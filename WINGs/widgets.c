@@ -453,21 +453,12 @@ loadPixmaps(WMScreen *scr)
     RCombineImageWithColor(tmp, &white);
     scr->altDisketteIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
     RDestroyImage(tmp);
-    /* mount */
-    tmp = RGetSubImage(image, 0, 80, 24, 24);
-    RCombineImageWithColor(tmp, &white);
-    scr->mountIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
-    tmp = RGetSubImage(image, 0, 80, 24, 24);
-    RCombineImageWithColor(tmp, &white);
-    scr->altMountIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
     /* unmount */
-    tmp = RGetSubImage(image, 48, 80, 24, 24);
+    tmp = RGetSubImage(image, 0, 80, 24, 24);
     RCombineImageWithColor(tmp, &white);
     scr->unmountIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
     RDestroyImage(tmp);
-    tmp = RGetSubImage(image, 48, 80, 24, 24);
+    tmp = RGetSubImage(image, 0, 80, 24, 24);
     RCombineImageWithColor(tmp, &white);
     scr->altUnmountIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
     RDestroyImage(tmp);

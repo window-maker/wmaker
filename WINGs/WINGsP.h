@@ -204,8 +204,6 @@ typedef struct W_Screen {
 
     struct W_Pixmap *disketteIcon;
     struct W_Pixmap *altDisketteIcon;
-    struct W_Pixmap *mountIcon;
-    struct W_Pixmap *altMountIcon;
     struct W_Pixmap *unmountIcon;
     struct W_Pixmap *altUnmountIcon;
 

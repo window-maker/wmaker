@@ -34,7 +34,7 @@ typedef struct W_FilePanel {
     WMButton *trashcanButton;
     WMButton *createDirButton;
     WMButton *disketteButton;
-    WMButton *mountButton;
+    WMButton *unmountButton;
 
     WMView *accessoryView;
 
@@ -80,7 +80,7 @@ static void goHome();
 
 static void goFloppy();
 
-static void goMount();
+static void goUnmount();
 
 static void buttonClick();
 
@@ -286,15 +286,14 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     WMSetButtonAltImage(fPtr->disketteButton, scrPtr->altDisketteIcon);
     WMSetButtonAction(fPtr->disketteButton, goFloppy, fPtr);
 
-    /*
-    fPtr->mountButton = WMCreateCommandButton(fPtr->win);
-    WMMoveWidget(fPtr->mountButton, 127, 325);
-    WMResizeWidget(fPtr->mountButton, 28, 28);
-    WMSetButtonImagePosition(fPtr->mountButton, WIPImageOnly);
-    WMSetButtonImage(fPtr->mountButton, scrPtr->mountIcon);
-    WMSetButtonAltImage(fPtr->mountButton, scrPtr->altMountIcon);
-    WMSetButtonAction(fPtr->mountButton, goMount, fPtr);
-    */
+    fPtr->unmountButton = WMCreateCommandButton(fPtr->win);
+    WMMoveWidget(fPtr->unmountButton, 127, 325);
+    WMResizeWidget(fPtr->unmountButton, 28, 28);
+    WMSetButtonImagePosition(fPtr->unmountButton, WIPImageOnly);
+    WMSetButtonImage(fPtr->unmountButton, scrPtr->unmountIcon);
+    WMSetButtonAltImage(fPtr->unmountButton, scrPtr->altUnmountIcon);
+    WMSetButtonAction(fPtr->unmountButton, goUnmount, fPtr);
+    WMSetButtonEnabled(fPtr->unmountButton, False);
 
 
     WMRealizeWidget(fPtr->win);
@@ -738,7 +737,7 @@ deleteFile(WMButton *bPre, WMFilePanel *panel)
         for (i = 2;s[i] == '/';i++);
         strcpy(s, &s[i-1]);
     }
-    if ((s = strrchr(file, '/')) && !s[1]) s[0] = 0;
+    if (strlen(file) > 1 && (s = strrchr(file, '/')) && !s[1]) s[0] = 0;
 
     if (stat(file,&filestat)) {
         switch (errno) {
@@ -778,7 +777,7 @@ deleteFile(WMButton *bPre, WMFilePanel *panel)
                         showError(scr, panel->win, "Permission denied.", NULL);
                         break;
                     case ENOENT:
-                        showError(scr, panel->win, "'%s' does not exist.", file);
+                        showError(scr, panel->win, "Directory '%s' does not exist.", file);
                         break;
                     case ENOTEMPTY:
                         showError(scr, panel->win, "Directory '%s' is not empty.", file);
@@ -827,7 +826,7 @@ deleteFile(WMButton *bPre, WMFilePanel *panel)
 }
 
 static void
-goMount(WMButton *bPtr, WMFilePanel *panel)
+goUnmount(WMButton *bPtr, WMFilePanel *panel)
 {
 }
 
@@ -895,9 +894,7 @@ handleEvents(XEvent *event, void *data)
             WMMoveWidget(pPtr->createDirButton, 37, newHeight-(PHEIGHT-325));
             WMMoveWidget(pPtr->homeButton, 67, newHeight-(PHEIGHT-325));
             WMMoveWidget(pPtr->disketteButton, 97, newHeight-(PHEIGHT-325));
-            /*
-            WMMoveWidget(pPtr->mountButton, 127, newHeight-(PHEIGHT-325));
-            */
+            WMMoveWidget(pPtr->unmountButton, 127, newHeight-(PHEIGHT-325));
 
 	    newColumnCount = (newWidth - 14) / 140;
 	    WMSetBrowserMaxVisibleColumns(pPtr->browser, newColumnCount);
