@@ -185,7 +185,7 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 
     if (wwin->flags.mapped && !WFLAGP(wwin, no_focusable)) {
 	/* install colormap if colormap mode is lock mode */
-	if (wPreferences.colormap_mode==WKF_CLICK)
+	if (wPreferences.colormap_mode==WCM_CLICK)
 	    wColormapInstallForWindow(scr, wwin);
 
 	/* set input focus */

@@ -155,8 +155,11 @@ typedef enum {
 
 /* keyboard input focus mode */
 #define WKF_CLICK	0
-#define WKF_POINTER	1
 #define WKF_SLOPPY	2
+
+/* colormap change mode */
+#define WCM_CLICK	0
+#define WCM_POINTER	1
 
 /* window placement mode */
 #define WPM_MANUAL	0

@@ -1054,11 +1054,7 @@ handleEnterNotify(XEvent *event)
     /* enter to window */
     wwin = wWindowFor(event->xcrossing.window);
     if (!wwin) {
-	if (wPreferences.focus_mode==WKF_POINTER
-	    && event->xcrossing.window==event->xcrossing.root) {
-	    wSetFocusTo(scr, NULL);
-	}
-	if (wPreferences.colormap_mode==WKF_POINTER) {
+	if (wPreferences.colormap_mode==WCM_POINTER) {
 	    wColormapInstallForWindow(scr, NULL);
 	}
 	if (scr->autoRaiseTimer 
@@ -1074,8 +1070,7 @@ handleEnterNotify(XEvent *event)
 	 *
 	 * set focus if in focus-follows-mouse mode and the event
 	 * is for the frame window and window doesn't have focus yet */
-	if ((wPreferences.focus_mode==WKF_POINTER
-	     || wPreferences.focus_mode==WKF_SLOPPY)
+	if (wPreferences.focus_mode==WKF_SLOPPY
 	    && wwin->frame->core->window==event->xcrossing.window
 	    && !scr->flags.doing_alt_tab) {
 	    
@@ -1095,7 +1090,7 @@ handleEnterNotify(XEvent *event)
 	}
 	/* Install colormap for window, if the colormap installation mode
 	 * is colormap_follows_mouse */
-	if (wPreferences.colormap_mode==WKF_POINTER) {
+	if (wPreferences.colormap_mode==WCM_POINTER) {
 	    if (wwin->client_win==event->xcrossing.window)
 		wColormapInstallForWindow(scr, wwin);
 	    else

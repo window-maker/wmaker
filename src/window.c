@@ -1587,8 +1587,7 @@ wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 
 	   newFocusedWindow = tmp;
 
-	} else if (wPreferences.focus_mode==WKF_SLOPPY
-		   || wPreferences.focus_mode==WKF_POINTER) {
+	} else if (wPreferences.focus_mode==WKF_SLOPPY) {
             unsigned int mask;
             int foo;
             Window bar, win;

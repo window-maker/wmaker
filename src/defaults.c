@@ -225,14 +225,13 @@ static int setCursor();
 
 static WOptionEnumeration seFocusModes[] = {
     {"Manual", WKF_CLICK, 0}, {"ClickToFocus", WKF_CLICK, 1},
-    {"Auto", WKF_POINTER, 0}, {"FocusFollowMouse", WKF_POINTER, 1},
     {"Sloppy", WKF_SLOPPY, 0}, {"SemiAuto", WKF_SLOPPY, 1},
     {NULL, 0, 0}
 };
 
 static WOptionEnumeration seColormapModes[] = {
-    {"Manual", WKF_CLICK, 0}, {"ClickToFocus", WKF_CLICK, 1},
-    {"Auto", WKF_POINTER, 0}, {"FocusFollowMouse", WKF_POINTER, 1},
+    {"Manual", WCM_CLICK, 0}, {"ClickToFocus", WCM_CLICK, 1},
+    {"Auto", WCM_POINTER, 0}, {"FocusFollowMouse", WCM_POINTER, 1},
     {NULL, 0, 0}
 };
 
