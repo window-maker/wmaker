@@ -453,7 +453,7 @@ createPanel(Panel *p)
     color.blue = 0xaa;
     
     panel->box = WMCreateBox(panel->parent);
-    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
+    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 0, 0);
     
     /**************** Mouse Speed ****************/
     panel->speedF = WMCreateFrame(panel->box);

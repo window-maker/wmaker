@@ -610,8 +610,8 @@ AddSection(Panel *panel, char *iconFile)
     WMSetButtonAction(bPtr, changeSection, panel);
     WMHangData(bPtr, panel);
 
-    WMSetBalloonTextForView(((PanelRec*)panel)->description,
-			    WMWidgetView(bPtr));
+    WMSetBalloonTextForView(((PanelRec*)panel)->description, 
+		    WMWidgetView(bPtr));
 
     {
 	char *t1, *t2;

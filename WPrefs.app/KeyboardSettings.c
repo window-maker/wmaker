@@ -64,7 +64,7 @@ createPanel(Panel *p)
     font = WMSystemFontOfSize(scr, 10);
 
     panel->box = WMCreateBox(panel->parent);
-    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
+    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 0, 0);
     
     /**************** Initial Key Repeat ***************/
     panel->delaF = WMCreateFrame(panel->box);

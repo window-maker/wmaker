@@ -468,7 +468,7 @@ createPanel(_Panel *p)
     }
 
     panel->box = WMCreateBox(panel->parent);
-    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
+    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 0, 0);
 
     panel->typeP = WMCreatePopUpButton(panel->box);
     WMResizeWidget(panel->typeP, 150, 20);

@@ -1723,7 +1723,7 @@ createPanel(Panel *p)
     panel->hand = WMCreatePixmapFromXPMData(scr, hand_xpm);
 
     panel->box = WMCreateBox(panel->parent);
-    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
+    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 0, 0);
 
     /* preview box */
     panel->prevL = WMCreateLabel(panel->box);

@@ -227,7 +227,7 @@ createPanel(Panel *p)
     WMBox *hbox;
     
     panel->box = WMCreateBox(panel->parent);
-    WMSetBoxExpandsToParent(panel->box, 2, 2, 2, 2);
+    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
     WMSetBoxHorizontal(panel->box, False);
     WMSetBoxBorderWidth(panel->box, 8);
     

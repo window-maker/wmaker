@@ -103,7 +103,7 @@ createPanel(Panel *p)
     char *path;
     
     panel->box = WMCreateBox(panel->parent);
-    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
+    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 0, 0);
     
     /***************** Menu Scroll Speed ****************/
     panel->scrF = WMCreateFrame(panel->box);
