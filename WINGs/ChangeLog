@@ -1,3 +1,9 @@
+changes since wmaker 0.61.1:
+............................
+
+- fixed WMInsertInBag(). It ignored index, and always put the new item at end.
+
+
 changes since wmaker 0.61.0:
 ............................
 
