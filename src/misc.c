@@ -1124,7 +1124,6 @@ void
 UnescapeWM_CLASS(char *str, char **name, char **class)
 {
     int i, j, k, dot;
-    Bool esc;
 
     j = strlen(str);
     *name = wmalloc(j);
@@ -1133,53 +1132,36 @@ UnescapeWM_CLASS(char *str, char **name, char **class)
     **class = 0;
 
     /* separate string in 2 parts */
-    esc = False;
-    dot = 0;
+    dot = -1;
     for (i = 0; i < j; i++) {
-	if (!esc) {
-	    if (str[i]=='\\') {
-		esc = True;
-	    } else if (str[i]=='.') {
-		dot = i;
-		break;
-	    }
-	} else {
-	    esc = False;
-	}
+        if (str[i]=='\\') {
+            i++;
+            continue;
+        } else if (str[i]=='.') {
+            dot = i;
+            break;
+        }
     }
 
     /* unescape strings */
-    esc = False;
-    k = 0;
-    for (i = 0; i < dot; i++) {
-	if (!esc) {
-	    if (str[i]=='\\') {
-		esc = True;
-	    } else {
-		(*name)[k++] = str[i];
-	    }
-	} else {
-	    (*name)[k++] = str[i];
-	    esc = False;
-	}
+    for (i=0, k=0; i < dot; i++) {
+        if (str[i]=='\\') {
+            continue;
+        } else {
+            (*name)[k++] = str[i];
+        }
     }
     (*name)[k] = 0;
 
-    esc = False;
-    k = 0;
-    for (i = dot+1; i<j; i++) {
-	if (!esc) {
-	    if (str[i]=='\\') {
-		esc = True;
-	    } else {
-		(*class)[k++] = str[i];
-	    }
-	} else {
-	    esc = False;
-	}
+    for (i=dot+1, k=0; i<j; i++) {
+        if (str[i]=='\\') {
+            continue;
+        } else {
+            (*class)[k++] = str[i];
+        }
     }
     (*class)[k] = 0;
-    
+
     if (!*name) {
 	wfree(*name);
 	*name = NULL;

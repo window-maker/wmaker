@@ -196,7 +196,8 @@ WMCreateFont(WMScreen *scrPtr, char *fontName)
 
     /* This is for back-compat (to allow reading of old xlfd descriptions) */
     if (fontName[0]=='-' && (ptr = strchr(fontName, ','))) {
-	fname = wmalloc(ptr - fontName + 1);
+        // warn for deprecation
+        fname = wmalloc(ptr - fontName + 1);
 	strncpy(fname, fontName, ptr - fontName);
 	fname[ptr - fontName] = 0;
     } else {
@@ -215,9 +216,11 @@ WMCreateFont(WMScreen *scrPtr, char *fontName)
 
     font->screen = scrPtr;
 
+    // remove
     printf("%s\n", fname);
+
     if (fname[0] == '-') {
-        /* Backward compat thing. Remove in a later version */
+        // Backward compat thing. Remove in a later version
         font->font = XftFontOpenXlfd(display, scrPtr->screen, fname);
     } else {
         font->font = XftFontOpenName(display, scrPtr->screen, fname);

@@ -111,6 +111,7 @@ Changes since version 0.80.2:
 - Do not use the disabled clip color for the clip's workspace navigation arrows
   when the clip is collapsed (it made them look like disabled)
 - Fixed the 'focus flicker' problem, seen with GTK2 applications.
+- Fixed bug with incorrect un-escaping if there is a dot in wm_class.
 
 
 Changes since version 0.80.1:
