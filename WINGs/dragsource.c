@@ -927,7 +927,7 @@ getTypeList(Window window, XClientMessageEvent *event)
     
     if (types[0] == 0) {
 	wwarning("received invalid drag & drop type list");
-	//XXX	    return;
+	/*XXX	    return;*/
     }
 
     return types;
@@ -1065,7 +1065,6 @@ W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event)
 			      1, 0, 0, action);
 	}
 	
-//	puts("position");
     } else if (event->message_type == scr->xdndLeaveAtom
 	       && scr->dragInfo.sourceWindow == event->data.l[0]) {
 
