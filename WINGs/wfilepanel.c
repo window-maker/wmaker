@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <limits.h>
+#include <errno.h>
 
 #ifndef PATH_MAX
 #define PATH_MAX 1024
