@@ -120,6 +120,9 @@ testList(WMScreen *scr)
 {
     WMWindow *win;
     WMList *list;
+    WMList *mlist;
+    WMLabel *label;
+    WMLabel *mlabel;
     char text[100];
     int i;
 
@@ -134,11 +137,16 @@ testList(WMScreen *scr)
 	sprintf(text, "Item %i", i);
 	WMAddListItem(list, text);
     }
+    mlist = WMCreateList(win);
+    WMSetListAllowMultipleSelection(mlist, True);
+    WMMoveWidget(mlist, 220, 0);
+    for (i=0; i<50; i++) {
+	sprintf(text, "Item %i", i);
+	WMAddListItem(mlist, text);
+    }
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
     WMMapWidget(win);
-
-    
 }
 
 
@@ -1126,9 +1134,10 @@ main(int argc, char **argv)
      */
 
     testList(scr);
-    testColorWell(scr);
 
 #if 0
+    testColorWell(scr);
+
     testTextField(scr);
     testText(scr);
 
