@@ -108,6 +108,7 @@ typedef struct _Panel {
     
     Bool capturing;
 
+        
     /* about the currently selected item */
     WEditMenuItem *currentItem;
     InfoType currentType;
@@ -570,9 +571,9 @@ createPanel(_Panel *p)
 
 	WMSetScrollViewContentView(sview, WMWidgetView(pad));
 
-/*	data = putNewItem(panel, pad, ExternalInfo, _("Debian Menu"));
+	data = putNewItem(panel, pad, ExternalInfo, _("Debian Menu"));
 	data->param.pipe.command = "/etc/X11/WindowMaker/menu.hook";
- */
+ 
 	data = putNewItem(panel, pad, PipeInfo, _("RedHat Menu"));
 	data->param.pipe.command = "wmconfig --output wmaker";
 
@@ -851,12 +852,12 @@ createPanel(_Panel *p)
 		     " - drag items in menu to change their position\n"
 		     " - double click in a menu item to change the label\n"
 		     " - click on a menu item to change related information"));
-    
+    WMMapWidget(label);
 
     WMRealizeWidget(panel->frame);
     WMMapSubwidgets(panel->frame);
     WMMapWidget(panel->frame);
-
+    
 
     {
 	int i;
@@ -871,8 +872,7 @@ createPanel(_Panel *p)
     panel->sections[ExecInfo][1] = panel->shortF;
 
     panel->sections[CommandInfo][0] = panel->icommandL;
-    panel->sections[CommandInfo][1] = label;
-    panel->sections[CommandInfo][2] = panel->shortF;
+    panel->sections[CommandInfo][1] = panel->shortF;
 
     panel->sections[ExternalInfo][0] = panel->pathF;
 
@@ -884,6 +884,22 @@ createPanel(_Panel *p)
     panel->currentType = NoInfo;
 
     showData(panel);
+    
+    {
+	WMPoint pos;
+
+	pos = WMGetViewScreenPosition(WMWidgetView(panel->frame));
+
+	if (pos.x < 200) {
+	    pos.x += FRAME_WIDTH + 20;
+	} else {
+	    pos.x = 10;
+	}
+	
+	pos.y = WMAX(pos.y - 100, 0);
+	
+	WEditMenuShowAt(panel->menu, pos.x, pos.y);
+    }
 }
 
 
@@ -1120,16 +1136,15 @@ changeInfoType(_Panel *panel, char *title, InfoType type)
     if (panel->currentType != type) {
 
 	w = panel->sections[panel->currentType];
-	    
+
 	while (*w) {
 	    WMUnmapWidget(*w);
 	    w++;
 	}
 	WMUnmapWidget(panel->paramF);
 	WMUnmapWidget(panel->quickB);
-	
-	
-	
+
+
 	w = panel->sections[type];
 	
 	while (*w) {
@@ -1477,7 +1492,6 @@ static void
 buildMenuFromPL(_Panel *panel, proplist_t pl)
 {
     panel->menu = buildSubmenu(panel, pl);
-    WMMapWidget(panel->menu);
 }
 
 
@@ -1607,7 +1621,7 @@ processData(char *title, ItemData *data)
     switch (data->type) {
      case ExecInfo:
 #if 1
-	if (strpbrk(data->param.exec.command, "&$*|><?`")) {
+	if (strpbrk(data->param.exec.command, "&$*|><?`=")) {
 	    s1 = "SHEXEC";
 	} else {
 	    s1 = "EXEC";
@@ -1640,15 +1654,17 @@ processData(char *title, ItemData *data)
 	switch (i) {
 	 case 3:
 	 case 4:
-	    if (data->param.command.parameter)
+	    if (data->param.command.parameter) {
 		PLAppendArrayElement(item, 
 				     PLMakeString(data->param.command.parameter));
+	    }
 	    break;
 
-	 case 7: /* restart */
-	    if (data->param.command.parameter)
+	 case 6: /* restart */
+	    if (data->param.command.parameter) {
 		PLAppendArrayElement(item, 
 				     PLMakeString(data->param.command.parameter));
+	    }
 	    break;
 	}
 	
@@ -1768,6 +1784,23 @@ storeData(_Panel *panel)
 }
 
 
+
+static void
+showMenus(_Panel *panel)
+{
+    WEditMenuUnhide(panel->menu);
+}
+
+
+static void
+hideMenus(_Panel *panel)
+{
+    WEditMenuHide(panel->menu);
+}
+
+
+
+
 Panel*
 InitMenu(WMScreen *scr, WMWindow *win)
 {
@@ -1784,6 +1817,9 @@ InitMenu(WMScreen *scr, WMWindow *win)
 
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;
+    panel->callbacks.showPanel = showMenus;   
+    panel->callbacks.hidePanel = hideMenus;
+
     
     AddSection(panel, ICON_FILE);
 
