@@ -879,46 +879,48 @@ wScreenUpdateUsableArea(WScreen *scr)
 #endif
 
 #ifdef GNOME_STUFF
-    area = scr->reservedAreas;    
+    {
+        WReservedArea *area = scr->reservedAreas;
 
-    while (area) {
-	int th, bh;
-	int lw, rw;
-	int w, h;
+        while (area) {
+            int th, bh;
+            int lw, rw;
+            int w, h;
 
-	w = area->area.x2 - area->area.x1;
-	h = area->area.y2 - area->area.y1;
+            w = area->area.x2 - area->area.x1;
+            h = area->area.y2 - area->area.y1;
 
-	th = area->area.y1;
-	bh = scr->scr_height - area->area.y2;
-	lw = area->area.x1;
-	rw = scr->scr_width - area->area.x2;
+            th = area->area.y1;
+            bh = scr->scr_height - area->area.y2;
+            lw = area->area.x1;
+            rw = scr->scr_width - area->area.x2;
 
-	if (WMIN(th, bh) <= WMIN(lw, rw)) {
-	    /* horizontal */
-	    if (th < bh) {
-		/* on top */
-		if (scr->totalUsableArea.y1 < area->area.y2)
-		    scr->totalUsableArea.y1 = area->area.y2;
-	    } else {
-		/* on bottom */
-		if (scr->totalUsableArea.y2 > area->area.y1)
-		    scr->totalUsableArea.y2 = area->area.y1;
-	    }
-	} else {
-	    /* vertical */
-	    if (lw < rw) {
-		/* on left */
-		if (scr->totalUsableArea.x1 < area->area.x2)
-		    scr->totalUsableArea.x1 = area->area.x2;
-	    } else {
-		/* on right */
-		if (scr->totalUsableArea.x2 > area->area.x1)
-		    scr->totalUsableArea.x2 = area->area.x1;
-	    }
-	}
+            if (WMIN(th, bh) <= WMIN(lw, rw)) {
+                /* horizontal */
+                if (th < bh) {
+                    /* on top */
+                    if (scr->totalUsableArea.y1 < area->area.y2)
+                        scr->totalUsableArea.y1 = area->area.y2;
+                } else {
+                    /* on bottom */
+                    if (scr->totalUsableArea.y2 > area->area.y1)
+                        scr->totalUsableArea.y2 = area->area.y1;
+                }
+            } else {
+                /* vertical */
+                if (lw < rw) {
+                    /* on left */
+                    if (scr->totalUsableArea.x1 < area->area.x2)
+                        scr->totalUsableArea.x1 = area->area.x2;
+                } else {
+                    /* on right */
+                    if (scr->totalUsableArea.x2 > area->area.x1)
+                        scr->totalUsableArea.x2 = area->area.x1;
+                }
+            }
 
-	area = area->next;
+            area = area->next;
+        }
     }
 #endif /* GNOME_STUFF */
 
