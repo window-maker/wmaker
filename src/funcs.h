@@ -158,12 +158,4 @@ char* GetProgramNameForWindow(Window win);
 
 Bool GetCommandForPid(int pid, char ***argv, int *argc);
 
-#ifdef NETWM_HINTS
-#include "wmspec.h"
-#define GetPidForWindow(win) wNETWMGetPidForWindow(win)
-#else
-int GetPidForWindow(Window win);
-#endif
-
-
 #endif

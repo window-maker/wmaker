@@ -206,7 +206,7 @@ lookup_available_fonts(_Panel *panel)
 
             found = -1;
             for (j = 0; j < panel->fonts->familyn && found<0; j++)
-              if (strcmp(panel->fonts->families[j].name, name)==0)
+              if (strcasecmp(panel->fonts->families[j].name, name)==0)
                 found= j;
             
             if (found < 0)
@@ -419,7 +419,7 @@ static void
 selectedOption(WMWidget *w, void *data)
 {
     _Panel *panel= (_Panel*)data;
-    int index= WMGetPopUpButtonSelectedItem(panel->optionP);
+    int index = WMGetPopUpButtonSelectedItem(panel->optionP);
     WMMenuItem *item= WMGetPopUpButtonMenuItem(panel->optionP, index);
     char *font;
 
@@ -440,7 +440,7 @@ selectedOption(WMWidget *w, void *data)
             FcDefaultSubstitute(pat);
 
             if (FcPatternGetString(pat, FC_FAMILY, 0, &name) != FcResultMatch)
-              name= "sans";
+                name= "sans";
 
             found= 0;
             // select family
@@ -458,19 +458,19 @@ selectedOption(WMWidget *w, void *data)
                 }
             }
             if (!found)
-              WMSelectListItem(panel->familyL, -1);
+                WMSelectListItem(panel->familyL, -1);
             selectedFamily(panel->familyL, panel);
             
             // select style
             if (FcPatternGetInteger(pat, FC_WEIGHT, 0, &weight) != FcResultMatch)
-              weight= FC_WEIGHT_NORMAL;
+                weight= FC_WEIGHT_NORMAL;
             if (FcPatternGetInteger(pat, FC_WIDTH, 0, &width) != FcResultMatch)
-              width= FC_WIDTH_NORMAL;
+                width= FC_WIDTH_NORMAL;
             if (FcPatternGetInteger(pat, FC_SLANT, 0, &slant) != FcResultMatch)
-              slant= FC_SLANT_ROMAN;
+                slant= FC_SLANT_ROMAN;
 
             if (FcPatternGetDouble(pat, FC_PIXEL_SIZE, 0, &size) != FcResultMatch)
-              size= 10.0;
+                size= 10.0;
 
             found= 0;
             for (i= 0; i < WMGetListNumberOfRows(panel->styleL); i++)
@@ -488,7 +488,7 @@ selectedOption(WMWidget *w, void *data)
                 }
             }
             if (!found)
-              WMSelectListItem(panel->styleL, -1);
+                WMSelectListItem(panel->styleL, -1);
 
             found= 0;
             {
@@ -513,7 +513,7 @@ selectedOption(WMWidget *w, void *data)
             selected(NULL, panel);
         }
         else
-          wwarning("Can't parse font '%s'", font);
+            wwarning("Can't parse font '%s'", font);
     }
 
     updateSampleFont(panel);
