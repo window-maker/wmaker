@@ -207,7 +207,7 @@ WMCreateTextField(WMWidget *parent)
 	WMAX((tPtr->view->size.height - WMFontHeight(tPtr->font))/2, 1);
 
     WMCreateEventHandler(tPtr->view, EnterWindowMask|LeaveWindowMask
-			 |ButtonPressMask|KeyPressMask|Button1MotionMask,
+			 |ButtonReleaseMask|ButtonPressMask|KeyPressMask|Button1MotionMask,
 			 handleTextFieldActionEvents, tPtr);
 
     tPtr->flags.cursorOn = 1;
@@ -562,6 +562,7 @@ paintCursor(TextField *tPtr)
     XDrawRectangle(screen->display, tPtr->view->window, screen->xorGC,
 		   cx, tPtr->offsetWidth, 1,
 		   tPtr->view->size.height - 2*tPtr->offsetWidth - 1);
+	printf("%d %d\n",cx,tPtr->cursorPosition);
      */
     XDrawLine(screen->display, tPtr->view->window, screen->xorGC,
 	      cx, tPtr->offsetWidth, cx,
@@ -677,9 +678,15 @@ paintTextField(TextField *tPtr)
 		    ? tPtr->selection.position + tPtr->selection.count 
 		    : tPtr->selection.position;
 
+		/*
                 rx = tx + WMWidthOfString(tPtr->font,
 					  &(tPtr->text[tPtr->viewPosition]),
-					  count);
+					  count)
+			- WMWidthOfString(tPtr->font,
+					tPtr->text,tPtr->viewPosition);
+					*/
+		rx = tPtr->offsetWidth + 1 + WMWidthOfString(tPtr->font,tPtr->text,count)
+			- WMWidthOfString(tPtr->font,tPtr->text,tPtr->viewPosition);
 
                 XSetBackground(screen->display, screen->textFieldGC, 
 			       screen->gray->color.pixel);
@@ -1060,59 +1067,117 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 
     switch (event->type) {
      case KeyPress:
-	if (tPtr->flags.enabled && tPtr->flags.focused)
-	    handleTextFieldKeyPress(tPtr, event);
-	break;
+        if (tPtr->flags.enabled && tPtr->flags.focused)
+            handleTextFieldKeyPress(tPtr, event);
+        break;
 
      case MotionNotify:
-	if (tPtr->flags.enabled && (event->xmotion.state & Button1Mask)) {
+        if (tPtr->flags.enabled && (event->xmotion.state & Button1Mask)) {
 
-	    if (!tPtr->selection.count) {
-		tPtr->selection.position = tPtr->cursorPosition;
-	    }
 
-	    tPtr->cursorPosition = pointToCursorPosition(tPtr,
-							 event->xmotion.x);
+        if (tPtr->viewPosition < tPtr->textLen && event->xmotion.x >
+                tPtr->usableWidth) {
+            if (WMWidthOfString(tPtr->font,
+                    &(tPtr->text[tPtr->viewPosition]),
+                    tPtr->cursorPosition-tPtr->viewPosition)
+                    > tPtr->usableWidth) {
+                tPtr->viewPosition++;
+            }
+        }
+    	else if (tPtr->viewPosition > 0 && event->xmotion.x < 0) {
+	    paintCursor(tPtr);
+	    tPtr->viewPosition--;
+	}
 
-	    tPtr->selection.count = tPtr->cursorPosition 
-		- tPtr->selection.position;
+	if (!tPtr->selection.count) {
+	    tPtr->selection.position = tPtr->cursorPosition;
+	}
 
-	    paintTextField(tPtr);
+	tPtr->cursorPosition = pointToCursorPosition(tPtr, event->xmotion.x);
+
+	tPtr->selection.count = tPtr->cursorPosition - tPtr->selection.position;
+
+	/*
+	printf("notify %d %d\n",event->xmotion.x,tPtr->usableWidth);
+	*/
+
+	paintCursor(tPtr);
+	paintTextField(tPtr);
+
 	}
 	break;
 
      case ButtonPress:
-	if (tPtr->flags.enabled && !tPtr->flags.focused) {
-	    WMSetFocusToWidget(tPtr);
-	    tPtr->cursorPosition = pointToCursorPosition(tPtr, 
-							 event->xbutton.x);
-	    paintTextField(tPtr);
-	} else if (tPtr->flags.focused) {
-	    tPtr->cursorPosition = pointToCursorPosition(tPtr, 
-							 event->xbutton.x);
-	    tPtr->selection.count = 0;
-	    paintTextField(tPtr);
-	}
-	if (event->xbutton.button == Button2 && tPtr->flags.enabled) {
-	    char *text;
+        switch (tPtr->flags.alignment) {
+            int textWidth;
+         case WARight:
+            textWidth = WMWidthOfString(tPtr->font, tPtr->text, tPtr->textLen);
+            if (tPtr->flags.enabled && !tPtr->flags.focused) {
+                WMSetFocusToWidget(tPtr);
+            } else if (tPtr->flags.focused) {
+                tPtr->selection.count = 0;
+            }
+            if(textWidth < tPtr->usableWidth){
+                tPtr->cursorPosition = pointToCursorPosition(tPtr, 
+                                     event->xbutton.x - tPtr->usableWidth
+                                     + textWidth);
+            }
+            else tPtr->cursorPosition = pointToCursorPosition(tPtr, 
+                                     event->xbutton.x);
+            /*
+            tPtr->cursorPosition = pointToCursorPosition(tPtr, 
+                                     event->xbutton.x);
+                tPtr->cursorPosition += tPtr->usableWidth - textWidth;
+            }
 
-	    text = W_GetTextSelection(tPtr->view->screen,
-				      tPtr->view->screen->clipboardAtom);
-	    if (!text) {
-		text = W_GetTextSelection(tPtr->view->screen, XA_CUT_BUFFER0);
-	    }
-	    if (text) {
-		WMInsertTextFieldText(tPtr, text, tPtr->cursorPosition);
-		XFree(text);
-		WMPostNotificationName(WMTextDidChangeNotification, tPtr, 
-				       NULL);
-	    }
-	}
+            tPtr->cursorPosition = pointToCursorPosition(tPtr, 
+                                     event->xbutton.x);
+                                     */
+            paintTextField(tPtr);
+            break;
+        
+         case WALeft:
+            if (tPtr->flags.enabled && !tPtr->flags.focused) {
+                WMSetFocusToWidget(tPtr);
+                tPtr->cursorPosition = pointToCursorPosition(tPtr, 
+                                     event->xbutton.x);
+                paintTextField(tPtr);
+            } else if (tPtr->flags.focused) {
+                tPtr->cursorPosition = pointToCursorPosition(tPtr, 
+                                     event->xbutton.x);
+                tPtr->selection.count = 0;
+                paintTextField(tPtr);
+            }
+            if (event->xbutton.button == Button2 && tPtr->flags.enabled) {
+                char *text;
+
+                text = W_GetTextSelection(tPtr->view->screen,
+                              tPtr->view->screen->clipboardAtom);
+                if (!text) {
+                text = W_GetTextSelection(tPtr->view->screen, XA_CUT_BUFFER0);
+                }
+                if (text) {
+                WMInsertTextFieldText(tPtr, text, tPtr->cursorPosition);
+                XFree(text);
+                WMPostNotificationName(WMTextDidChangeNotification, tPtr, NULL);
+                }
+            }
+            break;
+        }
 	break;
 
      case ButtonRelease:
-
-	break;
+        {
+        int count;
+        XSetSelectionOwner(tPtr->view->screen->display,
+                XA_PRIMARY, None, CurrentTime);
+        count = tPtr->selection.count < 0
+            ? tPtr->selection.position + tPtr->selection.count 
+            : tPtr->selection.position;
+        XStoreBuffer(tPtr->view->screen->display,
+                        &tPtr->text[count] , abs(tPtr->selection.count), 0);
+        }
+        break;
     }
 }
 

@@ -106,6 +106,14 @@ wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance,
 #ifdef REDUCE_APPICONS
     dicon->num_apps = 0;
 #endif
+#ifdef DEMATERIALIZE_ICON
+    {
+        XSetWindowAttributes attribs;
+        attribs.save_under = True;
+        XChangeWindowAttributes(dpy, dicon->icon->core->window,
+                CWSaveUnder, &attribs);
+    }
+#endif
 
     /* will be overriden by dock */
     dicon->icon->core->descriptor.handle_mousedown = appIconMouseDown;
@@ -203,6 +211,14 @@ wAppIconCreate(WWindow *leader_win)
 #endif
 
     aicon->icon = wIconCreate(leader_win);
+#ifdef DEMATERIALIZE_ICON
+    {
+        XSetWindowAttributes attribs;
+        attribs.save_under = True;
+        XChangeWindowAttributes(dpy, aicon->icon->core->window,
+                CWSaveUnder, &attribs);
+    }
+#endif
 
     /* will be overriden if docked */
     aicon->icon->core->descriptor.handle_mousedown = appIconMouseDown;

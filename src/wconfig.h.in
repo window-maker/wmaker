@@ -206,7 +206,9 @@
 
 /*
  * Define DEMATERIALIZE_ICON if you want the undocked icon animation
- * to be a progressive disaparison animation. 
+ * to be a progressive disaparison animation.
+ * This will cause all application icons to be created with Save Under
+ * enable.
  */
 #undef DEMATERIALIZE_ICON
 
