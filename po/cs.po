@@ -280,6 +280,93 @@ msgstr "Vyberte soubor"
 msgid "Icon Chooser"
 msgstr "Výbìr ikony"
 
+#: ../src/dialog.c:
+msgid ""
+msgstr ""
+
+#: ../src/dialog.c:1263
+msgid "Window Manager for X"
+msgstr "Okenní mana¾er pro X"
+
+#: ../src/dialog.c:1266
+msgid "Version %s"
+msgstr "Verze %s"
+
+#: ../src/dialog.c:1287
+msgid "32 thousand"
+msgstr "32 tisíc"
+
+#: ../src/dialog.c:1290
+msgid "64 thousand"
+msgstr "64 tisíc"
+
+#: ../src/dialog.c:1294
+msgid "16 million"
+msgstr "16 milionù"
+
+#: ../src/dialog.c:1301
+msgid "Using visual 0x%x: %s %ibpp (%s colors)\n"
+msgstr "Grafika pou¾ívá 0x%x: %s %ibpp (%s barev)\n"
+
+#: ../src/dialog.c:1309
+msgid "Total allocated memory: %i kB. Total memory in use: %i kB.\n"
+msgstr "Pøidìlená pamì»: %i kB. Pou¾ívaná pamì»: %i kB.\n"
+
+#: ../src/dialog.c:1315
+msgid "Supported image formats: "
+msgstr "Podporované formáty obrázkù: "
+
+#: ../src/dialog.c:1322
+msgid "\nAdditional Support For: "
+msgstr "\nDodateèná podpora pro: "
+
+#: ../src/dialog.c:1341
+msgid "Sound"
+msgstr "Zvuk"
+
+#: ../src/dialog.c:1348
+msgid " and "
+msgstr " a "
+
+#: ../src/dialog.c:1377
+msgid "Info"
+msgstr "Informace"
+
+#: ../src/dialog.c:1400
+msgid "Merry X'mas!"
+msgstr "Veselé vánose!"
+
+#: ../src/dialog.c:1470
+msgid ""
+"    Window Maker is free software; you can redistribute it and/or\n"
+"modify it under the terms of the GNU General Public License as\n"
+"published by the Free Software Foundation; either version 2 of the\n"
+"License, or (at your option) any later version.\n\n\n"
+"    Window Maker is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty\n"
+"of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+"See the GNU General Public License for more details.\n\n\n"
+"    You should have received a copy of the GNU General Public\n"
+"License along with this program; if not, write to the Free Software\n"
+"Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA\n"
+"02111-1307, USA."
+msgstr ""
+"Window Maker je volnì ¹iøitelný software; mù¾ete ho pøedat dál nebo\n"
+"upravit podle podmínek GNU licence (Genral Public Licence), která\n"
+"byla uveøejnìna organizací Free Software Foundation; jedna ze\n"
+"dvou verzí licence, nebo (jestli chcete) nìjaká novìj¹í verze.\n\n\n"
+"Window Maker je ¹íøen s nadìjí, ¾e bude pou¾itelný, ale BEZ\n"
+" JAKÉKOLIV ZÁRUKY; bez pozdìji pøidaných záruk OBCHODNÍKA\n"
+"nebo DOBØE MÍNÌNÉHO ÚMYSLU. Více informací naleznete v\n"
+"GNU licenci (Genral Public Licence)\n\n\n"
+"Mìli by jste obdr¾et kopii GNU licence s tímto programem; pokud\n"
+"tomu tak není napi¹te organizaci Free Software Foundation:\n"
+"Inc., 59 Temple Place - Suite 330, Boston MA, 02111-1307, USA"
+
+#: ../src/dialog.c:1491
+msgid "Legal"
+msgstr "Licenèní podmínky"
+
 #: ../src/dialog.c:1401 ../src/startup.c:325
 msgid "cannot open connection for crashing dialog panel. Aborting."
 msgstr "pro nefunkèní dialogový panel nelze otevøít spojení. Konec."
@@ -330,6 +417,32 @@ msgstr "Restart Window Makeru"
 #: ../src/dialog.c:1467
 msgid "Start alternate window manager"
 msgstr "Odstartovat alternativní okenní mana¾er"
+
+#: ../src/dialog.c:1851
+msgid "About GNUstep"
+msgstr "O GNUstepu"
+
+#: ../src/dialog.c:1887
+msgid ""
+"Window Maker is part of the GNUstep project.\n"\
+"The GNUstep project aims to create a free\n"\
+"implementation of the OpenStep(tm) specification\n"\
+"which is a object-oriented framework for\n"\
+"creating advanced graphical, multi-platform\n"\
+"applications. Additionally, a development and\n"\
+"user desktop enviroment will be created on top\n"\
+"of the framework. For more information about\n"\
+"GNUstep, please visit: www.gnustep.org"
+msgstr ""
+"Window maker je souèástí GNUstep projektu.\n"
+"GNUstep usiluje o vytvoøení volnì ¹iøitelné\n"
+"implementace prostøedí OpenStepu(tm), které\n"
+"má objektovì orientovaný systém pro vytváøení\n"
+"pokroèilých grafických, multiplatformních\n"
+"aplikací. A navíc vývoj u¾ivatelsky pøívìtivého\n"
+"prostøedí je nejdùle¾itìj¹í souèást projektu.\n"
+"Více informací o GNUstepu naleznete na\n"
+"webové stránce: www.gnustep.org"
 
 #: ../src/dock.c:212
 #, c-format
@@ -400,15 +513,15 @@ msgid "Collapsed"
 msgstr "Svinuto"
 
 #: ../src/dock.c:1107
-msgid "AutoCollapse"
+msgid "Autocollapse"
 msgstr "Automaticky svinout"
 
 #: ../src/dock.c:1113
-msgid "AutoRaiseLower"
+msgid "Autoraise"
 msgstr "Automaticky Nahoru/Dolù"
 
 #: ../src/dock.c:1119
-msgid "AutoAttract Icons"
+msgid "Autoattract Icons"
 msgstr "Automaticky chytat ikony"
 
 #: ../src/dock.c:1125
@@ -447,6 +560,10 @@ msgstr "Chytat ikony"
 msgid "Launch"
 msgstr "Odstartovat"
 
+#: ../src/dock.c:3411
+msgid "Bring Here"
+msgstr "Dr¾et zde"
+
 #: ../src/dock.c:1202
 msgid "Settings..."
 msgstr "Nastavení..."
@@ -483,6 +600,10 @@ msgstr "V¹echny plochy"
 #: ../src/dock.c:3395 ../src/winmenu.c:417 ../src/winspector.c:1197
 msgid "Omnipresent"
 msgstr "V¹echny plochy"
+
+#: ../src/dock.c:3409
+msgid "Make window present in all workspaces."
+msgstr "Zobrazit okno na v¹ech plochách."
 
 #: ../src/dock.c:3409
 msgid "Unselect All Icons"
@@ -524,8 +645,12 @@ msgstr "Nìkteré ikony nemohou být v¹udypøítomné. Ujistìte se prosím, ¾e "
 "plochách a ¾e Sponka není na nìkteré plo¹e zaplnìna."
 
 #: ../src/dockedapp.c:313
-msgid "Start when WindowMaker is started"
+msgid "Start when Window Maker is started"
 msgstr "Odstartovat pøi startu Window Makeru"
+
+#: ../src/dockedapp.c:312
+msgid "Lock (prevent accidental removal)"
+msgstr "Zamknout (pøed náhodným odstranìním)"
 
 #: ../src/dockedapp.c:319
 msgid "Application path and arguments"
@@ -1327,6 +1452,10 @@ msgstr "Pro toto okno nelze najít specifikovanou ikonu (%s)"
 msgid "Could not open specified icon \"%s\":%s"
 msgstr "Nelze otevøít specifikovanou ikonu \"%s\":%s"
 
+#: ../src/winspector.c:1137
+msgid "Inspecting  %s.%s"
+msgstr "Nastavení pro %s.%s"
+
 #: ../src/winspector.c:1052
 msgid "Save"
 msgstr "Ulo¾it"
@@ -1366,19 +1495,25 @@ msgstr "Standard pro v¹echna okna"
 #: ../src/winspector.c:1144
 msgid ""
 "The configuration will apply to all\n"
-"windows that have their WM_CLASS property set to the above selected\n"
+"windows that have their WM_CLASS\n"
+"property set to the above selected\n"
 "name, when saved."
 msgstr ""
-"Konfigurace bude aplikována na v¹echny klienty,\n"
-"kteøí mají nastavenu vlastnost WM_CLASS na vybranou vý¹e\n"
+"Konfigurace bude aplikována na v¹echny\n"
+"klienty, kteøí mají nastavenu vlastnost\n"
+"WM_CLASS na vý¹e vybranou\n"
 "(pøi ulo¾ení této konfigurace)"
+
+#: ../src/winspector.c:1326
+msgid "Select window"
+msgstr "Vyberte okno"
 
 #: ../src/winspector.c:1151
 msgid "Attributes"
 msgstr "Atributy"
 
 #: ../src/winspector.c:1162
-msgid "Disable Titlebar"
+msgid "Disable titlebar"
 msgstr "Zakázat titulek"
 
 #: ../src/winspector.c:1164
@@ -1395,7 +1530,7 @@ msgstr "Odstranit titulkový pruh tohoto okna.\n"
 "nastavení)."
 
 #: ../src/winspector.c:1171
-msgid "Disable Resizebar"
+msgid "Disable resizebar"
 msgstr "Zakázat zvìt¹ovací rù¾ek"
 
 #: ../src/winspector.c:1173
@@ -1403,7 +1538,7 @@ msgid "Remove the resizebar of this window."
 msgstr "Odstranit zvìt¹ovací rù¾ek tohoto okna."
 
 #: ../src/winspector.c:1176
-msgid "Disable Close Button"
+msgid "Disable close button"
 msgstr "Zakázat prvek pro uzavøení"
 
 #: ../src/winspector.c:1178
@@ -1411,15 +1546,23 @@ msgid "Remove the `close window' button of this window."
 msgstr "Odstranit zavírací tlaèítko tohoto okna."
 
 #: ../src/winspector.c:1181
-msgid "Disable Miniaturize Button"
+msgid "Disable miniaturize button"
 msgstr "Zakázat prvek pro minimalizaci"
+
+#: ../src/winspector.c:1375
+msgid "Disable border"
+msgstr "Zakázat okraje"
+
+#: ../src/winspector.c:1377
+msgid "Remove the 1 pixel black border around the window."
+msgstr "Odstranit jednopixelový èerný okraj okolo okna."
 
 #: ../src/winspector.c:1183
 msgid "Remove the `miniaturize window' button of the window."
 msgstr "Odstranit minimalizaèní tlaèítko tohoto okna."
 
 #: ../src/winspector.c:1186
-msgid "Keep on Top / Floating"
+msgid "Keep on top (floating)"
 msgstr "V¾dy navrch / plovoucí"
 
 #: ../src/winspector.c:1188
@@ -1429,7 +1572,7 @@ msgid ""
 msgstr "Dr¾et okno nad ostatními a zabránit jim v pøekryvu."
 
 #: ../src/winspector.c:1192
-msgid "Keep at Bottom / Sunken"
+msgid "Keep at bottom (sunken)"
 msgstr "Dr¾et vespod"
 
 #: ../src/winspector.c:1194
@@ -1441,7 +1584,7 @@ msgid "Make window occupy all workspaces."
 msgstr "Nechat okno zabírat v¹echny plochy."
 
 #: ../src/winspector.c:1202
-msgid "Start Miniaturized"
+msgid "Start miniaturized"
 msgstr "Odstartovat jako ikonu"
 
 #: ../src/winspector.c:1204
@@ -1451,7 +1594,7 @@ msgid ""
 msgstr "Automaticky minimalizovat okno, kdy¾ se uká¾e poprvé."
 
 #: ../src/winspector.c:1208
-msgid "Start Maximized"
+msgid "Start maximized"
 msgstr "Odstartovat jako velké okno"
 
 #: ../src/winspector.c:1210
@@ -1461,7 +1604,7 @@ msgid ""
 msgstr "Automaticky maximalizovat okno, kdy¾ se uká¾e poprvé."
 
 #: ../src/winspector.c:1214
-msgid "Skip Window List"
+msgid "Do not show in the window list"
 msgstr "Vynechat ze seznamu oken"
 
 #: ../src/winspector.c:1216
@@ -1473,7 +1616,7 @@ msgid "Advanced"
 msgstr "Dal¹í volby"
 
 #: ../src/winspector.c:1246
-msgid "Ignore HideOthers"
+msgid "Ignore 'Hide Others'"
 msgstr "Ignorovat \"Skrýt ostatní\""
 
 #: ../src/winspector.c:1248
@@ -1483,7 +1626,7 @@ msgid ""
 msgstr "Neskrývat okno pøi pøíkazu 'Skrýt ostatní'."
 
 #: ../src/winspector.c:1252
-msgid "Don't Bind Keyboard Shortcuts"
+msgid "Do not bind keyboard shortcuts"
 msgstr "Klávesnice jen pro aplikaci"
 
 #: ../src/winspector.c:1254
@@ -1498,7 +1641,7 @@ msgstr "Nepou¾ívat klávesové zkratky Window Makeru,\n"
 "na va¹e nastavení klávesových zkratek."
 
 #: ../src/winspector.c:1260
-msgid "Don't Bind Mouse Clicks"
+msgid "Do not bind mouse clicks"
 msgstr "My¹ jen pro aplikaci"
 
 #: ../src/winspector.c:1262
@@ -1512,7 +1655,7 @@ msgstr ""
 
 
 #: ../src/winspector.c:1267
-msgid "Keep Inside Screen"
+msgid "Keep inside screen"
 msgstr "Dr¾et uvnitø obrazovky"
 
 #: ../src/winspector.c:1269
@@ -1524,7 +1667,7 @@ msgstr ""
 "(kvùli chybové kompatibilitì)\n"
 
 #: ../src/winspector.c:1273
-msgid "Don't Let It Take Focus"
+msgid "Do not let it take focus"
 msgstr "Nepovolit zamìøení"
 
 #: ../src/winspector.c:1275
@@ -1535,7 +1678,7 @@ msgstr ""
 "Nepovolit oknu získat zamìøení, kdy¾ na nìho kliknete."
 
 #: ../src/winspector.c:1279
-msgid "Don't Save Session"
+msgid "Ignore 'Save Session'"
 msgstr "Neukládat stav sezení"
 
 #: ../src/winspector.c:1281
@@ -1550,7 +1693,7 @@ msgstr ""
 "startu Window Makeru."
 
 #: ../src/winspector.c:1287
-msgid "Emulate Application Icon"
+msgid "Emulate application icon"
 msgstr "Emulovat aplikaèní ikonu"
 
 #: ../src/winspector.c:1289
@@ -1564,7 +1707,7 @@ msgstr ""
 "být vytvoøena ukotvitelná aplikaèní ikona."
 
 #: ../src/winspector.c:1294
-msgid "Full Screen Maximization"
+msgid "Full screen maximization"
 msgstr "Maximalizace na plnou obrazovku"
 
 #: ../src/winspector.c:1296
@@ -1578,7 +1721,7 @@ msgstr ""
 "mimo obrazovku."
 
 #: ../src/winspector.c:1302
-msgid "Disable Language Button"
+msgid "Disable language button"
 msgstr "Zakázat tlaèítko jazyka"
 
 #: ../src/winspector.c:1304
@@ -1594,7 +1737,7 @@ msgid "Update"
 msgstr "Nastavit"
 
 #: ../src/winspector.c:1355
-msgid "Icon File Name:"
+msgid "Icon filename:"
 msgstr "Soubor ikony:"
 
 #: ../src/winspector.c:1367
@@ -1615,10 +1758,14 @@ msgstr "Neurèena"
 
 #: ../src/winspector.c:1400
 msgid "Application Wide"
+msgstr "Atributy aplikací"
+
+#: ../src/winspector.c:1590
+msgid "Application Attributes"
 msgstr "Atributy aplikace"
 
 #: ../src/winspector.c:1411
-msgid "Start Hidden"
+msgid "Start hidden"
 msgstr "Startovat skrytì"
 
 #: ../src/winspector.c:1413
@@ -1626,7 +1773,7 @@ msgid "Automatically hide application when it's started."
 msgstr "Automaticky skrýt aplikaci pøi startu."
 
 #: ../src/winspector.c:1416
-msgid "No Application Icon"
+msgid "No application icon"
 msgstr "Bez aplikaèní ikony"
 
 #: ../src/winspector.c:1418
@@ -1637,9 +1784,21 @@ msgid ""
 "working correctly."
 msgstr ""
 "Zakázat aplikaèní ikonu pro tuto aplikaci.\n"
-"Uvìdomte si ale, ¾e ji nebudete moci více ukotvit\n" 
+"Uvìdomte si ale, ¾e ji nebudete moci více ukotvit\n"
 "do doku a v¹echny ji¾ ukotvené ikony pøestanou\n"
 "správnì pracovat."
+
+#: ../src/winspector.c:1614
+msgid "Collapse application icons"
+msgstr "Zakázat více aplikaèních ikon"
+
+#: ../src/winspector.c:1616
+msgid ""
+"Collapse application icons from other instances\n"
+"of this application into one.\n"
+msgstr ""
+"Zru¹ aplikaèní ikony ostatních instancí aplikace\n"
+"a pou¾ívej pouze aplikaèní ikonu tohoto okna.\n"
 
 #: ../src/workspace.c:107 ../src/workspace.c:108 ../src/workspace.c:703
 #, c-format
