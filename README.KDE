@@ -1,0 +1,111 @@
+
+
+Information on Using Window Maker with KDE
+------------------------------------------
+
+
+Window Maker supports almost all KDE/KWM specific client
+communication protocols, so you can simply replace kwm with 
+Window Maker, if you think these advantages are worthy:
+
+		Window Maker			KWM
+=============================================================================
+Looks		NEXTSTEP/NEXTSTEP enhanced	Original, but reminds
+						Weendoze
+
+Decoration	solid, gradient, multi-color	solid, vertical and
+Textures	gradient, pixmaps, textured	horizontal gradient,
+		gradient - all gradients are	pixmap
+		supported in horizontal,
+		vertical and diagonal 
+		directions
+
+Configurable	No				Yes, but not totally
+Titlebar Buttons
+
+Window Specific	Yes				No
+Configuration
+
+Quick Keyboard	Yes				No
+Navigation
+
+Pager		KDE pagers will work as 	Yes
+		well as GNOME pagers
+
+Session		Not yet supported, but		Yes, old (pre-X11R6) style
+Management	X11R6 style SM is being worked.
+
+Dock		kpanel and the Dock		kpanel
+
+GNOME support	Yes				No
+
+Memory Usage(1)	1.85Mb	Lite: 1.79Mb 		3.13Mb
+
+
+(1) Memory usage was tested by running wmaker and kwm at the same machine
+with the same windows, on the same screen and similar window texture
+configurations (at different times, of course). I looked in the output of
+ps -m, in the SIZE field, right after starting the window managers. The Lite
+value for wmaker, is for when it was compiled with --enable-lite.
+
+
+Enabling KDE Support
+--------------------
+
+To enable KDE support in Window Maker, you must compile it after
+configuring it as follows:
+./configure --enable-kde --enable-lite
+
+The --enable-lite flag is optional, but will reduce some memory
+usage by removing things that are duplicated in Window Maker and KDE.
+
+
+Then, open WPrefs and turn on the "Disable mouse actions"
+option in the Mouse related options panel. Or enable the 
+DisableWSMouseActions option by hand.
+
+Then, just replace kwm with wmaker in your startkde script.
+
+Make sure to disable workspace background setting in KDE. If you
+wont be using Window Maker themes anyway, you can set
+WorkspaceBack = (none);
+
+in ~/GNUstep/Defaults/WindowMaker
+
+
+Enhancing Integration
+---------------------
+
+Window Maker adds some extensions to KDE's messaging stuff, so you can run
+Window Maker specific commands from places like kpanel, krootwm or even
+kwmcom. If you want support for these in KDE, please go nag your favorite KDE
+developers, not us. The added stuff are the following kwm like commands:
+
+wmaker:info - show info panel
+wmaker:legal - show legal panel
+wmaker:arrangeIcons - arrange icons
+wmaker:showAll - show all windows
+wmaker:hideOthers - hide others
+wmaker:restart - restart wmaker
+wmaker:exit - exit wmaker
+
+You can test them with kwmcom, like:
+kwmcom wmaker:info
+
+
+Problems
+--------
+
+* kpanel will not be kept always on top. That's because kpanel is an
+OverrideRedirect window, so Window Maker can't do anything about that.
+
+Before requesting for a hack to work around that in Window Maker, please
+request the kpanel author to fix it.
+
+* because the KDE protocol for letting the window manager know the usable
+window region is broken, you might find some problems with the window
+positioning/maximization code and kpanel's position.
+
+* It seems kpanel (and maybe KDE in general) doesn't like dynamically
+changing the number of workspaces. So, don't create or destroy workspaces
+while running on KDE, unless you really need.
