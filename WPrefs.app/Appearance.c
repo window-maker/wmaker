@@ -1593,7 +1593,10 @@ colorWellObserver(void *self, WMNotification *n)
 
     panel->colors[p] = WMRetainColor(WMGetColorWellColor(panel->colW));
 
-    updateColorPreviewBox(panel, 1<<p);
+    /* redisplaying only the text when color changes will give image artifacts
+     * if antialiased text is used. we need to update the texture too.
+    updateColorPreviewBox(panel, 1<<p); */
+    updatePreviewBox(panel, 1<<p);
 }
 
 
