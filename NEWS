@@ -2,18 +2,32 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
---- 0.81.0
+--- 0.90.0
+
+
+NetWM / EWMH Support
+--------------------
+
+Support for the EWMH standard has been added. Applications from GNOME 2.x and
+KDE 3.x should now interoperate better with Window Maker.
+
+Support for the obsolete/legacy GNOME 1.x, KDE 1.x and OpenLook(!) hints was
+wiped out for the sake of sanity.
+
 
 Antialiased font support
 ------------------------
 
-With the addition of support for antialiased fonts in the WINGs library, now
-Window Maker can also support antialiased fonts. 
+With the addition of Xft2 support in the WINGs library, now
+Window Maker can display antialiased text with TrueType or any scalable fonts.
 
-Antialiased text can be enabled either by adding AntialiasedText = Yes;
-in ~/GNUstep/Defaults/WindowMaker or by launching WPrefs and checking the
-"Smooth font edges" in the Expert User Preferences panel.
+You can pick fonts for Window Maker in the Font configuration section of 
+WPrefs.
 
+Antialiased text is enabled by default, but can be disabled by adding
+AntialiasedText = NO; in ~/GNUstep/Defaults/WMGLOBAL
+Note that bitmapped fonts look much better than TrueType when antialiasing is
+disabled.
 
 Global Submenus
 ---------------
@@ -36,6 +50,31 @@ or, in case you want a submenu:
 (("Submenu", 
 	("Foobar", EXEC, foobar),
 	("Blabla", EXEC, blabla)))
+
+
+UTF-8 Support
+-------------
+
+Window Maker now uses UTF-8 internally (and thus can display UTF-8 text
+in window titles and other places). Menus and po files must now be
+encoded in UTF-8. If your menus contain non ASCII characters, you can convert
+them to UTF-8 with the following command:
+
+iconv -f <current-file-encoding> -t utf-8 <filename> > <filename>.utf8
+
+For example:
+
+iconv -f iso-8859-1 -t utf-8 menu > menu.utf
+mv menu.utf menu
+
+
+Icon Panel for Alt-Tabbing
+--------------------------
+
+A panel with icons for the windows that you can switch to will appear
+when you press Alt-Tab. You can navigate through the windows with Alt-Tab
+(Alt-Shift-Tab) or with the left/right keys once the panel is shown.
+
 
 
 --- 0.80.0

@@ -12,9 +12,6 @@ To do before next release:
 1. make AntialiasedText in WMGLOBAL work
 2. make wmaker read old xlfd, but warn about them so people use convert 
    (I think it reads them, but the warning needs to be added)
-3. Set the default font
-4. Change all xlfd fonts we still use hardcoded in wmaker/wprefs
-5. Update NEWS/Changelog (remove old info that only applies to xft1)
 
 =====================================================================
 

@@ -80,7 +80,10 @@ The following is required to build Window Maker:
 	If you have a different version, disable them by temporarily
 	renaming them to something else or uninstalling them from your
 	system. If you don't develop software you don't need them,
-	so you can safely uninstall. 
+	so you can safely uninstall.
+
+- Xft2 and its dependencies (such as freetype2 and fontconfig)
+	For the Antialiased text support.
 
 
 OPTIONAL:
@@ -268,27 +271,6 @@ apply.
 
 	* make sure you have /usr/local/lib in /etc/ld.so.conf before running
 	ldconfig;
-
-	* if you have problems that mention an error message with --no-reexec
-	uninstall libtool-1.2b and install libtool-1.3 instead. libtool-1.3
-	can be found in ftp.gnu.org  Also read the TROUBLESHOOTING section;
-
-	* if you installed the Window Maker package from RedHat and are
-	installing a new version of it by hand (compiling yourself), uninstall
-	the package from RedHat before.
-
-	* make sure you have a symbolic link from /usr/include/X11 to
-	/usr/X11R6/include/X11 (if not, type ln -s /usr/X11R6/include/X11
-	/usr/include/X11 )
-
-	* make sure you have /lib/cpp pointing to the cpp program
-
-	If you have any doubts in doing any of the stuff above, please
-	don't hesitate to contact the RedHat user support. They will
-	kindly answer to all your questions regarding their system.
-	They also know much more about their own system than us 
-	(we don't use RedHat).
-
 
 - PowerPC MkLinux
 	You will need to have the latest version of Xpmac. Older versions
@@ -557,32 +539,4 @@ menu.pt_BR
 menu.pt
 menu
 
-
-5 - If you chose a language that uses multi-byte characters, you must
-configure the fonts appropriately. Read the manual page for XCreateFontSet
-to have more details about it. You must change the ~/G/D/WindowMaker file
-for fonts used in titlebars, menus and other things. For fonts used in
-dialog windows, change ~/G/D/WMGLOBAL. The %d in the font names must not be
-removed. You can also use the supplied wsetfont script for the task.
-Read the script itself for instructions.
-
-For example, you can specify the following in ~/G/D/WindowMaker:
-
-WindowTitleFont = "-*-helvetica-bold-r-normal-*-12-*,-*-*-medium-r-normal-*-14-*";
-MenuTitleFont = "-*-helvetica-bold-r-normal-*-12-*,-*-*-medium-r-normal-*-14-*";
-MenuTextFont = "-*-helvetica-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-14-*";
-IconTitleFont = "-*-helvetica-medium-r-normal-*-8-*,-*-*-medium-r-normal-*-12-*";
-ClipTitleFont = "-*-helvetica-bold-r-normal-*-10-*,-*-*-medium-r-normal-*-12-*";
-DisplayFont = "-*-helvetica-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-12-*";
-
-and in ~/G/D/WMGLOBAL:
-
-SystemFont = "-*-*-medium-r-normal-*-%d-*-*-*-*-*-*-*";
-BoldSystemFont = "-*-*-medium-r-normal-*-%d-*-*-*-*-*-*-*";
-
-The above 2 fonts are only used by applications that use WINGs (WindowMaker
-and WPrefs.app)
-
-The wsetfont script that's supplied will allow you to change the font
-settings in a easier way. Take a look in the script for details on usage.
 
