@@ -5,14 +5,6 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUBDIRS = Resources
 
 
-LIBLIST= $(top_builddir)/wrlib/libwraster.la\
-	 @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ \
-	-lm @LIBPL@
-
-
-#lib_LTLIBRARIES = libWINGs.la
-
-lib_LIBRARIES = libWINGs.a libWUtil.a
 
 #libWINGs_la_LDFLAGS = -version-info 1:1:0
 
@@ -23,37 +15,17 @@ bin_SCRIPTS = get-wings-flags get-wutil-flags
 noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel\
 	connect puzzle
 
+lib_LIBRARIES = libWINGs.a libWUtil.a
+
+
+LDADD= libWINGs.a $(top_builddir)/wrlib/libwraster.la\
+	 @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ \
+	-lm @LIBPL@
+
+
 testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h 
 
-testmywidget_LDADD = libWINGs.a $(LIBLIST)
-
-puzzle_SOURCES = puzzle.c
-
-puzzle_LDADD = libWINGs.a $(LIBLIST)
-
-fontl_SOURCES = fontl.c
-
-fontl_LDADD = libWINGs.a $(LIBLIST)
-
-wtest_SOURCES = wtest.c
-
-wtest_LDADD = libWINGs.a $(LIBLIST)
-
 wtest_DEPENDENCIES = libWINGs.a
-
-wmfile_SOURCES = wmfile.c 
-
-wmfile_LDADD = libWINGs.a $(LIBLIST)
-	
-testcolorpanel_SOURCES = testcolorpanel.c
-
-testcolorpanel_LDADD = libWINGs.a $(LIBLIST)
-
-wmquery_SOURCES = wmquery.c 
-
-wmquery_LDADD = libWINGs.a $(LIBLIST)
-
-connect_SOURCES = connect.c
 
 connect_LDADD = libWUtil.a @LIBRARY_SEARCH_PATH@ @NETLIBS@ @LIBPL@
 

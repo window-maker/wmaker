@@ -97,12 +97,13 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     panel->retKey = XKeysymToKeycode(scrPtr->display, XK_Return);
     panel->escKey = XKeysymToKeycode(scrPtr->display, XK_Escape);
 
-    if (owner)
+    if (owner) {
 	panel->win = WMCreatePanelWithStyleForWindow(owner, "alertPanel",
 						     WMTitledWindowMask);
-    else
+    } else {
 	panel->win = WMCreateWindowWithStyle(scrPtr, "alertPanel",
 					     WMTitledWindowMask);
+    }
 
     WMSetWindowInitialPosition(panel->win,
 	 (scrPtr->rootView->size.width - WMWidgetWidth(panel->win))/2,

@@ -975,6 +975,18 @@ void testDragAndDrop(WMScreen *scr)
 
 #include "WUtil.h"
 
+void testUD()
+{
+    WMUserDefaults *defs;
+    char str[32];
+
+    defs = WMGetStandardUserDefaults();
+
+    sprintf(str, "TEST DATA");
+    puts(str);
+    WMSetUDStringForKey(defs, str, "testKey");
+    puts(str);
+}
 
 
 int main(int argc, char **argv)
@@ -985,6 +997,8 @@ int main(int argc, char **argv)
     
     /* Initialize the application */
     WMInitializeApplication("Test", &argc, argv);
+    
+    testUD();
     
     /*
      * Open connection to the X display.

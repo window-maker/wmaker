@@ -579,7 +579,6 @@ void WMSetUDObjectForKey(WMUserDefaults *database, proplist_t object,
 
 void WMRemoveUDObjectForKey(WMUserDefaults *database, char *defaultName);
 
-/* Free the returned string when no longer needed */
 char *WMGetUDStringForKey(WMUserDefaults *database, char *defaultName);
 
 int WMGetUDIntegerForKey(WMUserDefaults *database, char *defaultName);
