@@ -103,3 +103,6 @@ libWINGs_a_SOURCES = 	\
 INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
 	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @HEADER_SEARCH_PATH@ -DDEBUG
 
+
+wcolorpanel.o: wcolorpanel.c
+	$(COMPILE) -c -DRGBTXT="@X_LIBRARY_PATH@/X11/rgb.txt" $<

@@ -257,7 +257,10 @@ enum {
 
 #undef	EASTEREGG
 
+#ifndef RGBTXT
 #define RGBTXT "/usr/X11R6/lib/X11/rgb.txt"
+#endif
+
 #define MAX_LENGTH  1024
 
 static int	fetchFile(char* toPath, char *imageSrcFile, 
