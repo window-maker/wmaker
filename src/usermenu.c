@@ -331,19 +331,20 @@ wUserMenuGet(WScreen *scr, WWindow *wwin)
     char buffer[100];
     char *path = NULL;
     char *tmp;
+    if ( wwin->wm_instance && wwin->wm_class ) {
+        tmp=wmalloc(strlen(wwin->wm_instance)+strlen(wwin->wm_class)+7);
+        sprintf(tmp,"%s.%s.menu",wwin->wm_instance,wwin->wm_class);
+        path = wfindfile(DEF_USER_MENU_PATHS,tmp);
+        free(tmp);
 
-    tmp=wmalloc(strlen(wwin->wm_instance)+strlen(wwin->wm_class)+7);
-    sprintf(tmp,"%s.%s.menu",wwin->wm_instance,wwin->wm_class);
-    path = wfindfile(DEF_USER_MENU_PATHS,tmp);
-    free(tmp);
+        if (!path) return NULL;
+        
+        if (wwin) {
+            menu = readUserMenuFile(scr, path);
+        }
 
-    if (!path) return NULL;
-    
-    if (wwin) {
-        menu = readUserMenuFile(scr, path);
+        free(path);
     }
-
-    free(path);
     return menu;
 }
 

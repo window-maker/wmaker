@@ -235,7 +235,8 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 	wUserMenuRefreshInstances(napp->menu, wwin);
 #endif /* USER_MENU */
 
-	wAppMenuMap(napp->menu, wwin);
+    if (wwin->flags.mapped)
+    	wAppMenuMap(napp->menu, wwin);
 #ifdef NEWAPPICON
 	wApplicationActivate(napp);
 #endif
