@@ -380,9 +380,10 @@ showIconFor(WMScreen *scrPtr, InspectorPanel *panel,
 
         if (!path) {
 	    char *buf;
+	    int len = strlen(file)+80;
 	    
-	    buf = wmalloc(strlen(file)+80);
-	    sprintf(buf, _("Could not find icon \"%s\" specified for this window"),
+	    buf = wmalloc(len);
+	    snprintf(buf, len, _("Could not find icon \"%s\" specified for this window"),
 		    file);
             wMessageDialog(panel->frame->screen_ptr, _("Error"), buf, 
 			   _("OK"), NULL, NULL);
@@ -396,9 +397,10 @@ showIconFor(WMScreen *scrPtr, InspectorPanel *panel,
 
         if (!pixmap) {
 	    char *buf;
+	    int len = strlen(file)+80;
 	    
-	    buf = wmalloc(strlen(file)+80);
-	    sprintf(buf, _("Could not open specified icon \"%s\":%s"),
+	    buf = wmalloc(len);
+	    snprintf(buf, len, _("Could not open specified icon \"%s\":%s"),
 		    file, RMessageForError(RErrorCode));
             wMessageDialog(panel->frame->screen_ptr, _("Error"), buf,
 			   _("OK"), NULL, NULL);
@@ -1123,18 +1125,20 @@ selectSpecification(WMWidget *bPtr, void *data)
     InspectorPanel *panel = (InspectorPanel*)data;
     char *str;
     WWindow *wwin = panel->inspected;
-
+    int len;
 
     if (bPtr == panel->defaultRb && (wwin->wm_instance || wwin->wm_class)) {
 	WMSetButtonEnabled(panel->applyBtn, False);
     } else {
 	WMSetButtonEnabled(panel->applyBtn, True);
     }
+    
+    len = 16 + strlen(wwin->wm_instance ? wwin->wm_instance : "?")
+	+ strlen(wwin->wm_class ? wwin->wm_class : "?");
 
-    str = wmalloc(16 + strlen(wwin->wm_instance ? wwin->wm_instance : "?")
-		  + strlen(wwin->wm_class ? wwin->wm_class : "?"));
+    str = wmalloc(len);
 
-    sprintf(str, _("Inspecting  %s.%s"),
+    snprintf(str, len, _("Inspecting  %s.%s"),
 	    wwin->wm_instance ? wwin->wm_instance : "?",
 	    wwin->wm_class ? wwin->wm_class : "?");
 

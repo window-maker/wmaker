@@ -10,6 +10,7 @@
 echo gathering information for bug tracking...
 
 uname -a > sysinfo.txt
+wmaker --version >> sysinfo.txt
 echo "=============== xdpyinfo ================" >> sysinfo.txt
 xdpyinfo >> sysinfo.txt
 echo "=============== env ================" >> sysinfo.txt
@@ -25,9 +26,9 @@ cat ../config.cache ../Version >> sysinfo.txt 2> /dev/null
 cat config.cache Version >> sysinfo.txt 2> /dev/null
 
 echo "=============== configuration dir ===========" >> sysinfo.txt
-WDIR=$HOME/gnustep/Library/WindowMaker
+WDIR=$HOME/GNUstep/Defaults
 if [ -d $WDIR ]; then
-	for i in preferences menu app_options winitrc shortcuts; do
+	for i in WMGLOBAL WMRootMenu WMState WMWindowAttributes WindowMaker; do
 		if [ -f $WDIR/$i ]; then
 			echo "============== $i ========" >> sysinfo.txt
 			cat $WDIR/$i >> sysinfo.txt
@@ -37,6 +38,6 @@ else
 	echo "No config directory found" >> sysinfo.txt
 fi
 
-gzip -9 sysinfo.txt
+bzip2 -9f sysinfo.txt || gzip -9f sysinfo.txt
 
 echo done.

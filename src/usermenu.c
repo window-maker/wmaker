@@ -357,8 +357,9 @@ wUserMenuGet(WScreen *scr, WWindow *wwin)
     char *path = NULL;
     char *tmp;
     if ( wwin->wm_instance && wwin->wm_class ) {
-        tmp=wmalloc(strlen(wwin->wm_instance)+strlen(wwin->wm_class)+7);
-        sprintf(tmp,"%s.%s.menu",wwin->wm_instance,wwin->wm_class);
+	int len = strlen(wwin->wm_instance)+strlen(wwin->wm_class)+7;
+        tmp=wmalloc(len);
+        snprintf(tmp,len,"%s.%s.menu",wwin->wm_instance,wwin->wm_class);
         path = wfindfile(DEF_USER_MENU_PATHS,tmp);
         wfree(tmp);
 

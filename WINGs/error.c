@@ -21,6 +21,8 @@
 
 #include "../src/config.h"
 
+#include "wconfig.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -51,12 +53,12 @@ wstrerror(int errnum)
     if (errno < sys_nerr)
         return sys_errlist[errnum];
 
-    sprintf (buf, "Unknown error %d", errnum);
+    sprintf (buf, _("Unknown error %d"), errnum);
     return buf;
 #else /* no strerror() and no sys_errlist[] */
     static char buf[] = "Error 12345678901234567890";
 
-    sprintf(buf, "Error %d", errnum);
+    sprintf(buf, _("Error %d"), errnum);
     return buf;
 #endif
 }
@@ -107,7 +109,7 @@ wwarning(const char *msg, ...)
     strcat(buf,"\n");
     fflush(stdout);
     fputs(_WINGS_progname, stderr);
-    fputs(" warning: ",stderr);
+    fputs(_(" warning: "),stderr);
     fputs(buf, stderr);
     fflush(stdout);
     fflush(stderr);
@@ -134,7 +136,7 @@ wfatal(const char *msg, ...)
     strcat(buf,"\n");
     fflush(stdout);
     fputs(_WINGS_progname, stderr);
-    fputs(" fatal error: ",stderr);
+    fputs(_(" fatal error: "),stderr);
     fputs(buf, stderr);
     fflush(stdout);
     fflush(stderr);
@@ -160,7 +162,7 @@ wsyserror(const char *msg, ...)
     vsnprintf(buf, MAXLINE-3, msg, args);
     fflush(stdout);
     fputs(_WINGS_progname, stderr);
-    fputs(" error: ", stderr);
+    fputs(_(" error: "), stderr);
     fputs(buf, stderr);
     fputs(": ", stderr);
     fputs(wstrerror(error), stderr);
@@ -189,7 +191,7 @@ wsyserrorwithcode(int error, const char *msg, ...)
     vsnprintf(buf, MAXLINE-3, msg, args);
     fflush(stdout);
     fputs(_WINGS_progname, stderr);
-    fputs(" error: ", stderr);
+    fputs(_(" error: "), stderr);
     fputs(buf, stderr);
     fputs(": ", stderr);
     fputs(wstrerror(error), stderr);

@@ -1,6 +1,7 @@
 
 
 #include "WINGsP.h"
+#include "wconfig.h"
 
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
@@ -411,7 +412,7 @@ loadPixmaps(WMScreen *scr)
     if (!image)
 	image = RLoadImage(scr->rcontext, X_WINGS_IMAGES_FILE, 0);
     if (!image) {
-	wwarning("WINGs: could not load widget images file: %s", 
+	wwarning(_("WINGs: could not load widget images file: %s"), 
 		 RMessageForError(RErrorCode));
 	return False;
     }
@@ -753,8 +754,8 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 	scrPtr->boldFont = scrPtr->normalFont;
 
     if (!scrPtr->normalFont) {
-	wwarning("could not load any fonts. Make sure your font installation"
-		 "and locale settings are correct.");
+	wwarning(_("could not load any fonts. Make sure your font installation"
+		 "and locale settings are correct."));
 
 	return NULL;
     }

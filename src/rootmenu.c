@@ -331,14 +331,16 @@ getLocalizedMenuFile(char *menu)
 {
     char *buffer;
     char *ptr;
+    int len;
 
     if (!Locale)
 	return NULL;
 
-    buffer = wmalloc(strlen(menu)+32);
+    len = strlen(menu)+32;
+    buffer = wmalloc(len);
 
     /* try menu.locale_name */
-    sprintf(buffer, "%s.%s", menu, Locale);
+    snprintf(buffer, len, "%s.%s", menu, Locale);
     if (access(buffer, F_OK)==0) {
 	return buffer;
     }
@@ -745,6 +747,14 @@ finish:
 }
 
 
+static void
+cleanupWorkspaceMenu(WMenu *menu)
+{
+    if (menu->frame->screen_ptr->workspace_menu == menu)
+	menu->frame->screen_ptr->workspace_menu = NULL;
+}
+
+
 static WMenuEntry*
 addWorkspaceMenu(WScreen *scr, WMenu *menu, char *title)
 {
@@ -756,8 +766,10 @@ addWorkspaceMenu(WScreen *scr, WMenu *menu, char *title)
 	return NULL;
     } else {
 	scr->flags.added_workspace_menu = 1;
-	
+
 	wsmenu = wWorkspaceMenuMake(scr, True);
+	wsmenu->on_destroy = cleanupWorkspaceMenu;
+
 	scr->workspace_menu = wsmenu;
 	entry = wMenuAddCallback(menu, title, NULL, NULL);
 	wMenuEntrySetCascade(menu, entry, wsmenu);
@@ -766,6 +778,15 @@ addWorkspaceMenu(WScreen *scr, WMenu *menu, char *title)
     }
     return entry;
 }
+
+
+static void
+cleanupWindowsMenu(WMenu *menu)
+{
+    if (menu->frame->screen_ptr->switch_menu == menu)
+	menu->frame->screen_ptr->switch_menu = NULL;
+}
+
 
 static WMenuEntry*
 addWindowsMenu(WScreen *scr, WMenu *menu, char *title)
@@ -781,6 +802,7 @@ addWindowsMenu(WScreen *scr, WMenu *menu, char *title)
 	scr->flags.added_windows_menu = 1;
 
 	wwmenu = wMenuCreate(scr, _("Window List"), False);
+	wwmenu->on_destroy = cleanupWindowsMenu;
 	scr->switch_menu = wwmenu;
 	wwin = scr->focused_window;
 	while (wwin) {
@@ -793,6 +815,7 @@ addWindowsMenu(WScreen *scr, WMenu *menu, char *title)
     }
     return entry;
 }
+
 
 static WMenuEntry*
 addMenuEntry(WMenu *menu, char *title, char *shortcut, char *command,
@@ -1131,7 +1154,8 @@ readMenuFile(WScreen *scr, char *file_name)
 	if (!args) {
 	    wwarning(_("could not make arguments for menu file preprocessor"));
 	} else {
-	    sprintf(command, "%s %s %s", CPP_PATH, args, file_name);
+	    snprintf(command, sizeof(command), "%s %s %s", 
+		     CPP_PATH, args, file_name);
 	    wfree(args);
 	    file = popen(command, "r");
 	    if (!file) {
@@ -1230,7 +1254,8 @@ readMenuPipe(WScreen *scr, char **file_name)
        if (!args) {
            wwarning(_("could not make arguments for menu file preprocessor"));
        } else {
-           sprintf(command, "%s | %s %s", filename, CPP_PATH, args);
+           snprintf(command, sizeof(command), "%s | %s %s", 
+		    filename, CPP_PATH, args);
 
            wfree(args);
            file = popen(command, "r");
@@ -1746,6 +1771,7 @@ OpenRootMenu(WScreen *scr, int x, int y, int keyboard)
     
     scr->flags.root_menu_changed_shortcuts = 0;
     scr->flags.added_workspace_menu = 0;
+    scr->flags.added_windows_menu = 0;
 
     if (scr->root_menu && scr->root_menu->flags.mapped) {
 	menu = scr->root_menu;
@@ -1798,8 +1824,9 @@ OpenRootMenu(WScreen *scr, int x, int y, int keyboard)
 	menu = scr->root_menu;
     } else {
 	/* new root menu */
-	if (scr->root_menu)
+	if (scr->root_menu) {
 	    wMenuDestroy(scr->root_menu, True);
+	}
 	scr->root_menu = menu;
     }
     if (menu) {

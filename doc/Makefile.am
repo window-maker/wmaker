@@ -1,5 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
+SUBDIRS = sk
+
 man_MANS = \
 	geticonset.1x \
 	setstyle.1x \

@@ -1195,7 +1195,7 @@ static void handleResize(W_ViewDelegate *self, WMView *view)
     vh = WMIN(size.height, height);
 
     W_MoveView(table->tableView, 21, 1+table->headerHeight+1);
-    W_ResizeView(table->tableView, WMAX(vw, 1), WMAX(vh, 1));
+    W_ResizeView(table->tableView, WMAX(vw, 1), WMAX(vh, 1)+1);
     
     adjustScrollers(table);
     

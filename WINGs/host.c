@@ -21,6 +21,8 @@
 
 #include "../src/config.h"
 
+#include "wconfig.h"
+
 #include <unistd.h>
 #include <string.h>
 #include <netdb.h>
@@ -111,7 +113,7 @@ WMGetCurrentHost()
     char name[W_MAXHOSTNAMELEN+1];
 
     if (gethostname(name, W_MAXHOSTNAMELEN) < 0) {
-        wsyserror("Cannot get current host name");
+        wsyserror(_("Cannot get current host name"));
         return NULL;
     }
 

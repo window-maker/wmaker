@@ -1,5 +1,6 @@
 
 #include "WINGsP.h"
+#include "wconfig.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -231,7 +232,7 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     fPtr->nameLabel = WMCreateLabel(fPtr->win);
     WMMoveWidget(fPtr->nameLabel, 7, 282);
     WMResizeWidget(fPtr->nameLabel, 55, 14);
-    WMSetLabelText(fPtr->nameLabel, "Name:");
+    WMSetLabelText(fPtr->nameLabel, _("Name:"));
     
     fPtr->fileField = WMCreateTextField(fPtr->win);
     WMMoveWidget(fPtr->fileField, 60, 278);
@@ -246,7 +247,7 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     fPtr->okButton = WMCreateCommandButton(fPtr->win);
     WMMoveWidget(fPtr->okButton, 245, 325);
     WMResizeWidget(fPtr->okButton, 75, 28);
-    WMSetButtonText(fPtr->okButton, "OK");
+    WMSetButtonText(fPtr->okButton, _("OK"));
     WMSetButtonImage(fPtr->okButton, scrPtr->buttonArrow);
     WMSetButtonAltImage(fPtr->okButton, scrPtr->pushedButtonArrow);
     WMSetButtonImagePosition(fPtr->okButton, WIPRight);
@@ -255,7 +256,7 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     fPtr->cancelButton = WMCreateCommandButton(fPtr->win);
     WMMoveWidget(fPtr->cancelButton, 165, 325);
     WMResizeWidget(fPtr->cancelButton, 75, 28);
-    WMSetButtonText(fPtr->cancelButton, "Cancel");
+    WMSetButtonText(fPtr->cancelButton, _("Cancel"));
     WMSetButtonAction(fPtr->cancelButton, buttonClick, fPtr);
 
     fPtr->trashcanButton = WMCreateCommandButton(fPtr->win);
@@ -328,7 +329,7 @@ WMGetOpenPanel(WMScreen *scrPtr)
     if (scrPtr->sharedOpenPanel)
 	return scrPtr->sharedOpenPanel;
 
-    panel = makeFilePanel(scrPtr, "openFilePanel", "Open");
+    panel = makeFilePanel(scrPtr, "openFilePanel", _("Open"));
     panel->flags.fileMustExist = 1;
     panel->flags.panelType = WP_OPEN;
 
@@ -346,7 +347,7 @@ WMGetSavePanel(WMScreen *scrPtr)
     if (scrPtr->sharedSavePanel)
 	return scrPtr->sharedSavePanel;
 
-    panel = makeFilePanel(scrPtr, "saveFilePanel", "Save");
+    panel = makeFilePanel(scrPtr, "saveFilePanel", _("Save"));
     panel->flags.fileMustExist = 0;
     panel->flags.panelType = WP_SAVE;
 
@@ -392,13 +393,13 @@ WMRunModalFilePanelForDirectory(WMFilePanel *panel, WMWindow *owner,
             panel->flags.filtered = 1;
         panel->fileTypes = fileTypes;
         if (name == NULL)
-            name = "Open";
+            name = _("Open");
         break;
     case WP_SAVE:
         panel->fileTypes = NULL;
         panel->flags.filtered = 0;
         if (name == NULL)
-            name = "Save";
+            name = _("Save");
         break;
     default:
         break;
@@ -558,7 +559,7 @@ listDirectoryOnColumn(WMFilePanel *panel, int column, char *path)
     
     if (!dir) {
 #ifdef VERBOSE
-	printf("WINGs: could not open directory %s\n", path);
+	printf(_("WINGs: could not open directory %s\n"), path);
 #endif
 	return;
     }
@@ -576,7 +577,7 @@ listDirectoryOnColumn(WMFilePanel *panel, int column, char *path)
 
 	if (stat(pbuf, &stat_buf)!=0) {
 #ifdef VERBOSE
-	    printf("WINGs: could not stat %s\n", pbuf);
+	    printf(_("WINGs: could not stat %s\n"), pbuf);
 #endif
 	    continue;
 	} else {
@@ -643,7 +644,7 @@ showError(WMScreen *scr, WMWindow *owner, char *s, char *file)
     } else {
         errStr = wstrdup(s);
     }
-    WMRunAlertPanel(scr, owner, "Error", errStr, "OK", NULL, NULL);
+    WMRunAlertPanel(scr, owner, _("Error"), errStr, _("OK"), NULL, NULL);
     wfree(errStr);
 }
 
@@ -654,8 +655,8 @@ createDir(WMButton *bPre, WMFilePanel *panel)
     char *dirName, *directory, *file, *s;
     WMScreen *scr = WMWidgetScreen(panel->win);
 
-    dirName = WMRunInputPanel(scr, panel->win, "Create Directory",
-                              "Enter directory name", "", "OK", "Cancel");
+    dirName = WMRunInputPanel(scr, panel->win, _("Create Directory"),
+                              _("Enter directory name"), "", _("OK"), _("Cancel"));
     if (!dirName)
         return;
 
@@ -680,7 +681,7 @@ createDir(WMButton *bPre, WMFilePanel *panel)
     }
     if ((s = strrchr(dirName, '/')) && !s[1]) s[0] = 0;
 
-    file = wmalloc(strlen(dirName)+strlen(directory)+1);
+    file = wmalloc(strlen(dirName)+strlen(directory)+4);
     sprintf(file, "%s/%s", directory, dirName);
     while ((s = strstr(file,"//"))) {
         int i;
@@ -691,13 +692,13 @@ createDir(WMButton *bPre, WMFilePanel *panel)
     if (mkdir(file,0xfff) != 0) {
         switch (errno) {
             case EACCES:
-                showError(scr, panel->win, "Permission denied.", NULL);
+                showError(scr, panel->win, _("Permission denied."), NULL);
                 break;
             case EEXIST:
-                showError(scr, panel->win, "'%s' already existes.", file);
+                showError(scr, panel->win, _("'%s' already exists."), file);
                 break;
             case ENOENT:
-                showError(scr, panel->win, "Path does not exist.", NULL);
+                showError(scr, panel->win, _("Path does not exist."), NULL);
         }
     }
     else WMSetFilePanelDirectory(panel, file);
@@ -727,51 +728,53 @@ deleteFile(WMButton *bPre, WMFilePanel *panel)
     if (stat(file,&filestat)) {
         switch (errno) {
             case ENOENT:
-                showError(scr, panel->win, "'%s' does not exist.", file);
+                showError(scr, panel->win, _("'%s' does not exist."), file);
                 break;
             case EACCES:
-                showError(scr, panel->win, "Permission denied.", NULL);
+                showError(scr, panel->win, _("Permission denied."), NULL);
                 break;
             case ENOMEM:
                 showError(scr, panel->win,
-                        "Insufficient memory available.", NULL);
+                        _("Insufficient memory available."), NULL);
                 break;
             case EROFS:
                 showError(scr, panel->win,
-                        "'%s' is on a read-only filesystem.", file);
+                        _("'%s' is on a read-only filesystem."), file);
                 break;
             default:
-                showError(scr, panel->win, "Can not delete '%s'.", file);
+                showError(scr, panel->win, _("Can not delete '%s'."), file);
         }
         wfree(file);
         return;
     } else if (S_ISDIR(filestat.st_mode)) {
-        buffer = wmalloc(strlen(file)+20);
-        sprintf(buffer,"Delete directory %s ?",file);
+	int len = strlen(file)+20;
+        buffer = wmalloc(len);
+        snprintf(buffer,len,_("Delete directory %s ?"),file);
     } else {
-        buffer = wmalloc(strlen(file)+15);
-        sprintf(buffer,"Delete file %s ?",file);
+	int len = strlen(file)+15;
+        buffer = wmalloc(len);
+        snprintf(buffer,len,_("Delete file %s ?"),file);
     }
 
     if (!WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
-                "Warning", buffer, "OK", "Cancel", NULL)) {
+                _("Warning"), buffer, _("OK"), _("Cancel"), NULL)) {
         if (S_ISDIR(filestat.st_mode)) {
             if (rmdir(file) != 0) {
                 switch (errno) {
                     case EACCES:
-                        showError(scr, panel->win, "Permission denied.", NULL);
+                        showError(scr, panel->win, _("Permission denied."), NULL);
                         break;
                     case ENOENT:
-                        showError(scr, panel->win, "Directory '%s' does not exist.", file);
+                        showError(scr, panel->win, _("Directory '%s' does not exist."), file);
                         break;
                     case ENOTEMPTY:
-                        showError(scr, panel->win, "Directory '%s' is not empty.", file);
+                        showError(scr, panel->win, _("Directory '%s' is not empty."), file);
                         break;
                     case EBUSY:
-                        showError(scr, panel->win, "Directory '%s' is busy.", file);
+                        showError(scr, panel->win, _("Directory '%s' is busy."), file);
                         break;
                     default:
-                        showError(scr, panel->win, "Can not delete '%s'.", file);
+                        showError(scr, panel->win, _("Can not delete '%s'."), file);
                 }
             } else {
                 char *s = strrchr(file,'/');
@@ -781,24 +784,24 @@ deleteFile(WMButton *bPre, WMFilePanel *panel)
         } else if (remove(file) != 0) {
             switch (errno) {
                 case EISDIR:
-                    showError(scr, panel->win, "'%s' is a directory.", file);
+                    showError(scr, panel->win, _("'%s' is a directory."), file);
                     break;
                 case ENOENT:
-                    showError(scr, panel->win, "'%s' does not exist.", file);
+                    showError(scr, panel->win, _("'%s' does not exist."), file);
                     break;
                 case EACCES:
-                    showError(scr, panel->win, "Permission denied.", NULL);
+                    showError(scr, panel->win, _("Permission denied."), NULL);
                     break;
                 case ENOMEM:
                     showError(scr, panel->win,
-                            "Insufficient memory available.", NULL);
+                            _("Insufficient memory available."), NULL);
                     break;
                 case EROFS:
                     showError(scr, panel->win,
-                            "'%s' is on a read-only filesystem.", file);
+                            _("'%s' is on a read-only filesystem."), file);
                     break;
                 default:
-                    showError(scr, panel->win, "Can not delete '%s'.", file);
+                    showError(scr, panel->win, _("Can not delete '%s'."), file);
             }
         } else {
             char *s = strrchr(file,'/');
@@ -823,11 +826,11 @@ goFloppy(WMButton *bPtr, WMFilePanel *panel)
     WMScreen *scr = WMWidgetScreen(panel->win);
 
     if (stat(WINGsConfiguration.floppyPath, &filestat)) {
-        showError(scr, panel->win, "An error occured browsing '%s'.",
+        showError(scr, panel->win, _("An error occured browsing '%s'."),
                   WINGsConfiguration.floppyPath);
         return;
     } else if (!S_ISDIR(filestat.st_mode)) {
-        showError(scr, panel->win, "'%s' is not a directory.",
+        showError(scr, panel->win, _("'%s' is not a directory."),
                   WINGsConfiguration.floppyPath);
         return;
     }
@@ -964,8 +967,8 @@ buttonClick(WMButton *bPtr, WMFilePanel *panel)
 	    file = getCurrentFileName(panel);
 	    if (access(file, F_OK)!=0) {
 		WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
-				"Error", "File does not exist.",
-				"Ok", NULL, NULL);
+				_("Error"), _("File does not exist."),
+				_("OK"), NULL, NULL);
 		wfree(file);
 		return;
 	    }

@@ -231,10 +231,10 @@ W_PaintTextAndImage(W_View *view, int wrap, GC textGC, W_Font *font,
 	w = view->size.width;
 	h = view->size.height;
     } else {
-	x = 2;
-	y = 2;
-	w = view->size.width - 4;
-	h = view->size.height - 4;	
+	x = 1;
+	y = 1;
+	w = view->size.width - 3;
+	h = view->size.height - 3;	
     }
 
     /* calc. image alignment */

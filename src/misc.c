@@ -81,7 +81,7 @@ static void
 putidef(char *line, char *name, int value)
 {
     char tmp[64];
-    sprintf(tmp, "%i", value);
+    snprintf(tmp, sizeof(tmp), "%i", value);
     strcat(line, name);
     strcat(line, tmp);
 }
@@ -824,7 +824,7 @@ ExpandOptions(WScreen *scr, char *cmdline)
 	     case 'w':
 		if (scr->focused_window
 		    && scr->focused_window->flags.focused) {
-		    sprintf(tmpbuf, "0x%x", 
+		    snprintf(tmpbuf, sizeof(tmpbuf), "0x%x", 
 			    (unsigned int)scr->focused_window->client_win);
 		    slen = strlen(tmpbuf);
 		    olen += slen;
@@ -842,7 +842,7 @@ ExpandOptions(WScreen *scr, char *cmdline)
 		break;
 		
 	     case 'W':
-		sprintf(tmpbuf, "0x%x", 
+		snprintf(tmpbuf, sizeof(tmpbuf), "0x%x", 
 			(unsigned int)scr->current_workspace + 1);
 		slen = strlen(tmpbuf);
 		olen += slen;
@@ -1128,8 +1128,9 @@ EscapeWM_CLASS(char *name, char *class)
     }
 
     if (ename && eclass) {
-	ret = wmalloc(strlen(ename)+strlen(eclass)+4);
-	sprintf(ret, "%s.%s", ename, eclass);
+	int len = strlen(ename)+strlen(eclass)+4;
+	ret = wmalloc(len);
+	snprintf(ret, len, "%s.%s", ename, eclass);
 	wfree(ename);
 	wfree(eclass);
     } else if (ename) {
@@ -1230,12 +1231,12 @@ SendHelperMessage(WScreen *scr, char type, int workspace, char *msg)
     
     len = (msg ? strlen(msg) : 0) + (workspace >=0 ? 4 : 0) + 1 ;
     buffer = wmalloc(len+5);
-    sprintf(buf, "%4i", len);
+    snprintf(buf, len, "%4i", len);
     memcpy(buffer, buf, 4);
     buffer[4] = type;
     i = 5;
     if (workspace >= 0) {
-	sprintf(buf, "%4i", workspace);
+	snprintf(buf, sizeof(buf), "%4i", workspace);
 	memcpy(&buffer[i], buf, 4);
 	i += 4;
 	buffer[i] = 0;

@@ -1433,6 +1433,17 @@ handleKeyPress(XEvent *event)
 	    }
 	}
 	break;
+     case WKBD_HMAXIMIZE:
+	if (ISMAPPED(wwin) && ISFOCUSED(wwin) && !WFLAGP(wwin, no_resizable)) {
+	    CloseWindowMenu(scr);
+	    
+	    if (wwin->flags.maximized) {
+		wUnmaximizeWindow(wwin);
+	    } else {
+		wMaximizeWindow(wwin, MAX_HORIZONTAL);
+	    }
+	}
+	break;
      case WKBD_RAISE:
 	if (ISMAPPED(wwin) && ISFOCUSED(wwin)) {
 	    CloseWindowMenu(scr);

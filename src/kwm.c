@@ -685,7 +685,7 @@ wKWMGetWorkspaceName(WScreen *scr, int workspace)
     assert(workspace >= 0 && workspace < MAX_WORKSPACES);
 
     if (_XA_KWM_DESKTOP_NAME_[workspace]==0) {
-	sprintf(buffer, "KWM_DESKTOP_NAME_%d", workspace + 1);
+	snprintf(buffer, sizeof(buffer), "KWM_DESKTOP_NAME_%d", workspace + 1);
 
 	_XA_KWM_DESKTOP_NAME_[workspace] = XInternAtom(dpy, buffer, False);
     }
@@ -1511,7 +1511,7 @@ wKWMUpdateWorkspaceNameHint(WScreen *scr, int workspace)
     assert(workspace >= 0 && workspace < MAX_WORKSPACES);
 
     if (_XA_KWM_DESKTOP_NAME_[workspace]==0) {
-	sprintf(buffer, "KWM_DESKTOP_NAME_%d", workspace + 1);
+	snprintf(buffer, sizeof(buffer), "KWM_DESKTOP_NAME_%d", workspace + 1);
 
 	_XA_KWM_DESKTOP_NAME_[workspace] = XInternAtom(dpy, buffer, False);
     }
@@ -1583,7 +1583,7 @@ wKWMGetUsableArea(WScreen *scr, WArea *area)
     char buffer[64];
 
     if (_XA_KWM_WINDOW_REGION_[0]==0) {
-	sprintf(buffer, "KWM_WINDOW_REGION_%d", 1);
+	snprintf(buffer, sizeof(buffer), "KWM_WINDOW_REGION_%d", 1);
 
 	_XA_KWM_WINDOW_REGION_[0] = XInternAtom(dpy, buffer, False);
     }
@@ -1625,7 +1625,7 @@ wKWMSetUsableAreaHint(WScreen *scr, int workspace)
     assert(workspace >= 0 && workspace < MAX_WORKSPACES);
 
     if (_XA_KWM_WINDOW_REGION_[workspace]==0) {
-	sprintf(buffer, "KWM_WINDOW_REGION_%d", workspace+1);
+	snprintf(buffer, sizeof(buffer), "KWM_WINDOW_REGION_%d", workspace+1);
 
 	_XA_KWM_WINDOW_REGION_[workspace] = XInternAtom(dpy, buffer, False);
     }
@@ -1682,7 +1682,7 @@ writeSocket(int sock, char *data)
 {
     char buffer[128];
 
-    sprintf(buffer, "%i ", strlen(data));
+    snprintf(buffer, sizeof(buffer), "%i ", strlen(data));
     write(sock, buffer, strlen(buffer));
     write(sock, data, strlen(data));
 }
@@ -1692,15 +1692,16 @@ static int
 connectKFM(WScreen *scr)
 {
     char *path;
-    char buffer[128];
+    char *buffer;
     char *ptr;
     FILE *f;
     int pid;
     int sock = 0;
     struct sockaddr_un addr;
+    char buf[256];
 
     path = wstrconcat(wgethomedir(), "/.kde/share/apps/kfm/pid");
-    strcpy(buffer, getenv("DISPLAY"));
+    buffer = wstrdup(getenv("DISPLAY"));
 
     ptr = strchr(buffer, ':');
     if (ptr)
@@ -1712,12 +1713,12 @@ connectKFM(WScreen *scr)
     {
 	char b[32];
 	
-	sprintf(b, ".%i", scr->screen);
-	strcat(buffer, b);
+	snprintf(b, sizeof(b), ".%i", scr->screen);
+	
+	buffer = wstrappend(buffer, b);
     }
-    ptr = path;
-    path = wstrconcat(ptr, buffer);
-    wfree(ptr);
+    path = wstrappend(path, buffer);
+    wfree(buffer);
 
     /* pid file */
     f = fopen(path, "r");
@@ -1725,24 +1726,26 @@ connectKFM(WScreen *scr)
     if (!f)
 	return -1;
 
-    buffer[0] = 0;
-    fgets(buffer, 123, f);
-    pid = atoi(buffer);
+    *buf = 0;
+    fgets(buf, sizeof(buf), f);
+    buf[sizeof(buf)] = 0;
+    pid = atoi(buf);
     if (pid <= 0)
 	return -1;
 
     if (kill(pid, 0) != 0)
 	return -1;
 
-    buffer[0] = 0;
-    fscanf(f, "%s", buffer);
+    *buf = 0;
+    fgets(buf, sizeof(buf), f);
+    buf[sizeof(buf)] = 0;    
     fclose(f);
 
     sock = socket(AF_UNIX, SOCK_STREAM, 0);
     if (sock < 0)
 	return -1;
     addr.sun_family = AF_UNIX;
-    strcpy(addr.sun_path, buffer);
+    strcpy(addr.sun_path, buf);
 
     if (connect(sock, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
 	close(sock);
@@ -1751,17 +1754,18 @@ connectKFM(WScreen *scr)
 
     path = wstrconcat(wgethomedir(), "/.kde/share/apps/kfm/magic");
     f = fopen(path, "r");
+    wfree(path);
     if (!f) {
 	return -1;
     }
-    ptr = fgets(buffer, 123, f);
+    ptr = fgets(buf, sizeof(buf), f);
     fclose(f);
     if (!ptr) {
 	return -1;
     }
     puts(buffer);
 
-    ptr = wstrconcat("auth", buffer);
+    ptr = wstrconcat("auth", buf);
 
     writeSocket(sock, ptr);
     wfree(ptr);

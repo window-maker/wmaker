@@ -381,8 +381,11 @@ drawIconProc(WMList *lPtr, int index, Drawable d, char *text,
     whitecolor = WMWhiteColor(wmscr);
 
     dirfile = wexpandpath(WMGetListSelectedItem(panel->dirList)->text);
-    file = wmalloc(strlen(dirfile)+strlen(text)+4);
-    sprintf(file, "%s/%s", dirfile, text);
+    {
+	int len = strlen(dirfile)+strlen(text)+4;
+	file = wmalloc(len);
+	snprintf(file, len, "%s/%s", dirfile, text);
+    }
     wfree(dirfile);
 
     if ((state & WLDSSelected) != 0) {
@@ -691,12 +694,13 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
 
     {
 	char *tmp;
+	int len = (instance ? strlen(instance) : 0)
+	    + (class ? strlen(class) : 0) + 32;
 
-	tmp = wmalloc((instance ? strlen(instance) : 0)
-		     + (class ? strlen(class) : 0) + 32);
+	tmp = wmalloc(len);
 
 	if (tmp && (instance || class))
-	    sprintf(tmp, "%s [%s.%s]", _("Icon Chooser"), instance, class);
+	    snprintf(tmp, len, "%s [%s.%s]", _("Icon Chooser"), instance, class);
 	else
 	    strcpy(tmp, _("Icon Chooser"));
 
@@ -1155,7 +1159,7 @@ handleLogoPush(XEvent *event, void *data)
             WMReleaseFont(panel->oldFont);
             panel->oldFont = NULL;
         }
-	sprintf(version, _("Version %s"), VERSION);
+	snprintf(version, sizeof(version), _("Version %s"), VERSION);
         WMSetLabelText(panel->versionL, version);
         XFlush(WMScreenDisplay(WMWidgetScreen(panel->versionL)));
     }
@@ -1176,8 +1180,8 @@ wShowInfoPanel(WScreen *scr)
     WMPixmap *logo;
     WMSize size;
     WMFont *font;
-    char version[32];
-    char buffer[512];
+    char *strbuf = NULL;
+    char buffer[256];
     Window parent;
     WWindow *wwin;
     RColor color1, color2;
@@ -1264,13 +1268,13 @@ wShowInfoPanel(WScreen *scr)
     WMSetLabelTextAlignment(panel->name2L, WACenter);
     WMSetLabelText(panel->name2L, _("Window Manager for X"));
 
-
-    sprintf(version, _("Version %s"), VERSION);
+    
+    snprintf(buffer, sizeof(buffer), _("Version %s"), VERSION);
     panel->versionL = WMCreateLabel(panel->win);
     WMResizeWidget(panel->versionL, 310, 16);
     WMMoveWidget(panel->versionL, 30, 95);
     WMSetLabelTextAlignment(panel->versionL, WARight);
-    WMSetLabelText(panel->versionL, version);
+    WMSetLabelText(panel->versionL, buffer);
     WMSetLabelWraps(panel->versionL, False);
 
     panel->copyrL = WMCreateLabel(panel->win);
@@ -1284,44 +1288,50 @@ wShowInfoPanel(WScreen *scr)
 	WMSetLabelFont(panel->copyrL, font);
     }
 
+    strbuf = NULL;
+    snprintf(buffer, sizeof(buffer), _("Using visual 0x%x: %s %ibpp "),
+	    (unsigned)scr->w_visual->visualid,
+	    visuals[scr->w_visual->class], scr->w_depth);
+    
+    strbuf = wstrappend(strbuf, buffer);
+    
     switch (scr->w_depth) {
      case 15:
-	strcpy(version, _("32 thousand"));
+	strbuf = wstrappend(strbuf, _("(32 thousand colors)\n"));
 	break;
      case 16:
-	strcpy(version, _("64 thousand"));
+	strbuf = wstrappend(strbuf, _("(64 thousand colors)\n"));
 	break;
      case 24:
      case 32:
-	strcpy(version, _("16 million"));
+	strbuf = wstrappend(strbuf, _("(16 million colors)\n"));
 	break;
      default:
-	sprintf(version, "%d", 1<<scr->w_depth);
+	snprintf(buffer, sizeof(buffer), _("(%d colors)\n"), 1<<scr->w_depth);
+	strbuf = wstrappend(strbuf, buffer);
 	break;
     }
-
-    sprintf(buffer, _("Using visual 0x%x: %s %ibpp (%s colors)\n"),
-	    (unsigned)scr->w_visual->visualid,
-	    visuals[scr->w_visual->class], scr->w_depth, version);
+    
 
 #if defined(HAVE_MALLOC_H) && defined(HAVE_MALLINFO)
     {
 	struct mallinfo ma = mallinfo();
-	sprintf(buffer+strlen(buffer),
+	snprintf(buffer, sizeof(buffer),
 		_("Total allocated memory: %i kB. Total memory in use: %i kB.\n"),
 		(ma.arena+ma.hblkhd)/1024, (ma.uordblks+ma.hblkhd)/1024);
-
+	
+	strbuf = wstrappend(strbuf, buffer);
     }
 #endif
 
-    strcat(buffer, _("Supported image formats: "));
+    strbuf = wstrappend(strbuf, _("Supported image formats: "));
     strl = RSupportedFileFormats();
     for (i=0; strl[i]!=NULL; i++) {
-	strcat(buffer, strl[i]);
-	strcat(buffer, " ");
+	strbuf = wstrappend(strbuf, strl[i]);
+	strbuf = wstrappend(strbuf, " ");
     }
 
-    strcat(buffer, _("\nAdditional support for: "));
+    strbuf = wstrappend(strbuf, _("\nAdditional support for: "));
     {
 	char *list[8];
 	char buf[80];
@@ -1350,24 +1360,25 @@ wShowInfoPanel(WScreen *scr)
 	    }
 	    strcat(buf, list[i]);
 	}
-	strcat(buffer, buf);
+	strbuf = wstrappend(strbuf, buf);
     }
 
     if (wPreferences.no_sound) {
-        strcat(buffer, _("\nSound disabled"));
+        strbuf = wstrappend(strbuf, _("\nSound disabled"));
     } else {
-        strcat(buffer, _("\nSound enabled"));
+        strbuf = wstrappend(strbuf, _("\nSound enabled"));
     }
 
 
     panel->infoL = WMCreateLabel(panel->win);
     WMResizeWidget(panel->infoL, 350, 75);
     WMMoveWidget(panel->infoL, 15, 115);
-    WMSetLabelText(panel->infoL, buffer);
+    WMSetLabelText(panel->infoL, strbuf);
     if (font) {
 	WMSetLabelFont(panel->infoL, font);
 	WMReleaseFont(font);
     }
+    wfree(strbuf);
 
 
     WMRealizeWidget(panel->win);
@@ -1681,10 +1692,10 @@ wShowCrashingDialogPanel(int whatSig)
     WMMoveWidget(panel->noteL, 10, 90);
     WMSetLabelTextAlignment(panel->noteL, WAJustified);
 #ifdef SYS_SIGLIST_DECLARED
-    sprintf(buf, _("Window Maker received signal %i\n(%s)."),
+    snprintf(buf, sizeof(buf), _("Window Maker received signal %i\n(%s)."),
             whatSig, sys_siglist[whatSig]);
 #else
-    sprintf(buf, _("Window Maker received signal %i."), whatSig);
+    snprintf(buf, sizeof(buf), _("Window Maker received signal %i."), whatSig);
 #endif
     WMSetLabelText(panel->noteL, buf);
 

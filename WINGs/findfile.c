@@ -21,6 +21,8 @@
 
 #include "../src/config.h"
 
+#include "wconfig.h"
+
 #include "WUtil.h"
 
 #include <stdlib.h>
@@ -45,7 +47,7 @@ wgethomedir()
     
     user = getpwuid(getuid());
     if (!user) {
-	wsyserror("could not get password entry for UID %i", getuid());
+	wsyserror(_("could not get password entry for UID %i"), getuid());
 	return "/";
     }
     if (!user->pw_dir) {
@@ -63,7 +65,7 @@ getuserhomedir(char *username)
     
     user = getpwnam(username);
     if (!user) {
-	wsyserror("could not get password entry for user %s", username);
+	wsyserror(_("could not get password entry for user %s"), username);
 	return NULL;
     }
     if (!user->pw_dir) {

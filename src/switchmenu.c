@@ -181,6 +181,7 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
     WMenu *switchmenu = scr->switch_menu;
     WMenuEntry *entry;
     char title[MAX_MENU_TEXT_LENGTH+6];
+    int len = MAX_MENU_TEXT_LENGTH+6;
     int i;
     int checkVisibility = 0;
 
@@ -201,11 +202,11 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
 
 	if (wwin->flags.internal_window || WFLAGP(wwin, skip_window_list))
 	    return;
-	    
+	
 	if (wwin->frame->title)
-	  sprintf(title, "%s", wwin->frame->title);
+	  snprintf(title, len, "%s", wwin->frame->title);
 	else
-	  sprintf(title, "%s", DEF_WINDOW_TITLE);
+	  snprintf(title, len, "%s", DEF_WINDOW_TITLE);
 	t = ShrinkString(scr->menu_entry_font, title, MAX_WINDOWLIST_WIDTH);
 
 	if (IS_OMNIPRESENT(wwin))
@@ -220,9 +221,9 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
 	entry->flags.indicator = 1;
 	entry->rtext = wmalloc(MAX_WORKSPACENAME_WIDTH+8);
 	if (IS_OMNIPRESENT(wwin))
-	    sprintf(entry->rtext, "[*]");
+	    snprintf(entry->rtext, MAX_WORKSPACENAME_WIDTH, "[*]");
 	else
-	    sprintf(entry->rtext, "[%s]", 
+	    snprintf(entry->rtext, MAX_WORKSPACENAME_WIDTH, "[%s]", 
 		    scr->workspaces[wwin->frame->workspace]->name);
 
 	if (wwin->flags.hidden) {
@@ -262,7 +263,8 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
                         snprintf(title, MAX_MENU_TEXT_LENGTH, "%s",
                                  wwin->frame->title);
                     else
-                        sprintf(title, "%s", DEF_WINDOW_TITLE);
+                        snprintf(title, MAX_MENU_TEXT_LENGTH, "%s",
+				 DEF_WINDOW_TITLE);
 
 		    t = ShrinkString(scr->menu_entry_font, title, MAX_WINDOWLIST_WIDTH);
 		    entry->text = t;
@@ -278,10 +280,11 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
 			int it, ion;
 			
 			if (IS_OMNIPRESENT(wwin)) {
-			    sprintf(entry->rtext, "[*]");
+			    snprintf(entry->rtext, MAX_WORKSPACENAME_WIDTH,
+				     "[*]");
 			} else {
-			    sprintf(entry->rtext, "[%s]", 
-				    scr->workspaces[wwin->frame->workspace]->name);
+			    snprintf(entry->rtext, MAX_WORKSPACENAME_WIDTH,
+				     "[%s]", scr->workspaces[wwin->frame->workspace]->name);
 			}
 
 			rt = entry->rtext;
@@ -362,9 +365,9 @@ UpdateSwitchMenuWorkspace(WScreen *scr, int workspace)
 	if (wwin->frame->workspace==workspace 
 	    && !IS_OMNIPRESENT(wwin)) {
 	    if (IS_OMNIPRESENT(wwin))
-		sprintf(menu->entries[i]->rtext, "[*]");
+		snprintf(menu->entries[i]->rtext, MAX_WORKSPACENAME_WIDTH,"[*]");
 	    else
-		sprintf(menu->entries[i]->rtext, "[%s]", 
+		snprintf(menu->entries[i]->rtext, MAX_WORKSPACENAME_WIDTH,"[%s]", 
 			scr->workspaces[wwin->frame->workspace]->name);
 	    menu->flags.realized = 0;
 	}

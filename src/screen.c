@@ -557,7 +557,7 @@ aquireManagerSelection(WScreen *scr)
     XEvent ev;
     Time timestamp;
 
-    sprintf(buffer, "WM_S%i", scr->screen);
+    snprintf(buffer, sizeof(buffer), "WM_S%i", scr->screen);
     scr->managerAtom = XInternAtom(dpy, buffer, False);
 
     /* for race-conditions... */
@@ -1015,14 +1015,14 @@ wScreenRestoreState(WScreen *scr)
 	path = wdefaultspathfordomain("WMState");
     else {
 	char buf[16];
-	sprintf(buf, "WMState.%i", scr->screen);
+	snprintf(buf, sizeof(buf), "WMState.%i", scr->screen);
 	path = wdefaultspathfordomain(buf);
     }
     scr->session_state = PLGetProplistWithPath(path);
     wfree(path);
     if (!scr->session_state && wScreenCount>1) {
 	char buf[16];
-	sprintf(buf, "WMState.%i", scr->screen);
+	snprintf(buf, sizeof(buf), "WMState.%i", scr->screen);
 	path = wdefaultspathfordomain(buf);
 	scr->session_state = PLGetProplistWithPath(path);
 	wfree(path);
@@ -1125,7 +1125,7 @@ wScreenSaveState(WScreen *scr)
 	str = wdefaultspathfordomain("WMState");
     else {
 	char buf[16];
-	sprintf(buf, "WMState.%i", scr->screen);
+	snprintf(buf, sizeof(buf), "WMState.%i", scr->screen);
 	str = wdefaultspathfordomain(buf);
     }
     path = PLMakeString(str);

@@ -4,6 +4,10 @@
 
 #include "WINGsP.h"
 
+#include "wconfig.h"
+
+#include "X11/Xlocale.h"
+
 
 extern void W_InitNotificationCenter(void);
 
@@ -26,11 +30,21 @@ void
 WMInitializeApplication(char *applicationName, int *argc, char **argv)
 {
     int i;
-    
+
     assert(argc!=NULL);
     assert(argv!=NULL);
     assert(applicationName!=NULL);
+   
 
+    setlocale(LC_ALL, "");
+    
+#ifdef I18N
+    if (getenv("NLSPATH"))
+	bindtextdomain("WINGs", getenv("NLSPATH"));
+    else
+	bindtextdomain("WINGs", LOCALEDIR);
+#endif
+    
     _WINGS_progname = argv[0];
     
     WMApplication.applicationName = wstrdup(applicationName);

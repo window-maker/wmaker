@@ -1423,7 +1423,7 @@ main(int argc, char **argv)
         render_mode = RDitheredRendering;
 
     rattr.flags = RC_RenderMode | RC_ColorsPerChannel
-	| RC_StandardColormap;
+	| RC_StandardColormap | RC_DefaultVisual;
     rattr.render_mode = render_mode;
     rattr.colors_per_channel = cpc;
     rattr.standard_colormap_mode = RCreateStdColormap;

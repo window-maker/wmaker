@@ -270,7 +270,7 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 	
 	XDrawSegments(dpy, root, gc, segment, 4);
 	
-	sprintf(num, "%i", (by - ty - wwin->normal_hints->base_height) /
+	snprintf(num, sizeof(num), "%i", (by - ty - wwin->normal_hints->base_height) /
 		wwin->normal_hints->height_inc);
 	fw = WMWidthOfString(scr->info_text_font, num, strlen(num));
 	
@@ -289,7 +289,7 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 	    s = 15;
 	}
 	mx = x1 + (x2 - x1)/2;
-	sprintf(num, "%i", (x2 - x1 - wwin->normal_hints->base_width) /
+	snprintf(num, sizeof(num), "%i", (x2 - x1 - wwin->normal_hints->base_width) /
 		wwin->normal_hints->width_inc);
 	fw = WMWidthOfString(scr->info_text_font, num, strlen(num));
 	

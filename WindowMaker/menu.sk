@@ -1,12 +1,13 @@
 /* Slovak root menu for WindowMaker
- * (C) 2001 judas@hell
+ * (C) 2001 Jan "judas" Tomka
  * 
- * Original translation by judas@hell on Jan 22 2001
- * Currently maintained by judas@hell <tomka@oalevice.sk>
+ * Original translation by Jan "judas" Tomka on Jan 22 2001
+ * Currently maintained by Jan "judas" Tomka <tomka@oalevice.sk>
  *
  * Version history:
- *	mnu-ver	WM-ver	author		email			date
- *	0.10	0.63.1	judas@hell	<tomka@oalevice.sk>	Jan 22 2001
+ *	WM-ver	author			email			date
+ *	0.63.1	Jan "judas" Tomka	<tomka@oalevice.sk>	Jan 28 2001
+ *	0.64.0	Jan "judas" Tomka	<tomka@oalevice.sk>	Feb 25 2001
  *
  */
 
@@ -16,24 +17,24 @@
  * <Názov> [SHORTCUT <Klávesová skratka>] <Príkaz> <Parametre>
  *
  * <Názov> je µubovoµný re»azec, ktorý sa pou¾ije ako názov polo¾ky. Ak obsahuje
- *	medzery, musí by» uzavretý v zátvorkách.
+ *	medzery, musí by» uzavretý v úvodzovkách.
  * 
  * SHORTCUT udáva klávesovú skratku pre danú polo¾ku. <Klávesová skratka> má
  *	rovnakú syntax ako v súbore $HOME/GNUstep/Defaults/WindowMaker, napr. 
  *	RootMenuKey alebo MiniaturizeKey.
  *
- * Nemô¾ete uda» klávesovú skratku pre polo¾ky typu MENU A OPEN_MENU.
+ * Nemô¾ete zada» klávesovú skratku pre polo¾ky typu MENU a OPEN_MENU.
  * 
  * <Príkaz> je jeden z nasledujúcich:
  * 	MENU - zaèína definíciu (sub)menu
  * 	END  - ukonèuje definíciu (sub)menu
- * 	OPEN_MENU - vlo¾í menu zo súboru, rúry alebo adresáru(ov),
+ * 	OPEN_MENU - vlo¾í menu zo súboru, rúry alebo adresára(ov),
  * 		    eventuálne pred ka¾dú polo¾ku vlo¾í príkaz
- * 	WORKSPACE_MENU - vlo¾í submenu operácií pracovnej plochy. Len jedno
- * 		    takéto menu je povolené
+ * 	WORKSPACE_MENU - vlo¾í submenu operácií pracovnej plochy. Je povolené
+ *		    len jedno takéto menu
  * 	EXEC <príkaz> - vykoná externý príkaz
  * 	SHEXEC <príkaz> - vykoná príkaz shelu (napr. gimp > /dev/null)
- * 	EXIT - ukonèí mana¾éra okien
+ * 	EXIT - ukonèí mana¾ér okien
  * 	RESTART [<mana¾ér okien>] - re¹tartuje WindowMaker alebo spustí iný
  * 			mana¾ér okien
  * 	REFRESH - obnoví obrazovku
@@ -45,7 +46,7 @@
  * 	SAVE_SESSION - ulo¾í aktuálny stav pracovnej plochy, èo zahàòa v¹etky
  * 		       spustené aplikácie, ich nastavenia (geometria,
  * 		       umiestnenie na obrazovke, pracovná plocha, na ktorej sa
- * 		       nachádzajú, Dok alebo sponka, odkiaµ boli spustené, èi
+ * 		       nachádzajú, Dok alebo Sponka, odkiaµ boli spustené, èi
  * 		       sú minimalizované, zrolované alebo skryté. Tie¾ sa ulo¾í
  * 		       plocha, na ktorej sa u¾ívateµ nachádza. Pri ka¾dom ¹tarte
  * 		       WindowMakeru sa tieto nastavenia obnovia a¾ kým sa nepou-
@@ -81,7 +82,7 @@
  *	// poradí, prièom pred ka¾dý vlo¾í príkaz.
  *	OPEN_MENU [voµby] /nejaký/adr [/ïal¹í/adr ...] WITH príkaz -voµby
  *		Voµby:
- * 			-noext 	odstráni» zvy¹ok mena súboru za powslednou
+ * 			-noext 	odstráni» zvy¹ok mena súboru za poslednou
  * 				bodkou (príponu)
  *
  * <Parametre> sú odovzdané aplikácii, ktorá sa má vykona».
@@ -226,5 +227,4 @@
 		"Koniec"  EXIT
 	"Koniec" END
 "Aplikácie" END
-
 

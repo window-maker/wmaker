@@ -1792,7 +1792,7 @@ wWindowUpdateName(WWindow *wwin, char *newTitle)
     
 #ifndef NO_WINDOW_ENUMERATOR
     if (instIndex > 0) {
-	sprintf(prefix, "  [%i]", instIndex);
+	snprintf(prefix, sizeof(prefix), "  [%i]", instIndex);
 	
 	title = wstrconcat(title, prefix);
     }

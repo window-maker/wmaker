@@ -1,6 +1,8 @@
 
 #include "WINGsP.h"
 
+#include "wconfig.h"
+
 #include <wraster.h>
 
 #define LIGHT_STIPPLE_WIDTH 4
@@ -193,7 +195,7 @@ WMWhiteColor(WMScreen *scr)
     if (!scr->white) {
 	scr->white = WMCreateRGBColor(scr, 0xffff, 0xffff, 0xffff, True);
 	if (!scr->white->flags.exact)
-	    wwarning("could not allocate %s color", "white");
+	    wwarning(_("could not allocate %s color"), _("white"));
     }
     return WMRetainColor(scr->white);
 }
@@ -206,7 +208,7 @@ WMBlackColor(WMScreen *scr)
     if (!scr->black) {
 	scr->black = WMCreateRGBColor(scr, 0, 0, 0, True);
 	if (!scr->black->flags.exact)
-	    wwarning("could not allocate %s color", "black");
+	    wwarning(_("could not allocate %s color"), _("black"));
     }
     return WMRetainColor(scr->black);
 }
@@ -245,7 +247,7 @@ WMGrayColor(WMScreen *scr)
 	} else {
 	    color = WMCreateRGBColor(scr, 0xaeba, 0xaaaa, 0xaeba, True);
 	    if (!color->flags.exact)
-		wwarning("could not allocate %s color", "gray");
+		wwarning(_("could not allocate %s color"), _("gray"));
 	}
 	scr->gray = color;
     }
@@ -286,7 +288,7 @@ WMDarkGrayColor(WMScreen *scr)
 	} else {
 	    color = WMCreateRGBColor(scr, 0x5144, 0x5555, 0x5144, True);
 	    if (!color->flags.exact)
-		wwarning("could not allocate %s color", "dark gray");
+		wwarning(_("could not allocate %s color"), _("dark gray"));
 	}
 	scr->darkGray = color;
     }

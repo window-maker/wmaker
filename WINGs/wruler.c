@@ -20,6 +20,7 @@
 
 
 #include "WINGsP.h"
+#include "wconfig.h"
 
 #define MIN_DOC_WIDTH 10
 
@@ -185,7 +186,7 @@ static void drawRulerOnPixmap(Ruler * rPtr)
            rPtr->bg, 0, 0, rPtr->view->size.width, 40);
 
     WMDrawString(rPtr->view->screen, rPtr->drawBuffer, rPtr->fg,
-           rPtr->font, rPtr->margins.left + 2, 26, "0   inches", 10);
+           rPtr->font, rPtr->margins.left + 2, 26, _("0   inches"), 10);
 
     /* marker ticks */
     i = j = m = 0;

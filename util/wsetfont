@@ -77,8 +77,8 @@ for i in $*; do
     "--auto")
 	auto="YES";;
     *)
-	if echo $i |grep "^--locale=" &>/dev/null; then
-	    new_locale=$(echo $i |sed -e "s|--locale=||" -)
+	if echo $i |grep "^--locale=" >/dev/null 2>&1; then
+	    new_locale=$(echo $i |sed -e "s|--locale=||")
 	elif [ -z $family ]; then
 	    family=$i
 	else
@@ -332,6 +332,11 @@ for i in $DomainNames; do
 		    eval $j="\$${tmp2}"
 		fi
 	    fi
+	fi
+	tmp1="$j=\"`eval echo '${'$j'}'`\""			# cosmetic length workaround
+        echo '<<<<'
+	if [ ${#tmp1} -lt 80 ]; then
+	    tmp1=`echo $tmp1 | sed -e 's/^\(.\{1,76\}\).*/\1/'`
 	fi
 	eval _j="\$$j"
 	echo $j="${_j}"

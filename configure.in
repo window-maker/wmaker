@@ -15,7 +15,7 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.65.0)
+AM_INIT_AUTOMAKE(WindowMaker, 0.65.1)
 
 AM_PROG_LIBTOOL
 
@@ -222,6 +222,7 @@ dnl List of supported locales
 dnl -------------------------
 supported_locales="cs de es et fr gl it ja ko nl no pt ru sv tr fi hr el pl ro da zh_TW.Big5 zh_CN sk bg hu"
 supported_wprefs_locales="pt hr fr ko ja cs zh_TW.Big5 es zh_CN fi it ru de bg hu sk"
+supported_wings_locales="sk"
 
 for lang in $LINGUAS; do
 	ok=0
@@ -245,6 +246,16 @@ for lang in $LINGUAS; do
 	done
 	if test "$ok" = 1; then
 		WPMOFILES="$WPMOFILES $lang.mo"
+	fi
+	ok=0
+	for l in $supported_wings_locales; do
+		if test "$l" = "$lang"; then
+			ok=1
+			break
+		fi
+	done
+	if test "$ok" = 1; then
+		WINGSMOFILES="$WINGSMOFILES $lang.mo"
 	fi
 done
 
@@ -282,6 +293,7 @@ AC_SUBST(INTLIBS)
 AC_SUBST(NLSDIR)
 AC_SUBST(MOFILES)
 AC_SUBST(WPMOFILES)
+AC_SUBST(WINGSMOFILES)
 AC_SUBST(supported_locales)
 
 
@@ -821,8 +833,9 @@ dnl AC_SUBST(DOCTYPES)
 AC_OUTPUT(Makefile po/Makefile util/Makefile test/Makefile \
 	WINGs/Makefile WINGs/WINGs/Makefile WINGs/Documentation/Makefile \
 	WINGs/Examples/Makefile WINGs/Resources/Makefile WINGs/Tests/Makefile \
-	WINGs/Extras/Makefile \
+	WINGs/Extras/Makefile WINGs/po/Makefile \
 	wmlib/Makefile wrlib/Makefile src/Makefile src/wconfig.h doc/Makefile \
+	doc/sk/Makefile \
 	WindowMaker/Makefile WindowMaker/Backgrounds/Makefile \
 	WindowMaker/Defaults/Makefile WindowMaker/IconSets/Makefile \
 	WindowMaker/Icons/Makefile WindowMaker/Pixmaps/Makefile \

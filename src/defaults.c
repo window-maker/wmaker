@@ -702,6 +702,9 @@ WDefaultEntry optionList[] = {
     {"VMaximizeKey", "None",			(void*)WKBD_VMAXIMIZE,
 	  NULL,				getKeybind,	setKeyGrab
     },
+    {"HMaximizeKey", "None",			(void*)WKBD_HMAXIMIZE,
+	  NULL,				getKeybind,	setKeyGrab
+    },
     {"RaiseKey", "\"Meta+Up\"",			(void*)WKBD_RAISE,
 	  NULL,				getKeybind,	setKeyGrab
     },
@@ -968,7 +971,7 @@ wDefaultsInitDomain(char *domain, Bool requireDictionary)
     }
 
     /* global system dictionary */
-    sprintf(path, "%s/WindowMaker/%s", SYSCONFDIR, domain);
+    snprintf(path, sizeof(path), "%s/WindowMaker/%s", SYSCONFDIR, domain);
     if (stat(path, &stbuf)>=0) {
         shared_dict = ReadProplistFromFile(path);
         if (shared_dict) {
@@ -1063,7 +1066,7 @@ wDefaultsCheckDomains(void *foo)
 	WDWindowMaker->timestamp = stbuf.st_mtime;	
 
 	/* global dictionary */
-	sprintf(path, "%s/WindowMaker/WindowMaker", SYSCONFDIR);
+	snprintf(path, sizeof(path), "%s/WindowMaker/WindowMaker", SYSCONFDIR);
 	if (stat(path, &stbuf)>=0) {
 	    shared_dict = ReadProplistFromFile(path);
 	    if (shared_dict && !PLIsDictionary(shared_dict)) {
@@ -3240,15 +3243,17 @@ setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 	char *command;
         char *text;
         char *dither;
+	int len;
 
 	SetupEnvironment(scr);
 	text = PLGetDescription(value);
-        command = wmalloc(strlen(text)+40);
+	len = strlen(text)+40;
+        command = wmalloc(len);
         dither = wPreferences.no_dithering ? "-m" : "-d";
 	if (wPreferences.smooth_workspace_back)
-	    sprintf(command, "wmsetbg %s -S -p '%s' &", dither, text);
+	    snprintf(command, len, "wmsetbg %s -S -p '%s' &", dither, text);
 	else
-	    sprintf(command, "wmsetbg %s -p '%s' &", dither, text);
+	    snprintf(command, len, "wmsetbg %s -p '%s' &", dither, text);
 	wfree(text);
 	system(command);
 	wfree(command);

@@ -360,8 +360,9 @@ appiconBalloon(WObjDescriptor *object)
     char *tmp;
 
     if (aicon->command && aicon->wm_class) {
-	tmp = wmalloc(strlen(aicon->command)+strlen(aicon->wm_class)+8);
-	sprintf(tmp, "%s (%s)", aicon->wm_class, aicon->command);
+	int len = strlen(aicon->command)+strlen(aicon->wm_class)+8;
+	tmp = wmalloc(len);
+	snprintf(tmp, len, "%s (%s)", aicon->wm_class, aicon->command);
 	scr->balloon->text = tmp;
     } else if (aicon->command) {
 	scr->balloon->text = wstrdup(aicon->command);

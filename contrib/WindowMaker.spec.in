@@ -13,7 +13,7 @@ Group:		User Interface/Desktops
 Vendor:		The Window Maker Team
 Url:		http://www.windowmaker.org
 Source:		%{name}-%{version}.tar.gz
-Requires:	wmconfig, libPropList >= 0.9.5
+Requires:	wmconfig, libPropList >= 0.10.1
 Obsoletes:	windowmaker, windowmaker-devel, windowmaker-libs, WindowMaker-devel
 Provides:	windowmaker
 BuildRoot:	/var/tmp/%{name}-%{version}
@@ -49,9 +49,9 @@ GNUSTEP_LOCAL_ROOT='$(prefix)/X11R6/lib/GNUstep';
 export CFLAGS LINGUAS NLSDIR GNUSTEP_LOCAL_ROOT;
 
 ./configure --prefix=/usr --exec-prefix=/usr/X11R6 \
-	--sysconfdir=/etc/X11 \
-	--enable-newstyle --enable-superfluous \
-	--enable-kde --enable-gnome
+	--sysconfdir=/etc/X11 --enable-modelock \
+	--enable-kde --enable-gnome --enable-openlook \
+	--enable-usermenu
 make
 
 %install
@@ -73,6 +73,7 @@ if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
 %defattr(-,root,root)
 %doc AUTHORS BUGFORM BUGS ChangeLog NEWS FAQ* README
 %doc TODO MIRRORS README.*
+%doc AUTHORS.sk
 %config /etc/X11/WindowMaker
 /usr/X11R6/bin/*
 /usr/X11R6/lib/lib*
@@ -82,5 +83,6 @@ if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
 /usr/share/locale/*/LC_MESSAGES/*
 /usr/share/WINGs
 /usr/man/*/*
+/usr/man/*/*/*
 
 %changelog

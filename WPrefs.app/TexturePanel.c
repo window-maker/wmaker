@@ -301,6 +301,7 @@ updateSVSlider(WMSlider *sPtr, Bool saturation, WMFont *font, RHSVColor *hsv)
     WMScreen *scr = WMWidgetScreen(sPtr);
     RColor from, to;
     RHSVColor tmp;
+    char *buffer;
 
     tmp = *hsv;
     if (saturation) {
@@ -318,21 +319,25 @@ updateSVSlider(WMSlider *sPtr, Bool saturation, WMFont *font, RHSVColor *hsv)
     pixmap = WMCreatePixmapFromRImage(scr, image, 128);
     RReleaseImage(image);
 
+    if (saturation)
+	buffer = wstrdup(_("Saturation"));
+    else
+	buffer = wstrdup(_("Brightness"));
+	
     if (hsv->value < 128 || !saturation) {
 	WMColor *col = WMWhiteColor(scr);
-
+	
 	WMDrawString(scr, WMGetPixmapXID(pixmap), WMColorGC(col), font, 2,
-		     (16 - WMFontHeight(font))/2 - 1,
-		     saturation ? "Saturation" : "Brightness", 10);
+		     (16 - WMFontHeight(font))/2 - 1, buffer, strlen(buffer));
 	WMReleaseColor(col);
     } else {
 	WMColor *col = WMBlackColor(scr);
 
 	WMDrawString(scr, WMGetPixmapXID(pixmap), WMColorGC(col), font, 2,
-		     (16 - WMFontHeight(font))/2 - 1,
-		     saturation ? "Saturation" : "Brightness", 10);
+		     (16 - WMFontHeight(font))/2 - 1, buffer, strlen(buffer));
 	WMReleaseColor(col);
     }
+    wfree(buffer);
     WMSetSliderImage(sPtr, pixmap);
     WMReleasePixmap(pixmap);
 }
@@ -364,13 +369,15 @@ updateHueSlider(WMSlider *sPtr, WMFont *font, RHSVColor *hsv)
 	WMColor *col = WMWhiteColor(scr);
 
 	WMDrawString(scr, WMGetPixmapXID(pixmap), WMColorGC(col), font, 2,
-		     (16 - WMFontHeight(font))/2 - 1, "Hue", 3);
+		     (16 - WMFontHeight(font))/2 - 1,
+		     		_("Hue"), strlen(_("Hue")));
 	WMReleaseColor(col);
     } else {
 	WMColor *col = WMBlackColor(scr);
 
 	WMDrawString(scr, WMGetPixmapXID(pixmap), WMColorGC(col), font, 2,
-		     (16 - WMFontHeight(font))/2 - 1, "Hue", 3);
+		     (16 - WMFontHeight(font))/2 - 1,
+		     		_("Hue"), strlen(_("Hue")));
 	WMReleaseColor(col);
     }
     WMSetSliderImage(sPtr, pixmap);

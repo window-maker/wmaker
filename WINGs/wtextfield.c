@@ -3,6 +3,7 @@
 
 
 #include "WINGsP.h"
+#include "wconfig.h"
 
 #include <X11/keysym.h>
 #include <X11/Xatom.h>
@@ -1002,15 +1003,13 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     Bool relay = True;
     WMScreen *scr = tPtr->view->screen;
 
-    event->xkey.state &= ~scr->ignoredModifierMask;
-    
     /*printf("(%d,%d) -> ", tPtr->selection.position, tPtr->selection.count);*/
     if (((XKeyEvent *) event)->state & WM_EMACSKEYMASK)
 	control_pressed = 1;
     
     shifted = event->xkey.state & ShiftMask;
     controled = event->xkey.state & ControlMask;
-    if ((event->xkey.state & ~(ShiftMask|ControlMask)) != 0) {
+    if ((event->xkey.state & (ShiftMask|ControlMask)) != 0) {
 	modified = True;
     } else {
 	modified = False;
@@ -1065,9 +1064,10 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	break;
 
      case WM_EMACSKEY_LEFT:
-	if (!control_pressed) {
+	if (!control_pressed)
 	    goto normal_key;
-	}
+	else
+	    modified = False;
 #ifdef XK_KP_Left
      case XK_KP_Left:
 #endif
@@ -1099,9 +1099,11 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	break;
 
     case WM_EMACSKEY_RIGHT:
-        if (!control_pressed) {
+        if (!control_pressed)
             goto normal_key;
-        }
+        else
+	    modified = False;
+
 #ifdef XK_KP_Right
     case XK_KP_Right:
 #endif
@@ -1137,9 +1139,12 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	break;
 	
     case WM_EMACSKEY_HOME:
-        if (!control_pressed) {
+        if (!control_pressed)
             goto normal_key;
-        }
+        else {
+	    modified = False;
+	    controled = False;
+	}
 #ifdef XK_KP_Home
     case XK_KP_Home:
 #endif
@@ -1162,9 +1167,12 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	break;
 	
     case WM_EMACSKEY_END:
-        if (!control_pressed) {
+        if (!control_pressed)
             goto normal_key;
-        }
+        else {
+	    modified = False;
+	    controled = False;
+	}
 #ifdef XK_KP_End
     case XK_KP_End:
 #endif
@@ -1192,9 +1200,13 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	break;
 	
      case WM_EMACSKEY_BS:
-         if (!control_pressed) {
-             goto normal_key;
-         }
+         if (!control_pressed)
+            goto normal_key;
+         else {
+	    modified = False;
+	    controled = False;
+	    shifted = False;
+	}
      case XK_BackSpace:
 	if (!modified && !shifted && !controled) {
 	    if (tPtr->selection.count) {
@@ -1215,8 +1227,12 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	break;
 	
     case WM_EMACSKEY_DEL:
-        if (!control_pressed) {
+        if (!control_pressed)
             goto normal_key;
+	else {
+	    modified = False;
+	    controled = False;
+	    shifted = False;
         }
 #ifdef XK_KP_Delete
     case XK_KP_Delete:
@@ -1242,7 +1258,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 
     normal_key:
      default:
-	if (!controled && !modified) {
+	if (!controled) {
 	    if (count > 0 && isprint(buffer[0])) {
 		if (tPtr->selection.count)
 		    WMDeleteTextFieldRange(tPtr, tPtr->selection);

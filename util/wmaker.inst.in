@@ -68,6 +68,8 @@ copy() {
 		if [ "$LOCALE" ]; then
             	    if [ -f $GLOBALDIR/plmenu.${LOCALE%_*} ]; then
                 	source=$GLOBALDIR/plmenu.${LOCALE%_*}
+		    elif [ -f $GLOBALDIR/menu.${LOCALE%_*} ]; then
+			source=$GLOBALDIR/menu.${LOCALE%_*}
 		    else
 			source=$GLOBALDIR/plmenu 
             	    fi
@@ -266,6 +268,7 @@ test -f ~$GSDIR/Library/WindowMaker/exitscript || \
     cp $GLOBALDIR/exitscript.sh $GSDIR/Library/WindowMaker/exitscript
 chmod +rx $GSDIR/Library/WindowMaker/exitscript
 
+# no need to call wmchlocale --auto, since national menu is already copied
 wsetfont --auto
 
 # xx herbert

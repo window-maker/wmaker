@@ -320,7 +320,7 @@ updateDockNumbers(WScreen *scr)
 			   my_v_mask, &my_gc_values);
 
     ws_numbers = wmalloc(20);
-    sprintf(ws_numbers, "%i [ %i ]", scr->current_workspace+1,
+    snprintf(ws_numbers, 20, "%i [ %i ]", scr->current_workspace+1,
 	    ((scr->current_workspace/10)+1));
     length = strlen(ws_numbers);
     
@@ -457,14 +457,14 @@ wAppIconPaint(WAppIcon *aicon)
     if (index > 0) {
 	char buf[16];
 	
-	sprintf(buf, "%i", index);
+	snprintf(buf, sizeof(buf), "%i", index);
 	
 	WMDrawString(scr->wmscreen, aicon->icon->core->window, 
 		     scr->clip_title_gc, scr->title_font,
-		     1, 1, buf, strlen(buf));
+		     3, 3, buf, strlen(buf));
     }
-    
-    
+
+
     if (aicon->omnipresent)
         drawCorner(aicon->icon);
 

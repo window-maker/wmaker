@@ -1,5 +1,6 @@
 
 #include "WINGsP.h"
+#include "wconfig.h"
 
 
 #include <wraster.h>
@@ -70,11 +71,10 @@ W_CreateFontSetWithGuess(Display *dpy, char *xlfd, char ***missing,
     /* for non-iso8859-1 language and iso8859-1 specification
        (this fontset is only for pattern analysis) */
     if (fs == NULL) {
-	char *old_locale = setlocale(LC_CTYPE, NULL);
 	if (*nmissing != 0) XFreeStringList(*missing);
 	setlocale(LC_CTYPE, "C");
 	fs = XCreateFontSet(dpy, xlfd, missing, nmissing, def_string);
-	setlocale(LC_CTYPE, old_locale);
+	setlocale(LC_CTYPE, "");
     }
 
     /* make XLFD font name for pattern analysis */
@@ -88,7 +88,7 @@ W_CreateFontSetWithGuess(Display *dpy, char *xlfd, char ***missing,
     xlfd = generalize_xlfd (xlfd);
 
     if (*nmissing != 0) XFreeStringList(*missing);
-    if (fs != 0) XFreeFontSet(dpy, fs);
+    if (fs != NULL) XFreeFontSet(dpy, fs);
 
     fs = XCreateFontSet(dpy, xlfd, missing, nmissing, def_string);
 
@@ -126,14 +126,14 @@ WMCreateFontSet(WMScreen *scrPtr, char *fontName)
     if (nmissing > 0 && font->font.set) {
 	int i;
 	
-	wwarning("the following character sets are missing in %s:",
+	wwarning(_("the following character sets are missing in %s:"),
 		 fontName);
 	for (i = 0; i < nmissing; i++) {
 	    wwarning(missing[i]);
 	}
 	XFreeStringList(missing);
 	if (defaultString)
-	    wwarning("the string \"%s\" will be used in place of any characters from those sets.",
+	    wwarning(_("the string \"%s\" will be used in place of any characters from those sets."),
 		     defaultString);
     }
     if (!font->font.set) {
@@ -279,17 +279,17 @@ WMSystemFontOfSize(WMScreen *scrPtr, int size)
 
     if (!font) {
 	if (scrPtr->useMultiByte) {
-	    wwarning("could not load font set %s. Trying fixed.", fontSpec);
+	    wwarning(_("could not load font set %s. Trying fixed."), fontSpec);
 	    font = WMCreateFontSet(scrPtr, "fixed");
 	    if (!font) {
 		font = WMCreateFontSet(scrPtr, "-*-fixed-medium-r-normal-*-14-*-*-*-*-*-*-*");
 	    }
 	} else {
-	    wwarning("could not load font %s. Trying fixed.", fontSpec);
+	    wwarning(_("could not load font %s. Trying fixed."), fontSpec);
 	    font = WMCreateNormalFont(scrPtr, "fixed");
 	}
 	if (!font) {
-	    wwarning("could not load fixed font!");
+	    wwarning(_("could not load fixed font!"));
 	    wfree(fontSpec);
 	    return NULL;
 	}
@@ -315,17 +315,17 @@ WMBoldSystemFontOfSize(WMScreen *scrPtr, int size)
 
     if (!font) {
 	if (scrPtr->useMultiByte) {
-	    wwarning("could not load font set %s. Trying fixed.", fontSpec);
+	    wwarning(_("could not load font set %s. Trying fixed."), fontSpec);
 	    font = WMCreateFontSet(scrPtr, "fixed");
 	    if (!font) {
 		font = WMCreateFontSet(scrPtr, "-*-fixed-medium-r-normal-*-14-*-*-*-*-*-*-*");
 	    }
 	} else {
-	    wwarning("could not load font %s. Trying fixed.", fontSpec);
+	    wwarning(_("could not load font %s. Trying fixed."), fontSpec);
 	    font = WMCreateNormalFont(scrPtr, "fixed");
 	}
 	if (!font) {
-	    wwarning("could not load fixed font!");
+	    wwarning(_("could not load fixed font!"));
 	    wfree(fontSpec);
 	    return NULL;
 	}
@@ -420,7 +420,7 @@ makeFontSetOfSize(char *fontset, int size)
 	    int count = ptr-fontset;
 
 	    if (count > 255) {
-		wwarning("font description %s is too large.", fontset);
+		wwarning(_("font description %s is too large."), fontset);
 	    } else {
 		memcpy(font, fontset, count);
 		font[count] = 0;

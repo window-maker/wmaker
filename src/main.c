@@ -220,17 +220,18 @@ SetupEnvironment(WScreen *scr)
     char buf[16];
 
     if (multiHead) {
-    	tmp = wmalloc(strlen(DisplayName)+64);
-    	sprintf(tmp, "DISPLAY=%s", XDisplayName(DisplayName));
+	int len = strlen(DisplayName)+64;
+    	tmp = wmalloc(len);
+    	snprintf(tmp, len, "DISPLAY=%s", XDisplayName(DisplayName));
     	ptr = strchr(strchr(tmp, ':'), '.');
     	if (ptr)
 	    *ptr = 0;
-    	sprintf(buf, ".%i", scr->screen);
+    	snprintf(buf, sizeof(buf), ".%i", scr->screen);
     	strcat(tmp, buf);
     	putenv(tmp);
     }
     tmp = wmalloc(60);
-    sprintf(tmp, "WRASTER_COLOR_RESOLUTION%i=%i", scr->screen, 
+    snprintf(tmp, 60, "WRASTER_COLOR_RESOLUTION%i=%i", scr->screen, 
 		scr->rcontext->attribs->colors_per_channel);
     putenv(tmp);
 }
@@ -735,8 +736,11 @@ main(int argc, char **argv)
 	multiHead = False;
 
     DisplayName = XDisplayName(DisplayName);
-    str = wmalloc(strlen(DisplayName)+64);
-    sprintf(str, "DISPLAY=%s", DisplayName);
+    {
+	int len = strlen(DisplayName)+64;
+	str = wmalloc(len);
+	snprintf(str, len, "DISPLAY=%s", DisplayName);
+    }
     putenv(str);
 
 #ifdef DEBUG

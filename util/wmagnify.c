@@ -61,7 +61,7 @@ static BufferData *newWindow(int magfactor);
 int windowCount = 0;
 
 int rectBufferSize = 32;
-Display *dpy;
+Display *dpy, *vdpy;
 WMScreen *scr;
 unsigned int black;
 WMColor *cursorColor1;
@@ -212,19 +212,19 @@ updateImage(BufferData *data, int rx, int ry)
 	gw += gx;
 	gx = 0;
     }
-    if (gx + gw >= WidthOfScreen(DefaultScreenOfDisplay(dpy))) {
-	gw = WidthOfScreen(DefaultScreenOfDisplay(dpy)) - gx;
+    if (gx + gw >= WidthOfScreen(DefaultScreenOfDisplay(vdpy))) {
+	gw = WidthOfScreen(DefaultScreenOfDisplay(vdpy)) - gx;
     }
     if (gy < 0) {
 	yoffs = abs(gy);
 	gh += gy;
 	gy = 0;
     }
-    if (gy + gh >= HeightOfScreen(DefaultScreenOfDisplay(dpy))) {
-	gh = HeightOfScreen(DefaultScreenOfDisplay(dpy)) - gy;
+    if (gy + gh >= HeightOfScreen(DefaultScreenOfDisplay(vdpy))) {
+	gh = HeightOfScreen(DefaultScreenOfDisplay(vdpy)) - gy;
     }
 
-    image = XGetImage(dpy, DefaultRootWindow(dpy), gx, gy, gw, gh,
+    image = XGetImage(vdpy, DefaultRootWindow(vdpy), gx, gy, gw, gh,
 		      AllPlanes, ZPixmap);
 
 
@@ -453,6 +453,7 @@ int main(int argc, char **argv)
     BufferData *data;
     int i;
     char *display = "";
+    char *vdisplay = NULL;
     int magfactor = 2;
 #if 0
     WMButton *radio, *tradio;
@@ -466,6 +467,11 @@ int main(int argc, char **argv)
 	    if (i >= argc)
 		goto help;
 	    display = argv[i];
+	} else if (strcmp(argv[i], "-vdisplay")==0) {
+	    i++;
+	    if (i >= argc)
+		goto help;
+	    vdisplay = argv[i];
 	} else if (strcmp(argv[i], "-m")==0) {
 	    i++;
 	    if (i >= argc)
@@ -505,10 +511,20 @@ int main(int argc, char **argv)
 	}
     }
 
-    dpy = XOpenDisplay("");
+    dpy = XOpenDisplay(display);
     if (!dpy) {
 	puts("couldnt open display");
 	exit(1);
+    }
+
+    if (vdisplay) {
+        vdpy = XOpenDisplay(vdisplay);
+    	if (!vdpy) {
+	    puts("couldnt open display to be viewed");
+	    exit(1);
+    	}
+    } else {
+	vdpy = dpy;
     }
 
     /* calculate how many rectangles we can send in a trip to the server */

@@ -2455,7 +2455,7 @@ saveMenuInfo(proplist_t dict, WMenu *menu, proplist_t key)
     proplist_t value, list;
     char buffer[256];
 
-    sprintf(buffer, "%i,%i", menu->frame_x, menu->frame_y);
+    snprintf(buffer, sizeof(buffer), "%i,%i", menu->frame_x, menu->frame_y);
     value = PLMakeString(buffer);
     list = PLMakeArrayFromElements(value, NULL);
     if (menu->flags.lowered)
@@ -2654,7 +2654,7 @@ restoreMenuRecurs(WScreen *scr, proplist_t menus, WMenu *menu, char *path)
     if (strlen(path) + strlen(menu->frame->title) > 510)
 	return False;
 
-    sprintf(buffer, "%s\\%s", path, menu->frame->title);
+    snprintf(buffer, sizeof(buffer), "%s\\%s", path, menu->frame->title);
     key = PLMakeString(buffer);
     entry = PLGetDictionaryEntry(menus, key);
     res = False;

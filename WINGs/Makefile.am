@@ -2,7 +2,7 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 
-SUBDIRS = WINGs . Documentation Resources Examples Extras Tests
+SUBDIRS = WINGs . po Documentation Resources Examples Extras Tests
 
 
 
@@ -13,7 +13,7 @@ bin_SCRIPTS = get-wings-flags get-wutil-flags
 lib_LIBRARIES = libWINGs.a libWUtil.a
 
 
-LDADD= libWINGs.a $(top_builddir)/wrlib/libwraster.la @LIBPL@
+LDADD= libWINGs.a $(top_builddir)/wrlib/libwraster.la @LIBPL@ @INTLIBS@
 
 
 EXTRA_DIST = BUGS
@@ -50,6 +50,7 @@ libWINGs_a_SOURCES = 	\
 	wcolor.c \
 	wcolorpanel.c \
 	wcolorwell.c \
+	wconfig.h \
 	wevent.c \
 	wfilepanel.c \
 	wframe.c \
@@ -95,8 +96,10 @@ libWUtil_a_SOURCES = 	\
 	userdefaults.c \
 	usleep.c \
 	wapplication.c \
+	wconfig.h \
 	wutil.c
 
+CPPFLAGS = @CPPFLAGS@ -DLOCALEDIR=\"$(NLSDIR)\"
 
 INCLUDES = -I$(top_srcdir)/WINGs/WINGs -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
 	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @HEADER_SEARCH_PATH@ -DDEBUG

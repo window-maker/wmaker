@@ -215,7 +215,7 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
     char **argv;
     int i;
     unsigned mask;
-    char *class, *instance, *command=NULL, buffer[256];
+    char *class, *instance, *command=NULL, buffer[512];
     proplist_t win_state, cmd, name, workspace;
     proplist_t shaded, miniaturized, hidden, geometry;
     proplist_t dock, shortcut;
@@ -234,13 +234,13 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
 
     if (PropGetWMClass(win, &class, &instance)) {
         if (class && instance)
-            sprintf(buffer, "%s.%s", instance, class);
+            snprintf(buffer, sizeof(buffer), "%s.%s", instance, class);
         else if (instance)
-            sprintf(buffer, "%s", instance);
+            snprintf(buffer, sizeof(buffer), "%s", instance);
         else if (class)
-            sprintf(buffer, ".%s", class);
+            snprintf(buffer, sizeof(buffer), ".%s", class);
         else
-            sprintf(buffer, ".");
+            snprintf(buffer, sizeof(buffer), ".");
 
         name = PLMakeString(buffer);
         cmd = PLMakeString(command);
@@ -250,7 +250,8 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
         shaded = wwin->flags.shaded ? sYes : sNo;
         miniaturized = wwin->flags.miniaturized ? sYes : sNo;
         hidden = wwin->flags.hidden ? sYes : sNo;
-        sprintf(buffer, "%ix%i+%i+%i", wwin->client.width, wwin->client.height,
+        snprintf(buffer, sizeof(buffer), "%ix%i+%i+%i", 
+		 wwin->client.width, wwin->client.height,
 		wwin->frame_x, wwin->frame_y);
         geometry = PLMakeString(buffer);
 	
@@ -261,7 +262,7 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
 	    }
 	}
 
-	sprintf(buffer, "%u", mask);
+	snprintf(buffer, sizeof(buffer), "%u", mask);
 	shortcut = PLMakeString(buffer);
 
         win_state = PLMakeDictionaryFromEntries(sName, name,
@@ -860,7 +861,7 @@ makeAttributeState(WWindow *wwin)
 #define W_FLAG(wwin, FLAG)	((wwin)->defined_user_flags.FLAG \
 					? (wwin)->user_flags.FLAG : -1)
 
-    sprintf(buffer, 
+    snprintf(buffer, sizeof(buffer),
 	    "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
 	    W_FLAG(no_titlebar),
 	    W_FLAG(no_resizable),
@@ -912,7 +913,7 @@ makeClientState(WWindow *wwin)
     proplist_t state;
     proplist_t tmp;
     char *str;
-    char buffer[256];
+    char buffer[512];
     int i;
     unsigned shortcuts;
 
@@ -940,13 +941,13 @@ makeClientState(WWindow *wwin)
 	appendStringInArray(state, wwin->frame->name);
 
     /* geometry */
-    sprintf(buffer, "%i %i %i %i %i %i", wwin->frame_x, wwin->frame_y,
+    snprintf(buffer, sizeof(buffer), "%i %i %i %i %i %i", wwin->frame_x, wwin->frame_y,
 	    wwin->client.width, wwin->client.height,
 	    wwin->flags.user_changed_width, wwin->flags.user_changed_height);
     appendStringInArray(state, buffer);
 
     /* state */
-    sprintf(buffer, "%i %i %i", wwin->flags.miniaturized,
+    snprintf(buffer, sizeof(buffer), "%i %i %i", wwin->flags.miniaturized,
 	    wwin->flags.shaded, wwin->flags.maximized);
     appendStringInArray(state, buffer);
 
@@ -956,7 +957,7 @@ makeClientState(WWindow *wwin)
     PLRelease(tmp);
 
     /* workspace */
-    sprintf(buffer, "%i", wwin->frame->workspace);
+    snprintf(buffer, sizeof(buffer), "%i", wwin->frame->workspace);
     appendStringInArray(state, buffer);
 
     /* app state (repeated for all windows of the app) */
@@ -971,7 +972,7 @@ makeClientState(WWindow *wwin)
 	    shortcuts |= 1 << i;
 	}
     }
-    sprintf(buffer, "%ui", shortcuts);
+    snprintf(buffer, sizeof(buffer), "%ui", shortcuts);
     appendStringInArray(tmp, buffer);
 
     return state;
@@ -993,6 +994,7 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
     char *discardCmd = NULL;
     time_t t;
     proplist_t state;
+    int len;
 
 #ifdef DEBUG1
     puts("received SaveYourselfPhase2 SM message");
@@ -1013,7 +1015,8 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
     if (!prefix)
 	prefix = ".";
 
-    statefile = malloc(strlen(prefix)+64);
+    len = strlen(prefix)+64;
+    statefile = malloc(len);
     if (!statefile) {
 	wwarning(_("out of memory while saving session state"));
 	goto fail;
@@ -1023,10 +1026,10 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
     i = 0;
     do {
 	if (gsPrefix)
-	    sprintf(statefile, "%s/.AppInfo/WindowMaker/wmaker.%l%i.state",
+	    snprintf(statefile, len, "%s/.AppInfo/WindowMaker/wmaker.%l%i.state",
 		    prefix, t, i);
 	else
-	    sprintf(statefile, "%s/wmaker.%l%i.state", prefix, t, i);
+	    snprintf(statefile, len, "%s/wmaker.%l%i.state", prefix, t, i);
 	i++;
     } while (access(F_OK, statefile)!=-1);
 
@@ -1050,7 +1053,7 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
 	
 	scr = wScreenWithNumber(i);
 
-	sprintf(buf, "%i", scr->screen);
+	snprintf(buf, sizeof(buf), "%i", scr->screen);
 	pscreen = PLMakeArrayFromElements(PLMakeString(buf), NULL);
 
 	wwin = scr->focused_window;
@@ -1134,10 +1137,14 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
     prop[0].vals[j].value = statefile;
     prop[0].vals[j].length = strlen(statefile);
 
-    discardCmd = malloc(strlen(statefile)+8);
-    if (!discardCmd)
-	goto fail;
-    sprintf(discardCmd, "rm %s", statefile);
+    {
+	int len = strlen(statefile)+8;
+	
+	discardCmd = malloc(len);
+	if (!discardCmd)
+	    goto fail;
+	snprintf(discardCmd, len, "rm %s", statefile);
+    }
     prop[2].name = SmDiscardCommand;
     prop[2].type = SmARRAY8;
     prop[2].vals[0] = discardCmd;
@@ -1317,7 +1324,7 @@ wSessionConnectManager(char **argv, int argc)
 
     /* The XSMP doc from X11R6.1 says it contains the user name,
      * but every client implementation I saw places the uid # */
-    sprintf(uid, "%i", getuid());
+    snprintf(uid, sizeof(uid), "%i", getuid());
     prop2val.value = uid;
     prop2val.length = strlen(uid);
     prop[1].name = SmUserID;
@@ -1336,7 +1343,7 @@ wSessionConnectManager(char **argv, int argc)
     prop[2].vals = &prop3val;
 
     /* Our PID. Not required but might be usefull */
-    sprintf(pid, "%i", getpid());
+    snprintf(pid, sizeof(pid), "%i", getpid());
     prop4val.value = pid;
     prop4val.length = strlen(pid);
     prop[3].name = SmProcessID;

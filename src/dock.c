@@ -210,7 +210,7 @@ renameCallback(WMenu *menu, WMenuEntry *entry)
 
     name = wstrdup(dock->screen_ptr->workspaces[wspace]->name);
 
-    sprintf(buffer, _("Type the name for workspace %i:"), wspace+1);
+    snprintf(buffer, sizeof(buffer), _("Type the name for workspace %i:"), wspace+1);
     if (wInputDialog(dock->screen_ptr, _("Rename Workspace"), buffer,
 		     &name)) {
 	wWorkspaceRename(dock->screen_ptr, wspace, name);
@@ -1250,8 +1250,8 @@ wClipIconPaint(WAppIcon *aicon)
 
     length = strlen(workspace->name);
     ws_name = wmalloc(length + 1);
-    sprintf(ws_name, "%s", workspace->name);
-    sprintf(ws_number, "%i", scr->current_workspace + 1);
+    snprintf(ws_name, length+1, "%s", workspace->name);
+    snprintf(ws_number, sizeof(ws_number), "%i", scr->current_workspace + 1);
     nlength = strlen(ws_number);
 
     gc = scr->clip_title_gc;
@@ -1332,9 +1332,9 @@ make_icon_state(WAppIcon *btn)
 	buggy = btn->buggy_app ? dYes : dNo;
 
         if (btn == btn->icon->core->screen_ptr->clip_icon)
-            sprintf(buffer, "%i,%i", btn->x_pos, btn->y_pos);
+            snprintf(buffer, sizeof(buffer), "%i,%i", btn->x_pos, btn->y_pos);
         else
-            sprintf(buffer, "%hi,%hi", btn->xindex, btn->yindex);
+            snprintf(buffer, sizeof(buffer), "%hi,%hi", btn->xindex, btn->yindex);
         position = PLMakeString(buffer);
 
         node = PLMakeDictionaryFromEntries(dCommand, command,
@@ -1400,13 +1400,13 @@ dockSaveState(WDock *dock)
 					     NULL);
 
     if (dock->type == WM_DOCK) {
-	sprintf(buffer, "Applications%i", dock->screen_ptr->scr_height);
+	snprintf(buffer, sizeof(buffer), "Applications%i", dock->screen_ptr->scr_height);
 	key = PLMakeString(buffer);
 	PLInsertDictionaryEntry(dock_state, key, list);
 	PLRelease(key);
 
 	
-        sprintf(buffer, "%i,%i", (dock->on_right_side ? -ICON_SIZE : 0),
+        snprintf(buffer, sizeof(buffer), "%i,%i", (dock->on_right_side ? -ICON_SIZE : 0),
                                   dock->y_pos);
         value = PLMakeString(buffer);
         PLInsertDictionaryEntry(dock_state, dPosition, value);
@@ -1833,7 +1833,7 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
 	 * If it does not exist, use Applications as default.
 	 */
 	
-	sprintf(buffer, "Applications%i", scr->scr_height);
+	snprintf(buffer, sizeof(buffer), "Applications%i", scr->scr_height);
 
 	tmp = PLMakeString(buffer);
 	apps = PLGetDictionaryEntry(dock_state, tmp);
@@ -2153,8 +2153,9 @@ wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 
 #ifdef OFFIX_DND
     if (icon->command && !icon->dnd_command) {
-	icon->dnd_command = wmalloc(strlen(icon->command)+8);
-	sprintf(icon->dnd_command, "%s %%d", icon->command);
+	int len = strlen(icon->command)+8;
+	icon->dnd_command = wmalloc(len);
+	snprintf(icon->dnd_command, len, "%s %%d", icon->command);
     }
 #endif
 
@@ -3233,11 +3234,11 @@ trackDeadProcess(pid_t pid, unsigned char status, WDock *dock)
 	    if (status==111) {
 		char msg[PATH_MAX];
 #ifdef OFFIX_DND
-		sprintf(msg, _("Could not execute command \"%s\""),
+		snprintf(msg, sizeof(msg), _("Could not execute command \"%s\""),
 			icon->drop_launch && icon->dnd_command
 			? icon->dnd_command : icon->command);
 #else
-		sprintf(msg, _("Could not execute command \"%s\""),
+		snprintf(msg, sizeof(msg), _("Could not execute command \"%s\""),
 			icon->command);
 #endif
 		wMessageDialog(dock->screen_ptr, _("Error"), msg,

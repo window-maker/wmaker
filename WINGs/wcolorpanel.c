@@ -25,6 +25,7 @@
  */
 
 #include "../src/config.h"
+#include "wconfig.h"
 #include "WINGsP.h"
 #include <math.h>
 #include <unistd.h>
@@ -55,13 +56,6 @@
 
 
 char *WMColorPanelColorChangedNotification = "WMColorPanelColorChangedNotification";
-
-/*
- * Error Messages
- */
-#define NO_MEMORY_ERR 	"Color Panel: Could not allocate memory"
-#define NO_FILE_ERR	"Color Panel: Could not find file"
-#define X_ERR		"Color Panel: X failed request"
 
 
 /*
@@ -419,7 +413,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     panel->win = WMCreateWindowWithStyle(scrPtr, name,
 	    WMTitledWindowMask | WMClosableWindowMask | WMResizableWindowMask);
     WMResizeWidget(panel->win, PWIDTH, PHEIGHT);
-    WMSetWindowTitle(panel->win, "Colors");
+    WMSetWindowTitle(panel->win, _("Colors"));
     WMSetWindowCloseAction(panel->win, closeWindowCallback, panel);
     
     
@@ -609,9 +603,9 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     if (pixmap)
     W_PaintText(W_VIEW(panel->grayBrightnessS), pixmap->pixmap, 
 		panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->white), 
-		False, "Brightness", strlen("Brightness"));
+		False, _("Brightness"), strlen(_("Brightness")));
     else
-	wwarning(NO_MEMORY_ERR);
+	wwarning(_("Color Panel: Could not allocate memory"));
 
     WMSetSliderImage(panel->grayBrightnessS, pixmap);
     WMReleasePixmap(pixmap);
@@ -684,10 +678,10 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->rgbRedS), pixmap->pixmap, panel->font12,
-		2, 0, 100, WALeft, WMColorGC(scrPtr->white), False, "Red",
-		strlen("Red"));
+		2, 0, 100, WALeft, WMColorGC(scrPtr->white), False, _("Red"),
+		strlen(_("Red")));
     else
-	wwarning(NO_MEMORY_ERR);
+	wwarning(_("Color Panel: Could not allocate memory"));
 
     WMSetSliderImage(panel->rgbRedS, pixmap);
     WMReleasePixmap(pixmap);
@@ -717,10 +711,10 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->rgbGreenS), pixmap->pixmap, panel->font12,
-		2, 0, 100, WALeft, WMColorGC(scrPtr->white), False, "Green",
-		strlen("Green"));
+		2, 0, 100, WALeft, WMColorGC(scrPtr->white), False, _("Green"),
+		strlen(_("Green")));
     else
-	wwarning(NO_MEMORY_ERR);
+	wwarning(_("Color Panel: Could not allocate memory"));
     
     WMSetSliderImage(panel->rgbGreenS, pixmap);
     WMReleasePixmap(pixmap);
@@ -751,10 +745,10 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->rgbBlueS), pixmap->pixmap, panel->font12,
-		2, 0, 100, WALeft, WMColorGC(scrPtr->white), False, "Blue", 
-		strlen("Blue"));
+		2, 0, 100, WALeft, WMColorGC(scrPtr->white), False, _("Blue"), 
+		strlen(_("Blue")));
     else
-	wwarning(NO_MEMORY_ERR);
+	wwarning(_("Color Panel: Could not allocate memory"));
     
     WMSetSliderImage(panel->rgbBlueS, pixmap);
     WMReleasePixmap(pixmap);
@@ -811,10 +805,10 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->cmykCyanS), pixmap->pixmap, panel->font12,
-		2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, "Cyan", 
-		strlen("Cyan"));
+		2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, _("Cyan"), 
+		strlen(_("Cyan")));
     else
-	wwarning(NO_MEMORY_ERR);
+	wwarning(_("Color Panel: Could not allocate memory"));
     
     WMSetSliderImage(panel->cmykCyanS, pixmap);
     WMReleasePixmap(pixmap);
@@ -845,10 +839,10 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->cmykMagentaS), pixmap->pixmap, panel->font12,
-		2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, "Magenta", 
-		strlen("Magenta"));
+		2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, _("Magenta"), 
+		strlen(_("Magenta")));
     else
-	wwarning(NO_MEMORY_ERR);
+	wwarning(_("Color Panel: Could not allocate memory"));
 
     WMSetSliderImage(panel->cmykMagentaS, pixmap);
     WMReleasePixmap(pixmap);
@@ -879,10 +873,10 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->cmykYellowS), pixmap->pixmap, panel->font12,
-		2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, "Yellow", 
-		strlen("Yellow"));
+		2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, _("Yellow"), 
+		strlen(_("Yellow")));
     else
-	wwarning(NO_MEMORY_ERR);
+	wwarning(_("Color Panel: Could not allocate memory"));
     
     WMSetSliderImage(panel->cmykYellowS, pixmap);
     WMReleasePixmap(pixmap);
@@ -914,10 +908,10 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->cmykBlackS), pixmap->pixmap, panel->font12,
-		2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, "Black", 
-		strlen("Black"));
+		2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, _("Black"), 
+		strlen(_("Black")));
     else
-	wwarning(NO_MEMORY_ERR);
+	wwarning(_("Color Panel: Could not allocate memory"));
 
     WMSetSliderImage(panel->cmykBlackS, pixmap);
     WMReleasePixmap(pixmap);
@@ -995,7 +989,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     
     panel->customPaletteHistoryBtn = WMCreatePopUpButton(
 							 panel->customPaletteFrm);
-    WMAddPopUpButtonItem(panel->customPaletteHistoryBtn, "Spectrum");
+    WMAddPopUpButtonItem(panel->customPaletteHistoryBtn, _("Spectrum"));
     WMSetPopUpButtonSelectedItem(panel->customPaletteHistoryBtn, 
 				 WMGetPopUpButtonNumberOfItems(panel->customPaletteHistoryBtn)-1);
     WMSetPopUpButtonAction(panel->customPaletteHistoryBtn, 
@@ -1025,17 +1019,17 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     
     panel->customPaletteMenuBtn = WMCreatePopUpButton(panel->customPaletteFrm);
     WMSetPopUpButtonPullsDown(panel->customPaletteMenuBtn, 1);
-    WMSetPopUpButtonText(panel->customPaletteMenuBtn, "Palette");
+    WMSetPopUpButtonText(panel->customPaletteMenuBtn, _("Palette"));
     WMSetPopUpButtonAction(panel->customPaletteMenuBtn, 
 			   customPaletteMenuCallback, panel);
     WMResizeWidget(panel->customPaletteMenuBtn, PWIDTH - 8, 20);
     WMMoveWidget(panel->customPaletteMenuBtn, 0, PHEIGHT - 130);
     
-    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, "New from File...");
-    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, "Rename...");
-    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, "Remove");
-    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, "Copy");
-    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, "New from Clipboard");
+    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, _("New from File..."));
+    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, _("Rename..."));
+    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, _("Remove"));
+    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, _("Copy"));
+    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, _("New from Clipboard"));
     
     WMSetPopUpButtonItemEnabled(panel->customPaletteMenuBtn, CPmenuRename, 0);
     WMSetPopUpButtonItemEnabled(panel->customPaletteMenuBtn, CPmenuRemove, 0);
@@ -1056,7 +1050,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     WMMoveWidget(panel->colorListFrm, 5, 80);
     
     panel->colorListHistoryBtn = WMCreatePopUpButton(panel->colorListFrm);
-    WMAddPopUpButtonItem(panel->colorListHistoryBtn, "X11-Colors");
+    WMAddPopUpButtonItem(panel->colorListHistoryBtn, _("X11-Colors"));
     WMSetPopUpButtonSelectedItem(panel->colorListHistoryBtn, 
 				 WMGetPopUpButtonNumberOfItems(panel->colorListHistoryBtn)-1);
     /*	WMSetPopUpButtonAction(panel->colorListHistoryBtn, 
@@ -1073,15 +1067,15 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     
     panel->colorListColorMenuBtn = WMCreatePopUpButton(panel->colorListFrm);
     WMSetPopUpButtonPullsDown(panel->colorListColorMenuBtn, 1);
-    WMSetPopUpButtonText(panel->colorListColorMenuBtn, "Color");
+    WMSetPopUpButtonText(panel->colorListColorMenuBtn, _("Color"));
     WMSetPopUpButtonAction(panel->colorListColorMenuBtn, 
 			   colorListColorMenuCallback, panel);
     WMResizeWidget(panel->colorListColorMenuBtn, (PWIDTH - 16)/2, 20);
     WMMoveWidget(panel->colorListColorMenuBtn, 0, PHEIGHT - 130);
     
-    WMAddPopUpButtonItem(panel->colorListColorMenuBtn, "Add...");
-    WMAddPopUpButtonItem(panel->colorListColorMenuBtn, "Rename...");
-    WMAddPopUpButtonItem(panel->colorListColorMenuBtn, "Remove");
+    WMAddPopUpButtonItem(panel->colorListColorMenuBtn, _("Add..."));
+    WMAddPopUpButtonItem(panel->colorListColorMenuBtn, _("Rename..."));
+    WMAddPopUpButtonItem(panel->colorListColorMenuBtn, _("Remove"));
     
     WMSetPopUpButtonItemEnabled(panel->colorListColorMenuBtn, CLmenuAdd, 0);
     WMSetPopUpButtonItemEnabled(panel->colorListColorMenuBtn, CLmenuRename, 0);
@@ -1089,16 +1083,16 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     
     panel->colorListListMenuBtn = WMCreatePopUpButton(panel->colorListFrm);
     WMSetPopUpButtonPullsDown(panel->colorListListMenuBtn, 1);
-    WMSetPopUpButtonText(panel->colorListListMenuBtn, "List");
+    WMSetPopUpButtonText(panel->colorListListMenuBtn, _("List"));
     WMSetPopUpButtonAction(panel->colorListListMenuBtn, 
 			   colorListListMenuCallback, panel);
     WMResizeWidget(panel->colorListListMenuBtn, (PWIDTH - 16)/2, 20);
     WMMoveWidget(panel->colorListListMenuBtn, (PWIDTH - 16)/2 + 8, 
 		 PHEIGHT - 130);
     
-    WMAddPopUpButtonItem(panel->colorListListMenuBtn, "New...");
-    WMAddPopUpButtonItem(panel->colorListListMenuBtn, "Rename...");
-    WMAddPopUpButtonItem(panel->colorListListMenuBtn, "Remove");
+    WMAddPopUpButtonItem(panel->colorListListMenuBtn, _("New..."));
+    WMAddPopUpButtonItem(panel->colorListListMenuBtn, _("Rename..."));
+    WMAddPopUpButtonItem(panel->colorListListMenuBtn, _("Remove"));
     
     WMSetPopUpButtonItemEnabled(panel->colorListListMenuBtn, CLmenuAdd, 0);
     WMSetPopUpButtonItemEnabled(panel->colorListListMenuBtn, CLmenuRename, 0);
@@ -1235,21 +1229,21 @@ readConfiguration(W_ColorPanel *panel)
     if (stat(panel->configurationPath, &stat_buf)!=0) {
 	if (mkdir(panel->configurationPath, 
 		  S_IRWXU|S_IRGRP|S_IROTH|S_IXGRP|S_IXOTH)!=0) {
-	    wsyserror("Color Panel: Could not create directory %s needed"
-		      " to store configurations", panel->configurationPath);
+	    wsyserror(_("Color Panel: Could not create directory %s needed"
+		      " to store configurations"), panel->configurationPath);
 	    WMSetPopUpButtonEnabled(panel->customPaletteMenuBtn, False);
 	    WMSetPopUpButtonEnabled(panel->colorListColorMenuBtn, False);
 	    WMSetPopUpButtonEnabled(panel->colorListListMenuBtn, False);
 	    WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win, 
-		    "File Error",
-		    "Could not create ColorPanel configuration directory",
-		    "OK", NULL, NULL);
+		    _("File Error"),
+		    _("Could not create ColorPanel configuration directory"),
+		    _("OK"), NULL, NULL);
 	}
 	return;
     }
     
     if (!(dPtr = opendir(panel->configurationPath))) {
-	wwarning(NO_FILE_ERR, "%s", panel->configurationPath);
+	wwarning(_("Color Panel: Could not find file"), "%s", panel->configurationPath);
 	return;
     }
     
@@ -1285,7 +1279,7 @@ readXColors(W_ColorPanel *panel)
     WMListItem		*item;
     
     if (stat(RGBTXT, &stat_buf) != 0) {
-	wsyserror(NO_FILE_ERR, " %s", RGBTXT);
+	wsyserror(_("Color Panel: Could not find file"), " %s", RGBTXT);
 	return;
     }
     else {
@@ -1303,7 +1297,7 @@ readXColors(W_ColorPanel *panel)
 	    fclose(rgbtxt);
 	}
 	else {
-	    wsyserror(NO_FILE_ERR, "%s", RGBTXT);
+	    wsyserror(_("Color Panel: Could not find file"), "%s", RGBTXT);
 	}
     }
 }
@@ -1490,7 +1484,7 @@ magnifyGetImage(WMScreen *scr, XImage *image, int x, int y, int w, int h)
 		x - Cursor_x_hot,
 		y - Cursor_y_hot,
 		w, h, AllPlanes, ZPixmap)))
-	    wwarning(X_ERR);
+	    wwarning(_("Color Panel: X failed request"));
 
 	return image;
     }
@@ -1555,7 +1549,7 @@ magnifyGetImage(WMScreen *scr, XImage *image, int x, int y, int w, int h)
 		y - Cursor_y_hot + y0,
 		w0, h0,	AllPlanes, ZPixmap,
 		image, x0, y0))
-	wwarning(X_ERR);
+	wwarning(_("Color Panel: X failed request"));
     
     return NULL;
 }
@@ -1619,7 +1613,7 @@ magnifyGetImageStored(WMColorPanel *panel, int x1, int y1, int x2, int y2)
 	    panel->magnifyGlass->dirtyRect =
 		XSubImage(panel->magnifyGlass->image, xa, ya, width, height);
 	    if (!panel->magnifyGlass->dirtyRect) {
-		wwarning(X_ERR);
+		wwarning(_("Color Panel: X failed request"));
 		return;	/* X returned a NULL from XSubImage */
 	    }
 	}
@@ -2168,7 +2162,7 @@ wheelRender(W_ColorPanel *panel)
     
     image = RCreateImage(colorWheelSize+4, colorWheelSize+4, True);
     if (!image) {
-	wwarning(NO_MEMORY_ERR);
+	wwarning(_("Color Panel: Could not allocate memory"));
 	return;
     }
    
@@ -2828,9 +2822,9 @@ hsbUpdateBrightnessGradient(W_ColorPanel *panel)
     if (sliderPxmp)
     W_PaintText(W_VIEW(panel->hsbBrightnessS), sliderPxmp->pixmap, 
 		panel->font12, 2, 0, 100, WALeft, WMColorGC(scr->white),
-		False, "Brightness", strlen("Brightness"));
+		False, _("Brightness"), strlen(_("Brightness")));
     else
-	wwarning(NO_MEMORY_ERR);
+	wwarning(_("Color Panel: Could not allocate memory"));
 
     WMSetSliderImage(panel->hsbBrightnessS, sliderPxmp);
     WMReleasePixmap(sliderPxmp);
@@ -2864,9 +2858,9 @@ hsbUpdateSaturationGradient(W_ColorPanel *panel)
 	W_PaintText(W_VIEW(panel->hsbSaturationS), sliderPxmp->pixmap, 
 	    panel->font12, 2, 0, 100, WALeft, 
 	    WMColorGC(from.hsv.value < 128 ? scr->white : scr->black), False, 
-		    "Saturation", strlen("Saturation"));
+		    _("Saturation"), strlen(_("Saturation")));
     else
-	wwarning(NO_MEMORY_ERR);
+	wwarning(_("Color Panel: Could not allocate memory"));
     
     WMSetSliderImage(panel->hsbSaturationS, sliderPxmp);
     WMReleasePixmap(sliderPxmp);
@@ -2900,9 +2894,9 @@ hsbUpdateHueGradient(W_ColorPanel *panel)
 	W_PaintText(W_VIEW(panel->hsbHueS), sliderPxmp->pixmap, 
 	    panel->font12, 2, 0, 100, WALeft, 
 	    WMColorGC(hsvcolor.value < 128 ? scr->white : scr->black), False, 
-		    "Hue", strlen("Hue"));
+		    _("Hue"), strlen(_("Hue")));
     else
-	wwarning(NO_MEMORY_ERR);
+	wwarning(_("Color Panel: Could not allocate memory"));
     
     WMSetSliderImage(panel->hsbHueS, sliderPxmp);
     WMReleasePixmap(sliderPxmp);
@@ -3150,7 +3144,7 @@ customPaletteMenuNewFromFile(W_ColorPanel *panel)
     
     /* Get a filename */
     if (WMRunModalFilePanelForDirectory(browseP, panel->win, spath, 
-		"Open Palette", RSupportedFileFormats()) ) {
+		_("Open Palette"), RSupportedFileFormats()) ) {
 	filepath = WMGetFilePanelFileName(browseP);
 	
 	/* Get seperation position between path and filename */ 
@@ -3211,13 +3205,13 @@ customPaletteMenuNewFromFile(W_ColorPanel *panel)
 	    tmp = wstrconcat(panel->configurationPath, filename);
 	    
 	    i = remove(tmp);	/* Delete the file, it doesn't belong here */			
-	    WMRunAlertPanel(scr, panel->win, "File Error", 
-			    "Invalid file format !", "OK", NULL, NULL);
+	    WMRunAlertPanel(scr, panel->win, _("File Error"), 
+			    _("Invalid file format !"), _("OK"), NULL, NULL);
 	    if (i != 0) {
-		wsyserror("can't remove file %s", tmp);
-		WMRunAlertPanel(scr, panel->win, "File Error", 
-				"Couldn't remove file from Configuration Directory !", 
-				"OK", NULL, NULL);
+		wsyserror(_("can't remove file %s"), tmp);
+		WMRunAlertPanel(scr, panel->win, _("File Error"), 
+				_("Couldn't remove file from Configuration Directory !"), 
+				_("OK"), NULL, NULL);
 	    }
 	    wfree(tmp);
 	}
@@ -3243,8 +3237,8 @@ customPaletteMenuRename(W_ColorPanel *panel)
     item = WMGetPopUpButtonSelectedItem(panel->customPaletteHistoryBtn);
     fromName = WMGetPopUpButtonItem(panel->customPaletteHistoryBtn, item);
     
-    toName = WMRunInputPanel(scr, panel->win, "Rename", "Rename palette to:", 
-			     fromName, "OK", "Cancel");
+    toName = WMRunInputPanel(scr, panel->win, _("Rename"), _("Rename palette to:"), 
+			     fromName, _("OK"), _("Cancel"));
     
     if (toName) {
 	
@@ -3260,8 +3254,8 @@ customPaletteMenuRename(W_ColorPanel *panel)
 	
 	if (access (toPath, F_OK) == 0)	{	
 	    /* Careful, this palette exists already */
-	    if (WMRunAlertPanel(scr, panel->win, "Warning", 
-				"Palette already exists !\n\nOverwrite ?", "No", "Yes", 
+	    if (WMRunAlertPanel(scr, panel->win, _("Warning"), 
+				_("Palette already exists !\n\nOverwrite ?"), _("No"), _("Yes"), 
 				NULL) == 1) {
 		/* "No" = 0, "Yes" = 1 */
 		int items = WMGetPopUpButtonNumberOfItems(
@@ -3293,7 +3287,7 @@ customPaletteMenuRename(W_ColorPanel *panel)
 	}
 	
 	if ( rename(fromPath, toPath) != 0)
-	    wsyserror("Couldn't rename palette %s to %s\n", fromName, toName);
+	    wsyserror(_("Couldn't rename palette %s to %s\n"), fromName, toName);
 	else {
 	    WMRemovePopUpButtonItem(panel->customPaletteHistoryBtn, item);
 	    WMInsertPopUpButtonItem(panel->customPaletteHistoryBtn, item, 
@@ -3319,13 +3313,13 @@ customPaletteMenuRemove(W_ColorPanel *panel)
     
     item = WMGetPopUpButtonSelectedItem(panel->customPaletteHistoryBtn);
     
-    tmp = wstrconcat( "This will permanently remove the palette ", 
+    tmp = wstrconcat( _("This will permanently remove the palette "), 
 		     WMGetPopUpButtonItem(panel->customPaletteHistoryBtn, item ));
     text = wstrconcat( tmp, 
-	    ".\n\nAre you sure you want to remove this palette ?");
+	    _(".\n\nAre you sure you want to remove this palette ?"));
     wfree(tmp);
     
-    choice = WMRunAlertPanel(scr, panel->win, "Remove", text, "Yes", "No",
+    choice = WMRunAlertPanel(scr, panel->win, _("Remove"), text, _("Yes"), _("No"),
 	    NULL);
     /* returns 0 (= "Yes") or 1 (="No") */
     wfree(text);
@@ -3347,7 +3341,7 @@ customPaletteMenuRemove(W_ColorPanel *panel)
 	WMRemovePopUpButtonItem(panel->customPaletteHistoryBtn, item);
 
         } else {
-            wsyserror("Couldn't remove palette %s\n", tmp);
+            wsyserror(_("Couldn't remove palette %s\n"), tmp);
         }
 
 	wfree(tmp);
@@ -3652,14 +3646,14 @@ fetchFile(char *toPath, char *srcFile, char *destFile)
     char	buf[BUFSIZE];
     
     if ((src = open(srcFile, O_RDONLY)) == 0) {
-	wsyserror("Could not open %s", srcFile);
+	wsyserror(_("Could not open %s"), srcFile);
 	return -1;
     }
     
     tmp = wstrconcat(toPath, destFile);
     if ((dest = open( tmp, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) 
 	== 0) {
-	wsyserror("Could not create %s", tmp);
+	wsyserror(_("Could not create %s"), tmp);
 	wfree(tmp);
 	return -1;
     }
@@ -3670,7 +3664,7 @@ fetchFile(char *toPath, char *srcFile, char *destFile)
     while ((n = read(src, buf, BUFSIZE)) > 0)
     {
 	if (write (dest, buf, n) != n)	{
-	    wsyserror("Write error on file %s", destFile);
+	    wsyserror(_("Write error on file %s"), destFile);
 	    return -1;
 	}
     }
@@ -3715,7 +3709,7 @@ convertCPColor(CPColor *color)
     
     switch (color->set) {
 	case cpNone: 
-	    wwarning("Color Panel: Color unspecified");
+	    wwarning(_("Color Panel: Color unspecified"));
 	    return;
 	case cpRGB:
 	    old_hue = color->hsv.hue;
@@ -3750,7 +3744,7 @@ ulongToRColor(WMScreen *scr, unsigned long value)
     XColor	*xcolor = NULL;
     
     if (!(xcolor = wmalloc(sizeof(XColor)) )) {
-	wwarning(NO_MEMORY_ERR);
+	wwarning(_("Color Panel: Could not allocate memory"));
 	color.red = 0;
 	color.green = 0;
 	color.blue = 0;

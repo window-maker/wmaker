@@ -84,7 +84,7 @@ WCreateGeometryView(WMScreen *scr)
 
     WMCreateEventHandler(gview->view, ExposureMask, handleEvents, gview);
 
-    sprintf(buffer, "%+05i,  %+05i", 0, 0);
+    snprintf(buffer, sizeof(buffer), "%+05i,  %+05i", 0, 0);
 
     gview->textSize.width = WMWidthOfString(gview->font, buffer, 
 					    strlen(buffer));
@@ -127,9 +127,11 @@ paint(WGeometryView *gview)
     char buffer[64];
 
     if (gview->showPosition) {
-	sprintf(buffer, "%+5i , %+5i    ", gview->data.pos.x, gview->data.pos.y);
+	snprintf(buffer, sizeof(buffer), "%+5i , %+5i    ", 
+		 gview->data.pos.x, gview->data.pos.y);
     } else {
-	sprintf(buffer, "%+5i x %+5i    ", gview->data.size.width, gview->data.size.height);
+	snprintf(buffer, sizeof(buffer), "%+5i x %+5i    ", 
+		 gview->data.size.width, gview->data.size.height);
     }
 
     WMDrawImageString(W_VIEW_SCREEN(gview->view),

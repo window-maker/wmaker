@@ -1,13 +1,29 @@
+
+Changes since version 0.65.0:
+.............................
+
 - removed FocusFollowMouse from wmaker and WPrefs
 - fixed problem with alpha images showing a blue tint on big endian machines
 - fixed problem with WINGs based apps exiting with a "X_RotateProperties"
   related error when text was selected in a textfiled (including WPrefs.app
   and Window Maker itself).
+- fixed bug with maximization of windows with fixed resize increments
+- added None geometry display type
+- fixed window enumeration bug
+- removed GNUisms from wsetfont (Marcelo E. Magallon <marcelo.magallon@bigfoot.com>, Masahide -mac- NODA <mac@clave.gr.jp>)
+- added slovakian translations from (tomka@oalevice.sk)
+- added WINGs i18n patch from tomka@oalevice.sk
+- fixed wmsetbg.c to work in servers capable of multiple depths (overlay)
+- added HMaximizeKey (Ruda Moura <ruda@conectiva.com.br>)
+- fixed bad SIGPIPE handling setup across forks (Philippe Troin <phil@fifi.org>)
+- added workaround for bug in locale handling on font set creation (Seiichi SATO <sato@cvs-net.co.jp>)
 - Fixed some non-portable shell constructs used in installed scripts
   (Johnny C. Lam <lamj@stat.cmu.edu>)
-- Fixed crash with long titles in the window list menu
-  (Alban Hertroys <dalroi@wit401310.student.utwente.nl>)
-
+- Fixed crash with long titles in the window list menu (buffer overflow)
+  (Alban Hertroys <dalroi@wit401310.student.utwente.nl>, reported by
+   Robert Marshall <robert@chezmarshall.freeserve.co.uk>)
+- Replaced almost all sprintf() calls with snprintf()
+- fixed crash when removing menu entry for Window List or Workspace submenu
 
 Changes since version 0.64.0:
 .............................

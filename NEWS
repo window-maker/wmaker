@@ -5,6 +5,7 @@ NEWS for veteran Window Maker users
 
 Removed FocusFollowMouse option, only SloppyFocus present now.
 
+Added None option to MoveDisplay and ResizeDisplay
 
 --- 0.65.0
 

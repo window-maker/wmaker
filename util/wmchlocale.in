@@ -2,12 +2,19 @@
 #
 # Change locale-dependent settings of WindowMaker.
 #
-# v0.1 by judas@hell <tomka@oalevice.sk> on Jan 28 2001
+# v0.1 by Jan "judas" Tomka <tomka@oalevice.sk> on Jan 28 2001
 #
+# v0.2 by Jan "judas" Tomka <tomka@oalevice.sk> on Feb 22 2001
+# - removed --nodef option
+# - better error recognizing
+# - added --test switch like in wsetfont
+#
+# v0.3 by Jan "judas" Tomka <tomka@oalevice.sk> on May 04 2001
+# - bad bugs with --test found and corrected
 #
 
 PROGRAM=`basename $0`
-VERSION="0.1"
+VERSION="0.3"
 
 if [ "x$GNUSTEP_USER_ROOT" = "x" ]; then
     GSDIR="$HOME/GNUstep"
@@ -23,13 +30,13 @@ LOCALDIR="$GSDIR/Library/WindowMaker"
 
 help_msg() {
     echo -e "\n"\
-	"$PROGRAM, v$VERSION by judas@hell\n"\
+	"$PROGRAM, v$VERSION by Jan \"judas\" Tomka\n"\
 	"Syntax:\n"\
-	"    $PROGRAM [--auto] [--nodef] [<new-locale> | default]\n"\
+	"    $PROGRAM [--auto] [--test] [<new-locale> | default]\n"\
 	"\n"\
 	"<new-locale>	locale you want WindowMaker to move to (e.g. ja or default)\n"\
 	"--auto		use current locale\n"\
-	"--nodef	try to change only codings of fonts\n"
+	"--test		don't write anything\n"
     exit 0
 }
 
@@ -41,8 +48,8 @@ for i in $*; do
     case $i in
     --auto)
 	auto="YES";;
-    --nodef)
-	nodef="--nodef";;
+    --test)
+	test="--test";;
     *)
 	if [ -z "$new_locale" ]; then
 	    new_locale="$i"
@@ -54,6 +61,7 @@ for i in $*; do
 done
 if [ "$new_locale" = "default" ]; then
     new_locale=""
+    default="YES"
 fi
 
 if [ -n "$auto" ] && [ -z "$new_locale" ]; then
@@ -64,12 +72,20 @@ if [ -n "$auto" ] && [ -z "$new_locale" ]; then
 fi
 
 if [ -z "$new_locale" ]; then
-    echo -e "\nNo locale is set, using default...\n" >/dev/stderr
+    if [ -z "$default" ]; then
+	echo -e "\nNo locale is set, using default...\n" >/dev/stderr
+    fi
 elif ! (locale -a |grep "^$new_locale$" &>/dev/null); then
-    echo -e "\n"\
-	"Locale $new_locale currently set is not supported on your system...\n"\
-	"Check your LANG and LC_ALL variables or install your locale support\n"\
-	"\n" >/dev/stderr
+    if [ -z "$auto" ]; then
+	echo -e "\n"\
+	    "Locale $new_locale is not supported on your system..."\
+	    "\n" >/dev/stderr
+    else
+	echo -e "\n"\
+	    "Locale $new_locale currently set is not supported on your system...\n"\
+	    "Check your LANG and LC_ALL variables or install your locale support\n"\
+	    "\n" >/dev/stderr
+    fi
     exit 1
 fi
 
@@ -77,13 +93,18 @@ echo -n "Setting Window Maker root menu... "
 
 if [ -z "$new_locale" ] || [ "$new_locale" = "en" ]; then
     menu_list="plmenu menu"
+    args="default"
 else
     menu_list="plmenu.$new_locale menu.$new_locale plmenu menu"
+    args="--locale=$new_locale"
 fi
+
+echo -n "Setting Window Maker root menu... "
+
 for new_menu in $menu_list; do
     for wm_dir in $LOCALDIR $GLOBALDIR; do
 	if [ -f "$wm_dir/$new_menu" ]; then
-	    if [ -n "$new_locale" ] && echo "$new_menu" |grep "menu.$new_locale" &>/dev/null; then
+	    if [ -z "$new_locale" ] || ( [ -n "$new_locale" ] && echo "$new_menu" |grep "menu.$new_locale" &>/dev/null ); then
 		echo "success"
 	    else
 		echo "fail (copying default)"
@@ -118,7 +139,7 @@ if wsetfont "$args" &>/dev/null; then
     echo "success"
 else
     echo -n "fail"
-    if wsetfont default &>/dev/null; then
+    if wsetfont default "$test" &>/dev/null; then
 	echo " (setting default)"
     else
 	echo " (totally)"

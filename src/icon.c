@@ -466,14 +466,17 @@ getnameforicon(WWindow *wwin)
     int len;
     
     if (wwin->wm_class && wwin->wm_instance) {
-	suffix = wmalloc(strlen(wwin->wm_class)+strlen(wwin->wm_instance)+2);
-	sprintf(suffix, "%s.%s", wwin->wm_instance, wwin->wm_class);
+	int len = strlen(wwin->wm_class)+strlen(wwin->wm_instance)+2;
+	suffix = wmalloc(len);
+	snprintf(suffix, len, "%s.%s", wwin->wm_instance, wwin->wm_class);
     } else if (wwin->wm_class) {
-	suffix = wmalloc(strlen(wwin->wm_class)+1);
-	strcpy(suffix, wwin->wm_class);
+	int len = strlen(wwin->wm_class)+1;
+	suffix = wmalloc(len);
+	snprintf(suffix, len, "%s", wwin->wm_class);
     } else if (wwin->wm_instance) {
-	suffix = wmalloc(strlen(wwin->wm_instance)+1);
-	strcpy(suffix, wwin->wm_instance);
+	int len = strlen(wwin->wm_instance)+1;
+	suffix = wmalloc(len);
+	snprintf(suffix, len, "%s", wwin->wm_instance);
     } else {
 	return NULL;
     }
@@ -481,7 +484,7 @@ getnameforicon(WWindow *wwin)
     prefix = wusergnusteppath();
     len = strlen(prefix)+64+strlen(suffix);
     path = wmalloc(len+1);
-    sprintf(path, "%s/.AppInfo", prefix);
+    snprintf(path, len, "%s/.AppInfo", prefix);
 
     if (access(path, F_OK)!=0) {
 	if (mkdir(path, S_IRUSR|S_IWUSR|S_IXUSR)) {

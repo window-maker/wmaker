@@ -4,6 +4,7 @@
 
 #include "WINGsP.h"
 #include "WUtil.h"
+#include "wconfig.h"
 
 #include <ctype.h>
 #include <string.h>
@@ -70,7 +71,7 @@ static int scalableFontSizes[] = {
 
 	
 
-static void getSelectedFont(FontPanel *panel, char buffer[]);
+static void getSelectedFont(FontPanel *panel, char buffer[], int bufsize);
 
 
 static void arrangeLowerFrame(FontPanel *panel);
@@ -201,13 +202,13 @@ WMGetFontPanel(WMScreen *scr)
     panel->sampleT = WMCreateTextField(panel->upperF);
     WMResizeWidget(panel->sampleT, DEF_WIDTH - 20, 50);
     WMMoveWidget(panel->sampleT, 10, 10);
-    WMSetTextFieldText(panel->sampleT, "Test!!!");
+    WMSetTextFieldText(panel->sampleT, _("Test!!!"));
 
     font = WMBoldSystemFontOfSize(scr, 12);
 
     panel->famL = WMCreateLabel(panel->lowerF);
     WMSetWidgetBackgroundColor(panel->famL, dark);
-    WMSetLabelText(panel->famL, "Family");
+    WMSetLabelText(panel->famL, _("Family"));
     WMSetLabelFont(panel->famL, font);
     WMSetLabelTextColor(panel->famL, white);
     WMSetLabelRelief(panel->famL, WRSunken);
@@ -218,7 +219,7 @@ WMGetFontPanel(WMScreen *scr)
 
     panel->typL = WMCreateLabel(panel->lowerF);
     WMSetWidgetBackgroundColor(panel->typL, dark);
-    WMSetLabelText(panel->typL, "Typeface");
+    WMSetLabelText(panel->typL, _("Typeface"));
     WMSetLabelFont(panel->typL, font);
     WMSetLabelTextColor(panel->typL, white);
     WMSetLabelRelief(panel->typL, WRSunken);
@@ -229,7 +230,7 @@ WMGetFontPanel(WMScreen *scr)
 
     panel->sizL = WMCreateLabel(panel->lowerF);
     WMSetWidgetBackgroundColor(panel->sizL, dark);
-    WMSetLabelText(panel->sizL, "Size");
+    WMSetLabelText(panel->sizL, _("Size"));
     WMSetLabelFont(panel->sizL, font);
     WMSetLabelTextColor(panel->sizL, white);
     WMSetLabelRelief(panel->sizL, WRSunken);
@@ -248,12 +249,12 @@ WMGetFontPanel(WMScreen *scr)
     panel->setB = WMCreateCommandButton(panel->win);
     WMResizeWidget(panel->setB, 70, 24);
     WMMoveWidget(panel->setB, 240, DEF_HEIGHT - (BUTTON_SPACE_HEIGHT-5));
-    WMSetButtonText(panel->setB, "Set");
+    WMSetButtonText(panel->setB, _("Set"));
 
     panel->revertB = WMCreateCommandButton(panel->win);
     WMResizeWidget(panel->revertB, 70, 24);
     WMMoveWidget(panel->revertB, 80, DEF_HEIGHT - (BUTTON_SPACE_HEIGHT-5));
-    WMSetButtonText(panel->revertB, "Revert");
+    WMSetButtonText(panel->revertB, _("Revert"));
 
     WMRealizeWidget(panel->win);
 
@@ -340,9 +341,9 @@ WMGetFontPanelFont(WMFontPanel *panel)
 char*
 WMGetFontPanelFontName(WMFontPanel *panel)
 {
-    char name[256];
+    char name[512];
 
-    getSelectedFont(panel, name);
+    getSelectedFont(panel, name, sizeof(name));
 
     return wstrdup(name);
 }
@@ -704,8 +705,8 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
     fontList = XListFonts(scr->display, ALL_FONTS_MASK, MAX_FONTS_TO_RETRIEVE, 
                           &count);
     if (!fontList) {
-	WMRunAlertPanel(scr, panel->win, "Error", 
-			"Could not retrieve font list", "OK", NULL, NULL);
+	WMRunAlertPanel(scr, panel->win, _("Error"), 
+			_("Could not retrieve font list"), _("OK"), NULL, NULL);
 	return;
     }
 
@@ -717,7 +718,7 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
 	    continue;
 	}
 	if (fname_len > 255) {
-	    wwarning("font name %s is longer than 256, which is invalid.",
+	    wwarning(_("font name %s is longer than 256, which is invalid."),
 		     fontList[i]);
 	    *fontList[i] = '\0';
 	    continue;
@@ -766,7 +767,7 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
 
 
 static void
-getSelectedFont(FontPanel *panel, char buffer[])
+getSelectedFont(FontPanel *panel, char buffer[], int bufsize)
 {
     WMListItem *item;
     Family *family;
@@ -786,7 +787,7 @@ getSelectedFont(FontPanel *panel, char buffer[])
 
     size = WMGetTextFieldText(panel->sizT);
 
-    sprintf(buffer, "-%s-%s-%s-%s-%s-%s-%s-*-*-*-*-*-%s-%s",
+    snprintf(buffer, bufsize, "-%s-%s-%s-%s-%s-%s-%s-*-*-*-*-*-%s-%s",
 	    family->foundry,
 	    family->name,
 	    face->weight,
@@ -803,10 +804,10 @@ getSelectedFont(FontPanel *panel, char buffer[])
 static void
 preview(FontPanel *panel)
 {
-    char buffer[256];
+    char buffer[512];
     WMFont *font;
     
-    getSelectedFont(panel, buffer);
+    getSelectedFont(panel, buffer, sizeof(buffer));
     
     font = WMCreateFont(WMWidgetScreen(panel->win), buffer);
     if (font) {
@@ -864,22 +865,22 @@ familyClick(WMWidget *w, void *data)
 	}
 
 	if (strcmp(face->slant, "r") == 0) {
-	    strcat(buffer, "Roman");
+	    strcat(buffer, _("Roman"));
 	    top = 1;
 	} else if (strcmp(face->slant, "i") == 0) {
-	    strcat(buffer, "Italic");
+	    strcat(buffer, _("Italic"));
 	} else if (strcmp(face->slant, "o") == 0) {
-	    strcat(buffer, "Oblique");
+	    strcat(buffer, _("Oblique"));
 	} else if (strcmp(face->slant, "ri") == 0) {
-	    strcat(buffer, "Rev Italic");
+	    strcat(buffer, _("Rev Italic"));
 	} else if (strcmp(face->slant, "ro") == 0) {
-	    strcat(buffer, "Rev Oblique");
+	    strcat(buffer, _("Rev Oblique"));
 	} else {
 	    strcat(buffer, face->slant);
 	}
 
 	if (buffer[0] == 0) {
-	    strcpy(buffer, "Normal");
+	    strcpy(buffer, _("Normal"));
 	}
 
 	if (top)

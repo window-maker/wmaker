@@ -39,6 +39,9 @@ SUPPORTED PLATFORMS
 - IBM S/390 running Linux
 - iBook running Darwin
 - Windows NT with Cygwin/XFree86
+- Sony PlayStation2 running Linux
+
+All registered trademarks are registered by their owners. (duh)
 
 Patches to make it work on other platforms are welcome. 
 
