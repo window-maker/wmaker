@@ -177,7 +177,7 @@ dnl Checks for header files.
 dnl =======================
 AC_HEADER_SYS_WAIT
 AC_HEADER_TIME
-AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h sys/time.h sys/types.h libintl.h sys/select.h poll.h malloc.h ctype.h stdlib.h string.h strings.h)
+AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h sys/time.h sys/types.h libintl.h sys/select.h poll.h malloc.h ctype.h string.h strings.h)
 
 
 
@@ -774,6 +774,10 @@ dnl ==============================================
 dnl         End of Graphic Format Libraries
 dnl ==============================================
 
+
+dnl
+dnl stdlib.h is checked here, because of conflict in jpeglib.h
+AC_CHECK_HEADERS(stdlib.h)
 
 # AC_PREFIX_PROGRAM(wmaker)
 
