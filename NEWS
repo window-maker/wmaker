@@ -81,7 +81,7 @@ Example user menu syntax:
     ("Put 2", SHORTCUT, "2"),
     ("Put 3,4 and 5", SHORTCUT, (3,4,5))
   ),
-  ("Exit", SHORTCUT, "Control+q"),
+  ("Exit", SHORTCUT, "Control+q")
 )
 
 
