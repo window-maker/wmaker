@@ -29,7 +29,7 @@
 #include <WINGs/WUtil.h>
 
 #ifdef XINERAMA
-#include <X11/Xinerama.h>
+#include <X11/extensions/Xinerama.h>
 #endif
 
 

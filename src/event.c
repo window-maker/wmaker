@@ -1437,6 +1437,13 @@ handleKeyPress(XEvent *event)
 	    }
 	}
 	break;
+     case WKBD_HIDE_OTHERS:
+	if (ISMAPPED(wwin) && ISFOCUSED(wwin)) {
+	    CloseWindowMenu(scr);
+	    
+            wHideOtherApplications(wwin);
+	}
+	break;
      case WKBD_MAXIMIZE:
 	if (ISMAPPED(wwin) && ISFOCUSED(wwin) && !WFLAGP(wwin, no_resizable)) {
 	    CloseWindowMenu(scr);

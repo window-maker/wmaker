@@ -8,6 +8,7 @@ Changes since version 0.80.0:
 - Fixed problem with keyboard shortcuts executed an every screen for
   multihead systems.
 - Fixed problem with kcalc not having a miniaturize button.
+- Added "Hide Others" to the window menu.
 
 
 Changes since version 0.70.0:

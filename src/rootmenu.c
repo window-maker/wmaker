@@ -338,6 +338,7 @@ static void
 clearSessionCommand(WMenu *menu, WMenuEntry *entry)
 {
     wSessionClearState(menu->frame->screen_ptr);
+    wScreenSaveState(menu->frame->screen_ptr);
 }
 
 

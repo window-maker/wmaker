@@ -681,6 +681,9 @@ WDefaultEntry optionList[] = {
     {"HideKey", "None",	       			(void*)WKBD_HIDE,
 	  NULL,				getKeybind,	setKeyGrab
     },
+    {"HideOthersKey", "None",	       		(void*)WKBD_HIDE_OTHERS,
+	  NULL,				getKeybind,	setKeyGrab
+    },
     {"MoveResizeKey", "None",	       		(void*)WKBD_MOVERESIZE,
 	  NULL,				getKeybind,	setKeyGrab
     },

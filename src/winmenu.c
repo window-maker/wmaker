@@ -50,15 +50,16 @@
 #define MC_MINIATURIZE	1
 #define MC_SHADE	2
 #define MC_HIDE		3
-#define MC_MOVERESIZE	4
-#define MC_SELECT       5
-#define MC_DUMMY_MOVETO	6
-#define MC_PROPERTIES   7
-#define MC_OPTIONS	8
-#define MC_SHORTCUT	8
+#define MC_HIDE_OTHERS  4
+#define MC_MOVERESIZE   5
+#define MC_SELECT       6
+#define MC_DUMMY_MOVETO 7
+#define MC_PROPERTIES   8
+#define MC_OPTIONS      9
+#define MC_SHORTCUT     9
 
-#define MC_CLOSE        9
-#define MC_KILL         10
+#define MC_CLOSE        10
+#define MC_KILL         11
 
 
 #define WO_KEEP_ON_TOP		0
@@ -175,6 +176,10 @@ execMenuCommand(WMenu *menu, WMenuEntry *entry)
      case MC_HIDE:
 	wapp = wApplicationOf(wwin->main_window);
 	wHideApplication(wapp);
+	break;
+
+     case MC_HIDE_OTHERS:
+         wHideOtherApplications(wwin);
 	break;
 
     }
@@ -442,7 +447,6 @@ createWindowMenu(WScreen *scr)
     }
 
     entry = wMenuAddCallback(menu, _("Miniaturize"), execMenuCommand, NULL);
-    
     if (wKeyBindings[WKBD_MINIATURIZE].keycode!=0) {
 	kcode = wKeyBindings[WKBD_MINIATURIZE].keycode;
 	
@@ -461,6 +465,14 @@ createWindowMenu(WScreen *scr)
     entry = wMenuAddCallback(menu, _("Hide"), execMenuCommand, NULL);
     if (wKeyBindings[WKBD_HIDE].keycode!=0) {
 	kcode = wKeyBindings[WKBD_HIDE].keycode;
+	
+	if (kcode && (tmp = XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0))))
+	  entry->rtext = wstrdup(tmp);
+    }
+
+    entry = wMenuAddCallback(menu, _("Hide Others"), execMenuCommand, NULL);
+    if (wKeyBindings[WKBD_HIDE_OTHERS].keycode!=0) {
+	kcode = wKeyBindings[WKBD_HIDE_OTHERS].keycode;
 	
 	if (kcode && (tmp = XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0))))
 	  entry->rtext = wstrdup(tmp);

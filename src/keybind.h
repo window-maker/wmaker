@@ -28,25 +28,26 @@
 /* window */
 #define WKBD_MINIATURIZE	3
 #define WKBD_HIDE		4
-#define WKBD_MAXIMIZE		5
-#define WKBD_VMAXIMIZE		6
-#define WKBD_HMAXIMIZE		7
-#define WKBD_SELECT		8
+#define WKBD_HIDE_OTHERS        5
+#define WKBD_MAXIMIZE           6
+#define WKBD_VMAXIMIZE          7
+#define WKBD_HMAXIMIZE          8
+#define WKBD_SELECT             9
 /* Clip */
-#define WKBD_CLIPLOWER		9
-#define WKBD_CLIPRAISE		10
-#define WKBD_CLIPRAISELOWER	11
+#define WKBD_CLIPLOWER          10
+#define WKBD_CLIPRAISE		11
+#define WKBD_CLIPRAISELOWER	12
 /* window */
-#define WKBD_RAISE		12
-#define WKBD_LOWER		13
-#define WKBD_RAISELOWER		14
-#define WKBD_MOVERESIZE		15
-#define WKBD_SHADE		16
+#define WKBD_RAISE		13
+#define WKBD_LOWER		14
+#define WKBD_RAISELOWER		15
+#define WKBD_MOVERESIZE		16
+#define WKBD_SHADE		17
 /* window, menu */
-#define WKBD_CLOSE		17
+#define WKBD_CLOSE		18
 /* window */
-#define WKBD_FOCUSNEXT		18
-#define WKBD_FOCUSPREV		19
+#define WKBD_FOCUSNEXT		19
+#define WKBD_FOCUSPREV          20
 
 #define WKBD_WORKSPACE1		21
 #define WKBD_WORKSPACE2		22
@@ -78,10 +79,10 @@
 #define WKBD_SWITCH_SCREEN      45
 
 #ifdef KEEP_XKB_LOCK_STATUS
-# define WKBD_TOGGLE             46
-# define WKBD_LAST               47
+# define WKBD_TOGGLE            46
+# define WKBD_LAST              47
 #else
-# define WKBD_LAST               46
+# define WKBD_LAST              46
 #endif /* KEEP_XKB_LOCK_STATUS */
 
 
