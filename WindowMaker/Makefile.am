@@ -51,6 +51,7 @@ prefsdata_DATA =\
 	plmenu.ro\
 	plmenu.sk\
 	plmenu.zh_CN\
+	plmenu.zh_TW.Big5\
 	wmmacros\
 	xtree.dat
 

@@ -18,6 +18,9 @@ LDADD= libWINGs.a $(top_builddir)/wrlib/libwraster.la @LIBPL@ @INTLIBS@
 
 EXTRA_DIST = BUGS
 
+wingsincludedir = $(includedir)/WINGs
+wingsinclude_HEADERS = WINGs.h WUtil.h WINGsP.h
+
 # wbutton.c 
 libWINGs_a_SOURCES = 	\
 	array.c \

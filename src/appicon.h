@@ -50,6 +50,8 @@ typedef struct WAppIcon {
 				       /* dropped on us */
 #endif
     
+    char *paste_command;	       /* command to run when something is pasted */
+    
     char *wm_class;
     char *wm_instance;
     pid_t pid;			       /* for apps launched from the dock */
@@ -73,6 +75,7 @@ typedef struct WAppIcon {
     unsigned int updated:1;
     unsigned int editing:1;	       /* editing docked icon */
     unsigned int drop_launch:1;	       /* launching from drop action */
+    unsigned int paste_launch:1;       /* launching from paste action */
     unsigned int destroyed:1;	       /* appicon was destroyed */
     unsigned int buggy_app:1;	       /* do not make dock rely on hints 
 					* set by app */

@@ -653,9 +653,7 @@ wScreenForRootWindow(Window window)
 	}
     }
 
-    assert("bad_root_window" && 0);
-    
-    return NULL;
+    return wScreenForWindow(window);
 }
 
 
@@ -678,7 +676,7 @@ wScreenSearchForRootWindow(Window window)
 	}
     }
     
-    return NULL;
+    return wScreenForWindow(window);
 }
 
 
@@ -1125,7 +1123,8 @@ manageAllWindows(WScreen *scr, int crashRecovery)
 
                 wWindowMove(wwin, wwin->frame_x - border,
                             wwin->frame_y - border -
-                            wwin->frame->titlebar->height);
+			    (wwin->frame->titlebar ? 
+                             wwin->frame->titlebar->height : 0));
             }
 	}
     }

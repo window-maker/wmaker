@@ -98,6 +98,7 @@ extern void appIconMouseDown(WObjDescriptor *desc, XEvent *event);
 /***** Local variables ****/
 
 static proplist_t dCommand=NULL;
+static proplist_t dPasteCommand=NULL;
 #ifdef OFFIX_DND
 static proplist_t dDropCommand=NULL;
 #endif
@@ -136,7 +137,7 @@ static void clipEnterNotify(WObjDescriptor *desc, XEvent *event);
 static void clipLeaveNotify(WObjDescriptor *desc, XEvent *event);
 static void clipAutoCollapse(void *cdata);
 static void clipAutoExpand(void *cdata);
-static void launchDockedApplication(WAppIcon *btn);
+static void launchDockedApplication(WAppIcon *btn, Bool withSelection);
 
 static void clipAutoLower(void *cdata);
 static void clipAutoRaise(void *cdata);
@@ -168,9 +169,8 @@ make_keys()
 	return;
 
     dCommand = PLRetain(PLMakeString("Command"));
-#ifdef OFFIX_DND
+    dPasteCommand = PLRetain(PLMakeString("PasteCommand"));    
     dDropCommand = PLRetain(PLMakeString("DropCommand"));
-#endif
     dLock = PLRetain(PLMakeString("Lock"));
     dAutoLaunch = PLRetain(PLMakeString("AutoLaunch"));
     dName = PLRetain(PLMakeString("Name"));
@@ -771,7 +771,7 @@ launchCallback(WMenu *menu, WMenuEntry *entry)
 {
     WAppIcon *btn = (WAppIcon*)entry->clientdata;
 
-    launchDockedApplication(btn);
+    launchDockedApplication(btn, False);
 }
 
 
@@ -890,11 +890,13 @@ switchWSCommand(WMenu *menu, WMenuEntry *entry)
 
 
 static void
-launchDockedApplication(WAppIcon *btn)
+launchDockedApplication(WAppIcon *btn, Bool withSelection)
 {
     WScreen *scr = btn->icon->core->screen_ptr;
 
-    if (!btn->launching && btn->command!=NULL) {
+    if (!btn->launching && 
+	((!withSelection && btn->command!=NULL) ||
+	 (withSelection && btn->paste_command!=NULL))) {
 	if (!btn->forced_dock) {
 	    btn->relaunching = btn->running;
 	    btn->running = 1;
@@ -911,8 +913,11 @@ launchDockedApplication(WAppIcon *btn)
 		btn->running = 0;
 	}
 	btn->drop_launch = 0;
+	btn->paste_launch = withSelection;
         scr->last_dock = btn->dock;
-        btn->pid = execCommand(btn, btn->command, NULL);
+        btn->pid = execCommand(btn, 
+			       withSelection ? btn->paste_command : btn->command,
+			       NULL);
         if (btn->pid>0) {
 	    if (btn->buggy_app) {
 		/* give feedback that the app was launched */
@@ -1361,6 +1366,12 @@ make_icon_state(WAppIcon *btn)
             PLRelease(command);
 	}
 #endif /* OFFIX_DND */
+	
+	if (btn->paste_command) {
+	    command = PLMakeString(btn->paste_command);
+	    PLInsertDictionaryEntry(node, dPasteCommand, command);
+	    PLRelease(command);
+	}
 
 	if (btn->client_machine && btn->remote_start) {
 	    host = PLMakeString(btn->client_machine);
@@ -1578,6 +1589,10 @@ restore_icon_state(WScreen *scr, proplist_t info, int type, int index)
     if (cmd)
 	aicon->dnd_command = wstrdup(PLGetString(cmd));
 #endif
+    
+    cmd = PLGetDictionaryEntry(info, dPasteCommand);
+    if (cmd)
+	aicon->paste_command = wstrdup(PLGetString(cmd));    
 
     /* check auto launch */
     value = PLGetDictionaryEntry(info, dAutoLaunch);
@@ -1679,6 +1694,10 @@ wClipRestoreState(WScreen *scr, proplist_t clip_state)
     if (value && PLIsString(value))
 	icon->dnd_command = wstrdup(PLGetString(value));
 #endif
+    
+    value = PLGetDictionaryEntry(clip_state, dPasteCommand);
+    if (value && PLIsString(value))
+	icon->paste_command = wstrdup(PLGetString(value));    
 
     PLRelease(clip_state);
 
@@ -1930,6 +1949,7 @@ wDockLaunchWithState(WDock *dock, WAppIcon *btn, WSavedState *state)
     if (btn && btn->command && !btn->running && !btn->launching) {
 
         btn->drop_launch = 0;
+	btn->paste_launch = 0;
 
         btn->pid = execCommand(btn, btn->command, state);
 
@@ -2040,6 +2060,7 @@ wDockReceiveDNDDrop(WScreen *scr, XEvent *event)
                 btn->running = 0;
         }
 
+	btn->paste_launch = 0;
         btn->drop_launch = 1;
         scr->last_dock = dock;
         btn->pid = execCommand(btn, btn->dnd_command, NULL);
@@ -2159,6 +2180,12 @@ wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
     }
 #endif
 
+    if (icon->command && !icon->paste_command) {
+	int len = strlen(icon->command)+8;
+	icon->paste_command = wmalloc(len);
+	snprintf(icon->paste_command, len, "%s %%s", icon->command);
+    }
+    
     return True;
 }
 
@@ -2337,6 +2364,10 @@ wDockDetach(WDock *dock, WAppIcon *icon)
         icon->dnd_command = NULL;
     }
 #endif
+    if (icon->paste_command) {
+        wfree(icon->paste_command);
+        icon->paste_command = NULL;
+    }    
 
     for (index=1; index<dock->max_icons; index++)
         if (dock->icon_array[index] == icon)
@@ -2936,9 +2967,7 @@ execCommand(WAppIcon *btn, char *command, WSavedState *state)
 	execvp(argv[0], args);
 	exit(111);
     }
-    while (argc > 0)
-        wfree(argv[--argc]);
-    wfree(argv);
+    wtokenfree(argv, argc);
 
     if (pid > 0) {
         if (!state) {
@@ -3233,14 +3262,17 @@ trackDeadProcess(pid_t pid, unsigned char status, WDock *dock)
 	    icon->pid = 0;
 	    if (status==111) {
 		char msg[PATH_MAX];
-#ifdef OFFIX_DND
-		snprintf(msg, sizeof(msg), _("Could not execute command \"%s\""),
-			icon->drop_launch && icon->dnd_command
-			? icon->dnd_command : icon->command);
-#else
-		snprintf(msg, sizeof(msg), _("Could not execute command \"%s\""),
-			icon->command);
-#endif
+
+		if (icon->drop_launch)
+		    snprintf(msg, sizeof(msg), _("Could not execute command \"%s\""),
+			     icon->dnd_command);
+		else if (icon->paste_launch)
+		    snprintf(msg, sizeof(msg), _("Could not execute command \"%s\""),
+			     icon->paste_command);
+		else
+		    snprintf(msg, sizeof(msg), _("Could not execute command \"%s\""),
+			     icon->command);
+
 		wMessageDialog(dock->screen_ptr, _("Error"), msg,
 			       _("OK"), NULL, NULL);
 	    }
@@ -3506,7 +3538,7 @@ iconDblClick(WObjDescriptor *desc, XEvent *event)
 	    } else if (btn->command) {
 		if (!btn->launching &&
 		    (!btn->running || (event->xbutton.state & ControlMask))) {
-		    launchDockedApplication(btn);
+		    launchDockedApplication(btn, False);
                 }
             } else if (btn->xindex == 0 && btn->yindex == 0
 		       && btn->dock->type == WM_DOCK) {
@@ -3516,6 +3548,7 @@ iconDblClick(WObjDescriptor *desc, XEvent *event)
         }
     }
 }
+
 
 
 static void
@@ -4076,6 +4109,13 @@ iconMouseDown(WObjDescriptor *desc, XEvent *event)
 	}
 
 	openDockMenu(dock, aicon, event);
+    } else if (event->xbutton.button == Button2) {
+	WAppIcon *btn = desc->parent;
+	
+	if (!btn->launching &&
+	    (!btn->running || (event->xbutton.state & ControlMask))) {
+	    launchDockedApplication(btn, True);
+	}	
     }
 }
 

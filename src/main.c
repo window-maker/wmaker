@@ -453,10 +453,21 @@ check_defaults()
 
     path = wdefaultspathfordomain("");
     if (access(path, R_OK)!=0) {
+#if 0
 	wfatal(_("could not find user GNUstep directory (%s).\n"
-		 "Make sure you have installed Window Maker correctly and run wmaker.inst"),
+		  "Make sure you have installed Window Maker correctly and run wmaker.inst"),
 	       path);
 	exit(1);
+#else
+	wwarning(_("could not find user GNUstep directory (%s)."), path);
+	
+	if (system("wmaker.inst --batch") != 0) {
+	    wwarning(_("There was an error while creating GNUstep directory, please "
+		       "make sure you have installed Window Maker correctly and run wmaker.inst"));
+	} else {
+	    wwarning(_("%s directory created with default configuration."), path);
+	}
+#endif
     }
     
     wfree(path);

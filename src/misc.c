@@ -621,8 +621,10 @@ getuserinput(WScreen *scr, char *line, int *ptr)
     char *prompt;
     int j, state;
     int begin = 0;
-    char tbuffer[256], pbuffer[256];
+#define BUFSIZE 512        
+    char tbuffer[BUFSIZE], pbuffer[BUFSIZE];
 
+    
     title = _("Program Arguments");
     prompt = _("Enter command arguments:");
     ret = NULL;
@@ -650,8 +652,8 @@ getuserinput(WScreen *scr, char *line, int *ptr)
 
 		j = 0;
 		if (*ptr > begin) {
-		    strncpy(tbuffer, &line[begin], WMIN(*ptr-begin, 255));
-		    tbuffer[WMIN(*ptr-begin, 255)] = 0;
+		    strncpy(tbuffer, &line[begin], WMIN(*ptr-begin, BUFSIZE));
+		    tbuffer[WMIN(*ptr-begin, BUFSIZE)] = 0;
 		    title = (char*)tbuffer;
 		}
 		begin = *ptr+1;
@@ -660,8 +662,8 @@ getuserinput(WScreen *scr, char *line, int *ptr)
 	    } else if (j <= 0 && line[*ptr]==')') {
 
 		if (*ptr > begin) {
-		    strncpy(tbuffer, &line[begin], WMIN(*ptr-begin, 255));
-		    tbuffer[WMIN(*ptr-begin, 255)] = 0;
+		    strncpy(tbuffer, &line[begin], WMIN(*ptr-begin, BUFSIZE));
+		    tbuffer[WMIN(*ptr-begin, BUFSIZE)] = 0;
 		    title = (char*)tbuffer;
 		}
 		state = _DONE;
@@ -678,8 +680,8 @@ getuserinput(WScreen *scr, char *line, int *ptr)
 	    if (line[*ptr]==')' && j==0) {
 
 		if (*ptr-begin > 1) {
-		    strncpy(pbuffer, &line[begin], WMIN(*ptr-begin, 255));
-		    pbuffer[WMIN(*ptr-begin, 255)] = 0;
+		    strncpy(pbuffer, &line[begin], WMIN(*ptr-begin, BUFSIZE));
+		    pbuffer[WMIN(*ptr-begin, BUFSIZE)] = 0;
 		    prompt = (char*)pbuffer;
 		}
 		state = _DONE;

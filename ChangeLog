@@ -5,11 +5,17 @@ Changes since version 0.65.1:
 - Fixed some more bash specific constructs in wsetfont.
     (Marcelo E. Magallon <marcelo.magallon@bigfoot.com>)
 - fixed crash with broken apps that set null WM_CLASS
+- fixed crash when with gnome panel and multi-screens, some menu
+  updates and applied various other patches from 
+  (Crutcher Dunnavant <crutcher@redhat.com>)
+- po file fixes (Crutcher Dunnavant <crutcher@redhat.com>)
 - replaced I18N_MB with I18N in one place in src/wconfig.h.in
 - fixed default clip title font in WindowMaker.in
 - fixed some locale related problems (Yukihiro Nakai <ynakai@redhat.com>)
 - fixed a bug in RCombineAreaWithOpaqueness() (Brad <lists@anomie.yi.org>)
 - added spanish INSTALL file (Efrain Maximiliano Palermo <max_drake2001@yahoo.com.ar>)
+- updated Finnish pots (Tomi Kajala <tomi@iki.fi>)
+- copy/paste launching in Dock
 
 Changes since version 0.65.0:
 .............................

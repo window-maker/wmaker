@@ -61,6 +61,10 @@ typedef struct _AppSettingsPanel {
     WMTextField *dndCommandField;
     WMLabel *dndCommandLabel;
 
+    WMFrame *pasteCommandFrame;
+    WMTextField *pasteCommandField;
+    WMLabel *pasteCommandLabel;
+    
     WMFrame *iconFrame;
     WMTextField *iconField;
     WMButton *browseBtn;
@@ -98,6 +102,20 @@ updateCommand(WAppIcon *icon, char *command)
 	icon->forced_dock = 1;
     }
 }
+
+
+static void
+updatePasteCommand(WAppIcon *icon, char *command)
+{
+    if (icon->paste_command)
+	wfree(icon->paste_command);
+    if (command && (command[0]==0 || (command[0]=='-' && command[1]==0))) {
+	wfree(command);
+	command = NULL;
+    }
+    icon->paste_command = command;
+}
+
 
 
 #ifdef OFFIX_DND
@@ -245,6 +263,9 @@ panelBtnCallback(WMWidget *self, void *data)
 	text = WMGetTextFieldText(panel->dndCommandField);
 	updateDNDCommand(panel->editedIcon, text);
 #endif
+	text = WMGetTextFieldText(panel->pasteCommandField);
+	updatePasteCommand(panel->editedIcon, text);
+
 
 	panel->editedIcon->auto_launch =
 	    WMGetButtonSelected(panel->autoLaunchBtn);
@@ -259,7 +280,7 @@ panelBtnCallback(WMWidget *self, void *data)
 
 
 #define PWIDTH	295
-#define PHEIGHT	365
+#define PHEIGHT	430
 
 
 void
@@ -270,6 +291,7 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
     Window parent;
     WMFont *font;
     int x, y;
+    WMBox *vbox;
 
     panel = wmalloc(sizeof(AppSettingsPanel));
     memset(panel, 0, sizeof(AppSettingsPanel));
@@ -281,7 +303,7 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
 
     panel->win = WMCreateWindow(scr->wmscreen, "applicationSettings");
     WMResizeWidget(panel->win, PWIDTH, PHEIGHT);
-
+    
     panel->iconLabel = WMCreateLabel(panel->win);
     WMResizeWidget(panel->iconLabel, 64, 64);
     WMMoveWidget(panel->iconLabel, 10, 10);
@@ -299,35 +321,61 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
     else
 	WMSetLabelText(panel->nameLabel, aicon->wm_class);
 
-    panel->autoLaunchBtn = WMCreateSwitchButton(panel->win);
-    WMResizeWidget(panel->autoLaunchBtn, PWIDTH-30, 20);
-    WMMoveWidget(panel->autoLaunchBtn, 15, 80);
+    
+    vbox = WMCreateBox(panel->win);
+    WMResizeWidget(vbox, PWIDTH-20, PHEIGHT-84-10);
+    WMMoveWidget(vbox, 10, 84);
+    
+    panel->autoLaunchBtn = WMCreateSwitchButton(vbox);
+    WMAddBoxSubview(vbox, WMWidgetView(panel->autoLaunchBtn), False, True,
+		    20, 20, 2);
     WMSetButtonText(panel->autoLaunchBtn,
 		    _("Start when Window Maker is started"));
     WMSetButtonSelected(panel->autoLaunchBtn, aicon->auto_launch);
 
-    panel->lockBtn = WMCreateSwitchButton(panel->win);
-    WMResizeWidget(panel->lockBtn, PWIDTH-30, 20);
-    WMMoveWidget(panel->lockBtn, 15, 100);
+    panel->lockBtn = WMCreateSwitchButton(vbox);
+    WMAddBoxSubview(vbox, WMWidgetView(panel->lockBtn), False, True,
+		    20, 20, 5);
     WMSetButtonText(panel->lockBtn,
 		    _("Lock (prevent accidental removal)"));
     WMSetButtonSelected(panel->lockBtn, aicon->lock);
 
-    panel->commandFrame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->commandFrame, 275, 50);
-    WMMoveWidget(panel->commandFrame, 10, 125);
+    panel->commandFrame = WMCreateFrame(vbox);
     WMSetFrameTitle(panel->commandFrame, _("Application path and arguments"));
+    WMAddBoxSubview(vbox, WMWidgetView(panel->commandFrame), False, True,
+		    50, 50, 5);
 
     panel->commandField = WMCreateTextField(panel->commandFrame);
     WMResizeWidget(panel->commandField, 256, 20);
     WMMoveWidget(panel->commandField, 10, 20);
     WMSetTextFieldText(panel->commandField, aicon->command);
 
-    panel->dndCommandFrame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->dndCommandFrame, 275, 70);
-    WMMoveWidget(panel->dndCommandFrame, 10, 185);
+    WMMapSubwidgets(panel->commandFrame);    
+
+    panel->pasteCommandFrame = WMCreateFrame(vbox);
+    WMSetFrameTitle(panel->pasteCommandFrame,
+		   _("Command for middle-click launch"));
+    WMAddBoxSubview(vbox, WMWidgetView(panel->pasteCommandFrame), False, True,
+		    70, 70, 5);
+
+    panel->pasteCommandField = WMCreateTextField(panel->pasteCommandFrame);
+    WMResizeWidget(panel->pasteCommandField, 256, 20);
+    WMMoveWidget(panel->pasteCommandField, 10, 20);
+
+    panel->pasteCommandLabel = WMCreateLabel(panel->pasteCommandFrame);
+    WMResizeWidget(panel->pasteCommandLabel, 256, 18);
+    WMMoveWidget(panel->pasteCommandLabel, 10, 45);
+
+    WMSetTextFieldText(panel->pasteCommandField, aicon->paste_command);
+    WMSetLabelText(panel->pasteCommandLabel,
+		   _("%s will be replaced with current selection"));
+    WMMapSubwidgets(panel->pasteCommandFrame);    
+    
+    panel->dndCommandFrame = WMCreateFrame(vbox);
     WMSetFrameTitle(panel->dndCommandFrame,
-		   _("Command for files dropped with DND"));
+		    _("Command for files dropped with DND"));
+    WMAddBoxSubview(vbox, WMWidgetView(panel->dndCommandFrame), False, True,
+		    70, 70, 5);
 
     panel->dndCommandField = WMCreateTextField(panel->dndCommandFrame);
     WMResizeWidget(panel->dndCommandField, 256, 20);
@@ -345,11 +393,12 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
     WMSetLabelText(panel->dndCommandLabel,
 		   _("DND support was not compiled in"));
 #endif
+    WMMapSubwidgets(panel->dndCommandFrame);    
 
-    panel->iconFrame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->iconFrame, 275, 50);
-    WMMoveWidget(panel->iconFrame, 10, 265);
+    panel->iconFrame = WMCreateFrame(vbox);
     WMSetFrameTitle(panel->iconFrame, _("Icon Image"));
+    WMAddBoxSubview(vbox, WMWidgetView(panel->iconFrame), False, True,
+		    50, 50, 10);
 
     panel->iconField = WMCreateTextField(panel->iconFrame);
     WMResizeWidget(panel->iconField, 176, 20);
@@ -365,22 +414,30 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
     WMSetButtonAction(panel->browseBtn, chooseIconCallback, panel);
 
 
-    panel->okBtn = WMCreateCommandButton(panel->win);
-    WMResizeWidget(panel->okBtn, 80, 26);
-    WMMoveWidget(panel->okBtn, 200, 328);
-    WMSetButtonText(panel->okBtn, _("OK"));
-    WMSetButtonAction(panel->okBtn, panelBtnCallback, panel);
+    {
+	WMBox *hbox;
+	
+	hbox = WMCreateBox(vbox);
+	WMSetBoxHorizontal(hbox, True);
+	WMAddBoxSubview(vbox, WMWidgetView(hbox), False, True, 24, 24, 0);
+			
+	
+	panel->okBtn = WMCreateCommandButton(hbox);
+	WMSetButtonText(panel->okBtn, _("OK"));
+	WMSetButtonAction(panel->okBtn, panelBtnCallback, panel);
+	WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->okBtn), False, True, 80, 80, 0);
 
-    panel->cancelBtn = WMCreateCommandButton(panel->win);
-    WMResizeWidget(panel->cancelBtn, 80, 26);
-    WMMoveWidget(panel->cancelBtn, 110, 328);
-    WMSetButtonText(panel->cancelBtn, _("Cancel"));
-    WMSetButtonAction(panel->cancelBtn, panelBtnCallback, panel);
-
+	panel->cancelBtn = WMCreateCommandButton(hbox);
+	WMSetButtonText(panel->cancelBtn, _("Cancel"));
+	WMSetButtonAction(panel->cancelBtn, panelBtnCallback, panel);
+	WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->cancelBtn), False, True, 80, 80, 5);
+	
+	WMMapSubwidgets(hbox);
+    }
+    
     WMRealizeWidget(panel->win);
     WMMapSubwidgets(panel->win);
-    WMMapSubwidgets(panel->commandFrame);
-    WMMapSubwidgets(panel->dndCommandFrame);
+    WMMapSubwidgets(vbox);
     WMMapSubwidgets(panel->iconFrame);
 
     updateSettingsPanelIcon(panel);

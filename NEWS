@@ -2,10 +2,21 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+--- 0.66.0
+
+Copy/paste launch in dock. For example, put
+netscape %s in the Docked icon for Netscape,
+select an url somewhere and then middle-click the icon.
+The command will be launched with the "pasted" string.
+
+
+--- 0.65.1
 
 Removed FocusFollowMouse option, only SloppyFocus present now.
 
 Added None option to MoveDisplay and ResizeDisplay
+
+
 
 --- 0.65.0
 
