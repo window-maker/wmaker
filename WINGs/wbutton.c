@@ -410,7 +410,7 @@ WMSetButtonDisabledTextColor(WMButton *bPtr, WMColor *color)
 void
 WMSetButtonSelected(WMButton *bPtr, int isSelected)
 {
-    bPtr->flags.selected = isSelected;
+    bPtr->flags.selected = isSelected ? 1 : 0;
  
     if (bPtr->view->flags.realized) {
 	paintButton(bPtr);
@@ -453,7 +453,7 @@ WMSetButtonFont(WMButton *bPtr, WMFont *font)
 void
 WMSetButtonEnabled(WMButton *bPtr, Bool flag)
 {
-    bPtr->flags.enabled = flag;
+    bPtr->flags.enabled = flag ? 1 : 0;
 
     if (bPtr->view->flags.mapped) {
 	paintButton(bPtr);

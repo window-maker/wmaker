@@ -460,132 +460,137 @@ makeFontSetOfSize(char *fontset, int size)
 static void
 changeFontProp(char *fname, char *newprop, int which)
 {
-	char before[128], prop[128], after[128];
-	char *ptr, *bptr;
-	int part=0;
-	
-	if(!fname || !prop)
-		return;
+    char before[128], prop[128], after[128];
+    char *ptr, *bptr;
+    int part=0;
 
-	ptr = fname;
-	bptr = before;
-	while (*ptr) {
-		if(*ptr == '-') {
-    	    *bptr = 0;
-			if(part==which) bptr = prop;
-			else if(part==which+1) bptr = after;
-    	  	*bptr++ = *ptr;
-			part++;
-		} else {
-    	  *bptr++ = *ptr;
-		}  ptr++;
-	}*bptr = 0;
-	snprintf(fname, 255, "%s-%s%s", before, newprop, after); 
+    if(!fname || !prop)
+        return;
+
+    ptr = fname;
+    bptr = before;
+    while (*ptr) {
+        if(*ptr == '-') {
+            *bptr = 0;
+            if(part==which)
+                bptr = prop;
+            else if(part==which+1)
+                bptr = after;
+            *bptr++ = *ptr;
+            part++;
+        } else {
+            *bptr++ = *ptr;
+        }
+        ptr++;
+    }
+    *bptr = 0;
+    snprintf(fname, 255, "%s-%s%s", before, newprop, after);
 }
 
 
-WMFont *
+WMFont*
 WMNormalizeFont(WMScreen *scr, WMFont *font)
-{   
+{
     WMFont *newfont=NULL;
     char fname[256];
-    
+
     if(!scr || !font)
         return NULL;
-    
-    snprintf(fname, 255, font->name); 
+
+    snprintf(fname, 255, font->name);
     changeFontProp(fname, "medium", 2);
-	changeFontProp(fname, "r", 3);
+    changeFontProp(fname, "r", 3);
     newfont = WMCreateNormalFont(scr, fname);
-    
+
     if(!newfont)
         return NULL;
-    
+
     return newfont;
 }
 
 
-WMFont *
-WMStrengthenFont(WMScreen *scr, WMFont *font) 
+WMFont*
+WMStrengthenFont(WMScreen *scr, WMFont *font)
 {
-	WMFont *newfont=NULL;
-	char fname[256];
+    WMFont *newfont=NULL;
+    char fname[256];
 
-	if(!scr || !font)
+    if(!scr || !font)
         return NULL;
 
-	snprintf(fname, 255, font->name);
-	changeFontProp(fname, "bold", 2);
-	newfont = WMCreateNormalFont(scr, fname);
+    snprintf(fname, 255, font->name);
+    changeFontProp(fname, "bold", 2);
+    newfont = WMCreateNormalFont(scr, fname);
 
-	if(!newfont)
+    if(!newfont)
         return NULL;
 
-	return newfont;
+    return newfont;
 }
 
 
-WMFont *
-WMUnstrengthenFont(WMScreen *scr, WMFont *font) 
+WMFont*
+WMUnstrengthenFont(WMScreen *scr, WMFont *font)
 {
-	WMFont *newfont=NULL;
-	char fname[256];
+    WMFont *newfont=NULL;
+    char fname[256];
 
-	if(!scr || !font)
+    if(!scr || !font)
         return NULL;
 
-	snprintf(fname, 255, font->name);
-	changeFontProp(fname, "medium", 2);
-	newfont = WMCreateNormalFont(scr, fname);
+    snprintf(fname, 255, font->name);
+    changeFontProp(fname, "medium", 2);
+    newfont = WMCreateNormalFont(scr, fname);
 
-	if(!newfont)
+    if(!newfont)
         return NULL;
 
-	return newfont;
+    return newfont;
 }
 
 
-WMFont *
-WMEmphasizeFont(WMScreen *scr, WMFont *font) 
+WMFont*
+WMEmphasizeFont(WMScreen *scr, WMFont *font)
 {
-	WMFont *newfont=NULL;
-	char fname[256];
+    WMFont *newfont=NULL;
+    char fname[256];
 
-	if(!scr || !font)
+    if(!scr || !font)
         return NULL;
 
-	snprintf(fname, 255, font->name);
-	changeFontProp(fname, "o", 3);
-	newfont = WMCreateNormalFont(scr, fname);
+    snprintf(fname, 255, font->name);
+    changeFontProp(fname, "o", 3);
+    newfont = WMCreateNormalFont(scr, fname);
 
-	if(!newfont)
+    if(!newfont)
         return NULL;
 
-	return newfont;
+    return newfont;
 }
 
 
-WMFont *
-WMUnemphasizeFont(WMScreen *scr, WMFont *font) 
+WMFont*
+WMUnemphasizeFont(WMScreen *scr, WMFont *font)
 {
-	WMFont *newfont=NULL;
-	char fname[256];
+    WMFont *newfont=NULL;
+    char fname[256];
 
-	if(!scr || !font)
+    if(!scr || !font)
         return NULL;
 
-	snprintf(fname, 255, font->name);
-	changeFontProp(fname, "r", 3);
-	newfont = WMCreateNormalFont(scr, fname);
+    snprintf(fname, 255, font->name);
+    changeFontProp(fname, "r", 3);
+    newfont = WMCreateNormalFont(scr, fname);
 
-	if(!newfont)
+    if(!newfont)
         return NULL;
 
-	return newfont;
+    return newfont;
 }
 
-WMFont *
-WMGetFontOfSize(WMScreen *scr, WMFont *font, int size) 
+
+WMFont*
+WMGetFontOfSize(WMScreen *scr, WMFont *font, int size)
 {
     if(!scr || !font || size<1)
         return NULL;
