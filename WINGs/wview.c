@@ -112,9 +112,7 @@ createView(W_Screen *screen, W_View *parent)
     
     view = wmalloc(sizeof(W_View));
     memset(view, 0, sizeof(W_View));
-    
-    view->refCount = 1;
-    
+
     view->screen = screen;
 
     if (parent!=NULL) {
@@ -131,6 +129,8 @@ createView(W_Screen *screen, W_View *parent)
 
 	adoptChildView(parent, view);
     }
+    
+    view->eventHandlers = WMCreateBag(4);
 
     return view;
 }
@@ -181,6 +181,24 @@ W_CreateTopView(W_Screen *screen)
     return view;
 }
 
+
+W_View*
+W_CreateUnmanagedTopView(W_Screen *screen)
+{
+    W_View *view;
+    
+    view = createView(screen, screen->rootView);
+    if (!view)
+	return NULL;
+
+    view->flags.topLevel = 1;
+    view->attribs.event_mask |= StructureNotifyMask;
+
+    view->attribFlags |= CWOverrideRedirect;
+    view->attribs.override_redirect = True;
+
+    return view;
+}
 
 
 void
@@ -250,6 +268,23 @@ W_ReparentView(W_View *view, W_View *newParent, int x, int y)
   
     view->pos.x = x;
     view->pos.y = y;
+}
+
+
+void
+W_RaiseView(W_View *view)
+{
+    if (W_VIEW_REALIZED(view))
+	XRaiseWindow(W_VIEW_DISPLAY(view), W_VIEW_DRAWABLE(view));
+}
+
+
+
+void
+W_LowerView(W_View *view)
+{
+    if (W_VIEW_REALIZED(view))
+	XLowerWindow(W_VIEW_DISPLAY(view), W_VIEW_DRAWABLE(view));
 }
 
 
@@ -324,7 +359,9 @@ W_TopLevelOfView(W_View *view)
 {
     W_View *toplevel;
     
-    for (toplevel=view; !toplevel->flags.topLevel; toplevel=toplevel->parent);
+    for (toplevel=view;
+	 toplevel && !toplevel->flags.topLevel; 
+	 toplevel=toplevel->parent);
     
     return toplevel;
 }
@@ -374,7 +411,7 @@ destroyView(W_View *view)
 	    }
 	}
     }
-    
+
     /* destroy children recursively */
     while (view->childrenList!=NULL) {
 	ptr = view->childrenList;
@@ -391,7 +428,8 @@ destroyView(W_View *view)
     W_CallDestroyHandlers(view);
 
     if (view->flags.realized) {
-	XDeleteContext(view->screen->display, view->window, ViewContext);
+	XDeleteContext(view->screen->display,
+		       view->window, ViewContext);
     
 	/* if parent is being destroyed, it will die naturaly */
 	if (!view->flags.parentDying || view->flags.topLevel)
@@ -402,6 +440,9 @@ destroyView(W_View *view)
     unparentView(view);
 
     W_CleanUpEvents(view);
+    
+    WMFreeBag(view->eventHandlers);
+    view->eventHandlers = NULL;
     
     WMUnregisterViewDraggedTypes(view);
     
@@ -424,7 +465,8 @@ destroyView(W_View *view)
 void
 W_DestroyView(W_View *view)
 {
-    W_ReleaseView(view);
+    if (view->refCount == 0)
+	destroyView(view);
 }
 
 
@@ -607,6 +649,7 @@ WMView*
 W_RetainView(WMView *view)
 {
     view->refCount++;
+
     return view;
 }
 
@@ -616,7 +659,8 @@ void
 W_ReleaseView(WMView *view)
 {
     view->refCount--;
-    if (view->refCount < 1) {
+
+    if (view->refCount < 0) {
 	destroyView(view);
     }
 }

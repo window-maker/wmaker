@@ -327,7 +327,7 @@ typedef struct W_View {
     
     struct W_View *nextSister;	       /* next on parent's children list */
     
-    struct W_EventHandler *handlerList;/* list of event handlers for this window */
+    WMBag *eventHandlers;	       /* event handlers for this window */
 
     unsigned long attribFlags;
     XSetWindowAttributes attribs;
@@ -377,8 +377,6 @@ typedef struct W_EventHandler {
     WMEventProc *proc;
 
     void *clientData;
-
-    struct W_EventHandler *nextHandler;
 } W_EventHandler;
 
 
@@ -407,7 +405,8 @@ extern _WINGsConfiguration WINGsConfiguration;
 
 #define W_VIEW_REALIZED(view)	(view)->flags.realized
 #define W_VIEW_MAPPED(view)	(view)->flags.mapped
-    
+ 
+#define W_VIEW_DISPLAY(view)    (view)->screen->display
 #define W_VIEW_SCREEN(view)	(view)->screen
 #define W_VIEW_DRAWABLE(view)	(view)->window
     
@@ -429,6 +428,8 @@ W_View *W_CreateView(W_View *parent);
 
 W_View *W_CreateTopView(W_Screen *screen);
 
+W_View *W_CreateUnmanagedTopView(W_Screen *screen);
+
 
 W_View *W_CreateRootView(W_Screen *screen);
 
@@ -437,6 +438,11 @@ void W_DestroyView(W_View *view);
 void W_RealizeView(W_View *view);
 
 void W_ReparentView(W_View *view, W_View *newParent, int x, int y);
+
+void W_RaiseView(W_View *view);
+
+void W_LowerView(W_View *view);
+
 
 void W_MapView(W_View *view);
 

@@ -217,7 +217,7 @@ static void rbTreeInsert(W_TreeBag *tree, W_Node *node)
 static void rbDeleteFixup(W_TreeBag *tree, W_Node *node)
 {
     W_Node *w;
-    
+
     while (node != tree->root && node->color == 'B') {
 	if (IS_LEFT(node)) {
 	    w = node->parent->right;
@@ -248,7 +248,7 @@ static void rbDeleteFixup(W_TreeBag *tree, W_Node *node)
 	    if (w->color == 'R') {
 		w->color = 'B';
 		node->parent->color = 'R';
-		leftRotate(tree, node->parent);
+		rightRotate(tree, node->parent);
 		w = node->parent->left;
 	    }
 	    if (w->left->color == 'B' && w->right->color == 'B') {
@@ -258,18 +258,19 @@ static void rbDeleteFixup(W_TreeBag *tree, W_Node *node)
 		if (w->left->color == 'B') {
 		    w->right->color = 'B';
 		    w->color = 'R';
-		    rightRotate(tree, w);
+		    leftRotate(tree, w);
 		    w = node->parent->left;
 		}
 		w->color = node->parent->color;
 		node->parent->color = 'B';
 		w->left->color = 'B';
-		leftRotate(tree, node->parent);
+		rightRotate(tree, node->parent);
 		node = tree->root;
 	    }	    
 	}
     }
     node->color = 'B';
+					  
 }
 
 
@@ -481,10 +482,12 @@ static int appendBag(WMBag *self, WMBag *bag)
     return 1;
 }
 
+extern WMBag *bla;
 
 static int putInBag(WMBag *self, void *item)
 {
     W_Node *ptr;
+    
     
     ptr = wmalloc(sizeof(W_Node));
     
@@ -505,7 +508,7 @@ static int putInBag(WMBag *self, void *item)
 static int insertInBag(WMBag *self, int index, void *item)
 {
     W_Node *ptr;
-
+    
     ptr = wmalloc(sizeof(W_Node));
 
     ptr->data = item;
@@ -569,6 +572,8 @@ static int eraseFromBag(WMBag *self, int index)
 	    self->destructor(ptr->data);
 	free(ptr);
 
+	wassertrv(SELF->count == 0||SELF->root->index >= 0, 1);
+
 	return 1;
     } else {
 	return 0;
@@ -579,23 +584,25 @@ static int eraseFromBag(WMBag *self, int index)
 static int deleteFromBag(WMBag *self, int index)
 {
     W_Node *ptr = treeSearch(SELF->root, SELF->nil, index);
-    
+            
     if (ptr != SELF->nil) {
 	W_Node *tmp;
 	
 	SELF->count--;
-	
+
 	tmp = treeSuccessor(ptr, SELF->nil);
 	while (tmp != SELF->nil) {
 	    tmp->index--;
 	    tmp = treeSuccessor(tmp, SELF->nil);
 	}
-	
+
 	ptr = rbTreeDelete(SELF, ptr);
 	if (self->destructor)
 	    self->destructor(ptr->data);
 	free(ptr);
 
+	wassertrv(SELF->count == 0||SELF->root->index >= 0, 1);
+	
 	return 1;
     } else {
 	return 0;

@@ -805,6 +805,10 @@ void WMUnmapWidget(WMWidget *w);
 
 void WMMapWidget(WMWidget *w);
 
+void WMRaiseWidget(WMWidget *w);
+
+void WMLowerWidget(WMWidget *w);
+
 void WMMoveWidget(WMWidget *w, int x, int y);
 
 void WMResizeWidget(WMWidget *w, unsigned int width, unsigned int height);
@@ -975,6 +979,8 @@ void WMSetLabelWraps(WMLabel *lPtr, Bool flag);
 void WMSetLabelImage(WMLabel *lPtr, WMPixmap *image);
 
 WMPixmap *WMGetLabelImage(WMLabel *lPtr);
+
+char *WMGetLabelText(WMLabel *lPtr);
 
 void WMSetLabelImagePosition(WMLabel *lPtr, WMImagePosition position);
 	
@@ -1404,7 +1410,7 @@ WMRuler *WMCreateRuler (WMWidget *parent);
 
 void WMShowRulerTabs(WMRuler *rPtr, Bool Show);
 
-WMRulerMargins WMGetRulerMargins(WMRuler *rPtr);
+int WMGetRulerMargin(WMRuler *rPtr, int which);
 
 void WMSetRulerMargins(WMRuler *rPtr, WMRulerMargins margins);
 
@@ -1521,6 +1527,8 @@ void WMSelectTabViewItemAtIndex(WMTabView *tPtr, int index);
 
 void WMSetTabViewDelegate(WMTabView *tPtr, WMTabViewDelegate *delegate);
 
+
+WMTabViewItem *WMCreateTabViewItem(int identifier, char *label);
 
 WMTabViewItem *WMCreateTabViewItemWithIdentifier(int identifier);
 

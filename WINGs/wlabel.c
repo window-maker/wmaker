@@ -98,6 +98,13 @@ WMGetLabelImage(WMLabel *lPtr)
 }
 
 
+char *
+WMGetLabelText(WMLabel *lPtr)
+{
+    return lPtr->caption;
+}
+
+
 void
 WMSetLabelImagePosition(WMLabel *lPtr, WMImagePosition position)
 {

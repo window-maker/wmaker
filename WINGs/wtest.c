@@ -141,6 +141,44 @@ testList(WMScreen *scr)
 
 
 void
+testButton(WMScreen *scr)
+{
+    WMWindow *win;
+    int i;
+    char *types[] = {
+	"MomentaryPush",
+	    "PushOnPushOff",
+	    "Toggle",
+	    "Switch",
+	    "Radio",
+	    "MomentaryChange",
+	    "OnOff",
+	    "MomentaryLigh"
+    };
+
+    windowCount++;
+    
+    win = WMCreateWindow(scr, "testButton");
+    WMResizeWidget(win, 300, 300);
+    WMSetWindowTitle(win, "Buttons");
+
+    WMSetWindowCloseAction(win, closeAction, NULL);
+
+    for (i = 1; i < 9; i++) {
+	WMButton *b;
+	b = WMCreateButton(win, i);
+	WMResizeWidget(b, 150, 24);
+	WMMoveWidget(b, 20, i*30);
+	WMSetButtonText(b, types[i-1]);
+    }
+
+    WMRealizeWidget(win);
+    WMMapSubwidgets(win);
+    WMMapWidget(win);
+}
+
+
+void
 testGradientButtons(WMScreen *scr)
 {
     WMWindow *win;
@@ -1042,6 +1080,10 @@ int main(int argc, char **argv)
     testDragAndDrop(scr);
     testDragAndDrop(scr);
 
+    testScrollView(scr);
+    
+    testButton(scr);
+
 #if 0    
     testFrame(scr);
 
@@ -1061,7 +1103,6 @@ int main(int argc, char **argv)
 
     testOpenFilePanel(scr);
     testList(scr);
-    testScrollView(scr);
 
 
     testSlider(scr);

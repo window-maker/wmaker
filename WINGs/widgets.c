@@ -880,6 +880,13 @@ WMMapWidget(WMWidget *w)
 }
 
 
+void
+WMReparentWidget(WMWidget *w, WMWidget *newParent, int x, int y)
+{
+    W_ReparentView(W_VIEW(w), newParent, x, y);
+}
+
+
 static void
 makeChildrenAutomap(W_View *view, int flag)
 {
@@ -930,6 +937,22 @@ void
 WMSetWidgetBackgroundColor(WMWidget *w, WMColor *color)
 {    
     W_SetViewBackgroundColor(W_VIEW(w), color);
+    if (W_VIEW(w)->flags.mapped)
+	WMRedisplayWidget(w);
+}
+
+
+void
+WMRaiseWidget(WMWidget *w)
+{
+     W_RaiseView(W_VIEW(w));
+}
+
+
+void
+WMLowerWidget(WMWidget *w)
+{
+     W_LowerView(W_VIEW(w));
 }
 
 

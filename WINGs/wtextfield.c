@@ -298,6 +298,7 @@ _notification(void *observerData, WMNotification *notification)
     if (to != tw) lostHandler(to->view, XA_PRIMARY, NULL);
 }
 
+
 WMTextField*
 WMCreateTextField(WMWidget *parent)
 {
@@ -1028,6 +1029,11 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
         textEvent = WMTextDidEndEditingNotification;
 	break;
 
+     case XK_Escape:
+        data = (void*)WMEscapeTextMovement;
+        textEvent = WMTextDidEndEditingNotification;
+	break;
+
      case XK_Return:
         data = (void*)WMReturnTextMovement;
         textEvent = WMTextDidEndEditingNotification;
@@ -1229,9 +1235,11 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
             if (textEvent==WMTextDidBeginEditingNotification &&
                 tPtr->delegate->didBeginEditing)
                 (*tPtr->delegate->didBeginEditing)(tPtr->delegate, notif);
+
             else if (textEvent==WMTextDidEndEditingNotification &&
                      tPtr->delegate->didEndEditing)
                 (*tPtr->delegate->didEndEditing)(tPtr->delegate, notif);
+
             else if (textEvent==WMTextDidChangeNotification &&
                      tPtr->delegate->didChange)
                 (*tPtr->delegate->didChange)(tPtr->delegate, notif);

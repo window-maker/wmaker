@@ -95,9 +95,7 @@ WMCreatePopUpButton(WMWidget *parent)
 
     bPtr->selectedItemIndex = -1;
 
-    bPtr->menuView = W_CreateTopView(scr);
-    bPtr->menuView->attribs.override_redirect = True;
-    bPtr->menuView->attribFlags |= CWOverrideRedirect;
+    bPtr->menuView = W_CreateUnmanagedTopView(scr);
 
     W_ResizeView(bPtr->menuView, bPtr->view->size.width, 1);
 

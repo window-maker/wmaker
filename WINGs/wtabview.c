@@ -724,6 +724,22 @@ WMCreateTabViewItemWithIdentifier(int identifier)
 }
 
 
+WMTabViewItem*
+WMCreateTabViewItem(int identifier, char *label)
+{
+    WMTabViewItem *item;
+
+    item = wmalloc(sizeof(WMTabViewItem));
+    memset(item, 0, sizeof(WMTabViewItem));
+
+    item->identifier = identifier;
+    WMSetTabViewItemLabel(item, label);
+
+    return item;
+}
+
+
+
 int
 WMGetTabViewItemIdentifier(WMTabViewItem *item)
 {

@@ -424,6 +424,8 @@ WMSetScrollViewRelief(WMScrollView *sPtr, WMReliefType type)
 {
     sPtr->flags.relief = type;
     
+    reorganizeInterior(sPtr);
+    
     if (sPtr->view->flags.mapped)
 	paintScrollView(sPtr);
     

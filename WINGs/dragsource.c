@@ -713,7 +713,7 @@ WMDragImageFromView(WMView *view, WMPixmap *image, char *dataTypes[],
     /* start pointer grab */
     XGrabPointer(dpy, scr->rootWin, False,
 		 ButtonPressMask|ButtonReleaseMask|ButtonMotionMask,
-		 GrabModeSync, GrabModeAsync, None, scr->defaultCursor,
+		 GrabModeAsync, GrabModeAsync, None, scr->defaultCursor,
 		 CurrentTime);
 
     XFlush(dpy);
@@ -739,7 +739,6 @@ WMDragImageFromView(WMView *view, WMPixmap *image, char *dataTypes[],
     state = 1;
 
     while (state != 6 && state != 0 && !_XErrorOccured) {
-	XAllowEvents(dpy, SyncPointer, CurrentTime);
 	WMNextEvent(dpy, &ev);
 
 	switch (ev.type) {

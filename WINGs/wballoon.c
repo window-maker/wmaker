@@ -61,15 +61,12 @@ W_CreateBalloon(WMScreen *scr)
     bPtr = wmalloc(sizeof(Balloon));
     memset(bPtr, 0, sizeof(Balloon));
 
-    bPtr->view = W_CreateTopView(scr);
+    bPtr->view = W_CreateUnmanagedTopView(scr);
     if (!bPtr->view) {
 	wfree(bPtr);
 	return NULL;
     }
     bPtr->view->self = bPtr;
-
-    bPtr->view->attribFlags |= CWOverrideRedirect;
-    bPtr->view->attribs.override_redirect = True;
 
     bPtr->textColor = WMRetainColor(bPtr->view->screen->black);
 

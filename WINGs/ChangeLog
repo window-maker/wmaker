@@ -4,6 +4,12 @@ changes since wmaker 0.62.1:
 - added WText widget (rtf multiline text widget) 
 	Nwanua Elumeze <nwanua@colorado.edu>
 - added a new AUTO option for the UseMultiByte option
+- added WMRaiseWidget()/WMLowerWidget()
+- added missing EscapeTextMovement to textfield delegate/notification
+- added WMGetLabelText()
+- added WMReparentWidget()
+- added WMCreateTabViewItem()
+- added W_CreateUnmanagedTopView()
 
 changes since wmaker 0.62.0:
 ............................

@@ -403,38 +403,27 @@ void
 WMCreateEventHandler(WMView *view, unsigned long mask, WMEventProc *eventProc,
 		     void *clientData)
 {
-    W_EventHandler *handler;
-    W_EventHandler *ptr = view->handlerList;
+    W_EventHandler *handler, *ptr;
     unsigned long eventMask;
-        
-    if (ptr==NULL) {
+    WMBagIterator iter;
+
+    
+    handler = NULL;
+    eventMask = mask;
+
+    WM_ITERATE_BAG(view->eventHandlers, ptr, iter) {
+	if (ptr->clientData == clientData && ptr->proc == eventProc) {
+	    handler = ptr;
+	    eventMask |= ptr->eventMask;
+	}
+    }
+    if (!handler) {
 	handler = wmalloc(sizeof(W_EventHandler));
 
-	handler->nextHandler = NULL;
-	
-	view->handlerList = handler;
-	
-	eventMask = mask;
-    } else {
-	handler = NULL;
-	eventMask = mask;
-	while (ptr != NULL) {
-	    if (ptr->clientData == clientData && ptr->proc == eventProc) {
-		handler = ptr;
-	    }	    
-	    eventMask |= ptr->eventMask;
-	    
-	    ptr = ptr->nextHandler;
-	}
-	if (!handler) {
-	    handler = wmalloc(sizeof(W_EventHandler));
-	    handler->nextHandler = view->handlerList;
-	    view->handlerList = handler;
-	}	
+	WMPutInBag(view->eventHandlers, handler);
     }
-
     /* select events for window */
-    handler->eventMask = mask;
+    handler->eventMask = eventMask;
     handler->proc = eventProc;
     handler->clientData = clientData;
 }
@@ -450,31 +439,24 @@ void
 WMDeleteEventHandler(WMView *view, unsigned long mask, WMEventProc *eventProc, 
 		     void *clientData)
 {
-    W_EventHandler *handler, *ptr, *pptr;
-    
-    ptr = view->handlerList;
-    
+    W_EventHandler *handler, *ptr;
+    WMBagIterator iter;
+        
     handler = NULL;
-    pptr = NULL;
     
-    while (ptr!=NULL) {
+    WM_ITERATE_BAG(view->eventHandlers, ptr, iter) {
 	if (ptr->eventMask == mask && ptr->proc == eventProc 
 	    && ptr->clientData == clientData) {
 	    handler = ptr;
 	    break;
 	}
-	pptr = ptr;
-	ptr = ptr->nextHandler;
     }
     
     if (!handler)
 	return;
     
-    if (!pptr) {
-	view->handlerList = handler->nextHandler;
-    } else {
-	pptr->nextHandler = handler->nextHandler;
-    }
+    WMRemoveFromBag(view->eventHandlers, handler);
+
     wfree(handler);
 }
 
@@ -483,14 +465,11 @@ WMDeleteEventHandler(WMView *view, unsigned long mask, WMEventProc *eventProc,
 void
 W_CleanUpEvents(WMView *view)
 {
-    W_EventHandler *ptr, *nptr;
+    W_EventHandler *ptr;
+    WMBagIterator iter;
     
-    ptr = view->handlerList;
-        
-    while (ptr!=NULL) {
-	nptr = ptr->nextHandler;
+    WM_ITERATE_BAG(view->eventHandlers, ptr, iter) {
 	wfree(ptr);
-	ptr = nptr;
     }
 }
 
@@ -529,18 +508,17 @@ void
 W_CallDestroyHandlers(W_View *view)
 {
     XEvent event;
+    WMBagIterator iter;
     W_EventHandler *hPtr;
     
     event.type = DestroyNotify;
     event.xdestroywindow.window = view->window;
     event.xdestroywindow.event = view->window;
-    hPtr = view->handlerList;
-    while (hPtr!=NULL) {
+
+    WM_ITERATE_BAG(view->eventHandlers, hPtr, iter) {
 	if (hPtr->eventMask & StructureNotifyMask) {
 	    (*hPtr->proc)(&event, hPtr->clientData);
 	}
-	
-	hPtr = hPtr->nextHandler;
     }
 }
 
@@ -552,6 +530,7 @@ WMHandleEvent(XEvent *event)
     W_View *view, *vPtr, *toplevel;
     unsigned long mask;
     Window window;
+    WMBagIterator iter;
 
     if (event->type == MappingNotify) {
 	XRefreshKeyboardMapping(&event->xmapping);
@@ -570,6 +549,7 @@ WMHandleEvent(XEvent *event)
 	}
     }
     view = W_GetViewForXWindow(event->xany.display, window);
+
     if (!view) {
 	if (extraEventHandler)
 	    (extraEventHandler)(event);
@@ -642,34 +622,23 @@ WMHandleEvent(XEvent *event)
      * might destroy the widget. */
     W_RetainView(toplevel);
 
-    hPtr = view->handlerList;
-
-    while (hPtr!=NULL) {
-	W_EventHandler *tmp;
-
-	tmp = hPtr->nextHandler;
-
+    WM_ITERATE_BAG(view->eventHandlers, hPtr, iter) {
 	if ((hPtr->eventMask & mask)) {
 	    (*hPtr->proc)(event, hPtr->clientData);
 	}
-	
-	hPtr = tmp;
     }
-    
+
     /* pass the event to the top level window of the widget */
+    /* TODO: change this to a responder chain */
     if (view->parent != NULL) {
 	vPtr = view;
 	while (vPtr->parent != NULL)
 	    vPtr = vPtr->parent;
-	
-	hPtr = vPtr->handlerList;
 
-	while (hPtr != NULL) {
-	
+	WM_ITERATE_BAG(vPtr->eventHandlers, hPtr, iter) {
 	    if (hPtr->eventMask & mask) {
 		(*hPtr->proc)(event, hPtr->clientData);
 	    }
-	    hPtr = hPtr->nextHandler;
 	}
     }
 
@@ -682,9 +651,9 @@ WMHandleEvent(XEvent *event)
 	    view->screen->lastClickTime = event->xbutton.time;
 	}
     }
-    
+
     W_ReleaseView(toplevel);
-    
+
     return True;
 }
 
