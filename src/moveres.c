@@ -1613,7 +1613,7 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 
 
 #if defined(NETWM_HINTS) && defined(VIRTUAL_DESKTOP)
-            wWorkspaceResizeViewPort(scr, scr->current_workspace);
+            wWorkspaceResizeViewport(scr, scr->current_workspace);
 #endif
 
             return 1;
@@ -1908,7 +1908,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 
 #if defined(NETWM_HINTS) && defined(VIRTUAL_DESKTOP)
     if (started)
-        wWorkspaceResizeViewPort(scr, scr->current_workspace);
+        wWorkspaceResizeViewport(scr, scr->current_workspace);
 #endif
 
     return started;
@@ -2207,7 +2207,7 @@ wMouseResizeWindow(WWindow *wwin, XEvent *ev)
     }
 
 #if defined(NETWM_HINTS) && defined(VIRTUAL_DESKTOP)
-    wWorkspaceResizeViewPort(scr, scr->current_workspace);
+    wWorkspaceResizeViewport(scr, scr->current_workspace);
 #endif
 }
 

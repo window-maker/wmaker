@@ -1431,7 +1431,7 @@ wNETWMProcessClientMessage(XClientMessageEvent *event)
             wNETWMShowingDesktop(scr, event->data.l[0]);
 #ifdef VIRTUAL_DESKTOP
         } else if (event->message_type == net_desktop_viewport) {
-            wWorkspaceSetViewPort(scr, scr->current_workspace,
+            wWorkspaceSetViewport(scr, scr->current_workspace,
                                   event->data.l[0], event->data.l[1]);
 #endif
         } else if (event->message_type == net_desktop_names) {

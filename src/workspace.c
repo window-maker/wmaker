@@ -63,9 +63,6 @@ extern void ProcessPendingEvents();
 static WMPropList *dWorkspaces=NULL;
 static WMPropList *dClip, *dName;
 
-#ifdef VIRTUAL_DESKTOP
-static BOOL initVDesk = False;
-#endif
 
 
 static void
@@ -719,6 +716,14 @@ getClosestEdge(WScreen * scr, WMPoint direction, Bool (*cmp)(int))
 }
 
 
+static void
+getViewPosition(WScreen *scr, int workspace, int *x, int *y)
+{
+    *x = scr->workspaces[workspace]->view_x;
+    *y = scr->workspaces[workspace]->view_y;
+}
+
+
 void
 wWorkspaceKeyboardMoveDesktop(WScreen *scr, WMPoint direction)
 {
@@ -726,8 +731,8 @@ wWorkspaceKeyboardMoveDesktop(WScreen *scr, WMPoint direction)
     WMPoint edge = getClosestEdge(scr, direction, cmp_gz);
     int len = vec_dot(edge, direction);
     WMPoint step = vec_scale(direction, len);
-    wWorkspaceGetViewPosition(scr, scr->current_workspace, &x, &y);
-    wWorkspaceSetViewPort(scr, scr->current_workspace, x+step.x, y+step.y);
+    getViewPosition(scr, scr->current_workspace, &x, &y);
+    wWorkspaceSetViewport(scr, scr->current_workspace, x+step.x, y+step.y);
 }
 
 
@@ -757,8 +762,8 @@ vdMouseMoveDesktop(XEvent *event, WMPoint direction)
         /* if the grab fails, do it the old fashioned way */
         step = vec_scale2(direction, wPreferences.vedge_hscrollspeed,
                           wPreferences.vedge_vscrollspeed);
-        wWorkspaceGetViewPosition(scr, scr->current_workspace, &x, &y);
-        if (wWorkspaceSetViewPort(scr, scr->current_workspace,
+        getViewPosition(scr, scr->current_workspace, &x, &y);
+        if (wWorkspaceSetViewport(scr, scr->current_workspace,
                                   x+step.x, y+step.y)) {
             step = vec_scale(direction, wPreferences.vedge_thickness + 1);
             XWarpPointer(dpy, None, scr->root_win, 0,0,0,0,
@@ -825,8 +830,8 @@ vdMouseMoveDesktop(XEvent *event, WMPoint direction)
                             step = vec_scale(direction, step_len);
                         }
 
-                        wWorkspaceGetViewPosition(scr, scr->current_workspace, &x, &y);
-                        wWorkspaceSetViewPort(scr, scr->current_workspace,
+                        getViewPosition(scr, scr->current_workspace, &x, &y);
+                        wWorkspaceSetViewport(scr, scr->current_workspace,
                                               x+step.x, y+step.y);
                         moved = True;
                     }
@@ -869,30 +874,6 @@ vdHandleEnter_r(XEvent *event) {
 }
 
 
-static void
-wWorkspaceMapEdge(WScreen *scr)
-{
-    int i;
-    if (wPreferences.vedge_thickness && initVDesk) {
-        for (i=0; i<scr->virtual_nr_edges; ++i) {
-            XMapWindow(dpy, scr->virtual_edges[i]);
-        }
-    }
-}
-
-
-static void
-wWorkspaceUnmapEdge(WScreen *scr)
-{
-    int i;
-    if (wPreferences.vedge_thickness && initVDesk) {
-        for (i=0; i<scr->virtual_nr_edges; ++i) {
-            XUnmapWindow(dpy, scr->virtual_edges[i]);
-        }
-    }
-}
-
-
 #define LEFT_EDGE   0x01
 #define RIGHT_EDGE  0x02
 #define TOP_EDGE    0x04
@@ -902,7 +883,7 @@ wWorkspaceUnmapEdge(WScreen *scr)
 void
 wWorkspaceManageEdge(WScreen *scr)
 {
-    if (!initVDesk && wPreferences.vedge_thickness) {
+    if (!scr->virtual_edges && wPreferences.vedge_thickness) {
         int i, j, w;
         int vmask;
         XSetWindowAttributes attribs;
@@ -914,9 +895,7 @@ wWorkspaceManageEdge(WScreen *scr)
         int nr_edges = 0;
         int max_edges = 4*heads;
         int head;
-        Window * edges = (Window *)wmalloc(sizeof(Window)*max_edges);
-
-        initVDesk = True;
+        Window *edges = (Window *)wmalloc(sizeof(Window)*max_edges);
 
         for (i=0; i<heads; ++i)
             hasEdges[i] = ALL_EDGES;
@@ -955,7 +934,7 @@ wWorkspaceManageEdge(WScreen *scr)
 
         for (w = 0; w < scr->workspace_count; w++) {
             /* puts("reset workspace"); */
-            wWorkspaceSetViewPort(scr, w, 0, 0);
+            wWorkspaceSetViewport(scr, w, 0, 0);
         }
 
         vmask = CWEventMask|CWOverrideRedirect;
@@ -1015,7 +994,9 @@ wWorkspaceManageEdge(WScreen *scr)
         scr->virtual_nr_edges = nr_edges;
         scr->virtual_edges = edges;
 
-        wWorkspaceMapEdge(scr);
+        for (i=0; i<scr->virtual_nr_edges; ++i) {
+            XMapWindow(dpy, scr->virtual_edges[i]);
+        }
         wWorkspaceRaiseEdge(scr);
 
         wfree(hasEdges);
@@ -1023,37 +1004,33 @@ wWorkspaceManageEdge(WScreen *scr)
 }
 
 
-void
-wWorkspaceUpdateEdge(WScreen *scr)
+static void
+destroyEdge(WScreen *scr)
 {
-    if (!initVDesk && wPreferences.vedge_thickness) {
-        wWorkspaceManageEdge(scr);
-    } else if (initVDesk) {
-        if (wPreferences.vedge_thickness) {
-            wWorkspaceMapEdge(scr);
-        } else {
-            wWorkspaceUnmapEdge(scr);
-        }
-    }
-}
-
-
-void
-wWorkspaceDestroyEdge(WScreen *scr)
-{
-    if (!initVDesk) {
+    if (scr->virtual_edges) {
         int i;
 
         for (i=0; i<scr->virtual_nr_edges; ++i) {
             XDeleteContext(dpy, scr->virtual_edges[i], wVEdgeContext);
+            XUnmapWindow(dpy, scr->virtual_edges[i]);
             XDestroyWindow(dpy, scr->virtual_edges[i]);
         }
 
         wfree(scr->virtual_edges);
         scr->virtual_edges = NULL;
         scr->virtual_nr_edges = 0;
+    }
+}
 
-        initVDesk = False;
+
+void
+wWorkspaceUpdateEdge(WScreen *scr)
+{
+    if (wPreferences.vedge_thickness) {
+        destroyEdge(scr);
+        wWorkspaceManageEdge(scr);
+    } else {
+        destroyEdge(scr);
     }
 }
 
@@ -1064,39 +1041,39 @@ wWorkspaceRaiseEdge(WScreen *scr)
     static int toggle = 0;
     int i;
 
-    if (wPreferences.vedge_thickness && initVDesk) {
-        if (toggle) {
-            for (i=0; i<scr->virtual_nr_edges; ++i) {
-                XRaiseWindow(dpy, scr->virtual_edges[i]);
-            }
-        } else {
-            for (i=scr->virtual_nr_edges-1; i>=0; --i) {
-                XRaiseWindow(dpy, scr->virtual_edges[i]);
-            }
-        }
+    if (!scr->virtual_edges)
+        return;
 
-        toggle ^= 1;
+    if (toggle) {
+        for (i=0; i<scr->virtual_nr_edges; ++i) {
+            XRaiseWindow(dpy, scr->virtual_edges[i]);
+        }
+    } else {
+        for (i=scr->virtual_nr_edges-1; i>=0; --i) {
+            XRaiseWindow(dpy, scr->virtual_edges[i]);
+        }
     }
+
+    toggle ^= 1;
 }
+
 
 void
 wWorkspaceLowerEdge(WScreen *scr)
 {
     int i;
-    if (wPreferences.vedge_thickness && initVDesk) {
-        for (i=0; i<scr->virtual_nr_edges; ++i) {
-            XLowerWindow(dpy, scr->virtual_edges[i]);
-        }
+    for (i=0; i<scr->virtual_nr_edges; ++i) {
+        XLowerWindow(dpy, scr->virtual_edges[i]);
     }
 }
 
 
 void
-wWorkspaceResizeViewPort(WScreen *scr, int workspace)
+wWorkspaceResizeViewport(WScreen *scr, int workspace)
 {
     int x, y;
-    wWorkspaceGetViewPosition(scr, scr->current_workspace, &x, &y);
-    wWorkspaceSetViewPort(scr, scr->current_workspace, x, y);
+    getViewPosition(scr, scr->current_workspace, &x, &y);
+    wWorkspaceSetViewport(scr, scr->current_workspace, x, y);
 }
 
 
@@ -1191,7 +1168,7 @@ sendConfigureNotify (_delay_configure *delay)
 
 
 Bool
-wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y)
+wWorkspaceSetViewport(WScreen *scr, int workspace, int view_x, int view_y)
 {
     Bool adjust_flag = False;
     int diff_x, diff_y;
@@ -1201,7 +1178,7 @@ wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y)
 
     wptr = scr->workspaces[workspace];
 
-    /*printf("wWorkspaceSetViewPort %d %d\n", view_x, view_y);*/
+    /*printf("wWorkspaceSetViewport %d %d\n", view_x, view_y);*/
 
     updateWorkspaceGeometry(scr, workspace, &view_x, &view_y);
 
@@ -1250,12 +1227,6 @@ wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y)
 }
 
 
-void
-wWorkspaceGetViewPosition(WScreen *scr, int workspace, int *x, int *y)
-{
-    *x = scr->workspaces[workspace]->view_x;
-    *y = scr->workspaces[workspace]->view_y;
-}
 #endif
 
 

@@ -42,14 +42,11 @@ void wWorkspaceForceChange(WScreen *scr, int workspace);
 #ifdef VIRTUAL_DESKTOP
 void wWorkspaceManageEdge(WScreen *scr);
 void wWorkspaceUpdateEdge(WScreen *scr);
-void wWorkspaceDestroyEdge(WScreen *scr);
 void wWorkspaceRaiseEdge(WScreen *scr);
 void wWorkspaceLowerEdge(WScreen *scr);
-void wWorkspaceResizeViewPort(WScreen *scr, int workspace);
+void wWorkspaceResizeViewport(WScreen *scr, int workspace);
+Bool wWorkspaceSetViewport(WScreen *scr, int workspace, int view_x, int view_y);
 void wWorkspaceKeyboardMoveDesktop(WScreen *scr, WMPoint direction);
-Bool wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y);
-Bool wWorkspaceAdjustViewPort(WScreen *scr, int workspace, int view_x, int view_y);
-void wWorkspaceGetViewPosition(WScreen *scr, int workspace, int *view_x, int *view_y);
 
 #define VEC_LEFT    wmkpoint(-1,0)
 #define VEC_RIGHT   wmkpoint(1,0)

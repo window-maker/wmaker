@@ -52,7 +52,6 @@ extern int wScreenCount;
 int showCrashDialog(int sig)
 {
     int crashAction;
-    Display *dpy;
     
     dpy = XOpenDisplay("");
     if (dpy) {

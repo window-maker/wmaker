@@ -3,6 +3,10 @@ Changes since version 0.90.0:
 
 - added _NET_WM_NAME, _NET_WM_ICON_NAME and _NET_WM_ICON to WINGs
 - new WPrefs icon (thanks to Largo)
+- fixed virtual desktop to disable the virtual edge on the fly if thickness 
+  is set to 0.
+- fixed virtual desktop to resize the edge on the fly when edge thickness
+  changes.
 
 
 Changes since version 0.80.2:

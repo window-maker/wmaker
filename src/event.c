@@ -1050,7 +1050,7 @@ handleEnterNotify(XEvent *event)
 #ifdef VIRTUAL_DESKTOP
     if (XFindContext(dpy, event->xcrossing.window, wVEdgeContext,
                      (XPointer *)&vdHandler)!=XCNOENT) {
-        (*vdHandler)( event);
+        (*vdHandler)(event);
     }
 #endif
 
