@@ -495,7 +495,6 @@ parseTexture(RContext *rc, char *text)
         XColor color;
         Pixmap pixmap = None;
         RImage *image = NULL;
-        //int w, h;
         int iwidth, iheight;
         RColor rcolor;
 

@@ -944,7 +944,7 @@ getWindowLayer(WWindow * wwin)
                 layer = WMFullscreenLevel;
             }
         }
-        //layer = WMPopUpLevel;
+        /* //layer = WMPopUpLevel; // this seems a bad idea -Dan */
     } else if (wwin->type == net_wm_window_type_normal) {
     }
 
@@ -1157,8 +1157,10 @@ handleWindowType(WWindow * wwin, Atom type, int *layer)
         wwin->client_flags.no_appicon = 1;
         wwin->flags.net_skip_pager = 1;
     } else if (type == net_wm_window_type_dialog) {
+        /* These also seem a bad idea in our context -Dan
         // wwin->client_flags.skip_window_list = 1;
         // wwin->client_flags.no_appicon = 1;
+        */
     } else if (type == net_wm_window_type_normal) {
     } else {
         ret = False;

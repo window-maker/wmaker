@@ -130,31 +130,6 @@ struct W_DraggingInfo {
     W_DragDestinationInfo* destInfo; /* infos needed by destination */
 } W_DraggingInfo;
 
-/* original
-struct W_DraggingInfo {
-    Window destinationWindow;
-    Window sourceWindow;
-
-    WMPoint location;
-
-    unsigned sourceOperation;
-    WMPixmap *image;
-    WMPoint imageLocation;
-
-    char **types;
-
-    Time timestamp;
-
-    int protocolVersion;
-
-    // should be treated as internal data
-    WMView *sourceView;
-    WMView *destView;
-    WMSize mouseOffset;
-    unsigned finished:1;
-};
-*/
-
 
 typedef struct W_Screen {
     Display *display;

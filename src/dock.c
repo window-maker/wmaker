@@ -338,10 +338,10 @@ paintClipButtons(WAppIcon *clipIcon, Bool lpushed, Bool rpushed)
     Bool collapsed = clipIcon->dock->collapsed;
 #endif
 
-    //if (!clipIcon->dock->collapsed)
-    //    color = scr->clip_title_color[CLIP_NORMAL];
-    //else
-    //    color = scr->clip_title_color[CLIP_COLLAPSED];
+    /*if (!clipIcon->dock->collapsed)
+        color = scr->clip_title_color[CLIP_NORMAL];
+    else
+        color = scr->clip_title_color[CLIP_COLLAPSED];*/
     color = scr->clip_title_color[CLIP_NORMAL];
 
     XSetForeground(dpy, gc, WMColorPixel(color));

@@ -7,8 +7,6 @@ Newly added
 - wmaker will not stop managing a screen even if another window manager
   requests that, through the ICCCM 2.0 manager selection stuff
 - stacking code is buggy (or XFree is buggy)
-- after restart focus is losed or switched to another window. May be related
-  to the one above.
 - save session doesnt work on some platforms (Alpha and Sparc)
 - texture pixmaps are being incorrectly freed somewhere. Either
   fix bug (to support broken MetroX servers) or remove all useless references

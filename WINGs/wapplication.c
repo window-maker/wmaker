@@ -35,7 +35,6 @@ WMInitializeApplication(char *applicationName, int *argc, char **argv)
     assert(argv!=NULL);
     assert(applicationName!=NULL);
 
-    /* // TODO: check if to move inside #ifdef I18N */
     setlocale(LC_ALL, "");
 
 #ifdef I18N

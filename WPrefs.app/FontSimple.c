@@ -478,7 +478,7 @@ selectedOption(WMWidget *w, void *data)
                 name= "sans serif";
 
             found= 0;
-            // select family
+            /* select family */
             for (i= 0; i < WMGetListNumberOfRows(panel->familyL); i++)
             {
                 WMListItem *item= WMGetListItem(panel->familyL, i);
@@ -496,7 +496,7 @@ selectedOption(WMWidget *w, void *data)
                 WMSelectListItem(panel->familyL, -1);
             selectedFamily(panel->familyL, panel);
             
-            // select style
+            /* select style */
             if (FcPatternGetInteger(pat, FC_WEIGHT, 0, &weight) != FcResultMatch)
                 weight= FC_WEIGHT_NORMAL;
             if (FcPatternGetInteger(pat, FC_WIDTH, 0, &width) != FcResultMatch)
@@ -681,7 +681,7 @@ createPanel(Panel *p)
     label = createListLabel(scr, vbox, _("Family"));
     WMAddBoxSubview(vbox, WMWidgetView(label), False, True, 20, 0, 2);
 
-    // family
+    /* family */
     panel->familyL = WMCreateList(vbox);
     WMAddBoxSubview(vbox, WMWidgetView(panel->familyL), True, True, 0, 0, 0);
     if (panel->fonts)

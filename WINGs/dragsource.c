@@ -425,8 +425,9 @@ sendEnterMessage(WMDraggingInfo *info)
 }
 
 
+/*
 // this functon doesn't return something in all cases.
-// control reaches end of non-void function. fix this -Dan
+// control reaches end of non-void function. fix this -Dan */
 static Bool
 sendPositionMessage(WMDraggingInfo *info, WMPoint *mousePos)
 {

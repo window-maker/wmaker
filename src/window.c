@@ -894,7 +894,7 @@ wManageWindow(WScreen *scr, Window window)
 
 #define ADEQUATE(x) ((x)!=None && (x)!=wwin->client_win && (x)!=fPtr->leader)
 
-        // only enter here if PropGetWMClass() succeds
+        /* // only enter here if PropGetWMClass() succeds */
         PropGetWMClass(wwin->main_window, &class, &instance);
         buffer = StrConcatDot(instance, class);
 

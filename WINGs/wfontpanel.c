@@ -374,7 +374,7 @@ WMSetFontPanelFont(WMFontPanel *panel, char *fontName)
     } else {
         /* maybe its proper xlfd and we can convert it to an FcPattern */
         pattern = XftXlfdParse(fontName, False, False);
-        //FcPatternPrint(pattern);
+        /*//FcPatternPrint(pattern);*/
     }
 
     if (!pattern)

@@ -408,7 +408,7 @@ createPanel(Panel *p)
                               "for actions like shading and closing a window.\n"
                               "You will need a module distributed separately\n"
                               "for this. You can get it at:\n"
-                              "http://shadowmere.student.utwente.nl/"),
+                              "http://largo.windowmaker.org/files.php#WSoundServer"),
                             WMWidgetView(panel->sfxB));
 
     panel->noteL = WMCreateLabel(panel->animF);

@@ -69,7 +69,7 @@ print_help()
     puts("");
 }
 
-// replace --sets-too with something better
+
 int
 main(int argc, char **argv)
 {

@@ -4019,7 +4019,7 @@ WMGetTextSelectionFont(WMText *tPtr)
 void
 WMSetTextSelectionUnderlined(WMText *tPtr, int underlined)
 {
-    // check this
+    /* // check this */
     if (underlined!=0 && underlined!=1)
         return;
 

@@ -732,8 +732,6 @@ void WMSetViewDragDestinationProcs(WMView *view, WMDragDestinationProcs *procs);
 
 /* ....................................................................... */
 
-//Bool WMHasAntialiasingSupport(WMScreen *scrPtr);
-
 Bool WMIsAntialiasingEnabled(WMScreen *scrPtr);
 
 /* ....................................................................... */

@@ -236,43 +236,43 @@ wGetHeadForWindow(WWindow *wwin)
 
 
 /*
- int
- wGetHeadForPoint(WScreen *scr, WMPoint point, int *flags)
- {
- int i;
+int
+wGetHeadForPoint(WScreen *scr, WMPoint point, int *flags)
+{
+    int i;
 
- // paranoia
- if (flags == NULL) {
- static int tmp;
- flags = &tmp;
- }
- *flags = XFLAG_NONE;
+    // paranoia
+    if (flags == NULL) {
+        static int tmp;
+        flags = &tmp;
+    }
+    *flags = XFLAG_NONE;
 
- for (i = 0; i < scr->xine_info.count; i++) {
- #if 0
- int yy, xx;
+    for (i = 0; i < scr->xine_info.count; i++) {
+#if 0
+        int yy, xx;
 
- xx = scr->xine_info.screens[i].pos.x + scr->xine_info.screens[i].size.width;
- yy = scr->xine_info.screens[i].pos.y + scr->xine_info.screens[i].size.height;
- if (point.x >= scr->xine_info.screens[i].pos.x &&
- point.y >= scr->xine_info.screens[i].pos.y &&
- point.x < xx && point.y < yy) {
- return i;
- }
- #else
- XineramaScreenInfo *xsi = &scr->xine_info.screens[i];
+        xx = scr->xine_info.screens[i].pos.x + scr->xine_info.screens[i].size.width;
+        yy = scr->xine_info.screens[i].pos.y + scr->xine_info.screens[i].size.height;
+        if (point.x >= scr->xine_info.screens[i].pos.x &&
+            point.y >= scr->xine_info.screens[i].pos.y &&
+            point.x < xx && point.y < yy) {
+            return i;
+        }
+#else
+        XineramaScreenInfo *xsi = &scr->xine_info.screens[i];
 
- if ((unsigned)(point.x - xsi->x_org) < xsi->width &&
- (unsigned)(point.y - xsi->y_org) < xsi->height)
- return i;
- #endif
- }
+        if ((unsigned)(point.x - xsi->x_org) < xsi->width &&
+            (unsigned)(point.y - xsi->y_org) < xsi->height)
+            return i;
+#endif
+    }
 
- *flags |= XFLAG_DEAD;
+    *flags |= XFLAG_DEAD;
 
- return scr->xine_primary_head;
- }
- */
+    return scr->xine_primary_head;
+}
+*/
 
 
 
