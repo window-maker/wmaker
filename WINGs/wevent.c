@@ -165,7 +165,7 @@ WMHandlerID
 WMAddTimerHandler(int milliseconds, WMCallback *callback, void *cdata)
 {
     TimerHandler *handler;
-    
+
     handler = malloc(sizeof(TimerHandler));
     if (!handler)
       return NULL;
@@ -381,7 +381,7 @@ checkTimerHandlers()
 {
     TimerHandler *handler;
     struct timeval now;
-
+    
     if (!timerHandler) {
         W_FlushASAPNotificationQueue();
         return;
@@ -391,8 +391,10 @@ checkTimerHandlers()
 
     handler = timerHandler;
     while (handler && IS_AFTER(now, handler->when)) {
-	SET_ZERO(handler->when);
-	(*handler->callback)(handler->clientData);
+	if (!IS_ZERO(handler->when)) {
+	    SET_ZERO(handler->when);
+	    (*handler->callback)(handler->clientData);
+	}
 	handler = handler->next;
     }
 
@@ -401,7 +403,7 @@ checkTimerHandlers()
 	timerHandler = timerHandler->next;	
 
 	if (handler->nextDelay > 0) {
-	    rightNow(&handler->when);
+	    handler->when = now;
 	    addmillisecs(&handler->when, handler->nextDelay);
 	    enqueueTimerHandler(handler);
 	} else {
