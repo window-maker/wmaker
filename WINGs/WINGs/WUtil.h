@@ -205,9 +205,9 @@ typedef void WMNotificationObserverAction(void *observerData,
 
 /*......................................................................*/
 
-typedef void (waborthandler)(int);
+typedef void waborthandler(int);
 
-waborthandler* wsetabort(waborthandler*);
+waborthandler* wsetabort(waborthandler* handler);
 
 
 /* don't free the returned string */
@@ -680,7 +680,7 @@ void WMSortTree(WMTreeNode *aNode, WMCompareDataProc *comparer);
 WMTreeNode* WMFindInTree(WMTreeNode *aTree, WMMatchDataProc *match, void *cdata);
 
 /* Returns first tree node that has data == cdata */
-#define WMGetFirstInTree(aTree, cdata) WMFindInTree(atree, NULL, cdata)
+#define WMGetFirstInTree(aTree, cdata) WMFindInTree(aTree, NULL, cdata)
 
 
 /*--------------------------------------------------------------------------*/

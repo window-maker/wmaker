@@ -4,6 +4,9 @@
   Or a delegate to be called when the list selection change.
 - add some way to modify speed when scrolling WMList, depending on how
   far the mouse is moved outside of the list.
+- clean up header files of declared but not implemented anywhere functions
+- implement a generic WMChangeFontAttribute(WMFont *font, enum attributes)
+  function
 
 
 - optimize color allocation for repeated colors

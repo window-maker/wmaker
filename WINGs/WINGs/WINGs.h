@@ -1003,7 +1003,7 @@ void WMSetButtonBordered(WMButton *bPtr, int isBordered);
 
 void WMSetButtonEnabled(WMButton *bPtr, Bool flag);
 
-void WMSetButtonImageDimsWhenDisabled(WMButton *bPtr, Bool flag);
+//void WMSetButtonImageDimsWhenDisabled(WMButton *bPtr, Bool flag);
 
 void WMSetButtonTag(WMButton *bPtr, int tag);
 
@@ -1430,8 +1430,6 @@ void WMSetScrollViewContentView(WMScrollView *sPtr, WMView *view);
 
 void WMSetScrollViewRelief(WMScrollView *sPtr, WMReliefType type);
 
-void WMSetScrollViewContentView(WMScrollView *sPtr, WMView *view);
-
 WMRect WMGetScrollViewVisibleRect(WMScrollView *sPtr);
 
 WMScroller* WMGetScrollViewHorizontalScroller(WMScrollView *sPtr);
@@ -1646,13 +1644,13 @@ void WMGetTextBlockProperties(WMText *tPtr, void *vtb, unsigned int *first,
 
 int WMGetTextInsertType(WMText *tPtr);
 
-int WMGetTextBlocks(WMText *tPtr);
+//int WMGetTextBlocks(WMText *tPtr);
 
-void WMSetCurrentTextBlock(WMText *tPtr, int current);
+//void WMSetCurrentTextBlock(WMText *tPtr, int current);
 
-int WMGetCurrentTextBlock(WMText *tPtr); 
+//int WMGetCurrentTextBlock(WMText *tPtr);
 
-void WMPrependTextBlock(WMText *tPtr, void *vtb);
+//void WMPrependTextBlock(WMText *tPtr, void *vtb);
 
 void WMAppendTextBlock(WMText *tPtr, void *vtb);
 
