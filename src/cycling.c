@@ -227,11 +227,11 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     }
 
     if (newFocused) {
+        wRaiseFrame(newFocused->frame->core);
         CommitStacking(scr);
         if (!newFocused->flags.mapped)
             wMakeWindowVisible(newFocused);
         wSetFocusTo(scr, newFocused);
-        wRaiseFrame(newFocused->frame->core);
     }
 
     if (swpanel)
