@@ -114,6 +114,7 @@ typedef struct _Panel {
     char titleAlignment;
 
     Pixmap preview;
+    Pixmap previewNoText;
 
     char *fprefix;
 } _Panel;
@@ -780,6 +781,12 @@ renderPreview(_Panel *panel, GC gc, int part, int relief)
 	      previewPositions[part].pos.x,
 	      previewPositions[part].pos.y);
 
+    XCopyArea(WMScreenDisplay(scr), pix, panel->previewNoText, gc, 0, 0,
+	      previewPositions[part].size.width, 
+	      previewPositions[part].size.height,
+	      previewPositions[part].pos.x,
+	      previewPositions[part].pos.y);
+
     XFreePixmap(WMScreenDisplay(scr), pix);
 }
 
@@ -789,8 +796,6 @@ updatePreviewBox(_Panel *panel, int elements)
 {
     WMScreen *scr = WMWidgetScreen(panel->parent);
     Display *dpy = WMScreenDisplay(scr);
- /*   RContext *rc = WMScreenRContext(scr);*/
-    int refresh = 0;
     Pixmap pix;
     GC gc;
     int colorUpdate = 0;
@@ -801,16 +806,22 @@ updatePreviewBox(_Panel *panel, int elements)
 
     if (panel->preview == None) {
 	WMColor *color;
+        WMPixmap *p;
 
-	panel->preview = XCreatePixmap(dpy, WMWidgetXID(panel->parent),
-				       240-4, 215-4, WMScreenDepth(scr));
+	panel->previewNoText = XCreatePixmap(dpy, WMWidgetXID(panel->parent),
+                                             240-4, 215-4, WMScreenDepth(scr));
+
+        p = WMCreatePixmap(scr, 240-4, 215-4, WMScreenDepth(scr), False);
+        panel->preview = WMGetPixmapXID(p);
+        WMSetLabelImage(panel->prevL, p);
+        WMReleasePixmap(p);
 
 	color = WMCreateRGBColor(scr, 0x5100, 0x5100, 0x7100, True);
 	XFillRectangle(dpy, panel->preview, WMColorGC(color),
 		       0, 0, 240-4, 215-4);
+        XFillRectangle(dpy, panel->previewNoText, WMColorGC(color),
+                       0, 0, 240-4, 215-4);
 	WMReleaseColor(color);
-
-	refresh = -1;
     }
 
 
@@ -820,7 +831,12 @@ updatePreviewBox(_Panel *panel, int elements)
 		       previewPositions[PFOCUSED].pos.x-1,
 		       previewPositions[PFOCUSED].pos.y-1,
 		       previewPositions[PFOCUSED].size.width,
-		       previewPositions[PFOCUSED].size.height);
+                       previewPositions[PFOCUSED].size.height);
+	XDrawRectangle(dpy, panel->previewNoText, WMColorGC(black),
+		       previewPositions[PFOCUSED].pos.x-1,
+		       previewPositions[PFOCUSED].pos.y-1,
+		       previewPositions[PFOCUSED].size.width,
+                       previewPositions[PFOCUSED].size.height);
 	colorUpdate |= FTITLE_COL;
     }
     if (elements & (1<<PUNFOCUSED)) {
@@ -830,11 +846,21 @@ updatePreviewBox(_Panel *panel, int elements)
 		       previewPositions[PUNFOCUSED].pos.y-1,
 		       previewPositions[PUNFOCUSED].size.width,
 		       previewPositions[PUNFOCUSED].size.height);
+	XDrawRectangle(dpy, panel->previewNoText, WMColorGC(black),
+		       previewPositions[PUNFOCUSED].pos.x-1,
+		       previewPositions[PUNFOCUSED].pos.y-1,
+		       previewPositions[PUNFOCUSED].size.width,
+		       previewPositions[PUNFOCUSED].size.height);
 	colorUpdate |= UTITLE_COL;
     }
     if (elements & (1<<POWNER)) {
 	renderPreview(panel, gc, POWNER, RBEV_RAISED2);
 	XDrawRectangle(dpy, panel->preview, WMColorGC(black),
+		       previewPositions[POWNER].pos.x-1,
+		       previewPositions[POWNER].pos.y-1,
+		       previewPositions[POWNER].size.width,
+		       previewPositions[POWNER].size.height);
+	XDrawRectangle(dpy, panel->previewNoText, WMColorGC(black),
 		       previewPositions[POWNER].pos.x-1,
 		       previewPositions[POWNER].pos.y-1,
 		       previewPositions[POWNER].size.width,
@@ -865,6 +891,12 @@ updatePreviewBox(_Panel *panel, int elements)
 		  previewPositions[PMITEM].pos.x,
 		  previewPositions[PMITEM].pos.y);
 
+	XCopyArea(dpy, pix, panel->previewNoText, gc, 0, 0,
+		  previewPositions[PMITEM].size.width, 
+		  previewPositions[PMITEM].size.height,
+		  previewPositions[PMITEM].pos.x,
+		  previewPositions[PMITEM].pos.y);
+
 	XFreePixmap(dpy, pix);
 
 	colorUpdate |= MITEM_COL|MDISAB_COL|MHIGH_COL|MHIGHT_COL;
@@ -872,6 +904,9 @@ updatePreviewBox(_Panel *panel, int elements)
     if (elements & (1<<PMITEM|1<<PMTITLE)) {
 	XDrawLine(dpy, panel->preview, gc, 29, 120, 29, 120+20*4+20);
 	XDrawLine(dpy, panel->preview, gc, 29, 119, 119, 119);
+
+	XDrawLine(dpy, panel->previewNoText, gc, 29, 120, 29, 120+20*4+20);
+	XDrawLine(dpy, panel->previewNoText, gc, 29, 119, 119, 119);
     }
     if (elements & (1<<PICON)) {
 	WMListItem *item;
@@ -885,23 +920,11 @@ updatePreviewBox(_Panel *panel, int elements)
 
 	colorUpdate |= ICONT_COL|ICONB_COL|CLIP_COL|CCLIP_COL;
     }
-    if (refresh < 0) {
-	WMPixmap *p;
 
-	p = WMCreatePixmapFromXPixmaps(scr, panel->preview, None,
-				       240-4, 215-4, WMScreenDepth(scr));
-
-	WMSetLabelImage(panel->prevL, p);
-	WMReleasePixmap(p);
-
-	if (colorUpdate)
-	    updateColorPreviewBox(panel, colorUpdate);
-    } else {
-	if (colorUpdate)
-	    updateColorPreviewBox(panel, colorUpdate);
-	else
-	    WMRedisplayWidget(panel->prevL);
-    }
+    if (colorUpdate)
+        updateColorPreviewBox(panel, colorUpdate);
+    else
+        WMRedisplayWidget(panel->prevL);
 
     XFreeGC(dpy, gc);
     WMReleaseColor(black);
@@ -1518,44 +1541,56 @@ static void
 updateColorPreviewBox(_Panel *panel, int elements)
 {
     WMScreen *scr = WMWidgetScreen(panel->box);
-    WMPixmap *pixmap;
-    Pixmap d;
+    Display *dpy = WMScreenDisplay(scr);
+    Pixmap d, pnot;
+    GC gc;
 
-    pixmap = WMGetLabelImage(panel->prevL);
-    d = WMGetPixmapXID(pixmap);
+    d = panel->preview;
+    pnot = panel->previewNoText;
+    gc = WMColorGC(panel->colors[0]);
 
     if (elements & FTITLE_COL) {
+        XCopyArea(dpy, pnot, d, gc, 30, 10, 190, 20, 30, 10);
 	paintText(scr, d, panel->colors[0], panel->boldFont, 30, 10, 190, 20,
 		  panel->titleAlignment, _("Focused Window"));
     }
     if (elements & UTITLE_COL) {
+        XCopyArea(dpy, pnot, d, gc, 30, 40, 190, 20, 30, 40);
 	paintText(scr, d, panel->colors[1], panel->boldFont, 30, 40, 190, 20,
 		  panel->titleAlignment, _("Unfocused Window"));
     }
     if (elements & OTITLE_COL) {
+        XCopyArea(dpy, pnot, d, gc, 30, 70, 190, 20, 30, 70);
 	paintText(scr, d, panel->colors[2], panel->boldFont, 30, 70, 190, 20,
 		  panel->titleAlignment, _("Owner of Focused Window"));
     }
     if (elements & MTITLE_COL) {
+        XCopyArea(dpy, pnot, d, gc, 30, 120, 90, 20, 30, 120);
 	paintText(scr, d, panel->colors[3], panel->boldFont, 30, 120, 90, 20,
 		  WALeft, _("Menu Title"));
     }
     if (elements & MITEM_COL) {
+        XCopyArea(dpy, pnot, d, gc, 30, 140, 90, 20, 30, 140);
 	paintText(scr, d, panel->colors[4], panel->normalFont, 30, 140, 90, 20,
 		  WALeft, _("Normal Item"));
+        XCopyArea(dpy, pnot, d, gc, 30, 200, 90, 20, 30, 200);
 	paintText(scr, d, panel->colors[4], panel->normalFont, 30, 200, 90, 20,
 		  WALeft, _("Normal Item"));
     }
     if (elements & MDISAB_COL) {
+        XCopyArea(dpy, pnot, d, gc, 30, 160, 90, 20, 30, 160);
 	paintText(scr, d, panel->colors[5], panel->normalFont, 30, 160, 90, 20,
 		  WALeft, _("Disabled Item"));
     }
     if (elements & MHIGH_COL) {
 	XFillRectangle(WMScreenDisplay(scr), d, WMColorGC(panel->colors[6]),
 		       31, 181, 87, 17);
+	XFillRectangle(WMScreenDisplay(scr), pnot, WMColorGC(panel->colors[6]),
+		       31, 181, 87, 17);
 	elements |= MHIGHT_COL;
     }
     if (elements & MHIGHT_COL) {
+        XCopyArea(dpy, pnot, d, gc, 30, 180, 90, 20, 30, 180);
 	paintText(scr, d, panel->colors[7], panel->normalFont, 30, 180, 90, 20,
 		  WALeft, _("Highlighted"));
     }
@@ -1593,10 +1628,7 @@ colorWellObserver(void *self, WMNotification *n)
 
     panel->colors[p] = WMRetainColor(WMGetColorWellColor(panel->colW));
 
-    /* redisplaying only the text when color changes will give image artifacts
-     * if antialiased text is used. we need to update the texture too.
-    updateColorPreviewBox(panel, 1<<p); */
-    updatePreviewBox(panel, 1<<p);
+    updateColorPreviewBox(panel, 1<<p);
 }
 
 
