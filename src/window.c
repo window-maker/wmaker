@@ -2415,7 +2415,7 @@ wWindowConfigureBorders(WWindow *wwin)
 #endif
 	if (!WFLAGP(wwin, no_titlebar))
 	    flags |= WFF_TITLEBAR;
-	if (!WFLAGP(wwin, no_resizebar))
+	if (!WFLAGP(wwin, no_resizebar) && !WFLAGP(wwin, no_resizable))
 	    flags |= WFF_RESIZEBAR;
 	if (!WFLAGP(wwin, no_border))
 	    flags |= WFF_BORDER;

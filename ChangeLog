@@ -29,7 +29,8 @@ Changes since version 0.80.1:
 - Changed the default position display while moving a window to 'Center'.
 - Better outline when drawing balloons.
 - Fixed wrlib to not accept too large images (fixes buffer overflow)
-
+- Patched FAQ (David Coe <davidc@debian.org>)
+- Fixed bug with resizebars appearing out of nothing when reloading configs
 
 Changes since version 0.80.0:
 .............................
