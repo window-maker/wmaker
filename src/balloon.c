@@ -84,8 +84,7 @@ typedef struct _WBalloon {
 #ifdef SHAPED_BALLOON
 
 #define 	SPACE	12
-#define MIN(a,b)	((a)<(b)?(a):(b))
-#define MAX(a,b)	((a)>(b)?(a):(b))
+
 
 static void
 drawBalloon(Pixmap pix, GC gc, int x, int y, int w, int h, int side)

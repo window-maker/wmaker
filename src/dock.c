@@ -2558,8 +2558,6 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
     return False;
 }
 
-#define MIN(x, y)  ((x) > (y) ? (y) : (x))
-#define MAX(x, y)  ((x) < (y) ? (y) : (x))
 
 #define ON_SCREEN(x, y, sx, ex, sy, ey) \
     ((((x)+ICON_SIZE/2) >= (sx)) && (((y)+ICON_SIZE/2) >= (sy)) && \
@@ -2633,8 +2631,8 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 	char *hmap, *vmap;
 	int hcount, vcount;
 
-	hcount = MIN(dock->max_icons, scr->scr_width/ICON_SIZE);
-	vcount = MIN(dock->max_icons, scr->scr_height/ICON_SIZE);
+	hcount = WMIN(dock->max_icons, scr->scr_width/ICON_SIZE);
+	vcount = WMIN(dock->max_icons, scr->scr_height/ICON_SIZE);
 	hmap = wmalloc(hcount+1);
 	memset(hmap, 0, hcount+1);
 	vmap = wmalloc(vcount+1);
@@ -2722,7 +2720,7 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 	x=0; y=0;
 	done = 0;
 	/* search a vacant slot */
-	for (i=1; i<MAX(vcount, hcount); i++) {
+	for (i=1; i<WMAX(vcount, hcount); i++) {
 	    if (i < vcount && vmap[i]==0) {
 		/* found a slot */
 		x = 0;
@@ -2771,7 +2769,7 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
     slot_map = wmalloc(mwidth*mwidth);
     memset(slot_map, 0, mwidth*mwidth);
 
-#define XY2OFS(x,y) (MAX(abs(x),abs(y)) > r) ? 0 : (((y)+r)*(mwidth)+(x)+r)
+#define XY2OFS(x,y) (WMAX(abs(x),abs(y)) > r) ? 0 : (((y)+r)*(mwidth)+(x)+r)
 
     /* mark used slots in the map. If the slot falls outside the map
      * (for example, when all icons are placed in line), ignore them. */

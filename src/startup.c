@@ -159,7 +159,7 @@ static unsigned int _ScrollLockMask = 0;
 
 
 
-static void manageAllWindows();
+static void manageAllWindows(WScreen *scr, int crashed);
 
 extern void NotifyDeadProcess(pid_t pid, unsigned char status);
 
@@ -353,8 +353,35 @@ handleSig(int sig)
             XCloseDisplay(dpy);
         dpy = XOpenDisplay("");
         if (dpy) {
+            CARD32 data[2];
+            WWindow *wwin;
+            int i;
+
 	    XGrabServer(dpy);
             crashAction = wShowCrashingDialogPanel(sig);
+
+            /*
+             * Save current workspace, so can go back to it if restarting.
+             * Also add hint that we crashed, so that windows will be placed
+             * correctly upon restart.
+             */
+            for (i=0; i<wScreenCount; i++) {
+                data[0] = wScreen[i]->current_workspace; /* workspace number */
+                data[1] = WFLAGS_CRASHED; /* signal that we crashed */
+
+                XChangeProperty(dpy, wScreen[i]->root_win,
+                                _XA_WINDOWMAKER_STATE, _XA_WINDOWMAKER_STATE,
+                                32, PropModeReplace, (unsigned char*) data, 2);
+
+                /* save state of windows */
+                wwin = wScreen[i]->focused_window;
+                while (wwin) {
+                    wWindowSaveState(wwin);
+                    wwin = wwin->prev;
+                }
+
+            }
+    
             XCloseDisplay(dpy);
             dpy = NULL;
         } else {
@@ -428,7 +455,7 @@ buryChild(int foo)
 
 
 static int
-getWorkspaceState(Window root, WWorkspaceState **state)            
+getWorkspaceState(Window root, WWorkspaceState **state)
 {
     Atom type_ret;
     int fmt_ret;    
@@ -440,19 +467,18 @@ getWorkspaceState(Window root, WWorkspaceState **state)
                            True, _XA_WINDOWMAKER_STATE,
                            &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
                            (unsigned char **)&data)!=Success || !data)
-      return 0;
+        return 0;
 
-    *state = malloc(sizeof(WWorkspaceState));
-    if (*state) {
-	(*state)->flags = data[0];
-	(*state)->workspace = data[1];
-    }
+    *state = wmalloc(sizeof(WWorkspaceState));
+    (*state)->workspace = data[0];
+    (*state)->flags = data[1];
+
     XFree(data);
 
     if (*state && type_ret==_XA_WINDOWMAKER_STATE)
-      return 1;
+        return 1;
     else
-      return 0;
+        return 0;
 }
 
 
@@ -674,16 +700,18 @@ static char *atomNames[] = {
     "WM_CLIENT_LEADER", 
     "WM_COLORMAP_WINDOWS", 
     "WM_COLORMAP_NOTIFY", 
-    GNUSTEP_WM_ATTR_NAME, 
-    "_WINDOWMAKER_MENU", 
+
+    "_WINDOWMAKER_MENU",
     "_WINDOWMAKER_STATE", 
     "_WINDOWMAKER_WM_PROTOCOLS", 
-    GNUSTEP_WM_MINIATURIZE_WINDOW,
     "_WINDOWMAKER_WM_FUNCTION",
     "_WINDOWMAKER_NOTICEBOARD",
     "_WINDOWMAKER_COMMAND",
     "_WINDOWMAKER_ICON_SIZE",
     "_WINDOWMAKER_ICON_TILE",
+
+    GNUSTEP_WM_ATTR_NAME,
+    GNUSTEP_WM_MINIATURIZE_WINDOW,
     GNUSTEP_TITLEBAR_STATE
 };
 
@@ -749,24 +777,17 @@ StartUp(Bool defaultScreenOnly)
     _XA_WM_COLORMAP_WINDOWS = atom[7];
     _XA_WM_COLORMAP_NOTIFY = atom[8];
 
-    _XA_GNUSTEP_WM_ATTR = atom[9];
+    _XA_WINDOWMAKER_MENU = atom[9];
+    _XA_WINDOWMAKER_STATE = atom[10];
+    _XA_WINDOWMAKER_WM_PROTOCOLS = atom[11];
+    _XA_WINDOWMAKER_WM_FUNCTION = atom[12];
+    _XA_WINDOWMAKER_NOTICEBOARD = atom[13];
+    _XA_WINDOWMAKER_COMMAND = atom[14];
+    _XA_WINDOWMAKER_ICON_SIZE = atom[15];
+    _XA_WINDOWMAKER_ICON_TILE = atom[16];
 
-    _XA_WINDOWMAKER_MENU = atom[10];
-    _XA_WINDOWMAKER_STATE = atom[11];
-
-    _XA_WINDOWMAKER_WM_PROTOCOLS = atom[12];
-
-    _XA_GNUSTEP_WM_MINIATURIZE_WINDOW = atom[13];
-    
-    _XA_WINDOWMAKER_WM_FUNCTION = atom[14];
-
-    _XA_WINDOWMAKER_NOTICEBOARD = atom[15];
-    
-    _XA_WINDOWMAKER_COMMAND = atom[16];
-
-    _XA_WINDOWMAKER_ICON_SIZE = atom[17];
-    _XA_WINDOWMAKER_ICON_TILE = atom[18];
-
+    _XA_GNUSTEP_WM_ATTR = atom[17];
+    _XA_GNUSTEP_WM_MINIATURIZE_WINDOW = atom[18];
     _XA_GNUSTEP_TITLEBAR_STATE = atom[19];
 
 #ifdef OFFIX_DND
@@ -927,7 +948,9 @@ StartUp(Bool defaultScreenOnly)
 
     /* initialize/restore state for the screens */
     for (j = 0; j < wScreenCount; j++) {
-	/* restore workspace state */
+        int crashed;
+
+        /* restore workspace state */
 	if (!getWorkspaceState(wScreen[j]->root_win, &ws_state)) {
 	    ws_state = NULL;
 	}
@@ -937,9 +960,14 @@ StartUp(Bool defaultScreenOnly)
 	/* manage all windows that were already here before us */
 	if (!wPreferences.flags.nodock && wScreen[j]->dock)
 	    wScreen[j]->last_dock = wScreen[j]->dock;
-	
-	manageAllWindows(wScreen[j]);
-		
+
+        if (ws_state && (ws_state->flags & WFLAGS_CRASHED)!=0)
+            crashed = 1;
+        else
+            crashed = 0;
+
+        manageAllWindows(wScreen[j], crashed);
+
 	/* restore saved menus */
 	wMenuRestoreState(wScreen[j]);
 	
@@ -1014,7 +1042,7 @@ windowInList(Window window, Window *list, int count)
  *----------------------------------------------------------------------- 
  */
 static void
-manageAllWindows(WScreen *scr)
+manageAllWindows(WScreen *scr, int crashRecovery)
 {
     Window root, parent;
     Window *children;
@@ -1077,7 +1105,16 @@ manageAllWindows(WScreen *scr)
 		wIconifyWindow(wwin);
 	    } else {
 		wClientSetState(wwin, NormalState, None);
-	    }
+            }
+            if (crashRecovery) {
+                int border;
+
+                border = (WFLAGP(wwin, no_border) ? 0 : FRAME_BORDER_WIDTH);
+
+                wWindowMove(wwin, wwin->frame_x - border,
+                            wwin->frame_y - border -
+                            wwin->frame->titlebar->height);
+            }
 	}
     }
     XUngrabServer(dpy);

@@ -1100,7 +1100,7 @@ EscapeWM_CLASS(char *name, char *class)
 
     if (name) {
 	l = strlen(name);
-	ename = wmalloc(l*2);
+	ename = wmalloc(l*2+1);
 	j = 0;
 	for (i=0; i<l; i++) {
 	    if (name[i]=='\\') {
@@ -1114,7 +1114,7 @@ EscapeWM_CLASS(char *name, char *class)
     }
     if (class) {
 	l = strlen(class);
-	eclass = wmalloc(l*2);
+	eclass = wmalloc(l*2+1);
 	j = 0;
 	for (i=0; i<l; i++) {
 	    if (class[i]=='\\') {

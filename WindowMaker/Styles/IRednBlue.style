@@ -1,5 +1,5 @@
 {
-  TitleJustify = center;
+  TitleJustify = left;
   HighlightColor = white;
   HighlightTextColor = black;
   ClipTitleColor = black;

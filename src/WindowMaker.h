@@ -265,6 +265,11 @@ typedef enum {
 }
 
 
+/* Flags for the Window Maker state when restarting/crash situations */
+#define WFLAGS_NONE       (0)
+#define WFLAGS_CRASHED    (1<<0)
+
+
 /* notifications */
 
 #ifdef MAINFILE

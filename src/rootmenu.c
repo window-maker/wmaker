@@ -144,9 +144,6 @@ static Shortcut *shortcutList = NULL;
  *							     
  */
 
-#define MAX(a,b)	((a)>(b) ? (a) : (b))
-
-
 #define M_QUICK		1
 
 /* menu commands */
@@ -1610,7 +1607,7 @@ configureMenu(WScreen *scr, proplist_t definition)
 
 	    menu = readMenuFile(scr, path);
 	    if (menu)
-		menu->timestamp = MAX(stat_buf.st_mtime, WDRootMenu->timestamp);
+		menu->timestamp = WMAX(stat_buf.st_mtime, WDRootMenu->timestamp);
 	} else {
 	    menu = NULL;
 	}

@@ -99,8 +99,6 @@ showIconLayout(WMWidget *widget, void *data)
 }
 
 
-#define MIN(a,b)	((a) < (b) ? (a) : (b))
-
 static void
 showData(_Panel *panel)
 {

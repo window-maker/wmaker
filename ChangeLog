@@ -24,6 +24,14 @@ Changes since version 0.64.0:
   performance a bit.
 - Made the Gnome tasklist skip the windows with the "Skip window list" flag
   enabled. (Bastien Nocera <hadess@hadess.net>)
+- Fixed crashing bug when name and class were empty for a docked app.
+- Removed MIN() and MAX() macros and replaced them with WMIN() and WMAX() from
+  WINGs.
+- Added a hint that Window Maker crashed, to allow windows to be placed
+  correctly after a crash situation.
+- Added a hint that Window Maker crashed, to allow windows to be placed
+  in their correct previous positions after a crash situation and also to
+  preserve their state before the crash (minimized, shaded, hidden, ...)
 
 
 Changes since version 0.63.1:
@@ -62,6 +70,7 @@ Changes since version 0.63.0:
 - added updated danish translations (Birger Langkjer <birger.langkjer@image.dk>)
 - fixed WindozeCycling config in WPrefs
 - fixed circulate raise withour WindozeCycling
+
 
 Changes since version 0.62.1:
 .............................
@@ -114,6 +123,7 @@ Changes since version 0.62.0:
 - added memory usage in info panel
 - fixed sticky hint handling in GNOME
 - fixed saving of maximized state for restart
+
 
 Changes since version 0.61.1:
 .............................

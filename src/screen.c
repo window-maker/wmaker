@@ -1064,7 +1064,6 @@ wScreenRestoreState(WScreen *scr)
 void
 wScreenSaveState(WScreen *scr)
 {
-    WWorkspaceState wstate;
     WWindow *wwin;
     char *str;
     proplist_t path, old_state, foo;
@@ -1073,13 +1072,9 @@ wScreenSaveState(WScreen *scr)
 
     make_keys();
 
-/*
- * Save current workspace, so can go back to it upon restart.
- */
-    wstate.workspace = scr->current_workspace;
-
-    data[0] = wstate.flags;
-    data[1] = wstate.workspace;
+    /* Save current workspace, so can go back to it upon restart. */
+    data[0] = scr->current_workspace;
+    data[1] = WFLAGS_NONE;
 
     XChangeProperty(dpy, scr->root_win, _XA_WINDOWMAKER_STATE,
                     _XA_WINDOWMAKER_STATE, 32, PropModeReplace,

@@ -26,8 +26,8 @@ Need to do:
 - remake internal string processing to use wchar? unicode?
 - add new file for stuff like default commands and dnd commands for
   docked apps, balloons for the dock etc
-- fix the #define MIN(a,b) stuff. defined in too many places, and maybe
-  replace with WMIN(a,b).
+- check whether apps with name.class set to empty strings should be treated
+  like if name.class were NULL.NULL
 
 Maybe some day:
 ===============
@@ -38,10 +38,10 @@ Maybe some day:
 Never: (so, dont even bother to ask)
 ======
 - different themes for each workspace. Unless you give us a SGI/Power Onyx
-with 2 CPUs ;). 
+  with 2 CPUs ;). 
 - anything that requires the mouse pointer to be jumped by WindowMaker to
-somewhere. This is *terrible* behaviour. And it's not just IMO.
-- rewrite to use Gtk... I wont even explain why...
+  somewhere. This is *terrible* behaviour. And it's not just IMO.
+- rewrite to use Gtk... I wont even bother to explain why...
 
 
 - ICCCM 2.0: ICCCM 2.0 (not 1.0, which is what everybody supports so so) is

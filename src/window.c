@@ -2394,28 +2394,27 @@ getSavedState(Window window, WSavedState **state)
 			   True, _XA_WINDOWMAKER_STATE,
 			   &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
 			   (unsigned char **)&data)!=Success || !data)
-      return 0;
-    
-    *state = malloc(sizeof(WSavedState));
+        return 0;
 
-    if (*state) {
-	(*state)->workspace = data[0];
-	(*state)->miniaturized = data[1];
-	(*state)->shaded = data[2];
-	(*state)->hidden = data[3];
-	(*state)->maximized = data[4];
-	(*state)->x = data[5];
-	(*state)->y = data[6];
-	(*state)->w = data[7];
-	(*state)->h = data[8];
-	(*state)->window_shortcuts = data[9];
-    }
+    *state = wmalloc(sizeof(WSavedState));
+
+    (*state)->workspace = data[0];
+    (*state)->miniaturized = data[1];
+    (*state)->shaded = data[2];
+    (*state)->hidden = data[3];
+    (*state)->maximized = data[4];
+    (*state)->x = data[5];
+    (*state)->y = data[6];
+    (*state)->w = data[7];
+    (*state)->h = data[8];
+    (*state)->window_shortcuts = data[9];
+
     XFree(data);
-    
+
     if (*state && type_ret==_XA_WINDOWMAKER_STATE)
-      return 1;
+        return 1;
     else 
-      return 0;
+        return 0;
 }
 
 

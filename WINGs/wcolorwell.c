@@ -236,8 +236,6 @@ WSetColorWellBordered(WMColorWell *cPtr, Bool flag)
 }
 
 
-#define MIN(a,b)	((a) > (b) ? (b) : (a))
-
 static void
 willResizeColorWell(W_ViewDelegate *self, WMView *view,
 		    unsigned int *width, unsigned int *height)
@@ -252,7 +250,7 @@ willResizeColorWell(W_ViewDelegate *self, WMView *view,
 	if (*height < MIN_HEIGHT)
 	    *height = MIN_HEIGHT;
 
-	bw = (int)((float)MIN(*width, *height)*0.24);
+	bw = (int)((float)WMIN(*width, *height)*0.24);
 
 	W_ResizeView(cPtr->colorView, *width-2*bw, *height-2*bw);
 
