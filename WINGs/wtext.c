@@ -3191,8 +3191,8 @@ WMCreateTextForDocumentType(WMWidget *parent, WMAction *parser, WMAction *writer
         WMRegisterViewForDraggedTypes(tPtr->view, types);
     }
 
-    WMAddNotificationObserver(fontChanged, tPtr, 
-        "WMFontPanelDidChangeNotification", tPtr);
+    /*WMAddNotificationObserver(fontChanged, tPtr,
+        WMFontPanelDidChangeNotification, tPtr);*/
 
     tPtr->firstTextBlock = NULL;
     tPtr->lastTextBlock = NULL;

@@ -1,6 +1,7 @@
 {
   SystemFont = "-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-%d-*,-*-*-medium-r-normal-*-*-*";
   BoldSystemFont = "-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-bold-r-normal-*-%d-*,-*-*-medium-r-normal-*-*-*";
+  DefaultFontSize = 12;
   FloppyPath = "/floppy";
   MultiByteText = AUTO;
   DoubleClickTime = 250;

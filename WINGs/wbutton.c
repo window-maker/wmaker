@@ -44,6 +44,8 @@ typedef struct W_Button {
 
 	unsigned int enabled:1;
 
+        unsigned int dimsWhenDisabled:1;
+
 	unsigned int bordered:1;
 
 	unsigned int springLoaded:1;
@@ -135,13 +137,13 @@ WMCreateCustomButton(WMWidget *parent, int behaviourMask)
     bPtr->flags.stateLight = (behaviourMask & WBBStateLightMask)!=0;
     bPtr->flags.stateChange = (behaviourMask & WBBStateChangeMask)!=0;
     bPtr->flags.statePush = (behaviourMask & WBBStatePushMask)!=0;
-    
+
     W_ResizeView(bPtr->view, DEFAULT_BUTTON_WIDTH, DEFAULT_BUTTON_HEIGHT);
     bPtr->flags.alignment = DEFAULT_BUTTON_ALIGNMENT;
     bPtr->flags.bordered = DEFAULT_BUTTON_IS_BORDERED;
-    
-    bPtr->flags.enabled = 1;
 
+    bPtr->flags.enabled = 1;
+    bPtr->flags.dimsWhenDisabled = 1;
 
     WMCreateEventHandler(bPtr->view, ExposureMask|StructureNotifyMask,
 			 handleEvents, bPtr);
@@ -239,31 +241,38 @@ updateDisabledMask(WMButton *bPtr)
     if (bPtr->image) {
 	XGCValues gcv;
 
-	bPtr->dimage->mask = XCreatePixmap(dpy, scr->stipple,
-					   bPtr->dimage->width, 
-					   bPtr->dimage->height, 1);
+        if (bPtr->dimage->mask) {
+            XFreePixmap(dpy, bPtr->dimage->mask);
+            bPtr->dimage->mask = None;
+        }
 
-	XSetForeground(dpy, scr->monoGC, 0);
-	XFillRectangle(dpy, bPtr->dimage->mask, scr->monoGC, 0, 0,
-		       bPtr->dimage->width, bPtr->dimage->height);
+        if (bPtr->flags.dimsWhenDisabled) {
+            bPtr->dimage->mask = XCreatePixmap(dpy, scr->stipple,
+                                               bPtr->dimage->width,
+                                               bPtr->dimage->height, 1);
 
-	gcv.foreground = 1;
-	gcv.background = 0;
-	gcv.stipple = scr->stipple;
-	gcv.fill_style = FillStippled;
-	gcv.clip_mask = bPtr->image->mask;
-	gcv.clip_x_origin = 0;
-	gcv.clip_y_origin = 0;
-	
-	XChangeGC(dpy, scr->monoGC, GCForeground|GCBackground|GCStipple
-		  |GCFillStyle|GCClipMask|GCClipXOrigin|GCClipYOrigin, &gcv);
+            XSetForeground(dpy, scr->monoGC, 0);
+            XFillRectangle(dpy, bPtr->dimage->mask, scr->monoGC, 0, 0,
+                           bPtr->dimage->width, bPtr->dimage->height);
 
-	XFillRectangle(dpy, bPtr->dimage->mask, scr->monoGC, 0, 0,
-		       bPtr->dimage->width, bPtr->dimage->height);
+            gcv.foreground = 1;
+            gcv.background = 0;
+            gcv.stipple = scr->stipple;
+            gcv.fill_style = FillStippled;
+            gcv.clip_mask = bPtr->image->mask;
+            gcv.clip_x_origin = 0;
+            gcv.clip_y_origin = 0;
 
-	gcv.fill_style = FillSolid;
-	gcv.clip_mask = None;
-	XChangeGC(dpy, scr->monoGC, GCFillStyle|GCClipMask, &gcv);
+            XChangeGC(dpy, scr->monoGC, GCForeground|GCBackground|GCStipple
+                      |GCFillStyle|GCClipMask|GCClipXOrigin|GCClipYOrigin, &gcv);
+
+            XFillRectangle(dpy, bPtr->dimage->mask, scr->monoGC, 0, 0,
+                           bPtr->dimage->width, bPtr->dimage->height);
+
+            gcv.fill_style = FillSolid;
+            gcv.clip_mask = None;
+            XChangeGC(dpy, scr->monoGC, GCFillStyle|GCClipMask, &gcv);
+        }
     }
 }
 
@@ -461,19 +470,36 @@ WMSetButtonEnabled(WMButton *bPtr, Bool flag)
 }
 
 
+int
+WMGetButtonEnabled(WMButton *bPtr)
+{
+    CHECK_CLASS(bPtr, WC_Button);
+
+    return bPtr->flags.enabled;
+}
+
+
+void
+WMSetButtonImageDimsWhenDisabled(WMButton *bPtr, Bool flag)
+{
+    bPtr->flags.dimsWhenDisabled = ((flag==0) ? 0 : 1);
+
+    updateDisabledMask(bPtr);
+}
+
+
 void
 WMSetButtonTag(WMButton *bPtr, int tag)
 {
     bPtr->tag = tag;
 }
 
-    
 
 void
 WMPerformButtonClick(WMButton *bPtr)
 {
     CHECK_CLASS(bPtr, WC_Button);
-  
+
     if (!bPtr->flags.enabled)
 	return;
 

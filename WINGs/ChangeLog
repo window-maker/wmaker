@@ -17,6 +17,8 @@ Changes since wmaker 0.80.0:
   1 or 0 for the flag value, not the flag passed by the user.
 - Added 2 functions to retrieve the default system fonts:
   WMDefaultSystemFont(WMScreen *scr) and WMDefaultBoldSystemFont(WMScreen *scr)
+- Added WMSetButtonImageDimsWhenDisabled() and WMGetButtonEnabled()
+- Cleaned-up the header files of functions/vars declared but not implemented
 
 
 Changes since wmaker 0.70.0:

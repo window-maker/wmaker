@@ -654,7 +654,7 @@ void WMDeleteEventHandler(WMView *view, unsigned long mask,
 
 int WMIsDoubleClick(XEvent *event);
 
-int WMIsTripleClick(XEvent *event);
+//int WMIsTripleClick(XEvent *event);
 
 void WMNextEvent(Display *dpy, XEvent *event);
 
@@ -895,9 +895,9 @@ void WMRelayToNextResponder(WMView *view, XEvent *event);
 /* notifications */
 extern char *WMViewSizeDidChangeNotification;
 
-extern char *WMViewRealizedNotification;
+extern char *WMViewFocusDidChangeNotification;
 
-extern char *WMFontPanelDidChangeNotification;
+extern char *WMViewRealizedNotification;
 
 
 /* ....................................................................... */
@@ -1007,7 +1007,9 @@ void WMSetButtonBordered(WMButton *bPtr, int isBordered);
 
 void WMSetButtonEnabled(WMButton *bPtr, Bool flag);
 
-//void WMSetButtonImageDimsWhenDisabled(WMButton *bPtr, Bool flag);
+int WMGetButtonEnabled(WMButton *bPtr);
+
+void WMSetButtonImageDimsWhenDisabled(WMButton *bPtr, Bool flag);
 
 void WMSetButtonTag(WMButton *bPtr, int tag);
 
