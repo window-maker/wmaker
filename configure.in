@@ -175,8 +175,7 @@ dnl GCC/as with MMX support
 dnl --------------------
 
 # until we fix it, leave it disabled
-#if test "$ac_cv_prog_gcc" = yes; then
-if [ 0 -eq 1 ]; then
+if test "$ac_cv_prog_gcc" = yes; then
     x86=0
     changequote(,)dnl
     case "$host_cpu" in
