@@ -133,7 +133,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     WMSetBoxBorderWidth(hbox, 10);
     WMSetBoxHorizontal(hbox, True);
     WMMapWidget(hbox);
-    WMAddBoxSubview(panel->vbox, WMWidgetView(hbox), False, True, 80, 0, 5);
+    WMAddBoxSubview(panel->vbox, WMWidgetView(hbox), False, True, 84, 0, 5);
 
     panel->iLbl = WMCreateLabel(hbox);
     WMSetLabelImagePosition(panel->iLbl, WIPImageOnly);
@@ -182,7 +182,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     WMSetBoxBorderWidth(hbox, 10);
     WMSetBoxHorizontal(hbox, True);
     WMMapWidget(hbox);
-    WMAddBoxSubview(panel->vbox, WMWidgetView(hbox), False, True, 24, 0, 0);
+    WMAddBoxSubview(panel->vbox, WMWidgetView(hbox), False, True, 44, 0, 0);
     
     /* create buttons */
     if (otherButton) 
