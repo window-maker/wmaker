@@ -31,30 +31,29 @@ x86_check_mmx()
 {
     static int result = -1;
 
-    return 1;
-    
     if (result >= 0)
 	return result;
-    
+
     result = 0;
 
     asm volatile
-	("pushfl		\n" // check whether cpuid supported
+        ("pushal		\n" // please don't forget this in any asm
+         "pushfl		\n" // check whether cpuid supported
 	 "pop %%eax		\n"
 	 "movl %%eax, %%ebx	\n"
-	 "xorl 1<<21, %%eax	\n"
+	 "xorl $(1<<21), %%eax	\n"
 	 "pushl %%eax		\n"
 	 "popfl			\n"
 	 "pushfl		\n"
 	 "popl %%eax		\n"
-	 "xorl %%eax, %%ebx	\n"
-	 "andl 1<<21, %%eax	\n"
+	 "xorl %%ebx, %%eax	\n"
+	 "andl $(1<<21), %%eax	\n"
 	 "jz .NotPentium	\n"
 	 "xorl %%eax, %%eax	\n"
 	 
 	 "movl $1, %%eax	\n"
 	 "cpuid			\n"
-	 "test 1<<23, %%edx	\n"
+	 "test $(1<<23), %%edx	\n"
 	 "jz .NotMMX		\n"
 	 "movl $1, %0		\n"
 
@@ -111,7 +110,7 @@ x86_mmx_TrueColor_32_to_16(unsigned char *image, // 8
 	(
 	 "subl $128, %esp		\n" // alloc some more stack
 
-	 "pusha				\n"
+	 "pushal       			\n"
 
 	 // pack dr, dg and db into mm6
 	 "movl 	36(%ebp), %eax		\n"
@@ -292,7 +291,7 @@ x86_mmx_TrueColor_32_to_16(unsigned char *image, // 8
 	 
 	 "emms				\n"
 
-	 "popa				\n"
+	 "popal				\n"
 	 );
 }
 
@@ -380,7 +379,7 @@ x86_PseudoColor_32_to_8(unsigned char *image, // 8
 	(
 	 "andl $-8, %ebp		\n"
 	 "subl $128, %esp		\n" // alloc some stack space
-	 "pusha				\n"
+	 "pushal       			\n"
 
 	 // process 1 pixel / cycle, each component treated as 16bit
 	 "movl 8(%ebp), %esi		\n" // esi = image->data
@@ -426,7 +425,7 @@ x86_PseudoColor_32_to_8(unsigned char *image, // 8
 
 ".Endb:					\n"
 	 
-	 "popa				\n"
+	 "popal				\n"
 	 );
     
     
