@@ -102,6 +102,8 @@ showData(_Panel *panel)
 	WMSetPopUpButtonSelectedItem(panel->sizeP, 2);
     else if (strcasecmp(str, "line")==0)
 	WMSetPopUpButtonSelectedItem(panel->sizeP, 3);
+    else if (strcasecmp(str, "none")==0)
+	WMSetPopUpButtonSelectedItem(panel->sizeP, 4);    
     
     str = GetStringForKey("MoveDisplay");
     if (!str)
@@ -112,6 +114,8 @@ showData(_Panel *panel)
 	WMSetPopUpButtonSelectedItem(panel->posiP, 1);
     else if (strcasecmp(str, "floating")==0)
 	WMSetPopUpButtonSelectedItem(panel->posiP, 2);
+    else if (strcasecmp(str, "none")==0)
+	WMSetPopUpButtonSelectedItem(panel->posiP, 3);
 
     x = GetIntegerForKey("WorkspaceBorderSize");
     x = x<0 ? 0 : x;
@@ -159,6 +163,9 @@ storeData(_Panel *panel)
      case 2:
 	str = "floating";
 	break;
+     case 4:
+	str = "none";
+	break;
      default:
 	str = "line";
 	break;
@@ -171,6 +178,9 @@ storeData(_Panel *panel)
 	break;
      case 1:
 	str = "center";
+	break;
+     case 3:
+	str = "none";
 	break;
      default:
 	str = "floating";
@@ -229,6 +239,7 @@ createPanel(Panel *p)
     WMAddPopUpButtonItem(panel->sizeP, _("Center of screen"));
     WMAddPopUpButtonItem(panel->sizeP, _("Center of resized window"));
     WMAddPopUpButtonItem(panel->sizeP, _("Technical drawing-like"));
+    WMAddPopUpButtonItem(panel->sizeP, _("Disabled"));
 
     WMMapSubwidgets(panel->sizeF);
 
@@ -248,6 +259,7 @@ createPanel(Panel *p)
     WMAddPopUpButtonItem(panel->posiP, _("Corner of screen"));
     WMAddPopUpButtonItem(panel->posiP, _("Center of screen"));
     WMAddPopUpButtonItem(panel->posiP, _("Center of resized window"));
+    WMAddPopUpButtonItem(panel->posiP, _("Disabled"));
 
     WMMapSubwidgets(panel->posiF);
 
