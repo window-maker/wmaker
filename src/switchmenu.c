@@ -258,10 +258,11 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
 		    if (entry->text)
 		      wfree(entry->text);
 		    
-		    if (wwin->frame->title)
-		      sprintf(title, "%s", wwin->frame->title);
-		    else
-		      sprintf(title, "%s", DEF_WINDOW_TITLE);
+                    if (wwin->frame->title)
+                        snprintf(title, MAX_MENU_TEXT_LENGTH, "%s",
+                                 wwin->frame->title);
+                    else
+                        sprintf(title, "%s", DEF_WINDOW_TITLE);
 
 		    t = ShrinkString(scr->menu_entry_font, title, MAX_WINDOWLIST_WIDTH);
 		    entry->text = t;
