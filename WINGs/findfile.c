@@ -312,7 +312,7 @@ wfindfileinarray(proplist_t array, char *file)
     }
 
     flen = strlen(file);
-    for (i=0; PLGetNumberOfElements(array); i++) {
+    for (i=0; i<PLGetNumberOfElements(array); i++) {
 	proplist_t prop;
 	char *p;
 
