@@ -748,7 +748,8 @@ updateMoveData(WWindow *wwin, MoveData *data)
 	if (tmp != wwin && scr->current_workspace == tmp->frame->workspace
 	    && !tmp->flags.miniaturized
 	    && !tmp->flags.hidden
-	    && !tmp->flags.obscured) {
+	    && !tmp->flags.obscured
+        && !WFLAGP(tmp, sunken)) {
 	    data->topList[data->count] = tmp;
 	    data->leftList[data->count] = tmp;
 	    data->rightList[data->count] = tmp;
