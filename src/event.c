@@ -1313,6 +1313,8 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     WWindow *oldFocused;
     int modifiers;
     XModifierKeymap *keymap;
+    Bool somethingElse = False;
+    XEvent ev;
 
     if (!wwin)
 	return;
@@ -1346,8 +1348,6 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     }
 #endif	
     while (!done) {
-	XEvent ev;
-
 	WMMaskEvent(dpy,KeyPressMask|KeyReleaseMask|ExposureMask, &ev);
 
 	if (ev.type != KeyRelease && ev.type != KeyPress) {
@@ -1390,20 +1390,9 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 		UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
 
 	    } else {
-		handleKeyPress(&ev);
+		somethingElse = True;
+		done = True;
 	    }
-	    
-	    /*
-	    else if (wKeyBindings[WKBD_LOWER].keycode == ev.xkey.keycode
-		       && wKeyBindings[WKBD_LOWER].modifier == modifiers) {
-
-		wLowerFrame(newFocused->frame->core);
-
-	    } else if (wKeyBindings[WKBD_RAISE].keycode == ev.xkey.keycode
-		       && wKeyBindings[WKBD_RAISE].modifier == modifiers) {
-
-		wRaiseFrame(newFocused->frame->core);
-	    }*/
 	} else if (ev.type == KeyRelease) {
 	    int i;
 
@@ -1430,6 +1419,10 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     scr->flags.doing_alt_tab = 0;
     if (openedSwitchMenu) 
 	OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);
+    
+    if (somethingElse) {
+	handleKeyPress(&ev);
+    }
 }
 
 
