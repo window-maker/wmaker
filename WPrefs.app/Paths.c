@@ -257,7 +257,7 @@ createPanel(Panel *p)
     WMSetFrameTitle(panel->icoF, _("Icon Search Paths"));
     
     panel->icoL = WMCreateList(panel->icoF);
-    WMResizeWidget(panel->icoL, 200, 150);
+    WMResizeWidget(panel->icoL, 200, 147);
     WMMoveWidget(panel->icoL, 15, 20);
     WMSetListUserDrawProc(panel->icoL, paintItem);
     WMHangData(panel->icoL, panel);
@@ -284,7 +284,7 @@ createPanel(Panel *p)
     WMSetFrameTitle(panel->pixF, _("Pixmap Search Paths"));
     
     panel->pixL = WMCreateList(panel->pixF);
-    WMResizeWidget(panel->pixL, 200, 150);
+    WMResizeWidget(panel->pixL, 200, 147);
     WMMoveWidget(panel->pixL, 15, 20);
     WMSetListUserDrawProc(panel->pixL, paintItem);
     WMHangData(panel->pixL, panel);
