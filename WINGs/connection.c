@@ -352,12 +352,12 @@ getSocketAddress(char* name, char* service, char* protocol) /*FOLD00*/
     return &socketaddr;
 }
 
+
 static void
-handle_sigpipe(int signum)
+dummyHandler(int signum)
 {
-    if (0) signum=0; /* To avoid a gcc warning */
-    return;
 }
+
 
 static WMConnection*
 createConnectionWithSocket(int sock, Bool closeOnRelease) /*FOLD00*/
@@ -384,12 +384,11 @@ createConnectionWithSocket(int sock, Bool closeOnRelease) /*FOLD00*/
 
     /* ignore dead pipe */
     if (!SigInitialized) {
-        sig_action.sa_handler = &handle_sigpipe;
-	/* Because POSIX mandates that only signal with handlers are reset
-	   accross an exec*(), we do not want to propagate ignoring SIGPIPEs
-	   to children. Hence the dummy handler.
-	   Philippe Troin <phil@fifi.org>
-	*/
+        /* Because POSIX mandates that only signal with handlers are reset
+         * accross an exec*(), we do not want to propagate ignoring SIGPIPEs
+         * to children. Hence the dummy handler. Philippe Troin <phil@fifi.org>
+         */
+        sig_action.sa_handler = &dummyHandler;
         sig_action.sa_flags = SA_RESTART;
         sigaction(SIGPIPE, &sig_action, NULL);
         SigInitialized = True;
