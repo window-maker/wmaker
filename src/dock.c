@@ -56,8 +56,6 @@
 #include "wsound.h"
 
 
-#include <WINGs/WINGsP.h>
-
 
 
 

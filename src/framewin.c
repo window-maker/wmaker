@@ -32,8 +32,6 @@
 
 #include <wraster.h>
 
-#include <WINGs/WINGsP.h>
-
 #include "WindowMaker.h"
 #include "GNUstep.h"
 #include "texture.h"

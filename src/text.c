@@ -368,8 +368,7 @@ textRefresh(WTextInput *wtext)
         XFillRectangle(dpy, wtext->core->window, wtext->regGC,
                        x1, y1, x2-x1, y2-y1);
 
-        /* Draw the selected text... use invGC so it will be the
-         * opposite color as the filled rectangle */
+        /* Draw the selected text. Inverse bg and fg colors for selection */
         WMDrawImageString(scr->wmscreen, wtext->core->window,
                           scr->white, scr->black, wtext->font, x1, y1, ptr,
                           (ep - sp));

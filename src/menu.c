@@ -43,8 +43,6 @@
 #include "stacking.h"
 #include "text.h"
 
-#include <WINGs/WINGsP.h>
-
 
 /****** Global Variables ******/
 

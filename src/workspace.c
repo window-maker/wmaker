@@ -50,8 +50,6 @@
 #include "kwm.h"
 #endif
 
-#include <WINGs/WINGsP.h>
-
 
 extern WPreferences wPreferences;
 extern XContext wWinContext;

@@ -51,8 +51,6 @@
 
 #include <wraster.h>
 
-#include <WINGs/WINGsP.h>
-
 #include "WindowMaker.h"
 #include "wcore.h"
 #include "framewin.h"

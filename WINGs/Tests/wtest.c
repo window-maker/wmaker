@@ -1293,9 +1293,6 @@ main(int argc, char **argv)
     testDragAndDrop(scr);
     testText(scr);
 
-    testFontPanel(scr);
-    testList(scr);
-
 #if 0
     testColorPanel(scr);
     testScrollView(scr);

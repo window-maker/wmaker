@@ -743,7 +743,7 @@ _getSibling:
             if (tPtr->flags.ownsSelection) {
                 XRectangle rect;
 
-                if ( sectionWasSelected(tPtr, tb, &rect, s)) {
+                if (sectionWasSelected(tPtr, tb, &rect, s)) {
                     tb->selected = True;
                     XFillRectangle(dpy, tPtr->db, WMColorGC(scr->gray),
                         rect.x, rect.y, rect.width, rect.height);
@@ -1472,7 +1472,8 @@ layOutLine(Text *tPtr, myLineItems *items, int nitems, int x, int y)
             
         } else { 
             font = (tPtr->flags.monoFont)?tPtr->dFont : tb->d.font;
-            max_d = WMAX(max_d, abs(font->height-font->y)); 
+            /*max_d = WMAX(max_d, abs(font->height-font->y));*/
+            max_d = 2;
             line_height = WMAX(line_height, font->height + max_d);
             text = &(tb->text[items[i].begin]);
             len = items[i].end - items[i].begin;
@@ -2346,7 +2347,8 @@ handleTextKeyPress(Text *tPtr, XEvent *event)
                 goto L_imaGFX;
             
             if(tPtr->tpos==0) { 
-L_imaGFX:       if(tb->prior) {
+            L_imaGFX:
+                if(tb->prior) {
                     tPtr->currentTextBlock = tb->prior;
                     if(tPtr->currentTextBlock->graphic)
                         tPtr->tpos = 1;
@@ -2367,7 +2369,8 @@ L_imaGFX:       if(tb->prior) {
             if(tb->graphic) 
                 goto R_imaGFX;
            if(tPtr->tpos == tb->used) {
-R_imaGFX:      if(tb->next) {
+           R_imaGFX:
+               if(tb->next) {
                     tPtr->currentTextBlock = tb->next;
                     tPtr->tpos = 0;
                     if(!tb->next->first && tb->next->used>0)

@@ -34,8 +34,6 @@
 
 #include <wraster.h>
 
-#include <WINGs/WINGsP.h>
-
 #include "WindowMaker.h"
 #include "screen.h"
 #include "texture.h"
