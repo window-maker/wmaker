@@ -9,4 +9,3 @@
 - optimize color allocation for repeated colors
 - make it work in 8bpp
 - optimize SystemFont allocation for repeated font sizes
-
