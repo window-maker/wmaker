@@ -5402,7 +5402,6 @@ fi
 fi
 
 
-==================================
 # Check whether --enable-usermenu or --disable-usermenu was given.
 if test "${enable_usermenu+set}" = set; then
   enableval="$enable_usermenu"
