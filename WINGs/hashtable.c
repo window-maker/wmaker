@@ -361,6 +361,33 @@ WMNextHashEnumeratorItem(WMHashEnumerator *enumerator)
 }
 
 
+void*
+WMNextHashEnumeratorKey(WMHashEnumerator *enumerator)
+{
+    const void *key = NULL;
+
+    /* this assumes the table doesn't change between 
+     * WMEnumerateHashTable() and WMNextHashEnumeratorKey() calls */
+
+    if (enumerator->nextItem==NULL) {
+        HashTable *table = enumerator->table;
+        while (++enumerator->index < table->size) {
+            if (table->table[enumerator->index]!=NULL) {
+                enumerator->nextItem = table->table[enumerator->index];
+                break;
+            }
+        }
+    }
+
+    if (enumerator->nextItem) {
+        key = ((HashItem*)enumerator->nextItem)->key;
+        enumerator->nextItem = ((HashItem*)enumerator->nextItem)->next;
+    }
+
+    return (void*)key;
+}
+
+
 unsigned
 WMCountHashTable(WMHashTable *table)
 {

@@ -120,13 +120,15 @@ enum {
 typedef struct W_Array WMArray;
 typedef struct W_Bag WMBag;
 typedef struct W_Data WMData;
+typedef struct W_TreeNode WMTreeNode;
+typedef struct W_TreeNode WMTree;
+typedef struct W_HashTable WMDictionary;
 typedef struct W_HashTable WMHashTable;
 typedef struct W_UserDefaults WMUserDefaults;
 typedef struct W_Notification WMNotification;
 typedef struct W_NotificationQueue WMNotificationQueue;
 typedef struct W_Host WMHost;
 typedef struct W_Connection WMConnection;
-
 
 
 typedef int WMCompareDataProc(const void *item1, const void *item2);
@@ -306,6 +308,8 @@ void WMHashRemove(WMHashTable *table, const void *key);
 WMHashEnumerator WMEnumerateHashTable(WMHashTable *table);
 
 void* WMNextHashEnumeratorItem(WMHashEnumerator *enumerator);
+
+void* WMNextHashEnumeratorKey(WMHashEnumerator *enumerator);
 
 unsigned WMCountHashTable(WMHashTable *table);
 
@@ -567,6 +571,38 @@ void WMSetDataFormat(WMData *aData, unsigned format);
 unsigned WMGetDataFormat(WMData *aData);
 /* Storing data */
 
+
+/*--------------------------------------------------------------------------*/
+
+/* Generic Tree and TreeNode */
+
+WMTreeNode* WMCreateTreeNode(void *data);
+
+WMTreeNode* WMCreateTreeNodeWithDestructor(void *data, WMFreeDataProc *destructor);
+
+WMTreeNode* WMInsertItemInTree(WMTreeNode *parent, int index, void *item);
+
+WMTreeNode* WMAddItemToTree(WMTreeNode *parent, void *item);
+
+WMTreeNode* WMInsertNodeInTree(WMTreeNode *parent, int index, WMTreeNode *node);
+
+WMTreeNode* WMAddNodeToTree(WMTreeNode *parent, WMTreeNode *node);
+
+int WMGetTreeNodeDepth(WMTreeNode *node);
+
+void WMDestroyTreeNode(WMTreeNode *node);
+
+
+/*--------------------------------------------------------------------------*/
+
+/* Dictionaries */
+/*
+WMDictionary* WMCreateDictionaryFromElements(void *key, void *value, ...);
+
+#define WMGetDictionaryEntryForKey(dict, key) WMHashGet(dict, key)
+
+WMArray* WMGetAllDictionaryKeys(WMDictionary *dPtr);
+*/
 
 /*--------------------------------------------------------------------------*/
 

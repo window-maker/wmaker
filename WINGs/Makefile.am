@@ -43,6 +43,7 @@ libWINGs_a_SOURCES = 	\
 	notification.c \
 	selection.c \
 	string.c \
+	tree.c \
 	userdefaults.c \
 	usleep.c \
 	wapplication.c \
@@ -95,6 +96,7 @@ libWUtil_a_SOURCES = 	\
 	memory.c \
 	notification.c \
 	string.c \
+	tree.c \
 	userdefaults.c \
 	usleep.c \
 	wapplication.c \
