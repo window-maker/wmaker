@@ -20,6 +20,14 @@
  *  USA.
  */
 
+/*
+ * TODO
+ * ----
+ *
+ * This file needs to be checked for all calls to XGetWindowProperty() and
+ * proper checks need to be made on the returned values. Only checking for
+ * return to be Success is not enough. -Dan
+ */
 
 #include "wconfig.h"
 
@@ -295,7 +303,7 @@ setSupportedHints(WScreen *scr)
     atom[i++] = net_wm_icon_geometry;
     atom[i++] = net_wm_icon;
     atom[i++] = net_wm_handled_icons;
-    
+
     atom[i++] = net_wm_name;
     atom[i++] = net_wm_icon_name;
 
@@ -357,7 +365,7 @@ wNETWMGetCurrentDesktopFromHint(WScreen *scr)
 {
     int count;
     unsigned char *prop;
-    
+
     prop= PropGetCheckProperty(scr->root_win, net_current_desktop, XA_CARDINAL,
                                0, 1, &count);
     if (prop)
@@ -370,55 +378,109 @@ wNETWMGetCurrentDesktopFromHint(WScreen *scr)
 }
 
 
+/*
+ * Find the best icon to be used by Window Maker for appicon/miniwindows.
+ * Currently the algorithm is to take the image with the size closest
+ * to icon_size x icon_size, but never bigger than that.
+ *
+ * This algorithm is very poorly implemented and needs to be redone (it can
+ * easily select images with very large widths and very small heights over
+ * square images, if the area of the former is closer to the desired one).
+ *
+ * The logic can also be changed to accept bigger images and scale them down.
+ */
+static CARD32*
+findBestIcon(CARD32 *data, unsigned long items)
+{
+    int size, wanted, d, distance;
+    unsigned long i;
+    CARD32 *icon;
+
+    /* better use only 75% of icon_size. For 64x64 this means 48x48
+     * This leaves room around the icon for the miniwindow title and
+     * results in better overall aesthetics -Dan */
+    wanted = wPreferences.icon_size * wPreferences.icon_size;
+
+    for (icon=NULL, distance=LONG_MAX, i=0L; i<items-1; ) {
+        size = data[i] * data[i+1];
+        if (size==0)
+            break;
+        d = wanted - size;
+        if (d>=0 && d<=distance && (i+size+2)<=items) {
+            distance = d;
+            icon = &data[i];
+        }
+        i += size+2;
+    }
+
+    return icon;
+}
+
+
+static RImage*
+makeRImageFromARGBData(CARD32 *data)
+{
+    int size, width, height, i;
+    RImage *image;
+    unsigned char *imgdata;
+    CARD32 pixel;
+
+    width  = data[0];
+    height = data[1];
+    size   = width * height;
+
+    if (size == 0)
+        return NULL;
+
+    image = RCreateImage(width, height, True);
+
+    for (imgdata=image->data, i=2; i<size+2; i++, imgdata+=4) {
+        pixel = data[i];
+        imgdata[3] = (pixel >> 24) & 0xff; /* A */
+        imgdata[0] = (pixel >> 16) & 0xff; /* R */
+        imgdata[1] = (pixel >>  8) & 0xff; /* G */
+        imgdata[2] = (pixel >>  0) & 0xff; /* B */
+    }
+
+    return image;
+}
+
+
 static void
 updateIconImage(WScreen *scr, WWindow *wwin)
 {
-    Atom actual_type_return;
-    int actual_format_return;
-    unsigned long nitems_return, bytes_after_return;
-    unsigned char *prop_return;
-    int rc = XGetWindowProperty(dpy, wwin->client_win, net_wm_icon, 0, ~0, False,
-                                XA_CARDINAL, &actual_type_return, &actual_format_return,
-                                &nitems_return, &bytes_after_return, &prop_return);
+    CARD32 *property, *data;
+    unsigned long items, rest;
+    Atom type;
+    int format;
+    RImage *image;
 
-    if (rc==Success && prop_return) {
-        unsigned int *data = (unsigned int *)prop_return;
-        unsigned int pos = 0, len = 0, best_pos = 0, best_tmp = ~0;
-        unsigned int pref_size = wPreferences.icon_size;
-        unsigned int pref_sq = pref_size*pref_size;
-        unsigned int tmp;
-        char *src, *dst;
-        RImage *new_rimage;
-
-        do {
-            len = data[pos+0]*data[pos+1];
-            tmp = pref_sq-len;
-            if (tmp < best_tmp && tmp > 0) {
-                best_tmp = tmp;
-                best_pos = pos;
-            }
-            pos += 2+len;
-        } while (pos < nitems_return && len != 0);
-
-        new_rimage = RCreateImage(data[best_pos+0], data[best_pos+1], True);
-        len = data[best_pos+0] * data[best_pos+1];
-        src = (char*)&data[best_pos+2];
-        dst = new_rimage->data;
-        for (pos=0; pos<len; ++pos, src+=4, dst+=4) {
-            dst[0] = src[2]; /* R */
-            dst[1] = src[1]; /* G */
-            dst[2] = src[0]; /* B */
-            dst[3] = src[3]; /* A */
-        }
-
-        if (new_rimage) {
-            if (wwin->net_icon_image)
-                RReleaseImage(wwin->net_icon_image);
-            wwin->net_icon_image = new_rimage;
-        }
-
-        XFree(prop_return);
+    if (XGetWindowProperty(dpy, wwin->client_win, net_wm_icon, 0L, LONG_MAX,
+                           False, XA_CARDINAL, &type, &format, &items, &rest,
+                           (unsigned char**)&property)!=Success || !property) {
+        return;
     }
+
+    if (type!=XA_CARDINAL || format!=32 || items<2) {
+        XFree(property);
+        return;
+    }
+
+    data = findBestIcon(property, items);
+    if (!data) {
+        XFree(property);
+        return;
+    }
+
+    image = makeRImageFromARGBData(data);
+
+    if (image) {
+        if (wwin->net_icon_image)
+            RReleaseImage(wwin->net_icon_image);
+        wwin->net_icon_image = image;
+    }
+
+    XFree(property);
 }
 
 
@@ -1584,7 +1646,7 @@ wNETWMGetIconName(Window window)
     char *name;
     char *ret;
     int size;
-    
+
     name= (char*)PropGetCheckProperty(window,
                                       net_wm_icon_name, utf8_string, 0,
                                       0, &size);
