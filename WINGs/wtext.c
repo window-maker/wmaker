@@ -12,7 +12,7 @@
  * -  FIX wrap... long lines that don't fit are not char wrapped yet.
  * -            hrm... something to do with already having tbs...
  * -  selection code... selects can be funny if it crosses over. use rect?
- *-       also inspect behaviour for WACenter and WARight
+ * -       also inspect behaviour for WACenter and WARight
  * -  FIX: graphix blocks MUST be skipped if monoFont even though they exist!
  * -  check if support for Horizontal Scroll is complete
  * -  assess danger of destroying widgets whose actions link to other pages
@@ -3603,7 +3603,7 @@ WMSetTextIgnoresNewline(WMText *tPtr, Bool ignore)
 {
     if (!tPtr)
         return;
-   /* tPtr->flags.ignoreNewLine = ignore;*/
+    tPtr->flags.ignoreNewLine = ignore;
 }
 
 Bool
