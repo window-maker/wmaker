@@ -1,5 +1,5 @@
 Makefile Makefile.in
-config.h config.h.in wconfig.h stamp-h
+config.h config.h.in wconfig.h stamp-h stamp-h.in
 .libs
 wmaker
 .psrc .inslog2 tca.map tca.log
