@@ -115,7 +115,6 @@ static WMEventHook *extraEventHandler=NULL;
 
 #define timerPending()	(timerHandler)
 
-#define idlePending()	(idleHandler)
 
 
 static void
@@ -322,16 +321,15 @@ WMDeleteInputHandler(WMHandlerID handlerID)
 }
 
 
-static void
+static Bool
 checkIdleHandlers()
 {
     IdleHandler *handler, *tmp;
 
     if (!idleHandler) {
-	W_FlushIdleNotificationQueue();
-	return;
+	return False;
     }
-
+    
     handler = idleHandler;
     
     /* we will process all idleHandlers so, empty the handler list */
@@ -345,7 +343,8 @@ checkIdleHandlers()
 	
 	handler = tmp;
     }
-    W_FlushIdleNotificationQueue();
+    
+    return True;
 }
 
 
@@ -922,9 +921,10 @@ WMNextEvent(Display *dpy, XEvent *event)
     while (XPending(dpy) == 0) {
 	/* Do idle stuff */
 	/* Do idle and timer stuff while there are no timer or X events */
-	while (!XPending(dpy) && idlePending()) {
-	    if (idlePending())
-		checkIdleHandlers();
+	while (!XPending(dpy) && checkIdleHandlers()) {
+
+	    W_FlushIdleNotificationQueue();
+	    
 	    /* dispatch timer events */
 	    if (timerPending())
 		checkTimerHandlers();
@@ -958,8 +958,10 @@ WMMaskEvent(Display *dpy, long mask, XEvent *event)
 
     while (!XCheckMaskEvent(dpy, mask, event)) {
 	/* Do idle stuff while there are no timer or X events */
-	while (idlePending()) {
-	    checkIdleHandlers();
+	while (checkIdleHandlers()) {
+	    
+	    W_FlushIdleNotificationQueue();
+	    
 	    if (XCheckMaskEvent(dpy, mask, event))
 		return;
 	}
@@ -1004,8 +1006,10 @@ WMMaskEvent(Display *dpy, long mask, XEvent *event)
 { 
     while (!XCheckMaskEvent(dpy, mask, event)) {
 	/* Do idle stuff while there are no timer or X events */
-	while (idlePending()) {
-	    checkIdleHandlers();
+	while (checkIdleHandlers()) {
+
+	    W_FlushIdleNotificationQueue();
+	    
 	    if (XCheckMaskEvent(dpy, mask, event))
 		return;
 	}
