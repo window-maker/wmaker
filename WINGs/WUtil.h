@@ -556,6 +556,11 @@ void WMSaveUserDefaults(WMUserDefaults *database);
 
 void WMEnableUDPeriodicSynchronization(WMUserDefaults *database, Bool enable);
 
+/* Returns a PLArray with all keys in the user defaults database.
+ * Free the returned array with PLRelease() when no longer needed,
+ * but do not free the elements of the array! They're just references. */
+proplist_t WMGetUDAllKeys(WMUserDefaults *database);
+
 proplist_t WMGetUDObjectForKey(WMUserDefaults *database, char *defaultName);
 
 void WMSetUDObjectForKey(WMUserDefaults *database, proplist_t object,
@@ -563,7 +568,7 @@ void WMSetUDObjectForKey(WMUserDefaults *database, proplist_t object,
 
 void WMRemoveUDObjectForKey(WMUserDefaults *database, char *defaultName);
 
-/* you can free the returned string */
+/* Free the returned string when no longer needed */
 char *WMGetUDStringForKey(WMUserDefaults *database, char *defaultName);
 
 int WMGetUDIntegerForKey(WMUserDefaults *database, char *defaultName);

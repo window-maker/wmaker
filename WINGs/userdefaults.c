@@ -411,6 +411,16 @@ WMGetDefaultsFromPath(char *path)
 }
 
 
+/* Returns a PLArray with all keys in the user defaults database.
+ * Free the returned array with PLRelease() when no longer needed,
+ * but do not free the elements of the array! They're just references. */
+proplist_t
+WMGetUDAllKeys(WMUserDefaults *database)
+{
+    return PLGetAllDictionaryKeys(database->defaults);
+}
+
+
 proplist_t
 WMGetUDObjectForKey(WMUserDefaults *database, char *defaultName)
 {
