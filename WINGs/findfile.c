@@ -160,6 +160,27 @@ wexpandpath(char *path)
 }
 
 
+/* return address of next char != tok or end of string whichever comes first */
+static char*
+skipchar(char *string, char tok)
+{
+    while(*string!=0 && *string==tok)
+        string++;
+
+    return string;
+}
+
+
+/* return address of next char == tok or end of string whichever comes first */
+static char*
+nextchar(char *string, char tok)
+{
+    while(*string!=0 && *string!=tok)
+        string++;
+
+    return string;
+}
+
 
 /*
  *----------------------------------------------------------------------
@@ -180,15 +201,14 @@ char*
 wfindfile(char *paths, char *file)
 {
     char *path;
-    char *tmp;
-    int done;
+    char *tmp, *tmp2;
     int len, flen;
     char *fullpath;
 
     if (!file)
 	return NULL;
     
-    if (*file=='/' || *file=='~' || *file=='$' || !paths) {
+    if (*file=='/' || *file=='~' || *file=='$' || !paths || *paths==0) {
 	if (access(file, F_OK)<0) {
 	    fullpath = wexpandpath(file);
 	    if (!fullpath)
@@ -207,26 +227,29 @@ wfindfile(char *paths, char *file)
 
     flen = strlen(file);
     tmp = paths;
-    done = 0;
-    while (!done) {
-	len = strcspn(tmp, ":");
-	if (len==0) done=1;
-	path = wmalloc(len+flen+2);
-	path = memcpy(path, tmp, len);
-	path[len]=0;
-	strcat(path, "/");
-	strcat(path, file);
-	fullpath = wexpandpath(path);
-	wfree(path);
-	if (fullpath) {
-	    if (access(fullpath, F_OK)==0) {
-		return fullpath;
-	    }
-	    wfree(fullpath);
-	}
-	tmp=&(tmp[len+1]);
-	if (*tmp==0) break;
+    while (*tmp) {
+        tmp = skipchar(tmp, ':');
+        if (*tmp==0)
+            break;
+        tmp2 = nextchar(tmp, ':');
+        len = tmp2 - tmp;
+        path = wmalloc(len+flen+2);
+        path = memcpy(path, tmp, len);
+        path[len]=0;
+        if (path[len-1] != '/')
+            strcat(path, "/");
+        strcat(path, file);
+        fullpath = wexpandpath(path);
+        wfree(path);
+        if (fullpath) {
+            if (access(fullpath, F_OK)==0) {
+                return fullpath;
+            }
+            wfree(fullpath);
+        }
+        tmp = tmp2;
     }
+
     return NULL;
 }
 

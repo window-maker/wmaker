@@ -38,9 +38,14 @@ typedef struct SelectionCallback {
 } SelectionCallback;
 
 
-WMArray *selCallbacks = NULL;
 
-WMArray *selHandlers = NULL;
+static WMArray *selCallbacks = NULL;
+
+static WMArray *selHandlers = NULL;
+
+static Bool gotXError = False;
+
+
 
 
 void
@@ -53,8 +58,9 @@ WMDeleteSelectionHandler(WMView *view, Atom selection, Time timestamp)
 
     if (!selHandlers)
         return;
-    
-    
+
+    //printf("deleting selection handler for %d\n", win);
+
     WM_ITERATE_ARRAY(selHandlers, handler, iter) {
 	if (handler->view == view
 	    && (handler->selection == selection || selection == None)
@@ -64,7 +70,8 @@ WMDeleteSelectionHandler(WMView *view, Atom selection, Time timestamp)
 		handler->flags.delete_pending = 1;
 		return;
 	    }
-	    WMRemoveFromArray(selHandlers, handler);
+            //puts("found & removed");
+            WMRemoveFromArray(selHandlers, handler);
 	    break;
         }
     }
@@ -103,20 +110,20 @@ WMDeleteSelectionCallback(WMView *view, Atom selection, Time timestamp)
 }
 
 
-
-static Bool gotError = 0;
-/*
 static int
-errorHandler(XErrorEvent *error)
+handleXError(Display *dpy, XErrorEvent *ev)
 {
-    return 0;
+    gotXError = True;
+
+    return 1;
 }
-*/
+
 
 static Bool
 writeSelection(Display *dpy, Window requestor, Atom property, Atom type,
 	       WMData *data)
 {
+    static void *oldHandler;
     int format, bpi;
 
     format = WMGetDataFormat(data);
@@ -127,23 +134,18 @@ writeSelection(Display *dpy, Window requestor, Atom property, Atom type,
 
     /* printf("write to %x: %s\n", requestor, XGetAtomName(dpy, property)); */
 
-    gotError = False;
+    oldHandler = XSetErrorHandler(handleXError);
 
-#ifndef __sgi
-    if (!XChangeProperty(dpy, requestor, property, type, format,
-                         PropModeReplace, WMDataBytes(data),
-                         WMGetDataLength(data)/bpi))
-        return False;
-#else
-    /* in sgi seems this seems to return void */
-    XChangeProperty(dpy, requestor, property, type, format,
-                    PropModeReplace, WMDataBytes(data),
-                    WMGetDataLength(data)/bpi);
-#endif
+    gotXError = False;
+
+    XChangeProperty(dpy, requestor, property, type, format, PropModeReplace,
+                    WMDataBytes(data), WMGetDataLength(data)/bpi);
 
     XFlush(dpy);
 
-    return !gotError;
+    XSetErrorHandler(oldHandler);
+
+    return !gotXError;
 }
 
 
@@ -341,6 +343,7 @@ handleNotifyEvent(XEvent *event)
 void
 W_HandleSelectionEvent(XEvent *event)
 {
+    //printf("%d received %d\n", event->xany.window, event->type);
     if (event->type == SelectionNotify) {
 	handleNotifyEvent(event);
     } else {
@@ -359,9 +362,11 @@ WMCreateSelectionHandler(WMView *view, Atom selection, Time timestamp,
     Display *dpy = W_VIEW_SCREEN(view)->display;
 
     XSetSelectionOwner(dpy, selection, W_VIEW_DRAWABLE(view), timestamp);
-    if (XGetSelectionOwner(dpy, selection) != W_VIEW_DRAWABLE(view))
-	return False;
+    if (XGetSelectionOwner(dpy, selection) != W_VIEW_DRAWABLE(view)) {
+        return False;
+    }
 
+    //printf("created selection handler for %d\n", W_VIEW_DRAWABLE(view));
     handler = malloc(sizeof(SelectionHandler));
     if (handler == NULL)
 	return False;

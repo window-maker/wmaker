@@ -285,6 +285,7 @@ lostHandler(WMView *view, Atom selection, void *cdata)
 {
     TextField *tPtr = (WMTextField*)view->self;
 
+    //WMDeleteSelectionHandler(view, XA_PRIMARY, CurrentTime);
     tPtr->flags.ownsSelection = 0;
     tPtr->selection.count = 0;
     paintTextField(tPtr);
@@ -1447,16 +1448,6 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 
             tPtr->selection.count = tPtr->cursorPosition - tPtr->selection.position;
 
-	    if (tPtr->selection.count != 0) {
-		if (!tPtr->flags.ownsSelection) {
-		    WMCreateSelectionHandler(tPtr->view,
-					     XA_PRIMARY,
-					     event->xbutton.time,
-					     &selectionHandler, NULL);
-		    tPtr->flags.ownsSelection = 1;
-		}
-	    }
-	    
 	    paintCursor(tPtr);
 	    paintTextField(tPtr);
 
@@ -1482,7 +1473,8 @@ handleTextFieldActionEvents(XEvent *event, void *data)
             textWidth = WMWidthOfString(tPtr->font, tPtr->text, tPtr->textLen);
             if (tPtr->flags.enabled && !tPtr->flags.focused) {
                 WMSetFocusToWidget(tPtr);
-            } else if (tPtr->flags.focused) {
+            }
+            if (tPtr->flags.focused) {
 		tPtr->selection.position = tPtr->cursorPosition;
                 tPtr->selection.count = 0;
             }
@@ -1499,11 +1491,8 @@ handleTextFieldActionEvents(XEvent *event, void *data)
          case WALeft:
             if (tPtr->flags.enabled && !tPtr->flags.focused) {
                 WMSetFocusToWidget(tPtr);
-                tPtr->cursorPosition = pointToCursorPosition(tPtr, 
-                                     event->xbutton.x);
-                paintTextField(tPtr);
-            } else if (tPtr->flags.focused 
-		       && event->xbutton.button == Button1) {
+            }
+            if (tPtr->flags.focused && event->xbutton.button == Button1) {
                 tPtr->cursorPosition = pointToCursorPosition(tPtr, 
                                      event->xbutton.x);
 		tPtr->selection.position = tPtr->cursorPosition;
@@ -1574,10 +1563,20 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 					 event->xbutton.time,
 					 &selectionHandler, NULL);
 		tPtr->flags.ownsSelection = 1;
-	    }
-	    
-	    WMPostNotificationName("_lostOwnership", NULL, tPtr);
-	}
+                //puts("lost ownership");
+                WMPostNotificationName("_lostOwnership", NULL, tPtr);
+            }
+	} else if (!tPtr->flags.secure && tPtr->selection.count!=0 &&
+                   !tPtr->flags.ownsSelection) {
+            WMCreateSelectionHandler(tPtr->view,
+                                     XA_PRIMARY,
+                                     event->xbutton.time,
+                                     &selectionHandler, NULL);
+            tPtr->flags.ownsSelection = 1;
+            //puts("lost ownership");
+            WMPostNotificationName("_lostOwnership", NULL, tPtr);
+        }
+
 	lastButtonReleasedEvent = event->xbutton.time;
 		
         break;
@@ -1602,3 +1601,5 @@ destroyTextField(TextField *tPtr)
 
     wfree(tPtr);
 }
+
+

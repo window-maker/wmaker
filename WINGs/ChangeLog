@@ -1,3 +1,9 @@
+Changes since wmaker 0.80.0:
+............................
+
+- fixed a bug in wfindfile() (rewrote wfindfile() with better logic).
+
+
 Changes since wmaker 0.70.0:
 ............................
 

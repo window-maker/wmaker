@@ -290,7 +290,7 @@ Bool copyAllFiles(char *gsdir)
     FILE *f;
     char path[2048];
     char file[256];
-    char target[256];
+    char target[2048];
 
     /* copy misc data files */
 
@@ -298,7 +298,7 @@ Bool copyAllFiles(char *gsdir)
     
     f = fopen(path, "r");
     while (!feof(f)) {
-	if (!fgets(path, 255, f)) {
+	if (!fgets(file, 255, f)) {
 	    break;
 	}
 	sprintf(path, "%s/%s", DATADIR, file);
