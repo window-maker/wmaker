@@ -45,6 +45,7 @@ prefsdata_DATA =\
 	plmenu.fr\
 	plmenu.hr\
 	plmenu.it\
+	plmenu.ja\
 	plmenu.ko\
 	plmenu.pl\
 	plmenu.ro\
