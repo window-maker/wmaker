@@ -851,6 +851,7 @@ WMGetHangedData(WMWidget *widget)
 void
 WMDestroyWidget(WMWidget *widget)
 {
+    W_UnmapView(W_VIEW(widget));
     W_DestroyView(W_VIEW(widget));
 }
 

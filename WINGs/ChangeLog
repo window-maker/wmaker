@@ -39,6 +39,7 @@ changes since wmaker 0.62.1:
 - WMBrowser now allows multiple selections.
 - Added WMGetBrowserPaths() to retrieve the paths for browsers that allow
   multiple selections.
+- WMDestroyWidget() now calls WMUnmapWidget() first
 
 
 changes since wmaker 0.62.0:

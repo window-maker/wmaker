@@ -346,10 +346,10 @@ W_UnmapView(W_View *view)
     view->flags.mapWhenRealized = 0;
     if (!view->flags.mapped)
 	return;
-  
+
     XUnmapWindow(view->screen->display, view->window);
     XFlush(view->screen->display);
-    
+
     view->flags.mapped = 0;
 }
 

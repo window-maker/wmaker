@@ -1002,7 +1002,6 @@ toggleItemSelection(WMList *lPtr, int index)
     }
 }
 
-#define behavior2
 
 static void
 handleActionEvents(XEvent *event, void *data)
@@ -1040,10 +1039,6 @@ handleActionEvents(XEvent *event, void *data)
         break;
 
     case EnterNotify:
-#ifndef behavior2
-        lPtr->flags.buttonPressed = lPtr->flags.buttonWasPressed;
-        lPtr->flags.buttonWasPressed = 0;
-#endif
         if (lPtr->selectID) {
             WMDeleteTimerHandler(lPtr->selectID);
             lPtr->selectID = NULL;
@@ -1051,18 +1046,8 @@ handleActionEvents(XEvent *event, void *data)
         break;
 
     case LeaveNotify:
-#ifndef behavior2
-        lPtr->flags.buttonWasPressed = lPtr->flags.buttonPressed;
-        lPtr->flags.buttonPressed = 0;
-#endif
-
         height = WMWidgetHeight(lPtr);
-
-#ifdef behavior2
         if (lPtr->flags.buttonPressed && !lPtr->selectID) {
-#else
-        if (lPtr->flags.buttonWasPressed && !lPtr->selectID) {
-#endif
             if (event->xcrossing.y >= height) {
                 lPtr->selectID = WMAddTimerHandler(SCROLL_DELAY,
                                                    scrollForwardSelecting,
@@ -1148,15 +1133,12 @@ handleActionEvents(XEvent *event, void *data)
         break;
 
     case MotionNotify:
-#ifdef behavior2
         height = WMWidgetHeight(lPtr);
         if (lPtr->selectID && event->xmotion.y>0 && event->xmotion.y<height) {
             WMDeleteTimerHandler(lPtr->selectID);
             lPtr->selectID = NULL;
         }
-#endif
         if (lPtr->flags.buttonPressed && !lPtr->selectID) {
-#ifdef behavior2
             if (event->xmotion.y <= 0) {
                 lPtr->selectID = WMAddTimerHandler(SCROLL_DELAY,
                                                    scrollBackwardSelecting,
@@ -1168,7 +1150,6 @@ handleActionEvents(XEvent *event, void *data)
                                                    lPtr);
                 break;
             }
-#endif
 
             tmp = getItemIndexAt(lPtr, event->xmotion.y);
             if (tmp>=0 && tmp!=prevItem) {

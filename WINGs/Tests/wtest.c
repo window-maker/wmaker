@@ -29,7 +29,6 @@ int windowCount = 0;
 void
 closeAction(WMWidget *self, void *data)
 {
-    WMUnmapWidget(self);
     WMDestroyWidget(self);
     windowCount--;
     printf("window closed, window count = %d\n", windowCount);
@@ -1207,6 +1206,10 @@ main(int argc, char **argv)
      */
 
     testList(scr);
+    testColorWell(scr);
+
+    testTextField(scr);
+    testText(scr);
 
 #if 0
     testColorWell(scr);
