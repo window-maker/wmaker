@@ -62,7 +62,7 @@ WMDeleteSelectionHandler(WMView *view, Atom selection, Time timestamp)
     if (!selHandlers)
         return;
 
-    printf("deleting selection handler for %d", win);
+    /*//printf("deleting selection handler for %d", win);*/
 
     WM_ITERATE_ARRAY(selHandlers, handler, iter) {
 	if (handler->view == view
@@ -71,16 +71,16 @@ WMDeleteSelectionHandler(WMView *view, Atom selection, Time timestamp)
 
 	    if (handler->flags.done_pending) {
 		handler->flags.delete_pending = 1;
-                puts(": postponed because still pending");
+                /*//puts(": postponed because still pending");*/
                 return;
 	    }
-            printf(": found & removed");
+            /*//printf(": found & removed");*/
             WMRemoveFromArray(selHandlers, handler);
 	    break;
         }
     }
 
-    printf("\n");
+    /*//printf("\n");*/
 
     XGrabServer(dpy);
     if (XGetSelectionOwner(dpy, selection) == win) {
@@ -349,8 +349,8 @@ handleNotifyEvent(XEvent *event)
 void
 W_HandleSelectionEvent(XEvent *event)
 {
-    printf("%d received selection ", event->xany.window);
-    switch(event->type) {
+    /*//printf("%d received selection ", event->xany.window);*/
+    /*//switch(event->type) {
     case SelectionNotify:
         puts("notify"); break;
     case SelectionRequest:
@@ -359,7 +359,7 @@ W_HandleSelectionEvent(XEvent *event)
         puts("clear"); break;
     default:
         puts("unknown"); break;
-    }
+    }*/
 
     if (event->type == SelectionNotify) {
 	handleNotifyEvent(event);
@@ -385,7 +385,7 @@ WMCreateSelectionHandler(WMView *view, Atom selection, Time timestamp,
     WMPostNotificationName(WMSelectionOwnerDidChangeNotification,
                            (void*)selection, (void*)view);
 
-    printf("created selection handler for %d\n", W_VIEW_DRAWABLE(view));
+    /*//printf("created selection handler for %d\n", W_VIEW_DRAWABLE(view));*/
 
     handler = wmalloc(sizeof(SelectionHandler));
 

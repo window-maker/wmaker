@@ -303,8 +303,10 @@ selectionNotification(void *observerData, WMNotification *notification)
     WMView *newOwnerView = (WMView*)WMGetNotificationClientData(notification);
 
     if (observerView != newOwnerView) {
+        /*
         //if (tPtr->flags.ownsSelection)
         //    WMDeleteSelectionHandler(observerView, XA_PRIMARY, CurrentTime);
+        */
         lostSelection(observerView, XA_PRIMARY, NULL);
     }
 }
@@ -1598,7 +1600,7 @@ destroyTextField(TextField *tPtr)
 #endif
 
     WMReleaseFont(tPtr->font);
-    // use lostSelection() instead of WMDeleteSelectionHandler aici?
+    /*// use lostSelection() instead of WMDeleteSelectionHandler here?*/
     WMDeleteSelectionHandler(tPtr->view, XA_PRIMARY, CurrentTime);
     WMRemoveNotificationObserver(tPtr);
 

@@ -654,7 +654,7 @@ void WMDeleteEventHandler(WMView *view, unsigned long mask,
 
 int WMIsDoubleClick(XEvent *event);
 
-//int WMIsTripleClick(XEvent *event);
+/*int WMIsTripleClick(XEvent *event);*/
 
 void WMNextEvent(Display *dpy, XEvent *event);
 
@@ -1651,11 +1651,11 @@ void WMGetTextBlockProperties(WMText *tPtr, void *vtb, unsigned int *first,
 
 int WMGetTextInsertType(WMText *tPtr);
 
-//int WMGetTextBlocks(WMText *tPtr);
+/*int WMGetTextBlocks(WMText *tPtr);
 
-//void WMSetCurrentTextBlock(WMText *tPtr, int current);
+void WMSetCurrentTextBlock(WMText *tPtr, int current);
 
-//int WMGetCurrentTextBlock(WMText *tPtr);
+int WMGetCurrentTextBlock(WMText *tPtr);*/
 
 void WMPrependTextBlock(WMText *tPtr, void *vtb);
 

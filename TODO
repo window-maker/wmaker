@@ -9,6 +9,8 @@ Do ASAP:
 - finish session stuff
 - add multiline support for balloons
 - remove colors_per_channel stuff from wmaker after?
++ finish the ability to browse for files/dirs in the WPrefs menu editor
++ finish selections and DND stuff in WINGs
 
 Need to do:
 ===========

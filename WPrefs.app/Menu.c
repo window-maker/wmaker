@@ -731,7 +731,7 @@ createPanel(_Panel *p)
     /* pipe */
 
     panel->pipeF = WMCreateFrame(panel->optionsF);
-    WMResizeWidget(panel->pipeF, width, 150);
+    WMResizeWidget(panel->pipeF, width, 155);
     WMMoveWidget(panel->pipeF, 10, 30);
     WMSetFrameTitle(panel->pipeF, _("Command"));
 
