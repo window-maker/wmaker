@@ -5,3 +5,4 @@ libtool ltconfig ltmain.sh
 .psrc .inslog2 tca.map tca.log
 *.rpt
 update update-autoconf
+libwmfun*.tar.gz
