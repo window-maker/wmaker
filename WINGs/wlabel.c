@@ -192,6 +192,7 @@ WMSetLabelTextColor(WMLabel *lPtr, WMColor *color)
 void
 WMSetLabelWraps(WMLabel *lPtr, Bool flag)
 {
+    flag = ((flag==0) ? 0 : 1);
     if (lPtr->flags.noWrap != !flag) {
 	lPtr->flags.noWrap = !flag;
 	if (lPtr->view->flags.realized)

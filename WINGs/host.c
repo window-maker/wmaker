@@ -213,7 +213,7 @@ WMReleaseHost(WMHost *hPtr)
 void
 WMSetHostCacheEnabled(Bool flag)
 {
-    hostCacheEnabled = flag;
+    hostCacheEnabled = ((flag==0) ? 0 : 1);
 }
 
 

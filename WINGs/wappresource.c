@@ -120,7 +120,7 @@ WMCreateApplicationIconBlendedPixmap(WMScreen *scr, RColor *color)
 void
 WMSetApplicationHasAppIcon(WMScreen *scr, Bool flag)
 {
-    scr->aflags.hasAppIcon = flag;
+    scr->aflags.hasAppIcon = ((flag==0) ? 0 : 1);
 }
 
 

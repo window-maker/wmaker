@@ -554,6 +554,7 @@ WMSetWindowLevel(WMWindow *win, int level)
 void
 WMSetWindowDocumentEdited(WMWindow *win, Bool flag)
 {
+    flag = ((flag==0) ? 0 : 1);
     if (win->flags.documentEdited != flag) {
 	win->flags.documentEdited = flag;
 	if (win->view->flags.realized)

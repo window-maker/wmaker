@@ -925,6 +925,8 @@ WMSetConnectionNonBlocking(WMConnection *cPtr, Bool flag)
 {
     wassertrv(cPtr!=NULL && cPtr->sock>=0, False);
 
+    flag = ((flag==0) ? 0 : 1);
+
     if (cPtr->isNonBlocking == flag)
         return True;
 
@@ -942,7 +944,7 @@ WMSetConnectionCloseOnExec(WMConnection *cPtr, Bool flag)
 {
     wassertrv(cPtr!=NULL && cPtr->sock>=0, False);
 
-    if (fcntl(cPtr->sock, F_SETFD, (flag ? FD_CLOEXEC : 0)) < 0) {
+    if (fcntl(cPtr->sock, F_SETFD, ((flag==0) ? 0 : FD_CLOEXEC)) < 0) {
         return False;
     }
 

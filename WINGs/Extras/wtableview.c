@@ -106,7 +106,7 @@ void WMSetTableColumnConstraints(WMTableColumn *column,
 
 void WMSetTableColumnEditable(WMTableColumn *column, Bool flag)
 {
-    column->editable = flag;
+    column->editable = ((flag==0) ? 0 : 1);
 }
 
 

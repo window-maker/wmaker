@@ -837,7 +837,7 @@ WMSetSplitViewVertical(WMSplitView *sPtr, Bool flag)
     
     CHECK_CLASS(sPtr, WC_SplitView);
 
-    vertical = (flag) ? 1 : 0;
+    vertical = ((flag==0) ? 0 : 1);
     if (sPtr->flags.vertical == vertical)
     	return;
     

@@ -192,7 +192,7 @@ WMRemovePopUpButtonItem(WMPopUpButton *bPtr, int index)
 void
 WMSetPopUpButtonEnabled(WMPopUpButton *bPtr, Bool flag)
 {
-    bPtr->flags.enabled = flag;
+    bPtr->flags.enabled = ((flag==0) ? 0 : 1);
     if (bPtr->view->flags.mapped)
 	paintPopUpButton(bPtr);
 }
@@ -252,7 +252,7 @@ WMSetPopUpButtonText(WMPopUpButton *bPtr, char *text)
 void 
 WMSetPopUpButtonItemEnabled(WMPopUpButton *bPtr, int index, Bool flag)
 {
-    WMSetMenuItemEnabled(WMGetFromArray(bPtr->items, index), flag);
+    WMSetMenuItemEnabled(WMGetFromArray(bPtr->items, index), (flag ? 1 : 0));
 }
 
 
@@ -266,7 +266,7 @@ WMGetPopUpButtonItemEnabled(WMPopUpButton *bPtr, int index)
 void
 WMSetPopUpButtonPullsDown(WMPopUpButton *bPtr, Bool flag)
 {
-    bPtr->flags.pullsDown = flag;
+    bPtr->flags.pullsDown = ((flag==0) ? 0 : 1);
     if (flag) {
 	bPtr->selectedItemIndex = -1;
     }

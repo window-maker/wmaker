@@ -1650,7 +1650,7 @@ int WMGetTextInsertType(WMText *tPtr);
 
 //int WMGetCurrentTextBlock(WMText *tPtr);
 
-//void WMPrependTextBlock(WMText *tPtr, void *vtb);
+void WMPrependTextBlock(WMText *tPtr, void *vtb);
 
 void WMAppendTextBlock(WMText *tPtr, void *vtb);
 

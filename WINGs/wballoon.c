@@ -151,7 +151,7 @@ WMSetBalloonDelay(WMScreen *scr, int delay)
 void
 WMSetBalloonEnabled(WMScreen *scr, Bool flag)
 {
-    scr->balloon->flags.enabled = flag;
+    scr->balloon->flags.enabled = ((flag==0) ? 0 : 1);
 
     W_UnmapView(scr->balloon->view);
 }

@@ -96,7 +96,7 @@ WMGetMenuItemEnabled(WMMenuItem *item)
 void
 WMSetMenuItemEnabled(WMMenuItem *item, Bool flag)
 {
-    item->flags.enabled = flag;
+    item->flags.enabled = ((flag==0) ? 0 : 1);
 }
 
 

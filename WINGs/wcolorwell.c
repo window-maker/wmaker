@@ -229,6 +229,7 @@ WMGetColorWellColor(WMColorWell *cPtr)
 void
 WSetColorWellBordered(WMColorWell *cPtr, Bool flag)
 {
+    flag = ((flag==0) ? 0 : 1);
     if (cPtr->flags.bordered != flag) {
 	cPtr->flags.bordered = flag;
 	W_ResizeView(cPtr->view, cPtr->view->size.width, cPtr->view->size.height);

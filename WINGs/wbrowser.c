@@ -156,7 +156,7 @@ WMSetBrowserAllowMultipleSelection(WMBrowser *bPtr, Bool flag)
 {
     int i;
 
-    bPtr->flags.allowMultipleSelection = flag ? 1 : 0;
+    bPtr->flags.allowMultipleSelection = ((flag==0) ? 0 : 1);
     for (i=0; i<bPtr->columnCount; i++) {
 	WMSetListAllowMultipleSelection(bPtr->columns[i], flag);
     }
@@ -168,7 +168,7 @@ WMSetBrowserAllowEmptySelection(WMBrowser *bPtr, Bool flag)
 {
     int i;
 
-    bPtr->flags.allowEmptySelection = flag ? 1 : 0;
+    bPtr->flags.allowEmptySelection = ((flag==0) ? 0 : 1);
     for (i=0; i<bPtr->columnCount; i++) {
 	WMSetListAllowEmptySelection(bPtr->columns[i], flag);
     }
@@ -422,6 +422,8 @@ WMSetBrowserTitled(WMBrowser *bPtr, Bool flag)
 {
     int i;
     int columnX, columnY;
+
+    flag = ((flag==0) ? 0 : 1);
 
     if (bPtr->flags.isTitled == flag)
 	return;

@@ -219,7 +219,7 @@ WMSetSliderContinuous(WMSlider *slider, Bool flag)
 {
     CHECK_CLASS(slider, WC_Slider);
     
-    slider->flags.continuous = flag;
+    slider->flags.continuous = ((flag==0) ? 0 : 1);
 }
 
 

@@ -708,7 +708,7 @@ WMGetViewPosition(WMView *view)
 void
 WMSetViewNotifySizeChanges(WMView *view, Bool flag)
 {
-    view->flags.notifySizeChanged = flag;
+    view->flags.notifySizeChanged = ((flag==0) ? 0 : 1);
 }
 
 

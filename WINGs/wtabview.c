@@ -276,7 +276,7 @@ WMAddItemInTabView(WMTabView *tPtr, WMTabViewItem *item)
 void
 WMSetTabViewEnabled(WMTabView *tPtr, Bool flag)
 {
-    tPtr->flags.enabled = (flag ? 1 : 0);
+    tPtr->flags.enabled = ((flag==0) ? 0 : 1);
     if (W_VIEW_REALIZED(tPtr->view))
 	paintTabView(tPtr);
 }
@@ -969,7 +969,7 @@ WMCreateTabViewItem(int identifier, char *label)
 void
 WMSetTabViewItemEnabled(WMTabViewItem *tPtr, Bool flag)
 {
-    tPtr->flags.enabled = (flag ? 1 : 0);
+    tPtr->flags.enabled = ((flag==0) ? 0 : 1);
     if (tPtr->tabView && W_VIEW_REALIZED(tPtr->tabView->view))
 	paintTabView(tPtr->tabView);
 }

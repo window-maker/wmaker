@@ -145,14 +145,14 @@ WMCreateList(WMWidget *parent)
 void
 WMSetListAllowMultipleSelection(WMList *lPtr, Bool flag)
 {
-    lPtr->flags.allowMultipleSelection = flag ? 1 : 0;
+    lPtr->flags.allowMultipleSelection = ((flag==0) ? 0 : 1);
 }
 
 
 void
 WMSetListAllowEmptySelection(WMList *lPtr, Bool flag)
 {
-    lPtr->flags.allowEmptySelection = flag ? 1 : 0;
+    lPtr->flags.allowEmptySelection = ((flag==0) ? 0 : 1);
 }
 
 

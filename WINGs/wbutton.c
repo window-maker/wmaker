@@ -453,7 +453,7 @@ WMSetButtonFont(WMButton *bPtr, WMFont *font)
 void
 WMSetButtonEnabled(WMButton *bPtr, Bool flag)
 {
-    bPtr->flags.enabled = flag ? 1 : 0;
+    bPtr->flags.enabled = ((flag==0) ? 0 : 1);
 
     if (bPtr->view->flags.mapped) {
 	paintButton(bPtr);
@@ -560,7 +560,7 @@ WMGroupButtons(WMButton *bPtr, WMButton *newMember)
 void
 WMSetButtonContinuous(WMButton *bPtr, Bool flag)
 {
-    bPtr->flags.continuous = flag;
+    bPtr->flags.continuous = ((flag==0) ? 0 : 1);
     if (bPtr->timer) {
 	WMDeleteTimerHandler(bPtr->timer);
 	bPtr->timer = NULL;

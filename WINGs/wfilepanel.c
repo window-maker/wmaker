@@ -451,20 +451,20 @@ WMSetFilePanelDirectory(WMFilePanel *panel, char *path)
 void
 WMSetFilePanelCanChooseDirectories(WMFilePanel *panel, Bool flag)
 {
-    panel->flags.canChooseDirectories = flag;
+    panel->flags.canChooseDirectories = ((flag==0) ? 0 : 1);
 }
 
 void
 WMSetFilePanelCanChooseFiles(WMFilePanel *panel, Bool flag)
 {
-    panel->flags.canChooseFiles = flag;
+    panel->flags.canChooseFiles = ((flag==0) ? 0 : 1);
 }
 
 
 void
 WMSetFilePanelAutoCompletion(WMFilePanel *panel, Bool flag)
 {
-    panel->flags.autoCompletion = flag;
+    panel->flags.autoCompletion = ((flag==0) ? 0 : 1);
 }
 
 

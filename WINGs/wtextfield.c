@@ -527,7 +527,7 @@ WMSetTextFieldBeveled(WMTextField *tPtr, Bool flag)
 {
     CHECK_CLASS(tPtr, WC_TextField);
     
-    tPtr->flags.beveled = flag;
+    tPtr->flags.beveled = ((flag==0) ? 0 : 1);
 
     if (tPtr->view->flags.realized) {
 	paintTextField(tPtr);
@@ -541,7 +541,7 @@ WMSetTextFieldSecure(WMTextField *tPtr, Bool flag)
 {
     CHECK_CLASS(tPtr, WC_TextField);
     
-    tPtr->flags.secure = flag;
+    tPtr->flags.secure = ((flag==0) ? 0 : 1);
     
     if (tPtr->view->flags.realized) {
 	paintTextField(tPtr);
@@ -563,7 +563,7 @@ WMSetTextFieldEditable(WMTextField *tPtr, Bool flag)
 {
     CHECK_CLASS(tPtr, WC_TextField);
     
-    tPtr->flags.enabled = flag;
+    tPtr->flags.enabled = ((flag==0) ? 0 : 1);
     
     if (tPtr->view->flags.realized) {
 	paintTextField(tPtr);
