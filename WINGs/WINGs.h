@@ -1020,6 +1020,8 @@ void WMRemovePopUpButtonItem(WMPopUpButton *bPtr, int index);
 
 void WMSetPopUpButtonItemEnabled(WMPopUpButton *bPtr, int index, Bool flag);
 
+Bool WMGetPopUpButtonItemEnabled(WMPopUpButton *bPtr, int index);
+
 void WMSetPopUpButtonSelectedItem(WMPopUpButton *bPtr, int index);
 
 int WMGetPopUpButtonSelectedItem(WMPopUpButton *bPtr);
@@ -1032,6 +1034,8 @@ char *WMGetPopUpButtonItem(WMPopUpButton *bPtr, int index);
 int WMGetPopUpButtonNumberOfItems(WMPopUpButton *bPtr);
 
 void WMSetPopUpButtonEnabled(WMPopUpButton *bPtr, Bool flag);
+
+Bool WMGetPopUpButtonEnabled(WMPopUpButton *bPtr);
 
 /* ....................................................................... */
 

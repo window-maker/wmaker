@@ -266,6 +266,13 @@ WMSetPopUpButtonEnabled(WMPopUpButton *bPtr, Bool flag)
 }
 
 
+Bool
+WMGetPopUpButtonEnabled(WMPopUpButton *bPtr)
+{
+    return bPtr->flags.enabled;
+}
+
+
 void
 WMSetPopUpButtonSelectedItem(WMPopUpButton *bPtr, int index)
 {
@@ -330,6 +337,22 @@ WMSetPopUpButtonItemEnabled(WMPopUpButton *bPtr, int index, Bool flag)
 	item=item->nextPtr;
     
     item->disabled = !flag;
+}
+
+
+Bool
+WMGetPopUpButtonItemEnabled(WMPopUpButton *bPtr, int index)
+{
+    int i;
+    ItemList *item = bPtr->items;
+    
+    if (index < 0 || index >= bPtr->itemCount)
+	return False;
+    
+    for (i = 0; i<index; i++)
+	item=item->nextPtr;
+    
+    return !item->disabled;
 }
 
 
