@@ -26,10 +26,6 @@
 #include <X11/Xutil.h>
 #include <X11/keysym.h>
 
-// TODO: remove non-MOX_CYCLING junk
-//       fix the stacking/window raising during alt-tabbing
-//       allow selection of icons with mouse
-
 #include "WindowMaker.h"
 #include "GNUstep.h"
 #include "screen.h"
@@ -125,21 +121,22 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     }
 
     while (hasModifier && !done) {
-        WMMaskEvent(dpy, KeyPressMask|KeyReleaseMask|ExposureMask|PointerMotionMask, &ev);
+        int i;
 
-        if (ev.type != KeyRelease && ev.type != KeyPress) {
-            WMHandleEvent(&ev);
-            continue;
-        }
+        WMMaskEvent(dpy, KeyPressMask|KeyReleaseMask|ExposureMask
+                    |PointerMotionMask|EnterWindowMask|LeaveWindowMask
+                    |ButtonReleaseMask, &ev);
+
         /* ignore CapsLock */
         modifiers = ev.xkey.state & ValidModMask;
 
-        if (ev.type == KeyPress) {
+        switch (ev.type) {
+        case KeyPress:
 #ifdef DEBUG
             printf("Got key press\n");
 #endif
             if ((wKeyBindings[WKBD_FOCUSNEXT].keycode == ev.xkey.keycode
-                && wKeyBindings[WKBD_FOCUSNEXT].modifier == modifiers)
+                 && wKeyBindings[WKBD_FOCUSNEXT].modifier == modifiers)
                 || ev.xkey.keycode == rightKey) {
 
                 if (swpanel) {
@@ -183,16 +180,6 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
                         }
                     }
                 }
-            } else if (ev.type == MotionNotify) {
-                WWindow *tmp;
-                if (swpanel) {
-                    tmp = wSwitchPanelHandleEvent(swpanel, &ev);
-                    if (tmp) {
-                        newFocused = tmp;
-                        wWindowFocus(newFocused, oldFocused);
-                        oldFocused = newFocused;
-                    }
-                }
             } else {
 #ifdef DEBUG
                 printf("Got something else\n");
@@ -200,9 +187,8 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
                 somethingElse = True;
                 done = True;
             }
-        } else if (ev.type == KeyRelease) {
-            int i;
-
+            break;
+        case KeyRelease:
 #ifdef DEBUG
             printf("Got key release\n");
 #endif
@@ -214,6 +200,35 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
                     break;
                 }
             }
+            break;
+
+        case EnterNotify:
+        case LeaveNotify:
+        case ButtonRelease:
+            {
+                WWindow *tmp;
+                if (swpanel) {
+                    tmp = wSwitchPanelHandleEvent(swpanel, &ev);
+                    if (tmp) {
+                        newFocused = tmp;
+                        wWindowFocus(newFocused, oldFocused);
+                        oldFocused = newFocused;
+                        
+                        if (wPreferences.circ_raise) {
+                            CommitStacking(scr);
+                            raiseWindow(swpanel, newFocused);
+                        }
+                        
+                        if (ev.type == ButtonRelease)
+                          done= True;
+                    }
+                }
+            }
+            break;
+
+        default:
+            WMHandleEvent(&ev);
+            break;
         }
     }
     if (keymap)

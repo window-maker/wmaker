@@ -463,17 +463,32 @@ WWindow *wSwitchPanelSelectFirst(WSwitchPanel *panel, int back)
 
 WWindow *wSwitchPanelHandleEvent(WSwitchPanel *panel, XEvent *event)
 {
-  WMLabel *label;
-  int i;
+    WMLabel *label;
+    int i;
+    
+    if (!panel->win)
+      return NULL;
 
-  printf("%i %i\n", event->xmotion.x, event->xmotion.y);
-  
-  WM_ITERATE_ARRAY(panel->icons, label, i) {
-    if (WMWidgetXID(label) == event->xmotion.subwindow)
-      puts("HOORAY");
-  }
-  
-  return NULL;
+    if (event->type == EnterNotify) {
+        int focus= -1;
+
+        WM_ITERATE_ARRAY(panel->icons, label, i) {
+            if (WMWidgetXID(label) == event->xcrossing.window) {
+                focus= i;
+                break;
+            }
+        }
+
+        if (focus >= 0) {
+            changeImage(panel, panel->current, 0);
+            changeImage(panel, focus, 1);
+            panel->current= focus;
+            
+            return WMGetFromArray(panel->windows, focus);
+        }
+    }
+
+    return NULL;
 }
 
 
