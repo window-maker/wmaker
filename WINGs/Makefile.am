@@ -45,6 +45,7 @@ libWINGs_a_SOURCES = 	\
 	wapplication.c \
 	wappresource.c \
 	wballoon.c \
+	wbox.c \
 	wbrowser.c \
 	wbutton.c \
 	wcolor.c \

@@ -69,6 +69,7 @@ WMCreateLabel(WMWidget *parent)
     lPtr->flags.alignment = DEFAULT_ALIGNMENT;
     lPtr->flags.relief = DEFAULT_RELIEF;
     lPtr->flags.imagePosition = DEFAULT_IMAGE_POSITION;
+    lPtr->flags.noWrap = 1;
 
     return lPtr;
 }
