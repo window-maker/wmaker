@@ -25,12 +25,6 @@
 #include <string.h>
 #include <sys/time.h>
 
-#ifdef SHAPE
-#include <X11/extensions/shape.h>
-
-extern Bool wShapeSupported;
-#endif
-
 #include "WindowMaker.h"
 #include "screen.h"
 #include "wcore.h"
@@ -40,6 +34,13 @@ extern Bool wShapeSupported;
 #include "switchpanel.h"
 #include "funcs.h"
 #include "xinerama.h"
+
+#ifdef SHAPE
+#include <X11/extensions/shape.h>
+
+extern Bool wShapeSupported;
+#endif
+
 
 struct SwitchPanel {
     WScreen *scr;
