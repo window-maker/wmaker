@@ -39,29 +39,19 @@ int RErrorCode=RERR_NONE;
 #define HAS_ALPHA(I)	((I)->format == RRGBAFormat)
 
 
+#define MAX_WIDTH 30000
+#define MAX_HEIGHT 30000
+
+
 RImage*
 RCreateImage(unsigned width, unsigned height, int alpha)
 {
     RImage *image=NULL;
-    unsigned bla1, bla2;
     
     assert(width>0 && height>0);
-    
-    /* detect overflow (gr33tz to ruda :D) */
-    bla1 = width*height;
-    if (bla1 / height != width) {
-	RErrorCode = RERR_NOMEMORY;
-	return NULL;
-    }
-    
-    bla2 = bla1*4;
-    if (bla2/4 != bla1) {
-	RErrorCode = RERR_NOMEMORY;
-	return NULL;
-    }
 
-    if (bla2 > INT_MAX - 4) {
-	RErrorCode = RERR_NOMEMORY;
+    if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+        RErrorCode = RERR_NOMEMORY;
 	return NULL;
     }
 
