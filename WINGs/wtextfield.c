@@ -1062,6 +1062,7 @@ static void
 handleTextFieldActionEvents(XEvent *event, void *data)
 {
     TextField *tPtr = (TextField*)data;
+    static int move;
     
     CHECK_CLASS(data, WC_TextField);
 
@@ -1085,29 +1086,40 @@ handleTextFieldActionEvents(XEvent *event, void *data)
             }
         }
     	else if (tPtr->viewPosition > 0 && event->xmotion.x < 0) {
-	    paintCursor(tPtr);
-	    tPtr->viewPosition--;
-	}
+            paintCursor(tPtr);
+            tPtr->viewPosition--;
+        }
 
-	if (!tPtr->selection.count) {
-	    tPtr->selection.position = tPtr->cursorPosition;
-	}
+        if (!tPtr->selection.count) {
+            tPtr->selection.position = tPtr->cursorPosition;
+        }
 
-	tPtr->cursorPosition = pointToCursorPosition(tPtr, event->xmotion.x);
+        tPtr->cursorPosition = pointToCursorPosition(tPtr, event->xmotion.x);
 
-	tPtr->selection.count = tPtr->cursorPosition - tPtr->selection.position;
+        tPtr->selection.count = tPtr->cursorPosition - tPtr->selection.position;
 
-	/*
-	printf("notify %d %d\n",event->xmotion.x,tPtr->usableWidth);
-	*/
+        /*
+        printf("notify %d %d\n",event->xmotion.x,tPtr->usableWidth);
+        */
 
-	paintCursor(tPtr);
-	paintTextField(tPtr);
+        paintCursor(tPtr);
+        paintTextField(tPtr);
 
-	}
+	    }
+        if (move) {
+        int count;
+        XSetSelectionOwner(tPtr->view->screen->display,
+                XA_PRIMARY, None, CurrentTime);
+        count = tPtr->selection.count < 0
+            ? tPtr->selection.position + tPtr->selection.count 
+            : tPtr->selection.position;
+        XStoreBuffer(tPtr->view->screen->display,
+                        &tPtr->text[count] , abs(tPtr->selection.count), 0);
+        }
 	break;
 
      case ButtonPress:
+        move = 1;
         switch (tPtr->flags.alignment) {
             int textWidth;
          case WARight:
@@ -1167,16 +1179,7 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 	break;
 
      case ButtonRelease:
-        {
-        int count;
-        XSetSelectionOwner(tPtr->view->screen->display,
-                XA_PRIMARY, None, CurrentTime);
-        count = tPtr->selection.count < 0
-            ? tPtr->selection.position + tPtr->selection.count 
-            : tPtr->selection.position;
-        XStoreBuffer(tPtr->view->screen->display,
-                        &tPtr->text[count] , abs(tPtr->selection.count), 0);
-        }
+        move = 0;
         break;
     }
 }
