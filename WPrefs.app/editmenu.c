@@ -92,6 +92,8 @@ typedef struct W_EditMenu {
 	
 	unsigned isDragging:1;
 	unsigned isEditing:1;
+	
+	unsigned wasMapped:1;
     } flags;
 } EditMenu;
 
@@ -726,6 +728,71 @@ WEditMenuIsTornOff(WEditMenu *mPtr)
 }
 
 
+
+void
+WEditMenuHide(WEditMenu *mPtr)
+{
+    WEditMenuItem *item;
+    int i = 0;
+
+    if (WMWidgetIsMapped(mPtr)) {
+	WMUnmapWidget(mPtr);
+	mPtr->flags.wasMapped = 1;
+    } else {
+	mPtr->flags.wasMapped = 0;
+    }
+    while ((item = WGetEditMenuItem(mPtr, i++))) {
+	WEditMenu *submenu;
+
+	submenu = WGetEditMenuSubmenu(mPtr, item);
+	if (submenu) {
+	    WEditMenuHide(submenu);
+	}
+    }
+}
+
+
+
+void
+WEditMenuUnhide(WEditMenu *mPtr)
+{
+    WEditMenuItem *item;
+    int i = 0;
+
+    if (mPtr->flags.wasMapped) {
+	WMMapWidget(mPtr);
+    }
+    while ((item = WGetEditMenuItem(mPtr, i++))) {
+	WEditMenu *submenu;
+
+	submenu = WGetEditMenuSubmenu(mPtr, item);
+	if (submenu) {
+	    WEditMenuUnhide(submenu);
+	}
+    }
+}
+
+
+void
+WEditMenuShowAt(WEditMenu *menu, int x, int y)
+{
+    XSizeHints *hints;
+
+    hints = XAllocSizeHints();
+
+    hints->flags = USPosition;
+    hints->x = x;
+    hints->y = y;
+
+    WMMoveWidget(menu, x, y);
+    XSetWMNormalHints(W_VIEW_DISPLAY(menu->view),
+		      W_VIEW_DRAWABLE(menu->view),
+		      hints);
+    XFree(hints);
+    WMMapWidget(menu);
+}
+
+
 static void
 updateMenuContents(WEditMenu *mPtr)
 {
@@ -790,32 +857,6 @@ updateMenuContents(WEditMenu *mPtr)
 }
 
 
-void
-WEditMenuHide(WEditMenu *menu)
-{
-    WMUnmapWidget(menu);
-
-    if (menu->selectedItem) {
-	deselectItem(menu);
-    }
-}
-
-
-void
-WEditMenuUnhide(WEditMenu *menu)
-{
-    WMMapWidget(menu);
-}
-
-
-void
-WEditMenuShowAt(WEditMenu *menu, int x, int y)
-{
-    WMMoveWidget(menu, x, y);
-    WMMapWidget(menu);
-}
-
-
 static void
 deselectItem(WEditMenu *menu)
 {
@@ -856,22 +897,10 @@ selectItem(WEditMenu *menu, WEditMenuItem *item)
 
 	if (item->submenu && !W_VIEW_MAPPED(item->submenu->view)) {
 	    WMPoint pt;
-	    XSizeHints *hints;
-
-	    hints = XAllocSizeHints();
 
 	    pt = WGetEditMenuLocationForSubmenu(menu, item->submenu);
-
-	    hints->flags = USPosition;
-	    hints->x = pt.x;
-	    hints->y = pt.y;
-
-	    WMMoveWidget(item->submenu, pt.x, pt.y);
-	    XSetWMNormalHints(W_VIEW_DISPLAY(item->submenu->view),
-			      W_VIEW_DRAWABLE(item->submenu->view),
-			      hints);
-	    XFree(hints);
-	    WMMapWidget(item->submenu);
+	    
+	    WEditMenuShowAt(item->submenu, pt.x, pt.y);
 	    
 	    item->submenu->flags.isTornOff = 0;
 	}
@@ -1306,6 +1335,9 @@ duplicateMenu(WEditMenu *menu)
 static void
 dragItem(WEditMenu *menu, WEditMenuItem *item)
 {
+    static XColor black = {0, 0,0,0, DoRed|DoGreen|DoBlue};
+    static XColor green = {0x0045b045, 0x4500,0xb000,0x4500, DoRed|DoGreen|DoBlue};
+    static XColor back = {0, 0xffff,0xffff,0xffff, DoRed|DoGreen|DoBlue};
     Display *dpy = W_VIEW_DISPLAY(menu->view);
     WMScreen *scr = W_VIEW_SCREEN(menu->view);
     int x, y;
@@ -1322,7 +1354,7 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
     WEditMenuItem *dritem = item;
     WEditMenu *dmenu = NULL;
 
-    
+
     if (item->flags.isTitle) {
 	WMRaiseWidget(menu);
 
@@ -1330,7 +1362,6 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
 
 	return;
     }
-
     
     selectItem(menu, NULL);
 
@@ -1366,6 +1397,9 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
 		 GrabModeAsync, GrabModeAsync, None, scr->defaultCursor,
 		 CurrentTime);
 
+    if (menu->flags.acceptsDrop)
+	XRecolorCursor(dpy, scr->defaultCursor, &green, &back);
+
     while (!done) {
 	XEvent ev;
 
@@ -1381,12 +1415,16 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
 
 	    if (dmenu) {
 		handleDragOver(dmenu, dview, dritem, x - dx, y - dy);
-		enteredMenu = True;
+		if (!enteredMenu) {
+		    enteredMenu = True;
+		    XRecolorCursor(dpy, scr->defaultCursor, &green, &back);
+		}
 	    } else {
 		if (enteredMenu) {
 		    W_ResizeView(dview, oldSize.width, oldSize.height);
 		    W_ResizeView(dritem->view, oldSize.width, oldSize.height);
 		    enteredMenu = False;
+		    XRecolorCursor(dpy, scr->defaultCursor, &black, &back);
 		}
 		W_MoveView(dview, x - dx, y - dy);
 	    }
@@ -1402,6 +1440,8 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
 	    break;
 	}
     }
+    XRecolorCursor(dpy, scr->defaultCursor, &black, &back);
+
     XUngrabPointer(dpy, CurrentTime);
 
     

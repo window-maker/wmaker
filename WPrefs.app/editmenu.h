@@ -63,6 +63,8 @@ WEditMenu *WCreateEditMenu(WMScreen *scr, char *title);
 
 WEditMenu *WCreateEditMenuPad(WMWidget *parent);
 
+void WEditMenuShowAt(WEditMenu *menu, int x, int y);
+
 void WSetEditMenuDelegate(WEditMenu *mPtr, WEditMenuDelegate *delegate);
 
 WEditMenuItem *WInsertMenuItemWithTitle(WEditMenu *mPtr, int index, 
@@ -101,6 +103,7 @@ WMPoint WGetEditMenuLocationForSubmenu(WEditMenu *mPtr, WEditMenu *submenu);
 void WTearOffEditMenu(WEditMenu *menu, WEditMenu *submenu);
 
 Bool WEditMenuIsTornOff(WEditMenu *mPtr);
+
 
 void WEditMenuHide(WEditMenu *menu);
 
