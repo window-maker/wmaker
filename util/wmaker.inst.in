@@ -266,7 +266,7 @@ test -f ~$GSDIR/Library/WindowMaker/exitscript || \
     cp $GLOBALDIR/exitscript.sh $GSDIR/Library/WindowMaker/exitscript
 chmod +rx $GSDIR/Library/WindowMaker/exitscript
 
-wsetfont --auto
+#wsetfont --auto
 
 # xx herbert
 if test -n "$BATCH" ; then
