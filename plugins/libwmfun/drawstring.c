@@ -199,9 +199,11 @@ widthOfFreeTypeString (unsigned char *text, int length, WPluginData *func_data,
     data = ((WPluginData*)func_data->array[0])->array[2]; /* initialized data */
 
     if (width) *width = 0;
+    if (height) *height = data->face->size->metrics.y_ppem;
     /* may finish height & top later if they really are neccessary */
 
     /* create temp for drawing */
+    if (text)
     for (i = 0; i < length; i++) {
         if (!data->glyphs_array[text[i]]) {
             data->glyphs_array[text[i]] = renderChar(data->face, (FT_ULong)text[i], &data->color);
@@ -209,8 +211,7 @@ widthOfFreeTypeString (unsigned char *text, int length, WPluginData *func_data,
         }
         if (data->glyphs_array[text[i]])
         if (data->glyphs_array[text[i]]->image) {
-            if (width)
-            *width += data->glyphs_array[text[i]]->advance_x >> 6;
+            if (width) *width += data->glyphs_array[text[i]]->advance_x >> 6;
         }
     }
 }
