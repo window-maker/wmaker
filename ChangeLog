@@ -1,3 +1,10 @@
+Changes since version 0.53.0:
+.............................
+
+- fixed a bug that caused icon overlaping in Clip, when icon was moved around.
+- this time really added libwmfun to distribution.
+
+
 Changes since version 0.52.0:
 .............................
 

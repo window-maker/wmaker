@@ -2307,6 +2307,9 @@ wDockDetach(WDock *dock, WAppIcon *icon)
  * coordinates.
  * 
  * Returns False if icon can't be docked.
+ *
+ * Note: this function should NEVER alter ret_x or ret_y, unless it will
+ * return True. -Dan
  */
 Bool
 wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, 
@@ -2365,8 +2368,6 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
 	    }
 	}
 
-	*ret_x = 0;
-
 	if (redocking) {
 	    int sig, done, closest;
 
@@ -2380,12 +2381,10 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
 	    if (abs(ex_x) > DOCK_DETTACH_THRESHOLD)
 		return False;
 
-	    if (ex_y >= 0 && ex_y <= max_y_icons && (aicon == icon || !aicon)) {
-
+	    if (ex_y>=0 && ex_y<=max_y_icons && (aicon==icon || !aicon)) {
+                *ret_x = 0;
 		*ret_y = ex_y;
-
-
-		return True;
+                return True;
 	    }
 
 	    /* start looking at the upper slot or lower? */
@@ -2420,15 +2419,15 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
 		((ex_y >= closest && ex_y - closest < DOCK_DETTACH_THRESHOLD+1)
 		||
 		 (ex_y < closest && closest - ex_y <= DOCK_DETTACH_THRESHOLD+1))) {
-
+                *ret_x = 0;
 		*ret_y = closest;
-
 		return True;
 	    }
 	} else { /* !redocking */
 
 	    /* if slot is free and the icon is close enough, return it */
 	    if (!aicon && ex_x == 0 && ex_y >= 0 && ex_y <= max_y_icons) {
+                *ret_x = 0;
 		*ret_y = ex_y;
 		return True;
 	    }
@@ -3618,8 +3617,7 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
                 if (dock->auto_raise_lower)
                     wDockRaise(dock);
                 last_dock = dock;
-            }
-            else if (dock2) {		
+            } else if (dock2) {
                 tmp = wDockSnapIcon(dock2, aicon, x, y, &ix, &iy, False);
                 if (tmp) {
                     change_dock = 1;
@@ -3641,7 +3639,7 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 		|| (aicon->running && !(ev.xmotion.state & MOD_MASK))
 		|| (!aicon->running && tmp)) {
                 shad_x = last_dock->x_pos + ix*wPreferences.icon_size;
-		shad_y = last_dock->y_pos + iy*wPreferences.icon_size;
+                shad_y = last_dock->y_pos + iy*wPreferences.icon_size;
 		
 		XMoveWindow(dpy, scr->dock_shadow, shad_x, shad_y);
                 
