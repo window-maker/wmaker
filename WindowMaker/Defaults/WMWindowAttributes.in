@@ -70,5 +70,6 @@
   xmcd = {Icon = Radio.xpm;};
   xplaycd = {Icon = Radio.xpm;};
   xmms.Xmms = {NoAppIcon = Yes;};
+  "." = {NoAppIcon = Yes;};
   "*" = {Icon = defaultAppIcon.#extension#;SharedAppIcon = Yes;};
 }

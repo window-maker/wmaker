@@ -119,6 +119,8 @@ Changes since version 0.80.2:
 - Fixed 2 focus switching related bugs (Allan Peramaki <aperamak@cc.hut.fi>)
 - Fixed a bug that made the crash panel to be shown again and again when the
   'Restart Window Maker' option was selected, under some circumstances.
+- Workaround to avoid creating a second appicon when a KDE3 application
+  opens a config panel.
 
 
 Changes since version 0.80.1:
