@@ -87,7 +87,7 @@ void
 WMUnregisterViewDraggedTypes(WMView *view)
 {
     if (view->droppableTypes != NULL)
-	free(view->droppableTypes);
+	wfree(view->droppableTypes);
     view->droppableTypes = NULL;
 }
 
@@ -128,7 +128,7 @@ void
 WMSetViewDragDestinationProcs(WMView *view, WMDragDestinationProcs *procs)
 {
     if (view->dragDestinationProcs == NULL) {
-	free(view->dragDestinationProcs);
+	wfree(view->dragDestinationProcs);
 	view->dragDestinationProcs = wmalloc(sizeof(WMDragDestinationProcs));
     }
     *view->dragDestinationProcs = *procs;

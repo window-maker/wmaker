@@ -248,7 +248,7 @@ wWindowDestroy(WWindow *wwin)
       XFree(wwin->wm_class);
 
     if (wwin->wm_gnustep_attr)
-      free(wwin->wm_gnustep_attr);
+      wfree(wwin->wm_gnustep_attr);
 
     if (wwin->cmap_windows)
       XFree(wwin->cmap_windows);
@@ -880,7 +880,7 @@ wManageWindow(WScreen *scr, Window window)
 	    }
 	}
 	if (wstate != NULL) {
-	    free(wstate);
+	    wfree(wstate);
 	}
     }
 
@@ -2447,7 +2447,7 @@ wWindowSetShape(WWindow *wwin)
 			    0, wwin->frame->top_width, urec, count,
 			    ShapeSet, Unsorted);
     XFlush(dpy);
-    free(urec);
+    wfree(urec);
     return;
 
 alt_code:
@@ -2656,7 +2656,7 @@ wWindowGetSavedState(Window win)
            class, command);
 #endif
 
-    if (command) free(command);
+    if (command) wfree(command);
     if (instance) XFree(instance);
     if (class) XFree(class);
 
@@ -2679,11 +2679,11 @@ wWindowDeleteSavedState(WMagicNumber id)
         printf("Deleted WindowState with ID %p, for %s.%s : \"%s\"\n",
                wstate, wstate->instance, wstate->class, wstate->command);
 #endif
-        if (wstate->instance) free(wstate->instance);
-        if (wstate->class)    free(wstate->class);
-        if (wstate->command)  free(wstate->command);
-        free(wstate->state);
-        free(wstate);
+        if (wstate->instance) wfree(wstate->instance);
+        if (wstate->class)    wfree(wstate->class);
+        if (wstate->command)  wfree(wstate->command);
+        wfree(wstate->state);
+        wfree(wstate);
     } else {
 	while (tmp->next) {
 	    if (tmp->next==wstate) {
@@ -2692,11 +2692,11 @@ wWindowDeleteSavedState(WMagicNumber id)
                 printf("Deleted WindowState with ID %p, for %s.%s : \"%s\"\n",
                        wstate, wstate->instance, wstate->class, wstate->command);
 #endif
-                if (wstate->instance) free(wstate->instance);
-                if (wstate->class)    free(wstate->class);
-                if (wstate->command)  free(wstate->command);
-                free(wstate->state);
-                free(wstate);
+                if (wstate->instance) wfree(wstate->instance);
+                if (wstate->class)    wfree(wstate->class);
+                if (wstate->command)  wfree(wstate->command);
+                wfree(wstate->state);
+                wfree(wstate);
 		break;
 	    }
 	    tmp = tmp->next;
@@ -2721,11 +2721,11 @@ wWindowDeleteSavedStatesForPID(pid_t pid)
         printf("Deleted WindowState with ID %p, for %s.%s : \"%s\"\n",
                wstate, wstate->instance, wstate->class, wstate->command);
 #endif
-        if (wstate->instance) free(wstate->instance);
-        if (wstate->class)    free(wstate->class);
-        if (wstate->command)  free(wstate->command);
-        free(wstate->state);
-        free(wstate);
+        if (wstate->instance) wfree(wstate->instance);
+        if (wstate->class)    wfree(wstate->class);
+        if (wstate->command)  wfree(wstate->command);
+        wfree(wstate->state);
+        wfree(wstate);
     } else {
 	while (tmp->next) {
 	    if (tmp->next->pid==pid) {
@@ -2735,11 +2735,11 @@ wWindowDeleteSavedStatesForPID(pid_t pid)
                 printf("Deleted WindowState with ID %p, for %s.%s : \"%s\"\n",
                        wstate, wstate->instance, wstate->class, wstate->command);
 #endif
-                if (wstate->instance) free(wstate->instance);
-                if (wstate->class)    free(wstate->class);
-                if (wstate->command)  free(wstate->command);
-                free(wstate->state);
-                free(wstate);
+                if (wstate->instance) wfree(wstate->instance);
+                if (wstate->class)    wfree(wstate->class);
+                if (wstate->command)  wfree(wstate->command);
+                wfree(wstate->state);
+                wfree(wstate);
 		break;
 	    }
 	    tmp = tmp->next;

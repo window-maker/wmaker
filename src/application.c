@@ -163,7 +163,7 @@ saveIconNameFor(char *iconPath, char *wm_instance, char *wm_class)
     }
     
     key = PLMakeString(tmp); 
-    free(tmp);
+    wfree(tmp);
     adict = PLGetDictionaryEntry(dict, key);
     
     iconk = PLMakeString("Icon");
@@ -215,13 +215,13 @@ wApplicationExtractDirPackIcon(WScreen *scr, char *path,
 		iconPath = tmp;
 	}
 	if (!iconPath)
-	    free(tmp);
+	    wfree(tmp);
     }
     
     if (iconPath) {
 	saveIconNameFor(iconPath, wm_instance, wm_class);
 
-	free(iconPath);
+	wfree(iconPath);
     }
 }
 
@@ -237,7 +237,7 @@ extractClientIcon(WAppIcon *icon)
 
     saveIconNameFor(path, icon->wm_instance, icon->wm_class);
 
-    free(path);
+    wfree(path);
 
     return True;
 }
@@ -284,7 +284,7 @@ wApplicationCreate(WScreen *scr, Window main_window)
     wapp->main_window = main_window;
     wapp->main_window_desc = makeMainWindow(scr, main_window);
     if (!wapp->main_window_desc) {
-	free(wapp);
+	wfree(wapp);
 	return NULL;
     }
     
@@ -508,7 +508,7 @@ wApplicationDestroy(WApplication *wapp)
     	XSaveContext(dpy, wwin->client_win, wWinContext, 
 		     (XPointer)&wwin->client_descriptor);
     }
-    free(wapp);
+    wfree(wapp);
     
 #ifdef DEBUG
     printf("Destroyed application for %x\n", (unsigned)main_window);

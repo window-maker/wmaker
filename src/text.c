@@ -293,9 +293,9 @@ wTextDestroy( WTextInput *wtext )
   XFreeGC( dpy, wtext->gc );
   XFreeGC( dpy, wtext->regGC );
   XFreeGC( dpy, wtext->invGC );
-  free( wtext->text.txt );
+  wfree( wtext->text.txt );
   wCoreDestroy( wtext->core );
-  free( wtext );
+  wfree( wtext );
     
   LEAVE("wTextDestroy");
   }
@@ -444,7 +444,7 @@ wTextPutText( WTextInput *wtext, char *txt )
   
   /* no memory leaks!  free the old txt */
   if( wtext->text.txt != NULL )
-    free( wtext->text.txt );
+    wfree( wtext->text.txt );
   
   wtext->text.txt = (char *)wmalloc((length+1)*sizeof(char));
   strcpy(wtext->text.txt, txt );
@@ -508,7 +508,7 @@ textInsert( WTextInput *wtext, char *txt )
   wtext->text.startPos = sp+txtLen;
   wtext->text.endPos   = sp+txtLen;
   
-  free(wtext->text.txt);
+  wfree(wtext->text.txt);
   wtext->text.txt    = newTxt;
   wtext->text.length = newLen-1;
   }

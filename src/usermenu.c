@@ -128,8 +128,8 @@ static void
 removeUserMenudata(void *menudata)
 {
     WUserMenuData *data = menudata;
-    if(data->key) free(data->key);
-    free(data);
+    if(data->key) wfree(data->key);
+    wfree(data);
 }
 
 
@@ -156,7 +156,7 @@ convertShortcuts(WScreen *scr, proplist_t shortcut)
     if (!data) return NULL;
     data->key = wmalloc(sizeof(WShortKey)*keycount);
     if (!data->key) {
-        free(data);
+        wfree(data);
         return NULL;
     }
 
@@ -196,8 +196,8 @@ keyover:
     /* get key */
     if (!j) {
         puts("fatal j");
-        free(data->key);
-        free(data);
+        wfree(data->key);
+        wfree(data);
         return NULL;
     }
     data->key_no = j;
@@ -360,7 +360,7 @@ wUserMenuGet(WScreen *scr, WWindow *wwin)
         tmp=wmalloc(strlen(wwin->wm_instance)+strlen(wwin->wm_class)+7);
         sprintf(tmp,"%s.%s.menu",wwin->wm_instance,wwin->wm_class);
         path = wfindfile(DEF_USER_MENU_PATHS,tmp);
-        free(tmp);
+        wfree(tmp);
 
         if (!path) return NULL;
         
@@ -368,7 +368,7 @@ wUserMenuGet(WScreen *scr, WWindow *wwin)
             menu = readUserMenuFile(scr, path);
         }
 
-        free(path);
+        wfree(path);
     }
     return menu;
 }

@@ -930,7 +930,7 @@ StartUp(Bool defaultScreenOnly)
 	/* go to workspace where we were before restart */
 	if (ws_state) { 
 	    wWorkspaceForceChange(wScreen[j], ws_state->workspace);
-	    free(ws_state);
+	    wfree(ws_state);
 	} else {
 	    wSessionRestoreLastWorkspace(wScreen[j]);
 	}

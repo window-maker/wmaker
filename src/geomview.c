@@ -53,7 +53,7 @@ WCreateGeometryView(WMScreen *scr)
 
     gview->view = W_CreateTopView(scr);
     if (!gview->view) {
-	free(gview);
+	wfree(gview);
 
 	return NULL;
     }
@@ -62,7 +62,7 @@ WCreateGeometryView(WMScreen *scr)
     gview->font = WMSystemFontOfSize(scr, 12);
     if (!gview->font) {
 	W_DestroyView(gview->view);
-	free(gview);
+	wfree(gview);
 
 	return NULL;
     }

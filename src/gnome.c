@@ -212,7 +212,7 @@ wGNOMEUpdateClientListHint(WScreen *scr)
     XChangeProperty(dpy, scr->root_win, _XA_WIN_CLIENT_LIST, XA_CARDINAL, 32,
 		    PropModeReplace, (unsigned char *)windows, count);
 
-    free(windows);
+    wfree(windows);
     XFlush(dpy);
 }
 
@@ -586,7 +586,7 @@ wGNOMERemoveClient(WWindow *wwin)
     if (area) {
 	if (area->window == wwin->client_win) {
 	    wwin->screen_ptr->reservedAreas = area->next;
-	    free(area);
+	    wfree(area);
 	    flag = 1;
 	} else {
 	    while (area->next && area->next->window != wwin->client_win) 
@@ -596,7 +596,7 @@ wGNOMERemoveClient(WWindow *wwin)
 		WReservedArea *next;
 		
 		next = area->next->next;
-		free(area->next);
+		wfree(area->next);
 		area->next = next;
 		
 		flag = 1;

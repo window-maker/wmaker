@@ -252,15 +252,15 @@ shellCommandHandler(pid_t pid, unsigned char status, _tuple *data)
 	buffer = wstrappend(_("Could not execute command: "), data->command);
 
 	wMessageDialog(data->scr, _("Error"), buffer, _("OK"), NULL, NULL);
-	free(buffer);
+	wfree(buffer);
     } else if (status != 127) {
 	/*
 	printf("%s: %i\n", data->command, status);
 	 */
     }
 
-    free(data->command);
-    free(data);
+    wfree(data->command);
+    wfree(data);
 }
 
 
@@ -456,7 +456,7 @@ check_defaults()
 	exit(1);
     }
     
-    free(path);
+    wfree(path);
 }
 
 
@@ -467,7 +467,7 @@ execInitScript()
     char *paths = wstrappend(wusergnusteppath(), ":"DEF_CONFIG_PATHS);
 
     file = wfindfile(paths, DEF_INIT_SCRIPT);
-    free(paths);
+    wfree(paths);
 
     if (file) {
 	if (system(file) != 0) {
@@ -480,7 +480,7 @@ execInitScript()
 	    exit(1);
 	}
 #endif
-	free(file);
+	wfree(file);
     }
 }
 
@@ -492,7 +492,7 @@ ExecExitScript()
     char *paths = wstrappend(wusergnusteppath(), ":"DEF_CONFIG_PATHS);
 
     file = wfindfile(paths, DEF_EXIT_SCRIPT);
-    free(paths);
+    wfree(paths);
 
     if (file) {
 	if (system(file) != 0) {
@@ -505,7 +505,7 @@ ExecExitScript()
 	    exit(1);
 	}
 #endif
-	free(file);
+	wfree(file);
     }
 }
 

@@ -216,7 +216,7 @@ renameCallback(WMenu *menu, WMenuEntry *entry)
 	wWorkspaceRename(dock->screen_ptr, wspace, name);
     }
     if (name) {
-	free(name);
+	wfree(name);
     }
 }
 
@@ -285,6 +285,8 @@ killCallback(WMenu *menu, WMenuEntry *entry)
 	    wClientKill(icon->icon->owner);
 	}
     }
+
+    wfree(buffer);
 #endif /* !REDUCE_APPICONS */
 
     icon->editing = 0;
@@ -599,7 +601,7 @@ keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 			     &command)) {
 		if (command && (command[0]==0 ||
 				(command[0]=='-' && command[1]==0))) {
-		    free(command);
+		    wfree(command);
 		    command = NULL;
 		}
 		clickedIcon->command = command;
@@ -607,7 +609,7 @@ keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 	    } else {
 		clickedIcon->editing = 0;
 		if (command)
-		    free(command);
+		    wfree(command);
 		WMFreeBag(selectedIcons);
 		return;
 	    }
@@ -969,7 +971,7 @@ updateWorkspaceMenu(WMenu *menu, WAppIcon *icon)
     for (i=0; i<scr->workspace_count; i++) {
         if (i < menu->entry_no) {
             if (strcmp(menu->entries[i]->text,scr->workspaces[i]->name)!=0) {
-                free(menu->entries[i]->text);
+                wfree(menu->entries[i]->text);
                 strcpy(title, scr->workspaces[i]->name);
                 menu->entries[i]->text = wstrdup(title);
                 menu->flags.realized = 0;
@@ -1122,7 +1124,7 @@ dockMenuCreate(WScreen *scr, int type)
 
         entry = wMenuAddCallback(menu, _("Rename Workspace"), renameCallback,
                                  NULL);
-        free(entry->text);
+        wfree(entry->text);
         entry->text = _("Rename Workspace");
 
         entry = wMenuAddCallback(menu, _("Selected"), selectCallback, NULL);
@@ -1132,15 +1134,15 @@ dockMenuCreate(WScreen *scr, int type)
 
         entry = wMenuAddCallback(menu, _("Select All Icons"),
                                  selectIconsCallback, NULL);
-        free(entry->text);
+        wfree(entry->text);
         entry->text = _("Select All Icons");
 
         entry = wMenuAddCallback(menu, _("Keep Icon"), keepIconsCallback, NULL);
-        free(entry->text);
+        wfree(entry->text);
         entry->text = _("Keep Icon");
 
         entry = wMenuAddCallback(menu, _("Move Icon To"), NULL, NULL);
-        free(entry->text);
+        wfree(entry->text);
         entry->text = _("Move Icon To");
         scr->clip_submenu = makeWorkspaceMenu(scr);
         if (scr->clip_submenu)
@@ -1148,7 +1150,7 @@ dockMenuCreate(WScreen *scr, int type)
 
         entry = wMenuAddCallback(menu, _("Remove Icon"), removeIconsCallback,
                                  NULL);
-        free(entry->text);
+        wfree(entry->text);
         entry->text = _("Remove Icon");
 
         wMenuAddCallback(menu, _("Attract Icons"), colectIconsCallback, NULL);
@@ -1159,7 +1161,7 @@ dockMenuCreate(WScreen *scr, int type)
     wMenuAddCallback(menu, _("Unhide Here"), unhideHereCallback, NULL);
 
     entry = wMenuAddCallback(menu, _("Hide"), hideCallback, NULL);
-    free(entry->text);
+    wfree(entry->text);
     entry->text = _("Hide");
 
     wMenuAddCallback(menu, _("Settings..."), settingsCallback, NULL);
@@ -1246,12 +1248,12 @@ wDockDestroy(WDock *dock)
     }
     if (wPreferences.auto_arrange_icons)
         wArrangeIcons(dock->screen_ptr, True);
-    free(dock->icon_array);
+    wfree(dock->icon_array);
     if (dock->menu && dock->type!=WM_CLIP)
         wMenuDestroy(dock->menu, True);
     if (dock->screen_ptr->last_dock == dock)
         dock->screen_ptr->last_dock = NULL;
-    free(dock);
+    wfree(dock);
 }
 
 
@@ -1294,7 +1296,7 @@ wClipIconPaint(WAppIcon *aicon)
     WMDrawString(scr->wmscreen, win, gc, scr->clip_title_font, tx,
 		 2, ws_number, nlength);
 
-    free(ws_name);
+    wfree(ws_name);
 
     if (aicon->launching) {
 	XFillRectangle(dpy, aicon->icon->core->window, scr->stipple_gc,
@@ -1345,7 +1347,7 @@ make_icon_state(WAppIcon *btn)
 
 	name = PLMakeString(tmp);
 
-	free(tmp);
+	wfree(tmp);
 
 	forced = btn->forced_dock ? dYes : dNo;
 
@@ -1565,11 +1567,11 @@ restore_icon_state(WScreen *scr, proplist_t info, int type, int index)
 
 	if (!command || strcmp(command, "-")==0) {
 	    if (command)
-		free(command);
+		wfree(command);
 	    if (wclass)
-		free(wclass);
+		wfree(wclass);
 	    if (winstance)
-		free(winstance);
+		wfree(winstance);
 
 	    return NULL;
 	}
@@ -1577,11 +1579,11 @@ restore_icon_state(WScreen *scr, proplist_t info, int type, int index)
 	aicon = wAppIconCreateForDock(scr, command, winstance, wclass,
 				      TILE_NORMAL);
 	if (wclass)
-	    free(wclass);
+	    wfree(wclass);
 	if (winstance)
-	    free(winstance);
+	    wfree(winstance);
 	if (command)
-	    free(command);
+	    wfree(command);
     }
 
     aicon->icon->core->descriptor.handle_mousedown = iconMouseDown;
@@ -1960,7 +1962,7 @@ wDockLaunchWithState(WDock *dock, WAppIcon *btn, WSavedState *state)
             }
         }
     } else {
-        free(state);
+        wfree(state);
     }
 }
 
@@ -2121,7 +2123,7 @@ wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 				 &command)) {
                     if (command && (command[0]==0 ||
                                     (command[0]=='-' && command[1]==0))) {
-                        free(command);
+                        wfree(command);
                         command = NULL;
                     }
                     icon->command = command;
@@ -2129,7 +2131,7 @@ wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
                 } else {
 		    icon->editing = 0;
 		    if (command)
-			free(command);
+			wfree(command);
 		    /* If the target is the dock, reject the icon. If
 		     * the target is the clip, make it an attracted icon
 		     */
@@ -2255,14 +2257,14 @@ moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y)
                              &command)) {
                 if (command && (command[0]==0 ||
                                 (command[0]=='-' && command[1]==0))) {
-                    free(command);
+                    wfree(command);
                     command = NULL;
                 }
                 icon->command = command;
             } else {
 		icon->editing = 0;
 		if (command)
-		    free(command);
+		    wfree(command);
 		return False;
             }
 	    icon->editing = 0;
@@ -2364,12 +2366,12 @@ wDockDetach(WDock *dock, WAppIcon *icon)
 	wIconSelect(icon->icon);
 
     if (icon->command) {
-	free(icon->command);
+	wfree(icon->command);
 	icon->command = NULL;
     }
 #ifdef OFFIX_DND
     if (icon->dnd_command) {
-        free(icon->dnd_command);
+        wfree(icon->dnd_command);
         icon->dnd_command = NULL;
     }
 #endif
@@ -2770,8 +2772,8 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 		break;
 	    }
 	}
-	free(vmap);
-	free(hmap);
+	wfree(vmap);
+	wfree(hmap);
 	/* If found a slot, translate and return */
         if (done) {
 	    if (corner==C_NW || corner==C_NE) {
@@ -2870,7 +2872,7 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 	    }
 	}
     }
-    free(slot_map);
+    wfree(slot_map);
 #undef XY2OFS
     return done;
 }
@@ -2934,9 +2936,9 @@ execCommand(WAppIcon *btn, char *command, WSavedState *state)
 
     if (scr->flags.dnd_data_convertion_status || !cmdline) {
 	if (cmdline)
-	    free(cmdline);
+	    wfree(cmdline);
         if (state)
-            free(state);
+            wfree(state);
         return 0;
     }
 
@@ -2944,9 +2946,9 @@ execCommand(WAppIcon *btn, char *command, WSavedState *state)
 
     if (argv==NULL) {
         if (cmdline)
-            free(cmdline);
+            wfree(cmdline);
         if (state)
-            free(state);
+            wfree(state);
 	return 0;
     }
 
@@ -2971,8 +2973,8 @@ execCommand(WAppIcon *btn, char *command, WSavedState *state)
 	exit(111);
     }
     while (argc > 0)
-        free(argv[--argc]);
-    free(argv);
+        wfree(argv[--argc]);
+    wfree(argv);
 
     if (pid > 0) {
         if (!state) {
@@ -2991,9 +2993,9 @@ execCommand(WAppIcon *btn, char *command, WSavedState *state)
         wAddDeathHandler(pid, (WDeathHandler*)trackDeadProcess,
                          btn->dock);
     } else if (state) {
-        free(state);
+        wfree(state);
     }
-    free(cmdline);
+    wfree(cmdline);
     return pid;
 }
 
@@ -3207,7 +3209,7 @@ retry:
     }
 
     if (command)
-	free(command);
+	wfree(command);
 
     if (wm_class)
 	XFree(wm_class);
@@ -4429,7 +4431,7 @@ wClipMakeIconOmnipresent(WAppIcon *aicon, int omnipresent)
         aicon->omnipresent = 0;
         if (aicon == scr->global_icons->aicon) {
             tmp = scr->global_icons->next;
-            free(scr->global_icons);
+            wfree(scr->global_icons);
             scr->global_icons = tmp;
             scr->global_icon_count--;
         } else {
@@ -4437,7 +4439,7 @@ wClipMakeIconOmnipresent(WAppIcon *aicon, int omnipresent)
             while (tmp->next) {
                 if (tmp->next->aicon == aicon) {
                     tmp1 = tmp->next->next;
-                    free(tmp->next);
+                    wfree(tmp->next);
                     tmp->next = tmp1;
                     scr->global_icon_count--;
                     break;

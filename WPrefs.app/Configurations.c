@@ -148,13 +148,13 @@ createImages(WMScreen *scr, RContext *rc, RImage *xis, char *file,
     *icon1 = WMCreatePixmapFromFile(scr, path);
     if (!*icon1) {
 	wwarning(_("could not load icon %s"), path);
-	free(path);
+	wfree(path);
 	return;
     }
     icon = RLoadImage(rc, path, 0);
     if (!icon) {
 	wwarning(_("could not load icon %s"), path);
-	free(path);
+	wfree(path);
 	return;
     }
     RCombineImageWithColor(icon, &gray);
@@ -164,7 +164,7 @@ createImages(WMScreen *scr, RContext *rc, RImage *xis, char *file,
 	    wwarning(_("could not process icon %s:"), file, RMessageForError(RErrorCode));
     }
     RDestroyImage(icon);
-    free(path);
+    wfree(path);
 }
 
 
@@ -188,7 +188,7 @@ createPanel(Panel *p)
 	if (!xis) {
 	    wwarning(_("could not load image file %s"), path);
 	}
-	free(path);
+	wfree(path);
     }
 
     panel->frame = WMCreateFrame(panel->win);
@@ -241,7 +241,7 @@ createPanel(Panel *p)
 	    } else {
 		wwarning(_("could not load icon file %s"), path);
 	    }
-	    free(path);
+	    wfree(path);
 	}
 	path = LocateImage(buf2);
 	if (path) {
@@ -253,11 +253,11 @@ createPanel(Panel *p)
 	    } else {
 		wwarning(_("could not load icon file %s"), path);
 	    }
-	    free(path);
+	    wfree(path);
 	}
     }
-    free(buf1);
-    free(buf2);
+    wfree(buf1);
+    wfree(buf2);
 
     
     WMMapSubwidgets(panel->icoF);
@@ -283,7 +283,7 @@ createPanel(Panel *p)
 	RImage *image, *scaled;
 
 	image = RLoadImage(WMScreenRContext(scr), path, 0);
-	free(path);
+	wfree(path);
 	
 	scaled = RScaleImage(image, 61, 61);
 	icon = WMCreatePixmapFromRImage(scr, scaled, 128);
@@ -336,7 +336,7 @@ createPanel(Panel *p)
 	    WMSetButtonImage(panel->oldsB, icon);
 	    WMReleasePixmap(icon);
 	}
-	free(path);
+	wfree(path);
     }
 
     WMGroupButtons(panel->newsB, panel->oldsB);

@@ -276,13 +276,13 @@ wIconDestroy(WIcon *icon)
       XFreePixmap(dpy, icon->pixmap);
 
     if (icon->file)
-        free(icon->file);
+        wfree(icon->file);
 
     if (icon->image!=NULL)
 	RDestroyImage(icon->image);
 
     wCoreDestroy(icon->core);
-    free(icon);
+    wfree(icon);
 }
 
 
@@ -451,7 +451,7 @@ wIconChangeImageFile(WIcon *icon, char *file)
     }
 
     if (path)
-	free(path);
+	wfree(path);
 
     return !error;
 }
@@ -486,8 +486,8 @@ getnameforicon(WWindow *wwin)
     if (access(path, F_OK)!=0) {
 	if (mkdir(path, S_IRUSR|S_IWUSR|S_IXUSR)) {
 	    wsyserror(_("could not create directory %s"), path);
-	    free(path);
-	    free(suffix);
+	    wfree(path);
+	    wfree(suffix);
 	    return NULL;
 	}
     }
@@ -495,8 +495,8 @@ getnameforicon(WWindow *wwin)
     if (access(path, F_OK)!=0) {
 	if (mkdir(path, S_IRUSR|S_IWUSR|S_IXUSR)!=0) {
 	    wsyserror(_("could not create directory %s"), path);
-	    free(path);
-	    free(suffix);
+	    wfree(path);
+	    wfree(suffix);
 	    return NULL;
 	}
     }
@@ -504,7 +504,7 @@ getnameforicon(WWindow *wwin)
     strcat(path, "/");
     strcat(path, suffix);
     strcat(path, ".xpm");
-    free(suffix);
+    wfree(suffix);
 
     return path;
 }
@@ -539,12 +539,12 @@ wIconStore(WIcon *icon)
 				     (wwin->wm_hints->flags & IconMaskHint)
 				     ? wwin->wm_hints->icon_mask : None);
     if (!image) {
-	free(path);
+	wfree(path);
 	return NULL;
     }
 
     if (!RSaveImage(image, path, "XPM")) {
-	free(path);
+	wfree(path);
 	path = NULL;
     }
     RDestroyImage(image);
@@ -770,7 +770,7 @@ wIconUpdate(WIcon *icon)
                           wwarning(_("could not load default icon \"%s\":%s"),
 				   file, RMessageForError(RErrorCode));
                       }
-                      free(path);
+                      wfree(path);
                   }
 	make_icons:
 		  
@@ -835,7 +835,7 @@ wIconPaint(WIcon *icon)
 
 	WMDrawString(scr->wmscreen, icon->core->window, gc,
 		     scr->icon_title_font, x, 1, tmp, l);
-	free(tmp);
+	wfree(tmp);
     }
 
     if (icon->selected)

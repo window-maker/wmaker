@@ -67,13 +67,13 @@ void
 WMDestroyMenuItem(WMMenuItem *item)
 {
     if (item->title)
-	free(item->title);
+	wfree(item->title);
 
     if (item->image)
 	WMReleasePixmap(item->image);
 
     if (item->shortcutKey)
-	free(item->shortcutKey);
+	wfree(item->shortcutKey);
     
     if (item->onStateImage)
 	WMReleasePixmap(item->onStateImage);

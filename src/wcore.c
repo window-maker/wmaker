@@ -149,11 +149,11 @@ void
 wCoreDestroy(WCoreWindow *core)
 {
     if (core->stacking) {
-	free(core->stacking);
+	wfree(core->stacking);
     }
     XDeleteContext(dpy, core->window, wWinContext);
     XDestroyWindow(dpy, core->window);
-    free(core);
+    wfree(core);
 }
 
 

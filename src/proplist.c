@@ -192,7 +192,7 @@ get_qstring(FILE *f)
     else {
 	char *tmp = unescapestr(buffer);
 	proplist_t pl = PLMakeString(tmp);
-	free(tmp);
+	wfree(tmp);
 	return pl;
     }
 }
@@ -224,7 +224,7 @@ get_string(FILE *f)
     else {
 	char *tmp = unescapestr(buffer);
 	proplist_t pl = PLMakeString(tmp);
-	free(tmp);
+	wfree(tmp);
 	return pl;
     }
 }
@@ -473,7 +473,7 @@ ReadProplistFromFile(char *file)
 	pl = NULL;
     }
 
-    free(buffer);
+    wfree(buffer);
 
     fclose(f);
 

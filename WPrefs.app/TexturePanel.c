@@ -193,7 +193,7 @@ updateGradButtons(TexturePanel *panel)
 	WMSetButtonImage(panel->dirdB, pixmap);
 	WMReleasePixmap(pixmap);
 
-	free(colors);
+	wfree(colors);
     }
 }
 
@@ -379,7 +379,7 @@ updateHueSlider(WMSlider *sPtr, WMFont *font, RHSVColor *hsv)
     WMReleasePixmap(pixmap);
 
     for (i = 0; i <= 6; i++)
-	free(colors[i]);
+	wfree(colors[i]);
 }
 
 
@@ -446,7 +446,7 @@ sliderChangeCallback(WMWidget *w, void *data)
     RConvertImage(WMScreenRContext(scr), image, &panel->gimage);
     RDestroyImage(image);
 
-    free(colors);
+    wfree(colors);
 
     WMRedisplayWidget(panel->gcolL);
 
@@ -554,7 +554,7 @@ gradDeleteCallback(WMWidget *w, void *data)
 	return;
 
     item = WMGetListItem(panel->gcolL, row);
-    free(item->clientData);
+    wfree(item->clientData);
 
     WMRemoveListItem(panel->gcolL, row);
 
@@ -610,7 +610,9 @@ updateImage(TexturePanel *panel, char *path)
 
 	    if (!panel->image)
 		WMSetButtonEnabled(panel->okB, False);
-	    return;
+
+            wfree(message);
+            return;
 	}
 
 	WMSetButtonEnabled(panel->okB, True);
@@ -663,7 +665,7 @@ browseImageCallback(WMWidget *w, void *data)
 	    return;
 	fullpath = tmp;
 
-	free(ipath);
+	wfree(ipath);
 	ipath = fullpath;
 
 	path = wstrdup(fullpath);
@@ -676,20 +678,20 @@ browseImageCallback(WMWidget *w, void *data)
 
 	if (tmp) {
 	    if (strcmp(fullpath, tmp)==0) {
-		free(path);
+		wfree(path);
 		path = tmp2;
 	    }
-	    free(tmp);
+	    wfree(tmp);
 	}
 
 	if (!RGetImageFileFormat(fullpath)) {
 	    WMRunAlertPanel(scr, panel->win, _("Error"),
 			    _("The selected file does not contain a supported image."),
 			    _("OK"), NULL, NULL);
-	    free(path);
+	    wfree(path);
 	} else {
 	    updateImage(panel, fullpath);
-	    free(panel->imageFile);
+	    wfree(panel->imageFile);
 	    panel->imageFile = path;
 
 	    WMSetTextFieldText(panel->imageT, path);
@@ -891,7 +893,7 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 	WMSetTextFieldText(panel->imageT,
 			   PLGetString(PLGetArrayElement(texture, 1)));
 	if (panel->imageFile)
-	    free(panel->imageFile);
+	    wfree(panel->imageFile);
 	panel->imageFile = wstrdup(PLGetString(PLGetArrayElement(texture, 1)));
 
 
@@ -927,7 +929,7 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 			   PLGetString(PLGetArrayElement(texture, 1)));
 	
     if (panel->imageFile)
-        free(panel->imageFile);
+        wfree(panel->imageFile);
     if ((panel->imageFile = wfindfileinarray(panel->pathList,
                 PLGetString(PLGetArrayElement(texture, 1)))) != NULL) {
 
@@ -946,7 +948,7 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 
 	for (i = 0; i < WMGetListNumberOfRows(panel->gcolL); i++) {
 	    item = WMGetListItem(panel->gcolL, i);
-	    free(item->clientData);
+	    wfree(item->clientData);
 	}
 	WMClearList(panel->gcolL);
 
@@ -1019,7 +1021,7 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 			   PLGetString(PLGetArrayElement(texture, 1)));
 	
 	if (panel->imageFile)
-	    free(panel->imageFile);
+	    wfree(panel->imageFile);
 	panel->imageFile = wfindfileinarray(panel->pathList,
 			    PLGetString(PLGetArrayElement(texture, 1)));
 
@@ -1055,7 +1057,7 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
  bad_texture:
     str = PLGetDescription(texture);
     wwarning("error creating texture %s", str);
-    free(str);
+    wfree(str);
 
 }
 
@@ -1087,7 +1089,7 @@ GetTexturePanelTexture(TexturePanel *panel)
 	str = WMGetColorRGBDescription(color);
 	prop = PLMakeArrayFromElements(PLMakeString("solid"),
 				       PLMakeString(str), NULL);
-	free(str);
+	wfree(str);
 
 	break;
 
@@ -1117,7 +1119,7 @@ GetTexturePanelTexture(TexturePanel *panel)
 					   PLMakeString(str), NULL);
 	    break;
 	}
-	free(str);
+	wfree(str);
 	break;
 
      case TYPE_TGRADIENT:
@@ -1148,8 +1150,8 @@ GetTexturePanelTexture(TexturePanel *panel)
 					   PLMakeString(str),
 					   PLMakeString(str2), NULL);
 	}
-	free(str);
-	free(str2);
+	wfree(str);
+	wfree(str2);
 	break;
 
 
@@ -1173,8 +1175,8 @@ GetTexturePanelTexture(TexturePanel *panel)
 					   PLMakeString(str),
 					   PLMakeString(str2), NULL);
 	}
-	free(str);
-	free(str2);
+	wfree(str);
+	wfree(str2);
 	break;
 
      case TYPE_GRADIENT:
@@ -1191,7 +1193,7 @@ GetTexturePanelTexture(TexturePanel *panel)
 	    prop = PLMakeArrayFromElements(PLMakeString("mhgradient"),
 					   PLMakeString(str), NULL);
 	}
-	free(str);
+	wfree(str);
 
 	for (i = 0; i < WMGetListNumberOfRows(panel->gcolL); i++) {
 	    RColor *rgb;
@@ -1608,7 +1610,7 @@ testOKButton(WMWidget *self, void *data)
     XCopyArea(dpy, pix, win, (WMScreenRContext(WMWidgetScreen(panel->okB)))->copy_gc, 0, 0, image->width, image->height, 
 	      0, 0);
     
-    free (test);
+    wfree (test);
     
 }
 

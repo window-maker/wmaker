@@ -164,7 +164,7 @@ MakeCPPArgs(char *path)
 	    *buf = 0; /* trunc filename */
 	    putdef(line, " -I", tmp);
 	}
-	free(tmp);
+	wfree(tmp);
     }
 
 
@@ -939,7 +939,7 @@ ExpandOptions(WScreen *scr, char *cmdline)
     return out;
     
     error:
-    free(out);
+    wfree(out);
     if (selection)
       XFree(selection);
     return NULL;
@@ -1030,7 +1030,7 @@ appendrealloc(char *a, char *b)
 	return wstrdup(b);
     else {
 	char *c = wstrappend(a, b);
-	free(a);
+	wfree(a);
 	return c;
     }
 }
@@ -1095,7 +1095,7 @@ GetShortcutString(char *text)
     puts(tmp);
     buffer = wstrappend(buffer, tmp);
 */
-    free(tmp);
+    wfree(tmp);
 
     return buffer;
 }
@@ -1143,14 +1143,14 @@ EscapeWM_CLASS(char *name, char *class)
     if (ename && eclass) {
 	ret = wmalloc(strlen(ename)+strlen(eclass)+4);
 	sprintf(ret, "%s.%s", ename, eclass);
-	free(ename);
-	free(eclass);
+	wfree(ename);
+	wfree(eclass);
     } else if (ename) {
 	ret = wstrdup(ename);
-	free(ename);
+	wfree(ename);
     } else {
 	ret = wstrdup(eclass);
-	free(eclass);
+	wfree(eclass);
     }
 
     return ret;
@@ -1218,11 +1218,11 @@ UnescapeWM_CLASS(char *str, char **name, char **class)
     (*class)[k] = 0;
     
     if (!*name) {
-	free(*name);
+	wfree(*name);
 	*name = NULL;
     }
     if (!*class) {
-	free(*class);
+	wfree(*class);
 	*class = NULL;
     }
 }
@@ -1259,5 +1259,5 @@ SendHelperMessage(WScreen *scr, char type, int workspace, char *msg)
     if (write(scr->helper_fd, buffer, len+4) < 0) {
 	wsyserror(_("could not send message to background image helper"));
     }
-    free(buffer);
+    wfree(buffer);
 }

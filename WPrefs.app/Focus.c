@@ -315,7 +315,7 @@ createPanel(Panel *p)
 	    } else {
 		wwarning(_("could not load icon file %s"), path);
 	    }
-	    free(path);
+	    wfree(path);
 	}
 	path = LocateImage(buf2);
 	if (path) {
@@ -326,11 +326,11 @@ createPanel(Panel *p)
 	    } else {
 		wwarning(_("could not load icon file %s"), path);
 	    }
-	    free(path);
+	    wfree(path);
 	}
     }
-    free(buf1);
-    free(buf2);
+    wfree(buf1);
+    wfree(buf2);
     
     panel->raisT = WMCreateTextField(panel->raisF);
     WMResizeWidget(panel->raisT, 36, 20);

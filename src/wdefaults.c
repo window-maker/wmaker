@@ -205,7 +205,7 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
       char *buffer = NULL;
 	  buffer = wmalloc(strlen(class)+strlen(instance)+4);
       key1 = PLMakeString(strcat(strcat(strcpy(buffer,instance),"."),class));
-	  free(buffer);
+	  wfree(buffer);
     } else
       key1 = NULL;
 
@@ -345,7 +345,7 @@ get_generic_value(WScreen *scr, char *instance, char *class, proplist_t option,
 
 	dict = PLGetDictionaryEntry(WDWindowAttributes->dictionary, key);
 	PLRelease(key);
-	free(buffer);
+	wfree(buffer);
 
 	if (dict) {
 	    value = PLGetDictionaryEntry(dict, option);
@@ -434,7 +434,7 @@ wDefaultGetImage(WScreen *scr, char *winstance, char *wclass)
     if (!image) {
 	wwarning(_("error loading image file \"%s\""), path, RMessageForError(RErrorCode));
     }
-    free(path);
+    wfree(path);
 
     image = wIconValidateIconSize(scr, image);
 
@@ -510,7 +510,7 @@ wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file)
         buffer = wmalloc(strlen(instance) + strlen(class) + 2);
         strcat(strcat(strcpy(buffer, instance), "."), class);
         key = PLMakeString(buffer);
-        free(buffer);
+        wfree(buffer);
     } else if (instance) {
         key = PLMakeString(instance);
     } else if (class) {

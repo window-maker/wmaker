@@ -245,7 +245,7 @@ updateWorkspaceMenu(WMenu *menu)
     for (i=0; i<scr->workspace_count; i++) {
 	if (i < menu->entry_no) {
 	    if (strcmp(menu->entries[i]->text,scr->workspaces[i]->name)!=0) {
-		free(menu->entries[i]->text);
+		wfree(menu->entries[i]->text);
 		strcpy(title, scr->workspaces[i]->name);
 		menu->entries[i]->text = wstrdup(title);
 		menu->flags.realized = 0;
@@ -296,7 +296,7 @@ updateMakeShortcutMenu(WMenu *menu, WWindow *wwin)
 	}
 
 	if (strcmp(buffer, entry->text)!=0) {
-	    free(entry->text);
+	    wfree(entry->text);
 	    entry->text = wstrdup(buffer);
 	    smenu->flags.realized = 0;
 	}
@@ -307,7 +307,7 @@ updateMakeShortcutMenu(WMenu *menu, WWindow *wwin)
 	    if ((tmp = XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0)))
 		&& (!entry->rtext || strcmp(tmp, entry->rtext)!=0)) {
 		if (entry->rtext)
-		    free(entry->rtext);
+		    wfree(entry->rtext);
 		entry->rtext = wstrdup(tmp);
 		smenu->flags.realized = 0;
 	    }
@@ -315,14 +315,14 @@ updateMakeShortcutMenu(WMenu *menu, WWindow *wwin)
 	} else {
 	    wMenuSetEnabled(smenu, i, False);
 	    if (entry->rtext) {
-		free(entry->rtext);
+		wfree(entry->rtext);
 		entry->rtext = NULL;
 		smenu->flags.realized = 0;
 	    }
 	}
 	entry->clientdata = wwin;
     }
-    free(buffer);
+    wfree(buffer);
     if (!smenu->flags.realized)
 	wMenuRealize(smenu);
 }
@@ -643,9 +643,9 @@ OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard)
 	scr->window_menu = createWindowMenu(scr);
 	
 	/* hack to save some memory allocation/deallocation */
-	free(scr->window_menu->entries[MC_MINIATURIZE]->text);
-	free(scr->window_menu->entries[MC_MAXIMIZE]->text);
-	free(scr->window_menu->entries[MC_SHADE]->text);
+	wfree(scr->window_menu->entries[MC_MINIATURIZE]->text);
+	wfree(scr->window_menu->entries[MC_MAXIMIZE]->text);
+	wfree(scr->window_menu->entries[MC_SHADE]->text);
     } else {
 	updateWorkspaceMenu(scr->workspace_submenu);
     }
@@ -683,9 +683,9 @@ OpenMiniwindowMenu(WWindow *wwin, int x, int y)
 	scr->window_menu = createWindowMenu(scr);
 	
 	/* hack to save some memory allocation/deallocation */
-	free(scr->window_menu->entries[MC_MINIATURIZE]->text);
-	free(scr->window_menu->entries[MC_MAXIMIZE]->text);
-	free(scr->window_menu->entries[MC_SHADE]->text);	
+	wfree(scr->window_menu->entries[MC_MINIATURIZE]->text);
+	wfree(scr->window_menu->entries[MC_MAXIMIZE]->text);
+	wfree(scr->window_menu->entries[MC_SHADE]->text);
     } else {
 	updateWorkspaceMenu(scr->workspace_submenu);
     }

@@ -427,7 +427,7 @@ removeModule(WScreen *scr, Window window)
 	if (KWMModules->title)
 	    XFree(KWMModules->title);
 #endif
-	free(KWMModules);
+	wfree(KWMModules);
 	KWMModules = next;
     } else {
 	KWMModuleList *ptr;
@@ -441,7 +441,7 @@ removeModule(WScreen *scr, Window window)
 		if (ptr->next->title)
 		    XFree(ptr->next->title);
 #endif
-		free(ptr->next);
+		wfree(ptr->next);
 		ptr->next->next = next;
 		break;
 	    }
@@ -496,7 +496,7 @@ removeDockWindow(WScreen *scr, Window window)
 			  window);
 
 	next = KWMDockWindows->next;
-	free(KWMDockWindows);
+	wfree(KWMDockWindows);
 	KWMDockWindows = next;
 
     } else {
@@ -508,7 +508,7 @@ removeDockWindow(WScreen *scr, Window window)
 		sendClientMessage(scr, scr->kwm_dock,
 				  _XA_KWM_MODULE_DOCKWIN_REMOVE, window);
 		next = ptr->next->next;
-		free(ptr->next);
+		wfree(ptr->next);
 		ptr->next = next;
 		return;
 	    }
@@ -1078,7 +1078,7 @@ performCommand(WScreen *scr, char *command, XClientMessageEvent *event)
 	cmd = ExpandOptions(scr, _("%a(Run Command,Type the command to run:)"));
 	if (cmd) {
 	    ExecuteShellCommand(scr, cmd);
-	    free(cmd);
+	    wfree(cmd);
 	}
     } else if (strcmp(command, "logout")==0) {
 
@@ -1394,7 +1394,7 @@ wKWMManageableClient(WScreen *scr, Window win, char *title)
      */
     if (ptr && strncmp(ptr->title, title, strlen(ptr->title))==0) {
 	next = ptr->next;
-	free(ptr);
+	wfree(ptr);
 	KWMDoNotManageCrap = next;
 #ifdef DEBUG1
 	printf("window %s not managed per KDE request\n", title);
@@ -1411,7 +1411,7 @@ wKWMManageableClient(WScreen *scr, Window win, char *title)
 		printf("window %s not managed per KDE request\n", title);
 #endif
 		next = ptr->next->next;
-		free(ptr->next);
+		wfree(ptr->next);
 		ptr->next = next;
 
 		sendToModules(scr, _XA_KWM_MODULE_WIN_ADD, NULL, win);
@@ -1717,11 +1717,11 @@ connectKFM(WScreen *scr)
     }
     ptr = path;
     path = wstrappend(ptr, buffer);
-    free(ptr);
+    wfree(ptr);
 
     /* pid file */
     f = fopen(path, "r");
-    free(path);
+    wfree(path);
     if (!f)
 	return -1;
 
@@ -1764,7 +1764,7 @@ connectKFM(WScreen *scr)
     ptr = wstrappend("auth", buffer);
 
     writeSocket(sock, ptr);
-    free(ptr);
+    wfree(ptr);
 
     return sock;
 }

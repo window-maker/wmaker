@@ -204,7 +204,7 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
 	}
 	
 	entry = wMenuInsertCallback(switchmenu, idx, t, focusWindow, wwin);
-	free(t);
+	wfree(t);
 
 	entry->flags.indicator = 1;
 	entry->rtext = wmalloc(MAX_WORKSPACENAME_WIDTH+8);
@@ -245,7 +245,7 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
 		    
 		 case ACTION_CHANGE:
 		    if (entry->text)
-		      free(entry->text);
+		      wfree(entry->text);
 		    
 		    if (wwin->frame->title)
 		      sprintf(title, "%s", wwin->frame->title);
@@ -289,7 +289,7 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
 
 			entry = wMenuInsertCallback(switchmenu, idx, t,
 						    focusWindow, wwin);
-			free(t);
+			wfree(t);
 			entry->rtext = rt;
 			entry->flags.indicator = 1;
 			entry->flags.indicator_type = it;

@@ -163,7 +163,7 @@ createPanel(Panel *p)
 	if (!xis) {
 	    wwarning(_("could not load image file %s"), path);
 	}
-	free(path);
+	wfree(path);
     }
 
     panel->frame = WMCreateFrame(panel->win);
@@ -194,7 +194,7 @@ createPanel(Panel *p)
 	    WMSetLabelImage(panel->cyclL, icon1);
 	    WMReleasePixmap(icon1);
 	}
-	free(path);
+	wfree(path);
     }
 
     /**/
@@ -216,7 +216,7 @@ createPanel(Panel *p)
 	    WMSetLabelImage(panel->linkL, icon1);
 	    WMReleasePixmap(icon1);
 	}
-	free(path);
+	wfree(path);
     }
 
     /**/
@@ -238,7 +238,7 @@ createPanel(Panel *p)
 	    WMSetLabelImage(panel->newL, icon1);
 	    WMReleasePixmap(icon1);
 	}
-	free(path);
+	wfree(path);
     }
 
     /**/
@@ -261,7 +261,7 @@ createPanel(Panel *p)
 	    WMSetLabelImage(panel->posiL, icon1);
 	    WMReleasePixmap(icon1);
 	}
-	free(path);
+	wfree(path);
     }
     
     panel->posP = WMCreatePopUpButton(panel->navF);
@@ -299,7 +299,7 @@ createPanel(Panel *p)
 	    WMSetButtonAltImage(panel->dockB, icon1);
 	    WMReleasePixmap(icon1);
 	}
-	free(path);
+	wfree(path);
     }
     WMSetBalloonTextForView(_("Disable/enable the application Dock (the\n"
 			      "vertical icon bar in the side of the screen)."),
@@ -320,7 +320,7 @@ createPanel(Panel *p)
 	    WMSetButtonAltImage(panel->clipB, icon1);
 	    WMReleasePixmap(icon1);
 	}
-	free(path);
+	wfree(path);
     }
     WMSetBalloonTextForView(_("Disable/enable the Clip (that thing with\n"
 			      "a paper clip icon)."),

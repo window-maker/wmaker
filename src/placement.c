@@ -247,7 +247,7 @@ PlaceIcon(WScreen *scr, int *x_ret, int *y_ret)
 	    break;
     }
 
-    free(map);
+    wfree(map);
 }
 
 

@@ -191,12 +191,12 @@ captureClick(WMWidget *w, void *data)
 	    WMSetTextFieldText(panel->shoT, shortcut);
 	    if (row>=0) {
 		if (panel->shortcuts[row])
-		    free(panel->shortcuts[row]);
+		    wfree(panel->shortcuts[row]);
 		panel->shortcuts[row] = shortcut;
 
 		WMRedisplayWidget(panel->actLs);
 	    } else {
-		free(shortcut);
+		wfree(shortcut);
 	    }
 	}
     }
@@ -218,7 +218,7 @@ clearShortcut(WMWidget *w, void *data)
 
     if (row>=0) {
 	if (panel->shortcuts[row])
-	    free(panel->shortcuts[row]);
+	    wfree(panel->shortcuts[row]);
 	panel->shortcuts[row]=NULL;
 	WMRedisplayWidget(panel->actLs);
     }
@@ -236,10 +236,10 @@ typedKeys(void *observerData, WMNotification *notification)
 	return;
 
     if (panel->shortcuts[row])
-	free(panel->shortcuts[row]);
+	wfree(panel->shortcuts[row]);
     panel->shortcuts[row] = WMGetTextFieldText(panel->shoT);
     if (strlen(panel->shortcuts[row])==0) {
-	free(panel->shortcuts[row]);
+	wfree(panel->shortcuts[row]);
 	panel->shortcuts[row] = NULL;
     }
     WMRedisplayWidget(panel->actLs);
@@ -285,7 +285,7 @@ showData(_Panel *panel)
 
 	str = GetStringForKey(keyOptions[i]);
 	if (panel->shortcuts[i])
-	    free(panel->shortcuts[i]);
+	    wfree(panel->shortcuts[i]);
 	if (str)
 	    panel->shortcuts[i] = trimstr(str);
 	else
@@ -294,7 +294,7 @@ showData(_Panel *panel)
 	if (panel->shortcuts[i] &&
 	    (strcasecmp(panel->shortcuts[i], "none")==0 
 	     || strlen(panel->shortcuts[i])==0)) {
-	    free(panel->shortcuts[i]);
+	    wfree(panel->shortcuts[i]);
 	    panel->shortcuts[i] = NULL;
 	}	    
     }
@@ -479,13 +479,13 @@ storeData(_Panel *panel)
 	if (panel->shortcuts[i]) {
 	    str = trimstr(panel->shortcuts[i]);
 	    if (strlen(str)==0) {
-		free(str);
+		wfree(str);
 		str = NULL;
 	    }
 	}
 	if (str) {
 	    SetStringForKey(str, keyOptions[i]);
-	    free(str);
+	    wfree(str);
 	} else {
 	    SetStringForKey("None", keyOptions[i]);
 	}

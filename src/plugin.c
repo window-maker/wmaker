@@ -77,7 +77,7 @@ wPluginCreateFunction(int type, char *library_name,
     function->handle = dlopen(library_name, RTLD_LAZY);
     if (!function->handle) {
         wwarning(_("library \"%s\" cound not be opened."), library_name);
-        free(function);
+        wfree(function);
         return NULL;
     }
 
@@ -85,7 +85,7 @@ wPluginCreateFunction(int type, char *library_name,
     if (!function->proc.any) {
         wwarning(_("function \"%s\" not found in library \"%s\""), proc_name, library_name);
         dlclose(function->handle);
-        free(function);
+        wfree(function);
         return NULL;
     }
 
@@ -95,7 +95,7 @@ wPluginCreateFunction(int type, char *library_name,
             wwarning(_("function \"%s\" not found in library \"%s\""), free_data_proc_name, library_name);
             /*
             dlclose(function->handle);
-            free(function);
+            wfree(function);
             return NULL;
             */
         }
@@ -128,11 +128,11 @@ wPluginDestroyFunction(WFunction *function)
         if (function->freeData) {
             function->freeData(&function->data);
         } else {
-            free(function->data);
+            wfree(function->data);
         }
     }
     if (function->arg) PLRelease(function->arg);
-    free(function);
+    wfree(function);
     return;
 }
 

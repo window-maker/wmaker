@@ -86,9 +86,9 @@ static void
 updateCommand(WAppIcon *icon, char *command)
 {
     if (icon->command)
-	free(icon->command);
+	wfree(icon->command);
     if (command && (command[0]==0 || (command[0]=='-' && command[1]==0))) {
-	free(command);
+	wfree(command);
 	command = NULL;
     }
     icon->command = command;
@@ -105,9 +105,9 @@ static void
 updateDNDCommand(WAppIcon *icon, char *command)
 {
     if (icon->dnd_command)
-	free(icon->dnd_command);
+	wfree(icon->dnd_command);
     if (command && (command[0]==0 || (command[0]=='-' && command[1]==0))) {
-	free(command);
+	wfree(command);
 	command = NULL;
     }
     icon->dnd_command = command;
@@ -130,7 +130,7 @@ updateSettingsPanelIcon(AppSettingsPanel *panel)
 	if (!path) {
 	    wwarning(_("could not find icon %s, used in a docked application"),
 		     file);
-	    free(file);
+	    wfree(file);
 	    WMSetLabelImage(panel->iconLabel, NULL);
 	    return;
 	} else {
@@ -150,8 +150,8 @@ updateSettingsPanelIcon(AppSettingsPanel *panel)
 		WMReleasePixmap(pixmap);
 	    }
 	}
-	free(file);
-	free(path);
+	wfree(file);
+	wfree(path);
     }
 }
 
@@ -175,7 +175,7 @@ chooseIconCallback(WMWidget *self, void *clientData)
     if (!panel->destroyed) {
 	if (result) {
 	    WMSetTextFieldText(panel->iconField, file);
-	    free(file);
+	    wfree(file);
 	    updateSettingsPanelIcon(panel);
 	}
 
@@ -200,7 +200,7 @@ panelBtnCallback(WMWidget *self, void *data)
     if (panel->okBtn == btn) {
 	text = WMGetTextFieldText(panel->iconField);
 	if (text[0]==0) {
-	    free(text);
+	    wfree(text);
 	    text = NULL;
 	}
 	if (!wIconChangeImageFile(panel->editedIcon->icon, text)) {
@@ -211,11 +211,11 @@ panelBtnCallback(WMWidget *self, void *data)
 	    if (wMessageDialog(panel->wwin->screen_ptr, _("Error"), buf,
 			       _("OK"), _("Ignore"), NULL) == WAPRDefault) {
 		if (text)
-		    free(text);
-		free(buf);
+		    wfree(text);
+		wfree(buf);
 		return;
 	    }
-	    free(buf);
+	    wfree(buf);
 	} else {
 	    WAppIcon *aicon = panel->editedIcon;
 
@@ -228,13 +228,13 @@ panelBtnCallback(WMWidget *self, void *data)
 			       aicon->wm_class, text);
 	}
 	if (text)
-	    free(text);
+	    wfree(text);
 
 	/* cannot free text from this, because it will be not be duplicated
 	 * in updateCommand */
 	text = WMGetTextFieldText(panel->commandField);
 	if (text[0]==0) {
-	    free(text);
+	    wfree(text);
 	    text = NULL;
 	}
 	updateCommand(panel->editedIcon, text);
@@ -447,5 +447,5 @@ DestroyDockAppSettingsPanel(AppSettingsPanel *panel)
 
     panel->editedIcon->editing = 0;
 
-    free(panel);
+    wfree(panel);
 }

@@ -2878,7 +2878,7 @@ WMCreateTextForDocumentType(WMWidget *parent,
     tPtr->view = W_CreateView(W_VIEW(parent));
     if (!tPtr->view) {
         perror("could not create text's view\n");
-        free(tPtr);
+        wfree(tPtr);
         return NULL;
     }
     tPtr->view->self = tPtr;

@@ -169,9 +169,9 @@ wTextureDestroy(WScreen *scr, WTexture *texture)
      case WTEX_MVGRADIENT:
      case WTEX_MDGRADIENT:
 	for (i=0; texture->mgradient.colors[i]!=NULL; i++) {
-	    free(texture->mgradient.colors[i]);
+	    wfree(texture->mgradient.colors[i]);
 	}
-	free(texture->mgradient.colors);
+	wfree(texture->mgradient.colors);
 	break;
 
      case WTEX_THGRADIENT:
@@ -188,9 +188,9 @@ wTextureDestroy(WScreen *scr, WTexture *texture)
 	}
 #endif
 	for (i = 0; i < texture->function.argc; i++) {
-	    free(texture->function.argv[i]);
+	    wfree(texture->function.argv[i]);
 	}
-	free(texture->function.argv);
+	wfree(texture->function.argv);
 	break;
 #endif /* TEXTURE_PLUGIN */
     }
@@ -208,7 +208,7 @@ wTextureDestroy(WScreen *scr, WTexture *texture)
 	XSetErrorHandler(oldhandler);
     }
     XFreeGC(dpy, texture->any.gc);
-    free(texture);
+    wfree(texture);
 #undef CANFREE    
 }
 
@@ -334,10 +334,10 @@ wTextureMakePixmap(WScreen *scr, int style, char *pixmap_file, XColor *color)
     if (!image) {
 	wwarning(_("could not load texture pixmap \"%s\":%s"), file,
 			RMessageForError(RErrorCode));
-	free(file);
+	wfree(file);
 	return NULL;
     }
-    free(file);
+    wfree(file);
 
     texture = wmalloc(sizeof(WTexture));
     memset(texture, 0, sizeof(WTexture));
@@ -376,10 +376,10 @@ wTextureMakeTGradient(WScreen *scr, int style, RColor *from, RColor *to,
     if (!image) {
 	wwarning(_("could not load texture pixmap \"%s\":%s"), file,
 		 RMessageForError(RErrorCode));
-	free(file);
+	wfree(file);
 	return NULL;
     }
-    free(file);
+    wfree(file);
 
     texture = wmalloc(sizeof(WTexture));
     memset(texture, 0, sizeof(WTexture));
@@ -435,8 +435,8 @@ wTextureMakeFunction(WScreen *scr, char *lib, char *func, int argc, char **argv)
     texture->handle = dlopen(lib, RTLD_LAZY);
     if (!texture->handle) {
         wwarning(_("library \"%s\" cound not be opened."), lib);
-	free(argv);
-	free(texture);
+	wfree(argv);
+	wfree(texture);
 	return NULL;
     }
     
@@ -444,9 +444,9 @@ wTextureMakeFunction(WScreen *scr, char *lib, char *func, int argc, char **argv)
     texture->render = dlsym(texture->handle, func);
     if (!texture->render) {
         wwarning(_("function \"%s\" not found in library \"%s\""), func, lib);
-	free(argv);
+	wfree(argv);
 	dlclose(texture->handle);
-	free(texture);
+	wfree(texture);
 	return NULL;
     }
 # else

@@ -182,13 +182,13 @@ static Bool pl_nextCommand(WRootMenuData *data,
 static void pl_closeMenuFile(WRootMenuData *data)
 {
     if (data->submenu)
-	free(data->submenu);
+	wfree(data->submenu);
     if (data->curSubIndex)
-	free(data->curSubIndex);
+	wfree(data->curSubIndex);
 
     PLRelease(data->pl);
     
-    free(data);
+    wfree(data);
 }
 
 
@@ -257,12 +257,12 @@ static WRootMenuData *dir_openMenuFile(char *paths, time_t *timestamp)
 	}
 
 	tmp = wexpandpath(dirs[i]);
-	free(dirs[i]);
+	wfree(dirs[i]);
 	dirs[i] = tmp;
 
 	if (stat(dirs[i], &stat_buf)<0) {
 	    wsyserror(_("%s:could not stat menu"), dirs[i]);
-	    free(dirs[i]);
+	    wfree(dirs[i]);
 	    dirs[i] = NULL;
 	} else {
 	    c++;
@@ -277,9 +277,9 @@ static WRootMenuData *dir_openMenuFile(char *paths, time_t *timestamp)
     if (c == 0) {
 	for (i = 0; i < dirN; i++) {
 	    if (dirs[i])
-		free(dirs[i]);
+		wfree(dirs[i]);
 	}
-	free(dirs);
+	wfree(dirs);
 	
 	return NULL;
     }
@@ -422,16 +422,16 @@ WRootMenuData *ReopenRootMenu(time_t *checkTime,
 	if (!path) {
 	    wwarning(_("could not find any usable menu files. Please check '%s'"),
 		      tmp);
-	    free(tmp);
+	    wfree(tmp);
 	    return NULL;
 	}
 	
-	free(tmp);
+	wfree(tmp);
 	
 	if (*menuPath) {
 	    if (strcmp(*menuPath, path) != 0) {
 		*menuTimestamp = 0;
-		free(*menuPath);
+		wfree(*menuPath);
 		*menuPath = path;
 		
 		if (menu_is_default) {

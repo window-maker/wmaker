@@ -330,7 +330,7 @@ createPanel(Panel *p)
 	} else {
 	    wwarning(_("could not load icon %s"), path);
 	}
-	free(path);
+	wfree(path);
     }
     
     path = LocateImage(OPAQUE_MOVE_PIXMAP);
@@ -342,7 +342,7 @@ createPanel(Panel *p)
 	} else {
 	    wwarning(_("could not load icon %s"), path);
 	}
-	free(path);
+	wfree(path);
     }
     WMMapSubwidgets(panel->opaqF);
     

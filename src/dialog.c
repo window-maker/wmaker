@@ -163,7 +163,7 @@ wInputDialog(WScreen *scr, char *title, char *message, char **text)
 	return False;
     else {
         if (*text)
-            free(*text);
+            wfree(*text);
         *text = result;
 
         return True;
@@ -232,8 +232,8 @@ listPixmaps(WScreen *scr, WMList *lPtr, char *path)
 	strcat(msg, path);
 	
 	wMessageDialog(scr, _("Error"), msg, _("OK"), NULL, NULL);
-	free(msg);
-	free(apath);
+	wfree(msg);
+	wfree(apath);
 	return;
     }
 
@@ -260,7 +260,7 @@ listPixmaps(WScreen *scr, WMList *lPtr, char *path)
     WMSortListItems(lPtr);
 
     closedir(dir);
-    free(apath);
+    wfree(apath);
     panel->preview = True;
 }
 
@@ -324,10 +324,10 @@ listCallback(void *self, void *data)
 	strcpy(path, tmp);
 	strcat(path, "/");
 	strcat(path, iconFile);
-	free(tmp);
+	wfree(tmp);
 	WMSetTextFieldText(panel->fileField, path);
 	setViewedImage(panel, path);
-	free(path);
+	wfree(path);
     }
 }
 
@@ -350,10 +350,10 @@ listIconPaths(WMList *lPtr)
 	 * directories searched */
 	if (access(tmp, X_OK)==0)
 	    WMAddListItem(lPtr, path);
-	free(tmp);
+	wfree(tmp);
     } while ((path=strtok(NULL, ":"))!=NULL);
 
-    free(paths);
+    wfree(paths);
 }
 
 
@@ -382,10 +382,10 @@ drawIconProc(WMList *lPtr, int index, Drawable d, char *text,
     dirfile = wexpandpath(WMGetListSelectedItem(panel->dirList)->text);
     buffer = wmalloc(strlen(dirfile)+strlen(text)+4);
     sprintf(buffer, "%s/%s", dirfile, text);
-    free(dirfile);
+    wfree(dirfile);
 
     pixmap = WMCreatePixmapFromFile(WMWidgetScreen(panel->win), buffer);
-    free(buffer);
+    wfree(buffer);
     if (!pixmap) {
         WMRemoveListItem(lPtr, index);
         return;
@@ -479,7 +479,7 @@ buttonCallback(void *self, void *clientData)
 	    path = WMGetFilePanelFile(op);
 	    WMSetTextFieldText(panel->fileField, path);
 	    setViewedImage(panel, path);
-	    free(path);
+	    wfree(path);
 	}
 	WMDestroyFilePanel(op);
     }
@@ -612,7 +612,7 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
 	wwin = wManageInternalWindow(scr, parent, None, tmp,
 				     (scr->scr_width - 450)/2,
 				     (scr->scr_height - 280)/2, 450, 280);
-	free(tmp);
+	wfree(tmp);
     }
     
     /* put icon paths in the list */
@@ -636,7 +636,7 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
 	 * would be loaded by default with the current search path */
 	*file = WMGetListSelectedItem(panel->iconList)->text;
 	if ((*file)[0]==0) {
-	    free(*file);
+	    wfree(*file);
 	    *file = NULL;
 	} else {
 	    defaultPath = FindImage(wPreferences.icon_path, *file);
@@ -646,9 +646,9 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
 		*file = wantedPath;
 	    } else {
 		*file = wstrdup(*file);
-		free(wantedPath);
+		wfree(wantedPath);
 	    }
-	    free(defaultPath);
+	    wfree(defaultPath);
 	}
     } else {
 	*file = NULL;
@@ -662,7 +662,7 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
 
     wUnmanageWindow(wwin, False, False);
 
-    free(panel);
+    wfree(panel);
 
     XDestroyWindow(dpy, parent);
     
@@ -738,7 +738,7 @@ destroyInfoPanel(WCoreWindow *foo, void *data, XEvent *event)
 
     WMDestroyWidget(thePanel->win);
 
-    free(thePanel);
+    wfree(thePanel);
     
     thePanel = NULL;
 }
@@ -993,7 +993,7 @@ handleLogoPush(XEvent *event, void *data)
 	    }
 
 	    panel->icon = RLoadImage(panel->scr->rcontext, path, 0);
-	    free(path);
+	    wfree(path);
 	    if (!panel->icon) {
 		broken = 1;
 		return;
@@ -1331,7 +1331,7 @@ destroyLegalPanel(WCoreWindow *foo, void *data, XEvent *event)
 
     wUnmanageWindow(legalPanel->wwin, False, False);
 
-    free(legalPanel);
+    wfree(legalPanel);
     
     legalPanel = NULL;
 }
@@ -1494,7 +1494,7 @@ getWindowMakerIconImage(WMScreen *scr)
                 pix = WMCreatePixmapFromRImage(scr, image, 0);
                 RDestroyImage(image);
             }
-            free(path);
+            wfree(path);
         }
     }
 
@@ -1631,7 +1631,7 @@ wShowCrashingDialogPanel(int whatSig)
 
     WMUnmapWidget(panel->win);
     WMDestroyWidget(panel->win);
-    free(panel);
+    wfree(panel);
 
     return action;
 }
@@ -1720,7 +1720,7 @@ destroyGNUstepPanel(WCoreWindow *foo, void *data, XEvent *event)
 
     wUnmanageWindow(gnustepPanel->wwin, False, False);
 
-    free(gnustepPanel);
+    wfree(gnustepPanel);
 
     gnustepPanel = NULL;
 }

@@ -933,8 +933,8 @@ wDefaultsDestroyDomain(WDDomain *domain)
 {
     if (domain->dictionary)
 	PLRelease(domain->dictionary);
-    free(domain->path);
-    free(domain);
+    wfree(domain->path);
+    wfree(domain);
 }
 
 
@@ -1335,7 +1335,7 @@ wDefaultUpdateIcons(WScreen *scr)
             RImage *new_image;
 
             if (aicon->icon->file)
-                free(aicon->icon->file);
+                wfree(aicon->icon->file);
             aicon->icon->file = wstrdup(file);
 
             new_image = wDefaultGetImage(scr, aicon->wm_instance,
@@ -1360,7 +1360,7 @@ wDefaultUpdateIcons(WScreen *scr)
                 RImage *new_image;
 
                 if (wwin->icon->file)
-                    free(wwin->icon->file);
+                    wfree(wwin->icon->file);
                 wwin->icon->file = wstrdup(file);
 
                 new_image = wDefaultGetImage(scr, wwin->wm_instance,
@@ -1679,7 +1679,7 @@ again:
     ptr--; *(ptr--) = 0;
 
     if (*(char**)addr!=NULL) {
-	free(*(char**)addr);
+	wfree(*(char**)addr);
     }
     *(char**)addr = data;
 
@@ -1905,9 +1905,9 @@ parse_texture(WScreen *scr, proplist_t pl)
 	    elem = PLGetArrayElement(pl, i+1);
 	    if (!elem || !PLIsString(elem)) {
 		for (--i; i>=0; --i) {
-		    free(colors[i]);
+		    wfree(colors[i]);
 		}
-		free(colors);
+		wfree(colors);
 		return NULL;
 	    }
 	    val = PLGetString(elem);
@@ -1915,9 +1915,9 @@ parse_texture(WScreen *scr, proplist_t pl)
 	    if (!XParseColor(dpy, scr->w_colormap, val, &color)) {
 		wwarning(_("\"%s\" is not a valid color name"), val);
 		for (--i; i>=0; --i) {
-		    free(colors[i]);
+		    wfree(colors[i]);
 		}
-		free(colors);
+		wfree(colors);
 		return NULL;
 	    } else {
 		colors[i] = wmalloc(sizeof(RColor));
@@ -2068,7 +2068,7 @@ parse_texture(WScreen *scr, proplist_t pl)
 	for (i = 0; i < argc - 1; i++) {
 	    elem = PLGetArrayElement(pl, 3 + i);
 	    if (!elem || !PLIsString(elem)) {
-		free(argv);
+		wfree(argv);
 
 		return NULL;
 	    }
@@ -2710,13 +2710,13 @@ parse_cursor(WScreen *scr, proplist_t pl, Cursor *cursor)
 	}
 	elem = PLGetArrayElement(pl, 2);
 	if (!elem || !PLIsString(elem)) {
-	    free(bitmap_name);
+	    wfree(bitmap_name);
 	    return(status);
 	}
 	val = PLGetString(elem);
 	mask_name = FindImage(wPreferences.pixmap_path, val);
 	if (!mask_name) {
-	    free(bitmap_name);
+	    wfree(bitmap_name);
 	    wwarning(_("could not find cursor bitmap file \"%s\""), val);
 	    return(status);
 	}
@@ -2735,8 +2735,8 @@ parse_cursor(WScreen *scr, proplist_t pl, Cursor *cursor)
 	}
 	check_bitmap_status(bitmap_status, bitmap_name, bitmap);
 	check_bitmap_status(mask_status, mask_name, mask);
-	free(bitmap_name);
-	free(mask_name);
+	wfree(bitmap_name);
+	wfree(mask_name);
     }
     return(status);
 }
@@ -3254,7 +3254,7 @@ setWorkspaceSpecificBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 
 	    SendHelperMessage(scr, 'S', i+1, str);
 
-	    free(str);
+	    wfree(str);
 	} else {
 	    SendHelperMessage(scr, 'U', i+1, NULL);
 	}
@@ -3280,7 +3280,7 @@ setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 	    str = PLGetDescription(value);
 	    if (str) {
 		SendHelperMessage(scr, 'S', 0, str);
-		free(str);
+		wfree(str);
 		SendHelperMessage(scr, 'C', scr->current_workspace+1, NULL);
 	    } else {
 		SendHelperMessage(scr, 'U', 0, NULL);
@@ -3297,9 +3297,9 @@ setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 	    sprintf(command, "wmsetbg -d -S -p '%s' &", text);
 	else
 	    sprintf(command, "wmsetbg -d -p '%s' &", text);
-	free(text);
+	wfree(text);
 	system(command);
-	free(command);
+	wfree(command);
     }
     PLRelease(value);
 

@@ -57,7 +57,7 @@ void
 WMSetViewDragSourceProcs(WMView *view, WMDragSourceProcs *procs)
 {
     if (view->dragSourceProcs)
-	free(view->dragSourceProcs);
+	wfree(view->dragSourceProcs);
     view->dragSourceProcs = wmalloc(sizeof(WMDragSourceProcs));
     
     *view->dragSourceProcs = *procs;

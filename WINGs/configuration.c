@@ -92,7 +92,7 @@ W_ReadConfigurations(void)
         buttonName = WMGetUDStringForKey(defaults, "MouseWheelUp");
         if (buttonName) {
             button = getButtonWithName(buttonName, Button4);
-            free(buttonName);
+            wfree(buttonName);
         } else {
             button = Button4;
         }
@@ -101,7 +101,7 @@ W_ReadConfigurations(void)
         buttonName = WMGetUDStringForKey(defaults, "MouseWheelDown");
         if (buttonName) {
             button = getButtonWithName(buttonName, Button5);
-            free(buttonName);
+            wfree(buttonName);
         } else {
             button = Button5;
         }

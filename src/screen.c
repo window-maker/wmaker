@@ -672,7 +672,7 @@ wScreenInit(int screen_number)
 
 #if 0
     if (!aquireManagerSelection(scr)) {
-	free(scr);
+	wfree(scr);
 
 	return NULL;
     }
@@ -703,7 +703,7 @@ wScreenInit(int screen_number)
     XSetErrorHandler(oldHandler);
     
     if (CantManageScreen) {
-	free(scr);
+	wfree(scr);
 	return NULL;
     }
 
@@ -1029,13 +1029,13 @@ wScreenRestoreState(WScreen *scr)
 	path = wdefaultspathfordomain(buf);
     }
     scr->session_state = PLGetProplistWithPath(path);
-    free(path);
+    wfree(path);
     if (!scr->session_state && wScreenCount>1) {
 	char buf[16];
 	sprintf(buf, "WMState.%i", scr->screen);
 	path = wdefaultspathfordomain(buf);
 	scr->session_state = PLGetProplistWithPath(path);
-	free(path);
+	wfree(path);
     }
 
     if (!wPreferences.flags.noclip) {
@@ -1144,7 +1144,7 @@ wScreenSaveState(WScreen *scr)
 	str = wdefaultspathfordomain(buf);
     }
     path = PLMakeString(str);
-    free(str);
+    wfree(str);
     PLSetFilename(scr->session_state, path);
     if (!PLSave(scr->session_state, YES)) {
 	wsyserror(_("could not save session state in %s"), PLGetString(path));

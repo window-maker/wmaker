@@ -141,7 +141,7 @@ WCreateEditMenuItem(WMWidget *parent, char *title, Bool isTitle)
     
     iPtr->view = W_CreateView(W_VIEW(parent));
     if (!iPtr->view) {
-	free(iPtr);
+	wfree(iPtr);
 	return NULL;
     }
     iPtr->view->self = iPtr;
@@ -300,13 +300,13 @@ static void
 destroyEditMenuItem(WEditMenuItem *iPtr)
 {
     if (iPtr->label)
-	free(iPtr->label);
+	wfree(iPtr->label);
     if (iPtr->data && iPtr->destroyData)
 	(*iPtr->destroyData)(iPtr->data);
     if (iPtr->submenu)
 	WMDestroyWidget(iPtr->submenu);
 
-    free(iPtr);
+    wfree(iPtr);
 }
 
 
@@ -441,7 +441,7 @@ makeEditMenu(WMScreen *scr, WMWidget *parent, char *title)
 	mPtr->flags.standalone = 1;
     }
     if (!mPtr->view) {
-	free(mPtr);
+	wfree(mPtr);
 	return NULL;
     }
     mPtr->view->self = mPtr;
@@ -553,7 +553,7 @@ WSetEditMenuTitle(WEditMenu *mPtr, char *title)
 
     item = WMGetFromBag(mPtr->items, 0);
 
-    free(item->label);
+    wfree(item->label);
     item->label = wstrdup(title);
 
     updateMenuContents(mPtr);
@@ -958,7 +958,7 @@ stopEditItem(WEditMenu *menu, Bool apply)
     if (apply) {
 	text = WMGetTextFieldText(menu->tfield);
 	
-	free(menu->selectedItem->label);
+	wfree(menu->selectedItem->label);
 	menu->selectedItem->label = wstrdup(text);
 
 	updateMenuContents(menu);
@@ -1548,9 +1548,9 @@ destroyEditMenu(WEditMenu *mPtr)
     
     WMFreeBag(mPtr->items);
     
-    free(mPtr->tdelegate);
+    wfree(mPtr->tdelegate);
     
-    free(mPtr);
+    wfree(mPtr);
 }
 
 

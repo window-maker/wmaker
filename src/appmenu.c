@@ -176,7 +176,7 @@ parseMenuCommand(WScreen *scr, Window win, char **slist, int count, int *index)
 		wMenuDestroy(menu, True);
 		wwarning("appmenu: out of memory creating menu for window %x",
 			 slist[*index], win);
-		free(data);
+		wfree(data);
 		return NULL;
 	    }
 	    if (rtext[0]!=0)

@@ -497,7 +497,7 @@ WMRemoveFromBag(WMBag *self, void *item)
         ptr = rbTreeDelete(self, ptr);
         if (self->destructor)
             self->destructor(ptr->data);
-        free(ptr);
+        wfree(ptr);
 
         return 1;
     } else {
@@ -518,7 +518,7 @@ WMEraseFromBag(WMBag *self, int index)
         ptr = rbTreeDelete(self, ptr);
         if (self->destructor)
             self->destructor(ptr->data);
-        free(ptr);
+        wfree(ptr);
 
         wassertrv(self->count == 0||self->root->index >= 0, 1);
 
@@ -548,7 +548,7 @@ WMDeleteFromBag(WMBag *self, int index)
         ptr = rbTreeDelete(self, ptr);
         if (self->destructor)
             self->destructor(ptr->data);
-        free(ptr);
+        wfree(ptr);
 
         wassertrv(self->count == 0||self->root->index >= 0, 1);
 
@@ -626,7 +626,7 @@ WMReplaceInBag(WMBag *self, int index, void *item)
         ptr = rbTreeDelete(self, ptr);
         if (self->destructor)
             self->destructor(ptr->data);
-        free(ptr);
+        wfree(ptr);
     } else if (ptr != self->nil) {
         old = ptr->data;
         ptr->data = item;
@@ -696,7 +696,7 @@ deleteTree(WMBag *self, W_Node *node)
 
     deleteTree(self, node->right);
 
-    free(node);
+    wfree(node);
 }
 
 
@@ -713,8 +713,8 @@ void
 WMFreeBag(WMBag *self)
 {
     WMEmptyBag(self);
-    free(self->nil);
-    free(self);
+    wfree(self->nil);
+    wfree(self);
 }
 
 

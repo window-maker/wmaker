@@ -706,13 +706,13 @@ static void
 freeMoveData(MoveData *data)
 {
     if (data->topList)
-	free(data->topList);
+	wfree(data->topList);
     if (data->leftList)
-	free(data->leftList);
+	wfree(data->leftList);
     if (data->rightList)
-	free(data->rightList);
+	wfree(data->rightList);
     if (data->bottomList)
-	free(data->bottomList);
+	wfree(data->bottomList);
 }
 
 

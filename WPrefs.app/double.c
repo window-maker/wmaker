@@ -74,7 +74,7 @@ CreateDoubleTest(WMWidget *parent, char *text)
     
     dPtr->view = W_CreateView(W_VIEW(parent));
     if (!dPtr->view) {
-	free(dPtr);
+	wfree(dPtr);
 	return NULL;
     }
     /* always do this */
@@ -186,9 +186,9 @@ destroyDoubleTest(_DoubleTest *dPtr)
     if (dPtr->timer)
 	WMDeleteTimerHandler(dPtr->timer);
     if (dPtr->text)
-	free(dPtr->text);
+	wfree(dPtr->text);
     
-    free(dPtr);
+    wfree(dPtr);
 }
 
 

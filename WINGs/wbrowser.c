@@ -282,7 +282,7 @@ drawTitleOfColumn(WMBrowser *bPtr, int column)
 			(bPtr->titleHeight-WMFontHeight(scr->boldFont))/2,
 			bPtr->columnSize.width, WACenter, WMColorGC(scr->white),
 			False, titleBuf, titleLen);
-	    free (titleBuf);
+	    wfree (titleBuf);
 	} else {
 	    W_PaintText(bPtr->view, bPtr->view->window, scr->boldFont, x,
 			(bPtr->titleHeight-WMFontHeight(scr->boldFont))/2,

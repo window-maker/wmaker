@@ -154,7 +154,7 @@ wXDNDProcessSelection(XEvent *event)
         /* final one */
         WMPutInBag(items, wstrdup(retain));
         total_size += strlen(retain) + 3;
-        free(retain);
+        wfree(retain);
 
         /* now pack new string */
         scr->xdestring = wmalloc(total_size);
@@ -170,7 +170,7 @@ wXDNDProcessSelection(XEvent *event)
                 /* unsupport object, still need more " ? tell ]d */
                 strcat(scr->xdestring, &tmp[5]);
             }
-            free(tmp);
+            wfree(tmp);
         }
         WMFreeBag(items);
         wDockReceiveDNDDrop(scr,event);
@@ -178,7 +178,7 @@ wXDNDProcessSelection(XEvent *event)
         printf("free ");
         puts(scr->xdestring);
         */
-        free(scr->xdestring); /* this xdestring is not from Xlib (no XFree) */
+        wfree(scr->xdestring); /* this xdestring is not from Xlib (no XFree) */
     }
 }
 

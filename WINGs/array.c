@@ -91,8 +91,8 @@ void
 WMFreeArray(WMArray *array)
 {
     WMEmptyArray(array);
-    free(array->items);
-    free(array);
+    wfree(array->items);
+    wfree(array);
 }
 
 

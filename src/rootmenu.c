@@ -165,7 +165,7 @@ execCommand(WMenu *menu, WMenuEntry *entry)
 
     if (cmdline) {
 	ExecuteShellCommand(menu->frame->screen_ptr, cmdline);
-	free(cmdline);
+	wfree(cmdline);
     }
     XUngrabPointer(dpy, CurrentTime);
     XSync(dpy, 0);
@@ -455,7 +455,7 @@ removeShortcutsForMenu(WMenu *menu)
     while (ptr!=NULL) {
 	tmp = ptr->next;
 	if (ptr->menu == menu) {
-	    free(ptr);
+	    wfree(ptr);
 	} else {
 	    ptr->next = newList;
 	    newList = ptr;
@@ -490,7 +490,7 @@ addShortcut(char *file, char *shortcutDefinition, WMenu *menu,
 	mod = wXModifierFromKey(b);
 	if (mod<0) {
 	    wwarning(_("%s:invalid key modifier \"%s\""), file, b);
-	    free(ptr);
+	    wfree(ptr);
 	    return False;
 	}
 	ptr->modifier |= mod;
@@ -504,7 +504,7 @@ addShortcut(char *file, char *shortcutDefinition, WMenu *menu,
     if (ksym==NoSymbol) {
 	wwarning(_("%s:invalid kbd shortcut specification \"%s\" for entry %s"),
 		 file, shortcutDefinition, entry->text);
-	free(ptr);
+	wfree(ptr);
 	return False;
     }
     
@@ -512,7 +512,7 @@ addShortcut(char *file, char *shortcutDefinition, WMenu *menu,
     if (ptr->keycode==0) {
 	wwarning(_("%s:invalid key in shortcut \"%s\" for entry %s"), file,
 		 shortcutDefinition, entry->text);
-	free(ptr);
+	wfree(ptr);
 	return False;
     }
 
@@ -677,10 +677,10 @@ constructMenu(WMenu *menu, WMenuEntry *entry)
 	    }
 	    
 	    tmp = wexpandpath(path[i]);
-	    free(path[i]);
+	    wfree(path[i]);
 	    lpath = getLocalizedMenuFile(tmp);
 	    if (lpath) {
-		free(tmp);
+		wfree(tmp);
 		path[i] = lpath;
 		lpath = NULL;
 	    } else {
@@ -741,10 +741,10 @@ constructMenu(WMenu *menu, WMenuEntry *entry)
 finish:
     i = 0;
     while (path[i]!=NULL)
-        free(path[i++]);
-    free(path);
+        wfree(path[i++]);
+    wfree(path);
     if (cmd)
-	free(cmd);
+	wfree(cmd);
 }
 
 
@@ -1105,7 +1105,7 @@ readMenuFile(WScreen *scr, char *file_name)
 	    wwarning(_("could not make arguments for menu file preprocessor"));
 	} else {
 	    sprintf(command, "%s %s %s", CPP_PATH, args, file_name);
-	    free(args);
+	    wfree(args);
 	    file = popen(command, "r");
 	    if (!file) {
 		wsyserror(_("%s:could not open/preprocess menu file"), 
@@ -1205,7 +1205,7 @@ readMenuPipe(WScreen *scr, char **file_name)
        } else {
            sprintf(command, "%s | %s %s", filename, CPP_PATH, args);
 
-           free(args);
+           wfree(args);
            file = popen(command, "r");
            if (!file) {
                wsyserror(_("%s:could not open/preprocess menu file"), filename);
@@ -1382,7 +1382,7 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
                     }
                 }
             }
-            free(buffer);
+            wfree(buffer);
         }
 
         closedir(dir);
@@ -1440,10 +1440,10 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
 
         addMenuEntry(menu, d->name, NULL, "OPEN_MENU", buffer, path[d->index]);
 
-        free(buffer);
+        wfree(buffer);
 	if (d->name)
-	    free(d->name);
-	free(d);
+	    wfree(d->name);
+	wfree(d);
     }
 
     for (i = 0; i < WMGetBagItemCount(files); i++) {
@@ -1490,10 +1490,10 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
 	}
         addMenuEntry(menu, f->name, NULL, "SHEXEC", buffer, path[f->index]);
 
-        free(buffer);
+        wfree(buffer);
 	if (f->name)
-	    free(f->name);
-	free(f);
+	    wfree(f->name);
+	wfree(f);
     }
     
     WMFreeBag(files);
@@ -1561,14 +1561,14 @@ configureMenu(WScreen *scr, proplist_t definition)
 	if (!path) {
 	    wsyserror(_("could not find menu file \"%s\" referenced in WMRootMenu"),
 		     tmp);
-	    free(tmp);
+	    wfree(tmp);
 	    return NULL;
 	}
 
 	if (stat(path, &stat_buf)<0) {
 	    wsyserror(_("could not access menu \"%s\" referenced in WMRootMenu"), path);
-	    free(path);
-	    free(tmp);
+	    wfree(path);
+	    wfree(tmp);
 	    return NULL;
 	}
 
@@ -1587,8 +1587,8 @@ configureMenu(WScreen *scr, proplist_t definition)
 	} else {
 	    menu = NULL;
 	}
-	free(path);
-	free(tmp);
+	wfree(path);
+	wfree(tmp);
 
 	return menu;
     }
@@ -1602,7 +1602,7 @@ configureMenu(WScreen *scr, proplist_t definition)
 	tmp = PLGetDescription(elem);
 	wwarning(_("%s:format error in root menu configuration \"%s\""), 
 		 "WMRootMenu", tmp);
-	free(tmp);
+	wfree(tmp);
 	return NULL;
     }
     mtitle = PLGetString(elem);
@@ -1678,7 +1678,7 @@ configureMenu(WScreen *scr, proplist_t definition)
 	tmp = PLGetDescription(elem);
 	wwarning(_("%s:format error in root menu configuration \"%s\""), 
 		 "WMRootMenu", tmp);
-	free(tmp);
+	wfree(tmp);
     }
     
     return menu;

@@ -432,7 +432,7 @@ wBalloonEnteredObject(WScreen *scr, WObjDescriptor *object)
     }
 
     if (scr->balloon->text)
-	free(scr->balloon->text);
+	wfree(scr->balloon->text);
     scr->balloon->text = NULL;
 
     if (!object) {

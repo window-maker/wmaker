@@ -68,7 +68,7 @@ addPathToList(WMList *list, int index, char *path)
     if (access(fpath, X_OK)!=0) {
 	item->uflags = 1;
     }
-    free(fpath);
+    wfree(fpath);
 }
 
 
@@ -171,7 +171,7 @@ browseForFile(WMWidget *w, void *data)
                 addPathToList(lPtr, i, str);
                 WMSetListBottomPosition(lPtr, WMGetListNumberOfRows(lPtr));
 
-                free(str);
+                wfree(str);
             }
         }
     }

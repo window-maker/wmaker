@@ -417,15 +417,15 @@ wMenuRemoveItem(WMenu *menu, int index)
     /* destroy unshared data */
 
     if (menu->entries[index]->text)
-      free(menu->entries[index]->text);
+      wfree(menu->entries[index]->text);
     
     if (menu->entries[index]->rtext)
-      free(menu->entries[index]->rtext);
+      wfree(menu->entries[index]->rtext);
 	
     if (menu->entries[index]->free_cdata && menu->entries[index]->clientdata)
       (*menu->entries[index]->free_cdata)(menu->entries[index]->clientdata);
 
-    free(menu->entries[index]);
+    wfree(menu->entries[index]);
 	
     for (i=index; i<menu->entry_no-1; i++) {
 	menu->entries[i+1]->order--;
@@ -628,10 +628,10 @@ wMenuDestroy(WMenu *menu, int recurse)
     if (!menu->flags.brother) {
 	for (i=0; i<menu->entry_no; i++) {
 
-	    free(menu->entries[i]->text);
+	    wfree(menu->entries[i]->text);
 
 	    if (menu->entries[i]->rtext)
-	      free(menu->entries[i]->rtext);
+	      wfree(menu->entries[i]->rtext);
 #ifdef USER_MENU
 
 	    if (menu->entries[i]->instances){
@@ -642,7 +642,7 @@ wMenuDestroy(WMenu *menu, int recurse)
 	    if (menu->entries[i]->free_cdata && menu->entries[i]->clientdata) {
 		(*menu->entries[i]->free_cdata)(menu->entries[i]->clientdata);
 	    }
-	    free(menu->entries[i]);
+	    wfree(menu->entries[i]);
 	}
 
 	if (recurse) {
@@ -657,14 +657,14 @@ wMenuDestroy(WMenu *menu, int recurse)
 	}
 	
 	if (menu->entries)
-	    free(menu->entries);
+	    wfree(menu->entries);
 	
     }
 
     FREE_PIXMAP(menu->menu_texture_data);
     
     if (menu->cascades)
-      free(menu->cascades);
+        wfree(menu->cascades);
 
     wCoreDestroy(menu->menu);
     wFrameWindowDestroy(menu->frame);
@@ -673,7 +673,7 @@ wMenuDestroy(WMenu *menu, int recurse)
     if (!menu->flags.brother && menu->brother)
 	wMenuDestroy(menu->brother, False);
     
-    free(menu);
+    wfree(menu);
 }
 
 
@@ -1301,7 +1301,7 @@ editEntry(WMenu *menu, WMenuEntry *entry)
     /* if !t, the user has canceled editing */
     if (t) {
 	if (entry->text)
-	    free(entry->text);
+	    wfree(entry->text);
 	entry->text = wstrdup(t);
 	
 	menu->flags.realized = 0;
@@ -1777,7 +1777,7 @@ _leaving(_delay *dl)
     wMenuMove(dl->menu, dl->ox, dl->oy, True);
     dl->menu->jump_back=NULL;
     dl->menu->menu->screen_ptr->flags.jump_back_pending = 0;
-    free(dl);
+    wfree(dl);
 }
 
 

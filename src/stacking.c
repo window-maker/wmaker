@@ -135,7 +135,7 @@ CommitStacking(WScreen *scr)
 	    if (i>=nwindows) {
 		puts("Internal inconsistency! window_count is incorrect!!!");
 		printf("window_count says %i windows\n", nwindows);
-		free(windows);
+		wfree(windows);
 		return;
 	    }
 #endif
@@ -144,7 +144,7 @@ CommitStacking(WScreen *scr)
 	}
     }
     XRestackWindows(dpy, windows, i);
-    free(windows);
+    wfree(windows);
     
 #ifdef KWM_HINTS
     wKWMBroadcastStacking(scr);

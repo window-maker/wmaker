@@ -243,7 +243,7 @@ freeInspector(InspectorPanel *panel)
 
     XDestroyWindow(dpy, panel->parent);
 
-    free(panel);
+    wfree(panel);
 }
 
 
@@ -293,7 +293,7 @@ wDestroyInspectorPanels()
         panel->inspected->flags.inspector_open = 0;
         panel->inspected->inspector = NULL;
 
-        free(panel);
+        wfree(panel);
     }
 }
 
@@ -352,7 +352,7 @@ showIconFor(WMScreen *scrPtr, InspectorPanel *panel,
     if ((flags & USE_TEXT_FIELD) != 0) {
         file = WMGetTextFieldText(panel->fileText);
         if (file && file[0] == 0) {
-            free(file);
+            wfree(file);
             file = NULL;
         }
     } else {
@@ -382,13 +382,13 @@ showIconFor(WMScreen *scrPtr, InspectorPanel *panel,
 		    file);
             wMessageDialog(panel->frame->screen_ptr, _("Error"), buf, 
 			   _("OK"), NULL, NULL);
-	    free(buf);
-	    free(file);
+	    wfree(buf);
+	    wfree(file);
             return -1;
         }
 
         pixmap = WMCreatePixmapFromFile(scrPtr, path);
-        free(path);
+        wfree(path);
 
         if (!pixmap) {
 	    char *buf;
@@ -398,11 +398,11 @@ showIconFor(WMScreen *scrPtr, InspectorPanel *panel,
 		    file, RMessageForError(RErrorCode));
             wMessageDialog(panel->frame->screen_ptr, _("Error"), buf,
 			   _("OK"), NULL, NULL);
-	    free(buf);
-	    free(file);
+	    wfree(buf);
+	    wfree(file);
             return -1;
         }
-        free(file);
+        wfree(file);
     }
 
     WMSetLabelImage(panel->iconLbl, pixmap);
@@ -523,7 +523,7 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 		buffer = wmalloc(strlen(wwin->wm_instance)+strlen(wwin->wm_class)+4);
         strcat(strcat(strcpy(buffer, wwin->wm_instance), "."), wwin->wm_class);
         key = PLMakeString(buffer);
-		free(buffer);
+        wfree(buffer);
     } else if (WMGetButtonSelected(panel->defaultRb) != 0) {
         key = PLRetain(AnyWindow);
         flags = UPDATE_DEFAULTS;
@@ -563,7 +563,7 @@ saveSettings(WMButton *button, InspectorPanel *panel)
             different |= insertAttribute(dict, winDic, AIcon, value, flags);
             PLRelease(value);
         }
-        free(icon_file);
+        wfree(icon_file);
     }
 
     {
@@ -689,7 +689,7 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 	    strcat(strcpy(buffer, wapp->main_window_desc->wm_instance), ".");
 	    strcat(buffer, wapp->main_window_desc->wm_class);
 	    key = PLMakeString(buffer);
-		free(buffer);
+            wfree(buffer);
 
 	    iconFile = wDefaultGetIconFile(wwin->screen_ptr, 
 					   wapp->main_window_desc->wm_instance,
@@ -904,12 +904,12 @@ applySettings(WMButton *button, InspectorPanel *panel)
             char *file = WMGetTextFieldText(panel->fileText);
 
 	    if (file[0] == 0) {
-		free(file);
+		wfree(file);
 		file = NULL;
 	    }
 	    wIconChangeImageFile(wapp->app_icon->icon, file);
 	    if (file)
-		free(file);
+		wfree(file);
 	    wAppIconPaint(wapp->app_icon);
         }
     }
@@ -1075,7 +1075,7 @@ chooseIconCallback(WMWidget *self, void *clientData)
 	    WMSetTextFieldText(panel->fileText, file);
 	    showIconFor(WMWidgetScreen(self), panel, NULL, NULL,
 			USE_TEXT_FIELD);
-	    free(file);
+	    wfree(file);
 	}
 	WMSetButtonEnabled(panel->browseIconBtn, True);
     } else {
@@ -1123,7 +1123,7 @@ selectSpecification(WMWidget *bPtr, void *data)
 
     wFrameWindowChangeTitle(panel->frame->frame, str);
 
-    free(str);
+    wfree(str);
 }
 
 
@@ -1273,8 +1273,8 @@ createInspectorForWindow(WWindow *wwin, int xpos, int ypos,
 	WMMoveWidget(panel->bothRb, 10, 18);
 	WMResizeWidget(panel->bothRb, frame_width - (2 * 10), 20);
 	WMSetButtonText(panel->bothRb, str);
-        free(tmp);
-        free(str);
+        wfree(tmp);
+        wfree(str);
 	WMGroupButtons(panel->defaultRb, panel->bothRb);
 
 	if (!selectedBtn)

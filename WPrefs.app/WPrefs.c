@@ -443,7 +443,7 @@ LocateImage(char *name)
 	sprintf(tmp, "%s.xpm", name);
 	path = WMPathForResourceOfType(tmp, "xpm");
     }
-    free(tmp);
+    wfree(tmp);
     if (!path) {
 	wwarning(_("could not locate image file %s\n"), name);
     }
@@ -584,7 +584,7 @@ SetButtonAlphaImage(WMScreen *scr, WMButton *bPtr, char *file,
 	WMReleasePixmap(icon);
 
     if (iconPath)
-	free(iconPath);
+	wfree(iconPath);
 }
 
 
@@ -618,7 +618,7 @@ AddSection(Panel *panel, char *iconFile)
 	}
 	SetButtonAlphaImage(WMWidgetScreen(bPtr), bPtr, iconFile,
 			    t1, t2);
-	free(t1);
+	wfree(t1);
     }
     WMMapWidget(bPtr);
 
@@ -670,7 +670,7 @@ Initialize(WMScreen *scr)
 	        WMReleasePixmap(icon);
 	    }
 	}
-	free(path);
+	wfree(path);
     }
     
     memset(&WPrefs, 0, sizeof(_WPrefs));
@@ -753,7 +753,7 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
 		path);
 	WMRunAlertPanel(scr, mainw, _("Error"), mbuf, _("OK"), NULL, NULL);
     }
-    free(path);
+    wfree(path);
 
     path = getenv("WMAKER_BIN_NAME");
     if (!path)
@@ -763,7 +763,7 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
 
 	command = wstrappend(path, " --version");
 	file = popen(command, "r");
-	free(command);
+	wfree(command);
     }
     if (!file || !fgets(buffer, 1023, file)) {
 	wsyserror(_("could not extract version information from Window Maker"));
@@ -804,7 +804,7 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
 	
 	command = wstrappend(path, " --global_defaults_path");
 	file = popen(command, "r");
-	free(command);
+	wfree(command);
     }
     if (!file || !fgets(buffer, 1023, file)) {
 	wsyserror(_("could not run \"%s --global_defaults_path\"."), path);

@@ -250,7 +250,7 @@ PropSetIconTileHint(WScreen *scr, RImage *image)
     XChangeProperty(dpy, scr->info_window, _XA_WINDOWMAKER_ICON_TILE,
 		    imageAtom, 8, PropModeReplace, tmp, 
 		    image->width * image->height * 4 + 4);
-    free(tmp);
+    wfree(tmp);
     
 }
 

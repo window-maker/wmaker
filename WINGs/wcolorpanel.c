@@ -1261,7 +1261,7 @@ readConfiguration(W_ColorPanel *panel)
 	    WMSetPopUpButtonItemEnabled(panel->customPaletteHistoryBtn,
 		    item, perm_mask);
 	}
-	free(path);
+	wfree(path);
     }
     (void)closedir(dPtr);
 }
@@ -3340,8 +3340,9 @@ customPaletteMenuRemove(W_ColorPanel *panel)
 	
 	WMRemovePopUpButtonItem(panel->customPaletteHistoryBtn, item);
 
-	} else
-	    wsyserror("Couldn't remove palette %s\n", tmp);
+        } else {
+            wsyserror("Couldn't remove palette %s\n", tmp);
+        }
 
 	wfree(tmp);
     }
@@ -3686,10 +3687,7 @@ generateNewFilename(char *curName)
     
     ptr = curName;	
     
-    if (
-	((ptr = strrchr(ptr, '{')) == 0) || 
-	sscanf(ptr, "{%i}%c", &n, &c) != 1
-	) 
+    if (((ptr = strrchr(ptr, '{'))==0) || sscanf(ptr, "{%i}%c", &n, &c)!=1)
 	return wstrappend(curName, " {1}");
     
     baseLen = ptr - curName -1;
@@ -3760,7 +3758,7 @@ ulongToRColor(WMScreen *scr, unsigned long value)
     color.green = xcolor->green >> 8;
     color.blue  = xcolor->blue >> 8;
 
-    free(xcolor);
+    wfree(xcolor);
    
     return color;
 }

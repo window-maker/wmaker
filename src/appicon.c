@@ -108,7 +108,7 @@ wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance,
 
     dicon->icon = wIconCreateWithIconFile(scr, path, tile);
     if (path)
-	free(path);
+	wfree(path);
 #ifdef XDND
     wXDNDMakeAwareness(dicon->icon->core->window);
 #endif
@@ -159,7 +159,7 @@ wAppIconCreate(WWindow *leader_win)
 	/* Something's wrong. wApplicationOf() should always return a
 	 * valid structure.  Rather than violate assumptions, bail. -cls
 	 */
-	free(applist);
+	wfree(applist);
 	wrelease(aicon);
 	return NULL;
     }
@@ -256,24 +256,24 @@ wAppIconDestroy(WAppIcon *aicon)
     RemoveFromStackList(aicon->icon->core);
     wIconDestroy(aicon->icon);
     if (aicon->command)
-	free(aicon->command);
+	wfree(aicon->command);
 #ifdef OFFIX_DND
     if (aicon->dnd_command)
-	free(aicon->dnd_command);
+	wfree(aicon->dnd_command);
 #endif
     if (aicon->wm_instance)
-      free(aicon->wm_instance);
+      wfree(aicon->wm_instance);
     if (aicon->wm_class)
-      free(aicon->wm_class);
+      wfree(aicon->wm_class);
 #ifdef REDUCE_APPICONS
     /* There should never be a list but just in case */
     if (aicon->applist != NULL) {
 	aptmp = aicon->applist;
     	while (aptmp->next) {
 	    aptmp = aptmp->next;
-	    free(aptmp->prev);
+	    wfree(aptmp->prev);
 	}
-	free(aptmp);
+	wfree(aptmp);
     }
 #endif
 
@@ -389,7 +389,7 @@ updateDockNumbers(WScreen *scr)
 		 scr->icon_title_font, 3, 2, ws_numbers, length);
 
     XFreeGC(dpy, numbers_gc);
-    free(ws_numbers);
+    wfree(ws_numbers);
 }
 #endif /* WS_INDICATOR */
 
@@ -485,7 +485,7 @@ wAppIconReduceAppCount(WApplication *wapp)
 	    if (applist == wapp->app_icon->applist)
 		wapp->app_icon->applist = applist->next;
 	    
-	    free(applist);
+	    wfree(applist);
 
 	    if (wapp->app_icon->applist != NULL)
 		wapp->app_icon->main_window = wapp->app_icon->applist->wapp->main_window;
@@ -543,7 +543,7 @@ setIconCallback(WMenu *menu, WMenuEntry *entry)
 
     if (result && !icon->destroyed) {
 	if (file[0]==0) {
-	    free(file);
+	    wfree(file);
 	    file = NULL;
 	}
 	if (!wIconChangeImageFile(icon->icon, file)) {
@@ -555,7 +555,7 @@ setIconCallback(WMenu *menu, WMenuEntry *entry)
 	    wAppIconPaint(icon);
 	}
 	if (file)
-	    free(file);
+	    wfree(file);
     }
     icon->editing = 0;
     wrelease(icon);
@@ -589,7 +589,7 @@ killCallback(WMenu *menu, WMenuEntry *entry)
     }
     wrelease(wapp->main_window_desc);
 
-    free(buffer);
+    wfree(buffer);
 
     WCHANGE_STATE(WSTATE_NORMAL);
 }
@@ -619,7 +619,7 @@ openApplicationMenu(WApplication *wapp, int x, int y)
 
     if (!scr->icon_menu) {
 	scr->icon_menu = createApplicationMenu(scr);
-	free(scr->icon_menu->entries[1]->text);
+	wfree(scr->icon_menu->entries[1]->text);
     }
 
     menu = scr->icon_menu;

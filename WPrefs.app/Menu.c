@@ -330,7 +330,7 @@ sgrabClicked(WMWidget *w, void *data)
 	if (shortcut) {
 	    WMSetTextFieldText(panel->shortT, shortcut);
 	    updateMenuItem(panel, panel->currentItem, panel->shortT);
-	    free(shortcut);
+	    wfree(shortcut);
 	}
     }
     panel->capturing = 0;
@@ -908,7 +908,7 @@ createPanel(_Panel *p)
 static void
 freeItemData(ItemData *data)
 {
-#define CFREE(d) if (d) free(d)
+#define CFREE(d) if (d) wfree(d)
 
     /* TODO */
     switch (data->type) {
@@ -939,7 +939,7 @@ freeItemData(ItemData *data)
 	break;
     }
 
-    free(data);
+    wfree(data);
 #undef CFREE
 }
 
@@ -1007,20 +1007,20 @@ parseCommand(proplist_t item)
 		data->param.directory.command = wstrdup(s);
 		
 		wtokensplit(p, &tokens, &tokn);
-		free(p);
+		wfree(p);
 		
 		ctokens = wmalloc(sizeof(char*)*tokn);
 
 		for (i = 0, j = 0; i < tokn; i++) {
 		    if (strcmp(tokens[i], "-noext") == 0) {
-			free(tokens[i]);
+			wfree(tokens[i]);
 			data->param.directory.stripExt = 1;
 		    } else {
 			ctokens[j++] = tokens[i];
 		    }
 		}
 		data->param.directory.directory = wtokenjoin(ctokens, j);
-		free(ctokens);
+		wfree(ctokens);
 
 		wtokenfree(tokens, tokn);
 	    } else {
@@ -1076,7 +1076,7 @@ parseCommand(proplist_t item)
     return data;
 
 error:
-    free(data);
+    wfree(data);
 
     return NULL;
 }
@@ -1120,7 +1120,7 @@ updateFrameTitle(_Panel *panel, char *title, InfoType type)
 	    break;
 	}
 	WMSetFrameTitle(panel->optionsF, tmp);
-	free(tmp);
+	wfree(tmp);
     } else {
 	WMSetFrameTitle(panel->optionsF, NULL);
     }
@@ -1168,7 +1168,7 @@ updateMenuItem(_Panel *panel, WEditMenuItem *item, WMWidget *changedWidget)
     
     assert(data != NULL);
 
-#define REPLACE(v, d) if (v) free(v); v = d
+#define REPLACE(v, d) if (v) wfree(v); v = d
 
     switch (data->type) {
      case ExecInfo:
@@ -1526,7 +1526,7 @@ getDefaultMenu(_Panel *panel)
 	}
     }
 
-    free(menuPath);
+    wfree(menuPath);
 
     if (menu) {
 	pmenu = menu;
@@ -1671,7 +1671,7 @@ processData(char *title, ItemData *data)
 	PLAppendArrayElement(item, pomenu);
 	s1 = wstrappend("| ", data->param.pipe.command);
 	PLAppendArrayElement(item, PLMakeString(s1));
-	free(s1);
+	wfree(s1);
 	break;
 	
      case ExternalInfo:
@@ -1697,7 +1697,7 @@ processData(char *title, ItemData *data)
 		    data->param.directory.command);
 	    
 	    PLAppendArrayElement(item, PLMakeString(tmp));
-	    free(tmp);
+	    wfree(tmp);
 	}
 	break;
 	

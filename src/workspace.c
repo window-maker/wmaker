@@ -124,7 +124,7 @@ wWorkspaceNew(WScreen *scr)
 	}
 	list[i] = wspace;
 	if (scr->workspaces)
-	    free(scr->workspaces);
+	    wfree(scr->workspaces);
 	scr->workspaces = list;
 
 	wWorkspaceMenuUpdate(scr, scr->workspace_menu);
@@ -181,11 +181,11 @@ wWorkspaceDelete(WScreen *scr, int workspace)
 	    list[j++] = scr->workspaces[i];
 	else {
 	    if (scr->workspaces[i]->name)
-		free(scr->workspaces[i]->name);
-	    free(scr->workspaces[i]);
+		wfree(scr->workspaces[i]->name);
+	    wfree(scr->workspaces[i]);
 	}
     }
-    free(scr->workspaces);
+    wfree(scr->workspaces);
     scr->workspaces = list;
 
     scr->workspace_count--;
@@ -250,7 +250,7 @@ hideWorkpaceName(void *data)
 	if (scr->workspace_name_data) {
 	    RDestroyImage(scr->workspace_name_data->back);
 	    RDestroyImage(scr->workspace_name_data->text);
-	    free(scr->workspace_name_data);
+	    wfree(scr->workspace_name_data);
 
 	    scr->workspace_name_data = NULL;
 	}
@@ -308,7 +308,7 @@ showWorkspaceName(WScreen *scr, int workspace)
     if (scr->workspace_name_data) {
 	RDestroyImage(scr->workspace_name_data->back);
 	RDestroyImage(scr->workspace_name_data->text);
-	free(scr->workspace_name_data);
+	wfree(scr->workspace_name_data);
     }
 
     data = wmalloc(sizeof(WorkspaceNameData));
@@ -426,7 +426,7 @@ erro:
 	RDestroyImage(data->text);
     if (data->back)
 	RDestroyImage(data->back);
-    free(data);
+    wfree(data);
 
     scr->workspace_name_data = NULL;
 
@@ -810,19 +810,19 @@ wWorkspaceRename(WScreen *scr, int workspace, char *name)
     buf[MAX_WORKSPACENAME_WIDTH] = 0;
 
     /* update workspace */
-    free(scr->workspaces[workspace]->name);
+    wfree(scr->workspaces[workspace]->name);
     scr->workspaces[workspace]->name = wstrdup(buf);
 
     if (scr->clip_ws_menu) {
 	if (strcmp(scr->clip_ws_menu->entries[workspace+2]->text, buf)!=0) {
-	    free(scr->clip_ws_menu->entries[workspace+2]->text);
+	    wfree(scr->clip_ws_menu->entries[workspace+2]->text);
 	    scr->clip_ws_menu->entries[workspace+2]->text = wstrdup(buf);
 	    wMenuRealize(scr->clip_ws_menu);
 	}
     }
     if (scr->workspace_menu) {
 	if (strcmp(scr->workspace_menu->entries[workspace+2]->text, buf)!=0) {
-	    free(scr->workspace_menu->entries[workspace+2]->text);
+	    wfree(scr->workspace_menu->entries[workspace+2]->text);
 	    scr->workspace_menu->entries[workspace+2]->text = wstrdup(buf);
 	    wMenuRealize(scr->workspace_menu);
 	}
@@ -991,11 +991,11 @@ wWorkspaceRestoreState(WScreen *scr)
 	if (i >= scr->workspace_count)
 	    wWorkspaceNew(scr);
 	if (scr->workspace_menu) {
-	    free(scr->workspace_menu->entries[i+2]->text);
+	    wfree(scr->workspace_menu->entries[i+2]->text);
 	    scr->workspace_menu->entries[i+2]->text = wstrdup(PLGetString(pstr));
 	    scr->workspace_menu->flags.realized = 0;
 	}
-	free(scr->workspaces[i]->name);
+	wfree(scr->workspaces[i]->name);
         scr->workspaces[i]->name = wstrdup(PLGetString(pstr));
         if (!wPreferences.flags.noclip) {
             clip_state = PLGetDictionaryEntry(wks_state, dClip);

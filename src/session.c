@@ -302,7 +302,7 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
 
     if (instance) XFree(instance);
     if (class) XFree(class);
-    if (command) free(command);
+    if (command) wfree(command);
 
     return win_state;
 }
@@ -404,8 +404,8 @@ execCommand(WScreen *scr, char *command, char *host)
         exit(111);
     }
     while (argc > 0)
-        free(argv[--argc]);
-    free(argv);
+        wfree(argv[--argc]);
+    wfree(argv);
     return pid;
 }
 
@@ -557,11 +557,11 @@ wSessionRestoreState(WScreen *scr)
         } else if ((pid = execCommand(scr, command, host)) > 0) {
             wWindowAddSavedState(instance, class, command, pid, state);
         } else {
-            free(state);
+            wfree(state);
         }
 
-        if (instance) free(instance);
-        if (class) free(class);
+        if (instance) wfree(instance);
+        if (class) wfree(class);
     }
     /* clean up */
     PLSetStringCmpHook(StringCompareHook);
@@ -1150,17 +1150,17 @@ fail:
     SmcSaveYourselfDone(smc_conn, ok);
     
     if (prop[0].vals)
-	free(prop[0].vals);
+	wfree(prop[0].vals);
     if (prop[1].vals)
-	free(prop[1].vals);
+	wfree(prop[1].vals);
     if (discardCmd)
-	free(discardCmd);
+	wfree(discardCmd);
 
     if (!ok) {
 	remove(statefile);
     }
     if (statefile)
-	free(statefile);
+	wfree(statefile);
 }
 
 

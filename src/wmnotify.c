@@ -128,7 +128,7 @@ int wNotifyClear(Window window)
 		    (int) clnt->not_win, clnt->not_mask );
 #endif
 	    wNotifyWindows = list_remove_elem( wNotifyWindows, clnt );
-	    free( clnt );
+	    wfree(clnt);
 	    return True;
 	}
     }

@@ -111,7 +111,7 @@ loadImage(RContext *rc, char *file)
 	wwarning("%s:could not load image file used in texture:%s", path,
 		 RMessageForError(RErrorCode));
     }
-    free(path);
+    wfree(path);
 
     return image;
 }
@@ -268,8 +268,8 @@ parseTexture(RContext *rc, char *text)
 		wwarning("could not parse texture %s", text);
 
 		for (j = 0; colors[j]!=NULL; j++)
-		    free(colors[j]);
-		free(colors);
+		    wfree(colors[j]);
+		wfree(colors);
 		goto error;
 	    }
 	    tmp = PLGetString(val);
@@ -279,16 +279,16 @@ parseTexture(RContext *rc, char *text)
 			 tmp, text);
 
 		for (j = 0; colors[j]!=NULL; j++)
-		    free(colors[j]);
-		free(colors);
+		    wfree(colors[j]);
+		wfree(colors);
 		goto error;
 	    }
 	    if (!(colors[i-2] = malloc(sizeof(RColor)))) {
 		wwarning("out of memory while parsing texture");
 
 		for (j = 0; colors[j]!=NULL; j++)
-		    free(colors[j]);
-		free(colors);
+		    wfree(colors[j]);
+		wfree(colors);
 		goto error;
 	    }
 
@@ -320,8 +320,8 @@ parseTexture(RContext *rc, char *text)
 	image = RRenderMultiGradient(iwidth, iheight, colors, gtype);
 	
 	for (j = 0; colors[j]!=NULL; j++)
-	    free(colors[j]);
-	free(colors);
+	    wfree(colors[j]);
+	wfree(colors);
 
 	if (!image) {
 	    wwarning("could not render gradient texture:%s",
@@ -658,7 +658,7 @@ function_cleanup:
         if (argv) {
 	    int i;
 	    for (i=0; i<argc; i++) {
-	        free(argv[i]);
+	        wfree(argv[i]);
 	    }
 	}
 	if (handle) {
@@ -685,7 +685,7 @@ function_cleanup:
 
 error:
     if (texture)
-	free(texture);
+	wfree(texture);
     if (texarray)
 	PLRelease(texarray);
 
@@ -708,8 +708,8 @@ freeTexture(BackgroundTexture *texture)
     if (texture->pixmap) {
 	XFreePixmap(dpy, texture->pixmap);
     }
-    free(texture->spec);
-    free(texture);
+    wfree(texture->spec);
+    wfree(texture);
 }
 
 
@@ -980,7 +980,7 @@ helperLoop(RContext *rc)
 	    printf("change pixmappath %s\n", &buffer[1]);
 #endif
 	    if (PixmapPath)
-		free(PixmapPath);
+		wfree(PixmapPath);
 	    PixmapPath = wstrdup(&buffer[1]);
 	    break;
 
@@ -1010,6 +1010,7 @@ updateDomain(char *domain, char *key, char *texture)
 {
     char *program = "wdwrite";
 
+    /* here is a mem leak */
     system(wstrappend("wdwrite ", 
 		      wstrappend(domain, smooth ? " SmoothWorkspaceBack YES"
 				 : " SmoothWorkspaceBack NO")));
@@ -1047,7 +1048,7 @@ getValueForKey(char *domain, char *keyName)
     if (!d) {
 	wwarning("could not open domain file %s", path);
     }
-    free(path);
+    wfree(path);
 
     if (d && !PLIsDictionary(d)) {
 	PLRelease(d);
@@ -1066,7 +1067,7 @@ getValueForKey(char *domain, char *keyName)
 	    d = NULL;
 	} else {
 	    d = PLGetProplistWithPath(path);
-	    free(path);
+	    wfree(path);
 	}
 
 	if (d && !PLIsDictionary(d)) {
@@ -1155,21 +1156,21 @@ getFullPixmapPath(char *file)
 	char *path = wmalloc(bsize);
 	
 	while (!getcwd(path, bsize)) {
-	    free(path);
+	    wfree(path);
 	    bsize += bsize/2;
 	    path = malloc(bsize);
 	}
 
 	tmp = wstrappend(path, "/");
-	free(path);
+	wfree(path);
 	path = wstrappend(tmp, file);
-	free(tmp);
+	wfree(tmp);
 
 	return path;
     }
     
     /* the file is in the PixmapPath */
-    free(tmp);
+    wfree(tmp);
 
     return wstrdup(file);
 }
@@ -1454,7 +1455,7 @@ main(int argc, char **argv)
 	    char *image_path = getFullPixmapPath(image_name);
 	    
 	    sprintf(buffer, "(%s, \"%s\", %s)", style, image_path, back_color);
-	    free(image_path);
+	    wfree(image_path);
 	    texture = (char*)buffer;
 	}
 

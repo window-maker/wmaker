@@ -50,9 +50,9 @@ generalize_xlfd (const char *xlfd)
 	     "-*-*-*-*-*-*-%s-*-*-*-*-*-*-*,*",
 	     xlfd, weight, slant, pxlsz, pxlsz);
 
-    free(pxlsz);
-    free(slant);
-    free(weight);
+    wfree(pxlsz);
+    wfree(slant);
+    wfree(weight);
 
     return buf;
 }
@@ -91,7 +91,7 @@ W_CreateFontSetWithGuess(Display *dpy, char *xlfd, char ***missing,
 
     fs = XCreateFontSet(dpy, xlfd, missing, nmissing, def_string);
 
-    free(xlfd);
+    wfree(xlfd);
     return fs;
 }
 

@@ -74,7 +74,7 @@ wtokennext(char *word, char **next)
     else
 	t = wstrdup(ret);
 
-    free(ret);
+    wfree(ret);
     
     if (ctype==PRC_EOS)
 	*next = NULL;
@@ -151,8 +151,8 @@ wtokenjoin(char **list, int count)
 void
 wtokenfree(char **tokens, int count)
 {
-    while (--count) free(tokens[count]);
-    free(tokens);
+    while (--count) wfree(tokens[count]);
+    wfree(tokens);
 }
 
 

@@ -429,7 +429,7 @@ WMCreateRuler(WMWidget * parent)
     rPtr->view = W_CreateView(W_VIEW(parent));
 
     if (!rPtr->view) {
-        free(rPtr);
+        wfree(rPtr);
         return NULL;
     }
 

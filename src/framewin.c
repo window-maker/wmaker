@@ -440,7 +440,7 @@ wFrameWindowDestroy(WFrameWindow *fwin)
     wCoreDestroy(fwin->core);
     
     if (fwin->title)
-	free(fwin->title);
+	wfree(fwin->title);
     
     for (i=0; i < (fwin->flags.single_texture ? 1 : 3); i++) {
 	FREE_PIXMAP(fwin->title_back[i]);
@@ -453,7 +453,7 @@ wFrameWindowDestroy(WFrameWindow *fwin)
         }
     }
     
-    free(fwin);
+    wfree(fwin);
 }
 
 
@@ -1100,7 +1100,7 @@ wFrameWindowPaint(WFrameWindow *fwin)
             title, titlelen);
 #endif /* DRAWSTRING_PLUGIN */
 
-	free(title);
+	wfree(title);
 	
 	if (fwin->left_button)
 	    handleButtonExpose(&fwin->left_button->descriptor, NULL);
@@ -1247,7 +1247,7 @@ wFrameWindowChangeTitle(WFrameWindow *fwin, char *new_title)
     }
 
     if (fwin->title)
-	free(fwin->title);
+	wfree(fwin->title);
     
     fwin->title = wstrdup(new_title);
     

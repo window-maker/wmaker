@@ -193,7 +193,7 @@ wDeleteDeathHandler(WMagicNumber id)
 
     WMRemoveFromBag(deathHandlers, handler);
 
-    free(handler);
+    wfree(handler);
 }
 
 

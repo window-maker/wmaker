@@ -221,7 +221,7 @@ Bool checkDir(char *path, Bool fatal)
 			  path, newName, wstrerror(errno));
 		}
 	    }
-	    free(newName);
+	    wfree(newName);
 	    
 	    return False;
 	}

@@ -325,10 +325,10 @@ void closeWindow(WMWidget *w, void *d)
     } else {
 	WMDeleteTimerHandler(data->tid);
 	WMDestroyWidget(w);
-	free(data->buffer);
-	free(data->rects);
+	wfree(data->buffer);
+	wfree(data->rects);
 	WMReleasePixmap(data->pixmap);
-	free(data);
+	wfree(data);
     }
 }
 

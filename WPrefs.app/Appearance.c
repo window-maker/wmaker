@@ -658,8 +658,8 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	    image = RRenderMultiGradient(width, height, colors, style);
 	    
 	    for (i = 0; colors[i]!=NULL; i++)
-		free(colors[i]);
-	    free(colors);
+		wfree(colors[i]);
+	    wfree(colors);
 	}
     } else if (strcasecmp(&type[1], "pixmap")==0) {
 	RImage *timage = NULL;
@@ -698,7 +698,7 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	    }
 
 	}
-	free(path);
+	wfree(path);
     }
 
     if (!image)
@@ -931,7 +931,7 @@ makeFileName(char *prefix)
     while (access(fname, F_OK)==0) {
 	char buf[30];
 
-	free(fname);
+	wfree(fname);
 	sprintf(buf, "%08lx.cache", time(NULL));
 	fname = wstrappend(prefix, buf);
     }
@@ -1000,7 +1000,7 @@ okEditTexture(void *data)
     if (titem->current) {
 	name = GetTexturePanelTextureName(panel->texturePanel);
 
-	free(titem->title);
+	wfree(titem->title);
 	titem->title = name;
     }
 
@@ -1013,7 +1013,7 @@ okEditTexture(void *data)
 
     titem->ispixmap = isPixmap(prop);
 
-    free(titem->texture);
+    wfree(titem->texture);
     titem->texture = str;
 
     XFreePixmap(WMScreenDisplay(WMWidgetScreen(panel->texLs)), titem->preview);
@@ -1096,17 +1096,17 @@ deleteTexture(WMWidget *w, void *data)
 	titem2->selectedFor |= 1 << section;
     }
 
-    free(titem->title);
-    free(titem->texture);
+    wfree(titem->title);
+    wfree(titem->texture);
     PLRelease(titem->prop);
     if (titem->path) {
 	if (remove(titem->path) < 0 && errno != ENOENT) {
 	    wsyserror("could not remove file %s", titem->path);
 	}
-	free(titem->path);
+	wfree(titem->path);
     }
 
-    free(titem);
+    wfree(titem);
 
     WMRemoveListItem(panel->texLs, row);
     WMSetButtonEnabled(panel->delB, False);
@@ -1133,7 +1133,7 @@ extractTexture(WMWidget *w, void *data)
 
 	OpenExtractPanelFor(panel, path);
 
-	free(path);
+	wfree(path);
     }
 }
 
@@ -1705,7 +1705,7 @@ createPanel(Panel *p)
     }
     if (ok) {
 	tmp = wstrappend(panel->fprefix, "/WPrefs/");
-	free(panel->fprefix);
+	wfree(panel->fprefix);
 	panel->fprefix = tmp;
 	if (access(panel->fprefix, F_OK)!=0) {
 	    if (mkdir(panel->fprefix, 0755) < 0) {
@@ -1964,7 +1964,7 @@ createPanel(Panel *p)
 	    } else {
 		wwarning(_("could not load icon file %s"), path);
 	    }
-	    free(path);
+	    wfree(path);
 	}
     }
     WMGroupButtons(panel->mstyB[0], panel->mstyB[1]);
@@ -2126,7 +2126,7 @@ storeData(_Panel *panel)
 
 	if (str) {
 	    SetStringForKey(str, colorOptions[i*2]);
-	    free(str);
+	    wfree(str);
 	}
     }
 
@@ -2195,7 +2195,7 @@ prepareForClose(_Panel *panel)
 
 	str = WMGetColorRGBDescription(color);
 	PLAppendArrayElement(textureList, PLMakeString(str));
-	free(str);
+	wfree(str);
     }
     WMSetUDObjectForKey(udb, textureList, "ColorList");
     PLRelease(textureList);

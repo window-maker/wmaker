@@ -324,7 +324,7 @@ fetchDragData(WMView *self, char *type)
     
     data = WMCreateDataWithBytes(color, strlen(color)+1);
     
-    free(color);
+    wfree(color);
     
     return data;
 }

@@ -152,11 +152,11 @@ speedChange(WMWidget *w, void *data)
 			    _("Error"),
 			    _("Invalid mouse acceleration value. Must be a positive real value."),
 			    _("OK"), NULL, NULL);
-	    free(tmp);
+	    wfree(tmp);
 	    return;
 	}
 	panel->acceleration = accel;
-	free(tmp);
+	wfree(tmp);
     } else {
 	i = (int)WMGetSliderValue(panel->speedS);
     
@@ -176,7 +176,7 @@ speedChange(WMWidget *w, void *data)
 	setMouseAccel(WMWidgetScreen(panel->win), panel->acceleration, 
 		      threshold);
     }
-    free(tmp);
+    wfree(tmp);
 }
 
 
@@ -432,17 +432,17 @@ fillModifierPopUp(WMPopUpButton *pop)
 		if (array[i] == NULL)
 		    continue;
 		if (strstr(array[i], tmp)) {
-		    free(array[i]);
+		    wfree(array[i]);
 		    array[i]=NULL;
 		    break;
 		}
 	    }
-	    free(tmp);
+	    wfree(tmp);
 	}
 	
 	while (--a>0) {
 	    if (array[a])
-		free(array[a]);
+		wfree(array[a]);
 	}
     }
     
@@ -490,7 +490,7 @@ createPanel(Panel *p)
 	} else {
 	    wwarning(_("could not load icon %s"), path);
 	}
-	free(path);
+	wfree(path);
     }
 
     panel->speedS = WMCreateSlider(panel->speedF);
@@ -560,7 +560,7 @@ createPanel(Panel *p)
 	    } else {
 		wwarning(_("could not load icon file %s"), path);
 	    }
-	    free(path);
+	    wfree(path);
 	}
 	path = LocateImage(buf2);
 	if (path) {
@@ -571,11 +571,11 @@ createPanel(Panel *p)
 	    } else {
 		wwarning(_("could not load icon file %s"), path);
 	    }
-	    free(path);
+	    wfree(path);
 	}
     }
-    free(buf1);
-    free(buf2);
+    wfree(buf1);
+    wfree(buf2);
 
     panel->tester = CreateDoubleTest(panel->ddelaF, _("Test"));
     WMResizeWidget(panel->tester, 84, 29);
@@ -710,7 +710,8 @@ storeCommandInScript(char *cmd, char *line)
 			     "/Library/WindowMaker/autostart.tmp");
 	fo = fopen(tmppath, "w");
 	if (!fo) {
-	    wsyserror(_("could not create temporary file %s"), tmppath);
+            wsyserror(_("could not create temporary file %s"), tmppath);
+            wfree(tmppath);
 	    goto end;
 	}
 
@@ -743,13 +744,13 @@ storeCommandInScript(char *cmd, char *line)
 	if (rename(tmppath, path)!=0) {
 	    wsyserror(_("could not rename file %s to %s\n"), tmppath, path);
 	}
-	free(tmppath);
+	wfree(tmppath);
     }
     sprintf(buffer, "chmod u+x %s", path);
     system(buffer);
 
 end:
-    free(path);
+    wfree(path);
     if (f)
 	fclose(f);
 }
@@ -767,7 +768,7 @@ storeData(_Panel *panel)
     if (!WMGetUDBoolForKey(udb, "NoXSetStuff")) {
 	tmp = WMGetTextFieldText(panel->threT);
 	if (strlen(tmp)==0) {
-	    free(tmp);
+	    wfree(tmp);
 	    tmp = wstrdup("4");
 	}
 
@@ -775,7 +776,7 @@ storeData(_Panel *panel)
 		10, tmp);
 	storeCommandInScript(XSET" m", buffer);
 
-	free(tmp);
+	wfree(tmp);
     }
 
     tmp = WMGetTextFieldText(panel->ddelaT);
@@ -801,7 +802,7 @@ storeData(_Panel *panel)
 
     SetStringForKey(tmp, "ModifierKey");
 
-    free(tmp);
+    wfree(tmp);
 }
 
 

@@ -94,7 +94,7 @@ wPixmapCreateFromXBMData(WScreen *scr, char *data, char *mask,
     pix->image = XCreatePixmapFromBitmapData(dpy, scr->w_win, data, width, 
 					     height, fg, bg, scr->w_depth);
     if (pix->image==None) {
-	free(pix);
+	wfree(pix);
 	return NULL;
     }
     if (mask) {
@@ -186,7 +186,7 @@ wPixmapCreate(WScreen *scr, Pixmap image, Pixmap mask)
     if (!XGetGeometry(dpy, image, &foo, &bar, &bar, &width, &height, &baz,
 	 &depth)) {
 	wwarning("XGetGeometry() failed during wPixmapCreate()");
-	free(pix);
+	wfree(pix);
 	return NULL;
     }
     pix->width = width;
@@ -225,7 +225,7 @@ wPixmapLoadXBMFile(WScreen *scr, char *path, char *mask_path)
     if (XReadBitmapFile(dpy, scr->w_win, path, (unsigned *)&(pix->width), 
 			(unsigned *)&(pix->height),
 			&(pix->image), &junk, &junk)!=BitmapSuccess) {
-	free(pix);
+	wfree(pix);
 	return NULL;
     }
     if (mask_path!=NULL) {
@@ -266,6 +266,6 @@ wPixmapDestroy(WPixmap *pix)
 	    XFreePixmap(dpy, pix->image);
 	}
     }
-    free(pix);
+    wfree(pix);
 }
 
