@@ -1256,7 +1256,7 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 	}
         if (move) {
             XSetSelectionOwner(tPtr->view->screen->display,
-                       XA_PRIMARY, tPtr->view->window, CurrentTime);
+                       XA_PRIMARY, tPtr->view->window,  event->xmotion.time);
             {
                 WMNotification *notif = WMCreateNotification("_lostOwnership",
                         NULL,tPtr);
