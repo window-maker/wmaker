@@ -25,5 +25,5 @@ WMState: $(srcdir)/WMState.in
 	chmod 644 WMState
 
 WMRootMenu: $(srcdir)/../plmenu
-	-cp -f ../plmenu WMRootMenu
+	-cp -f $(srcdir)/../plmenu WMRootMenu
 
