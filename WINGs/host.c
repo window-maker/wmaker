@@ -262,7 +262,8 @@ WMIsHostEqualToHost(WMHost* hPtr, WMHost* aPtr)
         return True;
 
     for (i=0; i<WMGetBagItemCount(aPtr->addresses); i++) {
-        if (WMGetFirstInBag(hPtr->addresses, WMGetFromBag(aPtr->addresses, i)))
+        if (WMGetFirstInBag(hPtr->addresses,
+                            WMGetFromBag(aPtr->addresses, i)) >= 0)
             return True;
     }
 
