@@ -940,6 +940,9 @@ void
 wFrameWindowPaint(WFrameWindow *fwin)
 {
     WScreen *scr = fwin->screen_ptr;
+    int state;
+
+    state = fwin->flags.state;
 
     if (fwin->flags.is_client_window_frame)
 	fwin->flags.justification = wPreferences.title_justification;
@@ -955,13 +958,14 @@ wFrameWindowPaint(WFrameWindow *fwin)
 	    updateTexture(fwin);
 	} else {
 	    /* first render the texture for the current state... */
-	    remakeTexture(fwin, fwin->flags.state);
+	    remakeTexture(fwin, state);
 	    /* ... and paint it */
 	    updateTexture(fwin);
 
 	    for (i=0; i < 3; i++) {
-		if (i!=fwin->flags.state)
-		    remakeTexture(fwin, i);
+                if (i != state) {
+                    remakeTexture(fwin, i);
+                }
 	    }
 	}
     }
@@ -973,10 +977,10 @@ wFrameWindowPaint(WFrameWindow *fwin)
     }
 
     if (fwin->titlebar && !fwin->flags.repaint_only_resizebar
-	&& fwin->title_texture[fwin->flags.state]->any.type==WTEX_SOLID) {
+	&& fwin->title_texture[state]->any.type==WTEX_SOLID) {
         wDrawBevel(fwin->titlebar->window, fwin->titlebar->width,
                 fwin->titlebar->height,
-                (WTexSolid*)fwin->title_texture[fwin->flags.state], 
+                (WTexSolid*)fwin->title_texture[state],
                 WREL_RAISED);
     }
 
@@ -1015,7 +1019,7 @@ wFrameWindowPaint(WFrameWindow *fwin)
     
     
     if (fwin->titlebar && !fwin->flags.repaint_only_resizebar) {
-        int x, w;
+        int x, y, w, h;
         int lofs = 6, rofs = 6;
         int titlelen;
         int allButtons = 1;
@@ -1035,7 +1039,7 @@ wFrameWindowPaint(WFrameWindow *fwin)
 	    else
 		allButtons = 0;
 #endif
-	    
+
 	    if (fwin->right_button && !fwin->flags.hide_right_button
 		&& !fwin->flags.rbutton_dont_fit)
 		rofs += fwin->right_button->width + 3;
@@ -1049,8 +1053,8 @@ wFrameWindowPaint(WFrameWindow *fwin)
 #endif
 
 	if (fwin->title) {
+            Drawable buf;
             char *title;
-            int h, y;
 
 	    title = ShrinkString(*fwin->font, fwin->title,
 				 fwin->titlebar->width - lofs - rofs);
@@ -1077,42 +1081,27 @@ wFrameWindowPaint(WFrameWindow *fwin)
             y = *fwin->title_clearance + TITLEBAR_EXTEND_SPACE;
             h = WMFontHeight(*fwin->font);
 
-//#define DBL_BUF
-#ifdef DBL_BUF
-            // what is going on here?
-            {
-                Drawable buf;
-                int i;
+            buf = XCreatePixmap(dpy, fwin->titlebar->window, w, h,
+                                scr->w_depth);
 
-                buf = XCreatePixmap(dpy, fwin->titlebar->window, w, h,
-                                    scr->w_depth);
+            XSetClipMask(dpy, scr->copy_gc, None);
 
-                i = fwin->flags.state;
-                if (fwin->title_texture[i]->any.type!=WTEX_SOLID) {
-                    XCopyArea(dpy, fwin->title_back[i], buf, scr->copy_gc,
-                              x, y, w, h, 0, 0);
-                } else {
-                    XSetForeground(dpy, scr->copy_gc,
-                                   fwin->title_texture[i]->solid.normal.pixel);
-                    XFillRectangle(dpy, buf, scr->copy_gc, 0, 0, w, h);
-                }
-
-                WMDrawString(scr->wmscreen, buf,
-                             fwin->title_color[fwin->flags.state],
-                             *fwin->font, 0, 0, title, titlelen);
-
-                XCopyArea(dpy, buf, fwin->titlebar->window, scr->copy_gc,
-                          0, 0, w, h, x, y);
-
-                XFreePixmap(dpy, buf);
+            if (fwin->title_texture[state]->any.type!=WTEX_SOLID) {
+                XCopyArea(dpy, fwin->title_back[state], buf, scr->copy_gc,
+                          x, y, w, h, 0, 0);
+            } else {
+                XSetForeground(dpy, scr->copy_gc,
+                               fwin->title_texture[state]->solid.normal.pixel);
+                XFillRectangle(dpy, buf, scr->copy_gc, 0, 0, w, h);
             }
-#else
-            XClearArea(dpy, fwin->titlebar->window, x, y, w, h, False);
 
-            WMDrawString(scr->wmscreen, fwin->titlebar->window,
-                         fwin->title_color[fwin->flags.state],
-                         *fwin->font, x, y, title, titlelen);
-#endif
+            WMDrawString(scr->wmscreen, buf, fwin->title_color[state],
+                         *fwin->font, 0, 0, title, titlelen);
+
+            XCopyArea(dpy, buf, fwin->titlebar->window, scr->copy_gc,
+                      0, 0, w, h, x, y);
+
+            XFreePixmap(dpy, buf);
 
             wfree(title);
 	}
