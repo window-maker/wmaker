@@ -265,7 +265,8 @@ enum {
     WC_Matrix = 12,		       /* not ready */
     WC_SplitView = 13,
     WC_TabView = 14,
-    WC_ProgressIndicator = 15
+    WC_ProgressIndicator = 15,
+    WC_MenuView = 16
 };
 
 /* All widgets must start with the following structure
@@ -312,6 +313,7 @@ typedef struct W_TabView WMTabView;
 
 /* not widgets */
 typedef struct W_TabViewItem WMTabViewItem;
+typedef struct W_MenuItem WMMenuItem;
 
 
 typedef struct W_FilePanel WMFilePanel;
@@ -950,6 +952,9 @@ WMListItem *WMInsertListItem(WMList *lPtr, int row, char *text);
 
 void WMSortListItems(WMList *lPtr);
 
+void WMSortListItemsWithComparer(WMList *lPtr, 
+				 int (f)(const void*, const void*));
+
 int WMFindRowOfListItemWithTitle(WMList *lPtr, char *title);
 
 WMListItem *WMGetListItem(WMList *lPtr, int row);
@@ -1042,6 +1047,69 @@ void WMSetBrowserDelegate(WMBrowser *bPtr, WMBrowserDelegate *delegate);
 
 /* ....................................................................... */
 
+
+Bool WMMenuItemIsSeparator(WMMenuItem *item);
+
+WMMenuItem *WMCreateMenuItem(void);
+
+void WMDestroyMenuItem(WMMenuItem *item);
+
+Bool WMGetMenuItemEnabled(WMMenuItem *item);
+
+void WMSetMenuItemEnabled(WMMenuItem *item, Bool flag);
+
+char *WMGetMenuItemShortcut(WMMenuItem *item);
+
+unsigned WMGetMenuItemShortcutModifierMask(WMMenuItem *item);
+
+void WMSetMenuItemShortcut(WMMenuItem *item, char *shortcut);
+
+void WMSetMenuItemShortcutModifierMask(WMMenuItem *item, unsigned mask);
+
+void *WMGetMenuItemRepresentedObject(WMMenuItem *item);
+
+void WMSetMenuItemRepresentedObject(WMMenuItem *item, void *object);
+
+void WMSetMenuItemAction(WMMenuItem *item, WMAction *action, void *data);
+
+WMAction *WMGetMenuItemAction(WMMenuItem *item);
+
+void *WMGetMenuItemData(WMMenuItem *item);
+
+void WMSetMenuItemTitle(WMMenuItem *item, char *title);
+
+char *WMGetMenuItemTitle(WMMenuItem *item);
+
+void WMSetMenuItemState(WMMenuItem *item, int state);
+
+int WMGetMenuItemState(WMMenuItem *item);
+
+void WMSetMenuItemPixmap(WMMenuItem *item, WMPixmap *pixmap);
+
+WMPixmap *WMGetMenuItemPixmap(WMMenuItem *item);
+
+void WMSetMenuItemOnStatePixmap(WMMenuItem *item, WMPixmap *pixmap);
+
+WMPixmap *WMGetMenuItemOnStatePixmap(WMMenuItem *item);
+
+void WMSetMenuItemOffStatePixmap(WMMenuItem *item, WMPixmap *pixmap);
+
+WMPixmap *WMGetMenuItemOffStatePixmap(WMMenuItem *item);
+
+void WMSetMenuItemMixedStatePixmap(WMMenuItem *item, WMPixmap *pixmap);
+
+WMPixmap *WMGetMenuItemMixedStatePixmap(WMMenuItem *item);
+
+/*void WMSetMenuItemSubmenu(WMMenuItem *item, WMMenu *submenu);
+ 
+
+WMMenu *WMGetMenuItemSubmenu(WMMenuItem *item);
+
+Bool WMGetMenuItemHasSubmenu(WMMenuItem *item);
+ */
+
+/* ....................................................................... */
+
 WMPopUpButton *WMCreatePopUpButton(WMWidget *parent);
 
 void WMSetPopUpButtonAction(WMPopUpButton *sPtr, WMAction *action, 
@@ -1049,9 +1117,10 @@ void WMSetPopUpButtonAction(WMPopUpButton *sPtr, WMAction *action,
 
 void WMSetPopUpButtonPullsDown(WMPopUpButton *bPtr, Bool flag);
 
-void WMAddPopUpButtonItem(WMPopUpButton *bPtr, char *title);
+WMMenuItem *WMAddPopUpButtonItem(WMPopUpButton *bPtr, char *title);
 
-void WMInsertPopUpButtonItem(WMPopUpButton *bPtr, int index, char *title);
+WMMenuItem *WMInsertPopUpButtonItem(WMPopUpButton *bPtr, int index, 
+				    char *title);
 
 void WMRemovePopUpButtonItem(WMPopUpButton *bPtr, int index);
 
@@ -1067,6 +1136,9 @@ void WMSetPopUpButtonText(WMPopUpButton *bPtr, char *text);
 
 /* don't free the returned data */
 char *WMGetPopUpButtonItem(WMPopUpButton *bPtr, int index);
+
+WMMenuItem *WMGetPopUpButtonMenuItem(WMPopUpButton *bPtr, int index);
+
 
 int WMGetPopUpButtonNumberOfItems(WMPopUpButton *bPtr);
 
@@ -1225,6 +1297,7 @@ void WMSelectTabViewItemAtIndex(WMTabView *tPtr, int index);
 
 void WMSetTabViewDelegate(WMTabView *tPtr, WMTabViewDelegate *delegate);
 
+/* ....................................................................... */
 
 WMTabViewItem *WMCreateTabViewItemWithIdentifier(int identifier);
 

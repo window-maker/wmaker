@@ -509,7 +509,8 @@ wSessionRestoreState(WScreen *scr)
                 btn = dock->icon_array[j];
                 if (btn && SAME(instance, btn->wm_instance) &&
                     SAME(class, btn->wm_class) &&
-                    SAME(command, btn->command)) {
+                    SAME(command, btn->command) &&
+		    !btn->launching) {
                     found = 1;
                     break;
                 }

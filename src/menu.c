@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <ctype.h>
+#include <nana.h>
 
 #include "WindowMaker.h"
 #include "wcore.h"
@@ -284,23 +285,13 @@ wMenuInsertCallback(WMenu *menu, int index, char *text,
 {
     WMenuEntry *entry;
 
-#ifdef DEBUG
-    if (!menu) {
-	dbprintf("Passed NULL as menu parameter to wMenuAddCallback() \n");
-	return NULL;
-    }    
-#endif
-
-    assert(menu->flags.brother==0);
     menu->flags.realized = 0;
     menu->brother->flags.realized = 0;
     
     /* reallocate array if it's too small */
     if (menu->entry_no >= menu->alloced_entries) {
 	void *tmp;
-#ifdef DEBUG
-	dbputs("doing wrealloc()");
-#endif	
+
 	tmp = wrealloc(menu->entries,
 		       sizeof(WMenuEntry)*(menu->alloced_entries+5));
 	if (tmp==NULL) {
@@ -1777,10 +1768,6 @@ wMenuScroll(WMenu *menu, XEvent *event)
     int old_frame_x = omenu->frame_x;
     int old_frame_y = omenu->frame_y;
     XEvent ev;
-
-#ifdef DEBUG
-    dbputs("Entering menu Scroll");
-#endif
     
     if (omenu->jump_back)
         WMDeleteTimerWithClientData(omenu->jump_back);
@@ -1887,11 +1874,6 @@ wMenuScroll(WMenu *menu, XEvent *event)
         else delayer = omenu->jump_back;
         WMAddTimerHandler(MENU_JUMP_BACK_DELAY,(WMCallback*)_leaving, delayer);
     }
-
-
-#ifdef DEBUG
-    dbputs("Leaving menu Scroll");
-#endif
 }
 
 
@@ -2313,10 +2295,6 @@ menuTitleMouseDown(WCoreWindow *sender, void *data, XEvent *event)
     int i, lower;
     Bool started;
 
-#ifdef DEBUG
-    dbprintf("Moving menu\n");
-#endif
-
     /* can't touch the menu copy */
     if (menu->flags.brother)
 	return;
@@ -2400,9 +2378,6 @@ menuTitleMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 	 case ButtonRelease:
 	    if (ev.xbutton.button != event->xbutton.button)
 		break;
-#ifdef DEBUG
-	    dbprintf("End menu move\n");
-#endif
 	    XUngrabPointer(dpy, CurrentTime);
 	    return;
 

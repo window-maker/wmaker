@@ -152,6 +152,16 @@ WMSortListItems(WMList *lPtr)
 
 
 
+void
+WMSortListItemsWithComparer(WMList *lPtr, int (f)(const void*, const void*))
+{
+    WMSortBag(lPtr->items, f);
+
+    paintList(lPtr);
+}
+
+
+
 WMListItem*
 WMInsertListItem(WMList *lPtr, int row, char *text)
 {

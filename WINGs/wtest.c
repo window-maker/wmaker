@@ -513,6 +513,7 @@ int main(int argc, char **argv)
      */
 
 
+    testPullDown(scr);
 
     testFontPanel(scr);
 #if 0
@@ -531,7 +532,6 @@ int main(int argc, char **argv)
 
 
     testSlider(scr);
-    testPullDown(scr);
 #endif
     /*
      * The main event loop.

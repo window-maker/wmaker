@@ -140,7 +140,8 @@ RGetImageFromXPMData(RContext *context, char **data)
 	    color_table[1][i] = green;
 	    color_table[2][i] = blue;
 	    color_table[3][i] = 255;
-	} else if (strncmp(&(data[line][j]), "None", 4)==0) {
+	} else if (strncmp(&(data[line][j]), "None", 4)==0
+		   || strncmp(&(data[line][j]), "none", 4)==0) {
 	    color_table[3][i] = 0;
 	    transp = 1;
 	} else {
@@ -315,7 +316,8 @@ RLoadXPM(RContext *context, char *file, int index)
 	    color_table[1][i] = green;
 	    color_table[2][i] = blue;
 	    color_table[3][i] = 255;
-	} else if (strncmp(&(line[j]), "None", 4)==0) {
+	} else if (strncmp(&(line[j]), "None", 4)==0
+		   || strncmp(&(line[j]), "none", 4)==0) {
 	    color_table[3][i] = 0;
 	    transp = 1;
 	} else {

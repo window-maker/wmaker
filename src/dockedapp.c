@@ -66,6 +66,7 @@ typedef struct _AppSettingsPanel {
     WMButton *browseBtn;
 
     WMButton *autoLaunchBtn;
+    WMButton *lockBtn;
 
     WMButton *okBtn;
     WMButton *cancelBtn;
@@ -246,6 +247,9 @@ panelBtnCallback(WMWidget *self, void *data)
 
 	panel->editedIcon->auto_launch =
 	    WMGetButtonSelected(panel->autoLaunchBtn);
+
+	panel->editedIcon->lock =
+	    WMGetButtonSelected(panel->lockBtn);
     }
 
     if (done)
@@ -254,7 +258,7 @@ panelBtnCallback(WMWidget *self, void *data)
 
 
 #define PWIDTH	295
-#define PHEIGHT	345
+#define PHEIGHT	365
 
 
 void
@@ -298,9 +302,16 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
 		    _("Start when WindowMaker is started"));
     WMSetButtonSelected(panel->autoLaunchBtn, aicon->auto_launch);
 
+    panel->lockBtn = WMCreateSwitchButton(panel->win);
+    WMResizeWidget(panel->lockBtn, PWIDTH-30, 20);
+    WMMoveWidget(panel->lockBtn, 15, 100);
+    WMSetButtonText(panel->lockBtn,
+		    _("Lock (prevent accidental removal)"));
+    WMSetButtonSelected(panel->lockBtn, aicon->lock);
+
     panel->commandFrame = WMCreateFrame(panel->win);
     WMResizeWidget(panel->commandFrame, 275, 50);
-    WMMoveWidget(panel->commandFrame, 10, 105);
+    WMMoveWidget(panel->commandFrame, 10, 125);
     WMSetFrameTitle(panel->commandFrame, _("Application path and arguments"));
 
     panel->commandField = WMCreateTextField(panel->commandFrame);
@@ -310,7 +321,7 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
 
     panel->dndCommandFrame = WMCreateFrame(panel->win);
     WMResizeWidget(panel->dndCommandFrame, 275, 70);
-    WMMoveWidget(panel->dndCommandFrame, 10, 165);
+    WMMoveWidget(panel->dndCommandFrame, 10, 185);
     WMSetFrameTitle(panel->dndCommandFrame,
 		   _("Command for files dropped with DND"));
 
@@ -333,7 +344,7 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
 
     panel->iconFrame = WMCreateFrame(panel->win);
     WMResizeWidget(panel->iconFrame, 275, 50);
-    WMMoveWidget(panel->iconFrame, 10, 245);
+    WMMoveWidget(panel->iconFrame, 10, 265);
     WMSetFrameTitle(panel->iconFrame, _("Icon Image"));
 
     panel->iconField = WMCreateTextField(panel->iconFrame);
@@ -352,13 +363,13 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
 
     panel->okBtn = WMCreateCommandButton(panel->win);
     WMResizeWidget(panel->okBtn, 80, 26);
-    WMMoveWidget(panel->okBtn, 200, 308);
+    WMMoveWidget(panel->okBtn, 200, 328);
     WMSetButtonText(panel->okBtn, _("OK"));
     WMSetButtonAction(panel->okBtn, panelBtnCallback, panel);
 
     panel->cancelBtn = WMCreateCommandButton(panel->win);
     WMResizeWidget(panel->cancelBtn, 80, 26);
-    WMMoveWidget(panel->cancelBtn, 110, 308);
+    WMMoveWidget(panel->cancelBtn, 110, 328);
     WMSetButtonText(panel->cancelBtn, _("Cancel"));
     WMSetButtonAction(panel->cancelBtn, panelBtnCallback, panel);
 

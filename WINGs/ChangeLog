@@ -3,6 +3,9 @@ changes since wmaker 0.61.1:
 
 - fixed WMInsertInBag(). It ignored index, and always put the new item at end.
 - added WMSaveUserDefaults().
+- rewrote WMPopUpButton to use WMMenuItem
+- added WMGetPopUpButtonMenuItem(WMPopUpButton *bPtr, int index)
+- WMSortListItemsWithComparer(WMList *lPtr, (int)(f)(const void*, const void*))
 - fixed bug with sorting list items.
 
 

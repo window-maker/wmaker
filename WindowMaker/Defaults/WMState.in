@@ -22,6 +22,7 @@
 	AutoLaunch = No;
 	Forced = No;
 	Position = "0,2";
+	Lock = Yes;
       }
     );
     Position = "-64,0";

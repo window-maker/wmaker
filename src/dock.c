@@ -100,7 +100,8 @@ static proplist_t dCommand=NULL;
 #ifdef OFFIX_DND
 static proplist_t dDropCommand=NULL;
 #endif
-static proplist_t dAutoLaunch, dName, dForced, dBuggyApplication, dYes, dNo;
+static proplist_t dAutoLaunch, dLock;
+static proplist_t dName, dForced, dBuggyApplication, dYes, dNo;
 static proplist_t dHost, dDock, dClip;
 static proplist_t dAutoAttractIcons;
 
@@ -169,6 +170,7 @@ make_keys()
 #ifdef OFFIX_DND
     dDropCommand = PLRetain(PLMakeString("DropCommand"));
 #endif
+    dLock = PLRetain(PLMakeString("Lock"));
     dAutoLaunch = PLRetain(PLMakeString("AutoLaunch"));
     dName = PLRetain(PLMakeString("Name"));
     dForced = PLRetain(PLMakeString("Forced"));
@@ -1327,7 +1329,7 @@ static proplist_t
 make_icon_state(WAppIcon *btn)
 {
     proplist_t node = NULL;
-    proplist_t command, autolaunch, name, forced, host, position, buggy;
+    proplist_t command, autolaunch, lock, name, forced, host, position, buggy;
     proplist_t omnipresent;
     char *tmp;
     char buffer[64];
@@ -1339,6 +1341,8 @@ make_icon_state(WAppIcon *btn)
 	    command = PLMakeString(btn->command);
 
 	autolaunch = btn->auto_launch ? dYes : dNo;
+
+	lock = btn->lock ? dYes : dNo;
 
 	tmp = EscapeWM_CLASS(btn->wm_instance, btn->wm_class);
 
@@ -1359,6 +1363,7 @@ make_icon_state(WAppIcon *btn)
         node = PLMakeDictionaryFromEntries(dCommand, command,
                                            dName, name,
                                            dAutoLaunch, autolaunch,
+					   dLock, lock,
                                            dForced, forced,
 					   dBuggyApplication, buggy,
                                            dPosition, position,
@@ -1511,6 +1516,22 @@ wClipSaveWorkspaceState(WScreen *scr, int workspace)
 }
 
 
+static Bool
+getBooleanDockValue(proplist_t value, proplist_t key)
+{
+    if (value) {
+        if (PLIsString(value)) {
+            if (strcasecmp(PLGetString(value), "YES")==0)
+                return True;
+        } else {
+            wwarning(_("bad value in docked icon state info %s"),
+                     PLGetString(key));
+        }
+    }
+    return False;
+}
+
+
 static WAppIcon*
 restore_icon_state(WScreen *scr, proplist_t info, int type, int index)
 {
@@ -1579,44 +1600,22 @@ restore_icon_state(WScreen *scr, proplist_t info, int type, int index)
     /* check auto launch */
     value = PLGetDictionaryEntry(info, dAutoLaunch);
 
-    aicon->auto_launch = 0;
-    if (value) {
-        if (PLIsString(value)) {
-            if (strcasecmp(PLGetString(value), "YES")==0)
-                aicon->auto_launch = 1;
-        } else {
-            wwarning(_("bad value in docked icon state info %s"),
-                     PLGetString(dAutoLaunch));
-        }
-    }
+    aicon->auto_launch = getBooleanDockValue(value, dAutoLaunch);
+
+    /* check lock */
+    value = PLGetDictionaryEntry(info, dLock);
+
+    aicon->lock = getBooleanDockValue(value, dLock);
 
     /* check if it wasn't normally docked */
     value = PLGetDictionaryEntry(info, dForced);
 
-    aicon->forced_dock = 0;
-    if (value) {
-        if (PLIsString(value)) {
-            if (strcasecmp(PLGetString(value), "YES")==0)
-                aicon->forced_dock = 1;
-        } else {
-            wwarning(_("bad value in docked icon state info %s"),
-                     PLGetString(dForced));
-        }
-    }
+    aicon->forced_dock = getBooleanDockValue(value, dForced);
 
     /* check if we can rely on the stuff in the app */
     value = PLGetDictionaryEntry(info, dBuggyApplication);
 
-    aicon->buggy_app = 0;
-    if (value) {
-        if (PLIsString(value)) {
-            if (strcasecmp(PLGetString(value), "YES")==0)
-                aicon->buggy_app = 1;
-        } else {
-            wwarning(_("bad value in docked icon state info %s"),
-                     PLGetString(dBuggyApplication));
-        }
-    }
+    aicon->buggy_app = getBooleanDockValue(value, dBuggyApplication);
 
     /* get position in the dock */
     value = PLGetDictionaryEntry(info, dPosition);
@@ -1642,16 +1641,7 @@ restore_icon_state(WScreen *scr, proplist_t info, int type, int index)
     /* check if icon is omnipresent */
     value = PLGetDictionaryEntry(info, dOmnipresent);
 
-    aicon->omnipresent = 0;
-    if (value) {
-        if (PLIsString(value)) {
-            if (strcasecmp(PLGetString(value), "YES")==0)
-                aicon->omnipresent = 1;
-        } else {
-            wwarning(_("bad value in docked icon state info %s"),
-                     PLGetString(dOmnipresent));
-        }
-    }
+    aicon->omnipresent = getBooleanDockValue(value, dOmnipresent);
 
     aicon->running = 0;
     aicon->docked = 1;
@@ -3869,6 +3859,7 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
                 }
             }
             if (aicon->launching
+		|| aicon->lock
 		|| (aicon->running && !(ev.xmotion.state & MOD_MASK))
 		|| (!aicon->running && tmp)) {
                 shad_x = last_dock->x_pos + ix*wPreferences.icon_size;

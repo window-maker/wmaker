@@ -102,6 +102,8 @@ char *ExpandOptions(WScreen *scr, char *cmdline);
 
 void ExecuteShellCommand(WScreen *scr, char *command);
 
+void StartLogShell(WScreen *scr);
+
 Bool IsDoubleClick(WScreen *scr, XEvent *event);
 
 WWindow *NextFocusWindow(WScreen *scr);
@@ -158,12 +160,6 @@ void ExecExitScript();
 Bool wFetchName(Display *dpy, Window win, char **winname);
 Bool wGetIconName(Display *dpy, Window win, char **iconname);
 
-
-
-/* debugging stuff */
-
-void dbprintf(char *, ...);
-void dbputs(char *);
 
 
 #endif

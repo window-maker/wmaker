@@ -271,6 +271,8 @@ typedef struct WPreferences {
 				       /* paths to find pixmaps */
     char *icon_path;		       /* : separated list of */
 				       /* paths to find icons */
+    
+    char *logger_shell;		       /* shell to log child stdi/o */
 
     RImage *button_images;	       /* titlebar button images */
 

@@ -91,6 +91,9 @@ typedef struct WAppIcon {
     unsigned int destroyed:1;	       /* appicon was destroyed */
     unsigned int buggy_app:1;	       /* do not make dock rely on hints 
 					* set by app */
+    
+    unsigned int lock:1;	       /* do not allow to be destroyed */
+    
 #ifdef REDUCE_APPICONS
     unsigned int num_apps;	       /* length of applist */
 #endif

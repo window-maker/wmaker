@@ -151,6 +151,9 @@ static int ArgCount;
 extern void EventLoop();
 extern void StartUp();
 
+/* stdi/o for log shell */
+static int LogStdIn = -1, LogStdOut = -1, LogStdErr = -1;
+
 
 void
 Exit(int status)
@@ -221,6 +224,159 @@ SetupEnvironment(WScreen *scr)
     sprintf(tmp, "WRASTER_COLOR_RESOLUTION%i=%i", scr->screen, 
 		scr->rcontext->attribs->colors_per_channel);
     putenv(tmp);
+}
+
+
+
+
+typedef struct {
+    WScreen *scr;
+    char *command;
+} _tuple;
+
+
+static void
+shellCommandHandler(pid_t pid, unsigned char status, _tuple *data)
+{
+    if (status == 127) {
+	char *buffer;
+
+	buffer = wstrappend(_("Could not execute command: "), data->command);
+
+	wMessageDialog(data->scr, _("Error"), buffer, _("OK"), NULL, NULL);
+	free(buffer);
+    } else if (status != 127) {
+	/*
+	printf("%s: %i\n", data->command, status);
+	 */
+    }
+
+    free(data->command);
+    free(data);
+}
+
+
+void
+ExecuteShellCommand(WScreen *scr, char *command)
+{
+    static char *shell = NULL;
+    pid_t pid;
+
+    /*
+     * This have a problem: if the shell is tcsh (not sure about others)
+     * and ~/.tcshrc have /bin/stty erase ^H somewhere on it, the shell
+     * will block and the command will not be executed.
+    if (!shell) {
+	shell = getenv("SHELL");
+	if (!shell)
+	    shell = "/bin/sh";
+    }
+     */
+    shell = "/bin/sh";
+
+    pid = fork();
+    
+    if (pid==0) {
+
+	SetupEnvironment(scr);
+
+#ifdef HAVE_SETPGID
+	setpgid(0, 0);
+#endif
+	execl(shell, shell, "-c", command, NULL);
+	wsyserror("could not execute %s -c %s", shell, command);
+	Exit(-1);
+    } else if (pid < 0) {
+	wsyserror("cannot fork a new process");
+    } else {
+	_tuple *data = wmalloc(sizeof(_tuple));
+	
+	data->scr = scr;
+	data->command = wstrdup(command);
+
+	wAddDeathHandler(pid, (WDeathHandler*)shellCommandHandler, data);
+    }
+}
+
+
+/*
+ *---------------------------------------------------------------------------
+ * StartLogShell
+ * 	Start a shell that will receive all stdin and stdout from processes
+ * forked by wmaker.
+ *---------------------------------------------------------------------------
+ */
+void
+StartLogShell(WScreen *scr)
+{
+    int in_fd[2];
+    int out_fd[2];
+    int err_fd[2];
+    pid_t pid;
+    
+    SetupEnvironment(scr);
+    
+    if (pipe(in_fd) < 0) {
+	wsyserror("could not create pipe for log shell\n");
+	return;
+    }
+    if (pipe(out_fd) < 0) {
+	wsyserror("could not create pipe for log shell\n");
+	close(in_fd[0]);
+	close(in_fd[1]);
+	return;
+    }
+    if (pipe(err_fd) < 0) {
+	wsyserror("could not create pipe for log shell\n");
+	close(out_fd[0]);
+	close(out_fd[1]);
+	close(in_fd[0]);
+	close(in_fd[1]);
+	return;
+    }
+
+    pid = fork();
+    if (pid < 0) {
+	wsyserror("could not fork a new process for log shell\n");
+	return;
+    } else if (pid == 0) {	
+	close(in_fd[0]);
+	close(out_fd[1]);
+	close(err_fd[1]);
+	
+	close(0);
+	close(1);
+	close(2);
+
+	if (dup2(in_fd[1], 0) < 0) {
+	    wsyserror("could not redirect stdin for log shell\n");
+	    exit(1);
+	}
+	if (dup2(out_fd[1], 1) < 0) {
+	    wsyserror("could not redirect stdout for log shell\n");
+	    exit(1);
+	}
+	if (dup2(err_fd[1], 2) < 0) {
+	    wsyserror("could not redirect stderr for log shell\n");
+	    exit(1);
+	}
+
+	close(in_fd[1]);
+	close(out_fd[1]);
+	close(err_fd[1]);
+
+	execl("/bin/sh", "/bin/sh", "-c", wPreferences.logger_shell, NULL);
+	wsyserror("could not execute %s\n", wPreferences.logger_shell);
+	exit(1);
+    } else {
+	close(in_fd[1]);
+	close(out_fd[0]);
+	close(err_fd[0]);
+	
+	LogStdIn = in_fd[1];
+	LogStdOut = out_fd[0];
+	LogStdErr = err_fd[0];
+    }
 }
 
 

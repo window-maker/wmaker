@@ -75,6 +75,7 @@ libWINGs_a_SOURCES = 	\
 	widgets.c \
 	wlabel.c \
 	wlist.c \
+	wmenuitem.c \
 	wmisc.c \
 	wpanel.c \
 	wpixmap.c \

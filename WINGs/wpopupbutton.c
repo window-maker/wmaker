@@ -4,12 +4,6 @@
 
 #include "WINGsP.h"
 
-typedef struct ItemList {
-    char *text;
-    struct ItemList *nextPtr;
-    unsigned int disabled:1;
-} ItemList;
-
 
 typedef struct W_PopUpButton {
     W_Class widgetClass;
@@ -20,14 +14,11 @@ typedef struct W_PopUpButton {
 
     char *caption;
 
-    ItemList *items;
-    short itemCount;
+    WMBag *items;
 
     short selectedItemIndex;
     
     short highlightedItem;
-
-    ItemList *selectedItem;	       /* selected item if it is a menu btn */
     
     WMView *menuView;		       /* override redirect popup menu */
 
@@ -100,6 +91,8 @@ WMCreatePopUpButton(WMWidget *parent)
 
     bPtr->flags.enabled = 1;
     
+    bPtr->items = WMCreateBag(4);
+
     bPtr->menuView = W_CreateTopView(scr);
     bPtr->menuView->attribs.override_redirect = True;
     bPtr->menuView->attribFlags |= CWOverrideRedirect;
@@ -125,69 +118,36 @@ WMSetPopUpButtonAction(WMPopUpButton *bPtr, WMAction *action, void *clientData)
 }
 
 
-void
+WMMenuItem*
 WMAddPopUpButtonItem(WMPopUpButton *bPtr, char *title)
 {
-    ItemList *itemPtr, *tmp;
+    WMMenuItem *item;
     
     CHECK_CLASS(bPtr, WC_PopUpButton);
 
-    itemPtr = wmalloc(sizeof(ItemList));
-    memset(itemPtr, 0, sizeof(ItemList));
-    itemPtr->text = wstrdup(title);
-    
-    /* append item to list */
-    tmp = bPtr->items;
-    if (!tmp)
-	bPtr->items = itemPtr;
-    else {
-	while (tmp->nextPtr!=NULL) 
-	    tmp = tmp->nextPtr;
-	tmp->nextPtr = itemPtr;
-    }
-    
-    bPtr->itemCount++;
-    
+    item = WMCreateMenuItem();
+    WMSetMenuItemTitle(item, title);
+
+    WMPutInBag(bPtr->items, item);
+
     if (bPtr->menuView && bPtr->menuView->flags.realized)
 	resizeMenu(bPtr);
+
+    return item;
 }
 
 
-void
+WMMenuItem*
 WMInsertPopUpButtonItem(WMPopUpButton *bPtr, int index, char *title)
 {
-    ItemList *itemPtr;
+    WMMenuItem *item;
 
     CHECK_CLASS(bPtr, WC_PopUpButton);
     
-    if (index < 0)
-	index = 0;
-    if (index >= bPtr->itemCount) {
-	WMAddPopUpButtonItem(bPtr, title);
-	return;
-    }
-    
-    itemPtr = wmalloc(sizeof(ItemList));
-    memset(itemPtr, 0, sizeof(ItemList));
-    itemPtr->text = wstrdup(title);
+    item = WMCreateMenuItem();
+    WMSetMenuItemTitle(item, title);
 
-    if (index == 0) {
-	itemPtr->nextPtr = bPtr->items;
-	bPtr->items = itemPtr;
-    } else {
-	ItemList *tmp;
-	int i = index;
-	
-	tmp = bPtr->items;
-	/* insert item in list */
-	while (--i > 0) {
-	    tmp = tmp->nextPtr;
-	}
-	itemPtr->nextPtr = tmp->nextPtr;
-	tmp->nextPtr = itemPtr;
-    }
-    
-    bPtr->itemCount++;
+    WMInsertInBag(bPtr->items, index, item);
   
     /* if there is an selected item, update it's index to match the new 
      * position */
@@ -196,49 +156,32 @@ WMInsertPopUpButtonItem(WMPopUpButton *bPtr, int index, char *title)
     
     if (bPtr->menuView && bPtr->menuView->flags.realized)
 	resizeMenu(bPtr);
+    
+    return item;
 }
 
 
 void
 WMRemovePopUpButtonItem(WMPopUpButton *bPtr, int index)
 {
-    ItemList *tmp;
+    WMMenuItem *item;
 
     CHECK_CLASS(bPtr, WC_PopUpButton);
+
+    wassertr(index >= 0 && index < WMGetBagItemCount(bPtr->items));
     
-    if (index < 0 || index >= bPtr->itemCount)
-	return;
 
+    item = WMGetFromBag(bPtr->items, index);
+    WMDeleteFromBag(bPtr->items, index);
 
-    if (index == 0) {
-	wfree(bPtr->items->text);
-	tmp = bPtr->items->nextPtr;
-	wfree(bPtr->items);
-	bPtr->items = tmp;
-    } else {
-	ItemList *next;
-	int i = index;
-	
-	tmp = bPtr->items;
-	while (--i > 0)
-	    tmp = tmp->nextPtr;
-	next = tmp->nextPtr->nextPtr;
-	
-	wfree(tmp->nextPtr->text);
-	wfree(tmp->nextPtr);
+    WMDestroyMenuItem(item);
 
-	tmp->nextPtr = next;
-    }
-
-    bPtr->itemCount--;
-
-    if (bPtr->selectedItem!=NULL && !bPtr->flags.pullsDown) {
+    if (bPtr->selectedItemIndex >= 0 && !bPtr->flags.pullsDown) {
 	if (index < bPtr->selectedItemIndex)
 	    bPtr->selectedItemIndex--;
 	else if (index == bPtr->selectedItemIndex) {
 	    /* reselect first item if the removed item is the 
 	     * selected one */
-	    bPtr->selectedItem = bPtr->items;
 	    bPtr->selectedItemIndex = 0;
 	    if (bPtr->view->flags.mapped)
 		paintPopUpButton(bPtr);
@@ -268,21 +211,13 @@ WMGetPopUpButtonEnabled(WMPopUpButton *bPtr)
 
 void
 WMSetPopUpButtonSelectedItem(WMPopUpButton *bPtr, int index)
-{
-    ItemList *itemPtr = bPtr->items;
-    int i = index;
-    
+{    
     if (index < 0) {
-	bPtr->selectedItem = NULL;
 	if (bPtr->view->flags.mapped)
 	    paintPopUpButton(bPtr);
 	return;
     }
     
-    while (i-- > 0) {
-	itemPtr = itemPtr->nextPtr;
-    }
-    bPtr->selectedItem = itemPtr;
     bPtr->selectedItemIndex = index;
     
     if (bPtr->view->flags.mapped)
@@ -292,7 +227,7 @@ WMSetPopUpButtonSelectedItem(WMPopUpButton *bPtr, int index)
 int
 WMGetPopUpButtonSelectedItem(WMPopUpButton *bPtr)
 {
-    if (!bPtr->flags.pullsDown && bPtr->selectedItem==NULL)
+    if (!bPtr->flags.pullsDown && bPtr->selectedItemIndex < 0)
 	return -1;
     else
 	return bPtr->selectedItemIndex;
@@ -320,32 +255,24 @@ WMSetPopUpButtonText(WMPopUpButton *bPtr, char *text)
 void 
 WMSetPopUpButtonItemEnabled(WMPopUpButton *bPtr, int index, Bool flag)
 {
-    int i;
-    ItemList *item = bPtr->items;
+    WMMenuItem *item;
+
+    item = WMGetFromBag(bPtr->items, index);
+    wassertr(item != NULL);
     
-    if (index < 0 || index >= bPtr->itemCount)
-	return;
-    
-    for (i = 0; i<index; i++)
-	item=item->nextPtr;
-    
-    item->disabled = !flag;
+    WMSetMenuItemEnabled(item, flag);
 }
 
 
 Bool
 WMGetPopUpButtonItemEnabled(WMPopUpButton *bPtr, int index)
 {
-    int i;
-    ItemList *item = bPtr->items;
-    
-    if (index < 0 || index >= bPtr->itemCount)
-	return False;
-    
-    for (i = 0; i<index; i++)
-	item=item->nextPtr;
-    
-    return !item->disabled;
+    WMMenuItem *item;
+
+    item = WMGetFromBag(bPtr->items, index);
+    wassertrv(item != NULL, False);
+
+    return WMGetMenuItemEnabled(item);
 }
 
 
@@ -353,22 +280,9 @@ void
 WMSetPopUpButtonPullsDown(WMPopUpButton *bPtr, Bool flag)
 {
     bPtr->flags.pullsDown = flag;
-    if (!flag) {
-        /* This code causes bugs. It should not select any item,
-         * since it was not asked to. -Dan
-        bPtr->selectedItem = bPtr->items;
-	if (bPtr->selectedItem)
-	    bPtr->selectedItemIndex = 0;
-	else
-            bPtr->selectedItemIndex = -1;
-        */
-        bPtr->selectedItem = NULL;
-        /* the drawing routine, still draws things wrong if we put
-         * the index to -1 (i.e. not selected).
-         * Find out why. -Dan */
-        bPtr->selectedItemIndex = 0;
-    } else
+    if (flag) {
 	bPtr->selectedItemIndex = -1;
+    }
 
     if (bPtr->view->flags.mapped)
 	paintPopUpButton(bPtr);
@@ -378,23 +292,33 @@ WMSetPopUpButtonPullsDown(WMPopUpButton *bPtr, Bool flag)
 int
 WMGetPopUpButtonNumberOfItems(WMPopUpButton *bPtr)
 {
-    return bPtr->itemCount;
+    return WMGetBagItemCount(bPtr->items);
 }
 
 
 char*
 WMGetPopUpButtonItem(WMPopUpButton *bPtr, int index)
 {
-    ItemList *itemPtr = bPtr->items;
-    
-    if ((index < 0) || (index >= bPtr->itemCount))
+    WMMenuItem *item;
+
+    item = WMGetFromBag(bPtr->items, index);
+    if (!item)
 	return NULL;
-    
-    while (index-->0)
-	itemPtr = itemPtr->nextPtr;
-    
-    return itemPtr->text;
+
+    return WMGetMenuItemTitle(item);
 }
+
+
+WMMenuItem*
+WMGetPopUpButtonMenuItem(WMPopUpButton *bPtr, int index)
+{
+    WMMenuItem *item;
+
+    item = WMGetFromBag(bPtr->items, index);
+
+    return item;
+}
+
 
 
 static void
@@ -408,11 +332,11 @@ paintPopUpButton(PopUpButton *bPtr)
     if (bPtr->flags.pullsDown) {
 	caption = bPtr->caption;
     } else {
-	if (bPtr->selectedItem == NULL) {
+	if (bPtr->selectedItemIndex < 0) {
 	    /* if no item selected, show the caption */
 	    caption = bPtr->caption;
-	} else {
-	    caption = bPtr->selectedItem->text;
+	} else {	    
+	    caption = WMGetPopUpButtonItem(bPtr, bPtr->selectedItemIndex);
 	}
     }
 
@@ -489,12 +413,12 @@ paintMenuEntry(PopUpButton *bPtr, int index, int highlight)
     W_Screen *scr = bPtr->view->screen;
     int i;
     int yo;
-    ItemList *itemPtr;
     int width, height, itemHeight;
+    char *title;
     
     itemHeight = bPtr->view->size.height;
     width = bPtr->view->size.width;
-    height = itemHeight * bPtr->itemCount;
+    height = itemHeight * WMGetBagItemCount(bPtr->items);
     yo = (itemHeight - WMFontHeight(scr->normalFont))/2;
 
     if (!highlight) {
@@ -508,16 +432,14 @@ paintMenuEntry(PopUpButton *bPtr, int index, int highlight)
     XFillRectangle(scr->display, bPtr->menuView->window, WMColorGC(scr->white),
 		   1, index*itemHeight+1, width-3, itemHeight-3);
     
-    itemPtr = bPtr->items;
-    for (i = 0; i < index; i++)
-	itemPtr = itemPtr->nextPtr;
-    
+    title = WMGetPopUpButtonItem(bPtr, index);
+
     W_DrawRelief(scr, bPtr->menuView->window, 0, index*itemHeight, 
 		 width, itemHeight, WRRaised);
 
     W_PaintText(bPtr->menuView, bPtr->menuView->window, scr->normalFont,  6, 
-		index*itemHeight + yo, width, WALeft, WMColorGC(scr->black), False,
-		itemPtr->text, strlen(itemPtr->text));
+		index*itemHeight + yo, width, WALeft, WMColorGC(scr->black), 
+		False, title, strlen(title));
 	
     if (!bPtr->flags.pullsDown && index == bPtr->selectedItemIndex) {
 	XCopyArea(scr->display, scr->popUpIndicator->pixmap, 
@@ -536,34 +458,38 @@ makeMenuPixmap(PopUpButton *bPtr)
     W_Screen *scr = bPtr->view->screen;
     int i;
     int yo;
-    ItemList *itemPtr;
     int width, height, itemHeight;
     
     itemHeight = bPtr->view->size.height;
     width = bPtr->view->size.width;
-    height = itemHeight * bPtr->itemCount;
+    height = itemHeight * WMGetBagItemCount(bPtr->items);
     yo = (itemHeight - WMFontHeight(scr->normalFont))/2;
     
     pixmap = XCreatePixmap(scr->display, bPtr->view->window, width, height, 
 			   scr->depth);
     
-    XFillRectangle(scr->display, pixmap, WMColorGC(scr->gray), 0, 0, width, height);
-    
-    itemPtr = bPtr->items;
-    for (i = 0; i < bPtr->itemCount; i++) {
+    XFillRectangle(scr->display, pixmap, WMColorGC(scr->gray), 0, 0,
+		   width, height);
+
+    for (i = 0; i < WMGetBagItemCount(bPtr->items); i++) {
 	GC gc;
-	
+	WMMenuItem *item;
+	char *text;
+
+	item = (WMMenuItem*)WMGetFromBag(bPtr->items, i);
+	text = WMGetMenuItemTitle(item);
+
 	W_DrawRelief(scr, pixmap, 0, i*itemHeight, width, itemHeight, 
 		     WRRaised);
 
-        if (itemPtr->disabled)
+        if (!WMGetMenuItemEnabled(item))
 	    gc = WMColorGC(scr->darkGray);
 	else
 	    gc = WMColorGC(scr->black);
 
 	W_PaintText(bPtr->menuView, pixmap, scr->normalFont,  6, 
 		    i*itemHeight + yo, width, WALeft, gc, False,
-		    itemPtr->text, strlen(itemPtr->text));
+		    text, strlen(text));
 	
 	if (!bPtr->flags.pullsDown && i == bPtr->selectedItemIndex) {
 	    XCopyArea(scr->display, scr->popUpIndicator->pixmap, pixmap, 
@@ -571,8 +497,7 @@ makeMenuPixmap(PopUpButton *bPtr)
 		      scr->popUpIndicator->height, 
 		      width-scr->popUpIndicator->width-4,
 		      i*itemHeight+(itemHeight-scr->popUpIndicator->height)/2);
-	}	
-	itemPtr = itemPtr->nextPtr;
+	}
     }
     
     return pixmap;
@@ -584,7 +509,7 @@ resizeMenu(PopUpButton *bPtr)
 {
     int height;
     
-    height = bPtr->itemCount * bPtr->view->size.height;
+    height = WMGetBagItemCount(bPtr->items) * bPtr->view->size.height;
     if (height > 0)
 	W_ResizeView(bPtr->menuView, bPtr->view->size.width, height);
 }
@@ -602,7 +527,7 @@ popUpMenu(PopUpButton *bPtr)
 	resizeMenu(bPtr);
     }
     
-    if (bPtr->itemCount < 1)
+    if (WMGetBagItemCount(bPtr->items) < 1)
 	return;
     
     XTranslateCoordinates(scr->display, bPtr->view->window, scr->rootWin,
@@ -622,7 +547,7 @@ popUpMenu(PopUpButton *bPtr)
     W_MapView(bPtr->menuView);
     
     bPtr->highlightedItem = 0;
-    if (!bPtr->flags.pullsDown && bPtr->selectedItem != NULL)
+    if (!bPtr->flags.pullsDown && bPtr->selectedItemIndex < 0)
 	paintMenuEntry(bPtr, bPtr->selectedItemIndex, True);
 }
 
@@ -635,18 +560,6 @@ popDownMenu(PopUpButton *bPtr)
     /* free the background pixmap used to draw the menu contents */
     XSetWindowBackgroundPixmap(bPtr->view->screen->display, 
 			       bPtr->menuView->window, None);
-}
-
-
-static int
-itemIsEnabled(PopUpButton *bPtr, int index)
-{
-    ItemList *item = bPtr->items;
-     
-    while (index-- > 0 && item)
-	item = item->nextPtr;
-
-    return item ? !item->disabled : False;
 }
 
 
@@ -690,9 +603,13 @@ autoScroll(void *data)
 	    / bPtr->view->size.height;
 
 	if (oldItem!=bPtr->highlightedItem) {
+	    WMMenuItem *item = 
+		WMGetPopUpButtonMenuItem(bPtr, bPtr->highlightedItem);
+
 	    paintMenuEntry(bPtr, oldItem, False);
+	    
 	    paintMenuEntry(bPtr, bPtr->highlightedItem,
-			   itemIsEnabled(bPtr, bPtr->highlightedItem));
+			   WMGetMenuItemEnabled(item));
 	}
 
 	bPtr->timer = WMAddTimerHandler(SCROLL_DELAY, autoScroll, bPtr);
@@ -711,14 +628,13 @@ handleActionEvents(XEvent *event, void *data)
 
     CHECK_CLASS(data, WC_PopUpButton);
 
-    if (bPtr->itemCount < 1)
+    if (WMGetBagItemCount(bPtr->items) < 1)
 	return;
     
     switch (event->type) {
 	/* called for menuView */
      case Expose:
-	paintMenuEntry(bPtr, bPtr->highlightedItem,
-		       itemIsEnabled(bPtr, bPtr->highlightedItem));
+	paintMenuEntry(bPtr, bPtr->highlightedItem, True);
 	break;
 
      case LeaveNotify:
@@ -737,9 +653,12 @@ handleActionEvents(XEvent *event, void *data)
 	    oldItem = bPtr->highlightedItem;
 	    bPtr->highlightedItem = event->xmotion.y / bPtr->view->size.height;
 	    if (oldItem!=bPtr->highlightedItem) {
+		WMMenuItem *item;
+		
+		item = WMGetPopUpButtonMenuItem(bPtr, bPtr->highlightedItem);
 		paintMenuEntry(bPtr, oldItem, False);
 		paintMenuEntry(bPtr, bPtr->highlightedItem, 
-			       itemIsEnabled(bPtr, bPtr->highlightedItem));
+			       WMGetMenuItemEnabled(item));
 	    }
 
 	    if (event->xmotion.y_root >= scrHeight-1
@@ -783,8 +702,12 @@ handleActionEvents(XEvent *event, void *data)
 	    bPtr->timer = NULL;
 	}
 
-	if (bPtr->flags.insideMenu && bPtr->highlightedItem>=0) {
-            if (itemIsEnabled(bPtr, bPtr->highlightedItem)) {
+	if (bPtr->flags.insideMenu && bPtr->highlightedItem>=0) {	
+	    WMMenuItem *item;
+		
+	    item = WMGetPopUpButtonMenuItem(bPtr, bPtr->highlightedItem);
+	    
+            if (WMGetMenuItemEnabled(item)) {
 		int i;
                 WMSetPopUpButtonSelectedItem(bPtr, bPtr->highlightedItem);
 
@@ -815,20 +738,19 @@ handleActionEvents(XEvent *event, void *data)
 static void
 destroyPopUpButton(PopUpButton *bPtr)
 {
-    ItemList *itemPtr, *tmp;
+    WMMenuItem *item;
+    int i;
 
     if (bPtr->timer) {
 	WMDeleteTimerHandler(bPtr->timer);
     }
-    
-    itemPtr = bPtr->items;
-    while (itemPtr!=NULL) {
-	wfree(itemPtr->text);
-	tmp = itemPtr->nextPtr;
-	wfree(itemPtr);
-	itemPtr = tmp;
+
+    for (i = 0; i < WMGetBagItemCount(bPtr->items); i++) {
+	item = WMGetFromBag(bPtr->items, i);
+	WMDestroyMenuItem(item);
     }
-    
+    WMFreeBag(bPtr->items);
+
     if (bPtr->caption)
 	wfree(bPtr->caption);
 
