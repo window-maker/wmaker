@@ -101,6 +101,8 @@ WMCreateFontInDefaultEncoding(WMScreen *scrPtr, char *fontName)
     
     font->refCount = 1;
 
+    font->name = wstrdup(fontName);
+
     assert(WMHashInsert(scrPtr->fontCache, font->name, font)==NULL);
 
     return font;    
@@ -159,13 +161,21 @@ WMSystemFontOfSize(WMScreen *scrPtr, int size)
 
     fontSpec = makeFontSetOfSize(WINGsConfiguration.systemFont, size);
 
-    font = WMCreateFont(scrPtr, fontSpec);
+    if (WINGsConfiguration.useMultiByte)
+	font = WMCreateFont(scrPtr, fontSpec);
+    else
+	font = WMCreateFontInDefaultEncoding(scrPtr, fontSpec);
 
     if (!font) {
-	wwarning("could not load font set %s. Trying fixed.", fontSpec);
-	font = WMCreateFont(scrPtr, "fixed");
-	if (!font) {
-	    font = WMCreateFont(scrPtr, "-*-fixed-medium-r-normal-*-14-*-*-*-*-*-*-*");
+	if (WINGsConfiguration.useMultiByte) {
+	    wwarning("could not load font set %s. Trying fixed.", fontSpec);
+	    font = WMCreateFont(scrPtr, "fixed");
+	    if (!font) {
+		font = WMCreateFont(scrPtr, "-*-fixed-medium-r-normal-*-14-*-*-*-*-*-*-*");
+	    }
+	} else {
+	    wwarning("could not load font %s. Trying fixed.", fontSpec);
+	    font = WMCreateFontInDefaultEncoding(scrPtr, "fixed");
 	}
 	if (!font) {
 	    wwarning("could not load fixed font!");
@@ -187,13 +197,21 @@ WMBoldSystemFontOfSize(WMScreen *scrPtr, int size)
 
     fontSpec = makeFontSetOfSize(WINGsConfiguration.boldSystemFont, size);
 
-    font = WMCreateFont(scrPtr, fontSpec);
-    
+    if (WINGsConfiguration.useMultiByte)
+	font = WMCreateFont(scrPtr, fontSpec);
+    else
+	font = WMCreateFontInDefaultEncoding(scrPtr, fontSpec);
+
     if (!font) {
-	wwarning("could not load font set %s. Trying fixed.", fontSpec);
-	font = WMCreateFont(scrPtr, "fixed");
-	if (!font) {
-	    font = WMCreateFont(scrPtr, "-*-fixed-medium-r-normal-*-14-*-*-*-*-*-*-*");
+	if (WINGsConfiguration.useMultiByte) {
+	    wwarning("could not load font set %s. Trying fixed.", fontSpec);
+	    font = WMCreateFont(scrPtr, "fixed");
+	    if (!font) {
+		font = WMCreateFont(scrPtr, "-*-fixed-medium-r-normal-*-14-*-*-*-*-*-*-*");
+	    }
+	} else {
+	    wwarning("could not load font %s. Trying fixed.", fontSpec);
+	    font = WMCreateFontInDefaultEncoding(scrPtr, "fixed");
 	}
 	if (!font) {
 	    wwarning("could not load fixed font!");

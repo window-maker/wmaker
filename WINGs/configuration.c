@@ -31,9 +31,12 @@ W_ReadConfigurations(void)
 
 	WINGsConfiguration.boldSystemFont = 
 	    WMGetUDStringForKey(defaults, "BoldSystemFont");
-	
+
+	WINGsConfiguration.useMultiByte =
+	    WMGetUDStringForKey(defaults, "MultiByteText");
+
 	WINGsConfiguration.doubleClickDelay = 
-	    WMGetUDIntegerForKey(defaults, "DoubleClickTime");
+	    WMGetUDIntegerForKey(defaults, "DoubleClickTime");	
     }
 
     if (!WINGsConfiguration.systemFont) {

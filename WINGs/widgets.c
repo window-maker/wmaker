@@ -596,6 +596,8 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 
     scrPtr->stipple = stipple;
 
+    scrPtr->useMultiByte = WINGsConfiguration.useMultiByte;
+
     scrPtr->normalFont = WMSystemFontOfSize(scrPtr, 12);
 
     scrPtr->boldFont = WMBoldSystemFontOfSize(scrPtr, 12);

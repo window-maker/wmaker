@@ -39,6 +39,8 @@ changes since wmaker 0.53.0:
 - added WMGetColorPanelColor(WMColorPanel *panel)
 - made WMGetUDStringForKey() to only return a reference to the string, not a
   wstrdup()'ed copy. DO NOT FREE IT ANYMORE!
+- added MultiByteText option to userdefaults file to control use of multibyte
+  string drawing functions
 
 
 changes since wmaker 0.52.0:

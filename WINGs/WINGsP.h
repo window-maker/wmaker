@@ -155,13 +155,14 @@ typedef struct W_Screen {
     GC ixorGC;			       /* IncludeInferiors XOR */
 
     GC textFieldGC;
-    
+
     W_Font *normalFont;
 
     W_Font *boldFont;
 
     WMHashTable *fontCache;
 
+    Bool useMultiByte;
 
     struct W_Balloon *balloon;
 
@@ -317,11 +318,11 @@ typedef struct W_View {
 
 typedef struct W_EventHandler {
     unsigned long eventMask;
-    
+
     WMEventProc *proc;
-    
+
     void *clientData;
-    
+
     struct W_EventHandler *nextHandler;
 } W_EventHandler;
 
@@ -331,6 +332,7 @@ typedef struct W_EventHandler {
 typedef struct _WINGsConfiguration {
     char *systemFont;
     char *boldSystemFont;
+    Bool useMultiByte;
     unsigned doubleClickDelay;
 } _WINGsConfiguration;
 

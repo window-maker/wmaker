@@ -154,7 +154,7 @@ testGradientButtons(WMScreen *scr)
     WMSetButtonAltImage(btn, pix2);
     WMSetButtonText(btn, "Button");
 
-    WMSetBalloonTextForView("This is another button", WMWidgetView(btn));
+    WMSetBalloonTextForView("Este é outro balão.", WMWidgetView(btn));
 
     btn = WMCreateButton(win, WBTMomentaryChange);
     WMResizeWidget(btn, 60, 24);
@@ -486,14 +486,14 @@ int main(int argc, char **argv)
      * Put the testSomething() function you want to test here.
      */
 
+    testGradientButtons(scr);
 
 
-    testColorWell(scr);
 #if 0
+    testColorWell(scr);
 
     testTabView(scr);
     testTextField(scr);
-    testGradientButtons(scr);
 
     testOpenFilePanel(scr);
     testFontPanel(scr);
