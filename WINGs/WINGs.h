@@ -618,6 +618,8 @@ void WMDeleteEventHandler(WMView *view, unsigned long mask,
 
 int WMIsDoubleClick(XEvent *event);
 
+int WMIsTripleClick(XEvent *event);
+
 void WMNextEvent(Display *dpy, XEvent *event);
 
 void WMMaskEvent(Display *dpy, long mask, XEvent *event);
@@ -699,7 +701,7 @@ WMFont *WMBoldSystemFontOfSize(WMScreen *scrPtr, int size);
 XFontSet WMGetFontFontSet(WMFont *font);
 
 WMFont * WMConvertFontToPlain(WMScreen *scr, WMFont *font);
-WMFont * WMConvertFontTobold(WMScreen *scr, WMFont *font);
+WMFont * WMConvertFontToBold(WMScreen *scr, WMFont *font);
 WMFont * WMConvertFontToItalic(WMScreen *scr, WMFont *font);
 WMFont * WMGetFontOfSize(WMScreen *scr, WMFont *font, int size);
 
@@ -1504,7 +1506,7 @@ char * WMGetTextStream(WMText *tPtr);
 char * WMGetTextSelected(WMText *tPtr);
 
 /* destroy the array */
-WMArray * WMGetTextStreamIntoArray(WMText *tPtr);
+WMArray * WMGetTextStreamObjects(WMText *tPtr);
 
 /* destroy the array */
 WMArray* WMGetTextSelectedObjects(WMText *tPtr);
@@ -1514,6 +1516,9 @@ void WMSetTextSelectionColor(WMText *tPtr, WMColor *color);
 void WMSetTextSelectionFont(WMText *tPtr, WMFont *font);
 
 void WMSetTextAlignment(WMText *tPtr, WMAlignment alignment);
+
+Bool WMFindInTextStream(WMText *tPtr, char *needle, Bool direction,
+    Bool caseSensitive);
 
 /* parser related stuff... use only if implementing a new parser */
 
