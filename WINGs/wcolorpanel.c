@@ -1094,6 +1094,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     WMAddPopUpButtonItem(panel->colorListListMenuBtn, "Rename...");
     WMAddPopUpButtonItem(panel->colorListListMenuBtn, "Remove");
     
+    WMSetPopUpButtonItemEnabled(panel->colorListListMenuBtn, CLmenuAdd, 0);
     WMSetPopUpButtonItemEnabled(panel->colorListListMenuBtn, CLmenuRename, 0);
     WMSetPopUpButtonItemEnabled(panel->colorListListMenuBtn, CLmenuRemove, 0);
     
@@ -2177,11 +2178,11 @@ wheelRender(W_ColorPanel *panel)
 	    bp = image->data[2] + (ofs << shift);
 	    
 	    if (wheelInsideColorWheel(panel, ofs)) {
-		*rp = (unsigned int)(panel->wheelMtrx->values[ 
+		*rp = (unsigned char)(panel->wheelMtrx->values[ 
 			panel->wheelMtrx->data[0][ofs] ]);
-		*gp = (unsigned int)(panel->wheelMtrx->values[ 
+		*gp = (unsigned char)(panel->wheelMtrx->values[ 
 			panel->wheelMtrx->data[1][ofs] ]);
-		*bp = (unsigned int)(panel->wheelMtrx->values[
+		*bp = (unsigned char)(panel->wheelMtrx->values[
 			panel->wheelMtrx->data[2][ofs] ]);
 	    }
 	    else {
@@ -2198,7 +2199,7 @@ wheelRender(W_ColorPanel *panel)
     
     RConvertImage(scr->rcontext, image, &panel->wheelImg);
     RDestroyImage(image);
-
+    
     /* Check if backimage exists. If it doesn't, allocate and fill it */
     if (!panel->selectionBackImg) {
 	panel->selectionBackImg = XCreatePixmap(scr->display,
@@ -2466,10 +2467,8 @@ wheelUpdateBrightnessGradient(W_ColorPanel *panel, CPColor topColor)
     
     to.red = to.green = to.blue = 0;
 
-    if (topColor.set == cpHSV) {
-	topColor.hsv.value = 255;
+    if (topColor.set == cpHSV)
 	convertCPColor(&topColor);
-    }
     
     sliderImg = RRenderGradient(16, 153, &(topColor.rgb), &to, RGRD_VERTICAL);
     sliderPxmp = WMCreatePixmapFromRImage(WMWidgetScreen(panel->win), 
@@ -3523,11 +3522,12 @@ colorListListMenuNew(W_ColorPanel *panel)
 static void
 wheelInit(W_ColorPanel *panel)
 {
+    CPColor	cpColor;
+    
     if (panel->color.set != cpHSV)
 	convertCPColor(&panel->color);
 
     WMSetSliderValue(panel->wheelBrightnessS, 255 - panel->color.hsv.value);
-    wheelUpdateBrightnessGradient(panel, panel->color);
     
     panel->colx = 2 + rint((colorWheelSize / 2.0) *
 	    (1 + ( panel->color.hsv.saturation/255.0) *
@@ -3537,6 +3537,11 @@ wheelInit(W_ColorPanel *panel)
 	     sin(- panel->color.hsv.hue*M_PI/180.0)));
     
     wheelCalculateValues(panel, panel->color.hsv.value);
+    
+    cpColor = panel->color;
+    cpColor.hsv.value = 255;
+    cpColor.set = cpHSV;
+    wheelUpdateBrightnessGradient(panel, cpColor);
 }
 
 
