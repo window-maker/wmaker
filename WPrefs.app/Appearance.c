@@ -69,7 +69,10 @@ typedef struct _Panel {
 
     WMPixmap *onLed;
     WMPixmap *offLed;
+    WMPixmap *hand;
 
+    int oldsection;
+    
     Pixmap preview;
 
     char *fprefix;
@@ -166,6 +169,49 @@ static char *blueled2_xpm[] = {
 ".#nono#.",
 "..####.."
 };
+
+/* XPM */
+static char * hand_xpm[] = {
+"22 21 17 1",
+" 	c None",
+".	c #030305",
+"+	c #101010",
+"@	c #535355",
+"#	c #7F7F7E",
+"$	c #969697",
+"%	c #B5B5B6",
+"&	c #C5C5C6",
+"*	c #D2D2D0",
+"=	c #DCDCDC",
+"-	c #E5E5E4",
+";	c #ECECEC",
+">	c #767674",
+",	c #F2F2F4",
+"'	c #676767",
+")	c #FDFDFB",
+"!	c #323234",
+"                      ",
+"       .....          ",
+"     ..#%&&$.         ",
+"    .))),%..........  ",
+"   .)-)),&)))))))))$. ",
+"  .-&))))))))),,,,;;. ",
+" .=)))))))));-=***&$. ",
+" .=)))))))),..+.....  ",
+" +=)))))))))-&#.      ",
+" +=)))))))))-%>.      ",
+" +&)))))))))-%'.      ",
+" +$,,))))));...       ",
+" .#%%*;,)),*$>+       ",
+"  .'>$%&&&&$#@.       ",
+"   .!'>#$##>'.        ",
+"     ..+++++.         ",
+"                      ",
+"     ##@@@##          ",
+"   @@@@@@@@@@@        ",
+"     >>@@@##          ",
+"                      "};
+
 
 
 
@@ -465,9 +511,9 @@ updatePreviewBox(_Panel *panel, int elements)
 	item = WMGetListItem(panel->texLs, panel->textureIndex[0]);
 	titem = (TextureListItem*)item->clientData;
 
-	pix = renderTexture(scr, titem->prop, 220, 20, NULL, RBEV_RAISED2);
+	pix = renderTexture(scr, titem->prop, 210, 20, NULL, RBEV_RAISED2);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 220, 20, 5, 10);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 10);
 
 	XFreePixmap(dpy, pix);
     }
@@ -475,9 +521,9 @@ updatePreviewBox(_Panel *panel, int elements)
 	item = WMGetListItem(panel->texLs, panel->textureIndex[1]);
 	titem = (TextureListItem*)item->clientData;
 
-	pix = renderTexture(scr, titem->prop, 220, 20, NULL, RBEV_RAISED2);
+	pix = renderTexture(scr, titem->prop, 210, 20, NULL, RBEV_RAISED2);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 220, 20, 15, 35);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 35);
 
 	XFreePixmap(dpy, pix);
     }
@@ -485,9 +531,9 @@ updatePreviewBox(_Panel *panel, int elements)
 	item = WMGetListItem(panel->texLs, panel->textureIndex[2]);
 	titem = (TextureListItem*)item->clientData;
 
-	pix = renderTexture(scr, titem->prop, 220, 20, NULL, RBEV_RAISED2);
+	pix = renderTexture(scr, titem->prop, 210, 20, NULL, RBEV_RAISED2);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 220, 20, 25, 60);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 60);
 
 	XFreePixmap(dpy, pix);
     }
@@ -497,7 +543,7 @@ updatePreviewBox(_Panel *panel, int elements)
 
 	pix = renderTexture(scr, titem->prop, 100, 20, NULL, RBEV_RAISED2);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 20, 20, 95);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 20, 30, 95);
 
 	XFreePixmap(dpy, pix);
     }
@@ -507,15 +553,15 @@ updatePreviewBox(_Panel *panel, int elements)
 
 	pix = renderTexture(scr, titem->prop, 100, 18, NULL, RBEV_RAISED2);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 18, 20, 115);
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 18, 20, 115 + 18);
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 18, 20, 115 + 36);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 18, 30, 115);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 18, 30, 115 + 18);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 18, 30, 115 + 36);
 
 	XFreePixmap(dpy, pix);
     }
     if (elements & (MITEM|MTITLE)) {
-	XDrawLine(dpy, panel->preview, gc, 19, 95, 19, 115+36+20);
-	XDrawLine(dpy, panel->preview, gc, 19, 94, 119, 94);
+	XDrawLine(dpy, panel->preview, gc, 29, 95, 29, 115+36+20);
+	XDrawLine(dpy, panel->preview, gc, 29, 94, 129, 94);
     }
 
     if (elements & ICON) {
@@ -525,7 +571,7 @@ updatePreviewBox(_Panel *panel, int elements)
 	pix = renderTexture(scr, titem->prop, 64, 64, NULL, 
 			    titem->ispixmap ? 0 : RBEV_RAISED3);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 64, 64, 150, 90);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 64, 64, 170, 90);
 
 	XFreePixmap(dpy, pix);
     }
@@ -784,6 +830,16 @@ changePage(WMWidget *w, void *data)
     WMListItem *item;
     TextureListItem *titem;
     char *str;
+    WMScreen *scr = WMWidgetScreen(w);
+    RContext *rc = WMScreenRContext(scr);
+    static WMPoint positions[6] = {
+	{5, 10},
+	{5, 35},
+	{5, 60},
+	{5, 95},
+	{5, 130},
+	{145, 110}
+    };
 
     section = WMGetPopUpButtonSelectedItem(panel->secP);
 
@@ -800,6 +856,21 @@ changePage(WMWidget *w, void *data)
     sprintf(str, "%s: %s", titem->title, titem->texture);
     WMSetLabelText(panel->texsL, str);
     free(str);
+
+    {
+	WMColor *color;
+	
+	color = WMGrayColor(scr);
+	XFillRectangle(rc->dpy, panel->preview, WMColorGC(color),
+		       positions[panel->oldsection].x, 
+		       positions[panel->oldsection].y, 22, 22);
+	WMReleaseColor(color);
+    }
+    panel->oldsection = section;
+    WMDrawPixmap(panel->hand, panel->preview, positions[section].x, 
+		 positions[section].y);
+
+    WMRedisplayWidget(panel->prevL);
 }
 
 
@@ -1021,6 +1092,7 @@ createPanel(Panel *p)
 
     panel->onLed = WMCreatePixmapFromXPMData(scr, blueled_xpm);
     panel->offLed = WMCreatePixmapFromXPMData(scr, blueled2_xpm);
+    panel->hand = WMCreatePixmapFromXPMData(scr, hand_xpm);
 
     panel->frame = WMCreateFrame(panel->win);
     WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
