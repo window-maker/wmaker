@@ -1042,7 +1042,7 @@ wShowInfoPanel(WScreen *scr)
     WMSetLabelTextAlignment(panel->copyrL, WALeft);
     WMSetLabelText(panel->copyrL, COPYRIGHT_TEXT);
     /* we want the (c) character in the helvetica font */
-    font = WMCreateFontInDefaultEncoding(scr->wmscreen, HELVETICA10_FONT);
+    font = WMCreateNormalFont(scr->wmscreen, HELVETICA10_FONT);
     if (font) {
 	WMSetLabelFont(panel->copyrL, font);
     }

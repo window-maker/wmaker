@@ -612,8 +612,7 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
         }
     }
 
-    if (!scr->flags.startup2)
-	showWorkspaceName(scr, workspace);
+    showWorkspaceName(scr, workspace);
 
 #ifdef GNOME_STUFF
     wGNOMEUpdateCurrentWorkspaceHint(scr);
