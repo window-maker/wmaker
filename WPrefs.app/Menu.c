@@ -83,6 +83,7 @@ typedef struct _Panel {
 
     WMFrame *pipeF;
     WMTextField *pipeT;
+    WMButton *pipeCacheB;
 
     WMFrame *dpathF;
     WMTextField *dpathT;
@@ -134,6 +135,7 @@ typedef struct {
 	} external;
 	struct {
 	    char *command;
+	    unsigned cached:1;
 	} pipe;
 	struct {
 	    char *directory;
@@ -691,8 +693,8 @@ createPanel(_Panel *p)
     /* pipe */
 
     panel->pipeF = WMCreateFrame(panel->optionsF);
-    WMResizeWidget(panel->pipeF, width, 100);
-    WMMoveWidget(panel->pipeF, 10, 50);
+    WMResizeWidget(panel->pipeF, width, 150);
+    WMMoveWidget(panel->pipeF, 10, 30);
     WMSetFrameTitle(panel->pipeF, _("Command"));
 
     panel->pipeT = WMCreateTextField(panel->pipeF);
@@ -709,6 +711,14 @@ createPanel(_Panel *p)
     WMMoveWidget(label, 10, 50);
     WMSetLabelText(label, _("Enter a command that outputs a menu\n"
 			    "definition to stdout when invoked."));
+
+    
+    panel->pipeCacheB = WMCreateSwitchButton(panel->pipeF);
+    WMResizeWidget(panel->pipeCacheB, width - 20, 40);
+    WMMoveWidget(panel->pipeCacheB, 10, 110);
+    WMSetButtonText(panel->pipeCacheB, 
+		    _("Cache menu contents after opening for\n"
+		      "the first time"));
 
     WMMapSubwidgets(panel->pipeF);
 
@@ -983,11 +993,17 @@ parseCommand(WMPropList *item)
 	/*
 	 * dir menu, menu file
 	 * dir WITH
-	 * |pipe (TODO: ||pipe)
+	 * |pipe
 	 */
 	p = parameter;
 	while (isspace(*p) && *p) p++;
 	if (*p == '|') {
+	    if (*(p+1) == '|') {
+		p++;
+		data->param.pipe.cached = 0;
+	    } else {
+		data->param.pipe.cached = 1;
+	    }
 	    data->type = PipeInfo;
 	    data->param.pipe.command = wtrimspace(p+1);
 	} else {
@@ -1226,6 +1242,10 @@ updateMenuItem(_Panel *panel, WEditMenuItem *item, WMWidget *changedWidget)
 	    REPLACE(data->param.pipe.command,
 		    WMGetTextFieldText(panel->pipeT));
 	}
+	if (changedWidget == panel->pipeCacheB) {
+	    data->param.pipe.cached =
+		WMGetButtonSelected(panel->pipeCacheB);
+	}
 	break;
 	
      case ExternalInfo:
@@ -1290,6 +1310,7 @@ menuItemCloned(WEditMenuDelegate *delegate, WEditMenu *menu,
 
      case PipeInfo:
 	newData->param.pipe.command = DUP(data->param.pipe.command);
+	newData->param.pipe.cached = data->param.pipe.cached;
 	break;
 
      case ExternalInfo:
@@ -1415,6 +1436,7 @@ menuItemSelected(WEditMenuDelegate *delegate, WEditMenu *menu,
 
 	 case PipeInfo:
 	    WMSetTextFieldText(panel->pipeT, data->param.pipe.command);
+	    WMSetButtonSelected(panel->pipeCacheB, data->param.pipe.cached);
 	    break;
 
 	 case ExternalInfo:
@@ -1682,11 +1704,14 @@ processData(char *title, ItemData *data)
 	if (!data->param.pipe.command)
 	    return NULL;
 	WMAddToPLArray(item, pomenu);
-	s1 = wstrconcat("| ", data->param.pipe.command);
+	if (data->param.pipe.cached)
+	    s1 = wstrconcat("| ", data->param.pipe.command);
+	else
+	    s1 = wstrconcat("|| ", data->param.pipe.command);
 	WMAddToPLArray(item, WMCreatePLString(s1));
 	wfree(s1);
 	break;
-	
+
      case ExternalInfo:
 	if (!data->param.external.path)
 	    return NULL;

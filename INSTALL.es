@@ -235,8 +235,8 @@ Subject: Re: El paquete WindowMaker funciona bien en Alpha?
 >  por favor probar esto?  Debería el parámetro ser pasado al compilar 
 >  en Alpha?
 
-Descargo de responsabilidad: alphas bajo mi mando nunca han ejecutado X y are
-least likely to suddenly start running it anytime soon.
+Descargo de responsabilidad: alphas bajo mi mando nunca han ejecutado X
+y es poco probable de que las ejecute repentinamente en algún momento.
 
 	Alpha suele tener alguna ridícula poca cantidad de memoria compartida
 configurada.

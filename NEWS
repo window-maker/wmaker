@@ -92,10 +92,27 @@ that this happened.
 New dock option
 ---------------
 
-Copy/paste launch in dock. For example, put
-netscape %s in the Docked icon for Netscape,
-select an url somewhere and then middle-click the icon.
-The command will be launched with the "pasted" string.
+Copy/paste launch in dock.
+==========================
+
+For example, put netscape %s in the Docked icon for Netscape, select an url
+somewhere and then middle-click the icon. The command will be launched with
+the "pasted" string.
+
+
+Xinerama Support
+================
+
+Supported Xinerama features:
+
+- Normal maximization of windows will maximize to only one of the screens,
+the one where the cursor pointer is.
+
+- Full Maximize command in window menu
+
+- Place dialogs in the middle of the head where the pointer is
+
+- Try to place windows inside one head in non-manual placement modes
 
 
 Less dependancies
