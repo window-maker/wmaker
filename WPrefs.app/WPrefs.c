@@ -40,6 +40,7 @@ extern Panel *InitFocus(WMScreen *scr, WMWidget *parent);
 extern Panel *InitPreferences(WMScreen *scr, WMWidget *parent);
 
 extern Panel *InitFont(WMScreen *scr, WMWidget *parent);
+extern Panel *InitFontSimple(WMScreen *scr, WMWidget *parent);
 
 extern Panel *InitConfigurations(WMScreen *scr, WMWidget *parent);
 
@@ -713,9 +714,7 @@ Initialize(WMScreen *scr)
 
     InitAppearance(scr, WPrefs.banner);
 
-#ifdef finished_checking
-    InitFont(scr, WPrefs.banner);
-#endif
+    InitFontSimple(scr, WPrefs.banner);
 
 #ifdef not_yet_fully_implemented
     InitThemes(scr, WPrefs.banner);

@@ -157,6 +157,7 @@ Changes since version 0.80.2:
   restarting be made automatically by a monitoring process.
 - Made NetWM support be enabled by default
 - Removed old code to store/restore workspace state (now relies on netwm)
+- Added a (simple) Font Configuration for fontconfig fonts
 
 Changes since version 0.80.1:
 .............................

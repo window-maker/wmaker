@@ -253,9 +253,9 @@ handleExitSig(int sig)
 
     if (sig == SIGUSR1) {
 #ifdef SYS_SIGLIST_DECLARED
-        wwarning(_("got signal %i (%s) - restarting\n"), sig, sys_siglist[sig]);
+        wwarning("got signal %i (%s) - restarting\n", sig, sys_siglist[sig]);
 #else
-        wwarning(_("got signal %i - restarting\n"), sig);
+        wwarning("got signal %i - restarting\n", sig);
 #endif
 
         SIG_WCHANGE_STATE(WSTATE_NEED_RESTART);
@@ -265,9 +265,9 @@ handleExitSig(int sig)
         WDelayedActionSet++;
     } else if (sig == SIGUSR2) {
 #ifdef SYS_SIGLIST_DECLARED
-        wwarning(_("got signal %i (%s) - rereading defaults\n"), sig, sys_siglist[sig]);
+        wwarning("got signal %i (%s) - rereading defaults\n", sig, sys_siglist[sig]);
 #else
-        wwarning(_("got signal %i - rereading defaults\n"), sig);
+        wwarning("got signal %i - rereading defaults\n", sig);
 #endif
 
         SIG_WCHANGE_STATE(WSTATE_NEED_REREAD);
@@ -277,9 +277,9 @@ handleExitSig(int sig)
         WDelayedActionSet++;
     } else if (sig==SIGTERM || sig==SIGINT || sig==SIGHUP) {
 #ifdef SYS_SIGLIST_DECLARED
-        wwarning(_("got signal %i (%s) - exiting...\n"), sig, sys_siglist[sig]);
+        wwarning("got signal %i (%s) - exiting...\n", sig, sys_siglist[sig]);
 #else
-        wwarning(_("got signal %i - exiting...\n"), sig);
+        wwarning("got signal %i - exiting...\n", sig);
 #endif
 
         SIG_WCHANGE_STATE(WSTATE_NEED_EXIT);

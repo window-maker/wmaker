@@ -11,12 +11,14 @@ To do before next release:
 - automate convertfonts for different locales
 - Append .UTF-8 to locale
 - figure out a better gnustep path for wprefs.app installation
-- add -fno-strict-aliasing (do this only for gcc >= 3.3)
 - pick a good font fallback
 - figure a better fullscreen level
 - add default pixelsize if font doesn't define any size.
 - clean up netwm hints on exit
-
+- check whether window states are being saved/restored properly via netwm
+  on restart/crash-restart (grep for XXX/TODO)
+- remove legacy stuff for openlook/gnome-1/kde-1 (don't forget to remove README.KDE/.GNOME)
+- review wmaker.inst
 
 remake wrlib rule to not compile with -fomit-frame-pointer and stuff
 if its added to CFLAGS
@@ -27,10 +29,8 @@ Do ASAP:
 - fix RemakeStackList() to account for transient windows
 - blink border of clients with UrgencyHint set between red and black
 - finish session stuff
-- add multiline support for balloons
 - remove colors_per_channel stuff from wmaker after?
 + finish the ability to browse for files/dirs in the WPrefs menu editor
-+ finish selections and DND stuff in WINGs
 
 Need to do:
 ===========

@@ -62,9 +62,7 @@
   ("Show All", SHOW_ALL),
   ("Arrange Icons", ARRANGE_ICONS),
   ("Refresh", REFRESH),
-  ("Lock", EXEC, "xlock -allowroot -usefirst"),
-  ("Save Session", SAVE_SESSION),
-  ("Clear Session", CLEAR_SESSION)
+  ("Lock", EXEC, "xlock -allowroot -usefirst")
  ),
  ("Appearance",
   ("Themes", OPEN_MENU, "-noext #wmdatadir#/Themes $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
@@ -97,7 +95,7 @@
    ("Save IconSet", SHEXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(IconSet name)\""),
    ("Preferences Utility", EXEC, "/usr/local/GNUstep/Apps/WPrefs.app/WPrefs")
    ), 
-   ("Exit",
+   ("Session",
     ("Save Session", SAVE_SESSION),
     ("Clear Session", CLEAR_SESSION),
 	("Restart Window Maker", RESTART),

@@ -136,9 +136,6 @@ WMCreateFont(WMScreen *scrPtr, char *fontName)
 
     font->screen = scrPtr;
 
-    // remove
-    printf("WMCreateFont: %s\n", fname);
-
     if (fname[0] == '-') {
         // Backward compat thing. Remove in a later version
         font->font = XftFontOpenXlfd(display, scrPtr->screen, fname);

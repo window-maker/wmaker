@@ -177,8 +177,6 @@
 		"Arrange Icons" ARRANGE_ICONS
 		"Refresh" REFRESH
 		"Lock" EXEC xlock -allowroot -usefirst
-		"Save Session" SAVE_SESSION
-		"Clear Session" CLEAR_SESSION
 	"Commands" END
 
 	"Appearance" MENU
@@ -213,14 +211,14 @@
 		"Preferences Utility" EXEC /usr/local/GNUstep/Apps/WPrefs.app/WPrefs
 	"Appearance" END
 
-	"Exit" MENU
+	"Session" MENU
 		"Save Session" SAVE_SESSION
 		"Clear Session" CLEAR_SESSION
 		"Restart Window Maker" RESTART
 		"Start BlackBox" RESTART blackbox
 		"Start IceWM" RESTART icewm
 		"Exit"  EXIT
-	"Exit" END
+	"Session" END
 "Applications" END
 
 

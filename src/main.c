@@ -650,6 +650,7 @@ real_main(int argc, char **argv)
         WMAddToArray(wPreferences.fallbackWMs, wstrdup(alt));
 
     WMAddToArray(wPreferences.fallbackWMs, wstrdup(FALLBACK_WINDOWMANAGER));
+    WMAddToArray(wPreferences.fallbackWMs, wstrdup("metacity"));
     WMAddToArray(wPreferences.fallbackWMs, wstrdup("fvwm"));
     WMAddToArray(wPreferences.fallbackWMs, wstrdup("twm"));
     WMAddToArray(wPreferences.fallbackWMs, NULL);
