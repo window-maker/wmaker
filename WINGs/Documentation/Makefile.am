@@ -2,5 +2,5 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 
-EXTRA_DIST = wm.png wm.html README.connection
+EXTRA_DIST = README.connection
 
