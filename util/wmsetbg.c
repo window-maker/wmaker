@@ -51,7 +51,7 @@
 
 #include <proplist.h>
 
-#define PROG_VERSION	"wmsetbg (Window Maker) 2.3"
+#define PROG_VERSION	"wmsetbg (Window Maker) 2.5"
 
 
 #define WORKSPACE_COUNT (MAX_WORKSPACES+1)
@@ -350,6 +350,8 @@ parseTexture(RContext *rc, char *text)
 	RImage *image = NULL;
 	int w, h;
 	int iwidth, iheight;
+	RColor rcolor;
+
 
 	GETSTRORGOTO(val, tmp, 1, error);
 /*
@@ -374,12 +376,18 @@ parseTexture(RContext *rc, char *text)
 	    goto error;
 	}
 	if (!XAllocColor(dpy, DefaultColormap(dpy, scr), &color)) {
-	    RColor rcolor;
-
 	    rcolor.red = color.red >> 8;
 	    rcolor.green = color.green >> 8;
 	    rcolor.blue = color.blue >> 8;
 	    RGetClosestXColor(rc, &rcolor, &color);
+	} else {
+	    rcolor.red = 0;
+	    rcolor.green = 0;
+	    rcolor.blue = 0;
+	}
+	/* for images with a transparent color */
+	if (image->data[3]) {
+	    RCombineImageWithColor(image, &rcolor);
 	}
 
 	switch (toupper(type[0])) {
@@ -842,8 +850,9 @@ setPixmapProperty(Pixmap pixmap)
 void
 changeTexture(BackgroundTexture *texture)
 {
-    if (!texture)
+    if (!texture) {
 	return;
+    }
 
     if (texture->solid) {
 	XSetWindowBackground(dpy, root, texture->color.pixel);
@@ -958,10 +967,11 @@ helperLoop(RContext *rc)
 #ifdef DEBUG
 	    printf("change texture %i\n", workspace);
 #endif
-	    if (!textures[workspace])
+	    if (!textures[workspace]) {
 		changeTexture(textures[0]);
-	    else
+	    } else {
 		changeTexture(textures[workspace]);
+	    }
 	    break;
 
 	 case 'P':
@@ -1350,9 +1360,13 @@ main(int argc, char **argv)
     PixmapPath = getPixmapPath(domain);
     if (!smooth) {
 	proplist_t val;
-	
+#if 0 /* some problem with Alpha... TODO: check if its right */
 	val = PLGetDictionaryEntry(domain, 
 				   PLMakeString("SmoothWorkspaceBack"));
+#else
+	val = getValueForKey(domain, "SmoothWorkspaceBack");
+#endif
+
 	if (val && PLIsString(val) && strcasecmp(PLGetString(val), "YES")==0)
 	    smooth = True;
     }
@@ -1408,7 +1422,7 @@ main(int argc, char **argv)
 	    changeTexture(tex);
 	else {
 	    /* always update domain */
-	    changeTextureForWorkspace(domain, texture, workspace-1);
+	    changeTextureForWorkspace(domain, texture, workspace);
 	}
     }
 

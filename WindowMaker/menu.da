@@ -105,12 +105,13 @@
                 "Copyright..." LEGAL_PANEL
                 "Systemkonsol" EXEC xconsole
                 "Systembelastning" SHEXEC xosview || xload
-                "Procesliste" EXEC xterm -e top
-                "Brugsanvisninger" EXEC xman
+                "Procesliste" EXEC xterm -fg wheat -bg black -fn 6x10 -geometry 
+80x50 -e top
+                "Manualer" EXEC xman
         "Info" END
+	"Kør..." SHEXEC "%a(Kør,Indtast kommando der skal udføres:)"
         "XTerm" EXEC xterm -sb 
-        "Rxvt (lille)" EXEC rxvt -bg black -fg white -fn fixed
-        "Rxvt (stor)" EXEC rxvt -bg black -fg white -fn 9x15
+        "Rxvt" EXEC rxvt -bg black -fg white 
         "Arbejdsborde" WORKSPACE_MENU
         "Applikationer" MENU
                 "Grafik" MENU
@@ -123,8 +124,9 @@
                 "OffiX Files" EXEC files
                 "LyX" EXEC lyx
                 "Netscape" EXEC netscape 
-                "Ghostview" EXEC ghostview %a(Skriv filnavn)
-                "Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Skriv PDF-filnavn)
+                "Ghostview" EXEC ghostview %a(GhostView,Indtast filnavn)
+                "Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobat,Indta
+st PDF-filnavn)
                 "TkDesk" EXEC tkdesk
         "Applikationer" END
         "Tekstbehandling" MENU
@@ -142,7 +144,8 @@
         "Diverse" END
         "Tilbehør" MENU
                 "Lommeregner" EXEC xcalc
-                "Window Egenskaber" SHEXEC xprop | xmessage -center -title 'xprop' -file
+                "Vindues Egenskaber" SHEXEC xprop | xmessage -center -title 'xpr
+op' -file -
                 "Vælg skrifttype" EXEC xfontsel
                 "Terminalemulator" EXEC xminicom
                 "Forstørrelsesglas" EXEC xmag
@@ -152,15 +155,15 @@
                 "Udklipsbord" EXEC xclipboard
         "Tilbehør" END
 
-        "Markering" MENU
+        "Markeret" MENU
                 "Kopier" SHEXEC echo '%s' | wxcopy
-                "Send e-post" EXEC xterm -name mail -T "Pine" -e pine %s
+                "Send e-post til" EXEC xterm -name mail -T "Pine" -e pine %s
                 "Indtast URL" EXEC netscape %s
                 "Søg i manual" SHEXEC MANUAL_SEARCH(%s)
-        "Markering" END
+        "Markeret" END
 
         "Arbejdsbord" MENU
-                "Gem andre" HIDE_OTHERS
+                "Skjul andre" HIDE_OTHERS
                 "Vis alle" SHOW_ALL
                 "Arranger ikoner" ARRANGE_ICONS
                 "Genindlæs" REFRESH
@@ -170,9 +173,12 @@
         "Arbejdsbord" END
 
         "Udseende" MENU
-                "Temaer" OPEN_MENU -noext  THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
-                "Stil" OPEN_MENU -noext  STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
-                "Ikonsæt" OPEN_MENU -noext  ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
+                "Temaer" OPEN_MENU -noext THEMES_DIR $HOME/GNUstep/Library/Windo
+wMaker/Themes WITH setstyle
+                "Stil" OPEN_MENU -noext STYLES_DIR $HOME/GNUstep/Library/WindowM
+aker/Styles WITH setstyle
+                "Ikonsæt" OPEN_MENU -noext ICON_SETS_DIR $HOME/GNUstep/Library/W
+indowMaker/IconSets WITH seticons
                 "Baggrund" MENU
                         "Ensfarvet" MENU
                                 "Sort" WS_BACK '(solid, black)'
@@ -185,19 +191,32 @@
                                 "Bordeaux" WS_BACK '(solid, "#400020")'
                         "Ensfarvet" END
                         "Nuancer" MENU
-                                "Flag" WS_BACK '(mdgradient, green, red, white, green)'
-                                "Himmel" WS_BACK '(vgradient, blue4, white)'
+				"Solopgang" WS_BACK '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4
+)'
+				"Himmel" WS_BACK '(vgradient, blue4, white)'
+    				"Blå Skygger" WS_BACK '(vgradient, "#7080a5", "#101020")'
+				"Indigo Skygger" WS_BACK '(vgradient, "#746ebc", "#242e4c")'
+			    	"Lilla Skygger" WS_BACK '(vgradient, "#654c66", "#151426")'
+    				"Hvede Skygger" WS_BACK '(vgradient, "#a09060", "#302010")'
+    				"Grå Skygger" WS_BACK '(vgradient, "#636380", "#131318")'
+    				"Bordeaux Skygger" WS_BACK '(vgradient, "#600040", "#180010")'
+                                "Flag" WS_BACK '(mdgradient, green, red, white, 
+green)'
                         "Nuancer" END
-                        "Billeder" OPEN_MENU -noext  BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+                        "Billeder" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUste
+p/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
                 "Baggrund" END
-                "Gem tema" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
-                "Gem ikonsæt" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
+                "Gem Tema" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/
+Themes/"%a(Tema navn,Indtast navn:)"
+                "Gem Ikonsæt" SHEXEC geticonset $HOME/GNUstep/Library/WindowMake
+r/IconSets/"%a(Ikonsæt navn,Indtast navn:)"
         "Udseende" END
 
         "Afslut" MENU
-                "Genindlæs" RESTART
-                "Start AfterStep" RESTART afterstep
-                "Afslut WindowMaker..."  EXIT
-                "Afslut X-session..." SHUTDOWN
+                "Genstart" RESTART
+                "Start Blackbox" RESTART blackbox
+		"Start kwm" RESTART kwm
+		"Start IceWM" RESTART icewm
+                "Afslut..."  EXIT
         "Afslut" END
 "Applikationer" END

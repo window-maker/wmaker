@@ -37,14 +37,10 @@
 #include <WINGs.h>
 #include <WUtil.h>
 
-/** some config options **/
-/* is not easier to include ../src/wconfig.h ?? */
-#undef EXTEND_WINDOWSHORTCUT
-
 /****/
 
-#define WVERSION	"0.40"
-#define WMVERSION	"0.60.x"
+#define WVERSION	"0.41"
+#define WMVERSION	"0.61.x"
 
 
 extern char *NOptionValueChanged;

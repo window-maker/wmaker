@@ -1,4 +1,4 @@
-# Window Maker 0.53.0 fordansket
+# Window Maker 0.60.0 fordansket
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Birger Langkjer <birger.langkjer@image.dk>, 1999.
 #
@@ -6,285 +6,285 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.2\n"
-"POT-Creation-Date: 1999-04-22 22:45+0200\n"
+"POT-Creation-Date: 1999-06-04 14:21+0200\n"
 "PO-Revision-Date: 1999-04-27 23:20+0200\n"
 "Last-Translator: Birger Langkjer <birger.langkjer@image.dk>\n"
 "Language-Team: Danish <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO8859-1\n"
-"Content-Transfer-Encoding: ISO8859-1\n"
+"Content-Transfer-Encoding: 8-bit\n"
 
-#: ../src/appicon.c:541 ../src/dialog.c:223 ../src/dialog.c:279
-#: ../src/dock.c:3116 ../src/dockedapp.c:210 ../src/rootmenu.c:1743
-#: ../src/winspector.c:284 ../src/winspector.c:300
+#: ../src/appicon.c:570 ../src/dialog.c:223 ../src/dock.c:3301
+#: ../src/dockedapp.c:210 ../src/dockedapp.c:251 ../src/rootmenu.c:1754
+#: ../src/winspector.c:290 ../src/winspector.c:306
 msgid "Error"
 msgstr "Fejl"
 
-#: ../src/appicon.c:542
+#: ../src/appicon.c:571
 msgid "Could not open specified icon file"
 msgstr "Kunne ikke åbne specificeret ikon fil"
 
-#: ../src/appicon.c:543 ../src/dialog.c:122 ../src/dialog.c:223
-#: ../src/dialog.c:279 ../src/dialog.c:467 ../src/dialog.c:1476
-#: ../src/dock.c:475 ../src/dock.c:3117 ../src/dockedapp.c:211
-#: ../src/dockedapp.c:357 ../src/rootmenu.c:1747 ../src/winspector.c:285
-#: ../src/winspector.c:301
+#: ../src/appicon.c:572 ../src/dialog.c:122 ../src/dialog.c:223
+#: ../src/dialog.c:460 ../src/dialog.c:1477 ../src/dock.c:514
+#: ../src/dock.c:522 ../src/dock.c:545 ../src/dock.c:3302
+#: ../src/dockedapp.c:211 ../src/dockedapp.c:257 ../src/dockedapp.c:371
+#: ../src/rootmenu.c:1758 ../src/winspector.c:291 ../src/winspector.c:307
 msgid "OK"
 msgstr "OK"
 
-#: ../src/appicon.c:570 ../src/dock.c:276
+#: ../src/appicon.c:599 ../src/dock.c:278
 msgid ""
 " will be forcibly closed.\n"
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-" vil blive afsluttet.\n"
-"Alle ugemte data bliver slettet.\n"
-"Bekraeft"
+" vil blive brat afsluttet.\n"
+"Alle ugemte data bliver tabt.\n"
+"Bekræft venligst."
 
-#: ../src/appicon.c:576 ../src/dock.c:281 ../src/winmenu.c:124
+#: ../src/appicon.c:605 ../src/dock.c:283 ../src/winmenu.c:125
 msgid "Kill Application"
-msgstr "Draeb program"
+msgstr "Dræb program"
 
-#: ../src/appicon.c:577 ../src/dock.c:282 ../src/winmenu.c:126
+#: ../src/appicon.c:606 ../src/dock.c:284 ../src/winmenu.c:127
 msgid "Yes"
 msgstr "Ja"
 
-#: ../src/appicon.c:577 ../src/dock.c:282 ../src/winmenu.c:126
+#: ../src/appicon.c:606 ../src/dock.c:284 ../src/winmenu.c:127
 msgid "No"
 msgstr "Nej"
 
-#: ../src/appicon.c:595 ../src/dock.c:1111
+#: ../src/appicon.c:624 ../src/dock.c:1196
 msgid "Unhide Here"
 msgstr "Vis igen her"
 
-#: ../src/appicon.c:596 ../src/appicon.c:621 ../src/dock.c:1113
-#: ../src/dock.c:1115 ../src/dock.c:3242 ../src/dock.c:3244
-#: ../src/winmenu.c:446
+#: ../src/appicon.c:625 ../src/appicon.c:650 ../src/dock.c:1198
+#: ../src/dock.c:1200 ../src/dock.c:3468 ../src/dock.c:3470
+#: ../src/winmenu.c:465
 msgid "Hide"
 msgstr "Skjul"
 
-#: ../src/appicon.c:597
+#: ../src/appicon.c:626
 msgid "Set Icon..."
 msgstr "Vælg ikon..."
 
-#: ../src/appicon.c:598 ../src/dock.c:1119 ../src/rootmenu.c:227
-#: ../src/rootmenu.c:241 ../src/winmenu.c:493
+#: ../src/appicon.c:627 ../src/dock.c:1204 ../src/rootmenu.c:228
+#: ../src/rootmenu.c:242 ../src/winmenu.c:512
 msgid "Kill"
-msgstr "Draeb"
+msgstr "Dræb"
 
-#: ../src/appicon.c:619 ../src/dock.c:3240
+#: ../src/appicon.c:648 ../src/dock.c:3466
 msgid "Unhide"
 msgstr "Vis igen"
 
-#: ../src/defaults.c:812 ../src/startup.c:772 ../src/startup.c:790
-#: ../src/startup.c:796
+#: ../src/defaults.c:836 ../src/startup.c:767 ../src/startup.c:785
+#: ../src/startup.c:791
 #, c-format
 msgid "could not read domain \"%s\" from defaults database"
 msgstr "kunne ikke læse domænet \"%s\" fra standard-databasen"
 
-#: ../src/defaults.c:858 ../src/defaults.c:983 ../src/defaults.c:1022
-#: ../src/defaults.c:1052
+#: ../src/defaults.c:882 ../src/defaults.c:1007 ../src/defaults.c:1046
+#: ../src/defaults.c:1076
 #, c-format
 msgid "Domain %s (%s) of defaults database is corrupted!"
 msgstr "Domænet %s (%s) i standard-databasen er ødelagt!"
 
-#: ../src/defaults.c:863 ../src/defaults.c:1004 ../src/defaults.c:1035
-#: ../src/defaults.c:1061
+#: ../src/defaults.c:887 ../src/defaults.c:1028 ../src/defaults.c:1059
+#: ../src/defaults.c:1085
 #, c-format
 msgid "could not load domain %s from user defaults database"
 msgstr "kunne ikke indlæse domænet \"%s\" fra bruger standard-database"
 
-#: ../src/defaults.c:874 ../src/defaults.c:968
+#: ../src/defaults.c:898 ../src/defaults.c:992
 #, c-format
 msgid "Domain %s (%s) of global defaults database is corrupted!"
 msgstr "Domænet %s (%s) i den globale standard-database er ødelagt!"
 
-#: ../src/defaults.c:893 ../src/defaults.c:973
+#: ../src/defaults.c:917 ../src/defaults.c:997
 #, c-format
 msgid "could not load domain %s from global defaults database"
 msgstr "kunne ikke indlæse domænet \"%s\" fra den globale standard-database"
 
-#: ../src/defaults.c:1281
+#: ../src/defaults.c:1305
 #, c-format
 msgid "wrong option value for key \"%s\". Should be one of %s"
 msgstr "forkert konfigurationsværdi for tast \"%s\". Skulle have været %s."
 
-#: ../src/defaults.c:1328
+#: ../src/defaults.c:1352
 #, c-format
 msgid "can't convert \"%s\" to boolean for key \"%s\""
 msgstr "kan ikke konvertere \"%s\" til boolsk værdi for tast \"%s\""
 
-#: ../src/defaults.c:1333 ../src/defaults.c:1367 ../src/defaults.c:1399
-#: ../src/defaults.c:1412 ../src/defaults.c:1427 ../src/defaults.c:1441
-#: ../src/defaults.c:1513 ../src/defaults.c:1525 ../src/defaults.c:1931
-#: ../src/defaults.c:1948 ../src/defaults.c:1961 ../src/defaults.c:1994
-#: ../src/defaults.c:2010 ../src/defaults.c:2041 ../src/defaults.c:2128
+#: ../src/defaults.c:1357 ../src/defaults.c:1391 ../src/defaults.c:1423
+#: ../src/defaults.c:1436 ../src/defaults.c:1451 ../src/defaults.c:1465
+#: ../src/defaults.c:1537 ../src/defaults.c:1549 ../src/defaults.c:1955
+#: ../src/defaults.c:1972 ../src/defaults.c:1985 ../src/defaults.c:2018
+#: ../src/defaults.c:2034 ../src/defaults.c:2065 ../src/defaults.c:2155
 #, c-format
 msgid "using default \"%s\" instead"
 msgstr "bruger standard \"%s\" istedet"
 
-#: ../src/defaults.c:1364
+#: ../src/defaults.c:1388
 #, c-format
 msgid "can't convert \"%s\" to integer for key \"%s\""
 msgstr "kan ikke konvertere \"%s\" til integer værdi for tast \"%s\""
 
-#: ../src/defaults.c:1394 ../src/defaults.c:1508 ../src/defaults.c:1926
-#: ../src/defaults.c:1943 ../src/defaults.c:1989 ../src/defaults.c:2036
-#: ../src/wdefaults.c:546 ../src/wdefaults.c:582
+#: ../src/defaults.c:1418 ../src/defaults.c:1532 ../src/defaults.c:1950
+#: ../src/defaults.c:1967 ../src/defaults.c:2013 ../src/defaults.c:2060
+#: ../src/wdefaults.c:557 ../src/wdefaults.c:593
 #, c-format
 msgid "Wrong option format for key \"%s\". Should be %s."
 msgstr "Forkert konfigurationsformat for tast \"%s\". Skulle have været %s."
 
-#: ../src/defaults.c:1407
+#: ../src/defaults.c:1431
 #, c-format
 msgid "Incorrect number of elements in array for key \"%s\"."
 msgstr "Ukorrekt antal af elementer i array for tast \"%s\"."
 
-#: ../src/defaults.c:1422
+#: ../src/defaults.c:1446
 #, c-format
 msgid "Wrong value for key \"%s\". Should be Coordinate."
 msgstr "Forkert værdi for tast \"%s\". Burde være Coordinate."
 
-#: ../src/defaults.c:1437
+#: ../src/defaults.c:1461
 #, c-format
 msgid "can't convert array to integers for \"%s\"."
 msgstr "kan ikke konvertere array til integer for \"%s\"."
 
-#: ../src/defaults.c:1635 ../src/defaults.c:1667 ../src/defaults.c:1683
-#: ../src/defaults.c:1729 ../src/defaults.c:1769 ../src/defaults.c:1807
-#: ../src/defaults.c:1823
+#: ../src/defaults.c:1659 ../src/defaults.c:1691 ../src/defaults.c:1707
+#: ../src/defaults.c:1753 ../src/defaults.c:1793 ../src/defaults.c:1831
+#: ../src/defaults.c:1847
 #, c-format
 msgid "\"%s\" is not a valid color name"
 msgstr "\"%s\" er en ugyldig farve"
 
-#: ../src/defaults.c:1648
+#: ../src/defaults.c:1672
 msgid "bad number of arguments in gradient specification"
 msgstr "dårligt antal argumenter i definition af farveovergang"
 
-#: ../src/defaults.c:1702
+#: ../src/defaults.c:1726
 msgid "too few arguments in multicolor gradient specification"
 msgstr "for få argumenter i definition af flerfarve-farveovergang"
 
-#: ../src/defaults.c:1796
+#: ../src/defaults.c:1820
 msgid "bad number of arguments in textured gradient specification"
 msgstr "dårligt antal argumenter i definition af tekstur-farveovergang"
 
-#: ../src/defaults.c:1839
+#: ../src/defaults.c:1863
 #, c-format
 msgid "bad opacity value for tgradient texture \"%s\". Should be [0..255]"
 msgstr "bad opacity value for tgradient texture \"%s\". Should be [0..255]"
 
-#: ../src/defaults.c:1899
+#: ../src/defaults.c:1923
 #, c-format
 msgid "could not initialize library %s"
 msgstr "kunne ikke initialisere library %s"
 
-#: ../src/defaults.c:1902
+#: ../src/defaults.c:1926
 #, c-format
 msgid "could not find function %s::%s"
 msgstr "kunne ikke finde funktion %s::%s"
 
-#: ../src/defaults.c:1909
+#: ../src/defaults.c:1933
 #, c-format
 msgid "invalid texture type %s"
 msgstr "ugyldig tekstur type %s"
 
-#: ../src/defaults.c:1956
+#: ../src/defaults.c:1980
 #, c-format
 msgid "Error in texture specification for key \"%s\""
 msgstr "Fejl i tekstur specifikation for tast \"%s\""
 
-#: ../src/defaults.c:2006
+#: ../src/defaults.c:2030
 msgid "Wrong type for workspace background. Should be a texture type."
 msgstr "Forkert type baggrund for arbejdsbord. Bør være en tekstur."
 
-#: ../src/defaults.c:2054
+#: ../src/defaults.c:2078
 #, c-format
 msgid "Wrong type for background of workspace %i. Should be a texture."
 msgstr "Forkert type baggrund for arbejdsbord %i. Bør være en tekstur."
 
-#: ../src/defaults.c:2095
+#: ../src/defaults.c:2122
 msgid "could not load any usable font!!!"
 msgstr "ingen brugbare fonte fundet!!!"
 
-#: ../src/defaults.c:2123
+#: ../src/defaults.c:2150
 #, c-format
 msgid "could not get color for key \"%s\""
 msgstr "kunne ikke finde farve for tast \"%s\""
 
-#: ../src/defaults.c:2183 ../src/rootmenu.c:493
+#: ../src/defaults.c:2210 ../src/rootmenu.c:494
 #, c-format
 msgid "%s:invalid key modifier \"%s\""
 msgstr "%s: ugyldigt taste argument \"%s\""
 
-#: ../src/defaults.c:2195
+#: ../src/defaults.c:2222
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\""
 msgstr "%s:ugyldig tastaturgenvej \"%s\""
 
-#: ../src/defaults.c:2202
+#: ../src/defaults.c:2229
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\""
 msgstr "%s:ugyldig tast i tastaturgenvej \"%s\""
 
-#: ../src/defaults.c:2228
+#: ../src/defaults.c:2255
 #, c-format
 msgid "%s: modifier key %s is not valid"
 msgstr "%s: taste argument %s er ugyldigt"
 
-#: ../src/defaults.c:2262
+#: ../src/defaults.c:2289
 #, c-format
 msgid "could not load image in option %s: %s"
 msgstr "kunne ikke indlæse billede i konfiguration %s: %s"
 
-#: ../src/defaults.c:2344
+#: ../src/defaults.c:2371
 msgid "could not render texture for icon background"
 msgstr "kunne ikke lave tekstur for ikon baggrund"
 
-#: ../src/dialog.c:122 ../src/dialog.c:474 ../src/dock.c:475
-#: ../src/dockedapp.c:363 ../src/rootmenu.c:189 ../src/rootmenu.c:227
-#: ../src/rootmenu.c:241
+#: ../src/dialog.c:122 ../src/dialog.c:467 ../src/dock.c:545
+#: ../src/dockedapp.c:377 ../src/rootmenu.c:190 ../src/rootmenu.c:228
+#: ../src/rootmenu.c:242
 msgid "Cancel"
-msgstr "Fortryd"
+msgstr "Annuller"
 
 #: ../src/dialog.c:218
 msgid "Could not open directory "
 msgstr "Kunne ikke åbne katalog"
 
-#: ../src/dialog.c:274
+#: ../src/dialog.c:271
 msgid "Could not load image file "
 msgstr "Kunne ikke indlæse billedfil"
 
-#: ../src/dialog.c:411
+#: ../src/dialog.c:403
 msgid "Directories"
 msgstr "Kataloger"
 
-#: ../src/dialog.c:420
+#: ../src/dialog.c:412
 msgid "Icons"
 msgstr "Ikoner"
 
-#: ../src/dialog.c:457
+#: ../src/dialog.c:450
 msgid "File Name:"
 msgstr "Filnavn:"
 
-#: ../src/dialog.c:480
+#: ../src/dialog.c:473
 msgid "Choose File"
 msgstr "Vælg fil"
 
-#: ../src/dialog.c:497 ../src/dialog.c:499
+#: ../src/dialog.c:490 ../src/dialog.c:492
 msgid "Icon Chooser"
 msgstr "Ikon vælger"
 
-#: ../src/dialog.c:1400 ../src/startup.c:325
+#: ../src/dialog.c:1401 ../src/startup.c:325
 msgid "cannot open connection for crashing dialog panel. Aborting."
 msgstr "kan ikke åbne forbindelse til dialog box der er gået ned. Afbryder."
 
-#: ../src/dialog.c:1426
+#: ../src/dialog.c:1427
 msgid "Fatal error"
 msgstr "Fatal fejl"
 
-#: ../src/dialog.c:1437
+#: ../src/dialog.c:1438
 #, c-format
 msgid ""
 "Window Maker received signal %i\n"
@@ -293,12 +293,12 @@ msgstr ""
 "Window Maker modtog signal %i\n"
 "(%s)."
 
-#: ../src/dialog.c:1440
+#: ../src/dialog.c:1441
 #, c-format
 msgid "Window Maker received signal %i."
 msgstr "Window Maker modtog signal %i"
 
-#: ../src/dialog.c:1449
+#: ../src/dialog.c:1450
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
 "BUGFORM and report it to bugs@windowmaker.org."
@@ -306,147 +306,206 @@ msgstr ""
 "en fatal fejl er opstået, sikkert pga. en bug. Udfyld venligst den vedlagte "
 "BUGFORM og indberet det til bugs@windowmaker.org."
 
-#: ../src/dialog.c:1457
+#: ../src/dialog.c:1458
 msgid "What do you want to do now?"
 msgstr "Hvad vil du nu?"
 
-#: ../src/dialog.c:1463
+#: ../src/dialog.c:1464
 msgid "Select action"
 msgstr "Vælg handling"
 
-#: ../src/dialog.c:1464
+#: ../src/dialog.c:1465
 msgid "Abort and leave a core file"
 msgstr "Afbryd og lav en core fil"
 
-#: ../src/dialog.c:1465
+#: ../src/dialog.c:1466
 msgid "Restart Window Maker"
 msgstr "Genstart Window Maker"
 
-#: ../src/dialog.c:1466
+#: ../src/dialog.c:1467
 msgid "Start alternate window manager"
 msgstr "Start alternativ window manager"
 
-#: ../src/dock.c:210
+#: ../src/dock.c:212
 #, c-format
 msgid "Type the name for workspace %i:"
 msgstr "Indtast navn for arbejdsbord %i:"
 
-#: ../src/dock.c:211 ../src/dock.c:1090
+#: ../src/dock.c:213 ../src/dock.c:1160 ../src/dock.c:1163 ../src/dock.c:3384
 msgid "Rename Workspace"
 msgstr "Omdøb arbejdsbord"
 
-#: ../src/dock.c:473
+#: ../src/dock.c:508 ../src/dock.c:516
+msgid "Warning"
+msgstr "Advarsel"
+
+#: ../src/dock.c:509
+msgid ""
+"Some icons cannot be made omnipresent. Please make sure that no other icon "
+"is docked in the same positions on the other workspaces and the Clip is not "
+"full in some workspace."
+msgstr ""
+"Nogle ikoner kan ikke være på alle arbejdsborde. Se til at ingen andre ikoner "
+"er indfældet på samme sted på de andre arbejdsborde og at Clip'en ikke er "
+"fuld på noget arbejdsbord."
+
+#: ../src/dock.c:517
+msgid ""
+"Icon cannot be made omnipresent. Please make sure that no other icon is "
+"docked in the same position on the other workspaces and the Clip is not full "
+"in some workspace."
+msgstr ""
+"Ikonen kan ikke være på alle arbejdsborde. Se til at ingen anden ikon "
+"er indfældet på samme sted på de andre arbejdsborde og at Clip'en ikke er "
+"fuld på noget arbejdsbord."
+
+#: ../src/dock.c:543
 msgid "Workspace Clip"
 msgstr "Arbejdsbords Clip"
 
-#: ../src/dock.c:474
+#: ../src/dock.c:544
 msgid "All selected icons will be removed!"
 msgstr "Alle markerede ikoner vil blive fjernet!"
 
-#: ../src/dock.c:521
+#: ../src/dock.c:591 ../src/dock.c:1175 ../src/dock.c:1177 ../src/dock.c:3420
 msgid "Keep Icon"
 msgstr "Behold ikon"
 
-#: ../src/dock.c:522 ../src/dock.c:2024 ../src/dock.c:2153
+#: ../src/dock.c:592 ../src/dock.c:2130 ../src/dock.c:2264
 msgid "Type the command used to launch the application"
 msgstr "Indtast kommandoen der starter programmet"
 
-#: ../src/dock.c:903
+#: ../src/dock.c:973
 #, c-format
 msgid "could not launch application %s\n"
 msgstr "kunne ikke starte program %s\n"
 
-#: ../src/dock.c:958
+#: ../src/dock.c:1028
 msgid "could not create workspace submenu for Clip menu"
 msgstr "kunne ikke lave arbejdsbords undermenu for Clip menu"
 
-#: ../src/dock.c:1021
+#: ../src/dock.c:1091
 msgid "could not create options submenu for Clip menu"
 msgstr "kunne ikke lave konfigurations undermenu for Clip menu"
 
-#: ../src/dock.c:1025 ../src/dock.c:1079 ../src/winmenu.c:388
-msgid "Keep on top"
+#: ../src/dock.c:1095
+#, fuzzy
+msgid "Keep on Top"
 msgstr "Altid øverst"
 
-#: ../src/dock.c:1031
+#: ../src/dock.c:1101
 msgid "Collapsed"
 msgstr "Sammenfoldet"
 
-#: ../src/dock.c:1037
+#: ../src/dock.c:1107
 msgid "AutoCollapse"
 msgstr "AutoSammenfold"
 
-#: ../src/dock.c:1043
+#: ../src/dock.c:1113
 msgid "AutoRaiseLower"
 msgstr "AutoFremhæv"
 
-#: ../src/dock.c:1049
+#: ../src/dock.c:1119
 msgid "AutoAttract Icons"
 msgstr "AutoTiltræk ikoner"
 
-#: ../src/dock.c:1055
+#: ../src/dock.c:1125
 msgid "Keep Attracted Icons"
 msgstr "Behold tiltrukkede ikoner"
 
-#: ../src/dock.c:1085
+#: ../src/dock.c:1149 ../src/winmenu.c:407
+msgid "Keep on top"
+msgstr "Altid øverst"
+
+#: ../src/dock.c:1155
 msgid "Clip Options"
 msgstr "Clip konfiguration"
 
-#: ../src/dock.c:1092
-msgid "(Un)Select Icon"
-msgstr "(Fra)Vælg ikon"
+#: ../src/dock.c:1165
+#, fuzzy
+msgid "Selected"
+msgstr "Valgt"
 
-#: ../src/dock.c:1094
-msgid "(Un)Select All Icons"
-msgstr "(Fra)Vælg alle ikoner"
+#: ../src/dock.c:1170 ../src/dock.c:1173 ../src/dock.c:3411
+#, fuzzy
+msgid "Select All Icons"
+msgstr "Vælg alle ikoner"
 
-#: ../src/dock.c:1097
-msgid "Keep Icon(s)"
-msgstr "Behold ikon(er)"
+#: ../src/dock.c:1179 ../src/dock.c:1181 ../src/dock.c:3428
+#, fuzzy
+msgid "Move Icon To"
+msgstr "Flyt ikon til"
 
-#: ../src/dock.c:1099
-msgid "Move Icon(s) To"
-msgstr "Flyt ikon(er) til"
+#: ../src/dock.c:1186 ../src/dock.c:1189 ../src/dock.c:3439
+#, fuzzy
+msgid "Remove Icon"
+msgstr "Fjern Ikon"
 
-#: ../src/dock.c:1104
-msgid "Remove Icon(s)"
-msgstr "Fjern Ikon(er)"
-
-#: ../src/dock.c:1106
+#: ../src/dock.c:1191
 msgid "Attract Icons"
 msgstr "Tiltræk ikoner"
 
-#: ../src/dock.c:1109
+#: ../src/dock.c:1194
 msgid "Launch"
 msgstr "Kør"
 
-#: ../src/dock.c:1117
+#: ../src/dock.c:1202
 msgid "Settings..."
 msgstr "Indstillinger..."
 
-#: ../src/dock.c:1502 ../src/dock.c:1516 ../src/dock.c:1530 ../src/dock.c:1540
+#: ../src/dock.c:1595 ../src/dock.c:1609 ../src/dock.c:1623 ../src/dock.c:1633
+#: ../src/dock.c:1658
 #, c-format
 msgid "bad value in docked icon state info %s"
 msgstr "forkert værdi i indfældet ikon status info %s"
 
-#: ../src/dock.c:1548
+#: ../src/dock.c:1641
 #, c-format
 msgid "bad value in docked icon position %i,%i"
 msgstr "forkert værdi i indfældet ikon position %i,%i"
 
-#: ../src/dock.c:1791
+#: ../src/dock.c:1897
 msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
 msgstr "der er for mange ikoner i docken. Udelader dem der ikke passer ind"
 
 #. icon->forced_dock = 1;
-#: ../src/dock.c:2023 ../src/dock.c:2152
+#: ../src/dock.c:2129 ../src/dock.c:2263
 msgid "Dock Icon"
 msgstr "Indfæld ikon"
 
-#: ../src/dock.c:3109 ../src/dock.c:3113
+#: ../src/dock.c:3294 ../src/dock.c:3298
 #, c-format
 msgid "Could not execute command \"%s\""
 msgstr "Kunne ikke udføre kommando \"%s\""
+
+#: ../src/dock.c:3390
+#, fuzzy
+msgid "Toggle Omnipresent"
+msgstr "På alle arbejdsborde"
+
+#: ../src/dock.c:3395 ../src/winmenu.c:417 ../src/winspector.c:1197
+msgid "Omnipresent"
+msgstr "På alle arbejdsborde"
+
+#: ../src/dock.c:3409
+#, fuzzy
+msgid "Unselect All Icons"
+msgstr "Fravælg alle ikoner"
+
+#: ../src/dock.c:3418
+#, fuzzy
+msgid "Keep Icons"
+msgstr "Behold ikoner"
+
+#: ../src/dock.c:3426
+#, fuzzy
+msgid "Move Icons To"
+msgstr "Flyt ikoner til"
+
+#: ../src/dock.c:3437
+#, fuzzy
+msgid "Remove Icons"
+msgstr "Fjern Ikoner"
 
 #: ../src/dockedapp.c:130
 #, c-format
@@ -462,58 +521,68 @@ msgstr "Kunne ikke åbne specificeret ikon fil: %s"
 msgid "Ignore"
 msgstr "Ignorer"
 
-#: ../src/dockedapp.c:298
+#: ../src/dockedapp.c:252
+msgid ""
+"Sorry, icon cannot be made omnipresent. Please make sure that no other icon "
+"is docked in the same position on the other workspaces, and the Clip is not "
+"full in some workspace, then try again."
+msgstr ""
+"Ikonen kan ikke være på alle arbejdsborde. Se til at ingen anden ikon "
+"er indfældet på samme sted på de andre arbejdsborde og at Clip'en ikke er "
+"fuld på noget arbejdsbord, og prøv igen."
+
+#: ../src/dockedapp.c:313
 msgid "Start when WindowMaker is started"
 msgstr "Start samtidig med WindowMaker"
 
-#: ../src/dockedapp.c:305
+#: ../src/dockedapp.c:319
 msgid "Application path and arguments"
 msgstr "Programsti og argumenter"
 
-#: ../src/dockedapp.c:316
+#: ../src/dockedapp.c:330
 msgid "Command for files dropped with DND"
-msgstr "\"Traek og slip\" kommando"
+msgstr "\"Træk og slip\" kommando"
 
-#: ../src/dockedapp.c:328
+#: ../src/dockedapp.c:342
 #, c-format
 msgid "%d will be replaced with the file name"
 msgstr "%d bliver erstattet med filnavnet"
 
-#: ../src/dockedapp.c:332
+#: ../src/dockedapp.c:346
 msgid "DND support was not compiled in"
 msgstr "DND support blev ikke kompileret ind"
 
-#: ../src/dockedapp.c:338
+#: ../src/dockedapp.c:352
 msgid "Icon Image"
 msgstr "Ikonfil"
 
-#: ../src/dockedapp.c:350 ../src/winspector.c:1245
+#: ../src/dockedapp.c:364 ../src/winspector.c:1333
 msgid "Browse..."
-msgstr "Soeg..."
+msgstr "Find..."
 
-#: ../src/dockedapp.c:395
+#: ../src/dockedapp.c:409
 msgid "Docked Application Settings"
 msgstr "Indfældet programs indstillinger"
 
-#: ../src/framewin.c:489 ../src/framewin.c:565 ../src/menu.c:461
+#: ../src/framewin.c:642 ../src/framewin.c:737 ../src/menu.c:467
 #: ../src/texture.c:549
 #, c-format
 msgid "could not render texture: %s"
 msgstr "kunne ikke lave tekstur: %s"
 
-#: ../src/framewin.c:505 ../src/framewin.c:520 ../src/framewin.c:531
-#: ../src/framewin.c:538 ../src/framewin.c:545 ../src/icon.c:350
-#: ../src/menu.c:490
+#: ../src/framewin.c:665 ../src/framewin.c:676 ../src/framewin.c:692
+#: ../src/framewin.c:703 ../src/framewin.c:710 ../src/framewin.c:717
+#: ../src/icon.c:350 ../src/menu.c:496
 #, c-format
 msgid "error rendering image:%s"
 msgstr "fejl i tegning af billede:%s"
 
-#: ../src/framewin.c:588
+#: ../src/framewin.c:770
 #, c-format
 msgid "error rendering image: %s"
 msgstr "fejl i tegning af billede: %s"
 
-#: ../src/icon.c:229 ../src/wdefaults.c:416
+#: ../src/icon.c:229 ../src/wdefaults.c:427
 #, c-format
 msgid "error loading image file \"%s\""
 msgstr "fejl i åbning af billedfil \"%s\""
@@ -533,69 +602,69 @@ msgstr "kunne ikke finde standard ikon \"%s\""
 msgid "could not load default icon \"%s\":%s"
 msgstr "kunne ikke indlæse standard ikon \"%s\":%s"
 
-#: ../src/main.c:198
+#: ../src/main.c:193
 msgid "failed to restart Window Maker."
 msgstr "kunne ikke genstarte Window Maker."
 
-#: ../src/main.c:201
+#: ../src/main.c:196
 #, c-format
 msgid "could not exec %s"
 msgstr "kunne ikke udføre %s"
 
-#: ../src/main.c:250
+#: ../src/main.c:245
 #, c-format
 msgid "%s aborted.\n"
 msgstr "%s afbrudt.\n"
 
-#: ../src/main.c:261
+#: ../src/main.c:256
 #, c-format
 msgid "Usage: %s [options]\n"
 msgstr "Brug: %s [muligheder]\n"
 
-#: ../src/main.c:262
+#: ../src/main.c:257
 msgid "The Window Maker window manager for the X window system"
 msgstr "Window Maker window manager til X window system"
 
-#: ../src/main.c:264
+#: ../src/main.c:259
 msgid " -display host:dpy\tdisplay to use"
 msgstr " -display host:dpy\tdisplay som skal bruges"
 
-#: ../src/main.c:266
+#: ../src/main.c:261
 msgid " --no-cpp \t\tdisable preprocessing of configuration files"
 msgstr " --no-cpp \t\tundlad forbehandling af konfigurationsfiler"
 
-#: ../src/main.c:268
+#: ../src/main.c:263
 msgid " --no-dock\t\tdo not open the application Dock"
 msgstr " --no-dock\t\tåbn ikke programmet Dock"
 
-#: ../src/main.c:269
+#: ../src/main.c:264
 msgid " --no-clip\t\tdo not open the workspace Clip"
 msgstr " --no-clip\t\tåbn ikke arbejdsbordets Clip"
 
 #.
 #. puts(_(" --locale locale		locale to use"));
 #.
-#: ../src/main.c:273
+#: ../src/main.c:268
 msgid " --visual-id visualid\tvisual id of visual to use"
 msgstr " --visual-id visualid\tvisual id af visual som skal bruges"
 
-#: ../src/main.c:274
+#: ../src/main.c:269
 msgid " --static\t\tdo not update or save configurations"
 msgstr " --static\t\thverken updater eller gem konfigurationer"
 
-#: ../src/main.c:276
+#: ../src/main.c:271
 msgid " --synchronous\t\tturn on synchronous display mode"
 msgstr " --synchronous\t\tstart synkron display modus"
 
-#: ../src/main.c:278
+#: ../src/main.c:273
 msgid " --version\t\tprint version and exit"
 msgstr " --version\t\tvis version og afslut"
 
-#: ../src/main.c:279
+#: ../src/main.c:274
 msgid " --help\t\t\tshow this message"
 msgstr " --help\t\t\tvis denne besked"
 
-#: ../src/main.c:291
+#: ../src/main.c:286
 #, c-format
 msgid ""
 "could not find user GNUstep directory (%s).\n"
@@ -604,50 +673,50 @@ msgstr ""
 "kunne ikke finde brugerens GNUstep katalog (%s).\n"
 "Har du installeret Window Maker korrekt og kørt wmaker.inst?"
 
-#: ../src/main.c:309 ../src/main.c:314
+#: ../src/main.c:307 ../src/main.c:312
 #, c-format
 msgid "%s:could not execute initialization script"
 msgstr "%s:kunne ikke køre autostart script"
 
-#: ../src/main.c:331 ../src/main.c:336
+#: ../src/main.c:332 ../src/main.c:337
 #, c-format
 msgid "%s:could not execute exit script"
 msgstr "%s:kunne ikke køre exit script"
 
-#: ../src/main.c:405 ../src/main.c:412 ../src/main.c:420 ../src/main.c:436
+#: ../src/main.c:410 ../src/main.c:417 ../src/main.c:425 ../src/main.c:441
 #, c-format
 msgid "too few arguments for %s"
 msgstr "for få argumenter til &s"
 
-#: ../src/main.c:424
+#: ../src/main.c:429
 #, c-format
 msgid "bad value for visualid: \"%s\""
 msgstr "dårlig værdi for visualid: \"%s\""
 
-#: ../src/main.c:444
+#: ../src/main.c:449
 #, c-format
 msgid "%s: invalid argument '%s'\n"
 msgstr "%s: ugyldigt argument '%s'\n"
 
-#: ../src/main.c:445
+#: ../src/main.c:450
 #, c-format
 msgid "Try '%s --help' for more information\n"
 msgstr "Prøv '%s --help' for at få mere information\n"
 
-#: ../src/main.c:488
+#: ../src/main.c:493
 msgid "X server does not support locale"
 msgstr "X server understøtter ikke lokale sprog"
 
-#: ../src/main.c:491
+#: ../src/main.c:496
 msgid "cannot set locale modifiers"
-msgstr "kan ikke vise dansk (doh! hvorfor oversætter jeg det her..)"
+msgstr "kan ikke vise dansk (doh! hvorfor oversætter jeg det her...)"
 
-#: ../src/main.c:508
+#: ../src/main.c:513
 #, c-format
 msgid "could not open display \"%s\""
 msgstr "kunne ikke åbne display \"%s\""
 
-#: ../src/menu.c:297
+#: ../src/menu.c:303
 msgid "wrealloc() failed while trying to add menu item"
 msgstr "wrealloc() fejlede under opbygningning af menuen"
 
@@ -671,62 +740,62 @@ msgstr "din maskine er sat forkert op. HOSTNAME er sat til %s"
 msgid "your machine is misconfigured. HOST is set to %s"
 msgstr "din maskine er sat forkert op. HOST er sat til %s"
 
-#: ../src/misc.c:772
+#: ../src/misc.c:749
 msgid "selection timed-out"
 msgstr "udvalg fik time-out"
 
-#: ../src/misc.c:788
+#: ../src/misc.c:765
 msgid "Program Arguments"
 msgstr "Program Argumenter"
 
-#: ../src/misc.c:789
+#: ../src/misc.c:766
 msgid "Enter command arguments:"
 msgstr "Indtast kommando argumenter:"
 
-#: ../src/misc.c:887
+#: ../src/misc.c:859
 msgid "unable to get dropped data from DND drop"
 msgstr "kan ikke modtage data fra DND drop"
 
-#: ../src/misc.c:895
+#: ../src/misc.c:867
 msgid "error getting dropped data from DND drop"
 msgstr "fejl i modtagelse af data fra DND drop"
 
-#: ../src/misc.c:901
+#: ../src/misc.c:873
 msgid "out of memory while getting data from DND drop"
 msgstr "løb tør for hukommelse mens data blev hentet fra DND drop"
 
-#: ../src/misc.c:946 ../src/misc.c:1081
+#: ../src/misc.c:918 ../src/misc.c:1058
 #, c-format
 msgid "out of memory during expansion of \"%s\""
 msgstr "løb tør for hukommelse under udvidelse af \"%s\""
 
-#: ../src/misc.c:1000
+#: ../src/misc.c:972
 msgid "out of memory during expansion of \"%w\""
 msgstr "løb tør for hukommelse under udvidelse af \"%w\""
 
-#: ../src/misc.c:1018
+#: ../src/misc.c:990
 msgid "out of memory during expansion of \"%W\""
 msgstr "løb tør for hukommelse under udvidelse af \"%W\""
 
-#: ../src/misc.c:1034
+#: ../src/misc.c:1006
 msgid "out of memory during expansion of \"%a\""
 msgstr "løb tør for hukommelse under udvidelse af \"%a\""
 
-#: ../src/misc.c:1060
+#: ../src/misc.c:1037
 #, c-format
 msgid "out of memory during expansion of \"%d\""
 msgstr "løb tør for hukommelse under udvidelse af \"%d\""
 
-#: ../src/misc.c:1074
+#: ../src/misc.c:1051
 msgid "selection not available"
 msgstr "valg ikke tilgængeligt"
 
-#: ../src/misc.c:1146 ../src/misc.c:1152
+#: ../src/misc.c:1123 ../src/misc.c:1129
 #, c-format
 msgid "bad window name value in %s state info"
 msgstr "ugyldig værdi for vinduesnavn i %s status info"
 
-#: ../src/misc.c:1407
+#: ../src/misc.c:1384
 msgid "could not send message to background image helper"
 msgstr "kunne ikke sende besked til baggrundsbillede hjælper"
 
@@ -796,265 +865,241 @@ msgstr "kunne ikke åbne domæne fil %s"
 msgid "extra data after end of file"
 msgstr "extra data efter linjens slutning"
 
-#: ../src/resources.c:71
-#, c-format
-msgid "The following character sets are missing in %s:"
-msgstr "Følgende tegnsæt mangler %s:"
-
-#: ../src/resources.c:76
-#, c-format
-msgid "The string \"%s\" will be used in place"
-msgstr "Tekststrengen \"%s\" vil blive brugt i stedetfor"
-
-#: ../src/resources.c:78
-msgid "of any characters from those sets."
-msgstr "for tegn fra disse tegnsæt."
-
-#: ../src/resources.c:81
-#, c-format
-msgid "could not create font set %s. Trying fixed"
-msgstr "kunne ikke skabe font sæt %s. Prøver standard"
-
-#: ../src/resources.c:98
-#, c-format
-msgid "could not load font %s. Trying fixed"
-msgstr "kunne ikke indlæse font %s. Prøver standard"
-
-#: ../src/resources.c:136
+#: ../src/resources.c:44
 #, c-format
 msgid "could not parse color \"%s\""
 msgstr "\"%s\" er en ugyldig farve"
 
-#: ../src/resources.c:140
+#: ../src/resources.c:48
 #, c-format
 msgid "could not allocate color \"%s\""
 msgstr "kunne ikke allokere farve \"%s\""
 
-#: ../src/rootmenu.c:187 ../src/rootmenu.c:189
+#: ../src/rootmenu.c:188 ../src/rootmenu.c:190
 msgid "Exit"
-msgstr "Luk ned"
+msgstr "Afslut"
 
-#: ../src/rootmenu.c:188
+#: ../src/rootmenu.c:189
 msgid "Exit window manager?"
 msgstr "Afslut window manager?"
 
-#: ../src/rootmenu.c:224
-msgid "Close X session"
-msgstr "Afslut X"
-
 #: ../src/rootmenu.c:225
+msgid "Close X session"
+msgstr "Luk X session"
+
+#: ../src/rootmenu.c:226
 msgid ""
 "Close Window System session?\n"
 "Kill might close applications with unsaved data."
 msgstr ""
-"Afslut Window System?\n"
-"Drab kan medføre datatab i åbne programmer med ugemt data."
+"Luk Window System session?\n"
+"Kan medføre datatab i åbne programmer med ugemt data."
 
 #.
 #. entry = wMenuAddCallback(menu, _("Select Shortcut"), NULL, NULL);
 #. wMenuEntrySetCascade(menu, entry, makeMakeShortcutMenu(scr));
 #.
-#: ../src/rootmenu.c:227 ../src/winmenu.c:486
+#: ../src/rootmenu.c:228 ../src/winmenu.c:505
 msgid "Close"
-msgstr "Luk ned"
-
-#: ../src/rootmenu.c:238
-msgid "Kill X session"
-msgstr "Draeb X"
+msgstr "Luk"
 
 #: ../src/rootmenu.c:239
+msgid "Kill X session"
+msgstr "Dræb X session"
+
+#: ../src/rootmenu.c:240
 msgid ""
 "Kill Window System session?\n"
 "(all applications will be closed)"
 msgstr ""
-"Draeb Window System?\n"
-"(alle programmer bliver afsluttet)"
+"Dræb Window System session?\n"
+"(alle programmer bliver lukket)"
 
-#: ../src/rootmenu.c:506
+#: ../src/rootmenu.c:507
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\" for entry %s"
-msgstr "%s:ugyldig tastatur genvej \"%s\" i linje %s"
+msgstr "%s:ugyldig tastaturgenvej \"%s\" i linje %s"
 
-#: ../src/rootmenu.c:514
+#: ../src/rootmenu.c:515
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\" for entry %s"
 msgstr "%s:ugyldig tast i genvej \"%s\" i linje %s"
 
-#: ../src/rootmenu.c:567
+#: ../src/rootmenu.c:568
 #, c-format
 msgid "%s: unmatched '\"' in menu file"
-msgstr "%s: ikke matchende '\"' i menu fil"
+msgstr "%s: ingen matchende '\"' i menu filen"
 
-#: ../src/rootmenu.c:617
+#: ../src/rootmenu.c:618
 #, c-format
 msgid "%s: missing command"
 msgstr "%s: manglende kommando"
 
-#: ../src/rootmenu.c:650
+#: ../src/rootmenu.c:651
 #, c-format
 msgid "invalid OPEN_MENU specification: %s"
 msgstr "ugyldig OPEN_MENU specifikation: %s"
 
-#: ../src/rootmenu.c:698
+#: ../src/rootmenu.c:699
 #, c-format
 msgid "%s:could not stat menu"
 msgstr "%s:kunne ikke undersøge menu"
 
-#: ../src/rootmenu.c:706
+#: ../src/rootmenu.c:707
 #, c-format
 msgid "%s:could not stat menu:%s"
 msgstr "%s:kunne ikke undersøge menu:%s"
 
-#: ../src/rootmenu.c:724
+#: ../src/rootmenu.c:725
 #, c-format
 msgid "too many parameters in OPEN_MENU: %s"
 msgstr "for mange parametere i OPEN_MENU: %s"
 
-#: ../src/rootmenu.c:760
+#: ../src/rootmenu.c:761
 msgid ""
 "There are more than one WORKSPACE_MENU commands in the applications menu. "
 "Only one is allowed."
 msgstr ""
-"Der er mere end een WORKSPACE_MENU kommando i program menuen. "
-"Kun en er tilladt."
+"Der er mere end een WORKSPACE_MENU kommando i program menuen. Kun en er "
+"tilladt."
 
-#: ../src/rootmenu.c:789 ../src/rootmenu.c:807
+#: ../src/rootmenu.c:790 ../src/rootmenu.c:808 ../src/rootmenu.c:818
 #, c-format
 msgid "%s:missing parameter for menu command \"%s\""
 msgstr "%s:manglende parameter for menu kommando \"%s\""
 
-#: ../src/rootmenu.c:870
+#: ../src/rootmenu.c:882
 #, c-format
 msgid "%s:unknown command \"%s\" in menu config."
 msgstr "%s:ukendt kommando \"%s\" i menu konfig"
 
-#: ../src/rootmenu.c:878
+#: ../src/rootmenu.c:890
 #, c-format
 msgid "%s:can't add shortcut for entry \"%s\""
 msgstr "%s:kan ikke tilføje genvej for linje \"%s\""
 
-#: ../src/rootmenu.c:1015
+#: ../src/rootmenu.c:1027
 #, c-format
 msgid "%s:maximal line size exceeded in menu config: %s"
 msgstr "%s:maksmal linje størrelse overskredet i menu konfig: %s"
 
-#: ../src/rootmenu.c:1037 ../src/rootmenu.c:1129 ../src/rootmenu.c:1230
+#: ../src/rootmenu.c:1049 ../src/rootmenu.c:1141 ../src/rootmenu.c:1242
 #, c-format
 msgid "%s:missing command in menu config: %s"
 msgstr "%s:manglende kommando i menu konfig: %s"
 
-#: ../src/rootmenu.c:1067
+#: ../src/rootmenu.c:1079
 #, c-format
 msgid "%s:syntax error in menu file:END declaration missing"
 msgstr "%s:syntaks fejl i menu fil:END deklaration mangler"
 
-#: ../src/rootmenu.c:1096 ../src/rootmenu.c:1195
+#: ../src/rootmenu.c:1108 ../src/rootmenu.c:1207
 msgid "could not make arguments for menu file preprocessor"
 msgstr "kunne ikke skabe argumenter for menu fil forbehandler"
 
-#: ../src/rootmenu.c:1102 ../src/rootmenu.c:1202
+#: ../src/rootmenu.c:1114 ../src/rootmenu.c:1214
 #, c-format
 msgid "%s:could not open/preprocess menu file"
 msgstr "%s:kunne ikke åbne/forbehandle menu fil"
 
-#: ../src/rootmenu.c:1114 ../src/rootmenu.c:1215
+#: ../src/rootmenu.c:1126 ../src/rootmenu.c:1227
 #, c-format
 msgid "%s:could not open menu file"
 msgstr "%:kunne ikke åbne menu fil"
 
-#: ../src/rootmenu.c:1141
+#: ../src/rootmenu.c:1153
 #, c-format
 msgid "%s:invalid menu file. MENU command is missing"
 msgstr "%s:ugyldig menu fil. MENU kommando mangler"
 
-#: ../src/rootmenu.c:1150
+#: ../src/rootmenu.c:1162
 msgid "error reading preprocessed menu data"
 msgstr "kunne ikke indlæse forbehandlet menu data"
 
-#: ../src/rootmenu.c:1242
+#: ../src/rootmenu.c:1254
 #, c-format
 msgid "%s:no title given for the root menu"
 msgstr "%s:ingen titel angivet for rod menuen"
 
-#: ../src/rootmenu.c:1325 ../src/rootmenu.c:1392 ../src/rootmenu.c:1436
+#: ../src/rootmenu.c:1337 ../src/rootmenu.c:1404 ../src/rootmenu.c:1448
 #, c-format
 msgid "out of memory while constructing directory menu %s"
 msgstr "løb tør for memory mens katalog menu %s blev lavet"
 
-#: ../src/rootmenu.c:1335
+#: ../src/rootmenu.c:1347
 #, c-format
 msgid "%s:could not stat file \"%s\" in menu directory"
 msgstr "%s: kunne ikke undersøge fil \"%s\" i menu katalog"
 
-#: ../src/rootmenu.c:1490
+#: ../src/rootmenu.c:1502
 msgid "Commands"
 msgstr "Kommandoer"
 
-#: ../src/rootmenu.c:1493
+#: ../src/rootmenu.c:1505
 msgid "Restart"
 msgstr "Genstart"
 
-#: ../src/rootmenu.c:1494
+#: ../src/rootmenu.c:1506
 msgid "Exit..."
 msgstr "Afslut..."
 
-#: ../src/rootmenu.c:1539
+#: ../src/rootmenu.c:1551
 #, c-format
 msgid "could not find menu file \"%s\" referenced in WMRootMenu"
 msgstr "kunne ikke åbne menu fil \"%s\" refereret i WMRootMenu"
 
-#: ../src/rootmenu.c:1546
+#: ../src/rootmenu.c:1558
 #, c-format
 msgid "could not access menu \"%s\" referenced in WMRootMenu"
 msgstr "kunne ikke åbne menu \"%s\" refereret i WMRootMenu"
 
-#: ../src/rootmenu.c:1557
+#: ../src/rootmenu.c:1569
 #, c-format
 msgid ""
 "using default menu file \"%s\" as the menu referenced in WMRootMenu could "
 "not be found "
 msgstr ""
-"bruger standard menu fil \"%s\" da menuen angivet i WMRootMenu ikke "
-"fandtes "
+"bruger standard menu fil \"%s\" da menuen angivet i WMRootMenu ikke fandtes "
 
-#: ../src/rootmenu.c:1580 ../src/rootmenu.c:1656
+#: ../src/rootmenu.c:1592 ../src/rootmenu.c:1668
 #, c-format
 msgid "%s:format error in root menu configuration \"%s\""
 msgstr "%s:formateringsfejl i konfiguration af hovedmenu \"%s\""
 
-#: ../src/rootmenu.c:1744
+#: ../src/rootmenu.c:1755
+#, fuzzy
 msgid ""
-"The applications menu could not be loaded.Look at the console output for a "
-"detaileddescription of the errors"
+"The applications menu could not be loaded. Look at the console output for a "
+"detailed description of the errors."
 msgstr ""
 "Program menuen kunne ikke indlæses. Læs kommandolinje output for en "
 "detaljeret beskrivelse af fejlen(e)"
 
-#: ../src/screen.c:436
+#: ../src/screen.c:459
 #, c-format
 msgid "could not load logo image for panels: %s"
 msgstr "kunne ikke indlæse logo billede for panelerne: %s"
 
-#: ../src/screen.c:440
+#: ../src/screen.c:463
 #, c-format
 msgid "error making logo image for panel:%s"
 msgstr "kunne ikke konstruere logo billede for panel:%s"
 
-#: ../src/screen.c:728
+#: ../src/screen.c:751
 #, c-format
 msgid "could not initialize graphics library context: %s"
 msgstr "kunne ikke initialisere grafik library: %s"
 
-#: ../src/screen.c:759
+#: ../src/screen.c:782
 msgid "could not do initialization of WINGs widget set"
 msgstr "kunne ikke initialisere WINGs widget set"
 
-#: ../src/screen.c:1093
+#: ../src/screen.c:1114
 #, c-format
 msgid "could not save session state in %s"
 msgstr "kunne ikke gemme sessions status i %s"
 
-#: ../src/session.c:182 ../src/wdefaults.c:564 ../src/winspector.c:348
+#: ../src/session.c:182 ../src/wdefaults.c:575 ../src/winspector.c:354
 #, c-format
 msgid "can't convert \"%s\" to boolean"
 msgstr "kan ikke konvertere \"%s\" til boolsk værdi"
@@ -1075,7 +1120,7 @@ msgstr "ikke mere hukommelse mens sessions status blev gemt"
 #.
 #: ../src/session.c:1206
 msgid "connection to the session manager was lost"
-msgstr "forbindelse til sessions manager forsvandt"
+msgstr "forbindelsen til sessions manager forsvandt"
 
 #: ../src/stacking.c:73
 msgid "could not get window list!!"
@@ -1119,7 +1164,8 @@ msgstr "fik signal %i\n"
 #: ../src/startup.c:303
 msgid ""
 "crashed while trying to do some post-crash cleanup. Aborting immediatelly."
-msgstr "gik ned under forsøg at rydde op efter uheld. Afslutter straks"
+msgstr ""
+"gik ned under forsøg at rydde op efter crash. Annullerer med det samme."
 
 #. we try to restart Window Maker
 #: ../src/startup.c:337
@@ -1132,7 +1178,7 @@ msgstr "prøver at starte alternativ window manager..."
 
 #: ../src/startup.c:347
 msgid "failed to start alternate window manager. Aborting."
-msgstr "det lykkedes ikke at starte alternativ window manager. Afslutter."
+msgstr "det lykkedes ikke at starte alternativ window manager. Annullerer."
 
 #: ../src/startup.c:349
 msgid ""
@@ -1142,21 +1188,25 @@ msgstr ""
 "en fatal fejl er opstået, sikkert pga. en bug. Udfyld venligst den vedlagte "
 "BUGFORM og indberet det."
 
-#: ../src/startup.c:782
+#: ../src/startup.c:777
 #, c-format
 msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
 msgstr "ikon størrelse er sat til %i, men det er for lille. Bruger 16 istedet\n"
 
-#: ../src/startup.c:821
+#: ../src/startup.c:805
+msgid "XKB is not supported. KbdModeLock is automatically disabled."
+msgstr "XKB er ikke understøttet. KbdModeLock er slået fra."
+
+#: ../src/startup.c:824
 msgid "it seems that there is already a window manager running"
 msgstr "det ser ud til at der kører en window manager i forvejen"
 
-#: ../src/startup.c:827
+#: ../src/startup.c:830
 #, c-format
 msgid "could not manage screen %i"
 msgstr "kunne ikke håndtere skærm %i"
 
-#: ../src/startup.c:887
+#: ../src/startup.c:890
 msgid "could not manage any screen"
 msgstr "kunne ikke håndtere nogen skærm"
 
@@ -1186,14 +1236,14 @@ msgstr "funktion \"%s\" fandtes ikke i library \"%s\""
 
 #: ../src/texture.c:416
 msgid "function textures not supported on this system, sorry."
-msgstr "tekstur funktionen er ikke understøttet af dette system."
+msgstr "tekstur funktionen er ikke understøttet af dette system, desværre."
 
-#: ../src/wdefaults.c:410
+#: ../src/wdefaults.c:421
 #, c-format
 msgid "could not find icon file \"%s\""
 msgstr "kunne ikke finde ikonfil \"%s\""
 
-#: ../src/window.c:2539 ../src/window.c:2673
+#: ../src/window.c:2607 ../src/window.c:2741
 msgid ""
 "the NumLock, ScrollLock or similar key seems to be turned on.\n"
 "Turn it off or some mouse actions and keyboard shortcuts will not work."
@@ -1201,278 +1251,463 @@ msgstr ""
 "NumLock, ScrollLock eller en lignende tast er trykket ind.\n"
 "Tryk den ud eller visse musefunktioner og tastaturgenveje vil ikke fungere."
 
-#: ../src/winmenu.c:125
+#: ../src/winmenu.c:126
 msgid ""
 "This will kill the application.\n"
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-"Dette vil draebe programmet.\n"
+"Dette vil lukke programmet.\n"
 "Alle ugemte data bliver slettet.\n"
-"Bekraeft."
+"Bekræft venligst."
 
-#: ../src/winmenu.c:252 ../src/winmenu.c:260
+#: ../src/winmenu.c:269 ../src/winmenu.c:277
 msgid "Set Shortcut"
 msgstr "Angiv genvej"
 
-#: ../src/winmenu.c:338 ../src/winmenu.c:384
+#: ../src/winmenu.c:357 ../src/winmenu.c:403
 msgid "could not create submenu for window menu"
 msgstr "kunne ikke lave undermenu for vinduesmenu"
 
-#: ../src/winmenu.c:393
+#: ../src/winmenu.c:412
 msgid "Keep at bottom"
 msgstr "Altid nederst"
-
-#: ../src/winmenu.c:398 ../src/winspector.c:1147
-msgid "Omnipresent"
-msgstr "Paa alle arbejdsborde"
 
 #.
 #. * Warning: If you make some change that affects the order of the
 #. * entries, you must update the command #defines in the top of
 #. * this file.
 #.
-#: ../src/winmenu.c:421 ../src/winmenu.c:556
+#: ../src/winmenu.c:440 ../src/winmenu.c:575
 msgid "Maximize"
 msgstr "Maximer"
 
-#: ../src/winmenu.c:429 ../src/winmenu.c:542
+#: ../src/winmenu.c:448 ../src/winmenu.c:561
 msgid "Miniaturize"
 msgstr "Minimer"
 
-#: ../src/winmenu.c:438 ../src/winmenu.c:573
+#: ../src/winmenu.c:457 ../src/winmenu.c:592
 msgid "Shade"
 msgstr "Rul op"
 
-#: ../src/winmenu.c:454
+#: ../src/winmenu.c:473
 msgid "Resize/Move"
 msgstr "Ændre størrelse/Flyt"
 
-#: ../src/winmenu.c:462
+#: ../src/winmenu.c:481
 msgid "Select"
 msgstr "Vælg"
 
-#: ../src/winmenu.c:470
+#: ../src/winmenu.c:489
 msgid "Move To"
 msgstr "Flyt til"
 
-#: ../src/winmenu.c:475
+#: ../src/winmenu.c:494
 msgid "Attributes..."
 msgstr "Attributter..."
 
-#: ../src/winmenu.c:477
+#: ../src/winmenu.c:496
 msgid "Options"
 msgstr "Indstillinger"
 
-#: ../src/winmenu.c:537
+#: ../src/winmenu.c:556
 msgid "Deminiaturize"
 msgstr "Uminimer"
 
-#: ../src/winmenu.c:551
+#: ../src/winmenu.c:570
 msgid "Unmaximize"
 msgstr "Umaximer"
 
-#: ../src/winmenu.c:568
+#: ../src/winmenu.c:587
 msgid "Unshade"
 msgstr "Rul ned"
 
-#: ../src/winspector.c:282
+#: ../src/winspector.c:288
 #, c-format
 msgid "Could not find icon \"%s\" specified for this window"
 msgstr "Kunne ikke finde ikon \"%s\" specificeret for dette vindue"
 
-#: ../src/winspector.c:298
+#: ../src/winspector.c:304
 #, c-format
 msgid "Could not open specified icon \"%s\":%s"
 msgstr "Kunne ikke finde specificeret ikon \"%s\":%s"
 
-#: ../src/winspector.c:1022
+#: ../src/winspector.c:1052
 msgid "Save"
 msgstr "Gem"
 
-#: ../src/winspector.c:1030
+#: ../src/winspector.c:1060
 msgid "Apply"
-msgstr "Udfoer"
+msgstr "Anvend"
 
-#: ../src/winspector.c:1036
+#: ../src/winspector.c:1066
 msgid "Reload"
-msgstr "Genindlaes"
+msgstr "Genindlæs"
 
-#: ../src/winspector.c:1045 ../src/winspector.c:1055
+#: ../src/winspector.c:1075 ../src/winspector.c:1085
 msgid "Window Specification"
 msgstr "Vinduesspecifikationer"
 
-#: ../src/winspector.c:1046
+#: ../src/winspector.c:1076
 msgid "Window Attributes"
 msgstr "Vinduesattributter"
 
-#: ../src/winspector.c:1047
+#: ../src/winspector.c:1077
 msgid "Advanced Options"
-msgstr "Udvidede indstillinger"
+msgstr "Udvidede Indstillinger"
 
-#: ../src/winspector.c:1048
+#: ../src/winspector.c:1078
 msgid "Icon and Initial Workspace"
-msgstr "Ikon og foerste arbejdsbord"
+msgstr "Ikon og første arbejdsbord"
 
-#: ../src/winspector.c:1049
+#: ../src/winspector.c:1079
 msgid "Application Specific"
 msgstr "Specifikt for program"
 
-#: ../src/winspector.c:1063
+#: ../src/winspector.c:1093
 msgid "Defaults for all windows"
 msgstr "Standard for alle vinduer"
 
-#: ../src/winspector.c:1106
+#: ../src/winspector.c:1144
 msgid ""
 "The configuration will apply to all\n"
 "windows that have their WM_CLASS property set to the above selected\n"
 "name, when saved."
 msgstr ""
-"Konfigurationen gaelder for alle\n"
-"vinduer, hvis WM_CLASS egenskab er sat til det ovenstaeende\n"
-"navn, naer de gemmes."
+"Konfigurationen vil gælde for alle\n"
+"vinduer, hvis WM_CLASS egenskab er sat til det ovenstående\n"
+"navn, når den er gemt."
 
-#: ../src/winspector.c:1113
+#: ../src/winspector.c:1151
 msgid "Attributes"
 msgstr "Attributter"
 
-#: ../src/winspector.c:1123
+#: ../src/winspector.c:1162
 msgid "Disable Titlebar"
-msgstr "Fjern titellinje"
+msgstr "Fjern Titellinje"
 
-#: ../src/winspector.c:1127
+#: ../src/winspector.c:1164
+msgid ""
+"Remove the titlebar of this window.\n"
+"To access the window commands menu of a window\n"
+"without it's titlebar, press Control+Esc (or the\n"
+"equivalent shortcut, if you changed the default\n"
+"settings)."
+msgstr ""
+"Fjern dette vindues titellinje.\n"
+"For at komme til et vindues kommando menu\n"
+"uden titellinjen, tryk Control+Esc (eller\n"
+"den korrekte genvej, hvis du har ændret i\n"
+"standard indstillingerne)."
+
+#: ../src/winspector.c:1171
 msgid "Disable Resizebar"
-msgstr "Fjern bundlinje"
-
-#: ../src/winspector.c:1131
-msgid "Disable Close Button"
-msgstr "Fjern lukkeknap"
-
-#: ../src/winspector.c:1135
-msgid "Disable Miniaturize Button"
-msgstr "Fjern minimerknap"
-
-#: ../src/winspector.c:1139
-msgid "Keep on Top / Floating"
-msgstr "Altid oeverst / flydende"
-
-#: ../src/winspector.c:1143
-msgid "Keep at Bottom / Sunken"
-msgstr "Altid nederst / sunket"
-
-#: ../src/winspector.c:1151
-msgid "Start Miniaturized"
-msgstr "Start minimeret"
-
-#: ../src/winspector.c:1155
-msgid "Start Maximized"
-msgstr "Start maximeret"
-
-#: ../src/winspector.c:1159
-msgid "Skip Window List"
-msgstr "Udelad i vinduesliste"
+msgstr "Fjern Bundlinje"
 
 #: ../src/winspector.c:1173
+msgid "Remove the resizebar of this window."
+msgstr "Fjern dette vindues bundlinje."
+
+#: ../src/winspector.c:1176
+msgid "Disable Close Button"
+msgstr "Fjern Lukkeknap"
+
+#: ../src/winspector.c:1178
+msgid "Remove the `close window' button of this window."
+msgstr "Fjern dette vindues `luk vindue' knap."
+
+#: ../src/winspector.c:1181
+msgid "Disable Miniaturize Button"
+msgstr "Fjern Minimerknap"
+
+#: ../src/winspector.c:1183
+msgid "Remove the `miniaturize window' button of the window."
+msgstr "Fjern dette vindues `minimer vindue' knap."
+
+#: ../src/winspector.c:1186
+msgid "Keep on Top / Floating"
+msgstr "Altid øverst / Flydende"
+
+#: ../src/winspector.c:1188
+msgid ""
+"Keep the window over other windows, not allowing\n"
+"them to covert it."
+msgstr ""
+"Placer dette vindue ovenover andre vinduer,\n"
+"og lad dem ikke dække for det."
+
+#: ../src/winspector.c:1192
+msgid "Keep at Bottom / Sunken"
+msgstr "Altid nederst / Sunket"
+
+#: ../src/winspector.c:1194
+msgid "Keep the window under all other windows."
+msgstr "Placer dette vindue under alle andre vinduer."
+
+#: ../src/winspector.c:1199
+msgid "Make window occupy all workspaces."
+msgstr "Dette vindue skal være på alle arbejdsborde."
+
+#: ../src/winspector.c:1202
+msgid "Start Miniaturized"
+msgstr "Start Minimeret"
+
+#: ../src/winspector.c:1204
+msgid ""
+"Make the window be automatically miniaturized when it's\n"
+"first shown."
+msgstr ""
+"Dette vindue skal automatisk være minimeret når det\n"
+"først vises."
+
+#: ../src/winspector.c:1208
+msgid "Start Maximized"
+msgstr "Start Maximeret"
+
+#: ../src/winspector.c:1210
+msgid ""
+"Make the window be automatically maximized when it's\n"
+"first shown."
+msgstr ""
+"Dette vindue skal automatisk være maximeret når det\n"
+"først vises."
+
+#: ../src/winspector.c:1214
+msgid "Skip Window List"
+msgstr "Udelad i Vinduesliste"
+
+#: ../src/winspector.c:1216
+msgid "Do not list the window in the window list menu."
+msgstr "Vis ikke dette vindue i vinduesliste menuen."
+
+#: ../src/winspector.c:1231
 msgid "Advanced"
 msgstr "Udvidet"
 
-#: ../src/winspector.c:1183
+#: ../src/winspector.c:1246
 msgid "Ignore HideOthers"
-msgstr "Ignorer Skjul Andre"
+msgstr "Ignorer `Skjul Andre'"
 
-#: ../src/winspector.c:1187
-msgid "Don't Bind Keyboard Shortcuts"
-msgstr "Bind ikke tastaturgenveje"
-
-#: ../src/winspector.c:1191
-msgid "Don't Bind Mouse Clicks"
-msgstr "Bind ikke museklik"
-
-#: ../src/winspector.c:1195
-msgid "Keep Inside Screen"
-msgstr "Hold indenfor skaermen"
-
-#: ../src/winspector.c:1199
-msgid "Don't Let It Take Focus"
-msgstr "Maa ikke faa fokus"
-
-#: ../src/winspector.c:1203
-msgid "Don't Save Session"
-msgstr "Gem ikke session"
-
-#: ../src/winspector.c:1207
-msgid "Emulate Application Icon"
-msgstr "Emuler programikon"
-
-#: ../src/winspector.c:1211
-msgid "Full Screen Maximization"
-msgstr "Brug hele skaermen"
-
-#: ../src/winspector.c:1226
+#: ../src/winspector.c:1248
 msgid ""
-"Enable the \"Don't bind...\" options to allow the application to receive all "
-"mouse or keyboard events."
+"Do not hide the window when issuing the\n"
+"`HideOthers' command."
 msgstr ""
-" Vaelg \"Bind ikke...\" muligheden hvis programmet skal modtage alle "
-"muse- eller tastaturtryk."
+"Skjul ikke dette vindue når du bruger\n"
+"`Skjul Andre' kommandoen."
 
-#: ../src/winspector.c:1233
+
+#: ../src/winspector.c:1252
+msgid "Don't Bind Keyboard Shortcuts"
+msgstr "Tastaturgenveje gælder ikke"
+
+#: ../src/winspector.c:1254
+msgid ""
+"Do not bind keyboard shortcuts from Window Maker\n"
+"when this window is focused. This will allow the\n"
+"window to receive all key combinations regardless\n"
+"of your shortcut configuration."
+msgstr ""
+"Window Makers tastaturgenveje gælder ikke når\n"
+"dette vindue er fokuseret. Dette tillader vinduet\n"
+"at modtage alle taste kombinationer uanset hvilke\n"
+"tastaturgenveje du har valgt for Window Maker."
+
+#: ../src/winspector.c:1260
+msgid "Don't Bind Mouse Clicks"
+msgstr "Museklik gælder ikke"
+
+#: ../src/winspector.c:1262
+msgid ""
+"Do not bind mouse actions, such as `Alt'+drag\n"
+"in the window (when alt is the modifier you haveconfigured)."
+msgstr ""
+"Musehandlinger, såsom `Alt'+træk gælder ikke for dette\n"
+"vindue (hvis du har valgt Alt som modifier tast)."
+
+#: ../src/winspector.c:1267
+msgid "Keep Inside Screen"
+msgstr "Hold indenfor skærmen"
+
+#: ../src/winspector.c:1269
+msgid ""
+"Do not allow the window to move itself completely\n"
+"outside the screen. For bug compatibility.\n"
+msgstr ""
+"Dette vindue må ikke flytte sig selv helt udenfor\n"
+"skærmen. Af hensyn til fejlbehæftede programmer.\n"
+
+#: ../src/winspector.c:1273
+msgid "Don't Let It Take Focus"
+msgstr "Må Ikke Tage Fokus"
+
+#: ../src/winspector.c:1275
+msgid ""
+"Do not let the window take keyboard focus when you\n"
+"click on it."
+msgstr ""
+"Dette vindue må ikke tage tastatur fokus når du\n"
+"klikker på det."
+
+#: ../src/winspector.c:1279
+msgid "Don't Save Session"
+msgstr "Gem Ikke Session"
+
+#: ../src/winspector.c:1281
+msgid ""
+"Do not save the associated application in the\n"
+"session's state, so that it won't be restarted\n"
+"together with other applications when Window Maker\n"
+"starts."
+msgstr ""
+"Gem ikke det associerede program i\n"
+"session's state, så den ikke bliver genstartet\n"
+"sammen med andre programmer når Window Maker\n"
+"starter."
+
+#: ../src/winspector.c:1287
+msgid "Emulate Application Icon"
+msgstr "Emuler Programikon"
+
+#: ../src/winspector.c:1289
+msgid ""
+"Make this window act as an application that provides\n"
+"enough information to Window Maker for a dockable\n"
+"application icon to be created."
+msgstr ""
+"Lad dette vindue fungere som et program der giver\n"
+"tilstrækkelig information til Window Maker til at\n"
+"lave en program ikon som kan indfældes i dock'en."
+
+#: ../src/winspector.c:1294
+msgid "Full Screen Maximization"
+msgstr "Brug hele skærmen"
+
+#: ../src/winspector.c:1296
+msgid ""
+"Make the window use the whole screen space when it's\n"
+"maximized. The titlebar and resizebar will be moved\n"
+"to outside the screen."
+msgstr ""
+"Lad dette vindue bruge hele skærmen når det er\n"
+"maksimeret. Titellinjen og bundlinjen vil blive\n"
+"flyttet udenfor skærmen."
+
+#: ../src/winspector.c:1302
+#, fuzzy
+msgid "Disable Language Button"
+msgstr "Fjern lukkeknap"
+
+#: ../src/winspector.c:1304
+msgid "Remove the `toggle language' button of the window."
+msgstr "Fjern vinduets `toggle language' knap."
+
+#: ../src/winspector.c:1321
 msgid "Miniwindow Image"
 msgstr "Minivinduesbillede"
 
-#: ../src/winspector.c:1252
+#: ../src/winspector.c:1340
 msgid "Update"
 msgstr "Opdater"
 
-#: ../src/winspector.c:1267
+#: ../src/winspector.c:1355
 msgid "Icon File Name:"
 msgstr "Ikon filnavn"
 
-#: ../src/winspector.c:1279
+#: ../src/winspector.c:1367
 msgid "Ignore client supplied icon"
 msgstr "Ignorer programmets egen ikon"
 
-#: ../src/winspector.c:1286
+#: ../src/winspector.c:1374
 msgid "Initial Workspace"
-msgstr "Foerste arbejdsbord"
+msgstr "Første arbejdsbord"
 
-#: ../src/winspector.c:1291
+#: ../src/winspector.c:1376
+msgid "The workspace to place the window when it'sfirst shown."
+msgstr "Hvilket arbejdsbord vinduet først skal dukke op på."
+
+#: ../src/winspector.c:1382
 msgid "Nowhere in particular"
 msgstr "Intet specielt sted"
 
-#: ../src/winspector.c:1309
+#: ../src/winspector.c:1400
 msgid "Application Wide"
-msgstr "For alle programmer"
+msgstr "For hele programmet"
 
-#: ../src/winspector.c:1319
+#: ../src/winspector.c:1411
 msgid "Start Hidden"
-msgstr "Start skjult"
+msgstr "Start Skjult"
 
-#: ../src/winspector.c:1323
+#: ../src/winspector.c:1413
+msgid "Automatically hide application when it's started."
+msgstr "Skjul automatisk programmet når det starter."
+
+#: ../src/winspector.c:1416
 msgid "No Application Icon"
-msgstr "Ingen programikon"
+msgstr "Ingen program ikon"
 
-#: ../src/workspace.c:106 ../src/workspace.c:107 ../src/workspace.c:655
+#: ../src/winspector.c:1418
+msgid ""
+"Disable the application icon for the application.\n"
+"Note that you won't be able to dock it anymore,\n"
+"and any icons that are already docked will stop\n"
+"working correctly."
+msgstr ""
+"Ingen program ikon for dette program.\n"
+"Bemærk at du ikke længere vil kunne indfælde det i dock'en,\n"
+"og alle ikoner for programmet som allerede er indfældet\n"
+"vil ikke længere fungere ordentligt."
+
+#: ../src/workspace.c:107 ../src/workspace.c:108 ../src/workspace.c:703
 #, c-format
 msgid "Workspace %i"
 msgstr "Arbejdsbord %i"
 
-#: ../src/workspace.c:712
+#: ../src/workspace.c:760
 msgid "Workspaces"
 msgstr "Arbejdsborde"
 
-#: ../src/workspace.c:714
+#: ../src/workspace.c:762
 msgid "could not create Workspace menu"
-msgstr "kunne ikke skabe arbejdsbordsmenu"
+msgstr "kunne ikke lave arbejdsbordsmenu"
 
-#: ../src/workspace.c:721
+#: ../src/workspace.c:769
 msgid "New"
 msgstr "Ny"
 
-#: ../src/workspace.c:722
+#: ../src/workspace.c:770
 msgid "Destroy Last"
 msgstr "Fjern sidste"
 
 #: ../src/xutil.c:228
 msgid "invalid data in selection"
-msgstr "ugyldigt data i udvælgelse"
+msgstr "ugyldigt data i markering"
+
+#~ msgid "(Un)Select Icon"
+#~ msgstr "(Fra)Vælg ikon"
+
+#~ msgid "Keep Icon(s)"
+#~ msgstr "Behold ikon(er)"
+
+#~ msgid "The following character sets are missing in %s:"
+#~ msgstr "Følgende tegnsæt mangler %s:"
+
+#~ msgid "The string \"%s\" will be used in place"
+#~ msgstr "Tekststrengen \"%s\" vil blive brugt i stedetfor"
+
+#~ msgid "of any characters from those sets."
+#~ msgstr "for tegn fra disse tegnsæt."
+
+#~ msgid "could not create font set %s. Trying fixed"
+#~ msgstr "kunne ikke skabe font sæt %s. Prøver standard"
+
+#~ msgid "could not load font %s. Trying fixed"
+#~ msgstr "kunne ikke indlæse font %s. Prøver standard"
+
+#~ msgid ""
+#~ "Enable the \"Don't bind...\" options to allow the application to receive all
+ "
+#~ "mouse or keyboard events."
+#~ msgstr ""
+#~ " Vælg \"Bind ikke...\" muligheden hvis programmet skal modtage alle muse- "
+#~ "eller tastaturtryk."

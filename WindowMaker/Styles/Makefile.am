@@ -9,6 +9,7 @@ prefsdata_DATA =\
 	BlueDawn.style\
 	BlueishGreen.style\
 	Brown.style\
+	Brownish.style\
 	Chumbo.style\
 	Copper.style\
 	DarkBlue.style\
@@ -24,6 +25,7 @@ prefsdata_DATA =\
 	Pink.style\
 	Pumpkin.style\
 	Purple.style\
+	Purplish.style\
 	Red.style\
 	RednBlue.style\
 	Summer.style\

@@ -217,6 +217,7 @@ image2TrueColorD16(RContext *ctx, RImage *image)
 	    ofs += image->width;
             /*(char*)dataP += line_offset;*/
             dataP = (unsigned short *)((char *)dataP + line_offset);
+
 	    /* skip to next line */
 	    terr = rerr;
 	    rerr = nrerr;

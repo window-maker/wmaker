@@ -5,16 +5,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.53.0\n"
-"POT-Creation-Date: 1999-06-03 01:12+0900\n"
-"PO-Revision-Date: 1999-06-03 01:30+0900\n"
+"Project-Id-Version: 0.60.0\n"
+"POT-Creation-Date: 1999-06-04 11:52+0900\n"
+"PO-Revision-Date: 1999-06-04 11:56+0900\n"
 "Last-Translator: Byeong-Chan Kim <redhands@linux.sarang.net>\n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=EUC-KR\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: ../src/appicon.c:570 ../src/dialog.c:223 ../src/dock.c:3300
+#: ../src/appicon.c:570 ../src/dialog.c:223 ../src/dock.c:3301
 #: ../src/dockedapp.c:210 ../src/dockedapp.c:251 ../src/rootmenu.c:1754
 #: ../src/winspector.c:290 ../src/winspector.c:306
 msgid "Error"
@@ -26,7 +26,7 @@ msgstr "지정한 아이콘을 열지 못함."
 
 #: ../src/appicon.c:572 ../src/dialog.c:122 ../src/dialog.c:223
 #: ../src/dialog.c:460 ../src/dialog.c:1477 ../src/dock.c:514
-#: ../src/dock.c:522 ../src/dock.c:545 ../src/dock.c:3301
+#: ../src/dock.c:522 ../src/dock.c:545 ../src/dock.c:3302
 #: ../src/dockedapp.c:211 ../src/dockedapp.c:257 ../src/dockedapp.c:371
 #: ../src/rootmenu.c:1758 ../src/winspector.c:291 ../src/winspector.c:307
 msgid "OK"
@@ -54,12 +54,12 @@ msgstr "예"
 msgid "No"
 msgstr "아니오"
 
-#: ../src/appicon.c:624 ../src/dock.c:1195
+#: ../src/appicon.c:624 ../src/dock.c:1196
 msgid "Unhide Here"
 msgstr "숨긴 것 이곳에 보임"
 
-#: ../src/appicon.c:625 ../src/appicon.c:650 ../src/dock.c:1197
-#: ../src/dock.c:1199 ../src/dock.c:3473 ../src/dock.c:3475
+#: ../src/appicon.c:625 ../src/appicon.c:650 ../src/dock.c:1198
+#: ../src/dock.c:1200 ../src/dock.c:3468 ../src/dock.c:3470
 #: ../src/winmenu.c:465
 msgid "Hide"
 msgstr "숨김"
@@ -68,12 +68,12 @@ msgstr "숨김"
 msgid "Set Icon..."
 msgstr "아이콘 지정..."
 
-#: ../src/appicon.c:627 ../src/dock.c:1203 ../src/rootmenu.c:228
+#: ../src/appicon.c:627 ../src/dock.c:1204 ../src/rootmenu.c:228
 #: ../src/rootmenu.c:242 ../src/winmenu.c:512
 msgid "Kill"
 msgstr "강제 종료"
 
-#: ../src/appicon.c:648 ../src/dock.c:3471
+#: ../src/appicon.c:648 ../src/dock.c:3466
 msgid "Unhide"
 msgstr "숨김 해제"
 
@@ -331,7 +331,7 @@ msgstr "대체용 창 관리자를 시작..."
 msgid "Type the name for workspace %i:"
 msgstr "작업공간 %i의 이름을 입력하세요:"
 
-#: ../src/dock.c:213 ../src/dock.c:1160 ../src/dock.c:1163 ../src/dock.c:3383
+#: ../src/dock.c:213 ../src/dock.c:1160 ../src/dock.c:1163 ../src/dock.c:3384
 msgid "Rename Workspace"
 msgstr "작업공간 이름 바꿈"
 
@@ -355,9 +355,9 @@ msgid ""
 "docked in the same position on the other workspaces and the Clip is not full "
 "in some workspace."
 msgstr ""
-"아이콘을 항상 보이게 할 수 없습니다. 다른 작업 공간의 같은 위치에 "
-"아이콘이 도크되지 않았는지 그리고 다른 작업공간의 클립이 가득차지 않았는지 "
-"확인 하시기 바랍니다."
+"아이콘을 항상 보이게 할 수 없습니다. 다른 작업 공간의 같은 위치에 아이콘이 "
+"도크되지 않았는지 그리고 다른 작업공간의 클립이 가득차지 않았는지 확인 "
+"하시기 바랍니다."
 
 #: ../src/dock.c:543
 msgid "Workspace Clip"
@@ -367,11 +367,11 @@ msgstr "작업공간 클립"
 msgid "All selected icons will be removed!"
 msgstr "선택한 모든 아이콘이 없어질 것입니다!!"
 
-#: ../src/dock.c:591 ../src/dock.c:1174 ../src/dock.c:1176 ../src/dock.c:3425
+#: ../src/dock.c:591 ../src/dock.c:1175 ../src/dock.c:1177 ../src/dock.c:3420
 msgid "Keep Icon"
 msgstr "아이콘 유지"
 
-#: ../src/dock.c:592 ../src/dock.c:2129 ../src/dock.c:2263
+#: ../src/dock.c:592 ../src/dock.c:2130 ../src/dock.c:2264
 msgid "Type the command used to launch the application"
 msgstr "애플리케이션을 실행하는데 필요한 명령을 입력합니다"
 
@@ -420,92 +420,80 @@ msgstr "항상 위로"
 msgid "Clip Options"
 msgstr "클립 옵션"
 
-#: ../src/dock.c:1165 ../src/dock.c:1167 ../src/dock.c:3407
-msgid "Select Icon"
-msgstr "아이콘 선택"
+#: ../src/dock.c:1165
+msgid "Selected"
+msgstr "선택됨"
 
-#: ../src/dock.c:1169 ../src/dock.c:1172 ../src/dock.c:3416
+#: ../src/dock.c:1170 ../src/dock.c:1173 ../src/dock.c:3411
 msgid "Select All Icons"
 msgstr "모든 아이콘 선택"
 
-#: ../src/dock.c:1178 ../src/dock.c:1180 ../src/dock.c:3433
+#: ../src/dock.c:1179 ../src/dock.c:1181 ../src/dock.c:3428
 msgid "Move Icon To"
 msgstr "아이콘 옮김"
 
-#: ../src/dock.c:1185 ../src/dock.c:1188 ../src/dock.c:3444
+#: ../src/dock.c:1186 ../src/dock.c:1189 ../src/dock.c:3439
 msgid "Remove Icon"
 msgstr "아이콘 없앰"
 
-#: ../src/dock.c:1190
+#: ../src/dock.c:1191
 msgid "Attract Icons"
 msgstr "아이콘 모음"
 
-#: ../src/dock.c:1193
+#: ../src/dock.c:1194
 msgid "Launch"
 msgstr "실행"
 
-#: ../src/dock.c:1201
+#: ../src/dock.c:1202
 msgid "Settings..."
 msgstr "설정..."
 
-#: ../src/dock.c:1594 ../src/dock.c:1608 ../src/dock.c:1622 ../src/dock.c:1632
-#: ../src/dock.c:1657
+#: ../src/dock.c:1595 ../src/dock.c:1609 ../src/dock.c:1623 ../src/dock.c:1633
+#: ../src/dock.c:1658
 #, c-format
 msgid "bad value in docked icon state info %s"
 msgstr "Dock 아이콘의 상태정보에 잘못된 값 %s"
 
-#: ../src/dock.c:1640
+#: ../src/dock.c:1641
 #, c-format
 msgid "bad value in docked icon position %i,%i"
 msgstr "Dock 아이콘의 위치값 %i,%i 는 잘못된 값"
 
-#: ../src/dock.c:1896
+#: ../src/dock.c:1897
 msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
 msgstr "Dock에 들어간 아이콘이 너무 많음. 맞지 않는 것은 무시합니다"
 
 #. icon->forced_dock = 1;
-#: ../src/dock.c:2128 ../src/dock.c:2262
+#: ../src/dock.c:2129 ../src/dock.c:2263
 msgid "Dock Icon"
 msgstr "Dock 아이콘"
 
-#: ../src/dock.c:3293 ../src/dock.c:3297
+#: ../src/dock.c:3294 ../src/dock.c:3298
 #, c-format
 msgid "Could not execute command \"%s\""
 msgstr "\"%s\" 명령을 실행할 수 없음."
 
-#: ../src/dock.c:3390 ../src/winmenu.c:417 ../src/winspector.c:1197
-msgid "Omnipresent"
-msgstr "항상 보임"
-
-#: ../src/dock.c:3392
+#: ../src/dock.c:3390
 msgid "Toggle Omnipresent"
 msgstr "항상 보임 선택"
 
-#: ../src/dock.c:3395
-msgid "Unset Omnipresent"
-msgstr "항상 보임 해제"
+#: ../src/dock.c:3395 ../src/winmenu.c:417 ../src/winspector.c:1197
+msgid "Omnipresent"
+msgstr "항상 보임"
 
-#: ../src/dock.c:3397
-msgid "Set Omnipresent"
-msgstr "항상 보임 설정"
-
-#: ../src/dock.c:3405
-msgid "Unselect Icon"
-msgstr "아이콘 선택 해제"
-
-#: ../src/dock.c:3414
+#: ../src/dock.c:3409
 msgid "Unselect All Icons"
 msgstr "모든 아이콘 선택 해제"
 
-#: ../src/dock.c:3423
+#: ../src/dock.c:3418
 msgid "Keep Icons"
 msgstr "아이콘 유지"
 
-#: ../src/dock.c:3431
+#: ../src/dock.c:3426
 msgid "Move Icons To"
 msgstr "아이콘 옮김"
 
-#: ../src/dock.c:3442
+#: ../src/dock.c:3437
 msgid "Remove Icons"
 msgstr "아이콘 없앰"
 
@@ -529,9 +517,9 @@ msgid ""
 "is docked in the same position on the other workspaces, and the Clip is not "
 "full in some workspace, then try again."
 msgstr ""
-"아이콘을 항상 보이게 할 수 없습니다. 다른 작업 공간의 같은 위치에 "
-"아이콘이 도크되지 않았는지 그리고 다른 작업공간의 클립이 가득차지 않았는지 "
-"확인 하신 후에 다시 시도하십시오."
+"아이콘을 항상 보이게 할 수 없습니다. 다른 작업 공간의 같은 위치에 아이콘이 "
+"도크되지 않았는지 그리고 다른 작업공간의 클립이 가득차지 않았는지 확인 하신 "
+"후에 다시 시도하십시오."
 
 #: ../src/dockedapp.c:313
 msgid "Start when WindowMaker is started"
@@ -1070,8 +1058,8 @@ msgstr "%s:최상위 메뉴 설정 \"%s\"의 형식 오류"
 
 #: ../src/rootmenu.c:1755
 msgid ""
-"The applications menu could not be loaded.Look at the console output for a "
-"detaileddescription of the errors"
+"The applications menu could not be loaded. Look at the console output for a "
+"detailed description of the errors."
 msgstr ""
 "애플리케이션 메뉴를 읽을 수 없음. 콘솔로 출력되는 자세한 오류 메세지를 "
 "참고하십시오."

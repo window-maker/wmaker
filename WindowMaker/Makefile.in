@@ -59,12 +59,10 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
-AS = @AS@
 CC = @CC@
 CPP_PATH = @CPP_PATH@
 DFLAGS = @DFLAGS@
 DLLIBS = @DLLIBS@
-DLLTOOL = @DLLTOOL@
 GFXLIBS = @GFXLIBS@
 HEADER_SEARCH_PATH = @HEADER_SEARCH_PATH@
 ICONEXT = @ICONEXT@
@@ -79,7 +77,6 @@ MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
 NLSDIR = @NLSDIR@
 NM = @NM@
-OBJDUMP = @OBJDUMP@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
@@ -96,7 +93,7 @@ SUBDIRS = Backgrounds Defaults IconSets Icons Pixmaps Styles Themes
 
 prefsdatadir = $(pkgdatadir)
 
-prefsdata_DATA =  	README 	README.themes 	autostart.sh 	exitscript.sh 	menu 	menu.ca 	menu.cz 	menu.da 	menu.de 	menu.el 	menu.es 	menu.fi 	menu.fr 	menu.gl 	menu.he 	menu.hr 	menu.hu 	menu.it 	menu.ja 	menu.ko 	menu.nl 	menu.no 	menu.pt 	menu.ru 	menu.se 	menu.sl 	menu.tr 	menu.zh_CN 	menu.zh_TW.Big5 	plmenu 	plmenu.da 	plmenu.fr 	plmenu.hr 	plmenu.zh_CN 	plmenu.it 	wmmacros 	xtree.dat
+prefsdata_DATA =  	README 	README.themes 	autostart.sh 	exitscript.sh 	menu 	menu.ca 	menu.cz 	menu.da 	menu.de 	menu.el 	menu.es 	menu.fi 	menu.fr 	menu.gl 	menu.he 	menu.hr 	menu.hu 	menu.it 	menu.ja 	menu.ko 	menu.nl 	menu.no 	menu.pt 	menu.ru 	menu.se 	menu.sl 	menu.tr 	menu.zh_CN 	menu.zh_TW.Big5 	plmenu 	plmenu.da 	plmenu.fr 	plmenu.hr 	plmenu.zh_CN 	plmenu.it 	plmenu.de 	wmmacros 	xtree.dat
 
 
 EXTRA_DIST = $(prefsdata_DATA) mkMakefile
@@ -110,7 +107,7 @@ DIST_COMMON =  README Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = tar
+TAR = gtar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:

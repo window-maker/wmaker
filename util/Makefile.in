@@ -57,12 +57,10 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
-AS = @AS@
 CC = @CC@
 CPP_PATH = @CPP_PATH@
 DFLAGS = @DFLAGS@
 DLLIBS = @DLLIBS@
-DLLTOOL = @DLLTOOL@
 GFXLIBS = @GFXLIBS@
 HEADER_SEARCH_PATH = @HEADER_SEARCH_PATH@
 ICONEXT = @ICONEXT@
@@ -77,7 +75,6 @@ MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
 NLSDIR = @NLSDIR@
 NM = @NM@
-OBJDUMP = @OBJDUMP@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
@@ -101,7 +98,8 @@ bin_SCRIPTS = wmaker.inst wm-oldmenu2new wsetfont wkdemenu.pl
 EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new wsetfont directjpeg.c 		wkdemenu.pl
 
 
-INCLUDES = @DFLAGS@ -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib @HEADER_SEARCH_PATH@
+INCLUDES = @DFLAGS@ -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib 	@HEADER_SEARCH_PATH@
+
 
 # X_EXTRA_LIBS is for libproplist in systems that need -lsocket
 liblist = @LIBRARY_SEARCH_PATH@ @LIBPL@ @X_EXTRA_LIBS@
@@ -190,7 +188,7 @@ DIST_COMMON =  README Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = tar
+TAR = gtar
 GZIP_ENV = --best
 SOURCES = $(wxcopy_SOURCES) $(wxpaste_SOURCES) $(wdwrite_SOURCES) $(getstyle_SOURCES) $(setstyle_SOURCES) $(seticons_SOURCES) $(geticonset_SOURCES) $(wmsetbg_SOURCES)
 OBJECTS = $(wxcopy_OBJECTS) $(wxpaste_OBJECTS) $(wdwrite_OBJECTS) $(getstyle_OBJECTS) $(setstyle_OBJECTS) $(seticons_OBJECTS) $(geticonset_OBJECTS) $(wmsetbg_OBJECTS)

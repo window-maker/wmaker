@@ -122,7 +122,7 @@ msgstr ""
 
 #: ../../WPrefs.app/WPrefs.c:605 ../../WPrefs.app/WPrefs.c:670
 msgid "Window Maker domain (%s) is corrupted!"
-msgstr ""
+msgstr "Window Maker домен (%s) поврежден!"
 
 #: ../../WPrefs.app/Menu.c:1342 ../../WPrefs.app/MouseSettings.c:147 ../../WPrefs.app/MouseSettings.c:167 ../../WPrefs.app/Text.c:181 ../../WPrefs.app/TexturePanel.c:604 ../../WPrefs.app/TexturePanel.c:677 ../../WPrefs.app/Themes.c:96 ../../WPrefs.app/WPrefs.c:606 ../../WPrefs.app/WPrefs.c:611 ../../WPrefs.app/WPrefs.c:620 ../../WPrefs.app/WPrefs.c:630 ../../WPrefs.app/WPrefs.c:640 ../../WPrefs.app/WPrefs.c:671 ../../WPrefs.app/WPrefs.c:676
 msgid "Error"
@@ -202,7 +202,7 @@ msgstr "Заголовок владельца активного окна"
 
 #: ../../WPrefs.app/Appearance.c:1261
 msgid "Window Resizebar"
-msgstr ""
+msgstr "Ресайз окна"
 
 #: ../../WPrefs.app/Appearance.c:1262
 msgid "Titlebar of Menus"
@@ -222,19 +222,19 @@ msgstr "Текстуры"
 
 #: ../../WPrefs.app/Appearance.c:1313
 msgid "New"
-msgstr ""
+msgstr "Новый"
 
 #: ../../WPrefs.app/Appearance.c:1322
 msgid "Extract..."
-msgstr ""
+msgstr "Извлечь..."
 
 #: ../../WPrefs.app/Appearance.c:1333
 msgid "Edit"
-msgstr ""
+msgstr "Редактировать"
 
 #: ../../WPrefs.app/Appearance.c:1342 ../../WPrefs.app/TexturePanel.c:1293
 msgid "Delete"
-msgstr ""
+msgstr "Стереть"
 
 #: ../../WPrefs.app/Appearance.c:1518
 msgid "Appearance Preferences"
@@ -242,11 +242,11 @@ msgstr "Внешний вид"
 
 #: ../../WPrefs.app/Appearance.c:1562
 msgid "Extract Texture"
-msgstr ""
+msgstr "Извлечь текстуру"
 
 #: ../../WPrefs.app/Appearance.c:1598
 msgid "Extract"
-msgstr ""
+msgstr "Извлечь"
 
 #: ../../WPrefs.app/Configurations.c:142 ../../WPrefs.app/Configurations.c:148 ../../WPrefs.app/MouseSettings.c:534 ../../WPrefs.app/WindowHandling.c:311 ../../WPrefs.app/WindowHandling.c:323 ../../WPrefs.app/Workspace.c:71 ../../WPrefs.app/Workspace.c:77
 msgid "could not load icon %s"
@@ -274,23 +274,23 @@ msgstr "Стиль заголовка"
 
 #: ../../WPrefs.app/Configurations.c:299
 msgid "Animations and Sound"
-msgstr ""
+msgstr "Анимация и звук"
 
 #: ../../WPrefs.app/Configurations.c:305
 msgid "Animations"
-msgstr ""
+msgstr "Анимация"
 
 #: ../../WPrefs.app/Configurations.c:321
 msgid "Superfluous"
-msgstr ""
+msgstr "Лишний"
 
 #: ../../WPrefs.app/Configurations.c:337
 msgid "Sounds"
-msgstr ""
+msgstr "Звуки"
 
 #: ../../WPrefs.app/Configurations.c:354
 msgid "Note: sound requires a module distributed separately"
-msgstr ""
+msgstr "Замечание: для звука требуется отдельно поставляемый модуль"
 
 #: ../../WPrefs.app/Configurations.c:364
 msgid "Dithering colormap for 8bpp"
@@ -302,15 +302,15 @@ msgstr ""
 
 #: ../../WPrefs.app/Configurations.c:390
 msgid "More colors for applications"
-msgstr ""
+msgstr "Больше цветов приложениям"
 
 #: ../../WPrefs.app/Configurations.c:397
 msgid "More colors for WindowMaker"
-msgstr ""
+msgstr "Больше цветов для WindowMaker"
 
 #: ../../WPrefs.app/Configurations.c:450
 msgid "Other Configurations"
-msgstr "Другие"
+msgstr "Другие настройки" 
 
 #: ../../WPrefs.app/Expert.c:72
 msgid "Disable miniwindows (icons for miniaturized windows). For use with KDE/GNOME."
@@ -348,7 +348,8 @@ msgstr "неверное значение %s для ColormapMode. Используем Auto"
 msgid ""
 "Click on the window to set\n"
 "keyboard input focus."
-msgstr ""
+msgstr "Щелкните на окне, чтобы\n"
+"вводить с клавиатуры"
 
 #: ../../WPrefs.app/Focus.c:198
 msgid ""
@@ -401,7 +402,7 @@ msgstr "Всплывать через..."
 
 #: ../../WPrefs.app/Focus.c:345
 msgid "msec"
-msgstr ""
+msgstr "Мсек"
 
 #: ../../WPrefs.app/Focus.c:362
 msgid "Do not let applications receive the click used to focus windows."
@@ -433,7 +434,7 @@ msgstr "Вращение/Кручение"
 
 #: ../../WPrefs.app/Icons.c:240
 msgid "3D-flipping"
-msgstr ""
+msgstr "3D-кручение"
 
 #: ../../WPrefs.app/Icons.c:241
 msgid "None"
@@ -465,7 +466,7 @@ msgstr ""
 
 #: ../../WPrefs.app/KeyboardSettings.c:113
 msgid "Key Repeat Rate"
-msgstr ""
+msgstr "Скорость повторения клаиши"
 
 #: ../../WPrefs.app/KeyboardSettings.c:153
 msgid "Type here to test"
@@ -705,7 +706,7 @@ msgstr "Добавить внешнее меню"
 
 #: ../../WPrefs.app/Menu.c:1068 ../../WPrefs.app/Menu.c:1083
 msgid "Add Workspace Menu"
-msgstr ""
+msgstr "Добавить меню Рабочие места"
 
 #: ../../WPrefs.app/Menu.c:1069 ../../WPrefs.app/Menu.c:1084
 msgid "Remove Item"
@@ -825,7 +826,7 @@ msgid ""
 "Always open submenus inside the screen, instead of scrolling.\n"
 "Note: this can be an annoyance at some circumstances.\n"
 msgstr ""
-"Всегда открывать подменю внутри экрана, вместо прокрутки.\n"
+"Всегда открывать подменю внутри экрана, вместо прокрутки."
 
 #: ../../WPrefs.app/MenuPreferences.c:209
 msgid "Scroll off-screen menus when pointer is moved over them."
@@ -873,7 +874,7 @@ msgstr "Чувствит:"
 
 #: ../../WPrefs.app/MouseSettings.c:579
 msgid "Double-Click Delay"
-msgstr ""
+msgstr "Задержка двойного щелчка"
 
 #: ../../WPrefs.app/MouseSettings.c:623
 msgid "Test"
@@ -885,7 +886,7 @@ msgstr "Действия мыши на р/столе"
 
 #: ../../WPrefs.app/MouseSettings.c:658
 msgid "Disable mouse actions"
-msgstr "Отменить мышь"
+msgstr "Отключить мышь"
 
 #: ../../WPrefs.app/MouseSettings.c:711
 msgid "Applications menu"
@@ -1001,7 +1002,7 @@ msgstr "Окно наверх при переключении фокуса с клавиатуры (CirculateRaise)."
 
 #: ../../WPrefs.app/Preferences.c:214
 msgid "Keep keyboard language status for each window."
-msgstr ""
+msgstr "Сохранять язык клавиатуры для каждого окна"
 
 #: ../../WPrefs.app/Preferences.c:235
 msgid "Miscellaneous Ergonomic Preferences"
@@ -1069,59 +1070,59 @@ msgstr "Вправо"
 
 #: ../../WPrefs.app/Text.c:325
 msgid "Text Preferences"
-msgstr ""
+msgstr "Свойства текста"
 
 #: ../../WPrefs.app/TexturePanel.c:601
 msgid "Could not load the selected file: "
-msgstr ""
+msgstr "Не могу загрузить выбраный файл"
 
 #: ../../WPrefs.app/TexturePanel.c:678
 msgid "The selected file does not contain a supported image."
-msgstr ""
+msgstr "Выбраный файл не содержит поддерживаемой картинки"
 
 #: ../../WPrefs.app/TexturePanel.c:1231
 msgid "Texture Panel"
-msgstr ""
+msgstr "Панель текстур"
 
 #: ../../WPrefs.app/TexturePanel.c:1239
 msgid "Texture Name"
-msgstr ""
+msgstr "Название текстуры"
 
 #: ../../WPrefs.app/TexturePanel.c:1251
 msgid "Solid Color"
-msgstr ""
+msgstr "Равномерный цвет"
 
 #: ../../WPrefs.app/TexturePanel.c:1252
 msgid "Gradient Texture"
-msgstr ""
+msgstr "Градиент"
 
 #: ../../WPrefs.app/TexturePanel.c:1253
 msgid "Simple Gradient Texture"
-msgstr ""
+msgstr "Простой градиент"
 
 #: ../../WPrefs.app/TexturePanel.c:1254
 msgid "Textured Gradient"
-msgstr ""
+msgstr "Текстурный градиент"
 
 #: ../../WPrefs.app/TexturePanel.c:1255
 msgid "Image Texture"
-msgstr ""
+msgstr "Текстура изображения"
 
 #: ../../WPrefs.app/TexturePanel.c:1263
 msgid "Default Color"
-msgstr ""
+msgstr "Цвет по умолчанию"
 
 #: ../../WPrefs.app/TexturePanel.c:1275
 msgid "Gradient Colors"
-msgstr ""
+msgstr "Градиентные цвета"
 
 #: ../../WPrefs.app/TexturePanel.c:1371
 msgid "Direction"
-msgstr ""
+msgstr "Напрвление"
 
 #: ../../WPrefs.app/TexturePanel.c:1399
 msgid "Gradient"
-msgstr ""
+msgstr "Градиент"
 
 #: ../../WPrefs.app/TexturePanel.c:1417
 msgid "Gradient Opacity"
@@ -1129,47 +1130,47 @@ msgstr ""
 
 #: ../../WPrefs.app/TexturePanel.c:1460
 msgid "Image"
-msgstr ""
+msgstr "Изображение"
 
 #: ../../WPrefs.app/TexturePanel.c:1480
 msgid "Browse..."
-msgstr ""
+msgstr "Найти..."
 
 #: ../../WPrefs.app/TexturePanel.c:1492
 msgid "Tile"
-msgstr ""
+msgstr "Заголовок"
 
 #: ../../WPrefs.app/TexturePanel.c:1493
 msgid "Scale"
-msgstr ""
+msgstr "Шкала"
 
 #: ../../WPrefs.app/TexturePanel.c:1495
 msgid "Maximize"
-msgstr ""
+msgstr "Развернуть"
 
 #: ../../WPrefs.app/Themes.c:71 ../../WPrefs.app/Themes.c:82
 msgid "Set"
-msgstr ""
+msgstr "Установить"
 
 #: ../../WPrefs.app/Themes.c:132
 msgid "Stop"
-msgstr ""
+msgstr "Стоп"
 
 #: ../../WPrefs.app/Themes.c:143 ../../WPrefs.app/Themes.c:205 ../../WPrefs.app/Themes.c:225
 msgid "Download"
-msgstr ""
+msgstr "Загрузить из инета"
 
 #: ../../WPrefs.app/Themes.c:173
 msgid "Save Current Theme"
-msgstr ""
+msgstr "Сохранить текущую тему"
 
 #: ../../WPrefs.app/Themes.c:182
 msgid "Load"
-msgstr ""
+msgstr "Загрузить"
 
 #: ../../WPrefs.app/Themes.c:187
 msgid "Install"
-msgstr ""
+msgstr "Инсталировать"
 
 #: ../../WPrefs.app/Themes.c:195
 msgid "Tile of The Day"
@@ -1181,11 +1182,11 @@ msgstr ""
 
 #: ../../WPrefs.app/Themes.c:252
 msgid "Themes"
-msgstr ""
+msgstr "Темы"
 
 #: ../../WPrefs.app/WindowHandling.c:134
 msgid "bad option value %s in WindowPlacement. Using default value"
-msgstr ""
+msgstr "неверное значение %s в размещении окна. Используется значение по умолчанию"
 
 #: ../../WPrefs.app/WindowHandling.c:156
 msgid "invalid data in option WindowPlaceOrigin. Using default (0,0)"
@@ -1233,7 +1234,7 @@ msgstr "...не закрываем Dock"
 
 #: ../../WPrefs.app/WindowHandling.c:353
 msgid "Edge Resistance"
-msgstr ""
+msgstr "Сопративляемость краев"
 
 #: ../../WPrefs.app/WindowHandling.c:377
 msgid "Open dialogs in same workspace as their owners"
@@ -1299,7 +1300,8 @@ msgstr "Назад"
 msgid ""
 "This process will help you create a submenu which definition is located in another file or is created dynamically.\n"
 "What do you want to use as the contents of the submenu?"
-msgstr ""
+msgstr "Этот процесс поможет вам создать подменю находящееся в другом файле или создаваемое динамически.\n"
+"Что вы хотите использовать в качестве содержания этого подменю"
 
 #: ../../WPrefs.app/MenuGuru.c:279
 msgid "A file containing the menu definition in the plain text (non-property list) menu format."
@@ -1311,19 +1313,19 @@ msgstr ""
 
 #: ../../WPrefs.app/MenuGuru.c:291
 msgid "The files in one or more directories."
-msgstr ""
+msgstr "Файлы в одной или более директориях."
 
 #: ../../WPrefs.app/MenuGuru.c:303
 msgid "Type the path for the menu file:"
-msgstr ""
+msgstr "Введите путь к файлу с меню:"
 
 #: ../../WPrefs.app/MenuGuru.c:318
 msgid "The menu file must contain a menu in the plain text menu file format. This format is described in the menu files included with WindowMaker, probably at ~/GNUstep/Library/WindowMaker/menu"
-msgstr ""
+msgstr "Файл меню должен содержать меню в формате plain text. Формат файла описан в menu файлах идущих с WindowMaker, вероятнее всего ~/GNUstep/Library/WindowMaker/menu"
 
 #: ../../WPrefs.app/MenuGuru.c:328
 msgid "Type the command that will generate the menu definition:"
-msgstr ""
+msgstr "Наберите команду которая войдет в меню:"
 
 #: ../../WPrefs.app/MenuGuru.c:338
 msgid "The command supplied must generate and output a valid menu definition to stdout. This definition should be in the plain text menu file format, described in the menu files included with WindowMaker, usually at ~/GNUstep/Library/WindowMaker/menu"
@@ -1331,7 +1333,7 @@ msgstr ""
 
 #: ../../WPrefs.app/MenuGuru.c:350 ../../WPrefs.app/MenuGuru.c:372 ../../WPrefs.app/MenuGuru.c:394
 msgid "Type the path for the directory. You can type more than one path by separating them with spaces."
-msgstr ""
+msgstr "Наберите путь к директории. Вы можите ввести более одного пути вазделив их пробелами."
 
 #: ../../WPrefs.app/MenuGuru.c:361 ../../WPrefs.app/MenuGuru.c:383 ../../WPrefs.app/MenuGuru.c:405
 msgid "The menu generated will have an item for each file in the directory. The directories can contain program executables or data files (such as jpeg images)."
@@ -1339,7 +1341,7 @@ msgstr ""
 
 #: ../../WPrefs.app/MenuGuru.c:415
 msgid "If the directory contain data files, type the command used to open these files. Otherwise, leave it in blank."
-msgstr ""
+msgstr "Если директория содержит файлы данных, наберите команду используемую для открытия этих файлов. Или оставьте так."
 
 #: ../../WPrefs.app/MenuGuru.c:426
 msgid "Each file in the directory will have an item and they will be opened with the supplied command.For example, if the directory contains image files and the command is \"xv -root\", each file in the directory will have a menu item like \"xv -root imagefile\"."

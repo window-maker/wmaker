@@ -6,10 +6,10 @@ File	Language	Note	Current Maintainer
 ja.po	Japanese	1	ABE Shige <sabe@ibm.net>
 				MANOME Tomonori <manome@itlb.te.noda.sut.ac.jp>
 pt.po	Portuguese		Eliphas Levy Theodoro <eliphas@conectiva.com.br>
-de.po	German			Carsten Schaar 
-					<nhadcasc@fs-maphy.uni-hannover.de>
+de.po	German			Bernd Eggert <Bernd.Eggert@t-online.de>
+				[Matthias Warkus <mawarkus@t-online.de>]
 es.po	Spanish			Raul Benito Garcia <raul@fi.upm.es>
-ko.po	Korean		1,2	Byeong-Chan, Kim <redhands@linux.sarang.net>
+ko.po	Korean		1,2	Byeong-Chan Kim <redhands@linux.sarang.net>
 se.po	Swedish			John Forgoil <forgoil@rsn.hk-r.se>
 cs.po	Czech		3	David ©auer <xsauer@hwlab.felk.cvut.cz>
 no.po	Norwegian		Marcus Ramberg <draven@mo.himolde.no>
@@ -38,6 +38,11 @@ sk.po	Slovak			Milan Hromada <mhromada@elas.sk>
 
 Some translations are based on previous translations by other people.
 The history of translations can be found in the po files.
+
+If you want to update a translation that's maintained by someone else
+please please please contact the original maintainer first. It's for
+your own good.
+
 
 Notes
 -----

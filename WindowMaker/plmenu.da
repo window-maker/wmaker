@@ -1,169 +1,70 @@
 (
-  Applikationer,
+  "Applikationer",
   (
-    Info,
+    "Info",
     ("Info Panel...", INFO_PANEL),
-    (Copyright..., LEGAL_PANEL),
-    (Systemkonsol, EXEC, xconsole),
-    (Systembelastning, SHEXEC, "xosview || xload"),
-    (Procesliste, EXEC, "rxvt -fn 6x10 -geometry 80x50 -e top"),
-    (Brugsanvisninger, EXEC, xman),
-    (Kontrolpanel, EXEC, "control-panel"),
-    (LinuxConfig, EXEC, linuxconf)
-  ),
-  ("Kør...", EXEC, "%a(Koer,Indtast kommando du vil udfoere:)"),
-  (Xterm, EXEC, "rxvt -bg black -fg white -fn 8x13"),
-  (Arbejdsborde, WORKSPACE_MENU),
-  (
-    Programmer,
+    ("Copyright...", LEGAL_PANEL),
+    ("Systemkonsol", EXEC, "xconsole"),
+    ("Systembelastning", EXEC, "xosview || xload"),
     (
-      Grafik,
-      (Gimp, SHEXEC, "gimp >/dev/null"),
-      ("Electric Eyes", EXEC, ee),
-      (XV, EXEC, xv),
-      (XPaint, EXEC, xpaint),
-      (XFig, EXEC, xfig)
-    ),
-    ("X Filh\345ndtering", EXEC, xfm),
-    ("Midnight Commander", EXEC, "rxvt -fn 8x13 -e mc"),
-    ("OffiX Files", EXEC, files),
-    (LyX, EXEC, lyx),
-    (Netscape, EXEC, netscape),
-    ("Netscape Mail", EXEC, "netscape -news"),
-    (Lynx, EXEC, "rxvt -fn 8x13 -e lynx"),
-    (Ghostview, EXEC, "ghostview %a(Skriv filnavn)"),
-    (
-      Acrobat,
+      "Procesliste",
       EXEC,
-      "/usr/local/Acrobat3/bin/acroread %a(Skriv PDF-filnavn)"
+      "xterm -fg wheat -bg black -fn 6x10 -geometry 80x50 -e top"
     ),
-    (TkDesk, EXEC, tkdesk),
-    ("X11 apps", OPEN_MENU, "/usr/local/bin")
+    ("Manualer", EXEC, "xman")
   ),
   (
-    Tekstbehandling,
-    (Wordperfect, EXEC, "/usr/local/wp8/wpbin/xwp"),
-    ("Pathetic Writer", EXEC, pw),
-    (GXedit, EXEC, gxedit),
-    ("Gnotepad+", EXEC, gnp),
-    (gEdit, EXEC, gedit),
-    (Emacs, EXEC, emacs),
-    (NEdit, EXEC, nedit),
-    (VI, EXEC, "rxvt -e vi")
+    "K\370r...",
+    SHEXEC,
+    "%a(K\370r,Indtast kommando der skal udf\370res:)"
+  ),
+  ("XTerm", EXEC, "xterm -sb"),
+  ("Rxvt", EXEC, "rxvt -bg black -fg white"),
+  ("Arbejdsborde", WORKSPACE_MENU),
+  (
+    "Applikationer",
+    (
+      "Grafik",
+      ("Gimp", SHEXEC, "gimp >/dev/null"),
+      ("XV", EXEC, "xv"),
+      ("XPaint", EXEC, "xpaint"),
+      ("XFig", EXEC, "xfig")
+    ),
+    ("X Filh\345ndtering", EXEC, "xfm"),
+    ("OffiX Files", EXEC, "files"),
+    ("LyX", EXEC, "lyx"),
+    ("Netscape", EXEC, "netscape"),
+    ("Ghostview", EXEC, "ghostview %a(GhostView,Indtast filnavn)"),
+    (
+      "Acrobat",
+      EXEC,
+      "/usr/local/Acrobat3/bin/acroread %a(Acrobat,Indtast PDF-filnavn)"
+    ),
+    ("TkDesk", EXEC, "tkdesk")
   ),
   (
-    "KDE programmer",
-    (Kmail, EXEC, kmail),
-    (Kppp, EXEC, kppp),
-    ("K Filh\345ndtering", EXEC, "kfm -w"),
-    ("Kdehj\346lp", EXEC, kdehelp),
-    (Kexplorer, EXEC, kexplorer)
+    "Tekstbehandling",
+    ("XFte", EXEC, "xfte"),
+    ("Emacs", SHEXEC, "xemacs || emacs"),
+    ("XJed", EXEC, "xjed"),
+    ("NEdit", EXEC, "nedit"),
+    ("Xedit", EXEC, "xedit"),
+    ("VI", EXEC, "xterm -e vi")
   ),
   (
-    "KDE Applications",
-    (
-      Applications,
-      ("Text Editor", EXEC, kedit),
-      (WebMaker, EXEC, webmaker),
-      ("Advanced Editor", EXEC, kwrite),
-      (Organizer, EXEC, korganizer),
-      (KLyx, EXEC, klyx)
-    ),
-    (
-      Games,
-      (Asteroids, EXEC, kasteroids),
-      (Abalone, EXEC, kabalone),
-      (KBlackBox, EXEC, kblackbox),
-      (Minesweeper, EXEC, kmines),
-      (Reversi, EXEC, kreversi),
-      (SameGame, EXEC, ksame),
-      (Patience, EXEC, kpat),
-      (Poker, EXEC, kpoker),
-      (Mahjongg, EXEC, kmahjongg),
-      ("Shisen-Sho", EXEC, kshisen),
-      (Konquest, EXEC, konquest),
-      (Sirtet, EXEC, ksirtet),
-      (Smiletris, EXEC, ksmiletris),
-      ("Snake Race", EXEC, ksnake),
-      (Sokoban, EXEC, ksokoban)
-    ),
-    (
-      Graphics,
-      ("DVI Viewer", EXEC, kdvi),
-      ("Fax Viewer", EXEC, kfax),
-      ("Fractals Generator", EXEC, kfract),
-      ("PS Viewer", EXEC, kghostview),
-      ("Icon Editor", EXEC, kiconedit),
-      ("Image Viewer", EXEC, kview),
-      (Paint, EXEC, kpaint),
-      (Snapshot, EXEC, ksnapshot)
-    ),
-    (
-      Internet,
-      ("Chat Client (ksirc)", EXEC, ksirc),
-      (PWS, EXEC, pws),
-      ("Mail client", EXEC, kmail),
-      ("News client", EXEC, krn),
-      (Kppp, EXEC, kppp),
-      ("KPPP - Logview", EXEC, kppplogview),
-      ("Mail monitor", EXEC, korn),
-      ("Archie client", EXEC, karchie),
-      (Biff, EXEC, kbiff),
-      ("User information", EXEC, kfinger),
-      ("Network utilities", EXEC, knu)
-    ),
-    (
-      Multimedia,
-      ("CD Player", EXEC, "kscd"),
-      ("Media Player", EXEC, "kmedia"),
-      ("Midi player", EXEC, kmidi),
-      ("Midi/Karaoke Player", EXEC, "kmid"),
-      ("Sound Mixer Panel", EXEC, "kmix")
-    ),
-    (
-      System,
-      ("Arrange Icons", EXEC, "kfmclient sortDesktop"),
-      (Fontmanager, EXEC, kfontmanager),
-      (Appfinder, EXEC, "xterm -T \"Appfinder\" -e kappfinder_restart"),
-      ("File manager ( Super User Mode )", EXEC, kfmsu),
-      ("International Keyboard Layout", EXEC, kikbd),
-      ("Desktop Pager", EXEC, kpager),
-      ("SysV Init Editor", EXEC, ksysv)
-    ),
-    (
-      Utilities,
-      ("Menu Editor", EXEC, kmenuedit),
-      (Konsole, EXEC, konsole),
-      (Terminal, EXEC, kvt),
-      ("Tape Backup Tool", EXEC, kdat),
-      (MoonPhase, EXEC, kmoon),
-      (Mouspedometa, EXEC, kodo),
-      ("World Watch", EXEC, kworldwatch),
-      ("Address book", EXEC, kab),
-      ("HP LaserJet Control Panel", EXEC, kljettool),
-      (KJots, EXEC, kjots),
-      (KNotes, EXEC, knotes),
-      ("Personal Time Tracker", EXEC, karm),
-      (KFloppy, EXEC, kfloppy),
-      ("Printer Queue", EXEC, klpq),
-      (Archiver, EXEC, ark),
-      (Calculator, EXEC, kcalc),
-      ("Hex Editor", EXEC, khexdit),
-      ("Cut & paste history (klipper)", EXEC, klipper),
-      ("Process management", EXEC, kpm),
-      (kpackage, EXEC, kpackage)
-    )
-  ),
-  (
-    Diverse,
-    (Xmcd, SHEXEC, "xmcd 2> /dev/null"),
-    (Xplaycd, EXEC, xplaycd),
-    (Xmixer, EXEC, xmixer)
+    "Diverse",
+    ("Xmcd", SHEXEC, "xmcd 2> /dev/null"),
+    ("Xplaycd", EXEC, xplaycd),
+    ("Xmixer", EXEC, xmixer)
   ),
   (
     "Tilbeh\370r",
     (Lommeregner, EXEC, xcalc),
-    ("Window Egenskaber", SHEXEC, "xprop | xmessage -center -title 'xprop' -file -"),
+    (
+      "Vindues Egenskaber",
+      SHEXEC,
+      "xprop | xmessage -center -title 'xprop' -file -"
+    ),
     ("V\346lg skrifttype", EXEC, xfontsel),
     (Terminalemulator, EXEC, xminicom),
     ("Forst\370rrelsesglas", EXEC, xmag),
@@ -173,15 +74,15 @@
     (Udklipsbord, EXEC, xclipboard)
   ),
   (
-    Markering,
+    "Markeret",
     (Kopier, SHEXEC, "echo '%s' | wxcopy"),
-    ("Send e-post", EXEC, "rxvt -name mail -T Pine -e pine %s"),
+    ("Send e-post til", EXEC, "xterm -name mail -T Pine -e pine %s"),
     ("Indtast URL", EXEC, "netscape %s"),
-    ("S\370g i manual", EXEC, "MANUAL_SEARCH(%s)")
+    ("S\370g i Manual", EXEC, "MANUAL_SEARCH(%s)")
   ),
   (
-    Arbejdsbord,
-    ("Gem andre", HIDE_OTHERS),
+    "Arbejdsbord",
+    ("Skjul andre", HIDE_OTHERS),
     ("Vis alle", SHOW_ALL),
     ("Arranger ikoner", ARRANGE_ICONS),
     ("Genindl\346s", REFRESH),
@@ -190,16 +91,31 @@
     ("Slet gemt milj\370", CLEAR_SESSION)
   ),
   (
-    Udseende,
-    (Temaer, OPEN_MENU, "-noext #wmdatadir#/Themes  $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
-    (Stil, OPEN_MENU, "-noext #wmdatadir#/Styles  $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle"),
-    ("Ikons\346t", OPEN_MENU, "-noext #wmdatadir#/IconSets  $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
+    "Udseende",
     (
-      Baggrund,
+      "Temaer",
+      OPEN_MENU,
+      "-noext /usr/local/share/WindowMaker/Themes  $HOME/GNUstep/Library/WindowM
+aker/Themes WITH setstyle"
+    ),
+    (
+      "Stil",
+      OPEN_MENU,
+      "-noext /usr/local/share/WindowMaker/Styles  $HOME/GNUstep/Library/WindowM
+aker/Styles WITH setstyle"
+    ),
+    (
+      "Ikons\346t",
+      OPEN_MENU,
+      "-noext /usr/local/share/WindowMaker/IconSets  $HOME/GNUstep/Library/Windo
+wMaker/IconSets WITH seticons"
+    ),
+    (
+      "Baggrund",
       (
-        Ensfarvet,
+        "Ensfarvet",
         (
-          Sort,
+          "Sort",
           EXEC,
           "wdwrite WindowMaker WorkspaceBack  '(solid, black)'"
         ),
@@ -209,7 +125,7 @@
           "wdwrite WindowMaker WorkspaceBack  '(solid, \"#505075\")'"
         ),
         (
-          Indigo,
+          "Indigo",
           EXEC,
           "wdwrite WindowMaker WorkspaceBack  '(solid, \"#243e6c\")'"
         ),
@@ -219,12 +135,12 @@
           "wdwrite WindowMaker WorkspaceBack  '(solid, \"#180090\")'"
         ),
         (
-          Lilla,
+          "Lilla",
           EXEC,
           "wdwrite WindowMaker WorkspaceBack  '(solid, \"#554466\")'"
         ),
         (
-          Hvede,
+          "Hvede",
           EXEC,
           "wdwrite WindowMaker WorkspaceBack  '(solid, \"wheat4\")'"
         ),
@@ -234,80 +150,93 @@
           "wdwrite WindowMaker WorkspaceBack  '(solid, \"#333340\")'"
         ),
         (
-          Bordeaux,
+          "Bordeaux",
           EXEC,
           "wdwrite WindowMaker WorkspaceBack  '(solid, \"#400020\")'"
         )
       ),
       (
-        Nuancer,
+        "Nuancer",
         (
-          Flag,
+          "Solopgang",
           EXEC,
-          "wdwrite WindowMaker WorkspaceBack  '(mdgradient, green, red, white, green)'"
+          "wdwrite WindowMaker WorkspaceBack  '(mvgradient, deepskyblue4, black,
+ deepskyblue4, tomato4)'"
         ),
         (
-          Himmel,
+          "Himmel",
           EXEC,
           "wdwrite WindowMaker WorkspaceBack  '(vgradient, blue4, white)'"
         ),
         (
-          "Blue Shades",
+          "Bl\345 Skygger",
           EXEC,
-          "wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#7080a5\", \"#101020\")'"
+          "wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#7080a5\", \"#10102
+0\")'"
         ),
         (
-          "Indigo Shades",
+          "Indigo Skygger",
           EXEC,
-          "wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#746ebc\", \"#242e4c\")'"
+          "wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#746ebc\", \"#242e4
+c\")'"
         ),
         (
-          "Purple Shades",
+          "Lilla Skygger",
           EXEC,
-          "wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#654c66\", \"#151426\")'"
+          "wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#654c66\", \"#15142
+6\")'"
         ),
         (
-          "Wheat Shades",
+          "Hvede Skygger",
           EXEC,
-          "wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#a09060\", \"#302010\")'"
+          "wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#a09060\", \"#30201
+0\")'"
         ),
         (
-          "Grey Shades",
+          "Gr\345 Skygger",
           EXEC,
-          "wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#636380\", \"#131318\")'"
+          "wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#636380\", \"#13131
+8\")'"
         ),
         (
-          "Wine Shades",
+          "Bordeaux Skygger",
           EXEC,
-          "wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#600040\", \"#180010\")'"
+          "wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#600040\", \"#18001
+0\")'"
+        ),
+        (
+          "Flag",
+          EXEC,
+          "wdwrite WindowMaker WorkspaceBack  '(mdgradient, green, red, white, g
+reen)'"
         )
       ),
       (
-        Billeder,
+        "Billeder",
         OPEN_MENU,
-        "-noext /usr/local/share/WindowMaker/Backgrounds  $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t"
+        "-noext /usr/local/share/WindowMaker/Backgrounds  $HOME/GNUstep/Library/
+WindowMaker/Backgrounds WITH wmsetbg -u -t"
       )
     ),
     (
-      "Gem tema",
+      "Gem Tema",
       SHEXEC,
-      "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/\"%a(Tema navn,Indtast fil navn:)\""
+      "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/\"%a(Tema navn,Indta
+st navn:)\""
     ),
     (
-      "Gem ikons\346t",
+      "Gem Ikons\346t",
       SHEXEC,
-      "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(Ikonsæt navn,Enter fil navn:)\""
+      "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(Ikons\346t nav
+n,Indtast navn:)\""
     )
   ),
   (
-    Afslut,
+    "Afslut",
     ("Genstart", RESTART),
-    ("Start Fvwm2", RESTART, fvwm2),
-    ("Start AfterStep", RESTART, afterstep),
-    ("Start Icewm", RESTART, icewm),
-    ("Start KDE", RESTART, startkde),
     ("Start Blackbox", RESTART, blackbox),
-    ("Afslut WindowMaker...", EXIT),
-    ("Afslut X...", SHUTDOWN)
+    ("Start kwm", RESTART, kwm),
+    ("Start IceWM", RESTART, icewm),
+    ("Afslut...", EXIT)
   )
 )

@@ -66,14 +66,10 @@ typedef struct _Panel {
     WMLabel *listL;
     WMLabel *appL;
     WMLabel *selL;
-    WMLabel *mblL;
-    WMLabel *mbmL;
-    WMLabel *mbrL;
-    WMButton *lmb[3];
-    WMButton *amb[3];
-    WMButton *smb[3];
+    WMPopUpButton *listP;
+    WMPopUpButton *appP;
+    WMPopUpButton *selP;
 
-    
     WMButton *disaB;
 
     WMFrame *grabF;
@@ -92,9 +88,6 @@ typedef struct _Panel {
 #define DELAY_ICON "timer%i"
 #define DELAY_ICON_S "timer%is"
 
-#define MOUSEB_L "minimouseleft"
-#define MOUSEB_M "minimousemiddle"
-#define MOUSEB_R "minimouseright"
 
 /* need access to the double click variables */
 #include "WINGsP.h"
@@ -110,6 +103,16 @@ static char *modifierNames[] = {
 	"Mod3",
 	"Mod4",
 	"Mod5"
+};
+
+
+static char *buttonNames[] = {
+    "None",
+	"Btn1 (left)",
+	"Btn2 (middle)",
+	"Btn3 (right)",
+	"Btn4",
+	"Btn5"
 };
 
 
@@ -213,21 +216,21 @@ getbutton(char *str)
 	return -2;
 
     if (strcasecmp(str, "left")==0)
-	return 0;
+	return 1;
     else if (strcasecmp(str, "middle")==0)
-	return 1;
+	return 2;
     else if (strcasecmp(str, "right")==0)
-	return 2;
+	return 3;
     else if (strcasecmp(str, "button1")==0)
-	return 0;
-    else if (strcasecmp(str, "button2")==0)
 	return 1;
-    else if (strcasecmp(str, "button3")==0)
+    else if (strcasecmp(str, "button2")==0)
 	return 2;
-    else if (strcasecmp(str, "button4")==0
-	     || strcasecmp(str, "button5")==0) {
-	wwarning(_("mouse button %s not supported by WPrefs."), str);
-	return -2;
+    else if (strcasecmp(str, "button3")==0)
+	return 3;
+    else if (strcasecmp(str, "button4")==0)
+	return 4;
+    else if (strcasecmp(str, "button5")==0) {
+	return 5;
     } else {
 	return -1;
     }
@@ -257,45 +260,47 @@ showData(_Panel *panel)
     Display *dpy = WMScreenDisplay(WMWidgetScreen(panel->win));
 
     str = GetStringForKey("SelectWindowsMouseButton");
-    if (!str)
-	str = "left";
-    i = getbutton(str);
-    if (i==-1) {
+    if (str) {
+	i = getbutton(str);
+	if (i==-1) {
+	    a = 1;
+	    wwarning(_("bad value %s for option %s"),str, "SelectWindowsMouseButton");
+	} else if (i>=0) {
+	    a = i;
+	} 
+    } else {
 	a = 0;
-	wwarning(_("bad value %s for option %s"),str, "SelectWindowsMouseButton");
-	WMPerformButtonClick(panel->smb[0]);
-    } else if (i>=0) {
-	a = i;
-	WMPerformButtonClick(panel->smb[i]);
-    } 
+    }
+    WMSetPopUpButtonSelectedItem(panel->selP, a);
     
     str = GetStringForKey("WindowListMouseButton");
-    if (!str)
-	str = "middle";
-    i = getbutton(str);
-    if (i==-1) {
+    if (str) {
+	i = getbutton(str);
+	if (i==-1) {
+	    b = 2;
+	    wwarning(_("bad value %s for option %s"), str, "WindowListMouseButton");
+	} else if (i>=0) {
+	    b = i;
+	} 
+    } else {
 	b = 0;
-	wwarning(_("bad value %s for option %s"), str, "WindowListMouseButton");
-	WMPerformButtonClick(panel->lmb[1]);
-    } else if (i>=0) {
-	b = i;
-	WMPerformButtonClick(panel->lmb[i]);
-    } 
+    }
+    WMSetPopUpButtonSelectedItem(panel->listP, b);
     
     str = GetStringForKey("ApplicationMenuMouseButton");
-    if (!str)
-	str = "right";
-    i = getbutton(str);
-    if (i==-1) {
+    if (str) {
+	i = getbutton(str);
+	if (i==-1) {
+	    c = 3;
+	    wwarning(_("bad value %s for option %s"), str, "ApplicationMenuMouseButton");
+	} else if (i>=0) {
+	    c = i;
+	}
+    } else {
 	c = 0;
-	wwarning(_("bad value %s for option %s"), str, "ApplicationMenuMouseButton");
-	WMPerformButtonClick(panel->amb[2]);
-    } else if (i>=0) {
-	c = i;
-	WMPerformButtonClick(panel->amb[i]);
     }
-    
-    
+    WMSetPopUpButtonSelectedItem(panel->appP, c);
+
     WMSetButtonSelected(panel->disaB, GetBoolForKey("DisableWSMouseActions"));
     
     /**/
@@ -422,6 +427,8 @@ fillModifierPopUp(WMPopUpButton *pop)
 	    sprintf(buffer, "%s (%s)", modifierNames[j], tmp);
 	    WMAddPopUpButtonItem(pop, buffer);
 	    for (i=k+1; i<a; i++) {
+		if (array[i] == NULL)
+		    continue;
 		if (strstr(array[i], tmp)) {
 		    free(array[i]);
 		    array[i]=NULL;
@@ -442,60 +449,6 @@ fillModifierPopUp(WMPopUpButton *pop)
 }
 
 
-
-static void
-mouseButtonClickA(WMWidget *w, void *data)
-{
-    _Panel *panel = (_Panel*)data;
-    int i;
-    
-    for (i=0; i<3; i++) {
-	if (panel->amb[i]==w)
-	    break;
-    }
-    if (i==3)
-	return;
-    if (WMGetButtonSelected(panel->lmb[i]))
-	WMSetButtonSelected(panel->lmb[i], False);
-    if (WMGetButtonSelected(panel->smb[i]))
-	WMSetButtonSelected(panel->smb[i], False);
-}
-
-static void
-mouseButtonClickL(WMWidget *w, void *data)
-{
-    _Panel *panel = (_Panel*)data;
-    int i;
-    
-    for (i=0; i<3; i++) {
-	if (panel->lmb[i]==w)
-	    break;
-    }
-    if (i==3)
-	return;
-    if (WMGetButtonSelected(panel->smb[i]))
-	WMSetButtonSelected(panel->smb[i], False);
-    if (WMGetButtonSelected(panel->amb[i]))
-	WMSetButtonSelected(panel->amb[i], False);    
-}
-
-static void
-mouseButtonClickS(WMWidget *w, void *data)
-{
-    _Panel *panel = (_Panel*)data;
-    int i;
-    
-    for (i=0; i<3; i++) {
-	if (panel->smb[i]==w)
-	    break;
-    }
-    if (i==3)
-	return;
-    if (WMGetButtonSelected(panel->lmb[i]))
-	WMSetButtonSelected(panel->lmb[i], False);
-    if (WMGetButtonSelected(panel->amb[i]))
-	WMSetButtonSelected(panel->amb[i], False);    
-}
 
 static void
 createPanel(Panel *p)
@@ -659,64 +612,27 @@ createPanel(Panel *p)
     WMMoveWidget(panel->disaB, 10, 20);
     WMSetButtonText(panel->disaB, _("Disable mouse actions"));
 
-    panel->mblL = WMCreateLabel(panel->menuF);
-    WMResizeWidget(panel->mblL, 16, 22);
-    WMMoveWidget(panel->mblL, 135, 40);
-    WMSetLabelImagePosition(panel->mblL, WIPImageOnly);
-    path = LocateImage(MOUSEB_L);
-    if (path) {
-	icon = WMCreatePixmapFromFile(scr, path);
-	if (icon) {
-	    WMSetLabelImage(panel->mblL, icon);
-	    WMReleasePixmap(icon);
-	} else {
-	    wwarning(_("could not load icon file %s"), path);
-	}
-	free(path);
-    }
-    panel->mbmL = WMCreateLabel(panel->menuF);
-    WMResizeWidget(panel->mbmL, 16, 22);
-    WMMoveWidget(panel->mbmL, 170, 40);
-    WMSetLabelImagePosition(panel->mbmL, WIPImageOnly);
-    path = LocateImage(MOUSEB_M);
-    if (path) {
-	icon = WMCreatePixmapFromFile(scr, path);
-	if (icon) {
-	    WMSetLabelImage(panel->mbmL, icon);
-	    WMReleasePixmap(icon);
-	} else {
-	    wwarning(_("could not load icon file %s"), path);
-	}
-	free(path);
-    }
-
-    panel->mbrL = WMCreateLabel(panel->menuF);
-    WMResizeWidget(panel->mbrL, 16, 22);
-    WMMoveWidget(panel->mbrL, 205, 40);
-    WMSetLabelImagePosition(panel->mbrL, WIPImageOnly);
-    path = LocateImage(MOUSEB_R);
-    if (path) {
-	icon = WMCreatePixmapFromFile(scr, path);
-	if (icon) {
-	    WMSetLabelImage(panel->mbrL, icon);
-	    WMReleasePixmap(icon);
-	} else {
-	    wwarning(_("could not load icon file %s"), path);
-	}
-	free(path);
-    }
-
+    
     panel->appL = WMCreateLabel(panel->menuF);
     WMResizeWidget(panel->appL, 125, 16);
-    WMMoveWidget(panel->appL, 5, 65);
+    WMMoveWidget(panel->appL, 5, 45);
     WMSetLabelTextAlignment(panel->appL, WARight);
     WMSetLabelText(panel->appL, _("Applications menu"));
+
+    panel->appP = WMCreatePopUpButton(panel->menuF);
+    WMResizeWidget(panel->appP, 95, 20);
+    WMMoveWidget(panel->appP, 135, 45);
     
     panel->listL = WMCreateLabel(panel->menuF);
     WMResizeWidget(panel->listL, 125, 16);
-    WMMoveWidget(panel->listL, 5, 90);
+    WMMoveWidget(panel->listL, 5, 80);
     WMSetLabelTextAlignment(panel->listL, WARight);
     WMSetLabelText(panel->listL, _("Window list menu"));
+    
+    panel->listP = WMCreatePopUpButton(panel->menuF);
+    WMResizeWidget(panel->listP, 95, 20);
+    WMMoveWidget(panel->listP, 135, 80);
+
     
     panel->selL = WMCreateLabel(panel->menuF);
     WMResizeWidget(panel->selL, 125, 16);
@@ -724,31 +640,14 @@ createPanel(Panel *p)
     WMSetLabelTextAlignment(panel->selL, WARight);
     WMSetLabelText(panel->selL, _("Select windows"));
 
-    
-    for (i=0; i<3; i++) {
-	panel->amb[i] = WMCreateRadioButton(panel->menuF);
-	WMResizeWidget(panel->amb[i], 24, 24);
-	WMMoveWidget(panel->amb[i], 135+35*i, 65);
-	WMSetButtonText(panel->amb[i], NULL);
-	WMSetButtonAction(panel->amb[i], mouseButtonClickA, panel);
+    panel->selP = WMCreatePopUpButton(panel->menuF);
+    WMResizeWidget(panel->selP, 95, 20);
+    WMMoveWidget(panel->selP, 135, 115);
 
-	panel->lmb[i] = WMCreateRadioButton(panel->menuF);
-	WMResizeWidget(panel->lmb[i], 24, 24);
-	WMMoveWidget(panel->lmb[i], 135+35*i, 90);
-	WMSetButtonText(panel->lmb[i], NULL);	
-	WMSetButtonAction(panel->lmb[i], mouseButtonClickL, panel);
-
-	panel->smb[i] = WMCreateRadioButton(panel->menuF);
-	WMResizeWidget(panel->smb[i], 24, 24);
-	WMMoveWidget(panel->smb[i], 135+35*i, 115);
-	WMSetButtonText(panel->smb[i], NULL);	
-	WMSetButtonAction(panel->smb[i], mouseButtonClickS, panel);
-
-	if (i>0) {
-	    WMGroupButtons(panel->lmb[0], panel->lmb[i]);
-	    WMGroupButtons(panel->amb[0], panel->amb[i]);
-	    WMGroupButtons(panel->smb[0], panel->smb[i]);	    
-	}
+    for (i = 0; i < sizeof(buttonNames)/sizeof(char*); i++) {
+	WMAddPopUpButtonItem(panel->appP, buttonNames[i]);
+	WMAddPopUpButtonItem(panel->selP, buttonNames[i]);
+	WMAddPopUpButtonItem(panel->listP, buttonNames[i]);
     }
     
     WMMapSubwidgets(panel->menuF);
@@ -883,28 +782,16 @@ storeData(_Panel *panel)
 
     SetBoolForKey(WMGetButtonSelected(panel->disaB), "DisableWSMouseActions");
 
-    for (i=0; i<3; i++) {
-	if (WMGetButtonSelected(panel->amb[i]))
-	    break;
-    }
-    if (i<3)
-	SetStringForKey(button[i], "ApplicationMenuMouseButton");
+    i = WMGetPopUpButtonSelectedItem(panel->appP);
+    SetStringForKey(button[i], "ApplicationMenuMouseButton");
+
+    i = WMGetPopUpButtonSelectedItem(panel->listP);
+    SetStringForKey(button[i], "WindowListMouseButton");
     
-    for (i=0; i<3; i++) {
-	if (WMGetButtonSelected(panel->lmb[i]))
-	    break;
-    }
-    if (i<3)
-	SetStringForKey(button[i], "WindowListMouseButton");
+    i = WMGetPopUpButtonSelectedItem(panel->selP);
+    SetStringForKey(button[i], "SelectWindowsMouseButton");
     
-    for (i=0; i<3; i++) {
-	if (WMGetButtonSelected(panel->smb[i]))
-	    break;
-    }
-    if (i<3)
-	SetStringForKey(button[i], "SelectWindowsMouseButton");
-    
-    tmp = WMGetPopUpButtonItem(panel->grabP, 
+    tmp = WMGetPopUpButtonItem(panel->grabP,
 			       WMGetPopUpButtonSelectedItem(panel->grabP));
     tmp = wstrdup(tmp);
     p = strchr(tmp, ' ');
