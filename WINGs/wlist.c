@@ -11,40 +11,37 @@ typedef struct W_List {
     W_Class widgetClass;
     W_View *view;
 
-    WMBag *items; 		/* list of WMListItem */
-    
+    WMArray *items; 	    /* list of WMListItem */
+    WMArray *selectedItems; /* list of selected WMListItems */
+
     short selectedItem;
-    
+
     short itemHeight;
-    
-    short topItem;		       /* index of first visible item */
-    
-    short fullFitLines;		       /* no of lines that fit entirely */
+
+    short topItem;	    /* index of first visible item */
+
+    short fullFitLines;	    /* no of lines that fit entirely */
 
     void *clientData;
     WMAction *action;
     void *doubleClientData;
     WMAction *doubleAction;
-    
+
     WMListDrawProc *draw;
-    
-    WMHandlerID	*idleID;	       /* for updating the scroller after
-					* adding elements */
+
+    WMHandlerID	*idleID;    /* for updating the scroller after adding elements */
 
     WMScroller *vScroller;
-    /*
-    WMScroller *hScroller;
-     */
 
     struct {
-	unsigned int allowMultipleSelection:1;
-	unsigned int userDrawn:1;
-	unsigned int userItemHeight:1;
-	/* */
-	unsigned int dontFitAll:1;     /* 1 = last item won't be fully visible */
-	unsigned int redrawPending:1;
-	unsigned int buttonPressed:1;
-	unsigned int buttonWasPressed:1;
+        unsigned int allowMultipleSelection:1;
+        unsigned int allowEmptySelection:1;
+        unsigned int userDrawn:1;
+        unsigned int userItemHeight:1;
+        unsigned int dontFitAll:1;     /* 1 = last item won't be fully visible */
+        unsigned int redrawPending:1;
+        unsigned int buttonPressed:1;
+        unsigned int buttonWasPressed:1;
     } flags;
 } List;
 
@@ -70,14 +67,24 @@ static void didResizeList();
 
 W_ViewDelegate _ListViewDelegate = {
     NULL,
-	NULL,
-	didResizeList,
-	NULL,
-	NULL
+    NULL,
+    didResizeList,
+    NULL,
+    NULL
 };
 
 
-	      
+static void
+releaseItem(void *data)
+{
+    WMListItem *item = (WMListItem*)data;
+
+    if (item->text)
+        wfree(item->text);
+    wfree(item);
+}
+
+
 WMList*
 WMCreateList(WMWidget *parent)
 {
@@ -91,23 +98,23 @@ WMCreateList(WMWidget *parent)
 
     lPtr->view = W_CreateView(W_VIEW(parent));
     if (!lPtr->view) {
-	wfree(lPtr);
-	return NULL;
+        wfree(lPtr);
+        return NULL;
     }
     lPtr->view->self = lPtr;
 
     lPtr->view->delegate = &_ListViewDelegate;
 
     WMCreateEventHandler(lPtr->view, ExposureMask|StructureNotifyMask
-			 |ClientMessageMask, handleEvents, lPtr);
+                         |ClientMessageMask, handleEvents, lPtr);
 
     WMCreateEventHandler(lPtr->view, ButtonPressMask|ButtonReleaseMask
-			 |EnterWindowMask|LeaveWindowMask|ButtonMotionMask,
-			 handleActionEvents, lPtr);
+                         |EnterWindowMask|LeaveWindowMask|ButtonMotionMask,
+                         handleActionEvents, lPtr);
 
     lPtr->itemHeight = WMFontHeight(scrPtr->normalFont) + 1;
 
-    lPtr->items = WMCreateBag(4);
+    lPtr->items = WMCreateArrayWithDestructor(4, releaseItem);
 
     /* create the vertical scroller */
     lPtr->vScroller = WMCreateScroller(lPtr);
@@ -120,7 +127,7 @@ WMCreateList(WMWidget *parent)
     WMMapWidget(lPtr->vScroller);
 
     W_ResizeView(lPtr->view, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    
+
     lPtr->selectedItem = -1;
 
     return lPtr;
@@ -137,7 +144,7 @@ comparator(const void *a, const void *b)
 void
 WMSortListItems(WMList *lPtr)
 {
-    WMSortBag(lPtr->items, comparator);
+    WMSortArray(lPtr->items, comparator);
 
     paintList(lPtr);
 }
@@ -147,7 +154,7 @@ WMSortListItems(WMList *lPtr)
 void
 WMSortListItemsWithComparer(WMList *lPtr, int (f)(const void*, const void*))
 {
-    WMSortBag(lPtr->items, f);
+    WMSortArray(lPtr->items, f);
 
     paintList(lPtr);
 }
@@ -167,21 +174,21 @@ WMInsertListItem(WMList *lPtr, int row, char *text)
 
 
     if (lPtr->selectedItem >= row && lPtr->selectedItem >= 0
-	&& row >= 0)
-	lPtr->selectedItem++;
-    
-    row = WMIN(row, WMGetBagItemCount(lPtr->items));
-    
+        && row >= 0)
+        lPtr->selectedItem++;
+
+    row = WMIN(row, WMGetArrayItemCount(lPtr->items));
+
     if (row < 0)
-	WMPutInBag(lPtr->items, item);
+        WMAddToArray(lPtr->items, item);
     else
-	WMInsertInBag(lPtr->items, row, item);
+        WMInsertInArray(lPtr->items, row, item);
 
     /* update the scroller when idle, so that we don't waste time
      * updating it when another item is going to be added later */
     if (!lPtr->idleID) {
-	lPtr->idleID = WMAddIdleHandler((WMCallback*)updateScroller, lPtr);
-    } 
+        lPtr->idleID = WMAddIdleHandler((WMCallback*)updateScroller, lPtr);
+    }
 
     return item;
 }
@@ -190,14 +197,13 @@ WMInsertListItem(WMList *lPtr, int row, char *text)
 void
 WMRemoveListItem(WMList *lPtr, int row)
 {
-    WMListItem *item;
     int topItem = lPtr->topItem;
     int selNotify = 0;
 
     CHECK_CLASS(lPtr, WC_List);
-    
-    if (row < 0 || row >= WMGetBagItemCount(lPtr->items))
-	return;
+
+    if (row < 0 || row >= WMGetArrayItemCount(lPtr->items))
+        return;
 
     if (lPtr->selectedItem == row) {
         lPtr->selectedItem = -1;
@@ -207,22 +213,17 @@ WMRemoveListItem(WMList *lPtr, int row)
     }
 
     if (row <= lPtr->topItem+lPtr->fullFitLines+lPtr->flags.dontFitAll)
-	lPtr->topItem--;
+        lPtr->topItem--;
     if (lPtr->topItem < 0)
-	lPtr->topItem = 0;
+        lPtr->topItem = 0;
 
-    item = WMGetFromBag(lPtr->items, row);
-    if (item->text)
-	wfree(item->text);
-    wfree(item);
-
-    WMDeleteFromBag(lPtr->items, row);
+    WMDeleteFromArray(lPtr->items, row);
 
     if (!lPtr->idleID) {
-	lPtr->idleID = WMAddIdleHandler((WMCallback*)updateScroller, lPtr);
+        lPtr->idleID = WMAddIdleHandler((WMCallback*)updateScroller, lPtr);
     }
     if (lPtr->topItem != topItem)
-    	WMPostNotificationName(WMListDidScrollNotification, lPtr, NULL);
+        WMPostNotificationName(WMListDidScrollNotification, lPtr, NULL);
     if (selNotify)
         WMPostNotificationName(WMListSelectionDidChangeNotification, lPtr,
                                (void*)((int)lPtr->selectedItem));
@@ -233,11 +234,11 @@ WMRemoveListItem(WMList *lPtr, int row)
 WMListItem*
 WMGetListItem(WMList *lPtr, int row)
 {
-    return WMGetFromBag(lPtr->items, row);
+    return WMGetFromArray(lPtr->items, row);
 }
 
 
-WMBag*
+WMArray*
 WMGetListItems(WMList *lPtr)
 {
     return lPtr->items;
@@ -257,10 +258,10 @@ void
 WMSetListUserDrawItemHeight(WMList *lPtr, unsigned short height)
 {
     assert(height > 0);
-    
+
     lPtr->flags.userItemHeight = 1;
     lPtr->itemHeight = height;
-    
+
     updateGeometry(lPtr);
 }
 
@@ -268,26 +269,20 @@ WMSetListUserDrawItemHeight(WMList *lPtr, unsigned short height)
 void
 WMClearList(WMList *lPtr)
 {
-    WMListItem *item;
     int oldSelected = lPtr->selectedItem;
     int i;
 
-    for (i = 0; i < WMGetBagItemCount(lPtr->items); i++) {
-	item = WMGetFromBag(lPtr->items, i);
-	wfree(item->text);
-	wfree(item);
-    }
-    WMEmptyBag(lPtr->items);
+    WMEmptyArray(lPtr->items);
 
     lPtr->topItem = 0;
     lPtr->selectedItem = -1;
 
     if (!lPtr->idleID) {
-	WMDeleteIdleHandler(lPtr->idleID);
-	lPtr->idleID = NULL;
+        WMDeleteIdleHandler(lPtr->idleID);
+        lPtr->idleID = NULL;
     }
     if (lPtr->view->flags.realized) {
-	updateScroller(lPtr);
+        updateScroller(lPtr);
     }
     if (oldSelected != -1)
         WMPostNotificationName(WMListSelectionDidChangeNotification, lPtr,
@@ -315,22 +310,22 @@ WMListItem*
 WMGetListSelectedItem(WMList *lPtr)
 {
     if (lPtr->selectedItem < 0)
-	return NULL;
+        return NULL;
 
-    return WMGetFromBag(lPtr->items, lPtr->selectedItem);
+    return WMGetFromArray(lPtr->items, lPtr->selectedItem);
 }
 
 
 int
 WMGetListSelectedItemRow(WMList *lPtr)
-{    
+{
     return lPtr->selectedItem;
 }
 
 
 int
 WMGetListItemHeight(WMList *lPtr)
-{    
+{
     return lPtr->itemHeight;
 }
 
@@ -339,26 +334,26 @@ void
 WMSetListPosition(WMList *lPtr, int row)
 {
     lPtr->topItem = row;
-    if (lPtr->topItem + lPtr->fullFitLines > WMGetBagItemCount(lPtr->items))
-	lPtr->topItem = WMGetBagItemCount(lPtr->items) - lPtr->fullFitLines;
+    if (lPtr->topItem + lPtr->fullFitLines > WMGetArrayItemCount(lPtr->items))
+        lPtr->topItem = WMGetArrayItemCount(lPtr->items) - lPtr->fullFitLines;
 
     if (lPtr->topItem < 0)
-	lPtr->topItem = 0;
-    
+        lPtr->topItem = 0;
+
     if (lPtr->view->flags.realized)
-	updateScroller(lPtr);
+        updateScroller(lPtr);
 }
 
 
 void
 WMSetListBottomPosition(WMList *lPtr, int row)
 {
-    if (WMGetBagItemCount(lPtr->items) > lPtr->fullFitLines) {
-	lPtr->topItem = row - lPtr->fullFitLines;
-	if (lPtr->topItem < 0)
-	    lPtr->topItem = 0;
-	if (lPtr->view->flags.realized)
-	    updateScroller(lPtr);
+    if (WMGetArrayItemCount(lPtr->items) > lPtr->fullFitLines) {
+        lPtr->topItem = row - lPtr->fullFitLines;
+        if (lPtr->topItem < 0)
+            lPtr->topItem = 0;
+        if (lPtr->view->flags.realized)
+            updateScroller(lPtr);
     }
 }
 
@@ -366,7 +361,7 @@ WMSetListBottomPosition(WMList *lPtr, int row)
 int
 WMGetListNumberOfRows(WMList *lPtr)
 {
-    return WMGetBagItemCount(lPtr->items);
+    return WMGetArrayItemCount(lPtr->items);
 }
 
 int
@@ -383,69 +378,69 @@ vScrollCallBack(WMWidget *scroller, void *self)
     WMScroller *sPtr = (WMScroller*)scroller;
     int height;
     int topItem = lPtr->topItem;
-    int itemCount = WMGetBagItemCount(lPtr->items);
-    
+    int itemCount = WMGetArrayItemCount(lPtr->items);
+
     height = lPtr->view->size.height - 4;
 
     switch (WMGetScrollerHitPart(sPtr)) {
-     case WSDecrementLine:
-	if (lPtr->topItem > 0) {
-	    lPtr->topItem--;
+    case WSDecrementLine:
+        if (lPtr->topItem > 0) {
+            lPtr->topItem--;
 
-	    updateScroller(lPtr);
-	}
-	break;
-	
-     case WSDecrementPage:
-	if (lPtr->topItem > 0) {
-	    lPtr->topItem -= lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
-	    if (lPtr->topItem < 0)
-		lPtr->topItem = 0;
+            updateScroller(lPtr);
+        }
+        break;
 
-	    updateScroller(lPtr);
-	}
-	break;
+    case WSDecrementPage:
+        if (lPtr->topItem > 0) {
+            lPtr->topItem -= lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
+            if (lPtr->topItem < 0)
+                lPtr->topItem = 0;
 
-	
-     case WSIncrementLine:
-	if (lPtr->topItem + lPtr->fullFitLines < itemCount) {
-	    lPtr->topItem++;
-	    
-	    updateScroller(lPtr);
-	}
-	break;
-	
-     case WSIncrementPage:
-	if (lPtr->topItem + lPtr->fullFitLines < itemCount) {
-	    lPtr->topItem += lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
+            updateScroller(lPtr);
+        }
+        break;
 
-	    if (lPtr->topItem + lPtr->fullFitLines > itemCount)
-		lPtr->topItem = itemCount - lPtr->fullFitLines;
 
-	    updateScroller(lPtr);
-	}
-	break;
-	
-     case WSKnob:
-	{
-	    int oldTopItem = lPtr->topItem;
-	    
-	    lPtr->topItem = WMGetScrollerValue(lPtr->vScroller) * 
-		(float)(itemCount - lPtr->fullFitLines);
+    case WSIncrementLine:
+        if (lPtr->topItem + lPtr->fullFitLines < itemCount) {
+            lPtr->topItem++;
 
-	    if (oldTopItem != lPtr->topItem)
-		paintList(lPtr);
-	}
-	break;
+            updateScroller(lPtr);
+        }
+        break;
 
-     case WSKnobSlot:
-     case WSNoPart:
-	/* do nothing */
-	break;
+    case WSIncrementPage:
+        if (lPtr->topItem + lPtr->fullFitLines < itemCount) {
+            lPtr->topItem += lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
+
+            if (lPtr->topItem + lPtr->fullFitLines > itemCount)
+                lPtr->topItem = itemCount - lPtr->fullFitLines;
+
+            updateScroller(lPtr);
+        }
+        break;
+
+    case WSKnob:
+        {
+            int oldTopItem = lPtr->topItem;
+
+            lPtr->topItem = WMGetScrollerValue(lPtr->vScroller) *
+                (float)(itemCount - lPtr->fullFitLines);
+
+            if (oldTopItem != lPtr->topItem)
+                paintList(lPtr);
+        }
+        break;
+
+    case WSKnobSlot:
+    case WSNoPart:
+        /* do nothing */
+        break;
     }
 
     if (lPtr->topItem != topItem)
-	WMPostNotificationName(WMListDidScrollNotification, lPtr, NULL);
+        WMPostNotificationName(WMListDidScrollNotification, lPtr, NULL);
 }
 
 
@@ -457,7 +452,7 @@ paintItem(List *lPtr, int index)
     int width, height, x, y;
     WMListItem *itemPtr;
 
-    itemPtr = WMGetFromBag(lPtr->items, index);
+    itemPtr = WMGetFromArray(lPtr->items, index);
 
     width = lPtr->view->size.width - 2 - 19;
     height = lPtr->itemHeight;
@@ -465,35 +460,35 @@ paintItem(List *lPtr, int index)
     y = 2 + (index-lPtr->topItem) * lPtr->itemHeight + 1;
 
     if (lPtr->flags.userDrawn) {
-	WMRect rect;
-	int flags;
+        WMRect rect;
+        int flags;
 
-	rect.size.width = width;
-	rect.size.height = height;
-	rect.pos.x = x;
-	rect.pos.y = y;
+        rect.size.width = width;
+        rect.size.height = height;
+        rect.pos.x = x;
+        rect.pos.y = y;
 
-	flags = itemPtr->uflags;
-	if (itemPtr->disabled)
-	    flags |= WLDSDisabled;
-	if (itemPtr->selected)
-	    flags |= WLDSSelected;
-	if (itemPtr->isBranch)
-	    flags |= WLDSIsBranch;
+        flags = itemPtr->uflags;
+        if (itemPtr->disabled)
+            flags |= WLDSDisabled;
+        if (itemPtr->selected)
+            flags |= WLDSSelected;
+        if (itemPtr->isBranch)
+            flags |= WLDSIsBranch;
 
-	if (lPtr->draw)
-	    (*lPtr->draw)(lPtr, index, view->window, itemPtr->text, flags, 
-			  &rect);
+        if (lPtr->draw)
+            (*lPtr->draw)(lPtr, index, view->window, itemPtr->text, flags,
+                          &rect);
     } else {
-	if (itemPtr->selected)
-	    XFillRectangle(scr->display, view->window, WMColorGC(scr->white), 
-			   x, y, width, height);
-	else
-	    XClearArea(scr->display, view->window, x, y, width, height, False);
+        if (itemPtr->selected)
+            XFillRectangle(scr->display, view->window, WMColorGC(scr->white),
+                           x, y, width, height);
+        else
+            XClearArea(scr->display, view->window, x, y, width, height, False);
 
-	W_PaintText(view, view->window, scr->normalFont,  x+4, y, width,
-		    WALeft, WMColorGC(scr->black), False, 
-		    itemPtr->text, strlen(itemPtr->text));
+        W_PaintText(view, view->window, scr->normalFont,  x+4, y, width,
+                    WALeft, WMColorGC(scr->black), False,
+                    itemPtr->text, strlen(itemPtr->text));
     }
 }
 
@@ -506,34 +501,34 @@ paintList(List *lPtr)
     int i, lim;
 
     if (!lPtr->view->flags.mapped)
-	return;
+        return;
 
-    if (WMGetBagItemCount(lPtr->items) > 0) {
-	if (lPtr->topItem+lPtr->fullFitLines+lPtr->flags.dontFitAll 
-	    > WMGetBagItemCount(lPtr->items)) {
+    if (WMGetArrayItemCount(lPtr->items) > 0) {
+        if (lPtr->topItem+lPtr->fullFitLines+lPtr->flags.dontFitAll
+            > WMGetArrayItemCount(lPtr->items)) {
 
-	    lim = WMGetBagItemCount(lPtr->items) - lPtr->topItem;
-	    XClearArea(scrPtr->display, lPtr->view->window, 19,
-		       2+lim*lPtr->itemHeight, lPtr->view->size.width-21,
-		       lPtr->view->size.height-lim*lPtr->itemHeight-3, False);
-	} else {
-	    lim = lPtr->fullFitLines + lPtr->flags.dontFitAll;
-	}
-	for (i = lPtr->topItem; i < lPtr->topItem + lim; i++) {
-	    paintItem(lPtr, i);
-	}
+            lim = WMGetArrayItemCount(lPtr->items) - lPtr->topItem;
+            XClearArea(scrPtr->display, lPtr->view->window, 19,
+                       2+lim*lPtr->itemHeight, lPtr->view->size.width-21,
+                       lPtr->view->size.height-lim*lPtr->itemHeight-3, False);
+        } else {
+            lim = lPtr->fullFitLines + lPtr->flags.dontFitAll;
+        }
+        for (i = lPtr->topItem; i < lPtr->topItem + lim; i++) {
+            paintItem(lPtr, i);
+        }
     } else {
-	XClearWindow(scrPtr->display, lPtr->view->window);
+        XClearWindow(scrPtr->display, lPtr->view->window);
     }
     W_DrawRelief(scrPtr, lPtr->view->window, 0, 0, lPtr->view->size.width,
-		 lPtr->view->size.height, WRSunken);
+                 lPtr->view->size.height, WRSunken);
 }
 
 #if 0
 static void
 scrollTo(List *lPtr, int newTop)
 {
-    
+
 }
 #endif
 
@@ -541,23 +536,23 @@ static void
 updateScroller(List *lPtr)
 {
     float knobProportion, floatValue, tmp;
-    int count = WMGetBagItemCount(lPtr->items);
+    int count = WMGetArrayItemCount(lPtr->items);
 
     if (lPtr->idleID)
- 	WMDeleteIdleHandler(lPtr->idleID);
+        WMDeleteIdleHandler(lPtr->idleID);
     lPtr->idleID = NULL;
-        
+
     paintList(lPtr);
-    
+
     if (count == 0 || count <= lPtr->fullFitLines)
-	WMSetScrollerParameters(lPtr->vScroller, 0, 1);
+        WMSetScrollerParameters(lPtr->vScroller, 0, 1);
     else {
-	tmp = lPtr->fullFitLines;
-	knobProportion = tmp/(float)count;
+        tmp = lPtr->fullFitLines;
+        knobProportion = tmp/(float)count;
 
-	floatValue = (float)lPtr->topItem/(float)(count - lPtr->fullFitLines);
+        floatValue = (float)lPtr->topItem/(float)(count - lPtr->fullFitLines);
 
-	WMSetScrollerParameters(lPtr->vScroller, floatValue, knobProportion);
+        WMSetScrollerParameters(lPtr->vScroller, floatValue, knobProportion);
     }
 }
 
@@ -570,36 +565,32 @@ handleEvents(XEvent *event, void *data)
     CHECK_CLASS(data, WC_List);
 
 
-    switch (event->type) {	
-     case Expose:
-	if (event->xexpose.count!=0)
-	    break;
-	paintList(lPtr);
-	break;
-	
-     case DestroyNotify:
-	destroyList(lPtr);
-	break;
-	
+    switch (event->type) {
+    case Expose:
+        if (event->xexpose.count!=0)
+            break;
+        paintList(lPtr);
+        break;
+
+    case DestroyNotify:
+        destroyList(lPtr);
+        break;
+
     }
+}
+
+
+static int
+matchTitle(void *item, void *title)
+{
+    return (strcmp(((WMListItem*)item)->text, (char*)title)==0 ? 1 : 0);
 }
 
 
 int
 WMFindRowOfListItemWithTitle(WMList *lPtr, char *title)
 {
-    WMListItem *item;
-    WMBagIterator i;
-    int ok = 0;
-    
-    WM_ITERATE_BAG(lPtr->items, item, i) {
-	if (strcmp(item->text, title)==0) {
-	    ok = 1;
-	    break;
-	}
-    }
-
-    return ok ? WMBagIndexForIterator(lPtr->items, i) : -1;
+    return WMFindInArray(lPtr->items, matchTitle, title);
 }
 
 
@@ -609,8 +600,8 @@ WMSelectListItem(WMList *lPtr, int row)
     WMListItem *itemPtr;
     int notify = 0;
 
-    if (row >= WMGetBagItemCount(lPtr->items))
-	return;
+    if (row >= WMGetArrayItemCount(lPtr->items))
+        return;
 
     /* the check below must be changed when the multiple selection is
      * implemented. -Dan
@@ -620,50 +611,50 @@ WMSelectListItem(WMList *lPtr, int row)
     else
         notify = 1;
 
-    assert(lPtr->selectedItem < WMGetBagItemCount(lPtr->items));
-    
-    if (!lPtr->flags.allowMultipleSelection) {
-	/* unselect previous selected item */
-	if (lPtr->selectedItem >= 0) {
-	    itemPtr = WMGetFromBag(lPtr->items, lPtr->selectedItem);
+    assert(lPtr->selectedItem < WMGetArrayItemCount(lPtr->items));
 
-	    if (itemPtr->selected) {
-		itemPtr->selected = 0;
-		if (lPtr->view->flags.mapped 
-		    && lPtr->selectedItem>=lPtr->topItem
-		    && lPtr->selectedItem<=lPtr->topItem+lPtr->fullFitLines) {
-		    paintItem(lPtr, lPtr->selectedItem);
-		}
-	    }
-	}
+    if (!lPtr->flags.allowMultipleSelection) {
+        /* unselect previous selected item */
+        if (lPtr->selectedItem >= 0) {
+            itemPtr = WMGetFromArray(lPtr->items, lPtr->selectedItem);
+
+            if (itemPtr->selected) {
+                itemPtr->selected = 0;
+                if (lPtr->view->flags.mapped
+                    && lPtr->selectedItem>=lPtr->topItem
+                    && lPtr->selectedItem<=lPtr->topItem+lPtr->fullFitLines) {
+                    paintItem(lPtr, lPtr->selectedItem);
+                }
+            }
+        }
     }
-    
+
     if (row < 0) {
         if (!lPtr->flags.allowMultipleSelection) {
-	    lPtr->selectedItem = -1;
+            lPtr->selectedItem = -1;
             if (notify)
                 WMPostNotificationName(WMListSelectionDidChangeNotification,
                                        lPtr, (void*)((int)lPtr->selectedItem));
         }
-	return;
+        return;
     }
 
     /* select item */
-    itemPtr = WMGetFromBag(lPtr->items, row);
+    itemPtr = WMGetFromArray(lPtr->items, row);
 
     if (lPtr->flags.allowMultipleSelection)
-	itemPtr->selected = !itemPtr->selected;
+        itemPtr->selected = !itemPtr->selected;
     else
-	itemPtr->selected = 1;
+        itemPtr->selected = 1;
 
     if (lPtr->view->flags.mapped) {
-	paintItem(lPtr, row);
+        paintItem(lPtr, row);
 
-	if ((row-lPtr->topItem+lPtr->fullFitLines)*lPtr->itemHeight
-	    > lPtr->view->size.height-2)
-	    W_DrawRelief(lPtr->view->screen, lPtr->view->window, 0, 0,
-			 lPtr->view->size.width, lPtr->view->size.height,
-			 WRSunken);
+        if ((row-lPtr->topItem+lPtr->fullFitLines)*lPtr->itemHeight
+            > lPtr->view->size.height-2)
+            W_DrawRelief(lPtr->view->screen, lPtr->view->window, 0, 0,
+                         lPtr->view->size.width, lPtr->view->size.height,
+                         WRSunken);
     }
     lPtr->selectedItem = row;
     if (notify)
@@ -679,8 +670,8 @@ getItemIndexAt(List *lPtr, int clickY)
 
     index = (clickY - 2) / lPtr->itemHeight + lPtr->topItem;
 
-    if (index < 0 || index >= WMGetBagItemCount(lPtr->items))
-	return -1;
+    if (index < 0 || index >= WMGetArrayItemCount(lPtr->items))
+        return -1;
 
     return index;
 }
@@ -696,7 +687,7 @@ handleActionEvents(XEvent *event, void *data)
     CHECK_CLASS(data, WC_List);
 
     switch (event->type) {
-     case ButtonRelease:
+    case ButtonRelease:
 #define CHECK_WHEEL_PATCH
 #ifdef CHECK_WHEEL_PATCH
         /* Ignore mouse wheel events, they're not "real" button events */
@@ -705,27 +696,27 @@ handleActionEvents(XEvent *event, void *data)
             break;
 #endif
 
-	lPtr->flags.buttonPressed = 0;
-	tmp = getItemIndexAt(lPtr, event->xbutton.y);
+        lPtr->flags.buttonPressed = 0;
+        tmp = getItemIndexAt(lPtr, event->xbutton.y);
 
-	if (tmp == lPtr->selectedItem && tmp >= 0) {
-	    if (lPtr->action)
-		(*lPtr->action)(lPtr, lPtr->clientData);
-	}
-	break;
+        if (tmp == lPtr->selectedItem && tmp >= 0) {
+            if (lPtr->action)
+                (*lPtr->action)(lPtr, lPtr->clientData);
+        }
+        break;
 
-     case EnterNotify:
-	lPtr->flags.buttonPressed = lPtr->flags.buttonWasPressed;
-	lPtr->flags.buttonWasPressed = 0;
-	break;
+    case EnterNotify:
+        lPtr->flags.buttonPressed = lPtr->flags.buttonWasPressed;
+        lPtr->flags.buttonWasPressed = 0;
+        break;
 
-     case LeaveNotify:
-	lPtr->flags.buttonWasPressed = lPtr->flags.buttonPressed;
-	lPtr->flags.buttonPressed = 0;
-	break;
+    case LeaveNotify:
+        lPtr->flags.buttonWasPressed = lPtr->flags.buttonPressed;
+        lPtr->flags.buttonPressed = 0;
+        break;
 
-     case ButtonPress:
-	if (event->xbutton.x > WMWidgetWidth(lPtr->vScroller)) {
+    case ButtonPress:
+        if (event->xbutton.x > WMWidgetWidth(lPtr->vScroller)) {
 #ifdef CHECK_WHEEL_PATCH
             /* Mouse wheel events need to be properly handled here. It would
              * be best to somehow route them to lPtr->vScroller so that the
@@ -737,7 +728,7 @@ handleActionEvents(XEvent *event, void *data)
 
             if (event->xbutton.button == WINGsConfiguration.mouseWheelDown) {
                 /* Wheel down */
-                int itemCount = WMGetBagItemCount(lPtr->items);
+                int itemCount = WMGetArrayItemCount(lPtr->items);
                 if (lPtr->topItem + lPtr->fullFitLines < itemCount) {
                     int incr = lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
                     lPtr->topItem += incr;
@@ -766,48 +757,48 @@ handleActionEvents(XEvent *event, void *data)
 #endif
 
             tmp = getItemIndexAt(lPtr, event->xbutton.y);
-	    lPtr->flags.buttonPressed = 1;
+            lPtr->flags.buttonPressed = 1;
 
-	    if (tmp >= 0) {
-		if (tmp == lPtr->selectedItem && WMIsDoubleClick(event)) {
-		    WMSelectListItem(lPtr, tmp);
-		    if (lPtr->doubleAction)
-			(*lPtr->doubleAction)(lPtr, lPtr->doubleClientData);
-		} else {
-		    WMSelectListItem(lPtr, tmp);
-		}
-	    }
-	}
-	break;
-	
-     case MotionNotify:
-	if (lPtr->flags.buttonPressed) {
-	    tmp = getItemIndexAt(lPtr, event->xmotion.y);
-	    if (tmp>=0 && tmp != lPtr->selectedItem) {
-		WMSelectListItem(lPtr, tmp);
-	    }
-	}
-	break;
+            if (tmp >= 0) {
+                if (tmp == lPtr->selectedItem && WMIsDoubleClick(event)) {
+                    WMSelectListItem(lPtr, tmp);
+                    if (lPtr->doubleAction)
+                        (*lPtr->doubleAction)(lPtr, lPtr->doubleClientData);
+                } else {
+                    WMSelectListItem(lPtr, tmp);
+                }
+            }
+        }
+        break;
+
+    case MotionNotify:
+        if (lPtr->flags.buttonPressed) {
+            tmp = getItemIndexAt(lPtr, event->xmotion.y);
+            if (tmp>=0 && tmp != lPtr->selectedItem) {
+                WMSelectListItem(lPtr, tmp);
+            }
+        }
+        break;
     }
     if (lPtr->topItem != topItem)
-    	WMPostNotificationName(WMListDidScrollNotification, lPtr, NULL);
+        WMPostNotificationName(WMListDidScrollNotification, lPtr, NULL);
 }
 
 
 static void
 updateGeometry(WMList *lPtr)
-{    
+{
     lPtr->fullFitLines = (lPtr->view->size.height - 4) / lPtr->itemHeight;
     if (lPtr->fullFitLines * lPtr->itemHeight < lPtr->view->size.height - 4) {
-	lPtr->flags.dontFitAll = 1;
+        lPtr->flags.dontFitAll = 1;
     } else {
-	lPtr->flags.dontFitAll = 0;
+        lPtr->flags.dontFitAll = 0;
     }
 
-    if (WMGetBagItemCount(lPtr->items) - lPtr->topItem <= lPtr->fullFitLines) {
-	lPtr->topItem = WMGetBagItemCount(lPtr->items) - lPtr->fullFitLines;
-	if (lPtr->topItem < 0)
-	    lPtr->topItem = 0;
+    if (WMGetArrayItemCount(lPtr->items) - lPtr->topItem <= lPtr->fullFitLines) {
+        lPtr->topItem = WMGetArrayItemCount(lPtr->items) - lPtr->fullFitLines;
+        if (lPtr->topItem < 0)
+            lPtr->topItem = 0;
     }
 
     updateScroller(lPtr);
@@ -816,7 +807,7 @@ updateGeometry(WMList *lPtr)
 
 static void
 didResizeList(W_ViewDelegate *self, WMView *view)
-{    
+{
     WMList *lPtr = (WMList*)view->self;
 
     WMResizeWidget(lPtr->vScroller, 1, view->size.height-2);
@@ -828,18 +819,11 @@ didResizeList(W_ViewDelegate *self, WMView *view)
 static void
 destroyList(List *lPtr)
 {
-    WMListItem *item;
-    WMBagIterator i;
-    
     if (lPtr->idleID)
- 	WMDeleteIdleHandler(lPtr->idleID);
+        WMDeleteIdleHandler(lPtr->idleID);
     lPtr->idleID = NULL;
 
-    WM_ITERATE_BAG(lPtr->items, item, i) {
-	wfree(item->text);
-	wfree(item);
-    }
-    WMFreeBag(lPtr->items);
-    
+    WMFreeArray(lPtr->items);
+
     wfree(lPtr);
 }

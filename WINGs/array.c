@@ -21,21 +21,21 @@
 
 typedef struct W_Array {
     void **items;		      /* the array data */
-    unsigned itemCount;	              /* # of items in array */
-    unsigned allocSize;	              /* allocated size of array */
+    int itemCount;	              /* # of items in array */
+    int allocSize;	              /* allocated size of array */
     void (*destructor)(void *item);   /* the destructor to free elements */
 } W_Array;
 
 
 WMArray*
-WMCreateArray(unsigned initialSize)
+WMCreateArray(int initialSize)
 {
     WMCreateArrayWithDestructor(initialSize, NULL);
 }
 
 
 WMArray*
-WMCreateArrayWithDestructor(unsigned initialSize, void (*destructor)(void*))
+WMCreateArrayWithDestructor(int initialSize, WMFreeDataProc *destructor)
 {
     WMArray *array;
 
@@ -78,7 +78,7 @@ WMFreeArray(WMArray *array)
 }
 
 
-unsigned
+int
 WMGetArrayItemCount(WMArray *array)
 {
     return array->itemCount;
@@ -120,7 +120,7 @@ WMAddToArray(WMArray *array, void *item)
 
 
 int
-WMInsertInArray(WMArray *array, unsigned index, void *item)
+WMInsertInArray(WMArray *array, int index, void *item)
 {
     wassertrv(index <= array->itemCount, 0);
 
@@ -141,7 +141,7 @@ WMInsertInArray(WMArray *array, unsigned index, void *item)
 
 
 void*
-WMReplaceInArray(WMArray *array, unsigned index, void *item)
+WMReplaceInArray(WMArray *array, int index, void *item)
 {
     void *old;
 
@@ -160,7 +160,7 @@ WMReplaceInArray(WMArray *array, unsigned index, void *item)
 
 
 int
-WMDeleteFromArray(WMArray *array, unsigned index)
+WMDeleteFromArray(WMArray *array, int index)
 {
     if (index >= array->itemCount)
         return 0;
@@ -183,7 +183,7 @@ WMDeleteFromArray(WMArray *array, unsigned index)
 int
 WMRemoveFromArray(WMArray *array, void *item)
 {
-    unsigned i;
+    int i;
 
     for (i = 0; i < array->itemCount; i++) {
         if (array->items[i] == item) {
@@ -196,7 +196,7 @@ WMRemoveFromArray(WMArray *array, void *item)
 
 
 void*
-WMGetFromArray(WMArray *array, unsigned index)
+WMGetFromArray(WMArray *array, int index)
 {
     if (index >= array->itemCount)
         return NULL;
@@ -215,9 +215,9 @@ WMPopFromArray(WMArray *array)
 
 
 int
-WMFindInArray(WMArray *array, int (*match)(void*, void*), void *cdata)
+WMFindInArray(WMArray *array, WMMatchDataProc *match, void *cdata)
 {
-    unsigned i;
+    int i;
 
     if (match!=NULL) {
         for (i = 0; i < array->itemCount; i++) {
@@ -235,10 +235,10 @@ WMFindInArray(WMArray *array, int (*match)(void*, void*), void *cdata)
 }
 
 
-unsigned
+int
 WMCountInArray(WMArray *array, void *item)
 {
-    unsigned i, count;
+    int i, count;
 
     for (i=0, count=0; i<array->itemCount; i++) {
         if (array->items[i] == item)
@@ -261,7 +261,7 @@ WMSortArray(WMArray *array, int (*comparer)(const void*, const void*))
 void
 WMMapArray(WMArray *array, void (*function)(void*, void*), void *data)
 {
-    unsigned i;
+    int i;
 
     for (i=0; i<array->itemCount; i++) {
         (*function)(array->items[i], data);

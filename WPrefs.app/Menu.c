@@ -1303,14 +1303,13 @@ menuItemCloned(WEditMenuDelegate *delegate, WEditMenu *menu,
 }
 
 
-
-
-static void menuItemEdited(struct WEditMenuDelegate *delegate, WEditMenu *menu,
-			   WEditMenuItem *item)
+static void
+menuItemEdited(struct WEditMenuDelegate *delegate, WEditMenu *menu,
+               WEditMenuItem *item)
 {
     _Panel *panel = (_Panel*)delegate->data;
     WEditMenu *submenu;
-    
+
     updateFrameTitle(panel, WGetEditMenuItemTitle(item), panel->currentType);
 
     submenu = WGetEditMenuSubmenu(menu, item);
@@ -1320,17 +1319,15 @@ static void menuItemEdited(struct WEditMenuDelegate *delegate, WEditMenu *menu,
 }
 
 
-
-
-
-static Bool shouldRemoveItem(struct WEditMenuDelegate *delegate,
-			     WEditMenu *menu, WEditMenuItem *item)
+static Bool
+shouldRemoveItem(struct WEditMenuDelegate *delegate, WEditMenu *menu,
+                 WEditMenuItem *item)
 {
     _Panel *panel = (_Panel*)delegate->data;
 
     if (panel->dontAsk)
 	return True;
-    
+
     if (WGetEditMenuSubmenu(menu, item)) {
 	int res;
 	

@@ -131,6 +131,10 @@ typedef struct W_Connection WMConnection;
 
 typedef void WMFreeDataProc(void *data);
 
+/* Used by WMBag or WMArray for matching data */
+typedef int WMMatchDataProc(void *item, void *cdata);
+
+
 
 
 typedef struct {
@@ -320,16 +324,15 @@ extern const WMHashTableCallbacks WMStringPointerHashCallbacks;
  * 	aren't in the end
  */
 
-WMArray* WMCreateArray(unsigned initialSize);
+WMArray* WMCreateArray(int initialSize);
 
-WMArray* WMCreateArrayWithDestructor(unsigned initialSize,
-                                     void (*destructor)(void*));
+WMArray* WMCreateArrayWithDestructor(int initialSize, WMFreeDataProc *destructor);
 
 void WMEmptyArray(WMArray *array);
 
 void WMFreeArray(WMArray *array);
 
-unsigned WMGetArrayItemCount(WMArray *array);
+int WMGetArrayItemCount(WMArray *array);
 
 /* appends other to array. other remains unchanged */
 int WMAppendArray(WMArray *array, WMArray *other);
@@ -340,12 +343,12 @@ int WMAddToArray(WMArray *array, void *item);
 #define WMPushInArray(array, item) WMAddToArray(array, item)
 
 /* insert will increment the index of elements after it by 1 */
-int WMInsertInArray(WMArray *array, unsigned index, void *item);
+int WMInsertInArray(WMArray *array, int index, void *item);
 
 /* replace and set will return the old item WITHOUT calling the
  * destructor on it even if its available. Free the returned item yourself.
  */
-void* WMReplaceInArray(WMArray *array, unsigned index, void *item);
+void* WMReplaceInArray(WMArray *array, int index, void *item);
 
 #define WMSetInArray(array, index, item) WMReplaceInArray(array, index, item)
 
@@ -353,11 +356,11 @@ void* WMReplaceInArray(WMArray *array, unsigned index, void *item);
  * after them to decrement their indexes by 1. Also will call the
  * destructor on the deleted element if there's one available.
  */
-int WMDeleteFromArray(WMArray *array, unsigned index);
+int WMDeleteFromArray(WMArray *array, int index);
 
 int WMRemoveFromArray(WMArray *array, void *item);
 
-void* WMGetFromArray(WMArray *array, unsigned index);
+void* WMGetFromArray(WMArray *array, int index);
 
 #define WMGetFirstInArray(array, item) WMFindInArray(array, NULL, item)
 
@@ -367,9 +370,9 @@ void* WMGetFromArray(WMArray *array, unsigned index);
  */
 void* WMPopFromArray(WMArray *array);
 
-int WMFindInArray(WMArray *array, int (*match)(void*, void*), void *cdata);
+int WMFindInArray(WMArray *array, WMMatchDataProc *match, void *cdata);
 
-unsigned WMCountInArray(WMArray *array, void *item);
+int WMCountInArray(WMArray *array, void *item);
 
 /* comparer must return:
  * < 0 if a < b
@@ -403,7 +406,7 @@ void WMMapArray(WMArray *array, void (*function)(void*, void*), void *data);
 
 WMBag* WMCreateTreeBag(void);
 
-WMBag* WMCreateTreeBagWithDestructor(void (*destructor)(void*));
+WMBag* WMCreateTreeBagWithDestructor(WMFreeDataProc *destructor);
 
 int WMGetBagItemCount(WMBag *bag);
 
@@ -448,7 +451,7 @@ int WMGetFirstInBag(WMBag *bag, void *item);
 
 int WMCountInBag(WMBag *bag, void *item);
 
-int WMFindInBag(WMBag *bag, int (*match)(void*,void*), void *cdata);
+int WMFindInBag(WMBag *bag, WMMatchDataProc *match, void *cdata);
 
 void* WMBagFirst(WMBag *bag, WMBagIterator *ptr);
 

@@ -164,26 +164,29 @@ WCreateEditMenuItem(WMWidget *parent, char *title, Bool isTitle)
     return iPtr;
 }
 
-char *WGetEditMenuItemTitle(WEditMenuItem *item)
+char*
+WGetEditMenuItemTitle(WEditMenuItem *item)
 {
     return item->label;
 }
 
-void *WGetEditMenuItemData(WEditMenuItem *item)
+void*
+WGetEditMenuItemData(WEditMenuItem *item)
 {
     return item->data;
 }
 
 
-void WSetEditMenuItemData(WEditMenuItem *item, void *data, 
-			   WMCallback *destroyer)
+void
+WSetEditMenuItemData(WEditMenuItem *item, void *data, WMCallback *destroyer)
 {
     item->data = data;
     item->destroyData = destroyer;
 }
 
 
-void WSetEditMenuItemImage(WEditMenuItem *item, WMPixmap *pixmap)
+void
+WSetEditMenuItemImage(WEditMenuItem *item, WMPixmap *pixmap)
 {
     if (item->pixmap)
 	WMReleasePixmap(item->pixmap);
@@ -315,10 +318,9 @@ static void updateMenuContents(WEditMenu *mPtr);
 static void handleEvents(XEvent *event, void *data);
 
 static void editItemLabel(WEditMenuItem *item);
+
 static void stopEditItem(WEditMenu *menu, Bool apply);
 
-
-static void unmapMenu(WEditMenu *menu);
 static void deselectItem(WEditMenu *menu);
 
 
@@ -594,12 +596,10 @@ WGetEditMenuSubmenu(WEditMenu *mPtr, WEditMenuItem *item)
 }
 
 
-static int simpleMatch(void *a, void *b)
+static int
+simpleMatch(void *a, void *b)
 {
-    if (a == b)
-	return 1;
-    else
-	return 0;
+    return ((a == b) ? 1 : 0);
 }
 
 
@@ -692,7 +692,7 @@ closeMenuAction(WMWidget *w, void *data)
     WMAddIdleHandler(WMDestroyWidget, menu->closeB);
     menu->closeB = NULL;
 
-    unmapMenu(menu);
+    WEditMenuHide(menu);
 }
 
 
@@ -790,14 +790,29 @@ updateMenuContents(WEditMenu *mPtr)
 }
 
 
-static void
-unmapMenu(WEditMenu *menu)
+void
+WEditMenuHide(WEditMenu *menu)
 {
     WMUnmapWidget(menu);
- 
+
     if (menu->selectedItem) {
 	deselectItem(menu);
     }
+}
+
+
+void
+WEditMenuUnhide(WEditMenu *menu)
+{
+    WMMapWidget(menu);
+}
+
+
+void
+WEditMenuShowAt(WEditMenu *menu, int x, int y)
+{
+    WMMoveWidget(menu, x, y);
+    WMMapWidget(menu);
 }
 
 
@@ -815,7 +830,7 @@ deselectItem(WEditMenu *menu)
     submenu = item->submenu;
 
     if (submenu && !WEditMenuIsTornOff(submenu)) {
-	unmapMenu(submenu);
+	WEditMenuHide(submenu);
     }
     
     menu->selectedItem = NULL;
@@ -1057,7 +1072,8 @@ slideWindow(Display *dpy, Window win, int srcX, int srcY, int dstX, int dstY)
 }
 
 
-static int errorHandler(Display *d, XErrorEvent *ev)
+static int
+errorHandler(Display *d, XErrorEvent *ev)
 {
     /* just ignore */
     return 0;

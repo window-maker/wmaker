@@ -343,7 +343,7 @@ typedef struct W_ColorPanel WMColorPanel;
 typedef struct WMListItem {
     char *text;
     void *clientData;		       /* ptr for user clientdata. */
-    
+
     unsigned int uflags:16;	       /* flags for the user */
     unsigned int selected:1;
     unsigned int disabled:1;
@@ -363,7 +363,7 @@ typedef struct WMAlertPanel {
     WMFrame *line;		       /* separator */
     short result;		       /* button that was pushed */
     short done;
-    
+
     KeyCode retKey;
     KeyCode escKey;
 } WMAlertPanel;
@@ -378,7 +378,7 @@ typedef struct WMInputPanel {
     WMTextField *text;		       /* text field */
     short result;		       /* button that was pushed */
     short done;
-    
+
     KeyCode retKey;
     KeyCode escKey;
 } WMInputPanel;
@@ -456,39 +456,39 @@ typedef struct WMTextFieldDelegate {
     void *data;
 
     void (*didBeginEditing)(struct WMTextFieldDelegate *self,
-			    WMNotification *notif);
+                            WMNotification *notif);
 
     void (*didChange)(struct WMTextFieldDelegate *self, 
-		      WMNotification *notif);
+                      WMNotification *notif);
 
     void (*didEndEditing)(struct WMTextFieldDelegate *self,
-			  WMNotification *notif);
+                          WMNotification *notif);
 
     Bool (*shouldBeginEditing)(struct WMTextFieldDelegate *self,
-			       WMTextField *tPtr);
+                               WMTextField *tPtr);
 
     Bool (*shouldEndEditing)(struct WMTextFieldDelegate *self,
-			     WMTextField *tPtr);
+                             WMTextField *tPtr);
 } WMTextFieldDelegate;
 
 
 typedef struct WMTextDelegate {
     void *data;
-    
+
     void (*didBeginEditing)(struct WMTextDelegate *self,
-                WMNotification *notif);
-                
+                            WMNotification *notif);
+
     void (*didChange)(struct WMTextDelegate *self,
-              WMNotification *notif);
-              
+                      WMNotification *notif);
+
     void (*didEndEditing)(struct WMTextDelegate *self,
-              WMNotification *notif);
-              
+                          WMNotification *notif);
+
     Bool (*shouldBeginEditing)(struct WMTextDelegate *self,
-                   WMText *tPtr);
-                   
+                               WMText *tPtr);
+
     Bool (*shouldEndEditing)(struct WMTextDelegate *self,
-                 WMText *tPtr);
+                             WMText *tPtr);
 } WMTextDelegate;
 
 
@@ -500,13 +500,13 @@ typedef struct WMTabViewDelegate {
 				   WMTabView *tabView);
 
     void (*didSelectItem)(struct WMTabViewDelegate *self, WMTabView *tabView,
-				 WMTabViewItem *item);
+                          WMTabViewItem *item);
 
     Bool (*shouldSelectItem)(struct WMTabViewDelegate *self, WMTabView *tabView, 
-			     WMTabViewItem *item);
+                             WMTabViewItem *item);
 
     void (*willSelectItem)(struct WMTabViewDelegate *self, WMTabView *tabView,
-			   WMTabViewItem *item);
+                           WMTabViewItem *item);
 } WMTabViewDelegate;
 
 
@@ -1066,8 +1066,7 @@ int WMFindRowOfListItemWithTitle(WMList *lPtr, char *title);
 
 WMListItem *WMGetListItem(WMList *lPtr, int row);
 
-WMBag *WMGetListItems(WMList *lPtr);
-
+WMArray *WMGetListItems(WMList *lPtr);
 
 void WMRemoveListItem(WMList *lPtr, int row);
 

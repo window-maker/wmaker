@@ -21,6 +21,9 @@
  */
 
 
+#ifndef _editmenu_h_
+#define _editmenu_h_
+
 typedef struct W_EditMenu WEditMenu;
 typedef struct W_EditMenuItem WEditMenuItem;
 
@@ -98,3 +101,13 @@ WMPoint WGetEditMenuLocationForSubmenu(WEditMenu *mPtr, WEditMenu *submenu);
 void WTearOffEditMenu(WEditMenu *menu, WEditMenu *submenu);
 
 Bool WEditMenuIsTornOff(WEditMenu *mPtr);
+
+void WEditMenuHide(WEditMenu *menu);
+
+void WEditMenuUnhide(WEditMenu *menu);
+
+void WEdirMenuShowAt(WEditMenu *menu, int x, int y);
+
+
+#endif
+
