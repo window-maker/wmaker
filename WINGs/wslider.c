@@ -483,7 +483,7 @@ handleActionEvents(XEvent *event, void *data)
      case ButtonPress:
 	if (event->xbutton.button==WINGsConfiguration.mouseWheelUp
 	    &&!sPtr->flags.dragging) {
-	    // Wheel up
+	    /* Wheel up */
 	    if (sPtr->value+1<=sPtr->maxValue) {
 		WMSetSliderValue(sPtr, sPtr->value+1);
 		if (sPtr->flags.continuous && sPtr->action) {
@@ -492,7 +492,7 @@ handleActionEvents(XEvent *event, void *data)
 	    }
 	} else if (event->xbutton.button==WINGsConfiguration.mouseWheelDown
 	    &&!sPtr->flags.dragging) {
-	    // Wheel down
+	    /* Wheel down */
 	    if (sPtr->value-1>=sPtr->minValue)
 	    {
 		WMSetSliderValue(sPtr, sPtr->value-1);

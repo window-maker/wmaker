@@ -471,7 +471,7 @@ vScrollCallBack(WMWidget *scroller, void *self)
             (float)(itemCount - lPtr->fullFitLines);
 
         if (oldTopItem != lPtr->topItem)
-            paintList(lPtr); // use updateScroller(lPtr) here?
+            paintList(lPtr); /* use updateScroller(lPtr) here? -Dan */
         break;
 
     case WSKnobSlot:

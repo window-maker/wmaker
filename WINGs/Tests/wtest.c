@@ -178,7 +178,7 @@ testList(WMScreen *scr)
     WMSetLabelText(mtitle, "Multiple selection list");
 
     list = WMCreateList(win);
-    WMSetListAllowEmptySelection(list, True);
+    /*WMSetListAllowEmptySelection(list, True);*/
     WMMoveWidget(list, 10, 40);
     for (i=0; i<50; i++) {
 	sprintf(text, "Item %i", i);
@@ -186,7 +186,7 @@ testList(WMScreen *scr)
     }
     mlist = WMCreateList(win);
     WMSetListAllowMultipleSelection(mlist, True);
-    WMSetListAllowEmptySelection(mlist, True);
+    /*WMSetListAllowEmptySelection(mlist, True);*/
     WMMoveWidget(mlist, 210, 40);
     for (i=0; i<135; i++) {
 	sprintf(text, "Item %i", i);
