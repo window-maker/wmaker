@@ -914,6 +914,10 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
 		    XFreePixmap(dpy, ghost);
 		XSetWindowBackground(dpy, scr->dock_shadow, scr->white_pixel);
 	    }
+
+	    if (wPreferences.auto_arrange_icons)
+		wArrangeIcons(scr, True);
+
 	    done = 1;
 	    break;
 	}

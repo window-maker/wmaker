@@ -349,6 +349,9 @@ destroyView(W_View *view)
 	return;
     view->flags.alreadyDead = 1;    
 
+    /* delete the balloon text for the view, if there's any */
+    WMSetBalloonTextForView(NULL, view);
+
     if (view->nextFocusChain)
         view->nextFocusChain->prevFocusChain = view->prevFocusChain;
     if (view->prevFocusChain)

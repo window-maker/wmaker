@@ -18,6 +18,13 @@ will load the theme, but keep the titlebar background related options as
 before.
 
 
+New Options
+-----------
+
+WorkspaceNameDisplayPosition =
+none/center/top/bottom/topleft/topright/bottomleft/bottomright
+
+
 root menu
 ---------
 

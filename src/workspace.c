@@ -281,9 +281,13 @@ showWorkspaceName(WScreen *scr, int workspace)
     RXImage *ximg;
     Pixmap text, mask;
     int w, h;
+    int px, py;
     char *name = scr->workspaces[workspace]->name;
     int len = strlen(name);
     int x, y;
+
+    if (wPreferences.workspace_name_display_position == WD_NONE)
+	return;
 
     if (scr->workspace_name_timer) {
 	WMDeleteTimerHandler(scr->workspace_name_timer);
@@ -309,11 +313,38 @@ showWorkspaceName(WScreen *scr, int workspace)
     w = wTextWidth(scr->workspace_name_font->font, name, len);
     h = scr->workspace_name_font->height;
 
+    switch (wPreferences.workspace_name_display_position) {
+     case WD_CENTER:
+	px = (scr->scr_width - (w+4))/2;
+	py = (scr->scr_height - (h+4))/2;
+	break;
+     case WD_TOP:
+	px = (scr->scr_width - (w+4))/2;
+	py = 0;
+	break;
+     case WD_BOTTOM:
+	px = (scr->scr_width - (w+4))/2;
+	py = scr->scr_height - h;
+	break;
+     case WD_TOPLEFT:
+	px = 0;
+	py = 0;
+	break;
+     case WD_TOPRIGHT:
+	px = scr->scr_width - w;
+	py = 0;
+	break;
+     case WD_BOTTOMLEFT:
+	px = 0;
+	py = scr->scr_height - h;
+	break;
+     case WD_BOTTOMRIGHT:
+	px = scr->scr_width - w;
+	py = scr->scr_height - h;
+	break;
+    }
     XResizeWindow(dpy, scr->workspace_name, w+4, h+4);
-    XMoveWindow(dpy, scr->workspace_name, (scr->scr_width - (w+4))/2, 0);
-		/*
-		(scr->scr_height - (h+4))/2);
-		 */
+    XMoveWindow(dpy, scr->workspace_name, px, py);
 
     text = XCreatePixmap(dpy, scr->w_win, w+4, h+4, scr->w_depth);
     mask = XCreatePixmap(dpy, scr->w_win, w+4, h+4, 1);
@@ -356,9 +387,7 @@ showWorkspaceName(WScreen *scr, int workspace)
 	goto erro;
     }
 
-    ximg = RGetXImage(scr->rcontext, scr->root_win, 
-		      (scr->scr_width - data->text->width)/2,
-		      0 /* (scr->scr_height - data->text->height)/2 */,
+    ximg = RGetXImage(scr->rcontext, scr->root_win, px, py,
 		      data->text->width, data->text->height);
 
     if (!ximg) {
@@ -409,8 +438,7 @@ wWorkspaceChange(WScreen *scr, int workspace)
     if (workspace != scr->current_workspace) {
         wWorkspaceForceChange(scr, workspace);
     } else {
-	if (!wPreferences.no_workspace_name_display)
-	    showWorkspaceName(scr, workspace);
+	showWorkspaceName(scr, workspace);
     }
 }
 
@@ -577,8 +605,7 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
         }
     }
 
-    if (!wPreferences.no_workspace_name_display)
-	showWorkspaceName(scr, workspace);
+    showWorkspaceName(scr, workspace);
 
 #ifdef GNOME_STUFF
     wGNOMEUpdateCurrentWorkspaceHint(scr);

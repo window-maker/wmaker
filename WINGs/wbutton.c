@@ -285,7 +285,7 @@ WMSetButtonImage(WMButton *bPtr, WMPixmap *image)
 
     if (image) {
 	bPtr->dimage = WMCreatePixmapFromXPixmaps(WMWidgetScreen(bPtr), 
-						  image->pixmap, None, 
+						  image->pixmap, None,
 						  image->width, image->height,
 						  image->depth);
 	updateDisabledMask(bPtr);
@@ -554,7 +554,7 @@ paintButton(Button *bPtr)
 
     gc = NULL;
     caption = bPtr->caption;
-    if (bPtr->flags.enabled)
+    if (bPtr->flags.enabled || !bPtr->dimage)
 	image = bPtr->image;
     else
 	image = bPtr->dimage;
@@ -575,13 +575,13 @@ paintButton(Button *bPtr)
 	    if (bPtr->altImage)
 		image = bPtr->altImage;
 	}
-	
+
 	if (bPtr->flags.statePush && bPtr->flags.bordered) {
 	    relief = WRSunken;
 	    offset = 1;
 	}
     }
-        
+
     if (bPtr->flags.pushed) {
 	if (bPtr->flags.pushIn) {
 	    relief = WRPushed;
@@ -589,7 +589,7 @@ paintButton(Button *bPtr)
 	}
 	if (bPtr->flags.pushLight)
 	    gc = WMColorGC(scrPtr->white);
-	
+
 	if (bPtr->flags.pushChange) {
 	    if (bPtr->altCaption) {
 		caption = bPtr->altCaption;

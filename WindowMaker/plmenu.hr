@@ -9,9 +9,11 @@
     ("Lista procesa", EXEC, "xterm -e top"),
     ("Pretra\276iva\350 manuala", EXEC, xman)
   ),
-  (XTerm, EXEC, "xterm -sb"),
-  (Rxvt, EXEC, "rxvt -bg black -fg white -fn fixed"),
-  ("Radni Prostori", WORKSPACE_MENU),
+  (Pokreni..., EXEC, "%a(Pokreni,Upi\271ite naredbu za pokrenuti:)"),
+  (NXTerm, EXEC, "nxterm -sb"),
+  (Rxvt, EXEC, rxvt),
+  (WMTerm, EXEC, "rxvt -wm"),
+  ("Radni prostori", WORKSPACE_MENU),
   (
     Programi,
     (
@@ -21,8 +23,8 @@
       (XPaint, EXEC, xpaint),
       (XFig, EXEC, xfig)
     ),
-    ("X File Manager", EXEC, xfm),
-    ("OffiX Files", EXEC, files),
+    (FSViewer, EXEC, fsviewer),
+    ("Offix files", EXEC, files),
     (LyX, EXEC, lyx),
     (Netscape, EXEC, netscape),
     (Ghostview, EXEC, "ghostview %a(Enter file to view)"),
@@ -52,7 +54,7 @@
     "Pomo\346ni programi",
     (Kalkulator, EXEC, xcalc),
     (
-      "Postavke prozora",
+      "Info o prozoru",
       EXEC,
       "xprop | xmessage -center -title 'xprop' -file -"
     ),
@@ -61,7 +63,7 @@
     ("Pove\346alo", EXEC, xmag),
     (Colormap, EXEC, xcmap),
     (XKill, EXEC, xkill),
-    (ASClock, EXEC, "asclock -shape"),
+    (WMClock, EXEC, "wmclock -24"),
     (Clipboard, EXEC, xclipboard)
   ),
   (
@@ -79,7 +81,7 @@
     ("Osvje\276i", REFRESH),
     ("Zaklju\350aj", EXEC, "xlock -allowroot -usefirst"),
     ("Snimi session", SAVE_SESSION),
-    ("O\350isti snimljeni Session", CLEAR_SESSION)
+    ("O\350isti snimljeni session", CLEAR_SESSION)
   ),
   (
     Izgled,
@@ -118,17 +120,17 @@
           "wdwrite WindowMaker WorkspaceBack '(solid, \"#243e6c\")'"
         ),
         (
-          "Duboko Plava",
+          "Duboko Blue",
           EXEC,
           "wdwrite WindowMaker WorkspaceBack '(solid, \"#180090\")'"
         ),
         (
-          Purpurna,
+          "Ljubi\350asta",
           EXEC,
           "wdwrite WindowMaker WorkspaceBack '(solid, \"#554466\")'"
         ),
         (
-          Pustinjska,
+          Krem,
           EXEC,
           "wdwrite WindowMaker WorkspaceBack '(solid, wheat4)'"
         ),
@@ -138,7 +140,7 @@
           "wdwrite WindowMaker WorkspaceBack '(solid, \"#333340\")'"
         ),
         (
-          Vinska,
+          "Vinsko crvena",
           EXEC,
           "wdwrite WindowMaker WorkspaceBack '(solid, \"#400020\")'"
         )
@@ -166,12 +168,12 @@
           "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#746ebc\", \"#242e4c\")'"
         ),
         (
-          "Purpurne nijanse",
+          "Ljubi\350aste nijanse",
           EXEC,
           "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#654c66\", \"#151426\")'"
         ),
         (
-          "Pustinjske nijanse",
+          "Krem nijanse",
           EXEC,
           "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#a09060\", \"#302010\")'"
         ),
@@ -181,7 +183,7 @@
           "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#636380\", \"#131318\")'"
         ),
         (
-          "Vinske nijanse",
+          "Vinsko crvene nijanse",
           EXEC,
           "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#600040\", \"#180010\")'"
         )
@@ -206,8 +208,10 @@
   (
     Izlaz,
     ("Ponovo startaj", RESTART),
-    ("Startaj AfterStep", RESTART, afterstep),
+    ("Pokreni BlackBox", RESTART, blackbox),
+    ("Pokreni kwm", RESTART, kwm),
+    ("Pokreni IceWM", RESTART, icewm),
     (Izlaz..., EXIT),
-    ("Izlaz iz sessiona...", SHORTCUT, "Mod1+e", SHUTDOWN, QUICK)
-  ),
+    ("Ubij session...", SHUTDOWN)
+  )
 )

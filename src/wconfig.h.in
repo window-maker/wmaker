@@ -3,7 +3,7 @@
  * 
  *  WindowMaker window manager
  * 
- *  Copyright (c) 1997 Alfredo K. Kojima
+ *  Copyright (c) 1997-199 Alfredo K. Kojima
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -300,7 +300,7 @@
 #define DEF_CLIP_TITLE_FONT "\"-*-*-medium-r-normal--10-*\""
 #define DEF_INFO_TEXT_FONT "\"-*-*-medium-r-normal--14-*\""
 
-#define DEF_WORKSPACE_NAME_FONT "-*-*-medium-r-normal--24-*"
+#define DEF_WORKSPACE_NAME_FONT "\"-*-*-medium-r-normal--24-*\""
 #else /* !I18N_MB */
 #define DEF_TITLE_FONT "\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*\""
 #define DEF_MENU_TITLE_FONT "\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*\""
@@ -309,7 +309,7 @@
 #define DEF_CLIP_TITLE_FONT "\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*\""
 #define DEF_INFO_TEXT_FONT "\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*\""
 
-#define DEF_WORKSPACE_NAME_FONT "-*-lucida-bold-r-*-*-24-*-*-*-*-*-*-*"
+#define DEF_WORKSPACE_NAME_FONT "\"-*-lucida-bold-r-*-*-24-*-*-*-*-*-*-*\""
 #endif /* !I18N_MB */
 
 #define HELVETICA10_FONT "-*-helvetica-medium-r-normal-*-10-*-*-*-*-*-*-*"
@@ -425,7 +425,7 @@
 /* workspace name on switch display */
 #define WORKSPACE_NAME_FADE_DELAY 30
 
-#define WORKSPACE_NAME_DELAY	500
+#define WORKSPACE_NAME_DELAY	400
 
 /* window birth animation steps (DO NOT MAKE IT RUN-TIME) */
 #define WINDOW_BIRTH_STEPS	20

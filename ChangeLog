@@ -6,13 +6,16 @@ Changes since version 0.53.0:
 - made deiconification not automatically focus window in sloppy focus
 - fixed crash with DisableMiniwindows and icon pixmap changes
 - fixed crash when changing icon of window without WM_CLASS
-- added IAmAnnoyingAndDontWantWorkspaceNameDisplay
 - added hysteresys for offscreen menu scrollback
 - fixed bug with IgnoreFocusClick
 - fixed crash with windows with width == 1 (Alban Hertroys 
 					<dalroi@wit401310.student.utwente.nl>)
 - added SHEXEC command
 - fixed resizebarback for SHADOW_RESIZEBAR ( jim knoble jmknoble@pobox.com)
+- added balloon help everywhere
+- fixed bug with FullMaximize attribute
+- GNOME: button events not bound in wmaker are proxyized (to gmc)
+				(Paul Warren <pdw@ferret.lmh.ox.ac.uk>)
 
 
 Changes since version 0.52.0:

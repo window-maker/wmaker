@@ -92,6 +92,7 @@ showData(_Panel *panel)
     WMSetButtonSelected(panel->ballB[0], GetBoolForKey("WindowTitleBalloons"));
     WMSetButtonSelected(panel->ballB[1], GetBoolForKey("MiniwindowTitleBalloons"));
     WMSetButtonSelected(panel->ballB[2], GetBoolForKey("AppIconBalloons"));
+    WMSetButtonSelected(panel->ballB[3], GetBoolForKey("HelpBalloons"));
 }
 
 
@@ -136,6 +137,7 @@ storeData(_Panel *panel)
     SetBoolForKey(WMGetButtonSelected(panel->ballB[0]), "WindowTitleBalloons");
     SetBoolForKey(WMGetButtonSelected(panel->ballB[1]), "MiniwindowTitleBalloons");
     SetBoolForKey(WMGetButtonSelected(panel->ballB[2]), "AppIconBalloons");
+    SetBoolForKey(WMGetButtonSelected(panel->ballB[3]), "HelpBalloons");
 }
 
 
@@ -187,7 +189,7 @@ createPanel(Panel *p)
     WMMoveWidget(panel->ballF, 270, 10);
     WMSetFrameTitle(panel->ballF, _("Show balloon text for..."));
     
-    for (i=0; i<3; i++) {
+    for (i=0; i<4; i++) {
 	panel->ballB[i] = WMCreateSwitchButton(panel->ballF);
 	WMResizeWidget(panel->ballB[i], 205, 20);
 	WMMoveWidget(panel->ballB[i], 15, 25+i*30);
@@ -195,15 +197,15 @@ createPanel(Panel *p)
     WMSetButtonText(panel->ballB[0], _("incomplete window titles"));
     WMSetButtonText(panel->ballB[1], _("miniwindow titles"));
     WMSetButtonText(panel->ballB[2], _("application/dock icons"));
-/*    WMSetButtonText(panel->ballB[3], "help");*/
+    WMSetButtonText(panel->ballB[3], _("internal help"));
 
     WMMapSubwidgets(panel->ballF);
-    
+
     /***************** Options ****************/
     panel->optF = WMCreateFrame(panel->frame);
     WMResizeWidget(panel->optF, 485, 75);
     WMMoveWidget(panel->optF, 20, 145);
-    
+
     panel->raisB = WMCreateSwitchButton(panel->optF);
     WMResizeWidget(panel->raisB, 440, 20);
     WMMoveWidget(panel->raisB, 20, 15);

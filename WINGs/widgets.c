@@ -297,9 +297,12 @@ static char *CHECK_MARK[] = {
 "#%======="};
 
 
-#define STIPPLE_WIDTH 2
-#define STIPPLE_HEIGHT 2
-static unsigned char STIPPLE_BITS[] = {0x01, 0x02};
+#define STIPPLE_WIDTH 8
+#define STIPPLE_HEIGHT 8
+static unsigned char STIPPLE_BITS[] = {
+    0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa
+};
+
 
 
 extern void W_ReadConfigurations(void);

@@ -555,15 +555,6 @@ wGNOMEProcessClientMessage(XClientMessageEvent *event)
 Bool
 wGNOMEProxyizeButtonEvent(WScreen *scr, XEvent *event)
 {
-#ifndef MOUSE_WS_SWITCH
-    if (event->xbutton.button <= Button3
-	&& (event->xbutton.state & ValidModMask) == 0)
-	return False;
-#else
-    if ((event->xbutton.state & ValidModMask) == 0)
-	return False;
-#endif
-
     if (event->type == ButtonPress)
 	XUngrabPointer(dpy, CurrentTime);
     XSendEvent(dpy, scr->no_focus_win, False, SubstructureNotifyMask, event);

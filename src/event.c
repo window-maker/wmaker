@@ -617,11 +617,6 @@ handleButtonPress(XEvent *event)
 #ifndef LITE
     if (event->xbutton.window==scr->root_win) {
 
-#ifdef GNOME_STUFF
-	if (wGNOMEProxyizeButtonEvent(scr, event))
-	    return;
-#endif
-
 	if (event->xbutton.button==wPreferences.menu_button) {
 	    OpenRootMenu(scr, event->xbutton.x_root,
                          event->xbutton.y_root, False);
@@ -656,6 +651,10 @@ handleButtonPress(XEvent *event)
 
 	}
 #endif /* MOUSE_WS_SWITCH */
+#ifdef GNOME_STUFF
+	else if (wGNOMEProxyizeButtonEvent(scr, event))
+	    return;
+#endif
     }
 #endif /* !LITE */
 

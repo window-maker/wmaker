@@ -1117,47 +1117,65 @@ createInspectorForWindow(WWindow *wwin)
     for (i=0; i < 10; i++) {
 	char *caption = NULL;
 	int flag = 0;
-	
+	char *descr = NULL;
+
 	switch (i) {
 	 case 0:
 	    caption = _("Disable Titlebar");
             flag = WFLAGP(wwin, no_titlebar);
+	    descr = _("Remove the titlebar of this window.\n"
+		      "To access the window commands menu of a window\n"
+		      "without it's titlebar, press Control+Esc (or the\n"
+		      "equivalent shortcut, if you changed the default\n"
+		      "settings).");
 	    break;
 	 case 1:
 	    caption = _("Disable Resizebar");
 	    flag = WFLAGP(wwin, no_resizebar);
+	    descr = _("Remove the resizebar of this window."); 
 	    break;
 	 case 2:
 	    caption = _("Disable Close Button");
 	    flag = WFLAGP(wwin, no_close_button);
+	    descr = _("Remove the `close window' button of this window.");
 	    break;
 	 case 3:
 	    caption = _("Disable Miniaturize Button");
 	    flag = WFLAGP(wwin, no_miniaturize_button);
+	    descr = _("Remove the `miniaturize window' button of the window.");
 	    break;
 	 case 4:
 	    caption = _("Keep on Top / Floating");
 	    flag = WFLAGP(wwin, floating);
+	    descr = _("Keep the window over other windows, not allowing\n"
+		      "them to covert it.");
 	    break;
 	 case 5:
 	    caption = _("Keep at Bottom / Sunken");
 	    flag = WFLAGP(wwin, sunken);
+	    descr = _("Keep the window under all other windows.");
 	    break;
 	 case 6:
 	    caption = _("Omnipresent");
 	    flag = WFLAGP(wwin, omnipresent);
+	    descr = _("Make window occupy all workspaces.");
 	    break;
 	 case 7:
 	    caption = _("Start Miniaturized");
 	    flag = WFLAGP(wwin, start_miniaturized);
+	    descr = _("Make the window be automatically miniaturized when it's\n"
+		    "first shown.");
 	    break;
 	 case 8:
 	    caption = _("Start Maximized");
 	    flag = WFLAGP(wwin, start_maximized!=0);
+	    descr = _("Make the window be automatically maximized when it's\n"
+		    "first shown.");
 	    break;
 	 case 9:
 	    caption = _("Skip Window List");
 	    flag = WFLAGP(wwin, skip_window_list);
+	    descr = _("Do not list the window in the window list menu.");
 	    break;
 	}
 	panel->attrChk[i] = WMCreateSwitchButton(panel->attrFrm);
@@ -1165,6 +1183,8 @@ createInspectorForWindow(WWindow *wwin)
 	WMResizeWidget(panel->attrChk[i], frame_width-15, 20);
 	WMSetButtonSelected(panel->attrChk[i], flag);
 	WMSetButtonText(panel->attrChk[i], caption);
+
+	WMSetBalloonTextForView(descr, WMWidgetView(panel->attrChk[i]));
     }
 
 
@@ -1177,39 +1197,63 @@ createInspectorForWindow(WWindow *wwin)
     for (i=0; i < 8; i++) {
 	char *caption = NULL;
 	int flag = 0;
+	char *descr = NULL;
 	
 	switch (i) {
 	 case 0:
 	    caption = _("Ignore HideOthers");
 	    flag = WFLAGP(wwin, no_hide_others);
+	    descr = _("Do not hide the window when issuing the\n"
+		      "`HideOthers' command.");
 	    break;
 	 case 1:
 	    caption = _("Don't Bind Keyboard Shortcuts");
 	    flag = WFLAGP(wwin, no_bind_keys);
+	    descr = _("Do not bind keyboard shortcuts from Window Maker\n"
+		      "when this window is focused. This will allow the\n"
+		      "window to receive all key combinations regardless\n"
+		      "of your shortcut configuration.");
 	    break;
 	 case 2:
 	    caption = _("Don't Bind Mouse Clicks");
 	    flag = WFLAGP(wwin, no_bind_mouse);
+	    descr = _("Do not bind mouse actions, such as `Alt'+drag\n"
+		      "in the window (when alt is the modifier you have"
+		      "configured).");
 	    break;
 	 case 3:
 	    caption = _("Keep Inside Screen");
 	    flag = WFLAGP(wwin, dont_move_off);
+	    descr = _("Do not allow the window to move itself completely\n"
+		      "outside the screen. For bug compatibility.\n");
 	    break;
 	 case 4:
 	    caption = _("Don't Let It Take Focus");
 	    flag = WFLAGP(wwin, no_focusable);
+	    descr = _("Do not let the window take keyboard focus when you\n"
+		      "click on it.");
 	    break;
 	 case 5:
 	    caption = _("Don't Save Session");
 	    flag = WFLAGP(wwin, dont_save_session);
+	    descr = _("Do not save the associated application in the\n"
+		      "session's state, so that it won't be restarted\n"
+		      "together with other applications when Window Maker\n"
+		      "starts.");
 	    break;
 	 case 6:
 	    caption = _("Emulate Application Icon");
 	    flag = WFLAGP(wwin, emulate_appicon);
+	    descr = _("Make this window act as an application that provides\n"
+		      "enough information to Window Maker for a dockable\n"
+		      "application icon to be created.");
 	    break;
 	 case 7:
 	    caption = _("Full Screen Maximization");
 	    flag = WFLAGP(wwin, full_maximize);
+	    descr = _("Make the window use the whole screen space when it's\n"
+		      "maximized. The titlebar and resizebar will be moved\n"
+		      "to outside the screen.");
 	    break;
 	}
 	panel->moreChk[i] = WMCreateSwitchButton(panel->moreFrm);
@@ -1217,14 +1261,9 @@ createInspectorForWindow(WWindow *wwin)
 	WMResizeWidget(panel->moreChk[i], frame_width-15, 20);
 	WMSetButtonSelected(panel->moreChk[i], flag);
 	WMSetButtonText(panel->moreChk[i], caption);
-    }
 
-    panel->moreLbl = WMCreateLabel(panel->moreFrm);
-    WMResizeWidget(panel->moreLbl, frame_width - (2 * 5), 60);
-    WMMoveWidget(panel->moreLbl, 5, 180);
-    WMSetLabelText(panel->moreLbl, 
-		   _("Enable the \"Don't bind...\" options to allow the "
-		     "application to receive all mouse or keyboard events."));
+	WMSetBalloonTextForView(descr, WMWidgetView(panel->moreChk[i]));
+    }
 
     /* miniwindow/workspace */
     panel->iconFrm = WMCreateFrame(panel->win);
@@ -1285,6 +1324,9 @@ createInspectorForWindow(WWindow *wwin)
     WMResizeWidget(panel->wsFrm, PWIDTH - (2 * 15), 70);
     WMSetFrameTitle(panel->wsFrm, _("Initial Workspace"));
 
+    WMSetBalloonTextForView(_("The workspace to place the window when it's"
+			      "first shown."), WMWidgetView(panel->wsFrm));
+
     panel->wsP = WMCreatePopUpButton(panel->wsFrm);
     WMMoveWidget(panel->wsP, 20, 30);
     WMResizeWidget(panel->wsP, PWIDTH - (2 * 15) - (2 * 20), 20);
@@ -1313,15 +1355,21 @@ createInspectorForWindow(WWindow *wwin)
 	for (i=0; i < 2; i++) {
 	    char *caption = NULL;
 	    int flag = 0;
+	    char *descr = NULL;
 	    
 	    switch (i) {
 	     case 0:
 		caption = _("Start Hidden");
 		flag = WFLAGP(wapp->main_window_desc, start_hidden);
+		descr = _("Automatically hide application when it's started.");
 		break;
 	     case 1:
 		caption = _("No Application Icon");
 		flag = WFLAGP(wapp->main_window_desc, no_appicon);
+		descr = _("Disable the application icon for the application.\n"
+			  "Note that you won't be able to dock it anymore,\n"
+			  "and any icons that are already docked will stop\n"
+			  "working correctly.");
 		break;
 	    }
 	    panel->appChk[i] = WMCreateSwitchButton(panel->appFrm);
@@ -1329,6 +1377,8 @@ createInspectorForWindow(WWindow *wwin)
 	    WMResizeWidget(panel->appChk[i], 205, 20);
 	    WMSetButtonSelected(panel->appChk[i], flag);
 	    WMSetButtonText(panel->appChk[i], caption);
+
+	    WMSetBalloonTextForView(descr, WMWidgetView(panel->appChk[i]));
 	}
 	
 	if (WFLAGP(wwin, emulate_appicon)) {
@@ -1421,7 +1471,9 @@ void
 wShowInspectorForWindow(WWindow *wwin)
 {
     if (wwin->flags.inspector_open)
-      return;
+	return;
+
+    WMSetBalloonEnabled(wwin->screen_ptr->wmscreen, wPreferences.help_balloon);
 
     make_keys();
     wwin->flags.inspector_open = 1;

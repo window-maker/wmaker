@@ -296,6 +296,18 @@ static WOptionEnumeration seMenuStyles[] = {
 };
 
 
+static WOptionEnumeration seDisplayPositions[] = {
+    {"none",  		WD_NONE,	0},
+    {"center", 		WD_CENTER,	0},
+    {"top",		WD_TOP,		0},
+    {"bottom",		WD_BOTTOM,	0},
+    {"topleft",		WD_TOPLEFT,	0},
+    {"topright",	WD_TOPRIGHT, 	0},
+    {"bottomleft",	WD_BOTTOMLEFT,	0},
+    {"bottomright",	WD_BOTTOMRIGHT,	0}
+};
+
+
 /*
  * ALL entries in the tables bellow, NEED to have a default value
  * defined, and this value needs to be correct.
@@ -387,8 +399,8 @@ WDefaultEntry optionList[] = {
     {"CycleWorkspaces", "NO",			NULL,
 	  &wPreferences.ws_cycle,        getBool,	NULL
     },
-    {"IAmAnnoyingAndDontWantWorkspaceNameDisplay", "NO",NULL,
-	  &wPreferences.no_workspace_name_display, getBool, NULL
+    {"WorkspaceNameDisplayPosition", "center",	seDisplayPositions,
+	  &wPreferences.workspace_name_display_position, getEnum, NULL
     },
     {"StickyIcons", "NO",			NULL,
 	  &wPreferences.sticky_icons, getBool, setStickyIcons
@@ -417,7 +429,7 @@ WDefaultEntry optionList[] = {
     {"AlignSubmenus",	"NO",			NULL,
 	  &wPreferences.align_menus,	getBool,	NULL
     },
-    {"OpenTransientOnOwnerWorkspace",	"NO",			NULL,
+    {"OpenTransientOnOwnerWorkspace",	"NO",	NULL,
 	  &wPreferences.open_transients_with_parent, getBool,	NULL
     },
     {"WindowPlacement",	"auto",		sePlacements,
@@ -470,6 +482,9 @@ WDefaultEntry optionList[] = {
     },
     {"AppIconBalloons", "NO",		NULL,
 	  &wPreferences.appicon_balloon,getBool,	NULL
+    },
+    {"HelpBalloons",	"NO",		NULL,
+	  &wPreferences.help_balloon,	getBool,	NULL
     },
     {"EdgeResistance", 	"30",			NULL,
 	  &wPreferences.edge_resistance,getInt,		NULL
@@ -776,7 +791,7 @@ initDefaults()
 	else
 	    entry->plvalue = NULL;
     }
-    
+
     for (i=0; i<sizeof(staticOptionList)/sizeof(WDefaultEntry); i++) {
 	entry = &staticOptionList[i];
 	

@@ -200,6 +200,17 @@ typedef enum {
 #define MS_FLAT			2
 
 
+/* workspace display position */
+#define WD_NONE		0
+#define WD_CENTER	1
+#define WD_TOP		2
+#define WD_BOTTOM	3
+#define WD_TOPLEFT	4
+#define WD_TOPRIGHT	5
+#define WD_BOTTOMLEFT	6
+#define WD_BOTTOMRIGHT	7
+
+
 /* program states */
 #define WSTATE_NORMAL		0
 #define WSTATE_NEED_EXIT	1
@@ -339,12 +350,14 @@ typedef struct WPreferences {
 
     int menu_style;		       /* menu decoration style */
 
+    int workspace_name_display_position;
+    
+    unsigned int modifier_mask;	       /* mask to use as kbd modifier */
+
+
     char ws_advance;                   /* Create new workspace and advance */
 
     char ws_cycle;                     /* Cycle existing workspaces */
-
-    
-    unsigned int modifier_mask;	       /* mask to use as kbd modifier */
 
     char save_session_on_exit;	       /* automatically save session on exit */
 
@@ -369,9 +382,8 @@ typedef struct WPreferences {
     char window_balloon;
     char miniwin_balloon;
     char appicon_balloon;
-    
-    char no_workspace_name_display;
-    
+    char help_balloon;
+        
 #ifdef WEENDOZE_CYCLE
     char windoze_cycling;	       /* Windoze 95 style Alt+Tabbing */
     char popup_switchmenu;	       /* Popup the switchmenu when Alt+Tabbing */

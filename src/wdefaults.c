@@ -302,7 +302,7 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
     APPLY_VAL(value, emulate_appicon, AEmulateAppIcon);
 
     value = get_value(dw, dc, dn, da, AFullMaximize, No, useGlobalDefault);
-    APPLY_VAL(value, emulate_appicon, AFullMaximize);
+    APPLY_VAL(value, full_maximize, AFullMaximize);
 
     /* clean up */
     PLSetStringCmpHook(StringCompareHook);

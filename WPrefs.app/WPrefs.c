@@ -75,7 +75,9 @@ typedef struct _WPrefs {
     WMButton *closeBtn;
     WMButton *undoBtn;
     WMButton *undosBtn;
-    
+
+    WMButton *balloonBtn;
+
     WMFrame *banner;
     WMLabel *nameL;
     WMLabel *versionL;
@@ -215,7 +217,7 @@ static void
 prepareForClose()
 {
     int i;
-    
+
     for (i=0; i<WPrefs.sectionCount; i++) {
 	PanelRec *rec = WMGetHangedData(WPrefs.sectionB[i]);
 
@@ -225,6 +227,19 @@ prepareForClose()
     }
 }
 
+
+void
+toggleBalloons(WMWidget *w, void *data)
+{
+    WMUserDefaults *udb = WMGetStandardUserDefaults();
+    Bool flag;
+
+    flag = WMGetButtonSelected(WPrefs.balloonBtn);
+
+    WMSetBalloonEnabled(WMWidgetScreen(WPrefs.win), flag);
+
+    WMSetUDBoolForKey(udb, flag, "BalloonHelp");
+}
 
 
 static void
@@ -280,7 +295,21 @@ createMainWindow(WMScreen *scr)
     WMMoveWidget(WPrefs.closeBtn, 425, 350);
     WMSetButtonText(WPrefs.closeBtn, _("Close"));
     WMSetButtonAction(WPrefs.closeBtn, quit, NULL);
-    
+
+
+    WPrefs.balloonBtn = WMCreateSwitchButton(WPrefs.win);
+    WMResizeWidget(WPrefs.balloonBtn, 200, 28);
+    WMMoveWidget(WPrefs.balloonBtn, 15, 350);
+    WMSetButtonText(WPrefs.balloonBtn, _("Balloon Help"));
+    WMSetButtonAction(WPrefs.balloonBtn, toggleBalloons, NULL);
+    {
+	WMUserDefaults *udb = WMGetStandardUserDefaults();
+	Bool flag = WMGetUDBoolForKey(udb, "BalloonHelp");
+
+	WMSetButtonSelected(WPrefs.balloonBtn, flag);
+	WMSetBalloonEnabled(scr, flag);
+    }
+
     /* banner */
     WPrefs.banner = WMCreateFrame(WPrefs.win);
     WMResizeWidget(WPrefs.banner, FRAME_WIDTH, FRAME_HEIGHT);
