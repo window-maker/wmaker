@@ -494,6 +494,14 @@ wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
         //WSETUFLAG(wwin, sunken, 0);
 
     WSETUFLAG(wwin, no_shadeable, WFLAGP(wwin, no_titlebar));
+    
+    
+    /* windows that have takefocus=False shouldn't take focus at all */
+    if (wwin->focus_mode == WFM_NO_INPUT) {
+	/* dont use WSETUFLAG, since this was not an attribute change 
+	 * made by the user */
+	wwin->user_flags.no_focusable = 1;
+    }
 }
 
 
