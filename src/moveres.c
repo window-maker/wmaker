@@ -1271,9 +1271,6 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
         } while (event.type == Expose);
 
 
-        while (XCheckTypedEvent(dpy, Expose, &event)) {
-            WMHandleEvent(&event);
-        }
         if (wwin->flags.shaded || scr->selected_windows) {
             if(scr->selected_windows)
                 drawFrames(wwin,scr->selected_windows,off_x,off_y);
