@@ -113,8 +113,8 @@ void AddDeadChildHandler(pid_t pid, void (*handler)(void*), void *data);
 
 
 #define FRAME_TOP	105
-#define FRAME_LEFT	-1
-#define FRAME_WIDTH	522
+#define FRAME_LEFT	-2
+#define FRAME_WIDTH	524
 #define FRAME_HEIGHT	235
 
 

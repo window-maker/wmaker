@@ -650,7 +650,7 @@ paintButton(Button *bPtr)
 	}
     }
 
-    W_PaintTextAndImage(bPtr->view, False, WMColorGC(textColor),
+    W_PaintTextAndImage(bPtr->view, True, WMColorGC(textColor),
 			(bPtr->font!=NULL ? bPtr->font : scrPtr->normalFont),
 			relief, caption, bPtr->flags.alignment, image, 
 			bPtr->flags.imagePosition, gc, offset);

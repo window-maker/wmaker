@@ -250,7 +250,7 @@ createPanel(Panel *p)
     panel->font = WMSystemFontOfSize(scr, 12);
     
     panel->box = WMCreateBox(panel->parent);
-    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 0, 0);
+    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
     
     
     panel->tabv = WMCreateTabView(panel->box);

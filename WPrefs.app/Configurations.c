@@ -193,7 +193,7 @@ createPanel(Panel *p)
 
 
     panel->box = WMCreateBox(panel->parent);
-    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 0, 0);
+    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
 
     /*********** Icon Slide Speed **********/
     

@@ -448,12 +448,12 @@ createPanel(Panel *p)
     RColor color;
     char *path;
 
-    color.red = 0xaa;
-    color.green = 0xae;
-    color.blue = 0xaa;
+    color.red = 0xae;
+    color.green = 0xaa;
+    color.blue = 0xae;
     
     panel->box = WMCreateBox(panel->parent);
-    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 0, 0);
+    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
     
     /**************** Mouse Speed ****************/
     panel->speedF = WMCreateFrame(panel->box);

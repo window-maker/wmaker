@@ -64,7 +64,7 @@ createPanel(Panel *p)
     int i;
 
     panel->box = WMCreateBox(panel->parent);
-    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 0, 0);
+    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
 
     for (i=0; i<7; i++) {
 	panel->swi[i] = WMCreateSwitchButton(panel->box);

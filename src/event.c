@@ -631,8 +631,7 @@ handleButtonPress(XEvent *event)
 	} else if (event->xbutton.button==wPreferences.select_button) {
 	    wUnselectWindows(scr);
 	    wSelectWindows(scr, event);
-	}
-	else if (event->xbutton.button==Button5) {
+	} else if (event->xbutton.button==Button5) {
 	    wWorkspaceRelativeChange(scr, -1);
 	} else if (event->xbutton.button==Button4) {
 	    wWorkspaceRelativeChange(scr, 1);

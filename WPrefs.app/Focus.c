@@ -239,7 +239,7 @@ createPanel(Panel *p)
     WMFont *font;
 
     panel->box = WMCreateBox(panel->parent);
-    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 0, 0);
+    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
     
     /***************** Input Focus Mode *****************/
     panel->kfocF = WMCreateFrame(panel->box);

@@ -152,9 +152,10 @@ rearrange(WMBox *box)
 void
 WMSetBoxBorderWidth(WMBox *box, unsigned width)
 {
-    box->borderWidth = width;
-    
-    rearrange(box);
+    if (box->borderWidth != width) {
+        box->borderWidth = width;
+        rearrange(box);
+    }
 }
 
 
@@ -227,8 +228,12 @@ WMRemoveBoxSubview(WMBox *bPtr, WMView *view)
 void
 WMSetBoxHorizontal(WMBox *box, Bool flag)
 {
-    box->horizontal = flag;
-    rearrange(box);
+    /* make sure flag is either 0 or 1 no matter what true value was passed */
+    flag = ((flag==0) ? 0 : 1);
+    if (box->horizontal != flag) {
+        box->horizontal = flag;
+        rearrange(box);
+    }
 }
 
 
