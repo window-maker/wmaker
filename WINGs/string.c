@@ -127,10 +127,7 @@ wtokenjoin(char **list, int count)
         }
     }
     
-    flat_string = malloc(j+count+1);
-    if (!flat_string) {
-	return NULL;
-    }
+    flat_string = wmalloc(j+count+1);
 
     *flat_string = 0;
     for (i=0; i<count; i++) {
