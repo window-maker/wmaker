@@ -193,21 +193,15 @@ enum {
 };
 
 
-enum {
+typedef enum {
     WRulerLeft=0,
 	WRulerBody, 
 	WRulerFirst, 
 	WRulerRight,
 	WRulerBoth,
 	WRulerDocLeft
-} WRulerMargins;
+} WMRulerMarginType;
 
-
-/* Insert type for WMText */
-typedef enum {
-    itAppend=0,
-    itPrepend
-} InsertType;
 
 
 /* drag operations */
@@ -536,13 +530,13 @@ typedef void WMParseAction(WMWidget *self, void *clientData, short type);
 /* these are the things parsers (for text) do */
 
 typedef struct _parserActions {
-    void *(*createParagraph) (short fmargin, short bmargin, short rmargin,
-                              short *tabstops, short numTabs, WMAlignment a);
-    void (*insertParagraph) (WMText *tPtr, void *para, InsertType type);
+    void *(*createParagraph) (short fmargin, short bmargin,
+        short rmargin, short *tabstops, short numTabs, WMAlignment a);
+    void (*insertParagraph) (WMText *tPtr, void *para, Bool prepend);
     void *(*createPChunk) (WMPixmap *pixmap, short script, ushort ul);
-    void *(*createTChunk) (char *text, short chars, WMFont *font,
-                           WMColor *color, short script, ushort ul);
-    void (*insertChunk) (WMText *tPtr, void *chunk, InsertType type);
+    void *(*createTChunk) (char *text, short chars, WMFont *font, 
+        WMColor *color, short script, ushort ul);
+    void (*insertChunk) (WMText *tPtr, void *chunk, Bool prepend);
 } WMParserActions;
 
 
@@ -1440,9 +1434,9 @@ int WMGetTextCurrentChunk(WMText *tPtr);
 void WMRemoveTextChunk(WMText *tPtr, int which);
 void WMSetTextCurrentChunk(WMText *tPtr, int current);
 
-void W_InsertText(WMText *tPtr, void *data, int position);/* position = -1||0*/
-#define WMAppendTextStream(t, d) W_InsertText(t, d, -1)
-#define WMPrependTextStream(t, d) W_InsertText(t, d, 0)
+void W_InsertText(WMText *tPtr, void *data, Bool prepend);
+#define WMAppendTextStream(t, d) W_InsertText(t, d, False)
+#define WMPrependTextStream(t, d) W_InsertText(t, d, True)
 
 
 void WMSetTextParser(WMText *tPtr, WMParseAction *parser);

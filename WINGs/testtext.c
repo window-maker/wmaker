@@ -5,7 +5,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-
+#include <ctype.h>
 
 void
 wAbort()
@@ -200,7 +200,7 @@ void parseToken(WMText *tPtr, char *token, short tk)
 				 if(*img == '\"') { img[strlen(img)-1] = 0; iptr++;}
 				pixmap = WMCreatePixmapFromFile(scr, iptr);
   				chunk = (cfmt.actions.createPChunk)(pixmap, 0, False);
-				(cfmt.actions.insertChunk) (tPtr, chunk, itAppend);
+				(cfmt.actions.insertChunk) (tPtr, chunk, False);
 				printf("[%s]\n", iptr);
 				} } break; } } while(*(token++));
 			} 	

@@ -1,3 +1,7 @@
+/* WMRuler: nifty ruler widget for WINGs  (OK, for WMText ;-) */
+/* Copyleft (>) 1999, 2000 Nwanua Elumeze <nwanua@colorado.edu> */
+
+
 #include "WINGsP.h"
 
 #define MIN_DOC_WIDTH 10

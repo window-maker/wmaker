@@ -1094,7 +1094,7 @@ if(scroll) {
 
 
 void
-W_InsertText(WMText *tPtr, void *data, int position)
+W_InsertText(WMText *tPtr, void *data, Bool prepend)
 {
     if(!tPtr) return;
     if(!data) {
@@ -1127,9 +1127,9 @@ W_InsertText(WMText *tPtr, void *data, int position)
     }
 
     if(tPtr->parser)
-        (tPtr->parser)(tPtr, data, position >= 0 ? 1 : 0);
+        (tPtr->parser)(tPtr, data, prepend);
     else
-        defaultParser(tPtr, data, position >= 0 ? 1 : 0);
+        defaultParser(tPtr, data, prepend);
 }
 
 static  void
@@ -1894,8 +1894,9 @@ createParagraph(short fmargin, short bmargin, short rmargin,
  This function then sets currentPara as _this_ paragraph.
  NOTE: this means careless parser implementors might lose previous
  paragraphs... but this keeps stuff small and non-buggy :-) */
+
 void
-insertParagraph(WMText *tPtr, void *v, InsertType type)
+insertParagraph(WMText *tPtr, void *v, Bool prepend)
 //insertParagraph(WMText *tPtr, Paragraph *para, InsertType type)
 {
     Paragraph *tmp;
@@ -1906,7 +1907,7 @@ insertParagraph(WMText *tPtr, void *v, InsertType type)
         tPtr->paragraphs = para;
     } else {
         tmp = tPtr->paragraphs;
-        if(type == itAppend) {
+        if(!prepend) {
             while(tmp->next && tmp != tPtr->currentPara)
                 tmp = tmp->next;
 
@@ -1997,7 +1998,7 @@ createTChunk(char *text, short chars, WMFont *font,
  NOTE: this means careless parser implementors might lose previous
  paragraphs/chunks... but this keeps stuff small and non-buggy :-) */
 void
-insertChunk(WMText *tPtr, void *v, InsertType type)
+insertChunk(WMText *tPtr, void *v, Bool prepend)
 {
     Chunk *tmp;
     Chunk *chunk = (Chunk *)v;
@@ -2007,7 +2008,7 @@ insertChunk(WMText *tPtr, void *v, InsertType type)
     if(!tPtr->paragraphs) { /* i.e., first chunk via insertTextInteractively */
         Paragraph *para = (tPtr->funcs.createParagraph) (0, 0, tPtr->visibleW,
                                                          NULL, 0, WALeft);
-        (tPtr->funcs.insertParagraph) (tPtr, para, itAppend);
+        (tPtr->funcs.insertParagraph) (tPtr, para, False);
     }
 
     if(!tPtr->currentPara)
@@ -2020,7 +2021,7 @@ insertChunk(WMText *tPtr, void *v, InsertType type)
     } else {
         tmp = tPtr->currentPara->chunks;
 
-        if(type == itAppend) {
+        if(!prepend) {
             while(tmp->next && tmp != tPtr->currentChunk)
                 tmp = tmp->next;
 
