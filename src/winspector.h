@@ -25,73 +25,16 @@
 
 #include "window.h"
 
-typedef struct InspectorPanel {
-    struct InspectorPanel *nextPtr;
-
-    WWindow *frame;
-
-    WWindow *inspected;       /* the window that's being inspected */
-
-    WMWindow *win;
-    
-    Window parent;
-
-    /* common stuff */
-    WMButton *revertBtn;
-    WMButton *applyBtn;
-    WMButton *saveBtn;
-
-    WMPopUpButton *pagePopUp;
-
-    /* first page. general stuff */
-    
-    WMFrame *specFrm;
-    WMButton *instRb;
-    WMButton *clsRb;
-    WMButton *bothRb;
-    WMButton *defaultRb;
-
-    WMLabel *specLbl;
-    
-    /* second page. attributes */
-
-    WMFrame *attrFrm;
-    WMButton *attrChk[10];
-
-    /* 3rd page. more attributes */
-    WMFrame *moreFrm;
-#ifdef XKB_BUTTON_HINT
-    WMButton *moreChk[9];
-#else
-    WMButton *moreChk[8];
-#endif
-
-    /* 4th page. icon and workspace */
-    WMFrame *iconFrm;
-    WMLabel *iconLbl;
-    WMLabel *fileLbl;
-    WMTextField *fileText;
-    WMButton *alwChk;
-    /*
-    WMButton *updateIconBtn;
-     */
-    WMButton *browseIconBtn;
-    
-    WMFrame *wsFrm;
-    WMPopUpButton *wsP;
-    
-    /* 5th page. application wide attributes */
-    WMFrame *appFrm;
-    WMButton *appChk[2];
-
-    unsigned int done:1;
-    unsigned int destroyed:1;
-    unsigned int choosingIcon:1;
-} InspectorPanel;
-
-
-
 void wShowInspectorForWindow(WWindow *wwin);
+
+void wHideInspectorForWindow(WWindow *wwin);
+
+void wUnhideInspectorForWindow(WWindow *wwin);
+
 void wDestroyInspectorPanels();
+
+WWindow *wGetWindowOfInspectorForWindow(WWindow *wwin);
+
+void wCloseInspectorForWindow(WWindow *wwin);
 
 #endif

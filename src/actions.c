@@ -1213,12 +1213,7 @@ hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate)
     }
 
     if (wwin->flags.inspector_open) {
-        WWindow *pwin = wwin->inspector->frame;
-
-	wWindowUnmap(pwin);
-        pwin->flags.hidden = 1;
-
-        wClientSetState(pwin, IconicState, icon->icon_win);
+	wHideInspectorForWindow(wwin);
     }
 
     wwin->flags.hidden = 1;
@@ -1273,7 +1268,7 @@ wHideOtherApplications(WWindow *awin)
 	    && wwin->frame->workspace == awin->screen_ptr->current_workspace
             && !(wwin->flags.miniaturized||wwin->flags.hidden)
             && !wwin->flags.internal_window
-            && (!wwin->flags.inspector_open || wwin->inspector->frame!=awin)
+	    && wGetWindowOfInspectorForWindow(wwin) != awin
 	    && !WFLAGP(wwin, no_hide_others)) {
 	    
 #ifdef REDUCE_APPICONS
@@ -1460,13 +1455,7 @@ unhideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate,
     wClientSetState(wwin, NormalState, None);
     wRaiseFrame(wwin->frame->core);
     if (wwin->flags.inspector_open) {
-        WWindow *pwin = wwin->inspector->frame;
-
-        pwin->flags.hidden = 0;
-        pwin->flags.mapped = 1;
-        XMapWindow(dpy, pwin->client_win);
-        XMapWindow(dpy, pwin->frame->core->window);
-        wClientSetState(pwin, NormalState, None);
+	wUnhideInspectorForWindow(wwin);
     }
 
 #ifdef GNOME_STUFF

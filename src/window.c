@@ -1404,8 +1404,7 @@ wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 
     /* First close attribute editor window if open */
     if (wwin->flags.inspector_open) {
-        WWindow *pwin = wwin->inspector->frame; /* the inspector window */
-        (*pwin->frame->on_click_right)(NULL, pwin, NULL);
+	wCloseInspectorForWindow(wwin);
     }
 
     /* Close window menu if it's open for this window */

@@ -594,8 +594,8 @@ Initialize(WMScreen *scr)
     InitMouseSettings(scr, WPrefs.win);
 
     InitAppearance(scr, WPrefs.win);
-#ifdef not_yet_fully_implemented
 
+#ifdef not_yet_fully_implemented
     InitText(scr, WPrefs.win);
     InitThemes(scr, WPrefs.win);
 #endif

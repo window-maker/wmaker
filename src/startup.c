@@ -710,6 +710,7 @@ StartUp(Bool defaultScreenOnly)
     wCursor[WCUR_WAIT] = XCreateFontCursor(dpy, XC_watch);
     wCursor[WCUR_QUESTION] = XCreateFontCursor(dpy, XC_question_arrow);
     wCursor[WCUR_TEXT]     = XCreateFontCursor(dpy, XC_xterm); /* odd name???*/
+    wCursor[WCUR_SELECT] = XCreateFontCursor(dpy, XC_cross);
     
     /* emergency exit... */
     sig_action.sa_handler = handleSig;

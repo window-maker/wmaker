@@ -45,8 +45,86 @@
 #include "actions.h"
 #include "winspector.h"
 #include "dock.h"
+#include "client.h"
 
 #include <proplist.h>
+
+
+
+
+
+
+
+typedef struct InspectorPanel {
+    struct InspectorPanel *nextPtr;
+
+    WWindow *frame;
+
+    WWindow *inspected;       /* the window that's being inspected */
+
+    WMWindow *win;
+    
+    Window parent;
+
+    /* common stuff */
+    WMButton *revertBtn;
+    WMButton *applyBtn;
+    WMButton *saveBtn;
+
+    WMPopUpButton *pagePopUp;
+
+    /* first page. general stuff */
+    
+    WMFrame *specFrm;
+    WMButton *instRb;
+    WMButton *clsRb;
+    WMButton *bothRb;
+    WMButton *defaultRb;
+
+    WMButton *selWinB;
+    
+    WMLabel *specLbl;
+    
+    /* second page. attributes */
+
+    WMFrame *attrFrm;
+    WMButton *attrChk[10];
+
+    /* 3rd page. more attributes */
+    WMFrame *moreFrm;
+#ifdef XKB_BUTTON_HINT
+    WMButton *moreChk[9];
+#else
+    WMButton *moreChk[8];
+#endif
+
+    /* 4th page. icon and workspace */
+    WMFrame *iconFrm;
+    WMLabel *iconLbl;
+    WMLabel *fileLbl;
+    WMTextField *fileText;
+    WMButton *alwChk;
+    /*
+    WMButton *updateIconBtn;
+     */
+    WMButton *browseIconBtn;
+    
+    WMFrame *wsFrm;
+    WMPopUpButton *wsP;
+    
+    /* 5th page. application wide attributes */
+    WMFrame *appFrm;
+    WMButton *appChk[2];
+
+    unsigned int done:1;
+    unsigned int destroyed:1;
+    unsigned int choosingIcon:1;
+} InspectorPanel;
+
+
+
+
+extern Cursor wCursor[WCUR_LAST];
 
 extern WDDomain *WDWindowAttributes;
 
@@ -95,7 +173,20 @@ static proplist_t Yes, No;
 #define PHEIGHT	350
 
 
+
+
 static void applySettings(WMButton *button, InspectorPanel *panel);
+
+
+
+
+#define UNDEFINED_POS 0xffffff
+
+static InspectorPanel *createInspectorForWindow(WWindow *wwin, 
+						int xpos, int ypos,
+						Bool showSelectPanel);
+
+
 
 static void
 make_keys()
@@ -1021,8 +1112,60 @@ selectSpecification(WMWidget *bPtr, void *data)
 }
 
 
+
+
+#define SPEC_TEXT "The configuration will apply to all\n"\
+		     "windows that have their WM_CLASS property"\
+		     " set to the above selected\nname, when saved."
+
+
+#define SELEC_TEXT "Click in the window you wish to inspect."
+
+
+
+static void
+selectWindow(WMWidget *bPtr, void *data)
+{
+    InspectorPanel *panel = (InspectorPanel*)data;
+    WWindow *wwin = panel->inspected;
+    WScreen *scr = wwin->screen_ptr;
+    XEvent event;
+    WWindow *iwin;
+    
+    if (XGrabPointer(dpy, scr->root_win, True,
+		     ButtonPressMask, GrabModeAsync, GrabModeAsync, None,
+		     wCursor[WCUR_SELECT], CurrentTime)!=GrabSuccess) {
+	wwarning("could not grab mouse pointer");
+	return;
+    }
+    
+    WMSetLabelText(panel->specLbl, _(SELEC_TEXT));
+
+    WMMaskEvent(dpy, ButtonPressMask, &event);
+
+    XUngrabPointer(dpy, CurrentTime);
+
+    iwin = wWindowFor(event.xbutton.subwindow);
+    
+    if (iwin && !iwin->flags.internal_window && iwin != wwin
+	&& !iwin->flags.inspector_open) {
+
+	iwin->flags.inspector_open = 1;
+	iwin->inspector = createInspectorForWindow(iwin,
+						   panel->frame->frame_x,
+						   panel->frame->frame_y,
+						   True);
+	wCloseInspectorForWindow(wwin);
+    } else {
+	WMSetLabelText(panel->specLbl, _(SPEC_TEXT));
+    }
+}
+
+
+
 static InspectorPanel*
-createInspectorForWindow(WWindow *wwin)
+createInspectorForWindow(WWindow *wwin, int xpos, int ypos, 
+			 Bool showSelectPanel)
 {
     WScreen *scr = wwin->screen_ptr;
     InspectorPanel *panel;
@@ -1095,7 +1238,7 @@ createInspectorForWindow(WWindow *wwin)
     panel->specFrm = WMCreateFrame(panel->win);
     WMSetFrameTitle(panel->specFrm, _("Window Specification"));
     WMMoveWidget(panel->specFrm, 15, 65);
-    WMResizeWidget(panel->specFrm, frame_width, 105);
+    WMResizeWidget(panel->specFrm, frame_width, 145);
 
 
     panel->defaultRb = WMCreateRadioButton(panel->specFrm);
@@ -1154,13 +1297,19 @@ createInspectorForWindow(WWindow *wwin)
     if (selectedBtn)
         WMSetButtonSelected(selectedBtn, True);
 
+    
+    panel->selWinB = WMCreateCommandButton(panel->specFrm);
+    WMMoveWidget(panel->selWinB, 20, 145-24 - 10);
+    WMResizeWidget(panel->selWinB, frame_width - 2*10 - 20, 24);
+    WMSetButtonText(panel->selWinB, _("Select Window"));
+    WMSetButtonAction(panel->selWinB, selectWindow, panel);
+    
+    
     panel->specLbl = WMCreateLabel(panel->win);
-    WMMoveWidget(panel->specLbl, 15, 170);
+    WMMoveWidget(panel->specLbl, 15, 210);
     WMResizeWidget(panel->specLbl, frame_width, 100);
-    WMSetLabelText(panel->specLbl,
-		   _("The configuration will apply to all\n"
-		     "windows that have their WM_CLASS property"
-		     " set to the above selected\nname, when saved."));
+    WMSetLabelText(panel->specLbl, _(SPEC_TEXT));
+    
     WMSetLabelTextAlignment(panel->specLbl, WACenter);
     
     /**** attributes ****/
@@ -1249,11 +1398,13 @@ createInspectorForWindow(WWindow *wwin)
     WMMoveWidget(panel->moreFrm, 15, 45);
     WMResizeWidget(panel->moreFrm, frame_width, 250);
 
+    for (i=0;
 #ifdef XKB_BUTTON_HINT
-    for (i=0; i < 9; i++) {
+	 i < 9;
 #else
-    for (i=0; i < 8; i++) {
+	 i < 8;
 #endif
+	 i++) {
 	char *caption = NULL;
 	int flag = 0;
 	char *descr = NULL;
@@ -1492,8 +1643,13 @@ createInspectorForWindow(WWindow *wwin)
     if (panel->appFrm)
 	WMMapSubwidgets(panel->appFrm);
 
-    WMSetPopUpButtonSelectedItem(panel->pagePopUp, 1);
-    changePage(panel->pagePopUp, panel);
+    if (showSelectPanel) {
+	WMSetPopUpButtonSelectedItem(panel->pagePopUp, 0);
+	changePage(panel->pagePopUp, panel);
+    } else {
+	WMSetPopUpButtonSelectedItem(panel->pagePopUp, 1);
+	changePage(panel->pagePopUp, panel);
+    }
 
     
     parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, PWIDTH, PHEIGHT, 
@@ -1506,12 +1662,17 @@ createInspectorForWindow(WWindow *wwin)
 
     XSetTransientForHint(dpy, parent, wwin->client_win);
 
-    x = wwin->frame_x+wwin->frame->core->width/2;
-    y = wwin->frame_y+wwin->frame->top_width*2;
-    if (y + PHEIGHT > scr->scr_height)
-	y = scr->scr_height - PHEIGHT - 30;
-    if (x + PWIDTH > scr->scr_width)
-	x = scr->scr_width - PWIDTH;
+    if (xpos == UNDEFINED_POS) {
+	x = wwin->frame_x+wwin->frame->core->width/2;
+	y = wwin->frame_y+wwin->frame->top_width*2;
+	if (y + PHEIGHT > scr->scr_height)
+	    y = scr->scr_height - PHEIGHT - 30;
+	if (x + PWIDTH > scr->scr_width)
+	    x = scr->scr_width - PWIDTH;
+    } else {
+	x = xpos;
+	y = ypos;
+    }
 
     panel->frame = wManageInternalWindow(scr, parent, wwin->client_win, 
 					 "Inspector", x, y, PWIDTH, PHEIGHT);
@@ -1551,7 +1712,58 @@ wShowInspectorForWindow(WWindow *wwin)
 
     make_keys();
     wwin->flags.inspector_open = 1;
-    wwin->inspector = createInspectorForWindow(wwin);;
+    wwin->inspector = createInspectorForWindow(wwin, UNDEFINED_POS,
+					       UNDEFINED_POS, False);
+}
+
+
+
+    
+void
+wHideInspectorForWindow(WWindow *wwin)
+{
+    WWindow *pwin = wwin->inspector->frame;
+
+    wWindowUnmap(pwin);
+    pwin->flags.hidden = 1;
+
+    wClientSetState(pwin, IconicState, None);
+}
+
+
+
+void
+wUnhideInspectorForWindow(WWindow *wwin)
+{
+    WWindow *pwin = wwin->inspector->frame;
+
+    pwin->flags.hidden = 0;
+    pwin->flags.mapped = 1;
+    XMapWindow(dpy, pwin->client_win);
+    XMapWindow(dpy, pwin->frame->core->window);
+    wClientSetState(pwin, NormalState, None);
+}
+
+
+
+WWindow*
+wGetWindowOfInspectorForWindow(WWindow *wwin)
+{    
+    if (wwin->inspector) {
+	assert(wwin->flags.inspector_open != 0);
+	
+	return wwin->inspector->frame;
+    } else
+	return NULL;
+}
+
+
+void
+wCloseInspectorForWindow(WWindow *wwin)
+{
+    WWindow *pwin = wwin->inspector->frame; /* the inspector window */
+
+    (*pwin->frame->on_click_right)(NULL, pwin, NULL);
 }
 
 

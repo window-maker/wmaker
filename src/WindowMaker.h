@@ -127,7 +127,8 @@ typedef enum {
 #define WCUR_ARROW	4
 #define WCUR_QUESTION	5
 #define WCUR_TEXT	6
-#define WCUR_LAST	7
+#define WCUR_SELECT	7
+#define WCUR_LAST	8
 
 
 /* geometry displays */
@@ -277,11 +278,11 @@ typedef struct WPreferences {
     RImage *button_images;	       /* titlebar button images */
 
     char smooth_workspace_back;
-    char size_display;		       /* display type for resize geometry */
-    char move_display;		       /* display type for move geometry */
-    char window_placement;	       /* window placement mode */
-    char colormap_mode;		       /* colormap focus mode */
-    char focus_mode;		       /* window focusing mode */
+    signed char size_display;		       /* display type for resize geometry */
+    signed char move_display;		       /* display type for move geometry */
+    signed char window_placement;	       /* window placement mode */
+    signed char colormap_mode;		       /* colormap focus mode */
+    signed char focus_mode;		       /* window focusing mode */
     
     char opaque_move;		       /* update window position during */
 				       /* move */
@@ -308,7 +309,7 @@ typedef struct WPreferences {
 
     char open_transients_with_parent;  /* open transient window in
 					same workspace as parent */
-    char title_justification;	       /* titlebar text alignment */
+    signed char title_justification;	       /* titlebar text alignment */
 
     char multi_byte_text;
 #ifdef KEEP_XKB_LOCK_STATUS
@@ -327,7 +328,7 @@ typedef struct WPreferences {
     
     char icon_box_position;	       /* position to place icons */
     
-    char iconification_style;          /* position to place icons */
+    signed char iconification_style;          /* position to place icons */
     
     char disable_root_mouse;	       /* disable button events in root window */
     
@@ -341,7 +342,7 @@ typedef struct WPreferences {
 
     WCoord *win_menu_pos;
     
-    char icon_yard;		       /* aka iconbox */
+    signed char icon_yard;		       /* aka iconbox */
 
     int raise_delay;		       /* delay for autoraise. 0 is disabled */
 
@@ -350,9 +351,9 @@ typedef struct WPreferences {
 
     int icon_size;		       /* size of the icon */
 
-    char menu_style;		       /* menu decoration style */
+    signed char menu_style;	       /* menu decoration style */
 
-    char workspace_name_display_position;
+    signed char workspace_name_display_position;
     
     unsigned int modifier_mask;	       /* mask to use as kbd modifier */
 
@@ -376,9 +377,9 @@ typedef struct WPreferences {
     char superfluous;		       /* Use superfluous things */
 
     /* root window mouse bindings */
-    char select_button;		       /* button for window selection */
-    char windowl_button;	       /* button for window list menu */
-    char menu_button;		       /* button for app menu */
+    signed char select_button;		       /* button for window selection */
+    signed char windowl_button;	       /* button for window list menu */
+    signed char menu_button;		       /* button for app menu */
 
     /* balloon text */
     char window_balloon;
@@ -394,13 +395,13 @@ typedef struct WPreferences {
     int dblclick_time;		       /* double click delay time in ms */
 
     /* animate menus */
-    char menu_scroll_speed;	       /* how fast menus are scrolled */
+    signed char menu_scroll_speed;	       /* how fast menus are scrolled */
 
     /* animate icon sliding */
-    char icon_slide_speed;	       /* icon slide animation speed */
+    signed char icon_slide_speed;	       /* icon slide animation speed */
 
     /* shading animation */
-    char shade_speed;
+    signed char shade_speed;
 
     int edge_resistance;
     char attract;

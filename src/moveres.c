@@ -67,9 +67,6 @@ extern Atom _XA_WM_PROTOCOLS;
 
 
 
-
-
-
 void
 wGetGeometryWindowSize(WScreen *scr, unsigned int *width, 
 		       unsigned int *height)
@@ -80,11 +77,10 @@ wGetGeometryWindowSize(WScreen *scr, unsigned int *width,
 }
 
 
-
 /*
  *----------------------------------------------------------------------
  * checkMouseSamplingRate-
- * 	For lowering the mouse motion sampling rate for machines where
+ *      For lowering the mouse motion sampling rate for machines where
  * it's too high (SGIs). If it returns False then the event should be
  * ignored.
  *----------------------------------------------------------------------
@@ -93,13 +89,13 @@ static Bool
 checkMouseSamplingRate(XEvent *ev)
 {
     static Time previousMotion = 0;
-
+    
     if (ev->type == MotionNotify) {
-	if (ev->xmotion.time - previousMotion < DELAY_BETWEEN_MOUSE_SAMPLING) {
-	    return False;
-	} else {
-	    previousMotion = ev->xmotion.time;
-	}
+        if (ev->xmotion.time - previousMotion < DELAY_BETWEEN_MOUSE_SAMPLING) {
+            return False;
+        } else {
+            previousMotion = ev->xmotion.time;
+        }
     }
     return True;
 }
@@ -1907,10 +1903,9 @@ wMouseResizeWindow(WWindow *wwin, XEvent *ev)
     while (1) {
 	WMMaskEvent(dpy, KeyPressMask | ButtonMotionMask | ButtonReleaseMask
 		   | ButtonPressMask | ExposureMask, &event);
-
 	if (!checkMouseSamplingRate(&event))
 	    continue;
-	
+
 	switch (event.type) {
 	 case KeyPress:
 	    showGeometry(wwin, fx, fy, fx + fw, fy + fh, res);
@@ -2115,19 +2110,13 @@ wSelectWindows(WScreen *scr, XEvent *ev)
     int xp = ev->xbutton.x_root;
     int yp = ev->xbutton.y_root;
     int w = 0, h = 0;
-    int nx = xp, ny = yp, ox = xp, oy = yp, update_selection = 0;
-    XSegment segments[8]; /* 8 segments is the most possible */
-			  /* it may be beneficial to use */
-			  /* XDrawRectangle for 8 segment case */
-    int	nsegs = 0;
-
+    int x = xp, y = yp;
     
 #ifdef DEBUG
     puts("Selecting windows");
 #endif
-    if (XGrabPointer(dpy, scr->root_win, True, PointerMotionMask
-		| ButtonMotionMask | ButtonReleaseMask | ButtonPressMask 
-		| EnterWindowMask | LeaveWindowMask , GrabModeAsync,
+    if (XGrabPointer(dpy, scr->root_win, False, ButtonMotionMask
+		     | ButtonReleaseMask | ButtonPressMask, GrabModeAsync,
 		     GrabModeAsync, None, wCursor[WCUR_DEFAULT],
 		     CurrentTime) != Success) {
 	return;
@@ -2136,36 +2125,29 @@ wSelectWindows(WScreen *scr, XEvent *ev)
     
     wUnselectWindows(scr);
     
+    XDrawRectangle(dpy, root, gc, xp, yp, w, h);
     while (1) {
-	update_selection = 0;
-
-	WMMaskEvent(dpy, ButtonReleaseMask | PointerMotionMask | LeaveWindowMask
-		| EnterWindowMask | ButtonPressMask,
-		&event);
+	WMMaskEvent(dpy, ButtonReleaseMask | PointerMotionMask
+		    | ButtonPressMask, &event);
 	
-	if (!checkMouseSamplingRate(&event))
-	    continue;
-	
-	nsegs = 0;
 	switch (event.type) {
-	 case LeaveNotify:
-	 case EnterNotify:
-#ifdef DEBUG
-	 	dbputs("got Enter/LeaveNotify in selection");
-#endif
-	    nx = event.xcrossing.x_root;
-	    ny = event.xcrossing.y_root;
-	    update_selection = 1;
-	    break;
-		
-		
 	 case MotionNotify:
-#ifdef DEBUG
-	 	dbputs("got motionevent in selection");
-#endif
-	    nx = event.xmotion.x_root;
-	    ny = event.xmotion.y_root;
-	    update_selection = 1;
+	    XDrawRectangle(dpy, root, gc, x, y, w, h);
+	    x = event.xmotion.x_root;
+	    if (x < xp) {
+		w = xp - x;
+	    } else {
+		w = x - xp;
+		x = xp;
+	    }
+	    y = event.xmotion.y_root;
+	    if (y < yp) {
+		h = yp - y;
+	    } else {
+		h = y - yp;
+		y = yp;
+	    }
+	    XDrawRectangle(dpy, root, gc, x, y, w, h);
 	    break;
 
 	 case ButtonPress:
@@ -2175,22 +2157,10 @@ wSelectWindows(WScreen *scr, XEvent *ev)
 	    if (event.xbutton.button != ev->xbutton.button)
 		break;
 
-	    if(nx > xp) w = nx - xp;
-	    else if(nx < xp) {
-		w = xp - nx;
-		xp = nx;
-	    } else w = 0;
-
-	    if(ny > yp) h = ny - yp;
-	    else if(ny < yp) {
-		h = yp - ny;
-		yp = ny;
-	    } else h = 0;
-	    
-	    XDrawRectangle(dpy, root, gc, xp, yp, w, h);
+	    XDrawRectangle(dpy, root, gc, x, y, w, h);
 	    XUngrabServer(dpy);
 	    XUngrabPointer(dpy, CurrentTime);
-	    selectWindowsInside(scr, xp, yp, w + xp, h + yp);
+	    selectWindowsInside(scr, x, y, x + w, y + h);
 	   
 #ifdef KWM_HINTS
 	    wKWMSelectRootRegion(scr, xp, yp, w, h, 
@@ -2198,112 +2168,13 @@ wSelectWindows(WScreen *scr, XEvent *ev)
 #endif /* KWM_HINTS */
 
 #ifdef DEBUG
-	    dbputs("End window selection");
+	    puts("End window selection");
 #endif
 	    return;
 	    
 	 default:
-#ifdef DEBUG
-	    dbputs("unknown event");
-	    dbprintf("type: %u\n", event.type);
-#endif
 	    WMHandleEvent(&event);
 	    break;
-	}
-
-	if(update_selection) {
-	/* stuff to change for movement along X axis */
-	    if(nx != ox) {
-
-		/* erase old vertical line */
-		/* only if old vertical line exists */
-		/* and only if its different from other vertical line */
-		if(yp != oy && ox != xp) {
-			segments[nsegs].x1 = ox;
-			segments[nsegs].y1 = yp;
-			segments[nsegs].x2 = ox;
-			segments[nsegs].y2 = oy;
-			nsegs++;
-		}
-
-		/* draw new vertical line */
-		/* only if new vertical line exists */
-		/* and only if its different from the other vertical line */
-		if(yp != ny && nx != xp) {
-			segments[nsegs].x1 = nx;
-			segments[nsegs].y1 = yp;
-			segments[nsegs].x2 = nx;
-			segments[nsegs].y2 = ny;
-			nsegs++;
-		}
-
-	/* difference along x axis from old to new on ny horizontal */
-	/* only if our mouse doesnt move along Y, otherwise this gets */
-	/* done elsewhere */
-		if(ny == oy && nx != xp) {
-			segments[nsegs].x1 = ox;
-			segments[nsegs].y1 = ny;
-			segments[nsegs].x2 = nx;
-			segments[nsegs].y2 = ny;
-			nsegs++;
-		}
-
-	/* difference along x axis from old to new on yp horizontal */
-		segments[nsegs].x1 = nx;
-		segments[nsegs].y1 = yp;
-		segments[nsegs].x2 = ox;
-		segments[nsegs].y2 = yp;
-		nsegs++;
-	    }
-
-
-
-	/* now for stuff to change for movement along Y axis */
-
-	    if(ny != oy) {
-	/* erase old horizontal line */
-	/* only if old horizontal line exists */
-	/* and only if its different from other horizontal line */
-		if(xp != ox && oy != yp) {
-			segments[nsegs].x1 = ox;
-			segments[nsegs].y1 = oy;
-			segments[nsegs].x2 = xp;
-			segments[nsegs].y2 = oy;
-			nsegs++;
-		}
-
-	/* draw new horizontal line */
-	/* only if horizontal line exists, and if its different from other */
-		if(xp != nx && ny != yp) {
-			segments[nsegs].x1 = nx;
-			segments[nsegs].y1 = ny;
-			segments[nsegs].x2 = xp;
-			segments[nsegs].y2 = ny;
-			nsegs++;
-		}
-
-	/* difference along y axis from old to new on nx vertical */
-	/* only if no movement along x axis */
-	/* and only if we dont have duplicate lines */
-		if(nx == ox && nx != xp) {
-			segments[nsegs].x1 = nx;
-			segments[nsegs].y1 = oy;
-			segments[nsegs].x2 = nx;
-			segments[nsegs].y2 = ny;
-			nsegs++;
-		}
-
-	/* difference along y axis from old to new on xp vertical */
-		segments[nsegs].x1 = xp;
-		segments[nsegs].y1 = oy;
-		segments[nsegs].x2 = xp;
-		segments[nsegs].y2 = ny;
-		nsegs++;
-	    }
-
-	    ox = nx;
-	    oy = ny;
-	    XDrawSegments(dpy, root, gc, segments, nsegs);
 	}
     }
 }
@@ -2349,7 +2220,7 @@ InteractivePlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 		   &event);
 	
 	if (!checkMouseSamplingRate(&event))
-	    continue;
+            continue;
 	
 	switch (event.type) {
 	 case KeyPress:
