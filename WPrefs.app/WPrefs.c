@@ -322,13 +322,11 @@ createMainWindow(WMScreen *scr)
     WMMoveWidget(WPrefs.banner, FRAME_LEFT, FRAME_TOP);
     WMSetFrameRelief(WPrefs.banner, WRFlat);
 
-    font = WMCreateFont(scr, "Lucida Sans,Times New Roman,serif:bold:pixelsize=24");
-    if (!font)
-        font = WMBoldSystemFontOfSize(scr, 24);
+    font = WMCreateFont(scr, "Lucida Sans,URW Gothic L,Times New Roman,serif:bold:pixelsize=26");
     WPrefs.nameL = WMCreateLabel(WPrefs.banner);
     WMSetLabelTextAlignment(WPrefs.nameL, WACenter);
     WMResizeWidget(WPrefs.nameL, FRAME_WIDTH-20, 60);
-    WMMoveWidget(WPrefs.nameL, 10, 60);
+    WMMoveWidget(WPrefs.nameL, 10, 50);
     WMSetLabelFont(WPrefs.nameL, font);
     WMSetLabelText(WPrefs.nameL, _("Window Maker Preferences"));
     WMReleaseFont(font);
