@@ -14,6 +14,8 @@ Changes since version 0.64.0:
 - When Window Maker calls wmsetbg to set the background, it will consider the
   value of the DisableDithering option and pass the right switch to wmsetbg.
 - fixed a memleak in the dialog panels.
+- made "Keep on Top" in the dock/clip menu a checked menu entry. It's _much_
+  easier to work with it this way.
 
 
 Changes since version 0.63.1:

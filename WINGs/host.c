@@ -1,7 +1,7 @@
 /*
  *  WINGs WMHost function library
  *
- *  Copyright (c) 1999-2000 Dan Pascu
+ *  Copyright (c) 1999-2001 Dan Pascu
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -248,11 +248,18 @@ WMFlushHostCache()
 }
 
 
+static int
+matchAddress(void *item, void *cdata)
+{
+    return (strcmp((char*) item, (char*) cdata)==0);
+}
+
+
 Bool
 WMIsHostEqualToHost(WMHost* hPtr, WMHost* aPtr)
 {
-    int	i, j;
-    char *adr1, *adr2;
+    char *adr;
+    int i;
 
     wassertrv(hPtr!=NULL && aPtr!=NULL, False);
 
@@ -260,12 +267,9 @@ WMIsHostEqualToHost(WMHost* hPtr, WMHost* aPtr)
         return True;
 
     for (i=0; i<WMGetArrayItemCount(aPtr->addresses); i++) {
-        adr1 = WMGetFromArray(aPtr->addresses, i);
-        // use WMFindInArray here --Dan
-        for (j=0; j<WMGetArrayItemCount(hPtr->addresses); j++) {
-            adr2 = WMGetFromArray(hPtr->addresses, j);
-            if (strcmp(adr1, adr2)==0)
-                return True;
+        adr = WMGetFromArray(aPtr->addresses, i);
+        if (WMFindInArray(hPtr->addresses, matchAddress, adr) != WANotFound) {
+            return True;
         }
     }
 

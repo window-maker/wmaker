@@ -1626,7 +1626,7 @@ processData(char *title, ItemData *data)
     switch (data->type) {
      case ExecInfo:
 #if 1
-	if (strpbrk(data->param.exec.command, "&$*|><?`=")) {
+	if (strpbrk(data->param.exec.command, "&$*|><?`=;")) {
 	    s1 = "SHEXEC";
 	} else {
 	    s1 = "EXEC";
