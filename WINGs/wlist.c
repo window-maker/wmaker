@@ -418,74 +418,92 @@ WMListAllowsEmptySelection(WMList *lPtr)
 
 
 static void
+scrollByAmount(WMList *lPtr, int amount)
+{
+    int itemCount = WMGetArrayItemCount(lPtr->items);
+
+    if ((amount < 0 && lPtr->topItem > 0) ||
+        (amount > 0 && (lPtr->topItem + lPtr->fullFitLines < itemCount))) {
+
+        lPtr->topItem += amount;
+        if (lPtr->topItem < 0)
+            lPtr->topItem = 0;
+        if (lPtr->topItem + lPtr->fullFitLines > itemCount)
+            lPtr->topItem = itemCount - lPtr->fullFitLines;
+
+        updateScroller(lPtr);
+    }
+}
+
+
+static void
 vScrollCallBack(WMWidget *scroller, void *self)
 {
     WMList *lPtr = (WMList*)self;
-    WMScroller *sPtr = (WMScroller*)scroller;
     int height;
-    int topItem = lPtr->topItem;
+    int oldTopItem = lPtr->topItem;
     int itemCount = WMGetArrayItemCount(lPtr->items);
 
     height = lPtr->view->size.height - 4;
 
-    switch (WMGetScrollerHitPart(sPtr)) {
+    switch (WMGetScrollerHitPart((WMScroller*)scroller)) {
     case WSDecrementLine:
-        if (lPtr->topItem > 0) {
-            lPtr->topItem--;
+        //if (lPtr->topItem > 0) {
+        //    lPtr->topItem--;
+        //
+        //    updateScroller(lPtr);
+        //}
+        scrollByAmount(lPtr, -1);
+        break;
 
-            updateScroller(lPtr);
-        }
+    case WSIncrementLine:
+        //if (lPtr->topItem + lPtr->fullFitLines < itemCount) {
+        //    lPtr->topItem++;
+        //
+        //    updateScroller(lPtr);
+        //}
+        scrollByAmount(lPtr, 1);
         break;
 
     case WSDecrementPage:
-        if (lPtr->topItem > 0) {
-            lPtr->topItem -= lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
-            if (lPtr->topItem < 0)
-                lPtr->topItem = 0;
-
-            updateScroller(lPtr);
-        }
-        break;
-
-
-    case WSIncrementLine:
-        if (lPtr->topItem + lPtr->fullFitLines < itemCount) {
-            lPtr->topItem++;
-
-            updateScroller(lPtr);
-        }
+        //if (lPtr->topItem > 0) {
+        //    lPtr->topItem -= lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
+        //    if (lPtr->topItem < 0)
+        //        lPtr->topItem = 0;
+        //
+        //    updateScroller(lPtr);
+        //}
+        scrollByAmount(lPtr, -lPtr->fullFitLines+(1-lPtr->flags.dontFitAll)+1);
         break;
 
     case WSIncrementPage:
-        if (lPtr->topItem + lPtr->fullFitLines < itemCount) {
-            lPtr->topItem += lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
-
-            if (lPtr->topItem + lPtr->fullFitLines > itemCount)
-                lPtr->topItem = itemCount - lPtr->fullFitLines;
-
-            updateScroller(lPtr);
-        }
+        //if (lPtr->topItem + lPtr->fullFitLines < itemCount) {
+        //    lPtr->topItem += lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
+        //
+        //    if (lPtr->topItem + lPtr->fullFitLines > itemCount)
+        //        lPtr->topItem = itemCount - lPtr->fullFitLines;
+        //
+        //    updateScroller(lPtr);
+        //}
+        scrollByAmount(lPtr, lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1);
         break;
 
     case WSKnob:
-        {
-            int oldTopItem = lPtr->topItem;
+        lPtr->topItem = WMGetScrollerValue(lPtr->vScroller) *
+            (float)(itemCount - lPtr->fullFitLines);
 
-            lPtr->topItem = WMGetScrollerValue(lPtr->vScroller) *
-                (float)(itemCount - lPtr->fullFitLines);
-
-            if (oldTopItem != lPtr->topItem)
-                paintList(lPtr);
-        }
+        if (oldTopItem != lPtr->topItem)
+            paintList(lPtr); // use updateScroller(lPtr) here?
         break;
 
     case WSKnobSlot:
     case WSNoPart:
+    default:
         /* do nothing */
         break;
     }
 
-    if (lPtr->topItem != topItem)
+    if (lPtr->topItem != oldTopItem)
         WMPostNotificationName(WMListDidScrollNotification, lPtr, NULL);
 }
 
@@ -728,8 +746,9 @@ handleActionEvents(XEvent *event, void *data)
 #ifdef CHECK_WHEEL_PATCH
         /* Ignore mouse wheel events, they're not "real" button events */
         if (event->xbutton.button == WINGsConfiguration.mouseWheelUp ||
-            event->xbutton.button == WINGsConfiguration.mouseWheelDown)
+            event->xbutton.button == WINGsConfiguration.mouseWheelDown) {
             break;
+        }
 #endif
 
         lPtr->flags.buttonPressed = 0;
@@ -754,17 +773,12 @@ handleActionEvents(XEvent *event, void *data)
     case ButtonPress:
         if (event->xbutton.x > WMWidgetWidth(lPtr->vScroller)) {
 #ifdef CHECK_WHEEL_PATCH
-            /* Mouse wheel events need to be properly handled here. It would
-             * be best to somehow route them to lPtr->vScroller so that the
-             * correct chain of actions is triggered. However, I found no
-             * clean way to do so, so I mostly copied the code that deals with
-             * WSIncrementPage and WSDecrementPage from vScrollCallBack.
-             *
-             *          - Martynas Kunigelis <diskena@linuxfreak.com> */
+            int amount = 0;
 
+            // join them
             if (event->xbutton.button == WINGsConfiguration.mouseWheelDown) {
                 /* Wheel down */
-                int itemCount = WMGetArrayItemCount(lPtr->items);
+                /*int itemCount = WMGetArrayItemCount(lPtr->items);
                 if (lPtr->topItem + lPtr->fullFitLines < itemCount) {
                     int incr = lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
                     lPtr->topItem += incr;
@@ -773,13 +787,24 @@ handleActionEvents(XEvent *event, void *data)
                         lPtr->topItem = itemCount - lPtr->fullFitLines;
 
                     updateScroller(lPtr);
+                }*/
+                if (event->xbutton.state & ShiftMask) {
+                    amount = lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
+                } else if (event->xbutton.state & ControlMask) {
+                    amount = 1;
+                } else {
+                    amount = lPtr->fullFitLines / 3;
+                    if (amount == 0)
+                        amount++;
                 }
+
+                scrollByAmount(lPtr, amount);
                 break;
             }
 
             if (event->xbutton.button == WINGsConfiguration.mouseWheelUp) {
                 /* Wheel up */
-                if (lPtr->topItem > 0) {
+                /*if (lPtr->topItem > 0) {
                     int decr = lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
                     lPtr->topItem -= decr;
 
@@ -787,7 +812,18 @@ handleActionEvents(XEvent *event, void *data)
                         lPtr->topItem = 0;
 
                     updateScroller(lPtr);
+                }*/
+                if (event->xbutton.state & ShiftMask) {
+                    amount = -lPtr->fullFitLines+(1-lPtr->flags.dontFitAll)+1;
+                } else if (event->xbutton.state & ControlMask) {
+                    amount = -1;
+                } else {
+                    amount = -(lPtr->fullFitLines / 3);
+                    if (amount == 0)
+                        amount--;
                 }
+
+                scrollByAmount(lPtr, amount);
                 break;
             }
 #endif
