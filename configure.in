@@ -100,7 +100,7 @@ dnl not used anywhere
 dnl AC_FUNC_MEMCMP  
 AC_FUNC_VPRINTF
 AC_FUNC_ALLOCA
-AC_CHECK_FUNCS(gethostname select poll strerror strcasecmp strncasecmp setpgid atexit mallinfo snprintf vsnprintf asprintf vasprintf mkstemp)
+AC_CHECK_FUNCS(gethostname select poll strerror strcasecmp strncasecmp setpgid atexit mallinfo mkstemp snprintf vsnprintf asprintf vasprintf)
 
 
 dnl ripped from samba
