@@ -29,11 +29,6 @@ esac
 
 
 
-dnl configure/build bundled libraries
-dnl ===================================
-AC_CONFIG_SUBDIRS(libPropList)
-
-
 AM_CONFIG_HEADER(src/config.h)
 
 
