@@ -1162,9 +1162,10 @@ dockMenuCreate(WScreen *scr, int type)
         free(entry->text);
         entry->text = _("Rename Workspace");
 
-        entry = wMenuAddCallback(menu, _("Select Icon"), selectCallback, NULL);
-        free(entry->text);
-        entry->text = _("Select Icon");
+        entry = wMenuAddCallback(menu, _("Selected"), selectCallback, NULL);
+        entry->flags.indicator = 1;
+        entry->flags.indicator_on = 1;
+        entry->flags.indicator_type = MI_CHECK;
 
         entry = wMenuAddCallback(menu, _("Select All Icons"),
                                  selectIconsCallback, NULL);
@@ -3379,32 +3380,26 @@ openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
         if (aicon == scr->clip_icon) {
             entry->callback = renameCallback;
             entry->clientdata = dock;
-            //entry->flags.indicator = 0;
+            entry->flags.indicator = 0;
             entry->text = _("Rename Workspace");
         } else {
             entry->callback = omnipresentCallback;
             entry->clientdata = aicon;
-            //entry->flags.indicator = 1;
-            //entry->flags.indicator_on = aicon->omnipresent;
-            //entry->flags.indicator_type = MI_CHECK;
-            //entry->text = _("Omnipresent");
             if (n_selected > 0) {
+                entry->flags.indicator = 0;
                 entry->text = _("Toggle Omnipresent");
             } else {
-                if (aicon->omnipresent)
-                    entry->text = _("Unset Omnipresent");
-                else
-                    entry->text = _("Set Omnipresent");
+                entry->flags.indicator = 1;
+                entry->flags.indicator_on = aicon->omnipresent;
+                entry->flags.indicator_type = MI_CHECK;
+                entry->text = _("Omnipresent");
             }
         }
 
 	/* select/unselect icon */
 	entry = dock->menu->entries[++index];
         entry->clientdata = aicon;
-        if (aicon->icon->selected)
-            entry->text = _("Unselect Icon");
-        else
-            entry->text = _("Select Icon");
+        entry->flags.indicator_on = aicon->icon->selected;
 	wMenuSetEnabled(dock->menu, index, aicon!=scr->clip_icon);
 
 	/* select/unselect all icons */

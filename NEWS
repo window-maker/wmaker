@@ -74,13 +74,48 @@ Omnipresent icons in Clip
 -------------------------
 
 Added ability to set icons docked in Clip to be omnipresent on all workspaces.
-To set/reset this flag use the "Settings Panel" for that specific icon (right
-click on docked icon, and select "Settings").
+To set/reset this flag use the clip menu.
+The Clip menu changed in the following way:
+ - if you bring up the menu from the Clip's main icon, it will contain as
+   before the "Rename Workspace" entry in the second position.
+ - however, if you bring up the menu from any other icon in clip, the
+   "Rename Workspace" menu entry is replaced by "Omnipresent" or
+   "Toggle Omnipresent" depending on the context.
+
+This entry will work in the following way, depending on the context:
+
+1. If there is no icon selected in the clip, then the menu will contain the
+   entry named "Omnipresent" which will be checked accordingly to the current
+   state of the icon (omnipresent or not), and will let you change the
+   omnipresent state of the icon you brought the menu from.
+2. If one or more icons are already selected when the Clip menu is called, the
+   entry will be named "Toggle Omnipresent" and will apply to all selected
+   icons trying to toggle their omnipresent state. The icons which will be
+   succesfully changed to their new state as requested, will be unselected,
+   while the ones that will fail for some reason to gain their new state,
+   will remain selected.
+
+In both cases if there is not success in setting what user requested a panel
+will inform user of the failure.
+(Note: trying to set an icon to not-omnipresent will never fail. Failures can
+       be met only when trying to set omnipresent for an icon).
+
+The icons set to omnipresent will be marked with a triangle in the upper left
+corner, having the color of the IconTitleColor.
+
 An icon can be set to omnipresent, only if its position is free in all the
 workspaces, else you will be informed of the problem and asked to fix it first.
 Also when dragging an omnipresent icon around in Clip, all the icons docked in
 all the workspaces are shown while the dragging is done, to let one easily see
 where are free slots in all workspaces.
+
+For advanced users, there is also a shortcut to set/reset the omnipresent
+state of an icon: just use "Shift+MiddleButton" (button2) on the icon you want
+to change.
+In this case only the mark in the upper left corner will appear in case of
+success, or nothing will happen if icon cannot be made omnipresent (advanced
+users are expected to know why the icon failed to be made omnipresent, so they
+don't need a panel to explain them why ;) ).
 
 Now before you load your gun to start a flame war because this is against your
 principles you love so much, please sit down and think that this is a feature,
