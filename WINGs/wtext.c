@@ -2531,12 +2531,6 @@ handleEvents(XEvent *event, void *data)
 
         case DestroyNotify:
             clearText(tPtr);
-            if(tPtr->hS)
-                WMDestroyWidget(tPtr->hS);
-            if(tPtr->vS)
-                WMDestroyWidget(tPtr->vS);
-            if(tPtr->ruler)
-                WMDestroyWidget(tPtr->ruler);
             if(tPtr->db)
                 XFreePixmap(tPtr->view->screen->display, tPtr->db);
             if(tPtr->gfxItems)
