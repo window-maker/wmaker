@@ -45,7 +45,7 @@
 
 #define CLIENT_EVENTS (StructureNotifyMask | PropertyChangeMask\
 	| EnterWindowMask | LeaveWindowMask | ColormapChangeMask \
-	| FocusChangeMask)
+	| FocusChangeMask | VisibilityChangeMask)
 
 typedef enum {
     WFM_PASSIVE, WFM_NO_INPUT, WFM_LOCALLY_ACTIVE, WFM_GLOBALLY_ACTIVE
@@ -224,6 +224,8 @@ typedef struct WWindow {
     struct WOLWindowState ol_window_state;
 #endif
 
+    long event_mask;		       /* the event mask thats selected */
+
 #ifdef MONITOR_HEARTBEAT
     time_t last_beat;
 #endif
@@ -252,19 +254,20 @@ typedef struct WWindow {
 					   * window next time it's painted */
 	unsigned int icon_moved:1;     /* icon for this window was moved
 					* by the user */
-	unsigned int ignore_next_unmap:1;
 	unsigned int selected:1;       /* multiple window selection */
 	unsigned int skip_next_animation:1;
 	unsigned int internal_window:1;
 	unsigned int changing_workspace:1;
 
         unsigned int inspector_open:1; /* attrib inspector is already open */
-	
+
 	unsigned int destroyed:1;      /* window was already destroyed */
 
 	unsigned int menu_open_for_me:1;   /* window commands menu */
 
 	unsigned int waiting_save_ack:1;   /* waiting for SAVE_YOURSELF ack */
+
+	unsigned int obscured:1;       /* window is obscured */
 #ifdef KWM_HINTS
 	unsigned int kwm_hidden_for_modules:1;
 #endif
@@ -328,7 +331,7 @@ WWindow *wManageWindow(WScreen *scr, Window window);
 
 void wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed);
 
-void wWindowFocus(WWindow *wwin);
+void wWindowFocus(WWindow *wwin, WWindow *owin);
 void wWindowUnfocus(WWindow *wwin);
 void wWindowConstrainSize(WWindow *wwin, int *nwidth, int *nheight);
 void wWindowConfigure(WWindow *wwin, int req_x, int req_y, 

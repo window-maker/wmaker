@@ -117,6 +117,7 @@ static void handleClientMessage();
 static void handleKeyPress();
 static void handleFocusIn();
 static void handleMotionNotify();
+static void handleVisibilityNotify();
 
 
 #ifdef SHAPE
@@ -250,7 +251,7 @@ DispatchEvent(XEvent *event)
 	break;
 	
      case MapNotify:
-	handleMapNotify(event->xmap.window);
+	handleMapNotify(event);
 	break;
 	
      case UnmapNotify:
@@ -295,6 +296,10 @@ DispatchEvent(XEvent *event)
 	handleFocusIn(event);
 	break;
 
+     case VisibilityNotify:
+	handleVisibilityNotify(event);
+	break;
+
      default:
 	handleExtensions(event);
 	break;
@@ -333,11 +338,11 @@ IsDoubleClick(WScreen *scr, XEvent *event)
     if ((scr->last_click_time>0) && 
 	(event->xbutton.time-scr->last_click_time<=wPreferences.dblclick_time)
 	&& (event->xbutton.button == scr->last_click_button)
-	&& (event->xbutton.subwindow == scr->last_click_window)) {
+	&& (event->xbutton.window == scr->last_click_window)) {
 
 	scr->flags.next_click_is_not_double = 1;
 	scr->last_click_time = 0;
-	scr->last_click_window = None;
+	scr->last_click_window = event->xbutton.window;
 
 	return True;
     }
@@ -456,7 +461,7 @@ handleMapRequest(XEvent *ev)
     printf("got map request for %x\n", (unsigned)window);
 #endif
 
-    if ((wwin=wWindowFor(window))) {
+    if ((wwin = wWindowFor(window))) {
 	if (wwin->flags.shaded) {
 	    wUnshadeWindow(wwin);
 	}
@@ -496,16 +501,15 @@ handleMapRequest(XEvent *ev)
 	  wDockTrackWindowLaunch(scr->last_dock, window);
     }
 
-
     if (wwin) {
 	int state;
-	
+
 	if (wwin->wm_hints && (wwin->wm_hints->flags & StateHint))
 	    state = wwin->wm_hints->initial_state;
 	else
 	    state = NormalState;
 
-        if (state==IconicState)
+        if (state == IconicState)
             wwin->flags.miniaturized = 1;
 
         if (state == WithdrawnState) {
@@ -520,23 +524,21 @@ handleMapRequest(XEvent *ev)
             if (wwin->flags.shaded) {
                 wwin->flags.shaded = 0;
                 wwin->flags.skip_next_animation = 1;
-                wwin->flags.ignore_next_unmap = 1; /* ??? */
                 wShadeWindow(wwin);
             }
             if (wwin->flags.miniaturized) {
                 wwin->flags.miniaturized = 0;
-                wwin->flags.hidden = 0;
                 wwin->flags.skip_next_animation = 1;
-                wwin->flags.ignore_next_unmap = 1;
                 wIconifyWindow(wwin);
-            } else if (wwin->flags.hidden) {
+            }
+	    if (wwin->flags.hidden) {
                 WApplication *wapp = wApplicationOf(wwin->main_window);
+
                 wwin->flags.hidden = 0;
                 wwin->flags.skip_next_animation = 1;
                 if (wapp) {
                     wHideApplication(wapp);
                 }
-                wwin->flags.ignore_next_unmap = 1;
             }
         }
     }
@@ -585,14 +587,14 @@ static void
 handleExpose(XEvent *event)
 {
     WObjDescriptor *desc;
+    XEvent ev;
 
 #ifdef DEBUG    
     puts("got expose");
 #endif
-    if (event->xexpose.count!=0) {
-      return;
-    }
-    
+
+    while (XCheckTypedWindowEvent(dpy, event->xexpose.window, Expose, &ev));
+
     if (XFindContext(dpy, event->xexpose.window, wWinContext, 
 		     (XPointer *)&desc)==XCNOENT) {
 	return;
@@ -675,6 +677,10 @@ handleButtonPress(XEvent *event)
 	}
     }
 
+    if (desc->handle_mousedown!=NULL) {
+	(*desc->handle_mousedown)(desc, event);
+    }
+
     if (desc->parent_type == WCLASS_WINDOW) {
 	XSync(dpy, 0);
     
@@ -699,43 +705,33 @@ handleButtonPress(XEvent *event)
 	}
     }
 
-    if (desc->handle_mousedown!=NULL) {
-	(*desc->handle_mousedown)(desc, event);
-    }
-    
     /* save double-click information */
     if (scr->flags.next_click_is_not_double) {
 	scr->flags.next_click_is_not_double = 0;
     } else {
 	scr->last_click_time = event->xbutton.time;
 	scr->last_click_button = event->xbutton.button;
-	scr->last_click_window = event->xbutton.subwindow;
+	scr->last_click_window = event->xbutton.window;
     }
 }
 
 
 static void
-handleMapNotify(Window window)
+handleMapNotify(XEvent *event)
 {
     WWindow *wwin;
-    
+
 #ifdef DEBUG
     puts("got map");
 #endif
-    wwin= wWindowFor(window);
-    if (wwin && wwin->client_win==window) {
-	if (wwin->flags.ignore_next_unmap) {
-	    wwin->flags.ignore_next_unmap=0;	    
-	    return;
-	}
+
+    wwin = wWindowFor(event->xmap.event);
+    if (wwin && wwin->client_win == event->xmap.event) {
 	if (wwin->flags.miniaturized) {
 	    wDeiconifyWindow(wwin);
 	} else {
 	    XGrabServer(dpy);
-	    XSync(dpy,0);
-	    XMapWindow(dpy, wwin->client_win);
-	    XMapWindow(dpy, wwin->frame->core->window);
-	    wwin->flags.mapped=1;
+	    wWindowMap(wwin);
 	    wClientSetState(wwin, NormalState, None);
 	    XUngrabServer(dpy);
 	}
@@ -748,22 +744,31 @@ handleUnmapNotify(XEvent *event)
 {
     WWindow *wwin;
     XEvent ev;
-    
+    Bool withdraw = False;
+
 #ifdef DEBUG
     puts("got unmap");
 #endif
+
+    /* only process windows with StructureNotify selected 
+     * (ignore SubstructureNotify) */
     wwin = wWindowFor(event->xunmap.window);
-    if (!wwin || wwin->client_win!=event->xunmap.window)
+    if (!wwin)
 	return;
-    
-    if (!wwin->flags.mapped 
-	&& wwin->frame->workspace==wwin->screen_ptr->current_workspace
+
+    /* whether the event is a Withdrawal request */
+    if (event->xunmap.event == wwin->screen_ptr->root_win
+	&& event->xunmap.send_event)
+	withdraw = True;
+
+    if (wwin->client_win != event->xunmap.event && !withdraw)
+	return;
+
+    if (!wwin->flags.mapped && !withdraw
+	&& wwin->frame->workspace == wwin->screen_ptr->current_workspace
 	&& !wwin->flags.miniaturized && !wwin->flags.hidden)
 	return;
 
-    if (wwin->flags.ignore_next_unmap) {
-	return;
-    }
     XGrabServer(dpy);
     XUnmapWindow(dpy, wwin->frame->core->window);
     wwin->flags.mapped = 0;
@@ -863,7 +868,7 @@ handleClientMessage(XEvent *event)
 	    wIconifyWindow(wwin);
     } else if (event->xclient.message_type == _XA_WM_COLORMAP_NOTIFY
 	       && event->xclient.format == 32) {
-	WScreen *scr = wScreenForRootWindow(event->xclient.window);
+	WScreen *scr = wScreenSearchForRootWindow(event->xclient.window);
 
 	if (!scr)
 	    return;
@@ -1026,7 +1031,8 @@ handleEnterNotify(XEvent *event)
 	 * is for the frame window and window doesn't have focus yet */
 	if ((wPreferences.focus_mode==WKF_POINTER
 	     || wPreferences.focus_mode==WKF_SLOPPY)
-		&& wwin->frame->core->window==event->xcrossing.window) {
+		&& wwin->frame->core->window==event->xcrossing.window
+	    && !scr->flags.doing_alt_tab) {
 
 		if (!wwin->flags.focused)
 		wSetFocusTo(scr, wwin);
@@ -1238,6 +1244,161 @@ windowUnderPointer(WScreen *scr)
     return NULL;
 }
 
+#ifdef WEENDOZE_CYCLE
+
+static WWindow*
+nextToFocusAfter(WWindow *wwin)
+{
+    WWindow *tmp = wwin->next;
+
+    while (tmp) {
+	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
+
+	    return tmp;
+	}
+	tmp = tmp->next;
+    }
+
+    tmp = wwin;
+    /* start over from the beginning of the list */
+    while (tmp->prev)
+	tmp = tmp->prev;
+
+    while (tmp && tmp != wwin) {
+	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
+
+	    return tmp;
+	}
+	tmp = tmp->next;
+    }
+
+    return wwin;
+}
+
+
+static WWindow*
+nextToFocusBefore(WWindow *wwin)
+{
+    WWindow *tmp = wwin->prev;
+
+    while (tmp) {
+	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
+
+	    return tmp;
+	}
+	tmp = tmp->prev;
+    }
+
+    /* start over from the beginning of the list */
+    tmp = wwin;
+    while (tmp->next)
+	tmp = tmp->next;
+
+    while (tmp && tmp != wwin) {
+	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
+
+	    return tmp;
+	}
+	tmp = tmp->prev;
+    }
+
+    return wwin;
+}
+
+static void
+doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
+{
+    WScreen *scr = wScreenForRootWindow(event->xkey.root);
+    Bool done = False;
+    WWindow *newFocused;
+    WWindow *oldFocused;
+    int modifiers;
+    XModifierKeymap *keymap;
+
+    if (!wwin)
+	return;
+
+    puts("IN");
+    keymap = XGetModifierMapping(dpy);
+
+    
+    XGrabKeyboard(dpy, scr->root_win, False, GrabModeAsync, GrabModeAsync, 
+		  CurrentTime);
+
+    if (next) {
+	newFocused = nextToFocusAfter(wwin);
+    } else {
+	newFocused = nextToFocusBefore(wwin); 
+    }
+
+    scr->flags.doing_alt_tab = 1;
+
+    wWindowFocus(newFocused, scr->focused_window);
+    oldFocused = newFocused;
+
+    OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);
+
+    while (!done) {
+	XEvent ev;
+
+	WMMaskEvent(dpy,KeyPressMask|KeyReleaseMask|ExposureMask, &ev);
+/*	WMNextEvent(dpy, &ev);*/
+	if (ev.type != KeyRelease && ev.type != KeyPress) {
+	    WMHandleEvent(&ev);
+	    continue;
+	}
+puts("EV");
+	/* ignore CapsLock */
+	modifiers = ev.xkey.state & ValidModMask;
+
+	if (ev.type == KeyPress
+	    && wKeyBindings[WKBD_FOCUSNEXT].keycode == ev.xkey.keycode
+	    && wKeyBindings[WKBD_FOCUSNEXT].modifier == modifiers) {
+
+	    UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
+	    newFocused = nextToFocusAfter(newFocused);
+	    wWindowFocus(newFocused, oldFocused);
+	    oldFocused = newFocused;
+	    UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
+
+	} else if (ev.type == KeyPress
+		   && wKeyBindings[WKBD_FOCUSPREV].keycode == ev.xkey.keycode
+		   && wKeyBindings[WKBD_FOCUSPREV].modifier == modifiers) {
+
+	    UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
+	    newFocused = nextToFocusBefore(newFocused);
+	    wWindowFocus(newFocused, oldFocused);
+	    oldFocused = newFocused;
+	    UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
+	}
+	if (ev.type == KeyRelease) {
+	    int i;
+
+	    for (i = 0; i <= 8 * keymap->max_keypermod; i++) {
+		if (keymap->modifiermap[i] == ev.xkey.keycode &&
+		    wKeyBindings[WKBD_FOCUSNEXT].modifier 
+		    & 1<<(i/keymap->max_keypermod)) {
+		    done = True;
+		    break;
+		}
+	    }
+	}
+    }
+puts("OUT");
+    XFree(keymap);
+
+    XUngrabKeyboard(dpy, CurrentTime);
+    wSetFocusTo(scr, newFocused);
+    scr->flags.doing_alt_tab = 0; 
+    OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);   
+}
+
+
+#endif /* WEENDOZE_CYCLE */
+
+
+
+
 static void
 handleKeyPress(XEvent *event)
 {
@@ -1407,21 +1568,37 @@ handleKeyPress(XEvent *event)
 	}
         break;
      case WKBD_FOCUSNEXT:
-	wwin = NextFocusWindow(scr);
-        if (wwin != NULL) {
-            wSetFocusTo(scr, wwin);
-            if (wPreferences.circ_raise)
-                wRaiseFrame(wwin->frame->core);
-        }
+#ifdef WEENDOZE_CYCLE
+	if (wPreferences.windoze_cycling) {
+	    doWindozeCycle(wwin, event, True);
+	} else
+#endif /* WEENDOZE_CYCLE */
+	{
+	    wwin = NextFocusWindow(scr);
+	    if (wwin != NULL) {
+		wSetFocusTo(scr, wwin);
+		if (wPreferences.circ_raise)
+		    wRaiseFrame(wwin->frame->core);
+	    }
+	}
 	break;
+
      case WKBD_FOCUSPREV:
-	wwin = PrevFocusWindow(scr);
-        if (wwin != NULL) {
-            wSetFocusTo(scr, wwin);
-            if (wPreferences.circ_raise)
-                wRaiseFrame(wwin->frame->core);
-        }
+#ifdef WEENDOZE_CYCLE
+	if (wPreferences.windoze_cycling) {
+	    doWindozeCycle(wwin, event, False);
+	} else 
+#endif /* WEENDOZE_CYCLE */
+	{
+	    wwin = PrevFocusWindow(scr);
+	    if (wwin != NULL) {
+		wSetFocusTo(scr, wwin);
+		if (wPreferences.circ_raise)
+		    wRaiseFrame(wwin->frame->core);
+	    }
+	}
 	break;
+
 #if (defined(__STDC__) && !defined(UNIXCPP)) || defined(ANSICPP)
 #define GOTOWORKS(wk)	case WKBD_WORKSPACE##wk:\
 			i = (scr->current_workspace/10)*10 + wk - 1;\
@@ -1543,3 +1720,14 @@ handleMotionNotify(XEvent *event)
 }
 
 
+static void
+handleVisibilityNotify(XEvent *event)
+{
+    WWindow *wwin;
+
+    wwin = wWindowFor(event->xvisibility.window);
+    if (!wwin)
+	return;
+    wwin->flags.obscured = 
+	(event->xvisibility.state == VisibilityFullyObscured);
+}

@@ -10,7 +10,7 @@
  * 
  * SHORTCUT specifies a shortcut for that item. <Shortcut> has the
  * same syntax of the shortcuts key options in the 
- * ~/GNUstep/Defaults/WindowMaker file, such as RootMenuKey or MiniaturizeKey.
+ * $HOME/GNUstep/Defaults/WindowMaker file, such as RootMenuKey or MiniaturizeKey.
  *
  * You can't specify a shortcut for a MENU or OPEN_MENU entry.
  * 
@@ -93,9 +93,9 @@
  *		// creates a submenu with the contents of /usr/openwin/bin
  *	"XView apps" OPEN_MENU "/usr/openwin/bin"
  *		// some X11 apps in different directories
- *	"X11 apps" OPEN_MENU /usr/X11/bin ~/bin/X11
+ *	"X11 apps" OPEN_MENU /usr/X11/bin $HOME/bin/X11
  *		// set some background images
- *	"Background" OPEN_MENU -noext ~/images /usr/share/images WITH wmsetbg -u -t
+ *	"Background" OPEN_MENU -noext $HOME/images /usr/share/images WITH wmsetbg -u -t
  *		// inserts the style.menu in this entry
  *	"Style" OPEN_MENU style.menu
  * "Test" END
@@ -173,9 +173,9 @@
 	"Workspace" END
 
 	"Appearance" MENU
-		"Themes" OPEN_MENU -noext THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Styles" OPEN_MENU -noext STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Icon Sets" OPEN_MENU -noext ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Themes" OPEN_MENU -noext THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Styles" OPEN_MENU -noext STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Icon Sets" OPEN_MENU -noext ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Background" MENU
 			"Solid" MENU
                         	"Black" WS_BACK '(solid, black)'
@@ -197,10 +197,10 @@
     				"Grey Shades" WS_BACK '(vgradient, "#636380", "#131318")'
     				"Wine Shades" WS_BACK '(vgradient, "#600040", "#180010")'
 			"Gradient" END
-			"Images" OPEN_MENU -noext BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+			"Images" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Background" END
-		"Save Theme" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Theme name,Enter file name:)"
-		"Save IconSet" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name,Enter file name:)"
+		"Save Theme" EXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name,Enter file name:)"
+		"Save IconSet" EXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name,Enter file name:)"
 	"Appearance" END
 
 	"Exit"	MENU

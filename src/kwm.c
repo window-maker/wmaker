@@ -1424,7 +1424,7 @@ wKWMCheckDestroy(XDestroyWindowEvent *event)
 	return;
     }
 
-    scr = wScreenForRootWindow(event->event);
+    scr = wScreenSearchForRootWindow(event->event);
     if (!scr) {
 	return;
     }

@@ -9,7 +9,7 @@
  * 	yazýlmalý
  * 
  * SHORTCUT sözkonusu giriþ için kýsayol tuþu tanýmlamak için kullanýlýr
- * <Kýsayol>, ~/GNUstep/Defaults/WindowMaker olduðu gibi tanýmlanabilir.
+ * <Kýsayol>, $HOME/GNUstep/Defaults/WindowMaker olduðu gibi tanýmlanabilir.
  *
  * MENU veya OPEN_MENU için kýsayol tanýmlayamazsýnýz.
  * 
@@ -76,9 +76,9 @@
  *		//  /usr/openwin/bin'in içeriði ile bir menü yaratýr
  *	"XView apps" OPEN_MENU "/usr/openwin/bin"
  *		// deðiþik dizinlerde yer alan uygulamalrla bir menü yaratýr
- *	"X11 apps" OPEN_MENU /usr/X11/bin ~/bin/X11
+ *	"X11 apps" OPEN_MENU /usr/X11/bin $HOME/bin/X11
  *		// bazý arkaplan görüntülerini ekler
- *	"Background" OPEN_MENU ~/images /usr/share/images WITH wmsetbg -u -t
+ *	"Background" OPEN_MENU $HOME/images /usr/share/images WITH wmsetbg -u -t
  *		// style.menu menüsünü ekler.
  *	"Style" OPEN_MENU style.menu
  * "Test" END
@@ -156,9 +156,9 @@
 	"Çalýþma Alaný" END
 
 	"Görünüm" MENU
-		"Temalar" OPEN_MENU -noext THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Tarzlar" OPEN_MENU -noext STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Simge Kümeleri" OPEN_MENU -noext ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Temalar" OPEN_MENU -noext THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Tarzlar" OPEN_MENU -noext STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Simge Kümeleri" OPEN_MENU -noext ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Arkaplan" MENU
 			"Düz Renk" MENU
                         	"Black" WS_BACK '(solid, black)'
@@ -174,10 +174,10 @@
 				"Flag" WS_BACK '(mdgradient, green, red, white, green)'
 				"Sky" WS_BACK '(vgradient, blue4, white)'
 			"Renk Geçiþi" END
-			"Görüntüler" OPEN_MENU -noext BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+			"Görüntüler" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Arkaplan" END
-		"Tema Sakla" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
-		"Simge Kümesi Sakla" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
+		"Tema Sakla" EXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
+		"Simge Kümesi Sakla" EXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
 	"Görünüm" END
 
 	"Çýkýþ"	MENU

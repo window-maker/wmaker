@@ -6,7 +6,7 @@ SUBDIRS = Resources
 
 
 LIBLIST= $(top_builddir)/wrlib/libwraster.la\
-	 @GFXLFLAGS@ @XLFLAGS@ @GFXLIBS@ @XLIBS@ \
+	 @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ \
 	-lm @LIBPL@
 
 
@@ -18,7 +18,8 @@ lib_LIBRARIES = libWINGs.a
 
 include_HEADERS = WINGs.h WUtil.h WINGsP.h
 
-noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel
+noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel \
+			testnot
 
 testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h
 
@@ -42,6 +43,10 @@ testcolorpanel_SOURCES = testcolorpanel.c
 
 testcolorpanel_LDADD = libWINGs.a $(LIBLIST)
 
+testnot_SOURCES = testnot.c
+
+testnot_LDADD = libWINGs.a $(LIBLIST)
+
 
 wmquery_SOURCES = wmquery.c 
 
@@ -55,6 +60,8 @@ libWINGs_a_SOURCES = 	\
 	WINGs.h \
 	WINGsP.h \
 	configuration.c \
+	llist.h \
+	llist.c \
 	international.c \
 	notification.c \
 	selection.c \
@@ -90,11 +97,7 @@ libWINGs_a_SOURCES = 	\
 	memory.c \
 	usleep.c
 
-##
-## Find a better way than $(GFXFLAGS) to inform widgets.c wich of 
-## tiff or xpm images should be used
 
 INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
-	-DRESOURCE_PATH=\"$(datadir)/WINGs\" $(GFXFLAGS) -DDEBUG \
-	@XCFLAGS@
+	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @HEADER_SEARCH_PATH@ -DDEBUG
 

@@ -26,17 +26,11 @@
 /* Define if you have the vprintf function.  */
 #define HAVE_VPRINTF 1
 
-/* Define to `int' if <sys/types.h> doesn't define.  */
-/* #undef pid_t */
-
 /* Define if you need to in order for stat and other things to work.  */
 /* #undef _POSIX_SOURCE */
 
 /* Define as the return type of signal handlers (int or void).  */
 #define RETSIGTYPE void
-
-/* Define to `unsigned' if <sys/types.h> doesn't define.  */
-/* #undef size_t */
 
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
@@ -46,9 +40,6 @@
  STACK_DIRECTION = 0 => direction of growth unknown
  */
 /* #undef STACK_DIRECTION */
-
-/* Define if you have the ANSI C header files.  */
-#define STDC_HEADERS 1
 
 /* Define if `sys_siglist' is declared by <signal.h>.  */
 #define SYS_SIGLIST_DECLARED 1
@@ -61,10 +52,6 @@
 
 /* define to the path to cpp */
 #define CPP_PATH "/lib/cpp"
-
-/* define to the directory containing NLS information
- * set by configure */
-#define NLSDIR "/usr/local/lib/locale"
 
 /* define if you want GNOME stuff support */
 /* #undef GNOME_STUFF */
@@ -130,9 +117,13 @@
  * set by configure */
 #define X_LOCALE 1
 
-/* the place where the configuration is stored
+/* the place where shared data is stored
  * defined by configure */
 #define PKGDATADIR "/usr/local/share/WindowMaker"
+
+/* the place where the configuration is stored
+ * defined by configure */
+#define SYSCONFDIR "/usr/local/etc/WindowMaker"
 
 /* Define if you have the atexit function.  */
 #define HAVE_ATEXIT 1
@@ -153,7 +144,7 @@
 #define HAVE_STRERROR 1
 
 /* Define if you have the strncasecmp function.  */
-/* #undef HAVE_STRNCASECMP */
+#define HAVE_STRNCASECMP 1
 
 /* Define if you have the <fcntl.h> header file.  */
 #define HAVE_FCNTL_H 1
@@ -183,5 +174,5 @@
 #define PACKAGE "WindowMaker"
 
 /* Version number of package */
-#define VERSION "0.51.0"
+#define VERSION "0.51.1"
 

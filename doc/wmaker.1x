@@ -11,13 +11,13 @@ emulate NeXT's look as much as possible, but it deviates from it as
 necessary.
 .SH "OPTIONS"
 .TP
-.B \-nocpp
+.B \-\-no\-cpp
 disable preprocessing of configuration files
 .TP
-.B \-nodock
+.B \-\-no\-dock
 do not show the application Dock
 .TP
-.B \-noclip
+.B \-\-no\-clip
 do not show the workspace Clip
 .TP
 .B \-display host:display.screen
@@ -30,13 +30,16 @@ command line argument. For example, if you want Window Maker to manage only
 screen 1, start it as:
 .B wmaker -display :0.1
 .TP
-.B \-version
+.B \-\-version
 display version number and exit
 .TP
-.B \-visualid
+.B \-\-visual\-id
 specify the ID of the visual to use. See
 .BR xdpyinfo (1x)
 for a list of visuals available in your display.
+.TP
+.B \-\-help
+print a brief help message
 .PP
 .SH FILES
 .TP

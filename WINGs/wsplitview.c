@@ -144,7 +144,7 @@ WMAddSplitViewSubview(WMSplitView *sPtr, WMView *subview)
 	W_UnmapView(subview);
     }
 
-    W_ReparentView(subview, sPtr->view);
+    W_ReparentView(subview, sPtr->view, 0, 0);
 
 #if 0
     if (sPtr->resizeSubviewsProc && subviewCount(sPtr)>1) {

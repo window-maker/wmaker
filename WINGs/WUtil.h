@@ -61,6 +61,10 @@
 #endif /* !NDEBUG */
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 
 typedef enum {
     WMPostWhenIdle = 1,
@@ -227,9 +231,12 @@ WMNotificationQueue *WMGetDefaultNotificationQueue(void);
 
 WMNotificationQueue *WMCreateNotificationQueue(void);
 
-void WMDequeueNotificationMatching(WMNotificationQueue *queue, unsigned mask);
+void WMDequeueNotificationMatching(WMNotificationQueue *queue, 
+				   WMNotification *notification, 
+				   unsigned mask);
 
-void WMEnqueueNotification(WMNotificationQueue *queue, WMNotification *notification,
+void WMEnqueueNotification(WMNotificationQueue *queue,
+			   WMNotification *notification,
 			   WMPostingStyle postingStyle);
 
 void WMEnqueueCoalesceNotification(WMNotificationQueue *queue, 
@@ -254,7 +261,7 @@ char *WMGetUDStringForKey(WMUserDefaults *database, char *defaultName);
 
 int WMGetUDIntegerForKey(WMUserDefaults *database, char *defaultName);
 
-int WMGetUDFloatForKey(WMUserDefaults *database, char *defaultName);
+float WMGetUDFloatForKey(WMUserDefaults *database, char *defaultName);
 
 Bool WMGetUDBoolForKey(WMUserDefaults *database, char *defaultName);
 
@@ -274,6 +281,9 @@ proplist_t WMGetUDSearchList(WMUserDefaults *database);
 
 void WMSetUDSearchList(WMUserDefaults *database, proplist_t list);
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 
 #endif

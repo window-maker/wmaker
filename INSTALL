@@ -66,11 +66,11 @@ The following is required to build Window Maker:
 	Install it before building Window Maker.
 
 - autoconf, automake and libtool
-	These tools are not needed, but IF you have one or
+	These tools are NOT needed, but IF you have one or
 	more of them installed, make sure you have ALL of the following 
 	with exactly these versions:
-		autoconf 2.12
-		automake 1.3
+		autoconf 2.13
+		automake 1.4
 		libtool 1.2
 	If you have a different version, disable them by temporarily
 	renaming them to something else or uninstalling them from your
@@ -116,7 +116,7 @@ might work too.
 - GNU xgettext
 	If you want to use translated messages, you will need GNU gettext.
 	Other versions of gettext are not compatible and will not work.
-	Get the GNU version from ftp://prep.ai.mit.edu
+	Get the GNU version from ftp://ftp.gnu.org
 
 Most of these can be get from ftp.uu.net/pub/graphics
 
@@ -134,6 +134,16 @@ support compiled in.
 
 
 To get a list of other options, run ./configure --help
+
+--with-libs-from
+	specify additional paths for libraries to be searched.
+	The -L flag must precede each path, like:
+	--with-libs-from=-L/opt/libs -L/usr/local/lib
+
+--with-incs-from
+	specify additional paths for header files to be searched.
+	The -I flag must precede each paths, like:
+	--with-incs-from=-I/opt/headers -I/usr/local/include
 
 --enable-kanji
 	support to display Kanji characters, Korean, Chinese and other
@@ -202,6 +212,11 @@ To get a list of other options, run ./configure --help
 
 PLATFORM SPECIFIC NOTES:
 ========================
+
+- DEC/Alpha machines
+	You might need to pass the --disable-shm flag to configure, like
+	./configure --disable-shm
+
 - SCO Unix - run configure like
 	CFLAGS="-belf -DANSICPP" ./configure 
 
@@ -210,8 +225,10 @@ PLATFORM SPECIFIC NOTES:
 	CPP_PATH="gcc -E -x c" ./configure
 	Sun's cpp lacks some features needed by Window Maker and it can
 	cause problems when parsing the config files.
-	You also might need to use the --with-gfx-libs and --with-gfx-incs
+	You also might need to use the --with-libs-from and --with-incs-from
 	to supply the directory where libtiff is located.
+	Someone mailed me that you also must make /usr/local/lib be the
+	first path in LD_LIBRARY_PATH to make it work.
 
 	If you have a Ultra Creator 3D or some other machine with high-end
 	graphics, be sure to start the X server with the default visual
@@ -221,17 +238,21 @@ PLATFORM SPECIFIC NOTES:
 - GNU/Linux in general
 	Make sure you have /usr/local/lib in /etc/ld.so.conf and that you
 	run ldconfig after installing.
+	Uninstall any packaged version of Window Maker before installing a new
+	version. 
 
 - RedHat GNU/Linux
 	RedHat systems have several annoying problems. If you use it, 
 	be sure to follow the steps below or Window Maker will not work:
 
+	* if you installed the Window Maker that comes with RedHat, uninstall
+	it before upgrading;
+
 	* make sure you don't have the LANG and LINGUAS environment variables
 	set to en_RN;
 
 	* make sure you have /usr/local/bin in your PATH environment
-	variable, as for some mysterious reason the folks at RedHat did not
-	include it in the default configuration files in RH 5.x;
+	variable;
 
 	* make sure you have /usr/local/lib in /etc/ld.so.conf before running
 	ldconfig;
@@ -248,6 +269,15 @@ PLATFORM SPECIFIC NOTES:
 	(type ln -s /usr/X11R6 /usr/X11 ) and make sure you have a symbolic
 	link from /usr/include/X11 to /usr/X11R6/include/X11 (if not,
 	type ln -s /usr/X11R6/include/X11 /usr/include/X11 )
+
+	* make sure you have /lib/cpp pointing to the cpp program
+
+	If you have any doubts in doing any of the stuff above, please
+	don't exitate to contact the RedHat user support. They will
+	kindly answer to all your questions regarding their system.
+	They also know much more about their own system than us 
+	(we don't use RedHat).
+
 
 - PowerPC MkLinux
 	You will need to have the latest version of Xpmac. Older versions
@@ -364,8 +394,13 @@ WPrefs.app Example:
 ./configure --prefix=/home/jshmoe --with-appspath=/home/jshmoe/GNUstep/Apps
 
 
-Then make /home/jshmoe/bin be included in your search path and run 
+Then make /home/jshmoe/bin be included in your search PATH, add
+/home/jshmoe/lib to your LD_LIBRARY_PATH environment variable and run 
 bin/wmaker.inst
+
+Of course, /home/jshmoe is supposed to be replaced with your actual home
+directory path.
+
 
 
 UPGRADING
@@ -395,8 +430,8 @@ configure: error: libtool configure failed
 remove the --no-reexec option from aclocal.m4 and libPropList/aclocal.m4
 and reconfigure
 Also make sure the autoconf and automake versions you have installed are:
-autoconf 2.12
-automake 1.3
+autoconf 2.13
+automake 1.4
 libtool 1.2
 
 Note that it must not be libtool 1.2b, it must be libtool 1.2, 
@@ -412,11 +447,11 @@ somewhere else in this file.
 
 Delete config.cache, then rerun configure adding the following options to
 configure (among the other options you use):
---with-gfx-libs="-L/usr/local/lib"
---with-gfx-incs="-I/usr/local/include -I/usr/local/include/tiff"
+--with-libs-from="-L/usr/local/lib"
+--with-incs-from="-I/usr/local/include -I/usr/local/include/tiff"
 Put the paths where your graphic libs and their corresponding header files are
 located. You can put multiple paths in any of these options, as the example
-of --with-gfx-incs shows. Just put a space between them.
+of --with-incs-from shows. Just put a space between them.
 
 
 == configure doesn't detect libXpm. 

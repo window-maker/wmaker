@@ -83,9 +83,9 @@
  *		// /usr/openwin/bin 디렉토리의 내용으로 서브 메뉴를 만든다.
  *	"XView apps" OPEN_MENU "/usr/openwin/bin"
  *		// 다른 디렉토리에 있는 몇개의 X11 프로그램들
- *	"X11 apps" OPEN_MENU /usr/X11/bin ~/bin/X11
+ *	"X11 apps" OPEN_MENU /usr/X11/bin $HOME/bin/X11
  *		// 바탕화면으로 사용할 그림을 지정한다.
- *	"Background" OPEN_MENU ~/images /usr/share/images WITH wmsetbg -u -t
+ *	"Background" OPEN_MENU $HOME/images /usr/share/images WITH wmsetbg -u -t
  *		// 현재 항목에 style.menu를 삽입한다.
  *	"Style" OPEN_MENU style.menu
  * "Test" END
@@ -172,9 +172,9 @@
 	"작업공간" END
 
 	"Appearance" MENU
-		"테마" OPEN_MENU -noext THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"스타일" OPEN_MENU -noext STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"아이콘 세트" OPEN_MENU -noext ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"테마" OPEN_MENU -noext THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"스타일" OPEN_MENU -noext STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"아이콘 세트" OPEN_MENU -noext ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"배경화면" MENU
 			"Solid" MENU
                         	"검은색" WS_BACK '(solid, black)'
@@ -190,14 +190,14 @@
 				"Flag" WS_BACK '(mdgradient, green, red, white, green)'
 				"Sky" WS_BACK '(vgradient, blue4, white)'
 			"Gradient" END
-			"Images" OPEN_MENU -noext BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+			"Images" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"배경화면" END
-		"테마 저장" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
-		"아이콘세트 저장" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
+		"테마 저장" EXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
+		"아이콘세트 저장" EXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
 		"설정 파일 수정" MENU
-			"menu.ko" EXEC hanterm -e vi ~/GNUstep/Library/WindowMaker/menu.ko
-			"WindowMaker" EXEC hanterm -e vi ~/GNUstep/Defaults/WindowMaker
-			"WMWindowAttributes" EXEC hanterm -e vi ~/GNUstep/Defaults/WMWindowAttributes
+			"menu.ko" EXEC hanterm -e vi $HOME/GNUstep/Library/WindowMaker/menu.ko
+			"WindowMaker" EXEC hanterm -e vi $HOME/GNUstep/Defaults/WindowMaker
+			"WMWindowAttributes" EXEC hanterm -e vi $HOME/GNUstep/Defaults/WMWindowAttributes
 		"환경 설정" END
 	"Appearance" END
 

@@ -149,7 +149,7 @@ main(int argc, char **argv)
     if (getenv("NLSPATH"))
 	bindtextdomain("WPrefs", getenv("NLSPATH"));
     else
-	bindtextdomain("WPrefs", NLSDIR);
+	bindtextdomain("WPrefs", LOCALEDIR);
     textdomain("WPrefs");
 
     if (!XSupportsLocale()) {
@@ -165,7 +165,7 @@ main(int argc, char **argv)
 	wfatal(_("could not open display %s"), XDisplayName(display_name));
 	exit(0);
     }
-#if 0
+#if 1
     XSynchronize(dpy, 1);
 #endif
     scr = WMCreateScreen(dpy, DefaultScreen(dpy));

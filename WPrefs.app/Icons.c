@@ -145,6 +145,8 @@ showData(_Panel *panel)
     WMSetPopUpButtonSelectedItem(panel->sizeP, i);
     
     str = GetStringForKey("IconificationStyle");
+    if (!str)
+	str = "zoom";
     if (strcasecmp(str, "none")==0)
 	WMPerformButtonClick(panel->animB[3]);
     else if (strcasecmp(str, "twist")==0)

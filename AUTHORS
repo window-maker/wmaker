@@ -33,6 +33,9 @@ Text input field, 15bpp support
 George Clernon <clernong@tinet.ie>
 bug fix in browser widget
 
+Omar Cornut / Zoop <cornut@capway.com>
+SteelBlueSilk theme
+
 Sylvain CORRE <sylvain.corre@wanadoo.fr>
 bug fix for MkLinux/PPC
 
@@ -65,7 +68,7 @@ Better detection of gfx libraries, added IconTitleColor/IconTitleBack
 Greg Hayes <sdc@choice.net>
 Twisted miniaturization  animation
 
-Alban Hertroys
+Alban Hertroys <dalroi@wit401310.student.utwente.nl>
 WINGs color panel
 
 HIDEKI Fujimoto <hideki70@osk2.threewebnet.or.jp>
@@ -192,6 +195,10 @@ xv.tiff
 
 David Wang <dwang@cisco.com>
 edge resistance, 8bpp balloon bug fix, other 8bpp related fixes
+
+Franck Wolff <frawolff@club-internet.fr>
+various fixes/enhancements to WINGs
+
 
 Yoav Yerushalmi <yoav@mit.edu>
 Fixed -visualid for screens that can do multiple depths. Another fix in 

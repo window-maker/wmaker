@@ -33,3 +33,4 @@ wdwrite- write data into the defaults database (configuration files).
 
 wsetfont- set locale the fonts needed for a specific locale for Window Maker
 
+wkdemenu.sh- convert a KDE menu into a wmaker menu (for pipe)

@@ -25,17 +25,11 @@
 /* Define if you have the vprintf function.  */
 #undef HAVE_VPRINTF
 
-/* Define to `int' if <sys/types.h> doesn't define.  */
-#undef pid_t
-
 /* Define if you need to in order for stat and other things to work.  */
 #undef _POSIX_SOURCE
 
 /* Define as the return type of signal handlers (int or void).  */
 #undef RETSIGTYPE
-
-/* Define to `unsigned' if <sys/types.h> doesn't define.  */
-#undef size_t
 
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
@@ -45,9 +39,6 @@
  STACK_DIRECTION = 0 => direction of growth unknown
  */
 #undef STACK_DIRECTION
-
-/* Define if you have the ANSI C header files.  */
-#undef STDC_HEADERS
 
 /* Define if `sys_siglist' is declared by <signal.h>.  */
 #undef SYS_SIGLIST_DECLARED
@@ -60,10 +51,6 @@
 
 /* define to the path to cpp */
 #undef CPP_PATH
-
-/* define to the directory containing NLS information
- * set by configure */
-#undef NLSDIR
 
 /* define if you want GNOME stuff support */
 #undef GNOME_STUFF
@@ -129,9 +116,13 @@
  * set by configure */
 #undef X_LOCALE
 
-/* the place where the configuration is stored
+/* the place where shared data is stored
  * defined by configure */
 #undef PKGDATADIR
+
+/* the place where the configuration is stored
+ * defined by configure */
+#undef SYSCONFDIR
 
 /* Define if you have the atexit function.  */
 #undef HAVE_ATEXIT

@@ -1,10 +1,10 @@
-nlsdir      = @NLSDIR@
-
 CATALOGS = @WPMOFILES@
+
+nlsdir = $(DESTDIR)$(NLSDIR)
 
 CLEANFILES = $(CATALOGS)
 
-EXTRA_DIST = pt.po hr.po fr.po ko.po cs.po ja.po
+EXTRA_DIST = pt.po hr.po fr.po ko.po cs.po ja.po zh_TW.Big5.po
 
 POTFILES  = \
 	$(top_builddir)/WPrefs.app/Configurations.c \
@@ -45,15 +45,15 @@ WPrefs.pot: $(POTFILES)
 
 
 install-data-local:  $(CATALOGS)
-	$(mkinstalldirs) $(DESTDIR)$(nlsdir) 
-	chmod 755 $(DESTDIR)$(nlsdir) 
+	$(mkinstalldirs) $(nlsdir)
+	chmod 755 $(nlsdir) 
 	for n in $(CATALOGS) __DuMmY ; do \
 		if test "$$n" -a "$$n" != "__DuMmY" ; then \
 			l=`basename $$n .mo`; \
-			$(mkinstalldirs) $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES; \
-			chmod 755 $(DESTDIR)$(nlsdir)/$$l; \
-			chmod 755 $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES; \
-			$(INSTALL) -m 644 $$n $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES/WPrefs.mo; \
+			$(mkinstalldirs) $(nlsdir)/$$l/LC_MESSAGES; \
+			chmod 755 $(nlsdir)/$$l; \
+			chmod 755 $(nlsdir)/$$l/LC_MESSAGES; \
+			$(INSTALL_DATA) -m 644 $$n $(nlsdir)/$$l/LC_MESSAGES/WPrefs.mo; \
 		fi; \
 	done
 

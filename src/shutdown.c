@@ -162,7 +162,7 @@ RestoreDesktop(WScreen *scr)
 {
     int i;
 
-    if (scr->helper_pid) {
+    if (scr->helper_pid > 0) {
 	kill(scr->helper_pid, SIGTERM);
 	scr->helper_pid = 0;
     }

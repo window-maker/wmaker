@@ -78,16 +78,28 @@ iconPosition(WCoreWindow *wcore, int sx1, int sy1, int sx2, int sy2,
 
 	ok = 1;
     } else if (wcore->descriptor.parent_type == WCLASS_MINIWINDOW &&
-	       (((WIcon*)parent)->owner->frame->workspace==workspace
+	       (((WIcon*)parent)->owner->frame->workspace == workspace
 		|| IS_OMNIPRESENT(((WIcon*)parent)->owner)
 		|| wPreferences.sticky_icons)
-	       && !((WIcon*)parent)->owner->flags.hidden) {
+	       && (!((WIcon*)parent)->owner->flags.hidden
+		   || wcore->screen_ptr->flags.startup)) {
 
 	*retX = ((WIcon*)parent)->owner->icon_x;
 	*retY = ((WIcon*)parent)->owner->icon_y;
 
 	ok = 1;
+    } else if (wcore->descriptor.parent_type == WCLASS_WINDOW
+	       && (((WWindow*)parent)->flags.icon_moved
+		   || ((WWindow*)parent)->flags.hidden)
+	       && (((WWindow*)parent)->frame->workspace == workspace
+		   || IS_OMNIPRESENT((WWindow*)parent)
+		   || wPreferences.sticky_icons)) {
+	*retX = ((WWindow*)parent)->icon_x;
+	*retY = ((WWindow*)parent)->icon_y;
+
+	ok = 1;	
     }
+		
 
     /*
      * Check if it is inside the screen.
@@ -280,11 +292,16 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 		    test_window = test_window->next;
 		    continue;
 		}
+#if 0
                 tw = test_window->client.width;
                 if (test_window->flags.shaded)
                     th = test_window->frame->top_width;
                 else
                     th = test_window->client.height + extra_height;
+#else
+		tw = test_window->frame->core->width;
+		th = test_window->frame->core->height;
+#endif
 		tx = test_window->frame_x;
 		ty = test_window->frame_y;
 
@@ -309,11 +326,16 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 		    test_window = test_window->prev;
 		    continue;
 		}
+#if 0
                 tw = test_window->client.width;
                 if (test_window->flags.shaded)
                     th = test_window->frame->top_width;
                 else
                     th = test_window->client.height + extra_height;
+#else
+		tw = test_window->frame->core->width;
+		th = test_window->frame->core->height;
+#endif
 		tx = test_window->frame_x;
 		ty = test_window->frame_y;
 

@@ -10,7 +10,7 @@
  *
  * SHORTCUT spécifie un raccourci pour une entrée dans le menu. <Raccourci>
  * a la même syntaxe que les options pour les raccourcis clavier dans le
- * fichier ~/GNUstep/Defaults/WindowMaker, comme par example RootMenuKey ou
+ * fichier $HOME/GNUstep/Defaults/WindowMaker, comme par example RootMenuKey ou
  * encore MiniaturizeKey.
  *
  * Il n'est pas possible de spécifier un raccourci pour une entrée MENU
@@ -142,9 +142,9 @@
  *		/ Crée un sous menu avec le contenu de /usr/openwin/bin
  *	"Applications XView" OPEN_MENU "/usr/openwin/bin"
  *		/ Quelques applications X11 dans différents répertoires
- *	"Applications X11" OPEN_MENU /usr/X11/bin ~/bin/X11
+ *	"Applications X11" OPEN_MENU /usr/X11/bin $HOME/bin/X11
  *		/ Définir quelques images de fond
- *	"Fond d'écran" OPEN_MENU ~/images /usr/share/images WITH wmsetbg -u -t
+ *	"Fond d'écran" OPEN_MENU $HOME/images /usr/share/images WITH wmsetbg -u -t
  *		/ Insère le fichier "style.menu" dans cette entrée
  *	"Style" OPEN_MENU style.menu
  * "Test" END
@@ -222,9 +222,9 @@
 	"Espace de travail" END
 
 	"Apparence" MENU
-		"Thèmes" OPEN_MENU -noext THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Styles" OPEN_MENU -noext STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Jeu d'icônes" OPEN_MENU -noext ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Thèmes" OPEN_MENU -noext THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Styles" OPEN_MENU -noext STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Jeu d'icônes" OPEN_MENU -noext ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Fond d'écran" MENU
 			"Unifié" MENU
 				"Noir" WS_BACK '(solid, black)'
@@ -246,10 +246,10 @@
 				"Dégradés de Gris" WS_BACK '(vgradient, "#636380", "#131318")'
 				"Dégradés de Bordeau" WS_BACK '(vgradient, "#600040", "#180010")'
 			"Degradé" END
-			"Images" OPEN_MENU -noext BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+			"Images" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Fond d'écran" END
-		"Sauver le thème" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Nom du thème,Entrez un nom de fichier:)"
-		"Sauver le jeu d'icônes" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(Nom du jeu d'icônes,Entrez un nom de fichier:)"
+		"Sauver le thème" EXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Nom du thème,Entrez un nom de fichier:)"
+		"Sauver le jeu d'icônes" EXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(Nom du jeu d'icônes,Entrez un nom de fichier:)"
 	"Apparence" END
 
 	"Quitter" MENU

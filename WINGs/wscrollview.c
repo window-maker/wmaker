@@ -398,7 +398,7 @@ WMSetScrollViewContentView(WMScrollView *sPtr, WMView *view)
     
     sPtr->contentView = view;
 
-    W_ReparentView(sPtr->contentView, sPtr->viewport);
+    W_ReparentView(sPtr->contentView, sPtr->viewport, 0, 0);
 
     if (sPtr->flags.hasHScroller) {
 	float prop;

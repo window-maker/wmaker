@@ -56,8 +56,6 @@ extern WPreferences wPreferences;
 
 extern Time LastTimestamp;
 
-
-
 #ifdef OFFIX_DND
 extern Atom _XA_DND_SELECTION;
 #endif
@@ -191,13 +189,12 @@ MakeCPPArgs(char *path)
 #endif /* USECPP */
 
 
-
 WWindow*
 NextFocusWindow(WScreen *scr)
 {
     WWindow *tmp, *wwin, *closest, *min;
     Window d;
-    
+
     if (!(wwin = scr->focused_window))
         return NULL;
     tmp = wwin->prev;
@@ -853,6 +850,7 @@ getuserinput(WScreen *scr, char *line, int *ptr)
 	    break;
 	}
     }
+    (*ptr)--;
 #undef _STARTING
 #undef _TITLE
 #undef _PROMPT
@@ -1309,7 +1307,7 @@ UnescapeWM_CLASS(char *str, char **name, char **class)
 {
     int i, j, k, dot;
     Bool esc;
-    
+
     j = strlen(str);
     *name = wmalloc(j);
     **name = 0;
@@ -1343,6 +1341,7 @@ UnescapeWM_CLASS(char *str, char **name, char **class)
 		(*name)[k++] = str[i];
 	    }
 	} else {
+	    (*name)[k++] = str[i];
 	    esc = False;
 	}
     }

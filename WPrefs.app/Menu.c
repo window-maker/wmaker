@@ -83,7 +83,7 @@ typedef struct _Panel {
 
 extern char *OpenMenuGuru(WMWindow *mainWindow);
 
-
+extern Bool AskMenuCopy(WMWindow *wwin);
 
 
 /* must match the indexes of the commands popup */
@@ -631,16 +631,21 @@ fillBrowserColumn(WMBrowser *bPtr, int column)
 
     if (column > 0) {
 	menuList = getItemOfSelectedEntry(panel->browser);
+
+	WMHangData(WMGetBrowserListInColumn(bPtr, column), menuList);
+
 	if (column > WMGetBrowserFirstVisibleColumn(bPtr))
 	    WMSetTextFieldText(panel->tit2T, getItemTitle(menuList));
 	else
 	    WMSetTextFieldText(panel->tit1T, getItemTitle(menuList));
     } else {
 	menuList = panel->menu;
+
+	WMHangData(WMGetBrowserListInColumn(bPtr, column), menuList);
+
 	WMSetTextFieldText(panel->tit1T, getItemTitle(panel->menu));
     }
 
-    WMHangData(WMGetBrowserListInColumn(bPtr, column), menuList);
     for (i=1; i<PLGetNumberOfElements(menuList); i++) {
 	menuItem = PLGetArrayElement(menuList, i);
 	WMInsertBrowserItem(bPtr, column, -1, getItemTitle(menuItem),
@@ -1298,19 +1303,24 @@ getDefaultMenu(_Panel *panel, int *hasWSMenu)
 	    wwarning("%s:could not read property list menu", menuPath);
 	}
 	if (!menu) {
+	    char buffer[512];
+
+	    sprintf(buffer, _("Could not open default menu from '%s'"),
+		    menuPath);
 	    WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
-			    _("Error"), _("Could not copy default plmenu file "
-					  "from ~/GNUstep/Library/WindowMaker"),
-			    _("OK"), NULL, NULL);
-	    return NULL;
+			    _("Error"), buffer,	_("OK"), NULL, NULL);
 	}
     }
 
     free(gspath);
     free(menuPath);
 
-    pmenu = preProcessMenu(menu, hasWSMenu);
-    PLRelease(menu);
+    if (menu) {
+	pmenu = preProcessMenu(menu, hasWSMenu);
+	PLRelease(menu);
+    } else {
+	pmenu = NULL;
+    }
 
     return pmenu;
 }
@@ -1322,8 +1332,7 @@ showData(_Panel *panel)
     char *gspath;
     char *menuPath;
     proplist_t menu, pmenu, plPath;
-    char buffer[512];
-    int hasWSMenu=0;
+    int hasWSMenu = 0;
 
     gspath = wusergnusteppath();
     
@@ -1336,22 +1345,13 @@ showData(_Panel *panel)
     pmenu = NULL;
 
     if (!menu || !PLIsArray(menu)) {
-	sprintf(buffer, _("The format of the menu in ~/G/D/WMRootMenu is "
-		"not recognized by WPrefs. It might be in a format different "
-		"than the one supported by WPrefs or contain a syntax error. "
-		"Do you want to continue using the current menu to edit "
-		"it by hand later or replace it with a default menu in the new "
-		"format?"));
-	if (WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
-			    _("Warning"), buffer, _("Keep current menu"),
-			    _("Install default menu"), NULL)!=WAPRDefault) {
+	if (AskMenuCopy(panel->win)) {
 	    panel->dontSave = 0;
 
 	    pmenu = getDefaultMenu(panel, &hasWSMenu);
 	} else {
-	    WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
-			    _("Warning"), _("Any changes made in this section will not be saved"),
-			    _("OK"), NULL, NULL);
+	    WMSetPopUpButtonEnabled(panel->cmd1P, False);
+	    WMSetPopUpButtonEnabled(panel->cmd2P, False);
 	    panel->dontSave = 1;
 	}
 	if (!pmenu) {

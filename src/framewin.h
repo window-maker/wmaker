@@ -37,6 +37,8 @@
 #define WFF_BORDER	(1<<4)
 #define WFF_SINGLE_STATE (1<<5)
 
+#define WFF_IS_SHADED	(1<<16)
+
 typedef struct WFrameWindow {
     WScreen *screen_ptr;	       /* pointer to the screen structure */
     

@@ -42,6 +42,11 @@ echo
 echo "Please read the INSTALL and FAQ files before e-mailing "
 echo "questions. (we are lazy to reply questions already answered "
 echo "there as much as you are lazy to read these ;) "
+echo
+perai
+echo
+echo "Did you install libPropList? If not, please install it now."
+echo
 perai
 echo "Did you read the INSTALL file?"
 echo -n "<y/n> "
@@ -170,7 +175,7 @@ if [ "$NLS" = "y" -o "$NLS" = "Y" ]; then
 			continue
 		fi
 
-		if [ "$MB" = "" -a "$i" = "ja" -o "$i" = "kr" ]; then
+		if [ "$MB" = "" -a "$i" = "ja" -o "$i" = "ko" ]; then
 			echo
 			echo "A language you selected needs multi-byte character support"
 			echo "Do you want to enable it?"
@@ -217,8 +222,6 @@ while [ $done = 0 ]; do
     echo
     echo "   $PREFIX/bin must be in the PATH environment variable"
     echo "of all users who will use Window Maker"
-    echo
-    echo "   Make sure $PREFIX/lib is in the /etc/ld.so.conf file"
     perai
 done
 
@@ -259,6 +262,8 @@ echo "--------------------------"
 perform make install
 
 if [ `uname -s` = "Linux" ]; then
+    echo
+    echo "   Make sure $PREFIX/lib is in the /etc/ld.so.conf file"
 	/sbin/ldconfig
 fi
 

@@ -102,6 +102,32 @@ adoptChildView(W_View *view, W_View *child)
 }
 
 
+static void
+getPosition(Display *dpy, Window win, int *x_ret, int *y_ret)
+{
+    unsigned foo;
+    Window bar;
+    Window parent;
+    Window *childs;
+    int x, y;
+
+    XGetGeometry(dpy, win, &bar, &x, &y, &foo, &foo, &foo, &foo);
+    if (XQueryTree(dpy, win, &bar, &parent, &childs, &foo)) {
+	int px, py;
+
+	XFree(childs);
+	if (parent != bar) {
+	    getPosition(dpy, parent, &px, &py);
+
+	    x += px;
+	    y += py;
+	}
+    }
+    
+    *x_ret = x;
+    *y_ret = y;
+}
+
 
 static void
 handleEvents(XEvent *event, void *data)
@@ -109,15 +135,27 @@ handleEvents(XEvent *event, void *data)
     W_View *view = (W_View*)data;
     
     if (event->type == ConfigureNotify) {
-	
+
 	if (event->xconfigure.width != view->size.width
 	    || event->xconfigure.height != view->size.height) {
-	    
+
+	    view->size.width = event->xconfigure.width;
+	    view->size.height = event->xconfigure.height;
+
 	    if (view->flags.notifySizeChanged) {
-		view->size.width = event->xconfigure.width;
-		view->size.height = event->xconfigure.height;
 		WMPostNotificationName(WMViewSizeDidChangeNotification,
 				       view, NULL);
+	    }
+	}
+	if (event->xconfigure.x != view->pos.x
+	    || event->xconfigure.y != view->pos.y) {
+
+	    if (event->xconfigure.send_event) {
+		view->pos.x = event->xconfigure.x;
+		view->pos.y = event->xconfigure.y;
+	    } else {
+		getPosition(view->screen->display, view->window,
+			    &view->pos.x, &view->pos.y);
 	    }
 	}
     }
@@ -265,34 +303,26 @@ W_CheckInternalMessage(W_Screen *scr, XClientMessageEvent *cev, int event)
 
 
 void
-W_ReparentView(W_View *view, W_View *newParent)
+W_ReparentView(W_View *view, W_View *newParent, int x, int y)
 {
-    int wasMapped;
     Display *dpy = view->screen->display;
     
     assert(!view->flags.topLevel);
-    
-    wasMapped = view->flags.mapped;
-    if (wasMapped)
-	W_UnmapView(view);
 
     unparentView(view);
     adoptChildView(newParent, view);
 
     if (view->flags.realized) {
 	if (newParent->flags.realized) {
-	    XReparentWindow(dpy, view->window, newParent->window, 0, 0);
+	    XReparentWindow(dpy, view->window, newParent->window, x, y);
 	} else {
 	    wwarning("trying to reparent realized view to unrealized parent");
 	    return;
 	}
     }
   
-    view->pos.x = 0;
-    view->pos.y = 0;
-    
-    if (wasMapped)
-	W_MapView(view);
+    view->pos.x = x;
+    view->pos.y = y;
 }
 
 
@@ -381,6 +411,11 @@ destroyView(W_View *view)
     if (view->flags.alreadyDead)
 	return;
     view->flags.alreadyDead = 1;    
+
+    if (view->nextFocusChain)
+        view->nextFocusChain->prevFocusChain = view->prevFocusChain;
+    if (view->prevFocusChain)
+        view->prevFocusChain->nextFocusChain = view->nextFocusChain;
 
     /* Do not leave focus in a inexisting control */
     if (W_FocusedViewOfToplevel(W_TopLevelOfView(view))==view)

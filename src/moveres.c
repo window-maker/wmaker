@@ -1,7 +1,7 @@
 /*
  *  Window Maker window manager
  * 
- *  Copyright (c) 1997, 1998 Alfredo K. Kojima
+ *  Copyright (c) 1997, 1998, 1999 Alfredo K. Kojima
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <X11/Xutil.h>
 #include <X11/keysym.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #include "WindowMaker.h"
@@ -402,72 +403,9 @@ mapGeometryDisplay(WWindow *wwin, int x, int y, int w, int h)
 #define unmapGeometryDisplay(w) \
 XUnmapWindow(dpy, (w)->screen_ptr->geometry_display);
 
-static void
-checkEdgeResistance(WWindow *wwin, int *winx, int *winy, int off_x, int off_y)
-{
-    WScreen *scr = wwin->screen_ptr;
-    int scr_width = wwin->screen_ptr->scr_width - 3;
-    int scr_height = wwin->screen_ptr->scr_height;
-    int x = *winx;
-    int y = *winy;
-    int edge_resistance = wPreferences.edge_resistance;
-    int right_side = scr_width;
-    int left_side = 0; 
-    int isize = wPreferences.icon_size;
-
-    x -= off_x;
-    y -= off_y;
-
-    if (scr->dock)
-    {
-      if (scr->dock->on_right_side)
-	right_side -= isize + DOCK_EXTRA_SPACE;
-      else
-	left_side += isize + DOCK_EXTRA_SPACE;
-    }
-
-    if ((x + wwin->frame->core->width) >= right_side) {
-      if ((x + wwin->frame->core->width) < (right_side 
-          + edge_resistance)) {
-        x = right_side - wwin->frame->core->width;
-      } else {
-        x -= edge_resistance;
-      }
-    }
-
-    if (x <= left_side) {
-      if (x > (left_side - edge_resistance)) {
-        x = left_side;
-      } else {
-        x += edge_resistance;
-      }
-    }
-
-    if ((y + wwin->frame->core->height) >= (scr_height - 1)) {
-      if ((y + wwin->frame->core->height) < ((scr_height - 1)
-          + edge_resistance)) {
-        y = scr_height - wwin->frame->core->height - 1;
-      } else {
-        y -= edge_resistance;
-      }
-    }
-
-    if (y <=0) {
-      if (y > -edge_resistance) {
-        y = 0;
-      } else {
-        y += edge_resistance;
-      }
-    }
-
-
-    *winx = x;
-    *winy = y;
-}
 
 static void
-doWindowMove(WWindow *wwin, int single_win_x, int single_win_y,
-             LinkedList *list, int dx, int dy, int off_x, int off_y)
+doWindowMove(WWindow *wwin, LinkedList *list, int dx, int dy)
 {
     WWindow *tmpw;
     int x, y;
@@ -475,8 +413,7 @@ doWindowMove(WWindow *wwin, int single_win_x, int single_win_y,
     int scr_height = wwin->screen_ptr->scr_height;
 
     if (!list) {
-        checkEdgeResistance(wwin, &single_win_x, &single_win_y, off_x, off_y);
-        wWindowMove(wwin, single_win_x, single_win_y);
+        wWindowMove(wwin, wwin->frame_x + dx, wwin->frame_y + dy);
     } else {
 	while (list) {
 	    tmpw = list->head;
@@ -533,7 +470,7 @@ drawTransparentFrame(WWindow *wwin, int x, int y, int width, int height)
 
 
 static void
-drawFrames(WWindow *wwin, LinkedList *list, int dx, int dy, int off_x, int off_y)
+drawFrames(WWindow *wwin, LinkedList *list, int dx, int dy)
 {
     WWindow *tmpw;
     int scr_width = wwin->screen_ptr->scr_width;
@@ -545,7 +482,6 @@ drawFrames(WWindow *wwin, LinkedList *list, int dx, int dy, int off_x, int off_y
         x = wwin->frame_x + dx;
         y = wwin->frame_y + dy;
 
-        checkEdgeResistance(wwin, &x, &y, off_x, off_y);
 	drawTransparentFrame(wwin, x, y,
 			     wwin->frame->core->width, 
 			     wwin->frame->core->height);
@@ -617,26 +553,561 @@ crossWorkspace(WScreen *scr, WWindow *wwin, int opaque_move,
 }
 
 
-/*
- *---------------------------------------------------------------------- 
- * wMouseMoveWindow--
- * 	Move the named window and the other selected ones (if any),
- * interactively. Also shows the position of the window, if only one
- * window is being moved.
- * 	If the window is not on the selected window list, the selected
- * windows are deselected.
- * 	If shift is pressed during the operation, the position display
- * is changed to another type.
- * 
- * Returns:
- * 	True if the window was moved, False otherwise.
- * 
- * Side effects:
- * 	The window(s) position is changed, and the client(s) are 
- * notified about that.
- * 	The position display configuration may be changed.
- *---------------------------------------------------------------------- 
- */
+
+
+typedef struct {
+    /* arrays of WWindows sorted by the respective border position */
+    WWindow **topList;		       /* top border */
+    WWindow **leftList;		       /* left border */
+    WWindow **rightList;	       /* right border */
+    WWindow **bottomList;	       /* bottom border */
+    int count;
+
+    /* index of window in the above lists indicating the relative position
+     * of the window with the others */
+    int topIndex;
+    int leftIndex;
+    int rightIndex;
+    int bottomIndex;
+
+    int rubCount;		       /* for workspace switching */
+
+    int winWidth, winHeight;	       /* width/height of the window */
+    int realX, realY;		       /* actual position of the window */
+    int calcX, calcY;		       /* calculated position of window */
+    int omouseX, omouseY;	       /* old mouse position */
+    int mouseX, mouseY;		       /* last known position of the pointer */
+} MoveData;
+
+#define WTOP(w) (w)->frame_y
+#define WLEFT(w) (w)->frame_x
+#define WRIGHT(w) ((w)->frame_x + (int)(w)->frame->core->width)
+#define WBOTTOM(w) ((w)->frame_y + (int)(w)->frame->core->height)
+
+static int
+compareWTop(const void *a, const void *b)
+{
+    WWindow *wwin1 = *(WWindow**)a;
+    WWindow *wwin2 = *(WWindow**)b;
+
+    if (WTOP(wwin1) > WTOP(wwin2))
+	return -1;
+    else if (WTOP(wwin1) < WTOP(wwin2))
+	return 1;
+    else
+	return 0;
+}
+
+
+static int
+compareWLeft(const void *a, const void *b)
+{
+    WWindow *wwin1 = *(WWindow**)a;
+    WWindow *wwin2 = *(WWindow**)b;
+
+    if (WLEFT(wwin1) > WLEFT(wwin2))
+	return -1;
+    else if (WLEFT(wwin1) < WLEFT(wwin2))
+	return 1;
+    else
+	return 0;
+}
+
+
+static int
+compareWRight(const void *a, const void *b)
+{
+    WWindow *wwin1 = *(WWindow**)a;
+    WWindow *wwin2 = *(WWindow**)b;
+
+    if (WRIGHT(wwin1) < WRIGHT(wwin2))
+	return -1;
+    else if (WRIGHT(wwin1) > WRIGHT(wwin2))
+	return 1;
+    else
+	return 0;
+}
+
+
+
+static int
+compareWBottom(const void *a, const void *b)
+{
+    WWindow *wwin1 = *(WWindow**)a;
+    WWindow *wwin2 = *(WWindow**)b;
+
+    if (WBOTTOM(wwin1) < WBOTTOM(wwin2))
+	return -1;
+    else if (WBOTTOM(wwin1) > WBOTTOM(wwin2))
+	return 1;
+    else
+	return 0;
+}
+
+
+static void
+updateResistance(WWindow *wwin, MoveData *data, int newX, int newY)
+{
+    int i;
+    int newX2 = newX + data->winWidth;
+    int newY2 = newY + data->winHeight;
+    Bool ok = False;
+
+    if (newX < data->realX) {
+	if (data->rightIndex > 0 
+	    && newX < WRIGHT(data->rightList[data->rightIndex-1])) {
+	    ok = True;
+	} else if (data->leftIndex <= data->count-1
+		   && newX2 <= WLEFT(data->leftList[data->leftIndex])) {
+	    ok = True;
+	}
+    } else if (newX > data->realX) {
+	if (data->leftIndex > 0
+	    && newX2 > WLEFT(data->leftList[data->leftIndex-1])) {
+	    ok = True;
+	} else if (data->rightIndex <= data->count-1
+		   && newX >= WRIGHT(data->rightList[data->rightIndex])) {
+	    ok = True;
+	}
+    }
+
+    if (!ok) {
+	if (newY < data->realY) {
+	    if (data->bottomIndex > 0 
+		&& newY < WBOTTOM(data->bottomList[data->bottomIndex-1])) {
+		ok = True;
+	    } else if (data->topIndex <= data->count-1
+		       && newY2 <= WTOP(data->topList[data->topIndex])) {
+		ok = True;
+	    }
+	} else if (newY > data->realY) {
+	    if (data->topIndex > 0
+		&& newY2 > WTOP(data->topList[data->topIndex-1])) {
+		ok = True;
+	    } else if (data->bottomIndex <= data->count-1
+		       && newY >= WBOTTOM(data->bottomList[data->bottomIndex])) {
+		ok = True;
+	    }
+	}
+    }
+
+    if (!ok)
+	return;
+
+    /* TODO: optimize this */
+    if (data->realY < WBOTTOM(data->bottomList[0])) {
+	data->bottomIndex = 0;
+    }
+    if (data->realX < WRIGHT(data->rightList[0])) {
+	data->rightIndex = 0;
+    }
+    if ((data->realX + data->winWidth) > WLEFT(data->leftList[0])) {
+	data->leftIndex = 0;
+    }
+    if ((data->realY + data->winHeight) > WTOP(data->topList[0])) {
+	data->topIndex = 0;
+    }
+    for (i = 0; i < data->count; i++) {
+	if (data->realY > WBOTTOM(data->bottomList[i])) {
+	    data->bottomIndex = i + 1;
+	}
+	if (data->realX > WRIGHT(data->rightList[i])) {
+	    data->rightIndex = i + 1;
+	}
+	if ((data->realX + data->winWidth) < WLEFT(data->leftList[i])) {
+	    data->leftIndex = i + 1;
+	}
+	if ((data->realY + data->winHeight) < WTOP(data->topList[i])) {
+	    data->topIndex = i + 1;
+	}
+    }
+}
+
+
+static void
+freeMoveData(MoveData *data)
+{
+    if (data->topList)
+	free(data->topList);
+    if (data->leftList)
+	free(data->leftList);
+    if (data->rightList)
+	free(data->rightList);
+    if (data->bottomList)
+	free(data->bottomList);
+}
+
+
+static void
+updateMoveData(WWindow *wwin, MoveData *data)
+{
+    WScreen *scr = wwin->screen_ptr;
+    WWindow *tmp;
+    int i;
+
+    data->count = 0;
+    tmp = scr->focused_window;
+    while (tmp) {
+	if (tmp != wwin && scr->current_workspace == tmp->frame->workspace
+	    && !tmp->flags.obscured) {
+	    data->topList[data->count] = tmp;
+	    data->leftList[data->count] = tmp;
+	    data->rightList[data->count] = tmp;
+	    data->bottomList[data->count] = tmp;
+	    data->count++;
+	}
+	tmp = tmp->prev;
+    }
+
+    if (data->count == 0) {
+	data->topIndex = 0;
+	data->leftIndex = 0;
+	data->rightIndex = 0;
+	data->bottomIndex = 0;	
+	return;
+    }
+
+    /*
+     * order from closest to the border of the screen to farthest
+     */
+    qsort(data->topList, data->count, sizeof(WWindow**), compareWTop);
+    qsort(data->leftList, data->count, sizeof(WWindow**), compareWLeft);
+    qsort(data->rightList, data->count, sizeof(WWindow**), compareWRight);
+    qsort(data->bottomList, data->count, sizeof(WWindow**), compareWBottom);
+    
+    /* figure the position of the window relative to the others */
+
+    data->topIndex = -1;
+    data->leftIndex = -1;
+    data->rightIndex = -1;
+    data->bottomIndex = -1;
+
+    if (WTOP(wwin) < WBOTTOM(data->bottomList[0])) {
+	data->bottomIndex = 0;
+    }
+    if (WLEFT(wwin) < WRIGHT(data->rightList[0])) {
+	data->rightIndex = 0;
+    }
+    if (WRIGHT(wwin) > WLEFT(data->leftList[0])) {
+	data->leftIndex = 0;
+    }
+    if (WBOTTOM(wwin) > WTOP(data->topList[0])) {
+	data->topIndex = 0;
+    }
+    for (i = 0; i < data->count; i++) {
+	if (WTOP(wwin) >= WBOTTOM(data->bottomList[i])) {
+	    data->bottomIndex = i + 1;
+	}
+	if (WLEFT(wwin) >= WRIGHT(data->rightList[i])) {
+	    data->rightIndex = i + 1;
+	}
+	if (WRIGHT(wwin) <= WLEFT(data->leftList[i])) {
+	    data->leftIndex = i + 1;
+	}
+	if (WBOTTOM(wwin) <= WTOP(data->topList[i])) {
+	    data->topIndex = i + 1;
+	}
+    }
+}
+
+
+static void
+initMoveData(WWindow *wwin, MoveData *data)
+{
+    int i;
+    WWindow *tmp;
+
+    memset(data, 0, sizeof(MoveData));
+
+    for (i = 0, tmp = wwin->screen_ptr->focused_window; 
+	 tmp != NULL;
+	 tmp = tmp->prev, i++);
+
+    if (i <= 1)
+	return;
+
+    data->topList = wmalloc(sizeof(WWindow*) * i);
+    data->leftList = wmalloc(sizeof(WWindow*) * i);
+    data->rightList = wmalloc(sizeof(WWindow*) * i);
+    data->bottomList = wmalloc(sizeof(WWindow*) * i);
+
+    updateMoveData(wwin, data);
+
+    data->realX = wwin->frame_x;
+    data->realY = wwin->frame_y;
+    data->calcX = wwin->frame_x;
+    data->calcY = wwin->frame_y;
+
+    data->winWidth = wwin->frame->core->width + 2;
+    data->winHeight = wwin->frame->core->height + 2;
+}
+
+
+static Bool
+checkWorkspaceChange(WWindow *wwin, MoveData *data, Bool opaqueMove)
+{
+    WScreen *scr = wwin->screen_ptr;
+    Bool changed = False;
+
+    if (data->mouseX <= 1) {
+	if (scr->current_workspace > 0) {
+
+	    crossWorkspace(scr, wwin, opaqueMove, scr->current_workspace - 1,
+			   True);
+	    changed = True;
+	    data->rubCount = 0;
+
+	} else if (scr->current_workspace == 0 && wPreferences.ws_cycle) {
+
+	    crossWorkspace(scr, wwin, opaqueMove, scr->workspace_count - 1,
+			   True);
+	    changed = True;
+	    data->rubCount = 0;
+	}
+    } else if (data->mouseX >= scr->scr_width - 2) {
+
+	if (scr->current_workspace == scr->workspace_count - 1) {
+
+	    if (wPreferences.ws_cycle
+		|| scr->workspace_count == MAX_WORKSPACES) {
+
+		crossWorkspace(scr, wwin, opaqueMove, 0, False);
+		changed = True;
+		data->rubCount = 0;
+	    }
+	    /* if user insists on trying to go to next workspace even when
+	     * it's already the last, create a new one */
+	    else if (data->omouseX == data->mouseX 
+		     && wPreferences.ws_advance) {
+
+		/* detect user "rubbing" the window against the edge */
+		if (data->rubCount > 0 
+		    && data->omouseY - data->mouseY > MOVE_THRESHOLD) {
+
+		    data->rubCount = -(data->rubCount + 1);
+
+		} else if (data->rubCount <= 0
+			   && data->mouseY - data->omouseY > MOVE_THRESHOLD) {
+
+		    data->rubCount = -data->rubCount + 1;
+		}
+	    }
+	    /* create a new workspace */
+	    if (abs(data->rubCount) > 2) {
+		/* go to next workspace */
+		wWorkspaceNew(scr);
+		
+		crossWorkspace(scr, wwin, opaqueMove, 
+			       scr->current_workspace+1, False);
+		changed = True;
+		data->rubCount = 0;
+	    }
+	} else if (scr->current_workspace < scr->workspace_count) {
+
+	    /* go to next workspace */
+	    crossWorkspace(scr, wwin, opaqueMove, 
+			   scr->current_workspace+1, False);
+	    changed = True;
+	    data->rubCount = 0;
+	}
+    } else {
+	data->rubCount = 0;
+    }
+
+    return changed;
+}
+
+
+static void
+updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
+		     Bool opaqueMove, int newMouseX, int newMouseY)
+{
+    WScreen *scr = wwin->screen_ptr;
+    int dx, dy;			       /* how much mouse moved */
+    int winL, winR, winT, winB;	       /* requested new window position */
+    int newX, newY;		       /* actual new window position */
+    Bool hresist, vresist;
+    Bool updateIndex;
+
+    hresist = False;
+    vresist = False;
+
+    updateIndex = False;
+
+    /* check the direction of the movement */
+    dx = newMouseX - data->mouseX;
+    dy = newMouseY - data->mouseY;
+
+    data->omouseX = data->mouseX;
+    data->omouseY = data->mouseY;
+    data->mouseX = newMouseX;
+    data->mouseY = newMouseY;
+
+    winL = data->calcX + dx;
+    winR = data->calcX + data->winWidth + dx;
+    winT = data->calcY + dy;
+    winB = data->calcY + data->winHeight + dy;
+
+    newX = data->realX;
+    newY = data->realY;
+
+    if (doResistance) {
+	int edge;
+	int resist;
+	WWindow *rwin;
+
+	resist = wPreferences.edge_resistance;
+	/* horizontal movement: check horizontal edge resistances */
+	if (dx < 0) {
+	    /* window is the leftmost window: check against screen edge */
+	    edge = 0;
+
+	    /* check position of nearest window to the left */
+	    if (data->rightIndex > 0) {
+		/* there is some window at the left: check if it will block
+		 * the window */
+		rwin = data->rightList[data->rightIndex - 1];
+
+		if (data->realY > WBOTTOM(rwin) 
+		    || (data->realY + data->winHeight) < WTOP(rwin)) {
+		    resist = 0;
+		} else {
+		    edge = WRIGHT(rwin) + 1;
+		    resist = WIN_RESISTANCE(wPreferences.edge_resistance);
+		}
+	    }
+	    if (resist > 0 && winL >= edge - resist && winL <= edge) {
+		newX = edge;
+		hresist = True;
+	    }
+	} else if (dx > 0) {
+	    /* window is the rightmost window: check against screen edge */
+	    edge = scr->scr_width;
+
+	    /* check position of nearest window to the right */
+	    if (data->leftIndex > 0) {
+		/* there is some window at the right: check if it will block
+		 * the window */
+		rwin = data->leftList[data->leftIndex - 1];
+
+		if (data->realY > WBOTTOM(rwin) 
+		    || (data->realY + data->winHeight) < WTOP(rwin)) {
+		    resist = 0;
+		} else {
+		    edge = WLEFT(rwin);
+		    resist = WIN_RESISTANCE(wPreferences.edge_resistance);
+		}
+	    }
+	    if (resist > 0 && winR <= edge + resist && winR >= edge) {
+		newX = edge - data->winWidth;
+		hresist = True;
+	    }
+	}
+
+	resist = wPreferences.edge_resistance;
+	/* vertical movement: check vertical edge resistances */
+	if (dy < 0) {
+	    /* window is the topmost window: check against screen edge */
+	    edge = 0;
+
+	    /* check position of nearest window to the top */
+	    if (data->bottomIndex > 0) {
+		/* there is some window at the top: check if it will block
+		 * the window */
+		rwin = data->bottomList[data->bottomIndex - 1];
+
+		if (data->realX > WRIGHT(rwin) 
+		    || (data->realX + data->winWidth) < WLEFT(rwin)) {
+		    resist = 0;
+		} else {
+		    edge = WBOTTOM(rwin) + 1;
+		    resist = WIN_RESISTANCE(wPreferences.edge_resistance);
+		}
+	    }
+	    if (resist > 0 && winT >= edge - resist && winT <= edge) {
+		newY = edge;
+		vresist = True;
+	    }
+	} else if (dy > 0) {
+	    /* window is the bottommost window: check against screen edge */
+	    edge = scr->scr_height;
+
+	    /* check position of nearest window to the bottom */
+	    if (data->topIndex > 0) {
+		/* there is some window at the bottom: check if it will block
+		 * the window */
+		rwin = data->topList[data->topIndex - 1];
+
+		if (data->realX > WRIGHT(rwin) 
+		    || (data->realX + data->winWidth) < WLEFT(rwin)) {
+		    resist = 0;
+		} else {
+		    edge = WTOP(rwin);
+		    resist = WIN_RESISTANCE(wPreferences.edge_resistance);
+		}
+	    }
+	    if (resist > 0 && winB <= edge + resist && winB >= edge) {
+		newY = edge - data->winHeight;
+		vresist = True;
+	    }
+	}
+    }
+
+    /* update window position */
+    data->calcX += dx;
+    data->calcY += dy;
+
+    if (((dx > 0 && data->calcX - data->realX > 0)
+	 || (dx < 0 && data->calcX - data->realX < 0)) && !hresist)
+	newX = data->calcX;
+
+    if (((dy > 0 && data->calcY - data->realY > 0)
+	 || (dy < 0 && data->calcY - data->realY < 0)) && !vresist)
+	newY = data->calcY;
+
+    if (data->realX != newX || data->realY != newY) {
+	if (opaqueMove) {
+	    doWindowMove(wwin, scr->selected_windows,
+			 newX - wwin->frame_x,
+			 newY - wwin->frame_y);
+	} else {
+	    /* erase frames */
+	    drawFrames(wwin, scr->selected_windows, 
+		       data->realX - wwin->frame_x,
+		       data->realY - wwin->frame_y);
+
+	    /* draw frames */
+	    drawFrames(wwin, scr->selected_windows, 
+		       newX - wwin->frame_x,
+		       newY - wwin->frame_y);
+	}
+    }
+
+    if (!scr->selected_windows) {
+
+	if (wPreferences.move_display == WDIS_NEW) {
+
+	    showPosition(wwin, data->realX, data->realY);
+
+	} else if (wPreferences.move_display == WDIS_FRAME_CENTER) {
+
+	    moveGeometryDisplayCentered(scr, newX + data->winWidth/2, 
+					newY + data->winHeight/2);
+	}
+	showPosition(wwin, newX, newY);
+    }
+
+    /* recalc relative window position */
+    if (doResistance && (data->realX != newX || data->realY != newY)) {
+	updateResistance(wwin, data, newX, newY);
+    }
+
+    data->realX = newX;
+    data->realY = newY;
+}
+
+
+
 
 #if 0
 typedef struct _looper {
@@ -660,7 +1131,7 @@ _keyloop(_looper *lpr){
         XSync(dpy, False);
         wusleep(10000);
         XGrabServer(dpy);
-        printf("called\n");
+/*        printf("called\n");*/
         if (!scr->selected_windows){
             drawTransparentFrame(wwin, src_x+lpr->ox, src_y+lpr->oy, w, h);
         }
@@ -712,18 +1183,17 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
         wUnselectWindows(scr);
     }
     XGrabServer(dpy);
-	XGrabPointer(dpy, scr->root_win, True, PointerMotionMask
-		     |ButtonReleaseMask|ButtonPressMask, GrabModeAsync,
-		     GrabModeAsync, None, wCursor[WCUR_DEFAULT], CurrentTime);
+    XGrabPointer(dpy, scr->root_win, True, PointerMotionMask
+		 |ButtonReleaseMask|ButtonPressMask, GrabModeAsync,
+		 GrabModeAsync, None, wCursor[WCUR_DEFAULT], CurrentTime);
 
     if (wwin->flags.shaded || scr->selected_windows) {
 	if(scr->selected_windows)
-	    drawFrames(wwin,scr->selected_windows,off_x,off_y,0,0);
+	    drawFrames(wwin,scr->selected_windows,off_x,off_y);
 	else drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
 	if(!scr->selected_windows)
             mapPositionDisplay(wwin, src_x, src_y, w, h);
-    }
-    else {
+    } else {
 	drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
     }
     ww=w;
@@ -737,7 +1207,7 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 		    | ButtonPressMask | ExposureMask, &event);
     	if (wwin->flags.shaded || scr->selected_windows) {
 	    if(scr->selected_windows)
-	        drawFrames(wwin,scr->selected_windows,off_x,off_y,0,0);
+	        drawFrames(wwin,scr->selected_windows,off_x,off_y);
 	    else drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
 	    /*** I HATE EDGE RESISTANCE - ]d ***/
 	}
@@ -880,7 +1350,7 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 
     	if (wwin->flags.shaded || scr->selected_windows) {
 	    if(scr->selected_windows)
-	        drawFrames(wwin,scr->selected_windows,off_x,off_y,0,0);
+	        drawFrames(wwin,scr->selected_windows,off_x,off_y);
 	    else drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
 	}
 	else {
@@ -902,7 +1372,7 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 	     */
             if (wwin->flags.shaded || scr->selected_windows) {
 	        if(scr->selected_windows)
-	            drawFrames(wwin,scr->selected_windows,off_x,off_y,0,0);
+	            drawFrames(wwin,scr->selected_windows,off_x,off_y);
 	        else drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
             }
             else {
@@ -927,7 +1397,7 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 		        wWindowSynthConfigureNotify(wwin);
 		    }
 		    else {
-			    doWindowMove(wwin,0,0,scr->selected_windows,off_x,off_y,0,0);
+			    doWindowMove(wwin,scr->selected_windows,off_x,off_y);
 			    while (list) {
 				wWindowSynthConfigureNotify(list->head);
 				list = list->tail;
@@ -947,6 +1417,26 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 }
 
 
+/*
+ *---------------------------------------------------------------------- 
+ * wMouseMoveWindow--
+ * 	Move the named window and the other selected ones (if any),
+ * interactively. Also shows the position of the window, if only one
+ * window is being moved.
+ * 	If the window is not on the selected window list, the selected
+ * windows are deselected.
+ * 	If shift is pressed during the operation, the position display
+ * is changed to another type.
+ * 
+ * Returns:
+ * 	True if the window was moved, False otherwise.
+ * 
+ * Side effects:
+ * 	The window(s) position is changed, and the client(s) are 
+ * notified about that.
+ * 	The position display configuration may be changed.
+ *---------------------------------------------------------------------- 
+ */
 int
 wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 {
@@ -954,33 +1444,21 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
     XEvent event;
     Window root = scr->root_win;
     KeyCode shiftl, shiftr;
-    int w = wwin->frame->core->width;
-    int h = wwin->frame->core->height;
-    int x = wwin->frame_x;
-    int y = wwin->frame_y;
-    int ox, oy, orig_x, orig_y;
-    int off_x, off_y;
-    short count = 0;		/* for automatic workspace creation */
     int started = 0;
     int warped = 0;
     /* This needs not to change while moving, else bad things can happen */
-    int opaque_move = wPreferences.opaque_move;
-    int XOffset, YOffset, origDragX, origDragY;
-    
-    origDragX = wwin->frame_x;
-    origDragY = wwin->frame_y;
-    XOffset = origDragX - ev->xbutton.x_root;
-    YOffset = origDragY - ev->xbutton.y_root;
-    
+    int opaqueMove = wPreferences.opaque_move;
+    MoveData moveData;
+
+    initMoveData(wwin, &moveData);
+
+    moveData.mouseX = ev->xmotion.x_root;
+    moveData.mouseY = ev->xmotion.y_root;
+
     if (!wwin->flags.selected) {
 	/* this window is not selected, unselect others and move only wwin */
 	wUnselectWindows(scr);
     }
-    orig_x = ox = ev->xbutton.x_root;
-    orig_y = oy = ev->xbutton.y_root;
-    off_x = x; off_y = y;
-    checkEdgeResistance(wwin, &off_x, &off_y, 0, 0);
-    off_x = (off_x-x); off_y = (off_y-y);
 #ifdef DEBUG
     puts("Moving window");
 #endif
@@ -993,153 +1471,84 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 	    
 	    /* XWarpPointer() doesn't seem to generate Motion events, so
 	     we've got to simulate them */
-            printf("warp\n");
 	    XQueryPointer(dpy, root, &junkw, &junkw, &event.xmotion.x_root,
 			  &event.xmotion.y_root, &junk, &junk,
 			  (unsigned *) &junk);
 	} else {
-	    Window win;
-	    
 	    WMMaskEvent(dpy, KeyPressMask | ButtonMotionMask
-			| ButtonReleaseMask | ButtonPressMask | ExposureMask, &event);
+			| ButtonReleaseMask | ButtonPressMask | ExposureMask,
+			&event);
 	    
 	    if (event.type == MotionNotify) {
 		/* compress MotionNotify events */
-		win = event.xmotion.window;
 		while (XCheckMaskEvent(dpy, ButtonMotionMask, &event)) ;
 	    }
 	}
 	switch (event.type) {
 	 case KeyPress:
-	    if (scr->selected_windows)
-		break;
 	    if ((event.xkey.keycode == shiftl || event.xkey.keycode == shiftr)
-		&& started) {
-		if (!opaque_move)
+		&& started && !scr->selected_windows) {
+
+		if (!opaqueMove) {
                     drawFrames(wwin, scr->selected_windows,
-                               ox - orig_x, oy - orig_y, off_x, off_y);
-		
-		cyclePositionDisplay(wwin, x, y, w, h);
-		
-		if (!opaque_move) {
-		    drawFrames(wwin, scr->selected_windows,
-			       ox - orig_x, oy - orig_y, off_x, off_y);
-		} 
-		showPosition(wwin, x, y);
+                               moveData.realX - wwin->frame_x,
+			       moveData.realY - wwin->frame_y);
+		}
+
+		cyclePositionDisplay(wwin, moveData.realX, moveData.realY, 
+				     moveData.winWidth, moveData.winHeight);
+
+		if (!opaqueMove) {
+                    drawFrames(wwin, scr->selected_windows,
+                               moveData.realX - wwin->frame_x,
+			       moveData.realY - wwin->frame_y);
+		}
 	    }
 	    break;
 	    
 	 case MotionNotify:
 	    if (started) {
-		showPosition(wwin, x, y);
+		updateWindowPosition(wwin, &moveData,
+				     scr->selected_windows == NULL
+				     && wPreferences.edge_resistance > 0,
+				     opaqueMove, 
+				     event.xmotion.x_root,
+				     event.xmotion.y_root);
 
-                if (!opaque_move) {
-                    drawFrames(wwin, scr->selected_windows,
-                               ox-orig_x, oy-orig_y, off_x, off_y);
-                } else {
-                    doWindowMove(wwin, event.xmotion.x_root + XOffset,
-                                 event.xmotion.y_root + YOffset,
-                                 scr->selected_windows,
-                                 event.xmotion.x_root - ox,
-                                 event.xmotion.y_root - oy,
-                                 off_x, off_y);
-                }
-
-                x = event.xmotion.x_root + XOffset;
-                y = event.xmotion.y_root + YOffset;
-
-                checkEdgeResistance(wwin, &x, &y, off_x, off_y);
-
-		if (!scr->selected_windows) {
-		    if (wPreferences.move_display == WDIS_FRAME_CENTER)
-			moveGeometryDisplayCentered(scr, x + w/2, y + h/2);
-		}
 		if (!warped && !wPreferences.no_autowrap) {
-		    if (event.xmotion.x_root <= 1) {
-			if (scr->current_workspace > 0) {
-			    crossWorkspace(scr, wwin, opaque_move, 
-					   scr->current_workspace-1, True);
-			    warped = 1;
-			    count = 0;
-			} else if (scr->current_workspace == 0
-				   && wPreferences.ws_cycle) {
-			    crossWorkspace(scr, wwin, opaque_move, 
-					   scr->workspace_count-1, True);
-			    warped = 1;
-			    count = 0;			    
-			}
-		    } else if (event.xmotion.x_root >= scr->scr_width - 2) {
+		    int oldWorkspace = scr->current_workspace;
 
-			if (scr->current_workspace == scr->workspace_count-1) {
-			    if ((!wPreferences.ws_advance && wPreferences.ws_cycle)
-				|| (scr->workspace_count == MAX_WORKSPACES)) {
-				crossWorkspace(scr, wwin, opaque_move, 0, False);
-				warped = 1;
-				count = 0;
-			    }
-			    /* if user insists on trying to go to next
-			     workspace even when it's already the last,
-			     create a new one */
-			    else if ((ox == event.xmotion.x_root)
-				     && wPreferences.ws_advance) {
-				
-				/* detect user "rubbing" the window
-				 against the edge */
-				if (count > 0
-				    && oy - event.xmotion.y_root > MOVE_THRESHOLD)
-				    count = -(count + 1);
-				else if (count <= 0
-					 && event.xmotion.y_root - oy > MOVE_THRESHOLD)
-				    count = -count + 1;
-			    }
-			    /* create a new workspace */
-			    if (abs(count) > 2) {
-				/* go to next workspace */
-				wWorkspaceNew(scr);
-				
-				crossWorkspace(scr, wwin, opaque_move, 
-					       scr->current_workspace+1, False);
-				warped = 1;
-				count = 0;
-			    }
-			} else if (scr->current_workspace < scr->workspace_count) {
-			    
-			    /* go to next workspace */
-			    crossWorkspace(scr, wwin, opaque_move, 
-					   scr->current_workspace+1, False);
-			    warped = 1;
-			    count = 0;
-			}
-		    } else {
-			count = 0;
+		    if (checkWorkspaceChange(wwin, &moveData, opaqueMove)) {
+			if (scr->current_workspace != oldWorkspace
+			    && wPreferences.edge_resistance > 0
+			    && scr->selected_windows == NULL)
+			    updateMoveData(wwin, &moveData);
+			warped = 1;
 		    }
+
 		} else {
 		    warped = 0;
 		}
-	    } else if (abs(orig_x - event.xmotion.x_root) >= MOVE_THRESHOLD
-		       || abs(orig_y - event.xmotion.y_root) >= MOVE_THRESHOLD) {
+	    } else if (abs(ev->xmotion.x_root - event.xmotion.x_root) >= MOVE_THRESHOLD
+		       || abs(ev->xmotion.y_root - event.xmotion.y_root) >= MOVE_THRESHOLD) {
+
 		XChangeActivePointerGrab(dpy, ButtonMotionMask
 					 | ButtonReleaseMask | ButtonPressMask,
 					 wCursor[WCUR_MOVE], CurrentTime);
 		started = 1;
-		XGrabKeyboard(dpy, root, False, GrabModeAsync, GrabModeAsync, 
+		XGrabKeyboard(dpy, root, False, GrabModeAsync, GrabModeAsync,
 			      CurrentTime);
-		event.xmotion.x_root = orig_x;
-		event.xmotion.y_root = orig_y;
-		
+
 		if (!scr->selected_windows)
-		    mapPositionDisplay(wwin, x, y, w, h);
-		
-		if (!opaque_move)
+		    mapPositionDisplay(wwin, moveData.realX, moveData.realY,
+				       moveData.winWidth, moveData.winHeight);
+
+		if (started && !opaqueMove)
+		    drawFrames(wwin, scr->selected_windows, 0, 0);
+
+		if (!opaqueMove)
 		    XGrabServer(dpy);
 	    }
-	    ox = event.xmotion.x_root;
-	    oy = event.xmotion.y_root;
-	    
-	    if (started && !opaque_move)
-		drawFrames(wwin, scr->selected_windows, ox - orig_x, oy - orig_y, off_x, off_y);
-	    
-	    showPosition(wwin, x, y);
 	    break;
 
 	 case ButtonPress:
@@ -1150,27 +1559,27 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 		break;
 
 	    if (started) {
-		if (!opaque_move) {
+		if (!opaqueMove) {
 		    drawFrames(wwin, scr->selected_windows,
-			       ox - orig_x, oy - orig_y, off_x, off_y);
+			       moveData.realX - wwin->frame_x,
+			       moveData.realY - wwin->frame_y);
 		    XSync(dpy, 0);
-		    doWindowMove(wwin, event.xmotion.x_root + XOffset,
-                                 event.xmotion.y_root + YOffset,
-                                 scr->selected_windows,
-				 ox - orig_x, oy - orig_y, 
-				 off_x, off_y);
+		    doWindowMove(wwin, scr->selected_windows,
+				 moveData.realX - wwin->frame_x,
+				 moveData.realY - wwin->frame_y);
 		}
 #ifndef CONFIGURE_WINDOW_WHILE_MOVING
 		wWindowSynthConfigureNotify(wwin);
 #endif
-		
 		XUngrabKeyboard(dpy, CurrentTime);
 		XUngrabServer(dpy);
-		if (!opaque_move) {
+		if (!opaqueMove) {
 		    wWindowChangeWorkspace(wwin, scr->current_workspace);
 		    wSetFocusTo(scr, wwin);
 		}
-		showPosition(wwin, x, y);
+		if (wPreferences.move_display == WDIS_NEW)
+		    showPosition(wwin, moveData.realX, moveData.realY);
+
 		if (!scr->selected_windows) {
 		    /* get rid of the geometry window */
 		    unmapPositionDisplay(wwin);
@@ -1179,22 +1588,31 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 #ifdef DEBUG
 	    puts("End move window");
 #endif
+	    freeMoveData(&moveData);
+
 	    return started;
 	    
 	 default:
-	    if (started && !opaque_move) {
-		drawFrames(wwin, scr->selected_windows, ox - orig_x, oy - orig_y, off_x, off_y);
+	    if (started && !opaqueMove) {
+		drawFrames(wwin, scr->selected_windows, 
+			   moveData.realX - wwin->frame_x, 
+			   moveData.realY - wwin->frame_y);
 		XUngrabServer(dpy);
 		WMHandleEvent(&event);
 		XSync(dpy, False);
 		XGrabServer(dpy);
-		drawFrames(wwin, scr->selected_windows, ox - orig_x, oy - orig_y, off_x, off_y);
+		drawFrames(wwin, scr->selected_windows,
+			   moveData.realX - wwin->frame_x,
+			   moveData.realY - wwin->frame_y);
 	    } else {
 		WMHandleEvent(&event);
 	    }
 	    break;
 	}
     }
+
+    freeMoveData(&moveData);
+
     return 0;
 }
 
@@ -1554,6 +1972,7 @@ wSelectWindows(WScreen *scr, XEvent *ev)
 	    
 	 default:
 	    WMHandleEvent(&event);
+	    break;
 	}
     }
 }

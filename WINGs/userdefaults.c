@@ -279,7 +279,7 @@ WMGetUDIntegerForKey(WMUserDefaults *database, char *defaultName)
 
 
 
-int
+float
 WMGetUDFloatForKey(WMUserDefaults *database, char *defaultName)
 {
     proplist_t val;
@@ -288,16 +288,12 @@ WMGetUDFloatForKey(WMUserDefaults *database, char *defaultName)
 
     val = WMGetUDObjectForKey(database, defaultName);
     
-    if (!val)
+    if (!val || !PLIsString(val))
 	return 0.0;
 
-    if (!PLIsString(val))
+    if (!(str = PLGetString(val)))
 	return 0.0;
-    
-    str = PLGetString(val);
-    if (!str)
-	return 0.0;
-    
+
     if (sscanf(str, "%f", &value)!=1)
 	return 0.0;
 

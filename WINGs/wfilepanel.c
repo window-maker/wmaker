@@ -1,7 +1,4 @@
 
-
-
-
 #include "WINGsP.h"
 
 #include <sys/types.h>
@@ -47,15 +44,24 @@ typedef struct W_FilePanel {
 	unsigned int showAllFiles:1;
 	unsigned int canFreeFileTypes:1;
 	unsigned int fileMustExist:1;
+	unsigned int panelType:1;
+
+	/**/
+	unsigned int ignoreTextChangeNotification:1;
     } flags;
 } W_FilePanel;
 
+
+/* Type of panel */
+#define WP_OPEN         0
+#define WP_SAVE         1
 
 #define PWIDTH		320
 #define PHEIGHT 	360
 
 static void listDirectoryOnColumn(WMFilePanel *panel, int column, char *path);
 static void browserClick();
+static void browserDClick();
 
 static void fillColumn(WMBrowser *bPtr, int column);
 
@@ -65,6 +71,7 @@ static void buttonClick();
 
 static char *getCurrentFileName(WMFilePanel *panel);
 
+static void handleEvents(XEvent *event, void *data);
 
 
 static int
@@ -94,14 +101,24 @@ static void
 textChangedObserver(void *observerData, WMNotification *notification)
 {
     W_FilePanel *panel = (W_FilePanel*)observerData;
-    char *text, *text1;
+    char *text;
     WMList *list;
     int col = WMGetBrowserNumberOfColumns(panel->browser) - 1;
     int i, j, textEvent = (int)WMGetNotificationClientData(notification);
+    static int running = 0;
+
+    if (running)
+        return;
+
+    running = 1;
+
+    if (panel->flags.ignoreTextChangeNotification)
+	return;
 
     list = WMGetBrowserListInColumn(panel->browser, col);
     if (!list)
 	return;
+
     text = WMGetTextFieldText(panel->fileField);
 
     if (panel->flags.autoCompletion && textEvent!=WMDeleteTextEvent)
@@ -110,45 +127,28 @@ textChangedObserver(void *observerData, WMNotification *notification)
         i = closestListItem(list, text, True);
 
     WMSelectListItem(list, i);
-    if (i>=0) {
+    if (i>=0 && panel->flags.autoCompletion) {
         WMListItem *item = WMGetListItem(list, i);
         int textLen = strlen(text), itemTextLen = strlen(item->text);
-
-        WMSetListPosition(list, i);
-
-        if (panel->flags.autoCompletion) {
-            /* Be careful with the '<' condition below. Changing it can drop
-             * you into an endless loop. We call here, inside a function
-             * called from a notification observer, to a function that
-             * generates notification events. So make sure we do not call it
-             * recursively for ever.
-             * '<' means we only update text field if it is really not yet
-             * complete. -Dan
-             */
-            if (textLen < itemTextLen && textEvent!=WMDeleteTextEvent) {
-                WMRange range;
-
-                WMInsertTextFieldText(panel->fileField, &item->text[textLen],
-                                      textLen);
-                WMSetTextFieldCursorPosition(panel->fileField, itemTextLen);
-                range.position = textLen;
-                range.count = itemTextLen - textLen;
-                WMSelectTextFieldRange(panel->fileField, range);
-            }
-
-            text1 = WMGetTextFieldText(panel->fileField);
-            j = closestListItem(list, text1, True);
-            if (i != j) {
-                WMSelectListItem(list, j);
-                if (j>=0) {
-                    WMSetListPosition(list, j);
-                }
-            }
-            free(text1);
-        }
+        int visibleItems = WMWidgetHeight(list)/WMGetListItemHeight(list);
+	
+        if (textEvent!=WMSetTextEvent || textLen<itemTextLen)
+            WMSetListPosition(list, i - visibleItems/2);
+	
+        if (textEvent!=WMDeleteTextEvent && textLen<itemTextLen) {
+            WMRange range;
+	    
+	    WMInsertTextFieldText(panel->fileField, &item->text[textLen],
+				  textLen);
+	    WMSetTextFieldCursorPosition(panel->fileField, itemTextLen);
+	    range.position = textLen;
+	    range.count = itemTextLen - textLen;
+	    WMSelectTextFieldRange(panel->fileField, range);
+	}
     }
 
     free(text);
+    running = 0;
 }
 
 
@@ -178,6 +178,11 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     WMResizeWidget(fPtr->win, PWIDTH, PHEIGHT);
     WMSetWindowTitle(fPtr->win, "");
 
+    WMCreateEventHandler(WMWidgetView(fPtr->win), StructureNotifyMask,
+                         handleEvents, fPtr);
+    WMSetWindowMinSize(fPtr->win, PWIDTH, PHEIGHT);
+
+
     fPtr->iconLabel = WMCreateLabel(fPtr->win);
     WMResizeWidget(fPtr->iconLabel, 64, 64);
     WMMoveWidget(fPtr->iconLabel, 0, 0);
@@ -200,6 +205,7 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     fPtr->browser = WMCreateBrowser(fPtr->win);
     WMSetBrowserFillColumnProc(fPtr->browser, fillColumn);
     WMSetBrowserAction(fPtr->browser, browserClick, fPtr);
+    WMSetBrowserDoubleAction(fPtr->browser, browserDClick, fPtr);
     WMMoveWidget(fPtr->browser, 7, 72);
     WMHangData(fPtr->browser, fPtr);
 
@@ -238,11 +244,14 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     WMResizeWidget(fPtr->homeButton, 28, 28);
     WMSetButtonImagePosition(fPtr->homeButton, WIPImageOnly);
     WMSetButtonImage(fPtr->homeButton, scrPtr->homeIcon);
-	WMSetButtonAltImage(fPtr->homeButton, scrPtr->homeAltIcon);
+    WMSetButtonAltImage(fPtr->homeButton, scrPtr->altHomeIcon);
     WMSetButtonAction(fPtr->homeButton, goHome, fPtr);
 
     WMRealizeWidget(fPtr->win);
     WMMapSubwidgets(fPtr->win);
+
+    WMSetFocusToWidget(fPtr->fileField);
+    WMSetTextFieldCursorPosition(fPtr->fileField, 0);
 
     WMLoadBrowserColumnZero(fPtr->browser);
     
@@ -264,6 +273,7 @@ WMGetOpenPanel(WMScreen *scrPtr)
 
     panel = makeFilePanel(scrPtr, "openFilePanel", "Open");
     panel->flags.fileMustExist = 1;
+    panel->flags.panelType = WP_OPEN;
 
     scrPtr->sharedOpenPanel = panel;
 
@@ -281,6 +291,7 @@ WMGetSavePanel(WMScreen *scrPtr)
 
     panel = makeFilePanel(scrPtr, "saveFilePanel", "Save");
     panel->flags.fileMustExist = 0;
+    panel->flags.panelType = WP_SAVE;
 
     scrPtr->sharedSavePanel = panel;
 
@@ -305,20 +316,40 @@ WMFreeFilePanel(WMFilePanel *panel)
 
 
 int
-WMRunModalSavePanelForDirectory(WMFilePanel *panel, WMWindow *owner, 
-				char *path, char *name)
+WMRunModalFilePanelForDirectory(WMFilePanel *panel, WMWindow *owner,
+                                char *path, char *name, char **fileTypes)
 {
     WMScreen *scr = WMWidgetScreen(panel->win);
     XEvent event;
 
     WMChangePanelOwner(panel->win, owner);
 
+    if (name && !owner) {
+        WMSetWindowTitle(panel->win, name);
+    }
+
     WMSetFilePanelDirectory(panel, path);
 
     panel->flags.done = 0;
-    panel->fileTypes = NULL;
+    switch(panel->flags.panelType) {
+    case WP_OPEN:
+        if (fileTypes)
+            panel->flags.filtered = 1;
+        panel->fileTypes = fileTypes;
+        if (name == NULL)
+            name = "Open";
+        break;
+    case WP_SAVE:
+        panel->fileTypes = NULL;
+        panel->flags.filtered = 0;
+        if (name == NULL)
+            name = "Save";
+        break;
+    default:
+        break;
+    }
 
-    panel->flags.filtered = 0;
+    WMSetLabelText(panel->titleLabel, name);
 
     WMMapWidget(panel->win);
 
@@ -337,35 +368,6 @@ WMRunModalSavePanelForDirectory(WMFilePanel *panel, WMWindow *owner,
 
 
 
-int
-WMRunModalOpenPanelForDirectory(WMFilePanel *panel, WMWindow *owner, 
-				char *path, char *name, char **fileTypes)
-{
-    WMScreen *scr = WMWidgetScreen(panel->win);
-    XEvent event;
-
-    WMChangePanelOwner(panel->win, owner);
-
-    WMSetFilePanelDirectory(panel, path);
-
-    panel->flags.done = 0;
-
-    if (fileTypes)
-	panel->flags.filtered = 1;
-    panel->fileTypes = fileTypes;
-
-    WMMapWidget(panel->win);
-
-    while (!panel->flags.done) {	
-	WMNextEvent(scr->display, &event);
-	WMHandleEvent(&event);
-    }
-
-    WMCloseWindow(panel->win);
-
-    return (panel->flags.canceled ? False : True);
-}
-
 
 void
 WMSetFilePanelDirectory(WMFilePanel *panel, char *path)
@@ -373,18 +375,22 @@ WMSetFilePanelDirectory(WMFilePanel *panel, char *path)
     WMList *list;
     WMListItem *item;
     int col;
-    
-    WMSetBrowserPath(panel->browser, path);
-    col = WMGetBrowserNumberOfColumns(panel->browser) - 1;
+    char *rest;
+
+    rest = WMSetBrowserPath(panel->browser, path);
+    if (strcmp(path, "/")==0)
+        rest = NULL;
+
+    col = WMGetBrowserSelectedColumn(panel->browser);
     list = WMGetBrowserListInColumn(panel->browser, col);
     if (list && (item = WMGetListSelectedItem(list))) {
-	if (item->isBranch) {
-	    WMSetTextFieldText(panel->fileField, NULL);
-	} else {
-	    WMSetTextFieldText(panel->fileField, item->text);
-	}
+        if (item->isBranch) {
+            WMSetTextFieldText(panel->fileField, rest);
+        } else {
+            WMSetTextFieldText(panel->fileField, item->text);
+        }
     } else {
-	WMSetTextFieldText(panel->fileField, path);
+        WMSetTextFieldText(panel->fileField, rest);
     }
 }
 
@@ -425,7 +431,7 @@ WMSetFilePanelAccessoryView(WMFilePanel *panel, WMView *view)
 
     v = WMWidgetView(panel->win);
 
-    W_ReparentView(view, v);
+    W_ReparentView(view, v, 0, 0);
 
     W_MoveView(view, (v->size.width - v->size.width)/2, 300);
 }
@@ -541,18 +547,27 @@ fillColumn(WMBrowser *bPtr, int column)
 }
 
 
+static void 
+browserDClick(WMBrowser *bPtr, WMFilePanel *panel)
+{
+    WMPerformButtonClick(panel->okButton);
+}
 
 static void 
 browserClick(WMBrowser *bPtr, WMFilePanel *panel)
 {
     int col = WMGetBrowserSelectedColumn(bPtr);
     WMListItem *item = WMGetBrowserSelectedItemInColumn(bPtr, col);
-    
+
+    panel->flags.ignoreTextChangeNotification = 1;
+
     if (!item || item->isBranch)
 	WMSetTextFieldText(panel->fileField, NULL);
     else {
 	WMSetTextFieldText(panel->fileField, item->text);
     }
+
+    panel->flags.ignoreTextChangeNotification = 0;
 }
 
 
@@ -567,6 +582,39 @@ goHome(WMButton *bPtr, WMFilePanel *panel)
 	return;
     
     WMSetFilePanelDirectory(panel, home);
+}
+
+
+static void 
+handleEvents(XEvent *event, void *data)
+{
+    W_FilePanel *pPtr = (W_FilePanel*)data;
+    W_View *view = WMWidgetView(pPtr->win);
+
+    if (event->type == ConfigureNotify) {
+        if (event->xconfigure.width != view->size.width
+            || event->xconfigure.height != view->size.height) {
+            unsigned int newWidth = event->xconfigure.width;
+            unsigned int newHeight = event->xconfigure.height;
+	    int newColumnCount;
+
+            W_ResizeView(view, newWidth, newHeight);
+            WMResizeWidget(pPtr->line, newWidth, 2);
+            WMResizeWidget(pPtr->browser, newWidth-14,
+                           newHeight-(PHEIGHT-200));
+            WMResizeWidget(pPtr->fileField, newWidth-60-10, 24);
+            WMMoveWidget(pPtr->nameLabel, 7, newHeight-(PHEIGHT-282));
+            WMMoveWidget(pPtr->fileField, 60, newHeight-(PHEIGHT-278));
+            WMMoveWidget(pPtr->okButton, newWidth-(PWIDTH-230),
+                         newHeight-(PHEIGHT-325));
+            WMMoveWidget(pPtr->cancelButton, newWidth-(PWIDTH-140),
+                         newHeight-(PHEIGHT-325));
+            WMMoveWidget(pPtr->homeButton, 55, newHeight-(PHEIGHT-325));
+
+	    newColumnCount = (newWidth - 14) / 140;
+	    WMSetBrowserMaxVisibleColumns(pPtr->browser, newColumnCount);
+        }
+    }
 }
 
 
@@ -604,23 +652,30 @@ static Bool
 validOpenFile(WMFilePanel *panel)
 {
     WMListItem *item;
-    int col;
+    int col, haveFile = 0;
+    char *file = WMGetTextFieldText(panel->fileField);
 
-    /*col = WMGetBrowserSelectedColumn(panel->browser);*/
-    col = WMGetBrowserNumberOfColumns(panel->browser) - 1;
+    if (file[0] != '\0')
+        haveFile = 1;
+    free(file);
+
+    col = WMGetBrowserSelectedColumn(panel->browser);
     item = WMGetBrowserSelectedItemInColumn(panel->browser, col);
     if (item) {
-	if (item->isBranch && !panel->flags.canChooseDirectories)
+	if (item->isBranch && !panel->flags.canChooseDirectories && !haveFile)
 	    return False;
 	else if (!item->isBranch && !panel->flags.canChooseFiles)
             return False;
         else
             return True;
+    } else {
+        /* we compute for / here */
+	if (!panel->flags.canChooseDirectories && !haveFile)
+	    return False;
+        else
+            return True;
     }
-    if (!panel->flags.canChooseDirectories)
-        return False;
-    else
-        return True;
+    return True;
 }
 
 
@@ -628,11 +683,13 @@ validOpenFile(WMFilePanel *panel)
 static void
 buttonClick(WMButton *bPtr, WMFilePanel *panel)
 {
+    WMRange range;
+
     if (bPtr == panel->okButton) {
+        if (!validOpenFile(panel))
+            return;
 	if (panel->flags.fileMustExist) {
 	    char *file;
-	    if (!validOpenFile(panel))
-		return;
 	    
 	    file = getCurrentFileName(panel);
 	    if (access(file, F_OK)!=0) {
@@ -648,6 +705,8 @@ buttonClick(WMButton *bPtr, WMFilePanel *panel)
     } else
 	panel->flags.canceled = 1;
 
+    range.count = range.position = 0;
+    WMSelectTextFieldRange(panel->fileField, range);
     panel->flags.done = 1;
 }
 

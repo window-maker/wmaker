@@ -253,6 +253,8 @@ showData(_Panel *panel)
     Display *dpy = WMScreenDisplay(WMWidgetScreen(panel->win));
 
     str = GetStringForKey("SelectWindowsMouseButton");
+    if (!str)
+	str = "left";
     i = getbutton(str);
     if (i==-1) {
 	a = 0;
@@ -264,6 +266,8 @@ showData(_Panel *panel)
     } 
     
     str = GetStringForKey("WindowListMouseButton");
+    if (!str)
+	str = "middle";
     i = getbutton(str);
     if (i==-1) {
 	b = 0;
@@ -275,6 +279,8 @@ showData(_Panel *panel)
     } 
     
     str = GetStringForKey("ApplicationMenuMouseButton");
+    if (!str)
+	str = "right";
     i = getbutton(str);
     if (i==-1) {
 	c = 0;
@@ -319,9 +325,10 @@ showData(_Panel *panel)
 
     /**/
     str = GetStringForKey("ModifierKey");
-
+    if (!str)
+	str = "mod1";
     a = ModifierFromKey(dpy, str);
-    
+
     if (a != -1) {
 	str = modifierNames[a];
     
@@ -334,7 +341,7 @@ showData(_Panel *panel)
 	    }
 	}
     }
-    
+
     if (a < 1) {
 	sscanf(WMGetPopUpButtonItem(panel->grabP, 0), "%s", buffer);
 	WMSetPopUpButtonSelectedItem(panel->grabP, 0);
@@ -528,8 +535,8 @@ createPanel(Panel *p)
 	free(path);
     }
 
-    buf1 = wmalloc(strlen(SPEED_IMAGE)+1);
-    buf2 = wmalloc(strlen(SPEED_IMAGE_S)+1);
+    buf1 = wmalloc(strlen(SPEED_IMAGE)+2);
+    buf2 = wmalloc(strlen(SPEED_IMAGE_S)+2);
 
     for (i = 0; i < 5; i++) {
 	panel->speedB[i] = WMCreateCustomButton(panel->speedF,
@@ -601,8 +608,8 @@ createPanel(Panel *p)
     WMMoveWidget(panel->ddelaF, 15, 125);
     WMSetFrameTitle(panel->ddelaF, _("Double-Click Delay"));
     
-    buf1 = wmalloc(strlen(DELAY_ICON)+1);
-    buf2 = wmalloc(strlen(DELAY_ICON_S)+1);
+    buf1 = wmalloc(strlen(DELAY_ICON)+2);
+    buf2 = wmalloc(strlen(DELAY_ICON_S)+2);
     
     for (i = 0; i < 5; i++) {
 	panel->ddelaB[i] = WMCreateCustomButton(panel->ddelaF, 
@@ -855,18 +862,22 @@ storeData(_Panel *panel)
     int i;
     char *tmp, *p;
     static char *button[3] = {"left", "middle", "right"};
+    WMUserDefaults *udb = WMGetStandardUserDefaults();
 
-    tmp = WMGetTextFieldText(panel->threT);
-    if (strlen(tmp)==0) {
+    if (!WMGetUDBoolForKey(udb, "NoXSetStuff")) {
+	tmp = WMGetTextFieldText(panel->threT);
+	if (strlen(tmp)==0) {
+	    free(tmp);
+	    tmp = wstrdup("4");
+	}
+
+	sprintf(buffer, XSET" m %i/%i %s\n", (int)(panel->acceleration*10),
+		10, tmp);
+	storeCommandInScript(XSET" m", buffer);
+
 	free(tmp);
-	tmp = wstrdup("0");
     }
 
-    sprintf(buffer, XSET" m %i/%i %s\n", (int)(panel->acceleration*10),10, tmp);
-    storeCommandInScript(XSET" m", buffer);
-
-    free(tmp);
-    
     for (i=0; i<5; i++) {
 	if (WMGetButtonSelected(panel->ddelaB[i]))
 	    break;
@@ -874,7 +885,7 @@ storeData(_Panel *panel)
     SetIntegerForKey(DELAY(i), "DoubleClickTime");
 
     SetBoolForKey(WMGetButtonSelected(panel->disaB), "DisableWSMouseActions");
-    
+
     for (i=0; i<3; i++) {
 	if (WMGetButtonSelected(panel->amb[i]))
 	    break;

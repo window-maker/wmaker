@@ -5,7 +5,7 @@
 #include "WINGsP.h"
 
 char *WMListDidScrollNotification = "WMListDidScrollNotification";
-
+char *WMListSelectionDidChangeNotification = "WMListSelectionDidChangeNotification";
 
 typedef struct W_List {
     W_Class widgetClass;
@@ -227,16 +227,19 @@ WMRemoveListItem(WMList *lPtr, int row)
     WMListItem *llist;
     WMListItem *tmp;
     int topItem = lPtr->topItem;
+    int selNotify = 0;
 
     CHECK_CLASS(lPtr, WC_List);
     
     if (row < 0 || row >= lPtr->itemCount)
 	return;
 
-    if (lPtr->selectedItem == row)
-	lPtr->selectedItem = -1;
-    else if (lPtr->selectedItem > row)
-	lPtr->selectedItem--;
+    if (lPtr->selectedItem == row) {
+        lPtr->selectedItem = -1;
+        selNotify = 1;
+    } else if (lPtr->selectedItem > row) {
+        lPtr->selectedItem--;
+    }
     
     if (row <= lPtr->topItem+lPtr->fullFitLines+lPtr->flags.dontFitAll)
 	lPtr->topItem--;
@@ -271,6 +274,9 @@ WMRemoveListItem(WMList *lPtr, int row)
     }
     if (lPtr->topItem != topItem)
     	WMPostNotificationName(WMListDidScrollNotification, lPtr, NULL);
+    if (selNotify)
+        WMPostNotificationName(WMListSelectionDidChangeNotification, lPtr,
+                               (void*)((int)lPtr->selectedItem));
 }
 
 
@@ -312,7 +318,8 @@ void
 WMClearList(WMList *lPtr)
 {
     WMListItem *item, *tmp;
-    
+    int oldSelected = lPtr->selectedItem;
+
     item = lPtr->items;
     while (item) {
 	free(item->text);
@@ -332,6 +339,9 @@ WMClearList(WMList *lPtr)
     if (lPtr->view->flags.realized) {
 	updateScroller(lPtr);
     }
+    if (oldSelected != -1)
+        WMPostNotificationName(WMListSelectionDidChangeNotification, lPtr,
+                               (void*)-1);
 }
 
 
@@ -654,11 +664,19 @@ void
 WMSelectListItem(WMList *lPtr, int row)
 {
     WMListItem *itemPtr;
-    int i;
+    int i, notify = 0;
 
     if (row >= lPtr->itemCount)
 	return;
-    
+
+    /* the check below must be changed when the multiple selection is
+     * implemented. -Dan
+     */
+    if (!lPtr->flags.allowMultipleSelection && row == lPtr->selectedItem)
+        notify = 0;
+    else
+        notify = 1;
+
     if (!lPtr->flags.allowMultipleSelection) {
 	/* unselect previous selected item */
 	if (lPtr->selectedItem >= 0) {
@@ -676,8 +694,12 @@ WMSelectListItem(WMList *lPtr, int row)
     }
     
     if (row < 0) {
-	if (!lPtr->flags.allowMultipleSelection)
+        if (!lPtr->flags.allowMultipleSelection) {
 	    lPtr->selectedItem = -1;
+            if (notify)
+                WMPostNotificationName(WMListSelectionDidChangeNotification,
+                                       lPtr, (void*)((int)lPtr->selectedItem));
+        }
 	return;
     }
 
@@ -700,6 +722,9 @@ WMSelectListItem(WMList *lPtr, int row)
 			 WRSunken);
     }
     lPtr->selectedItem = row;
+    if (notify)
+        WMPostNotificationName(WMListSelectionDidChangeNotification, lPtr,
+                               (void*)((int)lPtr->selectedItem));
 }
 
 
@@ -732,7 +757,6 @@ handleActionEvents(XEvent *event, void *data)
 	tmp = getItemIndexAt(lPtr, event->xbutton.y);
 
 	if (tmp == lPtr->selectedItem && tmp >= 0) {
-
 	    if (lPtr->action)
 		(*lPtr->action)(lPtr, lPtr->clientData);
 	}
@@ -751,16 +775,16 @@ handleActionEvents(XEvent *event, void *data)
      case ButtonPress:
 	if (event->xbutton.x > WMWidgetWidth(lPtr->vScroller)) {
 	    tmp = getItemIndexAt(lPtr, event->xbutton.y);
-
 	    lPtr->flags.buttonPressed = 1;
 
 	    if (tmp >= 0) {
-		WMSelectListItem(lPtr, tmp);
 		if (tmp == lPtr->selectedItem && WMIsDoubleClick(event)) {
+		    WMSelectListItem(lPtr, tmp);
 		    if (lPtr->doubleAction)
 			(*lPtr->doubleAction)(lPtr, lPtr->doubleClientData);
+		} else {
+		    WMSelectListItem(lPtr, tmp);
 		}
-		lPtr->selectedItem = tmp;
 	    }
 	}
 	break;
@@ -770,7 +794,6 @@ handleActionEvents(XEvent *event, void *data)
 	    tmp = getItemIndexAt(lPtr, event->xmotion.y);
 	    if (tmp>=0 && tmp != lPtr->selectedItem) {
 		WMSelectListItem(lPtr, tmp);
-		lPtr->selectedItem = tmp;
 	    }
 	}
 	break;

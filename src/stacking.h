@@ -42,5 +42,4 @@ void RemakeStackList(WScreen *scr);
 
 void CommitStacking(WScreen *scr);
 
-
 #endif

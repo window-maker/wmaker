@@ -1,12 +1,11 @@
 .\" Hey, Emacs!  This is an -*- nroff -*- source file.
-.TH getstyle 1x "December 1998"
+.TH getstyle 1x "January 1999"
 .SH NAME
 getstyle \- dumps the current Window Maker style related configuration or
 creates a theme pack.
 .SH SYNOPSIS
 .B getstyle
-[[-t] [style file]]
-[-p theme name]
+[[-t|--theme-options] [-p|--pack] [style file]]
 .SH DESCRIPTION
 .B getstyle
 can either dump the current Window Maker style related configuration
@@ -16,6 +15,18 @@ redistributable theme, includig the style information and pixmaps used by it.
 
 Note that style information stored in the global configuration of the
 system is not read.
+
+The following options are stored by default: \fIIconBack\fP,
+\fIIconBack\fP, \fITitleJustify\fP, \fIWindowTitleFont\fP,
+\fIMenuTitleFont, MenuTextFont\fP, \fIIconTitleFont\fP,
+\fIDisplayFont\fP, \fIHighlightColor\fP, \fIHighlightTextColor\fP,
+\fIIconTitleColor\fP, \fICClipTitleColor\fP, \fIIconBackColor\fP,
+\fIFTitleColor\fP, \fIPTitleColor\fP, \fIUTitleColor\fP,
+\fIFTitleBack\fP, \fIPTitleBack, UTitleBack\fP, \fIMenuTitleColor\fP,
+\fIMenuTextColor\fP, \fIMenuDisabledColor\fP, \fIMenuTitleBack\fP and
+\fIMenuTextBack\fP. If either \fB-t\fP or \fB--theme-options\fP is
+specificied, in addition to the previous options, \fIWorkspaceBack\fP
+is \fIalso\fP stored.
 
 .SH OPTIONS
 .TP
@@ -27,14 +38,6 @@ This option is always enabled when the \-p option is used.
 creates a theme pack in the directory named by the theme name appended
 with the .themed suffix.
 
-Options that are stored in the style file are: IconBack, WorkspaceBack,
-IconBack, TitleJustify, WindowTitleFont, MenuTitleFont, MenuTextFont,
-IconTitleFont, DisplayFont, HighlightColor, HighlightTextColor,
-IconTitleColor, CClipTitleColor, IconBackColor, FTitleColor, PTitleColor,
-UTitleColor, FTitleBack, PTitleBack, UTitleBack, MenuTitleColor,
-MenuTextColor, MenuDisabledColor, MenuTitleBack and MenuTextBack.
-
-
 .SH ENVIRONMENT
 .IP GNUSTEP_USER_ROOT
 specifies the initial path for the Defaults directory. "Defaults/" is
@@ -42,7 +45,7 @@ appended to this variable to determine the actual location of the
 databases. If the varialbe is not set, it defaults to "~/GNUstep"
 .SH FILES
 .IP GNUSTEP_USER_ROOT/Defaults/WindowMaker
-This is the actual file that's written.
+This is the actual file that gets written.
 .SH SEE ALSO
 .BR setstyle (1x),
 .BR wmaker (1x)

@@ -872,7 +872,7 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
     if (!statefile) {
 	if (gsPrefix)
 	    free(prefix);
-	wwarning(_("end of memory while saving session state"));
+	wwarning(_("out of memory while saving session state"));
 	goto fail;
     }
 
@@ -880,7 +880,7 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
     i = 0;
     do {
 	if (gsPrefix)
-	    sprintf(statefile, "%s/.AppInfo/WindowMaker/%l%i.state",
+	    sprintf(statefile, "%s/.AppInfo/WindowMaker/wmaker.%l%i.state",
 		    prefix, t, i);
 	else
 	    sprintf(statefile, "%s/wmaker.%l%i.state", prefix, t, i);

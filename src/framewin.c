@@ -114,10 +114,13 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
     int width, height;
     int i;
     WScreen *scr = fwin->screen_ptr;
-    
+
     width = fwin->core->width;
-    height = fwin->core->height - fwin->top_width - fwin->bottom_width;
-    
+    if (flags & WFF_IS_SHADED)
+	height = -1;
+    else
+	height = fwin->core->height - fwin->top_width - fwin->bottom_width;
+
     if (flags & WFF_TITLEBAR)
 	theight = (*fwin->font)->height + TITLEBAR_EXTRA_HEIGHT;
     else
@@ -283,10 +286,11 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
 	    fwin->resizebar = NULL;
 	}
     }
-    
-    if (height + fwin->top_width + fwin->bottom_width != fwin->core->height) {
+
+    if (height + fwin->top_width + fwin->bottom_width != fwin->core->height
+	&& !(flags & WFF_IS_SHADED)) {
 	wFrameWindowResize(fwin, width,
-			      height + fwin->top_width + fwin->bottom_width);
+			   height + fwin->top_width + fwin->bottom_width);
     }
     
     /* setup object descriptors */
@@ -757,14 +761,6 @@ wFrameWindowPaint(WFrameWindow *fwin)
 	    break;
 	}
 
-	XSetForeground(dpy, *fwin->title_gc, 
-		       fwin->title_pixel[fwin->flags.state]);
-	    
-	wDrawString(fwin->titlebar->window, *fwin->font,
-		    *fwin->title_gc, x, 
-		    (*fwin->font)->y + TITLEBAR_EXTRA_HEIGHT/2, title,
-		    titlelen);
-
 #ifdef TITLE_TEXT_SHADOW
        if(wPreferences.title_shadow){
           int shadowx,shadowy;
@@ -780,6 +776,14 @@ wFrameWindowPaint(WFrameWindow *fwin)
                        titlelen);
        }
 #endif /* TITLE_TEXT_SHADOW */
+
+	XSetForeground(dpy, *fwin->title_gc, 
+		       fwin->title_pixel[fwin->flags.state]);
+	    
+	wDrawString(fwin->titlebar->window, *fwin->font,
+		    *fwin->title_gc, x, 
+		    (*fwin->font)->y + TITLEBAR_EXTRA_HEIGHT/2, title,
+		    titlelen);
 
 	free(title);
     }

@@ -3,6 +3,34 @@ NEWS for veteran Window Maker users
 -----------------------------------
 
 
+--- 0.51.1
+
+KDE Application Menu script
+---------------------------
+
+wkdemenu.sh is a converter from KDE application menu structures to wmaker 
+menu that can be used as a piped menu. Look wkdemenu.sh for how to use it.
+
+
+Window Edge Resistance
+----------------------
+
+Window edge resistance was now added. No, feature freeze hasn't been
+removed. Its just part of the edge resistance rewrite ;)
+
+
+New Theme
+---------
+
+Added SteelBlueSilk theme
+
+Installation Path Changes
+-------------------------
+
+Default configuration data installed in /usr/local/etc/WindowMaker
+or $(sysconfdir)/WindowMaker
+
+
 --- 0.51.0
 
 Window Maker has become a GNU program (part of the GNU Project).

@@ -1,9 +1,8 @@
 
 
 
-		               GNU Window Maker 
-			      X11 Window Manager
-                      
+		       		GNU Window Maker
+		       	       X11 Window Manager
 
 	  	   	   <http://windowmaker.org>
 		 	 <ftp://ftp.windowmaker.org>
@@ -49,8 +48,8 @@ supposed to be relatively fast and small, feature rich, easy to configure and
 easy to use, with a simple and elegant appearance borrowed from NEXTSTEP(tm).
 
 Window Maker was designed keeping integration with GNUstep in mind and is the
-"official" window manager for it. It is also, the window manager for the
-GNU Project. Read more about GNUstep further on this file.
+"official" window manager for it. It is also part of the GNU project
+(www.gnu.org) Read more about GNUstep further on this file.
 
 Hints (information given by applications to integrate well with the window 
 manager) for Motif(tm), OPEN LOOK(tm), KDE and GNOME are also supported. 
@@ -138,9 +137,9 @@ Mailing List
 ============
 
 There is a mailing list for discussing Window Maker at
-wmaker@linuxcenter.com To subscribe to it, send a message containing:
+wm-user@windowmaker.org To subscribe to it, send a message containing:
 	subscribe 
-in the body of the message to wmaker-request@linuxcenter.com
+in the subject of the message to wm-user-request@windowmaker.org
 
 If you got a problem, ask there (after reading the docs, of course). The
 people there is more likely to be able to answer your questions than we are.
@@ -210,8 +209,8 @@ To enable, use --enable-openlook when doing the configure. Note that
 not everything is implemented. 
 
 Implemented stuff include decoration hints and the push-pin. Not implemented
-stuff include _SUN_WINDOW_STATE (the compose led state stuff), header (not
-sure what's it) and footer strings.
+stuff include _SUN_WINDOW_STATE (the compose led state stuff), drag and drop
+interest stuff, header (not sure what's it) and footer strings.
 
 Please give me feedback if something doesn't work. If the feature is
 already implemented, but is not working because of a bug, I'll try to
@@ -327,6 +326,10 @@ Copyrights & Disclaimers
 
 Window Maker is copyrighted by Alfredo K. Kojima and is licensed through the
 GNU General Public License. Read the COPYING file for the complete license.
+
+The icons that are distributed with this program and were made by Marco van
+Hylckama Vlieg are licensed through the OpenContent License. Read the 
+COPYING.OPL file for the complete license.
 
 NeXT, OpenStep and NEXTSTEP are a trademarks of NeXT Computer, Inc.
 All other trademarks are property of their respective owners.

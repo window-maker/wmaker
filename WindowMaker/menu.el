@@ -11,7 +11,7 @@
  * 
  * SHORTCUT είναι ο συνδυασμός πλήκτρων για το συγκεκριμένο πρόγραμμα π.χ:
  *          "Meta+1". ¶λλα παραδείγματα θα δείτε στο αχρείο:
- *          ~/GNUstep/Defaults/WindowMaker
+ *          $HOME/GNUstep/Defaults/WindowMaker
  *
  * Δεν μπορεί να δηλωθεί ένα shortcut για MENU και για OPEN_MENU εντολή.
  * 
@@ -43,7 +43,7 @@
  *                 θα ανακληθούν την επόμενη φορά που ο χρήστης
  *                 εκκινίσει τον Window Maker μέχρι η εντολή SAVE_SESSION ή
  *                 CLEAR_SESSION χρησιμοποιηθούν. Αν στο αρχείο Window Maker του
- *                 καταλόγου "~/GNUstep/Defaults/" υπάρχει η εντολή:
+ *                 καταλόγου "$HOME/GNUstep/Defaults/" υπάρχει η εντολή:
  *                 "SaveSessionOnExit = Yes;", τότε όλα τα παραπάνω γίνονται
  *                 αυτόματα με κάθε έξοδο του χρήστη από τον Window Maker,
  *                 ακυρώνοντας ουσιαστικά κάθε προηγούμενη χρήση τως εντολών
@@ -97,9 +97,9 @@
  *		// creates a submenu with the contents of /usr/openwin/bin
  *	"XView apps" OPEN_MENU "/usr/openwin/bin"
  *		// some X11 apps in different directories
- *	"X11 apps" OPEN_MENU /usr/X11/bin ~/bin/X11
+ *	"X11 apps" OPEN_MENU /usr/X11/bin $HOME/bin/X11
  *		// set some background images
- *	"Φόντο" OPEN_MENU ~/images /usr/share/images WITH wmsetbg -u -t
+ *	"Φόντο" OPEN_MENU $HOME/images /usr/share/images WITH wmsetbg -u -t
  *		// inserts the style.menu in this entry
  *	"Στυλ" OPEN_MENU style.menu
  * "Δοκιμαστικό" END
@@ -177,9 +177,9 @@
 	"Επιφάνεια" END
 
 	"Εμφάνιση" MENU
-		"Θέματα" OPEN_MENU -noext  THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Στυλ" OPEN_MENU -noext  STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Ομάδα Εικονιδίων" OPEN_MENU -noext  ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Θέματα" OPEN_MENU -noext  THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Στυλ" OPEN_MENU -noext  STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Ομάδα Εικονιδίων" OPEN_MENU -noext  ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Φόντο" MENU
 			"Μονόχρωμο" MENU
                         	"Μαύρο" WS_BACK '(solid, black)'
@@ -195,10 +195,10 @@
 				"Σημαία" WS_BACK '(mdgradient, green, red, white, green)'
 				"Ουράνος" WS_BACK '(vgradient, blue4, white)'
 			"Διαβαθμισμένο" END
-			"Εικόνες" OPEN_MENU -noext  BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+			"Εικόνες" OPEN_MENU -noext  BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Φόντο" END
-		"Αποθήκευση Θέματος" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Όνομα Θέματος)"
-		"Αποθήκευση Ομάδας Εικονιδίων" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(Όνομα Ομάδας)"
+		"Αποθήκευση Θέματος" EXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Όνομα Θέματος)"
+		"Αποθήκευση Ομάδας Εικονιδίων" EXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(Όνομα Ομάδας)"
 	"Εμφάνιση" END
 
 	"Έξοδος"	MENU

@@ -1,0 +1,1380 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 1999 Free Software Foundation, Inc.
+# Li Wei Jih <lwj83@cs.ccu.edu.tw>, 1999.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Window Maker-0.51.0\n"
+"POT-Creation-Date: 1999-02-09 13:00+0800\n"
+"PO-Revision-Date: 1999-02-09 13:00+0800\n"
+"Last-Translator: Li Wei Jih <lwj83@cs.ccu.edu.tw>\n"
+"Language-Team: chinese <zh@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=big5\n"
+"Content-Transfer-Encoding: 8-bit\n"
+
+#: ../src/appicon.c:509 ../src/dialog.c:216 ../src/dialog.c:272
+#: ../src/dock.c:3060 ../src/dockedapp.c:208 ../src/winspector.c:281
+#: ../src/winspector.c:297
+msgid "Error"
+msgstr "錯誤"
+
+#: ../src/appicon.c:510
+msgid "Could not open specified icon file"
+msgstr "無法開啟指定的圖示檔"
+
+#: ../src/appicon.c:511 ../src/dialog.c:115 ../src/dialog.c:216
+#: ../src/dialog.c:272 ../src/dialog.c:460 ../src/dock.c:424
+#: ../src/dock.c:3061 ../src/dockedapp.c:208 ../src/dockedapp.c:352
+#: ../src/winspector.c:282 ../src/winspector.c:298
+msgid "OK"
+msgstr "確定"
+
+#: ../src/appicon.c:532 ../src/dock.c:272 ../src/winmenu.c:123
+msgid "Kill Application"
+msgstr "結束應用程式"
+
+#: ../src/appicon.c:533 ../src/dock.c:273 ../src/winmenu.c:124
+msgid ""
+"This will kill the application.\n"
+"Any unsaved changes will be lost.\n"
+"Please confirm."
+msgstr ""
+"這樣會結束應用程式。\n"
+"任何未儲存的改變將會遺失。\n"
+"請確認。"
+
+#: ../src/appicon.c:534 ../src/dock.c:274 ../src/winmenu.c:125
+msgid "Yes"
+msgstr "是"
+
+#: ../src/appicon.c:534 ../src/dock.c:274 ../src/winmenu.c:125
+msgid "No"
+msgstr "否"
+
+#: ../src/appicon.c:548 ../src/dock.c:1064
+msgid "Unhide Here"
+msgstr "在此顯現"
+
+#: ../src/appicon.c:549 ../src/appicon.c:574 ../src/dock.c:1066
+#: ../src/dock.c:1068 ../src/dock.c:3186 ../src/dock.c:3188
+#: ../src/winmenu.c:441
+msgid "Hide"
+msgstr "隱藏"
+
+#: ../src/appicon.c:550
+msgid "Set Icon..."
+msgstr "設定圖示..."
+
+#: ../src/appicon.c:551 ../src/dock.c:1072 ../src/rootmenu.c:226
+#: ../src/rootmenu.c:240 ../src/winmenu.c:488
+msgid "Kill"
+msgstr "結束"
+
+#: ../src/appicon.c:572 ../src/dock.c:3184
+msgid "Unhide"
+msgstr "顯現"
+
+#: ../src/defaults.c:752 ../src/startup.c:709 ../src/startup.c:727
+#: ../src/startup.c:733
+#, c-format
+msgid "could not read domain \"%s\" from defaults database"
+msgstr "無法從預設資料庫讀取定義域 \"%s\""
+
+#: ../src/defaults.c:798 ../src/defaults.c:922 ../src/defaults.c:961
+#: ../src/defaults.c:991
+#, c-format
+msgid "Domain %s (%s) of defaults database is corrupted!"
+msgstr "預設資料庫的定義域 %s (%s) 已損壞！"
+
+#: ../src/defaults.c:803 ../src/defaults.c:943 ../src/defaults.c:974
+#: ../src/defaults.c:1000
+#, c-format
+msgid "could not load domain %s from user defaults database"
+msgstr "無法從使用者預設資料庫載入定義域 %s"
+
+#: ../src/defaults.c:814 ../src/defaults.c:907
+#, c-format
+msgid "Domain %s (%s) of global defaults database is corrupted!"
+msgstr "整體預設資料庫的定義域 %s (%s) 已損壞！"
+
+#: ../src/defaults.c:833 ../src/defaults.c:912
+#, c-format
+msgid "could not load domain %s from global defaults database"
+msgstr "無法從整體預設資料庫載入定義域 %s"
+
+#: ../src/defaults.c:1283
+#, c-format
+msgid "wrong option value for key \"%s\". Should be one of %s"
+msgstr "key \"%s\" 的選項值錯誤。應為 %s "
+
+#: ../src/defaults.c:1330
+#, c-format
+msgid "can't convert \"%s\" to boolean for key \"%s\""
+msgstr "無法轉換 key \"%s\" 的 \"%s\" 成為 boolean"
+
+#: ../src/defaults.c:1335 ../src/defaults.c:1369 ../src/defaults.c:1401
+#: ../src/defaults.c:1414 ../src/defaults.c:1429 ../src/defaults.c:1443
+#: ../src/defaults.c:1515 ../src/defaults.c:1527 ../src/defaults.c:1875
+#: ../src/defaults.c:1892 ../src/defaults.c:1905 ../src/defaults.c:1938
+#: ../src/defaults.c:1954 ../src/defaults.c:1985 ../src/defaults.c:2058
+#, c-format
+msgid "using default \"%s\" instead"
+msgstr "改用預設 \"%s\""
+
+#: ../src/defaults.c:1366
+#, c-format
+msgid "can't convert \"%s\" to integer for key \"%s\""
+msgstr "無法轉換 key \"%s\" 的 \"%s\" 成為整數"
+
+#: ../src/defaults.c:1396 ../src/defaults.c:1510 ../src/defaults.c:1870
+#: ../src/defaults.c:1887 ../src/defaults.c:1933 ../src/defaults.c:1980
+#: ../src/wdefaults.c:541 ../src/wdefaults.c:577
+#, c-format
+msgid "Wrong option format for key \"%s\". Should be %s."
+msgstr "key \"%s\" 的選項格式錯誤。應為 %s。"
+
+#: ../src/defaults.c:1409
+#, c-format
+msgid "Incorrect number of elements in array for key \"%s\"."
+msgstr "key \"%s\" 的陣列元素數目錯誤。"
+
+#: ../src/defaults.c:1424
+#, c-format
+msgid "Wrong value for key \"%s\". Should be Coordinate."
+msgstr "key \"%s\" 的值錯誤。應為座標。"
+
+#: ../src/defaults.c:1439
+#, c-format
+msgid "can't convert array to integers for \"%s\"."
+msgstr "無法為 \"%s\" 轉換陣列成為整數。"
+
+#: ../src/defaults.c:1636 ../src/defaults.c:1668 ../src/defaults.c:1684
+#: ../src/defaults.c:1730 ../src/defaults.c:1770 ../src/defaults.c:1808
+#: ../src/defaults.c:1824
+#, c-format
+msgid "\"%s\" is not a valid color name"
+msgstr "\"%s\" 不是有效的顏色名"
+
+#: ../src/defaults.c:1649
+msgid "bad number of arguments in gradient specification"
+msgstr "漸層規格中引數數目錯誤"
+
+#: ../src/defaults.c:1703
+msgid "too few arguments in multicolor gradient specification"
+msgstr "多色漸層規格中引數太少"
+
+#: ../src/defaults.c:1797
+msgid "bad number of arguments in textured gradient specification"
+msgstr "材質漸層規格中引數數目錯誤"
+
+#: ../src/defaults.c:1840
+#, c-format
+msgid "bad opacity value for tgradient texture \"%s\". Should be [0..255]"
+msgstr "漸層材質 \"%s\" 不透明值錯誤。應該是 [0..255]"
+
+#: ../src/defaults.c:1853
+#, c-format
+msgid "invalid texture type %s"
+msgstr "材質型態 %s 無效"
+
+#: ../src/defaults.c:1900
+#, c-format
+msgid "Error in texture specification for key \"%s\""
+msgstr "key \"%s\" 的材質規格錯誤"
+
+#: ../src/defaults.c:1950
+msgid "Wrong type for workspace background. Should be a texture type."
+msgstr "工作區背景型態錯誤。應為材質型態。"
+
+#: ../src/defaults.c:1998
+#, c-format
+msgid "Wrong type for background of workspace %i. Should be a texture."
+msgstr "工作區 %i 背景型態錯誤。應為材質。"
+
+#: ../src/defaults.c:2023
+msgid "could not load any usable font!!!"
+msgstr "無法載入任何可用字型!!!"
+
+#: ../src/defaults.c:2053
+#, c-format
+msgid "could not get color for key \"%s\""
+msgstr "無法取得 key \"%s\" 的色彩"
+
+#: ../src/defaults.c:2112 ../src/rootmenu.c:454
+#, c-format
+msgid "%s:invalid key modifier \"%s\""
+msgstr "%s: 鍵修正 \"%s\" 無效"
+
+#: ../src/defaults.c:2124
+#, c-format
+msgid "%s:invalid kbd shortcut specification \"%s\""
+msgstr "%s: 鍵盤捷徑規格 \"%s\" 無效"
+
+#: ../src/defaults.c:2131
+#, c-format
+msgid "%s:invalid key in shortcut \"%s\""
+msgstr "%s: 捷徑 \"%s\" 的鍵無效"
+
+#: ../src/defaults.c:2157
+#, c-format
+msgid "%s: modifier key %s is not valid"
+msgstr "%s: 修正鍵 %s 不正確"
+
+#: ../src/defaults.c:2233
+msgid "could not render texture for icon background"
+msgstr "無法表現圖示背景的材質"
+
+#: ../src/dialog.c:115 ../src/dialog.c:467 ../src/dock.c:424
+#: ../src/dockedapp.c:358 ../src/rootmenu.c:188 ../src/rootmenu.c:226
+#: ../src/rootmenu.c:240
+msgid "Cancel"
+msgstr "取消"
+
+#: ../src/dialog.c:211
+msgid "Could not open directory "
+msgstr "無法開啟目錄"
+
+#: ../src/dialog.c:267
+msgid "Could not load image file "
+msgstr "無法載入影像檔"
+
+#: ../src/dialog.c:404
+msgid "Directories"
+msgstr "目錄"
+
+#: ../src/dialog.c:413
+msgid "Icons"
+msgstr "圖示"
+
+#: ../src/dialog.c:450
+msgid "File Name:"
+msgstr "檔名:"
+
+#: ../src/dialog.c:473
+msgid "Choose File"
+msgstr "選取檔案"
+
+#: ../src/dialog.c:490 ../src/dialog.c:492
+msgid "Icon Chooser"
+msgstr "圖示選取器"
+
+#: ../src/dock.c:213
+#, c-format
+msgid "Type the name for workspace %i:"
+msgstr "輸入工作區 %i 名稱:"
+
+#: ../src/dock.c:214 ../src/dock.c:1043
+msgid "Rename Workspace"
+msgstr "工作區更名"
+
+#: ../src/dock.c:422
+msgid "Workspace Clip"
+msgstr "工作區迴紋針"
+
+#: ../src/dock.c:423
+msgid "All selected icons will be removed!"
+msgstr "所有選取的圖示會被刪除！"
+
+#: ../src/dock.c:470
+msgid "Keep Icon"
+msgstr "保持圖示"
+
+#: ../src/dock.c:471 ../src/dock.c:1978 ../src/dock.c:2107
+msgid "Type the command used to launch the application"
+msgstr "輸入用來啟動應用程式的命令"
+
+#: ../src/dock.c:856
+#, c-format
+msgid "could not launch application %s\n"
+msgstr "無法啟動應用程式 %s\n"
+
+#: ../src/dock.c:911
+msgid "could not create workspace submenu for Clip menu"
+msgstr "無法為迴紋針選單建立工作區副選單"
+
+#: ../src/dock.c:974
+msgid "could not create options submenu for Clip menu"
+msgstr "無法為迴紋針選單建立選項副選單"
+
+#: ../src/dock.c:978 ../src/dock.c:1032 ../src/winmenu.c:383
+msgid "Keep on top"
+msgstr "保持在最上層"
+
+#: ../src/dock.c:984
+msgid "Collapsed"
+msgstr "折疊"
+
+#: ../src/dock.c:990
+msgid "AutoCollapse"
+msgstr "自動折疊"
+
+#: ../src/dock.c:996
+msgid "AutoRaiseLower"
+msgstr "自動升降"
+
+#: ../src/dock.c:1002
+msgid "AutoAttract Icons"
+msgstr "自動吸引圖示"
+
+#: ../src/dock.c:1008
+msgid "Keep Attracted Icons"
+msgstr "保持吸引的圖示"
+
+#: ../src/dock.c:1038
+msgid "Clip Options"
+msgstr "迴紋針選項"
+
+#: ../src/dock.c:1045
+msgid "(Un)Select Icon"
+msgstr "選取圖示（取消）"
+
+#: ../src/dock.c:1047
+msgid "(Un)Select All Icons"
+msgstr "選取所有圖示（取消）"
+
+#: ../src/dock.c:1050
+msgid "Keep Icon(s)"
+msgstr "保持圖示"
+
+#: ../src/dock.c:1052
+msgid "Move Icon(s) To"
+msgstr "移動圖示至"
+
+#: ../src/dock.c:1057
+msgid "Remove Icon(s)"
+msgstr "刪除圖示"
+
+#: ../src/dock.c:1059
+msgid "Attract Icons"
+msgstr "吸引圖示"
+
+#: ../src/dock.c:1062
+msgid "Launch"
+msgstr "啟動"
+
+#: ../src/dock.c:1070
+msgid "Settings..."
+msgstr "設定..."
+
+#: ../src/dock.c:1455 ../src/dock.c:1469 ../src/dock.c:1483 ../src/dock.c:1493
+#, c-format
+msgid "bad value in docked icon state info %s"
+msgstr "停靠的圖示狀態資訊 %s 值不正確"
+
+#: ../src/dock.c:1501
+#, c-format
+msgid "bad value in docked icon position %i,%i"
+msgstr "停靠的圖示位置 %i,%i 值不正確"
+
+#: ../src/dock.c:1745
+msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
+msgstr "太多圖示存放在停靠區。忽略不適當的"
+
+#. icon->forced_dock = 1;
+#: ../src/dock.c:1977 ../src/dock.c:2106
+msgid "Dock Icon"
+msgstr "停靠圖示"
+
+#: ../src/dock.c:3053 ../src/dock.c:3057
+#, c-format
+msgid "Could not execute command \"%s\""
+msgstr "無法執行命令 \"%s\""
+
+#: ../src/dockedapp.c:128
+#, c-format
+msgid "could not find icon %s, used in a docked application"
+msgstr "無法找到圖示 %s，用於停靠的應用程式"
+
+#: ../src/dockedapp.c:207
+#, c-format
+msgid "Could not open specified icon file:%s"
+msgstr "無法開啟指定的圖示檔:%s"
+
+#: ../src/dockedapp.c:293
+msgid "Start when WindowMaker is started"
+msgstr "當 WindowMaker 啟動時啟動"
+
+#: ../src/dockedapp.c:300
+msgid "Application path and arguments"
+msgstr "應用程式路徑與引數"
+
+#: ../src/dockedapp.c:311
+msgid "Command for files dropped with DND"
+msgstr "DND 放置檔案的命令"
+
+#: ../src/dockedapp.c:323
+#, c-format
+msgid "%d will be replaced with the file name"
+msgstr "%d 會被檔名取代"
+
+#: ../src/dockedapp.c:327
+msgid "DND support was not compiled in"
+msgstr "未編譯入 DND 支援"
+
+#: ../src/dockedapp.c:333
+msgid "Icon Image"
+msgstr "圖示影像"
+
+#: ../src/dockedapp.c:345 ../src/winspector.c:1235
+msgid "Browse..."
+msgstr "瀏覽..."
+
+#: ../src/dockedapp.c:390
+msgid "Docked Application Settings"
+msgstr "停靠的應用程式設定"
+
+#: ../src/event.c:352
+msgid "stack overflow: too many dead processes"
+msgstr "堆疊溢位: 太多終止的行程"
+
+#: ../src/framewin.c:485
+#, c-format
+msgid "could not render gradient: %s"
+msgstr "無法表現漸層: %s"
+
+#: ../src/framewin.c:501 ../src/framewin.c:516 ../src/framewin.c:527
+#: ../src/framewin.c:534 ../src/framewin.c:541 ../src/icon.c:296
+#: ../src/texture.c:578
+#, c-format
+msgid "error rendering image:%s"
+msgstr "表現影像錯誤: %s"
+
+#: ../src/icon.c:182 ../src/wdefaults.c:411
+#, c-format
+msgid "error loading image file \"%s\""
+msgstr "載入影像檔錯誤 \"%s\""
+
+#: ../src/icon.c:430 ../src/icon.c:439
+#, c-format
+msgid "could not create directory %s"
+msgstr "無法建立目錄 %s"
+
+#: ../src/icon.c:706
+#, c-format
+msgid "could not find default icon \"%s\""
+msgstr "無法載入預設圖示 \"%s\""
+
+#: ../src/icon.c:712
+#, c-format
+msgid "could not load default icon \"%s\":%s"
+msgstr "無法載入預設圖示 \"%s\":%s"
+
+#: ../src/main.c:195
+msgid "could not exec window manager"
+msgstr "無法執行視窗管理員"
+
+#: ../src/main.c:196
+msgid "Restart failed!!!"
+msgstr "重新啟動失敗!!!"
+
+#: ../src/main.c:243
+#, c-format
+msgid "%s aborted.\n"
+msgstr "%s 放棄。\n"
+
+#: ../src/main.c:254
+#, c-format
+msgid "Usage: %s [options]\n"
+msgstr "使用法： %s [選項]\n"
+
+#: ../src/main.c:255
+msgid "The Window Maker window manager for the X window system"
+msgstr "The Window Maker window manager for the X window system"
+
+#: ../src/main.c:257
+msgid " -display host:dpy\tdisplay to use"
+msgstr " -display host:dpy\t要使用的 display"
+
+#: ../src/main.c:259
+msgid " --no-cpp \t\tdisable preprocessing of configuration files"
+msgstr " --no-cpp \t\t不預先處理設定檔"
+
+#: ../src/main.c:261
+msgid " --no-dock\t\tdo not open the application Dock"
+msgstr " --no-dock\t\t不要開啟程式停靠區"
+
+#: ../src/main.c:262
+msgid " --no-clip\t\tdo not open the workspace Clip"
+msgstr " --no-clip\t\t不要開啟工作區迴紋針"
+
+#.
+#. puts(_(" --locale locale		locale to use"));
+#.
+#: ../src/main.c:266
+msgid " --visual-id visualid\tvisual id of visual to use"
+msgstr " --visual-id visualid\t所欲使用的 visual 之 visualid"
+
+#: ../src/main.c:267
+msgid " --static\t\tdo not update or save configurations"
+msgstr " --static\t\t不要更新或儲存設定檔"
+
+#: ../src/main.c:268
+msgid " --version\t\tprint version and exit"
+msgstr " --version\t\t印出版本編號並離開"
+
+#: ../src/main.c:269
+msgid " --help\t\t\tshow this message"
+msgstr " --help\t\t\t顯示本說明訊息"
+
+#: ../src/main.c:281
+#, c-format
+msgid ""
+"could not find user GNUstep directory (%s).\n"
+"Make sure you have installed Window Maker correctly and run wmaker.inst"
+msgstr ""
+"無法找到使用者 GNUstep 目錄 (%s)。\n"
+"確定您已經安裝 WindowMaker 正確且執行 wmaker.inst"
+
+#: ../src/main.c:300
+#, c-format
+msgid "%s:could not execute initialization script"
+msgstr "%s: 啟始手稿無法執行"
+
+#: ../src/main.c:317
+#, c-format
+msgid "%s:could not execute exit script"
+msgstr "%s: 離開手稿無法執行"
+
+#: ../src/main.c:378 ../src/main.c:385 ../src/main.c:393 ../src/main.c:409
+#, c-format
+msgid "too few arguments for %s"
+msgstr "%s 的引數太少"
+
+#: ../src/main.c:397
+#, c-format
+msgid "bad value for visualid: \"%s\""
+msgstr "visualid 的值不正確: \"%s\""
+
+#: ../src/main.c:414
+#y, c-format
+msgid "%s: invalid argument '%s'"
+msgstr "%s: 捷徑 \"%s\" 的鍵無效"
+
+#: ../src/main.c:415
+#, c-format
+msgid "Try '%s --help' for more information"
+msgstr "試著用 '%s --help' 來獲得更多資訊"
+
+#: ../src/main.c:458
+msgid "X server does not support locale"
+msgstr "X 伺服器不支援 locale"
+
+#: ../src/main.c:461
+msgid "cannot set locale modifiers"
+msgstr "無法設定 locale"
+
+#: ../src/main.c:478
+#, c-format
+msgid "could not open display \"%s\""
+msgstr "無法開啟 display \"%s\""
+
+#: ../src/menu.c:285
+msgid "wrealloc() failed while trying to add menu item"
+msgstr "嘗試增加選單項目時 wrealloc() 失敗"
+
+#: ../src/misc.c:71
+#, c-format
+msgid "could not define value for %s for cpp"
+msgstr "無法定義 cpp 的 %s 的值"
+
+#: ../src/misc.c:101
+#, c-format
+msgid "could not get password entry for UID %i"
+msgstr "無法取得 UID %i 的密碼記錄"
+
+#: ../src/misc.c:125
+#, c-format
+msgid "your machine is misconfigured. HOSTNAME is set to %s"
+msgstr "您的機器設定錯誤。HOSTNAME 設為 %s"
+
+#: ../src/misc.c:131
+#, c-format
+msgid "your machine is misconfigured. HOST is set to %s"
+msgstr "您的機器設定錯誤。HOST 設為 %s"
+
+#: ../src/misc.c:773
+msgid "selection timed-out"
+msgstr "選取逾時"
+
+#: ../src/misc.c:789
+msgid "Program Arguments"
+msgstr "程式引數"
+
+#: ../src/misc.c:790
+msgid "Enter command arguments:"
+msgstr "輸入命令引數:"
+
+#: ../src/misc.c:887
+msgid "unable to get dropped data from DND drop"
+msgstr "無法從 DND 放置取得放置資料"
+
+#: ../src/misc.c:895
+msgid "error getting dropped data from DND drop"
+msgstr "從 DND 放置取得放置資料錯誤"
+
+#: ../src/misc.c:901
+msgid "out of memory while getting data from DND drop"
+msgstr "從 DND 放置取得資料時記憶體不足"
+
+#: ../src/misc.c:946 ../src/misc.c:1081
+#, c-format
+msgid "out of memory during expansion of \"%s\""
+msgstr "展開 \"%s\" 時記憶體不足"
+
+#: ../src/misc.c:1000
+msgid "out of memory during expansion of \"%w\""
+msgstr "展開 \"%w\" 時記憶體不足"
+
+#: ../src/misc.c:1018
+#
+msgid "out of memory during expansion of \"%W\""
+msgstr "展開 \"%W\" 時記憶體不足"
+
+#: ../src/misc.c:1034
+msgid "out of memory during expansion of \"%a\""
+msgstr "展開 \"%a\" 時記憶體不足"
+
+#: ../src/misc.c:1060
+#, c-format
+msgid "out of memory during expansion of \"%d\""
+msgstr "展開 \"%d\" 時記憶體不足"
+
+#: ../src/misc.c:1074
+msgid "selection not available"
+msgstr "選取不能使用"
+
+#: ../src/misc.c:1146 ../src/misc.c:1152
+#, c-format
+msgid "bad window name value in %s state info"
+msgstr "%s 狀態資訊中有無效的視窗名稱值"
+
+#: ../src/misc.c:1406
+msgid "could not send message to background image helper"
+msgstr "無法傳送訊息至背景影像助手"
+
+#: ../src/pixmap.c:235
+#, c-format
+msgid "could not load mask bitmap file \"%s\". Won't use mask"
+msgstr "無法載入遮罩位元映像檔 \"%s\"。不使用遮罩"
+
+#: ../src/proplist.c:180
+msgid "unterminated string"
+msgstr "字串未終止"
+
+#: ../src/proplist.c:247
+msgid "unterminated array"
+msgstr "陣列未終止"
+
+#: ../src/proplist.c:256
+msgid "missing , in array or unterminated array"
+msgstr "在陣列缺少 , 或陣列未終止"
+
+#: ../src/proplist.c:267
+msgid "could not get array element"
+msgstr "無法取得陣列元素"
+
+#: ../src/proplist.c:297
+msgid "unterminated dictionary"
+msgstr "字點未終止"
+
+#: ../src/proplist.c:315
+msgid "missing dictionary key"
+msgstr "缺少字典鍵"
+
+#: ../src/proplist.c:317
+msgid "missing dictionary entry key or unterminated dictionary"
+msgstr "缺少字典記錄鍵或字典未中止"
+
+#: ../src/proplist.c:323
+msgid "error parsing dictionary key"
+msgstr "字典鍵解析錯誤"
+
+#: ../src/proplist.c:332
+msgid "missing = in dictionary entry"
+msgstr "字典記錄中缺少 = "
+
+#: ../src/proplist.c:351
+msgid "missing ; in dictionary entry"
+msgstr "字典記錄中缺少 ; "
+
+#: ../src/proplist.c:432
+msgid "was expecting a string, dictionary, data or array."
+msgstr "要求字串，字典，資料或陣列。"
+
+#: ../src/proplist.c:434
+msgid "Comments are not allowed inside WindowMaker owned domain files."
+msgstr "在 WindowMaker 的定義域檔中不允許\註解。"
+
+#: ../src/proplist.c:453
+#, c-format
+msgid "could not open domain file %s"
+msgstr "無法開啟定義域檔 %s"
+
+#: ../src/proplist.c:466
+msgid "extra data after end of file"
+msgstr "檔案結束後有額外資料"
+
+#: ../src/resources.c:71
+#, c-format
+msgid "The following character sets are missing in %s:"
+msgstr "%s 中下列字元集缺少:"
+
+#: ../src/resources.c:76
+#, c-format
+msgid "The string \"%s\" will be used in place"
+msgstr "字串 \"%s\" 會被用來取代"
+
+#: ../src/resources.c:78
+msgid "of any characters from those sets."
+msgstr "那些集合的任何字元。"
+
+#: ../src/resources.c:81
+#, c-format
+msgid "could not create font set %s. Trying fixed"
+msgstr "無法建立字型集 %s。試用 fixed"
+
+#: ../src/resources.c:98
+#, c-format
+msgid "could not load font %s. Trying fixed"
+msgstr "無法載入字型 %s。試用 fixed"
+
+#: ../src/resources.c:136
+#, c-format
+msgid "could not parse color \"%s\""
+msgstr "無法解析色彩 \"%s\""
+
+#: ../src/resources.c:140
+#, c-format
+msgid "could not allocate color \"%s\""
+msgstr "無法配置色彩 \"%s\""
+
+#: ../src/rootmenu.c:186 ../src/rootmenu.c:188
+msgid "Exit"
+msgstr "離開"
+
+#: ../src/rootmenu.c:187
+msgid "Exit window manager?"
+msgstr "離開視窗管理員？"
+
+#: ../src/rootmenu.c:223
+msgid "Close X session"
+msgstr "關閉 X 視窗系統"
+
+#: ../src/rootmenu.c:224
+msgid ""
+"Close Window System session?\n"
+"Kill might close applications with unsaved data."
+msgstr ""
+"關閉視窗系統？\n"
+"結束可能關閉尚未儲存資料的應用程式。"
+
+#.
+#. entry = wMenuAddCallback(menu, _("Select Shortcut"), NULL, NULL);
+#. wMenuEntrySetCascade(menu, entry, makeMakeShortcutMenu(scr));
+#.
+#: ../src/rootmenu.c:226 ../src/winmenu.c:481
+msgid "Close"
+msgstr "關閉"
+
+#: ../src/rootmenu.c:237
+msgid "Kill X session"
+msgstr "結束 X 視窗系統"
+
+#: ../src/rootmenu.c:238
+msgid ""
+"Kill Window System session?\n"
+"(all applications will be closed)"
+msgstr ""
+"結束視窗系統？\n"
+"（所有應用程式會被關閉）"
+
+#: ../src/rootmenu.c:467
+#, c-format
+msgid "%s:invalid kbd shortcut specification \"%s\" for entry %s"
+msgstr "%s: 鍵盤捷徑規格 \"%s\" 無效 (%s)"
+
+#: ../src/rootmenu.c:475
+#, c-format
+msgid "%s:invalid key in shortcut \"%s\" for entry %s"
+msgstr "%s: 捷徑 \"%s\" 的鍵無效 (%s)"
+
+#: ../src/rootmenu.c:528
+#, c-format
+msgid "%s: unmatched '\"' in menu file"
+msgstr "%s: 選單檔中 '\"' 不成對"
+
+#: ../src/rootmenu.c:578
+#, c-format
+msgid "%s: missing command"
+msgstr "%s: 缺少命令"
+
+#: ../src/rootmenu.c:611
+#, c-format
+msgid "invalid OPEN_MENU specification: %s"
+msgstr "無效的 OPEN_MENU 規格: %s"
+
+#: ../src/rootmenu.c:684
+#, c-format
+msgid "%s:could not stat menu"
+msgstr "%s: 無法 stat 選單"
+
+#: ../src/rootmenu.c:692
+#, c-format
+msgid "%s:could not stat menu:%s"
+msgstr "%s: 無法 stat 選單: %s"
+
+#: ../src/rootmenu.c:710
+#, c-format
+msgid "too many parameters in OPEN_MENU: %s"
+msgstr "OPEN_MENU 中有太多參數: %s"
+
+#: ../src/rootmenu.c:746
+msgid ""
+"There are more than one WORKSPACE_MENU commands in the applications menu. "
+"Only one is allowed."
+msgstr "應用程式選單中有超過一個 WORKSPACE_MENU 命令。只允許\有一個。"
+
+#: ../src/rootmenu.c:775 ../src/rootmenu.c:793
+#, c-format
+msgid "%s:missing parameter for menu command \"%s\""
+msgstr "%s: 選單命令 \"%s\" 缺少參數"
+
+#: ../src/rootmenu.c:856
+#, c-format
+msgid "%s:unknown command \"%s\" in menu config."
+msgstr "%s: 選單設定中有不名的命令 \"%s\"。"
+
+#: ../src/rootmenu.c:864
+#, c-format
+msgid "%s:can't add shortcut for entry \"%s\""
+msgstr "%s: 無法為 \"%s\" 增加捷徑"
+
+#: ../src/rootmenu.c:1001
+#, c-format
+msgid "%s:maximal line size exceeded in menu config: %s"
+msgstr "%s: 選單檔中超過最大行數: %s"
+
+#: ../src/rootmenu.c:1023 ../src/rootmenu.c:1115 ../src/rootmenu.c:1216
+#, c-format
+msgid "%s:missing command in menu config: %s"
+msgstr "%s: 選單設定中缺少命令: %s"
+
+#: ../src/rootmenu.c:1053
+#, c-format
+msgid "%s:syntax error in menu file:END declaration missing"
+msgstr "%s: 選單檔中語法錯誤: 缺少 END 宣告"
+
+#: ../src/rootmenu.c:1082 ../src/rootmenu.c:1181
+msgid "could not make arguments for menu file preprocessor"
+msgstr "無法為選單檔預先處理器產生引數"
+
+#: ../src/rootmenu.c:1088 ../src/rootmenu.c:1188
+#, c-format
+msgid "%s:could not open/preprocess menu file"
+msgstr "%s: 無法開啟/預先處理選單檔"
+
+#: ../src/rootmenu.c:1100 ../src/rootmenu.c:1201
+#, c-format
+msgid "%s:could not open menu file"
+msgstr "%s: 無法開啟選單檔"
+
+#: ../src/rootmenu.c:1127
+#, c-format
+msgid "%s:invalid menu file. MENU command is missing"
+msgstr "%s: 無效的選單檔。缺少 MENU 命令"
+
+#: ../src/rootmenu.c:1136
+msgid "error reading preprocessed menu data"
+msgstr "預先處理選單資料讀取錯誤"
+
+#: ../src/rootmenu.c:1228
+#, c-format
+msgid "%s:no title given for the root menu"
+msgstr "%s: 沒有給主選單標題"
+
+#: ../src/rootmenu.c:1311 ../src/rootmenu.c:1378 ../src/rootmenu.c:1422
+#, c-format
+msgid "out of memory while constructing directory menu %s"
+msgstr "建立目錄選單 %s 時記憶體不足"
+
+#: ../src/rootmenu.c:1321
+#, c-format
+msgid "%s:could not stat file \"%s\" in menu directory"
+msgstr "%s: 無法 stat 選單目錄中檔案 \"%s\""
+
+#: ../src/rootmenu.c:1476
+msgid "Commands"
+msgstr "命令"
+
+#: ../src/rootmenu.c:1479
+msgid "Restart"
+msgstr "重新啟動"
+
+#: ../src/rootmenu.c:1480
+msgid "Exit..."
+msgstr "離開..."
+
+#: ../src/rootmenu.c:1553
+#, c-format
+msgid "could not find menu file \"%s\" referenced in WMRootMenu"
+msgstr "無法找到 WMRootMenu 參照的選單檔 \"%s\""
+
+#: ../src/rootmenu.c:1560
+#, c-format
+msgid "could not access menu \"%s\" referenced in WMRootMenu"
+msgstr "無法存取 WMRootMenu 參照的選單檔 \"%s\""
+
+#: ../src/rootmenu.c:1571
+#, c-format
+msgid ""
+"using default menu file \"%s\" as the menu referenced in WMRootMenu could "
+"not be found "
+msgstr "無法找到 WMRootMenu 參照的選單，使用預設選單檔 \"%s\""
+
+#: ../src/rootmenu.c:1594 ../src/rootmenu.c:1670
+#, c-format
+msgid "%s:format error in root menu configuration \"%s\""
+msgstr "%s: 主選單設定中格式錯誤 \"%s\""
+
+#: ../src/screen.c:428
+msgid "could not load logo image for panels"
+msgstr "無法載入面板的標識影像"
+
+#: ../src/screen.c:431
+#, c-format
+msgid "error making logo image for panel:%s"
+msgstr "面板的標識影像產生錯誤: %s"
+
+#: ../src/screen.c:695
+#, c-format
+msgid "could not initialize graphics library context: %s"
+msgstr "無法啟始圖形函式庫關連: %s"
+
+#: ../src/screen.c:727
+msgid "could not do initialization of WINGs widget set"
+msgstr "無法啟始 WINGs widget set"
+
+#: ../src/screen.c:1059
+#, c-format
+msgid "could not save session state in %s"
+msgstr "無法在 %s 儲存階段狀態"
+
+#: ../src/session.c:182 ../src/wdefaults.c:559 ../src/winspector.c:345
+#, c-format
+msgid "can't convert \"%s\" to boolean"
+msgstr "無法轉換 \"%s\" 至 boolean"
+
+#: ../src/session.c:875 ../src/session.c:969
+msgid "end of memory while saving session state"
+msgstr "儲存階段狀態時記憶體不足"
+
+#. This is not fatal but can mean the session manager exited.
+#. * If the session manager exited normally we would get a
+#. * Die message, so this probably means an abnormal exit.
+#. * If the sm was the last client of session, then we'll die
+#. * anyway, otherwise we can continue doing our stuff.
+#.
+#: ../src/session.c:1103
+msgid "connection to the session manager was lost"
+msgstr "遺失至階段管理員的連結"
+
+#: ../src/stacking.c:72
+msgid "could not get window list!!"
+msgstr "無法得到視窗清單!!"
+
+#: ../src/startup.c:195
+#, c-format
+msgid "internal X error: %s\n"
+msgstr "X 內部錯誤: %s\n"
+
+#: ../src/startup.c:258
+#, c-format
+msgid "got signal %i (%s) - restarting\n"
+msgstr "收到信號 %i (%s) - 重新啟動\n"
+
+#: ../src/startup.c:260
+#, c-format
+msgid "got signal %i - restarting\n"
+msgstr "收到信號 %i - 重新啟動\n"
+
+#: ../src/startup.c:275
+#, c-format
+msgid "got signal %i (%s) - exiting...\n"
+msgstr "收到信號 %i (%s) - 重新啟動...\n"
+
+#: ../src/startup.c:277
+#, c-format
+msgid "got signal %i - exiting...\n"
+msgstr "收到信號 %i - 重新啟動...\n"
+
+#: ../src/startup.c:290
+#, c-format
+msgid "got signal %i (%s)\n"
+msgstr "收到信號 %i (%s)\n"
+
+#: ../src/startup.c:292
+#, c-format
+msgid "got signal %i\n"
+msgstr "收到信號 %i\n"
+
+#: ../src/startup.c:298
+msgid ""
+"crashed while trying to do some post-crash cleanup. Aborting immediatelly."
+msgstr "嘗試崩潰後清除處理時崩潰。直接放棄。"
+
+#: ../src/startup.c:309
+msgid ""
+"a fatal error has occured, probably due to a bug. Please fill the included "
+"BUGFORM and report it."
+msgstr "發生嚴重錯誤，可能因為程式錯誤。請填寫 BUGFORM 並提出報告。"
+
+#. restart another window manager so that the X session doesn't
+#. * go to space
+#: ../src/startup.c:316
+msgid "trying to start alternative window manager..."
+msgstr "嘗試啟動另一套視窗管理員..."
+
+#: ../src/startup.c:719
+#, c-format
+msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
+msgstr "圖示大小設為 %i 太小。改用 16\n"
+
+#: ../src/startup.c:763
+msgid "it seems that there already is a window manager running"
+msgstr "似乎已經有視窗管理員在執行中"
+
+#: ../src/startup.c:769
+#, c-format
+msgid "could not manage screen %i"
+msgstr "無法管理螢幕 %i"
+
+#: ../src/startup.c:829
+msgid "could not manage any screen"
+msgstr "無法管理任何螢幕"
+
+#: ../src/switchmenu.c:114
+msgid "Windows"
+msgstr "視窗"
+
+#: ../src/texture.c:274 ../src/texture.c:318
+#, c-format
+msgid "image file \"%s\" used as texture could not be found."
+msgstr "找不到作為材質的影像檔 \"%s\""
+
+#: ../src/texture.c:280 ../src/texture.c:324
+#, c-format
+msgid "could not load texture pixmap \"%s\":%s"
+msgstr "無法載入材質圖像 \"%s\":%s"
+
+#: ../src/texture.c:463 ../src/texture.c:574
+#, c-format
+msgid "could not render texture: %s"
+msgstr "無法表現材質: %s"
+
+#: ../src/wdefaults.c:405
+#, c-format
+msgid "could not find icon file \"%s\""
+msgstr "無法找到圖示檔 \"%s\""
+
+#: ../src/window.c:2377 ../src/window.c:2509
+msgid ""
+"the NumLock, ScrollLock or similar key seems to be turned on.\n"
+"Turn it off or some mouse actions and keyboard shortcuts will not work."
+msgstr ""
+"NumLock, ScrollLock 或類似的鍵似乎被打開。\n"
+"關閉它否則一些滑鼠動作與鍵盤???會無法作用。"
+
+#: ../src/winmenu.c:249 ../src/winmenu.c:257
+msgid "Set Shortcut"
+msgstr "設定捷徑"
+
+#: ../src/winmenu.c:333 ../src/winmenu.c:379
+msgid "could not create submenu for window menu"
+msgstr "無法為視窗選單建立副選單"
+
+#: ../src/winmenu.c:388
+msgid "Keep at bottom"
+msgstr "保持在最下層"
+
+#: ../src/winmenu.c:393 ../src/winspector.c:1141
+msgid "Omnipresent"
+msgstr "無所不在"
+
+#.
+#. * Warning: If you make some change that affects the order of the
+#. * entries, you must update the command #defines in the top of
+#. * this file.
+#.
+#: ../src/winmenu.c:416 ../src/winmenu.c:551
+msgid "Maximize"
+msgstr "最大化"
+
+#: ../src/winmenu.c:424 ../src/winmenu.c:537
+msgid "Miniaturize"
+msgstr "最小化"
+
+#: ../src/winmenu.c:433 ../src/winmenu.c:565
+msgid "Shade"
+msgstr "遮蔽"
+
+#: ../src/winmenu.c:449
+msgid "Resize/Move"
+msgstr "大小變更/移動"
+
+#: ../src/winmenu.c:457
+msgid "Select"
+msgstr "選取"
+
+#: ../src/winmenu.c:465
+msgid "Move To"
+msgstr "移至"
+
+#: ../src/winmenu.c:470
+msgid "Attributes..."
+msgstr "屬性..."
+
+#: ../src/winmenu.c:472
+msgid "Options"
+msgstr "選項"
+
+#: ../src/winmenu.c:532
+msgid "Deminiaturize"
+msgstr "取消最小化"
+
+#: ../src/winmenu.c:546
+msgid "Unmaximize"
+msgstr "取消最大化"
+
+#: ../src/winmenu.c:560
+msgid "Unshade"
+msgstr "取消遮蔽"
+
+#: ../src/winspector.c:279
+#, c-format
+msgid "Could not find icon \"%s\" specified for this window"
+msgstr "無法找到指定給這個視窗的圖示 \"%s\""
+
+#: ../src/winspector.c:295
+#, c-format
+msgid "Could not open specified icon \"%s\":%s"
+msgstr "無法開啟指定的圖示 \"%s\":%s"
+
+#: ../src/winspector.c:1016
+msgid "Save"
+msgstr "儲存"
+
+#: ../src/winspector.c:1024
+msgid "Apply"
+msgstr "套用"
+
+#: ../src/winspector.c:1030
+msgid "Reload"
+msgstr "還原"
+
+#: ../src/winspector.c:1039 ../src/winspector.c:1049
+msgid "Window Specification"
+msgstr "視窗規格"
+
+#: ../src/winspector.c:1040
+msgid "Window Attributes"
+msgstr "視窗屬性"
+
+#: ../src/winspector.c:1041
+msgid "Advanced Options"
+msgstr "進階選項"
+
+#: ../src/winspector.c:1042
+msgid "Icon and Initial Workspace"
+msgstr "圖示與啟始工作區"
+
+#: ../src/winspector.c:1043
+msgid "Application Specific"
+msgstr "應用程示特定"
+
+#: ../src/winspector.c:1057
+msgid "Defaults for all windows"
+msgstr "所有視窗預設值"
+
+#: ../src/winspector.c:1100
+msgid ""
+"The configuration will apply to all\n"
+"windows that have their WM_CLASS property set to the above selected\n"
+"name, when saved."
+msgstr ""
+"儲存時，設定值會套用至所有\n"
+"WM_CLASS 特性設為以上選取名稱的視窗。"
+
+#: ../src/winspector.c:1107
+msgid "Attributes"
+msgstr "屬性"
+
+#: ../src/winspector.c:1117
+msgid "Disable titlebar"
+msgstr "使「標題列」失效"
+
+#: ../src/winspector.c:1121
+msgid "Disable resizebar"
+msgstr "使「大小變更列」失效"
+
+#: ../src/winspector.c:1125
+msgid "Disable close button"
+msgstr "使「關閉按鈕」失效"
+
+#: ../src/winspector.c:1129
+msgid "Disable miniaturize button"
+msgstr "使「最小化按鈕」失效"
+
+#: ../src/winspector.c:1133
+msgid "Keep on top / floating"
+msgstr "保持在最上層 / 漂浮"
+
+#: ../src/winspector.c:1137
+msgid "Keep at bottom / sunken"
+msgstr "保持在最下層 / 下沉"
+
+#: ../src/winspector.c:1145
+msgid "Start Miniaturized"
+msgstr "啟動時最小化"
+
+#: ../src/winspector.c:1149
+msgid "Start Maximized"
+msgstr "啟動時最大化"
+
+#: ../src/winspector.c:1153
+msgid "Skip window list"
+msgstr "略過視窗清單"
+
+#: ../src/winspector.c:1167
+msgid "Advanced"
+msgstr "進階"
+
+#: ../src/winspector.c:1177
+msgid "Ignore HideOthers"
+msgstr "忽略「隱藏其他」"
+
+#: ../src/winspector.c:1181
+msgid "Don't bind keyboard shortcuts"
+msgstr "不要結合鍵盤捷徑"
+
+#: ../src/winspector.c:1185
+msgid "Don't bind mouse clicks"
+msgstr "不要結合滑鼠按鍵"
+
+#: ../src/winspector.c:1189
+msgid "Keep inside screen"
+msgstr "保持在螢幕內"
+
+#: ../src/winspector.c:1193
+msgid "Don't let it take focus"
+msgstr "不要讓它取得焦點"
+
+#: ../src/winspector.c:1197
+msgid "Don't Save Session"
+msgstr "不要儲存狀態"
+
+#: ../src/winspector.c:1201
+msgid "Emulate Application Icon"
+msgstr "模擬應用程式圖示"
+
+#: ../src/winspector.c:1216
+msgid ""
+"Enable the \"Don't bind...\" options to allow the application to receive all "
+"mouse or keyboard events."
+msgstr ""
+"啟動 \"不要結合...\" 選項\n"
+"允許\應用程式接受所有滑鼠或鍵盤事件。"
+
+#: ../src/winspector.c:1223
+msgid "Miniwindow Image"
+msgstr "迷你視窗影像"
+
+#: ../src/winspector.c:1242
+msgid "Update"
+msgstr "更新"
+
+#: ../src/winspector.c:1257
+msgid "Icon file name:"
+msgstr "圖示檔名:"
+
+#: ../src/winspector.c:1269
+msgid "Ignore client supplied icon"
+msgstr "忽略程式提供的圖示"
+
+#: ../src/winspector.c:1276
+msgid "Initial Workspace"
+msgstr "啟始工作區"
+
+#: ../src/winspector.c:1281
+msgid "Nowhere in particular"
+msgstr "無特別指定"
+
+#: ../src/winspector.c:1315
+msgid "Application Wide"
+msgstr "整個應用程式"
+
+#: ../src/winspector.c:1325
+msgid "Start Hidden"
+msgstr "啟動時隱藏"
+
+#: ../src/winspector.c:1329
+msgid "No application icon"
+msgstr "無應用程式圖示"
+
+#: ../src/workspace.c:102 ../src/workspace.c:103 ../src/workspace.c:480
+#, c-format
+msgid "Workspace %i"
+msgstr "工作區  %i"
+
+#: ../src/workspace.c:537
+msgid "Workspaces"
+msgstr "工作區"
+
+#: ../src/workspace.c:539
+msgid "could not create Workspace menu"
+msgstr "無法建立工作區選單"
+
+#: ../src/workspace.c:546
+msgid "New"
+msgstr "新增工作區"
+
+#: ../src/workspace.c:547
+msgid "Destroy Last"
+msgstr "刪除最後的工作區"
+
+#: ../src/xutil.c:228
+msgid "invalid data in selection"
+msgstr "選取的資料無效"
+
+#~ msgid "Keep Clip On Top"
+#~ msgstr "保持迴紋針在最上層"
+
+# ??
+#~ msgid "Keep Dock On Top"
+#~ msgstr "保持停靠區在最上層"
+
+#~ msgid "(Un)Hide"
+#~ msgstr "隱藏（還原）"
+
+#~ msgid ""
+#~ "Close Window System session?\n"
+#~ "(all applications will be closed)"
+#~ msgstr ""
+#~ "關閉視窗系統？\n"
+#~ "（所有應用程式會被關閉）"
+
+#~ msgid "%s: Received signal SIGTERM. Exiting..."
+#~ msgstr "%s: 收到 SIGTERM 信號。離開..."
+
+#~ msgid "(Un)Maximize"
+#~ msgstr "最大化（還原）"
+
+#~ msgid "(Un)Shade"
+#~ msgstr "遮蔽（還原）"
+
+# ??
+#~ msgid "Hide Others"
+#~ msgstr "隱藏其他視窗"
+
+#~ msgid "Revert"
+#~ msgstr "還原"

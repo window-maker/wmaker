@@ -43,6 +43,7 @@
 #include "winspector.h"
 #include "dialog.h"
 #include "stacking.h"
+#include "icon.h"
 
 #define MC_MAXIMIZE	0
 #define MC_MINIATURIZE	1
@@ -157,7 +158,10 @@ execMenuCommand(WMenu *menu, WMenuEntry *entry)
 	break;
 
      case MC_SELECT:
-        wSelectWindow(wwin, !wwin->flags.selected);
+	if (!wwin->flags.miniaturized)
+	    wSelectWindow(wwin, !wwin->flags.selected);
+	else
+	    wIconSelect(wwin->icon);
 	break;
 
      case MC_MOVERESIZE:
@@ -308,11 +312,13 @@ updateOptionsMenu(WMenu *menu, WWindow *wwin)
     smenu->entries[WO_KEEP_ON_TOP]->clientdata = wwin;
     smenu->entries[WO_KEEP_ON_TOP]->flags.indicator_on = 
     	(wwin->frame->core->stacking->window_level == WMFloatingLevel)?1:0;
+    wMenuSetEnabled(smenu, WO_KEEP_ON_TOP, !wwin->flags.miniaturized);
 
     /* keep at bottom check */
     smenu->entries[WO_KEEP_AT_BOTTOM]->clientdata = wwin;
     smenu->entries[WO_KEEP_AT_BOTTOM]->flags.indicator_on =
     	(wwin->frame->core->stacking->window_level == WMSunkenLevel)?1:0;
+    wMenuSetEnabled(smenu, WO_KEEP_AT_BOTTOM, !wwin->flags.miniaturized);
 
     /* omnipresent check */
     smenu->entries[WO_OMNIPRESENT]->clientdata = wwin;
@@ -552,8 +558,11 @@ updateMenuForWindow(WMenu *menu, WWindow *wwin)
 
 	menu->entries[MC_MAXIMIZE]->text = text;
     }
+    wMenuSetEnabled(menu, MC_MAXIMIZE, !WFLAGP(wwin, no_resizable));
 
-    wMenuSetEnabled(menu, MC_MOVERESIZE, !WFLAGP(wwin, no_resizable));
+
+    wMenuSetEnabled(menu, MC_MOVERESIZE, !WFLAGP(wwin, no_resizable) 
+		    && !wwin->flags.miniaturized);
 
     if (wwin->flags.shaded) {
 	static char *text = NULL;
@@ -637,7 +646,6 @@ OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard)
 }
 
 
-#if 0
 void
 OpenMiniwindowMenu(WWindow *wwin, int x, int y)
 {
@@ -671,4 +679,4 @@ OpenMiniwindowMenu(WWindow *wwin, int x, int y)
 
     wMenuMapAt(menu, x, y, False);
 }
-#endif
+

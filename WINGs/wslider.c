@@ -533,6 +533,8 @@ destroySlider(Slider *sPtr)
     if (sPtr->backPixmap)
 	WMReleasePixmap(sPtr->backPixmap);
 
+    WMRemoveNotificationObserver(sPtr);
+
     free(sPtr);
 }
 

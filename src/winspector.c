@@ -169,7 +169,7 @@ destroyInspector(WCoreWindow *foo, void *data, XEvent *event)
 
     WMRemoveNotificationObserver(panel);
 
-    panel->frame->flags.mapped = 0;
+    wWindowUnmap(panel->frame);
     wUnmanageWindow(panel->frame, True, False);
 
     freeInspector(panel);
@@ -987,6 +987,7 @@ createInspectorForWindow(WWindow *wwin)
     WMPixmap *pixmap;
 #endif
     panel = wmalloc(sizeof(InspectorPanel));
+    memset(panel, 0, sizeof(InspectorPanel));
     
     panel->destroyed = 0;
 
@@ -1114,27 +1115,27 @@ createInspectorForWindow(WWindow *wwin)
 	
 	switch (i) {
 	 case 0:
-	    caption = _("Disable titlebar");
+	    caption = _("Disable Titlebar");
             flag = WFLAGP(wwin, no_titlebar);
 	    break;
 	 case 1:
-	    caption = _("Disable resizebar");
+	    caption = _("Disable Resizebar");
 	    flag = WFLAGP(wwin, no_resizebar);
 	    break;
 	 case 2:
-	    caption = _("Disable close button");
+	    caption = _("Disable Close Button");
 	    flag = WFLAGP(wwin, no_close_button);
 	    break;
 	 case 3:
-	    caption = _("Disable miniaturize button");
+	    caption = _("Disable Miniaturize Button");
 	    flag = WFLAGP(wwin, no_miniaturize_button);
 	    break;
 	 case 4:
-	    caption = _("Keep on top / floating");
+	    caption = _("Keep on Top / Floating");
 	    flag = WFLAGP(wwin, floating);
 	    break;
 	 case 5:
-	    caption = _("Keep at bottom / sunken");
+	    caption = _("Keep at Bottom / Sunken");
 	    flag = WFLAGP(wwin, sunken);
 	    break;
 	 case 6:
@@ -1150,7 +1151,7 @@ createInspectorForWindow(WWindow *wwin)
 	    flag = WFLAGP(wwin, start_maximized!=0);
 	    break;
 	 case 9:
-	    caption = _("Skip window list");
+	    caption = _("Skip Window List");
 	    flag = WFLAGP(wwin, skip_window_list);
 	    break;
 	}
@@ -1178,19 +1179,19 @@ createInspectorForWindow(WWindow *wwin)
 	    flag = WFLAGP(wwin, no_hide_others);
 	    break;
 	 case 1:
-	    caption = _("Don't bind keyboard shortcuts");
+	    caption = _("Don't Bind Keyboard Shortcuts");
 	    flag = WFLAGP(wwin, no_bind_keys);
 	    break;
 	 case 2:
-	    caption = _("Don't bind mouse clicks");
+	    caption = _("Don't Bind Mouse Clicks");
 	    flag = WFLAGP(wwin, no_bind_mouse);
 	    break;
 	 case 3:
-	    caption = _("Keep inside screen");
+	    caption = _("Keep Inside Screen");
 	    flag = WFLAGP(wwin, dont_move_off);
 	    break;
 	 case 4:
-	    caption = _("Don't let it take focus");
+	    caption = _("Don't Let It Take Focus");
 	    flag = WFLAGP(wwin, no_focusable);
 	    break;
 	 case 5:
@@ -1254,7 +1255,7 @@ createInspectorForWindow(WWindow *wwin)
     panel->fileLbl = WMCreateLabel(panel->iconFrm);
     WMMoveWidget(panel->fileLbl, 20, 95);
     WMResizeWidget(panel->fileLbl, PWIDTH - (2 * 15) - (2 * 20), 14);
-    WMSetLabelText(panel->fileLbl, _("Icon file name:"));
+    WMSetLabelText(panel->fileLbl, _("Icon File Name:"));
 
     panel->fileText = WMCreateTextField(panel->iconFrm);
     WMMoveWidget(panel->fileText, 20, 115);
@@ -1326,7 +1327,7 @@ createInspectorForWindow(WWindow *wwin)
 		flag = WFLAGP(wapp->main_window_desc, start_hidden);
 		break;
 	     case 1:
-		caption = _("No application icon");
+		caption = _("No Application Icon");
 		flag = WFLAGP(wapp->main_window_desc, no_appicon);
 		break;
 	    }

@@ -325,8 +325,45 @@ legalPanelCommand(WMenu *menu, WMenuEntry *entry)
 }
 
 
-
 /********************************************************************/
+
+
+static char*
+getLocalizedMenuFile(char *menu)
+{
+    char *buffer;
+    char *ptr;
+
+    if (!Locale)
+	return NULL;
+
+    buffer = wmalloc(strlen(menu)+32);
+
+    /* try menu.locale_name */
+    sprintf(buffer, "%s.%s", menu, Locale);
+    if (access(buffer, F_OK)==0) {
+	return buffer;
+    }
+    /* check if it is in the form aa_bb.encoding and check for aa_bb */
+    ptr = strchr(Locale, '.');
+    if (ptr) {
+	*ptr = 0;
+	if (access(buffer, F_OK)==0) {
+	    return buffer;
+	}
+    }
+    /* now check for aa */
+    ptr = strchr(buffer, '_');
+    if (ptr) {
+	*ptr = 0;
+	if (access(buffer, F_OK)==0) {
+	    return buffer;
+	}
+    }
+
+    return NULL;
+}
+
 
 static void
 raiseMenus(WMenu *menu)
@@ -633,7 +670,6 @@ constructMenu(WMenu *menu, WMenuEntry *entry)
         i=0;
         while(path[i] != NULL) {
 	    char *tmp;
-	    Bool statted = False;
 
 	    if (strcmp(path[i], "-noext")==0) {
 		i++;
@@ -642,40 +678,16 @@ constructMenu(WMenu *menu, WMenuEntry *entry)
 	    
 	    tmp = wexpandpath(path[i]);
 	    free(path[i]);
-	    path[i] = tmp;
+	    lpath = getLocalizedMenuFile(tmp);
+	    if (lpath) {
+		free(tmp);
+		path[i] = lpath;
+		lpath = NULL;
+	    } else {
+		path[i] = tmp;
+	    }
 
-            if (Locale) {
-                lpath = wmalloc(strlen(path[i])+32);
-
-                strcpy(lpath, path[i]);
-                strcat(lpath, ".");
-                strcat(lpath, Locale);
-                if (stat(lpath, &stat_buf)<0) {
-                    int i;
-                    i = strlen(Locale);
-                    if (i>2) {
-                        lpath[strlen(lpath)-(i-2)]=0;
-                        if (stat(lpath, &stat_buf)==0) {
-			    statted = True;
-                            free(path[i]);
-                            path[i] = lpath;
-                            lpath = NULL;
-                        }
-                    }
-                } else {
-		    statted = True;
-                    free(path[i]);
-                    path[i] = lpath;
-                    lpath = NULL;
-                }
-            }
-
-            if (lpath) {
-                free(lpath);
-                lpath = NULL;
-            }
-
-            if (statted || stat(path[i], &stat_buf)==0) {
+            if (stat(path[i], &stat_buf)==0) {
                 if (last < stat_buf.st_mtime)
                     last = stat_buf.st_mtime;
                 if (first<0)
@@ -1508,38 +1520,10 @@ configureMenu(WScreen *scr, proplist_t definition)
 	Bool menu_is_default = False;
 
 	/* menu definition is a string. Probably a path, so parse the file */
-	
+
 	tmp = wexpandpath(PLGetString(definition));
 
-	if (Locale) {
-	    path = wmalloc(strlen(tmp)+32);
-
-	    strcpy(path, tmp);
-	    strcat(path, ".");
-	    strcat(path, Locale);
-
-	    /* look for menu.xy */
-	    if (stat(path, &stat_buf)<0) {		
-		int i;
-		i = strlen(Locale);
-		if (i>2) {
-		    path[strlen(path)-(i-2)]=0;
-		    /* look for menu.xy_zw */
-		    if (stat(path, &stat_buf)<0) {
-			free(path);
-			/* If did not find any localized menus, try
-			 * only menu. This can also mean that
-			 * the path in WMRootMenu was already the
-			 * path for the localized menu (eg: menu = "menu.ab")
-			 */
-			path = NULL;
-		    }
-		} else {
-		    free(path);
-		    path = NULL;
-		}
-	    }
-	}
+	path = getLocalizedMenuFile(tmp);
 
 	if (!path)
 	    path = wfindfile(DEF_CONFIG_PATHS, tmp);
@@ -1555,7 +1539,7 @@ configureMenu(WScreen *scr, proplist_t definition)
 	    free(tmp);
 	    return NULL;
 	}
-	
+
 	if (stat(path, &stat_buf)<0) {
 	    wsyserror(_("could not access menu \"%s\" referenced in WMRootMenu"), path);
 	    free(path);

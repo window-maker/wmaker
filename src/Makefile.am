@@ -6,6 +6,7 @@ bin_PROGRAMS = wmaker
 
 EXTRA_DIST = wmnotify.c wmnotdef.h wmnotify.h
 
+
 wmaker_SOURCES = 	\
 	GNUstep.h \
 	WindowMaker.h \
@@ -98,23 +99,21 @@ wmaker_SOURCES = 	\
 	text.h 
 
 
-CPPFLAGS = @CPPFLAGS@ @DFLAGS@
-	
+CPPFLAGS = @CPPFLAGS@ @DFLAGS@ -DLOCALEDIR=\"$(NLSDIR)\"
+
 
 INCLUDES = \
 	-I$(top_srcdir)/wrlib \
-	-I$(top_srcdir)/WINGs @XCFLAGS@ 
+	-I$(top_srcdir)/WINGs @HEADER_SEARCH_PATH@ 
 
 
 wmaker_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a\
 	$(top_builddir)/wrlib/libwraster.la\
+	@LIBRARY_SEARCH_PATH@ \
 	@LIBPL@ \
-	@GFXLFLAGS@ \
-	@XLFLAGS@ \
 	@GFXLIBS@ \
 	@XLIBS@ \
-	@X_EXTRA_LIBS@ \
 	@INTLIBS@ \
 	-lm 
 

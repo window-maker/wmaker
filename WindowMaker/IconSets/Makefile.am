@@ -7,7 +7,7 @@ EXTRA_DIST =
 
 CLEANFILES = Default.iconset
 
-Default.iconset: $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes ./Makefile
+Default.iconset: $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes
 	-rm -f Default.iconset
 	cp $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes Default.iconset
 	chmod 644 Default.iconset

@@ -111,72 +111,32 @@ wstrdup(char *s)
     return strcpy(tmp, s);
 }
 
+
 char**
 RSupportedFileFormats(void)
 {
-    char **tmp;
+    static char *tmp[IM_TYPES+1];
     int i = 0;
-    
-    tmp = malloc(sizeof(char*)*(IM_TYPES+1));
-    if (!tmp)
-	return NULL;
-    memset(tmp, 0, sizeof(char*)*(IM_TYPES+1));
-    
+
     /* built-in */
-    tmp[i++] = wstrdup("XPM");
-    if (!tmp[i-1]) {
-	RFreeStringList(tmp);
-	return NULL;
-    }
+    tmp[i++] = "XPM";
     /* built-in */
-    tmp[i++] = wstrdup("PPM");
-    if (!tmp[i-1]) {
-	RFreeStringList(tmp);
-	return NULL;
-    }
+    tmp[i++] = "PPM";
 #ifdef USE_TIFF
-    tmp[i++] = wstrdup("TIFF");
-    if (!tmp[i-1]) {
-	RFreeStringList(tmp);
-	return NULL;
-    }
+    tmp[i++] = "TIFF";
 #endif
 #ifdef USE_PNG
-    tmp[i++] = wstrdup("PNG");
-    if (!tmp[i-1]) {
-	RFreeStringList(tmp);
-	return NULL;
-    }
+    tmp[i++] = "PNG";
 #endif
 #ifdef USE_JPEG
-    tmp[i++] = wstrdup("JPEG");
-    if (!tmp[i-1]) {
-	RFreeStringList(tmp);
-	return NULL;
-    }
+    tmp[i++] = "JPEG";
 #endif
 #ifdef USE_GIF
-    tmp[i++] = wstrdup("GIF");
-    if (!tmp[i-1]) {
-	RFreeStringList(tmp);
-	return NULL;
-    }
+    tmp[i++] = "GIF";
 #endif
     tmp[i] = NULL;
-    
+
     return tmp;
-}
-
-
-void
-RFreeStringList(char **list)
-{
-    int i;
-    
-    for (i = 0; list[i]!=NULL; i++) {
-	free(list[i]);
-    }
-    free(list);
 }
 
 

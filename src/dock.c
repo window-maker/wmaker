@@ -762,7 +762,7 @@ mainIconCreate(WScreen *scr, int type)
         x_pos = 0;
     } else {
         btn = wAppIconCreateForDock(scr, NULL, "Logo", "WMDock", TILE_NORMAL);
-        x_pos = scr->scr_width - ICON_SIZE - DOCK_EXTRA_SPACE - 1;
+        x_pos = scr->scr_width - ICON_SIZE - DOCK_EXTRA_SPACE;
     }
 
     btn->xindex = 0;
@@ -1602,21 +1602,20 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
             if (dock->y_pos < 0) 
                 dock->y_pos = 0;
             else if (dock->y_pos > scr->scr_height-ICON_SIZE)
-                dock->y_pos = scr->scr_height-ICON_SIZE;
-            
+                dock->y_pos = scr->scr_height - ICON_SIZE;
+
             /* This is no more needed. ??? */
             if (type == WM_CLIP) {
                 if (dock->x_pos < 0)
                     dock->x_pos = 0;
                 else if (dock->x_pos > scr->scr_width-ICON_SIZE)
                     dock->x_pos = scr->scr_width-ICON_SIZE;
-            }
-            else {
+            } else {
                 if (dock->x_pos >= 0) {
                     dock->x_pos = DOCK_EXTRA_SPACE;
                     dock->on_right_side = 0;
                 } else {
-                    dock->x_pos = scr->scr_width - DOCK_EXTRA_SPACE - ICON_SIZE - 1;
+                    dock->x_pos = scr->scr_width - DOCK_EXTRA_SPACE - ICON_SIZE;
                     dock->on_right_side = 1;
                 }
             }
@@ -2691,7 +2690,7 @@ swapDock(WDock *dock)
 
 
     if (dock->on_right_side) {
-	x = dock->x_pos = scr->scr_width - ICON_SIZE - DOCK_EXTRA_SPACE - 1;
+	x = dock->x_pos = scr->scr_width - ICON_SIZE - DOCK_EXTRA_SPACE;
     } else {
 	x = dock->x_pos = DOCK_EXTRA_SPACE;
     }
@@ -3355,8 +3354,7 @@ handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
                     y = ev.xmotion.y_root - ofs_y;
                 }
                 moveDock(dock, x, y);
-            }
-            else {
+            } else {
             /* move vertically if pointer is inside the dock*/
 	    if ((dock->on_right_side &&
 		 ev.xmotion.x_root >= dock->x_pos - ICON_SIZE)

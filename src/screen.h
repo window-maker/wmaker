@@ -293,6 +293,7 @@ typedef struct _WScreen {
 	unsigned int backimage_helper_launched:1;
 	/* some client has issued a WM_COLORMAP_NOTIFY */
 	unsigned int colormap_stuff_blocked:1;
+	unsigned int doing_alt_tab:1;
 #ifdef KWM_HINTS
 	unsigned int kwm_syncing_name:1;
 	unsigned int kwm_syncing_count:1;
@@ -326,6 +327,7 @@ int wScreenBringInside(WScreen *scr, int *x, int *y, int width, int height);
 /* in startup.c */
 WScreen *wScreenWithNumber(int i);
 WScreen *wScreenForRootWindow(Window window);   /* window must be valid */
+WScreen *wScreenSearchForRootWindow(Window window);
 WScreen *wScreenForWindow(Window window);   /* slower than above functions */
 
 void wScreenFinish(WScreen *scr);

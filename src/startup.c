@@ -206,6 +206,7 @@ catchXError(Display *dpy, XErrorEvent *error)
 static int
 handleXIO(Display *dpy)
 {
+    dpy = NULL;
     Exit(0);
     return 0;
 }
@@ -531,9 +532,10 @@ WScreen*
 wScreenWithNumber(int i)
 {
     assert(i < wScreenCount);
-    
+
     return wScreen[i];
 }
+
 
 WScreen*
 wScreenForRootWindow(Window window)
@@ -558,6 +560,30 @@ wScreenForRootWindow(Window window)
     
     return NULL;
 }
+
+
+WScreen*
+wScreenSearchForRootWindow(Window window)
+{
+    int i;
+
+    if (wScreenCount==1)
+	return wScreen[0];
+
+    /*
+     * Since the number of heads will probably be small (normally 2),
+     * it should be faster to use this than a hash table, because
+     * of the overhead.
+     */
+    for (i=0; i<wScreenCount; i++) {
+	if (wScreen[i]->root_win == window) {
+	    return wScreen[i];
+	}
+    }
+    
+    return NULL;
+}
+
 
 WScreen*
 wScreenForWindow(Window window)
@@ -899,7 +925,7 @@ manageAllWindows(WScreen *scr)
     scr->flags.startup = 1;
 
     /* first remove all icon windows */
-    for (i=0; i<nchildren; i++) {
+    for (i = 0; i < nchildren; i++) {
 	if (children[i]==None) 
 	  continue;
 
@@ -919,9 +945,10 @@ manageAllWindows(WScreen *scr)
 	}
     }
     /* map all windows without OverrideRedirect */
-    for (i=0; i<nchildren; i++) {
-	if (children[i]==None) 
-	  continue;
+    for (i = 0; i < nchildren; i++) {
+	if (children[i] == None)
+	    continue;
+
 
 #ifdef KWM_HINTS
 	wKWMCheckModule(scr, children[i]);
@@ -932,7 +959,6 @@ manageAllWindows(WScreen *scr)
 	state = getState(children[i]);
 	if (!wattribs.override_redirect 
 	    && (state>=0 || wattribs.map_state!=IsUnmapped)) {
-	    XUnmapWindow(dpy, children[i]);
 	    
 	    if (state==WithdrawnState) {
 		/* move the window far away so that it doesn't flash */
@@ -941,7 +967,7 @@ manageAllWindows(WScreen *scr)
 	    }
 	    wwin = wManageWindow(scr, children[i]);
 	    if (wwin) {
-		if (state==WithdrawnState) {
+		if (state == WithdrawnState) {
 		    wwin->flags.mapped = 0;
 		    wClientSetState(wwin, WithdrawnState, None);
 		    XSelectInput(dpy, wwin->client_win, NoEventMask);
@@ -954,40 +980,46 @@ manageAllWindows(WScreen *scr)
 			wwin->flags.shaded = 0;
                         wShadeWindow(wwin);
                     }
-                    if (wwin->flags.hidden) {
-                        WApplication *wapp = wApplicationOf(wwin->main_window);
-                        wwin->flags.hidden = 0;
-                        if (wapp) {
-                            wHideApplication(wapp);
-                        }
-                        wwin->flags.ignore_next_unmap=1;
-                    } else {
-                        if (wwin->wm_hints &&
-                            (wwin->wm_hints->flags & StateHint) && state<0)
-                            state=wwin->wm_hints->initial_state;
-                        if (state==IconicState) {
-			    /* iconify if it's not a transient */
-			    if (wwin->transient_for==None 
-				|| wwin->transient_for==wwin->client_win
-				|| !windowInList(wwin->transient_for,
-						 children, nchildren)) {
-			        wwin->flags.miniaturized = 0;
-				wIconifyWindow(wwin);
-				wwin->flags.ignore_next_unmap=1;
-			    }
-                        } else {
-                            wClientSetState(wwin, NormalState, None);
-                        }
-                    }
-                }
+		    if (wwin->wm_hints &&
+			(wwin->wm_hints->flags & StateHint) && state < 0)
+			state = wwin->wm_hints->initial_state;
+
+		    if ((state == IconicState || wwin->flags.miniaturized)
+			&& (wwin->transient_for == None
+			    || wwin->transient_for == wwin->client_win
+			    || !windowInList(wwin->transient_for,
+					     children, nchildren))) {
+			wwin->flags.miniaturized = 0;
+			wIconifyWindow(wwin);
+		    } else {
+			wClientSetState(wwin, NormalState, None);
+		    }
+		}
             }
-	    if (state==WithdrawnState) {
+	    if (state == WithdrawnState) {
 		/* move the window back to it's old position */
 		XMoveWindow(dpy, children[i], wattribs.x, wattribs.y);
 	    }
 	}
     }
     XUngrabServer(dpy);
+
+    /* hide apps */
+    wwin = scr->focused_window;
+    while (wwin) {
+	if (wwin->flags.hidden) {
+	    WApplication *wapp = wApplicationOf(wwin->main_window);
+
+	    if (wapp) {
+		wwin->flags.hidden = 0;
+		wHideApplication(wapp);
+	    } else {
+		wwin->flags.hidden = 0;
+	    }
+	}
+	wwin = wwin->prev;
+    }
+
     XFree(children);
     scr->flags.startup = 0;
     scr->flags.startup2 = 1;

@@ -62,13 +62,13 @@ host_triplet = @host@
 CC = @CC@
 CPP_PATH = @CPP_PATH@
 DFLAGS = @DFLAGS@
-GFXFLAGS = @GFXFLAGS@
-GFXLFLAGS = @GFXLFLAGS@
 GFXLIBS = @GFXLIBS@
+HEADER_SEARCH_PATH = @HEADER_SEARCH_PATH@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
 LD = @LD@
 LIBPL = @LIBPL@
+LIBRARY_SEARCH_PATH = @LIBRARY_SEARCH_PATH@
 LIBTOOL = @LIBTOOL@
 LITE = @LITE@
 LN_S = @LN_S@
@@ -87,7 +87,7 @@ XLIBS = @XLIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 wprefsdir = @wprefsdir@
 
-defsdatadir = $(pkgdatadir)/Defaults
+defsdatadir = $(sysconfdir)/WindowMaker
 
 defsdata_DATA = WMRootMenu WMWindowAttributes WindowMaker WMState WMGLOBAL
 
@@ -217,18 +217,19 @@ mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
-WMWindowAttributes: $(srcdir)/WMWindowAttributes.in ./Makefile
+WMWindowAttributes: $(srcdir)/WMWindowAttributes.in
 	-rm -f WMWindowAttributes
 	sed -e "s:#extension#:@ICONEXT@:" \
 		$(srcdir)/WMWindowAttributes.in > WMWindowAttributes
 	chmod 644 WMWindowAttributes
 
-WindowMaker: $(srcdir)/WindowMaker.in ./Makefile
+WindowMaker: $(srcdir)/WindowMaker.in
 	-rm -f WindowMaker
-	sed -e "s:#pkgdatadir#:$(pkgdatadir):" $(srcdir)/WindowMaker.in > WindowMaker
+	sed -e "s:#pkgdatadir#:$(pkgdatadir):" $(srcdir)/WindowMaker.in \
+		> WindowMaker
 	chmod 644 WindowMaker
 
-WMState: $(srcdir)/WMState.in ./Makefile
+WMState: $(srcdir)/WMState.in
 	-rm -f WMState
 	sed -e "s:#wprefs#:$(wprefsdir)/WPrefs:" $(srcdir)/WMState.in > WMState
 	chmod 644 WMState

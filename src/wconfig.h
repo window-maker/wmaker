@@ -37,6 +37,15 @@
  *--------------------------------------------------------------------
  */
 
+/* undefine WEENDOZE_CYCLING to remove all Windoze style Alt-Tab cycling
+ * If define, windoze cycling must still be enabled with the 
+ * WindozeCycling = YES and FinishedCyclingKey = Meta_L options
+ 
+ not working yet
+ */
+#undef WEENDOZE_CYCLING
+
+
 /* undefine ANIMATIONS if you don't want animations for iconification,
  * shading, icon arrangement etc. */
 #define ANIMATIONS
@@ -169,6 +178,10 @@
  */
 #undef SHADOW_RESIZEBAR
 
+/*
+ * Titlebar text shadow
+ */
+#undef TITLE_TEXT_SHADOW
 
 /*
  * Define DEMATERIALIZE_ICON if you want the undocked icon animation
@@ -263,12 +276,8 @@
 #define DEF_APPMENU_X		10
 #define DEF_APPMENU_Y		10
 
-/* number of window shortcuts */
-#ifdef EXTEND_WINDOWSHORTCUT
-# define MAX_WINDOW_SHORTCUTS 10
-#else
-# define MAX_WINDOW_SHORTCUTS 4
-#endif
+/* calculate window edge resistance from edge resistance */
+#define WIN_RESISTANCE(x)	(((x)*20)/30)
 
 /* Window level where icons reside */
 #define NORMAL_ICON_LEVEL WMNormalLevel
@@ -448,6 +457,13 @@
  *----------------------------------------------------------------------
  */
 
+
+/* number of window shortcuts */
+#ifdef EXTEND_WINDOWSHORTCUT
+# define MAX_WINDOW_SHORTCUTS 10
+#else
+# define MAX_WINDOW_SHORTCUTS 4
+#endif
 
 
 #define WM_PI 3.14159265358979323846

@@ -27,6 +27,10 @@
 #include <X11/Xlib.h>
 #include <X11/Xmd.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 typedef struct {
     CARD32 flags;
     CARD32 window_style;
@@ -130,5 +134,8 @@ void WMMenuSetEnabled(WMMenu *menu, int index, int enabled);
 
 void WMMenuDestroy(WMMenu *menu, int submenus);
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif

@@ -169,7 +169,7 @@ CommitStacking(WScreen *scr)
  * 	Changes the stacking order of frame.
  *----------------------------------------------------------------------
  */
-void
+static void
 moveFrameToUnder(WCoreWindow *under, WCoreWindow *frame)
 {
     Window wins[2];

@@ -9,8 +9,12 @@
 #define WINGS_H_VERSION  981220
 
 
-
-
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+#if 0
+}
+#endif
 
 
 typedef unsigned long WMPixel;
@@ -768,6 +772,10 @@ void WMSetTextFieldAlignment(WMTextField *tPtr, WMAlignment alignment);
 
 void WMSetTextFieldBordered(WMTextField *tPtr, Bool bordered);
 
+void WMSetTextFieldBeveled(WMTextField *tPtr, Bool flag);
+
+Bool WMGetTextFieldEnabled(WMTextField *tPtr);
+
 void WMSetTextFieldEnabled(WMTextField *tPtr, Bool flag);
 
 void WMSetTextFieldSecure(WMTextField *tPtr, Bool flag);
@@ -776,8 +784,11 @@ void WMSelectTextFieldRange(WMTextField *tPtr, WMRange range);
 
 void WMSetTextFieldCursorPosition(WMTextField *tPtr, unsigned int position);
 
+void WMSetTextFieldNextTextField(WMTextField *tPtr, WMTextField *next);
 
-extern char *WMListDidScrollNotification;
+void WMSetTextFieldPrevTextField(WMTextField *tPtr, WMTextField *prev);
+
+
 extern char *WMTextDidChangeNotification;
 extern char *WMTextDidBeginEditingNotification;
 extern char *WMTextDidEndEditingNotification;
@@ -844,6 +855,7 @@ void WMSetListBottomPosition(WMList *lPtr, int row);
 int WMGetListPosition(WMList *lPtr);
 
 extern char *WMListDidScrollNotification;
+extern char *WMListSelectionDidChangeNotification;
 
 /* ....................................................................... */
 
@@ -867,7 +879,8 @@ WMListItem *WMAddSortedBrowserItem(WMBrowser *bPtr, int column, char *text, Bool
 
 WMListItem *WMInsertBrowserItem(WMBrowser *bPtr, int column, int row, char *text, Bool isBranch);
 
-Bool WMSetBrowserPath(WMBrowser *bPtr, char *path);
+/* Don't free the returned string. */
+char* WMSetBrowserPath(WMBrowser *bPtr, char *path);
 
 /* you can free the returned string */
 char *WMGetBrowserPath(WMBrowser *bPtr);
@@ -877,6 +890,9 @@ char *WMGetBrowserPathToColumn(WMBrowser *bPtr, int column);
 void WMSetBrowserFillColumnProc(WMBrowser *bPtr,WMBrowserFillColumnProc *proc);
 
 void WMSetBrowserAction(WMBrowser *bPtr, WMAction *action, void *clientData);
+
+void WMSetBrowserDoubleAction(WMBrowser *bPtr, WMAction *action, 
+			      void *clientData);
 
 WMListItem *WMGetBrowserSelectedItemInColumn(WMBrowser *bPtr, int column);
 
@@ -1057,11 +1073,8 @@ char *WMGetFilePanelFileName(WMFilePanel *panel);
 
 void WMFreeFilePanel(WMFilePanel *panel);
 
-int WMRunModalOpenPanelForDirectory(WMFilePanel *panel, WMWindow *owner,
-				    char *path, char *name, char **fileTypes);
-
-int WMRunModalSavePanelForDirectory(WMFilePanel *panel, WMWindow *owner, 
-				    char *path, char *name);
+int WMRunModalFilePanelForDirectory(WMFilePanel *panel, WMWindow *owner,
+                                    char *path, char *name, char **fileTypes);
 
 void WMSetFilePanelAccessoryView(WMFilePanel *panel, WMView *view);
 
@@ -1083,6 +1096,10 @@ void WMSetFontPanelFont(WMFontPanel *panel, WMFont *font);
 char *WMGetFontPanelFontName(WMFontPanel *panel);
 
 WMFont *WMGetFontPanelFont(WMFontPanel *panel);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif
 

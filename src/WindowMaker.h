@@ -320,7 +320,10 @@ typedef struct WPreferences {
     char window_balloon;
     char miniwin_balloon;
     char appicon_balloon;
-
+#ifdef WEENDOZE_CYCLE
+    char windoze_cycling;	       /* Windoze 95 style Alt+Tabbing */
+    char popup_switchmenu;	       /* Popup the switchmenu when Alt+Tabbing */
+#endif /* WEENDOZE_CYCLE */
     /* some constants */
     int dblclick_time;		       /* double click delay time in ms */
 
@@ -332,9 +335,9 @@ typedef struct WPreferences {
 
     /* shading animation */
     char shade_speed;
-    
+
     int edge_resistance;
-    
+
     struct {
         unsigned int nodock:1;	       /* don't display the dock */
         unsigned int noclip:1;        /* don't display the clip */

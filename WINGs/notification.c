@@ -6,6 +6,7 @@
 
 #include "WUtil.h"
 
+#include "llist.h"
 
 typedef struct W_Notification {
     char *name;
@@ -14,6 +15,8 @@ typedef struct W_Notification {
     int refCount;
 } Notification;
 
+
+extern void W_FlushASAPNotificationQueue();
 
 
 char*
@@ -214,16 +217,15 @@ WMPostNotification(WMNotification *notification)
     }
 
     WMReleaseNotification(notification);
+
+    W_FlushASAPNotificationQueue();
 }
-
-
 
 
 void
 WMRemoveNotificationObserver(void *observer)
 {
     NotificationObserver *orec, *tmp, *rec;
-
 
     /* get the list of actions the observer is doing */
     orec = WMHashGet(notificationCenter->observerTable, observer);
@@ -285,9 +287,14 @@ void
 WMRemoveNotificationObserverWithName(void *observer, char *name, void *object)
 {
     NotificationObserver *orec, *tmp, *rec;
+    NotificationObserver *newList = NULL;
 
     /* get the list of actions the observer is doing */
     orec = WMHashGet(notificationCenter->observerTable, observer);
+
+    WMHashRemove(notificationCenter->observerTable, observer);
+
+    /* rebuild the list of actions for the observer */
 
     while (orec) {
 	tmp = orec->nextAction;
@@ -301,8 +308,8 @@ WMRemoveNotificationObserverWithName(void *observer, char *name, void *object)
 		    assert(rec->prev==NULL);
 		    /* replace table entry */
 		    if (orec->next) {
-			WMHashInsert(notificationCenter->objectTable, orec->object,
-				     orec->next);
+			WMHashInsert(notificationCenter->objectTable, 
+				     orec->object, orec->next);
 		    } else {
 			WMHashRemove(notificationCenter->objectTable, 
 				     orec->object);
@@ -314,23 +321,12 @@ WMRemoveNotificationObserverWithName(void *observer, char *name, void *object)
 		    assert(rec->prev==NULL);
 		    /* replace table entry */
 		    if (orec->next) {
-			WMHashInsert(notificationCenter->nameTable, orec->name,
-				     orec->next);
+			WMHashInsert(notificationCenter->nameTable,
+				     orec->name, orec->next);
 		    } else {
-			WMHashRemove(notificationCenter->nameTable, orec->name);
+			WMHashRemove(notificationCenter->nameTable, 
+				     orec->name);
 		    }
-		}
-	    }
-	    
-	    /* update the action list for the observer */
-	    rec = WMHashGet(notificationCenter->observerTable, observer);
-	    
-	    if (rec == orec) {
-		if (orec->nextAction) {
-		    WMHashInsert(notificationCenter->nameTable, observer,
-				 orec->nextAction);
-		} else {
-		    WMHashRemove(notificationCenter->nameTable, observer);
 		}
 	    }
 
@@ -339,8 +335,27 @@ WMRemoveNotificationObserverWithName(void *observer, char *name, void *object)
 	    if (orec->next)
 		orec->next->prev = orec->prev;
 	    free(orec);
+        } else {
+	    /* append this action in the new action list */
+	    orec->nextAction = NULL;
+	    if (!newList) {
+		newList = orec;
+	    } else {
+		NotificationObserver *p;
+
+		p = newList;
+		while (p->nextAction) {
+		    p = p->nextAction;
+		}
+		p->nextAction = orec;
+	    }
 	}
 	orec = tmp;
+    }
+
+    /* reinsert the list to the table */
+    if (newList) {
+	WMHashInsert(notificationCenter->observerTable, observer, newList);
     }
 }
 
@@ -363,18 +378,25 @@ WMPostNotificationName(char *name, void *object, void *clientData)
 
 
 typedef struct W_NotificationQueue {
-    NotificationCenter *center;
-    void *asapQueue;
-    void *idleQueue;
+    list_t *asapQueue;
+    list_t *idleQueue;
+
+    struct W_NotificationQueue *next;
 } NotificationQueue;
 
+
+static WMNotificationQueue *notificationQueueList = NULL;
 
 /* default queue */
 static WMNotificationQueue *notificationQueue = NULL;
 
+
 WMNotificationQueue*
 WMGetDefaultNotificationQueue(void)
 {
+    if (!notificationQueue)
+	notificationQueue = WMCreateNotificationQueue();
+
     return notificationQueue;
 }
 
@@ -382,20 +404,76 @@ WMGetDefaultNotificationQueue(void)
 WMNotificationQueue*
 WMCreateNotificationQueue(void)
 {
-    return NULL;
+    NotificationQueue *queue;
+
+    queue = wmalloc(sizeof(NotificationQueue));
+
+    queue->asapQueue = NULL;
+    queue->idleQueue = NULL;
+    queue->next = notificationQueueList;
+
+    notificationQueueList = queue;
+
+    return queue;
 }
 
-
-void
-WMDequeueNotificationMatching(WMNotificationQueue *queue, unsigned mask)
-{
-}
 
 
 void
 WMEnqueueNotification(WMNotificationQueue *queue, WMNotification *notification,
 		      WMPostingStyle postingStyle)
 {
+    WMEnqueueCoalesceNotification(queue, notification, postingStyle,
+				  WNCOnName|WNCOnSender);
+}
+
+
+static int
+matchName(void *a, void *b)
+{
+    WMNotification *n1 = (WMNotification*)a;
+    WMNotification *n2 = (WMNotification*)b;
+
+    return strcmp(n1->name, n2->name);
+}
+
+
+static int
+matchSender(void *a, void *b)
+{
+    WMNotification *n1 = (WMNotification*)a;
+    WMNotification *n2 = (WMNotification*)b;
+
+    return (n1->object == n2->object);
+}
+
+
+void
+WMDequeueNotificationMatching(WMNotificationQueue *queue, 
+			      WMNotification *notification, unsigned mask)
+{
+    void *n;
+
+    if (mask & WNCOnName) {
+	while ((n = lfind(notification->name, queue->asapQueue, matchName))) {
+	    queue->asapQueue = lremove(queue->asapQueue, n);
+	    WMReleaseNotification((WMNotification*)n);
+	}
+	while ((n = lfind(notification->name, queue->idleQueue, matchName))) {
+	    queue->idleQueue = lremove(queue->idleQueue, n);
+	    WMReleaseNotification((WMNotification*)n);
+	}
+    }
+    if (mask & WNCOnSender) {
+	while ((n = lfind(notification->name, queue->asapQueue, matchSender))) {
+	    queue->asapQueue = lremove(queue->asapQueue, n);
+	    WMReleaseNotification((WMNotification*)n);
+	}
+	while ((n = lfind(notification->name, queue->idleQueue, matchSender))) {
+	    queue->idleQueue = lremove(queue->idleQueue, n);
+	    WMReleaseNotification((WMNotification*)n);
+	}
+    }
 }
 
 
@@ -405,10 +483,51 @@ WMEnqueueCoalesceNotification(WMNotificationQueue *queue,
 			      WMPostingStyle postingStyle,
 			      unsigned coalesceMask)
 {
+    if (coalesceMask != WNCNone)
+	WMDequeueNotificationMatching(queue, notification, coalesceMask);
+
+    switch (postingStyle) {
+     case WMPostNow:
+	WMPostNotification(notification);
+	break;
+
+     case WMPostASAP:
+	queue->asapQueue = lappend(queue->asapQueue, 
+				   lcons(notification, NULL));
+	break;
+
+     case WMPostWhenIdle:
+	queue->idleQueue = lappend(queue->idleQueue,
+				   lcons(notification, NULL));	
+	break;
+    }
 }
 
 
+void
+W_FlushASAPNotificationQueue()
+{
+    WMNotificationQueue *queue = notificationQueueList;
+
+    while (queue) {
+	while (queue->asapQueue) {
+	    WMPostNotification((WMNotification*)lhead(queue->asapQueue));
+	    queue->asapQueue = lremovehead(queue->asapQueue);
+	}
+    }
+}
 
 
+void
+W_FlushIdleNotificationQueue()
+{
+    WMNotificationQueue *queue = notificationQueueList;
 
+    while (queue) {
+	while (queue->idleQueue) {
+	    WMPostNotification((WMNotification*)lhead(queue->idleQueue));
+	    queue->idleQueue = lremovehead(queue->idleQueue);
+	}
+    }
+}
 

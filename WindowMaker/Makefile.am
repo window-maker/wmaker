@@ -30,6 +30,7 @@ prefsdata_DATA =\
 	menu.se\
 	menu.sl\
 	menu.tr\
+	menu.zh_TW.Big5\
 	plmenu\
 	plmenu.fr\
 	plmenu.hr\

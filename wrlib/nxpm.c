@@ -500,8 +500,7 @@ index2str(char *buffer, int index, int colorCount)
 static void
 outputcolormap(FILE *file, XPMColor *colormap, int colorCount)
 {
-    int j;
-    int i,index;
+    int index;
     char buf[128];
 
     if (!colormap)

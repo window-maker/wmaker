@@ -4,13 +4,13 @@ dnl
 dnl Process with: aclocal; autoconf; automake
 dnl
 dnl
-dnl Shared library generation stuff taken from configure script from zlib
-dnl
 
 
 AC_INIT(src/WindowMaker.h)
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.51.0)
+
+
+AM_INIT_AUTOMAKE(WindowMaker, 0.51.1)
 
 AM_PROG_LIBTOOL
 
@@ -59,18 +59,48 @@ dnl Let make expand exec_prefix.
 test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
 
 
+_bindir=`eval echo $bindir`
+_bindir=`eval echo $_bindir`
+
+_libdir=`eval echo $libdir`
+_libdir=`eval echo $_libdir`
+lib_search_path="-L$_libdir"
+
+inc_search_path=`eval echo $includedir`
+inc_search_path="-I`eval echo $inc_search_path`"
+
+
+dnl
+dnl Check for RedHat bugs
+dnl =====================
+
+WM_CHECK_REDCRAP_BUGS($prefix,$_bindir,$_libdir)
+
+
+dnl
+dnl Specify paths to look for libraries and headers
+dnl ===============================================
+AC_ARG_WITH(libs-from,
+[  --with-libs-from	  pass compiler flags to look for libraries],
+	[lib_search_path="$withval $lib_search_path"])
+
+AC_ARG_WITH(incs-from,
+[  --with-incs-from	  pass compiler flags to look for header files],
+	[inc_search_path="$withval $inc_search_path"])
+
+
+
 dnl Checks for library functions.
 dnl ============================
 dnl not used anywhere
 dnl AC_FUNC_MEMCMP  
-AC_TYPE_SIGNAL
 AC_FUNC_VPRINTF
 AC_FUNC_ALLOCA
 AC_CHECK_FUNCS(gethostname select poll strerror strncasecmp setpgid atexit)
 
 if test "x$CPP_PATH" = x; then
-    AC_PATH_PROG(CPP_PATH, cpp, notfound,
-		[/lib /usr/bin /bin /usr/lib /usr/ccs/lib $PATH])
+    AC_PATH_PROG(CPP_PATH, cpp, notfound, 
+		/lib:/usr/bin:/bin:/usr/lib:/usr/ccs/lib:$PATH)
 fi
 
 dnl
@@ -99,6 +129,7 @@ dnl Checks for header files.
 dnl =======================
 dnl AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
+AC_HEADER_TIME
 AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h sys/time.h sys/types.h\
 		libintl.h sys/select.h poll.h)
 
@@ -108,9 +139,9 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 dnl ==============================================================
 AC_DECL_SYS_SIGLIST
 AC_C_CONST
-AC_TYPE_SIZE_T
-AC_TYPE_PID_T
-AC_HEADER_TIME
+#AC_TYPE_SIZE_T
+#AC_TYPE_PID_T
+AC_TYPE_SIGNAL
 
 
 dnl gettext
@@ -167,8 +198,8 @@ dnl ==================
 
 dnl List of supported locales
 dnl -------------------------
-supported_locales="cs de es fr gl it ja ko nl no pt ru se tr fi hr el pl ro dk"
-supported_wprefs_locales="pt hr fr ko ja cs"
+supported_locales="cs de es fr gl it ja ko nl no pt ru se tr fi hr el pl ro dk zh_TW.Big5"
+supported_wprefs_locales="pt hr fr ko ja cs zh_TW.Big5"
 
 for lang in $LINGUAS; do
 	ok=0
@@ -214,28 +245,20 @@ if test "$enable_kanji" = yes; then
 fi
 
 
-dnl XKB keyboard language status
-dnl ============================
-AC_ARG_ENABLE(modelock,
-[  --enable-modelock	  XKB keyboard language status support],
-		X_CFLAGS="$X_CFLAGS -DXKB_MODELOCK",)
-
-
 
 dnl Added by Oliver - Support for NLSDIR option,   Hi Oliver!
 dnl ===========================================
 AC_ARG_WITH(nlsdir, 
 	[  --with-nlsdir=PATH      specify where the locale stuff should go ])
 
+
 if test "x$NLSDIR" = "x"; then
 	if test "x$with_nlsdir" != "x"; then
 		NLSDIR=$with_nlsdir
 	else
-		NLSDIR=`eval echo $prefix/lib/locale`
+		NLSDIR='$(prefix)/lib/locale'
 	fi
 fi
-
-AC_DEFINE_UNQUOTED(NLSDIR, "$NLSDIR")
 
 AC_SUBST(INTLIBS)
 AC_SUBST(NLSDIR)
@@ -295,7 +318,12 @@ XCFLAGS="$X_CFLAGS"
 
 XLFLAGS="$X_LIBS"
 
-XLIBS="$X_EXTRA_LIBS -lX11"
+XLIBS="-lX11 $X_EXTRA_LIBS"
+
+
+lib_search_path="$lib_search_path $XLFLAGS"
+inc_search_path="$inc_search_path $XCFLAGS"
+
 
 dnl Decide which locale function to use, setlocale() or _Xsetlocale()
 dnl by MANOME Tomonori 
@@ -308,6 +336,14 @@ AC_ARG_ENABLE(locale,
 if test "$use_locale" = yes; then
   AC_CHECK_LIB(X11, _Xsetlocale, AC_DEFINE(X_LOCALE),, $XLFLAGS $XLIBS)
 fi
+
+
+dnl XKB keyboard language status
+dnl ============================
+AC_ARG_ENABLE(modelock,
+[  --enable-modelock	  XKB keyboard language status support],
+		X_CFLAGS="$X_CFLAGS -DXKB_MODELOCK",)
+
 
 
 dnl Shape support
@@ -362,15 +398,14 @@ dnl ===================================
 dnl Check for libPropList
 dnl =====================
 
-lPL=""
 LIBPL=""
-AC_CHECK_LIB(PropList, PLGetString, lPL=yes, lPL=no, $XLFLAGS $XLIBS)
 
-if test "$lPL" = yes; then
-    my_old_cppflags=$CPPFLAGS
-    CPPFLAGS="$CPPFLAGS $XCFLAGS"
-    AC_CHECK_HEADER(proplist.h, LIBPL="-lPropList", LIBPL="")
-    CPPFLAGS=$my_old_cppflags
+WM_CHECK_LIB(PropList, PLGetString, $X_EXTRA_LIBS)
+if test "x$ac_cv_lib_PropList_PLGetString" = xyes; then
+    WM_CHECK_HEADER(proplist.h)
+    if test "x$ac_cv_header_proplist_h" = xyes; then
+    	LIBPL="-lPropList"
+    fi
 fi
 
 if test "x$LIBPL" = "x"; then
@@ -379,7 +414,13 @@ if test "x$LIBPL" = "x"; then
    echo "         Window Maker requires libPropList to build."
    echo "         Please read INSTALL to find where you can find libPropList,"
    echo "         and install it first."
-   echo
+   echo "         If you already have it installed, try using the"
+   if test "x$ac_cv_lib_PropList_PLGetString" != xyes; then
+   echo "         --with-libs-from flag to tell configure where the library"
+   echo "	  is installed and"
+   fi
+   echo "         --with-incs-from flag to tell configure where the header"
+   echo "	  files are installed"
    exit 1
 fi
 
@@ -392,19 +433,6 @@ dnl         Graphic Format Libraries
 dnl ==============================================
 
 
-dnl
-dnl Specify paths to look for graphic format libraries
-dnl ==================================================
-GFXLIBS=""
-AC_ARG_WITH(gfx-libs,
-[  --with-gfx-libs	  pass compiler flags to look for gfx libraries],
-	[GFXLFLAGS=$withval], [GFXLFLAGS=""])
-
-AC_ARG_WITH(gfx-incs,
-[  --with-gfx-incs	  pass compiler flags to look for gfx header files],
-	[GFXFLAGS="$withval" GFX_INC_PATH=$withval],
-	[GFXFLAGS="" GFX_INC_PATH=""])
-
 
 
 
@@ -416,26 +444,25 @@ AC_ARG_ENABLE(xpm,
 	xpm=$enableval, xpm=yes)
 
 if test "$xpm" = yes; then
-    AC_CHECK_LIB(Xpm, XpmCreatePixmapFromData,
-    	my_libok=yes, my_libok=no,
-	$GFX_INC_PATH $GFXLFLAGS $XLFLAGS $XLIBS)
+    WM_CHECK_LIB(Xpm, XpmCreatePixmapFromData, [$XLFLAGS $XLIBS])
 
-    if test "$my_libok" = yes; then
-	my_old_cppflags=$CPPFLAGS
-	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH $XCFLAGS"
-	AC_CHECK_HEADER(X11/xpm.h,
-		[GFXLIBS="$GFXLIBS -lXpm"
-		 supported_gfx="XPM"
-                 AC_DEFINE(USE_XPM)], supported_gfx="XPM (builtin)")
-	CPPFLAGS=$my_old_cppflags
+    if test "x$ac_cv_lib_Xpm_XpmCreatePixmapFromData" = xyes; then
+        WM_CHECK_HEADER(X11/xpm.h)
+	if test "x$ac_cv_header_X11_xpm_h" = xyes; then
+		GFXLIBS="$GFXLIBS -lXpm"
+		supported_gfx="XPM"
+		AC_DEFINE(USE_XPM)
+	else
+		supported_gfx="builtin-XPM"
+	fi
     fi
 fi
 
-
-
-AC_SUBST(XLIBS)
+# for wmlib
 AC_SUBST(XCFLAGS)
+# for test
 AC_SUBST(XLFLAGS)
+AC_SUBST(XLIBS)
 
 AC_SUBST(X_EXTRA_LIBS)
 
@@ -453,17 +480,15 @@ AC_ARG_ENABLE(png,
 
 
 if test "$png" = yes ; then
-    AC_CHECK_LIB(png, png_get_valid, my_libok=yes, my_libok=no,
-		$GFX_INC_PATH $GFXLFLAGS $XLFLAGS -lz -lm)
+    WM_CHECK_LIB(png, png_get_valid, [-lz -lm])
 
-    if test "$my_libok" = yes; then
-	my_old_cppflags=$CPPFLAGS
-	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH $XCFLAGS"
-	AC_CHECK_HEADER(png.h,
-		[GFXLIBS="$GFXLIBS -lpng -lz" 
-		 supported_gfx="$supported_gfx PNG"
-                 AC_DEFINE(USE_PNG)], )
-	CPPFLAGS=$my_old_cppflags
+    if test "x$ac_cv_lib_png_png_get_valid" = xyes; then
+    	WM_CHECK_HEADER(png.h)
+	if test "x$ac_cv_header_png_h" = xyes; then
+	    GFXLIBS="$GFXLIBS -lpng -lz" 
+	    supported_gfx="$supported_gfx PNG"
+            AC_DEFINE(USE_PNG)
+	fi
     fi
 fi
 
@@ -476,55 +501,49 @@ AC_ARG_ENABLE(jpeg,
 	jpeg=$enableval, jpeg=yes, jpeg=no)
 
 if test "$jpeg" = yes; then
-	AC_CHECK_LIB(jpeg, jpeg_destroy_compress, my_libok=yes, my_libok=no,
-		$GFX_INC_PATH $GFXLFLAGS $XLFLAGS)
+    WM_CHECK_LIB(jpeg, jpeg_destroy_compress)
 
-    if test "$my_libok" = yes; then
-	my_old_cppflags=$CPPFLAGS
-	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH $XCFLAGS"
-	AC_TRY_CPP(jpeglib.h,
-		[GFXLIBS="$GFXLIBS -ljpeg"
-		 supported_gfx="$supported_gfx JPEG"
-                 AC_DEFINE(USE_JPEG)], jpeg_not_found=yes)
-	CPPFLAGS=$my_old_cppflags
+    if test "x$ac_cv_lib_jpeg_jpeg_destroy_compress" = xyes; then
+	WM_CHECK_HEADER(jpeglib.h)
+	if test "x$ac_cv_header_jpeglib_h" = xyes; then
+	    GFXLIBS="$GFXLIBS -ljpeg"
+	    supported_gfx="$supported_gfx JPEG"
+            AC_DEFINE(USE_JPEG)
+	fi
     fi
 fi
 
 
 dnl GIF Support
 dnl ============
-dnl
-dnl giflib uses dangerous function naming... (namespace clashing)
-dnl
 gif=yes
 AC_ARG_ENABLE(gif,
 [  --disable-gif           disable GIF support through libgif or libungif],
 	gif=$enableval, gif=yes, gif=no)
 
 if test "$gif" = yes; then
-	retry=no
-	AC_CHECK_LIB(ungif, DGifOpenFileName, 
-		[my_libok=yes my_libname=ungif],
-	    	[retry=yes my_libok=no],
-	    	$GFX_INC_PATH $GFXLFLAGS $XLFLAGS $XLIBS)
+    my_libname=""
+    WM_CHECK_LIB(ungif, DGifOpenFileName, [$XLFLAGS $XLIBS])
+    if test "x$ac_cv_lib_ungif_DGifOpenFileName" = xyes; then
+        my_libname=ungif
+    fi
 dnl
 dnl libungif is the same thing as libgif for all practical purposes.
 dnl
-	if test "$retry" = yes; then
-	    AC_CHECK_LIB(gif, DGifOpenFileName, 
-	    	[my_libok=yes my_libname=gif], 
-		my_libok=no,
-		$GFX_INC_PATH $GFXLFLAGS $XLFLAGS $XLIBS)
+    if test "x$my_libname" = x; then
+        WM_CHECK_LIB(gif, DGifOpenFileName, [$XLFLAGS $XLIBS])
+        if test "x$ac_cv_lib_gif_DGifOpenFileName" = xyes; then
+            my_libname=gif
+        fi
+    fi
+
+    if test "$my_libname" != x; then
+	WM_CHECK_HEADER(gif_lib.h)
+	if test "x$ac_cv_header_gif_lib_h" = xyes; then
+	    GFXLIBS="$GFXLIBS -l$my_libname"
+	    supported_gfx="$supported_gfx GIF"
+            AC_DEFINE(USE_GIF)
 	fi
-	
-    if test "$my_libok" = yes; then
-	my_old_cppflags=$CPPFLAGS
-	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH $XCFLAGS"
-	AC_CHECK_HEADER(gif_lib.h,
-		[GFXLIBS="$GFXLIBS -l$my_libname"
-		 supported_gfx="$supported_gfx GIF"
-                 AC_DEFINE(USE_GIF)], )
-	CPPFLAGS=$my_old_cppflags
     fi
 fi
 
@@ -548,41 +567,56 @@ ICONEXT="xpm"
 
 if test "$tif" = yes; then
     my_libname=""
-    AC_CHECK_LIB(tiff, TIFFGetVersion, 
-    	[my_libok=yes my_libname="-ltiff"], my_libok=no,
-	[$GFX_INC_PATH $GFXLFLAGS $XLFLAGS $XLIBS $GFXLIBS -lm])
+    WM_CHECK_LIB(tiff, TIFFGetVersion, [-lm])
+    if test "x$ac_cv_lib_tiff_TIFFGetVersion" = xyes; then
+    	my_libname="-ltiff"
+    fi
 dnl
 dnl Retry with zlib
 dnl
     unset ac_cv_lib_tiff_TIFFGetVersion
-    if test "$my_libok" = no; then
-    	AC_CHECK_LIB(tiff, TIFFGetVersion,
-	    	[my_libok=yes my_libname="-ltiff -lz"], my_libok=no,
-		[$GFX_INC_PATH $GFXLFLAGS $XLFLAGS $XLIBS $GFXLIBS -lz -lm])
+    if test "x$my_libname" = x; then
+    	WM_CHECK_LIB(tiff, TIFFGetVersion, [-lz -lm])
+	if test "x$ac_cv_lib_tiff_TIFFGetVersion" = xyes; then
+	    my_libname="-ltiff -lz"
+	fi
     fi
-    
-    if test "$my_libok" = no; then
-	AC_CHECK_LIB(tiff34, TIFFGetVersion, 
-		[my_libok=yes my_libname="-ltiff34"], my_libok=no,
-		[$GFX_INC_PATH $GFXLFLAGS $XLFLAGS $XLIBS $GFXLIBS -lm])
+
+    if test "x$my_libname" = x; then
+	WM_CHECK_LIB(tiff34, TIFFGetVersion, [-lm])
+	if test "x$ac_cv_lib_tiff34_TIFFGetVersion" = xyes; then
+	    my_libname="-ltiff34"
+	fi
     fi
-    
-    if test "$my_libok" = yes; then
-	my_old_cppflags=$CPPFLAGS
-	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH $XCFLAGS"
-	AC_CHECK_HEADER(tiffio.h,
-		[GFXLIBS="$my_libname $GFXLIBS"
-		 ICONEXT="tiff"
-                 supported_gfx="$supported_gfx TIFF"
-                 AC_DEFINE(USE_TIFF)], )
-	CPPFLAGS=$my_old_cppflags
+
+# 
+# why the heck does debian name libtiff this way!?
+#
+    if test "x$my_libname" = x; then
+	WM_CHECK_LIB(tiff3g, TIFFGetVersion, [-lm])
+	if test "x$ac_cv_lib_tiff3g_TIFFGetVersion" = xyes; then
+	    my_libname="-ltiff3g"
+	fi
+    fi
+
+    if test "x$my_libname" != x; then
+	WM_CHECK_HEADER(tiffio.h)
+	if test "x$ac_cv_header_tiffio_h" = xyes; then
+	    GFXLIBS="$my_libname $GFXLIBS"
+	    ICONEXT="tiff"
+            supported_gfx="$supported_gfx TIFF"
+            AC_DEFINE(USE_TIFF)	    
+	fi
     fi
 fi
 
+LIBRARY_SEARCH_PATH="$lib_search_path"
+HEADER_SEARCH_PATH="$inc_search_path"
+
+AC_SUBST(LIBRARY_SEARCH_PATH)
+AC_SUBST(HEADER_SEARCH_PATH)
 
 
-AC_SUBST(GFXFLAGS)
-AC_SUBST(GFXLFLAGS)
 AC_SUBST(GFXLIBS)
 AC_SUBST(ICONEXT)
 
@@ -634,6 +668,9 @@ AC_DEFINE_UNQUOTED(PIXMAPDIR, "$pixmapdir")
 
 pkgdatadir=`eval echo $datadir`
 AC_DEFINE_UNQUOTED(PKGDATADIR, "$pkgdatadir/WindowMaker")
+
+sysconfdir=`eval echo $sysconfdir`
+AC_DEFINE_UNQUOTED(SYSCONFDIR, "$sysconfdir/WindowMaker")
 
 
 dnl Support for GNUSTEP_LOCAL_ROOT, for WPrefs.app
@@ -729,8 +766,8 @@ cat <<EOF >get-wraster-flags
 prefix="$prefix"
 exec_prefix=\$prefix
 
-WCFLAGS="-I\$prefix/include $XCFLAGS $GFXFLAGS"
-WLFLAGS="-L\$exec_prefix/lib $XLFLAGS $GFXLFLAGS"
+WCFLAGS="-I\$prefix/include $inc_search_path"
+WLFLAGS="-L\$exec_prefix/lib $lib_search_path"
 WLIBS="-lwraster $GFXLIBS $XLIBS -lm"
 
 usage="Usage: get-wraster-flags #lp#--cflags#rp# #lp#--lflags#rp# #lp#--libs#rp#"
@@ -772,7 +809,7 @@ dnl
 dnl Spit out the configuration
 dnl ==========================
 
-supported_gfx="$supported_gfx PPM (built-in)"
+supported_gfx="$supported_gfx builtin-PPM"
 
 if test "x$MOFILES" = "x"; then
 	mof=none
@@ -785,7 +822,7 @@ echo
 echo "Window Maker was configured as follows:"
 echo
 echo "Installation path prefix: $prefix"
-echo "Installation path prefix for binaries: $exec_prefix" | sed -e 's|\${prefix}|'"$prefix|"
+echo "Installation path prefix for binaries: $_bindir"
 echo "Installation path for WPrefs.app: $wprefsdir" | sed -e 's|\$(prefix)|'"$prefix|"
 echo "Graphic format libraries: $supported_gfx"
 echo "Sound support: $sound"
@@ -795,7 +832,7 @@ if test "x$MOFILES" != "x"; then
 fi
 
 
-if test "$jpeg_not_found" = yes; then
+if test "x$ac_cv_header_jpeglib_h" != xyes; then
 echo "WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING"
 echo
 echo "JPEG support will not be included because the JPEG library is"

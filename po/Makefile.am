@@ -1,11 +1,11 @@
-nlsdir      = $(DESTDIR)/@NLSDIR@
+nlsdir      = $(DESTDIR)$(NLSDIR)
 
 CATALOGS = @MOFILES@
 
 CLEANFILES = $(CATALOGS) WindowMaker.pot
 
 EXTRA_DIST = cs.po de.po es.po fr.po gl.po ja.po ko.po nl.po pt.po se.po it.po \
-	no.po ru.po tr.po fi.po hr.po el.po pl.po ro.po dk.po
+	no.po ru.po tr.po fi.po hr.po el.po pl.po ro.po dk.po zh_TW.Big5.po
 
 POTFILES  = \
 	$(top_builddir)/src/appicon.c \
@@ -53,14 +53,14 @@ WindowMaker.pot: $(POTFILES)
 	fi
 
 install-data-local:  $(CATALOGS)
-	$(mkinstalldirs) $(DESTDIR)$(nlsdir) 
-	chmod 755 $(DESTDIR)$(nlsdir) 
+	$(mkinstalldirs) $(nlsdir)
+	chmod 755 $(nlsdir) 
 	for n in $(CATALOGS) __DuMmY ; do \
 		if test "$$n" -a "$$n" != "__DuMmY" ; then \
 			l=`basename $$n .mo`; \
-			$(mkinstalldirs) $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES; \
-			chmod 755 $(DESTDIR)$(nlsdir)/$$l; \
-			chmod 755 $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES; \
-			$(INSTALL) -m 644 $$n $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES/WindowMaker.mo; \
+			$(mkinstalldirs) $(nlsdir)/$$l/LC_MESSAGES; \
+			chmod 755 $(nlsdir)/$$l; \
+			chmod 755 $(nlsdir)/$$l/LC_MESSAGES; \
+			$(INSTALL_DATA) -m 644 $$n $(nlsdir)/$$l/LC_MESSAGES/WindowMaker.mo; \
 		fi; \
 	done

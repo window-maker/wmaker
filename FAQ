@@ -95,11 +95,13 @@ Summary of Contents:
      5.6 What other apps exist for the dock? 
      5.7 How do I get an appicon for rxvt so I can dock it? 
      5.8 How do I get different icons for rxvt's (or xterms) running different
-         programs? 
+         programs?
      5.9 How do I launch multiple instances of XTerm from one appicon? 
      5.10 How do I allow Alt+# to work in an rxvt session? (with irc for
           example) 
      5.11 Window Maker breaks scilab
+     5.12 Netscape icons show up in black and white
+     5.13 Snow flakes from xsnow don't acumulate on titlebars!
 
 6 - Programming 
      6.1 How do I get a normal X application to produce an appicon? 
@@ -1211,6 +1213,24 @@ with
 
 in routines/xsci/jpc_SGraph.c
 
+
+5.12 Netscape shows black and white icons
+----------------------------------
+
+This is because Netscape uses monochrome icons when running under olwm
+and you are using the OPEN LOOK emulation option. If you do not use any XView
+apps anyway, recompile Window Maker without the --enable-openlook option.
+If you need OPEN LOOK emulation, you will have to get used to the monochrome
+icons or change then manually in the Attributes panel for each window.
+
+
+5.13 Snow flakes from xsnow don't acumulate on titlebars!
+----------------------------------
+
+Because of the way xsnow is coded, it seems that it can't "see"
+windows with the SaveUnder attribute turned on. So, if snow
+accumulation on windows is vital for you, disable SaveUnders in
+WPrefs, in the advanced options section.
 
 
 -=-=-=-=-=-=-

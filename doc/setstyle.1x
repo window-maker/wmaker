@@ -1,10 +1,10 @@
 .\" Hey, Emacs!  This is an -*- nroff -*- source file.
-.TH setstyle 1x "December 1998"
+.TH setstyle 1x "January 1999"
 .SH NAME
 setstyle \- set style related options for Window Maker or loads a theme
 .SH SYNOPSIS
 .B setstyle
-.I "[-nofonts]"
+.I "[--no-fonts] [--help] [--version]"
 .I stylefile
 .SH DESCRIPTION
 .B setstyle
@@ -12,9 +12,21 @@ reads
 .I stylefile
 and writes its contents to the WindowMaker domain, efectively setting
 the Window Maker style. If the supplied path is a directory, it will
-be treated as a theme pack and it will be loaded appropriately. If the 
-.B \-nofonts
-flag is specified, font related options in the style file will be ignored.
+be treated as a theme pack and it will be loaded appropriately. If the
+\fB\-\-no\-fonts\fP flag is specified, font related options
+(\fIIconTitleFont\fP, \fIClipTitleFont\fP, \fIDisplayFont\fP,
+\fIMenuTextFont\fP, \fIMenuTitleFont\fP, \fIWindowTitleFont\fP) in the
+style file will be ignored.
+.SH OPTIONS
+.TP
+.B \-\-no\-fonts
+ignore font related options in style file.
+.TP
+.B \-\-help
+print a help message
+.TP
+.B \-\-version
+print version number
 .SH ENVIRONMENT
 .IP GNUSTEP_USER_ROOT
 specifies the initial path for the Defaults directory. "Defaults/" is

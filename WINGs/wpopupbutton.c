@@ -338,11 +338,19 @@ WMSetPopUpButtonPullsDown(WMPopUpButton *bPtr, Bool flag)
 {
     bPtr->flags.pullsDown = flag;
     if (!flag) {
-	bPtr->selectedItem = bPtr->items;
+        /* This code causes bugs. It should not select any item,
+         * since it was not asked to. -Dan
+        bPtr->selectedItem = bPtr->items;
 	if (bPtr->selectedItem)
 	    bPtr->selectedItemIndex = 0;
 	else
-	    bPtr->selectedItemIndex = -1;
+            bPtr->selectedItemIndex = -1;
+        */
+        bPtr->selectedItem = NULL;
+        /* the drawing routine, still draws things wrong if we put
+         * the index to -1 (i.e. not selected).
+         * Find out why. -Dan */
+        bPtr->selectedItemIndex = 0;
     } else
 	bPtr->selectedItemIndex = -1;
 

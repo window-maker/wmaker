@@ -86,9 +86,11 @@ Enhancing Integration
 
 Window Maker adds some extensions to KDE's messaging stuff, so you can run
 Window Maker specific commands from places like kpanel, krootwm or even
-kwmcom. If you want support for these in KDE, please go nag your favorite KDE
-developers, not us. The added stuff are the following kwm like commands:
+kwmcom. Recently KDE developers have kindly added support for these extensions
+in the more recent KDE versions from CVS. The added stuff are the following 
+kwm like commands:
 
+wm:wmaker - select Window Maker support mode
 wmaker:info - show info panel
 wmaker:legal - show legal panel
 wmaker:arrangeIcons - arrange icons
@@ -124,3 +126,7 @@ windows present, restart them.
 * Wmaker opens windows by default under/over the panel, when the panel is
 at top or left of screen.  Use the GUI configuration tool WPrefs to change
 this.
+
+* Some commands, such as cascade windows and rearrange windows are not
+yet implemented.
+

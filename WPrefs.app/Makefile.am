@@ -1,7 +1,5 @@
 SUBDIRS = xpm tiff po
 
-nlsdir = @NLSDIR@
-
 AUTOMAKE_OPTIONS = no-dependencies
 
 wpexecbindir = @wprefsdir@
@@ -28,6 +26,7 @@ WPrefs_SOURCES = \
 	Menu.c \
 	MenuPreferences.c \
 	MouseSettings.c \
+	NoMenuAlert.c \
 	Paths.c \
 	Preferences.c \
 	Text.c \
@@ -39,26 +38,25 @@ WPrefs_SOURCES = \
 	Workspace.c \
 	double.c \
 	double.h \
+	editmenu.c \
+	editmenu.h \
 	MenuGuru.c \
 	xmodifier.c
 
-CPPFLAGS = \
-	@CPPFLAGS@
+CPPFLAGS = @CPPFLAGS@ -DLOCALEDIR=\"$(NLSDIR)\"
 
 
 INCLUDES = \
 	-I$(top_srcdir)/wrlib \
-	-I$(top_srcdir)/WINGs \
-	@XCFLAGS@ 
+	-I$(top_srcdir)/WINGs @HEADER_SEARCH_PATH@ 
 
 WPrefs_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
 
 WPrefs_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a\
 	$(top_builddir)/wrlib/libwraster.la \
+	@LIBRARY_SEARCH_PATH@ \
 	@LIBPL@ \
-	@GFXLFLAGS@ \
-	@XLFLAGS@ \
 	@GFXLIBS@ \
 	@XLIBS@ \
 	@X_EXTRA_LIBS@ \

@@ -62,13 +62,13 @@ host_triplet = @host@
 CC = @CC@
 CPP_PATH = @CPP_PATH@
 DFLAGS = @DFLAGS@
-GFXFLAGS = @GFXFLAGS@
-GFXLFLAGS = @GFXLFLAGS@
 GFXLIBS = @GFXLIBS@
+HEADER_SEARCH_PATH = @HEADER_SEARCH_PATH@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
 LD = @LD@
 LIBPL = @LIBPL@
+LIBRARY_SEARCH_PATH = @LIBRARY_SEARCH_PATH@
 LIBTOOL = @LIBTOOL@
 LITE = @LITE@
 LN_S = @LN_S@
@@ -89,8 +89,6 @@ wprefsdir = @wprefsdir@
 
 SUBDIRS = xpm tiff po
 
-nlsdir = @NLSDIR@
-
 AUTOMAKE_OPTIONS = no-dependencies
 
 wpexecbindir = @wprefsdir@
@@ -103,18 +101,17 @@ wpdata_DATA = WPrefs.tiff WPrefs.xpm
 
 EXTRA_DIST = $(wpdata_DATA) TexturePanel.icons 
 
-WPrefs_SOURCES =  	main.c 	WPrefs.c 	WPrefs.h 	Appearance.c 	Configurations.c 	Expert.c 	Focus.c 	Icons.c 	KeyboardSettings.c 	KeyboardShortcuts.c 	Menu.c 	MenuPreferences.c 	MouseSettings.c 	Paths.c 	Preferences.c 	Text.c 	TextureAndColor.c 	TexturePanel.c 	TexturePanel.h 	Themes.c 	WindowHandling.c 	Workspace.c 	double.c 	double.h 	MenuGuru.c 	xmodifier.c
+WPrefs_SOURCES =  	main.c 	WPrefs.c 	WPrefs.h 	Appearance.c 	Configurations.c 	Expert.c 	Focus.c 	Icons.c 	KeyboardSettings.c 	KeyboardShortcuts.c 	Menu.c 	MenuPreferences.c 	MouseSettings.c 	NoMenuAlert.c 	Paths.c 	Preferences.c 	Text.c 	TextureAndColor.c 	TexturePanel.c 	TexturePanel.h 	Themes.c 	WindowHandling.c 	Workspace.c 	double.c 	double.h 	editmenu.c 	editmenu.h 	MenuGuru.c 	xmodifier.c
 
 
-CPPFLAGS =  	@CPPFLAGS@
+CPPFLAGS = @CPPFLAGS@ -DLOCALEDIR=\"$(NLSDIR)\"
 
-
-INCLUDES =  	-I$(top_srcdir)/wrlib 	-I$(top_srcdir)/WINGs 	@XCFLAGS@ 
+INCLUDES =  	-I$(top_srcdir)/wrlib 	-I$(top_srcdir)/WINGs @HEADER_SEARCH_PATH@ 
 
 
 WPrefs_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
 
-WPrefs_LDADD =  	$(top_builddir)/WINGs/libWINGs.a 	$(top_builddir)/wrlib/libwraster.la 	@LIBPL@ 	@GFXLFLAGS@ 	@XLFLAGS@ 	@GFXLIBS@ 	@XLIBS@ 	@X_EXTRA_LIBS@ 	@INTLIBS@ 	-lm 
+WPrefs_LDADD =  	$(top_builddir)/WINGs/libWINGs.a 	$(top_builddir)/wrlib/libwraster.la 	@LIBRARY_SEARCH_PATH@ 	@LIBPL@ 	@GFXLIBS@ 	@XLIBS@ 	@X_EXTRA_LIBS@ 	@INTLIBS@ 	-lm 
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../src/config.h
@@ -130,9 +127,9 @@ X_LIBS = @X_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 WPrefs_OBJECTS =  main.o WPrefs.o Appearance.o Configurations.o Expert.o \
 Focus.o Icons.o KeyboardSettings.o KeyboardShortcuts.o Menu.o \
-MenuPreferences.o MouseSettings.o Paths.o Preferences.o Text.o \
-TextureAndColor.o TexturePanel.o Themes.o WindowHandling.o Workspace.o \
-double.o MenuGuru.o xmodifier.o
+MenuPreferences.o MouseSettings.o NoMenuAlert.o Paths.o Preferences.o \
+Text.o TextureAndColor.o TexturePanel.o Themes.o WindowHandling.o \
+Workspace.o double.o editmenu.o MenuGuru.o xmodifier.o
 WPrefs_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)

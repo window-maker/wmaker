@@ -164,8 +164,6 @@ getWindowHints(Window window, OLHints *hints)
 	return False;
     }
 
-    printf("WINDOW TYPE %s\n", XGetAtomName(dpy, hints->winType));
-
     XFree(data);
 
     /* do backward compatibility stuff */

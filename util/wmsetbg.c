@@ -22,6 +22,10 @@
  *  USA.
  */
 
+/*
+ * TODO: rewrite, too dirty
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -46,7 +50,6 @@
 
 
 #define WORKSPACE_COUNT (MAX_WORKSPACES+1)
-
 
 
 Display *dpy;
@@ -169,6 +172,7 @@ parseTexture(RContext *rc, char *text)
 	RImage *image;
 	Pixmap pixmap;
 	int gtype;
+	int iwidth, iheight;
 
 	GETSTR(val, tmp, 1);
 
@@ -196,17 +200,23 @@ parseTexture(RContext *rc, char *text)
 	 case 'h':
 	 case 'H':
 	    gtype = RHorizontalGradient;
+	    iwidth = scrWidth;
+	    iheight = 32;
 	    break;
 	 case 'V':
 	 case 'v':
 	    gtype = RVerticalGradient;
+	    iwidth = 32;
+	    iheight = scrHeight;
 	    break;
 	 default:
 	    gtype = RDiagonalGradient;
+	    iwidth = scrWidth;
+	    iheight = scrHeight;
 	    break;
 	}
 
-	image = RRenderGradient(scrWidth, scrHeight, &color1, &color2, gtype);
+	image = RRenderGradient(iwidth, iheight, &color1, &color2, gtype);
 
 	if (!image) {
 	    wwarning("could not render gradient texture:%s",
@@ -233,9 +243,9 @@ parseTexture(RContext *rc, char *text)
 	RColor **colors;
 	RImage *image;
 	Pixmap pixmap;
-	int i;
-	int j;
+	int i, j;
 	int gtype;
+	int iwidth, iheight;
 
 	colors = malloc(sizeof(RColor*)*(count-1));
 	if (!colors) {
@@ -283,17 +293,23 @@ parseTexture(RContext *rc, char *text)
 	 case 'h':
 	 case 'H':
 	    gtype = RHorizontalGradient;
+	    iwidth = scrWidth;
+	    iheight = 32;
 	    break;
 	 case 'V':
 	 case 'v':
 	    gtype = RVerticalGradient;
+	    iwidth = 32;
+	    iheight = scrHeight;
 	    break;
 	 default:
 	    gtype = RDiagonalGradient;
+	    iwidth = scrWidth;
+	    iheight = scrHeight;
 	    break;
 	}
 
-	image = RRenderMultiGradient(scrWidth, scrHeight, colors, gtype);
+	image = RRenderMultiGradient(iwidth, iheight, colors, gtype);
 	
 	for (j = 0; colors[j]!=NULL; j++)
 	    free(colors[j]);
@@ -815,7 +831,7 @@ helperLoop(RContext *rc)
 #ifdef DEBUG
 	printf("RECEIVED %s\n",buffer);
 #endif
-	if (buffer[0]!='P') {
+	if (buffer[0]!='P' && buffer[0]!='K') {
 	    memcpy(buf, &buffer[1], 4);
 	    buf[4] = 0;
 	    workspace = atoi(buf);
@@ -875,86 +891,135 @@ helperLoop(RContext *rc)
 
 
 void
-updateDomain(char *domain, char *texture)
+updateDomain(char *domain, char *key, char *texture)
 {
     char *program = "wdwrite";
 
-    execlp(program, program, domain, "WorkspaceBack", texture, NULL);
+    execlp(program, program, domain, key, texture, NULL);
     wwarning("warning could not run \"%s\"", program);
 }
 
 
 
-proplist_t
-getDomain(char *domain)
+char*
+globalDefaultsPathForDomain(char *domain)
 {
-   char *path;
-    proplist_t prop;
+    char path[1024];
 
+    sprintf(path, "%s/%s", SYSCONFDIR, domain);
 
-    path = wdefaultspathfordomain(domain);
-    if (!path) {
-	wwarning("could not locate file for domain %s", domain);
-	return NULL;
-    }
-
-    prop = PLGetProplistWithPath(path);
-
-    if (!prop || !PLIsDictionary(prop)) {
-	wwarning("invalid domain file %s", path);
-	free(path);
-	if (prop)
-	    PLRelease(prop);
-	return NULL;
-    }
-    free(path);
-
-    return prop;
+    return wstrdup(path);
 }
 
 
-char*
-getPixmapPath(proplist_t prop)
+proplist_t
+getValueForKey(char *domain, char *keyName)
 {
-    proplist_t key, val;
+    char *path;
+    proplist_t key;
+    proplist_t d;
+    proplist_t val;
+
+    key = PLMakeString(keyName);
+
+    /* try to find PixmapPath in user defaults */
+    path = wdefaultspathfordomain(domain);
+    d = PLGetProplistWithPath(path);
+    if (!d) {
+	wwarning("could not open domain file %s", path);
+    }
+    free(path);
+
+    if (d && !PLIsDictionary(d)) {
+	PLRelease(d);
+	d = NULL;
+    }
+    if (d) {
+	val = PLGetDictionaryEntry(d, key);
+    } else {
+	val = NULL;
+    }
+    /* try to find PixmapPath in global defaults */
+    if (!val) {
+	path = globalDefaultsPathForDomain(domain);
+	if (!path) {
+	    wwarning("could not locate file for domain %s", domain);
+	    d = NULL;
+	} else {
+	    d = PLGetProplistWithPath(path);
+	    free(path);
+	}
+
+	if (d && !PLIsDictionary(d)) {
+	    PLRelease(d);
+	    d = NULL;
+	}
+	if (d) {
+	    val = PLGetDictionaryEntry(d, key);
+	    
+	} else {
+	    val = NULL;
+	}
+    }
+
+    if (val)
+	PLRetain(val);
+
+    PLRelease(key);
+    if (d)
+	PLRelease(d);
+
+    return val;
+}
+
+char*
+getPixmapPath(char *domain)
+{
+    proplist_t val;
     proplist_t d;
     char *ptr, *data;
     int len, i, count;
 
-    key = PLMakeString("PixmapPath");
-    val = PLGetDictionaryEntry(prop, key);
-    PLRelease(key);
+    val = getValueForKey(domain, "PixmapPath");
+    
     if (!val || !PLIsArray(val)) {
-	PLRelease(prop);
+	if (val)
+	    PLRelease(val);
 	return wstrdup("");
     }
 
     count = PLGetNumberOfElements(val);
     len = 0;
     for (i=0; i<count; i++) {
-	d = PLGetArrayElement(val, i);
-	if (!d || !PLIsString(d)) {
+	proplist_t v;
+
+	v = PLGetArrayElement(val, i);
+	if (!v || !PLIsString(v)) {
 	    continue;
 	}
-	len += strlen(PLGetString(d))+1;
+	len += strlen(PLGetString(v))+1;
     }
 
     ptr = data = wmalloc(len+1);
     *ptr = 0;
 
     for (i=0; i<count; i++) {
-	d = PLGetArrayElement(val, i);
-	if (!d || !PLIsString(d)) {
+	proplist_t v;
+
+	v = PLGetArrayElement(val, i);
+	if (!v || !PLIsString(v)) {
 	    continue;
 	}
-	strcpy(ptr, PLGetString(d));
+	strcpy(ptr, PLGetString(v));
 
-	ptr += strlen(PLGetString(d));
+	ptr += strlen(PLGetString(v));
 	*ptr = ':';
 	ptr++;
     }
     if (i>0)
 	ptr--; *(ptr--) = 0;
+
+    PLRelease(d);
 
     return data;
 }
@@ -997,11 +1062,11 @@ P("     --help 			show this help and exit");
 
 
 void
-changeTextureForWorkspace(proplist_t dict, char *texture, int workspace)
+changeTextureForWorkspace(char *domain, char *texture, int workspace)
 {
-    proplist_t key;
     proplist_t array;
     proplist_t val;
+    char *value;
     int j;
 
     workspace++;
@@ -1012,11 +1077,10 @@ changeTextureForWorkspace(proplist_t dict, char *texture, int workspace)
 	return;
     }
 
-    key = PLMakeString("WorkspaceSpecificBack");
-    array = PLGetDictionaryEntry(dict, key);
+    array = getValueForKey("WindowMaker", "WorkspaceSpecificBack");
+
     if (!array) {
 	array = PLMakeArrayFromElements(NULL, NULL);
-	PLInsertDictionaryEntry(dict, key, array);
     }
 
     j = PLGetNumberOfElements(array);
@@ -1025,7 +1089,7 @@ changeTextureForWorkspace(proplist_t dict, char *texture, int workspace)
 
 	empty = PLMakeArrayFromElements(NULL, NULL);
 
-	while (j++ < workspace) {
+	while (j++ < workspace-1) {
 	    PLAppendArrayElement(array, empty);
 	}
 	PLAppendArrayElement(array, val);
@@ -1034,7 +1098,8 @@ changeTextureForWorkspace(proplist_t dict, char *texture, int workspace)
 	PLInsertArrayElement(array, val, workspace);
     }
 
-    PLSave(dict, YES);
+    value = PLGetDescription(array);
+    updateDomain(domain, "WorkspaceSpecificBack", value);
 }
 
 
@@ -1052,8 +1117,6 @@ main(int argc, char **argv)
     int update=0, cpc=4, render_mode=RM_DITHER, obey_user=0;
     char *texture = NULL;
     int workspace = -1;
-    proplist_t domain_prop;
-
     
     
     signal(SIGINT, SIG_DFL);
@@ -1166,16 +1229,15 @@ main(int argc, char **argv)
 	    exit(1);
 	}
     }
-    if (!image_name && !texture) {
+    if (!image_name && !texture && !helperMode) {
 	printf("%s: you must specify a image file name or a texture\n", 
 	       argv[0]);
 	printf("Try '%s --help' for more information\n", argv[0]);
 	exit(1);
     }
 
-    domain_prop = getDomain(domain);
     
-    PixmapPath = getPixmapPath(domain_prop);
+    PixmapPath = getPixmapPath(domain);
 
     dpy = XOpenDisplay(display);
     if (!dpy) {
@@ -1204,8 +1266,6 @@ main(int argc, char **argv)
 	/* lower priority, so that it wont use all the CPU */
 	nice(1000);
 
-	PLRelease(domain_prop);
-
 	helperLoop(rc);
     } else {
 	BackgroundTexture *tex;
@@ -1217,7 +1277,7 @@ main(int argc, char **argv)
 	}
 
 	if (update && workspace < 0) {
-	    updateDomain(domain, texture);
+	    updateDomain(domain, "WorkspaceBack", texture);
 	}
 
 	tex = parseTexture(rc, texture);
@@ -1228,7 +1288,7 @@ main(int argc, char **argv)
 	    changeTexture(tex);
 	else {
 	    /* always update domain */
-	    changeTextureForWorkspace(domain_prop, texture, workspace);
+	    changeTextureForWorkspace(domain, texture, workspace-1);
 	}
     }
 

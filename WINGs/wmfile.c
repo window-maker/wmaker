@@ -1,7 +1,16 @@
-
 /*
  * Author: Len Trigg <trigg@cs.waikato.ac.nz> 
  */
+ 
+/*
+    Update: Franck Wolff <frawolff@club-internet.fr>
+-----------------------------------------------------------------------
+    List of updated functions :
+    	- main :
+	    add -s option for a save panel...
+-----------------------------------------------------------------------
+*/
+
 
 
 #include "WINGs.h"
@@ -29,6 +38,7 @@ void usage(void)
 	  "\t%s [-options]\n"
 	  "\n"
 	  "options:\n"
+	  "  -s\t\tSave panel (default open panel)\n"
 	  "  -i <str>\tInitial directory (default /)\n"
 	  "  -t <str>\tQuery window title (default none)\n"
 	  "\n"
@@ -42,16 +52,21 @@ void usage(void)
   exit(0);
 }
 
+#define OPEN_PANEL_TYPE 0
+#define SAVE_PANEL_TYPE 1
+
 int main(int argc, char **argv)
 {
   Display *dpy = XOpenDisplay("");
   WMScreen *scr;
   WMPixmap *pixmap;
-  WMOpenPanel *panel;
+  WMOpenPanel *oPanel;
+  WMSavePanel *sPanel;
 /*  RImage *image;*/
   char *title = NULL;
   char *initial = "/";
   int ch;
+  int panelType = OPEN_PANEL_TYPE;
   extern char *optarg;
   extern int optind;
 
@@ -63,9 +78,12 @@ int main(int argc, char **argv)
     puts("could not open display");
     exit(1);
   }
-  while((ch = getopt(argc, argv, "i:ht:")) != -1)
+  while((ch = getopt(argc, argv, "si:ht:")) != -1)
     switch(ch) 
     { 
+    case 's':
+      panelType = SAVE_PANEL_TYPE;
+      break;
     case 'i':
       initial = optarg;
       break;
@@ -76,24 +94,30 @@ int main(int argc, char **argv)
       usage();
     }
 
-  for(; optind <argc; optind++)
-    usage();
+    for(; optind <argc; optind++)
+    	usage();
 
-  scr = WMCreateSimpleApplicationScreen(dpy);
+    scr = WMCreateSimpleApplicationScreen(dpy);
 
 
 	
-  pixmap = WMCreatePixmapFromXPMData(scr, GNUSTEP_XPM);
-  WMSetApplicationIconImage(scr, pixmap); WMReleasePixmap(pixmap);
-  panel = WMGetOpenPanel(scr);
-
-  /*WMSetFilePanelAutoCompletion(panel, False);*/
-
- /* The 3rd argument for this function is the initial name of the file,
-  * not the name of the window, although it's not implemented yet */
-  if (WMRunModalOpenPanelForDirectory(panel, NULL, initial, /*title*/ NULL, NULL) == True)
-    printf("%s\n", WMGetFilePanelFileName(panel));
-  else
-    printf("\n");
-  return 0;
+    pixmap = WMCreatePixmapFromXPMData(scr, GNUSTEP_XPM);
+    WMSetApplicationIconImage(scr, pixmap);
+    WMReleasePixmap(pixmap);
+    if (panelType == SAVE_PANEL_TYPE) {
+    	sPanel = WMGetSavePanel(scr);
+	if (WMRunModalFilePanelForDirectory(sPanel, NULL, initial,
+					    /*title*/ NULL, NULL) == True)
+    	    printf("%s\n", WMGetFilePanelFileName(sPanel));
+    	else
+    	    printf("\n");
+    } else {
+    	oPanel = WMGetOpenPanel(scr);
+	if (WMRunModalFilePanelForDirectory(oPanel, NULL, initial,
+					    /*title*/ NULL, NULL) == True)
+    	    printf("%s\n", WMGetFilePanelFileName(oPanel));
+    	else
+    	    printf("\n");
+    }
+    return 0;
 }

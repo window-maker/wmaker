@@ -39,8 +39,8 @@
 #define RLRASTER_H_
 
 
-/* version of the header for the library: 0.11 */
-#define WRASTER_HEADER_VERSION	11
+/* version of the header for the library: 0.12 */
+#define WRASTER_HEADER_VERSION	12
 
 
 #include <X11/Xlib.h>
@@ -67,6 +67,10 @@
 
 /* use default instead of best visual */
 #define RC_DefaultVisual	(1<<5)
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 typedef struct RContextAttributes {
     int flags;
@@ -242,10 +246,9 @@ enum {
 /*
  * Returns a NULL terminated array of strings containing the
  * supported formats, such as: TIFF, XPM, PNG, JPEG, PPM, GIF
+ * Do not free the returned data.
  */
 char **RSupportedFileFormats(void);
-
-void RFreeStringList(char **list);
 
 /*
  * Xlib contexts
@@ -389,5 +392,9 @@ int RBlurImage(RImage *image);
 /****** Global Variables *******/
 
 extern int RErrorCode;
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif

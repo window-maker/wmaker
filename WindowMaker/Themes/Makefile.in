@@ -62,13 +62,13 @@ host_triplet = @host@
 CC = @CC@
 CPP_PATH = @CPP_PATH@
 DFLAGS = @DFLAGS@
-GFXFLAGS = @GFXFLAGS@
-GFXLFLAGS = @GFXLFLAGS@
 GFXLIBS = @GFXLIBS@
+HEADER_SEARCH_PATH = @HEADER_SEARCH_PATH@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
 LD = @LD@
 LIBPL = @LIBPL@
+LIBRARY_SEARCH_PATH = @LIBRARY_SEARCH_PATH@
 LIBTOOL = @LIBTOOL@
 LITE = @LITE@
 LN_S = @LN_S@
@@ -91,7 +91,7 @@ SUBDIRS = Night.themed Checker.themed
 
 defsdatadir = $(pkgdatadir)/Themes
 
-defsdata_DATA = Default.style OpenStep.style Pastel.style
+defsdata_DATA = Default.style OpenStep.style Pastel.style SteelBlueSilk.style
 
 EXTRA_DIST = $(defsdata_DATA)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

@@ -412,19 +412,13 @@ getnameforicon(WWindow *wwin)
     } else {
 	return NULL;
     }
-    
-    prefix = getenv("GNUSTEP_USER_PATH");
-    if (!prefix) {
-	len = strlen(wgethomedir())+64+strlen(suffix);
-	path = wmalloc(len+1);
-	sprintf(path, "%s/GNUstep/.AppInfo", wgethomedir());
-    } else {
-	prefix = wexpandpath(prefix);
-	len = strlen(prefix)+64+strlen(suffix);
-	path = wmalloc(len+1);
-	sprintf(path, "%s/.AppInfo", prefix);
-	free(prefix);
-    }
+
+    prefix = wusergnusteppath();
+    len = strlen(prefix)+64+strlen(suffix);
+    path = wmalloc(len+1);
+    sprintf(path, "%s/.AppInfo", prefix);
+    free(prefix);
+
     if (access(path, F_OK)!=0) {
 	if (mkdir(path, S_IRUSR|S_IWUSR|S_IXUSR)) {
 	    wsyserror(_("could not create directory %s"), path);
@@ -826,7 +820,7 @@ miniwindowMouseDown(WObjDescriptor *desc, XEvent *event)
 #ifdef DEBUG
     puts("Moving miniwindow");
 #endif
-    if (event->xbutton.button==Button1) {	
+    if (event->xbutton.button == Button1) {	
 	if (event->xbutton.state & MOD_MASK)
 	    wLowerFrame(icon->core);
 	else
@@ -835,9 +829,7 @@ miniwindowMouseDown(WObjDescriptor *desc, XEvent *event)
             wIconSelect(icon);
             wSelectWindow(icon->owner, !wwin->flags.selected);
         }
-    } 
-#if 0
-    else if (event->xbutton.button==Button3) {
+    } else if (event->xbutton.button == Button3) {
 	WObjDescriptor *desc;
 
 	OpenMiniwindowMenu(wwin, event->xbutton.x_root, 
@@ -850,7 +842,7 @@ miniwindowMouseDown(WObjDescriptor *desc, XEvent *event)
 
 	return;
     }
-#endif
+
     if (XGrabPointer(dpy, icon->core->window, False, ButtonMotionMask
 		     |ButtonReleaseMask|ButtonPressMask, GrabModeAsync,
 		     GrabModeAsync, None, None, CurrentTime) !=GrabSuccess) {
@@ -901,6 +893,9 @@ miniwindowMouseDown(WObjDescriptor *desc, XEvent *event)
 	    puts("End miniwindow move");
 #endif
 	    XUngrabPointer(dpy, CurrentTime);
+
+	    if (wPreferences.auto_arrange_icons)
+		wArrangeIcons(wwin->screen_ptr, True);
 	    return;
 	    
 	}

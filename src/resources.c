@@ -79,8 +79,8 @@ wLoadFont(char *font_name)
     }
     if (!font->font) {
 	wwarning(_("could not create font set %s. Trying fixed"), font_name);
-	font->font = XCreateFontSet(dpy, "fixed", &missing, &num_missing, 
-				    &default_string);
+	font->font = XCreateFontSet(dpy, "-*-fixed-medium-r-normal-*-14-*-*-*-*-*-*-*",
+				    &missing, &num_missing, &default_string);
 	if (num_missing > 0) {
 	    XFreeStringList(missing);
 	}

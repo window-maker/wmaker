@@ -1,3 +1,40 @@
+Changes since version 0.51.0:
+.............................
+
+- icon explosion is stopped when clicking on anywhere
+- fixed dont set xset stuff option in WPrefs
+- fixed menu title messup in WPrefs
+- fixed WPrefs message dialogs for invalid menus
+- fixed workspace back setting in all screens
+- fixed WorkspaceSpecificBack / wmsetbg
+- added WindozeCycle patch (being rewritten)
+- cleaned up focus/unfocus state transitions
+- made WPrefs more robust
+- fixed locale file (po) installation stuff
+- fixed focus loss when dragging window across workspaces
+- fixed workspace baby boom with nextworkspacekey
+- removed ignore_next_unmap kluge
+- install defaults data in /usr/local/etc
+- added menu for miniwindow
+- fixed remove resizebar from shaded window
+- rewrote library/header search code in configure
+- rewrote window move/edge resistance code
+- added window border resistance
+- changed EdgeResistance option to only YES/NO
+- added workaround for glibc bug in sscanf("", bla, bla)
+- hopefully fixed WM_COLORMAP_WINDOWS crash bug
+- fixed searching of localized menus
+- fixed --help option
+- fixed handling of docked apps with . in their instance names
+- RSupportedFileFormats() in wrlib will now return a static buffer
+- fixed bug in StartHidden
+- a little faster startup
+- will rearrange icons after moving an icon if autoarrangeicons
+- fixed icon overlap bug
+- fixed crash with internal dialogs and multi-heads
+- added standard colormap support to wrlib (taken from libXmu sources)
+- fixed memory leak in attribute panel
+
 Changes since version 0.50.2:
 .............................
 
@@ -35,6 +72,8 @@ Changes since version 0.50.2:
 - fixed bug in start maximized
 - added _WINDOWMAKER_NOTICEBOARD protocol
 - added docklib
+- updated utility parameter format to GNU standards
+- removed libPropList from distribution and merged with GNOME one
 
 Changes since version 0.50.1:
 .............................

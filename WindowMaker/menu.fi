@@ -82,9 +82,9 @@
  *		// creates a submenu with the contents of /usr/openwin/bin
  *	"XView apps" OPEN_MENU "/usr/openwin/bin"
  *		// some X11 apps in different directories
- *	"X11 apps" OPEN_MENU /usr/X11/bin ~/bin/X11
+ *	"X11 apps" OPEN_MENU /usr/X11/bin $HOME/bin/X11
  *		// set some background images
- *	"Background" OPEN_MENU ~/images /usr/share/images WITH wmsetbg -u -t
+ *	"Background" OPEN_MENU $HOME/images /usr/share/images WITH wmsetbg -u -t
  *		// inserts the style.menu in this entry
  *	"Style" OPEN_MENU style.menu
  * "Test" END
@@ -162,9 +162,9 @@
 	"Työtilat" END
 
 	"Ulkonäkö" MENU
-		"Teemat" OPEN_MENU -noext  THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Tyylit" OPEN_MENU -noext  STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Kuvakeryhmät" OPEN_MENU -noext  ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Teemat" OPEN_MENU -noext  THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Tyylit" OPEN_MENU -noext  STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Kuvakeryhmät" OPEN_MENU -noext  ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Taustat" MENU
 			"Taustaväri" MENU
                         	"Musta" WS_BACK '(solid, black)'
@@ -180,10 +180,10 @@
 				"Lippu" WS_BACK '(mdgradient, green, red, white, green)'
 				"Taivas" WS_BACK '(vgradient, blue4, white)'
 			"Liukuväri" END
-			"Taustakuvat" OPEN_MENU -noext  BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+			"Taustakuvat" OPEN_MENU -noext  BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Taustat" END
-		"Talleta teema" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
-		"Talleta kuvakeryhmät" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
+		"Talleta teema" EXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
+		"Talleta kuvakeryhmät" EXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
 	"Ulkonäkö" END
 
 	"Poistu"	MENU

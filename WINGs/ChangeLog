@@ -1,3 +1,18 @@
+changes since wmaker 0.51.0:
+............................
+
+- applied c++ compat header patch from Martynas Kunigelis <mkunigelis@alna.lt>
+- added WMSetTextFieldBeveled()
+
+changes since wmaker 0.50.1:
+............................
+
+- fixed various bugs
+- added patch from Franck Wolff <frawolff@club-internet.fr>, with
+  many fixes and enhancements
+- added notification queues, asynchronous notifications etc.
+- added WMSetBrowserDoubleAction()
+- fixed list double click action
 
 changes since wmaker 0.50.2:
 ............................

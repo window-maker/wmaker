@@ -1,47 +1,62 @@
 .\" Hey, Emacs!  This is an -*- nroff -*- source file.
-.TH wmsetbg 1x "March 1998"
+.TH wmsetbg 1x "January 1999"
 .SH NAME
 wmsetbg \- sets the background on the X11 display
 .SH SYNOPSIS
 .B wmsetbg
-[-t|-s] [-d|-m] [-u] [-D domain] [-c cpc]
-.I image
+[-display] [--version] [--help] [{-b|--back-color} \fIcolor\fP]
+[{-t|--tile}|{-e|--center}|{-s|--scale}|{-a|--maxscale} \fIimage\fP]
+[{-d|--dither}|{-m|--match}] [-u|--update-wmaker]
+[{-D|--update-domain} \fIdomain\fP] [{-c|--colors} \fIcpc\fP]
+[{-p|--parse} \fItexture\fP] [{-w|--workspace} \fIworkspace\fP]
 .SH DESCRIPTION
 .B wmsetbg
 reads the specified
 .I image
-(XPM, PNG, jpeg, Tiff, raw PPM) and puts it on the root window. It can either
-scale the image or tile it to make it fit the root window. Window Maker
-uses this command internally to set the root window image on start up. It can be used on the command line, but it
-.B won't
-write the information to the Window Maker defaults' database.
+(XPM, PNG, jpeg, Tiff, raw PPM) and puts it on the root window. It can
+either scale the image or tile it to make it fit the root
+window. Window Maker uses this command internally to set the root
+window image on start up.
 .SH OPTIONS
 .TP
-.B \-t
-tiles the specified
-.I image
+.B -a|--maxscale
+scales the specified \fIimage\fP preserving its aspect ratio
 .TP
-.B \-s
-scales the specified
-.I image
-(default)
+.B -e|--center
+centers the specified \fIimage\fP
 .TP
-.B \-d
+.B -t|--tile
+tiles the specified \fIimage\fP
+.TP
+.B -s|--scale
+scales the specified \fIimage\fP (default)
+.TP
+.B -d|--dither
 dithers colors
 .TP
-.B \-m
+.B -m|--match
 matches colors
 .TP
-.B \-u
+.B -u|--update-wmaker
 updates the Window Maker defaults database
 .TP
-.B \-d
-updates the specifed
-.I domain
-database
+.B -D|--update-domain
+updates the specifed \fIdomain\fP database
 .TP
-.B \-c
+.B -c|--colors
 colors per channel to use
+.TP
+.B -p|--parse
+parses the specified \fItexture\fP as a \fIproplist style texture\fP
+.TP
+.B -w|--workspace
+update background only for the specified \fIworkspace\fP
+.TP
+.B \-\-help
+print a help message
+.TP
+.B \-\-version
+print version number
 .SH SEE ALSO
 .BR wmaker (1x)
 .SH AUTHOR
@@ -49,3 +64,4 @@ This man page was written by Marcelo Magallon <mmagallo@debian.org>.
 .PP
 Window Maker was written by Alfredo K. Kojima <kojima@windowmaker.org>.
 wmsetbg was written by Dan Pascu <dan@windowmaker.org>
+

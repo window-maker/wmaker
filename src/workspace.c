@@ -252,7 +252,7 @@ wWorkspaceRelativeChange(WScreen *scr, int amount)
 	if (w < scr->workspace_count)
 	    wWorkspaceChange(scr, w);
 	else if (wPreferences.ws_advance)
-	    wWorkspaceChange(scr, WMAX(w, MAX_WORKSPACES-1));
+	    wWorkspaceChange(scr, WMIN(w, MAX_WORKSPACES-1));
 	else if (wPreferences.ws_cycle)
 	    wWorkspaceChange(scr, w % scr->workspace_count);
     }
@@ -283,7 +283,7 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
     wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
 
     if ((tmp = scr->focused_window)!= NULL) {
-	if (IS_OMNIPRESENT(tmp))
+	if (IS_OMNIPRESENT(tmp) || tmp->flags.changing_workspace)
 	    foc = tmp;
 
 	while (tmp) {
@@ -401,7 +401,7 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 #ifdef KWM_HINTS
     wKWMUpdateCurrentWorkspaceHint(scr);
 #endif
-    XSync(dpy, False);
+/*   XSync(dpy, False); */
 }
 
 

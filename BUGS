@@ -1,8 +1,6 @@
 - wmaker will not stop managing a screen even if another window manager
   requests that, through the ICCCM 2.0 manager selection stuff
 - the app menu does not update after a style/theme change without restart.
-- during startup, transient windows should be miniaturized with their owners
-  not in their own icons
 - stacking code is buggy (or XFree is buggy)
 - save session doesnt work on some platforms (Alpha and Sparc)
 - texture pixmaps are being incorrectly freed somewhere. Either

@@ -366,7 +366,7 @@ buttonCallback(void *self, void *clientData)
 	
 	op = WMCreateOpenPanel(WMWidgetScreen(bPtr));
 	
-	if (WMRunModalOpenPanelForDirectory(op, NULL, "/usr/local", NULL, NULL)) {
+	if (WMRunModalFilePanelForDirectory(op, NULL, "/usr/local", NULL, NULL)) {
 	    char *path;
 	    path = WMGetFilePanelFile(op);
 	    WMSetTextFieldText(panel->fileField, path);
@@ -581,7 +581,7 @@ typedef struct {
     RImage *pic;
     WMPixmap *oldPix;
     char *str;
-    char x;
+    int x;
 #endif
 } InfoPanel;
 
@@ -683,8 +683,23 @@ logoPushCallback(void *data)
     char buffer[512];
     int i;
     int len;
+    static int jingobeu[] = {
+	329, 150, -1, 100, 329, 150, -1, 100, 329, 300, -1, 250,
+	    329, 150, -1, 100, 329, 150, -1, 100,  329, 300, -1, 250,
+	    329, 150, 392, 150, 261, 150, 293, 150, 329, 400, -1, 400, 0
+    };
+    static int c = 0;
 
     if (panel->x) {
+	XKeyboardControl kc;
+    
+	if (panel->x > 0) {
+	    if(jingobeu[panel->x-1]==0){panel->x=-1;}else if(jingobeu[panel->x
+-1]<0){panel->x++;c=jingobeu[panel->x-1]/50;panel->x++;}else if(c==0){
+    kc.bell_pitch=jingobeu[panel->x-1];panel->x++;kc.bell_percent=50;c=
+	jingobeu[panel->x-1]/50;kc.bell_duration=jingobeu[panel->x-1];panel->x++;
+XChangeKeyboardControl(dpy,KBBellPitch|KBBellDuration|KBBellPercent,&kc);
+    XBell(dpy,50);XFlush(dpy);}else{c--;}}
 	if (!(panel->cycle % 4)) {
 	    WMPixmap *p;
 
@@ -838,6 +853,7 @@ handleLogoPush(XEvent *event, void *data)
 	    "Have a nice day!"
     };
 
+
     clicks++;
     if (!panel->timer && !broken && clicks > 2) {
 	char *file;
@@ -973,39 +989,41 @@ wShowInfoPanel(WScreen *scr)
     }
 
     panel->name1L = WMCreateLabel(panel->win);
-    WMResizeWidget(panel->name1L, 200, 30);
-    WMMoveWidget(panel->name1L, 120, 30);
+    WMResizeWidget(panel->name1L, 240, 30);
+    WMMoveWidget(panel->name1L, 100, 30);
     color1.red = 0;
     color1.green = 0;
     color1.blue = 0;
     color2.red = 0x50;
     color2.green = 0x50;
     color2.blue = 0x70;
-    logo = renderText(scr->wmscreen, "    Window Maker    ",
-		      "-*-times-bold-r-*-*-24-*", &color1, &color2);
+    logo = renderText(scr->wmscreen, "GNU Window Maker",
+		      "-*-utopia-*-r-*-*-25-*", &color1, &color2);
     if (logo) {
 	WMSetLabelImagePosition(panel->name1L, WIPImageOnly);
 	WMSetLabelImage(panel->name1L, logo);
 	WMReleasePixmap(logo);
     } else {
-	font = WMBoldSystemFontOfSize(scr->wmscreen, 24);
+	font = WMBoldSystemFontOfSize(scr->wmscreen, 20);
 	if (font) {
 	    WMSetLabelFont(panel->name1L, font);
 	    WMReleaseFont(font);
 	}
-	WMSetLabelText(panel->name1L, "Window Maker");
+	WMSetLabelTextAlignment(panel->name1L, WACenter);
+	WMSetLabelText(panel->name1L, "GNU Window Maker");
     }
 
     panel->name2L = WMCreateLabel(panel->win);
-    WMResizeWidget(panel->name2L, 200, 24);
-    WMMoveWidget(panel->name2L, 120, 60);
+    WMResizeWidget(panel->name2L, 240, 24);
+    WMMoveWidget(panel->name2L, 100, 60);
     font = WMBoldSystemFontOfSize(scr->wmscreen, 18);
     if (font) {
 	WMSetLabelFont(panel->name2L, font);
 	WMReleaseFont(font);
 	font = NULL;
     }
-    WMSetLabelText(panel->name2L, "X11 Window Manager");
+    WMSetLabelTextAlignment(panel->name2L, WACenter);
+    WMSetLabelText(panel->name2L, "Window Manager for X");
 
     
     sprintf(version, "Version %s", VERSION);
@@ -1124,14 +1142,15 @@ wShowInfoPanel(WScreen *scr)
     panel->wwin = wwin;
 
     thePanel = panel;
-
-    if (InitXThing(panel->scr)) {
+#ifndef SILLYNESS
+    if (InitXThing(panel->scr)) {	
 	panel->timer = WMAddTimerHandler(100, logoPushCallback, panel);
 	panel->cycle = 0;
 	panel->x = 1;
-	panel->str = "Merry X'mas!";
+	panel->str = "Merry Christmas!";
 	panel->oldPix = WMRetainPixmap(WMGetLabelImage(panel->logoL));
     } 
+#endif
 }
 
 

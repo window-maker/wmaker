@@ -9,7 +9,7 @@
  * måste omslutas med " om den innehåller mellanslag.
  * 
  * SHORTCUT anger en genväg för det menyalternativet. <Genväg> har likadan
- * syntax som genvägarna i filen ~/GNUStep/Defaults/WindowMaker.
+ * syntax som genvägarna i filen $HOME/GNUStep/Defaults/WindowMaker.
  *
  * Man kan inte ange en genväg för kommandona MENU och OPEN_MENU.
  * 
@@ -90,9 +90,9 @@
  *		// skapar en undermeny med innehållet i /usr/openwin/bin
  *	"XView apps" OPEN_MENU "/usr/openwin/bin"
  *		// några X11-program i olika kataloger
- *	"X11 apps" OPEN_MENU /usr/X11/bin ~/bin/X11
+ *	"X11 apps" OPEN_MENU /usr/X11/bin $HOME/bin/X11
  *		// sätt en bakgrundsbild
- *	"Background" OPEN_MENU ~/images /usr/share/images WITH wmsetbg -u -t
+ *	"Background" OPEN_MENU $HOME/images /usr/share/images WITH wmsetbg -u -t
  *		// infogar style.menu här
  *	"Style" OPEN_MENU style.menu
  * "Test" END
@@ -171,9 +171,9 @@
 	"Arbetsbord" END
 
 	"Utseende" MENU
-		"Teman" OPEN_MENU -noext THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Stilar" OPEN_MENU -noext STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Ikonuppsättningar" OPEN_MENU -noext ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Teman" OPEN_MENU -noext THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Stilar" OPEN_MENU -noext STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Ikonuppsättningar" OPEN_MENU -noext ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Bakgrund" MENU
 			"Enfärgat" MENU
                         	"Svart" WS_BACK '(solid, black)'
@@ -189,10 +189,10 @@
 				"Flagga" WS_BACK '(mdgradient, green, red, white, green)'
 				"Himmel" WS_BACK '(vgradient, blue4, white)'
 			"Toningar" END
-			"Bilder" OPEN_MENU -noext BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+			"Bilder" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Bakgrund" END
-		"Spara tema" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
-		"Spara ikonuppsättning" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
+		"Spara tema" EXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
+		"Spara ikonuppsättning" EXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
 	"Utseende" END
 
 	"Avsluta"	MENU

@@ -13,7 +13,7 @@ Do ASAP:
 Need to do:
 ===========
 - allow user to select/restore default root menu from wprefs
-- fix and include the windoze cycle window patch
+- fix windoze cycle window patch
 - support for X11R6.4 extension for getting extra visual info in wrlib's
   automatic best context guessing
 - docklet to control AccessX (keyboard accessibility) functions

@@ -70,6 +70,7 @@ extern WPreferences wPreferences;
 
 extern Atom _XA_WM_TAKE_FOCUS;
 
+
 /******* Local Variables *******/
 static struct {
     int steps;
@@ -133,7 +134,6 @@ void
 wSetFocusTo(WScreen *scr, WWindow  *wwin)
 {
     WWindow *focused=scr->focused_window;
-    WWindow *owner = NULL;
     int timestamp=LastTimestamp;
     WApplication *oapp=NULL, *napp=NULL;
     int wasfocused;
@@ -149,9 +149,9 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
       timestamp = CurrentTime;
 
     if (focused)
-      oapp = wApplicationOf(focused->main_window);
+	oapp = wApplicationOf(focused->main_window);
 
-    if (wwin==NULL) {
+    if (wwin == NULL) {
 	XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, timestamp);
 	if (focused) {
 	    wWindowUnfocus(focused);
@@ -174,11 +174,8 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
     /* remember last workspace where the app has been */
     if (napp) 
 	napp->last_workspace = wwin->screen_ptr->current_workspace;
-    
-    if (WFLAGP(wwin, no_focusable))
-	return;
 
-    if (wwin->flags.mapped) {
+    if (wwin->flags.mapped && !WFLAGP(wwin, no_focusable)) {
 	/* install colormap if colormap mode is lock mode */
 	if (wPreferences.colormap_mode==WKF_CLICK)
 	    wColormapInstallForWindow(scr, wwin);
@@ -206,35 +203,17 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 	XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, timestamp);
     }
 
+    if (WFLAGP(wwin, no_focusable))
+	return;
+
     /* if this is not the focused window focus it */
     if (focused!=wwin) {
-	int foo=0;
-	
-	if (wwin->client_win == focused->transient_for)
-	  wwin->flags.semi_focused = 0;
-	else if (wwin->transient_for == focused->client_win)
-	  focused->flags.semi_focused = 1;
-	
-	if (wwin->transient_for 
-	    && wwin->transient_for == focused->transient_for) {
-	    owner = wWindowFor(wwin->transient_for);
-	    if (owner && owner->flags.semi_focused) {
-		foo=1;
-		/* this is to override the unfocusing of the mainwindow
-		 * in the next wWindowUnfocus() and avoid flickering */
-		owner->flags.semi_focused = 0;
-	    }
-	}
-	/* unfocus previous window */
-	wWindowUnfocus(focused);
-	if (foo) {
-	    owner->flags.semi_focused = 1;
-	}
 	/* change the focus window list order */
 	if (wwin->prev)
-	  wwin->prev->next=wwin->next;
+	  wwin->prev->next = wwin->next;
+
 	if (wwin->next)
-	  wwin->next->prev=wwin->prev;
+	  wwin->next->prev = wwin->prev;
 
 	wwin->prev = focused;
 	focused->next = wwin;
@@ -248,12 +227,9 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 #endif
 	}
     }
-    if ((owner=wWindowFor(wwin->transient_for)) 
-	&& !owner->flags.semi_focused) {
-	owner->flags.semi_focused = 1;
-	wWindowUnfocus(owner);
-    }
-    wWindowFocus(wwin);
+
+    wWindowFocus(wwin, focused);
+
     if (napp && !wasfocused) {
 	wAppMenuMap(napp->menu, wwin);
 #ifdef NEWAPPICON
@@ -271,7 +247,6 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 void
 wShadeWindow(WWindow  *wwin)
 {
-    XWindowAttributes attribs;
     time_t time0 = time(NULL);
 #ifdef ANIMATIONS
     int y, s, w, h;
@@ -314,13 +289,12 @@ wShadeWindow(WWindow  *wwin)
 
     wwin->flags.skip_next_animation = 0;
     wwin->flags.shaded = 1;
-    wwin->flags.mapped=0;
-    XGetWindowAttributes(dpy, wwin->client_win, &attribs);
+    wwin->flags.mapped = 0;
     /* prevent window withdrawal when getting UnmapNotify */
     XSelectInput(dpy, wwin->client_win, 
-                 attribs.your_event_mask & ~StructureNotifyMask);
+                 wwin->event_mask & ~StructureNotifyMask);
     XUnmapWindow(dpy, wwin->client_win);
-    XSelectInput(dpy, wwin->client_win, attribs.your_event_mask);
+    XSelectInput(dpy, wwin->client_win, wwin->event_mask);
 
     /* for the client it's just like iconification */
     wFrameWindowResize(wwin->frame, wwin->frame->core->width,
@@ -438,6 +412,10 @@ wMaximizeWindow(WWindow *wwin, int directions)
     int new_width, new_height, new_x, new_y;
     WArea usableArea = wwin->screen_ptr->totalUsableArea;
 
+
+    if (WFLAGP(wwin, no_resizable))
+	return;
+    
     if (wwin->flags.shaded) {
 	wwin->flags.skip_next_animation = 1;
 	wUnshadeWindow(wwin);
@@ -769,7 +747,6 @@ static void
 unmapTransientsFor(WWindow *wwin)
 {
     WWindow *tmp;
-    XWindowAttributes attribs;
     
 
     tmp = wwin->screen_ptr->focused_window;
@@ -779,8 +756,7 @@ unmapTransientsFor(WWindow *wwin)
 	    && (tmp->flags.mapped || wwin->screen_ptr->flags.startup
 		|| tmp->flags.shaded)) {
 	    unmapTransientsFor(tmp);
-	    XGetWindowAttributes(dpy, tmp->client_win, &attribs);
-	    tmp->flags.miniaturized=1;
+	    tmp->flags.miniaturized = 1;
 	    if (!tmp->flags.shaded) {
 		wWindowUnmap(tmp);
 	    } else {
@@ -842,7 +818,7 @@ mapTransientsFor(WWindow *wwin)
     }
 }
 
-
+#if 0
 static void
 setupIconGrabs(WIcon *icon)
 {
@@ -855,7 +831,7 @@ setupIconGrabs(WIcon *icon)
 		ButtonPressMask, GrabModeSync, GrabModeAsync, None, None);
     XSync(dpy, 0);
 }
-
+#endif
 
 static WWindow*
 recursiveTransientFor(WWindow *wwin)
@@ -881,7 +857,7 @@ recursiveTransientFor(WWindow *wwin)
     return wwin;
 }
 
-
+#if 0
 static void
 removeIconGrabs(WIcon *icon)
 {
@@ -891,7 +867,7 @@ removeIconGrabs(WIcon *icon)
     XUngrabButton(dpy, Button3, AnyModifier, icon->core->window);    
     XSync(dpy, 0);
 }
-
+#endif
 
 void
 wIconifyWindow(WWindow *wwin)
@@ -932,8 +908,8 @@ wIconifyWindow(WWindow *wwin)
     }
     wwin->icon = wIconCreate(wwin);
 
-    wwin->flags.miniaturized=1;
-    wwin->flags.mapped=0;
+    wwin->flags.miniaturized = 1;
+    wwin->flags.mapped = 0;
 
     /* unmap transients */
     
@@ -1148,7 +1124,7 @@ hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate)
 
     wwin->flags.hidden = 1;
     wWindowUnmap(wwin);
-    
+
     wClientSetState(wwin, IconicState, icon->icon_win);
     flushExpose();
 #ifdef WMSOUND
@@ -1170,7 +1146,6 @@ hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate)
 #endif
 
     UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
-
 }
 
 
@@ -1656,7 +1631,7 @@ wArrangeIcons(WScreen *scr, Bool arrangeAll)
         wwin = wwin->prev;
 
     while (wwin) { 
-        if (wwin->icon && wwin->flags.miniaturized && !wwin->flags.hidden &&
+        if (wwin->icon && wwin->flags.miniaturized &&/*!wwin->flags.hidden &&*/
             (wwin->frame->workspace==scr->current_workspace ||
              IS_OMNIPRESENT(wwin) || wPreferences.sticky_icons)) {
 	    
@@ -1675,9 +1650,11 @@ wArrangeIcons(WScreen *scr, Bool arrangeAll)
 		}
 		wwin->icon_x = X;
 		wwin->icon_y = Y;
-		wwin->flags.icon_moved = 0;
 		pi++;
 	    }
+	}
+	if (arrangeAll) {
+	    wwin->flags.icon_moved = 0;
 	}
         /* we reversed the order, so we use next */
         wwin = wwin->next;
@@ -1715,7 +1692,11 @@ wMakeWindowVisible(WWindow *wwin)
 	wUnshadeWindow(wwin);
     }
     if (wwin->flags.hidden) {
-	wUnhideApplication(wApplicationOf(wwin->main_window), False, False);
+	WApplication *app;
+
+	app = wApplicationOf(wwin->main_window);
+	if (app)
+	    wUnhideApplication(app, False, False);
     } else if (wwin->flags.miniaturized) {
 	wDeiconifyWindow(wwin);
     } else {

@@ -1,4 +1,4 @@
-/* window.c - client window managing class
+/* window.c - client window managing stuffs
  * 
  *  Window Maker window manager
  * 
@@ -500,7 +500,7 @@ wManageWindow(WScreen *scr, Window window)
 
     /* mutex. */
     XGrabServer(dpy);
-    XSync(dpy, 0);
+    XSync(dpy, False);
     /* make sure the window is still there */
     if (!XGetWindowAttributes(dpy, window, &wattribs)) {
 	XUngrabServer(dpy);
@@ -557,6 +557,7 @@ wManageWindow(WScreen *scr, Window window)
 
     wwin->old_border_width = wattribs.border_width;
 
+    wwin->event_mask = CLIENT_EVENTS;
     attribs.event_mask = CLIENT_EVENTS;
     attribs.do_not_propagate_mask = ButtonPressMask | ButtonReleaseMask;
     attribs.save_under = False;
@@ -566,7 +567,7 @@ wManageWindow(WScreen *scr, Window window)
 
     /* get hints from GNUstep app */
     if (!PropGetGNUstepWMAttr(window, &wwin->wm_gnustep_attr)) {
-	wwin->wm_gnustep_attr=NULL;
+	wwin->wm_gnustep_attr = NULL;
     }
     
     wwin->client_leader = PropGetClientLeader(window);
@@ -626,7 +627,6 @@ wManageWindow(WScreen *scr, Window window)
     /* get colormap windows */
     GetColormapWindows(wwin);
 
-
     /*
      *--------------------------------------------------
      * 
@@ -640,7 +640,7 @@ wManageWindow(WScreen *scr, Window window)
 
 #ifdef OLWM_HINTS
     if (wwin->client_flags.olwm_transient && wwin->transient_for==None
-	&& wwin->group_id!=None && wwin->group_id != window) {
+	&& wwin->group_id != None && wwin->group_id != window) {
 
 	transientOwner = wWindowFor(wwin->group_id);
 
@@ -860,8 +860,15 @@ wManageWindow(WScreen *scr, Window window)
 
     wwin->frame->on_mousedown_resizebar = resizebarMouseDown;
 
+
+    XSelectInput(dpy, wwin->client_win,
+		 wwin->event_mask & ~StructureNotifyMask);
+
     XReparentWindow(dpy, wwin->client_win, wwin->frame->core->window,
 		    0, wwin->frame->top_width);
+
+    XSelectInput(dpy, wwin->client_win, wwin->event_mask);
+
 
     {
 	int gx, gy;
@@ -872,7 +879,6 @@ wManageWindow(WScreen *scr, Window window)
 	if (gy > 0)
 	    y -= wwin->frame->top_width + wwin->frame->bottom_width;
     }
-
     /* 
      * wWindowConfigure() will init the client window's size
      * (wwin->client.{width,height}) and all other geometry
@@ -880,13 +886,16 @@ wManageWindow(WScreen *scr, Window window)
      */
     wWindowConfigure(wwin, x, y, width, height);
 
+    /* to make sure the window receives it's new position after reparenting */
+    wWindowSynthConfigureNotify(wwin);
+
     /*
      *--------------------------------------------------
      * 
      * Setup descriptors and save window to internal
      * lists
      *
-     *-------------------------------------------------- 
+     *--------------------------------------------------
      */
 
     if (wwin->main_window!=None) {
@@ -932,11 +941,12 @@ wManageWindow(WScreen *scr, Window window)
     XLowerWindow(dpy, window);
 
     /* if window is in this workspace and should be mapped, then  map it */
-    if (!wwin->flags.miniaturized && (workspace == scr->current_workspace
-		    || IS_OMNIPRESENT(wwin))
+    if (!wwin->flags.miniaturized 
+	&& (workspace == scr->current_workspace || IS_OMNIPRESENT(wwin))
         && !wwin->flags.hidden
 	&& !(wwin->wm_hints && (wwin->wm_hints->flags & StateHint)
 	     && wwin->wm_hints->initial_state == WithdrawnState)) {
+
         /* The following "if" is to avoid crashing of clients that expect
          * WM_STATE set before they get mapped. Else WM_STATE is set later,
          * after the return from this function.
@@ -952,11 +962,12 @@ wManageWindow(WScreen *scr, Window window)
 #define _WIDTH(w) (w)->frame->core->width
 #define _HEIGHT(w) (w)->frame->core->height
 	if (!wPreferences.auto_focus && scr->focused_window
-	    && !scr->flags.startup 
-	    && wWindowObscuresWindow(wwin, scr->focused_window)
-	    && (_WIDTH(wwin) > (_WIDTH(scr->focused_window)*5)/3 
-		|| _HEIGHT(wwin) > (_HEIGHT(scr->focused_window)*5)/3)
-	    && WINDOW_LEVEL(scr->focused_window) == WINDOW_LEVEL(wwin)) {
+	     && !scr->flags.startup && !transientOwner
+	    && ((wWindowObscuresWindow(wwin, scr->focused_window)
+		 && (_WIDTH(wwin) > (_WIDTH(scr->focused_window)*5)/3
+		     || _HEIGHT(wwin) > (_HEIGHT(scr->focused_window)*5)/3)
+		 && WINDOW_LEVEL(scr->focused_window) == WINDOW_LEVEL(wwin))
+		|| wwin->flags.maximized)) {
 	    MoveInStackListUnder(scr->focused_window->frame->core,
 				 wwin->frame->core);
 	}
@@ -985,11 +996,8 @@ wManageWindow(WScreen *scr, Window window)
 		|| wPreferences.auto_focus)) {
 	    DoWindowBirth(wwin);
 	}
-	XMapSubwindows(dpy, wwin->frame->core->window);
 
 	wWindowMap(wwin);
-    } else {
-	XMapSubwindows(dpy, wwin->frame->core->window);
     }
 
     /* setup stacking descriptor */
@@ -1031,7 +1039,7 @@ wManageWindow(WScreen *scr, Window window)
 #endif
 
     XUngrabServer(dpy);
-
+ 
     /*
      *--------------------------------------------------
      *
@@ -1043,12 +1051,11 @@ wManageWindow(WScreen *scr, Window window)
     wFrameWindowChangeState(wwin->frame, WS_UNFOCUSED);
 
 
-    if (!wwin->flags.miniaturized && workspace == scr->current_workspace) {
+    if (!wwin->flags.miniaturized && workspace == scr->current_workspace
+	&& !wwin->flags.hidden) {
 	if ((transientOwner && transientOwner->flags.focused)
 	    || wPreferences.auto_focus)
 	    wSetFocusTo(scr, wwin);
-    } else {
-	wwin->flags.ignore_next_unmap = 1;
     }
     wWindowResetMouseGrabs(wwin);
 
@@ -1061,13 +1068,6 @@ wManageWindow(WScreen *scr, Window window)
 #ifdef KWM_HINTS
     wKWMSendEventMessage(wwin, WKWMAddWindow);
 #endif
-    /*
-     * Prevent window withdrawal when getting the 
-     * unmap notifies generated during reparenting
-     */
-    wwin->flags.mapped = 0;
-
-    XSync(dpy, 0);
 
     wColormapInstallForWindow(wwin->screen_ptr, scr->cmap_window);
 
@@ -1325,7 +1325,7 @@ wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 	    scr->focused_window = wwin->prev;
 	    scr->focused_window->next = NULL;
 	}
-	
+
 	/* if in click to focus mode and the window
 	 * was a transient, focus the owner window  
 	 */
@@ -1396,33 +1396,16 @@ wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 
 
 void
-wWindowFocus(WWindow *wwin)
-{
-#ifdef KEEP_XKB_LOCK_STATUS
-    if (wPreferences.modelock) {
-        if (!wwin->flags.focused) {
-            XkbLockGroup(dpy, XkbUseCoreKbd, wwin->languagemode);
-        }
-    }
-#endif /* KEEP_XKB_LOCK_STATUS */
-
-    wFrameWindowChangeState(wwin->frame, WS_FOCUSED);
-
-    wwin->flags.focused=1;
-
-    wWindowResetMouseGrabs(wwin);
-
-    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
-
-}
-
-
-void
 wWindowMap(WWindow *wwin)
 {
     XMapWindow(dpy, wwin->frame->core->window);
     if (!wwin->flags.shaded) {
+	/* window will be remapped when getting MapNotify */
+	XSelectInput(dpy, wwin->client_win, 
+		     wwin->event_mask & ~StructureNotifyMask);
 	XMapWindow(dpy, wwin->client_win);
+	XSelectInput(dpy, wwin->client_win, wwin->event_mask);
+
 	wwin->flags.mapped = 1;
     }
 }
@@ -1431,18 +1414,81 @@ wWindowMap(WWindow *wwin)
 void
 wWindowUnmap(WWindow *wwin)
 {
-    XWindowAttributes attribs;
-
-    XGetWindowAttributes(dpy, wwin->client_win, &attribs);
     wwin->flags.mapped = 0;
 
     /* prevent window withdrawal when getting UnmapNotify */
-    XSelectInput(dpy, wwin->client_win,
-		 attribs.your_event_mask & ~StructureNotifyMask);
+    XSelectInput(dpy, wwin->client_win, 
+		 wwin->event_mask & ~StructureNotifyMask);
     XUnmapWindow(dpy, wwin->client_win);
-    XSelectInput(dpy, wwin->client_win, attribs.your_event_mask);
+    XSelectInput(dpy, wwin->client_win, wwin->event_mask);
 
     XUnmapWindow(dpy, wwin->frame->core->window);
+}
+
+
+
+void
+wWindowFocus(WWindow *wwin, WWindow *owin)
+{
+    WWindow *nowner;
+    WWindow *oowner;
+
+#ifdef KEEP_XKB_LOCK_STATUS
+    if (wPreferences.modelock) {
+        if (!wwin->flags.focused) {
+            XkbLockGroup(dpy, XkbUseCoreKbd, wwin->languagemode);
+        }
+    }
+#endif /* KEEP_XKB_LOCK_STATUS */
+
+    wwin->flags.semi_focused = 0;
+
+    wFrameWindowChangeState(wwin->frame, WS_FOCUSED);
+
+    wWindowResetMouseGrabs(wwin);
+
+    wwin->flags.focused = 1;
+
+    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
+
+    if (owin == wwin || !owin)
+	return;
+
+    nowner = wWindowFor(wwin->transient_for);
+
+    /* new window is a transient for the old window */
+    if (nowner == owin) {
+	owin->flags.semi_focused = 1;
+	wWindowUnfocus(nowner);
+	return;
+    }
+
+    /* new window is owner of old window */
+    if (wwin == oowner) {
+	wWindowUnfocus(owin);
+	return;
+    }
+
+    if (!nowner) {
+	wWindowUnfocus(owin);
+	return;
+    }
+
+    /* new window has same owner of old window */
+    oowner = wWindowFor(owin->transient_for);
+    if (oowner == nowner) {
+	/* prevent unfocusing of owner */
+	oowner->flags.semi_focused = 0;
+	wWindowUnfocus(owin);
+	oowner->flags.semi_focused = 1;
+
+	return;
+    }
+
+    /* nowner != NULL && oowner != nowner */
+    nowner->flags.semi_focused = 1;
+    wWindowUnfocus(nowner);
+    wWindowUnfocus(owin);
 }
 
 
@@ -1477,7 +1523,7 @@ wWindowUnfocus(WWindow *wwin)
 	    }
 	}
     }
-    wwin->flags.focused=0;
+    wwin->flags.focused = 0;
     wWindowResetMouseGrabs(wwin);
 
     UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
@@ -1591,19 +1637,29 @@ wWindowChangeWorkspace(WWindow *wwin, int workspace)
 
     if (workspace != scr->current_workspace) {
 	/* Sent to other workspace. Unmap window */
-	if ((wwin->flags.mapped||wwin->flags.shaded)
+	if ((wwin->flags.mapped
+	     || wwin->flags.shaded
+	     || (wwin->flags.miniaturized && !wPreferences.sticky_icons))
 	    && !IS_OMNIPRESENT(wwin) && !wwin->flags.changing_workspace) {
-	    
+
 	    wapp = wApplicationOf(wwin->main_window);
 	    if (wapp) {
 		wapp->last_workspace = workspace;
 	    }
-	    unmap = 1;
-	    wSetFocusTo(scr, NULL);
+	    if (wwin->flags.miniaturized) {
+		XUnmapWindow(dpy, wwin->icon->core->window);
+		wwin->icon->mapped = 0;
+	    } else {
+		unmap = 1;
+		wSetFocusTo(scr, NULL);
+	    }
 	}
     } else {
 	/* brought to current workspace. Map window */
-	if (!wwin->flags.mapped && 
+	if (wwin->flags.miniaturized && !wPreferences.sticky_icons) {
+	    XMapWindow(dpy, wwin->icon->core->window);
+	    wwin->icon->mapped = 1;
+	} else if (!wwin->flags.mapped && 
 	    !(wwin->flags.miniaturized || wwin->flags.hidden)) {
 	    wWindowMap(wwin);
 	}
@@ -1893,23 +1949,25 @@ wWindowConfigureBorders(WWindow *wwin)
     if (wwin->frame) {
 	int flags;
 	int newy, oldh;
-	
+
 	flags = WFF_LEFT_BUTTON|WFF_RIGHT_BUTTON;
 	if (!WFLAGP(wwin, no_titlebar))
 	    flags |= WFF_TITLEBAR;
 	if (!WFLAGP(wwin, no_resizebar))
 	    flags |= WFF_RESIZEBAR;
+	if (wwin->flags.shaded)
+	    flags |= WFF_IS_SHADED;
 
 	oldh = wwin->frame->top_width;
 	wFrameWindowUpdateBorders(wwin->frame, flags);
 	if (oldh != wwin->frame->top_width) {
 	    newy = wwin->frame_y + oldh - wwin->frame->top_width;
-	    
+
 	    XMoveWindow(dpy, wwin->client_win, 0, wwin->frame->top_width);
 	    wWindowConfigure(wwin, wwin->frame_x, newy,
 			     wwin->client.width, wwin->client.height);
 	}
-	
+
 	flags = 0;
 	if (!WFLAGP(wwin, no_miniaturize_button)
 	    && wwin->frame->flags.hide_left_button)

@@ -13,6 +13,7 @@ fi
 
 # directory where system wide configuration is stored
 GLOBALDIR="#pkgdatadir#"
+GLOBALDEFDIR="#sysconfdir#"
 
 USERDIR=$HOME
 
@@ -61,12 +62,10 @@ copy() {
 	else
 		if test "x$GNUSTEP_USER_ROOT" = "x"; then
 			sed -e "s:#wmdatadir#:$GLOBALDIR:g" \
-				-e "s://:/:g" \
 					$source > $target
 		else
-			sed -e "s|~/GNUstep|$GSDIR|g" \
+			sed -e "s|\$HOME/GNUstep|$GSDIR|g" \
 				-e "s:#wmdatadir#:$GLOBALDIR:g" \
-				-e "s://:/:g" \
 					$source > $target
 		fi
 	fi
@@ -78,6 +77,12 @@ echo "Installing WindowMaker $VERSION for current user..."
 
 
 if [ ! -d $GLOBALDIR ]; then
+      echo "Could not find global data files"
+      echo "Make sure you have installed Window Maker correctly"
+      exit 1
+fi
+
+if [ ! -d $GLOBALDEFDIR ]; then
       echo "Could not find global configurations files"
       echo "Make sure you have installed Window Maker correctly"
       exit 1
@@ -117,7 +122,7 @@ fi
 
 echo "Copying defaults database..."
 
-FILES=`(cd $GLOBALDIR/Defaults;ls *)`
+FILES=`(cd $GLOBALDEFDIR;ls *)`
 all=""
 for i in $FILES; do
 # xx herbert
@@ -132,10 +137,10 @@ for i in $FILES; do
 			fi
 		fi
 		if [ "$foo" = "y" -o "$foo" = "Y" -o "$all" = "a" ]; then
-			copy $GLOBALDIR/Defaults/$i $GSDIR/Defaults/$i
+			copy $GLOBALDEFDIR/$i $GSDIR/Defaults/$i
 		fi
 	else
-		copy $GLOBALDIR/Defaults/$i $GSDIR/Defaults/$i
+		copy $GLOBALDEFDIR/$i $GSDIR/Defaults/$i
 	fi
 done
 

@@ -12,7 +12,7 @@
  *
  * TECLA especifica una combinació de tecles per aquest objecte. <Tecla> té
  * la mateixa sintaxis que les combinacions de tecles especificades al
- * fitxer ~/GNUstep/Defaults/WindowMaker , com a RootMenuKey o bé
+ * fitxer $HOME/GNUstep/Defaults/WindowMaker , com a RootMenuKey o bé
  * MiniaturizeKey.
  *
  * No es pot especificar una combinació de tecles per a un MENU o un
@@ -96,9 +96,9 @@
  *              // crea un submenu amb els continguts de /usr/openwin/bin
  *      "XView apps" OPEN_MENU "/usr/openwin/bin"
  *              // Algunes aplicacions X de diferents directoris
- *      "X11 apps" OPEN_MENU /usr/X11/bin ~/bin/X11
+ *      "X11 apps" OPEN_MENU /usr/X11/bin $HOME/bin/X11
  *              // algunes imatges de fondo de l'escriptori
- *      "Background" OPEN_MENU ~/images /usr/share/images WITH wmsetbg -u -t
+ *      "Background" OPEN_MENU $HOME/images /usr/share/images WITH wmsetbg -u -t
  *              // inserta el fitxer style.menu
  *      "Style" OPEN_MENU style.menu
  * "Test" END
@@ -175,9 +175,9 @@
         "Escriptori" END
 
         "Aparença" MENU
-                "Temes" OPEN_MENU THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-                "Estils" OPEN_MENU STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-                "Jocs d'Icones" OPEN_MENU ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+                "Temes" OPEN_MENU THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
+                "Estils" OPEN_MENU STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
+                "Jocs d'Icones" OPEN_MENU ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
                 "Fons de pantalla" MENU
                         "Sòlid" MENU
                                 "Negre" WS_BACK '(solid, black)'
@@ -199,10 +199,10 @@
                                 "Degradat Gris" WS_BACK '(vgradient,"#636380", "#131318")'
                                 "Degradat Lila" WS_BACK '(vgradient,"#600040", "#180010")'
                         "Degradat" END
-                        "Imatges" OPEN_MENU BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+                        "Imatges" OPEN_MENU BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
                 "Fons de pantalla" END
-                "Guardar Tema" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
-                "Guardar Joc d'Icones" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
+                "Guardar Tema" EXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
+                "Guardar Joc d'Icones" EXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
         "Aparença" END
 
         "Sortir"        MENU

@@ -141,6 +141,9 @@ WMSystemFontOfSize(WMScreen *scrPtr, int size)
 	wwarning("could not load font set %s. Trying fixed.", fontSpec);
 	font = WMCreateFont(scrPtr, "fixed");
 	if (!font) {
+	    font = WMCreateFont(scrPtr, "-*-fixed-medium-r-normal-*-14-*-*-*-*-*-*-*");
+	}
+	if (!font) {
 	    wwarning("could not load fixed font!");
 	    free(fontSpec);
 	    return NULL;
@@ -165,6 +168,9 @@ WMBoldSystemFontOfSize(WMScreen *scrPtr, int size)
     if (!font) {
 	wwarning("could not load font set %s. Trying fixed.", fontSpec);
 	font = WMCreateFont(scrPtr, "fixed");
+	if (!font) {
+	    font = WMCreateFont(scrPtr, "-*-fixed-medium-r-normal-*-14-*-*-*-*-*-*-*");
+	}
 	if (!font) {
 	    wwarning("could not load fixed font!");
 	    free(fontSpec);

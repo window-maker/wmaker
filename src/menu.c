@@ -2164,15 +2164,6 @@ menuTitleMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 
     if (event->xbutton.button != Button1 && event->xbutton.button != Button2)
       return;
-    if (XGrabPointer(dpy, menu->frame->titlebar->window, False, 
-		     ButtonMotionMask|ButtonReleaseMask|ButtonPressMask,
-		     GrabModeAsync, GrabModeAsync, None, 
-		     wCursor[WCUR_MOVE], CurrentTime)!=GrabSuccess) {
-#ifdef DEBUG0
-	wwarning("pointer grab failed for menu move\n");
-#endif
-	return;
-    }
 
     if (event->xbutton.state & MOD_MASK) {
 	wLowerFrame(menu->frame->core);
@@ -2233,8 +2224,14 @@ menuTitleMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 		wMenuMove(menu, x, y, True);
 	    } else {
 		if (abs(ev.xmotion.x_root - dx) > MOVE_THRESHOLD
-		    || abs(ev.xmotion.y_root - dy) > MOVE_THRESHOLD)
+		    || abs(ev.xmotion.y_root - dy) > MOVE_THRESHOLD) {
 		    started = True;
+		    XGrabPointer(dpy, menu->frame->titlebar->window, False, 
+				 ButtonMotionMask|ButtonReleaseMask
+				 |ButtonPressMask,
+				 GrabModeAsync, GrabModeAsync, None, 
+				 wCursor[WCUR_MOVE], CurrentTime);
+		}
 	    }
 	    break;
 

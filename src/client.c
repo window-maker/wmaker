@@ -87,12 +87,9 @@ wClientRestore(WWindow *wwin)
     if (gy > 0)
 	wwin->frame_y += (wwin->frame->top_width + wwin->frame->bottom_width);
 #endif
-    XUnmapWindow(dpy, wwin->client_win);
     XSetWindowBorderWidth(dpy, wwin->client_win, wwin->old_border_width);    
     XReparentWindow(dpy, wwin->client_win, wwin->screen_ptr->root_win,
 		    wwin->frame_x, wwin->frame_y);
-    if (wwin->flags.mapped)
-      XMapWindow(dpy, wwin->client_win);
     
     /* don't let the window get iconified after restart */
     /*
@@ -747,7 +744,7 @@ GetColormapWindows(WWindow *wwin)
     wwin->cmap_window_no = 0;
 
     if (XGetWMColormapWindows(dpy, wwin->client_win, &(wwin->cmap_windows),
-			      &(wwin->cmap_window_no))!=Success
+			      &(wwin->cmap_window_no))==0
 	|| !wwin->cmap_windows) {
 	wwin->cmap_window_no = 0;
 	wwin->cmap_windows = NULL;

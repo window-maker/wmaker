@@ -245,9 +245,8 @@ buttonCallback(WMWidget *self, void *data)
   /* Pixmap Panel Buttons */
   
   } else if (self == panel->pbrowB) {
-    
-    op = WMGetOpenPanel(WMWidgetScreen(panel->pbrowB));    
-    if (WMRunModalOpenPanelForDirectory(op, NULL, "/usr/local", NULL, NULL)) {
+    op = WMGetOpenPanel(WMWidgetScreen(panel->pbrowB));
+    if (WMRunModalFilePanelForDirectory(op, NULL, "/usr/local", NULL, NULL)) {
       char *path;
       path = WMGetFilePanelFileName(op);
       WMSetTextFieldText(panel->pimagT, path);

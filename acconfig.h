@@ -1,10 +1,6 @@
 /* define to the path to cpp */
 #undef CPP_PATH
 
-/* define to the directory containing NLS information
- * set by configure */
-#undef NLSDIR
-
 /* package name */
 #undef PACKAGE 
 
@@ -75,7 +71,10 @@
  * set by configure */
 #undef X_LOCALE
 
-/* the place where the configuration is stored
+/* the place where shared data is stored
  * defined by configure */
 #undef PKGDATADIR
 
+/* the place where the configuration is stored
+ * defined by configure */
+#undef SYSCONFDIR

@@ -460,7 +460,6 @@ Initialize(WMScreen *scr)
 	    break;
 	}
     }
-    RFreeStringList(list);
     
     if (TIFFOK)
     	path = WMPathForResourceOfType("WPrefs.tiff", NULL);
@@ -495,7 +494,7 @@ Initialize(WMScreen *scr)
     loadConfigurations(scr, WPrefs.win);
 
     WMSetLabelText(WPrefs.statusL, _("Initializing configuration panels..."));
-
+#if 1
     InitWindowHandling(scr, WPrefs.win);
     InitFocus(scr, WPrefs.win);
     InitMenuPreferences(scr, WPrefs.win);
@@ -505,7 +504,9 @@ Initialize(WMScreen *scr)
     InitPaths(scr, WPrefs.win);    
     InitWorkspace(scr, WPrefs.win);
     InitConfigurations(scr, WPrefs.win);
+#endif
     InitMenu(scr, WPrefs.win);
+#if 1
 #ifdef not_yet_fully_implemented
     InitKeyboardSettings(scr, WPrefs.win);
 #endif
@@ -518,15 +519,14 @@ Initialize(WMScreen *scr)
     InitThemes(scr, WPrefs.win);
 #endif
     InitExpert(scr, WPrefs.win);
-
+#endif
     WMRealizeWidget(WPrefs.scrollV);
 
     WMSetLabelText(WPrefs.statusL, 
-		   _("WPrefs is free software and is distributed WITHOUT ANY "
-		   "WARRANTY under the terms of the GNU General Public License. "
-		   "Redistribution of the icons in this program separately "
-		   "from the program is prohibited."));
-
+		   _("WPrefs is free software and is distributed WITHOUT ANY\n"
+		   "WARRANTY under the terms of the GNU General Public License.\n"
+		   "The icons in this program are licensed through the\n"
+		   "OpenContent License."));
 }
 
 
@@ -580,8 +580,10 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
     if (sscanf(buffer, "Window Maker %i.%i.%i",&v1,&v2,&v3)!=3
 	&& sscanf(buffer, "WindowMaker %i.%i.%i",&v1,&v2,&v3)!=3) {
 	WMRunAlertPanel(scr, mainw, _("Error"),
-			_("Could not extract version from Window Maker. Make sure it is correctly installed."),
-			_("OK"), NULL, NULL);
+			_("Could not extract version from Window Maker. "
+			  "Make sure it is correctly installed and the path "
+			  "where it installed is in the PATH environment "
+			  "variable."), _("OK"), NULL, NULL);
 	exit(1);
     }
     if (v1 == 0 && (v2 < 18 || v3 < 0)) {
@@ -601,7 +603,14 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
     if (!file || !fgets(buffer, 1023, file)) {
 	wsyserror(_("could not run \"wmaker --global_defaults_path\"."));
 	exit(1);
+    } else {
+	char *ptr;
+	ptr = strchr(buffer, '\n');
+	if (ptr)
+	    *ptr = 0;
+	strcat(buffer, "/WindowMaker");
     }
+
     if (file)
 	pclose(file);
 
@@ -849,6 +858,9 @@ GetSpeedForKey(char *defaultName)
     int i;
     
     str = GetStringForKey(defaultName);
+    if (!str)
+	return 2;
+
     if (strcasecmp(str, "ultraslow")==0)
 	i = 0;
     else if (strcasecmp(str, "slow")==0)

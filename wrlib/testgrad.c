@@ -200,16 +200,9 @@ int main(int argc, char **argv)
     RConvertImage(ctx, imgd, &pix);
     XCopyArea(dpy, pix, win, ctx->copy_gc, 0, 0, 250, 250, 500, 0);
 
-    {
-	GC gc;
-	
-	gc = DefaultGC(dpy, DefaultScreen(dpy));
-	
-	XSetTile(dpy, gc, ParentRelative);
-    }
-    
     XFlush(dpy);
 #endif
+
     getchar();
     return 0;
 }

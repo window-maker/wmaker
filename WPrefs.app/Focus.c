@@ -69,6 +69,8 @@ showData(_Panel *panel)
     char buffer[32];
     
     str = GetStringForKey("FocusMode");
+    if (!str)
+	str = "manual";
     if (strcasecmp(str, "manual")==0 || strcasecmp(str, "clicktofocus")==0)
 	WMSetPopUpButtonSelectedItem(panel->kfocP, 0);
     else if (strcasecmp(str, "auto")==0 || strcasecmp(str, "focusfollowsmouse")==0)
@@ -84,12 +86,14 @@ showData(_Panel *panel)
 
     /**/
     str = GetStringForKey("ColormapMode");
+    if (!str)
+	str = "auto";
     if (strcasecmp(str, "manual")==0 || strcasecmp(str, "clicktofocus")==0) {
 	WMPerformButtonClick(panel->manB);
     } else if (strcasecmp(str, "auto")==0 || strcasecmp(str, "focusfollowsmouse")==0) {
 	WMPerformButtonClick(panel->autB);
     } else {
-	wwarning(_("bad option value %s for option ColormapMode. Using default Manual"),
+	wwarning(_("bad option value %s for option ColormapMode. Using default Auto"),
 		 str);
 	WMPerformButtonClick(panel->manB);
     }

@@ -182,8 +182,8 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
     while (k>0) {
 	XEvent foo;
 
-	if (XCheckTypedWindowEvent(dpy, scr->root_win, ButtonPressMask,
-				   &foo)) {
+	if (XCheckTypedEvent(dpy, ButtonPress, &foo)) {
+	    XPutBackEvent(dpy, &foo);
 	    XClearWindow(dpy, scr->root_win);
 	    break;
 	}
@@ -256,6 +256,7 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
 # endif
 #endif
     }
+    
     XFreePixmap(dpy, tmp);
 }
 #endif /* !DEMATERIALIZE_ICON */
@@ -510,7 +511,7 @@ InitXThing(WScreen *scr)
     if ((l->tm_mon!=12||l->tm_mday<24||l->tm_mday>26)) {
 	return False;
     }
- 
+
     if (!loadData(scr))
 	return False;
 

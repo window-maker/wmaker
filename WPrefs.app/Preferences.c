@@ -60,6 +60,8 @@ showData(_Panel *panel)
     char *str;
     
     str = GetStringForKey("ResizeDisplay");
+    if (!str)
+	str = "corner";
     if (strcasecmp(str, "corner")==0)
 	WMSetPopUpButtonSelectedItem(panel->sizeP, 0);
     else if (strcasecmp(str, "center")==0)
@@ -70,6 +72,8 @@ showData(_Panel *panel)
 	WMSetPopUpButtonSelectedItem(panel->sizeP, 3);
     
     str = GetStringForKey("MoveDisplay");
+    if (!str)
+	str = "corner";
     if (strcasecmp(str, "corner")==0)
 	WMSetPopUpButtonSelectedItem(panel->posiP, 0);
     else if (strcasecmp(str, "center")==0)

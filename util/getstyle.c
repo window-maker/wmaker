@@ -33,6 +33,7 @@
 #include <string.h>
 #include <pwd.h>
 #include <limits.h>
+#include <assert.h>
 
 #ifndef PATH_MAX
 #define PATH_MAX  1024
@@ -112,12 +113,13 @@ globalDefaultsPathForDomain(char *domain)
     char path[1024];
     char *tmp;
 
-    sprintf(path, "%s/%s/%s", PKGDATADIR, DEFAULTS_DIR, domain);
+    sprintf(path, "%s/%s", SYSCONFDIR, domain);
 
     tmp = malloc(strlen(path)+2);
+    assert(tmp!=NULL);
     strcpy(tmp, path);
 
-    return tmp;    
+    return tmp;
 }
 
 
@@ -534,6 +536,12 @@ main(int argc, char **argv)
 		puts(PROG_VERSION);
 		exit(0);
 	    } else {
+		if (style_file!=NULL) {
+		    printf("%s: invalid argument '%s'\n", argv[0], 
+			   style_file[0]=='-' ? style_file : argv[i]);
+		    printf("Try '%s --help' for more information\n", argv[0]);
+		    exit(1);
+		}
                 style_file = argv[i];
             }
         }

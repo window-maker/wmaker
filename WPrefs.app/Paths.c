@@ -365,6 +365,9 @@ createPanel(Panel *p)
     WMAddNotificationObserver(textBeginObserver, panel,
 			      WMTextDidBeginEditingNotification, panel->pixT);
 
+    WMSetTextFieldNextTextField(panel->pixT, panel->icoT);
+    WMSetTextFieldPrevTextField(panel->pixT, panel->icoT);
+
     WMMapSubwidgets(panel->pixF);
     
     WMRealizeWidget(panel->frame);

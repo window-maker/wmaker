@@ -64,7 +64,6 @@ unsigned int ValidModMask = 0xff;
 /* locale to use. NULL==POSIX or C */
 char *Locale=NULL;
 
-
 int wScreenCount=0;
 
 WPreferences wPreferences;
@@ -160,7 +159,8 @@ Exit(int status)
 #ifdef XSMP_ENABLED
     wSessionDisconnectManager();
 #endif
-    XCloseDisplay(dpy);
+    if (dpy)
+	XCloseDisplay(dpy);
 
     exit(status);
 }
@@ -369,7 +369,7 @@ main(int argc, char **argv)
 		printf("Window Maker %s\n", VERSION);
 		exit(0);
 	    } else if (strcmp(argv[i], "--global_defaults_path")==0) {
-		printf("%s/Defaults/WindowMaker", PKGDATADIR);
+		puts(SYSCONFDIR);
 		exit(0);
 	    } else if (strcmp(argv[i], "-locale")==0
 		       || strcmp(argv[i], "--locale")==0) {
@@ -410,9 +410,12 @@ main(int argc, char **argv)
 		    exit(0);
 		}
 #endif
+	    } else if (strcmp(argv[i], "--help")==0) {
+		print_help();
+		exit(0);
 	    } else {
-		printf(_("%s: invalid argument '%s'"), argv[0]);
-		printf(_("Try '%s --help' for more information"), argv[0]);
+		printf(_("%s: invalid argument '%s'\n"), argv[0], argv[i]);
+		printf(_("Try '%s --help' for more information\n"), argv[0]);
 		exit(1);
 	    }
 	}
@@ -451,7 +454,7 @@ main(int argc, char **argv)
     if (getenv("NLSPATH"))
       bindtextdomain("WindowMaker", getenv("NLSPATH"));
     else
-      bindtextdomain("WindowMaker", NLSDIR);
+      bindtextdomain("WindowMaker", LOCALEDIR);
     textdomain("WindowMaker");
 
     if (!XSupportsLocale()) {
@@ -490,9 +493,8 @@ main(int argc, char **argv)
 	str = strchr(DisplayName, ':');
     else
 	str = NULL;
-    if (!str)
-	str = "";
-    if (sscanf(str, "%i.%i", &d, &s)==2)
+
+    if (str && sscanf(str, "%i.%i", &d, &s)==2)
 	multiHead = False;
 
     DisplayName = XDisplayName(DisplayName);

@@ -4,7 +4,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 lib_LTLIBRARIES = libwraster.la
 
-libwraster_la_LDFLAGS = -version-info 1:2:0
+libwraster_la_LDFLAGS = -version-info 1:3:0
 
 bin_SCRIPTS = get-wraster-flags
 
@@ -37,9 +37,9 @@ libwraster_la_SOURCES = 	\
 	gif.c
 
 
-INCLUDES = @DFLAGS@ @XCFLAGS@ @GFXFLAGS@
+INCLUDES = @DFLAGS@ @HEADER_SEARCH_PATH@
 
-LIBLIST = libwraster.la @GFXLFLAGS@ @XLFLAGS@ @GFXLIBS@ @XLIBS@ -lm
+LIBLIST = libwraster.la @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ -lm
 
 view_SOURCES= view.c
 

@@ -328,8 +328,10 @@ checkIdleHandlers()
 {
     IdleHandler *handler, *tmp;
 
-    if (!idleHandler)
-      return;
+    if (!idleHandler) {
+	W_FlushIdleNotificationQueue();
+	return;
+    }
 
     handler = idleHandler;
     
@@ -344,6 +346,7 @@ checkIdleHandlers()
 	
 	handler = tmp;
     }
+    W_FlushIdleNotificationQueue();
 }
 
 
@@ -353,7 +356,7 @@ checkTimerHandlers()
 {
     TimerHandler *handler;
     struct timeval now;
-    
+
     rightNow(&now);
 
     while (timerHandler && IS_AFTER(now, timerHandler->when)) {
@@ -363,6 +366,8 @@ checkTimerHandlers()
 	(*handler->callback)(handler->clientData);
 	free(handler);
     }
+
+    W_FlushASAPNotificationQueue();
 }
 
 
@@ -797,7 +802,9 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 
     retval = fds[0].revents & (POLLIN|POLLRDNORM|POLLRDBAND|POLLPRI);
     free(fds);
-    
+
+    W_FlushASAPNotificationQueue();
+
     return retval;
 #else /* not HAVE_POLL */
 #ifdef HAVE_SELECT
@@ -882,13 +889,16 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 	    handler = handler->next;
 	}
     }
-    
+
+    W_FlushASAPNotificationQueue();
+
     return FD_ISSET(ConnectionNumber(dpy), &rset);
 #else /* not HAVE_SELECT, not HAVE_POLL */
 Neither select nor poll. You lose.
 #endif /* HAVE_SELECT */
 #endif /* HAVE_POLL */
 }
+
 
 void
 WMNextEvent(Display *dpy, XEvent *event)

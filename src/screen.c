@@ -707,7 +707,6 @@ wScreenInit(int screen_number)
 		    break;
 		}
 	    }
-	    RFreeStringList(formats);
 	}
     }
     

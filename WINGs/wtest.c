@@ -46,10 +46,10 @@ testOpenFilePanel(WMScreen *scr)
     /* get the shared Open File panel */
     panel = WMGetOpenPanel(scr);
     
-    WMRunModalOpenPanelForDirectory(panel, NULL, "/usr/local", NULL, NULL);
+    WMRunModalFilePanelForDirectory(panel, NULL, "/usr/local", NULL, NULL);
     
     /* free the panel to save some memory. Not needed otherwise. */
-    WMFreeFilePanel(panel);
+    WMFreeFilePanel(WMGetOpenPanel(scr));
 }
 
 

@@ -162,10 +162,7 @@ menuIndexForWindow(WMenu *menu, WWindow *wwin, int old_pos)
 
 
 /*
- *
  * Update switch menu
- *
- *
  */
 void 
 UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
@@ -317,7 +314,6 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
 			entry->flags.indicator_on = wwin->flags.focused;
 			entry->flags.indicator_type = MI_DIAMOND;
 		    }
-		    wMenuPaint(switchmenu);
 		    break;
 		}
 		break;

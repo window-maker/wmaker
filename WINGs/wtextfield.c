@@ -22,8 +22,10 @@ typedef struct W_TextField {
     W_Class widgetClass;
     W_View *view;
 
+#if 0
     struct W_TextField *nextField;     /* next textfield in the chain */
     struct W_TextField *prevField;
+#endif
 
     char *text;
     int textLen;		       /* size of text */
@@ -39,6 +41,8 @@ typedef struct W_TextField {
     WMRange selection;
     WMRange prevselection;
 
+    WMFont *font;
+
 #if 0
     WMHandlerID	timerID;	       /* for cursor blinking */
 #endif
@@ -46,13 +50,15 @@ typedef struct W_TextField {
 	WMAlignment alignment:2;
 
 	unsigned int bordered:1;
-	
+
+	unsigned int beveled:1;
+
 	unsigned int enabled:1;
-	
+
 	unsigned int focused:1;
 
 	unsigned int cursorOn:1;
-	
+
 	unsigned int secure:1;	       /* password entry style */
 
 	/**/
@@ -97,11 +103,11 @@ struct W_ViewProcedureTable _TextFieldViewProcedures = {
 };
 
 
-#define TEXT_WIDTH(tPtr, start)	(WMWidthOfString((tPtr)->view->screen->normalFont, \
-				   &((tPtr)->text[(start)]), (tPtr)->textLen - (start) + 1))
+#define TEXT_WIDTH(tPtr, start)	(WMWidthOfString((tPtr)->font, \
+		   &((tPtr)->text[(start)]), (tPtr)->textLen - (start) + 1))
 
-#define TEXT_WIDTH2(tPtr, start, end) (WMWidthOfString((tPtr)->view->screen->normalFont, \
-				   &((tPtr)->text[(start)]), (end) - (start) + 1))
+#define TEXT_WIDTH2(tPtr, start, end) (WMWidthOfString((tPtr)->font, \
+		   &((tPtr)->text[(start)]), (end) - (start) + 1))
 
 
 static void
@@ -163,7 +169,6 @@ WMCreateTextField(WMWidget *parent)
 {
     TextField *tPtr;
 
-    
     tPtr = wmalloc(sizeof(TextField));
     memset(tPtr, 0, sizeof(TextField));
 
@@ -185,24 +190,28 @@ WMCreateTextField(WMWidget *parent)
     tPtr->text[0] = 0;
     tPtr->textLen = 0;
     tPtr->bufferSize = MIN_TEXT_BUFFER;
-    
+
     tPtr->flags.enabled = 1;
     
     WMCreateEventHandler(tPtr->view, ExposureMask|StructureNotifyMask
 			 |FocusChangeMask, handleEvents, tPtr);
 
     W_ResizeView(tPtr->view, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    WMSetTextFieldBordered(tPtr, DEFAULT_BORDERED);
+
+    tPtr->font = WMRetainFont(tPtr->view->screen->normalFont);
+
+    tPtr->flags.bordered = DEFAULT_BORDERED;
+    tPtr->flags.beveled = True;
     tPtr->flags.alignment = DEFAULT_ALIGNMENT;
-    tPtr->offsetWidth = (tPtr->view->size.height
-			 - WMFontHeight(tPtr->view->screen->normalFont))/2;
+    tPtr->offsetWidth = 
+	WMAX((tPtr->view->size.height - WMFontHeight(tPtr->font))/2, 1);
 
     WMCreateEventHandler(tPtr->view, EnterWindowMask|LeaveWindowMask
 			 |ButtonPressMask|KeyPressMask|Button1MotionMask,
 			 handleTextFieldActionEvents, tPtr);
 
     tPtr->flags.cursorOn = 1;
-    
+
     return tPtr;
 }
 
@@ -311,10 +320,6 @@ WMGetTextFieldText(WMTextField *tPtr)
 void
 WMSetTextFieldText(WMTextField *tPtr, char *text)
 {
-    /* We do not set text if it's the same. This will also help
-     * to avoid some infinite loops if this function is called from
-     * a function called by a notification observer. -Dan
-     */
     if ((text && strcmp(tPtr->text, text) == 0) ||
         (!text && tPtr->textLen == 0))
         return;
@@ -348,6 +353,14 @@ WMSetTextFieldText(WMTextField *tPtr, char *text)
 
 
 void
+WMSetTextFieldFont(WMTextField *tPtr, WMFont *font)
+{
+    /* TODO: update font change after field is mapped */
+    WMReleaseFont(tPtr->font);
+    tPtr->font = WMRetainFont(font);
+}
+
+void
 WMSetTextFieldAlignment(WMTextField *tPtr, WMAlignment alignment)
 {
     tPtr->flags.alignment = alignment;
@@ -373,6 +386,17 @@ WMSetTextFieldBordered(WMTextField *tPtr, Bool bordered)
 }
 
 
+void
+WMSetTextFieldBeveled(WMTextField *tPtr, Bool flag)
+{
+    tPtr->flags.beveled = flag;
+
+    if (tPtr->view->flags.realized) {
+	paintTextField(tPtr);
+    }
+}
+
+
 
 void
 WMSetTextFieldSecure(WMTextField *tPtr, Bool flag)
@@ -382,6 +406,13 @@ WMSetTextFieldSecure(WMTextField *tPtr, Bool flag)
     if (tPtr->view->flags.realized) {
 	paintTextField(tPtr);
     }    
+}
+
+
+Bool
+WMGetTextFieldEnabled(WMTextField *tPtr)
+{
+    return tPtr->flags.enabled;
 }
 
 
@@ -438,15 +469,61 @@ WMSetTextFieldCursorPosition(WMTextField *tPtr, unsigned int position)
 }
 
 
+void
+WMSetTextFieldNextTextField(WMTextField *tPtr, WMTextField *next)
+{
+    CHECK_CLASS(tPtr, WC_TextField);
+    if (next == NULL) {
+        if (tPtr->view->nextFocusChain)
+            tPtr->view->nextFocusChain->prevFocusChain = NULL;
+        tPtr->view->nextFocusChain = NULL;
+        return;
+    }
+
+    CHECK_CLASS(next, WC_TextField);
+
+    if (tPtr->view->nextFocusChain)
+        tPtr->view->nextFocusChain->prevFocusChain = NULL;
+    if (next->view->prevFocusChain)
+        next->view->prevFocusChain->nextFocusChain = NULL;
+
+    tPtr->view->nextFocusChain = next->view;
+    next->view->prevFocusChain = tPtr->view;
+}
+
+
+void
+WMSetTextFieldPrevTextField(WMTextField *tPtr, WMTextField *prev)
+{
+    CHECK_CLASS(tPtr, WC_TextField);
+    if (prev == NULL) {
+        if (tPtr->view->prevFocusChain)
+            tPtr->view->prevFocusChain->nextFocusChain = NULL;
+        tPtr->view->prevFocusChain = NULL;
+        return;
+    }
+
+    CHECK_CLASS(prev, WC_TextField);
+
+    if (tPtr->view->prevFocusChain)
+        tPtr->view->prevFocusChain->nextFocusChain = NULL;
+    if (prev->view->nextFocusChain)
+        prev->view->nextFocusChain->prevFocusChain = NULL;
+
+    tPtr->view->prevFocusChain = prev->view;
+    prev->view->nextFocusChain = tPtr->view;
+}
+
+
 static void 
 resizeTextField(WMTextField *tPtr, unsigned int width, unsigned int height)
 {
     W_ResizeView(tPtr->view, width, height);
-    
-    tPtr->offsetWidth = (tPtr->view->size.height
-			 - WMFontHeight(tPtr->view->screen->normalFont))/2;
-    
-    tPtr->usableWidth = tPtr->view->size.width - 2*tPtr->offsetWidth;
+
+    tPtr->offsetWidth = 
+	WMAX((tPtr->view->size.height - WMFontHeight(tPtr->font))/2, 1);
+
+    tPtr->usableWidth = tPtr->view->size.width - 2*tPtr->offsetWidth + 2;
 }
 
 
@@ -457,27 +534,24 @@ paintCursor(TextField *tPtr)
     WMScreen *screen = tPtr->view->screen;
     int textWidth;
 
-    cx = WMWidthOfString(screen->normalFont,
-			 &(tPtr->text[tPtr->viewPosition]),
+    cx = WMWidthOfString(tPtr->font, &(tPtr->text[tPtr->viewPosition]),
 			 tPtr->cursorPosition-tPtr->viewPosition);
 
     switch (tPtr->flags.alignment) {
      case WARight:
-	textWidth = WMWidthOfString(screen->normalFont, tPtr->text, 
-				    tPtr->textLen);
+	textWidth = WMWidthOfString(tPtr->font, tPtr->text, tPtr->textLen);
 	if (textWidth < tPtr->usableWidth)
-	    cx += tPtr->offsetWidth + tPtr->usableWidth - textWidth;
+	    cx += tPtr->offsetWidth + tPtr->usableWidth - textWidth + 1;
 	else
-	    cx += tPtr->offsetWidth;
+	    cx += tPtr->offsetWidth + 1;
 	break;
      case WALeft:
-	cx += tPtr->offsetWidth;
+	cx += tPtr->offsetWidth + 1;
 	break;
      case WAJustified:
 	/* not supported */
      case WACenter:
-	textWidth = WMWidthOfString(screen->normalFont, tPtr->text, 
-				    tPtr->textLen);
+	textWidth = WMWidthOfString(tPtr->font, tPtr->text, tPtr->textLen);
 	if (textWidth < tPtr->usableWidth)
 	    cx += tPtr->offsetWidth + (tPtr->usableWidth-textWidth)/2;
 	else
@@ -497,7 +571,7 @@ paintCursor(TextField *tPtr)
 
 
 static void
-drawRelief(WMView *view)
+drawRelief(WMView *view, Bool beveled)
 {
     WMScreen *scr = view->screen;
     Display *dpy = scr->display;
@@ -507,8 +581,14 @@ drawRelief(WMView *view)
     int width = view->size.width;
     int height = view->size.height;
     
-    wgc = W_GC(scr->white);
     dgc = W_GC(scr->darkGray);
+
+    if (!beveled) {
+	XDrawRectangle(dpy, view->window, dgc, 0, 0, width-1, height-1);
+
+	return;
+    }
+    wgc = W_GC(scr->white);
     lgc = W_GC(scr->gray);
 
     /* top left */
@@ -550,16 +630,15 @@ paintTextField(TextField *tPtr)
     totalWidth = tPtr->view->size.width - 2*bd;
 
     if (tPtr->textLen > 0) {
-    	tw = WMWidthOfString(screen->normalFont, 
-			     &(tPtr->text[tPtr->viewPosition]),
+    	tw = WMWidthOfString(tPtr->font, &(tPtr->text[tPtr->viewPosition]),
 			     tPtr->textLen - tPtr->viewPosition);
     
-	th = WMFontHeight(screen->normalFont);
+	th = WMFontHeight(tPtr->font);
 
 	ty = tPtr->offsetWidth;
 	switch (tPtr->flags.alignment) {
 	 case WALeft:
-	    tx = tPtr->offsetWidth;
+	    tx = tPtr->offsetWidth + 1;
 	    if (tw < tPtr->usableWidth)
 		XClearArea(screen->display, view->window, bd+tw, bd,
 			   totalWidth-tw, view->size.height-2*bd, 
@@ -575,7 +654,7 @@ paintTextField(TextField *tPtr)
 
 	 default:
 	 case WARight:
-	    tx = tPtr->offsetWidth + tPtr->usableWidth - tw;
+	    tx = tPtr->offsetWidth + tPtr->usableWidth - tw - 1;
 	    if (tw < tPtr->usableWidth)
 		XClearArea(screen->display, view->window, bd, bd,
 			   totalWidth-tw, view->size.height-2*bd, False);
@@ -587,7 +666,7 @@ paintTextField(TextField *tPtr)
 		WMSetColorInGC(screen->darkGray, screen->textFieldGC);
 
 	    WMDrawImageString(screen, view->window, screen->textFieldGC, 
-			      screen->normalFont, tx, ty,
+			      tPtr->font, tx, ty,
 			      &(tPtr->text[tPtr->viewPosition]), 
 			      tPtr->textLen - tPtr->viewPosition);
 
@@ -598,7 +677,7 @@ paintTextField(TextField *tPtr)
 		    ? tPtr->selection.position + tPtr->selection.count 
 		    : tPtr->selection.position;
 
-                rx = tx + WMWidthOfString(screen->normalFont,
+                rx = tx + WMWidthOfString(tPtr->font,
 					  &(tPtr->text[tPtr->viewPosition]),
 					  count);
 
@@ -606,8 +685,7 @@ paintTextField(TextField *tPtr)
 			       screen->gray->color.pixel);
 
 		WMDrawImageString(screen, view->window, screen->textFieldGC,
-				  screen->normalFont, rx, ty,
-				  &(tPtr->text[count]),
+				  tPtr->font, rx, ty, &(tPtr->text[count]),
 				  abs(tPtr->selection.count));
 
                 XSetBackground(screen->display, screen->textFieldGC, 
@@ -630,7 +708,7 @@ paintTextField(TextField *tPtr)
     
     /* draw relief */
     if (tPtr->flags.bordered) {
-	drawRelief(view);
+	drawRelief(view, tPtr->flags.beveled);
     }
 }
 
@@ -715,7 +793,6 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     KeySym ksym;
     int count, refresh = 0;
     int control_pressed = 0;
-    WMScreen *scr = tPtr->view->screen;
 
     if (((XKeyEvent *) event)->state & WM_EMACSKEYMASK) {
 	control_pressed = 1;
@@ -733,9 +810,9 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     }
 
     /* Be careful in any case in this switch statement, never to call
-     * to more than 2 functions at the same time, that can generate text
-     * change notifications. Only one text change notification should be sent
-     * in any case. Else hazardous things can happen.
+     * to more than a function that can generate text change notifications.
+     * Only one text change notification should be sent in any case.
+     * Else hazardous things can happen.
      * Maybe we need a better solution than the function wrapper to inform
      * functions that change text in text fields, if they need to send a
      * change notification or not. -Dan
@@ -811,7 +888,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
             } else {
                tPtr->cursorPosition++;
             }
-	    while (WMWidthOfString(scr->normalFont,
+	    while (WMWidthOfString(tPtr->font,
 				&(tPtr->text[tPtr->viewPosition]),
 				tPtr->cursorPosition-tPtr->viewPosition)
 		   > tPtr->usableWidth) {
@@ -851,7 +928,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	    paintCursor(tPtr);
 	    tPtr->cursorPosition = tPtr->textLen;
 	    tPtr->viewPosition = 0;
-	    while (WMWidthOfString(scr->normalFont,
+	    while (WMWidthOfString(tPtr->font,
 				   &(tPtr->text[tPtr->viewPosition]),
 				   tPtr->textLen-tPtr->viewPosition)
 		   > tPtr->usableWidth) {
@@ -870,6 +947,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
      case XK_BackSpace:
 	if (tPtr->cursorPosition > 0) {
             WMRange range;
+
             if (tPtr->prevselection.count) {
                 range.position = tPtr->prevselection.count < 0 
 		    ? tPtr->prevselection.position + tPtr->prevselection.count 
@@ -892,6 +970,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
      case XK_Delete:
 	if (tPtr->cursorPosition < tPtr->textLen || tPtr->prevselection.count) {
             WMRange range;
+
             if (tPtr->prevselection.count) {
                 range.position = tPtr->prevselection.count < 0 
 		    ? tPtr->prevselection.position + tPtr->prevselection.count
@@ -910,6 +989,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
      default:
 	if (count > 0 && !iscntrl(buffer[0])) {
 	    WMRange range;
+
 	    if (tPtr->prevselection.count) {
                 range.position = tPtr->prevselection.count < 0 
 		    ? tPtr->prevselection.position + tPtr->prevselection.count
@@ -944,7 +1024,6 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 static int
 pointToCursorPosition(TextField *tPtr, int x)
 {
-    WMFont *font = tPtr->view->screen->normalFont;
     int a, b, mid;
     int tw;
 
@@ -953,13 +1032,13 @@ pointToCursorPosition(TextField *tPtr, int x)
 
     a = tPtr->viewPosition;
     b = tPtr->viewPosition + tPtr->textLen;
-    if (WMWidthOfString(font, &(tPtr->text[tPtr->viewPosition]), 
+    if (WMWidthOfString(tPtr->font, &(tPtr->text[tPtr->viewPosition]), 
 			tPtr->textLen-tPtr->viewPosition) < x)
 	return tPtr->textLen;
 
     while (a < b && b-a>1) {
 	mid = (a+b)/2;
-	tw = WMWidthOfString(font, &(tPtr->text[tPtr->viewPosition]), 
+	tw = WMWidthOfString(tPtr->font, &(tPtr->text[tPtr->viewPosition]), 
 			     mid - tPtr->viewPosition);
 	if (tw > x)
 	    b = mid;
@@ -981,7 +1060,7 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 
     switch (event->type) {
      case KeyPress:
-	if (tPtr->flags.enabled)
+	if (tPtr->flags.enabled && tPtr->flags.focused)
 	    handleTextFieldKeyPress(tPtr, event);
 	break;
 
@@ -1045,7 +1124,9 @@ destroyTextField(TextField *tPtr)
     if (tPtr->timerID)
 	WMDeleteTimerHandler(tPtr->timerID);
 #endif
-    
+
+    WMReleaseFont(tPtr->font);
+
     if (tPtr->text)
 	free(tPtr->text);
 

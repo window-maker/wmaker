@@ -94,7 +94,7 @@ typedef struct {
     int (*convert)();
     int (*update)();
     proplist_t plkey;
-    proplist_t plvalue;
+    proplist_t plvalue;		       /* default value */
 } WDefaultEntry;
 
 
@@ -394,9 +394,6 @@ WDefaultEntry optionList[] = {
     {"DontLinkWorkspaces","NO",			NULL,
 	  &wPreferences.no_autowrap,	getBool,	NULL
     },
-    {"EdgeResistance",	"0",			NULL,
-	  &wPreferences.edge_resistance,getInt,		NULL
-    },
     {"AutoArrangeIcons", "NO",			NULL,
 	  &wPreferences.auto_arrange_icons, getBool,	NULL
     },
@@ -427,9 +424,20 @@ WDefaultEntry optionList[] = {
     {"AppIconBalloons", "NO",		NULL,
 	  &wPreferences.appicon_balloon,getBool,	NULL
     },
+    {"EdgeResistance", 	"30",			NULL,
+	  &wPreferences.edge_resistance,getInt,		NULL
+    },
     {"DisableBlinking",	"NO",		NULL,
 	   &wPreferences.dont_blink,	getBool,	NULL
     },
+#ifdef WEENDOZE_CYCLE
+    {"WindozeCycling","NO", NULL,
+	    &wPreferences.windoze_cycling,	getBool, NULL
+    },
+    {"PopupSwitchMenu","YES",NULL, 
+	    &wPreferences.popup_switchmenu,	getBool, NULL
+    },
+#endif /* WEENDOZE_CYCLE */
       /* style options */
     {"WidgetColor",	"(solid, gray)",	NULL,
 	  NULL,				getTexture,	setWidgetColor,
@@ -806,7 +814,7 @@ wDefaultsInitDomain(char *domain, Bool requireDictionary)
     }
 
     /* global system dictionary */
-    sprintf(path, "%s/%s/%s", PKGDATADIR, DEFAULTS_DIR, domain);
+    sprintf(path, "%s/%s", SYSCONFDIR, domain);
     if (stat(path, &stbuf)>=0) {
         shared_dict = ReadProplistFromFile(path);
         if (shared_dict) {
@@ -900,7 +908,7 @@ wDefaultsCheckDomains(void *foo)
 	WDWindowMaker->timestamp = stbuf.st_mtime;	
 
 	/* global dictionary */
-	sprintf(path, "%s/%s/WindowMaker", PKGDATADIR, DEFAULTS_DIR);
+	sprintf(path, "%s/WindowMaker", SYSCONFDIR);
 	if (stat(path, &stbuf)>=0) {
 	    shared_dict = ReadProplistFromFile(path);
 	    if (shared_dict && !PLIsDictionary(shared_dict)) {
@@ -1107,13 +1115,12 @@ wReadDefaults(WScreen *scr, proplist_t new_dict)
 {
     proplist_t plvalue, old_value;
     WDefaultEntry *entry;
-    int i, changed, must_update;
+    int i, must_update;
     int needs_refresh;
     void *tdata;
     proplist_t old_dict = (WDWindowMaker->dictionary!=new_dict 
 			   ? WDWindowMaker->dictionary : NULL);
     
-    changed = 0;
     must_update = 0;
     
     needs_refresh = 0;
@@ -1137,7 +1144,6 @@ wReadDefaults(WScreen *scr, proplist_t new_dict)
 	    plvalue = entry->plvalue;
 	    if (plvalue && new_dict) {
 		PLInsertDictionaryEntry(new_dict, entry->plkey, plvalue);
-		changed = 1;
 		must_update = 1;
 	    }
 	} else if (!plvalue) {
@@ -1145,10 +1151,8 @@ wReadDefaults(WScreen *scr, proplist_t new_dict)
 	    continue;
 	} else if (!old_value) {
 	    /* set value for the 1st time */
-	    changed = 1;
 	} else if (!PLIsEqual(plvalue, old_value)) {	    
 	    /* value has changed */
-	    changed = 1;
 	} else {
 	    /* value was not changed since last time */
 	    continue;
@@ -2003,6 +2007,22 @@ again:
 
     *ret = PLRetain(value);
 
+#ifdef notworking
+    /* 
+     * Kluge to force wmsetbg helper to set the default background.
+     * If the WorkspaceSpecificBack is changed once wmaker has started,
+     * the WorkspaceBack won't be sent to the helper, unless the user
+     * changes it's value too. So, we must force this by removing the
+     * value from the defaults DB.
+     */
+    if (!scr->flags.backimage_helper_launched && !scr->flags.startup) {
+	proplist_t key = PLMakeString("WorkspaceBack");
+
+	PLRemoveDictionaryEntry(WDWindowMaker->dictionary, key);
+
+	PLRelease(key);
+    }
+#endif
     return True;
 }
 
@@ -2689,6 +2709,7 @@ setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 	char *command;
 	char *text;
 
+	SetupEnvironment(scr);
 	text = PLGetDescription(value);
 	command = wmalloc(strlen(text)+40);
 	sprintf(command, "wmsetbg -d -p '%s' &", text);

@@ -1,3 +1,6 @@
+#ifndef _WINGSP_H_
+#define _WINGSP_H_
+
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -15,6 +18,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 #define DOUBLE_BUFFER
 
@@ -177,25 +184,17 @@ typedef struct W_Screen {
     struct W_Pixmap *checkMark;
 
     struct W_Pixmap *homeIcon;
-	struct W_Pixmap *homeAltIcon;
+    struct W_Pixmap *altHomeIcon;
 
-	struct W_Pixmap *magnifyIcon;
-	struct W_Pixmap *wheelIcon;
-	struct W_Pixmap *grayIcon;
-	struct W_Pixmap *rgbIcon;
-	struct W_Pixmap *cmykIcon;
-	struct W_Pixmap *hsbIcon;
-	struct W_Pixmap *customPaletteIcon;
-	struct W_Pixmap *colorListIcon;
-
-	struct W_Pixmap *magnifyAltIcon;
-	struct W_Pixmap *wheelAltIcon;
-	struct W_Pixmap *grayAltIcon;
-	struct W_Pixmap *rgbAltIcon;
-	struct W_Pixmap *cmykAltIcon;
-	struct W_Pixmap *hsbAltIcon;
-	struct W_Pixmap *customPaletteAltIcon;
-	struct W_Pixmap *colorListAltIcon;
+    struct W_Pixmap *magnifyIcon;
+    struct W_Pixmap *altMagnifyIcon;
+    struct W_Pixmap *wheelIcon;
+    struct W_Pixmap *grayIcon;
+    struct W_Pixmap *rgbIcon;
+    struct W_Pixmap *cmykIcon;
+    struct W_Pixmap *hsbIcon;
+    struct W_Pixmap *customPaletteIcon;
+    struct W_Pixmap *colorListIcon;
 	
     struct W_Pixmap *defaultObjectIcon;
     
@@ -346,7 +345,7 @@ void W_DestroyView(W_View *view);
 
 void W_RealizeView(W_View *view);
 
-void W_ReparentView(W_View *view, W_View *newParent);
+void W_ReparentView(W_View *view, W_View *newParent, int x, int y);
 
 void W_MapView(W_View *view);
 
@@ -416,3 +415,14 @@ Bool W_ApplicationInitialized(void);
 char *W_GetTextSelection(WMScreen *scr, Atom selection);
 
 void W_HandleSelectionEvent(XEvent *event);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /* _WINGSP_H_ */
+
+void W_FlushASAPNotificationQueue();
+
+void W_FlushIdleNotificationQueue();
+
