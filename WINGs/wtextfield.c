@@ -13,26 +13,6 @@
 #define CURSOR_BLINK_OFF_DELAY	300
 
 
-typedef struct WMTextFieldDelegate {
-    void *data;
-
-    void (*didBeginEditing)(struct WMTextFieldDelegate *self,
-			    WMNotification *notif);
-
-    void (*didChange)(struct WMTextFieldDelegate *self, 
-		      WMNotification *notif);
-
-    void (*didEndEditing)(struct WMTextFieldDelegate *self,
-			  WMNotification *notif);
-
-    Bool (*shouldBeginEditing)(struct WMTextFieldDelegate *self,
-			       WMTextField *tPtr);
-
-    Bool (*shouldEndEditing)(struct WMTextFieldDelegate *self,
-			     WMTextField *tPtr);
-} WMTextFieldDelegate;
-
-
 
 char *WMTextDidChangeNotification = "WMTextDidChangeNotification";
 char *WMTextDidBeginEditingNotification = "WMTextDidBeginEditingNotification";
