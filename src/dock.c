@@ -477,6 +477,54 @@ wClipMakeTile(WScreen *scr, RImage *normalTile)
 
 
 static void
+omnipresentCallback(WMenu *menu, WMenuEntry *entry)
+{
+    WAppIcon *clickedIcon = entry->clientdata;
+    WAppIcon *aicon;
+    WDock *dock;
+    LinkedList *selectedIcons;
+    int failed;
+
+    assert(entry->clientdata!=NULL);
+
+    dock = clickedIcon->dock;
+
+    selectedIcons = getSelected(dock);
+
+    if (!selectedIcons)
+        selectedIcons = list_cons(clickedIcon, NULL);
+
+    failed = 0;
+    while (selectedIcons) {
+        aicon = selectedIcons->head;
+        if (wClipMakeIconOmnipresent(aicon, !aicon->omnipresent) == WO_FAILED)
+            failed++;
+        else if (aicon->icon->selected)
+            wIconSelect(aicon->icon);
+        list_remove_head(&selectedIcons);
+    }
+
+    if (failed > 1) {
+        wMessageDialog(aicon->icon->core->screen_ptr, _("Warning"),
+                       _("Some icons cannot be made omnipresent. "
+                         "Please make sure that no other icon is "
+                         "docked in the same positions on the other "
+                         "workspaces and the Clip is not full in "
+                         "some workspace."),
+                       _("OK"), NULL, NULL);
+    } else if (failed == 1) {
+        wMessageDialog(aicon->icon->core->screen_ptr, _("Warning"),
+                       _("Icon cannot be made omnipresent. "
+                         "Please make sure that no other icon is "
+                         "docked in the same position on the other "
+                         "workspaces and the Clip is not full in "
+                         "some workspace."),
+                       _("OK"), NULL, NULL);
+    }
+}
+
+
+static void
 removeIconsCallback(WMenu *menu, WMenuEntry *entry)
 {
     WAppIcon *clickedIcon = (WAppIcon*)entry->clientdata;
@@ -1109,7 +1157,10 @@ dockMenuCreate(WScreen *scr, int type)
         if (scr->clip_options)
             wMenuEntrySetCascade(menu, entry, scr->clip_options);
 
-        wMenuAddCallback(menu, _("Rename Workspace"), renameCallback, NULL);
+        entry = wMenuAddCallback(menu, _("Rename Workspace"), renameCallback,
+                                 NULL);
+        free(entry->text);
+        entry->text = _("Rename Workspace");
 
         entry = wMenuAddCallback(menu, _("Select Icon"), selectCallback, NULL);
         free(entry->text);
@@ -1272,7 +1323,7 @@ wClipIconPaint(WAppIcon *aicon)
     WMDrawString(scr->wmscreen, win, gc, scr->clip_title_font, tx,
 		 ty, ws_name, length);
 
-    tx = (ICON_SIZE/2 - WMWidthOfString(scr->clip_title_font, ws_number, 
+    tx = (ICON_SIZE/2 - WMWidthOfString(scr->clip_title_font, ws_number,
 					nlength))/2;
 
     WMDrawString(scr->wmscreen, win, gc, scr->clip_title_font, tx,
@@ -3321,9 +3372,31 @@ openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
 	if (scr->clip_options)
 	    updateClipOptionsMenu(scr->clip_options, dock);
 
+        n_selected = numberOfSelectedIcons(dock);
+
 	/* Rename Workspace */
 	entry = dock->menu->entries[++index];
-	entry->clientdata = dock;
+        if (aicon == scr->clip_icon) {
+            entry->callback = renameCallback;
+            entry->clientdata = dock;
+            //entry->flags.indicator = 0;
+            entry->text = _("Rename Workspace");
+        } else {
+            entry->callback = omnipresentCallback;
+            entry->clientdata = aicon;
+            //entry->flags.indicator = 1;
+            //entry->flags.indicator_on = aicon->omnipresent;
+            //entry->flags.indicator_type = MI_CHECK;
+            //entry->text = _("Omnipresent");
+            if (n_selected > 0) {
+                entry->text = _("Toggle Omnipresent");
+            } else {
+                if (aicon->omnipresent)
+                    entry->text = _("Unset Omnipresent");
+                else
+                    entry->text = _("Set Omnipresent");
+            }
+        }
 
 	/* select/unselect icon */
 	entry = dock->menu->entries[++index];
@@ -3334,7 +3407,6 @@ openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
             entry->text = _("Select Icon");
 	wMenuSetEnabled(dock->menu, index, aicon!=scr->clip_icon);
 
-        n_selected = numberOfSelectedIcons(dock);
 	/* select/unselect all icons */
 	entry = dock->menu->entries[++index];
         entry->clientdata = aicon;
@@ -3374,7 +3446,10 @@ openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
 
 	/* attract icon(s) */
 	entry = dock->menu->entries[++index];
-	entry->clientdata = aicon;
+        entry->clientdata = aicon;
+
+        dock->menu->flags.realized = 0;
+        wMenuRealize(dock->menu);
     }
 
     /* launch */
