@@ -690,6 +690,9 @@ WMSetBrowserPath(WMBrowser *bPtr, char *path)
 
     removeColumn(bPtr, 1);
 
+    WMSelectListItem(bPtr->columns[0], -1);
+    WMSetListPosition(bPtr->columns[0], 0);
+
     i = 0;
     tmp = strtok(str, bPtr->pathSeparator);
     while (tmp) {

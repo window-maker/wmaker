@@ -38,13 +38,11 @@ typedef struct _Panel {
     WMList *pixL;
     WMButton *pixaB;
     WMButton *pixrB;
-    WMTextField *pixT;
 
     WMFrame *icoF;
     WMList *icoL;
     WMButton *icoaB;
     WMButton *icorB;
-    WMTextField *icoT;
 
     WMColor *red;
     WMColor *black;
@@ -118,21 +116,7 @@ pushButton(WMWidget *w, void *data)
     int i;
 
     /* icon paths */
-    if (w == panel->icoaB) {
-	char *text = WMGetTextFieldText(panel->icoT);
-
-	if (text && strlen(text) > 0) {
-	    i = WMGetListSelectedItemRow(panel->icoL);
-	    if (i >= 0) i++;
-	    addPathToList(panel->icoL, i, text);
-	    WMSetListBottomPosition(panel->icoL, 
-				    WMGetListNumberOfRows(panel->icoL));
-	}
-	if (text)
-	    free(text);
-
-	WMSetTextFieldText(panel->icoT, NULL);
-    } else if (w == panel->icorB) {
+    if (w == panel->icorB) {
 	i = WMGetListSelectedItemRow(panel->icoL);
 
 	if (i>=0)
@@ -140,22 +124,9 @@ pushButton(WMWidget *w, void *data)
     }
 
     /* pixmap paths */
-    if (w == panel->pixaB) {
-	char *text = WMGetTextFieldText(panel->pixT);
-
-	if (text && strlen(text) > 0) {
-	    i = WMGetListSelectedItemRow(panel->pixL);
-	    if (i >= 0) i++;
-	    addPathToList(panel->pixL, i, text);
-	    WMSetListBottomPosition(panel->pixL, 
-				    WMGetListNumberOfRows(panel->pixL));
-	}
-	if (text)
-	    free(text);
-	WMSetTextFieldText(panel->pixT, NULL);
-    } else if (w == panel->pixrB) {
+    if (w == panel->pixrB) {
 	i = WMGetListSelectedItemRow(panel->pixL);
-	
+
 	if (i>=0)
 	    WMRemoveListItem(panel->pixL, i);
     }
@@ -163,62 +134,44 @@ pushButton(WMWidget *w, void *data)
 
 
 static void
-textEditedObserver(void *observerData, WMNotification *notification)
-{
-    _Panel *panel = (_Panel*)observerData;
-
-    switch ((int)WMGetNotificationClientData(notification)) {
-     case WMReturnTextMovement:
-	if (WMGetNotificationObject(notification) == panel->icoT)
-	    WMPerformButtonClick(panel->icoaB);
-	else
-	    WMPerformButtonClick(panel->pixaB);
-	break;
-
-     case WMIllegalTextMovement:
-	if (WMGetNotificationObject(notification) == panel->icoT) {
-	    WMSetButtonImage(panel->icoaB, NULL);
-	    WMSetButtonAltImage(panel->icoaB, NULL);
-	} else {	
-	    WMSetButtonImage(panel->pixaB, NULL);
-	    WMSetButtonAltImage(panel->pixaB, NULL);
-	}
-	break;
-    } 
-}
-
-
-static void
-textBeginObserver(void *observerData, WMNotification *notification)
-{
-    _Panel *panel = (_Panel*)observerData;
-    WMScreen *scr = WMWidgetScreen(panel->win);
-    WMPixmap *arrow1 = WMGetSystemPixmap(scr, WSIReturnArrow);
-    WMPixmap *arrow2 = WMGetSystemPixmap(scr, WSIHighlightedReturnArrow);
-
-    if (WMGetNotificationObject(notification)==panel->icoT) {
-	WMSetButtonImage(panel->icoaB, arrow1);
-	WMSetButtonAltImage(panel->icoaB, arrow2);
-    } else {	
-	WMSetButtonImage(panel->pixaB, arrow1);
-	WMSetButtonAltImage(panel->pixaB, arrow2);    
-    }
-}
-
-
-
-static void
-listClick(WMWidget *w, void *data)
+browseForFile(WMWidget *w, void *data)
 {
     _Panel *panel = (_Panel*)data;
-    char *t;
-    
-    if (w == panel->icoL) {
-	t = WMGetListSelectedItem(panel->icoL)->text;
-	WMSetTextFieldText(panel->icoT, t);
-    } else {
-	t = WMGetListSelectedItem(panel->pixL)->text;
-	WMSetTextFieldText(panel->pixT, t);
+    WMFilePanel *filePanel;
+
+    filePanel = WMGetOpenPanel(WMWidgetScreen(w));
+
+    WMSetFilePanelCanChooseFiles(filePanel, False);
+
+    if (WMRunModalFilePanelForDirectory(filePanel, panel->win, "/",
+                                        _("Select path"), NULL) == True) {
+        char *str = WMGetFilePanelFileName(filePanel);
+
+        if (str) {
+            int len = strlen(str);
+
+            /* Remove the trailing '/' except if the path is exactly / */
+            if (len > 1 && str[len-1] == '/') {
+                str[len-1] = '\0';
+                len--;
+            }
+            if (len > 0) {
+                WMList *lPtr;
+                int i;
+
+                if (w == panel->icoaB)
+                    lPtr = panel->icoL;
+                else if (w == panel->pixaB)
+                    lPtr = panel->pixL;
+
+                i = WMGetListSelectedItemRow(lPtr);
+                if (i >= 0) i++;
+                addPathToList(lPtr, i, str);
+                WMSetListBottomPosition(lPtr, WMGetListNumberOfRows(lPtr));
+
+                free(str);
+            }
+        }
     }
 }
 
@@ -304,32 +257,23 @@ createPanel(Panel *p)
     WMSetFrameTitle(panel->icoF, _("Icon Search Paths"));
     
     panel->icoL = WMCreateList(panel->icoF);
-    WMResizeWidget(panel->icoL, 200, 120);
+    WMResizeWidget(panel->icoL, 200, 150);
     WMMoveWidget(panel->icoL, 15, 20);
-    WMSetListAction(panel->icoL, listClick, panel);
     WMSetListUserDrawProc(panel->icoL, paintItem);
     WMHangData(panel->icoL, panel);
     
     panel->icoaB = WMCreateCommandButton(panel->icoF);
     WMResizeWidget(panel->icoaB, 90, 24);
-    WMMoveWidget(panel->icoaB, 125, 145);
+    WMMoveWidget(panel->icoaB, 125, 176);
     WMSetButtonText(panel->icoaB, _("Add"));
-    WMSetButtonAction(panel->icoaB, pushButton, panel);
+    WMSetButtonAction(panel->icoaB, browseForFile, panel);
     WMSetButtonImagePosition(panel->icoaB, WIPRight);
 
     panel->icorB = WMCreateCommandButton(panel->icoF);
     WMResizeWidget(panel->icorB, 90, 24);
-    WMMoveWidget(panel->icorB, 15, 145);
+    WMMoveWidget(panel->icorB, 15, 176);
     WMSetButtonText(panel->icorB, _("Remove"));
     WMSetButtonAction(panel->icorB, pushButton, panel);
-
-    panel->icoT = WMCreateTextField(panel->icoF);
-    WMResizeWidget(panel->icoT, 200, 20);
-    WMMoveWidget(panel->icoT, 15, 175);
-    WMAddNotificationObserver(textEditedObserver, panel, 
-			      WMTextDidEndEditingNotification, panel->icoT);
-    WMAddNotificationObserver(textBeginObserver, panel,
-			      WMTextDidBeginEditingNotification, panel->icoT);
 
     WMMapSubwidgets(panel->icoF);
 
@@ -340,35 +284,24 @@ createPanel(Panel *p)
     WMSetFrameTitle(panel->pixF, _("Pixmap Search Paths"));
     
     panel->pixL = WMCreateList(panel->pixF);
-    WMResizeWidget(panel->pixL, 200, 120);
+    WMResizeWidget(panel->pixL, 200, 150);
     WMMoveWidget(panel->pixL, 15, 20);
-    WMSetListAction(panel->pixL, listClick, panel);
     WMSetListUserDrawProc(panel->pixL, paintItem);
     WMHangData(panel->pixL, panel);
     
     panel->pixaB = WMCreateCommandButton(panel->pixF);
     WMResizeWidget(panel->pixaB, 90, 24);
-    WMMoveWidget(panel->pixaB, 125, 145);
+    WMMoveWidget(panel->pixaB, 125, 176);
     WMSetButtonText(panel->pixaB, _("Add"));
-    WMSetButtonAction(panel->pixaB, pushButton, panel);
+    WMSetButtonAction(panel->pixaB, browseForFile, panel);
     WMSetButtonImagePosition(panel->pixaB, WIPRight);
     
     panel->pixrB = WMCreateCommandButton(panel->pixF);
     WMResizeWidget(panel->pixrB, 90, 24);
-    WMMoveWidget(panel->pixrB, 15, 145);
+    WMMoveWidget(panel->pixrB, 15, 176);
     WMSetButtonText(panel->pixrB, _("Remove"));
     WMSetButtonAction(panel->pixrB, pushButton, panel);
-    
-    panel->pixT= WMCreateTextField(panel->pixF);
-    WMResizeWidget(panel->pixT, 200, 20);
-    WMMoveWidget(panel->pixT, 15, 175);
-    WMAddNotificationObserver(textEditedObserver, panel, 
-			      WMTextDidEndEditingNotification, panel->pixT);
-    WMAddNotificationObserver(textBeginObserver, panel,
-			      WMTextDidBeginEditingNotification, panel->pixT);
 
-    WMSetTextFieldNextTextField(panel->pixT, panel->icoT);
-    WMSetTextFieldPrevTextField(panel->pixT, panel->icoT);
 
     WMMapSubwidgets(panel->pixF);
     

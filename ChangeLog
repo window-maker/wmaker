@@ -30,7 +30,9 @@ Changes since version 0.53.0:
 - save state of all menus when exiting (Sebastien Bauer
 						seb_bauer@bigfoot.com)
 - added GNUstep info panel (still needs beautification..)
+- made the paths selector in WPrefs.app use the open file panel
 
+ 
 Changes since version 0.52.0:
 .............................
 
