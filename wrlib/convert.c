@@ -802,38 +802,31 @@ hermesConvert(RContext *context, RImage *image)
     }
     
     if (HAS_ALPHA(image)) {
-        if (ximage->image->byte_order==LSBFirst) {
-            source.r = 0x000000ff;
-            source.g = 0x0000ff00;
-            source.b = 0x00ff0000;
-            source.a = 0xff000000;
-        } else {
-            source.r = 0xff000000;
-            source.g = 0x00ff0000;
-            source.b = 0x0000ff00;
-            source.a = 0x000000ff;
-        }
+        source.r = 0xff000000;
+        source.g = 0x00ff0000;
+        source.b = 0x0000ff00;
+        source.a = 0x000000ff;
         source.bits = 32;
     } else {
-        if (ximage->image->byte_order==LSBFirst) {
-            source.r = 0x0000ff;
-            source.g = 0x00ff00;
-            source.b = 0xff0000;
-        } else {
-            source.r = 0xff0000;
-            source.g = 0x00ff00;
-            source.b = 0x0000ff;
-        }
+        source.r = 0xff0000;
+        source.g = 0x00ff00;
+        source.b = 0x0000ff;
         source.a = 0x000000;
         source.bits = 24;
     }
-
     source.indexed = 0;
     source.has_colorkey = 0;
 
-    dest.r = context->visual->red_mask;
-    dest.g = context->visual->green_mask;
-    dest.b = context->visual->blue_mask;
+    /* This is a hack and certainly looks weird, but it works :P */
+    if (ximage->image->byte_order==LSBFirst) {
+        dest.b = context->visual->red_mask;
+        dest.g = context->visual->green_mask;
+        dest.r = context->visual->blue_mask;
+    } else {
+        dest.r = context->visual->red_mask;
+        dest.g = context->visual->green_mask;
+        dest.b = context->visual->blue_mask;
+    }
     dest.a = 0;
     dest.bits = ximage->image->bits_per_pixel;
     if (context->vclass == TrueColor)
