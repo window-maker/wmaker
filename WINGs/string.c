@@ -175,4 +175,46 @@ wtrimspace(char *s)
 }
 
 
+char*
+wstrdup(char *str)
+{
+    assert(str!=NULL);
+
+    return strcpy(wmalloc(strlen(str)+1), str);
+}
+
+
+char*
+wstrconcat(char *str1, char *str2)
+{
+    char *str;
+
+    if (!str1)
+	return wstrdup(str2);
+    else if (!str2)
+	return wstrdup(str1);
+
+    str = wmalloc(strlen(str1)+strlen(str2)+1);
+    strcpy(str, str1);
+    strcat(str, str2);
+
+    return str;
+}
+
+
+char*
+wstrappend(char *dst, char *src)
+{
+    if (!dst)
+	return wstrdup(src);
+    else if (!src || *src==0)
+	return dst;
+
+    dst = wrealloc(dst, strlen(dst)+strlen(src)+1);
+    strcat(dst, src);
+
+    return dst;
+}
+
+
 

@@ -1,5 +1,6 @@
 - fixed problem with WINGs based apps exiting with a "X_RotateProperties"
   related error when text was selected in a textfiled.
+- moved wstrdup(), wstrconcat() and wstrappend() from memory.c to string.c
 
 
 Changes since wmaker 0.64.0:
