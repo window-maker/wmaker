@@ -44,7 +44,7 @@ observer2(void *data, WMNotification *notification)
 
 
 
-
+int
 main(int argc, char **argv)
 {
     int i;

@@ -594,56 +594,65 @@ browserClick(WMBrowser *bPtr, WMFilePanel *panel)
     }
 }
 
-#define ERROR_PANEL(s)  err_str = wmalloc(strlen(file)+strlen(s)); \
-                        sprintf(err_str, s, file);  \
-                        WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win, \
-                        "Error", err_str, "OK", NULL, NULL);
+
+static void
+showError(WMScreen *scr, WMWindow *owner, char *s, char *file)
+{
+    char *errStr;
+
+    if (file) {
+        errStr = wmalloc(strlen(file)+strlen(s));
+        sprintf(errStr, s, file);
+    } else {
+        errStr = wstrdup(s);
+    }
+    WMRunAlertPanel(scr, owner, "Error", errStr, "OK", NULL, NULL);
+    free(errStr);
+}
+
 
 static void
 deleteFile(WMButton *bPre, WMFilePanel *panel)
 {
+    WMScreen *scr = WMWidgetScreen(panel->win);
     char *file;
     char *buffer;
-    char *err_str;
-
-    WMFilePanel *deletePanel;
 
     file = getCurrentFileName(panel);
     if (file[strlen(file)-1] == '/') {
-        ERROR_PANEL("%s is a directory.");
-        free(err_str);
+        showError(scr, panel->win, "%s is a directory.", file);
         free(file);
         return;
     }
-    buffer = wmalloc(strlen(file)+15);
-    sprintf(buffer,"Delete file %s ?\x0",file);
+    buffer = wmalloc(strlen(file)+16);
+    sprintf(buffer,"Delete file %s ?",file);
     if (!WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
                 "Warning", buffer, "OK", "Cancel", NULL)) {
-        int rem_stat;
-        if (rem_stat = remove(file)) {
+        if (remove(file) != 0) {
             switch (errno) {
                 case EISDIR:
-                    ERROR_PANEL("%s is a directory.");
+                    showError(scr, panel->win, "'%s' is a directory.", file);
                     break;
                 case ENOENT:
-                    ERROR_PANEL("%s does not exist.");
+                    showError(scr, panel->win, "'%s' does not exist.", file);
                     break;
                 case EACCES:
-                    ERROR_PANEL("Permission denied.");
+                    showError(scr, panel->win, "Permission denied.", NULL);
                     break;
                 case ENOMEM:
-                    ERROR_PANEL("Insufficient kernel memory was available.");
+                    showError(scr, panel->win,
+                              "Insufficient memory available.", NULL);
                     break;
                 case EROFS:
-                    ERROR_PANEL("%s refers to a file on a read-only filesystem.");
+                    showError(scr, panel->win,
+                              "'%s' is on a read-only filesystem.", file);
                     break;
                 default:
-                    ERROR_PANEL("Can not delete %s.");
+                    showError(scr, panel->win, "Can not delete '%s'.", file);
             }
-            free(err_str);
         }
         else {
-            char *s = strrchr(file,'/');
+            char *s = strrchr(file, '/');
             if (s) s[1] = 0;
             WMSetFilePanelDirectory(panel, file);
         }
@@ -652,20 +661,18 @@ deleteFile(WMButton *bPre, WMFilePanel *panel)
     free(file);
 }
 
+
 static void
 goFloppy(WMButton *bPtr, WMFilePanel *panel)
 {
-    char *file, *err_str;
+    WMScreen *scr = WMWidgetScreen(panel->win);
     struct stat filestat;
 
-    /* home is statically allocated. Don't free it! */
-    if (stat("/floppy",&filestat)) {
-        ERROR_PANEL("An error occured browsing /floppy.");
-        free(err_str);
+    if (stat("/floppy", &filestat)) {
+        showError(scr, panel->win, "An error occured browsing /floppy.", NULL);
         return;
     } else if (!S_ISDIR(filestat.st_mode)) {
-        ERROR_PANEL("/floppy is not a directory.");
-        free(err_str);
+        showError(scr, panel->win, "/floppy is not a directory.", NULL);
         return;
     }
     

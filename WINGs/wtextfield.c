@@ -182,7 +182,7 @@ requestHandler(WMWidget *w, Atom selection, Atom target, Atom *type,
 	       void **value, unsigned *length, int *format) 
 {
     TextField *tPtr = w;
-    int count,count2;
+    int count;
     Display *dpy = tPtr->view->screen->display;
     Atom _TARGETS;
     char *text;
@@ -952,7 +952,9 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
      */
     switch (ksym) {
      case XK_Tab:
+#ifdef XK_ISO_Left_Tab
      case XK_ISO_Left_Tab:
+#endif
 	if (event->xkey.state & ShiftMask) {
 	    if (tPtr->view->prevFocusChain) {
 		W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),

@@ -161,7 +161,6 @@ static void
 createPanel(Panel *p)
 {
     _Panel *panel = (_Panel*)p;
-    WMScreen *scr = WMWidgetScreen(panel->win);
 
     panel->frame = WMCreateFrame(panel->win);
     WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);

@@ -53,7 +53,7 @@ wmquery_SOURCES = wmquery.c
 wmquery_LDADD = libWINGs.a $(LIBLIST)
 
 
-EXTRA_DIST = logo.xpm 
+EXTRA_DIST = logo.xpm BUGS
 
 # wbutton.c 
 libWINGs_a_SOURCES = 	\

@@ -505,7 +505,7 @@ omnipresentCallback(WMenu *menu, WMenuEntry *entry)
     }
 
     if (failed > 1) {
-        wMessageDialog(aicon->icon->core->screen_ptr, _("Warning"),
+        wMessageDialog(dock->screen_ptr, _("Warning"),
                        _("Some icons cannot be made omnipresent. "
                          "Please make sure that no other icon is "
                          "docked in the same positions on the other "
@@ -513,7 +513,7 @@ omnipresentCallback(WMenu *menu, WMenuEntry *entry)
                          "some workspace."),
                        _("OK"), NULL, NULL);
     } else if (failed == 1) {
-        wMessageDialog(aicon->icon->core->screen_ptr, _("Warning"),
+        wMessageDialog(dock->screen_ptr, _("Warning"),
                        _("Icon cannot be made omnipresent. "
                          "Please make sure that no other icon is "
                          "docked in the same position on the other "

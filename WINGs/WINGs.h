@@ -543,6 +543,14 @@ WMHandlerID WMAddInputHandler(int fd, int condition, WMInputProc *proc,
 
 void WMDeleteInputHandler(WMHandlerID handlerID);
 
+Bool WMCreateSelectionHandler(WMWidget *w, Atom selection, Time timestamp,
+                              WMConvertSelectionProc *convProc,
+                              WMLoseSelectionProc *loseProc,
+                              WMSelectionDoneProc *doneProc);
+
+void WMDeleteSelectionHandler(WMWidget *widget, Atom selection);
+
+
 /* ....................................................................... */
 /*
 void WMDragImageFromView(WMView *view, WMPixmap *image, WMPoint atLocation,

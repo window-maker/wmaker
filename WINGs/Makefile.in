@@ -140,7 +140,7 @@ wmquery_SOURCES = wmquery.c
 
 wmquery_LDADD = libWINGs.a $(LIBLIST)
 
-EXTRA_DIST = logo.xpm 
+EXTRA_DIST = logo.xpm BUGS
 
 # wbutton.c 
 libWINGs_a_SOURCES =  	WINGs.h 	WINGsP.h 	configuration.c 	llist.h 	llist.c 	international.c 	notification.c 	selection.c 	userdefaults.c 	wapplication.c 	wballoon.c 	wbrowser.c 	wbutton.c 	wcolor.c 	wcolorpanel.c 	wcolorwell.c 	wevent.c 	wfilepanel.c 	wframe.c 	wfont.c 	wfontpanel.c 	widgets.c 	wlabel.c 	wlist.c 	wmisc.c 	wpanel.c 	wpixmap.c 	wpopupbutton.c 	wscroller.c 	wscrollview.c 	wslider.c 	wsplitview.c 	wtabview.c 	wtextfield.c 	wwindow.c 	wview.c 	error.c 	findfile.c 	hashtable.c 	memory.c 	usleep.c

@@ -46,9 +46,8 @@
 
 #include "../src/wconfig.h"
 
-#include "../WINGs/WINGs.h"
-#include "../WINGs/WUtil.h"
-#include "../wrlib/wraster.h"
+#include <WINGs.h>
+#include <wraster.h>
 
 #include <proplist.h>
 
@@ -529,7 +528,6 @@ parseTexture(RContext *rc, char *text)
 
 	image = loadImage(rc, file);
 	if (!image) {
-	    RDestroyImage(gradient);
 	    goto error;
 	}
 
@@ -557,7 +555,8 @@ parseTexture(RContext *rc, char *text)
 	if (!gradient) {
 	    wwarning("could not render texture:%s",
 		     RMessageForError(RErrorCode));
-	    RDestroyImage(gradient);
+            RDestroyImage(gradient);
+            RDestroyImage(image);
 	    goto error;
 	}
 
@@ -577,7 +576,7 @@ parseTexture(RContext *rc, char *text)
 	if (!RConvertImage(rc, tiled, &pixmap)) {
 	    wwarning("could not convert texture:%s", 
 		     RMessageForError(RErrorCode));
-	    RDestroyImage(image);
+	    RDestroyImage(tiled);
 	    goto error;
 	}
 	texture->width = tiled->width;

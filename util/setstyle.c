@@ -374,7 +374,6 @@ main(int argc, char **argv)
     int i;
     int ignoreCount = 0;
     char *ignoreList[MAX_OPTIONS];
-    int format = 0;
 
     dpy = XOpenDisplay("");
 
