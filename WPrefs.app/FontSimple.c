@@ -630,7 +630,7 @@ createPanel(Panel *p)
     WMAddBoxSubview(hbox, WMWidgetView(vbox), False, True, 130, 0, 10);
     WMSetBoxHorizontal(vbox, False);
     panel->optionP = WMCreatePopUpButton(vbox);
-    WMAddBoxSubviewAtEnd(vbox, WMWidgetView(panel->optionP), False, True, 24, 0, 8);
+    WMAddBoxSubviewAtEnd(vbox, WMWidgetView(panel->optionP), False, True, 20, 0, 8);
     for (i= 0; fontOptions[i].option; i++)
     {
       WMAddPopUpButtonItem(panel->optionP, _(fontOptions[i].label));
@@ -661,7 +661,7 @@ createPanel(Panel *p)
 
     // family
     panel->familyL = WMCreateList(vbox);
-    WMAddBoxSubview(vbox, WMWidgetView(panel->familyL), True, True, 0, 0, 0);
+    WMAddBoxSubview(vbox, WMWidgetView(panel->familyL), True, True, 0, 0, 4);
     if (panel->fonts)
     {
         WMListItem *item;
