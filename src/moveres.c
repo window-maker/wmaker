@@ -2193,7 +2193,7 @@ wSelectWindows(WScreen *scr, XEvent *ev)
 	    selectWindowsInside(scr, xp, yp, w + xp, h + yp);
 	   
 #ifdef KWM_HINTS
-	    wKWMSelectRootRegion(scr, x, y, w, h, 
+	    wKWMSelectRootRegion(scr, xp, yp, w, h, 
 				 event.xbutton.state & ControlMask);
 #endif /* KWM_HINTS */
 
