@@ -42,6 +42,7 @@ Changes since version 0.80.1:
 - Fixed focus handling for windows that set WM_HINTS.take_focus = False.
 - Fixed a problem in the stacking code which could lead to segmentation faults
   (Jeff Teunissen <deek@d2dc.net>)
+- Fixed a crashing bug in the menu code when modal panel are involved.
 
 
 Changes since version 0.80.0:
