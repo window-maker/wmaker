@@ -55,6 +55,16 @@ class WMScreen:
             raise Error, "'%s' is a read-only WMScreen attribute" % name
         self.__dict__[name] = value
 
+    def __delattr__(self, name):
+        if name in self.__readonly:
+            #raise AttributeError, "'%s' attribute cannot be deleted from WMScreen instance" % name
+            raise Error, "'%s' attribute cannot be deleted from WMScreen instance" % name
+        try:
+            del(self.__dict__[name])
+        except KeyError:
+            raise AttributeError, "%s instance has no attribute '%s'" % \
+                                  (self.__class__.__name__, name)
+
     def mainLoop(self):
         wings.pyWMScreenMainLoop(self._o)
 

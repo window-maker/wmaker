@@ -3,9 +3,9 @@
 
 
 
-PLATEFORMES SUPPORTEES
+PLATEFORMES SUPPORTÉES
 ======================
-(c.a.d : j'ai entendu dire que la compilation a été réalisée avec succès sur..)
+(c.à.d. : j'ai entendu dire que la compilation a été réalisée avec succès sur..)
 
 - Intel GNU/Linux Conectiva 5.9 (beta)
 - Intel GNU/Linux Slackware
@@ -49,7 +49,7 @@ Tout patch qui pourrait faciliter l'adaptation à d'autres plateformes
 est le bienvenu. 
 
 
-PRE-REQUIS
+PRÉ-REQUIS
 ==========
 
 Les logiciels suivants sont nécessaires à l'utilisation de Window Maker :
@@ -124,8 +124,6 @@ fonctionner aussi bien.
 	Si vous voulez disposer des traductions en d'autres langues, GNU gettext
 	est nécessaire. Les autres versions de gettext sont incompatibles et ne
 	fonctionneront pas.
-	If you want to use translated messages, you will need GNU gettext.
-	Other versions of gettext are not compatible and will not work.
 	Vous trouverez la version GNU sur ftp://ftp.gnu.org
 
 
@@ -143,12 +141,12 @@ configurera Window Maker avec le support intégré pour KDE et GNOME.
 Afin d'obtenir la liste des autres options, exécutez ./configure --help
 
 --with-libs-from
-	ajoute des chemins d"accès pour la recherche des librairies.
+	ajoute des chemins d'accès pour la recherche des librairies.
 	L'option -L doit précéder chaque chemin d'accès, comme suit :
 	--with-libs-from="-L/opt/libs -L/usr/local/lib"
 
 --with-incs-from
-	ajoute des chemins d"accès pour la recherche des fichiers d'en-tête.
+	ajoute des chemins d'accès pour la recherche des fichiers d'en-tête.
 	L'option -I doit précéder chaque chemin d'accès, comme suit :
 	--with-incs-from="-I/opt/headers -I/usr/local/include"
 
@@ -217,7 +215,7 @@ Afin d'obtenir la liste des autres options, exécutez ./configure --help
 	désactive l'utilisation de "shaped windows" (pour oclock, xeyes, etc.).
 
 
-NOTES SPECIFIQUES AUX PLATEFORMES
+NOTES SPÉCIFIQUES AUX PLATEFORMES
 =================================
 
 - machines DEC/Alpha
@@ -242,7 +240,7 @@ Sujet : Re : Est-ce que le paquetage WindowMaker fonctionne correctement sur Alp
 >  pour compiler sur Alpha?
 
 Notez bien : les Alphas dont je me sers ne sont jamais sous X et ne sont pas près
-de le faire.
+de l'être.
 
 		Bien souvent, la configuration des Alphas n'inclut qu'un volume ridiculement
 petit de mémoire partagée. Aussi il n'est pas étonnant qu'un grand nombre
@@ -313,7 +311,7 @@ est soumis à toutes les réserves habituelles. (#include "standard_disclaimer.h")
 	* si vous rencontrez des messages d'erreur en rapport avec "--no-reexec",
 	désinstallez libtool-1.2b et installez libtool-1.3.
 	libtool-1.3 peut être trouvé sur ftp.gnu.org.
-	Consultez aussi la section PROBLEMES;
+	Consultez aussi la section PROBLÈMES;
 
 	* si vous aviez auparavant installé le paquetage de Window Maker livré
 	avec RedHat et que vous voulez installer maintenant manuellement une nouvelle
@@ -359,7 +357,7 @@ INSTALLATION
 
 Compiler Window Maker
 ---------------------
-	Pour aller vite, tapez ce qui suit sous un prompt shell :
+	Pour aller vite, tapez ce qui suit dans un prompt shell :
 
 	./configure
 	make
@@ -369,7 +367,7 @@ puis, loguez-vous en tant que root and tapez :
 	make install
 	ldconfig
 
-ou, si vous voulez ôter les infos de débogage des exécutables et les
+ou, si vous voulez ôter les infos de débogage des exécutables et ainsi les
 rendre plus petits, tapez plutôt :
 
 	make install-strip
@@ -392,7 +390,7 @@ pouvez faire :
 
 	./configure --enable-kde
 
-	3. (optionnel) Editez src/wconfig.h avec votre editeur de texte favori et
+	3. (optionnel) Éditez src/wconfig.h avec votre éditeur de texte favori et
 	et modifiez sont contenu à votre guise.
 
 	4. Compilez. Il faut juste taper :
@@ -471,7 +469,7 @@ bin/wmaker.inst
 Bien sûr, /home/jshmoe est supposé être remplacé par votre répertoire personnel.
 
 
-MISE A JOUR
+MISE À JOUR
 ===========
 
 Si vous mettez à jour une version plus ancienne de Window Maker :
@@ -482,7 +480,7 @@ Si vous mettez à jour une version plus ancienne de Window Maker :
       si nécessaire.
 
 
-PROBLEMES
+PROBLÈMES
 =========
 
 Si vous rencontrez des problèmes pendant la phase de configuration, comme par
@@ -492,7 +490,7 @@ du fichier config.log, vous y trouverez peut-être des indices pour résoudre
 ce problème.
 
 
-== erreur de chargement de polices, même si elles existent
+== erreur de chargement de polices, alors qu'elles existent
 
 Essayez de recompiler sans le support pour le NLS.
 

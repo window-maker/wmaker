@@ -8,24 +8,21 @@ from distutils.extension import Extension
 
 ## Get the include dirs
 wings = os.popen("get-wings-flags --cflags", "r")
-lines = [x.strip() for x in wings.readlines()]
-flags = reduce(lambda x,y: x+y, [x.split() for x in lines if x])
+flags = wings.read().split()
 include_dirs = [x[2:] for x in flags]
 #include_dirs += [".."]
 wings.close()
 
 ## Get the library dirs
 wings = os.popen("get-wings-flags --ldflags", "r")
-lines = [x.strip() for x in wings.readlines()]
-flags = reduce(lambda x,y: x+y, [x.split() for x in lines if x])
+flags = wings.read().split()
 library_dirs = [x[2:] for x in flags]
 #library_dirs += [".."]
 wings.close()
 
 ## Get the libraries
 wings = os.popen("get-wings-flags --libs", "r")
-lines = [x.strip() for x in wings.readlines()]
-flags = reduce(lambda x,y: x+y, [x.split() for x in lines if x])
+flags = wings.read().split()
 libraries = [x[2:] for x in flags]
 wings.close()
 
