@@ -955,7 +955,7 @@ void WMShowColorPanel(WMColorPanel *panel);
 
 void WMCloseColorPanel(WMColorPanel *panel);
 
-void WMSetColorPanelColor(WMColorPanel *panel, RColor color);
+void WMSetColorPanelColor(WMColorPanel *panel, WMColor *color);
 
 RColor WMGetColorPanelColor(WMColorPanel *panel);
 

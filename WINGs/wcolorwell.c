@@ -424,13 +424,11 @@ handleActionEvents(XEvent *event, void *data)
     if (cPtr->flags.active) {
 	WMPostNotificationName(_ColorWellActivatedNotification, cPtr, NULL);
     }
-/*
     cpanel = WMGetColorPanel(scr);
     if (cPtr->color)
 	WMSetColorPanelColor(cpanel, cPtr->color);
     WMShowColorPanel(cpanel);
- *
- */
+/*	
     {
 	char *t;
 	WMColor *color;
@@ -451,6 +449,7 @@ handleActionEvents(XEvent *event, void *data)
 	}
 
     }
+*/
 }
 
 
