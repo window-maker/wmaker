@@ -10,6 +10,7 @@ Changes since wmaker 0.80.0:
 - rewrote WMBox to use a WMArray for subviews. with this change fixed a bug
   about arranging subviews after removing one and a memleak occuring in the
   same case.
+- Fixed WMGetViewScreenPosition() to consider the window decorations.
 
 
 Changes since wmaker 0.70.0:

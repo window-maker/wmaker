@@ -724,12 +724,22 @@ WMGetViewScreenPosition(WMView *view)
 {
     WMScreen *scr = W_VIEW_SCREEN(view);
     Window foo;
-    int x, y;
-    
+    int x, y, topX, topY, bar;
+    WMView *topView;
+
+    topView = view;
+    while (topView->parent && topView->parent!=scr->rootView)
+        topView = topView->parent;
+
+    if (!XGetGeometry(scr->display, W_VIEW_DRAWABLE(topView), &foo, &topX,
+                      &topY, &bar, &bar, &bar, &bar)) {
+        topX = topY = 0;
+    }
+
     XTranslateCoordinates(scr->display, W_VIEW_DRAWABLE(view),
 			  scr->rootWin, 0, 0, &x, &y, &foo);
-    
-    return wmkpoint(x, y);
+
+    return wmkpoint(x-topX, y-topY);
 }
 
 
