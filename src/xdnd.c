@@ -102,6 +102,9 @@ wXDNDProcessSelection(XEvent *event)
     char * delme;
     XEvent xevent;
     Window selowner = XGetSelectionOwner(dpy,_XA_XdndSelection);
+    WMBag *items;
+
+
     XGetWindowProperty(dpy, event->xselection.requestor,
             _XA_WINDOWMAKER_XDNDEXCHANGE,
             0, 65536, True, atom_support, &ret_type, &ret_format,
@@ -121,22 +124,59 @@ wXDNDProcessSelection(XEvent *event)
     XSendEvent(dpy, selowner, 0, 0, &xevent);
 
     /*process dropping*/
-    for (retain=scr->xdestring;retain[0];retain++) {
-        if (retain[0] < 32) retain[0] = 32;
-        if (!strncmp(retain, "file:", 5)) {
-            int i;
-            for (i=0;i<5;retain[i++]=' ');
+    if (scr->xdestring) {
+        int length, str_size;
+        int total_size = 0;
+        char *tmp;
+
+        items = WMCreateBag(1);
+        retain = wstrdup(scr->xdestring);
+        XFree(scr->xdestring); /* since xdestring was created by Xlib */
+
+        length = strlen(retain);
+
+        /* search in string */
+        while (length--) {
+            if (retain[length] == '\r') { /* useless char, nuke it */
+                retain[length] = 0;
+            }
+            if (retain[length] == '\n') {
+                str_size = strlen(&retain[length + 1]);
+                if(str_size) {
+                    WMPutInBag(items, wstrdup(&retain[length + 1]));
+                    total_size += str_size + 3; /* reserve for " \"\"" */
+                    if (length)
+                        WMAppendBag(items, WMCreateBag(1));
+                }
+                retain[length] = 0;
+            }
         }
-    }
-    retain = scr->xdestring;
-    if (scr->xdestring){
-        if (!strncmp(scr->xdestring, "file:", 5))
-            scr->xdestring+=5;
-    }
-    wDockReceiveDNDDrop(scr,event);
-    if (retain){
-        XFree(retain);
-        scr->xdestring = NULL;
+        /* final one */
+        WMPutInBag(items, wstrdup(retain));
+        total_size += strlen(retain) + 3;
+        free(retain);
+
+        /* now pack new string */
+        scr->xdestring = wmalloc(total_size);
+        scr->xdestring[0]=0; /* empty string */
+        for(length = WMGetBagItemCount(items)-1; length >=0; length--) {
+            tmp = WMGetFromBag(items, length);
+            if (!strncmp(tmp,"file:",5)) {
+                /* add more 2 chars while removing 5 is harmless */
+                strcat(scr->xdestring, " \"");
+                strcat(scr->xdestring, &tmp[5]);
+                strcat(scr->xdestring, "\"");
+            } else {
+                /* unsupport object, still need more " ? tell ]d */
+                strcat(scr->xdestring, &tmp[5]);
+            }
+            free(tmp);
+        }
+        WMFreeBag(items);
+        wDockReceiveDNDDrop(scr,event);
+        printf("free ");
+        puts(scr->xdestring);
+        free(scr->xdestring); /* this xdestring is not from Xlib (no XFree) */
     }
 }
 
