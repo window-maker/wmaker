@@ -385,7 +385,7 @@ wIconChangeImage(WIcon *icon, RImage *new_image)
     if (icon->image)
         RReleaseImage(icon->image);
 
-    icon->image = wIconValidateIconSize(icon->core->screen_ptr, new_image);
+    icon->image = new_image;
 
     wIconUpdate(icon);
 }
@@ -445,6 +445,8 @@ wIconChangeImageFile(WIcon *icon, char *file)
     path = FindImage(wPreferences.icon_path, file);
 
     if (path && (image = RLoadImage(scr->rcontext, path, 0))) {
+	image = wIconValidateIconSize(icon->core->screen_ptr, image);
+
 	wIconChangeImage(icon, image);
     } else {
 	error = 1;
