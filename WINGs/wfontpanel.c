@@ -573,7 +573,6 @@ addTypefaceToFamily(Family *family, char fontFields[NUM_FIELDS][256])
 }
 
 
-
 /*
  * families (same family name) (Hashtable of family -> array)
  * 	registries (same family but different registries)
@@ -695,13 +694,12 @@ static void
 listFamilies(WMScreen *scr, WMFontPanel *panel)
 {
     char **fontList;
-    int count;
-    int i;
-    WMHashTable *families = WMCreateHashTable(WMStringPointerHashCallbacks);
+    WMHashTable *families;
     char fields[NUM_FIELDS][256];
     WMHashEnumerator enumer;
     WMArray *array;
-    
+    int i, count;
+
     fontList = XListFonts(scr->display, ALL_FONTS_MASK, MAX_FONTS_TO_RETRIEVE, 
                           &count);
     if (!fontList) {
@@ -709,6 +707,8 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
 			_("Could not retrieve font list"), _("OK"), NULL, NULL);
 	return;
     }
+
+    families = WMCreateHashTable(WMStringPointerHashCallbacks);
 
     for (i = 0; i < count; i++) {
 	int fname_len;
@@ -757,7 +757,6 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
 	    
 	    item->clientData = fam;
 	}
-        /* Isn't this going to memleak since items weren't released? --Dan */
         WMFreeArray(array);
     }
     WMSortListItems(panel->famLs);

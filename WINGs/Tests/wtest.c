@@ -1304,41 +1304,26 @@ main(int argc, char **argv)
 
 
     testTextField(scr);
-
-
+    testText(scr);
     testFontPanel(scr);
 
 
 #if 0
-    testText(scr);
-    testDragAndDrop(scr);
-    testColorPanel(scr);
-    testScrollView(scr);
-    testTabView(scr);    
     testBox(scr);
-    testText(scr);
-    testList(scr);
-
-    testProgressIndicator(scr);
-
-    testColorWell(scr);
-
-
-    testDragAndDrop(scr);
-    testFontPanel(scr);
-
     testButton(scr);
-
+    testColorPanel(scr);
+    testColorWell(scr);
+    testDragAndDrop(scr);
     testFrame(scr);
-
-    testSplitView(scr);
-
     testGradientButtons(scr);
-
+    testList(scr);
     testOpenFilePanel(scr);
-
-    testSlider(scr);
+    testProgressIndicator(scr);
     testPullDown(scr);
+    testScrollView(scr);
+    testSlider(scr);
+    testSplitView(scr);
+    testTabView(scr);
 #endif
     /*
      * The main event loop.

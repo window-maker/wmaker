@@ -44,6 +44,7 @@ Changes since wmaker 0.80.1:
 - Fixed a bug with empty frame titles (Alexey Voinov <voins@voins.program.ru>)
 - Added WMGetWidgetBackgroundColor()
 - Code cleanup in wtext.c
+- Fixed a memory leak in wfontpanel.c
 
 
 Changes since wmaker 0.80.0:
