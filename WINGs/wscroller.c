@@ -798,22 +798,22 @@ static void
 handleActionEvents(XEvent *event, void *data)
 {
     Scroller *sPtr = (Scroller*)data;
+    int wheelDecrement, wheelIncrement;
     int id, dd;
 
-    
+
     /* check if we're really dealing with a scroller, as something
      * might have gone wrong in the event dispatching stuff */
     CHECK_CLASS(sPtr, WC_Scroller);
-    
+
     id = sPtr->flags.incrDown;
     dd = sPtr->flags.decrDown;
-    
+
     switch (event->type) {
-     case EnterNotify:
-	
-	break;
-	
-     case LeaveNotify:
+    case EnterNotify:
+        break;
+
+    case LeaveNotify:
 	if (sPtr->timerID) {
 	    WMDeleteTimerHandler(sPtr->timerID);
 	    sPtr->timerID = NULL;
@@ -821,12 +821,21 @@ handleActionEvents(XEvent *event, void *data)
 	sPtr->flags.incrDown = 0;
 	sPtr->flags.decrDown = 0;
 	break;
-	
-     case ButtonPress:
+
+    case ButtonPress:
         /* FIXME: change Mod1Mask with something else */
         if (sPtr->flags.documentFullyVisible)
             break;
-	if (event->xbutton.button==WINGsConfiguration.mouseWheelUp) {
+
+        if (sPtr->flags.horizontal) {
+            wheelDecrement = WINGsConfiguration.mouseWheelDown;
+            wheelIncrement = WINGsConfiguration.mouseWheelUp;
+        } else {
+            wheelDecrement = WINGsConfiguration.mouseWheelUp;
+            wheelIncrement = WINGsConfiguration.mouseWheelDown;
+        }
+
+	if (event->xbutton.button == wheelDecrement) {
             if (event->xbutton.state & ControlMask) {
                 sPtr->flags.hitPart = WSDecrementPage;
             } else if (event->xbutton.state & ShiftMask) {
@@ -836,10 +845,10 @@ handleActionEvents(XEvent *event, void *data)
             }
 	    if (sPtr->action) {
 		(*sPtr->action)(sPtr, sPtr->clientData);
-		WMPostNotificationName(WMScrollerDidScrollNotification, sPtr, 
+		WMPostNotificationName(WMScrollerDidScrollNotification, sPtr,
 				       NULL);
 	    }
-	} else if (event->xbutton.button==WINGsConfiguration.mouseWheelDown) {
+	} else if (event->xbutton.button == wheelIncrement) {
             if (event->xbutton.state & ControlMask) {
                 sPtr->flags.hitPart = WSIncrementPage;
             } else if (event->xbutton.state & ShiftMask) {
@@ -865,7 +874,7 @@ handleActionEvents(XEvent *event, void *data)
 	}
 	break;
 
-     case ButtonRelease:
+    case ButtonRelease:
 	if (sPtr->flags.draggingKnob) {
 	    if (sPtr->action) {
 		(*sPtr->action)(sPtr, sPtr->clientData);
@@ -882,7 +891,7 @@ handleActionEvents(XEvent *event, void *data)
 	sPtr->flags.draggingKnob = 0;
 	break;
 
-     case MotionNotify:
+    case MotionNotify:
 	handleMotion(sPtr, event->xbutton.x, event->xbutton.y);
 	if (sPtr->timerID && sPtr->flags.hitPart != WSIncrementLine
 	    && sPtr->flags.hitPart != WSDecrementLine) {

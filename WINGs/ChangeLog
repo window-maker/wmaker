@@ -51,6 +51,7 @@ Changes since wmaker 0.64.0:
 - fixed a bug that made the scroller knob jump backwards when dragged (this
   bug had no relation with the behavior that #define STRICT_NEXT_BEHAVIOUR
   attempts to accomplish).
+- fixed scrolling direction with mouse wheel for horizontal scroller.
 
 
 changes since wmaker 0.63.1:
@@ -65,7 +66,7 @@ changes since wmaker 0.63.1:
 - Fixed a bug that caused sigsegv for a WMList with more than 32767 items.
 - Added an example of how to create a server type program with WMConnection.
 - added WMOpenScreen()
- 
+
 
 changes since wmaker 0.62.1:
 ............................
