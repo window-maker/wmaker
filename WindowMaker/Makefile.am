@@ -33,7 +33,7 @@ prefsdata_DATA =\
 	menu.zh_CN\
 	menu.zh_TW.Big5\
 	plmenu\
-	plmenu.dk\
+	plmenu.da\
 	plmenu.fr\
 	plmenu.hr\
 	plmenu.zh_CN\
