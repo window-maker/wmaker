@@ -720,6 +720,7 @@ int main(int argc, char **argv)
 
     testTabView(scr);
 
+    testColorWell(scr);
 #if 0
     testFontPanel(scr);
 
@@ -727,7 +728,6 @@ int main(int argc, char **argv)
 
     testGradientButtons(scr);
     testProgressIndicator(scr);
-    testColorWell(scr);
 
     testTextField(scr);
 

@@ -319,6 +319,97 @@ slideView(WMView *view, int srcX, int srcY, int dstX, int dstY)
 }
 
 
+
+static Window
+findChildInWindow(Display *dpy, Window toplevel, int x, int y)
+{
+    Window foo, bar;
+    Window *children;
+    unsigned nchildren;
+    int i;
+    
+    if (!XQueryTree(dpy, toplevel, &foo, &bar,
+		    &children, &nchildren) || children == NULL) {
+	return None;
+    }
+
+    /* first window that contains the point is the one */
+    for (i = nchildren-1; i >= 0; i--) {
+	XWindowAttributes attr;
+
+	if (XGetWindowAttributes(dpy, children[i], &attr)
+	    && attr.map_state == IsViewable
+	    && x >= attr.x && y >= attr.y
+	    && x < attr.x + attr.width && y < attr.y + attr.height) {
+	    Window child;
+	    
+	    child = findChildInWindow(dpy, children[i], 
+				      x - attr.x, y - attr.y);
+
+	    XFree(children);
+
+	    if (!child)
+		return toplevel;
+	    else
+		return child;
+	}
+    }
+
+    XFree(children);
+    return None;
+}
+
+
+static Window
+findWindowUnderDragPointer(WMScreen *scr, int x, int y, Window iconWindow)
+{
+    Window foo, bar;
+    Window *children;
+    unsigned nchildren;
+    int i;
+
+    if (!XQueryTree(scr->display, scr->rootWin, &foo, &bar,
+		    &children, &nchildren) || children == NULL) {
+	return None;
+    }
+    
+    /* try to find the window below the iconWindow by traversing
+     * the whole window list */
+    
+    /* first find the position of the iconWindow */
+    for (i = nchildren-1; i >= 0; i--) {
+	if (children[i] == iconWindow) {
+	    i--;
+	    break;
+	}
+    }
+    if (i <= 0) {
+	XFree(children);
+	return scr->rootWin;
+    }
+
+    /* first window that contains the point is the one */
+    for (; i >= 0; i--) {
+	XWindowAttributes attr;
+	Window child;
+
+	if (XGetWindowAttributes(scr->display, children[i], &attr)
+	    && attr.map_state == IsViewable
+	    && x >= attr.x && y >= attr.y
+	    && x < attr.x + attr.width && y < attr.y + attr.height
+	    && (child = findChildInWindow(scr->display, children[i], 
+					  x - attr.x, y - attr.y))) {
+	    XFree(children);
+	    return child;
+	}
+    }
+
+    XFree(children);
+    return None;
+}
+
+
+
 static void
 dragColor(ColorWell *cPtr, XEvent *event, WMPixmap *image)
 {
@@ -349,14 +440,15 @@ dragColor(ColorWell *cPtr, XEvent *event, WMPixmap *image)
     XClearWindow(dpy, dragView->window);
     
 
-    XGrabPointer(dpy, dragView->window, True,
-		 ButtonMotionMask|ButtonReleaseMask|EnterWindowMask,
+    XGrabPointer(dpy, scr->rootWin, True,
+		 ButtonMotionMask|ButtonReleaseMask,
 		 GrabModeSync, GrabModeAsync, 
 		 scr->rootWin, scr->defaultCursor, CurrentTime);
 
     while (!done) {
 	XEvent ev;
 	WMView *view;
+	Window win;
 
 	XAllowEvents(dpy, SyncPointer, CurrentTime);
 	WMNextEvent(dpy, &ev);
@@ -375,22 +467,32 @@ dragColor(ColorWell *cPtr, XEvent *event, WMPixmap *image)
 	    done = True;
 	    break;
 
-	 case EnterNotify:
-	    view = W_GetViewForXWindow(dpy, ev.xcrossing.window);
+	 case MotionNotify:
+	    while (XCheckTypedEvent(dpy, MotionNotify, &ev)) ;
+	    
+	    W_MoveView(dragView, ev.xmotion.x_root-8, ev.xmotion.y_root-8);
+
+	    win = findWindowUnderDragPointer(scr, ev.xmotion.x_root,
+					     ev.xmotion.y_root,
+					     dragView->window);
+
+	    if (win != None && win != scr->rootWin) {
+		view = W_GetViewForXWindow(dpy, win);
+	    } else {
+		view = NULL;
+	    }
 
 	    if (view && view->self && W_CLASS(view->self) == WC_ColorWell
 		&& view->self != activeWell && view->self != cPtr) {
-
+		
 		activeWell = view->self;
 		XRecolorCursor(dpy, scr->defaultCursor, &green, &back);
-	    } else if (view->self!=NULL && view->self != activeWell) {
+
+	    } else if (!view || view->self != activeWell) {
+
 		XRecolorCursor(dpy, scr->defaultCursor, &black, &back);
 		activeWell = NULL;
 	    }
-	    break;
-	    
-	 case MotionNotify:
-	    W_MoveView(dragView, ev.xmotion.x_root-8, ev.xmotion.y_root-8);
 	    break;
 
 	 default:
