@@ -1400,6 +1400,10 @@ wShowInfoPanel(WScreen *scr)
         strbuf = wstrappend(strbuf, _("\nSound enabled"));
     }
 
+#ifdef XFT
+    strbuf = wstrappend(strbuf, _("; Antialiased text"));
+#endif
+
 
     panel->infoL = WMCreateLabel(panel->win);
     WMResizeWidget(panel->infoL, 350, 75);
