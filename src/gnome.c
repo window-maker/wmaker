@@ -61,7 +61,7 @@
 #define WIN_HINTS_SKIP_TASKBAR    (1<<2) /*do not show on taskbar*/
 #define WIN_HINTS_GROUP_TRANSIENT (1<<3) /*Reserved - definition is unclear*/
 #define WIN_HINTS_FOCUS_ON_CLICK  (1<<4) /*app only accepts focus if clicked*/
-#if 0 /* hadess patch but still has problem said him */
+#ifdef HADESS_PATCH /* hadess patch but still has problem said him */
 #define WIN_HINTS_DO_NOT_COVER    (1<<5) /* attempt to not cover this window */
 #endif
 
@@ -316,7 +316,7 @@ wGNOMECheckClientHints(WWindow *wwin, int *layer, int *workspace)
 	    wwin->client_flags.skip_window_list = 1;
 	}
 
-#if 0 /* hadess patch but still has problem said him */
+#ifdef HADESS_PATCH /* hadess patch but still has problem said him */
 	if (flags & (WIN_HINTS_DO_NOT_COVER)) {
 		XWindowAttributes wattribs;
 		WReservedArea *area;
