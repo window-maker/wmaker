@@ -237,7 +237,7 @@ typedef struct W_ColorPanel {
     int			colx, coly;	/* (x,y) of sel.-marker in WheelMode */
     int			palx, paly;	/* (x,y) of sel.-marker in 
 					   CustomPaletteMode */
-    float		palXRatio, palYRatio;	/* Ratios in x & y between 
+    double		palXRatio, palYRatio;	/* Ratios in x & y between 
 						   original and scaled 
 						   palettesize */
     int			currentPalette;
@@ -2091,7 +2091,7 @@ wheelInitMatrix(W_ColorPanel *panel)
 	    
 	    if (sat < 256) {
 		if (xcor != 0)
-		    dhue[0] = rint(atan((float)ycor / (float)xcor) *
+		    dhue[0] = rint(atan((double)ycor / (double)xcor) *
 			    (180.0 / M_PI)) + (xcor < 0 ? 180.0 : 0.0);
 		else
 		    dhue[0] = 270;
@@ -2409,7 +2409,7 @@ wheelPositionSelectionOutBounds(W_ColorPanel *panel, int x, int y)
     panel->color.hsv.value = 255 - WMGetSliderValue(panel->wheelBrightnessS);
     
     if (xcor != 0)
-	hue = rint(atan(- (float)ycor / (float)xcor) * (180.0/M_PI));
+	hue = rint(atan(- (double)ycor / (double)xcor) * (180.0/M_PI));
     else {
 	if (ycor < 0)
 	    hue = 90;
@@ -2634,7 +2634,7 @@ cmykSliderCallback(WMWidget *w, void *data)
     int			value[4];
     char		tmp[4];
     W_ColorPanel	*panel = (W_ColorPanel*)data;
-    float		scale;
+    double		scale;
     
     value[0] = WMGetSliderValue(panel->cmykCyanS);
     value[1] = WMGetSliderValue(panel->cmykMagentaS);
@@ -2667,7 +2667,7 @@ cmykTextFieldCallback(void *observerData, WMNotification *notification)
     int			value[4];
     char		tmp[4];
     int			n;
-    float		scale;
+    double		scale;
     W_ColorPanel	*panel = (W_ColorPanel*)observerData;
     
     value[0] = atoi(WMGetTextFieldText(panel->cmykCyanT));
@@ -2987,10 +2987,10 @@ customSetPalette(W_ColorPanel *panel)
 	      panel->palx-2, panel->paly-2);
     XFreePixmap(scr->display, image);
     
-    panel->palXRatio = (float)(panel->customPaletteImg->width) / 
-	(float)(customPaletteWidth);
-    panel->palYRatio = (float)(panel->customPaletteImg->height) / 
-	(float)(customPaletteHeight);
+    panel->palXRatio = (double)(panel->customPaletteImg->width) / 
+	(double)(customPaletteWidth);
+    panel->palYRatio = (double)(panel->customPaletteImg->height) / 
+	(double)(customPaletteHeight);
     
     item = WMGetPopUpButtonSelectedItem (panel->customPaletteHistoryBtn);
 }
