@@ -60,7 +60,9 @@ wCoreCreateTopLevel(WScreen *screen, int x, int y, int width, int height,
     core = wmalloc(sizeof(WCoreWindow));
     memset(core, 0, sizeof(WCoreWindow));
 
-    vmask = /*CWBackPixmap|*/CWBackPixel|CWBorderPixel|CWCursor|CWEventMask
+    /* don't set CWBackPixmap so that transparent XRender windows 
+     are see-through */
+    vmask = /*CWBackPixmap|CWBackPixel|*/CWBorderPixel|CWCursor|CWEventMask
       |CWOverrideRedirect;
     attribs.override_redirect = True;
     attribs.cursor = wCursor[WCUR_DEFAULT];
