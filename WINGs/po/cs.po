@@ -13,7 +13,7 @@ msgstr ""
 "Last-Translator: Jiří Hnídek <jiri.hnidek@vslib.cz>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: unknown\n"
 
 #: ../../WINGs/connection.c:451 ../../WINGs/connection.c:516

@@ -1194,6 +1194,4 @@ msgstr "krivi podaci u odabiru"
 # msgid "not enough memory to open window inspector panel"
 # msgstr "premalo memorije za otvaranje window inspector panela"
 #
-msgid ""
-msgstr ""
 
