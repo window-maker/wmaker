@@ -59,6 +59,7 @@ int main(int argc, char **argv)
 	RDestroyImage(tmp);
 	   	   
 	XSetWindowBackgroundPixmap(dpy, win, pix);
+	XFreePixmap(dpy, pix);
 	XClearWindow(dpy, win);
 	XSync(dpy, 0);
 	usleep(50000);
