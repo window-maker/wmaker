@@ -151,8 +151,7 @@ void wHackedGrabButton(unsigned int button, unsigned int modifiers,
 		       int keyboard_mode, Window confine_to, Cursor cursor);
 
 
-/* this function is in dock.c */
-void ParseCommand(char *command, char ***argv, int *argc);
+void TokenizeString(char *command, char ***argv, int *argc);
 
 void ExecExitScript();
 

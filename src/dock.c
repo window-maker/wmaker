@@ -2940,7 +2940,7 @@ execCommand(WAppIcon *btn, char *command, WSavedState *state)
         return 0;
     }
 
-    ParseCommand(cmdline, &argv, &argc);
+    TokenizeString(cmdline, &argv, &argc);
 
     if (argv==NULL) {
         if (cmdline)

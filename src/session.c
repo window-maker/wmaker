@@ -381,7 +381,7 @@ execCommand(WScreen *scr, char *command, char *host)
     char **argv;
     int argc;
 
-    ParseCommand(command, &argv, &argc);
+    TokenizeString(command, &argv, &argc);
 
     if (argv==NULL) {
         return 0;

@@ -625,29 +625,27 @@ next_token(char *word, char **next)
 }
 
 
+/* separate a string in tokens, taking " and ' into account */
 void
-ParseCommand(char *command, char ***argv, int *argc)
+TokenizeString(char *command, char ***argv, int *argc)
 {
-    WMBag *bag = WMCreateBag(4);
     char *token, *line;
-    int count, j;
+    int count;
 
+    count = 0;
     line = command;
     do {
 	token = next_token(line, &line);
 	if (token) {
-	    WMPutInBag(bag, token);
+	    if (count == 0)
+		*argv = wmalloc(sizeof(char**));
+	    else
+		*argv = wrealloc(*argv, (count+1)*sizeof(char**));
+	    (*argv)[count++] = token;
 	}
     } while (token!=NULL && line!=NULL);
 
-    count = WMGetBagItemCount(bag);
-    *argv = wmalloc(sizeof(char*)*count);
-    for (j = 0; j < count; j++) {
-	(*argv)[j] = WMGetFromBag(bag, j);
-    }
     *argc = count;
-
-    WMFreeBag(bag);
 }
 
 
