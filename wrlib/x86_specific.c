@@ -61,12 +61,11 @@ x86_check_mmx()
          "jmp .noPop		\n"
 
 	 ".NotMMX:		\n"
-	 ".Bye:			\n"
 	 ".NotPentium:		\n"
          "popal			\n"
          ".noPop:		\n"
 
-	 : "=rm" (result));
+	 : "=m" (result));
 
     return result;
 }
@@ -75,7 +74,7 @@ x86_check_mmx()
 /*
  * TODO:
  * 		32/8	24/8	32/16	24/16	32/24	24/24
- * PPlain	YES	YES	
+ * PPlain	YES	YES
  * MMX				DONE
  *
  * 
@@ -177,7 +176,7 @@ x86_mmx_TrueColor_32_to_16(unsigned char *image, // 8
 	 "movl 16(%ebp), %eax		\n" //
 	 "movl %eax, -32(%ebp)		\n" // [-32] = eerr
 
-
+	 ".align 16			\n"
 ".LoopXa:				\n"
 
 	 // calculate errors and pixel components
@@ -192,19 +191,19 @@ x86_mmx_TrueColor_32_to_16(unsigned char *image, // 8
 	 "movzwl -24(%ebp), %ecx	\n" // ecx = pixel.red
 	 "movl 24(%ebp), %edi		\n" // edi = rtable
 	 "leal (%edi, %ecx, 2), %eax	\n" // eax = &rtable[pixel.red]
-	 "movl (%eax), %edx		\n" // edx = rtable[pixel.red]
+	 "movw (%eax), %dx		\n" // dx = rtable[pixel.red]
 	 "movw %dx, -16(%ebp)		\n" // save rr
 
 	 "movzwl -22(%ebp), %ecx	\n" // ecx = pixel.green
 	 "movl 28(%ebp), %edi		\n" // edi = gtable
 	 "leal (%edi, %ecx, 2), %eax	\n" // eax = &gtable[pixel.green]
-	 "movl (%eax), %edx		\n" // ebx = gtable[pixel.green]
+	 "movw (%eax), %dx		\n" // dx = gtable[pixel.green]
 	 "movw %dx, -14(%ebp)		\n" // save gg
 
 	 "movzwl -20(%ebp), %ecx	\n" // ecx = pixel.blue
 	 "movl 32(%ebp), %edi		\n" // ebx = btable
 	 "leal (%edi, %ecx, 2), %eax	\n" // eax = &btable[pixel.blue]
-	 "movl (%eax), %edx		\n" // ecx = btable[pixel.blue]
+	 "movw (%eax), %dx		\n" // dx = btable[pixel.blue]
 	 "movw %dx, -12(%ebp)		\n" // save bb
 
 	 "movw $0, -10(%ebp)		\n" // save dummy aa
@@ -303,133 +302,263 @@ x86_mmx_TrueColor_32_to_16(unsigned char *image, // 8
 
 #endif /* ASM_X86_MMX */
 
-#if 0
-
-    /* convert and dither the image to XImage */
-    for (y=0; y<image->height; y++) {
-	nerr[0] = 0;
-	nerr[1] = 0;
-	nerr[2] = 0;
-	for (x=0; x<image->width*3; x+=3, ptr+=channels) {
-
-	    /* reduce pixel */
-	    pixel = *ptr + err[x];
-	    if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
-	    r = rtable[pixel];
-	    /* calc error */
-	    rer = pixel - r*dr;
-
-	    /* reduce pixel */
-	    pixel = *(ptr+1) + err[x+1];
-	    if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
-	    g = gtable[pixel];
-	    /* calc error */
-	    ger = pixel - g*dg;
-
-	    /* reduce pixel */
-	    pixel = *(ptr+2) + err[x+2];
-	    if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
-	    b = btable[pixel];
-	    /* calc error */
-	    ber = pixel - b*db;
-
-	    *optr++ = pixels[r*cpcpc + g*cpc + b];
-
-	    /* distribute error */
-	    r = (rer*3)/8;
-	    g = (ger*3)/8;
-	    b = (ber*3)/8;
-	    /* x+1, y */
-	    err[x+3*1]+=r;
-	    err[x+1+3*1]+=g;
-	    err[x+2+3*1]+=b;
-	    /* x, y+1 */
-	    nerr[x]+=r;
-	    nerr[x+1]+=g;
-	    nerr[x+2]+=b;
-	    /* x+1, y+1 */
-	    nerr[x+3*1]=rer-2*r;
-	    nerr[x+1+3*1]=ger-2*g;
-	    nerr[x+2+3*1]=ber-2*b;
-	}
-	/* skip to next line */
-	terr = err;
-	err = nerr;
-	nerr = terr;
-	
-	optr += ximg->image->bytes_per_line - image->width;
-    }
-}
-#endif
 
 
 void
-x86_PseudoColor_32_to_8(unsigned char *image, // 8
-			unsigned char *ximage, // 12
-			char *err, // 16
-			char *nerr, // 20
-			short *rtable, // 24
-			short *gtable, // 28
-			short *btable, // 32
-			int dr, // 36
-			int dg, // 40
-			int db, // 44
-			unsigned long *pixels, // 48
-			int cpc, // 52
-			int width, // 56
-			int height, // 60
-			int line_offset) // 64
+x86_PseudoColor_to_8(unsigned char *image, // 8
+		     unsigned char *ximage, // 12
+		     char *err, // 16
+		     char *nerr, // 20
+		     short *ctable, // 24
+		     int dr, // 28
+		     int dg, // 32
+		     int db, // 36
+		     unsigned long *pixels, // 40
+		     int cpc, // 44
+		     int width, // 48
+		     int height, // 52
+		     int bytesPerPixel, // 56
+		     int line_offset) // 60
 {
+    /*
+     * int x; -4
+     * int cpcpc; -8
+     * 
+     * int rr; -12
+     * int gg; -16
+     * int bb; -20
+     * 
+     * char ndr; -21
+     * char ndg; -22
+     * char ndb; -23
+     * 
+     * char *err; -32
+     * char *nerr; -36
+     * 
+     */
     asm volatile
 	(
-	 "andl $-8, %ebp		\n"
 	 "subl $128, %esp		\n" // alloc some stack space
 	 "pushal       			\n"
+
+	 "movl 44(%ebp), %eax		\n"
+	 "mulb 44(%ebp)			\n"
+	 "movl %eax, -8(%ebp)		\n" // cpcpc = cpc*cpc
+	 
+	 // eax will always be <= 0xffff
 
 	 // process 1 pixel / cycle, each component treated as 16bit
 	 "movl 8(%ebp), %esi		\n" // esi = image->data
 
 ".LoopYb:				\n"
-	 "movl 56(%ebp), %eax		\n"
-	 "movl %eax, -4(%ebp)		\n" // x = width
+	 "movl 48(%ebp), %ecx		\n"
+	 "movl %ecx, -4(%ebp)		\n" // x = width
 
-	 "movl 60(%ebp), %eax		\n"
-	 "decl %eax			\n" // y--
-	 "movl %eax, 64(%ebp)		\n"
+	 "movl 52(%ebp), %ecx		\n"
+	 "decl %ecx			\n" // y--
+	 "movl %ecx, 52(%ebp)		\n"
 	 "js .Endb			\n" // if y < 0, goto end
-	 "andl $1, %eax			\n"
+	 "andl $1, %ecx			\n"
 	 "jz .LoopY_1b			\n" // if (y&1) goto LoopY_1
 
 ".LoopY_0b:				\n"
 
 	 "movl 16(%ebp), %ebx		\n" // ebx = err
-	 "movl %ebx, -36(%ebp)		\n" // [-36] = err
-	 "movl 20(%ebp), %eax		\n" //
-	 "movl %eax, -32(%ebp)		\n" // [-32] = nerr
+//	 "movl %ebx, -36(%ebp)		\n" // [-36] = err
+	 "movl 20(%ebp), %ecx		\n" //
+	 "movl %ecx, -32(%ebp)		\n" // [-32] = nerr
 
-	 "movl $0, -32(%ebp)		\n" // init error of nerr[0] to 0
+	 "movl $0, (%ecx)		\n" // init error of nerr[0] to 0
 
 	 "jmp .LoopXb			\n"
 
 ".LoopY_1b:				\n"
 
 	 "movl 20(%ebp), %ebx		\n" // ebx = nerr
-	 "movl %ebx, -36(%ebp)		\n" // [-36] = nerr
-	 "movl 16(%ebp), %eax		\n" //
-	 "movl %eax, -32(%ebp)		\n" // [-32] = err
+//	 "movl %ebx, -36(%ebp)		\n" // [-36] = nerr
+	 "movl 16(%ebp), %ecx		\n" //
+	 "movl %ecx, -32(%ebp)		\n" // [-32] = err
 
-	 "movl $0, -32(%ebp)		\n" // init error of nerr[0] to 0
+	 "movl $0, (%ecx)		\n" // init error of nerr[0] to 0
 
+	 
+	 ".align 16			\n"
 ".LoopXb:				\n"
 	 
-	 "movl (%esi), %edx		\n" // fetch a pixel
 
-//	 "movl  				\n"
+	 "movl 24(%ebp), %edi		\n" // edi = ctable
+	 "xorl %edx, %edx		\n" // zero the upper word on edx
+
+	 // RED
+
+	 // depends on ebx==err, esi==image->data, edi
+	 "movzbw (%esi), %dx		\n" // dx = image->data[0]
+	 "movsbw (%ebx), %ax		\n" // ax = error[0]
+	 "addw %ax, %dx			\n" // pixel.red = data[0] + error[0]
+
+	 "testb %dh, %dh		\n" // test if pixel.red < 0 or > 255
+	 "jz .OKRb			\n" // 0 <= pixel.red <= 255
+	 "js .NEGRb			\n" // pixel.red < 0
+	 "movw $0xff, %dx		\n" // pixel.red > 255
+	 "jmp .OKRb			\n"
+".NEGRb:				\n"
+	 "xorw %dx, %dx			\n"
+".OKRb:					\n"
+	 "leal (%edi, %edx, 2), %ecx	\n" // ecx = &ctable[pixel.red]
+	 "movl (%ecx), %eax		\n" // ax = ctable[pixel.red]
+	 "movw %ax, -12(%ebp)		\n" // save rr
+
+	 "mulb 28(%ebp)			\n" // ax = rr*dr
+	 "subw %ax, %dx			\n" // rer = dx = dx - rr*dr
+
+	 "movswl %dx, %eax		\n" // save rer
+
+	 // distribute error
+	 "leal (, %eax, 8), %ecx	\n"
+	 "subw %dx, %cx			\n" // cx = rer * 7
+	 "sarw $4, %cx			\n" // cx = rer * 7 / 16
+	 "addb %cl, 4(%ebx)		\n" // err[x+1] += rer * 7 / 16
 	 
+	 "movl -32(%ebp), %ecx		\n" // ecx = nerr
+	 
+	 "leaw (%eax, %eax, 4), %dx	\n" // dx = rer * 5
+	 "sarw $4, %dx			\n" // dx = rer * 5 / 16
+	 "addb %dl, (%ecx)		\n" // nerr[x] += rer * 5 / 16
 
+	 "leaw (%eax, %eax, 2), %dx	\n" // dx = rer * 3
+	 "sarw $4, %dx			\n" // dx = rer * 3 / 16
+	 "addb %dl, -4(%ecx)		\n" // nerr[x-1] += rer * 3 / 16
+
+	 "sarw $4, %ax			\n" // ax = rer / 16
+	 "movb %al, 4(%ecx)		\n" // nerr[x+1] = rer / 16
+
+	 
+	 // GREEN
+
+	 // depends on ebx, esi, edi
+	 "movzbw 1(%esi), %dx		\n" // dx = image->data[1]
+	 "movsbw 1(%ebx), %ax		\n" // ax = error[1]
+	 "addw %ax, %dx			\n" // pixel.grn = data[1] + error[1]
+
+	 "testb %dh, %dh		\n" // test if pixel.grn < 0 or > 255
+	 "jz .OKGb			\n" // 0 <= pixel.grn <= 255
+	 "js .NEGGb			\n" // pixel.grn < 0
+	 "movw $0xff, %dx		\n" // pixel.grn > 255
+	 "jmp .OKGb			\n"
+".NEGGb:				\n"
+	 "xorw %dx, %dx			\n"
+".OKGb:					\n"
+	 "leal (%edi, %edx, 2), %ecx	\n" // ecx = &ctable[pixel.grn]
+	 "movw (%ecx), %ax		\n" // ax = ctable[pixel.grn]
+	 "movw %ax, -16(%ebp)		\n" // save gg
+
+	 "mulb 28(%ebp)			\n" // ax = gg*dg
+	 "subw %ax, %dx			\n" // ger = dx = dx - gg*dg
+
+	 "movswl %dx, %eax		\n" // save ger
+
+	 // distribute error
+
+	 "leal (, %eax, 8), %ecx	\n"
+	 "subw %dx, %cx			\n" // cx = ger * 7
+	 "sarw $4, %cx			\n" // cx = ger * 7 / 16
+	 "addb %cl, 5(%ebx)		\n" // err[x+1] += ger * 7 / 16
+	 
+	 "movl -32(%ebp), %ecx		\n" // ecx = nerr
+	 
+	 "leaw (%eax, %eax, 4), %dx	\n" // dx = ger * 5
+	 "sarw $4, %dx			\n" // dx = ger * 5 / 16
+	 "addb %dl, 1(%ecx)		\n" // nerr[x] += ger * 5 / 16
+
+	 "leaw (%eax, %eax, 2), %dx	\n" // dx = ger * 3
+	 "sarw $4, %dx			\n" // dx = ger * 3 / 16
+	 "addb %dl, -3(%ecx)		\n" // nerr[x-1] += ger * 3 / 16
+
+	 "sarw $4, %ax			\n" // ax = ger / 16
+	 "movb %al, 5(%ecx)		\n" // nerr[x+1] = ger / 16
+
+	 
+	 // BLUE
+
+	 // depends on ebx, esi
+	 "movzbw 2(%esi), %dx		\n" // dx = image->data[2]
+	 "movsbw 2(%ebx), %ax		\n" // ax = error[2]
+	 "addw %ax, %dx			\n" // pixel.grn = data[2] + error[2]
+	 
+	 "testb %dh, %dh		\n" // test if pixel.blu < 0 or > 255
+	 "jz .OKBb			\n" // 0 <= pixel.blu <= 255
+	 "js .NEGBb			\n" // pixel.blu < 0
+	 "movw $0xff, %dx		\n" // pixel.blu > 255
+	 "jmp .OKBb			\n"
+".NEGBb:				\n"
+	 "xorw %dx, %dx			\n"
+".OKBb:					\n"
+	 "leal (%edi, %edx, 2), %ecx	\n" // ecx = &ctable[pixel.blu]
+	 "movw (%ecx), %ax		\n" // ax = ctable[pixel.blu]
+	 "movw %ax, -20(%ebp)		\n" // save bb
+
+	 "mulb 28(%ebp)			\n" // ax = bb*db
+	 "subw %ax, %dx			\n" // ber = dx = dx - bb*db
+	 "movswl %dx, %eax		\n" // save ber
+	 
+	 // distribute error
+	 "leal (, %eax, 8), %ecx	\n"
+	 "subw %dx, %cx			\n" // cx = ber * 7
+	 "sarw $4, %cx			\n" // cx = ber * 7 / 16
+	 "addb %cl, 6(%ebx)		\n" // err[x+1] += ber * 7 / 16
+	 
+	 "movl -32(%ebp), %ecx		\n" // ecx = nerr
+	 
+	 "leaw (%eax, %eax, 4), %dx	\n" // dx = ber * 5
+	 "sarw $4, %dx			\n" // dx = ber * 5 / 16
+	 "addb %dl, 2(%ecx)		\n" // nerr[x] += ber * 5 / 16
+
+	 "leaw (%eax, %eax, 2), %dx	\n" // dx = ber * 3
+	 "sarw $4, %dx			\n" // dx = ber * 3 / 16
+	 "addb %dl, -4(%ecx)		\n" // nerr[x-1] += ber * 3 / 16
+
+	 "sarw $4, %ax			\n" // ax = ber / 16
+	 "movb %al, 6(%ecx)		\n" // nerr[x+1] = ber / 16
+
+	 "andl $0xffff, %eax		\n"
+	 // depends on eax & 0xffff0000 == 0
+	 // calculate the index of the value of the pixel
+	 "movw -12(%ebp), %ax		\n" // ax = rr
+	 "mulb -8(%ebp)			\n" // ax = cpcpc*rr
+	 "movw %ax, %cx			\n"
+	 "movw -16(%ebp), %ax		\n" // ax = gg
+	 "mulb 44(%ebp)			\n" // ax = cpc*gg
+	 "addw %cx, %ax			\n" // ax = cpc*gg + cpcpc*rr
+	 "addw -20(%ebp), %ax		\n" // ax = cpcpc*rr + cpc*gg + bb
+
+	 "movl 40(%ebp), %ecx		\n"
+	 "leal (%ecx, %eax, 4), %edx	\n"
+	 "movb (%edx), %cl		\n" // cl = pixels[ax]
+
+	 // store the pixel
+	 "movl 12(%ebp), %eax		\n"
+	 "movb %cl, (%eax)		\n" // *ximage = cl
+	 "incl 12(%ebp)			\n" // ximage++
+
+	 // prepare for next iteration on X
+	 
+	 "addl $4, -32(%ebp)		\n" // nerr += 4
+	 "addl $4, %ebx			\n" // err += 4
+
+	 "addl 56(%ebp), %esi		\n" // image->data += bpp
+
+	 "decl -4(%ebp)			\n" // x--
+	 "jnz .LoopXb			\n" // if x>0, goto .LoopX
+
+	 
+	 "movl 60(%ebp), %eax		\n"
+	 "addl %eax, 12(%ebp)		\n" // add extra offset to ximage
+	 
+	 "jmp .LoopYb			\n"
 
 ".Endb:					\n"
 	 
+	 "emms				\n"
 	 "popal				\n"
 	 );
     

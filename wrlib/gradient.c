@@ -231,8 +231,9 @@ renderDGradient(unsigned width, unsigned height, int r0, int g0, int b0,
 		int rf, int gf, int bf)
 {
     RImage *image, *tmp;
-    unsigned long a;
     int i, j, offset;
+    float a;
+    char *ptr;
 
     if (width == 1)
         return renderVGradient(width, height, r0, g0, b0, rf, gf, bf);
@@ -249,15 +250,18 @@ renderDGradient(unsigned width, unsigned height, int r0, int g0, int b0,
         RDestroyImage(image);
         return NULL;
     }
-
-    a = (((width - 1)<<16) / (height - 1));
+    
+    ptr = tmp->data;
 
     width *= 3;
+    a = ((float)(width - 1))/((float)(height - 1));
+
     /* copy the first line to the other lines with corresponding offset */
-    for (i=0, j=0, offset = 0; i<height; i++, j+= width) {
-        offset += a;
-	memcpy(&(image->data[j]), &(tmp->data[(offset>>16)*3]), width);
+    for (i=0, j=0, offset=0; i<height; i++, j += width) {
+        offset = (int)(a*i+0.5)*3;
+	memcpy(&(image->data[j]), &ptr[offset], width);
     }
+
     RDestroyImage(tmp);
     return image;
 }
@@ -428,7 +432,8 @@ renderMDGradient(unsigned width, unsigned height, RColor **colors, int count)
 {
     RImage *image, *tmp;
     float a;
-    int i, offset;
+    int i, offset, j;
+    unsigned char *ptr;
 
     assert(count > 2);
 
@@ -459,13 +464,15 @@ renderMDGradient(unsigned width, unsigned height, RColor **colors, int count)
         RDestroyImage(image);
         return NULL;
     }
+    ptr = tmp->data;
+
 
     a = ((float)(width - 1))/((float)(height - 1));
 
     /* copy the first line to the other lines with corresponding offset */
-    for (i=0; i<height; i++) {
+    for (i=0, j=0, offset=0; i<height; i++, j += width) {
         offset = (int)(a*i+0.5)*3;
-        memcpy(&(image->data[i*width*3]), &(tmp->data[offset]), width*3);
+	memcpy(&(image->data[j]), &ptr[offset], width);
     }
     RDestroyImage(tmp);
     return image;

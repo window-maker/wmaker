@@ -41,6 +41,19 @@ extern Pixmap R_CreateXImageMappedPixmap(RContext *context, RXImage *ximage);
 #endif
 
 
+#ifdef ASM_X86
+extern void x86_PseudoColor_to_8(unsigned char *image,
+				 unsigned char *ximage, 
+				 char *err, char *nerr,
+				 short *ctable,
+				 int dr, int dg, int db,
+				 unsigned long *pixels,
+				 int cpc, 
+				 int width, int height,
+				 int bytesPerPixel,
+				 int line_offset);
+#endif /* ASM_X86 */
+
 #ifdef ASM_X86_MMX
 
 extern int x86_check_mmx();
@@ -59,7 +72,7 @@ extern void x86_mmx_TrueColor_32_to_16(unsigned char *image,
 
 
 
-#endif /* X86_ASM */
+#endif /* ASM_X86_MMX */
 
 
 
@@ -310,7 +323,8 @@ image2TrueColor(RContext *ctx, RImage *image)
 	    }
 	    memset(err, 0, 8*(image->width+3));
 	    memset(nerr, 0, 8*(image->width+3));
-	    
+
+	    puts("USING MMX");
 	    x86_mmx_TrueColor_32_to_16(image->data, 
 				       (unsigned short*)ximg->image->data, 
 				       err+8, nerr+8,
@@ -414,6 +428,7 @@ convertPseudoColor_to_8(RXImage *ximg, RImage *image,
 	    r = (rer*3)/8;
 	    g = (ger*3)/8;
 	    b = (ber*3)/8;
+
 	    /* x+1, y */
 	    err[x+3*1]+=r;
 	    err[x+1+3*1]+=g;
@@ -499,8 +514,8 @@ image2PseudoColor(RContext *ctx, RImage *image)
 #ifdef DEBUG
         printf("pseudo color dithering with %d colors per channel\n", cpc);
 #endif
-	err = malloc(3*(image->width+2));
-	nerr = malloc(3*(image->width+2));
+	err = malloc(4*(image->width+3));
+	nerr = malloc(4*(image->width+3));
 	if (!err || !nerr) {
 	    if (nerr)
 		free(nerr);
@@ -508,12 +523,22 @@ image2PseudoColor(RContext *ctx, RImage *image)
 	    RDestroyXImage(ctx, ximg);
 	    return NULL;
 	}
-	memset(err, 0, 3*(image->width+3));
-	memset(nerr, 0, 3*(image->width+3));
-  
+	memset(err, 0, 4*(image->width+3));
+	memset(nerr, 0, 4*(image->width+3));
+
+#ifdef ASM_X86
+	x86_PseudoColor_to_8(image->data, ximg->image->data,
+			     err+4, nerr+4,
+			     rtable,
+			     dr, dg, db, ctx->pixels, cpc,
+			     image->width, image->height,
+			     channels, 
+			     ximg->image->bytes_per_line - image->width);
+#else
 	convertPseudoColor_to_8(ximg, image, err+4, nerr+4,
 				rtable,	gtable,	btable,
 				dr, dg, db, ctx->pixels, cpc);
+#endif
 
 	free(err);
 	free(nerr);

@@ -5,7 +5,7 @@ inline static void
 cycle_bench(int start) 
 {
     static volatile unsigned int start_cycle;
-    
+
     if (start) {
 	asm volatile
 	    ("pushl %%edx	\n\t"
@@ -24,7 +24,7 @@ cycle_bench(int start)
 	     : "=m" (start_cycle) : : "eax", "edx");
     } else {
 	volatile int end;
-	
+
 	asm volatile
 	    ("pushl %%edx	\n\t"
 	     "clc            	\n\t"
