@@ -9,6 +9,8 @@ RContext *ctx;
 RImage *img;
 Pixmap pix;
 
+
+
 int main(int argc, char **argv)
 {
     RContextAttributes attr;
@@ -19,7 +21,7 @@ int main(int argc, char **argv)
 	exit(1);
     }
     attr.flags = RC_RenderMode | RC_ColorsPerChannel;
-    attr.render_mode = RM_DITHER;
+    attr.render_mode = RDitheredRendering;
     attr.colors_per_channel = 4;
     ctx = RCreateContext(dpy, DefaultScreen(dpy), &attr);
     if (argc<2) 
@@ -31,6 +33,7 @@ int main(int argc, char **argv)
 	puts(RMessageForError(RErrorCode));
 	exit(1);
     }
+    /*
     if (argc > 2) {
 	RImage *tmp = img;
 	
@@ -38,11 +41,19 @@ int main(int argc, char **argv)
 				tmp->height*atol(argv[2]));
 	RDestroyImage(tmp);
     }
+     */
+
+    if (argc > 2) {
+	img = RScaleImage(img, img->width*atof(argv[2]), 
+			  img->height*atof(argv[2]));
+    }
     if (!RConvertImage(ctx, img, &pix)) {
 	puts(RMessageForError(RErrorCode));
 	exit(1);
     }
-    win = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 10, 10, img->width,
+
+    win = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 10, 10, 
+			      img->width,
 			      img->height, 0, 0, 0);
     RDestroyImage(img);
     XSetWindowBackgroundPixmap(dpy, win, pix);

@@ -93,6 +93,147 @@ computeTable(unsigned short mask)
 }
 
 
+
+static RXImage*
+image2TrueColorD16(RContext *ctx, RImage *image)
+{
+    RXImage *ximg;
+    register int x, y, r, g, b;
+    unsigned char *red, *grn, *blu;
+    unsigned short rmask, gmask, bmask;
+    unsigned short roffs, goffs, boffs;
+    unsigned short *rtable, *gtable, *btable;
+    int ofs;
+
+    ximg = RCreateXImage(ctx, ctx->depth, image->width, image->height);
+    if (!ximg) {
+	return NULL;
+    }
+
+    red = image->data[0];
+    grn = image->data[1];
+    blu = image->data[2];
+    
+    roffs = ctx->red_offset;
+    goffs = ctx->green_offset;
+    boffs = ctx->blue_offset;
+    
+    rmask = ctx->visual->red_mask >> roffs;
+    gmask = ctx->visual->green_mask >> goffs;
+    bmask = ctx->visual->blue_mask >> boffs;
+
+    rtable = computeTable(rmask);
+    gtable = computeTable(gmask);
+    btable = computeTable(bmask);
+
+    if (rtable==NULL || gtable==NULL || btable==NULL) {
+	RErrorCode = RERR_NOMEMORY;
+        RDestroyXImage(ctx, ximg);
+        return NULL;
+    }
+
+    {
+        /* dither */
+	short *rerr, *gerr, *berr;
+	short *nrerr, *ngerr, *nberr;
+	short *terr;
+	unsigned short *dataP;
+	int line_offset;
+	int rer, ger, ber;
+	const int dr=0xff/rmask;
+	const int dg=0xff/gmask;
+        const int db=0xff/bmask;
+
+	rerr = (short*)alloca((image->width+2)*sizeof(short));
+	gerr = (short*)alloca((image->width+2)*sizeof(short));
+	berr = (short*)alloca((image->width+2)*sizeof(short));
+	nrerr = (short*)alloca((image->width+2)*sizeof(short));
+	ngerr = (short*)alloca((image->width+2)*sizeof(short));
+	nberr = (short*)alloca((image->width+2)*sizeof(short));
+	if (!rerr || !gerr || !berr || !nrerr || !ngerr || !nberr) {
+	    RErrorCode = RERR_NOMEMORY;
+	    RDestroyXImage(ctx, ximg);
+	    return NULL;
+	}
+	for (x=0; x<image->width; x++) {
+	    rerr[x] = red[x];
+	    gerr[x] = grn[x];
+	    berr[x] = blu[x];
+	}
+        rerr[x] = gerr[x] = berr[x] = 0;
+	
+	dataP = (unsigned short*)ximg->image->data;
+	line_offset = ximg->image->bytes_per_line - image->width * 2;
+
+        /* convert and dither the image to XImage */
+	for (y=0, ofs=0; y<image->height; y++) {
+	    if (y<image->height-1) {
+		int x1;
+		for (x=0, x1=ofs+image->width; x<image->width; x++, x1++) {
+		    nrerr[x] = red[x1];
+		    ngerr[x] = grn[x1];
+		    nberr[x] = blu[x1];
+		}
+		/* last column */
+		x1--;
+		nrerr[x] = red[x1];
+		ngerr[x] = grn[x1];
+		nberr[x] = blu[x1];
+	    }
+	    for (x=0; x<image->width; x++) {
+		/* reduce pixel */
+                if (rerr[x]>0xff) rerr[x]=0xff; else if (rerr[x]<0) rerr[x]=0;
+                if (gerr[x]>0xff) gerr[x]=0xff; else if (gerr[x]<0) gerr[x]=0;
+                if (berr[x]>0xff) berr[x]=0xff; else if (berr[x]<0) berr[x]=0;
+
+                r = rtable[rerr[x]];
+                g = gtable[gerr[x]];
+                b = btable[berr[x]];
+
+		*(dataP++) = (r<<roffs) | (g<<goffs) | (b<<boffs);
+
+		/* calc error */
+		rer = rerr[x] - r*dr;
+		ger = gerr[x] - g*dg;
+		ber = berr[x] - b*db;
+
+		/* distribute error */
+		r = (rer*3)/8;
+		g = (ger*3)/8;
+		b = (ber*3)/8;
+                /* x+1, y */
+		rerr[x+1]+=r;
+		gerr[x+1]+=g;
+                berr[x+1]+=b;
+		/* x, y+1 */
+		nrerr[x]+=r;
+		ngerr[x]+=g;
+		nberr[x]+=b;
+		/* x+1, y+1 */
+		nrerr[x+1]+=rer-2*r;
+		ngerr[x+1]+=ger-2*g;
+		nberr[x+1]+=ber-2*b;
+	    }
+	    ofs += image->width;
+	    (char*)dataP += line_offset;
+	    /* skip to next line */
+	    terr = rerr;
+	    rerr = nrerr;
+	    nrerr = terr;
+
+	    terr = gerr;
+	    gerr = ngerr;
+	    ngerr = terr;
+
+	    terr = berr;
+	    berr = nberr;
+	    nberr = terr;
+	}
+    }
+    return ximg;
+}
+
+
 static RXImage*
 image2TrueColor(RContext *ctx, RImage *image)
 {
@@ -151,7 +292,7 @@ image2TrueColor(RContext *ctx, RImage *image)
         return NULL;
     }
 
-    if (ctx->attribs->render_mode==RM_MATCH) {
+    if (ctx->attribs->render_mode==RBestMatchRendering) {
         /* fake match */
 #ifdef DEBUG
         puts("true color match");
@@ -264,6 +405,8 @@ image2TrueColor(RContext *ctx, RImage *image)
 }
 
 
+
+
 static RXImage*
 image2PseudoColor(RContext *ctx, RImage *image)
 {
@@ -303,7 +446,7 @@ image2PseudoColor(RContext *ctx, RImage *image)
         return NULL;
     }
 
-    if (ctx->attribs->render_mode == RM_MATCH) {
+    if (ctx->attribs->render_mode == RBestMatchRendering) {
         /* fake match */
 #ifdef DEBUG
         printf("pseudo color match with %d colors per channel\n", cpc);
@@ -477,7 +620,7 @@ image2GrayScale(RContext *ctx, RImage *image)
         return NULL;
     }
 
-    if (ctx->attribs->render_mode == RM_MATCH) {
+    if (ctx->attribs->render_mode == RBestMatchRendering) {
         /* fake match */
 #ifdef DEBUG
         printf("grayscale match with %d colors per channel\n", cpc);
@@ -594,12 +737,18 @@ RConvertImage(RContext *context, RImage *image, Pixmap *pixmap)
     assert(pixmap!=NULL);
 
     /* clear error message */    
-    if (context->vclass == TrueColor)
-      ximg = image2TrueColor(context, image);
-    else if (context->vclass == PseudoColor || context->vclass == StaticColor)
-      ximg = image2PseudoColor(context, image);
+    if (context->vclass == TrueColor) {
+
+	if (context->attribs->render_mode == RDitheredRendering
+	    && (context->depth == 15 || context->depth == 16))
+	    ximg = image2TrueColorD16(context, image);
+	else
+	    ximg = image2TrueColor(context, image);
+
+    } else if (context->vclass == PseudoColor || context->vclass == StaticColor)
+	    ximg = image2PseudoColor(context, image);
     else if (context->vclass == GrayScale || context->vclass == StaticGray)
-      ximg = image2GrayScale(context, image);
+	ximg = image2GrayScale(context, image);
     
     if (!ximg) {
 #ifdef C_ALLOCA
@@ -696,37 +845,6 @@ RConvertImageMask(RContext *context, RImage *image, Pixmap *pixmap,
 }
 
 
-
-int 
-RSmoothScaleBorderConvertImage(RContext *context, RImage *image,
-			       int newWidth, int newHeight, int borderType,
-			       Pixmap *pixmap)
-{
-    return False;
-}
-
-
-
-
-int 
-RScaleBorderConvertImage(RContext *context, RImage *image,
-			 int newWidth, int newHeight, int borderType,
-			 Pixmap *pixmap)
-{
-    return False;
-}
-
-
-
-
-
-
-
-
-
-
-
-
 Bool
 RGetClosestXColor(RContext *context, RColor *color, XColor *retColor)
 {
@@ -801,3 +919,4 @@ RGetClosestXColor(RContext *context, RColor *color, XColor *retColor)
 
     return True;
 }
+

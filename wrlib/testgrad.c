@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 {
     RContextAttributes attr;
     RColor **colors = NULL;
-    int i, rmode = RM_DITHER, ncolors = 0, cpc = 4;
+    int i, rmode = RDitheredRendering, ncolors = 0, cpc = 4;
     char **color_name;
     XColor color;
     XSetWindowAttributes val;
@@ -59,9 +59,9 @@ int main(int argc, char **argv)
     if (argc>1) {
 	for (i=1; i<argc; i++) {
             if (strcmp(argv[i], "-m")==0) {
-                rmode = RM_MATCH;
+                rmode = RBestMatchRendering;
             } else if (strcmp(argv[i], "-d")==0) {
-                rmode = RM_DITHER;
+                rmode = RDitheredRendering;
             } else if (strcmp(argv[i], "-c")==0) {
                 i++;
                 if (i>=argc) {
@@ -161,11 +161,11 @@ int main(int argc, char **argv)
 	gettimeofday(&timev, NULL);
 	t1 = (double)timev.tv_sec + (((double)timev.tv_usec)/1000000);
 	if (i%3==0)
-	    imgh = RRenderMultiGradient(250, 250, colors, RGRD_HORIZONTAL);
+	    imgh = RRenderMultiGradient(550, 550, colors, RGRD_HORIZONTAL);
 	else if (i%3==1)	    
-	    imgh = RRenderMultiGradient(250, 250, colors, RGRD_VERTICAL);
+	    imgh = RRenderMultiGradient(550, 550, colors, RGRD_VERTICAL);
 	else
-	    imgh = RRenderMultiGradient(250, 250, colors, RGRD_DIAGONAL);
+	    imgh = RRenderMultiGradient(550, 550, colors, RGRD_DIAGONAL);
 
 	gettimeofday(&timev, NULL);
 	t2 = (double)timev.tv_sec + (((double)timev.tv_usec)/1000000);

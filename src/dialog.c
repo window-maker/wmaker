@@ -862,7 +862,7 @@ handleLogoPush(XEvent *event, void *data)
 
 
     clicks++;
-    if (!panel->timer && !broken && clicks > 2) {
+    if (!panel->timer && !broken && clicks > 0) {
 	char *file;
 	char *path;
 

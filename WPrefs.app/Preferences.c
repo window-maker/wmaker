@@ -157,7 +157,11 @@ createPanel(Panel *p)
     WMResizeWidget(panel->sizeF, 240, 60);
     WMMoveWidget(panel->sizeF, 20, 10);
     WMSetFrameTitle(panel->sizeF, _("Size Display"));
-    
+
+    WMSetBalloonTextForView(WMWidgetView(panel->posiF),
+			    _("The position or style of the window size\n"
+			      "display that's shown when a window is resized."));
+
     panel->sizeP = WMCreatePopUpButton(panel->sizeF);
     WMResizeWidget(panel->sizeP, 180, 20);
     WMMoveWidget(panel->sizeP, 32, 24);
@@ -173,6 +177,10 @@ createPanel(Panel *p)
     WMResizeWidget(panel->posiF, 240, 60);
     WMMoveWidget(panel->posiF, 20, 75);
     WMSetFrameTitle(panel->posiF, _("Position Display"));
+
+    WMSetBalloonTextForView(WMWidgetView(panel->posiF),
+			    _("The position or style of the window position\n"
+			      "display that's shown when a window is moved."));
 
     panel->posiP = WMCreatePopUpButton(panel->posiF);
     WMResizeWidget(panel->posiP, 180, 20);

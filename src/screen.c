@@ -714,7 +714,10 @@ wScreenInit(int screen_number)
 
     /* screen descriptor for raster graphic library */
     rattr.flags = RC_RenderMode | RC_ColorsPerChannel;
-    rattr.render_mode = wPreferences.no_dithering?RM_MATCH:RM_DITHER;
+    rattr.render_mode = wPreferences.no_dithering 
+				? RBestMatchRendering
+				: RDitheredRendering;
+
     rattr.colors_per_channel = wPreferences.cmap_size;
     if (rattr.colors_per_channel<2)
 	rattr.colors_per_channel = 2;

@@ -42,7 +42,7 @@ static Bool bestContext(Display *dpy, int screen_number, RContext *context);
 
 static RContextAttributes DEFAULT_CONTEXT_ATTRIBS = {
     RC_UseSharedMemory|RC_RenderMode|RC_ColorsPerChannel, /* flags */
-	RM_DITHER, 		       /* render_mode */
+	RDitheredRendering, 		       /* render_mode */
 	4,			       /* colors_per_channel */
 	0, 
 	0,
@@ -204,7 +204,7 @@ allocateGrayScale(RContext *ctx)
 
     if (ncolors>=256 && ctx->vclass==StaticGray) {
         /* don't need dithering for 256 levels of gray in StaticGray visual */
-        ctx->attribs->render_mode = RM_MATCH;
+        ctx->attribs->render_mode = RBestMatchRendering;
     }
 
     colors = malloc(sizeof(XColor)*ncolors);
@@ -491,7 +491,7 @@ RCreateContext(Display *dpy, int screen_number, RContextAttributes *attribs)
 	context->blue_offset = count_offset(context->visual->blue_mask);
 	/* disable dithering on 24 bits visuals */
 	if (context->depth >= 24)
-	    context->attribs->render_mode = RM_MATCH;
+	    context->attribs->render_mode = RBestMatchRendering;
     }
     
     /* check avaiability of MIT-SHM */

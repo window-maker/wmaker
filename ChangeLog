@@ -21,7 +21,9 @@ Changes since version 0.53.0:
 - added high-quality filtered rescaling (smoothed rescaling) to wrlib/wmsetbg
 - added SmoothWorkspaceBack
 - fixed crash bug in Paths section of WPrefs
+- optimized image rendering for 15/16 bpp
 - user menus' paths were changed. See NEWS.
+
 
 Changes since version 0.52.0:
 .............................

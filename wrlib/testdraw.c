@@ -526,7 +526,7 @@ int main(int argc, char **argv)
 
     attr.flags = RC_RenderMode | RC_ColorsPerChannel;
 
-    attr.render_mode = RM_DITHER;
+    attr.render_mode = RDitheredRendering;
     attr.colors_per_channel = 4;
 
     if (visualID >= 0) {

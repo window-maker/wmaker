@@ -322,7 +322,8 @@ void RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
 
 RImage *RScaleImage(RImage *image, unsigned new_width, unsigned new_height);
 
-RImage *RSmoothScaleImage(RImage *src, int newWidth, int newHeight);
+RImage *RSmoothScaleImage(RImage *src, unsigned new_width, 
+			  unsigned new_height);
     
 RImage *RMakeTiledImage(RImage *tile, unsigned width, unsigned height);
 

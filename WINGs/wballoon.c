@@ -188,6 +188,12 @@ W_BalloonHandleLeaveView(WMView *view)
 }
 
 
+/*
+ * botar balao perto do cursor
+ * so mapear balao se o mouse ficar parado pelo delay
+ * 
+ */
+
 static void
 showBalloon(void *data)
 {

@@ -144,7 +144,9 @@ appearanceObserver(void *self, WMNotification *notif)
 	wWindowConfigureBorders(wwin);
     }
     if (flags & WTextureSettings) {
-	wwin->frame->flags.need_texture_remake = 1;
+	wwin->frame->flags.need_texture1_remake = 1;
+	wwin->frame->flags.need_texture2_remake = 1;
+	wwin->frame->flags.need_texture3_remake = 1;
     }
     if (flags & (WTextureSettings | WColorSettings)) {
 	if (wwin->frame->titlebar)

@@ -1180,6 +1180,7 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 	if (tPtr->flags.pointerGrabbed) {
 	    tPtr->flags.pointerGrabbed = 0;
 	    XUngrabPointer(WMScreenDisplay(W_VIEW(tPtr)->screen), CurrentTime);
+	    break;
 	}
 
         move = 1;

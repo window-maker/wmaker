@@ -8,9 +8,7 @@ Do ASAP:
 - blink border of clients with UrgencyHint set between red and black
 - finish session stuff
 - add multiline support for balloons
-- move/add balloon to WINGs
 - finish XStandardColormap stuff in wrlib
-- finish menu editor/other stuff in wprefs
 
 Need to do:
 ===========
