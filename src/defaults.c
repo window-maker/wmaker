@@ -420,7 +420,7 @@ WDefaultEntry optionList[] = {
     {"RaiseDelay",	"0",			NULL,
 	  &wPreferences.raise_delay,	getInt,		NULL
     },
-    {"WindozeCycling",  "YES",			NULL,
+    {"WindozeCycling",  "NO",			NULL,
 	  &wPreferences.windows_cycling,getBool,	NULL
     },
     {"CirculateRaise",	"NO",			NULL,
