@@ -433,18 +433,10 @@ WMSetBrowserTitled(WMBrowser *bPtr, Bool flag)
 }
 
 
-WMListItem*
-WMAddSortedBrowserItem(WMBrowser *bPtr, int column, char *text, Bool isBranch)
+void
+WMSortBrowserColumn(WMBrowser *bPtr, int column)
 {
-    WMListItem *item;
-
-    if (column < 0 || column >= bPtr->columnCount)
-	return NULL;
-
-    item = WMAddSortedListItem(bPtr->columns[column], text);
-    item->isBranch = isBranch;
-
-    return item;
+    WMSortListItems(bPtr->columns[column]);
 }
 
 

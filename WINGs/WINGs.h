@@ -7,7 +7,7 @@
 #include <WUtil.h>
 #include <X11/Xlib.h>
 
-#define WINGS_H_VERSION  990516
+#define WINGS_H_VERSION  991003
 
 
 #ifdef __cplusplus
@@ -327,8 +327,6 @@ typedef struct W_ColorPanel WMColorPanel;
 typedef struct WMListItem {
     char *text;
     void *clientData;		       /* ptr for user clientdata. */
-        
-    struct WMListItem *nextPtr;
     
     unsigned int uflags:16;	       /* flags for the user */
     unsigned int selected:1;
@@ -950,11 +948,14 @@ WMList *WMCreateList(WMWidget *parent);
 
 WMListItem *WMInsertListItem(WMList *lPtr, int row, char *text);
 
-WMListItem *WMAddSortedListItem(WMList *lPtr, char *text);
+void WMSortListItems(WMList *lPtr);
 
 int WMFindRowOfListItemWithTitle(WMList *lPtr, char *title);
 
 WMListItem *WMGetListItem(WMList *lPtr, int row);
+
+WMBag *WMGetListItems(WMList *lPtr);
+
 
 void WMRemoveListItem(WMList *lPtr, int row);
 
@@ -1006,9 +1007,9 @@ void WMSetBrowserMaxVisibleColumns(WMBrowser *bPtr, int columns);
 
 void WMSetBrowserColumnTitle(WMBrowser *bPtr, int column, char *title);
 
-WMListItem *WMAddSortedBrowserItem(WMBrowser *bPtr, int column, char *text, Bool isBranch);
-
 WMListItem *WMInsertBrowserItem(WMBrowser *bPtr, int column, int row, char *text, Bool isBranch);
+
+void WMSortBrowserColumn(WMBrowser *bPtr, int column);
 
 /* Don't free the returned string. */
 char* WMSetBrowserPath(WMBrowser *bPtr, char *path);

@@ -748,12 +748,13 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
 		strcat(buffer, fam->encoding);
 		strcat(buffer, ")");
 	    }
-	    item = WMAddSortedListItem(panel->famLs, buffer);
+	    item = WMAddListItem(panel->famLs, buffer);
 	    
 	    item->clientData = fam;
 	}
 	WMFreeBag(bag);
     }
+    WMSortListItems(panel->famLs);
     
     WMFreeHashTable(families);
 }

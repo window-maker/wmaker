@@ -5,7 +5,10 @@ changes since wmaker 0.61.0:
 - escape key in panels (craig nellist <crn@ozemail.com.au>)
 - applied patch with fixes and enhancements to textfield 
 	(Franck Wolff <wolff@cybercable.fr>)
-
+- changed WMList to use WMBag internally, instead of a linked list
+- replaced WMAddSortedListItem() with WMSortListItems()
+- replaced WMAddSortedBrowserItem() with WMSortBrowserColumn()
+- added WMGetListItems()
 
 changes since wmaker 0.60.0:
 ............................

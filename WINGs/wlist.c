@@ -11,8 +11,7 @@ typedef struct W_List {
     W_Class widgetClass;
     W_View *view;
 
-    WMListItem *items;	       /* array of items */
-    short itemCount;
+    WMBag *items; 		/* list of WMListItem */
     
     short selectedItem;
     
@@ -107,7 +106,9 @@ WMCreateList(WMWidget *parent)
 			 handleActionEvents, lPtr);
 
     lPtr->itemHeight = WMFontHeight(scrPtr->normalFont) + 1;
-        
+
+    lPtr->items = WMCreateBag(4);
+
     /* create the vertical scroller */
     lPtr->vScroller = WMCreateScroller(lPtr);
     WMMoveWidget(lPtr->vScroller, 1, 1);
@@ -126,60 +127,27 @@ WMCreateList(WMWidget *parent)
 }
 
 
-
-WMListItem*
-WMAddSortedListItem(WMList *lPtr, char *text)
+static int
+comparator(const void *a, const void *b)
 {
-    WMListItem *item;
-    WMListItem *tmp;
-    int index;
-
-    item = wmalloc(sizeof(WMListItem));
-    memset(item, 0, sizeof(WMListItem));
-    item->text = wstrdup(text);
-    if (!lPtr->items) {
-	lPtr->items = item;
-	index = 0;
-    } else if (strcmp(lPtr->items->text, text) > 0) {
-	item->nextPtr = lPtr->items;
-	lPtr->items = item;
-	index = 1;
-    } else {	
-	int added = 0;
-	
-	index = 0;
-	tmp = lPtr->items;
-	while (tmp->nextPtr) {
-	    if (strcmp(tmp->nextPtr->text, text) >= 0) {
-		item->nextPtr = tmp->nextPtr;
-		tmp->nextPtr = item;
-		added = 1;
-		break;
-	    }
-	    index++;
-	    tmp = tmp->nextPtr;
-	}
-	if (!added) {
-	    tmp->nextPtr = item;
-	}
-    }
-
-    if (index < lPtr->fullFitLines+lPtr->flags.dontFitAll-lPtr->topItem) {
-	paintList(lPtr);
-    }
-
-    lPtr->itemCount++;
+    WMListItem *item1 = (WMListItem*)a;
+    WMListItem *item2 = (WMListItem*)b;
     
-    if (lPtr->selectedItem >= index)
-	lPtr->selectedItem++;
+    if (strcmp(item1->text, item2->text) < 0)
+	return -1;
+    else if (strcmp(item1->text, item2->text) > 0)
+	return 1;
+    else
+	return 0;
+}
 
-    /* update the scroller when idle, so that we don't waste time
-     * updating it when another item is going to be added later */
-    if (!lPtr->idleID) {
-	lPtr->idleID = WMAddIdleHandler((WMCallback*)updateScroller, lPtr);
-    } 
 
-    return item;
+void
+WMSortListItems(WMList *lPtr)
+{
+    WMSortBag(lPtr->items, comparator);
+
+    paintList(lPtr);
 }
 
 
@@ -188,7 +156,6 @@ WMListItem*
 WMInsertListItem(WMList *lPtr, int row, char *text)
 {
     WMListItem *item;
-    WMListItem *tmp = lPtr->items;
 
     CHECK_CLASS(lPtr, WC_List);
 
@@ -200,31 +167,15 @@ WMInsertListItem(WMList *lPtr, int row, char *text)
     if (lPtr->selectedItem >= row && lPtr->selectedItem >= 0
 	&& row >= 0)
 	lPtr->selectedItem++;
+    
+    if (row < 0)
+	row = WMGetBagItemCount(lPtr->items);
 
-    if (lPtr->items==NULL) {
-	lPtr->items = item;
-    } else if (row == 0) {
-	item->nextPtr = lPtr->items;
-	lPtr->items = item;
-    } else if (row < 0) {
-	while (tmp->nextPtr)
-	    tmp = tmp->nextPtr;
-
-	tmp->nextPtr = item;
-	row = lPtr->itemCount;
-    } else {
-	while (--row > 0)
-	    tmp = tmp->nextPtr;
-
-	item->nextPtr = tmp->nextPtr;
-	tmp->nextPtr = item;
-    }
+    WMInsertInBag(lPtr->items, row, item);
 
     if (row < lPtr->fullFitLines+lPtr->flags.dontFitAll-lPtr->topItem) {
 	paintList(lPtr);
     }
-
-    lPtr->itemCount++;
 
     /* update the scroller when idle, so that we don't waste time
      * updating it when another item is going to be added later */
@@ -239,14 +190,13 @@ WMInsertListItem(WMList *lPtr, int row, char *text)
 void
 WMRemoveListItem(WMList *lPtr, int row)
 {
-    WMListItem *llist;
-    WMListItem *tmp;
+    WMListItem *item;
     int topItem = lPtr->topItem;
     int selNotify = 0;
 
     CHECK_CLASS(lPtr, WC_List);
     
-    if (row < 0 || row >= lPtr->itemCount)
+    if (row < 0 || row >= WMGetBagItemCount(lPtr->items))
 	return;
 
     if (lPtr->selectedItem == row) {
@@ -261,28 +211,12 @@ WMRemoveListItem(WMList *lPtr, int row)
     if (lPtr->topItem < 0)
 	lPtr->topItem = 0;
 
-    if (row == 0) {	
-	if (lPtr->items->text)
-	    free(lPtr->items->text);
-	
-	tmp = lPtr->items->nextPtr;
-	free(lPtr->items);
-	
-	lPtr->items = tmp;
-    } else {
-	llist = lPtr->items;
-	while (--row > 0)
-	    llist = llist->nextPtr;
-	tmp = llist->nextPtr;
-	llist->nextPtr = llist->nextPtr->nextPtr;
+    item = WMGetFromBag(lPtr->items, row);
+    if (item->text)
+	free(item->text);
+    free(item);
 
-	if (tmp->text)
-	    free(tmp->text);
-
-	free(tmp);
-    }
-    
-    lPtr->itemCount--;
+    WMDeleteFromBag(lPtr->items, row);
 
     if (!lPtr->idleID) {
 	lPtr->idleID = WMAddIdleHandler((WMCallback*)updateScroller, lPtr);
@@ -299,14 +233,14 @@ WMRemoveListItem(WMList *lPtr, int row)
 WMListItem*
 WMGetListItem(WMList *lPtr, int row)
 {
-    WMListItem *listPtr;
+    return WMGetFromBag(lPtr->items, row);
+}
 
-    listPtr = lPtr->items;
-    
-    while (row-- > 0) 
-	listPtr = listPtr->nextPtr;
-    
-    return listPtr;
+
+WMBag*
+WMGetListItems(WMList *lPtr)
+{
+    return lPtr->items;
 }
 
 
@@ -334,18 +268,17 @@ WMSetListUserDrawItemHeight(WMList *lPtr, unsigned short height)
 void
 WMClearList(WMList *lPtr)
 {
-    WMListItem *item, *tmp;
+    WMListItem *item;
     int oldSelected = lPtr->selectedItem;
+    int i;
 
-    item = lPtr->items;
-    while (item) {
+    for (i = 0; i < WMGetBagItemCount(lPtr->items); i++) {
+	item = WMGetFromBag(lPtr->items, i);
 	free(item->text);
-	tmp = item->nextPtr;
 	free(item);
-	item = tmp;
     }
-    lPtr->items = NULL;
-    lPtr->itemCount = 0;
+    WMEmptyBag(lPtr->items);
+
     lPtr->topItem = 0;
     lPtr->selectedItem = -1;
 
@@ -380,18 +313,11 @@ WMSetListDoubleAction(WMList *lPtr, WMAction *action, void *clientData)
 
 WMListItem*
 WMGetListSelectedItem(WMList *lPtr)
-{    
-    int i = lPtr->selectedItem;
-    WMListItem *item;
-
+{
     if (lPtr->selectedItem < 0)
 	return NULL;
-    
-    item = lPtr->items;
-    while (i-- > 0) {
-	item = item->nextPtr;
-    }
-    return item;
+
+    return WMGetFromBag(lPtr->items, lPtr->selectedItem);
 }
 
 
@@ -413,8 +339,8 @@ void
 WMSetListPosition(WMList *lPtr, int row)
 {
     lPtr->topItem = row;
-    if (lPtr->topItem + lPtr->fullFitLines > lPtr->itemCount)
-	lPtr->topItem = lPtr->itemCount - lPtr->fullFitLines;
+    if (lPtr->topItem + lPtr->fullFitLines > WMGetBagItemCount(lPtr->items))
+	lPtr->topItem = WMGetBagItemCount(lPtr->items) - lPtr->fullFitLines;
 
     if (lPtr->topItem < 0)
 	lPtr->topItem = 0;
@@ -427,7 +353,7 @@ WMSetListPosition(WMList *lPtr, int row)
 void
 WMSetListBottomPosition(WMList *lPtr, int row)
 {
-    if (lPtr->itemCount > lPtr->fullFitLines) {
+    if (WMGetBagItemCount(lPtr->items) > lPtr->fullFitLines) {
 	lPtr->topItem = row - lPtr->fullFitLines;
 	if (lPtr->topItem < 0)
 	    lPtr->topItem = 0;
@@ -440,7 +366,7 @@ WMSetListBottomPosition(WMList *lPtr, int row)
 int
 WMGetListNumberOfRows(WMList *lPtr)
 {
-    return lPtr->itemCount;
+    return WMGetBagItemCount(lPtr->items);
 }
 
 int
@@ -457,6 +383,7 @@ vScrollCallBack(WMWidget *scroller, void *self)
     WMScroller *sPtr = (WMScroller*)scroller;
     int height;
     int topItem = lPtr->topItem;
+    int itemCount = WMGetBagItemCount(lPtr->items);
     
     height = lPtr->view->size.height - 4;
 
@@ -481,7 +408,7 @@ vScrollCallBack(WMWidget *scroller, void *self)
 
 	
      case WSIncrementLine:
-	if (lPtr->topItem + lPtr->fullFitLines < lPtr->itemCount) {
+	if (lPtr->topItem + lPtr->fullFitLines < itemCount) {
 	    lPtr->topItem++;
 	    
 	    updateScroller(lPtr);
@@ -489,11 +416,11 @@ vScrollCallBack(WMWidget *scroller, void *self)
 	break;
 	
      case WSIncrementPage:
-	if (lPtr->topItem + lPtr->fullFitLines < lPtr->itemCount) {
+	if (lPtr->topItem + lPtr->fullFitLines < itemCount) {
 	    lPtr->topItem += lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
 
-	    if (lPtr->topItem + lPtr->fullFitLines > lPtr->itemCount)
-		lPtr->topItem = lPtr->itemCount - lPtr->fullFitLines;
+	    if (lPtr->topItem + lPtr->fullFitLines > itemCount)
+		lPtr->topItem = itemCount - lPtr->fullFitLines;
 
 	    updateScroller(lPtr);
 	}
@@ -504,7 +431,7 @@ vScrollCallBack(WMWidget *scroller, void *self)
 	    int oldTopItem = lPtr->topItem;
 	    
 	    lPtr->topItem = WMGetScrollerValue(lPtr->vScroller) * 
-		(float)(lPtr->itemCount - lPtr->fullFitLines);
+		(float)(itemCount - lPtr->fullFitLines);
 
 	    if (oldTopItem != lPtr->topItem)
 		paintList(lPtr);
@@ -529,12 +456,10 @@ paintItem(List *lPtr, int index)
     W_Screen *scr = view->screen;
     int width, height, x, y;
     WMListItem *itemPtr;
-    int i;
 
-    i = index;
-    itemPtr = lPtr->items;
-    while (i-- > 0)
-	itemPtr = itemPtr->nextPtr;
+
+    itemPtr = WMGetFromBag(lPtr->items, index);
+    
 
     width = lPtr->view->size.width - 2 - 19;
     height = lPtr->itemHeight;
@@ -567,7 +492,7 @@ paintItem(List *lPtr, int index)
 			   width, height);
 	else
 	    XClearArea(scr->display, view->window, x, y, width, height, False);
-	
+
 	W_PaintText(view, view->window, scr->normalFont,  x+4, y, width,
 		    WALeft, WMColorGC(scr->black), False, 
 		    itemPtr->text, strlen(itemPtr->text));
@@ -585,9 +510,11 @@ paintList(List *lPtr)
     if (!lPtr->view->flags.mapped)
 	return;
 
-    if (lPtr->itemCount>0) {
-	if (lPtr->topItem+lPtr->fullFitLines+lPtr->flags.dontFitAll > lPtr->itemCount) {
-	    lim = lPtr->itemCount - lPtr->topItem;
+    if (WMGetBagItemCount(lPtr->items) > 0) {
+	if (lPtr->topItem+lPtr->fullFitLines+lPtr->flags.dontFitAll 
+	    > WMGetBagItemCount(lPtr->items)) {
+
+	    lim = WMGetBagItemCount(lPtr->items) - lPtr->topItem;
 	    XClearArea(scrPtr->display, lPtr->view->window, 19,
 		       2+lim*lPtr->itemHeight, lPtr->view->size.width-21,
 		       lPtr->view->size.height-lim*lPtr->itemHeight-3, False);
@@ -616,6 +543,7 @@ static void
 updateScroller(List *lPtr)
 {
     float knobProportion, floatValue, tmp;
+    int count = WMGetBagItemCount(lPtr->items);
 
     if (lPtr->idleID)
  	WMDeleteIdleHandler(lPtr->idleID);
@@ -623,14 +551,14 @@ updateScroller(List *lPtr)
         
     paintList(lPtr);
     
-    if (lPtr->itemCount == 0 || lPtr->itemCount <= lPtr->fullFitLines)
+    if (count == 0 || count <= lPtr->fullFitLines)
 	WMSetScrollerParameters(lPtr->vScroller, 0, 1);
     else {
 	tmp = lPtr->fullFitLines;
-	knobProportion = tmp/(float)lPtr->itemCount;
-    
-	floatValue = (float)lPtr->topItem/(float)(lPtr->itemCount - lPtr->fullFitLines);
-    
+	knobProportion = tmp/(float)count;
+
+	floatValue = (float)lPtr->topItem/(float)(count - lPtr->fullFitLines);
+
 	WMSetScrollerParameters(lPtr->vScroller, floatValue, knobProportion);
     }
 }
@@ -666,7 +594,8 @@ WMFindRowOfListItemWithTitle(WMList *lPtr, char *title)
     int i;
     int ok = 0;
     
-    for (i=0, item=lPtr->items; item!=NULL; item=item->nextPtr, i++) {
+    for (i=0; i < WMGetBagItemCount(lPtr->items); i++) {
+	item = WMGetFromBag(lPtr->items, i);
 	if (strcmp(item->text, title)==0) {
 	    ok = 1;
 	    break;
@@ -681,9 +610,9 @@ void
 WMSelectListItem(WMList *lPtr, int row)
 {
     WMListItem *itemPtr;
-    int i, notify = 0;
+    int notify = 0;
 
-    if (row >= lPtr->itemCount)
+    if (row >= WMGetBagItemCount(lPtr->items))
 	return;
 
     /* the check below must be changed when the multiple selection is
@@ -697,15 +626,15 @@ WMSelectListItem(WMList *lPtr, int row)
     if (!lPtr->flags.allowMultipleSelection) {
 	/* unselect previous selected item */
 	if (lPtr->selectedItem >= 0) {
-	    itemPtr = lPtr->items;
-	    for (i=0; i<lPtr->selectedItem; i++)
-		itemPtr = itemPtr->nextPtr;
-	    
+	    itemPtr = WMGetFromBag(lPtr->items, lPtr->selectedItem);
+
 	    if (itemPtr->selected) {
 		itemPtr->selected = 0;
-		if (lPtr->view->flags.mapped && i>=lPtr->topItem 
-		    && i<=lPtr->topItem+lPtr->fullFitLines)
-		    paintItem(lPtr, i);
+		if (lPtr->view->flags.mapped 
+		    && lPtr->selectedItem>=lPtr->topItem
+		    && lPtr->selectedItem<=lPtr->topItem+lPtr->fullFitLines) {
+		    paintItem(lPtr, lPtr->selectedItem);
+		}
 	    }
 	}
     }
@@ -721,9 +650,8 @@ WMSelectListItem(WMList *lPtr, int row)
     }
 
     /* select item */
-    itemPtr = lPtr->items;
-    for (i=0; i<row; i++)
-	itemPtr = itemPtr->nextPtr;
+    itemPtr = WMGetFromBag(lPtr->items, row);
+
     if (lPtr->flags.allowMultipleSelection)
 	itemPtr->selected = !itemPtr->selected;
     else
@@ -752,7 +680,7 @@ getItemIndexAt(List *lPtr, int clickY)
 
     index = (clickY - 2) / lPtr->itemHeight + lPtr->topItem;
 
-    if (index < 0 || index >= lPtr->itemCount)
+    if (index < 0 || index >= WMGetBagItemCount(lPtr->items))
 	return -1;
 
     return index;
@@ -830,8 +758,8 @@ updateGeometry(WMList *lPtr)
 	lPtr->flags.dontFitAll = 0;
     }
 
-    if (lPtr->itemCount - lPtr->topItem <= lPtr->fullFitLines) {
-	lPtr->topItem = lPtr->itemCount - lPtr->fullFitLines;
+    if (WMGetBagItemCount(lPtr->items) - lPtr->topItem <= lPtr->fullFitLines) {
+	lPtr->topItem = WMGetBagItemCount(lPtr->items) - lPtr->fullFitLines;
 	if (lPtr->topItem < 0)
 	    lPtr->topItem = 0;
     }
@@ -854,20 +782,19 @@ didResizeList(W_ViewDelegate *self, WMView *view)
 static void
 destroyList(List *lPtr)
 {
-    WMListItem *itemPtr;
+    WMListItem *item;
+    int i;
     
     if (lPtr->idleID)
  	WMDeleteIdleHandler(lPtr->idleID);
     lPtr->idleID = NULL;
 
-    while (lPtr->items!=NULL) {
-	itemPtr = lPtr->items;
-	if (itemPtr->text)
-	    free(itemPtr->text);
-	
-	lPtr->items = itemPtr->nextPtr;
-	free(itemPtr);
+    for (i = 0; i < WMGetBagItemCount(lPtr->items); i++) {
+	item = WMGetFromBag(lPtr->items, i);
+	free(item->text);
+	free(item);
     }
+    WMFreeBag(lPtr->items);
     
     free(lPtr);
 }

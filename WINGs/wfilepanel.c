@@ -102,22 +102,24 @@ static WMBrowserDelegate browserDelegate = {
 static int
 closestListItem(WMList *list, char *text, Bool exact)
 {
-    WMListItem *item = WMGetListItem(list, 0);
-    int i = 0;
+    WMListItem *item;
+    WMBag *items = WMGetListItems(list);
+    int i;
     int len = strlen(text);
 
     if (len==0)
 	return -1;
 
-    while (item) {
+    for (i = 0; i < WMGetBagItemCount(items); i++) {
+	item = WMGetFromBag(items, i);
+
         if (strlen(item->text) >= len &&
             ((exact && strcmp(item->text, text)==0) ||
              (!exact && strncmp(item->text, text, len)==0))) {
 	    return i;
 	}
-	item = item->nextPtr;
-	i++;
     }
+
     return -1;
 }
 
@@ -576,10 +578,10 @@ listDirectoryOnColumn(WMFilePanel *panel, int column, char *path)
 	    isDirectory = S_ISDIR(stat_buf.st_mode);
 	    
 	    if (filterFileName(panel, dentry->d_name, isDirectory))
-		WMAddSortedBrowserItem(bPtr, column, dentry->d_name, 
-					  isDirectory);
+		WMInsertBrowserItem(bPtr, column, -1, dentry->d_name, isDirectory);
 	}
     }
+    WMSortBrowserColumn(bPtr, column);
 
     closedir(dir);
 }
@@ -646,7 +648,6 @@ createDir(WMButton *bPre, WMFilePanel *panel)
     char *directory;
     char *file;
     char *s;
-    char *err_str;
     WMScreen *scr = WMWidgetScreen(panel->win);
     WMInputPanel *_panel;
 
@@ -680,14 +681,14 @@ createDir(WMButton *bPre, WMFilePanel *panel)
     if (directory_name[0] == '/') {
         directory[0] = 0;
     } else {
-        while (s = strstr(directory,"//")) {
+        while ((s = strstr(directory,"//"))) {
             int i;
             for (i = 2;s[i] == '/';i++);
             strcpy(s, &s[i-1]);
         }
         if ((s = strrchr(directory, '/')) && !s[1]) s[0] = 0;
     }
-    while (s = strstr(directory_name,"//")) {
+    while ((s = strstr(directory_name,"//"))) {
         int i;
         for (i = 2;s[i] == '/';i++);
         strcpy(s, &s[i-1]);
@@ -696,7 +697,7 @@ createDir(WMButton *bPre, WMFilePanel *panel)
 
     file = wmalloc(strlen(directory_name)+strlen(directory)+1);
     sprintf(file, "%s/%s", directory, directory_name);
-    while (s = strstr(file,"//")) {
+    while ((s = strstr(file,"//"))) {
         int i;
         for (i = 2;s[i] == '/';i++);
         strcpy(s, &s[i-1]);
@@ -727,13 +728,12 @@ deleteFile(WMButton *bPre, WMFilePanel *panel)
 {
     char *file;
     char *buffer, *s;
-    char *err_str;
     struct stat filestat;
     WMScreen *scr = WMWidgetScreen(panel->win);
 
     file = getCurrentFileName(panel);
 
-    while (s = strstr(file,"//")) {
+    while ((s = strstr(file,"//"))) {
         int i;
         for (i = 2;s[i] == '/';i++);
         strcpy(s, &s[i-1]);
@@ -835,7 +835,7 @@ goUnmount(WMButton *bPtr, WMFilePanel *panel)
 static void
 goFloppy(WMButton *bPtr, WMFilePanel *panel)
 {
-    char *file, *err_str;
+    char *file;
     struct stat filestat;
     WMScreen *scr = WMWidgetScreen(panel->win);
 

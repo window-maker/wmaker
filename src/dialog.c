@@ -250,9 +250,10 @@ listPixmaps(WScreen *scr, WMList *lPtr, char *path)
 	
 	if (statb.st_mode & (S_IRUSR|S_IRGRP|S_IROTH)
 	    && statb.st_mode & (S_IFREG|S_IFLNK)) {
-	    WMAddSortedListItem(lPtr, dentry->d_name);
+	    WMAddListItem(lPtr, dentry->d_name);
 	}
     }
+    WMSortListItems(lPtr);
 
     closedir(dir);
     free(apath);
@@ -374,10 +375,11 @@ drawIconProc(WMList *lPtr, int index, Drawable d, char *text,
     blackcolor = WMBlackColor(wmscr);
     whitecolor = WMWhiteColor(wmscr);
 
-    dirfile = WMGetListSelectedItem(panel->dirList)->text;
+    dirfile = wexpandpath(WMGetListSelectedItem(panel->dirList)->text);
     buffer = wmalloc(strlen(dirfile)+strlen(text)+4);
-    sprintf(buffer,"%s/%s" ,dirfile,text);
-		
+    sprintf(buffer, "%s/%s", dirfile, text);
+    free(dirfile);
+
     pixmap = WMCreatePixmapFromFile(WMWidgetScreen(panel->win), buffer);
     free(buffer);
     if (!pixmap) {
