@@ -783,7 +783,7 @@ WCFLAGS="-I\$prefix/include $inc_search_path"
 WLFLAGS="-L\$exec_prefix/lib $lib_search_path"
 WLIBS="-lwraster $GFXLIBS $XLIBS -lm"
 
-usage="Usage: get-wraster-flags #lp#--cflags#rp# #lp#--lflags#rp# #lp#--libs#rp#"
+usage="Usage: get-wraster-flags #lp#--cflags#rp# #lp#--ldflags#rp# #lp#--libs#rp#"
 
 if test \$# -eq 0; then
       echo "\${usage}" 1>&2
@@ -795,7 +795,7 @@ while test \$# -gt 0; do
     --cflags)
 	echo \$WCFLAGS
         ;;
-    --lflags)
+    --ldflags|--lflags)
 	echo \$WLFLAGS
         ;;
     --libs)

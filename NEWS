@@ -12,11 +12,12 @@ Added Appearance/Texture editing capability in WPrefs. Workspace background
 selection is not yet finished.
 
 
-New Themes
-----------
+Themes
+------
 
-Added 2 new cool themes (actually I added in 0.51.1, but forgot
-to put it here...) from largo (LeetWM) and BadlandZ (STEP2000).
+Removed all themes from the source tree, and moved them in a separate package.
+You can download the new package from the same place as this package.
+Look after WindowMaker-themes.tar.gz
 
 
 Full Screen Maximization
@@ -27,6 +28,18 @@ be maximized to the full size of the screen (ignoring anything
 like titlebar, resizebar, dock, panels etc). It should be usefull
 for programs that must use the whole screen, like games or things 
 like presentation programs.
+
+
+get-wraster-flags script change
+-------------------------------
+
+The name of the options passed to get-wraster-flags changed, to allow a better
+name compatibility with the naming conventions used by other software.
+The name change was as follows:
+--lflags was changed in --ldflags
+To allow backward compatibility, with already written software, the old
+--lflags option is still recognized, but you are encouraged to move the the
+new --ldflags.
 
 
 --- 0.51.1

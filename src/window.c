@@ -502,7 +502,7 @@ wManageWindow(WScreen *scr, Window window)
     Bool withdraw = False;
 
     /* mutex. */
-//    XGrabServer(dpy);
+    /* XGrabServer(dpy); */
     XSync(dpy, False);
     /* make sure the window is still there */
     if (!XGetWindowAttributes(dpy, window, &wattribs)) {

@@ -1571,7 +1571,7 @@ testOKButton(WMWidget *self, void *data)
     RImage *image;
     
     TexturePanel *panel = (TexturePanel*)data;
-//    test = GetTexturePanelTextureString(panel);
+    /* test = GetTexturePanelTextureString(panel); */
     
     wwarning(test);
     
@@ -1581,7 +1581,7 @@ testOKButton(WMWidget *self, void *data)
     XMapRaised(dpy, win);
     XFlush(dpy);
     
-  //  image = RenderTexturePanelTexture(panel, 250, 250);
+    /* image = RenderTexturePanelTexture(panel, 250, 250); */
     
     RConvertImage(WMScreenRContext(WMWidgetScreen(panel->okB)), image, &pix);
     

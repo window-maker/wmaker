@@ -52,7 +52,7 @@ typedef struct W_PopUpButton {
 #define MENU_BLINK_DELAY	60000
 #define MENU_BLINK_COUNT	2
 
-#define SCROLL_DELAY		30
+#define SCROLL_DELAY		10
 
 
 W_ViewProcedureTable _PopUpButtonViewProcedures = {

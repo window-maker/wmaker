@@ -337,7 +337,7 @@ listIconPaths(WMList *lPtr)
 	/* do not sort, because the order implies the order of
 	 * directories searched */
 	if (access(tmp, X_OK)==0)
-	    WMAddListItem(lPtr, tmp);
+	    WMAddListItem(lPtr, path);
 	free(tmp);
     } while ((path=strtok(NULL, ":"))!=NULL);
 

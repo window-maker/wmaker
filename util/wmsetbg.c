@@ -1249,7 +1249,9 @@ main(int argc, char **argv)
 	wfatal("could not open display");
 	exit(1);
     }
+#if 0
     XSynchronize(dpy, 1);
+#endif
 
     root = DefaultRootWindow(dpy);
 
