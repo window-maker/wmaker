@@ -814,7 +814,8 @@ paintEntry(WMenu *menu, int index, int selected)
                 DefaultDepth(dpy, DefaultScreen(dpy)));
 
         if (scr->menu_item_texture->any.type == WTEX_SOLID) {
-            XFillRectangle(dpy, tmp_bg, scr->menu_item_texture->solid.normal_gc, 0, 0, w, h);
+            XFillRectangle(dpy, tmp_bg, scr->menu_item_texture->solid.normal_gc,
+                    0, 0, w, h);
             drawFrame(scr, tmp_bg, 0, w, h, type);
 
         } else {
