@@ -956,8 +956,7 @@ changePage(WMWidget *w, void *data)
 
     WMSelectListItem(panel->texLs, panel->textureIndex[section]);
 
-    WMSetListPosition(panel->texLs, panel->textureIndex[section] 
-		      - WMGetListNumberOfRows(panel->texLs)/2);
+    WMSetListPosition(panel->texLs, panel->textureIndex[section] - 2);
 
     item = WMGetListItem(panel->texLs, panel->textureIndex[section]);
 

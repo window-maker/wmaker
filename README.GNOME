@@ -45,6 +45,9 @@ before compiling.
 
 Also, do not disable mwm hints support (they are enabled by default).
 
-I am not sure, but using --enable-lite or DisableWSMouseActions=YES;
-might be a bad idea in case of GNOME.
+
+Configuration
+-------------
+
+In WPrefs, go to the last section and toggle the "Disable miniwindows" option.
 

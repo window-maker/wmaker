@@ -676,10 +676,8 @@ iconDblClick(WObjDescriptor *desc, XEvent *event)
        return;
     }
 #endif /* REDUCE_APPICONS */
-#if 0
-    /* aproveita que ta aqui pra atualizar */
-    wapp->main_window = aicon->icon->owner->main_window;
-#endif
+    
+    printf("%i\n",wapp->refcount);
     
     unhideHere = (event->xbutton.state & ShiftMask);
     

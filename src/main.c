@@ -184,10 +184,13 @@ Restart(char *manager)
 	    }
 	}
     }
+    if (dpy) {
 #ifdef XSMP_ENABLED
-    wSessionDisconnectManager();
+	wSessionDisconnectManager();
 #endif
-    XCloseDisplay(dpy);
+	XCloseDisplay(dpy);
+	dpy = NULL;
+    }
     if (!prog)
       execvp(Arguments[0], Arguments);
     else {

@@ -155,7 +155,6 @@ alreadyRunningError(Display *dpy, XErrorEvent *error)
  * not be freed by anybody.
  *---------------------------------------------------------------------- 
  */
-#ifndef NEWSTUFF
 static void
 allocButtonPixmaps(WScreen *scr)
 {
@@ -182,8 +181,6 @@ allocButtonPixmaps(WScreen *scr)
       pix->shared = 1;
     scr->b_pixmaps[WBUT_KILL] = pix;
 }
-#endif
-
 
 
 static void
@@ -366,7 +363,13 @@ allocGCs(WScreen *scr)
     /* misc drawing GC */
     gcv.graphics_exposures = False;
     gcm = GCGraphicsExposures;
-    scr->draw_gc = XCreateGC(dpy, scr->w_win, gcm, &gcv);    
+    scr->draw_gc = XCreateGC(dpy, scr->w_win, gcm, &gcv);
+
+    assert (scr->stipple_bitmap!=None);
+    
+	
+    /* mono GC */
+    scr->mono_gc = XCreateGC(dpy, scr->stipple_bitmap, gcm, &gcv);
 }
 
 
@@ -534,6 +537,19 @@ createInternalWindows(WScreen *scr)
     attribs.background_pixel = scr->icon_back_texture->normal.pixel;
     attribs.border_pixel = 0; /* do not care */
     scr->clip_balloon =
+      XCreateWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, scr->w_depth,
+		    CopyFromParent, scr->w_visual, vmask, &attribs);
+
+    
+    /* workspace name */
+    vmask = CWBackPixel|CWSaveUnder|CWOverrideRedirect|CWColormap
+	|CWBorderPixel;
+    attribs.save_under = True;
+    attribs.override_redirect = True;
+    attribs.colormap = scr->w_colormap;
+    attribs.background_pixel = scr->icon_back_texture->normal.pixel;
+    attribs.border_pixel = 0; /* do not care */
+    scr->workspace_name =
       XCreateWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, scr->w_depth,
 		    CopyFromParent, scr->w_visual, vmask, &attribs);
 
@@ -757,6 +773,8 @@ wScreenInit(int screen_number)
 	wGetColor(scr, FRAME_BORDER_COLOR, &xcol);
 	scr->frame_border_pixel = xcol.pixel;
     }
+
+    scr->workspace_name_font = wLoadFont(DEF_WORKSPACE_NAME_FONT);
 
     /* create GCs with default values */
     allocGCs(scr);

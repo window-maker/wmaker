@@ -152,6 +152,7 @@ typedef struct _WScreen {
     WFont *clip_title_font;	       /* for clip titles */
     WFont *info_text_font;	       /* text on things like geometry
 					* hint boxes */
+    WFont *workspace_name_font;
 
     WMPixel select_pixel;
     WMPixel select_text_pixel;
@@ -192,13 +193,16 @@ typedef struct _WScreen {
     GC select_menu_gc;		       /* selected menu entries */
     GC disabled_menu_entry_gc;	       /* disabled menu entries */
     GC info_text_gc;		       /* for size/position display */
+    GC icon_select_gc;
+    GC workspace_name_gc;	       /* for the name shown when workspace
+					* is changed */
 
     GC frame_gc;		       /* gc for resize/move frame (root) */
     GC line_gc;			       /* gc for drawing XORed lines (root) */
     GC copy_gc;			       /* gc for XCopyArea() */
     GC stipple_gc;		       /* gc for stippled filling */
-    GC icon_select_gc;
     GC draw_gc;			       /* gc for drawing misc things */
+    GC mono_gc;			       /* gc for 1 bit drawables */
 
 #ifndef NEWSTUFF
     struct WPixmap *b_pixmaps[PRED_BPIXMAPS]; /* internal pixmaps for buttons*/
@@ -270,7 +274,12 @@ typedef struct _WScreen {
     
     /* balloon help data */
     struct _WBalloon *balloon;
-    
+
+    /* workspace name data */
+    Window workspace_name;
+    WMHandlerID *workspace_name_timer;
+    struct WorkspaceNameData *workspace_name_data;
+
     /* for raise-delay */
     WMHandlerID *autoRaiseTimer;
     Window autoRaiseWindow;	       /* window that is scheduled to be

@@ -69,7 +69,8 @@ typedef struct {
 
 
 static void
-notifyClient(WMenu *menu, WMenuEntry *entry){
+notifyClient(WMenu *menu, WMenuEntry *entry)
+{
     XEvent event;
     WUserMenuData *data = entry->clientdata;
     WScreen *scr = data->screen;
@@ -78,7 +79,7 @@ notifyClient(WMenu *menu, WMenuEntry *entry){
 
     window=scr->focused_window->client_win;
 
-    for(i=0;i<data->key_no;i++){
+    for(i=0;i<data->key_no;i++) {
         event.xkey.type = KeyPress;
         event.xkey.display = dpy;
         event.xkey.window = window;
@@ -99,7 +100,8 @@ notifyClient(WMenu *menu, WMenuEntry *entry){
 }
 
 static void
-removeUserMenudata(void *menudata){
+removeUserMenudata(void *menudata)
+{
     WUserMenuData *data = menudata;
     if(data->key) free(data->key);
     free(data);
@@ -107,7 +109,8 @@ removeUserMenudata(void *menudata){
 
 
 static WUserMenuData*
-convertShortcuts(WScreen *scr, proplist_t shortcut){
+convertShortcuts(WScreen *scr, proplist_t shortcut)
+{
     WUserMenuData *data;
     KeySym ksym;
     char *k;
@@ -115,10 +118,10 @@ convertShortcuts(WScreen *scr, proplist_t shortcut){
     char buf[128], *b;
     int keycount,i,j,mod;
 
-    if (PLIsString(shortcut)){
+    if (PLIsString(shortcut)) {
         keycount = 1;
     }
-    else if (PLIsArray(shortcut)){
+    else if (PLIsArray(shortcut)) {
         keycount = PLGetNumberOfElements(shortcut);
     }
     else return NULL;
@@ -137,8 +140,7 @@ convertShortcuts(WScreen *scr, proplist_t shortcut){
         data->key[j].modifier = 0;
         if (PLIsArray(shortcut)) {
             strcpy(buf, PLGetString(PLGetArrayElement(shortcut, i)));
-        }
-        else {
+        } else {
             strcpy(buf, PLGetString(shortcut));
         }
         b = (char*)buf;
@@ -180,7 +182,8 @@ keyover:
 }
 
 static WMenu*
-configureUserMenu(WScreen *scr, proplist_t plum){
+configureUserMenu(WScreen *scr, proplist_t plum)
+{
     char *mtitle;
     WMenu *menu=NULL;
     proplist_t elem, title, command, params;
@@ -188,7 +191,7 @@ configureUserMenu(WScreen *scr, proplist_t plum){
     WUserMenuData *data;
 
     if (!plum) return NULL;
-    if (!PLIsArray(plum)){
+    if (!PLIsArray(plum)) {
         return NULL;
     }
 
@@ -196,7 +199,7 @@ configureUserMenu(WScreen *scr, proplist_t plum){
     if (!count) return NULL;
 
     elem = PLGetArrayElement(plum, 0);
-    if (!PLIsString(elem)){
+    if (!PLIsString(elem)) {
         return NULL;
     }
     
@@ -204,9 +207,9 @@ configureUserMenu(WScreen *scr, proplist_t plum){
     
     menu=wMenuCreateForApp(scr, mtitle, True);
     
-    for(i=1; i<count; i++){
+    for(i=1; i<count; i++) {
         elem = PLGetArrayElement(plum,i);
-        if(PLIsArray(PLGetArrayElement(elem,1))){
+        if(PLIsArray(PLGetArrayElement(elem,1))) {
             WMenu *submenu;
             WMenuEntry *mentry;
             
@@ -228,7 +231,7 @@ configureUserMenu(WScreen *scr, proplist_t plum){
             if (!title || !command)
                 return menu;
 
-            if (!strcmp("SHORTCUT",PLGetString(command))){
+            if (!strcmp("SHORTCUT",PLGetString(command))) {
                 WMenuEntry *entry;
 
                 data = convertShortcuts(scr, params);
@@ -242,12 +245,12 @@ configureUserMenu(WScreen *scr, proplist_t plum){
                         }
                         entry->free_cdata = removeUserMenudata;
 
-                        if (PLGetNumberOfElements(elem) >= 4){
+                        if (PLGetNumberOfElements(elem) >= 4) {
                             instances = PLGetArrayElement(elem,idx++);
                             if(PLIsArray(instances))
-                            if (instances && PLGetNumberOfElements(instances)
-                                        && PLIsArray(instances)){
-                                entry->instances = PLRetain(instances);
+				if (instances && PLGetNumberOfElements(instances)
+				    && PLIsArray(instances)){
+				    entry->instances = PLRetain(instances);
                             }
                         }
                     }
@@ -278,9 +281,9 @@ wUserMenuRefreshInstances(WMenu *menu, WWindow *wwin)
 
             oldflag = menu->entries[i]->flags.enabled;
             menu->entries[i]->flags.enabled = 0;
-            for (j=0; j<count;j++){
+            for (j=0; j<count;j++) {
                 ins = PLGetArrayElement(menu->entries[i]->instances,j);
-                if (!strcmp(wwin->wm_instance,PLGetString(ins))){
+                if (!strcmp(wwin->wm_instance,PLGetString(ins))) {
                     menu->entries[i]->flags.enabled = 1;
                     break;
                 }
@@ -291,12 +294,12 @@ wUserMenuRefreshInstances(WMenu *menu, WWindow *wwin)
     }
     for (i=0; i < menu->cascade_no; i++) {
         if (!menu->cascades[i]->flags.brother)
-        wUserMenuRefreshInstances(menu->cascades[i], wwin);
+	    wUserMenuRefreshInstances(menu->cascades[i], wwin);
         else
-        wUserMenuRefreshInstances(menu->cascades[i]->brother, wwin);
+	    wUserMenuRefreshInstances(menu->cascades[i]->brother, wwin);
     }
 
-    if(paintflag)
+    if (paintflag)
         wMenuPaint(menu);
 }
 
@@ -322,7 +325,8 @@ readUserMenuFile(WScreen *scr, char *file_name)
 
 
 WMenu*
-wUserMenuGet(WScreen *scr, WWindow *wwin){
+wUserMenuGet(WScreen *scr, WWindow *wwin)
+{
     WMenu *menu = NULL;
     char buffer[100];
     char *path = NULL;

@@ -23,6 +23,10 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#ifdef SHAPE
+#include <X11/extensions/shape.h>
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -220,15 +224,185 @@ wWorkspaceDelete(WScreen *scr, int workspace)
 }
 
 
+typedef struct WorkspaceNameData {
+    int count;
+    RImage *back;
+    RImage *text;
+} WorkspaceNameData;
+
+
+
+static void
+hideWorkpaceName(void *data)
+{
+    WScreen *scr = (WScreen*)data;
+    
+
+    if (!scr->workspace_name_data || scr->workspace_name_data->count == 0) {
+	XUnmapWindow(dpy, scr->workspace_name);
+
+	if (scr->workspace_name_data) {
+	    RDestroyImage(scr->workspace_name_data->back);
+	    RDestroyImage(scr->workspace_name_data->text);
+	    free(scr->workspace_name_data);
+
+	    scr->workspace_name_data = NULL;
+	}
+	scr->workspace_name_timer = NULL;
+    } else {
+	RImage *img = RCloneImage(scr->workspace_name_data->back);
+	Pixmap pix;
+
+	RCombineImagesWithOpaqueness(img, scr->workspace_name_data->text,
+				     scr->workspace_name_data->count*255/10);
+
+	RConvertImage(scr->rcontext, img, &pix);
+
+	RDestroyImage(img);
+
+	XSetWindowBackgroundPixmap(dpy, scr->workspace_name, pix);
+	XClearWindow(dpy, scr->workspace_name);
+	XFreePixmap(dpy, pix);
+	XFlush(dpy);
+
+	scr->workspace_name_data->count--;
+
+	scr->workspace_name_timer = WMAddTimerHandler(40, hideWorkpaceName,
+						      scr);
+    }
+}
+
+
+
+static void
+showWorkspaceName(WScreen *scr, int workspace)
+{
+    WorkspaceNameData *data;
+    RXImage *ximg;
+    Pixmap text, mask;
+    int w, h;
+    char *name = scr->workspaces[workspace]->name;
+    int len = strlen(name);
+    int x, y;
+
+    if (scr->workspace_name_timer) {
+	WMDeleteTimerHandler(scr->workspace_name_timer);
+	XUnmapWindow(dpy, scr->workspace_name);
+	XFlush(dpy);
+    }
+
+    if (scr->workspace_name_data) {
+	RDestroyImage(scr->workspace_name_data->back);
+	RDestroyImage(scr->workspace_name_data->text);
+	free(scr->workspace_name_data);
+    }
+
+#ifndef I18N_MB
+    XSetFont(dpy, scr->mono_gc, scr->workspace_name_font->font->fid);
+    XSetFont(dpy, scr->draw_gc, scr->workspace_name_font->font->fid);
+#endif
+
+    data = wmalloc(sizeof(WorkspaceNameData));
+
+    w = wTextWidth(scr->workspace_name_font->font, name, len);
+    h = scr->workspace_name_font->height;
+
+    XResizeWindow(dpy, scr->workspace_name, w+4, h+4);
+    XMoveWindow(dpy, scr->workspace_name, (scr->scr_width - (w+4))/2,
+		(scr->scr_height - (h+4))/2);
+
+    text = XCreatePixmap(dpy, scr->w_win, w+4, h+4, scr->w_depth);
+    mask = XCreatePixmap(dpy, scr->w_win, w+4, h+4, 1);
+
+    XSetForeground(dpy, scr->draw_gc, scr->black_pixel);
+    XFillRectangle(dpy, text, scr->draw_gc, 0, 0, w+4, h+4);
+
+    XSetForeground(dpy, scr->mono_gc, 0);
+    XFillRectangle(dpy, mask, scr->mono_gc, 0, 0, w+4, h+4);
+
+    XSetForeground(dpy, scr->mono_gc, 1);
+    for (x = 0; x <= 4; x++) {
+	for (y = 0; y <= 4; y++) {
+	    wDrawString(mask, scr->workspace_name_font, scr->mono_gc,
+			x, scr->workspace_name_font->y + y, name, len);
+	}
+    }
+
+    XSetForeground(dpy, scr->draw_gc, scr->white_pixel);
+    wDrawString(text, scr->workspace_name_font, scr->draw_gc,
+		2, scr->workspace_name_font->y + 2, 
+		scr->workspaces[workspace]->name,
+		strlen(scr->workspaces[workspace]->name));
+#ifdef SHAPE
+    XShapeCombineMask(dpy, scr->workspace_name, ShapeBounding, 0, 0, mask,
+		      ShapeSet);
+#endif
+    XSetWindowBackgroundPixmap(dpy, scr->workspace_name, text);
+    XClearWindow(dpy, scr->workspace_name);
+
+    data->text = RCreateImageFromDrawable(scr->rcontext, text, None);
+
+    XFreePixmap(dpy, text);
+    XFreePixmap(dpy, mask);
+
+    if (!data->text) {
+	XMapRaised(dpy, scr->workspace_name);
+	XFlush(dpy);
+
+	goto erro;
+    }
+
+    ximg = RGetXImage(scr->rcontext, scr->root_win, 
+		      (scr->scr_width - data->text->width)/2,
+		      (scr->scr_height - data->text->height)/2, 
+		      data->text->width, data->text->height);
+
+    if (!ximg) {
+	goto erro;
+    }
+
+    XMapRaised(dpy, scr->workspace_name);
+    XFlush(dpy);
+
+    data->back = RCreateImageFromXImage(scr->rcontext, ximg->image, NULL);
+    RDestroyXImage(scr->rcontext, ximg);
+
+    if (!data->back) {
+	goto erro;
+    }
+
+    data->count = 10;
+
+    scr->workspace_name_data = data;
+
+    scr->workspace_name_timer = WMAddTimerHandler(200, hideWorkpaceName, scr);
+
+    return;
+
+erro:
+    if (data->text)
+	RDestroyImage(data->text);
+    if (data->back)
+	RDestroyImage(data->back);
+    free(data);
+
+    scr->workspace_name_data = NULL;
+
+    scr->workspace_name_timer = WMAddTimerHandler(600, hideWorkpaceName, scr);
+}
+
+
 void
 wWorkspaceChange(WScreen *scr, int workspace)
 {
     if (scr->flags.startup || scr->flags.startup2) {
 	return;
     }
-    
+
     if (workspace != scr->current_workspace) {
         wWorkspaceForceChange(scr, workspace);
+    } else {
+	showWorkspaceName(scr, workspace);
     }
 }
 
@@ -394,6 +568,8 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
             wClipIconPaint(scr->clip_icon);
         }
     }
+
+    showWorkspaceName(scr, workspace);
 
 #ifdef GNOME_STUFF
     wGNOMEUpdateCurrentWorkspaceHint(scr);

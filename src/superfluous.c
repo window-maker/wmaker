@@ -565,3 +565,4 @@ InitGhostWindowMove(WScreen *scr)
 }
 
 #endif /* GHOST_WINDOW_MOVE */
+

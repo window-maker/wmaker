@@ -23,6 +23,7 @@ Changes since version 0.52.0:
 - added a crashing dialog panel to select what to do on crashes.
 - fixed the problem with showing a window as focused in the window list menu
   while it was on another workspace.
+- show workspace name on screen when switching workspaces
 
 
 Changes since version 0.51.2:

@@ -1,3 +1,4 @@
+
 /* MouseSettings.c- mouse options (some are equivalent to xset)
  * 
  *  WPrefs - Window Maker Preferences Program
@@ -47,7 +48,7 @@ typedef struct _Panel {
     
     WMFrame *speedF;
     WMLabel *speedL;
-    WMButton *speedB[5];
+    WMSlider *speedS;
     WMLabel *acceL;
     WMTextField *acceT;
     WMLabel *threL;
@@ -77,7 +78,6 @@ typedef struct _Panel {
     WMPopUpButton *grabP;
 
     /**/
-    WMButton *lastClickedSpeed;
     int maxThreshold;
     float acceleration;
 } _Panel;
@@ -86,8 +86,6 @@ typedef struct _Panel {
 #define ICON_FILE "mousesettings"
 
 #define SPEED_ICON_FILE "mousespeed"
-#define SPEED_IMAGE "speed%i"
-#define SPEED_IMAGE_S "speed%is"
 
 #define DELAY_ICON "timer%i"
 #define DELAY_ICON_S "timer%is"
@@ -132,7 +130,7 @@ setMouseAccel(WMScreen *scr, float accel, int threshold)
 
 
 static void
-speedClick(WMWidget *w, void *data)
+speedChange(WMWidget *w, void *data)
 {
     _Panel *panel = (_Panel*)data;
     int i;
@@ -155,14 +153,11 @@ speedClick(WMWidget *w, void *data)
 	panel->acceleration = accel;
 	free(tmp);
     } else {
-	for (i=0; i<5; i++) {
-	    if (panel->speedB[i]==w)
-		break;
-	}
+	i = (int)WMGetSliderValue(panel->speedS);
     
-	panel->acceleration = 0.5+(i*0.5);
+	panel->acceleration = 0.25+(i*0.25);
 
-	sprintf(buffer, "%.2f", 0.5+(i*0.5));
+	sprintf(buffer, "%.2f", 0.25+(i*0.25));
 	WMSetTextFieldText(panel->acceT, buffer);
     }
 
@@ -185,7 +180,7 @@ returnPressed(void *observerData, WMNotification *notification)
 {
     _Panel *panel = (_Panel*)observerData;
 
-    speedClick(NULL, panel);
+    speedChange(NULL, panel);
 }
 
 
@@ -310,20 +305,12 @@ showData(_Panel *panel)
     sprintf(buffer, "%i", a);
     WMSetTextFieldText(panel->threT, buffer);
 
-    a = -1;
-    for (i=0; i<5; i++) {
-	if (0.5+(float)i*0.5 == accel)
-	    a = i;
-    }
-    if (a >= 0) {
-	WMPerformButtonClick(panel->speedB[a]);
-	panel->lastClickedSpeed = panel->speedB[a];
-    }
+    WMSetSliderValue(panel->speedS, (accel - 0.25)/0.25);
+
     panel->acceleration = accel;
     sprintf(buffer, "%.2f", accel);
     WMSetTextFieldText(panel->acceT, buffer);
 
-    speedClick(panel->lastClickedSpeed, panel);
     /**/
     b = GetIntegerForKey("DoubleClickTime");
     /* find best match */
@@ -549,47 +536,14 @@ createPanel(Panel *p)
 	free(path);
     }
 
-    buf1 = wmalloc(strlen(SPEED_IMAGE)+2);
-    buf2 = wmalloc(strlen(SPEED_IMAGE_S)+2);
+    panel->speedS = WMCreateSlider(panel->speedF);
+    WMResizeWidget(panel->speedS, 160, 15);
+    WMMoveWidget(panel->speedS, 70, 35);
+    WMSetSliderMinValue(panel->speedS, 0);
+    WMSetSliderMaxValue(panel->speedS, 40);
+    WMSetSliderContinuous(panel->speedS, False);
+    WMSetSliderAction(panel->speedS, speedChange, panel);
 
-    for (i = 0; i < 5; i++) {
-	panel->speedB[i] = WMCreateCustomButton(panel->speedF,
-						WBBStateChangeMask);
-	WMResizeWidget(panel->speedB[i], 26, 26);
-	WMMoveWidget(panel->speedB[i], 60+(35*i), 25);
-	WMSetButtonBordered(panel->speedB[i], False);
-	WMSetButtonImagePosition(panel->speedB[i], WIPImageOnly);
-	WMSetButtonAction(panel->speedB[i], speedClick, panel);
-	if (i > 0) {
-	    WMGroupButtons(panel->speedB[0], panel->speedB[i]);
-	}
-	sprintf(buf1, SPEED_IMAGE, i);
-	sprintf(buf2, SPEED_IMAGE_S, i);
-	path = LocateImage(buf1);
-	if (path) {
-	    icon = WMCreatePixmapFromFile(scr, path);
-	    if (icon) {
-		WMSetButtonImage(panel->speedB[i], icon);
-		WMReleasePixmap(icon);
-	    } else {
-		wwarning(_("could not load icon file %s"), path);
-	    }
-	    free(path);
-	}
-	path = LocateImage(buf2);
-	if (path) {
-	    icon = WMCreatePixmapFromFile(scr, path);
-	    if (icon) {
-		WMSetButtonAltImage(panel->speedB[i], icon);
-		WMReleasePixmap(icon);
-	    } else {
-		wwarning(_("could not load icon file %s"), path);
-	    }
-	}
-    }
-    free(buf1);
-    free(buf2);
-    
     panel->acceL = WMCreateLabel(panel->speedF);
     WMResizeWidget(panel->acceL, 70, 16);
     WMMoveWidget(panel->acceL, 10, 67);
