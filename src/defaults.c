@@ -2485,7 +2485,7 @@ getKeybind(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr,
         *k = 0;
         mod = wXModifierFromKey(b);
         if (mod<0) {
-            wwarning(_("%s:invalid key modifier \"%s\""), entry->key, b);
+            wwarning(_("%s: invalid key modifier \"%s\""), entry->key, b);
             return False;
         }
         shortcut.modifier |= mod;

@@ -528,7 +528,7 @@ addShortcut(char *file, char *shortcutDefinition, WMenu *menu,
         *k = 0;
         mod = wXModifierFromKey(b);
         if (mod<0) {
-            wwarning(_("%s:invalid key modifier \"%s\""), file, b);
+            wwarning(_("%s: invalid key modifier \"%s\""), file, b);
             wfree(ptr);
             return False;
         }

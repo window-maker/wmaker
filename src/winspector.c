@@ -1444,7 +1444,7 @@ createInspectorForWindow(WWindow *wwin, int xpos, int ypos,
             caption = _("Do not bind mouse clicks");
             flag = WFLAGP(wwin, no_bind_mouse);
             descr = _("Do not bind mouse actions, such as `Alt'+drag\n"
-                      "in the window (when alt is the modifier you have"
+                      "in the window (when alt is the modifier you have\n"
                       "configured).");
             break;
         case 2:

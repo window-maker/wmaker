@@ -2612,7 +2612,7 @@ saveMenuRecurs(WMPropList *menus, WScreen *scr, WMenu *menu)
 #endif /* !LITE */
 
 
-#define COMPLAIN(key) wwarning(_("bad value in menus state info:%s"), key)
+#define COMPLAIN(key) wwarning(_("bad value in menus state info: %s"), key)
 
 
 static Bool
