@@ -279,7 +279,7 @@ int wsprintesc(char *buffer, int length, char *format, WMSEscapes **escapes,
 
 /*......................................................................*/
 
-/* This function is used _only_ if you create a NON-GUI program.
+/* This function is used _only_ if you create a non-GUI program.
  * For GUI based programs use WMNextEvent()/WMHandleEvent() instead.
  * This function will handle all input/timer/idle events, then return.
  */

@@ -7,6 +7,10 @@ Changes since wmaker 0.64.0:
 - added WMAddPersistentTimerHandler()
 - Moved all internal handlers (timer, idle and input) to handlers.c
 - simplified wevent.c and wutil.c.
+- fixed handling of input with poll (was broken)
+- fixed mem leak that occured when input handling was done with poll
+- simpler and more straightforward event handling for timer, idle, input
+  and X events (also fixed some problems the old handling logic had)
 
 changes since wmaker 0.63.1:
 ............................

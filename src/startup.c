@@ -335,7 +335,7 @@ handleSig(int sig)
 	    wfatal(_("crashed while trying to do some post-crash cleanup. Aborting immediatelly."));
             signal(sig, SIG_DFL);
             kill(getpid(), sig);
-            exit(1);
+            return;
 	}
 	already_crashed = 1;
 

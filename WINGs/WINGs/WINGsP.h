@@ -542,8 +542,6 @@ Bool W_CheckIdleHandlers(void);
 
 void W_CheckTimerHandlers(void);
 
-Bool W_HaveInputHandlers(void);
-
 Bool W_HandleInputEvents(Bool waitForInput, int inputfd);
 
 #ifdef __cplusplus

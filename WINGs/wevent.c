@@ -381,8 +381,13 @@ WMIsDoubleClick(XEvent *event)
 }
 
 
-Bool
-W_WaitForEvent(Display *dpy, unsigned long xeventmask)
+/*
+ * If waitForInput is False, it will just peek to see if input is available
+ * then return without processing input but the return value will show
+ * if input is available or not.
+ */
+static Bool
+waitForEvent(Display *dpy, unsigned long xeventmask, Bool waitForInput)
 {
     XSync(dpy, False);
     if (xeventmask==0) {
@@ -396,7 +401,7 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 	}
     }
 
-    return W_HandleInputEvents(True, ConnectionNumber(dpy));
+    return W_HandleInputEvents(waitForInput, ConnectionNumber(dpy));
 }
 
 
@@ -407,9 +412,8 @@ WMNextEvent(Display *dpy, XEvent *event)
     W_CheckTimerHandlers();
 
     while (XPending(dpy) == 0) {
-	/* Do idle stuff */
 	/* Do idle and timer stuff while there are no timer or X events */
-	while (XPending(dpy) == 0 && W_CheckIdleHandlers()) {
+	while (!waitForEvent(dpy, 0, False) && W_CheckIdleHandlers()) {
 	    /* dispatch timer events */
             W_CheckTimerHandlers();
 	}
@@ -420,8 +424,8 @@ WMNextEvent(Display *dpy, XEvent *event)
 	 * an event that already arrived. 
 	 */
 	/* wait for something to happen or a timer to expire */
-	W_WaitForEvent(dpy, 0);
-	
+	waitForEvent(dpy, 0, True);
+
         /* Check any expired timers */
         W_CheckTimerHandlers();
     }
@@ -429,8 +433,9 @@ WMNextEvent(Display *dpy, XEvent *event)
     XNextEvent(dpy, event);
 }
 
+
 /*
- * Cant use this because XPending() will make W_WaitForEvent
+ * Cant use this because XPending() will make waitForEvent
  * return even if the event in the queue is not what we want,
  * and if we block until some new event arrives from the
  * server, other events already in the queue (like Expose)
@@ -438,7 +443,7 @@ WMNextEvent(Display *dpy, XEvent *event)
  */
 void
 WMMaskEvent(Display *dpy, long mask, XEvent *event)
-{ 
+{
     while (!XCheckMaskEvent(dpy, mask, event)) {
 	/* Do idle stuff while there are no timer or X events */
 	while (W_CheckIdleHandlers()) {
@@ -446,15 +451,16 @@ WMMaskEvent(Display *dpy, long mask, XEvent *event)
 		return;
 	}
 
-        /* Wait for input on the X connection socket */
-	W_WaitForEvent(dpy, mask);
+        /* Wait for input on the X connection socket or another input handler */
+	waitForEvent(dpy, mask, True);
 
         /* Check any expired timers */
         W_CheckTimerHandlers();
     }
 }
 
-Bool 
+
+Bool
 WMScreenPending(WMScreen *scr)
 {
     if (XPending(scr->display))

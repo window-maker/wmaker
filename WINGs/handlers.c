@@ -389,13 +389,6 @@ W_CheckTimerHandlers(void)
 }
 
 
-Bool
-W_HaveInputHandlers(void)
-{
-    return (inputHandler && WMGetBagItemCount(inputHandler)>0);
-}
-
-
 /*
  * This functions will handle input events on all registered file descriptors.
  * Input:
@@ -423,10 +416,10 @@ W_HaveInputHandlers(void)
  *
  * Parametersshould be passed like this:
  * - from wevent.c:
- *   waitForInput = True
+ *   waitForInput - apropriate value passed by the function who called us
  *   inputfd = ConnectionNumber(dpy)
  * - from wutil.c:
- *   waitForInput - value passed from the function who calls this function
+ *   waitForInput - apropriate value passed by the function who called us
  *   inputfd = -1
  *
  */
@@ -436,7 +429,7 @@ W_HandleInputEvents(Bool waitForInput, int inputfd)
 #if defined(HAVE_POLL) && defined(HAVE_POLL_H) && !defined(HAVE_SELECT)
     struct poll fd *fds;
     InputHandler *handler;
-    int count, timeout, nfds, i, extrafd, retval;
+    int count, timeout, nfds, i, extrafd;
 
     extrafd = (inputfd < 0) ? 0 : 1;
 
@@ -526,17 +519,14 @@ W_HandleInputEvents(Bool waitForInput, int inputfd)
         WMFreeBag(handlerCopy);
     }
 
-    /* we may only return count>0, because the returned value is not checked
-     * anywhere anyway. -Dan
-     */
-    retval = ((inputfd < 0) ? (count > 0) :
-              fds[nfds].revents & (POLLIN|POLLRDNORM|POLLRDBAND|POLLPRI));
+    /* --oldway-- retval = ((inputfd < 0) ? (count > 0) :
+     fds[nfds].revents & (POLLIN|POLLRDNORM|POLLRDBAND|POLLPRI));*/
 
     wfree(fds);
 
     W_FlushASAPNotificationQueue();
 
-    return retval;
+    return (count > 0);
 #else
 #ifdef HAVE_SELECT
     struct timeval timeout;
@@ -634,7 +624,8 @@ W_HandleInputEvents(Bool waitForInput, int inputfd)
 
     W_FlushASAPNotificationQueue();
 
-    return ((inputfd < 0) ? (count > 0) : FD_ISSET(inputfd, &rset));
+    /* --oldway-- return ((inputfd < 0) ? (count > 0) : FD_ISSET(inputfd, &rset));*/
+    return (count > 0);
 #else /* not HAVE_SELECT, not HAVE_POLL */
     Neither select nor poll. You lose.
 #endif /* HAVE_SELECT */
