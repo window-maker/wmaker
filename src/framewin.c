@@ -986,21 +986,28 @@ wFrameWindowPaint(WFrameWindow *fwin)
     if (fwin->titlebar && !fwin->flags.repaint_only_resizebar
 	&& fwin->title_texture[fwin->flags.state]->any.type==WTEX_SOLID) {
 #ifdef DRAWSTRING_PLUGIN
-    tmp_bg = XCreatePixmap(dpy, fwin->titlebar->window,
-            fwin->titlebar->width, tb,
-            DefaultDepth(dpy, DefaultScreen(dpy)));
-    XFillRectangle(dpy, tmp_bg, (*fwin->title_texture)->solid.normal_gc,
-            0, 0, fwin->titlebar->width, tb);
-	wDrawBevel(tmp_bg, fwin->titlebar->width,
-		   fwin->titlebar->height,
-		   (WTexSolid*)fwin->title_texture[fwin->flags.state], 
-		   WREL_RAISED);
-    background = &tmp_bg;
+        if (fwin->title) {
+            tmp_bg = XCreatePixmap(dpy, fwin->titlebar->window,
+                    fwin->titlebar->width, tb,
+                    DefaultDepth(dpy, DefaultScreen(dpy)));
+            XFillRectangle(dpy, tmp_bg, (*fwin->title_texture)->solid.normal_gc,
+                    0, 0, fwin->titlebar->width, tb);
+            wDrawBevel(tmp_bg, fwin->titlebar->width,
+                    fwin->titlebar->height,
+                    (WTexSolid*)fwin->title_texture[fwin->flags.state], 
+                    WREL_RAISED);
+            background = &tmp_bg;
+        } else {
+            wDrawBevel(fwin->titlebar->window, fwin->titlebar->width,
+                    fwin->titlebar->height,
+                    (WTexSolid*)fwin->title_texture[fwin->flags.state], 
+                    WREL_RAISED);
+        }
 #else
-	wDrawBevel(fwin->titlebar->window, fwin->titlebar->width,
-		   fwin->titlebar->height,
-		   (WTexSolid*)fwin->title_texture[fwin->flags.state], 
-		   WREL_RAISED);
+        wDrawBevel(fwin->titlebar->window, fwin->titlebar->width,
+                fwin->titlebar->height,
+                (WTexSolid*)fwin->title_texture[fwin->flags.state], 
+                WREL_RAISED);
 #endif
     }
 #ifdef DRAWSTRING_PLUGIN
@@ -1131,8 +1138,7 @@ wFrameWindowPaint(WFrameWindow *fwin)
                 title, titlelen);
     }
 
-    if (fwin->titlebar && !fwin->flags.repaint_only_resizebar
-	&& fwin->title_texture[fwin->flags.state]->any.type==WTEX_SOLID) {
+    if (fwin->title && fwin->title_texture[fwin->flags.state]->any.type==WTEX_SOLID) {
         XFreePixmap(dpy, tmp_bg);
     }
 #undef DRAWSTRING_CURRENT_STATE

@@ -188,7 +188,7 @@ WMFreeTypeRImage *renderChar(FT_Face face, FT_ULong char_index, RColor *color) {
     return tmp_data;
 }
 
-/* drawFreetypeString */
+/* drawFreeTypeString */
 void initDrawFreeTypeString(proplist_t pl, void **init_data) {
     WMFreeTypeData *data;
     XColor xcolor;
@@ -330,6 +330,7 @@ drawFreeTypeString (proplist_t pl, Drawable d,
     if (!func_data[2]) {
         XGetGeometry(ds_dpy, d, &wdummy, &dummy, &dummy, &xwidth, &xheight, &dummy, &dummy);
         pixmap = XCreatePixmap(ds_dpy, d, xwidth, xheight, DefaultDepth(ds_dpy, DefaultScreen(ds_dpy)));
+        XClearWindow(ds_dpy, d);
         XCopyArea(ds_dpy, d, pixmap, gc, 0, 0, xwidth, xheight, 0, 0);
         rimg = RCreateImageFromDrawable(rc, pixmap, None);
         XFreePixmap(ds_dpy, pixmap);
@@ -348,7 +349,8 @@ drawFreeTypeString (proplist_t pl, Drawable d,
                 int _dx, _dy, _sw, _sh;
 
                 _dx = j + data->glyphs_array[text[i]]->left;
-                _dy = (height + data->face->size->metrics.y_ppem)/2 - data->glyphs_array[text[i]]->top;
+                _dy = (height + data->face->size->metrics.y_ppem)/2 -
+                    data->glyphs_array[text[i]]->top;
                 _sw = data->glyphs_array[text[i]]->image->width;
                 _sh = data->glyphs_array[text[i]]->image->height;
 
