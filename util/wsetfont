@@ -12,6 +12,11 @@
 #  -argument --locale=?? takes locale code (ja, sk, ...)
 # )
 #
+# improved by Mike FABIAN <mfabian@suse.de> on April 23th 20003
+# - use 'locale charmap' to find out the encoding of the locale
+#   simulate 'locale charmap' on systems which lack it.
+# - add a few fontsets, especially a generic one which hopefully works almost always
+#
 # [Special Thanks To]
 # Korean fontset info from: 
 #     Byeong-Chan, Kim <redhands@linux.sarang.net> 
@@ -27,6 +32,8 @@
 #     CHOI Junho <junker@jazz.snu.ac.kr>
 # Ukrainian fontset info from: 
 #     Bohdan Vlasyuk <bohdan@vstu.edu.ua>
+# CP1251 and isocyr fontset info from:
+#     Anton Zinoviev <zinoviev@debian.org>
 
 VERSION="Version 0.6  2002/01/12"
 
@@ -42,30 +49,43 @@ Usage:                              $VERSION
         $PROGRAM [--nodef] [--auto] <font_family>
 -----------------------------------------------------------------------
 [font_fam]  [Fontset]                    [Font Information]
- default    helvetica                    
- latin1     helvetica(iso8859-1)
- latin2     helvetica(iso8859-2)          See *Note1.
+ default    helvetica                     See *Note1.
+ generic    helvetica/efont/gnu-unifont/* See *Note2.
+ efontuni   efont(iso10646-1)             See *Note1.
+ gnuuni     gnu-unicode(iso10646-1)       See *Note1.
+ unicode    helvetica(iso10646-1)         Included in XFree86
+ latin1     helvetica(iso8859-1)          Included in XFree86
+ latin2     helvetica(iso8859-2)          Included in XFree86
+ latin9     helvetica(iso8859-15)         Included in XFree86
  greek      helvetica(iso8859-7)          See *Note1.
  japanese   helvetica/-*-fixed(jisx02XX)  Included in X11R6/XFree86("fnon" pkg)
  korean     helvetica/-*-kodig(ksc5601)   See *Note1.
  korean2    helvetica/daewoo(ksc5601)     Included in X11R6/XFree86("fnon" pkg)
  russian    helvetica(koi8-r)             Included in X11R6/XFree86("fcyr" pkg)
  ukrainian  helvetica(koi8-u)             See *Note1.
- turkish    unknown                       See *Note2.
+ cp1251     helvetica(microsoft-cp1251)
+ isocyr     helvetica(iso8859-5)
+ turkish    helvetica(iso8859-9)          Included in XFree86
+ sans       generic alias for use with Xft
+ serif      generic alias for use with Xft
+ monospace  generic alias for use with Xft
 -----------------------------------------------------------------------
 Latin1 Languages: Danish/Dutch/English/Finnish/French/Galician/German/
                   Italian/Norwegian/Portuguese/Spanish/Swedish/...
 Latin2 Languages: Croatian/Czech/Polish/Romanian/Slovenian/...
+Latin9 Languages: same languages as Latin1 but with Euro symbol.
+CP1251 Languages: Belarusian/Bulgarian
 
 *Note1: Not included in X11R6/XFree86. You can download them from ...
- Latin2 X fonts packages:    http://sizif.mf.uni-lj.si/linux/cee/iso8859-2.html
+ efontuni:                   http://openlab.ring.gr.jp/efont/
+ gnuuni:                     http://czyborra.com/unifont/
  Greek X fonts packages:     ftp://argeas.argos.hol.gr/pub/unix/linux/GREEK/fonts/
                              ftp://ftp.ntua.gr/pub/fonts/X11/
  Korean X fonts packages:    ftp://linux.sarang.net  (Linux RPM)
                              ftp://ftp.kaist.ac.kr/pub/hangul/fonts
  Ukrainian X fonts packages: http://www.inp.nsk.su/~bolkhov/files/fonts/cyr-rfx/
-*Note2: please let me know appropriate font setting for WMGLOBAL/WindowMaker,
-        and the fonts' URL to download. mail-to: manome@itlb.te.noda.sut.ac.jp
+*Note2: generic fontset which hopefully works with most locales
+        in most circumstances
 EOF
     exit
 }
@@ -99,23 +119,11 @@ fi
 #
 
 #
-# For --auto and --locale= switch...
-#
-all_codings="latin1 latin2 greek japanese korean2 russian ukrainian"
-latin1="ca da de gl nl fi fr de is it no pt es sv se"
-latin2="hr cz cs hu pl ro sk sl"
-greek="el"
-japanese="ja"
-korean2="ko"
-russian="ru bg"
-ukrainian="uk" # note that it's really uk, not ua.
-
-#
 # These are lists of all domains and keys we're gonna change...
 #
 DomainNames="WMGLOBAL WindowMaker"
 DomainWMGLOBAL="SystemFont BoldSystemFont MultiByteText"
-DomainWindowMaker="WindowTitleFont MenuTitleFont MenuTextFont IconTitleFont ClipTitleFont DisplayFont"
+DomainWindowMaker="WindowTitleFont MenuTitleFont MenuTextFont IconTitleFont ClipTitleFont DisplayFont LargeDisplayFont"
 
 for i in $DomainNames; do
     tmp="Domain$i"
@@ -129,27 +137,36 @@ NotFont="MultiByteText"
 
 #
 # Elements of $NodefUnable will always have fonts set to defaults, while those
-# of $NonedefAble will have changed only coding part of font name (if --nodef
+# of $NodefAble will have changed only coding part of font name (if --nodef
 # command line argument is used).
 #
-NodefAble="default latin1 latin2 greek russian ukrainian"
-NodefUnable="japanese korean korean2"
+NodefAble="default unicode latin1 latin2 latin5 latin9 greek russian ukrainian cp1251 isocyr"
+NodefUnable="generic efontuni gnuuni japanese korean korean2 sans serif monospace"
 Supported="$NodefAble $NodefUnable"
 
-defaultCoding="*-*"
- latin1Coding="iso8859-1"
- latin2Coding="iso8859-2"
-  greekCoding="iso8859-7"
-russianCoding="koi8-r"
+  defaultCoding="*-*"
+  unicodeCoding="iso10646-1"
+   latin1Coding="iso8859-1"
+   latin2Coding="iso8859-2"
+   latin5Coding="iso8859-9"
+   latin9Coding="iso8859-15"
+    greekCoding="iso8859-7"
+  russianCoding="koi8-r"
 ukrainianCoding="koi8-u"
+   cp1251Coding="microsoft-cp1251"
+   isocyrCoding="iso8859-5"
 
-defaultMultiByteText="AUTO"
- latin1MultiByteText="NO"
- latin2MultiByteText="YES"
-  greekMultiByteText="YES"
-russianMultiByteText="YES"
+  defaultMultiByteText="AUTO"
+  unicodeMultiByteText="YES"
+   latin1MultiByteText="NO"
+   latin2MultiByteText="YES"
+   latin5MultiByteText="YES"
+   latin9MultiByteText="YES"
+    greekMultiByteText="YES"
+  russianMultiByteText="YES"
 ukrainianMultiByteText="YES"
-
+   cp1251MultiByteText="YES"
+   isocyrMultiByteText="YES"
 
 #
 # Default WindowMaker fonts for NodefAble font families (part telling us
@@ -163,11 +180,48 @@ DefaultMenuTextFont="-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-"
 DefaultIconTitleFont="-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-"
 DefaultClipTitleFont="-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-"
 DefaultDisplayFont="-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-"
+DefaultLargeDisplayFont="-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-"
 DefaultMultiByteText="AUTO"
 
 #
 # NodefUnable have to give full font descriptions...
 #
+
+genericSystemFont="-*-helvetica-medium-r-normal-*-%d-*-*-*-iso8859-*,-efont-biwidth-medium-r-normal-*-%d-*-*-*-*-*-*-*,-efont-biwidth-medium-r-normal-*-*-*-*-*-*-*-*-*,-gnu-unifont-medium-r-normal-*-16-*-*-*-*-*-*-*,-baekmuk-gulim-medium-r-normal-*-%d-*-*-*-*-*-ksc5601.1987-*,-shinonome-gothic-medium-r-normal-*-%d-*,-*-*-medium-r-normal-*-%d-*,-*-*-medium-r-normal-*-*-*"
+genericBoldSystemFont="-*-helvetica-bold-r-normal-*-%d-*-*-*-iso8859-*,-efont-biwidth-bold-r-normal-*-%d-*-*-*-*-*-*-*,-efont-biwidth-bold-r-normal-*-*-*-*-*-*-*-*-*,-gnu-unifont-medium-r-normal-*-16-*-*-*-*-*-*-*,-baekmuk-gulim-bold-r-normal-*-%d-*-*-*-*-*-ksc5601.1987-*,-shinonome-gothic-bold-r-normal-*-%d-*,-*-*-bold-r-normal-*-%d-*,-*-*-bold-r-normal-*-*-*"
+genericWindowTitleFont="-*-helvetica-bold-r-normal-*-12-*-*-*-iso8859-*,-efont-biwidth-bold-r-normal-*-12-*-*-*-*-*-*-*,-gnu-unifont-medium-r-normal-*-16-*-*-*-*-*-*-*,-baekmuk-gulim-medium-r-normal-*-12-*-*-*-*-*-ksc5601.1987-*,-*-*-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-14-*,-*-*-medium-r-normal-*-*-*"
+genericMenuTitleFont="-*-helvetica-bold-r-normal-*-12-*-*-*-iso8859-*,-efont-biwidth-bold-r-normal-*-12-*-*-*-*-*-*-*,-gnu-unifont-medium-r-normal-*-16-*-*-*-*-*-*-*,-baekmuk-gulim-bold-r-normal-*-12-*-*-*-*-*-ksc5601.1987-*,-shinonome-gothic-bold-r-normal-*-12-*,-*-*-bold-r-normal-*-12-*,-*-*-bold-r-normal-*-14-*,-*-*-bold-r-normal-*-*-*"
+genericMenuTextFont="-*-helvetica-medium-r-normal-*-12-*-*-*-iso8859-*,-efont-biwidth-medium-r-normal-*-12-*-*-*-*-*-*-*,-gnu-unifont-medium-r-normal-*-16-*-*-*-*-*-*-*,-baekmuk-gulim-medium-r-normal-*-12-*-*-*-*-*-ksc5601.1987-*,-shinonome-gothic-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-14-*,-*-*-medium-r-normal-*-*-*"
+genericIconTitleFont="-*-helvetica-medium-r-normal-*-8-*-*-*-iso8859-*,-efont-biwidth-medium-r-normal-*-8-*-*-*-*-*-*-*,-efont-biwidth-medium-r-normal-*-10-*-*-*-*-*-*-*,-gnu-unifont-medium-r-normal-*-16-*-*-*-*-*-*-*,-baekmuk-gulim-medium-r-normal-*-8-*-*-*-*-*-ksc5601.1987-*,-baekmuk-gulim-medium-r-normal-*-10-*-*-*-*-*-ksc5601.1987-*,-shinonome-gothic-medium-r-normal-*-8-*,-shinonome-gothic-medium-r-normal-*-10-*,-shinonome-gothic-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-8-*,-*-*-medium-r-normal-*-10-*,-*-*-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-14-*,-*-*-medium-r-normal-*-*-*"
+genericClipTitleFont="-*-helvetica-bold-r-normal-*-10-*-*-*-iso8859-*,-efont-biwidth-bold-r-normal-*-10-*-*-*-*-*-*-*,-gnu-unifont-medium-r-normal-*-16-*-*-*-*-*-*-*,-baekmuk-gulim-medium-r-normal-*-10-*-*-*-*-*-ksc5601.1987-*,-shinonome-gothic-medium-r-normal-*-10-*,-shinonome-gothic-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-10-*,-*-*-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-14-*,-*-*-medium-r-normal-*-*-*"
+genericDisplayFont="-*-helvetica-medium-r-normal-*-12-*-*-*-iso8859-*,-efont-biwidth-medium-r-normal-*-12-*-*-*-*-*-*-*,-gnu-unifont-medium-r-normal-*-16-*-*-*-*-*-*-*,-baekmuk-gulim-medium-r-normal-*-12-*-*-*-*-*-ksc5601.1987-*,-shinonome-gothic-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-14-*,-*-*-medium-r-normal-*-*-*"
+genericLargeDisplayFont="-*-helvetica-medium-r-normal-*-24-*-*-*-iso8859-*,-efont-biwidth-medium-r-normal-*-24-*-*-*-*-*-*-*,-gnu-unifont-medium-r-normal-*-16-*-*-*-*-*-*-*,-baekmuk-gulim-medium-r-normal-*-24-*-*-*-*-*-ksc5601.1987-*,-shinonome-gothic-medium-r-normal-*-24-*,-*-*-medium-r-normal-*-24-*,-*-*-medium-r-normal-*-*-*"
+genericMultiByteText="YES"
+
+efontuniSystemFont="-efont-biwidth-medium-r-normal-*-%d-*-*-*-*-*-*-*,-efont-biwidth-medium-r-normal-*-*-*-*-*-*-*-*-*"
+efontuniBoldSystemFont="-efont-biwidth-bold-r-normal-*-%d-*-*-*-*-*-*-*,-efont-biwidth-bold-r-normal-*-*-*-*-*-*-*-*-*"
+efontuniWindowTitleFont="-efont-biwidth-bold-r-normal-*-12-*-*-*-*-*-*-*"
+efontuniMenuTitleFont="-efont-biwidth-bold-r-normal-*-12-*-*-*-*-*-*-*"
+efontuniMenuTextFont="-efont-biwidth-medium-r-normal-*-12-*-*-*-*-*-*-*"
+efontuniIconTitleFont="-efont-biwidth-medium-r-normal-*-8-*-*-*-*-*-*-*,-efont-biwidth-medium-r-normal-*-10-*-*-*-*-*-*-*"
+efontuniClipTitleFont="-efont-biwidth-bold-r-normal-*-10-*-*-*-*-*-*-*"
+efontuniDisplayFont="-efont-biwidth-medium-r-normal-*-12-*-*-*-*-*-*-*"
+efontuniLargeDisplayFont="-efont-biwidth-medium-r-normal-*-24-*-*-*-*-*-*-*"
+efontuniMultiByteText="YES"
+
+# Unless scaling of bitmap fonts is allowed (usually disabled nowadays),
+# the GNU-Unifont is only available in 16 pixel height.
+gnuuniSystemFont="-gnu-unifont-medium-r-normal-*-16-*-*-*-*-*-*-*"
+gnuuniBoldSystemFont="-gnu-unifont-bold-r-normal-*-16-*-*-*-*-*-*-*"
+gnuuniWindowTitleFont="-gnu-unifont-bold-r-normal-*-16-*-*-*-*-*-*-*"
+gnuuniMenuTitleFont="-gnu-unifont-bold-r-normal-*-16-*-*-*-*-*-*-*"
+gnuuniMenuTextFont="-gnu-unifont-medium-r-normal-*-16-*-*-*-*-*-*-*"
+gnuuniIconTitleFont="-gnu-unifont-medium-r-normal-*-16-*-*-*-*-*-*-*"
+gnuuniClipTitleFont="-gnu-unifont-bold-r-normal-*-16-*-*-*-*-*-*-*"
+gnuuniDisplayFont="-gnu-unifont-medium-r-normal-*-16-*-*-*-*-*-*-*"
+gnuuniLargeDisplayFont="-gnu-unifont-medium-r-normal-*-16-*-*-*-*-*-*-*"
+gnuuniMultiByteText="YES"
+
 japaneseSystemFont="-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-%d-*,-*-*-medium-r-normal-*-*-*"
 japaneseBoldSystemFont="-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-%d-*,-*-*-medium-r-normal-*-*-*"
 japaneseWindowTitleFont="-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-14-*,-*-*-medium-r-normal-*-*-*"
@@ -176,6 +230,7 @@ japaneseMenuTextFont="-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*,-*-*-mediu
 japaneseIconTitleFont="-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-*-*"
 japaneseClipTitleFont="-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-*-*"
 japaneseDisplayFont="-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-14-*,-*-*-medium-r-normal-*-*-*"
+japaneseLargeDisplayFont="-*-helvetica-medium-r-normal-*-24-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-24-*,-*-*-medium-r-normal-*-16-*,-*-*-medium-r-normal-*-*-*"
 japaneseMultiByteText="YES"
 
 koreanSystemFont="-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*,-*-kodig-medium-r-normal--%d-*-*-*-*-*-*-*,*-*-medium-r-normal-*-%d-*-*-*-*-*-*-*,*-*-*-*-*--%d-*-*-*-*-*-*-*,*"
@@ -186,6 +241,7 @@ koreanMenuTextFont="-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*,-*-kodig-med
 koreanIconTitleFont="-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-*-*,-*-kodig-medium-r-normal--10-*-*-*-*-*-*-*,*-*-medium-r-normal--10-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*"
 koreanClipTitleFont="-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*,-*-kodig-medium-r-normal--10-*-*-*-*-*-*-*,*-*-medium-r-normal--10-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*"
 koreanDisplayFont="-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*,-*-kodig-medium-r-normal--12-*-*-*-*-*-*-*,*-*-medium-r-normal--12-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*"
+koreanLargeDisplayFont="-*-helvetica-medium-r-normal-*-24-*-*-*-*-*-*-*,-*-kodig-medium-r-normal--24-*-*-*-*-*-*-*,*-*-medium-r-normal--24-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*"
 koreanMultiByteText="YES"
 
 korean2SystemFont="-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*,-*-medium-r-normal-*-%d-*,-*-medium-r-normal-*"
@@ -193,10 +249,134 @@ korean2BoldSystemFont="-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*,-*-medium-r
 korean2WindowTitleFont="7x14,-*-gothic-medium-r-normal-*-16-*-*-*-*-*-ksc5601.1987-*"
 korean2MenuTitleFont="7x14,-*-gothic-medium-r-normal-*-16-*-*-*-*-*-ksc5601.1987-*"
 korean2MenuTextFont="7x14,-*-gothic-medium-r-normal-*-16-*-*-*-*-*-ksc5601.1987-*"
-korean2IconTitleFont="-*-helvetica-medium-r-normal-*-10-*-*-*-*-*-*-*,-*-gothic-medium-r-normal-*-12-*-*-*-*-*-ksc5601.1987-*"
-korean2ClipTitleFont="-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*,-*-gothic-medium-r-normal-*-12-*-*-*-*-*-ksc5601.1987-*"
+korean2IconTitleFont="-*-helvetica-medium-r-normal-*-10-*-*-*-*-*-*-*,-*-gothic-medium-r-normal-*-12-*-*-*-*-*-ksc5601.1987-*,-*-gothic-medium-r-normal-*-16-*-*-*-*-*-ksc5601.1987-*"
+korean2ClipTitleFont="-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*,-*-gothic-medium-r-normal-*-12-*-*-*-*-*-ksc5601.1987-*,-*-gothic-medium-r-normal-*-16-*-*-*-*-*-ksc5601.1987-*"
 korean2DisplayFont="-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*,-*-gothic-medium-r-normal-*-16-*-*-*-*-*-ksc5601.1987-*"
+korean2LargeDisplayFont="-*-helvetica-medium-r-normal-*-24-*-*-*-*-*-*-*,-*-gothic-medium-r-normal-*-24-*-*-*-*-*-ksc5601.1987-*,-*-*-medium-r-normal-*-24-*-*-*-*-*-ksc5601.1987-*"
 korean2MultiByteText="YES"
+
+# Entries for use with Xft2:
+#
+# WindowMaker uses the XftFontOpenXlfd() function to open fonts via Xft2.
+#
+# 1. If the XLFD doesn't have all its fields present will fail and
+#    return NULL (I added a fallback to load "sans" in that case to wfont.c).
+#
+# 2. If all fields are present, but hold invalid values then it will:
+#    a. If family is invalid, will load the default "sans-serif" font.
+#    b. If the font size is invalid (non-numerical) it will fail and
+#       return NULL.
+#    c. If other fields are invalid, will load the font specified by
+#       the valid family name, ignoring any invalid fields. It will
+#       use a default medium weight and a default roman slant if they
+#       are invalid.
+# 
+# I believe the three generic aliases "sans", "serif", and "monospace"
+# are especially good default values for the family name because these
+# 3 font aliases are guaranteed to work in Xft. A font named "sans"
+# doesn't really exist but the "sans" alias automatically resolves to
+# the "best" installed sans serif font which supports the language
+# from the current locale according to the rules in /etc/fonts/fonts.conf.
+# For exammple, if you are running in en_US locale, the first font from the 
+# list of the "prefer" aliases for "sans-serif" in /etc/fonts/fonts.conf
+# which is installed and contains all necessary glyphs for English
+# will be used. If you are running in a ja_JP locale (ja_JP.eucJP, ja_JP.SJIS,
+# or ja_JP.UTF-8), the first installed font from this list which has
+# all glyphs for Japanese is used. I.e. if /etc/fonts/fonts.conf contains
+#
+#       ...
+# 	<alias>
+# 		<family>sans-serif</family>
+# 		<prefer>
+#                       ...
+# 			<family>Luxi Sans</family>
+#                       ...
+# 			<family>Kochi Gothic</family>
+#                       ...
+# 		</prefer>
+# 	</alias>
+#       ...
+#
+# "Luxi Sans" will be used for English and "Kochi Gothic" for
+# Japanese (if no other fonts supporting Japanese or English fonts
+# are higher in the list).
+#
+# Therefore, using the generic aliases "sans", "serif", or "monospace"
+# is an easy way to support many languages automatically.
+#
+# These aliases also make it especially easy for the user to
+# get a consistent look throughout his system because he
+# can easily choose his preferred "sans-serif", "serif" and
+# "monospace" fonts by writing something like the following
+# in his personal ~/.fonts.conf:
+#
+# --- snip ---
+# <?xml version="1.0"?>
+# <!DOCTYPE fontconfig SYSTEM "/etc/fonts/fonts.dtd">
+# <fontconfig>
+# 	<alias>
+# 		<family>serif</family>
+#               <prefer>
+# 			<family>Luxi Serif</family>
+# 			<family>Kochi Mincho</family>
+# 		</prefer>
+# 	</alias>
+# 	<alias>
+# 		<family>sans-serif</family>
+# 		<prefer>
+# 			<family>Luxi Sans</family>
+# 			<family>Kochi Gothic</family>
+# 		</prefer>
+# 	</alias>
+# 	<alias>
+# 		<family>monospace</family>
+# 		<prefer>
+# 			<family>Luxi Mono</family>
+# 			<family>Kochi Gothic</family>
+# 		</prefer>
+# 	</alias>
+# </fontconfig>
+# --- snip ---
+#
+# By changing ~/.fonts.conf the user can thus easily change 
+# the look of all applications which just specify these generic aliases
+# instead of specific font names at once.
+#
+# As Xft doesn't care for the foundry, the following font settings
+# just have "xftdummy" in the foundry.
+
+sansSystemFont="-xftdummy-sans-medium-r-normal-*-%d-*-*-*-*-*-*-*"
+sansBoldSystemFont="-xftdummy-sans-bold-r-normal-*-%d-*-*-*-*-*-*-*"
+sansWindowTitleFont="-xftdummy-sans-bold-r-normal-*-12-*-*-*-*-*-*-*"
+sansMenuTitleFont="-xftdummy-sans-bold-r-normal-*-12-*-*-*-*-*-*-*"
+sansMenuTextFont="-xftdummy-sans-medium-r-normal-*-12-*-*-*-*-*-*-*"
+sansIconTitleFont="-xftdummy-sans-medium-r-normal-*-8-*-*-*-*-*-*-*"
+sansClipTitleFont="-xftdummy-sans-bold-r-normal-*-10-*-*-*-*-*-*-*"
+sansDisplayFont="-xftdummy-sans-medium-r-normal-*-12-*-*-*-*-*-*-*"
+sansLargeDisplayFont="-xftdummy-sans-medium-r-normal-*-12-*-*-*-*-*-*-*"
+sansMultiByteText="YES"
+
+serifSystemFont="-xftdummy-serif-medium-r-normal-*-%d-*-*-*-*-*-*-*"
+serifBoldSystemFont="-xftdummy-serif-bold-r-normal-*-%d-*-*-*-*-*-*-*"
+serifWindowTitleFont="-xftdummy-serif-bold-r-normal-*-12-*-*-*-*-*-*-*"
+serifMenuTitleFont="-xftdummy-serif-bold-r-normal-*-12-*-*-*-*-*-*-*"
+serifMenuTextFont="-xftdummy-serif-medium-r-normal-*-12-*-*-*-*-*-*-*"
+serifIconTitleFont="-xftdummy-serif-medium-r-normal-*-8-*-*-*-*-*-*-*"
+serifClipTitleFont="-xftdummy-serif-bold-r-normal-*-10-*-*-*-*-*-*-*"
+serifDisplayFont="-xftdummy-serif-medium-r-normal-*-12-*-*-*-*-*-*-*"
+serifLargeDisplayFont="-xftdummy-serif-medium-r-normal-*-12-*-*-*-*-*-*-*"
+serifMultiByteText="YES"
+
+monospaceSystemFont="-xftdummy-monospace-medium-r-normal-*-%d-*-*-*-*-*-*-*"
+monospaceBoldSystemFont="-xftdummy-monospace-bold-r-normal-*-%d-*-*-*-*-*-*-*"
+monospaceWindowTitleFont="-xftdummy-monospace-bold-r-normal-*-12-*-*-*-*-*-*-*"
+monospaceMenuTitleFont="-xftdummy-monospace-bold-r-normal-*-12-*-*-*-*-*-*-*"
+monospaceMenuTextFont="-xftdummy-monospace-medium-r-normal-*-12-*-*-*-*-*-*-*"
+monospaceIconTitleFont="-xftdummy-monospace-medium-r-normal-*-8-*-*-*-*-*-*-*"
+monospaceClipTitleFont="-xftdummy-monospace-bold-r-normal-*-10-*-*-*-*-*-*-*"
+monospaceDisplayFont="-xftdummy-monospace-medium-r-normal-*-12-*-*-*-*-*-*-*"
+monospaceLargeDisplayFont="-xftdummy-monospace-medium-r-normal-*-12-*-*-*-*-*-*-*"
+monospaceMultiByteText="YES"
 
 #
 # End of area meant to hold everything you could need to modify...
@@ -205,29 +385,211 @@ korean2MultiByteText="YES"
 #
 # Get current locale automaticaly (--auto).
 #
+
+# helper function to determine the encoding used by the current locale
+# as portable as possible:
+
+locale_charmap () {
+   if type -p locale > /dev/null 2>&1
+   then
+       # if the 'locale' command is available, the easiest way to
+       # determine the encoding used in the current locale is
+       # to call 'locale charmap'. It is available at least on
+       #    Linux
+       #    Solaris 8
+       #    AIX
+       #    HP-UX
+       LOCALE_CHARMAP=`locale charmap 2>/dev/null`
+   else
+      # emulate 'locale charmap' on systems which don't have it (*BSD)
+      # see also
+      #     http://www.cl.cam.ac.uk/~mgk25/ucs/langinfo.c
+      #
+      # First determine the LC_CTYPE locale category setting
+      ctype="C"
+      if test x$LC_ALL != x ; then
+         ctype=$LC_ALL
+      elif test x$LC_CTYPE != x ; then
+         ctype=$LC_CTYPE
+      elif test x$LANG != x ; then
+         ctype=$LANG
+      fi
+      
+      # the value of LC_CTYPE should have the following syntax:
+      #     [language[_territory][.codeset][@modifier]]
+      # (see also http://www.opengroup.org/onlinepubs/007904975/basedefs/xbd_chap08.html)
+      case $ctype in
+          C|POSIX)
+	     LOCALE_CHARMAP=US-ASCII
+	     ;;
+	  *[Uu][Tt][Ff]*)
+	     LOCALE_CHARMAP=UTF-8
+	     ;;
+          *@euro)
+	     # all @euro locales use ISO-8859-15 encoding
+	     # (apart from .UTF-8@euro locales of course, which exist
+	     # on Solaris 8).
+             LOCALE_CHARMAP=ISO-8859-15
+             ;;
+          *[Kk][Oo][Ii]8-[Rr]*)
+             LOCALE_CHARMAP=KOI8-R
+	     ;;
+          *[Kk][Oo][Ii]8-[Uu]*)
+             LOCALE_CHARMAP=KOI8-U
+	     ;;
+	  *620*)
+	     LOCALE_CHARMAP=TIS-620
+	     ;;
+	  *2312*)
+	     LOCALE_CHARMAP=GB2312
+	     ;;
+	  *[Hh][Kk][Ss][Cc][Ss]*)
+  	     LOCALE_CHARMAP=Big5HKSCS
+	     ;;
+	  *[Bb][Ii][Gg]*)
+	     LOCALE_CHARMAP=Big5
+	     ;;
+	  *[Gg][Bb][Kk]*)
+	     LOCALE_CHARMAP=GBK
+	     ;;
+	  *18030*)
+	     LOCALE_CHARMAP=GB18030
+	     ;;
+	  *Shift_JIS*|*[Ss][Jj][Ii][Ss]*)
+	     LOCALE_CHARMAP=SHIFT_JIS
+	     ;;
+	  # make sure to run 'sed' and 'cut' in POSIX locale, otherwise
+	  # one might get unexpected results, for example in vi_VN.tcvn
+	  # locale the following 'sed' and 'cut' commands fail.
+	  *.*@*)
+             # if it contains a '.' and an '@' the encoding can be found between
+	     # the '.' and the '@'.
+             LOCALE_CHARMAP=`echo $ctype | LC_ALL=C sed -e 's/.*\.\([^.@]\+\)@.*/\1/g' `
+             ;;
+	  *.*)
+             # if it contains only a '.' and no '@', everything behind the '.'
+	     # is the encoding:
+             LOCALE_CHARMAP=`echo $ctype | LC_ALL=C cut -d '.' -f 2 `
+             ;;
+	  # no encoding could be found in LC_CTYPE, try the language
+	  # and/or country codes as a fallback.
+	  zh_TW*)
+             LOCALE_CHARMAP=Big5
+	     ;;
+  	  zh_HK*)
+             LOCALE_CHARMAP=Big5HKSCS
+	     ;;
+	  zh*)
+             LOCALE_CHARMAP=GB2312
+	     ;;
+	  ja*)
+             LOCALE_CHARMAP=EUC-JP
+	     ;;
+	  ko*)
+             LOCALE_CHARMAP=EUC-KR
+	     ;;
+	  ru*)
+             LOCALE_CHARMAP=KOI8-R
+	     ;;
+	  uk*)
+             LOCALE_CHARMAP=KOI8-U
+	     ;;
+	  pl*|hr*|hu*|cs*|sk*|sl*)
+             LOCALE_CHARMAP=ISO-8859-2
+	     ;;
+	  eo*|mt*)
+             LOCALE_CHARMAP=ISO-8859-3
+	     ;;
+	  el*)
+             LOCALE_CHARMAP=ISO-8859-7
+	     ;;
+	  he*)
+             LOCALE_CHARMAP=ISO-8859-8
+	     ;;
+	  tr*)
+             LOCALE_CHARMAP=ISO-8859-9
+	     ;;
+	  th*)
+             LOCALE_CHARMAP=TIS-620      # or ISO-8859-11
+	     ;;
+	  lt*)
+             LOCALE_CHARMAP=ISO-8859-13
+	     ;;
+	  cy*)
+             LOCALE_CHARMAP=ISO-8859-14
+	     ;;
+	  ro*)
+             LOCALE_CHARMAP=ISO-8859-14  # or ISO-8859-16
+	     ;;
+	  am*|vi*)
+             LOCALE_CHARMAP=UTF-8
+	     ;;
+          *)
+             LOCALE_CHARMAP=ISO-8859-1
+             ;;
+      esac
+   fi
+   # The exact spelling of the value of LOCALE_CHARMAP may differ a little
+   # bit on different systems. 
+   # Converting it to lowercase and removing '-' and '_' characters hopefully
+   # gives the same results on most systems though and should make matching
+   # encodings easier.
+   # Attention!: make sure that tr is running in POSIX locale when doing the
+   # conversion to lowercase, otherwise one might run into locale dependent
+   # problems. For example in tr_TR locale, the lowercase version of 'I'
+   # is U+0131 (LATIN SMALL LETTER DOTLESS I), i.e. it doesn't have a dot
+   # like the lowercase version of 'I' in most other locales.
+   LOCALE_CHARMAP=`echo $LOCALE_CHARMAP | LC_ALL=C tr '[:upper:]' '[:lower:]' | tr -d '_-'`
+}
+
 if [ -z "$family" ]; then
     if [ -n "$new_locale" ]; then
-	locale="$new_locale"
-    else
-	locale=$LANG
-	if [ -z "$locale" ]; then
-	    locale=$LC_ALL
-	fi
+	export LC_ALL="$new_locale"
     fi
 
-    if [ -z "$locale" ]; then
-	family="default"
-    else
-	for i in $all_codings; do
-	    eval _i="\$$i"
-	    for j in ${_i}; do
-		if [ "$j" = "${locale%_*}" ]; then
-		    family="$i"
-		    break 2
-		fi
-	    done
-	done
-    fi
+    locale_charmap;
+    case "$LOCALE_CHARMAP" in
+        utf8)
+	    family="generic"
+	    ;;
+        eucjp)
+	    family="japanese"
+	    ;;
+	euckr)
+	    family="korean2"
+	    ;;
+	iso88591)
+	    family="latin1"
+	    ;;
+	iso88592)
+	    family="latin2"
+	    ;;
+	iso88599)
+	    family="latin5"
+	    ;;
+	iso885915)
+	    family="latin9"
+	    ;;
+	iso88597)
+	    family="greek"
+	    ;;
+	koi8u)
+	    family="ukrainian"
+	    ;;
+	koi8r)
+	    family="russian"
+	    ;;
+	cp1251)
+	    family="cp1251"
+	    ;;
+	iso88595)
+	    family="isocyr"
+	    ;;
+	*)
+            family="default"
+	    ;;
+    esac
+    echo "using family=$family ..."
 fi
 
 #

@@ -22,21 +22,21 @@
 
 
 
-		Felicitaciones! A adquirido un dispositivo excelentísimo
-	que le proporcionará miles de años de uso sin problemas 
-	,si no fuera porque indudablemente lo destruirá a través de alguna 
-	maniobra estúpida típica de consumidor. Por eso le pedimos
-	por EL AMOR DE DIOS LEA ESTE MANUAL DEL PROPIETARIO CUIDADOSAMENTE
-	ANTES DE DESEMPAQUETAR EL DISPOSITIVO. ¿YA LO DESEMPAQUETÓ, NO?
-	DESEMPAQUETELO Y ENCHÚFELO Y ENCIÉNDALO Y DEJE DE TOQUETEAR LAS PERILLAS, 
-	Y AHORA SUS CHICOS, EL MISMO CHICO QUE UNA VEZ METIÓ UNA SALCHICHA EN SU
-	VIDEOCASETERA Y DEFINIÓ UN "AVANCE RÁPIDO", ¿ESTE CHICO TAMBIÉN ESTÁ 
-	TOQUETEANDO LAS PERILLAS, CIERTO? ¿Y RECIEN AHORA ESTÁ COMENZANDO A LEER
-	LAS INSTRUCCIONES, CIERTO? PODEMOS TAMBIÉN ROMPER ESTOS DISPOSITIVOS 
-	EN LA FÁBRICA ANTES DE DESPACHÁRLOS, SABIA ESO?
-	
-
-				-- Dave	Barry, "Lea Esto Primero!"
+		¡Felicitaciones! Ha adquirido un dispositivo
+	excelentísimo que le proporcionará miles de años de uso sin
+	problemas, si no fuera porque indudablemente lo destruirá a
+	través de alguna maniobra estúpida típica de consumidor. Por
+	eso le pedimos por EL AMOR DE DIOS LEA ESTE MANUAL DEL
+	PROPIETARIO CUIDADOSAMENTE ANTES DE DESEMPAQUETAR EL
+	DISPOSITIVO. ¿YA LO DESEMPAQUETÓ, NO?  LO DESEMPAQUETÓ Y LO
+	ENCHUFÓ Y LO ENCENDIÓ Y TOQUETEÓ LAS PERILLAS, Y AHORA SU
+	CHICO, EL MISMO CHICO QUE UNA VEZ METIÓ UNA SALCHICHA EN SU
+	VIDEOCASETERA Y ACCIONÓ "AVANCE RÁPIDO", ESTE CHICO
+	TAMBIÉN ESTÁ TUOQUETEANDO LAS PERILLAS, ¿CIERTO? Y RECIÉN
+	AHORA ESTÁ COMENZANDO A LEER LAS INSTRUCCIONES, ¿¿¿CIERTO???
+	NOSOTROS PODRÍAMOS SIMPLEMENTE ROMPER ESTOS DISPOSITIVOS EN LA
+	FÁBRICA ANTES DE DESPACHARLOS, ¿SABE?
+				-- Dave	Barry, "¡Lea Esto Primero!"
 
 
 Descripción
