@@ -1430,8 +1430,7 @@ layOutLine(Text *tPtr, myLineItems *items, int nitems, int x, int y)
     int i, j=0, lw = 0, line_height=0, max_d=0, len, n;
     WMFont *font;
     char *text;
-    TextBlock *tb;
-    TextBlock *tbsame=NULL;
+    TextBlock *tb, *tbsame=NULL;
 
     if(!items || nitems == 0)
         return 0;
@@ -1625,7 +1624,6 @@ _layOut:
                 }
 
                 if(nitems + 1> itemsSize) {
-printf("realloc %d nitems\n", nitems);
                     items = wrealloc(items, 
                         (++itemsSize)*sizeof(myLineItems));
                 }
@@ -1662,7 +1660,6 @@ printf("realloc %d nitems\n", nitems);
                     if (width > tPtr->visible.w) { 
                         char *t = &tb->text[begin];
                         int l=end-begin, i=0;
-printf("%d > %d\n", width, tPtr->visible.w);
                         do { 
                             width = WMWidthOfString(font, t, ++i);
                         } while (width < tPtr->visible.w && i < l);  
