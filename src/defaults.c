@@ -492,6 +492,9 @@ WDefaultEntry optionList[] = {
     {"EdgeResistance", 	"30",			NULL,
 	  &wPreferences.edge_resistance,getInt,		NULL
     },
+    {"Attraction", 	"NO",			NULL,
+	  &wPreferences.attract,  getBool,    NULL
+    },
     {"DisableBlinking",	"NO",		NULL,
 	   &wPreferences.dont_blink,	getBool,	NULL
     },

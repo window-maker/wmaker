@@ -926,6 +926,7 @@ updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
     int newX, newY;		       /* actual new window position */
     Bool hresist, vresist;
     Bool updateIndex;
+    Bool attract;
 
     hresist = False;
     vresist = False;
@@ -950,105 +951,213 @@ updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
     newY = data->realY;
 
     if (doResistance) {
-	int edge;
+	int l_edge, r_edge;
+	int edge_l, edge_r;
+	int t_edge, b_edge;
+	int edge_t, edge_b;
 	int resist;
 	WWindow *rwin;
+    WWindow *rrwin;
 
-	resist = wPreferences.edge_resistance;
+    resist = WIN_RESISTANCE(wPreferences.edge_resistance);
+    attract = wPreferences.attract;
 	/* horizontal movement: check horizontal edge resistances */
-	if (dx < 0) {
+	if (dx || dy) {
+        int i;
 	    /* window is the leftmost window: check against screen edge */
-	    edge = scr->totalUsableArea.x1;
+	    l_edge = scr->totalUsableArea.x1;
+	    r_edge = scr->totalUsableArea.x2 + resist;
+	    edge_l = scr->totalUsableArea.x1 - resist;
+	    edge_r = scr->totalUsableArea.x2;
 
-	    /* check position of nearest window to the left */
-	    if (data->rightIndex > 0) {
-		/* there is some window at the left: check if it will block
-		 * the window */
-		rwin = data->rightList[data->rightIndex - 1];
+        /* 1 */
+	    if ((data->rightIndex >= 0) && (data->rightIndex <= data->count)) {
+            WWindow *looprw;
+                        
+            for (i = data->rightIndex - 1; i >= 0; i--) {
+                looprw = data->rightList[i];
+                if (!(data->realY > WBOTTOM(looprw) 
+                            || (data->realY + data->winHeight) < WTOP(looprw))) {
+                    if (attract || (data->realX < (WRIGHT(looprw) + 2)) && dx < 0) {
+                        l_edge = WRIGHT(looprw) + 1;
+                        resist = WIN_RESISTANCE(wPreferences.edge_resistance);
+                    }
+                    break;
+                }
+            }
 
-		if (data->realY > WBOTTOM(rwin) 
-		    || (data->realY + data->winHeight) < WTOP(rwin)) {
-		    resist = 0;
-		} else {
-		    edge = WRIGHT(rwin) + 1;
-		    resist = WIN_RESISTANCE(wPreferences.edge_resistance);
-		}
-	    }
-	    if (resist > 0 && winL >= edge - resist && winL <= edge) {
-		newX = edge;
-		hresist = True;
-	    }
-	} else if (dx > 0) {
-	    /* window is the rightmost window: check against screen edge */
-	    edge = scr->totalUsableArea.x2;
+            if (attract) {
+            for (i = data->rightIndex; i < data->count; i++) {
+                looprw = data->rightList[i];
+                if(!(data->realY > WBOTTOM(looprw) 
+                            || (data->realY + data->winHeight) < WTOP(looprw))) {
+                    r_edge = WRIGHT(looprw) + 1;
+                    resist = WIN_RESISTANCE(wPreferences.edge_resistance);
+                    break;
+                }
+            }
+            }
+        }
 
-	    /* check position of nearest window to the right */
-	    if (data->leftIndex > 0) {
-		/* there is some window at the right: check if it will block
-		 * the window */
-		rwin = data->leftList[data->leftIndex - 1];
+	    if ((data->leftIndex >= 0) && (data->leftIndex <= data->count)) {
+            WWindow *looprw;
+                        
+            for (i = data->leftIndex - 1; i >= 0; i--) {
+                looprw = data->leftList[i];
+                if (!(data->realY > WBOTTOM(looprw) 
+                            || (data->realY + data->winHeight) < WTOP(looprw))) {
+                    if (attract || ((data->realX + data->winWidth) > (WLEFT(looprw) - 1)) && dx > 0) {
+                        edge_r = WLEFT(looprw);
+                        resist = WIN_RESISTANCE(wPreferences.edge_resistance);
+                    }
+                    break;
+                }
+            }
 
-		if (data->realY > WBOTTOM(rwin) 
-		    || (data->realY + data->winHeight) < WTOP(rwin)) {
-		    resist = 0;
-		} else {
-		    edge = WLEFT(rwin);
-		    resist = WIN_RESISTANCE(wPreferences.edge_resistance);
-		}
-	    }
-	    if (resist > 0 && winR <= edge + resist && winR >= edge) {
-		newX = edge - data->winWidth;
-		hresist = True;
-	    }
+            if (attract)
+            for (i = data->leftIndex; i < data->count; i++) {
+                looprw = data->leftList[i];
+                if(!(data->realY > WBOTTOM(looprw) 
+                            || (data->realY + data->winHeight) < WTOP(looprw))) {
+                    edge_l = WLEFT(looprw);
+                    resist = WIN_RESISTANCE(wPreferences.edge_resistance);
+                    break;
+                }
+            }
+        }
+
+        /*
+        printf("%d %d\n",winL,winR);
+        printf("l_ %d r_ %d _l %d _r %d\n",l_edge,r_edge,edge_l,edge_r);
+        */
+
+        if ((winL - l_edge) < (r_edge - winL)) {
+            if (resist > 0) {
+            if ((attract && winL <= l_edge + resist && winL >= l_edge - resist)
+                || (dx < 0 && winL <= l_edge && winL >= l_edge - resist)) {
+                newX = l_edge;
+                hresist = True;
+            }
+            }
+        }
+        else {
+            if (resist > 0 && attract && winL >= r_edge - resist && winL <= r_edge + resist) {
+                newX = r_edge;
+                hresist = True;
+            }
+        }
+
+        if ((winR - edge_l) < (edge_r - winR)) {
+            if (resist > 0 && attract && winR <= edge_l + resist && winR >= edge_l - resist) {
+                newX = edge_l - data->winWidth;
+                hresist = True;
+            }
+        }
+        else {
+            if (resist > 0) {
+            if ((attract && winR >= edge_r - resist && winR <= edge_r + resist) 
+                || (dx > 0 && winR >= edge_r && winR <= edge_r + resist)) {
+                newX = edge_r - data->winWidth;
+                hresist = True;
+            }
+            }
+        }
+
+        /* VeRT */
+	    t_edge = scr->totalUsableArea.y1;
+	    b_edge = scr->totalUsableArea.y2 + resist;
+	    edge_t = scr->totalUsableArea.y1 - resist;
+	    edge_b = scr->totalUsableArea.y2;
+
+	    if ((data->bottomIndex >= 0) && (data->bottomIndex <= data->count)) {
+            WWindow *looprw;
+                        
+            for (i = data->bottomIndex - 1; i >= 0; i--) {
+                looprw = data->bottomList[i];
+                if (!(data->realX > WRIGHT(looprw) 
+                            || (data->realX + data->winWidth) < WLEFT(looprw))) {
+                    if (attract || (data->realY < (WBOTTOM(looprw) + 2)) && dy < 0) {
+                        t_edge = WBOTTOM(looprw) + 1;
+                        resist = WIN_RESISTANCE(wPreferences.edge_resistance);
+                    }
+                    break;
+                }
+            }
+
+            if (attract) {
+            for (i = data->bottomIndex; i < data->count; i++) {
+                looprw = data->bottomList[i];
+                if(!(data->realX > WRIGHT(looprw) 
+                            || (data->realX + data->winWidth) < WLEFT(looprw))) {
+                    b_edge = WBOTTOM(looprw) + 1;
+                    resist = WIN_RESISTANCE(wPreferences.edge_resistance);
+                    break;
+                }
+            }
+            }
+        }
+
+	    if ((data->topIndex >= 0) && (data->topIndex <= data->count)) {
+            WWindow *looprw;
+                        
+            for (i = data->topIndex - 1; i >= 0; i--) {
+                looprw = data->topList[i];
+                if (!(data->realX > WRIGHT(looprw) 
+                            || (data->realX + data->winWidth) < WLEFT(looprw))) {
+                    if (attract || ((data->realY + data->winHeight) > (WTOP(looprw) - 1)) && dy > 0) {
+                        edge_b = WTOP(looprw);
+                        resist = WIN_RESISTANCE(wPreferences.edge_resistance);
+                    }
+                    break;
+                }
+            }
+
+            if (attract)
+            for (i = data->topIndex; i < data->count; i++) {
+                looprw = data->topList[i];
+                if(!(data->realX > WRIGHT(looprw) 
+                            || (data->realX + data->winWidth) < WLEFT(looprw))) {
+                    edge_t = WTOP(looprw);
+                    resist = WIN_RESISTANCE(wPreferences.edge_resistance);
+                    break;
+                }
+            }
+        }
+
+        if ((winT - t_edge) < (b_edge - winT)) {
+            if (resist > 0) {
+            if ((attract && winT <= t_edge + resist && winT >= t_edge - resist)
+                || (dy < 0 && winT <= t_edge && winT >= t_edge - resist)) {
+                newY = t_edge;
+                vresist = True;
+            }
+            }
+        }
+        else {
+            if (resist > 0 && attract && winT >= b_edge - resist && winT <= b_edge + resist) {
+                newY = b_edge;
+                vresist = True;
+            }
+        }
+
+        if ((winB - edge_t) < (edge_b - winB)) {
+            if (resist > 0 && attract && winB <= edge_t + resist && winB >= edge_t - resist) {
+                newY = edge_t - data->winHeight;
+                vresist = True;
+            }
+        }
+        else {
+            if (resist > 0) {
+            if ((attract && winB >= edge_b - resist && winB <= edge_b + resist) 
+                || (dy > 0 && winB >= edge_b && winB <= edge_b + resist)) {
+                newY = edge_b - data->winHeight;
+                vresist = True;
+            }
+            }
+        }
 	}
+    /* END VeRT */
 
-	resist = wPreferences.edge_resistance;
-	/* vertical movement: check vertical edge resistances */
-	if (dy < 0) {
-	    /* window is the topmost window: check against screen edge */
-	    edge = scr->totalUsableArea.y1;
-
-	    /* check position of nearest window to the top */
-	    if (data->bottomIndex > 0) {
-		/* there is some window at the top: check if it will block
-		 * the window */
-		rwin = data->bottomList[data->bottomIndex - 1];
-
-		if (data->realX > WRIGHT(rwin) 
-		    || (data->realX + data->winWidth) < WLEFT(rwin)) {
-		    resist = 0;
-		} else {
-		    edge = WBOTTOM(rwin) + 1;
-		    resist = WIN_RESISTANCE(wPreferences.edge_resistance);
-		}
-	    }
-	    if (resist > 0 && winT >= edge - resist && winT <= edge) {
-		newY = edge;
-		vresist = True;
-	    }
-	} else if (dy > 0) {
-	    /* window is the bottommost window: check against screen edge */
-	    edge = scr->totalUsableArea.y2;
-
-	    /* check position of nearest window to the bottom */
-	    if (data->topIndex > 0) {
-		/* there is some window at the bottom: check if it will block
-		 * the window */
-		rwin = data->topList[data->topIndex - 1];
-
-		if (data->realX > WRIGHT(rwin) 
-		    || (data->realX + data->winWidth) < WLEFT(rwin)) {
-		    resist = 0;
-		} else {
-		    edge = WTOP(rwin);
-		    resist = WIN_RESISTANCE(wPreferences.edge_resistance);
-		}
-	    }
-	    if (resist > 0 && winB <= edge + resist && winB >= edge) {
-		newY = edge - data->winHeight;
-		vresist = True;
-	    }
-	}
     }
 
     /* update window position */
@@ -1443,6 +1552,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
     rimg = InitGhostWindowMove(scr);
 #endif
 
+
     if (wPreferences.opaque_move && !wPreferences.use_saveunders) {
 	XSetWindowAttributes attr;
 
@@ -1450,6 +1560,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 	XChangeWindowAttributes(dpy, wwin->frame->core->window,
 				CWSaveUnder, &attr);
     }
+
 
     initMoveData(wwin, &moveData);
 
@@ -1469,7 +1580,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 	if (warped) {
             int junk;
             Window junkw;
-	    
+
 	    /* XWarpPointer() doesn't seem to generate Motion events, so
 	     we've got to simulate them */
 	    XQueryPointer(dpy, root, &junkw, &junkw, &event.xmotion.x_root,
@@ -1649,9 +1760,11 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
     if (wPreferences.opaque_move && !wPreferences.use_saveunders) {
 	XSetWindowAttributes attr;
 
+
 	attr.save_under = False;
 	XChangeWindowAttributes(dpy, wwin->frame->core->window,
 				CWSaveUnder, &attr);
+
     }
 
     freeMoveData(&moveData);

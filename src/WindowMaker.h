@@ -410,6 +410,7 @@ typedef struct WPreferences {
     char shade_speed;
 
     int edge_resistance;
+    char attract;
 
     struct {
         unsigned int nodock:1;	       /* don't display the dock */

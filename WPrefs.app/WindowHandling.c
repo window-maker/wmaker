@@ -47,6 +47,8 @@ typedef struct _Panel {
     WMFrame *resF;
     WMSlider *resS;
     WMLabel *resL;
+    WMButton *resaB;
+    WMButton *resrB;
 
     WMFrame *maxiF;
     WMButton *miconB;
@@ -179,6 +181,11 @@ showData(_Panel *panel)
     WMSetButtonSelected(panel->miconB, GetBoolForKey("NoWindowOverIcons"));
 
     WMSetButtonSelected(panel->mdockB, GetBoolForKey("NoWindowOverDock"));
+
+    if (GetBoolForKey("Attraction"))
+        WMPerformButtonClick(panel->resrB);
+    else 
+        WMPerformButtonClick(panel->resaB);
 }
 
 
@@ -199,6 +206,7 @@ storeData(_Panel *panel)
     arr = PLMakeArrayFromElements(PLMakeString(x), PLMakeString(y), NULL);
     SetObjectForKey(arr, "WindowPlaceOrigin");
     SetIntegerForKey(WMGetSliderValue(panel->resS), "EdgeResistance");
+    SetBoolForKey(WMGetButtonSelected(panel->resrB), "Attraction");
     PLRelease(arr);
 }
 
@@ -366,15 +374,28 @@ createPanel(Panel *p)
 			       "of the screen."), WMWidgetView(panel->resF));
 
     panel->resS = WMCreateSlider(panel->resF);
-    WMResizeWidget(panel->resS, 200, 15);
-    WMMoveWidget(panel->resS, 20, 20);
+    WMResizeWidget(panel->resS, 80, 15);
+    WMMoveWidget(panel->resS, 10, 20);
     WMSetSliderMinValue(panel->resS, 0);
-    WMSetSliderMaxValue(panel->resS, 200);
+    WMSetSliderMaxValue(panel->resS, 80);
     WMSetSliderAction(panel->resS, resistanceCallback, panel);
 
     panel->resL = WMCreateLabel(panel->resF);
     WMResizeWidget(panel->resL, 30, 15);
-    WMMoveWidget(panel->resL, 230, 20);
+    WMMoveWidget(panel->resL, 95, 20);
+
+    panel->resaB = WMCreateRadioButton(panel->resF);
+    WMMoveWidget(panel->resaB, 130, 12);
+    WMResizeWidget(panel->resaB, 70, 30);
+    WMSetButtonText(panel->resaB, _("Resist"));
+
+    panel->resrB = WMCreateRadioButton(panel->resF);
+    WMMoveWidget(panel->resrB, 200, 12);
+    WMResizeWidget(panel->resrB, 65, 30);
+    WMSetButtonText(panel->resrB, _("Attract"));
+	WMGroupButtons(panel->resrB, panel->resaB);
+
+
 
     WMMapSubwidgets(panel->resF);
 
