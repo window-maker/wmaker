@@ -174,7 +174,7 @@ RestoreDesktop(WScreen *scr)
 
     /* reparent windows back to the root window, keeping the stacking order */
     for (core = WMBagFirst(scr->stacking_list, &iter);
-	 iter != NULL;
+	 iter != NULL && core != NULL;
 	 core = WMBagNext(scr->stacking_list, &iter)) {
         WCoreWindow *next;
         WWindow *wwin;
@@ -182,7 +182,7 @@ RestoreDesktop(WScreen *scr)
         /* go to the end of the list */
         while (core->stacking->under)
             core = core->stacking->under;
-        
+
         while (core) {
             next = core->stacking->above;
             
