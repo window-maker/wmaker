@@ -465,10 +465,13 @@ static WMPixmap *data[12];
 static Bool
 loadData(WScreen *scr)
 {
+#ifdef needs_update
     FILE *f;
     int i;
     RImage *image;
     Pixmap d[12];
+
+    return False;
 
     f = fopen(PKGDATADIR"/xtree.dat", "r");
     if (!f)
@@ -515,6 +518,7 @@ error:
     }
 
     return False;
+#endif
 }
 
 

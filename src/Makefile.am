@@ -36,6 +36,8 @@ wmaker_SOURCES = 	\
 	extend_pixmaps.h \
 	framewin.c \
 	framewin.h \
+	geomview.c \
+	geomview.h \
 	gnome.c \
 	gnome.h \
 	funcs.h \

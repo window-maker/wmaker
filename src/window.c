@@ -215,6 +215,10 @@ wWindowDestroy(WWindow *wwin)
 {
     int i;
 
+    if (wwin->screen_ptr->cmap_window == wwin) {
+	wwin->screen_ptr->cmap_window = NULL;
+    }
+    
     WMRemoveNotificationObserver(wwin);
     
     wwin->flags.destroyed = 1;
@@ -232,7 +236,7 @@ wWindowDestroy(WWindow *wwin)
     }
 
     if (wwin->normal_hints)
-      free(wwin->normal_hints);
+      XFree(wwin->normal_hints);
     
     if (wwin->wm_hints)
       XFree(wwin->wm_hints);
@@ -270,28 +274,48 @@ static void
 setupGNUstepHints(WWindow *wwin, GNUstepWMAttributes *gs_hints)
 {
     if (gs_hints->flags & GSWindowStyleAttr) {
-	wwin->client_flags.no_titlebar = 
-		  ((gs_hints->window_style & WMTitledWindowMask)?0:1);
+	if (gs_hints->window_style == WMBorderlessWindowMask) {
+	    wwin->client_flags.no_border = 1;
+	    wwin->client_flags.no_titlebar = 1;
+	    wwin->client_flags.no_closable = 1;
+	    wwin->client_flags.no_miniaturizable = 1;
+	    wwin->client_flags.no_resizable = 1;
+	    wwin->client_flags.no_close_button = 1;
+	    wwin->client_flags.no_miniaturize_button = 1;
+	    wwin->client_flags.no_resizebar = 1;
+	} else {
+	    wwin->client_flags.no_close_button =
+		((gs_hints->window_style & WMClosableWindowMask)?0:1);
 
-	wwin->client_flags.no_close_button =
-		  ((gs_hints->window_style & WMClosableWindowMask)?0:1);
+	    wwin->client_flags.no_closable =
+		((gs_hints->window_style & WMClosableWindowMask)?0:1);
 
-	wwin->client_flags.no_closable =
-		  ((gs_hints->window_style & WMClosableWindowMask)?0:1);
+	    wwin->client_flags.no_miniaturize_button =
+		((gs_hints->window_style & WMMiniaturizableWindowMask)?0:1);
 
-	wwin->client_flags.no_miniaturize_button =
-		  ((gs_hints->window_style & WMMiniaturizableWindowMask)?0:1);
+	    wwin->client_flags.no_miniaturizable = 
+		wwin->client_flags.no_miniaturize_button;
 
-	wwin->client_flags.no_miniaturizable =
-		  ((gs_hints->window_style & WMMiniaturizableWindowMask)?0:1);
+	    wwin->client_flags.no_resizebar =
+		((gs_hints->window_style & WMResizableWindowMask)?0:1);
 
-	wwin->client_flags.no_resizebar =
-		  ((gs_hints->window_style & WMResizableWindowMask)?0:1);
+	    wwin->client_flags.no_resizable = wwin->client_flags.no_resizebar;
 
-	wwin->client_flags.no_resizable =
-		  ((gs_hints->window_style & WMResizableWindowMask)?0:1);
+	    /* these attributes supposedly imply in the existence
+	     * of a titlebar */
+	    if (gs_hints->window_style & (WMResizableWindowMask|
+					  WMClosableWindowMask|
+					  WMMiniaturizableWindowMask)) {
+		wwin->client_flags.no_titlebar = 0;
+	    } else {
+		wwin->client_flags.no_titlebar = 
+		    ((gs_hints->window_style & WMTitledWindowMask)?0:1);
+	    }
+
+	}
     } else {
 	/* setup the defaults */
+	wwin->client_flags.no_border = 0;
 	wwin->client_flags.no_titlebar = 0;
 	wwin->client_flags.no_closable = 0;
 	wwin->client_flags.no_miniaturizable = 0;
@@ -911,6 +935,8 @@ wManageWindow(WScreen *scr, Window window)
 	foo |= WFF_TITLEBAR;
     if (!WFLAGP(wwin, no_resizebar))
 	foo |= WFF_RESIZEBAR;
+    if (!WFLAGP(wwin, no_border))
+	foo |= WFF_BORDER;
 
     wwin->frame = wFrameWindowCreate(scr, window_level, 
 				     x, y, width, height,
@@ -1271,7 +1297,7 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
     wwin->frame_y = wwin->client.y;
 
     
-    foo = WFF_RIGHT_BUTTON;
+    foo = WFF_RIGHT_BUTTON|WFF_BORDER;
     foo |= WFF_TITLEBAR;
 #ifdef XKB_BUTTON_HINT
     foo |= WFF_LANGUAGE_BUTTON;
@@ -2152,6 +2178,8 @@ wWindowConfigureBorders(WWindow *wwin)
 	    flags |= WFF_TITLEBAR;
 	if (!WFLAGP(wwin, no_resizebar))
 	    flags |= WFF_RESIZEBAR;
+	if (!WFLAGP(wwin, no_border))
+	    flags |= WFF_BORDER;
 	if (wwin->flags.shaded)
 	    flags |= WFF_IS_SHADED;
 

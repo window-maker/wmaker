@@ -40,6 +40,8 @@
 #include "actions.h"
 #include "workspace.h"
 
+#include "geomview.h"
+
 
 #ifdef KWM_HINTS
 #include "kwm.h"
@@ -65,16 +67,6 @@ extern WPreferences wPreferences;
 
 extern Atom _XA_WM_PROTOCOLS;
 
-
-
-void
-wGetGeometryWindowSize(WScreen *scr, unsigned int *width, 
-		       unsigned int *height)
-{
-    *width = WMWidthOfString(scr->info_text_font, "-8888 x -8888", 13);
-
-    *height = (6 * WMFontHeight(scr->info_text_font)) / 4 - 1;
-}
 
 
 /*
@@ -114,20 +106,23 @@ checkMouseSamplingRate(XEvent *ev)
 static void
 moveGeometryDisplayCentered(WScreen *scr, int x, int y)
 {
-    x -= scr->geometry_display_width / 2;
-    y -= scr->geometry_display_height / 2;
+    unsigned int w = WMWidgetWidth(scr->gview);
+    unsigned int h = WMWidgetHeight(scr->gview);
+    
+    x -= w / 2;
+    y -= h / 2;
     
     if (x < 1)
 	x = 1;
-    else if (x > (scr->scr_width - scr->geometry_display_width - 3))
-	x = scr->scr_width - scr->geometry_display_width - 3;
+    else if (x > (scr->scr_width - w - 3))
+	x = scr->scr_width - w - 3;
     
     if (y < 1)
 	y = 1;
-    else if (y > (scr->scr_height - scr->geometry_display_height - 3))
-	y = scr->scr_height - scr->geometry_display_height - 3;
-    
-    XMoveWindow(dpy, scr->geometry_display, x, y);
+    else if (y > (scr->scr_height - h - 3))
+	y = scr->scr_height - h - 3;
+
+    WMMoveWidget(scr->gview, x, y);
 }
 
 
@@ -135,12 +130,9 @@ static void
 showPosition(WWindow *wwin, int x, int y)
 {
     WScreen *scr = wwin->screen_ptr;
-    GC gc = scr->info_text_gc;
-    char num[16];
-    int fw, fh;
 
     if (wPreferences.move_display == WDIS_NEW) {
-#if 1
+#if 0
         int width = wwin->frame->core->width;
         int height = wwin->frame->core->height;
 
@@ -156,22 +148,7 @@ showPosition(WWindow *wwin, int x, int y)
 		  scr->scr_height);
 #endif
     } else {
-	XClearArea(dpy, scr->geometry_display, 1, 1, 
-		   scr->geometry_display_width-2, scr->geometry_display_height-2,
-		   False);
-	sprintf(num, "%+i  %-+i", x, y);
-	fw = WMWidthOfString(scr->info_text_font, num, strlen(num));
-
-	XSetForeground(dpy, gc, scr->black_pixel);
-	
-	fh = WMFontHeight(scr->info_text_font);
-	WMDrawString(scr->wmscreen, scr->geometry_display, gc,
-		     scr->info_text_font, 
-		    (scr->geometry_display_width - 2 - fw) / 2,
-		    (scr->geometry_display_height-fh)/2, num, strlen(num));
-	wDrawBevel(scr->geometry_display, scr->geometry_display_width+1,
-		   scr->geometry_display_height+1, 
-		   scr->widget_texture, WREL_RAISED);
+	WSetGeometryViewShownPosition(scr->gview, x, y);
     }
 }
 
@@ -183,9 +160,9 @@ cyclePositionDisplay(WWindow *wwin, int x, int y, int w, int h)
 
     wPreferences.move_display++;
     wPreferences.move_display %= NUM_DISPLAYS;
-    
+
     if (wPreferences.move_display == WDIS_NEW) {
-	XUnmapWindow(dpy, scr->geometry_display);
+	WMUnmapWidget(scr->gview);
     } else {
 	if (wPreferences.move_display == WDIS_CENTER) {
 	    moveGeometryDisplayCentered(scr,
@@ -195,7 +172,7 @@ cyclePositionDisplay(WWindow *wwin, int x, int y, int w, int h)
 	} else if (wPreferences.move_display == WDIS_FRAME_CENTER) {
 	    moveGeometryDisplayCentered(scr, x + w/2, y + h/2);
 	}
-	XMapRaised(dpy, scr->geometry_display);
+	WMMapWidget(scr->gview);
     }
 }
 
@@ -215,12 +192,9 @@ mapPositionDisplay(WWindow *wwin, int x, int y, int w, int h)
     } else if (wPreferences.move_display == WDIS_FRAME_CENTER) {
 	moveGeometryDisplayCentered(scr, x + w/2, y + h/2);
     }
-    XMapRaised(dpy, scr->geometry_display);
-    showPosition(wwin, x, y);
+    WMMapWidget(scr->gview);
+    WSetGeometryViewShownPosition(scr->gview, x, y);
 }
-
-#define unmapPositionDisplay(w) \
-XUnmapWindow(dpy, (w)->screen_ptr->geometry_display);
 
 
 static void
@@ -233,7 +207,7 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
     char num[16];
     XSegment segment[4];
     int fw, fh;
-    
+
     ty = y1 + wwin->frame->top_width;
     by = y2 - wwin->frame->bottom_width;
     fw = WMWidthOfString(scr->info_text_font, "8888", 4);
@@ -353,25 +327,11 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 	WMDrawString(scr->wmscreen, root, gc, scr->info_text_font,
 		     mx - fw/2 + 1, y - s - fh/2 + 1, num, strlen(num));
     } else {
-	XClearArea(dpy, scr->geometry_display, 1, 1, 
-		   scr->geometry_display_width-2, scr->geometry_display_height-2,
-		   False);
-	sprintf(num, "%i x %-i", (x2 - x1 - wwin->normal_hints->base_width)
-		/ wwin->normal_hints->width_inc,
-		(by - ty - wwin->normal_hints->base_height)
-		/ wwin->normal_hints->height_inc);
-	fw = WMWidthOfString(scr->info_text_font, num, strlen(num));
-
-	XSetForeground(dpy, scr->info_text_gc, scr->black_pixel);
-
-	/* Display the height. */
-	WMDrawString(scr->wmscreen, scr->geometry_display, scr->info_text_gc,
-		     scr->info_text_font,		    
-		    (scr->geometry_display_width-fw)/2,
-		    (scr->geometry_display_height-fh)/2, num, strlen(num));
-	wDrawBevel(scr->geometry_display, scr->geometry_display_width+1,
-		   scr->geometry_display_height+1,
-		   scr->widget_texture, WREL_RAISED);
+	WSetGeometryViewShownSize(scr->gview,
+				  (x2 - x1 - wwin->normal_hints->base_width)
+				  / wwin->normal_hints->width_inc,
+				  (by - ty - wwin->normal_hints->base_height)
+				  / wwin->normal_hints->height_inc);
     }
 }
 
@@ -385,7 +345,7 @@ cycleGeometryDisplay(WWindow *wwin, int x, int y, int w, int h, int dir)
     wPreferences.size_display %= NUM_DISPLAYS;
     
     if (wPreferences.size_display == WDIS_NEW) {
-	XUnmapWindow(dpy, scr->geometry_display);
+	WMUnmapWidget(scr->gview);
     } else {
 	if (wPreferences.size_display == WDIS_CENTER) {
 	    moveGeometryDisplayCentered(scr,
@@ -395,7 +355,7 @@ cycleGeometryDisplay(WWindow *wwin, int x, int y, int w, int h, int dir)
 	} else if (wPreferences.size_display == WDIS_FRAME_CENTER) {
 	    moveGeometryDisplayCentered(scr, x + w/2, y + h/2);
 	}
-	XMapRaised(dpy, scr->geometry_display);
+	WMMapWidget(scr->gview);
 	showGeometry(wwin, x, y, x + w, y + h, dir);
     }
 }
@@ -417,12 +377,10 @@ mapGeometryDisplay(WWindow *wwin, int x, int y, int w, int h)
     } else if (wPreferences.size_display == WDIS_FRAME_CENTER) {
 	moveGeometryDisplayCentered(scr, x + w/2, y + h/2);
     }
-    XMapRaised(dpy, scr->geometry_display);
+    WMMapWidget(scr->gview);
     showGeometry(wwin, x, y, x + w, y + h, 0);
 }
 
-#define unmapGeometryDisplay(w) \
-XUnmapWindow(dpy, (w)->screen_ptr->geometry_display);
 
 
 static void
@@ -1450,32 +1408,29 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 
 	if (wwin->flags.shaded && !scr->selected_windows){
 	    moveGeometryDisplayCentered(scr, src_x+off_x + w/2, src_y+off_y + h/2);
-	}
-	else {
-	    if(ctrlmode){
-		unmapPositionDisplay(wwin);
+	} else {
+	    if (ctrlmode) {
+		WMUnmapWidget(scr->gview);
 		mapGeometryDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh);
-	    }
-	    else if(!scr->selected_windows){
-		unmapGeometryDisplay(wwin);
+	    } else if(!scr->selected_windows) {
+		WMUnmapWidget(scr->gview);
 		mapPositionDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh);
 	    }
 	}
-
-    if (wwin->flags.shaded || scr->selected_windows) {
-    if(scr->selected_windows)
-        drawFrames(wwin,scr->selected_windows,off_x,off_y);
-    else drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
-	}
-	else {
+	
+	if (wwin->flags.shaded || scr->selected_windows) {
+	    if (scr->selected_windows)
+		drawFrames(wwin,scr->selected_windows,off_x,off_y);
+	    else 
+		drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
+	} else {
 	    drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, ww, wh);
 	}
-
-
-	if(ctrlmode){
+	
+	
+	if (ctrlmode) {
 	    showGeometry(wwin, src_x+off_x, src_y+off_y, src_x+off_x+ww, src_y+off_y+wh,0);
-	}
-	else if(!scr->selected_windows)
+	} else if(!scr->selected_windows)
 	    showPosition(wwin, src_x+off_x, src_y+off_y);
 	/**/
 	
@@ -1493,36 +1448,36 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
                 drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, ww, wh);
             }
 
-	    if(ctrlmode){
+	    if (ctrlmode) {
 		showGeometry(wwin, src_x+off_x, src_y+off_y, src_x+off_x+ww, src_y+off_y+wh,0);
-		unmapGeometryDisplay(wwin);
-	    }
-	    else
-		unmapPositionDisplay(wwin);
+		WMUnmapWidget(scr->gview);
+	    } else
+		WMUnmapWidget(scr->gview);
+	    
 	    XUngrabKeyboard(dpy, CurrentTime);
 	    XUngrabPointer(dpy, CurrentTime);
 	    XUngrabServer(dpy);
 
 	    if(done==2) {
-    		if (wwin->flags.shaded || scr->selected_windows) {
+		if (wwin->flags.shaded || scr->selected_windows) {
 		    if (!scr->selected_windows) {
-		    	wWindowMove(wwin, src_x+off_x, src_y+off_y);
+			wWindowMove(wwin, src_x+off_x, src_y+off_y);
 		        wWindowSynthConfigureNotify(wwin);
 		    } else {
-                int i;
-                WMBag *bag = scr->selected_windows;
-                doWindowMove(wwin,scr->selected_windows,off_x,off_y);
-                for (i = 0; i < WMGetBagItemCount(bag); i++) {
-                    wWindowSynthConfigureNotify(WMGetFromBag(bag, i));
+			int i;
+			WMBag *bag = scr->selected_windows;
+			doWindowMove(wwin,scr->selected_windows,off_x,off_y);
+			for (i = 0; i < WMGetBagItemCount(bag); i++) {
+			    wWindowSynthConfigureNotify(WMGetFromBag(bag, i));
 			}
 		    }
 		} else {
 		    if (wwin->client.width != ww)
 			wwin->flags.user_changed_width = 1;
-
+		    
 		    if (wwin->client.height != wh - vert_border)
 			wwin->flags.user_changed_height = 1;
-
+		    
 		    wWindowConfigure(wwin, src_x+off_x, src_y+off_y, 
 				     ww, wh - vert_border);
 		    wWindowSynthConfigureNotify(wwin);
@@ -1754,7 +1709,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 
 		if (!scr->selected_windows) {
 		    /* get rid of the geometry window */
-		    unmapPositionDisplay(wwin);
+		    WMUnmapWidget(scr->gview);
 		}
 	    }
 #ifdef DEBUG
@@ -2028,7 +1983,7 @@ wMouseResizeWindow(WWindow *wwin, XEvent *ev)
 		drawTransparentFrame(wwin, fx, fy, fw, fh);
 
 		XUngrabKeyboard(dpy, CurrentTime);
-		unmapGeometryDisplay(wwin);
+		WMUnmapWidget(scr->gview);
 		XUngrabServer(dpy);
 		
 		if (wwin->client.width != fw)
@@ -2258,7 +2213,7 @@ InteractivePlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 	    XUngrabPointer(dpy, CurrentTime);
 	    XUngrabKeyboard(dpy, CurrentTime);
 	    /* get rid of the geometry window */
-	    unmapPositionDisplay(wwin);
+	    WMUnmapWidget(scr->gview);
 	    return;
 	    
 	 default:

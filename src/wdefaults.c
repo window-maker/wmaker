@@ -66,6 +66,7 @@ static proplist_t ANoTitlebar = NULL;
 static proplist_t ANoResizebar;
 static proplist_t ANoMiniaturizeButton;
 static proplist_t ANoCloseButton;
+static proplist_t ANoBorder;
 static proplist_t ANoHideOthers;
 static proplist_t ANoMouseBindings;
 static proplist_t ANoKeyBindings;
@@ -105,6 +106,7 @@ init_wdefaults(WScreen *scr)
     ANoResizebar = PLMakeString("NoResizebar");
     ANoMiniaturizeButton = PLMakeString("NoMiniaturizeButton");
     ANoCloseButton = PLMakeString("NoCloseButton");
+    ANoBorder = PLMakeString("NoBorder");
     ANoHideOthers = PLMakeString("NoHideOthers");
     ANoMouseBindings = PLMakeString("NoMouseBindings");
     ANoKeyBindings = PLMakeString("NoKeyBindings");
@@ -260,6 +262,9 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
     
     value = get_value(dw, dc, dn, da, ANoCloseButton, No, useGlobalDefault);
     APPLY_VAL(value, no_close_button, ANoCloseButton);
+
+    value = get_value(dw, dc, dn, da, ANoBorder, No, useGlobalDefault);
+    APPLY_VAL(value, no_border, ANoBorder);
 
     value = get_value(dw, dc, dn, da, ANoHideOthers, No, useGlobalDefault);
     APPLY_VAL(value, no_hide_others, ANoHideOthers);

@@ -1769,13 +1769,24 @@ wSelectWindow(WWindow *wwin, Bool flag)
     if (flag) {
 	wwin->flags.selected = 1;
 	XSetWindowBorder(dpy, wwin->frame->core->window, scr->white_pixel);
+	
+	if (WFLAGP(wwin, no_border)) {	
+	    XSetWindowBorderWidth(dpy, wwin->frame->core->window, 
+				  FRAME_BORDER_WIDTH);
+	}
+
 	if (!scr->selected_windows)
 	    scr->selected_windows = WMCreateBag(4);
 	WMPutInBag(scr->selected_windows, wwin);
     } else {
 	wwin->flags.selected = 0;
-	XSetWindowBorder(dpy, wwin->frame->core->window, 
+	XSetWindowBorder(dpy, wwin->frame->core->window,
 			 scr->frame_border_pixel);
+
+	if (WFLAGP(wwin, no_border)) {	
+	    XSetWindowBorderWidth(dpy, wwin->frame->core->window, 0);
+	}
+
 	if (scr->selected_windows) {
 	    WMRemoveFromBag(scr->selected_windows, wwin);
 	}

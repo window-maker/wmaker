@@ -228,8 +228,6 @@ toggleLoweredCallback(WMenu *menu, WMenuEntry *entry)
 
     toggleLowered(entry->clientdata);
 
-    entry->flags.indicator_on = !((WDock*)entry->clientdata)->lowered;
-
     wMenuPaint(menu);
 }
 
@@ -1027,7 +1025,11 @@ updateClipOptionsMenu(WMenu *menu, WDock *dock)
 
     /* keep on top */
     entry = menu->entries[index];
-    entry->flags.indicator_on = !dock->lowered;
+    if (dock->lowered) {
+	entry->text = _("Keep on Top");
+    } else {
+	entry->text = _("Allow Lowering");
+    }
     entry->clientdata = dock;
 
     /* collapsed */
@@ -1069,9 +1071,6 @@ makeClipOptionsMenu(WScreen *scr)
 
     entry = wMenuAddCallback(menu, _("Keep on Top"),
                              toggleLoweredCallback, NULL);
-    entry->flags.indicator = 1;
-    entry->flags.indicator_on = 1;
-    entry->flags.indicator_type = MI_CHECK;
 
     entry = wMenuAddCallback(menu, _("Collapsed"),
                              toggleCollapsedCallback, NULL);
@@ -1115,11 +1114,8 @@ dockMenuCreate(WScreen *scr, int type)
 
     menu = wMenuCreate(scr, NULL, False);
     if (type != WM_CLIP) {
-        entry = wMenuAddCallback(menu, _("Keep on top"),
+        entry = wMenuAddCallback(menu, _("Keep on Top"),
                                  toggleLoweredCallback, NULL);
-        entry->flags.indicator = 1;
-        entry->flags.indicator_on = 1;
-        entry->flags.indicator_type = MI_CHECK;
     } else {
         entry = wMenuAddCallback(menu, _("Clip Options"), NULL, NULL);
         scr->clip_options = makeClipOptionsMenu(scr);
@@ -3357,8 +3353,15 @@ openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
     if (dock->type == WM_DOCK) {
 	/* keep on top */
 	entry = dock->menu->entries[index];
-	entry->flags.indicator_on = !dock->lowered;
+	
+	if (dock->lowered) {
+	    entry->text = _("Keep on Top");
+	} else {
+	    entry->text = _("Allow Lowering");
+	}
 	entry->clientdata = dock;
+	
+	dock->menu->flags.realized = 0;
     } else {
 	/* clip options */
 	if (scr->clip_options)

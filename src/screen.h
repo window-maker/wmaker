@@ -233,10 +233,6 @@ typedef struct _WScreen {
     
     Window clip_balloon;	       /* window for workspace name */
     
-    Window geometry_display;	       /* displays the geometry during
-					* window resize, move etc. */
-    unsigned int geometry_display_width;
-    unsigned int geometry_display_height;
     int keymove_tick;
 
 #ifdef GRADIENT_CLIP_ARROW
@@ -255,6 +251,9 @@ typedef struct _WScreen {
     Pixmap def_ticon_pixmap;
 
     struct WDialogData *dialog_data;
+    
+    
+    struct W_GeometryView *gview;      /* size/position view */
 
 #ifdef NEWSTUFF
     struct RImage *button_images[2][PRED_BPIXMAPS];/* scaled tbar btn images */

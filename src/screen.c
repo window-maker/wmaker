@@ -52,6 +52,7 @@
 #include "workspace.h"
 #include "session.h"
 #include "balloon.h"
+#include "geomview.h"
 #ifdef KWM_HINTS
 # include "kwm.h"
 #endif
@@ -498,29 +499,6 @@ createInternalWindows(WScreen *scr)
 {
     int vmask;
     XSetWindowAttributes attribs;
-
-    /* window for displaying geometry information during resizes and moves */
-    vmask = CWBorderPixel|CWBackPixmap|CWBackPixel|CWCursor|CWSaveUnder|CWOverrideRedirect;
-    attribs.border_pixel = scr->black_pixel;
-    attribs.save_under = True;
-    attribs.override_redirect = True;    
-    attribs.cursor = wCursor[WCUR_DEFAULT];
-    attribs.background_pixmap = None;
-    if (scr->widget_texture)
-	attribs.background_pixel = scr->widget_texture->normal.pixel;
-    else
-	attribs.background_pixel = scr->light_pixel;
-    vmask |= CWColormap;
-    attribs.colormap = scr->w_colormap;
-
-    wGetGeometryWindowSize(scr, &scr->geometry_display_width,
-			   &scr->geometry_display_height);
-    scr->geometry_display =
-      XCreateWindow(dpy, scr->root_win, 1, 1,
-		    scr->geometry_display_width,
-		    scr->geometry_display_height,
-		    1, scr->w_depth, CopyFromParent, scr->w_visual,
-		    vmask, &attribs);
     
     /* InputOnly window to get the focus when no other window can get it */
     vmask = CWEventMask|CWOverrideRedirect;
@@ -540,6 +518,7 @@ createInternalWindows(WScreen *scr)
     attribs.override_redirect = True;
     attribs.background_pixmap = None;
     attribs.background_pixel = scr->white_pixel;
+    attribs.cursor = wCursor[WCUR_DEFAULT];
     vmask |= CWColormap;
     attribs.colormap = scr->w_colormap;
     scr->dock_shadow =
@@ -868,6 +847,12 @@ wScreenInit(int screen_number)
     /* initialize balloon text stuff */
     wBalloonInitialize(scr);
 #endif
+    
+    scr->info_text_font = WMBoldSystemFontOfSize(scr->wmscreen, 12);
+					     
+
+    scr->gview = WCreateGeometryView(scr->wmscreen);
+    WMRealizeWidget(scr->gview);
 
     wScreenUpdateUsableArea(scr);
 

@@ -93,9 +93,10 @@ wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y,
     fwin->languagemode = XkbGroup1Index;
     fwin->last_languagemode = XkbGroup2Index;
 #endif
-    
+
     fwin->core = wCoreCreateTopLevel(scr, x, y, width, height, 
-				     FRAME_BORDER_WIDTH);
+				     (flags & WFF_BORDER) 
+				     ? FRAME_BORDER_WIDTH : 0);
     if (wPreferences.use_saveunders) {
 	unsigned long vmask;
 	XSetWindowAttributes attribs;
@@ -161,12 +162,12 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
 		}
 #ifdef XKB_BUTTON_HINT
 		if (fwin->language_button)
-        if (fwin->flags.hide_left_button || !fwin->left_button
-            || fwin->flags.lbutton_dont_fit) {
-		    wCoreConfigure(fwin->language_button, 0, 0, bsize, bsize);
-        } else {
-		    wCoreConfigure(fwin->language_button, bsize, 0, bsize, bsize);
-        }
+		    if (fwin->flags.hide_left_button || !fwin->left_button
+			|| fwin->flags.lbutton_dont_fit) {
+			wCoreConfigure(fwin->language_button, 0, 0, bsize, bsize);
+		    } else {
+			wCoreConfigure(fwin->language_button, bsize, 0, bsize, bsize);
+		    }
 #endif
 
 		
@@ -182,10 +183,9 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
         
 #ifdef XKB_BUTTON_HINT
 		if (fwin->language_button) {
-            wCoreConfigure(fwin->language_button, 6 + bsize, (theight-bsize)/2,
-                    bsize, bsize);
-
-        }
+		    wCoreConfigure(fwin->language_button, 6 + bsize, (theight-bsize)/2,
+				   bsize, bsize);
+		}
 #endif
 		
 		if (fwin->right_button) {
@@ -197,23 +197,23 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
 	} else {
 	    /* we had a titlebar, but now we don't need it anymore */
 	    for (i=0; i < (fwin->flags.single_texture ? 1 : 3); i++) {
-            FREE_PIXMAP(fwin->title_back[i]);
-            if (wPreferences.new_style) {
-                FREE_PIXMAP(fwin->lbutton_back[i]);
-                FREE_PIXMAP(fwin->rbutton_back[i]);
+		FREE_PIXMAP(fwin->title_back[i]);
+		if (wPreferences.new_style) {
+		    FREE_PIXMAP(fwin->lbutton_back[i]);
+		    FREE_PIXMAP(fwin->rbutton_back[i]);
 #ifdef XKB_BUTTON_HINT
-                FREE_PIXMAP(fwin->languagebutton_back[i]);
+		    FREE_PIXMAP(fwin->languagebutton_back[i]);
 #endif
-            }
+		}
 	    }
 	    if (fwin->left_button)
 		wCoreDestroy(fwin->left_button);
 	    fwin->left_button = NULL;
 	    
 #ifdef XKB_BUTTON_HINT
-        if (fwin->language_button)
-            wCoreDestroy(fwin->language_button);
-        fwin->language_button = NULL;
+	    if (fwin->language_button)
+		wCoreDestroy(fwin->language_button);
+	    fwin->language_button = NULL;
 #endif
 
 	    if (fwin->right_button)
@@ -233,59 +233,59 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
 	    
 	    fwin->flags.titlebar = 1;
 	    fwin->titlebar = wCoreCreate(fwin->core, 0, 0, width+1, theight);
-	    
+
 	    if (flags & WFF_LEFT_BUTTON) {
-            fwin->flags.left_button = 1;
-            if (wPreferences.new_style) {
-                fwin->left_button = wCoreCreate(fwin->core, 0, 0,
-                        bsize, bsize);
-                if (width < theight*4) {
-                    fwin->flags.lbutton_dont_fit = 1;
-                } else {
-                    XMapRaised(dpy, fwin->left_button->window);
-                }
-            } else {
-                fwin->left_button = 
-                    wCoreCreate(fwin->titlebar, 3, (theight-bsize)/2,
-                            bsize, bsize);
-
-                XSetWindowBackground(dpy, fwin->left_button->window,
-                        scr->widget_texture->normal.pixel);
-
-                if (width < theight*3) {
-                    fwin->flags.lbutton_dont_fit = 1;
-                } else {
-                    XMapRaised(dpy, fwin->left_button->window);
-                }
-            }
+		fwin->flags.left_button = 1;
+		if (wPreferences.new_style) {
+		    fwin->left_button = wCoreCreate(fwin->core, 0, 0,
+						    bsize, bsize);
+		    if (width < theight*4) {
+			fwin->flags.lbutton_dont_fit = 1;
+		    } else {
+			XMapRaised(dpy, fwin->left_button->window);
+		    }
+		} else {
+		    fwin->left_button = 
+			wCoreCreate(fwin->titlebar, 3, (theight-bsize)/2,
+				    bsize, bsize);
+		    
+		    XSetWindowBackground(dpy, fwin->left_button->window,
+					 scr->widget_texture->normal.pixel);
+		    
+		    if (width < theight*3) {
+			fwin->flags.lbutton_dont_fit = 1;
+		    } else {
+			XMapRaised(dpy, fwin->left_button->window);
+		    }
+		}
 	    }
         
 #ifdef XKB_BUTTON_HINT
 	    if (flags & WFF_LANGUAGE_BUTTON) {
-            fwin->flags.language_button = 1;
-            if (wPreferences.new_style) {
-                fwin->language_button = wCoreCreate(fwin->core,
-                        bsize, 0, bsize, bsize);
-
-                if (width < theight*4) {
-                    fwin->flags.languagebutton_dont_fit = 1;
-                } else {
-                    XMapRaised(dpy, fwin->language_button->window);
-                }
-            } else {
-                fwin->language_button = 
-                    wCoreCreate(fwin->titlebar, bsize + 6, (theight-bsize)/2,
+		fwin->flags.language_button = 1;
+		if (wPreferences.new_style) {
+		    fwin->language_button = wCoreCreate(fwin->core,
+							bsize, 0, bsize, bsize);
+		    
+		    if (width < theight*4) {
+			fwin->flags.languagebutton_dont_fit = 1;
+		    } else {
+			XMapRaised(dpy, fwin->language_button->window);
+		    }
+		} else {
+		    fwin->language_button = 
+			wCoreCreate(fwin->titlebar, bsize + 6, (theight-bsize)/2,
 				    bsize, bsize); 
-                
-                XSetWindowBackground(dpy, fwin->language_button->window,
+		    
+		    XSetWindowBackground(dpy, fwin->language_button->window,
 					 scr->widget_texture->normal.pixel); 
-
-                if (width < theight*3) {
-                    fwin->flags.languagebutton_dont_fit = 1;
-                } else {
-                    XMapRaised(dpy, fwin->language_button->window);
-                }
-            }
+		    
+		    if (width < theight*3) {
+			fwin->flags.languagebutton_dont_fit = 1;
+		    } else {
+			XMapRaised(dpy, fwin->language_button->window);
+		    }
+		}
 	    }
 #endif
 	    
@@ -319,14 +319,10 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
 	}
     }
     checkTitleSize(fwin);
-
-    if (flags & WFF_RESIZEBAR) {
-	fwin->bottom_width = RESIZEBAR_HEIGHT;
-    } else {
-	fwin->bottom_width = 0;
-    } 
     
     if (flags & WFF_RESIZEBAR) {
+	fwin->bottom_width = RESIZEBAR_HEIGHT;
+	
 	if (!fwin->resizebar) {
 	    fwin->flags.resizebar = 1;
 	    fwin->resizebar = wCoreCreate(fwin->core, 0,
@@ -350,6 +346,8 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
 	    }
 	}
     } else {
+	fwin->bottom_width = 0;
+	
 	if (fwin->resizebar) {
 	    fwin->bottom_width = 0;
 	    wCoreDestroy(fwin->resizebar);
@@ -361,6 +359,13 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
 	&& !(flags & WFF_IS_SHADED)) {
 	wFrameWindowResize(fwin, width,
 			   height + fwin->top_width + fwin->bottom_width);
+    }
+    
+    
+    if (flags & WFF_BORDER) {
+	XSetWindowBorderWidth(dpy, fwin->core->window, FRAME_BORDER_WIDTH);
+    } else {
+	XSetWindowBorderWidth(dpy, fwin->core->window, 0);
     }
     
     /* setup object descriptors */

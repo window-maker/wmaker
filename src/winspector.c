@@ -88,7 +88,7 @@ typedef struct InspectorPanel {
     /* second page. attributes */
 
     WMFrame *attrFrm;
-    WMButton *attrChk[10];
+    WMButton *attrChk[11];
 
     /* 3rd page. more attributes */
     WMFrame *moreFrm;
@@ -136,6 +136,7 @@ static proplist_t ANoTitlebar = NULL;
 static proplist_t ANoResizebar;
 static proplist_t ANoMiniaturizeButton;
 static proplist_t ANoCloseButton;
+static proplist_t ANoBorder;
 static proplist_t ANoHideOthers;
 static proplist_t ANoMouseBindings;
 static proplist_t ANoKeyBindings;
@@ -199,6 +200,7 @@ make_keys()
     ANoResizebar = PLMakeString("NoResizebar");
     ANoMiniaturizeButton = PLMakeString("NoMiniaturizeButton");
     ANoCloseButton = PLMakeString("NoCloseButton");
+    ANoBorder = PLMakeString("NoBorder");    
     ANoHideOthers = PLMakeString("NoHideOthers");
     ANoMouseBindings = PLMakeString("NoMouseBindings");
     ANoKeyBindings = PLMakeString("NoKeyBindings");
@@ -595,21 +597,24 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     different |= insertAttribute(dict, winDic, ANoMiniaturizeButton, value, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[4])!=0) ? Yes : No;
-    different |= insertAttribute(dict, winDic, AKeepOnTop,       value, flags);
+    different |= insertAttribute(dict, winDic, ANoBorder, value, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[5])!=0) ? Yes : No;
-    different |= insertAttribute(dict, winDic, AKeepOnBottom,    value, flags);
+    different |= insertAttribute(dict, winDic, AKeepOnTop,       value, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[6])!=0) ? Yes : No;
-    different |= insertAttribute(dict, winDic, AOmnipresent,     value, flags);
+    different |= insertAttribute(dict, winDic, AKeepOnBottom,    value, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[7])!=0) ? Yes : No;
-    different |= insertAttribute(dict, winDic, AStartMiniaturized, value, flags);
+    different |= insertAttribute(dict, winDic, AOmnipresent,     value, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[8])!=0) ? Yes : No;
-    different |= insertAttribute(dict, winDic, AStartMaximized,  value, flags);
+    different |= insertAttribute(dict, winDic, AStartMiniaturized, value, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[9])!=0) ? Yes : No;
+    different |= insertAttribute(dict, winDic, AStartMaximized,  value, flags);
+
+    value = (WMGetButtonSelected(panel->attrChk[10])!=0) ? Yes : No;
     different |= insertAttribute(dict, winDic, ASkipWindowList,  value, flags);
 
 
@@ -811,12 +816,13 @@ applySettings(WMButton *button, InspectorPanel *panel)
     WSETUFLAG(wwin, no_resizebar, WMGetButtonSelected(panel->attrChk[1]));
     WSETUFLAG(wwin, no_close_button, WMGetButtonSelected(panel->attrChk[2]));
     WSETUFLAG(wwin, no_miniaturize_button, WMGetButtonSelected(panel->attrChk[3]));
-    floating                   =  WMGetButtonSelected(panel->attrChk[4]);
-    sunken                     =  WMGetButtonSelected(panel->attrChk[5]);
-    WSETUFLAG(wwin, omnipresent, WMGetButtonSelected(panel->attrChk[6]));
-    WSETUFLAG(wwin, start_miniaturized, WMGetButtonSelected(panel->attrChk[7]));
-    WSETUFLAG(wwin, start_maximized, WMGetButtonSelected(panel->attrChk[8]));
-    skip_window_list           =  WMGetButtonSelected(panel->attrChk[9]);
+    WSETUFLAG(wwin, no_border, WMGetButtonSelected(panel->attrChk[4]));
+    floating                   =  WMGetButtonSelected(panel->attrChk[5]);
+    sunken                     =  WMGetButtonSelected(panel->attrChk[6]);
+    WSETUFLAG(wwin, omnipresent, WMGetButtonSelected(panel->attrChk[7]));
+    WSETUFLAG(wwin, start_miniaturized, WMGetButtonSelected(panel->attrChk[8]));
+    WSETUFLAG(wwin, start_maximized, WMGetButtonSelected(panel->attrChk[9]));
+    skip_window_list           =  WMGetButtonSelected(panel->attrChk[10]);
 
     WSETUFLAG(wwin, no_hide_others, WMGetButtonSelected(panel->moreChk[0]));
     WSETUFLAG(wwin, no_bind_keys, WMGetButtonSelected(panel->moreChk[1]));
@@ -936,7 +942,7 @@ revertSettings(WMButton *button, InspectorPanel *panel)
 
     wWindowSetupInitialAttributes(wwin, &level, &workspace);
 
-    for (i=0; i < 10; i++) {
+    for (i=0; i < 11; i++) {
 	int flag = 0;
 	
 	switch (i) {
@@ -953,21 +959,24 @@ revertSettings(WMButton *button, InspectorPanel *panel)
 	    flag = WFLAGP(wwin, no_miniaturize_button);
 	    break;
 	 case 4:
-            flag = WFLAGP(wwin, floating);
+	    flag = WFLAGP(wwin, no_border);
 	    break;
 	 case 5:
-            flag = WFLAGP(wwin, sunken);
+            flag = WFLAGP(wwin, floating);
 	    break;
 	 case 6:
-	    flag = WFLAGP(wwin, omnipresent);
+            flag = WFLAGP(wwin, sunken);
 	    break;
 	 case 7:
-	    flag = WFLAGP(wwin, start_miniaturized);
+	    flag = WFLAGP(wwin, omnipresent);
 	    break;
 	 case 8:
-	    flag = WFLAGP(wwin, start_maximized!=0);
+	    flag = WFLAGP(wwin, start_miniaturized);
 	    break;
 	 case 9:
+	    flag = WFLAGP(wwin, start_maximized!=0);
+	    break;
+	 case 10:
 	    flag = WFLAGP(wwin, skip_window_list);
 	    break;
 	}
@@ -1318,7 +1327,7 @@ createInspectorForWindow(WWindow *wwin, int xpos, int ypos,
     WMMoveWidget(panel->attrFrm, 15, 45);
     WMResizeWidget(panel->attrFrm, frame_width, 250);
 
-    for (i=0; i < 10; i++) {
+    for (i=0; i < 11; i++) {
 	char *caption = NULL;
 	int flag = 0;
 	char *descr = NULL;
@@ -1349,34 +1358,39 @@ createInspectorForWindow(WWindow *wwin, int xpos, int ypos,
 	    descr = _("Remove the `miniaturize window' button of the window.");
 	    break;
 	 case 4:
+	    caption = _("Disable Border");
+	    flag = WFLAGP(wwin, no_border);
+	    descr = _("Remove the 1 pixel black border around the window.");
+	    break;
+	 case 5:
 	    caption = _("Keep on Top / Floating");
 	    flag = WFLAGP(wwin, floating);
 	    descr = _("Keep the window over other windows, not allowing\n"
 		      "them to covert it.");
 	    break;
-	 case 5:
+	 case 6:
 	    caption = _("Keep at Bottom / Sunken");
 	    flag = WFLAGP(wwin, sunken);
 	    descr = _("Keep the window under all other windows.");
 	    break;
-	 case 6:
+	 case 7:
 	    caption = _("Omnipresent");
 	    flag = WFLAGP(wwin, omnipresent);
 	    descr = _("Make window occupy all workspaces.");
 	    break;
-	 case 7:
+	 case 8:
 	    caption = _("Start Miniaturized");
 	    flag = WFLAGP(wwin, start_miniaturized);
 	    descr = _("Make the window be automatically miniaturized when it's\n"
 		    "first shown.");
 	    break;
-	 case 8:
+	 case 9:
 	    caption = _("Start Maximized");
 	    flag = WFLAGP(wwin, start_maximized!=0);
 	    descr = _("Make the window be automatically maximized when it's\n"
 		    "first shown.");
 	    break;
-	 case 9:
+	 case 10:
 	    caption = _("Skip Window List");
 	    flag = WFLAGP(wwin, skip_window_list);
 	    descr = _("Do not list the window in the window list menu.");

@@ -739,7 +739,7 @@ GetColormapWindows(WWindow *wwin)
     if (wwin->cmap_windows) {
 	XFree(wwin->cmap_windows);
     }
-
+    
     wwin->cmap_windows = NULL;
     wwin->cmap_window_no = 0;
 
@@ -749,5 +749,6 @@ GetColormapWindows(WWindow *wwin)
 	wwin->cmap_window_no = 0;
 	wwin->cmap_windows = NULL;
     }
+
 #endif
 }

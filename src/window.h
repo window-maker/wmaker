@@ -91,6 +91,7 @@ typedef struct {
     unsigned int no_resizable:1;
     unsigned int no_closable:1;
     unsigned int no_miniaturizable:1;
+    unsigned int no_border:1;	       /* 1 pixel border around window */
 #ifdef XKB_BUTTON_HINT
     unsigned int no_language_button:1;
 #endif

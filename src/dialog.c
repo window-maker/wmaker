@@ -964,7 +964,8 @@ handleLogoPush(XEvent *event, void *data)
 "             .....XmnbN:q&Bo....             ",
 "                 ............                "};
     static char *msgs[] = {
-	    "Have a nice day!"
+	    "Have a nice day!",
+	    "Repent! Focus follow mouse users will burn in the flames of hell!"
     };
 
 

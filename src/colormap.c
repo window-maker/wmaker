@@ -32,7 +32,7 @@
 #include "window.h"
 
 
-
+#include "framewin.h"
 void 
 wColormapInstallForWindow(WScreen *scr, WWindow *wwin)
 {
@@ -41,6 +41,7 @@ wColormapInstallForWindow(WScreen *scr, WWindow *wwin)
     int done = 0;
     Window xwin = None;
 
+    
     if (wwin) {
 	xwin = wwin->client_win;
     } else {
@@ -81,7 +82,9 @@ wColormapInstallForWindow(WScreen *scr, WWindow *wwin)
     }
 
     if (!done) {
-	XGetWindowAttributes(dpy, xwin, &attributes);
+	attributes.colormap = None;
+	if (xwin != None)
+	    XGetWindowAttributes(dpy, xwin, &attributes);
 	if (attributes.colormap == None)
 	    attributes.colormap = scr->colormap;
 

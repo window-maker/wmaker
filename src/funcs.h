@@ -149,10 +149,6 @@ void wHackedGrabButton(unsigned int button, unsigned int modifiers,
 /* this function is in dock.c */
 void ParseCommand(char *command, char ***argv, int *argc);
 
-/* This function is in moveres.c. */
-void wGetGeometryWindowSize(WScreen *scr, unsigned int *width, 
-			    unsigned int *height);
-
 void ExecExitScript();
 
 /****** I18N Wrapper for XFetchName,XGetIconName ******/

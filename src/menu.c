@@ -164,7 +164,7 @@ wMenuCreate(WScreen *screen, char *title, int main_menu)
     tmp = (main_menu ? WMMainMenuLevel : WMSubmenuLevel);
 #endif
 
-    flags = WFF_SINGLE_STATE;
+    flags = WFF_SINGLE_STATE|WFF_BORDER;
     if (title) {
 	flags |= WFF_TITLEBAR|WFF_RIGHT_BUTTON;
 	menu->flags.titled = 1;
@@ -536,7 +536,7 @@ wMenuRealize(WMenu *menu)
 	brother_done = 0;
     }
 
-    flags = WFF_SINGLE_STATE;
+    flags = WFF_SINGLE_STATE|WFF_BORDER;
     if (menu->flags.titled)
 	flags |= WFF_TITLEBAR|WFF_RIGHT_BUTTON;
 
