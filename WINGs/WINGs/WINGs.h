@@ -1684,7 +1684,8 @@ void WMRemoveBoxSubview(WMBox *bPtr, WMView *view);
 
 void WMSetBoxHorizontal(WMBox *box, Bool flag);
 
-void WMSetBoxExpandsToParent(WMBox *box);
+void WMSetBoxExpandsToParent(WMBox *box, int topOffs, int bottomOffs,
+                             int leftOffs, int rightOffs);
 
 /* ....................................................................... */
 
