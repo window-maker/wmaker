@@ -1529,6 +1529,8 @@ void WMSetTextForegroundColor(WMText *tPtr, WMColor *color);
 
 void WMSetTextBackgroundColor(WMText *tPtr, WMColor *color);
 
+void WMSetTextBackgroundPixmap(WMText *tPtr, WMPixmap *pixmap);
+
 void WMPrependTextStream(WMText *tPtr, char *text);
 
 void WMAppendTextStream(WMText *tPtr, char *text);

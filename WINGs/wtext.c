@@ -10,10 +10,10 @@
 #define DO_BLINK 0
 
 /* TODO: 
- * -  FIX wrap... long lines that don't fit are not char wrapped yet.
- * -            hrm... something to do with already having tbs...
  * -  selection code... selects can be funny if it crosses over. use rect?
  * -       also inspect behaviour for WACenter and WARight
+ * -  what if a widget grabs the click... howto say: "pressed me"?
+ *       note that WMCreateEventHandler takes one data, but need widget & tPtr
  * -  FIX: graphix blocks MUST be skipped if monoFont even though they exist!
  * -  check if support for Horizontal Scroll is complete
  * -  assess danger of destroying widgets whose actions link to other pages
@@ -109,6 +109,7 @@ typedef struct W_Text {
     GC bgGC;                    /* the background GC to draw with */
     GC fgGC;                    /* the foreground GC to draw with */
     Pixmap db;                  /* the buffer on which to draw */
+    WMPixmap *bgPixmap;         /* the background pixmap */
 
     myRect visible;             /* the actual rectangle that can be drawn into */
     myRect cursor;              /* the position and (height) of cursor */
@@ -236,6 +237,11 @@ newMargin(Text *tPtr, WMRulerMargins *margins)
     n = getMarginNumber(tPtr, margins);
 
     if (n == -1) { 
+
+        if(tPtr->nMargins >= 127) { 
+           n = tPtr->nMargins-1;  
+           return n;
+        }
 
         tPtr->margins = wrealloc(tPtr->margins,
             (++tPtr->nMargins)*sizeof(WMRulerMargins));
@@ -581,6 +587,12 @@ TextBlock *tb)
         }
     }
 
+  
+    if(!tb->sections)
+      layOutDocument(tPtr);
+    if(!tb->sections) 
+      return 0;
+
     *dir = !(y <= tb->sections[0].y);
     if(*dir) { 
         if ( ( y <= tb->sections[0]._y + tb->sections[0].h )
@@ -620,6 +632,12 @@ paintText(Text *tPtr)
 
     XFillRectangle(dpy, tPtr->db, tPtr->bgGC, 
        0, 0, tPtr->visible.w, tPtr->visible.h);
+
+    if (tPtr->bgPixmap) {
+        WMDrawPixmap(tPtr->bgPixmap, tPtr->db, 
+            (tPtr->visible.w-tPtr->visible.x-tPtr->bgPixmap->width)/2,
+            (tPtr->visible.h-tPtr->visible.y-tPtr->bgPixmap->height)/2);
+    }
 
     if (! (tb = tPtr->currentTextBlock)) {
         if (! (tb = tPtr->firstTextBlock)) {
@@ -1092,6 +1110,9 @@ _doneV:
                     _w = WMWidgetWidth(tb->d.widget)-5;
                 else 
                     _w = tb->d.pixmap->width-5;
+
+                if (tb->sections[0].x + _w >= x)
+                    break;
             } else {
                 text = &(tb->text[tb->sections[s].begin]);
                 len = tb->sections[s].end - tb->sections[s].begin;
@@ -1149,25 +1170,42 @@ _doneV:
     }
         
     /* we have said TextBlock, now where within it? */
-    if (tb && !tb->graphic) {
-        WMFont *f = tb->d.font;
-        len = tb->sections[s].end - tb->sections[s].begin;
-        text = &(tb->text[tb->sections[s].begin]);
+    if (tb) { 
+        if(tb->graphic) {
+          int gw = (tb->object ? 
+            WMWidgetWidth(tb->d.widget) : tb->d.pixmap->width);
 
-        _w = x - tb->sections[s].x;
-        pos = 0;
+          tPtr->cursor.x = tb->sections[0].x;
 
-        while (pos<len && WMWidthOfString(f, text, pos+1) <  _w)
-            pos++;
+          if(x > tPtr->cursor.x + gw/2) {  
+            pos = 1;
+printf("here x%d:  %d\n", x, tPtr->cursor.x + gw/2);
+            tPtr->cursor.x += gw;
+          } else pos = 0;
+          
+          s = 0;
+          goto _doneH;
 
-        tPtr->cursor.x = tb->sections[s].x + 
-            (pos? WMWidthOfString(f, text, pos) : 0);
+        } else {
+          WMFont *f = tb->d.font;
+          len = tb->sections[s].end - tb->sections[s].begin;
+          text = &(tb->text[tb->sections[s].begin]);
 
-        pos += tb->sections[s].begin;
-_doneH:  
-        tPtr->tpos = (pos<tb->used)? pos : tb->used;
-    }
+          _w = x - tb->sections[s].x;
+          pos = 0;
+
+          while (pos<len && WMWidthOfString(f, text, pos+1) <  _w)
+              pos++;
+
+          tPtr->cursor.x = tb->sections[s].x + 
+              (pos? WMWidthOfString(f, text, pos) : 0);
+
+          pos += tb->sections[s].begin;
+        }
+      }
         
+_doneH:  
+     tPtr->tpos = (pos<tb->used)? pos : tb->used;
 _doNothing:
     if (!tb)
         printf("...for this app will surely crash :-)\n");
@@ -1193,83 +1231,6 @@ _doNothing:
 
 }
 
-static void 
-autoSelectText(Text *tPtr, int clicks) 
-{
-    int x, start;
-    TextBlock *tb;
-    char *mark = NULL, behind, ahead;
-
-    if(!(tb = tPtr->currentTextBlock))
-        return;
-
-     if(clicks == 2) {
-
-        
-        switch(tb->text[tPtr->tpos]) {
-            case ' ': return;
-/*
-            case '<': case '>': behind = '<'; ahead = '>'; break;
-            case '{': case '}': behind = '{'; ahead = '}'; break;
-            case '[': case ']': behind = '['; ahead = ']'; break;
-*/
-            default: behind = ahead = ' ';
-        }
-
-        tPtr->sel.y = tPtr->cursor.y+5;
-        tPtr->sel.h = 6;/*tPtr->cursor.h-10;*/
-
-        if(tb->graphic) { 
-            tPtr->sel.x = tb->sections[0].x;
-            tPtr->sel.w = tb->sections[0].w;
-        } else {
-            WMFont *font = tPtr->flags.monoFont?tPtr->dFont:tb->d.font;
-
-            start = tPtr->tpos;
-            while(start > 0 &&  tb->text[start-1] != behind)
-                start--;
-
-            x = tPtr->cursor.x;
-            if(tPtr->tpos > start){ 
-                x -= WMWidthOfString(font, &tb->text[start], 
-                tPtr->tpos - start);
-            }
-            tPtr->sel.x = (x<0?0:x)+1;
-
-            if((mark = strchr(&tb->text[start], ahead))) { 
-                tPtr->sel.w = WMWidthOfString(font, &tb->text[start],
-                    (int)(mark - &tb->text[start]));
-            } else if(tb->used > start)  {
-                tPtr->sel.w = WMWidthOfString(font, &tb->text[start],
-                    tb->used - start);
-            }
-        }
-
-    } else if(clicks == 3) { 
-          TextBlock *cur = tb;
-         
-          while(tb && !tb->first) {
-              tb = tb->prior;
-          }
-          tPtr->sel.y = tb->sections[0]._y;
-          
-          tb = cur;
-          while(tb->next && !tb->next->first) { 
-              tb = tb->next;
-          }
-          tPtr->sel.h = tb->sections[tb->nsections-1]._y 
-              + 5 - tPtr->sel.y;
-
-          tPtr->sel.x = 0;
-          tPtr->sel.w = tPtr->docWidth;
-          tPtr->clicked.x = 0; /* only for now, fix sel. code */
-    }
-
-    tPtr->flags.ownsSelection = True;
-    paintText(tPtr);
-
-
-}
 
 static void
 updateScrollers(Text *tPtr)
@@ -2117,7 +2078,6 @@ requestHandler(WMView *view, Atom selection, Atom target, void *cdata,
         char *text = WMGetTextSelectedStream(tPtr);
     
         if (text) {
-printf("got text [%s]\n", text);
             data = WMCreateDataWithBytes(text, strlen(text));
                WMSetDataFormat(data, TYPETEXT);
         }
@@ -2163,6 +2123,87 @@ ownershipObserver(void *observerData, WMNotification *notification)
         lostHandler(WMWidgetView(observerData), XA_PRIMARY, NULL);
 }
 
+static void 
+autoSelectText(Text *tPtr, int clicks) 
+{
+    int x, start;
+    TextBlock *tb;
+    char *mark = NULL, behind, ahead;
+
+    if(!(tb = tPtr->currentTextBlock))
+        return;
+
+     if(clicks == 2) {
+
+        
+        switch(tb->text[tPtr->tpos]) {
+            case ' ': return;
+/*
+            case '<': case '>': behind = '<'; ahead = '>'; break;
+            case '{': case '}': behind = '{'; ahead = '}'; break;
+            case '[': case ']': behind = '['; ahead = ']'; break;
+*/
+            default: behind = ahead = ' ';
+        }
+
+        tPtr->sel.y = tPtr->cursor.y+5;
+        tPtr->sel.h = 6;/*tPtr->cursor.h-10;*/
+
+        if(tb->graphic) { 
+            tPtr->sel.x = tb->sections[0].x;
+            tPtr->sel.w = tb->sections[0].w;
+        } else {
+            WMFont *font = tPtr->flags.monoFont?tPtr->dFont:tb->d.font;
+
+            start = tPtr->tpos;
+            while(start > 0 &&  tb->text[start-1] != behind)
+                start--;
+
+            x = tPtr->cursor.x;
+            if(tPtr->tpos > start){ 
+                x -= WMWidthOfString(font, &tb->text[start], 
+                tPtr->tpos - start);
+            }
+            tPtr->sel.x = (x<0?0:x)+1;
+
+            if((mark = strchr(&tb->text[start], ahead))) { 
+                tPtr->sel.w = WMWidthOfString(font, &tb->text[start],
+                    (int)(mark - &tb->text[start]));
+            } else if(tb->used > start)  {
+                tPtr->sel.w = WMWidthOfString(font, &tb->text[start],
+                    tb->used - start);
+            }
+        }
+
+    } else if(clicks == 3) { 
+          TextBlock *cur = tb;
+         
+          while(tb && !tb->first) {
+              tb = tb->prior;
+          }
+          tPtr->sel.y = tb->sections[0]._y;
+          
+          tb = cur;
+          while(tb->next && !tb->next->first) { 
+              tb = tb->next;
+          }
+          tPtr->sel.h = tb->sections[tb->nsections-1]._y 
+              + 5 - tPtr->sel.y;
+
+          tPtr->sel.x = 0;
+          tPtr->sel.w = tPtr->docWidth;
+          tPtr->clicked.x = 0; /* only for now, fix sel. code */
+    }
+
+    if (!tPtr->flags.ownsSelection) { 
+      WMCreateSelectionHandler(tPtr->view, 
+        XA_PRIMARY, tPtr->lastClickTime, &selectionHandler, NULL);
+      tPtr->flags.ownsSelection = True;
+    }
+    paintText(tPtr);
+
+
+}
 
 static void
 fontChanged(void *observerData, WMNotification *notification)
@@ -2273,32 +2314,50 @@ R_imaGFX:      if(tb->next) {
     }
 
     if (!control_pressed && tPtr->flags.ownsSelection) 
-        ;//releaseSelection(tPtr);
+        releaseSelection(tPtr);
 }
+
 
 static void
-handleWidgetPress(XEvent *event, void *data)
+pasteText(WMView *view, Atom selection, Atom target, Time timestamp,
+    void *cdata, WMData *data)
 {
-    TextBlock *tb = (TextBlock *)data;
-    Text *tPtr;
-    WMWidget *w;
+    Text *tPtr = (Text *)view->self;
+    char *text;
 
-    if (!tb)
-        return;
+    tPtr->flags.waitingForSelection = 0;
 
-    tPtr = (Text*)w;
-    tPtr->currentTextBlock = tb;
-    tPtr->flags.isOverGraphic = 2;
-    tPtr->tpos = 0;
-    output(tb->text, tb->used);
-#if 0
-    if (!tPtr->flags.focused) {
-        WMSetFocusToWidget(tPtr);
-      tPtr->flags.focused = True;
-    }     
-#endif
+    if (data) {
+        text = (char*)WMDataBytes(data);
+    
+        if (tPtr->parser) {
+            (tPtr->parser) (tPtr, (void *) text);
+            layOutDocument(tPtr);
+        } else insertTextInteractively(tPtr, text, strlen(text));
+        updateCursorPosition(tPtr);
+        paintText(tPtr);
+
+    } else {
+        int n;
+    
+        text = XFetchBuffer(tPtr->view->screen->display, &n, 0);
+        
+        if (text) {
+            text[n] = 0;
+            if (tPtr->parser) {
+                (tPtr->parser) (tPtr, (void *) text);
+                layOutDocument(tPtr);
+            } else insertTextInteractively(tPtr, text, n);
+            updateCursorPosition(tPtr);
+            paintText(tPtr);
+
+            XFree(text);
+        }      
+    }      
+
 
 }
+
 
 static void
 handleActionEvents(XEvent *event, void *data)
@@ -2347,11 +2406,28 @@ handleActionEvents(XEvent *event, void *data)
                 break;
 
             if ((event->xmotion.state & Button1Mask)) {
-                if (!tPtr->flags.ownsSelection) { 
-                    WMCreateSelectionHandler(tPtr->view, 
-                        XA_PRIMARY, event->xbutton.time, 
-                        &selectionHandler, NULL);
-                    tPtr->flags.ownsSelection = True;
+                TextBlock *tb = tPtr->currentTextBlock;
+
+                if(tPtr->flags.isOverGraphic && tb && tb->graphic && !tb->object) {
+                    WMSize offs;
+                    WMPixmap *pixmap = tb->d.pixmap;
+                    char *types[2] = {"application/X-image", NULL};
+
+                    offs.width = 2;
+                    offs.height = 2;
+
+                    WMDragImageFromView(tPtr->view, pixmap, types,
+                        wmkpoint(event->xmotion.x_root, event->xmotion.y_root),
+                        offs, event, True);
+
+                  
+                } else {
+                    if (!tPtr->flags.ownsSelection) { 
+                        WMCreateSelectionHandler(tPtr->view, 
+                            XA_PRIMARY, event->xbutton.time, 
+                            &selectionHandler, NULL);
+                        tPtr->flags.ownsSelection = True;
+                    }
                 }
                 selectRegion(tPtr, event->xmotion.x, event->xmotion.y);
                 break;
@@ -2377,12 +2453,16 @@ handleActionEvents(XEvent *event, void *data)
                 return;
             }
 
+             if (tPtr->flags.ownsSelection) 
+               releaseSelection(tPtr);
+
             
             if (event->xbutton.button == Button1) { 
 
                 if(WMIsDoubleClick(event)) {
                     TextBlock *tb = tPtr->currentTextBlock;
  
+                    tPtr->lastClickTime = event->xbutton.time;
                     if(tb && tb->graphic && !tb->object) { 
                             char desc[tb->used+1];
                             memcpy(desc, tb->text, tb->used);
@@ -2395,21 +2475,18 @@ handleActionEvents(XEvent *event, void *data)
                     } else {
                         autoSelectText(tPtr, 2);
                     }
-                    tPtr->lastClickTime = event->xbutton.time;
                     break;
                 } else if(event->xbutton.time - tPtr->lastClickTime
                 <  WINGsConfiguration.doubleClickDelay) {
-                   autoSelectText(tPtr, 3);
-                    break;
+                  tPtr->lastClickTime = event->xbutton.time;
+                  autoSelectText(tPtr, 3);
+                  break;
                 }
 
                 if (!tPtr->flags.focused) {
                     WMSetFocusToWidget(tPtr);
                       tPtr->flags.focused = True;
                 }    
-
-                if (tPtr->flags.ownsSelection) 
-                    releaseSelection(tPtr);
 
                 tPtr->lastClickTime = event->xbutton.time;
                 cursorToTextPosition(tPtr, event->xmotion.x, event->xmotion.y);
@@ -2437,19 +2514,19 @@ handleActionEvents(XEvent *event, void *data)
                     break; 
                 }
 
-#if 0
                 if (!WMRequestSelection(tPtr->view, XA_PRIMARY, XA_STRING,
                     event->xbutton.time, pasteText, NULL)) {
-#endif
-{
 
                     text = XFetchBuffer(tPtr->view->screen->display, &n, 0);
+                    tPtr->flags.waitingForSelection = 0;
 
                        if (text) {
                         text[n] = 0;
 
-                        if (tPtr->parser) 
+                        if (tPtr->parser) {
                             (tPtr->parser) (tPtr, (void *) text);
+                            layOutDocument(tPtr);
+                        }
                         else 
                             insertTextInteractively(tPtr, text, n);
                     
@@ -2458,6 +2535,8 @@ handleActionEvents(XEvent *event, void *data)
                         NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
                               (void*)WMInsertTextEvent);
 #endif
+                        updateCursorPosition(tPtr);
+                        paintText(tPtr);
 
                     } else {
                         tPtr->flags.waitingForSelection = True;
@@ -2468,7 +2547,6 @@ handleActionEvents(XEvent *event, void *data)
 
 
         case ButtonRelease:
-
             if (tPtr->flags.pointerGrabbed) {
                 tPtr->flags.pointerGrabbed = False;
                 XUngrabPointer(dpy, CurrentTime);
@@ -2624,6 +2702,41 @@ rulerReleaseCallBack(WMWidget *w, void *self)
     return;
 }
 
+static unsigned
+draggingSourceOperation(WMView *self, Bool local)
+{
+    return WDOperationCopy;
+}
+
+static WMData*
+fetchDragData(WMView *self, char *type)
+{
+    TextBlock *tb = ((WMText *)self->self)->currentTextBlock;
+    char *desc;
+    WMData *data;
+
+    if(!tb)
+        return NULL;
+
+printf("type is [%s]\n", type);
+    desc = wmalloc(tb->used+1);
+    memcpy(desc, tb->text, tb->used);
+    desc[tb->used] = 0; 
+    data = WMCreateDataWithBytes(desc, strlen(desc)+1);
+
+    wfree(desc);
+
+    return data;
+}
+
+
+static WMDragSourceProcs _DragSourceProcs = {
+    draggingSourceOperation,
+    NULL,
+    NULL,
+    fetchDragData
+};
+
 
 static unsigned
 draggingEntered(WMView *self, WMDraggingInfo *info)
@@ -2699,7 +2812,7 @@ wwarning("could not request data for dropped data");
 }
 
 static Bool
-performDragOperation(WMView *self, WMDraggingInfo *info, WMData *data)
+performDragOperation(WMView *self, WMDraggingInfo *info)
 {
     WMColor *color; 
     WMText *tPtr = (WMText *)self->self;
@@ -2784,8 +2897,7 @@ getStream(WMText *tPtr, int sel, int array)
           
             } else if (sel && tb->selected) {
 
-                if (!tPtr->flags.ignoreNewLine && (tb->first || tb->blank)
-                    && tb != tPtr->firstTextBlock) {
+                if (!tPtr->flags.ignoreNewLine && tb->blank) { 
                   text = wrealloc(text, where+1);
                   text[where++] = '\n';
                 }
@@ -2862,7 +2974,6 @@ getStreamObjects(WMText *tPtr, int sel)
 
     wfree(stream);
     return array;
-    WMFreeArray(array);
 }
 
 
@@ -2923,9 +3034,12 @@ WMCreateTextForDocumentType(WMWidget *parent,
     WMAddNotificationObserver(ownershipObserver, tPtr, 
         "_lostOwnership", tPtr);
     
-    if(0){
-        char *types[2] = {"application/X-color", NULL};
-        WMSetViewDragDestinationProcs(tPtr->view, &_DragDestinationProcs);
+    WMSetViewDragSourceProcs(tPtr->view, &_DragSourceProcs);
+    WMSetViewDragDestinationProcs(tPtr->view, &_DragDestinationProcs);
+
+
+    {
+        char *types[3] = {"application/X-color", "application/X-image", NULL};
         WMRegisterViewForDraggedTypes(tPtr->view, types);
     }
 
@@ -2958,6 +3072,7 @@ WMCreateTextForDocumentType(WMWidget *parent,
     tPtr->dBulletPix = WMCreatePixmapFromXPMData(tPtr->view->screen,
         default_bullet);
     tPtr->db = (Pixmap) NULL;
+    tPtr->bgPixmap = NULL;
 
     tPtr->margins = WMGetRulerMargins(NULL);
     tPtr->margins->right = tPtr->visible.w;
@@ -2995,12 +3110,10 @@ WMPrependTextStream(WMText *tPtr, char *text)
     CHECK_CLASS(tPtr, WC_Text);
 
     if(!text) {
-        if(tPtr->flags.ownsSelection)
+        if (tPtr->flags.ownsSelection) 
             releaseSelection(tPtr);
-        else {
-            clearText(tPtr);
-            updateScrollers(tPtr);
-        }
+        clearText(tPtr);
+        updateScrollers(tPtr);
         return;
     }
 
@@ -3012,6 +3125,9 @@ WMPrependTextStream(WMText *tPtr, char *text)
 
     tPtr->flags.needsLayOut = True;
     tPtr->tpos = 0;
+    if(!tPtr->flags.frozen) {
+        layOutDocument(tPtr);
+    }
 }
 
 
@@ -3021,12 +3137,10 @@ WMAppendTextStream(WMText *tPtr, char *text)
     CHECK_CLASS(tPtr, WC_Text);
 
     if(!text) {
-        if(tPtr->flags.ownsSelection)
+        if (tPtr->flags.ownsSelection) 
             releaseSelection(tPtr);
-        else {
-            clearText(tPtr);
-            updateScrollers(tPtr);
-        }
+        clearText(tPtr);
+        updateScrollers(tPtr);
         return;
     }
 
@@ -3040,7 +3154,9 @@ WMAppendTextStream(WMText *tPtr, char *text)
     if(tPtr->currentTextBlock)
         tPtr->tpos = tPtr->currentTextBlock->used;
 
-  
+    if(!tPtr->flags.frozen) {
+        layOutDocument(tPtr);
+    }
 }
 
 
@@ -3244,8 +3360,6 @@ WMPrependTextBlock(WMText *tPtr, void *vtb)
     if (tb->graphic) {
         if(tb->object) {
             WMWidget *w = tb->d.widget;
-            WMCreateEventHandler(W_VIEW(w), ButtonPressMask,
-                handleWidgetPress, tb);
             if (W_CLASS(w) != WC_TextField && W_CLASS(w) != WC_Text) {
                 (W_VIEW(w))->attribs.cursor = tPtr->view->screen->defaultCursor;
                 (W_VIEW(w))->attribFlags |= CWOverrideRedirect | CWCursor;
@@ -3291,8 +3405,6 @@ WMAppendTextBlock(WMText *tPtr, void *vtb)
     if (tb->graphic) {
         if(tb->object) {
             WMWidget *w = tb->d.widget;
-            WMCreateEventHandler(W_VIEW(w), ButtonPressMask,
-                handleWidgetPress, tb);
             if (W_CLASS(w) != WC_TextField && W_CLASS(w) != WC_Text) {
                 (W_VIEW(w))->attribs.cursor = 
                     tPtr->view->screen->defaultCursor;
@@ -3344,8 +3456,6 @@ WMRemoveTextBlock(WMText *tPtr)
         WMRemoveFromArray(tPtr->gfxItems, (void *)tb);
 
         if(tb->object) {
-            WMDeleteEventHandler(W_VIEW(tb->d.widget), ButtonPressMask,
-                handleWidgetPress, tb);
             WMUnmapWidget(tb->d.widget);
         }
     }
@@ -3434,6 +3544,20 @@ WMSetTextBackgroundColor(WMText *tPtr, WMColor *color)
     }
 
     paintText(tPtr);
+}
+
+void WMSetTextBackgroundPixmap(WMText *tPtr, WMPixmap *pixmap)
+{
+    if (!tPtr)
+        return;
+
+    if (tPtr->bgPixmap)
+        WMReleasePixmap(tPtr->bgPixmap);
+ 
+    if (pixmap) 
+        tPtr->bgPixmap = WMRetainPixmap(pixmap);
+    else
+        tPtr->bgPixmap = NULL;
 }
 
 void
