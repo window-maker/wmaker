@@ -73,8 +73,12 @@ WMCreateScrollView(WMWidget *parent)
 
     sPtr->view->delegate = &_ScrollViewViewDelegate;
 
-    W_SetViewBackgroundColor(sPtr->viewport, 
-			     WMBlackColor(WMWidgetScreen(parent)));
+    /* This has a very bad effect when the scrollview is mapped, making it
+     * flicker with each item added to it. It also seems to draw slower.
+     * Why should it be black anyway? -Dan
+     */
+    /*W_SetViewBackgroundColor(sPtr->viewport,
+                             WMBlackColor(WMWidgetScreen(parent)));*/
     sPtr->viewport->flags.mapWhenRealized = 1;
 
     WMCreateEventHandler(sPtr->view, StructureNotifyMask|ExposureMask,

@@ -122,7 +122,7 @@ static char*
 captureShortcut(Display *dpy, _Panel *panel)
 {
     XEvent ev;
-    KeySym ksym;
+    KeySym ksym, lksym, uksym;
     char buffer[64];
     char *key = NULL;
 
@@ -131,9 +131,10 @@ captureShortcut(Display *dpy, _Panel *panel)
 	WMNextEvent(dpy, &ev);
 	if (ev.type==KeyPress && ev.xkey.keycode!=0) {
 	    ksym = XKeycodeToKeysym(dpy, ev.xkey.keycode, 0);
-	    if (!IsModifierKey(ksym)) {
-		key=XKeysymToString(ksym);
-		panel->capturing = 0;
+            if (!IsModifierKey(ksym)) {
+                XConvertCase(ksym, &lksym, &uksym);
+                key=XKeysymToString(uksym);
+                panel->capturing = 0;
 		break;
 	    }
 	}
