@@ -118,46 +118,50 @@
 	"Info" END
 	"Run..." SHEXEC %a(Run,Type command to run:)
 	"XTerm" EXEC xterm -sb 
-	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
+	"Mozilla Firefox" EXEC firefox
 	"Workspaces" WORKSPACE_MENU
 	"Applications" MENU
-		"Graphics" MENU
-			"Gimp" SHEXEC gimp >/dev/null
-			"XV" EXEC xv
-			"XPaint" EXEC xpaint
-			"XFig" EXEC xfig
-		"Graphics" END
-		"X File Manager" EXEC xfm
-		"OffiX Files" EXEC files
-		"LyX" EXEC lyx
-		"Netscape" EXEC netscape 
+		"Gimp" SHEXEC gimp >/dev/null
   		"Ghostview" EXEC ghostview %a(GhostView,Enter file to view)
-		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobar,Enter PDF to view)
-  		"TkDesk" EXEC tkdesk
+		"Xpdf" EXEC xpdf %a(Xpdf,Enter PDF to view)
+		"Abiword" EXEC abiword
+		"Dia" EXEC dia
+		"OpenOffice.org" MENU
+			"OpenOffice.org" EXEC ooffice
+			"Writer" EXEC oowriter
+			"Spreadsheet" EXEC oocalc
+			"Draw" EXEC oodraw
+			"Impress" EXEC ooimpress
+		"OpenOffice.org" END 
+
+		"Editors" MENU
+			"XEmacs" EXEC xemacs
+			"Emacs" EXEC emacs
+			"XJed" EXEC xjed 
+			"VI" EXEC xterm -e vi
+			"GVIM" EXEC gvim
+			"NEdit" EXEC nedit
+			"Xedit" EXEC xedit
+		"Editors" END
+
+		"Multimedia" MENU
+			"XMMS" MENU
+				"XMMS" EXEC xmms
+				"XMMS play/pause" EXEC xmms -t
+				"XMMS stop" EXEC xmms -s
+			"XMMS" END
+			"Xine video player" EXEC xine
+			"MPlayer" EXEC mplayer
+		"Multimedia" END
 	"Applications" END
-	"Editors" MENU
-		"XFte" EXEC xfte
-		"XEmacs" EXEC xemacs
-		"Emacs" EXEC emacs
-		"XJed" EXEC xjed 
-		"NEdit" EXEC nedit
-		"Xedit" EXEC xedit
-		"VI" EXEC xterm -e vi
-	"Editors" END
-	"Miscellaneous" MENU
-		"Xmcd" SHEXEC xmcd 2> /dev/null
-		"Xplaycd" EXEC xplaycd
-		"Xmixer" EXEC xmixer
-	"Miscellaneous" END
+
 	"Utils" MENU
 		"Calculator" EXEC xcalc
 		"Window Properties" SHEXEC xprop | xmessage -center -title 'xprop' -file -
 		"Font Chooser" EXEC xfontsel
-		"Terminal Emulator" EXEC xminicom
-		"Magnify" EXEC xmag
+		"Magnify" EXEC wmagnify
 		"Colormap" EXEC xcmap
-		"XKill" EXEC xkill
-		"Clipboard" EXEC xclipboard
+		"Kill X Application" EXEC xkill
 	"Utils" END
 
 	"Selection" MENU
@@ -183,24 +187,24 @@
 		"Icon Sets" OPEN_MENU -noext ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Background" MENU
 			"Solid" MENU
-                        	"Black" WS_BACK '(solid, black)'
-                        	"Blue"  WS_BACK '(solid, "#505075")'
+				"Black" WS_BACK '(solid, black)'
+				"Blue"  WS_BACK '(solid, "#505075")'
 				"Indigo" WS_BACK '(solid, "#243e6c")'
-				"Bleumarine" WS_BACK '(solid, "#224477")'
-                        	"Purple" WS_BACK '(solid, "#554466")'
-                        	"Wheat"  WS_BACK '(solid, "wheat4")'
-                        	"Dark Gray"  WS_BACK '(solid, "#333340")'
-                        	"Wine" WS_BACK '(solid, "#400020")'
-			"Solid" END
+				"Bluemarine" WS_BACK '(solid, "#224477")'
+				"Purple" WS_BACK '(solid, "#554466")'
+				"Wheat"  WS_BACK '(solid, "wheat4")'
+				"Dark Gray"  WS_BACK '(solid, "#333340")'
+				"Wine" WS_BACK '(solid, "#400020")'
+				"Solid" END
 			"Gradient" MENU
 				"Sunset" WS_BACK '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'
 				"Sky" WS_BACK '(vgradient, blue4, white)'
-    				"Blue Shades" WS_BACK '(vgradient, "#7080a5", "#101020")'
+    			"Blue Shades" WS_BACK '(vgradient, "#7080a5", "#101020")'
 				"Indigo Shades" WS_BACK '(vgradient, "#746ebc", "#242e4c")'
-			    	"Purple Shades" WS_BACK '(vgradient, "#654c66", "#151426")'
-    				"Wheat Shades" WS_BACK '(vgradient, "#a09060", "#302010")'
-    				"Grey Shades" WS_BACK '(vgradient, "#636380", "#131318")'
-    				"Wine Shades" WS_BACK '(vgradient, "#600040", "#180010")'
+			    "Purple Shades" WS_BACK '(vgradient, "#654c66", "#151426")'
+    			"Wheat Shades" WS_BACK '(vgradient, "#a09060", "#302010")'
+    			"Grey Shades" WS_BACK '(vgradient, "#636380", "#131318")'
+    			"Wine Shades" WS_BACK '(vgradient, "#600040", "#180010")'
 			"Gradient" END
 			"Images" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Background" END
@@ -209,10 +213,11 @@
 		"Preferences Utility" EXEC /usr/local/GNUstep/Apps/WPrefs.app/WPrefs
 	"Appearance" END
 
-	"Exit"	MENU
-		"Restart" RESTART
+	"Exit" MENU
+		"Save Session" SAVE_SESSION
+		"Clear Session" CLEAR_SESSION
+		"Restart Window Maker" RESTART
 		"Start BlackBox" RESTART blackbox
-		"Start kwm" RESTART kwm
 		"Start IceWM" RESTART icewm
 		"Exit"  EXIT
 	"Exit" END
