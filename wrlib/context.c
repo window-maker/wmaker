@@ -718,9 +718,9 @@ RCreateContext(Display *dpy, int screen_number, RContextAttributes *attribs)
     {
 	unsigned long flags = 0;
 	
-	if (context->attribs->render_mode == RDitheredRendering)
+	if (context->attribs->render_mode == RDitheredRendering) {
 	    flags |= HERMES_CONVERT_DITHER;
-	
+	}
 	context->hermes_data->converter = Hermes_ConverterInstance(flags);
     }
 #endif
