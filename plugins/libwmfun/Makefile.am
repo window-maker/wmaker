@@ -1,5 +1,7 @@
 lib_LTLIBRARIES = libwmfun.la
 
+libwmfun_la_LDFLAGS = -version-info 1:0:1
+
 libwmfun_la_SOURCES = bilinear.c \
 		fade.c \
 		generic.c \

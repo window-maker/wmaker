@@ -72,6 +72,8 @@ VERSION = @VERSION@
 
 lib_LTLIBRARIES = libwmfun.la
 
+libwmfun_la_LDFLAGS = -version-info 1:0:1
+
 libwmfun_la_SOURCES = bilinear.c 		fade.c 		generic.c 		generic.h 		getopt.c 		getopt.h 		getopt1.c 		wave.c 		drawstring.c
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -84,7 +86,6 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I.
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-libwmfun_la_LDFLAGS = 
 libwmfun_la_LIBADD = 
 libwmfun_la_OBJECTS =  bilinear.lo fade.lo generic.lo getopt.lo \
 getopt1.lo wave.lo drawstring.lo
@@ -245,7 +246,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$/$$file $(distdir)/$$file; \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
