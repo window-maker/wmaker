@@ -15,6 +15,8 @@ INCLUDES = $(DFLAGS) -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib \
 	-DETCDIR=\"sysconfdir\" -DDATADIR=\"pkgdatadir\"
 
 # X_EXTRA_LIBS is for libproplist in systems that need -lsocket
+# remove after we require lPL 0.10.2 which automatically resolves its
+# library dependancies using the libPropList.la file
 liblist= @LIBRARY_SEARCH_PATH@ @LIBPL@ @X_EXTRA_LIBS@
 
 wdwrite_LDADD = $(liblist)
@@ -34,23 +36,20 @@ geticonset_LDADD= $(liblist)
 wmagnify_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a \
 	$(top_builddir)/wrlib/libwraster.la \
-	@LIBRARY_SEARCH_PATH@ \
 	@LIBPL@ \
-	@GFXLIBS@ @XLIBS@ @DLLIBS@ -lm
+	@DLLIBS@
 
 wmsetup_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a \
 	$(top_builddir)/wrlib/libwraster.la \
-	@LIBRARY_SEARCH_PATH@ \
 	@LIBPL@ \
-	@GFXLIBS@ @XLIBS@ @DLLIBS@ -lm
+	@DLLIBS@
 
 wmsetbg_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a \
 	$(top_builddir)/wrlib/libwraster.la \
-	@LIBRARY_SEARCH_PATH@ \
 	@LIBPL@ \
-	@GFXLIBS@ @XLIBS@ @DLLIBS@ -lm
+	@DLLIBS@
 
 CLEANFILES = wmaker.inst
 

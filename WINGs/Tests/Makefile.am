@@ -5,8 +5,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 noinst_PROGRAMS = wtest wmquery wmfile testmywidget testcolorpanel 
 
 LDADD= $(top_builddir)/WINGs/libWINGs.a $(top_builddir)/wrlib/libwraster.la \
-	@LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ \
-	-lm @LIBPL@
+	@LIBPL@
 
 
 testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h 

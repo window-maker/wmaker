@@ -44,20 +44,13 @@ WPrefs_SOURCES = \
 
 CPPFLAGS = @CPPFLAGS@ -DLOCALEDIR=\"$(NLSDIR)\"
 
-INCLUDES = \
-	-I$(top_srcdir)/wrlib \
-	-I$(top_srcdir)/WINGs @HEADER_SEARCH_PATH@ 
+INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/WINGs @HEADER_SEARCH_PATH@ 
 
 WPrefs_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
 
 WPrefs_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a\
 	$(top_builddir)/wrlib/libwraster.la \
-	@LIBRARY_SEARCH_PATH@ \
 	@LIBPL@ \
-	@GFXLIBS@ \
-	@XLIBS@ \
-	@X_EXTRA_LIBS@ \
-	@INTLIBS@ \
-	-lm 
+	@INTLIBS@
 

@@ -15,9 +15,7 @@ bin_SCRIPTS = get-wings-flags get-wutil-flags
 lib_LIBRARIES = libWINGs.a libWUtil.a
 
 
-LDADD= libWINGs.a $(top_builddir)/wrlib/libwraster.la\
-	 @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ \
-	-lm @LIBPL@
+LDADD= libWINGs.a $(top_builddir)/wrlib/libwraster.la @LIBPL@
 
 
 EXTRA_DIST = BUGS

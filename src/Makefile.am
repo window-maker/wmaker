@@ -117,11 +117,8 @@ INCLUDES = \
 wmaker_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a\
 	$(top_builddir)/wrlib/libwraster.la\
-	@LIBRARY_SEARCH_PATH@ \
 	@LIBPL@ \
-	@GFXLIBS@ \
 	@XLIBS@ \
 	@INTLIBS@ \
-	@DLLIBS@ \
-	-lm 
+	@DLLIBS@
 

@@ -59,7 +59,7 @@ x86_specific.o: x86_specific.c
 
 INCLUDES = $(DFLAGS) @HEADER_SEARCH_PATH@
 
-LIBLIST = $(top_builddir)/wrlib/libwraster.la @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ -lm
+LIBLIST = $(top_builddir)/wrlib/libwraster.la
 
 view_SOURCES= view.c
 
@@ -79,6 +79,6 @@ testdraw_SOURCES = testdraw.c
 testdraw_LDADD = $(LIBLIST)
 
 
-libwraster_la_LIBADD = @ALLOCA@ 
+libwraster_la_LIBADD = @ALLOCA@ @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ -lm
 
 

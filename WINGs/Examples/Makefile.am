@@ -7,8 +7,7 @@ noinst_PROGRAMS = connect fontl puzzle
 
 
 LDADD= $(top_builddir)/WINGs/libWINGs.a $(top_builddir)/wrlib/libwraster.la \
-	 @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ \
-	-lm @LIBPL@
+	@LIBPL@
 
 
 fontl_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
