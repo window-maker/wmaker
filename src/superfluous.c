@@ -555,19 +555,73 @@ InitXThing(WScreen *scr)
 
 
 #ifdef GHOST_WINDOW_MOVE
-RImage*
-InitGhostWindowMove(WScreen *scr)
+
+typedef struct {
+    WScreen *scr;
+
+    int width, height;
+
+    int iniX, iniY;
+    int boxX, boxY;
+
+    Window window;
+
+    RXImage *winImage;
+
+    RXImage *backImage;
+
+    /* the combined image */
+    RXImage *image;
+    Pixmap pixmap;
+
+} _GhostWindowData;
+
+
+
+_GhostWindowData*
+InitGhostWindowMove(WWindow *wwin)
 {
-    RXImage *ximg;
-    RImage *img;
+    _GhostWindowData *gdata;
+    WScreen *scr = wwin->screen_ptr;
 
-    ximg = RGetXImage(scr->rcontext, scr->root_win, 0, 0, 
-		      scr->scr_width, scr->scr_height);
-    img = RCreateImageFromXImage(scr->rcontext, ximg->image, NULL);
-    RDestroyXImage(dpy, ximg);
+    gdata = wmalloc(sizeof(_GhostWindowData));
 
-    return img;
+    gdata->width = wwin->frame->core->width;
+    gdata->height = wwin->frame->core->height;
+
+    gdata->iniX = wwin->frame_x;
+    gdata->iniY = wwin->frame_y;
+
+    gdata->boxX = wwin->frame_x;
+    gdata->boxY = wwin->frame_y;
+
+    gdata->window = 
+	XCreateSimpleWindow(dpy, scr->root_win, wwin->frame_x, wwin->frame_y,
+			    gdata->width, gdata->height, 0, 0, 0);
+
+    gdata->winImage =
+	RGetXImage(scr->rcontext, wwin->frame->core->window, 0, 0,
+		   scr->frame->core->width, scr->frame->core->height);
+
+    gdata->backImage =
+	RCreateXImage(scr->rcontext, scr->w_depth,
+		      scr->frame->core->width, scr->frame->core->height);
+
+    memcpy(gdata->backImage->image->data, gdata->winImage->image->data,
+	   gdata->winImage->image->bytes_per_line * scr->frame->core->height);
+
+    return gdata;
 }
+
+
+void
+UpdateGhostWindowMove(void *data, int x, int y)
+{
+    _GhostWindowData *gdata = (_GhostWindowData*)data;
+
+    
+}
+
 
 #endif /* GHOST_WINDOW_MOVE */
 

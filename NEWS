@@ -234,7 +234,7 @@ like presentation programs.
 KDE Application Menu script
 ---------------------------
 
-wkdemenu.sh is a converter from KDE application menu structures to wmaker 
+wkdemenu.pl is a converter from KDE application menu structures to wmaker 
 menu that can be used as a piped menu. Look wkdemenu.sh for how to use it.
 
 

@@ -1752,9 +1752,9 @@ OpenRootMenu(WScreen *scr, int x, int y, int keyboard)
 	/* menu hasn't changed or could not be read */
 	if (!scr->root_menu) {
 	    wMessageDialog(scr, _("Error"),
-			  _("The applications menu could not be loaded."
-			    "Look at the console output for a detailed"
-			    "description of the errors"),
+			  _("The applications menu could not be loaded. "
+			    "Look at the console output for a detailed "
+			    "description of the errors."),
 			   _("OK"), NULL, NULL);
 
 	    menu = makeDefaultMenu(scr);
