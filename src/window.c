@@ -360,7 +360,7 @@ wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 #endif /* MWM_HINTS */
 
 #ifdef KWM_HINTS
-	wKWMCheckClientHints(wwin, &tmp_workspace);
+	wKWMCheckClientHints(wwin, &tmp_level, &tmp_workspace);
 #endif /* KWM_HINTS */
 	
 #ifdef GNOME_STUFF
@@ -1005,6 +1005,7 @@ wManageWindow(WScreen *scr, Window window)
             wClientSetState(wwin, NormalState, None);
         }
 
+#if 0
 	/* if not auto focus, then map the window under the currently
 	 * focused window */
 #define _WIDTH(w) (w)->frame->core->width
@@ -1021,6 +1022,8 @@ wManageWindow(WScreen *scr, Window window)
 	}
 #undef _WIDTH
 #undef _HEIGHT
+
+#endif
 
 	if (wPreferences.superfluous && !wPreferences.no_animations
 	    && !scr->flags.startup && wwin->transient_for==None
@@ -1649,7 +1652,7 @@ wWindowConstrainSize(WWindow *wwin, int *nwidth, int *nheight)
 		}
 	    } else {
 		width = (height * sizeh->min_aspect.x) / sizeh->min_aspect.y;
-		if (width < sizeh->min_width) {
+		if (width > sizeh->min_width) {
 		    width = sizeh->min_width;
 		    height = (width*sizeh->min_aspect.y) / sizeh->min_aspect.x;
 		}
