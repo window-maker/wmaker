@@ -33,6 +33,8 @@ typedef struct _Panel {
     CallbackRec callbacks;
 
     WMWindow *win;
+    
+    WMTabView *tabv;
 
     WMFrame *pixF;
     WMList *pixL;
@@ -240,38 +242,49 @@ createPanel(Panel *p)
 {
     _Panel *panel = (_Panel*)p;
     WMScreen *scr = WMWidgetScreen(panel->win);
+    WMTabViewItem *tab;
 
     panel->white = WMWhiteColor(scr);
     panel->black = WMBlackColor(scr);
     panel->red = WMCreateRGBColor(scr, 0xffff, 0, 0, True);
     panel->font = WMSystemFontOfSize(scr, 12);
-
+    
     panel->frame = WMCreateFrame(panel->win);
     WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
     WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
+    
+    panel->tabv = WMCreateTabView(panel->frame);
+    WMMoveWidget(panel->tabv, 10, 10);
+    WMResizeWidget(panel->tabv, 500, 215);
+
+    
 
     /* icon path */
     panel->icoF = WMCreateFrame(panel->frame);
+    WMSetFrameRelief(panel->icoF, WRFlat);
     WMResizeWidget(panel->icoF, 230, 210);
-    WMMoveWidget(panel->icoF, 25, 10);
-    WMSetFrameTitle(panel->icoF, _("Icon Search Paths"));
+
+    tab = WMCreateTabViewItemWithIdentifier(0);
+    WMSetTabViewItemView(tab, WMWidgetView(panel->icoF));
+    WMAddItemInTabView(panel->tabv, tab);
+    WMSetTabViewItemLabel(tab, "Icon Search Paths");
     
     panel->icoL = WMCreateList(panel->icoF);
-    WMResizeWidget(panel->icoL, 200, 147);
-    WMMoveWidget(panel->icoL, 15, 20);
+    WMResizeWidget(panel->icoL, 480, 147);
+    WMMoveWidget(panel->icoL, 10, 10);
     WMSetListUserDrawProc(panel->icoL, paintItem);
     WMHangData(panel->icoL, panel);
     
     panel->icoaB = WMCreateCommandButton(panel->icoF);
     WMResizeWidget(panel->icoaB, 95, 24);
-    WMMoveWidget(panel->icoaB, 120, 176);
+    WMMoveWidget(panel->icoaB, 110, 165);
     WMSetButtonText(panel->icoaB, _("Add"));
     WMSetButtonAction(panel->icoaB, browseForFile, panel);
     WMSetButtonImagePosition(panel->icoaB, WIPRight);
 
     panel->icorB = WMCreateCommandButton(panel->icoF);
     WMResizeWidget(panel->icorB, 95, 24);
-    WMMoveWidget(panel->icorB, 15, 176);
+    WMMoveWidget(panel->icorB, 10, 165);
     WMSetButtonText(panel->icorB, _("Remove"));
     WMSetButtonAction(panel->icorB, pushButton, panel);
 
@@ -279,26 +292,30 @@ createPanel(Panel *p)
 
     /* pixmap path */
     panel->pixF = WMCreateFrame(panel->frame);
+    WMSetFrameRelief(panel->pixF, WRFlat);
     WMResizeWidget(panel->pixF, 230, 210);
-    WMMoveWidget(panel->pixF, 270, 10);
-    WMSetFrameTitle(panel->pixF, _("Pixmap Search Paths"));
+    
+    tab = WMCreateTabViewItemWithIdentifier(0);
+    WMSetTabViewItemView(tab, WMWidgetView(panel->pixF));
+    WMAddItemInTabView(panel->tabv, tab);
+    WMSetTabViewItemLabel(tab, "Pixmap Search Paths");
     
     panel->pixL = WMCreateList(panel->pixF);
-    WMResizeWidget(panel->pixL, 200, 147);
-    WMMoveWidget(panel->pixL, 15, 20);
+    WMResizeWidget(panel->pixL, 480, 147);
+    WMMoveWidget(panel->pixL, 10, 10);
     WMSetListUserDrawProc(panel->pixL, paintItem);
     WMHangData(panel->pixL, panel);
     
     panel->pixaB = WMCreateCommandButton(panel->pixF);
     WMResizeWidget(panel->pixaB, 95, 24);
-    WMMoveWidget(panel->pixaB, 120, 176);
+    WMMoveWidget(panel->pixaB, 110, 165);
     WMSetButtonText(panel->pixaB, _("Add"));
     WMSetButtonAction(panel->pixaB, browseForFile, panel);
     WMSetButtonImagePosition(panel->pixaB, WIPRight);
     
     panel->pixrB = WMCreateCommandButton(panel->pixF);
     WMResizeWidget(panel->pixrB, 95, 24);
-    WMMoveWidget(panel->pixrB, 15, 176);
+    WMMoveWidget(panel->pixrB, 10, 165);
     WMSetButtonText(panel->pixrB, _("Remove"));
     WMSetButtonAction(panel->pixrB, pushButton, panel);
 
