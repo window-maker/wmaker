@@ -654,7 +654,7 @@ renderTexture(WScreen *scr, WTexture *texture, int width, int height,
     
 #ifdef XKB_BUTTON_HINT
     if (language) {
-	    timg = RGetSubImage(img, bwidth, 0, bwidth, bheight);
+	    timg = RGetSubImage(img, bwidth * left, 0, bwidth, bheight);
 	} else
 	    timg = NULL;
 #endif
@@ -792,9 +792,10 @@ updateTexture(WFrameWindow *fwin)
 					       fwin->lbutton_back[i]);
 
 #ifdef XKB_BUTTON_HINT
-		if (fwin->language_button && fwin->languagebutton_back[i])
+		if (fwin->language_button && fwin->languagebutton_back[i]) {
 		    XSetWindowBackgroundPixmap(dpy, fwin->language_button->window,
 					       fwin->languagebutton_back[i]);
+        }
 #endif
 		
 		if (fwin->right_button && fwin->rbutton_back[i])
