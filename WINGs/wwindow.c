@@ -25,9 +25,10 @@ typedef struct W_Window {
     WMSize baseSize;
     WMSize minSize;
     WMSize maxSize;
+    WMPoint minAspect;
+    WMPoint maxAspect;
 
     WMPoint upos;
-    WMSize usize;
 
     WMAction *closeAction;
     void *closeData;
@@ -39,7 +40,8 @@ typedef struct W_Window {
 	unsigned configured:1;
 	unsigned documentEdited:1;
 
-	unsigned upos_set:1;
+	unsigned setUPos:1;
+	unsigned setAspect:1;
     } flags;
 } _Window;
 
@@ -310,15 +312,10 @@ setSizeHints(WMWindow *win)
 
     hints->flags = 0;
 
-    if (win->flags.upos_set) {
-	hints->flags |= PPosition;
+    if (win->flags.setUPos) {
+	hints->flags |= USPosition;
 	hints->x = win->upos.x;
 	hints->y = win->upos.y;
-    }
-    if (win->usize.width>0 && win->usize.height>0) {
-	hints->flags |= PSize;
-	hints->width = win->usize.width;
-	hints->height = win->usize.height;
     }
     if (win->minSize.width>0 && win->minSize.height>0) {
 	hints->flags |= PMinSize;
@@ -340,7 +337,15 @@ setSizeHints(WMWindow *win)
 	hints->width_inc = win->resizeIncrement.width;
 	hints->height_inc = win->resizeIncrement.height;
     }
-    
+    if (win->flags.setAspect) {
+	hints->flags |= PAspect;
+	hints->min_aspect.x = win->minAspect.x;
+	hints->min_aspect.y = win->minAspect.y;
+	hints->max_aspect.x = win->maxAspect.x;
+	hints->max_aspect.y = win->maxAspect.y;
+    }
+
+
     if (hints->flags) {
 	XSetWMNormalHints(win->view->screen->display, win->view->window, hints);
     }
@@ -447,27 +452,30 @@ realizeWindow(WMWindow *win)
 
 
 void
-WMSetWindowInitialPosition(WMWindow *win, int x, int y)
+WMSetWindowAspectRatio(WMWindow *win, int minX, int minY,
+		       int maxX, int maxY)
 {
-    win->flags.upos_set = 1;
-    win->upos.x = x;
-    win->upos.y = y;
+    win->flags.setAspect = 1;
+    win->minAspect.x = minX;
+    win->minAspect.y = minY;
+    win->maxAspect.x = maxX;
+    win->maxAspect.y = maxY;
     if (win->view->flags.realized)
         setSizeHints(win);
-    WMMoveWidget(win, x, y);
 }
 
 
 
 void
-WMSetWindowInitialSize(WMWindow *win, unsigned width, unsigned height)
+WMSetWindowInitialPosition(WMWindow *win, int x, int y)
 {
-    win->usize.width = width;
-    win->usize.height = height;
+    win->flags.setUPos = 1;
+    win->upos.x = x;
+    win->upos.y = y;
     if (win->view->flags.realized)
-        setSizeHints(win);
-    WMResizeWidget(win, width, height);
+	setSizeHints(win);
 }
+
 
 
 void

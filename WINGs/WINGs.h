@@ -832,7 +832,8 @@ void WMSetWindowCloseAction(WMWindow *win, WMAction *action, void *clientData);
 
 void WMSetWindowInitialPosition(WMWindow *win, int x, int y);
 
-void WMSetWindowInitialSize(WMWindow *win, unsigned width, unsigned height);
+void WMSetWindowAspectRatio(WMWindow *win, int minX, int minY,
+			    int maxX, int maxY);
 
 void WMSetWindowMaxSize(WMWindow *win, unsigned width, unsigned height);
 

@@ -79,44 +79,66 @@ Bool SlideButton(int button)
 }
 
 
+#define SWAP(a,b) {int tmp; tmp=a; a=b; b=tmp;}
+
 void ResetGame(void)
 {
-    int i, x, y;
+    int i, x, y, ox, oy;
+    
     
     MoveCount = 0;
     
-    memset(Map, -1, Size*Size);
-    
     for (i = 0; i < Size*Size-1; i++) {
-	while (1) {
-	    int pos = rand()%(Size*Size);
-	    if (Map[pos] < 0) {
-		Map[pos] = i;
-		break;
-	    }
+	Map[i] = i;
+    }
+    Map[i] = -1;
+    ox = x = Size-1;
+    oy = y = Size-1;
+    for (i = 0; i < 1000; i++) {
+	int ok;
+	ok = 1;
+	switch (rand()%4) {
+	 case 0:
+	    if (x > 0) x--; else ok = 0;
+	    break;
+	 case 2:
+	    if (x < Size-1) x++; else ok = 0;
+	    break;
+	 case 1:
+	    if (y > 0) y--; else ok = 0;
+	    break;
+	 case 3:
+	    if (y < Size-1) y++; else ok = 0;
+	    break;
 	}
-    }    
-    for (y = 0; y < Size; y++) {
-	for (x = 0; x < Size; x++) {
-	    if (MAP(x,y) >= 0) {
-		MoveButton(MAP(x,y), x, y);
+	if (ok) {
+	    MoveButton(MAP(x,y), ox, oy);
+
+	    SWAP(MAP(ox, oy), MAP(x, y));
+	    
+	    while (XPending(WMScreenDisplay(WMWidgetScreen(win)))) {
+		XEvent ev;
+		WMNextEvent(WMScreenDisplay(WMWidgetScreen(win)), &ev);
+		WMHandleEvent(&ev);
 	    }
+	    ox = x;
+	    oy = y;
 	}
     }
 }
-    
+
 
 
 void buttonClick(WMWidget *w, void *ptr)
 {
     char buffer[300];
-    
+
     if (SlideButton((int)ptr)) {
 	MoveCount++;
 
 	if (CheckWin()) {
 	    sprintf(buffer, "You finished the game in %i moves.", MoveCount);
-	
+
 	    if (WMRunAlertPanel(WMWidgetScreen(w), win, "You Won!", buffer,
 				"Wee!", "Gah! Lemme retry!", NULL) == WAPRDefault) {
 		exit(0);
@@ -125,6 +147,26 @@ void buttonClick(WMWidget *w, void *ptr)
 	    ResetGame();
 	}
     }
+}
+
+
+static void resizeObserver(void *self, WMNotification *notif)
+{
+    WMSize size = WMGetViewSize(WMWidgetView(win));
+    int x, y;
+    
+    WinSize = size.width;
+    for (y = 0; y < Size; y++) {
+	for (x = 0; x < Size; x++) {
+	    if (MAP(x,y) >= 0) {
+		WMResizeWidget(Button[(int)MAP(x,y)],
+			       WinSize/Size, WinSize/Size);
+		WMMoveWidget(Button[(int)MAP(x,y)],
+			     x*(WinSize/Size), y*(WinSize/Size));
+	    }
+	}
+    }
+
 }
 
 
@@ -148,6 +190,15 @@ int main(int argc, char **argv)
     win = WMCreateWindow(scr, "puzzle");
     WMResizeWidget(win, WinSize, WinSize);
     WMSetWindowTitle(win, "zuPzel");
+    WMSetWindowMinSize(win, 80, 80);
+    WMSetWindowAspectRatio(win, 2, 2, 2, 2);
+    WMSetWindowResizeIncrements(win, Size, Size);
+    WMSetViewNotifySizeChanges(WMWidgetView(win), True);
+    WMAddNotificationObserver(resizeObserver, NULL,
+			      WMViewSizeDidChangeNotification,
+			      WMWidgetView(win));
+			      
+			      
     
     for (i = y = 0; y < Size && i < Size*Size-1; y++) {
 	for (x = 0; x < Size && i < Size*Size-1; x++) {
@@ -157,8 +208,8 @@ int main(int argc, char **argv)
 	    RHSVColor hsv;
 	    
 	    hsv.hue = i*360/(Size*Size-1);
-	    hsv.saturation = 100;
-	    hsv.value = 180;
+	    hsv.saturation = 120;
+	    hsv.value = 200;
 	    
 	    RHSVtoRGB(&hsv, &col);
 
