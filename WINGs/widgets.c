@@ -1048,8 +1048,11 @@ WMBreakModalLoop(WMScreen *scr)
 void
 WMRunModalLoop(WMScreen *scr, WMView *view)
 {
-    WMScreen *scr = view->screen;
-    
+    /* why is scr passed if is determined from the view? */
+    /*WMScreen *scr = view->screen;*/
+    int oldModalLoop = scr->modalLoop;
+    WMView *oldModalView = scr->modalView;
+
     scr->modalView = view;
 
     scr->modalLoop = 1;
@@ -1059,7 +1062,10 @@ WMRunModalLoop(WMScreen *scr, WMView *view)
 	WMNextEvent(scr->display, &event);
 	WMHandleEvent(&event);
     }
-}				  
+
+    scr->modalView = oldModalView;
+    scr->modalLoop = oldModalLoop;
+}
 
 
 Display*

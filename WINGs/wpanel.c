@@ -130,14 +130,14 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     WMMapWidget(panel->vbox);
     
     hbox = WMCreateBox(panel->vbox);
-    WSetBoxHorizontal(hbox, True);
+    WMSetBoxHorizontal(hbox, True);
     WMMapWidget(hbox);
-    WMAddBoxSubview(panel->vbox, WMWidgetView(hbox), False, True, 80, 0, 0, 5);
+    WMAddBoxSubview(panel->vbox, WMWidgetView(hbox), False, True, 80, 0, 5);
 
     panel->iLbl = WMCreateLabel(hbox);
     WMSetLabelImagePosition(panel->iLbl, WIPImageOnly);
     WMMapWidget(panel->iLbl);
-    WMAddBoxSubview(hbox, WMWidgetView(panel->iLbl), False, True, 64, 0, 0, 10);
+    WMAddBoxSubview(hbox, WMWidgetView(panel->iLbl), False, True, 64, 0, 10);
 
     if (scrPtr->applicationIcon) {		
 	WMSetLabelImage(panel->iLbl, scrPtr->applicationIcon);
@@ -151,7 +151,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 	panel->tLbl = WMCreateLabel(hbox);
 	WMMapWidget(panel->tLbl);
 	WMAddBoxSubview(hbox, WMWidgetView(panel->tLbl), True, True, 
-			64, 0, 0, 0);
+			64, 0, 0);
 	WMSetLabelText(panel->tLbl, title);
 	WMSetLabelTextAlignment(panel->tLbl, WALeft);
 	WMSetLabelFont(panel->tLbl, largeFont);
@@ -172,7 +172,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 	panel->mLbl = WMCreateLabel(panel->win);
 	WMMapWidget(panel->mLbl);
 	WMAddBoxSubview(panel->vbox, WMWidgetView(panel->mLbl), True, True,
-			WMFontHeight(scrPtr->normalFont)*4, 0, 0, 5);
+			WMFontHeight(scrPtr->normalFont)*4, 0, 5);
 	WMSetLabelText(panel->mLbl, msg);
 	WMSetLabelTextAlignment(panel->mLbl, WACenter);
     }
@@ -180,7 +180,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     hbox = WMCreateBox(panel->vbox);
     WMSetBoxHorizontal(hbox, True);
     WMMapWidget(hbox);
-    WMAddBoxSubview(panel->vbox, hbox, False, True, 24, 0, 0, 0);
+    WMAddBoxSubview(panel->vbox, WMWidgetView(hbox), False, True, 24, 0, 0);
     
     /* create buttons */
     if (otherButton) 

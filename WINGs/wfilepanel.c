@@ -42,7 +42,6 @@ typedef struct W_FilePanel {
     struct {
 	unsigned int canExit:1;
 	unsigned int canceled:1;       /* clicked on cancel */
-	unsigned int done:1;
 	unsigned int filtered:1;
 	unsigned int canChooseFiles:1;
 	unsigned int canChooseDirectories:1;
@@ -381,7 +380,6 @@ WMRunModalFilePanelForDirectory(WMFilePanel *panel, WMWindow *owner,
 
     WMSetFilePanelDirectory(panel, path);
 
-    panel->flags.done = 0;
     switch(panel->flags.panelType) {
     case WP_OPEN:
         if (fileTypes)
@@ -402,15 +400,9 @@ WMRunModalFilePanelForDirectory(WMFilePanel *panel, WMWindow *owner,
 
     WMSetLabelText(panel->titleLabel, name);
 
-    scr->modalView = W_VIEW(panel->win);
     WMMapWidget(panel->win);
 
-    scr->modal = 1;
-    while (!panel->flags.done) {	
-	WMNextEvent(scr->display, &event);
-	WMHandleEvent(&event);
-    }
-    scr->modal = 0;
+    WMRunModalLoop(scr, W_VIEW(panel->win));
 
     /* Must withdraw window because the next time we map
      * it, it might have a different transient owner. 
@@ -653,41 +645,19 @@ showError(WMScreen *scr, WMWindow *owner, char *s, char *file)
 static void
 createDir(WMButton *bPre, WMFilePanel *panel)
 {
-    char *directory_name;
-    char *directory;
-    char *file;
-    char *s;
+    char *dirName, *directory, *file, *s;
     WMScreen *scr = WMWidgetScreen(panel->win);
-    WMInputPanel *_panel;
 
-    _panel = WMCreateInputPanel(scr, panel->win,
-            "Create Directory", "Enter directory name", "", "OK", "Cancel");
-    scr->modalView = W_VIEW(_panel->win);
-    WMMapWidget(_panel->win);
-    scr->modal = 1;
-    while (!_panel->done || WMScreenPending(scr)) {
-        XEvent event;
-        WMNextEvent(scr->display, &event);
-        WMHandleEvent(&event);
-    }
-    scr->modal = 0;
-
-    if (_panel->result == WAPRDefault)
-        directory_name = WMGetTextFieldText(_panel->text);
-    else {
-        WMDestroyInputPanel(_panel);
+    dirName = WMRunInputPanel(scr, panel->win, "Create Directory",
+                              "Enter directory name", "", "OK", "Cancel");
+    if (!dirName)
         return;
-    }
-
-    WMDestroyInputPanel(_panel);
 
     directory = getCurrentFileName(panel);
-    {
-        char *s = strrchr(directory,'/');
-        if (s) s[1] = 0;
-    }
+    s = strrchr(directory,'/');
+    if (s) s[1] = 0;
 
-    if (directory_name[0] == '/') {
+    if (dirName[0] == '/') {
         directory[0] = 0;
     } else {
         while ((s = strstr(directory,"//"))) {
@@ -697,15 +667,15 @@ createDir(WMButton *bPre, WMFilePanel *panel)
         }
         if ((s = strrchr(directory, '/')) && !s[1]) s[0] = 0;
     }
-    while ((s = strstr(directory_name,"//"))) {
+    while ((s = strstr(dirName,"//"))) {
         int i;
         for (i = 2;s[i] == '/';i++);
         strcpy(s, &s[i-1]);
     }
-    if ((s = strrchr(directory_name, '/')) && !s[1]) s[0] = 0;
+    if ((s = strrchr(dirName, '/')) && !s[1]) s[0] = 0;
 
-    file = wmalloc(strlen(directory_name)+strlen(directory)+1);
-    sprintf(file, "%s/%s", directory, directory_name);
+    file = wmalloc(strlen(dirName)+strlen(directory)+1);
+    sprintf(file, "%s/%s", directory, dirName);
     while ((s = strstr(file,"//"))) {
         int i;
         for (i = 2;s[i] == '/';i++);
@@ -726,10 +696,9 @@ createDir(WMButton *bPre, WMFilePanel *panel)
     }
     else WMSetFilePanelDirectory(panel, file);
 
-    wfree(directory_name);
+    wfree(dirName);
     wfree(directory);
     wfree(file);
-
 }
 
 static void
@@ -1002,7 +971,7 @@ buttonClick(WMButton *bPtr, WMFilePanel *panel)
 
     range.count = range.position = 0;
     WMSelectTextFieldRange(panel->fileField, range);
-    panel->flags.done = 1;
+    WMBreakModalLoop(WMWidgetScreen(bPtr));
 }
 
 

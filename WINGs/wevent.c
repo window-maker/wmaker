@@ -601,7 +601,7 @@ WMHandleEvent(XEvent *event)
     }
 
 
-    if (view->screen->modal && toplevel!=view->screen->modalView
+    if (view->screen->modalLoop && toplevel!=view->screen->modalView
 	&& !toplevel->flags.worksWhenModal) {
 	if (event->type == KeyPress || event->type == KeyRelease
 	    || event->type == MotionNotify || event->type == ButtonPress
