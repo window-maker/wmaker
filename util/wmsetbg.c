@@ -1436,7 +1436,7 @@ main(int argc, char **argv)
     }
     
     if (!rc) {
-	wfatal("could not initialize wrlib:",
+	wfatal("could not initialize wrlib: %s",
 	       RMessageForError(RErrorCode));
 	exit(1);
     }
