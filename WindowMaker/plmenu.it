@@ -3,7 +3,7 @@
   ("Info Panel...", INFO_PANEL),
   ("Legal...", LEGAL_PANEL),
   ("Console di sistema", EXEC, "xconsole"),
-  ("Carico del Sistema", SHEXEC, "xosview || xload"),
+  ("Carico del Sistema", EXEC, "xosview || xload"),
   ("Lista dei Processi", EXEC, "xterm -e top"),
   ("Ricerca Manuali", EXEC, "xman")
   ),
@@ -13,7 +13,7 @@
  ("Workspace", WORKSPACE_MENU),
  ("Programmi",
   ("Grafica",
-   ("Gimp", SHEXEC, "gimp >/dev/null"),
+   ("Gimp", EXEC, "gimp >/dev/null"),
    ("XV", EXEC, "xv"),
    ("XPaint", EXEC, "xpaint"),
    ("XFig", EXEC, "xfig")
@@ -22,26 +22,26 @@
   ("OffiX Files", EXEC, "files"),
   ("LyX", EXEC, "lyx"),
   ("Netscape", EXEC, "netscape"),
-  ("Ghostview", EXEC, "ghostview %a(Enter file to view)"),
-  ("Acrobat", EXEC, "/usr/local/Acrobat3/bin/acroread %a(Enter PDF to view)"),
+  ("Ghostview", EXEC, "ghostview %a(Ghostview, Scrivi il file da visualizzare)"),
+  ("Acrobat", EXEC, "/usr/local/Acrobat3/bin/acroread %a(Acroread, Scrivi il file da visualizzare)"),
   ("TkDesk", EXEC, "tkdesk")
   ),
  ("Editor",
   ("XFte", EXEC, "xfte"),
-  ("XEmacs", SHEXEC, "xemacs || emacs"),
+  ("XEmacs", EXEC, "xemacs || emacs"),
   ("XJed", EXEC, "xjed"),
   ("NEdit", EXEC, "nedit"),
   ("Xedit", EXEC, "xedit"),
   ("VI", EXEC, "xterm -e vi")
   ),
  ("Varie",
-  ("Xmcd", SHEXEC, "xmcd 2> /dev/null"),
+  ("Xmcd", EXEC, "xmcd 2> /dev/null"),
   ("Xplaycd", EXEC, "xplaycd"),
   ("Xmixer", EXEC, "xmixer")
   ),
  ("Utilità",
   ("Calcolatrice", EXEC, "xcalc"),
-  ("Proprietà finestra", SHEXEC, "xprop | xmessage -center -title 'xprop' -file -"),
+  ("Proprietà finestra", EXEC, "xprop | xmessage -center -title 'xprop' -file -"),
   ("Selezione Font", EXEC, "xfontsel"),
   ("Emulatore di terminale", EXEC, "xminicom"),
   ("Lente", EXEC, "xmag"),
@@ -51,10 +51,10 @@
   ("Clipboard", EXEC, "xclipboard")
   ),
  ("Selezione",
-  ("Copia", SHEXEC, "echo '%s' | wxcopy"),
+  ("Copia", EXEC, "echo '%s' | wxcopy"),
   ("Spedisci a...", EXEC, "xterm -name mail -T Pine -e pine %s"),
   ("Naviga", EXEC, "netscape %s"),
-  ("Cerca nei Manuali", SHEXEC, "MANUAL_SEARCH(%s)")
+  ("Cerca nei Manuali", EXEC, "MANUAL_SEARCH(%s)")
   ),
  ("Workspace",
   ("Nascondi gli altri", HIDE_OTHERS),
@@ -91,10 +91,10 @@
     ("Sfumature Vinaccia",   EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#600040\", \"#180010\")'")
     ),
    ("Immagini", OPEN_MENU, "-noext /usr/X11R6/share/WindowMaker/Backgrounds ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
-   ),
-  ("Salva il tema", SHEXEC, "getstyle -t ~/GNUstep/Library/WindowMaker/Themes/\"%a(Nome Tema)\""),
-  ("Salva il set icone", SHEXEC, "geticonset ~/GNUstep/Library/WindowMaker/IconSets/\"%a(Nome IconSet)\"")
-  ),
+   ),   
+  ("Salva il tema", EXEC, "getstyle -t ~/GNUstep/Library/WindowMaker/Themes/\"%a(Nome Tema)\""),
+  ("Salva il set icone", EXEC, "geticonset ~/GNUstep/Library/WindowMaker/IconSets/\"%a(Nome IconSet)\"")
+  ), 
  ("Esci",
   ("Riavvia", RESTART),
   ("Avvia BlackBox", RESTART, blackbox),

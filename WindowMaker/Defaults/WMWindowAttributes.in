@@ -1,8 +1,8 @@
 {
-  Logo.WMDock = {Icon = GNUstep3D.#extension#;};
-  Logo.WMPanel = {Icon = GNUstep3D.#extension#;};
+  Logo.WMDock = {Icon = GNUstepGlow.#extension#;};
+  Logo.WMPanel = {Icon = GNUstepGlow.#extension#;};
   Logo.WMClip = {Icon = clip.#extension#;};
-  Dockit = {Icon = GNUstep3D.#extension#;};
+  Dockit = {Icon = GNUstepGlow.#extension#;};
   WMSoundServer = {Icon = sound.#extension#;};
   XTerm = {Icon = GNUterm.#extension#;};
   NXTerm = {Icon = GNUterm.#extension#;};

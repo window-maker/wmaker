@@ -38,9 +38,9 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-" sarà chiuso forzatamente.\n"
+" sara' chiuso forzatamente.\n"
 "Tutte le modifiche non salvate saranno perse.\n"
-"Confermare."
+"Sei sicuro?"
 
 #: ../src/appicon.c:575 ../src/dock.c:286 ../src/winmenu.c:124
 msgid "Kill Application"
@@ -374,8 +374,7 @@ msgstr "Avvia"
 msgid "Settings..."
 msgstr "Proprietà..."
 
-#: ../src/dock.c:1465 ../src/dock.c:1479 ../src/dock.c:1493
-../src/dock.c:1503
+#: ../src/dock.c:1465 ../src/dock.c:1479 ../src/dock.c:1493 ../src/dock.c:1503
 #, c-format
 msgid "bad value in docked icon state info %s"
 msgstr "Valore errato nelle informazioni di stato dell'icona sul Dock %s"
@@ -411,7 +410,7 @@ msgstr "Non riesco ad aprire il file icona: %s"
 
 #: ../src/dockedapp.c:295
 msgid "Start when WindowMaker is started"
-msgstr "Avvia con WindowMaker"
+msgstr "Esecuzione automatica all'avvio"
 
 #: ../src/dockedapp.c:302
 msgid "Application path and arguments"
@@ -502,8 +501,7 @@ msgstr " -display host:dpy\tDisplay da usare"
 
 #: ../src/main.c:259
 msgid " --no-cpp \t\tdisable preprocessing of configuration files"
-msgstr " --no-cpp \t\tDisabilita il preprocessing dei file di
-configurazione"
+msgstr " --no-cpp \t\tDisabilita il preprocessing dei file di configurazione"
 
 #: ../src/main.c:261
 msgid " --no-dock\t\tdo not open the application Dock"
@@ -514,7 +512,7 @@ msgid " --no-clip\t\tdo not open the workspace Clip"
 msgstr " --no-clip\t\tNon avviare la Clip per i workspace"
 
 #.
-#. puts(_(" --locale locale             locale to use"));
+#. puts(_(" --locale locale		locale to use"));
 #.
 #: ../src/main.c:266
 msgid " --visual-id visualid\tvisual id of visual to use"
@@ -670,8 +668,7 @@ msgstr "Non riesco ad inviare il messaggio al gestore dello sfondo"
 #: ../src/pixmap.c:235
 #, c-format
 msgid "could not load mask bitmap file \"%s\". Won't use mask"
-msgstr "Non riesco a caricare la maschera dal file bitmap \"%s\". Non la
-uso"
+msgstr "Non riesco a caricare la maschera dal file bitmap \"%s\". Non la uso"
 
 #: ../src/proplist.c:180
 msgid "unterminated string"
@@ -738,7 +735,7 @@ msgstr "Mancano i seguenti set di caratteri in %s:"
 #: ../src/resources.c:76
 #, c-format
 msgid "The string \"%s\" will be used in place"
-msgstr "Sarà usata la stringa \"%s\" in sostituzione"
+msgstr "Sara' usata la stringa \"%s\" in sostituzione"
 
 #: ../src/resources.c:78
 msgid "of any characters from those sets."
@@ -770,7 +767,7 @@ msgstr "Uscita"
 
 #: ../src/rootmenu.c:187
 msgid "Exit window manager?"
-msgstr "Esco dal window manager?"
+msgstr "Esco da Window Maker?"
 
 #: ../src/rootmenu.c:223
 msgid "Close X session"
@@ -884,8 +881,7 @@ msgstr "%s: errore di sintassi nel menu file: manca 'END'"
 
 #: ../src/rootmenu.c:1094 ../src/rootmenu.c:1193
 msgid "could not make arguments for menu file preprocessor"
-msgstr "Non riesco a generare i parametri per il preprocessor del file di
-menu"
+msgstr "Non riesco a generare i parametri per il preprocessor del file di menu"
 
 #: ../src/rootmenu.c:1100 ../src/rootmenu.c:1200
 #, c-format
@@ -936,14 +932,12 @@ msgstr "Esci..."
 #: ../src/rootmenu.c:1537
 #, c-format
 msgid "could not find menu file \"%s\" referenced in WMRootMenu"
-msgstr "Non riesco a trovare il file di menu \"%s\" menzionato in
-WMRootMenu"
+msgstr "Non riesco a trovare il file di menu \"%s\" menzionato in WMRootMenu"
 
 #: ../src/rootmenu.c:1544
 #, c-format
 msgid "could not access menu \"%s\" referenced in WMRootMenu"
-msgstr "Non riesco ad accedere al file di menu \"%s\" menzionato in
-WMRootMenu"
+msgstr "Non riesco ad accedere al file di menu \"%s\" menzionato in WMRootMenu"
 
 #: ../src/rootmenu.c:1555
 #, c-format
@@ -961,10 +955,10 @@ msgstr "%s: errore di formato nella configurazione del root menu \"%s\""
 
 #: ../src/rootmenu.c:1742
 msgid ""
-"The applications menu could not be loaded.Look at the console output for a"
+"The applications menu could not be loaded.Look at the console output for a "
 "detaileddescription of the errors"
 msgstr ""
-"Il menu delle appplicazioni non può essere caricato. Guarda l'output della"
+"Il menu delle appplicazioni non può essere caricato. Guarda l'output della "
 "console per un descrizione dettagliata dell'errore."
 
 #: ../src/screen.c:433
@@ -1075,10 +1069,8 @@ msgstr "Provo ad avviare un window manager alternativo..."
 
 #: ../src/startup.c:745
 #, c-format
-msgid "icon size is configured to %i, but it's too small. Using 16,
-instead\n"
-msgstr "La dimensione delle icone è configurata a %i, è troppo piccola. Uso
-16.\n"
+msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
+msgstr "La dimensione delle icone è configurata a %i, è troppo piccola. Uso 16.\n"
 
 #: ../src/startup.c:789
 msgid "it seems that there already is a window manager running"
@@ -1145,9 +1137,9 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-"Questo ucciderà l'applicazione.\n"
-"Tutte le modifiche non slavate saranno perse.\n"
-"Conferma."
+"Questo uccidera' l'applicazione.\n"
+"Tutte le modifiche non salvate saranno perse.\n"
+"Sei sicuro?"
 
 #: ../src/winmenu.c:252 ../src/winmenu.c:260
 msgid "Set Shortcut"
@@ -1266,7 +1258,7 @@ msgid ""
 "windows that have their WM_CLASS property set to the above selected\n"
 "name, when saved."
 msgstr ""
-"La configurazione sarà applicata a tutte\n"
+"La configurazione sara' applicata a tutte\n"
 "le finestre che hanno la loro proprietà WM_CLASS\n"
 "uguale al nome selzionato (se salvato)"
 

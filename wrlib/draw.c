@@ -232,6 +232,66 @@ ROperatePixels(RImage *image, int operation, RPoint *points, int npoints,
 }
 
 
+static Bool
+clipLineInRectangle(int xmin, int ymin, int xmax, int ymax,
+		    int *x1, int *y1, int *x2, int *y2)
+{
+#define TOP	(1<<0)
+#define BOT	(1<<1)
+#define LEF	(1<<2)
+#define RIG	(1<<3)
+#define CHECK_OUT(X,Y)	(((Y) > ymax ? TOP : ((Y) < ymin ? BOT : 0))\
+			 | ((X) > xmax ? RIG : ((X) < xmin ? LEF : 0)))
+
+    int ocode1, ocode2, ocode;
+    int accept = 0;
+    int x, y;
+
+    ocode1 = CHECK_OUT(*x1, *y1);
+    ocode2 = CHECK_OUT(*x2, *y2);
+
+    for(;;) {
+	if (!ocode1 && !ocode2) { /* completely inside */
+	    accept = 1;
+	    break;
+	} else if (ocode1 & ocode2) {
+	    break;
+	}
+
+	if (ocode1)
+	    ocode = ocode1;
+	else
+	    ocode = ocode2;
+
+	if (ocode & TOP) {
+	    x = *x1 + (*x2 - *x1) * (ymax - *y1) / (*y2 - *y1);
+	    y = ymax;
+	} else if (ocode & BOT) {
+	    x = *x1 + (*x2 - *x1) * (ymin - *y1) / (*y2 - *y1);
+	    y = ymin;
+	} else if (ocode & RIG) {
+	    y = *y1 + (*y2 - *y1) * (xmax - *x1) / (*x2 - *x1);
+	    x = xmax;
+	} else if (ocode & LEF) {
+	    y = *y1 + (*y2 - *y1) * (xmax - *x1) / (*x2 - *x1);
+	    x = xmin;
+	}
+
+	if (ocode == ocode1) {
+	    *x1 = x;
+	    *y1 = y;
+	    ocode1 = CHECK_OUT(x, y);
+	} else {
+	    *x2 = x;
+	    *y2 = y;
+	    ocode2 = CHECK_OUT(x, y);
+	}
+    }
+    
+    return accept;
+}
+
+
 /*
  * This routine is a generic drawing routine, based on Bresenham's line
  * drawing algorithm.
@@ -243,10 +303,10 @@ genericLine(RImage *image, int x0, int y0, int x1, int y1, RColor *color,
     int i, err, du, dv, du2, dv2, uofs, vofs, last;
 
     assert(image!=NULL);
-    assert(x0 >= 0 && x0 <= image->width);
-    assert(x1 >= 0 && x1 <= image->width);
-    assert(y0 >= 0 && y0 <= image->height);
-    assert(y1 >= 0 && y1 <= image->height);
+
+    if (!clipLineInRectangle(0, 0, image->width-1, image->height-1,
+			     &x0, &y0, &x1, &y1))
+	return True;
 
     if (x0 < x1) {
         du = x1 - x0;

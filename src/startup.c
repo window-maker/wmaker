@@ -302,7 +302,7 @@ handleSig(int sig)
 	if (already_crashed) {
 	    wfatal(_("crashed while trying to do some post-crash cleanup. Aborting immediatelly."));
             signal(sig, SIG_DFL);
-            raise(sig);
+            kill(getpid(), sig);
             return;
 	}
 	already_crashed = 1;
@@ -328,7 +328,7 @@ handleSig(int sig)
 
         if (crashAction == WMAbort) {
             signal(sig, SIG_DFL);
-            raise(sig);
+            kill(getpid(), sig);
             return;
         }
 
@@ -351,7 +351,7 @@ handleSig(int sig)
 #endif /* !NO_EMERGENCY_AUTORESTART */
 
         signal(sig, SIG_DFL);
-        raise(sig);
+        kill(getpid(), sig);
         return;
 
     }

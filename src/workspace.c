@@ -120,7 +120,8 @@ wWorkspaceNew(WScreen *scr)
 	    list[i] = scr->workspaces[i];
 	}
 	list[i] = wspace;
-	free(scr->workspaces);
+	if (scr->workspaces)
+	    free(scr->workspaces);
 	scr->workspaces = list;
 
 	wWorkspaceMenuUpdate(scr, scr->workspace_menu);
@@ -517,11 +518,14 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
                     if (!wPreferences.sticky_icons) {
                         XUnmapWindow(dpy, tmp->icon->core->window);
 			tmp->icon->mapped = 0;
-		    } else {
+		    }
+#if 0
+		    else {
 			tmp->icon->mapped = 1;
 			/* Why is this here? -Alfredo */
                         XMapWindow(dpy, tmp->icon->core->window);
 		    }
+#endif
                 }
 		/* update current workspace of omnipresent windows */
 		if (IS_OMNIPRESENT(tmp)) {

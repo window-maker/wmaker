@@ -512,6 +512,8 @@ gradAddCallback(WMWidget *w, void *data)
     updateGradButtons(panel);
 
     sliderChangeCallback(panel->ghueS, panel);
+
+    WMSetButtonEnabled(panel->okB, WMGetListNumberOfRows(panel->gcolL) > 1);
 }
 
 
@@ -561,6 +563,8 @@ gradDeleteCallback(WMWidget *w, void *data)
     updateGradButtons(panel);
 
     gradClickCallback(panel->gcolL, panel);
+
+    WMSetButtonEnabled(panel->okB, WMGetListNumberOfRows(panel->gcolL) > 1);
 }
 
 
@@ -603,8 +607,13 @@ updateImage(TexturePanel *panel, char *path)
 
 	    WMRunAlertPanel(scr, panel->win, _("Error"), message,
 			    _("OK"), NULL, NULL);
+
+	    if (!panel->image)
+		WMSetButtonEnabled(panel->okB, False);
 	    return;
 	}
+
+	WMSetButtonEnabled(panel->okB, True);
 
 	if (panel->image)
 	    RDestroyImage(panel->image);
@@ -733,13 +742,19 @@ changeTypeCallback(WMWidget *w, void *data)
     switch (newType) {
      case TYPE_SGRADIENT:
 	updateSGradButtons(panel);
+	WMSetButtonEnabled(panel->okB, True);
 	break;
      case TYPE_GRADIENT:
 	updateGradButtons(panel);
+	WMSetButtonEnabled(panel->okB, WMGetListNumberOfRows(panel->gcolL)>1);
 	break;
      case TYPE_TGRADIENT:
      case TYPE_PIXMAP:
 	updateImage(panel, NULL);
+	WMSetButtonEnabled(panel->okB, panel->image!=NULL);
+	break;
+     default:
+	WMSetButtonEnabled(panel->okB, True);
 	break;
     }
 }

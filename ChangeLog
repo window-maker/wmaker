@@ -48,6 +48,10 @@ Changes since version 0.53.0:
 - rewrote font code to use WINGs
 - made autoraise only work for the active window
 - fixed compilation problem with OpenWindows and other non-X11R6 systems..
+- fixed crash bug when iconsize=24
+- fixed portability prob with raise() in SunOS
+- fixed icon placement bug (Markus Schoder <Markus.Schoder@online.de>)
+
 
 Changes since version 0.52.0:
 .............................

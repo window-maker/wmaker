@@ -89,6 +89,7 @@ XGETTEXT = @XGETTEXT@
 XLFLAGS = @XLFLAGS@
 XLIBS = @XLIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
+X_LIBRARY_PATH = @X_LIBRARY_PATH@
 wprefsdir = @wprefsdir@
 
 EXTRA_DIST = README single_click.diff

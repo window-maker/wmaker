@@ -1726,8 +1726,8 @@ wArrangeIcons(WScreen *scr, Bool arrangeAll)
     while (wwin && wwin->prev)
         wwin = wwin->prev;
 
-    while (wwin) { 
-        if (wwin->icon && wwin->flags.miniaturized &&/*!wwin->flags.hidden &&*/
+    while (wwin) {
+        if (wwin->icon && wwin->flags.miniaturized && !wwin->flags.hidden &&
             (wwin->frame->workspace==scr->current_workspace ||
              IS_OMNIPRESENT(wwin) || wPreferences.sticky_icons)) {
 	    

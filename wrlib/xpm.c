@@ -39,11 +39,10 @@ RGetImageFromXPMData(RContext *context, char **data)
     Colormap cmap = context->cmap;
     RImage *image;
     XpmImage xpm;
-    unsigned char *color_table[3];
+    unsigned char *color_table[4];
     unsigned char *r, *g, *b, *a;
     int *p;
     int i;
-    int transp=-1;
     
     i = XpmCreateXpmImageFromData(data, &xpm, (XpmInfo *)NULL);
     if (i!=XpmSuccess) {
@@ -81,7 +80,7 @@ RGetImageFromXPMData(RContext *context, char **data)
     }
     
     /* make color table */
-    for (i=0; i<3; i++) {
+    for (i=0; i<4; i++) {
 	color_table[i] = malloc(xpm.ncolors*sizeof(char));
 	if (!color_table[i]) {
 	    for (i=i-1;i>=0; i--) {
@@ -102,17 +101,19 @@ RGetImageFromXPMData(RContext *context, char **data)
 	    color_table[0][i]=0;
 	    color_table[1][i]=0;
 	    color_table[2][i]=0;
-	    transp = i;
+	    color_table[3][i]=0;
 	    continue;
 	}
 	if (XParseColor(dpy, cmap, xpm.colorTable[i].c_color, &xcolor)) {
 	    color_table[0][i] = xcolor.red>>8;
 	    color_table[1][i] = xcolor.green>>8;
 	    color_table[2][i] = xcolor.blue>>8;
+	    color_table[3][i] = 0xff;
 	} else {
-	    color_table[0][i]=0xbe;
-	    color_table[1][i]=0xbe;
-	    color_table[2][i]=0xbe;
+	    color_table[0][i] = 0xbe;
+	    color_table[1][i] = 0xbe;
+	    color_table[2][i] = 0xbe;
+	    color_table[3][i] = 0xff;
 	}
     }
     memset(image->data[3], 255, xpm.width*xpm.height);
@@ -123,15 +124,13 @@ RGetImageFromXPMData(RContext *context, char **data)
     b = image->data[2];
     a = image->data[3];
     for (i=0; i<xpm.width*xpm.height; i++) {
-	if (*p==transp)
-	  *a=0;
-	a++;
 	*(r++)=color_table[0][*p];
 	*(g++)=color_table[1][*p];
 	*(b++)=color_table[2][*p];
+	*(a++)=color_table[3][*p];
 	p++;
     }
-    for(i=0; i<3; i++) {
+    for(i=0; i<4; i++) {
 	free(color_table[i]);
     }
     XpmFreeXpmImage(&xpm);
@@ -147,11 +146,10 @@ RLoadXPM(RContext *context, char *file, int index)
     Colormap cmap = context->cmap;
     RImage *image;
     XpmImage xpm;
-    unsigned char *color_table[3];
+    unsigned char *color_table[4];
     unsigned char *r, *g, *b, *a;
     int *p;
     int i;
-    int transp=-1;
     
     i = XpmReadFileToXpmImage(file, &xpm, (XpmInfo *)NULL);
     if (i!=XpmSuccess) {
@@ -189,7 +187,7 @@ RLoadXPM(RContext *context, char *file, int index)
     }
     
     /* make color table */
-    for (i=0; i<3; i++) {
+    for (i=0; i<4; i++) {
 	color_table[i] = malloc(xpm.ncolors*sizeof(char));
 	if (!color_table[i]) {
 	    for (i=i-1;i>=0; i--) {
@@ -210,20 +208,21 @@ RLoadXPM(RContext *context, char *file, int index)
 	    color_table[0][i]=0;
 	    color_table[1][i]=0;
 	    color_table[2][i]=0;
-	    transp = i;
+	    color_table[3][i]=0;
 	    continue;
 	}
 	if (XParseColor(dpy, cmap, xpm.colorTable[i].c_color, &xcolor)) {
 	    color_table[0][i] = xcolor.red>>8;
 	    color_table[1][i] = xcolor.green>>8;
 	    color_table[2][i] = xcolor.blue>>8;
+	    color_table[3][i] = 0xff;
 	} else {
-	    color_table[0][i]=0xbe;
-	    color_table[1][i]=0xbe;
-	    color_table[2][i]=0xbe;
+	    color_table[0][i] = 0xbe;
+	    color_table[1][i] = 0xbe;
+	    color_table[2][i] = 0xbe;
+	    color_table[3][i] = 0xff;
 	}
     }
-    memset(image->data[3], 255, xpm.width*xpm.height);
     /* convert pixmap to RImage */
     p = (int*)xpm.data;
     r = image->data[0];
@@ -231,15 +230,13 @@ RLoadXPM(RContext *context, char *file, int index)
     b = image->data[2];
     a = image->data[3];
     for (i=0; i<xpm.width*xpm.height; i++) {
-	if (*p==transp)
-	  *a=0;
-	a++;
 	*(r++)=color_table[0][*p];
 	*(g++)=color_table[1][*p];
 	*(b++)=color_table[2][*p];
+	*(a++)=color_table[3][*p];
 	p++;
     }
-    for(i=0; i<3; i++) {
+    for(i=0; i<4; i++) {
 	free(color_table[i]);
     }
     XpmFreeXpmImage(&xpm);

@@ -1,4 +1,5 @@
 {
+  MultiByteText = NO;
   SmoothWorkspaceBack = YES;
   WindozeCycling = NO;
   PopupSwitchMenu = NO;

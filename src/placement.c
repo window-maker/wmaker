@@ -83,17 +83,14 @@ iconPosition(WCoreWindow *wcore, int sx1, int sy1, int sx2, int sy2,
 	       (((WIcon*)parent)->owner->frame->workspace == workspace
 		|| IS_OMNIPRESENT(((WIcon*)parent)->owner)
 		|| wPreferences.sticky_icons)
-	       && ((WIcon*)parent)->mapped
-	       && (!((WIcon*)parent)->owner->flags.hidden
-		   || wcore->screen_ptr->flags.startup)) {
+	       && ((WIcon*)parent)->mapped) {
 
 	*retX = ((WIcon*)parent)->owner->icon_x;
 	*retY = ((WIcon*)parent)->owner->icon_y;
 
 	ok = 1;
     } else if (wcore->descriptor.parent_type == WCLASS_WINDOW
-	       && (((WWindow*)parent)->flags.icon_moved
-		   || ((WWindow*)parent)->flags.hidden)
+	       && ((WWindow*)parent)->flags.icon_moved
 	       && (((WWindow*)parent)->frame->workspace == workspace
 		   || IS_OMNIPRESENT((WWindow*)parent)
 		   || wPreferences.sticky_icons)) {

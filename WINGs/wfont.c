@@ -74,23 +74,35 @@ WMCreateNormalFont(WMScreen *scrPtr, char *fontName)
 {
     WMFont *font;
     Display *display = scrPtr->display;
+    char *fname, *ptr;
 
-    font = WMHashGet(scrPtr->fontCache, fontName);
+    if ((ptr = strchr(fontName, ','))) {
+	fname = wmalloc(ptr - fontName + 1);
+	strncpy(fname, fontName, ptr - fontName);
+	fname[ptr - fontName] = 0;
+    } else {
+	fname = wstrdup(fontName);
+    }
+
+    font = WMHashGet(scrPtr->fontCache, fname);
     if (font) {
 	WMRetainFont(font);
+	free(fname);
 	return font;
     }
 
     font = malloc(sizeof(WMFont));
-    if (!font)
+    if (!font) {
+	free(fname);
 	return NULL;
+    }
     memset(font, 0, sizeof(WMFont));
     
     font->notFontSet = 1;
     
     font->screen = scrPtr;
     
-    font->font.normal = XLoadQueryFont(display, fontName);
+    font->font.normal = XLoadQueryFont(display, fname);
     if (!font->font.normal) {
 	free(font);
 	return NULL;
@@ -98,14 +110,14 @@ WMCreateNormalFont(WMScreen *scrPtr, char *fontName)
 
     font->height = font->font.normal->ascent+font->font.normal->descent;
     font->y = font->font.normal->ascent;
-    
+
     font->refCount = 1;
 
-    font->name = wstrdup(fontName);
+    font->name = fname;
 
     assert(WMHashInsert(scrPtr->fontCache, font->name, font)==NULL);
 
-    return font;    
+    return font;
 }
 
 
@@ -113,7 +125,7 @@ WMCreateNormalFont(WMScreen *scrPtr, char *fontName)
 WMFont*
 WMCreateFont(WMScreen *scrPtr, char *fontName)
 {
-    if (WINGsConfiguration.useMultiByte)
+    if (scrPtr->useMultiByte)
 	return WMCreateFontSet(scrPtr, fontName);
     else
 	return WMCreateNormalFont(scrPtr, fontName);
@@ -172,13 +184,13 @@ WMSystemFontOfSize(WMScreen *scrPtr, int size)
 
     fontSpec = makeFontSetOfSize(WINGsConfiguration.systemFont, size);
 
-    if (WINGsConfiguration.useMultiByte)
+    if (scrPtr->useMultiByte)
 	font = WMCreateFontSet(scrPtr, fontSpec);
     else
 	font = WMCreateNormalFont(scrPtr, fontSpec);
 
     if (!font) {
-	if (WINGsConfiguration.useMultiByte) {
+	if (scrPtr->useMultiByte) {
 	    wwarning("could not load font set %s. Trying fixed.", fontSpec);
 	    font = WMCreateFontSet(scrPtr, "fixed");
 	    if (!font) {
@@ -208,13 +220,13 @@ WMBoldSystemFontOfSize(WMScreen *scrPtr, int size)
 
     fontSpec = makeFontSetOfSize(WINGsConfiguration.boldSystemFont, size);
 
-    if (WINGsConfiguration.useMultiByte)
+    if (scrPtr->useMultiByte)
 	font = WMCreateFontSet(scrPtr, fontSpec);
     else
 	font = WMCreateNormalFont(scrPtr, fontSpec);
 
     if (!font) {
-	if (WINGsConfiguration.useMultiByte) {
+	if (scrPtr->useMultiByte) {
 	    wwarning("could not load font set %s. Trying fixed.", fontSpec);
 	    font = WMCreateFontSet(scrPtr, "fixed");
 	    if (!font) {

@@ -401,8 +401,8 @@ drawClip()
     ROperateLine(img, RAddOperation, 22, 63-1, 22, 63, &cdelta);
     /*ROperateLine(img, RAddOperation, 22, 63-1, 22, 63, &cdelta);*/   /* the bevel arround them */
     ROperateLine(img, RSubtractOperation, 0, 63-22, 1, 63-22, &cdelta1);
-#endif
-
+#endif    
+    
     RConvertImage(ctx, img, &pix);
     XCopyArea(dpy, pix, back, ctx->copy_gc, 0, 0, 64, 64, 0, 0);
     RDestroyImage(img);

@@ -32,9 +32,9 @@ If I18N support does not work for you, check these:
 		here:
 		ftp://ftp.linux.or.jp/pub/RPM/glibc
 
-	- if you'd like to display multibyte characters, wmaker have to
-	  be compiled with multibyte character support. Add this option
-	  to the configure, "--enable-kanji".
+	- if you'd like to display multibyte characters, set the
+	  MultiByteText option to YES in ~/GNUstep/Defaults/WindowMaker
+	  and ~/GNUstep/Defaults/WMGLOBAL
 
 	- the fonts you're using support your locale. if your font
 	  setting on $HOME/GNUstep/Defaults/WindowMaker is like..

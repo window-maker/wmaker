@@ -2115,6 +2115,9 @@ getFont(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
     val = PLGetString(value);
 
     font = WMCreateFont(scr->wmscreen, val);
+    if (!font)
+	font = WMCreateFont(scr->wmscreen, "fixed");
+
     if (!font) {
 	wfatal(_("could not load any usable font!!!"));
 	exit(1);

@@ -1,4 +1,4 @@
-/* resources.c - manage X resources (fonts, colors etc)
+/* resources.c - manage X resources (colors etc)
  * 
  *  Window Maker window manager
  * 

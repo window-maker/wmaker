@@ -1,5 +1,6 @@
 {
   SystemFont = "-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*";
   BoldSystemFont = "-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*";
+  MultiByteText = NO;
   DoubleClickTime = 250;
 }
