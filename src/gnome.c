@@ -61,6 +61,9 @@
 #define WIN_HINTS_SKIP_TASKBAR    (1<<2) /*do not show on taskbar*/
 #define WIN_HINTS_GROUP_TRANSIENT (1<<3) /*Reserved - definition is unclear*/
 #define WIN_HINTS_FOCUS_ON_CLICK  (1<<4) /*app only accepts focus if clicked*/
+#if 0 /* hadess patch but still has problem said him */
+#define WIN_HINTS_DO_NOT_COVER    (1<<5) /* attempt to not cover this window */
+#endif
 
 
 #define WIN_STATE_STICKY          (1<<0) /*everyone knows sticky*/
@@ -312,6 +315,32 @@ wGNOMECheckClientHints(WWindow *wwin, int *layer, int *workspace)
 	if (flags & (WIN_HINTS_SKIP_FOCUS|WIN_HINTS_SKIP_WINLIST)) {
 	    wwin->client_flags.skip_window_list = 1;
 	}
+
+#if 0 /* hadess patch but still has problem said him */
+	if (flags & (WIN_HINTS_DO_NOT_COVER)) {
+		XWindowAttributes wattribs;
+		WReservedArea *area;
+
+		area = malloc(sizeof(WReservedArea));
+		if (!area) {
+			wwarning(_("out of memory while updating GNOME hints"));
+		} else {
+			XGetWindowAttributes(dpy, wwin->client_win, &wattribs);
+			wClientGetNormalHints(wwin, &wattribs, False, &area->area.x1, &area->area.y1, &area->area.x2, &area->area.y2);
+			area->area.x2 = area->area.x2 + area->area.x1;
+			area->area.y2 = area->area.y2 + area->area.y1;
+
+			area->window = wwin->client_win;
+			printf("area x:%d y:%d w:%d h:%d\n %s.%s\n", area->area.x1, area->area.y1, area->area.x2, area->area.y2, wwin->wm_class, wwin->wm_instance);
+		}
+		area->next = wwin->screen_ptr->reservedAreas;
+		wwin->screen_ptr->reservedAreas = area;
+		
+		wScreenUpdateUsableArea(wwin->screen_ptr);
+	}
+
+#endif
+
 	hasHints = True;
     }
 

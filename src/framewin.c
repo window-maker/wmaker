@@ -1088,7 +1088,7 @@ wFrameWindowPaint(WFrameWindow *fwin)
                     + fwin->drawstring_proc_offset]->arg,
                     fwin->titlebar->window, *fwin->title_gc,
                     *fwin->font, x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE,
-                    fwin->titlebar->width, fwin->top_width, title, titlelen);
+                    fwin->titlebar->width, fwin->top_width, fwin->title, titlelen);
     } else {
         WMDrawString(scr->wmscreen, fwin->titlebar->window, 
                 *fwin->title_gc, *fwin->font, x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE, 
