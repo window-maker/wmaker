@@ -1,201 +1,201 @@
-diff -urN wm-a/WPrefs.app/Expert.c wm-c/WPrefs.app/Expert.c
---- wm-a/WPrefs.app/Expert.c	2003-01-16 18:30:47.000000000 -0500
-+++ wm-c/WPrefs.app/Expert.c	2003-05-19 12:50:17.000000000 -0400
-@@ -33,7 +33,7 @@
-     
-     WMWidget *parent;
- 
--    WMButton *swi[8];
-+    WMButton *swi[9];
- 
- } _Panel;
- 
-@@ -54,8 +54,9 @@
-     WMSetButtonSelected(panel->swi[4], GetBoolForKey("WindozeCycling"));
-     WMSetButtonSelected(panel->swi[5], GetBoolForKey("DontConfirmKill"));
-     WMSetButtonSelected(panel->swi[6], GetBoolForKey("DisableBlinking"));
-+    WMSetButtonSelected(panel->swi[7], GetBoolForKey("SingleClickLaunch"));   
-     if (WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
--        WMSetButtonSelected(panel->swi[7], GetBoolForKey("AntialiasedText"));
-+        WMSetButtonSelected(panel->swi[8], GetBoolForKey("AntialiasedText"));
+This patch allows dock icons, appicons and miniwindows to be activated with
+a single-click (as opposed to a double-click). Great for weary fingers!
+
+Index: WPrefs.app/Expert.c
+===================================================================
+RCS file: /cvsroot/wm/WPrefs.app/Expert.c,v
+retrieving revision 1.25
+diff -u -r1.25 Expert.c
+--- WPrefs.app/Expert.c	23 Oct 2004 03:30:04 -0000	1.25
++++ WPrefs.app/Expert.c	23 Oct 2004 04:16:07 -0000
+@@ -54,6 +54,7 @@
+     WMSetButtonSelected(panel->swi[4], GetBoolForKey("DontConfirmKill"));
+     WMSetButtonSelected(panel->swi[5], GetBoolForKey("DisableBlinking"));
+     WMSetButtonSelected(panel->swi[6], GetBoolForKey("AntialiasedText"));
++    WMSetButtonSelected(panel->swi[7], GetBoolForKey("SingleClickLaunch"));
  }
  
  
-@@ -68,10 +69,10 @@
+@@ -66,7 +67,7 @@
      panel->box = WMCreateBox(panel->parent);
      WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
  
--    for (i=0; i<8; i++) {
-+    for (i=0; i<9; i++) {
- 	panel->swi[i] = WMCreateSwitchButton(panel->box);
- 	WMResizeWidget(panel->swi[i], FRAME_WIDTH-40, 25);
--	WMMoveWidget(panel->swi[i], 20, 20+i*25);
-+	WMMoveWidget(panel->swi[i], 20, 5+i*25);
-     }
-     
-     WMSetButtonText(panel->swi[0], _("Disable miniwindows (icons for miniaturized windows). For use with KDE/GNOME."));
-@@ -81,11 +82,11 @@
-     WMSetButtonText(panel->swi[4], _("Use Windoze style cycling."));
-     WMSetButtonText(panel->swi[5], _("Disable confirmation panel for the Kill command."));
-     WMSetButtonText(panel->swi[6], _("Disable selection animation for selected icons."));
--    WMSetButtonText(panel->swi[7], _("Smooth font edges (needs restart)."));
--
-+    WMSetButtonText(panel->swi[7], _("Launch applications and restore windows with a single click"));
-+    WMSetButtonText(panel->swi[8], _("Smooth font edges (needs restart)."));
-     if (!WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
--        WMSetButtonEnabled(panel->swi[7], False);
--
-+        WMSetButtonEnabled(panel->swi[8], False);
-+    
-     WMRealizeWidget(panel->box);
-     WMMapSubwidgets(panel->box);
-     
-@@ -107,8 +108,9 @@
-     SetBoolForKey(WMGetButtonSelected(panel->swi[4]), "WindozeCycling");
-     SetBoolForKey(WMGetButtonSelected(panel->swi[5]), "DontConfirmKill");
-     SetBoolForKey(WMGetButtonSelected(panel->swi[6]), "DisableBlinking");
+-    for (i=0; i<7; i++) {
++    for (i=0; i<8; i++) {
+         panel->swi[i] = WMCreateSwitchButton(panel->box);
+         WMResizeWidget(panel->swi[i], FRAME_WIDTH-40, 25);
+         WMMoveWidget(panel->swi[i], 20, 20+i*25);
+@@ -79,6 +80,7 @@
+     WMSetButtonText(panel->swi[4], _("Disable confirmation panel for the Kill command."));
+     WMSetButtonText(panel->swi[5], _("Disable selection animation for selected icons."));
+     WMSetButtonText(panel->swi[6], _("Smooth font edges (needs restart)."));
++    WMSetButtonText(panel->swi[7], _("Launch applications and restore windows with a single click."));
+ 
+     WMSetButtonEnabled(panel->swi[6], True);
+ 
+@@ -103,6 +105,7 @@
+     SetBoolForKey(WMGetButtonSelected(panel->swi[4]), "DontConfirmKill");
+     SetBoolForKey(WMGetButtonSelected(panel->swi[5]), "DisableBlinking");
+     SetBoolForKey(WMGetButtonSelected(panel->swi[6]), "AntialiasedText");
 +    SetBoolForKey(WMGetButtonSelected(panel->swi[7]), "SingleClickLaunch");
-     if (WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
--        SetBoolForKey(WMGetButtonSelected(panel->swi[7]), "AntialiasedText");
-+        SetBoolForKey(WMGetButtonSelected(panel->swi[8]), "AntialiasedText");
  }
  
  
-Binary files wm-a/contrib/.single_click.diff.swp and wm-c/contrib/.single_click.diff.swp differ
-diff -urN wm-a/src/WindowMaker.h wm-c/src/WindowMaker.h
---- wm-a/src/WindowMaker.h	2003-01-16 18:30:48.000000000 -0500
-+++ wm-c/src/WindowMaker.h	2003-05-19 12:27:57.000000000 -0400
-@@ -464,6 +464,9 @@
-     /* shading animation */
-     signed char shade_speed;
+Index: src/WindowMaker.h
+===================================================================
+RCS file: /cvsroot/wm/src/WindowMaker.h,v
+retrieving revision 1.60
+diff -u -r1.60 WindowMaker.h
+--- src/WindowMaker.h	18 Oct 2004 01:30:02 -0000	1.60
++++ src/WindowMaker.h	23 Oct 2004 04:16:07 -0000
+@@ -472,6 +472,9 @@
+     unsigned int workspace_border_size; /* Size in pixels of the workspace border */
+     char workspace_border_position;     /* Where to leave a workspace border */
  
 +    /* single click to lauch applications */
 +    char single_click;
 +
-     int edge_resistance;
-     char attract;
- 
-diff -urN wm-a/src/appicon.c wm-c/src/appicon.c
---- wm-a/src/appicon.c	2003-01-16 18:30:48.000000000 -0500
-+++ wm-c/src/appicon.c	2003-05-19 12:27:01.000000000 -0400
-@@ -585,6 +585,7 @@
-     int shad_x = 0, shad_y = 0, docking=0, dockable, collapsed = 0;
-     int ix, iy;
-     int clickButton = event->xbutton.button;
-+    Bool hasMoved = False;
-     Pixmap ghost = None;
-     Window wins[2];
+     struct {
+         unsigned int nodock:1;	       /* don't display the dock */
+         unsigned int noclip:1;         /* don't display the clip */
+Index: src/appicon.c
+===================================================================
+RCS file: /cvsroot/wm/src/appicon.c,v
+retrieving revision 1.50
+diff -u -r1.50 appicon.c
+--- src/appicon.c	13 Oct 2004 05:09:08 -0000	1.50
++++ src/appicon.c	23 Oct 2004 04:16:08 -0000
+@@ -590,6 +590,7 @@
      Bool movingSingle = False;
+     int oldX = x;
+     int oldY = y;
++    Bool hasMoved = False;
+ 
+     if (aicon->editing || WCHECK_STATE(WSTATE_MODAL))
+         return;
 @@ -665,6 +666,7 @@
- 	    break;
+             break;
  
- 	 case MotionNotify:
-+	    hasMoved = True;
- 	    if (!grabbed) {
- 		if (abs(dx-ev.xmotion.x)>=MOVE_THRESHOLD
- 		    || abs(dy-ev.xmotion.y)>=MOVE_THRESHOLD) {
-@@ -801,7 +803,9 @@
+         case MotionNotify:
++            hasMoved = True;
+             if (!grabbed) {
+                 if (abs(dx-ev.xmotion.x)>=MOVE_THRESHOLD
+                     || abs(dy-ev.xmotion.y)>=MOVE_THRESHOLD) {
+@@ -802,6 +804,9 @@
+             if (wPreferences.auto_arrange_icons)
+                 wArrangeIcons(scr, True);
  
- 	    if (wPreferences.auto_arrange_icons)
- 		wArrangeIcons(scr, True);
--
-+            
-+	    if (!hasMoved && wPreferences.single_click)
++            if (wPreferences.single_click && !hasMoved)
 +                iconDblClick(desc, event);
- 	    done = 1;
- 	    break;
- 	}
-diff -urN wm-a/src/defaults.c wm-c/src/defaults.c
---- wm-a/src/defaults.c	2003-01-16 18:30:48.000000000 -0500
-+++ wm-c/src/defaults.c	2003-05-19 12:27:17.000000000 -0400
-@@ -547,6 +547,9 @@
++
+             done = 1;
+             break;
+         }
+Index: src/defaults.c
+===================================================================
+RCS file: /cvsroot/wm/src/defaults.c,v
+retrieving revision 1.90
+diff -u -r1.90 defaults.c
+--- src/defaults.c	22 Oct 2004 23:39:11 -0000	1.90
++++ src/defaults.c	23 Oct 2004 04:16:08 -0000
+@@ -562,6 +562,9 @@
      {"DisableBlinking",	"NO",		NULL,
      &wPreferences.dont_blink,	getBool,	NULL
      },
-+    {"SingleClickLaunch", "NO",                NULL,
-+          &wPreferences.single_click,  getBool,        NULL
-+    },   
++    {"SingleClickLaunch",	"NO",	NULL,
++    &wPreferences.single_click,	getBool,	NULL
++    },
      /* style options */
      {"MenuStyle", 	"normal",  		seMenuStyles,
      &wPreferences.menu_style, getEnum, 	setMenuStyle
-diff -urN wm-a/src/dock.c wm-c/src/dock.c
---- wm-a/src/dock.c	2003-02-28 07:42:17.000000000 -0500
-+++ wm-c/src/dock.c	2003-05-19 12:27:33.000000000 -0400
-@@ -3782,7 +3782,7 @@
+Index: src/dock.c
+===================================================================
+RCS file: /cvsroot/wm/src/dock.c,v
+retrieving revision 1.91
+diff -u -r1.91 dock.c
+--- src/dock.c	23 Oct 2004 03:30:04 -0000	1.91
++++ src/dock.c	23 Oct 2004 04:16:09 -0000
+@@ -3758,7 +3758,7 @@
  
  
  
 -static void
-+static Bool 
++static Bool
  handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
  {
      WScreen *scr = dock->screen_ptr;
-@@ -3798,6 +3798,7 @@
-     int tmp;
-     Pixmap ghost = None;
+@@ -3776,6 +3776,7 @@
      Bool docked;
-+    Bool hasMoved = False;
      int superfluous = wPreferences.superfluous; /* we catch it to avoid problems */
      int omnipresent = aicon->omnipresent; /* this must be cached!!! */
++    Bool hasMoved = False;
  
-@@ -3852,6 +3853,7 @@
- 	    break;
  
- 	 case MotionNotify:
-+	    hasMoved = True;
- 	    if (!grabbed) {
- 		if (abs(ofs_x-ev.xmotion.x)>=MOVE_THRESHOLD
- 		    || abs(ofs_y-ev.xmotion.y)>=MOVE_THRESHOLD) {
-@@ -4001,7 +4003,7 @@
+     if (wPreferences.flags.noupdates)
+@@ -3828,6 +3829,7 @@
+             break;
+ 
+         case MotionNotify:
++            hasMoved = True;
+             if (!grabbed) {
+                 if (abs(ofs_x-ev.xmotion.x)>=MOVE_THRESHOLD
+                     || abs(ofs_y-ev.xmotion.y)>=MOVE_THRESHOLD) {
+@@ -3977,9 +3979,11 @@
  #ifdef DEBUG
- 	    puts("End icon move");
+             puts("End icon move");
  #endif
--	    return;
-+	    return hasMoved;
- 	}
+-            return;
++            return hasMoved;
+         }
      }
++
++    return False;  /* never reached */
  }
-@@ -4140,8 +4142,11 @@
+ 
+ 
+@@ -4116,8 +4120,11 @@
                  handleClipChangeWorkspace(scr, event);
              else
                  handleDockMove(dock, aicon, event);
 -        } else
--	    handleIconMove(dock, aicon, event);
+-            handleIconMove(dock, aicon, event);
 +        } else {
-+	    Bool hasMoved = handleIconMove(dock, aicon, event);
-+            if (!hasMoved && wPreferences.single_click)
++            Bool hasMoved = handleIconMove(dock, aicon, event);
++            if (wPreferences.single_click && !hasMoved)
 +                iconDblClick(desc, event);
 +        }
  
      } else if (event->xbutton.button==Button2 && dock->type==WM_CLIP &&
                 aicon==scr->clip_icon) {
-diff -urN wm-a/src/icon.c wm-c/src/icon.c
---- wm-a/src/icon.c	2003-01-16 18:30:49.000000000 -0500
-+++ wm-c/src/icon.c	2003-05-19 12:27:44.000000000 -0400
-@@ -878,7 +878,8 @@
+Index: src/icon.c
+===================================================================
+RCS file: /cvsroot/wm/src/icon.c,v
+retrieving revision 1.27
+diff -u -r1.27 icon.c
+--- src/icon.c	16 Oct 2004 22:05:04 -0000	1.27
++++ src/icon.c	23 Oct 2004 04:16:10 -0000
+@@ -891,6 +891,7 @@
      int dx=event->xbutton.x, dy=event->xbutton.y;
      int grabbed=0;
      int clickButton=event->xbutton.button;
--
 +    Bool hasMoved = False;
-+    
+ 
      if (WCHECK_STATE(WSTATE_MODAL))
- 	return;
+         return;
+@@ -942,6 +943,7 @@
+             break;
  
-@@ -929,6 +930,7 @@
- 	    break;
+         case MotionNotify:
++            hasMoved = True;
+             if (!grabbed) {
+                 if (abs(dx-ev.xmotion.x)>=MOVE_THRESHOLD
+                     || abs(dy-ev.xmotion.y)>=MOVE_THRESHOLD) {
+@@ -979,6 +981,8 @@
  
- 	 case MotionNotify:
-+	    hasMoved = True;
- 	    if (!grabbed) {
- 		if (abs(dx-ev.xmotion.x)>=MOVE_THRESHOLD
- 		    || abs(dy-ev.xmotion.y)>=MOVE_THRESHOLD) {
-@@ -966,6 +968,8 @@
+             if (wPreferences.auto_arrange_icons)
+                 wArrangeIcons(wwin->screen_ptr, True);
++            if (wPreferences.single_click && !hasMoved)
++                miniwindowDblClick(desc, event);
+             return;
  
- 	    if (wPreferences.auto_arrange_icons)
- 		wArrangeIcons(wwin->screen_ptr, True);
-+            if (!hasMoved && wPreferences.single_click)
-+                miniwindowDblClick(desc, event);	    
- 	    return;
- 	    
- 	}
+         }
