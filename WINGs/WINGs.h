@@ -7,7 +7,7 @@
 #include <WUtil.h>
 #include <X11/Xlib.h>
 
-#define WINGS_H_VERSION  20000402
+#define WINGS_H_VERSION  20000521
 
 
 #ifdef __cplusplus
@@ -647,6 +647,11 @@ WMFont *WMUserFontOfSize(WMScreen *scrPtr, int size);
 
 WMFont *WMUserFixedPitchFontOfSize(WMScreen *scrPtr, int size);
 */
+
+
+void WMSetWidgetDefaultFont(WMScreen *scr, WMFont *font);
+
+void WMSetWidgetDefaultBoldFont(WMScreen *scr, WMFont *font);
 
 WMFont *WMSystemFontOfSize(WMScreen *scrPtr, int size);
 

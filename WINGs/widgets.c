@@ -815,6 +815,24 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 }
 
 
+
+void
+WMSetWidgetDefaultFont(WMScreen *scr, WMFont *font)
+{
+    WMReleaseFont(scr->normalFont);
+    scr->normalFont = WMRetainFont(font);
+}
+
+
+void
+WMSetWidgetDefaultBoldFont(WMScreen *scr, WMFont *font)
+{
+    WMReleaseFont(scr->boldFont);
+    scr->boldFont = WMRetainFont(font);
+}
+
+
+
 void 
 WMHangData(WMWidget *widget, void *data)
 {

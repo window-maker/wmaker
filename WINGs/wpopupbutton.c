@@ -15,7 +15,7 @@ typedef struct W_PopUpButton {
     char *caption;
 
     WMBag *items;
-
+    
     short selectedItemIndex;
     
     short highlightedItem;
