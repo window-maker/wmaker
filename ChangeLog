@@ -54,6 +54,8 @@ Changes since version 0.80.2:
   patch (Peter Zijlstra <a.p.zijlstra@chello.nl>)
 - Fixed bug with cursor locked in drag mode after Alt-dragging a window
 - Added Catalan translation (Ernest Adrogué <eadrogue@gmx.net>)
+- Fixed a bug with deminiaturizing windows when the application is hidden and
+  the miniaturized window is selected from the window list menu
 
 
 Changes since version 0.80.1:

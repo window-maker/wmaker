@@ -1403,10 +1403,12 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
                 if (bringToCurrentWS)
                     wWindowChangeWorkspace(wlist, scr->current_workspace);
                 wlist->flags.hidden = 0;
-                if (miniwindows &&
-                    wlist->frame->workspace == scr->current_workspace) {
-                    wUnshadeWindow(wlist);
-                    wRaiseFrame(wlist->frame->core);
+                if (wlist->frame->workspace == scr->current_workspace) {
+                    XMapWindow(dpy, wlist->frame->core->window);
+                    if (miniwindows) {
+                        wUnshadeWindow(wlist);
+                        wRaiseFrame(wlist->frame->core);
+                    }
                 }
                 WMPostNotificationName(WMNChangedState, wlist, "hide");
 	    } else if (wlist->flags.hidden) {
@@ -1685,7 +1687,7 @@ wMakeWindowVisible(WWindow *wwin)
 	wWorkspaceChange(wwin->screen_ptr, wwin->frame->workspace);
 
     if (wwin->flags.shaded) {
-	wUnshadeWindow(wwin);
+        wUnshadeWindow(wwin);
     }
     if (wwin->flags.hidden) {
 	WApplication *app;
@@ -1696,7 +1698,8 @@ wMakeWindowVisible(WWindow *wwin)
             app->last_focused = wwin;
             wUnhideApplication(app, False, False);
         }
-    } else if (wwin->flags.miniaturized) {
+    }
+    if (wwin->flags.miniaturized) {
 	wDeiconifyWindow(wwin);
     } else {
 	if (!WFLAGP(wwin, no_focusable))
