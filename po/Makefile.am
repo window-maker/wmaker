@@ -21,7 +21,6 @@ POTFILES  = \
 	$(top_builddir)/src/menu.c \
 	$(top_builddir)/src/misc.c \
 	$(top_builddir)/src/pixmap.c \
-	$(top_builddir)/src/proplist.c \
 	$(top_builddir)/src/resources.c \
 	$(top_builddir)/src/rootmenu.c \
 	$(top_builddir)/src/screen.c \

@@ -17,6 +17,7 @@ POTFILES  = \
 	$(top_builddir)/WINGs/host.c \
 	$(top_builddir)/WINGs/international.c \
 	$(top_builddir)/WINGs/memory.c \
+	$(top_builddir)/WINGs/proplist.c \
 	$(top_builddir)/WINGs/wcolor.c \
 	$(top_builddir)/WINGs/wcolorpanel.c \
 	$(top_builddir)/WINGs/wfilepanel.c \
