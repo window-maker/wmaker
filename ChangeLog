@@ -17,6 +17,8 @@ Changes since version 0.62.1:
 - fixed circulateraise on non-windoze cycling mode
 - fixed bug in RCombineAreaWithOpaqueness (Tim Malone <tmalone3@uswest.net>)
 - fixed bug with hangling of WM_COMMAND update in client.c (Andrew M. Langmead <aml@world.std.com>)
+- fixed bug with incorrect reading of ppm files (Adam Fedor <fedor@gnu.org>)
+
 
 Changes since version 0.62.0:
 .............................
