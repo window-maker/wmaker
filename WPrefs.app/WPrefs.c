@@ -695,8 +695,7 @@ Initialize(WMScreen *scr)
     InitWorkspace(scr, WPrefs.win);
     InitConfigurations(scr, WPrefs.win);
 
-    changeSection(NULL, InitMenu(scr, WPrefs.win));
-    return;
+    InitMenu(scr, WPrefs.win);
 
 #ifdef not_yet_fully_implemented
     InitKeyboardSettings(scr, WPrefs.win);

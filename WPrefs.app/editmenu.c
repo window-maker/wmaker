@@ -164,7 +164,6 @@ WCreateEditMenuItem(WMWidget *parent, char *title, Bool isTitle)
     return iPtr;
 }
 
-
 char *WGetEditMenuItemTitle(WEditMenuItem *item)
 {
     return item->label;
@@ -299,6 +298,8 @@ destroyEditMenuItem(WEditMenuItem *iPtr)
 	free(iPtr->label);
     if (iPtr->data && iPtr->destroyData)
 	(*iPtr->destroyData)(iPtr->data);
+    if (iPtr->submenu)
+	WMDestroyWidget(iPtr->submenu);
 
     free(iPtr);
 }
@@ -550,7 +551,10 @@ WSetEditMenuTitle(WEditMenu *mPtr, char *title)
 
     free(item->label);
     item->label = wstrdup(title);
+
     updateMenuContents(mPtr);
+
+    WMRedisplayWidget(item);
 }
 
 
@@ -763,6 +767,9 @@ updateMenuContents(WEditMenu *mPtr)
 	newH = WMAX(newH, mPtr->minSize.height);
     if (mPtr->maxSize.height)
 	newH = WMIN(newH, mPtr->maxSize.height);
+    
+    if (W_VIEW(mPtr)->size.width == newW && mPtr->view->size.height == newH+1)
+	return;
 
     W_ResizeView(mPtr->view, newW, newH+1);
 

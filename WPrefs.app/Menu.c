@@ -437,12 +437,13 @@ createPanel(_Panel *p)
 
 	pix = WMGetPixmapXID(pixm);
 
-	XDrawLine(dpy, pix, WMColorGC(black), 1, 0, 6, 3);
-	XDrawLine(dpy, pix, WMColorGC(black), 1, 6, 6, 3);
+	XDrawLine(dpy, pix, WMColorGC(black), 0, 3, 6, 3);
+	XDrawLine(dpy, pix, WMColorGC(black), 3, 0, 3, 6);
+	/*
 	XDrawLine(dpy, pix, WMColorGC(black), 1, 0, 3, 3);
 	XDrawLine(dpy, pix, WMColorGC(black), 1, 6, 3, 3);
 	XDrawLine(dpy, pix, WMColorGC(black), 0, 0, 0, 6);
-
+	 */
 
 	pix = WMGetPixmapMaskXID(pixm);
 
@@ -452,11 +453,8 @@ createPanel(_Panel *p)
 	XFillRectangle(dpy, pix, gc, 0, 0, 7, 7);
 
 	XSetForeground(dpy, gc, 1);
-	XDrawLine(dpy, pix, gc, 1, 0, 6, 3);
-	XDrawLine(dpy, pix, gc, 1, 6, 6, 3);
-	XDrawLine(dpy, pix, gc, 1, 0, 3, 3);
-	XDrawLine(dpy, pix, gc, 1, 6, 3, 3);
-	XDrawLine(dpy, pix, gc, 0, 0, 0, 6);
+	XDrawLine(dpy, pix, gc, 0, 3, 6, 3);
+	XDrawLine(dpy, pix, gc, 3, 0, 3, 6);
 
 	panel->markerPix[ExternalInfo] = pixm;
 	panel->markerPix[PipeInfo] = pixm;
@@ -582,6 +580,7 @@ createPanel(_Panel *p)
 	data->param.pipe.command = "wmconfig --output wmaker";
 
 	data = putNewItem(panel, pad, DirectoryInfo, _("Themes"));
+	data->param.directory.command = "setstyle";
 	data->param.directory.directory = "/usr/share/WindowMaker/Themes /usr/local/share/WindowMaker/Themes $HOME/GNUstep/Library/WindowMaker/Themes";
 	data->param.directory.stripExt = 1;
 	
@@ -838,6 +837,21 @@ createPanel(_Panel *p)
     WMMoveWidget(panel->quickB, 10, 120);
     WMSetButtonText(panel->quickB, _("Do not confirm action."));
     WMSetButtonAction(panel->quickB, buttonClicked, panel);
+    
+    
+    
+    
+    label = WMCreateLabel(panel->optionsF);
+    WMResizeWidget(label, width - 20, FRAME_HEIGHT - 50);
+    WMMoveWidget(label, 10, 20);
+    WMSetLabelText(label, 
+		   _("Instructions:\n\n"
+		     " - drag items from the left to the menu to add new items\n"
+		     " - drag items out of the menu to remove items\n"
+		     " - drag items in menu to change their position\n"
+		     " - double click in a menu item to change the label\n"
+		     " - click on a menu item to change related information"));
+    
 
     WMRealizeWidget(panel->frame);
     WMMapSubwidgets(panel->frame);
@@ -851,6 +865,7 @@ createPanel(_Panel *p)
     }
     changedItemPad(panel->typeP, panel);
 
+    panel->sections[NoInfo][0] = label;
 
     panel->sections[ExecInfo][0] = panel->commandF;
     panel->sections[ExecInfo][1] = panel->shortF;
@@ -1104,24 +1119,22 @@ changeInfoType(_Panel *panel, char *title, InfoType type)
     
     if (panel->currentType != type) {
 
-	if (panel->currentType != NoInfo) {
-	    w = panel->sections[panel->currentType];
+	w = panel->sections[panel->currentType];
 	    
-	    while (*w) {
-		WMUnmapWidget(*w);
-		w++;
-	    }
-	    WMUnmapWidget(panel->paramF);
-	    WMUnmapWidget(panel->quickB);
+	while (*w) {
+	    WMUnmapWidget(*w);
+	    w++;
 	}
+	WMUnmapWidget(panel->paramF);
+	WMUnmapWidget(panel->quickB);
 	
-	if (type != NoInfo) {
-	    w = panel->sections[type];
-	    
-	    while (*w) {
-		WMMapWidget(*w);
-		w++;
-	    }
+	
+	
+	w = panel->sections[type];
+	
+	while (*w) {
+	    WMMapWidget(*w);
+	    w++;
 	}
     }
 
@@ -1281,8 +1294,14 @@ static void menuItemEdited(struct WEditMenuDelegate *delegate, WEditMenu *menu,
 			   WEditMenuItem *item)
 {
     _Panel *panel = (_Panel*)delegate->data;
+    WEditMenu *submenu;
     
     updateFrameTitle(panel, WGetEditMenuItemTitle(item), panel->currentType);
+
+    submenu = WGetEditMenuSubmenu(menu, item);
+    if (submenu) {
+	WSetEditMenuTitle(submenu, WGetEditMenuItemTitle(item));
+    }
 }
 
 
