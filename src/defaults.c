@@ -129,7 +129,7 @@ static int getModMask();
 #ifdef NEWSTUFF
 static int getRImage();
 #endif
-static int getPLArray();
+static int getPropList();
 
 /* value setting functions */
 static int setJustify();
@@ -407,9 +407,6 @@ WDefaultEntry optionList[] = {
     {"RaiseDelay",	"0",			NULL,
     &wPreferences.raise_delay,	getInt,		NULL
     },
-    {"WindozeCycling",  "NO",			NULL,
-    &wPreferences.windows_cycling,getBool,	NULL
-    },
     {"CirculateRaise",	"NO",			NULL,
     &wPreferences.circ_raise, 	getBool, 	NULL
     },
@@ -663,7 +660,7 @@ WDefaultEntry optionList[] = {
     NULL,				getColor,	setIconTitleBack
     },
     {"SwitchPanelImages", "(\"swtile.png\")",    &wPreferences,
-    NULL,                               getPLArray,     setSwPOptions
+    NULL,                               getPropList,     setSwPOptions
     },
     /* keybindings */
 #ifndef LITE
@@ -1708,15 +1705,9 @@ again:
 
 
 static int
-getPLArray(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr,
+getPropList(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr,
            void **ret)
 {
-    if (!WMIsPLArray(value)) {
-        wwarning(_("Wrong value for key \"%s\". Should be an array."),
-                 entry->key);
-        return False;
-    }
-
     WMRetainPropList(value);
 
     *ret= value;
@@ -3534,6 +3525,14 @@ setSwPOptions(WScreen *scr, WDefaultEntry *entry, WMPropList *array, void *foo)
     RImage *bgimage;
     int cwidth, cheight;
     WPreferences *prefs= (WPreferences*)foo;
+
+    if (!WMIsPLArray(array) || WMGetPropListItemCount(array)==0) {
+        if (prefs->swtileImage) RReleaseImage(prefs->swtileImage);
+        prefs->swtileImage= NULL;
+ 
+        WMReleasePropList(array);
+        return 0;
+    }
 
     switch (WMGetPropListItemCount(array))
     {

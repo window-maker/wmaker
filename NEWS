@@ -2,6 +2,15 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+--- 0.91.1
+
+To disable the panel shown during Alt-tabbing, you may put the following in
+~/GNUstep/Defaults/WindowMaker
+
+SwitchPanelImages= None;
+
+
+
 --- 0.91.0
 
 Alt-Tab Window Switching

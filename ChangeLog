@@ -2,6 +2,7 @@ Changes since version 0.91.0:
 .............................
 - fixed crash with info panel and alt-tabbing
 - updated Japanese translations (Takeo Hashimoto <HashimotoTakeo@mac.com>)
+- allow disable of switch panel when SwitchPanelImages=None
 
 Changes since version 0.90.0:
 .............................

@@ -50,12 +50,15 @@ static void raiseWindow(WSwitchPanel *swpanel, WWindow *wwin)
     Window swwin= wSwitchPanelGetWindow(swpanel);
     
     if (wwin->flags.mapped) {
-        Window win[2];
+        if (swwin!=None) {
+            Window win[2];
     
-        win[0]= swwin;
-        win[1]= wwin->frame->core->window;
+            win[0]= swwin;
+            win[1]= wwin->frame->core->window;
     
-        XRestackWindows(dpy, win, 2);
+            XRestackWindows(dpy, win, 2);
+        } else
+            XRaiseWindow(dpy, wwin->frame->core->window);
     }
 }
 
@@ -128,8 +131,7 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
         int i;
 
         WMMaskEvent(dpy, KeyPressMask|KeyReleaseMask|ExposureMask
-                    |PointerMotionMask|ButtonReleaseMask
-        	    |LeaveWindowMask, &ev);
+                    |PointerMotionMask|ButtonReleaseMask, &ev);
 
         /* ignore CapsLock */
         modifiers = ev.xkey.state & ValidModMask;
@@ -253,11 +255,6 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
         wSetFocusTo(scr, newFocused);
     }
 
-    if (!getenv("SWPDEBUG"))
-    {
-        if (swpanel)
-          wSwitchPanelDestroy(swpanel);
-    }
     scr->flags.doing_alt_tab = 0;
 
     if (somethingElse)

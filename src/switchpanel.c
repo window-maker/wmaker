@@ -397,7 +397,8 @@ drawTitle(WSwitchPanel *panel, int idecks, char *title)
 
 
 
-static WMArray *makeWindowListArray(WScreen *scr, WWindow *curwin, int workspace)
+static WMArray *makeWindowListArray(WScreen *scr, WWindow *curwin, int workspace,
+                                    int include_unmapped)
 {
     WMArray *windows= WMCreateArray(10);
     int fl;
@@ -406,7 +407,8 @@ static WMArray *makeWindowListArray(WScreen *scr, WWindow *curwin, int workspace
     for (fl= 0; fl < 2; fl++) {
         for (wwin= curwin; wwin; wwin= wwin->prev) {
             if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
-                (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window)) {
+                (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window) &&
+                (wwin->flags.mapped || include_unmapped)) {
                 WMAddToArray(windows, wwin);
             }
         }
@@ -417,7 +419,8 @@ static WMArray *makeWindowListArray(WScreen *scr, WWindow *curwin, int workspace
         
         for (wwin= curwin; wwin && wwin != curwin; wwin= wwin->prev) {
             if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
-                (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window)) {
+                (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window) &&
+                (wwin->flags.mapped || include_unmapped)) {
                 WMAddToArray(windows, wwin);
             }
         }
@@ -446,7 +449,8 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
 
     panel->scr= scr;
 
-    panel->windows= makeWindowListArray(scr, curwin, workspace);
+    panel->windows= makeWindowListArray(scr, curwin, workspace,
+                                        wPreferences.swtileImage!=0);
     count= WMGetArrayItemCount(panel->windows);
     
     if (count == 0) {
@@ -464,6 +468,9 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
     }
     
     panel->visibleCount= iconsThatFitCount;
+
+    if (!wPreferences.swtileImage)
+        return panel;
 
     height= LABEL_HEIGHT + ICON_TILE_SIZE;
 
@@ -684,10 +691,10 @@ WWindow *wSwitchPanelHandleEvent(WSwitchPanel *panel, XEvent *event)
     if (!panel->win)
       return NULL;
 
-    if (event->type == LeaveNotify) {
+ /*   if (event->type == LeaveNotify) {
         if (event->xcrossing.window == WMWidgetXID(panel->win))
             focus= 0;
-    } else if (event->type == MotionNotify) {
+    } else*/ if (event->type == MotionNotify) {
 
         WM_ITERATE_ARRAY(panel->icons, icon, i) {
             if (WMWidgetXID(icon) == event->xmotion.window) {

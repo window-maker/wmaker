@@ -557,6 +557,7 @@ parseTexture(RContext *rc, char *text)
         case 'C':
             {
                 Pixmap tpixmap = XCreatePixmap( dpy, root, scrWidth, scrHeight, DefaultDepth(dpy, scr));
+                XSetForeground(dpy, DefaultGC(dpy, scr), color.pixel);
                 XFillRectangle(dpy, tpixmap, DefaultGC(dpy, scr), 0, 0, scrWidth, scrHeight);
 
                 texture->pixmap = tpixmap;

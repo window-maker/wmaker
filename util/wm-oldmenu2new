@@ -75,7 +75,9 @@ which1()
 # Expand macros if necessary.
 # Create a temp copy of the menu file to edit to turn into the new.
 #
-T=/tmp/wmmenu$$
+TD=$(/bin/mktemp -d /tmp/wmmenu.XXXXXX) || { echo "$0: can not create temporary file" >& 2; exit 1; }
+T=$TD/wmmenu$$
+
 echo "Converting $GLW/$OLD_MENU --> $GD/$NEW_MENU"
 cd $WLW || exit 1
 if [ ! -s "$OLD_MENU" ]
@@ -198,7 +200,8 @@ END	{
 	}
 ' > $WD/$NEW_MENU.new || exit 1
 
-rm $T
+rm -f $T
+rm -fr $TD
 
 #
 # Now install it.
