@@ -1,2 +1,3 @@
 Makefile Makefile.in
 .psrc .inslog2 tca.map tca.log pchdir *.rpt
+.libs *.pc
