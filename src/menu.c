@@ -2437,25 +2437,36 @@ menuCloseClick(WCoreWindow *sender, void *data, XEvent *event)
 }
 
 
+static void
+saveMenuInfo(proplist_t dict, WMenu *menu, proplist_t key)
+{
+    proplist_t value, list;
+    char buffer[256];
+
+    sprintf(buffer, "%i,%i", menu->frame_x, menu->frame_y);
+    value = PLMakeString(buffer);
+    list = PLMakeArrayFromElements(value, NULL);
+    if (menu->flags.lowered)
+	PLAppendArrayElement(list, PLMakeString("lowered"));
+    PLInsertDictionaryEntry(dict, key, list);
+    PLRelease(value);
+    PLRelease(list);
+}
+
+
 void
 wMenuSaveState(WScreen *scr)
 {
-    proplist_t menus, key, value;
+    proplist_t menus, key;
     int save_menus = 0;
-
-    char buffer[256];
 
     menus = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
 
 #ifndef LITE
     if (scr->switch_menu && scr->switch_menu->flags.buttoned) {
-        sprintf(buffer, "%i,%i", scr->switch_menu->frame_x,
-                                 scr->switch_menu->frame_y);
-        key = PLMakeString("SwitchMenu");
-        value = PLMakeString(buffer);
-        PLInsertDictionaryEntry(menus, key, value);
-        PLRelease(key);
-        PLRelease(value);
+	key = PLMakeString("SwitchMenu");
+	saveMenuInfo(menus, scr->switch_menu, key);
+	PLRelease(key);
         save_menus = 1;
     }
 
@@ -2464,13 +2475,9 @@ wMenuSaveState(WScreen *scr)
 
 #endif /* !LITE */
     if (scr->workspace_menu && scr->workspace_menu->flags.buttoned) {
-        sprintf(buffer, "%i,%i", scr->workspace_menu->frame_x,
-                                 scr->workspace_menu->frame_y);
         key = PLMakeString("WorkspaceMenu");
-        value = PLMakeString(buffer);
-        PLInsertDictionaryEntry(menus, key, value);
+	saveMenuInfo(menus, scr->workspace_menu, key);
         PLRelease(key);
-        PLRelease(value);
         save_menus = 1;
     }
     
@@ -2510,10 +2517,11 @@ getMenuPath(WMenu *menu, char *buffer, int bufSize)
     return True;
 }
 
+
 static Bool
 saveMenuRecurs(proplist_t menus, WScreen *scr, WMenu *menu)
 {
-    proplist_t key, value;
+    proplist_t key;
     int save_menus = 0, i;
     char buffer[512];
     Bool ok = True;
@@ -2524,17 +2532,13 @@ saveMenuRecurs(proplist_t menus, WScreen *scr, WMenu *menu)
 
     if (menu->flags.buttoned && menu != scr->switch_menu) {
 
-	sprintf(buffer, "%i,%i", menu->frame_x, menu->frame_y);
-	value = PLMakeString(buffer);
-
 	buffer[0] = '\0';
 	ok = getMenuPath(menu, buffer, 510);
 
 	if (ok) {
 	    key = PLMakeString(buffer);
-	    PLInsertDictionaryEntry(menus, key, value);
-	    PLRelease(key);
-	    PLRelease(value);
+	    saveMenuInfo(menus, menu, key);
+	    PLRelease(key);	    
 	    save_menus = 1;
 	}
     }
@@ -2553,22 +2557,50 @@ saveMenuRecurs(proplist_t menus, WScreen *scr, WMenu *menu)
 #define COMPLAIN(key) wwarning(_("bad value in menus state info:%s"), key)
 
 
+static Bool
+getMenuInfo(proplist_t info, int *x, int *y, Bool *lowered)
+{
+    proplist_t pos;
+    
+    *lowered = False;
+    
+    if (PLIsArray(info)) {
+	proplist_t flags;
+	pos = PLGetArrayElement(info, 0);
+	flags = PLGetArrayElement(info, 1);
+	if (flags != NULL && PLIsString(flags) && PLGetString(flags) != NULL
+	    && strcmp(PLGetString(flags), "lowered") == 0) {
+	    *lowered = True;
+	}
+    } else {
+	pos = info;
+    }
+
+    if (pos != NULL && PLIsString(pos)) {
+	if (sscanf(PLGetString(pos), "%i,%i", x, y)!=2)
+	    COMPLAIN("Position");
+    } else {
+	COMPLAIN("(position, flags...)");
+	return False;
+    }
+
+    return True;
+}
+
+
 static int
 restoreMenu(WScreen *scr, proplist_t menu, int which)
 {
     int x, y;
+    Bool lowered = False;
     WMenu *pmenu = NULL;
-    
-    if (!menu)
-        return False;
-    
-    if (!PLIsString(menu)) {
-        COMPLAIN("Position");
-        return False;
-    }
 
-    if (sscanf(PLGetString(menu), "%i,%i", &x, &y)!=2)
-        COMPLAIN("Position");
+    if (!menu)
+	return False;
+    
+    if (!getMenuInfo(menu, &x, &y, &lowered))
+	return False;
+
 
 #ifndef LITE
     if (which & WSS_SWITCHMENU) {
@@ -2581,6 +2613,10 @@ restoreMenu(WScreen *scr, proplist_t menu, int which)
         int width = MENUW(pmenu);
         int height = MENUH(pmenu);
         
+	if (lowered) {
+	    changeMenuLevels(pmenu, True);
+	}
+	
         x = (x < -width) ? 0 : x;
         x = (x > scr->scr_width) ? scr->scr_width - width : x;
         y = (y < 0) ? 0 : y;
@@ -2601,6 +2637,7 @@ restoreMenuRecurs(WScreen *scr, proplist_t menus, WMenu *menu, char *path)
     proplist_t key, entry;
     char buffer[512];
     int i, x, y, res;
+    Bool lowered;
 
     if (strlen(path) + strlen(menu->frame->title) > 510)
 	return False;
@@ -2610,10 +2647,7 @@ restoreMenuRecurs(WScreen *scr, proplist_t menus, WMenu *menu, char *path)
     entry = PLGetDictionaryEntry(menus, key);
     res = False;
 
-    if (entry && PLIsString(entry)) {
-
-	if (sscanf(PLGetString(entry), "%i,%i", &x, &y) != 2)
-	    COMPLAIN("Position");
+    if (entry && getMenuInfo(entry, &x, &y, &lowered)) {
 
 	if (!menu->flags.mapped) {
 	    int width = MENUW(menu);
@@ -2629,6 +2663,9 @@ restoreMenuRecurs(WScreen *scr, proplist_t menus, WMenu *menu, char *path)
 			break;
 		    }
 		}
+	    }
+	    if (lowered) {
+		changeMenuLevels(menu, True);
 	    }
 	    x = (x < -width) ? 0 : x;
 	    x = (x > scr->scr_width) ? scr->scr_width - width : x;
@@ -2669,6 +2706,7 @@ wMenuRestoreState(WScreen *scr)
 
     skey = PLMakeString("SwitchMenu");
     menu = PLGetDictionaryEntry(menus, skey);
+    PLRelease(skey);
     restoreMenu(scr, menu, WSS_SWITCHMENU);
 
 #ifndef LITE

@@ -1389,7 +1389,12 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 		}
 		UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
 
-	    } else if (wKeyBindings[WKBD_LOWER].keycode == ev.xkey.keycode
+	    } else {
+		handleKeyPress(&ev);
+	    }
+	    
+	    /*
+	    else if (wKeyBindings[WKBD_LOWER].keycode == ev.xkey.keycode
 		       && wKeyBindings[WKBD_LOWER].modifier == modifiers) {
 
 		wLowerFrame(newFocused->frame->core);
@@ -1398,7 +1403,7 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 		       && wKeyBindings[WKBD_RAISE].modifier == modifiers) {
 
 		wRaiseFrame(newFocused->frame->core);
-	    }
+	    }*/
 	} else if (ev.type == KeyRelease) {
 	    int i;
 

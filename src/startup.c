@@ -691,8 +691,18 @@ StartUp(Bool defaultScreenOnly)
 
 /*    _XA_VERSION = XInternAtom(dpy, "VERSION", False);*/
 
+#ifdef HAVE_XINTERNATOMS
     XInternAtoms(dpy, atomNames, sizeof(atomNames)/sizeof(char*),
 		 False, atom);
+#else
+
+    {
+	int i;
+	for (i = 0; i < sizeof(atomNames)/sizeof(char*); i++) {
+	    atom[i] = XInternAtom(dpy, atomNames[i], False);
+	}
+    }
+#endif
     
     _XA_WM_STATE = atom[0];
     _XA_WM_CHANGE_STATE = atom[1];
