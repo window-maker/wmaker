@@ -63,7 +63,7 @@
   ("Refresh", REFRESH),
   ("Lock", EXEC, "xlock -allowroot -usefirst"),
   ("Save Session", SAVE_SESSION),
-  ("Clear Saved Session", CLEAR_SESSION)
+  ("Clear Session", CLEAR_SESSION)
   ),
  ("Appearance",
   ("Themes", OPEN_MENU, "-noext #wmdatadir#/Themes $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle"),

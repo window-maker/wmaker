@@ -170,7 +170,7 @@
 		"Refresh" REFRESH
 		"Lock" EXEC xlock -allowroot -usefirst
 		"Save Session" SAVE_SESSION
-		"Clear Saved Session" CLEAR_SESSION
+		"Clear Session" CLEAR_SESSION
 	"Workspace" END
 
 	"Appearance" MENU
