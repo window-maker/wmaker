@@ -96,7 +96,7 @@ EOF
 	for i in $files; do
 		echo $OTREE/$i
 		echo "echo \"Removing ../$i\"" >> $TMP/delfiles
-		if [ -d $OTREE/$delfiles ]; then
+		if [ -d $OTREE/$i ]; then
 			echo "rm -rf ../$i" >> $TMP/delfiles
 		else
 			echo "rm ../$i" >> $TMP/delfiles

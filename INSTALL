@@ -158,7 +158,12 @@ PLATFORM SPECIFIC NOTES:
 - Debian Linux
 	If you want JPEG and TIFF support, make sure you have libtiff-dev 
 	and libjpeg-dev	installed.
-	
+
+- SuSE Linux
+        If you installed the Window Maker package from SuSE,
+        uninstall it before trying to compile wmaker or you
+        might have problems.
+
 - MetroX (unknown version)
 	MetroX has a bug that corrupts pixmaps that are set as window
 	backgrounds. If you use MetroX and has weird problems with

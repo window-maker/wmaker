@@ -4,7 +4,7 @@ Changes since version 0.20.1:
 - fixed timer bug
 - removed NoWindowUnderDock
 - error reporting mechanism has changed in wrlib. Instead of a writing
-the message in a string, it will place the error code in RErrorCode
+  the message in a string, it will place the error code in RErrorCode
 - smoother icon selection
 - persistent client supplied icon pixmaps
 - fixed yet another crash on emacs exit bug
@@ -19,7 +19,7 @@ the message in a string, it will place the error code in RErrorCode
 - fixed bug in libproplist
 - fixed focus with sloppy
 - changed permissions of shm segments to 0666. Now, if someone has a shm
-leak, we can know who it is.
+  leak, we can know who it is.
 - faster titlebar texture update
 - faster icon kaboom
 - added different undocking animation
@@ -35,7 +35,7 @@ leak, we can know who it is.
 - selection retrieval moved to WINGs
 - fixed workspacekey to switch workspaces in the current layer
 - fixed workspacekey to not switch to inexisting workspace unless
-AdvanceToNewWorkspace is YES
+  AdvanceToNewWorkspace is YES
 - fixed bug with disappearing windows if a workspace switch is made on startup
 - fixed blocking of window creation/destroy events when opening menu with kbd
 - fixed aspect ratio setting bug
@@ -45,11 +45,11 @@ AdvanceToNewWorkspace is YES
 - raised threshold for removing docked icons
 - fixed HideOthers for windows with NoAppIcon=YES
 - if Cancel is pressed in dialog box of %a in menu cmd lines, the command
-will be canceled
+  will be canceled
 - slightly better dithering for 8bpp
 - apps menu will use $SHELL, instead of /bin/sh to run EXEC menu commands
 - cleaned up some code (GetNormalHints(), wManageWindow(),
-wGetWindowSavedState() et al, )
+  wGetWindowSavedState() et al, )
 
 
 Changes since version 0.20.0:

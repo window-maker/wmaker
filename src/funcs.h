@@ -75,7 +75,8 @@ Pixmap LoadIcon(WScreen *scr, char *path, char *mask, int title_height);
 
 void PlaceIcon(WScreen *scr, int *x_ret, int *y_ret);
 
-void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret);
+void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
+                 unsigned int width, unsigned int height);
 
 #ifdef USECPP
 char *MakeCPPArgs(char *path);

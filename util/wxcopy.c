@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <errno.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 

@@ -314,10 +314,10 @@ PlaceIcon(WScreen *scr, int *x_ret, int *y_ret)
 
 
 static int
-smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret)
+smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
+                 unsigned int width, unsigned int height)
 {
     WScreen *scr = wwin->screen_ptr;
-    int height,width;
     int test_x = 0, test_y = Y_ORIGIN;
     int loc_ok = False, tw,tx,ty,th;
     int swidth, sx;
@@ -337,11 +337,11 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret)
         else if (X_ORIGIN < wPreferences.icon_size + DOCK_EXTRA_SPACE)
             sx += wPreferences.icon_size + DOCK_EXTRA_SPACE - X_ORIGIN;
     }
-    
-     /* this was based on fvwm2's smart placement */
 
-    height = wwin->client.height+extra_height;
-    width  = wwin->client.width;
+    /* this was based on fvwm2's smart placement */
+
+    height += extra_height;
+
     while (((test_y + height) < (scr->scr_height)) && (!loc_ok)) {
 	
 	test_x = sx;
@@ -409,10 +409,16 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret)
 }
 
 
+/* Alfredo, shouldn't the cascade placement follow the !dock->lowered flag
+ * like smart placement?
+ * I didn't knew your intention about this, so I did not coded it, but it is
+ * quite simple to do, if you think it should. -Dan
+ */
 static void 
-cascadeWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret, int h)
+cascadeWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret,
+              unsigned int width, unsigned int height, int h)
 {
-    unsigned int extra_height, height, width;
+    unsigned int extra_height;
 
     if (wwin->frame)
 	extra_height = wwin->frame->top_width + wwin->frame->bottom_width;
@@ -421,8 +427,7 @@ cascadeWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret, int h)
     
     *x_ret = h * scr->cascade_index + X_ORIGIN;
     *y_ret = h * scr->cascade_index + Y_ORIGIN;
-    height = wwin->client.height + extra_height;
-    width  = wwin->client.width;
+    height += extra_height;
     
     if (width + *x_ret > scr->scr_width || height + *y_ret > scr->scr_height) {
 	scr->cascade_index = 0;
@@ -433,7 +438,8 @@ cascadeWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret, int h)
 
 
 void
-PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret)
+PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
+            unsigned width, unsigned height)
 {
     WScreen *scr = wwin->screen_ptr;
     int h = scr->title_font->height+TITLEBAR_EXTRA_HEIGHT;
@@ -444,7 +450,7 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret)
 	break;
 
      case WPM_SMART:
-	if (smartPlaceWindow(wwin, x_ret, y_ret))
+	if (smartPlaceWindow(wwin, x_ret, y_ret, width, height))
 	  break;
 	/* there isn't a break here, because if we fail, it should fall
 	   through to cascade placement, as people who want tiling want
@@ -454,7 +460,7 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret)
         if (wPreferences.window_placement == WPM_SMART)
             scr->cascade_index++;
 
-	cascadeWindow(scr, wwin, x_ret, y_ret, h);
+	cascadeWindow(scr, wwin, x_ret, y_ret, width, height, h);
 
         if (wPreferences.window_placement == WPM_CASCADE)
             scr->cascade_index++;

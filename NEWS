@@ -80,7 +80,7 @@ If you want the animation, enable AutoFocus or use manual focus mode
 
 The NoWindowUnderDock option was removed
 ----------------------------------------
-To obtain the same result, use the "Floating Dock" option in the dock menu.
+To obtain the same result, use the "Keep Dock On Top" option in the dock menu.
 
 
 Persistent Program Suplied Icons
@@ -89,6 +89,15 @@ Persistent Program Suplied Icons
 Application supplied icons are now stored, so that the dock will keep
 showing them after the app is exited. The icons are stored at
 ~/GNUstep/.AppInfo/WindowMaker/
+
+
+Sound support
+-------------
+
+Sound support is now on by default. Even if you don't use sound the overhead
+is very small, and has no impact on performance. If you still want to
+optimize it and remove a few hundred of bytes, then use --disable-sound or
+--enable-sound=no options when you configure Window Maker.
 
 
 --- 0.20.0

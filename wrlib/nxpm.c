@@ -43,6 +43,7 @@ char *alloca ();
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <errno.h>
 
 #include "wraster.h"
 
@@ -101,7 +102,7 @@ RGetImageFromXPMData(RContext *context, char **data)
 
     if (!color_table[0] || !color_table[1] || !color_table[2] ||
 	!color_table[3] || !symbol_table || !bsize) {
-	RErrorCode = RERR_MEMORY;
+	RErrorCode = RERR_NOMEMORY;
 	alloca(0);
 	return NULL;
     }
@@ -270,7 +271,7 @@ RLoadXPM(RContext *context, char *file, int index)
 
     if (!color_table[0] || !color_table[1] || !color_table[2] ||
 	!color_table[3] || !symbol_table || !bsize) {
-	RErrorCode = RERR_MEMORY;
+	RErrorCode = RERR_NOMEMORY;
 	fclose(f);
 	alloca(0);
 	return NULL;

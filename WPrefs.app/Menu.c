@@ -1268,7 +1268,7 @@ showData(_Panel *panel)
 {
     char *gspath;
     char *menuPath;
-    proplist_t menu, pmenu;
+    proplist_t menu, pmenu, plPath;
     char buffer[512];
     int hasWSMenu=0;
 
@@ -1302,8 +1302,10 @@ showData(_Panel *panel)
     } else {
 	pmenu = preProcessMenu(menu, &hasWSMenu);
     }
-    PLSetFilename(pmenu, menuPath);
+    plPath = PLMakeString(menuPath);
     free(menuPath);
+    PLSetFilename(pmenu, plPath);
+    PLRelease(plPath);
 
     if (menu)
         PLRelease(menu);

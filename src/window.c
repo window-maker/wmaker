@@ -770,7 +770,7 @@ wManageWindow(WScreen *scr, Window window)
     } else if (wwin->transient_for==None && !scr->flags.startup &&
                workspace==scr->current_workspace && !iconic &&
                !(wwin->normal_hints->flags & (USPosition|PPosition))) {
-        PlaceWindow(wwin, &x, &y);
+        PlaceWindow(wwin, &x, &y, width, height);
     } 
     
     if (wwin->window_flags.dont_move_off)
@@ -839,7 +839,7 @@ wManageWindow(WScreen *scr, Window window)
 	int gx, gy;
 
 	wClientGetGravityOffsets(wwin, &gx, &gy);
-	/* set the positio of the frame on screen */
+	/* set the position of the frame on screen */
 	x += gx * FRAME_BORDER_WIDTH;
 	y += gy * FRAME_BORDER_WIDTH;
 	/* if gravity is to the south, account for the border sizes */
