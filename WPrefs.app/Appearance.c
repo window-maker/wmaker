@@ -51,15 +51,6 @@ typedef struct _Panel {
     WMButton *ripB;
     WMButton *delB;
 
-
-    proplist_t ftitleTex;
-    proplist_t utitleTex;
-    proplist_t ptitleTex;
-    proplist_t iconTex;
-    proplist_t menuTex;
-    proplist_t mtitleTex;
-    proplist_t backTex;
-
     int textureIndex[8];
 
     WMFont *smallFont;
@@ -370,9 +361,11 @@ updatePreviewBox(_Panel *panel, int elements)
     int refresh = 0;
     Pixmap pix;
     GC gc;
+    WMListItem *item;
+    TextureListItem *titem;
 
     gc = XCreateGC(dpy, WMWidgetXID(panel->win), 0, NULL);
-    
+
 
     if (!panel->preview) {
 	WMColor *color;
@@ -389,40 +382,50 @@ updatePreviewBox(_Panel *panel, int elements)
     }
 
     if (elements & FTITLE) {
-	pix = renderTexture(scr, panel->ftitleTex, 180, 20, NULL, 
-			    RBEV_RAISED2);
+	item = WMGetListItem(panel->texLs, 0);
+	titem = (TextureListItem*)item->clientData;
+
+	pix = renderTexture(scr, titem->prop, 180, 20, NULL, RBEV_RAISED2);
 
 	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 180, 20, 5, 10);
 
 	XFreePixmap(dpy, pix);
     }
     if (elements & UTITLE) {
-	pix = renderTexture(scr, panel->utitleTex, 180, 20, NULL, 
-			    RBEV_RAISED2);
+	item = WMGetListItem(panel->texLs, 1);
+	titem = (TextureListItem*)item->clientData;
+
+	pix = renderTexture(scr, titem->prop, 180, 20, NULL, RBEV_RAISED2);
 
 	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 180, 20, 10, 35);
 
 	XFreePixmap(dpy, pix);
     }
     if (elements & OTITLE) {
-	pix = renderTexture(scr, panel->ptitleTex, 180, 20, NULL, 
-			    RBEV_RAISED2);
+	item = WMGetListItem(panel->texLs, 2);
+	titem = (TextureListItem*)item->clientData;
+
+	pix = renderTexture(scr, titem->prop, 180, 20, NULL, RBEV_RAISED2);
 
 	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 180, 20, 15, 60);
 
 	XFreePixmap(dpy, pix);
     }
     if (elements & MTITLE) {
-	pix = renderTexture(scr, panel->mtitleTex, 100, 20, NULL, 
-			    RBEV_RAISED2);
+	item = WMGetListItem(panel->texLs, 3);
+	titem = (TextureListItem*)item->clientData;
+
+	pix = renderTexture(scr, titem->prop, 100, 20, NULL, RBEV_RAISED2);
 
 	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 20, 20, 95);
 
 	XFreePixmap(dpy, pix);
     }
     if (elements & MITEM) {
-	pix = renderTexture(scr, panel->menuTex, 100, 18, NULL, 
-			    RBEV_RAISED2);
+	item = WMGetListItem(panel->texLs, 4);
+	titem = (TextureListItem*)item->clientData;
+
+	pix = renderTexture(scr, titem->prop, 100, 18, NULL, RBEV_RAISED2);
 
 	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 20, 20, 115);
 	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 20, 20, 115+18);
@@ -431,8 +434,10 @@ updatePreviewBox(_Panel *panel, int elements)
 	XFreePixmap(dpy, pix);
     }
     if (elements & ICON) {
-	pix = renderTexture(scr, panel->iconTex, 64, 64, NULL, 
-			    RBEV_RAISED3);
+	item = WMGetListItem(panel->texLs, 5);
+	titem = (TextureListItem*)item->clientData;
+
+	pix = renderTexture(scr, titem->prop, 64, 64, NULL, RBEV_RAISED3);
 
 	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 64, 64, 130, 100);
 
@@ -440,14 +445,15 @@ updatePreviewBox(_Panel *panel, int elements)
     }
 
 
-    
-    if (refresh<0) {
-	WMPixmap *pix;
-	pix = WMCreatePixmapFromXPixmaps(scr, panel->preview, None,
-					 220-4, 185-4, WMScreenDepth(scr));
+    if (refresh < 0) {
+	WMPixmap *p;
+	p = WMCreatePixmapFromXPixmaps(scr, panel->preview, None,
+				       220-4, 185-4, WMScreenDepth(scr));
 
-	WMSetLabelImage(panel->prevL, pix);
-	WMReleasePixmap(pix);
+	WMSetLabelImage(panel->prevL, p);
+	WMReleasePixmap(p);
+    } else {
+	WMRedisplayWidget(panel->prevL);
     }
 
     XFreeGC(dpy, gc);
@@ -463,6 +469,8 @@ cancelNewTexture(void *data)
     
     HideTexturePanel(panel->texturePanel);
 }
+
+
 
 
 static char*
@@ -486,6 +494,8 @@ makeFileName(char *prefix, char *name)
 
     return fname;
 }
+
+
 
 
 static void
@@ -565,6 +575,9 @@ okEditTexture(void *data)
 				   titem->path, 0);
 
     WMRedisplayWidget(panel->texLs);
+
+    if (titem->selectedFor)
+	updatePreviewBox(panel, titem->selectedFor);
 }
 
 
@@ -826,6 +839,7 @@ loadRImage(WMScreen *scr, char *path)
 }
 
 
+
 static void
 fillTextureList(WMList *lPtr)
 {
@@ -1017,7 +1031,7 @@ createPanel(Panel *p)
 
 
 
-static proplist_t
+static void
 setupTextureFor(WMList *list, char *key, char *defValue, char *title, 
 		int index)
 {
@@ -1043,8 +1057,6 @@ setupTextureFor(WMList *list, char *key, char *defValue, char *title,
 
     item = WMAddListItem(list, "");
     item->clientData = titem;
-
-    return titem->prop;
 }
 
 
@@ -1054,33 +1066,31 @@ showData(_Panel *panel)
 {
     int i = 0;
 
-    panel->ftitleTex = setupTextureFor(panel->texLs, "FTitleBack", 
-				       "(solid, black)", "[Focused]", i);
+    setupTextureFor(panel->texLs, "FTitleBack", "(solid, black)", 
+		    "[Focused]", i);
     panel->textureIndex[i] = i++;
 
-    panel->utitleTex = setupTextureFor(panel->texLs, "UTitleBack",
-				       "(solid, gray)", "[Unfocused]", i);
+    setupTextureFor(panel->texLs, "UTitleBack", "(solid, gray)", 
+		    "[Unfocused]", i);
     panel->textureIndex[i] = i++;
 
-    panel->ptitleTex = setupTextureFor(panel->texLs, "PTitleBack",
-				       "(solid, \"#616161\")",
-				       "[Owner of Focused]", i);
+    setupTextureFor(panel->texLs, "PTitleBack", "(solid, \"#616161\")",
+		    "[Owner of Focused]", i);
     panel->textureIndex[i] = i++;
 
-    panel->mtitleTex = setupTextureFor(panel->texLs, "MenuTitleBack", 
-				       "(solid, black)", "[Menu Title]", i);
+    setupTextureFor(panel->texLs, "MenuTitleBack", "(solid, black)", 
+		    "[Menu Title]", i);
     panel->textureIndex[i] = i++;
 
-    panel->menuTex = setupTextureFor(panel->texLs, "MenuTextBack", 
-				     "(solid, gray)", "[Menu Item]", i);
+    setupTextureFor(panel->texLs, "MenuTextBack", "(solid, gray)", 
+		    "[Menu Item]", i);
     panel->textureIndex[i] = i++;
 
-    panel->iconTex = setupTextureFor(panel->texLs, "IconBack",
-				     "(solid, gray)", "[Icon]", i);
+    setupTextureFor(panel->texLs, "IconBack", "(solid, gray)", "[Icon]", i);
     panel->textureIndex[i] = i++;
 /*
-    panel->backTex = setupTextureFor(panel->texLs, "WorkspaceBack",
-				     "(solid, black)", "[Workspace]", i);
+    setupTextureFor(panel->texLs, "WorkspaceBack", "(solid, black)", 
+		    "[Workspace]", i);
     panel->textureIndex[i] = i++;
  */
 

@@ -313,7 +313,13 @@ wfindfileinarray(proplist_t array, char *file)
 
     flen = strlen(file);
     for (i=0; PLGetNumberOfElements(array); i++) {
-	char *p = PLGetString(PLGetArrayElement(array, i));
+	proplist_t prop;
+	char *p;
+
+	prop = PLGetArrayElement(array, i);
+	if (!prop)
+	    continue;
+	p = PLGetString(prop);
 
 	len = strlen(p);
 	path = wmalloc(len+flen+2);
