@@ -26,6 +26,9 @@
  *
  */
 
+
+#include "../src/config.h"
+
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -275,7 +278,11 @@ getSocketAddress(char* name, char* service, char* protocol) /*FOLD00*/
             return NULL; /* name is not a hostname nor a number and dot adr */
 
         name = WMGetHostAddress(host);
+#ifndef	HAVE_INET_ATON
+        if ((socketaddr.sin_addr.s_addr = inet_addr(name)) == INADDR_NONE) {
+#else
         if (inet_aton(name, &socketaddr.sin_addr) == 0) {
+#endif
             WMReleaseHost(host);
             return NULL;
         }
