@@ -36,7 +36,7 @@ ac_help="$ac_help
 ac_help="$ac_help
   --enable-openlook	  enable support for OPEN LOOK(tm) (olwm) hints "
 ac_help="$ac_help
-  --enable-lite		  disable stuff duplicated in KDE/GNOME "
+  --enable-lite		  disable some stuff (dont use it) "
 ac_help="$ac_help
   --with-x                use the X Window System"
 ac_help="$ac_help
@@ -751,7 +751,7 @@ fi
 
 PACKAGE=WindowMaker
 
-VERSION=0.53.0
+VERSION=0.53.1
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
