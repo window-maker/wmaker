@@ -80,6 +80,8 @@ extern void DestroyDockAppSettingsPanel();
 extern void ShowDockAppSettingsPanel(WAppIcon *aicon);
 
 
+extern XContext wWinContext;
+
 extern Cursor wCursor[WCUR_LAST];
 
 extern WPreferences wPreferences;
@@ -3932,8 +3934,28 @@ clipEnterNotify(WObjDescriptor *desc, XEvent *event)
 static void
 clipLeave(WDock *dock)
 {
+    XEvent event;
+    WObjDescriptor *desc = NULL;
+
     if (!dock || dock->type!=WM_CLIP)
 	return;
+
+    if (XCheckTypedEvent(dpy, EnterNotify, &event)!=False) {
+        if (XFindContext(dpy, event.xcrossing.window, wWinContext,
+                         (XPointer *)&desc)!=XCNOENT
+            && desc && desc->parent_type==WCLASS_DOCK_ICON
+            && ((WAppIcon*)desc->parent)->dock
+            && ((WAppIcon*)desc->parent)->dock->type==WM_CLIP) {
+            /* We didn't left the Clip yet */
+            XPutBackEvent(dpy, &event);
+            return;
+        }
+
+        XPutBackEvent(dpy, &event);
+    } else {
+        /* We entered a withdrawn window, so we're still in Clip */
+        return;
+    }
 
     if (dock->auto_raise_magic) {
         WMDeleteTimerHandler(dock->auto_raise_magic);

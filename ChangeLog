@@ -22,6 +22,9 @@ Changes since version 0.51.2:
 - remember window shortcuts after restart
 - change edge resistance to account for panels and stuffs
 - narrower menus
+- fixed auto raise/lower behaviour of clip for docked icons that have their
+  own window
+
 
 Changes since version 0.51.1:
 .............................
