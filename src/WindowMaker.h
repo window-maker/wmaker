@@ -194,6 +194,12 @@ typedef enum {
 #define	IY_LEFT		0
 
 
+/* menu styles */
+#define MS_NORMAL		0
+#define MS_SINGLE_TEXTURE	1
+#define MS_FLAT			2
+
+
 /* program states */
 #define WSTATE_NORMAL		0
 #define WSTATE_NEED_EXIT	1
@@ -314,7 +320,6 @@ typedef struct WPreferences {
     
     char auto_focus;		       /* focus window when it's mapped */
 
-    char alt_menu_style;
 
     char *icon_back_file;	       /* background image for icons */
 
@@ -331,6 +336,8 @@ typedef struct WPreferences {
 					* per channel */
 
     int icon_size;		       /* size of the icon */
+
+    int menu_style;		       /* menu decoration style */
 
     char ws_advance;                   /* Create new workspace and advance */
 

@@ -271,6 +271,7 @@ typedef struct WWindow {
 
 	unsigned int user_changed_width:1;
 	unsigned int user_changed_height:1;
+	unsigned int wm_name_changed:1;
 
 #ifdef KWM_HINTS
 	unsigned int kwm_hidden_for_modules:1;

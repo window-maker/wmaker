@@ -1,4 +1,3 @@
-#ifdef USER_MENU
 /* User defined menu is good, but beer's always better
  * if someone wanna start hacking something, He heard...
  * TODO
@@ -36,6 +35,8 @@
  */
 
 #include "wconfig.h"
+
+#ifdef USER_MENU
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>

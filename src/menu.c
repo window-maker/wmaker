@@ -437,6 +437,63 @@ wMenuRemoveItem(WMenu *menu, int index)
 }
 
 
+static Pixmap
+renderTexture(WMenu *menu)
+{
+    RImage *img;
+    Pixmap pix;
+    int i;
+    RColor light;
+    RColor dark;
+    RColor mid;
+    WScreen *scr = menu->menu->screen_ptr;
+    WTexture *texture = scr->menu_item_texture;
+
+    if (wPreferences.menu_style == MS_NORMAL) {
+	img = wTextureRenderImage(texture, menu->menu->width, 
+				  menu->entry_height, WREL_MENUENTRY);
+    } else {
+	img = wTextureRenderImage(texture, menu->menu->width, 
+				  menu->menu->height+1, WREL_MENUENTRY);
+    }
+    if (!img) {
+	wwarning(_("could not render texture: %s"), 
+		 RMessageForError(RErrorCode));
+
+	return None;
+    }
+
+    if (wPreferences.menu_style == MS_SINGLE_TEXTURE) {
+	light.alpha = 0;
+	light.red = light.green = light.blue = 80;
+    
+	dark.alpha = 255;
+	dark.red = dark.green = dark.blue = 0;
+    
+	mid.alpha = 0;
+	mid.red = mid.green = mid.blue = 40;
+    
+	for (i = 1; i < menu->entry_no; i++) {	    
+	    ROperateLine(img, RSubtractOperation, 0, i*menu->entry_height-2,
+			 menu->menu->width-1, i*menu->entry_height-2, &mid);
+	    
+	    RDrawLine(img, 0, i*menu->entry_height-1,
+		      menu->menu->width-1, i*menu->entry_height-1, &dark);
+
+	    ROperateLine(img, RAddOperation, 0, i*menu->entry_height,
+			 menu->menu->width-1, i*menu->entry_height, 
+			 &light);
+	}
+    }
+    if (!RConvertImage(scr->rcontext, img, &pix)) {
+	wwarning(_("error rendering image:%s"), RMessageForError(RErrorCode));
+    }
+    RDestroyImage(img);
+
+    return pix;
+}
+
+
 static void
 updateTexture(WMenu *menu)
 {
@@ -447,15 +504,7 @@ updateTexture(WMenu *menu)
 	if (!menu->flags.brother) {
 	    FREE_PIXMAP(menu->menu_texture_data);
 
-	    if (wPreferences.alt_menu_style) {
-		wTextureRender(scr, scr->menu_item_texture,
-			       &menu->menu_texture_data, menu->menu->width,
-			       menu->menu->height, WREL_MENUENTRY);
-	    } else {
-		wTextureRender(scr, scr->menu_item_texture,
-			       &menu->menu_texture_data, menu->menu->width,
-			       menu->entry_height, WREL_MENUENTRY);
-	    }
+	    menu->menu_texture_data = renderTexture(menu);
 
 	    XSetWindowBackgroundPixmap(dpy, menu->menu->window,
 				       menu->menu_texture_data);
@@ -629,31 +678,48 @@ wMenuDestroy(WMenu *menu, int recurse)
 }
 
 
+#define F_NORMAL	0
+#define F_TOP		1
+#define F_BOTTOM	2
+#define F_NONE		3
+
 static void
-drawFrame(WScreen *scr, Window win, int y, int w, int h)
+drawFrame(WScreen *scr, Window win, int y, int w, int h, int type)
 {
     XSegment segs[2];
+    int i;
 
-    segs[0].x1 = 0;
-    segs[0].y1 = y;
-    segs[0].x2 = w-1;
-    segs[0].y2 = y;
-    segs[1].x1 = 0;
-    segs[1].y1 = y;
-    segs[1].x2 = 0;
-    segs[1].y2 = y + h - 2;
-    XDrawSegments(dpy, win, scr->menu_item_auxtexture->light_gc, segs, 2);
+    i = 0;
+    segs[i].x1 = segs[i].x2 = w-1;
+    segs[i].y1 = y;
+    segs[i].y2 = y + h - 1;
+    i++;
+    if (type != F_TOP && type != F_NONE) {
+	segs[i].x1 = 1;
+	segs[i].y1 = segs[i].y2 = y + h-2;
+	segs[i].x2 = w-1;
+	i++;
+    }
+    XDrawSegments(dpy, win, scr->menu_item_auxtexture->dim_gc, segs, i);
 
-    XDrawLine(dpy, win, scr->menu_item_auxtexture->dark_gc, 0, y+h-1,
-	      w-1, y+h-1);
+    i = 0;
+    segs[i].x1 = 0;
+    segs[i].y1 = y;
+    segs[i].x2 = 0;
+    segs[i].y2 = y + h - 1;
+    i++;
+    if (type != F_BOTTOM && type != F_NONE) {
+	segs[i].x1 = 0;
+	segs[i].y1 = y;
+	segs[i].x2 = w-1;
+	segs[i].y2 = y;
+	i++;
+    }
+    XDrawSegments(dpy, win, scr->menu_item_auxtexture->light_gc, segs, i);
 
-    segs[0].x1 = 1;
-    segs[0].y1 = segs[0].y2 = y + h-2;
-    segs[0].x2 = w-1;
-    segs[1].x1 = segs[1].x2 = w-1;
-    segs[1].y1 = y + 1;
-    segs[1].y2 = y + h-2;
-    XDrawSegments(dpy, win, scr->menu_item_auxtexture->dim_gc, segs, 2);
+    if (type != F_TOP && type != F_NONE)
+	XDrawLine(dpy, win, scr->menu_item_auxtexture->dark_gc, 0, y+h-1,
+		  w-1, y+h-1);
 }
 
 
@@ -661,6 +727,7 @@ static void
 paintEntry(WMenu *menu, int index, int selected)
 {
     int x, y, w, h, tw;
+    int type;
     GC light, dim, dark, textGC;
     WScreen *scr=menu->frame->screen_ptr;
     Window win = menu->menu->window;
@@ -675,17 +742,28 @@ paintEntry(WMenu *menu, int index, int selected)
     dim = scr->menu_item_auxtexture->dim_gc;
     dark = scr->menu_item_auxtexture->dark_gc;
 
+    if (wPreferences.menu_style == MS_FLAT && menu->entry_no > 1) {
+	if (index == 0)
+	    type = F_TOP;
+	else if (index == menu->entry_no - 1)
+	    type = F_BOTTOM;
+	else
+	    type = F_NONE;
+    } else {
+	type = F_NORMAL;
+    }
+    
     /* paint background */
     if (selected) {
 	XSetForeground(dpy, scr->select_menu_gc, scr->select_pixel);
 	XFillRectangle(dpy, win, scr->select_menu_gc, 1, y+1, w-2, h-3);
 	if (scr->menu_item_texture->any.type == WTEX_SOLID)
-	    drawFrame(scr, win, y, w, h);
+	    drawFrame(scr, win, y, w, h, type);
     } else { 
 	if (scr->menu_item_texture->any.type == WTEX_SOLID) {
 	    XClearArea(dpy, win, 0, y + 1, w - 1, h - 3, False);
 	    /* draw the frame */
-	    drawFrame(scr, win, y, w, h);
+	    drawFrame(scr, win, y, w, h, type);
 	} else {
 	    XClearArea(dpy, win, 0, y, w, h, False);
 	}

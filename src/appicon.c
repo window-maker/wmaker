@@ -347,22 +347,6 @@ updateDockNumbers(WScreen *scr)
 }
 #endif /* WS_INDICATOR */
 
-#ifdef HIDDENDOT
-static void
-draw_dot(WScreen *scr, Drawable d)
-{
-    GC gc;
-    int y;
-    gc = scr->draw_gc;
-    y = wPreferences.icon_size-6;
-    XSetForeground(dpy, gc, scr->black_pixel);
-    XDrawLine(dpy, d, gc, 4, y, 5, y);
-    XDrawPoint(dpy, d, gc, 4, y+1);
-    XSetForeground(dpy, gc, scr->white_pixel);
-    XDrawLine(dpy, d, gc, 6, y, 6, y+1);
-    XDrawPoint(dpy, d, gc, 5, y+1);
-}
-#endif /* HIDDENDOT */
 
 void
 wAppIconPaint(WAppIcon *aicon)

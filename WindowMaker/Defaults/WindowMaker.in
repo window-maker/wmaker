@@ -1,4 +1,6 @@
 {
+  WindozeCycling = YES;
+  PopupSwitchMenu = NO;
   AlternativeMenuStyle = NO;
   DisableMiniwindows = NO;
   OpenTransientOnOwnerWorkspace = NO;

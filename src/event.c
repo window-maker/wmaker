@@ -1338,7 +1338,7 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     if (!wwin)
 	return;
 
-    puts("IN");
+/*    puts("IN");*/
     keymap = XGetModifierMapping(dpy);
 
     
@@ -1374,7 +1374,7 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 	    WMHandleEvent(&ev);
 	    continue;
 	}
-puts("EV");
+/*puts("EV");*/
 	/* ignore CapsLock */
 	modifiers = ev.xkey.state & ValidModMask;
 
@@ -1415,14 +1415,14 @@ puts("EV");
 	    }
 	}
     }
-puts("OUT");
+/*puts("OUT");*/
     XFree(keymap);
 
     XUngrabKeyboard(dpy, CurrentTime);
     wSetFocusTo(scr, newFocused);
     scr->flags.doing_alt_tab = 0; 
     if (openedSwitchMenu) 
-		OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);   
+	OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);   
 }
 
 

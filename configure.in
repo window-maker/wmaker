@@ -10,7 +10,7 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.52.0)
+AM_INIT_AUTOMAKE(WindowMaker, 0.53.0)
 
 AM_PROG_LIBTOOL
 
@@ -852,6 +852,9 @@ echo
 echo "JPEG support will not be included because the JPEG library is"
 echo "not installed correctly or was not found. Background images"
 echo "from themes will not display as they usually are JPEG files."
+echo
+echo "To fix, download and install the jpeg library and/or make sure you"
+echo "installed all jpeg related packages, like jpeg-devel."
 echo
 echo "WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING"
 fi

@@ -427,7 +427,8 @@ wTextureMakeFunction(WScreen *scr, char *lib, char *func, int argc, char **argv)
 
 
 RImage*
-wTextureRenderImage(WTexture *texture, int width, int height, int relief)
+wTextureRenderImage(WTexture *texture, int width, int height,
+		    int relief)
 {
     RImage *image;
     RColor color1;
@@ -598,31 +599,6 @@ wTextureRenderImage(WTexture *texture, int width, int height, int relief)
 }
 
 
-/* used only for menu entries */
-void
-wTextureRender(WScreen *scr, WTexture *texture, Pixmap *data, 
-	       int width, int height, int relief)
-{
-    if (!texture)
-      return;
-/*    
-    switch (texture->any.type) {
-     case WTEX_DGRADIENT:
-     case WTEX_VGRADIENT:
-     case WTEX_HGRADIENT:
-     case WTEX_MHGRADIENT:
-     case WTEX_MVGRADIENT:
-     case WTEX_MDGRADIENT:
-     case WTEX_PIXMAP:
-	*/
-	if (!*data) {
-	    *data = renderTexture(scr, width, height, texture, relief);
-	}/*
-	break;
-    }*/
-}
-
-
 
 static void
 bevelImage(RImage *image, int relief)
@@ -659,27 +635,6 @@ bevelImage(RImage *image, int relief)
     }
 }
  
-
-
-static Pixmap
-renderTexture(WScreen *scr, int width, int height, WTexture *texture,
-	       int rel)
-{
-    RImage *img;
-    Pixmap pix;
-
-    img = wTextureRenderImage(texture, width, height, rel);
-    
-    if (!img) {
-	wwarning(_("could not render texture: %s"), RMessageForError(RErrorCode));
-	return None;
-    }
-    if (!RConvertImage(scr->rcontext, img, &pix)) {
-	wwarning(_("error rendering image:%s"), RMessageForError(RErrorCode));
-    }
-    RDestroyImage(img);
-    return pix;
-}
  
 
 void

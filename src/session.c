@@ -897,7 +897,10 @@ makeClientState(WWindow *wwin)
     appendStringInArray(state, wwin->wm_class);
 
     /* WM_NAME */
-    
+    if (wwin->flags.wm_name_changed)
+	appendStringInArray(state, "");
+    else
+	appendStringInArray(state, wwin->frame->name);
 
     /* geometry */
     sprintf(buffer, "%i %i %i %i %i %i", wwin->frame_x, wwin->frame_y,

@@ -2542,7 +2542,8 @@ resizebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
     CloseWindowMenu(wwin->screen_ptr);
 
     if (wPreferences.focus_mode==WKF_CLICK 
-	&& !(event->xbutton.state&ControlMask)) {
+	&& !(event->xbutton.state&ControlMask)
+	&& !WFLAGP(wwin, no_focusable)) {
 	wSetFocusTo(wwin->screen_ptr, wwin);
     }
 
@@ -2629,7 +2630,8 @@ frameMouseDown(WObjDescriptor *desc, XEvent *event)
     CloseWindowMenu(wwin->screen_ptr);
 
     if (wPreferences.focus_mode==WKF_CLICK
-	&& !(event->xbutton.state&ControlMask)) {
+	&& !(event->xbutton.state&ControlMask)
+	&& !WFLAGP(wwin, no_focusable)) {
 	wSetFocusTo(wwin->screen_ptr, wwin);
     }
     if (event->xbutton.button == Button1) {
@@ -2673,7 +2675,8 @@ titlebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
     CloseWindowMenu(wwin->screen_ptr);
 
     if (wPreferences.focus_mode==WKF_CLICK 
-	&& !(event->xbutton.state&ControlMask)) {
+	&& !(event->xbutton.state&ControlMask)
+	&& !WFLAGP(wwin, no_focusable)) {
 	wSetFocusTo(wwin->screen_ptr, wwin);
     }
 

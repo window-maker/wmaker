@@ -156,8 +156,14 @@
 /*
  * disable/enable workspace indicator in the dock
  */
-
 #undef WS_INDICATOR 
+
+
+/*
+ * define USER_MENU if you want user specified menus for sending
+ * commands to applications. Kinda experimental..
+ */
+#undef USER_MENU
 
 
 /*

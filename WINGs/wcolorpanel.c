@@ -1337,6 +1337,7 @@ WMSetColorPanelColor(WMColorPanel *panel, WMColor *color)
 }
 
 
+static void
 updateSwatch(WMColorPanel *panel, RColor color)
 {
 	WMScreen	*scr = WMWidgetScreen(panel->win);

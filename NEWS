@@ -2,12 +2,21 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
---- 0.52.1
+--- 0.53.0
 
 New Option
 ----------
 
-AlternativeMenuStyle=YES; will make textures in menus to be unsegmented. 
+MenuStyle=<style>; will change the menu texture style.
+
+<style> can be:
+normal (default): for the traditional one texture per item, with bevels in 
+each
+
+singleTexture: for a single texture that spans the whole menu, with bevels
+in each item
+
+flat: singleTexture without the bevels
 
 
 --- 0.52.0

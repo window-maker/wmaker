@@ -112,7 +112,6 @@ typedef struct {
 } WOptionEnumeration;
 
 
-
 /* type converters */
 static int getBool();
 static int getInt();
@@ -133,6 +132,7 @@ static int getModMask();
 #ifdef NEWSTUFF
 static int getRImage();
 #endif
+
 
 /* value setting functions */
 static int setJustify();
@@ -170,7 +170,7 @@ static int setIconPosition();
 static int setClipTitleFont();
 static int setClipTitleColor();
 
-static int setNothing();
+static int setMenuStyle();
 
 
 static int updateUsableArea();
@@ -286,10 +286,16 @@ static WOptionEnumeration seIconPositions[] = {
     {NULL, 0, 0}
 };
 
+static WOptionEnumeration seMenuStyles[] = {
+    {"normal", MS_NORMAL, 0},
+    {"singletexture", MS_SINGLE_TEXTURE, 0},
+    {"flat", MS_FLAT, 0},
+    {NULL, 0, 0}
+};
 
 
 /*
- * All entries in the tables bellow, NEED to have a default value
+ * ALL entries in the tables bellow, NEED to have a default value
  * defined, and this value needs to be correct.
  */
 
@@ -475,8 +481,8 @@ WDefaultEntry optionList[] = {
     },
 #endif /* WEENDOZE_CYCLE */
       /* style options */
-    {"AlternativeMenuStyle", "NO",  		(void*)REFRESH_MENU_TEXTURE,
-	&wPreferences.alt_menu_style, getBool, 	setNothing
+    {"MenuStyle", 	"normal",  		seMenuStyles,
+	&wPreferences.menu_style, getEnum, 	setMenuStyle
     },
     {"WidgetColor",	"(solid, gray)",	NULL,
 	  NULL,				getTexture,	setWidgetColor,
@@ -2200,7 +2206,7 @@ static int
 getModMask(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
 	   void **ret)
 {
-    unsigned int mask;
+    static unsigned int mask;
     char *str;
 
     STRINGP("Modifier Key");
@@ -2323,8 +2329,8 @@ setIconTile(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
     int reset = 0;
    
     img = wTextureRenderImage(*texture, wPreferences.icon_size,
-			      wPreferences.icon_size, 
-			      ((*texture)->any.type & WREL_BORDER_MASK) 
+			      wPreferences.icon_size,
+			      ((*texture)->any.type & WREL_BORDER_MASK)
 			      ? WREL_ICON : WREL_FLAT);
     if (!img) {
 	wwarning(_("could not render texture for icon background"));
@@ -2927,9 +2933,9 @@ updateUsableArea(WScreen *scr, WDefaultEntry *entry, void *bar, void *foo)
 
 
 static int
-setNothing(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
+setMenuStyle(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
 {
-    return (int)entry->extra_data;
+    return REFRESH_MENU_TEXTURE;
 }
 
 
