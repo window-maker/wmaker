@@ -26,6 +26,10 @@ int main(int argc, char **argv)
   WMPixmap		*pixmap;
   WMColorPanel	*panel;
 
+#if 0
+    XSynchronize(dpy, True);
+    fprintf(stderr, "...Running Synchronous...\n");
+#endif
 
   WMInitializeApplication("WMColorPicker", &argc, argv);
     
@@ -38,9 +42,6 @@ int main(int argc, char **argv)
 
   scr = WMCreateSimpleApplicationScreen(dpy);
 
-
-
-	
   pixmap = WMCreatePixmapFromXPMData(scr, GNUSTEP_XPM);
   WMSetApplicationIconImage(scr, pixmap); WMReleasePixmap(pixmap);
   panel = WMGetColorPanel(scr);

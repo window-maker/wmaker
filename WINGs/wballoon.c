@@ -1,10 +1,12 @@
 
 
 
-
+#include "../src/config.h"
 #include "WINGsP.h"
 
+#ifdef SHAPE
 #include <X11/extensions/shape.h>
+#endif
 
 
 typedef struct W_Balloon {
@@ -434,8 +436,10 @@ showText(Balloon *bPtr, int x, int y, int h, int w, char *text)
 
     XFreePixmap(dpy, pixmap);
 
+#ifdef SHAPE
     XShapeCombineMask(dpy, bPtr->view->window, ShapeBounding, 0, 0, mask,
 		      ShapeSet);
+#endif
     XFreePixmap(dpy, mask);
 
     W_MoveView(bPtr->view, bx, by);

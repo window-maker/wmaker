@@ -50,7 +50,7 @@ wmquery_LDADD = libWINGs.a $(LIBLIST)
 
 connect_SOURCES = connect.c
 
-connect_LDADD = libWUtil.a @NETLIBS@ @LIBPL@
+connect_LDADD = libWUtil.a @LIBRARY_SEARCH_PATH@ @NETLIBS@ @LIBPL@
 
 
 EXTRA_DIST = logo.xpm BUGS
