@@ -1790,11 +1790,13 @@ wWindowUpdateName(WWindow *wwin, char *newTitle)
 	title = newTitle;
     }
     
+#ifdef NO_WINDOW_ENUMERATOR
     if (instIndex > 0) {
 	sprintf(prefix, "  [%i]", instIndex);
 	
 	title = wstrconcat(title, prefix);
     }
+#endif
     
     if (wFrameWindowChangeTitle(wwin->frame, title)) {
 	/* only update the menu if the title has actually changed */

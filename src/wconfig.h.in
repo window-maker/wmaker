@@ -218,6 +218,9 @@
 #undef DEFINABLE_CURSOR
 
 
+#undef NO_WINDOW_ENUMERATOR
+
+
 /*
  *--------------------------------------------------------------------
  * 			Default Configuration
@@ -580,12 +583,13 @@
 #ifdef XKB_MODELOCK
 #define KEEP_XKB_LOCK_STATUS
 /* This is a hidden feature.
- * choose one between 2 of these hints. Icon can be changed
- * in def_pixmaps.h and default icon is now for Thai language only.
+ * Choose just one of LANGUAGE_* hints.
+ * Icon can be changed in def_pixmaps.h.
  * More icons are welcome.
  */
 #define XKB_BUTTON_HINT
 #undef LANGUAGE_TH
+#undef LANGUAGE_SK
 #endif
 
 #ifndef DEMATERIALIZE_ICON
