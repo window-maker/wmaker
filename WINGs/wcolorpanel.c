@@ -1687,6 +1687,8 @@ magnifyPutCursor(WMWidget *w, void *data)
 	while(panel->magnifyGlass->valid) 
 	{
 		WMNextEvent(scr->display, &event);
+        while (XCheckTypedEvent(scr->display, MotionNotify, &event)) {
+        }
 
 		switch (event.type)
 		{
