@@ -20,11 +20,16 @@ include_HEADERS = WINGs.h WUtil.h WINGsP.h
 
 bin_SCRIPTS = get-wings-flags get-wutil-flags
 
-noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel connect
+noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel\
+	connect puzzle
 
-testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h
+testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h 
 
 testmywidget_LDADD = libWINGs.a $(LIBLIST)
+
+puzzle_SOURCES = puzzle.c
+
+puzzle_LDADD = libWINGs.a $(LIBLIST)
 
 fontl_SOURCES = fontl.c
 

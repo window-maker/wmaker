@@ -897,10 +897,12 @@ makeDraggableLabel(WMWidget *w, char *file, int x, int y)
 			 ButtonPressMask|ButtonReleaseMask|ButtonMotionMask,
 			 iconMouseStuff, label);
 	
-	
-    WMSetLabelImagePosition(label, WIPImageOnly);
-    WMSetLabelImage(label, image);
-    WMReleasePixmap(image);
+
+    if (image != NULL) {
+	WMSetLabelImagePosition(label, WIPImageOnly);
+	WMSetLabelImage(label, image);
+	WMReleasePixmap(image);
+    } else puts(file);
 
     return label;
 }
