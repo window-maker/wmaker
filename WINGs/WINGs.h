@@ -1119,6 +1119,8 @@ int WMGetSplitViewDividerThickness(WMSplitView *sPtr);
 
 WMTabView *WMCreateTabView(WMWidget *parent);
 
+void WMSetTabViewFont(WMTabView *tPtr, WMFont *font);
+
 void WMAddItemInTabView(WMTabView *tPtr, WMTabViewItem *item);
 
 void WMInsertItemInTabView(WMTabView *tPtr, int index, WMTabViewItem *item);

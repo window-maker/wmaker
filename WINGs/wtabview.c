@@ -602,6 +602,16 @@ WMCreateTabViewItemWithIdentifier(int identifier)
 
 
 void
+WMSetTabViewFont(WMTabView *tPtr, WMFont *font)
+{
+    if (tPtr->font)
+	WMReleaseFont(tPtr->font);
+
+    tPtr->font = WMRetainFont(font);
+}
+
+
+void
 WMSetTabViewItemLabel(WMTabViewItem *item, char *label)
 {
     if (item->label)
