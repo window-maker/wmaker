@@ -25,7 +25,7 @@
 
 #include "config.h"
 
-/*** Change it (wconfig.h) *after* you ran configure ***/
+/*** Change this file (wconfig.h) *after* you ran configure ***/
 
 /*
  *--------------------------------------------------------------------
@@ -122,13 +122,6 @@
  * and knows that the penalty is small (or not), please tell me.
  */
 #define NUMLOCK_HACK
-
-
-
-/*
- * define EXTEND_WINDOWSHORTCUT if you want 10 window shortcuts instead of 4. 
- */
-#define EXTEND_WINDOWSHORTCUT
 
 
 
