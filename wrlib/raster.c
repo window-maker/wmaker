@@ -43,11 +43,14 @@ RImage*
 RCreateImage(unsigned width, unsigned height, int alpha)
 {
     RImage *image=NULL;
+    unsigned bla1, bla2;
     
     assert(width>0 && height>0);
     
-    /* check for too large images (cap on INT_MAX just to be sure :P) */
-    if (width > (INT_MAX/4)/height+4) {
+    /* detect overflow (gr33tz to ruda :D) */
+    bla1 = width*height;
+    bla2 = bla1*4;
+    if (bla1/height != width || bla2/4 != bla1 || bla2 > INT_MAX-32) {
 	RErrorCode = RERR_NOMEMORY;
 	return NULL;
     }
