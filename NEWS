@@ -59,6 +59,7 @@ This feature is turned off by default for the following applications
 because it's incompatible with them:
 1. all GNUstep applications
 2. applications with an application menu (wterm, Aileron, etc)
+3. all applications with withdrawn windows only (this means all dockapps)
 
 As a side note: wterm can use the shared appicon feature as long as it
 doesn't use the appmenu (will do this by default). If you start it
