@@ -1,5 +1,5 @@
 /*
- *  WINGs connect.c: example how to create a netwrok client using WMConnection
+ *  WINGs connect.c: example how to create a network client using WMConnection
  * 
  *  Copyright (c) 1999 Dan Pascu
  * 
@@ -168,7 +168,7 @@ main(int argc, char **argv) /*FOLD00*/
     if (argc>1) {
         for (i=1; i<argc; i++) {
             if (strcmp(argv[i], "--help")==0 || strcmp(argv[i], "-h")==0) {
-                printf("usage: %s [host [port]]\n\n", argv[0]);
+                printf("usage: %s [host [port]]\n\n", ProgName);
                 exit(0);
             } else {
                 if (!host)

@@ -21,6 +21,8 @@ Changes since version 0.61.1:
 - optimized frame drawing (Swivel <swivel@gnugeneration.com>)
 - removed broken optimized frame drawing patch
 - added Select Window button in attribute inspector
+- added get-wings-flags and get-wutil-flags with the same purpose as
+  get-wraster-flags, but for compiling and linking with WINGs/WUtil
 
 Changes since version 0.61.0:
 .............................

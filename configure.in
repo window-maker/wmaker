@@ -806,8 +806,8 @@ AC_OUTPUT(Makefile po/Makefile util/Makefile test/Makefile wmlib/Makefile \
 
 
 dnl
-dnl Output some helpfull data for compiling WINGs apps
-dnl ==================================================
+dnl Output some helpful data for compiling wraster and WINGs/WUtil apps
+dnl ===================================================================
 dnl
 
 dnl echo "WFLAGS=\"$LIBPL_INC_PATH -I$prefix/include\"" > WINGs-flags
@@ -856,10 +856,91 @@ done
 
 EOF
 
-sed 's/#lp#/[/g' get-wraster-flags | sed 's/#rp#/]/g' > wrlib/get-wraster-flags
+cat <<EOF >get-wings-flags
+#!/bin/sh
 
-chmod 755 wrlib/get-wraster-flags
-rm -f get-wraster-flags
+prefix="$prefix"
+exec_prefix=\$prefix
+
+WCFLAGS="-I\$prefix/include $inc_search_path"
+WLFLAGS="-L\$exec_prefix/lib $lib_search_path"
+WLIBS="-lWINGs -lwraster $GFXLIBS $XLIBS -lm $NETLIBS -lPropList"
+
+usage="Usage: get-wings-flags #lp#--cflags#rp# #lp#--ldflags#rp# #lp#--libs#rp#"
+
+if test \$# -eq 0; then
+      echo "\${usage}" 1>&2
+      exit 1
+fi
+
+while test \$# -gt 0; do
+  case \$1 in
+    --cflags)
+	echo \$WCFLAGS
+        ;;
+    --ldflags|--lflags)
+	echo \$WLFLAGS
+        ;;
+    --libs)
+	echo \$WLIBS
+        ;;
+    *)
+    	echo "\${usage}" 1>&2
+    	exit 1
+      	;;
+  esac
+  shift
+done
+
+
+EOF
+
+cat <<EOF >get-wutil-flags
+#!/bin/sh
+
+prefix="$prefix"
+exec_prefix=\$prefix
+
+WCFLAGS="-I\$prefix/include $inc_search_path"
+WLFLAGS="-L\$exec_prefix/lib $lib_search_path"
+WLIBS="-lWUtil $NETLIBS -lPropList"
+
+usage="Usage: get-wutil-flags #lp#--cflags#rp# #lp#--ldflags#rp# #lp#--libs#rp#"
+
+if test \$# -eq 0; then
+      echo "\${usage}" 1>&2
+      exit 1
+fi
+
+while test \$# -gt 0; do
+  case \$1 in
+    --cflags)
+	echo \$WCFLAGS
+        ;;
+    --ldflags|--lflags)
+	echo \$WLFLAGS
+        ;;
+    --libs)
+	echo \$WLIBS
+        ;;
+    *)
+    	echo "\${usage}" 1>&2
+    	exit 1
+      	;;
+  esac
+  shift
+done
+
+
+EOF
+
+sed 's/#lp#/[/g' get-wraster-flags | sed 's/#rp#/]/g' > wrlib/get-wraster-flags
+sed 's/#lp#/[/g' get-wings-flags | sed 's/#rp#/]/g' > WINGs/get-wings-flags
+sed 's/#lp#/[/g' get-wutil-flags | sed 's/#rp#/]/g' > WINGs/get-wutil-flags
+
+chmod 755 wrlib/get-wraster-flags WINGs/get-wings-flags WINGs/get-wutil-flags
+
+rm -f get-wraster-flags get-wings-flags get-wutil-flags
 
 
 dnl

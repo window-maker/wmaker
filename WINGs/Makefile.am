@@ -18,6 +18,8 @@ lib_LIBRARIES = libWINGs.a libWUtil.a
 
 include_HEADERS = WINGs.h WUtil.h WINGsP.h
 
+bin_SCRIPTS = get-wings-flags get-wutil-flags
+
 noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel connect
 
 testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h
