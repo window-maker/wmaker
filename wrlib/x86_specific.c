@@ -56,7 +56,7 @@ x86_check_mmx()
 	 "test $(1<<23), %%edx	\n"
 	 "jz .NotMMX		\n"
 
-         "popal			\n" // this is needed because the address of
+         "popal			\n" // popal needed because the address of
          "movl $1, %0		\n" // variable %0 may be kept in a register
          "jmp .noPop		\n"
 
