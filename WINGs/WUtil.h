@@ -112,7 +112,8 @@ typedef enum {
 
 
 enum {
-    WBNotFound = INT_MIN /* element was not found in bag */
+    WBNotFound = INT_MIN, /* element was not found in bag */
+    WANotFound = -1       /* element was not found in array */
 };
 
 
@@ -160,18 +161,6 @@ typedef struct {
 
 
 typedef void *WMBagIterator;
-
-
-#if 0
-struct W_Bag {
-    void *data;
-    
-    void (*destructor)(void *item);
-    
-    W_BagFunctions func;
-};
-#endif
-
 
 
 #if 0
@@ -317,20 +306,83 @@ extern const WMHashTableCallbacks WMStringPointerHashCallbacks;
 
 /*......................................................................*/
 
-
 /*
- * Array bags use an array to store the elements.
- * Item indexes may be any integer number.
- * 
+ * WMArray use an array to store the elements.
+ * Item indexes may be only positive integer numbers.
+ * The array cannot contain holes in it.
+ *
  * Pros:
  * Fast [O(1)] access to elements
  * Fast [O(1)] push/pop
- * 
+ *
  * Cons:
  * A little slower [O(n)] for insertion/deletion of elements that 
  * 	aren't in the end
- * Element indexes with large difference will cause large holes
  */
+
+WMArray* WMCreateArray(unsigned initialSize);
+
+WMArray* WMCreateArrayWithDestructor(unsigned initialSize,
+                                     void (*destructor)(void*));
+
+void WMEmptyArray(WMArray *array);
+
+void WMFreeArray(WMArray *array);
+
+unsigned WMGetArrayItemCount(WMArray *array);
+
+/* appends other to array. other remains unchanged */
+int WMAppendArray(WMArray *array, WMArray *other);
+
+/* add will place the element at the end of the array */
+int WMAddToArray(WMArray *array, void *item);
+
+#define WMPushInArray(array, item) WMAddToArray(array, item)
+
+/* insert will increment the index of elements after it by 1 */
+int WMInsertInArray(WMArray *array, unsigned index, void *item);
+
+/* replace and set will return the old item WITHOUT calling the
+ * destructor on it even if its available. Free the returned item yourself.
+ */
+void* WMReplaceInArray(WMArray *array, unsigned index, void *item);
+
+#define WMSetInArray(array, index, item) WMReplaceInArray(array, index, item)
+
+/* delete and remove will remove the elements and cause the elements
+ * after them to decrement their indexes by 1. Also will call the
+ * destructor on the deleted element if there's one available.
+ */
+int WMDeleteFromArray(WMArray *array, unsigned index);
+
+int WMRemoveFromArray(WMArray *array, void *item);
+
+void* WMGetFromArray(WMArray *array, unsigned index);
+
+#define WMGetFirstInArray(array, item) WMFindInArray(array, NULL, item)
+
+/* pop will return the last element from the array, also removing it
+ * from the array. The destructor is NOT called, even if available.
+ * Free the returned element if needed by yourself
+ */
+void* WMPopFromArray(WMArray *array);
+
+int WMFindInArray(WMArray *array, int (*match)(void*, void*), void *cdata);
+
+unsigned WMCountInArray(WMArray *array, void *item);
+
+/* comparer must return:
+ * < 0 if a < b
+ * > 0 if a > b
+ * = 0 if a = b
+ */
+int WMSortArray(WMArray *array, int (*comparer)(const void*, const void*));
+
+void WMMapArray(WMArray *array, void (*function)(void*, void*), void *data);
+
+
+
+/*..........................................................................*/
 
 /*
  * Tree bags use a red-black tree for storage.
@@ -353,29 +405,29 @@ WMBag* WMCreateTreeBag(void);
 
 WMBag* WMCreateTreeBagWithDestructor(void (*destructor)(void*));
 
-int WMGetBagItemCount(WMBag *self);
+int WMGetBagItemCount(WMBag *bag);
 
-int WMAppendBag(WMBag *self, WMBag *bag);
+int WMAppendBag(WMBag *bag, WMBag *other);
 
-int WMPutInBag(WMBag *self, void *item);
+int WMPutInBag(WMBag *bag, void *item);
 
 /* insert will increment the index of elements after it by 1 */
-int WMInsertInBag(WMBag *self, int index, void *item);
+int WMInsertInBag(WMBag *bag, int index, void *item);
 
 /* this is slow */
 /* erase will remove the element from the bag,
  * but will keep the index of the other elements unchanged */
-int WMEraseFromBag(WMBag *self, int index);
+int WMEraseFromBag(WMBag *bag, int index);
 
 /* delete and remove will remove the elements and cause the elements
  * after them to decrement their indexes by 1 */
-int WMRemoveFromBag(WMBag *self, void *item);
+int WMDeleteFromBag(WMBag *bag, int index);
 
-int WMDeleteFromBag(WMBag *self, int index);
+int WMRemoveFromBag(WMBag *bag, void *item);
 
-void* WMGetFromBag(WMBag *self, int index);
+void* WMGetFromBag(WMBag *bag, int index);
 
-void* WMReplaceInBag(WMBag *self, int index, void *item);
+void* WMReplaceInBag(WMBag *bag, int index, void *item);
 
 #define WMSetInBag(bag, index, item) WMReplaceInBag(bag, index, item)
 
@@ -384,29 +436,29 @@ void* WMReplaceInBag(WMBag *self, int index, void *item);
  * > 0 if a > b
  * = 0 if a = b
  */
-int WMSortBag(WMBag *self, int (*comparer)(const void*, const void*));
+int WMSortBag(WMBag *bag, int (*comparer)(const void*, const void*));
 
-void WMEmptyBag(WMBag *self);
+void WMEmptyBag(WMBag *bag);
 
-void WMFreeBag(WMBag *self);
+void WMFreeBag(WMBag *bag);
 
-void WMMapBag(WMBag *self, void (*function)(void*, void*), void *data);
+void WMMapBag(WMBag *bag, void (*function)(void*, void*), void *data);
 
-int WMGetFirstInBag(WMBag *self, void *item);
+int WMGetFirstInBag(WMBag *bag, void *item);
 
-int WMCountInBag(WMBag *self, void *item);
+int WMCountInBag(WMBag *bag, void *item);
 
-int WMFindInBag(WMBag *self, int (*match)(void*,void*), void *cdata);
+int WMFindInBag(WMBag *bag, int (*match)(void*,void*), void *cdata);
 
-void* WMBagFirst(WMBag *self, WMBagIterator *ptr);
+void* WMBagFirst(WMBag *bag, WMBagIterator *ptr);
 
-void* WMBagLast(WMBag *self, WMBagIterator *ptr);
+void* WMBagLast(WMBag *bag, WMBagIterator *ptr);
 
-void* WMBagNext(WMBag *self, WMBagIterator *ptr);
+void* WMBagNext(WMBag *bag, WMBagIterator *ptr);
 
-void* WMBagPrevious(WMBag *self, WMBagIterator *ptr);
+void* WMBagPrevious(WMBag *bag, WMBagIterator *ptr);
 
-void* WMBagIteratorAtIndex(WMBag *self, int index, WMBagIterator *ptr);
+void* WMBagIteratorAtIndex(WMBag *bag, int index, WMBagIterator *ptr);
 
 int WMBagIndexForIterator(WMBag *bag, WMBagIterator ptr);
 

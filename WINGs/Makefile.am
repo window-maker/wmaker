@@ -26,14 +26,25 @@ EXTRA_DIST = BUGS
 libWINGs_a_SOURCES = 	\
 	WINGs.h \
 	WINGsP.h \
+	array.c \
+	bagtree.c \
 	configuration.c \
+	connection.c \
+	data.c \
 	dragdestination.c \
 	dragsource.c \
+	error.c \
+	findfile.c \
 	fontmanager.c \
+	hashtable.c \
+	host.c \
 	international.c \
+	memory.c \
 	notification.c \
 	selection.c \
+	string.c \
 	userdefaults.c \
+	usleep.c \
 	wapplication.c \
 	wappresource.c \
 	wballoon.c \
@@ -64,38 +75,29 @@ libWINGs_a_SOURCES = 	\
 	wtabview.c \
 	wtext.c \
 	wtextfield.c \
-	wwindow.c \
 	wview.c \
-	error.c \
-	findfile.c \
-	bagtree.c \
-	connection.c \
-	data.c \
-	hashtable.c \
-	host.c \
-	memory.c \
-	string.c \
-	usleep.c
+	wwindow.c
 
 
 libWUtil_a_SOURCES = 	\
 	WINGs.h \
 	WINGsP.h \
+	array.c \
 	bagtree.c \
 	connection.c \
 	data.c \
-	host.c \
-	international.c \
-	notification.c \
-	userdefaults.c \
-	wapplication.c \
-	wutil.c \
 	error.c \
 	findfile.c \
 	hashtable.c \
+	host.c \
+	international.c \
 	memory.c \
+	notification.c \
 	string.c \
-	usleep.c
+	userdefaults.c \
+	usleep.c \
+	wapplication.c \
+	wutil.c
 
 
 INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \

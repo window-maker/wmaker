@@ -19,10 +19,10 @@
 #define RESIZE_INCREMENT 8
 
 
-typedef struct {
+typedef struct W_Array {
     void **items;		      /* the array data */
-    unsigned int length;	      /* # of items in array */
-    unsigned int allocSize;	      /* allocated size of array */
+    unsigned itemCount;	              /* # of items in array */
+    unsigned allocSize;	              /* allocated size of array */
     void (*destructor)(void *item);   /* the destructor to free elements */
 } W_Array;
 
@@ -47,7 +47,7 @@ WMCreateArrayWithDestructor(unsigned initialSize, void (*destructor)(void*))
 
     array->items = wmalloc(sizeof(void*) * initialSize);
 
-    array->length = 0;
+    array->itemCount = 0;
     array->allocSize = initialSize;
     array->destructor = destructor;
 
@@ -59,12 +59,13 @@ void
 WMEmptyArray(WMArray *array)
 {
     if (array->destructor) {
-        while (array->length-- > 0) {
-            array->destructor(array->items[array->length]);
+        while (array->itemCount > 0) {
+            array->itemCount--;
+            array->destructor(array->items[array->itemCount]);
         }
     }
-    /*memset(array->items, 0, array->length * sizeof(void*));*/
-    array->length = 0;
+    /*memset(array->items, 0, array->itemCount * sizeof(void*));*/
+    array->itemCount = 0;
 }
 
 
@@ -77,123 +78,205 @@ WMFreeArray(WMArray *array)
 }
 
 
+unsigned
+WMGetArrayItemCount(WMArray *array)
+{
+    return array->itemCount;
+}
+
+
+int
+WMAppendArray(WMArray *array, WMArray *other)
+{
+    if (other->itemCount == 0)
+        return 1;
+
+    if (array->itemCount + other->itemCount > array->allocSize) {
+        array->allocSize += other->allocSize;
+        array->items = wrealloc(array->items, sizeof(void*)*array->allocSize);
+    }
+
+    memcpy(array->items+array->itemCount, other->items,
+           sizeof(void*)*other->itemCount);
+    array->itemCount += other->itemCount;
+
+    return 1;
+}
+
+
+int
+WMAddToArray(WMArray *array, void *item)
+{
+    if (array->itemCount >= array->allocSize) {
+        array->allocSize += RESIZE_INCREMENT;
+        array->items = wrealloc(array->items, sizeof(void*)*array->allocSize);
+    }
+    array->items[array->itemCount] = item;
+
+    array->itemCount++;
+
+    return 1;
+}
+
+
+int
+WMInsertInArray(WMArray *array, unsigned index, void *item)
+{
+    wassertrv(index <= array->itemCount, 0);
+
+    if (array->itemCount >= array->allocSize) {
+        array->allocSize += RESIZE_INCREMENT;
+        array->items = wrealloc(array->items, sizeof(void*)*array->allocSize);
+    }
+    if (index < array->itemCount) {
+        memmove(array->items+index+1, array->items+index,
+                sizeof(void*)*(array->itemCount-index));
+    }
+    array->items[index] = item;
+
+    array->itemCount++;
+
+    return 1;
+}
+
+
 void*
-WMReplaceInArray(WMArray *array, unsigned int index, void *data)
+WMReplaceInArray(WMArray *array, unsigned index, void *item)
 {
     void *old;
 
-    wassertrv(index > array->length, 0);
+    wassertrv(index > array->itemCount, 0);
 
-    if (index == array->length) {
-        WMArrayAppend(array, data);
+    if (index == array->itemCount) {
+        WMAddToArray(array, item);
         return NULL;
     }
 
     old = array->items[index];
-    array->items[index] = data;
+    array->items[index] = item;
 
     return old;
 }
 
 
-void*
-WMGetArrayElement(WMArray *array, unsigned int index)
+static void
+deleteFromArray(WMArray *array, unsigned index)
 {
-    if (index >= array->length)
+    /*wassertr(index < array->itemCount);*/
+
+    if (index < array->itemCount-1) {
+        memmove(array->items+index, array->items+index+1,
+                sizeof(void*)*(array->itemCount-index-1));
+    }
+
+    array->itemCount--;
+}
+
+
+int
+WMDeleteFromArray(WMArray *array, unsigned index)
+{
+    if (index >= array->itemCount)
+        return 0;
+
+    if (array->destructor) {
+        array->destructor(array->items[index]);
+    }
+
+    deleteFromArray(array, index);
+
+    return 1;
+}
+
+
+int
+WMRemoveFromArray(WMArray *array, void *item)
+{
+    unsigned i;
+
+    for (i = 0; i < array->itemCount; i++) {
+        if (array->items[i] == item) {
+            return WMDeleteFromArray(array, i);
+        }
+    }
+
+    return 0;
+}
+
+
+void*
+WMGetFromArray(WMArray *array, unsigned index)
+{
+    if (index >= array->itemCount)
         return NULL;
 
     return array->items[index];
 }
 
 
-#if 0
-int
-WMAppendToArray(WMArray *array, void *data)
-{
-    if (array->length >= array->allocSize) {
-        array->allocSize += RESIZE_INCREMENT;
-        array->items = wrealloc(array->items, sizeof(void*)*array->allocSize);
-    }
-    array->items[array->length++] = data;
-
-    return 1;
-}
-#endif
-
-
-int
-WMInsertInArray(WMArray *array, unsigned index, void *data)
-{
-    wassertrv(index <= array->length, 0);
-
-    if (array->length >= array->allocSize) {
-        array->allocSize += RESIZE_INCREMENT;
-        array->items = wrealloc(array->items, sizeof(void*)*array->allocSize);
-    }
-    if (index < array->length)
-        memmove(array->items+index+1, array->items+index,
-                sizeof(void*)*(array->length-index));
-    array->items[index] = data;
-
-    array->length++;
-
-    return 1;
-}
-
-
-int
-WMAppendToArray(WMArray *array, void *data)
-{
-    return WMInsertInArray(array, array->length, data);
-}
-
-
-static void
-removeFromArray(WMArray *array, unsigned index)
-{
-    /*wassertr(index < array->length);*/
-
-    memmove(array->items+index, array->items+index+1,
-            sizeof(void*)*(array->length-index-1));
-
-    array->length--;
-}
-
-
-void
-WMDeleteFromArray(WMArray *array, unsigned index)
-{
-    wassertr(index < array->length);
-
-    if (array->destructor) {
-        array->destructor(array->items[index]);
-    }
-
-    removeFromArray(array, index);
-}
-
-
 void*
-WMArrayPop(WMArray *array)
+WMPopFromArray(WMArray *array)
 {
-    void *last = array->items[length-1];
+    void *last = array->items[array->itemCount-1];
 
-    removeFromArray(array, array->length-1);
+    deleteFromArray(array, array->itemCount-1);
 
     return last;
 }
 
 
 int
-WMIndexForArrayElement(WMArray *array, void *data)
+WMFindInArray(WMArray *array, int (*match)(void*, void*), void *cdata)
 {
     unsigned i;
 
-    for (i = 0; i < array->length; i++)
-        if (array->items[i] == data)
-            return i;
+    if (match!=NULL) {
+        for (i = 0; i < array->itemCount; i++) {
+            if ((*match)(array->items[i], cdata))
+                return i;
+        }
+    } else {
+        for (i = 0; i < array->itemCount; i++) {
+            if (array->items[i] == cdata)
+                return i;
+        }
+    }
 
-    return -1;
+    return WANotFound;
+}
+
+
+unsigned
+WMCountInArray(WMArray *array, void *item)
+{
+    unsigned i, count;
+
+    for (i=0, count=0; i<array->itemCount; i++) {
+        if (array->items[i] == item)
+            count++;
+    }
+
+    return count;
+}
+
+
+int
+WMSortArray(WMArray *array, int (*comparer)(const void*, const void*))
+{
+    qsort(array->items, array->itemCount, sizeof(void*), comparer);
+
+    return 1;
+}
+
+
+void
+WMMapArray(WMArray *array, void (*function)(void*, void*), void *data)
+{
+    unsigned i;
+
+    for (i=0; i<array->itemCount; i++) {
+        (*function)(array->items[i], data);
+    }
 }
 
 
