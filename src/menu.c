@@ -784,8 +784,37 @@ paintEntry(WMenu *menu, int index, int selected)
     if (entry->flags.indicator)
 	x += MENU_INDICATOR_SPACE + 2;
 
+#ifdef DRAWSTRING_PLUGIN
+    if (scr->drawstring_func[W_STRING_MTEXT]) {
+        Pixmap tmp_bg;
+        void **p;
+        tmp_bg = XCreatePixmap(dpy, win, w, menu->entry_height, DefaultDepth(dpy, DefaultScreen(dpy)));
+        XCopyArea(dpy, win, tmp_bg, textGC, 0, y, w, menu->entry_height, 0, 0);
+        p = wPluginPackData(4,
+                textGC,
+                scr->menu_entry_font,
+                scr->drawstring_func[W_STRING_MTEXT]->data,
+                /*menu->menu_texture_data,*/
+                tmp_bg,
+                "extendable");
+        scr->drawstring_func[W_STRING_MTEXT]->proc.drawString(
+                scr->drawstring_func[W_STRING_MTEXT]->arg,
+                win,
+                x, y,
+                menu->frame->titlebar->width, menu->entry_height,
+                entry->text, p);
+        XFreePixmap(dpy, tmp_bg);
+        free(p);
+#undef DRAWSTRING_CURRENT_STATE
+    } else {
+        WMDrawString(scr->wmscreen, win, textGC, scr->menu_entry_font,
+                x, 3 + y + wPreferences.menu_text_clearance, entry->text, strlen(entry->text));
+    }
+
+#else
     WMDrawString(scr->wmscreen, win, textGC, scr->menu_entry_font, 
 		 x, 3 + y + wPreferences.menu_text_clearance, entry->text, strlen(entry->text));
+#endif
 
     if (entry->cascade>=0) {
 	/* draw the cascade indicator */

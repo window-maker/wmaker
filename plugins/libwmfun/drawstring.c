@@ -272,6 +272,7 @@ logicalCombineArea(RImage *bg, RImage *image,
         int _dx, int _dy,
         int opaquueness) {
 
+    /*
     if (_dx < 0) {
         _sx = -_dx;
         _sw = _sw + _dx;
@@ -291,6 +292,7 @@ logicalCombineArea(RImage *bg, RImage *image,
     if (_dy + _sh > bg->height) {
         _sh = bg->height - _dy;
     }
+    */
 
     if (_sh > 0 && _sw > 0) {
         if (opaquueness) {
@@ -332,7 +334,7 @@ drawFreeTypeString (proplist_t pl, Drawable d,
     }
 
     if (rimg) {
-        for (i = 0, j = 3; i < strlen(text); i++) {
+        for (i = 0, j = x; i < strlen(text); i++) {
             if (!data->glyphs_array[text[i]]) {
                 data->glyphs_array[text[i]] = renderChar(data->face, (FT_ULong)text[i], &data->color);
                 data->glyphs_shadow_array[text[i]] = renderChar(data->face, (FT_ULong)text[i], &black_color);
@@ -342,22 +344,30 @@ drawFreeTypeString (proplist_t pl, Drawable d,
                 int _dx, _dy, _sw, _sh;
 
                 _dx = j + data->glyphs_array[text[i]]->left;
-                _dy = rimg->height - data->glyphs_array[text[i]]->top ;
+                _dy = (height + data->face->size->metrics.y_ppem)/2 - data->glyphs_array[text[i]]->top;
                 _sw = data->glyphs_array[text[i]]->image->width;
                 _sh = data->glyphs_array[text[i]]->image->height;
 
                 logicalCombineArea(rimg, data->glyphs_shadow_array[text[i]]->image,
-                        0, 0, _sw, _sh, _dx-2, _dy-2, 100);
+                        0, 0, _sw, _sh, _dx-2, _dy+2, 100);
                 logicalCombineArea(rimg, data->glyphs_array[text[i]]->image,
-                        0, 0, _sw, _sh, _dx-3, _dy-3, 0);
+                        0, 0, _sw, _sh, _dx-3, _dy+1, 0);
 
                 j += data->glyphs_array[text[i]]->advance_x >> 6;
             }
         }
 
         RConvertImage(rc, rimg, &pixmap);
-        XCopyArea(ds_dpy, pixmap, d, gc, 0, 0, rimg->width, rimg->height, 0, 0);
+        XCopyArea(ds_dpy, pixmap, d, gc, 0, 0, rimg->width, height, 0, y);
         XFreePixmap(ds_dpy, pixmap);
+        /*
+        _debug("%d\n", height);
+        */
+        /*
+        i = (height + data->face->size->metrics.y_ppem)/2 - data->face->size->metrics.y_ppem;
+        XDrawLine(ds_dpy, d, gc, 5, y + i, 100, y + data->face->size->metrics.y_ppem);
+        XDrawLine(ds_dpy, d, gc, 100, y + i, 5, y + data->face->size->metrics.y_ppem);
+        */
 
         RDestroyImage(rimg);
     }

@@ -652,14 +652,17 @@ WDefaultEntry optionList[] = {
     {"MenuTitleColor", "white",             NULL,
         NULL,           getTextRenderer,    setMenuTitleColor
     },
+    {"MenuTextColor",	"black",       		NULL,
+	  NULL,				getTextRenderer,	setMenuTextColor
+    },
 #else
     {"MenuTitleColor",	"white",       		NULL,
 	  NULL,				getColor,	setMenuTitleColor
     },
-#endif
     {"MenuTextColor",	"black",       		NULL,
 	  NULL,				getColor,	setMenuTextColor
     },
+#endif
     {"MenuDisabledColor", "\"#616161\"",       	NULL,
 	  NULL,				getColor,	setMenuDisabledColor
     },

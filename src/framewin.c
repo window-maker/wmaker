@@ -1093,16 +1093,17 @@ wFrameWindowPaint(WFrameWindow *fwin)
         scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->proc.drawString(
                 scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->arg,
                 fwin->titlebar->window,
-                x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE,
+                x, 0, 
                 fwin->titlebar->width, fwin->top_width,
                 fwin->title, p);
         free(p);
     } else {
         WMDrawString(scr->wmscreen, fwin->titlebar->window, 
                 *fwin->title_gc, *fwin->font,
-                x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE, 
+                x, ((signed)fwin->top_width - (signed)WMFontHeight(*fwin->font))/2, 
                 title, titlelen);
     }
+#undef DRAWSTRING_CURRENT_STATE
 #else
     WMDrawString(scr->wmscreen, fwin->titlebar->window, 
             *fwin->title_gc, *fwin->font, x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE, 
