@@ -247,8 +247,13 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
         iconWidth = width / WMGetArrayItemCount(panel->windows) - ICON_EXTRASPACE;
     }
     
-    if (iconWidth < 16 || WMGetArrayItemCount(panel->windows) == 0)
-    {
+    if (WMGetArrayItemCount(panel->windows) == 0) {
+        WMFreeArray(panel->windows);
+        wfree(panel);
+        return NULL;
+    }
+    
+    if (iconWidth < 16) {
         /* if there are too many windows, don't bother trying to show the panel */
 
         return panel; 
