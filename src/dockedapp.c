@@ -66,7 +66,6 @@ typedef struct _AppSettingsPanel {
     WMButton *browseBtn;
 
     WMButton *autoLaunchBtn;
-    WMButton *omnipresentBtn;
 
     WMButton *okBtn;
     WMButton *cancelBtn;
@@ -194,7 +193,7 @@ panelBtnCallback(WMWidget *self, void *data)
     WMButton *btn = self;
     AppSettingsPanel *panel = (AppSettingsPanel*)data;
     char *text;
-    int done, omnipresent;
+    int done;
 
     done = 1;
     if (panel->okBtn == btn) {
@@ -245,6 +244,7 @@ panelBtnCallback(WMWidget *self, void *data)
 	updateDNDCommand(panel->editedIcon, text);
 #endif
 
+#ifdef dan_remove_later
         omnipresent = WMGetButtonSelected(panel->omnipresentBtn);
         if (wClipMakeIconOmnipresent(panel->editedIcon, omnipresent) ==
             WO_FAILED) {
@@ -257,6 +257,7 @@ panelBtnCallback(WMWidget *self, void *data)
                            _("OK"), NULL, NULL);
             return;
         }
+#endif
 
 	panel->editedIcon->auto_launch =
 	    WMGetButtonSelected(panel->autoLaunchBtn);
@@ -268,7 +269,7 @@ panelBtnCallback(WMWidget *self, void *data)
 
 
 #define PWIDTH	295
-#define PHEIGHT	375
+#define PHEIGHT	345
 
 
 void
@@ -312,19 +313,9 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
 		    _("Start when WindowMaker is started"));
     WMSetButtonSelected(panel->autoLaunchBtn, aicon->auto_launch);
 
-    panel->omnipresentBtn = WMCreateSwitchButton(panel->win);
-    WMResizeWidget(panel->omnipresentBtn, PWIDTH-30, 20);
-    WMMoveWidget(panel->omnipresentBtn, 15, 102);
-    WMSetButtonText(panel->omnipresentBtn,
-		    _("Omnipresent application icon"));
-    WMSetButtonEnabled(panel->omnipresentBtn,
-                       aicon->dock!=scr->dock && aicon!=scr->clip_icon);
-    WMSetButtonSelected(panel->omnipresentBtn, (aicon->omnipresent ||
-                         aicon->dock==scr->dock || aicon==scr->clip_icon));
-
     panel->commandFrame = WMCreateFrame(panel->win);
     WMResizeWidget(panel->commandFrame, 275, 50);
-    WMMoveWidget(panel->commandFrame, 10, 130);
+    WMMoveWidget(panel->commandFrame, 10, 105);
     WMSetFrameTitle(panel->commandFrame, _("Application path and arguments"));
 
     panel->commandField = WMCreateTextField(panel->commandFrame);
@@ -334,7 +325,7 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
 
     panel->dndCommandFrame = WMCreateFrame(panel->win);
     WMResizeWidget(panel->dndCommandFrame, 275, 70);
-    WMMoveWidget(panel->dndCommandFrame, 10, 190);
+    WMMoveWidget(panel->dndCommandFrame, 10, 165);
     WMSetFrameTitle(panel->dndCommandFrame,
 		   _("Command for files dropped with DND"));
 
@@ -357,7 +348,7 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
 
     panel->iconFrame = WMCreateFrame(panel->win);
     WMResizeWidget(panel->iconFrame, 275, 50);
-    WMMoveWidget(panel->iconFrame, 10, 270);
+    WMMoveWidget(panel->iconFrame, 10, 245);
     WMSetFrameTitle(panel->iconFrame, _("Icon Image"));
 
     panel->iconField = WMCreateTextField(panel->iconFrame);
@@ -376,13 +367,13 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
 
     panel->okBtn = WMCreateCommandButton(panel->win);
     WMResizeWidget(panel->okBtn, 80, 26);
-    WMMoveWidget(panel->okBtn, 200, 333);
+    WMMoveWidget(panel->okBtn, 200, 308);
     WMSetButtonText(panel->okBtn, _("OK"));
     WMSetButtonAction(panel->okBtn, panelBtnCallback, panel);
 
     panel->cancelBtn = WMCreateCommandButton(panel->win);
     WMResizeWidget(panel->cancelBtn, 80, 26);
-    WMMoveWidget(panel->cancelBtn, 110, 333);
+    WMMoveWidget(panel->cancelBtn, 110, 308);
     WMSetButtonText(panel->cancelBtn, _("Cancel"));
     WMSetButtonAction(panel->cancelBtn, panelBtnCallback, panel);
 
