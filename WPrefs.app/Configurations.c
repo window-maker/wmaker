@@ -501,7 +501,7 @@ storeData(_Panel *panel)
     SetBoolForKey(WMGetButtonSelected(panel->supB), "Superfluous");
     SetBoolForKey(!WMGetButtonSelected(panel->sfxB), "DisableSound");
 
-    SetBoolForKey(!WMGetButtonSelected(panel->smoB), "SmoothWorkspaceBack");
+    SetBoolForKey(WMGetButtonSelected(panel->smoB), "SmoothWorkspaceBack");
     
     SetBoolForKey(WMGetButtonSelected(panel->dithB), "DisableDithering");
     SetIntegerForKey(WMGetSliderValue(panel->dithS), "ColormapSize");

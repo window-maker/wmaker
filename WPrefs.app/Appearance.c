@@ -269,6 +269,35 @@ static char * hand_xpm[] = {
 
 
 
+static char *sampleColors[] = {
+    "black",
+	"#292929",
+	"#525252",
+	"#848484",
+	"#adadad",
+	"#d6d6d6",
+	"white",
+	"#d6d68c",
+	"#d6a57b",
+	"#8cd68c",
+	"#8cd6ce",
+	"#d68c8c",
+	"#8c9cd6",
+	"#bd86d6",
+	"#d68cbd",
+	"#d64a4a",
+	"#4a5ad6",
+	"#4ad6ce",
+	"#4ad65a",
+	"#ced64a",
+	"#d6844a",
+	"#8ad631",
+	"#ce29c6",
+	"#ce2973",
+	"black"
+};
+
+
 static char *textureOptions[] = {
     "FTitleBack", "(solid, black)", "[Focused]", 
 	"UTitleBack", "(solid, gray)", "[Unfocused]",
@@ -336,7 +365,7 @@ static WMRect previewPositions[] = {
 #define PMTITLE		4
     {{30,120},{90,20}},
 #define PMITEM		5
-    {{30,140},{90,18*4}},
+    {{30,140},{90,20*4}},
 #define PICON		6
     {{155,130},{64,64}}
 };
@@ -348,10 +377,10 @@ static WMRect previewColorPositions[] = {
     {{30,40},{190,20}},
     {{30,70},{190,20}},
     {{30,120},{90,20}},
-    {{30,140},{90,18}},
-    {{30,158},{90,18}},
-    {{30,176},{90,18}},
-    {{30,194},{90,18}},
+    {{30,140},{90,20}},
+    {{30,160},{90,20}},
+    {{30,180},{90,20}},
+    {{30,200},{90,20}},
     {{155,130},{64,64}},
     {{155,130},{64,64}},
     {{155,130},{64,64}},
@@ -473,10 +502,9 @@ drawMenuBevel(RImage *img)
 	ROperateLine(img, RSubtractOperation, 0, i*iheight-2,
 		     img->width-1, i*iheight-2, &mid);
 	
-	RDrawLine(img, 0, i*iheight-1,
-		  img->width-1, i*iheight-1, &dark);
+	RDrawLine(img, 0, i*iheight-1, img->width-1, i*iheight-1, &dark);
 	
-	ROperateLine(img, RAddOperation, 1, i*iheight, 
+	ROperateLine(img, RAddOperation, 1, i*iheight,
 		     img->width-2, i*iheight, &light);
     }
 }
@@ -688,8 +716,7 @@ renderMenu(_Panel *panel, proplist_t texture, int width, int iheight)
 	    
 	pix = XCreatePixmap(dpy, tmp, width, iheight*4, WMScreenDepth(scr));
 	for (i = 0; i < 4; i++) {
-	    XCopyArea(dpy, tmp, pix, gc, 0, 0, width, iheight,
-		      0, iheight*i);
+	    XCopyArea(dpy, tmp, pix, gc, 0, 0, width, iheight, 0, iheight*i);
 	}
 	XFreePixmap(dpy, tmp);
 	break;
@@ -801,7 +828,7 @@ updatePreviewBox(_Panel *panel, int elements)
 	colorUpdate |= MITEM_COL|MDISAB_COL|MHIGH_COL|MHIGHT_COL;
     }
     if (elements & (1<<PMITEM|1<<PMTITLE)) {
-	XDrawLine(dpy, panel->preview, gc, 29, 120, 29, 120+18*4+20);
+	XDrawLine(dpy, panel->preview, gc, 29, 120, 29, 120+20*4+20);
 	XDrawLine(dpy, panel->preview, gc, 29, 119, 119, 119);
     }
     if (elements & (1<<PICON)) {
@@ -1330,6 +1357,41 @@ fillTextureList(WMList *lPtr)
 }
 
 
+static void
+fillColorList(_Panel *panel)
+{
+    WMColor *color;
+    proplist_t list;
+    WMUserDefaults *udb = WMGetStandardUserDefaults();
+    WMScreen *scr = WMWidgetScreen(panel->frame);
+    int i;
+    
+    list = WMGetUDObjectForKey(udb, "ColorList");
+    if (!list) {
+	for (i = 0; i < 24; i++) {
+	    color = WMCreateNamedColor(scr, sampleColors[i], False);
+	    if (!color)
+		continue;
+	    WMSetColorWellColor(panel->sampW[i], color);
+	    WMReleaseColor(color);
+	}
+    } else {
+	proplist_t c;
+
+	for (i = 0; i < WMIN(24, PLGetNumberOfElements(list)); i++) {
+	    c = PLGetArrayElement(list, i);
+	    if (!c || !PLIsString(c))
+		continue;
+	    color = WMCreateNamedColor(scr, PLGetString(c), False);
+	    if (!color)
+		continue;
+	    WMSetColorWellColor(panel->sampW[i], color);
+	    WMReleaseColor(color);
+	}
+    }
+}
+
+
 /*************************************************************************/
 
 
@@ -1346,9 +1408,9 @@ changeColorPage(WMWidget *w, void *data)
 	{5, 70},
 	{5, 120},
 	{5, 140},
-	{5, 158},
-	{5, 176},
-	{5, 176},
+	{5, 160},
+	{5, 180},
+	{5, 180},
 	{130, 140},
 	{130, 140},
 	{130, 140},
@@ -1431,22 +1493,22 @@ updateColorPreviewBox(_Panel *panel, int elements)
 		  WALeft, _("Menu Title"));
     }
     if (elements & MITEM_COL) {
-	paintText(scr, d, panel->colors[4], panel->normalFont, 30, 140, 90, 18,
+	paintText(scr, d, panel->colors[4], panel->normalFont, 30, 140, 90, 20,
 		  WALeft, _("Normal Item"));
-	paintText(scr, d, panel->colors[4], panel->normalFont, 30, 194, 90, 18,
+	paintText(scr, d, panel->colors[4], panel->normalFont, 30, 200, 90, 20,
 		  WALeft, _("Normal Item"));
     }
     if (elements & MDISAB_COL) {
-	paintText(scr, d, panel->colors[5], panel->normalFont, 30, 158, 90, 18,
+	paintText(scr, d, panel->colors[5], panel->normalFont, 30, 160, 90, 20,
 		  WALeft, _("Disabled Item"));
     }
     if (elements & MHIGH_COL) {
 	XFillRectangle(WMScreenDisplay(scr), d, WMColorGC(panel->colors[6]),
-		       31, 177, 87, 15);
+		       31, 181, 87, 17);
 	elements |= MHIGHT_COL;
     }
     if (elements & MHIGHT_COL) {
-	paintText(scr, d, panel->colors[7], panel->normalFont, 30, 176, 90, 18,
+	paintText(scr, d, panel->colors[7], panel->normalFont, 30, 180, 90, 20,
 		  WALeft, _("Highlighted"));
     }
 /*
@@ -1479,7 +1541,9 @@ colorWellObserver(void *self, WMNotification *n)
 
     p = WMGetPopUpButtonSelectedItem(panel->colP);
 
-    panel->colors[p] = WMGetColorWellColor(panel->colW);
+    WMReleaseColor(panel->colors[p]);
+
+    panel->colors[p] = WMRetainColor(WMGetColorWellColor(panel->colW));
 
     updateColorPreviewBox(panel, 1<<p);
 }
@@ -1771,10 +1835,10 @@ createPanel(Panel *p)
     for (i = 0; i < 4; i++) {
 	int j;
 	for (j = 0; j < 6; j++) {
-	    panel->sampW[i] = WMCreateColorWell(panel->colF);
-	    WMResizeWidget(panel->sampW[i], 22, 22);
-	    WMMoveWidget(panel->sampW[i], 130 + i*22, 40 + j*22);
-	    WSetColorWellBordered(panel->sampW[i], False);
+	    panel->sampW[i+j*4] = WMCreateColorWell(panel->colF);
+	    WMResizeWidget(panel->sampW[i+j*4], 22, 22);
+	    WMMoveWidget(panel->sampW[i+j*4], 130 + i*22, 40 + j*22);
+	    WSetColorWellBordered(panel->sampW[i+j*4], False);
 	}
     }
 
@@ -1873,6 +1937,8 @@ createPanel(Panel *p)
     changePage(panel->secP, panel);
 
     fillTextureList(panel->texLs);
+
+    fillColorList(panel);
 
     panel->texturePanel = CreateTexturePanel(panel->win);
 }
@@ -2016,10 +2082,10 @@ prepareForClose(_Panel *panel)
 {
     proplist_t textureList;
     proplist_t texture;
-    int i;
     TextureListItem *titem;
     WMListItem *item;
     WMUserDefaults *udb = WMGetStandardUserDefaults();
+    int i;
 
     textureList = PLMakeArrayFromElements(NULL, NULL);
 
@@ -2037,6 +2103,21 @@ prepareForClose(_Panel *panel)
     }
 
     WMSetUDObjectForKey(udb, textureList, "TextureList");
+    PLRelease(textureList);
+    
+    /* store list of colors */
+    textureList = PLMakeArrayFromElements(NULL, NULL);
+    for (i = 0; i < 24; i++) {
+	WMColor *color;
+	char *str;
+
+	color = WMGetColorWellColor(panel->sampW[i]);
+
+	str = WMGetColorRGBDescription(color);
+	PLAppendArrayElement(textureList, PLMakeString(str));
+	free(str);
+    }
+    WMSetUDObjectForKey(udb, textureList, "ColorList");
     PLRelease(textureList);
 
     WMSynchronizeUserDefaults(udb);
