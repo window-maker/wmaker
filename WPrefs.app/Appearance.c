@@ -434,7 +434,7 @@ isPixmap(proplist_t prop)
 {
     proplist_t p;
     char *s;
-    
+
     p = PLGetArrayElement(prop, 0);
     s = PLGetString(p);
     if (strcasecmp(&s[1], "pixmap")==0)
@@ -1970,7 +1970,8 @@ setupTextureFor(WMList *list, char *key, char *defValue, char *title,
 
     titem->title = wstrdup(title);
     titem->prop = GetObjectForKey(key);
-    if (!titem->prop) {
+    if (!titem->prop || !PLIsArray(titem->prop)) {
+        /* Maybe also give a error message to stderr that the entry is bad? */
 	titem->prop = PLGetProplistWithDescription(defValue);
     } else {
 	PLRetain(titem->prop);
