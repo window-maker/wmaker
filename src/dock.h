@@ -87,7 +87,7 @@ Bool wDockFindFreeSlot(WDock *dock, int *req_x, int *req_y);
 void wDockDetach(WDock *dock, WAppIcon *icon);
 
 void wDockTrackWindowLaunch(WDock *dock, Window window);
-WAppIcon *wDockFindIconFor(WDock *dock, Window window);
+WAppIcon *wDockFindIconForWindow(WDock *dock, Window window);
 void wDockDoAutoLaunch(WDock *dock, int workspace);
 void wDockLaunchWithState(WDock *dock, WAppIcon *btn, WSavedState *state);
 

@@ -3097,7 +3097,7 @@ wDockFinishLaunch(WDock *dock, WAppIcon *icon)
 
 
 WAppIcon*
-wDockFindIconFor(WDock *dock, Window window)
+wDockFindIconForWindow(WDock *dock, Window window)
 {
     WAppIcon *icon;
     int i;

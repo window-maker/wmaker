@@ -111,10 +111,10 @@ findDockIconFor(WDock *dock, Window main_window)
 {
     WAppIcon *aicon = NULL;
 
-    aicon = wDockFindIconFor(dock, main_window);
+    aicon = wDockFindIconForWindow(dock, main_window);
     if (!aicon) {
         wDockTrackWindowLaunch(dock, main_window);
-        aicon = wDockFindIconFor(dock, main_window);
+        aicon = wDockFindIconForWindow(dock, main_window);
     }
     return aicon;
 }
