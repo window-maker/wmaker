@@ -6,10 +6,9 @@ pkgdatadir  = $(datadir)/@PACKAGE@
 bin_PROGRAMS = wxcopy wxpaste wdwrite wdread getstyle setstyle convertfonts \
 	seticons geticonset wmsetbg wmsetup wmagnify
 
-bin_SCRIPTS = wmaker.inst wm-oldmenu2new wsetfont wmchlocale wkdemenu.pl \
-	wcopy wpaste
+bin_SCRIPTS = wmaker.inst wm-oldmenu2new wmchlocale wkdemenu.pl wcopy wpaste
 
-EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new wsetfont directjpeg.c \
+EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new directjpeg.c \
 		wkdemenu.pl wmchlocale.in wcopy wpaste
 
 INCLUDES = $(DFLAGS) -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib \

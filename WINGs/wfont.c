@@ -362,36 +362,30 @@ WMCopyFontWithStyle(WMScreen *scrPtr, WMFont *font, WMFontStyle style)
     if (!font)
         return NULL;
 
+    /* It's enough to add italic to slant, even if the font has no italic
+     * variant, but only oblique. This is because fontconfig will actually
+     * return the closest match font to what we requested which is the
+     * oblique font. Same goes for using bold for weight.
+     */
     pattern = FcNameParse(WMGetFontName(font));
     switch (style) {
     case WFSNormal:
         FcPatternDel(pattern, FC_WEIGHT);
         FcPatternDel(pattern, FC_SLANT);
-        //FcPatternAddString(pattern, FC_WEIGHT, "medium");
-        //FcPatternAddString(pattern, FC_WEIGHT, "light");
-        //FcPatternAddString(pattern, FC_SLANT, "roman");
         break;
     case WFSBold:
         FcPatternDel(pattern, FC_WEIGHT);
         FcPatternAddString(pattern, FC_WEIGHT, "bold");
-        FcPatternAddString(pattern, FC_WEIGHT, "demibold");
-        FcPatternAddString(pattern, FC_WEIGHT, "black");
         break;
     case WFSItalic:
         FcPatternDel(pattern, FC_SLANT);
         FcPatternAddString(pattern, FC_SLANT, "italic");
-        FcPatternAddString(pattern, FC_SLANT, "oblique");
-        //FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_ITALIC);
-        //FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_OBLIQUE);
         break;
     case WFSBoldItalic:
         FcPatternDel(pattern, FC_WEIGHT);
         FcPatternDel(pattern, FC_SLANT);
         FcPatternAddString(pattern, FC_WEIGHT, "bold");
-        FcPatternAddString(pattern, FC_WEIGHT, "demibold");
-        FcPatternAddString(pattern, FC_WEIGHT, "black");
         FcPatternAddString(pattern, FC_SLANT, "italic");
-        FcPatternAddString(pattern, FC_SLANT, "oblique");
         break;
     }
 
@@ -402,6 +396,4 @@ WMCopyFontWithStyle(WMScreen *scrPtr, WMFont *font, WMFontStyle style)
 
     return copy;
 }
-
-
 
