@@ -77,6 +77,10 @@ changes since wmaker 0.62.1:
   one by one.
 - fixed a bug with mouse wheels scrolling in scrollers even with the widget
   fully visible.
+- Fixed a memory leak (the destroy function for a view was never called and
+  as a result the shaded windows didn't go away when closed. The non-shaded
+  windows were unmapped on close but not destroyed either so they only
+  apparently went away, but continued to use memory).
 
 
 changes since wmaker 0.62.0:
