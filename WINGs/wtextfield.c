@@ -236,6 +236,13 @@ lostHandler(WMWidget *w, Atom selection)
     paintTextField(tPtr);
 }
 
+static void
+_notification(void *observerData, WMNotification *notification)
+{
+    WMTextField *to = (WMTextField*)observerData;
+    WMTextField *tw = (WMTextField*)WMGetNotificationClientData(notification);
+    if (to != tw) lostHandler(to, 0);
+}
 
 WMTextField*
 WMCreateTextField(WMWidget *parent)
@@ -285,6 +292,7 @@ WMCreateTextField(WMWidget *parent)
     
     WMCreateSelectionHandler(tPtr, XA_PRIMARY, CurrentTime, requestHandler,
              lostHandler, NULL);
+    WMAddNotificationObserver(_notification, tPtr, "_lostOwnership", tPtr);
 
 
     tPtr->flags.cursorOn = 1;
@@ -1242,6 +1250,13 @@ handleTextFieldActionEvents(XEvent *event, void *data)
         if (move) {
             XSetSelectionOwner(tPtr->view->screen->display,
                        XA_PRIMARY, tPtr->view->window, CurrentTime);
+            {
+                WMNotification *notif = WMCreateNotification("_lostOwnership",
+                        NULL,tPtr);
+                puts("notify it");
+                WMPostNotification(notif);
+                WMReleaseNotification(notif);
+            }
         }
 	break;
 
@@ -1339,6 +1354,7 @@ destroyTextField(TextField *tPtr)
 
     WMReleaseFont(tPtr->font);
     WMDeleteSelectionHandler(tPtr, XA_PRIMARY);
+    WMRemoveNotificationObserver(tPtr);
 
     if (tPtr->text)
 	free(tPtr->text);
