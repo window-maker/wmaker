@@ -310,7 +310,8 @@ wGNOMECheckClientHints(WWindow *wwin, int *layer, int *workspace)
 	
 	XFree(data);
 	
-	if (flags & (WIN_HINTS_SKIP_FOCUS|WIN_HINTS_SKIP_WINLIST)) {
+	if (flags & (WIN_HINTS_SKIP_FOCUS|WIN_HINTS_SKIP_WINLIST
+				|WIN_HINTS_SKIP_TASKBAR)) {
 	    wwin->client_flags.skip_window_list = 1;
 	}
 
