@@ -739,6 +739,46 @@ void WMEnqueueCoalesceNotification(WMNotificationQueue *queue,
 
 /*......................................................................*/
 
+/* Property Lists handling */
+
+void WMSetPropListStringComparer(WMCompareDataProc *comparer);
+
+WMPropList* WMCreatePropListString(char *str);
+
+WMPropList* WMCreatePropListDataWithBytes(unsigned char *bytes,
+                                          unsigned int length);
+WMPropList* WMCreatePropListDataWithBytesNoCopy(unsigned char *bytes,
+                                                unsigned int length,
+                                                WMFreeDataProc *destructor);
+
+WMPropList* WMCreatePropListDataWithData(WMData *data);
+
+WMPropList* WMCreatePropListArrayFromElements(WMPropList *elem, ...);
+
+WMPropList* WMCreatePropListDictionaryFromEntries(WMPropList *key,
+                                                  WMPropList *value, ...);
+
+WMPropList* WMRetainPropList(WMPropList *plist);
+
+void WMReleasePropList(WMPropList *plist);
+
+Bool WMPropListIsString(WMPropList *plist);
+
+Bool WMPropListIsData(WMPropList *plist);
+
+Bool WMPropListIsArray(WMPropList *plist);
+
+Bool WMPropListIsDictionary(WMPropList *plist);
+
+Bool WMPropListIsSimple(WMPropList *plist);
+
+Bool WMPropListIsCompound(WMPropList *plist);
+
+Bool WMArePropListsEqual(WMPropList *plist, WMPropList *other);
+
+
+/*......................................................................*/
+
 WMUserDefaults* WMGetStandardUserDefaults(void);
 
 WMUserDefaults* WMGetDefaultsFromPath(char *path);

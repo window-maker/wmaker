@@ -1,6 +1,8 @@
 
 
 #include <string.h>
+#include <stdarg.h>
+
 #include "WUtil.h"
 #include "wconfig.h"
 
@@ -29,18 +31,26 @@ typedef struct W_PropList {
 
 
 
+
+static unsigned hashPropList(WMPropList *plist);
+
+
+
+
+typedef unsigned (*hashFunc)(const void*);
+typedef Bool (*isEqualFunc)(const void*, const void*);
+typedef void* (*retainFunc)(const void*);
+typedef void (*releaseFunc)(const void*);
+
+static const WMHashTableCallbacks WMPropListHashCallbacks = {
+    (hashFunc)hashPropList,
+    (isEqualFunc)WMArePropListsEqual,
+    (retainFunc)NULL,
+    (releaseFunc)NULL
+};
+
 static WMCompareDataProc *strCmp = (WMCompareDataProc*) strcmp;
 
-
-
-void
-WMSetPropListStringComparer(WMCompareDataProc *comparer)
-{
-    if (!comparer)
-        strCmp = (WMCompareDataProc*) strcmp;
-    else
-        strCmp = comparer;
-}
 
 
 static unsigned
@@ -76,6 +86,16 @@ hashPropList(WMPropList *plist)
 }
 
 
+void
+WMSetPropListStringComparer(WMCompareDataProc *comparer)
+{
+    if (!comparer)
+        strCmp = (WMCompareDataProc*) strcmp;
+    else
+        strCmp = comparer;
+}
+
+
 WMPropList*
 WMCreatePropListString(char *str)
 {
@@ -83,7 +103,7 @@ WMCreatePropListString(char *str)
 
     wassertrv(str!=NULL, NULL);
 
-    plist = (WMPropList*)wmalloc(sizeof(WMPropList));
+    plist = (WMPropList*)wmalloc(sizeof(W_PropList));
 
     plist->type = WPLString;
     plist->d.string = wstrdup(str);
@@ -98,9 +118,9 @@ WMCreatePropListDataWithBytes(unsigned char *bytes, unsigned int length)
 {
     WMPropList *plist;
 
-    wassertrv(length!=0 && bytes!=NULL, NULL);
+    wassertrv(bytes!=NULL, NULL);
 
-    plist = (WMPropList*)wmalloc(sizeof(WMPropList));
+    plist = (WMPropList*)wmalloc(sizeof(W_PropList));
 
     plist->type = WPLData;
     plist->d.data = WMCreateDataWithBytes(bytes, length);
@@ -118,7 +138,7 @@ WMCreatePropListDataWithBytesNoCopy(unsigned char *bytes, unsigned int length,
 
     wassertrv(length!=0 && bytes!=NULL, NULL);
 
-    plist = (WMPropList*)wmalloc(sizeof(WMPropList));
+    plist = (WMPropList*)wmalloc(sizeof(W_PropList));
 
     plist->type = WPLData;
     plist->d.data = WMCreateDataWithBytesNoCopy(bytes, length, destructor);
@@ -135,7 +155,7 @@ WMCreatePropListDataWithData(WMData *data)
 
     wassertrv(data!=NULL, NULL);
 
-    plist = (WMPropList*)wmalloc(sizeof(WMPropList));
+    plist = (WMPropList*)wmalloc(sizeof(W_PropList));
 
     plist->type = WPLData;
     plist->d.data = WMRetainData(data);
@@ -145,8 +165,224 @@ WMCreatePropListDataWithData(WMData *data)
 }
 
 
+WMPropList*
+WMCreatePropListArrayFromElements(WMPropList *elem, ...)
+{
+    WMPropList *plist, *nelem;
+    va_list ap;
+
+    plist = (WMPropList*)wmalloc(sizeof(W_PropList));
+    plist->type = WPLArray;
+    plist->d.array = WMCreateArray(4);
+    plist->retainCount = 1;
+
+    if (!elem)
+        return plist;
+
+    WMAddToArray(plist->d.array, WMRetainPropList(elem));
+
+    va_start(ap, elem);
+
+    while (1) {
+        nelem = va_arg(ap, WMPropList*);
+        if(!nelem) {
+            va_end(ap);
+            return plist;
+        }
+        WMAddToArray(plist->d.array, WMRetainPropList(nelem));
+    }
+}
+
+
+WMPropList*
+WMCreatePropListDictionaryFromEntries(WMPropList *key, WMPropList *value, ...)
+{
+}
+
+
+WMPropList*
+WMRetainPropList(WMPropList *plist)
+{
+    WMPropList *key, *value;
+    WMHashEnumerator e;
+    int i;
+
+    plist->retainCount++;
+
+    switch(plist->type) {
+    case WPLString:
+    case WPLData:
+        break;
+    case WPLArray:
+        for (i=0; i<WMGetArrayItemCount(plist->d.array); i++) {
+            WMRetainPropList(WMGetFromArray(plist->d.array, i));
+        }
+        break;
+    case WPLDictionary:
+        e = WMEnumerateHashTable(plist->d.dict);
+        while (WMNextHashEnumeratorItemAndKey(&e, (void**)&value, (void**)&key)) {
+            WMRetainPropList(key);
+            WMRetainPropList(value);
+        }
+        break;
+    default:
+        wwarning(_("Used proplist functions on non-WMPropLists objects"));
+        wassertrv(False, NULL);
+    }
+
+    return plist;
+}
+
+
+#if 0
+void
+WMReleasePropList(WMPropList *plist)
+{
+    WMPropList *key, *value;
+    WMHashEnumerator e;
+    int i;
+
+    plist->retainCount--;
+
+    switch(plist->type) {
+    case WPLString:
+        if (plist->retainCount < 1) {
+            wfree(plist->d.string);
+            wfree(plist);
+        }
+        break;
+    case WPLData:
+        if (plist->retainCount < 1) {
+            WMReleaseData(plist->d.data);
+            wfree(plist);
+        }
+        break;
+    case WPLArray:
+        for (i=0; i<WMGetArrayItemCount(plist->d.array); i++) {
+            WMReleasePropList(WMGetFromArray(plist->d.array, i));
+        }
+        if (plist->retainCount < 1) {
+            WMFreeArray(plist->d.array);
+            wfree(plist);
+        }
+        break;
+    case WPLDictionary:
+        e = WMEnumerateHashTable(plist->d.dict);
+        while (WMNextHashEnumeratorItemAndKey(&e, (void**)&value, (void**)&key)) {
+            WMReleasePropList(key);
+            WMReleasePropList(value);
+        }
+        if (plist->retainCount < 1) {
+            WMFreeHashTable(plist->d.dict);
+            wfree(plist);
+        }
+        break;
+    default:
+        wwarning(_("Used proplist functions on non-WMPropLists objects"));
+        wassertr(False);
+    }
+}
+#else
+
+void
+WMReleasePropList(WMPropList *plist)
+{
+    WMPropList *key, *value;
+    WMHashEnumerator e;
+    int i;
+
+    plist->retainCount--;
+
+    switch(plist->type) {
+    case WPLString:
+    case WPLData:
+        break;
+    case WPLArray:
+        for (i=0; i<WMGetArrayItemCount(plist->d.array); i++) {
+            WMReleasePropList(WMGetFromArray(plist->d.array, i));
+        }
+        break;
+    case WPLDictionary:
+        e = WMEnumerateHashTable(plist->d.dict);
+        while (WMNextHashEnumeratorItemAndKey(&e, (void**)&value, (void**)&key)) {
+            WMReleasePropList(key);
+            WMReleasePropList(value);
+        }
+        break;
+    default:
+        wwarning(_("Used proplist functions on non-WMPropLists objects"));
+        wassertr(False);
+    }
+
+    if (plist->retainCount > 0)
+        return;
+
+    switch(plist->type) {
+    case WPLString:
+        wfree(plist->d.string);
+        break;
+    case WPLData:
+        WMReleaseData(plist->d.data);
+        break;
+    case WPLArray:
+        WMFreeArray(plist->d.array);
+        break;
+    case WPLDictionary:
+        WMFreeHashTable(plist->d.dict);
+        break;
+    default:
+        wwarning(_("Used proplist functions on non-WMPropLists objects"));
+        wassertr(False);
+    }
+    wfree(plist);
+}
+#endif
+
+
 Bool
-WMIsPropListEqualWith(WMPropList *plist, WMPropList *other)
+WMPropListIsString(WMPropList *plist)
+{
+    return (plist->type == WPLString);
+}
+
+
+Bool
+WMPropListIsData(WMPropList *plist)
+{
+    return (plist->type == WPLData);
+}
+
+
+Bool
+WMPropListIsArray(WMPropList *plist)
+{
+    return (plist->type == WPLArray);
+}
+
+
+Bool
+WMPropListIsDictionary(WMPropList *plist)
+{
+    return (plist->type == WPLDictionary);
+}
+
+
+Bool
+WMPropListIsSimple(WMPropList *plist)
+{
+    return (plist->type==WPLString || plist->type==WPLData);
+}
+
+
+Bool
+WMPropListIsCompound(WMPropList *plist)
+{
+    return (plist->type==WPLArray || plist->type==WPLDictionary);
+}
+
+
+Bool
+WMArePropListsEqual(WMPropList *plist, WMPropList *other)
 {
     WMPropList *key1, *key2, *item1, *item2;
     WMHashEnumerator enumerator;
@@ -167,7 +403,7 @@ WMIsPropListEqualWith(WMPropList *plist, WMPropList *other)
         for (i=0; i<n; i++) {
             item1 = WMGetFromArray(plist->d.array, i);
             item2 = WMGetFromArray(other->d.array, i);
-            if (!WMIsPropListEqualWith(item1, item2))
+            if (!WMArePropListsEqual(item1, item2))
                 return False;
         }
         return True;
@@ -178,7 +414,7 @@ WMIsPropListEqualWith(WMPropList *plist, WMPropList *other)
         while (WMNextHashEnumeratorItemAndKey(&enumerator, (void**)&item1,
                                               (void**)&key1)) {
             item2 = WMHashGet(other->d.dict, key1);
-            if (!item2 || !item1 || !WMIsPropListEqualWith(item1, item2))
+            if (!item2 || !item1 || !WMArePropListsEqual(item1, item2))
                 return False;
         }
         return True;
@@ -191,19 +427,6 @@ WMIsPropListEqualWith(WMPropList *plist, WMPropList *other)
 }
 
 
-
-typedef unsigned (*hashFunc)(const void*);
-typedef Bool (*isEqualFunc)(const void*, const void*);
-typedef void* (*retainFunc)(const void*);
-typedef void (*releaseFunc)(const void*);
-
-
-const WMHashTableCallbacks WMPropListHashCallbacks = {
-    (hashFunc)hashPropList,
-    (isEqualFunc)WMIsPropListEqualWith,
-    (retainFunc)NULL,
-    (releaseFunc)NULL
-};
 
 
 
