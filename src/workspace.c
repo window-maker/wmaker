@@ -1299,7 +1299,7 @@ wWorkspaceRename(WScreen *scr, int workspace, char *name)
     tmp = cropline(name);
 
     if (strlen(tmp)==0) {
-        sprintf(buf, _("Workspace %i"), workspace+1);
+        snprintf(buf, sizeof(buf), _("Workspace %i"), workspace+1);
     } else {
         strncpy(buf, tmp, MAX_WORKSPACENAME_WIDTH);
     }

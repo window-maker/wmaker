@@ -51,12 +51,12 @@ wstrerror(int errnum)
     if (errno < sys_nerr)
         return sys_errlist[errnum];
 
-    sprintf (buf, _("Unknown error %d"), errnum);
+    snprintf(buf, sizeof(buf), _("Unknown error %d"), errnum);
     return buf;
 #else /* no strerror() and no sys_errlist[] */
     static char buf[] = "Error 12345678901234567890";
 
-    sprintf(buf, _("Error %d"), errnum);
+    snprintf(buf, sizeof(buf), _("Error %d"), errnum);
     return buf;
 #endif
 }

@@ -32,7 +32,7 @@ POTFILES  = \
 SUFFIXES = .po .mo
 
 .po.mo: 
-	msgfmt -o $@ $<
+	msgfmt -c -o $@ $<
 
 
 all-local: $(CATALOGS)

@@ -24,11 +24,11 @@ xlfdToFcPattern(char *xlfd, int size)
     FcPattern *pattern;
     char *fname, *ptr;
 
-    fname = wmalloc(strlen(xlfd) + 20);
-    if (strstr(xlfd, "%d")!=NULL)
-        sprintf(fname, xlfd, size ? size : DEFAULT_SIZE);
-    else
-        strcpy(fname, xlfd);
+    if (strchr(xlfd, "%")!=NULL)
+       return FcNameParse("sans:pixelsize=12");
+    else {
+        fname= wstrdup(xlfd);
+    }
 
     if ((ptr = strchr(fname, ','))) {
         *ptr = 0;
