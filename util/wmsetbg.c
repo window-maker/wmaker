@@ -1151,18 +1151,13 @@ getFullPixmapPath(char *file)
     char *tmp;
 
     if (!PixmapPath || !(tmp = wfindfile(PixmapPath, file))) {
-	char *path = malloc(1024);
 	int bsize = 512;
-	
-	if (!path)
-	    return file;
+	char *path = wmalloc(bsize);
 	
 	while (!getcwd(path, bsize)) {
 	    free(path);
-	    bsize += 64;
+	    bsize += bsize/2;
 	    path = malloc(bsize);
-	    if (!path)
-		return file;
 	}
 
 	tmp = wstrappend(path, "/");
@@ -1176,7 +1171,7 @@ getFullPixmapPath(char *file)
     /* the file is in the PixmapPath */
     free(tmp);
 
-    return file;
+    return wstrdup(file);
 }
 
 
