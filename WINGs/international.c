@@ -8,5 +8,5 @@
 void
 InitI18n(Display *dpy)
 {
-    
+
 }

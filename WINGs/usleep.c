@@ -36,9 +36,9 @@ wusleep(unsigned int microsecs)
 
 #else /* not HAVE_SELECT */
 
-# ifdef HAVE_POLL 
+# ifdef HAVE_POLL
 
-void 
+void
 wusleep(unsigned int microsecs)
 {
     poll((struct poll *) 0, (size_t) 0, microsecs/1000);

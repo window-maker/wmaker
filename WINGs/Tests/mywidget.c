@@ -2,9 +2,9 @@
  * Demo user widget for WINGs
  *
  * Author: Alfredo K. Kojima
- * 
+ *
  * This file is in the public domain.
- * 
+ *
  */
 
 
@@ -12,7 +12,7 @@
  *
  * Include the WINGs private data header.
  *
- * 
+ *
  */
 #include <WINGs/WINGsP.h>
 
@@ -25,14 +25,14 @@
  * Define the widget "class"
  */
 typedef struct W_MyWidget {
-    /* these two fields must be present in all your widgets in this 
+    /* these two fields must be present in all your widgets in this
      * exact position */
     W_Class widgetClass;
     WMView *view;
-    
+
     /* put your stuff here */
     char *text;
-    
+
 } _MyWidget;
 
 
@@ -50,16 +50,16 @@ static void handleActionEvents(XEvent *event, void *data);
 
 
 /*
- * Delegates 
+ * Delegates
  * See the source for the other widgets to see how to use.
  * You won't need to use this most of the time.
  */
 static W_ViewDelegate _MyWidgetDelegate = {
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
 };
 
 
@@ -76,9 +76,9 @@ InitMyWidget(WMScreen *scr)
 {
     /* register our widget with WINGs and get our widget class ID */
     if (!myWidgetClass) {
-	myWidgetClass = W_RegisterUserWidget();
+        myWidgetClass = W_RegisterUserWidget();
     }
-    
+
     return myWidgetClass;
 }
 
@@ -90,7 +90,7 @@ MyWidget*
 CreateMyWidget(WMWidget *parent)
 {
     MyWidget *mPtr;
-    
+
     /* allocate some storage for our new widget instance */
     mPtr = wmalloc(sizeof(MyWidget));
     /* initialize it */
@@ -99,17 +99,17 @@ CreateMyWidget(WMWidget *parent)
     /* set the class ID */
     mPtr->widgetClass = myWidgetClass;
 
-    /* 
+    /*
      * Create the view for our widget.
      * Note: the Window for the view is only created after the view is
      * realized with W_RealizeView()
-     * 
+     *
      * Consider the returned view as read-only.
      */
     mPtr->view = W_CreateView(W_VIEW(parent));
     if (!mPtr->view) {
-	wfree(mPtr);
-	return NULL;
+        wfree(mPtr);
+        return NULL;
     }
     /* always do this */
     mPtr->view->self = mPtr;
@@ -121,8 +121,8 @@ CreateMyWidget(WMWidget *parent)
      * Intercept some events for our widget, so that we can handle them.
      */
     WMCreateEventHandler(mPtr->view, ExposureMask /* this allows us to know when we should paint */
-			 |StructureNotifyMask, /* this allows us to know things like when we are destroyed */
-			 handleEvents, mPtr);
+                         |StructureNotifyMask, /* this allows us to know things like when we are destroyed */
+                         handleEvents, mPtr);
 
     /*
      * Intercept some other events. This could be merged with the above
@@ -146,14 +146,14 @@ paintMyWidget(_MyWidget *mPtr)
 
 
     if (mPtr->text) {
-	
-	color = WMWhiteColor(scr);
-	
-	W_PaintText(mPtr->view, mPtr->view->window, scr->normalFont,  0, 0,
-		    mPtr->view->size.width, WACenter, color,
-		    False, mPtr->text, strlen(mPtr->text));
-	
-	WMReleaseColor(color);
+
+        color = WMWhiteColor(scr);
+
+        W_PaintText(mPtr->view, mPtr->view->window, scr->normalFont,  0, 0,
+                    mPtr->view->size.width, WACenter, color,
+                    False, mPtr->text, strlen(mPtr->text));
+
+        WMReleaseColor(color);
     }
 }
 
@@ -165,17 +165,17 @@ handleEvents(XEvent *event, void *data)
     _MyWidget *mPtr = (_MyWidget*)data;
 
 
-    switch (event->type) {	
-     case Expose:
-	if (event->xexpose.count!=0)
-	    break;
-	paintMyWidget(mPtr);
-	break;
-	
-     case DestroyNotify:
-	destroyMyWidget(mPtr);
-	break;
-	
+    switch (event->type) {
+    case Expose:
+        if (event->xexpose.count!=0)
+            break;
+        paintMyWidget(mPtr);
+        break;
+
+    case DestroyNotify:
+        destroyMyWidget(mPtr);
+        break;
+
     }
 }
 
@@ -186,10 +186,10 @@ handleActionEvents(XEvent *event, void *data)
     _MyWidget *mPtr = (_MyWidget*)data;
 
     switch (event->type) {
-     case ButtonPress:
-	XBell(mPtr->view->screen->display, 100);
-	XBell(mPtr->view->screen->display, 100);
-	break;
+    case ButtonPress:
+        XBell(mPtr->view->screen->display, 100);
+        XBell(mPtr->view->screen->display, 100);
+        break;
     }
 }
 
@@ -200,12 +200,12 @@ SetMyWidgetText(MyWidget *mPtr, char *text)
     CHECK_CLASS(mPtr, myWidgetClass);
 
     if (mPtr->text)
-	wfree(mPtr->text);
-    
+        wfree(mPtr->text);
+
     mPtr->text = wstrdup(text);
-    
+
     if (W_VIEW_MAPPED(mPtr->view)) {
-	paintMyWidget(mPtr);
+        paintMyWidget(mPtr);
     }
 }
 
@@ -215,12 +215,12 @@ static void
 destroyMyWidget(_MyWidget *mPtr)
 {
     /*
-     * Free all data we allocated for our widget. 
+     * Free all data we allocated for our widget.
      */
-        
+
     if (mPtr->text)
-	wfree(mPtr->text);
-    
+        wfree(mPtr->text);
+
     wfree(mPtr);
 }
 

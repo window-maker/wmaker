@@ -275,3 +275,4 @@ destroyFrame(Frame *fPtr)
 
     wfree(fPtr);
 }
+

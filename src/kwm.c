@@ -1,9 +1,9 @@
 /* kwm.c-- stuff for support for kwm hints
  *
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,24 +16,24 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
 /*
- * 
+ *
  * Supported stuff:
  * ================
- * 
+ *
  * kfm icon selection from krootbgwm
- * 
+ *
  * kwm.h function/method	Notes
  *----------------------------------------------------------------------------
- * setUnsavedDataHint() 	currently, only gives visual clue that 
+ * setUnsavedDataHint() 	currently, only gives visual clue that
  *				there is unsaved data (broken X close button)
- * setSticky()			
+ * setSticky()
  * setIcon()			std X thing...
- * setDecoration()		
+ * setDecoration()
  * logout()
  * refreshScreen()
  * setWmCommand()		std X thing
@@ -41,7 +41,7 @@
  * setKWMModule()
  *
  * isKWMInitialized()		not trustworthy
- * activeWindow()		dunno it's use, but since it's easy to 
+ * activeWindow()		dunno it's use, but since it's easy to
  * 				implement it won't hurt to support
  * switchToDesktop()
  * (set/get)WindowRegion()
@@ -52,13 +52,13 @@
  * sendKWMCommand()		also does the message relay thing
  * desktop()
  * geometryRestore()
- * isIconified()		
- * isMaximized()		
+ * isIconified()
+ * isMaximized()
  * isSticky()
  * moveToDesktop()		WARNING: evil mechanism
  * setGeometryRestore()		WARNING: evil mechanism
  * setMaximize()		woo hoo! wanna race?
- * setIconify()			BAH!: why reinvent the f'ing wheel!? 
+ * setIconify()			BAH!: why reinvent the f'ing wheel!?
  * 				its even broken!!!
  * move()			std X thing
  * setGeometry()		std X thing
@@ -73,10 +73,10 @@
  * setKWMDockModule()		maybe we can make the Dock behave as the KDE
  * 				dock, but must figure where to show the windows
  * setDockWindow()
- * 
+ *
  * Unsupported stuff (superfluous/not-essential/nonsense):
  * =======================================================
- * 
+ *
  * darkenScreen()
  * setMiniIcon()
  * configureWm()
@@ -86,11 +86,11 @@
  * title()
  * titleWithState()
  * geometry()			kde lib code makes it unnecessary
- * 
- * 
+ *
+ *
  * Extensions to KDE:
  * ==================
- * 
+ *
  * These are clientmessage-type messages specific to Window Maker:
  * wmaker:info - show info panel
  * wmaker:legal - show legal panel
@@ -146,7 +146,7 @@
 #include "kwm.h"
 
 /*#define DEBUG1
-*/
+ */
 /******* Global ******/
 
 extern Time LastFocusChange;
@@ -181,7 +181,7 @@ static Atom _XA_KWM_MODULE_WIN_ACTIVATE = 0;
 static Atom _XA_KWM_MODULE_WIN_ICON_CHANGE = 0;
 static Atom _XA_KWM_MODULE_DOCKWIN_ADD = 0;
 static Atom _XA_KWM_MODULE_DOCKWIN_REMOVE = 0;
-  
+
 static Atom _XA_KWM_WIN_UNSAVED_DATA = 0;
 static Atom _XA_KWM_WIN_DECORATION = 0;
 static Atom _XA_KWM_WIN_DESKTOP = 0;
@@ -223,11 +223,11 @@ static KWMModuleList *KWMDockWindows = NULL;
 
 /* window decoration types */
 enum {
-    KWMnoDecoration = 0, 
-    KWMnormalDecoration = 1, 
+    KWMnoDecoration = 0,
+    KWMnormalDecoration = 1,
     KWMtinyDecoration = 2,
     KWMnoFocus = 256,
-    KWMstandaloneMenuBar = 512, 
+    KWMstandaloneMenuBar = 512,
     KWMdesktopIcon = 1024,
     KWMstaysOnTop = 2048
 };
@@ -249,7 +249,7 @@ getSimpleHint(Window win, Atom atom, long *retval)
     data = (long*)PropGetCheckProperty(win, atom, atom, 32, 1, NULL);
 
     if (!data)
-	return False;
+        return False;
 
     *retval = *data;
 
@@ -265,7 +265,7 @@ setSimpleHint(Window win, Atom atom, long value)
 {
     assert(atom!=0);
     XChangeProperty(dpy, win, atom, atom,
-		    32, PropModeReplace, (unsigned char*)&value, 1);
+                    32, PropModeReplace, (unsigned char*)&value, 1);
 }
 
 
@@ -286,7 +286,7 @@ sendClientMessage(WScreen *scr, Window window, Atom atom, long value)
     event.xclient.data.l[1] = LastTimestamp;
 
     if (scr && scr->root_win == window)
-	mask = SubstructureRedirectMask;
+        mask = SubstructureRedirectMask;
 
     XSendEvent(dpy, window, False, mask, &event);
 }
@@ -308,10 +308,10 @@ sendTextMessage(WScreen *scr, Window window, Atom atom, char *text)
     event.xclient.format = 8;
 
     for (i=0; i<20 && text[i]; i++)
-	event.xclient.data.b[i] = text[i];
+        event.xclient.data.b[i] = text[i];
 
     if (scr && scr->root_win == window)
-	mask = SubstructureRedirectMask;
+        mask = SubstructureRedirectMask;
 
     XSendEvent(dpy, window, False, mask, &event);
 }
@@ -325,7 +325,7 @@ getAreaHint(Window win, Atom atom, WArea *area)
     data = (long*)PropGetCheckProperty(win, atom, atom, 32, 4, NULL);
 
     if (!data)
-	return False;
+        return False;
 
     area->x1 = data[0];
     area->y1 = data[1];
@@ -348,8 +348,8 @@ setAreaHint(Window win, Atom atom, WArea area)
     value[1] = area.y1;
     value[2] = area.x2 - area.x1;
     value[3] = area.y2 - area.y1;
-    XChangeProperty(dpy, win, atom, atom, 32, PropModeReplace, 
-		    (unsigned char*)&value, 4);
+    XChangeProperty(dpy, win, atom, atom, 32, PropModeReplace,
+                    (unsigned char*)&value, 4);
 }
 
 
@@ -362,8 +362,8 @@ addModule(WScreen *scr, Window window)
 
     node = malloc(sizeof(KWMModuleList));
     if (!node) {
-	wwarning("out of memory while registering KDE module");
-	return;
+        wwarning("out of memory while registering KDE module");
+        return;
     }
 
     node->next = KWMModules;
@@ -373,27 +373,27 @@ addModule(WScreen *scr, Window window)
     sendClientMessage(scr, window, _XA_KWM_MODULE_INIT, 0);
 
     if (getSimpleHint(window, _XA_KWM_MODULE, &val) && val==2) {
-	if (scr->kwm_dock != None) {
-	    setSimpleHint(window, _XA_KWM_MODULE, 1);
-	} else {
-	    KWMModuleList *ptr;
-	    
-	    scr->kwm_dock = window;
+        if (scr->kwm_dock != None) {
+            setSimpleHint(window, _XA_KWM_MODULE, 1);
+        } else {
+            KWMModuleList *ptr;
 
-	    for (ptr = KWMDockWindows; ptr!=NULL; ptr = ptr->next) {
-		sendClientMessage(scr, scr->kwm_dock, _XA_KWM_MODULE_DOCKWIN_ADD,
-				  ptr->window);
-	    }
-	}
+            scr->kwm_dock = window;
+
+            for (ptr = KWMDockWindows; ptr!=NULL; ptr = ptr->next) {
+                sendClientMessage(scr, scr->kwm_dock, _XA_KWM_MODULE_DOCKWIN_ADD,
+                                  ptr->window);
+            }
+        }
     }
 
     /* send list of windows */
     for (ptr = scr->focused_window; ptr!=NULL; ptr = ptr->prev) {
-	if (!ptr->flags.kwm_hidden_for_modules
-	    && !WFLAGP(ptr, skip_window_list)) {
-	    sendClientMessage(scr, window, _XA_KWM_MODULE_WIN_ADD,
-			      ptr->client_win);
-	}
+        if (!ptr->flags.kwm_hidden_for_modules
+            && !WFLAGP(ptr, skip_window_list)) {
+            sendClientMessage(scr, window, _XA_KWM_MODULE_WIN_ADD,
+                              ptr->client_win);
+        }
     }
 
     /* send window stacking order */
@@ -401,8 +401,8 @@ addModule(WScreen *scr, Window window)
 
     /* send focused window */
     if (scr->focused_window && scr->focused_window->flags.focused) {
-	sendClientMessage(scr, window, _XA_KWM_MODULE_WIN_ACTIVATE,
-			  scr->focused_window->client_win);
+        sendClientMessage(scr, window, _XA_KWM_MODULE_WIN_ACTIVATE,
+                          scr->focused_window->client_win);
     }
 
     /* tell who we are */
@@ -424,40 +424,40 @@ removeModule(WScreen *scr, Window window)
     KWMModuleList *next;
 
     if (!KWMModules) {
-	return;
+        return;
     }
 
     if (KWMModules->window == window) {
-	next = KWMModules->next;
+        next = KWMModules->next;
 #ifdef DEBUG1
-	printf("REMOVING MODULE %s\n", KWMModules->title);
-	if (KWMModules->title)
-	    XFree(KWMModules->title);
+        printf("REMOVING MODULE %s\n", KWMModules->title);
+        if (KWMModules->title)
+            XFree(KWMModules->title);
 #endif
-	wfree(KWMModules);
-	KWMModules = next;
+        wfree(KWMModules);
+        KWMModules = next;
     } else {
-	KWMModuleList *ptr;
+        KWMModuleList *ptr;
 
-	ptr = KWMModules;
-	while (ptr->next) {
-	    if (ptr->next->window == window) {
-		next = ptr->next->next;
+        ptr = KWMModules;
+        while (ptr->next) {
+            if (ptr->next->window == window) {
+                next = ptr->next->next;
 #ifdef DEBUG1
-		printf("REMOVING MODULE %s\n", ptr->next->title);
-		if (ptr->next->title)
-		    XFree(ptr->next->title);
+                printf("REMOVING MODULE %s\n", ptr->next->title);
+                if (ptr->next->title)
+                    XFree(ptr->next->title);
 #endif
-		wfree(ptr->next);
-		ptr->next->next = next;
-		break;
-	    }
-	    ptr->next = ptr->next->next;
-	}
+                wfree(ptr->next);
+                ptr->next->next = next;
+                break;
+            }
+            ptr->next = ptr->next->next;
+        }
     }
 
     if (scr->kwm_dock == window)
-	scr->kwm_dock = None;
+        scr->kwm_dock = None;
 }
 
 
@@ -468,24 +468,24 @@ addDockWindow(WScreen *scr, Window window)
     KWMModuleList *ptr;
 
     for (ptr = KWMDockWindows; ptr != NULL; ptr = ptr->next) {
-	if (ptr->window == window)
-	    break;
+        if (ptr->window == window)
+            break;
     }
     if (!ptr) {
-	KWMModuleList *node;
+        KWMModuleList *node;
 
-	node = malloc(sizeof(KWMModuleList));
-	if (!node) {
-	    wwarning("out of memory while processing KDE dock window");
-	    return;
-	}
-	node->next = KWMDockWindows;
-	KWMDockWindows = node;
-	node->window = window;
-	XSelectInput(dpy, window, StructureNotifyMask);
+        node = malloc(sizeof(KWMModuleList));
+        if (!node) {
+            wwarning("out of memory while processing KDE dock window");
+            return;
+        }
+        node->next = KWMDockWindows;
+        KWMDockWindows = node;
+        node->window = window;
+        XSelectInput(dpy, window, StructureNotifyMask);
 
-	sendClientMessage(scr, scr->kwm_dock, _XA_KWM_MODULE_DOCKWIN_ADD,
-			  window);
+        sendClientMessage(scr, scr->kwm_dock, _XA_KWM_MODULE_DOCKWIN_ADD,
+                          window);
     }
 }
 
@@ -494,33 +494,33 @@ static void
 removeDockWindow(WScreen *scr, Window window)
 {
     if (!KWMDockWindows)
-	return;
+        return;
 
     if (KWMDockWindows->window == window) {
-	KWMModuleList *next;
+        KWMModuleList *next;
 
-	sendClientMessage(scr, scr->kwm_dock, _XA_KWM_MODULE_DOCKWIN_REMOVE,
-			  window);
+        sendClientMessage(scr, scr->kwm_dock, _XA_KWM_MODULE_DOCKWIN_REMOVE,
+                          window);
 
-	next = KWMDockWindows->next;
-	wfree(KWMDockWindows);
-	KWMDockWindows = next;
+        next = KWMDockWindows->next;
+        wfree(KWMDockWindows);
+        KWMDockWindows = next;
 
     } else {
-	KWMModuleList *ptr, *next;
+        KWMModuleList *ptr, *next;
 
-	ptr = KWMDockWindows;
-	while (ptr->next) {
-	    if (ptr->next->window == window) {
-		sendClientMessage(scr, scr->kwm_dock,
-				  _XA_KWM_MODULE_DOCKWIN_REMOVE, window);
-		next = ptr->next->next;
-		wfree(ptr->next);
-		ptr->next = next;
-		return;
-	    }
-	    ptr = ptr->next;
-	}
+        ptr = KWMDockWindows;
+        while (ptr->next) {
+            if (ptr->next->window == window) {
+                sendClientMessage(scr, scr->kwm_dock,
+                                  _XA_KWM_MODULE_DOCKWIN_REMOVE, window);
+                next = ptr->next->next;
+                wfree(ptr->next);
+                ptr->next = next;
+                return;
+            }
+            ptr = ptr->next;
+        }
     }
 }
 
@@ -533,12 +533,12 @@ sendToModules(WScreen *scr, Atom atom, WWindow *wwin, long data)
     long mask;
 
     if (wwin) {
-	if (wwin->flags.kwm_hidden_for_modules
-	    || WFLAGP(wwin, skip_window_list))
-	    return;
-	data = wwin->client_win;
+        if (wwin->flags.kwm_hidden_for_modules
+            || WFLAGP(wwin, skip_window_list))
+            return;
+        data = wwin->client_win;
     }
-#ifdef DEBUG1    
+#ifdef DEBUG1
     printf("notifying %s\n",XGetAtomName(dpy, atom));
 #endif
     memset(&event, 0, sizeof(XEvent));
@@ -549,12 +549,12 @@ sendToModules(WScreen *scr, Atom atom, WWindow *wwin, long data)
 
     mask = 0;
     if (scr && scr->root_win == data)
-	mask = SubstructureRedirectMask;
+        mask = SubstructureRedirectMask;
 
     for (ptr = KWMModules; ptr!=NULL; ptr = ptr->next) {
-	event.xclient.window = ptr->window;
-	event.xclient.data.l[0] = data;
-	XSendEvent(dpy, ptr->window, False, mask, &event);
+        event.xclient.window = ptr->window;
+        event.xclient.data.l[0] = data;
+        XSendEvent(dpy, ptr->window, False, mask, &event);
     }
 }
 
@@ -563,74 +563,74 @@ void
 wKWMInitStuff(WScreen *scr)
 {
     if (!_XA_KWM_WIN_STICKY) {
-	_XA_KWM_WIN_UNSAVED_DATA = XInternAtom(dpy, "KWM_WIN_UNSAVED_DATA",
-					       False);
+        _XA_KWM_WIN_UNSAVED_DATA = XInternAtom(dpy, "KWM_WIN_UNSAVED_DATA",
+                                               False);
 
-	_XA_KWM_WIN_DECORATION = XInternAtom(dpy, "KWM_WIN_DECORATION", False);
+        _XA_KWM_WIN_DECORATION = XInternAtom(dpy, "KWM_WIN_DECORATION", False);
 
-	_XA_KWM_WIN_DESKTOP = XInternAtom(dpy, "KWM_WIN_DESKTOP", False);
+        _XA_KWM_WIN_DESKTOP = XInternAtom(dpy, "KWM_WIN_DESKTOP", False);
 
-	_XA_KWM_WIN_GEOMETRY_RESTORE = XInternAtom(dpy, 
-						   "KWM_WIN_GEOMETRY_RESTORE",
-						   False);
+        _XA_KWM_WIN_GEOMETRY_RESTORE = XInternAtom(dpy,
+                                                   "KWM_WIN_GEOMETRY_RESTORE",
+                                                   False);
 
-	_XA_KWM_WIN_STICKY = XInternAtom(dpy, "KWM_WIN_STICKY", False);
+        _XA_KWM_WIN_STICKY = XInternAtom(dpy, "KWM_WIN_STICKY", False);
 
-	_XA_KWM_WIN_ICONIFIED = XInternAtom(dpy, "KWM_WIN_ICONIFIED", False);
+        _XA_KWM_WIN_ICONIFIED = XInternAtom(dpy, "KWM_WIN_ICONIFIED", False);
 
-	_XA_KWM_WIN_MAXIMIZED = XInternAtom(dpy, "KWM_WIN_MAXIMIZED", False);
+        _XA_KWM_WIN_MAXIMIZED = XInternAtom(dpy, "KWM_WIN_MAXIMIZED", False);
 
-	_XA_KWM_WIN_ICON_GEOMETRY = XInternAtom(dpy, "KWM_WIN_ICON_GEOMETRY",
-						False);
+        _XA_KWM_WIN_ICON_GEOMETRY = XInternAtom(dpy, "KWM_WIN_ICON_GEOMETRY",
+                                                False);
 
-	_XA_KWM_COMMAND = XInternAtom(dpy, "KWM_COMMAND", False);
+        _XA_KWM_COMMAND = XInternAtom(dpy, "KWM_COMMAND", False);
 
-	_XA_KWM_ACTIVE_WINDOW = XInternAtom(dpy, "KWM_ACTIVE_WINDOW", False);
+        _XA_KWM_ACTIVE_WINDOW = XInternAtom(dpy, "KWM_ACTIVE_WINDOW", False);
 
-	_XA_KWM_ACTIVATE_WINDOW = XInternAtom(dpy, "KWM_ACTIVATE_WINDOW",
-					      False);
+        _XA_KWM_ACTIVATE_WINDOW = XInternAtom(dpy, "KWM_ACTIVATE_WINDOW",
+                                              False);
 
-	_XA_KWM_DO_NOT_MANAGE = XInternAtom(dpy, "KWM_DO_NOT_MANAGE", False);
-	
-	_XA_KWM_CURRENT_DESKTOP = XInternAtom(dpy, "KWM_CURRENT_DESKTOP", 
-					      False);
+        _XA_KWM_DO_NOT_MANAGE = XInternAtom(dpy, "KWM_DO_NOT_MANAGE", False);
 
-	_XA_KWM_NUMBER_OF_DESKTOPS = XInternAtom(dpy, "KWM_NUMBER_OF_DESKTOPS",
-						 False);
+        _XA_KWM_CURRENT_DESKTOP = XInternAtom(dpy, "KWM_CURRENT_DESKTOP",
+                                              False);
 
-	_XA_KWM_DOCKWINDOW = XInternAtom(dpy, "KWM_DOCKWINDOW", False);
+        _XA_KWM_NUMBER_OF_DESKTOPS = XInternAtom(dpy, "KWM_NUMBER_OF_DESKTOPS",
+                                                 False);
 
-	_XA_KWM_RUNNING = XInternAtom(dpy, "KWM_RUNNING", False);
+        _XA_KWM_DOCKWINDOW = XInternAtom(dpy, "KWM_DOCKWINDOW", False);
 
-	_XA_KWM_MODULE = XInternAtom(dpy, "KWM_MODULE", False);
+        _XA_KWM_RUNNING = XInternAtom(dpy, "KWM_RUNNING", False);
 
-	_XA_KWM_MODULE_INIT = XInternAtom(dpy, "KWM_MODULE_INIT", False);
-	_XA_KWM_MODULE_INITIALIZED = XInternAtom(dpy, "KWM_MODULE_INITIALIZED", False);
+        _XA_KWM_MODULE = XInternAtom(dpy, "KWM_MODULE", False);
 
-	/* dunno what these do, but Matthias' patch contains it... */
-	_XA_KWM_MODULE_DESKTOP_CHANGE = XInternAtom(dpy, "KWM_MODULE_DESKTOP_CHANGE", False);
-	_XA_KWM_MODULE_DESKTOP_NAME_CHANGE = XInternAtom(dpy, "KWM_MODULE_DESKTOP_NAME_CHANGE", False);
-	_XA_KWM_MODULE_DESKTOP_NUMBER_CHANGE = XInternAtom(dpy, "KWM_MODULE_DESKTOP_NUMBER_CHANGE", False);
+        _XA_KWM_MODULE_INIT = XInternAtom(dpy, "KWM_MODULE_INIT", False);
+        _XA_KWM_MODULE_INITIALIZED = XInternAtom(dpy, "KWM_MODULE_INITIALIZED", False);
 
-	_XA_KWM_MODULE_WIN_ADD = XInternAtom(dpy, "KWM_MODULE_WIN_ADD", False);
-	_XA_KWM_MODULE_WIN_REMOVE = XInternAtom(dpy, "KWM_MODULE_WIN_REMOVE", False);
-	_XA_KWM_MODULE_WIN_CHANGE = XInternAtom(dpy, "KWM_MODULE_WIN_CHANGE", False);
-	_XA_KWM_MODULE_WIN_RAISE = XInternAtom(dpy, "KWM_MODULE_WIN_RAISE", False);
-	_XA_KWM_MODULE_WIN_LOWER = XInternAtom(dpy, "KWM_MODULE_WIN_LOWER", False);
-	_XA_KWM_MODULE_WIN_ACTIVATE = XInternAtom(dpy, "KWM_MODULE_WIN_ACTIVATE", False);
-	_XA_KWM_MODULE_WIN_ICON_CHANGE = XInternAtom(dpy, "KWM_MODULE_WIN_ICON_CHANGE", False);
-	_XA_KWM_MODULE_DOCKWIN_ADD = XInternAtom(dpy, "KWM_MODULE_DOCKWIN_ADD", False);
-	_XA_KWM_MODULE_DOCKWIN_REMOVE = XInternAtom(dpy, "KWM_MODULE_DOCKWIN_REMOVE", False);
-	
-	memset(_XA_KWM_WINDOW_REGION_, 0, sizeof(_XA_KWM_WINDOW_REGION_));
+        /* dunno what these do, but Matthias' patch contains it... */
+        _XA_KWM_MODULE_DESKTOP_CHANGE = XInternAtom(dpy, "KWM_MODULE_DESKTOP_CHANGE", False);
+        _XA_KWM_MODULE_DESKTOP_NAME_CHANGE = XInternAtom(dpy, "KWM_MODULE_DESKTOP_NAME_CHANGE", False);
+        _XA_KWM_MODULE_DESKTOP_NUMBER_CHANGE = XInternAtom(dpy, "KWM_MODULE_DESKTOP_NUMBER_CHANGE", False);
 
-	memset(_XA_KWM_DESKTOP_NAME_, 0, sizeof(_XA_KWM_DESKTOP_NAME_));
+        _XA_KWM_MODULE_WIN_ADD = XInternAtom(dpy, "KWM_MODULE_WIN_ADD", False);
+        _XA_KWM_MODULE_WIN_REMOVE = XInternAtom(dpy, "KWM_MODULE_WIN_REMOVE", False);
+        _XA_KWM_MODULE_WIN_CHANGE = XInternAtom(dpy, "KWM_MODULE_WIN_CHANGE", False);
+        _XA_KWM_MODULE_WIN_RAISE = XInternAtom(dpy, "KWM_MODULE_WIN_RAISE", False);
+        _XA_KWM_MODULE_WIN_LOWER = XInternAtom(dpy, "KWM_MODULE_WIN_LOWER", False);
+        _XA_KWM_MODULE_WIN_ACTIVATE = XInternAtom(dpy, "KWM_MODULE_WIN_ACTIVATE", False);
+        _XA_KWM_MODULE_WIN_ICON_CHANGE = XInternAtom(dpy, "KWM_MODULE_WIN_ICON_CHANGE", False);
+        _XA_KWM_MODULE_DOCKWIN_ADD = XInternAtom(dpy, "KWM_MODULE_DOCKWIN_ADD", False);
+        _XA_KWM_MODULE_DOCKWIN_REMOVE = XInternAtom(dpy, "KWM_MODULE_DOCKWIN_REMOVE", False);
+
+        memset(_XA_KWM_WINDOW_REGION_, 0, sizeof(_XA_KWM_WINDOW_REGION_));
+
+        memset(_XA_KWM_DESKTOP_NAME_, 0, sizeof(_XA_KWM_DESKTOP_NAME_));
     }
 
 #define SETSTR(hint, str) {\
-	static Atom a = 0; if (!a) a = XInternAtom(dpy, #hint, False);\
-	XChangeProperty(dpy, scr->root_win, a, XA_STRING, 8, PropModeReplace,\
-	    	    (unsigned char*)str, strlen(str));}
+    static Atom a = 0; if (!a) a = XInternAtom(dpy, #hint, False);\
+    XChangeProperty(dpy, scr->root_win, a, XA_STRING, 8, PropModeReplace,\
+    (unsigned char*)str, strlen(str));}
 
     SETSTR(KWM_STRING_MAXIMIZE, _("Maximize"));
     SETSTR(KWM_STRING_UNMAXIMIZE, _("Unmaximize"));
@@ -644,9 +644,9 @@ wKWMInitStuff(WScreen *scr)
     SETSTR(KWM_STRING_TODESKTOP, _("Move To"));
     SETSTR(KWM_STRING_ONTOCURRENTDESKTOP, _("Bring Here"));
 #undef SETSTR
-    
+
     /* catch any notifications from any objects */
-    
+
     WMAddNotificationObserver(observer, scr, WMNManaged, NULL);
     WMAddNotificationObserver(observer, scr, WMNUnmanaged, NULL);
     WMAddNotificationObserver(observer, scr, WMNChangedWorkspace, NULL);
@@ -659,8 +659,8 @@ wKWMInitStuff(WScreen *scr)
     WMAddNotificationObserver(wsobserver, scr, WMNWorkspaceDestroyed, NULL);
     WMAddNotificationObserver(wsobserver, scr, WMNWorkspaceChanged, NULL);
     WMAddNotificationObserver(wsobserver, scr, WMNWorkspaceNameChanged, NULL);
-    
-    WMAddNotificationObserver(wsobserver, scr, WMNResetStacking, NULL);    
+
+    WMAddNotificationObserver(wsobserver, scr, WMNResetStacking, NULL);
 }
 
 
@@ -671,14 +671,14 @@ wKWMSendStacking(WScreen *scr, Window module)
     WCoreWindow *core;
 
     WM_ITERATE_BAG(scr->stacking_list, core, i) {
-	for (; core != NULL; core = core->stacking->under) {
-	    WWindow *wwin;
+        for (; core != NULL; core = core->stacking->under) {
+            WWindow *wwin;
 
-	    wwin = wWindowFor(core->window);
-	    if (wwin)
-		sendClientMessage(scr, module, _XA_KWM_MODULE_WIN_RAISE,
-				  wwin->client_win);
-	}
+            wwin = wWindowFor(core->window);
+            if (wwin)
+                sendClientMessage(scr, module, _XA_KWM_MODULE_WIN_RAISE,
+                                  wwin->client_win);
+        }
     }
 }
 
@@ -689,9 +689,9 @@ wKWMBroadcastStacking(WScreen *scr)
     KWMModuleList *ptr = KWMModules;
 
     while (ptr) {
-	wKWMSendStacking(scr, ptr->window);
+        wKWMSendStacking(scr, ptr->window);
 
-	ptr = ptr->next;
+        ptr = ptr->next;
     }
 }
 
@@ -709,18 +709,18 @@ wKWMGetWorkspaceName(WScreen *scr, int workspace)
     assert(workspace >= 0 && workspace < MAX_WORKSPACES);
 
     if (_XA_KWM_DESKTOP_NAME_[workspace]==0) {
-	snprintf(buffer, sizeof(buffer), "KWM_DESKTOP_NAME_%d", workspace + 1);
+        snprintf(buffer, sizeof(buffer), "KWM_DESKTOP_NAME_%d", workspace + 1);
 
-	_XA_KWM_DESKTOP_NAME_[workspace] = XInternAtom(dpy, buffer, False);
+        _XA_KWM_DESKTOP_NAME_[workspace] = XInternAtom(dpy, buffer, False);
     }
-    
+
     /* What do these people have against correctly using property types? */
-    if (XGetWindowProperty(dpy, scr->root_win, 
-			   _XA_KWM_DESKTOP_NAME_[workspace], 0, 128, False, 
-			   XA_STRING,
-			   &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
-			   (unsigned char**)&data)!=Success || !data)
-	return NULL;
+    if (XGetWindowProperty(dpy, scr->root_win,
+                           _XA_KWM_DESKTOP_NAME_[workspace], 0, 128, False,
+                           XA_STRING,
+                           &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
+                           (unsigned char**)&data)!=Success || !data)
+        return NULL;
 
     tmp = wstrdup(data);
     XFree(data);
@@ -744,9 +744,9 @@ wKWMShutdown(WScreen *scr, Bool closeModules)
     XDeleteProperty(dpy, scr->root_win, _XA_KWM_RUNNING);
 
     if (closeModules) {
-	for (ptr = KWMModules; ptr != NULL; ptr = ptr->next) {
-	    XKillClient(dpy, ptr->window);
-	}
+        for (ptr = KWMModules; ptr != NULL; ptr = ptr->next) {
+            XKillClient(dpy, ptr->window);
+        }
     }
 }
 
@@ -757,49 +757,49 @@ wKWMCheckClientHints(WWindow *wwin, int *layer, int *workspace)
     long val;
     Bool hasHint = False;
 
-    if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_UNSAVED_DATA, &val)	
-	&& val) {
+    if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_UNSAVED_DATA, &val)
+        && val) {
 
-	wwin->client_flags.broken_close = 1;
-	hasHint = True;
+        wwin->client_flags.broken_close = 1;
+        hasHint = True;
     } else
-    if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_DECORATION, &val)) {
-	if (val & KWMnoFocus) {
-	    wwin->client_flags.no_focusable = 1;
-	}
-	switch (val & ~KWMnoFocus) {
-	 case KWMnoDecoration:
-	    wwin->client_flags.no_titlebar = 1;
-	    wwin->client_flags.no_resizebar = 1;
-	    break;
-	 case KWMtinyDecoration:
-	    wwin->client_flags.no_resizebar = 1;
-	    break;
-	 case KWMstandaloneMenuBar:
-	    wwin->client_flags.no_titlebar = 1;
-	    wwin->client_flags.no_resizebar = 1;
-	    wwin->client_flags.no_resizable = 1;
-	    wwin->client_flags.skip_window_list = 1;
-	    wwin->client_flags.no_hide_others = 1;
-	    wwin->flags.kwm_menubar = 1;
-	    *layer = WMMainMenuLevel;
-	    break;
-	 case KWMdesktopIcon:
-	    *layer = WMDesktopLevel;
-	    break;
-	 case KWMstaysOnTop:
-	    *layer = WMFloatingLevel;
-	    break;
-	 case KWMnormalDecoration:
-	 default:
-	    break;
-	}
-	hasHint = True;
-    } else
-    if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_DESKTOP, &val)) {
-	*workspace = val - 1;
-	hasHint = True;
-    }
+        if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_DECORATION, &val)) {
+            if (val & KWMnoFocus) {
+                wwin->client_flags.no_focusable = 1;
+            }
+            switch (val & ~KWMnoFocus) {
+            case KWMnoDecoration:
+                wwin->client_flags.no_titlebar = 1;
+                wwin->client_flags.no_resizebar = 1;
+                break;
+            case KWMtinyDecoration:
+                wwin->client_flags.no_resizebar = 1;
+                break;
+            case KWMstandaloneMenuBar:
+                wwin->client_flags.no_titlebar = 1;
+                wwin->client_flags.no_resizebar = 1;
+                wwin->client_flags.no_resizable = 1;
+                wwin->client_flags.skip_window_list = 1;
+                wwin->client_flags.no_hide_others = 1;
+                wwin->flags.kwm_menubar = 1;
+                *layer = WMMainMenuLevel;
+                break;
+            case KWMdesktopIcon:
+                *layer = WMDesktopLevel;
+                break;
+            case KWMstaysOnTop:
+                *layer = WMFloatingLevel;
+                break;
+            case KWMnormalDecoration:
+            default:
+                break;
+            }
+            hasHint = True;
+        } else
+            if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_DESKTOP, &val)) {
+                *workspace = val - 1;
+                hasHint = True;
+            }
 
     return hasHint;
 }
@@ -814,35 +814,35 @@ wKWMCheckClientInitialState(WWindow *wwin)
 
     if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_STICKY, &val) && val) {
 
-	wwin->client_flags.omnipresent = 1;
-	hasHint = True;
+        wwin->client_flags.omnipresent = 1;
+        hasHint = True;
     } else
-    if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_ICONIFIED, &val) && val) {
+        if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_ICONIFIED, &val) && val) {
 
-	wwin->flags.miniaturized = 1;
-	hasHint = True;
-    } else
-    if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_MAXIMIZED, &val)) {
-	if (val == 2)
-	    wwin->flags.maximized = MAX_VERTICAL;
-	else if (val == 1)
-	    wwin->flags.maximized = MAX_HORIZONTAL;
-	else if (val == 3)
-	    wwin->flags.maximized = MAX_VERTICAL|MAX_HORIZONTAL;
-	hasHint = True;
-    } else
-    if (getAreaHint(wwin->client_win, _XA_KWM_WIN_GEOMETRY_RESTORE, &area)
-	&& (wwin->old_geometry.x != area.x1
-	    || wwin->old_geometry.y != area.y1
-	    || wwin->old_geometry.width != area.x2 - area.x1
-	    || wwin->old_geometry.height != area.y2 - area.y1)) {
+            wwin->flags.miniaturized = 1;
+            hasHint = True;
+        } else
+            if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_MAXIMIZED, &val)) {
+                if (val == 2)
+                    wwin->flags.maximized = MAX_VERTICAL;
+                else if (val == 1)
+                    wwin->flags.maximized = MAX_HORIZONTAL;
+                else if (val == 3)
+                    wwin->flags.maximized = MAX_VERTICAL|MAX_HORIZONTAL;
+                hasHint = True;
+            } else
+                if (getAreaHint(wwin->client_win, _XA_KWM_WIN_GEOMETRY_RESTORE, &area)
+                    && (wwin->old_geometry.x != area.x1
+                        || wwin->old_geometry.y != area.y1
+                        || wwin->old_geometry.width != area.x2 - area.x1
+                        || wwin->old_geometry.height != area.y2 - area.y1)) {
 
-	wwin->old_geometry.x = area.x1;
-	wwin->old_geometry.y = area.y1;
-	wwin->old_geometry.width = area.x2 - area.x1;
-	wwin->old_geometry.height = area.y2 - area.y1;
-	hasHint = True;
-    }
+                    wwin->old_geometry.x = area.x1;
+                    wwin->old_geometry.y = area.y1;
+                    wwin->old_geometry.width = area.x2 - area.x1;
+                    wwin->old_geometry.height = area.y2 - area.y1;
+                    hasHint = True;
+                }
 
     return hasHint;
 }
@@ -857,165 +857,165 @@ wKWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event)
 
 
     if (!wwin->frame) {
-	return False;
+        return False;
     }
-    
+
     if (event->atom == _XA_KWM_WIN_UNSAVED_DATA) {
 #ifdef DEBUG1
-	printf("got KDE unsaved data change\n");
+        printf("got KDE unsaved data change\n");
 #endif
 
-	flag = getSimpleHint(wwin->client_win, _XA_KWM_WIN_UNSAVED_DATA,
-			     &value) && value;
+        flag = getSimpleHint(wwin->client_win, _XA_KWM_WIN_UNSAVED_DATA,
+                             &value) && value;
 
-	if (flag != wwin->client_flags.broken_close) {
-	    wwin->client_flags.broken_close = flag;
-	    if (wwin->frame)
-		wWindowUpdateButtonImages(wwin);
-	}
+        if (flag != wwin->client_flags.broken_close) {
+            wwin->client_flags.broken_close = flag;
+            if (wwin->frame)
+                wWindowUpdateButtonImages(wwin);
+        }
     } else if (event->atom == _XA_KWM_WIN_STICKY) {
 
 #ifdef DEBUG1
-	printf("got KDE sticky change\n");
+        printf("got KDE sticky change\n");
 #endif
-	flag = !getSimpleHint(wwin->client_win, _XA_KWM_WIN_STICKY, 
-			      &value) || value;
+        flag = !getSimpleHint(wwin->client_win, _XA_KWM_WIN_STICKY,
+                              &value) || value;
 
-	if (flag != wwin->client_flags.omnipresent) {
+        if (flag != wwin->client_flags.omnipresent) {
 
-	    wWindowSetOmnipresent(wwin, flag);
-	}
+            wWindowSetOmnipresent(wwin, flag);
+        }
     } else if (event->atom == _XA_KWM_WIN_MAXIMIZED) {
-	int bla = 0;
+        int bla = 0;
 
 #ifdef DEBUG1
-	printf("got KDE maximize change\n");
+        printf("got KDE maximize change\n");
 #endif
-	flag = getSimpleHint(wwin->client_win, _XA_KWM_WIN_MAXIMIZED, &value);
+        flag = getSimpleHint(wwin->client_win, _XA_KWM_WIN_MAXIMIZED, &value);
 
-	if (flag) {
-	    if (value == 3)
-		bla = MAX_VERTICAL|MAX_HORIZONTAL;
-	    else if (value == 2)
-		bla = MAX_VERTICAL;
-	    else if (value == 1)
-		bla = MAX_HORIZONTAL;
-	}
+        if (flag) {
+            if (value == 3)
+                bla = MAX_VERTICAL|MAX_HORIZONTAL;
+            else if (value == 2)
+                bla = MAX_VERTICAL;
+            else if (value == 1)
+                bla = MAX_HORIZONTAL;
+        }
 
-	if (bla != wwin->flags.maximized) {
-	    if (bla != 0)
-		wMaximizeWindow(wwin, bla);
-	    else
-		wUnmaximizeWindow(wwin);
-	} 
+        if (bla != wwin->flags.maximized) {
+            if (bla != 0)
+                wMaximizeWindow(wwin, bla);
+            else
+                wUnmaximizeWindow(wwin);
+        }
     } else if (event->atom == _XA_KWM_WIN_ICONIFIED) {
 
 #ifdef DEBUG1
-	printf("got KDE iconify change\n");
+        printf("got KDE iconify change\n");
 #endif
-	flag = !getSimpleHint(wwin->client_win, _XA_KWM_WIN_ICONIFIED,
-			     &value) || value;
+        flag = !getSimpleHint(wwin->client_win, _XA_KWM_WIN_ICONIFIED,
+                              &value) || value;
 
-	if (flag != wwin->flags.miniaturized) {
+        if (flag != wwin->flags.miniaturized) {
 
-	    if (flag)
-		wIconifyWindow(wwin);
-	    else
-		wDeiconifyWindow(wwin);
-	} 
+            if (flag)
+                wIconifyWindow(wwin);
+            else
+                wDeiconifyWindow(wwin);
+        }
 
     } else if (event->atom == _XA_KWM_WIN_DECORATION) {
-	Bool refresh = False;
-	int oldnofocus;
+        Bool refresh = False;
+        int oldnofocus;
 
 #ifdef DEBUG1
-	printf("got KDE decoration change\n");
+        printf("got KDE decoration change\n");
 #endif
 
-	oldnofocus = wwin->client_flags.no_focusable;
+        oldnofocus = wwin->client_flags.no_focusable;
 
-	if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_DECORATION, &value)) {
-	    wwin->client_flags.no_focusable = (value & KWMnoFocus)!=0;
+        if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_DECORATION, &value)) {
+            wwin->client_flags.no_focusable = (value & KWMnoFocus)!=0;
 
-	    switch (value & ~KWMnoFocus) {
-	     case KWMnoDecoration:
-		if (!WFLAGP(wwin, no_titlebar) || !WFLAGP(wwin, no_resizebar))
-		    refresh = True;
+            switch (value & ~KWMnoFocus) {
+            case KWMnoDecoration:
+                if (!WFLAGP(wwin, no_titlebar) || !WFLAGP(wwin, no_resizebar))
+                    refresh = True;
 
-		wwin->client_flags.no_titlebar = 1;
-		wwin->client_flags.no_resizebar = 1;
-		break;
+                wwin->client_flags.no_titlebar = 1;
+                wwin->client_flags.no_resizebar = 1;
+                break;
 
-	     case KWMtinyDecoration:
-		if (WFLAGP(wwin, no_titlebar) || !WFLAGP(wwin, no_resizebar))
-		    refresh = True;
+            case KWMtinyDecoration:
+                if (WFLAGP(wwin, no_titlebar) || !WFLAGP(wwin, no_resizebar))
+                    refresh = True;
 
-		wwin->client_flags.no_titlebar = 0;
-		wwin->client_flags.no_resizebar = 1;
-		break;
+                wwin->client_flags.no_titlebar = 0;
+                wwin->client_flags.no_resizebar = 1;
+                break;
 
-	     case KWMnormalDecoration:
-	     default:
-		if (WFLAGP(wwin, no_titlebar) || WFLAGP(wwin, no_resizebar))
-		    refresh = True;
+            case KWMnormalDecoration:
+            default:
+                if (WFLAGP(wwin, no_titlebar) || WFLAGP(wwin, no_resizebar))
+                    refresh = True;
 
-		wwin->client_flags.no_titlebar = 0;
-		wwin->client_flags.no_resizebar = 0;
-		break;
-	    }
-	} else {
-	    if (WFLAGP(wwin, no_titlebar) || WFLAGP(wwin, no_resizebar))
-		refresh = True;
-	    wwin->client_flags.no_focusable = (value & KWMnoFocus)!=0;
-	    wwin->client_flags.no_titlebar = 0;
-	    wwin->client_flags.no_resizebar = 0;
-	}
+                wwin->client_flags.no_titlebar = 0;
+                wwin->client_flags.no_resizebar = 0;
+                break;
+            }
+        } else {
+            if (WFLAGP(wwin, no_titlebar) || WFLAGP(wwin, no_resizebar))
+                refresh = True;
+            wwin->client_flags.no_focusable = (value & KWMnoFocus)!=0;
+            wwin->client_flags.no_titlebar = 0;
+            wwin->client_flags.no_resizebar = 0;
+        }
 
-	if (refresh)
-	    wWindowConfigureBorders(wwin);
+        if (refresh)
+            wWindowConfigureBorders(wwin);
 
-	if (wwin->client_flags.no_focusable && !oldnofocus) {
+        if (wwin->client_flags.no_focusable && !oldnofocus) {
 
-	    sendToModules(wwin->screen_ptr, _XA_KWM_MODULE_WIN_REMOVE, 
-			  wwin, 0);
-	    wwin->flags.kwm_hidden_for_modules = 1;
+            sendToModules(wwin->screen_ptr, _XA_KWM_MODULE_WIN_REMOVE,
+                          wwin, 0);
+            wwin->flags.kwm_hidden_for_modules = 1;
 
-	} else if (!wwin->client_flags.no_focusable && oldnofocus) {
+        } else if (!wwin->client_flags.no_focusable && oldnofocus) {
 
-	    if (wwin->flags.kwm_hidden_for_modules) {
-		sendToModules(wwin->screen_ptr, _XA_KWM_MODULE_WIN_ADD,
-			      wwin, 0);
-		wwin->flags.kwm_hidden_for_modules = 0;
-	    }
-	}
+            if (wwin->flags.kwm_hidden_for_modules) {
+                sendToModules(wwin->screen_ptr, _XA_KWM_MODULE_WIN_ADD,
+                              wwin, 0);
+                wwin->flags.kwm_hidden_for_modules = 0;
+            }
+        }
     } else if (event->atom == _XA_KWM_WIN_DESKTOP && wwin->frame) {
 #ifdef DEBUG1
-	printf("got KDE workspace change for %s\n", wwin->frame->title);
+        printf("got KDE workspace change for %s\n", wwin->frame->title);
 #endif
-	if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_DESKTOP, &value)
-	    && value-1 != wwin->frame->workspace) {
-	    wWindowChangeWorkspace(wwin, value-1);
-	}
+        if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_DESKTOP, &value)
+            && value-1 != wwin->frame->workspace) {
+            wWindowChangeWorkspace(wwin, value-1);
+        }
 
     } else if (event->atom == _XA_KWM_WIN_GEOMETRY_RESTORE) {
-	WArea area;
+        WArea area;
 
 #ifdef DEBUG1
-	printf("got KDE geometry restore change\n");
+        printf("got KDE geometry restore change\n");
 #endif
-	if (getAreaHint(wwin->client_win, _XA_KWM_WIN_GEOMETRY_RESTORE,	&area)
-	    && (wwin->old_geometry.x != area.x1
-		|| wwin->old_geometry.y != area.y1
-		|| wwin->old_geometry.width != area.x2 - area.x1
-		|| wwin->old_geometry.height != area.y2 - area.y1)) {
+        if (getAreaHint(wwin->client_win, _XA_KWM_WIN_GEOMETRY_RESTORE,	&area)
+            && (wwin->old_geometry.x != area.x1
+                || wwin->old_geometry.y != area.y1
+                || wwin->old_geometry.width != area.x2 - area.x1
+                || wwin->old_geometry.height != area.y2 - area.y1)) {
 
-		wwin->old_geometry.x = area.x1;
-		wwin->old_geometry.y = area.y1;
-		wwin->old_geometry.width = area.x2 - area.x1;
-		wwin->old_geometry.height = area.y2 - area.y1;
-	    }
+            wwin->old_geometry.x = area.x1;
+            wwin->old_geometry.y = area.y1;
+            wwin->old_geometry.width = area.x2 - area.x1;
+            wwin->old_geometry.height = area.y2 - area.y1;
+        }
     } else {
-	processed = False;
+        processed = False;
     }
 
     return processed;
@@ -1030,7 +1030,7 @@ performWindowCommand(WScreen *scr, char *command)
 
     wwin = scr->focused_window;
     if (!wwin || !wwin->flags.focused || !wwin->flags.mapped) {
-	wwin = NULL;
+        wwin = NULL;
     }
 
     CloseWindowMenu(scr);
@@ -1038,61 +1038,61 @@ performWindowCommand(WScreen *scr, char *command)
 
     if (strcmp(command, "winMove")==0 || strcmp(command, "winResize")==0) {
 
-	if (wwin)
-	    wKeyboardMoveResizeWindow(wwin);
+        if (wwin)
+            wKeyboardMoveResizeWindow(wwin);
 
     } else if (strcmp(command, "winMaximize")==0) {
 
-	if (wwin)
-	    wMaximizeWindow(wwin, MAX_VERTICAL|MAX_HORIZONTAL);
-	
+        if (wwin)
+            wMaximizeWindow(wwin, MAX_VERTICAL|MAX_HORIZONTAL);
+
     } else if (strcmp(command, "winRestore")==0) {
 
-	if (wwin && wwin->flags.maximized)
-	    wUnmaximizeWindow(wwin);
+        if (wwin && wwin->flags.maximized)
+            wUnmaximizeWindow(wwin);
 
     } else if (strcmp(command, "winIconify")==0) {
 
 
-	if (wwin && !WFLAGP(wwin, no_miniaturizable)) {
-	    if (wwin->protocols.MINIATURIZE_WINDOW)
-		wClientSendProtocol(wwin, _XA_GNUSTEP_WM_MINIATURIZE_WINDOW,
-				    LastTimestamp);
-	    else {
-		wIconifyWindow(wwin);
-	    }
-	}
+        if (wwin && !WFLAGP(wwin, no_miniaturizable)) {
+            if (wwin->protocols.MINIATURIZE_WINDOW)
+                wClientSendProtocol(wwin, _XA_GNUSTEP_WM_MINIATURIZE_WINDOW,
+                                    LastTimestamp);
+            else {
+                wIconifyWindow(wwin);
+            }
+        }
 
     } else if (strcmp(command, "winClose")==0) {
 
-	if (wwin && !WFLAGP(wwin, no_closable)) {
-	    if (wwin->protocols.DELETE_WINDOW)
-		wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, LastTimestamp);
-	}
+        if (wwin && !WFLAGP(wwin, no_closable)) {
+            if (wwin->protocols.DELETE_WINDOW)
+                wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, LastTimestamp);
+        }
 
     } else if (strcmp(command, "winSticky")==0) {
 
-	if (wwin) {
-	    wWindowSetOmnipresent(wwin, !wwin->client_flags.omnipresent);
-	}
+        if (wwin) {
+            wWindowSetOmnipresent(wwin, !wwin->client_flags.omnipresent);
+        }
 
     } else if (strcmp(command, "winShade")==0) {
 
-	if (wwin && !WFLAGP(wwin, no_shadeable)) {
-	    if (wwin->flags.shaded)
-		wUnshadeWindow(wwin);
-	    else
-		wShadeWindow(wwin);
-	}
+        if (wwin && !WFLAGP(wwin, no_shadeable)) {
+            if (wwin->flags.shaded)
+                wUnshadeWindow(wwin);
+            else
+                wShadeWindow(wwin);
+        }
 
     } else if (strcmp(command, "winOperation")==0) {
 
-	if (wwin)
-	    OpenWindowMenu(wwin, wwin->frame_x, 
-			   wwin->frame_y+wwin->frame->top_width, True);
-	
+        if (wwin)
+            OpenWindowMenu(wwin, wwin->frame_x,
+                           wwin->frame_y+wwin->frame->top_width, True);
+
     } else {
-	return False;
+        return False;
     }
 
     return True;
@@ -1103,87 +1103,87 @@ static void
 performCommand(WScreen *scr, char *command, XClientMessageEvent *event)
 {
     assert(scr != NULL);
-    
-    if (strcmp(command, "commandLine")==0
-       || strcmp(command, "execute")==0) {
-	char *cmd;
 
-	cmd = ExpandOptions(scr, _("%a(Run Command,Type the command to run:)"));
-	if (cmd) {
-	    ExecuteShellCommand(scr, cmd);
-	    wfree(cmd);
-	}
+    if (strcmp(command, "commandLine")==0
+        || strcmp(command, "execute")==0) {
+        char *cmd;
+
+        cmd = ExpandOptions(scr, _("%a(Run Command,Type the command to run:)"));
+        if (cmd) {
+            ExecuteShellCommand(scr, cmd);
+            wfree(cmd);
+        }
     } else if (strcmp(command, "logout")==0) {
 
-	Shutdown(WSLogoutMode);
+        Shutdown(WSLogoutMode);
 
     } else if (strcmp(command, "refreshScreen")==0) {
 
-	wRefreshDesktop(scr);
+        wRefreshDesktop(scr);
 
     } else if (strncmp(command, "go:", 3)==0) {
 
-	Shutdown(WSRestartPreparationMode);
-	Restart(&command[3], False);
-	Restart(NULL, True);
+        Shutdown(WSRestartPreparationMode);
+        Restart(&command[3], False);
+        Restart(NULL, True);
 
     } else if (strcmp(command, "desktop+1")==0) {
 
-	wWorkspaceRelativeChange(scr, 1);
+        wWorkspaceRelativeChange(scr, 1);
 
     } else if (strcmp(command, "desktop-1")==0) {
 
-	wWorkspaceRelativeChange(scr, -1);
+        wWorkspaceRelativeChange(scr, -1);
 
     } else if (strcmp(command, "desktop+2")==0) {
 
-	wWorkspaceRelativeChange(scr, 2);
+        wWorkspaceRelativeChange(scr, 2);
 
     } else if (strcmp(command, "desktop-2")==0) {
 
-	wWorkspaceRelativeChange(scr, -2);
+        wWorkspaceRelativeChange(scr, -2);
 
     } else if (strcmp(command, "desktop%%2")==0) {
 
-	if (scr->current_workspace % 2 == 1)
-	    wWorkspaceRelativeChange(scr, 1);
-	else
-	    wWorkspaceRelativeChange(scr, -1);
+        if (scr->current_workspace % 2 == 1)
+            wWorkspaceRelativeChange(scr, 1);
+        else
+            wWorkspaceRelativeChange(scr, -1);
     } else if (strncmp(command, "desktop", 7)==0) {
-	int ws;
+        int ws;
 
-	ws = atoi(&command[7]);
-	wWorkspaceChange(scr, ws);
+        ws = atoi(&command[7]);
+        wWorkspaceChange(scr, ws);
 
-	/* wmaker specific stuff */
+        /* wmaker specific stuff */
     } else if (strcmp(command, "wmaker:info")==0) {
 
-	wShowInfoPanel(scr);
+        wShowInfoPanel(scr);
 
     } else if (strcmp(command, "wmaker:legal")==0) {
 
-	wShowLegalPanel(scr);
+        wShowLegalPanel(scr);
 
     } else if (strcmp(command, "wmaker:arrangeIcons")==0) {
 
-	wArrangeIcons(scr, True);
+        wArrangeIcons(scr, True);
 
     } else if (strcmp(command, "wmaker:showAll")==0) {
 
-	wShowAllWindows(scr);
+        wShowAllWindows(scr);
 
     } else if (strcmp(command, "wmaker:hideOthers")==0) {
 
-	wHideOtherApplications(scr->focused_window);
+        wHideOtherApplications(scr->focused_window);
 
     } else if (strcmp(command, "wmaker:restart")==0) {
 
-	Shutdown(WSRestartPreparationMode);
-	Restart(NULL, True);
+        Shutdown(WSRestartPreparationMode);
+        Restart(NULL, True);
 
     } else if (strcmp(command, "wmaker:exit")==0) {
 
-	Shutdown(WSExitMode);
+        Shutdown(WSExitMode);
 
 #ifdef UNSUPPORTED_STUFF
     } else if (strcmp(command, "moduleRaised")==0) { /* useless */
@@ -1194,22 +1194,22 @@ performCommand(WScreen *scr, char *command, XClientMessageEvent *event)
     } else if (strcmp(command, "darkenScreen")==0) { /* breaks consistency */
 #endif
     } else if (!performWindowCommand(scr, command)) {
-	KWMModuleList *module;
-	long mask = 0;
-	XEvent ev;
-	/* do message relay thing */
+        KWMModuleList *module;
+        long mask = 0;
+        XEvent ev;
+        /* do message relay thing */
 
-	ev.xclient = *event;
-	for (module = KWMModules; module != NULL; module = module->next) {
+        ev.xclient = *event;
+        for (module = KWMModules; module != NULL; module = module->next) {
 
-	    ev.xclient.window = module->window;
-	    if (module->window == scr->root_win)
-		mask = SubstructureRedirectMask;
-	    else
-		mask = 0;
+            ev.xclient.window = module->window;
+            if (module->window == scr->root_win)
+                mask = SubstructureRedirectMask;
+            else
+                mask = 0;
 
-	    XSendEvent(dpy, module->window, False, mask, &ev);
-	}
+            XSendEvent(dpy, module->window, False, mask, &ev);
+        }
     }
 }
 
@@ -1223,73 +1223,73 @@ wKWMProcessClientMessage(XClientMessageEvent *event)
     printf("CLIENT MESS %s\n", XGetAtomName(dpy, event->message_type));
 #endif
     if (event->message_type == _XA_KWM_COMMAND && event->format==8) {
-	char buffer[24];
-	int i;
+        char buffer[24];
+        int i;
 
-	scr = wScreenForRootWindow(event->window);
+        scr = wScreenForRootWindow(event->window);
 
-	for (i=0; i<20; i++) {
-	    buffer[i] = event->data.b[i];
-	}
-	buffer[i] = 0;
+        for (i=0; i<20; i++) {
+            buffer[i] = event->data.b[i];
+        }
+        buffer[i] = 0;
 
 #ifdef DEBUG1
-	printf("got KDE command %s\n", buffer);
+        printf("got KDE command %s\n", buffer);
 #endif
-	performCommand(scr, buffer, event);
+        performCommand(scr, buffer, event);
 
     } else if (event->message_type == _XA_KWM_ACTIVATE_WINDOW) {
-	WWindow *wwin;
+        WWindow *wwin;
 
 #ifdef DEBUG1
-	printf("got KDE activate internal\n");
+        printf("got KDE activate internal\n");
 #endif
-	wwin = wWindowFor(event->data.l[0]);
+        wwin = wWindowFor(event->data.l[0]);
 
-	if (wwin)
-	    wSetFocusTo(wwin->screen_ptr, wwin);
+        if (wwin)
+            wSetFocusTo(wwin->screen_ptr, wwin);
 
-    } else if (event->message_type == _XA_KWM_DO_NOT_MANAGE 
-	       && event->format == 8) {
-	KWMDoNotManageList *node;
-	int i;
+    } else if (event->message_type == _XA_KWM_DO_NOT_MANAGE
+               && event->format == 8) {
+        KWMDoNotManageList *node;
+        int i;
 
 #ifdef DEBUG1
-	printf("got KDE dont manage\n");
+        printf("got KDE dont manage\n");
 #endif
 
-	node = malloc(sizeof(KWMDoNotManageList));
-	if (!node) {
-	    wwarning("out of memory processing KWM_DO_NOT_MANAGE message");
-	}
-	for (i=0; i<20 && event->data.b[i]; i++)
-	    node->title[i] = event->data.b[i];
-	node->title[i] = 0;
+        node = malloc(sizeof(KWMDoNotManageList));
+        if (!node) {
+            wwarning("out of memory processing KWM_DO_NOT_MANAGE message");
+        }
+        for (i=0; i<20 && event->data.b[i]; i++)
+            node->title[i] = event->data.b[i];
+        node->title[i] = 0;
 
-	node->next = KWMDoNotManageCrap;
-	KWMDoNotManageCrap = node;
+        node->next = KWMDoNotManageCrap;
+        KWMDoNotManageCrap = node;
 
     } else if (event->message_type == _XA_KWM_MODULE) {
-	long val;
-	Window modwin = event->data.l[0];
+        long val;
+        Window modwin = event->data.l[0];
 
-	scr = wScreenForRootWindow(event->window);
+        scr = wScreenForRootWindow(event->window);
 
-	if (getSimpleHint(modwin, _XA_KWM_MODULE, &val) && val) {
+        if (getSimpleHint(modwin, _XA_KWM_MODULE, &val) && val) {
 #ifdef DEBUG1
-	    puts("got KDE module startup");
+            puts("got KDE module startup");
 #endif
-	    addModule(scr, modwin);
-	} else {
+            addModule(scr, modwin);
+        } else {
 #ifdef DEBUG1
-	    puts("got KDE module finish");
+            puts("got KDE module finish");
 #endif
-	    removeModule(scr, modwin);
-	}
+            removeModule(scr, modwin);
+        }
     } else {
-	processed = False;
+        processed = False;
     }
-    
+
     return processed;
 }
 
@@ -1301,9 +1301,9 @@ wKWMCheckModule(WScreen *scr, Window window)
 
     if (getSimpleHint(window, _XA_KWM_MODULE, &val) && val) {
 #ifdef DEBUG1
-	puts("got KDE module startup");
+        puts("got KDE module startup");
 #endif
-	addModule(scr, window);
+        addModule(scr, window);
     }
 }
 
@@ -1315,100 +1315,100 @@ wKWMCheckRootHintChange(WScreen *scr, XPropertyEvent *event)
     long value;
 
     if (event->atom == _XA_KWM_CURRENT_DESKTOP) {
-	if (getSimpleHint(scr->root_win, _XA_KWM_CURRENT_DESKTOP, &value)) {
+        if (getSimpleHint(scr->root_win, _XA_KWM_CURRENT_DESKTOP, &value)) {
 #ifdef DEBUG1
-	    printf("got KDE workspace switch to %li\n", value);
+            printf("got KDE workspace switch to %li\n", value);
 #endif
-	    if (value-1 != scr->current_workspace) {
-		wWorkspaceChange(scr, value-1);
-	    }
-	}
+            if (value-1 != scr->current_workspace) {
+                wWorkspaceChange(scr, value-1);
+            }
+        }
     } else if (event->atom == _XA_KWM_NUMBER_OF_DESKTOPS) {
 #ifdef DEBUG1
-	    printf("got KDE workspace number change\n");
+        printf("got KDE workspace number change\n");
 #endif
 
-	if (getSimpleHint(scr->root_win, _XA_KWM_NUMBER_OF_DESKTOPS, &value)) {
+        if (getSimpleHint(scr->root_win, _XA_KWM_NUMBER_OF_DESKTOPS, &value)) {
 
-	    /* increasing is easy... */
-	    if (value > scr->workspace_count) {
-		scr->flags.kwm_syncing_count = 1;
+            /* increasing is easy... */
+            if (value > scr->workspace_count) {
+                scr->flags.kwm_syncing_count = 1;
 
-		wWorkspaceMake(scr, value - scr->workspace_count);
+                wWorkspaceMake(scr, value - scr->workspace_count);
 
-		scr->flags.kwm_syncing_count = 0;
+                scr->flags.kwm_syncing_count = 0;
 
-	    } else if (value < scr->workspace_count) {
-		int i;
-		Bool rebuild = False;
+            } else if (value < scr->workspace_count) {
+                int i;
+                Bool rebuild = False;
 
-		scr->flags.kwm_syncing_count = 1;
+                scr->flags.kwm_syncing_count = 1;
 
-		/* decrease all we can do */
-		for (i = scr->workspace_count; i >= value; i--) {
-		    if (!wWorkspaceDelete(scr, i)) {
-			rebuild = True;
-			break;
-		    }
-		}
+                /* decrease all we can do */
+                for (i = scr->workspace_count; i >= value; i--) {
+                    if (!wWorkspaceDelete(scr, i)) {
+                        rebuild = True;
+                        break;
+                    }
+                }
 
-		scr->flags.kwm_syncing_count = 0;
+                scr->flags.kwm_syncing_count = 0;
 
-		/* someone destroyed a workspace that can't be destroyed. 
-		 * Reset the hints to reflect our internal state.
-		 */
-		if (rebuild) {
-		    wKWMUpdateWorkspaceCountHint(scr);
-		}
-	    }
-	}
+                /* someone destroyed a workspace that can't be destroyed.
+                 * Reset the hints to reflect our internal state.
+                 */
+                if (rebuild) {
+                    wKWMUpdateWorkspaceCountHint(scr);
+                }
+            }
+        }
     } else {
-	int i;
+        int i;
 
-	processed = False;
+        processed = False;
 
-	for (i = 0; i < MAX_WORKSPACES && i < scr->workspace_count; i++) {
-	     if (event->atom == _XA_KWM_DESKTOP_NAME_[i]) {
-		 char *name;
+        for (i = 0; i < MAX_WORKSPACES && i < scr->workspace_count; i++) {
+            if (event->atom == _XA_KWM_DESKTOP_NAME_[i]) {
+                char *name;
 
-		 name = wKWMGetWorkspaceName(scr, i);
+                name = wKWMGetWorkspaceName(scr, i);
 
 #ifdef DEBUG1
-		 printf("got KDE workspace name change to %s\n", name);
+                printf("got KDE workspace name change to %s\n", name);
 #endif
 
-		 if (name && strncmp(name, scr->workspaces[i]->name, 
-				     MAX_WORKSPACENAME_WIDTH)!=0) {
-		     scr->flags.kwm_syncing_name = 1;
-		     wWorkspaceRename(scr, i, name);
-		     scr->flags.kwm_syncing_name = 0;
-		 }
-		 if (name)
-		     XFree(name);
-		 processed = True;
-		 break;
-	     } else if (event->atom == _XA_KWM_WINDOW_REGION_[i]) {
+                if (name && strncmp(name, scr->workspaces[i]->name,
+                                    MAX_WORKSPACENAME_WIDTH)!=0) {
+                    scr->flags.kwm_syncing_name = 1;
+                    wWorkspaceRename(scr, i, name);
+                    scr->flags.kwm_syncing_name = 0;
+                }
+                if (name)
+                    XFree(name);
+                processed = True;
+                break;
+            } else if (event->atom == _XA_KWM_WINDOW_REGION_[i]) {
 #if 0
-		 WArea area;
+                WArea area;
 
-		 if (getAreaHint(scr->root_win, event->atom, &area)) {
-			    
-		     if (scr->totalUsableArea.x1 != area.x1
-			 || scr->totalUsableArea.y1 != area.y1
-			 || scr->totalUsableArea.x2 != area.x2
-			 || scr->totalUsableArea.y2 != area.y2) {
-			 wScreenUpdateUsableArea(scr);
-		     }
-		 }
+                if (getAreaHint(scr->root_win, event->atom, &area)) {
+
+                    if (scr->totalUsableArea.x1 != area.x1
+                        || scr->totalUsableArea.y1 != area.y1
+                        || scr->totalUsableArea.x2 != area.x2
+                        || scr->totalUsableArea.y2 != area.y2) {
+                        wScreenUpdateUsableArea(scr);
+                    }
+                }
 #else
-		 if (i == scr->current_workspace % MAX_WORKSPACES)
-		     wScreenUpdateUsableArea(scr);
+                if (i == scr->current_workspace % MAX_WORKSPACES)
+                    wScreenUpdateUsableArea(scr);
 #endif
 
-		 processed = True;
-		 break;
-	     }
-	}
+                processed = True;
+                break;
+            }
+        }
     }
 
     return processed;
@@ -1422,44 +1422,44 @@ wKWMManageableClient(WScreen *scr, Window win, char *title)
     long val;
 
     if (getSimpleHint(win, _XA_KWM_DOCKWINDOW, &val) && val) {
-	addDockWindow(scr, win);
-	return False;
+        addDockWindow(scr, win);
+        return False;
     }
-    
+
     ptr = KWMDoNotManageCrap;
     /*
      * TODO: support for glob patterns or regexes
      */
     if (ptr && strncmp(ptr->title, title, strlen(ptr->title))==0) {
-	next = ptr->next;
-	wfree(ptr);
-	KWMDoNotManageCrap = next;
+        next = ptr->next;
+        wfree(ptr);
+        KWMDoNotManageCrap = next;
 #ifdef DEBUG1
-	printf("window %s not managed per KDE request\n", title);
+        printf("window %s not managed per KDE request\n", title);
 #endif
 
-	sendToModules(scr, _XA_KWM_MODULE_WIN_ADD, NULL, win);
-	sendToModules(scr, _XA_KWM_MODULE_WIN_REMOVE, NULL, win);
+        sendToModules(scr, _XA_KWM_MODULE_WIN_ADD, NULL, win);
+        sendToModules(scr, _XA_KWM_MODULE_WIN_REMOVE, NULL, win);
 
-	return False;
+        return False;
     } else if (ptr) {
-	while (ptr->next) {
-	    if (strncmp(ptr->next->title, title, strlen(ptr->next->title))==0) {
+        while (ptr->next) {
+            if (strncmp(ptr->next->title, title, strlen(ptr->next->title))==0) {
 #ifdef DEBUG1
-		printf("window %s not managed per KDE request\n", title);
+                printf("window %s not managed per KDE request\n", title);
 #endif
-		next = ptr->next->next;
-		wfree(ptr->next);
-		ptr->next = next;
+                next = ptr->next->next;
+                wfree(ptr->next);
+                ptr->next = next;
 
-		sendToModules(scr, _XA_KWM_MODULE_WIN_ADD, NULL, win);
-		sendToModules(scr, _XA_KWM_MODULE_WIN_REMOVE, NULL, win);
+                sendToModules(scr, _XA_KWM_MODULE_WIN_ADD, NULL, win);
+                sendToModules(scr, _XA_KWM_MODULE_WIN_REMOVE, NULL, win);
 
-		return False;
-	    }
+                return False;
+            }
 
-	    ptr = ptr->next;
-	}
+            ptr = ptr->next;
+        }
     }
 
     return True;
@@ -1470,10 +1470,10 @@ void
 wKWMUpdateCurrentWorkspaceHint(WScreen *scr)
 {
     setSimpleHint(scr->root_win, _XA_KWM_CURRENT_DESKTOP,
-		  scr->current_workspace+1);
+                  scr->current_workspace+1);
 
     sendToModules(scr, _XA_KWM_MODULE_DESKTOP_CHANGE, NULL,
-		  scr->current_workspace+1);
+                  scr->current_workspace+1);
 }
 
 
@@ -1484,26 +1484,26 @@ wKWMUpdateActiveWindowHint(WScreen *scr)
     WWindow *wwin, *tmp;
 
     if (!scr->focused_window || !scr->focused_window->flags.focused)
-	val = None;
+        val = None;
     else {
-	val = (long)(scr->focused_window->client_win);
+        val = (long)(scr->focused_window->client_win);
 
-	/* raise the menubar thing */
-	wwin = scr->focused_window;
-	tmp = wwin->prev;
-	while (tmp) {
-	    if (tmp->flags.kwm_menubar 
-		&& tmp->transient_for == wwin->client_win) {
-		wRaiseFrame(tmp->frame->core);
-		break;
-	    }
-	    tmp = tmp->prev;
-	}
+        /* raise the menubar thing */
+        wwin = scr->focused_window;
+        tmp = wwin->prev;
+        while (tmp) {
+            if (tmp->flags.kwm_menubar
+                && tmp->transient_for == wwin->client_win) {
+                wRaiseFrame(tmp->frame->core);
+                break;
+            }
+            tmp = tmp->prev;
+        }
     }
-    
+
     XChangeProperty(dpy, scr->root_win, _XA_KWM_ACTIVE_WINDOW,
-		    _XA_KWM_ACTIVE_WINDOW, 32, PropModeReplace, 
-		    (unsigned char*)&val, 1);
+                    _XA_KWM_ACTIVE_WINDOW, 32, PropModeReplace,
+                    (unsigned char*)&val, 1);
     XFlush(dpy);
 }
 
@@ -1512,13 +1512,13 @@ void
 wKWMUpdateWorkspaceCountHint(WScreen *scr)
 {
     if (scr->flags.kwm_syncing_count)
-	return;
+        return;
 
     setSimpleHint(scr->root_win, _XA_KWM_NUMBER_OF_DESKTOPS,
-		  scr->workspace_count);
+                  scr->workspace_count);
 
     sendToModules(scr, _XA_KWM_MODULE_DESKTOP_NUMBER_CHANGE, NULL,
-		  scr->workspace_count);
+                  scr->workspace_count);
 }
 
 
@@ -1528,12 +1528,12 @@ wKWMCheckDestroy(XDestroyWindowEvent *event)
     WScreen *scr;
 
     if (event->event == event->window) {
-	return;
+        return;
     }
 
     scr = wScreenSearchForRootWindow(event->event);
     if (!scr) {
-	return;
+        return;
     }
 
     removeModule(scr, event->window);
@@ -1549,15 +1549,15 @@ wKWMUpdateWorkspaceNameHint(WScreen *scr, int workspace)
     assert(workspace >= 0 && workspace < MAX_WORKSPACES);
 
     if (_XA_KWM_DESKTOP_NAME_[workspace]==0) {
-	snprintf(buffer, sizeof(buffer), "KWM_DESKTOP_NAME_%d", workspace + 1);
+        snprintf(buffer, sizeof(buffer), "KWM_DESKTOP_NAME_%d", workspace + 1);
 
-	_XA_KWM_DESKTOP_NAME_[workspace] = XInternAtom(dpy, buffer, False);
+        _XA_KWM_DESKTOP_NAME_[workspace] = XInternAtom(dpy, buffer, False);
     }
 
     XChangeProperty(dpy, scr->root_win, _XA_KWM_DESKTOP_NAME_[workspace],
-		    XA_STRING, 8, PropModeReplace, 
-		    (unsigned char*)scr->workspaces[workspace]->name,
-		    strlen(scr->workspaces[workspace]->name)+1);
+                    XA_STRING, 8, PropModeReplace,
+                    (unsigned char*)scr->workspaces[workspace]->name,
+                    strlen(scr->workspaces[workspace]->name)+1);
 
     sendToModules(scr, _XA_KWM_MODULE_DESKTOP_NAME_CHANGE, NULL, workspace+1);
 }
@@ -1569,10 +1569,10 @@ wKWMUpdateClientWorkspace(WWindow *wwin)
 {
 #ifdef DEBUG1
     printf("updating workspace of %s to %i\n",
-	   wwin->frame->title, wwin->frame->workspace+1);
+           wwin->frame->title, wwin->frame->workspace+1);
 #endif
-    setSimpleHint(wwin->client_win, _XA_KWM_WIN_DESKTOP, 
-		  wwin->frame->workspace+1);
+    setSimpleHint(wwin->client_win, _XA_KWM_WIN_DESKTOP,
+                  wwin->frame->workspace+1);
 }
 
 
@@ -1580,12 +1580,12 @@ void
 wKWMUpdateClientGeometryRestore(WWindow *wwin)
 {
     WArea rect;
-    
+
     rect.x1 = wwin->old_geometry.x;
     rect.y1 = wwin->old_geometry.y;
     rect.x2 = wwin->old_geometry.x + wwin->old_geometry.width;
     rect.y2 = wwin->old_geometry.y + wwin->old_geometry.height;
-    
+
     setAreaHint(wwin->client_win, _XA_KWM_WIN_GEOMETRY_RESTORE, rect);
 }
 
@@ -1594,23 +1594,23 @@ void
 wKWMUpdateClientStateHint(WWindow *wwin, WKWMStateFlag flags)
 {
     if (flags & KWMIconifiedFlag) {
-	setSimpleHint(wwin->client_win, _XA_KWM_WIN_ICONIFIED, 
-		      wwin->flags.miniaturized /*|| wwin->flags.shaded
-		      || wwin->flags.hidden*/);
+        setSimpleHint(wwin->client_win, _XA_KWM_WIN_ICONIFIED,
+                      wwin->flags.miniaturized /*|| wwin->flags.shaded
+                      || wwin->flags.hidden*/);
     }
     if (flags & KWMStickyFlag) {
-	setSimpleHint(wwin->client_win, _XA_KWM_WIN_STICKY, 
-		      IS_OMNIPRESENT(wwin));
+        setSimpleHint(wwin->client_win, _XA_KWM_WIN_STICKY,
+                      IS_OMNIPRESENT(wwin));
     }
     if (flags & KWMMaximizedFlag) {
-	int value = 0;
+        int value = 0;
 
-	if (wwin->flags.maximized & MAX_VERTICAL)
-	    value |= 2;
-	if (wwin->flags.maximized & MAX_HORIZONTAL)
-	    value |= 1;
+        if (wwin->flags.maximized & MAX_VERTICAL)
+            value |= 2;
+        if (wwin->flags.maximized & MAX_HORIZONTAL)
+            value |= 1;
 
-	setSimpleHint(wwin->client_win, _XA_KWM_WIN_MAXIMIZED, value);
+        setSimpleHint(wwin->client_win, _XA_KWM_WIN_MAXIMIZED, value);
     }
 }
 
@@ -1623,20 +1623,20 @@ wKWMGetUsableArea(WScreen *scr, int head, WArea *area)
     int region = scr->current_workspace % MAX_WORKSPACES;
 
     if (_XA_KWM_WINDOW_REGION_[region]==0) {
-	snprintf(buffer, sizeof(buffer), "KWM_WINDOW_REGION_%d", 1+region);
+        snprintf(buffer, sizeof(buffer), "KWM_WINDOW_REGION_%d", 1+region);
 
-	_XA_KWM_WINDOW_REGION_[region] = XInternAtom(dpy, buffer, False);
+        _XA_KWM_WINDOW_REGION_[region] = XInternAtom(dpy, buffer, False);
     }
 
     ok = getAreaHint(scr->root_win, _XA_KWM_WINDOW_REGION_[region], area);
 
     if (ok) {
-	WMRect rect = wGetRectForHead(scr, head);
+        WMRect rect = wGetRectForHead(scr, head);
 
-	area->x1 = WMAX(area->x1, rect.pos.x);
-	area->x2 = WMIN(area->x2, rect.pos.x + rect.size.width);
-	area->y1 = WMAX(area->y1, rect.pos.y);
-	area->y2 = WMIN(area->y2, rect.pos.y + rect.size.height);
+        area->x1 = WMAX(area->x1, rect.pos.x);
+        area->x2 = WMIN(area->x2, rect.pos.x + rect.size.width);
+        area->y1 = WMAX(area->y1, rect.pos.y);
+        area->y2 = WMIN(area->y2, rect.pos.y + rect.size.height);
     }
 
     return ok;
@@ -1660,15 +1660,15 @@ wKWMSetUsableAreaHint(WScreen *scr, int workspace)
      * the next time the area changes, we won't know what should
      * be the new final area. This protocol isn't worth a shit :/
      */
-/*
- * According to Matthias Ettrich:  
- * Indeed, there's no protocol to deal with the area yet in case several
- * clients want to influence it. It is sufficent, though, if it is clear
- * that one process is responsable for the area. For KDE this is kpanel, but
- * I see that there might be a conflict with the docking area of windowmaker
- * itself.
- * 
- */
+    /*
+     * According to Matthias Ettrich:
+     * Indeed, there's no protocol to deal with the area yet in case several
+     * clients want to influence it. It is sufficent, though, if it is clear
+     * that one process is responsable for the area. For KDE this is kpanel, but
+     * I see that there might be a conflict with the docking area of windowmaker
+     * itself.
+     *
+     */
 
 #ifdef notdef
     char buffer[64];
@@ -1676,13 +1676,13 @@ wKWMSetUsableAreaHint(WScreen *scr, int workspace)
     assert(workspace >= 0 && workspace < MAX_WORKSPACES);
 
     if (_XA_KWM_WINDOW_REGION_[workspace]==0) {
-	snprintf(buffer, sizeof(buffer), "KWM_WINDOW_REGION_%d", workspace+1);
+        snprintf(buffer, sizeof(buffer), "KWM_WINDOW_REGION_%d", workspace+1);
 
-	_XA_KWM_WINDOW_REGION_[workspace] = XInternAtom(dpy, buffer, False);
+        _XA_KWM_WINDOW_REGION_[workspace] = XInternAtom(dpy, buffer, False);
     }
 
     setAreaHint(scr->root_win, _XA_KWM_WINDOW_REGION_[workspace],
-		scr->totalUsableArea);
+                scr->totalUsableArea);
 #endif
 }
 #endif /* not_used */
@@ -1693,35 +1693,35 @@ wKWMSendEventMessage(WWindow *wwin, WKWMEventMessage message)
     Atom msg;
 
     if (wwin && (wwin->flags.internal_window
-		 || wwin->flags.kwm_hidden_for_modules
-		 || !wwin->flags.kwm_managed
-		 || WFLAGP(wwin, skip_window_list)))
-	return;
+                 || wwin->flags.kwm_hidden_for_modules
+                 || !wwin->flags.kwm_managed
+                 || WFLAGP(wwin, skip_window_list)))
+        return;
 
     switch (message) {
-     case WKWMAddWindow:
-	msg = _XA_KWM_MODULE_WIN_ADD;
-	break;
-     case WKWMRemoveWindow:
-	msg = _XA_KWM_MODULE_WIN_REMOVE;
-	break;
-     case WKWMFocusWindow:
-	msg = _XA_KWM_MODULE_WIN_ACTIVATE;
-	break;
-     case WKWMRaiseWindow:
-	msg = _XA_KWM_MODULE_WIN_RAISE;
-	break;
-     case WKWMLowerWindow:
-	msg = _XA_KWM_MODULE_WIN_LOWER;
-	break;
-     case WKWMChangedClient:
-	msg = _XA_KWM_MODULE_WIN_CHANGE;
-	break;
-     case WKWMIconChange:
-	msg = _XA_KWM_MODULE_WIN_ICON_CHANGE;
-	break;
-     default:
-	return;
+    case WKWMAddWindow:
+        msg = _XA_KWM_MODULE_WIN_ADD;
+        break;
+    case WKWMRemoveWindow:
+        msg = _XA_KWM_MODULE_WIN_REMOVE;
+        break;
+    case WKWMFocusWindow:
+        msg = _XA_KWM_MODULE_WIN_ACTIVATE;
+        break;
+    case WKWMRaiseWindow:
+        msg = _XA_KWM_MODULE_WIN_RAISE;
+        break;
+    case WKWMLowerWindow:
+        msg = _XA_KWM_MODULE_WIN_LOWER;
+        break;
+    case WKWMChangedClient:
+        msg = _XA_KWM_MODULE_WIN_CHANGE;
+        break;
+    case WKWMIconChange:
+        msg = _XA_KWM_MODULE_WIN_ICON_CHANGE;
+        break;
+    default:
+        return;
     }
 
     sendToModules(wwin ? wwin->screen_ptr : NULL, msg, wwin, 0);
@@ -1756,17 +1756,17 @@ connectKFM(WScreen *scr)
 
     ptr = strchr(buffer, ':');
     if (ptr)
-	*ptr = '_';
+        *ptr = '_';
 
     ptr = strrchr(buffer, '.');
     if (ptr)
-	*ptr = 0;
+        *ptr = 0;
     {
-	char b[32];
-	
-	snprintf(b, sizeof(b), ".%i", scr->screen);
-	
-	buffer = wstrappend(buffer, b);
+        char b[32];
+
+        snprintf(b, sizeof(b), ".%i", scr->screen);
+
+        buffer = wstrappend(buffer, b);
     }
     path = wstrappend(path, buffer);
     wfree(buffer);
@@ -1775,44 +1775,44 @@ connectKFM(WScreen *scr)
     f = fopen(path, "rb");
     wfree(path);
     if (!f)
-	return -1;
+        return -1;
 
     *buf = 0;
     fgets(buf, sizeof(buf), f);
     buf[sizeof(buf)] = 0;
     pid = atoi(buf);
     if (pid <= 0)
-	return -1;
+        return -1;
 
     if (kill(pid, 0) != 0)
-	return -1;
+        return -1;
 
     *buf = 0;
     fgets(buf, sizeof(buf), f);
-    buf[sizeof(buf)] = 0;    
+    buf[sizeof(buf)] = 0;
     fclose(f);
 
     sock = socket(AF_UNIX, SOCK_STREAM, 0);
     if (sock < 0)
-	return -1;
+        return -1;
     addr.sun_family = AF_UNIX;
     strcpy(addr.sun_path, buf);
 
     if (connect(sock, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
-	close(sock);
-	return -1;
+        close(sock);
+        return -1;
     }
 
     path = wstrconcat(wgethomedir(), "/.kde/share/apps/kfm/magic");
     f = fopen(path, "rb");
     wfree(path);
     if (!f) {
-	return -1;
+        return -1;
     }
     ptr = fgets(buf, sizeof(buf), f);
     fclose(f);
     if (!ptr) {
-	return -1;
+        return -1;
     }
     puts(buffer);
 
@@ -1835,20 +1835,19 @@ wKWMSelectRootRegion(WScreen *scr, int x, int y, int w, int h, Bool control)
     puts("CONNECTING");
     sock = connectKFM(scr);
     if (sock < 0)
-	return;
+        return;
     puts("SENDING DATA");
-    
+
     sprintf(buffer, "selectRootIcons %i %i %i %i %c", x, y, w, h, control);
     writeSocket(sock, buffer);
-    
+
     close(sock);
 #endif
 }
 
 
-
-
-static void observer(void *self, WMNotification *notif)
+static void
+observer(void *self, WMNotification *notif)
 {
     WScreen *scr = (WScreen*)self;
     WWindow *wwin = (WWindow*)WMGetNotificationObject(notif);
@@ -1856,99 +1855,101 @@ static void observer(void *self, WMNotification *notif)
     void *data = WMGetNotificationClientData(notif);
 
     if (strcmp(name, WMNManaged) == 0 && wwin) {
-	wKWMUpdateClientWorkspace(wwin);
-	wKWMUpdateClientStateHint(wwin, KWMAllFlags);
-	
-	wwin->flags.kwm_managed = 1;
+        wKWMUpdateClientWorkspace(wwin);
+        wKWMUpdateClientStateHint(wwin, KWMAllFlags);
 
-	wKWMSendEventMessage(wwin, WKWMAddWindow);
-	
+        wwin->flags.kwm_managed = 1;
+
+        wKWMSendEventMessage(wwin, WKWMAddWindow);
+
     } else if (strcmp(name, WMNUnmanaged) == 0 && wwin) {
-	wwin->frame->workspace = -1;
-	
-	wKWMUpdateClientWorkspace(wwin);
-	
-	wKWMSendEventMessage(wwin, WKWMRemoveWindow);
-	
+        wwin->frame->workspace = -1;
+
+        wKWMUpdateClientWorkspace(wwin);
+
+        wKWMSendEventMessage(wwin, WKWMRemoveWindow);
+
     } else if (strcmp(name, WMNChangedWorkspace) == 0 && wwin) {
-	wKWMUpdateClientWorkspace(wwin);
-	wKWMSendEventMessage(wwin, WKWMChangedClient);
-	
+        wKWMUpdateClientWorkspace(wwin);
+        wKWMSendEventMessage(wwin, WKWMChangedClient);
+
     } else if (strcmp(name, WMNChangedFocus) == 0) {
-	wKWMUpdateActiveWindowHint(scr);
-	wKWMSendEventMessage(wwin, WKWMFocusWindow);
-	
+        wKWMUpdateActiveWindowHint(scr);
+        wKWMSendEventMessage(wwin, WKWMFocusWindow);
+
     } else if (strcmp(name, WMNChangedName) == 0) {
-	wKWMSendEventMessage(wwin, WKWMChangedClient);
+        wKWMSendEventMessage(wwin, WKWMChangedClient);
 
     } else if (strcmp(name, WMNChangedState) == 0) {
-	char *detail = (char*)data;
+        char *detail = (char*)data;
 
-	if (strcmp(detail, "shade") == 0) {
-	    wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
-	    wKWMSendEventMessage(wwin, WKWMChangedClient);
-	} else if (strcmp(detail, "omnipresent") == 0) {
-	    wKWMUpdateClientStateHint(wwin, KWMStickyFlag);
-	    wKWMSendEventMessage(wwin, WKWMChangedClient);	    
-	} else if (strcmp(detail, "maximize") == 0) {
-	    wKWMUpdateClientStateHint(wwin, KWMMaximizedFlag);
-	    wKWMSendEventMessage(wwin, WKWMChangedClient);	    
-	} else if (strcmp(detail, "iconify-transient") == 0) {
-	    if (wwin->flags.miniaturized) {
-		wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
-		wKWMSendEventMessage(wwin, WKWMRemoveWindow);
-		wwin->flags.kwm_hidden_for_modules = 1;
-	    } else {
-		wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
-		if (wwin->flags.kwm_hidden_for_modules) {
-		    wKWMSendEventMessage(wwin, WKWMAddWindow);
-		    wwin->flags.kwm_hidden_for_modules = 0;
-		}
-	    }
-	} else if (strcmp(detail, "iconify") == 0) {
-	    wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
-	    wKWMSendEventMessage(wwin, WKWMChangedClient);
-	} else if (strcmp(detail, "hide") == 0) {
-	    wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
-	    wKWMSendEventMessage(wwin, WKWMChangedClient);	    
-	}
+        if (strcmp(detail, "shade") == 0) {
+            wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
+            wKWMSendEventMessage(wwin, WKWMChangedClient);
+        } else if (strcmp(detail, "omnipresent") == 0) {
+            wKWMUpdateClientStateHint(wwin, KWMStickyFlag);
+            wKWMSendEventMessage(wwin, WKWMChangedClient);
+        } else if (strcmp(detail, "maximize") == 0) {
+            wKWMUpdateClientStateHint(wwin, KWMMaximizedFlag);
+            wKWMSendEventMessage(wwin, WKWMChangedClient);
+        } else if (strcmp(detail, "iconify-transient") == 0) {
+            if (wwin->flags.miniaturized) {
+                wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
+                wKWMSendEventMessage(wwin, WKWMRemoveWindow);
+                wwin->flags.kwm_hidden_for_modules = 1;
+            } else {
+                wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
+                if (wwin->flags.kwm_hidden_for_modules) {
+                    wKWMSendEventMessage(wwin, WKWMAddWindow);
+                    wwin->flags.kwm_hidden_for_modules = 0;
+                }
+            }
+        } else if (strcmp(detail, "iconify") == 0) {
+            wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
+            wKWMSendEventMessage(wwin, WKWMChangedClient);
+        } else if (strcmp(detail, "hide") == 0) {
+            wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
+            wKWMSendEventMessage(wwin, WKWMChangedClient);
+        }
 
     } else if (strcmp(name, WMNChangedStacking) == 0 && wwin) {
-	if (data == NULL)	
-	    wKWMBroadcastStacking(wwin->screen_ptr);
-	else if (strcmp(data, "lower") == 0)
-	    wKWMSendEventMessage(wwin, WKWMLowerWindow);
-	else if (strcmp(data, "raise") == 0)
-	    wKWMSendEventMessage(wwin, WKWMRaiseWindow);	    
+        if (data == NULL)
+            wKWMBroadcastStacking(wwin->screen_ptr);
+        else if (strcmp(data, "lower") == 0)
+            wKWMSendEventMessage(wwin, WKWMLowerWindow);
+        else if (strcmp(data, "raise") == 0)
+            wKWMSendEventMessage(wwin, WKWMRaiseWindow);
     }
 }
 
 
-static void wsobserver(void *self, WMNotification *notif)
+static void
+wsobserver(void *self, WMNotification *notif)
 {
     WScreen *scr = (WScreen*)WMGetNotificationObject(notif);
     const char *name = WMGetNotificationName(notif);
     void *data = WMGetNotificationClientData(notif);
 
     if (strcmp(name, WMNWorkspaceCreated) == 0) {
-	if (!scr->flags.kwm_syncing_count) {
-	    wKWMUpdateWorkspaceCountHint(scr);
-	    wKWMUpdateWorkspaceNameHint(scr, (int)data);
-	}
+        if (!scr->flags.kwm_syncing_count) {
+            wKWMUpdateWorkspaceCountHint(scr);
+            wKWMUpdateWorkspaceNameHint(scr, (int)data);
+        }
 #ifdef not_used
-	wKWMSetUsableAreaHint(scr, scr->workspace_count-1);
+        wKWMSetUsableAreaHint(scr, scr->workspace_count-1);
 #endif
     } else if (strcmp(name, WMNWorkspaceDestroyed) == 0) {
-	wKWMUpdateWorkspaceCountHint(scr);	
+        wKWMUpdateWorkspaceCountHint(scr);
     } else if (strcmp(name, WMNWorkspaceNameChanged) == 0) {
-	wKWMUpdateWorkspaceNameHint(scr, (int)data);
+        wKWMUpdateWorkspaceNameHint(scr, (int)data);
     } else if (strcmp(name, WMNWorkspaceChanged) == 0) {
-	wKWMUpdateCurrentWorkspaceHint(scr);
+        wKWMUpdateCurrentWorkspaceHint(scr);
 
     } else if (strcmp(name, WMNResetStacking) == 0) {
-	wKWMBroadcastStacking(scr);
+        wKWMBroadcastStacking(scr);
     }
 }
 
 
 #endif /* KWM_HINTS */
+

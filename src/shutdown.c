@@ -1,8 +1,8 @@
 /*
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -58,7 +58,7 @@ static void wipeDesktop(WScreen *scr);
  * the whole X session will be closed, by killing all clients if
  * no session manager is running or by asking a shutdown to
  * it if its present.
- * 
+ *
  *----------------------------------------------------------------------
  */
 void
@@ -67,79 +67,79 @@ Shutdown(WShutdownMode mode)
     int i;
 
     switch (mode) {
-     case WSLogoutMode:
+    case WSLogoutMode:
 #ifdef XSMP_ENABLED
-	wSessionRequestShutdown();
-	break;
+        wSessionRequestShutdown();
+        break;
 #else
-	/* fall through */
+        /* fall through */
 #endif
-     case WSKillMode:
-     case WSExitMode:
-	/* if there is no session manager, send SAVE_YOURSELF to
-	 * the clients */
+    case WSKillMode:
+    case WSExitMode:
+        /* if there is no session manager, send SAVE_YOURSELF to
+         * the clients */
 #if 0
 #ifdef XSMP_ENABLED
-	if (!wSessionIsManaged())
+        if (!wSessionIsManaged())
 #endif
-	    for (i = 0; i < wScreenCount; i++) {
-		WScreen *scr;
+            for (i = 0; i < wScreenCount; i++) {
+                WScreen *scr;
 
-		scr = wScreenWithNumber(i);
-		if (scr) {
-		    wSessionSendSaveYourself(scr);
-		}
-	    }
+                scr = wScreenWithNumber(i);
+                if (scr) {
+                    wSessionSendSaveYourself(scr);
+                }
+            }
 #endif
-	for (i = 0; i < wScreenCount; i++) {
-	    WScreen *scr;
+        for (i = 0; i < wScreenCount; i++) {
+            WScreen *scr;
 
-	    scr = wScreenWithNumber(i);
-	    if (scr) {
-		if (scr->helper_pid)
-		    kill(scr->helper_pid, SIGKILL);
+            scr = wScreenWithNumber(i);
+            if (scr) {
+                if (scr->helper_pid)
+                    kill(scr->helper_pid, SIGKILL);
 
-		/* if the session is not being managed, save restart info */
+                /* if the session is not being managed, save restart info */
 #ifdef XSMP_ENABLED
-		if (!wSessionIsManaged())
+                if (!wSessionIsManaged())
 #endif
-		    wSessionSaveClients(scr);
+                    wSessionSaveClients(scr);
 
 #ifdef KWM_HINTS
-		wKWMShutdown(scr, True);
+                wKWMShutdown(scr, True);
 #endif
-		wScreenSaveState(scr);
+                wScreenSaveState(scr);
 
-		if (mode == WSKillMode)
-		    wipeDesktop(scr);
-		else
-		    RestoreDesktop(scr);
-	    }
-	}
-	ExecExitScript();
-	Exit(0);
-	break;
+                if (mode == WSKillMode)
+                    wipeDesktop(scr);
+                else
+                    RestoreDesktop(scr);
+            }
+        }
+        ExecExitScript();
+        Exit(0);
+        break;
 
-     case WSRestartPreparationMode:
-	for (i=0; i<wScreenCount; i++) {
-	    WScreen *scr;
+    case WSRestartPreparationMode:
+        for (i=0; i<wScreenCount; i++) {
+            WScreen *scr;
 
-	    scr = wScreenWithNumber(i);
-	    if (scr) {
-		if (scr->helper_pid)
-		    kill(scr->helper_pid, SIGKILL);
+            scr = wScreenWithNumber(i);
+            if (scr) {
+                if (scr->helper_pid)
+                    kill(scr->helper_pid, SIGKILL);
 #ifdef KWM_HINTS
-		wKWMShutdown(scr, False);
+                wKWMShutdown(scr, False);
 #endif
 #ifdef OLWM_HINTS
-		wOLWMShutdown(scr);
+                wOLWMShutdown(scr);
 #endif
-		wScreenSaveState(scr);
+                wScreenSaveState(scr);
 
-		RestoreDesktop(scr);
-	    }
-	}
-	break;
+                RestoreDesktop(scr);
+            }
+        }
+        break;
     }
 }
 
@@ -153,32 +153,32 @@ restoreWindows(WMBag *bag, WMBagIterator iter)
 
 
     if (iter == NULL) {
-	core = WMBagFirst(bag, &iter);
+        core = WMBagFirst(bag, &iter);
     } else {
-	core = WMBagNext(bag, &iter);
+        core = WMBagNext(bag, &iter);
     }
 
     if (core == NULL)
-	return;
+        return;
 
     restoreWindows(bag, iter);
 
     /* go to the end of the list */
     while (core->stacking->under)
-	core = core->stacking->under;
+        core = core->stacking->under;
 
     while (core) {
-	next = core->stacking->above;
+        next = core->stacking->above;
 
-	if (core->descriptor.parent_type==WCLASS_WINDOW) {
-	    Window window;
+        if (core->descriptor.parent_type==WCLASS_WINDOW) {
+            Window window;
 
-	    wwin = core->descriptor.parent;
-	    window = wwin->client_win;
-	    wUnmanageWindow(wwin, !wwin->flags.internal_window, False);
-	    XMapWindow(dpy, window);
-	}
-	core = next;
+            wwin = core->descriptor.parent;
+            window = wwin->client_win;
+            wUnmanageWindow(wwin, !wwin->flags.internal_window, False);
+            XMapWindow(dpy, window);
+        }
+        core = next;
     }
 }
 
@@ -190,17 +190,17 @@ restoreWindows(WMBag *bag, WMBagIterator iter)
  *
  * Side effects:
  * 	All frame windows are removed and windows are reparented
- * back to root. Windows that are outside the screen are 
- * brought to a viable place. 
- * 
- *---------------------------------------------------------------------- 
+ * back to root. Windows that are outside the screen are
+ * brought to a viable place.
+ *
+ *----------------------------------------------------------------------
  */
 void
 RestoreDesktop(WScreen *scr)
 {
     if (scr->helper_pid > 0) {
-	kill(scr->helper_pid, SIGTERM);
-	scr->helper_pid = 0;
+        kill(scr->helper_pid, SIGTERM);
+        scr->helper_pid = 0;
     }
 
     XGrabServer(dpy);
@@ -222,12 +222,12 @@ RestoreDesktop(WScreen *scr)
  * wipeDesktop--
  * 	Kills all windows in a screen. Send DeleteWindow to all windows
  * that support it and KillClient on all windows that don't.
- * 
+ *
  * Side effects:
  * 	All managed windows are closed.
- * 
+ *
  * TODO: change to XQueryTree()
- *---------------------------------------------------------------------- 
+ *----------------------------------------------------------------------
  */
 static void
 wipeDesktop(WScreen *scr)
@@ -236,11 +236,11 @@ wipeDesktop(WScreen *scr)
 
     wwin = scr->focused_window;
     while (wwin) {
-	if (wwin->protocols.DELETE_WINDOW)
-	    wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, LastTimestamp);
-	else
-	    wClientKill(wwin);
-	wwin = wwin->prev;
+        if (wwin->protocols.DELETE_WINDOW)
+            wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, LastTimestamp);
+        else
+            wClientKill(wwin);
+        wwin = wwin->prev;
     }
     XSync(dpy, False);
 }

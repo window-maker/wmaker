@@ -1,8 +1,8 @@
 /*
  *  Window Maker miscelaneous function library
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -41,17 +41,17 @@ wgethomedir()
     struct passwd *user;
 
     if (home)
-      return home;
-    
+        return home;
+
     user = getpwuid(getuid());
     if (!user) {
-	wsyserror(_("could not get password entry for UID %i"), getuid());
-	return "/";
+        wsyserror(_("could not get password entry for UID %i"), getuid());
+        return "/";
     }
     if (!user->pw_dir) {
-	return "/";
+        return "/";
     } else {
-	return user->pw_dir;
+        return user->pw_dir;
     }
 }
 
@@ -60,16 +60,16 @@ static char*
 getuserhomedir(char *username)
 {
     struct passwd *user;
-    
+
     user = getpwnam(username);
     if (!user) {
-	wsyserror(_("could not get password entry for user %s"), username);
-	return NULL;
+        wsyserror(_("could not get password entry for user %s"), username);
+        return NULL;
     }
     if (!user->pw_dir) {
-	return "/";
+        return "/";
     } else {
-	return user->pw_dir;
+        return user->pw_dir;
     }
 }
 
@@ -84,78 +84,78 @@ wexpandpath(char *path)
     int i;
 
     memset(buffer, 0, PATH_MAX+2);
-    
+
     if (*path=='~') {
-	char *home;
-	
-	path++;
-	if (*path=='/' || *path==0) {
-	    home = wgethomedir();
-	    strcat(buffer, home);
-	} else {
-	    int j;
-	    j = 0;
-	    while (*path!=0 && *path!='/') {
-		buffer2[j++] = *path;
-		buffer2[j] = 0;
-		path++;
-	    }
-	    home = getuserhomedir(buffer2);
-	    if (!home)
-		return NULL;
-	    strcat(buffer, home);
-	}
+        char *home;
+
+        path++;
+        if (*path=='/' || *path==0) {
+            home = wgethomedir();
+            strcat(buffer, home);
+        } else {
+            int j;
+            j = 0;
+            while (*path!=0 && *path!='/') {
+                buffer2[j++] = *path;
+                buffer2[j] = 0;
+                path++;
+            }
+            home = getuserhomedir(buffer2);
+            if (!home)
+                return NULL;
+            strcat(buffer, home);
+        }
     }
-    
+
     i = strlen(buffer);
 
     while (*path!=0) {
-	char *tmp;
-	
-	if (*path=='$') {
-	    int j = 0;
-	    path++;
-	    /* expand $(HOME) or $HOME style environment variables */
-	    if (*path=='(') {
-		path++;
-		while (*path!=0 && *path!=')') {
-		    buffer2[j++] = *(path++);
-		    buffer2[j] = 0;
+        char *tmp;
+
+        if (*path=='$') {
+            int j = 0;
+            path++;
+            /* expand $(HOME) or $HOME style environment variables */
+            if (*path=='(') {
+                path++;
+                while (*path!=0 && *path!=')') {
+                    buffer2[j++] = *(path++);
+                    buffer2[j] = 0;
                 }
                 if (*path==')')
                     path++;
-		tmp = getenv(buffer2);
-		if (!tmp) {
-		    buffer[i] = 0;
-		    strcat(buffer, "$(");
-		    strcat(buffer, buffer2);
-		    strcat(buffer, ")");
-		    i += strlen(buffer2)+3;
-		} else {
-		    strcat(buffer, tmp);
-		    i += strlen(tmp);
-		}
-	    } else {
-		while (*path!=0 && *path!='/') {
-		    buffer2[j++] = *(path++);
-		    buffer2[j] = 0;
-		}
-		tmp = getenv(buffer2);
-		if (!tmp) {
-		    strcat(buffer, "$");
-		    strcat(buffer, buffer2);
-		    i += strlen(buffer2)+1;
-		} else {
-		    strcat(buffer, tmp);
-		    i += strlen(tmp);
-		}
-	    }	    
-	} else {
-	    buffer[i++] = *path;
-	    path++;
-	}
+                tmp = getenv(buffer2);
+                if (!tmp) {
+                    buffer[i] = 0;
+                    strcat(buffer, "$(");
+                    strcat(buffer, buffer2);
+                    strcat(buffer, ")");
+                    i += strlen(buffer2)+3;
+                } else {
+                    strcat(buffer, tmp);
+                    i += strlen(tmp);
+                }
+            } else {
+                while (*path!=0 && *path!='/') {
+                    buffer2[j++] = *(path++);
+                    buffer2[j] = 0;
+                }
+                tmp = getenv(buffer2);
+                if (!tmp) {
+                    strcat(buffer, "$");
+                    strcat(buffer, buffer2);
+                    i += strlen(buffer2)+1;
+                } else {
+                    strcat(buffer, tmp);
+                    i += strlen(tmp);
+                }
+            }
+        } else {
+            buffer[i++] = *path;
+            path++;
+        }
     }
-    
+
     return wstrdup(buffer);
 }
 
@@ -185,17 +185,17 @@ nextchar(char *string, char tok)
 /*
  *----------------------------------------------------------------------
  * findfile--
- * 	Finds a file in a : separated list of paths. ~ expansion is also 
+ * 	Finds a file in a : separated list of paths. ~ expansion is also
  * done.
- * 
+ *
  * Returns:
  * 	The complete path for the file (in a newly allocated string) or
  * NULL if the file was not found.
- * 
+ *
  * Side effects:
  * 	A new string is allocated. It must be freed later.
- * 
- *---------------------------------------------------------------------- 
+ *
+ *----------------------------------------------------------------------
  */
 char*
 wfindfile(char *paths, char *file)
@@ -206,23 +206,23 @@ wfindfile(char *paths, char *file)
     char *fullpath;
 
     if (!file)
-	return NULL;
-    
+        return NULL;
+
     if (*file=='/' || *file=='~' || *file=='$' || !paths || *paths==0) {
-	if (access(file, F_OK)<0) {
-	    fullpath = wexpandpath(file);
-	    if (!fullpath)
-		return NULL;
-	    
-	    if (access(fullpath, F_OK)<0) {
-		wfree(fullpath);
-		return NULL;
-	    } else {
-		return fullpath;
-	    }
-	} else {
-	    return wstrdup(file);
-	}
+        if (access(file, F_OK)<0) {
+            fullpath = wexpandpath(file);
+            if (!fullpath)
+                return NULL;
+
+            if (access(fullpath, F_OK)<0) {
+                wfree(fullpath);
+                return NULL;
+            } else {
+                return fullpath;
+            }
+        } else {
+            return wstrdup(file);
+        }
     }
 
     flen = strlen(file);
@@ -263,43 +263,43 @@ wfindfileinlist(char **path_list, char *file)
     char *fullpath;
 
     if (!file)
-	return NULL;
-    
+        return NULL;
+
     if (*file=='/' || *file=='~' || !path_list) {
-	if (access(file, F_OK)<0) {
-	    fullpath = wexpandpath(file);
-	    if (!fullpath)
-		return NULL;
-	    
-	    if (access(fullpath, F_OK)<0) {
-		wfree(fullpath);
-		return NULL;
-	    } else {
-		return fullpath;
-	    }
-	} else {
-	    return wstrdup(file);
-	}
+        if (access(file, F_OK)<0) {
+            fullpath = wexpandpath(file);
+            if (!fullpath)
+                return NULL;
+
+            if (access(fullpath, F_OK)<0) {
+                wfree(fullpath);
+                return NULL;
+            } else {
+                return fullpath;
+            }
+        } else {
+            return wstrdup(file);
+        }
     }
 
     flen = strlen(file);
     for (i=0; path_list[i]!=NULL; i++) {
-	len = strlen(path_list[i]);
-	path = wmalloc(len+flen+2);
-	path = memcpy(path, path_list[i], len);
-	path[len]=0;
-	strcat(path, "/");
-	strcat(path, file);
-	/* expand tilde */
-	fullpath = wexpandpath(path);
-	wfree(path);
-	if (fullpath) {
-	    /* check if file exists */
-	    if (access(fullpath, F_OK)==0) {
-		return fullpath;
-	    }
-	    wfree(fullpath);
-	}
+        len = strlen(path_list[i]);
+        path = wmalloc(len+flen+2);
+        path = memcpy(path, path_list[i], len);
+        path[len]=0;
+        strcat(path, "/");
+        strcat(path, file);
+        /* expand tilde */
+        fullpath = wexpandpath(path);
+        wfree(path);
+        if (fullpath) {
+            /* check if file exists */
+            if (access(fullpath, F_OK)==0) {
+                return fullpath;
+            }
+            wfree(fullpath);
+        }
     }
     return NULL;
 }
@@ -315,51 +315,51 @@ wfindfileinarray(WMPropList *array, char *file)
     char *fullpath;
 
     if (!file)
-	return NULL;
-    
-    if (*file=='/' || *file=='~' || !array) {
-	if (access(file, F_OK)<0) {
-	    fullpath = wexpandpath(file);
-	    if (!fullpath)
-		return NULL;
+        return NULL;
 
-	    if (access(fullpath, F_OK)<0) {
-		wfree(fullpath);
-		return NULL;
-	    } else {
-		return fullpath;
-	    }
-	} else {
-	    return wstrdup(file);
-	}
+    if (*file=='/' || *file=='~' || !array) {
+        if (access(file, F_OK)<0) {
+            fullpath = wexpandpath(file);
+            if (!fullpath)
+                return NULL;
+
+            if (access(fullpath, F_OK)<0) {
+                wfree(fullpath);
+                return NULL;
+            } else {
+                return fullpath;
+            }
+        } else {
+            return wstrdup(file);
+        }
     }
 
     flen = strlen(file);
     for (i=0; i<WMGetPropListItemCount(array); i++) {
-	WMPropList *prop;
-	char *p;
+        WMPropList *prop;
+        char *p;
 
-	prop = WMGetFromPLArray(array, i);
-	if (!prop)
-	    continue;
-	p = WMGetFromPLString(prop);
+        prop = WMGetFromPLArray(array, i);
+        if (!prop)
+            continue;
+        p = WMGetFromPLString(prop);
 
-	len = strlen(p);
-	path = wmalloc(len+flen+2);
-	path = memcpy(path, p, len);
-	path[len]=0;
-	strcat(path, "/");
-	strcat(path, file);
-	/* expand tilde */
-	fullpath = wexpandpath(path);
-	wfree(path);
-	if (fullpath) {
-	    /* check if file exists */
-	    if (access(fullpath, F_OK)==0) {
-		return fullpath;
-	    }
-	    wfree(fullpath);
-	}
+        len = strlen(p);
+        path = wmalloc(len+flen+2);
+        path = memcpy(path, p, len);
+        path[len]=0;
+        strcat(path, "/");
+        strcat(path, file);
+        /* expand tilde */
+        fullpath = wexpandpath(path);
+        wfree(path);
+        if (fullpath) {
+            /* check if file exists */
+            if (access(fullpath, F_OK)==0) {
+                return fullpath;
+            }
+            wfree(fullpath);
+        }
     }
     return NULL;
 }

@@ -14,7 +14,7 @@ WMTableColumnDelegate *WTCreateStringEditorDelegate(WMTableView *table);
     
 WMTableColumnDelegate *WTCreateEnumSelectorDelegate(WMTableView *table);
 void WTSetEnumSelectorOptions(WMTableColumnDelegate *delegate,
-			      char **options, int count);
+                              char **options, int count);
     
 WMTableColumnDelegate *WTCreateBooleanSwitchDelegate(WMTableView *parent);
     

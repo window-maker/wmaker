@@ -1,8 +1,8 @@
 /*
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -72,11 +72,11 @@ wInitXinerama(WScreen *scr)
         XineramaScreenInfo *xine_screens;
         WXineramaInfo *info = &scr->xine_info;
         int i;
-        
+
         xine_screens = XineramaQueryScreens(dpy, &info->count);
 
         info->screens = wmalloc(sizeof(WMRect)*(info->count+1));
-        
+
         for (i=0; i<info->count; i++) {
             info->screens[i].pos.x = xine_screens[i].x_org;
             info->screens[i].pos.y = xine_screens[i].y_org;
@@ -110,47 +110,47 @@ wGetRectPlacementInfo(WScreen *scr, WMRect rect, int *flags)
     *flags = XFLAG_NONE;
 
     if (scr->xine_info.count <= 1) {
-	unsigned long a;
+        unsigned long a;
 
-	a = calcIntersectionArea(rx, ry, rw, rh,
-				 0, 0, scr->scr_width, scr->scr_height);
+        a = calcIntersectionArea(rx, ry, rw, rh,
+                                 0, 0, scr->scr_width, scr->scr_height);
 
-	if (a == 0) {
-	    *flags |= XFLAG_DEAD;
-	} else if (a != rw*rh) {
-	    *flags |= XFLAG_PARTIAL;
-	}
-	
-	return scr->xine_info.primary_head;
+        if (a == 0) {
+            *flags |= XFLAG_DEAD;
+        } else if (a != rw*rh) {
+            *flags |= XFLAG_PARTIAL;
+        }
+
+        return scr->xine_info.primary_head;
     }
 
     for (i = 0; i < wXineramaHeads(scr); i++) {
-	unsigned long a;
+        unsigned long a;
 
-	a = calcIntersectionArea(rx, ry, rw, rh,
-				 scr->xine_info.screens[i].pos.x,
-				 scr->xine_info.screens[i].pos.y,
-				 scr->xine_info.screens[i].size.width,
-				 scr->xine_info.screens[i].size.height);
+        a = calcIntersectionArea(rx, ry, rw, rh,
+                                 scr->xine_info.screens[i].pos.x,
+                                 scr->xine_info.screens[i].pos.y,
+                                 scr->xine_info.screens[i].size.width,
+                                 scr->xine_info.screens[i].size.height);
 
-	totalArea += a;
-	if (a > area) {
-	    if (best != -1)
-		*flags |= XFLAG_MULTIPLE;
-	    area = a;
-	    best = i;
-	}
+        totalArea += a;
+        if (a > area) {
+            if (best != -1)
+                *flags |= XFLAG_MULTIPLE;
+            area = a;
+            best = i;
+        }
     }
 
     if (best == -1) {
-	*flags |= XFLAG_DEAD;
-	best = wGetHeadForPointerLocation(scr);
+        *flags |= XFLAG_DEAD;
+        best = wGetHeadForPointerLocation(scr);
     } else if (totalArea != rw*rh)
-	*flags |= XFLAG_PARTIAL;
+        *flags |= XFLAG_PARTIAL;
 
     return best;
 }
- 
+
 
 
 /* get the head that covers most of the rectangle */
@@ -166,31 +166,31 @@ wGetHeadForRect(WScreen *scr, WMRect rect)
     int rh = rect.size.height;
 
     if (!scr->xine_info.count)
-	return scr->xine_info.primary_head;
+        return scr->xine_info.primary_head;
 
     best = -1;
     area = 0;
 
     for (i = 0; i < wXineramaHeads(scr); i++) {
-	unsigned long a;
+        unsigned long a;
 
-	a = calcIntersectionArea(rx, ry, rw, rh,
-				 scr->xine_info.screens[i].pos.x,
-				 scr->xine_info.screens[i].pos.y,
-				 scr->xine_info.screens[i].size.width,
-				 scr->xine_info.screens[i].size.height);
+        a = calcIntersectionArea(rx, ry, rw, rh,
+                                 scr->xine_info.screens[i].pos.x,
+                                 scr->xine_info.screens[i].pos.y,
+                                 scr->xine_info.screens[i].size.width,
+                                 scr->xine_info.screens[i].size.height);
 
-	if (a > area) {
-	    area = a;
-	    best = i;
-	}
+        if (a > area) {
+            area = a;
+            best = i;
+        }
     }
 
     /*
      * in case rect is in dead space, return valid head
      */
     if (best == -1)
-	best = wGetHeadForPointerLocation(scr);
+        best = wGetHeadForPointerLocation(scr);
 
     return best;
 }
@@ -236,57 +236,57 @@ wGetHeadForWindow(WWindow *wwin)
 
 
 /*
-int
-wGetHeadForPoint(WScreen *scr, WMPoint point, int *flags)
-{
-    int i;	
+ int
+ wGetHeadForPoint(WScreen *scr, WMPoint point, int *flags)
+ {
+ int i;
 
-    // paranoia
-    if (flags == NULL) {
-	static int tmp;
-	flags = &tmp;
-    }
-    *flags = XFLAG_NONE;
-    
-    for (i = 0; i < scr->xine_info.count; i++) {
-#if 0
-	int yy, xx;
-	
-	xx = scr->xine_info.screens[i].pos.x + scr->xine_info.screens[i].size.width;
-	yy = scr->xine_info.screens[i].pos.y + scr->xine_info.screens[i].size.height;
-	if (point.x >= scr->xine_info.screens[i].pos.x &&
-	    point.y >= scr->xine_info.screens[i].pos.y &&
-	    point.x < xx && point.y < yy) {
-	    return i;
-	}
-#else
-	XineramaScreenInfo *xsi = &scr->xine_info.screens[i];
+ // paranoia
+ if (flags == NULL) {
+ static int tmp;
+ flags = &tmp;
+ }
+ *flags = XFLAG_NONE;
 
-	if ((unsigned)(point.x - xsi->x_org) < xsi->width &&
-	    (unsigned)(point.y - xsi->y_org) < xsi->height)
-	    return i;
-#endif
-    }
+ for (i = 0; i < scr->xine_info.count; i++) {
+ #if 0
+ int yy, xx;
 
-    *flags |= XFLAG_DEAD;
-    
-    return scr->xine_primary_head;
-}
-*/
+ xx = scr->xine_info.screens[i].pos.x + scr->xine_info.screens[i].size.width;
+ yy = scr->xine_info.screens[i].pos.y + scr->xine_info.screens[i].size.height;
+ if (point.x >= scr->xine_info.screens[i].pos.x &&
+ point.y >= scr->xine_info.screens[i].pos.y &&
+ point.x < xx && point.y < yy) {
+ return i;
+ }
+ #else
+ XineramaScreenInfo *xsi = &scr->xine_info.screens[i];
+
+ if ((unsigned)(point.x - xsi->x_org) < xsi->width &&
+ (unsigned)(point.y - xsi->y_org) < xsi->height)
+ return i;
+ #endif
+ }
+
+ *flags |= XFLAG_DEAD;
+
+ return scr->xine_primary_head;
+ }
+ */
 
 
 
 int
 wGetHeadForPoint(WScreen *scr, WMPoint point)
 {
-    int i;	
+    int i;
 
     for (i = 0; i < scr->xine_info.count; i++) {
-	WMRect *rect = &scr->xine_info.screens[i];
+        WMRect *rect = &scr->xine_info.screens[i];
 
-	if ((unsigned)(point.x - rect->pos.x) < rect->size.width &&
-	    (unsigned)(point.y - rect->pos.y) < rect->size.height)
-	    return i;
+        if ((unsigned)(point.x - rect->pos.x) < rect->size.width &&
+            (unsigned)(point.y - rect->pos.y) < rect->size.height)
+            return i;
     }
     return scr->xine_info.primary_head;
 }
@@ -301,13 +301,13 @@ wGetHeadForPointerLocation(WScreen *scr)
     unsigned int blo;
 
     if (!scr->xine_info.count)
-	return scr->xine_info.primary_head;
+        return scr->xine_info.primary_head;
 
     if (!XQueryPointer(dpy, scr->root_win, &bla, &bla,
-		       &point.x, &point.y,
-		       &ble, &ble,
-		       &blo))
-	return scr->xine_info.primary_head;
+                       &point.x, &point.y,
+                       &ble, &ble,
+                       &blo))
+        return scr->xine_info.primary_head;
 
     return wGetHeadForPoint(scr, point);
 }
@@ -319,15 +319,15 @@ wGetRectForHead(WScreen *scr, int head)
     WMRect rect;
 
     if (head < scr->xine_info.count) {
-	rect.pos.x = scr->xine_info.screens[head].pos.x;
-	rect.pos.y = scr->xine_info.screens[head].pos.y;
-	rect.size.width = scr->xine_info.screens[head].size.width;
+        rect.pos.x = scr->xine_info.screens[head].pos.x;
+        rect.pos.y = scr->xine_info.screens[head].pos.y;
+        rect.size.width = scr->xine_info.screens[head].size.width;
         rect.size.height = scr->xine_info.screens[head].size.height;
     } else {
-	rect.pos.x = 0;
-	rect.pos.y = 0;
-	rect.size.width = scr->scr_width;
-	rect.size.height = scr->scr_height;
+        rect.pos.x = 0;
+        rect.pos.y = 0;
+        rect.size.width = scr->scr_width;
+        rect.size.height = scr->scr_height;
     }
 
     return rect;
@@ -348,9 +348,9 @@ wGetUsableAreaForHead(WScreen *scr, int head, WArea *totalAreaPtr, Bool noicons)
     if (totalAreaPtr != NULL) *totalAreaPtr = totalArea;
 
     if (head < wXineramaHeads(scr)) {
-	usableArea = noicons ? scr->totalUsableArea[head] : scr->usableArea[head];
+        usableArea = noicons ? scr->totalUsableArea[head] : scr->usableArea[head];
     } else
-	usableArea = totalArea;
+        usableArea = totalArea;
 
     return usableArea;
 }

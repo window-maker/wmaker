@@ -1,9 +1,9 @@
-/* rootmenu.h- user defined menu 
- * 
+/* rootmenu.h- user defined menu
+ *
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 2000-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -33,10 +33,10 @@ typedef struct _WRootMenuReader {
     WRootMenuData (*openMenuFile)(char *path);
     Bool (*hasMoreData)(WRootMenuData *data);
     Bool (*nextCommand)(WRootMenuData *data,
-			char **title,
-			char **command,
-			char **parameter,
-			char **shortcut);
+                        char **title,
+                        char **command,
+                        char **parameter,
+                        char **shortcut);
     void (*closeMenuFile)(WRootMenuData *data);
 } WRootMenuReader;
 

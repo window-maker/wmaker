@@ -23,11 +23,11 @@ wSoundPlay(long event_sound)
     XEvent sound_event;
 
     if (!atom) {
-	atom = XInternAtom(dpy, "_WINDOWMAKER_EVENT", False);
+        atom = XInternAtom(dpy, "_WINDOWMAKER_EVENT", False);
     }
 
     if(!wPreferences.no_sound) {
-	Window win = wScreenWithNumber(0)->info_window;
+        Window win = wScreenWithNumber(0)->info_window;
 
         sound_event.xclient.type = ClientMessage;
         sound_event.xclient.message_type = atom;
@@ -36,7 +36,7 @@ wSoundPlay(long event_sound)
         sound_event.xclient.window = win;
         sound_event.xclient.data.l[0] = event_sound;
         XSendEvent(dpy, win, False, StructureNotifyMask, &sound_event);
-	XFlush(dpy);
+        XFlush(dpy);
     }
 }
 

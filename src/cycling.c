@@ -1,9 +1,9 @@
 /* cycling.c- window cycling
- * 
+ *
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 2000-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -54,22 +54,22 @@ nextToFocusAfter(WWindow *wwin)
     WWindow *tmp = wwin->prev;
 
     while (tmp) {
-	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
-	    return tmp;
-	}
-	tmp = tmp->prev;
+        if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
+            return tmp;
+        }
+        tmp = tmp->prev;
     }
 
     tmp = wwin;
     /* start over from the beginning of the list */
     while (tmp->next)
-	tmp = tmp->next;
+        tmp = tmp->next;
 
     while (tmp && tmp != wwin) {
-	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
-	    return tmp;
-	}
-	tmp = tmp->prev;
+        if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
+            return tmp;
+        }
+        tmp = tmp->prev;
     }
 
     return wwin;
@@ -82,23 +82,23 @@ nextToFocusBefore(WWindow *wwin)
     WWindow *tmp = wwin->next;
 
     while (tmp) {
-	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
-	    return tmp;
-	}
-	tmp = tmp->next;
+        if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
+            return tmp;
+        }
+        tmp = tmp->next;
     }
 
     /* start over from the beginning of the list */
     tmp = wwin;
     while (tmp->prev)
-	tmp = tmp->prev;
+        tmp = tmp->prev;
 
     while (tmp && tmp != wwin) {
-	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
+        if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
 
-	    return tmp;
-	}
-	tmp = tmp->next;
+            return tmp;
+        }
+        tmp = tmp->next;
     }
 
     return wwin;
@@ -120,10 +120,10 @@ nextFocusWindow(WWindow *wwin)
     min = wwin;
     d = 0xffffffff;
     while (tmp) {
-        if (wWindowCanReceiveFocus(tmp) 
+        if (wWindowCanReceiveFocus(tmp)
             && (!WFLAGP(tmp, skip_window_list)|| tmp->flags.internal_window)) {
             if (min->client_win > tmp->client_win)
-              min = tmp;
+                min = tmp;
             if (tmp->client_win > wwin->client_win
                 && (!closest
                     || (tmp->client_win - wwin->client_win) < d)) {
@@ -134,7 +134,7 @@ nextFocusWindow(WWindow *wwin)
         tmp = tmp->prev;
     }
     if (!closest||closest==wwin)
-      return min;
+        return min;
     return closest;
 }
 
@@ -144,7 +144,7 @@ prevFocusWindow(WWindow *wwin)
 {
     WWindow *tmp, *closest, *max;
     Window d;
-    
+
     if (!wwin)
         return NULL;
     tmp = wwin->prev;
@@ -155,7 +155,7 @@ prevFocusWindow(WWindow *wwin)
         if (wWindowCanReceiveFocus(tmp) &&
             (!WFLAGP(tmp, skip_window_list) || tmp->flags.internal_window)) {
             if (max->client_win < tmp->client_win)
-              max = tmp;
+                max = tmp;
             if (tmp->client_win < wwin->client_win
                 && (!closest
                     || (wwin->client_win - tmp->client_win) < d)) {
@@ -166,7 +166,7 @@ prevFocusWindow(WWindow *wwin)
         tmp = tmp->prev;
     }
     if (!closest||closest==wwin)
-      return max;
+        return max;
     return closest;
 }
 
@@ -188,144 +188,144 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     XEvent ev;
 
     if (!wwin)
-	return;
-    
+        return;
+
     if (next)
-	hasModifier = (wKeyBindings[WKBD_FOCUSNEXT].modifier != 0);
+        hasModifier = (wKeyBindings[WKBD_FOCUSNEXT].modifier != 0);
     else
-	hasModifier = (wKeyBindings[WKBD_FOCUSPREV].modifier != 0);
+        hasModifier = (wKeyBindings[WKBD_FOCUSPREV].modifier != 0);
 
     if (hasModifier) {
-	keymap = XGetModifierMapping(dpy);
+        keymap = XGetModifierMapping(dpy);
 
 #ifdef DEBUG
         printf("Grabbing keyboard\n");
 #endif
-	XGrabKeyboard(dpy, scr->root_win, False, GrabModeAsync, GrabModeAsync, 
-		      CurrentTime);
+        XGrabKeyboard(dpy, scr->root_win, False, GrabModeAsync, GrabModeAsync,
+                      CurrentTime);
     }
 
     if (next) {
-	if (wPreferences.windows_cycling)
-	    newFocused = nextToFocusAfter(wwin);
-	else
-	    newFocused = nextFocusWindow(wwin);
+        if (wPreferences.windows_cycling)
+            newFocused = nextToFocusAfter(wwin);
+        else
+            newFocused = nextFocusWindow(wwin);
     } else {
-	if (wPreferences.windows_cycling)
-	    newFocused = nextToFocusBefore(wwin);
-	else
-	    newFocused = prevFocusWindow(wwin);
+        if (wPreferences.windows_cycling)
+            newFocused = nextToFocusBefore(wwin);
+        else
+            newFocused = prevFocusWindow(wwin);
     }
 
     scr->flags.doing_alt_tab = 1;
 
 
     if (wPreferences.circ_raise)
-	XRaiseWindow(dpy, newFocused->frame->core->window);
+        XRaiseWindow(dpy, newFocused->frame->core->window);
     wWindowFocus(newFocused, scr->focused_window);
     oldFocused = newFocused;
 
 #if 0
-    if (wPreferences.popup_switchmenu && 
-	(!scr->switch_menu || !scr->switch_menu->flags.mapped)) {
+    if (wPreferences.popup_switchmenu &&
+        (!scr->switch_menu || !scr->switch_menu->flags.mapped)) {
 
-	OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);
-	openedSwitchMenu = True;
+        OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);
+        openedSwitchMenu = True;
     }
 #endif
 
     while (hasModifier && !done) {
-	WMMaskEvent(dpy, KeyPressMask|KeyReleaseMask|ExposureMask, &ev);
+        WMMaskEvent(dpy, KeyPressMask|KeyReleaseMask|ExposureMask, &ev);
 
-	if (ev.type != KeyRelease && ev.type != KeyPress) {
-	    WMHandleEvent(&ev);
-	    continue;
-	}
-	/* ignore CapsLock */
-	modifiers = ev.xkey.state & ValidModMask;
+        if (ev.type != KeyRelease && ev.type != KeyPress) {
+            WMHandleEvent(&ev);
+            continue;
+        }
+        /* ignore CapsLock */
+        modifiers = ev.xkey.state & ValidModMask;
 
-	if (ev.type == KeyPress) {
+        if (ev.type == KeyPress) {
 #ifdef DEBUG
             printf("Got key press\n");
 #endif
             if (wKeyBindings[WKBD_FOCUSNEXT].keycode == ev.xkey.keycode
-		&& wKeyBindings[WKBD_FOCUSNEXT].modifier == modifiers) {
+                && wKeyBindings[WKBD_FOCUSNEXT].modifier == modifiers) {
 
-		newFocused = nextToFocusAfter(newFocused);
-		wWindowFocus(newFocused, oldFocused);
-		oldFocused = newFocused;
-	    
-		if (wPreferences.circ_raise) {
-		    /* restore order */
-		    CommitStacking(scr);
-		    XRaiseWindow(dpy, newFocused->frame->core->window);
-		}
+                newFocused = nextToFocusAfter(newFocused);
+                wWindowFocus(newFocused, oldFocused);
+                oldFocused = newFocused;
 
-	    } else if (wKeyBindings[WKBD_FOCUSPREV].keycode == ev.xkey.keycode
-		       && wKeyBindings[WKBD_FOCUSPREV].modifier == modifiers) {
+                if (wPreferences.circ_raise) {
+                    /* restore order */
+                    CommitStacking(scr);
+                    XRaiseWindow(dpy, newFocused->frame->core->window);
+                }
 
-		newFocused = nextToFocusBefore(newFocused);
-		wWindowFocus(newFocused, oldFocused);
-		oldFocused = newFocused;
+            } else if (wKeyBindings[WKBD_FOCUSPREV].keycode == ev.xkey.keycode
+                       && wKeyBindings[WKBD_FOCUSPREV].modifier == modifiers) {
 
-		if (wPreferences.circ_raise) {
-		    /* restore order */
-		    CommitStacking(scr);
-		    XRaiseWindow(dpy, newFocused->frame->core->window);
-		}
+                newFocused = nextToFocusBefore(newFocused);
+                wWindowFocus(newFocused, oldFocused);
+                oldFocused = newFocused;
 
-	    } else {
+                if (wPreferences.circ_raise) {
+                    /* restore order */
+                    CommitStacking(scr);
+                    XRaiseWindow(dpy, newFocused->frame->core->window);
+                }
+
+            } else {
 #ifdef DEBUG
                 printf("Got something else\n");
 #endif
-		somethingElse = True;
-		done = True;
-	    }
-	} else if (ev.type == KeyRelease) {
-	    int i;
+                somethingElse = True;
+                done = True;
+            }
+        } else if (ev.type == KeyRelease) {
+            int i;
 
 #ifdef DEBUG
             printf("Got key release\n");
 #endif
-	    for (i = 0; i < 8 * keymap->max_keypermod; i++) {
-		if (keymap->modifiermap[i] == ev.xkey.keycode &&
-		    wKeyBindings[WKBD_FOCUSNEXT].modifier 
-		    & 1<<(i/keymap->max_keypermod)) {
-		    done = True;
-		    break;
-		}
-	    }
-	}
+            for (i = 0; i < 8 * keymap->max_keypermod; i++) {
+                if (keymap->modifiermap[i] == ev.xkey.keycode &&
+                    wKeyBindings[WKBD_FOCUSNEXT].modifier
+                    & 1<<(i/keymap->max_keypermod)) {
+                    done = True;
+                    break;
+                }
+            }
+        }
     }
     if (keymap)
-	XFreeModifiermap(keymap);
+        XFreeModifiermap(keymap);
 
     if (hasModifier) {
 #ifdef DEBUG
         printf("Ungrabbing keyboard\n");
 #endif
-	XUngrabKeyboard(dpy, CurrentTime);
+        XUngrabKeyboard(dpy, CurrentTime);
     }
     wSetFocusTo(scr, newFocused);
 
     if (wPreferences.circ_raise) {
-	wRaiseFrame(newFocused->frame->core);
-    	CommitStacking(scr);
+        wRaiseFrame(newFocused->frame->core);
+        CommitStacking(scr);
     }
 
     scr->flags.doing_alt_tab = 0;
     if (openedSwitchMenu) {
-	/*
-	 * place window in center of current head
-	 */
-	WMPoint center = wGetPointToCenterRectInHead(scr, 
-				   wGetHeadForPointerLocation(scr), 
-					   0, 0);
-	OpenSwitchMenu(scr, center.x, center.y, False);
+        /*
+         * place window in center of current head
+         */
+        WMPoint center =
+            wGetPointToCenterRectInHead(scr, wGetHeadForPointerLocation(scr),
+                                        0, 0);
+        OpenSwitchMenu(scr, center.x, center.y, False);
     }
 
     if (somethingElse) {
-	WMHandleEvent(&ev);
+        WMHandleEvent(&ev);
     }
 }
 

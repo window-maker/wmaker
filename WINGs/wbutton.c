@@ -9,9 +9,9 @@ typedef struct W_Button {
     WMView *view;
 
     char *caption;
-    
+
     char *altCaption;
-    
+
     WMFont *font;
 
     WMColor *textColor;
@@ -27,52 +27,52 @@ typedef struct W_Button {
     WMAction *action;
 
     int tag;
-    
+
     int groupIndex;
-    
+
     float periodicDelay;
     float periodicInterval;
-    
+
     WMHandlerID *timer;		       /* for continuous mode */
-    
+
     struct {
-	WMButtonType type:4;
-	WMImagePosition imagePosition:4;
-	WMAlignment alignment:2;
+        WMButtonType type:4;
+        WMImagePosition imagePosition:4;
+        WMAlignment alignment:2;
 
-	unsigned int selected:1;
+        unsigned int selected:1;
 
-	unsigned int enabled:1;
+        unsigned int enabled:1;
 
         unsigned int dimsWhenDisabled:1;
 
-	unsigned int bordered:1;
+        unsigned int bordered:1;
 
-	unsigned int springLoaded:1;
+        unsigned int springLoaded:1;
 
-	unsigned int pushIn:1;	       /* change relief while pushed */
+        unsigned int pushIn:1;	       /* change relief while pushed */
 
-	unsigned int pushLight:1;      /* highlight while pushed */
+        unsigned int pushLight:1;      /* highlight while pushed */
 
-	unsigned int pushChange:1;     /* change caption while pushed */
+        unsigned int pushChange:1;     /* change caption while pushed */
 
-	unsigned int stateLight:1;     /* state indicated by highlight */
+        unsigned int stateLight:1;     /* state indicated by highlight */
 
-	unsigned int stateChange:1;    /* state indicated by caption change */
+        unsigned int stateChange:1;    /* state indicated by caption change */
 
-	unsigned int statePush:1;      /* state indicated by relief */
+        unsigned int statePush:1;      /* state indicated by relief */
 
-	unsigned int continuous:1;     /* continually perform action */
+        unsigned int continuous:1;     /* continually perform action */
 
-	unsigned int prevSelected:1;
+        unsigned int prevSelected:1;
 
-	unsigned int pushed:1;
+        unsigned int pushed:1;
 
-	unsigned int wasPushed:1;
+        unsigned int wasPushed:1;
 
-	unsigned int redrawPending:1;
+        unsigned int redrawPending:1;
 
-	unsigned int addedObserver:1;
+        unsigned int addedObserver:1;
     } flags;
 } Button;
 
@@ -115,16 +115,16 @@ WMButton*
 WMCreateCustomButton(WMWidget *parent, int behaviourMask)
 {
     Button *bPtr;
-    
+
     bPtr = wmalloc(sizeof(Button));
     memset(bPtr, 0, sizeof(Button));
 
     bPtr->widgetClass = WC_Button;
-    
+
     bPtr->view = W_CreateView(W_VIEW(parent));
     if (!bPtr->view) {
-	wfree(bPtr);
-	return NULL;
+        wfree(bPtr);
+        return NULL;
     }
     bPtr->view->self = bPtr;
 
@@ -146,11 +146,11 @@ WMCreateCustomButton(WMWidget *parent, int behaviourMask)
     bPtr->flags.dimsWhenDisabled = 1;
 
     WMCreateEventHandler(bPtr->view, ExposureMask|StructureNotifyMask,
-			 handleEvents, bPtr);
+                         handleEvents, bPtr);
 
     WMCreateEventHandler(bPtr->view, ButtonPressMask|ButtonReleaseMask
-			 |EnterWindowMask|LeaveWindowMask, 
-			 handleActionEvents, bPtr);
+                         |EnterWindowMask|LeaveWindowMask,
+                         handleActionEvents, bPtr);
 
     W_ResizeView(bPtr->view, DEFAULT_BUTTON_WIDTH, DEFAULT_BUTTON_HEIGHT);
     bPtr->flags.alignment = DEFAULT_BUTTON_ALIGNMENT;
@@ -166,68 +166,68 @@ WMCreateButton(WMWidget *parent, WMButtonType type)
 {
     W_Screen *scrPtr = W_VIEW(parent)->screen;
     Button *bPtr;
-    
+
     switch (type) {
-     case WBTMomentaryPush:
-	bPtr = WMCreateCustomButton(parent, WBBSpringLoadedMask
-				    |WBBPushInMask|WBBPushLightMask);
-	break;
+    case WBTMomentaryPush:
+        bPtr = WMCreateCustomButton(parent, WBBSpringLoadedMask
+                                    |WBBPushInMask|WBBPushLightMask);
+        break;
 
-     case WBTMomentaryChange:
-	bPtr = WMCreateCustomButton(parent, WBBSpringLoadedMask
-				    |WBBPushChangeMask);
-	break;
-		
-     case WBTPushOnPushOff:
-	bPtr = WMCreateCustomButton(parent, WBBPushInMask|WBBStatePushMask
-				    |WBBStateLightMask);
-	break;
-	
-     case WBTToggle:
-	bPtr = WMCreateCustomButton(parent, WBBPushInMask|WBBStateChangeMask
-				    |WBBStatePushMask);
-	break;
+    case WBTMomentaryChange:
+        bPtr = WMCreateCustomButton(parent, WBBSpringLoadedMask
+                                    |WBBPushChangeMask);
+        break;
 
-     case WBTOnOff:
-	bPtr = WMCreateCustomButton(parent, WBBStateLightMask);
-	break;
+    case WBTPushOnPushOff:
+        bPtr = WMCreateCustomButton(parent, WBBPushInMask|WBBStatePushMask
+                                    |WBBStateLightMask);
+        break;
 
-     case WBTSwitch:
-	bPtr = WMCreateCustomButton(parent, WBBStateChangeMask);
-	bPtr->flags.bordered = 0;
-	bPtr->image = WMRetainPixmap(scrPtr->checkButtonImageOff);
-	bPtr->altImage = WMRetainPixmap(scrPtr->checkButtonImageOn);
-	break;
+    case WBTToggle:
+        bPtr = WMCreateCustomButton(parent, WBBPushInMask|WBBStateChangeMask
+                                    |WBBStatePushMask);
+        break;
 
-     case WBTRadio:
-	bPtr = WMCreateCustomButton(parent, WBBStateChangeMask);
-	bPtr->flags.bordered = 0;
-	bPtr->image = WMRetainPixmap(scrPtr->radioButtonImageOff);
-	bPtr->altImage = WMRetainPixmap(scrPtr->radioButtonImageOn);
-	break;
+    case WBTOnOff:
+        bPtr = WMCreateCustomButton(parent, WBBStateLightMask);
+        break;
 
-     default:
-     case WBTMomentaryLight:
-	bPtr = WMCreateCustomButton(parent, WBBSpringLoadedMask
-				    |WBBPushLightMask);
-	bPtr->flags.bordered = 1;
-	break;
+    case WBTSwitch:
+        bPtr = WMCreateCustomButton(parent, WBBStateChangeMask);
+        bPtr->flags.bordered = 0;
+        bPtr->image = WMRetainPixmap(scrPtr->checkButtonImageOff);
+        bPtr->altImage = WMRetainPixmap(scrPtr->checkButtonImageOn);
+        break;
+
+    case WBTRadio:
+        bPtr = WMCreateCustomButton(parent, WBBStateChangeMask);
+        bPtr->flags.bordered = 0;
+        bPtr->image = WMRetainPixmap(scrPtr->radioButtonImageOff);
+        bPtr->altImage = WMRetainPixmap(scrPtr->radioButtonImageOn);
+        break;
+
+    default:
+    case WBTMomentaryLight:
+        bPtr = WMCreateCustomButton(parent, WBBSpringLoadedMask
+                                    |WBBPushLightMask);
+        bPtr->flags.bordered = 1;
+        break;
     }
-    
+
     bPtr->flags.type = type;
 
     if (type==WBTRadio) {
-	W_ResizeView(bPtr->view, DEFAULT_RADIO_WIDTH, DEFAULT_RADIO_HEIGHT);
-	WMSetButtonText(bPtr, DEFAULT_RADIO_TEXT);
-	bPtr->flags.alignment = DEFAULT_RADIO_ALIGNMENT;
-	bPtr->flags.imagePosition = DEFAULT_RADIO_IMAGE_POSITION;
+        W_ResizeView(bPtr->view, DEFAULT_RADIO_WIDTH, DEFAULT_RADIO_HEIGHT);
+        WMSetButtonText(bPtr, DEFAULT_RADIO_TEXT);
+        bPtr->flags.alignment = DEFAULT_RADIO_ALIGNMENT;
+        bPtr->flags.imagePosition = DEFAULT_RADIO_IMAGE_POSITION;
     } else if (type==WBTSwitch) {
-	W_ResizeView(bPtr->view, DEFAULT_SWITCH_WIDTH, DEFAULT_SWITCH_HEIGHT);
-	WMSetButtonText(bPtr, DEFAULT_SWITCH_TEXT);
-	bPtr->flags.alignment = DEFAULT_SWITCH_ALIGNMENT;
-	bPtr->flags.imagePosition = DEFAULT_SWITCH_IMAGE_POSITION;
+        W_ResizeView(bPtr->view, DEFAULT_SWITCH_WIDTH, DEFAULT_SWITCH_HEIGHT);
+        WMSetButtonText(bPtr, DEFAULT_SWITCH_TEXT);
+        bPtr->flags.alignment = DEFAULT_SWITCH_ALIGNMENT;
+        bPtr->flags.imagePosition = DEFAULT_SWITCH_IMAGE_POSITION;
     }
-    
+
     return bPtr;
 }
 
@@ -239,7 +239,7 @@ updateDisabledMask(WMButton *bPtr)
     Display *dpy = scr->display;
 
     if (bPtr->image) {
-	XGCValues gcv;
+        XGCValues gcv;
 
         if (bPtr->dimage->mask) {
             XFreePixmap(dpy, bPtr->dimage->mask);
@@ -287,25 +287,25 @@ void
 WMSetButtonImage(WMButton *bPtr, WMPixmap *image)
 {
     if (bPtr->image!=NULL)
-	WMReleasePixmap(bPtr->image);
+        WMReleasePixmap(bPtr->image);
     bPtr->image = WMRetainPixmap(image);
 
     if (bPtr->dimage) {
-	bPtr->dimage->pixmap = None;
-	WMReleasePixmap(bPtr->dimage);
-	bPtr->dimage = NULL;
+        bPtr->dimage->pixmap = None;
+        WMReleasePixmap(bPtr->dimage);
+        bPtr->dimage = NULL;
     }
 
     if (image) {
-	bPtr->dimage = WMCreatePixmapFromXPixmaps(WMWidgetScreen(bPtr), 
-						  image->pixmap, None,
-						  image->width, image->height,
-						  image->depth);
-	updateDisabledMask(bPtr);
+        bPtr->dimage = WMCreatePixmapFromXPixmaps(WMWidgetScreen(bPtr),
+                                                  image->pixmap, None,
+                                                  image->width, image->height,
+                                                  image->depth);
+        updateDisabledMask(bPtr);
     }
 
     if (bPtr->view->flags.realized) {
-	paintButton(bPtr);
+        paintButton(bPtr);
     }
 }
 
@@ -314,12 +314,12 @@ void
 WMSetButtonAltImage(WMButton *bPtr, WMPixmap *image)
 {
     if (bPtr->altImage!=NULL)
-	WMReleasePixmap(bPtr->altImage);
+        WMReleasePixmap(bPtr->altImage);
     bPtr->altImage = WMRetainPixmap(image);
-    
-    
+
+
     if (bPtr->view->flags.realized) {
-	paintButton(bPtr);
+        paintButton(bPtr);
     }
 }
 
@@ -328,10 +328,10 @@ void
 WMSetButtonImagePosition(WMButton *bPtr, WMImagePosition position)
 {
     bPtr->flags.imagePosition = position;
-    
-    
+
+
     if (bPtr->view->flags.realized) {
-	paintButton(bPtr);
+        paintButton(bPtr);
     }
 }
 
@@ -342,10 +342,10 @@ void
 WMSetButtonTextAlignment(WMButton *bPtr, WMAlignment alignment)
 {
     bPtr->flags.alignment = alignment;
-    
-    
+
+
     if (bPtr->view->flags.realized) {
-	paintButton(bPtr);
+        paintButton(bPtr);
     }
 }
 
@@ -353,17 +353,17 @@ void
 WMSetButtonText(WMButton *bPtr, char *text)
 {
     if (bPtr->caption)
-	wfree(bPtr->caption);
+        wfree(bPtr->caption);
 
     if (text!=NULL) {
-	bPtr->caption = wstrdup(text);
+        bPtr->caption = wstrdup(text);
     } else {
-	bPtr->caption = NULL;
+        bPtr->caption = NULL;
     }
-    
-    
+
+
     if (bPtr->view->flags.realized) {
-	paintButton(bPtr);
+        paintButton(bPtr);
     }
 }
 
@@ -372,16 +372,16 @@ void
 WMSetButtonAltText(WMButton *bPtr, char *text)
 {
     if (bPtr->altCaption)
-	wfree(bPtr->altCaption);
-    
+        wfree(bPtr->altCaption);
+
     if (text!=NULL) {
-	bPtr->altCaption = wstrdup(text);
+        bPtr->altCaption = wstrdup(text);
     } else {
-	bPtr->altCaption = NULL;
+        bPtr->altCaption = NULL;
     }
-    
+
     if (bPtr->view->flags.realized) {
-	paintButton(bPtr);
+        paintButton(bPtr);
     }
 }
 
@@ -390,7 +390,7 @@ void
 WMSetButtonTextColor(WMButton *bPtr, WMColor *color)
 {
     if (bPtr->textColor)
-	WMReleaseColor(bPtr->textColor);
+        WMReleaseColor(bPtr->textColor);
 
     bPtr->textColor = WMRetainColor(color);
 }
@@ -400,7 +400,7 @@ void
 WMSetButtonAltTextColor(WMButton *bPtr, WMColor *color)
 {
     if (bPtr->altTextColor)
-	WMReleaseColor(bPtr->altTextColor);
+        WMReleaseColor(bPtr->altTextColor);
 
     bPtr->altTextColor = WMRetainColor(color);
 }
@@ -410,7 +410,7 @@ void
 WMSetButtonDisabledTextColor(WMButton *bPtr, WMColor *color)
 {
     if (bPtr->disTextColor)
-	WMReleaseColor(bPtr->disTextColor);
+        WMReleaseColor(bPtr->disTextColor);
 
     bPtr->disTextColor = WMRetainColor(color);
 }
@@ -420,12 +420,12 @@ void
 WMSetButtonSelected(WMButton *bPtr, int isSelected)
 {
     bPtr->flags.selected = isSelected ? 1 : 0;
- 
+
     if (bPtr->view->flags.realized) {
-	paintButton(bPtr);
-    }    
+        paintButton(bPtr);
+    }
     if (bPtr->groupIndex > 0)
-	WMPostNotificationName(WMPushedRadioNotification, bPtr, NULL);
+        WMPostNotificationName(WMPushedRadioNotification, bPtr, NULL);
 }
 
 
@@ -433,7 +433,7 @@ int
 WMGetButtonSelected(WMButton *bPtr)
 {
     CHECK_CLASS(bPtr, WC_Button);
-    
+
     return bPtr->flags.selected;
 }
 
@@ -442,9 +442,9 @@ void
 WMSetButtonBordered(WMButton *bPtr, int isBordered)
 {
     bPtr->flags.bordered = isBordered;
-    
+
     if (bPtr->view->flags.realized) {
-	paintButton(bPtr);
+        paintButton(bPtr);
     }
 }
 
@@ -453,7 +453,7 @@ void
 WMSetButtonFont(WMButton *bPtr, WMFont *font)
 {
     if (bPtr->font)
-	WMReleaseFont(bPtr->font);
+        WMReleaseFont(bPtr->font);
 
     bPtr->font = WMRetainFont(font);
 }
@@ -465,7 +465,7 @@ WMSetButtonEnabled(WMButton *bPtr, Bool flag)
     bPtr->flags.enabled = ((flag==0) ? 0 : 1);
 
     if (bPtr->view->flags.mapped) {
-	paintButton(bPtr);
+        paintButton(bPtr);
     }
 }
 
@@ -501,28 +501,28 @@ WMPerformButtonClick(WMButton *bPtr)
     CHECK_CLASS(bPtr, WC_Button);
 
     if (!bPtr->flags.enabled)
-	return;
+        return;
 
     bPtr->flags.pushed = 1;
     bPtr->flags.selected = 1;
-    
+
     if (bPtr->view->flags.mapped) {
-	paintButton(bPtr);
-	XFlush(WMScreenDisplay(WMWidgetScreen(bPtr)));
-	wusleep(20000);
+        paintButton(bPtr);
+        XFlush(WMScreenDisplay(WMWidgetScreen(bPtr)));
+        wusleep(20000);
     }
-     
+
     bPtr->flags.pushed = 0;
-  
+
     if (bPtr->groupIndex > 0) {
-	WMPostNotificationName(WMPushedRadioNotification, bPtr, NULL);
+        WMPostNotificationName(WMPushedRadioNotification, bPtr, NULL);
     }
 
     if (bPtr->action)
-	(*bPtr->action)(bPtr, bPtr->clientData);
-    
+        (*bPtr->action)(bPtr, bPtr->clientData);
+
     if (bPtr->view->flags.mapped)
-	paintButton(bPtr);
+        paintButton(bPtr);
 }
 
 
@@ -531,9 +531,9 @@ void
 WMSetButtonAction(WMButton *bPtr, WMAction *action, void *clientData)
 {
     CHECK_CLASS(bPtr, WC_Button);
-    
+
     bPtr->action = action;
-    
+
     bPtr->clientData = clientData;
 }
 
@@ -547,11 +547,11 @@ radioPushObserver(void *observerData, WMNotification *notification)
     WMButton *pushedButton = (WMButton*)WMGetNotificationObject(notification);
 
     if (bPtr!=pushedButton && pushedButton->groupIndex == bPtr->groupIndex
-	&& bPtr->groupIndex!=0) {
-	if (bPtr->flags.selected) {
-	    bPtr->flags.selected = 0;
-	    paintButton(bPtr);
-	}
+        && bPtr->groupIndex!=0) {
+        if (bPtr->flags.selected) {
+            bPtr->flags.selected = 0;
+            paintButton(bPtr);
+        }
     }
 }
 
@@ -561,23 +561,23 @@ void
 WMGroupButtons(WMButton *bPtr, WMButton *newMember)
 {
     static int tagIndex = 0;
-    
+
     CHECK_CLASS(bPtr, WC_Button);
     CHECK_CLASS(newMember, WC_Button);
 
     if (!bPtr->flags.addedObserver) {
-	WMAddNotificationObserver(radioPushObserver, bPtr,
-				  WMPushedRadioNotification, NULL);
-	bPtr->flags.addedObserver = 1;
+        WMAddNotificationObserver(radioPushObserver, bPtr,
+                                  WMPushedRadioNotification, NULL);
+        bPtr->flags.addedObserver = 1;
     }
     if (!newMember->flags.addedObserver) {
-	WMAddNotificationObserver(radioPushObserver, newMember,
-				  WMPushedRadioNotification, NULL);
-	newMember->flags.addedObserver = 1;
+        WMAddNotificationObserver(radioPushObserver, newMember,
+                                  WMPushedRadioNotification, NULL);
+        newMember->flags.addedObserver = 1;
     }
-    
+
     if (bPtr->groupIndex==0) {
-	bPtr->groupIndex = ++tagIndex;
+        bPtr->groupIndex = ++tagIndex;
     }
     newMember->groupIndex = bPtr->groupIndex;
 }
@@ -588,8 +588,8 @@ WMSetButtonContinuous(WMButton *bPtr, Bool flag)
 {
     bPtr->flags.continuous = ((flag==0) ? 0 : 1);
     if (bPtr->timer) {
-	WMDeleteTimerHandler(bPtr->timer);
-	bPtr->timer = NULL;
+        WMDeleteTimerHandler(bPtr->timer);
+        bPtr->timer = NULL;
     }
 }
 
@@ -626,14 +626,14 @@ paintButton(Button *bPtr)
     }
 
     if (bPtr->flags.enabled || !bPtr->dimage)
-	image = bPtr->image;
+        image = bPtr->image;
     else
-	image = bPtr->dimage;
+        image = bPtr->dimage;
     offset = 0;
     if (bPtr->flags.bordered)
-	relief = WRRaised;
+        relief = WRRaised;
     else
-	relief = WRFlat;
+        relief = WRFlat;
 
     if (bPtr->flags.selected) {
         if (bPtr->flags.stateLight) {
@@ -641,45 +641,45 @@ paintButton(Button *bPtr)
             textColor = scrPtr->black;
         }
 
-	if (bPtr->flags.stateChange) {
-	    if (bPtr->altCaption)
-		caption = bPtr->altCaption;
-	    if (bPtr->altImage)
-		image = bPtr->altImage;
+        if (bPtr->flags.stateChange) {
+            if (bPtr->altCaption)
+                caption = bPtr->altCaption;
+            if (bPtr->altImage)
+                image = bPtr->altImage;
             if (bPtr->altTextColor)
                 textColor = bPtr->altTextColor;
         }
 
-	if (bPtr->flags.statePush && bPtr->flags.bordered) {
-	    relief = WRSunken;
-	    offset = 1;
-	}
+        if (bPtr->flags.statePush && bPtr->flags.bordered) {
+            relief = WRSunken;
+            offset = 1;
+        }
     }
 
     if (bPtr->flags.pushed) {
-	if (bPtr->flags.pushIn) {
-	    relief = WRPushed;
-	    offset = 1;
-	}
+        if (bPtr->flags.pushIn) {
+            relief = WRPushed;
+            offset = 1;
+        }
         if (bPtr->flags.pushLight) {
             backColor = scrPtr->white;
             textColor = scrPtr->black;
         }
 
-	if (bPtr->flags.pushChange) {
-	    if (bPtr->altCaption)
-		caption = bPtr->altCaption;
-	    if (bPtr->altImage)
-		image = bPtr->altImage;
+        if (bPtr->flags.pushChange) {
+            if (bPtr->altCaption)
+                caption = bPtr->altCaption;
+            if (bPtr->altImage)
+                image = bPtr->altImage;
             if (bPtr->altTextColor)
                 textColor = bPtr->altTextColor;
-	}
+        }
     }
 
     W_PaintTextAndImage(bPtr->view, True, textColor,
-			(bPtr->font!=NULL ? bPtr->font : scrPtr->normalFont),
-			relief, caption, bPtr->flags.alignment, image, 
-			bPtr->flags.imagePosition, backColor, offset);
+                        (bPtr->font!=NULL ? bPtr->font : scrPtr->normalFont),
+                        relief, caption, bPtr->flags.alignment, image,
+                        bPtr->flags.imagePosition, backColor, offset);
 }
 
 
@@ -693,29 +693,29 @@ handleEvents(XEvent *event, void *data)
 
 
     switch (event->type) {
-     case Expose:
-	if (event->xexpose.count!=0)
-	    break;
-	paintButton(bPtr);
-	break;
-	
-     case DestroyNotify:
-	destroyButton(bPtr);
-	break;
+    case Expose:
+        if (event->xexpose.count!=0)
+            break;
+        paintButton(bPtr);
+        break;
+
+    case DestroyNotify:
+        destroyButton(bPtr);
+        break;
     }
 }
 
 
-static void 
+static void
 autoRepeat(void *data)
 {
     Button *bPtr = (Button*)data;
 
     if (bPtr->action && bPtr->flags.pushed)
-	(*bPtr->action)(bPtr, bPtr->clientData);
+        (*bPtr->action)(bPtr, bPtr->clientData);
 
     bPtr->timer = WMAddTimerHandler((int)(bPtr->periodicInterval*1000),
-				    autoRepeat, bPtr);
+                                    autoRepeat, bPtr);
 }
 
 
@@ -728,80 +728,80 @@ handleActionEvents(XEvent *event, void *data)
     CHECK_CLASS(data, WC_Button);
 
     if (!bPtr->flags.enabled)
-	return;
-    
+        return;
+
     switch (event->type) {
-     case EnterNotify:
-	if (bPtr->groupIndex == 0) {
-	    bPtr->flags.pushed = bPtr->flags.wasPushed;
-	    if (bPtr->flags.pushed) {
-		bPtr->flags.selected = !bPtr->flags.prevSelected;
-		dopaint = 1;
-	    }
-	}
-	break;
+    case EnterNotify:
+        if (bPtr->groupIndex == 0) {
+            bPtr->flags.pushed = bPtr->flags.wasPushed;
+            if (bPtr->flags.pushed) {
+                bPtr->flags.selected = !bPtr->flags.prevSelected;
+                dopaint = 1;
+            }
+        }
+        break;
 
-     case LeaveNotify:
-	if (bPtr->groupIndex == 0) {
-	    bPtr->flags.wasPushed = bPtr->flags.pushed;
-	    if (bPtr->flags.pushed) {
-		bPtr->flags.selected = bPtr->flags.prevSelected;
-		dopaint = 1;
-	    }
-	    bPtr->flags.pushed = 0;
-	}
-	break;
+    case LeaveNotify:
+        if (bPtr->groupIndex == 0) {
+            bPtr->flags.wasPushed = bPtr->flags.pushed;
+            if (bPtr->flags.pushed) {
+                bPtr->flags.selected = bPtr->flags.prevSelected;
+                dopaint = 1;
+            }
+            bPtr->flags.pushed = 0;
+        }
+        break;
 
-     case ButtonPress:
-	if (event->xbutton.button == Button1) {
-	    bPtr->flags.prevSelected = bPtr->flags.selected;	    
-	    bPtr->flags.wasPushed = 0;
-	    bPtr->flags.pushed = 1;
-	    if (bPtr->groupIndex>0) {
-		bPtr->flags.selected = 1;
-		dopaint = 1;
-		break;
-	    }
-	    bPtr->flags.selected = !bPtr->flags.selected;
-	    dopaint = 1;
-	    
-	    if (bPtr->flags.continuous && !bPtr->timer) {
-		bPtr->timer = WMAddTimerHandler((int)(bPtr->periodicDelay*1000),
-						autoRepeat, bPtr);
-	    }
-	}
-	break;
- 
-     case ButtonRelease:
-	if (event->xbutton.button == Button1) {
-	    if (bPtr->flags.pushed) {
-		if (bPtr->groupIndex==0 || 
-		    (bPtr->flags.selected && bPtr->groupIndex > 0))
-		    doclick = 1;
-		dopaint = 1;
-		if (bPtr->flags.springLoaded) {
-		    bPtr->flags.selected = bPtr->flags.prevSelected;
-		}
-	    }
-	    bPtr->flags.pushed = 0;
-	}
-	if (bPtr->timer) {
-	    WMDeleteTimerHandler(bPtr->timer);
-	    bPtr->timer = NULL;
-	}
-	break;	
+    case ButtonPress:
+        if (event->xbutton.button == Button1) {
+            bPtr->flags.prevSelected = bPtr->flags.selected;
+            bPtr->flags.wasPushed = 0;
+            bPtr->flags.pushed = 1;
+            if (bPtr->groupIndex>0) {
+                bPtr->flags.selected = 1;
+                dopaint = 1;
+                break;
+            }
+            bPtr->flags.selected = !bPtr->flags.selected;
+            dopaint = 1;
+
+            if (bPtr->flags.continuous && !bPtr->timer) {
+                bPtr->timer = WMAddTimerHandler((int)(bPtr->periodicDelay*1000),
+                                                autoRepeat, bPtr);
+            }
+        }
+        break;
+
+    case ButtonRelease:
+        if (event->xbutton.button == Button1) {
+            if (bPtr->flags.pushed) {
+                if (bPtr->groupIndex==0 ||
+                    (bPtr->flags.selected && bPtr->groupIndex > 0))
+                    doclick = 1;
+                dopaint = 1;
+                if (bPtr->flags.springLoaded) {
+                    bPtr->flags.selected = bPtr->flags.prevSelected;
+                }
+            }
+            bPtr->flags.pushed = 0;
+        }
+        if (bPtr->timer) {
+            WMDeleteTimerHandler(bPtr->timer);
+            bPtr->timer = NULL;
+        }
+        break;
     }
 
     if (dopaint)
-	paintButton(bPtr);
-    
-    if (doclick) {
-	if (bPtr->flags.selected && bPtr->groupIndex > 0) {
-	    WMPostNotificationName(WMPushedRadioNotification, bPtr, NULL);
-	}
+        paintButton(bPtr);
 
-	if (bPtr->action)
-	    (*bPtr->action)(bPtr, bPtr->clientData);
+    if (doclick) {
+        if (bPtr->flags.selected && bPtr->groupIndex > 0) {
+            WMPostNotificationName(WMPushedRadioNotification, bPtr, NULL);
+        }
+
+        if (bPtr->action)
+            (*bPtr->action)(bPtr, bPtr->clientData);
     }
 }
 
@@ -811,20 +811,20 @@ static void
 destroyButton(Button *bPtr)
 {
     if (bPtr->flags.addedObserver) {
-	WMRemoveNotificationObserver(bPtr);
+        WMRemoveNotificationObserver(bPtr);
     }
 
     if (bPtr->timer)
-	WMDeleteTimerHandler(bPtr->timer);
-    
+        WMDeleteTimerHandler(bPtr->timer);
+
     if (bPtr->font)
-	WMReleaseFont(bPtr->font);
-    
+        WMReleaseFont(bPtr->font);
+
     if (bPtr->caption)
-	wfree(bPtr->caption);
+        wfree(bPtr->caption);
 
     if (bPtr->altCaption)
-	wfree(bPtr->altCaption);
+        wfree(bPtr->altCaption);
 
     if (bPtr->textColor)
         WMReleaseColor(bPtr->textColor);
@@ -836,16 +836,16 @@ destroyButton(Button *bPtr)
         WMReleaseColor(bPtr->disTextColor);
 
     if (bPtr->image)
-	WMReleasePixmap(bPtr->image);
+        WMReleasePixmap(bPtr->image);
 
     if (bPtr->dimage) {
-	/* yuck.. kluge */
-	bPtr->dimage->pixmap = None;
+        /* yuck.. kluge */
+        bPtr->dimage->pixmap = None;
 
-	WMReleasePixmap(bPtr->dimage);
+        WMReleasePixmap(bPtr->dimage);
     }
     if (bPtr->altImage)
-	WMReleasePixmap(bPtr->altImage);
+        WMReleasePixmap(bPtr->altImage);
 
     wfree(bPtr);
 }

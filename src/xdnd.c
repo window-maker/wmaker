@@ -33,13 +33,14 @@ Atom _XA_XdndFinished;
 Atom _XA_WINDOWMAKER_XDNDEXCHANGE;
 
 /*
-Atom _XA_MOTIF_DRAG_RECEIVER_INFO;
-Atom _XA_MOTIF_DRAG_AND_DROP_MESSAGE;
-*/
+ Atom _XA_MOTIF_DRAG_RECEIVER_INFO;
+ Atom _XA_MOTIF_DRAG_AND_DROP_MESSAGE;
+ */
 
 Atom atom_support;
 
-void wXDNDInitializeAtoms()
+void
+wXDNDInitializeAtoms()
 {
 
     _XA_XdndAware = XInternAtom(dpy, "XdndAware", False);
@@ -55,37 +56,41 @@ void wXDNDInitializeAtoms()
     _XA_WINDOWMAKER_XDNDEXCHANGE = XInternAtom(dpy, "_WINDOWMAKER_XDNDEXCHANGE", False);
 
     /*
-    _XA_MOTIF_DRAG_RECEIVER_INFO = XInternAtom(dpy, "_MOTIF_DRAG_RECEIVER_INFO",False);
-    _XA_MOTIF_DRAG_AND_DROP_MESSAGE = XInternAtom(dpy, "_MOTIF_DRAG_AND_DROP_MESSAGE", False);
-    */
+     _XA_MOTIF_DRAG_RECEIVER_INFO = XInternAtom(dpy, "_MOTIF_DRAG_RECEIVER_INFO",False);
+     _XA_MOTIF_DRAG_AND_DROP_MESSAGE = XInternAtom(dpy, "_MOTIF_DRAG_AND_DROP_MESSAGE", False);
+     */
 }
 
-void wXDNDMakeAwareness(Window window) {
+void
+wXDNDMakeAwareness(Window window)
+{
     long int xdnd_version = 3;
     /*
-    MotifDragReceiverInfo info;
-    */
+     MotifDragReceiverInfo info;
+     */
     XChangeProperty (dpy, window, _XA_XdndAware, XA_ATOM,
-            32, PropModeAppend, (char *)&xdnd_version, 1);
+                     32, PropModeAppend, (char *)&xdnd_version, 1);
 
     /*** MOTIF ***
-    info.byte_order = '\0';
-    info.protocol_version = 0;
-    info.protocol_style = XmDRAG_DYNAMIC;
-    info.proxy_window = 0;
-    info.num_drop_sites = 0;
-    info.total_size = sizeof(info);
+     info.byte_order = '\0';
+     info.protocol_version = 0;
+     info.protocol_style = XmDRAG_DYNAMIC;
+     info.proxy_window = 0;
+     info.num_drop_sites = 0;
+     info.total_size = sizeof(info);
 
-    XChangeProperty (dpy, window,
-                   _XA_MOTIF_DRAG_RECEIVER_INFO,
-                   _XA_MOTIF_DRAG_RECEIVER_INFO,
-                   8, PropModeReplace,
-                   (unsigned char *)&info,
-                   sizeof (info));
-                   */
+     XChangeProperty (dpy, window,
+     _XA_MOTIF_DRAG_RECEIVER_INFO,
+     _XA_MOTIF_DRAG_RECEIVER_INFO,
+     8, PropModeReplace,
+     (unsigned char *)&info,
+     sizeof (info));
+     */
 }
 
-void wXDNDClearAwareness(Window window) {
+void
+wXDNDClearAwareness(Window window)
+{
     //long int xdnd_version = 3;
     XDeleteProperty (dpy, window, _XA_XdndAware);
 }
@@ -106,11 +111,11 @@ wXDNDProcessSelection(XEvent *event)
 
 
     XGetWindowProperty(dpy, event->xselection.requestor,
-            _XA_WINDOWMAKER_XDNDEXCHANGE,
-            0, 65536, True, atom_support, &ret_type, &ret_format,
-            &ret_item, &remain_byte, (unsigned char **)&delme);
+                       _XA_WINDOWMAKER_XDNDEXCHANGE,
+                       0, 65536, True, atom_support, &ret_type, &ret_format,
+                       &ret_item, &remain_byte, (unsigned char **)&delme);
     if (delme){
-		scr->xdestring=delme;
+        scr->xdestring=delme;
     }
 
     /*send finished*/
@@ -147,7 +152,7 @@ wXDNDProcessSelection(XEvent *event)
                     WMAddToArray(items, wstrdup(&retain[length + 1]));
                     total_size += str_size + 3; /* reserve for " \"\"" */
                     /* this is nonsense -- if (length)
-                        WMAppendArray(items, WMCreateArray(1));*/
+                     WMAppendArray(items, WMCreateArray(1));*/
                 }
                 retain[length] = 0;
             }
@@ -175,9 +180,9 @@ wXDNDProcessSelection(XEvent *event)
         WMFreeArray(items);
         wDockReceiveDNDDrop(scr,event);
         /*
-        printf("free ");
-        puts(scr->xdestring);
-        */
+         printf("free ");
+         puts(scr->xdestring);
+         */
         wfree(scr->xdestring); /* this xdestring is not from Xlib (no XFree) */
     }
 
@@ -194,9 +199,9 @@ isAwareXDND(Window window)
 
     if (!window) return False;
     XGetWindowProperty (dpy, window, _XA_XdndAware,
-                    0, 0x8000000L, False, XA_ATOM,
-                    &actual, &format,
-                    &count, &remaining, &data);
+                        0, 0x8000000L, False, XA_ATOM,
+                        &actual, &format,
+                        &count, &remaining, &data);
     if (actual != XA_ATOM || format != 32 || count == 0 || !data) {
         if (data)
             XFree (data);
@@ -213,7 +218,7 @@ acceptXDND(Window window)
     WScreen *scr = wScreenForWindow(window);
     WDock *dock;
     int icon_pos,i;
-    
+
     icon_pos = -1;
     if ((dock = scr->dock)!=NULL) {
         for (i=0; i<dock->max_icons; i++) {
@@ -236,9 +241,9 @@ acceptXDND(Window window)
     if (icon_pos<0) return False;
     if (!dock) return False;
     if (isAwareXDND(dock->icon_array[icon_pos]->icon->icon_win)) return False;
-    
+
     if (dock->icon_array[icon_pos]->dnd_command!=NULL) return True;
-    
+
     return False;
 }
 
@@ -247,62 +252,62 @@ wXDNDProcessClientMessage(XClientMessageEvent *event)
 {
     /* test */
     {
-    char * name = XGetAtomName(dpy, event->message_type);
-    /*
-    printf("Get %s\n",name);
-    */
-    XFree(name);
+        char * name = XGetAtomName(dpy, event->message_type);
+        /*
+         printf("Get %s\n",name);
+         */
+        XFree(name);
     }
 
     /*
-    if (event->message_type == _XA_MOTIF_DRAG_AND_DROP_MESSAGE) {
-        printf("motif dnd msg %d\n",event->data.b[0]);
-        if (event->data.b[0] == XmDROP_START){
-            unsigned x_root, y_root, flags;
-            unsigned char reason;
-            unsigned long timestamp;
-            Atom atom;
-            Window source_window;
-            MotifDragInitiatorInfo *initiator_info;
-            Atom ret_type;
-            int ret_format;
-            unsigned long ret_item;
-            unsigned long remain_byte;
+     if (event->message_type == _XA_MOTIF_DRAG_AND_DROP_MESSAGE) {
+     printf("motif dnd msg %d\n",event->data.b[0]);
+     if (event->data.b[0] == XmDROP_START){
+     unsigned x_root, y_root, flags;
+     unsigned char reason;
+     unsigned long timestamp;
+     Atom atom;
+     Window source_window;
+     MotifDragInitiatorInfo *initiator_info;
+     Atom ret_type;
+     int ret_format;
+     unsigned long ret_item;
+     unsigned long remain_byte;
 
-            reason = event->data.b[0];
-            flags = event->data.s[1];
-            timestamp = event->data.l[1];
-            x_root = event->data.s[4];
-            y_root = event->data.s[5];
-            atom = event->data.l[3];
-            source_window = event->data.l[4];
+     reason = event->data.b[0];
+     flags = event->data.s[1];
+     timestamp = event->data.l[1];
+     x_root = event->data.s[4];
+     y_root = event->data.s[5];
+     atom = event->data.l[3];
+     source_window = event->data.l[4];
 
-    XGetWindowProperty(dpy, source_window, atom,
-            0, sizeof(*initiator_info), True, atom_support,
-            &ret_type, &ret_format,
-            &ret_item, &remain_byte, (unsigned char **)&initiator_info);
-        }
-    }
-    else */
+     XGetWindowProperty(dpy, source_window, atom,
+     0, sizeof(*initiator_info), True, atom_support,
+     &ret_type, &ret_format,
+     &ret_item, &remain_byte, (unsigned char **)&initiator_info);
+     }
+     }
+     else */
     if (event->message_type == _XA_XdndEnter) {
         if ((event->data.l[1] & 1) == 0){
             atom_support = event->data.l[2];
         }
         /*
-        else puts("enter more than 3 types");
-        */
+         else puts("enter more than 3 types");
+         */
         return True;
     } else if (event->message_type == _XA_XdndLeave) {
         return True;
     } else if (event->message_type == _XA_XdndDrop) {
         if (event->data.l[0] == XGetSelectionOwner(dpy, _XA_XdndSelection)){
             XConvertSelection(dpy, _XA_XdndSelection, atom_support,
-                    _XA_WINDOWMAKER_XDNDEXCHANGE, event->window, CurrentTime);
+                              _XA_WINDOWMAKER_XDNDEXCHANGE, event->window, CurrentTime);
         }
         else {
             puts("wierd selection owner? QT?");
             XConvertSelection(dpy, _XA_XdndSelection, atom_support,
-                    _XA_WINDOWMAKER_XDNDEXCHANGE, event->window, CurrentTime);
+                              _XA_WINDOWMAKER_XDNDEXCHANGE, event->window, CurrentTime);
         }
         return True;
     } else if (event->message_type == _XA_XdndPosition) {
@@ -317,7 +322,7 @@ wXDNDProcessClientMessage(XClientMessageEvent *event)
             xevent.xany.display = dpy;
             xevent.xclient.window = srcwin;
             xevent.xclient.message_type = _XA_XdndStatus;
-            xevent.xclient.format = 32; 
+            xevent.xclient.format = 32;
 
             XDND_STATUS_TARGET_WIN (&xevent) = event->window;
             XDND_STATUS_WILL_ACCEPT_SET (&xevent, acceptXDND(event->window));
@@ -333,3 +338,4 @@ wXDNDProcessClientMessage(XClientMessageEvent *event)
 }
 
 #endif
+

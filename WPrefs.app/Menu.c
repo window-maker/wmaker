@@ -1,9 +1,9 @@
 /* Menu.c- menu definition
- * 
+ *
  *  WPrefs - Window Maker Preferences Program
- * 
+ *
  *  Copyright (c) 2000-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -55,7 +55,7 @@ typedef struct _Panel {
     CallbackRec callbacks;
     WMWidget *parent;
 
-    
+
     WMFont *boldFont;
     WMFont *normalFont;
     WMColor *white;
@@ -65,7 +65,7 @@ typedef struct _Panel {
     WMPixmap *markerPix[LastInfo];
 
     WMPopUpButton *typeP;
-    
+
     WMWidget *itemPad[3];
     int currentPad;
 
@@ -103,15 +103,15 @@ typedef struct _Panel {
 
     WMFrame *paramF;
     WMTextField *paramT;
-    
+
     WMButton *quickB;
-    
+
     Bool dontAsk; 		       /* whether to comfirm submenu remove */
     Bool dontSave;
-    
+
     Bool capturing;
 
-        
+
     /* about the currently selected item */
     WEditMenuItem *currentItem;
     InfoType currentType;
@@ -122,27 +122,27 @@ typedef struct _Panel {
 typedef struct {
     InfoType type;
     union {
-	struct {
-	    int command;
-	    char *parameter;
-	    char *shortcut;
-	} command;
-	struct {
-	    char *command;
-	    char *shortcut;
-	} exec;
-	struct {
-	    char *path;
-	} external;
-	struct {
-	    char *command;
-	    unsigned cached:1;
-	} pipe;
-	struct {
-	    char *directory;
-	    char *command;
-	    unsigned stripExt:1;
-	} directory;
+        struct {
+            int command;
+            char *parameter;
+            char *shortcut;
+        } command;
+        struct {
+            char *command;
+            char *shortcut;
+        } exec;
+        struct {
+            char *path;
+        } external;
+        struct {
+            char *command;
+            unsigned cached:1;
+        } pipe;
+        struct {
+            char *directory;
+            char *command;
+            unsigned stripExt:1;
+        } directory;
     } param;
 } ItemData;
 
@@ -150,17 +150,17 @@ typedef struct {
 
 static char *commandNames[] = {
     "ARRANGE_ICONS",
-	"HIDE_OTHERS",
-	"SHOW_ALL",
-	"EXIT",
-	"SHUTDOWN",
-	"RESTART",
-	"RESTART",
-	"SAVE_SESSION",
-	"CLEAR_SESSION",
-	"REFRESH",
-	"INFO_PANEL",
-	"LEGAL_PANEL"
+    "HIDE_OTHERS",
+    "SHOW_ALL",
+    "EXIT",
+    "SHUTDOWN",
+    "RESTART",
+    "RESTART",
+    "SAVE_SESSION",
+    "CLEAR_SESSION",
+    "REFRESH",
+    "INFO_PANEL",
+    "LEGAL_PANEL"
 };
 
 
@@ -175,23 +175,23 @@ static char *commandNames[] = {
 static void showData(_Panel *panel);
 
 
-static void updateMenuItem(_Panel *panel, WEditMenuItem *item, 
-			   WMWidget *changedWidget);
+static void updateMenuItem(_Panel *panel, WEditMenuItem *item,
+                           WMWidget *changedWidget);
 
-static void menuItemSelected(struct WEditMenuDelegate *delegate, 
-			     WEditMenu *menu, WEditMenuItem *item);
+static void menuItemSelected(struct WEditMenuDelegate *delegate,
+                             WEditMenu *menu, WEditMenuItem *item);
 
 static void menuItemDeselected(struct WEditMenuDelegate *delegate,
-			       WEditMenu *menu, WEditMenuItem *item);
+                               WEditMenu *menu, WEditMenuItem *item);
 
 static void menuItemCloned(struct WEditMenuDelegate *delegate, WEditMenu *menu,
-			   WEditMenuItem *origItem, WEditMenuItem *newItem);
+                           WEditMenuItem *origItem, WEditMenuItem *newItem);
 
 static void menuItemEdited(struct WEditMenuDelegate *delegate, WEditMenu *menu,
-			   WEditMenuItem *item);
+                           WEditMenuItem *item);
 
-static Bool shouldRemoveItem(struct WEditMenuDelegate *delegate, 
-			     WEditMenu *menu, WEditMenuItem *item);
+static Bool shouldRemoveItem(struct WEditMenuDelegate *delegate,
+                             WEditMenu *menu, WEditMenuItem *item);
 
 
 static void freeItemData(ItemData *data);
@@ -200,11 +200,11 @@ static void freeItemData(ItemData *data);
 
 static WEditMenuDelegate menuDelegate = {
     NULL,
-	menuItemCloned,
-	menuItemEdited,
-	menuItemSelected,
-	menuItemDeselected,
-	shouldRemoveItem
+    menuItemCloned,
+    menuItemEdited,
+    menuItemSelected,
+    menuItemDeselected,
+    shouldRemoveItem
 };
 
 
@@ -214,7 +214,7 @@ dataChanged(void *self, WMNotification *notif)
     _Panel *panel = (_Panel*)self;
     WEditMenuItem *item = panel->currentItem;
     WMWidget *w = (WMWidget*)WMGetNotificationObject(notif);
-    
+
     updateMenuItem(panel, item, w);
 }
 
@@ -224,7 +224,7 @@ buttonClicked(WMWidget *w, void *data)
 {
     _Panel *panel = (_Panel*)data;
     WEditMenuItem *item = panel->currentItem;
-    
+
     updateMenuItem(panel, item, w);
 }
 
@@ -237,14 +237,14 @@ icommandLClicked(WMWidget *w, void *data)
 
     cmd = WMGetListSelectedItemRow(w);
     if (cmd == 3 || cmd == 4) {
-	WMMapWidget(panel->quickB);
+        WMMapWidget(panel->quickB);
     } else {
-	WMUnmapWidget(panel->quickB);
+        WMUnmapWidget(panel->quickB);
     }
     if (cmd == 6) {
-	WMMapWidget(panel->paramF);
+        WMMapWidget(panel->paramF);
     } else {
-	WMUnmapWidget(panel->paramF);
+        WMUnmapWidget(panel->paramF);
     }
 }
 
@@ -295,47 +295,47 @@ captureShortcut(Display *dpy, _Panel *panel)
     char *key = NULL;
 
     while (panel->capturing) {
-    	XAllowEvents(dpy, AsyncKeyboard, CurrentTime);
-	WMNextEvent(dpy, &ev);
-	if (ev.type==KeyPress && ev.xkey.keycode!=0) {
-	    ksym = XKeycodeToKeysym(dpy, ev.xkey.keycode, 0);
-	    if (!IsModifierKey(ksym)) {
-		key=XKeysymToString(ksym);
-		panel->capturing = 0;
-		break;
-	    }
-	}
-	WMHandleEvent(&ev);
+        XAllowEvents(dpy, AsyncKeyboard, CurrentTime);
+        WMNextEvent(dpy, &ev);
+        if (ev.type==KeyPress && ev.xkey.keycode!=0) {
+            ksym = XKeycodeToKeysym(dpy, ev.xkey.keycode, 0);
+            if (!IsModifierKey(ksym)) {
+                key=XKeysymToString(ksym);
+                panel->capturing = 0;
+                break;
+            }
+        }
+        WMHandleEvent(&ev);
     }
-    
+
     if (!key)
-	return NULL;
-    
+        return NULL;
+
     buffer[0] = 0;
-    
+
     if (ev.xkey.state & ControlMask) {
-	strcat(buffer, "Control+");
-    } 
+        strcat(buffer, "Control+");
+    }
     if (ev.xkey.state & ShiftMask) {
-	strcat(buffer, "Shift+");
-    } 
+        strcat(buffer, "Shift+");
+    }
     if (ev.xkey.state & Mod1Mask) {
-	strcat(buffer, "Mod1+");
-    } 
+        strcat(buffer, "Mod1+");
+    }
     if (ev.xkey.state & Mod2Mask) {
-	strcat(buffer, "Mod2+");
-    } 
+        strcat(buffer, "Mod2+");
+    }
     if (ev.xkey.state & Mod3Mask) {
-	strcat(buffer, "Mod3+");
-    } 
+        strcat(buffer, "Mod3+");
+    }
     if (ev.xkey.state & Mod4Mask) {
-	strcat(buffer, "Mod4+");
-    } 
+        strcat(buffer, "Mod4+");
+    }
     if (ev.xkey.state & Mod5Mask) {
-	strcat(buffer, "Mod5+");
+        strcat(buffer, "Mod5+");
     }
     strcat(buffer, key);
-    
+
     return wstrdup(buffer);
 }
 
@@ -348,24 +348,24 @@ sgrabClicked(WMWidget *w, void *data)
     Display *dpy = WMScreenDisplay(WMWidgetScreen(panel->parent));
     char *shortcut;
 
-    
+
     if (w == panel->sclearB) {
-	WMSetTextFieldText(panel->shortT, "");
-	updateMenuItem(panel, panel->currentItem, panel->shortT);
-	return;
+        WMSetTextFieldText(panel->shortT, "");
+        updateMenuItem(panel, panel->currentItem, panel->shortT);
+        return;
     }
-    
+
     if (!panel->capturing) {
-	panel->capturing = 1;
-	WMSetButtonText(w, _("Cancel"));
-	XGrabKeyboard(dpy, WMWidgetXID(panel->parent), True, GrabModeAsync,
-		      GrabModeAsync, CurrentTime);
-	shortcut = captureShortcut(dpy, panel);
-	if (shortcut) {
-	    WMSetTextFieldText(panel->shortT, shortcut);
-	    updateMenuItem(panel, panel->currentItem, panel->shortT);
-	    wfree(shortcut);
-	}
+        panel->capturing = 1;
+        WMSetButtonText(w, _("Cancel"));
+        XGrabKeyboard(dpy, WMWidgetXID(panel->parent), True, GrabModeAsync,
+                      GrabModeAsync, CurrentTime);
+        shortcut = captureShortcut(dpy, panel);
+        if (shortcut) {
+            WMSetTextFieldText(panel->shortT, shortcut);
+            updateMenuItem(panel, panel->currentItem, panel->shortT);
+            wfree(shortcut);
+        }
     }
     panel->capturing = 0;
     WMSetButtonText(w, _("Capture"));
@@ -378,10 +378,10 @@ changedItemPad(WMWidget *w, void *data)
 {
     _Panel *panel = (_Panel*)data;
     int padn = WMGetPopUpButtonSelectedItem(w);
-    
+
     WMUnmapWidget(panel->itemPad[panel->currentPad]);
     WMMapWidget(panel->itemPad[padn]);
-    
+
     panel->currentPad = padn;
 }
 
@@ -413,9 +413,9 @@ putNewItem(_Panel *panel, WEditMenu *menu, int type, char *title)
 
     data = NEW(ItemData);
     data->type = type;
-    WSetEditMenuItemData(item, data, (WMCallback*)freeItemData); 
+    WSetEditMenuItemData(item, data, (WMCallback*)freeItemData);
     WSetEditMenuItemImage(item, panel->markerPix[type]);
-   
+
     return data;
 }
 
@@ -424,7 +424,7 @@ static WEditMenu*
 makeFactoryMenu(WMWidget *parent, int width)
 {
     WEditMenu *pad;
-    
+
     pad = WCreateEditMenuPad(parent);
     WMResizeWidget(pad, width, 10);
     WSetEditMenuMinSize(pad, wmksize(width, 0));
@@ -433,7 +433,7 @@ makeFactoryMenu(WMWidget *parent, int width)
     WSetEditMenuEditable(pad, False);
     WSetEditMenuIsFactory(pad, True);
     WSetEditMenuDelegate(pad, &menuDelegate);
-    
+
     return pad;
 }
 
@@ -454,7 +454,7 @@ createPanel(_Panel *p)
 
     menuDelegate.data = panel;
 
-    
+
     panel->boldFont = bold;
     panel->normalFont = font;
 
@@ -463,41 +463,41 @@ createPanel(_Panel *p)
     panel->gray = gray;
 
     {
-	Pixmap pix;
-	Display *dpy = WMScreenDisplay(scr);
-	GC gc;
-	WMPixmap *pixm;
+        Pixmap pix;
+        Display *dpy = WMScreenDisplay(scr);
+        GC gc;
+        WMPixmap *pixm;
 
-	pixm = WMCreatePixmap(scr, 7, 7, WMScreenDepth(scr), True);
+        pixm = WMCreatePixmap(scr, 7, 7, WMScreenDepth(scr), True);
 
-	pix = WMGetPixmapXID(pixm);
+        pix = WMGetPixmapXID(pixm);
 
-	XDrawLine(dpy, pix, WMColorGC(black), 0, 3, 6, 3);
-	XDrawLine(dpy, pix, WMColorGC(black), 3, 0, 3, 6);
-	/*
-	XDrawLine(dpy, pix, WMColorGC(black), 1, 0, 3, 3);
-	XDrawLine(dpy, pix, WMColorGC(black), 1, 6, 3, 3);
-	XDrawLine(dpy, pix, WMColorGC(black), 0, 0, 0, 6);
-	 */
+        XDrawLine(dpy, pix, WMColorGC(black), 0, 3, 6, 3);
+        XDrawLine(dpy, pix, WMColorGC(black), 3, 0, 3, 6);
+        /*
+         XDrawLine(dpy, pix, WMColorGC(black), 1, 0, 3, 3);
+         XDrawLine(dpy, pix, WMColorGC(black), 1, 6, 3, 3);
+         XDrawLine(dpy, pix, WMColorGC(black), 0, 0, 0, 6);
+         */
 
-	pix = WMGetPixmapMaskXID(pixm);
+        pix = WMGetPixmapMaskXID(pixm);
 
-	gc = XCreateGC(dpy, pix, 0, NULL);
+        gc = XCreateGC(dpy, pix, 0, NULL);
 
-	XSetForeground(dpy, gc, 0);
-	XFillRectangle(dpy, pix, gc, 0, 0, 7, 7);
+        XSetForeground(dpy, gc, 0);
+        XFillRectangle(dpy, pix, gc, 0, 0, 7, 7);
 
-	XSetForeground(dpy, gc, 1);
-	XDrawLine(dpy, pix, gc, 0, 3, 6, 3);
-	XDrawLine(dpy, pix, gc, 3, 0, 3, 6);
+        XSetForeground(dpy, gc, 1);
+        XDrawLine(dpy, pix, gc, 0, 3, 6, 3);
+        XDrawLine(dpy, pix, gc, 3, 0, 3, 6);
 
-	panel->markerPix[ExternalInfo] = pixm;
-	panel->markerPix[PipeInfo] = pixm;
-	panel->markerPix[DirectoryInfo] = pixm;
-	panel->markerPix[WSMenuInfo] = pixm;
-	panel->markerPix[WWindowListInfo] = pixm;
+        panel->markerPix[ExternalInfo] = pixm;
+        panel->markerPix[PipeInfo] = pixm;
+        panel->markerPix[DirectoryInfo] = pixm;
+        panel->markerPix[WSMenuInfo] = pixm;
+        panel->markerPix[WWindowListInfo] = pixm;
 
-	XFreeGC(dpy, gc);
+        XFreeGC(dpy, gc);
     }
 
     panel->box = WMCreateBox(panel->parent);
@@ -510,154 +510,154 @@ createPanel(_Panel *p)
     WMAddPopUpButtonItem(panel->typeP, _("New Items"));
     WMAddPopUpButtonItem(panel->typeP, _("Sample Commands"));
     WMAddPopUpButtonItem(panel->typeP, _("Sample Submenus"));
-    
+
     WMSetPopUpButtonAction(panel->typeP, changedItemPad, panel);
 
     WMSetPopUpButtonSelectedItem(panel->typeP, 0);
 
     {
-	WEditMenu *pad;
-	WEditMenu *smenu;
-	ItemData *data;
+        WEditMenu *pad;
+        WEditMenu *smenu;
+        ItemData *data;
 
-	pad = makeFactoryMenu(panel->box, 150);
-	WMMoveWidget(pad, 10, 40);
-	
-	data = putNewItem(panel, pad, ExecInfo, _("Run Program"));
-	data = putNewItem(panel, pad, CommandInfo, _("Internal Command"));
-	smenu = putNewSubmenu(pad, _("Submenu"));
-	data = putNewItem(panel, pad, ExternalInfo, _("External Submenu"));
-	data = putNewItem(panel, pad, PipeInfo, _("Generated Submenu"));
-	data = putNewItem(panel, pad, DirectoryInfo, _("Directory Contents"));
-	data = putNewItem(panel, pad, WSMenuInfo, _("Workspace Menu"));
-	data = putNewItem(panel, pad, WWindowListInfo, _("Window List Menu"));
+        pad = makeFactoryMenu(panel->box, 150);
+        WMMoveWidget(pad, 10, 40);
 
-	panel->itemPad[0] = pad;
+        data = putNewItem(panel, pad, ExecInfo, _("Run Program"));
+        data = putNewItem(panel, pad, CommandInfo, _("Internal Command"));
+        smenu = putNewSubmenu(pad, _("Submenu"));
+        data = putNewItem(panel, pad, ExternalInfo, _("External Submenu"));
+        data = putNewItem(panel, pad, PipeInfo, _("Generated Submenu"));
+        data = putNewItem(panel, pad, DirectoryInfo, _("Directory Contents"));
+        data = putNewItem(panel, pad, WSMenuInfo, _("Workspace Menu"));
+        data = putNewItem(panel, pad, WWindowListInfo, _("Window List Menu"));
+
+        panel->itemPad[0] = pad;
     }
 
     {
-	WEditMenu *pad;
-	ItemData *data;
-	WMScrollView *sview;
+        WEditMenu *pad;
+        ItemData *data;
+        WMScrollView *sview;
 
-	sview = WMCreateScrollView(panel->box);
-	WMResizeWidget(sview, 150, 180);
-	WMMoveWidget(sview, 10, 40);
-	WMSetScrollViewHasVerticalScroller(sview, True);
+        sview = WMCreateScrollView(panel->box);
+        WMResizeWidget(sview, 150, 180);
+        WMMoveWidget(sview, 10, 40);
+        WMSetScrollViewHasVerticalScroller(sview, True);
 
-	pad = makeFactoryMenu(panel->box, 130);
+        pad = makeFactoryMenu(panel->box, 130);
 
-	WMSetScrollViewContentView(sview, WMWidgetView(pad));
+        WMSetScrollViewContentView(sview, WMWidgetView(pad));
 
-	data = putNewItem(panel, pad, ExecInfo, _("XTerm"));
-	data->param.exec.command = "xterm -sb -sl 2000 -bg black -fg white";
+        data = putNewItem(panel, pad, ExecInfo, _("XTerm"));
+        data->param.exec.command = "xterm -sb -sl 2000 -bg black -fg white";
 
-	data = putNewItem(panel, pad, ExecInfo, _("rxvt"));
-	data->param.exec.command = "rxvt";
+        data = putNewItem(panel, pad, ExecInfo, _("rxvt"));
+        data->param.exec.command = "rxvt";
 
-	data = putNewItem(panel, pad, ExecInfo, _("ETerm"));
-	data->param.exec.command = "eterm";
+        data = putNewItem(panel, pad, ExecInfo, _("ETerm"));
+        data->param.exec.command = "eterm";
 
-	data = putNewItem(panel, pad, ExecInfo, _("Run..."));
-	data->param.exec.command = _("%a(Run,Type command to run)");
+        data = putNewItem(panel, pad, ExecInfo, _("Run..."));
+        data->param.exec.command = _("%a(Run,Type command to run)");
 
-	data = putNewItem(panel, pad, ExecInfo, _("Netscape"));
-	data->param.exec.command = "netscape";
+        data = putNewItem(panel, pad, ExecInfo, _("Netscape"));
+        data->param.exec.command = "netscape";
 
-	data = putNewItem(panel, pad, ExecInfo, _("gimp"));
-	data->param.exec.command = "gimp";
+        data = putNewItem(panel, pad, ExecInfo, _("gimp"));
+        data->param.exec.command = "gimp";
 
-	data = putNewItem(panel, pad, ExecInfo, _("epic"));
-	data->param.exec.command = "xterm -e epic";
+        data = putNewItem(panel, pad, ExecInfo, _("epic"));
+        data->param.exec.command = "xterm -e epic";
 
-	data = putNewItem(panel, pad, ExecInfo, _("ee"));
-	data->param.exec.command = "ee";
+        data = putNewItem(panel, pad, ExecInfo, _("ee"));
+        data->param.exec.command = "ee";
 
-	data = putNewItem(panel, pad, ExecInfo, _("xv"));
-	data->param.exec.command = "xv";
+        data = putNewItem(panel, pad, ExecInfo, _("xv"));
+        data->param.exec.command = "xv";
 
-	data = putNewItem(panel, pad, ExecInfo, _("Acrobat Reader"));
-	data->param.exec.command = "acroread || /usr/local/Acrobat4/bin/acroread";
+        data = putNewItem(panel, pad, ExecInfo, _("Acrobat Reader"));
+        data->param.exec.command = "acroread || /usr/local/Acrobat4/bin/acroread";
 
-	data = putNewItem(panel, pad, ExecInfo, _("ghostview"));
-	data->param.exec.command = "gv";
+        data = putNewItem(panel, pad, ExecInfo, _("ghostview"));
+        data->param.exec.command = "gv";
 
-	data = putNewItem(panel, pad, CommandInfo, _("Exit Window Maker"));
-	data->param.command.command = 3;
+        data = putNewItem(panel, pad, CommandInfo, _("Exit Window Maker"));
+        data->param.command.command = 3;
 
-	WMMapWidget(pad);
-	
-	panel->itemPad[1] = sview;
+        WMMapWidget(pad);
+
+        panel->itemPad[1] = sview;
     }
 
-    
+
     {
-	WEditMenu *pad, *smenu;
-	ItemData *data;
-	WMScrollView *sview;
+        WEditMenu *pad, *smenu;
+        ItemData *data;
+        WMScrollView *sview;
 
-	sview = WMCreateScrollView(panel->box);
-	WMResizeWidget(sview, 150, 180);
-	WMMoveWidget(sview, 10, 40);
-	WMSetScrollViewHasVerticalScroller(sview, True);
+        sview = WMCreateScrollView(panel->box);
+        WMResizeWidget(sview, 150, 180);
+        WMMoveWidget(sview, 10, 40);
+        WMSetScrollViewHasVerticalScroller(sview, True);
 
-	pad = makeFactoryMenu(panel->box, 130);
+        pad = makeFactoryMenu(panel->box, 130);
 
-	WMSetScrollViewContentView(sview, WMWidgetView(pad));
+        WMSetScrollViewContentView(sview, WMWidgetView(pad));
 
-	data = putNewItem(panel, pad, ExternalInfo, _("Debian Menu"));
-	data->param.pipe.command = "/etc/X11/WindowMaker/menu.hook";
- 
-	data = putNewItem(panel, pad, PipeInfo, _("RedHat Menu"));
-	data->param.pipe.command = "wmconfig --output wmaker";
+        data = putNewItem(panel, pad, ExternalInfo, _("Debian Menu"));
+        data->param.pipe.command = "/etc/X11/WindowMaker/menu.hook";
 
-	data = putNewItem(panel, pad, PipeInfo, _("Menu Conectiva"));
-	data->param.pipe.command = "wmconfig --output wmaker";
+        data = putNewItem(panel, pad, PipeInfo, _("RedHat Menu"));
+        data->param.pipe.command = "wmconfig --output wmaker";
 
-	data = putNewItem(panel, pad, DirectoryInfo, _("Themes"));
-	data->param.directory.command = "setstyle";
-	data->param.directory.directory = "/usr/share/WindowMaker/Themes /usr/local/share/WindowMaker/Themes $HOME/GNUstep/Library/WindowMaker/Themes";
-	data->param.directory.stripExt = 1;
-	
-	data = putNewItem(panel, pad, DirectoryInfo, _("Bg Images (scale)"));
-	data->param.directory.command = "wmsetbg -u -s";
-	data->param.directory.directory = "/opt/kde2/share/wallpapers /usr/share/WindowMaker/Backgrounds $HOME/GNUstep/Library/WindowMaker/Backgrounds";
-	data->param.directory.stripExt = 1;
+        data = putNewItem(panel, pad, PipeInfo, _("Menu Conectiva"));
+        data->param.pipe.command = "wmconfig --output wmaker";
 
-	data = putNewItem(panel, pad, DirectoryInfo, _("Bg Images (tile)"));
-	data->param.directory.command = "wmsetbg -u -t";
-	data->param.directory.directory = "/opt/kde2/share/wallpapers /usr/share/WindowMaker/Backgrounds $HOME/GNUstep/Library/WindowMaker/Backgrounds";
-	data->param.directory.stripExt = 1;
-	
-	smenu = putNewSubmenu(pad, _("Assorted XTerms"));
+        data = putNewItem(panel, pad, DirectoryInfo, _("Themes"));
+        data->param.directory.command = "setstyle";
+        data->param.directory.directory = "/usr/share/WindowMaker/Themes /usr/local/share/WindowMaker/Themes $HOME/GNUstep/Library/WindowMaker/Themes";
+        data->param.directory.stripExt = 1;
 
-	data = putNewItem(panel, smenu, ExecInfo, _("XTerm Yellow on Blue"));
-	data->param.exec.command = "xterm -sb -sl 2000 -bg midnightblue -fg yellow";
+        data = putNewItem(panel, pad, DirectoryInfo, _("Bg Images (scale)"));
+        data->param.directory.command = "wmsetbg -u -s";
+        data->param.directory.directory = "/opt/kde2/share/wallpapers /usr/share/WindowMaker/Backgrounds $HOME/GNUstep/Library/WindowMaker/Backgrounds";
+        data->param.directory.stripExt = 1;
 
-	data = putNewItem(panel, smenu, ExecInfo, _("XTerm White on Black"));
-	data->param.exec.command = "xterm -sb -sl 2000 -bg black -fg white";
+        data = putNewItem(panel, pad, DirectoryInfo, _("Bg Images (tile)"));
+        data->param.directory.command = "wmsetbg -u -t";
+        data->param.directory.directory = "/opt/kde2/share/wallpapers /usr/share/WindowMaker/Backgrounds $HOME/GNUstep/Library/WindowMaker/Backgrounds";
+        data->param.directory.stripExt = 1;
 
-	data = putNewItem(panel, smenu, ExecInfo, _("XTerm Black on White"));
-	data->param.exec.command = "xterm -sb -sl 2000 -bg white -fg black";
+        smenu = putNewSubmenu(pad, _("Assorted XTerms"));
 
-	data = putNewItem(panel, smenu, ExecInfo, _("XTerm Black on Beige"));
-	data->param.exec.command = "xterm -sb -sl 2000 -bg '#bbbb99' -fg black";
+        data = putNewItem(panel, smenu, ExecInfo, _("XTerm Yellow on Blue"));
+        data->param.exec.command = "xterm -sb -sl 2000 -bg midnightblue -fg yellow";
 
-	data = putNewItem(panel, smenu, ExecInfo, _("XTerm White on Green"));
-	data->param.exec.command = "xterm -sb -sl 2000 -bg '#228822' -fg white";
+        data = putNewItem(panel, smenu, ExecInfo, _("XTerm White on Black"));
+        data->param.exec.command = "xterm -sb -sl 2000 -bg black -fg white";
 
-	data = putNewItem(panel, smenu, ExecInfo, _("XTerm White on Olive"));
-	data->param.exec.command = "xterm -sb -sl 2000 -bg '#335533' -fg white";
+        data = putNewItem(panel, smenu, ExecInfo, _("XTerm Black on White"));
+        data->param.exec.command = "xterm -sb -sl 2000 -bg white -fg black";
 
-	data = putNewItem(panel, smenu, ExecInfo, _("XTerm Blue on Blue"));
-	data->param.exec.command = "xterm -sb -sl 2000 -bg '#112244' -fg '#88aabb'";
+        data = putNewItem(panel, smenu, ExecInfo, _("XTerm Black on Beige"));
+        data->param.exec.command = "xterm -sb -sl 2000 -bg '#bbbb99' -fg black";
 
-	data = putNewItem(panel, smenu, ExecInfo, _("XTerm BIG FONTS"));
-	data->param.exec.command = "xterm -sb -sl 2000 -bg black -fg white -fn 10x20";
+        data = putNewItem(panel, smenu, ExecInfo, _("XTerm White on Green"));
+        data->param.exec.command = "xterm -sb -sl 2000 -bg '#228822' -fg white";
 
-	WMMapWidget(pad);
-	
-	panel->itemPad[2] = sview;
+        data = putNewItem(panel, smenu, ExecInfo, _("XTerm White on Olive"));
+        data->param.exec.command = "xterm -sb -sl 2000 -bg '#335533' -fg white";
+
+        data = putNewItem(panel, smenu, ExecInfo, _("XTerm Blue on Blue"));
+        data->param.exec.command = "xterm -sb -sl 2000 -bg '#112244' -fg '#88aabb'";
+
+        data = putNewItem(panel, smenu, ExecInfo, _("XTerm BIG FONTS"));
+        data->param.exec.command = "xterm -sb -sl 2000 -bg black -fg white -fn 10x20";
+
+        WMMapWidget(pad);
+
+        panel->itemPad[2] = sview;
     }
 
 
@@ -666,11 +666,11 @@ createPanel(_Panel *p)
     panel->optionsF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->optionsF, width, FRAME_HEIGHT - 15);
     WMMoveWidget(panel->optionsF, 10 + 150 + 10, 5);
-    
+
     width -= 20;
 
     /* command */
-    
+
     panel->commandF = WMCreateFrame(panel->optionsF);
     WMResizeWidget(panel->commandF, width, 50);
     WMMoveWidget(panel->commandF, 10, 20);
@@ -688,8 +688,8 @@ createPanel(_Panel *p)
     WMSetButtonAction(panel->browseB, browseForFile, panel);
 
     WMAddNotificationObserver(dataChanged, panel,
-			      WMTextDidChangeNotification,
-			      panel->commandT);
+                              WMTextDidChangeNotification,
+                              panel->commandT);
 
 #if 0
     panel->xtermC = WMCreateSwitchButton(panel->commandF);
@@ -712,18 +712,18 @@ createPanel(_Panel *p)
     WMMoveWidget(panel->pathT, 10, 20);
 
     WMAddNotificationObserver(dataChanged, panel,
-			      WMTextDidChangeNotification,
-			      panel->pathT);
-    
+                              WMTextDidChangeNotification,
+                              panel->pathT);
+
     label = WMCreateLabel(panel->pathF);
     WMResizeWidget(label, width - 20, 80);
     WMMoveWidget(label, 10, 50);
     WMSetLabelText(label, _("Enter the path for a file containing a menu\n"
-			    "or a list of directories with the programs you\n"
-			    "want to have listed in the menu. Ex:\n"
-			    "~/GNUstep/Library/WindowMaker/menu\n"
-			    "or\n"
-			    "/usr/X11R6/bin ~/xbin"));
+                            "or a list of directories with the programs you\n"
+                            "want to have listed in the menu. Ex:\n"
+                            "~/GNUstep/Library/WindowMaker/menu\n"
+                            "or\n"
+                            "/usr/X11R6/bin ~/xbin"));
 
     WMMapSubwidgets(panel->pathF);
 
@@ -740,23 +740,23 @@ createPanel(_Panel *p)
     WMMoveWidget(panel->pipeT, 10, 20);
 
     WMAddNotificationObserver(dataChanged, panel,
-			      WMTextDidChangeNotification,
-			      panel->pipeT);
+                              WMTextDidChangeNotification,
+                              panel->pipeT);
 
 
     label = WMCreateLabel(panel->pipeF);
     WMResizeWidget(label, width - 20, 40);
     WMMoveWidget(label, 10, 50);
     WMSetLabelText(label, _("Enter a command that outputs a menu\n"
-			    "definition to stdout when invoked."));
+                            "definition to stdout when invoked."));
 
-    
+
     panel->pipeCacheB = WMCreateSwitchButton(panel->pipeF);
     WMResizeWidget(panel->pipeCacheB, width - 20, 40);
     WMMoveWidget(panel->pipeCacheB, 10, 110);
-    WMSetButtonText(panel->pipeCacheB, 
-		    _("Cache menu contents after opening for\n"
-		      "the first time"));
+    WMSetButtonText(panel->pipeCacheB,
+                    _("Cache menu contents after opening for\n"
+                      "the first time"));
 
     WMMapSubwidgets(panel->pipeF);
 
@@ -773,15 +773,15 @@ createPanel(_Panel *p)
     WMMoveWidget(panel->dcommandT, 10, 20);
 
     WMAddNotificationObserver(dataChanged, panel,
-			      WMTextDidChangeNotification,
-			      panel->dcommandT);
+                              WMTextDidChangeNotification,
+                              panel->dcommandT);
 
 
     label = WMCreateLabel(panel->dcommandF);
     WMResizeWidget(label, width - 20, 45);
     WMMoveWidget(label, 10, 40);
     WMSetLabelText(label, _("Enter the command you want to use to open the\n"
-			    "files in the directories listed below."));
+                            "files in the directories listed below."));
 
     WMMapSubwidgets(panel->dcommandF);
 
@@ -796,8 +796,8 @@ createPanel(_Panel *p)
     WMMoveWidget(panel->dpathT, 10, 20);
 
     WMAddNotificationObserver(dataChanged, panel,
-			      WMTextDidChangeNotification,
-			      panel->dpathT);
+                              WMTextDidChangeNotification,
+                              panel->dpathT);
 
     panel->dstripB = WMCreateSwitchButton(panel->dpathF);
     WMResizeWidget(panel->dstripB, width - 20, 20);
@@ -805,7 +805,7 @@ createPanel(_Panel *p)
     WMSetButtonText(panel->dstripB, _("Strip extensions from file names"));
 
     WMSetButtonAction(panel->dstripB, buttonClicked, panel);
-    
+
     WMMapSubwidgets(panel->dpathF);
 
 
@@ -821,8 +821,8 @@ createPanel(_Panel *p)
     WMMoveWidget(panel->shortT, 10, 20);
 
     WMAddNotificationObserver(dataChanged, panel,
-			      WMTextDidChangeNotification,
-			      panel->shortT);
+                              WMTextDidChangeNotification,
+                              panel->shortT);
 
     panel->sgrabB = WMCreateCommandButton(panel->shortF);
     WMResizeWidget(panel->sgrabB, 70, 24);
@@ -843,12 +843,12 @@ createPanel(_Panel *p)
     panel->icommandL = WMCreateList(panel->optionsF);
     WMResizeWidget(panel->icommandL, width, 80);
     WMMoveWidget(panel->icommandL, 10, 20);
-    
+
     WMSetListAction(panel->icommandL, icommandLClicked, panel);
 
     WMAddNotificationObserver(dataChanged, panel,
-			      WMListSelectionDidChangeNotification,
-			      panel->icommandL);
+                              WMListSelectionDidChangeNotification,
+                              panel->icommandL);
 
     WMInsertListItem(panel->icommandL, 0, _("Arrange Icons"));
     WMInsertListItem(panel->icommandL, 1, _("Hide All Windows Except For The Focused One"));
@@ -876,8 +876,8 @@ createPanel(_Panel *p)
     WMMoveWidget(panel->paramT, 10, 20);
 
     WMAddNotificationObserver(dataChanged, panel,
-			      WMTextDidChangeNotification,
-			      panel->paramT);
+                              WMTextDidChangeNotification,
+                              panel->paramT);
 
     WMMapSubwidgets(panel->paramF);
 
@@ -892,25 +892,25 @@ createPanel(_Panel *p)
     label = WMCreateLabel(panel->optionsF);
     WMResizeWidget(label, width+5, FRAME_HEIGHT - 50);
     WMMoveWidget(label, 7, 20);
-    WMSetLabelText(label, 
-		   _("Instructions:\n\n"
-		     " - drag items from the left to the menu to add new items\n"
-		     " - drag items out of the menu to remove items\n"
-		     " - drag items in menu to change their position\n"
-		     " - drag items with Control pressed to copy them\n"
-		     " - double click in a menu item to change the label\n"
-		     " - click on a menu item to change related information"));
+    WMSetLabelText(label,
+                   _("Instructions:\n\n"
+                     " - drag items from the left to the menu to add new items\n"
+                     " - drag items out of the menu to remove items\n"
+                     " - drag items in menu to change their position\n"
+                     " - drag items with Control pressed to copy them\n"
+                     " - double click in a menu item to change the label\n"
+                     " - click on a menu item to change related information"));
     WMMapWidget(label);
 
     WMRealizeWidget(panel->box);
     WMMapSubwidgets(panel->box);
     WMMapWidget(panel->box);
-    
+
 
     {
-	int i;
-	for (i = 0; i < 3; i++)
-	    WMUnmapWidget(panel->itemPad[i]);
+        int i;
+        for (i = 0; i < 3; i++)
+            WMUnmapWidget(panel->itemPad[i]);
     }
     changedItemPad(panel->typeP, panel);
 
@@ -932,20 +932,20 @@ createPanel(_Panel *p)
     panel->currentType = NoInfo;
 
     showData(panel);
-    
+
     {
-	WMPoint pos;
+        WMPoint pos;
 
-	pos = WMGetViewScreenPosition(WMWidgetView(panel->box));
+        pos = WMGetViewScreenPosition(WMWidgetView(panel->box));
 
-	if (pos.x < 200) {
-	    pos.x += FRAME_WIDTH + 20;
-	} else {
-	    pos.x = 10;
-	}
-	
-	pos.y = WMAX(pos.y - 100, 0);
-	
+        if (pos.x < 200) {
+            pos.x += FRAME_WIDTH + 20;
+        } else {
+            pos.x = 10;
+        }
+
+        pos.y = WMAX(pos.y - 100, 0);
+
         if (panel->menu)
             WEditMenuShowAt(panel->menu, pos.x, pos.y);
     }
@@ -961,31 +961,31 @@ freeItemData(ItemData *data)
 
     /* TODO */
     switch (data->type) {
-     case CommandInfo:
-	CFREE(data->param.command.parameter);
-	CFREE(data->param.command.shortcut);
-	break;
-	
-     case ExecInfo:
-	CFREE(data->param.exec.command);
-	CFREE(data->param.exec.shortcut);
-	break;
-	
-     case PipeInfo:
-	CFREE(data->param.pipe.command);
-	break;
-	
-     case ExternalInfo:
-	CFREE(data->param.external.path);
-	break;
-	
-     case DirectoryInfo:
-	CFREE(data->param.directory.command);
-	CFREE(data->param.directory.directory);
-	break;
+    case CommandInfo:
+        CFREE(data->param.command.parameter);
+        CFREE(data->param.command.shortcut);
+        break;
 
-     default:
-	break;
+    case ExecInfo:
+        CFREE(data->param.exec.command);
+        CFREE(data->param.exec.shortcut);
+        break;
+
+    case PipeInfo:
+        CFREE(data->param.pipe.command);
+        break;
+
+    case ExternalInfo:
+        CFREE(data->param.external.path);
+        break;
+
+    case DirectoryInfo:
+        CFREE(data->param.directory.command);
+        CFREE(data->param.directory.directory);
+        break;
+
+    default:
+        break;
     }
 
     wfree(data);
@@ -1002,132 +1002,132 @@ parseCommand(WMPropList *item)
     char *parameter = NULL;
     char *shortcut = NULL;
     int i = 1;
-    
-    
+
+
     p = WMGetFromPLArray(item, i++);
     command = WMGetFromPLString(p);
     if (strcmp(command, "SHORTCUT") == 0) {
-	p = WMGetFromPLArray(item, i++);
-	shortcut = WMGetFromPLString(p);
-	p = WMGetFromPLArray(item, i++);
-	command = WMGetFromPLString(p);
+        p = WMGetFromPLArray(item, i++);
+        shortcut = WMGetFromPLString(p);
+        p = WMGetFromPLArray(item, i++);
+        command = WMGetFromPLString(p);
     }
     p = WMGetFromPLArray(item, i++);
     if (p)
-	parameter = WMGetFromPLString(p);
+        parameter = WMGetFromPLString(p);
 
     if (strcmp(command, "EXEC") == 0 || strcmp(command, "SHEXEC") == 0) {
-	
-	data->type = ExecInfo;
-	
-	data->param.exec.command = wstrdup(parameter);
-	if (shortcut)
-	    data->param.exec.shortcut = wstrdup(shortcut);
-	
+
+        data->type = ExecInfo;
+
+        data->param.exec.command = wstrdup(parameter);
+        if (shortcut)
+            data->param.exec.shortcut = wstrdup(shortcut);
+
     } else if (strcmp(command, "OPEN_MENU") == 0) {
-	char *p;
-	/*
-	 * dir menu, menu file
-	 * dir WITH
-	 * |pipe
-	 */
-	p = parameter;
-	while (isspace(*p) && *p) p++;
-	if (*p == '|') {
-	    if (*(p+1) == '|') {
-		p++;
-		data->param.pipe.cached = 0;
-	    } else {
-		data->param.pipe.cached = 1;
-	    }
-	    data->type = PipeInfo;
-	    data->param.pipe.command = wtrimspace(p+1);
-	} else {
-	    char *s;
+        char *p;
+        /*
+         * dir menu, menu file
+         * dir WITH
+         * |pipe
+         */
+        p = parameter;
+        while (isspace(*p) && *p) p++;
+        if (*p == '|') {
+            if (*(p+1) == '|') {
+                p++;
+                data->param.pipe.cached = 0;
+            } else {
+                data->param.pipe.cached = 1;
+            }
+            data->type = PipeInfo;
+            data->param.pipe.command = wtrimspace(p+1);
+        } else {
+            char *s;
 
-	    p = wstrdup(p);
-	    
-	    s = strstr(p, "WITH");
-	    if (s) {
-		char **tokens;
-		char **ctokens;
-		int tokn;
-		int i, j;
+            p = wstrdup(p);
 
-		data->type = DirectoryInfo;
-		
-		*s = '\0';
-		s += 5;
-		while (*s && isspace(*s)) s++;
-		data->param.directory.command = wstrdup(s);
-		
-		wtokensplit(p, &tokens, &tokn);
-		wfree(p);
-		
-		ctokens = wmalloc(sizeof(char*)*tokn);
+            s = strstr(p, "WITH");
+            if (s) {
+                char **tokens;
+                char **ctokens;
+                int tokn;
+                int i, j;
 
-		for (i = 0, j = 0; i < tokn; i++) {
-		    if (strcmp(tokens[i], "-noext") == 0) {
-			wfree(tokens[i]);
-			data->param.directory.stripExt = 1;
-		    } else {
-			ctokens[j++] = tokens[i];
-		    }
-		}
-		data->param.directory.directory = wtokenjoin(ctokens, j);
-		wfree(ctokens);
+                data->type = DirectoryInfo;
 
-		wtokenfree(tokens, tokn);
-	    } else {
-		data->type = ExternalInfo;
-		data->param.external.path = p;
-	    }
-	}
+                *s = '\0';
+                s += 5;
+                while (*s && isspace(*s)) s++;
+                data->param.directory.command = wstrdup(s);
+
+                wtokensplit(p, &tokens, &tokn);
+                wfree(p);
+
+                ctokens = wmalloc(sizeof(char*)*tokn);
+
+                for (i = 0, j = 0; i < tokn; i++) {
+                    if (strcmp(tokens[i], "-noext") == 0) {
+                        wfree(tokens[i]);
+                        data->param.directory.stripExt = 1;
+                    } else {
+                        ctokens[j++] = tokens[i];
+                    }
+                }
+                data->param.directory.directory = wtokenjoin(ctokens, j);
+                wfree(ctokens);
+
+                wtokenfree(tokens, tokn);
+            } else {
+                data->type = ExternalInfo;
+                data->param.external.path = p;
+            }
+        }
     } else if (strcmp(command, "WORKSPACE_MENU") == 0) {
-	data->type = WSMenuInfo;
+        data->type = WSMenuInfo;
     } else if (strcmp(command, "WINDOWS_MENU") == 0) {
-	data->type = WWindowListInfo;
+        data->type = WWindowListInfo;
     } else {
-	int cmd;
+        int cmd;
 
-	if (strcmp(command, "ARRANGE_ICONS") == 0) {
-	    cmd = 0;
-	} else if (strcmp(command, "HIDE_OTHERS") == 0) {
-	    cmd = 1;
-	} else if (strcmp(command, "SHOW_ALL") == 0) {
-	    cmd = 2;
-	} else if (strcmp(command, "EXIT") == 0) {
-	    cmd = 3;
-	} else if (strcmp(command, "SHUTDOWN") == 0) {
-	    cmd = 4;
-	} else if (strcmp(command, "RESTART") == 0) {
-	    if (parameter) {
-		cmd = 6;
-	    } else {
-		cmd = 5;
-	    }
-	} else if (strcmp(command, "SAVE_SESSION") == 0) {
-	    cmd = 7;
-	} else if (strcmp(command, "CLEAR_SESSION") == 0) {
-	    cmd = 8;
-	} else if (strcmp(command, "REFRESH") == 0) {
-	    cmd = 9;
-	} else if (strcmp(command, "INFO_PANEL") == 0) {
-	    cmd = 10;
-	} else if (strcmp(command, "LEGAL_PANEL") == 0) {
-	    cmd = 11;
-	} else {
-	    wwarning(_("unknown command '%s' in menu"), command);
-	    goto error;
-	}
+        if (strcmp(command, "ARRANGE_ICONS") == 0) {
+            cmd = 0;
+        } else if (strcmp(command, "HIDE_OTHERS") == 0) {
+            cmd = 1;
+        } else if (strcmp(command, "SHOW_ALL") == 0) {
+            cmd = 2;
+        } else if (strcmp(command, "EXIT") == 0) {
+            cmd = 3;
+        } else if (strcmp(command, "SHUTDOWN") == 0) {
+            cmd = 4;
+        } else if (strcmp(command, "RESTART") == 0) {
+            if (parameter) {
+                cmd = 6;
+            } else {
+                cmd = 5;
+            }
+        } else if (strcmp(command, "SAVE_SESSION") == 0) {
+            cmd = 7;
+        } else if (strcmp(command, "CLEAR_SESSION") == 0) {
+            cmd = 8;
+        } else if (strcmp(command, "REFRESH") == 0) {
+            cmd = 9;
+        } else if (strcmp(command, "INFO_PANEL") == 0) {
+            cmd = 10;
+        } else if (strcmp(command, "LEGAL_PANEL") == 0) {
+            cmd = 11;
+        } else {
+            wwarning(_("unknown command '%s' in menu"), command);
+            goto error;
+        }
 
-	data->type = CommandInfo;
+        data->type = CommandInfo;
 
-	data->param.command.command = cmd;
-	if (shortcut)
-	    data->param.command.shortcut = wstrdup(shortcut);
-	if (parameter)
-	    data->param.command.parameter = wstrdup(parameter);
+        data->param.command.command = cmd;
+        if (shortcut)
+            data->param.command.shortcut = wstrdup(shortcut);
+        if (parameter)
+            data->param.command.parameter = wstrdup(parameter);
     }
 
     return data;
@@ -1145,45 +1145,45 @@ static void
 updateFrameTitle(_Panel *panel, char *title, InfoType type)
 {
     if (type != NoInfo) {
-	char *tmp;
+        char *tmp;
 
-	switch (type) {
-	 case ExecInfo:
-	    tmp = wstrconcat(title, _(": Execute Program"));
-	    break;
+        switch (type) {
+        case ExecInfo:
+            tmp = wstrconcat(title, _(": Execute Program"));
+            break;
 
-	 case CommandInfo:
-	    tmp = wstrconcat(title, _(": Perform Internal Command"));
-	    break;
+        case CommandInfo:
+            tmp = wstrconcat(title, _(": Perform Internal Command"));
+            break;
 
-	 case ExternalInfo:
-	    tmp = wstrconcat(title, _(": Open a Submenu"));
-	    break;
+        case ExternalInfo:
+            tmp = wstrconcat(title, _(": Open a Submenu"));
+            break;
 
-	 case PipeInfo:
-	    tmp = wstrconcat(title, _(": Program Generated Submenu"));
-	    break;
+        case PipeInfo:
+            tmp = wstrconcat(title, _(": Program Generated Submenu"));
+            break;
 
-	 case DirectoryInfo:
-	    tmp = wstrconcat(title, _(": Directory Contents Menu"));
-	    break;
+        case DirectoryInfo:
+            tmp = wstrconcat(title, _(": Directory Contents Menu"));
+            break;
 
-	 case WSMenuInfo:
-	    tmp = wstrconcat(title, _(": Open Workspaces Submenu"));
-	    break;
+        case WSMenuInfo:
+            tmp = wstrconcat(title, _(": Open Workspaces Submenu"));
+            break;
 
-	 case WWindowListInfo:
-	    tmp = wstrconcat(title, _(": Open Window List Submenu"));
-	    break;
+        case WWindowListInfo:
+            tmp = wstrconcat(title, _(": Open Window List Submenu"));
+            break;
 
-	 default:
-	    tmp = NULL;
-	    break;
-	}
-	WMSetFrameTitle(panel->optionsF, tmp);
-	wfree(tmp);
+        default:
+            tmp = NULL;
+            break;
+        }
+        WMSetFrameTitle(panel->optionsF, tmp);
+        wfree(tmp);
     } else {
-	WMSetFrameTitle(panel->optionsF, NULL);
+        WMSetFrameTitle(panel->optionsF, NULL);
     }
 }
 
@@ -1193,25 +1193,25 @@ static void
 changeInfoType(_Panel *panel, char *title, InfoType type)
 {
     WMWidget **w;
-    
+
     if (panel->currentType != type) {
 
-	w = panel->sections[panel->currentType];
+        w = panel->sections[panel->currentType];
 
-	while (*w) {
-	    WMUnmapWidget(*w);
-	    w++;
-	}
-	WMUnmapWidget(panel->paramF);
-	WMUnmapWidget(panel->quickB);
+        while (*w) {
+            WMUnmapWidget(*w);
+            w++;
+        }
+        WMUnmapWidget(panel->paramF);
+        WMUnmapWidget(panel->quickB);
 
 
-	w = panel->sections[type];
-	
-	while (*w) {
-	    WMMapWidget(*w);
-	    w++;
-	}
+        w = panel->sections[type];
+
+        while (*w) {
+            WMMapWidget(*w);
+            w++;
+        }
     }
 
     updateFrameTitle(panel, title, type);
@@ -1222,93 +1222,93 @@ changeInfoType(_Panel *panel, char *title, InfoType type)
 
 
 
-static void 
+static void
 updateMenuItem(_Panel *panel, WEditMenuItem *item, WMWidget *changedWidget)
 {
-    ItemData *data = WGetEditMenuItemData(item);    
-    
+    ItemData *data = WGetEditMenuItemData(item);
+
     assert(data != NULL);
 
 #define REPLACE(v, d) if (v) wfree(v); v = d
 
     switch (data->type) {
-     case ExecInfo:
-	if (changedWidget == panel->commandT) {
-	    REPLACE(data->param.exec.command, 
-		    WMGetTextFieldText(panel->commandT));
-	}
-	if (changedWidget == panel->shortT) {
-	    REPLACE(data->param.exec.shortcut,
-		    WMGetTextFieldText(panel->shortT));
-	}
-	break;
+    case ExecInfo:
+        if (changedWidget == panel->commandT) {
+            REPLACE(data->param.exec.command,
+                    WMGetTextFieldText(panel->commandT));
+        }
+        if (changedWidget == panel->shortT) {
+            REPLACE(data->param.exec.shortcut,
+                    WMGetTextFieldText(panel->shortT));
+        }
+        break;
 
-     case CommandInfo:
-	if (changedWidget == panel->icommandL) {
-	    data->param.command.command = 
-		WMGetListSelectedItemRow(panel->icommandL);
-	}
-	switch (data->param.command.command) {
-	 case 3:
-	 case 4:
-	    if (changedWidget == panel->quickB) {
-		REPLACE(data->param.command.parameter,
-			WMGetButtonSelected(panel->quickB) 
-			? wstrdup("QUICK") : NULL);
-	    }
-	    break;
+    case CommandInfo:
+        if (changedWidget == panel->icommandL) {
+            data->param.command.command =
+                WMGetListSelectedItemRow(panel->icommandL);
+        }
+        switch (data->param.command.command) {
+        case 3:
+        case 4:
+            if (changedWidget == panel->quickB) {
+                REPLACE(data->param.command.parameter,
+                        WMGetButtonSelected(panel->quickB)
+                        ? wstrdup("QUICK") : NULL);
+            }
+            break;
 
-	 case 6:
-	    if (changedWidget == panel->paramT) {
-		REPLACE(data->param.command.parameter,
-			WMGetTextFieldText(panel->paramT));
-	    }
-	    break;
-	}
-	if (changedWidget == panel->shortT) {
-	    REPLACE(data->param.command.shortcut,
-		    WMGetTextFieldText(panel->shortT));
-	}
-	
-	
-	break;
-	
-     case PipeInfo:
-	if (changedWidget == panel->pipeT) {
-	    REPLACE(data->param.pipe.command,
-		    WMGetTextFieldText(panel->pipeT));
-	}
-	if (changedWidget == panel->pipeCacheB) {
-	    data->param.pipe.cached =
-		WMGetButtonSelected(panel->pipeCacheB);
-	}
-	break;
-	
-     case ExternalInfo:
-	if (changedWidget == panel->pathT) {
-	    REPLACE(data->param.external.path, 
-		    WMGetTextFieldText(panel->pathT));
-	}
-	break;
-	
-     case DirectoryInfo:
-	if (changedWidget == panel->dpathT) {
-	    REPLACE(data->param.directory.directory,
-		    WMGetTextFieldText(panel->dpathT));
-	}
-	if (changedWidget == panel->dcommandT) {
-	    REPLACE(data->param.directory.command,
-		    WMGetTextFieldText(panel->dcommandT));
-	}
-	if (changedWidget == panel->dstripB) {
-	    data->param.directory.stripExt = 
-		WMGetButtonSelected(panel->dstripB);
-	}
-	break;
+        case 6:
+            if (changedWidget == panel->paramT) {
+                REPLACE(data->param.command.parameter,
+                        WMGetTextFieldText(panel->paramT));
+            }
+            break;
+        }
+        if (changedWidget == panel->shortT) {
+            REPLACE(data->param.command.shortcut,
+                    WMGetTextFieldText(panel->shortT));
+        }
 
-     default:
-	assert(0);
-	break;
+
+        break;
+
+    case PipeInfo:
+        if (changedWidget == panel->pipeT) {
+            REPLACE(data->param.pipe.command,
+                    WMGetTextFieldText(panel->pipeT));
+        }
+        if (changedWidget == panel->pipeCacheB) {
+            data->param.pipe.cached =
+                WMGetButtonSelected(panel->pipeCacheB);
+        }
+        break;
+
+    case ExternalInfo:
+        if (changedWidget == panel->pathT) {
+            REPLACE(data->param.external.path,
+                    WMGetTextFieldText(panel->pathT));
+        }
+        break;
+
+    case DirectoryInfo:
+        if (changedWidget == panel->dpathT) {
+            REPLACE(data->param.directory.directory,
+                    WMGetTextFieldText(panel->dpathT));
+        }
+        if (changedWidget == panel->dcommandT) {
+            REPLACE(data->param.directory.command,
+                    WMGetTextFieldText(panel->dcommandT));
+        }
+        if (changedWidget == panel->dstripB) {
+            data->param.directory.stripExt =
+                WMGetButtonSelected(panel->dstripB);
+        }
+        break;
+
+    default:
+        assert(0);
+        break;
     }
 
 #undef REPLACE
@@ -1318,49 +1318,49 @@ updateMenuItem(_Panel *panel, WEditMenuItem *item, WMWidget *changedWidget)
 
 static void
 menuItemCloned(WEditMenuDelegate *delegate, WEditMenu *menu,
-	       WEditMenuItem *origItem, WEditMenuItem *newItem)
+               WEditMenuItem *origItem, WEditMenuItem *newItem)
 {
     ItemData *data = WGetEditMenuItemData(origItem);
     ItemData *newData;
-    
+
     if (!data)
-	return;
-    
+        return;
+
 #define DUP(s) (s) ? wstrdup(s) : NULL
 
     newData = NEW(ItemData);
 
     newData->type = data->type;
-    
+
     switch (data->type) {
-     case ExecInfo:
-	newData->param.exec.command = DUP(data->param.exec.command);
-	newData->param.exec.shortcut = DUP(data->param.exec.shortcut);
-	break;
+    case ExecInfo:
+        newData->param.exec.command = DUP(data->param.exec.command);
+        newData->param.exec.shortcut = DUP(data->param.exec.shortcut);
+        break;
 
-     case CommandInfo:
-	newData->param.command.command = data->param.command.command;
-	newData->param.command.parameter = DUP(data->param.command.parameter);
-	newData->param.command.shortcut = DUP(data->param.command.shortcut);
-	break;
+    case CommandInfo:
+        newData->param.command.command = data->param.command.command;
+        newData->param.command.parameter = DUP(data->param.command.parameter);
+        newData->param.command.shortcut = DUP(data->param.command.shortcut);
+        break;
 
-     case PipeInfo:
-	newData->param.pipe.command = DUP(data->param.pipe.command);
-	newData->param.pipe.cached = data->param.pipe.cached;
-	break;
+    case PipeInfo:
+        newData->param.pipe.command = DUP(data->param.pipe.command);
+        newData->param.pipe.cached = data->param.pipe.cached;
+        break;
 
-     case ExternalInfo:
-	newData->param.external.path = DUP(data->param.external.path);
-	break;
+    case ExternalInfo:
+        newData->param.external.path = DUP(data->param.external.path);
+        break;
 
-     case DirectoryInfo:
-	newData->param.directory.directory = DUP(data->param.directory.directory);
-	newData->param.directory.command = DUP(data->param.directory.command);
-	newData->param.directory.stripExt = data->param.directory.stripExt;
-	break;
-	
-     default:
-	break;
+    case DirectoryInfo:
+        newData->param.directory.directory = DUP(data->param.directory.directory);
+        newData->param.directory.command = DUP(data->param.directory.command);
+        newData->param.directory.stripExt = data->param.directory.stripExt;
+        break;
+
+    default:
+        break;
     }
 
 #undef DUP
@@ -1380,7 +1380,7 @@ menuItemEdited(struct WEditMenuDelegate *delegate, WEditMenu *menu,
 
     submenu = WGetEditMenuSubmenu(menu, item);
     if (submenu) {
-	WSetEditMenuTitle(submenu, WGetEditMenuItemTitle(item));
+        WSetEditMenuTitle(submenu, WGetEditMenuItemTitle(item));
     }
 }
 
@@ -1392,34 +1392,34 @@ shouldRemoveItem(struct WEditMenuDelegate *delegate, WEditMenu *menu,
     _Panel *panel = (_Panel*)delegate->data;
 
     if (panel->dontAsk)
-	return True;
+        return True;
 
     if (WGetEditMenuSubmenu(menu, item)) {
-	int res;
-	
-	res = WMRunAlertPanel(WMWidgetScreen(menu), NULL,
-			      _("Remove Submenu"),
-			      _("Removing this item will destroy all items inside\n"
-				"the submenu. Do you really want to do that?"),
-			      _("Yes"), _("No"), 
-			      _("Yes, don't ask again."));
-	switch (res) {
-	 case WAPRDefault:
-	    return True;
-	 case WAPRAlternate:
-	    return False;
-	 case WAPROther:
-	    panel->dontAsk = True;
-	    return True;
-	}
+        int res;
+
+        res = WMRunAlertPanel(WMWidgetScreen(menu), NULL,
+                              _("Remove Submenu"),
+                              _("Removing this item will destroy all items inside\n"
+                                "the submenu. Do you really want to do that?"),
+                              _("Yes"), _("No"),
+                              _("Yes, don't ask again."));
+        switch (res) {
+        case WAPRDefault:
+            return True;
+        case WAPRAlternate:
+            return False;
+        case WAPROther:
+            panel->dontAsk = True;
+            return True;
+        }
     }
     return True;
 }
 
 
-static void 
+static void
 menuItemDeselected(WEditMenuDelegate *delegate, WEditMenu *menu,
-		   WEditMenuItem *item)
+                   WEditMenuItem *item)
 {
     _Panel *panel = (_Panel*)delegate->data;
 
@@ -1427,70 +1427,70 @@ menuItemDeselected(WEditMenuDelegate *delegate, WEditMenu *menu,
 }
 
 
-static void 
+static void
 menuItemSelected(WEditMenuDelegate *delegate, WEditMenu *menu,
-		 WEditMenuItem *item)
+                 WEditMenuItem *item)
 {
     ItemData *data = WGetEditMenuItemData(item);
     _Panel *panel = (_Panel*)delegate->data;
-    
+
     panel->currentItem = item;
-    
+
     if (data) {
-	changeInfoType(panel, WGetEditMenuItemTitle(item), data->type);
-	
-	switch (data->type) {
-	 case NoInfo:
-	    break;
+        changeInfoType(panel, WGetEditMenuItemTitle(item), data->type);
 
-	 case ExecInfo:
-	    WMSetTextFieldText(panel->commandT, data->param.exec.command);
-	    WMSetTextFieldText(panel->shortT, data->param.exec.shortcut);
-	    break;
+        switch (data->type) {
+        case NoInfo:
+            break;
 
-	 case CommandInfo:
-	    WMSelectListItem(panel->icommandL, 
-			     data->param.command.command);
-	    WMSetListPosition(panel->icommandL,
-			      data->param.command.command - 2);
-	    WMSetTextFieldText(panel->shortT, data->param.command.shortcut);
-	    
-	    switch (data->param.command.command) {
-	     case 3:
-	     case 4:
-		WMSetButtonSelected(panel->quickB,
-				    data->param.command.parameter!=NULL);
-		break;
-	     case 6:
-		WMSetTextFieldText(panel->paramT, 
-				   data->param.command.parameter);
-		break;
-	    }
+        case ExecInfo:
+            WMSetTextFieldText(panel->commandT, data->param.exec.command);
+            WMSetTextFieldText(panel->shortT, data->param.exec.shortcut);
+            break;
 
-	    icommandLClicked(panel->icommandL, panel);
-	    break;
+        case CommandInfo:
+            WMSelectListItem(panel->icommandL,
+                             data->param.command.command);
+            WMSetListPosition(panel->icommandL,
+                              data->param.command.command - 2);
+            WMSetTextFieldText(panel->shortT, data->param.command.shortcut);
 
-	 case PipeInfo:
-	    WMSetTextFieldText(panel->pipeT, data->param.pipe.command);
-	    WMSetButtonSelected(panel->pipeCacheB, data->param.pipe.cached);
-	    break;
+            switch (data->param.command.command) {
+            case 3:
+            case 4:
+                WMSetButtonSelected(panel->quickB,
+                                    data->param.command.parameter!=NULL);
+                break;
+            case 6:
+                WMSetTextFieldText(panel->paramT,
+                                   data->param.command.parameter);
+                break;
+            }
 
-	 case ExternalInfo:
-	    WMSetTextFieldText(panel->pathT, data->param.external.path);
-	    break;
+            icommandLClicked(panel->icommandL, panel);
+            break;
 
-	 case DirectoryInfo:
-	    WMSetTextFieldText(panel->dpathT, data->param.directory.directory);
-	    WMSetTextFieldText(panel->dcommandT, data->param.directory.command);
-	    WMSetButtonSelected(panel->dstripB, data->param.directory.stripExt);
-	    break;
-	    
-	 case WSMenuInfo:
-	    break;
-	    
-	 default:
-	    break;
-	}
+        case PipeInfo:
+            WMSetTextFieldText(panel->pipeT, data->param.pipe.command);
+            WMSetButtonSelected(panel->pipeCacheB, data->param.pipe.cached);
+            break;
+
+        case ExternalInfo:
+            WMSetTextFieldText(panel->pathT, data->param.external.path);
+            break;
+
+        case DirectoryInfo:
+            WMSetTextFieldText(panel->dpathT, data->param.directory.directory);
+            WMSetTextFieldText(panel->dcommandT, data->param.directory.command);
+            WMSetButtonSelected(panel->dstripB, data->param.directory.stripExt);
+            break;
+
+        case WSMenuInfo:
+            break;
+
+        default:
+            break;
+        }
     }
 }
 
@@ -1505,41 +1505,41 @@ buildSubmenu(_Panel *panel, WMPropList *pl)
     char *title;
     WMPropList *tp, *bp;
     int i;
-    
+
     tp = WMGetFromPLArray(pl, 0);
     title = WMGetFromPLString(tp);
 
     menu = WCreateEditMenu(scr, title);
-    
+
     for (i = 1; i < WMGetPropListItemCount(pl); i++) {
-	WMPropList *pi;
-	
-	pi = WMGetFromPLArray(pl, i);
+        WMPropList *pi;
 
-	tp = WMGetFromPLArray(pi, 0);
-	bp = WMGetFromPLArray(pi, 1);
-	
-	title = WMGetFromPLString(tp);
+        pi = WMGetFromPLArray(pl, i);
 
-	if (!bp || WMIsPLArray(bp)) {	       /* it's a submenu */
-	    WEditMenu *submenu;
-	    
-	    submenu = buildSubmenu(panel, pi);
-	    
-	    item = WAddMenuItemWithTitle(menu, title);
+        tp = WMGetFromPLArray(pi, 0);
+        bp = WMGetFromPLArray(pi, 1);
 
-	    WSetEditMenuSubmenu(menu, item, submenu);
-	} else {
-	    ItemData *data;
-	    
-	    item = WAddMenuItemWithTitle(menu, title);
-	    
-	    data = parseCommand(pi);
-	    
-	    if (panel->markerPix[data->type])
-		WSetEditMenuItemImage(item, panel->markerPix[data->type]);
-	    WSetEditMenuItemData(item, data, (WMCallback*)freeItemData);
-	}
+        title = WMGetFromPLString(tp);
+
+        if (!bp || WMIsPLArray(bp)) {	       /* it's a submenu */
+            WEditMenu *submenu;
+
+            submenu = buildSubmenu(panel, pi);
+
+            item = WAddMenuItemWithTitle(menu, title);
+
+            WSetEditMenuSubmenu(menu, item, submenu);
+        } else {
+            ItemData *data;
+
+            item = WAddMenuItemWithTitle(menu, title);
+
+            data = parseCommand(pi);
+
+            if (panel->markerPix[data->type])
+                WSetEditMenuItemImage(item, panel->markerPix[data->type]);
+            WSetEditMenuItemData(item, data, (WMCallback*)freeItemData);
+        }
     }
 
     WSetEditMenuAcceptsDrop(menu, True);
@@ -1574,31 +1574,31 @@ getDefaultMenu(_Panel *panel)
 
     menu = WMReadPropListFromFile(menuPath);
     if (!menu) {
-	wwarning("%s:could not read property list menu", menuPath);
+        wwarning("%s:could not read property list menu", menuPath);
 
-	if (strcmp("%s/Library/WindowMaker/plmenu",
-		   _("%s/Library/WindowMaker/plmenu"))!=0) {
+        if (strcmp("%s/Library/WindowMaker/plmenu",
+                   _("%s/Library/WindowMaker/plmenu"))!=0) {
 
-	    sprintf(menuPath, "%s/Library/WindowMaker/plmenu", gspath);
-	    menu = WMReadPropListFromFile(menuPath);
-	    wwarning("%s:could not read property list menu", menuPath);
-	}
-	if (!menu) {
-	    char buffer[512];
+            sprintf(menuPath, "%s/Library/WindowMaker/plmenu", gspath);
+            menu = WMReadPropListFromFile(menuPath);
+            wwarning("%s:could not read property list menu", menuPath);
+        }
+        if (!menu) {
+            char buffer[512];
 
-	    sprintf(buffer, _("Could not open default menu from '%s'"),
-		    menuPath);
-	    WMRunAlertPanel(WMWidgetScreen(panel->parent), panel->parent,
-			    _("Error"), buffer,	_("OK"), NULL, NULL);
-	}
+            sprintf(buffer, _("Could not open default menu from '%s'"),
+                    menuPath);
+            WMRunAlertPanel(WMWidgetScreen(panel->parent), panel->parent,
+                            _("Error"), buffer,	_("OK"), NULL, NULL);
+        }
     }
 
     wfree(menuPath);
 
     if (menu) {
-	pmenu = menu;
+        pmenu = menu;
     } else {
-	pmenu = NULL;
+        pmenu = NULL;
     }
 
     return pmenu;
@@ -1619,29 +1619,29 @@ showData(_Panel *panel)
     strcat(menuPath, "/Defaults/WMRootMenu");
 
     pmenu = WMReadPropListFromFile(menuPath);
-    
+
     if (!pmenu || !WMIsPLArray(pmenu)) {
-	int res;
-	
-	res = WMRunAlertPanel(WMWidgetScreen(panel->parent), panel->parent,
-			      _("Warning"),
-			      _("The menu file format currently in use is not supported\n"
-				"by this tool. Do you want to discard the current menu\n"
-				"to use this tool?"),
-			      _("Yes, Discard and Update"),
-			      _("No, Keep Current Menu"), NULL);
+        int res;
 
-	if (res == WAPRDefault) {
-	    pmenu = getDefaultMenu(panel);
+        res = WMRunAlertPanel(WMWidgetScreen(panel->parent), panel->parent,
+                              _("Warning"),
+                              _("The menu file format currently in use is not supported\n"
+                                "by this tool. Do you want to discard the current menu\n"
+                                "to use this tool?"),
+                              _("Yes, Discard and Update"),
+                              _("No, Keep Current Menu"), NULL);
 
-	    if (!pmenu) {
-		pmenu = WMCreatePLArray(WMCreatePLString("Applications"),
-						NULL);
-	    }
-	} else {
-	    panel->dontSave = True;
-	    return;
-	}
+        if (res == WAPRDefault) {
+            pmenu = getDefaultMenu(panel);
+
+            if (!pmenu) {
+                pmenu = WMCreatePLArray(WMCreatePLString("Applications"),
+                                        NULL);
+            }
+        } else {
+            panel->dontSave = True;
+            return;
+        }
     }
 
     panel->menuPath = menuPath;
@@ -1656,10 +1656,10 @@ static Bool
 notblank(char *s)
 {
     if (s) {
-	while (*s++) {
-	    if (!isspace(*s))
-		return True;
-	}
+        while (*s++) {
+            if (!isspace(*s))
+                return True;
+        }
     }
     return False;
 }
@@ -1675,124 +1675,124 @@ processData(char *title, ItemData *data)
     int i;
 
     if (!pscut) {
-	pscut = WMCreatePLString("SHORTCUT");
-	pomenu = WMCreatePLString("OPEN_MENU");
+        pscut = WMCreatePLString("SHORTCUT");
+        pomenu = WMCreatePLString("OPEN_MENU");
     }
 
     item = WMCreatePLArray(WMCreatePLString(title), NULL);
-    
+
 
     switch (data->type) {
-     case ExecInfo:
-	if (data->param.exec.command == NULL)
-	    return NULL;
+    case ExecInfo:
+        if (data->param.exec.command == NULL)
+            return NULL;
 #if 1
-	if (strpbrk(data->param.exec.command, "&$*|><?`=;")) {
-	    s1 = "SHEXEC";
-	} else {
-	    s1 = "EXEC";
-	}
-#else	 
-	s1 = "SHEXEC";
+        if (strpbrk(data->param.exec.command, "&$*|><?`=;")) {
+            s1 = "SHEXEC";
+        } else {
+            s1 = "EXEC";
+        }
+#else
+        s1 = "SHEXEC";
 #endif
 
-	if (notblank(data->param.exec.shortcut)) {
-	    WMAddToPLArray(item, pscut);
-	    WMAddToPLArray(item, 
-				 WMCreatePLString(data->param.exec.shortcut));
-	}
+        if (notblank(data->param.exec.shortcut)) {
+            WMAddToPLArray(item, pscut);
+            WMAddToPLArray(item,
+                           WMCreatePLString(data->param.exec.shortcut));
+        }
 
-	WMAddToPLArray(item, WMCreatePLString(s1));
-	WMAddToPLArray(item, WMCreatePLString(data->param.exec.command));
-	break;
+        WMAddToPLArray(item, WMCreatePLString(s1));
+        WMAddToPLArray(item, WMCreatePLString(data->param.exec.command));
+        break;
 
-     case CommandInfo:
-	if (notblank(data->param.command.shortcut)) {
-	    WMAddToPLArray(item, pscut);
-	    WMAddToPLArray(item, 
-				 WMCreatePLString(data->param.command.shortcut));
-	}
-	
-	i = data->param.command.command;
-	
-	WMAddToPLArray(item, WMCreatePLString(commandNames[i]));
-	
-	switch (i) {
-	 case 3:
-	 case 4:
-	    if (data->param.command.parameter) {
-		WMAddToPLArray(item, 
-				     WMCreatePLString(data->param.command.parameter));
-	    }
-	    break;
+    case CommandInfo:
+        if (notblank(data->param.command.shortcut)) {
+            WMAddToPLArray(item, pscut);
+            WMAddToPLArray(item,
+                           WMCreatePLString(data->param.command.shortcut));
+        }
 
-	 case 6: /* restart */
-	    if (data->param.command.parameter) {
-		WMAddToPLArray(item, 
-				     WMCreatePLString(data->param.command.parameter));
-	    }
-	    break;
-	}
-	
-	break;
-	
-     case PipeInfo:
-	if (!data->param.pipe.command)
-	    return NULL;
-	WMAddToPLArray(item, pomenu);
-	if (data->param.pipe.cached)
-	    s1 = wstrconcat("| ", data->param.pipe.command);
-	else
-	    s1 = wstrconcat("|| ", data->param.pipe.command);
-	WMAddToPLArray(item, WMCreatePLString(s1));
-	wfree(s1);
-	break;
+        i = data->param.command.command;
 
-     case ExternalInfo:
-	if (!data->param.external.path)
-	    return NULL;
-	WMAddToPLArray(item, pomenu);
-	WMAddToPLArray(item, WMCreatePLString(data->param.external.path));
-	break;
-	
-     case DirectoryInfo:
-	if (!data->param.directory.directory
-	    || !data->param.directory.command)
-	    return NULL;
-	{
-	    int l;
-	    char *tmp;
-	    
-	    l = strlen(data->param.directory.directory);
-	    l += strlen(data->param.directory.command);
-	    l += 32;
+        WMAddToPLArray(item, WMCreatePLString(commandNames[i]));
 
-	    WMAddToPLArray(item, pomenu);
-	    
-	    tmp = wmalloc(l);
-	    sprintf(tmp, "%s%s WITH %s",
-		    data->param.directory.stripExt ? "-noext " : "",
-		    data->param.directory.directory,
-		    data->param.directory.command);
-	    
-	    WMAddToPLArray(item, WMCreatePLString(tmp));
-	    wfree(tmp);
-	}
-	break;
-	
-     case WSMenuInfo:
-	WMAddToPLArray(item, WMCreatePLString("WORKSPACE_MENU"));
-	break;
+        switch (i) {
+        case 3:
+        case 4:
+            if (data->param.command.parameter) {
+                WMAddToPLArray(item,
+                               WMCreatePLString(data->param.command.parameter));
+            }
+            break;
 
-     case WWindowListInfo:
-	WMAddToPLArray(item, WMCreatePLString("WINDOWS_MENU"));
-	break;
+        case 6: /* restart */
+            if (data->param.command.parameter) {
+                WMAddToPLArray(item,
+                               WMCreatePLString(data->param.command.parameter));
+            }
+            break;
+        }
 
-     default:
-	assert(0);
-	break;
+        break;
+
+    case PipeInfo:
+        if (!data->param.pipe.command)
+            return NULL;
+        WMAddToPLArray(item, pomenu);
+        if (data->param.pipe.cached)
+            s1 = wstrconcat("| ", data->param.pipe.command);
+        else
+            s1 = wstrconcat("|| ", data->param.pipe.command);
+        WMAddToPLArray(item, WMCreatePLString(s1));
+        wfree(s1);
+        break;
+
+    case ExternalInfo:
+        if (!data->param.external.path)
+            return NULL;
+        WMAddToPLArray(item, pomenu);
+        WMAddToPLArray(item, WMCreatePLString(data->param.external.path));
+        break;
+
+    case DirectoryInfo:
+        if (!data->param.directory.directory
+            || !data->param.directory.command)
+            return NULL;
+        {
+            int l;
+            char *tmp;
+
+            l = strlen(data->param.directory.directory);
+            l += strlen(data->param.directory.command);
+            l += 32;
+
+            WMAddToPLArray(item, pomenu);
+
+            tmp = wmalloc(l);
+            sprintf(tmp, "%s%s WITH %s",
+                    data->param.directory.stripExt ? "-noext " : "",
+                    data->param.directory.directory,
+                    data->param.directory.command);
+
+            WMAddToPLArray(item, WMCreatePLString(tmp));
+            wfree(tmp);
+        }
+        break;
+
+    case WSMenuInfo:
+        WMAddToPLArray(item, WMCreatePLString("WORKSPACE_MENU"));
+        break;
+
+    case WWindowListInfo:
+        WMAddToPLArray(item, WMCreatePLString("WINDOWS_MENU"));
+        break;
+
+    default:
+        assert(0);
+        break;
     }
-    
+
     return item;
 }
 
@@ -1805,8 +1805,8 @@ processSubmenu(WEditMenu *menu)
     WMPropList *pl;
     char *s;
     int i;
-    
-    
+
+
     s = WGetEditMenuTitle(menu);
     pl = WMCreatePLString(s);
 
@@ -1814,35 +1814,35 @@ processSubmenu(WEditMenu *menu)
 
     i = 0;
     while ((item = WGetEditMenuItem(menu, i++))) {
-	WEditMenu *submenu;
+        WEditMenu *submenu;
 
-	s = WGetEditMenuItemTitle(item);
-	
-	submenu = WGetEditMenuSubmenu(menu, item);
-	if (submenu) {
-	    pl = processSubmenu(submenu); 
-	} else {
-	    pl = processData(s, WGetEditMenuItemData(item));
-	}
+        s = WGetEditMenuItemTitle(item);
 
-	if (!pl)
-	    continue;
+        submenu = WGetEditMenuSubmenu(menu, item);
+        if (submenu) {
+            pl = processSubmenu(submenu);
+        } else {
+            pl = processData(s, WGetEditMenuItemData(item));
+        }
 
-	WMAddToPLArray(pmenu, pl);
+        if (!pl)
+            continue;
+
+        WMAddToPLArray(pmenu, pl);
     }
-    
+
     return pmenu;
 }
-	       
+
 
 
 static WMPropList*
 buildPLFromMenu(_Panel *panel)
 {
     WMPropList *menu;
-    
+
     menu = processSubmenu(panel->menu);
-    
+
     return menu;
 }
 
@@ -1855,7 +1855,7 @@ storeData(_Panel *panel)
     WMPropList *menu;
 
     if (panel->dontSave)
-	return;
+        return;
 
     menu = buildPLFromMenu(panel);
 
@@ -1888,7 +1888,7 @@ Panel*
 InitMenu(WMScreen *scr, WMWidget *parent)
 {
     _Panel *panel;
-    
+
     panel = wmalloc(sizeof(_Panel));
     memset(panel, 0, sizeof(_Panel));
 
@@ -1900,10 +1900,10 @@ InitMenu(WMScreen *scr, WMWidget *parent)
 
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;
-    panel->callbacks.showPanel = showMenus;   
+    panel->callbacks.showPanel = showMenus;
     panel->callbacks.hidePanel = hideMenus;
 
-    
+
     AddSection(panel, ICON_FILE);
 
     return panel;

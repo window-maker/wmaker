@@ -60,14 +60,15 @@ static WMArray *inputHandler=NULL;
 
 
 static void
-rightNow(struct timeval *tv) {
+rightNow(struct timeval *tv)
+{
     X_GETTIMEOFDAY(tv);
 }
 
 /* is t1 after t2 ? */
 #define IS_AFTER(t1, t2)	(((t1).tv_sec > (t2).tv_sec) || \
-				 (((t1).tv_sec == (t2).tv_sec) \
-				  && ((t1).tv_usec > (t2).tv_usec)))
+    (((t1).tv_sec == (t2).tv_sec) \
+    && ((t1).tv_usec > (t2).tv_usec)))
 
 #define IS_ZERO(tv) (tv.tv_sec == 0 && tv.tv_usec == 0)
 
@@ -90,16 +91,16 @@ enqueueTimerHandler(TimerHandler *handler)
 
     /* insert callback in queue, sorted by time left */
     if (!timerHandler || !IS_AFTER(handler->when, timerHandler->when)) {
-	/* first in the queue */
-	handler->next = timerHandler;
-	timerHandler = handler;
+        /* first in the queue */
+        handler->next = timerHandler;
+        timerHandler = handler;
     } else {
-	tmp = timerHandler;
-	while (tmp->next && IS_AFTER(handler->when, tmp->next->when)) {
-	    tmp = tmp->next;
-	}
-	handler->next = tmp->next;
-	tmp->next = handler;
+        tmp = timerHandler;
+        while (tmp->next && IS_AFTER(handler->when, tmp->next->when)) {
+            tmp = tmp->next;
+        }
+        handler->next = tmp->next;
+        tmp->next = handler;
     }
 }
 
@@ -116,22 +117,22 @@ delayUntilNextTimerEvent(struct timeval *delay)
     if (!handler) {
         /* The return value of this function is only valid if there _are_
          timers active. */
-	delay->tv_sec = 0;
-	delay->tv_usec = 0;
-	return;
+        delay->tv_sec = 0;
+        delay->tv_usec = 0;
+        return;
     }
 
     rightNow(&now);
     if (IS_AFTER(now, handler->when)) {
-	delay->tv_sec = 0;
-	delay->tv_usec = 0;
+        delay->tv_sec = 0;
+        delay->tv_usec = 0;
     } else {
-	delay->tv_sec = handler->when.tv_sec - now.tv_sec;
-	delay->tv_usec = handler->when.tv_usec - now.tv_usec;
-	if (delay->tv_usec < 0) {
-	    delay->tv_usec += 1000000;
-	    delay->tv_sec--;
-	}
+        delay->tv_sec = handler->when.tv_sec - now.tv_sec;
+        delay->tv_usec = handler->when.tv_usec - now.tv_usec;
+        if (delay->tv_usec < 0) {
+            delay->tv_usec += 1000000;
+            delay->tv_sec--;
+        }
     }
 }
 
@@ -143,7 +144,7 @@ WMAddTimerHandler(int milliseconds, WMCallback *callback, void *cdata)
 
     handler = malloc(sizeof(TimerHandler));
     if (!handler)
-      return NULL;
+        return NULL;
 
     rightNow(&handler->when);
     addmillisecs(&handler->when, milliseconds);
@@ -163,7 +164,7 @@ WMAddPersistentTimerHandler(int milliseconds, WMCallback *callback, void *cdata)
     TimerHandler *handler = WMAddTimerHandler(milliseconds, callback, cdata);
 
     if (handler != NULL)
-	handler->nextDelay = milliseconds;
+        handler->nextDelay = milliseconds;
 
     return handler;
 }
@@ -180,18 +181,18 @@ WMDeleteTimerWithClientData(void *cdata)
 
     tmp = timerHandler;
     if (tmp->clientData==cdata) {
-	tmp->nextDelay = 0;
-	if (!IS_ZERO(tmp->when)) {
-	    timerHandler = tmp->next;
-	    wfree(tmp);
-	}
+        tmp->nextDelay = 0;
+        if (!IS_ZERO(tmp->when)) {
+            timerHandler = tmp->next;
+            wfree(tmp);
+        }
     } else {
         while (tmp->next) {
             if (tmp->next->clientData==cdata) {
                 handler = tmp->next;
-		handler->nextDelay = 0;
-		if (IS_ZERO(handler->when))
-		    break;
+                handler->nextDelay = 0;
+                if (IS_ZERO(handler->when))
+                    break;
                 tmp->next = handler->next;
                 wfree(handler);
                 break;
@@ -209,27 +210,27 @@ WMDeleteTimerHandler(WMHandlerID handlerID)
     TimerHandler *tmp, *handler=(TimerHandler*)handlerID;
 
     if (!handler || !timerHandler)
-      return;
+        return;
 
     tmp = timerHandler;
 
     handler->nextDelay = 0;
 
     if (IS_ZERO(handler->when))
-	return;
+        return;
 
     if (tmp==handler) {
-	timerHandler = handler->next;
-	wfree(handler);
+        timerHandler = handler->next;
+        wfree(handler);
     } else {
-	while (tmp->next) {
-	    if (tmp->next==handler) {
-		tmp->next=handler->next;
-		wfree(handler);
-		break;
-	    }
-	    tmp = tmp->next;
-	}
+        while (tmp->next) {
+            if (tmp->next==handler) {
+                tmp->next=handler->next;
+                wfree(handler);
+                break;
+            }
+            tmp = tmp->next;
+        }
     }
 }
 
@@ -296,7 +297,7 @@ WMDeleteInputHandler(WMHandlerID handlerID)
     InputHandler *handler = (InputHandler*)handlerID;
 
     if (!handler || !inputHandler)
-	return;
+        return;
 
     WMRemoveFromArray(inputHandler, handler);
 }
@@ -310,7 +311,7 @@ W_CheckIdleHandlers(void)
     WMArrayIterator iter;
 
     if (!idleHandler || WMGetArrayItemCount(idleHandler)==0) {
-	W_FlushIdleNotificationQueue();
+        W_FlushIdleNotificationQueue();
         /* make sure an observer in queue didn't added an idle handler */
         return (idleHandler!=NULL && WMGetArrayItemCount(idleHandler)>0);
     }
@@ -322,7 +323,7 @@ W_CheckIdleHandlers(void)
         if (WMGetFirstInArray(idleHandler, handler) == WANotFound)
             continue;
 
-	(*handler->callback)(handler->clientData);
+        (*handler->callback)(handler->clientData);
         WMDeleteIdleHandler(handler);
     }
 
@@ -351,24 +352,24 @@ W_CheckTimerHandlers(void)
 
     handler = timerHandler;
     while (handler && IS_AFTER(now, handler->when)) {
-	if (!IS_ZERO(handler->when)) {
-	    SET_ZERO(handler->when);
-	    (*handler->callback)(handler->clientData);
-	}
-	handler = handler->next;
+        if (!IS_ZERO(handler->when)) {
+            SET_ZERO(handler->when);
+            (*handler->callback)(handler->clientData);
+        }
+        handler = handler->next;
     }
 
     while (timerHandler && IS_ZERO(timerHandler->when)) {
-	handler = timerHandler;
-	timerHandler = timerHandler->next;
+        handler = timerHandler;
+        timerHandler = timerHandler->next;
 
-	if (handler->nextDelay > 0) {
-	    handler->when = now;
-	    addmillisecs(&handler->when, handler->nextDelay);
-	    enqueueTimerHandler(handler);
-	} else {
-	    wfree(handler);
-	}
+        if (handler->nextDelay > 0) {
+            handler->when = now;
+            addmillisecs(&handler->when, handler->nextDelay);
+            enqueueTimerHandler(handler);
+        } else {
+            wfree(handler);
+        }
     }
 
     W_FlushASAPNotificationQueue();

@@ -45,13 +45,13 @@ testDraw()
 
     /* Standard gray tile gradient */
     /*from.red = 0xa6;
-    from.green = 0xa6;
-    from.blue = 0xb6;
-    from.alpha = 0xff;
-    to.red = 0x51;
-    to.green = 0x55;
-    to.blue = 0x61;
-    to.alpha = 0xff;*/
+     from.green = 0xa6;
+     from.blue = 0xb6;
+     from.alpha = 0xff;
+     to.red = 0x51;
+     to.green = 0x55;
+     to.blue = 0x61;
+     to.alpha = 0xff;*/
 
     /* Make the tile, and put it as a sample in the first place */
     tile = RRenderGradient(64, 64, &from, &to, RGRD_DIAGONAL);
@@ -63,8 +63,8 @@ testDraw()
      * in the second slot, and also save a copy for later use. */
     icon = RLoadImage(ctx, "ballot_box.xpm", 0);
     if (!icon) {
-	puts(RMessageForError(RErrorCode));
-	exit(1);
+        puts(RMessageForError(RErrorCode));
+        exit(1);
     }
     RCombineArea(img, icon, 0, 0, icon->width, icon->height, 8, 8);
     RReleaseImage(icon);
@@ -230,13 +230,13 @@ testBevel()
 
     /* Dark blue tile gradient */
     /*from.red = 0x28;
-    from.green = 0x45;
-    from.blue = 0x69;
-    from.alpha = 0xff;
-    to.red = 0x08;
-    to.green = 0x24;
-    to.blue = 0x20;
-    to.alpha = 0xff;*/
+     from.green = 0x45;
+     from.blue = 0x69;
+     from.alpha = 0xff;
+     to.red = 0x08;
+     to.green = 0x24;
+     to.blue = 0x20;
+     to.alpha = 0xff;*/
 
     /* Create Background */
     img = RCreateImage(140, 140, True);
@@ -289,7 +289,7 @@ void testScale()
     XSetWindowAttributes val;
     Pixmap pix;
     Window win;
-    
+
     val.background_pixel = ctx->black;
     val.colormap = ctx->cmap;
     win = XCreateWindow(dpy, DefaultRootWindow(dpy), 10, 10, 140, 140,
@@ -297,13 +297,13 @@ void testScale()
                         CWColormap|CWBackPixel, &val);
     XStoreName(dpy, win, "Scale");
     pix = XCreatePixmap(ctx->dpy, ctx->drawable, 140, 140, ctx->depth);
-    
+
     image = RLoadImage(ctx, "ballot_box.xpm", 0);
     if (!image) {
-	puts("couldnt load ballot_box.xpm");
-	return;
+        puts("couldnt load ballot_box.xpm");
+        return;
     }
-    
+
     scaled = RScaleImage(image, 140, 140);
 
     RReleaseImage(image);
@@ -326,23 +326,23 @@ void testRotate()
 
     image = RLoadImage(ctx, "ballot_box.xpm", 0);
     if (!image) {
-	puts("couldnt load ballot_box.xpm");
-	return;
+        puts("couldnt load ballot_box.xpm");
+        return;
     }
-    
+
     image = RScaleImage(image, 90, 180);
- 
+
 
     val.background_pixel = ctx->black;
     val.colormap = ctx->cmap;
-    win = XCreateWindow(dpy, DefaultRootWindow(dpy), 10, 10, image->height, 
-			image->width,
+    win = XCreateWindow(dpy, DefaultRootWindow(dpy), 10, 10, image->height,
+                        image->width,
                         0, ctx->depth, InputOutput, ctx->visual,
                         CWColormap|CWBackPixel, &val);
     XStoreName(dpy, win, "Rotate");
     pix = XCreatePixmap(ctx->dpy, ctx->drawable, image->height, image->width,
-			ctx->depth);
-    
+                        ctx->depth);
+
     rotated = RRotateImage(image, 90.0);
 
     RReleaseImage(image);
@@ -474,8 +474,8 @@ drawClip()
     ROperateLine(img, RAddOperation, 22, 63-1, 22, 63, &cdelta);
     /*ROperateLine(img, RAddOperation, 22, 63-1, 22, 63, &cdelta);*/   /* the bevel arround them */
     ROperateLine(img, RSubtractOperation, 0, 63-22, 1, 63-22, &cdelta1);
-#endif    
-    
+#endif
+
     RConvertImage(ctx, img, &pix);
     XCopyArea(dpy, pix, back, ctx->copy_gc, 0, 0, 64, 64, 0, 0);
     RReleaseImage(img);
@@ -587,14 +587,14 @@ int main(int argc, char **argv)
 
     ProgName = strrchr(argv[0],'/');
     if (!ProgName)
-      ProgName = argv[0];
+        ProgName = argv[0];
     else
-      ProgName++;
+        ProgName++;
 
     dpy = XOpenDisplay("");
     if (!dpy) {
-	puts("cant open display");
-	exit(1);
+        puts("cant open display");
+        exit(1);
     }
 
     attr.flags = RC_RenderMode | RC_ColorsPerChannel;
@@ -610,9 +610,9 @@ int main(int argc, char **argv)
     ctx = RCreateContext(dpy, DefaultScreen(dpy), &attr);
 
     if (!ctx) {
-	printf("could not initialize graphics library context: %s\n",
-	       RMessageForError(RErrorCode));
-	exit(1);
+        printf("could not initialize graphics library context: %s\n",
+               RMessageForError(RErrorCode));
+        exit(1);
     }
 
     /* Here are the things we want to test */
@@ -621,13 +621,14 @@ int main(int argc, char **argv)
     testBevel();
 
     drawClip();
-    
+
     testScale();
-    
+
     testRotate();
 
-  /*  benchmark();*/
+    /* benchmark();*/
 
     getchar();
     return 0;
 }
+

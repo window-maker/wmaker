@@ -1,9 +1,9 @@
 /* gnome.c-- support for the GNOME Hints
- * 
+ *
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,14 +16,14 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
 /*
  * According to the author of this thing, it should not be taken seriously.
  * IMHO, there are lot's of weirdnesses and it's quite unelegant. I'd
- * rather not support it, but here it goes anyway. 
+ * rather not support it, but here it goes anyway.
  */
 
 #include "wconfig.h"
@@ -116,35 +116,35 @@ wGNOMEInitStuff(WScreen *scr)
 
     if (!_XA_WIN_SUPPORTING_WM_CHECK) {
 
-	_XA_WIN_SUPPORTING_WM_CHECK = 
-	    XInternAtom(dpy, "_WIN_SUPPORTING_WM_CHECK", False);
+        _XA_WIN_SUPPORTING_WM_CHECK =
+            XInternAtom(dpy, "_WIN_SUPPORTING_WM_CHECK", False);
 
-	_XA_WIN_PROTOCOLS = XInternAtom(dpy, "_WIN_PROTOCOLS", False);
+        _XA_WIN_PROTOCOLS = XInternAtom(dpy, "_WIN_PROTOCOLS", False);
 
-	_XA_WIN_LAYER = XInternAtom(dpy, "_WIN_LAYER", False);
+        _XA_WIN_LAYER = XInternAtom(dpy, "_WIN_LAYER", False);
 
-	_XA_WIN_STATE = XInternAtom(dpy, "_WIN_STATE", False);
+        _XA_WIN_STATE = XInternAtom(dpy, "_WIN_STATE", False);
 
-	_XA_WIN_HINTS = XInternAtom(dpy, "_WIN_HINTS", False);
+        _XA_WIN_HINTS = XInternAtom(dpy, "_WIN_HINTS", False);
 
-	_XA_WIN_APP_STATE = XInternAtom(dpy, "_WIN_APP_STATE", False);
+        _XA_WIN_APP_STATE = XInternAtom(dpy, "_WIN_APP_STATE", False);
 
-	_XA_WIN_EXPANDED_SIZE = XInternAtom(dpy, "_WIN_EXPANDED_SIZE", False);
+        _XA_WIN_EXPANDED_SIZE = XInternAtom(dpy, "_WIN_EXPANDED_SIZE", False);
 
-	_XA_WIN_ICONS = XInternAtom(dpy, "_WIN_ICONS", False);
+        _XA_WIN_ICONS = XInternAtom(dpy, "_WIN_ICONS", False);
 
-	_XA_WIN_WORKSPACE = XInternAtom(dpy, "_WIN_WORKSPACE", False);
+        _XA_WIN_WORKSPACE = XInternAtom(dpy, "_WIN_WORKSPACE", False);
 
-	_XA_WIN_WORKSPACE_COUNT = 
-	    XInternAtom(dpy, "_WIN_WORKSPACE_COUNT", False);
+        _XA_WIN_WORKSPACE_COUNT =
+            XInternAtom(dpy, "_WIN_WORKSPACE_COUNT", False);
 
-	_XA_WIN_WORKSPACE_NAMES = 
-	    XInternAtom(dpy, "_WIN_WORKSPACE_NAMES", False);
+        _XA_WIN_WORKSPACE_NAMES =
+            XInternAtom(dpy, "_WIN_WORKSPACE_NAMES", False);
 
-	_XA_WIN_CLIENT_LIST = XInternAtom(dpy, "_WIN_CLIENT_LIST", False);
+        _XA_WIN_CLIENT_LIST = XInternAtom(dpy, "_WIN_CLIENT_LIST", False);
 
-	_XA_WIN_DESKTOP_BUTTON_PROXY = 
-	    XInternAtom(dpy, "_WIN_DESKTOP_BUTTON_PROXY", False);
+        _XA_WIN_DESKTOP_BUTTON_PROXY =
+            XInternAtom(dpy, "_WIN_DESKTOP_BUTTON_PROXY", False);
     }
 
     /* I'd rather use the ICCCM 2.0 mechanisms, but
@@ -154,23 +154,23 @@ wGNOMEInitStuff(WScreen *scr)
     /* setup the "We're compliant, you idiot!" hint */
 
     /* why XA_CARDINAL instead of XA_WINDOW? */
-    XChangeProperty(dpy, scr->root_win, _XA_WIN_SUPPORTING_WM_CHECK, 
-		    XA_CARDINAL, 32, PropModeReplace, 
-		    (unsigned char*)&scr->no_focus_win, 1);
+    XChangeProperty(dpy, scr->root_win, _XA_WIN_SUPPORTING_WM_CHECK,
+                    XA_CARDINAL, 32, PropModeReplace,
+                    (unsigned char*)&scr->no_focus_win, 1);
 
-    XChangeProperty(dpy, scr->no_focus_win, _XA_WIN_SUPPORTING_WM_CHECK, 
-		    XA_CARDINAL, 32, PropModeReplace, 
-		    (unsigned char*)&scr->no_focus_win, 1);
+    XChangeProperty(dpy, scr->no_focus_win, _XA_WIN_SUPPORTING_WM_CHECK,
+                    XA_CARDINAL, 32, PropModeReplace,
+                    (unsigned char*)&scr->no_focus_win, 1);
 
-    
+
     /* setup the "desktop button proxy" thing */
     XChangeProperty(dpy, scr->root_win, _XA_WIN_DESKTOP_BUTTON_PROXY,
-		    XA_CARDINAL, 32, PropModeReplace,
-		    (unsigned char*)&scr->no_focus_win, 1);
+                    XA_CARDINAL, 32, PropModeReplace,
+                    (unsigned char*)&scr->no_focus_win, 1);
     XChangeProperty(dpy, scr->no_focus_win, _XA_WIN_DESKTOP_BUTTON_PROXY,
-		    XA_CARDINAL, 32, PropModeReplace,
-		    (unsigned char*)&scr->no_focus_win, 1);
-    
+                    XA_CARDINAL, 32, PropModeReplace,
+                    (unsigned char*)&scr->no_focus_win, 1);
+
 
     /* setup the list of supported protocols */
     count = 0;
@@ -186,7 +186,7 @@ wGNOMEInitStuff(WScreen *scr)
     supportedStuff[count++] = _XA_WIN_CLIENT_LIST;
 
     XChangeProperty(dpy, scr->root_win, _XA_WIN_PROTOCOLS, XA_ATOM, 32,
-		    PropModeReplace, (unsigned char*)supportedStuff, count);
+                    PropModeReplace, (unsigned char*)supportedStuff, count);
 
     XFlush(dpy);
 
@@ -214,8 +214,8 @@ wGNOMEUpdateClientListHint(WScreen *scr)
 
     windows = malloc(sizeof(Window)*scr->window_count);
     if (!windows) {
-	wwarning(_("out of memory while updating GNOME hints"));
-	return;
+        wwarning(_("out of memory while updating GNOME hints"));
+        return;
     }
 
     count = 0;
@@ -224,14 +224,14 @@ wGNOMEUpdateClientListHint(WScreen *scr)
         if (!wwin->flags.internal_window &&
             !wwin->client_flags.skip_window_list) {
 
-	    windows[count++] = wwin->client_win;
-	}
+            windows[count++] = wwin->client_win;
+        }
 
-	wwin = wwin->prev;
+        wwin = wwin->prev;
     }
 
     XChangeProperty(dpy, scr->root_win, _XA_WIN_CLIENT_LIST, XA_CARDINAL, 32,
-		    PropModeReplace, (unsigned char *)windows, count);
+                    PropModeReplace, (unsigned char *)windows, count);
 
     wfree(windows);
     XFlush(dpy);
@@ -246,7 +246,7 @@ wGNOMEUpdateWorkspaceHints(WScreen *scr)
     val = scr->workspace_count;
 
     XChangeProperty(dpy, scr->root_win, _XA_WIN_WORKSPACE_COUNT, XA_CARDINAL,
-		    32, PropModeReplace, (unsigned char*)&val, 1);
+                    32, PropModeReplace, (unsigned char*)&val, 1);
 
     wGNOMEUpdateWorkspaceNamesHint(scr);
 }
@@ -260,13 +260,13 @@ wGNOMEUpdateWorkspaceNamesHint(WScreen *scr)
     int i;
 
     for (i = 0; i < scr->workspace_count; i++) {
-	wsNames[i] = scr->workspaces[i]->name;
+        wsNames[i] = scr->workspaces[i]->name;
     }
 
     if (XStringListToTextProperty(wsNames, scr->workspace_count, &textProp)) {
-	XSetTextProperty(dpy, scr->root_win, &textProp,
-			 _XA_WIN_WORKSPACE_NAMES);
-	XFree(textProp.value);
+        XSetTextProperty(dpy, scr->root_win, &textProp,
+                         _XA_WIN_WORKSPACE_NAMES);
+        XFree(textProp.value);
     }
 }
 
@@ -279,7 +279,7 @@ wGNOMEUpdateCurrentWorkspaceHint(WScreen *scr)
     val = scr->current_workspace;
 
     XChangeProperty(dpy, scr->root_win, _XA_WIN_WORKSPACE, XA_CARDINAL,
-		    32, PropModeReplace, (unsigned char*)&val, 1);
+                    32, PropModeReplace, (unsigned char*)&val, 1);
 }
 
 
@@ -289,22 +289,22 @@ getWindowLevel(int layer)
     int level;
 
     if (layer <= WIN_LAYER_DESKTOP)
-	level = WMDesktopLevel;
+        level = WMDesktopLevel;
     else if (layer <= WIN_LAYER_BELOW)
-	level = WMSunkenLevel;
+        level = WMSunkenLevel;
     else if (layer <= WIN_LAYER_NORMAL)
-	level = WMNormalLevel;
+        level = WMNormalLevel;
     else if (layer <= WIN_LAYER_ONTOP)
-	level = WMFloatingLevel;
+        level = WMFloatingLevel;
     else if (layer <= WIN_LAYER_DOCK)
-	level = WMDockLevel;
+        level = WMDockLevel;
     else if (layer <= WIN_LAYER_ABOVE_DOCK)
-	level = WMSubmenuLevel;
+        level = WMSubmenuLevel;
     else if (layer <= WIN_LAYER_MENU)
-	level = WMMainMenuLevel;
-    else 
-	level = WMOuterSpaceLevel;
-    
+        level = WMMainMenuLevel;
+    else
+        level = WMOuterSpaceLevel;
+
     return level;
 }
 
@@ -320,103 +320,103 @@ wGNOMECheckClientHints(WWindow *wwin, int *layer, int *workspace)
     Bool hasHints = False;
 
     /* hints */
-    
+
     if (XGetWindowProperty(dpy, wwin->client_win, _XA_WIN_HINTS, 0, 1, False,
-			   /* should be XA_INTEGER, but spec is broken */
-			   XA_CARDINAL, &type_ret, &fmt_ret, &nitems_ret, 
-			   &bytes_after_ret,
-			   (unsigned char**)&data)==Success && data) {
-	flags = *data;
-	
-	XFree(data);
-	
-	if (flags & (WIN_HINTS_SKIP_FOCUS|WIN_HINTS_SKIP_WINLIST
-				|WIN_HINTS_SKIP_TASKBAR)) {
-	    wwin->client_flags.skip_window_list = 1;
-	}
+                           /* should be XA_INTEGER, but spec is broken */
+                           XA_CARDINAL, &type_ret, &fmt_ret, &nitems_ret,
+                           &bytes_after_ret,
+                           (unsigned char**)&data)==Success && data) {
+        flags = *data;
 
-	/* client reserved area, for the panel */
-	if (flags & (WIN_HINTS_DO_NOT_COVER)) {
-		WReservedArea *area;
+        XFree(data);
 
-		area = malloc(sizeof(WReservedArea));
-		if (!area) {
-			wwarning(_("out of memory while updating GNOME hints"));
-		} else {
-			XWindowAttributes wattribs;
+        if (flags & (WIN_HINTS_SKIP_FOCUS|WIN_HINTS_SKIP_WINLIST
+                     |WIN_HINTS_SKIP_TASKBAR)) {
+            wwin->client_flags.skip_window_list = 1;
+        }
 
-			XGetWindowAttributes(dpy, wwin->client_win, &wattribs);
-			wClientGetNormalHints(wwin, &wattribs, False,
-					      &area->area.x1, &area->area.y1,
-					      &area->area.x2, &area->area.y2);
-			area->area.x2 = area->area.x2 + area->area.x1;
-			area->area.y2 = area->area.y2 + area->area.y1;
+        /* client reserved area, for the panel */
+        if (flags & (WIN_HINTS_DO_NOT_COVER)) {
+            WReservedArea *area;
 
-			area->window = wwin->client_win;
-		}
-		area->next = wwin->screen_ptr->reservedAreas;
-		wwin->screen_ptr->reservedAreas = area;
-		
-		wScreenUpdateUsableArea(wwin->screen_ptr);
-	}
+            area = malloc(sizeof(WReservedArea));
+            if (!area) {
+                wwarning(_("out of memory while updating GNOME hints"));
+            } else {
+                XWindowAttributes wattribs;
 
-	hasHints = True;
+                XGetWindowAttributes(dpy, wwin->client_win, &wattribs);
+                wClientGetNormalHints(wwin, &wattribs, False,
+                                      &area->area.x1, &area->area.y1,
+                                      &area->area.x2, &area->area.y2);
+                area->area.x2 = area->area.x2 + area->area.x1;
+                area->area.y2 = area->area.y2 + area->area.y1;
+
+                area->window = wwin->client_win;
+            }
+            area->next = wwin->screen_ptr->reservedAreas;
+            wwin->screen_ptr->reservedAreas = area;
+
+            wScreenUpdateUsableArea(wwin->screen_ptr);
+        }
+
+        hasHints = True;
     }
 
     /* layer */
     if (XGetWindowProperty(dpy, wwin->client_win, _XA_WIN_LAYER, 0, 1, False,
-			   XA_CARDINAL, &type_ret, &fmt_ret, &nitems_ret, 
-			   &bytes_after_ret,
-			   (unsigned char**)&data)==Success  && data) {
-	val = *data;
+                           XA_CARDINAL, &type_ret, &fmt_ret, &nitems_ret,
+                           &bytes_after_ret,
+                           (unsigned char**)&data)==Success  && data) {
+        val = *data;
 
-	XFree(data);
+        XFree(data);
 
-	*layer = getWindowLevel(val);
-	hasHints = True;
+        *layer = getWindowLevel(val);
+        hasHints = True;
     }
-    
+
     /* workspace */
-    if (XGetWindowProperty(dpy, wwin->client_win, _XA_WIN_WORKSPACE, 0, 1, 
-			   False, XA_CARDINAL, &type_ret, &fmt_ret, 
-			   &nitems_ret, &bytes_after_ret,
-			   (unsigned char**)&data)==Success && data) {
-	val = *data;
+    if (XGetWindowProperty(dpy, wwin->client_win, _XA_WIN_WORKSPACE, 0, 1,
+                           False, XA_CARDINAL, &type_ret, &fmt_ret,
+                           &nitems_ret, &bytes_after_ret,
+                           (unsigned char**)&data)==Success && data) {
+        val = *data;
 
-	XFree(data);
+        XFree(data);
 
-	if (val > 0)
-	    *workspace = val;
-	hasHints = True;
+        if (val > 0)
+            *workspace = val;
+        hasHints = True;
     }
 
     /* reserved area */
-    if (XGetWindowProperty(dpy, wwin->client_win, _XA_WIN_EXPANDED_SIZE, 0, 1, 
-			   False, XA_CARDINAL, &type_ret, &fmt_ret, 
-			   &nitems_ret, &bytes_after_ret,
-			   (unsigned char**)&data)==Success && data) {
-	WReservedArea *area;
+    if (XGetWindowProperty(dpy, wwin->client_win, _XA_WIN_EXPANDED_SIZE, 0, 1,
+                           False, XA_CARDINAL, &type_ret, &fmt_ret,
+                           &nitems_ret, &bytes_after_ret,
+                           (unsigned char**)&data)==Success && data) {
+        WReservedArea *area;
 
-	area = malloc(sizeof(WReservedArea));
-	if (!area) {
-	    wwarning(_("out of memory while updating GNOME hints"));
-	} else {
-	    area->area.x1 = data[0];
-	    area->area.y1 = data[1];
-	    area->area.x2 = data[2] - data[0];
-	    area->area.y2 = data[3] - data[1];
-	    XFree(data);
+        area = malloc(sizeof(WReservedArea));
+        if (!area) {
+            wwarning(_("out of memory while updating GNOME hints"));
+        } else {
+            area->area.x1 = data[0];
+            area->area.y1 = data[1];
+            area->area.x2 = data[2] - data[0];
+            area->area.y2 = data[3] - data[1];
+            XFree(data);
 
-	    area->window = wwin->client_win;
-	}
+            area->window = wwin->client_win;
+        }
 
-	area->next = wwin->screen_ptr->reservedAreas;
-	wwin->screen_ptr->reservedAreas = area;
+        area->next = wwin->screen_ptr->reservedAreas;
+        wwin->screen_ptr->reservedAreas = area;
 
         wScreenUpdateUsableArea(wwin->screen_ptr);
-	hasHints = True;
+        hasHints = True;
     }
-    
+
     return hasHints;
 }
 
@@ -433,21 +433,21 @@ wGNOMEGetUsableArea(WScreen *scr, int head, WArea *area)
     area->x1 = area->y1 = area->x2 = area->y2 = 0;
 
     for(cur = scr->reservedAreas ; cur ; cur = cur->next) {
-	WWindow * wwin = wWindowFor(cur->window);
-	if (wWindowTouchesHead(wwin, head)) {
-	    if(cur->area.x1 > area->x1)
-		area->x1 = cur->area.x1;
-	    if(cur->area.y1 > area->y1)
-		area->y1 = cur->area.y1;
-	    if(cur->area.x2 > area->x2)
-		area->x2 = cur->area.x2;
-	    if(cur->area.y2 > area->y2)
-		area->y2 = cur->area.y2;
-	}
+        WWindow * wwin = wWindowFor(cur->window);
+        if (wWindowTouchesHead(wwin, head)) {
+            if(cur->area.x1 > area->x1)
+                area->x1 = cur->area.x1;
+            if(cur->area.y1 > area->y1)
+                area->y1 = cur->area.y1;
+            if(cur->area.x2 > area->x2)
+                area->x2 = cur->area.x2;
+            if(cur->area.y2 > area->y2)
+                area->y2 = cur->area.y2;
+        }
     }
 
     if (area->x1==0 && area->x2==0 &&
-	area->y1==0 && area->y2==0) return False;
+        area->y1==0 && area->y2==0) return False;
 
     rect = wGetRectForHead(scr, head);
 
@@ -470,30 +470,30 @@ wGNOMECheckInitialClientState(WWindow *wwin)
     long flags, *data = 0;
 
     if (XGetWindowProperty(dpy, wwin->client_win, _XA_WIN_STATE, 0, 1, False,
-			   XA_CARDINAL, &type_ret, &fmt_ret, &nitems_ret, 
-			   &bytes_after_ret,
-			   (unsigned char**)&data)!=Success || !data)
-	return False;
+                           XA_CARDINAL, &type_ret, &fmt_ret, &nitems_ret,
+                           &bytes_after_ret,
+                           (unsigned char**)&data)!=Success || !data)
+        return False;
 
     flags = *data;
 
     XFree(data);
 
     if (flags & WIN_STATE_STICKY)
-	wwin->client_flags.omnipresent = 1;
+        wwin->client_flags.omnipresent = 1;
 
     if (flags & (WIN_STATE_MAXIMIZED_VERT|WIN_STATE_MAXIMIZED_HORIZ)) {
 
-	if (flags & WIN_STATE_MAXIMIZED_VERT)
-	    wwin->flags.maximized |= MAX_VERTICAL;
+        if (flags & WIN_STATE_MAXIMIZED_VERT)
+            wwin->flags.maximized |= MAX_VERTICAL;
 
-	if (flags & WIN_STATE_MAXIMIZED_HORIZ)
-	    wwin->flags.maximized |= MAX_HORIZONTAL;
+        if (flags & WIN_STATE_MAXIMIZED_HORIZ)
+            wwin->flags.maximized |= MAX_HORIZONTAL;
     }
 
     if (flags & WIN_STATE_SHADED)
-	wwin->flags.shaded = 1;
-    
+        wwin->flags.shaded = 1;
+
     return True;
 }
 
@@ -505,43 +505,43 @@ wGNOMEUpdateClientStateHint(WWindow *wwin, Bool changedWorkspace)
     long flags = 0;
 
     if (changedWorkspace) {
-	val = wwin->frame->workspace;
+        val = wwin->frame->workspace;
 
-	XChangeProperty(dpy, wwin->client_win, _XA_WIN_WORKSPACE, XA_CARDINAL,
-			32, PropModeReplace, (unsigned char*)&val, 1);
+        XChangeProperty(dpy, wwin->client_win, _XA_WIN_WORKSPACE, XA_CARDINAL,
+                        32, PropModeReplace, (unsigned char*)&val, 1);
 
-	if (val != wwin->screen_ptr->current_workspace)
-	    flags |= WIN_STATE_HID_WORKSPACE;
+        if (val != wwin->screen_ptr->current_workspace)
+            flags |= WIN_STATE_HID_WORKSPACE;
     }
 
     if (IS_OMNIPRESENT(wwin))
-	flags |= WIN_STATE_STICKY;
+        flags |= WIN_STATE_STICKY;
 
     if (wwin->flags.miniaturized)
-	flags |= WIN_STATE_MINIMIZED;
+        flags |= WIN_STATE_MINIMIZED;
 
     if (wwin->flags.maximized & MAX_VERTICAL)
-	flags |= WIN_STATE_MAXIMIZED_VERT;
+        flags |= WIN_STATE_MAXIMIZED_VERT;
 
     if (wwin->flags.maximized & MAX_HORIZONTAL)
-	flags |= WIN_STATE_MAXIMIZED_HORIZ;
+        flags |= WIN_STATE_MAXIMIZED_HORIZ;
 
     if (wwin->flags.shaded)
-	flags |= WIN_STATE_SHADED;
+        flags |= WIN_STATE_SHADED;
 
     if (wwin->transient_for != None) {
-	WWindow *owner = wWindowFor(wwin->transient_for);
+        WWindow *owner = wWindowFor(wwin->transient_for);
 
-	if (owner && !owner->flags.mapped)
-	    flags |= WIN_STATE_HID_TRANSIENT;
+        if (owner && !owner->flags.mapped)
+            flags |= WIN_STATE_HID_TRANSIENT;
     }
 
     /* ? */
     if (wwin->flags.hidden)
-	flags |= WIN_STATE_HIDDEN;
+        flags |= WIN_STATE_HIDDEN;
 
     XChangeProperty(dpy, wwin->client_win, _XA_WIN_STATE, XA_CARDINAL,
-		    32, PropModeReplace, (unsigned char*)&flags, 1);
+                    32, PropModeReplace, (unsigned char*)&flags, 1);
 }
 
 
@@ -554,85 +554,85 @@ wGNOMEProcessClientMessage(XClientMessageEvent *event)
 
     scr = wScreenForWindow(event->window);
     if (scr) {
-	/* generic client messages */
-	if (event->message_type == _XA_WIN_WORKSPACE) {
-	    wWorkspaceChange(scr, event->data.l[0]);
-	} else {
-	    done = False;
-	}
+        /* generic client messages */
+        if (event->message_type == _XA_WIN_WORKSPACE) {
+            wWorkspaceChange(scr, event->data.l[0]);
+        } else {
+            done = False;
+        }
 
-	if (done)
-	    return True;
+        if (done)
+            return True;
     }
 
-    /* window specific client messages */    
+    /* window specific client messages */
 
     wwin = wWindowFor(event->window);
     if (!wwin)
-	return False;
-    
+        return False;
+
     if (event->message_type == _XA_WIN_LAYER) {
-	int level = getWindowLevel(event->data.l[0]);
+        int level = getWindowLevel(event->data.l[0]);
 
-	if (WINDOW_LEVEL(wwin) != level) {
-	    ChangeStackingLevel(wwin->frame->core, level);
-	}
+        if (WINDOW_LEVEL(wwin) != level) {
+            ChangeStackingLevel(wwin->frame->core, level);
+        }
     } else if (event->message_type == _XA_WIN_STATE) {
-	int flags, mask;
-	int maximize = 0;
+        int flags, mask;
+        int maximize = 0;
 
-	mask = event->data.l[0];
-	flags = event->data.l[1]; 
+        mask = event->data.l[0];
+        flags = event->data.l[1];
 
-	if (mask & WIN_STATE_STICKY) {
-	    if ((flags & WIN_STATE_STICKY) != WFLAGP(wwin, omnipresent)) {
-		wWindowSetOmnipresent(wwin, (flags & WIN_STATE_STICKY)!=0);
-	    }
-	}
-
-	if (mask & WIN_STATE_MAXIMIZED_VERT) {
-	    if (flags & WIN_STATE_MAXIMIZED_VERT)
-		maximize = MAX_VERTICAL;
-	    else
-		maximize = 0;
-	} else {
-	    maximize = wwin->flags.maximized & MAX_VERTICAL;
-	}
-
-	if (mask & WIN_STATE_MAXIMIZED_HORIZ) {
-	    if (flags & WIN_STATE_MAXIMIZED_HORIZ)
-		maximize |= MAX_HORIZONTAL;
-	    else
-		maximize |= 0;
-	} else {
-	    maximize |= wwin->flags.maximized & MAX_HORIZONTAL;
-	}
-
-	if (maximize != wwin->flags.maximized) {
-	    if (maximize) {
-		wMaximizeWindow(wwin, maximize);
-            } else {
-		wUnmaximizeWindow(wwin);
+        if (mask & WIN_STATE_STICKY) {
+            if ((flags & WIN_STATE_STICKY) != WFLAGP(wwin, omnipresent)) {
+                wWindowSetOmnipresent(wwin, (flags & WIN_STATE_STICKY)!=0);
             }
-	}
+        }
 
-	if (mask & WIN_STATE_SHADED) {
-	    if ((flags & WIN_STATE_SHADED) != wwin->flags.shaded) {
-		if (wwin->flags.shaded)
-		    wUnshadeWindow(wwin);
-		else
-		    wShadeWindow(wwin);
-	    }
-	}
+        if (mask & WIN_STATE_MAXIMIZED_VERT) {
+            if (flags & WIN_STATE_MAXIMIZED_VERT)
+                maximize = MAX_VERTICAL;
+            else
+                maximize = 0;
+        } else {
+            maximize = wwin->flags.maximized & MAX_VERTICAL;
+        }
+
+        if (mask & WIN_STATE_MAXIMIZED_HORIZ) {
+            if (flags & WIN_STATE_MAXIMIZED_HORIZ)
+                maximize |= MAX_HORIZONTAL;
+            else
+                maximize |= 0;
+        } else {
+            maximize |= wwin->flags.maximized & MAX_HORIZONTAL;
+        }
+
+        if (maximize != wwin->flags.maximized) {
+            if (maximize) {
+                wMaximizeWindow(wwin, maximize);
+            } else {
+                wUnmaximizeWindow(wwin);
+            }
+        }
+
+        if (mask & WIN_STATE_SHADED) {
+            if ((flags & WIN_STATE_SHADED) != wwin->flags.shaded) {
+                if (wwin->flags.shaded)
+                    wUnshadeWindow(wwin);
+                else
+                    wShadeWindow(wwin);
+            }
+        }
     } else if (event->message_type == _XA_WIN_WORKSPACE) {
 
-	if (event->data.l[0] != wwin->frame->workspace) {
-	    wWindowChangeWorkspace(wwin, event->data.l[0]);
-	}
+        if (event->data.l[0] != wwin->frame->workspace) {
+            wWindowChangeWorkspace(wwin, event->data.l[0]);
+        }
     } else {
-	done = False;
+        done = False;
     }
-    
+
     return done;
 }
 
@@ -641,7 +641,7 @@ Bool
 wGNOMEProxyizeButtonEvent(WScreen *scr, XEvent *event)
 {
     if (event->type == ButtonPress)
-	XUngrabPointer(dpy, CurrentTime);
+        XUngrabPointer(dpy, CurrentTime);
     XSendEvent(dpy, scr->no_focus_win, False, SubstructureNotifyMask, event);
 
     return True;
@@ -655,32 +655,32 @@ wGNOMERemoveClient(WWindow *wwin)
     WReservedArea *area;
 
     wGNOMEUpdateClientListHint(wwin->screen_ptr);
-    
+
     area = wwin->screen_ptr->reservedAreas;
 
     if (area) {
-	if (area->window == wwin->client_win) {
-	    wwin->screen_ptr->reservedAreas = area->next;
-	    wfree(area);
-	    flag = 1;
-	} else {
-	    while (area->next && area->next->window != wwin->client_win) 
-		area = area->next;
-	
-	    if (area->next) {
-		WReservedArea *next;
-		
-		next = area->next->next;
-		wfree(area->next);
-		area->next = next;
-		
-		flag = 1;
-	    }
-	}
+        if (area->window == wwin->client_win) {
+            wwin->screen_ptr->reservedAreas = area->next;
+            wfree(area);
+            flag = 1;
+        } else {
+            while (area->next && area->next->window != wwin->client_win)
+                area = area->next;
+
+            if (area->next) {
+                WReservedArea *next;
+
+                next = area->next->next;
+                wfree(area->next);
+                area->next = next;
+
+                flag = 1;
+            }
+        }
     }
 
     if (flag) {
-	wScreenUpdateUsableArea(wwin->screen_ptr);
+        wScreenUpdateUsableArea(wwin->screen_ptr);
     }
 }
 
@@ -694,15 +694,15 @@ observer(void *self, WMNotification *notif)
     const char *name = WMGetNotificationName(notif);
 
     if (strcmp(name, WMNManaged) == 0 && wwin) {
-	wGNOMEUpdateClientStateHint(wwin, True);
-	
-	wGNOMEUpdateClientListHint(wwin->screen_ptr);
+        wGNOMEUpdateClientStateHint(wwin, True);
+
+        wGNOMEUpdateClientListHint(wwin->screen_ptr);
     } else if (strcmp(name, WMNUnmanaged) == 0 && wwin) {
-	wGNOMERemoveClient(wwin);
+        wGNOMERemoveClient(wwin);
     } else if (strcmp(name, WMNChangedWorkspace) == 0 && wwin) {
-	wGNOMEUpdateClientStateHint(wwin, True);
+        wGNOMEUpdateClientStateHint(wwin, True);
     } else if (strcmp(name, WMNChangedState) == 0 && wwin) {
-	wGNOMEUpdateClientStateHint(wwin, False);
+        wGNOMEUpdateClientStateHint(wwin, False);
     }
 }
 
@@ -712,15 +712,15 @@ wsobserver(void *self, WMNotification *notif)
 {
     WScreen *scr = (WScreen*)WMGetNotificationObject(notif);
     const char *name = WMGetNotificationName(notif);
-    
+
     if (strcmp(name, WMNWorkspaceCreated) == 0) {
-	wGNOMEUpdateWorkspaceHints(scr);
+        wGNOMEUpdateWorkspaceHints(scr);
     } else if (strcmp(name, WMNWorkspaceDestroyed) == 0) {
-	wGNOMEUpdateWorkspaceHints(scr);
+        wGNOMEUpdateWorkspaceHints(scr);
     } else if (strcmp(name, WMNWorkspaceNameChanged) == 0) {
-	wGNOMEUpdateWorkspaceNamesHint(scr);
+        wGNOMEUpdateWorkspaceNamesHint(scr);
     } else if (strcmp(name, WMNWorkspaceChanged) == 0) {
-	wGNOMEUpdateCurrentWorkspaceHint(scr);
+        wGNOMEUpdateCurrentWorkspaceHint(scr);
     } else if (strcmp(name, WMNResetStacking) == 0) {
 
     }
@@ -728,3 +728,4 @@ wsobserver(void *self, WMNotification *notif)
 
 
 #endif /* GNOME_STUFF */
+

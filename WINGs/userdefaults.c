@@ -57,19 +57,19 @@ wusergnusteppath()
     int pathlen;
 
     if (!path) {
-	gspath = getenv("GNUSTEP_USER_ROOT");
-	if (gspath) {
-	    gspath = wexpandpath(gspath);
-	    pathlen = strlen(gspath) + 4;
-	    path = wmalloc(pathlen);
-	    strcpy(path, gspath);
-	    wfree(gspath);
-	} else {
-	    pathlen = strlen(wgethomedir()) + 10;
-	    path = wmalloc(pathlen);
-	    strcpy(path, wgethomedir());
-	    strcat(path, "/GNUstep");
-	}
+        gspath = getenv("GNUSTEP_USER_ROOT");
+        if (gspath) {
+            gspath = wexpandpath(gspath);
+            pathlen = strlen(gspath) + 4;
+            path = wmalloc(pathlen);
+            strcpy(path, gspath);
+            wfree(gspath);
+        } else {
+            pathlen = strlen(wgethomedir()) + 10;
+            path = wmalloc(pathlen);
+            strcpy(path, wgethomedir());
+            strcat(path, "/GNUstep");
+        }
     }
 
     return path;
@@ -436,24 +436,24 @@ WMGetUDObjectForKey(WMUserDefaults *database, char *defaultName)
     WMPropList *object = NULL;
     WMPropList *key = WMCreatePLString(defaultName);
     int i = 0;
-    
+
     while (database->searchList[i] && !object) {
-	domainName = database->searchList[i];
-	domain = WMGetFromPLDictionary(database->defaults, domainName);
-	if (domain) {
-	    object = WMGetFromPLDictionary(domain, key);
-	}
-	i++;
+        domainName = database->searchList[i];
+        domain = WMGetFromPLDictionary(database->defaults, domainName);
+        if (domain) {
+            object = WMGetFromPLDictionary(domain, key);
+        }
+        i++;
     }
     WMReleasePropList(key);
-    
+
     return object;
 }
 
 
 void
 WMSetUDObjectForKey(WMUserDefaults *database, WMPropList *object,
-		    char *defaultName)
+                    char *defaultName)
 {
     WMPropList *key = WMCreatePLString(defaultName);
 
@@ -472,7 +472,7 @@ WMRemoveUDObjectForKey(WMUserDefaults *database, char *defaultName)
     database->dirty = 1;
 
     WMRemoveFromPLDictionary(database->appDomain, key);
-    
+
     WMReleasePropList(key);
 }
 
@@ -481,14 +481,14 @@ char*
 WMGetUDStringForKey(WMUserDefaults *database, char *defaultName)
 {
     WMPropList *val;
-    
+
     val = WMGetUDObjectForKey(database, defaultName);
 
     if (!val)
-	return NULL;
+        return NULL;
 
     if (!WMIsPLString(val))
-	return NULL;
+        return NULL;
 
     return WMGetFromPLString(val);
 }
@@ -502,19 +502,19 @@ WMGetUDIntegerForKey(WMUserDefaults *database, char *defaultName)
     int value;
 
     val = WMGetUDObjectForKey(database, defaultName);
-    
+
     if (!val)
-	return 0;
+        return 0;
 
     if (!WMIsPLString(val))
-	return 0;
-    
+        return 0;
+
     str = WMGetFromPLString(val);
     if (!str)
-	return 0;
-    
+        return 0;
+
     if (sscanf(str, "%i", &value)!=1)
-	return 0;
+        return 0;
 
     return value;
 }
@@ -529,15 +529,15 @@ WMGetUDFloatForKey(WMUserDefaults *database, char *defaultName)
     float value;
 
     val = WMGetUDObjectForKey(database, defaultName);
-    
+
     if (!val || !WMIsPLString(val))
-	return 0.0;
+        return 0.0;
 
     if (!(str = WMGetFromPLString(val)))
-	return 0.0;
+        return 0.0;
 
     if (sscanf(str, "%f", &value)!=1)
-	return 0.0;
+        return 0.0;
 
     return value;
 }
@@ -552,25 +552,25 @@ WMGetUDBoolForKey(WMUserDefaults *database, char *defaultName)
     char *str;
 
     val = WMGetUDObjectForKey(database, defaultName);
-    
+
     if (!val)
-	return False;
+        return False;
 
     if (!WMIsPLString(val))
-	return False;
-    
+        return False;
+
     str = WMGetFromPLString(val);
     if (!str)
-	return False;
-    
+        return False;
+
     if (sscanf(str, "%i", &value)==1 && value!=0)
-	return True;
+        return True;
 
     if (strcasecmp(str, "YES")==0)
-	return True;
+        return True;
 
     if (strcasecmp(str, "Y")==0)
-	return True;
+        return True;
 
     return False;
 }
@@ -584,7 +584,7 @@ WMSetUDIntegerForKey(WMUserDefaults *database, int value, char *defaultName)
 
     sprintf(buffer, "%i", value);
     object = WMCreatePLString(buffer);
- 
+
     WMSetUDObjectForKey(database, object, defaultName);
     WMReleasePropList(object);
 }
@@ -626,8 +626,8 @@ WMSetUDBoolForKey(WMUserDefaults *database, Bool value, char *defaultName)
     static WMPropList *yes = NULL, *no = NULL;
 
     if (!yes) {
-	yes = WMCreatePLString("YES");
-	no = WMCreatePLString("NO");
+        yes = WMCreatePLString("YES");
+        no = WMCreatePLString("NO");
     }
 
     WMSetUDObjectForKey(database, value ? yes : no, defaultName);
@@ -645,27 +645,27 @@ void
 WMSetUDSearchList(WMUserDefaults *database, WMPropList *list)
 {
     int i, c;
-    
+
     if (database->searchList) {
-	i = 0;
-	while (database->searchList[i]) {
-	    WMReleasePropList(database->searchList[i]);
-	    i++;
-	}
-	wfree(database->searchList);
+        i = 0;
+        while (database->searchList[i]) {
+            WMReleasePropList(database->searchList[i]);
+            i++;
+        }
+        wfree(database->searchList);
     }
     if (database->searchListArray) {
-	WMReleasePropList(database->searchListArray);
+        WMReleasePropList(database->searchListArray);
     }
 
     c = WMGetPropListItemCount(list);
     database->searchList = wmalloc(sizeof(WMPropList*)*(c+1));
 
     for (i=0; i<c; i++) {
-	database->searchList[i] = WMGetFromPLArray(list, i);
+        database->searchList[i] = WMGetFromPLArray(list, i);
     }
     database->searchList[c] = NULL;
-    
+
     database->searchListArray = WMDeepCopyPropList(list);
 }
 

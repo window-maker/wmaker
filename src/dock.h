@@ -1,10 +1,10 @@
 /* dock.h- built-in Dock module for WindowMaker
- * 
+ *
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
  *  Copyright (c) 1998-2003 Dan Pascu
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -17,7 +17,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -59,7 +59,7 @@ typedef struct WDock {
 
     unsigned int lclip_button_pushed:1;
     unsigned int rclip_button_pushed:1;
-    
+
     struct WMenu *menu;
 
     struct WDDomain *defaults;
@@ -82,7 +82,7 @@ void wDockSaveState(WScreen *scr, WMPropList *old_state);
 
 Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y);
 Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
-		  int *ret_x, int *ret_y, int redocking);
+                   int *ret_x, int *ret_y, int redocking);
 Bool wDockFindFreeSlot(WDock *dock, int *req_x, int *req_y);
 void wDockDetach(WDock *dock, WAppIcon *icon);
 

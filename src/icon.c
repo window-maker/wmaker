@@ -1,9 +1,9 @@
 /* icon.c - window icon and dock and appicon parent
- * 
+ *
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -66,22 +66,22 @@ appearanceObserver(void *self, WMNotification *notif)
     int flags = (int)WMGetNotificationClientData(notif);
 
     if (flags & WTextureSettings) {
-	icon->force_paint = 1;
+        icon->force_paint = 1;
     }
     if (flags & WFontSettings) {
-	icon->force_paint = 1;
+        icon->force_paint = 1;
     }
     /*
-    if (flags & WColorSettings) {
-    }
+     if (flags & WColorSettings) {
+     }
      */
 
     wIconPaint(icon);
 
-    /* so that the appicon expose handlers will paint the appicon specific 
+    /* so that the appicon expose handlers will paint the appicon specific
      * stuff */
-    XClearArea(dpy, icon->core->window, 0, 0, icon->core->width, 
-	       icon->core->height, True);
+    XClearArea(dpy, icon->core->window, 0, 0, icon->core->width,
+               icon->core->height, True);
 }
 
 
@@ -106,7 +106,7 @@ getSize(Drawable d, unsigned int *w, unsigned int *h, unsigned int *dep)
     Window rjunk;
     int xjunk, yjunk;
     unsigned int bjunk;
-    
+
     XGetGeometry(dpy, d, &rjunk, &xjunk, &yjunk, w, h, &bjunk, dep);
 }
 
@@ -119,30 +119,30 @@ wIconCreate(WWindow *wwin)
     char *file;
     unsigned long vmask = 0;
     XSetWindowAttributes attribs;
-    
+
     icon = wmalloc(sizeof(WIcon));
     memset(icon, 0, sizeof(WIcon));
     icon->core = wCoreCreateTopLevel(scr, wwin->icon_x, wwin->icon_y,
-				     wPreferences.icon_size, 
-				     wPreferences.icon_size, 0);
-    
+                                     wPreferences.icon_size,
+                                     wPreferences.icon_size, 0);
+
     if (wPreferences.use_saveunders) {
-	vmask |= CWSaveUnder;
-	attribs.save_under = True;
+        vmask |= CWSaveUnder;
+        attribs.save_under = True;
     }
     /* a white border for selecting it */
     vmask |= CWBorderPixel;
     attribs.border_pixel = scr->white_pixel;
-    
+
     XChangeWindowAttributes(dpy, icon->core->window, vmask, &attribs);
 
-    
+
     /* will be overriden if this is an application icon */
     icon->core->descriptor.handle_mousedown = miniwindowMouseDown;
     icon->core->descriptor.handle_expose = miniwindowExpose;
     icon->core->descriptor.parent_type = WCLASS_MINIWINDOW;
     icon->core->descriptor.parent = icon;
-    
+
     icon->core->stacking = wmalloc(sizeof(WStacking));
     icon->core->stacking->above = NULL;
     icon->core->stacking->under = NULL;
@@ -151,15 +151,15 @@ wIconCreate(WWindow *wwin)
 
     icon->owner = wwin;
     if (wwin->wm_hints && (wwin->wm_hints->flags & IconWindowHint)) {
-	if (wwin->client_win == wwin->main_window) {
-	    WApplication *wapp;
-	    /* do not let miniwindow steal app-icon's icon window */
-	    wapp = wApplicationOf(wwin->client_win);
-	    if (!wapp || wapp->app_icon==NULL)
-		icon->icon_win = wwin->wm_hints->icon_window;
-	} else {
-	    icon->icon_win = wwin->wm_hints->icon_window;
-	}
+        if (wwin->client_win == wwin->main_window) {
+            WApplication *wapp;
+            /* do not let miniwindow steal app-icon's icon window */
+            wapp = wApplicationOf(wwin->client_win);
+            if (!wapp || wapp->app_icon==NULL)
+                icon->icon_win = wwin->wm_hints->icon_window;
+        } else {
+            icon->icon_win = wwin->wm_hints->icon_window;
+        }
     }
 #ifdef NO_MINIWINDOW_TITLES
     icon->show_title = 0;
@@ -168,13 +168,13 @@ wIconCreate(WWindow *wwin)
 #endif
 #ifdef NETWM_HINTS
     if (!icon->image && !WFLAGP(wwin, always_user_icon))
-	icon->image = RRetainImage(wwin->net_icon_image);
+        icon->image = RRetainImage(wwin->net_icon_image);
     if (!icon->image)
 #endif
-    icon->image = wDefaultGetImage(scr, wwin->wm_instance, wwin->wm_class);
+        icon->image = wDefaultGetImage(scr, wwin->wm_instance, wwin->wm_class);
 
     file = wDefaultGetIconFile(scr, wwin->wm_instance, wwin->wm_class,
-			       False);
+                               False);
     if (file) {
         icon->file = wstrdup(file);
     }
@@ -182,15 +182,15 @@ wIconCreate(WWindow *wwin)
     wGetIconName(dpy, wwin->client_win, &icon->icon_name);
 
     icon->tile_type = TILE_NORMAL;
-    
+
     wIconUpdate(icon);
-    
+
     XFlush(dpy);
 
-    WMAddNotificationObserver(appearanceObserver, icon, 
-			      WNIconAppearanceSettingsChanged, icon);
-    WMAddNotificationObserver(tileObserver, icon, 
-			      WNIconTileSettingsChanged, icon);
+    WMAddNotificationObserver(appearanceObserver, icon,
+                              WNIconAppearanceSettingsChanged, icon);
+    WMAddNotificationObserver(tileObserver, icon,
+                              WNIconTileSettingsChanged, icon);
     return icon;
 }
 
@@ -204,16 +204,16 @@ wIconCreateWithIconFile(WScreen *scr, char *iconfile, int tile)
 
     icon = wmalloc(sizeof(WIcon));
     memset(icon, 0, sizeof(WIcon));
-    icon->core = wCoreCreateTopLevel(scr, 0, 0, wPreferences.icon_size, 
-				     wPreferences.icon_size, 0);
+    icon->core = wCoreCreateTopLevel(scr, 0, 0, wPreferences.icon_size,
+                                     wPreferences.icon_size, 0);
     if (wPreferences.use_saveunders) {
-	vmask = CWSaveUnder;
-	attribs.save_under = True;
+        vmask = CWSaveUnder;
+        attribs.save_under = True;
     }
     /* a white border for selecting it */
     vmask |= CWBorderPixel;
     attribs.border_pixel = scr->white_pixel;
-	
+
     XChangeWindowAttributes(dpy, icon->core->window, vmask, &attribs);
 
     /* will be overriden if this is a application icon */
@@ -229,24 +229,24 @@ wIconCreateWithIconFile(WScreen *scr, char *iconfile, int tile)
     icon->core->stacking->child_of = NULL;
 
     if (iconfile) {
-	icon->image = RLoadImage(scr->rcontext, iconfile, 0);
-	if (!icon->image) {
-	    wwarning(_("error loading image file \"%s\""), iconfile, RMessageForError(RErrorCode));
-	}
+        icon->image = RLoadImage(scr->rcontext, iconfile, 0);
+        if (!icon->image) {
+            wwarning(_("error loading image file \"%s\""), iconfile, RMessageForError(RErrorCode));
+        }
 
-	icon->image = wIconValidateIconSize(scr, icon->image);
-    
-	icon->file = wstrdup(iconfile);
+        icon->image = wIconValidateIconSize(scr, icon->image);
+
+        icon->file = wstrdup(iconfile);
     }
-    
+
     icon->tile_type = tile;
-    
+
     wIconUpdate(icon);
 
-    WMAddNotificationObserver(appearanceObserver, icon, 
-			      WNIconAppearanceSettingsChanged, icon);
-    WMAddNotificationObserver(tileObserver, icon, 
-			      WNIconTileSettingsChanged, icon);
+    WMAddNotificationObserver(appearanceObserver, icon,
+                              WNIconAppearanceSettingsChanged, icon);
+    WMAddNotificationObserver(tileObserver, icon,
+                              WNIconTileSettingsChanged, icon);
 
     return icon;
 }
@@ -262,29 +262,29 @@ wIconDestroy(WIcon *icon)
     WMRemoveNotificationObserver(icon);
 
     if (icon->handlerID)
-	WMDeleteTimerHandler(icon->handlerID);
+        WMDeleteTimerHandler(icon->handlerID);
 
     if (icon->icon_win) {
-	int x=0, y=0;
+        int x=0, y=0;
 
-	if (icon->owner) {
-	    x = icon->owner->icon_x;
-	    y = icon->owner->icon_y;
-	}
-	XUnmapWindow(dpy, icon->icon_win);
-	XReparentWindow(dpy, icon->icon_win, scr->root_win, x, y);
+        if (icon->owner) {
+            x = icon->owner->icon_x;
+            y = icon->owner->icon_y;
+        }
+        XUnmapWindow(dpy, icon->icon_win);
+        XReparentWindow(dpy, icon->icon_win, scr->root_win, x, y);
     }
     if (icon->icon_name)
-      XFree(icon->icon_name);
+        XFree(icon->icon_name);
 
     if (icon->pixmap)
-      XFreePixmap(dpy, icon->pixmap);
+        XFreePixmap(dpy, icon->pixmap);
 
     if (icon->file)
         wfree(icon->file);
 
     if (icon->image!=NULL)
-	RReleaseImage(icon->image);
+        RReleaseImage(icon->image);
 
     wCoreDestroy(icon->core);
     wfree(icon);
@@ -296,13 +296,13 @@ static void
 drawIconTitle(WScreen *scr, Pixmap pixmap, int height)
 {
     XFillRectangle(dpy, pixmap, scr->icon_title_texture->normal_gc,
-		   0, 0, wPreferences.icon_size, height+1);
+                   0, 0, wPreferences.icon_size, height+1);
     XDrawLine(dpy, pixmap, scr->icon_title_texture->light_gc, 0, 0,
-	      wPreferences.icon_size, 0);
+              wPreferences.icon_size, 0);
     XDrawLine(dpy, pixmap, scr->icon_title_texture->light_gc, 0, 0,
-	      0, height+1);
-    XDrawLine(dpy, pixmap, scr->icon_title_texture->dim_gc, 
-	      wPreferences.icon_size-1, 0, wPreferences.icon_size-1, height+1);
+              0, height+1);
+    XDrawLine(dpy, pixmap, scr->icon_title_texture->dim_gc,
+              wPreferences.icon_size-1, 0, wPreferences.icon_size-1, height+1);
 }
 
 
@@ -314,31 +314,31 @@ makeIcon(WScreen *scr, RImage *icon, int titled, int shadowed, int tileType)
     int x, y, sx, sy;
     unsigned w, h;
     int theight = WMFontHeight(scr->icon_title_font);
-    
+
     if (tileType == TILE_NORMAL)
-	tile = RCloneImage(scr->icon_tile);
+        tile = RCloneImage(scr->icon_tile);
     else {
-	assert(scr->clip_tile);
-	tile = RCloneImage(scr->clip_tile);
+        assert(scr->clip_tile);
+        tile = RCloneImage(scr->clip_tile);
     }
     if (icon) {
-	w = (icon->width > wPreferences.icon_size) 
-	    ? wPreferences.icon_size : icon->width;
-	x = (wPreferences.icon_size - w) / 2;
-	sx = (icon->width - w)/2;
-	
-	if (!titled) {
-	    h = (icon->height > wPreferences.icon_size) 
-		? wPreferences.icon_size : icon->height;
-	    y = (wPreferences.icon_size - h) / 2;
-	    sy = (icon->height - h)/2;
-	} else {
-	    h = (icon->height+theight > wPreferences.icon_size
-		 ? wPreferences.icon_size-theight : icon->height);
-	    y = theight+((int)wPreferences.icon_size-theight-h)/2;
-	    sy = (icon->height - h)/2;
-	}
-	RCombineArea(tile, icon, sx, sy, w, h, x, y);
+        w = (icon->width > wPreferences.icon_size)
+            ? wPreferences.icon_size : icon->width;
+        x = (wPreferences.icon_size - w) / 2;
+        sx = (icon->width - w)/2;
+
+        if (!titled) {
+            h = (icon->height > wPreferences.icon_size)
+                ? wPreferences.icon_size : icon->height;
+            y = (wPreferences.icon_size - h) / 2;
+            sy = (icon->height - h)/2;
+        } else {
+            h = (icon->height+theight > wPreferences.icon_size
+                 ? wPreferences.icon_size-theight : icon->height);
+            y = theight+((int)wPreferences.icon_size-theight-h)/2;
+            sy = (icon->height - h)/2;
+        }
+        RCombineArea(tile, icon, sx, sy, w, h, x, y);
     }
 
     if (shadowed) {
@@ -352,12 +352,12 @@ makeIcon(WScreen *scr, RImage *icon, int titled, int shadowed, int tileType)
     }
 
     if (!RConvertImage(scr->rcontext, tile, &pixmap)) {
-	wwarning(_("error rendering image:%s"), RMessageForError(RErrorCode));
+        wwarning(_("error rendering image:%s"), RMessageForError(RErrorCode));
     }
     RReleaseImage(tile);
 
     if (titled)
-      drawIconTitle(scr, pixmap, theight);
+        drawIconTitle(scr, pixmap, theight);
 
     return pixmap;
 }
@@ -369,10 +369,10 @@ wIconChangeTitle(WIcon *icon, char *new_title)
     int changed;
 
     changed = (new_title==NULL && icon->icon_name!=NULL)
-	|| (new_title!=NULL && icon->icon_name==NULL);
+        || (new_title!=NULL && icon->icon_name==NULL);
 
     if (icon->icon_name!=NULL)
-	XFree(icon->icon_name);
+        XFree(icon->icon_name);
 
     icon->icon_name = new_title;
 
@@ -386,7 +386,7 @@ void
 wIconChangeImage(WIcon *icon, RImage *new_image)
 {
     assert(icon != NULL);
-    
+
     if (icon->image)
         RReleaseImage(icon->image);
 
@@ -401,32 +401,32 @@ wIconValidateIconSize(WScreen *scr, RImage *icon)
 {
     RImage *tmp;
     int w, h;
-    
+
     if (!icon)
-	return NULL;
+        return NULL;
 #ifndef DONT_SCALE_ICONS
     if (wPreferences.icon_size != 64) {
-	w = wPreferences.icon_size * icon->width / 64;
-	h = wPreferences.icon_size * icon->height / 64;
+        w = wPreferences.icon_size * icon->width / 64;
+        h = wPreferences.icon_size * icon->height / 64;
 
-	tmp = RScaleImage(icon, w, h);
-	RReleaseImage(icon);
-	icon = tmp;
+        tmp = RScaleImage(icon, w, h);
+        RReleaseImage(icon);
+        icon = tmp;
     }
 #endif
 #if 0
     if (icon->width > wPreferences.icon_size
         || icon->height > wPreferences.icon_size) {
-	if (icon->width > icon->height) {
-	    w = wPreferences.icon_size - 4;
-	    h = w*icon->height/icon->width;
-	} else {
-	    h = wPreferences.icon_size - 4;
-	    w = h*icon->width/icon->height;
-	}
-	tmp = RScaleImage(icon, w, h);
-	RReleaseImage(icon);
-	icon = tmp;
+        if (icon->width > icon->height) {
+            w = wPreferences.icon_size - 4;
+            h = w*icon->height/icon->width;
+        } else {
+            h = wPreferences.icon_size - 4;
+            w = h*icon->width/icon->height;
+        }
+        tmp = RScaleImage(icon, w, h);
+        RReleaseImage(icon);
+        icon = tmp;
     }
 #endif
 
@@ -443,22 +443,22 @@ wIconChangeImageFile(WIcon *icon, char *file)
     int error = 0;
 
     if (!file) {
-	wIconChangeImage(icon, NULL);
-	return True;
+        wIconChangeImage(icon, NULL);
+        return True;
     }
 
     path = FindImage(wPreferences.icon_path, file);
 
     if (path && (image = RLoadImage(scr->rcontext, path, 0))) {
-	image = wIconValidateIconSize(icon->core->screen_ptr, image);
+        image = wIconValidateIconSize(icon->core->screen_ptr, image);
 
-	wIconChangeImage(icon, image);
+        wIconChangeImage(icon, image);
     } else {
-	error = 1;
+        error = 1;
     }
 
     if (path)
-	wfree(path);
+        wfree(path);
 
     return !error;
 }
@@ -471,21 +471,21 @@ getnameforicon(WWindow *wwin)
     char *prefix, *suffix;
     char *path;
     int len;
-    
+
     if (wwin->wm_class && wwin->wm_instance) {
-	int len = strlen(wwin->wm_class)+strlen(wwin->wm_instance)+2;
-	suffix = wmalloc(len);
-	snprintf(suffix, len, "%s.%s", wwin->wm_instance, wwin->wm_class);
+        int len = strlen(wwin->wm_class)+strlen(wwin->wm_instance)+2;
+        suffix = wmalloc(len);
+        snprintf(suffix, len, "%s.%s", wwin->wm_instance, wwin->wm_class);
     } else if (wwin->wm_class) {
-	int len = strlen(wwin->wm_class)+1;
-	suffix = wmalloc(len);
-	snprintf(suffix, len, "%s", wwin->wm_class);
+        int len = strlen(wwin->wm_class)+1;
+        suffix = wmalloc(len);
+        snprintf(suffix, len, "%s", wwin->wm_class);
     } else if (wwin->wm_instance) {
-	int len = strlen(wwin->wm_instance)+1;
-	suffix = wmalloc(len);
-	snprintf(suffix, len, "%s", wwin->wm_instance);
+        int len = strlen(wwin->wm_instance)+1;
+        suffix = wmalloc(len);
+        snprintf(suffix, len, "%s", wwin->wm_instance);
     } else {
-	return NULL;
+        return NULL;
     }
 
     prefix = wusergnusteppath();
@@ -494,21 +494,21 @@ getnameforicon(WWindow *wwin)
     snprintf(path, len, "%s/.AppInfo", prefix);
 
     if (access(path, F_OK)!=0) {
-	if (mkdir(path, S_IRUSR|S_IWUSR|S_IXUSR)) {
-	    wsyserror(_("could not create directory %s"), path);
-	    wfree(path);
-	    wfree(suffix);
-	    return NULL;
-	}
+        if (mkdir(path, S_IRUSR|S_IWUSR|S_IXUSR)) {
+            wsyserror(_("could not create directory %s"), path);
+            wfree(path);
+            wfree(suffix);
+            return NULL;
+        }
     }
     strcat(path, "/WindowMaker");
     if (access(path, F_OK)!=0) {
-	if (mkdir(path, S_IRUSR|S_IWUSR|S_IXUSR)!=0) {
-	    wsyserror(_("could not create directory %s"), path);
-	    wfree(path);
-	    wfree(suffix);
-	    return NULL;
-	}
+        if (mkdir(path, S_IRUSR|S_IWUSR|S_IXUSR)!=0) {
+            wsyserror(_("could not create directory %s"), path);
+            wfree(path);
+            wfree(suffix);
+            return NULL;
+        }
     }
 
     strcat(path, "/");
@@ -525,7 +525,7 @@ getnameforicon(WWindow *wwin)
  * 	Stores the client supplied icon at ~/GNUstep/.AppInfo/WindowMaker
  * and returns the path for that icon. Returns NULL if there is no
  * client supplied icon or on failure.
- * 
+ *
  * Side effects:
  * 	New directories might be created.
  */
@@ -537,25 +537,25 @@ wIconStore(WIcon *icon)
     WWindow *wwin = icon->owner;
 
     if (!wwin || !wwin->wm_hints || !(wwin->wm_hints->flags & IconPixmapHint)
-	|| wwin->wm_hints->icon_pixmap == None)
-	return NULL;
+        || wwin->wm_hints->icon_pixmap == None)
+        return NULL;
 
     path = getnameforicon(wwin);
     if (!path)
-	return NULL;
+        return NULL;
 
     image = RCreateImageFromDrawable(icon->core->screen_ptr->rcontext,
-				     wwin->wm_hints->icon_pixmap,
-				     (wwin->wm_hints->flags & IconMaskHint)
-				     ? wwin->wm_hints->icon_mask : None);
+                                     wwin->wm_hints->icon_pixmap,
+                                     (wwin->wm_hints->flags & IconMaskHint)
+                                     ? wwin->wm_hints->icon_mask : None);
     if (!image) {
-	wfree(path);
-	return NULL;
+        wfree(path);
+        return NULL;
     }
 
     if (!RSaveImage(image, path, "XPM")) {
-	wfree(path);
-	path = NULL;
+        wfree(path);
+        path = NULL;
     }
     RReleaseImage(image);
 
@@ -564,11 +564,10 @@ wIconStore(WIcon *icon)
 
 
 /*
-void
-wIconChangeIconWindow(WIcon *icon, Window new_window);
+void wIconChangeIconWindow(WIcon *icon, Window new_window);
 */
 
-static void 
+static void
 cycleColor(void *data)
 {
     WIcon *icon = (WIcon*)data;
@@ -580,7 +579,7 @@ cycleColor(void *data)
     XChangeGC(dpy, scr->icon_select_gc, GCDashOffset, &gcv);
 
     XDrawRectangle(dpy, icon->core->window, scr->icon_select_gc, 0, 0,
-		   icon->core->width-1, icon->core->height-1);
+                   icon->core->width-1, icon->core->height-1);
     icon->handlerID = WMAddTimerHandler(COLOR_CYCLE_DELAY, cycleColor, icon);
 }
 
@@ -589,9 +588,9 @@ void
 wIconSetHighlited(WIcon *icon, Bool flag)
 {
     if (icon->highlighted == flag) {
-	return;
+        return;
     }
-    
+
     icon->highlighted = flag;
     wIconPaint(icon);
 }
@@ -606,7 +605,7 @@ wIconSelect(WIcon *icon)
 
     if (icon->selected) {
         icon->step = 0;
-	if (!wPreferences.dont_blink)
+        if (!wPreferences.dont_blink)
             icon->handlerID = WMAddTimerHandler(10, cycleColor, icon);
         else
             XDrawRectangle(dpy, icon->core->window, scr->icon_select_gc, 0, 0,
@@ -616,8 +615,8 @@ wIconSelect(WIcon *icon)
             WMDeleteTimerHandler(icon->handlerID);
             icon->handlerID = NULL;
         }
-	XClearArea(dpy, icon->core->window, 0, 0, icon->core->width,
-		   icon->core->height, True);
+        XClearArea(dpy, icon->core->window, 0, 0, icon->core->width,
+                   icon->core->height, True);
     }
 }
 
@@ -632,180 +631,180 @@ wIconUpdate(WIcon *icon)
     assert(scr->icon_tile!=NULL);
 
     if (icon->pixmap!=None)
-	XFreePixmap(dpy, icon->pixmap);
+        XFreePixmap(dpy, icon->pixmap);
     icon->pixmap = None;
-    
-    
+
+
     if (wwin && (WFLAGP(wwin, always_user_icon)
 #ifdef NETWM_HINTS
-		|| wwin->net_icon_image
+                 || wwin->net_icon_image
 #endif
-		))
-	goto user_icon;
-    
+                ))
+        goto user_icon;
+
     /* use client specified icon window */
     if (icon->icon_win!=None) {
-	XWindowAttributes attr;
-	int resize=0;
-	int width, height, depth;
-	int theight;
-	Pixmap pixmap;
+        XWindowAttributes attr;
+        int resize=0;
+        int width, height, depth;
+        int theight;
+        Pixmap pixmap;
 
-	getSize(icon->icon_win, &width, &height, &depth);
+        getSize(icon->icon_win, &width, &height, &depth);
 
-	if (width > wPreferences.icon_size) {
-	    resize = 1;
-	    width = wPreferences.icon_size;
-	}
-	if (height > wPreferences.icon_size) {
-	    resize = 1;
-	    height = wPreferences.icon_size;
-	}
-	if (icon->show_title 
-	    && (height+title_height < wPreferences.icon_size)) {
-	    pixmap = XCreatePixmap(dpy, scr->w_win, wPreferences.icon_size,
-				   wPreferences.icon_size, scr->w_depth);
-	    XSetClipMask(dpy, scr->copy_gc, None);
-	    XCopyArea(dpy, scr->icon_tile_pixmap, pixmap, scr->copy_gc, 0, 0,
-		      wPreferences.icon_size, wPreferences.icon_size, 0, 0);
-	    drawIconTitle(scr, pixmap, title_height);
-	    theight = title_height;
-	} else {
-	    pixmap = None;
-	    theight = 0;
-	    XSetWindowBackgroundPixmap(dpy, icon->core->window,
-				       scr->icon_tile_pixmap);
-	}
-	
-	XSetWindowBorderWidth(dpy, icon->icon_win, 0);
-	XReparentWindow(dpy, icon->icon_win, icon->core->window,
-			(wPreferences.icon_size-width)/2,
-			theight+(wPreferences.icon_size-height-theight)/2);
-	if (resize)
-	  XResizeWindow(dpy, icon->icon_win, width, height);
+        if (width > wPreferences.icon_size) {
+            resize = 1;
+            width = wPreferences.icon_size;
+        }
+        if (height > wPreferences.icon_size) {
+            resize = 1;
+            height = wPreferences.icon_size;
+        }
+        if (icon->show_title
+            && (height+title_height < wPreferences.icon_size)) {
+            pixmap = XCreatePixmap(dpy, scr->w_win, wPreferences.icon_size,
+                                   wPreferences.icon_size, scr->w_depth);
+            XSetClipMask(dpy, scr->copy_gc, None);
+            XCopyArea(dpy, scr->icon_tile_pixmap, pixmap, scr->copy_gc, 0, 0,
+                      wPreferences.icon_size, wPreferences.icon_size, 0, 0);
+            drawIconTitle(scr, pixmap, title_height);
+            theight = title_height;
+        } else {
+            pixmap = None;
+            theight = 0;
+            XSetWindowBackgroundPixmap(dpy, icon->core->window,
+                                       scr->icon_tile_pixmap);
+        }
 
-	XMapWindow(dpy, icon->icon_win);
-	
-	XAddToSaveSet(dpy, icon->icon_win);
-	
-	icon->pixmap = pixmap;
+        XSetWindowBorderWidth(dpy, icon->icon_win, 0);
+        XReparentWindow(dpy, icon->icon_win, icon->core->window,
+                        (wPreferences.icon_size-width)/2,
+                        theight+(wPreferences.icon_size-height-theight)/2);
+        if (resize)
+            XResizeWindow(dpy, icon->icon_win, width, height);
 
-	if (XGetWindowAttributes(dpy, icon->icon_win, &attr)) {
-	    if (attr.all_event_masks & ButtonPressMask) {
-		wHackedGrabButton(Button1, MOD_MASK, icon->core->window, True, 
-				  ButtonPressMask, GrabModeSync, GrabModeAsync,
-				  None, wCursor[WCUR_ARROW]);
-	    }
-	}
+        XMapWindow(dpy, icon->icon_win);
+
+        XAddToSaveSet(dpy, icon->icon_win);
+
+        icon->pixmap = pixmap;
+
+        if (XGetWindowAttributes(dpy, icon->icon_win, &attr)) {
+            if (attr.all_event_masks & ButtonPressMask) {
+                wHackedGrabButton(Button1, MOD_MASK, icon->core->window, True,
+                                  ButtonPressMask, GrabModeSync, GrabModeAsync,
+                                  None, wCursor[WCUR_ARROW]);
+            }
+        }
     } else if (wwin && wwin->wm_hints
-	       && (wwin->wm_hints->flags & IconPixmapHint)) {
-	int x, y;
-	unsigned int w, h;
-	Window jw;
-	int ji, dotitle;
-	unsigned int ju, d;
-	Pixmap pixmap;
-	
-	if (!XGetGeometry(dpy, wwin->wm_hints->icon_pixmap, &jw, 
-			  &ji, &ji, &w, &h, &ju, &d)) {
-	    icon->owner->wm_hints->flags &= ~IconPixmapHint;
-	    goto user_icon;
-	}
-			
-	pixmap = XCreatePixmap(dpy, icon->core->window, wPreferences.icon_size,
-			       wPreferences.icon_size, scr->w_depth);
-	XSetClipMask(dpy, scr->copy_gc, None);
-	XCopyArea(dpy, scr->icon_tile_pixmap, pixmap, scr->copy_gc, 0, 0,
-		  wPreferences.icon_size, wPreferences.icon_size, 0, 0);
+               && (wwin->wm_hints->flags & IconPixmapHint)) {
+        int x, y;
+        unsigned int w, h;
+        Window jw;
+        int ji, dotitle;
+        unsigned int ju, d;
+        Pixmap pixmap;
 
-	if (w > wPreferences.icon_size)
-	    w = wPreferences.icon_size;
-	x = (wPreferences.icon_size-w)/2;
+        if (!XGetGeometry(dpy, wwin->wm_hints->icon_pixmap, &jw,
+                          &ji, &ji, &w, &h, &ju, &d)) {
+            icon->owner->wm_hints->flags &= ~IconPixmapHint;
+            goto user_icon;
+        }
 
-	if (icon->show_title && (title_height < wPreferences.icon_size)) {
-	    drawIconTitle(scr, pixmap, title_height);
-	    dotitle = 1;
-	    
-	    if (h > wPreferences.icon_size - title_height - 2) {
-		h = wPreferences.icon_size - title_height - 2;
-		y = title_height + 1;
-	    } else {
-		y = (wPreferences.icon_size-h-title_height)/2+title_height + 1;
-	    }
-	} else {
-	    dotitle = 0;
-	    if (w > wPreferences.icon_size)
-		w = wPreferences.icon_size;
-	    y = (wPreferences.icon_size-h)/2;
-	}
+        pixmap = XCreatePixmap(dpy, icon->core->window, wPreferences.icon_size,
+                               wPreferences.icon_size, scr->w_depth);
+        XSetClipMask(dpy, scr->copy_gc, None);
+        XCopyArea(dpy, scr->icon_tile_pixmap, pixmap, scr->copy_gc, 0, 0,
+                  wPreferences.icon_size, wPreferences.icon_size, 0, 0);
 
-	if (wwin->wm_hints->flags & IconMaskHint)
-	    XSetClipMask(dpy, scr->copy_gc, wwin->wm_hints->icon_mask);
-	
-	XSetClipOrigin(dpy, scr->copy_gc, x, y);
-	
-	if (d != scr->w_depth) {
-	    XSetForeground(dpy, scr->copy_gc, scr->black_pixel);
-	    XSetBackground(dpy, scr->copy_gc, scr->white_pixel);
-	    XCopyPlane(dpy, wwin->wm_hints->icon_pixmap, pixmap, scr->copy_gc,
-		      0, 0, w, h, x, y, 1);
-	} else {
-	    XCopyArea(dpy, wwin->wm_hints->icon_pixmap, pixmap, scr->copy_gc,
-		      0, 0, w, h, x, y);
-	}
-	
-	XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
-	
-	icon->pixmap = pixmap;
+        if (w > wPreferences.icon_size)
+            w = wPreferences.icon_size;
+        x = (wPreferences.icon_size-w)/2;
+
+        if (icon->show_title && (title_height < wPreferences.icon_size)) {
+            drawIconTitle(scr, pixmap, title_height);
+            dotitle = 1;
+
+            if (h > wPreferences.icon_size - title_height - 2) {
+                h = wPreferences.icon_size - title_height - 2;
+                y = title_height + 1;
+            } else {
+                y = (wPreferences.icon_size-h-title_height)/2+title_height + 1;
+            }
+        } else {
+            dotitle = 0;
+            if (w > wPreferences.icon_size)
+                w = wPreferences.icon_size;
+            y = (wPreferences.icon_size-h)/2;
+        }
+
+        if (wwin->wm_hints->flags & IconMaskHint)
+            XSetClipMask(dpy, scr->copy_gc, wwin->wm_hints->icon_mask);
+
+        XSetClipOrigin(dpy, scr->copy_gc, x, y);
+
+        if (d != scr->w_depth) {
+            XSetForeground(dpy, scr->copy_gc, scr->black_pixel);
+            XSetBackground(dpy, scr->copy_gc, scr->white_pixel);
+            XCopyPlane(dpy, wwin->wm_hints->icon_pixmap, pixmap, scr->copy_gc,
+                       0, 0, w, h, x, y, 1);
+        } else {
+            XCopyArea(dpy, wwin->wm_hints->icon_pixmap, pixmap, scr->copy_gc,
+                      0, 0, w, h, x, y);
+        }
+
+        XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
+
+        icon->pixmap = pixmap;
     } else {
-      user_icon:
+    user_icon:
 
-          if (icon->image) {
-              icon->pixmap = makeIcon(scr, icon->image, icon->show_title,
-				      icon->shadowed, icon->tile_type);
-          } else {
-              /* make default icons */
+        if (icon->image) {
+            icon->pixmap = makeIcon(scr, icon->image, icon->show_title,
+                                    icon->shadowed, icon->tile_type);
+        } else {
+            /* make default icons */
 
-              if (!scr->def_icon_pixmap) {
-                  RImage *image = NULL;
-                  char *path;
-                  char *file;
+            if (!scr->def_icon_pixmap) {
+                RImage *image = NULL;
+                char *path;
+                char *file;
 
-                  file = wDefaultGetIconFile(scr, NULL, NULL, False);
-                  if (file) {
-                      path = FindImage(wPreferences.icon_path, file);
-                      if (!path) {
-                          wwarning(_("could not find default icon \"%s\""),file);
-                          goto make_icons;
-                      }
+                file = wDefaultGetIconFile(scr, NULL, NULL, False);
+                if (file) {
+                    path = FindImage(wPreferences.icon_path, file);
+                    if (!path) {
+                        wwarning(_("could not find default icon \"%s\""),file);
+                        goto make_icons;
+                    }
 
-                      image = RLoadImage(scr->rcontext, path, 0);
-                      if (!image) {
-                          wwarning(_("could not load default icon \"%s\":%s"),
-				   file, RMessageForError(RErrorCode));
-                      }
-                      wfree(path);
-                  }
-	make_icons:
-		  
-		  image = wIconValidateIconSize(scr, image);
-                  scr->def_icon_pixmap = makeIcon(scr, image, False, False,
-						  icon->tile_type);
-                  scr->def_ticon_pixmap = makeIcon(scr, image, True, False,
-						   icon->tile_type);
-		  if (image)
-		      RReleaseImage(image);
-              }
+                    image = RLoadImage(scr->rcontext, path, 0);
+                    if (!image) {
+                        wwarning(_("could not load default icon \"%s\":%s"),
+                                 file, RMessageForError(RErrorCode));
+                    }
+                    wfree(path);
+                }
+                make_icons:
 
-              if (icon->show_title) {
-                  XSetWindowBackgroundPixmap(dpy, icon->core->window,
-                                             scr->def_ticon_pixmap);
-              } else {
-                  XSetWindowBackgroundPixmap(dpy, icon->core->window,
-                                             scr->def_icon_pixmap);
-              }
-              icon->pixmap = None;
-          }
+                image = wIconValidateIconSize(scr, image);
+                scr->def_icon_pixmap = makeIcon(scr, image, False, False,
+                                                icon->tile_type);
+                scr->def_ticon_pixmap = makeIcon(scr, image, True, False,
+                                                 icon->tile_type);
+                if (image)
+                    RReleaseImage(image);
+            }
+
+            if (icon->show_title) {
+                XSetWindowBackgroundPixmap(dpy, icon->core->window,
+                                           scr->def_ticon_pixmap);
+            } else {
+                XSetWindowBackgroundPixmap(dpy, icon->core->window,
+                                           scr->def_icon_pixmap);
+            }
+            icon->pixmap = None;
+        }
     }
     if (icon->pixmap != None) {
         XSetWindowBackgroundPixmap(dpy, icon->core->window, icon->pixmap);
@@ -834,26 +833,26 @@ wIconPaint(WIcon *icon)
 
     /* draw the icon title */
     if (icon->show_title && icon->icon_name!=NULL) {
-	int l;
-	int w;
+        int l;
+        int w;
 
-	tmp = ShrinkString(scr->icon_title_font, icon->icon_name,
-			   wPreferences.icon_size-4);
-	w = WMWidthOfString(scr->icon_title_font, tmp, l=strlen(tmp));
+        tmp = ShrinkString(scr->icon_title_font, icon->icon_name,
+                           wPreferences.icon_size-4);
+        w = WMWidthOfString(scr->icon_title_font, tmp, l=strlen(tmp));
 
-	if (w > icon->core->width - 4)
-	  x = (icon->core->width - 4) - w;
-	else
-	  x = (icon->core->width - w)/2;
+        if (w > icon->core->width - 4)
+            x = (icon->core->width - 4) - w;
+        else
+            x = (icon->core->width - w)/2;
 
-	WMDrawString(scr->wmscreen, icon->core->window, scr->icon_title_color,
-		     scr->icon_title_font, x, 1, tmp, l);
-	wfree(tmp);
+        WMDrawString(scr->wmscreen, icon->core->window, scr->icon_title_color,
+                     scr->icon_title_font, x, 1, tmp, l);
+        wfree(tmp);
     }
 
     if (icon->selected)
-	XDrawRectangle(dpy, icon->core->window, scr->icon_select_gc, 0, 0,
-		       icon->core->width-1, icon->core->height-1);
+        XDrawRectangle(dpy, icon->core->window, scr->icon_select_gc, 0, 0,
+                       icon->core->width-1, icon->core->height-1);
 }
 
 
@@ -877,7 +876,7 @@ miniwindowDblClick(WObjDescriptor *desc, XEvent *event)
 }
 
 
-static void 
+static void
 miniwindowMouseDown(WObjDescriptor *desc, XEvent *event)
 {
     WIcon *icon = desc->parent;
@@ -889,95 +888,95 @@ miniwindowMouseDown(WObjDescriptor *desc, XEvent *event)
     int clickButton=event->xbutton.button;
 
     if (WCHECK_STATE(WSTATE_MODAL))
-	return;
+        return;
 
     if (IsDoubleClick(icon->core->screen_ptr, event)) {
-	miniwindowDblClick(desc, event);
-	return;
+        miniwindowDblClick(desc, event);
+        return;
     }
-    
+
 #ifdef DEBUG
     puts("Moving miniwindow");
 #endif
-    if (event->xbutton.button == Button1) {	
-	if (event->xbutton.state & MOD_MASK)
-	    wLowerFrame(icon->core);
-	else
-	    wRaiseFrame(icon->core);
+    if (event->xbutton.button == Button1) {
+        if (event->xbutton.state & MOD_MASK)
+            wLowerFrame(icon->core);
+        else
+            wRaiseFrame(icon->core);
         if (event->xbutton.state & ShiftMask) {
             wIconSelect(icon);
             wSelectWindow(icon->owner, !wwin->flags.selected);
         }
     } else if (event->xbutton.button == Button3) {
-	WObjDescriptor *desc;
+        WObjDescriptor *desc;
 
-	OpenMiniwindowMenu(wwin, event->xbutton.x_root, 
-			   event->xbutton.y_root);
+        OpenMiniwindowMenu(wwin, event->xbutton.x_root,
+                           event->xbutton.y_root);
 
-	/* allow drag select of menu */
-	desc = &wwin->screen_ptr->window_menu->menu->descriptor;
-	event->xbutton.send_event = True;
-	(*desc->handle_mousedown)(desc, event);
+        /* allow drag select of menu */
+        desc = &wwin->screen_ptr->window_menu->menu->descriptor;
+        event->xbutton.send_event = True;
+        (*desc->handle_mousedown)(desc, event);
 
-	return;
+        return;
     }
 
     if (XGrabPointer(dpy, icon->core->window, False, ButtonMotionMask
-		     |ButtonReleaseMask|ButtonPressMask, GrabModeAsync,
-		     GrabModeAsync, None, None, CurrentTime) !=GrabSuccess) {
+                     |ButtonReleaseMask|ButtonPressMask, GrabModeAsync,
+                     GrabModeAsync, None, None, CurrentTime) !=GrabSuccess) {
 #ifdef DEBUG0
-	wwarning("pointer grab failed for icon move");
+        wwarning("pointer grab failed for icon move");
 #endif
     }
     while(1) {
-	WMMaskEvent(dpy, PointerMotionMask|ButtonReleaseMask|ButtonPressMask
-		   |ButtonMotionMask|ExposureMask, &ev);
-	switch (ev.type) {
-	 case Expose:
-	    WMHandleEvent(&ev);
-	    break;
+        WMMaskEvent(dpy, PointerMotionMask|ButtonReleaseMask|ButtonPressMask
+                    |ButtonMotionMask|ExposureMask, &ev);
+        switch (ev.type) {
+        case Expose:
+            WMHandleEvent(&ev);
+            break;
 
-	 case MotionNotify:
-	    if (!grabbed) {
-		if (abs(dx-ev.xmotion.x)>=MOVE_THRESHOLD
-		    || abs(dy-ev.xmotion.y)>=MOVE_THRESHOLD) {
-		    XChangeActivePointerGrab(dpy, ButtonMotionMask
-					    |ButtonReleaseMask|ButtonPressMask, 
-					     wCursor[WCUR_MOVE], CurrentTime);
-		    grabbed=1;
-		} else {
-		    break;
-		}
-	    }
-	    x = ev.xmotion.x_root - dx;
-	    y = ev.xmotion.y_root - dy;
-	    XMoveWindow(dpy, icon->core->window, x, y);
-	    break;
+        case MotionNotify:
+            if (!grabbed) {
+                if (abs(dx-ev.xmotion.x)>=MOVE_THRESHOLD
+                    || abs(dy-ev.xmotion.y)>=MOVE_THRESHOLD) {
+                    XChangeActivePointerGrab(dpy, ButtonMotionMask
+                                             |ButtonReleaseMask|ButtonPressMask,
+                                             wCursor[WCUR_MOVE], CurrentTime);
+                    grabbed=1;
+                } else {
+                    break;
+                }
+            }
+            x = ev.xmotion.x_root - dx;
+            y = ev.xmotion.y_root - dy;
+            XMoveWindow(dpy, icon->core->window, x, y);
+            break;
 
-	 case ButtonPress:
-	    break;
+        case ButtonPress:
+            break;
 
-	 case ButtonRelease:
-	    if (ev.xbutton.button != clickButton)
-		break;
+        case ButtonRelease:
+            if (ev.xbutton.button != clickButton)
+                break;
 
-	    if (wwin->icon_x!=x || wwin->icon_y!=y)
-	      wwin->flags.icon_moved = 1;
+            if (wwin->icon_x!=x || wwin->icon_y!=y)
+                wwin->flags.icon_moved = 1;
 
-	    XMoveWindow(dpy, icon->core->window, x, y);
+            XMoveWindow(dpy, icon->core->window, x, y);
 
-	    wwin->icon_x = x;
-	    wwin->icon_y = y;
+            wwin->icon_x = x;
+            wwin->icon_y = y;
 #ifdef DEBUG
-	    puts("End miniwindow move");
+            puts("End miniwindow move");
 #endif
-	    XUngrabPointer(dpy, CurrentTime);
+            XUngrabPointer(dpy, CurrentTime);
 
-	    if (wPreferences.auto_arrange_icons)
-		wArrangeIcons(wwin->screen_ptr, True);
-	    return;
-	    
-	}
+            if (wPreferences.auto_arrange_icons)
+                wArrangeIcons(wwin->screen_ptr, True);
+            return;
+
+        }
     }
 }
 

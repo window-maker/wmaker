@@ -1,7 +1,7 @@
 /* draw.c - pixel plotting, line drawing
- * 
+ *
  * Raster graphics library
- * 
+ *
  * Copyright (c) 1998-2003 Dan Pascu
  * Copyright (c) 2000-2003 Alfredo K. Kojima
  *
@@ -9,12 +9,12 @@
  *  modify it under the terms of the GNU Library General Public
  *  License as published by the Free Software Foundation; either
  *  version 2 of the License, or (at your option) any later version.
- *  
+ *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *  Library General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the Free
  *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -44,22 +44,22 @@ RGetPixel(RImage *image, int x, int y, RColor *color)
 
     assert(image!=NULL);
     if (x < 0 || x >= image->width
-	|| y < 0 || y >= image->height)
-	return False;
+        || y < 0 || y >= image->height)
+        return False;
 
     if (image->format == RRGBAFormat) {
-	ofs = (y*image->width + x) * 4;
-	color->red = image->data[ofs++];
-	color->green = image->data[ofs++];
-	color->blue = image->data[ofs++];
-	color->alpha = image->data[ofs];
+        ofs = (y*image->width + x) * 4;
+        color->red = image->data[ofs++];
+        color->green = image->data[ofs++];
+        color->blue = image->data[ofs++];
+        color->alpha = image->data[ofs];
     } else {
-	ofs = (y*image->width + x) * 3;
-	color->red = image->data[ofs++];
-	color->green = image->data[ofs++];
-	color->blue = image->data[ofs];
-	/* If the image does not have alpha channel, we consider alpha 255 */
-	color->alpha = 255;
+        ofs = (y*image->width + x) * 3;
+        color->red = image->data[ofs++];
+        color->green = image->data[ofs++];
+        color->blue = image->data[ofs];
+        /* If the image does not have alpha channel, we consider alpha 255 */
+        color->alpha = 255;
     }
 
     return True;
@@ -74,21 +74,21 @@ RPutPixel(RImage *image, int x, int y, RColor *color)
     assert(image!=NULL);
     assert(color!=NULL);
     if (x < 0 || x >= image->width || y < 0 || y >= image->height)
-	return;
+        return;
 
     if (image->format == RRGBAFormat) {
-	ptr = image->data + (y*image->width + x) * 4;
+        ptr = image->data + (y*image->width + x) * 4;
     } else {
-	ptr = image->data + (y*image->width + x) * 3;
+        ptr = image->data + (y*image->width + x) * 3;
     }
 
     if (color->alpha==255) {
-	*ptr++ = color->red;
+        *ptr++ = color->red;
         *ptr++ = color->green;
         *ptr++ = color->blue;
-	if (image->format == RRGBAFormat) {
-	    *ptr = 255;
-	}
+        if (image->format == RRGBAFormat) {
+            *ptr = 255;
+        }
     } else {
         register int alpha, nalpha, r, g, b;
 
@@ -103,7 +103,7 @@ RPutPixel(RImage *image, int x, int y, RColor *color)
         *ptr = (((int)*ptr * nalpha) + (b * alpha))/256; ptr++;
         if (image->format == RRGBAFormat) {
             *ptr = alpha + ((int)*ptr * nalpha)/256;
-	}
+        }
     }
 }
 
@@ -122,55 +122,55 @@ operatePixel(RImage *image, int ofs, int operation, RColor *color)
     sg = image->data + ofs*(hasAlpha ? 4 : 3) + 1;
     sb = image->data + ofs*(hasAlpha ? 4 : 3) + 2;
     sa = image->data + ofs*(hasAlpha ? 4 : 3) + 3;
-    
+
     switch (operation) {
-     case RClearOperation:
-	*sr = 0;
-	*sg = 0;
-	*sb = 0;
-	if (hasAlpha)
-	    *sa = 0;
-	break;
-     case RCopyOperation:
-	*sr = color->red;
-	*sg = color->green;
-	*sb = color->blue;
-	if (hasAlpha)
-	    *sa = color->alpha;
-	break;
-     case RNormalOperation:
-	if (color->alpha==255) {
-	    *sr = color->red;
-	    *sg = color->green;
-	    *sb = color->blue;
-	    if (hasAlpha)
-		*sa = 255;
-	} else {
-	    *sr = (((int)*sr * nalpha) + ((int)color->red * alpha))/256;
-	    *sg = (((int)*sg * nalpha) + ((int)color->green * alpha))/256;
-	    *sb = (((int)*sb * nalpha) + ((int)color->blue * alpha))/256;
-	}
-	break;
-     case RAddOperation:
-	tmp = color->red + *sr;
-	*sr = MIN(255, tmp);
-	tmp = color->green + *sg;
-	*sg = MIN(255, tmp);
-	tmp = color->blue + *sb;
-	*sb = MIN(255, tmp);
-	if (hasAlpha)
-	    *sa = MIN(*sa, color->alpha);
-	break;
-     case RSubtractOperation:
-	tmp = *sr - color->red;
-	*sr = MAX(0, tmp);
-	tmp = *sg - color->green;
-	*sg = MAX(0, tmp);
-	tmp = *sb - color->blue;
-	*sb = MAX(0, tmp);
-	if (hasAlpha)
-	    *sa = MIN(*sa, color->alpha);
-	break;
+    case RClearOperation:
+        *sr = 0;
+        *sg = 0;
+        *sb = 0;
+        if (hasAlpha)
+            *sa = 0;
+        break;
+    case RCopyOperation:
+        *sr = color->red;
+        *sg = color->green;
+        *sb = color->blue;
+        if (hasAlpha)
+            *sa = color->alpha;
+        break;
+    case RNormalOperation:
+        if (color->alpha==255) {
+            *sr = color->red;
+            *sg = color->green;
+            *sb = color->blue;
+            if (hasAlpha)
+                *sa = 255;
+        } else {
+            *sr = (((int)*sr * nalpha) + ((int)color->red * alpha))/256;
+            *sg = (((int)*sg * nalpha) + ((int)color->green * alpha))/256;
+            *sb = (((int)*sb * nalpha) + ((int)color->blue * alpha))/256;
+        }
+        break;
+    case RAddOperation:
+        tmp = color->red + *sr;
+        *sr = MIN(255, tmp);
+        tmp = color->green + *sg;
+        *sg = MIN(255, tmp);
+        tmp = color->blue + *sb;
+        *sb = MIN(255, tmp);
+        if (hasAlpha)
+            *sa = MIN(*sa, color->alpha);
+        break;
+    case RSubtractOperation:
+        tmp = *sr - color->red;
+        *sr = MAX(0, tmp);
+        tmp = *sg - color->green;
+        *sg = MAX(0, tmp);
+        tmp = *sb - color->blue;
+        *sb = MAX(0, tmp);
+        if (hasAlpha)
+            *sa = MIN(*sa, color->alpha);
+        break;
     }
 }
 
@@ -187,7 +187,7 @@ ROperatePixel(RImage *image, int operation, int x, int y, RColor *color)
     assert(y >= 0 && y < image->height);
 
     ofs = y*image->width + x;
-    
+
     operatePixel(image, ofs, operation, color);
 }
 
@@ -216,8 +216,8 @@ RPutPixels(RImage *image, RPoint *points, int npoints, int mode, RColor *color)
 
 
 void
-ROperatePixels(RImage *image, int operation, RPoint *points, int npoints, 
-	       int mode, RColor *color)
+ROperatePixels(RImage *image, int operation, RPoint *points, int npoints,
+               int mode, RColor *color)
 {
     register int x, y, i;
 
@@ -241,14 +241,14 @@ ROperatePixels(RImage *image, int operation, RPoint *points, int npoints,
 
 static Bool
 clipLineInRectangle(int xmin, int ymin, int xmax, int ymax,
-		    int *x1, int *y1, int *x2, int *y2)
+                    int *x1, int *y1, int *x2, int *y2)
 {
 #define TOP	(1<<0)
 #define BOT	(1<<1)
 #define LEF	(1<<2)
 #define RIG	(1<<3)
 #define CHECK_OUT(X,Y)	(((Y) > ymax ? TOP : ((Y) < ymin ? BOT : 0))\
-			 | ((X) > xmax ? RIG : ((X) < xmin ? LEF : 0)))
+    | ((X) > xmax ? RIG : ((X) < xmin ? LEF : 0)))
 
     int ocode1, ocode2, ocode;
     int accept = 0;
@@ -258,43 +258,43 @@ clipLineInRectangle(int xmin, int ymin, int xmax, int ymax,
     ocode2 = CHECK_OUT(*x2, *y2);
 
     for(;;) {
-	if (!ocode1 && !ocode2) { /* completely inside */
-	    accept = 1;
-	    break;
-	} else if (ocode1 & ocode2) {
-	    break;
-	}
+        if (!ocode1 && !ocode2) { /* completely inside */
+            accept = 1;
+            break;
+        } else if (ocode1 & ocode2) {
+            break;
+        }
 
-	if (ocode1)
-	    ocode = ocode1;
-	else
-	    ocode = ocode2;
+        if (ocode1)
+            ocode = ocode1;
+        else
+            ocode = ocode2;
 
-	if (ocode & TOP) {
-	    x = *x1 + (*x2 - *x1) * (ymax - *y1) / (*y2 - *y1);
-	    y = ymax;
-	} else if (ocode & BOT) {
-	    x = *x1 + (*x2 - *x1) * (ymin - *y1) / (*y2 - *y1);
-	    y = ymin;
-	} else if (ocode & RIG) {
-	    y = *y1 + (*y2 - *y1) * (xmax - *x1) / (*x2 - *x1);
-	    x = xmax;
+        if (ocode & TOP) {
+            x = *x1 + (*x2 - *x1) * (ymax - *y1) / (*y2 - *y1);
+            y = ymax;
+        } else if (ocode & BOT) {
+            x = *x1 + (*x2 - *x1) * (ymin - *y1) / (*y2 - *y1);
+            y = ymin;
+        } else if (ocode & RIG) {
+            y = *y1 + (*y2 - *y1) * (xmax - *x1) / (*x2 - *x1);
+            x = xmax;
         } else { //if (ocode & LEF) {
-	    y = *y1 + (*y2 - *y1) * (xmax - *x1) / (*x2 - *x1);
-	    x = xmin;
-	}
+            y = *y1 + (*y2 - *y1) * (xmax - *x1) / (*x2 - *x1);
+            x = xmin;
+        }
 
-	if (ocode == ocode1) {
-	    *x1 = x;
-	    *y1 = y;
-	    ocode1 = CHECK_OUT(x, y);
-	} else {
-	    *x2 = x;
-	    *y2 = y;
-	    ocode2 = CHECK_OUT(x, y);
-	}
+        if (ocode == ocode1) {
+            *x1 = x;
+            *y1 = y;
+            ocode1 = CHECK_OUT(x, y);
+        } else {
+            *x2 = x;
+            *y2 = y;
+            ocode2 = CHECK_OUT(x, y);
+        }
     }
-    
+
     return accept;
 }
 
@@ -312,8 +312,8 @@ genericLine(RImage *image, int x0, int y0, int x1, int y1, RColor *color,
     assert(image!=NULL);
 
     if (!clipLineInRectangle(0, 0, image->width-1, image->height-1,
-			     &x0, &y0, &x1, &y1))
-	return True;
+                             &x0, &y0, &x1, &y1))
+        return True;
 
     if (x0 < x1) {
         du = x1 - x0;
@@ -342,53 +342,53 @@ genericLine(RImage *image, int x0, int y0, int x1, int y1, RColor *color,
     last = (polyline) ? du-1 : du;
 
     if (color->alpha==255 || operation==RCopyOperation) {
-	unsigned char *ptr;
+        unsigned char *ptr;
 
-	if (image->format == RRGBAFormat)
-	    i = (y0*image->width + x0) * 4;
-	else
-	    i = (y0*image->width + x0) * 3;
-	ptr = image->data + i;
+        if (image->format == RRGBAFormat)
+            i = (y0*image->width + x0) * 4;
+        else
+            i = (y0*image->width + x0) * 3;
+        ptr = image->data + i;
 
-	for (i=0; i<=last; i++) {
-	    /* Draw the pixel */
-	    *ptr = color->red;
-	    *(ptr+1) = color->green;
-	    *(ptr+2) = color->blue;
-	    if (image->format == RRGBAFormat)
-		*(ptr+3) = 255;
+        for (i=0; i<=last; i++) {
+            /* Draw the pixel */
+            *ptr = color->red;
+            *(ptr+1) = color->green;
+            *(ptr+2) = color->blue;
+            if (image->format == RRGBAFormat)
+                *(ptr+3) = 255;
 
-	    /* Compute error for NeXT Step */
-	    err += dv2;
-	    if (err >= du) {
-		if (image->format == RRGBAFormat)
-		    ptr += vofs*4;
-		else
-		    ptr += vofs*3;
-		err -= du2;
-	    }
-	    if (image->format == RRGBAFormat)
-		ptr += uofs*4;
-	    else
-		ptr += uofs*3;
-	}
+            /* Compute error for NeXT Step */
+            err += dv2;
+            if (err >= du) {
+                if (image->format == RRGBAFormat)
+                    ptr += vofs*4;
+                else
+                    ptr += vofs*3;
+                err -= du2;
+            }
+            if (image->format == RRGBAFormat)
+                ptr += uofs*4;
+            else
+                ptr += uofs*3;
+        }
     } else {
-	register int ofs = y0*image->width + x0;
-	
-	for (i=0; i<=last; i++) {
-	    /* Draw the pixel */
-	    operatePixel(image, ofs, operation, color);
-	    
-	    /* Compute error for NeXT Step */
-	    err += dv2;
-	    if (err >= du) {
-		ofs += vofs;
-		err -= du2;
-	    }
-	    ofs += uofs;
-	}
+        register int ofs = y0*image->width + x0;
+
+        for (i=0; i<=last; i++) {
+            /* Draw the pixel */
+            operatePixel(image, ofs, operation, color);
+
+            /* Compute error for NeXT Step */
+            err += dv2;
+            if (err >= du) {
+                ofs += vofs;
+                err -= du2;
+            }
+            ofs += uofs;
+        }
     }
-	
+
 #if 0
     if (mode == RALTER_PIXELS) {
         RColorOffset *cdelta = (RColorOffset*)cdata;
@@ -485,8 +485,8 @@ RDrawLine(RImage *image, int x0, int y0, int x1, int y1, RColor *color)
 
 
 int
-ROperateLine(RImage *image, int operation, int x0, int y0, int x1, 
-	     int y1, RColor *color)
+ROperateLine(RImage *image, int operation, int x0, int y0, int x1,
+             int y1, RColor *color)
 {
     return genericLine(image, x0, y0, x1, y1, color, operation, False);
 }
@@ -534,7 +534,7 @@ RDrawLines(RImage *image, RPoint *points, int npoints, int mode, RColor *color)
 
 void
 ROperateLines(RImage *image, int operation, RPoint *points,
-			int npoints, int mode, RColor *color)
+              int npoints, int mode, RColor *color)
 {
     register int x1, y1, x2, y2, i;
 
@@ -589,8 +589,8 @@ RDrawSegments(RImage *image, RSegment *segs, int nsegs, RColor *color)
 
 
 void
-ROperateSegments(RImage *image, int operation, RSegment *segs, 
-		 int nsegs, RColor *color)
+ROperateSegments(RImage *image, int operation, RSegment *segs,
+                 int nsegs, RColor *color)
 {
     register int i;
 

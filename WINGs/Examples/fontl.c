@@ -1,8 +1,8 @@
 /*
  * WINGs demo: font lister
- * 
+ *
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -64,10 +64,10 @@ main(int argc, char **argv)
 
     dpy = XOpenDisplay("");
     if (!dpy) {
-	wfatal("cant open display");
-	exit(0);
+        wfatal("cant open display");
+        exit(0);
     }
-    
+
     scr = WMCreateSimpleApplicationScreen(dpy);
 
     win = WMCreateWindow(scr, "main");
@@ -80,25 +80,25 @@ main(int argc, char **argv)
 
     c = 0;
     for (y=0; y<8; y++) {
-	for (x=0; x<32; x++, c++) {
-	    lab = WMCreateCustomButton(win, WBBStateLightMask);
-	    WMResizeWidget(lab, 20, 20);
-	    WMMoveWidget(lab, 10+x*20, 30+y*20);
-	    sprintf(buf, "%c", c);
-	    WMSetButtonText(lab, buf);
-	    WMSetButtonAction(lab, show, pos);
-	    WMHangData(lab, (void*)c);
-	    if (c>0) {
-		WMGroupButtons(l0, lab);
-	    } else {
-		l0 = lab;
-	    }
-	}
+        for (x=0; x<32; x++, c++) {
+            lab = WMCreateCustomButton(win, WBBStateLightMask);
+            WMResizeWidget(lab, 20, 20);
+            WMMoveWidget(lab, 10+x*20, 30+y*20);
+            sprintf(buf, "%c", c);
+            WMSetButtonText(lab, buf);
+            WMSetButtonAction(lab, show, pos);
+            WMHangData(lab, (void*)c);
+            if (c>0) {
+                WMGroupButtons(l0, lab);
+            } else {
+                l0 = lab;
+            }
+        }
     }
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
     WMMapWidget(win);
     WMScreenMainLoop(scr);
-    return 0;   
+    return 0;
 }
 

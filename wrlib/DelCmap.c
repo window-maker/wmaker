@@ -1,7 +1,7 @@
 /* $XConsortium: DelCmap.c,v 1.2 94/04/17 20:15:58 converse Exp $ */
 
-/* 
- 
+/*
+
 Copyright (c) 1989  X Consortium
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -49,19 +49,18 @@ void XmuDeleteStandardColormap(dpy, screen, property)
     int			count = 0;
 
     if (XGetRGBColormaps(dpy, RootWindow(dpy, screen), &stdcmaps, &count,
-			 property))
-    {
-	for (s=stdcmaps; count > 0; count--, s++) {
-	    if ((s->killid == ReleaseByFreeingColormap) &&
-		(s->colormap != None) &&
-		(s->colormap != DefaultColormap(dpy, screen)))
-		XFreeColormap(dpy, s->colormap);
-	    else if (s->killid != None)
-		XKillClient(dpy, s->killid);
-	}
-	XDeleteProperty(dpy, RootWindow(dpy, screen), property);
-	XFree((char *) stdcmaps);
-	XSync(dpy, False);
+                         property)) {
+        for (s=stdcmaps; count > 0; count--, s++) {
+            if ((s->killid == ReleaseByFreeingColormap) &&
+                (s->colormap != None) &&
+                (s->colormap != DefaultColormap(dpy, screen)))
+                XFreeColormap(dpy, s->colormap);
+            else if (s->killid != None)
+                XKillClient(dpy, s->killid);
+        }
+        XDeleteProperty(dpy, RootWindow(dpy, screen), property);
+        XFree((char *) stdcmaps);
+        XSync(dpy, False);
     }
 }
 

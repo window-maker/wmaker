@@ -1,8 +1,8 @@
 /*
  *  Window Maker miscelaneous function library
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -47,9 +47,9 @@ static void
 defaultHandler(int bla)
 {
     if (bla)
-	kill(getpid(), SIGABRT);
+        kill(getpid(), SIGABRT);
     else
-	exit(1);
+        exit(1);
 }
 
 
@@ -89,23 +89,23 @@ wmalloc(size_t size)
     tmp = malloc(size);
 #endif
     if (tmp == NULL) {
-	wwarning("malloc() failed. Retrying after 2s.");
-	sleep(2);
+        wwarning("malloc() failed. Retrying after 2s.");
+        sleep(2);
 #ifdef TEST_WITH_GC
         tmp = GC_malloc(size);
 #else
         tmp = malloc(size);
 #endif
-	if (tmp == NULL) {
-	    if (Aborting) {
-		fputs("Really Bad Error: recursive malloc() failure.", stderr);
-		exit(-1);
-	    } else {
-		wfatal("virtual memory exhausted");
-		Aborting=1;
-		wAbort(False);
-	    }
-	}
+        if (tmp == NULL) {
+            if (Aborting) {
+                fputs("Really Bad Error: recursive malloc() failure.", stderr);
+                exit(-1);
+            } else {
+                wfatal("virtual memory exhausted");
+                Aborting=1;
+                wAbort(False);
+            }
+        }
     }
     return tmp;
 }
@@ -117,15 +117,15 @@ wrealloc(void *ptr, size_t newsize)
     void *nptr;
 
     if (!ptr) {
-	nptr = wmalloc(newsize);
+        nptr = wmalloc(newsize);
     } else if (newsize==0) {
         wfree(ptr);
         nptr = NULL;
     } else {
 #ifdef TEST_WITH_GC
-	nptr = GC_realloc(ptr, newsize);
+        nptr = GC_realloc(ptr, newsize);
 #else
-	nptr = realloc(ptr, newsize);
+        nptr = realloc(ptr, newsize);
 #endif
         if (nptr==NULL) {
             wwarning("realloc() failed. Retrying after 2s.");
@@ -156,26 +156,26 @@ void*
 wretain(void *ptr)
 {
     int *refcount;
-    
+
     if (!table) {
-	table = WMCreateHashTable(WMIntHashCallbacks);
+        table = WMCreateHashTable(WMIntHashCallbacks);
     }
-        
+
     refcount = WMHashGet(table, ptr);
     if (!refcount) {
-	refcount = wmalloc(sizeof(int));
-	*refcount = 1;
-	WMHashInsert(table, ptr, refcount);
+        refcount = wmalloc(sizeof(int));
+        *refcount = 1;
+        WMHashInsert(table, ptr, refcount);
 #ifdef VERBOSE
-	printf("== %i (%p)\n", *refcount, ptr);
+        printf("== %i (%p)\n", *refcount, ptr);
 #endif
     } else {
-	(*refcount)++;
+        (*refcount)++;
 #ifdef VERBOSE
-	printf("+ %i (%p)\n", *refcount, ptr);
+        printf("+ %i (%p)\n", *refcount, ptr);
 #endif
     }
-    
+
     return ptr;
 }
 
@@ -197,24 +197,24 @@ void
 wrelease(void *ptr)
 {
     int *refcount;
-    
+
     refcount = WMHashGet(table, ptr);
     if (!refcount) {
-	wwarning("trying to release unexisting data %p", ptr);
+        wwarning("trying to release unexisting data %p", ptr);
     } else {
-	(*refcount)--;
-	if (*refcount < 1) {
+        (*refcount)--;
+        if (*refcount < 1) {
 #ifdef VERBOSE
-	    printf("RELEASING %p\n", ptr);
+            printf("RELEASING %p\n", ptr);
 #endif
-	    WMHashRemove(table, ptr);
-	    wfree(refcount);
-	    wfree(ptr);
-	}
+            WMHashRemove(table, ptr);
+            wfree(refcount);
+            wfree(ptr);
+        }
 #ifdef VERBOSE
-	else {
-	    printf("- %i (%p)\n", *refcount, ptr);
-	}
+        else {
+            printf("- %i (%p)\n", *refcount, ptr);
+        }
 #endif
     }
 }

@@ -1,5 +1,5 @@
 /*
- *  WINGs WMRuler: nifty ruler widget for WINGs :-) 
+ *  WINGs WMRuler: nifty ruler widget for WINGs :-)
  *
  *  Copyright (c) 1999-2000 Nwanua Elumeze
  *
@@ -38,8 +38,8 @@ typedef struct W_Ruler {
     WMFont *font;
     WMRulerMargins margins;
     int offset;
-    int motion;            /* the position of the _moving_ marker(s) */
-    int end;                 /* the last tick on the baseline (restrict markers to it) */
+    int motion;                /* the position of the _moving_ marker(s) */
+    int end;                   /* the last tick on the baseline (restrict markers to it) */
 
     Pixmap drawBuffer;
 
@@ -65,7 +65,7 @@ typedef struct W_Ruler {
    |
 
  */
-static void 
+static void
 drawLeftMarker(Ruler * rPtr)
 {
     XPoint points[4];
@@ -183,7 +183,7 @@ drawRulerOnPixmap(Ruler * rPtr)
 
     if (!rPtr->drawBuffer || !rPtr->view->flags.realized)
         return;
-        
+
 
     XFillRectangle(rPtr->view->screen->display, rPtr->drawBuffer,
                    rPtr->bgGC, 0, 0, rPtr->view->size.width, 40);
@@ -346,7 +346,7 @@ handleEvents(XEvent * event, void *data)
 
     switch (event->type) {
       case Expose:
-        rulerDidResize(rPtr->view->delegate, rPtr->view); 
+        rulerDidResize(rPtr->view->delegate, rPtr->view);
       break;
 
       case MotionNotify:
@@ -500,7 +500,7 @@ WMGetRulerMargins(WMRuler * rPtr)
 {
     WMRulerMargins *margins = wmalloc(sizeof(WMRulerMargins));
 
-    if (!rPtr) { 
+    if (!rPtr) {
         margins->first = margins->body = margins->left = 0;
         margins->right = 100;
         return margins;
@@ -598,3 +598,4 @@ WMGetGrabbedRulerMargin(WMRuler * rPtr)
         return 0;
     return rPtr->flags.whichMarker;
 }
+

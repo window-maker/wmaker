@@ -55,29 +55,29 @@ typedef struct {
  * range INT_MIN+1 to INT_MAX
  */
 enum {
-  WMDesktopWindowLevel = -1000, /* GNUstep addition     */
-  WMNormalWindowLevel = 0,
-  WMFloatingWindowLevel = 3,
-  WMSubmenuWindowLevel = 3,
-  WMTornOffMenuWindowLevel = 3,
-  WMMainMenuWindowLevel = 20,
-  WMDockWindowLevel = 21,       /* Deprecated - use NSStatusWindowLevel */
-  WMStatusWindowLevel = 21,
-  WMModalPanelWindowLevel = 100,
-  WMPopUpMenuWindowLevel = 101,
-  WMScreenSaverWindowLevel = 1000
+    WMDesktopWindowLevel = -1000, /* GNUstep addition     */
+    WMNormalWindowLevel = 0,
+    WMFloatingWindowLevel = 3,
+    WMSubmenuWindowLevel = 3,
+    WMTornOffMenuWindowLevel = 3,
+    WMMainMenuWindowLevel = 20,
+    WMDockWindowLevel = 21,       /* Deprecated - use NSStatusWindowLevel */
+    WMStatusWindowLevel = 21,
+    WMModalPanelWindowLevel = 100,
+    WMPopUpMenuWindowLevel = 101,
+    WMScreenSaverWindowLevel = 1000
 };
 
 
 /* window attributes */
 enum {
-  WMBorderlessWindowMask = 0,
-  WMTitledWindowMask = 1,
-  WMClosableWindowMask = 2,
-  WMMiniaturizableWindowMask = 4,
-  WMResizableWindowMask = 8,
-  WMIconWindowMask = 64,
-  WMMiniWindowMask = 128
+    WMBorderlessWindowMask = 0,
+    WMTitledWindowMask = 1,
+    WMClosableWindowMask = 2,
+    WMMiniaturizableWindowMask = 4,
+    WMResizableWindowMask = 8,
+    WMIconWindowMask = 64,
+    WMMiniWindowMask = 128
 };
 #endif
 
@@ -400,18 +400,18 @@ typedef struct WMAlertPanel {
 typedef struct WMGenericPanel {
     WMWindow *win;
     WMBox *vbox;
-    
+
     WMLabel *iLbl;
     WMLabel *tLbl;
-    
+
     WMFrame *line;
-    
+
     WMFrame *content;
-    
+
     WMBox *buttonBox;
     WMButton *defBtn;
     WMButton *altBtn;
-    
+
     short result;
 } WMGenericPanel;
 
@@ -443,7 +443,7 @@ typedef struct {
     unsigned short right;       /* right margin marker */
     unsigned short first;       /* indentation marker for first line only */
     unsigned short body;        /* body indentation marker */
-    unsigned short retainCount; 
+    unsigned short retainCount;
 } WMRulerMargins;
 /* All indentation and tab markers are _relative_ to the left margin marker */
 
@@ -464,10 +464,11 @@ typedef void WMAction2(void *self, void *clientData);
 typedef void WMListDrawProc(WMList *lPtr, int index, Drawable d, char *text,
                             int state, WMRect *rect);
 
+
 /*
 typedef void WMSplitViewResizeSubviewsProc(WMSplitView *sPtr,
-					   unsigned int oldWidth,
-					   unsigned int oldHeight);
+                                           unsigned int oldWidth,
+                                           unsigned int oldHeight);
 */
 
 typedef void WMSplitViewConstrainProc(WMSplitView *sPtr, int dividerIndex,
@@ -499,7 +500,7 @@ typedef struct WMTextFieldDelegate {
     void (*didBeginEditing)(struct WMTextFieldDelegate *self,
                             WMNotification *notif);
 
-    void (*didChange)(struct WMTextFieldDelegate *self, 
+    void (*didChange)(struct WMTextFieldDelegate *self,
                       WMNotification *notif);
 
     void (*didEndEditing)(struct WMTextFieldDelegate *self,
@@ -532,7 +533,7 @@ typedef struct WMTabViewDelegate {
     void (*didSelectItem)(struct WMTabViewDelegate *self, WMTabView *tabView,
                           WMTabViewItem *item);
 
-    Bool (*shouldSelectItem)(struct WMTabViewDelegate *self, WMTabView *tabView, 
+    Bool (*shouldSelectItem)(struct WMTabViewDelegate *self, WMTabView *tabView,
                              WMTabViewItem *item);
 
     void (*willSelectItem)(struct WMTabViewDelegate *self, WMTabView *tabView,
@@ -563,29 +564,29 @@ typedef struct W_DragOperationtItem WMDragOperationItem;
 
 
 typedef struct W_DragSourceProcs {
-	WMArray* (*dropDataTypes)(WMView *self);
+    WMArray* (*dropDataTypes)(WMView *self);
     WMDragOperationType (*wantedDropOperation)(WMView *self);
-	WMArray* (*askedOperations)(WMView *self);
-	Bool (*acceptDropOperation)(WMView *self, WMDragOperationType operation);
+    WMArray* (*askedOperations)(WMView *self);
+    Bool (*acceptDropOperation)(WMView *self, WMDragOperationType operation);
     void (*beganDrag)(WMView *self, WMPoint *point);
     void (*endedDrag)(WMView *self, WMPoint *point, Bool deposited);
     WMData* (*fetchDragData)(WMView *self, char *type);
-/*    Bool (*ignoreModifierKeysWhileDragging)(WMView *view);*/
+    /*Bool (*ignoreModifierKeysWhileDragging)(WMView *view);*/
 } WMDragSourceProcs;
 
 
 
 typedef struct W_DragDestinationProcs {
-	void (*prepareForDragOperation)(WMView *self);
-	WMArray* (*requiredDataTypes)(WMView *self, WMDragOperationType request,
+    void (*prepareForDragOperation)(WMView *self);
+    WMArray* (*requiredDataTypes)(WMView *self, WMDragOperationType request,
                                   WMArray *sourceDataTypes);
     WMDragOperationType (*allowedOperation)(WMView *self,
                                             WMDragOperationType request,
                                             WMArray *sourceDataTypes);
-	Bool (*inspectDropData)(WMView *self, WMArray *dropData);
-	void (*performDragOperation)(WMView *self, WMArray *dropData,
+    Bool (*inspectDropData)(WMView *self, WMArray *dropData);
+    void (*performDragOperation)(WMView *self, WMArray *dropData,
                                  WMArray *operations, WMPoint *dropLocation);
-	void (*concludeDragOperation)(WMView *self);
+    void (*concludeDragOperation)(WMView *self);
 } WMDragDestinationProcs;
 
 
@@ -621,7 +622,7 @@ char* WMPathForResourceOfType(char *resource, char *ext);
 WMScreen* WMOpenScreen(const char *display);
 
 WMScreen* WMCreateScreenWithRContext(Display *display, int screen,
-				     RContext *context);
+                                     RContext *context);
 
 WMScreen* WMCreateScreen(Display *display, int screen);
 
@@ -663,10 +664,10 @@ int WMHandleEvent(XEvent *event);
 Bool WMScreenPending(WMScreen *scr);
 
 void WMCreateEventHandler(WMView *view, unsigned long mask,
-			  WMEventProc *eventProc, void *clientData);
+                          WMEventProc *eventProc, void *clientData);
 
 void WMDeleteEventHandler(WMView *view, unsigned long mask,
-			  WMEventProc *eventProc, void *clientData);
+                          WMEventProc *eventProc, void *clientData);
 
 int WMIsDoubleClick(XEvent *event);
 
@@ -681,13 +682,13 @@ void WMMaskEvent(Display *dpy, long mask, XEvent *event);
 
 
 Bool WMCreateSelectionHandler(WMView *view, Atom selection, Time timestamp,
-			      WMSelectionProcs *procs, void *cdata);
+                              WMSelectionProcs *procs, void *cdata);
 
 void WMDeleteSelectionHandler(WMView *view, Atom selection, Time timestamp);
 
-Bool WMRequestSelection(WMView *view, Atom selection, Atom target, 
-			Time timestamp, WMSelectionCallback *callback,
-			void *cdata);
+Bool WMRequestSelection(WMView *view, Atom selection, Atom target,
+                        Time timestamp, WMSelectionCallback *callback,
+                        void *cdata);
 
 
 extern char *WMSelectionOwnerDidChangeNotification;
@@ -814,7 +815,7 @@ GC WMColorGC(WMColor *color);
 
 WMPixel WMColorPixel(WMColor *color);
 
-void WMPaintColorSwatch(WMColor *color, Drawable d, int x, int y, 
+void WMPaintColorSwatch(WMColor *color, Drawable d, int x, int y,
                         unsigned int width, unsigned int height);
 
 void WMReleaseColor(WMColor *color);
@@ -909,7 +910,7 @@ void WMRedisplayWidget(WMWidget *w);
 
 void WMSetViewNotifySizeChanges(WMView *view, Bool flag);
 
-void WMSetViewExpandsToParent(WMView *view, int topOffs, int leftOffs, 
+void WMSetViewExpandsToParent(WMView *view, int topOffs, int leftOffs,
                               int rightOffs, int bottomOffs);
 
 WMSize WMGetViewSize(WMView *view);
@@ -994,16 +995,16 @@ void WMCloseWindow(WMWindow *win);
 void WMSetButtonAction(WMButton *bPtr, WMAction *action, void *clientData);
 
 #define WMCreateCommandButton(parent) \
-	WMCreateCustomButton((parent), WBBSpringLoadedMask\
-					|WBBPushInMask\
-					|WBBPushLightMask\
-					|WBBPushChangeMask)
+    WMCreateCustomButton((parent), WBBSpringLoadedMask\
+    |WBBPushInMask\
+    |WBBPushLightMask\
+    |WBBPushChangeMask)
 
 #define WMCreateRadioButton(parent) \
-	WMCreateButton((parent), WBTRadio)
+    WMCreateButton((parent), WBTRadio)
 
 #define WMCreateSwitchButton(parent) \
-	WMCreateButton((parent), WBTSwitch)
+    WMCreateButton((parent), WBTSwitch)
 
 WMButton* WMCreateButton(WMWidget *parent, WMButtonType type);
 
@@ -1138,7 +1139,7 @@ extern char *WMTextDidEndEditingNotification;
 
 WMScroller* WMCreateScroller(WMWidget *parent);
 
-void WMSetScrollerParameters(WMScroller *sPtr, float floatValue, 
+void WMSetScrollerParameters(WMScroller *sPtr, float floatValue,
                              float knobProportion);
 
 float WMGetScrollerKnobProportion(WMScroller *sPtr);
@@ -1149,8 +1150,8 @@ WMScrollerPart WMGetScrollerHitPart(WMScroller *sPtr);
 
 void WMSetScrollerAction(WMScroller *sPtr, WMAction *action, void *clientData);
 
-void WMSetScrollerArrowsPosition(WMScroller *sPtr, 
-				 WMScrollArrowPosition position);
+void WMSetScrollerArrowsPosition(WMScroller *sPtr,
+                                 WMScrollArrowPosition position);
 
 extern char *WMScrollerDidScrollNotification;
 
@@ -1277,7 +1278,7 @@ WMArray* WMGetBrowserPaths(WMBrowser *bPtr);
 
 void WMSetBrowserAction(WMBrowser *bPtr, WMAction *action, void *clientData);
 
-void WMSetBrowserDoubleAction(WMBrowser *bPtr, WMAction *action, 
+void WMSetBrowserDoubleAction(WMBrowser *bPtr, WMAction *action,
                               void *clientData);
 
 WMListItem* WMGetBrowserSelectedItemInColumn(WMBrowser *bPtr, int column);
@@ -1358,18 +1359,18 @@ void WMSetMenuItemMixedStatePixmap(WMMenuItem *item, WMPixmap *pixmap);
 WMPixmap* WMGetMenuItemMixedStatePixmap(WMMenuItem *item);
 
 /*void WMSetMenuItemSubmenu(WMMenuItem *item, WMMenu *submenu);
- 
+
 
 WMMenu* WMGetMenuItemSubmenu(WMMenuItem *item);
 
 Bool WMGetMenuItemHasSubmenu(WMMenuItem *item);
- */
+*/
 
 /* ....................................................................... */
 
 WMPopUpButton* WMCreatePopUpButton(WMWidget *parent);
 
-void WMSetPopUpButtonAction(WMPopUpButton *sPtr, WMAction *action, 
+void WMSetPopUpButtonAction(WMPopUpButton *sPtr, WMAction *action,
                             void *clientData);
 
 void WMSetPopUpButtonPullsDown(WMPopUpButton *bPtr, Bool flag);
@@ -1529,8 +1530,8 @@ void WMSetSplitViewConstrainProc(WMSplitView *sPtr,
                                  WMSplitViewConstrainProc *proc);
 
 /*
-void WMSetSplitViewResizeSubviewsProc(WMSplitView *sPtr, 
-				      WMSplitViewResizeSubviewsProc *proc);
+void WMSetSplitViewResizeSubviewsProc(WMSplitView *sPtr,
+                                      WMSplitViewResizeSubviewsProc *proc);
 */
 
 int WMGetSplitViewDividerThickness(WMSplitView *sPtr);
@@ -1568,9 +1569,9 @@ WMText* WMCreateTextForDocumentType(WMWidget *parent, WMAction *parser,
 
 void WMSetTextDelegate(WMText *tPtr, WMTextDelegate *delegate);
 
-void WMFreezeText(WMText *tPtr); 
+void WMFreezeText(WMText *tPtr);
 
-#define WMRefreshText(tPtr) WMThawText((tPtr)) 
+#define WMRefreshText(tPtr) WMThawText((tPtr))
 
 void WMThawText(WMText *tPtr);
 
@@ -1770,9 +1771,9 @@ void WMSetBoxHorizontal(WMBox *box, Bool flag);
 
 /* ....................................................................... */
 
-int WMRunAlertPanel(WMScreen *app, WMWindow *owner, char *title, char *msg, 
-		    char *defaultButton, char *alternateButton, 
-		    char *otherButton);
+int WMRunAlertPanel(WMScreen *app, WMWindow *owner, char *title, char *msg,
+                    char *defaultButton, char *alternateButton,
+                    char *otherButton);
 
 /* you can free the returned string */
 char* WMRunInputPanel(WMScreen *app, WMWindow *owner, char *title, char *msg,

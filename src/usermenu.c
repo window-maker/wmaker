@@ -17,9 +17,9 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
- * 
+ *
  * * * * * * * * *
  * User defined menu is good, but beer's always better
  * if someone wanna start hacking something, He heard...
@@ -33,7 +33,7 @@
  *  TODONOT
  *  - allow applications to share their menu. ] think it
  *    looks wierd since there still are more than 1 appicon.
- *  
+ *
  *  Syntax...
  *  (
  *    "Program Name",
@@ -49,12 +49,12 @@
  *      ("Exit Command", EXIT)
  *    )
  *  )
- *  
+ *
  *  Tips:
  *  - If you don't want short cut keys to be listed
  *    in the right side of entries, you can just put them
  *    in array instead of using the string directly.
- *  
+ *
  */
 
 #include "wconfig.h"
@@ -191,7 +191,7 @@ convertShortcuts(WScreen *scr, WMPropList *shortcut)
     }
 
 keyover:
-    
+
     /* get key */
     if (!j) {
         puts("fatal j");
@@ -201,7 +201,7 @@ keyover:
     }
     data->key_no = j;
     data->screen = scr;
-    
+
     return data;
 }
 
@@ -226,21 +226,21 @@ configureUserMenu(WScreen *scr, WMPropList *plum)
     if (!WMIsPLString(elem)) {
         return NULL;
     }
-    
+
     mtitle = WMGetFromPLString(elem);
-    
+
     menu=wMenuCreateForApp(scr, mtitle, True);
-    
+
     for(i=1; i<count; i++) {
         elem = WMGetFromPLArray(plum,i);
         if(WMIsPLArray(WMGetFromPLArray(elem,1))) {
             WMenu *submenu;
             WMenuEntry *mentry;
-            
+
             submenu = configureUserMenu(scr,elem);
             if (submenu)
                 mentry = wMenuAddCallback(menu, submenu->frame->title,
-                        NULL, NULL);
+                                          NULL, NULL);
             wMenuEntrySetCascade(menu, mentry, submenu);
         }
         else {
@@ -251,7 +251,7 @@ configureUserMenu(WScreen *scr, WMPropList *plum)
             command = WMGetFromPLArray(elem,idx++);
             if (WMGetPropListItemCount(elem) >= 3)
                 params = WMGetFromPLArray(elem,idx++);
-            
+
             if (!title || !command)
                 return menu;
 
@@ -261,7 +261,7 @@ configureUserMenu(WScreen *scr, WMPropList *plum)
                 data = convertShortcuts(scr, params);
                 if (data){
                     entry = wMenuAddCallback(menu, WMGetFromPLString(title),
-                                    notifyClient, data);
+                                             notifyClient, data);
 
                     if (entry) {
                         if (WMIsPLString(params)) {
@@ -272,10 +272,10 @@ configureUserMenu(WScreen *scr, WMPropList *plum)
                         if (WMGetPropListItemCount(elem) >= 4) {
                             instances = WMGetFromPLArray(elem,idx++);
                             if(WMIsPLArray(instances))
-				if (instances && WMGetPropListItemCount(instances)
-				    && WMIsPLArray(instances)){
-				    entry->instances = WMRetainPropList(instances);
-                            }
+                                if (instances && WMGetPropListItemCount(instances)
+                                    && WMIsPLArray(instances)){
+                                    entry->instances = WMRetainPropList(instances);
+                                }
                         }
                     }
                 }
@@ -292,9 +292,9 @@ wUserMenuRefreshInstances(WMenu *menu, WWindow *wwin)
 {
     WMenuEntry* entry;
     int i,j,count,paintflag;
-    
+
     paintflag=0;
-    
+
     if(!menu) return;
 
     for (i=0; i<menu->entry_no; i++) {
@@ -318,9 +318,9 @@ wUserMenuRefreshInstances(WMenu *menu, WWindow *wwin)
     }
     for (i=0; i < menu->cascade_no; i++) {
         if (!menu->cascades[i]->flags.brother)
-	    wUserMenuRefreshInstances(menu->cascades[i], wwin);
+            wUserMenuRefreshInstances(menu->cascades[i], wwin);
         else
-	    wUserMenuRefreshInstances(menu->cascades[i]->brother, wwin);
+            wUserMenuRefreshInstances(menu->cascades[i]->brother, wwin);
     }
 
     if (paintflag)
@@ -339,7 +339,7 @@ readUserMenuFile(WScreen *scr, char *file_name)
     menu=NULL;
     plum = WMReadPropListFromFile(file_name);
     /**/
-    
+
     if(plum){
         menu = configureUserMenu(scr, plum);
         WMReleasePropList(plum);
@@ -356,14 +356,14 @@ wUserMenuGet(WScreen *scr, WWindow *wwin)
     char *path = NULL;
     char *tmp;
     if (wwin->wm_instance && wwin->wm_class) {
-	int len = strlen(wwin->wm_instance)+strlen(wwin->wm_class)+7;
+        int len = strlen(wwin->wm_instance)+strlen(wwin->wm_class)+7;
         tmp=wmalloc(len);
         snprintf(tmp,len,"%s.%s.menu",wwin->wm_instance,wwin->wm_class);
         path = wfindfile(DEF_USER_MENU_PATHS,tmp);
         wfree(tmp);
 
         if (!path) return NULL;
-        
+
         if (wwin) {
             menu = readUserMenuFile(scr, path);
         }
@@ -374,3 +374,4 @@ wUserMenuGet(WScreen *scr, WWindow *wwin)
 }
 
 #endif /* USER_MENU */
+

@@ -20,8 +20,8 @@ typedef struct SelectionHandler {
     void *data;
 
     struct {
-	unsigned delete_pending:1;
-	unsigned done_pending:1;
+        unsigned delete_pending:1;
+        unsigned done_pending:1;
     } flags;
 } SelectionHandler;
 
@@ -35,8 +35,8 @@ typedef struct SelectionCallback {
     void *data;
 
     struct {
-	unsigned delete_pending:1;
-	unsigned done_pending:1;
+        unsigned delete_pending:1;
+        unsigned done_pending:1;
     } flags;
 } SelectionCallback;
 
@@ -65,18 +65,18 @@ WMDeleteSelectionHandler(WMView *view, Atom selection, Time timestamp)
     /*//printf("deleting selection handler for %d", win);*/
 
     WM_ITERATE_ARRAY(selHandlers, handler, iter) {
-	if (handler->view == view
-	    && (handler->selection == selection || selection == None)
-	    && (handler->timestamp == timestamp || timestamp == CurrentTime)) {
+        if (handler->view == view
+            && (handler->selection == selection || selection == None)
+            && (handler->timestamp == timestamp || timestamp == CurrentTime)) {
 
-	    if (handler->flags.done_pending) {
-		handler->flags.delete_pending = 1;
+            if (handler->flags.done_pending) {
+                handler->flags.delete_pending = 1;
                 /*//puts(": postponed because still pending");*/
                 return;
-	    }
+            }
             /*//printf(": found & removed");*/
             WMRemoveFromArray(selHandlers, handler);
-	    break;
+            break;
         }
     }
 
@@ -84,7 +84,7 @@ WMDeleteSelectionHandler(WMView *view, Atom selection, Time timestamp)
 
     XGrabServer(dpy);
     if (XGetSelectionOwner(dpy, selection) == win) {
-	XSetSelectionOwner(dpy, selection, None, timestamp);
+        XSetSelectionOwner(dpy, selection, None, timestamp);
     }
     XUngrabServer(dpy);
 }
@@ -99,18 +99,18 @@ WMDeleteSelectionCallback(WMView *view, Atom selection, Time timestamp)
 
     if (!selCallbacks)
         return;
-    
-    WM_ITERATE_ARRAY(selCallbacks, handler, iter) {
-	if (handler->view == view
-	    && (handler->selection == selection || selection == None)
-	    && (handler->timestamp == timestamp || timestamp == CurrentTime)) {
 
-	    if (handler->flags.done_pending) {
-		handler->flags.delete_pending = 1;
-		return;
-	    }
-	    WMRemoveFromArray(selCallbacks, handler);
-	    break;
+    WM_ITERATE_ARRAY(selCallbacks, handler, iter) {
+        if (handler->view == view
+            && (handler->selection == selection || selection == None)
+            && (handler->timestamp == timestamp || timestamp == CurrentTime)) {
+
+            if (handler->flags.done_pending) {
+                handler->flags.delete_pending = 1;
+                return;
+            }
+            WMRemoveFromArray(selCallbacks, handler);
+            break;
         }
     }
 }
@@ -127,14 +127,14 @@ handleXError(Display *dpy, XErrorEvent *ev)
 
 static Bool
 writeSelection(Display *dpy, Window requestor, Atom property, Atom type,
-	       WMData *data)
+               WMData *data)
 {
     static void *oldHandler;
     int format, bpi;
 
     format = WMGetDataFormat(data);
     if (format == 0)
-	format = 8;
+        format = 8;
 
     bpi = format/8;
 
@@ -171,9 +171,9 @@ notifySelection(XEvent *event, Atom prop)
     ev.xselection.selection = event->xselectionrequest.selection;
     ev.xselection.property = prop;
     ev.xselection.time = event->xselectionrequest.time;
-    
-    XSendEvent(event->xany.display, event->xselectionrequest.requestor, 
-	       False, 0, &ev);
+
+    XSendEvent(event->xany.display, event->xselectionrequest.requestor,
+               False, 0, &ev);
     XFlush(event->xany.display);
 }
 
@@ -188,54 +188,54 @@ handleRequestEvent(XEvent *event)
 
     WM_ITERATE_ARRAY(selHandlers, handler, iter) {
 
-	switch (event->type) {
-	 case SelectionClear:
-	    if (W_VIEW_DRAWABLE(handler->view) 
-		!= event->xselectionclear.window) {
-		break;
-	    }
+        switch (event->type) {
+        case SelectionClear:
+            if (W_VIEW_DRAWABLE(handler->view)
+                != event->xselectionclear.window) {
+                break;
+            }
 
-	    handler->flags.done_pending = 1;
-	    if (handler->procs.selectionLost)
-		handler->procs.selectionLost(handler->view,
-					     handler->selection,
-					     handler->data);
-	    handler->flags.done_pending = 0;
-	    handler->flags.delete_pending = 1;
-	    break;
+            handler->flags.done_pending = 1;
+            if (handler->procs.selectionLost)
+                handler->procs.selectionLost(handler->view,
+                                             handler->selection,
+                                             handler->data);
+            handler->flags.done_pending = 0;
+            handler->flags.delete_pending = 1;
+            break;
 
-	 case SelectionRequest:
-	    if (W_VIEW_DRAWABLE(handler->view)!=event->xselectionrequest.owner) {
-		break;
-	    }
+        case SelectionRequest:
+            if (W_VIEW_DRAWABLE(handler->view)!=event->xselectionrequest.owner) {
+                break;
+            }
 
-	    if (handler->procs.convertSelection != NULL
-		&& handler->selection == event->xselectionrequest.selection) {
-		Atom atom;
-		WMData *data;
-		Atom prop;
+            if (handler->procs.convertSelection != NULL
+                && handler->selection == event->xselectionrequest.selection) {
+                Atom atom;
+                WMData *data;
+                Atom prop;
 
-		/* they're requesting for something old.. maybe another handler
-		 * can handle it */
-		if (event->xselectionrequest.time < handler->timestamp
-		    && event->xselectionrequest.time != CurrentTime) {
-		    break;
-		}
+                /* they're requesting for something old.. maybe another handler
+                 * can handle it */
+                if (event->xselectionrequest.time < handler->timestamp
+                    && event->xselectionrequest.time != CurrentTime) {
+                    break;
+                }
 
                 handledRequest = False;
 
-		handler->flags.done_pending = 1;
+                handler->flags.done_pending = 1;
 
-		data = handler->procs.convertSelection(handler->view,
-						     handler->selection,
-						     event->xselectionrequest.target,
-						     handler->data,
-						     &atom);
+                data = handler->procs.convertSelection(handler->view,
+                                                       handler->selection,
+                                                       event->xselectionrequest.target,
+                                                       handler->data,
+                                                       &atom);
 
-		prop = event->xselectionrequest.property;
-		/* obsolete clients that don't set the property field */
-		if (prop == None)
-		    prop = event->xselectionrequest.target;
+                prop = event->xselectionrequest.property;
+                /* obsolete clients that don't set the property field */
+                if (prop == None)
+                    prop = event->xselectionrequest.target;
 
                 if (data) {
                     if (writeSelection(event->xselectionrequest.display,
@@ -248,17 +248,17 @@ handleRequestEvent(XEvent *event)
 
                 notifySelection(event, (handledRequest==True ? prop : None));
 
-		if (handler->procs.selectionDone != NULL) {
-		    handler->procs.selectionDone(handler->view,
-					 handler->selection,
-					 event->xselectionrequest.target,
-					 handler->data);
-		}
+                if (handler->procs.selectionDone != NULL) {
+                    handler->procs.selectionDone(handler->view,
+                                                 handler->selection,
+                                                 event->xselectionrequest.target,
+                                                 handler->data);
+                }
 
-		handler->flags.done_pending = 0;
-	    }
-	    break;
-	}
+                handler->flags.done_pending = 0;
+            }
+            break;
+        }
     }
 
     /* delete handlers */
@@ -283,10 +283,10 @@ getSelectionData(Display *dpy, Window win, Atom where)
     unsigned long len, bytes;
 
 
-    if (XGetWindowProperty(dpy, win, where, 0, MAX_PROPERTY_SIZE, 
-			   False, AnyPropertyType, &rtype, &bits, &len,
-			   &bytes, &data)!=Success) {
-	return NULL;
+    if (XGetWindowProperty(dpy, win, where, 0, MAX_PROPERTY_SIZE,
+                           False, AnyPropertyType, &rtype, &bits, &len,
+                           &bytes, &data)!=Success) {
+        return NULL;
     }
 
     bpi = bits/8;
@@ -307,30 +307,30 @@ handleNotifyEvent(XEvent *event)
     WMData *data;
 
     WM_ITERATE_ARRAY(selCallbacks, handler, iter) {
-	
-	if (W_VIEW_DRAWABLE(handler->view) != event->xselection.requestor
-	    || handler->selection != event->xselection.selection) {
-	    continue;
-	}
-	handler->flags.done_pending = 1;
-	
-	if (event->xselection.property == None) {
-	    data = NULL;
-	} else {
-	    data = getSelectionData(event->xselection.display, 
-				    event->xselection.requestor,
-				    event->xselection.property);
-	}
 
-	(*handler->callback)(handler->view, handler->selection, 
-			     handler->target, handler->timestamp,
-			     handler->data, data);
+        if (W_VIEW_DRAWABLE(handler->view) != event->xselection.requestor
+            || handler->selection != event->xselection.selection) {
+            continue;
+        }
+        handler->flags.done_pending = 1;
 
-	if (data != NULL) {
-	    WMReleaseData(data);
-	}
-	handler->flags.done_pending = 0;
-	handler->flags.delete_pending = 1;
+        if (event->xselection.property == None) {
+            data = NULL;
+        } else {
+            data = getSelectionData(event->xselection.display,
+                                    event->xselection.requestor,
+                                    event->xselection.property);
+        }
+
+        (*handler->callback)(handler->view, handler->selection,
+                             handler->target, handler->timestamp,
+                             handler->data, data);
+
+        if (data != NULL) {
+            WMReleaseData(data);
+        }
+        handler->flags.done_pending = 0;
+        handler->flags.delete_pending = 1;
     }
 
     /* delete callbacks */
@@ -351,20 +351,20 @@ W_HandleSelectionEvent(XEvent *event)
 {
     /*//printf("%d received selection ", event->xany.window);*/
     /*//switch(event->type) {
-    case SelectionNotify:
-        puts("notify"); break;
-    case SelectionRequest:
-        puts("request"); break;
-    case SelectionClear:
-        puts("clear"); break;
-    default:
-        puts("unknown"); break;
-    }*/
+     case SelectionNotify:
+     puts("notify"); break;
+     case SelectionRequest:
+     puts("request"); break;
+     case SelectionClear:
+     puts("clear"); break;
+     default:
+     puts("unknown"); break;
+     }*/
 
     if (event->type == SelectionNotify) {
-	handleNotifyEvent(event);
+        handleNotifyEvent(event);
     } else {
-	handleRequestEvent(event);
+        handleRequestEvent(event);
     }
 }
 
@@ -372,7 +372,7 @@ W_HandleSelectionEvent(XEvent *event)
 
 Bool
 WMCreateSelectionHandler(WMView *view, Atom selection, Time timestamp,
-			 WMSelectionProcs *procs, void *cdata)
+                         WMSelectionProcs *procs, void *cdata)
 {
     SelectionHandler *handler;
     Display *dpy = W_VIEW_SCREEN(view)->display;
@@ -397,7 +397,7 @@ WMCreateSelectionHandler(WMView *view, Atom selection, Time timestamp,
     memset(&handler->flags, 0, sizeof(handler->flags));
 
     if (selHandlers == NULL) {
-	selHandlers = WMCreateArrayWithDestructor(4, wfree);
+        selHandlers = WMCreateArrayWithDestructor(4, wfree);
     }
 
     WMAddToArray(selHandlers, handler);
@@ -409,16 +409,16 @@ WMCreateSelectionHandler(WMView *view, Atom selection, Time timestamp,
 
 Bool
 WMRequestSelection(WMView *view, Atom selection, Atom target, Time timestamp,
-		   WMSelectionCallback *callback, void *cdata)
+                   WMSelectionCallback *callback, void *cdata)
 {
     SelectionCallback *handler;
 
     if (XGetSelectionOwner(W_VIEW_SCREEN(view)->display, selection) == None)
-	return False;
+        return False;
 
     if (!XConvertSelection(W_VIEW_SCREEN(view)->display, selection, target,
-			   W_VIEW_SCREEN(view)->clipboardAtom,
-			   W_VIEW_DRAWABLE(view), timestamp)) {
+                           W_VIEW_SCREEN(view)->clipboardAtom,
+                           W_VIEW_DRAWABLE(view), timestamp)) {
         return False;
     }
 
@@ -433,7 +433,7 @@ WMRequestSelection(WMView *view, Atom selection, Atom target, Time timestamp,
     memset(&handler->flags, 0, sizeof(handler->flags));
 
     if (selCallbacks == NULL) {
-	selCallbacks = WMCreateArrayWithDestructor(4, wfree);
+        selCallbacks = WMCreateArrayWithDestructor(4, wfree);
     }
 
     WMAddToArray(selCallbacks, handler);

@@ -1,6 +1,6 @@
 /*
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -44,8 +44,8 @@
 
 
 #define CLIENT_EVENTS (StructureNotifyMask | PropertyChangeMask\
-	| EnterWindowMask | LeaveWindowMask | ColormapChangeMask \
-	| FocusChangeMask | VisibilityChangeMask)
+    | EnterWindowMask | LeaveWindowMask | ColormapChangeMask \
+    | FocusChangeMask | VisibilityChangeMask)
 
 typedef enum {
     WFM_PASSIVE, WFM_NO_INPUT, WFM_LOCALLY_ACTIVE, WFM_GLOBALLY_ACTIVE
@@ -54,36 +54,36 @@ typedef enum {
 
 /*
  * window attribute flags.
- * 
+ *
  * Note: attributes that should apply to the application as a
  * whole should only access the flags from app->main_window_desc->window_flags
  * This is to make sure that the application doesn't have many different
- * values for the same option. For example, imagine xfoo, which has 
+ * values for the same option. For example, imagine xfoo, which has
  * foo.bar as leader and it a child window named foo.baz. If you set
  * StartHidden YES for foo.bar and NO for foo.baz we must *always* guarantee
  * that the value that will be used will be that of the leader foo.bar.
  * The attributes inspector must always save application wide options
  * in the name of the leader window, not the child.
- * 
+ *
  */
 /*
  * All flags must have their default values = 0
- * 
+ *
  * New flag scheme:
- * 
+ *
  * user_flags, defined_flags
  * client_flags
- * 
+ *
  * if defined window_flag then window_flag else client_flag
- * 
+ *
  */
 
 #define WFLAGP(wwin, FLAG)	((wwin)->defined_user_flags.FLAG \
-					? (wwin)->user_flags.FLAG \
-					: (wwin)->client_flags.FLAG)
+    ? (wwin)->user_flags.FLAG \
+    : (wwin)->client_flags.FLAG)
 
 #define WSETUFLAG(wwin, FLAG, VAL)	(wwin)->user_flags.FLAG = (VAL),\
-					(wwin)->defined_user_flags.FLAG = 1
+    (wwin)->defined_user_flags.FLAG = 1
 
 typedef struct {
     /* OpenStep */
@@ -101,7 +101,7 @@ typedef struct {
     unsigned int no_resizebar:1;       /* draw the bottom handle? */
     unsigned int no_close_button:1;    /* draw a close button? */
     unsigned int no_miniaturize_button:1; /* draw an iconify button? */
-    
+
     unsigned int broken_close:1;       /* is the close button broken? */
 
     /* ours */
@@ -113,10 +113,10 @@ typedef struct {
     unsigned int floating:1;	       /* put in WMFloatingLevel */
     unsigned int sunken:1;	       /* put in WMSunkenLevel */
     unsigned int no_bind_keys:1;       /* intercept wm kbd binds
-					* while window is focused */
+                                        * while window is focused */
     unsigned int no_bind_mouse:1;      /* intercept mouse events
-					* on client area while window
-					* is focused */
+                                        * on client area while window
+                                        * is focused */
     unsigned int no_hide_others:1;     /* hide window when doing hideothers */
     unsigned int no_appicon:1;	       /* make app icon */
 
@@ -125,9 +125,9 @@ typedef struct {
     unsigned int dont_move_off:1;
 
     unsigned int no_focusable:1;
-    
+
     unsigned int always_user_icon:1;   /* ignore client IconPixmap or
-					* IconWindow */
+                                        * IconWindow */
 
     unsigned int start_miniaturized:1;
     unsigned int start_hidden:1;
@@ -165,7 +165,7 @@ typedef struct {
     unsigned int SAVE_YOURSELF:1;
     /* WindowMaker specific */
     unsigned int MINIATURIZE_WINDOW:1;
-#ifdef MONITOR_HEARTBEAT 
+#ifdef MONITOR_HEARTBEAT
     unsigned int HEARTBEAT:1;
 #endif
 } WProtocols;
@@ -194,7 +194,7 @@ typedef struct WWindow {
     WWindowAttributes user_flags;      /* window attribute flags set by user */
     WWindowAttributes defined_user_flags;/* mask for user_flags */
     WWindowAttributes client_flags;    /* window attribute flags set by app
-					* initialized with global defaults */
+                                        * initialized with global defaults */
 
     struct InspectorPanel *inspector;  /*  pointer to attribute editor panel */
 
@@ -202,23 +202,23 @@ typedef struct WWindow {
     int frame_x, frame_y;	       /* position of the frame in root*/
 
     struct {
-	int x, y;
-	unsigned int width, height;    /* original geometry of the window */
+        int x, y;
+        unsigned int width, height;    /* original geometry of the window */
     } old_geometry;		       /* (before things like maximize) */
 
     struct {
-	int x, y;
-	unsigned int width, height;    /* original geometry of the window */
+        int x, y;
+        unsigned int width, height;    /* original geometry of the window */
     } bfs_geometry;		       /* (before fullscreen) */
 
     /* client window info */
     short old_border_width;	       /* original border width of client_win*/
     Window client_win;		       /* the window we're managing */
-    WObjDescriptor client_descriptor; /* dummy descriptor for client */
+    WObjDescriptor client_descriptor;  /* dummy descriptor for client */
     struct {
-	int x, y;		       /* position of *client* relative 
-					* to root */
-	unsigned int width, height;    /* size of the client window */
+        int x, y;		       /* position of *client* relative
+                                        * to root */
+        unsigned int width, height;    /* size of the client window */
     } client;
 
     XSizeHints *normal_hints;	       /* WM_NORMAL_HINTS */
@@ -235,7 +235,7 @@ typedef struct WWindow {
                                           a single appicon */
     Window group_id;		       /* the leader window of the group */
     Window client_leader;	       /* WM_CLIENT_LEADER if not
-					  internal_window */
+                                          internal_window */
 
     Window main_window;		       /* main window for the application */
 
@@ -260,69 +260,69 @@ typedef struct WWindow {
     time_t last_beat;
 #endif
     struct {
-	/* state flags */
-	unsigned int mapped:1;	
-	unsigned int focused:1;
-	unsigned int miniaturized:1;
-	unsigned int hidden:1;
-	unsigned int shaded:1;
-	unsigned int maximized:2;
-	unsigned int fullscreen:1;
-	unsigned int omnipresent:1;
+        /* state flags */
+        unsigned int mapped:1;
+        unsigned int focused:1;
+        unsigned int miniaturized:1;
+        unsigned int hidden:1;
+        unsigned int shaded:1;
+        unsigned int maximized:2;
+        unsigned int fullscreen:1;
+        unsigned int omnipresent:1;
 
-	unsigned int semi_focused:1;
-	/* window type flags */
-	unsigned int urgent:1;	       /* if wm_hints says this is urgent */
+        unsigned int semi_focused:1;
+        /* window type flags */
+        unsigned int urgent:1;	       /* if wm_hints says this is urgent */
 #ifdef SHAPE
-	unsigned int shaped:1;
+        unsigned int shaped:1;
 #endif
 
-	/* info flags */
-	unsigned int is_gnustep:1;     /* 1 if the window belongs to a GNUstep
-					app */
-	
-	unsigned int buttons_dont_fit:1;
-	unsigned int rebuild_texture:1;/* the window was resized and 
-					* gradients should be re-rendered */
-	unsigned int needs_full_repaint:1;/* does a full repaint of the 
-					   * window next time it's painted */
-	unsigned int icon_moved:1;     /* icon for this window was moved
-					* by the user */
-	unsigned int selected:1;       /* multiple window selection */
-	unsigned int skip_next_animation:1;
-	unsigned int internal_window:1;
-	unsigned int changing_workspace:1;
+        /* info flags */
+        unsigned int is_gnustep:1;  /* 1 if the window belongs to a GNUstep
+                                       app */
+
+        unsigned int buttons_dont_fit:1;
+        unsigned int rebuild_texture:1;  /* the window was resized and
+                                          * gradients should be re-rendered */
+        unsigned int needs_full_repaint:1;/* does a full repaint of the
+                                           * window next time it's painted */
+        unsigned int icon_moved:1;     /* icon for this window was moved
+                                        * by the user */
+        unsigned int selected:1;       /* multiple window selection */
+        unsigned int skip_next_animation:1;
+        unsigned int internal_window:1;
+        unsigned int changing_workspace:1;
 
         unsigned int inspector_open:1; /* attrib inspector is already open */
 
-	unsigned int destroyed:1;      /* window was already destroyed */
+        unsigned int destroyed:1;      /* window was already destroyed */
 
-	unsigned int menu_open_for_me:1;   /* window commands menu */
+        unsigned int menu_open_for_me:1;   /* window commands menu */
 
-	unsigned int waiting_save_ack:1;   /* waiting for SAVE_YOURSELF ack */
+        unsigned int waiting_save_ack:1;   /* waiting for SAVE_YOURSELF ack */
 
-	unsigned int obscured:1;       /* window is obscured */
+        unsigned int obscured:1;       /* window is obscured */
 
-	unsigned int dragged_while_fmaximized;
+        unsigned int dragged_while_fmaximized;
 
-	unsigned int user_changed_width:1;
-	unsigned int user_changed_height:1;
-	unsigned int wm_name_changed:1;
+        unsigned int user_changed_width:1;
+        unsigned int user_changed_height:1;
+        unsigned int wm_name_changed:1;
 
 #ifdef KWM_HINTS
-	unsigned int kwm_hidden_for_modules:1;
-	unsigned int kwm_managed:1;
-	unsigned int kwm_menubar:1;
+        unsigned int kwm_hidden_for_modules:1;
+        unsigned int kwm_managed:1;
+        unsigned int kwm_menubar:1;
 #endif
 #ifdef OLWM_HINTS
-	unsigned int olwm_push_pin_out:1;/* emulate pushpin behaviour */
-	unsigned int olwm_limit_menu:1;
+        unsigned int olwm_push_pin_out:1;/* emulate pushpin behaviour */
+        unsigned int olwm_limit_menu:1;
 #endif
 #ifdef NETWM_HINTS
-	unsigned int net_state_from_client:1; /* state hint was set by client */
-	unsigned int net_skip_pager:1;
-	unsigned int net_handle_icon:1;
-	unsigned int net_show_desktop:1;
+        unsigned int net_state_from_client:1; /* state hint was set by client */
+        unsigned int net_skip_pager:1;
+        unsigned int net_handle_icon:1;
+        unsigned int net_show_desktop:1;
 #endif
     } flags;		/* state of the window */
 
@@ -355,7 +355,7 @@ typedef struct WWindow {
 
 /*
  * Changes to this must update wWindowSaveState/getSavedState
- * 
+ *
  */
 typedef struct WSavedState {
     int workspace;
@@ -403,9 +403,9 @@ void wWindowUnfocus(WWindow *wwin);
 void wWindowUpdateName(WWindow *wwin, char *newTitle);
 void wWindowConstrainSize(WWindow *wwin, int *nwidth, int *nheight);
 void wWindowCropSize(WWindow *wwin, int maxw, int maxh,
-		     int *nwidth, int *nheight);
-void wWindowConfigure(WWindow *wwin, int req_x, int req_y, 
-		      int req_width, int req_height);
+                     int *nwidth, int *nheight);
+void wWindowConfigure(WWindow *wwin, int req_x, int req_y,
+                      int req_width, int req_height);
 
 void wWindowMove(WWindow *wwin, int req_x, int req_y);
 
@@ -427,8 +427,8 @@ void wWindowSetKeyGrabs(WWindow *wwin);
 void wWindowResetMouseGrabs(WWindow *wwin);
 
 WWindow *wManageInternalWindow(WScreen *scr, Window window, Window owner,
-			       char *title, int x, int y, 
-			       int width, int height);
+                               char *title, int x, int y,
+                               int width, int height);
 
 void wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace);
 

@@ -1,8 +1,8 @@
 /*
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -42,15 +42,15 @@
 /* class codes */
 typedef enum {
     WCLASS_UNKNOWN = 0,
-	WCLASS_WINDOW = 1,	       /* managed client windows */
-	WCLASS_MENU = 2,	       /* root menus */
-	WCLASS_APPICON = 3,
-	WCLASS_DUMMYWINDOW = 4,	       /* window that holds window group leader */
-	WCLASS_MINIWINDOW = 5,
-	WCLASS_DOCK_ICON = 6,
-	WCLASS_PAGER = 7,
-	WCLASS_TEXT_INPUT = 8,
-	WCLASS_FRAME = 9
+    WCLASS_WINDOW = 1,		/* managed client windows */
+    WCLASS_MENU = 2,		/* root menus */
+    WCLASS_APPICON = 3,
+    WCLASS_DUMMYWINDOW = 4,	/* window that holds window group leader */
+    WCLASS_MINIWINDOW = 5,
+    WCLASS_DOCK_ICON = 6,
+    WCLASS_PAGER = 7,
+    WCLASS_TEXT_INPUT = 8,
+    WCLASS_FRAME = 9
 } WClassType;
 
 
@@ -61,25 +61,25 @@ typedef enum {
  * but discouraged.
  */
 enum {
-	WMBackLevel = INT_MIN+1,	/* Very lowest level */
-	WMDesktopLevel = -1000,		/* Lowest level of normal use */
-	WMSunkenLevel = -1,
-	WMNormalLevel = 0,
-	WMFloatingLevel = 3,
-	WMDockLevel = 5,
-	WMSubmenuLevel = 6,
-	WMMainMenuLevel = 20,
-	WMStatusLevel = 21,
-	WMFullscreenLevel = 50,
-	WMModalLevel = 100,
-	WMPopUpLevel = 101,
-	WMScreensaverLevel = 1000,
-	WMOuterSpaceLevel = INT_MAX
+    WMBackLevel = INT_MIN+1,	/* Very lowest level */
+    WMDesktopLevel = -1000,		/* Lowest level of normal use */
+    WMSunkenLevel = -1,
+    WMNormalLevel = 0,
+    WMFloatingLevel = 3,
+    WMDockLevel = 5,
+    WMSubmenuLevel = 6,
+    WMMainMenuLevel = 20,
+    WMStatusLevel = 21,
+    WMFullscreenLevel = 50,
+    WMModalLevel = 100,
+    WMPopUpLevel = 101,
+    WMScreensaverLevel = 1000,
+    WMOuterSpaceLevel = INT_MAX
 };
 
 /*
  * WObjDescriptor will be used by the event dispatcher to
- * send events to a particular object through the methods in the 
+ * send events to a particular object through the methods in the
  * method table. If all objects of the same class share the
  * same methods, the class method table should be used, otherwise
  * a new method table must be created for each object.
@@ -88,10 +88,10 @@ enum {
  */
 
 typedef struct WObjDescriptor {
-    void *self;			       /* the object that will be called */    
-				       /* event handlers */
+    void *self;			       /* the object that will be called */
+    /* event handlers */
     void (*handle_expose)(struct WObjDescriptor *sender, XEvent *event);
-    
+
     void (*handle_mousedown)(struct WObjDescriptor *sender, XEvent *event);
 
     void (*handle_anything)(struct WObjDescriptor *sender, XEvent *event);
@@ -107,9 +107,9 @@ typedef struct WObjDescriptor {
 /* shutdown modes */
 typedef enum {
     WSExitMode,
-	WSLogoutMode,
-	WSKillMode,
-	WSRestartPreparationMode
+    WSLogoutMode,
+    WSKillMode,
+    WSRestartPreparationMode
 } WShutdownMode;
 
 
@@ -262,10 +262,10 @@ typedef enum {
 
 #define WCHANGE_STATE(nstate) {\
     if (WProgramState == WSTATE_NORMAL\
-	    || nstate != WSTATE_MODAL)\
-	WProgramState = (nstate); \
+        || nstate != WSTATE_MODAL)\
+        WProgramState = (nstate); \
     if (WProgramSigState != 0)\
-	WProgramState = WProgramSigState;\
+        WProgramState = WProgramSigState;\
 }
 
 
@@ -303,8 +303,8 @@ NOTIFICATION(MenuTitleAppearanceSettingsChanged);
 /* appearance settings clientdata flags */
 enum {
     WFontSettings = 1 << 0,
-	WTextureSettings = 1 << 1,
-	WColorSettings = 1 << 2
+    WTextureSettings = 1 << 1,
+    WColorSettings = 1 << 2
 };
 
 
@@ -320,9 +320,9 @@ typedef struct WCoord {
 
 typedef struct WPreferences {
     char *pixmap_path;		       /* : separate list of */
-				       /* paths to find pixmaps */
+    /* paths to find pixmaps */
     char *icon_path;		       /* : separated list of */
-				       /* paths to find icons */
+    /* paths to find icons */
     WMArray *fallbackWMs;              /* fallback window manager list */
 
     char *logger_shell;		       /* shell to log child stdi/o */
@@ -335,25 +335,25 @@ typedef struct WPreferences {
     signed char window_placement;	       /* window placement mode */
     signed char colormap_mode;		       /* colormap focus mode */
     signed char focus_mode;		       /* window focusing mode */
-    
+
     char opaque_move;		       /* update window position during */
-				       /* move */
+    /* move */
 
     char wrap_menus;		       /* wrap menus at edge of screen */
     char scrollable_menus;	       /* let them be scrolled */
     char align_menus;		       /* align menu with their parents */
-    
+
     char use_saveunders;	       /* turn on SaveUnders for menus,
-					* icons etc. */ 
+    * icons etc. */
     char no_window_over_dock;
 
     char no_window_over_icons;
 
     WCoord window_place_origin;	       /* Offset for windows placed on
-                                        * screen */
+    * screen */
 
-    char constrain_window_size;	       /* don't let windows get bigger than 
-					* screen */
+    char constrain_window_size;	       /* don't let windows get bigger than
+    * screen */
 
     char windows_cycling;	       /* windoze cycling */
     char circ_raise;		       /* raise window after Alt-tabbing */
@@ -361,7 +361,7 @@ typedef struct WPreferences {
     char ignore_focus_click;
 
     char open_transients_with_parent;  /* open transient window in
-					same workspace as parent */
+    same workspace as parent */
     signed char title_justification;	       /* titlebar text alignment */
 
     int window_title_clearance;
@@ -374,21 +374,21 @@ typedef struct WPreferences {
 #endif
 
     char no_dithering;		       /* use dithering or not */
-    
+
     char no_sound;		       /* enable/disable sound */
     char no_animations;		       /* enable/disable animations */
-    
+
     char no_autowrap;		       /* wrap workspace when window is moved
-					* to the edge */
-    
+    * to the edge */
+
     char auto_arrange_icons;	       /* automagically arrange icons */
-    
+
     char icon_box_position;	       /* position to place icons */
-    
+
     signed char iconification_style;          /* position to place icons */
-    
+
     char disable_root_mouse;	       /* disable button events in root window */
-    
+
     char auto_focus;		       /* focus window when it's mapped */
 
 
@@ -398,20 +398,20 @@ typedef struct WPreferences {
     WCoord *app_menu_pos;
 
     WCoord *win_menu_pos;
-    
+
     signed char icon_yard;		       /* aka iconbox */
 
     int raise_delay;		       /* delay for autoraise. 0 is disabled */
 
     int cmap_size;		       /* size of dithering colormap in colors
-					* per channel */
+    * per channel */
 
     int icon_size;		       /* size of the icon */
 
     signed char menu_style;	       /* menu decoration style */
 
     signed char workspace_name_display_position;
-    
+
     unsigned int modifier_mask;	       /* mask to use as kbd modifier */
 
 
@@ -437,7 +437,7 @@ typedef struct WPreferences {
     char disable_miniwindows;
 
     char dont_blink;		       /* do not blink icon selection */
-    
+
     /* Appearance options */
     char new_style;		       /* Use newstyle buttons */
     char superfluous;		       /* Use superfluous things */
@@ -453,7 +453,7 @@ typedef struct WPreferences {
     char miniwin_balloon;
     char appicon_balloon;
     char help_balloon;
-        
+
     /* some constants */
     int dblclick_time;		       /* double click delay time in ms */
 
@@ -475,11 +475,11 @@ typedef struct WPreferences {
     struct {
         unsigned int nodock:1;	       /* don't display the dock */
         unsigned int noclip:1;         /* don't display the clip */
-	unsigned int nocpp:1;	       /* don't use cpp */
-	unsigned int noupdates:1;      /* don't require ~/GNUstep (-static) */
-	unsigned int noautolaunch:1;   /* don't autolaunch apps */
-	unsigned int norestore:1;      /* don't restore session */
-	unsigned int create_stdcmap:1; /* create std colormap */
+        unsigned int nocpp:1;	       /* don't use cpp */
+        unsigned int noupdates:1;      /* don't require ~/GNUstep (-static) */
+        unsigned int noautolaunch:1;   /* don't autolaunch apps */
+        unsigned int norestore:1;      /* don't restore session */
+        unsigned int create_stdcmap:1; /* create std colormap */
         unsigned int nopolling:1;      /* don't poll for defaults changes */
     } flags;			       /* internal flags */
 } WPreferences;
@@ -514,3 +514,4 @@ extern const char *WMNWorkspaceNameChanged;
 
 extern const char *WMNResetStacking;
 #endif
+

@@ -67,17 +67,17 @@
 extern WPreferences wPreferences;
 
 
-static WMPoint getCenter(WScreen *scr, int width, int height)
+static WMPoint
+getCenter(WScreen *scr, int width, int height)
 {
-    return wGetPointToCenterRectInHead(scr, 
-			     wGetHeadForPointerLocation(scr), 
-			     width, height);
+    return wGetPointToCenterRectInHead(scr, wGetHeadForPointerLocation(scr),
+                                       width, height);
 }
 
 
 int
 wMessageDialog(WScreen *scr, char *title, char *message,
-	       char *defBtn, char *altBtn, char *othBtn)
+               char *defBtn, char *altBtn, char *othBtn)
 {
     WMAlertPanel *panel;
     Window parent;
@@ -86,16 +86,16 @@ wMessageDialog(WScreen *scr, char *title, char *message,
     WMPoint center;
 
     panel = WMCreateAlertPanel(scr->wmscreen, NULL, title, message,
-			       defBtn, altBtn, othBtn);
+                               defBtn, altBtn, othBtn);
 
     parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 400, 180, 0, 0, 0);
 
     XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
-    
+
     center = getCenter(scr, 400, 180);
     wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y,
-				 400, 180);
+                                 400, 180);
     wwin->client_leader = WMWidgetXID(panel->win);
 
     WMMapWidget(panel->win);
@@ -143,7 +143,7 @@ wExitDialog(WScreen *scr, char *title, char *message,
     saveSessionBtn = WMCreateSwitchButton(panel->hbox);
     WMSetButtonAction(saveSessionBtn, toggleSaveSession, NULL);
     WMAddBoxSubview(panel->hbox, WMWidgetView(saveSessionBtn),
-                            False, True, 200, 0, 0);
+                    False, True, 200, 0, 0);
     WMSetButtonText(saveSessionBtn, _("Save workspace state"));
     WMSetButtonSelected(saveSessionBtn, wPreferences.save_session_on_exit);
     WMRealizeWidget(saveSessionBtn);
@@ -155,7 +155,7 @@ wExitDialog(WScreen *scr, char *title, char *message,
 
     center = getCenter(scr, 400, 180);
     wwin = wManageInternalWindow(scr, parent, None, NULL,
-                                center.x, center.y, 400, 180);
+                                 center.x, center.y, 400, 180);
 
     wwin->client_leader = WMWidgetXID(panel->win);
 
@@ -189,7 +189,7 @@ wInputDialog(WScreen *scr, char *title, char *message, char **text)
     WMPoint center;
 
     panel = WMCreateInputPanel(scr->wmscreen, NULL, title, message, *text,
-			       _("OK"), _("Cancel"));
+                               _("OK"), _("Cancel"));
 
 
     parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 320, 160, 0, 0, 0);
@@ -199,7 +199,7 @@ wInputDialog(WScreen *scr, char *title, char *message, char **text)
 
     center = getCenter(scr, 320, 160);
     wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y,
-				 320, 160);
+                                 320, 160);
 
     wwin->client_leader = WMWidgetXID(panel->win);
 
@@ -210,9 +210,9 @@ wInputDialog(WScreen *scr, char *title, char *message, char **text)
     WMRunModalLoop(WMWidgetScreen(panel->win), WMWidgetView(panel->win));
 
     if (panel->result == WAPRDefault)
-	result = WMGetTextFieldText(panel->text);
+        result = WMGetTextFieldText(panel->text);
     else
-	result = NULL;
+        result = NULL;
 
     wUnmanageWindow(wwin, False, False);
 
@@ -221,7 +221,7 @@ wInputDialog(WScreen *scr, char *title, char *message, char **text)
     XDestroyWindow(dpy, parent);
 
     if (result==NULL)
-	return False;
+        return False;
     else {
         if (*text)
             wfree(*text);
@@ -285,38 +285,38 @@ listPixmaps(WScreen *scr, WMList *lPtr, char *path)
     dir = opendir(apath);
 
     if (!dir) {
-	char *msg;
-	char *tmp;
-	tmp = _("Could not open directory ");
-	msg = wmalloc(strlen(tmp)+strlen(path)+6);
-	strcpy(msg, tmp);
-	strcat(msg, path);
+        char *msg;
+        char *tmp;
+        tmp = _("Could not open directory ");
+        msg = wmalloc(strlen(tmp)+strlen(path)+6);
+        strcpy(msg, tmp);
+        strcat(msg, path);
 
-	wMessageDialog(scr, _("Error"), msg, _("OK"), NULL, NULL);
-	wfree(msg);
-	wfree(apath);
-	return;
+        wMessageDialog(scr, _("Error"), msg, _("OK"), NULL, NULL);
+        wfree(msg);
+        wfree(apath);
+        return;
     }
 
     /* list contents in the column */
     while ((dentry = readdir(dir))) {
-	struct stat statb;
+        struct stat statb;
 
-	if (strcmp(dentry->d_name, ".")==0 ||
-	    strcmp(dentry->d_name, "..")==0)
-	    continue;
+        if (strcmp(dentry->d_name, ".")==0 ||
+            strcmp(dentry->d_name, "..")==0)
+            continue;
 
-	strcpy(pbuf, apath);
-	strcat(pbuf, "/");
-	strcat(pbuf, dentry->d_name);
+        strcpy(pbuf, apath);
+        strcat(pbuf, "/");
+        strcat(pbuf, dentry->d_name);
 
-	if (stat(pbuf, &statb)<0)
-	    continue;
+        if (stat(pbuf, &statb)<0)
+            continue;
 
-	if (statb.st_mode & (S_IRUSR|S_IRGRP|S_IROTH)
-	    && statb.st_mode & (S_IFREG|S_IFLNK)) {
-	    WMAddListItem(lPtr, dentry->d_name);
-	}
+        if (statb.st_mode & (S_IRUSR|S_IRGRP|S_IROTH)
+            && statb.st_mode & (S_IFREG|S_IFLNK)) {
+            WMAddListItem(lPtr, dentry->d_name);
+        }
     }
     WMSortListItems(lPtr);
 
@@ -338,19 +338,19 @@ setViewedImage(IconPanel *panel, char *file)
     color.blue = 0xae;
     color.alpha = 0;
     pixmap = WMCreateBlendedPixmapFromFile(WMWidgetScreen(panel->win),
-					   file, &color);
+                                           file, &color);
     if (!pixmap) {
-	WMSetButtonEnabled(panel->okButton, False);
+        WMSetButtonEnabled(panel->okButton, False);
 
-	WMSetLabelText(panel->iconView, _("Could not load image file "));
+        WMSetLabelText(panel->iconView, _("Could not load image file "));
 
-	WMSetLabelImage(panel->iconView, NULL);
+        WMSetLabelImage(panel->iconView, NULL);
     } else {
-	WMSetButtonEnabled(panel->okButton, True);
+        WMSetButtonEnabled(panel->okButton, True);
 
-	WMSetLabelText(panel->iconView, NULL);
-	WMSetLabelImage(panel->iconView, pixmap);
-	WMReleasePixmap(pixmap);
+        WMSetLabelText(panel->iconView, NULL);
+        WMSetLabelImage(panel->iconView, pixmap);
+        WMReleasePixmap(pixmap);
     }
 }
 
@@ -363,42 +363,42 @@ listCallback(void *self, void *data)
     char *path;
 
     if (lPtr==panel->dirList) {
-	WMListItem *item = WMGetListSelectedItem(lPtr);
+        WMListItem *item = WMGetListSelectedItem(lPtr);
 
-	if (item == NULL)
-	    return;
-	path = item->text;
+        if (item == NULL)
+            return;
+        path = item->text;
 
-	WMSetTextFieldText(panel->fileField, path);
+        WMSetTextFieldText(panel->fileField, path);
 
-	WMSetLabelImage(panel->iconView, NULL);
+        WMSetLabelImage(panel->iconView, NULL);
 
-	WMSetButtonEnabled(panel->okButton, False);
+        WMSetButtonEnabled(panel->okButton, False);
 
-	WMClearList(panel->iconList);
-	listPixmaps(panel->scr, panel->iconList, path);
+        WMClearList(panel->iconList);
+        listPixmaps(panel->scr, panel->iconList, path);
     } else {
-	char *tmp, *iconFile;
-	WMListItem *item = WMGetListSelectedItem(panel->dirList);
+        char *tmp, *iconFile;
+        WMListItem *item = WMGetListSelectedItem(panel->dirList);
 
-	if (item == NULL)
-	    return;
-	path = item->text;
-	tmp = wexpandpath(path);
+        if (item == NULL)
+            return;
+        path = item->text;
+        tmp = wexpandpath(path);
 
-	item = WMGetListSelectedItem(panel->iconList);
-	if (item == NULL)
-	    return;
-	iconFile = item->text;
+        item = WMGetListSelectedItem(panel->iconList);
+        if (item == NULL)
+            return;
+        iconFile = item->text;
 
-	path = wmalloc(strlen(tmp)+strlen(iconFile)+4);
-	strcpy(path, tmp);
-	strcat(path, "/");
-	strcat(path, iconFile);
-	wfree(tmp);
-	WMSetTextFieldText(panel->fileField, path);
-	setViewedImage(panel, path);
-	wfree(path);
+        path = wmalloc(strlen(tmp)+strlen(iconFile)+4);
+        strcpy(path, tmp);
+        strcat(path, "/");
+        strcat(path, iconFile);
+        wfree(tmp);
+        WMSetTextFieldText(panel->fileField, path);
+        setViewedImage(panel, path);
+        wfree(path);
     }
 }
 
@@ -414,14 +414,14 @@ listIconPaths(WMList *lPtr)
     path = strtok(paths, ":");
 
     do {
-	char *tmp;
+        char *tmp;
 
-	tmp = wexpandpath(path);
-	/* do not sort, because the order implies the order of
-	 * directories searched */
-	if (access(tmp, X_OK)==0)
-	    WMAddListItem(lPtr, path);
-	wfree(tmp);
+        tmp = wexpandpath(path);
+        /* do not sort, because the order implies the order of
+         * directories searched */
+        if (access(tmp, X_OK)==0)
+            WMAddListItem(lPtr, path);
+        wfree(tmp);
     } while ((path=strtok(NULL, ":"))!=NULL);
 
     wfree(paths);
@@ -483,21 +483,21 @@ drawIconProc(WMList *lPtr, int index, Drawable d, char *text, int state,
     XSetClipMask(dpy, copygc, WMGetPixmapMaskXID(pixmap));
     XSetClipOrigin(dpy, copygc, x + (width-size.width)/2, y+2);
     XCopyArea(dpy, WMGetPixmapXID(pixmap), d, copygc, 0, 0,
-	      size.width>100?100:size.width, size.height>64?64:size.height,
-	      x + (width-size.width)/2, y+2);
+              size.width>100?100:size.width, size.height>64?64:size.height,
+              x + (width-size.width)/2, y+2);
 
     {
         int i,j;
-	int fheight = WMFontHeight(panel->normalfont);
-	int tlen = strlen(text);
-	int twidth = WMWidthOfString(panel->normalfont, text, tlen);
-	int ofx, ofy;
+        int fheight = WMFontHeight(panel->normalfont);
+        int tlen = strlen(text);
+        int twidth = WMWidthOfString(panel->normalfont, text, tlen);
+        int ofx, ofy;
 
-	ofx = x + (width - twidth)/2;
-	ofy = y + 64 - fheight;
+        ofx = x + (width - twidth)/2;
+        ofy = y + 64 - fheight;
 
         for(i=-1;i<2;i++)
-	    for(j=-1;j<2;j++)
+            for(j=-1;j<2;j++)
                 WMDrawString(wmscr, d, scr->white, panel->normalfont,
                              ofx+i, ofy+j, text, tlen);
 
@@ -519,11 +519,11 @@ buttonCallback(void *self, void *clientData)
 
 
     if (bPtr==panel->okButton) {
-	panel->done = True;
-	panel->result = True;
+        panel->done = True;
+        panel->result = True;
     } else if (bPtr==panel->cancelButton) {
-	panel->done = True;
-	panel->result = False;
+        panel->done = True;
+        panel->result = False;
     } else if (bPtr==panel->previewButton) {
         /**** Previewer ****/
         WMSetButtonEnabled(bPtr, False);
@@ -535,18 +535,18 @@ buttonCallback(void *self, void *clientData)
     }
 #if 0
     else if (bPtr==panel->chooseButton) {
-	WMOpenPanel *op;
+        WMOpenPanel *op;
 
-	op = WMCreateOpenPanel(WMWidgetScreen(bPtr));
+        op = WMCreateOpenPanel(WMWidgetScreen(bPtr));
 
-	if (WMRunModalFilePanelForDirectory(op, NULL, "/usr/local", NULL, NULL)) {
-	    char *path;
-	    path = WMGetFilePanelFile(op);
-	    WMSetTextFieldText(panel->fileField, path);
-	    setViewedImage(panel, path);
-	    wfree(path);
-	}
-	WMDestroyFilePanel(op);
+        if (WMRunModalFilePanelForDirectory(op, NULL, "/usr/local", NULL, NULL)) {
+            char *path;
+            path = WMGetFilePanelFile(op);
+            WMSetTextFieldText(panel->fileField, path);
+            setViewedImage(panel, path);
+            wfree(path);
+        }
+        WMDestroyFilePanel(op);
     }
 #endif
 }
@@ -563,9 +563,9 @@ keyPressHandler(XEvent *event, void *data)
     int didx;
     int item;
     WMList *list = NULL;
-    
+
     if (event->type == KeyRelease)
-	return;
+        return;
 
     buffer[0] = 0;
     count = XLookupString(&event->xkey, buffer, sizeof(buffer), &ksym, NULL);
@@ -575,54 +575,54 @@ keyPressHandler(XEvent *event, void *data)
     didx = WMGetListSelectedItemRow(panel->dirList);
 
     switch (ksym) {
-     case XK_Up:
-	if (iidx > 0)
-	    item = iidx-1;
-	else
-	    item = iidx;
-	list = panel->iconList;
-	break;
-     case XK_Down:
-	if (iidx < WMGetListNumberOfRows(panel->iconList) - 1)
-	    item = iidx+1;
-	else
-	    item = iidx;
-	list = panel->iconList;
-	break;
-     case XK_Home:
-	item = 0;
-	list = panel->iconList;
-	break;
-     case XK_End:
-	item = WMGetListNumberOfRows(panel->iconList) - 1;
-	list = panel->iconList;
-	break;
-     case XK_Next:
-	if (didx < WMGetListNumberOfRows(panel->dirList) - 1)
-	    item = didx + 1;
-	else
-	    item = didx;
-	list = panel->dirList;
-	break;
-     case XK_Prior:
-	if (didx > 0)
-	    item = didx - 1;
-	else
-	    item = 0;
-	list = panel->dirList;
-	break;
-     case XK_Return:
-	WMPerformButtonClick(panel->okButton);
-	break;
-     case XK_Escape:
-	WMPerformButtonClick(panel->cancelButton);
-	break;
+    case XK_Up:
+        if (iidx > 0)
+            item = iidx-1;
+        else
+            item = iidx;
+        list = panel->iconList;
+        break;
+    case XK_Down:
+        if (iidx < WMGetListNumberOfRows(panel->iconList) - 1)
+            item = iidx+1;
+        else
+            item = iidx;
+        list = panel->iconList;
+        break;
+    case XK_Home:
+        item = 0;
+        list = panel->iconList;
+        break;
+    case XK_End:
+        item = WMGetListNumberOfRows(panel->iconList) - 1;
+        list = panel->iconList;
+        break;
+    case XK_Next:
+        if (didx < WMGetListNumberOfRows(panel->dirList) - 1)
+            item = didx + 1;
+        else
+            item = didx;
+        list = panel->dirList;
+        break;
+    case XK_Prior:
+        if (didx > 0)
+            item = didx - 1;
+        else
+            item = 0;
+        list = panel->dirList;
+        break;
+    case XK_Return:
+        WMPerformButtonClick(panel->okButton);
+        break;
+    case XK_Escape:
+        WMPerformButtonClick(panel->cancelButton);
+        break;
     }
 
     if (list) {
-	WMSelectListItem(list, item);
-	WMSetListPosition(list, item - 5);
-	listCallback(list, panel);
+        WMSelectListItem(list, item);
+        WMSetListPosition(list, item - 5);
+        listCallback(list, panel);
     }
 }
 
@@ -647,7 +647,7 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
     WMResizeWidget(panel->win, 450, 280);
 
     WMCreateEventHandler(WMWidgetView(panel->win), KeyPressMask|KeyReleaseMask,
-			 keyPressHandler, panel);
+                         keyPressHandler, panel);
 
 
     boldFont = WMBoldSystemFontOfSize(scr->wmscreen, 12);
@@ -746,23 +746,23 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
     XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
     {
-	char *tmp;
-	int len = (instance ? strlen(instance) : 0)
-	    + (class ? strlen(class) : 0) + 32;
-	WMPoint center;
+        char *tmp;
+        int len = (instance ? strlen(instance) : 0)
+            + (class ? strlen(class) : 0) + 32;
+        WMPoint center;
 
-	tmp = wmalloc(len);
+        tmp = wmalloc(len);
 
-	if (tmp && (instance || class))
-	    snprintf(tmp, len, "%s [%s.%s]", _("Icon Chooser"), instance, class);
-	else
-	    strcpy(tmp, _("Icon Chooser"));
+        if (tmp && (instance || class))
+            snprintf(tmp, len, "%s [%s.%s]", _("Icon Chooser"), instance, class);
+        else
+            strcpy(tmp, _("Icon Chooser"));
 
-	center = getCenter(scr, 450, 280);
-	
-	wwin = wManageInternalWindow(scr, parent, None, tmp, center.x,center.y,
-				     450, 280);
-	wfree(tmp);
+        center = getCenter(scr, 450, 280);
+
+        wwin = wManageInternalWindow(scr, parent, None, tmp, center.x,center.y,
+                                     450, 280);
+        wfree(tmp);
     }
 
     /* put icon paths in the list */
@@ -773,35 +773,35 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
     wWindowMap(wwin);
 
     while (!panel->done) {
-	XEvent event;
+        XEvent event;
 
-	WMNextEvent(dpy, &event);
-	WMHandleEvent(&event);
+        WMNextEvent(dpy, &event);
+        WMHandleEvent(&event);
     }
 
     if (panel->result) {
-	char *defaultPath, *wantedPath;
+        char *defaultPath, *wantedPath;
 
-	/* check if the file the user selected is not the one that
-	 * would be loaded by default with the current search path */
-	*file = WMGetListSelectedItem(panel->iconList)->text;
-	if (**file==0) {
-	    wfree(*file);
-	    *file = NULL;
-	} else {
-	    defaultPath = FindImage(wPreferences.icon_path, *file);
-	    wantedPath = WMGetTextFieldText(panel->fileField);
-	    /* if the file is not the default, use full path */
-	    if (strcmp(wantedPath, defaultPath)!=0) {
-		*file = wantedPath;
-	    } else {
-		*file = wstrdup(*file);
-		wfree(wantedPath);
-	    }
-	    wfree(defaultPath);
-	}
+        /* check if the file the user selected is not the one that
+         * would be loaded by default with the current search path */
+        *file = WMGetListSelectedItem(panel->iconList)->text;
+        if (**file==0) {
+            wfree(*file);
+            *file = NULL;
+        } else {
+            defaultPath = FindImage(wPreferences.icon_path, *file);
+            wantedPath = WMGetTextFieldText(panel->fileField);
+            /* if the file is not the default, use full path */
+            if (strcmp(wantedPath, defaultPath)!=0) {
+                *file = wantedPath;
+            } else {
+                *file = wstrdup(*file);
+                wfree(wantedPath);
+            }
+            wfree(defaultPath);
+        }
     } else {
-	*file = NULL;
+        *file = NULL;
     }
 
     result = panel->result;
@@ -862,8 +862,8 @@ typedef struct {
 
 
 #define COPYRIGHT_TEXT  \
-     "Copyright \xc2\xa9 1997-2004 Alfredo K. Kojima <kojima@windowmaker.org>\n"\
-     "Copyright \xc2\xa9 1998-2004 Dan Pascu <dan@windowmaker.org>"
+    "Copyright \xc2\xa9 1997-2004 Alfredo K. Kojima <kojima@windowmaker.org>\n"\
+    "Copyright \xc2\xa9 1998-2004 Dan Pascu <dan@windowmaker.org>"
 
 
 
@@ -874,19 +874,19 @@ destroyInfoPanel(WCoreWindow *foo, void *data, XEvent *event)
 {
 #ifdef SILLYNESS
     if (thePanel->timer) {
-	WMDeleteTimerHandler(thePanel->timer);
+        WMDeleteTimerHandler(thePanel->timer);
     }
     if (thePanel->oldPix) {
-	WMReleasePixmap(thePanel->oldPix);
+        WMReleasePixmap(thePanel->oldPix);
     }
     if (thePanel->oldFont) {
         WMReleaseFont(thePanel->oldFont);
     }
     if (thePanel->icon) {
-	RReleaseImage(thePanel->icon);
+        RReleaseImage(thePanel->icon);
     }
     if (thePanel->pic) {
-	RReleaseImage(thePanel->pic);
+        RReleaseImage(thePanel->pic);
     }
 #endif /* SILLYNESS */
     WMUnmapWidget(thePanel);
@@ -928,7 +928,7 @@ logoPushCallback(void *data)
 
         XGetKeyboardControl(dpy, &ksave);
 
-	if (panel->x > 0) {
+        if (panel->x > 0) {
             if(jingobeu[panel->x-1]==0) {
                 panel->x=-1;
             } else if (jingobeu[panel->x-1]<0) {
@@ -949,18 +949,18 @@ logoPushCallback(void *data)
                 c--;
             }
         }
-	if (!(panel->cycle % 4)) {
-	    WMPixmap *p;
+        if (!(panel->cycle % 4)) {
+            WMPixmap *p;
 
-	    p = DoXThing(panel->wwin);
-	    WMSetLabelImage(panel->logoL, p);
+            p = DoXThing(panel->wwin);
+            WMSetLabelImage(panel->logoL, p);
         }
         kc.bell_pitch = ksave.bell_pitch;
         kc.bell_percent = ksave.bell_percent;
         kc.bell_duration = ksave.bell_duration;
         XChangeKeyboardControl(dpy, mask, &kc);
     } else if (panel->cycle < 30) {
-	RImage *image;
+        RImage *image;
         WMPixmap *pix;
         RColor gray;
 
@@ -968,11 +968,11 @@ logoPushCallback(void *data)
         gray.blue = 0xae; gray.alpha = 0;
 
         image = RScaleImage(panel->icon, panel->pic->width, panel->pic->height);
-	RCombineImagesWithOpaqueness(image, panel->pic, panel->cycle*255/30);
-	pix = WMCreateBlendedPixmapFromRImage(panel->scr->wmscreen, image, &gray);
-	RReleaseImage(image);
-	WMSetLabelImage(panel->logoL, pix);
-	WMReleasePixmap(pix);
+        RCombineImagesWithOpaqueness(image, panel->pic, panel->cycle*255/30);
+        pix = WMCreateBlendedPixmapFromRImage(panel->scr->wmscreen, image, &gray);
+        RReleaseImage(image);
+        WMSetLabelImage(panel->logoL, pix);
+        WMReleasePixmap(pix);
     }
 
     /* slow down text a little */
@@ -1133,37 +1133,37 @@ handleLogoPush(XEvent *event, void *data)
     if (!panel->timer && !broken && clicks > 0) {
         WMFont *font;
 
-	panel->x = 0;
-	clicks = 0;
-	if (!panel->icon) {
+        panel->x = 0;
+        clicks = 0;
+        if (!panel->icon) {
             panel->icon = WMGetApplicationIconImage(panel->scr->wmscreen);
-	    if (!panel->icon) {
-		broken = 1;
-		return;
+            if (!panel->icon) {
+                broken = 1;
+                return;
             } else {
-		RColor color;
+                RColor color;
 
                 color.red = 0xae;  color.green = 0xaa;
                 color.blue = 0xae; color.alpha = 0;
 
                 panel->icon = RCloneImage(panel->icon);
-		RCombineImageWithColor(panel->icon, &color);
+                RCombineImageWithColor(panel->icon, &color);
             }
-	}
-	if (!panel->pic) {
-	    panel->pic = RGetImageFromXPMData(panel->scr->rcontext, pic_data);
-	    if (!panel->pic) {
-		broken = 1;
-		RReleaseImage(panel->icon);
-		panel->icon = NULL;
-		return;
-	    }
-	}
+        }
+        if (!panel->pic) {
+            panel->pic = RGetImageFromXPMData(panel->scr->rcontext, pic_data);
+            if (!panel->pic) {
+                broken = 1;
+                RReleaseImage(panel->icon);
+                panel->icon = NULL;
+                return;
+            }
+        }
 
-	panel->str = msgs[rand()%(sizeof(msgs)/sizeof(char*))];
+        panel->str = msgs[rand()%(sizeof(msgs)/sizeof(char*))];
 
-	panel->timer = WMAddTimerHandler(50, logoPushCallback, panel);
-	panel->cycle = 0;
+        panel->timer = WMAddTimerHandler(50, logoPushCallback, panel);
+        panel->cycle = 0;
         panel->oldPix = WMRetainPixmap(WMGetLabelImage(panel->logoL));
         /* If we don't use a fixed font, scrolling will be jumpy */
         /* Alternatively we can draw text in a pixmap and scroll it smoothly */
@@ -1176,31 +1176,31 @@ handleLogoPush(XEvent *event, void *data)
         }
         WMSetLabelText(panel->versionL, "");
     } else if (panel->timer) {
-	char version[20];
+        char version[20];
 
-	panel->x = 0;
-	clicks = 0;
-	WMSetLabelImage(panel->logoL, panel->oldPix);
-	WMReleasePixmap(panel->oldPix);
-	panel->oldPix = NULL;
+        panel->x = 0;
+        clicks = 0;
+        WMSetLabelImage(panel->logoL, panel->oldPix);
+        WMReleasePixmap(panel->oldPix);
+        panel->oldPix = NULL;
 
-	WMDeleteTimerHandler(panel->timer);
-	panel->timer = NULL;
+        WMDeleteTimerHandler(panel->timer);
+        panel->timer = NULL;
 
         WMSetLabelFont(panel->versionL, panel->oldFont);
         if (panel->oldFont) {
             WMReleaseFont(panel->oldFont);
             panel->oldFont = NULL;
         }
-	snprintf(version, sizeof(version), _("Version %s"), VERSION);
+        snprintf(version, sizeof(version), _("Version %s"), VERSION);
         WMSetLabelText(panel->versionL, version);
         XFlush(WMScreenDisplay(WMWidgetScreen(panel->versionL)));
     }
 
     {
-	XEvent ev;
-	while (XCheckTypedWindowEvent(dpy, WMWidgetXID(panel->versionL),
-				      ButtonPress, &ev));
+        XEvent ev;
+        while (XCheckTypedWindowEvent(dpy, WMWidgetXID(panel->versionL),
+                                      ButtonPress, &ev));
     }
 }
 #endif /* SILLYNESS */
@@ -1220,21 +1220,21 @@ wShowInfoPanel(WScreen *scr)
     char **strl;
     int i, width, sepWidth;
     char *visuals[] = {
-	"StaticGray",
-	    "GrayScale",
-	    "StaticColor",
-	    "PseudoColor",
-	    "TrueColor",
-	    "DirectColor"
+        "StaticGray",
+        "GrayScale",
+        "StaticColor",
+        "PseudoColor",
+        "TrueColor",
+        "DirectColor"
     };
 
 
     if (thePanel) {
-	if (thePanel->scr == scr) {
-	    wRaiseFrame(thePanel->wwin->frame->core);
-	    wSetFocusTo(scr, thePanel->wwin);
-	}
-	return;
+        if (thePanel->scr == scr) {
+            wRaiseFrame(thePanel->wwin->frame->core);
+            wSetFocusTo(scr, thePanel->wwin);
+        }
+        return;
     }
 
     panel = wmalloc(sizeof(InfoPanel));
@@ -1250,15 +1250,15 @@ wShowInfoPanel(WScreen *scr)
         logo = WMRetainPixmap(WMGetApplicationIconPixmap(scr->wmscreen));
     }
     if (logo) {
-	size = WMGetPixmapSize(logo);
-	panel->logoL = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->logoL, 64, 64);
-	WMMoveWidget(panel->logoL, 30, 20);
-	WMSetLabelImagePosition(panel->logoL, WIPImageOnly);
-	WMSetLabelImage(panel->logoL, logo);
+        size = WMGetPixmapSize(logo);
+        panel->logoL = WMCreateLabel(panel->win);
+        WMResizeWidget(panel->logoL, 64, 64);
+        WMMoveWidget(panel->logoL, 30, 20);
+        WMSetLabelImagePosition(panel->logoL, WIPImageOnly);
+        WMSetLabelImage(panel->logoL, logo);
 #ifdef SILLYNESS
-	WMCreateEventHandler(WMWidgetView(panel->logoL), ButtonPressMask,
-			     handleLogoPush, panel);
+        WMCreateEventHandler(WMWidgetView(panel->logoL), ButtonPressMask,
+                             handleLogoPush, panel);
 #endif
         WMReleasePixmap(logo);
     }
@@ -1294,9 +1294,9 @@ wShowInfoPanel(WScreen *scr)
     WMMoveWidget(panel->name2L, 100, 60);
     font = WMBoldSystemFontOfSize(scr->wmscreen, 18);
     if (font) {
-	WMSetLabelFont(panel->name2L, font);
-	WMReleaseFont(font);
-	font = NULL;
+        WMSetLabelFont(panel->name2L, font);
+        WMReleaseFont(font);
+        font = NULL;
     }
     WMSetLabelTextAlignment(panel->name2L, WACenter);
     WMSetLabelText(panel->name2L, _("Window Manager for X"));
@@ -1323,80 +1323,80 @@ wShowInfoPanel(WScreen *scr)
 
     strbuf = NULL;
     snprintf(buffer, sizeof(buffer), _("Using visual 0x%x: %s %ibpp "),
-	    (unsigned)scr->w_visual->visualid,
-	    visuals[scr->w_visual->class], scr->w_depth);
-    
+             (unsigned)scr->w_visual->visualid,
+             visuals[scr->w_visual->class], scr->w_depth);
+
     strbuf = wstrappend(strbuf, buffer);
-    
+
     switch (scr->w_depth) {
-     case 15:
-	strbuf = wstrappend(strbuf, _("(32 thousand colors)\n"));
-	break;
-     case 16:
-	strbuf = wstrappend(strbuf, _("(64 thousand colors)\n"));
-	break;
-     case 24:
-     case 32:
-	strbuf = wstrappend(strbuf, _("(16 million colors)\n"));
-	break;
-     default:
-	snprintf(buffer, sizeof(buffer), _("(%d colors)\n"), 1<<scr->w_depth);
-	strbuf = wstrappend(strbuf, buffer);
-	break;
+    case 15:
+        strbuf = wstrappend(strbuf, _("(32 thousand colors)\n"));
+        break;
+    case 16:
+        strbuf = wstrappend(strbuf, _("(64 thousand colors)\n"));
+        break;
+    case 24:
+    case 32:
+        strbuf = wstrappend(strbuf, _("(16 million colors)\n"));
+        break;
+    default:
+        snprintf(buffer, sizeof(buffer), _("(%d colors)\n"), 1<<scr->w_depth);
+        strbuf = wstrappend(strbuf, buffer);
+        break;
     }
-    
+
 
 #if defined(HAVE_MALLOC_H) && defined(HAVE_MALLINFO)
     {
-	struct mallinfo ma = mallinfo();
-	snprintf(buffer, sizeof(buffer),
-		_("Total allocated memory: %i kB. Total memory in use: %i kB.\n"),
-		(ma.arena+ma.hblkhd)/1024, (ma.uordblks+ma.hblkhd)/1024);
-	
-	strbuf = wstrappend(strbuf, buffer);
+        struct mallinfo ma = mallinfo();
+        snprintf(buffer, sizeof(buffer),
+                 _("Total allocated memory: %i kB. Total memory in use: %i kB.\n"),
+                 (ma.arena+ma.hblkhd)/1024, (ma.uordblks+ma.hblkhd)/1024);
+
+        strbuf = wstrappend(strbuf, buffer);
     }
 #endif
 
     strbuf = wstrappend(strbuf, _("Supported image formats: "));
     strl = RSupportedFileFormats();
     for (i=0; strl[i]!=NULL; i++) {
-	strbuf = wstrappend(strbuf, strl[i]);
-	strbuf = wstrappend(strbuf, " ");
+        strbuf = wstrappend(strbuf, strl[i]);
+        strbuf = wstrappend(strbuf, " ");
     }
 
     strbuf = wstrappend(strbuf, _("\nAdditional support for: "));
     {
-	char *list[9];
-	char buf[80];
-	int j = 0;
+        char *list[9];
+        char buf[80];
+        int j = 0;
 
 #ifdef MWM_HINTS
-	list[j++] = "MWM";
+        list[j++] = "MWM";
 #endif
 #ifdef KWM_HINTS
-	list[j++] = "KDE";
+        list[j++] = "KDE";
 #endif
 #ifdef GNOME_STUFF
-	list[j++] = "GNOME";
+        list[j++] = "GNOME";
 #endif
 #ifdef OLWM_HINTS
-	list[j++] = "OLWM";
+        list[j++] = "OLWM";
 #endif
 #ifdef NETWM_HINTS
-	list[j++] = "WMSPEC";
+        list[j++] = "WMSPEC";
 #endif
 
-	buf[0] = 0;
-	for (i = 0; i < j; i++) {
-	    if (i > 0) {
-		if (i == j - 1)
-		    strcat(buf, _(" and "));
-		else
-		    strcat(buf, ", ");
-	    }
-	    strcat(buf, list[i]);
-	}
-	strbuf = wstrappend(strbuf, buf);
+        buf[0] = 0;
+        for (i = 0; i < j; i++) {
+            if (i > 0) {
+                if (i == j - 1)
+                    strcat(buf, _(" and "));
+                else
+                    strcat(buf, ", ");
+            }
+            strcat(buf, list[i]);
+        }
+        strbuf = wstrappend(strbuf, buf);
     }
 
     if (wPreferences.no_sound) {
@@ -1420,9 +1420,9 @@ wShowInfoPanel(WScreen *scr)
 #endif
     strbuf = wstrappend(strbuf, _("Xinerama: "));
     {
-	char tmp[128];
-	snprintf(tmp, sizeof(tmp)-1, "%d heads found.", scr->xine_info.count);
-	strbuf = wstrappend(strbuf, tmp);
+        char tmp[128];
+        snprintf(tmp, sizeof(tmp)-1, "%d heads found.", scr->xine_info.count);
+        strbuf = wstrappend(strbuf, tmp);
     }
 #endif
 
@@ -1433,7 +1433,7 @@ wShowInfoPanel(WScreen *scr)
     WMSetLabelText(panel->infoL, strbuf);
     font = WMSystemFontOfSize(scr->wmscreen, 11);
     if (font) {
-	WMSetLabelFont(panel->infoL, font);
+        WMSetLabelFont(panel->infoL, font);
         WMReleaseFont(font);
         font = NULL;
     }
@@ -1450,11 +1450,11 @@ wShowInfoPanel(WScreen *scr)
     WMMapWidget(panel->win);
 
     {
-	WMPoint center = getCenter(scr, 382, 230);
-	
-	wwin = wManageInternalWindow(scr, parent, None, _("Info"),
-				     center.x, center.y,
-				     382, 230);
+        WMPoint center = getCenter(scr, 382, 230);
+
+        wwin = wManageInternalWindow(scr, parent, None, _("Info"),
+                                     center.x, center.y,
+                                     382, 230);
     }
 
     WSETUFLAG(wwin, no_closable, 0);
@@ -1473,11 +1473,11 @@ wShowInfoPanel(WScreen *scr)
     thePanel = panel;
 #ifdef SILLYNESS
     if (InitXThing(panel->scr)) {
-	panel->timer = WMAddTimerHandler(100, logoPushCallback, panel);
-	panel->cycle = 0;
-	panel->x = 1;
-	panel->str = _("Merry Christmas!");
-	panel->oldPix = WMRetainPixmap(WMGetLabelImage(panel->logoL));
+        panel->timer = WMAddTimerHandler(100, logoPushCallback, panel);
+        panel->cycle = 0;
+        panel->x = 1;
+        panel->str = _("Merry Christmas!");
+        panel->oldPix = WMRetainPixmap(WMGetLabelImage(panel->logoL));
     }
 #endif
 }
@@ -1525,11 +1525,11 @@ wShowLegalPanel(WScreen *scr)
     WWindow *wwin;
 
     if (legalPanel) {
-	if (legalPanel->scr == scr) {
-	    wRaiseFrame(legalPanel->wwin->frame->core);
-	    wSetFocusTo(scr, legalPanel->wwin);
-	}
-	return;
+        if (legalPanel->scr == scr) {
+            wRaiseFrame(legalPanel->wwin->frame->core);
+            wSetFocusTo(scr, legalPanel->wwin);
+        }
+        return;
     }
 
     panel = wmalloc(sizeof(LegalPanel));
@@ -1546,18 +1546,18 @@ wShowLegalPanel(WScreen *scr)
     WMMoveWidget(panel->licenseL, 10, 10);
     WMSetLabelTextAlignment(panel->licenseL, WALeft);
     WMSetLabelText(panel->licenseL,
-      _("    Window Maker is free software; you can redistribute it and/or\n"
-	"modify it under the terms of the GNU General Public License as\n"
-	"published by the Free Software Foundation; either version 2 of the\n"
-	"License, or (at your option) any later version.\n\n"
-	"    Window Maker is distributed in the hope that it will be useful,\n"
-	"but WITHOUT ANY WARRANTY; without even the implied warranty\n"
-	"of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-	"See the GNU General Public License for more details.\n\n"
-	"    You should have received a copy of the GNU General Public\n"
-	"License along with this program; if not, write to the Free Software\n"
-	"Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA\n"
-	"02111-1307, USA."));
+                   _("    Window Maker is free software; you can redistribute it and/or\n"
+                     "modify it under the terms of the GNU General Public License as\n"
+                     "published by the Free Software Foundation; either version 2 of the\n"
+                     "License, or (at your option) any later version.\n\n"
+                     "    Window Maker is distributed in the hope that it will be useful,\n"
+                     "but WITHOUT ANY WARRANTY; without even the implied warranty\n"
+                     "of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+                     "See the GNU General Public License for more details.\n\n"
+                     "    You should have received a copy of the GNU General Public\n"
+                     "License along with this program; if not, write to the Free Software\n"
+                     "Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA\n"
+                     "02111-1307, USA."));
     WMSetLabelRelief(panel->licenseL, WRGroove);
 
     WMRealizeWidget(panel->win);
@@ -1568,11 +1568,11 @@ wShowLegalPanel(WScreen *scr)
     XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
     {
-	WMPoint center = getCenter(scr, 420, 250);
-	
-	wwin = wManageInternalWindow(scr, parent, None, _("Legal"),
-				     center.x, center.y,
-				     420, 250);
+        WMPoint center = getCenter(scr, 420, 250);
+
+        wwin = wManageInternalWindow(scr, parent, None, _("Legal"),
+                                     center.x, center.y,
+                                     420, 250);
     }
 
     WSETUFLAG(wwin, no_closable, 0);
@@ -1633,7 +1633,7 @@ handleKeyPress(XEvent *event, void *clientData)
     CrashPanel *panel = (CrashPanel*)clientData;
 
     if (event->xkey.keycode == panel->retKey) {
-	WMPerformButtonClick(panel->okB);
+        WMPerformButtonClick(panel->okB);
     }
 }
 
@@ -1723,7 +1723,7 @@ wShowCrashingDialogPanel(int whatSig)
     scr = WMCreateScreen(dpy, screen_no);
     if (!scr) {
         wsyserror(_("cannot open connection for crashing dialog panel. Aborting."));
-	return WMAbort;
+        return WMAbort;
     }
 
     panel->retKey = XKeysymToKeycode(dpy, XK_Return);
@@ -1760,7 +1760,7 @@ wShowCrashingDialogPanel(int whatSig)
     WMSetLabelTextAlignment(panel->noteL, WAJustified);
 #ifdef SYS_SIGLIST_DECLARED
     snprintf(buf, sizeof(buf), _("Window Maker received signal %i\n(%s)."),
-            whatSig, sys_siglist[whatSig]);
+             whatSig, sys_siglist[whatSig]);
 #else
     snprintf(buf, sizeof(buf), _("Window Maker received signal %i."), whatSig);
 #endif
@@ -1772,8 +1772,8 @@ wShowCrashingDialogPanel(int whatSig)
     WMSetLabelTextAlignment(panel->note2L, WALeft);
     WMSetLabelText(panel->note2L,
                    _(" This fatal error occured probably due to a bug."
-                   " Please fill the included BUGFORM and "
-                   "report it to bugs@windowmaker.org."));
+                     " Please fill the included BUGFORM and "
+                     "report it to bugs@windowmaker.org."));
     WMSetLabelWraps(panel->note2L, True);
 
 
@@ -1843,7 +1843,7 @@ wShowCrashingDialogPanel(int whatSig)
 
 static void
 drawGNUstepLogo(Display *dpy, Drawable d, int width, int height,
-		unsigned long blackPixel, unsigned long whitePixel)
+                unsigned long blackPixel, unsigned long whitePixel)
 {
     GC gc;
     XGCValues gcv;
@@ -1853,7 +1853,7 @@ drawGNUstepLogo(Display *dpy, Drawable d, int width, int height,
     gc = XCreateGC(dpy, d, GCForeground, &gcv);
 
     XFillArc(dpy, d, gc, width/45, height/45,
-	     width - 2*width/45, height - 2*height/45, 0, 360*64);
+             width - 2*width/45, height - 2*height/45, 0, 360*64);
 
     rects[0].x = 0;
     rects[0].y = 37*height/45;
@@ -1875,7 +1875,7 @@ drawGNUstepLogo(Display *dpy, Drawable d, int width, int height,
 
     XSetForeground(dpy, gc, whitePixel);
     XFillArc(dpy, d, gc, width/45, height/45,
-	     width - 2*width/45, height - 2*height/45, 0, 360*64);
+             width - 2*width/45, height - 2*height/45, 0, 360*64);
 
     XFreeGC(dpy, gc);
 }
@@ -1920,11 +1920,11 @@ wShowGNUstepPanel(WScreen *scr)
     WMColor *color;
 
     if (gnustepPanel) {
-	if (gnustepPanel->scr == scr) {
-	    wRaiseFrame(gnustepPanel->wwin->frame->core);
-	    wSetFocusTo(scr, gnustepPanel->wwin);
-	}
-	return;
+        if (gnustepPanel->scr == scr) {
+            wRaiseFrame(gnustepPanel->wwin->frame->core);
+            wSetFocusTo(scr, gnustepPanel->wwin);
+        }
+        return;
     }
 
     panel = wmalloc(sizeof(GNUstepPanel));
@@ -1935,18 +1935,18 @@ wShowGNUstepPanel(WScreen *scr)
     WMResizeWidget(panel->win, 325, 205);
 
     pixmap = WMCreatePixmap(scr->wmscreen, 130, 130,
-			    WMScreenDepth(scr->wmscreen), True);
+                            WMScreenDepth(scr->wmscreen), True);
 
     color = WMCreateNamedColor(scr->wmscreen, "gray50", True);
 
     drawGNUstepLogo(dpy, WMGetPixmapXID(pixmap), 130, 130,
-		    WMColorPixel(color), scr->white_pixel);
+                    WMColorPixel(color), scr->white_pixel);
 
     WMReleaseColor(color);
 
     XSetForeground(dpy, scr->mono_gc, 0);
     XFillRectangle(dpy, WMGetPixmapMaskXID(pixmap), scr->mono_gc, 0, 0,
-		   130, 130);
+                   130, 130);
     drawGNUstepLogo(dpy, WMGetPixmapMaskXID(pixmap), 130, 130, 1, 1);
 
     panel->gstepL = WMCreateLabel(panel->win);
@@ -1955,10 +1955,10 @@ wShowGNUstepPanel(WScreen *scr)
     WMSetLabelTextAlignment(panel->gstepL, WARight);
     WMSetLabelText(panel->gstepL, "GNUstep");
     {
-	WMFont *font = WMBoldSystemFontOfSize(scr->wmscreen, 24);
+        WMFont *font = WMBoldSystemFontOfSize(scr->wmscreen, 24);
 
-	WMSetLabelFont(panel->gstepL, font);
-	WMReleaseFont(font);
+        WMSetLabelFont(panel->gstepL, font);
+        WMReleaseFont(font);
     }
 
     panel->textL = WMCreateLabel(panel->win);
@@ -1967,15 +1967,15 @@ wShowGNUstepPanel(WScreen *scr)
     WMSetLabelTextAlignment(panel->textL, WARight);
     WMSetLabelImagePosition(panel->textL, WIPOverlaps);
     WMSetLabelText(panel->textL,
-	_("Window Maker is part of the GNUstep project.\n"\
-	"The GNUstep project aims to create a free\n"\
-	"implementation of the OpenStep(tm) specification\n"\
-	"which is a object-oriented framework for\n"\
-	"creating advanced graphical, multi-platform\n"\
-	"applications. Additionally, a development and\n"\
-	"user desktop enviroment will be created on top\n"\
-	"of the framework. For more information about\n"\
-	"GNUstep, please visit: www.gnustep.org"));
+                   _("Window Maker is part of the GNUstep project.\n"\
+                     "The GNUstep project aims to create a free\n"\
+                     "implementation of the OpenStep(tm) specification\n"\
+                     "which is a object-oriented framework for\n"\
+                     "creating advanced graphical, multi-platform\n"\
+                     "applications. Additionally, a development and\n"\
+                     "user desktop enviroment will be created on top\n"\
+                     "of the framework. For more information about\n"\
+                     "GNUstep, please visit: www.gnustep.org"));
     WMSetLabelImage(panel->textL, pixmap);
 
     WMReleasePixmap(pixmap);
@@ -1988,11 +1988,11 @@ wShowGNUstepPanel(WScreen *scr)
     XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
     {
-	WMPoint center = getCenter(scr, 325, 200);
-	
-	wwin = wManageInternalWindow(scr, parent, None, _("About GNUstep"),
-				     center.x, center.y,
-				     325, 200);
+        WMPoint center = getCenter(scr, 325, 200);
+
+        wwin = wManageInternalWindow(scr, parent, None, _("About GNUstep"),
+                                     center.x, center.y,
+                                     325, 200);
     }
 
     WSETUFLAG(wwin, no_closable, 0);
@@ -2012,3 +2012,4 @@ wShowGNUstepPanel(WScreen *scr)
 
     gnustepPanel = panel;
 }
+

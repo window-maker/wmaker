@@ -1,9 +1,9 @@
 /* Icons.c- icon preferences
- * 
+ *
  *  WPrefs - Window Maker Preferences Program
- * 
+ *
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -32,9 +32,9 @@ typedef struct _Panel {
     char *description;
 
     CallbackRec callbacks;
-    
+
     WMWidget *parent;
-    
+
     WMFrame *posF;
     WMFrame *posVF;
     WMFrame *posV;
@@ -47,7 +47,7 @@ typedef struct _Panel {
     WMFrame *optF;
     WMButton *arrB;
     WMButton *omnB;
-    
+
     WMFrame *sizeF;
     WMPopUpButton *sizeP;
 
@@ -65,36 +65,36 @@ showIconLayout(WMWidget *widget, void *data)
     _Panel *panel = (_Panel*)data;
     int w, h;
     int i;
-    
+
     for (i=0; i<8; i++) {
-	if (panel->posB[i] == widget) {
-	    panel->iconPos = i;
-	    break;
-	}
+        if (panel->posB[i] == widget) {
+            panel->iconPos = i;
+            break;
+        }
     }
 
     if (panel->iconPos & 1) {
-	w = 32;
-	h = 8;
+        w = 32;
+        h = 8;
     } else {
-	w = 8;
-	h = 32;
+        w = 8;
+        h = 32;
     }
     WMResizeWidget(panel->posV, w, h);
-    
+
     switch (panel->iconPos & ~1) {
-     case 0:
-	WMMoveWidget(panel->posV, 2, 2);
-	break;
-     case 2:
-	WMMoveWidget(panel->posV, 95-2-w, 2);
-	break;
-     case 4:
-	WMMoveWidget(panel->posV, 2, 70-2-h);
-	break;
-     default:
-	WMMoveWidget(panel->posV, 95-2-w, 70-2-h);
-	break;
+    case 0:
+        WMMoveWidget(panel->posV, 2, 2);
+        break;
+    case 2:
+        WMMoveWidget(panel->posV, 95-2-w, 2);
+        break;
+    case 4:
+        WMMoveWidget(panel->posV, 2, 70-2-h);
+        break;
+    default:
+        WMMoveWidget(panel->posV, 95-2-w, 70-2-h);
+        break;
     }
 }
 
@@ -105,56 +105,56 @@ showData(_Panel *panel)
     int i;
     char *str;
     char *def = "blh";
-        
+
     WMSetButtonSelected(panel->arrB, GetBoolForKey("AutoArrangeIcons"));
-    
+
     WMSetButtonSelected(panel->omnB, GetBoolForKey("StickyIcons"));
-    
+
     str = GetStringForKey("IconPosition");
     if (!str)
-	str = def;
+        str = def;
     if (strlen(str)!=3) {
-	wwarning("bad value %s for option IconPosition. Using default blh",
-		 str);
-	str = def;
+        wwarning("bad value %s for option IconPosition. Using default blh",
+                 str);
+        str = def;
     }
 
     if (str[0]=='t' || str[0]=='T') {
-	i = 0;
+        i = 0;
     } else {
-	i = 4;
+        i = 4;
     }
     if (str[1]=='r' || str[1]=='R') {
-	i += 2;
+        i += 2;
     }
     if (str[2]=='v' || str[2]=='V') {
-	i += 0;
+        i += 0;
     } else {
-	i += 1;
+        i += 1;
     }
     panel->iconPos = i;
     WMPerformButtonClick(panel->posB[i]);
-    
+
     i = GetIntegerForKey("IconSize");
     i = (i-24)/8;
-    
+
     if (i<0)
-	i = 0;
+        i = 0;
     else if (i>9)
-	i = 9;
+        i = 9;
     WMSetPopUpButtonSelectedItem(panel->sizeP, i);
-    
+
     str = GetStringForKey("IconificationStyle");
     if (!str)
-	str = "zoom";
+        str = "zoom";
     if (strcasecmp(str, "none")==0)
-	WMPerformButtonClick(panel->animB[3]);
+        WMPerformButtonClick(panel->animB[3]);
     else if (strcasecmp(str, "twist")==0)
-	WMPerformButtonClick(panel->animB[1]);
+        WMPerformButtonClick(panel->animB[1]);
     else if (strcasecmp(str, "flip")==0)
-	WMPerformButtonClick(panel->animB[2]);
+        WMPerformButtonClick(panel->animB[2]);
     else {
-	WMPerformButtonClick(panel->animB[0]);
+        WMPerformButtonClick(panel->animB[0]);
     }
 }
 
@@ -172,7 +172,7 @@ createPanel(Panel *p)
 
     panel->box = WMCreateBox(panel->parent);
     WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
-    
+
     /***************** Positioning of Icons *****************/
     panel->posF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->posF, 260, 135);
@@ -180,11 +180,11 @@ createPanel(Panel *p)
     WMSetFrameTitle(panel->posF, _("Icon Positioning"));
 
     for (i=0; i<8; i++) {
-	panel->posB[i] = WMCreateButton(panel->posF, WBTOnOff);
-	WMSetButtonAction(panel->posB[i], showIconLayout, panel);
+        panel->posB[i] = WMCreateButton(panel->posF, WBTOnOff);
+        WMSetButtonAction(panel->posB[i], showIconLayout, panel);
 
-	if (i>0)
-	    WMGroupButtons(panel->posB[0], panel->posB[i]);
+        if (i>0)
+            WMGroupButtons(panel->posB[0], panel->posB[i]);
     }
     WMMoveWidget(panel->posB[1], 70, 23);
     WMResizeWidget(panel->posB[1], 47, 15);
@@ -206,8 +206,8 @@ createPanel(Panel *p)
     WMMoveWidget(panel->posB[6], 70+95, 38+35);
     WMResizeWidget(panel->posB[6], 15, 35);
 
-    color = WMCreateRGBColor(WMWidgetScreen(panel->parent), 0x5100, 0x5100, 
-			     0x7100, True);
+    color = WMCreateRGBColor(WMWidgetScreen(panel->parent), 0x5100, 0x5100,
+                             0x7100, True);
     panel->posVF = WMCreateFrame(panel->posF);
     WMResizeWidget(panel->posVF, 95, 70);
     WMMoveWidget(panel->posVF, 70, 38);
@@ -217,9 +217,9 @@ createPanel(Panel *p)
 
     panel->posV = WMCreateFrame(panel->posVF);
     WMSetFrameRelief(panel->posV, WRSimple);
-    
+
     WMMapSubwidgets(panel->posF);
-    
+
     /***************** Animation ****************/
     panel->animF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->animF, 205, 135);
@@ -227,9 +227,9 @@ createPanel(Panel *p)
     WMSetFrameTitle(panel->animF, _("Iconification Animation"));
 
     for (i=0; i<4; i++) {
-	panel->animB[i] = WMCreateRadioButton(panel->animF);
-	WMResizeWidget(panel->animB[i], 170, 20);
-	WMMoveWidget(panel->animB[i], 20, 24+i*25);
+        panel->animB[i] = WMCreateRadioButton(panel->animF);
+        WMResizeWidget(panel->animB[i], 170, 20);
+        WMMoveWidget(panel->animB[i], 20, 24+i*25);
     }
     WMGroupButtons(panel->animB[0], panel->animB[1]);
     WMGroupButtons(panel->animB[0], panel->animB[2]);
@@ -246,15 +246,15 @@ createPanel(Panel *p)
     panel->optF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->optF, 260, 70);
     WMMoveWidget(panel->optF, 25, 150);
-/*    WMSetFrameTitle(panel->optF, _("Icon Display"));*/
-    
+    /*    WMSetFrameTitle(panel->optF, _("Icon Display"));*/
+
     panel->arrB = WMCreateSwitchButton(panel->optF);
     WMResizeWidget(panel->arrB, 235, 20);
     WMMoveWidget(panel->arrB, 15, 15);
     WMSetButtonText(panel->arrB, _("Auto-arrange icons"));
 
     WMSetBalloonTextForView(_("Keep icons and miniwindows arranged all the time."),
-			    WMWidgetView(panel->arrB));
+                            WMWidgetView(panel->arrB));
 
     panel->omnB = WMCreateSwitchButton(panel->optF);
     WMResizeWidget(panel->omnB, 235, 20);
@@ -262,10 +262,10 @@ createPanel(Panel *p)
     WMSetButtonText(panel->omnB, _("Omnipresent miniwindows"));
 
     WMSetBalloonTextForView(_("Make miniwindows be present in all workspaces."),
-			    WMWidgetView(panel->omnB));
+                            WMWidgetView(panel->omnB));
 
     WMMapSubwidgets(panel->optF);
-    
+
     /***************** Icon Size ****************/
     panel->sizeF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->sizeF, 205, 70);
@@ -273,21 +273,21 @@ createPanel(Panel *p)
     WMSetFrameTitle(panel->sizeF, _("Icon Size"));
 
     WMSetBalloonTextForView(_("The size of the dock/application icon and miniwindows"),
-			    WMWidgetView(panel->sizeF));
+                            WMWidgetView(panel->sizeF));
 
     panel->sizeP = WMCreatePopUpButton(panel->sizeF);
     WMResizeWidget(panel->sizeP, 156, 20);
     WMMoveWidget(panel->sizeP, 25, 30);
     for (i=24; i<=96; i+=8) {
-	sprintf(buf, "%ix%i", i, i);
-	WMAddPopUpButtonItem(panel->sizeP, buf);
+        sprintf(buf, "%ix%i", i, i);
+        WMAddPopUpButtonItem(panel->sizeP, buf);
     }
-    
+
     WMMapSubwidgets(panel->sizeF);
 
     WMRealizeWidget(panel->box);
     WMMapSubwidgets(panel->box);
-    
+
     showData(panel);
 }
 
@@ -301,35 +301,35 @@ storeData(_Panel *panel)
     SetBoolForKey(WMGetButtonSelected(panel->omnB), "StickyIcons");
 
     SetIntegerForKey(WMGetPopUpButtonSelectedItem(panel->sizeP)*8+24,
-		     "IconSize");
+                     "IconSize");
 
     buf[3] = 0;
 
     if (panel->iconPos < 4) {
-	buf[0] = 't';
+        buf[0] = 't';
     } else {
-	buf[0] = 'b';
+        buf[0] = 'b';
     }
     if (panel->iconPos & 2) {
-	buf[1] = 'r';
+        buf[1] = 'r';
     } else {
-	buf[1] = 'l';
+        buf[1] = 'l';
     }
     if (panel->iconPos & 1) {
-	buf[2] = 'h';
+        buf[2] = 'h';
     } else {
-	buf[2] = 'v';
+        buf[2] = 'v';
     }
     SetStringForKey(buf, "IconPosition");
 
     if (WMGetButtonSelected(panel->animB[0]))
-	SetStringForKey("zoom", "IconificationStyle");
+        SetStringForKey("zoom", "IconificationStyle");
     else if (WMGetButtonSelected(panel->animB[1]))
-	SetStringForKey("twist", "IconificationStyle");
+        SetStringForKey("twist", "IconificationStyle");
     else if (WMGetButtonSelected(panel->animB[2]))
-	SetStringForKey("flip", "IconificationStyle");
-    else 
-	SetStringForKey("none", "IconificationStyle");
+        SetStringForKey("flip", "IconificationStyle");
+    else
+        SetStringForKey("none", "IconificationStyle");
 }
 
 
@@ -345,7 +345,7 @@ InitIcons(WMScreen *scr, WMWidget *parent)
     panel->sectionName = _("Icon Preferences");
 
     panel->description = _("Icon/Miniwindow handling options. Icon positioning\n"
-			   "area, sizes of icons, miniaturization animation style.");
+                           "area, sizes of icons, miniaturization animation style.");
 
     panel->parent = parent;
 
@@ -356,3 +356,4 @@ InitIcons(WMScreen *scr, WMWidget *parent)
 
     return panel;
 }
+

@@ -47,18 +47,18 @@
 #else /* !DEBUG */
 
 #define wassertr(expr) \
-	if (!(expr)) { \
-		wwarning("%s line %i (%s): assertion %s failed",\
-			__FILE__, __LINE__, __ASSERT_FUNCTION, #expr);\
-		return;\
-	}
+    if (!(expr)) { \
+        wwarning("%s line %i (%s): assertion %s failed",\
+                 __FILE__, __LINE__, __ASSERT_FUNCTION, #expr);\
+        return;\
+    }
 
 #define wassertrv(expr, val) \
-	if (!(expr)) { \
-		wwarning("%s line %i (%s): assertion %s failed",\
-			__FILE__, __LINE__, __ASSERT_FUNCTION, #expr);\
-		return (val);\
-	}
+    if (!(expr)) { \
+        wwarning("%s line %i (%s): assertion %s failed",\
+                 __FILE__, __LINE__, __ASSERT_FUNCTION, #expr);\
+        return (val);\
+    }
 #endif /* !DEBUG */
 
 #endif /* !NDEBUG */
@@ -71,15 +71,15 @@ extern "C" {
 
 typedef enum {
     WMPostWhenIdle = 1,
-	WMPostASAP = 2,
-	WMPostNow = 3
+    WMPostASAP = 2,
+    WMPostNow = 3
 } WMPostingStyle;
 
 
 typedef enum {
     WNCNone = 0,
-	WNCOnName = 1,
-	WNCOnSender = 2
+    WNCOnName = 1,
+    WNCOnSender = 2
 } WMNotificationCoalescing;
 
 
@@ -166,7 +166,7 @@ typedef struct {
     /* NULL does nothing */
     void*	(*retainKey)(const void *);
     /* NULL does nothing */
-    void	(*releaseKey)(const void *);    
+    void	(*releaseKey)(const void *);
 } WMHashTableCallbacks;
 
 
@@ -201,8 +201,8 @@ typedef struct ConnectionDelegate {
 } ConnectionDelegate;
 
 
-typedef void WMNotificationObserverAction(void *observerData, 
-					  WMNotification *notification);
+typedef void WMNotificationObserverAction(void *observerData,
+                                          WMNotification *notification);
 
 
 
@@ -285,7 +285,7 @@ void wusleep(unsigned int microsec);
 
 #if 0
 int wsprintesc(char *buffer, int length, char *format, WMSEscapes **escapes,
-	       int count);
+               int count);
 #endif
 
 /*......................................................................*/
@@ -293,7 +293,7 @@ int wsprintesc(char *buffer, int length, char *format, WMSEscapes **escapes,
 /* Event handlers: timer, idle, input */
 
 WMHandlerID WMAddTimerHandler(int milliseconds, WMCallback *callback,
-			      void *cdata);
+                              void *cdata);
 
 WMHandlerID WMAddPersistentTimerHandler(int milliseconds, WMCallback *callback,
                                         void *cdata);
@@ -306,8 +306,8 @@ WMHandlerID WMAddIdleHandler(WMCallback *callback, void *cdata);
 
 void WMDeleteIdleHandler(WMHandlerID handlerID);
 
-WMHandlerID WMAddInputHandler(int fd, int condition, WMInputProc *proc, 
-			      void *clientData);
+WMHandlerID WMAddInputHandler(int fd, int condition, WMInputProc *proc,
+                              void *clientData);
 
 void WMDeleteInputHandler(WMHandlerID handlerID);
 
@@ -373,7 +373,7 @@ extern const WMHashTableCallbacks WMIntHashCallbacks;
 /* sizeof(keys) are <= sizeof(void*) */
 
 extern const WMHashTableCallbacks WMStringHashCallbacks;
-/* keys are strings. Strings will be copied with wstrdup() 
+/* keys are strings. Strings will be copied with wstrdup()
  * and freed with wfree() */
 
 extern const WMHashTableCallbacks WMStringPointerHashCallbacks;
@@ -392,7 +392,7 @@ extern const WMHashTableCallbacks WMStringPointerHashCallbacks;
  * Fast [O(1)] push/pop
  *
  * Cons:
- * A little slower [O(n)] for insertion/deletion of elements that 
+ * A little slower [O(n)] for insertion/deletion of elements that
  * 	aren't in the end
  */
 
@@ -475,23 +475,23 @@ void* WMArrayPrevious(WMArray *array, WMArrayIterator *iter);
 
 /* The following 2 macros assume that the array doesn't change in the for loop */
 #define WM_ITERATE_ARRAY(array, var, i) \
-      	for (var = WMArrayFirst(array, &(i)); (i) != WANotFound; \
-		var = WMArrayNext(array, &(i)))
+    for (var = WMArrayFirst(array, &(i)); (i) != WANotFound; \
+    var = WMArrayNext(array, &(i)))
 
 #define WM_ETARETI_ARRAY(array, var, i) \
-      	for (var = WMArrayLast(array, &(i)); (i) != WANotFound; \
-		var = WMArrayPrevious(array, &(i)))
+    for (var = WMArrayLast(array, &(i)); (i) != WANotFound; \
+    var = WMArrayPrevious(array, &(i)))
 
 /*..........................................................................*/
 
 /*
  * Tree bags use a red-black tree for storage.
  * Item indexes may be any integer number.
- * 
+ *
  * Pros:
  * O(lg n) insertion/deletion/search
  * Good for large numbers of elements with sparse indexes
- * 
+ *
  * Cons:
  * O(lg n) insertion/deletion/search
  * Slow for storing small numbers of elements
@@ -565,12 +565,12 @@ int WMBagIndexForIterator(WMBag *bag, WMBagIterator ptr);
 
 /* The following 2 macros assume that the bag doesn't change in the for loop */
 #define WM_ITERATE_BAG(bag, var, i) \
-      	for (var = WMBagFirst(bag, &(i)); (i) != NULL; \
-		var = WMBagNext(bag, &(i)))
+    for (var = WMBagFirst(bag, &(i)); (i) != NULL; \
+    var = WMBagNext(bag, &(i)))
 
 #define WM_ETARETI_BAG(bag, var, i) \
-      	for (var = WMBagLast(bag, &(i)); (i) != NULL; \
-		var = WMBagPrevious(bag, &(i)))
+    for (var = WMBagLast(bag, &(i)); (i) != NULL; \
+    var = WMBagPrevious(bag, &(i)))
 
 
 
@@ -703,15 +703,15 @@ void* WMGetNotificationObject(WMNotification *notification);
 const char* WMGetNotificationName(WMNotification *notification);
 
 
-void WMAddNotificationObserver(WMNotificationObserverAction *observerAction, 
-			       void *observer, const char *name, void *object);
+void WMAddNotificationObserver(WMNotificationObserverAction *observerAction,
+                               void *observer, const char *name, void *object);
 
 void WMPostNotification(WMNotification *notification);
 
 void WMRemoveNotificationObserver(void *observer);
 
-void WMRemoveNotificationObserverWithName(void *observer, const char *name, 
-					  void *object);
+void WMRemoveNotificationObserverWithName(void *observer, const char *name,
+                                          void *object);
 
 void WMPostNotificationName(const char *name, void *object, void *clientData);
 
@@ -719,18 +719,18 @@ WMNotificationQueue* WMGetDefaultNotificationQueue(void);
 
 WMNotificationQueue* WMCreateNotificationQueue(void);
 
-void WMDequeueNotificationMatching(WMNotificationQueue *queue, 
-				   WMNotification *notification, 
-				   unsigned mask);
+void WMDequeueNotificationMatching(WMNotificationQueue *queue,
+                                   WMNotification *notification,
+                                   unsigned mask);
 
 void WMEnqueueNotification(WMNotificationQueue *queue,
-			   WMNotification *notification,
-			   WMPostingStyle postingStyle);
+                           WMNotification *notification,
+                           WMPostingStyle postingStyle);
 
-void WMEnqueueCoalesceNotification(WMNotificationQueue *queue, 
-				   WMNotification *notification,
-				   WMPostingStyle postingStyle,
-				   unsigned coalesceMask);
+void WMEnqueueCoalesceNotification(WMNotificationQueue *queue,
+                                   WMNotification *notification,
+                                   WMPostingStyle postingStyle,
+                                   unsigned coalesceMask);
 
 
 /*......................................................................*/
@@ -855,7 +855,7 @@ WMPropList* WMGetUDKeys(WMUserDefaults *database);
 WMPropList* WMGetUDObjectForKey(WMUserDefaults *database, char *defaultName);
 
 void WMSetUDObjectForKey(WMUserDefaults *database, WMPropList *object,
-			 char *defaultName);
+                         char *defaultName);
 
 void WMRemoveUDObjectForKey(WMUserDefaults *database, char *defaultName);
 
@@ -867,17 +867,17 @@ float WMGetUDFloatForKey(WMUserDefaults *database, char *defaultName);
 
 Bool WMGetUDBoolForKey(WMUserDefaults *database, char *defaultName);
 
-void WMSetUDStringForKey(WMUserDefaults *database, char *value, 
-			 char *defaultName);
+void WMSetUDStringForKey(WMUserDefaults *database, char *value,
+                         char *defaultName);
 
-void WMSetUDIntegerForKey(WMUserDefaults *database, int value, 
-			  char *defaultName);
+void WMSetUDIntegerForKey(WMUserDefaults *database, int value,
+                          char *defaultName);
 
-void WMSetUDFloatForKey(WMUserDefaults *database, float value, 
-			char *defaultName);
+void WMSetUDFloatForKey(WMUserDefaults *database, float value,
+                        char *defaultName);
 
 void WMSetUDBoolForKey(WMUserDefaults *database, Bool value,
-		       char *defaultName);
+                       char *defaultName);
 
 WMPropList* WMGetUDSearchList(WMUserDefaults *database);
 

@@ -876,7 +876,7 @@ static void rereadDefaults(void);
 
 #if 0
 static void
-    rereadDefaults(void)
+rereadDefaults(void)
 {
     /* must defer the update because accessing X data from a
      * signal handler can mess up Xlib */
@@ -978,10 +978,10 @@ static void appendMenu(WMPropList *destarr, WMPropList *array)
 
 
 void wDefaultsMergeGlobalMenus(WDDomain *menuDomain)
-{    
+{
     WMPropList *menu = menuDomain->dictionary;
     WMPropList *submenu;
-    
+
     if (!menu || !WMIsPLArray(menu))
         return;
 
@@ -1014,7 +1014,7 @@ void wDefaultsMergeGlobalMenus(WDDomain *menuDomain)
         WMReleasePropList(submenu);
     }
 #endif
-    
+
     menuDomain->dictionary = menu;
 }
 

@@ -17,45 +17,45 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
 
 /*
- * 
+ *
  * If defined(XSMP_ENABLED) and session manager is running then
  * 	do normal stuff
  * else
  * 	do pre-R6 session management stuff (save window state and relaunch)
  *
  * When doing a checkpoint:
- * 
+ *
  * = Without XSMP
  * Open "Stop"/status Dialog
  * Send SAVE_YOURSELF to clients and wait for reply
  * Save restart info
  * Save state of clients
- * 
+ *
  * = With XSMP
  * Send checkpoint request to sm
  *
  * When exiting:
  * -------------
- * 
+ *
  * = Without XSMP
- * 
+ *
  * Open "Exit Now"/status Dialog
  * Send SAVE_YOURSELF to clients and wait for reply
  * Save restart info
  * Save state of clients
  * Send DELETE to all clients
  * When no more clients are left or user hit "Exit Now", exit
- * 
+ *
  * = With XSMP
  *
  * Send Shutdown request to session manager
- * if SaveYourself message received, save state of clients 
+ * if SaveYourself message received, save state of clients
  * if the Die message is received, exit.
  */
 
@@ -156,7 +156,7 @@ make_keys()
 
 
 
-static int 
+static int
 getBool(WMPropList *value)
 {
     char *val;
@@ -169,20 +169,20 @@ getBool(WMPropList *value)
     }
 
     if ((val[1]=='\0' && (val[0]=='y' || val[0]=='Y'))
-	|| strcasecmp(val, "YES")==0) {
+        || strcasecmp(val, "YES")==0) {
 
-	return 1;
+        return 1;
     } else if ((val[1]=='\0' && (val[0]=='n' || val[0]=='N'))
-	     || strcasecmp(val, "NO")==0) {
-	return 0;
+               || strcasecmp(val, "NO")==0) {
+        return 0;
     } else {
-	int i;
-	if (sscanf(val, "%i", &i)==1) {
-	    return (i!=0);
-	} else {
-	    wwarning(_("can't convert \"%s\" to boolean"), val);
-	    return 0;
-	}
+        int i;
+        if (sscanf(val, "%i", &i)==1) {
+            return (i!=0);
+        } else {
+            wwarning(_("can't convert \"%s\" to boolean"), val);
+            return 0;
+        }
     }
 }
 
@@ -192,14 +192,14 @@ getInt(WMPropList *value)
 {
     char *val;
     unsigned n;
-    
+
     if (!WMIsPLString(value))
-	return 0;
+        return 0;
     val = WMGetFromPLString(value);
     if (!val)
-	return 0;
+        return 0;
     if (sscanf(val, "%u", &n) != 1)
-	return 0;
+        return 0;
 
     return n;
 }
@@ -240,25 +240,25 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
         name = WMCreatePLString(buffer);
         cmd = WMCreatePLString(command);
         /*sprintf(buffer, "%d", wwin->frame->workspace+1);
-        workspace = WMCreatePLString(buffer);*/
+         workspace = WMCreatePLString(buffer);*/
         workspace = WMCreatePLString(scr->workspaces[wwin->frame->workspace]->name);
         shaded = wwin->flags.shaded ? sYes : sNo;
         miniaturized = wwin->flags.miniaturized ? sYes : sNo;
         hidden = wwin->flags.hidden ? sYes : sNo;
-        snprintf(buffer, sizeof(buffer), "%ix%i+%i+%i", 
-		 wwin->client.width, wwin->client.height,
-		wwin->frame_x, wwin->frame_y);
+        snprintf(buffer, sizeof(buffer), "%ix%i+%i+%i",
+                 wwin->client.width, wwin->client.height,
+                 wwin->frame_x, wwin->frame_y);
         geometry = WMCreatePLString(buffer);
-	
-	for (mask = 0, i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
-	    if (scr->shortcutWindows[i] != NULL &&
-		WMGetFirstInArray(scr->shortcutWindows[i], wwin) != WANotFound) {
-		mask |= 1<<i;
-	    }
-	}
 
-	snprintf(buffer, sizeof(buffer), "%u", mask);
-	shortcut = WMCreatePLString(buffer);
+        for (mask = 0, i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
+            if (scr->shortcutWindows[i] != NULL &&
+                WMGetFirstInArray(scr->shortcutWindows[i], wwin) != WANotFound) {
+                mask |= 1<<i;
+            }
+        }
+
+        snprintf(buffer, sizeof(buffer), "%u", mask);
+        shortcut = WMCreatePLString(buffer);
 
         win_state = WMCreatePLDictionary(sName, name,
                                          sCommand, cmd,
@@ -274,7 +274,7 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
         WMReleasePropList(cmd);
         WMReleasePropList(workspace);
         WMReleasePropList(geometry);
-	WMReleasePropList(shortcut);
+        WMReleasePropList(shortcut);
         if (wapp && wapp->app_icon && wapp->app_icon->dock) {
             int i;
             char *name;
@@ -332,7 +332,7 @@ wSessionSaveState(WScreen *scr)
         if ((wwin->transient_for==None
              || wwin->transient_for==wwin->screen_ptr->root_win)
             && WMGetFirstInArray(wapp_list, (void*)appId)==WANotFound
-	    && !WFLAGP(wwin, dont_save_session)) {
+            && !WFLAGP(wwin, dont_save_session)) {
             /* A entry for this application was not yet saved. Save one. */
             if ((win_info = makeWindowState(wwin, wapp))!=NULL) {
                 WMAddToPLArray(list, win_info);
@@ -342,7 +342,7 @@ wSessionSaveState(WScreen *scr)
                  * application list, so no multiple entries for the same
                  * application are saved.
                  */
-		WMAddToArray(wapp_list, (void*)appId);
+                WMAddToArray(wapp_list, (void*)appId);
             }
         }
         wwin = wwin->prev;
@@ -389,7 +389,7 @@ execCommand(WScreen *scr, char *command, char *host)
         char **args;
         int i;
 
-	SetupEnvironment(scr);
+        SetupEnvironment(scr);
 
         args = malloc(sizeof(char*)*(argc+1));
         if (!args)
@@ -442,17 +442,17 @@ getWindowState(WScreen *scr, WMPropList *win_state)
         state->hidden = getBool(value);
     if ((value = WMGetFromPLDictionary(win_state, sShortcutMask))!=NULL) {
         mask = getInt(value);
-	state->window_shortcuts = mask;
+        state->window_shortcuts = mask;
     }
-    
+
     value = WMGetFromPLDictionary(win_state, sGeometry);
     if (value && WMIsPLString(value)) {
         if (!(sscanf(WMGetFromPLString(value), "%ix%i+%i+%i",
-                   &state->w, &state->h, &state->x, &state->y)==4 &&
-	      (state->w>0 && state->h>0))) {
-	    state->w = 0;
-	    state->h = 0;
-	}
+                     &state->w, &state->h, &state->x, &state->y)==4 &&
+              (state->w>0 && state->h>0))) {
+            state->w = 0;
+            state->h = 0;
+        }
     }
 
     return state;
@@ -486,7 +486,7 @@ wSessionRestoreState(WScreen *scr)
         return;
 
     count = WMGetPropListItemCount(apps);
-    if (count==0) 
+    if (count==0)
         return;
 
     for (i=0; i<count; i++) {
@@ -543,7 +543,7 @@ wSessionRestoreState(WScreen *scr)
                 if (btn && SAME(instance, btn->wm_instance) &&
                     SAME(class, btn->wm_class) &&
                     SAME(command, btn->command) &&
-		    !btn->launching) {
+                    !btn->launching) {
                     found = 1;
                     break;
                 }
@@ -614,12 +614,12 @@ clearWaitingAckState(WScreen *scr)
     WApplication *wapp;
 
     for (wwin = scr->focused_window; wwin != NULL; wwin = wwin->prev) {
-	wwin->flags.waiting_save_ack = 0;
-	if (wwin->main_window != None) {
-	    wapp = wApplicationOf(wwin->main_window);
-	    if (wapp)
-		wapp->main_window_desc->flags.waiting_save_ack = 0;
-	}
+        wwin->flags.waiting_save_ack = 0;
+        if (wwin->main_window != None) {
+            wapp = wApplicationOf(wwin->main_window);
+            if (wapp)
+                wapp->main_window_desc->flags.waiting_save_ack = 0;
+        }
     }
 }
 
@@ -627,9 +627,9 @@ clearWaitingAckState(WScreen *scr)
 void
 wSessionSaveClients(WScreen *scr)
 {
-    
+
 }
-		    
+
 
 /*
  * With XSMP, this job is done by smproxy
@@ -642,10 +642,10 @@ wSessionSendSaveYourself(WScreen *scr)
 
     /* freeze client interaction with clients */
     XGrabKeyboard(dpy, scr->root_win, False, GrabModeAsync, GrabModeAsync,
-		  CurrentTime);
+                  CurrentTime);
     XGrabPointer(dpy, scr->root_win, False, ButtonPressMask|ButtonReleaseMask,
-		 GrabModeAsync, GrabModeAsync, scr->root_win, None,
-		 CurrentTime);
+                 GrabModeAsync, GrabModeAsync, scr->root_win, None,
+                 CurrentTime);
 
     clearWaitingAckState(scr);
 
@@ -653,34 +653,34 @@ wSessionSendSaveYourself(WScreen *scr)
 
     /* first send SAVE_YOURSELF for everybody */
     for (wwin = scr->focused_window; wwin != NULL; wwin = wwin->prev) {
-	WWindow *mainWin;
+        WWindow *mainWin;
 
-	mainWin = wWindowFor(wwin->main_window);
+        mainWin = wWindowFor(wwin->main_window);
 
-	if (mainWin) {
-	    /* if the client is a multi-window client, only send message
-	     * to the main window */
-	    wwin = mainWin;
-	}
+        if (mainWin) {
+            /* if the client is a multi-window client, only send message
+             * to the main window */
+            wwin = mainWin;
+        }
 
-	/* make sure the SAVE_YOURSELF flag is up-to-date */
-	PropGetProtocols(wwin->client_win, &wwin->protocols);
+        /* make sure the SAVE_YOURSELF flag is up-to-date */
+        PropGetProtocols(wwin->client_win, &wwin->protocols);
 
-	if (wwin->protocols.SAVE_YOURSELF) {
-	    if (!wwin->flags.waiting_save_ack) {
-		wClientSendProtocol(wwin, _XA_WM_SAVE_YOURSELF, LastTimestamp);
+        if (wwin->protocols.SAVE_YOURSELF) {
+            if (!wwin->flags.waiting_save_ack) {
+                wClientSendProtocol(wwin, _XA_WM_SAVE_YOURSELF, LastTimestamp);
 
-		wwin->flags.waiting_save_ack = 1;
-		count++;
-	    }
-	} else {
-	    wwin->flags.waiting_save_ack = 0;
-	}
+                wwin->flags.waiting_save_ack = 1;
+                count++;
+            }
+        } else {
+            wwin->flags.waiting_save_ack = 0;
+        }
     }
 
     /* then wait for acknowledge */
     while (count > 0) {
-	
+
     }
 
     XUngrabPointer(dpy, CurrentTime);
@@ -691,28 +691,28 @@ wSessionSendSaveYourself(WScreen *scr)
 
 #ifdef XSMP_ENABLED
 /*
- * With full session management support, the part of WMState 
+ * With full session management support, the part of WMState
  * that store client window state will become obsolete (maybe we can reuse
  *							the old code too),
  * but we still need to store state info like the dock and workspaces.
  * It is better to keep dock/wspace info in WMState because the user
  * might want to keep the dock configuration while not wanting to
- * resume a previously saved session. 
- * So, wmaker specific state info can be saved in 
- * ~/GNUstep/.AppInfo/WindowMaker/statename.state 
+ * resume a previously saved session.
+ * So, wmaker specific state info can be saved in
+ * ~/GNUstep/.AppInfo/WindowMaker/statename.state
  * Its better to not put it in the defaults directory because:
  * - its not a defaults file (having domain names like wmaker0089504baa
  * in the defaults directory wouldn't be very neat)
  * - this state file is not meant to be edited by users
- * 
+ *
  * The old session code will become obsolete. When wmaker is
  * compiled with R6 sm support compiled in, it'll be better to
  * use a totally rewritten state saving code, but we can keep
- * the current code for when XSMP_ENABLED is not compiled in. 
- * 
+ * the current code for when XSMP_ENABLED is not compiled in.
+ *
  * This will be confusing to old users (well get lots of "SAVE_SESSION broke!"
  * messages), but it'll be better.
- * 
+ *
  * -readme
  */
 
@@ -722,15 +722,15 @@ getWindowRole(Window window)
 {
     XTextProperty prop;
     static Atom atom = 0;
-    
+
     if (!atom)
-	atom = XInternAtom(dpy, "WM_WINDOW_ROLE", False);
+        atom = XInternAtom(dpy, "WM_WINDOW_ROLE", False);
 
     if (XGetTextProperty(dpy, window, &prop, atom)) {
-	if (prop.encoding == XA_STRING && prop.format == 8 && prop.nitems > 0)
-	    return prop.value;
+        if (prop.encoding == XA_STRING && prop.format == 8 && prop.nitems > 0)
+            return prop.value;
     }
-    
+
     return NULL;
 }
 
@@ -745,7 +745,7 @@ getWindowRole(Window window)
  * WM_CLASS.class
  * WM_NAME
  * WM_COMMAND
- * 
+ *
  * geometry
  * state = (miniaturized, shaded, etc)
  * attribute
@@ -760,18 +760,18 @@ makeAppState(WWindow *wwin)
     WApplication *wapp;
     WMPropList *state;
     WScreen *scr = wwin->screen_ptr;
-        
+
     state = WMCreatePLArray(NULL, NULL);
 
     wapp = wApplicationOf(wwin->main_window);
-    
+
     if (wapp) {
         if (wapp->app_icon && wapp->app_icon->dock) {
 
-	    if (wapp->app_icon->dock == scr->dock) {
-		WMAddToPLArray(state, WMCreatePLString("Dock"));
-	    } else {
-		int i;
+            if (wapp->app_icon->dock == scr->dock) {
+                WMAddToPLArray(state, WMCreatePLString("Dock"));
+            } else {
+                int i;
 
                 for(i=0; i<scr->workspace_count; i++)
                     if(scr->workspaces[i]->clip == wapp->app_icon->dock)
@@ -779,14 +779,14 @@ makeAppState(WWindow *wwin)
 
                 assert(i < scr->workspace_count);
 
-                WMAddToPLArray(state, 
-				     WMCreatePLString(scr->workspaces[i]->name));
-	    }
-	}
-	
-	WMAddToPLArray(state, WMCreatePLString(wapp->hidden ? "1" : "0"));
+                WMAddToPLArray(state,
+                               WMCreatePLString(scr->workspaces[i]->name));
+            }
+        }
+
+        WMAddToPLArray(state, WMCreatePLString(wapp->hidden ? "1" : "0"));
     }
-    
+
     return state;
 }
 
@@ -804,12 +804,12 @@ wSessionGetStateFor(WWindow *wwin, WSessionData *state)
     index = 3;
 
     /* geometry */
-    value = WMGetFromPLArray(slist, index++);    
+    value = WMGetFromPLArray(slist, index++);
     str = WMGetFromPLString(value);
 
     sscanf(str, "%i %i %i %i %i %i", &state->x, &state->y,
-	   &state->width, &state->height,
-	   &state->user_changed_width, &state->user_changed_height);
+           &state->width, &state->height,
+           &state->user_changed_width, &state->user_changed_height);
 
 
     /* state */
@@ -817,7 +817,7 @@ wSessionGetStateFor(WWindow *wwin, WSessionData *state)
     str = WMGetFromPLString(value);
 
     sscanf(str, "%i %i %i", &state->miniaturized, &state->shaded,
-	   &state->maximized);
+           &state->maximized);
 
 
     /* attributes */
@@ -856,38 +856,38 @@ makeAttributeState(WWindow *wwin)
     char buffer[256];
 
 #define W_FLAG(wwin, FLAG)	((wwin)->defined_user_flags.FLAG \
-					? (wwin)->user_flags.FLAG : -1)
+    ? (wwin)->user_flags.FLAG : -1)
 
     snprintf(buffer, sizeof(buffer),
-	    "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
-	    W_FLAG(no_titlebar),
-	    W_FLAG(no_resizable),
-	    W_FLAG(no_closable),
-	    W_FLAG(no_miniaturizable),
-	    W_FLAG(no_resizebar),
-	    W_FLAG(no_close_button),
-	    W_FLAG(no_miniaturize_button),
-	    /*
-	    W_FLAG(broken_close),
-	    W_FLAG(kill_close),
-	     */
-	    W_FLAG(no_shadeable),
-	    W_FLAG(omnipresent),
-	    W_FLAG(skip_window_list),
-	    W_FLAG(floating),
-	    W_FLAG(sunken),
-	    W_FLAG(no_bind_keys),
-	    W_FLAG(no_bind_mouse),
-	    W_FLAG(no_hide_others),
-	    W_FLAG(no_appicon),
-	    W_FLAG(dont_move_off),
-	    W_FLAG(no_focusable),
-	    W_FLAG(always_user_icon),
-	    W_FLAG(start_miniaturized),
-	    W_FLAG(start_hidden),
-	    W_FLAG(start_maximized),
-	    W_FLAG(dont_save_session),
-	    W_FLAG(emulate_appicon));
+             "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+             W_FLAG(no_titlebar),
+             W_FLAG(no_resizable),
+             W_FLAG(no_closable),
+             W_FLAG(no_miniaturizable),
+             W_FLAG(no_resizebar),
+             W_FLAG(no_close_button),
+             W_FLAG(no_miniaturize_button),
+             /*
+              W_FLAG(broken_close),
+              W_FLAG(kill_close),
+              */
+             W_FLAG(no_shadeable),
+             W_FLAG(omnipresent),
+             W_FLAG(skip_window_list),
+             W_FLAG(floating),
+             W_FLAG(sunken),
+             W_FLAG(no_bind_keys),
+             W_FLAG(no_bind_mouse),
+             W_FLAG(no_hide_others),
+             W_FLAG(no_appicon),
+             W_FLAG(dont_move_off),
+             W_FLAG(no_focusable),
+             W_FLAG(always_user_icon),
+             W_FLAG(start_miniaturized),
+             W_FLAG(start_hidden),
+             W_FLAG(start_maximized),
+             W_FLAG(dont_save_session),
+             W_FLAG(emulate_appicon));
 
     return WMCreatePLString(buffer);
 }
@@ -897,7 +897,7 @@ static void
 appendStringInArray(WMPropList *array, char *str)
 {
     WMPropList *val;
-    
+
     val = WMCreatePLString(str);
     WMAddToPLArray(array, val);
     WMReleasePropList(val);
@@ -915,14 +915,14 @@ makeClientState(WWindow *wwin)
     unsigned shortcuts;
 
     state = WMCreatePLArray(NULL, NULL);
-    
+
     /* WM_WINDOW_ROLE */
     str = getWindowRole(wwin->client_win);
     if (!str)
-	appendStringInArray(state, "");
+        appendStringInArray(state, "");
     else {
-	appendStringInArray(state, str);
-	XFree(str);
+        appendStringInArray(state, str);
+        XFree(str);
     }
 
     /* WM_CLASS.instance */
@@ -933,19 +933,19 @@ makeClientState(WWindow *wwin)
 
     /* WM_NAME */
     if (wwin->flags.wm_name_changed)
-	appendStringInArray(state, "");
+        appendStringInArray(state, "");
     else
-	appendStringInArray(state, wwin->frame->name);
+        appendStringInArray(state, wwin->frame->name);
 
     /* geometry */
     snprintf(buffer, sizeof(buffer), "%i %i %i %i %i %i", wwin->frame_x, wwin->frame_y,
-	    wwin->client.width, wwin->client.height,
-	    wwin->flags.user_changed_width, wwin->flags.user_changed_height);
+             wwin->client.width, wwin->client.height,
+             wwin->flags.user_changed_width, wwin->flags.user_changed_height);
     appendStringInArray(state, buffer);
 
     /* state */
     snprintf(buffer, sizeof(buffer), "%i %i %i", wwin->flags.miniaturized,
-	    wwin->flags.shaded, wwin->flags.maximized);
+             wwin->flags.shaded, wwin->flags.maximized);
     appendStringInArray(state, buffer);
 
     /* attributes */
@@ -965,9 +965,9 @@ makeClientState(WWindow *wwin)
     /* shortcuts */
     shortcuts = 0;
     for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
-	if (scr->shortcutWindow[i] == wwin) {
-	    shortcuts |= 1 << i;
-	}
+        if (scr->shortcutWindow[i] == wwin) {
+            shortcuts |= 1 << i;
+        }
     }
     snprintf(buffer, sizeof(buffer), "%ui", shortcuts);
     appendStringInArray(tmp, buffer);
@@ -998,36 +998,36 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
 #endif
 
     /* save session state */
-    
+
     /* the file that will contain the state */
     prefix = getenv("SM_SAVE_DIR");
     if (!prefix) {
-	prefix = wusergnusteppath();
-	if (prefix)
-	    gsPrefix = True;
+        prefix = wusergnusteppath();
+        if (prefix)
+            gsPrefix = True;
     }
     if (!prefix) {
-	prefix = getenv("HOME");
+        prefix = getenv("HOME");
     }
     if (!prefix)
-	prefix = ".";
+        prefix = ".";
 
     len = strlen(prefix)+64;
     statefile = malloc(len);
     if (!statefile) {
-	wwarning(_("out of memory while saving session state"));
-	goto fail;
+        wwarning(_("out of memory while saving session state"));
+        goto fail;
     }
 
     t = time();
     i = 0;
     do {
-	if (gsPrefix)
-	    snprintf(statefile, len, "%s/.AppInfo/WindowMaker/wmaker.%l%i.state",
-		    prefix, t, i);
-	else
-	    snprintf(statefile, len, "%s/wmaker.%l%i.state", prefix, t, i);
-	i++;
+        if (gsPrefix)
+            snprintf(statefile, len, "%s/.AppInfo/WindowMaker/wmaker.%l%i.state",
+                     prefix, t, i);
+        else
+            snprintf(statefile, len, "%s/wmaker.%l%i.state", prefix, t, i);
+        i++;
     } while (access(F_OK, statefile)!=-1);
 
     /* save the states of all windows we're managing */
@@ -1040,30 +1040,30 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
      * version_info ::= 'version' = '1';
      * state ::= 'state' = array of screen_info
      * screen_info ::= array of (screen number, window_info, window_info, ...)
-     * window_info ::= 
+     * window_info ::=
      */
     for (i=0; i<wScreenCount; i++) {
-	WScreen *scr;
-	WWindow *wwin;
-	char buf[32];
-	WMPropList *pscreen;
+        WScreen *scr;
+        WWindow *wwin;
+        char buf[32];
+        WMPropList *pscreen;
 
-	scr = wScreenWithNumber(i);
+        scr = wScreenWithNumber(i);
 
-	snprintf(buf, sizeof(buf), "%i", scr->screen);
-	pscreen = WMCreatePLArray(WMCreatePLString(buf), NULL);
+        snprintf(buf, sizeof(buf), "%i", scr->screen);
+        pscreen = WMCreatePLArray(WMCreatePLString(buf), NULL);
 
-	wwin = scr->focused_window;
-	while (wwin) {
+        wwin = scr->focused_window;
+        while (wwin) {
             WMPropList *pwindow;
 
-	    pwindow = makeClientState(wwin);
-	    WMAddToPLArray(pscreen, pwindow);
+            pwindow = makeClientState(wwin);
+            WMAddToPLArray(pscreen, pwindow);
 
-	    wwin = wwin->prev;
-	}
+            wwin = wwin->prev;
+        }
 
-	WMAddToPLArray(state, pscreen);
+        WMAddToPLArray(state, pscreen);
     }
 
     plState = WMCreatePLDictionary(WMCreatePLString("Version"),
@@ -1079,12 +1079,12 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
      * startup time */
 
     for (argc=0, i=0; argv[i]!=NULL; i++) {
-	if (strcmp(argv[i], "-clientid")==0
-	    || strcmp(argv[i], "-restore")==0) {
-	    i++;
-	} else {
-	    argc++;
-	}
+        if (strcmp(argv[i], "-clientid")==0
+            || strcmp(argv[i], "-restore")==0) {
+            i++;
+        } else {
+            argc++;
+        }
     }
 
     prop[0].name = SmRestartCommand;
@@ -1098,21 +1098,21 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
     prop[1].num_vals = argc;
 
     if (!prop[0].vals || !prop[1].vals) {
-	wwarning(_("end of memory while saving session state"));
-	goto fail;
+        wwarning(_("end of memory while saving session state"));
+        goto fail;
     }
 
     for (j=0, i=0; i<argc+4; i++) {
-	if (strcmp(argv[i], "-clientid")==0
-	    || strcmp(argv[i], "-restore")==0) {
-	    i++;
-	} else {
-	    prop[0].vals[j].value = argv[i];
-	    prop[0].vals[j].length = strlen(argv[i]);
-	    prop[1].vals[j].value = argv[i];
-	    prop[1].vals[j].length = strlen(argv[i]);
-	    j++;
-	}
+        if (strcmp(argv[i], "-clientid")==0
+            || strcmp(argv[i], "-restore")==0) {
+            i++;
+        } else {
+            prop[0].vals[j].value = argv[i];
+            prop[0].vals[j].length = strlen(argv[i]);
+            prop[1].vals[j].value = argv[i];
+            prop[1].vals[j].length = strlen(argv[i]);
+            j++;
+        }
     }
     prop[0].vals[j].value = "-clientid";
     prop[0].vals[j].length = 9;
@@ -1127,12 +1127,12 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
     prop[0].vals[j].length = strlen(statefile);
 
     {
-	int len = strlen(statefile)+8;
-	
-	discardCmd = malloc(len);
-	if (!discardCmd)
-	    goto fail;
-	snprintf(discardCmd, len, "rm %s", statefile);
+        int len = strlen(statefile)+8;
+
+        discardCmd = malloc(len);
+        if (!discardCmd)
+            goto fail;
+        snprintf(discardCmd, len, "rm %s", statefile);
     }
     prop[2].name = SmDiscardCommand;
     prop[2].type = SmARRAY8;
@@ -1144,40 +1144,40 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
     ok = True;
 fail:
     SmcSaveYourselfDone(smc_conn, ok);
-    
+
     if (prop[0].vals)
-	wfree(prop[0].vals);
+        wfree(prop[0].vals);
     if (prop[1].vals)
-	wfree(prop[1].vals);
+        wfree(prop[1].vals);
     if (discardCmd)
-	wfree(discardCmd);
+        wfree(discardCmd);
 
     if (!ok) {
-	remove(statefile);
+        remove(statefile);
     }
     if (statefile)
-	wfree(statefile);
+        wfree(statefile);
 }
 
 
 static void
 smSaveYourselfProc(SmcConn smc_conn, SmPointer client_data, int save_type,
-		   Bool shutdown, int interact_style, Bool fast)
+                   Bool shutdown, int interact_style, Bool fast)
 {
 #ifdef DEBUG1
     puts("received SaveYourself SM message");
 #endif
 
     if (!SmcRequestSaveYourselfPhase2(smc_conn, smSaveYourselfPhase2Proc,
-				      client_data)) {
+                                      client_data)) {
 
-	SmcSaveYourselfDone(smc_conn, False);
-	sWaitingPhase2 = False;
+        SmcSaveYourselfDone(smc_conn, False);
+        sWaitingPhase2 = False;
     } else {
 #ifdef DEBUG1
-	puts("successfull request of SYS phase 2");
+        puts("successfull request of SYS phase 2");
 #endif
-	sWaitingPhase2 = True;
+        sWaitingPhase2 = True;
     }
 }
 
@@ -1211,9 +1211,9 @@ smShutdownCancelledProc(SmcConn smc_conn, SmPointer client_data)
 {
     if (sWaitingPhase2) {
 
-	sWaitingPhase2 = False;
+        sWaitingPhase2 = False;
 
-	SmcSaveYourselfDone(smc_conn, False);
+        SmcSaveYourselfDone(smc_conn, False);
     }
 }
 
@@ -1231,7 +1231,7 @@ static void
 iceIOErrorHandler(IceConnection ice_conn)
 {
     /* This is not fatal but can mean the session manager exited.
-     * If the session manager exited normally we would get a 
+     * If the session manager exited normally we would get a
      * Die message, so this probably means an abnormal exit.
      * If the sm was the last client of session, then we'll die
      * anyway, otherwise we can continue doing our stuff.
@@ -1257,7 +1257,7 @@ wSessionConnectManager(char **argv, int argc)
     int i;
 
     mask = SmcSaveYourselfProcMask|SmcDieProcMask|SmcSaveCompleteProcMask
-	|SmcShutdownCancelledProcMask;
+        |SmcShutdownCancelledProcMask;
 
     callbacks.save_yourself.callback = smSaveYourselfProc;
     callbacks.save_yourself.client_data = argv;
@@ -1272,34 +1272,34 @@ wSessionConnectManager(char **argv, int argc)
     callbacks.shutdown_cancelled.client_data = NULL;
 
     for (i=0; i<argc; i++) {
-	if (strcmp(argv[i], "-clientid")==0) {
-	    previous_id = argv[i+1];
-	    break;
-	}
+        if (strcmp(argv[i], "-clientid")==0) {
+            previous_id = argv[i+1];
+            break;
+        }
     }
 
     /* connect to the session manager */
     sSMCConn = SmcOpenConnection(NULL, NULL, SmProtoMajor, SmProtoMinor,
-				 mask, &callbacks, previous_id,
-				 &sClientID, 255, buffer);
+                                 mask, &callbacks, previous_id,
+                                 &sClientID, 255, buffer);
     if (!sSMCConn) {
-	return;
+        return;
     }
 #ifdef DEBUG1
     puts("connected to the session manager");
 #endif
 
-/*    IceSetIOErrorHandler(iceIOErrorHandler);*/
+    /*    IceSetIOErrorHandler(iceIOErrorHandler);*/
 
     /* check for session manager clients */
     iceConn = SmcGetIceConnection(smcConn);
 
     if (fcntl(IceConnectionNumber(iceConn), F_SETFD, FD_CLOEXEC) < 0) {
-	wsyserror("error setting close-on-exec flag for ICE connection");
+        wsyserror("error setting close-on-exec flag for ICE connection");
     }
 
-    sSMInputHandler = WMAddInputHandler(IceConnectionNumber(iceConn), 
-					WIReadMask, iceMessageProc, iceConn);
+    sSMInputHandler = WMAddInputHandler(IceConnectionNumber(iceConn),
+                                        WIReadMask, iceMessageProc, iceConn);
 
     /* setup information about ourselves */
 
@@ -1351,11 +1351,11 @@ void
 wSessionDisconnectManager(void)
 {
     if (sSMCConn) {
-	WMDeleteInputHandler(sSMInputHandler);
-	sSMInputHandler = NULL;
+        WMDeleteInputHandler(sSMInputHandler);
+        sSMInputHandler = NULL;
 
-	SmcCloseConnection(sSMCConn, 0, NULL);
-	sSMCConn = NULL;
+        SmcCloseConnection(sSMCConn, 0, NULL);
+        sSMCConn = NULL;
     }
 }
 
@@ -1364,15 +1364,16 @@ wSessionRequestShutdown(void)
 {
     /* request a shutdown to the session manager */
     if (sSMCConn)
-	SmcRequestSaveYourself(sSMCConn, SmSaveBoth, True, SmInteractStyleAny,
-			       False, True);
+        SmcRequestSaveYourself(sSMCConn, SmSaveBoth, True, SmInteractStyleAny,
+                               False, True);
 }
 
 
-Bool 
+Bool
 wSessionIsManaged(void)
 {
     return sSMCConn!=NULL;
 }
 
 #endif /* !XSMP_ENABLED */
+

@@ -175,7 +175,7 @@ strToInt(str *token)
     int res=0, pos, c;
 
     if (token->len==0 || token->str[0]=='*') {
-	return -1;
+        return -1;
     } else {
         for (res=0, pos=0; pos<token->len; pos++) {
             c = token->str[pos] - '0';
@@ -579,11 +579,11 @@ print_help()
     puts("  --ignore <option>   ignore changes in the specified option");
     puts("  --help              display this help and exit");
     /*
-    puts("  --format <format>   specifies the format of the theme to be converted");
+     puts("  --format <format>   specifies the format of the theme to be converted");
      */
     puts("  --version           output version information and exit");
     /*puts("");
-    puts("Supported formats: blackbox");*/
+     puts("Supported formats: blackbox");*/
 }
 
 
@@ -806,3 +806,4 @@ readBlackBoxStyle(char *path)
     }
 }
 #endif
+

@@ -1,19 +1,19 @@
 /* nxpm.c - load "normalized" XPM image
- * 
+ *
  * Raster graphics library
- * 
+ *
  * Copyright (c) 1997-2003 Alfredo K. Kojima
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
  *  License as published by the Free Software Foundation; either
  *  version 2 of the License, or (at your option) any later version.
- *  
+ *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *  Library General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the Free
  *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -50,7 +50,7 @@ char *alloca ();
 
 /*
  * Restricted support for XPM images.
- * 
+ *
  * The images must be in the following "normalized" format:
  *
  *
@@ -86,130 +86,130 @@ RGetImageFromXPMData(RContext *context, char **data)
     int w, h, ccount, csize;
 
     if (sscanf(data[line++], "%i %i %i %i", &w, &h, &ccount, &csize)!=4
-	|| w <= 0 || h <= 0 || ccount <= 0 || csize <= 0)
-	goto bad_format;
+        || w <= 0 || h <= 0 || ccount <= 0 || csize <= 0)
+        goto bad_format;
 
-    if (csize!=1 && csize!=2) 
-	goto bad_format;
+    if (csize!=1 && csize!=2)
+        goto bad_format;
 
     color_table[0] = alloca(ccount);
     color_table[1] = alloca(ccount);
     color_table[2] = alloca(ccount);
     color_table[3] = alloca(ccount);
     symbol_table = alloca(ccount * sizeof(unsigned short));
-    
+
     bsize = csize * w + 16;
 
     if (!color_table[0] || !color_table[1] || !color_table[2] ||
-	!color_table[3] || !symbol_table || !bsize) {
-	RErrorCode = RERR_NOMEMORY;
-	alloca(0);
-	return NULL;
+        !color_table[3] || !symbol_table || !bsize) {
+        RErrorCode = RERR_NOMEMORY;
+        alloca(0);
+        return NULL;
     }
 
     transp = 0;
     /* get color table */
     for (i=0; i<ccount; i++) {
-	symbol_table[i] = data[line][0];
-	if (csize==2)
-	    symbol_table[i] |= data[line][1]<<8;
+        symbol_table[i] = data[line][0];
+        if (csize==2)
+            symbol_table[i] |= data[line][1]<<8;
 
-	j = csize;
-	while (data[line][j]!='#' && data[line][j]!=0
-	       && data[line][j]!='N') j++;
+        j = csize;
+        while (data[line][j]!='#' && data[line][j]!=0
+               && data[line][j]!='N') j++;
 
-	if (data[line][j]=='#') {
-	    unsigned int red, green, blue;
-	    
-	    k = 0;
-	    j++;
-	    while (data[line][j+k]!=0) k++;
-	    if (k==6) {
-		if (sscanf(&(data[line][j]), "%2x%2x%2x", &red, &green, &blue)!=3)
-		    goto bad_format;
-	    } else if (k==12) {		
-		if (sscanf(&(data[line][j]), "%4x%4x%4x", &red, &green, &blue)!=3)
-		    goto bad_format;
-		red >>= 8;
-		green >>= 8;
-		blue >>= 8;
-	    } else
-		goto bad_format;
-	    
-	    color_table[0][i] = red;
-	    color_table[1][i] = green;
-	    color_table[2][i] = blue;
-	    color_table[3][i] = 255;
-	} else if (strncmp(&(data[line][j]), "None", 4)==0
-		   || strncmp(&(data[line][j]), "none", 4)==0) {
-	    color_table[3][i] = 0;
-	    transp = 1;
-	} else {
-	    goto bad_format;
-	}
-	line++;
+        if (data[line][j]=='#') {
+            unsigned int red, green, blue;
+
+            k = 0;
+            j++;
+            while (data[line][j+k]!=0) k++;
+            if (k==6) {
+                if (sscanf(&(data[line][j]), "%2x%2x%2x", &red, &green, &blue)!=3)
+                    goto bad_format;
+            } else if (k==12) {
+                if (sscanf(&(data[line][j]), "%4x%4x%4x", &red, &green, &blue)!=3)
+                    goto bad_format;
+                red >>= 8;
+                green >>= 8;
+                blue >>= 8;
+            } else
+                goto bad_format;
+
+            color_table[0][i] = red;
+            color_table[1][i] = green;
+            color_table[2][i] = blue;
+            color_table[3][i] = 255;
+        } else if (strncmp(&(data[line][j]), "None", 4)==0
+                   || strncmp(&(data[line][j]), "none", 4)==0) {
+            color_table[3][i] = 0;
+            transp = 1;
+        } else {
+            goto bad_format;
+        }
+        line++;
     }
 
     image = RCreateImage(w, h, transp);
     if (!image) {
-	alloca(0);
-	return NULL;
+        alloca(0);
+        return NULL;
     }
 
     r = image->data;
     g = image->data+1;
     b = image->data+2;
     if (image->format == RRGBAFormat)
-	a = image->data+3;
+        a = image->data+3;
     else
-	a = NULL;
+        a = NULL;
 
     for (i=0; i<h; i++) {
-	if (csize==1) {
-	    for (j=0; j<w; j++) {
-		color = data[line][j];
-		
-		for (k=0; k<ccount; k++) {
-		    if (symbol_table[k] == color)
-			break;
-		}
-		if (k==ccount)
-		    k = 0;
-		
-		*r = color_table[0][k];
-		*g = color_table[1][k];
-		*b = color_table[2][k];
-		if (a) {
-		    *a = color_table[3][k];
-		    r += 4; g += 4; b += 4; a += 4;
-		} else {
-		    r += 3; g += 3; b += 3;
-		}
-	    }
-	} else {
-	    for (j=0; j<w*2; j++) {
-		color = data[line][j++];
-		color |= data[line][j];
-		
-		for (k=0; k<ccount; k++) {
-		    if (symbol_table[k] == color)
-			break;
-		}	
-		if (k==ccount)
-		    k = 0;
-	
-		*r = color_table[0][k];
-		*g = color_table[1][k];
-		*b = color_table[2][k];
-		if (a) {
-		    *a = color_table[3][k];
-		    r += 4; g += 4; b += 4; a += 4;
-		} else {
-		    r += 3; g += 3; b += 3;
-		}
-	    }
-	}
-	line++;
+        if (csize==1) {
+            for (j=0; j<w; j++) {
+                color = data[line][j];
+
+                for (k=0; k<ccount; k++) {
+                    if (symbol_table[k] == color)
+                        break;
+                }
+                if (k==ccount)
+                    k = 0;
+
+                *r = color_table[0][k];
+                *g = color_table[1][k];
+                *b = color_table[2][k];
+                if (a) {
+                    *a = color_table[3][k];
+                    r += 4; g += 4; b += 4; a += 4;
+                } else {
+                    r += 3; g += 3; b += 3;
+                }
+            }
+        } else {
+            for (j=0; j<w*2; j++) {
+                color = data[line][j++];
+                color |= data[line][j];
+
+                for (k=0; k<ccount; k++) {
+                    if (symbol_table[k] == color)
+                        break;
+                }
+                if (k==ccount)
+                    k = 0;
+
+                *r = color_table[0][k];
+                *g = color_table[1][k];
+                *b = color_table[2][k];
+                if (a) {
+                    *a = color_table[3][k];
+                    r += 4; g += 4; b += 4; a += 4;
+                } else {
+                    r += 3; g += 3; b += 3;
+                }
+            }
+        }
+        line++;
     }
 
 #ifdef C_ALLOCA
@@ -217,13 +217,13 @@ RGetImageFromXPMData(RContext *context, char **data)
 #endif
     return image;
 
-  bad_format:
+bad_format:
     RErrorCode = RERR_BADIMAGEFILE;
 #ifdef C_ALLOCA
     alloca(0);
 #endif
     if (image)
-	RReleaseImage(image);
+        RReleaseImage(image);
     return NULL;
 }
 
@@ -244,165 +244,165 @@ RLoadXPM(RContext *context, char *file, int index)
     int bsize;
     int w, h, ccount, csize;
     FILE *f;
-    
+
     f = fopen(file, "rb");
     if (!f) {
-	RErrorCode = RERR_OPEN;
-	return NULL;
+        RErrorCode = RERR_OPEN;
+        return NULL;
     }
     /* sig */
     if (!fgets(line, LINEWIDTH, f))
-	goto bad_file;
+        goto bad_file;
     /* declaration */
     if (!fgets(line, LINEWIDTH, f))
-	goto bad_file;
+        goto bad_file;
 
     /* data */
     if (!fgets(line, LINEWIDTH, f))
-	goto bad_file;
-    
+        goto bad_file;
+
     if (line[0]=='/')
-	if (!fgets(line, LINEWIDTH, f))
-	    goto bad_file;
+        if (!fgets(line, LINEWIDTH, f))
+            goto bad_file;
 
     if (sscanf(line, "\"%i %i %i %i\"", &w, &h, &ccount, &csize)!=4
-	|| w <= 0 || h <= 0 || ccount <= 0 || csize <= 0)
-	goto bad_file;
-    
-    if (csize!=1 && csize!=2) 
-	goto bad_format;
+        || w <= 0 || h <= 0 || ccount <= 0 || csize <= 0)
+        goto bad_file;
+
+    if (csize!=1 && csize!=2)
+        goto bad_format;
 
     color_table[0] = alloca(ccount);
     color_table[1] = alloca(ccount);
     color_table[2] = alloca(ccount);
     color_table[3] = alloca(ccount);
     symbol_table = alloca(ccount * sizeof(unsigned short));
-    
+
     bsize = csize * w + 16;
     buffer = alloca(bsize);
 
     if (!color_table[0] || !color_table[1] || !color_table[2] ||
-	!color_table[3] || !symbol_table || !bsize) {
-	RErrorCode = RERR_NOMEMORY;
-	fclose(f);
-	alloca(0);
-	return NULL;
+        !color_table[3] || !symbol_table || !bsize) {
+        RErrorCode = RERR_NOMEMORY;
+        fclose(f);
+        alloca(0);
+        return NULL;
     }
 
     transp = 0;
     /* get color table */
     for (i=0; i<ccount; i++) {
-	if (!fgets(line, LINEWIDTH, f)) 
-	    goto bad_file;
-	if (line[0]=='/')
-	    if (!fgets(line, LINEWIDTH, f))
-		goto bad_file;
+        if (!fgets(line, LINEWIDTH, f))
+            goto bad_file;
+        if (line[0]=='/')
+            if (!fgets(line, LINEWIDTH, f))
+                goto bad_file;
 
-	symbol_table[i] = line[1];
-	if (csize==2)
-	    symbol_table[i] |= line[2]<<8;
+        symbol_table[i] = line[1];
+        if (csize==2)
+            symbol_table[i] |= line[2]<<8;
 
-	j = csize+1;
-	while (line[j]!='#' && line[j]!='"' && line[j]!=0 && line[j]!='N') j++;
+        j = csize+1;
+        while (line[j]!='#' && line[j]!='"' && line[j]!=0 && line[j]!='N') j++;
 
-	if (line[j]=='#') {
-	    unsigned int red, green, blue;
-	    
-	    k = 0;
-	    j++;
-	    while (line[j+k]!='"' && line[j+k]!=0) k++;
-	    if (k==6) {
-		if (sscanf(&(line[j]), "%2x%2x%2x", &red, &green, &blue)!=3)
-		    goto bad_format;
-	    } else if (k==12) {		
-		if (sscanf(&(line[j]), "%4x%4x%4x", &red, &green, &blue)!=3)
-		    goto bad_format;
-		red >>= 8;
-		green >>= 8;
-		blue >>= 8;
-	    } else
-		goto bad_format;
-	    
-	    color_table[0][i] = red;
-	    color_table[1][i] = green;
-	    color_table[2][i] = blue;
-	    color_table[3][i] = 255;
-	} else if (strncmp(&(line[j]), "None", 4)==0
-		   || strncmp(&(line[j]), "none", 4)==0) {
-	    color_table[3][i] = 0;
-	    transp = 1;
-	} else {
-	    goto bad_format;
-	}
+        if (line[j]=='#') {
+            unsigned int red, green, blue;
+
+            k = 0;
+            j++;
+            while (line[j+k]!='"' && line[j+k]!=0) k++;
+            if (k==6) {
+                if (sscanf(&(line[j]), "%2x%2x%2x", &red, &green, &blue)!=3)
+                    goto bad_format;
+            } else if (k==12) {
+                if (sscanf(&(line[j]), "%4x%4x%4x", &red, &green, &blue)!=3)
+                    goto bad_format;
+                red >>= 8;
+                green >>= 8;
+                blue >>= 8;
+            } else
+                goto bad_format;
+
+            color_table[0][i] = red;
+            color_table[1][i] = green;
+            color_table[2][i] = blue;
+            color_table[3][i] = 255;
+        } else if (strncmp(&(line[j]), "None", 4)==0
+                   || strncmp(&(line[j]), "none", 4)==0) {
+            color_table[3][i] = 0;
+            transp = 1;
+        } else {
+            goto bad_format;
+        }
     }
 
     image = RCreateImage(w, h, transp);
     if (!image) {
-	fclose(f);
-	alloca(0);
-	return NULL;
+        fclose(f);
+        alloca(0);
+        return NULL;
     }
 
     r = image->data;
     g = image->data+1;
     b = image->data+2;
     if (image->format == RRGBAFormat)
-	a = image->data+3;
+        a = image->data+3;
     else
-	a = NULL;
+        a = NULL;
 
     for (i=0; i<h; i++) {
-	if (!fgets(buffer, bsize, f))
-	    goto bad_file;
-	if (buffer[0]=='/')
-	    if (!fgets(buffer, bsize, f))
-		goto bad_file;
-	
-	if (csize==1) {
-	    for (j=1; j<=w; j++) {
-		color = buffer[j];
-		
-		for (k=0; k<ccount; k++) {
-		    if (symbol_table[k] == color)
-			break;
-		}
-		if (k==ccount)
-		    k = 0;
-		
-		*r = color_table[0][k];
-		*g = color_table[1][k];
-		*b = color_table[2][k];
+        if (!fgets(buffer, bsize, f))
+            goto bad_file;
+        if (buffer[0]=='/')
+            if (!fgets(buffer, bsize, f))
+                goto bad_file;
+
+        if (csize==1) {
+            for (j=1; j<=w; j++) {
+                color = buffer[j];
+
+                for (k=0; k<ccount; k++) {
+                    if (symbol_table[k] == color)
+                        break;
+                }
+                if (k==ccount)
+                    k = 0;
+
+                *r = color_table[0][k];
+                *g = color_table[1][k];
+                *b = color_table[2][k];
                 if (a) {
                     *a = color_table[3][k];
                     r += 4; g += 4; b += 4; a += 4;
                 } else {
                     r += 3; g += 3; b += 3;
                 }
-	    }
-	} else {
-	    for (j=1; j<=w*2; j++) {
-		color = buffer[j++];
-		color |= buffer[j] << 8;
-		
-		for (k=0; k<ccount; k++) {
-		    if (symbol_table[k] == color)
-			break;
-		}
-		if (k==ccount) {
-		    k = 0;
-		}
-	
-		*r = color_table[0][k];
-		*g = color_table[1][k];
-		*b = color_table[2][k];
+            }
+        } else {
+            for (j=1; j<=w*2; j++) {
+                color = buffer[j++];
+                color |= buffer[j] << 8;
+
+                for (k=0; k<ccount; k++) {
+                    if (symbol_table[k] == color)
+                        break;
+                }
+                if (k==ccount) {
+                    k = 0;
+                }
+
+                *r = color_table[0][k];
+                *g = color_table[1][k];
+                *b = color_table[2][k];
                 if (a) {
                     *a = color_table[3][k];
                     r += 4; g += 4; b += 4; a += 4;
                 } else {
                     r += 3; g += 3; b += 3;
                 }
-	    }
-	}
+            }
+        }
     }
 
     fclose(f);
@@ -411,24 +411,24 @@ RLoadXPM(RContext *context, char *file, int index)
 #endif
     return image;
 
-  bad_format:
+bad_format:
     RErrorCode = RERR_BADIMAGEFILE;
     fclose(f);
 #ifdef C_ALLOCA
     alloca(0);
 #endif
     if (image)
-	RReleaseImage(image);
+        RReleaseImage(image);
     return NULL;
-    
-  bad_file:
+
+bad_file:
     RErrorCode = RERR_BADIMAGEFILE;
     fclose(f);
 #ifdef C_ALLOCA
     alloca(0);
 #endif
     if (image)
-	RReleaseImage(image);
+        RReleaseImage(image);
     return NULL;
 }
 
@@ -454,20 +454,20 @@ static XPMColor*
 lookfor(XPMColor *list, int index)
 {
     if (!list)
-	return NULL;
+        return NULL;
 
     for (; list!=NULL; list=list->next) {
-	if (CINDEX(list) == index)
-	    return list;
+        if (CINDEX(list) == index)
+            return list;
     }
     return NULL;
 }
 
 /*
  * Looks for the color in the colormap and inserts if it is not found.
- * 
+ *
  * list is a binary search list. The unbalancing problem is just ignored.
- * 
+ *
  * Returns False on error
  */
 static Bool
@@ -483,15 +483,15 @@ addcolor(XPMColor **list, unsigned r, unsigned g, unsigned b, int *colors)
     tmpc = lookfor(*list, index);
 
     if (tmpc)
-	return True;
+        return True;
 
     newc = malloc(sizeof(XPMColor));
 
     if (!newc) {
 
-	RErrorCode = RERR_NOMEMORY;
+        RErrorCode = RERR_NOMEMORY;
 
-	return False;
+        return False;
     }
 
     newc->red = r;
@@ -512,11 +512,11 @@ index2str(char *buffer, int index, int charsPerPixel)
     int i;
 
     for (i=0; i<charsPerPixel; i++) {
-	buffer[i] = I2CHAR(index&63);
-	index >>= 6;
+        buffer[i] = I2CHAR(index&63);
+        index >>= 6;
     }
     buffer[i] = 0;
-    
+
     return buffer;
 }
 
@@ -528,13 +528,13 @@ outputcolormap(FILE *file, XPMColor *colormap, int charsPerPixel)
     char buf[128];
 
     if (!colormap)
-	return;
+        return;
 
     for (index=0; colormap!=NULL; colormap=colormap->next,index++) {
-	colormap->index = index;
-	fprintf(file, "\"%s c #%02x%02x%02x\",\n", 
-		index2str(buf, index, charsPerPixel), colormap->red,
-		colormap->green, colormap->blue);
+        colormap->index = index;
+        fprintf(file, "\"%s c #%02x%02x%02x\",\n",
+                index2str(buf, index, charsPerPixel), colormap->red,
+                colormap->green, colormap->blue);
     }
 }
 
@@ -543,18 +543,18 @@ static void
 freecolormap(XPMColor *colormap)
 {
     XPMColor *tmp;
-    
+
     while (colormap) {
-	tmp = colormap->next;
-	free(colormap);
-	colormap = tmp;
+        tmp = colormap->next;
+        free(colormap);
+        colormap = tmp;
     }
 }
 
 
 
 /* save routine is common to internal support and library support */
-Bool 
+Bool
 RSaveXPM(RImage *image, char *filename)
 {
     FILE *file;
@@ -571,8 +571,8 @@ RSaveXPM(RImage *image, char *filename)
 
     file = fopen(filename, "wb+");
     if (!file) {
-	RErrorCode = RERR_OPEN;
-	return False;
+        RErrorCode = RERR_OPEN;
+        return False;
     }
 
     fprintf(file, "/* XPM */\n");
@@ -583,18 +583,18 @@ RSaveXPM(RImage *image, char *filename)
     g = image->data+1;
     b = image->data+2;
     if (image->format == RRGBAFormat)
-	a = image->data+3;
+        a = image->data+3;
     else
-	a = NULL;
+        a = NULL;
 
     /* first pass: make colormap for the image */
     if (a)
-	colorCount = 1;
+        colorCount = 1;
     for (y = 0; y < image->height; y++) {
-	for (x = 0; x < image->width; x++) {
+        for (x = 0; x < image->width; x++) {
             if (!a || *a>127) {
-		if (!addcolor(&colormap, *r, *g, *b, &colorCount)) {
-		    goto uhoh;
+                if (!addcolor(&colormap, *r, *g, *b, &colorCount)) {
+                    goto uhoh;
                 }
             }
             if (a) {
@@ -602,7 +602,7 @@ RSaveXPM(RImage *image, char *filename)
             } else {
                 r += 3; g += 3; b += 3;
             }
-	}
+        }
     }
 
     charsPerPixel = 1;
@@ -610,18 +610,18 @@ RSaveXPM(RImage *image, char *filename)
         charsPerPixel++;
 
     /* write header info */
-    fprintf(file, "\"%i %i %i %i\",\n", image->width, image->height, 
-	    colorCount, charsPerPixel);
+    fprintf(file, "\"%i %i %i %i\",\n", image->width, image->height,
+            colorCount, charsPerPixel);
 
     /* write colormap data */
     if (a) {
-	for (i=0; i<charsPerPixel; i++)
-	    transp[i] = ' ';
-	transp[i] = 0;
+        for (i=0; i<charsPerPixel; i++)
+            transp[i] = ' ';
+        transp[i] = 0;
 
-	fprintf(file, "\"%s c None\",\n", transp);
+        fprintf(file, "\"%s c None\",\n", transp);
     }
-    
+
     i = 0;
     outputcolormap(file, colormap, charsPerPixel);
 
@@ -630,36 +630,36 @@ RSaveXPM(RImage *image, char *filename)
     g = image->data+1;
     b = image->data+2;
     if (image->format == RRGBAFormat)
-	a = image->data+3;
+        a = image->data+3;
     else
-	a = NULL;
+        a = NULL;
 
     /* write data */
     for (y = 0; y < image->height; y++) {
 
-	fprintf(file, "\"");
+        fprintf(file, "\"");
 
-	for (x = 0; x < image->width; x++) {
+        for (x = 0; x < image->width; x++) {
 
-	    if (!a || *a>127) {
-		tmpc = lookfor(colormap, (unsigned)*r<<16|(unsigned)*g<<8|(unsigned)*b);
+            if (!a || *a>127) {
+                tmpc = lookfor(colormap, (unsigned)*r<<16|(unsigned)*g<<8|(unsigned)*b);
 
-		fprintf(file, index2str(buf, tmpc->index, charsPerPixel));
-	    } else {
-		fprintf(file, transp);
-	    }
+                fprintf(file, index2str(buf, tmpc->index, charsPerPixel));
+            } else {
+                fprintf(file, transp);
+            }
 
             if (a) {
                 r += 4; g += 4; b += 4; a += 4;
             } else {
                 r += 3; g += 3; b += 3;
             }
-	}
+        }
 
-	if (y < image->height-1)
-	    fprintf(file, "\",\n");
-	else
-	    fprintf(file, "\"};\n");
+        if (y < image->height-1)
+            fprintf(file, "\",\n");
+        else
+            fprintf(file, "\"};\n");
     }
 
     ok = 1;
@@ -667,7 +667,7 @@ uhoh:
     errno = 0;
     fclose(file);
     if (ok && errno==ENOSPC) {
-	RErrorCode = RERR_WRITE;
+        RErrorCode = RERR_WRITE;
     }
 
     freecolormap(colormap);

@@ -2260,7 +2260,7 @@ byebye:
 
     ((WMenu*)desc->parent)->flags.inside_handler = 0;
 #ifdef VIRTUAL_DESKTOP
-        wWorkspaceRaiseEdge(scr);
+    wWorkspaceRaiseEdge(scr);
 #endif
 }
 

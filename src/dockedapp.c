@@ -65,7 +65,7 @@ typedef struct _AppSettingsPanel {
     WMFrame *pasteCommandFrame;
     WMTextField *pasteCommandField;
     WMLabel *pasteCommandLabel;
-    
+
     WMFrame *iconFrame;
     WMTextField *iconField;
     WMButton *browseBtn;
@@ -91,16 +91,16 @@ static void
 updateCommand(WAppIcon *icon, char *command)
 {
     if (icon->command)
-	wfree(icon->command);
+        wfree(icon->command);
     if (command && (command[0]==0 || (command[0]=='-' && command[1]==0))) {
-	wfree(command);
-	command = NULL;
+        wfree(command);
+        command = NULL;
     }
     icon->command = command;
 
     if (!icon->wm_class && !icon->wm_instance && icon->command
-	&& strlen(icon->command)>0) {
-	icon->forced_dock = 1;
+        && strlen(icon->command)>0) {
+        icon->forced_dock = 1;
     }
 }
 
@@ -109,10 +109,10 @@ static void
 updatePasteCommand(WAppIcon *icon, char *command)
 {
     if (icon->paste_command)
-	wfree(icon->paste_command);
+        wfree(icon->paste_command);
     if (command && (command[0]==0 || (command[0]=='-' && command[1]==0))) {
-	wfree(command);
-	command = NULL;
+        wfree(command);
+        command = NULL;
     }
     icon->paste_command = command;
 }
@@ -124,10 +124,10 @@ static void
 updateDNDCommand(WAppIcon *icon, char *command)
 {
     if (icon->dnd_command)
-	wfree(icon->dnd_command);
+        wfree(icon->dnd_command);
     if (command && (command[0]==0 || (command[0]=='-' && command[1]==0))) {
-	wfree(command);
-	command = NULL;
+        wfree(command);
+        command = NULL;
     }
     icon->dnd_command = command;
 }
@@ -141,36 +141,36 @@ updateSettingsPanelIcon(AppSettingsPanel *panel)
 
     file = WMGetTextFieldText(panel->iconField);
     if (!file)
-	WMSetLabelImage(panel->iconLabel, NULL);
+        WMSetLabelImage(panel->iconLabel, NULL);
     else {
-	char *path;
+        char *path;
 
-	path = FindImage(wPreferences.icon_path, file);
-	if (!path) {
-	    wwarning(_("could not find icon %s, used in a docked application"),
-		     file);
-	    wfree(file);
-	    WMSetLabelImage(panel->iconLabel, NULL);
-	    return;
-	} else {
-	    WMPixmap *pixmap;
-	    RColor color;
+        path = FindImage(wPreferences.icon_path, file);
+        if (!path) {
+            wwarning(_("could not find icon %s, used in a docked application"),
+                     file);
+            wfree(file);
+            WMSetLabelImage(panel->iconLabel, NULL);
+            return;
+        } else {
+            WMPixmap *pixmap;
+            RColor color;
 
-	    color.red = 0xae;
-	    color.green = 0xaa;
-	    color.blue = 0xae;
-	    color.alpha = 0;
-	    pixmap = WMCreateBlendedPixmapFromFile(WMWidgetScreen(panel->win),
-						   path, &color);
-	    if (!pixmap) {
-		WMSetLabelImage(panel->iconLabel, NULL);
-	    } else {
-		WMSetLabelImage(panel->iconLabel, pixmap);
-		WMReleasePixmap(pixmap);
-	    }
-	}
-	wfree(file);
-	wfree(path);
+            color.red = 0xae;
+            color.green = 0xaa;
+            color.blue = 0xae;
+            color.alpha = 0;
+            pixmap = WMCreateBlendedPixmapFromFile(WMWidgetScreen(panel->win),
+                                                   path, &color);
+            if (!pixmap) {
+                WMSetLabelImage(panel->iconLabel, NULL);
+            } else {
+                WMSetLabelImage(panel->iconLabel, pixmap);
+                WMReleasePixmap(pixmap);
+            }
+        }
+        wfree(file);
+        wfree(path);
     }
 }
 
@@ -187,22 +187,22 @@ chooseIconCallback(WMWidget *self, void *clientData)
     WMSetButtonEnabled(panel->browseBtn, False);
 
     result = wIconChooserDialog(panel->wwin->screen_ptr, &file,
-				panel->editedIcon->wm_instance,
-				panel->editedIcon->wm_class);
+                                panel->editedIcon->wm_instance,
+                                panel->editedIcon->wm_class);
 
     panel->choosingIcon = 0;
     if (!panel->destroyed) {
-	if (result) {
-	    WMSetTextFieldText(panel->iconField, file);
-	    wfree(file);
-	    updateSettingsPanelIcon(panel);
-	}
+        if (result) {
+            WMSetTextFieldText(panel->iconField, file);
+            wfree(file);
+            updateSettingsPanelIcon(panel);
+        }
 
-	WMSetButtonEnabled(panel->browseBtn, True);
+        WMSetButtonEnabled(panel->browseBtn, True);
     } else {
-	/* kluge for the case, the user asked to close the panel before
-	 * the icon chooser */
-	DestroyDockAppSettingsPanel(panel);
+        /* kluge for the case, the user asked to close the panel before
+         * the icon chooser */
+        DestroyDockAppSettingsPanel(panel);
     }
 }
 
@@ -217,66 +217,66 @@ panelBtnCallback(WMWidget *self, void *data)
 
     done = 1;
     if (panel->okBtn == btn) {
-	text = WMGetTextFieldText(panel->iconField);
-	if (text[0]==0) {
-	    wfree(text);
-	    text = NULL;
-	}
-	if (!wIconChangeImageFile(panel->editedIcon->icon, text)) {
-	    char *buf;
-	    int len = strlen(text) + 64;
+        text = WMGetTextFieldText(panel->iconField);
+        if (text[0]==0) {
+            wfree(text);
+            text = NULL;
+        }
+        if (!wIconChangeImageFile(panel->editedIcon->icon, text)) {
+            char *buf;
+            int len = strlen(text) + 64;
 
-	    buf = wmalloc(len);
-	    snprintf(buf, len, _("Could not open specified icon file: %s"), text);
-	    if (wMessageDialog(panel->wwin->screen_ptr, _("Error"), buf,
-			       _("OK"), _("Ignore"), NULL) == WAPRDefault) {
-		if (text)
-		    wfree(text);
-		wfree(buf);
-		return;
-	    }
-	    wfree(buf);
-	} else {
-	    WAppIcon *aicon = panel->editedIcon;
+            buf = wmalloc(len);
+            snprintf(buf, len, _("Could not open specified icon file: %s"), text);
+            if (wMessageDialog(panel->wwin->screen_ptr, _("Error"), buf,
+                               _("OK"), _("Ignore"), NULL) == WAPRDefault) {
+                if (text)
+                    wfree(text);
+                wfree(buf);
+                return;
+            }
+            wfree(buf);
+        } else {
+            WAppIcon *aicon = panel->editedIcon;
 
-	    if (aicon == aicon->icon->core->screen_ptr->clip_icon)
-		wClipIconPaint(aicon);
-	    else
-		wAppIconPaint(aicon);
+            if (aicon == aicon->icon->core->screen_ptr->clip_icon)
+                wClipIconPaint(aicon);
+            else
+                wAppIconPaint(aicon);
 
-	    wDefaultChangeIcon(panel->wwin->screen_ptr, aicon->wm_instance,
-			       aicon->wm_class, text);
-	}
-	if (text)
-	    wfree(text);
+            wDefaultChangeIcon(panel->wwin->screen_ptr, aicon->wm_instance,
+                               aicon->wm_class, text);
+        }
+        if (text)
+            wfree(text);
 
-	/* cannot free text from this, because it will be not be duplicated
-	 * in updateCommand */
-	text = WMGetTextFieldText(panel->commandField);
-	if (text[0]==0) {
-	    wfree(text);
-	    text = NULL;
-	}
-	updateCommand(panel->editedIcon, text);
+        /* cannot free text from this, because it will be not be duplicated
+         * in updateCommand */
+        text = WMGetTextFieldText(panel->commandField);
+        if (text[0]==0) {
+            wfree(text);
+            text = NULL;
+        }
+        updateCommand(panel->editedIcon, text);
 #ifdef OFFIX_DND
-	/* cannot free text from this, because it will be not be duplicated
-	 * in updateDNDCommand */
-	text = WMGetTextFieldText(panel->dndCommandField);
-	updateDNDCommand(panel->editedIcon, text);
+        /* cannot free text from this, because it will be not be duplicated
+         * in updateDNDCommand */
+        text = WMGetTextFieldText(panel->dndCommandField);
+        updateDNDCommand(panel->editedIcon, text);
 #endif
-	text = WMGetTextFieldText(panel->pasteCommandField);
-	updatePasteCommand(panel->editedIcon, text);
+        text = WMGetTextFieldText(panel->pasteCommandField);
+        updatePasteCommand(panel->editedIcon, text);
 
 
-	panel->editedIcon->auto_launch =
-	    WMGetButtonSelected(panel->autoLaunchBtn);
+        panel->editedIcon->auto_launch =
+            WMGetButtonSelected(panel->autoLaunchBtn);
 
-	panel->editedIcon->lock =
-	    WMGetButtonSelected(panel->lockBtn);
+        panel->editedIcon->lock =
+            WMGetButtonSelected(panel->lockBtn);
     }
 
     if (done)
-	DestroyDockAppSettingsPanel(panel);
+        DestroyDockAppSettingsPanel(panel);
 }
 
 
@@ -304,7 +304,7 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
 
     panel->win = WMCreateWindow(scr->wmscreen, "applicationSettings");
     WMResizeWidget(panel->win, PWIDTH, PHEIGHT);
-    
+
     panel->iconLabel = WMCreateLabel(panel->win);
     WMResizeWidget(panel->iconLabel, 64, 64);
     WMMoveWidget(panel->iconLabel, 10, 10);
@@ -318,46 +318,46 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
     WMSetLabelFont(panel->nameLabel, font);
     WMReleaseFont(font);
     if (aicon->wm_class && strcmp(aicon->wm_class, "DockApp")==0)
-	WMSetLabelText(panel->nameLabel, aicon->wm_instance);
+        WMSetLabelText(panel->nameLabel, aicon->wm_instance);
     else
-	WMSetLabelText(panel->nameLabel, aicon->wm_class);
+        WMSetLabelText(panel->nameLabel, aicon->wm_class);
 
-    
+
     vbox = WMCreateBox(panel->win);
     WMResizeWidget(vbox, PWIDTH-20, PHEIGHT-84-10);
     WMMoveWidget(vbox, 10, 84);
-    
+
     panel->autoLaunchBtn = WMCreateSwitchButton(vbox);
     WMAddBoxSubview(vbox, WMWidgetView(panel->autoLaunchBtn), False, True,
-		    20, 20, 2);
+                    20, 20, 2);
     WMSetButtonText(panel->autoLaunchBtn,
-		    _("Start when Window Maker is started"));
+                    _("Start when Window Maker is started"));
     WMSetButtonSelected(panel->autoLaunchBtn, aicon->auto_launch);
 
     panel->lockBtn = WMCreateSwitchButton(vbox);
     WMAddBoxSubview(vbox, WMWidgetView(panel->lockBtn), False, True,
-		    20, 20, 5);
+                    20, 20, 5);
     WMSetButtonText(panel->lockBtn,
-		    _("Lock (prevent accidental removal)"));
+                    _("Lock (prevent accidental removal)"));
     WMSetButtonSelected(panel->lockBtn, aicon->lock);
 
     panel->commandFrame = WMCreateFrame(vbox);
     WMSetFrameTitle(panel->commandFrame, _("Application path and arguments"));
     WMAddBoxSubview(vbox, WMWidgetView(panel->commandFrame), False, True,
-		    50, 50, 5);
+                    50, 50, 5);
 
     panel->commandField = WMCreateTextField(panel->commandFrame);
     WMResizeWidget(panel->commandField, 256, 20);
     WMMoveWidget(panel->commandField, 10, 20);
     WMSetTextFieldText(panel->commandField, aicon->command);
 
-    WMMapSubwidgets(panel->commandFrame);    
+    WMMapSubwidgets(panel->commandFrame);
 
     panel->pasteCommandFrame = WMCreateFrame(vbox);
     WMSetFrameTitle(panel->pasteCommandFrame,
-		   _("Command for middle-click launch"));
+                    _("Command for middle-click launch"));
     WMAddBoxSubview(vbox, WMWidgetView(panel->pasteCommandFrame), False, True,
-		    70, 70, 5);
+                    70, 70, 5);
 
     panel->pasteCommandField = WMCreateTextField(panel->pasteCommandFrame);
     WMResizeWidget(panel->pasteCommandField, 256, 20);
@@ -369,14 +369,14 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
 
     WMSetTextFieldText(panel->pasteCommandField, aicon->paste_command);
     WMSetLabelText(panel->pasteCommandLabel,
-		   _("%s will be replaced with current selection"));
-    WMMapSubwidgets(panel->pasteCommandFrame);    
-    
+                   _("%s will be replaced with current selection"));
+    WMMapSubwidgets(panel->pasteCommandFrame);
+
     panel->dndCommandFrame = WMCreateFrame(vbox);
     WMSetFrameTitle(panel->dndCommandFrame,
-		    _("Command for files dropped with DND"));
+                    _("Command for files dropped with DND"));
     WMAddBoxSubview(vbox, WMWidgetView(panel->dndCommandFrame), False, True,
-		    70, 70, 5);
+                    70, 70, 5);
 
     panel->dndCommandField = WMCreateTextField(panel->dndCommandFrame);
     WMResizeWidget(panel->dndCommandField, 256, 20);
@@ -388,25 +388,25 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
 #ifdef OFFIX_DND
     WMSetTextFieldText(panel->dndCommandField, aicon->dnd_command);
     WMSetLabelText(panel->dndCommandLabel,
-		   _("%d will be replaced with the file name"));
+                   _("%d will be replaced with the file name"));
 #else
     WMSetTextFieldEditable(panel->dndCommandField, False);
     WMSetLabelText(panel->dndCommandLabel,
-		   _("DND support was not compiled in"));
+                   _("DND support was not compiled in"));
 #endif
-    WMMapSubwidgets(panel->dndCommandFrame);    
+    WMMapSubwidgets(panel->dndCommandFrame);
 
     panel->iconFrame = WMCreateFrame(vbox);
     WMSetFrameTitle(panel->iconFrame, _("Icon Image"));
     WMAddBoxSubview(vbox, WMWidgetView(panel->iconFrame), False, True,
-		    50, 50, 10);
+                    50, 50, 10);
 
     panel->iconField = WMCreateTextField(panel->iconFrame);
     WMResizeWidget(panel->iconField, 176, 20);
     WMMoveWidget(panel->iconField, 10, 20);
     WMSetTextFieldText(panel->iconField,
-		       wDefaultGetIconFile(scr, aicon->wm_instance,
-					   aicon->wm_class, True));
+                       wDefaultGetIconFile(scr, aicon->wm_instance,
+                                           aicon->wm_class, True));
 
     panel->browseBtn = WMCreateCommandButton(panel->iconFrame);
     WMResizeWidget(panel->browseBtn, 70, 24);
@@ -416,26 +416,26 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
 
 
     {
-	WMBox *hbox;
-	
-	hbox = WMCreateBox(vbox);
-	WMSetBoxHorizontal(hbox, True);
-	WMAddBoxSubview(vbox, WMWidgetView(hbox), False, True, 24, 24, 0);
-			
-	
-	panel->okBtn = WMCreateCommandButton(hbox);
-	WMSetButtonText(panel->okBtn, _("OK"));
-	WMSetButtonAction(panel->okBtn, panelBtnCallback, panel);
-	WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->okBtn), False, True, 80, 80, 0);
+        WMBox *hbox;
 
-	panel->cancelBtn = WMCreateCommandButton(hbox);
-	WMSetButtonText(panel->cancelBtn, _("Cancel"));
-	WMSetButtonAction(panel->cancelBtn, panelBtnCallback, panel);
-	WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->cancelBtn), False, True, 80, 80, 5);
-	
-	WMMapSubwidgets(hbox);
+        hbox = WMCreateBox(vbox);
+        WMSetBoxHorizontal(hbox, True);
+        WMAddBoxSubview(vbox, WMWidgetView(hbox), False, True, 24, 24, 0);
+
+
+        panel->okBtn = WMCreateCommandButton(hbox);
+        WMSetButtonText(panel->okBtn, _("OK"));
+        WMSetButtonAction(panel->okBtn, panelBtnCallback, panel);
+        WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->okBtn), False, True, 80, 80, 0);
+
+        panel->cancelBtn = WMCreateCommandButton(hbox);
+        WMSetButtonText(panel->cancelBtn, _("Cancel"));
+        WMSetButtonAction(panel->cancelBtn, panelBtnCallback, panel);
+        WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->cancelBtn), False, True, 80, 80, 5);
+
+        WMMapSubwidgets(hbox);
     }
-    
+
     WMRealizeWidget(panel->win);
     WMMapSubwidgets(panel->win);
     WMMapSubwidgets(vbox);
@@ -444,7 +444,7 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
     updateSettingsPanelIcon(panel);
 
     parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, PWIDTH, PHEIGHT,
-				 0, 0, 0);
+                                 0, 0, 0);
     XSelectInput(dpy, parent, KeyPressMask|KeyReleaseMask);
 
     XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
@@ -453,27 +453,27 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
      * make things relative to head
      */
     {
-	WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+        WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
 
-	y = aicon->y_pos;
-	if (y < 0)
-	    y = 0;
-	else if (y + PHEIGHT > rect.pos.y + rect.size.height)
-	    y = rect.pos.y + rect.size.height - PHEIGHT - 30;
+        y = aicon->y_pos;
+        if (y < 0)
+            y = 0;
+        else if (y + PHEIGHT > rect.pos.y + rect.size.height)
+            y = rect.pos.y + rect.size.height - PHEIGHT - 30;
 
-	if (aicon->dock && aicon->dock->type == WM_DOCK) {
-	    if (aicon->dock->on_right_side)
-		x = rect.pos.x + rect.size.width/2;
-	    else
-		x = rect.pos.x + rect.size.width/2 - PWIDTH - 2;
-	} else {
-	    x = rect.pos.x + (rect.size.width - PWIDTH)/2;
-	}
+        if (aicon->dock && aicon->dock->type == WM_DOCK) {
+            if (aicon->dock->on_right_side)
+                x = rect.pos.x + rect.size.width/2;
+            else
+                x = rect.pos.x + rect.size.width/2 - PWIDTH - 2;
+        } else {
+            x = rect.pos.x + (rect.size.width - PWIDTH)/2;
+        }
     }
 
     panel->wwin = wManageInternalWindow(scr, parent, None,
-					_("Docked Application Settings"),
-					x, y, PWIDTH, PHEIGHT);
+                                        _("Docked Application Settings"),
+                                        x, y, PWIDTH, PHEIGHT);
 
     panel->wwin->client_leader = WMWidgetXID(panel->win);
 
@@ -489,10 +489,10 @@ void
 DestroyDockAppSettingsPanel(AppSettingsPanel *panel)
 {
     if (!panel->destroyed) {
-	XUnmapWindow(dpy, panel->wwin->client_win);
-	XReparentWindow(dpy, panel->wwin->client_win,
-			panel->wwin->screen_ptr->root_win, 0, 0);
-	wUnmanageWindow(panel->wwin, False, False);
+        XUnmapWindow(dpy, panel->wwin->client_win);
+        XReparentWindow(dpy, panel->wwin->client_win,
+                        panel->wwin->screen_ptr->root_win, 0, 0);
+        wUnmanageWindow(panel->wwin, False, False);
     }
 
     panel->destroyed = 1;
@@ -504,7 +504,7 @@ DestroyDockAppSettingsPanel(AppSettingsPanel *panel)
      * but it is not working for some reason.
      */
     if (panel->choosingIcon)
-	return;
+        return;
 
     WMDestroyWidget(panel->win);
 
@@ -516,3 +516,4 @@ DestroyDockAppSettingsPanel(AppSettingsPanel *panel)
 
     wfree(panel);
 }
+

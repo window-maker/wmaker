@@ -1,9 +1,9 @@
 /* Themes.c- Theme stuff
- * 
+ *
  *  WPrefs - Window Maker Preferences Program
- * 
+ *
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -31,18 +31,18 @@ typedef struct _Panel {
     char *sectionName;
 
     CallbackRec callbacks;
-    
+
     WMWidget *parent;
 
     WMButton *saveB;
     WMList *list;
     WMButton *loadB;
     WMButton *instB;
-    
+
     WMFrame *totF;
     WMButton *totB;
     WMLabel *totL;
-    
+
     WMFrame *botF;
     WMButton *botB;
     WMLabel *botL;
@@ -88,23 +88,23 @@ static pid_t
 downloadFile(WMScreen *scr, _Panel *panel, char *file)
 {
     pid_t pid;
-    
+
     pid = fork();
     if (pid < 0) {
-	wsyserror("could not fork() process");
+        wsyserror("could not fork() process");
 
-	WMRunAlertPanel(scr, GetWindow(panel), _("Error"), 
-			"Could not start download. fork() failed",
-			_("OK"), NULL, NULL);
-	return -1;
+        WMRunAlertPanel(scr, GetWindow(panel), _("Error"),
+                        "Could not start download. fork() failed",
+                        _("OK"), NULL, NULL);
+        return -1;
     }
     if (pid != 0) {
-	return pid;
+        return pid;
     }
 
     close(ConnectionNumber(WMScreenDisplay(scr)));
 
-    
+
 
     exit(1);
 }
@@ -119,28 +119,28 @@ downloadCallback(WMWidget *w, void *data)
     pid_t *pid;
 
     if (button == panel->totB) {
-	pid = &panel->tilePID;
+        pid = &panel->tilePID;
     } else {
-	pid = &panel->barPID;
+        pid = &panel->barPID;
     }
-    
+
     if (*pid == 0) {
-	newPid = downloadFile(WMWidgetScreen(w), panel, NULL);
-	if (newPid < 0) {
-	    return;
-	}
-	WMSetButtonText(button, _("Stop"));
+        newPid = downloadFile(WMWidgetScreen(w), panel, NULL);
+        if (newPid < 0) {
+            return;
+        }
+        WMSetButtonText(button, _("Stop"));
 
-	if (button == panel->totB) {
-	    AddDeadChildHandler(newPid, finishedTileDownload, data);
-	} else {
-	    AddDeadChildHandler(newPid, finishedBarDownload, data);
-	}
-	*pid = newPid;
+        if (button == panel->totB) {
+            AddDeadChildHandler(newPid, finishedTileDownload, data);
+        } else {
+            AddDeadChildHandler(newPid, finishedBarDownload, data);
+        }
+        *pid = newPid;
     } else {
-	*pid = 0;
+        *pid = 0;
 
-	WMSetButtonText(button, _("Download"));
+        WMSetButtonText(button, _("Download"));
     }
 }
 
@@ -151,8 +151,8 @@ updateThemeList(_Panel *panel)
 {
     WMClearList(panel->list);
 
-    
-    
+
+
 }
 
 
@@ -184,9 +184,9 @@ createPanel(Panel *p)
     WMMoveWidget(panel->instB, 95, 200);
     WMSetButtonText(panel->instB, _("Install"));
 
-    
+
     /**************** Tile of the day ****************/
-    
+
     panel->totF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->totF, 210, 105);
     WMMoveWidget(panel->totF, 240, 10);
@@ -204,7 +204,7 @@ createPanel(Panel *p)
     WMSetButtonAction(panel->totB, downloadCallback, panel);
 
     WMMapSubwidgets(panel->totF);
-    
+
     /**************** Bar of the day ****************/
 
     panel->botF = WMCreateFrame(panel->box);
@@ -227,7 +227,7 @@ createPanel(Panel *p)
 
     WMRealizeWidget(panel->box);
     WMMapSubwidgets(panel->box);
-    
+
     showData(panel);
 }
 
@@ -248,9 +248,9 @@ InitThemes(WMScreen *scr, WMWidget *parent)
     memset(panel, 0, sizeof(_Panel));
 
     panel->sectionName = _("Themes");
-    
+
     panel->parent = parent;
-    
+
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;
 
@@ -258,3 +258,4 @@ InitThemes(WMScreen *scr, WMWidget *parent)
 
     return panel;
 }
+

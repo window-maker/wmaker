@@ -16,9 +16,9 @@ static unsigned long eventMasks[] = {
     ButtonPressMask,                    /* ButtonPress */
     ButtonReleaseMask,                  /* ButtonRelease */
     PointerMotionMask|PointerMotionHintMask|ButtonMotionMask
-            |Button1MotionMask|Button2MotionMask|Button3MotionMask
-            |Button4MotionMask|Button5MotionMask,
-                                        /* MotionNotify */
+    |Button1MotionMask|Button2MotionMask|Button3MotionMask
+    |Button4MotionMask|Button5MotionMask,
+    /* MotionNotify */
     EnterWindowMask,                    /* EnterNotify */
     LeaveWindowMask,                    /* LeaveNotify */
     FocusChangeMask,                    /* FocusIn */

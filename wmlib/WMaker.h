@@ -1,18 +1,18 @@
-/* 
+/*
  * WindowMaker interface definitions
- * 
+ *
  * Copyright (C) 1997-2003 Alfredo K. Kojima
- *  
+ *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
  *  License as published by the Free Software Foundation; either
  *  version 2 of the License, or (at your option) any later version.
- *  
+ *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *  Library General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the Free
  *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -78,29 +78,29 @@ typedef struct {
  * range INT_MIN+1 to INT_MAX
  */
 enum {
-  WMDesktopWindowLevel = -1000, /* GNUstep addition     */
-  WMNormalWindowLevel = 0,
-  WMFloatingWindowLevel = 3,
-  WMSubmenuWindowLevel = 3,
-  WMTornOffMenuWindowLevel = 3,
-  WMMainMenuWindowLevel = 20,
-  WMDockWindowLevel = 21,       /* Deprecated - use NSStatusWindowLevel */
-  WMStatusWindowLevel = 21,
-  WMModalPanelWindowLevel = 100,
-  WMPopUpMenuWindowLevel = 101,
-  WMScreenSaverWindowLevel = 1000
+    WMDesktopWindowLevel = -1000, /* GNUstep addition     */
+    WMNormalWindowLevel = 0,
+    WMFloatingWindowLevel = 3,
+    WMSubmenuWindowLevel = 3,
+    WMTornOffMenuWindowLevel = 3,
+    WMMainMenuWindowLevel = 20,
+    WMDockWindowLevel = 21,       /* Deprecated - use NSStatusWindowLevel */
+    WMStatusWindowLevel = 21,
+    WMModalPanelWindowLevel = 100,
+    WMPopUpMenuWindowLevel = 101,
+    WMScreenSaverWindowLevel = 1000
 };
 
 
 /* window attributes */
 enum {
-  WMBorderlessWindowMask = 0,
-  WMTitledWindowMask = 1,
-  WMClosableWindowMask = 2,
-  WMMiniaturizableWindowMask = 4,
-  WMResizableWindowMask = 8,
-  WMIconWindowMask = 64,
-  WMMiniWindowMask = 128
+    WMBorderlessWindowMask = 0,
+    WMTitledWindowMask = 1,
+    WMClosableWindowMask = 2,
+    WMMiniaturizableWindowMask = 4,
+    WMResizableWindowMask = 8,
+    WMIconWindowMask = 64,
+    WMMiniWindowMask = 128
 };
 #endif
 
@@ -116,7 +116,7 @@ int WMProcessEvent(WMAppContext *app, XEvent *event);
 
 
 WMAppContext *WMAppCreateWithMain(Display *display, int screen_number,
-				  Window main_window);
+                                  Window main_window);
 
 WMAppContext *WMAppCreate(Display *display, int screen_number);
 
@@ -128,8 +128,8 @@ int WMAppSetMainMenu(WMAppContext *app, WMMenu *menu);
 int WMRealizeMenus(WMAppContext *app);
 
 
-void WMSetWindowAttributes(Display *dpy, Window window, 
-			   GNUstepWMAttributes *attributes);
+void WMSetWindowAttributes(Display *dpy, Window window,
+                           GNUstepWMAttributes *attributes);
 
 
 void WMHideApplication(WMAppContext *app);
@@ -141,10 +141,10 @@ void WMHideOthers(WMAppContext *app);
 WMMenu *WMMenuCreate(WMAppContext *app, char *title);
 
 int WMMenuAddItem(WMMenu *menu, char *text, WMMenuAction action,
-		  void *clientData, WMFreeFunction freedata, char *rtext);
+                  void *clientData, WMFreeFunction freedata, char *rtext);
 
-int WMMenuInsertItem(WMMenu *menu, int index, char *text, 
-		     WMMenuAction *action, char *rtext);
+int WMMenuInsertItem(WMMenu *menu, int index, char *text,
+                     WMMenuAction *action, char *rtext);
 
 int WMMenuRemoveItem(WMMenu *menu, int index);
 

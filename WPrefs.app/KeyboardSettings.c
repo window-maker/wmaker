@@ -1,9 +1,9 @@
 /* KeyboardSettings.c- keyboard options (equivalent to xset)
- * 
+ *
  *  WPrefs - Window Maker Preferences Program
- * 
+ *
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -38,12 +38,12 @@ typedef struct _Panel {
     WMButton *delaB[4];
     WMLabel *dmsL;
     WMTextField *dmsT;
-    
+
     WMFrame *rateF;
     WMButton *rateB[4];
     WMLabel *rmsL;
     WMTextField *rmsT;
-    
+
     WMTextField *testT;
 } _Panel;
 
@@ -65,38 +65,38 @@ createPanel(Panel *p)
 
     panel->box = WMCreateBox(panel->parent);
     WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
-    
+
     /**************** Initial Key Repeat ***************/
     panel->delaF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->delaF, 495, 60);
     WMMoveWidget(panel->delaF, 15, 10);
     WMSetFrameTitle(panel->delaF, _("Initial Key Repeat"));
-        
+
     for (i = 0; i < 4; i++) {
-	panel->delaB[i] = WMCreateButton(panel->delaF, WBTOnOff);
-	WMResizeWidget(panel->delaB[i], 60, 20);
-	WMMoveWidget(panel->delaB[i], 70+i*60, 25);
-	if (i>0)
-	    WMGroupButtons(panel->delaB[0], panel->delaB[i]);
-	switch (i) {
-	 case 0:
-	    WMSetButtonText(panel->delaB[i], "....a");
-	    break;
-	 case 1:
-	    WMSetButtonText(panel->delaB[i], "...a");
-	    break;
-	 case 2:
-	    WMSetButtonText(panel->delaB[i], "..a");
-	    break;
-	 case 3:
-	    WMSetButtonText(panel->delaB[i], ".a");
-	    break;
-	}
+        panel->delaB[i] = WMCreateButton(panel->delaF, WBTOnOff);
+        WMResizeWidget(panel->delaB[i], 60, 20);
+        WMMoveWidget(panel->delaB[i], 70+i*60, 25);
+        if (i>0)
+            WMGroupButtons(panel->delaB[0], panel->delaB[i]);
+        switch (i) {
+        case 0:
+            WMSetButtonText(panel->delaB[i], "....a");
+            break;
+        case 1:
+            WMSetButtonText(panel->delaB[i], "...a");
+            break;
+        case 2:
+            WMSetButtonText(panel->delaB[i], "..a");
+            break;
+        case 3:
+            WMSetButtonText(panel->delaB[i], ".a");
+            break;
+        }
     }
     panel->dmsT = WMCreateTextField(panel->delaF);
     WMResizeWidget(panel->dmsT, 50, 20);
     WMMoveWidget(panel->dmsT, 345, 25);
-/*    WMSetTextFieldAlignment(panel->dmsT, WARight);*/
+    /*    WMSetTextFieldAlignment(panel->dmsT, WARight);*/
 
     panel->dmsL = WMCreateLabel(panel->delaF);
     WMResizeWidget(panel->dmsL, 30, 16);
@@ -104,48 +104,48 @@ createPanel(Panel *p)
     WMSetLabelTextColor(panel->dmsL, color);
     WMSetLabelFont(panel->dmsL, font);
     WMSetLabelText(panel->dmsL, "msec");
-    
+
     WMMapSubwidgets(panel->delaF);
-    
+
     /**************** Key Repeat Rate ***************/
     panel->rateF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->rateF, 495, 60);
     WMMoveWidget(panel->rateF, 15, 95);
     WMSetFrameTitle(panel->rateF, _("Key Repeat Rate"));
-    
+
     for (i = 0; i < 4; i++) {
-	panel->rateB[i] = WMCreateButton(panel->rateF, WBTOnOff);
-	WMResizeWidget(panel->rateB[i], 60, 20);
-	WMMoveWidget(panel->rateB[i], 70+i*60, 25);
-	if (i>0)
-	    WMGroupButtons(panel->rateB[0], panel->rateB[i]);
-	switch (i) {
-	 case 0:
-	    WMSetButtonText(panel->rateB[i], "a....a");
-	    break;
-	 case 1:
-	    WMSetButtonText(panel->rateB[i], "a...a");
-	    break;
-	 case 2:
-	    WMSetButtonText(panel->rateB[i], "a..a");
-	    break;
-	 case 3:
-	    WMSetButtonText(panel->rateB[i], "a.a");
-	    break;
-	}
+        panel->rateB[i] = WMCreateButton(panel->rateF, WBTOnOff);
+        WMResizeWidget(panel->rateB[i], 60, 20);
+        WMMoveWidget(panel->rateB[i], 70+i*60, 25);
+        if (i>0)
+            WMGroupButtons(panel->rateB[0], panel->rateB[i]);
+        switch (i) {
+        case 0:
+            WMSetButtonText(panel->rateB[i], "a....a");
+            break;
+        case 1:
+            WMSetButtonText(panel->rateB[i], "a...a");
+            break;
+        case 2:
+            WMSetButtonText(panel->rateB[i], "a..a");
+            break;
+        case 3:
+            WMSetButtonText(panel->rateB[i], "a.a");
+            break;
+        }
     }
     panel->rmsT = WMCreateTextField(panel->rateF);
     WMResizeWidget(panel->rmsT, 50, 20);
     WMMoveWidget(panel->rmsT, 345, 25);
-/*    WMSetTextFieldAlignment(panel->rmsT, WARight);*/
-	
+    /*    WMSetTextFieldAlignment(panel->rmsT, WARight);*/
+
     panel->rmsL = WMCreateLabel(panel->rateF);
     WMResizeWidget(panel->rmsL, 30, 16);
     WMMoveWidget(panel->rmsL, 400, 30);
     WMSetLabelTextColor(panel->rmsL, color);
     WMSetLabelFont(panel->rmsL, font);
     WMSetLabelText(panel->rmsL, "msec");
-    
+
     WMMapSubwidgets(panel->rateF);
 
     panel->testT = WMCreateTextField(panel->box);
@@ -155,7 +155,7 @@ createPanel(Panel *p)
 
     WMReleaseColor(color);
     WMReleaseFont(font);
-    
+
     WMRealizeWidget(panel->box);
     WMMapSubwidgets(panel->box);
 }
@@ -175,10 +175,11 @@ InitKeyboardSettings(WMScreen *scr, WMWidget *parent)
     panel->description = _("Not done");
 
     panel->parent = parent;
-    
+
     panel->callbacks.createWidgets = createPanel;
-        
+
     AddSection(panel, ICON_FILE);
 
     return panel;
 }
+

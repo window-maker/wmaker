@@ -1,8 +1,8 @@
 /*
  *  Window Maker miscelaneous function library
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -64,7 +64,7 @@ wstrerror(int errnum)
 
 /*********************************************************************
  * Prints a message with variable arguments
- * 
+ *
  * msg - message to print with optional formatting
  * ... - arguments to use on formatting
  *********************************************************************/
@@ -90,19 +90,19 @@ wmessage(const char *msg, ...)
 
 
 /*********************************************************************
- * Prints a warning message with variable arguments 
- * 
+ * Prints a warning message with variable arguments
+ *
  * msg - message to print with optional formatting
  * ... - arguments to use on formatting
  *********************************************************************/
-void 
+void
 wwarning(const char *msg, ...)
 {
     va_list args;
     char buf[MAXLINE];
-    
+
     va_start(args, msg);
-    
+
     vsnprintf(buf, MAXLINE-3, msg, args);
     strcat(buf,"\n");
     fflush(stdout);
@@ -111,18 +111,18 @@ wwarning(const char *msg, ...)
     fputs(buf, stderr);
     fflush(stdout);
     fflush(stderr);
-    
+
     va_end(args);
 }
 
 
 /**************************************************************************
  * Prints a fatal error message with variable arguments and terminates
- * 
+ *
  * msg - message to print with optional formatting
- * ... - arguments to use on formatting 
+ * ... - arguments to use on formatting
  **************************************************************************/
-void 
+void
 wfatal(const char *msg, ...)
 {
     va_list args;
@@ -144,12 +144,12 @@ wfatal(const char *msg, ...)
 
 
 /*********************************************************************
- * Prints a system error message with variable arguments 
- * 
+ * Prints a system error message with variable arguments
+ *
  * msg - message to print with optional formatting
  * ... - arguments to use on formatting
  *********************************************************************/
-void 
+void
 wsyserror(const char *msg, ...)
 {
     va_list args;
@@ -174,12 +174,12 @@ wsyserror(const char *msg, ...)
 /*********************************************************************
  * Prints a system error message with variable arguments, being given
  * the error code.
- * 
+ *
  * error - the error code foe which to print the message
  * msg   - message to print with optional formatting
  * ...   - arguments to use on formatting
  *********************************************************************/
-void 
+void
 wsyserrorwithcode(int error, const char *msg, ...)
 {
     va_list args;

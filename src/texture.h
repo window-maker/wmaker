@@ -1,8 +1,8 @@
 /*
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -69,7 +69,7 @@ typedef struct WTexSolid {
     char subtype;
     XColor normal;
     GC normal_gc;
-    
+
     GC light_gc;
     GC dim_gc;
     GC dark_gc;
@@ -148,7 +148,7 @@ typedef struct WTexFunction {
 } WTexFunction;
 
 typedef union WTexture {
-    WTexAny any;    
+    WTexAny any;
     WTexSolid solid;
     WTexGradient gradient;
     WTexIGradient igradient;
@@ -164,8 +164,8 @@ WTexGradient *wTextureMakeGradient(WScreen*, int, RColor*, RColor*);
 WTexMGradient *wTextureMakeMGradient(WScreen*, int, RColor**);
 WTexTGradient *wTextureMakeTGradient(WScreen*, int, RColor*, RColor*, char *, int);
 WTexIGradient *wTextureMakeIGradient(WScreen*, int, RColor[], int, RColor[]);
-WTexPixmap *wTextureMakePixmap(WScreen *scr, int style, char *pixmap_file, 
-			       XColor *color);
+WTexPixmap *wTextureMakePixmap(WScreen *scr, int style, char *pixmap_file,
+                               XColor *color);
 #ifdef TEXTURE_PLUGIN
 WTexFunction *wTextureMakeFunction(WScreen*, char *, char *, int, char **);
 #endif
@@ -176,12 +176,12 @@ struct RImage *wTextureRenderImage(WTexture*, int, int, int);
 
 
 void wTexturePaintTitlebar(struct WWindow *wwin, WTexture *texture, Pixmap *tdata,
-			   int repaint);
+                           int repaint);
 
 
 #define FREE_PIXMAP(p) if ((p)!=None) XFreePixmap(dpy, (p)), (p)=None
 
 void wDrawBevel(Drawable d, unsigned width, unsigned height,
-		WTexSolid *texture, int relief);
+                WTexSolid *texture, int relief);
 
 #endif

@@ -1,9 +1,9 @@
 /* WindowHandling.c- options for handling windows
- * 
+ *
  *  WPrefs - Window Maker Preferences Program
- * 
+ *
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -31,16 +31,16 @@ typedef struct _Panel {
     char *description;
 
     CallbackRec callbacks;
-    
+
     WMWidget *parent;
-    
+
     WMFrame *placF;
     WMPopUpButton *placP;
     WMLabel *porigL;
     WMLabel *porigvL;
     WMFrame *porigF;
     WMLabel *porigW;
-    
+
     WMSlider *vsli;
     WMSlider *hsli;
 
@@ -53,7 +53,7 @@ typedef struct _Panel {
     WMFrame *maxiF;
     WMButton *miconB;
     WMButton *mdockB;
-    
+
     WMFrame *opaqF;
     WMButton *opaqB;
 
@@ -74,10 +74,10 @@ typedef struct _Panel {
 
 static char *placements[] = {
     "auto",
-	"random",
-	"manual",
-	"cascade",
-        "smart"
+    "random",
+    "manual",
+    "cascade",
+    "smart"
 };
 
 
@@ -92,11 +92,11 @@ sliderCallback(WMWidget *w, void *data)
 
     x = WMGetSliderValue(panel->hsli);
     y = WMGetSliderValue(panel->vsli);
-    
+
     rx = x*(WMWidgetWidth(panel->porigF)-3)/swidth+2;
     ry = y*(WMWidgetHeight(panel->porigF)-3)/sheight+2;
     WMMoveWidget(panel->porigW, rx, ry);
-    
+
     sprintf(buffer, "(%i,%i)", x, y);
     WMSetLabelText(panel->porigvL, buffer);
 }
@@ -113,33 +113,33 @@ resistanceCallback(WMWidget *w, void *data)
     i = WMGetSliderValue(panel->resS);
 
     if (i == 0)
-	WMSetLabelText(panel->resL, "OFF");
+        WMSetLabelText(panel->resL, "OFF");
     else {
-	sprintf(buffer, "%i", i);
-	WMSetLabelText(panel->resL, buffer);
+        sprintf(buffer, "%i", i);
+        WMSetLabelText(panel->resL, buffer);
     }
 }
 
 
 static int
-getPlacement(char *str) 
+getPlacement(char *str)
 {
     if (!str)
-	return 0;
+        return 0;
 
     if (strcasecmp(str, "auto")==0)
-	return 0;
+        return 0;
     else if (strcasecmp(str, "random")==0)
-	return 1;
+        return 1;
     else if (strcasecmp(str, "manual")==0)
-	return 2;
+        return 2;
     else if (strcasecmp(str, "cascade")==0)
-	return 3;
+        return 3;
     else if (strcasecmp(str, "smart")==0)
         return 4;
     else
-	wwarning(_("bad option value %s in WindowPlacement. Using default value"),
-		 str);
+        wwarning(_("bad option value %s in WindowPlacement. Using default value"),
+                 str);
     return 0;
 }
 
@@ -157,15 +157,15 @@ showData(_Panel *panel)
 
     arr = GetObjectForKey("WindowPlaceOrigin");
 
-    x = 0; 
+    x = 0;
     y = 0;
     if (arr && (!WMIsPLArray(arr) || WMGetPropListItemCount(arr)!=2)) {
-	wwarning(_("invalid data in option WindowPlaceOrigin. Using default (0,0)"));
+        wwarning(_("invalid data in option WindowPlaceOrigin. Using default (0,0)"));
     } else {
-	if (arr) {
-	    x = atoi(WMGetFromPLString(WMGetFromPLArray(arr, 0)));
-	    y = atoi(WMGetFromPLString(WMGetFromPLArray(arr, 1)));
-	}
+        if (arr) {
+            x = atoi(WMGetFromPLString(WMGetFromPLArray(arr, 0)));
+            y = atoi(WMGetFromPLString(WMGetFromPLArray(arr, 1)));
+        }
     }
 
     WMSetSliderValue(panel->hsli, x);
@@ -178,16 +178,16 @@ showData(_Panel *panel)
     resistanceCallback(NULL, panel);
 
     WMSetButtonSelected(panel->tranB, GetBoolForKey("OpenTransientOnOwnerWorkspace"));
-    
+
     WMSetButtonSelected(panel->opaqB, GetBoolForKey("OpaqueMove"));
-    
+
     WMSetButtonSelected(panel->miconB, GetBoolForKey("NoWindowOverIcons"));
 
     WMSetButtonSelected(panel->mdockB, GetBoolForKey("NoWindowOverDock"));
 
     if (GetBoolForKey("Attraction"))
         WMPerformButtonClick(panel->resrB);
-    else 
+    else
         WMPerformButtonClick(panel->resaB);
 }
 
@@ -197,13 +197,13 @@ storeData(_Panel *panel)
 {
     WMPropList *arr;
     char x[16], y[16];
-    
+
     SetBoolForKey(WMGetButtonSelected(panel->miconB), "NoWindowOverIcons");
     SetBoolForKey(WMGetButtonSelected(panel->mdockB), "NoWindowOverDock");
     SetBoolForKey(WMGetButtonSelected(panel->opaqB), "OpaqueMove");
     SetBoolForKey(WMGetButtonSelected(panel->tranB), "OpenTransientOnOwnerWorkspace");
     SetStringForKey(placements[WMGetPopUpButtonSelectedItem(panel->placP)],
-		    "WindowPlacement");
+                    "WindowPlacement");
     sprintf(x, "%i", WMGetSliderValue(panel->hsli));
     sprintf(y, "%i", WMGetSliderValue(panel->vsli));
     arr = WMCreatePLArray(WMCreatePLString(x), WMCreatePLString(y), NULL);
@@ -225,16 +225,16 @@ createPanel(Panel *p)
     int swidth, sheight;
     char *path;
     WMBox *hbox;
-    
+
     panel->box = WMCreateBox(panel->parent);
     WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
     WMSetBoxHorizontal(panel->box, False);
     WMSetBoxBorderWidth(panel->box, 8);
-    
+
     hbox = WMCreateBox(panel->box);
     WMSetBoxHorizontal(hbox, True);
     WMAddBoxSubview(panel->box, WMWidgetView(hbox), False, True, 110, 0, 10);
-    
+
     /************** Window Placement ***************/
     panel->placF = WMCreateFrame(hbox);
     WMMapWidget(panel->placF);
@@ -242,7 +242,7 @@ createPanel(Panel *p)
 
     WMSetFrameTitle(panel->placF, _("Window Placement"));
     WMSetBalloonTextForView(_("How to place windows when they are first put\n"
-			       "on screen."), WMWidgetView(panel->placF));
+                              "on screen."), WMWidgetView(panel->placF));
 
     panel->placP = WMCreatePopUpButton(panel->placF);
     WMResizeWidget(panel->placP, 105, 20);
@@ -252,39 +252,39 @@ createPanel(Panel *p)
     WMAddPopUpButtonItem(panel->placP, _("Manual"));
     WMAddPopUpButtonItem(panel->placP, _("Cascade"));
     WMAddPopUpButtonItem(panel->placP, _("Smart"));
-    
+
     panel->porigL = WMCreateLabel(panel->placF);
     WMResizeWidget(panel->porigL, 120, 32);
     WMMoveWidget(panel->porigL, 5, 45);
     WMSetLabelTextAlignment(panel->porigL, WACenter);
     WMSetLabelText(panel->porigL, _("Placement Origin"));
-    
+
     panel->porigvL = WMCreateLabel(panel->placF);
     WMResizeWidget(panel->porigvL, 80, 20);
     WMMoveWidget(panel->porigvL, 30, 75);
-    WMSetLabelTextAlignment(panel->porigvL, WACenter);    
+    WMSetLabelTextAlignment(panel->porigvL, WACenter);
 
     color = WMCreateRGBColor(scr, 0x5100, 0x5100, 0x7100, True);
     panel->porigF = WMCreateFrame(panel->placF);
     WMSetWidgetBackgroundColor(panel->porigF, color);
     WMReleaseColor(color);
     WMSetFrameRelief(panel->porigF, WRSunken);
-    
+
     swidth = WidthOfScreen(DefaultScreenOfDisplay(WMScreenDisplay(scr)));
     sheight = HeightOfScreen(DefaultScreenOfDisplay(WMScreenDisplay(scr)));
-    
+
     if (sheight > swidth) {
-	height = 70;
-	width = 70*swidth/sheight;
-	if (width > 240)
-	    width = 240;
-	height = 240*sheight/swidth;
+        height = 70;
+        width = 70*swidth/sheight;
+        if (width > 240)
+            width = 240;
+        height = 240*sheight/swidth;
     } else {
-	width = 240;
-	height = 240*sheight/swidth;
-	if (height > 70)
-	    height = 70;
-	width = 70*swidth/sheight;
+        width = 240;
+        height = 240*sheight/swidth;
+        if (height > 70)
+            height = 70;
+        width = 70*swidth/sheight;
     }
     WMResizeWidget(panel->porigF, width, height);
     WMMoveWidget(panel->porigF, 130+(240-width)/2, 20+(70-height)/2);
@@ -294,7 +294,7 @@ createPanel(Panel *p)
     WMMoveWidget(panel->porigW, 2, 2);
     WMSetLabelRelief(panel->porigW, WRRaised);
 
-    
+
     panel->hsli = WMCreateSlider(panel->placF);
     WMResizeWidget(panel->hsli, width, 12);
     WMMoveWidget(panel->hsli, 130+(240-width)/2, 20+(70-height)/2+height+2);
@@ -317,12 +317,12 @@ createPanel(Panel *p)
     panel->opaqF = WMCreateFrame(hbox);
     WMMapWidget(panel->opaqF);
     WMAddBoxSubview(hbox, WMWidgetView(panel->opaqF), False, True, 110, 0, 0);
-    
+
     WMSetFrameTitle(panel->opaqF, _("Opaque Move"));
     WMSetBalloonTextForView(_("Whether the window contents should be moved\n"
-			       "when dragging windows aroung or if only a\n"
-			       "frame should be displayed.\n"),
-			     WMWidgetView(panel->opaqF));
+                              "when dragging windows aroung or if only a\n"
+                              "frame should be displayed.\n"),
+                            WMWidgetView(panel->opaqF));
 
     panel->opaqB = WMCreateButton(panel->opaqF, WBTToggle);
     WMResizeWidget(panel->opaqB, 64, 64);
@@ -331,35 +331,35 @@ createPanel(Panel *p)
 
     path = LocateImage(NON_OPAQUE_MOVE_PIXMAP);
     if (path) {
-	pixmap = WMCreatePixmapFromFile(scr, path);
-	if (pixmap) {
-	    WMSetButtonImage(panel->opaqB, pixmap);
-	    WMReleasePixmap(pixmap);
-	} else {
-	    wwarning(_("could not load icon %s"), path);
-	}
-	wfree(path);
+        pixmap = WMCreatePixmapFromFile(scr, path);
+        if (pixmap) {
+            WMSetButtonImage(panel->opaqB, pixmap);
+            WMReleasePixmap(pixmap);
+        } else {
+            wwarning(_("could not load icon %s"), path);
+        }
+        wfree(path);
     }
-    
+
     path = LocateImage(OPAQUE_MOVE_PIXMAP);
     if (path) {
-	pixmap = WMCreatePixmapFromFile(scr, path);
-	if (pixmap) {
-	    WMSetButtonAltImage(panel->opaqB, pixmap);
-	    WMReleasePixmap(pixmap);
-	} else {
-	    wwarning(_("could not load icon %s"), path);
-	}
-	wfree(path);
+        pixmap = WMCreatePixmapFromFile(scr, path);
+        if (pixmap) {
+            WMSetButtonAltImage(panel->opaqB, pixmap);
+            WMReleasePixmap(pixmap);
+        } else {
+            wwarning(_("could not load icon %s"), path);
+        }
+        wfree(path);
     }
     WMMapSubwidgets(panel->opaqF);
-    
+
     /**************** Account for Icon/Dock ***************/
     panel->maxiF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->maxiF, 205, 95);
     WMMoveWidget(panel->maxiF, 305, 125);
     WMSetFrameTitle(panel->maxiF, _("When maximizing..."));
-    
+
     panel->miconB = WMCreateSwitchButton(panel->maxiF);
     WMResizeWidget(panel->miconB, 190, 30);
     WMMoveWidget(panel->miconB, 10, 18);
@@ -381,9 +381,9 @@ createPanel(Panel *p)
     WMSetFrameTitle(panel->resF, _("Edge Resistance"));
 
     WMSetBalloonTextForView(_("Edge resistance will make windows `resist'\n"
-			       "being moved further for the defined threshold\n"
-			       "when moved against other windows or the edges\n"
-			       "of the screen."), WMWidgetView(panel->resF));
+                              "being moved further for the defined threshold\n"
+                              "when moved against other windows or the edges\n"
+                              "of the screen."), WMWidgetView(panel->resF));
 
     panel->resS = WMCreateSlider(panel->resF);
     WMResizeWidget(panel->resS, 80, 15);
@@ -410,21 +410,21 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->resF);
 
     /**************** Transients on Parent Workspace ****************/
-    
+
     panel->tranF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->tranF, 285, 40);
     WMMoveWidget(panel->tranF, 8, 180);
-    
+
     panel->tranB = WMCreateSwitchButton(panel->tranF);
     WMMoveWidget(panel->tranB, 10, 5);
     WMResizeWidget(panel->tranB, 250, 30);
     WMSetButtonText(panel->tranB, _("Open dialogs in the same workspace\nas their owners"));
-    
+
     WMMapSubwidgets(panel->tranF);
-    
+
     WMRealizeWidget(panel->box);
     WMMapSubwidgets(panel->box);
- 
+
     /* show the config data */
     showData(panel);
 }
@@ -448,15 +448,16 @@ InitWindowHandling(WMScreen *scr, WMWidget *parent)
     panel->sectionName = _("Window Handling Preferences");
 
     panel->description = _("Window handling options. Initial placement style\n"
-			   "edge resistance, opaque move etc.");
+                           "edge resistance, opaque move etc.");
 
     panel->parent = parent;
-    
+
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;
     panel->callbacks.undoChanges = undo;
-        
+
     AddSection(panel, ICON_FILE);
-    
+
     return panel;
 }
+

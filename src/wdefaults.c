@@ -1,9 +1,9 @@
 /* wdefaults.c - window specific defaults
- * 
+ *
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -27,7 +27,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <ctype.h>
- 
+
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/keysym.h>
@@ -102,7 +102,7 @@ static void
 init_wdefaults(WScreen *scr)
 {
     AIcon = WMCreatePLString("Icon");
-    
+
     ANoTitlebar = WMCreatePLString("NoTitlebar");
     ANoResizebar = WMCreatePLString("NoResizebar");
     ANoMiniaturizeButton = WMCreatePLString("NoMiniaturizeButton");
@@ -131,50 +131,50 @@ init_wdefaults(WScreen *scr)
 #endif
 
     AStartWorkspace = WMCreatePLString("StartWorkspace");
-    
+
     AnyWindow = WMCreatePLString("*");
     No = WMCreatePLString("No");
     /*
-    if (!scr->wattribs) {
-	scr->wattribs = PLGetDomain(wAttributeDomainName);
-    }*/
+     if (!scr->wattribs) {
+     scr->wattribs = PLGetDomain(wAttributeDomainName);
+     }*/
 }
 
 
 
 static WMPropList*
-get_value(WMPropList *dict_win, WMPropList *dict_class, WMPropList *dict_name, 
-	  WMPropList *dict_any, WMPropList *option, WMPropList *default_value,
-	  Bool useGlobalDefault)
+get_value(WMPropList *dict_win, WMPropList *dict_class, WMPropList *dict_name,
+          WMPropList *dict_any, WMPropList *option, WMPropList *default_value,
+          Bool useGlobalDefault)
 {
     WMPropList *value;
 
 
     if (dict_win) {
-	value = WMGetFromPLDictionary(dict_win, option);
-	if (value)
-	    return value;
+        value = WMGetFromPLDictionary(dict_win, option);
+        if (value)
+            return value;
     }
-    
+
     if (dict_name) {
-	value = WMGetFromPLDictionary(dict_name, option);
-	if (value)
-	    return value;
+        value = WMGetFromPLDictionary(dict_name, option);
+        if (value)
+            return value;
     }
 
     if (dict_class) {
-	value = WMGetFromPLDictionary(dict_class, option);
-	if (value)
-	    return value;
+        value = WMGetFromPLDictionary(dict_class, option);
+        if (value)
+            return value;
     }
 
     if (!useGlobalDefault)
-	return NULL;
+        return NULL;
 
     if (dict_any) {
-	value = WMGetFromPLDictionary(dict_any, option);
-	if (value)
-	    return value;
+        value = WMGetFromPLDictionary(dict_any, option);
+        if (value)
+            return value;
     }
 
     return default_value;
@@ -188,15 +188,15 @@ get_value(WMPropList *dict_win, WMPropList *dict_class, WMPropList *dict_name,
  * fills attr with it. Values that are actually defined are also
  * set in mask. If useGlobalDefault is True, the default for
  * all windows ("*") will be used for when no values are found
- * for that instance/class. 
- * 
+ * for that instance/class.
+ *
  *----------------------------------------------------------------------
  */
 void
-wDefaultFillAttributes(WScreen *scr, char *instance, char *class, 
-		       WWindowAttributes *attr,
-		       WWindowAttributes *mask,
-		       Bool useGlobalDefault)
+wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
+                       WWindowAttributes *attr,
+                       WWindowAttributes *mask,
+                       Bool useGlobalDefault)
 {
     WMPropList *value, *key1, *key2, *key3, *dw, *dc, *dn, *da;
 
@@ -213,45 +213,45 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
     }
 
     if (instance)
-      key2 = WMCreatePLString(instance);
+        key2 = WMCreatePLString(instance);
     else
-      key2 = NULL;
+        key2 = NULL;
 
     if (class)
-      key3 = WMCreatePLString(class);
+        key3 = WMCreatePLString(class);
     else
-      key3 = NULL;
-    
+        key3 = NULL;
+
     if (!ANoTitlebar) {
-	init_wdefaults(scr);
+        init_wdefaults(scr);
     }
 
     WMPLSetCaseSensitive(True);
 
     if (WDWindowAttributes->dictionary) {
-	dw = key1 ? WMGetFromPLDictionary(WDWindowAttributes->dictionary, key1) : NULL;
-	dn = key2 ? WMGetFromPLDictionary(WDWindowAttributes->dictionary, key2) : NULL;
-	dc = key3 ? WMGetFromPLDictionary(WDWindowAttributes->dictionary, key3) : NULL;
-	if (useGlobalDefault)
-	    da = WMGetFromPLDictionary(WDWindowAttributes->dictionary, AnyWindow);
-	else
-	    da = NULL;
+        dw = key1 ? WMGetFromPLDictionary(WDWindowAttributes->dictionary, key1) : NULL;
+        dn = key2 ? WMGetFromPLDictionary(WDWindowAttributes->dictionary, key2) : NULL;
+        dc = key3 ? WMGetFromPLDictionary(WDWindowAttributes->dictionary, key3) : NULL;
+        if (useGlobalDefault)
+            da = WMGetFromPLDictionary(WDWindowAttributes->dictionary, AnyWindow);
+        else
+            da = NULL;
     } else {
-	dw = NULL;
-	dn = NULL;
-	dc = NULL;
-	da = NULL;
+        dw = NULL;
+        dn = NULL;
+        dc = NULL;
+        da = NULL;
     }
     if (key1)
-      WMReleasePropList(key1);
+        WMReleasePropList(key1);
     if (key2)
-      WMReleasePropList(key2);
+        WMReleasePropList(key2);
     if (key3)
-      WMReleasePropList(key3);
+        WMReleasePropList(key3);
 
 #define APPLY_VAL(value, flag, attrib)	\
-	if (value) {attr->flag = getBool(attrib, value); \
-			if (mask) mask->flag = 1;}
+    if (value) {attr->flag = getBool(attrib, value); \
+    if (mask) mask->flag = 1;}
 
     /* get the data */
     value = get_value(dw, dc, dn, da, ANoTitlebar, No, useGlobalDefault);
@@ -295,7 +295,7 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
 
     value = get_value(dw, dc, dn, da, ASkipWindowList, No, useGlobalDefault);
     APPLY_VAL(value, skip_window_list, ASkipWindowList);
-    
+
     value = get_value(dw, dc, dn, da, AKeepInsideScreen, No, useGlobalDefault);
     APPLY_VAL(value, dont_move_off, AKeepInsideScreen);
 
@@ -307,7 +307,7 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
 
     value = get_value(dw, dc, dn, da, AStartMiniaturized, No, useGlobalDefault);
     APPLY_VAL(value, start_miniaturized, AStartMiniaturized);
-    
+
     value = get_value(dw, dc, dn, da, AStartHidden, No, useGlobalDefault);
     APPLY_VAL(value, start_hidden, AStartHidden);
 
@@ -336,10 +336,10 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
 
 WMPropList*
 get_generic_value(WScreen *scr, char *instance, char *class, WMPropList *option,
-		  Bool noDefault)
+                  Bool noDefault)
 {
     WMPropList *value, *key, *dict;
-    
+
     value = NULL;
 
     WMPLSetCaseSensitive(True);
@@ -349,46 +349,46 @@ get_generic_value(WScreen *scr, char *instance, char *class, WMPropList *option,
 
         buffer = wmalloc(strlen(class)+strlen(instance)+2);
         sprintf(buffer, "%s.%s", instance, class);
-	key = WMCreatePLString(buffer);
-	wfree(buffer);
+        key = WMCreatePLString(buffer);
+        wfree(buffer);
 
-	dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
-	WMReleasePropList(key);
+        dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
+        WMReleasePropList(key);
 
-	if (dict) {
-	    value = WMGetFromPLDictionary(dict, option);
-	}
+        if (dict) {
+            value = WMGetFromPLDictionary(dict, option);
+        }
     }
 
     if (!value && instance) {
-	key = WMCreatePLString(instance);
-	
-	dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
-	WMReleasePropList(key);
-	if (dict) {
-	    value = WMGetFromPLDictionary(dict, option);
-	}
+        key = WMCreatePLString(instance);
+
+        dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
+        WMReleasePropList(key);
+        if (dict) {
+            value = WMGetFromPLDictionary(dict, option);
+        }
     }
 
     if (!value && class) {
-	key = WMCreatePLString(class);
-	
-	dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
-	WMReleasePropList(key);
+        key = WMCreatePLString(class);
 
-	if (dict) {
-	    value = WMGetFromPLDictionary(dict, option);
-	}
+        dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
+        WMReleasePropList(key);
+
+        if (dict) {
+            value = WMGetFromPLDictionary(dict, option);
+        }
     }
 
     if (!value && !noDefault) {
-	dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, AnyWindow);
-	
-	if (dict) {
-	    value = WMGetFromPLDictionary(dict, option);
-	}
+        dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, AnyWindow);
+
+        if (dict) {
+            value = WMGetFromPLDictionary(dict, option);
+        }
     }
-    
+
     WMPLSetCaseSensitive(False);
 
     return value;
@@ -396,23 +396,23 @@ get_generic_value(WScreen *scr, char *instance, char *class, WMPropList *option,
 
 
 char*
-wDefaultGetIconFile(WScreen *scr, char *instance, char *class, 
-		    Bool noDefault)
+wDefaultGetIconFile(WScreen *scr, char *instance, char *class,
+                    Bool noDefault)
 {
     WMPropList *value;
     char *tmp;
 
     if (!ANoTitlebar) {
-	init_wdefaults(scr);
+        init_wdefaults(scr);
     }
 
     if (!WDWindowAttributes->dictionary)
-	return NULL;
+        return NULL;
 
     value = get_generic_value(scr, instance, class, AIcon, noDefault);
 
     if (!value)
-	return NULL;
+        return NULL;
 
     tmp = getString(AIcon, value);
 
@@ -429,18 +429,18 @@ wDefaultGetImage(WScreen *scr, char *winstance, char *wclass)
 
     file_name = wDefaultGetIconFile(scr, winstance, wclass, False);
     if (!file_name)
-	return NULL;
-    
+        return NULL;
+
     path = FindImage(wPreferences.icon_path, file_name);
-    
+
     if (!path) {
-	wwarning(_("could not find icon file \"%s\""), file_name);
-	return NULL;
+        wwarning(_("could not find icon file \"%s\""), file_name);
+        return NULL;
     }
-    
+
     image = RLoadImage(scr->rcontext, path, 0);
     if (!image) {
-	wwarning(_("error loading image file \"%s\""), path, RMessageForError(RErrorCode));
+        wwarning(_("error loading image file \"%s\""), path, RMessageForError(RErrorCode));
     }
     wfree(path);
 
@@ -458,33 +458,33 @@ wDefaultGetStartWorkspace(WScreen *scr, char *instance, char *class)
     char *tmp;
 
     if (!ANoTitlebar) {
-	init_wdefaults(scr);
+        init_wdefaults(scr);
     }
 
     if (!WDWindowAttributes->dictionary)
-	return -1;
+        return -1;
 
-    value = get_generic_value(scr, instance, class, AStartWorkspace, 
-			      False);
-    
+    value = get_generic_value(scr, instance, class, AStartWorkspace,
+                              False);
+
     if (!value)
-	return -1;
+        return -1;
 
     tmp = getString(AStartWorkspace, value);
 
     if (!tmp || strlen(tmp)==0)
-	return -1;
+        return -1;
 
     if (sscanf(tmp, "%i", &w)!=1) {
-	w = -1;
-	for (i=0; i < scr->workspace_count; i++) {
-	    if (strcmp(scr->workspaces[i]->name, tmp)==0) {
-		w = i;
-		break;
-	    }
-	}
+        w = -1;
+        for (i=0; i < scr->workspace_count; i++) {
+            if (strcmp(scr->workspaces[i]->name, tmp)==0) {
+                w = i;
+                break;
+            }
+        }
     } else {
-	w--;
+        w--;
     }
 
     return w;
@@ -511,7 +511,7 @@ wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file)
     WMPLSetCaseSensitive(True);
 
     if (instance && class) {
-    	char *buffer;
+        char *buffer;
         buffer = wmalloc(strlen(instance) + strlen(class) + 2);
         sprintf(buffer, "%s.%s", instance, class);
         key = WMCreatePLString(buffer);
@@ -562,31 +562,31 @@ wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file)
 
 /* --------------------------- Local ----------------------- */
 
-static int 
+static int
 getBool(WMPropList *key, WMPropList *value)
 {
     char *val;
 
     if (!WMIsPLString(value)) {
-	wwarning(_("Wrong option format for key \"%s\". Should be %s."),
-		 WMGetFromPLString(key), "Boolean");
-	return 0;
+        wwarning(_("Wrong option format for key \"%s\". Should be %s."),
+                 WMGetFromPLString(key), "Boolean");
+        return 0;
     }
     val = WMGetFromPLString(value);
-    
-    if ((val[1]=='\0' && (val[0]=='y' || val[0]=='Y' || val[0]=='T' 
-			  || val[0]=='t' || val[0]=='1'))
-	|| (strcasecmp(val, "YES")==0 || strcasecmp(val, "TRUE")==0)) {
-	
-	return 1;
-    } else if ((val[1]=='\0' 
-	      && (val[0]=='n' || val[0]=='N' || val[0]=='F' 
-		  || val[0]=='f' || val[0]=='0')) 
-	     || (strcasecmp(val, "NO")==0 || strcasecmp(val, "FALSE")==0)) {
-	
-	return 0;
+
+    if ((val[1]=='\0' && (val[0]=='y' || val[0]=='Y' || val[0]=='T'
+                          || val[0]=='t' || val[0]=='1'))
+        || (strcasecmp(val, "YES")==0 || strcasecmp(val, "TRUE")==0)) {
+
+        return 1;
+    } else if ((val[1]=='\0'
+                && (val[0]=='n' || val[0]=='N' || val[0]=='F'
+                    || val[0]=='f' || val[0]=='0'))
+               || (strcasecmp(val, "NO")==0 || strcasecmp(val, "FALSE")==0)) {
+
+        return 0;
     } else {
-	wwarning(_("can't convert \"%s\" to boolean"), val);
+        wwarning(_("can't convert \"%s\" to boolean"), val);
         /* We return False if we can't convert to BOOLEAN.
          * This is because all options defaults to False.
          * -1 is not checked and thus is interpreted as True,
@@ -596,18 +596,16 @@ getBool(WMPropList *key, WMPropList *value)
 }
 
 
-
-/*
- * WARNING: Do not free value returned by this!!
- */
+/* WARNING: Do not free the value returned by this function!! */
 static char*
 getString(WMPropList *key, WMPropList *value)
-{    
+{
     if (!WMIsPLString(value)) {
-	wwarning(_("Wrong option format for key \"%s\". Should be %s."),
-		 WMGetFromPLString(key), "String");
-	return NULL;
+        wwarning(_("Wrong option format for key \"%s\". Should be %s."),
+                 WMGetFromPLString(key), "String");
+        return NULL;
     }
-        
+
     return WMGetFromPLString(value);
 }
+

@@ -1,8 +1,8 @@
 /*
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -86,7 +86,7 @@ Pixmap LoadIcon(WScreen *scr, char *path, char *mask, int title_height);
 void PlaceIcon(WScreen *scr, int *x_ret, int *y_ret, int head);
 
 int calcIntersectionArea(int x1, int y1, int w1, int h1,
-			 int x2, int y2, int w2, int h2);
+                         int x2, int y2, int w2, int h2);
 
 void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
                  unsigned int width, unsigned int height);
@@ -135,14 +135,14 @@ Bool UpdateDomainFile(WDDomain *domain);
 
 #ifdef NUMLOCK_HACK
 void wHackedGrabKey(int keycode, unsigned int modifiers,
-		    Window grab_window, Bool owner_events, int pointer_mode,
-		    int keyboard_mode);
+                    Window grab_window, Bool owner_events, int pointer_mode,
+                    int keyboard_mode);
 #endif
 
-void wHackedGrabButton(unsigned int button, unsigned int modifiers, 
-		       Window grab_window, Bool owner_events, 
-		       unsigned int event_mask, int pointer_mode, 
-		       int keyboard_mode, Window confine_to, Cursor cursor);
+void wHackedGrabButton(unsigned int button, unsigned int modifiers,
+                       Window grab_window, Bool owner_events,
+                       unsigned int event_mask, int pointer_mode,
+                       int keyboard_mode, Window confine_to, Cursor cursor);
 
 
 void ExecExitScript();

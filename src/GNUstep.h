@@ -1,9 +1,9 @@
 /* GNUstep.h-- stuff for compatibility with GNUstep applications
  *
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -33,9 +33,9 @@
 
 #define	GNUSTEP_TITLEBAR_STATE 	"_GNUSTEP_TITLEBAR_STATE"
 enum {
-  WMTitleBarKey = 0,
-  WMTitleBarNormal = 1,
-  WMTitleBarMain = 2
+    WMTitleBarKey = 0,
+    WMTitleBarNormal = 1,
+    WMTitleBarMain = 2
 };
 
 #ifndef _DEFINED_GNUSTEP_WINDOW_INFO
@@ -50,29 +50,29 @@ enum {
  * range INT_MIN+1 to INT_MAX
  */
 enum {
-  WMDesktopWindowLevel = -1000, /* GNUstep addition     */
-  WMNormalWindowLevel = 0,
-  WMFloatingWindowLevel = 3,
-  WMSubmenuWindowLevel = 3,
-  WMTornOffMenuWindowLevel = 3,
-  WMMainMenuWindowLevel = 20,
-  WMDockWindowLevel = 21,       /* Deprecated - use NSStatusWindowLevel */
-  WMStatusWindowLevel = 21,
-  WMModalPanelWindowLevel = 100,
-  WMPopUpMenuWindowLevel = 101,
-  WMScreenSaverWindowLevel = 1000
+    WMDesktopWindowLevel = -1000, /* GNUstep addition     */
+    WMNormalWindowLevel = 0,
+    WMFloatingWindowLevel = 3,
+    WMSubmenuWindowLevel = 3,
+    WMTornOffMenuWindowLevel = 3,
+    WMMainMenuWindowLevel = 20,
+    WMDockWindowLevel = 21,       /* Deprecated - use NSStatusWindowLevel */
+    WMStatusWindowLevel = 21,
+    WMModalPanelWindowLevel = 100,
+    WMPopUpMenuWindowLevel = 101,
+    WMScreenSaverWindowLevel = 1000
 };
 
 
 /* window attributes */
 enum {
-  WMBorderlessWindowMask = 0,
-  WMTitledWindowMask = 1,
-  WMClosableWindowMask = 2,
-  WMMiniaturizableWindowMask = 4,
-  WMResizableWindowMask = 8,
-  WMIconWindowMask = 64,
-  WMMiniWindowMask = 128
+    WMBorderlessWindowMask = 0,
+    WMTitledWindowMask = 1,
+    WMClosableWindowMask = 2,
+    WMMiniaturizableWindowMask = 4,
+    WMResizableWindowMask = 8,
+    WMIconWindowMask = 64,
+    WMMiniWindowMask = 128
 };
 #endif
 
@@ -110,3 +110,4 @@ typedef struct {
 #define WMFHideApplication		12
 
 #endif
+

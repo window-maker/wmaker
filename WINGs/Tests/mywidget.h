@@ -1,7 +1,7 @@
 
 /*
  * Header for demo widget.
- * 
+ *
  */
 
 typedef struct W_MyWidget MyWidget;

@@ -1,6 +1,6 @@
 /* $XConsortium: CmapAlloc.c,v 1.9 94/04/17 20:15:52 rws Exp $ */
 
-/* 
+/*
 
 Copyright (c) 1989, 1994  X Consortium
 
@@ -45,11 +45,11 @@ static int icbrt();
 static int icbrt_with_bits();
 static int icbrt_with_guess();
 
-/* To determine the best allocation of reds, greens, and blues in a 
+/* To determine the best allocation of reds, greens, and blues in a
  * standard colormap, use XmuGetColormapAllocation.
  * 	vinfo		specifies visual information for a chosen visual
  *	property	specifies one of the standard colormap property names
- * 	red_max		returns maximum red value 
+ * 	red_max		returns maximum red value
  *      green_max	returns maximum green value
  * 	blue_max	returns maximum blue value
  *
@@ -65,33 +65,32 @@ Status XmuGetColormapAllocation(vinfo, property, red_max, green_max, blue_max)
     Status 	status = 1;
 
     if (vinfo->colormap_size <= 2)
-	return 0;
+        return 0;
 
-    switch (property)
-    {
-      case XA_RGB_DEFAULT_MAP:
-	status = default_allocation(vinfo, red_max, green_max, blue_max);
-	break;
-      case XA_RGB_BEST_MAP:
-	best_allocation(vinfo, red_max, green_max, blue_max);
-	break;
-      case XA_RGB_GRAY_MAP:
-	gray_allocation(vinfo->colormap_size, red_max, green_max, blue_max);
-	break;
-      case XA_RGB_RED_MAP:
-	*red_max = vinfo->colormap_size - 1;
-	*green_max = *blue_max = 0;
-	break;
-      case XA_RGB_GREEN_MAP:
-	*green_max = vinfo->colormap_size - 1;
-	*red_max = *blue_max = 0;
-	break;
-      case XA_RGB_BLUE_MAP:
-	*blue_max = vinfo->colormap_size - 1;
-	*red_max = *green_max = 0;
-	break;
-      default:
-	status = 0;
+    switch (property) {
+    case XA_RGB_DEFAULT_MAP:
+        status = default_allocation(vinfo, red_max, green_max, blue_max);
+        break;
+    case XA_RGB_BEST_MAP:
+        best_allocation(vinfo, red_max, green_max, blue_max);
+        break;
+    case XA_RGB_GRAY_MAP:
+        gray_allocation(vinfo->colormap_size, red_max, green_max, blue_max);
+        break;
+    case XA_RGB_RED_MAP:
+        *red_max = vinfo->colormap_size - 1;
+        *green_max = *blue_max = 0;
+        break;
+    case XA_RGB_GREEN_MAP:
+        *green_max = vinfo->colormap_size - 1;
+        *red_max = *blue_max = 0;
+        break;
+    case XA_RGB_BLUE_MAP:
+        *blue_max = vinfo->colormap_size - 1;
+        *red_max = *green_max = 0;
+        break;
+    default:
+        status = 0;
     }
     return status;
 }
@@ -107,15 +106,15 @@ static void gray_allocation(n, red_max, green_max, blue_max)
     unsigned long *red_max, *green_max, *blue_max;
 {
     *red_max = (n * 30) / 100;
-    *green_max = (n * 59) / 100; 
-    *blue_max = (n * 11) / 100; 
+    *green_max = (n * 59) / 100;
+    *blue_max = (n * 11) / 100;
     *green_max += ((n - 1) - (*red_max + *green_max + *blue_max));
 }
 
 /****************************************************************************/
 /* Determine an appropriate color allocation for the RGB_DEFAULT_MAP.
  * If a map has less than a minimum number of definable entries, we do not
- * produce an allocation for an RGB_DEFAULT_MAP.  
+ * produce an allocation for an RGB_DEFAULT_MAP.
  *
  * For 16 planes, the default colormap will have 27 each RGB; for 12 planes,
  * 12 each.  For 8 planes, let n = the number of colormap entries, which may
@@ -133,51 +132,51 @@ static int default_allocation(vinfo, red, green, blue)
     int			ngrays;		/* number of gray cells */
 
     switch (vinfo->class) {
-      case PseudoColor:
+    case PseudoColor:
 
-	if (vinfo->colormap_size > 65000)
-	    /* intended for displays with 16 planes */
-	    *red = *green = *blue = (unsigned long) 27;
-	else if (vinfo->colormap_size > 4000)
-	    /* intended for displays with 12 planes */
-	    *red = *green = *blue = (unsigned long) 12;
-	else if (vinfo->colormap_size < 250)
-	    return 0;
-	else
-	    /* intended for displays with 8 planes */
-	    *red = *green = *blue = (unsigned long)
-		(icbrt(vinfo->colormap_size - 125) - 1);
-	break;
+        if (vinfo->colormap_size > 65000)
+            /* intended for displays with 16 planes */
+            *red = *green = *blue = (unsigned long) 27;
+        else if (vinfo->colormap_size > 4000)
+            /* intended for displays with 12 planes */
+            *red = *green = *blue = (unsigned long) 12;
+        else if (vinfo->colormap_size < 250)
+            return 0;
+        else
+            /* intended for displays with 8 planes */
+            *red = *green = *blue = (unsigned long)
+                (icbrt(vinfo->colormap_size - 125) - 1);
+        break;
 
-      case DirectColor:
+    case DirectColor:
 
-	if (vinfo->colormap_size < 10)
-	    return 0;
-	*red = *green = *blue = vinfo->colormap_size / 2 - 1;
-	break;
+        if (vinfo->colormap_size < 10)
+            return 0;
+        *red = *green = *blue = vinfo->colormap_size / 2 - 1;
+        break;
 
-      case TrueColor:
+    case TrueColor:
 
-	*red = vinfo->red_mask / lowbit(vinfo->red_mask);
-	*green = vinfo->green_mask / lowbit(vinfo->green_mask);
-	*blue = vinfo->blue_mask / lowbit(vinfo->blue_mask);
-	break;
+        *red = vinfo->red_mask / lowbit(vinfo->red_mask);
+        *green = vinfo->green_mask / lowbit(vinfo->green_mask);
+        *blue = vinfo->blue_mask / lowbit(vinfo->blue_mask);
+        break;
 
-      case GrayScale:
+    case GrayScale:
 
-	if (vinfo->colormap_size > 65000)
-	    ngrays = 4096;
-	else if (vinfo->colormap_size > 4000)
-	    ngrays = 512;
-	else if (vinfo->colormap_size < 250)
-	    return 0;
-	else
-	    ngrays = 12;
-	gray_allocation(ngrays, red, green, blue);
-	break;
-	
-      default:
-	return 0;
+        if (vinfo->colormap_size > 65000)
+            ngrays = 4096;
+        else if (vinfo->colormap_size > 4000)
+            ngrays = 512;
+        else if (vinfo->colormap_size < 250)
+            return 0;
+        else
+            ngrays = 12;
+        gray_allocation(ngrays, red, green, blue);
+        break;
+
+    default:
+        return 0;
     }
     return 1;
 }
@@ -199,65 +198,58 @@ static int default_allocation(vinfo, red, green, blue)
  * Which, on a GPX, allows for 252 entries in the best map, out of 254
  * defineable colormap entries.
  */
- 
+
 static void best_allocation(vinfo, red, green, blue)
     XVisualInfo		*vinfo;
     unsigned long	*red, *green, *blue;
 {
 
-    if (vinfo->class == DirectColor ||	vinfo->class == TrueColor)
-    {
-	*red = vinfo->red_mask;
-	while ((*red & 01) == 0)
-	    *red >>= 1;
-	*green = vinfo->green_mask;
-	while ((*green & 01) == 0)
-	    *green >>=1;
-	*blue = vinfo->blue_mask;
-	while ((*blue & 01) == 0)
-	    *blue >>= 1;
-    }
-    else
-    {
-	register int bits, n;
-	
-	/* Determine n such that n is the least integral power of 2 which is
-	 * greater than or equal to the number of entries in the colormap.
-         */
-	n = 1;
-	bits = 0;
-	while (vinfo->colormap_size > n)
-	{
-	    n = n << 1;
-	    bits++;
-	}
-	
-	/* If the number of entries in the colormap is a power of 2, determine
-	 * the allocation by "dealing" the bits, first to green, then red, then
-	 * blue.  If not, find the maximum integral red, green, and blue values
-	 * which, when multiplied together, do not exceed the number of 
+    if (vinfo->class == DirectColor ||	vinfo->class == TrueColor) {
+        *red = vinfo->red_mask;
+        while ((*red & 01) == 0)
+            *red >>= 1;
+        *green = vinfo->green_mask;
+        while ((*green & 01) == 0)
+            *green >>=1;
+        *blue = vinfo->blue_mask;
+        while ((*blue & 01) == 0)
+            *blue >>= 1;
+    } else {
+        register int bits, n;
 
-	 * colormap entries.
-	 */
-	if (n == vinfo->colormap_size)
-	{
-	    register int r, g, b;
-	    b = bits / 3;
-	    g = b + ((bits % 3) ? 1 : 0);
-	    r = b + (((bits % 3) == 2) ? 1 : 0);
-	    *red = 1 << r;
-	    *green = 1 << g;
-	    *blue = 1 << b;
-	}
-	else
-	{
-	    *red = icbrt_with_bits(vinfo->colormap_size, bits);
-	    *blue = *red;	
-	    *green = (vinfo->colormap_size / ((*red) * (*blue)));
-	}
-	(*red)--;
-	(*green)--;
-	(*blue)--;
+        /* Determine n such that n is the least integral power of 2 which is
+         * greater than or equal to the number of entries in the colormap.
+         */
+        n = 1;
+        bits = 0;
+        while (vinfo->colormap_size > n) {
+            n = n << 1;
+            bits++;
+        }
+
+        /* If the number of entries in the colormap is a power of 2, determine
+         * the allocation by "dealing" the bits, first to green, then red, then
+         * blue.  If not, find the maximum integral red, green, and blue values
+         * which, when multiplied together, do not exceed the number of
+
+         * colormap entries.
+         */
+        if (n == vinfo->colormap_size) {
+            register int r, g, b;
+            b = bits / 3;
+            g = b + ((bits % 3) ? 1 : 0);
+            r = b + (((bits % 3) == 2) ? 1 : 0);
+            *red = 1 << r;
+            *green = 1 << g;
+            *blue = 1 << b;
+        } else {
+            *red = icbrt_with_bits(vinfo->colormap_size, bits);
+            *blue = *red;
+            *green = (vinfo->colormap_size / ((*red) * (*blue)));
+        }
+        (*red)--;
+        (*green)--;
+        (*blue)--;
     }
     return;
 }
@@ -274,10 +266,9 @@ static int icbrt(a)		/* integer cube root */
     register int bits = 0;
     register unsigned n = a;
 
-    while (n)
-    {
-	bits++;
-	n >>= 1;
+    while (n) {
+        bits++;
+        n >>= 1;
     }
     return icbrt_with_bits(a, bits);
 }
@@ -313,23 +304,24 @@ static int icbrt_with_guess(a, guess)
     icbrt_loopcount = 0;
 #endif
     if (a <= 0)
-	return 0;
+        return 0;
     if (guess < 1)
-	guess = 1;
+        guess = 1;
 
     do {
 #ifdef DEBUG
-	icbrt_loopcount++;
+        icbrt_loopcount++;
 #endif
-	delta = (guess - a/(guess*guess))/3;
+        delta = (guess - a/(guess*guess))/3;
 #ifdef DEBUG
-	printf("pass %d: guess=%d, delta=%d\n", icbrt_loopcount, guess, delta);
+        printf("pass %d: guess=%d, delta=%d\n", icbrt_loopcount, guess, delta);
 #endif
-	guess -= delta;
+        guess -= delta;
     } while (delta != 0);
 
     if (guess*guess*guess > a)
-	guess--;
+        guess--;
 
     return guess;
 }
+

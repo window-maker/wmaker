@@ -1,9 +1,9 @@
 /* kde.h-- stuff for support for kde hints
- * 
+ *
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -25,19 +25,19 @@
 
 typedef enum {
     KWMStickyFlag = (1<<0),
-	KWMMaximizedFlag = (1<<1),
-	KWMIconifiedFlag = (1<<2),
-	KWMAllFlags = 7
+    KWMMaximizedFlag = (1<<1),
+    KWMIconifiedFlag = (1<<2),
+    KWMAllFlags = 7
 } WKWMStateFlag;
 
 typedef enum {
     WKWMAddWindow,
-	WKWMRemoveWindow,
-	WKWMFocusWindow,
-	WKWMRaiseWindow,
-	WKWMLowerWindow,
-	WKWMChangedClient,
-	WKWMIconChange
+    WKWMRemoveWindow,
+    WKWMFocusWindow,
+    WKWMRaiseWindow,
+    WKWMLowerWindow,
+    WKWMChangedClient,
+    WKWMIconChange
 } WKWMEventMessage;
 
 
@@ -95,8 +95,8 @@ char *wKWMGetWorkspaceName(WScreen *scr, int workspace);
 
 Bool wKWMGetIconGeometry(WWindow *wwin, WArea *area);
 
-void wKWMSelectRootRegion(WScreen *scr, int x, int y, int w, int h, 
-			  Bool control);
+void wKWMSelectRootRegion(WScreen *scr, int x, int y, int w, int h,
+                          Bool control);
 
 #endif
 

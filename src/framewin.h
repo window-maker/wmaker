@@ -1,8 +1,8 @@
 /*
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -45,9 +45,9 @@
 
 typedef struct WFrameWindow {
     WScreen *screen_ptr;	       /* pointer to the screen structure */
-    
+
     WCoreWindow *core;
-    
+
     WCoreWindow *titlebar;	       /* the titlebar */
     WCoreWindow *left_button;	       /* miniaturize button */
 #ifdef XKB_BUTTON_HINT
@@ -78,7 +78,7 @@ typedef struct WFrameWindow {
 #ifdef XKB_BUTTON_HINT
     WPixmap *languagebutton_image;
 #endif
-    
+
     union WTexture **title_texture;
     union WTexture **resizebar_texture;
     WMColor **title_color;
@@ -93,70 +93,70 @@ typedef struct WFrameWindow {
 
     /* thing that uses this frame. passed as data to callbacks */
     void *child;
-    
+
     /* callbacks */
     void (*on_click_left)(WCoreWindow *sender, void *data, XEvent *event);
 #ifdef XKB_BUTTON_HINT
     void (*on_click_language)(WCoreWindow *sender, void *data, XEvent *event);
 #endif
-    
+
     void (*on_click_right)(WCoreWindow *sender, void *data, XEvent *event);
     void (*on_dblclick_right)(WCoreWindow *sender, void *data, XEvent *event);
-    
+
     void (*on_mousedown_titlebar)(WCoreWindow *sender, void *data, XEvent *event);
     void (*on_dblclick_titlebar)(WCoreWindow *sender, void *data, XEvent *event);
 
     void (*on_mousedown_resizebar)(WCoreWindow *sender, void *data, XEvent *event);
-    
+
     struct {
-	unsigned int state:2;	       /* 3 possible states */
-	unsigned int justification:2;
-	unsigned int titlebar:1;
-	unsigned int resizebar:1;
-	unsigned int left_button:1;
-	unsigned int right_button:1;
+        unsigned int state:2;	       /* 3 possible states */
+        unsigned int justification:2;
+        unsigned int titlebar:1;
+        unsigned int resizebar:1;
+        unsigned int left_button:1;
+        unsigned int right_button:1;
 #ifdef XKB_BUTTON_HINT
-	unsigned int language_button:1;
+        unsigned int language_button:1;
 #endif
 
-	unsigned int need_texture_remake:1;
+        unsigned int need_texture_remake:1;
 
-	unsigned int single_texture:1;
-	
-	unsigned int hide_left_button:1;
-	unsigned int hide_right_button:1;
+        unsigned int single_texture:1;
+
+        unsigned int hide_left_button:1;
+        unsigned int hide_right_button:1;
 #ifdef XKB_BUTTON_HINT
-	unsigned int hide_language_button:1;
-#endif
-	
-	unsigned int need_texture_change:1;
-	
-	unsigned int lbutton_dont_fit:1;
-	unsigned int rbutton_dont_fit:1;
-#ifdef XKB_BUTTON_HINT
-	unsigned int languagebutton_dont_fit:1;
+        unsigned int hide_language_button:1;
 #endif
 
-	unsigned int repaint_only_titlebar:1;
-	unsigned int repaint_only_resizebar:1;
+        unsigned int need_texture_change:1;
 
-	unsigned int is_client_window_frame:1;
-	
-	unsigned int incomplete_title:1;
+        unsigned int lbutton_dont_fit:1;
+        unsigned int rbutton_dont_fit:1;
+#ifdef XKB_BUTTON_HINT
+        unsigned int languagebutton_dont_fit:1;
+#endif
+
+        unsigned int repaint_only_titlebar:1;
+        unsigned int repaint_only_resizebar:1;
+
+        unsigned int is_client_window_frame:1;
+
+        unsigned int incomplete_title:1;
 
 #ifdef OLWM_HINTS
-	unsigned int right_button_pushed_in:1;
+        unsigned int right_button_pushed_in:1;
 #endif
     } flags;
 } WFrameWindow;
 
 
 WFrameWindow*
-wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y, 
-		   int width, int height, int *clearance, int flags,
-		   union WTexture **title_texture, 
-		   union WTexture **resize_texture,
-		   WMColor **color, WMFont **font);
+wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y,
+                   int width, int height, int *clearance, int flags,
+                   union WTexture **title_texture,
+                   union WTexture **resize_texture,
+                   WMColor **color, WMFont **font);
 
 void wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags);
 

@@ -1,9 +1,9 @@
 /* Workspace.c- workspace options
- * 
+ *
  *  WPrefs - Window Maker Preferences Program
- * 
+ *
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -68,47 +68,47 @@ typedef struct _Panel {
 
 static char *WSNamePositions[] = {
     "none",
-	"center",
-	"top",
-	"bottom",
-	"topleft",
-	"topright",
-	"bottomleft",
-	"bottomright"
+    "center",
+    "top",
+    "bottom",
+    "topleft",
+    "topright",
+    "bottomleft",
+    "bottomright"
 };
 
 
 static void
-createImages(WMScreen *scr, RContext *rc, RImage *xis, char *file, 
-	     WMPixmap **icon1,  WMPixmap **icon2)
+createImages(WMScreen *scr, RContext *rc, RImage *xis, char *file,
+             WMPixmap **icon1,  WMPixmap **icon2)
 {
     RImage *icon;
     RColor gray = {0xae,0xaa,0xae};
-    
+
     *icon1 = WMCreatePixmapFromFile(scr, file);
     if (!*icon1) {
-	wwarning(_("could not load icon %s"), file);
-	if (icon2)
-	    *icon2 = NULL;
-	return;
+        wwarning(_("could not load icon %s"), file);
+        if (icon2)
+            *icon2 = NULL;
+        return;
     }
 
     if (!icon2)
-	return;
-    
+        return;
+
     icon = RLoadImage(rc, file, 0);
     if (!icon) {
-	wwarning(_("could not load icon %s"), file);
-	*icon2 = NULL;
-	return;
+        wwarning(_("could not load icon %s"), file);
+        *icon2 = NULL;
+        return;
     }
     RCombineImageWithColor(icon, &gray);
     if (xis) {
-	RCombineImagesWithOpaqueness(icon, xis, 180);
-	if (!(*icon2 = WMCreatePixmapFromRImage(scr, icon, 127))) {
-	    wwarning(_("could not process icon %s:"), file, RMessageForError(RErrorCode));
-	    *icon2 = NULL;
-	}
+        RCombineImagesWithOpaqueness(icon, xis, 180);
+        if (!(*icon2 = WMCreatePixmapFromRImage(scr, icon, 127))) {
+            wwarning(_("could not process icon %s:"), file, RMessageForError(RErrorCode));
+            *icon2 = NULL;
+        }
     }
     RReleaseImage(icon);
 }
@@ -122,25 +122,25 @@ showData(_Panel *panel)
     char *str;
 
     WMSetButtonSelected(panel->linkB, !GetBoolForKey("DontLinkWorkspaces"));
-    
+
     WMSetButtonSelected(panel->cyclB, GetBoolForKey("CycleWorkspaces"));
-    
+
     WMSetButtonSelected(panel->newB, GetBoolForKey("AdvanceToNewWorkspace"));
-    
+
     WMSetButtonSelected(panel->dockB, !GetBoolForKey("DisableDock"));
-    
+
     WMSetButtonSelected(panel->clipB, !GetBoolForKey("DisableClip"));
 
     str = GetStringForKey("WorkspaceNameDisplayPosition");
     if (!str)
-	str = "center";
+        str = "center";
 
     idx = 1; /* center */
     for (i = 0; i < sizeof(WSNamePositions)/sizeof(char*); i++) {
-	if (strcasecmp(WSNamePositions[i], str) == 0) {
-	    idx = i;
-	    break;
-	}
+        if (strcasecmp(WSNamePositions[i], str) == 0) {
+            idx = i;
+            break;
+        }
     }
     WMSetPopUpButtonSelectedItem(panel->posP, idx);
 }
@@ -156,31 +156,31 @@ createPanel(Panel *p)
     RImage *xis = NULL;
     RContext *rc = WMScreenRContext(scr);
     char *path;
-    
+
     path = LocateImage(ARQUIVO_XIS);
     if (path) {
-	xis = RLoadImage(rc, path, 0);
-	if (!xis) {
-	    wwarning(_("could not load image file %s"), path);
-	}
-	wfree(path);
+        xis = RLoadImage(rc, path, 0);
+        if (!xis) {
+            wwarning(_("could not load image file %s"), path);
+        }
+        wfree(path);
     }
 
     panel->box = WMCreateBox(panel->parent);
     WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
-    
+
     /***************** Workspace Navigation *****************/
     panel->navF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->navF, 365, 210);
     WMMoveWidget(panel->navF, 15, 10);
     WMSetFrameTitle(panel->navF, _("Workspace Navigation"));
 
-    
+
     panel->cyclB = WMCreateSwitchButton(panel->navF);
     WMResizeWidget(panel->cyclB, 280, 34);
     WMMoveWidget(panel->cyclB, 75, 30);
     WMSetButtonText(panel->cyclB,
-		   _("Wrap to the first workspace from the last workspace."));
+                    _("Wrap to the first workspace from the last workspace."));
 
     panel->cyclL = WMCreateLabel(panel->navF);
     WMResizeWidget(panel->cyclL, 60, 60);
@@ -188,12 +188,12 @@ createPanel(Panel *p)
     WMSetLabelImagePosition(panel->cyclL, WIPImageOnly);
     path = LocateImage(CYCLE_FILE);
     if (path) {
-	createImages(scr, rc, xis, path, &icon1, NULL);
-	if (icon1) {
-	    WMSetLabelImage(panel->cyclL, icon1);
-	    WMReleasePixmap(icon1);
-	}
-	wfree(path);
+        createImages(scr, rc, xis, path, &icon1, NULL);
+        if (icon1) {
+            WMSetLabelImage(panel->cyclL, icon1);
+            WMReleasePixmap(icon1);
+        }
+        wfree(path);
     }
 
     /**/
@@ -202,7 +202,7 @@ createPanel(Panel *p)
     WMResizeWidget(panel->linkB, 280, 34);
     WMMoveWidget(panel->linkB, 75, 75);
     WMSetButtonText(panel->linkB,
-		   _("Switch workspaces while dragging windows."));
+                    _("Switch workspaces while dragging windows."));
 
     panel->linkL = WMCreateLabel(panel->navF);
     WMResizeWidget(panel->linkL, 60, 40);
@@ -210,21 +210,21 @@ createPanel(Panel *p)
     WMSetLabelImagePosition(panel->linkL, WIPImageOnly);
     path = LocateImage(DONT_LINK_FILE);
     if (path) {
-	createImages(scr, rc, xis, path, &icon1, NULL);
-	if (icon1) {
-	    WMSetLabelImage(panel->linkL, icon1);
-	    WMReleasePixmap(icon1);
-	}
-	wfree(path);
+        createImages(scr, rc, xis, path, &icon1, NULL);
+        if (icon1) {
+            WMSetLabelImage(panel->linkL, icon1);
+            WMReleasePixmap(icon1);
+        }
+        wfree(path);
     }
 
     /**/
-    
+
     panel->newB = WMCreateSwitchButton(panel->navF);
     WMResizeWidget(panel->newB, 280, 34);
     WMMoveWidget(panel->newB, 75, 120);
     WMSetButtonText(panel->newB,
-		   _("Automatically create new workspaces."));
+                    _("Automatically create new workspaces."));
 
     panel->newL = WMCreateLabel(panel->navF);
     WMResizeWidget(panel->newL, 60, 20);
@@ -232,37 +232,37 @@ createPanel(Panel *p)
     WMSetLabelImagePosition(panel->newL, WIPImageOnly);
     path = LocateImage(ADVANCE_FILE);
     if (path) {
-	createImages(scr, rc, xis, path, &icon1, NULL);
-	if (icon1) {
-	    WMSetLabelImage(panel->newL, icon1);
-	    WMReleasePixmap(icon1);
-	}
-	wfree(path);
+        createImages(scr, rc, xis, path, &icon1, NULL);
+        if (icon1) {
+            WMSetLabelImage(panel->newL, icon1);
+            WMReleasePixmap(icon1);
+        }
+        wfree(path);
     }
 
     /**/
-    
+
     panel->posL = WMCreateLabel(panel->navF);
     WMResizeWidget(panel->posL, 140, 30);
     WMMoveWidget(panel->posL, 75, 165);
     WMSetLabelTextAlignment(panel->posL, WARight);
-    WMSetLabelText(panel->posL, 
-		   _("Position of workspace\nname display"));
-    
+    WMSetLabelText(panel->posL,
+                   _("Position of workspace\nname display"));
+
     panel->posiL = WMCreateLabel(panel->navF);
     WMResizeWidget(panel->posiL, 60, 40);
     WMMoveWidget(panel->posiL, 10, 160);
     WMSetLabelImagePosition(panel->posiL, WIPImageOnly);
     path = LocateImage(WSNAME_FILE);
     if (path) {
-	createImages(scr, rc, xis, path, &icon1, NULL);
-	if (icon1) {
-	    WMSetLabelImage(panel->posiL, icon1);
-	    WMReleasePixmap(icon1);
-	}
-	wfree(path);
+        createImages(scr, rc, xis, path, &icon1, NULL);
+        if (icon1) {
+            WMSetLabelImage(panel->posiL, icon1);
+            WMReleasePixmap(icon1);
+        }
+        wfree(path);
     }
-    
+
     panel->posP = WMCreatePopUpButton(panel->navF);
     WMResizeWidget(panel->posP, 125, 20);
     WMMoveWidget(panel->posP, 225, 175);
@@ -274,7 +274,7 @@ createPanel(Panel *p)
     WMAddPopUpButtonItem(panel->posP, _("Top/Right"));
     WMAddPopUpButtonItem(panel->posP, _("Bottom/Left"));
     WMAddPopUpButtonItem(panel->posP, _("Bottom/Right"));
-    
+
     WMMapSubwidgets(panel->navF);
 
     /***************** Dock/Clip *****************/
@@ -289,20 +289,20 @@ createPanel(Panel *p)
     WMSetButtonImagePosition(panel->dockB, WIPImageOnly);
     path = LocateImage(DOCK_FILE);
     if (path) {
-	createImages(scr, rc, xis, path, &icon1, &icon2);
-	if (icon2) {
-	    WMSetButtonImage(panel->dockB, icon2); 
-	    WMReleasePixmap(icon2);
-	}
-	if (icon1) {
-	    WMSetButtonAltImage(panel->dockB, icon1);
-	    WMReleasePixmap(icon1);
-	}
-	wfree(path);
+        createImages(scr, rc, xis, path, &icon1, &icon2);
+        if (icon2) {
+            WMSetButtonImage(panel->dockB, icon2);
+            WMReleasePixmap(icon2);
+        }
+        if (icon1) {
+            WMSetButtonAltImage(panel->dockB, icon1);
+            WMReleasePixmap(icon1);
+        }
+        wfree(path);
     }
     WMSetBalloonTextForView(_("Disable/enable the application Dock (the\n"
-			      "vertical icon bar in the side of the screen)."),
-			    WMWidgetView(panel->dockB));
+                              "vertical icon bar in the side of the screen)."),
+                            WMWidgetView(panel->dockB));
 
     panel->clipB = WMCreateButton(panel->dockF, WBTToggle);
     WMResizeWidget(panel->clipB, 64, 64);
@@ -310,26 +310,26 @@ createPanel(Panel *p)
     WMSetButtonImagePosition(panel->clipB, WIPImageOnly);
     path = LocateImage(CLIP_FILE);
     if (path) {
-	createImages(scr, rc, xis, path, &icon1, &icon2);
-	if (icon2) {
-	    WMSetButtonImage(panel->clipB, icon2); 
-	    WMReleasePixmap(icon2);
-	}
-	if (icon1) {
-	    WMSetButtonAltImage(panel->clipB, icon1);
-	    WMReleasePixmap(icon1);
-	}
-	wfree(path);
+        createImages(scr, rc, xis, path, &icon1, &icon2);
+        if (icon2) {
+            WMSetButtonImage(panel->clipB, icon2);
+            WMReleasePixmap(icon2);
+        }
+        if (icon1) {
+            WMSetButtonAltImage(panel->clipB, icon1);
+            WMReleasePixmap(icon1);
+        }
+        wfree(path);
     }
     WMSetBalloonTextForView(_("Disable/enable the Clip (that thing with\n"
-			      "a paper clip icon)."),
-			    WMWidgetView(panel->clipB));
+                              "a paper clip icon)."),
+                            WMWidgetView(panel->clipB));
 
     WMMapSubwidgets(panel->dockF);
 
     if (xis)
-	RReleaseImage(xis);
-    
+        RReleaseImage(xis);
+
     WMRealizeWidget(panel->box);
     WMMapSubwidgets(panel->box);
 
@@ -343,12 +343,12 @@ storeData(_Panel *panel)
     SetBoolForKey(!WMGetButtonSelected(panel->linkB), "DontLinkWorkspaces");
     SetBoolForKey(WMGetButtonSelected(panel->cyclB), "CycleWorkspaces");
     SetBoolForKey(WMGetButtonSelected(panel->newB), "AdvanceToNewWorkspace");
-    
+
     SetBoolForKey(!WMGetButtonSelected(panel->dockB), "DisableDock");
     SetBoolForKey(!WMGetButtonSelected(panel->clipB), "DisableClip");
-    
+
     SetStringForKey(WSNamePositions[WMGetPopUpButtonSelectedItem(panel->posP)],
-		    "WorkspaceNameDisplayPosition");
+                    "WorkspaceNameDisplayPosition");
 }
 
 
@@ -364,10 +364,10 @@ InitWorkspace(WMScreen *scr, WMWidget *parent)
     panel->sectionName = _("Workspace Preferences");
 
     panel->description = _("Workspace navigation features.\n"
-			   "You can also enable/disable the Dock and Clip here.");
+                           "You can also enable/disable the Dock and Clip here.");
 
     panel->parent = parent;
-    
+
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;
 
@@ -375,3 +375,4 @@ InitWorkspace(WMScreen *scr, WMWidget *parent)
 
     return panel;
 }
+

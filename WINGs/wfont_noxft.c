@@ -273,7 +273,7 @@ WMCreateFontWithFlags(WMScreen *scrPtr, char *fontName, WMFontFlags flags)
         multiByte = False;
     }
 
-    } else if (multiByte) {
+    if (multiByte) {
         font = WMCreateFontSet(scrPtr, fontName);
     } else {
         font = WMCreateNormalFont(scrPtr, fontName);

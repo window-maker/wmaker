@@ -19,19 +19,19 @@ typedef struct W_Balloon {
     WMFont *font;
 
     WMHandlerID timer; 		       /* timer for showing balloon */
-    
+
     WMHandlerID noDelayTimer;
 
     int delay;
 
     Window forWindow;		       /* window for which the balloon
-					* is being show in the moment */
+    * is being show in the moment */
 
     struct {
-	WMAlignment alignment:2;
-	unsigned enabled:1;
+        WMAlignment alignment:2;
+        unsigned enabled:1;
 
-	unsigned noDelay:1;
+        unsigned noDelay:1;
     } flags;
 } Balloon;
 
@@ -63,8 +63,8 @@ W_CreateBalloon(WMScreen *scr)
 
     bPtr->view = W_CreateUnmanagedTopView(scr);
     if (!bPtr->view) {
-	wfree(bPtr);
-	return NULL;
+        wfree(bPtr);
+        return NULL;
     }
     bPtr->view->self = bPtr;
 
@@ -101,15 +101,15 @@ WMSetBalloonTextForView(char *text, WMView *view)
     WMScreen *scr = view->screen;
 
     if (text) {
-	oldText = WMHashInsert(scr->balloon->table, view, wstrdup(text));
+        oldText = WMHashInsert(scr->balloon->table, view, wstrdup(text));
     } else {
-	oldText = WMHashGet(scr->balloon->table, view);
+        oldText = WMHashGet(scr->balloon->table, view);
 
-	WMHashRemove(scr->balloon->table, view);
+        WMHashRemove(scr->balloon->table, view);
     }
 
     if (oldText) {
-	wfree(oldText);
+        wfree(oldText);
     }
 }
 
@@ -118,14 +118,14 @@ void
 WMSetBalloonFont(WMScreen *scr, WMFont *font)
 {
     Balloon *bPtr = scr->balloon;
-    
+
     if (bPtr->font!=NULL)
-	WMReleaseFont(bPtr->font);
+        WMReleaseFont(bPtr->font);
 
     if (font)
-	bPtr->font = WMRetainFont(font);
+        bPtr->font = WMRetainFont(font);
     else
-	bPtr->font = NULL;
+        bPtr->font = NULL;
 }
 
 
@@ -135,7 +135,7 @@ WMSetBalloonTextColor(WMScreen *scr, WMColor *color)
     Balloon *bPtr = scr->balloon;
 
     if (bPtr->textColor)
-	WMReleaseColor(bPtr->textColor);
+        WMReleaseColor(bPtr->textColor);
 
     bPtr->textColor = WMRetainColor(color);
 }
@@ -173,17 +173,17 @@ W_BalloonHandleLeaveView(WMView *view)
     Balloon *bPtr = view->screen->balloon;
 
     if (bPtr->forWindow == view->window) {
-	if (bPtr->view->flags.mapped) {
-	    W_UnmapView(bPtr->view);
-	    bPtr->noDelayTimer = WMAddTimerHandler(NO_DELAY_DELAY,
-						   clearNoDelay, bPtr);
-	}
-	if (bPtr->timer)
-	    WMDeleteTimerHandler(bPtr->timer);
+        if (bPtr->view->flags.mapped) {
+            W_UnmapView(bPtr->view);
+            bPtr->noDelayTimer = WMAddTimerHandler(NO_DELAY_DELAY,
+                                                   clearNoDelay, bPtr);
+        }
+        if (bPtr->timer)
+            WMDeleteTimerHandler(bPtr->timer);
 
-	bPtr->timer = NULL;
+        bPtr->timer = NULL;
 
-	bPtr->forWindow = None;
+        bPtr->forWindow = None;
     }
 }
 
@@ -191,7 +191,7 @@ W_BalloonHandleLeaveView(WMView *view)
 /*
  * botar balao perto do cursor
  * so mapear balao se o mouse ficar parado pelo delay
- * 
+ *
  */
 
 static void
@@ -207,13 +207,13 @@ showBalloon(void *data)
 
     text = WMHashGet(bPtr->table, view);
     if (!text)
-	return;
+        return;
 
     XTranslateCoordinates(view->screen->display, view->window,
-			  view->screen->rootWin, 0, 0, &x, &y, &foo);
+                          view->screen->rootWin, 0, 0, &x, &y, &foo);
 
     if (!bPtr->view->flags.realized)
-	W_RealizeView(bPtr->view);
+        W_RealizeView(bPtr->view);
 
     showText(bPtr, x, y, view->size.width, view->size.height, text);
 
@@ -229,32 +229,32 @@ W_BalloonHandleEnterView(WMView *view)
     char *text;
 
     if (!bPtr->flags.enabled)
-	return;
+        return;
 
     text = WMHashGet(bPtr->table, view);
     if (!text) {
-	if (bPtr->view->flags.realized)
-	    W_UnmapView(bPtr->view);
+        if (bPtr->view->flags.realized)
+            W_UnmapView(bPtr->view);
 
-	return;
+        return;
     }
 
     if (bPtr->timer)
-	WMDeleteTimerHandler(bPtr->timer);
+        WMDeleteTimerHandler(bPtr->timer);
     bPtr->timer = NULL;
 
     if (bPtr->noDelayTimer)
-	WMDeleteTimerHandler(bPtr->noDelayTimer);
+        WMDeleteTimerHandler(bPtr->noDelayTimer);
     bPtr->noDelayTimer = NULL;
 
     bPtr->forWindow = view->window;
 
     if (bPtr->flags.noDelay) {
-	bPtr->timer = NULL;
+        bPtr->timer = NULL;
 
-	showBalloon(view);
+        showBalloon(view);
     } else {
-	bPtr->timer = WMAddTimerHandler(bPtr->delay, showBalloon, view);
+        bPtr->timer = WMAddTimerHandler(bPtr->delay, showBalloon, view);
     }
 }
 
@@ -311,7 +311,7 @@ drawBalloon(WMScreen *scr, Pixmap bitmap, Pixmap pix, int x, int y, int w,
 
     if (side & BOTTOM) {
         pt[0].y = y+h-1;
-	pt[1].y = y+h-1+SPACE;
+        pt[1].y = y+h-1+SPACE;
         pt[2].y = y+h-1;
         ipt[0].y = pt[0].y-1;
         ipt[1].y = pt[1].y-1;
@@ -319,7 +319,7 @@ drawBalloon(WMScreen *scr, Pixmap bitmap, Pixmap pix, int x, int y, int w,
     } else {
         pt[0].y = y;
         pt[1].y = y-SPACE;
-	pt[2].y = y;
+        pt[2].y = y;
         ipt[0].y = pt[0].y+1;
         ipt[1].y = pt[1].y+1;
         ipt[2].y = pt[2].y+1;
@@ -329,15 +329,15 @@ drawBalloon(WMScreen *scr, Pixmap bitmap, Pixmap pix, int x, int y, int w,
     w1 = WMAX(h, 21);
 
     if (side & RIGHT) {
-	pt[0].x = x+w-w1+2*w1/16;
+        pt[0].x = x+w-w1+2*w1/16;
         pt[1].x = x+w-w1+11*w1/16;
         pt[2].x = x+w-w1+7*w1/16;
-	ipt[0].x = x+1+w-w1+2*(w1-1)/16;
+        ipt[0].x = x+1+w-w1+2*(w1-1)/16;
         ipt[1].x = x+1+w-w1+11*(w1-1)/16;
         ipt[2].x = x+1+w-w1+7*(w1-1)/16;
         /*ipt[0].x = pt[0].x+1;
-        ipt[1].x = pt[1].x;
-        ipt[2].x = pt[2].x;*/
+         ipt[1].x = pt[1].x;
+         ipt[2].x = pt[2].x;*/
     } else {
         pt[0].x = x+w1-2*w1/16;
         pt[1].x = x+w1-11*w1/16;
@@ -346,8 +346,8 @@ drawBalloon(WMScreen *scr, Pixmap bitmap, Pixmap pix, int x, int y, int w,
         ipt[1].x = x-1+w1-11*(w1-1)/16;
         ipt[2].x = x-1+w1-7*(w1-1)/16;
         /*ipt[0].x = pt[0].x-1;
-        ipt[1].x = pt[1].x;
-        ipt[2].x = pt[2].x;*/
+         ipt[1].x = pt[1].x;
+         ipt[2].x = pt[2].x;*/
     }
 
     XFillPolygon(dpy, bitmap, bgc, pt, 3, Convex, CoordModeOrigin);
@@ -380,7 +380,7 @@ makePixmap(WMScreen *scr, int width, int height, int side, Pixmap *mask)
 
     bitmap = XCreatePixmap(dpy, scr->rootWin, width+SPACE, height+SPACE, 1);
 
-    XSetForeground(dpy, scr->monoGC, 0); 
+    XSetForeground(dpy, scr->monoGC, 0);
     XFillRectangle(dpy, bitmap, scr->monoGC, 0, 0, width+SPACE, height+SPACE);
 
     pixmap = XCreatePixmap(dpy, scr->rootWin, width+SPACE, height+SPACE,
@@ -390,9 +390,9 @@ makePixmap(WMScreen *scr, int width, int height, int side, Pixmap *mask)
                    height+SPACE);
 
     if (side & BOTTOM) {
-	y = 0;
+        y = 0;
     } else {
-	y = SPACE;
+        y = SPACE;
     }
     x = 0;
 
@@ -422,62 +422,62 @@ showText(Balloon *bPtr, int x, int y, int w, int h, char *text)
     int bx, by;
 
     {
-	int w;
-	char *ptr, *ptr2;
+        int w;
+        char *ptr, *ptr2;
 
-	ptr2 = ptr = text;
-	width = 0;
-	while (ptr && ptr2) {
-	    ptr2 = strchr(ptr, '\n');
-	    if (ptr2) {
-		w = WMWidthOfString(font, ptr, ptr2 - ptr);
-	    } else {
-		w = WMWidthOfString(font, ptr, strlen(ptr));
-	    }
-	    if (w > width)
-		width = w;
-	    ptr = ptr2 + 1;
-	}
+        ptr2 = ptr = text;
+        width = 0;
+        while (ptr && ptr2) {
+            ptr2 = strchr(ptr, '\n');
+            if (ptr2) {
+                w = WMWidthOfString(font, ptr, ptr2 - ptr);
+            } else {
+                w = WMWidthOfString(font, ptr, strlen(ptr));
+            }
+            if (w > width)
+                width = w;
+            ptr = ptr2 + 1;
+        }
     }
-    
+
     width += 16;
 
     textHeight = W_GetTextHeight(font, text, width, False);
-    
+
     height = textHeight + 4;
-    
+
     if (height < 16)
-	height = 16;
+        height = 16;
     if (width < height)
-	width = height;
+        width = height;
 
     if (x + width > scr->rootView->size.width) {
-	side = RIGHT;
-	bx = x - width + w/2;
-	if (bx < 0)
-	    bx = 0;
+        side = RIGHT;
+        bx = x - width + w/2;
+        if (bx < 0)
+            bx = 0;
     } else {
-	side = LEFT;
-	bx = x + w/2;
+        side = LEFT;
+        bx = x + w/2;
     }
     if (bx + width > scr->rootView->size.width)
-	bx = scr->rootView->size.width - width;
+        bx = scr->rootView->size.width - width;
 
     if (y - (height + SPACE) < 0) {
-	side |= TOP;
-	by = y+h-1;
-	ty = SPACE;
+        side |= TOP;
+        by = y+h-1;
+        ty = SPACE;
     } else {
-	side |= BOTTOM;
-	by = y - (height + SPACE);
-	ty = 0;
+        side |= BOTTOM;
+        by = y - (height + SPACE);
+        ty = 0;
     }
     pixmap = makePixmap(scr, width, height, side, &mask);
 
     W_PaintText(bPtr->view, pixmap, font, 8, ty + (height - textHeight)/2,
-		width, bPtr->flags.alignment,
-		bPtr->textColor ? bPtr->textColor : scr->black,
-		False, text, strlen(text));
+                width, bPtr->flags.alignment,
+                bPtr->textColor ? bPtr->textColor : scr->black,
+                False, text, strlen(text));
 
     XSetWindowBackgroundPixmap(dpy, bPtr->view->window, pixmap);
 
@@ -487,7 +487,7 @@ showText(Balloon *bPtr, int x, int y, int w, int h, char *text)
 
 #ifdef SHAPE
     XShapeCombineMask(dpy, bPtr->view->window, ShapeBounding, 0, 0, mask,
-		      ShapeSet);
+                      ShapeSet);
 #endif
     XFreePixmap(dpy, mask);
 
@@ -502,10 +502,10 @@ handleEvents(XEvent *event, void *data)
 {
     Balloon *bPtr = (Balloon*)data;
 
-    switch (event->type) {	
-     case DestroyNotify:
-	destroyBalloon(bPtr);
-	break;
+    switch (event->type) {
+    case DestroyNotify:
+        destroyBalloon(bPtr);
+        break;
     }
 }
 
@@ -519,15 +519,16 @@ destroyBalloon(Balloon *bPtr)
     e = WMEnumerateHashTable(bPtr->table);
 
     while ((str = WMNextHashEnumeratorItem(&e))) {
-	wfree(str);
+        wfree(str);
     }
     WMFreeHashTable(bPtr->table);
 
     if (bPtr->textColor)
-	WMReleaseColor(bPtr->textColor);
+        WMReleaseColor(bPtr->textColor);
 
     if (bPtr->font)
-	WMReleaseFont(bPtr->font);
+        WMReleaseFont(bPtr->font);
 
     wfree(bPtr);
 }
+

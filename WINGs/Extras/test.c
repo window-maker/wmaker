@@ -12,61 +12,65 @@ static int col2[20];
 
 static char *options[] = {
     "Option1",
-	"Option2",
-	"Option3",
-	"Option4",
-	"Option5"
+    "Option2",
+    "Option3",
+    "Option4",
+    "Option5"
 };
 
 
-int numberOfRows(WMTableViewDelegate *self, WMTableView *table)
+int
+numberOfRows(WMTableViewDelegate *self, WMTableView *table)
 {
     return 20;
 }
 
 
-void *valueForCell(WMTableViewDelegate *self, WMTableColumn *column, int row)
+void*
+valueForCell(WMTableViewDelegate *self, WMTableColumn *column, int row)
 {
     /*WMTableView *table = (WMTableView*)WMGetTableColumnTableView(column);*/
     int i;
     if (col1[0] == 0) {
-	for (i = 0; i < 20; i++) {
-	    char buf[128];
+        for (i = 0; i < 20; i++) {
+            char buf[128];
 
-	    sprintf(buf, "Test row %i", i);
+            sprintf(buf, "Test row %i", i);
 
-	    col1[i] = wstrdup(buf);
-	    col2[i] = 0;
-	}
+            col1[i] = wstrdup(buf);
+            col2[i] = 0;
+        }
     }
     if ((int)WMGetTableColumnId(column) == 1)
-	return col1[row];
+        return col1[row];
     else
-	return (void*)col2[row];
+        return (void*)col2[row];
 }
 
 
-void setValueForCell(WMTableViewDelegate *self, WMTableColumn *column, int row,
-		     void *data)
+void
+setValueForCell(WMTableViewDelegate *self, WMTableColumn *column, int row,
+                void *data)
 {
     if ((int)WMGetTableColumnId(column) == 1)
-	col1[row] = data;
+        col1[row] = data;
     else
-	col2[row] = (int)data;
+        col2[row] = (int)data;
 }
 
 
 static WMTableViewDelegate delegate = {
     NULL,
-	numberOfRows,
-	valueForCell,
-	setValueForCell
+    numberOfRows,
+    valueForCell,
+    setValueForCell
 };
 
 
 
-void clickedTable(WMWidget *w, void *self)
-{    
+void
+clickedTable(WMWidget *w, void *self)
+{
     int row = WMGetTableViewClickedRow((WMTableView*)self);
 
     WMEditTableViewRow(self, row);
@@ -82,17 +86,17 @@ main(int argc, char **argv)
     WMTableView *table;
     WMTableColumn *col;
     WMTableColumnDelegate *colDeleg;
-    
+
     WMInitializeApplication("test", &argc, argv);
-    
+
     scr = WMOpenScreen(NULL);
 
     XSynchronize(WMScreenDisplay(scr), 1);
-    
+
     win = WMCreateWindow(scr, "eweq");
     WMResizeWidget(win, 400, 200);
     WMMapWidget(win);
-    
+
     table = WMCreateTableView(win);
     WMSetTableViewHasHorizontalScroller(table, 0);
     WMSetViewExpandsToParent(WMWidgetView(table), 10, 10, 10, 10);
@@ -101,12 +105,12 @@ main(int argc, char **argv)
     WMSetTableViewHeaderHeight(table, 20);
     WMSetTableViewDelegate(table, &delegate);
     WMSetTableViewAction(table, clickedTable, table);
-    
+
     colDeleg = WTCreateStringEditorDelegate(table);
-    
+
     col = WMCreateTableColumn("Group");
     WMSetTableColumnWidth(col, 180);
-    WMAddTableViewColumn(table, col);	
+    WMAddTableViewColumn(table, col);
     WMSetTableColumnDelegate(col, colDeleg);
     WMSetTableColumnId(col, (void*)1);
 
@@ -115,15 +119,15 @@ main(int argc, char **argv)
 
     col = WMCreateTableColumn("Package");
     WMSetTableColumnWidth(col, 140);
-    WMAddTableViewColumn(table, col);	
+    WMAddTableViewColumn(table, col);
     WMSetTableColumnDelegate(col, colDeleg);
-    WMSetTableColumnId(col, (void*)2);	
+    WMSetTableColumnId(col, (void*)2);
 
     colDeleg = WTCreateBooleanSwitchDelegate(table);
 
     col = WMCreateTableColumn("Bool");
     WMSetTableColumnWidth(col, 50);
-    WMAddTableViewColumn(table, col);	
+    WMAddTableViewColumn(table, col);
     WMSetTableColumnDelegate(col, colDeleg);
     WMSetTableColumnId(col, (void*)2);
 
@@ -133,3 +137,4 @@ main(int argc, char **argv)
 
     return 0;
 }
+

@@ -272,3 +272,4 @@ W_FreeViewXdndPart(WMView *view)
     if (view->dragImage)
         WMReleasePixmap(view->dragImage);
 }
+

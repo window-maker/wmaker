@@ -9,11 +9,11 @@
 typedef struct W_Window {
     W_Class widgetClass;
     W_View *view;
-    
+
     struct W_Window *nextPtr;	       /* next in the window list */
 
     struct W_Window *owner;
-    
+
     char *title;
 
     WMPixmap *miniImage;	       /* miniwindow */
@@ -33,17 +33,17 @@ typedef struct W_Window {
 
     WMAction *closeAction;
     void *closeData;
-    
+
     int level;
 
     struct {
-	unsigned style:4;
-	unsigned configured:1;
-	unsigned documentEdited:1;
+        unsigned style:4;
+        unsigned configured:1;
+        unsigned documentEdited:1;
 
         unsigned setUPos:1;
         unsigned setPPos:1;
-	unsigned setAspect:1;
+        unsigned setAspect:1;
     } flags;
 } _Window;
 
@@ -82,10 +82,10 @@ static void willResizeWindow(W_ViewDelegate *, WMView *, unsigned*, unsigned*);
 
 struct W_ViewDelegate _WindowViewDelegate = {
     NULL,
-	NULL,
-	NULL,
-	NULL,
-	willResizeWindow
+    NULL,
+    NULL,
+    NULL,
+    willResizeWindow
 };
 
 
@@ -100,7 +100,7 @@ static void handleEvents();
 
 static void realizeWindow();
 
-static void 
+static void
 realizeObserver(void *self, WMNotification *not)
 {
     realizeWindow(self);
@@ -111,7 +111,7 @@ WMWindow*
 WMCreatePanelWithStyleForWindow(WMWindow *owner, char *name, int style)
 {
     WMWindow *win;
-    
+
     win = WMCreateWindowWithStyle(owner->view->screen, name, style);
     win->owner = owner;
 
@@ -122,11 +122,11 @@ WMCreatePanelWithStyleForWindow(WMWindow *owner, char *name, int style)
 
 WMWindow*
 WMCreatePanelForWindow(WMWindow *owner, char *name)
-{    
-    return WMCreatePanelWithStyleForWindow(owner, name, 
-					   WMTitledWindowMask
-					   |WMClosableWindowMask
-					   |WMResizableWindowMask);
+{
+    return WMCreatePanelWithStyleForWindow(owner, name,
+                                           WMTitledWindowMask
+                                           |WMClosableWindowMask
+                                           |WMResizableWindowMask);
 }
 
 
@@ -134,10 +134,10 @@ void
 WMChangePanelOwner(WMWindow *win, WMWindow *newOwner)
 {
     win->owner = newOwner;
-    
+
     if (win->view->flags.realized && newOwner) {
-	XSetTransientForHint(win->view->screen->display, win->view->window,
-			     newOwner->view->window);
+        XSetTransientForHint(win->view->screen->display, win->view->window,
+                             newOwner->view->window);
     }
 }
 
@@ -147,9 +147,9 @@ WMWindow*
 WMCreateWindow(WMScreen *screen, char *name)
 {
     return WMCreateWindowWithStyle(screen, name, WMTitledWindowMask
-				   |WMClosableWindowMask
-				   |WMMiniaturizableWindowMask
-				   |WMResizableWindowMask);
+                                   |WMClosableWindowMask
+                                   |WMMiniaturizableWindowMask
+                                   |WMResizableWindowMask);
 }
 
 
@@ -166,8 +166,8 @@ WMCreateWindowWithStyle(WMScreen *screen, char *name, int style)
 
     win->view = W_CreateTopView(screen);
     if (!win->view) {
-	wfree(win);
-	return NULL;
+        wfree(win);
+        return NULL;
     }
     win->view->self = win;
 
@@ -180,13 +180,13 @@ WMCreateWindowWithStyle(WMScreen *screen, char *name, int style)
     screen->windowList = win;
 
     WMCreateEventHandler(win->view, ExposureMask|StructureNotifyMask
-			 |ClientMessageMask|FocusChangeMask, 
-			 handleEvents, win);
+                         |ClientMessageMask|FocusChangeMask,
+                         handleEvents, win);
 
     W_ResizeView(win->view, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
     WMAddNotificationObserver(realizeObserver, win,
-			      WMViewRealizedNotification, win->view);
+                              WMViewRealizedNotification, win->view);
 
     win->flags.style = style;
 
@@ -206,24 +206,24 @@ WMSetWindowTitle(WMWindow *win, char *title)
     int result;
 
     if (win->title!=NULL)
-	wfree(win->title);
+        wfree(win->title);
     if (title!=NULL)
-	win->title = wstrdup(title);
+        win->title = wstrdup(title);
     else
-	win->title = NULL;
+        win->title = NULL;
 
     if (win->view->flags.realized) {
-	result = XmbTextListToTextProperty (win->view->screen->display,
-					    &title, 1, XStdICCTextStyle,
-					    &property);
-	if (result == XNoMemory || result == XLocaleNotSupported) {
-	    wwarning("window title conversion error... using STRING encoding");
-	    XStoreName(win->view->screen->display, win->view->window, title);
-	} else {
-	    XSetWMName(win->view->screen->display, win->view->window, &property);
-	    if (property.value)
-	        XFree(property.value);
-	}
+        result = XmbTextListToTextProperty (win->view->screen->display,
+                                            &title, 1, XStdICCTextStyle,
+                                            &property);
+        if (result == XNoMemory || result == XLocaleNotSupported) {
+            wwarning("window title conversion error... using STRING encoding");
+            XStoreName(win->view->screen->display, win->view->window, title);
+        } else {
+            XSetWMName(win->view->screen->display, win->view->window, &property);
+            if (property.value)
+                XFree(property.value);
+        }
     }
 }
 
@@ -239,64 +239,64 @@ WMSetWindowCloseAction(WMWindow *win, WMAction *action, void *clientData)
     WMScreen *scr = win->view->screen;
 
     if (win->view->flags.realized) {
-	if (action && !win->closeAction) {
-	    if (!XGetWMProtocols(scr->display, win->view->window, &atoms,
-				&count)) {
-		count = 0;
-	    }
-	    newAtoms = wmalloc((count+1)*sizeof(Atom));
-	    if (count > 0)
-		memcpy(newAtoms, atoms, count*sizeof(Atom));
-	    newAtoms[count++] = scr->deleteWindowAtom;
-	    XSetWMProtocols(scr->display, win->view->window, newAtoms, count);
-	    if (atoms)
-		XFree(atoms);
-	    wfree(newAtoms);
-	} else if (!action && win->closeAction) {
-	    int i, ncount;
-	    
-	    if (XGetWMProtocols(scr->display, win->view->window, &atoms, 
-				 &count) && count>0) {
-		newAtoms = wmalloc((count-1)*sizeof(Atom));
-		ncount = 0;
-		for (i=0; i < count; i++) {
-		    if (atoms[i]!=scr->deleteWindowAtom) {
-			newAtoms[i] = atoms[i];
-			ncount++;
-		    }
-		}
-		XSetWMProtocols(scr->display, win->view->window, newAtoms, 
-				ncount);
-		if (atoms)
-		    XFree(atoms);
-		wfree(newAtoms);
-	    }
-	}
+        if (action && !win->closeAction) {
+            if (!XGetWMProtocols(scr->display, win->view->window, &atoms,
+                                 &count)) {
+                count = 0;
+            }
+            newAtoms = wmalloc((count+1)*sizeof(Atom));
+            if (count > 0)
+                memcpy(newAtoms, atoms, count*sizeof(Atom));
+            newAtoms[count++] = scr->deleteWindowAtom;
+            XSetWMProtocols(scr->display, win->view->window, newAtoms, count);
+            if (atoms)
+                XFree(atoms);
+            wfree(newAtoms);
+        } else if (!action && win->closeAction) {
+            int i, ncount;
+
+            if (XGetWMProtocols(scr->display, win->view->window, &atoms,
+                                &count) && count>0) {
+                newAtoms = wmalloc((count-1)*sizeof(Atom));
+                ncount = 0;
+                for (i=0; i < count; i++) {
+                    if (atoms[i]!=scr->deleteWindowAtom) {
+                        newAtoms[i] = atoms[i];
+                        ncount++;
+                    }
+                }
+                XSetWMProtocols(scr->display, win->view->window, newAtoms,
+                                ncount);
+                if (atoms)
+                    XFree(atoms);
+                wfree(newAtoms);
+            }
+        }
     }
     win->closeAction = action;
-    win->closeData = clientData;    
+    win->closeData = clientData;
 }
 
 
 
 static void
 willResizeWindow(W_ViewDelegate *self, WMView *view,
-	     unsigned *width, unsigned *height)
+                 unsigned *width, unsigned *height)
 {
     WMWindow *win = (WMWindow*)view->self;
 
     if (win->minSize.width > 0 && win->minSize.height > 0) {
-	if (*width < win->minSize.width)
-	    *width = win->minSize.width;
-	if (*height < win->minSize.height)
-	    *height = win->minSize.height;
+        if (*width < win->minSize.width)
+            *width = win->minSize.width;
+        if (*height < win->minSize.height)
+            *height = win->minSize.height;
     }
-    
+
     if (win->maxSize.width > 0 && win->maxSize.height > 0) {
-	if (*width > win->maxSize.width)
-	    *width = win->maxSize.width;
-	if (*height > win->maxSize.height)
-	    *height = win->maxSize.height;
+        if (*width > win->maxSize.width)
+            *width = win->maxSize.width;
+        if (*height > win->maxSize.height)
+            *height = win->maxSize.height;
     }
 }
 
@@ -308,53 +308,53 @@ setSizeHints(WMWindow *win)
 
     hints = XAllocSizeHints();
     if (!hints) {
-	wwarning("could not allocate memory for window size hints");
-	return;
+        wwarning("could not allocate memory for window size hints");
+        return;
     }
 
     hints->flags = 0;
 
     if (win->flags.setPPos) {
-	hints->flags |= PPosition;
-	hints->x = win->ppos.x;
-	hints->y = win->ppos.y;
+        hints->flags |= PPosition;
+        hints->x = win->ppos.x;
+        hints->y = win->ppos.y;
     }
     if (win->flags.setUPos) {
-	hints->flags |= USPosition;
-	hints->x = win->upos.x;
-	hints->y = win->upos.y;
+        hints->flags |= USPosition;
+        hints->x = win->upos.x;
+        hints->y = win->upos.y;
     }
     if (win->minSize.width>0 && win->minSize.height>0) {
-	hints->flags |= PMinSize;
-	hints->min_width = win->minSize.width;
-	hints->min_height = win->minSize.height;
+        hints->flags |= PMinSize;
+        hints->min_width = win->minSize.width;
+        hints->min_height = win->minSize.height;
     }
     if (win->maxSize.width>0 && win->maxSize.height>0) {
-	hints->flags |= PMaxSize;
-	hints->max_width = win->maxSize.width;
-	hints->max_height = win->maxSize.height;
+        hints->flags |= PMaxSize;
+        hints->max_width = win->maxSize.width;
+        hints->max_height = win->maxSize.height;
     }
     if (win->baseSize.width>0 && win->baseSize.height>0) {
-	hints->flags |= PBaseSize;
-	hints->base_width = win->baseSize.width;
-	hints->base_height = win->baseSize.height;
+        hints->flags |= PBaseSize;
+        hints->base_width = win->baseSize.width;
+        hints->base_height = win->baseSize.height;
     }
     if (win->resizeIncrement.width>0 && win->resizeIncrement.height>0) {
-	hints->flags |= PResizeInc;
-	hints->width_inc = win->resizeIncrement.width;
-	hints->height_inc = win->resizeIncrement.height;
+        hints->flags |= PResizeInc;
+        hints->width_inc = win->resizeIncrement.width;
+        hints->height_inc = win->resizeIncrement.height;
     }
     if (win->flags.setAspect) {
-	hints->flags |= PAspect;
-	hints->min_aspect.x = win->minAspect.x;
-	hints->min_aspect.y = win->minAspect.y;
-	hints->max_aspect.x = win->maxAspect.x;
-	hints->max_aspect.y = win->maxAspect.y;
+        hints->flags |= PAspect;
+        hints->min_aspect.x = win->minAspect.x;
+        hints->min_aspect.y = win->minAspect.y;
+        hints->max_aspect.x = win->maxAspect.x;
+        hints->max_aspect.y = win->maxAspect.y;
     }
 
 
     if (hints->flags) {
-	XSetWMNormalHints(win->view->screen->display, win->view->window, hints);
+        XSetWMNormalHints(win->view->screen->display, win->view->window, hints);
     }
     XFree(hints);
 }
@@ -378,7 +378,7 @@ writeGNUstepWMAttr(WMScreen *scr, Window window, GNUstepWMAttributes *attr)
     data[7] = attr->close_mask;
     data[8] = attr->extra_flags;
     XChangeProperty(scr->display, window, scr->attribsAtom, scr->attribsAtom,
-		    32, PropModeReplace,  (unsigned char *)data, 9);
+                    32, PropModeReplace,  (unsigned char *)data, 9);
 }
 
 
@@ -387,21 +387,21 @@ setWindowMakerHints(WMWindow *win)
 {
     GNUstepWMAttributes attribs;
     WMScreen *scr = WMWidgetScreen(win);
-    
+
     memset(&attribs, 0, sizeof(GNUstepWMAttributes));
     attribs.flags = GSWindowStyleAttr|GSWindowLevelAttr|GSExtraFlagsAttr;
     attribs.window_style = win->flags.style;
     attribs.window_level = win->level;
     if (win->flags.documentEdited)
-	attribs.extra_flags = GSDocumentEditedFlag;
+        attribs.extra_flags = GSDocumentEditedFlag;
     else
-	attribs.extra_flags = 0;
+        attribs.extra_flags = 0;
 
     writeGNUstepWMAttr(scr, win->view->window, &attribs);
 }
 
 
-static void 
+static void
 realizeWindow(WMWindow *win)
 {
     XWMHints *hints;
@@ -419,40 +419,40 @@ realizeWindow(WMWindow *win)
     hints = XAllocWMHints();
     hints->flags = 0;
     if (!scr->aflags.simpleApplication) {
-	hints->flags |= WindowGroupHint;
-	hints->window_group = scr->groupLeader;
+        hints->flags |= WindowGroupHint;
+        hints->window_group = scr->groupLeader;
     }
     if (win->miniImage) {
-	hints->flags |= IconPixmapHint;
-	hints->icon_pixmap = WMGetPixmapXID(win->miniImage);
-	hints->icon_mask = WMGetPixmapMaskXID(win->miniImage);
-	if (hints->icon_mask != None) {
-	    hints->flags |= IconMaskHint;
-	}
+        hints->flags |= IconPixmapHint;
+        hints->icon_pixmap = WMGetPixmapXID(win->miniImage);
+        hints->icon_mask = WMGetPixmapMaskXID(win->miniImage);
+        if (hints->icon_mask != None) {
+            hints->flags |= IconMaskHint;
+        }
     }
     if (hints->flags != 0)
-	XSetWMHints(scr->display, win->view->window, hints);
+        XSetWMHints(scr->display, win->view->window, hints);
     XFree(hints);
 
     count = 0;
     if (win->closeAction) {
-	atoms[count++] = scr->deleteWindowAtom;
+        atoms[count++] = scr->deleteWindowAtom;
     }
 
     if (count>0)
-	XSetWMProtocols(scr->display, win->view->window, atoms, count);
+        XSetWMProtocols(scr->display, win->view->window, atoms, count);
 
     if (win->title || win->miniTitle)
-	XmbSetWMProperties(scr->display, win->view->window, win->title, 
-			   win->miniTitle, NULL, 0, NULL, NULL, NULL);
+        XmbSetWMProperties(scr->display, win->view->window, win->title,
+                           win->miniTitle, NULL, 0, NULL, NULL, NULL);
 
     setWindowMakerHints(win);
 
     setSizeHints(win);
 
     if (win->owner) {
-	XSetTransientForHint(scr->display, win->view->window,
-			     win->owner->view->window);
+        XSetTransientForHint(scr->display, win->view->window,
+                             win->owner->view->window);
     }
 }
 
@@ -460,7 +460,7 @@ realizeWindow(WMWindow *win)
 
 void
 WMSetWindowAspectRatio(WMWindow *win, int minX, int minY,
-		       int maxX, int maxY)
+                       int maxX, int maxY)
 {
     win->flags.setAspect = 1;
     win->minAspect.x = minX;
@@ -480,7 +480,7 @@ WMSetWindowInitialPosition(WMWindow *win, int x, int y)
     win->ppos.x = x;
     win->ppos.y = y;
     if (win->view->flags.realized)
-	setSizeHints(win);
+        setSizeHints(win);
     WMMoveWidget(win, x, y);
 }
 
@@ -493,7 +493,7 @@ WMSetWindowUserPosition(WMWindow *win, int x, int y)
     win->upos.x = x;
     win->upos.y = y;
     if (win->view->flags.realized)
-	setSizeHints(win);
+        setSizeHints(win);
     WMMoveWidget(win, x, y);
 }
 
@@ -506,7 +506,7 @@ WMSetWindowMinSize(WMWindow *win, unsigned width, unsigned height)
     win->minSize.width = width;
     win->minSize.height = height;
     if (win->view->flags.realized)
-	setSizeHints(win);
+        setSizeHints(win);
 }
 
 
@@ -517,7 +517,7 @@ WMSetWindowMaxSize(WMWindow *win, unsigned width, unsigned height)
     win->maxSize.width = width;
     win->maxSize.height = height;
     if (win->view->flags.realized)
-	setSizeHints(win);
+        setSizeHints(win);
 }
 
 
@@ -528,7 +528,7 @@ WMSetWindowBaseSize(WMWindow *win, unsigned width, unsigned height)
     win->baseSize.width = width;
     win->baseSize.height = height;
     if (win->view->flags.realized)
-	setSizeHints(win);
+        setSizeHints(win);
 }
 
 
@@ -538,7 +538,7 @@ WMSetWindowResizeIncrements(WMWindow *win, unsigned wIncr, unsigned hIncr)
     win->resizeIncrement.width = wIncr;
     win->resizeIncrement.height = hIncr;
     if (win->view->flags.realized)
-	setSizeHints(win);
+        setSizeHints(win);
 }
 
 
@@ -547,7 +547,7 @@ WMSetWindowLevel(WMWindow *win, int level)
 {
     win->level = level;
     if (win->view->flags.realized)
-	setWindowMakerHints(win);
+        setWindowMakerHints(win);
 }
 
 
@@ -556,9 +556,9 @@ WMSetWindowDocumentEdited(WMWindow *win, Bool flag)
 {
     flag = ((flag==0) ? 0 : 1);
     if (win->flags.documentEdited != flag) {
-	win->flags.documentEdited = flag;
-	if (win->view->flags.realized)
-	    setWindowMakerHints(win);
+        win->flags.documentEdited = flag;
+        if (win->view->flags.realized)
+            setWindowMakerHints(win);
     }
 }
 
@@ -567,37 +567,37 @@ void
 WMSetWindowMiniwindowPixmap(WMWindow *win, WMPixmap *pixmap)
 {
     if ((win->miniImage && !pixmap) || (!win->miniImage && pixmap)) {
-	if (win->miniImage)
-	    WMReleasePixmap(win->miniImage);
+        if (win->miniImage)
+            WMReleasePixmap(win->miniImage);
 
-	if (pixmap)
-	    win->miniImage = WMRetainPixmap(pixmap);
-	else
-	    win->miniImage = NULL;
+        if (pixmap)
+            win->miniImage = WMRetainPixmap(pixmap);
+        else
+            win->miniImage = NULL;
 
-	if (win->view->flags.realized) {
-	    XWMHints *hints;
-	    
-	    hints = XGetWMHints(win->view->screen->display, win->view->window);
-	    if (!hints) {
-		hints = XAllocWMHints();
-		if (!hints) {
-		    wwarning("could not allocate memory for WM hints");
-		    return;
-		}
-		hints->flags = 0;
-	    }
-	    if (pixmap) {
-		hints->flags |= IconPixmapHint;
-		hints->icon_pixmap = WMGetPixmapXID(pixmap);
-		hints->icon_mask = WMGetPixmapMaskXID(pixmap);
-		if (hints->icon_mask != None) {
-		    hints->flags |= IconMaskHint;
-		}
-	    }
-	    XSetWMHints(win->view->screen->display, win->view->window, hints);
-	    XFree(hints);
-	}
+        if (win->view->flags.realized) {
+            XWMHints *hints;
+
+            hints = XGetWMHints(win->view->screen->display, win->view->window);
+            if (!hints) {
+                hints = XAllocWMHints();
+                if (!hints) {
+                    wwarning("could not allocate memory for WM hints");
+                    return;
+                }
+                hints->flags = 0;
+            }
+            if (pixmap) {
+                hints->flags |= IconPixmapHint;
+                hints->icon_pixmap = WMGetPixmapXID(pixmap);
+                hints->icon_mask = WMGetPixmapMaskXID(pixmap);
+                if (hints->icon_mask != None) {
+                    hints->flags |= IconMaskHint;
+                }
+            }
+            XSetWMHints(win->view->screen->display, win->view->window, hints);
+            XFree(hints);
+        }
     }
 }
 
@@ -609,30 +609,30 @@ WMSetWindowMiniwindowTitle(WMWindow *win, char *title)
     int result;
 
     if ((win->miniTitle && !title) || (!win->miniTitle && title)
-	|| (title && win->miniTitle && strcoll(title, win->miniTitle)!=0)) {
-	if (win->miniTitle)
-	    wfree(win->miniTitle);
-	
-	if (title)
-	    win->miniTitle = wstrdup(title);
-	else
-	    win->miniTitle = NULL;
+        || (title && win->miniTitle && strcoll(title, win->miniTitle)!=0)) {
+        if (win->miniTitle)
+            wfree(win->miniTitle);
 
-	if (win->view->flags.realized) {
-	    result = XmbTextListToTextProperty (win->view->screen->display,
-						&title, 1, XStdICCTextStyle,
-						&property);
-	    if (result == XNoMemory || result == XLocaleNotSupported) {
-		wwarning("icon title conversion error..using STRING encoding");
-		XSetIconName(win->view->screen->display, win->view->window,
-			     title);
-	    } else {
-		XSetWMIconName(win->view->screen->display, win->view->window,
-			       &property);
-		if (property.value)
-		    XFree(property.value);
-	    }
-	}
+        if (title)
+            win->miniTitle = wstrdup(title);
+        else
+            win->miniTitle = NULL;
+
+        if (win->view->flags.realized) {
+            result = XmbTextListToTextProperty (win->view->screen->display,
+                                                &title, 1, XStdICCTextStyle,
+                                                &property);
+            if (result == XNoMemory || result == XLocaleNotSupported) {
+                wwarning("icon title conversion error..using STRING encoding");
+                XSetIconName(win->view->screen->display, win->view->window,
+                             title);
+            } else {
+                XSetWMIconName(win->view->screen->display, win->view->window,
+                               &property);
+                if (property.value)
+                    XFree(property.value);
+            }
+        }
     }
 }
 
@@ -643,8 +643,8 @@ WMCloseWindow(WMWindow *win)
     WMUnmapWidget(win);
     /* withdraw the window */
     if (win->view->flags.realized)
-	XWithdrawWindow(win->view->screen->display, win->view->window,
-			win->view->screen->screen);
+        XWithdrawWindow(win->view->screen->display, win->view->window,
+                        win->view->screen->screen);
 }
 
 
@@ -653,65 +653,65 @@ handleEvents(XEvent *event, void *clientData)
 {
     _Window *win = (_Window*)clientData;
     W_View *view = win->view;
-    
-    
+
+
     switch (event->type) {
-     case ClientMessage:
-	if (event->xclient.message_type == win->view->screen->protocolsAtom
-	    && event->xclient.format == 32 
-	    && event->xclient.data.l[0]==win->view->screen->deleteWindowAtom) {
-	    
-	    if (win->closeAction) {
-		(*win->closeAction)(win, win->closeData);
-	    }
-	}
-	break;
-/*
- * was causing windows to ignore commands like closeWindow
- * after the windows is iconized/restored or a workspace change
- * if this is really needed, put the MapNotify portion too and
- * fix the restack bug in wmaker
-     case UnmapNotify:
-	WMUnmapWidget(win);
-	break;
- * 
-     case MapNotify:
-	WMMapWidget(win);
-	break;
- 
-*/
-     case DestroyNotify:
-	destroyWindow(win);
-	break;
-	
-     case ConfigureNotify:
-	if (event->xconfigure.width != view->size.width
-	    || event->xconfigure.height != view->size.height) {
+    case ClientMessage:
+        if (event->xclient.message_type == win->view->screen->protocolsAtom
+            && event->xclient.format == 32
+            && event->xclient.data.l[0]==win->view->screen->deleteWindowAtom) {
 
-	    view->size.width = event->xconfigure.width;
-	    view->size.height = event->xconfigure.height;
+            if (win->closeAction) {
+                (*win->closeAction)(win, win->closeData);
+            }
+        }
+        break;
+        /*
+         * was causing windows to ignore commands like closeWindow
+         * after the windows is iconized/restored or a workspace change
+         * if this is really needed, put the MapNotify portion too and
+         * fix the restack bug in wmaker
+         case UnmapNotify:
+         WMUnmapWidget(win);
+         break;
+         *
+         case MapNotify:
+         WMMapWidget(win);
+         break;
 
-	    if (view->flags.notifySizeChanged) {
-		WMPostNotificationName(WMViewSizeDidChangeNotification,
-				       view, NULL);
-	    }
-	}
-	if (event->xconfigure.x != view->pos.x
-	    || event->xconfigure.y != view->pos.y) {
+         */
+    case DestroyNotify:
+        destroyWindow(win);
+        break;
 
-	    if (event->xconfigure.send_event) {
-		view->pos.x = event->xconfigure.x;
-		view->pos.y = event->xconfigure.y;
-	    } else {
-		Window foo;
+    case ConfigureNotify:
+        if (event->xconfigure.width != view->size.width
+            || event->xconfigure.height != view->size.height) {
 
-		XTranslateCoordinates(view->screen->display,
-				      view->window, view->screen->rootWin,
-				      event->xconfigure.x, event->xconfigure.y,
-				      &view->pos.x, &view->pos.y, &foo);
-	    }
-	}
-	break;
+            view->size.width = event->xconfigure.width;
+            view->size.height = event->xconfigure.height;
+
+            if (view->flags.notifySizeChanged) {
+                WMPostNotificationName(WMViewSizeDidChangeNotification,
+                                       view, NULL);
+            }
+        }
+        if (event->xconfigure.x != view->pos.x
+            || event->xconfigure.y != view->pos.y) {
+
+            if (event->xconfigure.send_event) {
+                view->pos.x = event->xconfigure.x;
+                view->pos.y = event->xconfigure.y;
+            } else {
+                Window foo;
+
+                XTranslateCoordinates(view->screen->display,
+                                      view->window, view->screen->rootWin,
+                                      event->xconfigure.x, event->xconfigure.y,
+                                      &view->pos.x, &view->pos.y, &foo);
+            }
+        }
+        break;
     }
 }
 
@@ -724,38 +724,38 @@ destroyWindow(_Window *win)
     WMScreen *scr = win->view->screen;
 
     WMRemoveNotificationObserver(win);
-    
+
     if (scr->windowList == win) {
-	scr->windowList = scr->windowList->nextPtr;
+        scr->windowList = scr->windowList->nextPtr;
     } else {
-	WMWindow *ptr;
-	ptr = scr->windowList;
-	
-	if (ptr) {
-	    while (ptr->nextPtr) {
-		if (ptr->nextPtr==win) {
-		    ptr->nextPtr = ptr->nextPtr->nextPtr;
-		    break;
-		}
-		ptr = ptr->nextPtr;
-	    }
-	}
+        WMWindow *ptr;
+        ptr = scr->windowList;
+
+        if (ptr) {
+            while (ptr->nextPtr) {
+                if (ptr->nextPtr==win) {
+                    ptr->nextPtr = ptr->nextPtr->nextPtr;
+                    break;
+                }
+                ptr = ptr->nextPtr;
+            }
+        }
     }
 
     if (win->title) {
-	wfree(win->title);
+        wfree(win->title);
     }
-    
+
     if (win->miniTitle) {
-	wfree(win->miniTitle);
+        wfree(win->miniTitle);
     }
-    
+
     if (win->miniImage) {
-	WMReleasePixmap(win->miniImage);
+        WMReleasePixmap(win->miniImage);
     }
-    
+
     if (win->wname)
-	wfree(win->wname);
+        wfree(win->wname);
 
     wfree(win);
 }

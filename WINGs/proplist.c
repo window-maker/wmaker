@@ -98,8 +98,8 @@ static Bool caseSensitive = True;
 
 #define CHECK_BUFFER_SIZE(buf, ptr) \
     if ((ptr) >= (buf).size-1) {\
-      (buf).size += BUFFERSIZE_INCREMENT;\
-      (buf).str = wrealloc((buf).str, (buf).size);\
+    (buf).size += BUFFERSIZE_INCREMENT;\
+    (buf).str = wrealloc((buf).str, (buf).size);\
     }
 
 
@@ -132,9 +132,9 @@ hashPropList(WMPropList *plist)
             ctr = (ctr + 1) % sizeof (char *);
         }
         /*while (*key) {
-           ret ^= tolower(*key++) << ctr;
-           ctr = (ctr + 1) % sizeof (char *);
-        }*/
+         ret ^= tolower(*key++) << ctr;
+         ctr = (ctr + 1) % sizeof (char *);
+         }*/
         break;
 
     case WPLData:
@@ -1269,7 +1269,7 @@ WMSubtractPLDictionaries(WMPropList *dest, WMPropList *source, Bool recursive)
         if (WMIsPropListEqualTo(value, dvalue)) {
             WMRemoveFromPLDictionary(dest, key);
         } else if (recursive && value->type==WPLDictionary &&
-            dvalue->type==WPLDictionary) {
+                   dvalue->type==WPLDictionary) {
             WMSubtractPLDictionaries(dvalue, value, True);
         }
     }

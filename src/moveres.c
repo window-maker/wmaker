@@ -144,7 +144,7 @@ moveGeometryDisplayCentered(WScreen *scr, int x, int y)
             y2 = y1 + rect.size.height;
         }
     }
-    
+
     if (x < x1 + 1)
         x = x1 + 1;
     else if (x > (x2 - w))
@@ -400,7 +400,7 @@ cycleGeometryDisplay(WWindow *wwin, int x, int y, int w, int h, int dir)
     wPreferences.size_display++;
     wPreferences.size_display %= NUM_DISPLAYS;
 
-     if (wPreferences.size_display == WDIS_NEW
+    if (wPreferences.size_display == WDIS_NEW
         || wPreferences.size_display == WDIS_NONE) {
         WMUnmapWidget(scr->gview);
     } else {
@@ -1028,7 +1028,7 @@ updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
             /* window is the leftmost window: check against screen edge */
 
             /* Add inter head resistance 1/2 (if needed) */
-	    head = wGetHeadForPointerLocation(scr);
+            head = wGetHeadForPointerLocation(scr);
             rect = wGetRectForHead(scr, head);
 
             l_edge = WMAX(scr->totalUsableArea[head].x1, rect.pos.x);
@@ -1324,7 +1324,7 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
     ctrlmode=done=off_x=off_y=0;
 
     if (modes == RESIZABLE_BIT) {
-	ctrlmode = 1;
+        ctrlmode = 1;
     }
 
     XSync(dpy, False);
@@ -1392,15 +1392,15 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
             }
             if (kspeed < _KS) kspeed = _KS;
             lastTime = event.xkey.time;
-	    if (modes == (MOVABLE_BIT|RESIZABLE_BIT)) {
-		if ((event.xkey.state & ControlMask) && !wwin->flags.shaded) {
-		    ctrlmode=1;
-		    wUnselectWindows(scr);
-		}
-		else {
-		    ctrlmode=0;
-		}
-	    }
+            if (modes == (MOVABLE_BIT|RESIZABLE_BIT)) {
+                if ((event.xkey.state & ControlMask) && !wwin->flags.shaded) {
+                    ctrlmode=1;
+                    wUnselectWindows(scr);
+                }
+                else {
+                    ctrlmode=0;
+                }
+            }
             if (event.xkey.keycode == shiftl || event.xkey.keycode == shiftr) {
                 if (ctrlmode)
                     cycleGeometryDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh, 0);
@@ -1554,7 +1554,7 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
             showGeometry(wwin, src_x+off_x, src_y+off_y, src_x+off_x+ww, src_y+off_y+wh,0);
         } else if(!scr->selected_windows)
             showPosition(wwin, src_x+off_x, src_y+off_y);
-       
+
 
         if (done) {
             scr->keymove_tick=0;
@@ -1610,14 +1610,14 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
                 wSetFocusTo(scr, wwin);
             }
 
-	    if (wPreferences.auto_arrange_icons && wXineramaHeads(scr)>1 &&
+            if (wPreferences.auto_arrange_icons && wXineramaHeads(scr)>1 &&
                 head != wGetHeadForWindow(wwin)) {
                 wArrangeIcons(scr, True);
             }
 
 
 #if defined(NETWM_HINTS) && defined(VIRTUAL_DESKTOP)
-	    wWorkspaceResizeViewPort(scr, scr->current_workspace);
+            wWorkspaceResizeViewPort(scr, scr->current_workspace);
 #endif
 
             return 1;
@@ -1912,7 +1912,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 
 #if defined(NETWM_HINTS) && defined(VIRTUAL_DESKTOP)
     if (started)
-	wWorkspaceResizeViewPort(scr, scr->current_workspace);
+        wWorkspaceResizeViewPort(scr, scr->current_workspace);
 #endif
 
     return started;
@@ -2432,3 +2432,4 @@ InteractivePlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
         }
     }
 }
+

@@ -16,18 +16,18 @@
 
 typedef struct W_FilePanel {
     WMWindow *win;
-    
+
     WMLabel *iconLabel;
     WMLabel *titleLabel;
-    
+
     WMFrame *line;
 
     WMLabel *nameLabel;
     WMBrowser *browser;
-    
+
     WMButton *okButton;
     WMButton *cancelButton;
-    
+
     WMButton *homeButton;
     WMButton *trashcanButton;
     WMButton *createDirButton;
@@ -37,20 +37,20 @@ typedef struct W_FilePanel {
     WMView *accessoryView;
 
     WMTextField *fileField;
-    
+
     char **fileTypes;
 
     struct {
-	unsigned int canExit:1;
-	unsigned int canceled:1;       /* clicked on cancel */
-	unsigned int filtered:1;
-	unsigned int canChooseFiles:1;
-	unsigned int canChooseDirectories:1;
-	unsigned int autoCompletion:1;
-	unsigned int showAllFiles:1;
-	unsigned int canFreeFileTypes:1;
-	unsigned int fileMustExist:1;
-	unsigned int panelType:1;
+        unsigned int canExit:1;
+        unsigned int canceled:1;       /* clicked on cancel */
+        unsigned int filtered:1;
+        unsigned int canChooseFiles:1;
+        unsigned int canChooseDirectories:1;
+        unsigned int autoCompletion:1;
+        unsigned int showAllFiles:1;
+        unsigned int canFreeFileTypes:1;
+        unsigned int fileMustExist:1;
+        unsigned int panelType:1;
     } flags;
 } W_FilePanel;
 
@@ -67,7 +67,7 @@ static void browserClick();
 static void browserDClick();
 
 static void fillColumn(WMBrowserDelegate *self, WMBrowser *bPtr, int column,
-		       WMList *list);
+                       WMList *list);
 
 static void deleteFile();
 
@@ -89,10 +89,10 @@ static void handleEvents(XEvent *event, void *data);
 
 static WMBrowserDelegate browserDelegate = {
     NULL, /* data */
-	fillColumn, /* createRowsForColumn */
-	NULL, /* titleOfColumn */
-	NULL, /* didScroll */
-	NULL  /* willScroll */
+    fillColumn, /* createRowsForColumn */
+    NULL, /* titleOfColumn */
+    NULL, /* didScroll */
+    NULL  /* willScroll */
 };
 
 
@@ -104,15 +104,15 @@ closestListItem(WMList *list, char *text, Bool exact)
     int i, len = strlen(text);
 
     if (len==0)
-	return -1;
+        return -1;
 
     for(i=0; i<WMGetArrayItemCount(items); i++) {
         item = WMGetFromArray(items, i);
         if (strlen(item->text) >= len &&
             ((exact && strcmp(item->text, text)==0) ||
              (!exact && strncmp(item->text, text, len)==0))) {
-	    return i;
-	}
+            return i;
+        }
     }
 
     return -1;
@@ -129,7 +129,7 @@ textChangedObserver(void *observerData, WMNotification *notification)
     int i, textEvent;
 
     if (!(list = WMGetBrowserListInColumn(panel->browser, col)))
-	return;
+        return;
 
     text = WMGetTextFieldText(panel->fileField);
     textEvent = (int)WMGetNotificationClientData(notification);
@@ -144,19 +144,19 @@ textChangedObserver(void *observerData, WMNotification *notification)
         WMListItem *item = WMGetListItem(list, i);
         int textLen = strlen(text), itemTextLen = strlen(item->text);
         int visibleItems = WMWidgetHeight(list)/WMGetListItemHeight(list);
-	
+
         WMSetListPosition(list, i - visibleItems/2);
-	
+
         if (textEvent!=WMDeleteTextEvent) {
             WMRange range;
 
-	    WMInsertTextFieldText(panel->fileField, &item->text[textLen],
+            WMInsertTextFieldText(panel->fileField, &item->text[textLen],
                                   textLen);
-	    range.position = textLen;
-	    range.count = itemTextLen - textLen;
-	    WMSelectTextFieldRange(panel->fileField, range);
+            range.position = textLen;
+            range.count = itemTextLen - textLen;
+            WMSelectTextFieldRange(panel->fileField, range);
             /*WMSetTextFieldCursorPosition(panel->fileField, itemTextLen);*/
-	}
+        }
     }
 
     wfree(text);
@@ -169,7 +169,7 @@ textEditedObserver(void *observerData, WMNotification *notification)
     W_FilePanel *panel = (W_FilePanel*)observerData;
 
     if ((int)WMGetNotificationClientData(notification)==WMReturnTextMovement) {
-	WMPerformButtonClick(panel->okButton);
+        WMPerformButtonClick(panel->okButton);
     }
 }
 
@@ -186,7 +186,7 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     memset(fPtr, 0, sizeof(WMFilePanel));
 
     fPtr->win = WMCreateWindowWithStyle(scrPtr, name, WMTitledWindowMask
-					|WMResizableWindowMask);
+                                        |WMResizableWindowMask);
     WMResizeWidget(fPtr->win, PWIDTH, PHEIGHT);
     WMSetWindowTitle(fPtr->win, "");
 
@@ -206,7 +206,7 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     } else {
         WMSetLabelImage(fPtr->iconLabel, scrPtr->applicationIconPixmap);
     }
-    
+
     fPtr->titleLabel = WMCreateLabel(fPtr->win);
     WMResizeWidget(fPtr->titleLabel, PWIDTH-64, 64);
     WMMoveWidget(fPtr->titleLabel, 64, 0);
@@ -214,7 +214,7 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     WMSetLabelFont(fPtr->titleLabel, largeFont);
     WMReleaseFont(largeFont);
     WMSetLabelText(fPtr->titleLabel, title);
-    
+
     fPtr->line = WMCreateFrame(fPtr->win);
     WMMoveWidget(fPtr->line, 0, 64);
     WMResizeWidget(fPtr->line, PWIDTH, 2);
@@ -233,17 +233,17 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     WMMoveWidget(fPtr->nameLabel, 7, 282);
     WMResizeWidget(fPtr->nameLabel, 55, 14);
     WMSetLabelText(fPtr->nameLabel, _("Name:"));
-    
+
     fPtr->fileField = WMCreateTextField(fPtr->win);
     WMMoveWidget(fPtr->fileField, 60, 278);
     WMResizeWidget(fPtr->fileField, PWIDTH-60-10, 24);
     WMAddNotificationObserver(textEditedObserver, fPtr,
-			      WMTextDidEndEditingNotification,
-			      fPtr->fileField);
+                              WMTextDidEndEditingNotification,
+                              fPtr->fileField);
     WMAddNotificationObserver(textChangedObserver, fPtr,
-			      WMTextDidChangeNotification,
-			      fPtr->fileField);
-    
+                              WMTextDidChangeNotification,
+                              fPtr->fileField);
+
     fPtr->okButton = WMCreateCommandButton(fPtr->win);
     WMMoveWidget(fPtr->okButton, 245, 325);
     WMResizeWidget(fPtr->okButton, 75, 28);
@@ -252,7 +252,7 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     WMSetButtonAltImage(fPtr->okButton, scrPtr->pushedButtonArrow);
     WMSetButtonImagePosition(fPtr->okButton, WIPRight);
     WMSetButtonAction(fPtr->okButton, buttonClick, fPtr);
-    
+
     fPtr->cancelButton = WMCreateCommandButton(fPtr->win);
     WMMoveWidget(fPtr->cancelButton, 165, 325);
     WMResizeWidget(fPtr->cancelButton, 75, 28);
@@ -308,10 +308,10 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     WMSetTextFieldCursorPosition(fPtr->fileField, 0);
 
     WMLoadBrowserColumnZero(fPtr->browser);
-    
+
     WMSetWindowInitialPosition(fPtr->win,
-	       (scrPtr->rootView->size.width - WMWidgetWidth(fPtr->win))/2,
-               (scrPtr->rootView->size.height - WMWidgetHeight(fPtr->win))/2);
+                               (scrPtr->rootView->size.width - WMWidgetWidth(fPtr->win))/2,
+                               (scrPtr->rootView->size.height - WMWidgetHeight(fPtr->win))/2);
 
     fPtr->flags.canChooseFiles = 1;
     fPtr->flags.canChooseDirectories = 1;
@@ -325,9 +325,9 @@ WMOpenPanel*
 WMGetOpenPanel(WMScreen *scrPtr)
 {
     WMFilePanel *panel;
-    
+
     if (scrPtr->sharedOpenPanel)
-	return scrPtr->sharedOpenPanel;
+        return scrPtr->sharedOpenPanel;
 
     panel = makeFilePanel(scrPtr, "openFilePanel", _("Open"));
     panel->flags.fileMustExist = 1;
@@ -345,7 +345,7 @@ WMGetSavePanel(WMScreen *scrPtr)
     WMFilePanel *panel;
 
     if (scrPtr->sharedSavePanel)
-	return scrPtr->sharedSavePanel;
+        return scrPtr->sharedSavePanel;
 
     panel = makeFilePanel(scrPtr, "saveFilePanel", _("Save"));
     panel->flags.fileMustExist = 0;
@@ -361,10 +361,10 @@ void
 WMFreeFilePanel(WMFilePanel *panel)
 {
     if (panel == WMWidgetScreen(panel->win)->sharedSavePanel) {
-	WMWidgetScreen(panel->win)->sharedSavePanel = NULL;
+        WMWidgetScreen(panel->win)->sharedSavePanel = NULL;
     }
     if (panel == WMWidgetScreen(panel->win)->sharedOpenPanel) {
-	WMWidgetScreen(panel->win)->sharedOpenPanel = NULL;
+        WMWidgetScreen(panel->win)->sharedOpenPanel = NULL;
     }
     WMRemoveNotificationObserver(panel);
     WMUnmapWidget(panel->win);
@@ -412,7 +412,7 @@ WMRunModalFilePanelForDirectory(WMFilePanel *panel, WMWindow *owner,
     WMRunModalLoop(scr, W_VIEW(panel->win));
 
     /* Must withdraw window because the next time we map
-     * it, it might have a different transient owner. 
+     * it, it might have a different transient owner.
      */
     WMCloseWindow(panel->win);
 
@@ -447,7 +447,7 @@ WMSetFilePanelDirectory(WMFilePanel *panel, char *path)
     }
 }
 
-			
+
 void
 WMSetFilePanelCanChooseDirectories(WMFilePanel *panel, Bool flag)
 {
@@ -501,21 +501,21 @@ static char*
 get_name_from_path(char *path)
 {
     int size;
-    
+
     assert(path!=NULL);
-        
+
     size = strlen(path);
 
     /* remove trailing / */
     while (size > 0 && path[size-1]=='/')
-	size--;
+        size--;
     /* directory was root */
     if (size == 0)
-	return wstrdup("/");
+        return wstrdup("/");
 
     while (size > 0 && path[size-1] != '/')
-	size--;
-    
+        size--;
+
     return wstrdup(&(path[size]));
 }
 
@@ -532,9 +532,9 @@ static int
 comparer(const void *a, const void *b)
 {
     if (CAST(a)->isBranch == CAST(b)->isBranch)
-      return (strcmp(CAST(a)->text, CAST(b)->text));
+        return (strcmp(CAST(a)->text, CAST(b)->text));
     if (CAST(a)->isBranch)
-      return (-1);
+        return (-1);
     return (1);
 }
 #undef CAST
@@ -557,40 +557,40 @@ listDirectoryOnColumn(WMFilePanel *panel, int column, char *path)
     name = get_name_from_path(path);
     WMSetBrowserColumnTitle(bPtr, column, name);
     wfree(name);
-    
+
     dir = opendir(path);
-    
+
     if (!dir) {
 #ifdef VERBOSE
-	printf(_("WINGs: could not open directory %s\n"), path);
+        printf(_("WINGs: could not open directory %s\n"), path);
 #endif
-	return;
+        return;
     }
 
     /* list contents in the column */
-    while ((dentry = readdir(dir))) {	       
-	if (strcmp(dentry->d_name, ".")==0 ||
-	    strcmp(dentry->d_name, "..")==0)
-	    continue;
+    while ((dentry = readdir(dir))) {
+        if (strcmp(dentry->d_name, ".")==0 ||
+            strcmp(dentry->d_name, "..")==0)
+            continue;
 
-	strcpy(pbuf, path);
-	if (strcmp(path, "/")!=0)
-	    strcat(pbuf, "/");
-	strcat(pbuf, dentry->d_name);
+        strcpy(pbuf, path);
+        if (strcmp(path, "/")!=0)
+            strcat(pbuf, "/");
+        strcat(pbuf, dentry->d_name);
 
-	if (stat(pbuf, &stat_buf)!=0) {
+        if (stat(pbuf, &stat_buf)!=0) {
 #ifdef VERBOSE
-	    printf(_("WINGs: could not stat %s\n"), pbuf);
+            printf(_("WINGs: could not stat %s\n"), pbuf);
 #endif
-	    continue;
-	} else {
-	    int isDirectory;
+            continue;
+        } else {
+            int isDirectory;
 
-	    isDirectory = S_ISDIR(stat_buf.st_mode);
-	    
-	    if (filterFileName(panel, dentry->d_name, isDirectory))
-		WMInsertBrowserItem(bPtr, column, -1, dentry->d_name, isDirectory);
-	}
+            isDirectory = S_ISDIR(stat_buf.st_mode);
+
+            if (filterFileName(panel, dentry->d_name, isDirectory))
+                WMInsertBrowserItem(bPtr, column, -1, dentry->d_name, isDirectory);
+        }
     }
     WMSortBrowserColumnWithComparer(bPtr, column, comparer);
 
@@ -603,11 +603,11 @@ fillColumn(WMBrowserDelegate *self, WMBrowser *bPtr, int column, WMList *list)
 {
     char *path;
     WMFilePanel *panel;
-    
+
     if (column > 0) {
-	path = WMGetBrowserPathToColumn(bPtr, column-1);
+        path = WMGetBrowserPathToColumn(bPtr, column-1);
     } else {
-	path = wstrdup("/");
+        path = wstrdup("/");
     }
 
     panel = WMGetHangedData(bPtr);
@@ -616,22 +616,22 @@ fillColumn(WMBrowserDelegate *self, WMBrowser *bPtr, int column, WMList *list)
 }
 
 
-static void 
+static void
 browserDClick(WMBrowser *bPtr, WMFilePanel *panel)
 {
     WMPerformButtonClick(panel->okButton);
 }
 
-static void 
+static void
 browserClick(WMBrowser *bPtr, WMFilePanel *panel)
 {
     int col = WMGetBrowserSelectedColumn(bPtr);
     WMListItem *item = WMGetBrowserSelectedItemInColumn(bPtr, col);
 
     if (!item || item->isBranch)
-	WMSetTextFieldText(panel->fileField, NULL);
+        WMSetTextFieldText(panel->fileField, NULL);
     else {
-	WMSetTextFieldText(panel->fileField, item->text);
+        WMSetTextFieldText(panel->fileField, item->text);
     }
 }
 
@@ -694,14 +694,14 @@ createDir(WMButton *bPre, WMFilePanel *panel)
 
     if (mkdir(file,0xfff) != 0) {
         switch (errno) {
-            case EACCES:
-                showError(scr, panel->win, _("Permission denied."), NULL);
-                break;
-            case EEXIST:
-                showError(scr, panel->win, _("'%s' already exists."), file);
-                break;
-            case ENOENT:
-                showError(scr, panel->win, _("Path does not exist."), NULL);
+        case EACCES:
+            showError(scr, panel->win, _("Permission denied."), NULL);
+            break;
+        case EEXIST:
+            showError(scr, panel->win, _("'%s' already exists."), file);
+            break;
+        case ENOENT:
+            showError(scr, panel->win, _("Path does not exist."), NULL);
         }
     }
     else WMSetFilePanelDirectory(panel, file);
@@ -730,54 +730,54 @@ deleteFile(WMButton *bPre, WMFilePanel *panel)
 
     if (stat(file,&filestat)) {
         switch (errno) {
-            case ENOENT:
-                showError(scr, panel->win, _("'%s' does not exist."), file);
-                break;
-            case EACCES:
-                showError(scr, panel->win, _("Permission denied."), NULL);
-                break;
-            case ENOMEM:
-                showError(scr, panel->win,
-                        _("Insufficient memory available."), NULL);
-                break;
-            case EROFS:
-                showError(scr, panel->win,
-                        _("'%s' is on a read-only filesystem."), file);
-                break;
-            default:
-                showError(scr, panel->win, _("Can not delete '%s'."), file);
+        case ENOENT:
+            showError(scr, panel->win, _("'%s' does not exist."), file);
+            break;
+        case EACCES:
+            showError(scr, panel->win, _("Permission denied."), NULL);
+            break;
+        case ENOMEM:
+            showError(scr, panel->win,
+                      _("Insufficient memory available."), NULL);
+            break;
+        case EROFS:
+            showError(scr, panel->win,
+                      _("'%s' is on a read-only filesystem."), file);
+            break;
+        default:
+            showError(scr, panel->win, _("Can not delete '%s'."), file);
         }
         wfree(file);
         return;
     } else if (S_ISDIR(filestat.st_mode)) {
-	int len = strlen(file)+20;
+        int len = strlen(file)+20;
         buffer = wmalloc(len);
         snprintf(buffer,len,_("Delete directory %s ?"),file);
     } else {
-	int len = strlen(file)+15;
+        int len = strlen(file)+15;
         buffer = wmalloc(len);
         snprintf(buffer,len,_("Delete file %s ?"),file);
     }
 
     if (!WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
-                _("Warning"), buffer, _("OK"), _("Cancel"), NULL)) {
+                         _("Warning"), buffer, _("OK"), _("Cancel"), NULL)) {
         if (S_ISDIR(filestat.st_mode)) {
             if (rmdir(file) != 0) {
                 switch (errno) {
-                    case EACCES:
-                        showError(scr, panel->win, _("Permission denied."), NULL);
-                        break;
-                    case ENOENT:
-                        showError(scr, panel->win, _("Directory '%s' does not exist."), file);
-                        break;
-                    case ENOTEMPTY:
-                        showError(scr, panel->win, _("Directory '%s' is not empty."), file);
-                        break;
-                    case EBUSY:
-                        showError(scr, panel->win, _("Directory '%s' is busy."), file);
-                        break;
-                    default:
-                        showError(scr, panel->win, _("Can not delete '%s'."), file);
+                case EACCES:
+                    showError(scr, panel->win, _("Permission denied."), NULL);
+                    break;
+                case ENOENT:
+                    showError(scr, panel->win, _("Directory '%s' does not exist."), file);
+                    break;
+                case ENOTEMPTY:
+                    showError(scr, panel->win, _("Directory '%s' is not empty."), file);
+                    break;
+                case EBUSY:
+                    showError(scr, panel->win, _("Directory '%s' is busy."), file);
+                    break;
+                default:
+                    showError(scr, panel->win, _("Can not delete '%s'."), file);
                 }
             } else {
                 char *s = strrchr(file,'/');
@@ -786,25 +786,25 @@ deleteFile(WMButton *bPre, WMFilePanel *panel)
             }
         } else if (remove(file) != 0) {
             switch (errno) {
-                case EISDIR:
-                    showError(scr, panel->win, _("'%s' is a directory."), file);
-                    break;
-                case ENOENT:
-                    showError(scr, panel->win, _("'%s' does not exist."), file);
-                    break;
-                case EACCES:
-                    showError(scr, panel->win, _("Permission denied."), NULL);
-                    break;
-                case ENOMEM:
-                    showError(scr, panel->win,
-                            _("Insufficient memory available."), NULL);
-                    break;
-                case EROFS:
-                    showError(scr, panel->win,
-                            _("'%s' is on a read-only filesystem."), file);
-                    break;
-                default:
-                    showError(scr, panel->win, _("Can not delete '%s'."), file);
+            case EISDIR:
+                showError(scr, panel->win, _("'%s' is a directory."), file);
+                break;
+            case ENOENT:
+                showError(scr, panel->win, _("'%s' does not exist."), file);
+                break;
+            case EACCES:
+                showError(scr, panel->win, _("Permission denied."), NULL);
+                break;
+            case ENOMEM:
+                showError(scr, panel->win,
+                          _("Insufficient memory available."), NULL);
+                break;
+            case EROFS:
+                showError(scr, panel->win,
+                          _("'%s' is on a read-only filesystem."), file);
+                break;
+            default:
+                showError(scr, panel->win, _("Can not delete '%s'."), file);
             }
         } else {
             char *s = strrchr(file,'/');
@@ -837,7 +837,7 @@ goFloppy(WMButton *bPtr, WMFilePanel *panel)
                   WINGsConfiguration.floppyPath);
         return;
     }
-    
+
     WMSetFilePanelDirectory(panel, WINGsConfiguration.floppyPath);
 }
 
@@ -850,13 +850,13 @@ goHome(WMButton *bPtr, WMFilePanel *panel)
     /* home is statically allocated. Don't free it! */
     home = wgethomedir();
     if (!home)
-	return;
-    
+        return;
+
     WMSetFilePanelDirectory(panel, home);
 }
 
 
-static void 
+static void
 handleEvents(XEvent *event, void *data)
 {
     W_FilePanel *pPtr = (W_FilePanel*)data;
@@ -867,7 +867,7 @@ handleEvents(XEvent *event, void *data)
             || event->xconfigure.height != view->size.height) {
             unsigned int newWidth = event->xconfigure.width;
             unsigned int newHeight = event->xconfigure.height;
-	    int newColumnCount;
+            int newColumnCount;
 
             W_ResizeView(view, newWidth, newHeight);
             WMResizeWidget(pPtr->line, newWidth, 2);
@@ -877,9 +877,9 @@ handleEvents(XEvent *event, void *data)
             WMMoveWidget(pPtr->nameLabel, 7, newHeight-(PHEIGHT-282));
             WMMoveWidget(pPtr->fileField, 60, newHeight-(PHEIGHT-278));
             WMMoveWidget(pPtr->okButton, newWidth-(PWIDTH-245),
-                    newHeight-(PHEIGHT-325));
+                         newHeight-(PHEIGHT-325));
             WMMoveWidget(pPtr->cancelButton, newWidth-(PWIDTH-165),
-                    newHeight-(PHEIGHT-325));
+                         newHeight-(PHEIGHT-325));
 
             WMMoveWidget(pPtr->trashcanButton, 7, newHeight-(PHEIGHT-325));
             WMMoveWidget(pPtr->createDirButton, 37, newHeight-(PHEIGHT-325));
@@ -887,8 +887,8 @@ handleEvents(XEvent *event, void *data)
             WMMoveWidget(pPtr->disketteButton, 97, newHeight-(PHEIGHT-325));
             WMMoveWidget(pPtr->unmountButton, 127, newHeight-(PHEIGHT-325));
 
-	    newColumnCount = (newWidth - 14) / 140;
-	    WMSetBrowserMaxVisibleColumns(pPtr->browser, newColumnCount);
+            newColumnCount = (newWidth - 14) / 140;
+            WMSetBrowserMaxVisibleColumns(pPtr->browser, newColumnCount);
         }
     }
 }
@@ -901,24 +901,24 @@ getCurrentFileName(WMFilePanel *panel)
     char *file;
     char *tmp;
     int len;
-    
+
     path = WMGetBrowserPath(panel->browser);
-    
+
     len = strlen(path);
     if (path[len-1]=='/') {
-	file = WMGetTextFieldText(panel->fileField);
-	tmp = wmalloc(strlen(path)+strlen(file)+8);
+        file = WMGetTextFieldText(panel->fileField);
+        tmp = wmalloc(strlen(path)+strlen(file)+8);
         if (file[0]!='/') {
-           strcpy(tmp, path);
-           strcat(tmp, file);
+            strcpy(tmp, path);
+            strcat(tmp, file);
         } else
-           strcpy(tmp, file);
+            strcpy(tmp, file);
 
-	wfree(file);
-	wfree(path);
-	return tmp;
+        wfree(file);
+        wfree(path);
+        return tmp;
     } else {
-	return path;
+        return path;
     }
 }
 
@@ -938,16 +938,16 @@ validOpenFile(WMFilePanel *panel)
     col = WMGetBrowserSelectedColumn(panel->browser);
     item = WMGetBrowserSelectedItemInColumn(panel->browser, col);
     if (item) {
-	if (item->isBranch && !panel->flags.canChooseDirectories && !haveFile)
-	    return False;
-	else if (!item->isBranch && !panel->flags.canChooseFiles)
+        if (item->isBranch && !panel->flags.canChooseDirectories && !haveFile)
+            return False;
+        else if (!item->isBranch && !panel->flags.canChooseFiles)
             return False;
         else
             return True;
     } else {
         /* we compute for / here */
-	if (!panel->flags.canChooseDirectories && !haveFile)
-	    return False;
+        if (!panel->flags.canChooseDirectories && !haveFile)
+            return False;
         else
             return True;
     }
@@ -964,22 +964,22 @@ buttonClick(WMButton *bPtr, WMFilePanel *panel)
     if (bPtr == panel->okButton) {
         if (!validOpenFile(panel))
             return;
-	if (panel->flags.fileMustExist) {
-	    char *file;
-	    
-	    file = getCurrentFileName(panel);
-	    if (access(file, F_OK)!=0) {
-		WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
-				_("Error"), _("File does not exist."),
-				_("OK"), NULL, NULL);
-		wfree(file);
-		return;
-	    }
-	    wfree(file);
-	}
-	panel->flags.canceled = 0;
+        if (panel->flags.fileMustExist) {
+            char *file;
+
+            file = getCurrentFileName(panel);
+            if (access(file, F_OK)!=0) {
+                WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
+                                _("Error"), _("File does not exist."),
+                                _("OK"), NULL, NULL);
+                wfree(file);
+                return;
+            }
+            wfree(file);
+        }
+        panel->flags.canceled = 0;
     } else
-	panel->flags.canceled = 1;
+        panel->flags.canceled = 1;
 
     range.count = range.position = 0;
     WMSelectTextFieldRange(panel->fileField, range);

@@ -1,9 +1,9 @@
 /* Paths.c- pixmap/icon paths
- * 
+ *
  *  WPrefs - Window Maker Preferences Program
- * 
+ *
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -29,11 +29,11 @@ typedef struct _Panel {
     char *sectionName;
 
     char *description;
-    
+
     CallbackRec callbacks;
 
     WMWidget *parent;
-    
+
     WMTabView *tabv;
 
     WMFrame *pixF;
@@ -67,7 +67,7 @@ addPathToList(WMList *list, int index, char *path)
     item = WMInsertListItem(list, index, path);
 
     if (access(fpath, X_OK)!=0) {
-	item->uflags = 1;
+        item->uflags = 1;
     }
     wfree(fpath);
 }
@@ -78,36 +78,36 @@ showData(_Panel *panel)
 {
     WMPropList *array, *val;
     int i;
-    
+
     array = GetObjectForKey("IconPath");
     if (!array || !WMIsPLArray(array)) {
-	if (array)
-	    wwarning(_("bad value in option IconPath. Using default path list"));
-	addPathToList(panel->icoL, -1, "~/pixmaps");
-	addPathToList(panel->icoL, -1, "~/GNUstep/Library/Icons");
-	addPathToList(panel->icoL, -1, "/usr/include/X11/pixmaps");
-	addPathToList(panel->icoL, -1, "/usr/local/share/WindowMaker/Icons");
-	addPathToList(panel->icoL, -1, "/usr/local/share/WindowMaker/Pixmaps");
-	addPathToList(panel->icoL, -1, "/usr/share/WindowMaker/Icons");
+        if (array)
+            wwarning(_("bad value in option IconPath. Using default path list"));
+        addPathToList(panel->icoL, -1, "~/pixmaps");
+        addPathToList(panel->icoL, -1, "~/GNUstep/Library/Icons");
+        addPathToList(panel->icoL, -1, "/usr/include/X11/pixmaps");
+        addPathToList(panel->icoL, -1, "/usr/local/share/WindowMaker/Icons");
+        addPathToList(panel->icoL, -1, "/usr/local/share/WindowMaker/Pixmaps");
+        addPathToList(panel->icoL, -1, "/usr/share/WindowMaker/Icons");
     } else {
-	for (i=0; i<WMGetPropListItemCount(array); i++) {
-	    val = WMGetFromPLArray(array, i);
-	    addPathToList(panel->icoL, -1, WMGetFromPLString(val));
-	}
+        for (i=0; i<WMGetPropListItemCount(array); i++) {
+            val = WMGetFromPLArray(array, i);
+            addPathToList(panel->icoL, -1, WMGetFromPLString(val));
+        }
     }
 
     array = GetObjectForKey("PixmapPath");
     if (!array || !WMIsPLArray(array)) {
-	if (array)
-	    wwarning(_("bad value in option PixmapPath. Using default path list"));
-	addPathToList(panel->pixL, -1, "~/pixmaps");
-	addPathToList(panel->pixL, -1, "~/GNUstep/Library/WindowMaker/Pixmaps");
-	addPathToList(panel->pixL, -1, "/usr/local/share/WindowMaker/Pixmaps");
+        if (array)
+            wwarning(_("bad value in option PixmapPath. Using default path list"));
+        addPathToList(panel->pixL, -1, "~/pixmaps");
+        addPathToList(panel->pixL, -1, "~/GNUstep/Library/WindowMaker/Pixmaps");
+        addPathToList(panel->pixL, -1, "/usr/local/share/WindowMaker/Pixmaps");
     } else {
-	for (i=0; i<WMGetPropListItemCount(array); i++) {
-	    val = WMGetFromPLArray(array, i);
-	    addPathToList(panel->pixL, -1, WMGetFromPLString(val));
-	}
+        for (i=0; i<WMGetPropListItemCount(array); i++) {
+            val = WMGetFromPLArray(array, i);
+            addPathToList(panel->pixL, -1, WMGetFromPLString(val));
+        }
     }
 }
 
@@ -120,18 +120,18 @@ pushButton(WMWidget *w, void *data)
 
     /* icon paths */
     if (w == panel->icorB) {
-	i = WMGetListSelectedItemRow(panel->icoL);
+        i = WMGetListSelectedItemRow(panel->icoL);
 
-	if (i>=0)
-	    WMRemoveListItem(panel->icoL, i);
+        if (i>=0)
+            WMRemoveListItem(panel->icoL, i);
     }
 
     /* pixmap paths */
     if (w == panel->pixrB) {
-	i = WMGetListSelectedItemRow(panel->pixL);
+        i = WMGetListSelectedItemRow(panel->pixL);
 
-	if (i>=0)
-	    WMRemoveListItem(panel->pixL, i);
+        if (i>=0)
+            WMRemoveListItem(panel->pixL, i);
     }
 }
 
@@ -197,9 +197,9 @@ paintItem(WMList *lPtr, int index, Drawable d, char *text, int state, WMRect *re
     XFillRectangle(dpy, d, WMColorGC(backColor), x, y, width, height);
 
     if (state & 1) {
-	WMDrawString(scr, d, panel->red, panel->font, x+4, y, text, strlen(text));
+        WMDrawString(scr, d, panel->red, panel->font, x+4, y, text, strlen(text));
     } else {
-	WMDrawString(scr, d, panel->black, panel->font, x+4, y, text, strlen(text));
+        WMDrawString(scr, d, panel->black, panel->font, x+4, y, text, strlen(text));
     }
 }
 
@@ -212,20 +212,20 @@ storeData(_Panel *panel)
     WMPropList *tmp;
     int i;
     char *p;
-    
+
     list = WMCreatePLArray(NULL, NULL);
     for (i=0; i<WMGetListNumberOfRows(panel->icoL); i++) {
-	p = WMGetListItem(panel->icoL, i)->text;
-	tmp = WMCreatePLString(p);
-	WMAddToPLArray(list, tmp);
+        p = WMGetListItem(panel->icoL, i)->text;
+        tmp = WMCreatePLString(p);
+        WMAddToPLArray(list, tmp);
     }
     SetObjectForKey(list, "IconPath");
-    
+
     list = WMCreatePLArray(NULL, NULL);
     for (i=0; i<WMGetListNumberOfRows(panel->pixL); i++) {
-	p = WMGetListItem(panel->pixL, i)->text;
-	tmp = WMCreatePLString(p);
-	WMAddToPLArray(list, tmp);
+        p = WMGetListItem(panel->pixL, i)->text;
+        tmp = WMCreatePLString(p);
+        WMAddToPLArray(list, tmp);
     }
     SetObjectForKey(list, "PixmapPath");
 }
@@ -244,16 +244,16 @@ createPanel(Panel *p)
     panel->gray = WMGrayColor(scr);
     panel->red = WMCreateRGBColor(scr, 0xffff, 0, 0, True);
     panel->font = WMSystemFontOfSize(scr, 12);
-    
+
     panel->box = WMCreateBox(panel->parent);
     WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
-    
-    
+
+
     panel->tabv = WMCreateTabView(panel->box);
     WMMoveWidget(panel->tabv, 12, 10);
     WMResizeWidget(panel->tabv, 500, 215);
 
-    
+
 
     /* icon path */
     panel->icoF = WMCreateFrame(panel->box);
@@ -264,13 +264,13 @@ createPanel(Panel *p)
     WMSetTabViewItemView(tab, WMWidgetView(panel->icoF));
     WMAddItemInTabView(panel->tabv, tab);
     WMSetTabViewItemLabel(tab, _("Icon Search Paths"));
-    
+
     panel->icoL = WMCreateList(panel->icoF);
     WMResizeWidget(panel->icoL, 480, 147);
     WMMoveWidget(panel->icoL, 10, 10);
     WMSetListUserDrawProc(panel->icoL, paintItem);
     WMHangData(panel->icoL, panel);
-    
+
     panel->icoaB = WMCreateCommandButton(panel->icoF);
     WMResizeWidget(panel->icoaB, 95, 24);
     WMMoveWidget(panel->icoaB, 293, 165);
@@ -290,25 +290,25 @@ createPanel(Panel *p)
     panel->pixF = WMCreateFrame(panel->box);
     WMSetFrameRelief(panel->pixF, WRFlat);
     WMResizeWidget(panel->pixF, 230, 210);
-    
+
     tab = WMCreateTabViewItemWithIdentifier(0);
     WMSetTabViewItemView(tab, WMWidgetView(panel->pixF));
     WMAddItemInTabView(panel->tabv, tab);
     WMSetTabViewItemLabel(tab, _("Pixmap Search Paths"));
-    
+
     panel->pixL = WMCreateList(panel->pixF);
     WMResizeWidget(panel->pixL, 480, 147);
     WMMoveWidget(panel->pixL, 10, 10);
     WMSetListUserDrawProc(panel->pixL, paintItem);
     WMHangData(panel->pixL, panel);
-    
+
     panel->pixaB = WMCreateCommandButton(panel->pixF);
     WMResizeWidget(panel->pixaB, 95, 24);
     WMMoveWidget(panel->pixaB, 293, 165);
     WMSetButtonText(panel->pixaB, _("Add"));
     WMSetButtonAction(panel->pixaB, browseForFile, panel);
     WMSetButtonImagePosition(panel->pixaB, WIPRight);
-    
+
     panel->pixrB = WMCreateCommandButton(panel->pixF);
     WMResizeWidget(panel->pixrB, 95, 24);
     WMMoveWidget(panel->pixrB, 395, 165);
@@ -317,10 +317,10 @@ createPanel(Panel *p)
 
 
     WMMapSubwidgets(panel->pixF);
-    
+
     WMRealizeWidget(panel->box);
     WMMapSubwidgets(panel->box);
-    
+
     showData(panel);
 }
 
@@ -337,14 +337,15 @@ InitPaths(WMScreen *scr, WMWidget *parent)
     panel->sectionName = _("Search Path Configuration");
 
     panel->description = _("Search paths to use when looking for pixmaps\n"
-			   "and icons.");
+                           "and icons.");
 
     panel->parent = parent;
 
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;
-    
+
     AddSection(panel, ICON_FILE);
 
     return panel;
 }
+

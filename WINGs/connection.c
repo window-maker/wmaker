@@ -65,11 +65,13 @@
 #endif
 
 /* Stuff for setting the sockets into non-blocking mode. */
-/*#ifdef	__POSIX_SOURCE
+/*
+#ifdef	__POSIX_SOURCE
 # define NONBLOCK_OPT           O_NONBLOCK
 #else
 # define NONBLOCK_OPT           FNDELAY
-#endif*/
+#endif
+*/
 
 #define NONBLOCK_OPT            O_NONBLOCK
 
@@ -328,7 +330,7 @@ getSocketAddress(char* name, char* service, char* protocol)
 #ifndef	HAVE_INET_ATON
         if ((socketaddr.sin_addr.s_addr = inet_addr(name)) == INADDR_NONE) {
 #else
-        if (inet_aton(name, &socketaddr.sin_addr) == 0) {
+            if (inet_aton(name, &socketaddr.sin_addr) == 0) {
 #endif
             WMReleaseHost(host);
             return NULL;
@@ -419,8 +421,8 @@ WMCreateConnectionWithSocket(int sock, Bool closeOnRelease)
     cPtr->isNonBlocking = cPtr->wasNonBlocking;
 
     /* some way to find out if it is connected, and binded. can't find
-       if it listens though!!!
-    */
+     if it listens though!!!
+     */
 
     size = sizeof(clientname);
     n = getpeername(sock, (struct sockaddr*) &clientname, &size);
@@ -830,9 +832,9 @@ WMSendConnectionData(WMConnection *cPtr, WMData *data)
             tPtr->handler = NULL;
         }
         /*if (cPtr->handler.write) {
-            WMDeleteInputHandler(cPtr->handler.write);
-            cPtr->handler.write = NULL;
-        }*/
+         WMDeleteInputHandler(cPtr->handler.write);
+         cPtr->handler.write = NULL;
+         }*/
     }
 
     if (cPtr->handler.write) {

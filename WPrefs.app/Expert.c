@@ -1,9 +1,9 @@
 /* Expert.c- expert user options
- * 
+ *
  *  WPrefs - Window Maker Preferences Program
- * 
+ *
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -30,7 +30,7 @@ typedef struct _Panel {
     char *description;
 
     CallbackRec callbacks;
-    
+
     WMWidget *parent;
 
     WMButton *swi[8];
@@ -55,7 +55,7 @@ showData(_Panel *panel)
     WMSetButtonSelected(panel->swi[5], GetBoolForKey("DontConfirmKill"));
     WMSetButtonSelected(panel->swi[6], GetBoolForKey("DisableBlinking"));
     //if (WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
-        WMSetButtonSelected(panel->swi[7], GetBoolForKey("AntialiasedText"));
+    WMSetButtonSelected(panel->swi[7], GetBoolForKey("AntialiasedText"));
 }
 
 
@@ -69,11 +69,11 @@ createPanel(Panel *p)
     WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
 
     for (i=0; i<8; i++) {
-	panel->swi[i] = WMCreateSwitchButton(panel->box);
-	WMResizeWidget(panel->swi[i], FRAME_WIDTH-40, 25);
-	WMMoveWidget(panel->swi[i], 20, 20+i*25);
+        panel->swi[i] = WMCreateSwitchButton(panel->box);
+        WMResizeWidget(panel->swi[i], FRAME_WIDTH-40, 25);
+        WMMoveWidget(panel->swi[i], 20, 20+i*25);
     }
-    
+
     WMSetButtonText(panel->swi[0], _("Disable miniwindows (icons for miniaturized windows). For use with KDE/GNOME."));
     WMSetButtonText(panel->swi[1], _("Do not set non-WindowMaker specific parameters (do not use xset)."));
     WMSetButtonText(panel->swi[2], _("Automatically save session when exiting Window Maker."));
@@ -84,11 +84,11 @@ createPanel(Panel *p)
     WMSetButtonText(panel->swi[7], _("Smooth font edges (needs restart)."));
 
     //if (!WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
-        WMSetButtonEnabled(panel->swi[7], True);
+    WMSetButtonEnabled(panel->swi[7], True);
 
     WMRealizeWidget(panel->box);
     WMMapSubwidgets(panel->box);
-    
+
     showData(panel);
 }
 
@@ -108,7 +108,7 @@ storeDefaults(_Panel *panel)
     SetBoolForKey(WMGetButtonSelected(panel->swi[5]), "DontConfirmKill");
     SetBoolForKey(WMGetButtonSelected(panel->swi[6]), "DisableBlinking");
     //if (WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
-        SetBoolForKey(WMGetButtonSelected(panel->swi[7]), "AntialiasedText");
+    SetBoolForKey(WMGetButtonSelected(panel->swi[7]), "AntialiasedText");
 }
 
 
@@ -123,14 +123,15 @@ InitExpert(WMScreen *scr, WMWidget *parent)
     panel->sectionName = _("Expert User Preferences");
 
     panel->description = _("Options for people who know what they're doing...\n"
-			   "Also have some other misc. options.");
+                           "Also have some other misc. options.");
 
     panel->parent = parent;
 
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeDefaults;
-    
+
     AddSection(panel, ICON_FILE);
 
     return panel;
 }
+

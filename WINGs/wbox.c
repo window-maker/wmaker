@@ -60,8 +60,8 @@ WMCreateBox(WMWidget *parent)
 
     bPtr->view = W_CreateView(W_VIEW(parent));
     if (!bPtr->view) {
-	wfree(bPtr);
-	return NULL;
+        wfree(bPtr);
+        return NULL;
     }
     bPtr->view->self = bPtr;
 
@@ -70,7 +70,7 @@ WMCreateBox(WMWidget *parent)
     bPtr->subviews = WMCreateArrayWithDestructor(2, wfree);
 
     WMCreateEventHandler(bPtr->view, StructureNotifyMask,
-			 handleEvents, bPtr);
+                         handleEvents, bPtr);
 
     WMResizeWidget(bPtr, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
@@ -149,19 +149,19 @@ rearrange(WMBox *box)
     eData.expands = 0;
 
     if (box->horizontal) {
-	eData.ye = box->borderWidth;
-	eData.xe = WMWidgetWidth(box) - box->borderWidth;
-	eData.h = WMWidgetHeight(box) - 2 * box->borderWidth;
-	eData.total = WMWidgetWidth(box) - 2 * box->borderWidth;
+        eData.ye = box->borderWidth;
+        eData.xe = WMWidgetWidth(box) - box->borderWidth;
+        eData.h = WMWidgetHeight(box) - 2 * box->borderWidth;
+        eData.total = WMWidgetWidth(box) - 2 * box->borderWidth;
     } else {
-	eData.xe = box->borderWidth;
-	eData.ye = WMWidgetHeight(box) - box->borderWidth;
-	eData.w = WMWidgetWidth(box) - 2 * box->borderWidth;
-	eData.total = WMWidgetHeight(box) - 2 * box->borderWidth;
+        eData.xe = box->borderWidth;
+        eData.ye = WMWidgetHeight(box) - box->borderWidth;
+        eData.w = WMWidgetWidth(box) - 2 * box->borderWidth;
+        eData.total = WMWidgetHeight(box) - 2 * box->borderWidth;
     }
 
     if (eData.w <= 0 || eData.h <= 0 || eData.total <= 0) {
-	return;
+        return;
     }
 
     WMMapArray(box->subviews, computeExpansion, &eData);
@@ -181,7 +181,7 @@ WMSetBoxBorderWidth(WMBox *box, unsigned width)
 
 void
 WMAddBoxSubview(WMBox *bPtr, WMView *view, Bool expand, Bool fill,
-		int minSize, int maxSize, int space)
+                int minSize, int maxSize, int space)
 {
     SubviewItem *subView;
 
@@ -203,7 +203,7 @@ WMAddBoxSubview(WMBox *bPtr, WMView *view, Bool expand, Bool fill,
 
 void
 WMAddBoxSubviewAtEnd(WMBox *bPtr, WMView *view, Bool expand, Bool fill,
-		     int minSize, int maxSize, int space)
+                     int minSize, int maxSize, int space)
 {
     SubviewItem *subView;
 
@@ -272,14 +272,14 @@ handleEvents(XEvent *event, void *data)
 
     CHECK_CLASS(data, WC_Box);
 
-    switch (event->type) {	
-     case DestroyNotify:
-	destroyBox(bPtr);
-	break;
-	
-     case ConfigureNotify:
-	rearrange(bPtr);
-	break;
+    switch (event->type) {
+    case DestroyNotify:
+        destroyBox(bPtr);
+        break;
+
+    case ConfigureNotify:
+        rearrange(bPtr);
+        break;
     }
 }
 

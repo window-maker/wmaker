@@ -1,8 +1,8 @@
 /*
  *  WPrefs - Window Maker Preferences Program
- * 
+ *
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -70,10 +70,10 @@ handleDeadChild(int sig)
 {
     pid_t pid;
     int status;
-    
+
     pid = waitpid(-1, &status, WNOHANG);
     if (pid > 0) {
-	DeadChildren[DeadChildrenCount++] = pid;
+        DeadChildren[DeadChildrenCount++] = pid;
     }
 }
 #endif
@@ -84,18 +84,18 @@ AddDeadChildHandler(pid_t pid, void (*handler)(void*), void *data)
     int i;
 
     for (i = 0; i < MAX_DEATHS; i++) {
-	if (DeadHandlers[i].pid == 0) {
-	    DeadHandlers[i].pid = pid;
-	    DeadHandlers[i].handler = handler;
-	    DeadHandlers[i].data = data;
-	    break;
-	}
+        if (DeadHandlers[i].pid == 0) {
+            DeadHandlers[i].pid = pid;
+            DeadHandlers[i].handler = handler;
+            DeadHandlers[i].data = data;
+            break;
+        }
     }
     assert(i!=MAX_DEATHS);
 }
 
 
-int 
+int
 main(int argc, char **argv)
 {
     Display *dpy;
@@ -105,29 +105,29 @@ main(int argc, char **argv)
     char *display_name="";
 
     wsetabort(wAbort);
-    
+
     memset(DeadHandlers, 0, sizeof(DeadHandlers));
-    
+
     WMInitializeApplication("WPrefs", &argc, argv);
-    
+
     if (argc>1) {
-	for (i=1; i<argc; i++) {
-	    if (strcmp(argv[i], "-version")==0
-		|| strcmp(argv[i], "--version")==0) {
-		printf("WPrefs (Window Maker) %s\n", WVERSION);
-		exit(0);
-	    } else if (strcmp(argv[i], "-display")==0) {
-		i++;
-		if (i>=argc) {
-		    wwarning(_("too few arguments for %s"), argv[i-1]);
-		    exit(0);
-		}
-		display_name = argv[i];
-	    } else {
-		print_help(argv[0]);
-		exit(0);
-	    }
-	}
+        for (i=1; i<argc; i++) {
+            if (strcmp(argv[i], "-version")==0
+                || strcmp(argv[i], "--version")==0) {
+                printf("WPrefs (Window Maker) %s\n", WVERSION);
+                exit(0);
+            } else if (strcmp(argv[i], "-display")==0) {
+                i++;
+                if (i>=argc) {
+                    wwarning(_("too few arguments for %s"), argv[i-1]);
+                    exit(0);
+                }
+                display_name = argv[i];
+            } else {
+                print_help(argv[0]);
+                exit(0);
+            }
+        }
     }
 
     locale = getenv("LANG");
@@ -135,31 +135,31 @@ main(int argc, char **argv)
 
 #ifdef I18N
     if (getenv("NLSPATH"))
-	bindtextdomain("WPrefs", getenv("NLSPATH"));
+        bindtextdomain("WPrefs", getenv("NLSPATH"));
     else
-	bindtextdomain("WPrefs", LOCALEDIR);
+        bindtextdomain("WPrefs", LOCALEDIR);
     textdomain("WPrefs");
 
     if (!XSupportsLocale()) {
-	wwarning(_("X server does not support locale"));
+        wwarning(_("X server does not support locale"));
     }
     if (XSetLocaleModifiers("") == NULL) {
- 	wwarning(_("cannot set locale modifiers"));
+        wwarning(_("cannot set locale modifiers"));
     }
 #endif
 
     dpy = XOpenDisplay(display_name);
     if (!dpy) {
-	wfatal(_("could not open display %s"), XDisplayName(display_name));
-	exit(0);
+        wfatal(_("could not open display %s"), XDisplayName(display_name));
+        exit(0);
     }
 #if 0
     XSynchronize(dpy, 1);
 #endif
     scr = WMCreateScreen(dpy, DefaultScreen(dpy));
     if (!scr) {
-	wfatal(_("could not initialize application"));
-	exit(0);
+        wfatal(_("could not initialize application"));
+        exit(0);
     }
 
     WMPLSetCaseSensitive(False);
@@ -167,21 +167,22 @@ main(int argc, char **argv)
     Initialize(scr);
 
     while (1) {
-	XEvent event;
+        XEvent event;
 
-	WMNextEvent(dpy, &event);
+        WMNextEvent(dpy, &event);
 
-	while (DeadChildrenCount-- > 0) {
-	    int i;
-	    
-	    for (i=0; i<MAX_DEATHS; i++) {
-		if (DeadChildren[i] == DeadHandlers[i].pid) {
-		    (*DeadHandlers[i].handler)(DeadHandlers[i].data);
-		    DeadHandlers[i].pid = 0;
-		}
-	    }
-	}
+        while (DeadChildrenCount-- > 0) {
+            int i;
 
-	WMHandleEvent(&event);
+            for (i=0; i<MAX_DEATHS; i++) {
+                if (DeadChildren[i] == DeadHandlers[i].pid) {
+                    (*DeadHandlers[i].handler)(DeadHandlers[i].data);
+                    DeadHandlers[i].pid = 0;
+                }
+            }
+        }
+
+        WMHandleEvent(&event);
     }
 }
+

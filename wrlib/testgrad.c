@@ -49,9 +49,9 @@ int main(int argc, char **argv)
 
     ProgName = strrchr(argv[0],'/');
     if (!ProgName)
-      ProgName = argv[0];
+        ProgName = argv[0];
     else
-      ProgName++;
+        ProgName++;
 
     color_name = (char **) malloc(sizeof(char*) * argc);
     if(color_name == NULL) {
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     }
 
     if (argc>1) {
-	for (i=1; i<argc; i++) {
+        for (i=1; i<argc; i++) {
             if (strcmp(argv[i], "-m")==0) {
                 rmode = RBestMatchRendering;
             } else if (strcmp(argv[i], "-d")==0) {
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
             } else if (strcmp(argv[i], "-c")==0) {
                 i++;
                 if (i>=argc) {
-		    fprintf(stderr, "too few arguments for %s\n", argv[i-1]);
+                    fprintf(stderr, "too few arguments for %s\n", argv[i-1]);
                     exit(0);
                 }
                 if (sscanf(argv[i], "%i", &cpc)!=1) {
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
             } else if (strcmp(argv[i], "-v")==0) {
                 i++;
                 if (i>=argc) {
-		    fprintf(stderr, "too few arguments for %s\n", argv[i-1]);
+                    fprintf(stderr, "too few arguments for %s\n", argv[i-1]);
                     exit(0);
                 }
                 if (sscanf(argv[i], "%i", &visualID)!=1) {
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
                 print_help();
                 exit(1);
             }
-	}
+        }
     }
 
     if (ncolors == 0) {
@@ -101,8 +101,8 @@ int main(int argc, char **argv)
 
     dpy = XOpenDisplay("");
     if (!dpy) {
-	puts("cant open display");
-	exit(1);
+        puts("cant open display");
+        exit(1);
     }
     attr.flags = RC_RenderMode | RC_ColorsPerChannel;
 
@@ -117,9 +117,9 @@ int main(int argc, char **argv)
     ctx = RCreateContext(dpy, DefaultScreen(dpy), &attr);
 
     if (!ctx) {
-	printf("could not initialize graphics library context: %s\n",
-	       RMessageForError(RErrorCode));
-	exit(1);
+        printf("could not initialize graphics library context: %s\n",
+               RMessageForError(RErrorCode));
+        exit(1);
     }
 
     colors = malloc(sizeof(RColor*)*(ncolors+1));
@@ -159,32 +159,32 @@ int main(int argc, char **argv)
     gettimeofday(&timev, NULL);
     t = (double)timev.tv_sec + (((double)timev.tv_usec)/1000000);
     for (i=0; i<9; i++) {
-	if (i>0)
-	    printf("\nrepeating...\n\n");
-	gettimeofday(&timev, NULL);
-	t1 = (double)timev.tv_sec + (((double)timev.tv_usec)/1000000);
-	if (i%3==0)
-	    imgh = RRenderMultiGradient(550, 550, colors, RGRD_HORIZONTAL);
-	else if (i%3==1)	    
-	    imgh = RRenderMultiGradient(550, 550, colors, RGRD_VERTICAL);
-	else
-	    imgh = RRenderMultiGradient(550, 550, colors, RGRD_DIAGONAL);
+        if (i>0)
+            printf("\nrepeating...\n\n");
+        gettimeofday(&timev, NULL);
+        t1 = (double)timev.tv_sec + (((double)timev.tv_usec)/1000000);
+        if (i%3==0)
+            imgh = RRenderMultiGradient(550, 550, colors, RGRD_HORIZONTAL);
+        else if (i%3==1)
+            imgh = RRenderMultiGradient(550, 550, colors, RGRD_VERTICAL);
+        else
+            imgh = RRenderMultiGradient(550, 550, colors, RGRD_DIAGONAL);
 
-	gettimeofday(&timev, NULL);
-	t2 = (double)timev.tv_sec + (((double)timev.tv_usec)/1000000);
-	total = t2 - t1;
-	printf("gradient rendered in %f sec\n", total);
-	
-	RConvertImage(ctx, imgh, &pix);
-	gettimeofday(&timev, NULL);
-	t1 = (double)timev.tv_sec + (((double)timev.tv_usec)/1000000);
-	total = t1 - t2;
-	rt += total;
-	printf("image converted in %f sec\n", total);
+        gettimeofday(&timev, NULL);
+        t2 = (double)timev.tv_sec + (((double)timev.tv_usec)/1000000);
+        total = t2 - t1;
+        printf("gradient rendered in %f sec\n", total);
 
-	XCopyArea(dpy, pix, win, ctx->copy_gc, 0, 0, 250, 250, 0, 0);
+        RConvertImage(ctx, imgh, &pix);
+        gettimeofday(&timev, NULL);
+        t1 = (double)timev.tv_sec + (((double)timev.tv_usec)/1000000);
+        total = t1 - t2;
+        rt += total;
+        printf("image converted in %f sec\n", total);
 
-	XFlush(dpy);
+        XCopyArea(dpy, pix, win, ctx->copy_gc, 0, 0, 250, 250, 0, 0);
+
+        XFlush(dpy);
     }
     t1 = (double)timev.tv_sec + (((double)timev.tv_usec)/1000000);
     printf("------------------------------------------\n");
@@ -210,3 +210,4 @@ int main(int argc, char **argv)
     getchar();
     return 0;
 }
+

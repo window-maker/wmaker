@@ -1,7 +1,7 @@
 
 /*
  * Widget for testing double-clicks
- * 
+ *
  */
 
 #include <WINGs/WINGsP.h>
@@ -46,7 +46,7 @@ InitDoubleTest(WMScreen *scr)
 {
     /* register our widget with WINGs and get our widget class ID */
     if (!DoubleTestClass) {
-	DoubleTestClass = W_RegisterUserWidget();
+        DoubleTestClass = W_RegisterUserWidget();
     }
 
     return DoubleTestClass;
@@ -62,8 +62,8 @@ CreateDoubleTest(WMWidget *parent, char *text)
     DoubleTest *dPtr;
 
     if (!DoubleTestClass)
-	InitDoubleTest(WMWidgetScreen(parent));
-    
+        InitDoubleTest(WMWidgetScreen(parent));
+
     /* allocate some storage for our new widget instance */
     dPtr = wmalloc(sizeof(DoubleTest));
     /* initialize it */
@@ -71,20 +71,20 @@ CreateDoubleTest(WMWidget *parent, char *text)
 
     /* set the class ID */
     dPtr->widgetClass = DoubleTestClass;
-    
+
     dPtr->view = W_CreateView(W_VIEW(parent));
     if (!dPtr->view) {
-	wfree(dPtr);
-	return NULL;
+        wfree(dPtr);
+        return NULL;
     }
     /* always do this */
     dPtr->view->self = dPtr;
-    
+
     dPtr->text = wstrdup(text);
 
     WMCreateEventHandler(dPtr->view, ExposureMask /* this allows us to know when we should paint */
-			 |StructureNotifyMask, /* this allows us to know things like when we are destroyed */
-			 handleEvents, dPtr);
+                         |StructureNotifyMask, /* this allows us to know things like when we are destroyed */
+                         handleEvents, dPtr);
 
     WMCreateEventHandler(dPtr->view, ButtonPressMask,handleActionEvents, dPtr);
 
@@ -99,21 +99,21 @@ paintDoubleTest(_DoubleTest *dPtr)
     W_Screen *scr = dPtr->view->screen;
 
     if (dPtr->active) {
-	XFillRectangle(scr->display, dPtr->view->window, WMColorGC(scr->white),
-		       0, 0, dPtr->view->size.width, dPtr->view->size.height);
+        XFillRectangle(scr->display, dPtr->view->window, WMColorGC(scr->white),
+                       0, 0, dPtr->view->size.width, dPtr->view->size.height);
     } else {
-	XClearWindow(scr->display, dPtr->view->window);
+        XClearWindow(scr->display, dPtr->view->window);
     }
-    
+
     W_DrawRelief(scr, dPtr->view->window, 0, 0, dPtr->view->size.width,
-		 dPtr->view->size.height, dPtr->on ? WRSunken : WRRaised);
+                 dPtr->view->size.height, dPtr->on ? WRSunken : WRRaised);
 
     if (dPtr->text) {
-	int y;
-	y = (dPtr->view->size.height-scr->normalFont->height)/2;
-	W_PaintText(dPtr->view, dPtr->view->window, scr->normalFont,  
-		    dPtr->on, dPtr->on+y, dPtr->view->size.width, WACenter, 
-		    scr->black, False, dPtr->text, strlen(dPtr->text));
+        int y;
+        y = (dPtr->view->size.height-scr->normalFont->height)/2;
+        W_PaintText(dPtr->view, dPtr->view->window, scr->normalFont,
+                    dPtr->on, dPtr->on+y, dPtr->view->size.width, WACenter,
+                    scr->black, False, dPtr->text, strlen(dPtr->text));
     }
 }
 
@@ -125,17 +125,17 @@ handleEvents(XEvent *event, void *data)
     _DoubleTest *dPtr = (_DoubleTest*)data;
 
 
-    switch (event->type) {	
-     case Expose:
-	if (event->xexpose.count!=0)
-	    break;
-	paintDoubleTest(dPtr);
-	break;
-	
-     case DestroyNotify:
-	destroyDoubleTest(dPtr);
-	break;
-	
+    switch (event->type) {
+    case Expose:
+        if (event->xexpose.count!=0)
+            break;
+        paintDoubleTest(dPtr);
+        break;
+
+    case DestroyNotify:
+        destroyDoubleTest(dPtr);
+        break;
+
     }
 }
 
@@ -143,12 +143,12 @@ handleEvents(XEvent *event, void *data)
 static void
 deactivate(void *data)
 {
-   _DoubleTest *dPtr = (_DoubleTest*)data;
-    
+    _DoubleTest *dPtr = (_DoubleTest*)data;
+
     if (dPtr->active)
-	dPtr->active = 0;
+        dPtr->active = 0;
     paintDoubleTest(dPtr);
-    
+
     dPtr->timer = NULL;
 }
 
@@ -160,21 +160,21 @@ handleActionEvents(XEvent *event, void *data)
     extern _WINGsConfiguration WINGsConfiguration;
 
     switch (event->type) {
-     case ButtonPress:
-	if (WMIsDoubleClick(event)) {
-	    if (dPtr->timer)
-		WMDeleteTimerHandler(dPtr->timer);
-	    dPtr->timer = NULL;
-	    dPtr->on = !dPtr->on;
-	    dPtr->active = 0;
-	    paintDoubleTest(dPtr);
-	} else {
-	    dPtr->timer=WMAddTimerHandler(WINGsConfiguration.doubleClickDelay,
-					  deactivate, dPtr);
-	    dPtr->active = 1;
-	    paintDoubleTest(dPtr);
-	}
-	break;
+    case ButtonPress:
+        if (WMIsDoubleClick(event)) {
+            if (dPtr->timer)
+                WMDeleteTimerHandler(dPtr->timer);
+            dPtr->timer = NULL;
+            dPtr->on = !dPtr->on;
+            dPtr->active = 0;
+            paintDoubleTest(dPtr);
+        } else {
+            dPtr->timer=WMAddTimerHandler(WINGsConfiguration.doubleClickDelay,
+                                          deactivate, dPtr);
+            dPtr->active = 1;
+            paintDoubleTest(dPtr);
+        }
+        break;
     }
 }
 
@@ -184,10 +184,10 @@ static void
 destroyDoubleTest(_DoubleTest *dPtr)
 {
     if (dPtr->timer)
-	WMDeleteTimerHandler(dPtr->timer);
+        WMDeleteTimerHandler(dPtr->timer);
     if (dPtr->text)
-	wfree(dPtr->text);
-    
+        wfree(dPtr->text);
+
     wfree(dPtr);
 }
 

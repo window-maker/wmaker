@@ -23,7 +23,7 @@
 typedef struct HashItem {
     const void *key;
     const void *data;
-    
+
     struct HashItem *next;	       /* collided item list */
 } HashItem;
 
@@ -41,13 +41,13 @@ typedef struct W_HashTable {
 
 
 #define HASH(table, key)  (((table)->callbacks.hash ? \
-	    (*(table)->callbacks.hash)(key) : hashPtr(key)) % (table)->size)
+    (*(table)->callbacks.hash)(key) : hashPtr(key)) % (table)->size)
 
 #define DUPKEY(table, key) ((table)->callbacks.retainKey ? \
-		    (*(table)->callbacks.retainKey)(key) : (key))
+    (*(table)->callbacks.retainKey)(key) : (key))
 
 #define RELKEY(table, key) if ((table)->callbacks.releaseKey) \
-		    (*(table)->callbacks.releaseKey)(key)
+    (*(table)->callbacks.releaseKey)(key)
 
 
 
@@ -59,10 +59,10 @@ hashString(const char *key)
     unsigned ctr = 0;
 
     while (*key) {
-	ret ^= *(char*)key++ << ctr;
-	ctr = (ctr + 1) % sizeof (char *);
+        ret ^= *(char*)key++ << ctr;
+        ctr = (ctr + 1) % sizeof (char *);
     }
-    
+
     return ret;
 }
 
@@ -106,13 +106,13 @@ rebuildTable(WMHashTable *table)
     table->table = wmalloc(sizeof(char*)*newSize);
     memset(table->table, 0, sizeof(char*)*newSize);
     table->size = newSize;
-    
+
     for (i = 0; i < oldSize; i++) {
-	while (oldArray[i]!=NULL) {
-	    next = oldArray[i]->next;
-	    rellocateItem(table, oldArray[i]);
-	    oldArray[i] = next;
-	}
+        while (oldArray[i]!=NULL) {
+            next = oldArray[i]->next;
+            rellocateItem(table, oldArray[i]);
+            oldArray[i] = next;
+        }
     }
     wfree(oldArray);
 }
@@ -123,17 +123,17 @@ WMHashTable*
 WMCreateHashTable(WMHashTableCallbacks callbacks)
 {
     HashTable *table;
-    
+
     table = wmalloc(sizeof(HashTable));
     memset(table, 0, sizeof(HashTable));
-    
+
     table->callbacks = callbacks;
-    
+
     table->size = INITIAL_CAPACITY;
 
     table->table = wmalloc(sizeof(HashItem*)*table->size);
     memset(table->table, 0, sizeof(HashItem*)*table->size);
-    
+
     return table;
 }
 
@@ -145,21 +145,21 @@ WMResetHashTable(WMHashTable *table)
     int i;
 
     for (i = 0; i < table->size; i++) {
-	item = table->table[i];
-	while (item) {
-	    tmp = item->next;
-	    RELKEY(table, item->key);
-	    wfree(item);
-	    item = tmp;
-	}
+        item = table->table[i];
+        while (item) {
+            tmp = item->next;
+            RELKEY(table, item->key);
+            wfree(item);
+            item = tmp;
+        }
     }
 
     table->itemCount = 0;
-    
+
     if (table->size > INITIAL_CAPACITY) {
-	wfree(table->table);
-	table->size = INITIAL_CAPACITY;
-	table->table = wmalloc(sizeof(HashItem*)*table->size);
+        wfree(table->table);
+        table->size = INITIAL_CAPACITY;
+        table->table = wmalloc(sizeof(HashItem*)*table->size);
     }
     memset(table->table, 0, sizeof(HashItem*)*table->size);
 }
@@ -170,15 +170,15 @@ WMFreeHashTable(WMHashTable *table)
 {
     HashItem *item, *tmp;
     int i;
-    
+
     for (i = 0; i < table->size; i++) {
-	item = table->table[i];
-	while (item) {
-	    tmp = item->next;
-	    RELKEY(table, item->key);
-	    wfree(item);
-	    item = tmp;
-	}
+        item = table->table[i];
+        while (item) {
+            tmp = item->next;
+            RELKEY(table, item->key);
+            wfree(item);
+            item = tmp;
+        }
     }
     wfree(table->table);
     wfree(table);
@@ -197,29 +197,29 @@ WMHashGet(WMHashTable *table, const void *key)
 {
     unsigned h;
     HashItem *item;
-    
+
     h = HASH(table, key);
     item = table->table[h];
-    
+
     if (table->callbacks.keyIsEqual) {
-	while (item) {
-	    if ((*table->callbacks.keyIsEqual)(key, item->key)) {
-		break;
-	    }
-	    item = item->next;
-	}
+        while (item) {
+            if ((*table->callbacks.keyIsEqual)(key, item->key)) {
+                break;
+            }
+            item = item->next;
+        }
     } else {
-	while (item) {
-	    if (key == item->key) {
-		break;
-	    }
-	    item = item->next;
-	}
+        while (item) {
+            if (key == item->key) {
+                break;
+            }
+            item = item->next;
+        }
     }
     if (item)
-	return (void*)item->data;
+        return (void*)item->data;
     else
-	return NULL;
+        return NULL;
 }
 
 
@@ -229,31 +229,31 @@ WMHashGetItemAndKey(WMHashTable *table, const void *key,
 {
     unsigned h;
     HashItem *item;
-    
+
     h = HASH(table, key);
     item = table->table[h];
-    
+
     if (table->callbacks.keyIsEqual) {
-	while (item) {
-	    if ((*table->callbacks.keyIsEqual)(key, item->key)) {
-		break;
-	    }
-	    item = item->next;
-	}
+        while (item) {
+            if ((*table->callbacks.keyIsEqual)(key, item->key)) {
+                break;
+            }
+            item = item->next;
+        }
     } else {
-	while (item) {
-	    if (key == item->key) {
-		break;
-	    }
-	    item = item->next;
-	}
+        while (item) {
+            if (key == item->key) {
+                break;
+            }
+            item = item->next;
+        }
     }
     if (item) {
         if (retKey)
             *retKey = (void*)item->key;
         if (retItem)
             *retItem = (void*)item->data;
-	return True;
+        return True;
     } else {
         return False;
     }
@@ -267,60 +267,60 @@ WMHashInsert(WMHashTable *table, const void *key, const void *data)
     unsigned h;
     HashItem *item;
     int replacing = 0;
-    
+
     h = HASH(table, key);
     /* look for the entry */
     item = table->table[h];
     if (table->callbacks.keyIsEqual) {
-	while (item) {
-	    if ((*table->callbacks.keyIsEqual)(key, item->key)) {
-		replacing = 1;
-		break;
-	    }
-	    item = item->next;
-	}
+        while (item) {
+            if ((*table->callbacks.keyIsEqual)(key, item->key)) {
+                replacing = 1;
+                break;
+            }
+            item = item->next;
+        }
     } else {
-	while (item) {
-	    if (key == item->key) {
-		replacing = 1;
-		break;
-	    }
-	    item = item->next;
-	}
+        while (item) {
+            if (key == item->key) {
+                replacing = 1;
+                break;
+            }
+            item = item->next;
+        }
     }
-    
+
     if (replacing) {
-	const void *old;
+        const void *old;
 
-	old = item->data;
-	item->data = data;
-	RELKEY(table, item->key);
-	item->key = DUPKEY(table, key);
+        old = item->data;
+        item->data = data;
+        RELKEY(table, item->key);
+        item->key = DUPKEY(table, key);
 
-	return (void*)old;
+        return (void*)old;
     } else {
-	HashItem *nitem;
+        HashItem *nitem;
 
-	nitem = wmalloc(sizeof(HashItem));
-	nitem->key = DUPKEY(table, key);
-	nitem->data = data;
-	nitem->next = table->table[h];
-	table->table[h] = nitem;
+        nitem = wmalloc(sizeof(HashItem));
+        nitem->key = DUPKEY(table, key);
+        nitem->data = data;
+        nitem->next = table->table[h];
+        table->table[h] = nitem;
 
-	table->itemCount++;
+        table->itemCount++;
     }
-    
+
     /* OPTIMIZE: put this in an idle handler.*/
     if (table->itemCount > table->size) {
 #ifdef DEBUG0
-	printf("rebuilding hash table...\n");
+        printf("rebuilding hash table...\n");
 #endif
-	rebuildTable(table);
+        rebuildTable(table);
 #ifdef DEBUG0
-	printf("finished rebuild.\n");
+        printf("finished rebuild.\n");
 #endif
     }
-    
+
     return NULL;
 }
 
@@ -329,23 +329,23 @@ static HashItem*
 deleteFromList(HashTable *table, HashItem *item, const void *key)
 {
     HashItem *next;
-    
+
     if (item==NULL)
-	return NULL;
+        return NULL;
 
-    if ((table->callbacks.keyIsEqual 
-	 && (*table->callbacks.keyIsEqual)(key, item->key))
-	|| (!table->callbacks.keyIsEqual && key==item->key)) {
-	
-	next = item->next;
-	RELKEY(table, item->key);
-	wfree(item);
-	
-	table->itemCount--;
+    if ((table->callbacks.keyIsEqual
+         && (*table->callbacks.keyIsEqual)(key, item->key))
+        || (!table->callbacks.keyIsEqual && key==item->key)) {
 
-	return next;
+        next = item->next;
+        RELKEY(table, item->key);
+        wfree(item);
+
+        table->itemCount--;
+
+        return next;
     }
-    
+
     item->next = deleteFromList(table, item->next, key);
 
     return item;
@@ -356,9 +356,9 @@ void
 WMHashRemove(WMHashTable *table, const void *key)
 {
     unsigned h;
-    
+
     h = HASH(table, key);
-    
+
     table->table[h] = deleteFromList(table, table->table[h], key);
 }
 
@@ -367,11 +367,11 @@ WMHashEnumerator
 WMEnumerateHashTable(WMHashTable *table)
 {
     WMHashEnumerator enumerator;
-    
+
     enumerator.table = table;
     enumerator.index = 0;
     enumerator.nextItem = table->table[0];
-    
+
     return enumerator;
 }
 
@@ -382,24 +382,24 @@ WMNextHashEnumeratorItem(WMHashEnumerator *enumerator)
 {
     const void *data = NULL;
 
-    /* this assumes the table doesn't change between 
+    /* this assumes the table doesn't change between
      * WMEnumerateHashTable() and WMNextHashEnumeratorItem() calls */
 
     if (enumerator->nextItem==NULL) {
-	HashTable *table = enumerator->table;
-	while (++enumerator->index < table->size) {
-	    if (table->table[enumerator->index]!=NULL) {
-		enumerator->nextItem = table->table[enumerator->index];
-		break;
-	    }
-	}
+        HashTable *table = enumerator->table;
+        while (++enumerator->index < table->size) {
+            if (table->table[enumerator->index]!=NULL) {
+                enumerator->nextItem = table->table[enumerator->index];
+                break;
+            }
+        }
     }
-    
+
     if (enumerator->nextItem) {
-	data = ((HashItem*)enumerator->nextItem)->data;
-	enumerator->nextItem = ((HashItem*)enumerator->nextItem)->next;
+        data = ((HashItem*)enumerator->nextItem)->data;
+        enumerator->nextItem = ((HashItem*)enumerator->nextItem)->next;
     }
-    
+
     return (void*)data;
 }
 
@@ -409,7 +409,7 @@ WMNextHashEnumeratorKey(WMHashEnumerator *enumerator)
 {
     const void *key = NULL;
 
-    /* this assumes the table doesn't change between 
+    /* this assumes the table doesn't change between
      * WMEnumerateHashTable() and WMNextHashEnumeratorKey() calls */
 
     if (enumerator->nextItem==NULL) {
@@ -435,17 +435,17 @@ Bool
 WMNextHashEnumeratorItemAndKey(WMHashEnumerator *enumerator,
                                void **item, void **key)
 {
-    /* this assumes the table doesn't change between 
+    /* this assumes the table doesn't change between
      * WMEnumerateHashTable() and WMNextHashEnumeratorItemAndKey() calls */
 
     if (enumerator->nextItem==NULL) {
-	HashTable *table = enumerator->table;
-	while (++enumerator->index < table->size) {
-	    if (table->table[enumerator->index]!=NULL) {
-		enumerator->nextItem = table->table[enumerator->index];
-		break;
-	    }
-	}
+        HashTable *table = enumerator->table;
+        while (++enumerator->index < table->size) {
+            if (table->table[enumerator->index]!=NULL) {
+                enumerator->nextItem = table->table[enumerator->index];
+                break;
+            }
+        }
     }
 
     if (enumerator->nextItem) {

@@ -1,18 +1,18 @@
 /*
  * Raster graphics library
- * 
+ *
  * Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
  *  License as published by the Free Software Foundation; either
  *  version 2 of the License, or (at your option) any later version.
- *  
+ *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *  Library General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the Free
  *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -20,15 +20,15 @@
 
 /*
  * Environment variables:
- * 
+ *
  * WRASTER_GAMMA <rgamma>/<ggamma>/<bgamma>
  * gamma correction value. Must be  greater than 0
  * Only for PseudoColor visuals.
- * 
+ *
  * Default:
  * WRASTER_GAMMA 1/1/1
- * 
- * 
+ *
+ *
  * If you want a specific value for a screen, append the screen number
  * preceded by a hash to the variable name as in
  * WRASTER_GAMMA#1
@@ -86,14 +86,14 @@ extern "C" {
 
 /* std colormap usage/creation modes */
 enum {
-    RUseStdColormap,		       /* default. fallbacks to RIgnore.. if 
-					  there is none defined */
+    RUseStdColormap,		       /* default. fallbacks to RIgnore.. if
+    there is none defined */
     RCreateStdColormap,
     RIgnoreStdColormap
 };
 
 
-    
+
 typedef struct RContextAttributes {
     int flags;
     int render_mode;
@@ -101,10 +101,10 @@ typedef struct RContextAttributes {
     float rgamma;		       /* gamma correction for red, */
     float ggamma;		       /* green, */
     float bgamma;		       /* and blue */
-    VisualID visualid;		       /* visual ID to use */
+    VisualID visualid;	       /* visual ID to use */
     int use_shared_memory;	       /* True of False */
     int scaling_filter;
-    int standard_colormap_mode;	       /* what to do with std cma */
+    int standard_colormap_mode;    /* what to do with std cma */
 } RContextAttributes;
 
 
@@ -117,17 +117,17 @@ typedef struct RContext {
     Display *dpy;
     int screen_number;
     Colormap cmap;
-    
+
     RContextAttributes *attribs;
 
     GC copy_gc;
 
     Visual *visual;
     int depth;
-    Window drawable;		       /* window to pass for XCreatePixmap().*/
-				       /* generally = root */
+    Window drawable;               /* window to pass for XCreatePixmap().*/
+    /* generally = root */
     int vclass;
-    
+
     unsigned long black;
     unsigned long white;
 
@@ -139,14 +139,14 @@ typedef struct RContext {
 
     XStandardColormap *std_rgb_map;    /* standard RGB colormap */
     XStandardColormap *std_gray_map;   /* standard grayscale colormap */
-    
+
     int ncolors;		       /* total number of colors we can use */
     XColor *colors;		       /* internal colormap */
     unsigned long *pixels;	       /* RContext->colors[].pixel */
 
     struct {
-	unsigned int use_shared_pixmap:1;
-	unsigned int optimize_for_speed:1;
+        unsigned int use_shared_pixmap:1;
+        unsigned int optimize_for_speed:1;
     } flags;
 } RContext;
 
@@ -160,8 +160,8 @@ typedef struct RColor {
 
 
 typedef struct RHSVColor {
-    unsigned short hue;		       /* 0-359 */
-    unsigned char saturation;	       /* 0-255 */
+    unsigned short hue;	       /* 0-359 */
+    unsigned char saturation;      /* 0-255 */
     unsigned char value;	       /* 0-255 */
 } RHSVColor;
 
@@ -176,7 +176,7 @@ typedef struct RSegment {
     int x1, y1, x2, y2;
 } RSegment;
 
-    
+
 
 /* image formats */
 enum RImageFormat {
@@ -190,9 +190,9 @@ enum RImageFormat {
  */
 typedef struct RImage {
     unsigned char *data;       /* image data RGBA or RGB */
-    int width, height;	       /* size of the image */
+    int width, height;	   /* size of the image */
     enum RImageFormat format;
-    RColor background;	       /* background color */
+    RColor background;	   /* background color */
     int refCount;
 } RImage;
 
@@ -221,21 +221,21 @@ enum {
 /* smoothed scaling filter types */
 enum {
     RBoxFilter,
-	RTriangleFilter,
-	RBellFilter,
-	RBSplineFilter,
-	RLanczos3Filter,
-	RMitchellFilter
+    RTriangleFilter,
+    RBellFilter,
+    RBSplineFilter,
+    RLanczos3Filter,
+    RMitchellFilter
 };
 
 
 /* note that not all operations are supported in all functions */
 enum {
-    RClearOperation,		       /* clear with 0 */
-	RCopyOperation,
-	RNormalOperation,	       /* same as combine */
-	RAddOperation,
-	RSubtractOperation
+    RClearOperation,	       /* clear with 0 */
+    RCopyOperation,
+    RNormalOperation,	       /* same as combine */
+    RAddOperation,
+    RSubtractOperation
 };
 
 
@@ -247,8 +247,8 @@ enum {
 
 enum {
     RSunkenBevel	= -1,
-    RNoBevel		= 0,
-    RRaisedBevel	= 1    
+    RNoBevel	= 0,
+    RRaisedBevel	= 1
 };
 /* bw compat */
 #define RBEV_SUNKEN	RSunkenBevel
@@ -261,8 +261,8 @@ enum {
 
 enum {
     RHorizontalGradient = 2,
-	RVerticalGradient = 3,
-	RDiagonalGradient = 4
+    RVerticalGradient = 3,
+    RDiagonalGradient = 4
 };
 /* for backwards compatibility */
 #define RGRD_HORIZONTAL  RHorizontalGradient
@@ -284,7 +284,7 @@ enum {
 
 #define RERR_BADVISUALID	16     /* invalid visual ID requested for context */
 #define RERR_STDCMAPFAIL	17     /* failed to created std colormap */
-    
+
 #define RERR_XERROR		127    /* internal X error */
 #define RERR_INTERNAL		128    /* should not happen */
 
@@ -303,7 +303,7 @@ char *RGetImageFileFormat(char *file);
  * Xlib contexts
  */
 RContext *RCreateContext(Display *dpy, int screen_number,
-			 RContextAttributes *attribs);
+                         RContextAttributes *attribs);
 
 void RDestroyContext(RContext *context);
 
@@ -317,7 +317,7 @@ RImage *RCreateImage(unsigned width, unsigned height, int alpha);
 RImage *RCreateImageFromXImage(RContext *context, XImage *image, XImage *mask);
 
 RImage *RCreateImageFromDrawable(RContext *context, Drawable drawable,
-				 Pixmap mask);
+                                 Pixmap mask);
 
 RImage *RLoadImage(RContext *context, char *file, int index);
 
@@ -337,29 +337,29 @@ Bool RSaveImage(RImage *image, char *filename, char *format);
  */
 RImage *RCloneImage(RImage *image);
 
-RImage *RGetSubImage(RImage *image, int x, int y, unsigned width, 
-		     unsigned height);
+RImage *RGetSubImage(RImage *image, int x, int y, unsigned width,
+                     unsigned height);
 
 void RCombineImageWithColor(RImage *image, RColor *color);
 
 void RCombineImages(RImage *image, RImage *src);
 
 void RCombineArea(RImage *image, RImage *src, int sx, int sy, unsigned width,
-		 unsigned height, int dx, int dy);
+                  unsigned height, int dx, int dy);
 
 void RCombineImagesWithOpaqueness(RImage *image, RImage *src, int opaqueness);
 
-void RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy, 
-			       unsigned width, unsigned height, int dx, int dy,
-			       int opaqueness);
+void RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
+                                unsigned width, unsigned height, int dx, int dy,
+                                int opaqueness);
 
 RImage *RScaleImage(RImage *image, unsigned new_width, unsigned new_height);
 
-RImage *RSmoothScaleImage(RImage *src, unsigned new_width, 
-			  unsigned new_height);
+RImage *RSmoothScaleImage(RImage *src, unsigned new_width,
+                          unsigned new_height);
 
 RImage *RRotateImage(RImage *image, float angle);
-    
+
 
 RImage *RMakeTiledImage(RImage *tile, unsigned width, unsigned height);
 
@@ -375,27 +375,27 @@ void RPutPixel(RImage *image, int x, int y, RColor *color);
 
 void ROperatePixel(RImage *image, int operation, int x, int y, RColor *color);
 
-void RPutPixels(RImage *image, RPoint *points, int npoints, int mode, 
-		RColor *color);
+void RPutPixels(RImage *image, RPoint *points, int npoints, int mode,
+                RColor *color);
 
-void ROperatePixels(RImage *image, int operation, RPoint *points, 
-		    int npoints, int mode, RColor *color);
+void ROperatePixels(RImage *image, int operation, RPoint *points,
+                    int npoints, int mode, RColor *color);
 
 int RDrawLine(RImage *image, int x0, int y0, int x1, int y1, RColor *color);
 
 int ROperateLine(RImage *image, int operation, int x0, int y0, int x1, int y1,
-		 RColor *color);
+                 RColor *color);
 
-void RDrawLines(RImage *image, RPoint *points, int npoints, int mode, 
-		RColor *color);
+void RDrawLines(RImage *image, RPoint *points, int npoints, int mode,
+                RColor *color);
 
 void ROperateLines(RImage *image, int operation, RPoint *points, int npoints,
-		   int mode, RColor *color);
+                   int mode, RColor *color);
 
 void RDrawSegments(RImage *image, RSegment *segs, int nsegs, RColor *color);
 
 void ROperateSegments(RImage *image, int operation, RSegment *segs, int nsegs,
-		      RColor *color);
+                      RColor *color);
 
 /*
  * Color convertion
@@ -409,20 +409,20 @@ void RHSVtoRGB(RHSVColor *hsv, RColor *rgb);
 void RClearImage(RImage *image, RColor *color);
 
 void RFillImage(RImage *image, RColor *color);
-    
+
 void RBevelImage(RImage *image, int bevel_type);
 
-RImage *RRenderGradient(unsigned width, unsigned height, RColor *from, 
-			RColor *to, int style);
+RImage *RRenderGradient(unsigned width, unsigned height, RColor *from,
+                        RColor *to, int style);
 
 
-RImage *RRenderMultiGradient(unsigned width, unsigned height, RColor **colors, 
-			     int style);
+RImage *RRenderMultiGradient(unsigned width, unsigned height, RColor **colors,
+                             int style);
 
 
 RImage *RRenderInterwovenGradient(unsigned width, unsigned height,
-				  RColor colors1[2], int thickness1,
-				  RColor colors2[2], int thickness2);
+                                  RColor colors1[2], int thickness1,
+                                  RColor colors2[2], int thickness2);
 
 
 /*
@@ -431,24 +431,24 @@ RImage *RRenderInterwovenGradient(unsigned width, unsigned height,
 int RConvertImage(RContext *context, RImage *image, Pixmap *pixmap);
 
 int RConvertImageMask(RContext *context, RImage *image, Pixmap *pixmap,
-		      Pixmap *mask, int threshold);
+                      Pixmap *mask, int threshold);
 
 
 /*
  * misc. utilities
  */
 RXImage *RCreateXImage(RContext *context, int depth,
-		       unsigned width, unsigned height);
+                       unsigned width, unsigned height);
 
 RXImage *RGetXImage(RContext *context, Drawable d, int x, int y,
-		    unsigned width, unsigned height);
+                    unsigned width, unsigned height);
 
 void RDestroyXImage(RContext *context, RXImage *ximage);
 
-void RPutXImage(RContext *context, Drawable d, GC gc, RXImage *ximage, 
-		int src_x, int src_y, int dest_x, int dest_y,
-		unsigned width, unsigned height);
-    
+void RPutXImage(RContext *context, Drawable d, GC gc, RXImage *ximage,
+                int src_x, int src_y, int dest_x, int dest_y,
+                unsigned width, unsigned height);
+
 /* do not free the returned string! */
 const char *RMessageForError(int errorCode);
 
@@ -463,3 +463,4 @@ extern int RErrorCode;
 #endif /* __cplusplus */
 
 #endif
+

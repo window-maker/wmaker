@@ -9,12 +9,12 @@
  *  modify it under the terms of the GNU Library General Public
  *  License as published by the Free Software Foundation; either
  *  version 2 of the License, or (at your option) any later version.
- *  
+ *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *  Library General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the Free
  *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -31,22 +31,22 @@
 #include "wraster.h"
 
 
-static RImage *renderHGradient(unsigned width, unsigned height, 
-			       int r0, int g0, int b0, 
-			       int rf, int gf, int bf);
-static RImage *renderVGradient(unsigned width, unsigned height, 
-			       int r0, int g0, int b0, 
-			       int rf, int gf, int bf);
-static RImage *renderDGradient(unsigned width, unsigned height, 
-			       int r0, int g0, int b0, 
-			       int rf, int gf, int bf);
+static RImage *renderHGradient(unsigned width, unsigned height,
+                               int r0, int g0, int b0,
+                               int rf, int gf, int bf);
+static RImage *renderVGradient(unsigned width, unsigned height,
+                               int r0, int g0, int b0,
+                               int rf, int gf, int bf);
+static RImage *renderDGradient(unsigned width, unsigned height,
+                               int r0, int g0, int b0,
+                               int rf, int gf, int bf);
 
-static RImage *renderMHGradient(unsigned width, unsigned height, 
-				RColor **colors, int count);
+static RImage *renderMHGradient(unsigned width, unsigned height,
+                                RColor **colors, int count);
 static RImage *renderMVGradient(unsigned width, unsigned height,
-				RColor **colors, int count);
-static RImage *renderMDGradient(unsigned width, unsigned height, 
-				RColor **colors, int count);
+                                RColor **colors, int count);
+static RImage *renderMDGradient(unsigned width, unsigned height,
+                                RColor **colors, int count);
 
 RImage*
 RRenderMultiGradient(unsigned width, unsigned height, RColor **colors, int style)
@@ -57,18 +57,18 @@ RRenderMultiGradient(unsigned width, unsigned height, RColor **colors, int style
     while (colors[count]!=NULL) count++;
 
     if (count > 2) {
-	switch (style) {
-	 case RHorizontalGradient:
-	    return renderMHGradient(width, height, colors, count);
-	 case RVerticalGradient:
-	    return renderMVGradient(width, height, colors, count);
-	 case RDiagonalGradient:
-	    return renderMDGradient(width, height, colors, count);
-	}
+        switch (style) {
+        case RHorizontalGradient:
+            return renderMHGradient(width, height, colors, count);
+        case RVerticalGradient:
+            return renderMVGradient(width, height, colors, count);
+        case RDiagonalGradient:
+            return renderMDGradient(width, height, colors, count);
+        }
     } else if (count > 1) {
-	return RRenderGradient(width, height, colors[0], colors[1], style);
+        return RRenderGradient(width, height, colors[0], colors[1], style);
     } else if (count > 0) {
-	return RRenderGradient(width, height, colors[0], colors[0], style);
+        return RRenderGradient(width, height, colors[0], colors[0], style);
     }
     assert(0);
     return NULL;
@@ -77,20 +77,20 @@ RRenderMultiGradient(unsigned width, unsigned height, RColor **colors, int style
 
 
 RImage*
-RRenderGradient(unsigned width, unsigned height, RColor *from, RColor *to, 
-		int style)
+RRenderGradient(unsigned width, unsigned height, RColor *from, RColor *to,
+                int style)
 {
     switch (style) {
-     case RHorizontalGradient:
-	return renderHGradient(width, height, from->red, from->green, 
-			       from->blue, to->red, to->green, to->blue);
-     case RVerticalGradient:
-	return renderVGradient(width, height, from->red, from->green, 
-			       from->blue, to->red, to->green, to->blue);
+    case RHorizontalGradient:
+        return renderHGradient(width, height, from->red, from->green,
+                               from->blue, to->red, to->green, to->blue);
+    case RVerticalGradient:
+        return renderVGradient(width, height, from->red, from->green,
+                               from->blue, to->red, to->green, to->blue);
 
-     case RDiagonalGradient:
-	return renderDGradient(width, height, from->red, from->green, 
-			       from->blue, to->red, to->green, to->blue);
+    case RDiagonalGradient:
+        return renderDGradient(width, height, from->red, from->green,
+                               from->blue, to->red, to->green, to->blue);
     }
     assert(0);
     return NULL;
@@ -101,19 +101,19 @@ RRenderGradient(unsigned width, unsigned height, RColor *from, RColor *to,
  *----------------------------------------------------------------------
  * renderHGradient--
  * 	Renders a horizontal linear gradient of the specified size in the
- * RImage format with a border of the specified type. 
- * 
+ * RImage format with a border of the specified type.
+ *
  * Returns:
  * 	A 24bit RImage with the gradient (no alpha channel).
- * 
+ *
  * Side effects:
  * 	None
- *---------------------------------------------------------------------- 
+ *----------------------------------------------------------------------
  */
 static RImage*
-renderHGradient(unsigned width, unsigned height, int r0, int g0, int b0, 
-		int rf, int gf, int bf)
-{    
+renderHGradient(unsigned width, unsigned height, int r0, int g0, int b0,
+                int rf, int gf, int bf)
+{
     int i;
     long r, g, b, dr, dg, db;
     unsigned lineSize = width*3;
@@ -122,30 +122,30 @@ renderHGradient(unsigned width, unsigned height, int r0, int g0, int b0,
 
     image = RCreateImage(width, height, False);
     if (!image) {
-	return NULL;
+        return NULL;
     }
     ptr = image->data;
 
     r = r0 << 16;
     g = g0 << 16;
     b = b0 << 16;
-    
+
     dr = ((rf-r0)<<16)/(int)width;
     dg = ((gf-g0)<<16)/(int)width;
     db = ((bf-b0)<<16)/(int)width;
     /* render the first line */
     for (i=0; i<width; i++) {
-	*(ptr++) = (unsigned char)(r>>16);
-	*(ptr++) = (unsigned char)(g>>16);
-	*(ptr++) = (unsigned char)(b>>16);
-	r += dr;
-	g += dg;
-	b += db;
+        *(ptr++) = (unsigned char)(r>>16);
+        *(ptr++) = (unsigned char)(g>>16);
+        *(ptr++) = (unsigned char)(b>>16);
+        r += dr;
+        g += dg;
+        b += db;
     }
 
     /* copy the first line to the other lines */
     for (i=1; i<height; i++) {
-	memcpy(&(image->data[i*lineSize]), image->data, lineSize);
+        memcpy(&(image->data[i*lineSize]), image->data, lineSize);
     }
     return image;
 }
@@ -167,7 +167,7 @@ renderHGradient(unsigned width, unsigned height, int r0, int g0, int b0,
  */
 static RImage*
 renderVGradient(unsigned width, unsigned height, int r0, int g0, int b0,
-		int rf, int gf, int bf)
+                int rf, int gf, int bf)
 {
     int i, j;
     long r, g, b, dr, dg, db;
@@ -177,8 +177,8 @@ renderVGradient(unsigned width, unsigned height, int r0, int g0, int b0,
 
     image = RCreateImage(width, height, False);
     if (!image) {
-	return NULL;
-    }    
+        return NULL;
+    }
     ptr = image->data;
 
     r = r0<<16;
@@ -190,28 +190,28 @@ renderVGradient(unsigned width, unsigned height, int r0, int g0, int b0,
     db = ((bf-b0)<<16)/(int)height;
 
     for (i=0; i<height; i++) {
-	rr = r>>16;
-	gg = g>>16;
-	bb = b>>16;
-	for (j=0; j<width/8; j++) {
-	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	}
-	switch (width%8) {
-	 case 7: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	 case 6: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	 case 5: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	 case 4: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	 case 3: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	 case 2: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	 case 1: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	}
+        rr = r>>16;
+        gg = g>>16;
+        bb = b>>16;
+        for (j=0; j<width/8; j++) {
+            *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+            *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+            *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+            *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+            *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+            *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+            *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+            *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+        }
+        switch (width%8) {
+        case 7: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+        case 6: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+        case 5: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+        case 4: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+        case 3: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+        case 2: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+        case 1: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+        }
         r+=dr;
         g+=dg;
         b+=db;
@@ -237,7 +237,7 @@ renderVGradient(unsigned width, unsigned height, int r0, int g0, int b0,
 
 static RImage*
 renderDGradient(unsigned width, unsigned height, int r0, int g0, int b0,
-		int rf, int gf, int bf)
+                int rf, int gf, int bf)
 {
     RImage *image, *tmp;
     int j;
@@ -267,7 +267,7 @@ renderDGradient(unsigned width, unsigned height, int r0, int g0, int b0,
 
     /* copy the first line to the other lines with corresponding offset */
     for (j=0, offset=0.0; j<width*height; j += width) {
-	memcpy(&(image->data[j]), &ptr[3*(int)offset], width);
+        memcpy(&(image->data[j]), &ptr[3*(int)offset], width);
         offset += a;
     }
 
@@ -285,24 +285,24 @@ renderMHGradient(unsigned width, unsigned height, RColor **colors, int count)
     RImage *image;
     unsigned char *ptr;
     unsigned width2;
-    
-    
+
+
     assert(count > 2);
-    
+
     image = RCreateImage(width, height, False);
     if (!image) {
-	return NULL;
+        return NULL;
     }
     ptr = image->data;
-    
+
     if (count > width)
-	count = width;
-    
+        count = width;
+
     if (count > 1)
         width2 = width/(count-1);
     else
         width2 = width;
-    
+
     k = 0;
 
     r = colors[0]->red << 16;
@@ -311,31 +311,31 @@ renderMHGradient(unsigned width, unsigned height, RColor **colors, int count)
 
     /* render the first line */
     for (i=1; i<count; i++) {
-	dr = ((int)(colors[i]->red   - colors[i-1]->red)  <<16)/(int)width2;
-	dg = ((int)(colors[i]->green - colors[i-1]->green)<<16)/(int)width2;
-	db = ((int)(colors[i]->blue  - colors[i-1]->blue) <<16)/(int)width2;
-	for (j=0; j<width2; j++) {
-	    *ptr++ = (unsigned char)(r>>16);
-	    *ptr++ = (unsigned char)(g>>16);
-	    *ptr++ = (unsigned char)(b>>16);
-	    r += dr;
-	    g += dg;
-	    b += db;
-	    k++;
-	}
-	r = colors[i]->red << 16;
-	g = colors[i]->green << 16;
-	b = colors[i]->blue << 16;
+        dr = ((int)(colors[i]->red   - colors[i-1]->red)  <<16)/(int)width2;
+        dg = ((int)(colors[i]->green - colors[i-1]->green)<<16)/(int)width2;
+        db = ((int)(colors[i]->blue  - colors[i-1]->blue) <<16)/(int)width2;
+        for (j=0; j<width2; j++) {
+            *ptr++ = (unsigned char)(r>>16);
+            *ptr++ = (unsigned char)(g>>16);
+            *ptr++ = (unsigned char)(b>>16);
+            r += dr;
+            g += dg;
+            b += db;
+            k++;
+        }
+        r = colors[i]->red << 16;
+        g = colors[i]->green << 16;
+        b = colors[i]->blue << 16;
     }
     for (j=k; j<width; j++) {
-	*ptr++ = (unsigned char)(r>>16);
-	*ptr++ = (unsigned char)(g>>16);
-	*ptr++ = (unsigned char)(b>>16);
+        *ptr++ = (unsigned char)(r>>16);
+        *ptr++ = (unsigned char)(g>>16);
+        *ptr++ = (unsigned char)(b>>16);
     }
-    
+
     /* copy the first line to the other lines */
     for (i=1; i<height; i++) {
-	memcpy(&(image->data[i*lineSize]), image->data, lineSize);
+        memcpy(&(image->data[i*lineSize]), image->data, lineSize);
     }
     return image;
 }
@@ -354,24 +354,24 @@ renderMVGradient(unsigned width, unsigned height, RColor **colors, int count)
     unsigned height2;
     int x;
     unsigned char rr, gg, bb;
-    
+
 
     assert(count > 2);
-    
+
     image = RCreateImage(width, height, False);
     if (!image) {
-	return NULL;
+        return NULL;
     }
     ptr = image->data;
-    
+
     if (count > height)
-	count = height;
-    
+        count = height;
+
     if (count > 1)
         height2 = height/(count-1);
     else
         height2 = height;
-    
+
     k = 0;
 
     r = colors[0]->red << 16;
@@ -379,34 +379,34 @@ renderMVGradient(unsigned width, unsigned height, RColor **colors, int count)
     b = colors[0]->blue << 16;
 
     for (i=1; i<count; i++) {
-	dr = ((int)(colors[i]->red   - colors[i-1]->red)  <<16)/(int)height2;
-	dg = ((int)(colors[i]->green - colors[i-1]->green)<<16)/(int)height2;
-	db = ((int)(colors[i]->blue  - colors[i-1]->blue) <<16)/(int)height2;
+        dr = ((int)(colors[i]->red   - colors[i-1]->red)  <<16)/(int)height2;
+        dg = ((int)(colors[i]->green - colors[i-1]->green)<<16)/(int)height2;
+        db = ((int)(colors[i]->blue  - colors[i-1]->blue) <<16)/(int)height2;
 
-	for (j=0; j<height2; j++) {
-	    rr = r>>16;
-	    gg = g>>16;
-	    bb = b>>16;
+        for (j=0; j<height2; j++) {
+            rr = r>>16;
+            gg = g>>16;
+            bb = b>>16;
 
-	    for (x=0; x<width/4; x++) {
-		*ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-		*ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-		*ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-		*ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-	    }
-	    switch (width%4) {
-	     case 3: *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-	     case 2: *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-	     case 1: *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-	    }
-	    r += dr;
-	    g += dg;
-	    b += db;
-	    k++;
-	}
-	r = colors[i]->red << 16;
-	g = colors[i]->green << 16;
-	b = colors[i]->blue << 16;
+            for (x=0; x<width/4; x++) {
+                *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
+                *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
+                *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
+                *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
+            }
+            switch (width%4) {
+            case 3: *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
+            case 2: *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
+            case 1: *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
+            }
+            r += dr;
+            g += dg;
+            b += db;
+            k++;
+        }
+        r = colors[i]->red << 16;
+        g = colors[i]->green << 16;
+        b = colors[i]->blue << 16;
     }
 
     rr = r>>16;
@@ -433,7 +433,7 @@ renderMVGradient(unsigned width, unsigned height, RColor **colors, int count)
             ptr += lineSize;
         }
     }
-    
+
     return image;
 }
 
@@ -462,14 +462,14 @@ renderMDGradient(unsigned width, unsigned height, RColor **colors, int count)
         count = width;
     if (count > height)
         count = height;
- 
+
     if (count > 2)
-	tmp = renderMHGradient(2*width-1, 1, colors, count);
+        tmp = renderMHGradient(2*width-1, 1, colors, count);
     else
-	tmp = renderHGradient(2*width-1, 1, colors[0]->red<<8, 
-			      colors[0]->green<<8, colors[0]->blue<<8,
-			      colors[1]->red<<8, colors[1]->green<<8,
-			      colors[1]->blue<<8);
+        tmp = renderHGradient(2*width-1, 1, colors[0]->red<<8,
+                              colors[0]->green<<8, colors[0]->blue<<8,
+                              colors[1]->red<<8, colors[1]->green<<8,
+                              colors[1]->blue<<8);
 
     if (!tmp) {
         RReleaseImage(image);
@@ -482,7 +482,7 @@ renderMDGradient(unsigned width, unsigned height, RColor **colors, int count)
 
     /* copy the first line to the other lines with corresponding offset */
     for (j=0, offset=0; j<width*height; j += width) {
-	memcpy(&(image->data[j]), &ptr[3*(int)offset], width);
+        memcpy(&(image->data[j]), &ptr[3*(int)offset], width);
         offset += a;
     }
     RReleaseImage(tmp);
@@ -506,8 +506,8 @@ RRenderInterwovenGradient(unsigned width, unsigned height,
 
     image = RCreateImage(width, height, False);
     if (!image) {
-	return NULL;
-    }    
+        return NULL;
+    }
     ptr = image->data;
 
     r1 = colors1[0].red<<16;
@@ -527,51 +527,51 @@ RRenderInterwovenGradient(unsigned width, unsigned height,
     db2 = ((colors2[1].blue-colors2[0].blue)<<16)/(int)height;
 
     for (i=0,k=0,l=0,ll=thickness1; i<height; i++) {
-	if (k == 0) {
-	    rr = r1>>16;
-	    gg = g1>>16;
-	    bb = b1>>16;
-	} else {
-	    rr = r2>>16;
-	    gg = g2>>16;
-	    bb = b2>>16;
-	}
-	for (j=0; j<width/8; j++) {
-	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	}
-	switch (width%8) {
-	 case 7: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	 case 6: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	 case 5: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	 case 4: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	 case 3: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	 case 2: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	 case 1: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
-	}
-	if (++l == ll) {
-	    if (k == 0) {
-		k = 1;
-		ll = thickness2;
-	    } else {
-		k = 0;
-		ll = thickness1;
-	    }
-	    l = 0;
-	}
-	r1+=dr1;
-	g1+=dg1;
-	b1+=db1;
-	
-	r2+=dr2;
-	g2+=dg2;
-	b2+=db2;
+        if (k == 0) {
+            rr = r1>>16;
+            gg = g1>>16;
+            bb = b1>>16;
+        } else {
+            rr = r2>>16;
+            gg = g2>>16;
+            bb = b2>>16;
+        }
+        for (j=0; j<width/8; j++) {
+            *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+            *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+            *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+            *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+            *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+            *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+            *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+            *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+        }
+        switch (width%8) {
+        case 7: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+        case 6: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+        case 5: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+        case 4: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+        case 3: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+        case 2: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+        case 1: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+        }
+        if (++l == ll) {
+            if (k == 0) {
+                k = 1;
+                ll = thickness2;
+            } else {
+                k = 0;
+                ll = thickness1;
+            }
+            l = 0;
+        }
+        r1+=dr1;
+        g1+=dg1;
+        b1+=db1;
+
+        r2+=dr2;
+        g2+=dg2;
+        b2+=db2;
     }
     return image;
 }

@@ -19,14 +19,14 @@ WMSetApplicationIconWindow(WMScreen *scr, Window window)
     scr->applicationIconWindow = window;
 
     if (scr->groupLeader) {
-	XWMHints *hints;
+        XWMHints *hints;
 
-	hints = XGetWMHints(scr->display, scr->groupLeader);
-	hints->flags |= IconWindowHint;
-	hints->icon_window = window;
+        hints = XGetWMHints(scr->display, scr->groupLeader);
+        hints->flags |= IconWindowHint;
+        hints->icon_window = window;
 
-	XSetWMHints(scr->display, scr->groupLeader, hints);
-	XFree(hints);
+        XSetWMHints(scr->display, scr->groupLeader, hints);
+        XFree(hints);
     }
 }
 
@@ -40,7 +40,7 @@ WMSetApplicationIconImage(WMScreen *scr, RImage *image)
         return;
 
     if (scr->applicationIconImage)
-	RReleaseImage(scr->applicationIconImage);
+        RReleaseImage(scr->applicationIconImage);
 
     scr->applicationIconImage = RRetainImage(image);
 
@@ -66,20 +66,20 @@ WMSetApplicationIconPixmap(WMScreen *scr, WMPixmap *icon)
         return;
 
     if (scr->applicationIconPixmap)
-	WMReleasePixmap(scr->applicationIconPixmap);
+        WMReleasePixmap(scr->applicationIconPixmap);
 
     scr->applicationIconPixmap = WMRetainPixmap(icon);
 
     if (scr->groupLeader) {
-	XWMHints *hints;
+        XWMHints *hints;
 
-	hints = XGetWMHints(scr->display, scr->groupLeader);
-	hints->flags |= IconPixmapHint|IconMaskHint;
+        hints = XGetWMHints(scr->display, scr->groupLeader);
+        hints->flags |= IconPixmapHint|IconMaskHint;
         hints->icon_pixmap = (icon!=NULL ? icon->pixmap : None);
         hints->icon_mask = (icon!=NULL ? icon->mask : None);
 
-	XSetWMHints(scr->display, scr->groupLeader, hints);
-	XFree(hints);
+        XSetWMHints(scr->display, scr->groupLeader, hints);
+        XFree(hints);
     }
 }
 
@@ -132,40 +132,40 @@ W_InitApplication(WMScreen *scr)
     XWMHints *hints;
 
     leader = XCreateSimpleWindow(scr->display, scr->rootWin, -1, -1,
-				 1, 1, 0, 0, 0);
+                                 1, 1, 0, 0, 0);
 
     if (!scr->aflags.simpleApplication) {
-	classHint = XAllocClassHint();
-	classHint->res_name = "groupLeader";
-	classHint->res_class = WMApplication.applicationName;
-	XSetClassHint(scr->display, leader, classHint);
-	XFree(classHint);
+        classHint = XAllocClassHint();
+        classHint->res_name = "groupLeader";
+        classHint->res_class = WMApplication.applicationName;
+        XSetClassHint(scr->display, leader, classHint);
+        XFree(classHint);
 
-	XSetCommand(scr->display, leader, WMApplication.argv,
-		    WMApplication.argc);
+        XSetCommand(scr->display, leader, WMApplication.argv,
+                    WMApplication.argc);
 
-	hints = XAllocWMHints();
+        hints = XAllocWMHints();
 
-	hints->flags = WindowGroupHint;
-	hints->window_group = leader;
+        hints->flags = WindowGroupHint;
+        hints->window_group = leader;
 
         /* This code will never actually be reached, because to have
          * scr->applicationIconPixmap set we need to have a screen first,
          * but this function is called in the screen creation process.
          * -Dan
          */
-	if (scr->applicationIconPixmap) {
+        if (scr->applicationIconPixmap) {
             hints->flags |= IconPixmapHint;
-	    hints->icon_pixmap = scr->applicationIconPixmap->pixmap;
-	    if (scr->applicationIconPixmap->mask) {
-		hints->flags |= IconMaskHint;
-		hints->icon_mask = scr->applicationIconPixmap->mask;
-	    }
-	}
-	
-	XSetWMHints(scr->display, leader, hints);
+            hints->icon_pixmap = scr->applicationIconPixmap->pixmap;
+            if (scr->applicationIconPixmap->mask) {
+                hints->flags |= IconMaskHint;
+                hints->icon_mask = scr->applicationIconPixmap->mask;
+            }
+        }
 
-	XFree(hints);
+        XSetWMHints(scr->display, leader, hints);
+
+        XFree(hints);
     }
     scr->groupLeader = leader;
 }

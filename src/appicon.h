@@ -1,9 +1,9 @@
 /* appicon.h- application icon
- * 
+ *
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -38,29 +38,29 @@ typedef struct WAppIcon {
     struct WAppIcon *next;
     struct WAppIcon *prev;
     WIcon *icon;
-    
+
     char *client_machine;
-    
+
     int x_pos, y_pos;		       /* absolute screen coordinate */
-    
+
     char *command;		       /* command used to launch app */
-    
+
 #ifdef OFFIX_DND
     char *dnd_command;		       /* command to use when something is */
-				       /* dropped on us */
+                                       /* dropped on us */
 #endif
-    
+
     char *paste_command;	       /* command to run when something is pasted */
-    
+
     char *wm_class;
     char *wm_instance;
     pid_t pid;			       /* for apps launched from the dock */
     Window main_window;
 
     struct WDock *dock;		       /* In which dock is docked. */
-    
-    struct _AppSettingsPanel *panel;    /* Settings Panel */
-    
+
+    struct _AppSettingsPanel *panel;   /* Settings Panel */
+
     unsigned int gnustep_app:1;	       /* if this is a GNUstep application */
     unsigned int docked:1;
     unsigned int omnipresent:1;        /* If omnipresent when docked in clip */
@@ -77,17 +77,17 @@ typedef struct WAppIcon {
     unsigned int drop_launch:1;	       /* launching from drop action */
     unsigned int paste_launch:1;       /* launching from paste action */
     unsigned int destroyed:1;	       /* appicon was destroyed */
-    unsigned int buggy_app:1;	       /* do not make dock rely on hints 
-					* set by app */
-    
+    unsigned int buggy_app:1;	       /* do not make dock rely on hints
+                                        * set by app */
+
     unsigned int lock:1;	       /* do not allow to be destroyed */
-    
+
 } WAppIcon;
 
 
 WAppIcon *wAppIconCreate(WWindow *leader_win);
 WAppIcon *wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance,
-				char *wm_class, int tile);
+                                char *wm_class, int tile);
 
 void wAppIconDestroy(WAppIcon *aicon);
 
@@ -98,3 +98,4 @@ Bool wAppIconChangeImage(WAppIcon *icon, char *file);
 void wAppIconMove(WAppIcon *aicon, int x, int y);
 
 #endif
+

@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -165,38 +165,38 @@ static void manageAllWindows(WScreen *scr, int crashed);
 extern void NotifyDeadProcess(pid_t pid, unsigned char status);
 
 
-static int 
+static int
 catchXError(Display *dpy, XErrorEvent *error)
 {
     char buffer[MAXLINE];
-    
+
     /* ignore some errors */
-    if (error->resourceid != None 
-	&& ((error->error_code == BadDrawable 
-	     && error->request_code == X_GetGeometry)
-	    || (error->error_code == BadMatch
-		&& (error->request_code == X_SetInputFocus))
-	    || (error->error_code == BadWindow)
-	    /*
-		&& (error->request_code == X_GetWindowAttributes
-		    || error->request_code == X_SetInputFocus
-		    || error->request_code == X_ChangeWindowAttributes
-		    || error->request_code == X_GetProperty
-		    || error->request_code == X_ChangeProperty
-		    || error->request_code == X_QueryTree
-		    || error->request_code == X_GrabButton
-		    || error->request_code == X_UngrabButton
-		    || error->request_code == X_SendEvent
-		    || error->request_code == X_ConfigureWindow))
-	     */
-	    || (error->request_code == X_InstallColormap))) {
+    if (error->resourceid != None
+        && ((error->error_code == BadDrawable
+             && error->request_code == X_GetGeometry)
+            || (error->error_code == BadMatch
+                && (error->request_code == X_SetInputFocus))
+            || (error->error_code == BadWindow)
+            /*
+             && (error->request_code == X_GetWindowAttributes
+             || error->request_code == X_SetInputFocus
+             || error->request_code == X_ChangeWindowAttributes
+             || error->request_code == X_GetProperty
+             || error->request_code == X_ChangeProperty
+             || error->request_code == X_QueryTree
+             || error->request_code == X_GrabButton
+             || error->request_code == X_UngrabButton
+             || error->request_code == X_SendEvent
+             || error->request_code == X_ConfigureWindow))
+             */
+            || (error->request_code == X_InstallColormap))) {
 #ifndef DEBUG
 
-	return 0;
+        return 0;
 #else
-	printf("got X error %x %x %x\n", error->request_code,
-	       error->error_code, (unsigned)error->resourceid);
-	return 0;
+        printf("got X error %x %x %x\n", error->request_code,
+               error->error_code, (unsigned)error->resourceid);
+        return 0;
 #endif
     }
     FormatXError(dpy, error, buffer, MAXLINE);
@@ -206,10 +206,10 @@ catchXError(Display *dpy, XErrorEvent *error)
 
 
 /*
- *---------------------------------------------------------------------- 
+ *----------------------------------------------------------------------
  * handleXIO-
- * 	Handle X shutdowns and other stuff. 
- *---------------------------------------------------------------------- 
+ * 	Handle X shutdowns and other stuff.
+ *----------------------------------------------------------------------
  */
 static int
 handleXIO(Display *xio_dpy)
@@ -230,12 +230,12 @@ static void
 delayedAction(void *cdata)
 {
     if (WDelayedActionSet == 0) {
-	return;
+        return;
     }
     WDelayedActionSet--;
-    /* 
+    /*
      * Make the event dispatcher do whatever it needs to do,
-     * including handling zombie processes, restart and exit 
+     * including handling zombie processes, restart and exit
      * signals.
      */
     DispatchEvent(NULL);
@@ -246,7 +246,7 @@ delayedAction(void *cdata)
  *----------------------------------------------------------------------
  * handleExitSig--
  * 	User generated exit signal handler.
- *---------------------------------------------------------------------- 
+ *----------------------------------------------------------------------
  */
 static RETSIGTYPE
 handleExitSig(int sig)
@@ -255,7 +255,7 @@ handleExitSig(int sig)
 
     sigfillset(&sigs);
     sigprocmask(SIG_BLOCK, &sigs, NULL);
-    
+
     if (sig == SIGUSR1) {
 #ifdef SYS_SIGLIST_DECLARED
         wwarning(_("got signal %i (%s) - restarting\n"), sig, sys_siglist[sig]);
@@ -263,11 +263,11 @@ handleExitSig(int sig)
         wwarning(_("got signal %i - restarting\n"), sig);
 #endif
 
-	SIG_WCHANGE_STATE(WSTATE_NEED_RESTART);
-	/* setup idle handler, so that this will be handled when
-	 * the select() is returned becaused of the signal, even if
-	 * there are no X events in the queue */
-	WDelayedActionSet++;
+        SIG_WCHANGE_STATE(WSTATE_NEED_RESTART);
+        /* setup idle handler, so that this will be handled when
+         * the select() is returned becaused of the signal, even if
+         * there are no X events in the queue */
+        WDelayedActionSet++;
     } else if (sig == SIGUSR2) {
 #ifdef SYS_SIGLIST_DECLARED
         wwarning(_("got signal %i (%s) - rereading defaults\n"), sig, sys_siglist[sig]);
@@ -287,11 +287,11 @@ handleExitSig(int sig)
         wwarning(_("got signal %i - exiting...\n"), sig);
 #endif
 
-	SIG_WCHANGE_STATE(WSTATE_NEED_EXIT);
+        SIG_WCHANGE_STATE(WSTATE_NEED_EXIT);
 
-	WDelayedActionSet++;
+        WDelayedActionSet++;
     }
-    
+
     sigprocmask(SIG_UNBLOCK, &sigs, NULL);
 }
 
@@ -306,7 +306,7 @@ dummyHandler(int sig)
  *----------------------------------------------------------------------
  * handleSig--
  * 	general signal handler. Exits the program gently.
- *---------------------------------------------------------------------- 
+ *----------------------------------------------------------------------
  */
 static RETSIGTYPE
 handleSig(int sig)
@@ -316,11 +316,11 @@ handleSig(int sig)
 #ifndef NO_EMERGENCY_AUTORESTART
     int crashAction, i;
     char *argv[2];
-    
+
     argv[1] = NULL;
 #endif
-    
-    /* 
+
+    /*
      * No functions that potentially do Xlib calls should be called from
      * here. Xlib calls are not reentrant so the integrity of Xlib is
      * not guaranteed if a Xlib call is made from a signal handler.
@@ -338,21 +338,21 @@ handleSig(int sig)
      * the flags accordingly. -Dan
      */
     if (sig==SIGSEGV || sig==SIGFPE || sig==SIGBUS || sig==SIGILL
-	|| sig==SIGABRT) {
-	if (already_crashed) {
-	    wfatal(_("crashed while trying to do some post-crash cleanup. Aborting immediatelly."));
+        || sig==SIGABRT) {
+        if (already_crashed) {
+            wfatal(_("crashed while trying to do some post-crash cleanup. Aborting immediatelly."));
             signal(sig, SIG_DFL);
             kill(getpid(), sig);
             return;
-	}
-	already_crashed = 1;
+        }
+        already_crashed = 1;
 
-	dumpcore = 1;
+        dumpcore = 1;
 
-	/*
-	 * Yeah, we shouldn't do this, but it's already crashed anyway :P
-	 */
-	
+        /*
+         * Yeah, we shouldn't do this, but it's already crashed anyway :P
+         */
+
 #ifndef NO_EMERGENCY_AUTORESTART
         /* Close the X connection and open a new one. This is to avoid messing
          * Xlib because we call to Xlib functions in a signal handler.
@@ -364,7 +364,7 @@ handleSig(int sig)
             CARD32 data[2];
             WWindow *wwin;
 
-	    XGrabServer(dpy);
+            XGrabServer(dpy);
             crashAction = wShowCrashingDialogPanel(sig);
 
             /*
@@ -388,7 +388,7 @@ handleSig(int sig)
                 }
 
             }
-    
+
             XCloseDisplay(dpy);
             dpy = NULL;
         } else {
@@ -409,7 +409,7 @@ handleSig(int sig)
             /* fallback to alternate window manager then */
         }
 
-    	wmessage(_("trying to start alternate window manager..."));
+        wmessage(_("trying to start alternate window manager..."));
 
         for (i=0; i<WMGetArrayItemCount(wPreferences.fallbackWMs); i++) {
             Restart(WMGetFromArray(wPreferences.fallbackWMs, i), False);
@@ -442,7 +442,7 @@ buryChild(int foo)
     sigfillset(&sigs);
     /* Block signals so that NotifyDeadProcess() doesn't get fux0red */
     sigprocmask(SIG_BLOCK, &sigs, NULL);
-    
+
     /* R.I.P. */
     /* If 2 or more kids exit in a small time window, before this handler gets
      * the chance to get invoked, the SIGCHLD signals will be merged and only
@@ -451,14 +451,14 @@ buryChild(int foo)
      * signals to know exactly how many kids have exited. -Dan
      */
     while ((pid=waitpid(-1, &status, WNOHANG))>0 || (pid<0 && errno==EINTR)) {
-	NotifyDeadProcess(pid, WEXITSTATUS(status));
+        NotifyDeadProcess(pid, WEXITSTATUS(status));
     }
 
     WDelayedActionSet++;
-    
+
     sigprocmask(SIG_UNBLOCK, &sigs, NULL);
 
-    errno = save_errno;    
+    errno = save_errno;
 }
 
 
@@ -466,7 +466,7 @@ static int
 getWorkspaceState(Window root, WWorkspaceState **state)
 {
     Atom type_ret;
-    int fmt_ret;    
+    int fmt_ret;
     unsigned long nitems_ret;
     unsigned long bytes_after_ret;
     CARD32 *data;
@@ -497,8 +497,8 @@ getOffendingModifiers()
     XModifierKeymap *modmap;
     KeyCode nlock, slock;
     static int mask_table[8] = {
-	ShiftMask,LockMask,ControlMask,Mod1Mask,
-	    Mod2Mask, Mod3Mask, Mod4Mask, Mod5Mask
+        ShiftMask,LockMask,ControlMask,Mod1Mask,
+        Mod2Mask, Mod3Mask, Mod4Mask, Mod5Mask
     };
 
     nlock = XKeysymToKeycode(dpy, XK_Num_Lock);
@@ -509,118 +509,118 @@ getOffendingModifiers()
      * so that we can bind the grabs for when they are enabled too.
      */
     modmap = XGetModifierMapping(dpy);
-    
+
     if (modmap!=NULL && modmap->max_keypermod>0) {
-	for (i=0; i<8*modmap->max_keypermod; i++) {
-	    if (modmap->modifiermap[i]==nlock && nlock!=0)
-		_NumLockMask = mask_table[i/modmap->max_keypermod];
-	    else if (modmap->modifiermap[i]==slock && slock!=0)
-		_ScrollLockMask = mask_table[i/modmap->max_keypermod];
-	}
+        for (i=0; i<8*modmap->max_keypermod; i++) {
+            if (modmap->modifiermap[i]==nlock && nlock!=0)
+                _NumLockMask = mask_table[i/modmap->max_keypermod];
+            else if (modmap->modifiermap[i]==slock && slock!=0)
+                _ScrollLockMask = mask_table[i/modmap->max_keypermod];
+        }
     }
 
     if (modmap)
-	XFreeModifiermap(modmap);
+        XFreeModifiermap(modmap);
 }
 
 
 
 #ifdef NUMLOCK_HACK
-void 
+void
 wHackedGrabKey(int keycode, unsigned int modifiers,
-	       Window grab_window, Bool owner_events, int pointer_mode,
-	       int keyboard_mode)
+               Window grab_window, Bool owner_events, int pointer_mode,
+               int keyboard_mode)
 {
     if (modifiers == AnyModifier)
-	return;
-    
+        return;
+
     /* grab all combinations of the modifier with CapsLock, NumLock and
      * ScrollLock. How much memory/CPU does such a monstrosity consume
      * in the server?
      */
     if (_NumLockMask)
-	XGrabKey(dpy, keycode, modifiers|_NumLockMask, 
-		 grab_window, owner_events, pointer_mode, keyboard_mode);
+        XGrabKey(dpy, keycode, modifiers|_NumLockMask,
+                 grab_window, owner_events, pointer_mode, keyboard_mode);
     if (_ScrollLockMask)
-	XGrabKey(dpy, keycode, modifiers|_ScrollLockMask,
-		 grab_window, owner_events, pointer_mode, keyboard_mode);
+        XGrabKey(dpy, keycode, modifiers|_ScrollLockMask,
+                 grab_window, owner_events, pointer_mode, keyboard_mode);
     if (_NumLockMask && _ScrollLockMask)
-	XGrabKey(dpy, keycode, modifiers|_NumLockMask|_ScrollLockMask,
-		 grab_window, owner_events, pointer_mode, keyboard_mode);
+        XGrabKey(dpy, keycode, modifiers|_NumLockMask|_ScrollLockMask,
+                 grab_window, owner_events, pointer_mode, keyboard_mode);
     if (_NumLockMask)
-	XGrabKey(dpy, keycode, modifiers|_NumLockMask|LockMask,
-		 grab_window, owner_events, pointer_mode, keyboard_mode);
+        XGrabKey(dpy, keycode, modifiers|_NumLockMask|LockMask,
+                 grab_window, owner_events, pointer_mode, keyboard_mode);
     if (_ScrollLockMask)
-	XGrabKey(dpy, keycode, modifiers|_ScrollLockMask|LockMask,
-		 grab_window, owner_events, pointer_mode, keyboard_mode);
+        XGrabKey(dpy, keycode, modifiers|_ScrollLockMask|LockMask,
+                 grab_window, owner_events, pointer_mode, keyboard_mode);
     if (_NumLockMask && _ScrollLockMask)
-	XGrabKey(dpy, keycode, modifiers|_NumLockMask|_ScrollLockMask|LockMask,
-		 grab_window, owner_events, pointer_mode, keyboard_mode);
+        XGrabKey(dpy, keycode, modifiers|_NumLockMask|_ScrollLockMask|LockMask,
+                 grab_window, owner_events, pointer_mode, keyboard_mode);
     /* phew, I guess that's all, right? */
 }
 #endif
 
-void 
-wHackedGrabButton(unsigned int button, unsigned int modifiers, 
-		  Window grab_window, Bool owner_events, 
-		  unsigned int event_mask, int pointer_mode, 
-		  int keyboard_mode, Window confine_to, Cursor cursor)
+void
+wHackedGrabButton(unsigned int button, unsigned int modifiers,
+                  Window grab_window, Bool owner_events,
+                  unsigned int event_mask, int pointer_mode,
+                  int keyboard_mode, Window confine_to, Cursor cursor)
 {
     XGrabButton(dpy, button, modifiers, grab_window, owner_events,
-		event_mask, pointer_mode, keyboard_mode, confine_to, cursor);
+                event_mask, pointer_mode, keyboard_mode, confine_to, cursor);
 
     if (modifiers==AnyModifier)
-	return;
+        return;
 
     XGrabButton(dpy, button, modifiers|LockMask, grab_window, owner_events,
-		event_mask, pointer_mode, keyboard_mode, confine_to, cursor);
-    
-#ifdef NUMLOCK_HACK    
+                event_mask, pointer_mode, keyboard_mode, confine_to, cursor);
+
+#ifdef NUMLOCK_HACK
     /* same as above, but for mouse buttons */
     if (_NumLockMask)
-	XGrabButton(dpy, button, modifiers|_NumLockMask,
-		    grab_window, owner_events, event_mask, pointer_mode,
-		keyboard_mode, confine_to, cursor);
+        XGrabButton(dpy, button, modifiers|_NumLockMask,
+                    grab_window, owner_events, event_mask, pointer_mode,
+                    keyboard_mode, confine_to, cursor);
     if (_ScrollLockMask)
-	XGrabButton(dpy, button, modifiers|_ScrollLockMask,
-		    grab_window, owner_events, event_mask, pointer_mode,
-		    keyboard_mode, confine_to, cursor);
+        XGrabButton(dpy, button, modifiers|_ScrollLockMask,
+                    grab_window, owner_events, event_mask, pointer_mode,
+                    keyboard_mode, confine_to, cursor);
     if (_NumLockMask && _ScrollLockMask)
-	XGrabButton(dpy, button, modifiers|_ScrollLockMask|_NumLockMask,
-		    grab_window, owner_events, event_mask, pointer_mode,
-		    keyboard_mode, confine_to, cursor);
+        XGrabButton(dpy, button, modifiers|_ScrollLockMask|_NumLockMask,
+                    grab_window, owner_events, event_mask, pointer_mode,
+                    keyboard_mode, confine_to, cursor);
     if (_NumLockMask)
-	XGrabButton(dpy, button, modifiers|_NumLockMask|LockMask,
-		    grab_window, owner_events, event_mask, pointer_mode,
-		keyboard_mode, confine_to, cursor);
+        XGrabButton(dpy, button, modifiers|_NumLockMask|LockMask,
+                    grab_window, owner_events, event_mask, pointer_mode,
+                    keyboard_mode, confine_to, cursor);
     if (_ScrollLockMask)
-	XGrabButton(dpy, button, modifiers|_ScrollLockMask|LockMask,
-		    grab_window, owner_events, event_mask, pointer_mode,
-		    keyboard_mode, confine_to, cursor);
+        XGrabButton(dpy, button, modifiers|_ScrollLockMask|LockMask,
+                    grab_window, owner_events, event_mask, pointer_mode,
+                    keyboard_mode, confine_to, cursor);
     if (_NumLockMask && _ScrollLockMask)
-	XGrabButton(dpy, button, modifiers|_ScrollLockMask|_NumLockMask|LockMask,
-		    grab_window, owner_events, event_mask, pointer_mode,
-		    keyboard_mode, confine_to, cursor);
+        XGrabButton(dpy, button, modifiers|_ScrollLockMask|_NumLockMask|LockMask,
+                    grab_window, owner_events, event_mask, pointer_mode,
+                    keyboard_mode, confine_to, cursor);
 #endif /* NUMLOCK_HACK */
 }
 
 #ifdef notused
 void
-wHackedUngrabButton(unsigned int button, unsigned int modifiers, 
-		    Window grab_window)
+wHackedUngrabButton(unsigned int button, unsigned int modifiers,
+                    Window grab_window)
 {
     XUngrabButton(dpy, button, modifiers|_NumLockMask,
-		  grab_window);
+                  grab_window);
     XUngrabButton(dpy, button, modifiers|_ScrollLockMask,
-		  grab_window);
+                  grab_window);
     XUngrabButton(dpy, button, modifiers|_NumLockMask|_ScrollLockMask,
-		  grab_window);
+                  grab_window);
     XUngrabButton(dpy, button, modifiers|_NumLockMask|LockMask,
-		  grab_window);
+                  grab_window);
     XUngrabButton(dpy, button, modifiers|_ScrollLockMask|LockMask,
-		  grab_window);
+                  grab_window);
     XUngrabButton(dpy, button, modifiers|_NumLockMask|_ScrollLockMask|LockMask,
-		  grab_window);
+                  grab_window);
 }
 #endif
 
@@ -641,7 +641,7 @@ wScreenForRootWindow(Window window)
     int i;
 
     if (wScreenCount==1)
-	return wScreen[0];
+        return wScreen[0];
 
     /*
      * Since the number of heads will probably be small (normally 2),
@@ -649,9 +649,9 @@ wScreenForRootWindow(Window window)
      * of the overhead.
      */
     for (i=0; i<wScreenCount; i++) {
-	if (wScreen[i]->root_win == window) {
-	    return wScreen[i];
-	}
+        if (wScreen[i]->root_win == window) {
+            return wScreen[i];
+        }
     }
 
     return wScreenForWindow(window);
@@ -664,7 +664,7 @@ wScreenSearchForRootWindow(Window window)
     int i;
 
     if (wScreenCount==1)
-	return wScreen[0];
+        return wScreen[0];
 
     /*
      * Since the number of heads will probably be small (normally 2),
@@ -672,11 +672,11 @@ wScreenSearchForRootWindow(Window window)
      * of the overhead.
      */
     for (i=0; i<wScreenCount; i++) {
-	if (wScreen[i]->root_win == window) {
-	    return wScreen[i];
-	}
+        if (wScreen[i]->root_win == window) {
+            return wScreen[i];
+        }
     }
-    
+
     return wScreenForWindow(window);
 }
 
@@ -687,29 +687,29 @@ wScreenForWindow(Window window)
     XWindowAttributes attr;
 
     if (wScreenCount==1)
-	return wScreen[0];
+        return wScreen[0];
 
     if (XGetWindowAttributes(dpy, window, &attr)) {
-	return wScreenForRootWindow(attr.root);
+        return wScreenForRootWindow(attr.root);
     }
     return NULL;
 }
 
 
 static char *atomNames[] = {
-    "WM_STATE", 
-    "WM_CHANGE_STATE", 
-    "WM_PROTOCOLS", 
-    "WM_TAKE_FOCUS", 
-    "WM_DELETE_WINDOW", 
-    "WM_SAVE_YOURSELF", 
-    "WM_CLIENT_LEADER", 
-    "WM_COLORMAP_WINDOWS", 
-    "WM_COLORMAP_NOTIFY", 
+    "WM_STATE",
+    "WM_CHANGE_STATE",
+    "WM_PROTOCOLS",
+    "WM_TAKE_FOCUS",
+    "WM_DELETE_WINDOW",
+    "WM_SAVE_YOURSELF",
+    "WM_CLIENT_LEADER",
+    "WM_COLORMAP_WINDOWS",
+    "WM_COLORMAP_NOTIFY",
 
     "_WINDOWMAKER_MENU",
-    "_WINDOWMAKER_STATE", 
-    "_WINDOWMAKER_WM_PROTOCOLS", 
+    "_WINDOWMAKER_STATE",
+    "_WINDOWMAKER_WM_PROTOCOLS",
     "_WINDOWMAKER_WM_FUNCTION",
     "_WINDOWMAKER_NOTICEBOARD",
     "_WINDOWMAKER_COMMAND",
@@ -727,7 +727,7 @@ static char *atomNames[] = {
  * StartUp--
  * 	starts the window manager and setup global data.
  * Called from main() at startup.
- * 
+ *
  * Side effects:
  * global data declared in main.c is initialized
  *----------------------------------------------------------
@@ -759,21 +759,21 @@ StartUp(Bool defaultScreenOnly)
     wStackContext = XUniqueContext();
     wVEdgeContext = XUniqueContext();
 
-/*    _XA_VERSION = XInternAtom(dpy, "VERSION", False);*/
+    /*    _XA_VERSION = XInternAtom(dpy, "VERSION", False);*/
 
 #ifdef HAVE_XINTERNATOMS
     XInternAtoms(dpy, atomNames, sizeof(atomNames)/sizeof(char*),
-		 False, atom);
+                 False, atom);
 #else
 
     {
-	int i;
-	for (i = 0; i < sizeof(atomNames)/sizeof(char*); i++) {
-	    atom[i] = XInternAtom(dpy, atomNames[i], False);
-	}
+        int i;
+        for (i = 0; i < sizeof(atomNames)/sizeof(char*); i++) {
+            atom[i] = XInternAtom(dpy, atomNames[i], False);
+        }
     }
 #endif
-    
+
     _XA_WM_STATE = atom[0];
     _XA_WM_CHANGE_STATE = atom[1];
     _XA_WM_PROTOCOLS = atom[2];
@@ -823,17 +823,17 @@ StartUp(Bool defaultScreenOnly)
     wCursor[WCUR_TEXT]     = XCreateFontCursor(dpy, XC_xterm); /* odd name???*/
     wCursor[WCUR_SELECT] = XCreateFontCursor(dpy, XC_cross);
     {
-	Pixmap cur = XCreatePixmap(dpy, DefaultRootWindow(dpy), 16, 16, 1);
-	GC gc = XCreateGC(dpy, cur, 0, NULL);
-	XColor black;
-	memset(&black, 0, sizeof(XColor));
-	XSetForeground(dpy, gc, 0);
-	XFillRectangle(dpy, cur, gc, 0, 0, 16, 16);
-	XFreeGC(dpy, gc);
-	wCursor[WCUR_EMPTY] = XCreatePixmapCursor(dpy, cur, cur, &black, &black, 0, 0);
-	XFreePixmap(dpy, cur);
+        Pixmap cur = XCreatePixmap(dpy, DefaultRootWindow(dpy), 16, 16, 1);
+        GC gc = XCreateGC(dpy, cur, 0, NULL);
+        XColor black;
+        memset(&black, 0, sizeof(XColor));
+        XSetForeground(dpy, gc, 0);
+        XFillRectangle(dpy, cur, gc, 0, 0, 16, 16);
+        XFreeGC(dpy, gc);
+        wCursor[WCUR_EMPTY] = XCreatePixmapCursor(dpy, cur, cur, &black, &black, 0, 0);
+        XFreePixmap(dpy, cur);
     }
-    
+
     /* signal handler stuff that gets called when a signal is caught */
     WMAddPersistentTimerHandler(500, delayedAction, NULL);
 
@@ -849,7 +849,7 @@ StartUp(Bool defaultScreenOnly)
     sigaction(SIGABRT, &sig_action, NULL);
 
     sig_action.sa_handler = handleExitSig;
-    
+
     /* Here we set SA_RESTART for safety, because SIGUSR1 may not be handled
      * immediately. -Dan */
     sig_action.sa_flags = SA_RESTART;
@@ -894,8 +894,8 @@ StartUp(Bool defaultScreenOnly)
     /* initialize defaults stuff */
     WDWindowMaker = wDefaultsInitDomain("WindowMaker", True);
     if (!WDWindowMaker->dictionary) {
-	wwarning(_("could not read domain \"%s\" from defaults database"),
-		 "WindowMaker");
+        wwarning(_("could not read domain \"%s\" from defaults database"),
+                 "WindowMaker");
     }
 
     /* read defaults that don't change until a restart and are
@@ -904,23 +904,23 @@ StartUp(Bool defaultScreenOnly)
 
     /* check sanity of some values */
     if (wPreferences.icon_size < 16) {
-	wwarning(_("icon size is configured to %i, but it's too small. Using 16, instead\n"),
-		 wPreferences.icon_size);
-	wPreferences.icon_size = 16;
+        wwarning(_("icon size is configured to %i, but it's too small. Using 16, instead\n"),
+                 wPreferences.icon_size);
+        wPreferences.icon_size = 16;
     }
 
     /* init other domains */
     WDRootMenu = wDefaultsInitDomain("WMRootMenu", False);
     if (!WDRootMenu->dictionary) {
-	wwarning(_("could not read domain \"%s\" from defaults database"),
-		 "WMRootMenu");
+        wwarning(_("could not read domain \"%s\" from defaults database"),
+                 "WMRootMenu");
     }
     wDefaultsMergeGlobalMenus(WDRootMenu);
 
     WDWindowAttributes = wDefaultsInitDomain("WMWindowAttributes", True);
     if (!WDWindowAttributes->dictionary) {
-	wwarning(_("could not read domain \"%s\" from defaults database"),
-		 "WMWindowAttributes");
+        wwarning(_("could not read domain \"%s\" from defaults database"),
+                 "WMWindowAttributes");
     }
 
     XSetErrorHandler((XErrorHandler)catchXError);
@@ -929,7 +929,7 @@ StartUp(Bool defaultScreenOnly)
     /* ignore j */
     wShapeSupported = XShapeQueryExtension(dpy, &wShapeEventBase, &j);
 #endif
-    
+
 #ifdef KEEP_XKB_LOCK_STATUS
     wXkbSupported = XkbQueryExtension(dpy, NULL, &wXkbEventBase, NULL, NULL, NULL);
     if(wPreferences.modelock && !wXkbSupported) {
@@ -939,9 +939,9 @@ StartUp(Bool defaultScreenOnly)
 #endif
 
     if (defaultScreenOnly) {
-	max = 1;
+        max = 1;
     } else {
-	max = ScreenCount(dpy);
+        max = ScreenCount(dpy);
     }
     wScreen = wmalloc(sizeof(WScreen*)*max);
 
@@ -949,20 +949,20 @@ StartUp(Bool defaultScreenOnly)
 
     /* manage the screens */
     for (j = 0; j < max; j++) {
-	if (defaultScreenOnly || max==1) {
-	    wScreen[wScreenCount] = wScreenInit(DefaultScreen(dpy));
-	    if (!wScreen[wScreenCount]) {
-		wfatal(_("it seems that there is already a window manager running"));
-		Exit(1);
-	    }
-	} else {
-	    wScreen[wScreenCount] = wScreenInit(j);
-	    if (!wScreen[wScreenCount]) {
-		wwarning(_("could not manage screen %i"), j);
-		continue;
-	    }
-	}
-	wScreenCount++;
+        if (defaultScreenOnly || max==1) {
+            wScreen[wScreenCount] = wScreenInit(DefaultScreen(dpy));
+            if (!wScreen[wScreenCount]) {
+                wfatal(_("it seems that there is already a window manager running"));
+                Exit(1);
+            }
+        } else {
+            wScreen[wScreenCount] = wScreenInit(j);
+            if (!wScreen[wScreenCount]) {
+                wwarning(_("could not manage screen %i"), j);
+                continue;
+            }
+        }
+        wScreenCount++;
     }
 
 #ifndef LITE
@@ -974,15 +974,15 @@ StartUp(Bool defaultScreenOnly)
         int crashed;
 
         /* restore workspace state */
-	if (!getWorkspaceState(wScreen[j]->root_win, &ws_state)) {
-	    ws_state = NULL;
-	}
+        if (!getWorkspaceState(wScreen[j]->root_win, &ws_state)) {
+            ws_state = NULL;
+        }
 
-	wScreenRestoreState(wScreen[j]);
+        wScreenRestoreState(wScreen[j]);
 
-	/* manage all windows that were already here before us */
-	if (!wPreferences.flags.nodock && wScreen[j]->dock)
-	    wScreen[j]->last_dock = wScreen[j]->dock;
+        /* manage all windows that were already here before us */
+        if (!wPreferences.flags.nodock && wScreen[j]->dock)
+            wScreen[j]->last_dock = wScreen[j]->dock;
 
         if (ws_state && (ws_state->flags & WFLAGS_CRASHED)!=0)
             crashed = 1;
@@ -991,52 +991,52 @@ StartUp(Bool defaultScreenOnly)
 
         manageAllWindows(wScreen[j], crashed);
 
-	/* restore saved menus */
-	wMenuRestoreState(wScreen[j]);
-	
-	/* If we're not restarting restore session */
-	if (ws_state == NULL && !wPreferences.flags.norestore)
-	    wSessionRestoreState(wScreen[j]);
-	
-	if (!wPreferences.flags.noautolaunch) {
-	    /* auto-launch apps */
-	    if (!wPreferences.flags.nodock && wScreen[j]->dock) {
-		wScreen[j]->last_dock = wScreen[j]->dock;
-		wDockDoAutoLaunch(wScreen[j]->dock, 0);
-	    }
-	    /* auto-launch apps in clip */
-	    if (!wPreferences.flags.noclip) {
-		int i;
-		for(i=0; i<wScreen[j]->workspace_count; i++) {
-		    if (wScreen[j]->workspaces[i]->clip) {
-			wScreen[j]->last_dock = wScreen[j]->workspaces[i]->clip;
-			wDockDoAutoLaunch(wScreen[j]->workspaces[i]->clip, i);
-		    }
-		}
-	    }
-	}
+        /* restore saved menus */
+        wMenuRestoreState(wScreen[j]);
 
-	/* go to workspace where we were before restart */
-	if (ws_state) { 
-	    wWorkspaceForceChange(wScreen[j], ws_state->workspace);
-	    wfree(ws_state);
-	} else {
-	    wSessionRestoreLastWorkspace(wScreen[j]);
-	}
+        /* If we're not restarting restore session */
+        if (ws_state == NULL && !wPreferences.flags.norestore)
+            wSessionRestoreState(wScreen[j]);
+
+        if (!wPreferences.flags.noautolaunch) {
+            /* auto-launch apps */
+            if (!wPreferences.flags.nodock && wScreen[j]->dock) {
+                wScreen[j]->last_dock = wScreen[j]->dock;
+                wDockDoAutoLaunch(wScreen[j]->dock, 0);
+            }
+            /* auto-launch apps in clip */
+            if (!wPreferences.flags.noclip) {
+                int i;
+                for(i=0; i<wScreen[j]->workspace_count; i++) {
+                    if (wScreen[j]->workspaces[i]->clip) {
+                        wScreen[j]->last_dock = wScreen[j]->workspaces[i]->clip;
+                        wDockDoAutoLaunch(wScreen[j]->workspaces[i]->clip, i);
+                    }
+                }
+            }
+        }
+
+        /* go to workspace where we were before restart */
+        if (ws_state) {
+            wWorkspaceForceChange(wScreen[j], ws_state->workspace);
+            wfree(ws_state);
+        } else {
+            wSessionRestoreLastWorkspace(wScreen[j]);
+        }
 
 #ifdef KWM_HINTS
-	wKWMSetInitializedHint(wScreen[j]);
+        wKWMSetInitializedHint(wScreen[j]);
 #endif
     }
-    
+
     if (wScreenCount == 0) {
-	wfatal(_("could not manage any screen"));
-	Exit(1);
+        wfatal(_("could not manage any screen"));
+        Exit(1);
     }
 
     if (!wPreferences.flags.nopolling && !wPreferences.flags.noupdates) {
-	/* setup defaults file polling */
-	WMAddTimerHandler(3000, wDefaultsCheckDomains, NULL);
+        /* setup defaults file polling */
+        WMAddTimerHandler(3000, wDefaultsCheckDomains, NULL);
     }
 }
 
@@ -1047,8 +1047,8 @@ static Bool
 windowInList(Window window, Window *list, int count)
 {
     for (; count>=0; count--) {
-	if (window == list[count])
-	    return True;
+        if (window == list[count])
+            return True;
     }
     return False;
 }
@@ -1057,12 +1057,12 @@ windowInList(Window window, Window *list, int count)
  *-----------------------------------------------------------------------
  * manageAllWindows--
  * 	Manages all windows in the screen.
- * 
+ *
  * Notes:
  * 	Called when the wm is being started.
  *	No events can be processed while the windows are being
- * reparented/managed. 
- *----------------------------------------------------------------------- 
+ * reparented/managed.
+ *-----------------------------------------------------------------------
  */
 static void
 manageAllWindows(WScreen *scr, int crashRecovery)
@@ -1080,54 +1080,54 @@ manageAllWindows(WScreen *scr, int crashRecovery)
 
     /* first remove all icon windows */
     for (i = 0; i < nchildren; i++) {
-	XWMHints *wmhints;
+        XWMHints *wmhints;
 
-	if (children[i]==None) 
-	    continue;
+        if (children[i]==None)
+            continue;
 
-    	wmhints = XGetWMHints(dpy, children[i]);
-	if (wmhints && (wmhints->flags & IconWindowHint)) {
-	    for (j = 0; j < nchildren; j++)  {
-		if (children[j] == wmhints->icon_window) {
-		    XFree(wmhints);
-		    wmhints = NULL;
-		    children[j] = None;
-		    break;
-		}
-	    }
-	}
-	if (wmhints) {
-	    XFree(wmhints);
-	}
+        wmhints = XGetWMHints(dpy, children[i]);
+        if (wmhints && (wmhints->flags & IconWindowHint)) {
+            for (j = 0; j < nchildren; j++)  {
+                if (children[j] == wmhints->icon_window) {
+                    XFree(wmhints);
+                    wmhints = NULL;
+                    children[j] = None;
+                    break;
+                }
+            }
+        }
+        if (wmhints) {
+            XFree(wmhints);
+        }
     }
 
 
     for (i = 0; i < nchildren; i++) {
-	if (children[i] == None)
-	    continue;
+        if (children[i] == None)
+            continue;
 
 #ifdef KWM_HINTS
-	wKWMCheckModule(scr, children[i]);
+        wKWMCheckModule(scr, children[i]);
 #endif
-	wwin = wManageWindow(scr, children[i]);
-	if (wwin) {
-	    /* apply states got from WSavedState */
-	    /* shaded + minimized is not restored correctly */
-	    if (wwin->flags.shaded) {
-		wwin->flags.shaded = 0;
-		wShadeWindow(wwin);
-	    }
-	    if (wwin->flags.miniaturized
-		&& (wwin->transient_for == None
-		    || wwin->transient_for == scr->root_win
-		    || !windowInList(wwin->transient_for, children, 
-				     nchildren))) {
+        wwin = wManageWindow(scr, children[i]);
+        if (wwin) {
+            /* apply states got from WSavedState */
+            /* shaded + minimized is not restored correctly */
+            if (wwin->flags.shaded) {
+                wwin->flags.shaded = 0;
+                wShadeWindow(wwin);
+            }
+            if (wwin->flags.miniaturized
+                && (wwin->transient_for == None
+                    || wwin->transient_for == scr->root_win
+                    || !windowInList(wwin->transient_for, children,
+                                     nchildren))) {
 
-		wwin->flags.skip_next_animation = 1;
-		wwin->flags.miniaturized = 0;
-		wIconifyWindow(wwin);
-	    } else {
-		wClientSetState(wwin, NormalState, None);
+                wwin->flags.skip_next_animation = 1;
+                wwin->flags.miniaturized = 0;
+                wIconifyWindow(wwin);
+            } else {
+                wClientSetState(wwin, NormalState, None);
             }
             if (crashRecovery) {
                 int border;
@@ -1136,27 +1136,27 @@ manageAllWindows(WScreen *scr, int crashRecovery)
 
                 wWindowMove(wwin, wwin->frame_x - border,
                             wwin->frame_y - border -
-			    (wwin->frame->titlebar ? 
+                            (wwin->frame->titlebar ?
                              wwin->frame->titlebar->height : 0));
             }
-	}
+        }
     }
     XUngrabServer(dpy);
 
     /* hide apps */
     wwin = scr->focused_window;
     while (wwin) {
-	if (wwin->flags.hidden) {
-	    WApplication *wapp = wApplicationOf(wwin->main_window);
+        if (wwin->flags.hidden) {
+            WApplication *wapp = wApplicationOf(wwin->main_window);
 
-	    if (wapp) {
-		wwin->flags.hidden = 0;
-		wHideApplication(wapp);
-	    } else {
-		wwin->flags.hidden = 0;
-	    }
-	}
-	wwin = wwin->prev;
+            if (wapp) {
+                wwin->flags.hidden = 0;
+                wHideApplication(wapp);
+            } else {
+                wwin->flags.hidden = 0;
+            }
+        }
+        wwin = wwin->prev;
     }
 
     XFree(children);
@@ -1164,15 +1164,14 @@ manageAllWindows(WScreen *scr, int crashRecovery)
     scr->flags.startup2 = 1;
 
     while (XPending(dpy)) {
-	XEvent ev;
-	WMNextEvent(dpy, &ev);
-	WMHandleEvent(&ev);
+        XEvent ev;
+        WMNextEvent(dpy, &ev);
+        WMHandleEvent(&ev);
     }
     wWorkspaceForceChange(scr, 0);
     if (!wPreferences.flags.noclip)
         wDockShowIcons(scr->workspaces[scr->current_workspace]->clip);
     scr->flags.startup2 = 0;
 }
-
 
 

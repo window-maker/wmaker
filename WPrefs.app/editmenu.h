@@ -1,9 +1,9 @@
 /* editmenu.h - editable menus
- * 
+ *
  *  WPrefs - Window Maker Preferences Program
- * 
+ *
  *  Copyright (c) 2000-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -32,30 +32,30 @@ typedef struct WEditMenuDelegate {
     void *data;
 
     void (*itemCloned)(struct WEditMenuDelegate*, WEditMenu*,
-		       WEditMenuItem*, WEditMenuItem *);
+                       WEditMenuItem*, WEditMenuItem *);
     void (*itemEdited)(struct WEditMenuDelegate*, WEditMenu*,
-		       WEditMenuItem*);
+                       WEditMenuItem*);
     void (*itemSelected)(struct WEditMenuDelegate*, WEditMenu*,
-			 WEditMenuItem*);
+                         WEditMenuItem*);
     void (*itemDeselected)(struct WEditMenuDelegate*, WEditMenu*,
-			   WEditMenuItem*);
+                           WEditMenuItem*);
     Bool (*shouldRemoveItem)(struct WEditMenuDelegate*, WEditMenu*,
-			     WEditMenuItem*);
+                             WEditMenuItem*);
 } WEditMenuDelegate;
 
 
 
 
-WEditMenuItem *WCreateEditMenuItem(WMWidget *parent, char *title, 
-				   Bool isTitle);
+WEditMenuItem *WCreateEditMenuItem(WMWidget *parent, char *title,
+                                   Bool isTitle);
 
 
 char *WGetEditMenuItemTitle(WEditMenuItem *item);
 
 void *WGetEditMenuItemData(WEditMenuItem *item);
 
-void WSetEditMenuItemData(WEditMenuItem *item, void *data, 
-			   WMCallback *destroyer);
+void WSetEditMenuItemData(WEditMenuItem *item, void *data,
+                          WMCallback *destroyer);
 
 void WSetEditMenuItemImage(WEditMenuItem *item, WMPixmap *pixmap);
 
@@ -65,8 +65,8 @@ WEditMenu *WCreateEditMenuPad(WMWidget *parent);
 
 void WSetEditMenuDelegate(WEditMenu *mPtr, WEditMenuDelegate *delegate);
 
-WEditMenuItem *WInsertMenuItemWithTitle(WEditMenu *mPtr, int index, 
-					char *title);
+WEditMenuItem *WInsertMenuItemWithTitle(WEditMenu *mPtr, int index,
+                                        char *title);
 
 WEditMenuItem *WAddMenuItemWithTitle(WEditMenu *mPtr, char *title);
 
@@ -79,7 +79,7 @@ char *WGetEditMenuTitle(WEditMenu *mPtr);
 void WSetEditMenuAcceptsDrop(WEditMenu *mPtr, Bool flag);
 
 void WSetEditMenuSubmenu(WEditMenu *mPtr, WEditMenuItem *item,
-			 WEditMenu *submenu);
+                         WEditMenu *submenu);
 
 
 WEditMenu *WGetEditMenuSubmenu(WEditMenu *mPtr, WEditMenuItem *item);

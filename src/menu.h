@@ -1,8 +1,8 @@
 /*
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -42,11 +42,11 @@ typedef struct WMenuEntry {
     WMPropList *instances;	       /* allowed instances */
 #endif /* USER_MENU */
     struct {
-	unsigned int enabled:1;	       /* entry is selectable */
-	unsigned int indicator:1;      /* left indicator */
-	unsigned int indicator_on:1;
-	unsigned int indicator_type:3;
-	unsigned int editable:1;
+        unsigned int enabled:1;	       /* entry is selectable */
+        unsigned int indicator:1;      /* left indicator */
+        unsigned int indicator_on:1;
+        unsigned int indicator_type:3;
+        unsigned int editable:1;
     } flags;
 } WMenuEntry;
 
@@ -56,8 +56,8 @@ typedef struct WMenu {
     struct WMenu *brother;
 
     time_t timestamp;		       /* for the root menu. Last time
-					* menu was reloaded */
-    
+                                        * menu was reloaded */
+
     /* decorations */
     struct WFrameWindow *frame;
     WCoreWindow *menu;		       /* the window menu */
@@ -65,41 +65,41 @@ typedef struct WMenu {
     int frame_x, frame_y;	       /* position of the frame in root*/
 
     WMenuEntry **entries;	       /* array of entries. This is shared
-					* by the menu and it's "brother" */
+                                        * by the menu and it's "brother" */
     short alloced_entries;	       /* number of entries allocated in
-					* entry array */
+                                        * entry array */
     struct WMenu **cascades;	       /* array of cascades */
     short cascade_no;
-      
+
     short entry_no;		       /* number of entries */
     short selected_entry;
-    
+
     short entry_height;		       /* height of each entry */
 
     WMHandlerID timer;		       /* timer for the autoscroll */
-    
-    void *jump_back;               /* jump back data */
-    
+
+    void *jump_back;                   /* jump back data */
+
     /* to be called when some entry is edited */
     void (*on_edit)(struct WMenu *menu, struct WMenuEntry *entry);
     /* to be called when destroyed */
     void (*on_destroy)(struct WMenu *menu);
 
     struct {
-	unsigned int titled:1;
-	unsigned int realized:1;       /* whether the window was configured */
-	unsigned int app_menu:1;       /* this is a application or root menu */
-	unsigned int mapped:1;	       /* if menu is already mapped on screen*/
-	unsigned int buttoned:1;       /* if the close button is visible
-					* (menu was torn off) */
-	unsigned int open_to_left:1;  /* direction to open submenus */
-	unsigned int lowered:1;
+        unsigned int titled:1;
+        unsigned int realized:1;       /* whether the window was configured */
+        unsigned int app_menu:1;       /* this is a application or root menu */
+        unsigned int mapped:1;	       /* if menu is already mapped on screen*/
+        unsigned int buttoned:1;       /* if the close button is visible
+                                        * (menu was torn off) */
+        unsigned int open_to_left:1;   /* direction to open submenus */
+        unsigned int lowered:1;
 
-	unsigned int brother:1;	       /* if this is a copy of the menu*/
-	unsigned int editing:1;
-	unsigned int jump_back_pending:1;
-	
-	unsigned int inside_handler:1;
+        unsigned int brother:1;	       /* if this is a copy of the menu*/
+        unsigned int editing:1;
+        unsigned int jump_back_pending:1;
+
+        unsigned int inside_handler:1;
     } flags;
 } WMenu;
 
@@ -107,16 +107,16 @@ typedef struct WMenu {
 void wMenuPaint(WMenu *menu);
 void wMenuDestroy(WMenu *menu, int recurse);
 void wMenuRealize(WMenu *menu);
-WMenuEntry *wMenuInsertCascade(WMenu *menu, int index, char *text, 
-			       WMenu *cascade);
-WMenuEntry *wMenuInsertCallback(WMenu *menu, int index, char *text, 
-				void (*callback)(WMenu *menu, WMenuEntry *entry),
-				void *clientdata);
+WMenuEntry *wMenuInsertCascade(WMenu *menu, int index, char *text,
+                               WMenu *cascade);
+WMenuEntry *wMenuInsertCallback(WMenu *menu, int index, char *text,
+                                void (*callback)(WMenu *menu, WMenuEntry *entry),
+                                void *clientdata);
 
 void wMenuEntrySetCascade(WMenu *menu, WMenuEntry *entry, WMenu *cascade);
 
 #define wMenuAddCallback(menu, text, callback, data) \
-	wMenuInsertCallback(menu, -1, text, callback, data)
+    wMenuInsertCallback(menu, -1, text, callback, data)
 
 void wMenuRemoveItem(WMenu *menu, int index);
 

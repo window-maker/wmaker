@@ -66,8 +66,8 @@ static void
 putdef(char *line, char *name, char *value)
 {
     if (!value) {
-	wwarning(_("could not define value for %s for cpp"), name);
-	return;
+        wwarning(_("could not define value for %s for cpp"), name);
+        return;
     }
     strcat(line, name);
     strcat(line, value);
@@ -92,18 +92,18 @@ username()
 
     tmp = getlogin();
     if (!tmp) {
-	struct passwd *user;
+        struct passwd *user;
 
-	user = getpwuid(getuid());
-	if (!user) {
-	    wsyserror(_("could not get password entry for UID %i"), getuid());
-	    return NULL;
-	}
-	if (!user->pw_name) {
-	    return NULL;
-	} else {
-	    return user->pw_name;
-	}
+        user = getpwuid(getuid());
+        if (!user) {
+            wsyserror(_("could not get password entry for UID %i"), getuid());
+            return NULL;
+        }
+        if (!user->pw_name) {
+            return NULL;
+        } else {
+            return user->pw_name;
+        }
     }
     return tmp;
 }
@@ -120,21 +120,21 @@ MakeCPPArgs(char *path)
     *line = 0;
     i=1;
     if ((buf=getenv("HOSTNAME"))!=NULL) {
-	if (buf[0]=='(') {
-	    wwarning(_("your machine is misconfigured. HOSTNAME is set to %s"),
-		     buf);
-	} else
-	  putdef(line, " -DHOST=", buf);
+        if (buf[0]=='(') {
+            wwarning(_("your machine is misconfigured. HOSTNAME is set to %s"),
+                     buf);
+        } else
+            putdef(line, " -DHOST=", buf);
     } else if ((buf=getenv("HOST"))!=NULL) {
-	if (buf[0]=='(') {
-	    wwarning(_("your machine is misconfigured. HOST is set to %s"),
-		     buf);
-	} else
-	  putdef(line, " -DHOST=", buf);
+        if (buf[0]=='(') {
+            wwarning(_("your machine is misconfigured. HOST is set to %s"),
+                     buf);
+        } else
+            putdef(line, " -DHOST=", buf);
     }
     buf = username();
     if (buf)
-      putdef(line, " -DUSER=", buf);
+        putdef(line, " -DUSER=", buf);
     putidef(line, " -DUID=", getuid());
     buf = XDisplayName(DisplayString(dpy));
     putdef(line, " -DDISPLAY=", buf);
@@ -147,22 +147,22 @@ MakeCPPArgs(char *path)
 
     putidef(line, " -DSCR_WIDTH=", WidthOfScreen(DefaultScreenOfDisplay(dpy)));
     putidef(line, " -DSCR_HEIGHT=",
-	    HeightOfScreen(DefaultScreenOfDisplay(dpy)));
+            HeightOfScreen(DefaultScreenOfDisplay(dpy)));
 
     /* put the dir where the menu is being read from to the
      * search path */
     if (path) {
-	tmp = wstrdup(path);
-	buf = strchr(tmp+1, ' ');
-	if (buf) {
-	    *buf = 0;
-	}
-	buf = strrchr(tmp, '/');
-	if (buf) {
-	    *buf = 0; /* trunc filename */
-	    putdef(line, " -I", tmp);
-	}
-	wfree(tmp);
+        tmp = wstrdup(path);
+        buf = strchr(tmp+1, ' ');
+        if (buf) {
+            *buf = 0;
+        }
+        buf = strrchr(tmp, '/');
+        if (buf) {
+            *buf = 0; /* trunc filename */
+            putdef(line, " -I", tmp);
+        }
+        wfree(tmp);
     }
 
 
@@ -171,20 +171,20 @@ MakeCPPArgs(char *path)
     buf = strtok(buffer, ":");
 
     do {
-      char fullpath[MAXLINE];
+        char fullpath[MAXLINE];
 
-      if (buf[0]!='~') {
-	strcpy(fullpath, buf);
-      } else {
-	char * wgethomedir();
-	/* home is statically allocated. Don't free it! */
-	char *home = wgethomedir();
+        if (buf[0]!='~') {
+            strcpy(fullpath, buf);
+        } else {
+            char * wgethomedir();
+            /* home is statically allocated. Don't free it! */
+            char *home = wgethomedir();
 
-	strcpy(fullpath, home);
-	strcat(fullpath, &(buf[1]));
-      }
+            strcpy(fullpath, home);
+            strcat(fullpath, &(buf[1]));
+        }
 
-      putdef(line, " -I", fullpath);
+        putdef(line, " -I", fullpath);
 
     } while ((buf = strtok(NULL, ":"))!=NULL);
 
@@ -212,18 +212,18 @@ isBelow(WWindow *win1, WWindow *win2)
 
     tmp = win1->frame->core->stacking->under;
     while (tmp) {
-	if (tmp == win2->frame->core)
-	    return True;
-	tmp = tmp->stacking->under;
+        if (tmp == win2->frame->core)
+            return True;
+        tmp = tmp->stacking->under;
     }
 
     for (i=win1->frame->core->stacking->window_level-1; i>=0; i--) {
-	tmp = win1->screen_ptr->stacking_list[i];
-	while (tmp) {
-	    if (tmp == win2->frame->core)
-		return True;
-	    tmp = tmp->stacking->under;
-	}
+        tmp = win1->screen_ptr->stacking_list[i];
+        while (tmp) {
+            if (tmp == win2->frame->core)
+                return True;
+            tmp = tmp->stacking->under;
+        }
     }
     return True;
 }
@@ -246,32 +246,32 @@ char **winname;
     int num;
 
     if (XGetWMName(dpy, win, &text_prop)) {
-	if (text_prop.value && text_prop.nitems > 0) {
-	    if (text_prop.encoding == XA_STRING) {
-		*winname = wstrdup((char *)text_prop.value);
-		XFree(text_prop.value);
-	    } else {
-		text_prop.nitems = strlen((char *)text_prop.value);
-		if (XmbTextPropertyToTextList(dpy, &text_prop, &list, &num) >=
-		    Success && num > 0 && *list) {
-		    XFree(text_prop.value);
-		    *winname = wstrdup(*list);
-		    XFreeStringList(list);
-		} else {
-		    *winname = wstrdup((char *)text_prop.value);
-		    XFree(text_prop.value);
-		}
-	    }
-	} else {
-	    /* the title is set, but it was set to none */
-	    *winname = wstrdup("");
-	}
-	return True;
+        if (text_prop.value && text_prop.nitems > 0) {
+            if (text_prop.encoding == XA_STRING) {
+                *winname = wstrdup((char *)text_prop.value);
+                XFree(text_prop.value);
+            } else {
+                text_prop.nitems = strlen((char *)text_prop.value);
+                if (XmbTextPropertyToTextList(dpy, &text_prop, &list, &num) >=
+                    Success && num > 0 && *list) {
+                    XFree(text_prop.value);
+                    *winname = wstrdup(*list);
+                    XFreeStringList(list);
+                } else {
+                    *winname = wstrdup((char *)text_prop.value);
+                    XFree(text_prop.value);
+                }
+            }
+        } else {
+            /* the title is set, but it was set to none */
+            *winname = wstrdup("");
+        }
+        return True;
     } else {
-	/* the hint is probably not set */
-	*winname = NULL;
+        /* the hint is probably not set */
+        *winname = NULL;
 
-	return False;
+        return False;
     }
 }
 
@@ -291,20 +291,20 @@ char **iconname;
     int num;
 
     if (XGetWMIconName(dpy, win, &text_prop) != 0 && text_prop.value
-	&& text_prop.nitems > 0) {
-	if (text_prop.encoding == XA_STRING)
-	    *iconname = (char *)text_prop.value;
-	else {
-	    text_prop.nitems = strlen((char *)text_prop.value);
-	    if (XmbTextPropertyToTextList(dpy, &text_prop, &list, &num) >=
-		Success && num > 0 && *list) {
-		XFree(text_prop.value);
-		*iconname = wstrdup(*list);
-		XFreeStringList(list);
-	    } else
-		*iconname = (char *)text_prop.value;
-	}
-	return True;
+        && text_prop.nitems > 0) {
+        if (text_prop.encoding == XA_STRING)
+            *iconname = (char *)text_prop.value;
+        else {
+            text_prop.nitems = strlen((char *)text_prop.value);
+            if (XmbTextPropertyToTextList(dpy, &text_prop, &list, &num) >=
+                Success && num > 0 && *list) {
+                XFree(text_prop.value);
+                *iconname = wstrdup(*list);
+                XFreeStringList(list);
+            } else
+                *iconname = (char *)text_prop.value;
+        }
+        return True;
     }
     *iconname = NULL;
     return False;
@@ -319,14 +319,14 @@ eatExpose()
     /* compress all expose events into a single one */
 
     if (XCheckMaskEvent(dpy, ExposureMask, &event)) {
-	/* ignore other exposure events for this window */
-	while (XCheckWindowEvent(dpy, event.xexpose.window, ExposureMask,
-			       &foo));
-	/* eat exposes for other windows */
-	eatExpose();
+        /* ignore other exposure events for this window */
+        while (XCheckWindowEvent(dpy, event.xexpose.window, ExposureMask,
+                                 &foo));
+        /* eat exposes for other windows */
+        eatExpose();
 
-	event.xexpose.count = 0;
-	XPutBackEvent(dpy, &event);
+        event.xexpose.count = 0;
+        XPutBackEvent(dpy, &event);
     }
 }
 
@@ -340,15 +340,15 @@ SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
 
     /* animation parameters */
     static struct {
-	int delay;
-	int steps;
-	int slowdown;
+        int delay;
+        int steps;
+        int slowdown;
     } apars[5] = {
-	{ICON_SLIDE_DELAY_UF, ICON_SLIDE_STEPS_UF, ICON_SLIDE_SLOWDOWN_UF},
-	{ICON_SLIDE_DELAY_F, ICON_SLIDE_STEPS_F, ICON_SLIDE_SLOWDOWN_F},
-	{ICON_SLIDE_DELAY_M, ICON_SLIDE_STEPS_M, ICON_SLIDE_SLOWDOWN_M},
-	{ICON_SLIDE_DELAY_S, ICON_SLIDE_STEPS_S, ICON_SLIDE_SLOWDOWN_S},
-	{ICON_SLIDE_DELAY_US, ICON_SLIDE_STEPS_US, ICON_SLIDE_SLOWDOWN_US}};
+        {ICON_SLIDE_DELAY_UF, ICON_SLIDE_STEPS_UF, ICON_SLIDE_SLOWDOWN_UF},
+        {ICON_SLIDE_DELAY_F, ICON_SLIDE_STEPS_F, ICON_SLIDE_SLOWDOWN_F},
+        {ICON_SLIDE_DELAY_M, ICON_SLIDE_STEPS_M, ICON_SLIDE_SLOWDOWN_M},
+        {ICON_SLIDE_DELAY_S, ICON_SLIDE_STEPS_S, ICON_SLIDE_SLOWDOWN_S},
+        {ICON_SLIDE_DELAY_US, ICON_SLIDE_STEPS_US, ICON_SLIDE_SLOWDOWN_US}};
 
 
 
@@ -378,7 +378,7 @@ SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
     }
 
     while (x != to_x || y != to_y) {
-	x += px;
+        x += px;
         y += py;
         if ((px<0 && (int)x < to_x) || (px>0 && (int)x > to_x))
             x = (float)to_x;
@@ -408,8 +408,8 @@ SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
         } else {
             wusleep(10);
         }
-	if (time(NULL) - time0 > MAX_ANIMATION_TIME)
-	    break;
+        if (time(NULL) - time0 > MAX_ANIMATION_TIME)
+            break;
     }
     XMoveWindow(dpy, win, to_x, to_y);
 
@@ -429,37 +429,37 @@ ShrinkString(WMFont *font, char *string, int width)
     int p1, p2, t;
 
     if (wPreferences.multi_byte_text)
-	return wstrdup(string);
+        return wstrdup(string);
 
     p = strlen(string);
     w = WMWidthOfString(font, string, p);
     text = wmalloc(strlen(string)+8);
     strcpy(text, string);
     if (w<=width)
-      return text;
+        return text;
 
     pos = strchr(text, ' ');
     if (!pos)
-      pos = strchr(text, ':');
+        pos = strchr(text, ':');
 
     if (pos) {
-	*pos = 0;
-	p = strlen(text);
-    w1 = WMWidthOfString(font, text, p);
-	if (w1 > width) {
-	    w1 = 0;
-	    p = 0;
-	    *pos = ' ';
-	    *text = 0;
-	} else {
-	    *pos = 0;
-	    width -= w1;
-	    p++;
-	}
-	string += p;
-	p=strlen(string);
+        *pos = 0;
+        p = strlen(text);
+        w1 = WMWidthOfString(font, text, p);
+        if (w1 > width) {
+            w1 = 0;
+            p = 0;
+            *pos = ' ';
+            *text = 0;
+        } else {
+            *pos = 0;
+            width -= w1;
+            p++;
+        }
+        string += p;
+        p=strlen(string);
     } else {
-	*text=0;
+        *text=0;
     }
     strcat(text, "...");
     width -= WMWidthOfString(font, "...", 3);
@@ -468,15 +468,15 @@ ShrinkString(WMFont *font, char *string, int width)
     p2=p;
     t = (p2-p1)/2;
     while (p2>p1 && p1!=t) {
-	w = WMWidthOfString(font, &string[p-t], t);
-	if (w>width) {
-	    p2 = t;
-	    t = p1+(p2-p1)/2;
-	} else if (w<width) {
-	    p1 = t;
-	    t = p1+(p2-p1)/2;
-	} else
-	  p2=p1=t;
+        w = WMWidthOfString(font, &string[p-t], t);
+        if (w>width) {
+            p2 = t;
+            t = p1+(p2-p1)/2;
+        } else if (w<width) {
+            p1 = t;
+            t = p1+(p2-p1)/2;
+        } else
+            p2=p1=t;
     }
     strcat(text, &string[p-p1]);
 
@@ -491,12 +491,12 @@ FindImage(char *paths, char *file)
 
     tmp = strrchr(file, ':');
     if (tmp) {
-	*tmp = 0;
-	path = wfindfile(paths, file);
-	*tmp = ':';
+        *tmp = 0;
+        path = wfindfile(paths, file);
+        *tmp = ':';
     }
     if (!tmp || !path) {
-	path = wfindfile(paths, file);
+        path = wfindfile(paths, file);
     }
 
     return path;
@@ -516,88 +516,88 @@ getTextSelection(WScreen *screen, Atom selection)
     int buffer = -1;
 
     switch (selection) {
-     case XA_CUT_BUFFER0:
-	buffer = 0;
-	break;
-     case XA_CUT_BUFFER1:
-	buffer = 1;
-	break;
-     case XA_CUT_BUFFER2:
-	buffer = 2;
-	break;
-     case XA_CUT_BUFFER3:
-	buffer = 3;
-	break;
-     case XA_CUT_BUFFER4:
-	buffer = 4;
-	break;
-     case XA_CUT_BUFFER5:
-	buffer = 5;
-	break;
-     case XA_CUT_BUFFER6:
-	buffer = 6;
-	break;
-     case XA_CUT_BUFFER7:
-	buffer = 7;
-	break;
+    case XA_CUT_BUFFER0:
+        buffer = 0;
+        break;
+    case XA_CUT_BUFFER1:
+        buffer = 1;
+        break;
+    case XA_CUT_BUFFER2:
+        buffer = 2;
+        break;
+    case XA_CUT_BUFFER3:
+        buffer = 3;
+        break;
+    case XA_CUT_BUFFER4:
+        buffer = 4;
+        break;
+    case XA_CUT_BUFFER5:
+        buffer = 5;
+        break;
+    case XA_CUT_BUFFER6:
+        buffer = 6;
+        break;
+    case XA_CUT_BUFFER7:
+        buffer = 7;
+        break;
     }
     if (buffer >= 0) {
-	char *data;
-	int size;
+        char *data;
+        int size;
 
-	data = XFetchBuffer(dpy, &size, buffer);
+        data = XFetchBuffer(dpy, &size, buffer);
 
-	return data;
+        return data;
     } else {
-	char *data;
-	int bits;
-	Atom rtype;
-	unsigned long len, bytes;
-	WMHandlerID timer;
-	int timeout = 0;
-	XEvent ev;
-	static Atom clipboard = 0;
+        char *data;
+        int bits;
+        Atom rtype;
+        unsigned long len, bytes;
+        WMHandlerID timer;
+        int timeout = 0;
+        XEvent ev;
+        static Atom clipboard = 0;
 
-	if (!clipboard)
-	    clipboard = XInternAtom(dpy, "CLIPBOARD", False);
+        if (!clipboard)
+            clipboard = XInternAtom(dpy, "CLIPBOARD", False);
 
-	XDeleteProperty(dpy, screen->info_window, clipboard);
+        XDeleteProperty(dpy, screen->info_window, clipboard);
 
-	XConvertSelection(dpy, selection, XA_STRING,
-			  clipboard, screen->info_window,
-			  CurrentTime);
+        XConvertSelection(dpy, selection, XA_STRING,
+                          clipboard, screen->info_window,
+                          CurrentTime);
 
-	timer = WMAddTimerHandler(1000, timeoutHandler, &timeout);
+        timer = WMAddTimerHandler(1000, timeoutHandler, &timeout);
 
-	while (!XCheckTypedWindowEvent(dpy, screen->info_window,
-				       SelectionNotify, &ev) && !timeout);
+        while (!XCheckTypedWindowEvent(dpy, screen->info_window,
+                                       SelectionNotify, &ev) && !timeout);
 
-	if (!timeout) {
-	    WMDeleteTimerHandler(timer);
-	} else {
-	    wwarning("selection retrieval timed out");
-	    return NULL;
-	}
+        if (!timeout) {
+            WMDeleteTimerHandler(timer);
+        } else {
+            wwarning("selection retrieval timed out");
+            return NULL;
+        }
 
-	/* nobody owns the selection or the current owner has
-	 * nothing to do with what we need */
-	if (ev.xselection.property == None) {
-	    return NULL;
-	}
+        /* nobody owns the selection or the current owner has
+         * nothing to do with what we need */
+        if (ev.xselection.property == None) {
+            return NULL;
+        }
 
-	if (XGetWindowProperty(dpy, screen->info_window,
-			       clipboard, 0, 1024,
-			       False, XA_STRING, &rtype, &bits, &len,
-			       &bytes, (unsigned char**)&data)!=Success) {
-	    return NULL;
-	}
-	if (rtype!=XA_STRING || bits!=8) {
-	    wwarning("invalid data in text selection");
-	    if (data)
-		XFree(data);
-	    return NULL;
-	}
-	return data;
+        if (XGetWindowProperty(dpy, screen->info_window,
+                               clipboard, 0, 1024,
+                               False, XA_STRING, &rtype, &bits, &len,
+                               &bytes, (unsigned char**)&data)!=Success) {
+            return NULL;
+        }
+        if (rtype!=XA_STRING || bits!=8) {
+            wwarning("invalid data in text selection");
+            if (data)
+                XFree(data);
+            return NULL;
+        }
+        return data;
     }
 }
 
@@ -608,7 +608,7 @@ getselection(WScreen *scr)
 
     tmp = getTextSelection(scr, XA_PRIMARY);
     if (!tmp)
-	tmp = getTextSelection(scr, XA_CUT_BUFFER0);
+        tmp = getTextSelection(scr, XA_CUT_BUFFER0);
     return tmp;
 }
 
@@ -637,60 +637,60 @@ getuserinput(WScreen *scr, char *line, int *ptr)
     state = _STARTING;
     j = 0;
     for (; line[*ptr]!=0 && state!=_DONE; (*ptr)++) {
-	switch (state) {
-	 case _STARTING:
-	    if (line[*ptr]=='(') {
-		state = _TITLE;
-		begin = *ptr+1;
-	    } else {
-		state = _DONE;
-	    }
-	    break;
+        switch (state) {
+        case _STARTING:
+            if (line[*ptr]=='(') {
+                state = _TITLE;
+                begin = *ptr+1;
+            } else {
+                state = _DONE;
+            }
+            break;
 
-	 case _TITLE:
-	    if (j <= 0 && line[*ptr]==',') {
+        case _TITLE:
+            if (j <= 0 && line[*ptr]==',') {
 
-		j = 0;
-		if (*ptr > begin) {
-		    strncpy(tbuffer, &line[begin], WMIN(*ptr-begin, BUFSIZE));
-		    tbuffer[WMIN(*ptr-begin, BUFSIZE)] = 0;
-		    title = (char*)tbuffer;
-		}
-		begin = *ptr+1;
-		state = _PROMPT;
+                j = 0;
+                if (*ptr > begin) {
+                    strncpy(tbuffer, &line[begin], WMIN(*ptr-begin, BUFSIZE));
+                    tbuffer[WMIN(*ptr-begin, BUFSIZE)] = 0;
+                    title = (char*)tbuffer;
+                }
+                begin = *ptr+1;
+                state = _PROMPT;
 
-	    } else if (j <= 0 && line[*ptr]==')') {
+            } else if (j <= 0 && line[*ptr]==')') {
 
-		if (*ptr > begin) {
-		    strncpy(tbuffer, &line[begin], WMIN(*ptr-begin, BUFSIZE));
-		    tbuffer[WMIN(*ptr-begin, BUFSIZE)] = 0;
-		    title = (char*)tbuffer;
-		}
-		state = _DONE;
+                if (*ptr > begin) {
+                    strncpy(tbuffer, &line[begin], WMIN(*ptr-begin, BUFSIZE));
+                    tbuffer[WMIN(*ptr-begin, BUFSIZE)] = 0;
+                    title = (char*)tbuffer;
+                }
+                state = _DONE;
 
-	    } else if (line[*ptr]=='(') {
-		j++;
-	    } else if (line[*ptr]==')') {
-		j--;
-	    }
+            } else if (line[*ptr]=='(') {
+                j++;
+            } else if (line[*ptr]==')') {
+                j--;
+            }
 
-	    break;
+            break;
 
-	 case _PROMPT:
-	    if (line[*ptr]==')' && j==0) {
+        case _PROMPT:
+            if (line[*ptr]==')' && j==0) {
 
-		if (*ptr-begin > 1) {
-		    strncpy(pbuffer, &line[begin], WMIN(*ptr-begin, BUFSIZE));
-		    pbuffer[WMIN(*ptr-begin, BUFSIZE)] = 0;
-		    prompt = (char*)pbuffer;
-		}
-		state = _DONE;
-	    } else if (line[*ptr]=='(')
-		    j++;
-	    else if (line[*ptr]==')')
-		j--;
-	    break;
-	}
+                if (*ptr-begin > 1) {
+                    strncpy(pbuffer, &line[begin], WMIN(*ptr-begin, BUFSIZE));
+                    pbuffer[WMIN(*ptr-begin, BUFSIZE)] = 0;
+                    prompt = (char*)pbuffer;
+                }
+                state = _DONE;
+            } else if (line[*ptr]=='(')
+                j++;
+            else if (line[*ptr]==')')
+                j--;
+            break;
+        }
     }
     (*ptr)--;
 #undef _STARTING
@@ -699,9 +699,9 @@ getuserinput(WScreen *scr, char *line, int *ptr)
 #undef _DONE
 
     if (!wInputDialog(scr, title, prompt, &ret))
-	return NULL;
+        return NULL;
     else
-	return ret;
+        return ret;
 }
 
 
@@ -718,22 +718,22 @@ get_dnd_selection(WScreen *scr)
     result=XGetTextProperty(dpy, scr->root_win, &text_ret, _XA_DND_SELECTION);
 
     if (result==0 || text_ret.value==NULL || text_ret.encoding==None
-	|| text_ret.format==0 || text_ret.nitems == 0) {
-	wwarning(_("unable to get dropped data from DND drop"));
-	return NULL;
+        || text_ret.format==0 || text_ret.nitems == 0) {
+        wwarning(_("unable to get dropped data from DND drop"));
+        return NULL;
     }
 
     XTextPropertyToStringList(&text_ret, &list, &count);
 
     if (!list || count<1) {
-	XFree(text_ret.value);
-	wwarning(_("error getting dropped data from DND drop"));
-	return NULL;
+        XFree(text_ret.value);
+        wwarning(_("error getting dropped data from DND drop"));
+        return NULL;
     }
 
     flat_string = wtokenjoin(list, count);
     if (!flat_string) {
-	wwarning(_("out of memory while getting data from DND drop"));
+        wwarning(_("out of memory while getting data from DND drop"));
     }
 
     XFreeStringList(list);
@@ -778,171 +778,171 @@ ExpandOptions(WScreen *scr, char *cmdline)
     olen = len+1;
     out = malloc(olen);
     if (!out) {
-	wwarning(_("out of memory during expansion of \"%s\""));
-	return NULL;
+        wwarning(_("out of memory during expansion of \"%s\""));
+        return NULL;
     }
     *out = 0;
     ptr = 0; 			       /* input line pointer */
     optr = 0;			       /* output line pointer */
     state = S_NORMAL;
     while (ptr < len) {
-	switch (state) {
-	 case S_NORMAL:
-	    switch (cmdline[ptr]) {
-	     case '\\':
-		state = S_ESCAPE;
-		break;
-	     case '%':
-		state = S_OPTION;
-		break;
-	     default:
-		state = S_NORMAL;
-		out[optr++]=cmdline[ptr];
-		break;
-	    }
-	    break;
-	 case S_ESCAPE:
-	    switch (cmdline[ptr]) {
-	     case 'n':
-		out[optr++]=10;
-		break;
+        switch (state) {
+        case S_NORMAL:
+            switch (cmdline[ptr]) {
+            case '\\':
+                state = S_ESCAPE;
+                break;
+            case '%':
+                state = S_OPTION;
+                break;
+            default:
+                state = S_NORMAL;
+                out[optr++]=cmdline[ptr];
+                break;
+            }
+            break;
+        case S_ESCAPE:
+            switch (cmdline[ptr]) {
+            case 'n':
+                out[optr++]=10;
+                break;
 
-	     case 'r':
-		out[optr++]=13;
-		break;
+            case 'r':
+                out[optr++]=13;
+                break;
 
-	     case 't':
-		out[optr++]=9;
-		break;
+            case 't':
+                out[optr++]=9;
+                break;
 
-	     default:
-		out[optr++]=cmdline[ptr];
-	    }
-	    state = S_NORMAL;
-	    break;
-	 case S_OPTION:
-	    state = S_NORMAL;
-	    switch (cmdline[ptr]) {
-	     case 'w':
-		if (scr->focused_window
-		    && scr->focused_window->flags.focused) {
-		    snprintf(tmpbuf, sizeof(tmpbuf), "0x%x",
-			    (unsigned int)scr->focused_window->client_win);
-		    slen = strlen(tmpbuf);
-		    olen += slen;
-		    nout = realloc(out,olen);
-		    if (!nout) {
-			wwarning(_("out of memory during expansion of \"%w\""));
-			goto error;
-		    }
-		    out = nout;
-		    strcat(out,tmpbuf);
-		    optr+=slen;
-		} else {
-		    out[optr++]=' ';
-		}
-		break;
+            default:
+                out[optr++]=cmdline[ptr];
+            }
+            state = S_NORMAL;
+            break;
+        case S_OPTION:
+            state = S_NORMAL;
+            switch (cmdline[ptr]) {
+            case 'w':
+                if (scr->focused_window
+                    && scr->focused_window->flags.focused) {
+                    snprintf(tmpbuf, sizeof(tmpbuf), "0x%x",
+                             (unsigned int)scr->focused_window->client_win);
+                    slen = strlen(tmpbuf);
+                    olen += slen;
+                    nout = realloc(out,olen);
+                    if (!nout) {
+                        wwarning(_("out of memory during expansion of \"%w\""));
+                        goto error;
+                    }
+                    out = nout;
+                    strcat(out,tmpbuf);
+                    optr+=slen;
+                } else {
+                    out[optr++]=' ';
+                }
+                break;
 
-	     case 'W':
-		snprintf(tmpbuf, sizeof(tmpbuf), "0x%x",
-			(unsigned int)scr->current_workspace + 1);
-		slen = strlen(tmpbuf);
-		olen += slen;
-		nout = realloc(out,olen);
-		if (!nout) {
-		    wwarning(_("out of memory during expansion of \"%W\""));
-		    goto error;
-		}
-		out = nout;
-		strcat(out,tmpbuf);
-		optr+=slen;
-		break;
+            case 'W':
+                snprintf(tmpbuf, sizeof(tmpbuf), "0x%x",
+                         (unsigned int)scr->current_workspace + 1);
+                slen = strlen(tmpbuf);
+                olen += slen;
+                nout = realloc(out,olen);
+                if (!nout) {
+                    wwarning(_("out of memory during expansion of \"%W\""));
+                    goto error;
+                }
+                out = nout;
+                strcat(out,tmpbuf);
+                optr+=slen;
+                break;
 
-	     case 'a':
-		ptr++;
-		user_input = getuserinput(scr, cmdline, &ptr);
-		if (user_input) {
-		    slen = strlen(user_input);
-		    olen += slen;
-		    nout = realloc(out,olen);
-		    if (!nout) {
-			wwarning(_("out of memory during expansion of \"%a\""));
-			goto error;
-		    }
-		    out = nout;
-		    strcat(out,user_input);
-		    optr+=slen;
-		} else {
-		    /* Not an error, but user has Canceled the dialog box.
-		     * This will make the command to not be performed. */
-		    goto error;
-		}
-		break;
+            case 'a':
+                ptr++;
+                user_input = getuserinput(scr, cmdline, &ptr);
+                if (user_input) {
+                    slen = strlen(user_input);
+                    olen += slen;
+                    nout = realloc(out,olen);
+                    if (!nout) {
+                        wwarning(_("out of memory during expansion of \"%a\""));
+                        goto error;
+                    }
+                    out = nout;
+                    strcat(out,user_input);
+                    optr+=slen;
+                } else {
+                    /* Not an error, but user has Canceled the dialog box.
+                     * This will make the command to not be performed. */
+                    goto error;
+                }
+                break;
 
 #if defined(OFFIX_DND) || defined(XDND)
-	     case 'd':
+            case 'd':
 #ifdef XDND
-		if(scr->xdestring) {
-		    dropped_thing = wstrdup(scr->xdestring);
-		}
+                if(scr->xdestring) {
+                    dropped_thing = wstrdup(scr->xdestring);
+                }
 #endif
-		if (!dropped_thing) {
-		    dropped_thing = get_dnd_selection(scr);
-		}
-		if (!dropped_thing) {
-		    scr->flags.dnd_data_convertion_status = 1;
-		    goto error;
-		}
-		slen = strlen(dropped_thing);
-		olen += slen;
-		nout = realloc(out,olen);
-		if (!nout) {
-		    wwarning(_("out of memory during expansion of \"%d\""));
-		    goto error;
-		}
-		out = nout;
-		strcat(out,dropped_thing);
-		optr+=slen;
-		break;
+                if (!dropped_thing) {
+                    dropped_thing = get_dnd_selection(scr);
+                }
+                if (!dropped_thing) {
+                    scr->flags.dnd_data_convertion_status = 1;
+                    goto error;
+                }
+                slen = strlen(dropped_thing);
+                olen += slen;
+                nout = realloc(out,olen);
+                if (!nout) {
+                    wwarning(_("out of memory during expansion of \"%d\""));
+                    goto error;
+                }
+                out = nout;
+                strcat(out,dropped_thing);
+                optr+=slen;
+                break;
 #endif /* OFFIX_DND */
 
-	     case 's':
-		if (!selection) {
-		    selection = getselection(scr);
-		}
-		if (!selection) {
-		    wwarning(_("selection not available"));
-		    goto error;
-		}
-		slen = strlen(selection);
-		olen += slen;
-		nout = realloc(out,olen);
-		if (!nout) {
-		    wwarning(_("out of memory during expansion of \"%s\""));
-		    goto error;
-		}
-		out = nout;
-		strcat(out,selection);
-		optr+=slen;
-		break;
+            case 's':
+                if (!selection) {
+                    selection = getselection(scr);
+                }
+                if (!selection) {
+                    wwarning(_("selection not available"));
+                    goto error;
+                }
+                slen = strlen(selection);
+                olen += slen;
+                nout = realloc(out,olen);
+                if (!nout) {
+                    wwarning(_("out of memory during expansion of \"%s\""));
+                    goto error;
+                }
+                out = nout;
+                strcat(out,selection);
+                optr+=slen;
+                break;
 
-	     default:
-		out[optr++]='%';
-		out[optr++]=cmdline[ptr];
-	    }
-	    break;
-	}
-	out[optr]=0;
-	ptr++;
+            default:
+                out[optr++]='%';
+                out[optr++]=cmdline[ptr];
+            }
+            break;
+        }
+        out[optr]=0;
+        ptr++;
     }
     if (selection)
-      XFree(selection);
+        XFree(selection);
     return out;
 
-    error:
+error:
     wfree(out);
     if (selection)
-      XFree(selection);
+        XFree(selection);
     return NULL;
 }
 
@@ -955,14 +955,14 @@ ParseWindowName(WMPropList *value, char **winstance, char **wclass, char *where)
     *winstance = *wclass = NULL;
 
     if (!WMIsPLString(value)) {
-	wwarning(_("bad window name value in %s state info"), where);
-	return;
+        wwarning(_("bad window name value in %s state info"), where);
+        return;
     }
 
     name = WMGetFromPLString(value);
     if (!name || strlen(name)==0) {
-	wwarning(_("bad window name value in %s state info"), where);
-	return;
+        wwarning(_("bad window name value in %s state info"), where);
+        return;
     }
 
     UnescapeWM_CLASS(name, winstance, wclass);
@@ -1002,7 +1002,7 @@ GetShortcutString(char *text)
     char *buffer = NULL;
     char *k;
     int modmask = 0;
-/*    KeySym ksym;*/
+    /*    KeySym ksym;*/
     int control = 0;
     char *tmp;
 
@@ -1010,51 +1010,51 @@ GetShortcutString(char *text)
 
     /* get modifiers */
     while ((k = strchr(text, '+'))!=NULL) {
-	int mod;
+        int mod;
 
-	*k = 0;
-	mod = wXModifierFromKey(text);
-	if (mod<0) {
-	    return wstrdup("bug");
-	}
+        *k = 0;
+        mod = wXModifierFromKey(text);
+        if (mod<0) {
+            return wstrdup("bug");
+        }
 
-	modmask |= mod;
+        modmask |= mod;
 
-	if (strcasecmp(text, "Meta")==0) {
-	    buffer = wstrappend(buffer, "M+");
-	} else if (strcasecmp(text, "Alt")==0) {
-	    buffer = wstrappend(buffer, "A+");
-	} else if (strcasecmp(text, "Shift")==0) {
-	    buffer = wstrappend(buffer, "Sh+");
-	} else if (strcasecmp(text, "Mod1")==0) {
-	    buffer = wstrappend(buffer, "M1+");
-	} else if (strcasecmp(text, "Mod2")==0) {
-	    buffer = wstrappend(buffer, "M2+");
-	} else if (strcasecmp(text, "Mod3")==0) {
-	    buffer = wstrappend(buffer, "M3+");
-	} else if (strcasecmp(text, "Mod4")==0) {
-	    buffer = wstrappend(buffer, "M4+");
-	} else if (strcasecmp(text, "Mod5")==0) {
-	    buffer = wstrappend(buffer, "M5+");
-	} else if (strcasecmp(text, "Control")==0) {
-	    control = 1;
-	} else {
-	    buffer = wstrappend(buffer, text);
-	}
-	text = k+1;
+        if (strcasecmp(text, "Meta")==0) {
+            buffer = wstrappend(buffer, "M+");
+        } else if (strcasecmp(text, "Alt")==0) {
+            buffer = wstrappend(buffer, "A+");
+        } else if (strcasecmp(text, "Shift")==0) {
+            buffer = wstrappend(buffer, "Sh+");
+        } else if (strcasecmp(text, "Mod1")==0) {
+            buffer = wstrappend(buffer, "M1+");
+        } else if (strcasecmp(text, "Mod2")==0) {
+            buffer = wstrappend(buffer, "M2+");
+        } else if (strcasecmp(text, "Mod3")==0) {
+            buffer = wstrappend(buffer, "M3+");
+        } else if (strcasecmp(text, "Mod4")==0) {
+            buffer = wstrappend(buffer, "M4+");
+        } else if (strcasecmp(text, "Mod5")==0) {
+            buffer = wstrappend(buffer, "M5+");
+        } else if (strcasecmp(text, "Control")==0) {
+            control = 1;
+        } else {
+            buffer = wstrappend(buffer, text);
+        }
+        text = k+1;
     }
 
     if (control) {
-	buffer = wstrappend(buffer, "^");
+        buffer = wstrappend(buffer, "^");
     }
     buffer = wstrappend(buffer, text);
 
     /* get key */
-/*    ksym = XStringToKeysym(text);
-    tmp = keysymToString(ksym, modmask);
-    puts(tmp);
-    buffer = wstrappend(buffer, tmp);
-*/
+    /*    ksym = XStringToKeysym(text);
+     tmp = keysymToString(ksym, modmask);
+     puts(tmp);
+     buffer = wstrappend(buffer, tmp);
+     */
     wfree(tmp);
 
     return buffer;
@@ -1069,49 +1069,49 @@ EscapeWM_CLASS(char *name, char *class)
     int i, j, l;
 
     if (!name && !class)
-	return NULL;
+        return NULL;
 
     if (name) {
-	l = strlen(name);
-	ename = wmalloc(l*2+1);
-	j = 0;
-	for (i=0; i<l; i++) {
-	    if (name[i]=='\\') {
-		ename[j++] = '\\';
-	    } else if (name[i]=='.') {
-		ename[j++] = '\\';
-	    }
-	    ename[j++] = name[i];
-	}
-	ename[j] = 0;
+        l = strlen(name);
+        ename = wmalloc(l*2+1);
+        j = 0;
+        for (i=0; i<l; i++) {
+            if (name[i]=='\\') {
+                ename[j++] = '\\';
+            } else if (name[i]=='.') {
+                ename[j++] = '\\';
+            }
+            ename[j++] = name[i];
+        }
+        ename[j] = 0;
     }
     if (class) {
-	l = strlen(class);
-	eclass = wmalloc(l*2+1);
-	j = 0;
-	for (i=0; i<l; i++) {
-	    if (class[i]=='\\') {
-		eclass[j++] = '\\';
-	    } else if (class[i]=='.') {
-		eclass[j++] = '\\';
-	    }
-	    eclass[j++] = class[i];
-	}
-	eclass[j] = 0;
+        l = strlen(class);
+        eclass = wmalloc(l*2+1);
+        j = 0;
+        for (i=0; i<l; i++) {
+            if (class[i]=='\\') {
+                eclass[j++] = '\\';
+            } else if (class[i]=='.') {
+                eclass[j++] = '\\';
+            }
+            eclass[j++] = class[i];
+        }
+        eclass[j] = 0;
     }
 
     if (ename && eclass) {
-	int len = strlen(ename)+strlen(eclass)+4;
-	ret = wmalloc(len);
-	snprintf(ret, len, "%s.%s", ename, eclass);
-	wfree(ename);
-	wfree(eclass);
+        int len = strlen(ename)+strlen(eclass)+4;
+        ret = wmalloc(len);
+        snprintf(ret, len, "%s.%s", ename, eclass);
+        wfree(ename);
+        wfree(eclass);
     } else if (ename) {
-	ret = wstrdup(ename);
-	wfree(ename);
+        ret = wstrdup(ename);
+        wfree(ename);
     } else {
-	ret = wstrdup(eclass);
-	wfree(eclass);
+        ret = wstrdup(eclass);
+        wfree(eclass);
     }
 
     return ret;
@@ -1161,12 +1161,12 @@ UnescapeWM_CLASS(char *str, char **name, char **class)
     (*class)[k] = 0;
 
     if (!*name) {
-	wfree(*name);
-	*name = NULL;
+        wfree(*name);
+        *name = NULL;
     }
     if (!*class) {
-	wfree(*class);
-	*class = NULL;
+        wfree(*class);
+        *class = NULL;
     }
 }
 
@@ -1181,7 +1181,7 @@ SendHelperMessage(WScreen *scr, char type, int workspace, char *msg)
     char buf[16];
 
     if (!scr->flags.backimage_helper_launched) {
-	return;
+        return;
     }
 
     len = (msg ? strlen(msg) : 0) + (workspace >=0 ? 4 : 0) + 1 ;
@@ -1191,16 +1191,16 @@ SendHelperMessage(WScreen *scr, char type, int workspace, char *msg)
     buffer[4] = type;
     i = 5;
     if (workspace >= 0) {
-	snprintf(buf, sizeof(buf), "%4i", workspace);
-	memcpy(&buffer[i], buf, 4);
-	i += 4;
-	buffer[i] = 0;
+        snprintf(buf, sizeof(buf), "%4i", workspace);
+        memcpy(&buffer[i], buf, 4);
+        i += 4;
+        buffer[i] = 0;
     }
     if (msg)
-	strcpy(&buffer[i], msg);
+        strcpy(&buffer[i], msg);
 
     if (write(scr->helper_fd, buffer, len+4) < 0) {
-	wsyserror(_("could not send message to background image helper"));
+        wsyserror(_("could not send message to background image helper"));
     }
     wfree(buffer);
 }
@@ -1249,9 +1249,9 @@ StrConcatDot(char *a, char *b)
     char *str;
 
     if (!a)
-	a = "";
+        a = "";
     if (!b)
-	b = "";
+        b = "";
 
     len = strlen(a)+strlen(b)+4;
     str = wmalloc(len);

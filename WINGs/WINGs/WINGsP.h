@@ -79,7 +79,7 @@ typedef struct W_Color {
     short refCount;
     GC gc;
     struct {
-	unsigned int exact:1;
+        unsigned int exact:1;
     } flags;
 } W_Color;
 
@@ -196,13 +196,13 @@ typedef struct W_Screen {
     struct W_Window *windowList;       /* list of windows in the app */
 
     Window groupLeader;		       /* the leader of the application */
-    				       /* also used for other things */
+                                       /* also used for other things */
 
     struct W_SelectionHandlers *selectionHandlerList;
 
     struct {
-	unsigned int hasAppIcon:1;
-	unsigned int simpleApplication:1;
+        unsigned int hasAppIcon:1;
+        unsigned int simpleApplication:1;
     } aflags;
 
     WMOpenPanel *sharedOpenPanel;
@@ -296,7 +296,7 @@ typedef struct W_Screen {
     struct W_Pixmap *altUnmountIcon;
 
     struct W_Pixmap *magnifyIcon;
-/*    struct W_Pixmap *altMagnifyIcon;*/
+    /*struct W_Pixmap *altMagnifyIcon;*/
     struct W_Pixmap *wheelIcon;
     struct W_Pixmap *grayIcon;
     struct W_Pixmap *rgbIcon;
@@ -364,7 +364,7 @@ typedef struct W_ViewDelegate {
     void (*willMove)(struct W_ViewDelegate*, WMView*, int*, int*);
 
     void (*willResize)(struct W_ViewDelegate*, WMView*,
-		       unsigned int*, unsigned int*);
+                       unsigned int*, unsigned int*);
 } W_ViewDelegate;
 
 
@@ -373,7 +373,7 @@ typedef struct W_View {
     struct W_Screen *screen;
 
     WMWidget *self;		       /* must point to the widget the
-					* view belongs to */
+    * view belongs to */
 
     W_ViewDelegate *delegate;
 
@@ -553,8 +553,8 @@ void W_PaintTextAndImage(W_View *view, int wrap, WMColor *textColor,
                          WMImagePosition position, WMColor *backColor, int ofs);
 
 void W_PaintText(W_View *view, Drawable d, WMFont *font,  int x, int y,
-		 int width, WMAlignment alignment, WMColor *color,
-		 int wrap, char *text, int length);
+                 int width, WMAlignment alignment, WMColor *color,
+                 int wrap, char *text, int length);
 
 int W_GetTextHeight(WMFont *font, char *text, int width, int wrap);
 
@@ -649,3 +649,4 @@ void W_FreeViewXdndPart(WMView *view);
 #endif /* __cplusplus */
 
 #endif /* _WINGSP_H_ */
+

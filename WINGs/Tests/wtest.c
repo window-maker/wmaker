@@ -28,7 +28,7 @@ Display *dpy;
 int windowCount = 0;
 
 void
-    closeAction(WMWidget *self, void *data)
+closeAction(WMWidget *self, void *data)
 {
     WMDestroyWidget(self);
     windowCount--;
@@ -117,13 +117,13 @@ testFrame(WMScreen *scr)
 
 
 /*static void
-resizedWindow(void *self, WMNotification *notif)
-{
-    WMView *view = (WMView*)WMGetNotificationObject(notif);
-    WMSize size = WMGetViewSize(view);
+ resizedWindow(void *self, WMNotification *notif)
+ {
+ WMView *view = (WMView*)WMGetNotificationObject(notif);
+ WMSize size = WMGetViewSize(view);
 
-    WMResizeWidget((WMWidget*)self, size.width, size.height);
-}*/
+ WMResizeWidget((WMWidget*)self, size.width, size.height);
+ }*/
 
 void
 testBox(WMScreen *scr)
@@ -1071,3 +1071,4 @@ main(int argc, char **argv)
 
     return 0;
 }
+

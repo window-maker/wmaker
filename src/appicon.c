@@ -69,7 +69,7 @@ static void iconExpose(WObjDescriptor *desc, XEvent *event);
 
 WAppIcon*
 wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance,
-		      char *wm_class, int tile)
+                      char *wm_class, int tile)
 {
     WAppIcon *dicon;
     char *path;
@@ -88,26 +88,26 @@ wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance,
     scr->app_icon_list = dicon;
 
     if (command) {
-	dicon->command = wstrdup(command);
+        dicon->command = wstrdup(command);
     }
     if (wm_class)
-      dicon->wm_class = wstrdup(wm_class);
+        dicon->wm_class = wstrdup(wm_class);
     if (wm_instance)
-      dicon->wm_instance = wstrdup(wm_instance);
+        dicon->wm_instance = wstrdup(wm_instance);
 
     path = wDefaultGetIconFile(scr, wm_instance, wm_class, True);
     if (!path && command) {
-	wApplicationExtractDirPackIcon(scr, command, wm_instance, wm_class);
+        wApplicationExtractDirPackIcon(scr, command, wm_instance, wm_class);
 
-	path = wDefaultGetIconFile(scr, wm_instance, wm_class, False);
+        path = wDefaultGetIconFile(scr, wm_instance, wm_class, False);
     }
 
     if (path)
-	path = FindImage(wPreferences.icon_path, path);
+        path = FindImage(wPreferences.icon_path, path);
 
     dicon->icon = wIconCreateWithIconFile(scr, path, tile);
     if (path)
-	wfree(path);
+        wfree(path);
 #ifdef XDND
     wXDNDMakeAwareness(dicon->icon->core->window);
 #endif
@@ -117,7 +117,7 @@ wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance,
         XSetWindowAttributes attribs;
         attribs.save_under = True;
         XChangeWindowAttributes(dpy, dicon->icon->core->window,
-                CWSaveUnder, &attribs);
+                                CWSaveUnder, &attribs);
     }
 #endif
 
@@ -164,7 +164,7 @@ wAppIconCreate(WWindow *leader_win)
         XSetWindowAttributes attribs;
         attribs.save_under = True;
         XChangeWindowAttributes(dpy, aicon->icon->core->window,
-                CWSaveUnder, &attribs);
+                                CWSaveUnder, &attribs);
     }
 #endif
 #ifdef XDND
@@ -192,15 +192,15 @@ wAppIconDestroy(WAppIcon *aicon)
     RemoveFromStackList(aicon->icon->core);
     wIconDestroy(aicon->icon);
     if (aicon->command)
-	wfree(aicon->command);
+        wfree(aicon->command);
 #ifdef OFFIX_DND
     if (aicon->dnd_command)
-	wfree(aicon->dnd_command);
+        wfree(aicon->dnd_command);
 #endif
     if (aicon->wm_instance)
-      wfree(aicon->wm_instance);
+        wfree(aicon->wm_instance);
     if (aicon->wm_class)
-      wfree(aicon->wm_class);
+        wfree(aicon->wm_class);
 
     if (aicon == scr->app_icon_list) {
         if (aicon->next)
@@ -235,12 +235,12 @@ drawCorner(WIcon *icon, WWindow *wwin, int active)
     points[2].x = 2;
     points[2].y = 12;
     if (active) {
-	gc=scr->focused_texture->any.gc;
+        gc=scr->focused_texture->any.gc;
     } else {
-	gc=scr->unfocused_texture->any.gc;
+        gc=scr->unfocused_texture->any.gc;
     }
     XFillPolygon(dpy, icon->core->window, gc, points, 3,
-		 Convex, CoordModeOrigin);
+                 Convex, CoordModeOrigin);
 }
 #endif /* NEWAPPICON */
 
@@ -292,17 +292,17 @@ updateDockNumbers(WScreen *scr)
 
     ws_numbers = wmalloc(20);
     snprintf(ws_numbers, 20, "%i [ %i ]", scr->current_workspace+1,
-	    ((scr->current_workspace/10)+1));
+             ((scr->current_workspace/10)+1));
     length = strlen(ws_numbers);
-    
+
     XClearArea(dpy, dicon->icon->core->window, 2, 2, 50,
-	       WMFontHeight(scr->icon_title_font)+1, False);
-    
+               WMFontHeight(scr->icon_title_font)+1, False);
+
     WMDrawString(scr->wmscreen, dicon->icon->core->window, scr->black,
-		 scr->icon_title_font, 4, 3, ws_numbers, length);
+                 scr->icon_title_font, 4, 3, ws_numbers, length);
 
     WMDrawString(scr->wmscreen, dicon->icon->core->window, scr->white,
-		 scr->icon_title_font, 3, 2, ws_numbers, length);
+                 scr->icon_title_font, 3, 2, ws_numbers, length);
 
     wfree(ws_numbers);
 }
@@ -312,13 +312,13 @@ updateDockNumbers(WScreen *scr)
 void
 wAppIconPaint(WAppIcon *aicon)
 {
-    WApplication *wapp;    
+    WApplication *wapp;
     WScreen *scr = aicon->icon->core->screen_ptr;
 
     if (aicon->icon->owner)
-	wapp = wApplicationOf(aicon->icon->owner->main_window);
+        wapp = wApplicationOf(aicon->icon->owner->main_window);
     else
-	wapp = NULL;
+        wapp = NULL;
 
     wIconPaint(aicon->icon);
 
@@ -326,25 +326,25 @@ wAppIconPaint(WAppIcon *aicon)
 # ifdef WS_INDICATOR
     if (aicon->docked && scr->dock && scr->dock==aicon->dock &&
         aicon->yindex==0)
-	updateDockNumbers(scr);
+        updateDockNumbers(scr);
 # endif
     if (scr->dock_dots && aicon->docked && !aicon->running
-	&& aicon->command!=NULL) {
-	XSetClipMask(dpy, scr->copy_gc, scr->dock_dots->mask);
-	XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
-	XCopyArea(dpy, scr->dock_dots->image, aicon->icon->core->window,
-		  scr->copy_gc, 0, 0, scr->dock_dots->width,
-		  scr->dock_dots->height, 0, 0);
-    }       
-    
+        && aicon->command!=NULL) {
+        XSetClipMask(dpy, scr->copy_gc, scr->dock_dots->mask);
+        XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
+        XCopyArea(dpy, scr->dock_dots->image, aicon->icon->core->window,
+                  scr->copy_gc, 0, 0, scr->dock_dots->width,
+                  scr->dock_dots->height, 0, 0);
+    }
+
 #ifdef HIDDENDOT
     if (wapp && wapp->flags.hidden) {
-	XSetClipMask(dpy, scr->copy_gc, scr->dock_dots->mask);
-	XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
-	XCopyArea(dpy, scr->dock_dots->image,
-		  aicon->icon->core->window,
-		  scr->copy_gc, 0, 0, 7,
-		  scr->dock_dots->height, 0, 0);        
+        XSetClipMask(dpy, scr->copy_gc, scr->dock_dots->mask);
+        XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
+        XCopyArea(dpy, scr->dock_dots->image,
+                  aicon->icon->core->window,
+                  scr->copy_gc, 0, 0, 7,
+                  scr->dock_dots->height, 0, 0);
     }
 #endif /* HIDDENDOT */
 
@@ -353,8 +353,8 @@ wAppIconPaint(WAppIcon *aicon)
 
     XSetClipMask(dpy, scr->copy_gc, None);
     if (aicon->launching) {
-	XFillRectangle(dpy, aicon->icon->core->window, scr->stipple_gc,
-		       0, 0, wPreferences.icon_size, wPreferences.icon_size);
+        XFillRectangle(dpy, aicon->icon->core->window, scr->stipple_gc,
+                       0, 0, wPreferences.icon_size, wPreferences.icon_size);
     }
 }
 
@@ -370,10 +370,10 @@ hideCallback(WMenu *menu, WMenuEntry *entry)
     WApplication *wapp = (WApplication*)entry->clientdata;
 
     if (wapp->flags.hidden) {
-	wWorkspaceChange(menu->menu->screen_ptr, wapp->last_workspace);
-	wUnhideApplication(wapp, False, False);
+        wWorkspaceChange(menu->menu->screen_ptr, wapp->last_workspace);
+        wUnhideApplication(wapp, False, False);
     } else {
-	wHideApplication(wapp);
+        wHideApplication(wapp);
     }
 }
 
@@ -398,7 +398,7 @@ setIconCallback(WMenu *menu, WMenuEntry *entry)
     assert(icon!=NULL);
 
     if (icon->editing)
-	return;
+        return;
     icon->editing = 1;
     scr = icon->icon->core->screen_ptr;
 
@@ -407,20 +407,20 @@ setIconCallback(WMenu *menu, WMenuEntry *entry)
     result = wIconChooserDialog(scr, &file, icon->wm_instance, icon->wm_class);
 
     if (result && !icon->destroyed) {
-	if (file && *file==0) {
-	    wfree(file);
-	    file = NULL;
-	}
-	if (!wIconChangeImageFile(icon->icon, file)) {
-	    wMessageDialog(scr, _("Error"),
-			   _("Could not open specified icon file"),
-			   _("OK"), NULL, NULL);
-	} else {
-	    wDefaultChangeIcon(scr, icon->wm_instance, icon->wm_class, file);
-	    wAppIconPaint(icon);
-	}
-	if (file)
-	    wfree(file);
+        if (file && *file==0) {
+            wfree(file);
+            file = NULL;
+        }
+        if (!wIconChangeImageFile(icon->icon, file)) {
+            wMessageDialog(scr, _("Error"),
+                           _("Could not open specified icon file"),
+                           _("OK"), NULL, NULL);
+        } else {
+            wDefaultChangeIcon(scr, icon->wm_instance, icon->wm_class, file);
+            wAppIconPaint(icon);
+        }
+        if (file)
+            wfree(file);
     }
     icon->editing = 0;
     wrelease(icon);
@@ -435,23 +435,23 @@ killCallback(WMenu *menu, WMenuEntry *entry)
     char *buffer;
 
     if (!WCHECK_STATE(WSTATE_NORMAL))
-	return;
+        return;
 
     WCHANGE_STATE(WSTATE_MODAL);
 
     assert(entry->clientdata!=NULL);
 
     buffer = wstrconcat(wapp->app_icon ? wapp->app_icon->wm_class : NULL,
-			_(" will be forcibly closed.\n"
-			  "Any unsaved changes will be lost.\n"
-			  "Please confirm."));
+                        _(" will be forcibly closed.\n"
+                          "Any unsaved changes will be lost.\n"
+                          "Please confirm."));
 
     fPtr = wapp->main_window_desc->fake_group;
 
     wretain(wapp->main_window_desc);
     if (wPreferences.dont_confirm_kill
-	|| wMessageDialog(menu->frame->screen_ptr, _("Kill Application"),
-			  buffer, _("Yes"), _("No"), NULL)==WAPRDefault) {
+        || wMessageDialog(menu->frame->screen_ptr, _("Kill Application"),
+                          buffer, _("Yes"), _("No"), NULL)==WAPRDefault) {
         if (fPtr!=NULL) {
             WWindow *wwin, *twin;
 
@@ -498,16 +498,16 @@ openApplicationMenu(WApplication *wapp, int x, int y)
     int i;
 
     if (!scr->icon_menu) {
-	scr->icon_menu = createApplicationMenu(scr);
-	wfree(scr->icon_menu->entries[1]->text);
+        scr->icon_menu = createApplicationMenu(scr);
+        wfree(scr->icon_menu->entries[1]->text);
     }
 
     menu = scr->icon_menu;
 
     if (wapp->flags.hidden) {
-	menu->entries[1]->text = _("Unhide");
+        menu->entries[1]->text = _("Unhide");
     } else {
-	menu->entries[1]->text = _("Hide");
+        menu->entries[1]->text = _("Hide");
     }
 
     menu->flags.realized = 0;
@@ -515,13 +515,13 @@ openApplicationMenu(WApplication *wapp, int x, int y)
 
     x -= menu->frame->core->width/2;
     if (x + menu->frame->core->width > scr->scr_width)
-	x = scr->scr_width - menu->frame->core->width;
+        x = scr->scr_width - menu->frame->core->width;
     if (x < 0)
-	x = 0;
+        x = 0;
 
     /* set client data */
     for (i = 0; i < menu->entry_no; i++) {
-	menu->entries[i]->clientdata = wapp;
+        menu->entries[i]->clientdata = wapp;
     }
     wMenuMapAt(menu, x, y, False);
 }
@@ -549,8 +549,8 @@ iconDblClick(WObjDescriptor *desc, XEvent *event)
     wapp = wApplicationOf(aicon->icon->owner->main_window);
 #ifdef DEBUG0
     if (!wapp) {
-	wwarning("could not find application descriptor for app icon!!");
-	return;
+        wwarning("could not find application descriptor for app icon!!");
+        return;
     }
 #endif
 
@@ -558,12 +558,12 @@ iconDblClick(WObjDescriptor *desc, XEvent *event)
 
     /* go to the last workspace that the user worked on the app */
     if (!unhideHere && wapp->last_workspace != scr->current_workspace)
-	wWorkspaceChange(scr, wapp->last_workspace);
+        wWorkspaceChange(scr, wapp->last_workspace);
 
     wUnhideApplication(wapp, event->xbutton.button==Button2, unhideHere);
 
     if (event->xbutton.state & MOD_MASK) {
-	wHideOtherApplications(aicon->icon->owner);
+        wHideOtherApplications(aicon->icon->owner);
     }
 }
 
@@ -592,56 +592,56 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
     int oldY = y;
 
     if (aicon->editing || WCHECK_STATE(WSTATE_MODAL))
-	return;
+        return;
 
     if (IsDoubleClick(scr, event)) {
-	iconDblClick(desc, event);
-	return;
+        iconDblClick(desc, event);
+        return;
     }
 
     if (event->xbutton.button == Button3) {
-	WObjDescriptor *desc;
-	WApplication *wapp = wApplicationOf(aicon->icon->owner->main_window);
+        WObjDescriptor *desc;
+        WApplication *wapp = wApplicationOf(aicon->icon->owner->main_window);
 
-	if (!wapp)
-	    return;
+        if (!wapp)
+            return;
 
-	if (event->xbutton.send_event &&
-	    XGrabPointer(dpy, aicon->icon->core->window, True, ButtonMotionMask
-			 |ButtonReleaseMask|ButtonPressMask, GrabModeAsync,
-			 GrabModeAsync, None, None, CurrentTime) !=GrabSuccess) {
-	    wwarning("pointer grab failed for appicon menu");
-	    return;
-	}
+        if (event->xbutton.send_event &&
+            XGrabPointer(dpy, aicon->icon->core->window, True, ButtonMotionMask
+                         |ButtonReleaseMask|ButtonPressMask, GrabModeAsync,
+                         GrabModeAsync, None, None, CurrentTime) !=GrabSuccess) {
+            wwarning("pointer grab failed for appicon menu");
+            return;
+        }
 
-	openApplicationMenu(wapp, event->xbutton.x_root,
-			    event->xbutton.y_root);
+        openApplicationMenu(wapp, event->xbutton.x_root,
+                            event->xbutton.y_root);
 
-	/* allow drag select of menu */
-	desc = &scr->icon_menu->menu->descriptor;
-	event->xbutton.send_event = True;
-	(*desc->handle_mousedown)(desc, event);
-	return;
+        /* allow drag select of menu */
+        desc = &scr->icon_menu->menu->descriptor;
+        event->xbutton.send_event = True;
+        (*desc->handle_mousedown)(desc, event);
+        return;
     }
 
 #ifdef DEBUG
     puts("Moving icon");
 #endif
     if (event->xbutton.state & MOD_MASK)
-	wLowerFrame(icon->core);
+        wLowerFrame(icon->core);
     else
-	wRaiseFrame(icon->core);
+        wRaiseFrame(icon->core);
 
     if (XGrabPointer(dpy, icon->core->window, True, ButtonMotionMask
-		     |ButtonReleaseMask|ButtonPressMask, GrabModeAsync,
-		     GrabModeAsync, None, None, CurrentTime) !=GrabSuccess) {
-	wwarning("pointer grab failed for appicon move");
+                     |ButtonReleaseMask|ButtonPressMask, GrabModeAsync,
+                     GrabModeAsync, None, None, CurrentTime) !=GrabSuccess) {
+        wwarning("pointer grab failed for appicon move");
     }
 
     if (wPreferences.flags.nodock && wPreferences.flags.noclip)
-      dockable = 0;
+        dockable = 0;
     else
-      dockable = canBeDocked(icon->owner);
+        dockable = canBeDocked(icon->owner);
 
     wins[0] = icon->core->window;
     wins[1] = scr->dock_shadow;
@@ -655,41 +655,41 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
                                    ghost);
         XClearWindow(dpy, scr->dock_shadow);
     }
-    
+
     while (!done) {
-	WMMaskEvent(dpy, PointerMotionMask|ButtonReleaseMask|ButtonPressMask
-		    |ButtonMotionMask|ExposureMask, &ev);
-	switch (ev.type) {
-	 case Expose:
-	    WMHandleEvent(&ev);
-	    break;
+        WMMaskEvent(dpy, PointerMotionMask|ButtonReleaseMask|ButtonPressMask
+                    |ButtonMotionMask|ExposureMask, &ev);
+        switch (ev.type) {
+        case Expose:
+            WMHandleEvent(&ev);
+            break;
 
-	 case MotionNotify:
-	    if (!grabbed) {
-		if (abs(dx-ev.xmotion.x)>=MOVE_THRESHOLD
-		    || abs(dy-ev.xmotion.y)>=MOVE_THRESHOLD) {
-		    XChangeActivePointerGrab(dpy, ButtonMotionMask
-					    |ButtonReleaseMask|ButtonPressMask,
-					     wCursor[WCUR_MOVE], CurrentTime);
-		    grabbed=1;
-		} else {
-		    break;
-		}
-	    }
-	    x = ev.xmotion.x_root - dx;
-	    y = ev.xmotion.y_root - dy;
-	    
-	    if (movingSingle) {
-		XMoveWindow(dpy, icon->core->window, x, y);
-	    } else {
-		wAppIconMove(aicon, x, y);
-	    }
+        case MotionNotify:
+            if (!grabbed) {
+                if (abs(dx-ev.xmotion.x)>=MOVE_THRESHOLD
+                    || abs(dy-ev.xmotion.y)>=MOVE_THRESHOLD) {
+                    XChangeActivePointerGrab(dpy, ButtonMotionMask
+                                             |ButtonReleaseMask|ButtonPressMask,
+                                             wCursor[WCUR_MOVE], CurrentTime);
+                    grabbed=1;
+                } else {
+                    break;
+                }
+            }
+            x = ev.xmotion.x_root - dx;
+            y = ev.xmotion.y_root - dy;
 
-	    if (dockable) {
+            if (movingSingle) {
+                XMoveWindow(dpy, icon->core->window, x, y);
+            } else {
+                wAppIconMove(aicon, x, y);
+            }
+
+            if (dockable) {
                 if (scr->dock && wDockSnapIcon(scr->dock, aicon, x, y,
                                                &ix, &iy, False)) {
                     shad_x = scr->dock->x_pos + ix*wPreferences.icon_size;
-		    shad_y = scr->dock->y_pos + iy*wPreferences.icon_size;
+                    shad_y = scr->dock->y_pos + iy*wPreferences.icon_size;
 
                     if (scr->last_dock != scr->dock && collapsed) {
                         scr->last_dock->collapsed = 1;
@@ -706,16 +706,16 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
 
                     scr->last_dock = scr->dock;
 
-		    XMoveWindow(dpy, scr->dock_shadow, shad_x, shad_y);
-		    if (!docking) {
+                    XMoveWindow(dpy, scr->dock_shadow, shad_x, shad_y);
+                    if (!docking) {
                         XMapWindow(dpy, scr->dock_shadow);
-		    }
-		    docking = 1;
+                    }
+                    docking = 1;
                 } else if (workspace->clip &&
                            wDockSnapIcon(workspace->clip, aicon, x, y,
                                          &ix, &iy, False)) {
                     shad_x = workspace->clip->x_pos + ix*wPreferences.icon_size;
-		    shad_y = workspace->clip->y_pos + iy*wPreferences.icon_size;
+                    shad_y = workspace->clip->y_pos + iy*wPreferences.icon_size;
 
                     if (scr->last_dock != workspace->clip && collapsed) {
                         scr->last_dock->collapsed = 1;
@@ -732,33 +732,33 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
 
                     scr->last_dock = workspace->clip;
 
-		    XMoveWindow(dpy, scr->dock_shadow, shad_x, shad_y);
-		    if (!docking) {
-			XMapWindow(dpy, scr->dock_shadow);
-		    }
+                    XMoveWindow(dpy, scr->dock_shadow, shad_x, shad_y);
+                    if (!docking) {
+                        XMapWindow(dpy, scr->dock_shadow);
+                    }
                     docking = 1;
-		} else if (docking) {
-		    XUnmapWindow(dpy, scr->dock_shadow);
+                } else if (docking) {
+                    XUnmapWindow(dpy, scr->dock_shadow);
                     docking = 0;
-		}
+                }
             }
 
-	    break;
+            break;
 
-	 case ButtonPress:
-	    break;
+        case ButtonPress:
+            break;
 
-	 case ButtonRelease:
-	    if (ev.xbutton.button != clickButton)
-		break;
-	    XUngrabPointer(dpy, CurrentTime);
+        case ButtonRelease:
+            if (ev.xbutton.button != clickButton)
+                break;
+            XUngrabPointer(dpy, CurrentTime);
 
             if (docking) {
-		Bool docked;
+                Bool docked;
 
-		/* icon is trying to be docked */
-		SlideWindow(icon->core->window, x, y, shad_x, shad_y);
-		XUnmapWindow(dpy, scr->dock_shadow);
+                /* icon is trying to be docked */
+                SlideWindow(icon->core->window, x, y, shad_x, shad_y);
+                XUnmapWindow(dpy, scr->dock_shadow);
                 docked = wDockAttachIcon(scr->last_dock, aicon, ix, iy);
                 if (scr->last_dock->auto_collapse) {
                     collapsed = 0;
@@ -768,43 +768,43 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
                     workspace->clip->auto_raise_lower)
                     wDockLower(workspace->clip);
 
-		if (!docked) {
+                if (!docked) {
                     /* If icon could not be docked, slide it back to the old
                      * position */
                     SlideWindow(icon->core->window, x, y, oldX, oldY);
                 }
 
-		wSoundPlay(WSOUND_DOCK);
+                wSoundPlay(WSOUND_DOCK);
             } else {
-		if (movingSingle) {
-		    /* move back to its place */
-		    SlideWindow(icon->core->window, x, y, oldX, oldY);
-		    wAppIconMove(aicon, oldX, oldY);		    
-		} else {
-		    XMoveWindow(dpy, icon->core->window, x, y);
-		    aicon->x_pos = x;
-		    aicon->y_pos = y;
-		}
+                if (movingSingle) {
+                    /* move back to its place */
+                    SlideWindow(icon->core->window, x, y, oldX, oldY);
+                    wAppIconMove(aicon, oldX, oldY);
+                } else {
+                    XMoveWindow(dpy, icon->core->window, x, y);
+                    aicon->x_pos = x;
+                    aicon->y_pos = y;
+                }
                 if (workspace->clip && workspace->clip->auto_raise_lower)
                     wDockLower(workspace->clip);
             }
-	    if (collapsed) {
-		scr->last_dock->collapsed = 1;
-		wDockHideIcons(scr->last_dock);
-		collapsed = 0;
-	    }
-	    if (superfluous) {
-		if (ghost!=None)
-		    XFreePixmap(dpy, ghost);
-		XSetWindowBackground(dpy, scr->dock_shadow, scr->white_pixel);
-	    }
+            if (collapsed) {
+                scr->last_dock->collapsed = 1;
+                wDockHideIcons(scr->last_dock);
+                collapsed = 0;
+            }
+            if (superfluous) {
+                if (ghost!=None)
+                    XFreePixmap(dpy, ghost);
+                XSetWindowBackground(dpy, scr->dock_shadow, scr->white_pixel);
+            }
 
-	    if (wPreferences.auto_arrange_icons)
-		wArrangeIcons(scr, True);
+            if (wPreferences.auto_arrange_icons)
+                wArrangeIcons(scr, True);
 
-	    done = 1;
-	    break;
-	}
+            done = 1;
+            break;
+        }
     }
 #ifdef DEBUG
     puts("End icon move");

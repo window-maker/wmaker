@@ -1,9 +1,9 @@
 /* screen.c - screen management
- * 
+ *
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -32,8 +32,8 @@
 #ifdef SHAPE
 #include <X11/extensions/shape.h>
 #endif
-#ifdef KEEP_XKB_LOCK_STATUS     
-#include <X11/XKBlib.h>         
+#ifdef KEEP_XKB_LOCK_STATUS
+#include <X11/XKBlib.h>
 #endif /* KEEP_XKB_LOCK_STATUS */
 
 #include <wraster.h>
@@ -75,13 +75,13 @@
 
 #ifdef LITE
 #define EVENT_MASK (LeaveWindowMask|EnterWindowMask|PropertyChangeMask\
-		|SubstructureNotifyMask|PointerMotionMask \
-		|SubstructureRedirectMask|KeyPressMask|KeyReleaseMask)
+    |SubstructureNotifyMask|PointerMotionMask \
+    |SubstructureRedirectMask|KeyPressMask|KeyReleaseMask)
 #else
 #define EVENT_MASK (LeaveWindowMask|EnterWindowMask|PropertyChangeMask\
-		|SubstructureNotifyMask|PointerMotionMask \
-		|SubstructureRedirectMask|ButtonPressMask|ButtonReleaseMask\
-		|KeyPressMask|KeyReleaseMask)
+    |SubstructureNotifyMask|PointerMotionMask \
+    |SubstructureRedirectMask|ButtonPressMask|ButtonReleaseMask\
+    |KeyPressMask|KeyReleaseMask)
 #endif
 
 /**** Global variables ****/
@@ -94,7 +94,7 @@ extern Atom _XA_WINDOWMAKER_NOTICEBOARD;
 
 extern int wScreenCount;
 
-#ifdef KEEP_XKB_LOCK_STATUS     
+#ifdef KEEP_XKB_LOCK_STATUS
 extern int wXkbSupported;
 #endif
 
@@ -134,15 +134,15 @@ make_keys()
  * 	X error handler used to catch errors when trying to do
  * XSelectInput() on the root window. These errors probably mean that
  * there already is some other window manager running.
- * 
+ *
  * Returns:
  * 	Nothing, unless something really evil happens...
- * 
+ *
  * Side effects:
  * 	CantManageScreen is set to 1;
- *---------------------------------------------------------------------- 
+ *----------------------------------------------------------------------
  */
-static int 
+static int
 alreadyRunningError(Display *dpy, XErrorEvent *error)
 {
     CantManageScreen = 1;
@@ -151,19 +151,19 @@ alreadyRunningError(Display *dpy, XErrorEvent *error)
 
 
 /*
- *---------------------------------------------------------------------- 
+ *----------------------------------------------------------------------
  * allocButtonPixmaps--
  * 	Allocate pixmaps used on window operation buttons (those in the
  * titlebar). The pixmaps are linked to the program. If XPM is supported
  * XPM pixmaps are used otherwise, equivalent bitmaps are used.
- * 
+ *
  * Returns:
  * 	Nothing
- * 
+ *
  * Side effects:
- * 	Allocates shared pixmaps for the screen. These pixmaps should 
+ * 	Allocates shared pixmaps for the screen. These pixmaps should
  * not be freed by anybody.
- *---------------------------------------------------------------------- 
+ *----------------------------------------------------------------------
  */
 static void
 allocButtonPixmaps(WScreen *scr)
@@ -173,41 +173,41 @@ allocButtonPixmaps(WScreen *scr)
     /* create predefined pixmaps */
     pix = wPixmapCreateFromXPMData(scr, PRED_CLOSE_XPM);
     if (pix)
-      pix->shared = 1;
+        pix->shared = 1;
     scr->b_pixmaps[WBUT_CLOSE] = pix;
 
     pix = wPixmapCreateFromXPMData(scr, PRED_BROKEN_CLOSE_XPM);
     if (pix)
-      pix->shared = 1;
+        pix->shared = 1;
     scr->b_pixmaps[WBUT_BROKENCLOSE] = pix;
 
     pix = wPixmapCreateFromXPMData(scr, PRED_ICONIFY_XPM);
     if (pix)
-      pix->shared = 1;
+        pix->shared = 1;
     scr->b_pixmaps[WBUT_ICONIFY] = pix;
 #ifdef XKB_BUTTON_HINT
     pix = wPixmapCreateFromXPMData(scr, PRED_XKBGROUP1_XPM);
     if (pix)
-      pix->shared = 1;
+        pix->shared = 1;
     scr->b_pixmaps[WBUT_XKBGROUP1] = pix;
     pix = wPixmapCreateFromXPMData(scr, PRED_XKBGROUP2_XPM);
     if (pix)
-      pix->shared = 1;
+        pix->shared = 1;
     scr->b_pixmaps[WBUT_XKBGROUP2] = pix;
     pix = wPixmapCreateFromXPMData(scr, PRED_XKBGROUP3_XPM);
     if (pix)
-      pix->shared = 1;
+        pix->shared = 1;
     scr->b_pixmaps[WBUT_XKBGROUP3] = pix;
     pix = wPixmapCreateFromXPMData(scr, PRED_XKBGROUP4_XPM);
     if (pix)
-      pix->shared = 1;
+        pix->shared = 1;
     scr->b_pixmaps[WBUT_XKBGROUP4] = pix;
 #endif
 
-    
+
     pix = wPixmapCreateFromXPMData(scr, PRED_KILL_XPM);
     if (pix)
-      pix->shared = 1;
+        pix->shared = 1;
     scr->b_pixmaps[WBUT_KILL] = pix;
 }
 
@@ -231,32 +231,32 @@ make3Dots(WScreen *scr)
     GC gc2, gc;
     XGCValues gcv;
     Pixmap pix, mask;
-    
+
     gc = scr->copy_gc;
-    pix = XCreatePixmap(dpy, scr->w_win, wPreferences.icon_size, 
-			wPreferences.icon_size,	scr->w_depth);
+    pix = XCreatePixmap(dpy, scr->w_win, wPreferences.icon_size,
+                        wPreferences.icon_size,	scr->w_depth);
     XSetForeground(dpy, gc, scr->black_pixel);
-    XFillRectangle(dpy, pix, gc, 0, 0, wPreferences.icon_size, 
-		   wPreferences.icon_size);
+    XFillRectangle(dpy, pix, gc, 0, 0, wPreferences.icon_size,
+                   wPreferences.icon_size);
     XSetForeground(dpy, gc, scr->white_pixel);
     draw_dot(scr, pix, 4, wPreferences.icon_size-6, gc);
     draw_dot(scr, pix, 9, wPreferences.icon_size-6, gc);
     draw_dot(scr, pix, 14, wPreferences.icon_size-6, gc);
 
-    mask = XCreatePixmap(dpy, scr->w_win, wPreferences.icon_size, 
-			 wPreferences.icon_size, 1);
+    mask = XCreatePixmap(dpy, scr->w_win, wPreferences.icon_size,
+                         wPreferences.icon_size, 1);
     gcv.foreground = 0;
     gcv.graphics_exposures = False;
     gc2 = XCreateGC(dpy, mask, GCForeground|GCGraphicsExposures, &gcv);
-    XFillRectangle(dpy, mask, gc2, 0, 0, wPreferences.icon_size, 
-		   wPreferences.icon_size);
+    XFillRectangle(dpy, mask, gc2, 0, 0, wPreferences.icon_size,
+                   wPreferences.icon_size);
     XSetForeground(dpy, gc2, 1);
     XFillRectangle(dpy, mask, gc2, 4, wPreferences.icon_size-6, 3, 2);
     XFillRectangle(dpy, mask, gc2, 9, wPreferences.icon_size-6, 3, 2);
     XFillRectangle(dpy, mask, gc2, 14, wPreferences.icon_size-6, 3, 2);
-    
+
     XFreeGC(dpy, gc2);
-    
+
     wpix = wPixmapCreate(scr, pix, mask);
     wpix->shared = 1;
 
@@ -271,9 +271,9 @@ allocGCs(WScreen *scr)
     XColor color;
     int gcm;
 
-    scr->stipple_bitmap = 
-      XCreateBitmapFromData(dpy, scr->w_win, STIPPLE_DATA, STIPPLE_WIDTH,
-			    STIPPLE_HEIGHT);
+    scr->stipple_bitmap =
+        XCreateBitmapFromData(dpy, scr->w_win, STIPPLE_DATA, STIPPLE_WIDTH,
+                              STIPPLE_HEIGHT);
 
     gcv.stipple = scr->stipple_bitmap;
     gcv.foreground = scr->white_pixel;
@@ -282,7 +282,7 @@ allocGCs(WScreen *scr)
     gcm = GCForeground|GCStipple|GCFillStyle|GCGraphicsExposures;
     scr->stipple_gc = XCreateGC(dpy, scr->w_win, gcm, &gcv);
 
-   
+
     /* selected icon border GCs */
     gcv.function    = GXcopy;
     gcv.foreground  = scr->white_pixel;
@@ -315,25 +315,25 @@ allocGCs(WScreen *scr)
      * of the original color in PseudoColor when not all color cells are
      * initialized */
     if (DefaultVisual(dpy, scr->screen)->class==PseudoColor)
-    	gcv.plane_mask = (1<<(scr->depth-1))|1;
+        gcv.plane_mask = (1<<(scr->depth-1))|1;
     else
-	gcv.plane_mask = AllPlanes;
+        gcv.plane_mask = AllPlanes;
     gcv.foreground = color.pixel;
     if (gcv.foreground == 0)
-	gcv.foreground = 1;
+        gcv.foreground = 1;
     gcv.line_width = DEF_FRAME_THICKNESS;
     gcv.subwindow_mode = IncludeInferiors;
     gcv.graphics_exposures = False;
     scr->frame_gc = XCreateGC(dpy, scr->root_win, GCForeground|GCGraphicsExposures
-			      |GCFunction|GCSubwindowMode|GCLineWidth
-			      |GCPlaneMask, &gcv);
-    
+                              |GCFunction|GCSubwindowMode|GCLineWidth
+                              |GCPlaneMask, &gcv);
+
     /* line GC */
     gcv.foreground = color.pixel;
 
     if (gcv.foreground == 0)
         /* XOR:ing with a zero is not going to be of much use, so
-           in that case, we somewhat arbitrarily xor with 17 instead. */
+         in that case, we somewhat arbitrarily xor with 17 instead. */
         gcv.foreground = 17;
 
     gcv.function = GXxor;
@@ -352,7 +352,7 @@ allocGCs(WScreen *scr)
     gcv.background = scr->black_pixel;
     gcv.graphics_exposures = False;
     scr->copy_gc = XCreateGC(dpy, scr->w_win, GCForeground|GCBackground
-			     |GCGraphicsExposures, &gcv);
+                             |GCGraphicsExposures, &gcv);
 
     /* misc drawing GC */
     gcv.graphics_exposures = False;
@@ -376,29 +376,29 @@ createPixmaps(WScreen *scr)
 
     /* load pixmaps */
     pix = wPixmapCreateFromXBMData(scr, (char*)MENU_RADIO_INDICATOR_XBM_DATA,
-				   (char*)MENU_RADIO_INDICATOR_XBM_DATA,
-				   MENU_RADIO_INDICATOR_XBM_SIZE,
-				   MENU_RADIO_INDICATOR_XBM_SIZE,
-				   scr->black_pixel, scr->white_pixel);
+                                   (char*)MENU_RADIO_INDICATOR_XBM_DATA,
+                                   MENU_RADIO_INDICATOR_XBM_SIZE,
+                                   MENU_RADIO_INDICATOR_XBM_SIZE,
+                                   scr->black_pixel, scr->white_pixel);
     if (pix!=NULL)
         pix->shared = 1;
     scr->menu_radio_indicator = pix;
 
 
     pix = wPixmapCreateFromXBMData(scr, (char*)MENU_CHECK_INDICATOR_XBM_DATA,
-				   (char*)MENU_CHECK_INDICATOR_XBM_DATA,
-				   MENU_CHECK_INDICATOR_XBM_SIZE,
-				   MENU_CHECK_INDICATOR_XBM_SIZE,
-				   scr->black_pixel, scr->white_pixel);
+                                   (char*)MENU_CHECK_INDICATOR_XBM_DATA,
+                                   MENU_CHECK_INDICATOR_XBM_SIZE,
+                                   MENU_CHECK_INDICATOR_XBM_SIZE,
+                                   scr->black_pixel, scr->white_pixel);
     if (pix!=NULL)
         pix->shared = 1;
     scr->menu_check_indicator = pix;
 
     pix = wPixmapCreateFromXBMData(scr, (char*)MENU_MINI_INDICATOR_XBM_DATA,
-				   (char*)MENU_MINI_INDICATOR_XBM_DATA,
-				   MENU_MINI_INDICATOR_XBM_SIZE,
-				   MENU_MINI_INDICATOR_XBM_SIZE,
-				   scr->black_pixel, scr->white_pixel);
+                                   (char*)MENU_MINI_INDICATOR_XBM_DATA,
+                                   MENU_MINI_INDICATOR_XBM_SIZE,
+                                   MENU_MINI_INDICATOR_XBM_SIZE,
+                                   scr->black_pixel, scr->white_pixel);
     if (pix!=NULL)
         pix->shared = 1;
     scr->menu_mini_indicator = pix;
@@ -425,11 +425,11 @@ createPixmaps(WScreen *scr)
     image = wDefaultGetImage(scr, "Logo", "WMPanel");
 
     if (!image) {
-	wwarning(_("could not load logo image for panels: %s"),
-		 RMessageForError(RErrorCode));
+        wwarning(_("could not load logo image for panels: %s"),
+                 RMessageForError(RErrorCode));
     } else {
         WMSetApplicationIconImage(scr->wmscreen, image);
-	RReleaseImage(image);
+        RReleaseImage(image);
     }
 
     scr->dock_dots = make3Dots(scr);
@@ -445,32 +445,32 @@ createPixmaps(WScreen *scr)
  * 	Creates some windows used internally by the program. One to
  * receive input focus when no other window can get it and another
  * to display window geometry information during window resize/move.
- * 
+ *
  * Returns:
  * 	Nothing
- * 
+ *
  * Side effects:
  * 	Windows are created and some colors are allocated for the
  * window background.
- *---------------------------------------------------------------------- 
+ *----------------------------------------------------------------------
  */
 static void
 createInternalWindows(WScreen *scr)
 {
     int vmask;
     XSetWindowAttributes attribs;
-    
+
     /* InputOnly window to get the focus when no other window can get it */
     vmask = CWEventMask|CWOverrideRedirect;
     attribs.event_mask = KeyPressMask|FocusChangeMask;
     attribs.override_redirect = True;
     scr->no_focus_win=XCreateWindow(dpy,scr->root_win,-10, -10, 4, 4, 0, 0,
-				    InputOnly,CopyFromParent, vmask, &attribs);
+                                    InputOnly,CopyFromParent, vmask, &attribs);
     XSelectInput(dpy, scr->no_focus_win, KeyPressMask|KeyReleaseMask);
     XMapWindow(dpy, scr->no_focus_win);
 
     XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, CurrentTime);
- 
+
     /* shadow window for dock buttons */
     vmask = CWBorderPixel|CWBackPixmap|CWBackPixel|CWCursor|CWSaveUnder|CWOverrideRedirect;
     attribs.border_pixel = scr->black_pixel;
@@ -482,34 +482,34 @@ createInternalWindows(WScreen *scr)
     vmask |= CWColormap;
     attribs.colormap = scr->w_colormap;
     scr->dock_shadow =
-      XCreateWindow(dpy, scr->root_win, 0, 0, wPreferences.icon_size, 
-		    wPreferences.icon_size, 0, scr->w_depth, CopyFromParent, 
-		    scr->w_visual, vmask, &attribs);
+        XCreateWindow(dpy, scr->root_win, 0, 0, wPreferences.icon_size,
+                      wPreferences.icon_size, 0, scr->w_depth, CopyFromParent,
+                      scr->w_visual, vmask, &attribs);
 
     /* workspace name balloon for clip */
     vmask = CWBackPixel|CWSaveUnder|CWOverrideRedirect|CWColormap
-	|CWBorderPixel;
+        |CWBorderPixel;
     attribs.save_under = True;
     attribs.override_redirect = True;
     attribs.colormap = scr->w_colormap;
     attribs.background_pixel = scr->icon_back_texture->normal.pixel;
     attribs.border_pixel = 0; /* do not care */
     scr->clip_balloon =
-      XCreateWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, scr->w_depth,
-		    CopyFromParent, scr->w_visual, vmask, &attribs);
+        XCreateWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, scr->w_depth,
+                      CopyFromParent, scr->w_visual, vmask, &attribs);
 
-    
+
     /* workspace name */
     vmask = CWBackPixel|CWSaveUnder|CWOverrideRedirect|CWColormap
-	|CWBorderPixel;
+        |CWBorderPixel;
     attribs.save_under = True;
     attribs.override_redirect = True;
     attribs.colormap = scr->w_colormap;
     attribs.background_pixel = scr->icon_back_texture->normal.pixel;
     attribs.border_pixel = 0; /* do not care */
     scr->workspace_name =
-      XCreateWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, scr->w_depth,
-		    CopyFromParent, scr->w_visual, vmask, &attribs);
+        XCreateWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, scr->w_depth,
+                      CopyFromParent, scr->w_visual, vmask, &attribs);
 
     /*
      * If the window is clicked without having ButtonPress selected, the
@@ -536,25 +536,25 @@ aquireManagerSelection(WScreen *scr)
     /* if there is another manager running, don't try to replace it
      * (for now, at least) */
     if (XGetSelectionOwner(dpy, scr->managerAtom) != None) {
-	XUngrabServer(dpy);
-	return False;
+        XUngrabServer(dpy);
+        return False;
     }
 
     /* become the manager for this screen */
 
     scr->managerWindow = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 1, 1,
-					     0, 0, 0);
+                                             0, 0, 0);
 
     XSelectInput(dpy, scr->managerWindow, PropertyChangeMask);
     /* get a timestamp */
     XChangeProperty(dpy, scr->managerWindow, scr->managerAtom,
-		    XA_INTEGER, 32, PropModeAppend, NULL, 0);
+                    XA_INTEGER, 32, PropModeAppend, NULL, 0);
     while (1) {
-	XWindowEvent(dpy, scr->managerWindow, &ev);
-	if (ev.type == PropertyNotify) {
-	    timestamp = ev.xproperty.time;
-	    break;
-	}
+        XWindowEvent(dpy, scr->managerWindow, &ev);
+        if (ev.type == PropertyNotify) {
+            timestamp = ev.xproperty.time;
+            break;
+        }
     }
     XSelectInput(dpy, scr->managerWindow, NoEvents);
     XDeleteProperty(dpy, scr->managerWindow, scr->managerAtom);
@@ -585,20 +585,20 @@ aquireManagerSelection(WScreen *scr)
 /*
  *----------------------------------------------------------------------
  * wScreenInit--
- * 	Initializes the window manager for the given screen and 
+ * 	Initializes the window manager for the given screen and
  * allocates a WScreen descriptor for it. Many resources are allocated
  * for the screen and the root window is setup appropriately.
  *
  * Returns:
  * 	The WScreen descriptor for the screen.
- * 
+ *
  * Side effects:
  * 	Many resources are allocated and the IconSize property is
  * set on the root window.
  *	The program can be aborted if some fatal error occurs.
- * 
+ *
  * TODO: User specifiable visual.
- *---------------------------------------------------------------------- 
+ *----------------------------------------------------------------------
  */
 WScreen*
 wScreenInit(int screen_number)
@@ -615,7 +615,7 @@ wScreenInit(int screen_number)
     memset(scr, 0, sizeof(WScreen));
 
     scr->stacking_list = WMCreateTreeBag();
-    
+
     /* initialize globals */
     scr->screen = screen_number;
     scr->root_win = RootWindow(dpy, screen_number);
@@ -631,20 +631,20 @@ wScreenInit(int screen_number)
     scr->totalUsableArea = (WArea *)wmalloc(sizeof(WArea)*wXineramaHeads(scr));
 
     for (i=0; i<wXineramaHeads(scr); ++i) {
-	WMRect rect = wGetRectForHead(scr, i);
-	scr->usableArea[i].x1 = scr->totalUsableArea[i].x1 = rect.pos.x;
-	scr->usableArea[i].y1 = scr->totalUsableArea[i].y1 = rect.pos.y;
-	scr->usableArea[i].x2 = scr->totalUsableArea[i].x2 = rect.pos.x + rect.size.width;
-	scr->usableArea[i].y2 = scr->totalUsableArea[i].y2 = rect.pos.y + rect.size.height;
+        WMRect rect = wGetRectForHead(scr, i);
+        scr->usableArea[i].x1 = scr->totalUsableArea[i].x1 = rect.pos.x;
+        scr->usableArea[i].y1 = scr->totalUsableArea[i].y1 = rect.pos.y;
+        scr->usableArea[i].x2 = scr->totalUsableArea[i].x2 = rect.pos.x + rect.size.width;
+        scr->usableArea[i].y2 = scr->totalUsableArea[i].y2 = rect.pos.y + rect.size.height;
     }
 
     scr->fakeGroupLeaders = WMCreateArray(16);
 
 #if 0
     if (!aquireManagerSelection(scr)) {
-	wfree(scr);
+        wfree(scr);
 
-	return NULL;
+        return NULL;
     }
 #endif
     CantManageScreen = 0;
@@ -653,86 +653,86 @@ wScreenInit(int screen_number)
     event_mask = EVENT_MASK;
 
     if (wPreferences.disable_root_mouse) {
-	event_mask &= ~(ButtonPressMask|ButtonReleaseMask);
+        event_mask &= ~(ButtonPressMask|ButtonReleaseMask);
     }
-    
+
     XSelectInput(dpy, scr->root_win, event_mask);
 
-#ifdef KEEP_XKB_LOCK_STATUS     
+#ifdef KEEP_XKB_LOCK_STATUS
     /* Only GroupLock doesn't work correctly in my system since right-alt
      * can change mode while holding it too - ]d
      */
     if (wXkbSupported) {
         XkbSelectEvents(dpy,XkbUseCoreKbd,
-                XkbStateNotifyMask,
-                XkbStateNotifyMask);
+                        XkbStateNotifyMask,
+                        XkbStateNotifyMask);
     }
 #endif /* KEEP_XKB_LOCK_STATUS */
 
     XSync(dpy, False);
     XSetErrorHandler(oldHandler);
-    
+
     if (CantManageScreen) {
-	wfree(scr);
-	return NULL;
+        wfree(scr);
+        return NULL;
     }
-    
+
     XDefineCursor(dpy, scr->root_win, wCursor[WCUR_ROOT]);
 
     /* screen descriptor for raster graphic library */
     rattr.flags = RC_RenderMode | RC_ColorsPerChannel | RC_StandardColormap;
-    rattr.render_mode = wPreferences.no_dithering 
-				? RBestMatchRendering
-				: RDitheredRendering;
+    rattr.render_mode = wPreferences.no_dithering
+        ? RBestMatchRendering
+        : RDitheredRendering;
 
     /* if the std colormap stuff works ok, this will be ignored */
     rattr.colors_per_channel = wPreferences.cmap_size;
     if (rattr.colors_per_channel<2)
-	rattr.colors_per_channel = 2;
+        rattr.colors_per_channel = 2;
 
-    
+
     /* will only be accounted for in PseudoColor */
     if (wPreferences.flags.create_stdcmap) {
-	rattr.standard_colormap_mode = RCreateStdColormap;
+        rattr.standard_colormap_mode = RCreateStdColormap;
     } else {
-	rattr.standard_colormap_mode = RUseStdColormap;
+        rattr.standard_colormap_mode = RUseStdColormap;
     }
 
     if (wVisualID>=0) {
-	rattr.flags |= RC_VisualID;
-	rattr.visualid = wVisualID;
+        rattr.flags |= RC_VisualID;
+        rattr.visualid = wVisualID;
     }
-    
+
     scr->rcontext = RCreateContext(dpy, screen_number, &rattr);
 
     if (!scr->rcontext && RErrorCode == RERR_STDCMAPFAIL) {
-	wwarning(RMessageForError(RErrorCode));
+        wwarning(RMessageForError(RErrorCode));
 
-	rattr.flags &= ~RC_StandardColormap;
-	rattr.standard_colormap_mode = RUseStdColormap;
+        rattr.flags &= ~RC_StandardColormap;
+        rattr.standard_colormap_mode = RUseStdColormap;
 
-	scr->rcontext = RCreateContext(dpy, screen_number, &rattr);
+        scr->rcontext = RCreateContext(dpy, screen_number, &rattr);
     }
 
     if (!scr->rcontext) {
-	wwarning(_("could not initialize graphics library context: %s"),
-		 RMessageForError(RErrorCode));
-	wAbort(False);
+        wwarning(_("could not initialize graphics library context: %s"),
+                 RMessageForError(RErrorCode));
+        wAbort(False);
     } else {
-	char **formats;
-	int i = 0;
+        char **formats;
+        int i = 0;
 
-	formats = RSupportedFileFormats();
-	if (formats) {
-	    for (i=0; formats[i]!=NULL; i++) {
-		if (strcmp(formats[i], "TIFF")==0) {
-		    scr->flags.supports_tiff = 1;
-		    break;
-		}
-	    }
-	}
+        formats = RSupportedFileFormats();
+        if (formats) {
+            for (i=0; formats[i]!=NULL; i++) {
+                if (strcmp(formats[i], "TIFF")==0) {
+                    scr->flags.supports_tiff = 1;
+                    break;
+                }
+            }
+        }
     }
-    
+
     scr->w_win = scr->rcontext->drawable;
     scr->w_visual = scr->rcontext->visual;
     scr->w_depth = scr->rcontext->depth;
@@ -740,11 +740,11 @@ wScreenInit(int screen_number)
 
     /* create screen descriptor for WINGs */
     scr->wmscreen = WMCreateScreenWithRContext(dpy, screen_number,
-					       scr->rcontext);
+                                               scr->rcontext);
 
     if (!scr->wmscreen) {
-	wfatal(_("could not initialize WINGs widget set"));
-	return NULL;
+        wfatal(_("could not initialize WINGs widget set"));
+        return NULL;
     }
 
     scr->black    = WMBlackColor(scr->wmscreen);
@@ -758,21 +758,21 @@ wScreenInit(int screen_number)
     scr->dark_pixel  = WMColorPixel(scr->darkGray);
 
     {
-	XColor xcol;
-	/* frame boder color */
-	wGetColor(scr, FRAME_BORDER_COLOR, &xcol);
-	scr->frame_border_pixel = xcol.pixel;
+        XColor xcol;
+        /* frame boder color */
+        wGetColor(scr, FRAME_BORDER_COLOR, &xcol);
+        scr->frame_border_pixel = xcol.pixel;
     }
 
     /* create GCs with default values */
     allocGCs(scr);
 
     /* for our window manager info notice board. Need to
-     * create before reading the defaults, because it will be used there. 
+     * create before reading the defaults, because it will be used there.
      */
-    scr->info_window = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 10, 10, 
-					   0, 0, 0);
-    
+    scr->info_window = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 10, 10,
+                                           0, 0, 0);
+
     /* read defaults for this screen */
     wReadDefaults(scr, WDWindowMaker->dictionary);
 
@@ -814,11 +814,11 @@ wScreenInit(int screen_number)
 
     /* setup our noticeboard */
     XChangeProperty(dpy, scr->info_window, _XA_WINDOWMAKER_NOTICEBOARD,
-		    XA_WINDOW, 32, PropModeReplace, 
-		    (unsigned char*)&scr->info_window, 1);
+                    XA_WINDOW, 32, PropModeReplace,
+                    (unsigned char*)&scr->info_window, 1);
     XChangeProperty(dpy, scr->root_win, _XA_WINDOWMAKER_NOTICEBOARD,
-		    XA_WINDOW, 32, PropModeReplace, 
-		    (unsigned char*)&scr->info_window, 1);
+                    XA_WINDOW, 32, PropModeReplace,
+                    (unsigned char*)&scr->info_window, 1);
 
 
 #ifdef BALLOON_TEXT
@@ -859,120 +859,120 @@ wScreenUpdateUsableArea(WScreen *scr)
         rect.pos.y = scr->dock->y_pos;
         rect.size.width  = wPreferences.icon_size;
         rect.size.height = wPreferences.icon_size;
-	dock_head = wGetHeadForRect(scr, rect);
+        dock_head = wGetHeadForRect(scr, rect);
     }
-    
+
     for (i=0; i<wXineramaHeads(scr); ++i) {
-	WMRect rect = wGetRectForHead(scr, i);
+        WMRect rect = wGetRectForHead(scr, i);
         scr->totalUsableArea[i].x1 = rect.pos.x;
         scr->totalUsableArea[i].y1 = rect.pos.y;
         scr->totalUsableArea[i].x2 = rect.pos.x + rect.size.width;
         scr->totalUsableArea[i].y2 = rect.pos.y + rect.size.height;
 
-	if (scr->dock && dock_head==i &&
+        if (scr->dock && dock_head==i &&
             (!scr->dock->lowered || wPreferences.no_window_over_dock)) {
-	    int offset = wPreferences.icon_size + DOCK_EXTRA_SPACE;
+            int offset = wPreferences.icon_size + DOCK_EXTRA_SPACE;
 
-	    if (scr->dock->on_right_side) {
-		scr->totalUsableArea[i].x2 -= offset;
-	    } else {
-		scr->totalUsableArea[i].x1 += offset;
-	    }
-	}
+            if (scr->dock->on_right_side) {
+                scr->totalUsableArea[i].x2 -= offset;
+            } else {
+                scr->totalUsableArea[i].x1 += offset;
+            }
+        }
 
 #ifdef NETWM_HINTS
         {
-	    WArea area;
-	    if (wNETWMGetUsableArea(scr, i, &area)) {
-		scr->totalUsableArea[i].x1 = WMAX(scr->totalUsableArea[i].x1, area.x1);
-		scr->totalUsableArea[i].y1 = WMAX(scr->totalUsableArea[i].y1, area.y1);
-		scr->totalUsableArea[i].x2 = WMIN(scr->totalUsableArea[i].x2, area.x2);
-		scr->totalUsableArea[i].y2 = WMIN(scr->totalUsableArea[i].y2, area.y2);
-	    }
-	}
+            WArea area;
+            if (wNETWMGetUsableArea(scr, i, &area)) {
+                scr->totalUsableArea[i].x1 = WMAX(scr->totalUsableArea[i].x1, area.x1);
+                scr->totalUsableArea[i].y1 = WMAX(scr->totalUsableArea[i].y1, area.y1);
+                scr->totalUsableArea[i].x2 = WMIN(scr->totalUsableArea[i].x2, area.x2);
+                scr->totalUsableArea[i].y2 = WMIN(scr->totalUsableArea[i].y2, area.y2);
+            }
+        }
 #endif
 
 #ifdef GNOME_STUFF
-	{
-	    WArea area;
-	    if (wGNOMEGetUsableArea(scr, i, &area)) {
-		scr->totalUsableArea[i].x1 = WMAX(scr->totalUsableArea[i].x1, area.x1);
-		scr->totalUsableArea[i].y1 = WMAX(scr->totalUsableArea[i].y1, area.y1);
-		scr->totalUsableArea[i].x2 = WMIN(scr->totalUsableArea[i].x2, area.x2);
-		scr->totalUsableArea[i].y2 = WMIN(scr->totalUsableArea[i].y2, area.y2);
-	    }
-	}
+        {
+            WArea area;
+            if (wGNOMEGetUsableArea(scr, i, &area)) {
+                scr->totalUsableArea[i].x1 = WMAX(scr->totalUsableArea[i].x1, area.x1);
+                scr->totalUsableArea[i].y1 = WMAX(scr->totalUsableArea[i].y1, area.y1);
+                scr->totalUsableArea[i].x2 = WMIN(scr->totalUsableArea[i].x2, area.x2);
+                scr->totalUsableArea[i].y2 = WMIN(scr->totalUsableArea[i].y2, area.y2);
+            }
+        }
 #endif
 
 #ifdef KWM_HINTS
-	{
-	    WArea area;
-	    if (wKWMGetUsableArea(scr, i, &area)) {
-		scr->totalUsableArea[i].x1 = WMAX(scr->totalUsableArea[i].x1, area.x1);
-		scr->totalUsableArea[i].y1 = WMAX(scr->totalUsableArea[i].y1, area.y1);
-		scr->totalUsableArea[i].x2 = WMIN(scr->totalUsableArea[i].x2, area.x2);
-		scr->totalUsableArea[i].y2 = WMIN(scr->totalUsableArea[i].y2, area.y2);
-	    }
-	}
+        {
+            WArea area;
+            if (wKWMGetUsableArea(scr, i, &area)) {
+                scr->totalUsableArea[i].x1 = WMAX(scr->totalUsableArea[i].x1, area.x1);
+                scr->totalUsableArea[i].y1 = WMAX(scr->totalUsableArea[i].y1, area.y1);
+                scr->totalUsableArea[i].x2 = WMIN(scr->totalUsableArea[i].x2, area.x2);
+                scr->totalUsableArea[i].y2 = WMIN(scr->totalUsableArea[i].y2, area.y2);
+            }
+        }
 #endif
 
-	scr->usableArea[i] = scr->totalUsableArea[i];
+        scr->usableArea[i] = scr->totalUsableArea[i];
 
 #if 0
-	printf("usableArea[%d]: %d %d %d %d\n", i,
+        printf("usableArea[%d]: %d %d %d %d\n", i,
                scr->usableArea[i].x1, scr->usableArea[i].x2,
                scr->usableArea[i].y1, scr->usableArea[i].y2);
 #endif
 
-	if (wPreferences.no_window_over_icons) {
-	    if (wPreferences.icon_yard & IY_VERT) {
-		if (wPreferences.icon_yard & IY_RIGHT) {
-		    scr->totalUsableArea[i].x2 -= wPreferences.icon_size;
-		} else {
-		    scr->totalUsableArea[i].x1 += wPreferences.icon_size;
-		}
-	    } else {
-		if (wPreferences.icon_yard & IY_TOP) {
-		    scr->totalUsableArea[i].y1 += wPreferences.icon_size;
-		} else {
-		    scr->totalUsableArea[i].y2 -= wPreferences.icon_size;
-		}
-	    }
-	}
-
-	if (scr->totalUsableArea[i].x2 - scr->totalUsableArea[i].x1 < rect.size.width/2) {
-	    scr->totalUsableArea[i].x1 = rect.pos.x;
-	    scr->totalUsableArea[i].x2 = rect.pos.x + rect.size.width;
+        if (wPreferences.no_window_over_icons) {
+            if (wPreferences.icon_yard & IY_VERT) {
+                if (wPreferences.icon_yard & IY_RIGHT) {
+                    scr->totalUsableArea[i].x2 -= wPreferences.icon_size;
+                } else {
+                    scr->totalUsableArea[i].x1 += wPreferences.icon_size;
+                }
+            } else {
+                if (wPreferences.icon_yard & IY_TOP) {
+                    scr->totalUsableArea[i].y1 += wPreferences.icon_size;
+                } else {
+                    scr->totalUsableArea[i].y2 -= wPreferences.icon_size;
+                }
+            }
         }
 
-	if (scr->totalUsableArea[i].y2 - scr->totalUsableArea[i].y1 < rect.size.height/2) {
-	    scr->totalUsableArea[i].y1 = rect.pos.y;
-	    scr->totalUsableArea[i].y2 = rect.pos.y + rect.size.height;
-	}
+        if (scr->totalUsableArea[i].x2 - scr->totalUsableArea[i].x1 < rect.size.width/2) {
+            scr->totalUsableArea[i].x1 = rect.pos.x;
+            scr->totalUsableArea[i].x2 = rect.pos.x + rect.size.width;
+        }
 
-	tmp_area = (scr->totalUsableArea[i].x2 - scr->totalUsableArea[i].x1) * 
-	    (scr->totalUsableArea[i].y2 - scr->totalUsableArea[i].y1);
+        if (scr->totalUsableArea[i].y2 - scr->totalUsableArea[i].y1 < rect.size.height/2) {
+            scr->totalUsableArea[i].y1 = rect.pos.y;
+            scr->totalUsableArea[i].y2 = rect.pos.y + rect.size.height;
+        }
 
-	if (tmp_area > best_area) {
-	    best_area = tmp_area;
-	    area = scr->totalUsableArea[i];
-	}
+        tmp_area = (scr->totalUsableArea[i].x2 - scr->totalUsableArea[i].x1) *
+            (scr->totalUsableArea[i].y2 - scr->totalUsableArea[i].y1);
 
-	{
-	    unsigned size = wPreferences.workspace_border_size;
-	    unsigned position = wPreferences.workspace_border_position;
+        if (tmp_area > best_area) {
+            best_area = tmp_area;
+            area = scr->totalUsableArea[i];
+        }
 
-	    if (size>0 && position!=WB_NONE) {
-		if (position & WB_LEFTRIGHT) {
-		    scr->totalUsableArea[i].x1 += size;
-		    scr->totalUsableArea[i].x2 -= size;
-		}
-		if (position & WB_TOPBOTTOM) {
-		    scr->totalUsableArea[i].y1 += size;
-		    scr->totalUsableArea[i].y2 -= size;
-		}
-	    }
-	}
+        {
+            unsigned size = wPreferences.workspace_border_size;
+            unsigned position = wPreferences.workspace_border_position;
+
+            if (size>0 && position!=WB_NONE) {
+                if (position & WB_LEFTRIGHT) {
+                    scr->totalUsableArea[i].x1 += size;
+                    scr->totalUsableArea[i].x2 -= size;
+                }
+                if (position & WB_TOPBOTTOM) {
+                    scr->totalUsableArea[i].y1 += size;
+                    scr->totalUsableArea[i].y2 -= size;
+                }
+            }
+        }
     }
 
 #ifdef NETWM_HINTS
@@ -990,58 +990,58 @@ wScreenUpdateUsableArea(WScreen *scr)
 {
     scr->totalUsableArea = scr->usableArea;
 
-    if (scr->dock && (!scr->dock->lowered 
-		      || wPreferences.no_window_over_dock)) {
+    if (scr->dock && (!scr->dock->lowered
+                      || wPreferences.no_window_over_dock)) {
 
-	int offset = wPreferences.icon_size + DOCK_EXTRA_SPACE;
+        int offset = wPreferences.icon_size + DOCK_EXTRA_SPACE;
 
-	if (scr->dock->on_right_side) {
-	    scr->totalUsableArea.x2 = WMIN(scr->totalUsableArea.x2,
-					  scr->scr_width - offset);
-	} else {
-	    scr->totalUsableArea.x1 = WMAX(scr->totalUsableArea.x1, offset);
-	}
+        if (scr->dock->on_right_side) {
+            scr->totalUsableArea.x2 = WMIN(scr->totalUsableArea.x2,
+                                           scr->scr_width - offset);
+        } else {
+            scr->totalUsableArea.x1 = WMAX(scr->totalUsableArea.x1, offset);
+        }
     }
-    
+
     if (wPreferences.no_window_over_icons) {
-	if (wPreferences.icon_yard & IY_VERT) {
+        if (wPreferences.icon_yard & IY_VERT) {
 
-	    if (!(wPreferences.icon_yard & IY_RIGHT)) {
-		scr->totalUsableArea.x1 += wPreferences.icon_size;
-	    } else {
-		scr->totalUsableArea.x2 -= wPreferences.icon_size;
-	    }
-	} else {
+            if (!(wPreferences.icon_yard & IY_RIGHT)) {
+                scr->totalUsableArea.x1 += wPreferences.icon_size;
+            } else {
+                scr->totalUsableArea.x2 -= wPreferences.icon_size;
+            }
+        } else {
 
-	    if (wPreferences.icon_yard & IY_TOP) {
-		scr->totalUsableArea.y1 += wPreferences.icon_size;
-	    } else {
-		scr->totalUsableArea.y2 -= wPreferences.icon_size;
-	    }
-	}
+            if (wPreferences.icon_yard & IY_TOP) {
+                scr->totalUsableArea.y1 += wPreferences.icon_size;
+            } else {
+                scr->totalUsableArea.y2 -= wPreferences.icon_size;
+            }
+        }
     }
 
 #ifdef NETWM_HINTS
     {
-	WArea area;
-	if (wNETWMGetUsableArea(scr, &area)) {
-	    scr->totalUsableArea.x1 = WMAX(scr->totalUsableArea.x1, area.x1);
-	    scr->totalUsableArea.y1 = WMAX(scr->totalUsableArea.y1, area.y1);
-	    scr->totalUsableArea.x2 = WMIN(scr->totalUsableArea.x2, area.x2);
-	    scr->totalUsableArea.y2 = WMIN(scr->totalUsableArea.y2, area.y2);
-	}
+        WArea area;
+        if (wNETWMGetUsableArea(scr, &area)) {
+            scr->totalUsableArea.x1 = WMAX(scr->totalUsableArea.x1, area.x1);
+            scr->totalUsableArea.y1 = WMAX(scr->totalUsableArea.y1, area.y1);
+            scr->totalUsableArea.x2 = WMIN(scr->totalUsableArea.x2, area.x2);
+            scr->totalUsableArea.y2 = WMIN(scr->totalUsableArea.y2, area.y2);
+        }
     }
 #endif
 
 #ifdef KWM_HINTS
     {
-	WArea area;
-	if (wKWMGetUsableArea(scr, &area)) {
-	    scr->totalUsableArea.x1 = WMAX(scr->totalUsableArea.x1, area.x1);
-	    scr->totalUsableArea.y1 = WMAX(scr->totalUsableArea.y1, area.y1);
-	    scr->totalUsableArea.x2 = WMIN(scr->totalUsableArea.x2, area.x2);
-	    scr->totalUsableArea.y2 = WMIN(scr->totalUsableArea.y2, area.y2);
-	}
+        WArea area;
+        if (wKWMGetUsableArea(scr, &area)) {
+            scr->totalUsableArea.x1 = WMAX(scr->totalUsableArea.x1, area.x1);
+            scr->totalUsableArea.y1 = WMAX(scr->totalUsableArea.y1, area.y1);
+            scr->totalUsableArea.x2 = WMIN(scr->totalUsableArea.x2, area.x2);
+            scr->totalUsableArea.y2 = WMIN(scr->totalUsableArea.y2, area.y2);
+        }
     }
 #endif
 
@@ -1092,22 +1092,22 @@ wScreenUpdateUsableArea(WScreen *scr)
 #endif /* GNOME_STUFF */
 
     if (scr->totalUsableArea.x2 - scr->totalUsableArea.x1 < scr->scr_width/2) {
-	scr->totalUsableArea.x2 = scr->usableArea.x2;
-	scr->totalUsableArea.x1 = scr->usableArea.x1;
+        scr->totalUsableArea.x2 = scr->usableArea.x2;
+        scr->totalUsableArea.x1 = scr->usableArea.x1;
     }
     if (scr->totalUsableArea.y2 - scr->totalUsableArea.y1 < scr->scr_height/2) {
-	scr->totalUsableArea.y2 = scr->usableArea.y2;
-	scr->totalUsableArea.y1 = scr->usableArea.y1;
+        scr->totalUsableArea.y2 = scr->usableArea.y2;
+        scr->totalUsableArea.y1 = scr->usableArea.y1;
     }
 
 #ifdef not_used
 #ifdef KWM_HINTS
     {
-	int i;
+        int i;
 
-	for (i = 0; i < scr->workspace_count; i++) {
-	    wKWMSetUsableAreaHint(scr, i);
-	}
+        for (i = 0; i < scr->workspace_count; i++) {
+            wKWMSetUsableAreaHint(scr, i);
+        }
     }
 #endif
 #endif
@@ -1154,18 +1154,18 @@ wScreenRestoreState(WScreen *scr)
     make_keys();
 
     if (wScreenCount == 1) {
-	path = wdefaultspathfordomain("WMState");
+        path = wdefaultspathfordomain("WMState");
     } else {
-	char buf[16];
-	snprintf(buf, sizeof(buf), "WMState.%i", scr->screen);
-	path = wdefaultspathfordomain(buf);
+        char buf[16];
+        snprintf(buf, sizeof(buf), "WMState.%i", scr->screen);
+        path = wdefaultspathfordomain(buf);
     }
     scr->session_state = WMReadPropListFromFile(path);
     wfree(path);
     if (!scr->session_state && wScreenCount>1) {
-	path = wdefaultspathfordomain("WMState");
-	scr->session_state = WMReadPropListFromFile(path);
-	wfree(path);
+        path = wdefaultspathfordomain("WMState");
+        scr->session_state = WMReadPropListFromFile(path);
+        wfree(path);
     }
 
     if (!scr->session_state) {
@@ -1211,17 +1211,17 @@ wScreenSaveState(WScreen *scr)
     XChangeProperty(dpy, scr->root_win, _XA_WINDOWMAKER_STATE,
                     _XA_WINDOWMAKER_STATE, 32, PropModeReplace,
                     (unsigned char *) data, 2);
-    
+
     /* save state of windows */
     wwin = scr->focused_window;
     while (wwin) {
-	wWindowSaveState(wwin);
-	wwin = wwin->prev;
+        wWindowSaveState(wwin);
+        wwin = wwin->prev;
     }
 
 
     if (wPreferences.flags.noupdates)
-	return;
+        return;
 
 
     old_state = scr->session_state;
@@ -1264,14 +1264,14 @@ wScreenSaveState(WScreen *scr)
     wMenuSaveState(scr);
 
     if (wScreenCount == 1) {
-	str = wdefaultspathfordomain("WMState");
+        str = wdefaultspathfordomain("WMState");
     } else {
-	char buf[16];
-	snprintf(buf, sizeof(buf), "WMState.%i", scr->screen);
-	str = wdefaultspathfordomain(buf);
+        char buf[16];
+        snprintf(buf, sizeof(buf), "WMState.%i", scr->screen);
+        str = wdefaultspathfordomain(buf);
     }
     if (!WMWritePropListToFile(scr->session_state, str, True)) {
-	wsyserror(_("could not save session state in %s"), str);
+        wsyserror(_("could not save session state in %s"), str);
     }
     wfree(str);
     WMReleasePropList(old_state);
@@ -1307,42 +1307,42 @@ wScreenBringInside(WScreen *scr, int *x, int *y, int width, int height)
 
 #if 0 /* NOTE: gives funky group movement */
     if (flags & XFLAG_MULTIPLE) {
-	/*
-	 * since we span multiple heads, pull window totaly inside
-	 */
-	if (*x < sx1)
-	    *x = sx1, moved = 1;
-	else if (*x + width > sx2)
-	    *x = sx2 - width, moved = 1;
+        /*
+         * since we span multiple heads, pull window totaly inside
+         */
+        if (*x < sx1)
+            *x = sx1, moved = 1;
+        else if (*x + width > sx2)
+            *x = sx2 - width, moved = 1;
 
-	if (*y < sy1)
-	    *y = sy1, moved = 1;
-	else if (*y + height > sy2)
-	    *y = sy2 - height, moved = 1;
+        if (*y < sy1)
+            *y = sy1, moved = 1;
+        else if (*y + height > sy2)
+            *y = sy2 - height, moved = 1;
 
-	return moved;
+        return moved;
     }
 #endif
-    
+
     if (width > 20)
-	tol_w = width/2;
+        tol_w = width/2;
     else
-	tol_w = 20;
+        tol_w = 20;
 
     if (height > 20)
-	tol_h = height/2;
+        tol_h = height/2;
     else
-	tol_h = 20;
+        tol_h = 20;
 
     if (*x + width < sx1 + 10)
-	*x = sx1 - tol_w, moved = 1;
+        *x = sx1 - tol_w, moved = 1;
     else if (*x >= sx2 - 10)
-	*x = sx2 - tol_w - 1, moved = 1;
+        *x = sx2 - tol_w - 1, moved = 1;
 
     if (*y < sy1 - height + 10)
-	*y = sy1 - tol_h, moved = 1;
+        *y = sy1 - tol_h, moved = 1;
     else if (*y >= sy2 - 10)
-	*y = sy2 - tol_h - 1, moved = 1;
+        *y = sy2 - tol_h - 1, moved = 1;
 
     return moved;
 }
@@ -1371,14 +1371,14 @@ wScreenKeepInside(WScreen *scr, int *x, int *y, int width, int height)
     sy2 = sy1 + rect.size.height;
 
     if (*x < sx1)
-	*x = sx1, moved = 1;
+        *x = sx1, moved = 1;
     else if (*x + width > sx2)
-	*x = sx2 - width, moved = 1;
+        *x = sx2 - width, moved = 1;
 
     if (*y < sy1)
-	*y = sy1, moved = 1;
+        *y = sy1, moved = 1;
     else if (*y + height > sy2)
-	*y = sy2 - height, moved = 1;
+        *y = sy2 - height, moved = 1;
 
     return moved;
 }

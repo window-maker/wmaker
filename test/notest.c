@@ -33,28 +33,29 @@ hide(void *foo, int item, Time time)
 }
 
 
-int notify_print( int id, XEvent *event, void *data )
+int
+notify_print( int id, XEvent *event, void *data )
 {
     printf( "Got notification 0x%x, window 0x%lx, data '%s'\n",
-	    id, event->xclient.data.l[1], (char *) data );
+           id, event->xclient.data.l[1], (char *) data );
     return True;
 }
 
 
-static void 
+static void
 newwin(void *foo, int item, Time time)
 {
     Window win;
     XClassHint classhint;
     char title[100];
 
-    win = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 
-			      0, 0, 200, 100, 0, 0, 0);
+    win = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy),
+                              0, 0, 200, 100, 0, 0, 0);
     prots[0] = delete_win;
     XSetWMProtocols(dpy, win, prots, 1);
     sprintf(title, "Notify Test Window");
     XStoreName(dpy, win, title);
-    
+
     /* set class hint */
     classhint.res_name = "notest";
     classhint.res_class = "Notest";
@@ -65,24 +66,24 @@ newwin(void *foo, int item, Time time)
     hints->window_group = leader;
     hints->flags = WindowGroupHint;
     XSetWMHints(dpy, win, hints);
- 
-    WMAppAddWindow(app, win);   
+
+    WMAppAddWindow(app, win);
     XMapWindow(dpy, win);
 }
 
 int main(int argc, char **argv)
-{    
+{
     XClassHint classhint;
 
     dpy = XOpenDisplay("");
     if (!dpy) {
-	puts("could not open display!");
-	exit(1);
+        puts("could not open display!");
+        exit(1);
     }
     delete_win = XInternAtom(dpy, "WM_DELETE_WINDOW", False);
 
     leader = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 10, 10, 10, 10,
-			      0, 0, 0);
+                                 0, 0, 0);
     /* set class hint */
     classhint.res_name = "notest";
     classhint.res_class = "Notest";
@@ -99,7 +100,7 @@ int main(int argc, char **argv)
     menu = WMMenuCreate(app, "Notify Test Menu");
     WMMenuAddItem(menu, "Hide", (WMMenuAction)hide, NULL, NULL, NULL);
     WMMenuAddItem(menu, "Quit", (WMMenuAction)quit, NULL, NULL, NULL);
-    
+
     WMAppSetMainMenu(app, menu);
     WMRealizeMenus(app);
 
@@ -113,22 +114,22 @@ int main(int argc, char **argv)
 
     /* set command to use to startup this */
     XSetCommand(dpy, leader, argv, argc);
-    
+
     /* create first window */
     newwin(NULL, 0, 0);
 
 
     XFlush(dpy);
     while( 1 ) {
-	XEvent ev;
-	XNextEvent(dpy, &ev);
-	if (ev.type==ClientMessage) {
-	    if (ev.xclient.data.l[0]==delete_win) {
-		XDestroyWindow(dpy,ev.xclient.window);
-		break;
-	    } 
-	} 
-	WMProcessEvent(app, &ev);
+        XEvent ev;
+        XNextEvent(dpy, &ev);
+        if (ev.type==ClientMessage) {
+            if (ev.xclient.data.l[0]==delete_win) {
+                XDestroyWindow(dpy,ev.xclient.window);
+                break;
+            }
+        }
+        WMProcessEvent(app, &ev);
     }
     exit(0);
 }

@@ -20,14 +20,14 @@ typedef struct W_MenuItem {
     struct W_Menu *submenu;
 
     void *object;
-    
+
     WMPixmap *onStateImage;
     WMPixmap *offStateImage;
     WMPixmap *mixedStateImage;
 
     struct {
-	unsigned enabled:1;
-	unsigned state:2;
+        unsigned enabled:1;
+        unsigned state:2;
     } flags;
 } MenuItem;
 
@@ -53,12 +53,12 @@ WMMenuItem*
 WMCreateMenuItem(void)
 {
     WMMenuItem *item;
-    
+
     item = wmalloc(sizeof(WMMenuItem));
     memset(item, 0, sizeof(WMMenuItem));
 
     item->flags.enabled = 1;
-    
+
     return item;
 }
 
@@ -67,22 +67,22 @@ void
 WMDestroyMenuItem(WMMenuItem *item)
 {
     if (item->title)
-	wfree(item->title);
+        wfree(item->title);
 
     if (item->image)
-	WMReleasePixmap(item->image);
+        WMReleasePixmap(item->image);
 
     if (item->shortcutKey)
-	wfree(item->shortcutKey);
-    
+        wfree(item->shortcutKey);
+
     if (item->onStateImage)
-	WMReleasePixmap(item->onStateImage);
-    
+        WMReleasePixmap(item->onStateImage);
+
     if (item->offStateImage)
-	WMReleasePixmap(item->offStateImage);
-    
+        WMReleasePixmap(item->offStateImage);
+
     if (item->mixedStateImage)
-	WMReleasePixmap(item->mixedStateImage);
+        WMReleasePixmap(item->mixedStateImage);
 }
 
 
@@ -119,7 +119,7 @@ void
 WMSetMenuItemShortcut(WMMenuItem *item, char *shortcut)
 {
     if (item->shortcutKey)
-	wfree(item->shortcutKey);
+        wfree(item->shortcutKey);
 
     item->shortcutKey = wstrdup(shortcut);
 }
@@ -172,12 +172,12 @@ void
 WMSetMenuItemTitle(WMMenuItem *item, char *title)
 {
     if (item->title)
-	wfree(item->title);
-    
+        wfree(item->title);
+
     if (title)
-	item->title = wstrdup(title);
+        item->title = wstrdup(title);
     else
-	item->title = NULL;
+        item->title = NULL;
 }
 
 
@@ -206,7 +206,7 @@ void
 WMSetMenuItemPixmap(WMMenuItem *item, WMPixmap *pixmap)
 {
     if (item->image)
-	WMReleasePixmap(item->image);
+        WMReleasePixmap(item->image);
 
     item->image = WMRetainPixmap(pixmap);
 }
@@ -223,8 +223,8 @@ void
 WMSetMenuItemOnStatePixmap(WMMenuItem *item, WMPixmap *pixmap)
 {
     if (item->onStateImage)
-	WMReleasePixmap(item->onStateImage);
-    
+        WMReleasePixmap(item->onStateImage);
+
     item->onStateImage = WMRetainPixmap(pixmap);
 }
 
@@ -240,8 +240,8 @@ void
 WMSetMenuItemOffStatePixmap(WMMenuItem *item, WMPixmap *pixmap)
 {
     if (item->offStateImage)
-	WMReleasePixmap(item->offStateImage);
-    
+        WMReleasePixmap(item->offStateImage);
+
     item->offStateImage = WMRetainPixmap(pixmap);
 }
 
@@ -258,8 +258,8 @@ void
 WMSetMenuItemMixedStatePixmap(WMMenuItem *item, WMPixmap *pixmap)
 {
     if (item->mixedStateImage)
-	WMReleasePixmap(item->mixedStateImage);
-    
+        WMReleasePixmap(item->mixedStateImage);
+
     item->mixedStateImage = WMRetainPixmap(pixmap);
 }
 
@@ -271,7 +271,7 @@ WMGetMenuItemMixedStatePixmap(WMMenuItem *item)
 }
 
 
-/*
+#if 0
 void
 WMSetMenuItemSubmenu(WMMenuItem *item, WMMenu *submenu)
 {
@@ -292,5 +292,5 @@ WMGetMenuItemHasSubmenu(WMMenuItem *item)
 {
     return item->submenu != NULL;
 }
+#endif
 
-*/

@@ -1,10 +1,10 @@
 /*
  * wconfig.h- default configuration and definitions + compile time options
- * 
+ *
  *  WindowMaker window manager
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -30,9 +30,9 @@
 /*
  *--------------------------------------------------------------------
  * 			Feature Selection
- * 
- * 	Comment out the following #defines if you want to 
- * disable a feature. 
+ *
+ * 	Comment out the following #defines if you want to
+ * disable a feature.
  * 	Also check the features you can enable through configure.
  *--------------------------------------------------------------------
  */
@@ -101,7 +101,7 @@
  */
 #undef NO_EMERGENCY_AUTORESTART
 
-/* 
+/*
  * The window manager that is autorestarted
  */
 #define FALLBACK_WINDOWMANAGER "blackbox"
@@ -123,7 +123,7 @@
  * for applications that change their shape frequently (like xdaliclock
  * -shape), removing flickering. If wmaker and your display are on
  * different machines and the network connection is slow, it is not
- * recommended. 
+ * recommended.
  */
 #undef OPTIMIZE_SHAPE
 
@@ -138,7 +138,7 @@
 /*
  * disable/enable workspace indicator in the dock
  */
-#undef WS_INDICATOR 
+#undef WS_INDICATOR
 
 
 /*
@@ -217,7 +217,7 @@
 /*
  *--------------------------------------------------------------------
  * 			Default Configuration
- * 
+ *
  * 	Some of the following options can be configured in
  * the preference files, but if for some reason, they can't
  * be used, these defaults will be.
@@ -226,10 +226,10 @@
  *--------------------------------------------------------------------
  */
 
-/* list of paths to look for the config files, searched in order 
+/* list of paths to look for the config files, searched in order
  * of appearance */
 #define DEF_CONFIG_PATHS \
-"~/GNUstep/Library/WindowMaker:"PKGDATADIR
+    "~/GNUstep/Library/WindowMaker:"PKGDATADIR
 
 #define DEF_MENU_FILE	"menu"
 
@@ -253,17 +253,17 @@
 
 /* pixmap path */
 #define DEF_PIXMAP_PATHS \
-"(\"~/pixmaps\",\"~/GNUstep/Library/WindowMaker/Pixmaps\",\""PIXMAPDIR"\")"
+    "(\"~/pixmaps\",\"~/GNUstep/Library/WindowMaker/Pixmaps\",\""PIXMAPDIR"\")"
 
 #ifdef USER_MENU
 #define GLOBAL_USER_MENU_PATH PKGDATADIR"/UserMenus"
 #define DEF_USER_MENU_PATHS \
-"~/GNUstep/Library/WindowMaker/UserMenus:"GLOBAL_USER_MENU_PATH
+    "~/GNUstep/Library/WindowMaker/UserMenus:"GLOBAL_USER_MENU_PATH
 #endif
 
 /* icon path */
 #define DEF_ICON_PATHS \
-"(\"~/pixmaps\",\"~/GNUstep/Library/Icons\",\"/usr/include/X11/pixmaps/\",\""PIXMAPDIR"\")"
+    "(\"~/pixmaps\",\"~/GNUstep/Library/Icons\",\"/usr/include/X11/pixmaps/\",\""PIXMAPDIR"\")"
 
 
 /* window title to use for untitled windows */
@@ -301,7 +301,7 @@
 #define DEF_MENU_TEXT_EXTEND_SPACE	"0"
 #define TITLEBAR_EXTEND_SPACE 4
 
-#define DEF_XPM_CLOSENESS	40000 
+#define DEF_XPM_CLOSENESS	40000
 
 /* default position of application menus */
 #define DEF_APPMENU_X		10
@@ -313,7 +313,7 @@
 /* Window level where icons reside */
 #define NORMAL_ICON_LEVEL WMNormalLevel
 
-/* do not divide main menu and submenu in different tiers, 
+/* do not divide main menu and submenu in different tiers,
  * opposed to OpenStep */
 #define SINGLE_MENULEVEL
 
@@ -337,7 +337,7 @@
 #define MINIATURIZE_ANIMATION_STEPS_F    16
 #define MINIATURIZE_ANIMATION_DELAY_F    1000
 #define MINIATURIZE_ANIMATION_TWIST_F    0.5
-  
+
 
 #define HIDE_ANIMATION_STEPS (MINIATURIZE_ANIMATION_STEPS*2/3)
 
@@ -410,7 +410,7 @@
 /* workspace name on switch display */
 #define WORKSPACE_NAME_FADE_DELAY 30
 
-#ifdef VIRTUAL_DESKTOP 
+#ifdef VIRTUAL_DESKTOP
 /* workspace virtual edge speed */
 #define VIRTUALEDGE_SCROLL_VSTEP 30
 #define VIRTUALEDGE_SCROLL_HSTEP 30
@@ -474,7 +474,7 @@
 #define CURSOR_BLINK_RATE	300
 
 #define MOVE_THRESHOLD	5 /* how many pixels to move before dragging windows
-			   * and other objects */
+                           * and other objects */
 
 #define KEY_CONTROL_WINDOW_WEIGHT 1
 
@@ -482,10 +482,10 @@
 
 #define MAX_WORKSPACENAME_WIDTH	32
 #define MAX_WINDOWLIST_WIDTH	160     /* max width of window title in
-					 * window list */
+                                         * window list */
 
 #define DEFAULTS_CHECK_INTERVAL 2000	/* how often wmaker will check for
-					 * changes in the config files */
+                                         * changes in the config files */
 
 /* if your keyboard don't have arrow keys */
 #undef ARROWLESS_KBD

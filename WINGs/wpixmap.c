@@ -8,7 +8,7 @@ WMPixmap*
 WMRetainPixmap(WMPixmap *pixmap)
 {
     if (pixmap)
-	pixmap->refCount++;
+        pixmap->refCount++;
 
     return pixmap;
 }
@@ -22,11 +22,11 @@ WMReleasePixmap(WMPixmap *pixmap)
     pixmap->refCount--;
 
     if (pixmap->refCount<1) {
-	if (pixmap->pixmap)
-	    XFreePixmap(pixmap->screen->display, pixmap->pixmap);
-	if (pixmap->mask)
-	    XFreePixmap(pixmap->screen->display, pixmap->mask);
-	wfree(pixmap);
+        if (pixmap->pixmap)
+            XFreePixmap(pixmap->screen->display, pixmap->pixmap);
+        if (pixmap->mask)
+            XFreePixmap(pixmap->screen->display, pixmap->mask);
+        wfree(pixmap);
     }
 }
 
@@ -44,21 +44,21 @@ WMCreatePixmap(WMScreen *scrPtr, int width, int height, int depth, Bool masked)
     pixPtr->refCount = 1;
 
     pixPtr->pixmap = XCreatePixmap(scrPtr->display, W_DRAWABLE(scrPtr),
-				   width, height, depth);
+                                   width, height, depth);
     if (masked) {
         pixPtr->mask = XCreatePixmap(scrPtr->display, W_DRAWABLE(scrPtr),
                                      width, height, 1);
     } else {
-	pixPtr->mask = None;
+        pixPtr->mask = None;
     }
 
-    return pixPtr;    
+    return pixPtr;
 }
 
 
 WMPixmap*
 WMCreatePixmapFromXPixmaps(WMScreen *scrPtr, Pixmap pixmap, Pixmap mask,
-			   int width, int height, int depth)
+                           int width, int height, int depth)
 {
     WMPixmap *pixPtr;
 
@@ -70,7 +70,7 @@ WMCreatePixmapFromXPixmaps(WMScreen *scrPtr, Pixmap pixmap, Pixmap mask,
     pixPtr->height = height;
     pixPtr->depth = depth;
     pixPtr->refCount = 1;
-    
+
     return pixPtr;
 }
 
@@ -80,15 +80,15 @@ WMCreatePixmapFromFile(WMScreen *scrPtr, char *fileName)
 {
     WMPixmap *pixPtr;
     RImage *image;
-    
+
     image = RLoadImage(scrPtr->rcontext, fileName, 0);
     if (!image)
-	return NULL;
+        return NULL;
 
     pixPtr = WMCreatePixmapFromRImage(scrPtr, image, 127);
 
     RReleaseImage(image);
-    
+
     return pixPtr;
 }
 
@@ -99,11 +99,11 @@ WMCreatePixmapFromRImage(WMScreen *scrPtr, RImage *image, int threshold)
     WMPixmap *pixPtr;
     Pixmap pixmap, mask;
 
-    if (!RConvertImageMask(scrPtr->rcontext, image, &pixmap, &mask, 
-			   threshold)) {
-	return NULL;
+    if (!RConvertImageMask(scrPtr->rcontext, image, &pixmap, &mask,
+                           threshold)) {
+        return NULL;
     }
-    
+
     pixPtr = wmalloc(sizeof(WMPixmap));
     pixPtr->screen = scrPtr;
     pixPtr->pixmap = pixmap;
@@ -113,7 +113,7 @@ WMCreatePixmapFromRImage(WMScreen *scrPtr, RImage *image, int threshold)
     pixPtr->depth = scrPtr->depth;
     pixPtr->refCount = 1;
 
-    return pixPtr;    
+    return pixPtr;
 }
 
 
@@ -141,17 +141,17 @@ WMCreateBlendedPixmapFromFile(WMScreen *scrPtr, char *fileName, RColor *color)
     WMPixmap *pixPtr;
     RImage *image;
 
-    
+
     image = RLoadImage(scrPtr->rcontext, fileName, 0);
     if (!image)
-	return NULL;
-    
+        return NULL;
+
     RCombineImageWithColor(image, color);
 
     pixPtr = WMCreatePixmapFromRImage(scrPtr, image, 0);
-    
+
     RReleaseImage(image);
-    
+
     return pixPtr;
 }
 
@@ -164,12 +164,12 @@ WMCreatePixmapFromXPMData(WMScreen *scrPtr, char **data)
 
     image = RGetImageFromXPMData(scrPtr->rcontext, data);
     if (!image)
-	return NULL;
-    
+        return NULL;
+
     pixPtr = WMCreatePixmapFromRImage(scrPtr, image, 127);
 
     RReleaseImage(image);
-    
+
     return pixPtr;
 }
 
@@ -192,13 +192,13 @@ WMGetPixmapMaskXID(WMPixmap *pixmap)
 }
 
 
-WMSize 
+WMSize
 WMGetPixmapSize(WMPixmap *pixmap)
 {
     WMSize size = {0,0};
 
     wassertrv(pixmap != NULL, size);
-    
+
     size.width = pixmap->width;
     size.height = pixmap->height;
 
@@ -210,44 +210,44 @@ WMPixmap*
 WMGetSystemPixmap(WMScreen *scr, int image)
 {
     switch (image) {
-     case WSIReturnArrow:
-	return WMRetainPixmap(scr->buttonArrow);
-	
-     case WSIHighlightedReturnArrow:
-	return WMRetainPixmap(scr->pushedButtonArrow);
-	
-     case WSIScrollerDimple:
-	return WMRetainPixmap(scr->scrollerDimple);
-	
-     case WSIArrowLeft:
-	return WMRetainPixmap(scr->leftArrow);
-	
-     case WSIHighlightedArrowLeft:
-	return WMRetainPixmap(scr->hiLeftArrow);
-	
-     case WSIArrowRight:
-	return WMRetainPixmap(scr->rightArrow);
-	
-     case WSIHighlightedArrowRight:
-	return WMRetainPixmap(scr->hiRightArrow);
-	
-     case WSIArrowUp:
-	return WMRetainPixmap(scr->upArrow);
-	
-     case WSIHighlightedArrowUp:
-	return WMRetainPixmap(scr->hiUpArrow);
-	
-     case WSIArrowDown:
-	return WMRetainPixmap(scr->downArrow);
-	
-     case WSIHighlightedArrowDown:
-	return WMRetainPixmap(scr->hiDownArrow);
+    case WSIReturnArrow:
+        return WMRetainPixmap(scr->buttonArrow);
 
-     case WSICheckMark:
-	return WMRetainPixmap(scr->checkMark);
+    case WSIHighlightedReturnArrow:
+        return WMRetainPixmap(scr->pushedButtonArrow);
 
-     default:
-	return NULL;
+    case WSIScrollerDimple:
+        return WMRetainPixmap(scr->scrollerDimple);
+
+    case WSIArrowLeft:
+        return WMRetainPixmap(scr->leftArrow);
+
+    case WSIHighlightedArrowLeft:
+        return WMRetainPixmap(scr->hiLeftArrow);
+
+    case WSIArrowRight:
+        return WMRetainPixmap(scr->rightArrow);
+
+    case WSIHighlightedArrowRight:
+        return WMRetainPixmap(scr->hiRightArrow);
+
+    case WSIArrowUp:
+        return WMRetainPixmap(scr->upArrow);
+
+    case WSIHighlightedArrowUp:
+        return WMRetainPixmap(scr->hiUpArrow);
+
+    case WSIArrowDown:
+        return WMRetainPixmap(scr->downArrow);
+
+    case WSIHighlightedArrowDown:
+        return WMRetainPixmap(scr->hiDownArrow);
+
+    case WSICheckMark:
+        return WMRetainPixmap(scr->checkMark);
+
+    default:
+        return NULL;
     }
 }
 
@@ -261,6 +261,7 @@ WMDrawPixmap(WMPixmap *pixmap, Drawable d, int x, int y)
     XSetClipMask(scr->display, scr->clipGC, pixmap->mask);
     XSetClipOrigin(scr->display, scr->clipGC, x, y);
 
-    XCopyArea(scr->display, pixmap->pixmap, d, scr->clipGC, 0, 0, 
-	      pixmap->width, pixmap->height, x, y);
+    XCopyArea(scr->display, pixmap->pixmap, d, scr->clipGC, 0, 0,
+              pixmap->width, pixmap->height, x, y);
 }
+

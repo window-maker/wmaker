@@ -50,38 +50,38 @@ typedef struct W_TextField {
     WMHandlerID	timerID;	       /* for cursor blinking */
 #endif
     struct {
-	WMAlignment alignment:2;
+        WMAlignment alignment:2;
 
-	unsigned int bordered:1;
+        unsigned int bordered:1;
 
-	unsigned int beveled:1;
+        unsigned int beveled:1;
 
-	unsigned int enabled:1;
+        unsigned int enabled:1;
 
-	unsigned int focused:1;
+        unsigned int focused:1;
 
-	unsigned int cursorOn:1;
+        unsigned int cursorOn:1;
 
-	unsigned int secure:1;	       /* password entry style */
+        unsigned int secure:1;	       /* password entry style */
 
-	unsigned int pointerGrabbed:1;
+        unsigned int pointerGrabbed:1;
 
-	unsigned int ownsSelection:1;
+        unsigned int ownsSelection:1;
 
-	unsigned int waitingSelection:1; /* requested selection, but
-					  * didnt get yet */
+        unsigned int waitingSelection:1; /* requested selection, but
+        * didnt get yet */
 
-	/**/
-	unsigned int notIllegalMovement:1;
+        /**/
+        unsigned int notIllegalMovement:1;
     } flags;
 } TextField;
 
 
 #define NOTIFY(T,C,N,A)	{ WMNotification *notif = WMCreateNotification(N,T,A);\
-			if ((T)->delegate && (T)->delegate->C)\
-				(*(T)->delegate->C)((T)->delegate,notif);\
-			WMPostNotification(notif);\
-			WMReleaseNotification(notif);}
+    if ((T)->delegate && (T)->delegate->C)\
+    (*(T)->delegate->C)((T)->delegate,notif);\
+    WMPostNotification(notif);\
+    WMReleaseNotification(notif);}
 
 
 #define MIN_TEXT_BUFFER		2
@@ -137,59 +137,59 @@ static WMSelectionProcs selectionHandler = {
 
 
 #define TEXT_WIDTH(tPtr, start)	(WMWidthOfString((tPtr)->font, \
-		   &((tPtr)->text[(start)]), (tPtr)->textLen - (start) + 1))
+    &((tPtr)->text[(start)]), (tPtr)->textLen - (start) + 1))
 
 #define TEXT_WIDTH2(tPtr, start, end) (WMWidthOfString((tPtr)->font, \
-		   &((tPtr)->text[(start)]), (end) - (start) + 1))
+    &((tPtr)->text[(start)]), (end) - (start) + 1))
 
 
 static void
 normalizeRange(TextField *tPtr, WMRange *range)
 {
     if (range->position < 0 && range->count < 0)
-    	range->count = 0;
+        range->count = 0;
 
     if (range->count == 0) {
-    	/*range->position = 0; why is this?*/
-	return;
+        /*range->position = 0; why is this?*/
+        return;
     }
-    
+
     /* (1,-2) ~> (0,1) ; (1,-1) ~> (0,1) ; (2,-1) ~> (1,1) */
     if (range->count < 0) { /* && range->position >= 0 */
-	if (range->position + range->count < 0) {
-	    range->count = range->position;
-	    range->position = 0;
-	} else {
-	    range->count = -range->count;
-    	    range->position -= range->count;
-	}
-    /* (-2,1) ~> (0,0) ; (-1,1) ~> (0,0) ; (-1,2) ~> (0,1) */
+        if (range->position + range->count < 0) {
+            range->count = range->position;
+            range->position = 0;
+        } else {
+            range->count = -range->count;
+            range->position -= range->count;
+        }
+        /* (-2,1) ~> (0,0) ; (-1,1) ~> (0,0) ; (-1,2) ~> (0,1) */
     } else if (range->position < 0) { /* && range->count > 0 */
-    	if (range->position + range->count < 0) {
-	    range->position = range->count = 0;
-	} else {
-	    range->count += range->position;
-	    range->position = 0;
-	}
+        if (range->position + range->count < 0) {
+            range->position = range->count = 0;
+        } else {
+            range->count += range->position;
+            range->position = 0;
+        }
     }
-    
+
     if (range->position + range->count > tPtr->textLen)
-    	range->count = tPtr->textLen - range->position;
+        range->count = tPtr->textLen - range->position;
 }
 
 static void
 memmv(char *dest, char *src, int size)
 {
     int i;
-    
+
     if (dest > src) {
-	for (i=size-1; i>=0; i--) {
-	    dest[i] = src[i];
-	}
+        for (i=size-1; i>=0; i--) {
+            dest[i] = src[i];
+        }
     } else if (dest < src) {
-	for (i=0; i<size; i++) {
-	    dest[i] = src[i];
-	}
+        for (i=0; i<size; i++) {
+            dest[i] = src[i];
+        }
     }
 }
 
@@ -200,7 +200,7 @@ incrToFit(TextField *tPtr)
     int vp = tPtr->viewPosition;
 
     while (TEXT_WIDTH(tPtr, tPtr->viewPosition) > tPtr->usableWidth) {
-	tPtr->viewPosition++;
+        tPtr->viewPosition++;
     }
     return vp!=tPtr->viewPosition;
 }
@@ -210,11 +210,11 @@ static int
 incrToFit2(TextField *tPtr)
 {
     int vp = tPtr->viewPosition;
-    while (TEXT_WIDTH2(tPtr, tPtr->viewPosition, tPtr->cursorPosition) 
-	   >= tPtr->usableWidth)
-	tPtr->viewPosition++;
+    while (TEXT_WIDTH2(tPtr, tPtr->viewPosition, tPtr->cursorPosition)
+           >= tPtr->usableWidth)
+        tPtr->viewPosition++;
 
-    
+
     return vp!=tPtr->viewPosition;
 }
 
@@ -223,8 +223,8 @@ static void
 decrToFit(TextField *tPtr)
 {
     while (TEXT_WIDTH(tPtr, tPtr->viewPosition-1) < tPtr->usableWidth
-	   && tPtr->viewPosition>0)
-	tPtr->viewPosition--;
+           && tPtr->viewPosition>0)
+        tPtr->viewPosition--;
 }
 
 #undef TEXT_WIDTH
@@ -233,7 +233,7 @@ decrToFit(TextField *tPtr)
 
 
 static WMData*
-requestHandler(WMView *view, Atom selection, Atom target, void *cdata, 
+requestHandler(WMView *view, Atom selection, Atom target, void *cdata,
                Atom *type)
 {
     TextField *tPtr = view->self;
@@ -249,15 +249,15 @@ requestHandler(WMView *view, Atom selection, Atom target, void *cdata,
         : tPtr->selection.position;
 
     if (target == XA_STRING || target == TEXT || target == COMPOUND_TEXT) {
-	
-	data = WMCreateDataWithBytes(&(tPtr->text[count]), 
-				      abs(tPtr->selection.count));
-	WMSetDataFormat(data, 8);
+
+        data = WMCreateDataWithBytes(&(tPtr->text[count]),
+                                     abs(tPtr->selection.count));
+        WMSetDataFormat(data, 8);
         *type = target;
-	
+
         return data;
     }
-    
+
     _TARGETS = XInternAtom(dpy, "TARGETS", False);
     if (target == _TARGETS) {
         Atom *ptr;
@@ -267,10 +267,10 @@ requestHandler(WMView *view, Atom selection, Atom target, void *cdata,
         ptr[1] = XA_STRING;
         ptr[2] = TEXT;
         ptr[3] = COMPOUND_TEXT;
-	
-	data = WMCreateDataWithBytes(ptr, 4*4);
-	WMSetDataFormat(data, 32);
-	
+
+        data = WMCreateDataWithBytes(ptr, 4*4);
+        WMSetDataFormat(data, 32);
+
         *type = target;
         return data;
     }
@@ -304,9 +304,9 @@ selectionNotification(void *observerData, WMNotification *notification)
 
     if (observerView != newOwnerView) {
         /*
-        //if (tPtr->flags.ownsSelection)
-        //    WMDeleteSelectionHandler(observerView, XA_PRIMARY, CurrentTime);
-        */
+         //if (tPtr->flags.ownsSelection)
+         //    WMDeleteSelectionHandler(observerView, XA_PRIMARY, CurrentTime);
+         */
         lostSelection(observerView, XA_PRIMARY, NULL);
     }
 }
@@ -321,11 +321,11 @@ WMCreateTextField(WMWidget *parent)
     memset(tPtr, 0, sizeof(TextField));
 
     tPtr->widgetClass = WC_TextField;
-    
+
     tPtr->view = W_CreateView(W_VIEW(parent));
     if (!tPtr->view) {
-	wfree(tPtr);
-	return NULL;
+        wfree(tPtr);
+        return NULL;
     }
     tPtr->view->self = tPtr;
 
@@ -333,32 +333,32 @@ WMCreateTextField(WMWidget *parent)
 
     tPtr->view->attribFlags |= CWCursor;
     tPtr->view->attribs.cursor = tPtr->view->screen->textCursor;
-    
+
     W_SetViewBackgroundColor(tPtr->view, tPtr->view->screen->white);
-    
+
     tPtr->text = wmalloc(MIN_TEXT_BUFFER);
     tPtr->text[0] = 0;
     tPtr->textLen = 0;
     tPtr->bufferSize = MIN_TEXT_BUFFER;
 
     tPtr->flags.enabled = 1;
-    
+
     WMCreateEventHandler(tPtr->view, ExposureMask|StructureNotifyMask
-			 |FocusChangeMask, handleEvents, tPtr);
+                         |FocusChangeMask, handleEvents, tPtr);
 
     tPtr->font = WMRetainFont(tPtr->view->screen->normalFont);
 
     tPtr->flags.bordered = DEFAULT_BORDERED;
     tPtr->flags.beveled = True;
     tPtr->flags.alignment = DEFAULT_ALIGNMENT;
-    tPtr->offsetWidth = 
-	WMAX((tPtr->view->size.height - WMFontHeight(tPtr->font))/2, 1);
+    tPtr->offsetWidth =
+        WMAX((tPtr->view->size.height - WMFontHeight(tPtr->font))/2, 1);
 
     W_ResizeView(tPtr->view, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
     WMCreateEventHandler(tPtr->view, EnterWindowMask|LeaveWindowMask
-			 |ButtonReleaseMask|ButtonPressMask|KeyPressMask|Button1MotionMask,
-			 handleTextFieldActionEvents, tPtr);
+                         |ButtonReleaseMask|ButtonPressMask|KeyPressMask|Button1MotionMask,
+                         handleTextFieldActionEvents, tPtr);
 
     WMAddNotificationObserver(selectionNotification, tPtr->view,
                               WMSelectionOwnerDidChangeNotification,
@@ -375,7 +375,7 @@ void
 WMSetTextFieldDelegate(WMTextField *tPtr, WMTextFieldDelegate *delegate)
 {
     CHECK_CLASS(tPtr, WC_TextField);
-    
+
     tPtr->delegate = delegate;
 }
 
@@ -393,42 +393,42 @@ void
 WMInsertTextFieldText(WMTextField *tPtr, char *text, int position)
 {
     int len;
- 
+
     CHECK_CLASS(tPtr, WC_TextField);
-    
+
     if (!text)
-	return;
-    
+        return;
+
     len = strlen(text);
 
     /* check if buffer will hold the text */
     if (len + tPtr->textLen >= tPtr->bufferSize) {
-	tPtr->bufferSize = tPtr->textLen + len + TEXT_BUFFER_INCR;
-	tPtr->text = wrealloc(tPtr->text, tPtr->bufferSize);
+        tPtr->bufferSize = tPtr->textLen + len + TEXT_BUFFER_INCR;
+        tPtr->text = wrealloc(tPtr->text, tPtr->bufferSize);
     }
-    
+
     if (position < 0 || position >= tPtr->textLen) {
-	/* append the text at the end */
-	strcat(tPtr->text, text);
-	
-	incrToFit(tPtr);
+        /* append the text at the end */
+        strcat(tPtr->text, text);
 
-	tPtr->textLen += len;
-	tPtr->cursorPosition += len;
+        incrToFit(tPtr);
+
+        tPtr->textLen += len;
+        tPtr->cursorPosition += len;
     } else {
-	/* insert text at position */ 
-	memmv(&(tPtr->text[position+len]), &(tPtr->text[position]),
-                tPtr->textLen-position+1);
+        /* insert text at position */
+        memmv(&(tPtr->text[position+len]), &(tPtr->text[position]),
+              tPtr->textLen-position+1);
 
-	memcpy(&(tPtr->text[position]), text, len);
+        memcpy(&(tPtr->text[position]), text, len);
 
-	tPtr->textLen += len;
-	if (position >= tPtr->cursorPosition) {
-	    tPtr->cursorPosition += len;
-	    incrToFit2(tPtr);
-	} else {
-	    incrToFit(tPtr);
-	}
+        tPtr->textLen += len;
+        if (position >= tPtr->cursorPosition) {
+            tPtr->cursorPosition += len;
+            incrToFit2(tPtr);
+        } else {
+            incrToFit(tPtr);
+        }
     }
 
     paintTextField(tPtr);
@@ -442,19 +442,19 @@ WMDeleteTextFieldRange(WMTextField *tPtr, WMRange range)
     normalizeRange(tPtr, &range);
 
     if (!range.count)
-    	return;
-    
+        return;
+
     memmv(&(tPtr->text[range.position]), &(tPtr->text[range.position+range.count]),
-            tPtr->textLen - (range.position+range.count) + 1);
+          tPtr->textLen - (range.position+range.count) + 1);
 
     tPtr->textLen -= range.count;
 
     /* try to keep cursorPosition at the same place */
     tPtr->viewPosition -= range.count;
     if (tPtr->viewPosition < 0)
-    	tPtr->viewPosition = 0;
+        tPtr->viewPosition = 0;
     tPtr->cursorPosition = range.position;
-    
+
     decrToFit(tPtr);
 
     paintTextField(tPtr);
@@ -466,7 +466,7 @@ char*
 WMGetTextFieldText(WMTextField *tPtr)
 {
     CHECK_CLASS(tPtr, WC_TextField);
-        
+
     return wstrdup(tPtr->text);
 }
 
@@ -475,30 +475,30 @@ void
 WMSetTextFieldText(WMTextField *tPtr, char *text)
 {
     CHECK_CLASS(tPtr, WC_TextField);
-    
+
     if ((text && strcmp(tPtr->text, text) == 0) ||
         (!text && tPtr->textLen == 0))
         return;
 
     if (text==NULL) {
-	tPtr->text[0] = 0;
-	tPtr->textLen = 0;
+        tPtr->text[0] = 0;
+        tPtr->textLen = 0;
     } else {
-	tPtr->textLen = strlen(text);
-	
-	if (tPtr->textLen >= tPtr->bufferSize) {
-	    tPtr->bufferSize = tPtr->textLen + TEXT_BUFFER_INCR;
-	    tPtr->text = wrealloc(tPtr->text, tPtr->bufferSize);
-	}
-	strcpy(tPtr->text, text);
+        tPtr->textLen = strlen(text);
+
+        if (tPtr->textLen >= tPtr->bufferSize) {
+            tPtr->bufferSize = tPtr->textLen + TEXT_BUFFER_INCR;
+            tPtr->text = wrealloc(tPtr->text, tPtr->bufferSize);
+        }
+        strcpy(tPtr->text, text);
     }
 
     tPtr->cursorPosition = tPtr->selection.position = tPtr->textLen;
     tPtr->viewPosition = 0;
     tPtr->selection.count = 0;
-    
+
     if (tPtr->view->flags.realized)
-	paintTextField(tPtr);
+        paintTextField(tPtr);
 }
 
 
@@ -506,16 +506,16 @@ void
 WMSetTextFieldAlignment(WMTextField *tPtr, WMAlignment alignment)
 {
     CHECK_CLASS(tPtr, WC_TextField);
-    
+
     tPtr->flags.alignment = alignment;
-	
+
     if (alignment!=WALeft) {
-	wwarning("only left alignment is supported in textfields");
-	return;
+        wwarning("only left alignment is supported in textfields");
+        return;
     }
-    
+
     if (tPtr->view->flags.realized) {
-	paintTextField(tPtr);
+        paintTextField(tPtr);
     }
 }
 
@@ -524,11 +524,11 @@ void
 WMSetTextFieldBordered(WMTextField *tPtr, Bool bordered)
 {
     CHECK_CLASS(tPtr, WC_TextField);
-    
+
     tPtr->flags.bordered = bordered;
 
     if (tPtr->view->flags.realized) {
-	paintTextField(tPtr);
+        paintTextField(tPtr);
     }
 }
 
@@ -537,11 +537,11 @@ void
 WMSetTextFieldBeveled(WMTextField *tPtr, Bool flag)
 {
     CHECK_CLASS(tPtr, WC_TextField);
-    
+
     tPtr->flags.beveled = ((flag==0) ? 0 : 1);
 
     if (tPtr->view->flags.realized) {
-	paintTextField(tPtr);
+        paintTextField(tPtr);
     }
 }
 
@@ -551,12 +551,12 @@ void
 WMSetTextFieldSecure(WMTextField *tPtr, Bool flag)
 {
     CHECK_CLASS(tPtr, WC_TextField);
-    
+
     tPtr->flags.secure = ((flag==0) ? 0 : 1);
-    
+
     if (tPtr->view->flags.realized) {
-	paintTextField(tPtr);
-    }    
+        paintTextField(tPtr);
+    }
 }
 
 
@@ -564,7 +564,7 @@ Bool
 WMGetTextFieldEditable(WMTextField *tPtr)
 {
     CHECK_CLASS(tPtr, WC_TextField);
-    
+
     return tPtr->flags.enabled;
 }
 
@@ -573,11 +573,11 @@ void
 WMSetTextFieldEditable(WMTextField *tPtr, Bool flag)
 {
     CHECK_CLASS(tPtr, WC_TextField);
-    
+
     tPtr->flags.enabled = ((flag==0) ? 0 : 1);
-    
+
     if (tPtr->view->flags.realized) {
-	paintTextField(tPtr);
+        paintTextField(tPtr);
     }
 }
 
@@ -586,9 +586,9 @@ void
 WMSelectTextFieldRange(WMTextField *tPtr, WMRange range)
 {
     CHECK_CLASS(tPtr, WC_TextField);
-    
+
     if (tPtr->flags.enabled) {
-    	normalizeRange(tPtr, &range);
+        normalizeRange(tPtr, &range);
 
         tPtr->selection = range;
 
@@ -605,7 +605,7 @@ void
 WMSetTextFieldCursorPosition(WMTextField *tPtr, unsigned int position)
 {
     CHECK_CLASS(tPtr, WC_TextField);
-    
+
     if (tPtr->flags.enabled) {
         if (position > tPtr->textLen)
             position = tPtr->textLen;
@@ -664,20 +664,20 @@ WMSetTextFieldPrevTextField(WMTextField *tPtr, WMTextField *prev)
 }
 
 
-void 
+void
 WMSetTextFieldFont(WMTextField *tPtr, WMFont *font)
 {
     CHECK_CLASS(tPtr, WC_TextField);
-    
+
     if (tPtr->font)
-	WMReleaseFont(tPtr->font);
+        WMReleaseFont(tPtr->font);
     tPtr->font = WMRetainFont(font);
-  
-    tPtr->offsetWidth = 
-	WMAX((tPtr->view->size.height - WMFontHeight(tPtr->font))/2, 1);
+
+    tPtr->offsetWidth =
+        WMAX((tPtr->view->size.height - WMFontHeight(tPtr->font))/2, 1);
 
     if (tPtr->view->flags.realized) {
-	paintTextField(tPtr);
+        paintTextField(tPtr);
     }
 }
 
@@ -690,13 +690,13 @@ WMGetTextFieldFont(WMTextField *tPtr)
 }
 
 
-static void 
+static void
 didResizeTextField(W_ViewDelegate *self, WMView *view)
 {
     WMTextField *tPtr = (WMTextField*)view->self;
 
-    tPtr->offsetWidth = 
-	WMAX((tPtr->view->size.height - WMFontHeight(tPtr->font))/2, 1);
+    tPtr->offsetWidth =
+        WMAX((tPtr->view->size.height - WMFontHeight(tPtr->font))/2, 1);
 
     tPtr->usableWidth = tPtr->view->size.width - 2*tPtr->offsetWidth /*+ 2*/;
 }
@@ -728,39 +728,39 @@ paintCursor(TextField *tPtr)
         text = tPtr->text;
 
     cx = WMWidthOfString(tPtr->font, &(text[tPtr->viewPosition]),
-			 tPtr->cursorPosition-tPtr->viewPosition);
+                         tPtr->cursorPosition-tPtr->viewPosition);
 
     switch (tPtr->flags.alignment) {
-     case WARight:
-	textWidth = WMWidthOfString(tPtr->font, text, tPtr->textLen);
-	if (textWidth < tPtr->usableWidth)
-	    cx += tPtr->offsetWidth + tPtr->usableWidth - textWidth + 1;
-	else
-	    cx += tPtr->offsetWidth + 1;
-	break;
-     case WALeft:
-	cx += tPtr->offsetWidth + 1;
-	break;
-     case WAJustified:
-	/* not supported */
-     case WACenter:
-	textWidth = WMWidthOfString(tPtr->font, text, tPtr->textLen);
-	if (textWidth < tPtr->usableWidth)
-	    cx += tPtr->offsetWidth + (tPtr->usableWidth-textWidth)/2;
-	else
-	    cx += tPtr->offsetWidth;
-	break;
+    case WARight:
+        textWidth = WMWidthOfString(tPtr->font, text, tPtr->textLen);
+        if (textWidth < tPtr->usableWidth)
+            cx += tPtr->offsetWidth + tPtr->usableWidth - textWidth + 1;
+        else
+            cx += tPtr->offsetWidth + 1;
+        break;
+    case WALeft:
+        cx += tPtr->offsetWidth + 1;
+        break;
+    case WAJustified:
+        /* not supported */
+    case WACenter:
+        textWidth = WMWidthOfString(tPtr->font, text, tPtr->textLen);
+        if (textWidth < tPtr->usableWidth)
+            cx += tPtr->offsetWidth + (tPtr->usableWidth-textWidth)/2;
+        else
+            cx += tPtr->offsetWidth;
+        break;
     }
     /*
-    XDrawRectangle(screen->display, tPtr->view->window, screen->xorGC,
-		   cx, tPtr->offsetWidth, 1,
-		   tPtr->view->size.height - 2*tPtr->offsetWidth - 1);
-	printf("%d %d\n",cx,tPtr->cursorPosition);
+     XDrawRectangle(screen->display, tPtr->view->window, screen->xorGC,
+     cx, tPtr->offsetWidth, 1,
+     tPtr->view->size.height - 2*tPtr->offsetWidth - 1);
+     printf("%d %d\n",cx,tPtr->cursorPosition);
      */
 
     XDrawLine(screen->display, tPtr->view->window, screen->xorGC,
-	      cx, tPtr->offsetWidth, cx,
-	      tPtr->view->size.height - tPtr->offsetWidth - 1);
+              cx, tPtr->offsetWidth, cx,
+              tPtr->view->size.height - tPtr->offsetWidth - 1);
 
     if (tPtr->flags.secure)
         wfree(text);
@@ -778,13 +778,13 @@ drawRelief(WMView *view, Bool beveled)
     GC dgc;
     int width = view->size.width;
     int height = view->size.height;
-    
+
     dgc = WMColorGC(scr->darkGray);
 
     if (!beveled) {
-	XDrawRectangle(dpy, view->window, dgc, 0, 0, width-1, height-1);
+        XDrawRectangle(dpy, view->window, dgc, 0, 0, width-1, height-1);
 
-	return;
+        return;
     }
     wgc = WMColorGC(scr->white);
     lgc = WMColorGC(scr->gray);
@@ -792,10 +792,10 @@ drawRelief(WMView *view, Bool beveled)
     /* top left */
     XDrawLine(dpy, view->window, dgc, 0, 0, width-1, 0);
     XDrawLine(dpy, view->window, dgc, 0, 1, width-2, 1);
-    
+
     XDrawLine(dpy, view->window, dgc, 0, 0, 0, height-2);
     XDrawLine(dpy, view->window, dgc, 1, 0, 1, height-3);
-    
+
     /* bottom right */
     XDrawLine(dpy, view->window, wgc, 0, height-1, width-1, height-1);
     XDrawLine(dpy, view->window, lgc, 1, height-2, width-2, height-2);
@@ -821,12 +821,12 @@ paintTextField(TextField *tPtr)
 
 
     if (!view->flags.realized || !view->flags.mapped)
-	return;
+        return;
 
     if (!tPtr->flags.bordered) {
-	bd = 0;
+        bd = 0;
     } else {
-	bd = 2;
+        bd = 2;
     }
 
     if (tPtr->flags.secure) {
@@ -838,9 +838,9 @@ paintTextField(TextField *tPtr)
     totalWidth = tPtr->view->size.width - 2*bd;
 
     drawbuffer = XCreatePixmap(screen->display, view->window,
-            view->size.width, view->size.height, screen->depth);
+                               view->size.width, view->size.height, screen->depth);
     XFillRectangle(screen->display, drawbuffer, WMColorGC(screen->white),
-            0,0, view->size.width,view->size.height);
+                   0,0, view->size.width,view->size.height);
     /* this is quite dirty */
     viewbuffer.screen = view->screen;
     viewbuffer.size = view->size;
@@ -848,36 +848,36 @@ paintTextField(TextField *tPtr)
 
 
     if (tPtr->textLen > 0) {
-    	tw = WMWidthOfString(tPtr->font, &(text[tPtr->viewPosition]),
-			     tPtr->textLen - tPtr->viewPosition);
+        tw = WMWidthOfString(tPtr->font, &(text[tPtr->viewPosition]),
+                             tPtr->textLen - tPtr->viewPosition);
 
-	th = WMFontHeight(tPtr->font);
+        th = WMFontHeight(tPtr->font);
 
-	ty = tPtr->offsetWidth;
-	switch (tPtr->flags.alignment) {
-	 case WALeft:
-	    tx = tPtr->offsetWidth + 1;
-	    if (tw < tPtr->usableWidth)
-		XFillRectangle(screen->display, drawbuffer,
-			       WMColorGC(screen->white),
-			       bd+tw,bd, totalWidth-tw,view->size.height-2*bd);
-	    break;
-	
-	 case WACenter:	    
-	    tx = tPtr->offsetWidth + (tPtr->usableWidth - tw) / 2;
-	    if (tw < tPtr->usableWidth)
-		XClearArea(screen->display, view->window, bd, bd,
-			   totalWidth, view->size.height-2*bd, False);
-	    break;
+        ty = tPtr->offsetWidth;
+        switch (tPtr->flags.alignment) {
+        case WALeft:
+            tx = tPtr->offsetWidth + 1;
+            if (tw < tPtr->usableWidth)
+                XFillRectangle(screen->display, drawbuffer,
+                               WMColorGC(screen->white),
+                               bd+tw,bd, totalWidth-tw,view->size.height-2*bd);
+            break;
 
-	 default:
-	 case WARight:
-	    tx = tPtr->offsetWidth + tPtr->usableWidth - tw - 1;
-	    if (tw < tPtr->usableWidth)
-		XClearArea(screen->display, view->window, bd, bd,
-			   totalWidth-tw, view->size.height-2*bd, False);
-	    break;
-	}
+        case WACenter:
+            tx = tPtr->offsetWidth + (tPtr->usableWidth - tw) / 2;
+            if (tw < tPtr->usableWidth)
+                XClearArea(screen->display, view->window, bd, bd,
+                           totalWidth, view->size.height-2*bd, False);
+            break;
+
+        default:
+        case WARight:
+            tx = tPtr->offsetWidth + tPtr->usableWidth - tw - 1;
+            if (tw < tPtr->usableWidth)
+                XClearArea(screen->display, view->window, bd, bd,
+                           totalWidth-tw, view->size.height-2*bd, False);
+            break;
+        }
 
         color = tPtr->flags.enabled ? screen->black : screen->darkGray;
 
@@ -916,8 +916,8 @@ paintTextField(TextField *tPtr)
     if (tPtr->flags.secure)
         wfree(text);
     XCopyArea(screen->display, drawbuffer, view->window,
-	      screen->copyGC, 0,0, view->size.width,
-	      view->size.height,0,0);
+              screen->copyGC, 0,0, view->size.width,
+              view->size.height,0,0);
     XFreePixmap(screen->display, drawbuffer);
 
     /* draw cursor */
@@ -932,13 +932,13 @@ static void
 blinkCursor(void *data)
 {
     TextField *tPtr = (TextField*)data;
-    
+
     if (tPtr->flags.cursorOn) {
-	tPtr->timerID = WMAddTimerHandler(CURSOR_BLINK_OFF_DELAY, blinkCursor,
-					  data);
+        tPtr->timerID = WMAddTimerHandler(CURSOR_BLINK_OFF_DELAY, blinkCursor,
+                                          data);
     } else {
-	tPtr->timerID = WMAddTimerHandler(CURSOR_BLINK_ON_DELAY, blinkCursor,
-					  data);	
+        tPtr->timerID = WMAddTimerHandler(CURSOR_BLINK_ON_DELAY, blinkCursor,
+                                          data);
     }
     paintCursor(tPtr);
     tPtr->flags.cursorOn = !tPtr->flags.cursorOn;
@@ -955,47 +955,47 @@ handleEvents(XEvent *event, void *data)
 
 
     switch (event->type) {
-     case FocusIn:
-	if (W_FocusedViewOfToplevel(W_TopLevelOfView(tPtr->view))!=tPtr->view)
-	    return;
-	tPtr->flags.focused = 1;
+    case FocusIn:
+        if (W_FocusedViewOfToplevel(W_TopLevelOfView(tPtr->view))!=tPtr->view)
+            return;
+        tPtr->flags.focused = 1;
 #if 0
-	if (!tPtr->timerID) {
-	    tPtr->timerID = WMAddTimerHandler(CURSOR_BLINK_ON_DELAY, 
-					      blinkCursor, tPtr);
-	}
+        if (!tPtr->timerID) {
+            tPtr->timerID = WMAddTimerHandler(CURSOR_BLINK_ON_DELAY,
+                                              blinkCursor, tPtr);
+        }
 #endif
-	paintTextField(tPtr);
+        paintTextField(tPtr);
 
-	NOTIFY(tPtr, didBeginEditing, WMTextDidBeginEditingNotification, NULL);
+        NOTIFY(tPtr, didBeginEditing, WMTextDidBeginEditingNotification, NULL);
 
-	tPtr->flags.notIllegalMovement = 0;
-	break;
+        tPtr->flags.notIllegalMovement = 0;
+        break;
 
-     case FocusOut:
-	tPtr->flags.focused = 0;
+    case FocusOut:
+        tPtr->flags.focused = 0;
 #if 0
-	if (tPtr->timerID)
-	    WMDeleteTimerHandler(tPtr->timerID);
-	tPtr->timerID = NULL;
+        if (tPtr->timerID)
+            WMDeleteTimerHandler(tPtr->timerID);
+        tPtr->timerID = NULL;
 #endif
 
-	paintTextField(tPtr);
-	if (!tPtr->flags.notIllegalMovement) {
-	    NOTIFY(tPtr, didEndEditing, WMTextDidEndEditingNotification,
-		   (void*)WMIllegalTextMovement);
-	}
-	break;
+        paintTextField(tPtr);
+        if (!tPtr->flags.notIllegalMovement) {
+            NOTIFY(tPtr, didEndEditing, WMTextDidEndEditingNotification,
+                   (void*)WMIllegalTextMovement);
+        }
+        break;
 
-     case Expose:
-	if (event->xexpose.count!=0)
-	    break;
-	paintTextField(tPtr);
-	break;
-	
-     case DestroyNotify:
-	destroyTextField(tPtr);
-	break;
+    case Expose:
+        if (event->xexpose.count!=0)
+            break;
+        paintTextField(tPtr);
+        break;
+
+    case DestroyNotify:
+        destroyTextField(tPtr);
+        break;
     }
 }
 
@@ -1015,7 +1015,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 
     /*printf("(%d,%d) -> ", tPtr->selection.position, tPtr->selection.count);*/
     if (((XKeyEvent *) event)->state & WM_EMACSKEYMASK)
-	control_pressed = 1;
+        control_pressed = 1;
 
     shifted = (event->xkey.state & ShiftMask ? True : False);
     controled = (event->xkey.state & ControlMask ? True : False);
@@ -1025,62 +1025,62 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     buffer[count] = '\0';
 
     switch (ksym) {
-     case XK_Tab:
+    case XK_Tab:
 #ifdef XK_ISO_Left_Tab
-     case XK_ISO_Left_Tab:
+    case XK_ISO_Left_Tab:
 #endif
-	if (!controled) {
-	    if (shifted) {
-		if (tPtr->view->prevFocusChain) {
-		    W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
-					 tPtr->view->prevFocusChain);
+        if (!controled) {
+            if (shifted) {
+                if (tPtr->view->prevFocusChain) {
+                    W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
+                                         tPtr->view->prevFocusChain);
                     tPtr->flags.notIllegalMovement = 1;
-		}
-		data = (void*)WMBacktabTextMovement;
-	    } else {
-		if (tPtr->view->nextFocusChain) {
-		    W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
-					 tPtr->view->nextFocusChain);
+                }
+                data = (void*)WMBacktabTextMovement;
+            } else {
+                if (tPtr->view->nextFocusChain) {
+                    W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
+                                         tPtr->view->nextFocusChain);
                     tPtr->flags.notIllegalMovement = 1;
-		}
-		data = (void*)WMTabTextMovement;
-	    }
-	    textEvent = WMTextDidEndEditingNotification;
+                }
+                data = (void*)WMTabTextMovement;
+            }
+            textEvent = WMTextDidEndEditingNotification;
 
             cancelSelection = 0;
 
-	    relay = False;
-	}
-	break;
+            relay = False;
+        }
+        break;
 
-     case XK_Escape:
-	if (!modified) {
-	    data = (void*)WMEscapeTextMovement;
-	    textEvent = WMTextDidEndEditingNotification;
-	    
-	    relay = False;
-	}
-	break;
+    case XK_Escape:
+        if (!modified) {
+            data = (void*)WMEscapeTextMovement;
+            textEvent = WMTextDidEndEditingNotification;
 
-     case XK_Return:
-	if (!modified) {
-	    data = (void*)WMReturnTextMovement;
-	    textEvent = WMTextDidEndEditingNotification;
-	    
-	    relay = False;
-	}
-	break;
+            relay = False;
+        }
+        break;
 
-     case WM_EMACSKEY_LEFT:
-	if (!control_pressed)
-	    goto normal_key;
-	else
+    case XK_Return:
+        if (!modified) {
+            data = (void*)WMReturnTextMovement;
+            textEvent = WMTextDidEndEditingNotification;
+
+            relay = False;
+        }
+        break;
+
+    case WM_EMACSKEY_LEFT:
+        if (!control_pressed)
+            goto normal_key;
+        else
             controled = False;
 
 #ifdef XK_KP_Left
-     case XK_KP_Left:
+    case XK_KP_Left:
 #endif
-     case XK_Left:
+    case XK_Left:
         if (tPtr->cursorPosition > 0) {
             paintCursor(tPtr);
             if (controled) {
@@ -1104,13 +1104,13 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 
         relay = False;
 
-	break;
+        break;
 
     case WM_EMACSKEY_RIGHT:
         if (!control_pressed)
             goto normal_key;
         else
-	    controled = False;
+            controled = False;
 
 #ifdef XK_KP_Right
     case XK_KP_Right:
@@ -1143,8 +1143,8 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 
         relay = False;
 
-	break;
-	
+        break;
+
     case WM_EMACSKEY_HOME:
         if (!control_pressed)
             goto normal_key;
@@ -1155,23 +1155,23 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     case XK_KP_Home:
 #endif
     case XK_Home:
-	if (!controled) {
-	    if (tPtr->cursorPosition > 0) {
-		paintCursor(tPtr);
-		tPtr->cursorPosition = 0;
-		if (tPtr->viewPosition > 0) {
-		    tPtr->viewPosition = 0;
-		    refresh = 1;
-		} else
-		    paintCursor(tPtr);
-	    }
-	    if (shifted)
-		cancelSelection = 0;
-	    
-	    relay = False;
-	}
-	break;
-	
+        if (!controled) {
+            if (tPtr->cursorPosition > 0) {
+                paintCursor(tPtr);
+                tPtr->cursorPosition = 0;
+                if (tPtr->viewPosition > 0) {
+                    tPtr->viewPosition = 0;
+                    refresh = 1;
+                } else
+                    paintCursor(tPtr);
+            }
+            if (shifted)
+                cancelSelection = 0;
+
+            relay = False;
+        }
+        break;
+
     case WM_EMACSKEY_END:
         if (!control_pressed)
             goto normal_key;
@@ -1182,100 +1182,100 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     case XK_KP_End:
 #endif
     case XK_End:
-	if (!controled) {
-	    if (tPtr->cursorPosition < tPtr->textLen) {
-		paintCursor(tPtr);
-		tPtr->cursorPosition = tPtr->textLen;
-		tPtr->viewPosition = 0;
-		while (WMWidthOfString(tPtr->font,
-				       &(tPtr->text[tPtr->viewPosition]),
-				       tPtr->textLen-tPtr->viewPosition)
-		       > tPtr->usableWidth) {
-		    tPtr->viewPosition++;
-		    refresh = 1;
-		}
-		if (!refresh)
-		    paintCursor(tPtr);
-	    }
-	    if (shifted)
-		cancelSelection = 0;
-	    
-	    relay = False;
-	}
-	break;
-	
-     case WM_EMACSKEY_BS:
-         if (!control_pressed)
-             goto normal_key;
-         else
-             modified = False;
+        if (!controled) {
+            if (tPtr->cursorPosition < tPtr->textLen) {
+                paintCursor(tPtr);
+                tPtr->cursorPosition = tPtr->textLen;
+                tPtr->viewPosition = 0;
+                while (WMWidthOfString(tPtr->font,
+                                       &(tPtr->text[tPtr->viewPosition]),
+                                       tPtr->textLen-tPtr->viewPosition)
+                       > tPtr->usableWidth) {
+                    tPtr->viewPosition++;
+                    refresh = 1;
+                }
+                if (!refresh)
+                    paintCursor(tPtr);
+            }
+            if (shifted)
+                cancelSelection = 0;
 
-     case XK_BackSpace:
-	if (!modified) {
-	    if (tPtr->selection.count) {
-		WMDeleteTextFieldRange(tPtr, tPtr->selection);
-		data = (void*)WMDeleteTextEvent;
-		textEvent = WMTextDidChangeNotification;
-	    } else if (tPtr->cursorPosition > 0) {
-		WMRange range;
-		range.position = tPtr->cursorPosition - 1;
-		range.count = 1;
-		WMDeleteTextFieldRange(tPtr, range);
-		data = (void*)WMDeleteTextEvent;
-		textEvent = WMTextDidChangeNotification;
-	    }
-	    
-	    relay = False;
-	}
-	break;
-	
+            relay = False;
+        }
+        break;
+
+    case WM_EMACSKEY_BS:
+        if (!control_pressed)
+            goto normal_key;
+        else
+            modified = False;
+
+    case XK_BackSpace:
+        if (!modified) {
+            if (tPtr->selection.count) {
+                WMDeleteTextFieldRange(tPtr, tPtr->selection);
+                data = (void*)WMDeleteTextEvent;
+                textEvent = WMTextDidChangeNotification;
+            } else if (tPtr->cursorPosition > 0) {
+                WMRange range;
+                range.position = tPtr->cursorPosition - 1;
+                range.count = 1;
+                WMDeleteTextFieldRange(tPtr, range);
+                data = (void*)WMDeleteTextEvent;
+                textEvent = WMTextDidChangeNotification;
+            }
+
+            relay = False;
+        }
+        break;
+
     case WM_EMACSKEY_DEL:
         if (!control_pressed)
             goto normal_key;
-	else
+        else
             modified = False;
 
 #ifdef XK_KP_Delete
     case XK_KP_Delete:
 #endif
     case XK_Delete:
-	if (!modified) {
-	    if (tPtr->selection.count) {
-		WMDeleteTextFieldRange(tPtr, tPtr->selection);
-		data = (void*)WMDeleteTextEvent;
-		textEvent = WMTextDidChangeNotification;
-	    } else if (tPtr->cursorPosition < tPtr->textLen) {
-		WMRange range;
-		range.position = tPtr->cursorPosition;
-		range.count = 1;
-		WMDeleteTextFieldRange(tPtr, range);
-		data = (void*)WMDeleteTextEvent;
-		textEvent = WMTextDidChangeNotification;
-	    }
-	    
-	    relay = False;
+        if (!modified) {
+            if (tPtr->selection.count) {
+                WMDeleteTextFieldRange(tPtr, tPtr->selection);
+                data = (void*)WMDeleteTextEvent;
+                textEvent = WMTextDidChangeNotification;
+            } else if (tPtr->cursorPosition < tPtr->textLen) {
+                WMRange range;
+                range.position = tPtr->cursorPosition;
+                range.count = 1;
+                WMDeleteTextFieldRange(tPtr, range);
+                data = (void*)WMDeleteTextEvent;
+                textEvent = WMTextDidChangeNotification;
+            }
+
+            relay = False;
         }
-	break;
+        break;
 
     normal_key:
-     default:
-	if (!controled) {
-	    if (count > 0 && !iscntrl(buffer[0])) {
-		if (tPtr->selection.count)
-		    WMDeleteTextFieldRange(tPtr, tPtr->selection);
-		WMInsertTextFieldText(tPtr, buffer, tPtr->cursorPosition);
-		data = (void*)WMInsertTextEvent;
-		textEvent = WMTextDidChangeNotification;
-	    
-		relay = False;
-	    }
+    default:
+        if (!controled) {
+            if (count > 0 && !iscntrl(buffer[0])) {
+                if (tPtr->selection.count)
+                    WMDeleteTextFieldRange(tPtr, tPtr->selection);
+                WMInsertTextFieldText(tPtr, buffer, tPtr->cursorPosition);
+                data = (void*)WMInsertTextEvent;
+                textEvent = WMTextDidChangeNotification;
+
+                relay = False;
+            }
         }
-	break;
+        break;
     }
 
     if (relay) {
-	WMRelayToNextResponder(W_VIEW(tPtr), event);
-	return;
+        WMRelayToNextResponder(W_VIEW(tPtr), event);
+        return;
     }
 
     /* Do not allow text selection in secure text fields */
@@ -1320,7 +1320,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     }
 
     if (refresh)
-	paintTextField(tPtr);
+        paintTextField(tPtr);
 
     /*printf("(%d,%d)\n", tPtr->selection.position, tPtr->selection.count);*/
 }
@@ -1333,25 +1333,25 @@ pointToCursorPosition(TextField *tPtr, int x)
     int tw;
 
     if (tPtr->flags.bordered)
-	x -= 2;
+        x -= 2;
 
-    if (WMWidthOfString(tPtr->font, &(tPtr->text[tPtr->viewPosition]), 
-			tPtr->textLen - tPtr->viewPosition) < x)
-	return tPtr->textLen;
+    if (WMWidthOfString(tPtr->font, &(tPtr->text[tPtr->viewPosition]),
+                        tPtr->textLen - tPtr->viewPosition) < x)
+        return tPtr->textLen;
 
     a = tPtr->viewPosition;
     b = tPtr->textLen;
 
     while (a < b && b-a>1) {
-	mid = (a+b)/2;
-	tw = WMWidthOfString(tPtr->font, &(tPtr->text[tPtr->viewPosition]), 
-			     mid - tPtr->viewPosition);
-	if (tw > x)
-	    b = mid;
-	else if (tw < x)
-	    a = mid;
-	else
-	    return mid;
+        mid = (a+b)/2;
+        tw = WMWidthOfString(tPtr->font, &(tPtr->text[tPtr->viewPosition]),
+                             mid - tPtr->viewPosition);
+        if (tw > x)
+            b = mid;
+        else if (tw < x)
+            a = mid;
+        else
+            return mid;
     }
 
     return (a+b)/2;
@@ -1359,33 +1359,33 @@ pointToCursorPosition(TextField *tPtr, int x)
 
 
 
-static void 
-pasteText(WMView *view, Atom selection, Atom target, Time timestamp, 
-	  void *cdata, WMData *data)
+static void
+pasteText(WMView *view, Atom selection, Atom target, Time timestamp,
+          void *cdata, WMData *data)
 {
     TextField *tPtr = (TextField*)view->self;
     char *str;
-    
+
     tPtr->flags.waitingSelection = 0;
 
     if (data != NULL) {
-	str = (char*)WMDataBytes(data);
+        str = (char*)WMDataBytes(data);
 
-	WMInsertTextFieldText(tPtr, str, tPtr->cursorPosition);
-	NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
-	       (void*)WMInsertTextEvent);
+        WMInsertTextFieldText(tPtr, str, tPtr->cursorPosition);
+        NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
+               (void*)WMInsertTextEvent);
     } else {
-	int n;
-	
-	str = XFetchBuffer(tPtr->view->screen->display, &n, 0);
-		
-	if (str != NULL) {
-	    str[n] = 0;
-	    WMInsertTextFieldText(tPtr, str, tPtr->cursorPosition);
-	    XFree(str);
-	    NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
-		   (void*)WMInsertTextEvent);
-	}
+        int n;
+
+        str = XFetchBuffer(tPtr->view->screen->display, &n, 0);
+
+        if (str != NULL) {
+            str[n] = 0;
+            WMInsertTextFieldText(tPtr, str, tPtr->cursorPosition);
+            XFree(str);
+            NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
+                   (void*)WMInsertTextEvent);
+        }
     }
 }
 
@@ -1396,52 +1396,52 @@ handleTextFieldActionEvents(XEvent *event, void *data)
     TextField *tPtr = (TextField*)data;
     static int move = 0;
     static Time lastButtonReleasedEvent = 0;
-	static Time lastButtonReleasedEvent2 = 0;
+    static Time lastButtonReleasedEvent2 = 0;
     Display *dpy = event->xany.display;
-    
+
     CHECK_CLASS(data, WC_TextField);
 
     switch (event->type) {
-     case KeyPress:
-	if (tPtr->flags.waitingSelection) {
-	    return;
-	}
+    case KeyPress:
+        if (tPtr->flags.waitingSelection) {
+            return;
+        }
         if (tPtr->flags.enabled && tPtr->flags.focused) {
             handleTextFieldKeyPress(tPtr, event);
-	    XDefineCursor(dpy, W_VIEW(tPtr)->window, 
-			  W_VIEW(tPtr)->screen->invisibleCursor);
-	    tPtr->flags.pointerGrabbed = 1;
-	}
+            XDefineCursor(dpy, W_VIEW(tPtr)->window,
+                          W_VIEW(tPtr)->screen->invisibleCursor);
+            tPtr->flags.pointerGrabbed = 1;
+        }
         break;
 
-     case MotionNotify:
-	
-	if (tPtr->flags.pointerGrabbed) {
-	    tPtr->flags.pointerGrabbed = 0;
-	    XDefineCursor(dpy, W_VIEW(tPtr)->window, 
-			  W_VIEW(tPtr)->screen->textCursor);
-	}
-	if (tPtr->flags.waitingSelection) {
-	    return;
-	}
+    case MotionNotify:
+
+        if (tPtr->flags.pointerGrabbed) {
+            tPtr->flags.pointerGrabbed = 0;
+            XDefineCursor(dpy, W_VIEW(tPtr)->window,
+                          W_VIEW(tPtr)->screen->textCursor);
+        }
+        if (tPtr->flags.waitingSelection) {
+            return;
+        }
 
         if (tPtr->flags.enabled && (event->xmotion.state & Button1Mask)) {
 
-	    if (tPtr->viewPosition < tPtr->textLen && event->xmotion.x >
+            if (tPtr->viewPosition < tPtr->textLen && event->xmotion.x >
                 tPtr->usableWidth) {
-		if (WMWidthOfString(tPtr->font,
-				    &(tPtr->text[tPtr->viewPosition]),
-				    tPtr->cursorPosition-tPtr->viewPosition)
+                if (WMWidthOfString(tPtr->font,
+                                    &(tPtr->text[tPtr->viewPosition]),
+                                    tPtr->cursorPosition-tPtr->viewPosition)
                     > tPtr->usableWidth) {
-		    tPtr->viewPosition++;
-		}
-	    } else if (tPtr->viewPosition > 0 && event->xmotion.x < 0) {
-		paintCursor(tPtr);
-		tPtr->viewPosition--;
-	    }
+                    tPtr->viewPosition++;
+                }
+            } else if (tPtr->viewPosition > 0 && event->xmotion.x < 0) {
+                paintCursor(tPtr);
+                tPtr->viewPosition--;
+            }
 
-	    tPtr->cursorPosition = 
-		pointToCursorPosition(tPtr, event->xmotion.x);
+            tPtr->cursorPosition =
+                pointToCursorPosition(tPtr, event->xmotion.x);
 
             /* Do not allow text selection in secure textfields */
             if (tPtr->flags.secure) {
@@ -1450,145 +1450,145 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 
             tPtr->selection.count = tPtr->cursorPosition - tPtr->selection.position;
 
-	    paintCursor(tPtr);
-	    paintTextField(tPtr);
+            paintCursor(tPtr);
+            paintTextField(tPtr);
 
-	}
-	break;
+        }
+        break;
 
-     case ButtonPress:
-	if (tPtr->flags.pointerGrabbed) {
-	    tPtr->flags.pointerGrabbed = 0;
-	    XDefineCursor(dpy, W_VIEW(tPtr)->window, 
-			  W_VIEW(tPtr)->screen->textCursor);
-	    break;
-	}
-	
-	if (tPtr->flags.waitingSelection) {
-	    break;
-	}
+    case ButtonPress:
+        if (tPtr->flags.pointerGrabbed) {
+            tPtr->flags.pointerGrabbed = 0;
+            XDefineCursor(dpy, W_VIEW(tPtr)->window,
+                          W_VIEW(tPtr)->screen->textCursor);
+            break;
+        }
+
+        if (tPtr->flags.waitingSelection) {
+            break;
+        }
 
         move = 1;
         switch (tPtr->flags.alignment) {
             int textWidth;
-         case WARight:
+        case WARight:
             textWidth = WMWidthOfString(tPtr->font, tPtr->text, tPtr->textLen);
             if (tPtr->flags.enabled && !tPtr->flags.focused) {
                 WMSetFocusToWidget(tPtr);
             }
             if (tPtr->flags.focused) {
-		tPtr->selection.position = tPtr->cursorPosition;
+                tPtr->selection.position = tPtr->cursorPosition;
                 tPtr->selection.count = 0;
             }
             if (textWidth < tPtr->usableWidth) {
-                tPtr->cursorPosition = pointToCursorPosition(tPtr, 
-				     event->xbutton.x - tPtr->usableWidth
-                                     + textWidth);
+                tPtr->cursorPosition = pointToCursorPosition(tPtr,
+                                                             event->xbutton.x - tPtr->usableWidth
+                                                             + textWidth);
             } else tPtr->cursorPosition = pointToCursorPosition(tPtr,
-                                     event->xbutton.x);
+                                                                event->xbutton.x);
 
             paintTextField(tPtr);
             break;
-        
-         case WALeft:
+
+        case WALeft:
             if (tPtr->flags.enabled && !tPtr->flags.focused) {
                 WMSetFocusToWidget(tPtr);
             }
             if (tPtr->flags.focused && event->xbutton.button == Button1) {
-                tPtr->cursorPosition = pointToCursorPosition(tPtr, 
-                                     event->xbutton.x);
-		tPtr->selection.position = tPtr->cursorPosition;
+                tPtr->cursorPosition = pointToCursorPosition(tPtr,
+                                                             event->xbutton.x);
+                tPtr->selection.position = tPtr->cursorPosition;
                 tPtr->selection.count = 0;
                 paintTextField(tPtr);
             }
             if (event->xbutton.button == Button2 && tPtr->flags.enabled) {
                 char *text;
-		int n;
+                int n;
 
-		if (!WMRequestSelection(tPtr->view, XA_PRIMARY, XA_STRING, 
-					event->xbutton.time,
-					pasteText, NULL)) {
-		    text = XFetchBuffer(tPtr->view->screen->display, &n, 0);
-		
-		    if (text) {
-			text[n] = 0;
-			WMInsertTextFieldText(tPtr, text, tPtr->cursorPosition);
-			XFree(text);
-			NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
-			       (void*)WMInsertTextEvent);
-		    }
-		} else {
-		    tPtr->flags.waitingSelection = 1;
-		}
+                if (!WMRequestSelection(tPtr->view, XA_PRIMARY, XA_STRING,
+                                        event->xbutton.time,
+                                        pasteText, NULL)) {
+                    text = XFetchBuffer(tPtr->view->screen->display, &n, 0);
+
+                    if (text) {
+                        text[n] = 0;
+                        WMInsertTextFieldText(tPtr, text, tPtr->cursorPosition);
+                        XFree(text);
+                        NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
+                               (void*)WMInsertTextEvent);
+                    }
+                } else {
+                    tPtr->flags.waitingSelection = 1;
+                }
             }
             break;
-	 default:
-	    break;
+        default:
+            break;
         }
-	break;
+        break;
 
-     case ButtonRelease:
-	if (tPtr->flags.pointerGrabbed) {
-	    tPtr->flags.pointerGrabbed = 0;
-	    XDefineCursor(dpy, W_VIEW(tPtr)->window, 
-			  W_VIEW(tPtr)->screen->textCursor);
-	}
-	if (tPtr->flags.waitingSelection) {
-	    break;
-	}
-	
-	if (!tPtr->flags.secure && tPtr->selection.count!=0) {
-	    int start, count;
-	    XRotateBuffers(dpy, 1);
-	    
-	    count = abs(tPtr->selection.count);
-	    if (tPtr->selection.count < 0)
-		start = tPtr->selection.position - count;
-	    else
-		start = tPtr->selection.position;
-	    
-	    XStoreBuffer(dpy, &tPtr->text[start], count, 0);
-	}
+    case ButtonRelease:
+        if (tPtr->flags.pointerGrabbed) {
+            tPtr->flags.pointerGrabbed = 0;
+            XDefineCursor(dpy, W_VIEW(tPtr)->window,
+                          W_VIEW(tPtr)->screen->textCursor);
+        }
+        if (tPtr->flags.waitingSelection) {
+            break;
+        }
 
-	move = 0;
-		
+        if (!tPtr->flags.secure && tPtr->selection.count!=0) {
+            int start, count;
+            XRotateBuffers(dpy, 1);
+
+            count = abs(tPtr->selection.count);
+            if (tPtr->selection.count < 0)
+                start = tPtr->selection.position - count;
+            else
+                start = tPtr->selection.position;
+
+            XStoreBuffer(dpy, &tPtr->text[start], count, 0);
+        }
+
+        move = 0;
+
         if (!tPtr->flags.secure &&
             event->xbutton.time - lastButtonReleasedEvent
             <= WINGsConfiguration.doubleClickDelay) {
 
-			if (event->xbutton.time - lastButtonReleasedEvent2 <= 2*WINGsConfiguration.doubleClickDelay) {
-				tPtr->selection.position = 0;
-				tPtr->selection.count = tPtr->textLen;
-			} else {
-				int pos, cnt;
-				char *txt;
-				pos = tPtr->selection.position;
-				cnt = tPtr->selection.count;
-				txt = tPtr->text;
-				while(pos >= 0) {
-					if (txt[pos] == ' ' || txt[pos] == '\t') break;
-					pos--;
-				}
-				pos++;
+            if (event->xbutton.time - lastButtonReleasedEvent2 <= 2*WINGsConfiguration.doubleClickDelay) {
+                tPtr->selection.position = 0;
+                tPtr->selection.count = tPtr->textLen;
+            } else {
+                int pos, cnt;
+                char *txt;
+                pos = tPtr->selection.position;
+                cnt = tPtr->selection.count;
+                txt = tPtr->text;
+                while(pos >= 0) {
+                    if (txt[pos] == ' ' || txt[pos] == '\t') break;
+                    pos--;
+                }
+                pos++;
 
-				while(pos + cnt < tPtr->textLen) {
-					if (txt[pos + cnt] == ' ' || txt[pos + cnt] == '\t')
-						break;
-					cnt++;
-				}
-				tPtr->selection.position = pos;
-				tPtr->selection.count = cnt;
-			}
+                while(pos + cnt < tPtr->textLen) {
+                    if (txt[pos + cnt] == ' ' || txt[pos + cnt] == '\t')
+                        break;
+                    cnt++;
+                }
+                tPtr->selection.position = pos;
+                tPtr->selection.count = cnt;
+            }
             paintTextField(tPtr);
-	    
-	    if (!tPtr->flags.ownsSelection) {
+
+            if (!tPtr->flags.ownsSelection) {
                 tPtr->flags.ownsSelection =
                     WMCreateSelectionHandler(tPtr->view,
                                              XA_PRIMARY,
                                              event->xbutton.time,
                                              &selectionHandler, NULL);
             }
-	} else if (!tPtr->flags.secure && tPtr->selection.count!=0 &&
+        } else if (!tPtr->flags.secure && tPtr->selection.count!=0 &&
                    !tPtr->flags.ownsSelection) {
             tPtr->flags.ownsSelection =
                 WMCreateSelectionHandler(tPtr->view,
@@ -1597,9 +1597,9 @@ handleTextFieldActionEvents(XEvent *event, void *data)
                                          &selectionHandler, NULL);
         }
 
-	lastButtonReleasedEvent2 = lastButtonReleasedEvent;
-	lastButtonReleasedEvent = event->xbutton.time;
-		
+        lastButtonReleasedEvent2 = lastButtonReleasedEvent;
+        lastButtonReleasedEvent = event->xbutton.time;
+
         break;
     }
 }
@@ -1610,7 +1610,7 @@ destroyTextField(TextField *tPtr)
 {
 #if 0
     if (tPtr->timerID)
-	WMDeleteTimerHandler(tPtr->timerID);
+        WMDeleteTimerHandler(tPtr->timerID);
 #endif
 
     WMReleaseFont(tPtr->font);
@@ -1619,7 +1619,7 @@ destroyTextField(TextField *tPtr)
     WMRemoveNotificationObserver(tPtr);
 
     if (tPtr->text)
-	wfree(tPtr->text);
+        wfree(tPtr->text);
 
     wfree(tPtr);
 }

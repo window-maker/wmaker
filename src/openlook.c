@@ -1,10 +1,10 @@
 /*
  * openlook.c - OPEN LOOK (tm) compatibility stuff
- * 
+ *
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -17,7 +17,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -105,21 +105,21 @@ getWindowState(Window win, OLWindowState *state)
     unsigned long *data;
 
     if (!_XA_SUN_WINDOW_STATE) {
-	_XA_SUN_WINDOW_STATE = XInternAtom(dpy, "_SUN_WINDOW_STATE", False);
+        _XA_SUN_WINDOW_STATE = XInternAtom(dpy, "_SUN_WINDOW_STATE", False);
     }
 
     data = (unsigned long*)PropGetCheckProperty(win, _XA_SUN_WINDOW_STATE,
-						XA_INTEGER, 32, 2, NULL);
+                                                XA_INTEGER, 32, 2, NULL);
 
     if (!data) {
-	return False;
+        return False;
     }
-    
+
     state->flags = data[0];
     state->state = data[1];
 
     XFree(data);
-    
+
     return True;
 }
 #endif
@@ -132,53 +132,53 @@ getWindowHints(Window window, OLHints *hints)
     static Atom _XA_OL_WIN_ATTR = 0;
 
     if (!_XA_OL_WIN_ATTR) {
-	_XA_OL_WIN_ATTR = XInternAtom(dpy, "_OL_WIN_ATTR", False);
+        _XA_OL_WIN_ATTR = XInternAtom(dpy, "_OL_WIN_ATTR", False);
     }
 
-    data = (long*)PropGetCheckProperty(window, _XA_OL_WIN_ATTR, 
-				       _XA_OL_WIN_ATTR, 32, 0, &count);
+    data = (long*)PropGetCheckProperty(window, _XA_OL_WIN_ATTR,
+                                       _XA_OL_WIN_ATTR, 32, 0, &count);
 
     if (!data)
-	return False;
+        return False;
 
     if (count == 3) {
-	/* old format */
+        /* old format */
 
-	hints->flags = OL_WINTYPE|OL_MENUTYPE|OL_PINSTATE;
-	hints->winType = data[0];
-	hints->menuType = data[1];
-	hints->pinInitState = data[2];
-	hints->cancel = 0;
+        hints->flags = OL_WINTYPE|OL_MENUTYPE|OL_PINSTATE;
+        hints->winType = data[0];
+        hints->menuType = data[1];
+        hints->pinInitState = data[2];
+        hints->cancel = 0;
 
     } else if (count == 5) {
-	/* new format */
+        /* new format */
 
-	hints->flags = data[0];
-	hints->winType = data[1];
-	hints->menuType = data[2];
-	hints->pinInitState = data[3];
-	hints->cancel = data[4];
+        hints->flags = data[0];
+        hints->winType = data[1];
+        hints->menuType = data[2];
+        hints->pinInitState = data[3];
+        hints->cancel = data[4];
 
     } else {
-	XFree(data);
-	return False;
+        XFree(data);
+        return False;
     }
 
     XFree(data);
 
     /* do backward compatibility stuff */
     if (hints->flags & OL_PINSTATE) {
-	static Atom pinIn = 0, pinOut;
-	
-	if (!pinIn) {
-	    pinIn = XInternAtom(dpy, "_OL_PIN_IN", False);
-	    pinOut = XInternAtom(dpy, "_OL_PIN_OUT", False);
-	}
-	
-	if (hints->pinInitState == pinIn)
-	    hints->pinInitState = OL_PIN_IN;
-	else if (hints->pinInitState == pinOut)
-	    hints->pinInitState = OL_PIN_OUT;
+        static Atom pinIn = 0, pinOut;
+
+        if (!pinIn) {
+            pinIn = XInternAtom(dpy, "_OL_PIN_IN", False);
+            pinOut = XInternAtom(dpy, "_OL_PIN_OUT", False);
+        }
+
+        if (hints->pinInitState == pinIn)
+            hints->pinInitState = OL_PIN_IN;
+        else if (hints->pinInitState == pinOut)
+            hints->pinInitState = OL_PIN_OUT;
     }
 
     return True;
@@ -194,60 +194,60 @@ applyDecorationHints(Window win, int *flags)
     static Atom _XA_OL_DECOR_ADD = 0;
     static Atom _XA_OL_DECOR_DEL = 0;
     static Atom _XA_CLOSE, _XA_FOOTER, _XA_RESIZE, _XA_HEADER, _XA_PIN,
-	_XA_ICONNAME;
+        _XA_ICONNAME;
     int count;
     int i;
 
     if (!_XA_OL_DECOR_DEL) {
-	_XA_OL_DECOR_ADD = XInternAtom(dpy, "_OL_DECOR_ADD", False);
-	_XA_OL_DECOR_DEL = XInternAtom(dpy, "_OL_DECOR_DEL", False);
+        _XA_OL_DECOR_ADD = XInternAtom(dpy, "_OL_DECOR_ADD", False);
+        _XA_OL_DECOR_DEL = XInternAtom(dpy, "_OL_DECOR_DEL", False);
 
-	_XA_CLOSE = XInternAtom(dpy, "_OL_DECOR_CLOSE", False);
-	_XA_FOOTER = XInternAtom(dpy, "_OL_DECOR_FOOTER", False);
-	_XA_RESIZE = XInternAtom(dpy, "_OL_DECOR_RESIZE", False);
-	_XA_HEADER = XInternAtom(dpy, "_OL_DECOR_HEADER", False);
-	_XA_PIN = XInternAtom(dpy, "_OL_DECOR_PIN", False);
-	_XA_ICONNAME = XInternAtom(dpy, "_OL_DECOR_ICON_NAME", False);
+        _XA_CLOSE = XInternAtom(dpy, "_OL_DECOR_CLOSE", False);
+        _XA_FOOTER = XInternAtom(dpy, "_OL_DECOR_FOOTER", False);
+        _XA_RESIZE = XInternAtom(dpy, "_OL_DECOR_RESIZE", False);
+        _XA_HEADER = XInternAtom(dpy, "_OL_DECOR_HEADER", False);
+        _XA_PIN = XInternAtom(dpy, "_OL_DECOR_PIN", False);
+        _XA_ICONNAME = XInternAtom(dpy, "_OL_DECOR_ICON_NAME", False);
     }
 
-    atoms = (Atom*)PropGetCheckProperty(win, _XA_OL_DECOR_ADD, XA_ATOM, 32, 0, 
-					&count);
+    atoms = (Atom*)PropGetCheckProperty(win, _XA_OL_DECOR_ADD, XA_ATOM, 32, 0,
+                                        &count);
     if (atoms) {
-	for (i=0; i < count; i++) {
-	    if (atoms[i] == _XA_CLOSE)
-		*flags |= OL_DECORATION_CLOSEBUTTON;
-	    else if (atoms[i] == _XA_FOOTER)
-		*flags |= OL_DECORATION_FOOTER;
-	    else if (atoms[i] == _XA_RESIZE)
-		*flags |= OL_DECORATION_RESIZEABLE;
-	    else if (atoms[i] == _XA_HEADER)
-		*flags |= OL_DECORATION_HEADER;
-	    else if (atoms[i] == _XA_PIN)
-		*flags |= OL_DECORATION_PUSHPIN;
-	    else if (atoms[i] == _XA_ICONNAME)
-		*flags |= OL_DECORATION_ICONNAME;
-	}
-	XFree(atoms);
+        for (i=0; i < count; i++) {
+            if (atoms[i] == _XA_CLOSE)
+                *flags |= OL_DECORATION_CLOSEBUTTON;
+            else if (atoms[i] == _XA_FOOTER)
+                *flags |= OL_DECORATION_FOOTER;
+            else if (atoms[i] == _XA_RESIZE)
+                *flags |= OL_DECORATION_RESIZEABLE;
+            else if (atoms[i] == _XA_HEADER)
+                *flags |= OL_DECORATION_HEADER;
+            else if (atoms[i] == _XA_PIN)
+                *flags |= OL_DECORATION_PUSHPIN;
+            else if (atoms[i] == _XA_ICONNAME)
+                *flags |= OL_DECORATION_ICONNAME;
+        }
+        XFree(atoms);
     }
 
-    atoms = (Atom*)PropGetCheckProperty(win, _XA_OL_DECOR_DEL, XA_ATOM, 32, 0, 
-					&count);
+    atoms = (Atom*)PropGetCheckProperty(win, _XA_OL_DECOR_DEL, XA_ATOM, 32, 0,
+                                        &count);
     if (atoms) {
-	for (i=0; i < count; i++) {
-	    if (atoms[i] == _XA_CLOSE)
-		*flags &= ~OL_DECORATION_CLOSEBUTTON;
-	    else if (atoms[i] == _XA_FOOTER)
-		*flags &= ~OL_DECORATION_FOOTER;
-	    else if (atoms[i] == _XA_RESIZE)
-		*flags &= ~OL_DECORATION_RESIZEABLE;
-	    else if (atoms[i] == _XA_HEADER)
-		*flags &= ~OL_DECORATION_HEADER;
-	    else if (atoms[i] == _XA_PIN)
-		*flags &= ~OL_DECORATION_PUSHPIN;
-	    else if (atoms[i] == _XA_ICONNAME)
-		*flags &= ~OL_DECORATION_ICONNAME;
-	}
-	XFree(atoms);
+        for (i=0; i < count; i++) {
+            if (atoms[i] == _XA_CLOSE)
+                *flags &= ~OL_DECORATION_CLOSEBUTTON;
+            else if (atoms[i] == _XA_FOOTER)
+                *flags &= ~OL_DECORATION_FOOTER;
+            else if (atoms[i] == _XA_RESIZE)
+                *flags &= ~OL_DECORATION_RESIZEABLE;
+            else if (atoms[i] == _XA_HEADER)
+                *flags &= ~OL_DECORATION_HEADER;
+            else if (atoms[i] == _XA_PIN)
+                *flags &= ~OL_DECORATION_PUSHPIN;
+            else if (atoms[i] == _XA_ICONNAME)
+                *flags &= ~OL_DECORATION_ICONNAME;
+        }
+        XFree(atoms);
     }
 }
 
@@ -258,12 +258,12 @@ wOLWMInitStuff(WScreen *scr)
     static Atom _SUN_OL_WIN_ATTR_5;
 
     if (!_XA_SUN_WM_PROTOCOLS) {
-	_XA_SUN_WM_PROTOCOLS = XInternAtom(dpy, "_SUN_WM_PROTOCOLS", False);
-	_SUN_OL_WIN_ATTR_5 = XInternAtom(dpy, "_SUN_OL_WIN_ATTR_5", False);
+        _XA_SUN_WM_PROTOCOLS = XInternAtom(dpy, "_SUN_WM_PROTOCOLS", False);
+        _SUN_OL_WIN_ATTR_5 = XInternAtom(dpy, "_SUN_OL_WIN_ATTR_5", False);
     }
 
     XChangeProperty(dpy, scr->root_win, _XA_SUN_WM_PROTOCOLS, XA_ATOM, 32,
-		    PropModeReplace, (unsigned char*)&_SUN_OL_WIN_ATTR_5, 1);
+                    PropModeReplace, (unsigned char*)&_SUN_OL_WIN_ATTR_5, 1);
 }
 
 
@@ -273,11 +273,11 @@ wOLWMChangePushpinState(WWindow *wwin, Bool state)
     static Atom pinState = 0;
 
     if (!pinState) {
-	pinState = XInternAtom(dpy, "_OL_PIN_STATE", False);
+        pinState = XInternAtom(dpy, "_OL_PIN_STATE", False);
     }
 
     XChangeProperty(dpy, wwin->client_win, pinState, XA_INTEGER, 32,
-		    PropModeReplace, (unsigned char *)&state, 1);
+                    PropModeReplace, (unsigned char *)&state, 1);
 }
 
 
@@ -293,14 +293,14 @@ void
 wOLWMUpdateWindowState(WWindow *wwin)
 {
     if (wwin->ol_window_state.used) {
-	if (wwin->ol_window_state.semantic) {
-	    if (wwin->ol_window_state.semantic_compose)
-		setComposeLed(True);
-	    else
-		setComposeLed(False);
-	}
+        if (wwin->ol_window_state.semantic) {
+            if (wwin->ol_window_state.semantic_compose)
+                setComposeLed(True);
+            else
+                setComposeLed(False);
+        }
     } else {
-	setComposeLed(False);
+        setComposeLed(False);
     }
 }
 #endif /* unfinished */
@@ -316,89 +316,89 @@ wOLWMCheckClientHints(WWindow *wwin)
     Atom menuType;
 
     if (!WT_BASE) {
-	WT_BASE = XInternAtom(dpy, "_OL_WT_BASE", False);
-	WT_CMD = XInternAtom(dpy, "_OL_WT_CMD", False);
-	WT_NOTICE = XInternAtom(dpy, "_OL_WT_NOTICE", False);
-	WT_HELP = XInternAtom(dpy, "_OL_WT_HELP", False);
-	WT_OTHER = XInternAtom(dpy, "_OL_WT_OTHER", False);
+        WT_BASE = XInternAtom(dpy, "_OL_WT_BASE", False);
+        WT_CMD = XInternAtom(dpy, "_OL_WT_CMD", False);
+        WT_NOTICE = XInternAtom(dpy, "_OL_WT_NOTICE", False);
+        WT_HELP = XInternAtom(dpy, "_OL_WT_HELP", False);
+        WT_OTHER = XInternAtom(dpy, "_OL_WT_OTHER", False);
 
-	MT_FULL = XInternAtom(dpy, "_OL_MENU_FULL", False);
-	MT_LIMITED = XInternAtom(dpy, "_OL_MENU_LIMITED", False);
-	MT_NONE = XInternAtom(dpy, "_OL_NONE", False);
+        MT_FULL = XInternAtom(dpy, "_OL_MENU_FULL", False);
+        MT_LIMITED = XInternAtom(dpy, "_OL_MENU_LIMITED", False);
+        MT_NONE = XInternAtom(dpy, "_OL_NONE", False);
     }
 
     /* get attributes */
 
     if (!getWindowHints(wwin->client_win, &hints) ||
-	!(hints.flags & OL_WINTYPE)) {
+        !(hints.flags & OL_WINTYPE)) {
 
-	decoration = OL_DECORATION_CLOSEBUTTON|OL_DECORATION_RESIZEABLE
-	    |OL_DECORATION_HEADER|OL_DECORATION_ICONNAME;
+        decoration = OL_DECORATION_CLOSEBUTTON|OL_DECORATION_RESIZEABLE
+            |OL_DECORATION_HEADER|OL_DECORATION_ICONNAME;
 
-	menuType = MT_FULL;
+        menuType = MT_FULL;
 
     } else {
-	if (hints.winType == WT_BASE) {
+        if (hints.winType == WT_BASE) {
 
-	    decoration = OL_DECORATION_CLOSEBUTTON|OL_DECORATION_RESIZEABLE
-		|OL_DECORATION_HEADER|OL_DECORATION_ICONNAME;
+            decoration = OL_DECORATION_CLOSEBUTTON|OL_DECORATION_RESIZEABLE
+                |OL_DECORATION_HEADER|OL_DECORATION_ICONNAME;
 
-	    menuType = MT_FULL;
+            menuType = MT_FULL;
 
-	} else if (hints.winType == WT_CMD) {
+        } else if (hints.winType == WT_CMD) {
 
-	    decoration = OL_DECORATION_PUSHPIN|OL_DECORATION_RESIZEABLE
-		|OL_DECORATION_HEADER|OL_DECORATION_ICONNAME;
+            decoration = OL_DECORATION_PUSHPIN|OL_DECORATION_RESIZEABLE
+                |OL_DECORATION_HEADER|OL_DECORATION_ICONNAME;
 
-	    menuType = MT_LIMITED;
+            menuType = MT_LIMITED;
 
             /* this is a transient-like window */
             wwin->client_flags.olwm_transient = 1;
 
-	} else if (hints.winType == WT_NOTICE) {
+        } else if (hints.winType == WT_NOTICE) {
 
-	    decoration = OL_DECORATION_ICONNAME;
-	    menuType = MT_NONE;
+            decoration = OL_DECORATION_ICONNAME;
+            menuType = MT_NONE;
 
-	} else if (hints.winType == WT_HELP) {
+        } else if (hints.winType == WT_HELP) {
 
-	    decoration = OL_DECORATION_PUSHPIN|OL_DECORATION_HEADER
-		|OL_DECORATION_ICONNAME|OL_DECORATION_WARPTOPIN;
-	    menuType = MT_LIMITED;
-	    
-	} else if (hints.winType == WT_OTHER) {
+            decoration = OL_DECORATION_PUSHPIN|OL_DECORATION_HEADER
+                |OL_DECORATION_ICONNAME|OL_DECORATION_WARPTOPIN;
+            menuType = MT_LIMITED;
 
-	    decoration = OL_DECORATION_ICONNAME;
-	    menuType = MT_NONE;
+        } else if (hints.winType == WT_OTHER) {
 
-	    if (hints.flags & OL_MENUTYPE) {
-		menuType = hints.menuType;
-	    }
-	}
+            decoration = OL_DECORATION_ICONNAME;
+            menuType = MT_NONE;
 
-	if (hints.flags & OL_PINSTATE) {
-	    pinInitState = hints.pinInitState;
-	} else {
-	    pinInitState = OL_PIN_OUT;
-	}
+            if (hints.flags & OL_MENUTYPE) {
+                menuType = hints.menuType;
+            }
+        }
+
+        if (hints.flags & OL_PINSTATE) {
+            pinInitState = hints.pinInitState;
+        } else {
+            pinInitState = OL_PIN_OUT;
+        }
     }
 
     /* mask attributes with decoration hints */
     applyDecorationHints(wwin->client_win, &decoration);
 
     if ((decoration & OL_DECORATION_CLOSEBUTTON)
-	&& (decoration & OL_DECORATION_PUSHPIN))
-	decoration &= ~OL_DECORATION_CLOSEBUTTON;
+        && (decoration & OL_DECORATION_PUSHPIN))
+        decoration &= ~OL_DECORATION_CLOSEBUTTON;
 
     if (!(decoration & OL_DECORATION_PUSHPIN))
-	decoration &= ~OL_DECORATION_WARPTOPIN;
+        decoration &= ~OL_DECORATION_WARPTOPIN;
 
 
     /* map the hints to our attributes */
     if (menuType == MT_FULL)
-	wwin->flags.olwm_limit_menu = 0;
+        wwin->flags.olwm_limit_menu = 0;
     else
-	wwin->flags.olwm_limit_menu = 1;
+        wwin->flags.olwm_limit_menu = 1;
 
     /*
      * Emulate olwm pushpin.
@@ -408,20 +408,20 @@ wOLWMCheckClientHints(WWindow *wwin)
      * into a normal close button.
      */
     if ((decoration & OL_DECORATION_PUSHPIN) && pinInitState==OL_PIN_OUT) {
-	wwin->flags.olwm_push_pin_out = 1;
+        wwin->flags.olwm_push_pin_out = 1;
 
-	wOLWMChangePushpinState(wwin, False);
+        wOLWMChangePushpinState(wwin, False);
     } else {
-	wOLWMChangePushpinState(wwin, True);
+        wOLWMChangePushpinState(wwin, True);
     }
 
     if (!(decoration & OL_DECORATION_RESIZEABLE)) {
-	wwin->client_flags.no_resizable = 1;
-	wwin->client_flags.no_resizebar = 1;
+        wwin->client_flags.no_resizable = 1;
+        wwin->client_flags.no_resizebar = 1;
     }
 
     if (decoration & OL_DECORATION_WARPTOPIN) {
-	wwin->client_flags.olwm_warp_to_pin = 1;
+        wwin->client_flags.olwm_warp_to_pin = 1;
     }
 
 }

@@ -43,46 +43,46 @@ wtokennext(char *word, char **next)
 
     t = ret = wmalloc(strlen(word)+1);
     ptr = word;
-    
+
     state = 0;
     *t = 0;
     while (1) {
-	if (*ptr==0) 
-	    ctype = PRC_EOS;
-	else if (*ptr=='\\')
-	    ctype = PRC_ESCAPE;
-	else if (*ptr=='"')
-	    ctype = PRC_DQUOTE;
-	else if (*ptr=='\'')
-	    ctype = PRC_SQUOTE;
-	else if (*ptr==' ' || *ptr=='\t')
-	    ctype = PRC_BLANK;
-	else
-	    ctype = PRC_ALPHA;
+        if (*ptr==0)
+            ctype = PRC_EOS;
+        else if (*ptr=='\\')
+            ctype = PRC_ESCAPE;
+        else if (*ptr=='"')
+            ctype = PRC_DQUOTE;
+        else if (*ptr=='\'')
+            ctype = PRC_SQUOTE;
+        else if (*ptr==' ' || *ptr=='\t')
+            ctype = PRC_BLANK;
+        else
+            ctype = PRC_ALPHA;
 
-	if (mtable[state][ctype].output) {
-	    *t = *ptr; t++;
-	    *t = 0;
-	}
-	state = mtable[state][ctype].nstate;
-	ptr++;
-	if (mtable[state][0].output<0) {
-	    break;
-	}
+        if (mtable[state][ctype].output) {
+            *t = *ptr; t++;
+            *t = 0;
+        }
+        state = mtable[state][ctype].nstate;
+        ptr++;
+        if (mtable[state][0].output<0) {
+            break;
+        }
     }
 
     if (*ret==0)
-	t = NULL;
+        t = NULL;
     else
-	t = wstrdup(ret);
+        t = wstrdup(ret);
 
     wfree(ret);
-    
+
     if (ctype==PRC_EOS)
-	*next = NULL;
+        *next = NULL;
     else
-	*next = ptr;
-    
+        *next = ptr;
+
     return t;
 }
 
@@ -97,14 +97,14 @@ wtokensplit(char *command, char ***argv, int *argc)
     count = 0;
     line = command;
     do {
-	token = wtokennext(line, &line);
-	if (token) {
-	    if (count == 0)
-		*argv = wmalloc(sizeof(char**));
-	    else
-		*argv = wrealloc(*argv, (count+1)*sizeof(char**));
-	    (*argv)[count++] = token;
-	}
+        token = wtokennext(line, &line);
+        if (token) {
+            if (count == 0)
+                *argv = wmalloc(sizeof(char**));
+            else
+                *argv = wrealloc(*argv, (count+1)*sizeof(char**));
+            (*argv)[count++] = token;
+        }
     } while (token!=NULL && line!=NULL);
 
     *argc = count;
@@ -128,21 +128,21 @@ wtokenjoin(char **list, int count)
                 j += 2;
         }
     }
-    
+
     flat_string = wmalloc(j+count+1);
 
     *flat_string = 0;
     for (i=0; i<count; i++) {
-	if (list[i]!=NULL && list[i][0]!=0) {
-	    if (i>0)
-		strcat(flat_string, " ");
+        if (list[i]!=NULL && list[i][0]!=0) {
+            if (i>0)
+                strcat(flat_string, " ");
             wspace = strpbrk(list[i], " \t");
             if (wspace)
                 strcat(flat_string, "\"");
-	    strcat(flat_string, list[i]);
+            strcat(flat_string, list[i]);
             if (wspace)
                 strcat(flat_string, "\"");
-	}
+        }
     }
 
     return flat_string;
@@ -207,9 +207,9 @@ wstrconcat(char *str1, char *str2)
     char *str;
 
     if (!str1)
-	return wstrdup(str2);
+        return wstrdup(str2);
     else if (!str2)
-	return wstrdup(str1);
+        return wstrdup(str1);
 
     str = wmalloc(strlen(str1)+strlen(str2)+1);
     strcpy(str, str1);
@@ -223,9 +223,9 @@ char*
 wstrappend(char *dst, char *src)
 {
     if (!dst)
-	return wstrdup(src);
+        return wstrdup(src);
     else if (!src || *src==0)
-	return dst;
+        return dst;
 
     dst = wrealloc(dst, strlen(dst)+strlen(src)+1);
     strcat(dst, src);

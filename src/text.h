@@ -1,4 +1,4 @@
-/********************************************************************\
+/********************************************************************
  * text.h -- a basic text field                                     *
  * Copyright (C) 1997 Robin D. Clark                                *
  *                                                                  *
@@ -20,7 +20,7 @@
  * Internet: rclark@cs.hmc.edu                                      *
  *  Address: 609 8th Street                                         *
  *           Huntington Beach, CA 92648-4632                        *
-\********************************************************************/
+ ********************************************************************/
 
 #ifndef __TEXT_H__
 #define __TEXT_H__
@@ -28,33 +28,33 @@
 #include "wcore.h"
 
 typedef struct {
-  char  *txt;                      /* ptr to the text               */
-  int   length;                    /* length of txt[]               */
-  int   startPos;                  /* beginning of selected text    */
-  int   endPos;                    /* end of selected text          */
-} WTextBlock;                      /* if startPos == endPos, no txt *
-                                  * is selected... they give the  *
-                                  * cursor position.              */
+    char  *txt;                      /* ptr to the text               */
+    int   length;                    /* length of txt[]               */
+    int   startPos;                  /* beginning of selected text    */
+    int   endPos;                    /* end of selected text          */
+} WTextBlock;                        /* if startPos == endPos, no txt *
+                                      * is selected... they give the  *
+                                      * cursor position.              */
 typedef struct {
-  WCoreWindow *core;
-  WMFont       *font;
-  WTextBlock  text;
-  GC	gc;
-  GC    regGC;                     /* the normal GC                 */
-  GC    invGC;                     /* inverted, for selected text   */
-  WMagicNumber *magic;
-  short xOffset;
-  short yOffset;
-  unsigned int done:1;
-  unsigned int blink_on:1;
-  unsigned int blinking:1;
-  unsigned int canceled:1;
+    WCoreWindow *core;
+    WMFont       *font;
+    WTextBlock  text;
+    GC	gc;
+    GC    regGC;                     /* the normal GC                 */
+    GC    invGC;                     /* inverted, for selected text   */
+    WMagicNumber *magic;
+    short xOffset;
+    short yOffset;
+    unsigned int done:1;
+    unsigned int blink_on:1;
+    unsigned int blinking:1;
+    unsigned int canceled:1;
 } WTextInput;
 
 
 /** PROTOTYPES ******************************************************/
-WTextInput* wTextCreate( WCoreWindow *core, int x, int y, int width, 
-	int height );
+WTextInput* wTextCreate( WCoreWindow *core, int x, int y, int width,
+                        int height );
 void   wTextDestroy( WTextInput *wText );
 void   wTextPaint( WTextInput *wText );
 char*  wTextGetText( WTextInput *wText );
