@@ -1,0 +1,3 @@
+Makefile
+fontl testcolorpanel testmywidget testnot wmfile wtest wmquery
+.libs

@@ -1,0 +1,4 @@
+Makefile
+*.lo *.la
+view testgrad testdraw get-wraster-flags
+.libs

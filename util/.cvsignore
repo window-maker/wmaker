@@ -1,0 +1,3 @@
+Makefile
+wxcopy wxpaste wdwrite getstyle setstyle seticons geticonset wmsetbg wmaker.inst
+.libs

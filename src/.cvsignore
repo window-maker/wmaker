@@ -1,0 +1,4 @@
+Makefile
+config.h wconfig.h stamp-h
+.libs
+wmaker
