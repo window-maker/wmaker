@@ -406,6 +406,8 @@ void RHSVtoRGB(RHSVColor *hsv, RColor *rgb);
  */
 void RClearImage(RImage *image, RColor *color);
 
+void RFillImage(RImage *image, RColor *color);
+    
 void RBevelImage(RImage *image, int bevel_type);
 
 RImage *RRenderGradient(unsigned width, unsigned height, RColor *from, 

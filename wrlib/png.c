@@ -128,10 +128,10 @@ RLoadPNG(RContext *context, char *file, int index)
     }
     
     /* normalize to 8bpp with alpha channel */
-    if (color_type == PNG_COLOR_TYPE_PALETTE && depth < 8)
+    if (color_type == PNG_COLOR_TYPE_PALETTE && depth <= 8)
         png_set_expand(png);
 
-    if (color_type == PNG_COLOR_TYPE_GRAY && depth < 8)
+    if (color_type == PNG_COLOR_TYPE_GRAY && depth <= 8)
         png_set_expand(png);
 
     if (png_get_valid(png, pinfo, PNG_INFO_tRNS))
