@@ -1,0 +1,230 @@
+/* Slovak root menu for WindowMaker
+ * (C) 2001 judas@hell
+ * 
+ * Original translation by judas@hell on Jan 22 2001
+ * Currently maintained by judas@hell <tomka@oalevice.sk>
+ *
+ * Version history:
+ *	mnu-ver	WM-ver	author		email			date
+ *	0.10	0.63.1	judas@hell	<tomka@oalevice.sk>	Jan 22 2001
+ *
+ */
+
+/*
+ * Syntax je:
+ *
+ * <Názov> [SHORTCUT <Klávesová skratka>] <Príkaz> <Parametre>
+ *
+ * <Názov> je µubovoµný re»azec, ktorý sa pou¾ije ako názov polo¾ky. Ak obsahuje
+ *	medzery, musí by» uzavretý v zátvorkách.
+ * 
+ * SHORTCUT udáva klávesovú skratku pre danú polo¾ku. <Klávesová skratka> má
+ *	rovnakú syntax ako v súbore $HOME/GNUstep/Defaults/WindowMaker, napr. 
+ *	RootMenuKey alebo MiniaturizeKey.
+ *
+ * Nemô¾ete uda» klávesovú skratku pre polo¾ky typu MENU A OPEN_MENU.
+ * 
+ * <Príkaz> je jeden z nasledujúcich:
+ * 	MENU - zaèína definíciu (sub)menu
+ * 	END  - ukonèuje definíciu (sub)menu
+ * 	OPEN_MENU - vlo¾í menu zo súboru, rúry alebo adresáru(ov),
+ * 		    eventuálne pred ka¾dú polo¾ku vlo¾í príkaz
+ * 	WORKSPACE_MENU - vlo¾í submenu operácií pracovnej plochy. Len jedno
+ * 		    takéto menu je povolené
+ * 	EXEC <príkaz> - vykoná externý príkaz
+ * 	SHEXEC <príkaz> - vykoná príkaz shelu (napr. gimp > /dev/null)
+ * 	EXIT - ukonèí mana¾éra okien
+ * 	RESTART [<mana¾ér okien>] - re¹tartuje WindowMaker alebo spustí iný
+ * 			mana¾ér okien
+ * 	REFRESH - obnoví obrazovku
+ * 	ARRANGE_ICONS - vyrovná ikony na pracovnej ploche
+ * 	SHUTDOWN - zabije v¹etkých klientov (a ukonèí sedenie X systému)
+ * 	SHOW_ALL - zobrazí v¹etky okná na pracovnej ploche
+ * 	HIDE_OTHERS - skryje v¹etky okná na pracovnej ploche okrem
+ * 		aktívneho (alebo posledného aktívneho)
+ * 	SAVE_SESSION - ulo¾í aktuálny stav pracovnej plochy, èo zahàòa v¹etky
+ * 		       spustené aplikácie, ich nastavenia (geometria,
+ * 		       umiestnenie na obrazovke, pracovná plocha, na ktorej sa
+ * 		       nachádzajú, Dok alebo sponka, odkiaµ boli spustené, èi
+ * 		       sú minimalizované, zrolované alebo skryté. Tie¾ sa ulo¾í
+ * 		       plocha, na ktorej sa u¾ívateµ nachádza. Pri ka¾dom ¹tarte
+ * 		       WindowMakeru sa tieto nastavenia obnovia a¾ kým sa nepou-
+ * 		       ¾ije znova SAVE_SESSION alebo CLEAR_SESSION. Ak je
+ * 		       SaveSessionOnExit = Yes; v súbore domén WindowMakeru,
+ * 		       potom sa toto v¹etko ukladá pri ka¾dom ukonèení
+ * 		       WindowMakeru, èím sa prepí¹u predchádzajúce SAVE_SESSION
+ * 		       a CLEAR_SESSION (viï ni¾¹ie).
+ * 	CLEAR_SESSION - zma¾e ulo¾ené sedenie. Toto nemá úèinok, keï je
+ * 			nastavené SaveSessionOnExit.
+ * 	INFO - zobrazí panel Info
+ *
+ * Syntax príkazu OPEN_MENU:
+ *   1. Vkladanie menu zo súboru.
+ *   	// otvorí súbor.menu, ktorý musí obsahova» definíciu menu a toto
+ *   	// vlo¾í na aktuálnu pozíciu
+ *	OPEN_MENU súbor.menu
+ *   2. Vkladanie menu z rúry
+ *   	// spustí program a jeho ¹tandardný výstup pou¾ije ako definíciu menu.
+ *   	// Výstup menu musí by» korektná definícia menu.
+ *   	// Medzera medzi '|' a samotným príkazom nie je povinná.
+ *   	// Pou¾ite '||' namiesto '|' ak chcete, aby sa menu obnovovalo
+ *   	// pri ka¾dom otvorení. Mô¾e to by» pomalé.
+ *	OPEN_MENU | príkaz
+ *      OPEN_MENU || príkaz
+ *   3. Vkladanie menu z adresára
+ *   	// Otvorí jeden alebo viac adresárov vytvorí menu z podadresárov a
+ *   	// spustiteµných súborov zoradených v abecednom poradí.
+ *	OPEN_MENU /nejaký/adresár [/ïal¹í/adresár ...]
+ *   4. Vkladanie adresára s príkazom
+ *   	// Otvorí jeden alebo viac adresárov a vytvorí menu zo v¹etkých
+ *   	// podadresárov a súborov s právom èítania, zoradených v abecednom
+ *	// poradí, prièom pred ka¾dý vlo¾í príkaz.
+ *	OPEN_MENU [voµby] /nejaký/adr [/ïal¹í/adr ...] WITH príkaz -voµby
+ *		Voµby:
+ * 			-noext 	odstráni» zvy¹ok mena súboru za powslednou
+ * 				bodkou (príponu)
+ *
+ * <Parametre> sú odovzdané aplikácii, ktorá sa má vykona».
+ *
+ * ** Voµby príkazového riadku príkazu EXEC:
+ * %s - nahradi» aktuálnym výberom
+ * %a(titul[,výzva]) - otvorí dialóg s daným titulom, prípadne i výzvou a
+ * 			nahradí sa v príkaze textom, ktorý zadáte
+ * %w - nahradí sa identifikaèným èíslom (XID) aktuálneho okna
+ * %W - nahradí sa èíslom aktuálnej pracovnej plochy
+ * 
+ * Vlo¾i» ¹peciálne znaky (ako % a ") mô¾ete pomocou znaku \ :
+ * 	xterm -T "\"Ahoj svet\""
+ *
+ * Tie¾ je povolené pou¾íva» ¹peciálne kombinácie znakov, ako napr. \n
+ *
+ * Ka¾dý príkaz MENU musí ma» na konci zodpovedajúci príkaz END.
+ *
+ * Príklad:
+ *
+ * "Test" MENU
+ *	"XTerm" EXEC xterm
+ *		// vytvorí submenu s obsahom adresára /usr/openwin/bin
+ *	"XView apps" OPEN_MENU "/usr/openwin/bin"
+ *		// aplikácie X11 v rôznych adresároch
+ *	"X11 apps" OPEN_MENU /usr/X11/bin $HOME/bin/X11
+ *		// nastaví obrázky pozadia
+ *	"Pozadie" OPEN_MENU -noext $HOME/images /usr/share/images WITH wmsetbg -u -t
+ *		// vlo¾í menu definované v súbore style.menu
+ *	"©týl" OPEN_MENU style.menu
+ * "Test" END
+ */
+
+#include "wmmacros"
+
+"Aplikácie" MENU
+	"Informácie" MENU
+		"Panel Info" INFO_PANEL
+		"Panel Legal" LEGAL_PANEL
+		"Systémová konzola" EXEC xconsole
+		"Za»a¾enie systému" SHEXEC xosview || xload
+		"Zoznam procesov" EXEC xterm -e top
+		"Prehliadaè manuálov" EXEC xman
+	"Informácie" END
+	"Spusti»..." SHEXEC %a(Spusti»,Zadajte príkaz:)
+	"XTerm" EXEC xterm -sb 
+	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
+	"Pracovné plochy" WORKSPACE_MENU
+	"Aplikácie" MENU
+		"Grafika" MENU
+			"Gimp" SHEXEC gimp >/dev/null
+			"XV" EXEC xv
+			"XPaint" EXEC xpaint
+			"XFig" EXEC xfig
+		"Grafika" END
+		"Správca súborov Xfm" EXEC xfm
+		"Správca súborov OffiX" EXEC files
+		"LyX" EXEC lyx
+		"Netscape" EXEC netscape 
+  		"Ghostview" EXEC ghostview %a(GhostView,Zadajte meno súboru)
+		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobar,Zadajte meno PDF súboru)
+  		"TkDesk" EXEC tkdesk
+	"Aplikácie" END
+	"Editory" MENU
+		"XFte" EXEC xfte
+		"XEmacs" SHEXEC xemacs || emacs
+		"XJed" EXEC xjed 
+		"NEdit" EXEC nedit
+		"Xedit" EXEC xedit
+		"VIM" EXEC xterm -e vim
+	"Editory" END
+	"Rôzne" MENU
+		"Xmcd" SHEXEC xmcd 2> /dev/null
+		"CD prehrávaè" EXEC xplaycd
+		"Mixer" EXEC xmixer
+	"Rôzne" END
+	"Nástroje" MENU
+		"Kalkulaèka" EXEC xcalc
+		"Vlastnosti okien" SHEXEC xprop | xmessage -center -title 'xprop' -file -
+		"Výber fontu" EXEC xfontsel
+		"Emulátor terminálu" EXEC xminicom
+		"Lupa" EXEC xmag
+		"Paleta" EXEC xcmap
+		"Zabi» okno" EXEC xkill
+		"Nástenka" EXEC xclipboard
+	"Nástroje" END
+
+	"Výber" MENU
+		"Kopírova»" SHEXEC echo '%s' | wxcopy
+		"Posla» po¹tu" EXEC xterm -name mail -T "Pine" -e pine %s
+		"Prehliada» web" EXEC netscape %s
+		"Hµada» v manuáli" SHEXEC MANUAL_SEARCH(%s)
+	"Výber" END
+
+	"Pracovná plocha" MENU
+		"Skry» ostatné" HIDE_OTHERS
+		"Zobrazi» v¹etky" SHOW_ALL
+		"Vyrovna» ikony" ARRANGE_ICONS
+		"Obnovi» obrazovku" REFRESH
+		"Uzamknú»" EXEC xlock -allowroot -usefirst
+		"Ulo¾i» sedenie" SAVE_SESSION
+		"Zmaza» sedenie" CLEAR_SESSION
+	"Pracovná plocha" END
+
+	"Vzhµad" MENU
+		"Témy" OPEN_MENU -noext THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"©týly" OPEN_MENU -noext STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Sady ikon" OPEN_MENU -noext ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Pozadie" MENU
+			"Jedna farba" MENU
+                        	"Èierna" WS_BACK '(solid, black)'
+                        	"Modrá"  WS_BACK '(solid, "#505075")'
+				"Indigo" WS_BACK '(solid, "#243e6c")'
+				"Námornícka modrá" WS_BACK '(solid, "#224477")'
+                        	"Fialová" WS_BACK '(solid, "#554466")'
+                        	"P¹enièná"  WS_BACK '(solid, "wheat4")'
+                        	"Tmavosivá"  WS_BACK '(solid, "#333340")'
+                        	"Vínová" WS_BACK '(solid, "#400020")'
+			"Jedna farba" END
+			"Prechod farieb" MENU
+				"Západ slnka" WS_BACK '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'
+				"Obloha" WS_BACK '(vgradient, blue4, white)'
+    				"Odtiene modrej" WS_BACK '(vgradient, "#7080a5", "#101020")'
+				"Odtiene indiga" WS_BACK '(vgradient, "#746ebc", "#242e4c")'
+			    	"Odtiene fialovej" WS_BACK '(vgradient, "#654c66", "#151426")'
+    				"Odtiene p¹eniènej" WS_BACK '(vgradient, "#a09060", "#302010")'
+    				"Odtiene sivej" WS_BACK '(vgradient, "#636380", "#131318")'
+    				"Odtiene vínovej" WS_BACK '(vgradient, "#600040", "#180010")'
+			"Prechod farieb" END
+			"Obrázky" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+		"Pozadie" END
+		"Ulo¾i» tému" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Meno témy,Zadajte názov súboru:)"
+		"Ulo¾i» sadu ikon" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(Meno sady ikon,Zadajte názov súboru:)"
+		"Konfiguraèný nástroj" EXEC /usr/local/GNUstep/Apps/WPrefs.app/WPrefs
+	"Vzhµad" END
+
+	"Koniec" MENU
+		"Re¹tartova»" RESTART
+		"Spusti» BlackBox" RESTART blackbox
+		"Spusti» kwm" RESTART kwm
+		"Spusti» IceWM" RESTART icewm
+		"Koniec"  EXIT
+	"Koniec" END
+"Aplikácie" END
+
+
