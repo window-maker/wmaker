@@ -2175,6 +2175,8 @@ getTextRenderer(WScreen *scr, WDefaultEntry *entry, proplist_t value,
     char *val, *lib, *func, **argv;
     int argc, changed;
 
+    /* Destroying functions if they are already loaded. */
+    /* The function will auto-check NULL, does this break any ethic? */
     if (strcmp(entry->key, "FTitleColor")==0) {
         wPluginDestroyFunction(scr->drawstring_func[changed = W_STRING_FTITLE]);
         scr->drawstring_func[W_STRING_FTITLE] = NULL;
@@ -2187,7 +2189,7 @@ getTextRenderer(WScreen *scr, WDefaultEntry *entry, proplist_t value,
     } else if (strcmp(entry->key, "MenuTitleColor")==0) {
         wPluginDestroyFunction(scr->drawstring_func[changed = W_STRING_MTITLE]);
         scr->drawstring_func[W_STRING_MTITLE] = NULL;
-    } else if (strcmp(entry->key, "MenuPluginColor")==0) {
+    } else if (strcmp(entry->key, "MenuTextColor")==0) { /* problemssss */
         wPluginDestroyFunction(scr->drawstring_func[changed = W_STRING_MTEXT]);
         scr->drawstring_func[W_STRING_MTEXT] = NULL;
     }
@@ -2208,7 +2210,7 @@ getTextRenderer(WScreen *scr, WDefaultEntry *entry, proplist_t value,
             if (!elem || !PLIsString(elem)) return False;
             func = PLGetString(elem);
             scr->drawstring_func[changed] = wPluginCreateFunction (W_FUNCTION_DRAWSTRING,
-                    lib, "initDrawString", func, NULL, value,
+                    lib, "initDrawString", func, "destroyDrawString", value,
                     wPluginPackInitData(3, dpy, scr->w_colormap,"-DATA-"));
         }
 
@@ -3075,11 +3077,11 @@ static int
 setMenuTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
 {
     if (scr->menu_title_pixel[0]!=scr->white_pixel &&
-	scr->menu_title_pixel[0]!=scr->black_pixel) {
+            scr->menu_title_pixel[0]!=scr->black_pixel) {
 #ifdef DRAWSTRING_PLUGIN
         if(!scr->drawstring_func[W_STRING_MTITLE])
 #endif
-	wFreeColor(scr, scr->menu_title_pixel[0]);
+            wFreeColor(scr, scr->menu_title_pixel[0]);
     }
     
     scr->menu_title_pixel[0] = color->pixel;
