@@ -4,7 +4,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 
 
-include_HEADERS = wtableview.h tabledelegates.h 
+include_HEADERS = wtableview.h wtabledelegates.h 
 
 
 lib_LIBRARIES = libExtraWINGs.a 
@@ -15,9 +15,9 @@ EXTRA_DIST =
 
 libExtraWINGs_a_SOURCES = 	\
 	wtableview.c \
-	tabledelegates.c \
+	wtabledelegates.c \
 	wtableview.h \
-	tabledelegates.h 
+	wtabledelegates.h 
 
 
 INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/WINGs \
@@ -26,5 +26,5 @@ INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/WINGs \
 LDADD= $(top_builddir)/WINGs/libWINGs.a $(top_builddir)/wrlib/libwraster.la \
         @LIBPL@ 
 
-test_LDADD = wtableview.o tabledelegates.o $(LDADD)
+test_LDADD = wtableview.o wtabledelegates.o $(LDADD)
 
