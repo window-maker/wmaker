@@ -294,10 +294,6 @@ wMenuInsertCallback(WMenu *menu, int index, char *text,
 
 	tmp = wrealloc(menu->entries,
 		       sizeof(WMenuEntry)*(menu->alloced_entries+5));
-	if (tmp==NULL) {
-	    wwarning(_("wrealloc() failed while trying to add menu item"));
-	    return NULL;
-	}
 
 	menu->entries = tmp;
 	menu->alloced_entries += 5;

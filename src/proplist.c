@@ -373,7 +373,7 @@ get_data(FILE *f)
 {
 
     
-    COMPLAIN("the data datatype is not still implemented");
+    COMPLAIN("the data datatype is not yet implemented");
     
     return NULL;
 }

@@ -146,10 +146,6 @@ WMInsertItemInTabView(WMTabView *tPtr, int index, WMTabViewItem *item)
 
 	items = wrealloc(tPtr->items,
 			 sizeof(WMTabViewItem*) * (tPtr->maxItems + 10));
-	if (!items) {
-	    wwarning("out of memory allocating memory for tabview");
-	    return;
-	}
 	memset(&items[tPtr->maxItems], 0, sizeof(WMTabViewItem*) * 10);
 	tPtr->items = items;
 	tPtr->maxItems += 10;

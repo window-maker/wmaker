@@ -88,10 +88,14 @@ void *wmalloc(size_t size)
     if (tmp == NULL) {
 	wwarning("malloc() failed. Retrying after 2s.");
 	sleep(2);
-	tmp = malloc(size);
+#ifdef TEST_WITH_GC
+        tmp = GC_malloc(size);
+#else
+        tmp = malloc(size);
+#endif
 	if (tmp == NULL) {
 	    if (Aborting) {
-		puts("Real Bad Error: recursive malloc() failure.");
+		fputs("Really Bad Error: recursive malloc() failure.", stderr);
 		exit(-1);
 	    } else {
 		wfatal("virtual memory exhausted");
@@ -109,21 +113,33 @@ void *wrealloc(void *ptr, size_t newsize)
     void *nptr;
 
     if (!ptr) {
-#ifdef TEST_WITH_GC
-	nptr = GC_malloc(newsize);
-#else
-	nptr = malloc(newsize);
-#endif
+	nptr = wmalloc(newsize);
     } else {
 #ifdef TEST_WITH_GC
 	nptr = GC_realloc(ptr, newsize);
 #else
-	nptr=realloc(ptr, newsize);
+	nptr = realloc(ptr, newsize);
 #endif
-    }
-    if (nptr==NULL) {
-	printf("Could not do realloc");
-	return NULL;
+        if (nptr==NULL) {
+            wwarning("realloc() failed. Retrying after 2s.");
+            sleep(2);
+#ifdef TEST_WITH_GC
+            nptr = GC_realloc(ptr, newsize);
+#else
+            nptr = realloc(ptr, newsize);
+#endif
+            if (nptr == NULL) {
+                if (Aborting) {
+                    fputs("Really Bad Error: recursive realloc() failure.",
+                          stderr);
+                    exit(-1);
+                } else {
+                    wfatal("virtual memory exhausted");
+                    Aborting=1;
+                    wAbort(False);
+                }
+            }
+        }
     }
     return nptr;
 }
