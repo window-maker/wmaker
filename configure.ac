@@ -917,6 +917,14 @@ done
 
 EOF
 
+cat <<EOF > wrlib/wrlib.pc
+Name: wrlib
+Description: Image manipulation and conversion library
+Version: $VERSION
+Libs: $lib_search_path -lwraster $GFXLIBS $XLIBS -lm
+Cflags: $inc_search_path
+EOF
+
 cat <<EOF >get-wings-flags
 #!/bin/sh
 
@@ -953,6 +961,15 @@ done
 
 EOF
 
+cat <<EOF > WINGs/WINGs.pc
+Name: WINGs
+Description: Small widget set with the NeXTStep(TM) look and feel
+Version: $VERSION
+Requires: wrlib
+Libs: $lib_search_path -lWINGs $XFTLIBS $XLIBS -lm $NETLIBS $INTLIBS
+Cflags: $inc_search_path
+EOF
+
 cat <<EOF >get-wutil-flags
 #!/bin/sh
 
@@ -987,6 +1004,15 @@ while test \$# -gt 0; do
 done
 
 
+EOF
+
+cat <<EOF > wmlib/wmlib.pc
+Name: wmlib
+Description: FIXME: What do I write here?
+Version: $VERSION
+Requires: wrlib
+Libs: $lib_search_path -lWUtil $NETLIBS $INTLIBS
+Cflags: $inc_search_path
 EOF
 
 sed 's/#lp#/[/g' get-wraster-flags | sed 's/#rp#/]/g' > wrlib/get-wraster-flags

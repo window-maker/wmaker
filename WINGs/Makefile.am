@@ -115,3 +115,15 @@ INCLUDES = -I$(top_srcdir)/WINGs/WINGs -I$(top_srcdir)/wrlib -I$(top_srcdir)/src
 
 wcolorpanel.o: wcolorpanel.c
 	$(COMPILE) -c -DRGBTXT="\"@X_LIBRARY_PATH@/X11/rgb.txt\"" $<
+
+DISTCLEANFILES = WINGs.pc
+
+install-exec-local:
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(libdir)/pkgconfig
+	@list='WINGs.pc'; for p in $$list; do \
+	  if test -f $$p; then \
+	    echo "$(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/; \
+	  else :; fi; \
+	done

@@ -15,3 +15,14 @@ libWMaker_a_SOURCES = 	\
 	app.h		\
 	menu.h	
 
+DISTCLEANFILES = wmlib.pc
+
+install-exec-local:
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(libdir)/pkgconfig
+	@list='wmlib.pc'; for p in $$list; do \
+	  if test -f $$p; then \
+	    echo "$(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/; \
+	  else :; fi; \
+	done

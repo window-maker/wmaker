@@ -78,6 +78,8 @@ Changes since version 0.80.2:
 - Fixed the problem with the root menu code changing the locale setting as
   a side effect of loading a localized menu
 - Fixed e memory leak in the code that reads a localized root menu
+- Added support for generating pkgconfig files for WINGS, wmlib and wrlib.
+  ("Marcelo E. Magallon" <mmagallo@debian.org>)
 
 
 Changes since version 0.80.1:

@@ -79,4 +79,14 @@ testdraw_LDADD = $(LIBLIST)
 
 libwraster_la_LIBADD = @ALLOCA@ @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ -lm
 
+DISTCLEANFILES = wrlib.pc
 
+install-exec-local:
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(libdir)/pkgconfig
+	@list='wrlib.pc'; for p in $$list; do \
+	  if test -f $$p; then \
+	    echo "$(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/; \
+	  else :; fi; \
+	done
