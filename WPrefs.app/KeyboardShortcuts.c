@@ -105,6 +105,7 @@ static char *keyOptions[] = {
 	"WindowShortcut8Key",
 	"WindowShortcut9Key",
 	"WindowShortcut10Key",
+	"ScreenSwitchKey",
 	"ClipRaiseKey",
 	"ClipLowerKey",
 #ifndef XKB_MODELOCK
@@ -412,6 +413,7 @@ createPanel(Panel *p)
     WMAddListItem(panel->actLs, _("Shortcut for window 8"));
     WMAddListItem(panel->actLs, _("Shortcut for window 9"));
     WMAddListItem(panel->actLs, _("Shortcut for window 10"));
+    WMAddListItem(panel->actLs, _("Switch to Next Screen/Monitor"));
     WMAddListItem(panel->actLs, _("Raise Clip"));
     WMAddListItem(panel->actLs, _("Lower Clip"));
     WMAddListItem(panel->actLs, _("Raise/Lower Clip"));
