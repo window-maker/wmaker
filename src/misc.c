@@ -155,9 +155,15 @@ MakeCPPArgs(char *path)
      * search path */
     if (path) {
 	tmp = wstrdup(path);
+	buf = strchr(tmp+1, ' ');
+	if (buf) {
+        *buf = 0;
+    }
 	buf = strrchr(tmp, '/');
-	if (buf) *buf = 0; /* trunc filename */
-	putdef(line, " -I", tmp);
+	if (buf) {
+        *buf = 0; /* trunc filename */
+        putdef(line, " -I", tmp);
+    }
 	free(tmp);
     }
 

@@ -623,12 +623,12 @@ separateCommand(char *line, char ***file, char **command)
 
     count = WMGetBagItemCount(bag);
     if (count>0) {
-	int j;
+        int j;
         *file = wmalloc(sizeof(char*)*(count+1));
         i = count;
         (*file)[count] = NULL;
-	for (j = 0; j < count; j++) {
-            (*file)[--i] = WMGetFromBag(bag, j);
+        for (j = 0; j < count; j++) {
+            (*file)[j] = WMGetFromBag(bag, j);
         }
     }
     WMFreeBag(bag);
