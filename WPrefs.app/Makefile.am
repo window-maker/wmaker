@@ -24,10 +24,8 @@ WPrefs_SOURCES = \
 	Icons.c \
 	KeyboardSettings.c \
 	KeyboardShortcuts.c \
-	Menu.c \
 	MenuPreferences.c \
 	MouseSettings.c \
-	NoMenuAlert.c \
 	Paths.c \
 	Preferences.c \
 	TexturePanel.c \
@@ -40,7 +38,6 @@ WPrefs_SOURCES = \
 	editmenu.c \
 	editmenu.h \
 	imagebrowser.c \
-	MenuGuru.c \
 	xmodifier.c
 
 CPPFLAGS = @CPPFLAGS@ -DLOCALEDIR=\"$(NLSDIR)\"
