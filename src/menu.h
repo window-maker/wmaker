@@ -78,6 +78,8 @@ typedef struct WMenu {
 
     WMHandlerID timer;		       /* timer for the autoscroll */
     
+    void *jump_back;               /* jump back data */
+    
     /* to be called when some entry is edited */
     void (*on_edit)(struct WMenu *menu, struct WMenuEntry *entry);
     /* to be called when destroyed */

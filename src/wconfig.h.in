@@ -400,6 +400,7 @@
 
 #define MENU_SCROLL_STEPS_U	1
 #define MENU_SCROLL_DELAY_U	8
+#define MENU_JUMP_BACK_DELAY 0
 
 /* shade animation */
 #define SHADE_STEPS_UF		5

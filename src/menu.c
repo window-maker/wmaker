@@ -1740,6 +1740,23 @@ isPointNearBoder(WMenu *menu, int x, int y)
     return flag;
 }
 
+ 
+typedef struct _delay {
+    WWindow *wwin;
+    WMenu *menu;
+    int ox,oy;
+} _delay;
+
+
+static void
+_leaving(_delay *dl)
+{
+    wMenuMove(dl->menu, dl->ox, dl->oy, True);
+    dl->menu->jump_back=NULL;
+    dl->menu->menu->screen_ptr->flags.jump_back_pending = 0;
+    free(dl);
+}
+
 
 void
 wMenuScroll(WMenu *menu, XEvent *event)
@@ -1756,6 +1773,10 @@ wMenuScroll(WMenu *menu, XEvent *event)
 #ifdef DEBUG
     puts("Entering menu Scroll");
 #endif
+    
+    if (omenu->jump_back)
+        WMDeleteTimerWithClientData(omenu->jump_back);
+
 
     if ((/*omenu->flags.buttoned &&*/ !wPreferences.wrap_menus)
         || omenu->flags.app_menu) {
@@ -1842,6 +1863,20 @@ wMenuScroll(WMenu *menu, XEvent *event)
 
     if (jump_back)
         wMenuMove(omenu, old_frame_x, old_frame_y, True);
+    if (jump_back) {
+        _delay *delayer;
+        if (!omenu->jump_back) {
+            delayer=wmalloc(sizeof(_delay));
+            delayer->menu=omenu;
+            delayer->ox=old_frame_x;
+            delayer->oy=old_frame_y;
+            omenu->jump_back=delayer;
+            scr->flags.jump_back_pending = 1;
+        }
+        else delayer = omenu->jump_back;
+        WMAddTimerHandler(MENU_JUMP_BACK_DELAY,(WMCallback*)_leaving, delayer);
+    }
+
 
 #ifdef DEBUG
     puts("Leaving menu Scroll");

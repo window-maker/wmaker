@@ -1744,7 +1744,8 @@ handleMotionNotify(XEvent *event)
     WScreen *scr = wScreenForRootWindow(event->xmotion.root);
 
     if (wPreferences.scrollable_menus) {
-        if (event->xmotion.x_root <= 1 ||
+        if (scr->flags.jump_back_pending ||
+            event->xmotion.x_root <= 1 ||
             event->xmotion.x_root >= (scr->scr_width - 2) ||
             event->xmotion.y_root <= 1 ||
             event->xmotion.y_root >= (scr->scr_height - 2)) {

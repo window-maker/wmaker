@@ -315,6 +315,7 @@ typedef struct _WScreen {
 	/* some client has issued a WM_COLORMAP_NOTIFY */
 	unsigned int colormap_stuff_blocked:1;
 	unsigned int doing_alt_tab:1;
+    unsigned int jump_back_pending:1;
 #ifdef KWM_HINTS
 	unsigned int kwm_syncing_name:1;
 	unsigned int kwm_syncing_count:1;
