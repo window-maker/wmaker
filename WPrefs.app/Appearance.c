@@ -1979,7 +1979,7 @@ storeData(_Panel *panel)
 
     for (i = 0; i < 8; i++) {
 	SetStringForKey(WMGetColorRGBDescription(panel->colors[i]),
-			colorOptions[i]);
+			colorOptions[i*2]);
     }
 
     switch (panel->menuStyle) {

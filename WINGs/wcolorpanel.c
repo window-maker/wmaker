@@ -2110,7 +2110,7 @@ wheelHandleActionEvents(XEvent *event, void *data)
 	panel->flags.dragging = 0;
 	if (!panel->flags.continuous) {
 	    if (panel->action)
-		(*panel->action)(panel->action, panel->clientData);
+		(*panel->action)(panel, panel->clientData);
 	}
 	break;
 	
@@ -2946,7 +2946,7 @@ customPaletteHandleActionEvents(XEvent *event, void *data)
 	panel->flags.dragging = 0;
 	if (!panel->flags.continuous) {
 	    if (panel->action)
-		(*panel->action)(panel->action, panel->clientData);
+		(*panel->action)(panel, panel->clientData);
 	}
 	break;
 	
