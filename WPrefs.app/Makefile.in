@@ -104,7 +104,7 @@ wpdatadir = @wprefsdir@
 
 wpdata_DATA = WPrefs.tiff WPrefs.xpm
 
-EXTRA_DIST = $(wpdata_DATA) TexturePanel.icons 
+EXTRA_DIST = $(wpdata_DATA)
 
 WPrefs_SOURCES =  	main.c 	WPrefs.c 	WPrefs.h 	Appearance.c 	Configurations.c 	Expert.c 	Focus.c 	Icons.c 	KeyboardSettings.c 	KeyboardShortcuts.c 	Menu.c 	MenuPreferences.c 	MouseSettings.c 	NoMenuAlert.c 	Paths.c 	Preferences.c 	Text.c 	TexturePanel.c 	TexturePanel.h 	Themes.c 	WindowHandling.c 	Workspace.c 	double.c 	double.h 	editmenu.c 	editmenu.h 	MenuGuru.c 	xmodifier.c
 

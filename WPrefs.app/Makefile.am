@@ -10,7 +10,7 @@ wpdatadir = @wprefsdir@
 
 wpdata_DATA = WPrefs.tiff WPrefs.xpm
 
-EXTRA_DIST = $(wpdata_DATA) TexturePanel.icons 
+EXTRA_DIST = $(wpdata_DATA)
 
 WPrefs_SOURCES = \
 	main.c \
