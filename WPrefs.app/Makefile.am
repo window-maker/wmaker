@@ -24,6 +24,7 @@ WPrefs_SOURCES = \
 	Icons.c \
 	KeyboardSettings.c \
 	KeyboardShortcuts.c \
+	Menu.c \
 	MenuPreferences.c \
 	MouseSettings.c \
 	Paths.c \
