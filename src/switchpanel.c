@@ -345,7 +345,8 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
     }
 
     panel->current= WMGetFirstInArray(panel->windows, curwin);
-    changeImage(panel, panel->current, 1);
+    if (panel->current >= 0)
+        changeImage(panel, panel->current, 1);
     
     return panel;
 }
@@ -380,6 +381,9 @@ WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back)
 {
   WWindow *wwin;
   int count = WMGetArrayItemCount(panel->windows);
+
+  if (count == 0)
+    return NULL;
 
   if (panel->win)
     changeImage(panel, panel->current, 0);

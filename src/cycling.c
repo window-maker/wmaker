@@ -221,8 +221,10 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
   
     if (swpanel) {
         newFocused = wSwitchPanelSelectNext(swpanel, !next);
-        wWindowFocus(newFocused, oldFocused);
-        oldFocused = newFocused;
+        if (newFocused) {
+            wWindowFocus(newFocused, oldFocused);
+            oldFocused = newFocused;
+        }
     }
     else
       newFocused= wwin;
@@ -266,8 +268,10 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 #ifdef MOX_CYCLING
                 if (swpanel) {
                     newFocused = wSwitchPanelSelectNext(swpanel, False);
-                    wWindowFocus(newFocused, oldFocused);
-                    oldFocused = newFocused;
+                    if (newFocused) {
+                        wWindowFocus(newFocused, oldFocused);
+                        oldFocused = newFocused;
+                    }
                 }
 #else /* !MOX_CYCLING */
                 newFocused = nextToFocusAfter(newFocused);
@@ -287,8 +291,10 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 #ifdef MOX_CYCLING
                 if (swpanel) {
                     newFocused = wSwitchPanelSelectNext(swpanel, True);
-                    wWindowFocus(newFocused, oldFocused);
-                    oldFocused = newFocused;
+                    if (newFocused) {
+                        wWindowFocus(newFocused, oldFocused);
+                        oldFocused = newFocused;
+                    }
                 }
 #else /* !MOX_CYCLING */
                 newFocused = nextToFocusBefore(newFocused);
