@@ -94,7 +94,7 @@ wXDNDProcessSelection(XEvent *event)
 {
 	WScreen *scr = wScreenForWindow(event->xselection.requestor);
     char *dropdata;
-    char *retain = scr->xdestring;
+    char *retain;
     Atom ret_type;
     int ret_format;
     unsigned long ret_item;
@@ -107,9 +107,6 @@ wXDNDProcessSelection(XEvent *event)
             0, 65536, True, atom_support, &ret_type, &ret_format,
             &ret_item, &remain_byte, (unsigned char **)&delme);
     if (delme){
-        /*
-        printf("get -%s-\n",delme);
-        */
 		scr->xdestring=delme;
     }
 
@@ -124,7 +121,7 @@ wXDNDProcessSelection(XEvent *event)
     XSendEvent(dpy, selowner, 0, 0, &xevent);
 
     /*process dropping*/
-    for (;retain[0];retain++) {
+    for (retain=scr->xdestring;retain[0];retain++) {
         if (retain[0] < 32) retain[0] = 32;
         if (!strncmp(retain, "file:", 5)) {
             int i;
