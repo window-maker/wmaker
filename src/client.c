@@ -297,6 +297,8 @@ wClientKill(WWindow *wwin)
     XFlush(dpy);
 }
 
+
+
 /*
  *---------------------------------------------------------------------- 
  * wClientCheckProperty--
@@ -316,30 +318,18 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
     XWindowAttributes attribs;
     XWMHints *new_hints;
     int i, g1, g2;
-    char *tmp;
+    char *tmp = NULL;
     
     switch (event->atom) {
      case XA_WM_NAME:
 	/* window title was changed */
-	wwin->flags.wm_name_changed = 1;
-	if (wwin->frame) {
-	    if (!wFetchName(dpy, wwin->client_win, &tmp)) {
-		/* the hint was removed */
-		tmp = wstrdup(DEF_WINDOW_TITLE);
-#ifdef KWM_HINTS
-		wKWMSendEventMessage(wwin, WKWMChangedClient);
-#endif
-	    }
-            if (wFrameWindowChangeTitle(wwin->frame, tmp)) {
-                /* only update the menu if the title has actually changed */
-                UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE);
-#ifdef KWM_HINTS
-		wKWMSendEventMessage(wwin, WKWMChangedClient);
-#endif
-            }
-	    if (tmp)
-		wfree(tmp);
+	if (!wFetchName(dpy, wwin->client_win, &tmp)) {
+	    wWindowUpdateName(wwin, NULL);
+	} else {
+	    wWindowUpdateName(wwin, tmp);
 	}
+	if (tmp)
+	    XFree(tmp);	
 	break;
 	
      case XA_WM_ICON_NAME:

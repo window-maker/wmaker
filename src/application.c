@@ -255,7 +255,7 @@ wApplicationCreate(WScreen *scr, Window main_window)
 #endif
 	return NULL;
     }
-
+    
     {
 	Window root;
 	int foo;
@@ -300,6 +300,25 @@ wApplicationCreate(WScreen *scr, Window main_window)
 #endif /* USER_MENU */
 
 
+    {
+	WApplication *tmp = scr->wapp_list;
+	
+	wapp->next = NULL;
+	wapp->prev = NULL;
+
+	/* append to app list */
+	if (!tmp) {
+	    scr->wapp_list = wapp;
+	} else {
+	    while (tmp->next) {
+		tmp = tmp->next;
+	    }
+	    tmp->next = wapp;
+	    wapp->prev = tmp;
+	}
+    }
+    
+    
     /*
      * Set application wide attributes from the leader.
      */
@@ -341,18 +360,6 @@ wApplicationCreate(WScreen *scr, Window main_window)
             wAppIconPaint(wapp->app_icon);
         } else {
 	    wapp->app_icon = wAppIconCreate(wapp->main_window_desc);
-#ifdef REDUCE_APPICONS
-	/* This is so we get the appearance of invoking the app sitting
-	 * on the dock. -cls */
-	    if (wapp->app_icon) {
-		if (wapp->app_icon->docked && wapp->app_icon->num_apps == 1) {
-		    wapp->app_icon->launching = 0;
-		    wapp->app_icon->running = 1;
-		    wapp->app_icon->icon->force_paint = 1;
-		    wAppIconPaint(wapp->app_icon);
-		}
-	    }
-#endif
 	}
     } else {
 	wapp->app_icon = NULL;
@@ -362,14 +369,7 @@ wApplicationCreate(WScreen *scr, Window main_window)
         wapp->app_icon->main_window = main_window;
     }
 
-#ifndef REDUCE_APPICONS
     if (wapp->app_icon && !wapp->app_icon->docked) {
-#else
-    if (wapp->app_icon && !wapp->app_icon->docked && wapp->app_icon->num_apps == 1) {
-#ifdef THIS_SUCKS
-    }
-#endif
-#endif
         WIcon *icon = wapp->app_icon->icon;
         WDock *clip = scr->workspaces[scr->current_workspace]->clip;
         int x=0, y=0;
@@ -407,12 +407,6 @@ wApplicationCreate(WScreen *scr, Window main_window)
 	    extractClientIcon(wapp->app_icon);
     }
     
-    wapp->prev = NULL; 
-    wapp->next = scr->wapp_list;
-    if (scr->wapp_list)
-	scr->wapp_list->prev = wapp;
-    scr->wapp_list = wapp;
-
     
 #ifdef WSOUND
     wSoundPlay(WSOUND_APPSTART);
@@ -431,9 +425,6 @@ wApplicationDestroy(WApplication *wapp)
     Window main_window;
     WWindow *wwin;
     WScreen *scr;
-#ifdef REDUCE_APPICONS
-    unsigned int napps;
-#endif
 
     if (!wapp)
       return;
@@ -445,9 +436,6 @@ wApplicationDestroy(WApplication *wapp)
 
     scr = wapp->main_window_desc->screen_ptr;
     main_window = wapp->main_window;
-#ifdef REDUCE_APPICONS
-    napps = wAppIconReduceAppCount(wapp);
-#endif
 
     if (wapp == scr->wapp_list) {
         if (wapp->next)
@@ -464,39 +452,21 @@ wApplicationDestroy(WApplication *wapp)
     wAppMenuDestroy(wapp->menu);
     if (wapp->app_icon) {
         if (wapp->app_icon->docked && !wapp->app_icon->attracted) {
-#ifdef REDUCE_APPICONS
-	    if (napps == 0) {
-#endif
-		wapp->app_icon->running = 0;
-		/* since we keep it, we don't care if it was attracted or not */
-		wapp->app_icon->attracted = 0;
-		wapp->app_icon->icon->shadowed = 0;
-		wapp->app_icon->main_window = None;
-		wapp->app_icon->pid = 0;
-		wapp->app_icon->icon->owner = NULL;
-		wapp->app_icon->icon->icon_win = None;
-		wapp->app_icon->icon->force_paint = 1;
-		wAppIconPaint(wapp->app_icon);
-#ifdef REDUCE_APPICONS
-	    }
-#endif
+	    wapp->app_icon->running = 0;
+	    /* since we keep it, we don't care if it was attracted or not */
+	    wapp->app_icon->attracted = 0;
+	    wapp->app_icon->icon->shadowed = 0;
+	    wapp->app_icon->main_window = None;
+	    wapp->app_icon->pid = 0;
+	    wapp->app_icon->icon->owner = NULL;
+	    wapp->app_icon->icon->icon_win = None;
+	    wapp->app_icon->icon->force_paint = 1;
+	    wAppIconPaint(wapp->app_icon);
         } else if (wapp->app_icon->docked) {
-#ifdef REDUCE_APPICONS
-	    if (napps == 0)  {
-#endif
-		wapp->app_icon->running = 0;
-		wDockDetach(wapp->app_icon->dock, wapp->app_icon);
-#ifdef REDUCE_APPICONS
-	    }
-#endif 
+	    wapp->app_icon->running = 0;
+	    wDockDetach(wapp->app_icon->dock, wapp->app_icon);
         } else {
-#ifdef REDUCE_APPICONS
-    	    if (napps == 0) {
-#endif 
-		wAppIconDestroy(wapp->app_icon);
-#ifdef REDUCE_APPICONS
-    	    }
-#endif
+	    wAppIconDestroy(wapp->app_icon);
 	}
     }
     wwin = wWindowFor(wapp->main_window_desc->client_win);
@@ -522,4 +492,59 @@ wApplicationDestroy(WApplication *wapp)
 #endif
 }
 
+
+/*
+ * Returns index number of the app in case there are more than
+ * one instance of the same class/name.
+ */
+int
+wApplicationIndexOfInstance(WApplication *app)
+{
+    WApplication *list = app->main_window_desc->screen_ptr->wapp_list;
+    int index = 0;
+    WWindow *wwin = app->main_window_desc;
+    
+    while (list) {
+	if (app == list)
+	    return index;
+
+	if (strcmp(wwin->wm_instance,
+		   list->main_window_desc->wm_instance) == 0
+	    &&
+	    strcmp(wwin->wm_class,
+		   list->main_window_desc->wm_class) == 0)
+	    index++;
+
+	list = list->next;
+    }
+    
+    puts("OH SHIT!?!?!? HOW THE FUCK DID WE GET HERE!?!?!?!?!");
+    
+    return 0;
+}
+
+
+Bool
+wApplicationHasMultiInstances(WApplication *app)
+{
+    WApplication *list = app->main_window_desc->screen_ptr->wapp_list;
+    int index = 0;
+    WWindow *wwin = app->main_window_desc;
+    
+    while (list) {
+	if (strcmp(wwin->wm_instance,
+		   list->main_window_desc->wm_instance) == 0
+	    &&
+	    strcmp(wwin->wm_class,
+		   list->main_window_desc->wm_class) == 0)
+	    index++;
+
+	if (index == 2)
+	    return True;
+	
+	list = list->next;
+    }
+    
+    return False;
+}
 

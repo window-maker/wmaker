@@ -31,13 +31,6 @@
 #include "icon.h"
 #include "application.h"
 
-#ifdef REDUCE_APPICONS
-typedef struct WAppIconAppList {
-    struct WAppIconAppList *prev;
-    struct WAppIconAppList *next;
-    WApplication *wapp;
-} WAppIconAppList;
-#endif
 
 typedef struct WAppIcon {
     short xindex;
@@ -61,15 +54,7 @@ typedef struct WAppIcon {
     char *wm_instance;
     pid_t pid;			       /* for apps launched from the dock */
     Window main_window;
-#ifdef REDUCE_APPICONS
-    /* There are a number of assumptions about structures in the code,
-     * but nowhere do I see them explicitly stated. I'll rip this out later.
-     * If applist is not NULL, applist->wapp will always point to a valid
-     * structure. Knowing this removes the need for useless checks....
-     * AS LONG AS NO ONE VIOLATES THIS ASSUMPTION. -cls
-     */
-    WAppIconAppList *applist;	       /* list of apps bound to appicon */
-#endif
+
     struct WDock *dock;		       /* In which dock is docked. */
     
     struct _AppSettingsPanel *panel;    /* Settings Panel */
@@ -94,9 +79,6 @@ typedef struct WAppIcon {
     
     unsigned int lock:1;	       /* do not allow to be destroyed */
     
-#ifdef REDUCE_APPICONS
-    unsigned int num_apps;	       /* length of applist */
-#endif
 } WAppIcon;
 
 
@@ -112,7 +94,7 @@ Bool wAppIconChangeImage(WAppIcon *icon, char *file);
 
 void wAppIconMove(WAppIcon *aicon, int x, int y);
 
-#ifdef REDUCE_APPICONS
-unsigned int wAppIconReduceAppCount(WApplication *wapp);
-#endif
+WAppIcon *wAppIconNextSibling(WAppIcon *icon);
+
+int wAppIconIndexOfInstance(WAppIcon *icon);
 #endif

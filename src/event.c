@@ -480,14 +480,9 @@ handleMapRequest(XEvent *ev)
 	} else if (wwin->flags.hidden) {
             WApplication *wapp = wApplicationOf(wwin->main_window);
             /* go to the last workspace that the user worked on the app */
-#ifndef REDUCE_APPICONS
-            /* This severely breaks REDUCE_APPICONS.  last_workspace is a neat
-             * concept but it needs to be reworked to handle REDUCE_APPICONS -cls
-             */
             if (wapp) {
                 wWorkspaceChange(wwin->screen_ptr, wapp->last_workspace);
             }
-#endif
 	    wUnhideApplication(wapp, False, False);
 	}
 	return;

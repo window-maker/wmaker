@@ -55,8 +55,12 @@ void wApplicationDestroy(WApplication *wapp);
 
 WApplication *wApplicationOf(Window window);
 
+Bool wApplicationHasMultiInstances(WApplication *app);
+
 void wApplicationExtractDirPackIcon(WScreen *scr,char *path, char *wm_instance, 
 				    char *wm_class);
+
+int wApplicationIndexOfInstance(WApplication *app);
 
 
 #ifdef NEWAPPICON

@@ -1014,11 +1014,10 @@ wFrameWindowPaint(WFrameWindow *fwin)
     }
     
     
-    if (fwin->title && fwin->titlebar && !fwin->flags.repaint_only_resizebar) {
+    if (fwin->titlebar && !fwin->flags.repaint_only_resizebar) {
         int x, w;
         int lofs = 6, rofs = 6;
         int titlelen;
-        char *title;
         int allButtons = 1;
 
 
@@ -1049,36 +1048,40 @@ wFrameWindowPaint(WFrameWindow *fwin)
             scr->b_pixmaps[WBUT_XKBGROUP1 + fwin->languagemode];
 #endif
 
-	title = ShrinkString(*fwin->font, fwin->title,
-			     fwin->titlebar->width - lofs - rofs);
-	titlelen = strlen(title);
-	w = WMWidthOfString(*fwin->font, title, titlelen);
-
-	switch (fwin->flags.justification) {
-	 case WTJ_LEFT:
-	    x = lofs;
-	    break;
-
-	 case WTJ_RIGHT:
-	    x = fwin->titlebar->width - w - rofs;
-	    break;
-
-	 default:
-	    if (!allButtons)
-		x = lofs + (fwin->titlebar->width - w - lofs - rofs) / 2;
-	    else
-		x = (fwin->titlebar->width - w) / 2;
-	    break;
+	if (fwin->title) {
+	    char *title;
+	    
+	    title = ShrinkString(*fwin->font, fwin->title,
+				 fwin->titlebar->width - lofs - rofs);
+	    titlelen = strlen(title);
+	    w = WMWidthOfString(*fwin->font, title, titlelen);
+	    
+	    switch (fwin->flags.justification) {
+	     case WTJ_LEFT:
+		x = lofs;
+		break;
+		
+	     case WTJ_RIGHT:
+		x = fwin->titlebar->width - w - rofs;
+		break;
+		
+	     default:
+		if (!allButtons)
+		    x = lofs + (fwin->titlebar->width - w - lofs - rofs) / 2;
+		else
+		    x = (fwin->titlebar->width - w) / 2;
+		break;
+	    }
+	    
+	    XSetForeground(dpy, *fwin->title_gc, 
+			   fwin->title_pixel[fwin->flags.state]);
+	    
+	    WMDrawString(scr->wmscreen, fwin->titlebar->window, 
+			 *fwin->title_gc, *fwin->font, x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE, 
+			 title, titlelen);
+	    
+	    wfree(title);
 	}
-
-	XSetForeground(dpy, *fwin->title_gc, 
-		       fwin->title_pixel[fwin->flags.state]);
-	
-    WMDrawString(scr->wmscreen, fwin->titlebar->window, 
-            *fwin->title_gc, *fwin->font, x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE, 
-            title, titlelen);
-
-	wfree(title);
 	
 	if (fwin->left_button)
 	    handleButtonExpose(&fwin->left_button->descriptor, NULL);

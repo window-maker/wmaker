@@ -1269,19 +1269,11 @@ wHideOtherApplications(WWindow *awin)
 {
     WWindow *wwin;
     WApplication *tapp;
-#ifdef REDUCE_APPICONS
-    char *tinstance, *tclass;
-    unsigned int brokenwin = 0, match = 0;
-#endif
 
     if (!awin)
 	return;
     wwin = awin->screen_ptr->focused_window;
 
-#ifdef REDUCE_APPICONS
-    if (awin->wm_instance == NULL || awin->wm_class == NULL)
-	brokenwin++;
-#endif
 
     while (wwin) {
 	if (wwin!=awin 
@@ -1291,30 +1283,13 @@ wHideOtherApplications(WWindow *awin)
 	    && wGetWindowOfInspectorForWindow(wwin) != awin
 	    && !WFLAGP(wwin, no_hide_others)) {
 	    
-#ifdef REDUCE_APPICONS
-	    match = 0;
-	    if (!brokenwin) {
-		if ((tinstance = wwin->wm_instance) == NULL)
-		    tinstance = "";
-		if ((tclass = wwin->wm_class) == NULL)
-		    tclass = "";
-		if ((strcmp(awin->wm_instance, tinstance) == 0) &&
-		    (strcmp(awin->wm_class, tclass) == 0) )
-			match++;
-	    }
-#endif
-
 	    if (wwin->main_window==None || WFLAGP(wwin, no_appicon)) {
 		if (!WFLAGP(wwin, no_miniaturizable)) {
 		    wwin->flags.skip_next_animation = 1;
 		    wIconifyWindow(wwin);
 		}
 	    } else if (wwin->main_window!=None
-#ifndef REDUCE_APPICONS
 		       && awin->main_window != wwin->main_window) {
-#else
-			&& (awin->main_window != wwin->main_window && !match)) {
-#endif
 		tapp = wApplicationOf(wwin->main_window);
 		if (tapp) {
 		    tapp->flags.skip_next_animation = 1;
@@ -1339,11 +1314,6 @@ wHideOtherApplications(WWindow *awin)
 void
 wHideApplication(WApplication *wapp)
 {
-#ifdef REDUCE_APPICONS
-    WApplication *tapp;
-    char *tinstance, *tclass;
-    unsigned int nowmhints = 0, matchwmhints = 0, matchworkspace = 0;
-#endif
     WScreen *scr;
     WWindow *wlist;
     int hadfocus;
@@ -1356,11 +1326,6 @@ wHideApplication(WApplication *wapp)
 	wwarning("group leader not found for window group");
 	return;
     }
-#ifdef REDUCE_APPICONS
-    if ((wapp->main_window_desc->wm_instance == NULL) ||
-        (wapp->main_window_desc->wm_class == NULL))
-        nowmhints++;
-#endif
     scr = wapp->main_window_desc->screen_ptr;
     hadfocus = 0;
     wlist = scr->focused_window;
@@ -1372,38 +1337,7 @@ wHideApplication(WApplication *wapp)
     else
 	wapp->last_focused = NULL;
     while (wlist) {
-#ifdef REDUCE_APPICONS
-	matchwmhints = matchworkspace = 0;
-	if (!nowmhints) {
-	    tapp = wApplicationOf(wlist->main_window);
-	    tinstance = tclass = NULL;
-	    if (tapp) {
-		if (tapp->main_window_desc) {
-		    tinstance = tapp->main_window_desc->wm_instance;
-		    tclass = tapp->main_window_desc->wm_class;
-		}
-	    }
-	    if (tapp == NULL || tinstance == NULL || tclass == NULL) {
-		/* Should never reach here */
-		tinstance = "";
-		tclass = "";
-	    }
-	    if ((strcmp(tinstance, wapp->main_window_desc->wm_instance) == 0) &&
-		(strcmp(tclass, wapp->main_window_desc->wm_class) == 0) )
-		matchwmhints++;
-	}
-	if (wlist->frame) {
-	    if (wlist->frame->workspace == wapp->main_window_desc->screen_ptr->current_workspace)
-		matchworkspace++;
-	}
-        if ((wlist->main_window == wapp->main_window || matchwmhints) && 
-	    matchworkspace) {
-#ifdef I_HATE_THIS
-	}
-#endif
-#else
 	if (wlist->main_window == wapp->main_window) {
-#endif
 	    if (wlist->flags.focused) {
 		hadfocus = 1;
             }
@@ -1493,21 +1427,10 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
     WScreen *scr;
     WWindow *wlist, *next;
     WWindow *focused=NULL;
-#ifdef REDUCE_APPICONS
-    char *tinstance, *tclass;
-    unsigned int nowmhints = 0, matchwmhints = 0, matchworkspace = 0;
-#endif
 
     if (!wapp) {
 	return;
     }
-
-#ifdef REDUCE_APPICONS
-    if ((wapp->main_window_desc->wm_class == NULL) || 
-	(wapp->main_window_desc->wm_instance == NULL))
-	nowmhints++;
-#endif
-
     scr = wapp->main_window_desc->screen_ptr;
     wlist = scr->focused_window;
     if (!wlist) return;
@@ -1518,27 +1441,7 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
     while (wlist) {
 	next = wlist->next;
 
-#ifndef REDUCE_APPICONS	
 	if (wlist->main_window == wapp->main_window) {
-#else
-	matchwmhints = matchworkspace = 0;
-	if (!nowmhints) {
-	    if ((tinstance = wlist->wm_instance) == NULL)
-		tinstance = "";
-	    if ((tclass = wlist->wm_class) == NULL)
-		tclass = "";
-	    if ((strcmp(tinstance, wapp->main_window_desc->wm_instance) == 0) 
-		&& (strcmp(tclass, wapp->main_window_desc->wm_class) == 0) )
-		matchwmhints++;
-	}
-	if (wlist->frame) {
-	    if (wlist->frame->workspace == wapp->main_window_desc->screen_ptr->current_workspace)
-		matchworkspace++;
-	}
-
-	if ((wlist->main_window == wapp->main_window || matchwmhints) && 
-	    matchworkspace) {
-#endif
 	    if (wlist->flags.focused)
 	      focused = wlist;
 	    else if (!focused || !focused->flags.focused)
@@ -1717,8 +1620,8 @@ wArrangeIcons(WScreen *scr, Bool arrangeAll)
 
     pi = 0;
     si = 0;
-    while (aicon) {
-        if (!aicon->docked) {
+    while (aicon) {	
+        if (!aicon->docked && wAppIconIndexOfInstance(aicon) == 0) {
             if (aicon->x_pos != X || aicon->y_pos != Y) {
 #ifdef ANIMATIONS
                 if (!wPreferences.no_animations) {
@@ -1726,7 +1629,7 @@ wArrangeIcons(WScreen *scr, Bool arrangeAll)
                                 X, Y);
                 }
 #endif /* ANIMATIONS */
-            }
+            }	    
 	    wAppIconMove(aicon, X, Y);
             pi++;
         }

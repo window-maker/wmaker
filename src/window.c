@@ -518,6 +518,7 @@ wWindowObscuresWindow(WWindow *wwin, WWindow *obscured)
 }
 
 
+
 /*
  *----------------------------------------------------------------
  * wManageWindow--
@@ -1020,9 +1021,6 @@ wManageWindow(WScreen *scr, Window window)
 	wFrameWindowUpdatePushButton(wwin->frame, True);
 #endif /* OLWM_HINTS */
 
-    wFrameWindowChangeTitle(wwin->frame, title ? title : DEF_WINDOW_TITLE);
-    if (title)
-	XFree(title);
 
     wwin->frame->workspace = workspace;
 
@@ -1210,6 +1208,12 @@ wManageWindow(WScreen *scr, Window window)
 	wwin->next = tmp;
 	wwin->prev = NULL;
     }
+
+    /* Update name must come after WApplication stuff is done */
+    wWindowUpdateName(wwin, title);
+    if (title)
+	XFree(title);
+    
 
 #ifdef GNOME_STUFF
     wGNOMEUpdateClientStateHint(wwin, True);
@@ -1752,6 +1756,53 @@ wWindowUnfocus(WWindow *wwin)
 
     UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
 
+}
+
+
+void
+wWindowUpdateName(WWindow *wwin, char *newTitle)
+{
+    WApplication *app = wApplicationOf(wwin->main_window);
+    int instIndex = 0;
+    Bool res;
+    char prefix[32] = "";
+    char *tmp, *title;
+    
+    if (!wwin->frame)
+	return;
+    
+    if (app) 
+	instIndex = wApplicationIndexOfInstance(app);
+    
+    
+    wwin->flags.wm_name_changed = 1;
+    
+    if (!newTitle) {
+	/* the hint was removed */
+	title = DEF_WINDOW_TITLE;
+	
+#ifdef KWM_HINTS
+	wKWMSendEventMessage(wwin, WKWMChangedClient);
+#endif	
+    } else {
+	title = newTitle;
+    }
+    
+    if (instIndex > 0) {
+	sprintf(prefix, "  [%i]", instIndex);
+	
+	title = wstrconcat(title, prefix);
+    }
+    
+    if (wFrameWindowChangeTitle(wwin->frame, title)) {
+	/* only update the menu if the title has actually changed */
+	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE);
+#ifdef KWM_HINTS
+	wKWMSendEventMessage(wwin, WKWMChangedClient);
+#endif
+    }
+    if (instIndex > 0)
+	wfree(title);
 }
 
 

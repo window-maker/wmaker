@@ -158,7 +158,7 @@ wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y,
 		   union WTexture **title_texture, 
 		   union WTexture **resize_texture,
 		   unsigned long *color, 
-           GC *gc, WMFont **font);
+		   GC *gc, WMFont **font);
 
 void wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags);
 

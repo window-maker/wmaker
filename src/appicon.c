@@ -112,9 +112,7 @@ wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance,
 #ifdef XDND
     wXDNDMakeAwareness(dicon->icon->core->window);
 #endif
-#ifdef REDUCE_APPICONS
-    dicon->num_apps = 0;
-#endif
+
 #ifdef DEMATERIALIZE_ICON
     {
         XSetWindowAttributes attribs;
@@ -140,30 +138,11 @@ WAppIcon*
 wAppIconCreate(WWindow *leader_win)
 {
     WAppIcon *aicon;
-#ifdef REDUCE_APPICONS
-    WAppIcon *atmp;
-    WAppIconAppList *applist;
-    char *tinstance, *tclass;
-#endif
     WScreen *scr = leader_win->screen_ptr;
 
     aicon = wmalloc(sizeof(WAppIcon));
     wretain(aicon);
     memset(aicon, 0, sizeof(WAppIcon));
-#ifdef REDUCE_APPICONS
-    applist = wmalloc(sizeof(WAppIconAppList));
-    memset(applist, 0, sizeof(WAppIconAppList));
-    applist->wapp = wApplicationOf(leader_win->main_window);
-    aicon->applist = applist;
-    if (applist->wapp == NULL) {
-	/* Something's wrong. wApplicationOf() should always return a
-	 * valid structure.  Rather than violate assumptions, bail. -cls
-	 */
-	wfree(applist);
-	wrelease(aicon);
-	return NULL;
-    }
-#endif
 
     aicon->yindex = -1;
     aicon->xindex = -1;
@@ -171,43 +150,7 @@ wAppIconCreate(WWindow *leader_win)
     aicon->prev = NULL;
     aicon->next = scr->app_icon_list;
     if (scr->app_icon_list) {
-#ifndef REDUCE_APPICONS
         scr->app_icon_list->prev = aicon;
-#else
-	/* If we aren't going to have a match, jump straight to new appicon */
-	if (leader_win->wm_class == NULL || leader_win->wm_class == NULL)
-	    atmp = NULL;
-	else
-	atmp = scr->app_icon_list;
-
-	while (atmp != NULL) {
-	    if ((tinstance = atmp->wm_instance) == NULL)
-		tinstance = "";
-	    if ((tclass = atmp->wm_class) == NULL)
-		tclass = "";
-	    if ((strcmp(leader_win->wm_class, tclass) == 0) &&
-		(strcmp(leader_win->wm_instance, tinstance) == 0))
-	    {
-		/* We have a winner */
-		wrelease(aicon);
-		atmp->num_apps++;
-		applist->next = atmp->applist;
-		if (atmp->applist)
-		    atmp->applist->prev = applist;
-		atmp->applist = applist;
-
-		if (atmp->docked) {
-		    wDockSimulateLaunch(atmp->dock, atmp);
-		}
-
-		return atmp;
-	    }
-	    atmp = atmp->next;
-	}
-	if (atmp == NULL) {
-	    scr->app_icon_list->prev = aicon;
-	}
-#endif /* REDUCE_APPICONS */
     }
     scr->app_icon_list = aicon;
 
@@ -215,9 +158,6 @@ wAppIconCreate(WWindow *leader_win)
         aicon->wm_class = wstrdup(leader_win->wm_class);
     if (leader_win->wm_instance)
         aicon->wm_instance = wstrdup(leader_win->wm_instance);
-#ifdef REDUCE_APPICONS
-    aicon->num_apps = 1;
-#endif
 
     aicon->icon = wIconCreate(leader_win);
 #ifdef DEMATERIALIZE_ICON
@@ -249,9 +189,6 @@ void
 wAppIconDestroy(WAppIcon *aicon)
 {
     WScreen *scr = aicon->icon->core->screen_ptr;
-#ifdef REDUCE_APPICONS
-    WAppIconAppList *aptmp;
-#endif
 
     RemoveFromStackList(aicon->icon->core);
     wIconDestroy(aicon->icon);
@@ -265,17 +202,6 @@ wAppIconDestroy(WAppIcon *aicon)
       wfree(aicon->wm_instance);
     if (aicon->wm_class)
       wfree(aicon->wm_class);
-#ifdef REDUCE_APPICONS
-    /* There should never be a list but just in case */
-    if (aicon->applist != NULL) {
-	aptmp = aicon->applist;
-    	while (aptmp->next) {
-	    aptmp = aptmp->next;
-	    wfree(aptmp->prev);
-	}
-	wfree(aptmp);
-    }
-#endif
 
     if (aicon == scr->app_icon_list) {
         if (aicon->next)
@@ -351,9 +277,21 @@ drawCorner(WIcon *icon)
 void
 wAppIconMove(WAppIcon *aicon, int x, int y)
 {
-    XMoveWindow(dpy, aicon->icon->core->window, x, y);
-    aicon->x_pos = x;
-    aicon->y_pos = y;
+    WAppIcon *tmp;
+    
+    tmp = aicon->icon->core->screen_ptr->app_icon_list;    
+    
+    /* move all icons of the same class/name to the same pos */
+    while (tmp) {
+	if (strcmp(tmp->wm_class, aicon->wm_class) == 0 &&
+	    strcmp(tmp->wm_instance, aicon->wm_instance) == 0 &&
+	    !tmp->docked) {
+	    XMoveWindow(dpy, tmp->icon->core->window, x, y);
+	    tmp->x_pos = x;
+	    tmp->y_pos = y;
+	}
+	tmp = tmp->next;
+    }
 }
 
 
@@ -394,10 +332,65 @@ updateDockNumbers(WScreen *scr)
 #endif /* WS_INDICATOR */
 
 
+
+WAppIcon*
+wAppIconNextSibling(WAppIcon *icon)
+{
+    WAppIcon *tmp;
+    
+    tmp = icon->icon->core->screen_ptr->app_icon_list;
+    while (tmp) {
+	if (icon != tmp && strcmp(tmp->wm_class, icon->wm_class) == 0
+	    && strcmp(tmp->wm_instance, icon->wm_instance) == 0
+	    && !tmp->docked) {
+	    return tmp;
+	}
+	tmp = tmp->next;
+    }
+    return NULL;
+}
+
+
+
+int
+wAppIconIndexOfInstance(WAppIcon *icon)
+{
+    WAppIcon *list = icon->icon->core->screen_ptr->app_icon_list;
+    int index = 0;
+    
+    while (list) {
+	if (icon == list)
+	    return index;
+
+	if (strcmp(icon->wm_instance,
+		   list->wm_instance) == 0
+	    &&
+	    strcmp(icon->wm_class,
+		   list->wm_class) == 0
+	    && !icon->docked)
+	    index++;
+
+	list = list->next;
+    }
+    
+    puts("OH SHIT!?!?!? HOW THE FUCK DID WE GET HERE!?!?!?!?!");
+    
+    return 0;
+}
+
+
+
 void
 wAppIconPaint(WAppIcon *aicon)
 {
+    WApplication *wapp;    
     WScreen *scr = aicon->icon->core->screen_ptr;
+    int index;
+
+    if (aicon->icon->owner)
+	wapp = wApplicationOf(aicon->icon->owner->main_window);
+    else
+	wapp = NULL;
 
     wIconPaint(aicon->icon);
 
@@ -414,23 +407,35 @@ wAppIconPaint(WAppIcon *aicon)
 	XCopyArea(dpy, scr->dock_dots->image, aicon->icon->core->window,
 		  scr->copy_gc, 0, 0, scr->dock_dots->width,
 		  scr->dock_dots->height, 0, 0);
-    }
-
+    }       
+    
 #ifdef HIDDENDOT
-    {
-        WApplication *wapp;
-	wapp = wApplicationOf(aicon->main_window);
-	if (wapp && wapp->flags.hidden) {
-            XSetClipMask(dpy, scr->copy_gc, scr->dock_dots->mask);
-            XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
-            XCopyArea(dpy, scr->dock_dots->image,
-                      aicon->icon->core->window,
-                      scr->copy_gc, 0, 0, 7,
-                      scr->dock_dots->height, 0, 0);
-        }
+    if (wapp && wapp->flags.hidden) {
+	XSetClipMask(dpy, scr->copy_gc, scr->dock_dots->mask);
+	XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
+	XCopyArea(dpy, scr->dock_dots->image,
+		  aicon->icon->core->window,
+		  scr->copy_gc, 0, 0, 7,
+		  scr->dock_dots->height, 0, 0);        
     }
 #endif /* HIDDENDOT */
 
+    if (wapp)
+	index = wApplicationIndexOfInstance(wapp);
+    else
+	index = 0;
+    
+    if (index > 0) {
+	char buf[16];
+	
+	sprintf(buf, "%i", index);
+	
+	WMDrawString(scr->wmscreen, aicon->icon->core->window, 
+		     scr->clip_title_gc, scr->title_font,
+		     1, 1, buf, strlen(buf));
+    }
+    
+    
     if (aicon->omnipresent)
         drawCorner(aicon->icon);
 
@@ -445,58 +450,6 @@ wAppIconPaint(WAppIcon *aicon)
 
 #define canBeDocked(wwin)  ((wwin) && ((wwin)->wm_class||(wwin)->wm_instance))
 
-#ifdef REDUCE_APPICONS
-unsigned int
-wAppIconReduceAppCount(WApplication *wapp)
-{
-    WAppIconAppList *applist;
-
-    if (wapp == NULL)
-	return 0;
-
-    if (wapp->app_icon == NULL)
-	return 0;
-
-    /* If given a main window, check the applist
-     * and remove the if it exists
-     */
-    applist = wapp->app_icon->applist;
-    while (applist != NULL) {
-	if (applist->wapp == wapp) {
-	    /* If this app owns the appicon, change the appicon's
-	     * owner to the next app in the list or NULL
-	     */
-	    if (wapp->app_icon->icon->owner 
-		== applist->wapp->main_window_desc) {
-		if (applist->next) {
-		    wapp->app_icon->icon->owner = applist->next->wapp->main_window_desc;
-		} else if (applist->prev) {
-		    wapp->app_icon->icon->owner = applist->prev->wapp->main_window_desc;
-		} else {
-		    wapp->app_icon->icon->owner = NULL;
-		}
-	    }
-	    if (applist->prev)
-		applist->prev->next = applist->next;
-
-	    if (applist->next)
-		applist->next->prev = applist->prev;
-
-	    if (applist == wapp->app_icon->applist)
-		wapp->app_icon->applist = applist->next;
-	    
-	    wfree(applist);
-
-	    if (wapp->app_icon->applist != NULL)
-		wapp->app_icon->main_window = wapp->app_icon->applist->wapp->main_window;
-
-	    return (--wapp->app_icon->num_apps);
-	}
-	applist = applist->next;
-    }
-    return (--wapp->app_icon->num_apps);
-}
-#endif
 
 
 static void
@@ -664,14 +617,7 @@ iconDblClick(WObjDescriptor *desc, XEvent *event)
     WScreen *scr = aicon->icon->core->screen_ptr;
     int unhideHere;
 
-#ifndef REDUCE_APPICONS
     assert(aicon->icon->owner!=NULL);
-#else
-    if (aicon->icon->owner == NULL) {
-       fprintf(stderr, "Double-click disabled: missing main window.\n");
-       return;
-    }
-#endif
 
     wapp = wApplicationOf(aicon->icon->owner->main_window);
 #ifdef DEBUG0
@@ -680,12 +626,6 @@ iconDblClick(WObjDescriptor *desc, XEvent *event)
 	return;
     }
 #endif
-#ifdef REDUCE_APPICONS
-    if (!wapp) {
-       fprintf(stderr, "Double-click disabled: missing wapp.\n");
-       return;
-    }
-#endif /* REDUCE_APPICONS */
 
     unhideHere = (event->xbutton.state & ShiftMask);
 
@@ -699,6 +639,7 @@ iconDblClick(WObjDescriptor *desc, XEvent *event)
 	wHideOtherApplications(aicon->icon->owner);
     }
 }
+
 
 
 void
@@ -719,6 +660,9 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
     int clickButton = event->xbutton.button;
     Pixmap ghost = None;
     Window wins[2];
+    Bool movingSingle = False;
+    int oldX = x;
+    int oldY = y;
 
     if (aicon->editing || WCHECK_STATE(WSTATE_MODAL))
 	return;
@@ -808,7 +752,12 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
 	    }
 	    x = ev.xmotion.x_root - dx;
 	    y = ev.xmotion.y_root - dy;
-	    XMoveWindow(dpy, icon->core->window, x, y);
+	    
+	    if (movingSingle) {
+		XMoveWindow(dpy, icon->core->window, x, y);
+	    } else {
+		wAppIconMove(aicon, x, y);
+	    }
 
 	    if (dockable) {
                 if (scr->dock && wDockSnapIcon(scr->dock, aicon, x, y,
@@ -896,17 +845,31 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
 		if (!docked) {
 		    /* If icon could not be docked, slide it back to the old
 		     * position */
-		    SlideWindow(icon->core->window, x, y, aicon->x_pos,
-				aicon->y_pos);
+		    SlideWindow(icon->core->window, x, y, oldX, oldY);
+		} else {
+		    WAppIcon *nextIcon = wAppIconNextSibling(aicon);
+		    
+		    if (nextIcon) {
+			/* move the next instance back to the old position */
+			SlideWindow(nextIcon->icon->core->window, x, y,
+				    oldX, oldY);
+			wAppIconMove(nextIcon, oldX, oldY);
+		    }
 		}
 
 #ifdef WSOUND
 		wSoundPlay(WSOUND_DOCK);
 #endif
             } else {
-		XMoveWindow(dpy, icon->core->window, x, y);
-		aicon->x_pos = x;
-		aicon->y_pos = y;
+		if (movingSingle) {
+		    /* move back to its place */
+		    SlideWindow(icon->core->window, x, y, oldX, oldY);
+		    wAppIconMove(aicon, oldX, oldY);		    
+		} else {
+		    XMoveWindow(dpy, icon->core->window, x, y);
+		    aicon->x_pos = x;
+		    aicon->y_pos = y;
+		}
                 if (workspace->clip && workspace->clip->auto_raise_lower)
                     wDockLower(workspace->clip);
             }

@@ -237,13 +237,7 @@ static void
 killCallback(WMenu *menu, WMenuEntry *entry)
 {
     WAppIcon *icon;
-#ifdef REDUCE_APPICONS
-    WAppIconAppList *tapplist;
-
-    extern Atom _XA_WM_DELETE_WINDOW;
-#else
     char *buffer;
-#endif
 
     if (!WCHECK_STATE(WSTATE_NORMAL))
 	return;
@@ -256,23 +250,6 @@ killCallback(WMenu *menu, WMenuEntry *entry)
 
     WCHANGE_STATE(WSTATE_MODAL);
 
-#ifdef REDUCE_APPICONS
-    /* Send a delete message to the main window of each application
-     * bound to this docked appicon. - cls
-     */
-    tapplist = icon->applist;
-    while (tapplist != NULL) {
-	if (tapplist->wapp->main_window_desc != NULL) {
-	    if (tapplist->wapp->main_window_desc->protocols.DELETE_WINDOW) {
-		wClientSendProtocol(tapplist->wapp->main_window_desc,
-				    _XA_WM_DELETE_WINDOW, CurrentTime);
-	    } else {
-		wClientKill(tapplist->wapp->main_window_desc);
-	    }
-	}
-	tapplist = tapplist->next;
-    }
-#else
     buffer = wstrconcat(icon->wm_class,
 			_(" will be forcibly closed.\n"
 			  "Any unsaved changes will be lost.\n"
@@ -287,7 +264,6 @@ killCallback(WMenu *menu, WMenuEntry *entry)
     }
 
     wfree(buffer);
-#endif /* !REDUCE_APPICONS */
 
     icon->editing = 0;
 
@@ -1988,23 +1964,6 @@ wDockDoAutoLaunch(WDock *dock, int workspace)
     }
 }
 
-#ifdef REDUCE_APPICONS
-void
-wDockSimulateLaunch(WDock *dock, WAppIcon *btn)
-{
-    if ((btn == NULL) || (dock == NULL))
-	return;
-
-    if (!btn->running) {
-	if ((btn->icon->owner == NULL) && (btn->applist))
-	    btn->icon->owner = btn->applist->wapp->main_window_desc;
-	if (!btn->forced_dock)
-	   btn->launching = 1;
-        dockIconPaint(btn);
-	wusleep(5000);
-    }
-}
-#endif
 
 #ifdef OFFIX_DND
 static WDock*
@@ -2389,11 +2348,7 @@ wDockDetach(WDock *dock, WAppIcon *icon)
     /* if the dock is not attached to an application or
      * the the application did not set the approriate hints yet,
      * destroy the icon */
-#ifdef REDUCE_APPICONS
-    if ((icon->num_apps == 0) && (!icon->running || !wApplicationOf(icon->main_window)) )
-#else
     if (!icon->running || !wApplicationOf(icon->main_window))
-#endif
 	wAppIconDestroy(icon);
     else {
 	icon->icon->core->descriptor.handle_mousedown = appIconMouseDown;
@@ -2407,6 +2362,14 @@ wDockDetach(WDock *dock, WAppIcon *icon)
 	wAppIconPaint(icon);
         if (wPreferences.auto_arrange_icons) {
 	    wArrangeIcons(dock->screen_ptr, True);
+	} else {
+	    WAppIcon *bla = wAppIconNextSibling(icon);
+	    
+	    if (bla) {
+		SlideWindow(icon->icon->core->window, icon->x_pos, icon->y_pos,
+			    bla->x_pos, bla->y_pos);
+		wAppIconMove(icon, bla->x_pos, bla->y_pos);
+	    }
 	}
     }
     if (dock->auto_collapse || dock->auto_raise_lower)
@@ -3118,9 +3081,6 @@ void
 wDockTrackWindowLaunch(WDock *dock, Window window)
 {
     WAppIcon *icon;
-#ifdef REDUCE_APPICONS
-    WAppIconAppList *tapplist;
-#endif
     char *wm_class, *wm_instance;
     int i;
     Bool firstPass = True;
@@ -3186,16 +3146,6 @@ retry:
 		if (!icon->forced_dock)
 		    icon->main_window = window;
 
-#ifdef REDUCE_APPICONS
-		tapplist = wmalloc(sizeof(WAppIconAppList));
-		memset(tapplist, 0, sizeof(WAppIconAppList));
-		tapplist->next = icon->applist;
-		if (icon->applist)
-		   icon->applist->prev = tapplist;
-		icon->applist = tapplist;
-		tapplist->wapp = wApplicationOf(window);
-		icon->num_apps++;
-#endif
 	    }
 	    found = True;
 	    wDockFinishLaunch(dock, icon);
@@ -3528,14 +3478,7 @@ iconDblClick(WObjDescriptor *desc, XEvent *event)
     WApplication *wapp = NULL;
     int unhideHere = 0;
 
-#ifdef REDUCE_APPICONS
-    if ((btn->icon->owner && !(event->xbutton.state & ControlMask)) ||
-	((btn->icon->owner == NULL) && (btn->applist != NULL))) {
-	    if (btn->icon->owner == NULL)
-	    	btn->icon->owner = btn->applist->wapp->main_window_desc;
-#else
     if (btn->icon->owner && !(event->xbutton.state & ControlMask)) {
-#endif
 	wapp = wApplicationOf(btn->icon->owner->main_window);
 
 	assert(wapp!=NULL);
