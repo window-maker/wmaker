@@ -833,8 +833,9 @@ dnl AC_SUBST(DOCTYPES)
 AC_OUTPUT(Makefile po/Makefile util/Makefile test/Makefile \
 	WINGs/Makefile WINGs/WINGs/Makefile WINGs/Documentation/Makefile \
 	WINGs/Examples/Makefile WINGs/Resources/Makefile WINGs/Tests/Makefile \
-	WINGs/Extras/Makefile \
-	wmlib/Makefile wrlib/Makefile src/Makefile src/wconfig.h doc/Makefile \
+	WINGs/Extras/Makefile WINGs/po/Makefile \
+	wmlib/Makefile wrlib/Makefile src/Makefile src/wconfig.h \
+	doc/Makefile doc/sk/Makefile \
 	WindowMaker/Makefile WindowMaker/Backgrounds/Makefile \
 	WindowMaker/Defaults/Makefile WindowMaker/IconSets/Makefile \
 	WindowMaker/Icons/Makefile WindowMaker/Pixmaps/Makefile \

@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = sk
+mandir=@mandir@/sk
 
 man_MANS = \
 	geticonset.1x \

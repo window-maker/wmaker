@@ -1,0 +1,665 @@
+# Slovak messages for WINGs
+# (C) 2001 Jan "judas" Tomka
+#
+# Original translation by Jan "judas" Tomka on Feb 25 2001
+# Currently maintained by Jan "judas" Tomka <tomka@oalevice.sk>
+#
+# Version history:
+#	WM-ver	author		email			date
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: WINGs 0.64.0\n"
+"POT-Creation-Date: 2001-02-24 19:10+0100\n"
+"PO-Revision-Date: 2001-02-25 22:00+0100\n"
+"Last-Translator: Jan \"judas\" Tomka <tomka@oalevice>\n"
+"Language-Team: Slovak <sk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Transfer-Encoding: unknown\n"
+
+#: ../../WINGs/connection.c:451 ../../WINGs/connection.c:516
+#: ../../WINGs/connection.c:559
+msgid "Bad address-service-protocol combination"
+msgstr "Nesprávna kombinácia adresa-slu¾ba-protokol"
+
+#: ../../WINGs/dragsource.c:541
+msgid "DND selection lost during drag operation..."
+msgstr "DND výber sa stratil poèas operácie »ahania..."
+
+#: ../../WINGs/dragsource.c:610
+#, c-format
+msgid "drag & drop timed out while waiting for response from 0x%x\n"
+msgstr "èas pre drag & drop vypr¹al poèas èakania na odpoveï z 0x%x\n"
+
+#: ../../WINGs/dragsource.c:728
+msgid "could not get ownership or DND selection"
+msgstr "nemo¾no získa» vlastníctvo alebo DND výber"
+
+#: ../../WINGs/dragsource.c:898
+#, c-format
+msgid "drag source received unexpected XdndFinished message from %x"
+msgstr "zdroj »ahania prijal neèakanú správu XdndFinished z %x"
+
+#: ../../WINGs/dragsource.c:1040
+#, c-format
+msgid "unknown XDND action %s from 0x%x"
+msgstr "neznáma XDND akcia %s z 0x%x"
+
+#: ../../WINGs/dragsource.c:1073
+msgid "received invalid drag & drop type list"
+msgstr "prijatý nesprávny zoznam typov drag & drop"
+
+#: ../../WINGs/dragsource.c:1161
+msgid "received Enter event in bad order"
+msgstr "prijatá udalos» Enter v nesprávnom poradí"
+
+#: ../../WINGs/dragsource.c:1168
+#, c-format
+msgid "received drag & drop request with unsupported version %i"
+msgstr "prijatá po¾iadavka drag & drop s nepodporovanou verziou %i"
+
+#: ../../WINGs/error.c:56
+#, c-format
+msgid "Unknown error %d"
+msgstr "Nezmána chyba %d"
+
+#: ../../WINGs/error.c:61
+#, c-format
+msgid "Error %d"
+msgstr "Chyba %d"
+
+#: ../../WINGs/error.c:112
+msgid " warning: "
+msgstr " varovanie: "
+
+#: ../../WINGs/error.c:139
+msgid " fatal error: "
+msgstr " fatálna chyba: "
+
+#: ../../WINGs/error.c:165 ../../WINGs/error.c:194
+msgid " error: "
+msgstr " chyba: "
+
+#: ../../WINGs/findfile.c:50
+#, c-format
+msgid "could not get password entry for UID %i"
+msgstr "nemo¾no zisti» informácie o UID %i"
+
+#: ../../WINGs/findfile.c:68
+#, c-format
+msgid "could not get password entry for user %s"
+msgstr "nemo¾no zisti» informácie o u¾ívateµovi %s"
+
+#: ../../WINGs/hashtable.c:275
+msgid "rebuilding hash table...\n"
+msgstr ""
+
+#: ../../WINGs/hashtable.c:279
+msgid "finished rebuild.\n"
+msgstr ""
+
+#: ../../WINGs/host.c:116
+msgid "Cannot get current host name"
+msgstr "Nemo¾no zisti» aktuálne meno poèítaèa"
+
+#: ../../WINGs/memory.c:94
+msgid "malloc() failed. Retrying after 2s."
+msgstr "chyba malloc(). Nový pokus o 2s."
+
+#: ../../WINGs/memory.c:103
+msgid "Really Bad Error: recursive malloc() failure."
+msgstr "Naozaj zlá chyba: rekurzívna chyba malloc()."
+
+#: ../../WINGs/memory.c:106 ../../WINGs/memory.c:146
+msgid "virtual memory exhausted"
+msgstr "virtuálna pamä» vyèerpaná"
+
+#: ../../WINGs/memory.c:133
+msgid "realloc() failed. Retrying after 2s."
+msgstr "chyba realloc(). Nový pokus o 2s."
+
+#: ../../WINGs/memory.c:142
+msgid "Really Bad Error: recursive realloc() failure."
+msgstr "Naozaj zlá chyba: rekurzívna chyba realloc()."
+
+#: ../../WINGs/memory.c:205
+#, c-format
+msgid "trying to release unexisting data %p"
+msgstr "pokus uvoµni» neexistujúce dáta %p"
+
+#: ../../WINGs/memory.c:210
+#, c-format
+msgid "RELEASING %p\n"
+msgstr "UVO¥NENIE %p\n"
+
+#: ../../WINGs/wcolor.c:198 ../../WINGs/wcolor.c:211 ../../WINGs/wcolor.c:250
+#: ../../WINGs/wcolor.c:291
+#, c-format
+msgid "could not allocate %s color"
+msgstr "nemo¾no alokova» %s farbu"
+
+#: ../../WINGs/wcolor.c:198
+msgid "white"
+msgstr "bielu"
+
+#: ../../WINGs/wcolor.c:211
+msgid "black"
+msgstr "èiernu"
+
+#: ../../WINGs/wcolor.c:250
+msgid "gray"
+msgstr "¹edú"
+
+#: ../../WINGs/wcolor.c:291
+msgid "dark gray"
+msgstr "tmavo ¹edú"
+
+#: ../../WINGs/wcolorpanel.c:410
+msgid "Colors"
+msgstr "Farby"
+
+#: ../../WINGs/wcolorpanel.c:600 ../../WINGs/wcolorpanel.c:2819
+msgid "Brightness"
+msgstr "Svetlos»"
+
+#: ../../WINGs/wcolorpanel.c:602 ../../WINGs/wcolorpanel.c:678
+#: ../../WINGs/wcolorpanel.c:711 ../../WINGs/wcolorpanel.c:745
+#: ../../WINGs/wcolorpanel.c:805 ../../WINGs/wcolorpanel.c:839
+#: ../../WINGs/wcolorpanel.c:873 ../../WINGs/wcolorpanel.c:908
+#: ../../WINGs/wcolorpanel.c:2159 ../../WINGs/wcolorpanel.c:2821
+#: ../../WINGs/wcolorpanel.c:2857 ../../WINGs/wcolorpanel.c:2893
+#: ../../WINGs/wcolorpanel.c:3741
+msgid "Color Panel: Could not allocate memory"
+msgstr "Panel farieb: Nemo¾no alokova» pamä»"
+
+#: ../../WINGs/wcolorpanel.c:675 ../../WINGs/wcolorpanel.c:676
+msgid "Red"
+msgstr "Èervená"
+
+#: ../../WINGs/wcolorpanel.c:708 ../../WINGs/wcolorpanel.c:709
+msgid "Green"
+msgstr "Zelená"
+
+#: ../../WINGs/wcolorpanel.c:742 ../../WINGs/wcolorpanel.c:743
+msgid "Blue"
+msgstr "Modrá"
+
+#: ../../WINGs/wcolorpanel.c:802 ../../WINGs/wcolorpanel.c:803
+msgid "Cyan"
+msgstr ""
+
+#: ../../WINGs/wcolorpanel.c:836 ../../WINGs/wcolorpanel.c:837
+msgid "Magenta"
+msgstr ""
+
+#: ../../WINGs/wcolorpanel.c:870 ../../WINGs/wcolorpanel.c:871
+msgid "Yellow"
+msgstr "®ltá"
+
+#: ../../WINGs/wcolorpanel.c:905 ../../WINGs/wcolorpanel.c:906
+msgid "Black"
+msgstr "Èierna"
+
+#: ../../WINGs/wcolorpanel.c:986
+msgid "Spectrum"
+msgstr "Spektrum"
+
+#: ../../WINGs/wcolorpanel.c:1016
+msgid "Palette"
+msgstr "Paleta"
+
+#: ../../WINGs/wcolorpanel.c:1022
+msgid "New from File..."
+msgstr "Nová zo súboru..."
+
+#: ../../WINGs/wcolorpanel.c:1023 ../../WINGs/wcolorpanel.c:1071
+#: ../../WINGs/wcolorpanel.c:1088
+msgid "Rename..."
+msgstr "Premenova»..."
+
+#: ../../WINGs/wcolorpanel.c:1024 ../../WINGs/wcolorpanel.c:1072
+#: ../../WINGs/wcolorpanel.c:1089 ../../WINGs/wcolorpanel.c:3316
+msgid "Remove"
+msgstr "Odstráni»"
+
+#: ../../WINGs/wcolorpanel.c:1025
+msgid "Copy"
+msgstr "Kopírova»"
+
+#: ../../WINGs/wcolorpanel.c:1026
+msgid "New from Clipboard"
+msgstr ""
+
+#: ../../WINGs/wcolorpanel.c:1047
+msgid "X11-Colors"
+msgstr "Farby X11"
+
+#: ../../WINGs/wcolorpanel.c:1064
+msgid "Color"
+msgstr "Farba"
+
+#: ../../WINGs/wcolorpanel.c:1070
+msgid "Add..."
+msgstr "Prida»..."
+
+#: ../../WINGs/wcolorpanel.c:1080
+msgid "List"
+msgstr "Zoznam"
+
+#: ../../WINGs/wcolorpanel.c:1087
+msgid "New..."
+msgstr "Nový..."
+
+#: ../../WINGs/wcolorpanel.c:1226
+#, c-format
+msgid ""
+"Color Panel: Could not create directory %s needed to store configurations"
+msgstr ""
+"Panel farieb: Nemo¾no vytvori» adresár %s potrebný na ulo¾enie nastavení"
+
+#. Delete the file, it doesn't belong here
+#: ../../WINGs/wcolorpanel.c:1232 ../../WINGs/wcolorpanel.c:3202
+#: ../../WINGs/wcolorpanel.c:3206
+msgid "File Error"
+msgstr "Chyba súboru"
+
+#: ../../WINGs/wcolorpanel.c:1233
+msgid "Could not create ColorPanel configuration directory"
+msgstr "Nemo¾no vytvori» konfiguraèný adresár panelu farieb"
+
+#: ../../WINGs/wcolorpanel.c:1234 ../../WINGs/wcolorpanel.c:3203
+#: ../../WINGs/wcolorpanel.c:3208 ../../WINGs/wcolorpanel.c:3235
+#: ../../WINGs/wfilepanel.c:243 ../../WINGs/wfilepanel.c:641
+#: ../../WINGs/wfilepanel.c:653 ../../WINGs/wfilepanel.c:752
+#: ../../WINGs/wfilepanel.c:963 ../../WINGs/wfontpanel.c:717
+msgid "OK"
+msgstr "OK"
+
+#: ../../WINGs/wcolorpanel.c:1240 ../../WINGs/wcolorpanel.c:1276
+#: ../../WINGs/wcolorpanel.c:1294
+msgid "Color Panel: Could not find file"
+msgstr "Panel farieb: Nemo¾no nájs» súbor"
+
+#: ../../WINGs/wcolorpanel.c:1481 ../../WINGs/wcolorpanel.c:1546
+#: ../../WINGs/wcolorpanel.c:1610
+msgid "Color Panel: X failed request"
+msgstr "Panel farieb: chyba po¾iadavky X"
+
+#: ../../WINGs/wcolorpanel.c:2855
+msgid "Saturation"
+msgstr "Saturácia"
+
+#: ../../WINGs/wcolorpanel.c:2891
+msgid "Hue"
+msgstr "Odtieò"
+
+#: ../../WINGs/wcolorpanel.c:3141
+msgid "Open Palette"
+msgstr "Otvori» paletu"
+
+#: ../../WINGs/wcolorpanel.c:3203
+msgid "Invalid file format !"
+msgstr "Nesprávny súborový formát!"
+
+#: ../../WINGs/wcolorpanel.c:3205
+#, c-format
+msgid "can't remove file %s"
+msgstr "namo¾no odstráni» súbor %s"
+
+#: ../../WINGs/wcolorpanel.c:3207
+msgid "Couldn't remove file from Configuration Directory !"
+msgstr "Nemo¾no odstráni» súbor z konfiguraèného adresára!"
+
+#: ../../WINGs/wcolorpanel.c:3234
+msgid "Rename"
+msgstr "Premenova»"
+
+#: ../../WINGs/wcolorpanel.c:3234
+msgid "Rename palette to:"
+msgstr "Premenova» paletu:"
+
+#: ../../WINGs/wcolorpanel.c:3235 ../../WINGs/wfilepanel.c:252
+#: ../../WINGs/wfilepanel.c:653 ../../WINGs/wfilepanel.c:752
+msgid "Cancel"
+msgstr "Zru¹i»"
+
+#. Careful, this palette exists already
+#: ../../WINGs/wcolorpanel.c:3251 ../../WINGs/wfilepanel.c:752
+msgid "Warning"
+msgstr "Varovanie"
+
+#: ../../WINGs/wcolorpanel.c:3252
+msgid ""
+"Palette already exists !\n"
+"\n"
+"Overwrite ?"
+msgstr ""
+"Paleta u¾ existuje!\n"
+"\n"
+"Prepísa»?"
+
+#: ../../WINGs/wcolorpanel.c:3252 ../../WINGs/wcolorpanel.c:3316
+msgid "No"
+msgstr "Nie"
+
+#: ../../WINGs/wcolorpanel.c:3252 ../../WINGs/wcolorpanel.c:3316
+msgid "Yes"
+msgstr "Áno"
+
+#: ../../WINGs/wcolorpanel.c:3284
+#, c-format
+msgid "Couldn't rename palette %s to %s\n"
+msgstr "Nemo¾no premenova» paletu %s na %s\n"
+
+#: ../../WINGs/wcolorpanel.c:3310
+msgid "This will permanently remove the palette "
+msgstr "Paleta bude natrvalo zmazaná"
+
+#: ../../WINGs/wcolorpanel.c:3313
+msgid ""
+".\n"
+"\n"
+"Are you sure you want to remove this palette ?"
+msgstr ""
+".\n"
+"\n"
+"Ste si istý, ¾e chcete odstráni» túto paletu?"
+
+#: ../../WINGs/wcolorpanel.c:3338
+#, c-format
+msgid "Couldn't remove palette %s\n"
+msgstr "Nemo¾no odstráni» paletu %s\n"
+
+#: ../../WINGs/wcolorpanel.c:3643
+#, c-format
+msgid "Could not open %s"
+msgstr "Nemo¾no otvori» %s"
+
+#: ../../WINGs/wcolorpanel.c:3650
+#, c-format
+msgid "Could not create %s"
+msgstr "Nemo¾no vytvori» %s"
+
+#: ../../WINGs/wcolorpanel.c:3661
+#, c-format
+msgid "Write error on file %s"
+msgstr "Chyba zápisu do súboru %s"
+
+#: ../../WINGs/wcolorpanel.c:3706
+msgid "Color Panel: Color unspecified"
+msgstr "Panel farieb: Ne¹pecifikovaná farba"
+
+#: ../../WINGs/wfilepanel.c:228
+msgid "Name:"
+msgstr "Meno:"
+
+#: ../../WINGs/wfilepanel.c:325 ../../WINGs/wfilepanel.c:390
+msgid "Open"
+msgstr "Otvori»"
+
+#: ../../WINGs/wfilepanel.c:343 ../../WINGs/wfilepanel.c:396
+msgid "Save"
+msgstr "Ulo¾i»"
+
+#: ../../WINGs/wfilepanel.c:556
+#, c-format
+msgid "WINGs: could not open directory %s\n"
+msgstr "WINGs: nemo¾no otvori» adresár %s\n"
+
+#: ../../WINGs/wfilepanel.c:574
+#, c-format
+msgid "WINGs: could not stat %s\n"
+msgstr "WINGs: nemo¾no zisti» informácie o %s\n"
+
+#: ../../WINGs/wfilepanel.c:641 ../../WINGs/wfilepanel.c:962
+#: ../../WINGs/wfontpanel.c:716
+msgid "Error"
+msgstr "Chyba"
+
+#: ../../WINGs/wfilepanel.c:652
+msgid "Create Directory"
+msgstr "Vytvori» adresár"
+
+#: ../../WINGs/wfilepanel.c:653
+msgid "Enter directory name"
+msgstr "Meno adresára"
+
+#: ../../WINGs/wfilepanel.c:689 ../../WINGs/wfilepanel.c:728
+#: ../../WINGs/wfilepanel.c:757 ../../WINGs/wfilepanel.c:785
+msgid "Permission denied."
+msgstr "Prístup zamietnutý."
+
+#: ../../WINGs/wfilepanel.c:692
+#, c-format
+msgid "'%s' already exists."
+msgstr "'%s' u¾ existuje"
+
+#: ../../WINGs/wfilepanel.c:695
+msgid "Path does not exist."
+msgstr "Cesta neexistuje."
+
+#: ../../WINGs/wfilepanel.c:725 ../../WINGs/wfilepanel.c:782
+#, c-format
+msgid "'%s' does not exist."
+msgstr "'%s' neexistuje."
+
+#: ../../WINGs/wfilepanel.c:732 ../../WINGs/wfilepanel.c:789
+msgid "Insufficient memory available."
+msgstr "Nedostatok pamäti."
+
+#: ../../WINGs/wfilepanel.c:736 ../../WINGs/wfilepanel.c:793
+#, c-format
+msgid "'%s' is on a read-only filesystem."
+msgstr "'%s' je na súborovom systéme len pre èítanie."
+
+#: ../../WINGs/wfilepanel.c:739 ../../WINGs/wfilepanel.c:769
+#: ../../WINGs/wfilepanel.c:796
+#, c-format
+msgid "Can not delete '%s'."
+msgstr "Nemo¾no odstráni» '%s'."
+
+#: ../../WINGs/wfilepanel.c:745
+#, c-format
+msgid "Delete directory %s ?"
+msgstr "Odstráni» adresár %s?"
+
+#: ../../WINGs/wfilepanel.c:748
+#, c-format
+msgid "Delete file %s ?"
+msgstr "Odstráni» súbor %s?"
+
+#: ../../WINGs/wfilepanel.c:760
+#, c-format
+msgid "Directory '%s' does not exist."
+msgstr "Adresár '%s' neexistuje."
+
+#: ../../WINGs/wfilepanel.c:763
+#, c-format
+msgid "Directory '%s' is not empty."
+msgstr "Adresár '%s' nie je prázdny."
+
+#: ../../WINGs/wfilepanel.c:766
+#, c-format
+msgid "Directory '%s' is busy."
+msgstr "Adresár '%s' je pou¾ívaný."
+
+#: ../../WINGs/wfilepanel.c:779
+#, c-format
+msgid "'%s' is a directory."
+msgstr "'%s' je adresár."
+
+#: ../../WINGs/wfilepanel.c:821
+#, c-format
+msgid "An error occured browsing '%s'."
+msgstr "Pri prehliadaní '%s' nastala chyba."
+
+#: ../../WINGs/wfilepanel.c:825
+#, c-format
+msgid "'%s' is not a directory."
+msgstr "'%s' nie je adresár."
+
+#: ../../WINGs/wfilepanel.c:962
+msgid "File does not exist."
+msgstr "Súbor neexistuje."
+
+#: ../../WINGs/wfont.c:129
+#, c-format
+msgid "the following character sets are missing in %s:"
+msgstr "nasledujúce sady znakov chýbajú v %s:"
+
+#: ../../WINGs/wfont.c:136
+#, c-format
+msgid ""
+"the string \"%s\" will be used in place of any characters from those sets."
+msgstr ""
+"re»azec \"%s\" bude pou¾itý namiesto znakov z týchto sád."
+
+#: ../../WINGs/wfont.c:282 ../../WINGs/wfont.c:318
+#, c-format
+msgid "could not load font set %s. Trying fixed."
+msgstr "nemo¾no naèíta» font %s. Skú¹a sa naèíta» fixed."
+
+#: ../../WINGs/wfont.c:288 ../../WINGs/wfont.c:324
+#, c-format
+msgid "could not load font %s. Trying fixed."
+msgstr "nemo¾no naèíta» font %s. Skú¹a sa naèíta» fixed."
+
+#: ../../WINGs/wfont.c:292 ../../WINGs/wfont.c:328
+msgid "could not load fixed font!"
+msgstr "nemo¾no naèíta» font fixed!"
+
+#: ../../WINGs/wfont.c:423
+#, c-format
+msgid "font description %s is too large."
+msgstr "popis fontu %s je príli¹ veµký."
+
+#: ../../WINGs/wfontpanel.c:205
+msgid "Test!!!"
+msgstr "Skú¹ka!!!"
+
+#: ../../WINGs/wfontpanel.c:211
+msgid "Family"
+msgstr ""
+
+#: ../../WINGs/wfontpanel.c:222
+msgid "Typeface"
+msgstr ""
+
+#: ../../WINGs/wfontpanel.c:233
+msgid "Size"
+msgstr "Veµkos»"
+
+#: ../../WINGs/wfontpanel.c:252
+msgid "Set"
+msgstr ""
+
+#: ../../WINGs/wfontpanel.c:257
+msgid "Revert"
+msgstr ""
+
+#: ../../WINGs/wfontpanel.c:717
+msgid "Could not retrieve font list"
+msgstr "Nemo¾no obdr¾a» zoznam fontov"
+
+#: ../../WINGs/wfontpanel.c:729
+#, c-format
+msgid "font name %s is longer than 256, which is invalid."
+msgstr "meno fontu %s je dlh¹ie ako 256, èo je nesprávne."
+
+#: ../../WINGs/wfontpanel.c:880
+msgid "Roman"
+msgstr ""
+
+#: ../../WINGs/wfontpanel.c:883
+msgid "Italic"
+msgstr ""
+
+#: ../../WINGs/wfontpanel.c:885
+msgid "Oblique"
+msgstr ""
+
+#: ../../WINGs/wfontpanel.c:887
+msgid "Rev Italic"
+msgstr ""
+
+#: ../../WINGs/wfontpanel.c:889
+msgid "Rev Oblique"
+msgstr ""
+
+#: ../../WINGs/wfontpanel.c:895
+msgid "Normal"
+msgstr ""
+
+#: ../../WINGs/widgets.c:414
+#, c-format
+msgid "WINGs: could not load widget images file: %s"
+msgstr "WINGs: nemo¾no naèíta» súbor s obrázkami pre widgety: %s"
+
+#: ../../WINGs/widgets.c:525
+#, c-format
+msgid "WINGs: could not open display %s"
+msgstr "WINGs: nemo¾no otvori» display %s"
+
+#: ../../WINGs/widgets.c:717
+msgid ""
+"could not load any fonts. Make sure your font installationand locale "
+"settings are correct."
+msgstr ""
+"nemo¾no naèíta» ¾iadny font. Ubezpeète sa, ¾e in¹talácia fontov a miestne "
+"nastavenia sú v poriadku."
+
+#: ../../WINGs/wruler.c:189
+msgid "0   inches"
+msgstr "0    palcov"
+
+#: ../../WINGs/wtext.c:1212
+msgid "...for this app will surely crash :-)\n"
+msgstr ""
+
+#: ../../WINGs/wtext.c:2084
+msgid "didn't get it\n"
+msgstr ""
+
+#: ../../WINGs/wtext.c:2726
+#, c-format
+msgid "type is [%s]\n"
+msgstr ""
+
+#: ../../WINGs/wtext.c:2797
+msgid "could not request data for dropped data"
+msgstr ""
+
+#: ../../WINGs/wtext.c:2995
+msgid "could not create text's view\n"
+msgstr ""
+
+#: ../../WINGs/wview.c:219
+msgid "trying to realize widget of unrealized parent"
+msgstr ""
+
+#: ../../WINGs/wview.c:267
+msgid "trying to reparent realized view to unrealized parent"
+msgstr ""
+
+#: ../../WINGs/wtextfield.c:490
+msgid "only left alignment is supported in textfields"
+msgstr "pre textové polia je povolené len µavé zarovnanie"
+
+#pozor, co je STRING?
+#: ../../WINGs/wwindow.c:222
+msgid "window title conversion error... using STRING encoding"
+msgstr "chyba konverzie titulu okna... pou¾ije sa kódovanie STRING"
+
+#: ../../WINGs/wwindow.c:313
+msgid "could not allocate memory for window size hints"
+msgstr "nemo¾no alokova» pamä» pre pokyny veµkosti okna"
+
+#: ../../WINGs/wwindow.c:586
+msgid "could not allocate memory for WM hints"
+msgstr "nemo¾no alokova» pamä» pre pokyny WM"
+
+#: ../../WINGs/wwindow.c:627
+msgid "icon title conversion error..using STRING encoding"
+msgstr "chyba konverzie titulu ikony... pou¾ije sa kódovanie STRING"
+
