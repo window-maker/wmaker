@@ -9,7 +9,7 @@ msgstr ""
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <linux-ee@eenet.ee>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Type: text/plain; charset=iso-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../src/appicon.c:542 ../src/dialog.c:224 ../src/dock.c:3244
