@@ -62,14 +62,14 @@ wstrerror(int errnum)
 }
 
 
-/**************************************************************************
- * Prints a fatal error message with variable arguments and terminates
+/*********************************************************************
+ * Prints a message with variable arguments
  * 
  * msg - message to print with optional formatting
- * ... - arguments to use on formatting 
- **************************************************************************/
-void 
-wfatal(const char *msg, ...)
+ * ... - arguments to use on formatting
+ *********************************************************************/
+void
+wmessage(const char *msg, ...)
 {
     va_list args;
     char buf[MAXLINE];
@@ -80,7 +80,7 @@ wfatal(const char *msg, ...)
     strcat(buf,"\n");
     fflush(stdout);
     fputs(_WINGS_progname, stderr);
-    fputs(" fatal error: ",stderr);
+    fputs(": ",stderr);
     fputs(buf, stderr);
     fflush(stdout);
     fflush(stderr);
@@ -112,6 +112,33 @@ wwarning(const char *msg, ...)
     fflush(stdout);
     fflush(stderr);
     
+    va_end(args);
+}
+
+
+/**************************************************************************
+ * Prints a fatal error message with variable arguments and terminates
+ * 
+ * msg - message to print with optional formatting
+ * ... - arguments to use on formatting 
+ **************************************************************************/
+void 
+wfatal(const char *msg, ...)
+{
+    va_list args;
+    char buf[MAXLINE];
+
+    va_start(args, msg);
+
+    vsnprintf(buf, MAXLINE-3, msg, args);
+    strcat(buf,"\n");
+    fflush(stdout);
+    fputs(_WINGS_progname, stderr);
+    fputs(" fatal error: ",stderr);
+    fputs(buf, stderr);
+    fflush(stdout);
+    fflush(stderr);
+
     va_end(args);
 }
 

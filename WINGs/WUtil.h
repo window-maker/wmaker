@@ -210,8 +210,9 @@ waborthandler* wsetabort(waborthandler*);
 /* don't free the returned string */
 char* wstrerror(int errnum);
 
-void wfatal(const char *msg, ...);
+void wmessage(const char *msg, ...);
 void wwarning(const char *msg, ...);
+void wfatal(const char *msg, ...);
 void wsyserror(const char *msg, ...);
 void wsyserrorwithcode(int error, const char *msg, ...);
 
