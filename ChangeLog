@@ -8,6 +8,7 @@ Changes since version 0.63.1:
 	(Richard Frith-Macdonald <rfm@gnu.org>)
 - Fixed broken panels.
 - Renamed se.po to sv.po
+- New version of wkdemenu.pl (from Malcolm Cowe <malk@bruhaha.co.uk>)
 
 
 Changes since version 0.63.0:
