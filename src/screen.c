@@ -175,6 +175,17 @@ allocButtonPixmaps(WScreen *scr)
     if (pix)
       pix->shared = 1;
     scr->b_pixmaps[WBUT_ICONIFY] = pix;
+#ifdef XKB_BUTTON_HINT
+    pix = wPixmapCreateFromXPMData(scr, PRED_THAI_XPM);
+    if (pix)
+      pix->shared = 1;
+    scr->b_pixmaps[WBUT_THAI] = pix;
+    pix = wPixmapCreateFromXPMData(scr, PRED_ENGL_XPM);
+    if (pix)
+      pix->shared = 1;
+    scr->b_pixmaps[WBUT_ENGL] = pix;
+#endif
+
     
     pix = wPixmapCreateFromXPMData(scr, PRED_KILL_XPM);
     if (pix)

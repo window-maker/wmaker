@@ -123,6 +123,9 @@ static void windowCloseDblClick(WCoreWindow *sender, void *data, XEvent *event);
 /* iconify button */
 static void windowIconifyClick(WCoreWindow *sender, void *data, XEvent *event);
 
+#ifdef XKB_BUTTON_HINT
+static void windowThaiClick(WCoreWindow *sender, void *data, XEvent *event);
+#endif
 
 static void titlebarMouseDown(WCoreWindow *sender, void *data, XEvent *event);
 static void titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event);
@@ -888,6 +891,10 @@ wManageWindow(WScreen *scr, Window window)
      *--------------------------------------------------
      */
     foo = WFF_LEFT_BUTTON | WFF_RIGHT_BUTTON;
+#ifdef XKB_BUTTON_HINT
+    if (wPreferences.modelock)
+        foo |= WFF_THAI_BUTTON;
+#endif
     if (!WFLAGP(wwin, no_titlebar))
 	foo |= WFF_TITLEBAR;
     if (!WFLAGP(wwin, no_resizebar))
@@ -934,6 +941,11 @@ wManageWindow(WScreen *scr, Window window)
     wwin->frame->workspace = workspace;
 
     wwin->frame->on_click_left = windowIconifyClick;
+#ifdef XKB_BUTTON_HINT
+    if (wPreferences.modelock)
+        wwin->frame->on_click_thai = windowThaiClick;
+    else wwin->frame->on_click_thai = NULL;
+#endif
 
     wwin->frame->on_click_right = windowCloseClick;
     wwin->frame->on_dblclick_right = windowCloseDblClick;
@@ -1242,6 +1254,9 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
     
     foo = WFF_RIGHT_BUTTON;
     foo |= WFF_TITLEBAR;
+#ifdef XKB_BUTTON_HINT
+    foo |= WFF_THAI_BUTTON;
+#endif
 
     wwin->frame = wFrameWindowCreate(scr, WMFloatingLevel,
 				     wwin->frame_x, wwin->frame_y,
@@ -1268,6 +1283,12 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
     wwin->frame->child = wwin;
     
     wwin->frame->workspace = wwin->screen_ptr->current_workspace;
+    
+#ifdef THAI
+    if (wPreferences.modelock)
+        wwin->frame->on_click_thai = windowThaiClick;
+    else wwin->frame->on_click_thai = NULL;
+#endif
         
     wwin->frame->on_click_right = windowCloseClick;
     
@@ -1549,9 +1570,7 @@ wWindowFocus(WWindow *wwin, WWindow *owin)
 
 #ifdef KEEP_XKB_LOCK_STATUS
     if (wPreferences.modelock) {
-        if (!wwin->flags.focused) {
-            XkbLockGroup(dpy, XkbUseCoreKbd, wwin->frame->languagemode);
-        }
+        XkbLockGroup(dpy, XkbUseCoreKbd, wwin->frame->languagemode);
     }
 #endif /* KEEP_XKB_LOCK_STATUS */
 
@@ -1991,6 +2010,15 @@ wWindowUpdateButtonImages(WWindow *wwin)
 	    fwin->lbutton_image = scr->b_pixmaps[WBUT_ICONIFY];
 	}
     }
+    
+#ifdef XKB_BUTTON_HINT
+    if (!WFLAGP(wwin, no_thai_button)) {
+	    if (fwin->tbutton_image && !fwin->tbutton_image->shared) {
+		wPixmapDestroy(fwin->tbutton_image);
+	    }
+	    fwin->tbutton_image = scr->b_pixmaps[WBUT_ENGL];
+    }
+#endif
     
     /* close button */
 
@@ -2805,6 +2833,27 @@ windowCloseDblClick(WCoreWindow *sender, void *data, XEvent *event)
 	wClientKill(wwin);
     }
 }
+
+
+#ifdef XKB_BUTTON_HINT
+static void
+windowThaiClick(WCoreWindow *sender, void *data, XEvent *event)
+{
+    WWindow *wwin = data;
+    WFrameWindow *fwin = wwin->frame;
+    WScreen *scr = fwin->screen_ptr;
+    XkbStateRec staterec;
+
+    if (event->xbutton.button != Button1 && event->xbutton.button != Button3)
+        return;
+    wwin->frame->languagemode = !wwin->frame->languagemode;
+    wFrameWindowPaint(fwin);
+    wSetFocusTo(scr, wwin);
+    if (event->xbutton.button == Button3)
+	return;
+    wRaiseFrame(fwin->core);
+}
+#endif
 
 
 static void

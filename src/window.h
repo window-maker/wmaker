@@ -91,6 +91,9 @@ typedef struct {
     unsigned int no_resizable:1;
     unsigned int no_closable:1;
     unsigned int no_miniaturizable:1;
+#ifdef XKB_BUTTON_HINT
+    unsigned int no_thai_button:1;
+#endif
 
     /* decorations */
     unsigned int no_resizebar:1;       /* draw the bottom handle? */

@@ -1163,6 +1163,11 @@ handleXkbIndicatorStateNotify(XEvent *event)
 	wwin = scr->focused_window;
 	if (wwin->flags.focused) {
 	    wwin->frame->languagemode=staterec.compat_state&32?1:0;
+#ifdef XKB_BUTTON_HINT
+        if (wwin->frame->titlebar) {
+            wFrameWindowPaint(wwin->frame);
+        }
+#endif
 #ifdef XKB_TITLE_HINT
             if (wwin->frame->titlebar) {
 	        XClearWindow(dpy, wwin->frame->titlebar->window);

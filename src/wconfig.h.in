@@ -591,7 +591,13 @@
 
 #ifdef XKB_MODELOCK
 #define KEEP_XKB_LOCK_STATUS
-#define XKB_TITLE_HINT
+/* This is a hidden feature.
+ * choose one between 2 of these hints. Icon can be changed
+ * in def_pixmaps.h and default icon is now for Thai language only.
+ * More icons are welcome.
+ */
+#undef XKB_BUTTON_HINT
+#undef XKB_TITLE_HINT
 #define XKB_ON "[TH]"
 #define XKB_OFF "[EN]"
 #endif

@@ -36,6 +36,10 @@
 #define WFF_RESIZEBAR	(1<<3)
 #define WFF_BORDER	(1<<4)
 #define WFF_SINGLE_STATE (1<<5)
+#ifdef XKB_BUTTON_HINT
+#define WFF_THAI_BUTTON	(1<<6)
+#endif
+
 
 #define WFF_IS_SHADED	(1<<16)
 
@@ -46,6 +50,9 @@ typedef struct WFrameWindow {
     
     WCoreWindow *titlebar;	       /* the titlebar */
     WCoreWindow *left_button;	       /* miniaturize button */
+#ifdef XKB_BUTTON_HINT
+    WCoreWindow *thai_button;
+#endif
     WCoreWindow *right_button;	       /* close button */
 
     short workspace;		       /* workspace that the window occupies */
@@ -61,9 +68,15 @@ typedef struct WFrameWindow {
     Pixmap resizebar_back[3];	       /* any, None, None */
     Pixmap lbutton_back[3];
     Pixmap rbutton_back[3];
+#ifdef XKB_BUTTON_HINT
+    Pixmap tbutton_back[3];
+#endif
 
     WPixmap *lbutton_image;
     WPixmap *rbutton_image;
+#ifdef XKB_BUTTON_HINT
+    WPixmap *tbutton_image;
+#endif
     
     union WTexture **title_texture;
     union WTexture **resizebar_texture;
@@ -82,6 +95,9 @@ typedef struct WFrameWindow {
     
     /* callbacks */
     void (*on_click_left)(WCoreWindow *sender, void *data, XEvent *event);
+#ifdef XKB_BUTTON_HINT
+    void (*on_click_thai)(WCoreWindow *sender, void *data, XEvent *event);
+#endif
     
     void (*on_click_right)(WCoreWindow *sender, void *data, XEvent *event);
     void (*on_dblclick_right)(WCoreWindow *sender, void *data, XEvent *event);
@@ -98,6 +114,9 @@ typedef struct WFrameWindow {
 	unsigned int resizebar:1;
 	unsigned int left_button:1;
 	unsigned int right_button:1;
+#ifdef XKB_BUTTON_HINT
+	unsigned int thai_button:1;
+#endif
 
 	unsigned int need_texture_remake:1;
 
@@ -105,11 +124,17 @@ typedef struct WFrameWindow {
 	
 	unsigned int hide_left_button:1;
 	unsigned int hide_right_button:1;
+#ifdef XKB_BUTTON_HINT
+	unsigned int hide_thai_button:1;
+#endif
 	
 	unsigned int need_texture_change:1;
 	
 	unsigned int lbutton_dont_fit:1;
 	unsigned int rbutton_dont_fit:1;
+#ifdef XKB_BUTTON_HINT
+	unsigned int tbutton_dont_fit:1;
+#endif
 
 	unsigned int repaint_only_titlebar:1;
 	unsigned int repaint_only_resizebar:1;

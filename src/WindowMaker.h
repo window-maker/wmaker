@@ -108,8 +108,15 @@ typedef enum {
 #define WBUT_BROKENCLOSE        1
 #define WBUT_ICONIFY            2
 #define WBUT_KILL		3
+#ifdef XKB_BUTTON_HINT
+#define WBUT_THAI   4
+#define WBUT_ENGL   5
+
+#define PRED_BPIXMAPS		6 /* count of WBUT icons */
+#else
 
 #define PRED_BPIXMAPS		4 /* count of WBUT icons */
+#endif /* XKB_BUTTON_HINT */
 
 /* cursors */
 #define WCUR_DEFAULT	0
