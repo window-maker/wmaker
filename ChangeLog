@@ -1,3 +1,14 @@
+Changes since version 0.80.0:
+.............................
+
+- Fixed a bug that crashed wmaker when closing a window if multiple screens
+  were managed by wmaker (Valery Kotchiev <aggregator@nospam.dk>)
+- Fixed a problem that crashed wmaker when trying to read an unexisting
+  WMState.<number> file on multihead system.
+- Fixed problem with keyboard shortcuts executed an every screen for
+  multihead systems.
+
+
 Changes since version 0.70.0:
 .............................
 

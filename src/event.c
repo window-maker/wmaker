@@ -556,22 +556,23 @@ handleDestroyNotify(XEvent *event)
 	wUnmanageWindow(wwin, False, True);
     }
 
-    while ((index = WMFindInArray(scr->fakeGroupLeaders, matchWindow,
-                                  (void*)window)) != WANotFound) {
-        WFakeGroupLeader *fPtr;
+    if (scr != NULL) {
+        while ((index = WMFindInArray(scr->fakeGroupLeaders, matchWindow,
+                                      (void*)window)) != WANotFound) {
+            WFakeGroupLeader *fPtr;
 
-        fPtr = WMGetFromArray(scr->fakeGroupLeaders, index);
-        if (fPtr->retainCount > 0) {
-            fPtr->retainCount--;
-            if (fPtr->retainCount==0 && fPtr->leader!=None) {
-                XDestroyWindow(dpy, fPtr->leader);
-                fPtr->leader = None;
-                XFlush(dpy);
+            fPtr = WMGetFromArray(scr->fakeGroupLeaders, index);
+            if (fPtr->retainCount > 0) {
+                fPtr->retainCount--;
+                if (fPtr->retainCount==0 && fPtr->leader!=None) {
+                    XDestroyWindow(dpy, fPtr->leader);
+                    fPtr->leader = None;
+                    XFlush(dpy);
+                }
             }
+            fPtr->origLeader = None;
         }
-        fPtr->origLeader = None;
     }
-
 
     app = wApplicationOf(window);
     if (app) {
@@ -1364,8 +1365,8 @@ handleKeyPress(XEvent *event)
 	    break;
 	}
     }
-        
-    
+
+
     if (command < 0) {
 #ifdef LITE
 	{ 

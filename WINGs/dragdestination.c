@@ -94,38 +94,44 @@ WMUnregisterViewDraggedTypes(WMView *view)
 /***********************************************************************/
 
 
-static unsigned defDraggingEntered(WMView *self, WMDraggingInfo *info)
+static unsigned
+defDraggingEntered(WMView *self, WMDraggingInfo *info)
 {
     printf("%x drag entered\n", W_VIEW_DRAWABLE(self));
     return WDOperationNone;
 }
 
-static unsigned defDraggingUpdated(WMView *self, WMDraggingInfo *info)
+static unsigned
+defDraggingUpdated(WMView *self, WMDraggingInfo *info)
 {
-    printf("%x drag updat\n", W_VIEW_DRAWABLE(self));    
+    printf("%x drag update\n", W_VIEW_DRAWABLE(self));
     return WDOperationNone;
 }
 
-static void defDraggingExited(WMView *self, WMDraggingInfo *info)
+static void
+defDraggingExited(WMView *self, WMDraggingInfo *info)
 {
     printf("%x drag exit\n", W_VIEW_DRAWABLE(self));    
 }
 
-static Bool defPrepareForDragOperation(WMView *self, WMDraggingInfo *info)
+static Bool
+defPrepareForDragOperation(WMView *self, WMDraggingInfo *info)
 {
-    printf("%x drag prep\n", W_VIEW_DRAWABLE(self));    
+    printf("%x drag prepare\n", W_VIEW_DRAWABLE(self));
     return False;
 }
 
-static Bool defPerformDragOperation(WMView *self, WMDraggingInfo *info)
+static Bool
+defPerformDragOperation(WMView *self, WMDraggingInfo *info)
 {
-    printf("%x drag perf\n", W_VIEW_DRAWABLE(self));    
+    printf("%x drag perform\n", W_VIEW_DRAWABLE(self));
     return False;
 }
 
-static void defConcludeDragOperation(WMView *self, WMDraggingInfo *info)
+static void
+defConcludeDragOperation(WMView *self, WMDraggingInfo *info)
 {
-    printf("%x drag concl\n", W_VIEW_DRAWABLE(self));    
+    printf("%x drag conclude\n", W_VIEW_DRAWABLE(self));
 }
 
 
@@ -166,11 +172,8 @@ WMSetViewDragDestinationProcs(WMView *view, WMDragDestinationProcs *procs)
 
 
 
-
-
-
-
-WMPoint WMGetDraggingInfoImageLocation(WMDraggingInfo *info)
+WMPoint
+WMGetDraggingInfoImageLocation(WMDraggingInfo *info)
 {
     return info->imageLocation;
 }
@@ -179,15 +182,16 @@ WMPoint WMGetDraggingInfoImageLocation(WMDraggingInfo *info)
 
 static void
 receivedData(WMView *view, Atom selection, Atom target, Time timestamp, 
-	     void *cdata, WMData *data)
+             void *cdata, WMData *data)
 {
-    
+
 }
 
 
 
-Bool WMRequestDroppedData(WMView *view, WMDraggingInfo *info, char *type,
-			  WMDropDataCallback *callback)
+Bool
+WMRequestDroppedData(WMView *view, WMDraggingInfo *info, char *type,
+                     WMDropDataCallback *callback)
 {
 #if 0
     WMScreen *scr = W_VIEW_SCREEN(view);

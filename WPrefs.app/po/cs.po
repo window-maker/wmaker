@@ -388,7 +388,7 @@ msgstr "Pou¾ívat SaveUnder pøi vykreslení rámeèkù, menu, ikon apod."
 
 #: ../Expert.c:79
 msgid "Use Windoze style cycling."
-msgstr "Pou¾ívat Windousodní styl opakování pøepínání oken."
+msgstr "Pou¾ívat Windousoidní styl opakování pøepínání oken."
 
 #: ../Expert.c:80
 msgid "Disable confirmation panel for the Kill command."
@@ -1889,11 +1889,11 @@ msgstr "Ruèní"
 
 #: ../WindowHandling.c:253
 msgid "Cascade"
-msgstr "Kaskádovì"
+msgstr "Kaskádové"
 
 #: ../WindowHandling.c:254
 msgid "Smart"
-msgstr "Chytøé"
+msgstr "Chytré"
 
 #: ../WindowHandling.c:260
 msgid "Placement Origin"

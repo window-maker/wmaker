@@ -117,26 +117,28 @@ static Bool
 writeSelection(Display *dpy, Window requestor, Atom property, Atom type,
 	       WMData *data)
 {
-    int format;
-    
+    int format, bpi;
+
     format = WMGetDataFormat(data);
     if (format == 0)
 	format = 8;
-    
-/*
-    printf("write to %x: %s\n", requestor, XGetAtomName(dpy, property));
-*/
+
+    bpi = format/8;
+
+    /* printf("write to %x: %s\n", requestor, XGetAtomName(dpy, property)); */
+
     gotError = False;
 
 #ifndef __sgi
     if (!XChangeProperty(dpy, requestor, property, type, format,
                          PropModeReplace, WMDataBytes(data),
-			 WMGetDataLength(data)))
+                         WMGetDataLength(data)/bpi))
         return False;
 #else
     /* in sgi seems this seems to return void */
     XChangeProperty(dpy, requestor, property, type, format,
-		    PropModeReplace, WMDataBytes(data), WMGetDataLength(data));
+                    PropModeReplace, WMDataBytes(data),
+                    WMGetDataLength(data)/bpi);
 #endif
 
     XFlush(dpy);
@@ -149,9 +151,9 @@ static void
 notifySelection(XEvent *event, Atom prop)
 {
     XEvent ev;
-/*
-    printf("envent to %x\n", event->xselectionrequest.requestor);
-*/
+
+    /* printf("envent to %x\n", event->xselectionrequest.requestor); */
+
     ev.xselection.type = SelectionNotify;
     ev.xselection.serial = 0;
     ev.xselection.send_event = True;
@@ -278,22 +280,24 @@ getSelectionData(Display *dpy, Window win, Atom where)
     WMData *wdata;
     unsigned char *data;
     Atom rtype;
-    unsigned bits;
+    unsigned bits, bpi;
     unsigned long len, bytes;
 
-    
+
     if (XGetWindowProperty(dpy, win, where, 0, MAX_PROPERTY_SIZE, 
 			   False, AnyPropertyType, &rtype, &bits, &len,
 			   &bytes, &data)!=Success) {
 	return NULL;
     }
-    
-    wdata = WMCreateDataWithBytesNoCopy(data, len, (WMFreeDataProc*)XFree);
+
+    bpi = bits/8;
+
+    wdata = WMCreateDataWithBytesNoCopy(data, len*bpi, (WMFreeDataProc*)XFree);
     if (wdata == NULL) {
 	return NULL;
     }
     WMSetDataFormat(wdata, bits);
-    
+
     return wdata;
 }
 

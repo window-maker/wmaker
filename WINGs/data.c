@@ -40,7 +40,7 @@ typedef struct W_Data {
 /* Creating and destroying data objects */
 
 WMData*
-WMCreateDataWithCapacity(unsigned capacity) /*FOLD00*/
+WMCreateDataWithCapacity(unsigned capacity)
 {
     WMData *aData;
 
@@ -63,7 +63,7 @@ WMCreateDataWithCapacity(unsigned capacity) /*FOLD00*/
 
 
 WMData*
-WMCreateDataWithLength(unsigned length) /*FOLD00*/
+WMCreateDataWithLength(unsigned length)
 {
     WMData *aData;
 
@@ -78,7 +78,7 @@ WMCreateDataWithLength(unsigned length) /*FOLD00*/
 
 
 WMData*
-WMCreateDataWithBytes(void *bytes, unsigned length) /*FOLD00*/
+WMCreateDataWithBytes(void *bytes, unsigned length)
 {
     WMData *aData;
 
@@ -91,7 +91,7 @@ WMCreateDataWithBytes(void *bytes, unsigned length) /*FOLD00*/
 
 
 WMData*
-WMCreateDataWithBytesNoCopy(void *bytes, unsigned length, /*FOLD00*/
+WMCreateDataWithBytesNoCopy(void *bytes, unsigned length,
                             WMFreeDataProc *destructor)
 {
     WMData *aData;
@@ -110,7 +110,7 @@ WMCreateDataWithBytesNoCopy(void *bytes, unsigned length, /*FOLD00*/
 
 
 WMData*
-WMCreateDataWithData(WMData *aData) /*FOLD00*/
+WMCreateDataWithData(WMData *aData)
 {
     WMData *newData;
 
@@ -126,7 +126,7 @@ WMCreateDataWithData(WMData *aData) /*FOLD00*/
 
 
 WMData*
-WMRetainData(WMData *aData) /*FOLD00*/
+WMRetainData(WMData *aData)
 {
     aData->retainCount++;
     return aData;
@@ -134,7 +134,7 @@ WMRetainData(WMData *aData) /*FOLD00*/
 
 
 void
-WMReleaseData(WMData *aData) /*FOLD00*/
+WMReleaseData(WMData *aData)
 {
     aData->retainCount--;
     if (aData->retainCount > 0)
@@ -150,7 +150,7 @@ WMReleaseData(WMData *aData) /*FOLD00*/
 /* Adjusting capacity */
 
 void
-WMSetDataCapacity(WMData *aData, unsigned capacity) /*FOLD00*/
+WMSetDataCapacity(WMData *aData, unsigned capacity)
 {
     if (aData->capacity != capacity) {
         aData->bytes = wrealloc(aData->bytes, capacity);
@@ -164,7 +164,7 @@ WMSetDataCapacity(WMData *aData, unsigned capacity) /*FOLD00*/
 
 
 void
-WMSetDataLength(WMData *aData, unsigned length) /*FOLD00*/
+WMSetDataLength(WMData *aData, unsigned length)
 {
     if (length > aData->capacity) {
         WMSetDataCapacity(aData, length);
@@ -185,7 +185,7 @@ WMSetDataFormat(WMData *aData, unsigned format)
 
 
 void
-WMIncreaseDataLengthBy(WMData *aData, unsigned extraLength) /*FOLD00*/
+WMIncreaseDataLengthBy(WMData *aData, unsigned extraLength)
 {
     WMSetDataLength(aData, aData->length + extraLength);
 }
@@ -194,14 +194,14 @@ WMIncreaseDataLengthBy(WMData *aData, unsigned extraLength) /*FOLD00*/
 /* Accessing data */
 
 const void*
-WMDataBytes(WMData *aData) /*FOLD00*/
+WMDataBytes(WMData *aData)
 {
     return aData->bytes;
 }
 
 
 void
-WMGetDataBytes(WMData *aData, void *buffer) /*FOLD00*/
+WMGetDataBytes(WMData *aData, void *buffer)
 {
     wassertr(aData->length > 0);
 
@@ -217,7 +217,7 @@ WMGetDataFormat(WMData *aData)
 
 
 void
-WMGetDataBytesWithLength(WMData *aData, void *buffer, unsigned length) /*FOLD00*/
+WMGetDataBytesWithLength(WMData *aData, void *buffer, unsigned length)
 {
     wassertr(aData->length > 0);
     wassertr(length <= aData->length);
@@ -227,7 +227,7 @@ WMGetDataBytesWithLength(WMData *aData, void *buffer, unsigned length) /*FOLD00*
 
 
 void
-WMGetDataBytesWithRange(WMData *aData, void *buffer, WMRange aRange) /*FOLD00*/
+WMGetDataBytesWithRange(WMData *aData, void *buffer, WMRange aRange)
 {
     wassertr(aRange.position < aData->length);
     wassertr(aRange.count <= aData->length-aRange.position);
@@ -238,7 +238,7 @@ WMGetDataBytesWithRange(WMData *aData, void *buffer, WMRange aRange) /*FOLD00*/
 
 
 WMData*
-WMGetSubdataWithRange(WMData *aData, WMRange aRange) /*FOLD00*/
+WMGetSubdataWithRange(WMData *aData, WMRange aRange)
 {
     void *buffer;
     WMData *newData;
@@ -258,7 +258,7 @@ WMGetSubdataWithRange(WMData *aData, WMRange aRange) /*FOLD00*/
 /* Testing data */
 
 Bool
-WMIsDataEqualToData(WMData *aData, WMData *anotherData) /*FOLD00*/
+WMIsDataEqualToData(WMData *aData, WMData *anotherData)
 {
     if (aData->length != anotherData->length)
         return False;
@@ -271,7 +271,7 @@ WMIsDataEqualToData(WMData *aData, WMData *anotherData) /*FOLD00*/
 
 
 unsigned
-WMGetDataLength(WMData *aData) /*FOLD00*/
+WMGetDataLength(WMData *aData)
 {
     return aData->length;
 }
@@ -279,7 +279,7 @@ WMGetDataLength(WMData *aData) /*FOLD00*/
 
 /* Adding data */
 void
-WMAppendDataBytes(WMData *aData, void *bytes, unsigned length) /*FOLD00*/
+WMAppendDataBytes(WMData *aData, void *bytes, unsigned length)
 {
     unsigned oldLength = aData->length;
     unsigned newLength = oldLength + length;
@@ -303,7 +303,7 @@ WMAppendDataBytes(WMData *aData, void *bytes, unsigned length) /*FOLD00*/
 
 
 void
-WMAppendData(WMData *aData, WMData *anotherData) /*FOLD00*/
+WMAppendData(WMData *aData, WMData *anotherData)
 {
     if (anotherData->length > 0)
         WMAppendDataBytes(aData, anotherData->bytes, anotherData->length);
@@ -314,7 +314,7 @@ WMAppendData(WMData *aData, WMData *anotherData) /*FOLD00*/
 /* Modifying data */
 
 void
-WMReplaceDataBytesInRange(WMData *aData, WMRange aRange, void *bytes) /*FOLD00*/
+WMReplaceDataBytesInRange(WMData *aData, WMRange aRange, void *bytes)
 {
     wassertr(aRange.position < aData->length);
     wassertr(aRange.count <= aData->length-aRange.position);
@@ -324,7 +324,7 @@ WMReplaceDataBytesInRange(WMData *aData, WMRange aRange, void *bytes) /*FOLD00*/
 
 
 void
-WMResetDataBytesInRange(WMData *aData, WMRange aRange) /*FOLD00*/
+WMResetDataBytesInRange(WMData *aData, WMRange aRange)
 {
     wassertr(aRange.position < aData->length);
     wassertr(aRange.count <= aData->length-aRange.position);
@@ -334,7 +334,7 @@ WMResetDataBytesInRange(WMData *aData, WMRange aRange) /*FOLD00*/
 
 
 void
-WMSetData(WMData *aData, WMData *anotherData) /*FOLD00*/
+WMSetData(WMData *aData, WMData *anotherData)
 {
     unsigned length = anotherData->length;
 

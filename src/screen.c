@@ -1018,9 +1018,9 @@ wScreenRestoreState(WScreen *scr)
 
     make_keys();
 
-    if (wScreenCount == 1)
+    if (wScreenCount == 1) {
 	path = wdefaultspathfordomain("WMState");
-    else {
+    } else {
 	char buf[16];
 	snprintf(buf, sizeof(buf), "WMState.%i", scr->screen);
 	path = wdefaultspathfordomain(buf);
@@ -1028,14 +1028,14 @@ wScreenRestoreState(WScreen *scr)
     scr->session_state = WMReadPropListFromFile(path);
     wfree(path);
     if (!scr->session_state && wScreenCount>1) {
-	char buf[16];
-	snprintf(buf, sizeof(buf), "WMState.%i", scr->screen);
-	path = wdefaultspathfordomain(buf);
+	/*char buf[16];
+	snprintf(buf, sizeof(buf), "WMState.%i", scr->screen);*/
+	path = wdefaultspathfordomain("WMState");
 	scr->session_state = WMReadPropListFromFile(path);
 	wfree(path);
     }
 
-    if (!wPreferences.flags.noclip) {
+    if (!wPreferences.flags.noclip && scr->session_state) {
         state = WMGetFromPLDictionary(scr->session_state, dClip);
         scr->clip_icon = wClipRestoreState(scr, state);
     }

@@ -129,7 +129,7 @@ typedef struct W_Connection {
 
 
 static void
-clearOutputQueue(WMConnection *cPtr) /*FOLD00*/
+clearOutputQueue(WMConnection *cPtr)
 {
     cPtr->bufPos = 0;
     WMEmptyArray(cPtr->outputQueue);
@@ -137,7 +137,7 @@ clearOutputQueue(WMConnection *cPtr) /*FOLD00*/
 
 
 static void
-openTimeout(void *cdata) /*FOLD00*/
+openTimeout(void *cdata)
 {
     WMConnection *cPtr = (WMConnection*) cdata;
 
@@ -160,7 +160,7 @@ openTimeout(void *cdata) /*FOLD00*/
 
 
 static void
-sendTimeout(void *cdata) /*FOLD00*/
+sendTimeout(void *cdata)
 {
     WMConnection *cPtr = (WMConnection*) cdata;
 
@@ -184,7 +184,7 @@ sendTimeout(void *cdata) /*FOLD00*/
 
 
 static void
-inputHandler(int fd, int mask, void *clientData) /*FOLD00*/
+inputHandler(int fd, int mask, void *clientData)
 {
     WMConnection *cPtr = (WMConnection*)clientData;
 
@@ -249,7 +249,7 @@ inputHandler(int fd, int mask, void *clientData) /*FOLD00*/
 
 
 static Bool
-setSocketNonBlocking(int sock, Bool flag) /*FOLD00*/
+setSocketNonBlocking(int sock, Bool flag)
 {
     int state;
     Bool isNonBlock;
@@ -283,7 +283,7 @@ setSocketNonBlocking(int sock, Bool flag) /*FOLD00*/
 
 
 static void
-setConnectionAddress(WMConnection *cPtr, struct sockaddr_in *socketaddr) /*FOLD00*/
+setConnectionAddress(WMConnection *cPtr, struct sockaddr_in *socketaddr)
 {
     wassertr(cPtr->address==NULL);
 
@@ -295,7 +295,7 @@ setConnectionAddress(WMConnection *cPtr, struct sockaddr_in *socketaddr) /*FOLD0
 
 
 static struct sockaddr_in*
-getSocketAddress(char* name, char* service, char* protocol) /*FOLD00*/
+getSocketAddress(char* name, char* service, char* protocol)
 {
     static struct sockaddr_in socketaddr;
     struct servent *sp;
@@ -359,7 +359,7 @@ dummyHandler(int signum)
 
 
 static WMConnection*
-createConnectionWithSocket(int sock, Bool closeOnRelease) /*FOLD00*/
+createConnectionWithSocket(int sock, Bool closeOnRelease)
 {
     WMConnection *cPtr;
     struct sigaction sig_action;
@@ -399,7 +399,7 @@ createConnectionWithSocket(int sock, Bool closeOnRelease) /*FOLD00*/
 
 #if 0
 WMConnection*
-WMCreateConnectionWithSocket(int sock, Bool closeOnRelease) /*FOLD00*/
+WMCreateConnectionWithSocket(int sock, Bool closeOnRelease)
 {
     WMConnection *cPtr;
     struct sockaddr_in clientname;
@@ -448,7 +448,7 @@ WMCreateConnectionWithSocket(int sock, Bool closeOnRelease) /*FOLD00*/
  *          currently only "tcp" is supported.
  */
 WMConnection*
-WMCreateConnectionAsServerAtAddress(char *host, char *service, char *protocol) /*FOLD00*/
+WMCreateConnectionAsServerAtAddress(char *host, char *service, char *protocol)
 {
     WMConnection *cPtr;
     struct sockaddr_in *socketaddr;
@@ -509,7 +509,7 @@ WMCreateConnectionAsServerAtAddress(char *host, char *service, char *protocol) /
 
 
 WMConnection*
-WMCreateConnectionToAddress(char *host, char *service, char *protocol) /*FOLD00*/
+WMCreateConnectionToAddress(char *host, char *service, char *protocol)
 {
     WMConnection *cPtr;
     struct sockaddr_in *socketaddr;
@@ -551,7 +551,7 @@ WMCreateConnectionToAddress(char *host, char *service, char *protocol) /*FOLD00*
 
 
 WMConnection*
-WMCreateConnectionToAddressAndNotify(char *host, char *service, char *protocol) /*FOLD00*/
+WMCreateConnectionToAddressAndNotify(char *host, char *service, char *protocol)
 {
     WMConnection *cPtr;
     struct sockaddr_in *socketaddr;
@@ -602,7 +602,7 @@ WMCreateConnectionToAddressAndNotify(char *host, char *service, char *protocol) 
 
 
 static void
-removeAllHandlers(WMConnection *cPtr) /*FOLD00*/
+removeAllHandlers(WMConnection *cPtr)
 {
     if (cPtr->handler.read)
         WMDeleteInputHandler(cPtr->handler.read);
@@ -624,7 +624,7 @@ removeAllHandlers(WMConnection *cPtr) /*FOLD00*/
 
 
 void
-WMDestroyConnection(WMConnection *cPtr) /*FOLD00*/
+WMDestroyConnection(WMConnection *cPtr)
 {
     if (cPtr->closeOnRelease && cPtr->sock>=0) {
         shutdown(cPtr->sock, SHUT_RDWR);
@@ -645,7 +645,7 @@ WMDestroyConnection(WMConnection *cPtr) /*FOLD00*/
 
 
 void
-WMCloseConnection(WMConnection *cPtr) /*FOLD00*/
+WMCloseConnection(WMConnection *cPtr)
 {
     if (cPtr->sock>=0) {
         shutdown(cPtr->sock, SHUT_RDWR);
@@ -661,7 +661,7 @@ WMCloseConnection(WMConnection *cPtr) /*FOLD00*/
 
 
 WMConnection*
-WMAcceptConnection(WMConnection *listener) /*FOLD00*/
+WMAcceptConnection(WMConnection *listener)
 {
     struct sockaddr_in clientname;
     int size;
@@ -688,49 +688,49 @@ WMAcceptConnection(WMConnection *listener) /*FOLD00*/
 
 
 char*
-WMGetConnectionAddress(WMConnection *cPtr) /*FOLD00*/
+WMGetConnectionAddress(WMConnection *cPtr)
 {
     return cPtr->address;
 }
 
 
 char*
-WMGetConnectionService(WMConnection *cPtr) /*FOLD00*/
+WMGetConnectionService(WMConnection *cPtr)
 {
     return cPtr->service;
 }
 
 
 char*
-WMGetConnectionProtocol(WMConnection *cPtr) /*FOLD00*/
+WMGetConnectionProtocol(WMConnection *cPtr)
 {
     return cPtr->protocol;
 }
 
 
 int
-WMGetConnectionSocket(WMConnection *cPtr) /*FOLD00*/
+WMGetConnectionSocket(WMConnection *cPtr)
 {
     return cPtr->sock;
 }
 
 
 WMConnectionState
-WMGetConnectionState(WMConnection *cPtr) /*FOLD00*/
+WMGetConnectionState(WMConnection *cPtr)
 {
     return cPtr->state;
 }
 
 
 WMConnectionTimeoutState
-WMGetConnectionTimeoutState(WMConnection *cPtr) /*FOLD00*/
+WMGetConnectionTimeoutState(WMConnection *cPtr)
 {
     return cPtr->timeoutState;
 }
 
 
 Bool
-WMEnqueueConnectionData(WMConnection *cPtr, WMData *data) /*FOLD00*/
+WMEnqueueConnectionData(WMConnection *cPtr, WMData *data)
 {
     wassertrv(cPtr->state!=WCNotConnected && cPtr->state!=WCListening, False);
     wassertrv(cPtr->state!=WCInProgress && cPtr->state!=WCFailed, False);
@@ -744,7 +744,7 @@ WMEnqueueConnectionData(WMConnection *cPtr, WMData *data) /*FOLD00*/
 
 
 int
-WMSendConnectionData(WMConnection *cPtr, WMData *data) /*FOLD00*/
+WMSendConnectionData(WMConnection *cPtr, WMData *data)
 {
     int bytes, pos, len, totalTransfer;
     TimeoutData *tPtr = &cPtr->sendTimeout;
@@ -835,7 +835,7 @@ WMSendConnectionData(WMConnection *cPtr, WMData *data) /*FOLD00*/
  * considered to be an error condition, and will return NULL.
  */
 WMData*
-WMGetConnectionAvailableData(WMConnection *cPtr) /*FOLD00*/
+WMGetConnectionAvailableData(WMConnection *cPtr)
 {
     char buffer[NETBUF_SIZE];
     int nbytes;
@@ -880,7 +880,7 @@ again:
 
 
 void
-WMSetConnectionDelegate(WMConnection *cPtr, ConnectionDelegate *delegate) /*FOLD00*/
+WMSetConnectionDelegate(WMConnection *cPtr, ConnectionDelegate *delegate)
 {
     wassertr(cPtr->sock >= 0);
     /* Don't try to set the delegate multiple times */
@@ -898,7 +898,7 @@ WMSetConnectionDelegate(WMConnection *cPtr, ConnectionDelegate *delegate) /*FOLD
 
 #if 0
 Bool
-WMIsConnectionNonBlocking(WMConnection *cPtr) /*FOLD00*/
+WMIsConnectionNonBlocking(WMConnection *cPtr)
 {
 #if 1
     int state;
@@ -921,7 +921,7 @@ WMIsConnectionNonBlocking(WMConnection *cPtr) /*FOLD00*/
 
 
 Bool
-WMSetConnectionNonBlocking(WMConnection *cPtr, Bool flag) /*FOLD00*/
+WMSetConnectionNonBlocking(WMConnection *cPtr, Bool flag)
 {
     wassertrv(cPtr!=NULL && cPtr->sock>=0, False);
 
@@ -951,28 +951,28 @@ WMSetConnectionCloseOnExec(WMConnection *cPtr, Bool flag)
 
 
 void*
-WMGetConnectionClientData(WMConnection *cPtr) /*FOLD00*/
+WMGetConnectionClientData(WMConnection *cPtr)
 {
     return cPtr->clientData;
 }
 
 
 void
-WMSetConnectionClientData(WMConnection *cPtr, void *data) /*FOLD00*/
+WMSetConnectionClientData(WMConnection *cPtr, void *data)
 {
     cPtr->clientData = data;
 }
 
 
 unsigned int
-WMGetConnectionFlags(WMConnection *cPtr) /*FOLD00*/
+WMGetConnectionFlags(WMConnection *cPtr)
 {
     return cPtr->uflags;
 }
 
 
 void
-WMSetConnectionFlags(WMConnection *cPtr, unsigned int flags) /*FOLD00*/
+WMSetConnectionFlags(WMConnection *cPtr, unsigned int flags)
 {
     cPtr->uflags = flags;
 }
@@ -986,7 +986,7 @@ WMGetConnectionUnsentData(WMConnection *cPtr)
 
 
 void
-WMSetConnectionDefaultTimeout(unsigned int timeout) /*FOLD00*/
+WMSetConnectionDefaultTimeout(unsigned int timeout)
 {
     if (timeout == 0) {
         DefaultTimeout = DEF_TIMEOUT;
@@ -997,7 +997,7 @@ WMSetConnectionDefaultTimeout(unsigned int timeout) /*FOLD00*/
 
 
 void
-WMSetConnectionOpenTimeout(unsigned int timeout) /*FOLD00*/
+WMSetConnectionOpenTimeout(unsigned int timeout)
 {
     if (timeout == 0) {
         OpenTimeout = DefaultTimeout;
@@ -1008,7 +1008,7 @@ WMSetConnectionOpenTimeout(unsigned int timeout) /*FOLD00*/
 
 
 void
-WMSetConnectionSendTimeout(WMConnection *cPtr, unsigned int timeout) /*FOLD00*/
+WMSetConnectionSendTimeout(WMConnection *cPtr, unsigned int timeout)
 {
     if (timeout == 0) {
         cPtr->sendTimeout.timeout = DefaultTimeout;

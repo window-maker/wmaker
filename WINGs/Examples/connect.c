@@ -38,7 +38,7 @@ static ConnectionDelegate socketDelegate = {
 
 
 void
-wAbort(Bool foo) /*FOLD00*/
+wAbort(Bool foo)
 {
     exit(1);
 }
@@ -89,7 +89,7 @@ inputHandler(int fd, int mask, void *clientData)
 
 
 static void
-didReceiveInput(ConnectionDelegate *self, WMConnection *cPtr) /*FOLD00*/
+didReceiveInput(ConnectionDelegate *self, WMConnection *cPtr)
 {
     char *buffer;
 
@@ -106,7 +106,7 @@ didReceiveInput(ConnectionDelegate *self, WMConnection *cPtr) /*FOLD00*/
 
 
 static void
-connectionDidDie(ConnectionDelegate *self, WMConnection *cPtr) /*FOLD00*/
+connectionDidDie(ConnectionDelegate *self, WMConnection *cPtr)
 {
     WMCloseConnection(cPtr);
 
@@ -138,7 +138,7 @@ didInitialize(ConnectionDelegate *self, WMConnection *cPtr)
 
 
 int
-main(int argc, char **argv) /*FOLD00*/
+main(int argc, char **argv)
 {
     char *ProgName, *host, *port;
     int i;

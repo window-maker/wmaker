@@ -31,23 +31,27 @@ static Bool _XErrorOccured = False;
 
 
 
-static unsigned defDraggingSourceOperation(WMView *self, Bool local)
+static unsigned
+defDraggingSourceOperation(WMView *self, Bool local)
 {
     return WDOperationCopy;
 }
 
 
-static void defBeganDragImage(WMView *self, WMPixmap *image, WMPoint point)
+static void
+defBeganDragImage(WMView *self, WMPixmap *image, WMPoint point)
 {
 }
 
 
-static void defEndedDragImage(WMView *self, WMPixmap *image, WMPoint point,
-			      Bool deposited)
+static void
+defEndedDragImage(WMView *self, WMPixmap *image, WMPoint point, Bool deposited)
 {
 }
 
-static WMData* defFetchDragData(WMView *self, char *type)
+
+static WMData*
+defFetchDragData(WMView *self, char *type)
 {
     return NULL;
 }

@@ -52,14 +52,14 @@ static ConnectionDelegate socketDelegate = {
 
 
 void
-wAbort(Bool foo) /*FOLD00*/
+wAbort(Bool foo)
 {
     exit(1);
 }
 
 
 static void
-printHelp(char *progname) /*FOLD00*/
+printHelp(char *progname)
 {
     printf(_("usage: %s [options]\n\n"), progname);
     puts(_(" --help				print this message"));
@@ -226,7 +226,7 @@ getAvailableMessages(WMConnection *cPtr)
 
 
 static void
-complainAboutBadArgs(WMConnection *cPtr, char *cmdName, char *badArgs) /*FOLD00*/
+complainAboutBadArgs(WMConnection *cPtr, char *cmdName, char *badArgs)
 {
     char *buf = wmalloc(strlen(cmdName) + strlen(badArgs) + 100);
 
@@ -238,7 +238,7 @@ complainAboutBadArgs(WMConnection *cPtr, char *cmdName, char *badArgs) /*FOLD00*
 
 
 static void
-sendUpdateMessage(WMConnection *cPtr, char *id, int time) /*FOLD00*/
+sendUpdateMessage(WMConnection *cPtr, char *id, int time)
 {
     char *buf = wmalloc(strlen(id) + 100);
 
@@ -256,7 +256,7 @@ showId(WMConnection *cPtr)
 
 
 static void
-showHelp(WMConnection *cPtr) /*FOLD00*/
+showHelp(WMConnection *cPtr)
 {
     char *buf = wmalloc(strlen(WMGetApplicationName()) + 16);
 
@@ -307,7 +307,7 @@ listUsers(WMConnection *cPtr)
 
 
 static void
-setTimeForUser(WMConnection *cPtr, char *cmdArgs) /*FOLD00*/
+setTimeForUser(WMConnection *cPtr, char *cmdArgs)
 {
     char *id;
     int i, time;
@@ -332,7 +332,7 @@ setTimeForUser(WMConnection *cPtr, char *cmdArgs) /*FOLD00*/
 
 
 static void
-addTimeToUser(WMConnection *cPtr, char *cmdArgs) /*FOLD00*/
+addTimeToUser(WMConnection *cPtr, char *cmdArgs)
 {
     char *id;
     int i, time, newTime;
@@ -359,7 +359,7 @@ addTimeToUser(WMConnection *cPtr, char *cmdArgs) /*FOLD00*/
 
 
 static void
-subTimeFromUser(WMConnection *cPtr, char *cmdArgs) /*FOLD00*/
+subTimeFromUser(WMConnection *cPtr, char *cmdArgs)
 {
     char *id;
     int i, time, newTime;
@@ -386,7 +386,7 @@ subTimeFromUser(WMConnection *cPtr, char *cmdArgs) /*FOLD00*/
 
 
 static void
-removeTimeForUser(WMConnection *cPtr, char *cmdArgs) /*FOLD00*/
+removeTimeForUser(WMConnection *cPtr, char *cmdArgs)
 {
     char *ptr;
     int i;
@@ -412,7 +412,7 @@ removeTimeForUser(WMConnection *cPtr, char *cmdArgs) /*FOLD00*/
 
 
 static void
-getTimeForUser(WMConnection *cPtr, char *cmdArgs) /*FOLD00*/
+getTimeForUser(WMConnection *cPtr, char *cmdArgs)
 {
     char *ptr;
     int time;
@@ -525,7 +525,7 @@ isAllowedToConnect(WMConnection *cPtr)
 
 
 static void
-didReceiveInput(ConnectionDelegate *self, WMConnection *cPtr) /*FOLD00*/
+didReceiveInput(ConnectionDelegate *self, WMConnection *cPtr)
 {
     if (cPtr == serverPtr) {
         WMConnection *newPtr = WMAcceptConnection(cPtr);
@@ -548,7 +548,7 @@ didReceiveInput(ConnectionDelegate *self, WMConnection *cPtr) /*FOLD00*/
 
 
 static void
-connectionDidTimeout(ConnectionDelegate *self, WMConnection *cPtr) /*FOLD00*/
+connectionDidTimeout(ConnectionDelegate *self, WMConnection *cPtr)
 {
     WMHost *hPtr;
 
@@ -600,7 +600,7 @@ updatedDomain(void *observer, WMNotification *notification)
 
 #if 0
 static Bool
-isDifferent(char *str1, char *str2) /*FOLD00*/
+isDifferent(char *str1, char *str2)
 {
     if ((!str1 && !str2) || (str1 && str2 && strcmp(str1, str2)==0))
         return False;
@@ -611,7 +611,7 @@ isDifferent(char *str1, char *str2) /*FOLD00*/
 
 
 int
-main(int argc, char **argv) /*FOLD00*/
+main(int argc, char **argv)
 {
     int i;
 
