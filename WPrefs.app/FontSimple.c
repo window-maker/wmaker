@@ -39,6 +39,7 @@
 # define FC_WEIGHT_ULTRABOLD         FC_WEIGHT_EXTRABOLD
 # define FC_WEIGHT_HEAVY             FC_WEIGHT_BLACK
 /* Widths */
+# define FC_WIDTH                    "width"
 # define FC_WIDTH_ULTRACONDENSED     50
 # define FC_WIDTH_EXTRACONDENSED     63
 # define FC_WIDTH_CONDENSED          75
