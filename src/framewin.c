@@ -787,7 +787,7 @@ updateTexture(WFrameWindow *fwin)
 {
     int i;
     unsigned long pixel;
-		
+
     i = fwin->flags.state;
     if (fwin->titlebar) {
 	if (fwin->title_texture[i]->any.type!=WTEX_SOLID) {
@@ -802,9 +802,9 @@ updateTexture(WFrameWindow *fwin)
 		if (fwin->language_button && fwin->languagebutton_back[i]) {
 		    XSetWindowBackgroundPixmap(dpy, fwin->language_button->window,
 					       fwin->languagebutton_back[i]);
-        }
+                }
 #endif
-		
+
 		if (fwin->right_button && fwin->rbutton_back[i])
 		    XSetWindowBackgroundPixmap(dpy, fwin->right_button->window,
 					       fwin->rbutton_back[i]);
@@ -867,10 +867,10 @@ remakeTexture(WFrameWindow *fwin, int state)
 
 	if (fwin->title_texture[state]->any.type!=WTEX_SOLID) {
 	    int left, right;
-#ifdef XKB_BUTTON_HINT
-        int language;
-#endif
 	    int width;
+#ifdef XKB_BUTTON_HINT
+            int language;
+#endif
 
 	    /* eventually surrounded by if new_style */
 	    left = fwin->left_button && !fwin->flags.hide_left_button
@@ -1050,6 +1050,7 @@ wFrameWindowPaint(WFrameWindow *fwin)
 
 	if (fwin->title) {
             char *title;
+            int h, y;
 
 	    title = ShrinkString(*fwin->font, fwin->title,
 				 fwin->titlebar->width - lofs - rofs);
@@ -1073,13 +1074,47 @@ wFrameWindowPaint(WFrameWindow *fwin)
 		break;
 	    }
 
+            y = *fwin->title_clearance + TITLEBAR_EXTEND_SPACE;
+            h = WMFontHeight(*fwin->font);
+
+//#define DBL_BUF
+#ifdef DBL_BUF
+            // what is going on here?
+            {
+                Drawable buf;
+                int i;
+
+                buf = XCreatePixmap(dpy, fwin->titlebar->window, w, h,
+                                    scr->w_depth);
+
+                i = fwin->flags.state;
+                if (fwin->title_texture[i]->any.type!=WTEX_SOLID) {
+                    XCopyArea(dpy, fwin->title_back[i], buf, scr->copy_gc,
+                              x, y, w, h, 0, 0);
+                } else {
+                    XSetForeground(dpy, scr->copy_gc,
+                                   fwin->title_texture[i]->solid.normal.pixel);
+                    XFillRectangle(dpy, buf, scr->copy_gc, 0, 0, w, h);
+                }
+
+                WMDrawString(scr->wmscreen, buf,
+                             fwin->title_color[fwin->flags.state],
+                             *fwin->font, 0, 0, title, titlelen);
+
+                XCopyArea(dpy, buf, fwin->titlebar->window, scr->copy_gc,
+                          0, 0, w, h, x, y);
+
+                XFreePixmap(dpy, buf);
+            }
+#else
+            XClearArea(dpy, fwin->titlebar->window, x, y, w, h, False);
+
             WMDrawString(scr->wmscreen, fwin->titlebar->window,
                          fwin->title_color[fwin->flags.state],
-                         *fwin->font, x,
-                         *fwin->title_clearance + TITLEBAR_EXTEND_SPACE,
-                         title, titlelen);
+                         *fwin->font, x, y, title, titlelen);
+#endif
 
-	    wfree(title);
+            wfree(title);
 	}
 
 	if (fwin->left_button)

@@ -701,6 +701,8 @@ WMFont* WMCreateNormalFont(WMScreen *scrPtr, char *fontName);
 
 WMFont* WMCreateAAFont(WMScreen *scrPtr, char *fontName);
 
+WMFont* WMCreateNonAAFont(WMScreen *scrPtr, char *fontName);
+
 WMFont* WMCreateFont(WMScreen *scrPtr, char *fontName);
 
 WMFont* WMRetainFont(WMFont *font);

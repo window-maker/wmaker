@@ -24,6 +24,7 @@ Changes since wmaker 0.80.1:
   details and incompatibilities introduced by this change.
 - Added new Bool WMIsAAFont(WMFont *font) to check if a font is AA or not.
 - Added WMGetColorAlpha(WMColor *color)
+- Added WMCreateNonAAFont()
 
 
 Changes since wmaker 0.80.0:

@@ -286,6 +286,17 @@ WMCreateAAFont(WMScreen *scrPtr, char *fontName)
 
 
 WMFont*
+WMCreateNonAAFont(WMScreen *scrPtr, char *fontName)
+{
+    if (scrPtr->useMultiByte) {
+	return WMCreateFontSet(scrPtr, fontName);
+    } else {
+        return WMCreateNormalFont(scrPtr, fontName);
+    }
+}
+
+
+WMFont*
 WMCreateFont(WMScreen *scrPtr, char *fontName)
 {
     if (scrPtr->useMultiByte) {

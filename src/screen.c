@@ -823,9 +823,9 @@ wScreenInit(int screen_number)
     /* initialize balloon text stuff */
     wBalloonInitialize(scr);
 #endif
-    
+
     scr->info_text_font = WMBoldSystemFontOfSize(scr->wmscreen, 12);
-					     
+
 
     scr->gview = WCreateGeometryView(scr->wmscreen);
     WMRealizeWidget(scr->gview);
