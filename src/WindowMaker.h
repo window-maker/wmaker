@@ -407,6 +407,7 @@ typedef struct WPreferences {
 
 #ifdef VIRTUAL_DESKTOP
     unsigned int vedge_thickness;
+    unsigned int vedge_bordersize;
     unsigned int vedge_hscrollspeed;
     unsigned int vedge_vscrollspeed;
     unsigned int vedge_maxheight;

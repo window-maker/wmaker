@@ -442,7 +442,7 @@ WDefaultEntry optionList[] = {
         &wPreferences.vedge_thickness, getInt,        NULL
     },
     {"VirtualEdgeExtendSpace", "0",   NULL,
-        &wPreferences.vedge_border, getInt,        NULL
+        &wPreferences.vedge_bordersize, getInt,        NULL
     },
     {"VirtualEdgeHorizonScrollSpeed", "1",  NULL,
         &wPreferences.vedge_hscrollspeed, getInt,     NULL
