@@ -23,8 +23,8 @@ static void
 realizedObserver(void *self, WMNotification *notif)
 {
     WMView *view = (WMView*)WMGetNotificationObject(notif);
-        
-    XChangeProperty(W_VIEW_SCREEN(view)->display, W_VIEW_DRAWABLE(view), 
+
+    XChangeProperty(W_VIEW_SCREEN(view)->display, W_VIEW_DRAWABLE(view),
 		    W_VIEW_SCREEN(view)->xdndAwareAtom,
 		    XA_ATOM, 32, PropModeReplace,
 		    (unsigned char*)&XDNDversion, 1);
@@ -48,10 +48,11 @@ W_SetXdndAwareProperty(WMScreen *scr, WMView *view, Atom *types, int typeCount)
 			    XA_ATOM, 32, PropModeReplace,
 			    (unsigned char*)&XDNDversion, 1);
 	} else {
-	    WMAddNotificationObserver(realizedObserver, view, 
-				      WMViewRealizedNotification, 
+	    WMAddNotificationObserver(realizedObserver, 
 				      /* just use as an id */
-				      view->dragDestinationProcs);
+				      &view->dragDestinationProcs,
+				      WMViewRealizedNotification, 
+				      view);
 	}
     }
 }
@@ -161,3 +162,9 @@ WMSetViewDragDestinationProcs(WMView *view, WMDragDestinationProcs *procs)
 
 
 
+
+
+WMPoint WMGetDraggingInfoImageLocation(WMDraggingInfo *info)
+{
+    return info->imageLocation;
+}

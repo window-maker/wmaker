@@ -612,11 +612,21 @@ Bool WMRequestSelection(WMView *view, Atom selection, Atom target,
 
 
 /* ....................................................................... */
-/*
-void WMDragImageFromView(WMView *view, WMPixmap *image, WMPoint atLocation,
-			 WMSize mouseOffset, XEvent *event, Bool slideBack);
 
-*/
+void WMSetViewDragSourceProcs(WMView *view, WMDragSourceProcs *procs);
+
+void WMDragImageFromView(WMView *view, WMPixmap *image, char *dataTypes[],
+			 WMPoint atLocation, WMSize mouseOffset, XEvent *event,
+			 Bool slideBack);
+
+void WMRegisterViewForDraggedTypes(WMView *view, char *acceptedTypes[]);
+
+void WMUnregisterViewDraggedTypes(WMView *view);
+
+void WMSetViewDragDestinationProcs(WMView *view, WMDragDestinationProcs *procs);
+
+
+WMPoint WMGetDraggingInfoImageLocation(WMDraggingInfo *info);
 
 /* ....................................................................... */
 

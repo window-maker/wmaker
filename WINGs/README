@@ -56,21 +56,18 @@ Widgets provided by WINGs:
 - slider
 - scrollable view
 - color well
-- split view (only 2 subviews)
+- split view
 - tabbed view
 - progress indicator
+
+- selection (make pasteboard like?)
+- drag&drop
 
 - input box
 - file panel
 - color panel
 - alert panel 
 - font panel
-
-Planned:
---------
-
-- selection (pasteboard like)
-- drag&drop
 
 If you think you can code the following, please do. They are needed by
 WPrefs.app, but the number of other things I have to do is huge.
@@ -84,7 +81,6 @@ Wish list: (I don't have the know-how or time to do them)
 
 - text (with support for RTF)
 - matrix (like NSMatrix)
-- splitviews with more than 2 subviews
 - font manager (like NSFontManager)
 - finish other wigets
 - optimize list scrolling (XCopyArea() the area that's already drawn)

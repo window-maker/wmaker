@@ -1,7 +1,16 @@
 
+#include "../src/config.h"
 
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #include <X11/Xatom.h>
+
+#ifdef SHAPE
+#include <X11/extensions/shape.h>
+#endif
+
 #include <math.h>
+
 
 #include "WINGsP.h"
 
@@ -22,6 +31,27 @@ static Bool _XErrorOccured = False;
 
 
 
+static unsigned defDraggingSourceOperation(WMView *self, Bool local)
+{
+    return WDOperationCopy;
+}
+
+
+static void defBeganDragImage(WMView *self, WMPixmap *image, WMPoint point)
+{
+}
+
+
+static void defEndedDragImage(WMView *self, WMPixmap *image, WMPoint point,
+			      Bool deposited)
+{
+}
+
+static WMData* defFetchDragData(WMView *self, char *type)
+{
+    return NULL;
+}
+
 
 void
 WMSetViewDragSourceProcs(WMView *view, WMDragSourceProcs *procs)
@@ -31,8 +61,19 @@ WMSetViewDragSourceProcs(WMView *view, WMDragSourceProcs *procs)
     view->dragSourceProcs = wmalloc(sizeof(WMDragSourceProcs));
     
     *view->dragSourceProcs = *procs;
-    
-    /* XXX fill in non-implemented stuffs */
+
+    if (procs->draggingSourceOperation == NULL) {
+	view->dragSourceProcs->draggingSourceOperation = defDraggingSourceOperation;
+    }
+    if (procs->beganDragImage == NULL) {
+	view->dragSourceProcs->beganDragImage = defBeganDragImage;
+    }
+    if (procs->endedDragImage == NULL) {
+	view->dragSourceProcs->endedDragImage = defEndedDragImage;
+    }
+    if (procs->fetchDragData == NULL) {
+	view->dragSourceProcs->fetchDragData = defFetchDragData;
+    }
 }
 
 
@@ -90,7 +131,7 @@ makeDragIcon(WMScreen *scr, WMPixmap *pixmap)
 
 #ifdef SHAPE
     if (mask) {
-	XShapeCombineMask(dpy, scr->balloon->window, ShapeBounding, 0, 0, mask,
+	XShapeCombineMask(scr->display, window, ShapeBounding, 0, 0, mask,
 			  ShapeSet);
     }
 #endif
@@ -147,15 +188,16 @@ findChildInWindow(Display *dpy, Window toplevel, int x, int y)
 	    && attr.map_state == IsViewable
 	    && x >= attr.x && y >= attr.y
 	    && x < attr.x + attr.width && y < attr.y + attr.height) {
-	    Window child;
+	    Window child, tmp;
 	    
-	    child = findChildInWindow(dpy, children[i], 
-				      x - attr.x, y - attr.y);
+	    tmp = children[i];
+	    
+	    child = findChildInWindow(dpy, tmp, x - attr.x, y - attr.y);
 
 	    XFree(children);
 	    
 	    if (child == None)
-		return toplevel;
+		return tmp;
 	    else
 		return child;
 	}
@@ -172,11 +214,12 @@ findViewInToplevel(Display *dpy, Window toplevel, int x, int y)
     Window child;
 
     child = findChildInWindow(dpy, toplevel, x, y);
-    
-    if (child != None)
+
+    if (child != None) {
 	return W_GetViewForXWindow(dpy, child);
-    else
+    } else {
 	return NULL;
+    }
 }
 
 
@@ -385,29 +428,26 @@ translateCoordinates(WMScreen *scr, Window target, int fromX, int fromY,
 
 
 static void
-updateDraggingInfo(WMScreen *scr, WMDraggingInfo *info,
+updateDraggingInfo(WMScreen *scr, WMDraggingInfo *info, WMSize offset,
 		   XEvent *event, Window iconWindow)
 {
     Window toplevel;
-    WMSize size;
-    
-    size = WMGetPixmapSize(info->image);
 
     if (event->type == MotionNotify) {
-	info->imageLocation.x = event->xmotion.x_root-(int)size.width/2;
-	info->imageLocation.y = event->xmotion.y_root-(int)size.height/2;
+	info->imageLocation.x = event->xmotion.x_root-offset.width;
+	info->imageLocation.y = event->xmotion.y_root-offset.height;
         
 	info->location.x = event->xmotion.x_root;
 	info->location.y = event->xmotion.y_root;
-	info->timestamp = event->xmotion.time;
+/*	info->timestamp = event->xmotion.time;*/
 	
     } else if (event->type == ButtonRelease) {
-	info->imageLocation.x = event->xbutton.x_root-(int)size.width/2;
-	info->imageLocation.y = event->xbutton.y_root-(int)size.height/2;
+	info->imageLocation.x = event->xbutton.x_root-offset.width;
+	info->imageLocation.y = event->xbutton.y_root-offset.height;
         
 	info->location.x = event->xbutton.x_root;
 	info->location.y = event->xbutton.y_root;
-	info->timestamp = event->xbutton.time;
+/*	info->timestamp = event->xbutton.time;*/
     }
 
     toplevel = findToplevelUnderDragPointer(scr,
@@ -500,6 +540,7 @@ selectionLost(WMView *view, Atom selection, void *cdata)
 {
     if (W_VIEW_SCREEN(view)->dragSourceView == view) {
 	wwarning("DND selection lost during drag operation...");
+	W_VIEW_SCREEN(view)->dragSourceView = NULL;
     }
 }
 
@@ -573,7 +614,6 @@ WMDragImageFromView(WMView *view, WMPixmap *image, char *dataTypes[],
     Display *dpy = scr->display;
     Window icon;
     XEvent ev;
-    WMSize size;
     WMRect rect = {{0,0},{0,0}};
     int ostate = -1;
     int state;
@@ -591,7 +631,8 @@ WMDragImageFromView(WMView *view, WMPixmap *image, char *dataTypes[],
     };
 
     
-    wassertr(scr->dragSourceView == NULL);
+    if (scr->dragSourceView != NULL)
+	return;
     
     wassertr(view->dragSourceProcs != NULL);
 
@@ -600,12 +641,9 @@ WMDragImageFromView(WMView *view, WMPixmap *image, char *dataTypes[],
     if (image == NULL)
 	image = scr->defaultObjectIcon;
 
-    size = WMGetPixmapSize(image);
-
     icon = makeDragIcon(scr, image);
 
-    XMoveWindow(dpy, icon, event->xmotion.x_root-(int)size.width/2,
-		event->xmotion.y_root-(int)size.height/2);
+    XMoveWindow(dpy, icon, atLocation.x, atLocation.y);
     XMapRaised(dpy, icon);
     
 
@@ -621,8 +659,8 @@ WMDragImageFromView(WMView *view, WMPixmap *image, char *dataTypes[],
 
     dragInfo.destinationWindow = dragInfo.sourceWindow;
 
-    dragInfo.location.x = event->xmotion.x_root;
-    dragInfo.location.y = event->xmotion.y_root;
+    dragInfo.location.x = atLocation.x + mouseOffset.width;
+    dragInfo.location.y = atLocation.y + mouseOffset.height;
     dragInfo.imageLocation = atLocation;
     
     
@@ -665,7 +703,7 @@ WMDragImageFromView(WMView *view, WMPixmap *image, char *dataTypes[],
 
 		oldDragInfo = dragInfo;
 
-		updateDraggingInfo(scr, &dragInfo, &ev, icon);
+		updateDraggingInfo(scr, &dragInfo, mouseOffset, &ev, icon);
 
 		XMoveWindow(dpy, icon, dragInfo.imageLocation.x,
 			    dragInfo.imageLocation.y);
@@ -720,11 +758,15 @@ WMDragImageFromView(WMView *view, WMPixmap *image, char *dataTypes[],
 	    
 		oldDragInfo = dragInfo;
 
-		updateDraggingInfo(scr, &dragInfo, &ev, icon);
+		updateDraggingInfo(scr, &dragInfo, mouseOffset, &ev, icon);
 
 		XMoveWindow(dpy, icon, dragInfo.imageLocation.x,
 			    dragInfo.imageLocation.y);
 
+		if (state == 4 || state == 1) {
+		    dragInfo.destinationWindow = None;
+		    dragInfo.destView = NULL;
+		}
 		processMotion(scr, &dragInfo, &oldDragInfo, &rect, action);
 		
 		dragInfo.timestamp = ev.xbutton.time;
@@ -1042,9 +1084,11 @@ W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event)
     source = scr->dragInfo.sourceWindow;
     oldView = scr->dragInfo.destView;
 
-
     if (event->message_type == scr->xdndFinishedAtom) {
 	WMView *view = scr->dragSourceView;
+	
+	WMDeleteSelectionHandler(view, scr->xdndSelectionAtom,
+				 scr->dragInfo.timestamp);
 	
 	if (view->dragSourceProcs->endedDragImage != NULL) {
 	    view->dragSourceProcs->endedDragImage(view,
@@ -1055,12 +1099,8 @@ W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event)
 	
 	scr->dragSourceView = NULL;
 	
-	WMDeleteSelectionHandler(view, scr->xdndSelectionAtom,
-				 scr->dragInfo.timestamp);
-
 	return;
     }
-    
     
     
 
@@ -1099,14 +1139,16 @@ W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event)
 
 
 	newView = findViewInToplevel(scr->display,
-		 		  scr->dragInfo.destinationWindow, 
-				  x, y);
+				     scr->dragInfo.destinationWindow, 
+				     x, y);
 
     } else if (event->message_type == scr->xdndPositionAtom
 	       && scr->dragInfo.sourceWindow == event->data.l[0]) {
 
 	scr->dragInfo.location.x = event->data.l[2] >> 16;
 	scr->dragInfo.location.y = event->data.l[2] & 0xffff;
+	
+	scr->dragInfo.imageLocation = scr->dragInfo.location;
 
 	if (scr->dragInfo.protocolVersion >= 1) {
 	    scr->dragInfo.timestamp = event->data.l[3];
@@ -1135,8 +1177,9 @@ W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event)
 	       && scr->dragInfo.sourceWindow == event->data.l[0]) {
 
 	/* drop */
-	what = WDrop;
-	
+	if (oldView != NULL)
+	    what = WDrop;
+
     } else {
 	return;
     }
@@ -1148,7 +1191,7 @@ W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event)
 
     if (what == WNothing) {
 	if (IS_DROPPABLE(newView)) {
-	    if (oldView == NULL) { /* entered */
+	    if (!IS_DROPPABLE(oldView)) { /* entered */
 		what = WEnter;
 	    } else if (oldView == newView) { /* updated */
 		what = WUpdate;
@@ -1156,7 +1199,7 @@ W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event)
 		what = WCross;
 	    }
 	} else {
-	    if (oldView != NULL) {
+	    if (IS_DROPPABLE(oldView)) {
 		what = WLeave;
 	    } else {
 		/* just send rejection msg */

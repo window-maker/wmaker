@@ -100,7 +100,9 @@ struct W_DraggingInfo {
     unsigned sourceOperation;
     WMPixmap *image;
     WMPoint imageLocation;
-    
+
+    char **types;
+
     Time timestamp;
 
     int protocolVersion;

@@ -667,6 +667,267 @@ testSplitView(WMScreen *scr)
     WMMapWidget(win);
 }
 
+
+/*******************************************************************/
+
+#include <sys/types.h>
+#include <dirent.h>
+#include <string.h>
+
+
+typedef struct {
+    int x, y;
+    Bool mouseDown;
+    char *filename;
+} DNDStuff;
+
+WMPixmap*
+getImage(WMScreen *scr, char *file)
+{
+    char buffer[1000];
+    WMPixmap *pix;
+    
+    sprintf(buffer, "../WindowMaker/Icons/%s", file);
+    pix = WMCreatePixmapFromFile(scr, buffer);
+    
+    return pix;
+}
+
+
+
+
+static void iconMouseStuff(XEvent *event, void *cdata)
+{
+    WMLabel *label = (WMLabel*)cdata;
+    DNDStuff *stuff = WMGetHangedData(label);
+    WMPoint where;
+    
+    switch (event->type) {
+     case ButtonPress:
+	stuff->x = event->xbutton.x_root;
+	stuff->y = event->xbutton.y_root;
+	stuff->mouseDown = True;
+	break;
+     case ButtonRelease:
+	stuff->mouseDown = False;
+	break;
+     case MotionNotify:
+	if (!stuff->mouseDown)
+	    break;
+	
+	if (abs(stuff->x - event->xmotion.x_root)>4
+	    || abs(stuff->y - event->xmotion.y_root)>4) {
+	    
+	    where = WMGetViewScreenPosition(WMWidgetView(label));
+	    
+	    WMDragImageFromView(WMWidgetView(label), 
+				WMGetLabelImage(label),
+				NULL, /* XXX */
+				where,
+				wmksize(event->xmotion.x, event->xmotion.y),
+				event, True);
+	}
+	break;
+    }
+}
+
+
+static void endedDragImage(WMView *self, WMPixmap *image, WMPoint point,
+			   Bool deposited)
+{
+    DNDStuff *stuff = WMGetHangedData(WMWidgetOfView(self));
+    
+    if (deposited) {
+	WMDestroyWidget(WMWidgetOfView(self));
+    }
+    
+    stuff->mouseDown = False;
+}
+
+
+static WMData* fetchDragData(WMView *self, char *type)
+{
+    DNDStuff *stuff = WMGetHangedData(WMWidgetOfView(self));
+
+    return WMCreateDataWithBytes(stuff->filename, strlen(stuff->filename)+1);
+}
+
+
+WMDragSourceProcs dragSourceProcs = {
+    NULL,
+    NULL,
+    endedDragImage,
+    fetchDragData
+};
+
+
+/************************/
+
+
+unsigned draggingEntered(WMView *self, WMDraggingInfo *info)
+{
+    return WDOperationCopy;
+}
+
+
+unsigned draggingUpdated(WMView *self, WMDraggingInfo *info)
+{
+    return WDOperationCopy;
+}
+
+     /*
+    void (*draggingExited)(WMView *self, WMDraggingInfo *info);
+    */
+char *prepareForDragOperation(WMView *self, WMDraggingInfo *info)
+{
+    return "application/X-WINGs-Bla";
+}
+
+
+WMLabel *makeDraggableLabel(WMWidget *w, char *file, int x, int y);
+
+Bool performDragOperation(WMView *self, WMDraggingInfo *info,
+			  WMData *data)
+{
+    char *file = (char*)WMDataBytes(data);
+    WMPoint pos;
+    
+    pos = WMGetDraggingInfoImageLocation(info);
+ 
+    if (file!=NULL) {
+	WMLabel *label;
+	WMPoint pos2 = WMGetViewScreenPosition(self);
+
+	
+	label = makeDraggableLabel(WMWidgetOfView(self), file, 
+				   pos.x-pos2.x, pos.y-pos2.y);
+	WMRealizeWidget(label);
+	WMMapWidget(label);
+    }
+
+    
+    return True;
+}
+
+
+void concludeDragOperation(WMView *self, WMDraggingInfo *info)
+{
+    puts("concluded");
+		       
+}
+
+
+
+WMDragDestinationProcs dragDestProcs = {
+    draggingEntered,
+	draggingUpdated,
+	NULL,
+	prepareForDragOperation,
+	performDragOperation,
+	concludeDragOperation
+};
+
+
+
+
+WMLabel*
+makeDraggableLabel(WMWidget *w, char *file, int x, int y)
+{
+    DNDStuff *stuff;
+    WMLabel *label;
+    WMPixmap *image = getImage(WMWidgetScreen(w), file);
+	
+    stuff = wmalloc(sizeof(DNDStuff));
+    stuff->mouseDown = False;
+
+    stuff->filename = wstrdup(file);
+	
+    label = WMCreateLabel(w);
+    WMResizeWidget(label, 48, 48);
+    WMMoveWidget(label, x, y);
+	
+    WMSetViewDragSourceProcs(WMWidgetView(label), &dragSourceProcs);
+	
+    WMHangData(label, stuff);
+	
+    WMCreateEventHandler(WMWidgetView(label),
+			 ButtonPressMask|ButtonReleaseMask|ButtonMotionMask,
+			 iconMouseStuff, label);
+	
+	
+    WMSetLabelImagePosition(label, WIPImageOnly);
+    WMSetLabelImage(label, image);
+    WMReleasePixmap(image);
+
+    return label;
+}
+
+
+
+void testDragAndDrop(WMScreen *scr)
+{
+    WMWindow *win;
+    WMFrame *frame;
+    WMLabel *label;
+    int i, j;
+    DIR *dir;
+    struct dirent *ent;
+    char *types[] = {
+	"application/X-WINGs-Bla",
+	    NULL
+    };
+
+    windowCount++;
+
+    win = WMCreateWindow(scr, "dragDrop");
+    WMResizeWidget(win, 300, 300);
+    WMSetWindowCloseAction(win, closeAction, NULL);
+    WMSetWindowTitle(win, "Drag and Drop");
+
+
+    frame = WMCreateFrame(win);
+    WMSetFrameRelief(frame, WRSunken);
+    WMResizeWidget(frame, 250, 250);
+    WMMoveWidget(frame, 25, 25);
+
+    WMRegisterViewForDraggedTypes(WMWidgetView(frame), types);
+    WMSetViewDragDestinationProcs(WMWidgetView(frame), &dragDestProcs);
+    
+    dir = opendir("../WindowMaker/Icons");
+    if (!dir) {
+	perror("../WindowMaker/Icons");
+	return;
+    }
+    
+    for (i = 0, j=0; j < 8; i++) {
+	ent = readdir(dir);
+	if (!ent)
+	    break;
+	
+	if (strstr(ent->d_name, ".xpm")==NULL) {
+	    continue;
+	}
+
+	label = makeDraggableLabel(frame, ent->d_name,4+(j/4)*64, 4+(j%4)*64);
+		
+	j++;
+    }
+    
+    closedir(dir);
+    
+    WMMapSubwidgets(frame);
+    
+    WMMapSubwidgets(win);
+    WMRealizeWidget(win);
+    WMMapWidget(win);
+}
+
+
+
+
+
+/*******************************************************************/
+
 #include "WUtil.h"
 
 
@@ -718,9 +979,13 @@ int main(int argc, char **argv)
      * Put the testSomething() function you want to test here.
      */
 
+    
+    testDragAndDrop(scr);
+    testDragAndDrop(scr);
 
-    testColorWell(scr);
 #if 0
+    testColorWell(scr);
+
     testTabView(scr);
 
     testFontPanel(scr);
