@@ -12,6 +12,10 @@ Changes since version 0.52.0:
 - fixed crash bug when hiding apps with appicon disabled
 - fixed wrong initial workspace # being shown on attributes panel
 - XSMP updates
+- update colorpanel
+- applied WMSound patch from "Quinn, Anthony" <Anthony.Quinn@usa.xerox.com>
+- fixed focus bug with unfocusable window (I swear I had fixed that before...)
+- applied windoze cycle patch from  Paul Warren <pdw@ferret.lmh.ox.ac.uk>
 
 Changes since version 0.51.2:
 .............................

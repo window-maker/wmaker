@@ -45,7 +45,6 @@ extern WApplication *wSoundApp;
 
 
 void wSoundPlay(long event_sound);
-void wSoundInit(Display *dpy);
-void wSoundServerGrab(char *name, Window window);
+void wSoundServerGrab(Window wm_win);
 
 #endif /*WMSOUND_H_*/

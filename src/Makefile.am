@@ -75,6 +75,8 @@ wmaker_SOURCES = 	\
 	switchmenu.c \
 	texture.c \
 	texture.h \
+	usermenu.c \
+	usermenu.h \
 	xde.h \
 	xde.c \
 	xmodifier.h \

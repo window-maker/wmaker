@@ -38,6 +38,9 @@ typedef struct WMenuEntry {
     void (*free_cdata)(void *data);    /* proc to be used to free clientdata */
     void *clientdata;		       /* data to pass to callback */
     int cascade;		       /* cascade menu index */
+#ifdef USER_MENU
+	proplist_t instances;	/* allowed instances */
+#endif /* USER_MENU */
     struct {
 	unsigned int enabled:1;	       /* entry is selectable */
 	unsigned int indicator:1;      /* left indicator */

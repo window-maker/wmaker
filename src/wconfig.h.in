@@ -45,13 +45,11 @@
 #define TEXTURE_PLUGIN
 
 
-/* undefine WEENDOZE_CYCLING to remove all Windoze style Alt-Tab cycling
- * If define, windoze cycling must still be enabled with the 
- * WindozeCycling = YES and FinishedCyclingKey = Meta_L options
- 
- not working yet
+/* 
+ * #define to enable WindozeCycling.  Set WindozeCycling = YES in 
+ * your WindowMaker config file
  */
-#undef WEENDOZE_CYCLING
+#define WEENDOZE_CYCLE
 
 
 /* undefine ANIMATIONS if you don't want animations for iconification,

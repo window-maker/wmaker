@@ -175,10 +175,7 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
     if (napp) 
 	napp->last_workspace = wwin->screen_ptr->current_workspace;
 
-    if (WFLAGP(wwin, no_focusable))
-	return;
-
-    if (wwin->flags.mapped /*&& !WFLAGP(wwin, no_focusable)*/) {
+    if (wwin->flags.mapped && !WFLAGP(wwin, no_focusable)) {
 	/* install colormap if colormap mode is lock mode */
 	if (wPreferences.colormap_mode==WKF_CLICK)
 	    wColormapInstallForWindow(scr, wwin);
@@ -205,6 +202,8 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
     } else {
 	XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, timestamp);
     }
+    if (WFLAGP(wwin, no_focusable))
+	return;
 
     /* if this is not the focused window focus it */
     if (focused!=wwin) {
@@ -231,6 +230,10 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
     wWindowFocus(wwin, focused);
 
     if (napp && !wasfocused) {
+#ifdef USER_MENU
+	wUserMenuRefreshInstances(napp->menu, wwin);
+#endif /* USER_MENU */
+
 	wAppMenuMap(napp->menu, wwin);
 #ifdef NEWAPPICON
 	wApplicationActivate(napp);

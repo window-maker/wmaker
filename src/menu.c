@@ -266,7 +266,6 @@ insertEntry(WMenu *menu, WMenuEntry *entry, int index)
 }
 
 
-
 WMenuEntry*
 wMenuInsertCallback(WMenu *menu, int index, char *text,
 		    void (*callback)(WMenu *menu, WMenuEntry *entry), 
@@ -585,6 +584,12 @@ wMenuDestroy(WMenu *menu, int recurse)
 
 	    if (menu->entries[i]->rtext)
 	      free(menu->entries[i]->rtext);
+#ifdef USER_MENU
+
+	    if (menu->entries[i]->instances){
+		  PLRelease(menu->entries[i]->instances);
+		}
+#endif /* USER_MENU */
 
 	    if (menu->entries[i]->free_cdata && menu->entries[i]->clientdata) {
 		(*menu->entries[i]->free_cdata)(menu->entries[i]->clientdata);

@@ -55,10 +55,6 @@
 
 #include "list.h"
 
-#ifdef WMSOUND
-#include "wmsound.h"
-#endif
-
 #include <proplist.h>
 
 

@@ -58,10 +58,6 @@
 
 #include "xutil.h"
 
-#ifdef WMSOUND
-#include "wmsound.h"
-#endif
-
 #ifdef KWM_HINTS
 #include "kwm.h"
 #endif
@@ -766,10 +762,6 @@ StartUp(Bool defaultScreenOnly)
     XSetErrorHandler((XErrorHandler)catchXError);
 
     /* Sound init */
-#ifdef WMSOUND
-    wSoundInit(dpy);
-#endif
-
 #ifdef SHAPE
     /* ignore j */
     wShapeSupported = XShapeQueryExtension(dpy, &wShapeEventBase, &j);

@@ -122,25 +122,25 @@ fi
 
 echo "Copying defaults database..."
 
-FILES=`(cd $GLOBALDEFDIR;ls *)`
+FILES=`(cd $GLOBALDEFDIR;ls -d *)`
 all=""
 for i in $FILES; do
-# xx herbert
-	if [ -f $GSDIR/Defaults/$i -a -z "$BATCH" ]; then
-# /xx herbert
-		echo "The configuration file \"$i\" already exists in your defaults database."
-		echo "Do you wish to replace it? <y/n/a> [n] $all"
-		if [ "$all" != "a" ]; then
-			read foo
-			if [ "$foo" = "a" -o "$foo" = "A" ]; then
-				all="a"
+	if [ ! -d $GLOBALDEFDIR/$i ]; then
+		if [ -f $GSDIR/Defaults/$i -a -z "$BATCH" ]; then
+			echo "The configuration file \"$i\" already exists in your defaults database."
+			echo "Do you wish to replace it? <y/n/a> [n] $all"
+			if [ "$all" != "a" ]; then
+				read foo
+				if [ "$foo" = "a" -o "$foo" = "A" ]; then
+					all="a"
+				fi
 			fi
-		fi
-		if [ "$foo" = "y" -o "$foo" = "Y" -o "$all" = "a" ]; then
+			if [ "$foo" = "y" -o "$foo" = "Y" -o "$all" = "a" ]; then
+				copy $GLOBALDEFDIR/$i $GSDIR/Defaults/$i
+			fi
+		else
 			copy $GLOBALDEFDIR/$i $GSDIR/Defaults/$i
 		fi
-	else
-		copy $GLOBALDEFDIR/$i $GSDIR/Defaults/$i
 	fi
 done
 

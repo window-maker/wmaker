@@ -1268,36 +1268,6 @@ windowUnderPointer(WScreen *scr)
 static WWindow*
 nextToFocusAfter(WWindow *wwin)
 {
-    WWindow *tmp = wwin->next;
-
-    while (tmp) {
-	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
-
-	    return tmp;
-	}
-	tmp = tmp->next;
-    }
-
-    tmp = wwin;
-    /* start over from the beginning of the list */
-    while (tmp->prev)
-	tmp = tmp->prev;
-
-    while (tmp && tmp != wwin) {
-	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
-
-	    return tmp;
-	}
-	tmp = tmp->next;
-    }
-
-    return wwin;
-}
-
-
-static WWindow*
-nextToFocusBefore(WWindow *wwin)
-{
     WWindow *tmp = wwin->prev;
 
     while (tmp) {
@@ -1308,8 +1278,8 @@ nextToFocusBefore(WWindow *wwin)
 	tmp = tmp->prev;
     }
 
-    /* start over from the beginning of the list */
     tmp = wwin;
+    /* start over from the beginning of the list */
     while (tmp->next)
 	tmp = tmp->next;
 
@@ -1324,12 +1294,43 @@ nextToFocusBefore(WWindow *wwin)
     return wwin;
 }
 
+
+static WWindow*
+nextToFocusBefore(WWindow *wwin)
+{
+    WWindow *tmp = wwin->next;
+
+    while (tmp) {
+	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
+
+	    return tmp;
+	}
+	tmp = tmp->next;
+    }
+
+    /* start over from the beginning of the list */
+    tmp = wwin;
+    while (tmp->prev)
+	tmp = tmp->prev;
+
+    while (tmp && tmp != wwin) {
+	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
+
+	    return tmp;
+	}
+	tmp = tmp->next;
+    }
+
+    return wwin;
+}
+
 static void
 doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 {
     WScreen *scr = wScreenForRootWindow(event->xkey.root);
     Bool done = False;
-    WWindow *newFocused;
+    Bool openedSwitchMenu = False;
+	WWindow *newFocused;
     WWindow *oldFocused;
     int modifiers;
     XModifierKeymap *keymap;
@@ -1354,9 +1355,16 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 
     wWindowFocus(newFocused, scr->focused_window);
     oldFocused = newFocused;
+	if (wPreferences.circ_raise)
+    	wRaiseFrame(newFocused->frame->core);
 
-    OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);
-
+    if (wPreferences.popup_switchmenu && 
+		(!scr->switch_menu || !scr->switch_menu->flags.mapped))
+	{
+		OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);
+		openedSwitchMenu = True;
+	}
+	
     while (!done) {
 	XEvent ev;
 
@@ -1378,6 +1386,8 @@ puts("EV");
 	    newFocused = nextToFocusAfter(newFocused);
 	    wWindowFocus(newFocused, oldFocused);
 	    oldFocused = newFocused;
+		if (wPreferences.circ_raise)
+                                wRaiseFrame(newFocused->frame->core);
 	    UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
 
 	} else if (ev.type == KeyPress
@@ -1388,6 +1398,8 @@ puts("EV");
 	    newFocused = nextToFocusBefore(newFocused);
 	    wWindowFocus(newFocused, oldFocused);
 	    oldFocused = newFocused;
+		if (wPreferences.circ_raise)
+                                wRaiseFrame(newFocused->frame->core);
 	    UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
 	}
 	if (ev.type == KeyRelease) {
@@ -1409,7 +1421,8 @@ puts("OUT");
     XUngrabKeyboard(dpy, CurrentTime);
     wSetFocusTo(scr, newFocused);
     scr->flags.doing_alt_tab = 0; 
-    OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);   
+    if (openedSwitchMenu) 
+		OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);   
 }
 
 

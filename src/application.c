@@ -29,6 +29,9 @@
 #include "WindowMaker.h"
 #include "menu.h"
 #include "window.h"
+#ifdef USER_MENU
+#include "usermenu.h"
+#endif /* USER_MENU */
 #include "icon.h"
 #include "appicon.h"
 #include "application.h"
@@ -291,6 +294,9 @@ wApplicationCreate(WScreen *scr, Window main_window)
 	leader->main_window = main_window;
     }
     wapp->menu = wAppMenuGet(scr, main_window);
+#ifdef USER_MENU
+    if (!wapp->menu) wapp->menu = wUserMenuGet(scr, wapp->main_window_desc);
+#endif /* USER_MENU */
 
 
     /*
@@ -353,9 +359,6 @@ wApplicationCreate(WScreen *scr, Window main_window)
     
     if (wapp->app_icon) {
         wapp->app_icon->main_window = main_window;
-#ifdef WMSOUND
-        wSoundServerGrab(wapp->app_icon->wm_class, main_window);
-#endif
     }
 
 #ifndef REDUCE_APPICONS
