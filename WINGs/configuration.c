@@ -75,10 +75,6 @@ missingOrInvalidXLFD(char *xlfd)
             ptr = "system font";
         } else if (xlfd == WINGsConfiguration.boldSystemFont) {
             ptr = "bold system font";
-        } else if (xlfd == WINGsConfiguration.antialiasedSystemFont) {
-            ptr = "antialiased system font";
-        } else if (xlfd == WINGsConfiguration.antialiasedBoldSystemFont) {
-            ptr = "antialiased bold system font";
         } else {
             ptr = "Unknown System Font";
         }
@@ -109,12 +105,6 @@ W_ReadConfigurations(void)
 
 	WINGsConfiguration.boldSystemFont = 
 	    WMGetUDStringForKey(defaults, "BoldSystemFont");
-
-	WINGsConfiguration.antialiasedSystemFont =
-	    WMGetUDStringForKey(defaults, "AntialiasedSystemFont");
-
-	WINGsConfiguration.antialiasedBoldSystemFont =
-	    WMGetUDStringForKey(defaults, "AntialiasedBoldSystemFont");
 
 #ifdef XFT
 	WINGsConfiguration.antialiasedText =
@@ -183,12 +173,6 @@ W_ReadConfigurations(void)
     }
     if (missingOrInvalidXLFD(WINGsConfiguration.boldSystemFont)) {
 	WINGsConfiguration.boldSystemFont = BOLD_SYSTEM_FONT;
-    }
-    if (missingOrInvalidXLFD(WINGsConfiguration.antialiasedSystemFont)) {
-	WINGsConfiguration.antialiasedSystemFont = XFTSYSTEM_FONT;
-    }
-    if (missingOrInvalidXLFD(WINGsConfiguration.antialiasedBoldSystemFont)) {
-	WINGsConfiguration.antialiasedBoldSystemFont = XFTBOLD_SYSTEM_FONT;
     }
     if (!WINGsConfiguration.floppyPath) {
 	WINGsConfiguration.floppyPath = FLOPPY_PATH;

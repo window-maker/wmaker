@@ -12,30 +12,19 @@ Changes since wmaker 0.80.1:
   WMCreateRGBAColor() and WMSetColorAlpha()
 - Miscelaneous code cleanups in wtext.c
 - Added Xft support in WINGs (for drawing antialiased fonts with transparency).
-- Added a new function: WMCreateAntialiasedFont() to create a font which will
-  be drawn antialiased using Xft (if available, else function returns NULL)
-- New options in WMGLOBAL: AntialiasedText, AntialiasedSystemFont and
-  AntialiasedBoldSystemFont. Check NEWS for details.
+- New options in WMGLOBAL: AntialiasedText. Check NEWS for details.
 - Fixed some improper calls to snprintf in wfont.c
 - Added double buffering when drawing a WMFrame title with an antialiased font
   to avoid flickering.
 - Added double buffering when drawing WMList items to avoid flickering.
   Double buffering for list also works for user drawn lists. Read NEWS for
   details and incompatibilities introduced by this change.
-- Added WMIsAntialiasedFont(WMFont *font) to check if a font is antialiased.
 - Added WMGetColorAlpha(WMColor *color)
 - Better outline when drawing balloons.
-- Added WMCreateFontWithFlags()
+- Added WMCreateFontWithAttributes()
 - You can now pass "SystemFont", "BoldSystemFont", "SystemFont-##" or
   "BoldSystemFont-##", with ## being the font size to any font creating
   function to create a font with the (bold) system font font specification.
-- Added WMCreateAntialiasedFontSet() (like WMCreateAntialiasedFont() but for
-  languages with multibyte text). Note however that these specific font
-  creating functions (as well as WMCreateNormalFont() and WMCreateFontSet())
-  are not meant to be called directly except in very special cases.
-  The more generic WMCreateFont() or WMCreateFontWithFlags() should be used.
-- Multibyte languages can now render antialiased text too (only tested on
-  russian since this is the only multibyte language I can test).
 - Added WMCopyFontWithChanges(). This is a more generic and powerful function
   meant to replaces the obsoleted WMEmphasizeFont(), WMNormalizeFont(),
   WMStrenghtenFont() and the other similar functions. To get the same effect
@@ -45,7 +34,7 @@ Changes since wmaker 0.80.1:
 - Added WMGetWidgetBackgroundColor()
 - Code cleanup in wtext.c
 - Fixed a memory leak in wfontpanel.c
-- Added a check that only %d is used in a font specification in WMGLOBAL and at
+??- Added a check that only %d is used in a font specification in WMGLOBAL and at
   most once for each font in a fontset (eliminates a possible security exploit)
 - Fixed WMGetTextDefaultColor() not to retain the returned color. It returns
   only a reference to the internal color, which you shouldn't release

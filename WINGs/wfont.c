@@ -3,16 +3,18 @@
 
 #ifdef XFT
 # include <X11/Xft/Xft.h>
+# ifdef HAVE_WCHAR_H
+#  include <wchar.h>
+# endif
+# include <stdlib.h>
 #endif
 
 #include "WINGsP.h"
-
 
 #include <wraster.h>
 #include <assert.h>
 #include <X11/Xlocale.h>
 
-#include <wchar.h>
 
 
 static char *makeFontSetOfSize(char *fontset, int size);
@@ -276,9 +278,6 @@ WMCreateAntialiasedFont(WMScreen *scrPtr, char *fontName)
     Display *display = scrPtr->display;
     char *fname, *ptr;
 
-    if (!scrPtr->hasXftSupport)
-        return NULL;
-
     fontName = xlfdFromFontName(fontName, True);
 
     if ((ptr = strchr(fontName, ','))) {
@@ -354,9 +353,6 @@ WMCreateAntialiasedFontSet(WMScreen *scrPtr, char *fontName)
     WMFont *font;
     Display *display = scrPtr->display;
     char *fname, *ptr;
-
-    if (!scrPtr->hasXftSupport)
-        return NULL;
 
     fontName = xlfdFromFontName(fontName, True);
 
@@ -518,13 +514,6 @@ WMReleaseFont(WMFont *font)
 	}
 	wfree(font);
     }
-}
-
-
-Bool
-WMHasAntialiasingSupport(WMScreen *scrPtr)
-{
-    return scrPtr->hasXftSupport;
 }
 
 

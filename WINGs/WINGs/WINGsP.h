@@ -24,7 +24,7 @@ extern "C" {
 
 #define DOUBLE_BUFFER
 
-    
+
 
 #define WC_UserWidget	128
 
@@ -48,17 +48,20 @@ typedef struct W_Application {
 typedef struct W_Font {
     struct W_Screen *screen;
 
-    union {
-	XFontSet set;
-        XFontStruct *normal;
-        struct _XftFont *xft;
-    } font;
+#ifdef XFT
+    struct _XftFont *font;
+#else
+    // pick one
+    //XFontSet font;
+    XFontStruct *font;
+#endif
+
     short height;
     short y;
     short refCount;
     char *name;
-    unsigned int notFontSet:1;
-    unsigned int antialiased:1;
+    //unsigned int notFontSet:1;
+    //unsigned int antialiased:1;
 } W_Font;
 
 
@@ -97,7 +100,7 @@ typedef struct W_FocusInfo {
 struct W_DraggingInfo {
     Window destinationWindow;
     Window sourceWindow;
-    
+
     WMPoint location;
 
     unsigned sourceOperation;
@@ -116,7 +119,7 @@ struct W_DraggingInfo {
     WMSize mouseOffset;
     unsigned finished:1;
 };
-    
+
 
 typedef struct W_Screen {
     Display *display;
@@ -138,8 +141,6 @@ typedef struct W_Screen {
     struct W_IMContext *imctx;
 
     struct _XftDraw *xftdraw;          /* shared XftDraw */
-
-    Bool hasXftSupport;                /* if it can antialias text */
 
     /* application related */
 
@@ -416,8 +417,6 @@ typedef struct W_EventHandler {
 typedef struct _WINGsConfiguration {
     char *systemFont;
     char *boldSystemFont;
-    char *antialiasedSystemFont;
-    char *antialiasedBoldSystemFont;
     int  defaultFontSize;
     Bool antialiasedText;
     Bool useMultiByte;

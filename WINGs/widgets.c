@@ -629,13 +629,6 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     scrPtr->xftFontSetCache = WMCreateHashTable(WMStringPointerHashCallbacks);
 
 #ifdef XFT
-
-# ifdef XFT2
-    scrPtr->hasXftSupport = 1;
-# else
-    scrPtr->hasXftSupport = XftDefaultHasRender(scrPtr->display);
-# endif
-
     scrPtr->xftdraw = XftDrawCreate(scrPtr->display, W_DRAWABLE(scrPtr),
                                     scrPtr->visual, scrPtr->colormap);
 #endif
@@ -768,16 +761,7 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 
     scrPtr->useMultiByte = WINGsConfiguration.useMultiByte;
 
-    if (scrPtr->hasXftSupport) {
-        scrPtr->antialiasedText = WINGsConfiguration.antialiasedText;
-    } else {
-        if (WINGsConfiguration.antialiasedText) {
-            wwarning(_("Text antialiasing is enabled in the configuration but"
-                       " the X server doesn't have the required capabilities "
-                       "(missing RENDER extension). Disabling text antialiasing."));
-        }
-        scrPtr->antialiasedText = False;
-    }
+    scrPtr->antialiasedText = WINGsConfiguration.antialiasedText;
 
     scrPtr->normalFont = WMSystemFontOfSize(scrPtr, 
 		WINGsConfiguration.defaultFontSize);
@@ -800,16 +784,16 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 					    CHECK_BUTTON_ON_HEIGHT, False);
 
     scrPtr->checkButtonImageOff = makePixmap(scrPtr, CHECK_BUTTON_OFF,
-					    CHECK_BUTTON_OFF_WIDTH,
-					    CHECK_BUTTON_OFF_HEIGHT, False);
+                                             CHECK_BUTTON_OFF_WIDTH,
+                                             CHECK_BUTTON_OFF_HEIGHT, False);
 
     scrPtr->radioButtonImageOn = makePixmap(scrPtr, RADIO_BUTTON_ON,
 					    RADIO_BUTTON_ON_WIDTH,
 					    RADIO_BUTTON_ON_HEIGHT, False);
 
     scrPtr->radioButtonImageOff = makePixmap(scrPtr, RADIO_BUTTON_OFF,
-					    RADIO_BUTTON_OFF_WIDTH,
-					    RADIO_BUTTON_OFF_HEIGHT, False);
+                                             RADIO_BUTTON_OFF_WIDTH,
+                                             RADIO_BUTTON_OFF_HEIGHT, False);
 
     scrPtr->buttonArrow = makePixmap(scrPtr, BUTTON_ARROW, 
 				     BUTTON_ARROW_WIDTH, BUTTON_ARROW_HEIGHT, 
@@ -842,20 +826,20 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 				    SCROLLER_ARROW_RIGHT_HEIGHT, True);
 
     scrPtr->hiUpArrow = makePixmap(scrPtr, HI_SCROLLER_ARROW_UP,
-				 SCROLLER_ARROW_UP_WIDTH,
-				 SCROLLER_ARROW_UP_HEIGHT, True);
+                                   SCROLLER_ARROW_UP_WIDTH,
+                                   SCROLLER_ARROW_UP_HEIGHT, True);
 
     scrPtr->hiDownArrow = makePixmap(scrPtr, HI_SCROLLER_ARROW_DOWN,
-				   SCROLLER_ARROW_DOWN_WIDTH,
-				   SCROLLER_ARROW_DOWN_HEIGHT, True);
+                                     SCROLLER_ARROW_DOWN_WIDTH,
+                                     SCROLLER_ARROW_DOWN_HEIGHT, True);
 
     scrPtr->hiLeftArrow = makePixmap(scrPtr, HI_SCROLLER_ARROW_LEFT,
-				   SCROLLER_ARROW_LEFT_WIDTH,
-				   SCROLLER_ARROW_LEFT_HEIGHT, True);
+                                     SCROLLER_ARROW_LEFT_WIDTH,
+                                     SCROLLER_ARROW_LEFT_HEIGHT, True);
 
     scrPtr->hiRightArrow = makePixmap(scrPtr, HI_SCROLLER_ARROW_RIGHT,
-				    SCROLLER_ARROW_RIGHT_WIDTH,
-				    SCROLLER_ARROW_RIGHT_HEIGHT, True);
+                                      SCROLLER_ARROW_RIGHT_WIDTH,
+                                      SCROLLER_ARROW_RIGHT_HEIGHT, True);
 
     scrPtr->popUpIndicator = makePixmap(scrPtr, POPUP_INDICATOR,
 					POPUP_INDICATOR_WIDTH,
@@ -878,7 +862,7 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     {
 	XColor bla;
 	Pixmap blank;
-	
+
 	blank = XCreatePixmap(display, scrPtr->stipple, 1, 1, 1);
 	XSetForeground(display, scrPtr->monoGC, 0);
 	XFillRectangle(display, blank, scrPtr->monoGC, 0, 0, 1, 1);

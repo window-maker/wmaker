@@ -8,27 +8,11 @@ Antialiased font support
 ------------------------
 
 With the addition of support for antialiased fonts in the WINGs library, now
-Window Maker can also support antialiased fonts. However enabling them may
-prove not to be a trivial task to do. This is because enabling antialiased
-fonts doesn't depend solely on Window Maker and its configuration files. It
-also depends on the X server, the X server extension modules and their
-specific configuration files.
+Window Maker can also support antialiased fonts. 
 
-For a description of all the steps required to get antialiased fonts on
-screen please check the README.antialiasing file which describes all the
-things you need to do on a step by step basis. In addition it has extra
-useful hints and idea to make your antialiased fonts look nice in different
-contexts.
-
-After you have done all the steps described there, you can enable antialiased
-fonts either by adding AntialiasedText = Yes; in ~/GNUstep/Defaults/WindowMaker
-or by launching WPrefs and checking the "Smooth font edges" in the Expert User
-Preferences panel.
-
-As a general note you should always use a True Type font for your fonts if
-antialiasing is enabled, or alias a normal font to a True Type in the Xft
-configuration (read the details in README.antialiasing). Else you may get
-unepleasant results in the look of your screen :P
+Antialiased text can be enabled either by adding AntialiasedText = Yes;
+in ~/GNUstep/Defaults/WindowMaker or by launching WPrefs and checking the
+"Smooth font edges" in the Expert User Preferences panel.
 
 
 Global Submenus

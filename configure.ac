@@ -100,7 +100,9 @@ dnl not used anywhere
 dnl AC_FUNC_MEMCMP  
 AC_FUNC_VPRINTF
 AC_FUNC_ALLOCA
-AC_CHECK_FUNCS(gethostname select poll strerror strcasecmp strncasecmp setsid atexit mallinfo mkstemp snprintf vsnprintf asprintf vasprintf)
+AC_CHECK_FUNCS(gethostname select poll strerror strcasecmp strncasecmp \
+	       setsid atexit mallinfo mkstemp snprintf vsnprintf asprintf \
+	       vasprintf mbsnrtowcs mbsrtowcs)
 
 
 dnl ripped from samba
@@ -177,7 +179,9 @@ dnl Checks for header files.
 dnl =======================
 AC_HEADER_SYS_WAIT
 AC_HEADER_TIME
-AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h sys/time.h sys/types.h libintl.h sys/select.h poll.h malloc.h ctype.h string.h strings.h)
+AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h sys/time.h sys/types.h \
+		 libintl.h sys/select.h poll.h malloc.h ctype.h string.h \
+		 strings.h wchar.h)
 
 
 
@@ -533,10 +537,6 @@ if test "$xft" = yes; then
 		XFTFLAGS=`$XFTCONFIG --cflags`
 		AC_MSG_CHECKING([for the Xft2 library])
 		AC_MSG_RESULT([found])
-		AC_DEFINE(XFT2, 1, [define if you have Xft version 2 (set by configure)])
-	else
-		AC_CHECK_LIB(Xft, XftDrawCreate, [XFTLIBS="-lXft" XFTFLAGS=""],
-			xft=no, $XLFLAGS $XLIBS)
 	fi
 	if test "$xft" = yes; then
 		AC_SUBST(XFTFLAGS)

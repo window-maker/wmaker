@@ -107,22 +107,6 @@ enum {
 };
 
 
-/* Font flags */
-typedef enum {
-    WFDefaultFont    = 0,
-    WFNormalFont     = (1<<0),
-    WFFontSet        = (1<<1),
-    WFAntialiased    = (1<<2),
-    WFNotAntialiased = (1<<3)
-} WMFontFlags;
-
-
-/* Use default system font size in system font name */
-enum {
-    WFDefaultSize = -1
-};
-
-
 /* frame title positions */
 typedef enum {
     WTPNoTitle,
@@ -746,18 +730,11 @@ Bool WMIsAntialiasingEnabled(WMScreen *scrPtr);
 
 /* ....................................................................... */
 
-WMFont* WMCreateNormalFont(WMScreen *scrPtr, char *fontName);
-
-WMFont* WMCreateFontSet(WMScreen *scrPtr, char *fontName);
-
-WMFont* WMCreateAntialiasedFont(WMScreen *scrPtr, char *fontName);
-
-WMFont* WMCreateAntialiasedFontSet(WMScreen *scrPtr, char *fontName);
-
 WMFont* WMCreateFont(WMScreen *scrPtr, char *fontName);
 
-WMFont* WMCreateFontWithFlags(WMScreen *scrPtr, char *fontName,
-                              WMFontFlags flags);
+//??
+WMFont* WMCreateFontWithAttributes(WMScreen *scrPtr, char *fontName,
+                                   WMFontAttributes *attribs);
 
 WMFont* WMCopyFontWithChanges(WMScreen *scrPtr, WMFont *font,
                               const WMFontAttributes *changes);
@@ -770,15 +747,6 @@ char* WMGetFontName(WMFont *font);
 
 unsigned int WMFontHeight(WMFont *font);
 
-Bool WMIsAntialiasedFont(WMFont *font);
-
-/*
-WMFont* WMUserFontOfSize(WMScreen *scrPtr, int size);
-
-WMFont* WMUserFixedPitchFontOfSize(WMScreen *scrPtr, int size);
-*/
-
-
 void WMSetWidgetDefaultFont(WMScreen *scr, WMFont *font);
 
 void WMSetWidgetDefaultBoldFont(WMScreen *scr, WMFont *font);
@@ -790,8 +758,6 @@ WMFont* WMDefaultBoldSystemFont(WMScreen *scrPtr);
 WMFont* WMSystemFontOfSize(WMScreen *scrPtr, int size);
 
 WMFont* WMBoldSystemFontOfSize(WMScreen *scrPtr, int size);
-
-XFontSet WMGetFontFontSet(WMFont *font);
 
 /* ....................................................................... */
 
