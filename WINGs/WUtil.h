@@ -361,11 +361,6 @@ proplist_t WMGetUDSearchList(WMUserDefaults *database);
 void WMSetUDSearchList(WMUserDefaults *database, proplist_t list);
 
 
-/****** Global Variables *******/
-
-extern int WErrorCode;
-
-
 
 #ifdef __cplusplus
 }

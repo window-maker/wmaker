@@ -34,8 +34,6 @@ changes since wmaker 0.61.1:
     2. if new_size is 0, call wfree(old), and return NULL.
     3. if both old is a valid pointer and new_size>0, call realloc.
 - added wstrerror(int errnum) to return the string associated with errnum.
-- added a global var WErrorCode which can hold various error codes
-  (similar to errno or RErrorCode).
 - new wsyserrorwithcode(int error, const char* fmt, ...), similar to 
   wsyserror(), but printing the message for the specified error code.
 

@@ -29,9 +29,6 @@
 
 extern char *_WINGS_progname;
 
-int WErrorCode = 0;
-
-
 
 #define MAXLINE	1024
 
@@ -49,17 +46,17 @@ wstrerror(int errnum)
 #  ifndef __DECC
     extern char *sys_errlist[];
 #  endif
-    static char buf[] = "Unknown error number 12345678901234567890";
+    static char buf[] = "Unknown error 12345678901234567890";
 
     if (errno < sys_nerr)
         return sys_errlist[errnum];
 
-    sprintf (buf, "Unknown error number %d", errnum);
+    sprintf (buf, "Unknown error %d", errnum);
     return buf;
 #else /* no strerror() and no sys_errlist[] */
-    static char buf[] = "Error number 12345678901234567890";
+    static char buf[] = "Error 12345678901234567890";
 
-    sprintf(buf, "Error number %d", errnum);
+    sprintf(buf, "Error %d", errnum);
     return buf;
 #endif
 }
