@@ -67,10 +67,6 @@ echo "questions. We will IGNORE any questions that are already"
 echo "answered in the documentation."
 echo
 perai
-echo
-echo "Did you install libPropList? If not, please install it now."
-echo
-perai
 echo "Did you read the INSTALL file?"
 echo -n "<y/n> "
 read rtfm
