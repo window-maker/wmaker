@@ -1038,6 +1038,29 @@ WMScreenMainLoop(WMScreen *scr)
 }
 
 
+void
+WMBreakModalLoop(WMScreen *scr)
+{
+    scr->modalLoop = 0;
+}
+
+
+void
+WMRunModalLoop(WMScreen *scr, WMView *view)
+{
+    WMScreen *scr = view->screen;
+    
+    scr->modalView = view;
+
+    scr->modalLoop = 1;
+    while (scr->modalLoop) {
+	XEvent event;
+	
+	WMNextEvent(scr->display, &event);
+	WMHandleEvent(&event);
+    }
+}				  
+
 
 Display*
 WMScreenDisplay(WMScreen *scr)

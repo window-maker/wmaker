@@ -772,6 +772,10 @@ void WMSelectTableViewRow(WMTableView *table, int row)
 {
     if (table->clickedRow >= 0)
 	setRowSelected(table, table->clickedRow, False);
+    
+    if (row <= table->rows)
+	return;
+    
     setRowSelected(table, row, True);
     table->clickedRow = row;
     
@@ -788,6 +792,8 @@ void WMReloadTableView(WMTableView *table)
 
     repaintTable(table, 0, 0, 
 		 W_VIEW_WIDTH(table->tableView), rect.size.height);
+    
+    table->clickedRow = -1;
 }
 
 

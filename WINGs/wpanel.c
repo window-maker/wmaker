@@ -11,7 +11,7 @@ alertPanelOnClick(WMWidget *self, void *clientData)
 {
     WMAlertPanel *panel = clientData;
 
-    panel->done = 1;
+    WMBreakModalLoop(WMWidgetScreen(panel->othBtn));
     if (self == panel->defBtn) {
 	panel->result = WAPRDefault;
     } else if (self == panel->othBtn) {
@@ -35,7 +35,7 @@ handleKeyPress(XEvent *event, void *clientData)
 	    WMPerformButtonClick(panel->othBtn ? panel->othBtn : panel->altBtn);
 	} else {
 	    panel->result = WAPRDefault;
-	    panel->done=1;
+	    WMBreakModalLoop(WMWidgetScreen(panel->othBtn));
 	}
     }
 }
@@ -72,19 +72,10 @@ WMRunAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 	WMSetWindowInitialPosition(panel->win, px, py);
     }
 
-    
-    scrPtr->modalView = W_VIEW(panel->win);
     WMMapWidget(panel->win);
 
-    scrPtr->modal = 1;
-    while (!panel->done || WMScreenPending(scrPtr)) {
-	XEvent event;
-	
-	WMNextEvent(scrPtr->display, &event);
-	WMHandleEvent(&event);
-    }
-    scrPtr->modal = 0;
-
+    WMRunModalLoop(scrPtr, W_VIEW(panel->win));
+    
     tmp = panel->result;
 
     WMDestroyAlertPanel(panel);
@@ -109,6 +100,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 {
     WMAlertPanel *panel;
     int x, dw=0, aw=0, ow=0, w;
+    WMBox *hbox;
     
     
     panel = wmalloc(sizeof(WMAlertPanel));
@@ -131,15 +123,24 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 	 (scrPtr->rootView->size.height - WMWidgetHeight(panel->win))/2);
 
     WMSetWindowTitle(panel->win, "");
+    
+    panel->vbox = WMCreateBox(panel->win);
+    WMSetBoxExpandsToParent(panel->vbox);
+    WMSetBoxHorizontal(panel->vbox, False);
+    WMMapWidget(panel->vbox);
+    
+    hbox = WMCreateBox(panel->vbox);
+    WSetBoxHorizontal(hbox, True);
+    WMMapWidget(hbox);
+    WMAddBoxSubview(panel->vbox, WMWidgetView(hbox), False, True, 80, 0, 0, 5);
+
+    panel->iLbl = WMCreateLabel(hbox);
+    WMSetLabelImagePosition(panel->iLbl, WIPImageOnly);
+    WMMapWidget(panel->iLbl);
+    WMAddBoxSubview(hbox, WMWidgetView(panel->iLbl), False, True, 64, 0, 0, 10);
 
     if (scrPtr->applicationIcon) {		
-	panel->iLbl = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->iLbl, scrPtr->applicationIcon->width,
-		       scrPtr->applicationIcon->height);
-	WMMoveWidget(panel->iLbl, 8 + (64 - scrPtr->applicationIcon->width)/2,
-		     (75 - scrPtr->applicationIcon->height)/2);
 	WMSetLabelImage(panel->iLbl, scrPtr->applicationIcon);
-	WMSetLabelImagePosition(panel->iLbl, WIPImageOnly);
     }
 
     if (title) {
@@ -147,33 +148,40 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 	
 	largeFont = WMBoldSystemFontOfSize(scrPtr, 24);
 
-	panel->tLbl = WMCreateLabel(panel->win);
-	WMMoveWidget(panel->tLbl, 80, (80 - WMFontHeight(largeFont))/2);
-	WMResizeWidget(panel->tLbl, 400 - 70, WMFontHeight(largeFont)+4);
+	panel->tLbl = WMCreateLabel(hbox);
+	WMMapWidget(panel->tLbl);
+	WMAddBoxSubview(hbox, WMWidgetView(panel->tLbl), True, True, 
+			64, 0, 0, 0);
 	WMSetLabelText(panel->tLbl, title);
 	WMSetLabelTextAlignment(panel->tLbl, WALeft);
 	WMSetLabelFont(panel->tLbl, largeFont);
-	
+
 	WMReleaseFont(largeFont);
     }
+
+    /* create divider line */
+    
+    panel->line = WMCreateFrame(panel->win);
+    WMMapWidget(panel->line);
+    WMAddBoxSubview(panel->vbox, WMWidgetView(panel->line), False, True,
+		    2, 2, 5);
+    WMSetFrameRelief(panel->line, WRGroove);
 
 
     if (msg) {
 	panel->mLbl = WMCreateLabel(panel->win);
-	WMMoveWidget(panel->mLbl, 10, 83);
-	WMResizeWidget(panel->mLbl, 380, WMFontHeight(scrPtr->normalFont)*4);
+	WMMapWidget(panel->mLbl);
+	WMAddBoxSubview(panel->vbox, WMWidgetView(panel->mLbl), True, True,
+			WMFontHeight(scrPtr->normalFont)*4, 0, 0, 5);
 	WMSetLabelText(panel->mLbl, msg);
 	WMSetLabelTextAlignment(panel->mLbl, WACenter);
     }
     
+    hbox = WMCreateBox(panel->vbox);
+    WMSetBoxHorizontal(hbox, True);
+    WMMapWidget(hbox);
+    WMAddBoxSubview(panel->vbox, hbox, False, True, 24, 0, 0, 0);
     
-    /* create divider line */
-    
-    panel->line = WMCreateFrame(panel->win);
-    WMMoveWidget(panel->line, 0, 80);
-    WMResizeWidget(panel->line, 400, 2);
-    WMSetFrameRelief(panel->line, WRGroove);
-
     /* create buttons */
     if (otherButton) 
 	ow = WMWidthOfString(scrPtr->normalFont, otherButton,
@@ -211,11 +219,11 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 
     if (defaultButton) {
 	x -= dw + 10;
-	
+
 	panel->defBtn = WMCreateCommandButton(panel->win);
 	WMSetButtonAction(panel->defBtn, alertPanelOnClick, panel);
-	WMMoveWidget(panel->defBtn, x, 144);
-	WMResizeWidget(panel->defBtn, dw, 24);
+	WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->defBtn),
+			     False, True, dw, 0, 5);
 	WMSetButtonText(panel->defBtn, defaultButton);
 	WMSetButtonImage(panel->defBtn, scrPtr->buttonArrow);
 	WMSetButtonAltImage(panel->defBtn, scrPtr->pushedButtonArrow);
@@ -225,8 +233,8 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 	x -= aw + 10;
 
 	panel->altBtn = WMCreateCommandButton(panel->win);
-	WMMoveWidget(panel->altBtn, x, 144);
-	WMResizeWidget(panel->altBtn, aw, 24);
+	WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->altBtn),
+			     False, True, aw, 0, 5);
 	WMSetButtonAction(panel->altBtn, alertPanelOnClick, panel);
 	WMSetButtonText(panel->altBtn, alternateButton);
     }
@@ -235,12 +243,12 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 	
 	panel->othBtn = WMCreateCommandButton(panel->win);
 	WMSetButtonAction(panel->othBtn, alertPanelOnClick, panel);
-	WMMoveWidget(panel->othBtn, x, 144);
-	WMResizeWidget(panel->othBtn, ow, 24);
+	WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->othBtn),
+			     False, True, ow, 0, 5);
 	WMSetButtonText(panel->othBtn, otherButton);	
     }
-
-    panel->done = 0;
+    
+    WMMapSubwidgets(hbox);
     
     WMCreateEventHandler(W_VIEW(panel->win), KeyPressMask,
 			 handleKeyPress, panel);
@@ -260,7 +268,7 @@ inputBoxOnClick(WMWidget *self, void *clientData)
 {
     WMInputPanel *panel = clientData;
 
-    panel->done = 1;
+    WMBreakModalLoop(WMWidgetScreen(self));
     if (self == panel->defBtn) {
 	panel->result = WAPRDefault;
     } else if (self == panel->altBtn) {
@@ -283,7 +291,7 @@ handleKeyPress2(XEvent *event, void *clientData)
             WMPerformButtonClick(panel->altBtn);
 	} else {
 	    /*           printf("got esc\n");*/
-	    panel->done = 1;
+	    WMBreakModalLoop(WMWidgetScreen(panel->altBtn));
 	    panel->result = WAPRDefault;
 	}
     }
@@ -324,13 +332,7 @@ WMRunInputPanel(WMScreen *scrPtr, WMWindow *owner, char *title,
 
     WMMapWidget(panel->win);
 
-    while (!panel->done || WMScreenPending(scrPtr)) {
-	XEvent event;
-	
-	WMNextEvent(scrPtr->display, &event);
-	WMHandleEvent(&event);
-    }
-
+    WMRunModalLoop(scrPtr, W_VIEW(panel->win));
 
     if (panel->result == WAPRDefault)
 	tmp = WMGetTextFieldText(panel->text);
@@ -368,7 +370,7 @@ endedEditingObserver(void *observerData, WMNotification *notification)
 	if (panel->altBtn)
 	    WMPerformButtonClick(panel->altBtn);
 	else {
-	    panel->done = 1;
+	    WMBreakModalLoop(WMWidgetScreen(panel->defBtn));
 	    panel->result = WAPRDefault;
 	}
 	break;
@@ -475,8 +477,6 @@ WMCreateInputPanel(WMScreen *scrPtr, WMWindow *owner, char *title, char *msg,
 	WMSetButtonText(panel->altBtn, cancelButton);
     }
 
-    panel->done = 0;
-    
     WMCreateEventHandler(W_VIEW(panel->win), KeyPressMask,
 			 handleKeyPress2, panel);
 

@@ -363,6 +363,7 @@ typedef struct WMListItem {
 /* struct for message panel */
 typedef struct WMAlertPanel {
     WMWindow *win;		       /* window */
+    WMBox *vbox;
     WMButton *defBtn;		       /* default button */
     WMButton *altBtn;		       /* alternative button */
     WMButton *othBtn;		       /* other button */
@@ -580,6 +581,9 @@ WMScreen *WMCreateSimpleApplicationScreen(Display *display);
 
 void WMScreenMainLoop(WMScreen *scr);
 
+void WMBreakModalLoop(WMScreen *scr);
+
+void WMRunModalLoop(WMScreen *scr, WMView *view);
 
 RContext *WMScreenRContext(WMScreen *scr);
 
@@ -1671,6 +1675,8 @@ void WMAddBoxSubviewAtEnd(WMBox *bPtr, WMView *view, Bool expand, Bool fill,
 			  int minSize, int maxSize, int space);
 
 void WMSetBoxHorizontal(WMBox *box, Bool flag);
+
+void WMSetBoxExpandsToParent(WMBox *box);
 
 /* ....................................................................... */
 

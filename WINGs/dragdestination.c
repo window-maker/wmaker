@@ -128,8 +128,9 @@ void
 WMSetViewDragDestinationProcs(WMView *view, WMDragDestinationProcs *procs)
 {
     if (view->dragDestinationProcs == NULL) {
-	wfree(view->dragDestinationProcs);
 	view->dragDestinationProcs = wmalloc(sizeof(WMDragDestinationProcs));
+    } else {
+	free(view->dragDestinationProcs);
     }
     *view->dragDestinationProcs = *procs;
     

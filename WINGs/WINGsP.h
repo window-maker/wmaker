@@ -284,7 +284,7 @@ typedef struct W_Screen {
     Window lastClickWindow;	       /* window of the last mousedown */
 
     struct W_View *modalView;
-    unsigned modal:1;
+    unsigned modalLoop:1;
     unsigned ignoreNextDoubleClick:1;
 } W_Screen;
 

@@ -47,6 +47,16 @@ static W_ViewDelegate delegate = {
 
 
 
+
+static void resizedParent(void *self, WMNotification *notif)
+{
+    WMView *view = (WMView*)WMGetNotificationObject(notif);
+    WMSize size = WMGetViewSize(view);
+
+    WMResizeWidget((WMWidget*)self, size.width, size.height);
+}
+
+
 WMBox*
 WMCreateBox(WMWidget *parent)
 {
@@ -210,6 +220,16 @@ WMSetBoxHorizontal(WMBox *box, Bool flag)
 {
     box->horizontal = flag;
     rearrange(box);
+}
+
+
+void
+WMSetBoxExpandsToParent(WMBox *box)
+{
+    WMAddNotificationObserver(resizedParent, box,
+			      WMViewSizeDidChangeNotification, 
+			      W_VIEW(box)->parent);
+    WMSetViewNotifySizeChanges(W_VIEW(box)->parent, True);
 }
 
 

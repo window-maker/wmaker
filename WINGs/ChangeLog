@@ -1,3 +1,8 @@
+changes since wmaker 0.63.1:
+............................
+- added WMRunModalLoop() and WMBreakModalLoop()
+- added WMSetBoxExpandsToParent()
+
 changes since wmaker 0.62.1:
 ............................
 - added WRuler widget
@@ -58,6 +63,7 @@ changes since wmaker 0.62.1:
   the program name prepended to it. Similar to wwarning(), except that it
   doesn't add "warning:" in the output message.
 - added WMBox widget
+- added WMAddTabViewItemWithView()
 - added W_SetViewCursor()
 - made Extra widgets library
 - added table widget in Extras library
