@@ -14,6 +14,10 @@ typedef struct W_Button {
     
     WMFont *font;
 
+    WMColor *textColor;
+    WMColor *altTextColor;
+    WMColor *disTextColor;
+
     W_Pixmap *image;
     W_Pixmap *altImage;
 
@@ -374,6 +378,36 @@ WMSetButtonAltText(WMButton *bPtr, char *text)
 
 
 void
+WMSetButtonTextColor(WMButton *bPtr, WMColor *color)
+{
+    if (bPtr->textColor)
+	WMReleaseColor(bPtr->textColor);
+
+    bPtr->textColor = WMRetainColor(color);
+}
+
+
+void
+WMSetButtonAltTextColor(WMButton *bPtr, WMColor *color)
+{
+    if (bPtr->altTextColor)
+	WMReleaseColor(bPtr->altTextColor);
+
+    bPtr->altTextColor = WMRetainColor(color);
+}
+
+
+void
+WMSetButtonDisabledTextColor(WMButton *bPtr, WMColor *color)
+{
+    if (bPtr->disTextColor)
+	WMReleaseColor(bPtr->disTextColor);
+
+    bPtr->disTextColor = WMRetainColor(color);
+}
+
+
+void
 WMSetButtonSelected(WMButton *bPtr, int isSelected)
 {
     bPtr->flags.selected = isSelected;
@@ -545,15 +579,24 @@ static void
 paintButton(Button *bPtr)
 {
     W_Screen *scrPtr = bPtr->view->screen;
-    GC gc;
     WMReliefType relief;
     int offset;
     char *caption;
     WMPixmap *image;
-    GC textGC;
+    WMColor *textColor;
+    GC gc;
 
     gc = NULL;
     caption = bPtr->caption;
+
+    if (bPtr->flags.enabled) {
+        textColor = (bPtr->textColor!=NULL
+                     ? bPtr->textColor : scrPtr->black);
+    } else {
+        textColor = (bPtr->disTextColor!=NULL
+                     ? bPtr->disTextColor : scrPtr->darkGray);
+    }
+
     if (bPtr->flags.enabled || !bPtr->dimage)
 	image = bPtr->image;
     else
@@ -565,16 +608,19 @@ paintButton(Button *bPtr)
 	relief = WRFlat;
 
     if (bPtr->flags.selected) {
-	if (bPtr->flags.stateLight)
-	    gc = WMColorGC(scrPtr->white);
+        if (bPtr->flags.stateLight) {
+            gc = WMColorGC(scrPtr->white);
+            textColor = scrPtr->black;
+        }
 
 	if (bPtr->flags.stateChange) {
-	    if (bPtr->altCaption) {
+	    if (bPtr->altCaption)
 		caption = bPtr->altCaption;
-	    }
 	    if (bPtr->altImage)
 		image = bPtr->altImage;
-	}
+            if (bPtr->altTextColor)
+                textColor = bPtr->altTextColor;
+        }
 
 	if (bPtr->flags.statePush && bPtr->flags.bordered) {
 	    relief = WRSunken;
@@ -587,25 +633,22 @@ paintButton(Button *bPtr)
 	    relief = WRPushed;
 	    offset = 1;
 	}
-	if (bPtr->flags.pushLight)
-	    gc = WMColorGC(scrPtr->white);
+        if (bPtr->flags.pushLight) {
+            gc = WMColorGC(scrPtr->white);
+            textColor = scrPtr->black;
+        }
 
 	if (bPtr->flags.pushChange) {
-	    if (bPtr->altCaption) {
+	    if (bPtr->altCaption)
 		caption = bPtr->altCaption;
-	    }
 	    if (bPtr->altImage)
 		image = bPtr->altImage;
+            if (bPtr->altTextColor)
+                textColor = bPtr->altTextColor;
 	}
     }
-    
 
-    if (bPtr->flags.enabled)
-	textGC = WMColorGC(scrPtr->black);
-    else
-	textGC = WMColorGC(scrPtr->darkGray);
-
-    W_PaintTextAndImage(bPtr->view, True, textGC,
+    W_PaintTextAndImage(bPtr->view, True, WMColorGC(textColor),
 			(bPtr->font!=NULL ? bPtr->font : scrPtr->normalFont),
 			relief, caption, bPtr->flags.alignment, image, 
 			bPtr->flags.imagePosition, gc, offset);
@@ -756,7 +799,16 @@ destroyButton(Button *bPtr)
 
     if (bPtr->altCaption)
 	wfree(bPtr->altCaption);
-    
+
+    if (bPtr->textColor)
+        WMReleaseColor(bPtr->textColor);
+
+    if (bPtr->altTextColor)
+        WMReleaseColor(bPtr->altTextColor);
+
+    if (bPtr->disTextColor)
+        WMReleaseColor(bPtr->disTextColor);
+
     if (bPtr->image)
 	WMReleasePixmap(bPtr->image);
 

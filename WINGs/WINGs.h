@@ -825,6 +825,12 @@ void WMSetButtonText(WMButton *bPtr, char *text);
 
 void WMSetButtonAltText(WMButton *bPtr, char *text);
 
+void WMSetButtonTextColor(WMButton *bPtr, WMColor *color);
+
+void WMSetButtonAltTextColor(WMButton *bPtr, WMColor *color);
+
+void WMSetButtonDisabledTextColor(WMButton *bPtr, WMColor *color);
+
 void WMSetButtonSelected(WMButton *bPtr, int isSelected);
 
 int WMGetButtonSelected(WMButton *bPtr);

@@ -93,6 +93,8 @@ WMCreatePopUpButton(WMWidget *parent)
     
     bPtr->items = WMCreateBag(4);
 
+    bPtr->selectedItemIndex = -1;
+
     bPtr->menuView = W_CreateTopView(scr);
     bPtr->menuView->attribs.override_redirect = True;
     bPtr->menuView->attribFlags |= CWOverrideRedirect;

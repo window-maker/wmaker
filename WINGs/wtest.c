@@ -104,7 +104,7 @@ testGradientButtons(WMScreen *scr)
     WMPixmap *pix1, *pix2;
     RImage *back;
     RColor light, dark;
-    WMColor *color;
+    WMColor *color, *altColor;
 
     windowCount++;
     
@@ -134,6 +134,9 @@ testGradientButtons(WMScreen *scr)
     pix2 = WMCreatePixmapFromRImage(scr, back, 0);
     RDestroyImage(back);
 
+    color = WMWhiteColor(scr);
+    altColor = WMCreateNamedColor(scr, "red", True);
+
     btn = WMCreateButton(win, WBTMomentaryChange);
     WMResizeWidget(btn, 60, 24);
     WMMoveWidget(btn, 20, 100);
@@ -142,8 +145,10 @@ testGradientButtons(WMScreen *scr)
     WMSetButtonImage(btn, pix1);
     WMSetButtonAltImage(btn, pix2);
     WMSetButtonText(btn, "Cool");
+    WMSetButtonTextColor(btn, color);
+    WMSetButtonAltTextColor(btn, altColor);
 
-    WMSetBalloonTextForView("This is a button", WMWidgetView(btn));
+    WMSetBalloonTextForView("This is a cool button", WMWidgetView(btn));
 
     btn = WMCreateButton(win, WBTMomentaryChange);
     WMResizeWidget(btn, 60, 24);
@@ -153,8 +158,12 @@ testGradientButtons(WMScreen *scr)
     WMSetButtonImage(btn, pix1);
     WMSetButtonAltImage(btn, pix2);
     WMSetButtonText(btn, "Button");
+    WMSetButtonTextColor(btn, color);
 
     WMSetBalloonTextForView("Este é outro balão.", WMWidgetView(btn));
+
+    WMReleaseColor(color);
+    color = WMCreateNamedColor(scr, "orange", True);
 
     btn = WMCreateButton(win, WBTMomentaryChange);
     WMResizeWidget(btn, 60, 24);
@@ -164,9 +173,13 @@ testGradientButtons(WMScreen *scr)
     WMSetButtonImage(btn, pix1);
     WMSetButtonAltImage(btn, pix2);
     WMSetButtonText(btn, "Test");
+    WMSetButtonTextColor(btn, color);
 
     WMSetBalloonTextForView("This is yet another button.\nBut the balloon has 3 lines.\nYay!",
 			    WMWidgetView(btn));
+
+    WMReleaseColor(color);
+    WMReleaseColor(altColor);
 
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
@@ -680,10 +693,10 @@ int main(int argc, char **argv)
 
     testSplitView(scr);
     testFontPanel(scr);
+    testGradientButtons(scr);
 #if 0
 
     testProgressIndicator(scr);
-    testGradientButtons(scr);
     testColorWell(scr);
 
     testTabView(scr);
