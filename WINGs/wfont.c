@@ -268,6 +268,19 @@ WMFontHeight(WMFont *font)
 }
 
 
+WMFont*
+WMDefaultSystemFont(WMScreen *scrPtr)
+{
+    return WMRetainFont(scrPtr->normalFont);
+}
+
+
+WMFont*
+WMDefaultBoldSystemFont(WMScreen *scrPtr)
+{
+    return WMRetainFont(scrPtr->boldFont);
+}
+
 
 WMFont*
 WMSystemFontOfSize(WMScreen *scrPtr, int size)

@@ -718,6 +718,10 @@ void WMSetWidgetDefaultFont(WMScreen *scr, WMFont *font);
 
 void WMSetWidgetDefaultBoldFont(WMScreen *scr, WMFont *font);
 
+WMFont* WMDefaultSystemFont(WMScreen *scrPtr);
+
+WMFont* WMDefaultBoldSystemFont(WMScreen *scrPtr);
+
 WMFont* WMSystemFontOfSize(WMScreen *scrPtr, int size);
 
 WMFont* WMBoldSystemFontOfSize(WMScreen *scrPtr, int size);
