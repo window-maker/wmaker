@@ -306,18 +306,20 @@ WMCreateAntialiasedFont(WMScreen *scrPtr, char *fontName)
 
     font->screen = scrPtr;
 
-#if 0
-    /* // Xft sux. Loading a font that doesn't exist will load the default
-     * defined in XftConfig without any warning or error */
-    font->font.normal = XLoadQueryFont(display, fname);
-    if (!font->font.normal) {
-        wfree(font);
-        wfree(fname);
-        return NULL;
-    }
-    XFreeFont(display, font->font.normal);
-#endif
-
+    /* Xft sux. Loading a font with an invalid XLFD will give strange results
+     * sometimes without returning any warning or error.
+     * However Xft's idea of what font is invalid is quite strange:
+     * 1. If the XLFD doesn't have all its fields present will fail and
+     *    return NULL.
+     * 2. If all fields are present, but hold invalid values then it will:
+     *    a. If family is invalid, will load a default font without warning.
+     *    b. If the font size is invalid (non-numerical) it will fail and
+     *       return NULL.
+     *    c. If other fields are invalid, will load the font specified by
+     *       the valid family name, ignoring any invalid fields. It will
+     *       use a default medium weight and a default roman slant if they
+     *       are invalid.
+     */
     font->font.xft = XftFontOpenXlfd(display, scrPtr->screen, fname);
     if (!font->font.xft) {
         wfree(font);
@@ -353,7 +355,6 @@ WMCreateAntialiasedFontSet(WMScreen *scrPtr, char *fontName)
 
     fontName = xlfdFromFontName(fontName, True);
 
-    // use the second in list if available, instead of first?
     if ((ptr = strchr(fontName, ','))) {
         fname = wmalloc(ptr - fontName + 1);
 	strncpy(fname, fontName, ptr - fontName);
@@ -379,18 +380,20 @@ WMCreateAntialiasedFontSet(WMScreen *scrPtr, char *fontName)
 
     font->screen = scrPtr;
 
-#if 0
-    /* // Xft sux. Loading a font that doesn't exist will load the default
-     * defined in XftConfig without any warning or error */
-    font->font.normal = XLoadQueryFont(display, fname);
-    if (!font->font.normal) {
-        wfree(font);
-        wfree(fname);
-        return NULL;
-    }
-    XFreeFont(display, font->font.normal);
-#endif
-
+    /* Xft sux. Loading a font with an invalid XLFD will give strange results
+     * sometimes without returning any warning or error.
+     * However Xft's idea of what font is invalid is quite strange:
+     * 1. If the XLFD doesn't have all its fields present will fail and
+     *    return NULL.
+     * 2. If all fields are present, but hold invalid values then it will:
+     *    a. If family is invalid, will load a default font without warning.
+     *    b. If the font size is invalid (non-numerical) it will fail and
+     *       return NULL.
+     *    c. If other fields are invalid, will load the font specified by
+     *       the valid family name, ignoring any invalid fields. It will
+     *       use a default medium weight and a default roman slant if they
+     *       are invalid.
+     */
     font->font.xft = XftFontOpenXlfd(display, scrPtr->screen, fname);
     if (!font->font.xft) {
         wfree(font);
@@ -917,7 +920,7 @@ changeFontProp(char *buf, char *newprop, int position)
     int count;
 
     if (buf[0]!='-') {
-        // remove warning later. or maybe not
+        /* // remove warning later. or maybe not */
         wwarning(_("Invalid font specification: '%s'\n"), buf);
         return;
     }
@@ -1025,7 +1028,6 @@ WMCopyFontWithChanges(WMScreen *scrPtr, WMFont *font,
     if (totalProps == 0) {
         /* No options with fallback alternatives at all */
         WMFreeBag(props);
-        //printf("try:  '%s'\n      '%s'\n", font->name, fname);
         return WMCreateFontWithFlags(scrPtr, fname, fFlags);
     }
 
@@ -1040,7 +1042,6 @@ WMCopyFontWithChanges(WMScreen *scrPtr, WMFont *font,
             }
         }
         result = WMCreateFontWithFlags(scrPtr, fname, fFlags);
-        //printf("try:  '%s'\n      '%s'\n", font->name, fname);
         if (result) {
             WMFreeBag(props);
             return result;

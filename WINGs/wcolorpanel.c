@@ -36,7 +36,8 @@
 #include <errno.h>
 
 /* BUG There's something fishy with shaped windows */
-#if 1
+/* Whithout shape extension the magnified image is completely broken -Dan */
+#if 0
     #ifdef SHAPE
     #define SHAPE_WAS_DEFINED
     #undef SHAPE
@@ -1708,7 +1709,7 @@ magnifyCreatePixmap(WMColorPanel *panel)
     
     /* Copy the magnified pixmap, with the clip mask, to background pixmap */
     XCopyArea(scr->display, panel->magnifyGlass->magPix, pixmap,
-	    scr->clipGC, 0, 0, Cursor_mask_width, Cursor_mask_height, 0, 0);	
+	    scr->clipGC, 0, 0, Cursor_mask_width, Cursor_mask_height, 0, 0);
     /* (2,2) puts center pixel on center of glass */
     
     return pixmap;
