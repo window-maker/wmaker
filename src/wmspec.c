@@ -1031,7 +1031,6 @@ doStateAtom(WWindow *wwin, Atom state, int set, Bool init)
             }
         }
     } else if (state == net_wm_state_fullscreen) {
-        puts("GoT FS ST");
         if (set == _NET_WM_STATE_TOGGLE) {
             set = !(wwin->flags.fullscreen);
         }
