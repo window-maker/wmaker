@@ -1,7 +1,7 @@
 /*
  *  WINGs WMText: multi-line/font/color/graphic text widget
  *
- *  Copyright (c) 1999-2000 Nwanua Elumeze
+ *  Copyright (c) 1999-2000 Nwanua Elumeze <nwanua@windowmaker.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
