@@ -803,20 +803,32 @@ hermesConvert(RContext *context, RImage *image)
     /* The masks look weird for images with alpha. but they work this way.
      * wth does hermes do internally?
      */
-    source.r = 0xff0000;
-    source.g = 0x00ff00;
-    source.b = 0x0000ff;
-    source.a = 0x000000;
     source.bits = (HAS_ALPHA(image) ? 32 : 24);
+    if (ximage->image->byte_order==LSBFirst) {
+        source.r = 0xff0000;
+        source.g = 0x00ff00;
+        source.b = 0x0000ff;
+    } else {
+        if (source.bits == 32) {
+            source.r = 0xff000000;
+            source.g = 0x00ff0000;
+            source.b = 0x0000ff00;
+        } else {
+            source.r = 0xff0000;
+            source.g = 0x00ff00;
+            source.b = 0x0000ff;
+        }
+    }
+    source.a = 0; /* Don't care about alpha */
     source.indexed = 0;
     source.has_colorkey = 0;
 
     /* This is a hack and certainly looks weird, but it works :P
      * it assumes though that green is inbetween red and blue (the mask) */
     if (ximage->image->byte_order==LSBFirst) {
-        dest.b = context->visual->red_mask;
-        dest.g = context->visual->green_mask;
         dest.r = context->visual->blue_mask;
+        dest.g = context->visual->green_mask;
+        dest.b = context->visual->red_mask;
     } else {
         dest.r = context->visual->red_mask;
         dest.g = context->visual->green_mask;

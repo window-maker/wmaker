@@ -1,4 +1,5 @@
 - removed FocusFollowMouse from wmaker and WPrefs
+- fixed problem with alpha images showing a blue tint on big endian machines
 
 Changes since version 0.64.0:
 .............................
