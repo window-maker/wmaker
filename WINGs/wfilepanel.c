@@ -157,7 +157,7 @@ textChangedObserver(void *observerData, WMNotification *notification)
 
 	    WMInsertTextFieldText(panel->fileField, &item->text[textLen],
                                   textLen);
-	    WMSetTextFieldCursorPosition(panel->fileField, itemTextLen);
+            /*WMSetTextFieldCursorPosition(panel->fileField, itemTextLen);*/
 	    range.position = textLen;
 	    range.count = itemTextLen - textLen;
 	    WMSelectTextFieldRange(panel->fileField, range);

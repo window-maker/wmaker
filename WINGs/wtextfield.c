@@ -550,6 +550,8 @@ WMSelectTextFieldRange(WMTextField *tPtr, WMRange range)
 
         tPtr->selection = range;
 
+        tPtr->cursorPosition = range.position + range.count;
+
         if (tPtr->view->flags.realized) {
             paintTextField(tPtr);
         }
@@ -1052,13 +1054,13 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	break;
 
     case WM_EMACSKEY_RIGHT:
-      if (!control_pressed) {
-	goto normal_key;
-      }
+        if (!control_pressed) {
+            goto normal_key;
+        }
 #ifdef XK_KP_Right
     case XK_KP_Right:
 #endif
-     case XK_Right:
+    case XK_Right:
 	if (tPtr->cursorPosition < tPtr->textLen) {
 	    paintCursor(tPtr);
             if (event->xkey.state & ControlMask) {
@@ -1086,13 +1088,13 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	break;
 	
     case WM_EMACSKEY_HOME:
-      if (!control_pressed) {
-	goto normal_key;
-      }
+        if (!control_pressed) {
+            goto normal_key;
+        }
 #ifdef XK_KP_Home
     case XK_KP_Home:
 #endif
-     case XK_Home:
+    case XK_Home:
 	if (tPtr->cursorPosition > 0) {
 	    paintCursor(tPtr);
 	    tPtr->cursorPosition = 0;
@@ -1107,13 +1109,13 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	break;
 	
     case WM_EMACSKEY_END:
-      if (!control_pressed) {
-	goto normal_key;
-      }
+        if (!control_pressed) {
+            goto normal_key;
+        }
 #ifdef XK_KP_End
-     case XK_KP_End:
+    case XK_KP_End:
 #endif
-     case XK_End:
+    case XK_End:
 	if (tPtr->cursorPosition < tPtr->textLen) {
 	    paintCursor(tPtr);
 	    tPtr->cursorPosition = tPtr->textLen;
@@ -1133,9 +1135,9 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	break;
 	
      case WM_EMACSKEY_BS:
-      if (!control_pressed) {
-	goto normal_key;
-      }
+         if (!control_pressed) {
+             goto normal_key;
+         }
      case XK_BackSpace:
      	if (tPtr->selection.count) {
 	    WMDeleteTextFieldRange(tPtr, tPtr->selection);
@@ -1152,13 +1154,13 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	break;
 	
     case WM_EMACSKEY_DEL:
-      if (!control_pressed) {
-	goto normal_key;
-      }
+        if (!control_pressed) {
+            goto normal_key;
+        }
 #ifdef XK_KP_Delete
     case XK_KP_Delete:
 #endif
-     case XK_Delete:
+    case XK_Delete:
      	if (tPtr->selection.count) {
 	    WMDeleteTextFieldRange(tPtr, tPtr->selection);
             NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
@@ -1176,9 +1178,15 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     normal_key:
      default:
 	if (count > 0 && !iscntrl(buffer[0])) {
-     	    if (tPtr->selection.count)
-		WMDeleteTextFieldRange(tPtr, tPtr->selection);
+            if (tPtr->selection.count) {
+                WMDeleteTextFieldRange(tPtr, tPtr->selection);
+                tPtr->selection.count = 0;
+                refresh = 1;
+            }
+            /* TODO: check if this is correct. */
+            cancelSelection = 0;
 	    WMInsertTextFieldText(tPtr, buffer, tPtr->cursorPosition);
+            tPtr->selection.position = tPtr->cursorPosition;
             NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
                    (void*)WMInsertTextEvent);
 	} else
