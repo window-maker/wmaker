@@ -1338,6 +1338,7 @@ destroyTextField(TextField *tPtr)
 #endif
 
     WMReleaseFont(tPtr->font);
+    WMDeleteSelectionHandler(tPtr, XA_PRIMARY);
 
     if (tPtr->text)
 	free(tPtr->text);
