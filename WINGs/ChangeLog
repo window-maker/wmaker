@@ -31,6 +31,7 @@ changes since wmaker 0.62.1:
   by page.
 - better behavior of WMScroller regarding mouse wheel events. Control modifier
   will scroll line by line, while Shift modifier will scroll page by page.
+- fixed some buffer overflow allowing bugs.
 
 
 changes since wmaker 0.62.0:
