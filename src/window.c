@@ -2809,17 +2809,17 @@ wWindowResetMouseGrabs(WWindow *wwin)
     if (!WFLAGP(wwin, no_bind_mouse)) {
 	/* grabs for Meta+drag */
 	wHackedGrabButton(AnyButton, MOD_MASK, wwin->client_win,
-			  True, ButtonPressMask, GrabModeSync, 
-			  GrabModeAsync, None, None);
+                          True, ButtonPressMask|ButtonReleaseMask,
+                          GrabModeSync, GrabModeAsync, None, None);
     }
     
     if (!wwin->flags.focused && !WFLAGP(wwin, no_focusable)
 	&& !wwin->flags.is_gnustep) {
 	/* the passive grabs to focus the window */
-/*	if (wPreferences.focus_mode == WKF_CLICK) */
+	/* if (wPreferences.focus_mode == WKF_CLICK) */
 	    XGrabButton(dpy, AnyButton, AnyModifier, wwin->client_win,
-			True, ButtonPressMask, GrabModeSync, GrabModeAsync,
-			None, None);
+                        True, ButtonPressMask|ButtonReleaseMask,
+                        GrabModeSync, GrabModeAsync, None, None);
     }
     XFlush(dpy);
 }
