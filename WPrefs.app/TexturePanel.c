@@ -238,13 +238,14 @@ updateTGradImage(TexturePanel *panel)
 				   RDiagonalGradient);
     }
 
-    RCombineImagesWithOpaqueness(image, gradient, 
+    RCombineImagesWithOpaqueness(image, gradient,
 				 WMGetSliderValue(panel->topaS));
     RDestroyImage(gradient);
     pixmap = WMCreatePixmapFromRImage(WMWidgetScreen(panel->win),
 				      image, 128);
 
     WMSetLabelImage(panel->imageL, pixmap);
+    WMReleasePixmap(pixmap);
     WMResizeWidget(panel->imageL, image->width, image->height);
     RDestroyImage(image);
 }
@@ -387,7 +388,7 @@ static void
 sliderChangeCallback(WMWidget *w, void *data)
 {
     TexturePanel *panel = (TexturePanel*)data;
-    RHSVColor hsv, *hsvp;
+    RHSVColor hsv;
     int row, rows;
     WMListItem *item;
     RColor **colors;
@@ -588,7 +589,7 @@ static void
 updateImage(TexturePanel *panel, char *path)
 {
     WMScreen *scr = WMWidgetScreen(panel->win);
-    RImage *image, *scaled;
+    RImage *image;
     WMPixmap *pixmap;
     WMSize size;
 

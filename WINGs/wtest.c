@@ -255,6 +255,12 @@ testColorWell(WMScreen *scr)
     WMMapWidget(win);
 }
 
+void
+sliderCallback(WMWidget *w, void *data)
+{
+    printf("SLIEDER == %i\n", WMGetSliderValue(w));
+}
+
 
 void
 testSlider(WMScreen *scr)
@@ -274,6 +280,8 @@ testSlider(WMScreen *scr)
     WMResizeWidget(s, 16, 100);
     WMMoveWidget(s, 100, 100);
     WMSetSliderKnobThickness(s, 8);
+    WMSetSliderContinuous(s, False);
+    WMSetSliderAction(s, sliderCallback, s);
 
     s = WMCreateSlider(win);
     WMResizeWidget(s, 100, 16);

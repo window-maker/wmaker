@@ -689,6 +689,9 @@ freeTexture(BackgroundTexture *texture)
 	    && pixel[0]!=WhitePixelOfScreen(DefaultScreenOfDisplay(dpy)))
 	    XFreeColors(dpy, DefaultColormap(dpy, scr), pixel, 1, 0);
     }
+    if (texture->pixmap) {
+	XFreePixmap(dpy, texture->pixmap);
+    }
     free(texture->spec);
     free(texture);
 }
@@ -1065,6 +1068,8 @@ getValueForKey(char *domain, char *keyName)
 
     return val;
 }
+
+
 
 char*
 getPixmapPath(char *domain)
