@@ -697,6 +697,14 @@ handleActionEvents(XEvent *event, void *data)
 
     switch (event->type) {
      case ButtonRelease:
+#define CHECK_WHEEL_PATCH
+#ifdef CHECK_WHEEL_PATCH
+        /* Ignore mouse wheel events, they're not "real" button events */
+        if (event->xbutton.button == WINGsConfiguration.mouseWheelUp ||
+            event->xbutton.button == WINGsConfiguration.mouseWheelDown)
+            break;
+#endif
+
 	lPtr->flags.buttonPressed = 0;
 	tmp = getItemIndexAt(lPtr, event->xbutton.y);
 
@@ -718,7 +726,46 @@ handleActionEvents(XEvent *event, void *data)
 
      case ButtonPress:
 	if (event->xbutton.x > WMWidgetWidth(lPtr->vScroller)) {
-	    tmp = getItemIndexAt(lPtr, event->xbutton.y);
+#ifdef CHECK_WHEEL_PATCH
+            /* Mouse wheel events need to be properly handled here. It would
+             * be best to somehow route them to lPtr->vScroller so that the
+             * correct chain of actions is triggered. However, I found no
+             * clean way to do so, so I mostly copied the code that deals with
+             * WSIncrementPage and WSDecrementPage from vScrollCallBack.
+             *
+             *          - Martynas Kunigelis <diskena@linuxfreak.com> */
+
+            if (event->xbutton.button == WINGsConfiguration.mouseWheelDown) {
+                /* Wheel down */
+                int itemCount = WMGetBagItemCount(lPtr->items);
+                if (lPtr->topItem + lPtr->fullFitLines < itemCount) {
+                    int incr = lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
+                    lPtr->topItem += incr;
+
+                    if (lPtr->topItem + lPtr->fullFitLines > itemCount)
+                        lPtr->topItem = itemCount - lPtr->fullFitLines;
+
+                    updateScroller(lPtr);
+                }
+                break;
+            }
+
+            if (event->xbutton.button == WINGsConfiguration.mouseWheelUp) {
+                /* Wheel up */
+                if (lPtr->topItem > 0) {
+                    int decr = lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
+                    lPtr->topItem -= decr;
+
+                    if (lPtr->topItem < 0)
+                        lPtr->topItem = 0;
+
+                    updateScroller(lPtr);
+                }
+                break;
+            }
+#endif
+
+            tmp = getItemIndexAt(lPtr, event->xbutton.y);
 	    lPtr->flags.buttonPressed = 1;
 
 	    if (tmp >= 0) {

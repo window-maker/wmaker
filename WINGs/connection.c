@@ -386,7 +386,7 @@ createConnectionWithSocket(int sock, Bool closeOnRelease) /*FOLD00*/
 
     return cPtr;
 }
-
+ /*FOLD00*/
 
 #if 0
 WMConnection*
@@ -425,7 +425,7 @@ WMCreateConnectionWithSocket(int sock, Bool closeOnRelease) /*FOLD00*/
     return cPtr;
 }
 #endif
-
+ /*FOLD00*/
 
 /*
  * host     is the name on which we want to listen for incoming connections,
@@ -720,7 +720,7 @@ WMGetConnectionService(WMConnection *cPtr) /*FOLD00*/
 
 
 char*
-WMGetConnectionProtocol(WMConnection *cPtr)
+WMGetConnectionProtocol(WMConnection *cPtr) /*FOLD00*/
 {
     return cPtr->protocol;
 }
@@ -741,7 +741,7 @@ WMGetConnectionState(WMConnection *cPtr) /*FOLD00*/
 
 
 WMConnectionTimeoutState
-WMGetConnectionTimeoutState(WMConnection *cPtr)
+WMGetConnectionTimeoutState(WMConnection *cPtr) /*FOLD00*/
 {
     return cPtr->timeoutState;
 }
@@ -840,7 +840,7 @@ WMSendConnectionData(WMConnection *cPtr, WMData *data) /*FOLD00*/
 
     return totalTransfer;
 }
-
+ /*FOLD00*/
 
 /*
  * WMGetConnectionAvailableData(connection):
@@ -914,7 +914,7 @@ WMSetConnectionDelegate(WMConnection *cPtr, ConnectionDelegate *delegate) /*FOLD
         cPtr->handler.exception = WMAddInputHandler(cPtr->sock, WIExceptMask,
                                                     inputHandler, cPtr);
 }
-
+ /*FOLD00*/
 
 #if 0
 Bool
@@ -984,7 +984,7 @@ WMSetConnectionFlags(WMConnection *cPtr, unsigned int flags) /*FOLD00*/
 
 
 void
-WMSetConnectionDefaultTimeout(unsigned int timeout)
+WMSetConnectionDefaultTimeout(unsigned int timeout) /*FOLD00*/
 {
     if (timeout == 0) {
         DefaultTimeout = DEF_TIMEOUT;
@@ -995,7 +995,7 @@ WMSetConnectionDefaultTimeout(unsigned int timeout)
 
 
 void
-WMSetConnectionOpenTimeout(unsigned int timeout)
+WMSetConnectionOpenTimeout(unsigned int timeout) /*FOLD00*/
 {
     if (timeout == 0) {
         OpenTimeout = DefaultTimeout;
