@@ -16,6 +16,9 @@ Changes since wmaker 0.64.0:
 - better and more robust handling of events (timer, idle, input, X) in
   WMMaskEvent(). Also fixed a bug where input and timer events were not
   treated for undefined periods of time under some circumstances.
+- fixed secure textfields not to allow text selection, to avoid compromising
+  sensitive information by pasting it to a terminal.
+
 
 changes since wmaker 0.63.1:
 ............................

@@ -64,9 +64,9 @@ typedef struct W_TextField {
 	unsigned int secure:1;	       /* password entry style */
 
 	unsigned int pointerGrabbed:1;
-	
+
 	unsigned int ownsSelection:1;
-	
+
 	unsigned int waitingSelection:1; /* requested selection, but
 					  * didnt get yet */
 
@@ -1255,32 +1255,30 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
         }
 	break;
     }
-    
-    
+
     if (relay) {
 	WMRelayToNextResponder(W_VIEW(tPtr), event);
 	return;
     }
-    
 
-    if (!cancelSelection) {
-    	if (tPtr->selection.count != tPtr->cursorPosition - tPtr->selection.position) {
-	    
+    /* Do not allow text selection in secure text fields */
+    if (cancelSelection || tPtr->flags.secure) {
+        lostHandler(tPtr->view, XA_PRIMARY, NULL);
+
+        if (tPtr->selection.count) {
+            tPtr->selection.count = 0;
+            refresh = 1;
+        }
+        tPtr->selection.position = tPtr->cursorPosition;
+    } else {
+        if (tPtr->selection.count != tPtr->cursorPosition - tPtr->selection.position) {
+
             tPtr->selection.count = tPtr->cursorPosition - tPtr->selection.position;
 
-	    WMPostNotificationName("_lostOwnership", NULL, tPtr);
+            WMPostNotificationName("_lostOwnership", NULL, tPtr);
 
             refresh = 1;
         }
-    } else {
-	
-	lostHandler(tPtr->view, XA_PRIMARY, NULL);
-	
-    	if (tPtr->selection.count) {
-    	    tPtr->selection.count = 0;
-            refresh = 1;
-	}
-    	tPtr->selection.position = tPtr->cursorPosition;
     }
 
     /*printf("(%d,%d)\n", tPtr->selection.position, tPtr->selection.count);*/
@@ -1426,9 +1424,14 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 
 	    tPtr->cursorPosition = 
 		pointToCursorPosition(tPtr, event->xmotion.x);
-	    
-	    tPtr->selection.count = tPtr->cursorPosition - tPtr->selection.position;
-	    
+
+            /* Do not allow text selection in secure textfields */
+            if (tPtr->flags.secure) {
+                tPtr->selection.position = tPtr->cursorPosition;
+            }
+
+            tPtr->selection.count = tPtr->cursorPosition - tPtr->selection.position;
+
 	    if (tPtr->selection.count != 0) {
 		if (!tPtr->flags.ownsSelection) {
 		    WMCreateSelectionHandler(tPtr->view,
@@ -1464,12 +1467,11 @@ handleTextFieldActionEvents(XEvent *event, void *data)
             textWidth = WMWidthOfString(tPtr->font, tPtr->text, tPtr->textLen);
             if (tPtr->flags.enabled && !tPtr->flags.focused) {
                 WMSetFocusToWidget(tPtr);
-		
             } else if (tPtr->flags.focused) {
 		tPtr->selection.position = tPtr->cursorPosition;
                 tPtr->selection.count = 0;
             }
-            if(textWidth < tPtr->usableWidth) {
+            if (textWidth < tPtr->usableWidth) {
                 tPtr->cursorPosition = pointToCursorPosition(tPtr, 
 				     event->xbutton.x - tPtr->usableWidth
                                      + textWidth);
@@ -1544,8 +1546,9 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 
 	move = 0;
 		
-	if (event->xbutton.time - lastButtonReleasedEvent
-	    <= WINGsConfiguration.doubleClickDelay) {
+        if (!tPtr->flags.secure &&
+            event->xbutton.time - lastButtonReleasedEvent
+            <= WINGsConfiguration.doubleClickDelay) {
 	    tPtr->selection.position = 0;
 	    tPtr->selection.count = tPtr->textLen;
 	    paintTextField(tPtr);
