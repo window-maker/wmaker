@@ -800,25 +800,28 @@ paintEntry(WMenu *menu, int index, int selected)
     if (scr->drawstring_func[W_STRING_MTEXT]) {
         Pixmap tmp_bg;
         void **p;
+        int _y;
+        
+        _y = (wPreferences.menu_style == MS_NORMAL) ? 0 : y;
         tmp_bg = XCreatePixmap(dpy, win, w, menu->entry_height, DefaultDepth(dpy, DefaultScreen(dpy)));
         if (selected) {
             if (menu->flags.brother) {
                 XCopyArea(dpy, menu->brother->menu_texture_data, tmp_bg, textGC,
-                        0, y, w, menu->entry_height, 0, 0);
+                        0, _y, w, menu->entry_height, 0, 0);
             } else
                 XCopyArea(dpy, menu->menu_texture_data, tmp_bg, textGC,
-                        0, y, w, menu->entry_height, 0, 0);
+                        0, _y, w, menu->entry_height, 0, 0);
 
             XSetForeground(dpy, scr->select_menu_gc, scr->select_pixel);
             XFillRectangle(dpy, tmp_bg, scr->select_menu_gc, 1, 1, w-2, h-3);
         } else { 
             if (menu->flags.brother) {
                 XCopyArea(dpy, menu->brother->menu_texture_data, tmp_bg, textGC,
-                        0, y, w, menu->entry_height, 0, 0);
+                        0, _y, w, menu->entry_height, 0, 0);
             }
             else
                 XCopyArea(dpy, menu->menu_texture_data, tmp_bg, textGC,
-                        0, y, w, menu->entry_height, 0, 0);
+                        0, _y, w, menu->entry_height, 0, 0);
         }
 
         p = wPluginPackData(4,
