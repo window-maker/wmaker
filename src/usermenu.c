@@ -355,7 +355,7 @@ wUserMenuGet(WScreen *scr, WWindow *wwin)
     char buffer[100];
     char *path = NULL;
     char *tmp;
-    if ( wwin->wm_instance && wwin->wm_class ) {
+    if (wwin->wm_instance && wwin->wm_class) {
 	int len = strlen(wwin->wm_instance)+strlen(wwin->wm_class)+7;
         tmp=wmalloc(len);
         snprintf(tmp,len,"%s.%s.menu",wwin->wm_instance,wwin->wm_class);

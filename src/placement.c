@@ -141,22 +141,18 @@ PlaceIcon(WScreen *scr, int *x_ret, int *y_ret, int head)
     int isize = wPreferences.icon_size;
     int done = 0;
     WMBagIterator iter;
-    /*
-     * Find out screen boundaries.
-     */
-
-    /*
-     * Allows each head to have miniwindows
-     */
     WArea area = wGetUsableAreaForHead(scr, head, NULL, False);
-    WMRect rect = (WMRect){ area.x1, area.y1, area.x2-area.x1, area.y2-area.y1 };
 
-    sx1 = rect.pos.x;
-    sy1 = rect.pos.y;
-    sw = rect.size.width;
-    sh = rect.size.height;
-    sx2 = sx1 + sw;
-    sy2 = sy1 + sh;
+    /* Find out screen boundaries. */
+
+    /* Allows each head to have miniwindows */
+
+    sx1 = area.x1;
+    sy1 = area.y1;
+    sx2 = area.x2;
+    sy2 = area.y2;
+    sw = sx2-sx1;
+    sh = sy2-sy1;
 
 #if 0
     if (scr->dock) {
@@ -383,7 +379,7 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
             sum_isect = calcSumOfCoveredAreas(wwin, test_x, test_y,
                                               width, height);
 
-	    if ( sum_isect < min_isect ) {
+	    if (sum_isect < min_isect) {
 	        min_isect = sum_isect;
 	        min_isect_x = test_x;
 	        min_isect_y = test_y;
@@ -411,7 +407,7 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
             sum_isect = calcSumOfCoveredAreas(wwin, test_x, test_y,
                                               width, height);
 
-	    if ( sum_isect < min_isect ) {
+	    if (sum_isect < min_isect) {
 	        min_isect = sum_isect;
 	        min_isect_x = test_x;
 	        min_isect_y = test_y;

@@ -1726,8 +1726,8 @@ handleMotionNotify(XEvent *event)
     WScreen *scr = wScreenForRootWindow(event->xmotion.root);
 
     if (wPreferences.scrollable_menus) {
-	WMPoint p = { event->xmotion.x_root, event->xmotion.y_root };
-	WMRect rect = wGetRectForHead(scr, wGetHeadForPoint(scr, p));
+        WMPoint p = wmkpoint(event->xmotion.x_root, event->xmotion.y_root);
+        WMRect rect = wGetRectForHead(scr, wGetHeadForPoint(scr, p));
 
 	if (scr->flags.jump_back_pending ||
 	    p.x <= (rect.pos.x + 1) ||

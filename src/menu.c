@@ -1746,9 +1746,10 @@ isPointNearBoder(WMenu *menu, int x, int y)
     int menuX2 = menu->frame_x + MENUW(menu);
     int menuY2 = menu->frame_y + MENUH(menu);
     int flag = 0;
-    /* XXX: handle screen joins proper !! */
-    WMRect rect = wGetRectForHead(menu->frame->screen_ptr,
-                                  wGetHeadForPoint(menu->frame->screen_ptr, (WMPoint){ x, y}));
+    int head = wGetHeadForPoint(menu->frame->screen_ptr, wmkpoint(x, y));
+    WMRect rect = wGetRectForHead(menu->frame->screen_ptr, head);
+
+    /* XXX: handle screen joins properly !! */
 
     if (x >= menuX1 && x <= menuX2 &&
         (y < rect.pos.y + MENU_SCROLL_BORDER ||
@@ -1764,17 +1765,16 @@ isPointNearBoder(WMenu *menu, int x, int y)
 
 
 typedef struct _delay {
-    WWindow *wwin;
     WMenu *menu;
-    int ox,oy;
+    int ox, oy;
 } _delay;
 
 
 static void
-_leaving(_delay *dl)
+leaving(_delay *dl)
 {
     wMenuMove(dl->menu, dl->ox, dl->oy, True);
-    dl->menu->jump_back=NULL;
+    dl->menu->jump_back = NULL;
     dl->menu->menu->screen_ptr->flags.jump_back_pending = 0;
     wfree(dl);
 }
@@ -1832,7 +1832,7 @@ wMenuScroll(WMenu *menu, XEvent *event)
                 break;
             }
 
-            rect = wGetRectForHead(scr, wGetHeadForPoint(scr, (WMPoint){ x, y }));
+            rect = wGetRectForHead(scr, wGetHeadForPoint(scr, wmkpoint(x, y)));
             on_x_edge = x <= rect.pos.x + 1 || x >= rect.pos.x + rect.size.width - 2;
             on_y_edge = y <= rect.pos.y + 1 || y >= rect.pos.y + rect.size.height - 2;
             on_border = on_x_edge || on_y_edge;
@@ -1884,15 +1884,15 @@ wMenuScroll(WMenu *menu, XEvent *event)
     if (jump_back) {
         _delay *delayer;
         if (!omenu->jump_back) {
-            delayer=wmalloc(sizeof(_delay));
+            delayer = wmalloc(sizeof(_delay));
             delayer->menu=omenu;
             delayer->ox=old_frame_x;
             delayer->oy=old_frame_y;
-            omenu->jump_back=delayer;
+            omenu->jump_back = delayer;
             scr->flags.jump_back_pending = 1;
         }
         else delayer = omenu->jump_back;
-        WMAddTimerHandler(MENU_JUMP_BACK_DELAY,(WMCallback*)_leaving, delayer);
+        WMAddTimerHandler(MENU_JUMP_BACK_DELAY,(WMCallback*)leaving, delayer);
     }
 }
 

@@ -1401,7 +1401,7 @@ wKWMCheckRootHintChange(WScreen *scr, XPropertyEvent *event)
 		     }
 		 }
 #else
-		 if ( i == scr->current_workspace % MAX_WORKSPACES)
+		 if (i == scr->current_workspace % MAX_WORKSPACES)
 		     wScreenUpdateUsableArea(scr);
 #endif
 
@@ -1630,13 +1630,13 @@ wKWMGetUsableArea(WScreen *scr, int head, WArea *area)
 
     ok = getAreaHint(scr->root_win, _XA_KWM_WINDOW_REGION_[region], area);
 
-    if ( ok) {
+    if (ok) {
 	WMRect rect = wGetRectForHead(scr, head);
 
-	area->x1 = WMAX( area->x1, rect.pos.x);
-	area->x2 = WMIN( area->x2, rect.pos.x + rect.size.width);
-	area->y1 = WMAX( area->y1, rect.pos.y);
-	area->y2 = WMIN( area->y2, rect.pos.y + rect.size.height);
+	area->x1 = WMAX(area->x1, rect.pos.x);
+	area->x2 = WMIN(area->x2, rect.pos.x + rect.size.width);
+	area->y1 = WMAX(area->y1, rect.pos.y);
+	area->y2 = WMIN(area->y2, rect.pos.y + rect.size.height);
     }
 
     return ok;

@@ -1615,7 +1615,9 @@ WMReadPropListFromFile(char *file)
     pldata->lineNumber = 1;
 
     if (fread(pldata->ptr, length, 1, f) != 1) {
-        wsyserror(_("error reading from file '%s'"), file);
+        if (ferror(f)) {
+            wsyserror(_("error reading from file '%s'"), file);
+        }
         plist = NULL;
         goto cleanup;
     }

@@ -338,7 +338,18 @@ wmksize(unsigned int width, unsigned int height)
 }
 
 
+WMRect
+wmkrect(int x, int y, unsigned int width, unsigned int height)
+{
+    WMRect rect;
 
+    rect.pos.x = x;
+    rect.pos.y = y;
+    rect.size.width = width;
+    rect.size.height = height;
+
+    return rect;
+}
 
 
 

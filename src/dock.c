@@ -2646,7 +2646,7 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
 static int
 onScreen(WScreen *scr, int x, int y, int sx, int ex, int sy, int ey)
 {
-    WMRect rect = {x, y, ICON_SIZE, ICON_SIZE};
+    WMRect rect = wmkrect(x, y, ICON_SIZE, ICON_SIZE);
     int flags;
 
     wGetRectPlacementInfo(scr, rect, &flags);

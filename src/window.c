@@ -773,7 +773,7 @@ wManageWindow(WScreen *scr, Window window)
     /* get geometry stuff */
     wClientGetNormalHints(wwin, &wattribs, True, &x, &y, &width, &height);
 
-/*    printf( "wManageWindow: %d %d %d %d\n", x, y, width, height);*/
+/*    printf("wManageWindow: %d %d %d %d\n", x, y, width, height);*/
 
     /* get colormap windows */
     GetColormapWindows(wwin);
@@ -1152,11 +1152,11 @@ wManageWindow(WScreen *scr, Window window)
 	     * them. -alfredo
 	     */
 #if 0
-	    printf( "xinerama PPosition: x: %d %d\n", x, (scr->scr_width - width)/2);
-	    printf( "xinerama PPosition: y: %d %d\n", y, (scr->scr_height - height)/2);
+	    printf("xinerama PPosition: x: %d %d\n", x, (scr->scr_width - width)/2);
+	    printf("xinerama PPosition: y: %d %d\n", y, (scr->scr_height - height)/2);
 
-	    if ( (unsigned)(x + (width - scr->scr_width)/2 + 10) < 20 &&
-		 (unsigned)(y + (height - scr->scr_height)/2 + 10) < 20) {
+	    if ((unsigned)(x + (width - scr->scr_width)/2 + 10) < 20 &&
+                (unsigned)(y + (height - scr->scr_height)/2 + 10) < 20) {
 
 		reposition = 1;
 
@@ -3005,7 +3005,8 @@ wWindowDeleteSavedStatesForPID(pid_t pid)
 void
 wWindowSetOmnipresent(WWindow *wwin, Bool flag)
 {
-    if ( wwin->flags.omnipresent == flag) return;
+    if (wwin->flags.omnipresent == flag)
+        return;
 
     wwin->flags.omnipresent = flag;
     WMPostNotificationName(WMNChangedState, wwin, "omnipresent");

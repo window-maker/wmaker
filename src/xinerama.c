@@ -135,17 +135,17 @@ wGetRectPlacementInfo(WScreen *scr, WMRect rect, int *flags)
 
 	totalArea += a;
 	if (a > area) {
-	    if ( best != -1)
+	    if (best != -1)
 		*flags |= XFLAG_MULTIPLE;
 	    area = a;
 	    best = i;
 	}
     }
 
-    if ( best == -1) {
+    if (best == -1) {
 	*flags |= XFLAG_DEAD;
 	best = wGetHeadForPointerLocation(scr);
-    } else if ( totalArea != rw*rh) 
+    } else if (totalArea != rw*rh)
 	*flags |= XFLAG_PARTIAL;
 
     return best;
@@ -242,7 +242,7 @@ wGetHeadForPoint(WScreen *scr, WMPoint point, int *flags)
     int i;	
 
     // paranoia
-    if ( flags == NULL) {
+    if (flags == NULL) {
 	static int tmp;
 	flags = &tmp;
     }

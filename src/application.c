@@ -88,7 +88,7 @@ makeMainWindow(WScreen *scr, Window window)
 			   &wwin->user_flags, &wwin->defined_user_flags, True);
     
     XSelectInput(dpy, window, attr.your_event_mask | PropertyChangeMask
-		 | StructureNotifyMask );
+		 | StructureNotifyMask);
     return wwin;
 }
 

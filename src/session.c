@@ -289,7 +289,7 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
                 for(i=0; i<scr->workspace_count; i++)
                     if(scr->workspaces[i]->clip == wapp->app_icon->dock)
                         break;
-                assert( i < scr->workspace_count);
+                assert(i < scr->workspace_count);
                 /*n = i+1;*/
                 name = scr->workspaces[i]->name;
             }

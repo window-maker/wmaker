@@ -300,7 +300,7 @@ wAppMenuMap(WMenu *menu, WWindow *wwin)
 	int x, min;
 
         min = 20; /* Keep at least 20 pixels visible */
-	if( wwin->frame_x > min ) {
+	if (wwin->frame_x > min) {
 	    x = wwin->frame_x - menu->frame->core->width;
 	}
 	else {

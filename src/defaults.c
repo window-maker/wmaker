@@ -3195,7 +3195,7 @@ setIconTitleBack(WScreen *scr, WDefaultEntry *entry, XColor *color, void *foo)
     if (scr->icon_title_texture) {
         wTextureDestroy(scr, (WTexture*)scr->icon_title_texture);
     }
-    // ?? why is this necessary? color was already parsed and alloc'ed
+    /* // ?? why is this necessary? color was already parsed and alloc'ed */
     XQueryColor (dpy, scr->w_colormap, color);
     scr->icon_title_texture = wTextureMakeSolid(scr, color);
 
@@ -3464,6 +3464,7 @@ setKeyGrab(WScreen *scr, WDefaultEntry *entry, WShortKey *shortcut, long index)
 static int
 setIconPosition(WScreen *scr, WDefaultEntry *entry, void *bar, void *foo)
 {
+    wScreenUpdateUsableArea(scr);
     wArrangeIcons(scr, True);
 
     return 0;

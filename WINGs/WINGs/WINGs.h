@@ -625,6 +625,8 @@ WMPoint wmkpoint(int x, int y);
 
 WMSize wmksize(unsigned int width, unsigned int height);
 
+WMRect wmkrect(int x, int y, unsigned int width, unsigned int height);
+
 #ifdef ANSI_C_DOESNT_LIKE_IT_THIS_WAY
 #define wmksize(width, height) (WMSize){(width), (height)}
 #define wmkpoint(x, y)         (WMPoint){(x), (y)}

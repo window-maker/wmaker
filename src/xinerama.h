@@ -51,6 +51,8 @@ WArea wGetUsableAreaForHead(WScreen *scr, int head, WArea *totalAreaPtr, Bool no
 
 WMPoint wGetPointToCenterRectInHead(WScreen *scr, int head, int width, int height);
 
+Bool wWindowTouchesHead(WWindow *wwin, int head);
+
 #endif
 
 
