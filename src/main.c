@@ -302,7 +302,7 @@ execInitScript()
 	}
 #if 0
 	if (fork()==0) {
-	    execl("/bin/sh", "/bin/sh", "-c",file, NULL);
+	    execl("/bin/sh", "/bin/sh", "-c", file, NULL);
 	    wsyserror(_("%s:could not execute initialization script"), file);
 	    exit(1);
 	}

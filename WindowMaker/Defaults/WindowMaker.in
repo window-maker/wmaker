@@ -1,7 +1,7 @@
 {
   WindozeCycling = YES;
   PopupSwitchMenu = NO;
-  AlternativeMenuStyle = NO;
+  MenuStyle = normal;
   DisableMiniwindows = NO;
   OpenTransientOnOwnerWorkspace = NO;
   EdgeResistance = 30;

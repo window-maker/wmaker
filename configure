@@ -751,7 +751,7 @@ fi
 
 PACKAGE=WindowMaker
 
-VERSION=0.52.0
+VERSION=0.53.0
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
@@ -5811,6 +5811,9 @@ echo
 echo "JPEG support will not be included because the JPEG library is"
 echo "not installed correctly or was not found. Background images"
 echo "from themes will not display as they usually are JPEG files."
+echo
+echo "To fix, download and install the jpeg library and/or make sure you"
+echo "installed all jpeg related packages, like jpeg-devel."
 echo
 echo "WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING"
 fi

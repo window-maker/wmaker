@@ -193,8 +193,8 @@
 
 /*
  * define SHADOW_RESIZEBAR if you want a resizebar with shadows like in
- * NextStep 3.x ??, instead of the default Openstep look. NEXTSTEP 3.3
- * also does not have these shadows.
+ * AfterStep, instead of the default Openstep look.
+ * NEXTSTEP 3.3 also does not have these shadows.
  */
 #undef SHADOW_RESIZEBAR
 
