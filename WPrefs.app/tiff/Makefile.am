@@ -1,4 +1,4 @@
-tiffdatadir = $(wprefsdir)/tiff
+tiffdatadir = $(wprefs_datadir)/tiff
 
 EXTRA_DIST = \
 	advancetonewworkspace.tiff \

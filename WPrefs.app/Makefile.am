@@ -2,11 +2,11 @@ SUBDIRS = xpm tiff po
 
 AUTOMAKE_OPTIONS = no-dependencies
 
-wpexecbindir = @wprefsdir@
+wpexecbindir = @wprefs_bindir@
 
 wpexecbin_PROGRAMS = WPrefs 
 
-wpdatadir = @wprefsdir@
+wpdatadir = @wprefs_datadir@
 
 wpdata_DATA = WPrefs.tiff WPrefs.xpm
 

@@ -2,6 +2,18 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+--- 0.92.0
+
+GNUstep Installation Directory
+------------------------------
+
+WPrefs is now installed in /usr/local/bin and /usr/local/share by default.
+If you use GNUstep and want it to install in /usr/GNUstep/Applications,
+you may specify --with-gnustepdir=/usr/GNUstep
+If the GNUSTEP_LOCAL_ROOT environment variable is defined when configure is
+executed, it will be used (and you don't need to use --with-gnustepdir)
+
+
 --- 0.91.1
 
 To disable the panel shown during Alt-tabbing, you may put the following in

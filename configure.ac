@@ -15,23 +15,9 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.91.0)
+AM_INIT_AUTOMAKE(WindowMaker, 0.92.0)
 
 AC_PROG_LIBTOOL
-
-dnl # by Marcelo Magallon <mmagallo@efis.ucr.ac.cr>
-dnl # Turn around -rpath problem with libtool 1.0c
-dnl # This define should be improbable enough to not conflict with anything
-dnl case ${host} in
-dnl   *-pc-linux-gnu)
-dnl     AC_MSG_RESULT([Fixing libtool for -rpath problems.])
-dnl     sed < libtool > libtool-2 \
-dnl     's/^hardcode_libdir_flag_spec.*$/hardcode_libdir_flag_spec=" -D__LIBTOOL_IS_A_FOOL__ "/'
-dnl     mv libtool-2 libtool
-dnl     chmod 755 libtool
-dnl   ;;
-dnl esac
-
 
 AM_CONFIG_HEADER(src/config.h)
 
@@ -845,22 +831,26 @@ dnl ==============================================
 appspath=""
 
 AC_ARG_WITH(appspath,
-[  --with-appspath=PATH    specify the directory for GNUstep applications], appspath=$withval )
+[  --with-gnustepdir=PATH    specify the directory for GNUstep applications], appspath=$withval )
 
-if test "x$appspath" = "x"; then
-    gnustepdir='${prefix}/GNUstep'
+if test "$appspath$GNUSTEP_LOCAL_ROOT" = ""; then
+    wprefs_datadir="${datadir}/WPrefs"
+    wprefs_bindir="${bindir}"
+else
+    gnustepdir=$appspath
 
     if test "x$GNUSTEP_LOCAL_ROOT" != "x" ; then
 	gnustepdir=`echo "$GNUSTEP_LOCAL_ROOT" | sed -e "s|^${prefix}|prefix|"`
 	gnustepdir=`echo $gnustepdir | sed -e 's|^prefix|${prefix}|'`
     fi
 
-    with_appspath=$gnustepdir/Applications
+    xx=$gnustepdir/Applications
+    wprefs_datadir=$xx/WPrefs.app
+    wprefs_bindir=$xx/WPrefs.app
 fi
 
-wprefsdir=$with_appspath/WPrefs.app
-
-AC_SUBST(wprefsdir)
+AC_SUBST(wprefs_datadir)
+AC_SUBST(wprefs_bindir)
 
 
 dnl Enable User Defined Menu thing
@@ -1094,7 +1084,7 @@ echo "Window Maker was configured as follows:"
 echo
 echo "Installation path prefix            : $prefix"
 echo "Installation path for binaries      : $_bindir"
-echo "Installation path for WPrefs.app    : $with_appspath" | sed -e 's|\${prefix}|'"$prefix|"
+echo "Installation path for WPrefs.app    : $wprefs_bindir" | sed -e 's|\${exec_prefix}|'"$exec_prefix|"  -e 's|\${prefix}|'"$prefix|"
 echo "Supported graphic format libraries  : $supported_gfx"
 echo "Use assembly routines for wrlib     : $asm_support"
 echo "Use inline MMX(tm) x86 assembly     : $mmx_support"

@@ -1,4 +1,4 @@
-xpmdatadir = $(wprefsdir)/xpm
+xpmdatadir = $(wprefs_datadir)/xpm
 
 
 EXTRA_DIST = \

@@ -1,3 +1,7 @@
+
+- Removed --with-appsdir option and replaced it with --with-gnustepdir. Also,
+  default installation path (for non GNUstep users) is now $(prefix)/bin
+
 Changes since version 0.91.0:
 .............................
 - fixed crash with info panel and alt-tabbing
