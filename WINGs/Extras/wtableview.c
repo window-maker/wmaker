@@ -1079,7 +1079,7 @@ void WMReloadTableView(WMTableView *table)
 	
 	if (rows != table->rows) {
 	    table->rows = rows;
-	    handleResize(table->delegate, table->view);
+	    handleResize(table->view->delegate, table->view);
 	} else {
 	    repaintTable(table);
 	}
@@ -1229,5 +1229,5 @@ static void rearrangeHeader(WMTableView *table)
 
     table->tableWidth = width + 1;
     
-    handleResize(table->delegate, table->view);
+    handleResize(table->view->delegate, table->view);
 }
