@@ -57,6 +57,8 @@ void OpenRootMenu(WScreen *scr, int x, int y, int keyboard);
 
 void OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard);
 
+void InitializeSwitchMenu(void);
+
 #endif /* !LITE */
 
 

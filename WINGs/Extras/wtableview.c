@@ -846,27 +846,28 @@ static void drawGrid(WMTableView *table, WMRect rect)
 static WMRange columnsInRect(WMTableView *table, WMRect rect)
 {
     WMTableColumn *column;
-    int width;
-    int i , j;
+    int pos;
+    int i, found;
     int totalColumns = WMGetArrayItemCount(table->columns);
     WMRange range;
     
-    j = 0;
-    width = 0;
+    pos = 0;
+    found = 0;
     for (i = 0; i < totalColumns; i++) {
 	column = WMGetFromArray(table->columns, i);
-	if (j == 0) {
-	    if (width <= rect.pos.x && width + column->width > rect.pos.x) {
-		range.position = i;
-		j = 1;
+	if (!found) {
+	    if (rect.pos.x >= pos && rect.pos.x < pos + column->width) {
+                range.position = i;
+                range.count = 1;
+                found = 1;
 	    }
 	} else {
+            if (pos > rect.pos.x + rect.size.width) {
+                break;
+            }
 	    range.count++;
-	    if (width > rect.pos.x + rect.size.width) {
-		break;
-	    }
 	}
-	width += column->width;
+	pos += column->width;
     }
     range.count = WMAX(1, WMIN(range.count, totalColumns - range.position));
     return range;

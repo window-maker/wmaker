@@ -1,3 +1,11 @@
+Changes since version 0.80.1:
+.............................
+
+- Some updates to WINGs WMConnection. See WINGs/ChangeLog for details.
+- Fixed empty window list menu, if the window list menu was launched through
+  the root menu ("Marc-Christian Petersen" <m.c.p@wolk-project.de>)
+
+
 Changes since version 0.80.0:
 .............................
 

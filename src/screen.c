@@ -1017,7 +1017,7 @@ wScreenRestoreState(WScreen *scr)
     WMPropList *state;
     char *path;
 
-    
+
 #ifndef LITE
     OpenRootMenu(scr, -10000, -10000, False);
     wMenuUnmap(scr->root_menu);

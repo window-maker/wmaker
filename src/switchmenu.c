@@ -46,6 +46,9 @@ extern WPreferences wPreferences;
 extern Time LastTimestamp;
 
 
+static int initialized = 0;
+
+
 static void observer(void *self, WMNotification *notif);
 static void wsobserver(void *self, WMNotification *notif);
 
@@ -84,7 +87,28 @@ focusWindow(WMenu *menu, WMenuEntry *entry)
 	wWindowConfigure(wwin, x, y, wwin->client.width, wwin->client.height);
     }
 }
- 
+
+
+void
+InitializeSwitchMenu()
+{
+    if (!initialized) {
+        initialized = 1;
+
+        WMAddNotificationObserver(observer, NULL, WMNManaged, NULL);
+        WMAddNotificationObserver(observer, NULL, WMNUnmanaged, NULL);
+        WMAddNotificationObserver(observer, NULL, WMNChangedWorkspace, NULL);
+        WMAddNotificationObserver(observer, NULL, WMNChangedState, NULL);
+        WMAddNotificationObserver(observer, NULL, WMNChangedFocus, NULL);
+        WMAddNotificationObserver(observer, NULL, WMNChangedStacking, NULL);
+        WMAddNotificationObserver(observer, NULL, WMNChangedName, NULL);
+
+        WMAddNotificationObserver(wsobserver, NULL, WMNWorkspaceChanged, NULL);
+        WMAddNotificationObserver(wsobserver, NULL, WMNWorkspaceNameChanged, NULL);
+    }
+}
+
+
 /*
  *
  * Open switch menu 
@@ -95,22 +119,6 @@ OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard)
 {
     WMenu *switchmenu = scr->switch_menu;
     WWindow *wwin;
-    static int initialized = 0;
-    
-    if (!initialized) {
-	initialized = 1;
-
-	WMAddNotificationObserver(observer, NULL, WMNManaged, NULL);
-	WMAddNotificationObserver(observer, NULL, WMNUnmanaged, NULL);
-	WMAddNotificationObserver(observer, NULL, WMNChangedWorkspace, NULL);
-	WMAddNotificationObserver(observer, NULL, WMNChangedState, NULL);
-	WMAddNotificationObserver(observer, NULL, WMNChangedFocus, NULL);
-	WMAddNotificationObserver(observer, NULL, WMNChangedStacking, NULL);
-	WMAddNotificationObserver(observer, NULL, WMNChangedName, NULL);
-
-	WMAddNotificationObserver(wsobserver, NULL, WMNWorkspaceChanged, NULL);
-	WMAddNotificationObserver(wsobserver, NULL, WMNWorkspaceNameChanged, NULL);	
-    }
 
     if (switchmenu) {
 	if (switchmenu->flags.mapped) {
@@ -400,24 +408,27 @@ UpdateSwitchMenuWorkspace(WScreen *scr, int workspace)
 }
 
 
-static void observer(void *self, WMNotification *notif)
+static void
+observer(void *self, WMNotification *notif)
 {
     WWindow *wwin = (WWindow*)WMGetNotificationObject(notif);
     const char *name = WMGetNotificationName(notif);
     void *data = WMGetNotificationClientData(notif);
 
-    if (strcmp(name, WMNManaged) == 0 && wwin)
-	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_ADD);
-    else if (strcmp(name, WMNUnmanaged) == 0 && wwin)
-	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_REMOVE);
-    else if (strcmp(name, WMNChangedWorkspace) == 0 && wwin)
-	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_WORKSPACE);
-    else if (strcmp(name, WMNChangedFocus) == 0 && wwin)
-	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
-    else if (strcmp(name, WMNChangedName) == 0 && wwin)
-	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE);
-    else if (strcmp(name, WMNChangedState) == 0 && wwin) {
+    if (!wwin)
+        return;
 
+    if (strcmp(name, WMNManaged) == 0)
+	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_ADD);
+    else if (strcmp(name, WMNUnmanaged) == 0)
+	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_REMOVE);
+    else if (strcmp(name, WMNChangedWorkspace) == 0)
+	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_WORKSPACE);
+    else if (strcmp(name, WMNChangedFocus) == 0)
+	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
+    else if (strcmp(name, WMNChangedName) == 0)
+	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE);
+    else if (strcmp(name, WMNChangedState) == 0) {
 	if (strcmp((char*)data, "omnipresent") == 0) {
 	    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_WORKSPACE);
 	} else {
@@ -427,7 +438,8 @@ static void observer(void *self, WMNotification *notif)
 }
 
 
-static void wsobserver(void *self, WMNotification *notif)
+static void
+wsobserver(void *self, WMNotification *notif)
 {
     WScreen *scr = (WScreen*)WMGetNotificationObject(notif);
     const char *name = WMGetNotificationName(notif);
