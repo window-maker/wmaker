@@ -843,7 +843,7 @@ createPanel(_Panel *p)
     
     
     label = WMCreateLabel(panel->optionsF);
-    WMResizeWidget(label, width - 20, FRAME_HEIGHT - 50);
+    WMResizeWidget(label, width - 10, FRAME_HEIGHT - 50);
     WMMoveWidget(label, 10, 20);
     WMSetLabelText(label, 
 		   _("Instructions:\n\n"
