@@ -1255,6 +1255,8 @@ wDockDestroy(WDock *dock)
     free(dock->icon_array);
     if (dock->menu && dock->type!=WM_CLIP)
         wMenuDestroy(dock->menu, True);
+    if (dock->screen_ptr->last_dock == dock)
+        dock->screen_ptr->last_dock = NULL;
     free(dock);
 }
 
