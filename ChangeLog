@@ -24,6 +24,9 @@ Changes since version 0.80.1:
   <sato@cvs-net.co.jp>)
 - Added Belarusian translation (Ihar Viarheichyk <iverg@mail.ru>)
 - Fixed wrlib to not try to load braindead images with 0x0 size
+- Removed double no-position-display when cycling position display types
+  with Shift key while moving windows.
+- Changed the default position display while moving a window to 'Center'.
 
 
 Changes since version 0.80.0:

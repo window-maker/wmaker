@@ -45,7 +45,6 @@
    Unfocusable = Yes; 
    DontSaveSession = Yes; 
   }; 
-
   bookmarks.Netscape = {NoAppIcon = YES;};
   xcalc = {AlwaysUserIcon = Yes;Icon = "HP-16C-48.xpm";};
   Netscape = {Icon = Netscape.xpm;};

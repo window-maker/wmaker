@@ -57,7 +57,7 @@
   AutoArrangeIcons = NO;
   AdvanceToNewWorkspace = NO;
   CycleWorkspaces = NO;
-  ResizeDisplay = line;
+  ResizeDisplay = center;
   MoveDisplay = floating;
   OpaqueMove = YES;
   IconPosition = "blh";

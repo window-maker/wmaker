@@ -169,8 +169,12 @@ cyclePositionDisplay(WWindow *wwin, int x, int y, int w, int h)
     wPreferences.move_display++;
     wPreferences.move_display %= NUM_DISPLAYS;
 
-    if (wPreferences.move_display == WDIS_NEW
-	|| wPreferences.move_display == WDIS_NONE) {
+    if (wPreferences.move_display == WDIS_NEW) {
+        wPreferences.move_display++;
+        wPreferences.move_display %= NUM_DISPLAYS;
+    }
+
+    if (wPreferences.move_display == WDIS_NONE) {
 	WMUnmapWidget(scr->gview);
     } else {
 	if (wPreferences.move_display == WDIS_CENTER) {
@@ -180,7 +184,7 @@ cyclePositionDisplay(WWindow *wwin, int x, int y, int w, int h)
 	    moveGeometryDisplayCentered(scr, 1, 1);
 	} else if (wPreferences.move_display == WDIS_FRAME_CENTER) {
 	    moveGeometryDisplayCentered(scr, x + w/2, y + h/2);
-	}
+        }
 	WMMapWidget(scr->gview);
     }
 }
