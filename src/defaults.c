@@ -2999,8 +2999,6 @@ setClipTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
     scr->clip_title_color[index] = WMCreateRGBColor(scr->wmscreen, color->red,
                                                     color->green, color->blue,
                                                     True);
-    wFreeColor(scr, color->pixel);
-
 #ifdef GRADIENT_CLIP_ARROW
     if (index == CLIP_NORMAL) {
         RImage *image;
@@ -3024,6 +3022,8 @@ setClipTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
     }
 #endif /* GRADIENT_CLIP_ARROW */
 
+    wFreeColor(scr, color->pixel);
+
     return REFRESH_ICON_TITLE_COLOR;
 }
 
@@ -3037,9 +3037,6 @@ setWTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
     scr->window_title_color[index] =
         WMCreateRGBColor(scr->wmscreen, color->red, color->green, color->blue,
                          True);
-
-    if (index == WS_UNFOCUSED)
-        XSetForeground(dpy, scr->info_text_gc, color->pixel);
 
     wFreeColor(scr, color->pixel);
 

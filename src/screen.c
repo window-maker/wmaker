@@ -351,22 +351,14 @@ allocGCs(WScreen *scr)
     scr->copy_gc = XCreateGC(dpy, scr->w_win, GCForeground|GCBackground
 			     |GCGraphicsExposures, &gcv);
 
-    /* clip title GC */
-    scr->clip_title_gc = XCreateGC(dpy, scr->w_win, GCGraphicsExposures, &gcv);
-
-    /* move/size display GC */
-    gcv.graphics_exposures = False;
-    gcm = GCGraphicsExposures;
-    scr->info_text_gc = XCreateGC(dpy, scr->w_win, gcm, &gcv);
-    
     /* misc drawing GC */
     gcv.graphics_exposures = False;
     gcm = GCGraphicsExposures;
     scr->draw_gc = XCreateGC(dpy, scr->w_win, gcm, &gcv);
 
     assert (scr->stipple_bitmap!=None);
-    
-	
+
+
     /* mono GC */
     scr->mono_gc = XCreateGC(dpy, scr->stipple_bitmap, gcm, &gcv);
 }

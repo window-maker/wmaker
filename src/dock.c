@@ -352,7 +352,7 @@ paintClipButtons(WAppIcon *clipIcon, Bool lpushed, Bool rpushed)
     int pt = CLIP_BUTTON_SIZE*ICON_SIZE/64;
     int tp = ICON_SIZE - pt;
     int as = pt - 15; /* 15 = 5+5+5 */
-    GC gc = scr->clip_title_gc;
+    GC gc = scr->draw_gc; /* maybe use WMColorGC() instead here? */
     WMColor *color;
 #ifdef GRADIENT_CLIP_ARROW
     Bool collapsed = clipIcon->dock->collapsed;

@@ -145,9 +145,9 @@ typedef struct _WScreen {
     WMColor *gray;
     WMColor *darkGray;
 
+    /* shortcuts for the pixels of the above colors. just for convenience */
     WMPixel black_pixel;
     WMPixel white_pixel;
-
     WMPixel light_pixel;
     WMPixel dark_pixel;
 
@@ -171,6 +171,7 @@ typedef struct _WScreen {
     WMColor *clip_title_color[2];      /* clip title text */
     WMColor *mtext_color;	       /* menu item text */
     WMColor *dtext_color;	       /* disabled menu item text */
+
     WMPixel line_pixel;
     WMPixel frame_border_pixel;	       /* frame border */
 
@@ -191,8 +192,7 @@ typedef struct _WScreen {
 
 
     WMColor *icon_title_color;	       /* icon title color */
-    GC clip_title_gc;		       /* clip title */
-    GC info_text_gc;		       /* for size/position display */
+
     GC icon_select_gc;
 
     GC frame_gc;		       /* gc for resize/move frame (root) */
