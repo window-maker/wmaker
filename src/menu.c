@@ -2727,8 +2727,6 @@ wMenuRestoreState(WScreen *scr)
     }
     restoreMenuRecurs(scr, menus, scr->root_menu, "");
 #endif /* !LITE */
-
-    PLRelease(skey);
 }
 
 
