@@ -1,7 +1,7 @@
 /* 
  *  Raster graphics library
  * 
- *  Copyright (c) 1997 Alfredo K. Kojima
+ *  Copyright (c) 1997-2000 Alfredo K. Kojima
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -19,23 +19,6 @@
  */
 
 #include <config.h>
-
-/* AIX requires this to be the first thing in the file.  */
-#ifdef __GNUC__
-# define alloca __builtin_alloca
-#else
-# if HAVE_ALLOCA_H
-#  include <alloca.h>
-# else
-#  ifdef _AIX
-#   pragma alloca
-#  else
-#   ifndef alloca /* predefined by HP cc +Olibcalls */
-char *alloca ();
-#   endif
-#  endif
-# endif
-#endif
 
 
 #include <stdlib.h>
@@ -57,84 +40,92 @@ int
 RBlurImage(RImage *image)
 {
     register int x, y;
-    register int w, tmp;
-    unsigned char *r, *g, *b, *a;
-    unsigned char *pr=NULL, *pg=NULL, *pb=NULL, *pa=NULL;
+    register int tmp;
+    unsigned char *ptr, *nptr;
+    unsigned char *pptr=NULL, *tmpp;
+    int ch = image->format == RRGBAFormat ? 4 : 3;
 
-#define MASK(c,pc,p)   ((*c+ *c + *(c-1) + *(c+1) + pc[p] + pc[p-1] + pc[p+1] \
-			+ *(c+w) + *(c+w-1) + *(c+w+1))/10)
-    
-    pr = (unsigned char*)alloca(image->width*sizeof(char));
-    if (!pr)
-      goto outofmem;
-
-    pg = (unsigned char*)alloca(image->width*sizeof(char));
-    if (!pg)
-      goto outofmem;
-
-    pb = (unsigned char*)alloca(image->width*sizeof(char));
-    if (!pb)
-      goto outofmem;
-
-    pa = (unsigned char*)alloca(image->width*sizeof(char));
-    if (!pa)
-      goto outofmem;
-
-    
-    r = image->data[0];
-    g = image->data[1];
-    b = image->data[2];
-    a = image->data[3];
-
-    
-    for (x=0; x<image->width; x++) {
-	pr[x] = *(r++);
-	pg[x] = *(g++);
-	pb[x] = *(b++);
+    pptr = malloc(image->width * ch);
+    if (!pptr) {
+	RErrorCode = RERR_NOMEMORY;
+	return False;
     }
 
-    w = image->width;
-    
-    for (y=1; y<image->height-1; y++) {
-	pr[w-1] = r[w-1];
-	pg[w-1] = g[w-1];
-	pb[w-1] = b[w-1];
+#define MASK(prev, cur, next, ch)\
+	(*(prev-ch) + *prev + *(prev+ch)\
+	+*(cur-ch) + 2 * *cur + *(cur+ch)\
+	+*(next-ch) + *next + *(next+ch)) / 10
 
-	pr[0] = *(r++);
-	pg[0] = *(g++);
-	pb[0] = *(b++);
-	
-	for (x=1; x<image->width-1; x++) {
-	    tmp = *r;
-	    *(r++) = MASK(r,pr,x);
-	    pr[x] = tmp;
-	    
-	    tmp = *g;
-	    *(g++) = MASK(g,pg,x);
-	    pg[x] = tmp;
-	    
-	    tmp = *b;
-	    *(b++) = MASK(b,pb,x);
-	    pb[x] = tmp;
+    memcpy(pptr, image->data, image->width * ch);
+    
+    ptr = image->data;
+    nptr = ptr + image->width*ch;
+    tmpp = pptr;
+    
+    if (ch == 3) {
+	ptr+=3;
+	nptr+=3;
+	pptr+=3;
+
+	for (y = 1; y < image->height-1; y++) {
+	    	    
+	    for (x = 1; x < image->width-1; x++) {
+		tmp = *ptr;
+		*ptr = MASK(pptr, ptr, nptr, 3);
+		*pptr = tmp;
+		ptr++; nptr++; pptr++;
+
+		tmp = *ptr;
+		*ptr = MASK(pptr, ptr, nptr, 3);
+		*pptr = tmp;
+		ptr++; nptr++; pptr++;
+
+		tmp = *ptr;
+		*ptr = MASK(pptr, ptr, nptr, 3);
+		*pptr = tmp;
+		ptr++; nptr++; pptr++;
+	    }
+	    pptr = tmpp;
+	    ptr+=6;
+	    nptr+=6;
+	    pptr+=6;
 	}
-	r++;
-	g++;
-	b++;
-    }
+    } else {
+	ptr+=4;
+	nptr+=4;
+	pptr+=4;
 
-#undef MASK
+	for (y = 1; y < image->height-1; y++) {
+	    for (x = 1; x < image->width-1; x++) {
+		tmp = *ptr;
+		*ptr = MASK(pptr, ptr, nptr, 4);
+		*pptr = tmp;
+		ptr++; nptr++; pptr++;
+
+		tmp = *ptr;
+		*ptr = MASK(pptr, ptr, nptr, 4);
+		*pptr = tmp;
+		ptr++; nptr++; pptr++;
+
+		tmp = *ptr;
+		*ptr = MASK(pptr, ptr, nptr, 4);
+		*pptr = tmp;
+		ptr++; nptr++; pptr++;
+		
+		tmp = *ptr;
+		*ptr = MASK(pptr, ptr, nptr, 4);
+		*pptr = tmp;
+		ptr++; nptr++; pptr++;
+	    }
+	    pptr = tmpp;
+	    ptr+=8;
+	    nptr+=8;
+	    pptr+=8;
+	}
+    }
     
-#ifdef C_ALLOCA
-    alloca(0);
-#endif
+
     return True;
-    
-    outofmem:
-    RErrorCode = RERR_NOMEMORY;
-#ifdef C_ALLOCA
-    alloca(0);
-#endif
-    return False;
 }
 
 
@@ -273,47 +264,45 @@ RSmoothImage(RImage *image)
 {
     register int x, y;
     register int v, w;
-    unsigned char *r, *g, *b, *a;
+    unsigned char *ptr;
+    int ch = image->format == RRGBAFormat;
 
-    r = image->data[0];
-    g = image->data[1];
-    b = image->data[2];
-    a = image->data[3];
-    
-    w = image->width;
+    ptr = image->data;
+
+
+    w = image->width*ch;
     for (y=0; y<image->height - 1; y++) {
 	for (x=0; x<image->width - 1; x++) {
-	    v = *r + 2 * *(r + 1) + 2 * *(r + w) + *(r + w + 1);
-	    *(r++) = v/6;
+	    v = *ptr + 2 * *(ptr + ch) + 2 * *(ptr + w) + *(ptr + w + ch);
+	    *ptr = v/6;
+	    v = *(ptr+1) + 2 * *(ptr+1 + ch) + 2 * *(ptr+1 + w) + *(ptr+1 + w + ch);
+	    *(ptr+1) = v/6;
+	    v = *ptr + 2 * *(ptr+2 + ch) + 2 * *(ptr+2 + w) + *(ptr+2 + w + ch);
+	    *(ptr+2) = v/6;
 	    
-	    v = *g + 2 * *(g + 1) + 2 * *(g + w) + *(g + w + 1);
-	    *(g++) = v/6;
-	    
-	    v = *b + 2 * *(b + 1) + 2 * *(b + w) + *(b + w + 1);
-	    *(b++) = v/6;
+	    ptr+= ch;
 	}
-	
 	/* last column */
-	v = 3 * *r + 3 * *(r + w);
-	*(r++) = v/6;
-	    
-	v = 3 * *g + 3 * *(g + w);
-	*(g++) = v/6;
-	    
-	v = 3 * *b + 3 * *(b + w);
-	*(b++) = v/6;
+	v = 3 * *ptr + 3 * *(ptr + w);
+	*ptr = v/6;
+	v = 3 * *ptr + 3 * *(ptr+1 + w);
+	*(ptr+1) = v/6;
+	v = 3 * *ptr + 3 * *(ptr+2 + w);
+	*(ptr+2) = v/6;
+	
+	ptr+= ch;
     }
     
     /* last line */
     for (x=0; x<image->width - 1; x++) {
-	v = 3 * *r + 3 * *(r + 1);
-	*(r++) = v/6;
-	
-	v = 3 * *g + 3 * *(g + 1);
-	*(g++) = v/6;
-	    
-	v = 3 * *b + 3 * *(b + 1);
-	*(b++) = v/6;
+	v = 3 * *ptr + 3 * *(ptr + ch);
+	*ptr = v/6;
+	v = 3 * *(ptr+1) + 3 * *(ptr+1 + ch);
+	*(ptr+1) = v/6;
+	v = 3 * *(ptr+2) + 3 * *(ptr+2 + ch);
+	*(ptr+2) = v/6;
+    
+	ptr+= ch;
     }
 
     return True;

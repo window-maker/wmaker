@@ -77,8 +77,8 @@ typedef struct my_error_mgr * my_error_ptr;
  * Here's the routine that will replace the standard error_exit method:
  */
 
-void
-my_error_exit (j_common_ptr cinfo)
+static void
+my_error_exit(j_common_ptr cinfo)
 {
   /* cinfo->err really points to a my_error_mgr struct, so coerce pointer */
   my_error_ptr myerr = (my_error_ptr) cinfo->err;
@@ -97,9 +97,9 @@ RLoadJPEG(RContext *context, char *file_name, int index)
 {
     RImage *image = NULL;
     struct jpeg_decompress_struct cinfo;
-    int i, j;
-    unsigned char *r, *g, *b;
-    JSAMPROW buffer[1];
+    int i;
+    unsigned char *ptr;
+    JSAMPROW buffer[1], bptr;
     FILE *file;
     /* We use our private extension JPEG error handler.
      * Note that this struct must live as long as the main JPEG parameter
@@ -131,7 +131,7 @@ RLoadJPEG(RContext *context, char *file_name, int index)
   
     jpeg_read_header(&cinfo, TRUE);
 
-    buffer[0] = (JSAMPROW)malloc(cinfo.image_width*cinfo.num_components);
+    bptr = buffer[0] = (JSAMPROW)malloc(cinfo.image_width*cinfo.num_components);
     if (!buffer[0]) {
 	RErrorCode = RERR_NOMEMORY;
 	goto bye;
@@ -145,26 +145,47 @@ RLoadJPEG(RContext *context, char *file_name, int index)
     cinfo.do_fancy_upsampling = FALSE;
     cinfo.do_block_smoothing = FALSE;
     jpeg_calc_output_dimensions(&cinfo);
-    image = RCreateImage(cinfo.image_width, cinfo.image_height, False);
+
+    if (context->flags.optimize_for_speed)
+	image = RCreateImage(cinfo.image_width, cinfo.image_height, True);
+    else
+	image = RCreateImage(cinfo.image_width, cinfo.image_height, False);
+
     if (!image) {
        RErrorCode = RERR_NOMEMORY;
        goto bye;
     }
     jpeg_start_decompress(&cinfo);
 
-    r = image->data[0];
-    g = image->data[1];
-    b = image->data[2];
+    ptr = image->data;
 
-    while (cinfo.output_scanline < cinfo.output_height) {
-        jpeg_read_scanlines(&cinfo, buffer,(JDIMENSION) 1);
-	for (i=0,j=0; i<cinfo.image_width; i++) {
-	    if (cinfo.out_color_space==JCS_RGB) {
-		*(r++) = buffer[0][j++];
-		*(g++) = buffer[0][j++];
-		*(b++) = buffer[0][j++];
-	    } else {
-		*(r++) = *(g++) = *(b++) = buffer[0][j++];
+    
+    if (cinfo.out_color_space==JCS_RGB) {
+	if (context->flags.optimize_for_speed) {
+	    while (cinfo.output_scanline < cinfo.output_height) {
+		jpeg_read_scanlines(&cinfo, buffer,(JDIMENSION) 1);
+		bptr = buffer[0];
+		for (i=0; i<cinfo.image_width; i++) {
+		    *ptr++ = *bptr++;
+		    *ptr++ = *bptr++;
+		    *ptr++ = *bptr++;
+		    ptr++; /* skip alpha channel */
+		}
+	    }
+	} else {
+	    while (cinfo.output_scanline < cinfo.output_height) {
+		jpeg_read_scanlines(&cinfo, buffer,(JDIMENSION) 1);
+		bptr = buffer[0];
+		memcpy(ptr, bptr, cinfo.image_width*3);
+		ptr += cinfo.image_width*3;
+	    }
+	}
+    } else {
+	while (cinfo.output_scanline < cinfo.output_height) {
+	    jpeg_read_scanlines(&cinfo, buffer,(JDIMENSION) 1);
+	    bptr = buffer[0];
+	    for (i=0; i<cinfo.image_width; i++) {
+		*ptr++ = *ptr++ = *ptr++ = *bptr++;
 	    }
 	}
     }

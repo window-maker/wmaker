@@ -55,8 +55,8 @@ RScaleImage(RImage *image, unsigned new_width, unsigned new_height)
     int px, py;
     register int x, y, t;
     int dx, dy;
-    unsigned char *sr, *sg, *sb, *sa;
-    unsigned char *dr, *dg, *db, *da;
+    unsigned char *s;
+    unsigned char *d;
     RImage *img;
 
     assert(new_width >= 0 && new_height >= 0);
@@ -64,7 +64,7 @@ RScaleImage(RImage *image, unsigned new_width, unsigned new_height)
     if (new_width == image->width && new_height == image->height)
 	return RCloneImage(image);
 
-    img = RCreateImage(new_width, new_height, image->data[3]!=NULL);
+    img = RCreateImage(new_width, new_height, image->format==RRGBAFormat);
     
     if (!img)
       return NULL;
@@ -76,21 +76,15 @@ RScaleImage(RImage *image, unsigned new_width, unsigned new_height)
 
     py = 0;
     
-    dr = img->data[0];
-    dg = img->data[1];
-    db = img->data[2];
-    da = img->data[3];
+    d = img->data;
 
-    if (image->data[3]!=NULL) {
+    if (image->format == RRGBAFormat) {
 	int ot;
 	ot = -1;
 	for (y=0; y<new_height; y++) {
 	    t = image->width*(py>>16);
 
-	    sr = image->data[0]+t;
-	    sg = image->data[1]+t;
-	    sb = image->data[2]+t;
-	    sa = image->data[3]+t;
+	    s = image->data+t;
 
 	    ot = t;
 	    ox = 0;
@@ -98,18 +92,15 @@ RScaleImage(RImage *image, unsigned new_width, unsigned new_height)
 	    for (x=0; x<new_width; x++) {
 		px += dx;
 
-		*(dr++) = *sr;
-		*(dg++) = *sg;
-		*(db++) = *sb;
-		*(da++) = *sa;
+		*(d++) = *(s);
+		*(d++) = *(s+1);
+		*(d++) = *(s+2);
+		*(d++) = *(s+3);
 		
 		t = (px - ox)>>16;
 		ox += t<<16;
 		    
-		sr += t;
-		sg += t;
-		sb += t;
-		sa += t;
+		s += t<<2; /* t*4 */
 	    }
 	    py += dy;
 	}
@@ -119,9 +110,7 @@ RScaleImage(RImage *image, unsigned new_width, unsigned new_height)
 	for (y=0; y<new_height; y++) {
 	    t = image->width*(py>>16);
 
-	    sr = image->data[0]+t;
-	    sg = image->data[1]+t;
-	    sb = image->data[2]+t;
+	    s = image->data+t;
 	    
 	    ot = t;
 	    ox = 0;
@@ -129,16 +118,14 @@ RScaleImage(RImage *image, unsigned new_width, unsigned new_height)
 	    for (x=0; x<new_width; x++) {
 		px += dx;
 		
-		*(dr++) = *sr;
-		*(dg++) = *sg;
-		*(db++) = *sb;
+		*(d++) = *(s);
+		*(d++) = *(s+1);
+		*(d++) = *(s+2);
 		
 		t = (px-ox)>>16;
 		ox += t<<16;
 		
-		sr += t;
-		sg += t;
-		sb += t;
+		s += (t<<1)+t; /* t*3 */
 	    }
 	    py += dy;
 	}
@@ -431,6 +418,9 @@ CLIST	*contrib;		/* array of contribution lists */
 #define CLAMP(v,l,h)    ((v)<(l) ? (l) : (v) > (h) ? (h) : v)
 
 
+#include "bench.h"
+
+
 RImage*
 RSmoothScaleImage(RImage *src, unsigned new_width, unsigned new_height)
 {    
@@ -442,9 +432,11 @@ RSmoothScaleImage(RImage *src, unsigned new_width, unsigned new_height)
     double width, fscale;	       /* filter calculation variables */
     double rweight, gweight, bweight;
     RImage *dst;
-    unsigned char *rp, *gp, *bp;
-    unsigned char *rsp, *gsp, *bsp;
+    unsigned char *p;
+    unsigned char *sp;
+    int sch = src->format == RRGBAFormat ? 4 : 3;
 
+    
     dst = RCreateImage(new_width, new_height, False);
 
     /* create intermediate image to hold horizontal zoom */
@@ -475,11 +467,12 @@ RSmoothScaleImage(RImage *src, unsigned new_width, unsigned new_height)
 		    n = j;
 		}
 		k = contrib[i].n++;
-		contrib[i].p[k].pixel = n;
+		contrib[i].p[k].pixel = n*sch;
 		contrib[i].p[k].weight = rweight;
 	    }
 	}
     } else {
+
 	for(i = 0; i < new_width; ++i) {
 	    contrib[i].n = 0;
 	    contrib[i].p = (CONTRIB *)calloc((int) (fwidth * 2 + 1),
@@ -498,32 +491,29 @@ RSmoothScaleImage(RImage *src, unsigned new_width, unsigned new_height)
 		    n = j;
 		}
 		k = contrib[i].n++;
-		contrib[i].p[k].pixel = n;
+		contrib[i].p[k].pixel = n*sch;
 		contrib[i].p[k].weight = rweight;
 	    }
 	}
     }
     
     /* apply filter to zoom horizontally from src to tmp */
-    rp = tmp->data[0];
-    gp = tmp->data[1];
-    bp = tmp->data[2];
+    p = tmp->data;
+
 
     for(k = 0; k < tmp->height; ++k) {
-	rsp = src->data[0] + src->width*k;
-	gsp = src->data[1] + src->width*k;
-	bsp = src->data[2] + src->width*k;
-
+	sp = src->data + src->width*k*sch;
+	
 	for(i = 0; i < tmp->width; ++i) {
 	    rweight = gweight = bweight = 0.0;
 	    for(j = 0; j < contrib[i].n; ++j) {
-		rweight += rsp[contrib[i].p[j].pixel] * contrib[i].p[j].weight;
-		gweight += gsp[contrib[i].p[j].pixel] * contrib[i].p[j].weight;
-		bweight += bsp[contrib[i].p[j].pixel] * contrib[i].p[j].weight;
+		rweight += sp[contrib[i].p[j].pixel] * contrib[i].p[j].weight;
+		gweight += sp[contrib[i].p[j].pixel+1] * contrib[i].p[j].weight;
+		bweight += sp[contrib[i].p[j].pixel+2] * contrib[i].p[j].weight;
 	    }
-	    *rp++ = CLAMP(rweight, 0, 255);
-	    *gp++ = CLAMP(gweight, 0, 255);
-	    *bp++ = CLAMP(bweight, 0, 255);
+	    *p++ = CLAMP(rweight, 0, 255);
+	    *p++ = CLAMP(gweight, 0, 255);
+	    *p++ = CLAMP(bweight, 0, 255);
 	}
     }
 
@@ -556,7 +546,7 @@ RSmoothScaleImage(RImage *src, unsigned new_width, unsigned new_height)
 		    n = j;
 		}
 		k = contrib[i].n++;
-		contrib[i].p[k].pixel = n;
+		contrib[i].p[k].pixel = n*3;
 		contrib[i].p[k].weight = rweight;
 	    }
 	}
@@ -579,62 +569,46 @@ RSmoothScaleImage(RImage *src, unsigned new_width, unsigned new_height)
 		    n = j;
 		}
 		k = contrib[i].n++;
-		contrib[i].p[k].pixel = n;
+		contrib[i].p[k].pixel = n*3;
 		contrib[i].p[k].weight = rweight;
 	    }
 	}
     }
 
     /* apply filter to zoom vertically from tmp to dst */
-    rsp = malloc(tmp->height);
-    gsp = malloc(tmp->height);
-    bsp = malloc(tmp->height);
+    sp = malloc(tmp->height*3);
 
     for(k = 0; k < new_width; ++k) {
-	rp = dst->data[0] + k;
-	gp = dst->data[1] + k;
-	bp = dst->data[2] + k;
+	p = dst->data + k*3;
 
 	/* copy a column into a row */
 	{
 	    int i;
 	    unsigned char *p, *d;
 
-	    d = rsp;
-	    for(i = tmp->height, p = tmp->data[0] + k; i-- > 0; 
-		p += tmp->width) {
+	    d = sp;
+	    for(i = tmp->height, p = tmp->data + k*3; i-- > 0; 
+		p += tmp->width*3) {
 		*d++ = *p;
-	    }
-	    d = gsp;
-	    for(i = tmp->height, p = tmp->data[1] + k; i-- > 0; 
-		p += tmp->width) {
-		*d++ = *p;
-	    }
-	    d = bsp;
-	    for(i = tmp->height, p = tmp->data[2] + k; i-- > 0;
-		p += tmp->width) {
-		*d++ = *p;
+		*d++ = *(p+1);
+		*d++ = *(p+2);
 	    }
 	}
 	for(i = 0; i < new_height; ++i) {
 	    rweight = gweight = bweight = 0.0;
 	    for(j = 0; j < contrib[i].n; ++j) {
-		rweight += rsp[contrib[i].p[j].pixel] * contrib[i].p[j].weight;
-		gweight += gsp[contrib[i].p[j].pixel] * contrib[i].p[j].weight;
-		bweight += bsp[contrib[i].p[j].pixel] * contrib[i].p[j].weight;
+		rweight += sp[contrib[i].p[j].pixel] * contrib[i].p[j].weight;
+		gweight += sp[contrib[i].p[j].pixel+1] * contrib[i].p[j].weight;
+		bweight += sp[contrib[i].p[j].pixel+2] * contrib[i].p[j].weight;
 	    }
-	    *rp = CLAMP(rweight, 0, 255);
-	    *gp = CLAMP(gweight, 0, 255);
-	    *bp = CLAMP(bweight, 0, 255);
-	    rp += new_width;
-	    gp += new_width;
-	    bp += new_width;
+	    *p = CLAMP(rweight, 0, 255);
+	    *(p+1) = CLAMP(gweight, 0, 255);
+	    *(p+2) = CLAMP(bweight, 0, 255);
+	    p += new_width*3;
 	}
     }
-    free(rsp);
-    free(gsp);
-    free(bsp);
-    
+    free(sp);
+
     /* free the memory allocated for vertical filter weights */
     for(i = 0; i < dst->height; ++i) {
 	free(contrib[i].p);
@@ -642,7 +616,7 @@ RSmoothScaleImage(RImage *src, unsigned new_width, unsigned new_height)
     free(contrib);
 
     RDestroyImage(tmp);
-
+    
     return dst;
 }
 

@@ -97,7 +97,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 lib_LTLIBRARIES = libwraster.la
 
-libwraster_la_LDFLAGS = -version-info 4:0:3
+libwraster_la_LDFLAGS = -version-info 5:0:0
 
 bin_SCRIPTS = get-wraster-flags
 
@@ -106,7 +106,7 @@ noinst_PROGRAMS = testgrad testdraw view
 EXTRA_DIST = test.png tile.xpm ballot_box.xpm 
 include_HEADERS = wraster.h
 
-libwraster_la_SOURCES =  	LookupCmap.c		StdCmap.c		StdCmap.h		CrCmap.c		DelCmap.c		CmapAlloc.c		raster.c 		draw.c			color.c			load.c 			save.c			gradient.c 		xpixmap.c		convert.c 		context.c 		misc.c 			scale.c			convolve.c		nxpm.c			xpm.c 			xutil.c			ppm.c			png.c 			jpeg.c 			tiff.c			gif.c
+libwraster_la_SOURCES =  	LookupCmap.c		StdCmap.c		StdCmap.h		CrCmap.c		DelCmap.c		CmapAlloc.c		raster.c 		draw.c			color.c			load.c 			save.c			gradient.c 		xpixmap.c		convert.c 		x86_specific.c		context.c 		misc.c 			scale.c			convolve.c		nxpm.c			xpm.c 			xutil.c			ppm.c			png.c 			jpeg.c 			tiff.c			gif.c
 
 
 INCLUDES = @DFLAGS@ @HEADER_SEARCH_PATH@
@@ -125,7 +125,7 @@ testdraw_SOURCES = testdraw.c
 
 testdraw_LDADD = $(LIBLIST)
 
-libwraster_la_LIBADD = @ALLOCA@
+libwraster_la_LIBADD = @ALLOCA@ 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../src/config.h
 CONFIG_CLEAN_FILES = 
@@ -142,8 +142,9 @@ X_PRE_LIBS = @X_PRE_LIBS@
 libwraster_la_DEPENDENCIES =  @ALLOCA@
 libwraster_la_OBJECTS =  LookupCmap.lo StdCmap.lo CrCmap.lo DelCmap.lo \
 CmapAlloc.lo raster.lo draw.lo color.lo load.lo save.lo gradient.lo \
-xpixmap.lo convert.lo context.lo misc.lo scale.lo convolve.lo nxpm.lo \
-xpm.lo xutil.lo ppm.lo png.lo jpeg.lo tiff.lo gif.lo
+xpixmap.lo convert.lo x86_specific.lo context.lo misc.lo scale.lo \
+convolve.lo nxpm.lo xpm.lo xutil.lo ppm.lo png.lo jpeg.lo tiff.lo \
+gif.lo
 PROGRAMS =  $(noinst_PROGRAMS)
 
 testgrad_OBJECTS =  testgrad.o
@@ -433,6 +434,13 @@ uninstall-am uninstall all-redirect all-am all installdirs \
 mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
+
+# cant compile asm stuff with optimizations
+x86_specific.lo: x86_specific.c
+	$(LTCOMPILE) -O0 -c $<
+
+x86_specific.o: x86_specific.c
+	$(COMPILE) -O0 -c $<
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -10,6 +10,7 @@
 #include <time.h>
 #endif
 
+
 Display *dpy;
 Window win;
 RContext *ctx;
@@ -192,11 +193,12 @@ int main(int argc, char **argv)
     imgh = RRenderMultiGradient(250, 250, colors, RGRD_HORIZONTAL);
     imgv = RRenderMultiGradient(250, 250, colors, RGRD_VERTICAL);
     imgd = RRenderMultiGradient(250, 250, colors, RGRD_DIAGONAL);
-
     RConvertImage(ctx, imgh, &pix);
     XCopyArea(dpy, pix, win, ctx->copy_gc, 0, 0, 250, 250, 0, 0);
+
     RConvertImage(ctx, imgv, &pix);
     XCopyArea(dpy, pix, win, ctx->copy_gc, 0, 0, 250, 250, 250, 0);
+
     RConvertImage(ctx, imgd, &pix);
     XCopyArea(dpy, pix, win, ctx->copy_gc, 0, 0, 250, 250, 500, 0);
 

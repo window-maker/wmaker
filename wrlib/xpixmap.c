@@ -52,7 +52,7 @@ RCreateImageFromXImage(RContext *context, XImage *image, XImage *mask)
     RImage *img;
     int x, y;
     unsigned long pixel;
-    unsigned char *r, *g, *b, *a;
+    unsigned char *data;
     int rshift, gshift, bshift;
     int rmask, gmask, bmask;
 
@@ -84,10 +84,7 @@ RCreateImageFromXImage(RContext *context, XImage *image, XImage *mask)
     gshift = get_shifts(gmask) - 8;
     bshift = get_shifts(bmask) - 8;
 
-    r = img->data[0];
-    g = img->data[1];
-    b = img->data[2];
-    a = img->data[3];
+    data = img->data;
 
 #define NORMALIZE_RED(pixel)	((rshift>0) ? ((pixel) & rmask) >> rshift \
 					: ((pixel) & rmask) << -rshift)
@@ -101,9 +98,13 @@ RCreateImageFromXImage(RContext *context, XImage *image, XImage *mask)
 	    for (x = 0; x < image->width; x++) {
 		pixel = XGetPixel(image, x, y);
 		if (pixel) {
-		    *(r++) = *(g++) = *(b++) = 0;
+		    *data++ = 0;
+		    *data++ = 0;
+		    *data++ = 0;
 		} else {
-		    *(r++) = *(g++) = *(b++) = 0xff;		    
+		    *data++ = 0xff;
+		    *data++ = 0xff;
+		    *data++ = 0xff;
 		}
 	    }
 	}
@@ -111,20 +112,20 @@ RCreateImageFromXImage(RContext *context, XImage *image, XImage *mask)
 	for (y = 0; y < image->height; y++) {
 	    for (x = 0; x < image->width; x++) {
 		pixel = XGetPixel(image, x, y);
-		*(r++) = NORMALIZE_RED(pixel);
-		*(g++) = NORMALIZE_GREEN(pixel);
-		*(b++) = NORMALIZE_BLUE(pixel);
+		*(data++) = NORMALIZE_RED(pixel);
+		*(data++) = NORMALIZE_GREEN(pixel);
+		*(data++) = NORMALIZE_BLUE(pixel);
 	    }
 	}
     }
 
-    if (mask && a) {
+    if (mask) {
 	for (y = 0; y < mask->height; y++) {
 	    for (x = 0; x < mask->width; x++) {
 		if (XGetPixel(mask, x, y)) {
-		    *(a++) = 0xff;
+		    *(data++) = 0xff;
 		} else {
-		    *(a++) = 0;
+		    *(data++) = 0;
 		}
 	    }
 	}

@@ -443,10 +443,12 @@ setupPseudoColorColormap(RContext *context)
 
 	    if (theMap >= 0
 		&& allocateStandardPseudoColor(context, &maps[theMap])) {
-		
+
 		context->std_rgb_map = XAllocStandardColormap();
 		
 		*context->std_rgb_map = maps[theMap];
+		
+		context->cmap = context->std_rgb_map->colormap;
 
 		XFree(maps);
 
@@ -510,6 +512,14 @@ gatherconfig(RContext *context, int screen_n)
 	    context->attribs->colors_per_channel = i;
 	}
     }
+    
+    ptr = mygetenv("WRASTER_OPTIMIZE_FOR_SPEED", screen_n);
+    if (ptr) {
+	context->flags.optimize_for_speed = 1;
+    } else {
+	context->flags.optimize_for_speed = 0;
+    }
+    
 }
 
 
@@ -601,9 +611,9 @@ RCreateContext(Display *dpy, int screen_number, RContextAttributes *attribs)
 
     /* get configuration from environment variables */
     gatherconfig(context, screen_number);
-
+#ifndef BENCH
     _wraster_change_filter(context->attribs->scaling_filter);
-
+#endif
     if ((context->attribs->flags & RC_VisualID)) {
 	XVisualInfo *vinfo, templ;
 	int nret;

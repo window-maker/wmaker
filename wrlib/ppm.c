@@ -43,10 +43,27 @@ load_graymap(char *file_name, FILE *file, int w, int h, int max, int raw)
 	
     } else {
 	if (max<256) {
-	    if (!fgets(image->data[0], w*h, file))
-		goto short_file;
-	    memcpy(image->data[0], image->data[1], w*h);
-	    memcpy(image->data[0], image->data[2], w*h);
+	    int x, y;
+	    char *buf, *ptr;
+	    
+	    buf = malloc(w);
+	    if (!buf) {
+		return NULL;
+	    }
+	    
+	    ptr = image->data;
+	    for (y = 0; y < h; y++) {
+		if (!fgets(buf, w, file)) {
+		    free(buf);
+		    goto short_file;
+		}
+		for (x = 0; x < w; x++) {
+		    *(ptr++) = buf[x];
+		    *(ptr++) = buf[x];
+		    *(ptr++) = buf[x];
+		}
+	    }
+	    free(buf);
 	} else {
 	    
 	}
@@ -66,15 +83,13 @@ load_pixmap(char *file_name, FILE *file, int w, int h, int max, int raw)
     RImage *image;
     int i;
     char buf[3];
-    char *r, *g, *b;
+    char *ptr;
     
     image = RCreateImage(w, h, 0);
     if (!image) {
 	return NULL;
     }
-    r = image->data[0];
-    g = image->data[1];
-    b = image->data[2];
+    ptr = image->data;
     if (!raw) {
 	
     } else {
@@ -83,9 +98,9 @@ load_pixmap(char *file_name, FILE *file, int w, int h, int max, int raw)
 	    while (i < w*h) {
 		if (fread(buf, 1, 3, file)!=3)
 		    goto short_file;
-		*(r++) = buf[0];
-		*(g++) = buf[1];
-		*(b++) = buf[2];
+		*(ptr++) = buf[0];
+		*(ptr++) = buf[1];
+		*(ptr++) = buf[2];
 		i++;
 	    }
 	} else {

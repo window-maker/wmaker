@@ -33,18 +33,18 @@
 #include "wraster.h"
 
 RImage*
-RGetImageFromXPMData(RContext *context, char **data)
+RGetImageFromXPMData(RContext *context, char **xpmData)
 {
     Display *dpy = context->dpy;
     Colormap cmap = context->cmap;
     RImage *image;
     XpmImage xpm;
     unsigned char *color_table[4];
-    unsigned char *r, *g, *b, *a;
+    unsigned char *data;
     int *p;
     int i;
     
-    i = XpmCreateXpmImageFromData(data, &xpm, (XpmInfo *)NULL);
+    i = XpmCreateXpmImageFromData(xpmData, &xpm, (XpmInfo *)NULL);
     if (i!=XpmSuccess) {
 	switch (i) {
 	 case XpmOpenFailed:
@@ -136,18 +136,14 @@ RGetImageFromXPMData(RContext *context, char **data)
 	    color_table[3][i] = 0xff;
 	}
     }
-    memset(image->data[3], 255, xpm.width*xpm.height);
     /* convert pixmap to RImage */
     p = (int*)xpm.data;
-    r = image->data[0];
-    g = image->data[1];
-    b = image->data[2];
-    a = image->data[3];
+    data = image->data;
     for (i=0; i<xpm.width*xpm.height; i++) {
-	*(r++)=color_table[0][*p];
-	*(g++)=color_table[1][*p];
-	*(b++)=color_table[2][*p];
-	*(a++)=color_table[3][*p];
+	*(data++)=color_table[0][*p];
+	*(data++)=color_table[1][*p];
+	*(data++)=color_table[2][*p];
+	*(data++)=color_table[3][*p];
 	p++;
     }
     for(i=0; i<4; i++) {
@@ -167,7 +163,7 @@ RLoadXPM(RContext *context, char *file, int index)
     RImage *image;
     XpmImage xpm;
     unsigned char *color_table[4];
-    unsigned char *r, *g, *b, *a;
+    unsigned char *data;
     int *p;
     int i;
     
@@ -265,16 +261,12 @@ RLoadXPM(RContext *context, char *file, int index)
     }
     /* convert pixmap to RImage */
     p = (int*)xpm.data;
-    r = image->data[0];
-    g = image->data[1];
-    b = image->data[2];
-    a = image->data[3];
-    for (i=0; i<xpm.width*xpm.height; i++) {
-	*(r++)=color_table[0][*p];
-	*(g++)=color_table[1][*p];
-	*(b++)=color_table[2][*p];
-	*(a++)=color_table[3][*p];
-	p++;
+    data = image->data;
+    for (i=0; i<xpm.width*xpm.height; i++, p++) {
+	*(data++)=color_table[0][*p];
+	*(data++)=color_table[1][*p];
+	*(data++)=color_table[2][*p];
+	*(data++)=color_table[3][*p];
     }
     for(i=0; i<4; i++) {
 	free(color_table[i]);

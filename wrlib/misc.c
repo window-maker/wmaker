@@ -1,7 +1,7 @@
 /* 
  *  Raster graphics library
  * 
- *  Copyright (c) 1997 Alfredo K. Kojima
+ *  Copyright (c) 1997-2000 Alfredo K. Kojima
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -17,7 +17,6 @@
  *  License along with this library; if not, write to the Free
  *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
 #include <config.h>
 
 #include <stdlib.h>
@@ -92,24 +91,40 @@ RBevelImage(RImage *image, int bevel_type)
 void
 RClearImage(RImage *image, RColor *color)
 {
-    int bytes;
-    
-    bytes = image->width*image->height;
-
     if (color->alpha==255) {
-	memset(image->data[0], color->red, bytes);
-	memset(image->data[1], color->green, bytes);
-	memset(image->data[2], color->blue, bytes);
-	if (image->data[3])
-	  memset(image->data[3], 0xff, bytes);
+	if (image->format == RRGBAFormat) {
+	    unsigned char *d = image->data;
+	    int i;
+
+	    for (i = 0; i < image->width; i++) {
+		*d++ = color->red;
+		*d++ = color->green;
+		*d++ = color->blue;
+		*d++ = 0xff;
+	    }
+	    for (i = 1; i < image->height; i++, d += image->width*4) {
+		memcpy(d, image->data, image->width*4);
+	    }
+	} else {
+	    unsigned char *d = image->data;
+	    int i;
+	    
+	    for (i = 0; i < image->width; i++) {
+		*d++ = color->red;
+		*d++ = color->green;
+		*d++ = color->blue;
+	    }
+	    for (i = 1; i < image->height; i++, d += image->width*3) {
+		memcpy(d, image->data, image->width*3);
+	    }
+	}
     } else {
-	register int i;
-	unsigned char *dr, *dg, *db;
+	int bytes = image->width*image->height;
+	int i;
+	unsigned char *d;
 	int alpha, nalpha, r, g, b;
 
-	dr = image->data[0];
-	dg = image->data[1];
-	db = image->data[2];
+	d = image->data;
 
 	alpha = color->alpha;
 	r = color->red * alpha;
@@ -118,14 +133,18 @@ RClearImage(RImage *image, RColor *color)
 	nalpha = 255 - alpha;
 
 	for (i=0; i<bytes; i++) {
-	    *dr = (((int)*dr * nalpha) + r)/256;
-	    *dg = (((int)*dg * nalpha) + g)/256;
-	    *db = (((int)*db * nalpha) + b)/256;
-	    dr++;    dg++;    db++;
+	    *d = (((int)*d * nalpha) + r)/256;
+	    d++;
+	    *d = (((int)*d * nalpha) + g)/256;
+	    d++;
+	    *d = (((int)*d * nalpha) + b)/256;
+	    d++;
+	    if (image->format == RRGBAFormat) {
+		d++;
+	    }
 	}
     }
 }
-
 
 const char*
 RMessageForError(int errorCode)
@@ -172,4 +191,3 @@ RMessageForError(int errorCode)
 	return "internal error";
     }
 }
-

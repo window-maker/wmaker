@@ -20,12 +20,12 @@ int main(int argc, char **argv)
 	puts("cant open display");
 	exit(1);
     }
+
     attr.flags = RC_RenderMode | RC_ColorsPerChannel;
     attr.render_mode = RDitheredRendering;
     attr.colors_per_channel = 4;
     ctx = RCreateContext(dpy, DefaultScreen(dpy), &attr);
-    
-    
+
     if (argc<2) 
 	img = RGetImageFromXPMData(ctx, image_name);
     else
@@ -53,16 +53,18 @@ int main(int argc, char **argv)
 	puts(RMessageForError(RErrorCode));
 	exit(1);
     }
+    
+    printf("%ix%i\n", img->width, img->height);
+	   
+	   
 
     win = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 10, 10, 
 			      img->width,
 			      img->height, 0, 0, 0);
-    RDestroyImage(img);
     XSetWindowBackgroundPixmap(dpy, win, pix);
     XClearWindow(dpy, win);
     XMapRaised(dpy, win);
     XFlush(dpy);
-
     getchar();
     exit(0);
 }

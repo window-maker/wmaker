@@ -156,10 +156,13 @@ RGetImageFromXPMData(RContext *context, char **data)
 	return NULL;
     }
 
-    r = image->data[0];
-    g = image->data[1];
-    b = image->data[2];
-    a = image->data[3];
+    r = image->data;
+    g = image->data+1;
+    b = image->data+2;
+    if (image->format == RRGBAFormat)
+	a = image->data+3;
+    else
+	a = NULL;
 
     for (i=0; i<h; i++) {
 	if (csize==1) {
@@ -332,10 +335,13 @@ RLoadXPM(RContext *context, char *file, int index)
 	return NULL;
     }
 
-    r = image->data[0];
-    g = image->data[1];
-    b = image->data[2];
-    a = image->data[3];
+    r = image->data;
+    g = image->data+1;
+    b = image->data+2;
+    if (image->format == RRGBAFormat)
+	a = image->data+3;
+    else
+	a = NULL;
 
     for (i=0; i<h; i++) {
 	if (!fgets(buffer, bsize, f))
@@ -557,10 +563,13 @@ RSaveXPM(RImage *image, char *filename)
 
     fprintf(file, "static char *image[] = {\n");
 
-    r = image->data[0];
-    g = image->data[1];
-    b = image->data[2];
-    a = image->data[3];
+    r = image->data;
+    g = image->data+1;
+    b = image->data+2;
+    if (image->format == RRGBAFormat)
+	a = image->data+3;
+    else
+	a = NULL;
 
     /* first pass: make colormap for the image */
     if (a)
@@ -595,11 +604,14 @@ RSaveXPM(RImage *image, char *filename)
     i = 0;
     outputcolormap(file, colormap, charsPerPixel);
 
-    r = image->data[0];
-    g = image->data[1];
-    b = image->data[2];
-    a = image->data[3];
 
+    r = image->data;
+    g = image->data+1;
+    b = image->data+2;
+    if (image->format == RRGBAFormat)
+	a = image->data+3;
+    else
+	a = NULL;
 
     /* write data */
     for (y = 0; y < image->height; y++) {

@@ -65,7 +65,7 @@ RLoadPNG(RContext *context, char *file, int index)
     png_uint_32 width, height;
     int depth, junk, color_type;
     png_bytep *png_rows;
-    unsigned char *r, *g, *b, *a;
+    unsigned char *ptr;
     
     f = fopen(file, "r");
     if (!f) {
@@ -207,27 +207,19 @@ RLoadPNG(RContext *context, char *file, int index)
     
     fclose(f);
 
-    r = image->data[0];
-    g = image->data[1];
-    b = image->data[2];
-    a = image->data[3];
+    ptr = image->data;
 
     /* convert to RImage */
     if (alpha) {
 	for (y=0; y<height; y++) {
-	    for (x=0, i=0; x<width; x++) {
-		*(r++) = *(png_rows[y]+i++);
-		*(g++) = *(png_rows[y]+i++);
-		*(b++) = *(png_rows[y]+i++);
-		*(a++) = *(png_rows[y]+i++);
+	    for (x=0, i=width*4; x<i; x++, ptr++) {
+		*ptr = *(png_rows[y]+x);
 	    }
 	}
     } else {
 	for (y=0; y<height; y++) {
-	    for (x=0, i=0; x<width; x++) {
-		*(r++) = *(png_rows[y]+i++);
-		*(g++) = *(png_rows[y]+i++);
-		*(b++) = *(png_rows[y]+i++);
+	    for (x=0, i=width*3; x<i; x++, ptr++) {
+		*ptr = *(png_rows[y]+x);
 	    }
 	}	
     }

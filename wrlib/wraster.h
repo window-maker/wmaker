@@ -39,8 +39,8 @@
 #define RLRASTER_H_
 
 
-/* version of the header for the library: 0.16 */
-#define WRASTER_HEADER_VERSION	16
+/* version of the header for the library: 0.20 */
+#define WRASTER_HEADER_VERSION	20
 
 
 #include <X11/Xlib.h>
@@ -145,6 +145,7 @@ typedef struct RContext {
 
     struct {
 	unsigned int use_shared_pixmap:1;
+	unsigned int optimize_for_speed:1;
     } flags;
 } RContext;
 
@@ -174,14 +175,23 @@ typedef struct RSegment {
     int x1, y1, x2, y2;
 } RSegment;
 
+    
+
+/* image formats */
+enum RImageFormat {
+    RRGBFormat,
+    RRGBAFormat
+};
+
 
 /*
  * internal 24bit+alpha image representation
  */
 typedef struct RImage {
+    unsigned char *data;	       /* image data RGBA or RGB */
     unsigned width, height;	       /* size of the image */
+    enum RImageFormat format;
     RColor background;		       /* background color */
-    unsigned char *data[4];	       /* image data (R,G,B,A) */
 } RImage;
 
 
@@ -198,7 +208,6 @@ typedef struct RXImage {
 #endif
 } RXImage;
 
-    
 
 /* image display modes */
 enum {
@@ -313,7 +322,7 @@ RImage *RLoadImage(RContext *context, char *file, int index);
 
 void RDestroyImage(RImage *image);
 
-RImage *RGetImageFromXPMData(RContext *context, char **data);
+RImage *RGetImageFromXPMData(RContext *context, char **xpmData);
 
 /*
  * RImage storing

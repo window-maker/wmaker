@@ -4,7 +4,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 lib_LTLIBRARIES = libwraster.la
 
-libwraster_la_LDFLAGS = -version-info 4:0:3
+libwraster_la_LDFLAGS = -version-info 5:0:0
 
 bin_SCRIPTS = get-wraster-flags
 
@@ -28,6 +28,7 @@ libwraster_la_SOURCES = 	\
 	gradient.c 	\
 	xpixmap.c	\
 	convert.c 	\
+	x86_specific.c	\
 	context.c 	\
 	misc.c 		\
 	scale.c		\
@@ -40,6 +41,17 @@ libwraster_la_SOURCES = 	\
 	jpeg.c 		\
 	tiff.c		\
 	gif.c
+
+
+
+# cant compile asm stuff with optimizations
+x86_specific.lo: x86_specific.c
+	$(LTCOMPILE) -O0 -c $<
+
+x86_specific.o: x86_specific.c
+	$(COMPILE) -O0 -c $<
+
+
 
 
 INCLUDES = @DFLAGS@ @HEADER_SEARCH_PATH@
@@ -59,6 +71,6 @@ testdraw_SOURCES = testdraw.c
 testdraw_LDADD = $(LIBLIST)
 
 
-libwraster_la_LIBADD = @ALLOCA@
+libwraster_la_LIBADD = @ALLOCA@ 
 
 

@@ -44,6 +44,7 @@ RImage*
 RLoadGIF(RContext *context, char *file, int index)
 {
     RImage *image = NULL;
+#if 0
     GifFileType *gif = NULL;
     GifPixelType *buffer = NULL;
     int i, j, k, ofs = 0;
@@ -208,7 +209,7 @@ did_not_get_any_errors:
 
     if (gif)
 	DGifCloseFile(gif);
-
+#endif
     return image;
 }
 

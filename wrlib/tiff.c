@@ -47,6 +47,7 @@ RLoadTIFF(RContext *context, char *file, int index)
     uint32 *data, *ptr;
     uint16 extrasamples;
     uint16 *sampleinfo;
+    int ch;
     
     
     tif = TIFFOpen(file, "r");
@@ -93,14 +94,19 @@ RLoadTIFF(RContext *context, char *file, int index)
 	    
 	    /* convert data */
 	    image = RCreateImage(width, height, alpha);
+	   
+	    if (alpha)
+		ch = 4;
+	    else
+		ch = 3;
 	    
 	    if (image) {
 		int x, y;
 		
-		r = image->data[0];
-		g = image->data[1];
-		b = image->data[2];
-		a = image->data[3];
+		r = image->data;
+		g = image->data+1;
+		b = image->data+2;
+		a = image->data+3;
 
 		/* data seems to be stored upside down */
 		data += width * (height-1);
@@ -114,16 +120,16 @@ RLoadTIFF(RContext *context, char *file, int index)
 			if (alpha) {
 			    *(a) = (*data >> 24) & 0xff;
 			    
-		    	 if (amode && (*a > 0)) {
-			       *r = (*r * 255) / *(a);
-			       *g = (*g * 255) / *(a);
-			       *b = (*b * 255) / *(a);
+			    if (amode && (*a > 0)) {
+				*r = (*r * 255) / *(a);
+				*g = (*g * 255) / *(a);
+				*b = (*b * 255) / *(a);
 			    }
 				 
-				 a++;
+			    a+=4;
 			}
 			
-			r++; g++; b++;
+			r+=ch; g+=ch; b+=ch;
 			data++;
 		    }
 		    data -= 2*width;

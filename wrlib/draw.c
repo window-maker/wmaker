@@ -3,6 +3,7 @@
  *  Raster graphics library
  * 
  *  Copyright (c) 1998 Dan Pascu
+ *  Copyright (c) 2000 Alfredo K. Kojima
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -46,15 +47,20 @@ RGetPixel(RImage *image, int x, int y, RColor *color)
 	|| y < 0 || y >= image->height)
 	return False;
 
-    ofs = y*image->width + x;
-    color->red = image->data[0][ofs];
-    color->green = image->data[1][ofs];
-    color->blue = image->data[2][ofs];
-    /* If the image does not have alpha channel, we consider alpha 255 */
-    if (image->data[3])
-        color->alpha = image->data[3][ofs];
-    else
-        color->alpha = 255;
+    if (image->format == RRGBAFormat) {
+	ofs = (y*image->width + x) * 4;
+	color->red = image->data[ofs];
+	color->green = image->data[ofs++];
+	color->blue = image->data[ofs++];
+	color->alpha = image->data[ofs];
+    } else {
+	ofs = (y*image->width + x) * 3;
+	color->red = image->data[ofs++];
+	color->green = image->data[ofs++];
+	color->blue = image->data[ofs++];
+	/* If the image does not have alpha channel, we consider alpha 255 */
+	color->alpha = 255;
+    }
 
     return True;
 }
@@ -63,26 +69,26 @@ RGetPixel(RImage *image, int x, int y, RColor *color)
 void
 RPutPixel(RImage *image, int x, int y, RColor *color)
 {
-    int ofs;
-    unsigned char *sr, *sg, *sb, *sa;
+    unsigned char *ptr;
 
     assert(image!=NULL);
     assert(color!=NULL);
     if (x < 0 || x >= image->width || y < 0 || y >= image->height)
 	return;
 
-    ofs = y*image->width + x;
-    sr = image->data[0] + ofs;
-    sg = image->data[1] + ofs;
-    sb = image->data[2] + ofs;
-    sa = image->data[3] + ofs;
+    if (image->format == RRGBAFormat) {
+	ptr = image->data + (y*image->width + x) * 4;
+    } else {
+	ptr = image->data + (y*image->width + x) * 3;
+    }
 
     if (color->alpha==255) {
-        *sr = color->red;
-        *sg = color->green;
-        *sb = color->blue;
-        if (image->data[3])
-            *sa = 255;
+	*ptr++ = color->red;
+        *ptr++ = color->green;
+        *ptr++ = color->blue;
+	if (image->format == RRGBAFormat) {
+	    *ptr = 255;
+	}
     } else {
         register int alpha, nalpha, r, g, b;
 
@@ -92,11 +98,12 @@ RPutPixel(RImage *image, int x, int y, RColor *color)
         alpha = color->alpha;
         nalpha = 255 - alpha;
 
-        *sr = (((int)*sr * nalpha) + (r * alpha))/256;
-        *sg = (((int)*sg * nalpha) + (g * alpha))/256;
-        *sb = (((int)*sb * nalpha) + (b * alpha))/256;
-        if (image->data[3])
-            *sa = alpha + ((int)*sa * nalpha)/256;
+        *ptr++ = (((int)*ptr * nalpha) + (r * alpha))/256;
+        *ptr++ = (((int)*ptr * nalpha) + (g * alpha))/256;
+        *ptr++ = (((int)*ptr * nalpha) + (b * alpha))/256;
+        if (image->format == RRGBAFormat) {
+            *ptr = alpha + ((int)*ptr * nalpha)/256;
+	}
     }
 }
 
@@ -106,15 +113,15 @@ operatePixel(RImage *image, int ofs, int operation, RColor *color)
 {
     unsigned char *sr, *sg, *sb, *sa;
     register int alpha, nalpha, tmp;
-    int hasAlpha = image->data[3]!=NULL;
+    int hasAlpha = image->format == RRGBAFormat;
 
     alpha = color->alpha;
     nalpha = 255 - alpha;
 
-    sr = image->data[0] + ofs;
-    sg = image->data[1] + ofs;
-    sb = image->data[2] + ofs;
-    sa = image->data[3] + ofs;
+    sr = image->data + ofs*(hasAlpha ? 4 : 3);
+    sg = image->data + ofs*(hasAlpha ? 4 : 3) + 1;
+    sb = image->data + ofs*(hasAlpha ? 4 : 3) + 2;
+    sa = image->data + ofs*(hasAlpha ? 4 : 3) + 3;
     
     switch (operation) {
      case RClearOperation:
@@ -335,31 +342,35 @@ genericLine(RImage *image, int x0, int y0, int x1, int y1, RColor *color,
     last = (polyline) ? du-1 : du;
 
     if (color->alpha==255 || operation==RCopyOperation) {
-	unsigned char *sr, *sg, *sb, *sa;
+	unsigned char *ptr;
 
-	i = y0*image->width + x0;
-	sr = image->data[0] + i;
-	sg = image->data[1] + i;
-	sb = image->data[2] + i;
-	sa = image->data[3] + i;
+	if (image->format == RRGBAFormat)
+	    i = (y0*image->width + x0) * 4;
+	else
+	    i = (y0*image->width + x0) * 3;
+	ptr = image->data + i;
 
 	for (i=0; i<=last; i++) {
 	    /* Draw the pixel */
-	    *sr = color->red;
-	    *sg = color->green;
-	    *sb = color->blue;
-	    if (image->data[3])
-		*sa = 255;
+	    *ptr = color->red;
+	    *(ptr+1) = color->green;
+	    *(ptr+2) = color->blue;
+	    if (image->format == RRGBAFormat)
+		*(ptr+3) = 255;
 
 	    /* Compute error for NeXT Step */
 	    err += dv2;
 	    if (err >= du) {
-		sr += vofs; sg += vofs;
-		sb += vofs; sa += vofs;
+		if (image->format == RRGBAFormat)
+		    ptr += vofs*4;
+		else
+		    ptr += vofs*3;
 		err -= du2;
 	    }
-	    sr += uofs; sg += uofs;
-	    sb += uofs; sa += uofs;
+	    if (image->format == RRGBAFormat)
+		ptr += uofs*4;
+	    else
+		ptr += uofs*3;
 	}
     } else {
 	register int ofs = y0*image->width + x0;
@@ -591,5 +602,4 @@ ROperateSegments(RImage *image, int operation, RSegment *segs,
         segs++;
     }
 }
-
 
