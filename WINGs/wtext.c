@@ -2673,29 +2673,29 @@ insertPlainText(Text *tPtr, char *text)
         else
             WMAppendTextBlock(tPtr, tb);
     }
-    return;
-
 }
 
 
 static void
 rulerMoveCallBack(WMWidget *w, void *self)
-{   
+{
     Text *tPtr = (Text *)self;
-    if (!tPtr)    
+
+    if (!tPtr)
         return;
     if (W_CLASS(tPtr) != WC_Text)
         return;
-    
+
     paintText(tPtr);
 }
 
-    
+
 static void
 rulerReleaseCallBack(WMWidget *w, void *self)
 {
     Text *tPtr = (Text *)self;
-    if (!tPtr)    
+
+    if (!tPtr)
         return;
     if (W_CLASS(tPtr) != WC_Text)
         return;
@@ -2717,7 +2717,7 @@ fetchDragData(WMView *self, char *type)
     char *desc;
     WMData *data;
 
-    if(!tb)
+    if (!tb)
         return NULL;
 
 printf("type is [%s]\n", type);
@@ -2781,8 +2781,9 @@ badbadbad = wstrdup((char *)WMDataBytes(data));
 
 /* when it's done in WINGs, remove this */ 
 
-Bool requestDroppedData(WMView *view, WMDraggingInfo *info, char *type)
-{   
+Bool
+requestDroppedData(WMView *view, WMDraggingInfo *info, char *type)
+{
     WMScreen *scr = W_VIEW_SCREEN(view);
 
     if (!WMRequestSelection(scr->dragInfo.destView,
@@ -2790,25 +2791,24 @@ Bool requestDroppedData(WMView *view, WMDraggingInfo *info, char *type)
                 XInternAtom(scr->display, type, False),
                 scr->dragInfo.timestamp,
                 receivedData, &scr->dragInfo)) {
-wwarning("could not request data for dropped data");
-
-}
+        wwarning("could not request data for dropped data");
+    }
 
     {
-    XEvent ev;
-    
-    ev.type = ClientMessage;
-    ev.xclient.message_type = scr->xdndFinishedAtom;
-    ev.xclient.format = 32; 
-    ev.xclient.window = info->destinationWindow;
-    ev.xclient.data.l[0] = 0;
-    ev.xclient.data.l[1] = 0;
-    ev.xclient.data.l[2] = 0;
-    ev.xclient.data.l[3] = 0;
-    ev.xclient.data.l[4] = 0;
-    
-    XSendEvent(scr->display, info->sourceWindow, False, 0, &ev);
-    XFlush(scr->display);
+        XEvent ev;
+
+        ev.type = ClientMessage;
+        ev.xclient.message_type = scr->xdndFinishedAtom;
+        ev.xclient.format = 32;
+        ev.xclient.window = info->destinationWindow;
+        ev.xclient.data.l[0] = 0;
+        ev.xclient.data.l[1] = 0;
+        ev.xclient.data.l[2] = 0;
+        ev.xclient.data.l[3] = 0;
+        ev.xclient.data.l[4] = 0;
+
+        XSendEvent(scr->display, info->sourceWindow, False, 0, &ev);
+        XFlush(scr->display);
     }
     return True;
 }
@@ -2857,7 +2857,7 @@ getStream(WMText *tPtr, int sel, int array)
     TextBlock *tb = NULL;
     char *text = NULL;
     unsigned long where = 0;
-    
+
     if (!tPtr)
         return NULL;
 
@@ -2980,16 +2980,11 @@ getStreamObjects(WMText *tPtr, int sel)
 
 
 WMText *
-WMCreateTextForDocumentType(WMWidget *parent, 
-    WMAction *parser, WMAction *writer)
+WMCreateTextForDocumentType(WMWidget *parent, WMAction *parser, WMAction *writer)
 {
-    Text *tPtr = wmalloc(sizeof(Text));
-    if (!tPtr) {
-        printf("could not create text widget\n");
-        return NULL;
-    }
+    Text *tPtr;
 
-
+    tPtr = wmalloc(sizeof(Text));
     memset(tPtr, 0, sizeof(Text));
     tPtr->widgetClass = WC_Text;
     tPtr->view = W_CreateView(W_VIEW(parent));
@@ -3201,9 +3196,9 @@ WMSetTextDelegate(WMText *tPtr, WMTextDelegate *delegate)
 
 
 void *
-WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w, 
-    char *description, WMColor *color, 
-    unsigned short first, unsigned short extraInfo)
+WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w,
+                            char *description, WMColor *color,
+                            unsigned short first, unsigned short extraInfo)
 {
     TextBlock *tb;
 
@@ -3239,8 +3234,8 @@ WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w,
 
 void *
 WMCreateTextBlockWithPixmap(WMText *tPtr, WMPixmap *p, 
-    char *description, WMColor *color, 
-    unsigned short first, unsigned short extraInfo)
+                            char *description, WMColor *color,
+                            unsigned short first, unsigned short extraInfo)
 {
     TextBlock *tb;
 
@@ -3272,10 +3267,11 @@ WMCreateTextBlockWithPixmap(WMText *tPtr, WMPixmap *p,
 
     return tb;
 }
-    
-void *
+
+
+void*
 WMCreateTextBlockWithText(WMText *tPtr, char *text, WMFont *font, WMColor *color, 
-    unsigned short first, unsigned short len)
+                          unsigned short first, unsigned short len)
 {
     TextBlock *tb;
 

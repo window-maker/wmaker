@@ -414,6 +414,7 @@ destroyDrawString (proplist_t pl, WPluginData *init_data) {
         destroyDrawFreeTypeString(pl, init_data);
 }
 
+#ifdef USE_FREETYPE
 void
 widthOfString (unsigned char *text, int length, WPluginData *func_data,
         int *width, int *height, int *top) {
@@ -422,6 +423,7 @@ widthOfString (unsigned char *text, int length, WPluginData *func_data,
     data = ((WPluginData*)func_data->array[0])->array[2];
     data->strwidth(text, length, func_data, width, height, top);
 }
+#endif
 
 void
 initDrawString (proplist_t pl, WPluginData *init_data) {
