@@ -29,8 +29,10 @@ int windowCount = 0;
 void
 closeAction(WMWidget *self, void *data)
 {
+    WMUnmapWidget(self);
     WMDestroyWidget(self);
     windowCount--;
+    printf("window closed, window count = %d\n", windowCount);
     if (windowCount < 1)
 	exit(0);
 }
@@ -41,7 +43,7 @@ testOpenFilePanel(WMScreen *scr)
 {
     WMOpenPanel *panel;
     
-    windowCount++;
+    /* windowCount++; */
     
     /* get the shared Open File panel */
     panel = WMGetOpenPanel(scr);
@@ -58,7 +60,7 @@ testFontPanel(WMScreen *scr)
 {
     WMFontPanel *panel;
     
-    windowCount++;
+    /*windowCount++;*/
     
     panel = WMGetFontPanel(scr);
     
@@ -340,7 +342,6 @@ testColorWell(WMScreen *scr)
 
     win = WMCreateWindow(scr, "testColor");
     WMResizeWidget(win, 300, 300);
-
     WMSetWindowCloseAction(win, closeAction, NULL);
 
     well1 = WMCreateColorWell(win);
@@ -360,7 +361,7 @@ testColorWell(WMScreen *scr)
 void
 sliderCallback(WMWidget *w, void *data)
 {
-    printf("SLIEDER == %i\n", WMGetSliderValue(w));
+    printf("SLIDER == %i\n", WMGetSliderValue(w));
 }
 
 
@@ -808,7 +809,7 @@ getImage(WMScreen *scr, char *file)
     char buffer[1000];
     WMPixmap *pix;
     
-    sprintf(buffer, "../WindowMaker/Icons/%s", file);
+    sprintf(buffer, "../../WindowMaker/Icons/%s", file);
     pix = WMCreatePixmapFromFile(scr, buffer);
     
     return pix;
@@ -817,7 +818,8 @@ getImage(WMScreen *scr, char *file)
 
 
 
-static void iconMouseStuff(XEvent *event, void *cdata)
+static void
+iconMouseStuff(XEvent *event, void *cdata)
 {
     WMLabel *label = (WMLabel*)cdata;
     DNDStuff *stuff = WMGetHangedData(label);
@@ -853,8 +855,8 @@ static void iconMouseStuff(XEvent *event, void *cdata)
 }
 
 
-static void endedDragImage(WMView *self, WMPixmap *image, WMPoint point,
-			   Bool deposited)
+static void
+endedDragImage(WMView *self, WMPixmap *image, WMPoint point, Bool deposited)
 {
     DNDStuff *stuff = WMGetHangedData(WMWidgetOfView(self));
     
@@ -866,7 +868,8 @@ static void endedDragImage(WMView *self, WMPixmap *image, WMPoint point,
 }
 
 
-static WMData* fetchDragData(WMView *self, char *type)
+static WMData*
+fetchDragData(WMView *self, char *type)
 {
     DNDStuff *stuff = WMGetHangedData(WMWidgetOfView(self));
 
@@ -885,30 +888,33 @@ WMDragSourceProcs dragSourceProcs = {
 /************************/
 
 
-unsigned draggingEntered(WMView *self, WMDraggingInfo *info)
+unsigned
+draggingEntered(WMView *self, WMDraggingInfo *info)
 {
     return WDOperationCopy;
 }
 
 
-unsigned draggingUpdated(WMView *self, WMDraggingInfo *info)
+unsigned
+draggingUpdated(WMView *self, WMDraggingInfo *info)
 {
     return WDOperationCopy;
 }
 
-     /*
-    void (*draggingExited)(WMView *self, WMDraggingInfo *info);
-    */
-char *prepareForDragOperation(WMView *self, WMDraggingInfo *info)
+/*
+ void (*draggingExited)(WMView *self, WMDraggingInfo *info);
+ */
+char*
+prepareForDragOperation(WMView *self, WMDraggingInfo *info)
 {
     return "application/X-WINGs-Bla";
 }
 
 
-WMLabel *makeDraggableLabel(WMWidget *w, char *file, int x, int y);
+WMLabel* makeDraggableLabel(WMWidget *w, char *file, int x, int y);
 
-Bool performDragOperation(WMView *self, WMDraggingInfo *info,
-			  WMData *data)
+Bool
+performDragOperation(WMView *self, WMDraggingInfo *info, WMData *data)
 {
     char *file = (char*)WMDataBytes(data);
     WMPoint pos;
@@ -931,7 +937,8 @@ Bool performDragOperation(WMView *self, WMDraggingInfo *info,
 }
 
 
-void concludeDragOperation(WMView *self, WMDraggingInfo *info)
+void
+concludeDragOperation(WMView *self, WMDraggingInfo *info)
 {
 
 }
@@ -986,7 +993,8 @@ makeDraggableLabel(WMWidget *w, char *file, int x, int y)
 
 
 
-void testDragAndDrop(WMScreen *scr)
+void
+testDragAndDrop(WMScreen *scr)
 {
     WMWindow *win;
     WMFrame *frame;
@@ -996,7 +1004,7 @@ void testDragAndDrop(WMScreen *scr)
     struct dirent *ent;
     char *types[] = {
 	"application/X-WINGs-Bla",
-	    NULL
+        NULL
     };
 
     windowCount++;
@@ -1015,9 +1023,9 @@ void testDragAndDrop(WMScreen *scr)
     WMRegisterViewForDraggedTypes(WMWidgetView(frame), types);
     WMSetViewDragDestinationProcs(WMWidgetView(frame), &dragDestProcs);
     
-    dir = opendir("../WindowMaker/Icons");
+    dir = opendir("../../WindowMaker/Icons");
     if (!dir) {
-	perror("../WindowMaker/Icons");
+	perror("../../WindowMaker/Icons");
 	return;
     }
     
@@ -1052,7 +1060,8 @@ void testDragAndDrop(WMScreen *scr)
 
 #include "WUtil.h"
 
-void testUD()
+void
+testUD()
 {
     WMUserDefaults *defs;
     char str[32];
@@ -1066,7 +1075,8 @@ void testUD()
 }
 
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
     WMScreen *scr;
     WMPixmap *pixmap;
@@ -1115,6 +1125,7 @@ int main(int argc, char **argv)
      * Put the testSomething() function you want to test here.
      */
 
+    testList(scr);
     testColorWell(scr);
 
 #if 0
@@ -1143,8 +1154,6 @@ int main(int argc, char **argv)
 
 
     testOpenFilePanel(scr);
-    testList(scr);
-
 
     testSlider(scr);
     testPullDown(scr);
