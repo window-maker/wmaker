@@ -397,7 +397,7 @@ checkTimerHandlers()
 	handler = handler->next;
     }
 
-    while (timerHandler && IS_ZERO(handler->when)) {
+    while (timerHandler && IS_ZERO(timerHandler->when)) {
 	handler = timerHandler;
 	timerHandler = timerHandler->next;	
 	
