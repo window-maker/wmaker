@@ -2,7 +2,7 @@
 - check if its useful to add some WMBrowserSelectionDidChangeNotification
   (actually a pass-through for WMListSelectionDidChangeNotification).
   Or a delegate to be called when the list selection change.
-- add some way to modify speed when scrolling WMList depending on how
+- add some way to modify speed when scrolling WMList, depending on how
   far the mouse is moved outside of the list.
 
 

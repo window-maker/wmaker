@@ -2101,13 +2101,9 @@ showData(_Panel *panel)
     }
     updatePreviewBox(panel, EVERYTHING);
 
-
-    for (i = 0; i < 3; i++) {
-	WMSetButtonSelected(panel->mstyB[i], i==panel->menuStyle);
-	WMSetButtonSelected(panel->taliB[i], i==panel->titleAlignment);
-    }
+    WMSetButtonSelected(panel->mstyB[panel->menuStyle], True);
+    WMSetButtonSelected(panel->taliB[panel->titleAlignment], True);
 }
-
 
 
 static void
