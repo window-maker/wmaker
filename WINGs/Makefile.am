@@ -35,7 +35,6 @@ libWINGs_a_SOURCES = 	\
 	dragsource.c \
 	error.c \
 	findfile.c \
-	fontmanager.c \
 	hashtable.c \
 	host.c \
 	international.c \
