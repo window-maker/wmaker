@@ -820,7 +820,7 @@ wManageWindow(WScreen *scr, Window window)
                 fPtr->origLeader = wwin->main_window;
             }
             wwin->fake_group = fPtr;
-            //wwin->group_id = fPtr->leader;
+            /*wwin->group_id = fPtr->leader;*/
             wwin->main_window = fPtr->leader;
             wfree(buffer);
         } else {
@@ -839,7 +839,7 @@ wManageWindow(WScreen *scr, Window window)
                 fPtr->origLeader = wwin->main_window;
             }
             wwin->fake_group = fPtr;
-            //wwin->group_id = fPtr->leader;
+            /*wwin->group_id = fPtr->leader;*/
             wwin->main_window = fPtr->leader;
         }
         if (instance)
