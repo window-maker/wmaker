@@ -989,6 +989,7 @@ selectSpecification(WMWidget *bPtr, void *data)
 {
     InspectorPanel *panel = (InspectorPanel*)data;
     char *str;
+    WWindow *wwin = panel->frame;
 
     if (bPtr == panel->defaultRb) {
 	WMSetButtonEnabled(panel->applyBtn, False);
@@ -1003,7 +1004,7 @@ selectSpecification(WMWidget *bPtr, void *data)
 	    wwin->wm_instance ? wwin->wm_instance : "?",
 	    wwin->wm_class ? wwin->wm_class : "?");
 
-    wFrameWindowChangeTitle(panel->wwin->frame, str);
+    wFrameWindowChangeTitle(wwin->frame, str);
 
     free(str);
 }
