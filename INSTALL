@@ -38,6 +38,7 @@ SUPPORTED PLATFORMS
 - Amiga 3000 running RedHat Linux 5.1 (Rawhide)
 - IBM S/390 running Linux
 - iBook running Darwin
+- Windows NT with Cygwin/XFree86
 
 Patches to make it work on other platforms are welcome. 
 

@@ -36,15 +36,19 @@ main(int argc, char **argv)
 	puts(RMessageForError(RErrorCode));
 	exit(1);
     }
-    /*
+
     if (argc > 2) {
 	RImage *tmp = img;
 	
-	img = RSmoothScaleImage(tmp, tmp->width*atol(argv[2]), 
-				tmp->height*atol(argv[2]));
+	img = RScaleImage(tmp, tmp->width*atol(argv[2]),
+                          tmp->height*atol(argv[2]));
+	/*img = RSmoothScaleImage(tmp, tmp->width*atol(argv[2]),
+                                tmp->height*atol(argv[2]));
+         */
+
 	RReleaseImage(tmp);
     }
-     */
+
 #if 0
     if (argc > 2) {
 	img = RScaleImage(img, img->width*atof(argv[2]), 

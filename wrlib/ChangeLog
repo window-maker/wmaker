@@ -7,6 +7,11 @@
 - Small speed improvement for 24 and 32 bpp, if internal converter is used
 - Small speed improvement for generating gradients.
 - Fixed RSaveXPM() to output correct xpm images.
+- fixed speckles (white dots) on dithered images (bug still present on the
+  PowerPC architecture, because on LinuxPPC char is unsigned by default, not
+  signed like on the other platforms).
+  Bug fixed by Philip Derrin <philipd@student.unsw.edu.au>
+
 
 - fixed code dependant on the order of evaluation. code like
   *ptr++ = *ptr++ = *ptr++ = color;

@@ -616,10 +616,10 @@ TextBlock *tb)
     }
 
   
-    if(!tb->sections)
+    if(!tb->sections) {
       layOutDocument(tPtr);
-    if(!tb->sections) 
       return 0;
+    }
 
     *dir = !(y <= tb->sections[0].y);
     if(*dir) { 
@@ -3597,7 +3597,8 @@ WMAppendTextBlock(WMText *tPtr, void *vtb)
     tPtr->currentTextBlock = tb;
 }
 
-void  *
+
+void*
 WMRemoveTextBlock(WMText *tPtr) 
 {
     TextBlock *tb = NULL;
@@ -3637,15 +3638,15 @@ WMRemoveTextBlock(WMText *tPtr)
 }
 
 
+#if 0
 static void
 destroyWidget(WMWidget *widget)
 {
-  if(!widget)
-    return;
-
   WMDestroyWidget(widget);
-  wfree(widget); 
+  // -- never do this -- wfree(widget);
 }
+#endif
+
 
 void 
 WMDestroyTextBlock(WMText *tPtr, void *vtb)
@@ -3656,30 +3657,32 @@ WMDestroyTextBlock(WMText *tPtr, void *vtb)
 
     if (tb->graphic) {
         if(tb->object) {
-/* naturally, there's a danger to destroying widgets whose action 
-   brings us here: ie. press a button to destroy it... 
-   need to find a safer way. till then... this stays commented out */
-/* 5 months later... destroy it 10 seconds after now which should be 
-   enough time for the widget's action to be completed... :-) */
-          WMAddTimerHandler(10000, destroyWidget, (void *)tb->d.widget);
-          tb->d.widget = NULL;
-
+            /* naturally, there's a danger to destroying widgets whose action
+             * brings us here: ie. press a button to destroy it...
+             * need to find a safer way. till then... this stays commented out */
+            /* 5 months later... destroy it 10 seconds after now which should
+             * be enough time for the widget's action to be completed... :-) */
+            // This is a bad assumption. Just destroy the widget here.
+            // if the caller needs it, it can protect it with W_RetainView()
+            //WMAddTimerHandler(10000, destroyWidget, (void *)tb->d.widget);
+            WMDestroyWidget(tb->d.widget);
+            //tb->d.widget = NULL;
         } else {
             WMReleasePixmap(tb->d.pixmap);
-            tb->d.pixmap = NULL;
+            //tb->d.pixmap = NULL;
         }
     } else {
         WMReleaseFont(tb->d.font);
     }
-        
+
     WMReleaseColor(tb->color);
-    if (tb->sections && tb->nsections > 0)
+    // isn't this going to memleak if nsections==0? if (tb->sections && tb->nsections > 0)
+    if (tb->sections)
         wfree(tb->sections);
     wfree(tb->text);
     wfree(tb);
-    tb = NULL;
+    //tb = NULL;
 }
-    
 
 
 void

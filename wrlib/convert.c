@@ -139,7 +139,7 @@ computeStdTable(unsigned int mult, unsigned int max)
 
 static void
 convertTrueColor_generic(RXImage *ximg, RImage *image,
-			 char *err, char *nerr,
+			 signed char *err, signed char *nerr,
 			 const short *rtable, 
 			 const short *gtable,
 			 const short *btable,
@@ -148,7 +148,7 @@ convertTrueColor_generic(RXImage *ximg, RImage *image,
 			 const unsigned short goffs,
 			 const unsigned short boffs)
 {
-    char *terr;
+    signed char *terr;
     int x, y, r, g, b;
     int pixel;
     int rer, ger, ber;
@@ -330,7 +330,7 @@ image2TrueColor(RContext *ctx, RImage *image)
 
 static void
 convertPseudoColor_to_8(RXImage *ximg, RImage *image,
-			   char *err, char *nerr,
+			   signed char *err, signed char *nerr,
 			   const short *rtable, 
 			   const short *gtable,
 			   const short *btable,
@@ -338,7 +338,7 @@ convertPseudoColor_to_8(RXImage *ximg, RImage *image,
 			   unsigned long *pixels,
 			   int cpc)
 {
-    char *terr;
+    signed char *terr;
     int x, y, r, g, b;
     int pixel;
     int rer, ger, ber;
@@ -545,8 +545,8 @@ image2StandardPseudoColor(RContext *ctx, RImage *image)
 	}
     } else {
 	/* dither */
-	short *err, *nerr;
-	short *terr;
+	signed short *err, *nerr;
+	signed short *terr;
 	int rer, ger, ber;
 	int x1, ofs;
 
@@ -842,6 +842,14 @@ hermesConvert(RContext *context, RImage *image)
 	dest.indexed = 1;
     dest.has_colorkey = 0;
     
+    /*printf("source r=0x%x, g=0x%x, b=0x%x, a=0x%x, b=%d, i=%d, c=%d\n",
+           source.r, source.g, source.b, source.a,
+           source.bits, source.indexed, source.has_colorkey);
+    printf("dest r=0x%x, g=0x%x, b=0x%x, a=0x%x, b=%d, i=%d, c=%d\n",
+           dest.r, dest.g, dest.b, dest.a,
+           dest.bits, dest.indexed, dest.has_colorkey);
+    */
+
     Hermes_ConverterRequest(context->hermes_data->converter, &source, &dest);
     
     Hermes_ConverterPalette(context->hermes_data->converter, 

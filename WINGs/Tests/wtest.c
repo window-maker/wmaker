@@ -610,21 +610,21 @@ testText(WMScreen *scr)
     if(file) {
         char buf[1024];
 
-		WMFreezeText(text);
-		while(fgets(buf, 1023, file))
-			WMAppendTextStream(text, buf);
-		
-		fclose(file);
-		WMThawText(text);
-	} else {
-		WMAppendTextStream(text, 
-			"Window Maker is the GNU window manager for the "
-			"X Window System. It was designed to emulate the "
-			"look and feel of part of the NEXTSTEP(tm) GUI. Its "
-			"supposed to be relatively fast and small, feature "
-			"rich, easy to configure and easy to use, with a simple "
-			"and elegant appearance borrowed from NEXTSTEP(tm).");
-	}
+        WMFreezeText(text);
+        while(fgets(buf, 1023, file))
+            WMAppendTextStream(text, buf);
+
+        fclose(file);
+        WMThawText(text);
+    } else {
+        WMAppendTextStream(text,
+                           "Window Maker is the GNU window manager for the "
+                           "X Window System. It was designed to emulate the "
+                           "look and feel of part of the NEXTSTEP(tm) GUI. Its "
+                           "supposed to be relatively fast and small, feature "
+                           "rich, easy to configure and easy to use, with a simple "
+                           "and elegant appearance borrowed from NEXTSTEP(tm).");
+    }
 
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
@@ -1294,6 +1294,7 @@ main(int argc, char **argv)
 
 
     testDragAndDrop(scr);
+    testText(scr);
 #if 0
     testColorPanel(scr);
     testScrollView(scr);

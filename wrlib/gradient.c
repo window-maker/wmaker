@@ -115,7 +115,7 @@ renderHGradient(unsigned width, unsigned height, int r0, int g0, int b0,
 		int rf, int gf, int bf)
 {    
     int i;
-    unsigned long r, g, b, dr, dg, db;
+    long r, g, b, dr, dg, db;
     unsigned lineSize = width*3;
     RImage *image;
     unsigned char *ptr;
@@ -170,7 +170,7 @@ renderVGradient(unsigned width, unsigned height, int r0, int g0, int b0,
 		int rf, int gf, int bf)
 {
     int i, j;
-    unsigned long r, g, b, dr, dg, db;
+    long r, g, b, dr, dg, db;
     RImage *image;
     unsigned char *ptr;
     unsigned char rr, gg, bb;
@@ -280,7 +280,7 @@ static RImage*
 renderMHGradient(unsigned width, unsigned height, RColor **colors, int count)
 {
     int i, j, k;
-    unsigned long r, g, b, dr, dg, db;
+    long r, g, b, dr, dg, db;
     unsigned lineSize = width*3;
     RImage *image;
     unsigned char *ptr;
@@ -347,7 +347,7 @@ static RImage*
 renderMVGradient(unsigned width, unsigned height, RColor **colors, int count)
 {
     int i, j, k;
-    unsigned long r, g, b, dr, dg, db;
+    long r, g, b, dr, dg, db;
     unsigned lineSize = width*3;
     RImage *image;
     unsigned char *ptr, *tmp;
@@ -498,8 +498,8 @@ RRenderInterwovenGradient(unsigned width, unsigned height,
                           RColor colors2[2], int thickness2)
 {
     int i, j, k, l, ll;
-    unsigned long r1, g1, b1, dr1, dg1, db1;
-    unsigned long r2, g2, b2, dr2, dg2, db2;
+    long r1, g1, b1, dr1, dg1, db1;
+    long r2, g2, b2, dr2, dg2, db2;
     RImage *image;
     unsigned char *ptr;
     unsigned char rr, gg, bb;
