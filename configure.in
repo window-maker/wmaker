@@ -324,7 +324,7 @@ AC_ARG_ENABLE(lite,
 
 
 dnl
-dnl Networking stuff for Sysv
+dnl Networking stuff
 dnl
 
 NETLIBS=""
@@ -335,14 +335,20 @@ AC_CHECK_FUNC(connect,,
 AC_CHECK_FUNC(gethostbyname,,
 	AC_CHECK_LIB(nsl, gethostbyname, NETLIBS="$NETLIBS -lnsl",))
 
-save_LIBS=$LIBS
-LIBS="$LIBS $NETLIBS -lresolv"
-AC_CHECK_FUNCS(inet_aton)
-if test $ac_cv_func_inet_aton = yes; then
-  NETLIBS="$NETLIBS -lresolv"
-fi
+AC_CHECK_FUNC(inet_aton, AC_DEFINE(HAVE_INET_ATON),
+       for lib in bsd socket inet resolv; do
+         AC_CHECK_LIB($lib, inet_aton, [AC_DEFINE(HAVE_INET_ATON)
+           NETLIBS="$NETLIBS -l$lib"; break])
+       done)
 
-LIBS=$save_LIBS
+dnl save_LIBS=$LIBS
+dnl LIBS="$LIBS $NETLIBS -lresolv"
+dnl AC_CHECK_FUNCS(inet_aton)
+dnl if test $ac_cv_func_inet_aton = yes; then
+dnl   NETLIBS="$NETLIBS -lresolv"
+dnl fi
+dnl 
+dnl LIBS=$save_LIBS
 
 
 AC_SUBST(NETLIBS)
