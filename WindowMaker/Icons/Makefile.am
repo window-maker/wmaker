@@ -13,7 +13,6 @@ defsdata_DATA = \
 	TerminalGNUstep.tiff\
 	TerminalLinux.tiff\
 	clip.tiff\
-	clip2.tiff\
 	defaultAppIcon.tiff\
 	defaultterm.tiff\
 	draw.tiff\
@@ -40,7 +39,6 @@ defsdata_DATA = \
 	TerminalGNUstep.xpm\
 	TerminalLinux.xpm\
 	clip.xpm\
-	clip2.xpm\
 	defaultAppIcon.xpm\
 	defaultterm.xpm\
 	draw.xpm\
