@@ -2,8 +2,8 @@
   TitleJustify = center;
   HighlightColor = white;
   HighlightTextColor = black;
-  ClipTitleColor = white;
-  CClipTitleColor = gray40;
+  ClipTitleColor = black;
+  CClipTitleColor = gray30;
   FTitleColor = white;
   PTitleColor = white;
   UTitleColor = gray20;

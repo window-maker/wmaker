@@ -8,8 +8,8 @@
   DisplayFont = "-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*";
   HighlightColor = white;
   HighlightTextColor = black;
-  ClipTitleColor = white;
-  CClipTitleColor = gray20;
+  ClipTitleColor = black;
+  CClipTitleColor = gray30;
   FTitleColor = white;
   PTitleColor = white;
   UTitleColor = gray20;
