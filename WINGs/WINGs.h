@@ -1256,9 +1256,9 @@ WMSplitView *WMCreateSplitView(WMWidget *parent);
 Bool WMGetSplitViewVertical(WMSplitView *sPtr);
 void WMSetSplitViewVertical(WMSplitView *sPtr, Bool flag);
 
-int WMGetSplitViewSubViewsCount(WMSplitView *sPtr); /* ??? remove ??? */
+int WMGetSplitViewSubviewsCount(WMSplitView *sPtr); /* ??? remove ??? */
 
-WMView *WMGetSplitViewSubViewAt(WMSplitView *sPtr, int index);
+WMView *WMGetSplitViewSubviewAt(WMSplitView *sPtr, int index);
 
 /* remove the first subview == view */
 void WMRemoveSplitViewSubview(WMSplitView *sPtr, WMView *view);

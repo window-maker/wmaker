@@ -505,7 +505,7 @@ appendSubviewButtonAction(WMWidget *self, void *data)
     char buf[64];
     WMLabel *label = WMCreateLabel(sPtr);
     
-    sprintf(buf, "Subview %d", WMGetSplitViewSubViewsCount(sPtr) + 1);
+    sprintf(buf, "Subview %d", WMGetSplitViewSubviewsCount(sPtr) + 1);
     WMSetLabelText(label, buf);
     WMSetLabelRelief(label, WRSunken);
     WMAddSplitViewSubview(sPtr, WMWidgetView(label));
@@ -517,10 +517,10 @@ void
 removeSubviewButtonAction(WMWidget *self, void *data)
 {
     WMSplitView *sPtr = (WMSplitView*)data;
-    int count = WMGetSplitViewSubViewsCount(sPtr);
+    int count = WMGetSplitViewSubviewsCount(sPtr);
     
     if (count > 2) {
-    	WMView *view = WMGetSplitViewSubViewAt(sPtr, count-1);
+    	WMView *view = WMGetSplitViewSubviewAt(sPtr, count-1);
 	WMDestroyWidget(WMWidgetOfView(view));
     	WMRemoveSplitViewSubviewAt(sPtr, count-1);
     }
@@ -536,7 +536,7 @@ orientationButtonAction(WMWidget *self, void *data)
 void
 adjustSubviewsButtonAction(WMWidget *self, void *data)
 {
-    WMAdjustSplitViewSubViews((WMSplitView*)data);
+    WMAdjustSplitViewSubviews((WMSplitView*)data);
 }
 
 void

@@ -11,13 +11,13 @@ char *WMSplitViewWillResizeSubviewsNotification
     = "WMSplitViewWillResizeSubviewsNotification";
 */
 
-typedef struct _T_SplitViewSubView {
+typedef struct _T_SplitViewSubview {
     WMView *view;
     int minSize;
     int maxSize;
     int size;
     int pos;
-} T_SplitViewSubView;
+} T_SplitViewSubview;
 
 
 typedef struct W_SplitView {
@@ -44,28 +44,28 @@ typedef struct W_SplitView {
 #define MAX_SUBVIEW_SIZE    -1
 
 
-#define _GetSubViewsCount() WMGetBagItemCount(sPtr->subviewsBag)
+#define _GetSubviewsCount() WMGetBagItemCount(sPtr->subviewsBag)
 
-#define _AddPSubViewStruct(P) \
+#define _AddPSubviewStruct(P) \
 (WMPutInBag(sPtr->subviewsBag,((void*)P)))
 
-#define _GetPSubViewStructAt(i) \
-((T_SplitViewSubView*)WMGetFromBag(sPtr->subviewsBag,(i)))
+#define _GetPSubviewStructAt(i) \
+((T_SplitViewSubview*)WMGetFromBag(sPtr->subviewsBag,(i)))
 
-#define _GetSubViewAt(i) \
-(((T_SplitViewSubView*)WMGetFromBag(sPtr->subviewsBag,(i)))->view)
+#define _GetSubviewAt(i) \
+(((T_SplitViewSubview*)WMGetFromBag(sPtr->subviewsBag,(i)))->view)
 
 #define _GetMinSizeAt(i) \
-(((T_SplitViewSubView*)WMGetFromBag(sPtr->subviewsBag,(i)))->minSize)
+(((T_SplitViewSubview*)WMGetFromBag(sPtr->subviewsBag,(i)))->minSize)
 
 #define _GetMaxSizeAt(i) \
-(((T_SplitViewSubView*)WMGetFromBag(sPtr->subviewsBag,(i)))->maxSize)
+(((T_SplitViewSubview*)WMGetFromBag(sPtr->subviewsBag,(i)))->maxSize)
 
 #define _GetSizeAt(i) \
-(((T_SplitViewSubView*)WMGetFromBag(sPtr->subviewsBag,(i)))->size)
+(((T_SplitViewSubview*)WMGetFromBag(sPtr->subviewsBag,(i)))->size)
 
 #define _GetPosAt(i) \
-(((T_SplitViewSubView*)WMGetFromBag(sPtr->subviewsBag,(i)))->pos)
+(((T_SplitViewSubview*)WMGetFromBag(sPtr->subviewsBag,(i)))->pos)
 
 #define _GetSplitViewSize() \
 ((sPtr->flags.vertical) ? sPtr->view->size.width : sPtr->view->size.height)
@@ -99,12 +99,12 @@ getConstraints(SplitView *sPtr, int index, int *minSize, int *maxSize)
 static void
 updateConstraints(SplitView *sPtr)
 {
-    T_SplitViewSubView *p;
+    T_SplitViewSubview *p;
     int i, count;
 
-    count = _GetSubViewsCount();
+    count = _GetSubviewsCount();
     for (i = 0; i < count; i++) {
-    	p = _GetPSubViewStructAt(i);
+    	p = _GetPSubviewStructAt(i);
     	getConstraints(sPtr, i, &(p->minSize), &(p->maxSize));
     }
 }
@@ -171,12 +171,12 @@ static int
 checkSizes(SplitView *sPtr)
 {
     int i, count, offset;
-    T_SplitViewSubView *p;
+    T_SplitViewSubview *p;
 
-    count = _GetSubViewsCount();
+    count = _GetSubviewsCount();
     offset = 0;
     for (i = 0; i < count; i++) {
-    	p = _GetPSubViewStructAt(i);
+    	p = _GetPSubviewStructAt(i);
 	if (p->size < p->minSize) {
 	    offset += p->minSize - p->size;
 	    p->size = p->minSize;
@@ -194,12 +194,12 @@ static void
 checkPositions(SplitView *sPtr)
 {
     int i, count, pos;
-    T_SplitViewSubView *p;
+    T_SplitViewSubview *p;
 
-    count = _GetSubViewsCount();
+    count = _GetSubviewsCount();
     pos = 0;
     for (i = 0; i < count; i++) {
-    	p = _GetPSubViewStructAt(i);
+    	p = _GetPSubviewStructAt(i);
 	p->pos = pos;
 	pos += p->size + DIVIDER_THICKNESS;
     }
@@ -210,11 +210,11 @@ static void
 updateSubviewsGeom(SplitView *sPtr)
 {
     int i, count;
-    T_SplitViewSubView *p;
+    T_SplitViewSubview *p;
 
-    count = _GetSubViewsCount();
+    count = _GetSubviewsCount();
     for (i = 0; i < count; i++) {
-    	p = _GetPSubViewStructAt(i);
+    	p = _GetPSubviewStructAt(i);
 	resizeView(sPtr, p->view, p->size);
 	moveView(sPtr, p->view, p->pos);
     }
@@ -226,7 +226,7 @@ getTotalSize(SplitView *sPtr)
 {
     int i, count, totSize;
 
-    count = _GetSubViewsCount();
+    count = _GetSubviewsCount();
     if (!count)
     	return (0);
 
@@ -241,17 +241,17 @@ getTotalSize(SplitView *sPtr)
 static Bool
 distributeOffsetEqually(SplitView *sPtr, int offset)
 {
-    T_SplitViewSubView *p;
+    T_SplitViewSubview *p;
     int i, count, sizeChanged, forced;
 
-    if ((count = _GetSubViewsCount()) < 1)
+    if ((count = _GetSubviewsCount()) < 1)
     	return (True);
 
     forced = False;
     while (offset != 0) {
 	sizeChanged = 0;
     	for (i = 0; i < count && offset != 0; i++) {
-    	    p = _GetPSubViewStructAt(i);
+    	    p = _GetPSubviewStructAt(i);
 	    if (offset < 0) {
 	    	if (p->size > p->minSize) {
 		    offset++;
@@ -265,7 +265,7 @@ distributeOffsetEqually(SplitView *sPtr, int offset)
 	    }
     	}
 	if (offset != 0 && !sizeChanged) {
-	    p = _GetPSubViewStructAt(count-1);
+	    p = _GetPSubviewStructAt(count-1);
 	    if (offset > 0) {
 	    	p->size += offset;
 	    	p->maxSize = MAX_SUBVIEW_SIZE;
@@ -282,14 +282,14 @@ distributeOffsetEqually(SplitView *sPtr, int offset)
 static Bool
 distributeOffsetFormEnd(SplitView *sPtr, int offset)
 {
-    T_SplitViewSubView *p;
+    T_SplitViewSubview *p;
     int i, count, sizeTmp;
 
-    if ((count = _GetSubViewsCount()) < 1)
+    if ((count = _GetSubviewsCount()) < 1)
     	return (True);
 
     for (i = count-1; i >= 0 && offset != 0; i--) {
-	p = _GetPSubViewStructAt(i);
+	p = _GetPSubviewStructAt(i);
 	sizeTmp = p->size;
 	if (offset > 0) {
 	    if (p->maxSize == MAX_SUBVIEW_SIZE || p->size + offset < p->maxSize)
@@ -310,25 +310,25 @@ distributeOffsetFormEnd(SplitView *sPtr, int offset)
 
 
 static void
-adjustSplitViewSubViews(WMSplitView *sPtr)
+adjustSplitViewSubviews(WMSplitView *sPtr)
 {
-    T_SplitViewSubView *p;
+    T_SplitViewSubview *p;
     int i, count, adjSize, adjPad;
 
     CHECK_CLASS(sPtr, WC_SplitView);
 
 #if 0
-    printf("---- (adjustSplitViewSubViews - 1) ----\n");
-    dumpSubViews(sPtr);
+    printf("---- (adjustSplitViewSubviews - 1) ----\n");
+    dumpSubviews(sPtr);
 #endif
 
-    if ((count = _GetSubViewsCount()) < 1)
+    if ((count = _GetSubviewsCount()) < 1)
 	return;
 
     adjSize = (_GetSplitViewSize() - ((count-1) * DIVIDER_THICKNESS))  / count;
     adjPad =  (_GetSplitViewSize() - ((count-1) * DIVIDER_THICKNESS)) % count;
     for (i = 0; i < count; i++) {
-    	p = _GetPSubViewStructAt(i);
+    	p = _GetPSubviewStructAt(i);
 	p->size = adjSize;
     }
     
@@ -340,28 +340,28 @@ adjustSplitViewSubViews(WMSplitView *sPtr)
     sPtr->flags.subviewsWereManuallyMoved = 0;
 
 #if 0    
-    printf("---- (adjustSplitViewSubViews - 2) ----\n");
-    dumpSubViews(sPtr);
+    printf("---- (adjustSplitViewSubviews - 2) ----\n");
+    dumpSubviews(sPtr);
 #endif
 }
 
 #if 0
 static void
-handleSubViewResized(void *self, WMNotification *notif)
+handleSubviewResized(void *self, WMNotification *notif)
 {
     SplitView *sPtr = (SplitView*)self;
 
     CHECK_CLASS(sPtr, WC_SplitView);
 
     if (WMGetNotificationName(notif) == WMViewSizeDidChangeNotification) {
-    	T_SplitViewSubView *p;
+    	T_SplitViewSubview *p;
     	int i, count, done;
     	WMView *view = WMGetNotificationObject(notif);
 
-    	count = _GetSubViewsCount();
+    	count = _GetSubviewsCount();
     	done = 0;
 	for (i = 0; i < count; i++) {
-    	    p = _GetPSubViewStructAt(i);
+    	    p = _GetPSubviewStructAt(i);
 	    if (p->view == view) {
 	    	done = 1;
 		break;
@@ -384,7 +384,7 @@ handleViewResized(void *self, WMNotification *notification)
 
 #if 0
     printf("---- (handleViewResized - 1) ----\n");
-    dumpSubViews(sPtr);
+    dumpSubviews(sPtr);
 #endif
 
     updateConstraints(sPtr);
@@ -395,13 +395,13 @@ handleViewResized(void *self, WMNotification *notification)
     	checkPositions(sPtr);
     	updateSubviewsGeom(sPtr);
     } else
-    	adjustSplitViewSubViews(sPtr);
+    	adjustSplitViewSubviews(sPtr);
 
     assert(checkSizes(sPtr) == 0);
 
 #if 0
     printf("---- (handleViewResized - 2) ----\n");
-    dumpSubViews(sPtr);
+    dumpSubviews(sPtr);
 #endif
 }
 
@@ -409,14 +409,14 @@ handleViewResized(void *self, WMNotification *notification)
 static void
 paintSplitView(SplitView *sPtr)
 {
-    T_SplitViewSubView *p;
+    T_SplitViewSubview *p;
     W_Screen *scr = sPtr->view->screen;
     int x, y, i, count;
     WMPixmap *dimple = scr->scrollerDimple;
 
 #if 0
     printf("---- (paintSplitView - 1) ----\n");
-    dumpSubViews(sPtr);
+    dumpSubviews(sPtr);
 #endif
     
     if (!sPtr->view->flags.mapped || !sPtr->view->flags.realized)
@@ -424,7 +424,7 @@ paintSplitView(SplitView *sPtr)
 
     XClearWindow(scr->display, sPtr->view->window);
 
-    count = _GetSubViewsCount();
+    count = _GetSubviewsCount();
     if (count == 0)
     	return;
 
@@ -444,7 +444,7 @@ paintSplitView(SplitView *sPtr)
     }
 
     for (i = 0; i < count-1; i++) {
-    	p = _GetPSubViewStructAt(i);
+    	p = _GetPSubviewStructAt(i);
 
 	if (sPtr->flags.vertical)
     	    x += p->size;
@@ -463,7 +463,7 @@ paintSplitView(SplitView *sPtr)
 
 #if 0
     printf("---- (paintSplitView - 2) ----\n");
-    dumpSubViews(sPtr);
+    dumpSubviews(sPtr);
 #endif
 }
 
@@ -531,7 +531,7 @@ dragDivider(SplitView *sPtr, int clickX, int clickY)
     scr = sPtr->view->screen;
     divider = ofs = pos = done = 0;
     coord = (sPtr->flags.vertical) ? clickX : clickY;
-    count = _GetSubViewsCount();
+    count = _GetSubviewsCount();
     if (count < 2)
     	return;
 
@@ -585,11 +585,11 @@ dragDivider(SplitView *sPtr, int clickX, int clickY)
     }
     
     if (dragging) {
-    	T_SplitViewSubView *p1, *p2;
+    	T_SplitViewSubview *p1, *p2;
 	int totSize;
 	
-	p1 = _GetPSubViewStructAt(divider);
-	p2 = _GetPSubViewStructAt(divider+1);
+	p1 = _GetPSubviewStructAt(divider);
+	p2 = _GetPSubviewStructAt(divider+1);
 	
 	totSize = p1->size + DIVIDER_THICKNESS + p2->size;
 	
@@ -648,7 +648,7 @@ destroySplitView(SplitView *sPtr)
 {
     int i, count;
 
-    count = _GetSubViewsCount();
+    count = _GetSubviewsCount();
     for (i = 0; i < count; i++)
     	wfree(WMGetFromBag(sPtr->subviewsBag, i));
     WMFreeBag(sPtr->subviewsBag);
@@ -696,13 +696,13 @@ WMCreateSplitView(WMWidget *parent)
 
 
 void
-WMAdjustSplitViewSubViews(WMSplitView *sPtr)
+WMAdjustSplitViewSubviews(WMSplitView *sPtr)
 {
     CHECK_CLASS(sPtr, WC_SplitView);
     
     checkSizes(sPtr);
 
-    adjustSplitViewSubViews(sPtr);
+    adjustSplitViewSubviews(sPtr);
 
     assert(checkSizes(sPtr) == 0);
 }
@@ -712,18 +712,18 @@ void
 WMAddSplitViewSubview(WMSplitView *sPtr, WMView *subview)
 {
     int wasMapped, count;
-    T_SplitViewSubView *p;
+    T_SplitViewSubview *p;
 
     CHECK_CLASS(sPtr, WC_SplitView);
 
-    if (!(p = (T_SplitViewSubView*)wmalloc(sizeof(T_SplitViewSubView))))
+    if (!(p = (T_SplitViewSubview*)wmalloc(sizeof(T_SplitViewSubview))))
     	return;
 
     wasMapped = subview->flags.mapped;
     if (wasMapped)
 	W_UnmapView(subview);
 
-    count = _GetSubViewsCount();
+    count = _GetSubviewsCount();
     p->view = subview;
     getConstraints(sPtr, count, &(p->minSize), &(p->maxSize));
     if (sPtr->flags.vertical)
@@ -738,11 +738,11 @@ WMAddSplitViewSubview(WMSplitView *sPtr, WMView *subview)
     We should have something like that...
     
     WMSetViewNotifySizeChanges(subview, True);
-    WMAddNotificationObserver(handleSubViewResized, sPtr, 
+    WMAddNotificationObserver(handleSubviewResized, sPtr, 
 			      WMViewSizeDidChangeNotification,
 			      subview);
     WMSetViewNotifyMoveChanges(subview, True);
-    WMAddNotificationObserver(handleSubViewResized, sPtr, 
+    WMAddNotificationObserver(handleSubviewResized, sPtr, 
 			      WMViewMoveDidChangeNotification,
 			      subview);
 */
@@ -755,12 +755,12 @@ WMAddSplitViewSubview(WMSplitView *sPtr, WMView *subview)
 
 
 WMView*
-WMGetSplitViewSubViewAt(WMSplitView *sPtr, int index)
+WMGetSplitViewSubviewAt(WMSplitView *sPtr, int index)
 {
     CHECK_CLASS(sPtr, WC_SplitView);
 
-    if (index > 0 && index < _GetSubViewsCount())
-    	return (_GetSubViewAt(index));
+    if (index > 0 && index < _GetSubviewsCount())
+    	return (_GetSubviewAt(index));
     else
     	return (NULL);
 }
@@ -769,14 +769,14 @@ WMGetSplitViewSubViewAt(WMSplitView *sPtr, int index)
 void
 WMRemoveSplitViewSubview(WMSplitView *sPtr, WMView *view)
 {
-    T_SplitViewSubView *p;
+    T_SplitViewSubview *p;
     int i, count;
 
     CHECK_CLASS(sPtr, WC_SplitView);
 
-    count = _GetSubViewsCount();
+    count = _GetSubviewsCount();
     for (i = 0; i < count; i++) {
-    	p = _GetPSubViewStructAt(i);
+    	p = _GetPSubviewStructAt(i);
 	if (p->view == view) {
     	    wfree(p);
     	    WMDeleteFromBag(sPtr->subviewsBag, i);
@@ -791,12 +791,12 @@ WMRemoveSplitViewSubview(WMSplitView *sPtr, WMView *view)
 void
 WMRemoveSplitViewSubviewAt(WMSplitView *sPtr, int index)
 {
-    T_SplitViewSubView *p;
+    T_SplitViewSubview *p;
 
     CHECK_CLASS(sPtr, WC_SplitView);
 
-    if (index > 0 && index < _GetSubViewsCount()) {
-    	p = _GetPSubViewStructAt(index);
+    if (index > 0 && index < _GetSubviewsCount()) {
+    	p = _GetPSubviewStructAt(index);
     	wfree(p);
     	WMDeleteFromBag(sPtr->subviewsBag, index);
     	sPtr->flags.adjustOnPaint = 1;
@@ -815,11 +815,11 @@ WMSetSplitViewConstrainProc(WMSplitView *sPtr, WMSplitViewConstrainProc *proc)
 
 
 int
-WMGetSplitViewSubViewsCount(WMSplitView *sPtr)
+WMGetSplitViewSubviewsCount(WMSplitView *sPtr)
 {
     CHECK_CLASS(sPtr, WC_SplitView);
 
-    return (_GetSubViewsCount());
+    return (_GetSubviewsCount());
 }
 
 

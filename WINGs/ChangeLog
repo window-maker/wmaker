@@ -15,6 +15,13 @@ changes since wmaker 0.61.1:
 - added vertical views and multiple views in WMSplitView (Wolff <wolff@cybercable.fr>)
 - changed values of parameter values of WMSplitViewConstrainProc()
 - configurable default fontsize patch (Igor P. Roboul <igor@mordor.myip.org>)
+- fixed a bug that crashed the programm when a popup button was scrolled.
+- fixed a bug that caused incorrect drawing position of the popup indicator.
+- fixed a bug that prevented selecting no item (-1) in a popup button.
+- an assertion will be raised if the program tries to select a popup button
+  item that is beyond the total number of items present in the popup button.
+- changed names of functions for SplitView to be consistent. Some contained
+  SubView while other Subview. Now all have Subview.
 
 changes since wmaker 0.61.0:
 ............................

@@ -211,13 +211,13 @@ WMGetPopUpButtonEnabled(WMPopUpButton *bPtr)
 
 void
 WMSetPopUpButtonSelectedItem(WMPopUpButton *bPtr, int index)
-{    
-    if (index < 0) {
-	if (bPtr->view->flags.mapped)
-	    paintPopUpButton(bPtr);
-	return;
-    }
-    
+{
+
+    wassertr(index < WMGetBagItemCount(bPtr->items));
+
+    /* if (index >= WMGetBagCount(bPtr->items))
+        index = -1;*/
+
     bPtr->selectedItemIndex = index;
     
     if (bPtr->view->flags.mapped)
@@ -414,14 +414,17 @@ static void
 paintMenuEntry(PopUpButton *bPtr, int index, int highlight)
 {
     W_Screen *scr = bPtr->view->screen;
-    int i;
     int yo;
-    int width, height, itemHeight;
+    int width, height, itemHeight, itemCount;
     char *title;
-    
+
+    itemCount = WMGetBagItemCount(bPtr->items);
+    if (index < 0 || index >= itemCount)
+        return;
+
     itemHeight = bPtr->view->size.height;
     width = bPtr->view->size.width;
-    height = itemHeight * WMGetBagItemCount(bPtr->items);
+    height = itemHeight * itemCount;
     yo = (itemHeight - WMFontHeight(scr->normalFont))/2;
 
     if (!highlight) {
@@ -443,13 +446,13 @@ paintMenuEntry(PopUpButton *bPtr, int index, int highlight)
     W_PaintText(bPtr->menuView, bPtr->menuView->window, scr->normalFont,  6, 
 		index*itemHeight + yo, width, WALeft, WMColorGC(scr->black), 
 		False, title, strlen(title));
-	
+
     if (!bPtr->flags.pullsDown && index == bPtr->selectedItemIndex) {
 	XCopyArea(scr->display, scr->popUpIndicator->pixmap, 
 		  bPtr->menuView->window, scr->copyGC, 0, 0, 
 		  scr->popUpIndicator->width, scr->popUpIndicator->height,
 		  width-scr->popUpIndicator->width-4, 
-		  i*itemHeight+(itemHeight-scr->popUpIndicator->height)/2);
+		  index*itemHeight+(itemHeight-scr->popUpIndicator->height)/2);
     }
 }
 
@@ -575,8 +578,8 @@ autoScroll(void *data)
     int dy = 0;
 
 
-    if (bPtr->scrollStartY > scrHeight-1
-	&& bPtr->menuView->pos.y+bPtr->menuView->size.height > scrHeight-1) {
+    if (bPtr->scrollStartY >= scrHeight-1
+	&& bPtr->menuView->pos.y+bPtr->menuView->size.height >= scrHeight-1) {
 	repeat = 1;
 
 	if (bPtr->menuView->pos.y+bPtr->menuView->size.height-5 
@@ -605,17 +608,19 @@ autoScroll(void *data)
 	bPtr->highlightedItem = (bPtr->scrollStartY - bPtr->menuView->pos.y)
 	    / bPtr->view->size.height;
 
-	if (bPtr->highlightedItem >= WMGetBagItemCount(bPtr->items))
-	    bPtr->highlightedItem = WMGetBagItemCount(bPtr->items)-1;
-
 	if (oldItem!=bPtr->highlightedItem) {
-	    WMMenuItem *item = 
-		WMGetPopUpButtonMenuItem(bPtr, bPtr->highlightedItem);
+            WMMenuItem *item;
 
 	    paintMenuEntry(bPtr, oldItem, False);
-	    
-	    paintMenuEntry(bPtr, bPtr->highlightedItem,
-			   WMGetMenuItemEnabled(item));
+
+            if (bPtr->highlightedItem >= 0 &&
+                bPtr->highlightedItem < WMGetBagItemCount(bPtr->items)) {
+                item = WMGetPopUpButtonMenuItem(bPtr, bPtr->highlightedItem);
+                paintMenuEntry(bPtr, bPtr->highlightedItem,
+                               WMGetMenuItemEnabled(item));
+            } else {
+                bPtr->highlightedItem = -1;
+            }
 	}
 
 	bPtr->timer = WMAddTimerHandler(SCROLL_DELAY, autoScroll, bPtr);
@@ -661,10 +666,16 @@ handleActionEvents(XEvent *event, void *data)
 	    if (oldItem!=bPtr->highlightedItem) {
 		WMMenuItem *item;
 		
-		item = WMGetPopUpButtonMenuItem(bPtr, bPtr->highlightedItem);
 		paintMenuEntry(bPtr, oldItem, False);
-		paintMenuEntry(bPtr, bPtr->highlightedItem, 
-			       WMGetMenuItemEnabled(item));
+                if (bPtr->highlightedItem >= 0 &&
+                    bPtr->highlightedItem < WMGetBagItemCount(bPtr->items)) {
+                    item = WMGetPopUpButtonMenuItem(bPtr, bPtr->highlightedItem);
+                    paintMenuEntry(bPtr, bPtr->highlightedItem,
+                                   WMGetMenuItemEnabled(item));
+                } else {
+                    bPtr->highlightedItem = -1;
+                }
+
 	    }
 
 	    if (event->xmotion.y_root >= scrHeight-1

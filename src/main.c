@@ -49,6 +49,7 @@
 #include "xmodifier.h"
 #include "defaults.h"
 #include "session.h"
+#include "dialog.h"
 
 #include <proplist.h>
 

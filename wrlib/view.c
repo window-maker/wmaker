@@ -62,4 +62,5 @@ int main(int argc, char **argv)
     XFlush(dpy);
 
     getchar();
+    exit(0);
 }

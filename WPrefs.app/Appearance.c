@@ -1722,7 +1722,6 @@ createPanel(Panel *p)
     panel->secP = WMCreatePopUpButton(panel->texF);
     WMResizeWidget(panel->secP, 228, 20);
     WMMoveWidget(panel->secP, 7, 7);
-    WMSetPopUpButtonSelectedItem(panel->secP, 0);
     WMAddPopUpButtonItem(panel->secP, _("Titlebar of Focused Window"));
     WMAddPopUpButtonItem(panel->secP, _("Titlebar of Unfocused Windows"));
     WMAddPopUpButtonItem(panel->secP, _("Titlebar of Focused Window's Owner"));
@@ -1732,6 +1731,7 @@ createPanel(Panel *p)
     WMAddPopUpButtonItem(panel->secP, _("Icon Background"));
 /*    WMAddPopUpButtonItem(panel->secP, _("Workspace Backgrounds"));
  */
+    WMSetPopUpButtonSelectedItem(panel->secP, 0);
     WMSetPopUpButtonAction(panel->secP, changePage, panel);
 
     panel->texLs = WMCreateList(panel->texF);
@@ -1818,7 +1818,6 @@ createPanel(Panel *p)
     panel->colP = WMCreatePopUpButton(panel->colF);
     WMResizeWidget(panel->colP, 228, 20);
     WMMoveWidget(panel->colP, 7, 7);
-    WMSetPopUpButtonSelectedItem(panel->colP, 0);
     WMAddPopUpButtonItem(panel->colP, _("Focused Window Title"));
     WMAddPopUpButtonItem(panel->colP, _("Unfocused Window Title"));
     WMAddPopUpButtonItem(panel->colP, _("Owner of Focused Window Title"));

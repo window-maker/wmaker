@@ -961,7 +961,6 @@ raiseWindow(WScreen *scr)
 static void 
 handleEnterNotify(XEvent *event)
 {
-    WMenu *menu;
     WWindow *wwin;
     WObjDescriptor *desc = NULL;
     XEvent ev;
