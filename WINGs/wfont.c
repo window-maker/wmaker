@@ -19,21 +19,20 @@
 
 
 static FcPattern*
-xlfdToFcPattern(char *xlfd, int size)
+xlfdToFcPattern(char *xlfd)
 {
     FcPattern *pattern;
     char *fname, *ptr;
 
-    if (strchr(xlfd, "%")!=NULL)
-       return FcNameParse("sans:pixelsize=12");
-    else {
-        fname= wstrdup(xlfd);
-    }
+    /* Just skip old font names that contain %d in them.
+     * We don't support that anymore. */
+    if (strchr(xlfd, '%')!=NULL)
+        return FcNameParse(DEFAULT_FONT);
 
+    fname= wstrdup(xlfd);
     if ((ptr = strchr(fname, ','))) {
         *ptr = 0;
     }
-
     pattern = XftXlfdParse(fname, False, False);
     wfree(fname);
 
@@ -47,12 +46,12 @@ xlfdToFcPattern(char *xlfd, int size)
 
 
 static char*
-xlfdToFcName(char *xlfd, int size)
+xlfdToFcName(char *xlfd)
 {
     FcPattern *pattern;
     char *fname;
 
-    pattern = xlfdToFcPattern(xlfd, size);
+    pattern = xlfdToFcPattern(xlfd);
     fname = FcNameUnparse(pattern);
     FcPatternDestroy(pattern);
 
@@ -101,7 +100,7 @@ makeFontOfSize(char *font, int size, char *fallback)
     char *result;
 
     if (font[0]=='-') {
-        pattern = xlfdToFcPattern(font, size);
+        pattern = xlfdToFcPattern(font);
     } else {
         pattern = FcNameParse(font);
     }
@@ -137,7 +136,7 @@ WMCreateFont(WMScreen *scrPtr, char *fontName)
     char *fname;
 
     if (fontName[0]=='-'){
-        fname = xlfdToFcName(fontName, 0);
+        fname = xlfdToFcName(fontName);
     } else {
         fname = wstrdup(fontName);
     }

@@ -315,13 +315,13 @@
 #define HIDE_ANIMATION_STEPS (MINIATURIZE_ANIMATION_STEPS*2/3)
 
 /* delay before balloon is shown (ms) */
-#define BALLOON_DELAY	        1000
+#define BALLOON_DELAY           1000
 
 /* delay for menu item selection hysteresis (ms) */
 #define MENU_SELECT_DELAY       200
 
 /* delay for jumpback of scrolled menus (ms) */
-#define MENU_JUMP_BACK_DELAY 	400
+#define MENU_JUMP_BACK_DELAY    400
 
 /* *** animation speed constants *** */
 

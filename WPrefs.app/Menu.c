@@ -1563,45 +1563,30 @@ buildMenuFromPL(_Panel *panel, WMPropList *pl)
 static WMPropList*
 getDefaultMenu(_Panel *panel)
 {
-    WMPropList *menu, *pmenu;
+    WMPropList *menu;
     char *menuPath, *gspath;
 
     gspath = wusergnusteppath();
 
     menuPath = wmalloc(strlen(gspath)+128);
-    /* if there is a localized plmenu for the tongue put it's filename here */
-    sprintf(menuPath, _("%s/Library/WindowMaker/plmenu"), gspath);
+    sprintf(menuPath, "%s/Library/WindowMaker/plmenu", gspath);
 
     menu = WMReadPropListFromFile(menuPath);
+
     if (!menu) {
-        wwarning("%s:could not read property list menu", menuPath);
+        char *buffer, *msg;
 
-        if (strcmp("%s/Library/WindowMaker/plmenu",
-                   _("%s/Library/WindowMaker/plmenu"))!=0) {
-
-            sprintf(menuPath, "%s/Library/WindowMaker/plmenu", gspath);
-            menu = WMReadPropListFromFile(menuPath);
-            wwarning("%s:could not read property list menu", menuPath);
-        }
-        if (!menu) {
-            char buffer[512];
-
-            sprintf(buffer, _("Could not open default menu from '%s'"),
-                    menuPath);
-            WMRunAlertPanel(WMWidgetScreen(panel->parent), panel->parent,
-                            _("Error"), buffer,	_("OK"), NULL, NULL);
-        }
+        msg = _("Could not open default menu from '%s'");
+        buffer = wmalloc(strlen(msg) + strlen(menuPath) + 10);
+        sprintf(buffer, msg, menuPath);
+        WMRunAlertPanel(WMWidgetScreen(panel->parent), panel->parent,
+                        _("Error"), buffer,	_("OK"), NULL, NULL);
+        wfree(buffer);
     }
 
     wfree(menuPath);
 
-    if (menu) {
-        pmenu = menu;
-    } else {
-        pmenu = NULL;
-    }
-
-    return pmenu;
+    return menu;
 }
 
 

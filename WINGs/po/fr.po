@@ -49,7 +49,7 @@ msgstr "Impossible de lire le mot de passe de l'UID %i"
 #: ../../WINGs/findfile.c:66
 #, c-format
 msgid "could not get password entry for user %s"
-msgstr "Impossible de lire le mot de passe de l'utilisateur %i"
+msgstr "Impossible de lire le mot de passe de l'utilisateur %s"
 
 #: ../../WINGs/host.c:114
 msgid "Cannot get current host name"
