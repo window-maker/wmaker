@@ -782,7 +782,7 @@ getuserinput(WScreen *scr, char *line, int *ptr)
     char *title;
     char *prompt;
     int j, state;
-    int begin;
+    int begin = 0;
     char tbuffer[256], pbuffer[256];
 
     title = _("Program Arguments");

@@ -34,6 +34,7 @@
 #include "client.h"
 #include "funcs.h"
 #include "properties.h"
+#include "session.h"
 #include "winspector.h"
 #ifdef KWM_HINTS
 # include "kwm.h"

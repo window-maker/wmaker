@@ -24,6 +24,13 @@
 #define WMDIALOG_H_
 
 
+enum {
+    WMAbort=0,
+    WMRestart,
+    WMStartAlternate
+};
+
+
 int wMessageDialog(WScreen *scr, char *title, char *message, 
 		   char *defBtn, char *altBtn, char *othBtn);
 int wInputDialog(WScreen *scr, char *title, char *message, char **text);
@@ -33,5 +40,7 @@ Bool wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class);
 void wShowInfoPanel(WScreen *scr);
 
 void wShowLegalPanel(WScreen *scr);
+
+int wShowCrashingDialogPanel(int whatSig);
 
 #endif

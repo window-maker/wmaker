@@ -426,7 +426,7 @@ RImage*
 wTextureRenderImage(WTexture *texture, int width, int height,
 		    int relief)
 {
-    RImage *image;
+    RImage *image = NULL;
     RColor color1;
     int d;
     int subtype;
