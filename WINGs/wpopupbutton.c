@@ -730,15 +730,18 @@ handleActionEvents(XEvent *event, void *data)
 	if (!bPtr->flags.enabled)
 	    break;
 
-        if (!bPtr->flags.pullsDown && !bPtr->menuView->flags.mapped) {
-	    if (event->xbutton.button==WINGsConfiguration.mouseWheelDown) {
-                wheelScrollDown(bPtr);
-            } else if (event->xbutton.button==WINGsConfiguration.mouseWheelUp) {
+        if (event->xbutton.button==WINGsConfiguration.mouseWheelUp) {
+            if (!bPtr->menuView->flags.mapped && !bPtr->flags.pullsDown) {
                 wheelScrollUp(bPtr);
             }
-	    break;
-	}
-	popUpMenu(bPtr);
+            break;
+        } else if (event->xbutton.button==WINGsConfiguration.mouseWheelDown) {
+            if (!bPtr->menuView->flags.mapped && !bPtr->flags.pullsDown) {
+                wheelScrollDown(bPtr);
+            }
+            break;
+        }
+        popUpMenu(bPtr);
 	if (!bPtr->flags.pullsDown) {
 	    bPtr->highlightedItem = bPtr->selectedItemIndex;
 	    bPtr->flags.insideMenu = 1;
