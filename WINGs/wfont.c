@@ -317,31 +317,41 @@ WMDrawImageString(WMScreen *scr, Drawable d, GC gc, WMFont *font, int x, int y,
 static char*
 makeFontSetOfSize(char *fontset, int size)
 {
-    char font[300];
+    char font[300], *f;
     char *newfs = NULL;
     char *ptr;
-    char *tmp;
 
     do {
-	int hold = ' ';
-	
+	char *tmp;
+	int end;
+
+
+	f = fontset;
 	ptr = strchr(fontset, ',');
 	if (ptr) {
-	    hold = *(ptr+1);
-	    *(ptr+1) = 0;
+	    int count = ptr-fontset;
+
+	    if (count > 255) {
+		wwarning("font description %s is too large.", fontset);
+	    } else {
+		memcpy(font, fontset, count);
+		font[count] = 0;
+		f = (char*)font;
+	    }
 	}
-	if (strlen(fontset)>255) {
-	    wwarning("font description %s is too large.", fontset);
-	} else {
-	    sprintf(font, fontset, size);
-	    tmp = wstrappend(newfs, font);
-	    if (newfs)
-		free(newfs);
-	    newfs = tmp;
-	}
-	if (ptr) {
-	    *(ptr+1) = hold;
-	}
+
+	if (newfs)
+	    end = strlen(newfs);
+	else
+	    end = 0;
+
+	tmp = wmalloc(end + strlen(f) + 8);
+	sprintf(tmp + end, f, size);
+
+	if (newfs)
+	    free(newfs);
+	newfs = tmp;
+
 	fontset = ptr+1;
     } while (ptr!=NULL);
 
