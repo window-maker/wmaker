@@ -104,7 +104,7 @@ WMGetApplicationIconPixmap(WMScreen *scr)
 
 
 WMPixmap*
-WMGetApplicationIconBlendedPixmap(WMScreen *scr, RColor *color)
+WMCreateApplicationIconBlendedPixmap(WMScreen *scr, RColor *color)
 {
     WMPixmap *pix;
 

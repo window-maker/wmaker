@@ -1202,7 +1202,7 @@ wShowInfoPanel(WScreen *scr)
     panel->win = WMCreateWindow(scr->wmscreen, "info");
     WMResizeWidget(panel->win, 382, 230);
     
-    logo = WMGetApplicationIconBlendedPixmap(scr->wmscreen, (RColor*)NULL);
+    logo = WMCreateApplicationIconBlendedPixmap(scr->wmscreen, (RColor*)NULL);
     if (!logo) {
         logo = WMRetainPixmap(WMGetApplicationIconPixmap(scr->wmscreen));
     }

@@ -633,7 +633,7 @@ void WMSetApplicationIconPixmap(WMScreen *app, WMPixmap *icon);
 WMPixmap* WMGetApplicationIconPixmap(WMScreen *app);
 
 /* If color==NULL it will use the default color for panels: ae/aa/ae */
-WMPixmap* WMGetApplicationIconBlendedPixmap(WMScreen *scr, RColor *color);
+WMPixmap* WMCreateApplicationIconBlendedPixmap(WMScreen *scr, RColor *color);
 
 void WMSetApplicationIconWindow(WMScreen *scr, Window window);
 

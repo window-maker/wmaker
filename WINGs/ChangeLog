@@ -38,8 +38,8 @@ Changes since wmaker 0.64.0:
      room for the new functions added for operating on images with alpha info.
   2. Added WMSetApplicationIconImage() and WMGetApplicationIconImage() which
      operate on an RImage and store alpha information too.
-  3. Added WMGetApplicationIconBlendedPixmap() which will take the image with
-     alpha set by WMSetApplicationIconImage() and will blend it with a color.
+  3. Added WMCreateApplicationIconBlendedPixmap() which will take the image
+     set by WMSetApplicationIconImage() and will combine it with a color.
      If color is NULL it will blend using the default panel color (#aeaaae)
   All these changes will allow WINGs to handle images with alpha blending
   correctly in panels and wherever else needed. More about in NEWS.

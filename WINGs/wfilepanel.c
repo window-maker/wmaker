@@ -198,7 +198,7 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     WMResizeWidget(fPtr->iconLabel, 64, 64);
     WMMoveWidget(fPtr->iconLabel, 0, 0);
     WMSetLabelImagePosition(fPtr->iconLabel, WIPImageOnly);
-    icon = WMGetApplicationIconBlendedPixmap(scrPtr, (RColor*)NULL);
+    icon = WMCreateApplicationIconBlendedPixmap(scrPtr, (RColor*)NULL);
     if (icon) {
         WMSetLabelImage(fPtr->iconLabel, icon);
         WMReleasePixmap(icon);

@@ -15,7 +15,7 @@ changes took place:
 2. The following functions were added:
    - WMSetApplicationIconImage(WMScreen *scr, RImage *image)
    - RImage* WMGetApplicationIconImage(WMScreen *scr)
-   - WMPixmap* WMGetApplicationIconBlendedPixmap(WMScreen *scr, RColor *color)
+   - WMPixmap* WMCreateApplicationIconBlendedPixmap(WMScreen *scr, RColor *col)
 
 As you can see the old functions that operated on WMPixmap images (which are
 basically X Pixmaps that lack alpha information) were renamed to ...Pixmap()
@@ -54,7 +54,7 @@ different icon to be shown in the appicon than in panels.
 
 Also this new function was added:
 
-- WMGetApplicationIconBlendedPixmap() will use the RImage set with
+- WMCreateApplicationIconBlendedPixmap() will use the RImage set with
     WMSetApplicationIconImage() if available and will blend it with the color
     you passed. This will make the image show well on a background of that
     color. If the RImage was not set it will return NULL. You need to call
