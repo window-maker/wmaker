@@ -13,7 +13,6 @@ To do before next release:
 - figure out a better gnustep path for wprefs.app installation
 - pick a good font fallback
 - figure a better fullscreen level
-- add default pixelsize if font doesn't define any size.
 - clean up netwm hints on exit
 - check whether window states are being saved/restored properly via netwm
   on restart/crash-restart (grep for XXX/TODO)

@@ -553,15 +553,18 @@ showData(_Panel *panel)
     
     for (i= 0; i < WMGetPopUpButtonNumberOfItems(panel->optionP); i++)
     {
-        char *ofont;
+        char *ofont, *font;
         
         item= WMGetPopUpButtonMenuItem(panel->optionP, i);
         
         ofont= WMGetMenuItemRepresentedObject(item);
         if (ofont)
           wfree(ofont);
-        
-        WMSetMenuItemRepresentedObject(item, GetStringForKey(fontOptions[i].option));
+
+        font= GetStringForKey(fontOptions[i].option);
+        if (font)
+          font= wstrdup(font);
+        WMSetMenuItemRepresentedObject(item, font);
     }
 
     WMSetPopUpButtonSelectedItem(panel->optionP, 0);
@@ -581,7 +584,7 @@ storeData(_Panel *panel)
         item= WMGetPopUpButtonMenuItem(panel->optionP, i);
 
         font= WMGetMenuItemRepresentedObject(item);
-        if (font)
+        if (font && *font)
         {
             SetStringForKey(font, fontOptions[i].option);
         }
