@@ -194,7 +194,7 @@ static void addIconForWindow(WSwitchPanel *panel, WWindow *wwin, int iconWidth)
   if (!image && panel->defIcon)
     image= RRetainImage(panel->defIcon);
 
-  if (image && (abs(image->width - iconWidth) > 2 || abs(image->height - iconWidth) > 2)) {
+  if (image && ((image->width - iconWidth) > 2 || (image->height - iconWidth) > 2)) {
     RImage *nimage;
     nimage= RScaleImage(image, iconWidth, (image->height * iconWidth / image->width));
     RReleaseImage(image);
