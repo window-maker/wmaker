@@ -89,7 +89,7 @@ WMDeleteSelectionCallback(WMView *view, Atom selection, Time timestamp)
     
     WM_ITERATE_ARRAY(selCallbacks, handler, iter) {
 	if (handler->view == view
-	    && (handler->selection == selection || selection == 0)
+	    && (handler->selection == selection || selection == None)
 	    && (handler->timestamp == timestamp || timestamp == CurrentTime)) {
 
 	    if (handler->flags.done_pending) {
@@ -152,7 +152,7 @@ notifySelection(XEvent *event, Atom prop)
 {
     XEvent ev;
 
-    /* printf("envent to %x\n", event->xselectionrequest.requestor); */
+    /* printf("event to %x\n", event->xselectionrequest.requestor); */
 
     ev.xselection.type = SelectionNotify;
     ev.xselection.serial = 0;
@@ -176,7 +176,7 @@ handleRequestEvent(XEvent *event)
     SelectionHandler *handler;
     WMArrayIterator iter;
     WMArray *copy;
-    Bool handledRequest = False;
+    Bool handledRequest;
 
     WM_ITERATE_ARRAY(selHandlers, handler, iter) {
 
@@ -196,9 +196,8 @@ handleRequestEvent(XEvent *event)
 	    handler->flags.delete_pending = 1;
 	    break;
 
-	 case SelectionRequest:	    
-	    if (W_VIEW_DRAWABLE(handler->view)
-		!= event->xselectionrequest.owner) {
+	 case SelectionRequest:
+	    if (W_VIEW_DRAWABLE(handler->view)!=event->xselectionrequest.owner) {
 		break;
 	    }
 
@@ -215,6 +214,8 @@ handleRequestEvent(XEvent *event)
 		    break;
 		}
 
+                handledRequest = False;
+
 		handler->flags.done_pending = 1;
 
 		data = handler->procs.convertSelection(handler->view,
@@ -222,41 +223,31 @@ handleRequestEvent(XEvent *event)
 						     event->xselectionrequest.target,
 						     handler->data,
 						     &atom);
-		if (data == NULL) {
-		    break;
-		}
-	    
-		handledRequest = True;
-		
-		
+
 		prop = event->xselectionrequest.property;
 		/* obsolete clients that don't set the property field */
 		if (prop == None)
 		    prop = event->xselectionrequest.target;
-		
-		if (!writeSelection(event->xselectionrequest.display,
-				    event->xselectionrequest.requestor,
-				    prop, atom, data)) {
-		    WMReleaseData(data);
-		    notifySelection(event, None);
-		    break;
-		}
-		WMReleaseData(data);
-		
-		notifySelection(event, prop);
-		
+
+                if (data) {
+                    if (writeSelection(event->xselectionrequest.display,
+                                       event->xselectionrequest.requestor,
+                                       prop, atom, data)) {
+                        handledRequest = True;
+                    }
+                    WMReleaseData(data);
+                }
+
+                notifySelection(event, (handledRequest==True ? prop : None));
+
 		if (handler->procs.selectionDone != NULL) {
 		    handler->procs.selectionDone(handler->view,
 					 handler->selection,
 					 event->xselectionrequest.target,
 					 handler->data);
 		}
-		
+
 		handler->flags.done_pending = 0;
-		
-		if (!handledRequest) {
-		    notifySelection(event, None);
-		}
 	    }
 	    break;
 	}
@@ -293,9 +284,6 @@ getSelectionData(Display *dpy, Window win, Atom where)
     bpi = bits/8;
 
     wdata = WMCreateDataWithBytesNoCopy(data, len*bpi, (WMFreeDataProc*)XFree);
-    if (wdata == NULL) {
-	return NULL;
-    }
     WMSetDataFormat(wdata, bits);
 
     return wdata;

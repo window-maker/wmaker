@@ -1,0 +1,660 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: WINGs 0.80.0\n"
+"POT-Creation-Date: 2001-12-31 20:59+0100\n"
+"PO-Revision-Date: 2001-12-31 22:30+0100\n"
+"Last-Translator: Guido Scholz <guido.scholz@bayernline.de>\n"
+"Language-Team: Deutsch <de@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: unknown\n"
+
+#: ../../WINGs/connection.c:461 ../../WINGs/connection.c:526
+#: ../../WINGs/connection.c:569
+msgid "Bad address-service-protocol combination"
+msgstr "Ungültige Adress-Dienst-Protokoll Kombination"
+
+#: ../../WINGs/error.c:54
+#, c-format
+msgid "Unknown error %d"
+msgstr "Unbekannter Fehler %d"
+
+#: ../../WINGs/error.c:59
+#, c-format
+msgid "Error %d"
+msgstr "Fehler %d"
+
+#: ../../WINGs/error.c:110
+msgid " warning: "
+msgstr " Warnung: "
+
+#: ../../WINGs/error.c:137
+msgid " fatal error: "
+msgstr " fataler Fehler: "
+
+#: ../../WINGs/error.c:163 ../../WINGs/error.c:192
+msgid " error: "
+msgstr " Fehler: "
+
+#: ../../WINGs/findfile.c:48
+#, c-format
+msgid "could not get password entry for UID %i"
+msgstr "konnte Passwort nicht ermitteln für UID %i"
+
+#: ../../WINGs/findfile.c:66
+#, c-format
+msgid "could not get password entry for user %s"
+msgstr "konnte Passwort nicht ermitteln für Benutzer %s"
+
+#: ../../WINGs/host.c:114
+msgid "Cannot get current host name"
+msgstr "Kann aktuellen Hostnamen nicht ermitteln"
+
+#: ../../WINGs/proplist.c:150
+msgid "Only string or data is supported for a proplist dictionary key"
+msgstr "Nur \"string\" oder \"data\" wird als Schlüssel für ein "
+"\"proplist dictionary\" unterstützt"
+
+#: ../../WINGs/proplist.c:184 ../../WINGs/proplist.c:236
+#: ../../WINGs/proplist.c:394 ../../WINGs/proplist.c:474
+#: ../../WINGs/proplist.c:1071 ../../WINGs/proplist.c:1123
+#: ../../WINGs/proplist.c:1289 ../../WINGs/proplist.c:1368
+#: ../../WINGs/proplist.c:1489 ../../WINGs/proplist.c:1536
+msgid "Used proplist functions on non-WMPropLists objects"
+msgstr ""
+
+#: ../../WINGs/proplist.c:630
+msgid "unterminated PropList string"
+msgstr "nicht terminierter PropList \"string\""
+
+#: ../../WINGs/proplist.c:670
+msgid "unterminated PropList data"
+msgstr "nicht terminiertes PropList \"data"
+
+#: ../../WINGs/proplist.c:678
+msgid "unterminated PropList data (missing hexdigit)"
+msgstr "nicht terminiertes PropList \"data\" (fehlendes hex-Zeichen)"
+
+#: ../../WINGs/proplist.c:690
+msgid "non hexdigit character in PropList data"
+msgstr "falsches hex-Zeichen in PropList \"data\""
+
+#: ../../WINGs/proplist.c:725
+msgid "unterminated PropList array"
+msgstr "nicht terminiertes PropList \"array\""
+
+#: ../../WINGs/proplist.c:733
+msgid "missing or unterminated PropList array"
+msgstr "fehlendes oder nicht terminiertes PropList \"array\""
+
+#: ../../WINGs/proplist.c:743
+msgid "could not get PropList array element"
+msgstr ""
+
+#: ../../WINGs/proplist.c:772
+msgid "unterminated PropList dictionary"
+msgstr ""
+
+#: ../../WINGs/proplist.c:789
+msgid "missing PropList dictionary key"
+msgstr ""
+
+#: ../../WINGs/proplist.c:791
+msgid "missing PropList dictionary entry key or unterminated dictionary"
+msgstr ""
+
+#: ../../WINGs/proplist.c:799
+msgid "error parsing PropList dictionary key"
+msgstr ""
+
+#: ../../WINGs/proplist.c:807
+msgid "missing = in PropList dictionary entry"
+msgstr ""
+
+#: ../../WINGs/proplist.c:815
+msgid "error parsing PropList dictionary entry value"
+msgstr ""
+
+#: ../../WINGs/proplist.c:823
+msgid "missing ; in PropList dictionary entry"
+msgstr ""
+
+#: ../../WINGs/proplist.c:884
+msgid ""
+"was expecting a string, data, array or dictionary. If it's a string, try "
+"enclosing it with \"."
+msgstr "string, data, array oder dictionary wurde erwartet. Zeichenketten "
+"mit \" einklammern."
+
+#: ../../WINGs/proplist.c:888
+msgid "Comments are not allowed inside WindowMaker owned domain files."
+msgstr "Kommentare sind in Domaindaten von WindowMaker nicht erlaubt."
+
+#: ../../WINGs/proplist.c:1559 ../../WINGs/proplist.c:1624
+msgid "extra data after end of property list"
+msgstr "zusätzliche Daten hinter dem Ende der Propertyliste"
+
+#: ../../WINGs/proplist.c:1602
+#, c-format
+msgid "could not get size for file '%s'"
+msgstr "konnte Dateigrösse von '%s' nicht ermitteln"
+
+#: ../../WINGs/proplist.c:1614
+#, c-format
+msgid "error reading from file '%s'"
+msgstr "Fehler beim Lesen der Datei '%s'"
+
+#: ../../WINGs/proplist.c:1665
+#, c-format
+msgid "mkstemp (%s) failed"
+msgstr "mkstemp (%s) schlug fehl"
+
+#: ../../WINGs/proplist.c:1676
+#, c-format
+msgid "mktemp (%s) failed"
+msgstr "mktemp (%s) schlug fehl"
+
+#: ../../WINGs/proplist.c:1687
+#, c-format
+msgid "open (%s) failed"
+msgstr "open (%s) schlug fehl"
+
+#: ../../WINGs/proplist.c:1694
+#, c-format
+msgid "writing to file: %s failed"
+msgstr "Schreiben in Datei: %s schlug fehl"
+
+#: ../../WINGs/proplist.c:1702
+#, c-format
+msgid "fclose (%s) failed"
+msgstr "fclose (%s) schlug fehl"
+
+#: ../../WINGs/proplist.c:1711
+#, c-format
+msgid "rename ('%s' to '%s') failed"
+msgstr "rename ('%s' to '%s') schlug fehl"
+
+#. something happened with the file. just overwrite it
+#: ../../WINGs/userdefaults.c:192 ../../WINGs/userdefaults.c:208
+#, c-format
+msgid "cannot read domain from file '%s' when syncing"
+msgstr "Kannn bei der Synchronisation nicht aus Datei '%s' lesen"
+
+#: ../../WINGs/wcolor.c:198 ../../WINGs/wcolor.c:211 ../../WINGs/wcolor.c:250
+#: ../../WINGs/wcolor.c:291
+#, c-format
+msgid "could not allocate %s color"
+msgstr "konnte die Farbe %s nicht erzeugen"
+
+#: ../../WINGs/wcolor.c:198
+msgid "white"
+msgstr "weiß"
+
+#: ../../WINGs/wcolor.c:211
+msgid "black"
+msgstr "schwarz"
+
+#: ../../WINGs/wcolor.c:250
+msgid "gray"
+msgstr "grau"
+
+#: ../../WINGs/wcolor.c:291
+msgid "dark gray"
+msgstr "dunkelgrau"
+
+#: ../../WINGs/wcolorpanel.c:415
+msgid "Colors"
+msgstr "Farben"
+
+#: ../../WINGs/wcolorpanel.c:605 ../../WINGs/wcolorpanel.c:2824
+msgid "Brightness"
+msgstr ""
+
+#: ../../WINGs/wcolorpanel.c:607 ../../WINGs/wcolorpanel.c:683
+#: ../../WINGs/wcolorpanel.c:716 ../../WINGs/wcolorpanel.c:750
+#: ../../WINGs/wcolorpanel.c:810 ../../WINGs/wcolorpanel.c:844
+#: ../../WINGs/wcolorpanel.c:878 ../../WINGs/wcolorpanel.c:913
+#: ../../WINGs/wcolorpanel.c:2164 ../../WINGs/wcolorpanel.c:2826
+#: ../../WINGs/wcolorpanel.c:2862 ../../WINGs/wcolorpanel.c:2898
+#: ../../WINGs/wcolorpanel.c:3746
+msgid "Color Panel: Could not allocate memory"
+msgstr "Color Panel: Konnte keinen Speicher reservieren"
+
+#: ../../WINGs/wcolorpanel.c:680 ../../WINGs/wcolorpanel.c:681
+msgid "Red"
+msgstr "Rot"
+
+#: ../../WINGs/wcolorpanel.c:713 ../../WINGs/wcolorpanel.c:714
+msgid "Green"
+msgstr "Grün"
+
+#: ../../WINGs/wcolorpanel.c:747 ../../WINGs/wcolorpanel.c:748
+msgid "Blue"
+msgstr "Blau"
+
+#: ../../WINGs/wcolorpanel.c:807 ../../WINGs/wcolorpanel.c:808
+msgid "Cyan"
+msgstr ""
+
+#: ../../WINGs/wcolorpanel.c:841 ../../WINGs/wcolorpanel.c:842
+msgid "Magenta"
+msgstr ""
+
+#: ../../WINGs/wcolorpanel.c:875 ../../WINGs/wcolorpanel.c:876
+msgid "Yellow"
+msgstr "Gelb"
+
+#: ../../WINGs/wcolorpanel.c:910 ../../WINGs/wcolorpanel.c:911
+msgid "Black"
+msgstr "Schwarz"
+
+#: ../../WINGs/wcolorpanel.c:991
+msgid "Spectrum"
+msgstr ""
+
+#: ../../WINGs/wcolorpanel.c:1021
+msgid "Palette"
+msgstr ""
+
+#: ../../WINGs/wcolorpanel.c:1027
+msgid "New from File..."
+msgstr "Neu aus Datei..."
+
+#: ../../WINGs/wcolorpanel.c:1028 ../../WINGs/wcolorpanel.c:1076
+#: ../../WINGs/wcolorpanel.c:1093
+msgid "Rename..."
+msgstr "Umbenennen..."
+
+#: ../../WINGs/wcolorpanel.c:1029 ../../WINGs/wcolorpanel.c:1077
+#: ../../WINGs/wcolorpanel.c:1094 ../../WINGs/wcolorpanel.c:3321
+msgid "Remove"
+msgstr "Entfernen"
+
+#: ../../WINGs/wcolorpanel.c:1030
+msgid "Copy"
+msgstr "Kopieren"
+
+#: ../../WINGs/wcolorpanel.c:1031
+msgid "New from Clipboard"
+msgstr "Neu aus Zwischenablage"
+
+#: ../../WINGs/wcolorpanel.c:1052
+msgid "X11-Colors"
+msgstr "X11-Farben"
+
+#: ../../WINGs/wcolorpanel.c:1069
+msgid "Color"
+msgstr "Farbe"
+
+#: ../../WINGs/wcolorpanel.c:1075
+msgid "Add..."
+msgstr "Hinzufügen..."
+
+#: ../../WINGs/wcolorpanel.c:1085
+msgid "List"
+msgstr "Liste"
+
+#: ../../WINGs/wcolorpanel.c:1092
+msgid "New..."
+msgstr "Neu..."
+
+#: ../../WINGs/wcolorpanel.c:1231
+#, c-format
+msgid ""
+"Color Panel: Could not create directory %s needed to store configurations"
+msgstr "Color Panel: Konnte das Verzeichnis %s zum Speichern nicht erzeugen"
+
+#. Delete the file, it doesn't belong here
+#: ../../WINGs/wcolorpanel.c:1237 ../../WINGs/wcolorpanel.c:3207
+#: ../../WINGs/wcolorpanel.c:3211
+msgid "File Error"
+msgstr "Dateifehler"
+
+#: ../../WINGs/wcolorpanel.c:1238
+msgid "Could not create ColorPanel configuration directory"
+msgstr "Konnte Konfigurationsverzeichnis für Farbdialog nicht erzeugen"
+
+#: ../../WINGs/wcolorpanel.c:1239 ../../WINGs/wcolorpanel.c:3208
+#: ../../WINGs/wcolorpanel.c:3213 ../../WINGs/wcolorpanel.c:3240
+#: ../../WINGs/wfilepanel.c:250 ../../WINGs/wfilepanel.c:647
+#: ../../WINGs/wfilepanel.c:659 ../../WINGs/wfilepanel.c:760
+#: ../../WINGs/wfilepanel.c:971 ../../WINGs/wfontpanel.c:709
+msgid "OK"
+msgstr ""
+
+#: ../../WINGs/wcolorpanel.c:1245 ../../WINGs/wcolorpanel.c:1281
+#: ../../WINGs/wcolorpanel.c:1299
+msgid "Color Panel: Could not find file"
+msgstr "Color Panel: Konnte Datei nicht finden"
+
+#: ../../WINGs/wcolorpanel.c:1486 ../../WINGs/wcolorpanel.c:1551
+#: ../../WINGs/wcolorpanel.c:1615
+msgid "Color Panel: X failed request"
+msgstr ""
+
+#: ../../WINGs/wcolorpanel.c:2860
+msgid "Saturation"
+msgstr "Sättigung"
+
+#: ../../WINGs/wcolorpanel.c:2896
+msgid "Hue"
+msgstr "Farbton"
+
+#: ../../WINGs/wcolorpanel.c:3146
+msgid "Open Palette"
+msgstr "Palette öffnen"
+
+#: ../../WINGs/wcolorpanel.c:3208
+msgid "Invalid file format !"
+msgstr "Ungültiges Dateiformat!"
+
+#: ../../WINGs/wcolorpanel.c:3210
+#, c-format
+msgid "can't remove file %s"
+msgstr "kann Datei %s nicht entfernen"
+
+#: ../../WINGs/wcolorpanel.c:3212
+msgid "Couldn't remove file from Configuration Directory !"
+msgstr "Konnte Datei nicht aus Konfigurationsverzeichnis entfernen!"
+
+#: ../../WINGs/wcolorpanel.c:3239
+msgid "Rename"
+msgstr "Umbenennen"
+
+#: ../../WINGs/wcolorpanel.c:3239
+msgid "Rename palette to:"
+msgstr "Palette umbenennen in:"
+
+#: ../../WINGs/wcolorpanel.c:3240 ../../WINGs/wfilepanel.c:259
+#: ../../WINGs/wfilepanel.c:659 ../../WINGs/wfilepanel.c:760
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#. Careful, this palette exists already
+#: ../../WINGs/wcolorpanel.c:3256 ../../WINGs/wfilepanel.c:760
+msgid "Warning"
+msgstr "Warnung"
+
+#: ../../WINGs/wcolorpanel.c:3257
+msgid ""
+"Palette already exists !\n"
+"\n"
+"Overwrite ?"
+msgstr ""
+"Palette existiert bereits!\n"
+"\n"
+"Überschreiben?"
+
+#: ../../WINGs/wcolorpanel.c:3257 ../../WINGs/wcolorpanel.c:3321
+msgid "No"
+msgstr "Nein"
+
+#: ../../WINGs/wcolorpanel.c:3257 ../../WINGs/wcolorpanel.c:3321
+msgid "Yes"
+msgstr "Ja"
+
+#: ../../WINGs/wcolorpanel.c:3289
+#, c-format
+msgid "Couldn't rename palette %s to %s\n"
+msgstr "Konnte Palette %s nicht in %s umbenennen\n"
+
+#: ../../WINGs/wcolorpanel.c:3315
+msgid "This will permanently remove the palette "
+msgstr "Das wird die Palette unwiderruflich löschen "
+
+#: ../../WINGs/wcolorpanel.c:3318
+msgid ""
+".\n"
+"\n"
+"Are you sure you want to remove this palette ?"
+msgstr ""
+".\n"
+"\n"
+"Sind Sie sicher, dass Sie die Palette löschen wollen?"
+
+#: ../../WINGs/wcolorpanel.c:3343
+#, c-format
+msgid "Couldn't remove palette %s\n"
+msgstr "Konnte Palette %s nicht löschen\n"
+
+#: ../../WINGs/wcolorpanel.c:3648
+#, c-format
+msgid "Could not open %s"
+msgstr "Konnte %s nicht öffnen"
+
+#: ../../WINGs/wcolorpanel.c:3655
+#, c-format
+msgid "Could not create %s"
+msgstr "Konnte %s nicht erzeugen"
+
+#: ../../WINGs/wcolorpanel.c:3666
+#, c-format
+msgid "Write error on file %s"
+msgstr "Schreibfehler bei Datei %s"
+
+#: ../../WINGs/wcolorpanel.c:3711
+msgid "Color Panel: Color unspecified"
+msgstr "Color Panel: Farbe nicht spezifiziert"
+
+#: ../../WINGs/wfilepanel.c:235
+msgid "Name:"
+msgstr "Name:"
+
+#: ../../WINGs/wfilepanel.c:332 ../../WINGs/wfilepanel.c:396
+msgid "Open"
+msgstr "Öffnen"
+
+#: ../../WINGs/wfilepanel.c:350 ../../WINGs/wfilepanel.c:402
+msgid "Save"
+msgstr "Speichern"
+
+#: ../../WINGs/wfilepanel.c:562
+#, c-format
+msgid "WINGs: could not open directory %s\n"
+msgstr "WINGs: Konnte Verzeichnis %s nicht öffen\n"
+
+#: ../../WINGs/wfilepanel.c:580
+#, c-format
+msgid "WINGs: could not stat %s\n"
+msgstr "WINGs: Dateistatus von %s nicht bestimmbar\n"
+
+#: ../../WINGs/wfilepanel.c:647 ../../WINGs/wfilepanel.c:970
+#: ../../WINGs/wfontpanel.c:708
+msgid "Error"
+msgstr "Fehler"
+
+#: ../../WINGs/wfilepanel.c:658
+msgid "Create Directory"
+msgstr "Verzeichnis anlegen"
+
+#: ../../WINGs/wfilepanel.c:659
+msgid "Enter directory name"
+msgstr "Verzeichnisname eingeben"
+
+#: ../../WINGs/wfilepanel.c:695 ../../WINGs/wfilepanel.c:734
+#: ../../WINGs/wfilepanel.c:765 ../../WINGs/wfilepanel.c:793
+msgid "Permission denied."
+msgstr "Zugriff verweigert."
+
+#: ../../WINGs/wfilepanel.c:698
+#, c-format
+msgid "'%s' already exists."
+msgstr "'%s' existiert bereits."
+
+#: ../../WINGs/wfilepanel.c:701
+msgid "Path does not exist."
+msgstr "Pfad existiert nicht."
+
+#: ../../WINGs/wfilepanel.c:731 ../../WINGs/wfilepanel.c:790
+#, c-format
+msgid "'%s' does not exist."
+msgstr "'%s' existiert nicht."
+
+#: ../../WINGs/wfilepanel.c:738 ../../WINGs/wfilepanel.c:797
+msgid "Insufficient memory available."
+msgstr "Nicht genügend Speicher verfügbar."
+
+#: ../../WINGs/wfilepanel.c:742 ../../WINGs/wfilepanel.c:801
+#, c-format
+msgid "'%s' is on a read-only filesystem."
+msgstr "'%s' liegt auf einem \"read-only\" Dateisystem"
+
+#: ../../WINGs/wfilepanel.c:745 ../../WINGs/wfilepanel.c:777
+#: ../../WINGs/wfilepanel.c:804
+#, c-format
+msgid "Can not delete '%s'."
+msgstr "Kann %s nicht löschen."
+
+#: ../../WINGs/wfilepanel.c:752
+#, c-format
+msgid "Delete directory %s ?"
+msgstr "Verzeichnis % s löschen?"
+
+#: ../../WINGs/wfilepanel.c:756
+#, c-format
+msgid "Delete file %s ?"
+msgstr "Datei %s löschen?"
+
+#: ../../WINGs/wfilepanel.c:768
+#, c-format
+msgid "Directory '%s' does not exist."
+msgstr "Verzeichnis '%s' existiert nicht."
+
+#: ../../WINGs/wfilepanel.c:771
+#, c-format
+msgid "Directory '%s' is not empty."
+msgstr "Verzeichnis '%s' ist nicht leer."
+
+#: ../../WINGs/wfilepanel.c:774
+#, c-format
+msgid "Directory '%s' is busy."
+msgstr "Verzeichnis '%s' ist belegt."
+
+#: ../../WINGs/wfilepanel.c:787
+#, c-format
+msgid "'%s' is a directory."
+msgstr "'%s' ist ein Verzeichnis."
+
+#: ../../WINGs/wfilepanel.c:829
+#, c-format
+msgid "An error occured browsing '%s'."
+msgstr "Fehler beim Lesen von '%s'."
+
+#: ../../WINGs/wfilepanel.c:833
+#, c-format
+msgid "'%s' is not a directory."
+msgstr "'%s' ist kein Verzeichnis."
+
+#: ../../WINGs/wfilepanel.c:970
+msgid "File does not exist."
+msgstr "Datei existiert nicht."
+
+#: ../../WINGs/wfont.c:129
+#, c-format
+msgid "the following character sets are missing in %s:"
+msgstr "die folgenden Zeichensätze fehlen in %s:"
+
+#: ../../WINGs/wfont.c:136
+#, c-format
+msgid ""
+"the string \"%s\" will be used in place of any characters from those sets."
+msgstr ""
+"die Zeichenkette \"%s\" ersetzt alle anderen Zeichen dieser Zeichensätze."
+
+#: ../../WINGs/wfont.c:282 ../../WINGs/wfont.c:318
+#, c-format
+msgid "could not load font set %s. Trying fixed."
+msgstr "konnte Fonts nicht laden. Nehme fixed-Font."
+
+#: ../../WINGs/wfont.c:288 ../../WINGs/wfont.c:324
+#, c-format
+msgid "could not load font %s. Trying fixed."
+msgstr "Konnte Font %s nicht laden. Nehme fixed-Font."
+
+#: ../../WINGs/wfont.c:292 ../../WINGs/wfont.c:328
+msgid "could not load fixed font!"
+msgstr "konnte fixed-Font nicht laden!"
+
+#: ../../WINGs/wfont.c:423
+#, c-format
+msgid "font description %s is too large."
+msgstr "Fontbeschreibung ist zu groß."
+
+#: ../../WINGs/wfontpanel.c:205
+msgid "Test!!!"
+msgstr "Test!"
+
+#: ../../WINGs/wfontpanel.c:211
+msgid "Family"
+msgstr "Familie"
+
+#: ../../WINGs/wfontpanel.c:222
+msgid "Typeface"
+msgstr "Schriftart"
+
+#: ../../WINGs/wfontpanel.c:233
+msgid "Size"
+msgstr "Größe"
+
+#: ../../WINGs/wfontpanel.c:252
+msgid "Set"
+msgstr "Satz"
+
+#: ../../WINGs/wfontpanel.c:257
+msgid "Revert"
+msgstr ""
+
+#: ../../WINGs/wfontpanel.c:709
+msgid "Could not retrieve font list"
+msgstr "Konnte Fontliste nicht wiederherstellen"
+
+#: ../../WINGs/wfontpanel.c:721
+#, c-format
+msgid "font name %s is longer than 256, which is invalid."
+msgstr "Fontname %s ist ungültig, da länger als 256 Zeichen."
+
+#: ../../WINGs/wfontpanel.c:868
+msgid "Roman"
+msgstr "Roman"
+
+#: ../../WINGs/wfontpanel.c:871
+msgid "Italic"
+msgstr "Kursiv"
+
+#: ../../WINGs/wfontpanel.c:873
+msgid "Oblique"
+msgstr ""
+
+#: ../../WINGs/wfontpanel.c:875
+msgid "Rev Italic"
+msgstr ""
+
+#: ../../WINGs/wfontpanel.c:877
+msgid "Rev Oblique"
+msgstr ""
+
+#: ../../WINGs/wfontpanel.c:883
+msgid "Normal"
+msgstr "Normal"
+
+#: ../../WINGs/widgets.c:415
+#, c-format
+msgid "WINGs: could not load widget images file: %s"
+msgstr "WINGs: Konnte Widget-Bildatei %s nicht laden."
+
+#: ../../WINGs/widgets.c:761
+msgid ""
+"could not load any fonts. Make sure your font installationand locale "
+"settings are correct."
+msgstr ""
+"Konnte keine Fonts laden. Überprüfen Sie, ob Ihre "
+"Fontinstallation und -einstellungen korrekt sind."
+
+#: ../../WINGs/wruler.c:189
+msgid "0   inches"
+msgstr "0   Inch"

@@ -1036,6 +1036,9 @@ wWorkspaceRestoreState(WScreen *scr)
 
     make_keys();
 
+    if (scr->session_state == NULL)
+        return;
+
     parr = WMGetFromPLDictionary(scr->session_state, dWorkspaces);
 
     if (!parr)

@@ -4,7 +4,7 @@ CATALOGS = @WINGSMOFILES@
 
 CLEANFILES = $(CATALOGS) WINGs.pot
 
-EXTRA_DIST = cs.po sk.po
+EXTRA_DIST = cs.po de.po sk.po
 
 POTFILES  = \
 	$(top_builddir)/WINGs/connection.c \
