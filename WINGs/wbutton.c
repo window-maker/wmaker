@@ -283,11 +283,13 @@ WMSetButtonImage(WMButton *bPtr, WMPixmap *image)
 	WMReleasePixmap(bPtr->dimage);
     }
 
-    bPtr->dimage = WMCreatePixmapFromXPixmaps(WMWidgetScreen(bPtr), 
-					      image->pixmap, None, 
-					      image->width, image->height,
-					      image->depth);
-    updateDisabledMask(bPtr);
+    if (image) {
+	bPtr->dimage = WMCreatePixmapFromXPixmaps(WMWidgetScreen(bPtr), 
+						  image->pixmap, None, 
+						  image->width, image->height,
+						  image->depth);
+	updateDisabledMask(bPtr);
+    }
 
     if (bPtr->view->flags.realized) {
 	paintButton(bPtr);

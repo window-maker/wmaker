@@ -366,8 +366,8 @@ showText(Balloon *bPtr, int x, int y, int h, int w, char *text)
     {
 	int w;
 	char *ptr, *ptr2;
-	
-	ptr = text;
+
+	ptr2 = ptr = text;
 	width = 0;
 	while (ptr && ptr2) {
 	    ptr2 = strchr(ptr, '\n');

@@ -468,10 +468,12 @@ loadPixmaps(WMScreen *scr)
     RCombineImageWithColor(tmp, &gray);
     scr->magnifyIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
     RDestroyImage(tmp);
+    /*
     tmp = RGetSubImage(image, 24, 0, 40, 32);
     RCombineImageWithColor(tmp, &white);
     scr->altMagnifyIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
     RDestroyImage(tmp);
+     */
     /* ColorWheel Icon for ColorPanel */
     tmp = RGetSubImage(image, 0, 25, 24, 24);
     scr->wheelIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
