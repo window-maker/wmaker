@@ -13,7 +13,9 @@ Changes since wmaker 0.64.0:
   and X events (also fixed some problems the old handling logic had)
 - moved timer, dile and input handler definitions and prototypes from
   WINGs.h to WUtil.h because they're not GUI related.
-
+- better and more robust handling of events (timer, idle, input, X) in
+  WMMaskEvent(). Also fixed a bug where input and timer events were not
+  treated for undefined periods of time under some circumstances.
 
 changes since wmaker 0.63.1:
 ............................

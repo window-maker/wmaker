@@ -382,9 +382,19 @@ WMIsDoubleClick(XEvent *event)
 
 
 /*
- * If waitForInput is False, it will just peek to see if input is available
- * then return without processing input but the return value will show
- * if input is available or not.
+ * Check for X and input events. If X events are present input events will
+ * not be checked.
+ *
+ * Return value: True if a X event is available or any input event was
+ *               processed, false otherwise (including return because of
+ *               some timer handler expired).
+ *
+ *  If waitForInput is False, it will just peek for available input and return
+ * without processing. Return vaue will be True if input is available.
+ *
+ *  If waitForInput is True, it will wait until an input event arrives on the
+ * registered input handlers and ConnectionNumber(dpy), or will return when
+ * a timer handler expires if no input event arrived until then.
  */
 static Bool
 waitForEvent(Display *dpy, unsigned long xeventmask, Bool waitForInput)
@@ -407,12 +417,12 @@ waitForEvent(Display *dpy, unsigned long xeventmask, Bool waitForInput)
 
 void
 WMNextEvent(Display *dpy, XEvent *event)
-{ 
+{
     /* Check any expired timers */
     W_CheckTimerHandlers();
 
     while (XPending(dpy) == 0) {
-	/* Do idle and timer stuff while there are no timer or X events */
+	/* Do idle and timer stuff while there are no input or X events */
 	while (!waitForEvent(dpy, 0, False) && W_CheckIdleHandlers()) {
 	    /* dispatch timer events */
             W_CheckTimerHandlers();
@@ -435,6 +445,9 @@ WMNextEvent(Display *dpy, XEvent *event)
 
 
 /*
+ * Is this comment still valid?
+ * waitForEvent seems now to understand masked events. -Dan
+ *
  * Cant use this because XPending() will make waitForEvent
  * return even if the event in the queue is not what we want,
  * and if we block until some new event arrives from the
@@ -444,12 +457,17 @@ WMNextEvent(Display *dpy, XEvent *event)
 void
 WMMaskEvent(Display *dpy, long mask, XEvent *event)
 {
+    /* Check any expired timers */
+    W_CheckTimerHandlers();
+
     while (!XCheckMaskEvent(dpy, mask, event)) {
-	/* Do idle stuff while there are no timer or X events */
-	while (W_CheckIdleHandlers()) {
-	    if (XCheckMaskEvent(dpy, mask, event))
-		return;
+	/* Do idle and timer stuff while there are no input or X events */
+        while (!waitForEvent(dpy, mask, False) && W_CheckIdleHandlers()) {
+            W_CheckTimerHandlers();
 	}
+
+        if (XCheckMaskEvent(dpy, mask, event))
+            return;
 
         /* Wait for input on the X connection socket or another input handler */
 	waitForEvent(dpy, mask, True);
