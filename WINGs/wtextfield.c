@@ -871,6 +871,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
      */
     switch (ksym) {
      case XK_Tab:
+     case XK_ISO_Left_Tab:
 	if (event->xkey.state & ShiftMask) {
 	    if (tPtr->view->prevFocusChain) {
 		W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
@@ -889,16 +890,6 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 				   tPtr, (void*)WMTabTextMovement);
 	}
 	break;
-	
-     case XK_ISO_Left_Tab:
-         if (tPtr->view->prevFocusChain) {
-             W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
-                                  tPtr->view->prevFocusChain);
-             tPtr->flags.notIllegalMovement = 1;
-         }
-         WMPostNotificationName(WMTextDidEndEditingNotification, tPtr,
-                                (void*)WMBacktabTextMovement);
-         break;
 	
      case XK_Return:
 	WMPostNotificationName(WMTextDidEndEditingNotification, tPtr, 
