@@ -642,11 +642,10 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 
 	str = PLGetString(PLGetArrayElement(texture, 1));
 
-	path = wfindfileinarray(GetObjectForKey("PixmapPath"), str);
-	if (path)
-	    timage = RLoadImage(rc, path, 0);
+	if (path = wfindfileinarray(GetObjectForKey("PixmapPath"), str))
+        timage = RLoadImage(rc, path, 0);
 
-	if (!timage) {
+	if (!path || !timage) {
 	    wwarning("could not load file '%s': %s", path ? path : str,
 		     RMessageForError(RErrorCode));
 	} else {
