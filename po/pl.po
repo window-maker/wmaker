@@ -5,12 +5,11 @@
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Piotr Dembiñski <pdemb@fanthom.math.put.poznan.pl>, 1998.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: WindowMaker 0.80.2\n"
 "POT-Creation-Date: 1999-01-24 14:05+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2003-04-15 20:21+0200\n"
 "Last-Translator: Piotr Dembiñski <pdemb@fanthom.math.put.poznan.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -521,7 +520,7 @@ msgstr "nie mo¿na znale¼æ katalogu GNUstep u¿ytkownika (%s).\nUpewnij siê ¿e Win
 #: ../src/main.c:297
 #, c-format
 msgid "%s:could not execute initialization script"
-msgstr "#s:nie mo¿na wykonaæ skryptu inicjalizacji"
+msgstr "%s:nie mo¿na wykonaæ skryptu inicjalizacji"
 
 #: ../src/main.c:314
 #, c-format

@@ -2,10 +2,9 @@
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: WindowMaker 0.80.2\n"
 "POT-Creation-Date: 1998-05-23 12:54+0200\n"
 "PO-Revision-Date: 1998-05-23 H12:54+0200\n"
 "Last-Translator: Marcus Ramberg <draven@mo.himolde.no>\n"

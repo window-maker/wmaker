@@ -362,8 +362,7 @@ legalPanelCommand(WMenu *menu, WMenuEntry *entry)
 static char*
 getLocalizedMenuFile(char *menu)
 {
-    char *buffer;
-    char *ptr;
+    char *buffer, *ptr, *locale;
     int len;
 
     if (!Locale)
@@ -377,8 +376,12 @@ getLocalizedMenuFile(char *menu)
     if (access(buffer, F_OK)==0) {
 	return buffer;
     }
+
+    /* position of locale in our buffer */
+    locale = buffer + strlen(menu) + 1;
+
     /* check if it is in the form aa_bb.encoding and check for aa_bb */
-    ptr = strchr(Locale, '.');
+    ptr = strchr(locale, '.');
     if (ptr) {
 	*ptr = 0;
 	if (access(buffer, F_OK)==0) {
@@ -386,13 +389,15 @@ getLocalizedMenuFile(char *menu)
 	}
     }
     /* now check for aa */
-    ptr = strchr(buffer, '_');
+    ptr = strchr(locale, '_');
     if (ptr) {
 	*ptr = 0;
 	if (access(buffer, F_OK)==0) {
 	    return buffer;
 	}
     }
+
+    wfree(buffer);
 
     return NULL;
 }

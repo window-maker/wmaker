@@ -1,12 +1,16 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
 msgid ""
 msgstr ""
-"Date: 1998-08-18 16:28:19+0200\n"
-"From: Toni Biliæ <tbilic@oliver.efos.hr>\n"
-"Language-Team: Croatian \n"
+"Project-Id-Version: 0.80.2\n"
+"PO-Revision-Date: 1998-08-18 16:28:19+0200\n"
+"Last-Translator: Toni Biliæ <tbilic@oliver.efos.hr>\n"
+"Language-Team: Croatian\n"
 "MIME-Version: 1.0\n"
-"Content-Transfer-Encoding: 8-bit\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
-
+"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: ../src/appicon.c:509 ../src/dialog.c:215 ../src/dialog.c:271 ../src/dock.c:2953 ../src/dockedapp.c:206 ../src/winspector.c:279 ../src/winspector.c:295
 msgid "Error"

@@ -73,6 +73,11 @@ Changes since version 0.80.2:
 - Updated Bulgarian translations (Anton Zinoviev <zinoviev@debian.org>)
 - Fixed a bug in WINGs' hashtable which free'd the wrong memory in the
   WMResetHashTable() function (possible source of SIGSEGVs)
+- Fixed 2 syntax errors in plmenu.zh_TW.Big5 (Mike FABIAN <mfabian@suse.de>)
+- Some .po file fixes (Mike FABIAN <mfabian@suse.de>)
+- Fixed the problem with the root menu code changing the locale setting as
+  a side effect of loading a localized menu
+- Fixed e memory leak in the code that reads a localized root menu
 
 
 Changes since version 0.80.1:
