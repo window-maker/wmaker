@@ -1259,6 +1259,14 @@ paintListItem(WMList *lPtr, int index, Drawable d, char *text, int state,
     WMColor *black = WMBlackColor(scr);
     TextureListItem *titem;
 
+    item = WMGetListItem(lPtr, index);
+    titem = (TextureListItem*)item->clientData;
+    if (!titem) {
+	WMReleaseColor(white);
+	WMReleaseColor(black);
+	return;
+    }
+
     width = rect->size.width;
     height = rect->size.height;
     x = rect->pos.x;
@@ -1269,13 +1277,11 @@ paintListItem(WMList *lPtr, int index, Drawable d, char *text, int state,
     else
         XClearArea(dpy, d, x, y, width, height, False);
 
-    item = WMGetListItem(lPtr, index);
-    titem = (TextureListItem*)item->clientData;
 
     if (titem->preview)
-	XCopyArea(dpy, titem->preview, d, WMColorGC(black), 0, 0, TEXPREV_WIDTH,
-		  TEXPREV_HEIGHT, x + 5, y + 5);
-
+	XCopyArea(dpy, titem->preview, d, WMColorGC(black), 0, 0, 
+		  TEXPREV_WIDTH, TEXPREV_HEIGHT, x + 5, y + 5);
+    
     if ((1 << WMGetPopUpButtonSelectedItem(panel->secP)) & titem->selectedFor)
 	WMDrawPixmap(panel->onLed, d, x + TEXPREV_WIDTH + 10, y + 6);
     else if (titem->selectedFor)
