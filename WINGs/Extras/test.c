@@ -30,7 +30,11 @@ void *valueForCell(WMTableViewDelegate *self, WMTableColumn *column, int row)
     int i;
     if (col1[0] == 0) {
 	for (i = 0; i < 20; i++) {
-	    col1[i] = "teste";
+	    char buf[128];
+
+	    sprintf(buf, "Test row %i", i);
+		
+	    col1[i] = wstrdup(buf);
 	    col2[i] = 0;
 	}
     }
@@ -82,13 +86,14 @@ main(int argc, char **argv)
     
     scr = WMOpenScreen(NULL);
 
+    XSynchronize(WMScreenDisplay(scr), 1);
     
     win = WMCreateWindow(scr, "eweq");
     WMResizeWidget(win, 400, 200);
     WMMapWidget(win);
     
     table = WMCreateTableView(win);
-    WMResizeWidget(table, 400, 200);
+    WMSetViewExpandsToParent(WMWidgetView(table), 10, 10, 10, 10);
     WMSetTableViewBackgroundColor(table, WMWhiteColor(scr));
     /*WMSetTableViewGridColor(table, WMGrayColor(scr));*/
     WMSetTableViewHeaderHeight(table, 20);
@@ -119,10 +124,8 @@ main(int argc, char **argv)
     WMAddTableViewColumn(table, col);	
     WMSetTableColumnDelegate(col, colDeleg);
     WMSetTableColumnId(col, (void*)2);
-    
 
     WMMapWidget(table);
     WMRealizeWidget(win);
     WMScreenMainLoop(scr);
-    
 }

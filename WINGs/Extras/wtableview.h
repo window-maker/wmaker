@@ -17,10 +17,11 @@ extern const char *WMTableViewSelectionDidChangeNotification;
 
 typedef struct WMTableColumnDelegate {
     void *data;
-    void (*drawCell)(struct WMTableColumnDelegate *self, WMTableColumn *column,
-		     int row);
+    void (*drawCell)(struct WMTableColumnDelegate *self,
+		     WMTableColumn *column, int row, Drawable d);
     void (*drawSelectedCell)(struct WMTableColumnDelegate *self,
-			     WMTableColumn *column, int row);
+			     WMTableColumn *column, int row, Drawable d);
+
     void (*beginCellEdit)(struct WMTableColumnDelegate *self, WMTableColumn *column,
 			  int row);
     void (*endCellEdit)(struct WMTableColumnDelegate *self, WMTableColumn *column,
