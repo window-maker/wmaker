@@ -28,12 +28,10 @@
  *				    commande.
  *
  *	WORKSPACE_MENU		    Ajoute un sous menu pour les opérations
- *				    sur l'espace de travail. Il ne peut y
+ *				    sur les bureaux. Il ne peut y
  *				    avoir qu'un seul WORKSPACE_MENU.
  *
  *	EXEC			    Execute un programme externe
- *
- *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
  *
  *	EXIT			    Quitte le gestionnaire de fenêtres
  *
@@ -42,26 +40,24 @@
  *
  *	REFRESH			    Retrace l'écran
  *
- *	ARRANGE_ICONS		    Arrange les icônes sur l'espace de
- *				    travail
+ *	ARRANGE_ICONS		    Arrange les icônes sur le bureau
  *
  *	SHUTDOWN		    Tue tout les clients ( et termine la
  *				    session X Window)
  *
- *	SHOW_ALL		    Montre toutes les fenêtres sur l'espace
- *				    de travail
+ *	SHOW_ALL		    Montre toutes les fenêtres sur le bureau
  *
- *	HIDE_OTHERS		    Cache toutes les fenêtres sur l'espace
- *				    de travail qui sont en arrière plan
+ *	HIDE_OTHERS		    Cache toutes les fenêtres sur le 
+ *				    bureau qui sont en arrière plan
  *
  *	SAVE_SESSION		    Sauve la l'état courant du bureau, cela
  *				    inclus toute les applications en marche,
  *				    tout leur indices (geometrie, position
- *				    sur l'écran, l'espace de travail sur
+ *				    sur l'écran, le bureau sur
  *				    lequel elle sont, si elles ont ete lancées
  *				    par le "dock" ou le "clip", si elles
  *				    etaient minimisées, ombrées ou cachées).
- *				    De plus, l'espace de travail courant
+ *				    De plus, le bureau actuel
  *				    sera aussi sauvé. Tout sera remis dans
  *				    cet état a chaque démarrage de
  *				    WindowMaker jusqu'au prochain usage de
@@ -163,10 +159,10 @@
 		"Liste des processus" EXEC xterm -e top
 		"Butineur d'aide" EXEC xman
 	"Informations" END
-	"Démarrer..." EXEC %a(Démarrer,Tapez une commande à démarrer:)
+	"Démarrer..." SHEXEC %a(Démarrer,Tapez une commande à démarrer:)
 	"Terminal X" EXEC xterm -sb
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
-	"Espaces de travail" WORKSPACE_MENU
+	"Bureaux" WORKSPACE_MENU
 	"Applications" MENU
 		"Graphismes" MENU
 			"Gimp" SHEXEC gimp >/dev/null
@@ -213,7 +209,7 @@
 		"Rechercher dans le manuel" SHEXEC MANUAL_SEARCH(%s)
 	"Sélection" END
 	
-	"Espace de travail" MENU
+	"Bureau" MENU
 		"Cacher les autres fenêtres" HIDE_OTHERS
 		"Montrer toutes les fenêtres" SHOW_ALL
 		"Arranger les icônes" ARRANGE_ICONS
@@ -221,7 +217,7 @@
 		"Vérrouiller" EXEC xlock -allowroot -usefirst
 		"Sauver la session" SAVE_SESSION
 		"Effacer la session" CLEAR_SESSION
-	"Espace de travail" END
+	"Bureaux" END
 
 	"Apparence" MENU
 		"Thèmes" OPEN_MENU -noext THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
@@ -250,8 +246,8 @@
 			"Degradé" END
 			"Images" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Fond d'écran" END
-		"Sauver le thème" EXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Nom du thème,Entrez un nom de fichier:)"
-		"Sauver le jeu d'icônes" EXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(Nom du jeu d'icônes,Entrez un nom de fichier:)"
+		"Sauver le thème" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Nom du thème,Entrez un nom de fichier:)"
+		"Sauver le jeu d'icônes" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(Nom du jeu d'icônes,Entrez un nom de fichier:)"
 	"Apparence" END
 
 	"Quitter" MENU

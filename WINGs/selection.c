@@ -95,9 +95,16 @@ writeSelection(Display *dpy, Window requestor, Atom property, Atom type,
 */
     gotError = False;
 
-    if (!XChangeProperty(dpy, requestor, property, type, format, 
-			 PropModeReplace, value, length))
-	return False;
+#ifndef __sgi
+    if (!XChangeProperty(dpy, requestor, property, type, format,
+                         PropModeReplace, value, length))
+        return False;
+#else
+    /* in sgi seems this seems to return void */
+    XChangeProperty(dpy, requestor, property, type, format,
+		    PropModeReplace, value, length);
+#endif
+
     XFlush(dpy);
 
     return !gotError;

@@ -1332,7 +1332,7 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
 	    if (dentry->d_name[0] == '.')
 		continue;
 
-            buffer = wmalloc(strlen(path[i])+strlen(dentry->d_name)+4);
+            buffer = malloc(strlen(path[i])+strlen(dentry->d_name)+4);
             if (!buffer) {
                 wsyserror(_("out of memory while constructing directory menu %s"),
                          path[i]);
@@ -1399,7 +1399,7 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
         length = strlen(path[d->index])+strlen(d->name)+6;
         if (command)
             length += strlen(command) + 6;
-        buffer = wmalloc(length);
+        buffer = malloc(length);
         if (!buffer) {
             wsyserror(_("out of memory while constructing directory menu %s"),
                      path[d->index]);
@@ -1477,7 +1477,7 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
 	    if (ptr && ptr!=f->name)
 		*ptr = 0;
 	}
-        addMenuEntry(menu, f->name, NULL, "EXEC", buffer, path[f->index]);
+        addMenuEntry(menu, f->name, NULL, "SHEXEC", buffer, path[f->index]);
 
         free(buffer);
         if (files->head) {

@@ -37,12 +37,14 @@ typedef struct W_Slider {
 
 
 
-static void resizeSlider();
+static void didResizeSlider();
 
 
-W_ViewProcedureTable _SliderViewProcedures = {
+W_ViewDelegate _SliderViewDelegate = {
     NULL,
-	resizeSlider,
+	NULL,
+	didResizeSlider,
+	NULL,
 	NULL
 };
 
@@ -81,6 +83,8 @@ WMCreateSlider(WMWidget *parent)
 	return NULL;
     }
     sPtr->view->self = sPtr;
+
+    sPtr->view->delegate = &_SliderViewDelegate;
 
     WMCreateEventHandler(sPtr->view, ExposureMask|StructureNotifyMask,
 			 handleEvents, sPtr);
@@ -300,13 +304,15 @@ realizeSlider(Slider *sPtr)
 
 
 static void
-resizeSlider(Slider *sPtr, unsigned int width, unsigned int height)
+didResizeSlider(W_ViewDelegate *self, WMView *view)
 {
+    Slider *sPtr = (Slider*)view->self;
+    int width = sPtr->view->size.width;
+    int height = sPtr->view->size.height;
+
     assert(width > 0);
     assert(height > 0);
     
-    W_ResizeView(sPtr->view, width, height);
-
     if (width > height) {
 	if (sPtr->flags.vertical) {
 	    sPtr->flags.vertical = 0;

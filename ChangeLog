@@ -34,7 +34,15 @@ Changes since version 0.53.0:
 - fixed crash bug with hiding apps without dock/clip
 - fixed a mem leak in superfluous mode caused by the ghost icon.
 - added possibility to set omnipresent icons in Clip. See NEWS.
+- fixed bug in WPrefs menu editor
+- fixed crash when moving internal window with kbd
+- fixed compilation problem on IRIX machines (Neil Muller
+						<neil@octane.sun.ac.za>)
+- made images with a transparent color used a background use the default color
+  (Nicolas <NV04@wanadoo.fr>)
 - replace xde support drop on dock with xdnd.
+- added an (internal use) environment variable for telling WPrefs whats's
+  the name of the wmaker binary being ran.
 - more elegant text entries in Clip's menu, regarding single/multiple
   selected icons.
 

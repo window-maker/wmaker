@@ -55,13 +55,6 @@ typedef struct W_PopUpButton {
 #define SCROLL_DELAY		10
 
 
-W_ViewProcedureTable _PopUpButtonViewProcedures = {
-    NULL,
-	NULL,
-	NULL
-};
-
-
 #define DEFAULT_WIDTH	60
 #define DEFAULT_HEIGHT 	20
 #define DEFAULT_CAPTION	""

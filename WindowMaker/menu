@@ -113,7 +113,7 @@
 		"Process List" EXEC xterm -e top
 		"Manual Browser" EXEC xman
 	"Info" END
-	"Run..." EXEC %a(Run,Type command to run:)
+	"Run..." SHEXEC %a(Run,Type command to run:)
 	"XTerm" EXEC xterm -sb 
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
 	"Workspaces" WORKSPACE_MENU
@@ -200,8 +200,8 @@
 			"Gradient" END
 			"Images" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Background" END
-		"Save Theme" EXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name,Enter file name:)"
-		"Save IconSet" EXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name,Enter file name:)"
+		"Save Theme" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name,Enter file name:)"
+		"Save IconSet" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name,Enter file name:)"
 	"Appearance" END
 
 	"Exit"	MENU

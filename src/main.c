@@ -356,7 +356,11 @@ main(int argc, char **argv)
 #endif
 
     wsetabort(wAbort);
-    
+
+    /* for telling WPrefs what's the name of the wmaker binary being ran */
+    str = wstrappend("WMAKER_BIN_NAME", argv[0]);
+    putenv(str);
+
     ArgCount = argc;
     Arguments = argv;
 

@@ -358,15 +358,6 @@ parseTexture(RContext *rc, char *text)
 	    pixmap = LoadJPEG(rc, tmp, &iwidth, &iheight);
  */
 
-	if (!pixmap) {
-	    image = loadImage(rc, tmp);
-	    if (!image) {
-		goto error;
-	    }
-	    iwidth = image->width;
-	    iheight = image->height;
-	}
-
 	GETSTRORGOTO(val, tmp, 2, error);
 
 	if (!XParseColor(dpy, DefaultColormap(dpy, scr), tmp, &color)) {
@@ -382,6 +373,16 @@ parseTexture(RContext *rc, char *text)
 	    rcolor.blue = color.blue >> 8;
 	    RGetClosestXColor(rc, &rcolor, &color);
 	}
+
+	if (!pixmap) {
+	    image = loadImage(rc, tmp);
+	    if (!image) {
+		goto error;
+	    }
+	    iwidth = image->width;
+	    iheight = image->height;
+	}
+
 	switch (toupper(type[0])) {
 	 case 'T':
 	    texture->width = iwidth;

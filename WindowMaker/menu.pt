@@ -192,8 +192,8 @@
 			"Degradé" END
 			"Imagens" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Papéis de Parede" END
-		"Salvar Tema" EXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Nome do Tema)"
-		"Salvar Configuração de Ícones" EXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(Nome do Conjunto de Ícones)"
+		"Salvar Tema" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Nome do Tema)"
+		"Salvar Configuração de Ícones" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(Nome do Conjunto de Ícones)"
 	"Appearance" END
 
 	"Sair"	MENU

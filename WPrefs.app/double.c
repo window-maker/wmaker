@@ -32,12 +32,6 @@ static void handleEvents(XEvent *event, void *data);
 static void handleActionEvents(XEvent *event, void *data);
 
 
-static W_ViewProcedureTable _DoubleTestViewProcedures = {
-	NULL,
-	NULL,
-	NULL
-};
-
 
 /* our widget class ID */
 static W_Class DoubleTestClass = 0;
@@ -52,9 +46,9 @@ InitDoubleTest(WMScreen *scr)
 {
     /* register our widget with WINGs and get our widget class ID */
     if (!DoubleTestClass) {
-	DoubleTestClass = W_RegisterUserWidget(&_DoubleTestViewProcedures);
+	DoubleTestClass = W_RegisterUserWidget();
     }
-    
+
     return DoubleTestClass;
 }
 

@@ -75,6 +75,12 @@ WMCreateFontInDefaultEncoding(WMScreen *scrPtr, char *fontName)
     WMFont *font;
     Display *display = scrPtr->display;
 
+    font = WMHashGet(scrPtr->fontCache, fontName);
+    if (font) {
+	WMRetainFont(font);
+	return font;
+    }
+
     font = malloc(sizeof(WMFont));
     if (!font)
 	return NULL;
@@ -94,6 +100,8 @@ WMCreateFontInDefaultEncoding(WMScreen *scrPtr, char *fontName)
     font->y = font->font.normal->ascent;
     
     font->refCount = 1;
+
+    assert(WMHashInsert(scrPtr->fontCache, font->name, font)==NULL);
 
     return font;    
 }
@@ -143,7 +151,6 @@ WMFontHeight(WMFont *font)
 
 
 
-
 WMFont*
 WMSystemFontOfSize(WMScreen *scrPtr, int size)
 {
@@ -153,7 +160,7 @@ WMSystemFontOfSize(WMScreen *scrPtr, int size)
     fontSpec = makeFontSetOfSize(WINGsConfiguration.systemFont, size);
 
     font = WMCreateFont(scrPtr, fontSpec);
-    
+
     if (!font) {
 	wwarning("could not load font set %s. Trying fixed.", fontSpec);
 	font = WMCreateFont(scrPtr, "fixed");

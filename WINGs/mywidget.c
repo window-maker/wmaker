@@ -50,12 +50,13 @@ static void handleActionEvents(XEvent *event, void *data);
 
 
 /*
- * Some procedures you might want to override. Don't forget to call
- * the equivalent view procedure after (or before) doing your stuff.
+ * Delegates 
  * See the source for the other widgets to see how to use.
  * You won't need to use this most of the time.
  */
-static W_ViewProcedureTable _MyWidgetViewProcedures = {
+static W_ViewDelegate _MyWidgetDelegate = {
+	NULL,
+	NULL,
 	NULL,
 	NULL,
 	NULL
@@ -75,7 +76,7 @@ InitMyWidget(WMScreen *scr)
 {
     /* register our widget with WINGs and get our widget class ID */
     if (!myWidgetClass) {
-	myWidgetClass = W_RegisterUserWidget(&_MyWidgetViewProcedures);
+	myWidgetClass = W_RegisterUserWidget();
     }
     
     return myWidgetClass;
@@ -97,7 +98,7 @@ CreateMyWidget(WMWidget *parent)
 
     /* set the class ID */
     mPtr->widgetClass = myWidgetClass;
-    
+
     /* 
      * Create the view for our widget.
      * Note: the Window for the view is only created after the view is
@@ -112,6 +113,9 @@ CreateMyWidget(WMWidget *parent)
     }
     /* always do this */
     mPtr->view->self = mPtr;
+
+    /* setup the delegates for the view */
+    mPtr->view->delegate = &_MyWidgetDelegate;
 
     /*
      * Intercept some events for our widget, so that we can handle them.

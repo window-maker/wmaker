@@ -66,12 +66,14 @@ static void updateScroller(List *lPtr);
 static void vScrollCallBack(WMWidget *scroller, void *self);
 
 static void updateGeometry(WMList *lPtr);
-static void resizeList();
+static void didResizeList();
 
 
-W_ViewProcedureTable _ListViewProcedures = {
+W_ViewDelegate _ListViewDelegate = {
     NULL,
-	resizeList,
+	NULL,
+	didResizeList,
+	NULL,
 	NULL
 };
 
@@ -95,6 +97,8 @@ WMCreateList(WMWidget *parent)
     }
     lPtr->view->self = lPtr;
 
+    lPtr->view->delegate = &_ListViewDelegate;
+
     WMCreateEventHandler(lPtr->view, ExposureMask|StructureNotifyMask
 			 |ClientMessageMask, handleEvents, lPtr);
 
@@ -114,7 +118,7 @@ WMCreateList(WMWidget *parent)
     /* make the scroller map itself when it's realized */
     WMMapWidget(lPtr->vScroller);
 
-    resizeList(lPtr, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    W_ResizeView(lPtr->view, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     
     lPtr->selectedItem = -1;
 
@@ -829,11 +833,11 @@ updateGeometry(WMList *lPtr)
 
 
 static void
-resizeList(WMList *lPtr, unsigned int width, unsigned int height)
-{
-    W_ResizeView(lPtr->view, width, height);
-    
-    WMResizeWidget(lPtr->vScroller, 1, height-2);
+didResizeList(W_ViewDelegate *self, WMView *view)
+{    
+    WMList *lPtr = (WMList*)view->self;
+
+    WMResizeWidget(lPtr->vScroller, 1, view->size.height-2);
 
     updateGeometry(lPtr);
 }

@@ -141,8 +141,8 @@ displayed by Window Maker.
 * docklib-x.x.tar.gz  a library for writing dockapps
 
 
-Mailing List
-============
+HELP ME!!!
+==========
 
 There is a mailing list for discussing Window Maker at
 wm-user@windowmaker.org To subscribe to it, send a message containing:
@@ -160,6 +160,11 @@ IMPORTANT NOTE: when asking for help (in the mailing list or to the
 developerts, directly) *always* send information about the system you are
 using. You can use the system information section at the end of BUGFORM as a
 guideline. Another thing: please don't send HTML mail.
+
+
+There is also a #windowmaker IRC channel at openprojects. To join there,
+connect your irc client to irc.openprojects.net, irc.linux.com or some other
+server of that network.
 
 
 GNUstep

@@ -16,14 +16,6 @@ typedef struct W_Frame {
 } Frame;
 
 
-
-struct W_ViewProcedureTable _FrameViewProcedures = {
-	NULL,
-	NULL,
-	NULL
-};
-
-
 #define DEFAULT_RELIEF 	WRGroove
 #define DEFAULT_TITLE_POSITION	WTPAtTop
 #define DEFAULT_WIDTH		40

@@ -94,7 +94,7 @@
 		"Invio posta a.." EXEC xterm -name mail -T "Pine" -e pine %s
 	        "Navigare" SHEXEC netscape -noraise -remote \
 			'openURL(%s,new-window)' || netscape %s
-		"Ricerca nei Manuali" EXEC MANUAL_SEARCH(%s)
+		"Ricerca nei Manuali" SHEXEC MANUAL_SEARCH(%s)
 	"Selezione" END
 
 	"Area di lavoro" MENU

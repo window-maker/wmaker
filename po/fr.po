@@ -1,18 +1,19 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# French Message file for Window Maker
+# Last Update: version 0.53.0
 #
-#, fuzzy
+# Update History:
+# Bastien Nocera <hadess@writeme.com>
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 0.53.0\n"
 "POT-Creation-Date: 1999-04-22 07:08+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: French \n"
+"PO-Revision-Date: 1999-04-27 07:08+2000\n"
+"Last-Translator: Bastien Nocera <hadess@writeme.com>\n"
+"Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8-bit\n"
 
 #: ../src/appicon.c:541 ../src/dialog.c:223 ../src/dialog.c:279
 #: ../src/dock.c:3114 ../src/dockedapp.c:210 ../src/rootmenu.c:1743
@@ -266,7 +267,7 @@ msgstr "Icones"
 
 #: ../src/dialog.c:457
 msgid "File Name:"
-msgstr "Nom de fichier:"
+msgstr "Fichier:"
 
 #: ../src/dialog.c:480
 msgid "Choose File"
@@ -465,7 +466,7 @@ msgstr "Ignorer"
 
 #: ../src/dockedapp.c:298
 msgid "Start when WindowMaker is started"
-msgstr "Démarrer en même temps que WindowMaker"
+msgstr "Démarrage automatique"
 
 #: ../src/dockedapp.c:305
 msgid "Application path and arguments"
@@ -1341,19 +1342,19 @@ msgstr "Attributs"
 
 #: ../src/winspector.c:1123
 msgid "Disable Titlebar"
-msgstr "Désactiver la barre de titre"
+msgstr "Pas de barre de titre"
 
 #: ../src/winspector.c:1127
 msgid "Disable Resizebar"
-msgstr "Désactiver la barre de redimensionnement"
+msgstr "Pas de barre de redimensionnement"
 
 #: ../src/winspector.c:1131
 msgid "Disable Close Button"
-msgstr "Désactiver le bouton de fermeture"
+msgstr "Pas de bouton de fermeture"
 
 #: ../src/winspector.c:1135
 msgid "Disable Miniaturize Button"
-msgstr "Désactiver le bouton de miniaturisation"
+msgstr "Pas  bouton de miniaturisation"
 
 #: ../src/winspector.c:1139
 msgid "Keep on Top / Floating"
@@ -1385,11 +1386,11 @@ msgstr "Ignore «Cacher les Autres»"
 
 #: ../src/winspector.c:1187
 msgid "Don't Bind Keyboard Shortcuts"
-msgstr "Ne pas associer de raccourcis-clavier"
+msgstr "Utiliser le clavier"
 
 #: ../src/winspector.c:1191
 msgid "Don't Bind Mouse Clicks"
-msgstr "Ne pas associer de clicks de souris"
+msgstr "Utiliser la souris"
 
 #: ../src/winspector.c:1195
 msgid "Keep Inside Screen"
@@ -1401,7 +1402,7 @@ msgstr "Ne prend pas le focus"
 
 #: ../src/winspector.c:1203
 msgid "Don't Save Session"
-msgstr "Exclure des Sauvegardes de Sessions"
+msgstr "Pas de Sauvegarde de Session"
 
 #: ../src/winspector.c:1207
 msgid "Emulate Application Icon"
@@ -1416,7 +1417,7 @@ msgid ""
 "Enable the \"Don't bind...\" options to allow the application to receive all "
 "mouse or keyboard events."
 msgstr ""
-"Activer les options \"Ne pas associer...\" pour que  l'application reçoive "
+"Activer les options \"Utiliser...\" pour que  l'application reçoive "
 "tous les évenements clavier ou souris."
 
 #: ../src/winspector.c:1233

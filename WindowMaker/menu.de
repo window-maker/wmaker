@@ -91,7 +91,7 @@
                 "email an" EXEC xterm -name mail -T "Pine" -e pine %s
                 "Navigate" SHEXEC netscape -noraise -remote \
                        'openURL(%s,new-window)' || netscape %s
-                "in Anleitung suchen" EXEC MANUAL_SEARCH(%s)
+                "in Anleitung suchen" SHEXEC MANUAL_SEARCH(%s)
 	"Markierung" END
         "Arbeitsplatz" MENU
                 "Andere verstecken" HIDE_OTHERS

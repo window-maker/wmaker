@@ -44,6 +44,16 @@
 
 #else /* !NDEBUG */
 
+#ifdef DEBUG
+
+#include <assert.h>
+
+#define wassertr(expr) 	assert(expr)
+
+#define wassertrv(expr, val)	assert(expr)
+
+#else /* !DEBUG */
+
 #define wassertr(expr) \
 	if (!(expr)) { \
 		wwarning("%s line %i (%s): assertion %s failed",\
@@ -57,6 +67,7 @@
 			__FILE__, __LINE__, __ASSERT_FUNCTION, #expr);\
 		return (val);\
 	}
+#endif /* !DEBUG */
 
 #endif /* !NDEBUG */
 

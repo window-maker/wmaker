@@ -29,14 +29,6 @@ typedef struct W_Label {
 } Label;
 
 
-
-W_ViewProcedureTable _LabelViewProcedures = {
-    NULL,
-	NULL,
-	NULL
-};
-
-
 #define DEFAULT_WIDTH		60
 #define DEFAULT_HEIGHT		14
 #define DEFAULT_ALIGNMENT	WALeft

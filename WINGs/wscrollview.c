@@ -38,9 +38,11 @@ static void handleViewportEvents(XEvent *event, void *data);
 static void resizeScrollView();
 
 
-W_ViewProcedureTable _ScrollViewViewProcedures = {
+W_ViewDelegate _ScrollViewViewDelegate = {
     NULL,
+	NULL,
 	resizeScrollView,
+	NULL,
 	NULL
 };
 
@@ -67,7 +69,10 @@ WMCreateScrollView(WMWidget *parent)
 	free(sPtr);
 	return NULL;
     }
-    
+    sPtr->view->self = sPtr;
+
+    sPtr->view->delegate = &_ScrollViewViewDelegate;
+
     sPtr->viewport->flags.mapWhenRealized = 1;
 
     WMCreateEventHandler(sPtr->view, StructureNotifyMask|ExposureMask,
@@ -171,11 +176,9 @@ reorganizeInterior(WMScrollView *sPtr)
 
 
 static void
-resizeScrollView(WMScrollView *sPtr, unsigned int width, unsigned int height)
+resizeScrollView(W_ViewDelegate *self, WMView *view)
 {
-    W_ResizeView(sPtr->view, width, height);
-
-    reorganizeInterior(sPtr);
+    reorganizeInterior(view->self);
 }
 
 

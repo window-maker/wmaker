@@ -7,10 +7,10 @@
     ("Liste des processus", EXEC, "xterm -e top"),
     ("Butineur d'aide", EXEC, "xman")
    ),
-  ("Démarrer...", EXEC, "%a(Démarrer,Tapez une commande à démarrer:)"),
+  ("Démarrer...", SHEXEC, "%a(Démarrer,Tapez une commande à démarrer:)"),
   ("Terminal X", EXEC, "xterm -sb"),
   ("Rxvt", EXEC, "rxvt -bg black -fg white -fn fixed"),
-  ("Espaces de travail", WORKSPACE_MENU),
+  ("Bureau", WORKSPACE_MENU),
   ("Applications",
 	("Graphismes",
           ("Gimp", SHEXEC, "gimp >/dev/null"),
@@ -54,9 +54,9 @@
    ("Copier", SHEXEC, "echo '%s' | wxcopy"),
    ("Envoyer à", EXEC, "xterm -name mail -T Pine -e pine %s"),
    ("Naviguer", EXEC, "netscape %s"),
-   ("Rechercher dans le manuel", EXEC, "MANUAL_SEARCH(%s)")
+   ("Rechercher dans le manuel", SHEXEC, "MANUAL_SEARCH(%s)")
   ),
- ("Espace de travail",
+ ("Bureaux",
    ("Cacher les autres fenêtres", HIDE_OTHERS),
    ("Montrer toutes les fenêtres", SHOW_ALL),
    ("Arranger les icônes", ARRANGE_ICONS),
@@ -66,9 +66,9 @@
    ("Effacer la session", CLEAR_SESSION)
   ),
  ("Apparence",
-   ("Thèmes", OPEN_MENU, "-noext #wmdatadir#/Themes $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
-   ("Styles", OPEN_MENU, "-noext #wmdatadir#/Styles $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle"),
-   ("Jeu d'icônes", OPEN_MENU, "-noext #wmdatadir#/IconSets $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
+   ("Thèmes", OPEN_MENU, "-noext /opt/share/WindowMaker/Themes $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
+   ("Styles", OPEN_MENU, "-noext /opt/share/WindowMaker/Styles $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle"),
+   ("Jeu d'icônes", OPEN_MENU, "-noext /opt/share/WindowMaker/IconSets $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
    ("Fond d'écran",
      ("Unifié",
        ("Noir", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, black)'"),
@@ -88,10 +88,10 @@
        ("Dégradés de Gris",    EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#636380\", \"#131318\")'"),
        ("Dégradés de Bordeau", EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#600040\", \"#180010\")'")
       ),
-     ("Images", OPEN_MENU, "-noext #wmdatadir#/Backgrounds $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
+     ("Images", OPEN_MENU, "-noext /opt/share/WindowMaker/Backgrounds $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
       ),
-   ("Sauver le thème", EXEC, "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes /\"%a(Nom du thème,Entrez un nom de fichier:)\""),
-   ("Sauver le jeu d'icônes", EXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets /\"%a(Nom du jeu d'icônes,Entrez un nom de fichier:)\"")  
+   ("Sauver le thème", SHEXEC, "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes /\"%a(Nom du thème,Entrez un nom de fichier:)\""),
+   ("Sauver le jeu d'icônes", SHEXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets /\"%a(Nom du jeu d'icônes,Entrez un nom de fichier:)\"")  
   ),
  ("Quitter",
    ("Redémarrer", RESTART),

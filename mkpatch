@@ -150,7 +150,7 @@ index=0
 mkdir tmpdir
 while [ $index -lt $dircount ]; do
 	fname="dir$index"
-	eval origname=$"$fname"
+	eval origname=\$"$fname"
 	echo "Recreating directory ../$origname"
 	(cd tmpdir; tar xf ../files/$fname.tar)
 	mv tmpdir/$origname ../$origname
@@ -162,7 +162,7 @@ rm -fr tmpdir
 index=0
 while [ $index -lt $filecount ]; do
 	fname="file$index"
-	eval origname=$"$fname"
+	eval origname=\$"$fname"
 	echo "Copying file ../$origname"
 	cp files/$fname ../$origname
 	index=`expr $index + 1`
@@ -205,7 +205,7 @@ check_binary_changes() {
 index=0
 while [ $index -lt $filecount ]; do
 	fname="changed$index"
-	eval origname=$"$fname"
+	eval origname=\$"$fname"
 	echo "Replacing file ../$origname"
 	rm ../$origname
 	cp files/$fname ../$origname

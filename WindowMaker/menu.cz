@@ -31,7 +31,7 @@
 
 "Hlavní menu" MENU
 	"Správce oken" MENU	
-		"Editace menu" EXEC xterm -T 'Editace menu' -e joe $HOME/GNUstep/Library/WindowMaker/menu
+		"Editace menu" SHEXEC xterm -T 'Editace menu' -e joe $HOME/GNUstep/Library/WindowMaker/menu
 	"Správce oken" END
 	"Info" MENU
 		"Info Panel..." INFO_PANEL

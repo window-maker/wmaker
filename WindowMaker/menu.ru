@@ -106,7 +106,7 @@
 		"Копировать" SHEXEC echo '%s' | wxcopy
 		"Отправить" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Искать в Интернет" EXEC netscape %s
-		"Искать в Руководствах" EXEC MANUAL_SEARCH(%s)
+		"Искать в Руководствах" SHEXEC MANUAL_SEARCH(%s)
 	"Выделение" END
 
 	"Рабочее место" MENU

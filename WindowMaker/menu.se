@@ -158,7 +158,7 @@
 		"Kopiera" SHEXEC echo '%s' | wxcopy
 		"Skicka e-mail" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Gå till webbsida" EXEC netscape %s
-		"Sök i manualer" EXEC MANUAL_SEARCH(%s)
+		"Sök i manualer" SHEXEC MANUAL_SEARCH(%s)
 	"Markering" END
 
 	"Arbetsbord" MENU
@@ -192,8 +192,8 @@
 			"Toningar" END
 			"Bilder" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Bakgrund" END
-		"Spara tema" EXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
-		"Spara ikonuppsättning" EXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
+		"Spara tema" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
+		"Spara ikonuppsättning" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
 	"Utseende" END
 
 	"Avsluta"	MENU

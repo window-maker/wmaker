@@ -486,11 +486,13 @@ int main(int argc, char **argv)
      * Put the testSomething() function you want to test here.
      */
 
-    testTextField(scr);
+
+
+    testColorWell(scr);
+#if 0
 
     testTabView(scr);
-
-#if 0
+    testTextField(scr);
     testGradientButtons(scr);
 
     testOpenFilePanel(scr);
@@ -499,7 +501,6 @@ int main(int argc, char **argv)
     testGradientButtons(scr);
     testScrollView(scr);
 
-    testColorWell(scr);
 
     testSlider(scr);
     testPullDown(scr);

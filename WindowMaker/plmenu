@@ -7,7 +7,7 @@
   ("Process List", EXEC, "xterm -e top"),
   ("Manual Browser", EXEC, "xman")
   ),
- ("Run...", EXEC, "%a(Run,Type command to run:)"),
+ ("Run...", SHEXEC, "%a(Run,Type command to run:)"),
  ("XTerm", EXEC, "xterm -sb"),
  ("Rxvt", EXEC, "rxvt -bg black -fg white -fn fixed"),
  ("Workspaces", WORKSPACE_MENU),
@@ -92,8 +92,8 @@
     ),
    ("Images", OPEN_MENU, "-noext #wmdatadir#/Backgrounds $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
    ),   
-  ("Save Theme", EXEC, "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/\"%a(Theme name)\""),
-  ("Save IconSet", EXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(IconSet name)\"")
+  ("Save Theme", SHEXEC, "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/\"%a(Theme name)\""),
+  ("Save IconSet", SHEXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(IconSet name)\"")
   ), 
  ("Exit",
   ("Restart", RESTART),

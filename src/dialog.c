@@ -266,23 +266,15 @@ setViewedImage(IconPanel *panel, char *file)
     pixmap = WMCreateBlendedPixmapFromFile(WMWidgetScreen(panel->win),
 					   file, &color);
     if (!pixmap) {
-	char *msg;
-	char *tmp;
-
 	WMSetButtonEnabled(panel->okButton, False);
 	    
-	tmp = _("Could not load image file ");
-	msg = wmalloc(strlen(tmp)+strlen(file)+6);
-	strcpy(msg, tmp);
-	strcat(msg, file);
-	
-	wMessageDialog(panel->scr, _("Error"), msg, _("OK"), NULL, NULL);
-	free(msg);
+	WMSetLabelText(panel->iconView, _("Could not load image file "));
 	
 	WMSetLabelImage(panel->iconView, NULL);
     } else {
 	WMSetButtonEnabled(panel->okButton, True);
-	
+
+	WMSetLabelText(panel->iconView, NULL);
 	WMSetLabelImage(panel->iconView, pixmap);
 	WMReleasePixmap(pixmap);
     }
@@ -448,9 +440,10 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
     panel->iconView = WMCreateLabel(panel->win);
     WMResizeWidget(panel->iconView, 75, 75);
     WMMoveWidget(panel->iconView, 365, 60);
-    WMSetLabelImagePosition(panel->iconView, WIPImageOnly);
+    WMSetLabelImagePosition(panel->iconView, WIPOverlaps);
     WMSetLabelRelief(panel->iconView, WRSunken);
-    
+    WMSetLabelTextAlignment(panel->iconView, WACenter);
+
     panel->fileLabel = WMCreateLabel(panel->win);
     WMResizeWidget(panel->fileLabel, 80, 20);
     WMMoveWidget(panel->fileLabel, 10, 210);

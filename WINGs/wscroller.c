@@ -67,17 +67,19 @@ typedef struct W_Scroller {
 static void destroyScroller(Scroller *sPtr);
 static void paintScroller(Scroller *sPtr);
 
-static void resizeScroller();
+static void willResizeScroller();
 static void handleEvents(XEvent *event, void *data);
 static void handleActionEvents(XEvent *event, void *data);
 
 static void handleMotion(Scroller *sPtr, int mouseX, int mouseY);
 
 
-W_ViewProcedureTable _ScrollerViewProcedures = {
+W_ViewDelegate _ScrollerViewDelegate = {
     NULL,
-	resizeScroller,
-	NULL
+	NULL,
+	NULL,
+	NULL,
+	willResizeScroller
 };
 
 
@@ -99,13 +101,15 @@ WMCreateScroller(WMWidget *parent)
 	return NULL;
     }
     sPtr->view->self = sPtr;
+
+    sPtr->view->delegate = &_ScrollerViewDelegate;
     
     sPtr->flags.documentFullyVisible = 1;
     
     WMCreateEventHandler(sPtr->view, ExposureMask|StructureNotifyMask
 			 |ClientMessageMask, handleEvents, sPtr);
 
-    resizeScroller(sPtr, DEFAULT_WIDTH, DEFAULT_WIDTH);
+    W_ResizeView(sPtr->view, DEFAULT_WIDTH, DEFAULT_WIDTH);
     sPtr->flags.arrowsPosition = DEFAULT_ARROWS_POSITION;
 
     WMCreateEventHandler(sPtr->view, ButtonPressMask|ButtonReleaseMask
@@ -130,17 +134,17 @@ WMSetScrollerArrowsPosition(WMScroller *sPtr, WMScrollArrowPosition position)
 
 
 static void
-resizeScroller(WMScroller *sPtr, unsigned int width, unsigned int height)
+willResizeScroller(W_ViewDelegate *self, WMView *view, 
+		   unsigned int *width, unsigned int *height)
 {
-    if (width > height) {
+    WMScroller *sPtr = (WMScroller*)view->self;
+    
+    if (*width > *height) {
 	sPtr->flags.horizontal = 1;
-	W_ResizeView(sPtr->view, width, SCROLLER_WIDTH);
+	*height = SCROLLER_WIDTH;
     } else {
 	sPtr->flags.horizontal = 0;
-	W_ResizeView(sPtr->view, SCROLLER_WIDTH, height);
-    }
-    if (sPtr->view->flags.realized) {
-	paintScroller(sPtr);
+	*width = SCROLLER_WIDTH;
     }
 }
 

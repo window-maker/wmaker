@@ -193,8 +193,8 @@
 			"Gradient" END
 			"Images" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"배경화면" END
-		"테마 저장" EXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
-		"아이콘세트 저장" EXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
+		"테마 저장" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
+		"아이콘세트 저장" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
 		"설정 파일 수정" MENU
 			"menu.ko" EXEC hanterm -e vi $HOME/GNUstep/Library/WindowMaker/menu.ko
 			"WindowMaker" EXEC hanterm -e vi $HOME/GNUstep/Defaults/WindowMaker

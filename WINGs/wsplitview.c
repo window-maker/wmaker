@@ -33,14 +33,6 @@ static void handleEvents(XEvent *event, void *data);
 static void handleActionEvents(XEvent *event, void *data);
 
 
-W_ViewProcedureTable _SplitViewViewProcedures = {
-    NULL,
-	NULL,
-	NULL
-};
-
-
-
 static int
 subviewCount(SplitView *sPtr)
 {

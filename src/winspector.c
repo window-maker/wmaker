@@ -988,12 +988,24 @@ static void
 selectSpecification(WMWidget *bPtr, void *data)
 {
     InspectorPanel *panel = (InspectorPanel*)data;
+    char *str;
 
     if (bPtr == panel->defaultRb) {
 	WMSetButtonEnabled(panel->applyBtn, False);
     } else {
 	WMSetButtonEnabled(panel->applyBtn, True);
     }
+
+    str = wmalloc(16 + strlen(wwin->wm_instance ? wwin->wm_instance : "?")
+		  + strlen(wwin->wm_class ? wwin->wm_class : "?"));
+
+    sprintf(str, "Inspecting  %s.%s",
+	    wwin->wm_instance ? wwin->wm_instance : "?",
+	    wwin->wm_class ? wwin->wm_class : "?");
+
+    wFrameWindowChangeTitle(panel->wwin->frame, str);
+
+    free(str);
 }
 
 
@@ -1003,13 +1015,15 @@ createInspectorForWindow(WWindow *wwin)
     WScreen *scr = wwin->screen_ptr;
     InspectorPanel *panel;
     Window parent;
-    char charbuf[128];
     int i;
     int x, y;
     int btn_width, frame_width;
+    WMButton *selectedBtn = NULL;
 #ifdef wrong_behaviour
     WMPixmap *pixmap;
 #endif
+
+
     panel = wmalloc(sizeof(InspectorPanel));
     memset(panel, 0, sizeof(InspectorPanel));
     
@@ -1020,11 +1034,7 @@ createInspectorForWindow(WWindow *wwin)
 
     panel->nextPtr = panelList;
     panelList = panel;
-    
 
-    sprintf(charbuf, "Inspecting  %s.%s", 
-	    wwin->wm_instance ? wwin->wm_instance : "?",
-	    wwin->wm_class ? wwin->wm_class : "?");
 
     panel->win = WMCreateWindow(scr->wmscreen, "windowInspector");
     WMResizeWidget(panel->win, PWIDTH, PHEIGHT);
@@ -1082,16 +1092,20 @@ createInspectorForWindow(WWindow *wwin)
     WMSetButtonText(panel->defaultRb, _("Defaults for all windows"));
     WMSetButtonSelected(panel->defaultRb, False);
     WMSetButtonAction(panel->defaultRb, selectSpecification, panel);
-    
-    
+
     if (wwin->wm_class && wwin->wm_instance) {
-	sprintf(charbuf, "%s.%s", wwin->wm_instance, wwin->wm_class);
+	char *str;
+
+	str = wstrappend(wwin->wm_instance, wwin->wm_class);
 	panel->bothRb = WMCreateRadioButton(panel->specFrm);
 	WMMoveWidget(panel->bothRb, 10, 18);
 	WMResizeWidget(panel->bothRb, frame_width - (2 * 10), 20);
-	WMSetButtonText(panel->bothRb, charbuf);
-	WMSetButtonSelected(panel->bothRb, True);
+	WMSetButtonText(panel->bothRb, str);
+	free(str);
 	WMGroupButtons(panel->defaultRb, panel->bothRb);
+
+	if (!selectedBtn)
+	    selectedBtn = panel->bothRb;
 
 	WMSetButtonAction(panel->bothRb, selectSpecification, panel);
     }
@@ -1101,8 +1115,10 @@ createInspectorForWindow(WWindow *wwin)
 	WMMoveWidget(panel->instRb, 10, 38);
 	WMResizeWidget(panel->instRb, frame_width - (2 * 10), 20);
 	WMSetButtonText(panel->instRb, wwin->wm_instance);
-	WMSetButtonSelected(panel->instRb, False);
 	WMGroupButtons(panel->defaultRb, panel->instRb);
+
+	if (!selectedBtn)
+	    selectedBtn = panel->instRb;
 
 	WMSetButtonAction(panel->instRb, selectSpecification, panel);
     }
@@ -1112,8 +1128,10 @@ createInspectorForWindow(WWindow *wwin)
 	WMMoveWidget(panel->clsRb, 10, 58);
 	WMResizeWidget(panel->clsRb, frame_width - (2 * 10), 20);
 	WMSetButtonText(panel->clsRb, wwin->wm_class);
-	WMSetButtonSelected(panel->clsRb, False);
 	WMGroupButtons(panel->defaultRb, panel->clsRb);
+
+	if (!selectedBtn)
+	    selectedBtn = panel->clsRb;
 
 	WMSetButtonAction(panel->clsRb, selectSpecification, panel);
     }
@@ -1467,7 +1485,7 @@ createInspectorForWindow(WWindow *wwin)
     XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
     WMMapWidget(panel->win);
-    
+
     XSetTransientForHint(dpy, parent, wwin->client_win);
 
     x = wwin->frame_x+wwin->frame->core->width/2;
@@ -1476,12 +1494,18 @@ createInspectorForWindow(WWindow *wwin)
 	y = scr->scr_height - PHEIGHT - 30;
     if (x + PWIDTH > scr->scr_width)
 	x = scr->scr_width - PWIDTH;
+
     panel->frame = wManageInternalWindow(scr, parent, wwin->client_win, 
-					 charbuf, x, y, PWIDTH, PHEIGHT);
-    
+					 "Inspector", x, y, PWIDTH, PHEIGHT);
+
+    if (!selectedBtn)
+	selectedBtn = panel->defaultRb;
+
+    selectSpecification(selectedBtn, panel);
+
     /* kluge to know who should get the key events */
     panel->frame->client_leader = WMWidgetXID(panel->win);
-    
+
     WSETUFLAG(panel->frame, no_closable, 0);
     WSETUFLAG(panel->frame, no_close_button, 0);
     wWindowUpdateButtonImages(panel->frame);

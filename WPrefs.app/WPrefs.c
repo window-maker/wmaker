@@ -645,7 +645,12 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
     }
     free(path);
 
-    file = popen("wmaker --version", "r");
+    path = getenv("WMAKER_BIN_NAME");
+    if (!path)
+	path = "wmaker";
+    path = wstrappend(path, " --version");
+
+    file = popen(path, "r");
     if (!file || !fgets(buffer, 1023, file)) {
 	wsyserror(_("could not extract version information from Window Maker"));
 	wfatal(_("Make sure wmaker is in your search path."));

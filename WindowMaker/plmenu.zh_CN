@@ -7,7 +7,7 @@
   ("进程列表", EXEC, "xterm -e top"),
   ("手册浏览器", EXEC, "xman")
   ),
- ("运行...", EXEC, "%a(Run,Type command to run:)"),
+ ("运行...", SHEXEC, "%a(Run,Type command to run:)"),
  ("XTerm", EXEC, "xterm -sb"),
  ("Rxvt", EXEC, "rxvt -bg black -fg white -fn fixed"),
  ("程序", OPEN_MENU, "| wmconfig --output wmaker 2>/dev/null"),
@@ -54,8 +54,8 @@
     ),
    ("图像", OPEN_MENU, "-noext #wmdatadir#/Backgrounds $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
    ),   
-  ("保存主题", EXEC, "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/\"%a(Theme name)\""),
-  ("保存图标集", EXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(IconSet name)\"")
+  ("保存主题", SHEXEC, "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/\"%a(Theme name)\""),
+  ("保存图标集", SHEXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(IconSet name)\"")
   ), 
  ("退出",
   ("重新启动", RESTART),

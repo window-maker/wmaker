@@ -40,14 +40,16 @@ static void handleDragEvents(XEvent *event, void *data);
 
 static void handleActionEvents(XEvent *event, void *data);
 
-static void resizeColorWell();
+static void willResizeColorWell();
 
 
 
-W_ViewProcedureTable _ColorWellViewProcedures = {
+W_ViewDelegate _ColorWellViewDelegate = {
     NULL,
-	resizeColorWell,
-	NULL
+	NULL,
+	NULL,
+	NULL,
+	willResizeColorWell
 };
 
 
@@ -131,6 +133,8 @@ WMCreateColorWell(WMWidget *parent)
 	return NULL;
     }
     cPtr->view->self = cPtr;
+
+    cPtr->view->delegate = &_ColorWellViewDelegate;
     
     cPtr->colorView = W_CreateView(cPtr->view);
     if (!cPtr->colorView) {
@@ -155,7 +159,7 @@ WMCreateColorWell(WMWidget *parent)
 
     cPtr->flags.bordered = 1;
 
-    resizeColorWell(cPtr, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    W_ResizeView(cPtr->view, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
     WMAddNotificationObserver(activatedObserver, cPtr, 
 			      _ColorWellActivatedNotification, NULL);
@@ -194,7 +198,7 @@ WSetColorWellBordered(WMColorWell *cPtr, Bool flag)
 {
     if (cPtr->flags.bordered != flag) {
 	cPtr->flags.bordered = flag;
-	resizeColorWell(cPtr, cPtr->view->size.width, cPtr->view->size.height);
+	W_ResizeView(cPtr->view, cPtr->view->size.width, cPtr->view->size.height);
     }
 }
 
@@ -202,29 +206,27 @@ WSetColorWellBordered(WMColorWell *cPtr, Bool flag)
 #define MIN(a,b)	((a) > (b) ? (b) : (a))
 
 static void
-resizeColorWell(WMColorWell *cPtr, unsigned int width, unsigned int height)
+willResizeColorWell(W_ViewDelegate *self, WMView *view,
+		    unsigned int *width, unsigned int *height)
 {
+    WMColorWell *cPtr = (WMColorWell*)view->self;
     int bw;
     
     if (cPtr->flags.bordered) {
 
-	if (width < MIN_WIDTH)
-	    width = MIN_WIDTH;
-	if (height < MIN_HEIGHT)
-	    height = MIN_HEIGHT;
+	if (*width < MIN_WIDTH)
+	    *width = MIN_WIDTH;
+	if (*height < MIN_HEIGHT)
+	    *height = MIN_HEIGHT;
 
-	bw = (int)((float)MIN(width, height)*0.24);
-	
-	W_ResizeView(cPtr->view, width, height);
-    
-	W_ResizeView(cPtr->colorView, width-2*bw, height-2*bw);
+	bw = (int)((float)MIN(*width, *height)*0.24);
+
+	W_ResizeView(cPtr->colorView, *width-2*bw, *height-2*bw);
 
 	if (cPtr->colorView->pos.x!=bw || cPtr->colorView->pos.y!=bw)
 	    W_MoveView(cPtr->colorView, bw, bw);
-    } else {
-	W_ResizeView(cPtr->view, width, height);
-    
-	W_ResizeView(cPtr->colorView, width, height);
+    } else {    
+	W_ResizeView(cPtr->colorView, *width, *height);
 
 	W_MoveView(cPtr->colorView, 0, 0);
     }

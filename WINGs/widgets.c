@@ -309,53 +309,10 @@ static unsigned char STIPPLE_BITS[] = {
 extern void W_ReadConfigurations(void);
 
 
-extern W_ViewProcedureTable _WindowViewProcedures;
-extern W_ViewProcedureTable _FrameViewProcedures;
-extern W_ViewProcedureTable _LabelViewProcedures;
-extern W_ViewProcedureTable _ButtonViewProcedures;
-extern W_ViewProcedureTable _TextFieldViewProcedures;
-extern W_ViewProcedureTable _ScrollerViewProcedures;
-extern W_ViewProcedureTable _ScrollViewProcedures;
-extern W_ViewProcedureTable _ListViewProcedures;
-extern W_ViewProcedureTable _BrowserViewProcedures;
-extern W_ViewProcedureTable _PopUpButtonViewProcedures;
-extern W_ViewProcedureTable _ColorWellViewProcedures;
-extern W_ViewProcedureTable _ScrollViewViewProcedures;
-extern W_ViewProcedureTable _SliderViewProcedures;
-extern W_ViewProcedureTable _SplitViewViewProcedures;
-extern W_ViewProcedureTable _TabViewViewProcedures;
-
-/*
- * All widget classes defined must have an entry here.
- */
-static W_ViewProcedureTable *procedureTables[16];
-
-static W_ViewProcedureTable **userProcedureTable = NULL;
 static int userWidgetCount=0;
 
 
 /*****  end data  ******/
-
-
-
-static void
-initProcedureTable()
-{
-    procedureTables[WC_Window] = &_WindowViewProcedures;
-    procedureTables[WC_Frame] = &_FrameViewProcedures;
-    procedureTables[WC_Label] = &_LabelViewProcedures;
-    procedureTables[WC_Button] = &_ButtonViewProcedures;
-    procedureTables[WC_TextField] = &_TextFieldViewProcedures;
-    procedureTables[WC_Scroller] = &_ScrollerViewProcedures;
-    procedureTables[WC_List] = &_ListViewProcedures;
-    procedureTables[WC_Browser] = &_BrowserViewProcedures;
-    procedureTables[WC_PopUpButton] = &_PopUpButtonViewProcedures;
-    procedureTables[WC_ColorWell] = &_ColorWellViewProcedures;
-    procedureTables[WC_ScrollView] = &_ScrollViewViewProcedures;
-    procedureTables[WC_Slider] = &_SliderViewProcedures;
-    procedureTables[WC_SplitView] = &_SplitViewViewProcedures;
-    procedureTables[WC_TabView] = &_TabViewViewProcedures;
-}
 
 
 static void
@@ -562,8 +519,6 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     if (!initialized) {
 
 	initialized = 1;
-	
-	initProcedureTable();
 
 	W_ReadConfigurations();
 
@@ -866,76 +821,29 @@ WMUnmapWidget(WMWidget *w)
 void
 WMSetWidgetBackgroundColor(WMWidget *w, WMColor *color)
 {    
-    if (W_CLASS(w) < WC_UserWidget
-	&& procedureTables[W_CLASS(w)]->setBackgroundColor) {
-	
-	(*procedureTables[W_CLASS(w)]->setBackgroundColor)(w, color);
-	
-    } else if (W_CLASS(w) >= WC_UserWidget
-	&& userProcedureTable[W_CLASS(w)-WC_UserWidget]->setBackgroundColor) {
-	
-	(*userProcedureTable[W_CLASS(w)-WC_UserWidget]->setBackgroundColor)(w, color);
-	
-    } else {
-	W_SetViewBackgroundColor(W_VIEW(w), color);
-    }
+    W_SetViewBackgroundColor(W_VIEW(w), color);
 }
 
 
 void
 WMMoveWidget(WMWidget *w, int x, int y)
 {
-    if (W_CLASS(w) < WC_UserWidget
-	&& procedureTables[W_CLASS(w)]->move) {
-	
-	(*procedureTables[W_CLASS(w)]->move)(w, x, y);
-	
-    } else if (W_CLASS(w) >= WC_UserWidget
-	&& userProcedureTable[W_CLASS(w)-WC_UserWidget]->move) {
-
-	(*userProcedureTable[W_CLASS(w)-WC_UserWidget]->move)(w, x, y);
-
-    } else {
-	W_MoveView(W_VIEW(w), x, y);
-    }
+    W_MoveView(W_VIEW(w), x, y);
 }
 
 
 void
 WMResizeWidget(WMWidget *w, unsigned int width, unsigned int height)
 {
-    if (W_CLASS(w) < WC_UserWidget
-	&& procedureTables[W_CLASS(w)]->resize) {
-	
-	(*procedureTables[W_CLASS(w)]->resize)(w, width, height);
-	
-    } else if (W_CLASS(w) >= WC_UserWidget
-	       && userProcedureTable[W_CLASS(w)-WC_UserWidget]->resize) {
-
-	(*userProcedureTable[W_CLASS(w)-WC_UserWidget]->resize)(w, width, height);
-
-    } else {
-	W_ResizeView(W_VIEW(w), width, height);
-    }
+    W_ResizeView(W_VIEW(w), width, height);
 }
 
 
 
 W_Class
-W_RegisterUserWidget(W_ViewProcedureTable *procTable)
+W_RegisterUserWidget(void)
 {
-    W_ViewProcedureTable **newTable;
-    
     userWidgetCount++;
-    newTable = wmalloc(sizeof(W_ViewProcedureTable*)*userWidgetCount);
-    memcpy(newTable, userProcedureTable, 
-	   sizeof(W_ViewProcedureTable*)*(userWidgetCount-1));
-
-    newTable[userWidgetCount-1] = procTable;
-    
-    free(userProcedureTable);
-    
-    userProcedureTable = newTable;
 
     return userWidgetCount + WC_UserWidget - 1;
 }

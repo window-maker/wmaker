@@ -41,9 +41,9 @@
 "Menu Principal" MENU
 
 	"Informacion ..." MENU
-		"Copyright..." EXEC xmessage -center -font variable -title \
+		"Copyright..." SHEXEC xmessage -center -font variable -title \
 	'WindowMaker 'WM_VERSION -file ~/GNUstep/Library/WindowMaker/Copyright
-		"Carga del sistema" EXEC xosview || xload
+		"Carga del sistema" SHEXEC xosview || xload
 		"Lista de tarifas (top)" EXEC rxvt -ls -fg white -bg black -fn vga -e top
 		"Manual" EXEC xman
 	"Informacion ..." END
@@ -63,7 +63,7 @@
 		"Graficos ..." END
      
                 "Editores ..." MENU
-	                "XEmacs" EXEC xemacs || emacs
+	                "XEmacs" SHEXEC xemacs || emacs
 			"XJed" EXEC xjed
 			"NEdit" EXEC nedit
 			"Xedit" EXEC xedit
@@ -71,7 +71,7 @@
 	        "Editores ..." END
 		
 		"Multimedia ..." MENU
-	                "Xmcd" EXEC xmcd 2> /dev/null
+	                "Xmcd" SHEXEC xmcd 2> /dev/null
 			"Xplaycd" EXEC xplaycd
 			"Xmixer" EXEC xmixer
 		"Multimedia ..." END

@@ -34,13 +34,6 @@ typedef struct W_TabView {
 
 
 
-struct W_ViewProcedureTable _TabViewViewProcedures = {
-	NULL,
-	NULL,
-	NULL
-};
-
-
 #define DEFAULT_WIDTH	40
 #define DEFAULT_HEIGHT	40
 

@@ -2009,8 +2009,8 @@ showData(_Panel *panel)
 	    str = colorOptions[i*2+1];
 
 	if (!(color = WMCreateNamedColor(WMWidgetScreen(panel->frame), str, False))) {
-        color = WMCreateNamedColor(WMWidgetScreen(panel->frame), "#000000", False);
-    }
+	    color = WMCreateNamedColor(WMWidgetScreen(panel->frame), "#000000", False);
+	}
 
 	panel->colors[i] = color;
     }
@@ -2038,7 +2038,7 @@ storeData(_Panel *panel)
     TextureListItem *titem;
     WMListItem *item;
     int i;
-    
+
     for (i = 0; i < sizeof(textureOptions)/(sizeof(char*)*3); i++) {
 	item = WMGetListItem(panel->texLs, panel->textureIndex[i]);
 	titem = (TextureListItem*)item->clientData;
@@ -2046,8 +2046,14 @@ storeData(_Panel *panel)
     }
 
     for (i = 0; i < 8; i++) {
-	SetStringForKey(WMGetColorRGBDescription(panel->colors[i]),
-			colorOptions[i*2]);
+	char *str;
+
+	str = WMGetColorRGBDescription(panel->colors[i]);
+
+	if (str) {
+	    SetStringForKey(str, colorOptions[i*2]);
+	    free(str);
+	}
     }
 
     switch (panel->menuStyle) {

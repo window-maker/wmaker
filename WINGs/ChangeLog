@@ -14,11 +14,20 @@ changes since wmaker 0.53.0:
 	The notifications will still work, but using the delegate is preferable
 
   How to convert old code to delegate callbacks:
-  	Create a variable (static or dynamic) of the type of the delegate for
-	the widget type. Replace the notification observers with the
-	equivalent delegate callbacks. Put pointers to the callbacks
-	in the delegate variable. 
+  	1 - create a variable (static or dynamic) of the type of the 
+	    delegate for the widget type.
+	2 - Replace the notification observers with the equivalent 
+	    delegate callbacks. 
+	3 - Put pointers to the callbacks in the delegate variable.
+
 	Take a look in wfilepanel.c to see how it is used there.
+
+- changed W_ViewProcedureTable to delegates
+	This will only affect user created widgets. If you have a custom
+	widget, you will need to update the callbacks and the declaration
+	of the W_ViewProcedureTable variable to be a W_ViewDelegate,
+	which is declared in WINGsP.h  To setup the delegate, assign
+	the delegate variable to view->delegate.
 
 - WMTextField
 	Removed all the didChange notifications that were sent when the text

@@ -55,6 +55,12 @@ int ignoreFonts = 0;
 
 Display *dpy;
 
+
+
+proplist_t readBlackBoxStyle(char *path);
+
+
+
 char*
 defaultsPathForDomain(char *domain)
 {
@@ -338,7 +344,6 @@ StringCompareHook(proplist_t pl1, proplist_t pl2)
 }
 
 
-
 void
 print_help()
 {
@@ -348,9 +353,16 @@ print_help()
     puts("  --no-fonts		ignore font related options");
     puts("  --ignore <option>	ignore changes in the specified option");
     puts("  --help		display this help and exit");
+    /*
+    puts("  --format <format>	specifies the format of the theme to be converted");
+     */
     puts("  --version		output version information and exit");
+    puts("");
+    puts("Supported formats: blackbox");
 }
 
+
+#default F_BLACKBOX	1
 
 int 
 main(int argc, char **argv)
@@ -362,6 +374,7 @@ main(int argc, char **argv)
     int i;
     int ignoreCount = 0;
     char *ignoreList[MAX_OPTIONS];
+    int format = 0;
 
     dpy = XOpenDisplay("");
 
@@ -377,7 +390,7 @@ main(int argc, char **argv)
 	if (strcmp("--ignore", argv[i])==0) {
 	    i++;
 	    if (i == argc) {
-		printf("%s: missing argument for option --ignore", ProgName);
+		printf("%s: missing argument for option --ignore\n", ProgName);
 		exit(1);
 	    }
 	    ignoreList[ignoreCount++] = argv[i];
@@ -390,6 +403,18 @@ main(int argc, char **argv)
 	} else if (strcmp("--help", argv[i])==0) {
 	    print_help();
 	    exit(0);
+	} else if (strcmp("--format", argv[i])==0) {
+	    i++;
+	    if (i == argc) {
+		printf("%s: missing argument for option --format\n", ProgName);
+		exit(1);
+	    }
+	    if (strcasecmp(argv[i], "blackbox")==0) {
+		format = F_BLACKBOX;
+	    } else {
+		printf("%s: unknown theme format '%s'\n", ProgName);
+		exit(1);
+	    }
 	} else {
 	    if (file) {
 		printf("%s: invalid argument '%s'\n", ProgName, argv[i]);
@@ -417,51 +442,62 @@ main(int argc, char **argv)
 	exit(1);
     }
 
-    if (S_ISDIR(statbuf.st_mode)) {
-	char buffer[4018];
-	char *prefix;
-
-	if (*argv[argc-1] != '/') {
-	    if (!getcwd(buffer, 4000)) {
-		printf("%s: complete path for %s is too long\n", ProgName,
-		       file);
-		exit(1);
-	    }
-	    if (strlen(buffer) + strlen(file) > 4000) {
-		printf("%s: complete path for %s is too long\n", ProgName,
-		       file);
-		exit(1);
-	    }
-	    strcat(buffer, "/");
-	} else {
-	    buffer[0] = 0;
-	}
-	strcat(buffer, file);
-
-	prefix = malloc(strlen(buffer)+10);
-	if (!prefix) {
-	    printf("%s: out of memory\n", ProgName);
-	    exit(1);
-	}
-	strcpy(prefix, buffer);
-
-	strcat(buffer, "/style");
-	
-	style = PLGetProplistWithPath(buffer);
+    if (format == F_BLACKBOX) {
+	style = readBlackBoxStyle(file);
 	if (!style) {
-	    perror(buffer);
-	    printf("%s:could not load style file.\n", ProgName);
+	    printf("%s: could not open style file\n", ProgName);
 	    exit(1);
 	}
-
-	hackPaths(style, prefix);
-	free(prefix);
     } else {
-	style = PLGetProplistWithPath(file);
-	if (!style) {
-	    perror(file);
-	    printf("%s:could not load style file.\n", ProgName);
-	    exit(1);
+	if (S_ISDIR(statbuf.st_mode)) {
+	    char buffer[4018];
+	    char *prefix;
+	    /* theme pack */
+
+	    if (*argv[argc-1] != '/') {
+		if (!getcwd(buffer, 4000)) {
+		    printf("%s: complete path for %s is too long\n", ProgName,
+			   file);
+		    exit(1);
+		}
+		if (strlen(buffer) + strlen(file) > 4000) {
+		    printf("%s: complete path for %s is too long\n", ProgName,
+			   file);
+		    exit(1);
+		}
+		strcat(buffer, "/");
+	    } else {
+		buffer[0] = 0;
+	    }
+	    strcat(buffer, file);
+	    
+	    prefix = malloc(strlen(buffer)+10);
+	    if (!prefix) {
+		printf("%s: out of memory\n", ProgName);
+		exit(1);
+	    }
+	    strcpy(prefix, buffer);
+
+	    strcat(buffer, "/style");
+	
+	    style = PLGetProplistWithPath(buffer);
+	    if (!style) {
+		perror(buffer);
+		printf("%s:could not load style file.\n", ProgName);
+		exit(1);
+	    }
+
+	    hackPaths(style, prefix);
+	    free(prefix);
+	} else {
+	    /* normal style file */
+	    
+	    style = PLGetProplistWithPath(file);
+	    if (!style) {
+		perror(file);
+		printf("%s:could not load style file.\n", ProgName);
+		exit(1);
+	    }
 	}
     }
     
@@ -509,3 +545,34 @@ main(int argc, char **argv)
 }
 
 
+
+char*
+getToken(char *str, int i, char *buf)
+{
+    
+}
+
+
+proplist_t
+readBlackBoxStyle(char *path)
+{
+    FILE *f;
+    char buffer[128], char token[128];
+    proplist_t style;
+    proplist_t p;
+    
+    f = fopen(path, "r");
+    if (!f) {
+	perror(path);
+	return NULL;
+    }
+
+    while (1) {
+	if (!fgets(buffer, 127, f))
+	    break;
+
+	if (strncasecmp(buffer, "menu.title:", 11)==0) {
+	    
+	}
+    }
+}

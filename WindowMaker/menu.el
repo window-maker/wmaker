@@ -197,8 +197,8 @@
 			"Διαβαθμισμένο" END
 			"Εικόνες" OPEN_MENU -noext  BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Φόντο" END
-		"Αποθήκευση Θέματος" EXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Όνομα Θέματος)"
-		"Αποθήκευση Ομάδας Εικονιδίων" EXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(Όνομα Ομάδας)"
+		"Αποθήκευση Θέματος" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Όνομα Θέματος)"
+		"Αποθήκευση Ομάδας Εικονιδίων" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(Όνομα Ομάδας)"
 	"Εμφάνιση" END
 
 	"Έξοδος"	MENU

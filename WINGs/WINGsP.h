@@ -8,7 +8,7 @@
 
 #include "WINGs.h"
 
-#if WINGS_H_VERSION < 990222
+#if WINGS_H_VERSION < 990516
 #error There_is_an_old_WINGs.h_file_somewhere_in_your_system._Please_remove_it.
 #endif
 
@@ -91,6 +91,7 @@ typedef struct W_FocusInfo {
     struct W_View *focused;	       /* view that has the focus in this toplevel */
     struct W_FocusInfo *next;
 } W_FocusInfo;
+
 
 typedef struct W_Screen {
     Display *display;
@@ -234,12 +235,29 @@ typedef struct W_Screen {
 
 
 
+typedef struct W_ViewDelegate {
+    void *data;
+
+    void (*didMove)(struct W_ViewDelegate*, WMView*);
+
+    void (*didResize)(struct W_ViewDelegate*, WMView*);
+
+    void (*willMove)(struct W_ViewDelegate*, WMView*, int*, int*);
+
+    void (*willResize)(struct W_ViewDelegate*, WMView*, 
+		       unsigned int*, unsigned int*);
+} W_ViewDelegate;
+
+
+
 typedef struct W_View {
     struct W_Screen *screen;
 
     WMWidget *self;		       /* must point to the widget the
 					* view belongs to */
-    
+
+    W_ViewDelegate *delegate;
+
     Window window;
 
     WMSize size;
@@ -307,13 +325,6 @@ typedef struct W_EventHandler {
     struct W_EventHandler *nextHandler;
 } W_EventHandler;
 
-
-
-typedef struct W_ViewProcedureTable {
-    void (*setBackgroundColor)(WMWidget*, WMColor *color);
-    void (*resize)(WMWidget*, unsigned int, unsigned int);
-    void (*move)(WMWidget*, int, int);
-} W_ViewProcedureTable;
 
 
 
@@ -418,7 +429,7 @@ void W_InitApplication(WMScreen *scr);
 
 void W_InitNotificationCenter(void);
 
-W_Class W_RegisterUserWidget(W_ViewProcedureTable *procTable);
+W_Class W_RegisterUserWidget(void);
 
 void W_RedisplayView(WMView *view);
 

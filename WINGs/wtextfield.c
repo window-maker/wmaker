@@ -106,11 +106,13 @@ static void paintTextField(TextField *tPtr);
 
 static void handleEvents(XEvent *event, void *data);
 static void handleTextFieldActionEvents(XEvent *event, void *data);
-static void resizeTextField();
+static void didResizeTextField();
 
-struct W_ViewProcedureTable _TextFieldViewProcedures = {
+struct W_ViewDelegate _TextFieldViewDelegate = {
     NULL,
-	resizeTextField,
+	NULL,
+	didResizeTextField,
+	NULL,
 	NULL
 };
 
@@ -260,7 +262,9 @@ WMCreateTextField(WMWidget *parent)
 	return NULL;
     }
     tPtr->view->self = tPtr;
-    
+
+    tPtr->view->delegate = &_TextFieldViewDelegate;
+
     tPtr->view->attribFlags |= CWCursor;
     tPtr->view->attribs.cursor = tPtr->view->screen->textCursor;
     
@@ -276,8 +280,6 @@ WMCreateTextField(WMWidget *parent)
     WMCreateEventHandler(tPtr->view, ExposureMask|StructureNotifyMask
 			 |FocusChangeMask, handleEvents, tPtr);
 
-    W_ResizeView(tPtr->view, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
     tPtr->font = WMRetainFont(tPtr->view->screen->normalFont);
 
     tPtr->flags.bordered = DEFAULT_BORDERED;
@@ -285,6 +287,8 @@ WMCreateTextField(WMWidget *parent)
     tPtr->flags.alignment = DEFAULT_ALIGNMENT;
     tPtr->offsetWidth = 
 	WMAX((tPtr->view->size.height - WMFontHeight(tPtr->font))/2, 1);
+
+    W_ResizeView(tPtr->view, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
     WMCreateEventHandler(tPtr->view, EnterWindowMask|LeaveWindowMask
 			 |ButtonReleaseMask|ButtonPressMask|KeyPressMask|Button1MotionMask,
@@ -594,9 +598,9 @@ WMSetTextFieldPrevTextField(WMTextField *tPtr, WMTextField *prev)
 
 
 static void 
-resizeTextField(WMTextField *tPtr, unsigned int width, unsigned int height)
+didResizeTextField(W_ViewDelegate *self, WMView *view)
 {
-    W_ResizeView(tPtr->view, width, height);
+    WMTextField *tPtr = (WMTextField*)view->self;
 
     tPtr->offsetWidth = 
 	WMAX((tPtr->view->size.height - WMFontHeight(tPtr->font))/2, 1);
@@ -612,6 +616,7 @@ makeHiddenString(int length)
 
     memset(data, '*', length);
     data[length] = '\0';
+
     return data;
 }
 

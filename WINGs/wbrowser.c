@@ -87,12 +87,15 @@ static void removeColumn(WMBrowser *bPtr, int column);
 static char*
 createTruncatedString(WMFont *font, char *text, int *textLen, int width);
 
-static void resizeBrowser(WMWidget*, unsigned int, unsigned int);
+static void willResizeBrowser(W_ViewDelegate*, WMView*, 
+			      unsigned int*, unsigned int*);
 
-W_ViewProcedureTable _BrowserViewProcedures = {
+W_ViewDelegate _BrowserViewDelegate = {
     NULL,
-	resizeBrowser,
-	NULL
+	NULL,
+	NULL,
+	NULL,
+	willResizeBrowser
 };
 
 
@@ -117,6 +120,8 @@ WMCreateBrowser(WMWidget *parent)
     }
     bPtr->view->self = bPtr;
 
+    bPtr->view->delegate = &_BrowserViewDelegate;
+
     WMCreateEventHandler(bPtr->view, ExposureMask|StructureNotifyMask
 			 |ClientMessageMask, handleEvents, bPtr);
 
@@ -127,7 +132,7 @@ WMCreateBrowser(WMWidget *parent)
     bPtr->flags.isTitled = DEFAULT_IS_TITLED;
     bPtr->maxVisibleColumns = DEFAULT_MAX_VISIBLE_COLUMNS;
 
-    resizeBrowser(bPtr, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    WMResizeWidget(bPtr, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
     bPtr->pathSeparator = wstrdup(DEFAULT_SEPARATOR);
 
@@ -201,7 +206,7 @@ WMSetBrowserMaxVisibleColumns(WMBrowser *bPtr, int columns)
 	    removeColumn(bPtr, newFirstVisibleColumn + columns);
 	}
     }
-    resizeBrowser(bPtr, bPtr->view->size.width, bPtr->view->size.height);
+    WMResizeWidget(bPtr, bPtr->view->size.width, bPtr->view->size.height);
     if (bPtr->flags.loaded) {
 	XClearArea(bPtr->view->screen->display, bPtr->view->window, 0, 0,
 		   bPtr->view->size.width, bPtr->titleHeight, False);
@@ -463,18 +468,19 @@ WMInsertBrowserItem(WMBrowser *bPtr, int column, int row, char *text,
 
 
 static void
-resizeBrowser(WMWidget *w, unsigned int width, unsigned int height)
+willResizeBrowser(W_ViewDelegate *self, WMView *view, 
+		  unsigned int *width, unsigned int *height)
 {
-    WMBrowser *bPtr = (WMBrowser*)w;
+    WMBrowser *bPtr = (WMBrowser*)view->self;
     int cols = bPtr->maxVisibleColumns;
     int colX, colY;
     int i;
 
-    assert(width > 0);
-    assert(height > 0);
+    assert(*width > 0);
+    assert(*height > 0);
 
-    bPtr->columnSize.width = (width-(cols-1)*COLUMN_SPACING) / cols;
-    bPtr->columnSize.height = height;
+    bPtr->columnSize.width = (*width-(cols-1)*COLUMN_SPACING) / cols;
+    bPtr->columnSize.height = *height;
 
     if (bPtr->flags.isTitled) {
 	colY = TITLE_SPACING + bPtr->titleHeight;
@@ -487,8 +493,8 @@ resizeBrowser(WMWidget *w, unsigned int width, unsigned int height)
 	bPtr->columnSize.height -= SCROLLER_WIDTH + 4;
 
 	if (bPtr->scroller) {
-	    WMResizeWidget(bPtr->scroller, width-2, 1);
-	    WMMoveWidget(bPtr->scroller, 1, height-SCROLLER_WIDTH-1);
+	    WMResizeWidget(bPtr->scroller, *width-2, 1);
+	    WMMoveWidget(bPtr->scroller, 1, *height-SCROLLER_WIDTH-1);
 	}
     }
 
@@ -503,8 +509,6 @@ resizeBrowser(WMWidget *w, unsigned int width, unsigned int height)
 	    colX += bPtr->columnSize.width+COLUMN_SPACING;
 	}
     }
-
-    W_ResizeView(bPtr->view, width, height);
 }
 
 

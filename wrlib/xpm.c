@@ -97,12 +97,18 @@ RGetImageFromXPMData(RContext *context, char **data)
 
     for (i=0; i<xpm.ncolors; i++) {
 	XColor xcolor;
-	
+
 	if (strncmp(xpm.colorTable[i].c_color,"None",4)==0) {
-	    color_table[0][i]=0;
-	    color_table[1][i]=0;
-	    color_table[2][i]=0;
-	    transp = i;
+	    if (context->dpy) {
+		/* ??? */
+		color_table[0][i]=context->red_offset;
+		color_table[1][i]=context->red_offset;
+		color_table[2][i]=context->red_offset;
+	    } else {
+		color_table[0][i]=0;
+		color_table[1][i]=0;
+		color_table[2][i]=0;
+	    }
 	    continue;
 	}
 	if (XParseColor(dpy, cmap, xpm.colorTable[i].c_color, &xcolor)) {
@@ -207,9 +213,17 @@ RLoadXPM(RContext *context, char *file, int index)
 	XColor xcolor;
 	
 	if (strncmp(xpm.colorTable[i].c_color,"None",4)==0) {
-	    color_table[0][i]=0;
-	    color_table[1][i]=0;
-	    color_table[2][i]=0;
+	    if (context->dpy) {
+		/* ??? */
+		color_table[0][i]=context->red_offset;
+		color_table[1][i]=context->red_offset;
+		color_table[2][i]=context->red_offset;
+	    } else {
+		color_table[0][i]=0;
+		color_table[1][i]=0;
+		color_table[2][i]=0;
+	    }
+
 	    transp = i;
 	    continue;
 	}

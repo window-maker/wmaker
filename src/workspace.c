@@ -289,7 +289,8 @@ showWorkspaceName(WScreen *scr, int workspace)
     int len = strlen(name);
     int x, y;
 
-    if (wPreferences.workspace_name_display_position == WD_NONE)
+    if (wPreferences.workspace_name_display_position == WD_NONE
+	|| scr->workspace_count < 2)
 	return;
 
     if (scr->workspace_name_timer) {
@@ -605,6 +606,7 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 
     if (scr->dock)
         wAppIconPaint(scr->dock->icon_array[0]);
+
     if (scr->clip_icon) {
         if (scr->workspaces[workspace]->clip->auto_collapse ||
             scr->workspaces[workspace]->clip->auto_raise_lower) {
@@ -616,7 +618,8 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
         }
     }
 
-    showWorkspaceName(scr, workspace);
+    if (!scr->flags.startup2)
+	showWorkspaceName(scr, workspace);
 
 #ifdef GNOME_STUFF
     wGNOMEUpdateCurrentWorkspaceHint(scr);

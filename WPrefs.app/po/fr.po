@@ -1,18 +1,19 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# French Message file for Window Maker
+# Last Update: version 0.31.0
 #
-#, fuzzy
+# Update History:
+# Bastien Nocera <hadess@writeme.com>
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 1999-04-22 07:09+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: French \n"
+"Project-Id-Version: 0.31.0\n"
+"POT-Creation-Date: 1999-04-22 07:08+0200\n"
+"PO-Revision-Date: 1999-04-27 07:08+2000\n"
+"Last-Translator: Bastien Nocera <hadess@writeme.com>\n"
+"Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8-bit\n"
 
 #: ../../WPrefs.app/main.c:74
 #, c-format
@@ -97,7 +98,7 @@ msgid ""
 "More Programming: James Thompson"
 msgstr ""
 "Programmation/Conception: Alfredo K. Kojima\n"
-"Dessins: Marco van Hylckama Vlieg"
+"Dessins: Marco van Hylckama Vlieg\n"
 "Plus de Programmation: James Thompson"
 
 #: ../../WPrefs.app/WPrefs.c:407
@@ -353,7 +354,7 @@ msgstr "Sons"
 
 #: ../../WPrefs.app/Configurations.c:354
 msgid "Note: sound requires a module distributed separately"
-msgstr "Note: le son requière un module distribué séparément"
+msgstr "Note: le module de son est distribué séparément"
 
 #: ../../WPrefs.app/Configurations.c:364
 msgid "Dithering colormap for 8bpp"
@@ -365,11 +366,11 @@ msgstr "Désactiver le tramage dans toutes les résolutions"
 
 #: ../../WPrefs.app/Configurations.c:390
 msgid "More colors for applications"
-msgstr "Moins de couleurs pour Window Maker"
+msgstr "Plus pour les applications"
 
 #: ../../WPrefs.app/Configurations.c:397
 msgid "More colors for WindowMaker"
-msgstr "Plus de couleurs pour Window Maker"
+msgstr "Plus pour Window Maker"
 
 #: ../../WPrefs.app/Configurations.c:450
 msgid "Other Configurations"
@@ -379,7 +380,7 @@ msgstr "Autres Configurations"
 msgid ""
 "Disable miniwindows (icons for miniaturized windows). For use with KDE/GNOME."
 msgstr ""
-"Pas de mini-fenêtres (icones de fenêtres miniaturisées). Pour utiliser avec KDE/GNOME."
+"Pas de mini-fenêtres . A utiliser avec KDE/GNOME."
 
 #: ../../WPrefs.app/Expert.c:73
 msgid "Do not set non-WindowMaker specific parameters (do not use xset)"
@@ -621,7 +622,7 @@ msgstr "Plier la fenêtre active"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:387
 msgid "Move/Resize active window"
-msgstr "Déplacer/Redimensionner la fenêtre active"
+msgstr "Déplacer/Dimensionner la fenêtre active"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:388
 msgid "Select active window"
@@ -770,35 +771,35 @@ msgstr "Commandes"
 
 #: ../../WPrefs.app/Menu.c:1065 ../../WPrefs.app/Menu.c:1080
 msgid "Add Command"
-msgstr "Ajouter une Commande"
+msgstr "+ Commande"
 
 #: ../../WPrefs.app/Menu.c:1066 ../../WPrefs.app/Menu.c:1081
 msgid "Add Submenu"
-msgstr "Ajouter un Sous-Menu"
+msgstr "+ Sous-Menu"
 
 #: ../../WPrefs.app/Menu.c:1067 ../../WPrefs.app/Menu.c:1082
 msgid "Add External Menu"
-msgstr "Ajouter un Sous-Menu Externe"
+msgstr "+ Sous-Menu Externe"
 
 #: ../../WPrefs.app/Menu.c:1068 ../../WPrefs.app/Menu.c:1083
 msgid "Add Workspace Menu"
-msgstr "Ajouter le Menu des Bureaux"
+msgstr "+ Menu des Bureaux"
 
 #: ../../WPrefs.app/Menu.c:1069 ../../WPrefs.app/Menu.c:1084
 msgid "Remove Item"
-msgstr "Supprimer un Elément"
+msgstr "- Elément"
 
 #: ../../WPrefs.app/Menu.c:1070 ../../WPrefs.app/Menu.c:1085
 msgid "Cut Item"
-msgstr "Couper un Elément"
+msgstr "Couper Elément"
 
 #: ../../WPrefs.app/Menu.c:1071 ../../WPrefs.app/Menu.c:1086
 msgid "Copy Item"
-msgstr "Copier un Elément"
+msgstr "Copier Elément"
 
 #: ../../WPrefs.app/Menu.c:1072 ../../WPrefs.app/Menu.c:1087
 msgid "Paste Item"
-msgstr "Coller un Elément"
+msgstr "Coller Elément"
 
 #: ../../WPrefs.app/Menu.c:1116
 msgid "Label"
@@ -904,7 +905,7 @@ msgid ""
 "Always open submenus inside the screen, instead of scrolling.\n"
 "Note: this can be an annoyance at some circumstances."
 msgstr ""
-"Toujours ouvrir les sous-menus dans l'écran, au lieu de les faire apparaître.\n"
+"Ouvrir les sous-menus dans l'écran, au lieu de les faire apparaître.\n"
 "Note: Ca peut devenir énervant..."
 
 #: ../../WPrefs.app/MenuPreferences.c:209
@@ -1324,11 +1325,11 @@ msgstr "Lors de la Maximisation..."
 
 #: ../../WPrefs.app/WindowHandling.c:338
 msgid "...do not cover icons"
-msgstr "...ne pas recouvrir les icones"
+msgstr "...ne pas couvrir les icones"
 
 #: ../../WPrefs.app/WindowHandling.c:344
 msgid "...do not cover dock"
-msgstr "...ne pas recouvrir le dock"
+msgstr "...ne pas couvrir le dock"
 
 #: ../../WPrefs.app/WindowHandling.c:353
 msgid "Edge Resistance"
@@ -1355,8 +1356,7 @@ msgid ""
 "switch to first workspace when switching past the last workspace and "
 "vice-versa"
 msgstr ""
-"passer au premier bureau aprés le dernier bureau et vice-versa (les bureaux "
-"forment une boucle)."
+"passer au premier bureau aprés le dernier bureau et vice-versa."
 
 #: ../../WPrefs.app/Workspace.c:210
 msgid "create a new workspace when switching past the last workspace."

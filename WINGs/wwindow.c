@@ -74,12 +74,14 @@ typedef struct {
 
 
 
-static void resizeWindow(WMWidget *, unsigned, unsigned);
+static void willResizeWindow(W_ViewDelegate *, WMView *, unsigned*, unsigned*);
 
-struct W_ViewProcedureTable _WindowViewProcedures = {
+struct W_ViewDelegate _WindowViewDelegate = {
     NULL,
-	resizeWindow,
-	NULL
+	NULL,
+	NULL,
+	NULL,
+	willResizeWindow
 };
 
 
@@ -164,6 +166,8 @@ WMCreateWindowWithStyle(WMScreen *screen, char *name, int style)
 	return NULL;
     }
     win->view->self = win;
+
+    win->view->delegate = &_WindowViewDelegate;
 
     win->wname = wstrdup(name);
 
@@ -272,25 +276,24 @@ WMSetWindowCloseAction(WMWindow *win, WMAction *action, void *clientData)
 
 
 static void
-resizeWindow(WMWidget *w, unsigned width, unsigned height)
+willResizeWindow(W_ViewDelegate *self, WMView *view,
+	     unsigned *width, unsigned *height)
 {
-    WMWindow *win = (WMWindow*)w;
+    WMWindow *win = (WMWindow*)view->self;
 
     if (win->minSize.width > 0 && win->minSize.height > 0) {
-	if (width < win->minSize.width)
-	    width = win->minSize.width;
-	if (height < win->minSize.height)
-	    height = win->minSize.height;
+	if (*width < win->minSize.width)
+	    *width = win->minSize.width;
+	if (*height < win->minSize.height)
+	    *height = win->minSize.height;
     }
     
     if (win->maxSize.width > 0 && win->maxSize.height > 0) {
-	if (width > win->maxSize.width)
-	    width = win->maxSize.width;
-	if (height > win->maxSize.height)
-	    height = win->maxSize.height;
+	if (*width > win->maxSize.width)
+	    *width = win->maxSize.width;
+	if (*height > win->maxSize.height)
+	    *height = win->maxSize.height;
     }
-    
-    W_ResizeView(win->view, width, height);
 }
 
 

@@ -1674,77 +1674,92 @@ wWindowUnfocus(WWindow *wwin)
 void
 wWindowConstrainSize(WWindow *wwin, int *nwidth, int *nheight)
 {
-    XSizeHints *sizeh = wwin->normal_hints;
     int width = *nwidth;
     int height = *nheight;
-    int winc = sizeh->width_inc;
-    int hinc = sizeh->height_inc;
+    int winc = 1;
+    int hinc = 1;
+    int minW = 1, minH = 1;
+    int maxW = wwin->screen_ptr->scr_width*2;
+    int maxH = wwin->screen_ptr->scr_height*2;
+    int minAX = -1, minAY = -1;
+    int maxAX = -1, maxAY = -1;
+    int baseW = 0;
+    int baseH = 0;
 
-    if (width < sizeh->min_width)
-      width = sizeh->min_width;
-    if (height < sizeh->min_height)
-      height = sizeh->min_height;
+    if (wwin->normal_hints) {
+	winc = wwin->normal_hints->width_inc;
+	hinc = wwin->normal_hints->height_inc;
+	minW = wwin->normal_hints->min_width;
+	minH = wwin->normal_hints->min_height;
+	maxW = wwin->normal_hints->max_width;
+	maxH = wwin->normal_hints->max_height;
+	if (wwin->normal_hints->flags & PAspect) {
+	    minAX = wwin->normal_hints->min_aspect.x;
+	    minAY = wwin->normal_hints->min_aspect.y;
+	    maxAX = wwin->normal_hints->max_aspect.x;
+	    maxAY = wwin->normal_hints->max_aspect.y;
+	}
+    }
 
-    if (width > sizeh->max_width) 
-      width = sizeh->max_width;
-    if (height > sizeh->max_height) 
-      height = sizeh->max_height;
-    
+    if (width < minW)
+      width = minW;
+    if (height < minH)
+      height = minH;
+
+    if (width > maxW)
+      width = maxW;
+    if (height > maxH) 
+      height = maxH;
+
     /* aspect ratio code borrowed from olwm */
-    if (sizeh->flags & PAspect) {
+    if (minAX > 0) {
 	/* adjust max aspect ratio */
-	if (!(sizeh->max_aspect.x==1 && sizeh->max_aspect.y==1)
-	    && width * sizeh->max_aspect.y > height * sizeh->max_aspect.x) {
-	    if (sizeh->max_aspect.x > sizeh->max_aspect.y) {
-		height = (width * sizeh->max_aspect.y) / sizeh->max_aspect.x;
-		if (height > sizeh->max_height) {
-		    height = sizeh->max_height;
-		    width = (height*sizeh->max_aspect.x) / sizeh->max_aspect.y;
+	if (!(maxAX == 1 && maxAY == 1) && width * maxAY > height * maxAX) {
+	    if (maxAX > maxAY) {
+		height = (width * maxAY) / maxAX;
+		if (height > maxH) {
+		    height = maxH;
+		    width = (height * maxAX) / maxAY;
 		}
 	    } else {
-		width = (height * sizeh->max_aspect.x) / sizeh->max_aspect.y;
-		if (width > sizeh->max_width) {
-		    width = sizeh->max_width;
-		    height = (width*sizeh->max_aspect.y) / sizeh->max_aspect.x;
+		width = (height * maxAX) / maxAY;
+		if (width > maxW) {
+		    width = maxW;
+		    height = (width * maxAY) / maxAX;
 		}
 	    }
 	}
 
 	/* adjust min aspect ratio */
-	if (!(sizeh->min_aspect.x==1 && sizeh->min_aspect.y==1)
-	    && width * sizeh->min_aspect.y < height * sizeh->min_aspect.x) {
-	    if (sizeh->min_aspect.x > sizeh->min_aspect.y) {
-		height = (width * sizeh->min_aspect.y) / sizeh->min_aspect.x;
-		if (height < sizeh->min_height) {
-		    height = sizeh->min_height;
-		    width = (height*sizeh->min_aspect.x) / sizeh->min_aspect.y;
+	if (!(minAX == 1 && minAY == 1) && width * minAY < height * minAX) {
+	    if (minAX > minAY) {
+		height = (width * minAY) / minAX;
+		if (height < minH) {
+		    height = minH;
+		    width = (height * minAX) / minAY;
 		}
 	    } else {
-		width = (height * sizeh->min_aspect.x) / sizeh->min_aspect.y;
-		if (width < sizeh->min_width) {
-		    width = sizeh->min_width;
-		    height = (width*sizeh->min_aspect.y) / sizeh->min_aspect.x;
+		width = (height * minAX) / minAY;
+		if (width < minW) {
+		    width = minW;
+		    height = (width * minAY) / minAX;
 		}
 	    }
 	}
     }
 
-    if (sizeh->base_width != 0) {
-	width = (((width - sizeh->base_width) / winc) * winc) 
-	    + sizeh->base_width;
+    if (baseW != 0) {
+	width = (((width - baseW) / winc) * winc) + baseW;
     } else {
-	width = (((width - sizeh->min_width) / winc) * winc)
-	  + sizeh->min_width;
+	width = (((width - minW) / winc) * winc) + minW;
     }
 
-    if (sizeh->base_width != 0) {
-	height = (((height - sizeh->base_height) / hinc) * hinc)
-	  + sizeh->base_height;
+    if (baseW != 0) {
+	height = (((height - baseH) / hinc) * hinc) + baseH;
     } else {
-	height = (((height - sizeh->min_height) / hinc) * hinc) 
-	  + sizeh->min_height;
+	height = (((height - minH) / hinc) * hinc) + minH;
     }
-    
+
     *nwidth = width;
     *nheight = height;
 }

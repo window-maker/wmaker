@@ -32,9 +32,9 @@ typedef struct _Panel {
     char *description;
 
     CallbackRec callbacks;
-    
+
     WMWindow *win;
-    
+
     WMFrame *navF;
     WMButton *linkB;
     WMButton *cyclB;
@@ -42,7 +42,7 @@ typedef struct _Panel {
     WMLabel *linkL;
     WMLabel *cyclL;
     WMLabel *newL;
-    
+
     WMFrame *dockF;
     WMButton *dockB;
     WMButton *clipB;
