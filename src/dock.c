@@ -2907,7 +2907,7 @@ execCommand(WAppIcon *btn, char *command, WSavedState *state)
             state->hidden = -1;
             state->miniaturized = -1;
             state->shaded = -1;
-            if (btn->dock == scr->dock)
+            if (btn->dock==scr->dock || btn->omnipresent)
                 state->workspace = -1;
             else
                 state->workspace = scr->current_workspace;
