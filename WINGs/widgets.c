@@ -347,8 +347,7 @@ renderPixmap(W_Screen *screen, Pixmap d, Pixmap mask, char **data,
 
 
     if (mask)
-	XSetForeground(screen->display, screen->monoGC,
-		       W_PIXEL(screen->black));
+	XSetForeground(screen->display, screen->monoGC, 0);
 	
     for (y = 0; y < height; y++) {
 	for (x = 0; x < width; x++) {
@@ -394,7 +393,7 @@ makePixmap(W_Screen *sPtr, char **data, int width, int height, int masked)
     
     if (masked) {
 	mask = XCreatePixmap(sPtr->display, W_DRAWABLE(sPtr), width, height, 1);
-	XSetForeground(sPtr->display, sPtr->monoGC, W_PIXEL(sPtr->white));
+	XSetForeground(sPtr->display, sPtr->monoGC, 1);
 	XFillRectangle(sPtr->display, mask, sPtr->monoGC, 0, 0, width, height);
     }
 
@@ -524,6 +523,7 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     
     gcv.function = GXxor;
     gcv.foreground = W_PIXEL(scrPtr->white);
+    if (gcv.foreground == 0) gcv.foreground = 1;
     scrPtr->xorGC = XCreateGC(display, W_DRAWABLE(scrPtr), GCFunction
 			      |GCGraphicsExposures|GCForeground, &gcv);
 

@@ -59,9 +59,6 @@ extern WPreferences wPreferences;
 
 extern Atom _XA_WM_PROTOCOLS;
 
-/** Locals **/
-static LinkedList *wSelectedWindows=NULL;
-
 
 
 void
@@ -572,8 +569,7 @@ static void
 flushMotion()
 {
     XEvent ev;
-    
-    XSync(dpy, 0);
+
     while (XCheckMaskEvent(dpy, ButtonMotionMask, &ev)) ;
 }
 
@@ -654,7 +650,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
     
     if (!wwin->flags.selected) {
 	/* this window is not selected, unselect others and move only wwin */
-	wUnselectWindows();
+	wUnselectWindows(scr);
     }
     orig_x = ox = ev->xbutton.x_root;
     orig_y = oy = ev->xbutton.y_root;
@@ -690,18 +686,18 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 	}
 	switch (event.type) {
 	 case KeyPress:
-	    if (wSelectedWindows)
+	    if (scr->selected_windows)
 		break;
 	    if ((event.xkey.keycode == shiftl || event.xkey.keycode == shiftr)
 		&& started) {
 		if (!opaque_move)
-                    drawFrames(wwin, wSelectedWindows,
+                    drawFrames(wwin, scr->selected_windows,
                                ox - orig_x, oy - orig_y, off_x, off_y);
 		
 		cyclePositionDisplay(wwin, x, y, w, h);
 		
 		if (!opaque_move) {
-		    drawFrames(wwin, wSelectedWindows,
+		    drawFrames(wwin, scr->selected_windows,
 			       ox - orig_x, oy - orig_y, off_x, off_y);
 		} 
 		showPosition(wwin, x, y);
@@ -713,12 +709,12 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 		showPosition(wwin, x, y);
 
                 if (!opaque_move) {
-                    drawFrames(wwin, wSelectedWindows,
+                    drawFrames(wwin, scr->selected_windows,
                                ox-orig_x, oy-orig_y, off_x, off_y);
                 } else {
                     doWindowMove(wwin, event.xmotion.x_root + XOffset,
                                  event.xmotion.y_root + YOffset,
-                                 wSelectedWindows,
+                                 scr->selected_windows,
                                  event.xmotion.x_root - ox,
                                  event.xmotion.y_root - oy,
                                  off_x, off_y);
@@ -729,7 +725,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 
                 checkEdgeResistance(wwin, &x, &y, off_x, off_y);
 
-		if (!wSelectedWindows) {
+		if (!scr->selected_windows) {
 		    if (wPreferences.move_display == WDIS_FRAME_CENTER)
 			moveGeometryDisplayCentered(scr, x + w/2, y + h/2);
 		}
@@ -806,7 +802,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 		event.xmotion.x_root = orig_x;
 		event.xmotion.y_root = orig_y;
 		
-		if (!wSelectedWindows)
+		if (!scr->selected_windows)
 		    mapPositionDisplay(wwin, x, y, w, h);
 		
 		if (!opaque_move)
@@ -816,7 +812,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 	    oy = event.xmotion.y_root;
 	    
 	    if (started && !opaque_move)
-		drawFrames(wwin, wSelectedWindows, ox - orig_x, oy - orig_y, off_x, off_y);
+		drawFrames(wwin, scr->selected_windows, ox - orig_x, oy - orig_y, off_x, off_y);
 	    
 	    showPosition(wwin, x, y);
 	    break;
@@ -830,12 +826,12 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 
 	    if (started) {
 		if (!opaque_move) {
-		    drawFrames(wwin, wSelectedWindows,
+		    drawFrames(wwin, scr->selected_windows,
 			       ox - orig_x, oy - orig_y, off_x, off_y);
 		    XSync(dpy, 0);
 		    doWindowMove(wwin, event.xmotion.x_root + XOffset,
                                  event.xmotion.y_root + YOffset,
-                                 wSelectedWindows,
+                                 scr->selected_windows,
 				 ox - orig_x, oy - orig_y, 
 				 off_x, off_y);
 		}
@@ -850,7 +846,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 		    wSetFocusTo(scr, wwin);
 		}
 		showPosition(wwin, x, y);
-		if (!wSelectedWindows) {
+		if (!scr->selected_windows) {
 		    /* get rid of the geometry window */
 		    unmapPositionDisplay(wwin);
 		}
@@ -862,12 +858,12 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 	    
 	 default:
 	    if (started && !opaque_move) {
-		drawFrames(wwin, wSelectedWindows, ox - orig_x, oy - orig_y, off_x, off_y);
+		drawFrames(wwin, scr->selected_windows, ox - orig_x, oy - orig_y, off_x, off_y);
 		XUngrabServer(dpy);
 		WMHandleEvent(&event);
 		XSync(dpy, False);
 		XGrabServer(dpy);
-		drawFrames(wwin, wSelectedWindows, ox - orig_x, oy - orig_y, off_x, off_y);
+		drawFrames(wwin, scr->selected_windows, ox - orig_x, oy - orig_y, off_x, off_y);
 	    } else {
 		WMHandleEvent(&event);
 	    }
@@ -969,7 +965,7 @@ wMouseResizeWindow(WWindow *wwin, XEvent *ev)
     puts("Resizing window");
 #endif
     
-    wUnselectWindows();
+    wUnselectWindows(scr);
     rx1 = fx;
     rx2 = fx + fw - 1;
     ry1 = fy;
@@ -1130,36 +1126,16 @@ wMouseResizeWindow(WWindow *wwin, XEvent *ev)
 #undef RESIZEBAR
 
 void
-wUnselectWindows()
+wUnselectWindows(WScreen *scr)
 {
     WWindow *wwin;
     
-    while (wSelectedWindows) {
-	wwin = wSelectedWindows->head;
+    while (scr->selected_windows) {
+	wwin = scr->selected_windows->head;
         if (wwin->flags.miniaturized && wwin->icon && wwin->icon->selected)
             wIconSelect(wwin->icon);
 
-        XSetWindowBorder(dpy, wwin->frame->core->window,
-                         wwin->screen_ptr->frame_border_pixel);
-	wwin->flags.selected = 0;
-	list_remove_head(&wSelectedWindows);
-    }
-}
-
-
-void
-wSelectWindow(WWindow *wwin)
-{
-    if (!wwin->flags.selected) {
-	wwin->flags.selected = 1;
-	XSetWindowBorder(dpy, wwin->frame->core->window, 
-			 wwin->screen_ptr->white_pixel);
-	wSelectedWindows = list_cons(wwin, wSelectedWindows);
-    } else {
-	wwin->flags.selected = 0;
-	XSetWindowBorder(dpy, wwin->frame->core->window, 
-			 wwin->screen_ptr->frame_border_pixel);
-	wSelectedWindows = list_remove_elem(wSelectedWindows, wwin);
+	wSelectWindow(wwin, False);
     }
 }
 
@@ -1178,10 +1154,7 @@ selectWindowsInside(WScreen *scr, int x1, int y1, int x2, int y2)
 		&& (tmpw->frame_x >= x1) && (tmpw->frame_y >= y1) 
 		&& (tmpw->frame->core->width + tmpw->frame_x <= x2)
 		&& (tmpw->frame->core->height + tmpw->frame_y <= y2)) {
-		XSetWindowBorder(dpy, tmpw->frame->core->window, 
-				 tmpw->screen_ptr->white_pixel);
-		tmpw->flags.selected = 1;
-		wSelectedWindows = list_cons(tmpw, wSelectedWindows);
+		wSelectWindow(tmpw, True);
 	    }
 	}
 	tmpw = tmpw->prev;
@@ -1211,7 +1184,7 @@ wSelectWindows(WScreen *scr, XEvent *ev)
     }
     XGrabServer(dpy);
     
-    wUnselectWindows();
+    wUnselectWindows(scr);
     
     XDrawRectangle(dpy, root, gc, xp, yp, w, h);
     while (1) {

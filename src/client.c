@@ -73,8 +73,9 @@ extern Bool wShapeSupported;
 void
 wClientRestore(WWindow *wwin)
 {
+#if 0
     int gx, gy;
-    
+
     wClientGetGravityOffsets(wwin, &gx, &gy);
     /* set the positio of the frame on screen */
     wwin->frame_x -= gx * FRAME_BORDER_WIDTH;
@@ -82,7 +83,7 @@ wClientRestore(WWindow *wwin)
     /* if gravity is to the south, account for the border sizes */
     if (gy > 0)
 	wwin->frame_y += (wwin->frame->top_width + wwin->frame->bottom_width);
-
+#endif
     XUnmapWindow(dpy, wwin->client_win);
     XSetWindowBorderWidth(dpy, wwin->client_win, wwin->old_border_width);    
     XReparentWindow(dpy, wwin->client_win, wwin->screen_ptr->root_win,
@@ -232,12 +233,12 @@ wClientConfigure(WWindow *wwin, XConfigureRequestEvent *xcre)
     if (!wwin->flags.shaded) {
         /* If the window is shaded, wrong height will be set for the window */
         if (xcre->value_mask & CWX)
-            nx = xcre->x - FRAME_BORDER_WIDTH;
+            nx = xcre->x;
         else
             nx = wwin->frame_x;
 
         if (xcre->value_mask & CWY)
-            ny = xcre->y - FRAME_BORDER_WIDTH - ((ofs_y < 0) ? 0 : wwin->frame->top_width);
+            ny = xcre->y - ((ofs_y < 0) ? 0 : wwin->frame->top_width);
         else
             ny = wwin->frame_y;
 
@@ -708,8 +709,12 @@ GetColormapWindows(WWindow *wwin)
     if (wwin->cmap_windows) {
 	XFree(wwin->cmap_windows);
     }
-    if (!XGetWMColormapWindows(dpy, wwin->client_win, &(wwin->cmap_windows),
-			       &(wwin->cmap_window_no))) {
+
+    wwin->cmap_windows = NULL;
+    wwin->cmap_window_no = 0;
+
+    if (XGetWMColormapWindows(dpy, wwin->client_win, &(wwin->cmap_windows),
+			      &(wwin->cmap_window_no))!=Success) {
 	wwin->cmap_window_no = 0;
 	wwin->cmap_windows = NULL;
     }

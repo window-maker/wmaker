@@ -66,6 +66,7 @@ extern Cursor wCursor[WCUR_LAST];
 extern WPreferences wPreferences;
 extern Atom _XA_WINDOWMAKER_STATE;
 
+
 extern int wScreenCount;
 
 extern WDDomain *WDWindowMaker;
@@ -282,14 +283,23 @@ allocGCs(WScreen *scr)
 
     /* frame GC */
     wGetColor(scr, DEF_FRAME_COLOR, &color);
-
-    gcv.foreground = color.pixel;
     gcv.function = GXxor;
+    /* this will raise the probability of the XORed color being different
+     * of the original color in PseudoColor when not all color cells are
+     * initialized */
+    if (DefaultVisual(dpy, scr->screen)->class==PseudoColor)
+    	gcv.plane_mask = (1<<(scr->depth-1))|1;
+    else
+	gcv.plane_mask = AllPlanes;
+    gcv.foreground = color.pixel;
+    if (gcv.foreground == 0)
+	gcv.foreground = 1;
     gcv.line_width = DEF_FRAME_THICKNESS;
     gcv.subwindow_mode = IncludeInferiors;
     gcv.graphics_exposures = False;
     scr->frame_gc = XCreateGC(dpy, scr->root_win, GCForeground|GCGraphicsExposures
-			      |GCFunction|GCSubwindowMode|GCLineWidth, &gcv);
+			      |GCFunction|GCSubwindowMode|GCLineWidth
+			      |GCPlaneMask, &gcv);
     
     /* line GC */
     gcv.foreground = color.pixel;
@@ -536,7 +546,7 @@ wScreenInit(int screen_number)
     long event_mask;
     WMColor *color;
     XErrorHandler oldHandler;
-    
+
     scr = wmalloc(sizeof(WScreen));
     memset(scr, 0, sizeof(WScreen));
 
@@ -553,7 +563,7 @@ wScreenInit(int screen_number)
     oldHandler = XSetErrorHandler((XErrorHandler)alreadyRunningError);
 
     event_mask = EVENT_MASK;
-    
+
     if (wPreferences.disable_root_mouse)
 	event_mask &= ~(ButtonPressMask|ButtonReleaseMask);
     XSelectInput(dpy, scr->root_win, event_mask);

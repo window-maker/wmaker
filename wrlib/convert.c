@@ -613,7 +613,10 @@ RConvertImage(RContext *context, RImage *image, Pixmap *pixmap)
 			    image->height, context->depth);
     
 #ifdef XSHM
-    tmp = R_CreateXImageMappedPixmap(context, ximg);
+    if (context->flags.use_shared_pixmap)
+        tmp = R_CreateXImageMappedPixmap(context, ximg);
+    else
+	tmp = None;
     if (tmp) {
 	/*
 	 * We have to copy the shm Pixmap into a normal Pixmap because

@@ -43,6 +43,9 @@ typedef struct _Panel {
 
     WMFrame *optF;
     WMButton *raisB;
+#ifdef XKB_MODELOCK
+    WMButton *modeB;
+#endif /* XKB_MODELOCK */
 
 } _Panel;
 
@@ -76,6 +79,9 @@ showData(_Panel *panel)
     
 
     WMSetButtonSelected(panel->raisB, GetBoolForKey("CirculateRaise"));
+#ifdef XKB_MODELOCK
+    WMSetButtonSelected(panel->modeB, GetBoolForKey("KbdModeLock"));
+#endif /* XKB_MODELOCK */
 
     WMSetButtonSelected(panel->ballB[0], GetBoolForKey("WindowTitleBalloons"));
     WMSetButtonSelected(panel->ballB[1], GetBoolForKey("MiniwindowTitleBalloons"));
@@ -118,6 +124,9 @@ storeData(_Panel *panel)
     SetStringForKey(str, "MoveDisplay");
 
     SetBoolForKey(WMGetButtonSelected(panel->raisB), "CirculateRaise");
+#ifdef XKB_MODELOCK
+    SetBoolForKey(WMGetButtonSelected(panel->modeB), "KbdModeLock");
+#endif /* XKB_MODELOCK */
     SetBoolForKey(WMGetButtonSelected(panel->ballB[0]), "WindowTitleBalloons");
     SetBoolForKey(WMGetButtonSelected(panel->ballB[1]), "MiniwindowTitleBalloons");
     SetBoolForKey(WMGetButtonSelected(panel->ballB[2]), "AppIconBalloons");
@@ -191,8 +200,15 @@ createPanel(Panel *p)
     
     panel->raisB = WMCreateSwitchButton(panel->optF);
     WMResizeWidget(panel->raisB, 440, 20);
-    WMMoveWidget(panel->raisB, 20, 25);
+    WMMoveWidget(panel->raisB, 20, 15);
     WMSetButtonText(panel->raisB, _("Raise window when switching focus with keyboard (CirculateRaise)."));
+
+#ifdef XKB_MODELOCK
+    panel->modeB = WMCreateSwitchButton(panel->optF);
+    WMResizeWidget(panel->modeB, 440, 20);
+    WMMoveWidget(panel->modeB, 20, 40);
+    WMSetButtonText(panel->modeB, _("Keep keyboard language status for each window."));
+#endif
 
     WMMapSubwidgets(panel->optF);
     

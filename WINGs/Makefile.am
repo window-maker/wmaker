@@ -5,7 +5,8 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUBDIRS = Resources
 
 
-LIBLIST= -L$(top_builddir)/wrlib -lwraster @XLFLAGS@ @GFXLIBS@ @XLIBS@ \
+LIBLIST= -L$(top_builddir)/wrlib -lwraster\
+	 @GFXLFLAGS@ @XLFLAGS@ @GFXLIBS@ @XLIBS@ \
 	-lm -L$(top_builddir)/libPropList -lPropList
 
 
@@ -84,7 +85,7 @@ libWINGs_a_SOURCES = 	\
 ## Find a better way than $(GFXFLAGS) to inform widgets.c wich of 
 ## tiff or xpm images should be used
 
-INCLUDES = @XCFLAGS@ -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
+INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
 	-DRESOURCE_PATH=\"$(datadir)/WINGs\" $(GFXFLAGS) -DDEBUG \
-	-I$(top_srcdir)/libPropList
+	-I$(top_srcdir)/libPropList @XCFLAGS@
 

@@ -120,7 +120,7 @@ PropGetGNUstepWMAttr(Window window, GNUstepWMAttributes **attr)
     int fmt_ret;
     unsigned long nitems_ret;
     unsigned long bytes_after_ret;
-    CARD32 *data;
+    unsigned long *data;
 
     if (XGetWindowProperty(dpy, window, _XA_GNUSTEP_WM_ATTR, 0, 9,
 			   False, _XA_GNUSTEP_WM_ATTR,
@@ -161,7 +161,7 @@ PropGetMotifWMHints(Window window, MWMHints **mwmhints)
     int fmt_ret;
     unsigned long nitems_ret;
     unsigned long bytes_after_ret;
-    CARD32 *data;
+    unsigned long *data;
     
     if (XGetWindowProperty(dpy, window, _XA_MOTIF_WM_HINTS, 0,
 			   PROP_MWM_HINTS_ELEMENTS,

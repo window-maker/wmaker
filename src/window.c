@@ -27,9 +27,13 @@
 #ifdef SHAPE
 #include <X11/extensions/shape.h>
 #endif
+#ifdef KEEP_XKB_LOCK_STATUS
+# include <X11/XKBlib.h>
+#endif /* KEEP_XKB_LOCK_STATUS */
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
 
 #include "WindowMaker.h"
 #include "GNUstep.h"
@@ -146,7 +150,7 @@ wWindowFor(Window window)
 }
 
 
-WWindow *
+WWindow*
 wWindowCreate()
 {
     WWindow *wwin;
@@ -167,8 +171,16 @@ wWindowCreate()
 void
 wWindowDestroy(WWindow *wwin)
 {
+    int i;
+
     wwin->flags.destroyed = 1;
-    
+
+    for (i = 0; i < 4; i++) {
+	if (wwin->screen_ptr->shortcutWindow[i] == wwin) {
+	    wwin->screen_ptr->shortcutWindow[i] = NULL;
+	}
+    }
+
     if (wwin->normal_hints)
       free(wwin->normal_hints);
     
@@ -835,6 +847,7 @@ wManageWindow(WScreen *scr, Window window)
     XReparentWindow(dpy, wwin->client_win, wwin->frame->core->window,
 		    0, wwin->frame->top_width);
 
+#if 0
     {
 	int gx, gy;
 
@@ -846,7 +859,7 @@ wManageWindow(WScreen *scr, Window window)
 	if (gy > 0)
 	    y -= wwin->frame->top_width + wwin->frame->bottom_width;
     }
-
+#endif
     /* 
      * wWindowConfigure() will init the client window's size
      * (wwin->client.{width,height}) and all other geometry
@@ -1046,6 +1059,7 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
     wwin->window_flags.omnipresent = 1;
     wwin->window_flags.no_shadeable = 1;
     wwin->window_flags.no_resizable = 1;
+    wwin->window_flags.no_miniaturizable = 1;
     
     wwin->focus_mode = WFM_PASSIVE;
     
@@ -1186,12 +1200,19 @@ wUnmanageWindow(WWindow *wwin, int restore)
         WWindow *pwin = wwin->inspector->frame; /* the inspector window */
         (*pwin->frame->on_click_right)(NULL, pwin, NULL);
     }
+    
+    /* Close window menu if it's open for this window */
+    if (wwin->flags.menu_open_for_me) {
+	CloseWindowMenu(scr);
+    }
+    if (!wwin->flags.internal_window)
+        XRemoveFromSaveSet(dpy, wwin->client_win);
+    XSelectInput(dpy, wwin->client_win, NoEventMask);
 
     XUnmapWindow(dpy, frame->window);
 
     /* deselect window */
-    if (wwin->flags.selected)
-      wSelectWindow(wwin);
+    wSelectWindow(wwin, False);
     
     /* remove all pending events on window */
     /* I think this only matters for autoraise */
@@ -1289,7 +1310,15 @@ wUnmanageWindow(WWindow *wwin, int restore)
      
 void
 wWindowFocus(WWindow *wwin)
-{    
+{
+#ifdef KEEP_XKB_LOCK_STATUS
+    if (wPreferences.modelock) {
+        if (!wwin->flags.focused) {
+            XkbLockGroup(dpy, XkbUseCoreKbd, wwin->languagemode);
+        }
+    }
+#endif /* KEEP_XKB_LOCK_STATUS */
+
     wFrameWindowChangeState(wwin->frame, WS_FOCUSED);
 
     wwin->flags.focused=1;
@@ -1312,6 +1341,17 @@ wWindowMap(WWindow *wwin)
 void
 wWindowUnfocus(WWindow *wwin)
 {
+#ifdef KEEP_XKB_LOCK_STATUS
+    static XkbStateRec staterec;
+    if (wPreferences.modelock) {
+        if (wwin->flags.focused) {
+	    XkbGetState(dpy,XkbUseCoreKbd,&staterec);
+	    wwin->languagemode=staterec.compat_state&32?1:0;
+	    XkbLockGroup(dpy,XkbUseCoreKbd,0); /* reset to workspace */
+        }
+    }
+#endif /* KEEP_XKB_LOCK_STATUS */
+
     CloseWindowMenu(wwin->screen_ptr);
 
     wFrameWindowChangeState(wwin->frame, wwin->flags.semi_focused 
@@ -2275,7 +2315,7 @@ titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event)
             if (event->xbutton.state & ShiftMask) {
 		dir |= MAX_HORIZONTAL;
                 if (!(event->xbutton.state & ControlMask))
-                    wSelectWindow(wwin);
+                    wSelectWindow(wwin, !wwin->flags.selected);
             }
 
 	    /* maximize window */
@@ -2291,8 +2331,8 @@ titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event)
 	    wHideOtherApplications(wwin);
 	}
     } else if (event->xbutton.button==Button2) {
-	wSelectWindow(wwin);
-    } 
+	wSelectWindow(wwin, !wwin->flags.selected);
+    }
 }
 
 
@@ -2368,20 +2408,9 @@ titlebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 	}
 	if ((event->xbutton.state & ShiftMask)
 	    && !(event->xbutton.state & ControlMask)) {
-	    wSelectWindow(wwin);
+	    wSelectWindow(wwin, !wwin->flags.selected);
 	    return;
 	}
-#if 0
-	if (XGrabPointer(dpy, wwin->frame->titlebar->window, False,
-			 ButtonMotionMask|ButtonReleaseMask|ButtonPressMask,
-			 GrabModeAsync, GrabModeAsync, None, 
-			 None, CurrentTime)!=GrabSuccess) {
-#ifdef DEBUG0
-	    wwarning("pointer grab failed for window move");
-#endif
-	    return;
-	}
-#endif
 	/* move the window */
 	wMouseMoveWindow(wwin, event);
 	XUngrabPointer(dpy, CurrentTime);

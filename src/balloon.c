@@ -137,8 +137,7 @@ makePixmap(WScreen *scr, int width, int height, int side, Pixmap *mask)
     if (!bal->monoGC) {
 	bal->monoGC = XCreateGC(dpy, bitmap, 0, NULL);
     }
-    XSetForeground(dpy, bal->monoGC, 
-		   BlackPixelOfScreen(ScreenOfDisplay(dpy, scr->screen)));
+    XSetForeground(dpy, bal->monoGC, 0); 
     XFillRectangle(dpy, bitmap, bal->monoGC, 0, 0, width+SPACE, height+SPACE);
     
     pixmap = XCreatePixmap(dpy, scr->root_win, width+SPACE, height+SPACE,
@@ -153,8 +152,7 @@ makePixmap(WScreen *scr, int width, int height, int side, Pixmap *mask)
     }
     x = 0;
 
-    XSetForeground(dpy, bal->monoGC, 
-		   WhitePixelOfScreen(ScreenOfDisplay(dpy, scr->screen)));
+    XSetForeground(dpy, bal->monoGC, 1);
     drawBalloon(bitmap, bal->monoGC, x, y, width, height, side);
     XSetForeground(dpy, scr->draw_gc, scr->white_pixel);
     drawBalloon(pixmap, scr->draw_gc, x+1, y+1, width-2, height-2, side);

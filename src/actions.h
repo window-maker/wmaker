@@ -41,8 +41,8 @@ void wIconifyWindow(WWindow *wwin);
 void wDeiconifyWindow(WWindow *wwin);
 
 void wSelectWindows(WScreen *scr, XEvent *ev);
-void wSelectWindow(WWindow *wwin);
-void wUnselectWindows();
+void wSelectWindow(WWindow *wwin, Bool flag);
+void wUnselectWindows(WScreen *scr);
 
 void wMaximizeWindow(WWindow *wwin, int directions);
 void wUnmaximizeWindow(WWindow *wwin);
@@ -58,6 +58,6 @@ void wRefreshDesktop(WScreen *scr);
 
 void wArrangeIcons(WScreen *scr, Bool arrangeAll);
 
-
+void wMakeWindowVisible(WWindow *wwin);
 
 #endif

@@ -88,9 +88,18 @@ static char *keyOptions[] = {
 	"Workspace8Key",
 	"Workspace9Key",
 	"Workspace10Key",
+	"WindowShortcut1Key",
+	"WindowShortcut2Key",
+	"WindowShortcut3Key",
+	"WindowShortcut4Key",
 	"ClipRaiseKey",
 	"ClipLowerKey",
+#ifndef XKB_MODELOCK
 	"ClipRaiseLowerKey"
+#else
+	"ClipRaiseLowerKey",
+	"ToggleKbdModeKey"
+#endif /* XKB_MODELOCK */
 };
 
 
@@ -339,9 +348,16 @@ createPanel(Panel *p)
     WMAddListItem(panel->actLs, _("Switch to workspace 8"));
     WMAddListItem(panel->actLs, _("Switch to workspace 9"));
     WMAddListItem(panel->actLs, _("Switch to workspace 10"));
+    WMAddListItem(panel->actLs, _("Shortcut for window 1"));
+    WMAddListItem(panel->actLs, _("Shortcut for window 2"));
+    WMAddListItem(panel->actLs, _("Shortcut for window 3"));
+    WMAddListItem(panel->actLs, _("Shortcut for window 4"));
     WMAddListItem(panel->actLs, _("Raise Clip"));
     WMAddListItem(panel->actLs, _("Lower Clip"));
     WMAddListItem(panel->actLs, _("Raise/Lower Clip"));
+#ifdef XKB_MODELOCK
+    WMAddListItem(panel->actLs, _("Toggle keyboard language"));
+#endif /* XKB_MODELOCK */
 
     WMSetListAction(panel->actLs, listClick, panel);
 

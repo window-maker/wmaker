@@ -8,14 +8,14 @@ Do ASAP:
 - differential update of appmenu
 - make unhide app map windows in the same stacking order they were before
 hiding
+- blink border of clients with UrgencyHint set between red and black
 
 Need to do:
 ===========
+- fix and include the windoze cycle window patch
 - support for X11R6.4 extension for getting extra visual info in wrlib's
   automatic best context guessing
-- ICCCM 2.0 stuff (although nobody is 2.0 compliant, AFAIK. Not even twm)
 - rewrite menu traversal code
-- histeresys in menu item selection
 - docklet to control AccessX (keyboard accessibility) functions
 - rewrite all redundant stuff to use WINGs
 - resizebartexture option
@@ -48,4 +48,15 @@ with 2 CPUs ;). Different workspacebacks for each workspace is being
 considered, but don't hold your breath.
 - anything that requires the mouse pointer to be jumped by WindowMaker to
 somewhere. This is *terrible* behaviour. And it's not just IMO.
+
+
+- ICCCM 2.0: ICCCM 2.0 (not 1.0, which is what everybody supports so so) is
+a relatively new standard and nobody, AFAIK, complies with it (not even
+twm as people tend to think). It has some neat things, but many of the new
+stuff is really weird and tricky to implement, not to say unworthy (read the
+specs and you'll see). This is not bad, since I think it is very unlikely
+that a client that requires it exists... Anyway, if we get an "official"
+sample implementation (twm?) it might be supported. Maybe dtwm supports
+it? I dont know...
+
 

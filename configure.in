@@ -10,13 +10,13 @@ dnl
 
 AC_INIT(src/WindowMaker.h)
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.20.2)
+AM_INIT_AUTOMAKE(WindowMaker, 0.20.3)
 
 
 dnl Shared Library Versions
 
-WINGS_VER=0.0.1
-WRASTER_VER=0.0.1
+#WINGS_VER=0.0.1
+#WRASTER_VER=0.0.1
 
 
 dnl configure/build bundled libraries
@@ -52,9 +52,16 @@ AC_FUNC_VPRINTF
 AC_FUNC_ALLOCA
 AC_CHECK_FUNCS(gethostname gettimeofday select poll strerror strncasecmp setpgid)
 
+if test "$ac_cv_func_gettimeofday" != yes; then
+	echo "The gettimeofday() system call is not available in your system"
+	echo "but it is required by Window Maker. Sorry."
+	exit 1
+fi
 
-AC_PATH_PROG(CPP_PATH, cpp, notfound,
-	/lib:/usr/bin:/bin:/usr/lib:/usr/ccs/lib:$PATH)
+if test "x$CPP_PATH" = x; then
+    AC_PATH_PROG(CPP_PATH, cpp, notfound,
+		/lib:/usr/bin:/bin:/usr/lib:/usr/ccs/lib:$PATH)
+fi
 
 dnl
 dnl Tell stupid Solaris cpp that the files it will process have C++ like syntax
@@ -181,6 +188,14 @@ fi
 AC_SUBST(I18N_MB)
 
 
+dnl XKB keyboard language status
+dnl ============================
+AC_ARG_ENABLE(modelock,
+[  --enable-modelock	   XKB keyboard language status support],
+		X_CFLAGS="$X_CFLAGS -DXKB_MODELOCK",)
+
+
+
 dnl Added by Oliver - Support for NLSDIR option,   Hi Oliver!
 dnl ===========================================
 AC_ARG_WITH(nlsdir, 
@@ -190,7 +205,7 @@ if test "x$NLSDIR" = "x"; then
 	if test "x$with_nlsdir" != "x"; then
 		NLSDIR=$with_nlsdir
 	else
-		NLSDIR="/usr/lib/locale"
+		NLSDIR='$(prefix)/lib/locale'
 	fi
 fi
 
@@ -281,10 +296,10 @@ dnl ==============================================
 dnl
 dnl Specify paths to look for graphic format libraries
 dnl ==================================================
+GFXLIBS=""
 AC_ARG_WITH(gfx-libs,
 [  --with-gfx-libs	  pass compiler flags to look for gfx libraries],
-	[GFXLIBS="$withval" GFX_LIB_PATH=$withval],
-	[GFXLIBS="" GFX_LIB_PATH=""])
+	[GFXLFLAGS=$withval], [GFXLFLAGS=""])
 
 AC_ARG_WITH(gfx-incs,
 [  --with-gfx-incs	  pass compiler flags to look for gfx header files],
@@ -304,7 +319,7 @@ AC_ARG_ENABLE(xpm,
 if test "$xpm" = yes; then
     AC_CHECK_LIB(Xpm, XpmCreatePixmapFromData,
     	my_libok=yes, my_libok=no,
-	$GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS $XLIBS)
+	$GFX_INC_PATH $GFXLFLAGS $XLFLAGS $XLIBS)
 
     if test "$my_libok" = yes; then
 	my_old_cppflags=$CPPFLAGS
@@ -331,7 +346,7 @@ dnl ===============================================
 dnl test for zlib
 dnl =============
 
-AC_CHECK_LIB(z, gzread, zlib=yes, zlib=no, $GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS)
+AC_CHECK_LIB(z, gzread, zlib=yes, zlib=no, $GFX_INC_PATH $GFXLFLAGS $XLFLAGS)
 
 
 dnl PNG Support
@@ -345,11 +360,11 @@ png=yes
 
 if test "$png" = yes -a "$zlib" = yes ; then
     AC_CHECK_LIB(png, png_get_valid, my_libok=yes, my_libok=no,
-		$GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS -lz -lm)
+		$GFX_INC_PATH $GFXLFLAGS $XLFLAGS -lz -lm)
 
     if test "$my_libok" = yes; then
 	my_old_cppflags=$CPPFLAGS
-	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH"
+	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH $XCFLAGS"
 	AC_CHECK_HEADER(png.h,
 		[GFXLIBS="$GFXLIBS -lpng -lz" GFXFLAGS="$GFXFLAGS -DUSE_PNG" 
 		supported_gfx="$supported_gfx PNG"], )
@@ -367,11 +382,11 @@ AC_ARG_ENABLE(jpeg,
 
 if test "$jpeg" = yes; then
 	AC_CHECK_LIB(jpeg, jpeg_destroy_compress, my_libok=yes, my_libok=no,
-		$GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS)
+		$GFX_INC_PATH $GFXLFLAGS $XLFLAGS)
 
     if test "$my_libok" = yes; then
 	my_old_cppflags=$CPPFLAGS
-	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH"
+	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH $XCFLAGS"
 	AC_TRY_CPP(jpeglib.h,
 		[GFXLIBS="$GFXLIBS -ljpeg" GFXFLAGS="$GFXFLAGS -DUSE_JPEG"
 		supported_gfx="$supported_gfx JPEG"], )
@@ -395,7 +410,7 @@ if test "$gif" = yes; then
 	AC_CHECK_LIB(ungif, DGifOpenFileName, 
 		[my_libok=yes my_libname=ungif],
 	    	[retry=yes my_libok=no],
-	    	$GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS)
+	    	$GFX_INC_PATH $GFXLFLAGS $XLFLAGS $XLIBS)
 dnl
 dnl libungif is the same thing as libgif for all practical purposes.
 dnl
@@ -403,12 +418,12 @@ dnl
 	    AC_CHECK_LIB(gif, DGifOpenFileName, 
 	    	[my_libok=yes my_libname=gif], 
 		my_libok=no,
-		$GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS)
+		$GFX_INC_PATH $GFXLFLAGS $XLFLAGS $XLIBS)
 	fi
 	
     if test "$my_libok" = yes; then
 	my_old_cppflags=$CPPFLAGS
-	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH"
+	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH $XCFLAGS"
 	AC_CHECK_HEADER(gif_lib.h,
 		[GFXLIBS="$GFXLIBS -l$my_libname" GFXFLAGS="$GFXFLAGS -DUSE_GIF"
 		supported_gfx="$supported_gfx GIF"], )
@@ -438,7 +453,7 @@ if test "$tif" = yes; then
     my_libname=""
     AC_CHECK_LIB(tiff, TIFFGetVersion, 
     	[my_libok=yes my_libname="-ltiff"], my_libok=no,
-	[$GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS $XLIBS $GFXLIBS -lm])
+	[$GFX_INC_PATH $GFXLFLAGS $XLFLAGS $XLIBS $GFXLIBS -lm])
 dnl
 dnl Retry with zlib
 dnl
@@ -446,19 +461,19 @@ dnl
     	if test "$zlib" = "yes"; then
     	    AC_CHECK_LIB(tiff, TIFFGetVersion,
 	    	[my_libok=yes my_libname="-ltiff -lz"], my_libok=no,
-		[$GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS $XLIBS $GFXLIBS -lz -lm])
+		[$GFX_INC_PATH $GFXLFLAGS $XLFLAGS $XLIBS $GFXLIBS -lz -lm])
 	fi
     fi
     
     if test "$my_libok" = no; then
 	AC_CHECK_LIB(tiff34, TIFFGetVersion, 
 		[my_libok=yes my_libname="-ltiff34"], my_libok=no,
-		[$GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS $XLIBS $GFXLIBS -lm])
+		[$GFX_INC_PATH $GFXLFLAGS $XLFLAGS $XLIBS $GFXLIBS -lm])
     fi
     
     if test "$my_libok" = yes; then
 	my_old_cppflags=$CPPFLAGS
-	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH"
+	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH $XCFLAGS"
 	AC_CHECK_HEADER(tiffio.h,
 		[GFXFLAGS="$GFXFLAGS -DUSE_TIFF" GFXLIBS="$my_libname $GFXLIBS"
 		ICONEXT="tiff" supported_gfx="$supported_gfx TIFF"], )
@@ -469,6 +484,7 @@ fi
 
 
 AC_SUBST(GFXFLAGS)
+AC_SUBST(GFXLFLAGS)
 AC_SUBST(GFXLIBS)
 AC_SUBST(ICONEXT)
 
@@ -606,17 +622,17 @@ appspath=""
 AC_ARG_WITH(appspath,
 [  --with-appspath=PATH    specify the path of the GNUstep applications directory])
 
-if test "x$appspath" = "x"; then
-    gnustepdir="${prefix}/GNUstep"
+if test "x$with_appspath" = "x"; then
+    gnustepdir='$(prefix)/GNUstep'
 
     if test "x$GNUSTEP_LOCAL_ROOT" != "x" ; then
 	gnustepdir=`echo "$GNUSTEP_LOCAL_ROOT" | sed -e "s%${prefix}%\${prefix}%"`
     fi
 
-    appspath=$gnustepdir/Apps
+    with_appspath=$gnustepdir/Apps
 fi
 
-wprefsdir=$appspath/WPrefs.app
+wprefsdir=$with_appspath/WPrefs.app
 
 AC_SUBST(wprefsdir)
 

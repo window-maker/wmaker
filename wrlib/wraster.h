@@ -114,6 +114,10 @@ typedef struct RContext {
     /* only used for pseudocolor and grayscale */
     int ncolors;		       /* total number of colors we can use */
     XColor *colors;		       /* internal colormap */
+
+    struct {
+	unsigned int use_shared_pixmap:1;
+    } flags;
 } RContext;
 
 

@@ -187,6 +187,10 @@ typedef struct WWindow {
     
     FocusMode focus_mode;	       /* type of keyboard input focus */
 
+#ifdef KEEP_XKB_LOCK_STATUS
+    int languagemode;
+#endif /* KEEP_XKB_LOCK_STATUS */
+    
 #ifdef MONITOR_HEARTBEAT
     time_t last_beat;
 #endif
@@ -223,6 +227,8 @@ typedef struct WWindow {
         unsigned int inspector_open:1; /* attrib inspector is already open */
 	
 	unsigned int destroyed:1;      /* window was already destroyed */
+	
+	unsigned int menu_open_for_me:1;   /* window commands menu */
     } flags;		/* state of the window */
 
     struct WIcon *icon;		       /* icon info for the window */

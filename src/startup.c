@@ -1,8 +1,8 @@
 /*
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -102,6 +102,7 @@ extern Atom _XA_WM_DELETE_WINDOW;
 extern Atom _XA_WM_SAVE_YOURSELF;
 extern Atom _XA_WM_CLIENT_LEADER;
 extern Atom _XA_WM_COLORMAP_WINDOWS;
+extern Atom _XA_WM_COLORMAP_NOTIFY;
 
 extern Atom _XA_GNUSTEP_WM_ATTR;
 
@@ -588,6 +589,9 @@ StartUp(Bool defaultScreenOnly)
     wWinContext = XUniqueContext();
     wAppWinContext = XUniqueContext();
     wStackContext = XUniqueContext();
+
+/*    _XA_VERSION = XInternAtom(dpy, "VERSION", False);*/
+
     _XA_WM_STATE = XInternAtom(dpy, "WM_STATE", False);
     _XA_WM_CHANGE_STATE = XInternAtom(dpy, "WM_CHANGE_STATE", False);
     _XA_WM_PROTOCOLS = XInternAtom(dpy, "WM_PROTOCOLS", False);
@@ -596,7 +600,8 @@ StartUp(Bool defaultScreenOnly)
     _XA_WM_SAVE_YOURSELF = XInternAtom(dpy, "WM_SAVE_YOURSELF", False);    
     _XA_WM_CLIENT_LEADER = XInternAtom(dpy, "WM_CLIENT_LEADER", False);
     _XA_WM_COLORMAP_WINDOWS = XInternAtom(dpy, "WM_COLORMAP_WINDOWS", False);
-    
+    _XA_WM_COLORMAP_NOTIFY = XInternAtom(dpy, "WM_COLORMAP_NOTIFY", False);
+
     _XA_GNUSTEP_WM_ATTR = XInternAtom(dpy, GNUSTEP_WM_ATTR_NAME, False);
 #ifdef MWM_HINTS
     _XA_MOTIF_WM_HINTS = XInternAtom(dpy, "_MOTIF_WM_HINTS", False);

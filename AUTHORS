@@ -1,4 +1,4 @@
-Information about locale translators is at src/po/README and
+Bjoern Giesler <giesler@ira.uka.de>
 Library/WindowMaker/README
 
 Many thanks to the following people who have contributed
@@ -140,7 +140,8 @@ Initial code for clip's collapse feature.
 
 Ture Pelsson <ture@lysator.liu.se>
 various portability fixes, replaced busy wait with select() in event
-handling code, fixed problem with some misbehaved kids after a fork().
+handling code, fixed problem with some misbehaved kids after a fork(),
+some other bug fixes
 
 Toby Sargeant <?>
 menu format converter
@@ -155,7 +156,7 @@ Chong Shang Shan <chongsha@sps.nus.edu.sg>
 flipping iconification animation
 
 Phillip Smith <teknix@alloy.net>
-FTP and WWW site provider/maintainer
+FTP, WWW, mailing list site provider/maintainer (Net logistics)
 
 Lauri Tarkkala <ltarkkal@cs.hut.fi>
 SIGHUP unblock bug fix
@@ -164,10 +165,10 @@ Sam Varner <varner@nmr.physics.wm.edu>
 many fixes and enhancements for move, resize and window placement code.
 
 Marco van Hylckama Vlieg <fatal@global.uibk.ac.at>
-house icon for WINGs file dialogs, defaullAppIcon and Clip xpm icon
+house icon for WINGs file dialogs, defaultAppIcon and Clip xpm icon
 
 David Wang <dwang@cisco.com>
-edge resistance
+edge resistance, 8bpp balloon bug fix, other 8bpp related fixes
 
 Yoav Yerushalmi <yoav@mit.edu>
 Fixed -visualid for screens that can do multiple depths. Another fix in 
@@ -177,10 +178,12 @@ FRBall <frb@umr.edu>
 dgradient fix
 
 "]d" <mhz@gpf.or.th>
-Window list menu miniaturized/hidden hints, XDE support
+Window list menu miniaturized/hidden hints, XDE support, XKB lock 
+language status
 
 Trae Mc Combs <x@themes.org>
 BlueWaves.jpeg background image in BlueWaves theme.
 
 And a special thanks to Martin Eskildsen for giving me his
 copy of NEXTSTEP :-)
+

@@ -61,6 +61,7 @@ CC = @CC@
 CPP_PATH = @CPP_PATH@
 DFLAGS = @DFLAGS@
 GFXFLAGS = @GFXFLAGS@
+GFXLFLAGS = @GFXLFLAGS@
 GFXLIBS = @GFXLIBS@
 I18N = @I18N@
 I18N_MB = @I18N_MB@
@@ -97,7 +98,8 @@ bin_SCRIPTS = wmaker.inst wm-oldmenu2new
 
 EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new
 
-INCLUDES = @DFLAGS@ @XCFLAGS@ -I$(top_srcdir)/wrlib -I$(top_srcdir)/libPropList @GFXFLAGS@ 
+INCLUDES = @DFLAGS@ -I$(top_srcdir)/wrlib -I$(top_srcdir)/libPropList\
+	 @XCFLAGS@ @GFXFLAGS@ 
 
 # X_EXTRA_LIBS is for libproplist in systems that need -lsocket 
 liblist= -L$(top_builddir)/libPropList -lPropList @X_EXTRA_LIBS@ 
@@ -117,7 +119,8 @@ seticons_LDADD= $(liblist)
 geticonset_LDADD= $(liblist)
 
 wmsetbg_LDADD = -L$(top_builddir)/libPropList -lPropList \
-	-L$(top_builddir)/wrlib -lwraster @XLFLAGS@ @GFXLIBS@ @XLIBS@ -lm 
+	-L$(top_builddir)/wrlib -lwraster \
+	@GFXLFLAGS@ @XLFLAGS@ @GFXLIBS@ @XLIBS@ -lm 
 
 getstyle_SOURCES = getstyle.c
 

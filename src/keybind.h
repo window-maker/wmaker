@@ -60,7 +60,19 @@
 #define WKBD_NEXTWSLAYER	32
 #define WKBD_PREVWSLAYER	33
 
-#define WKBD_LAST               34
+/* window shortcuts */
+#define WKBD_WINDOW1		34
+#define WKBD_WINDOW2		35
+#define WKBD_WINDOW3		36
+#define WKBD_WINDOW4		37
+
+#ifdef KEEP_XKB_LOCK_STATUS
+# define WKBD_TOGGLE             38
+# define WKBD_LAST               39
+#else
+# define WKBD_LAST               38
+#endif /* KEEP_XKB_LOCK_STATUS */
+
 
 
 typedef struct WShortKey {

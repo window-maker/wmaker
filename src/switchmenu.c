@@ -64,20 +64,8 @@ focusWindow(WMenu *menu, WMenuEntry *entry)
 
     wwin = (WWindow*)entry->clientdata;
     scr = wwin->screen_ptr;
-    
-    wWorkspaceChange(menu->frame->screen_ptr, wwin->frame->workspace);
 
-    if (wwin->flags.shaded) {
-	wUnshadeWindow(wwin);
-    }
-    if (wwin->flags.hidden) {
-	wUnhideApplication(wApplicationOf(wwin->main_window), False, False);
-    } else if (wwin->flags.miniaturized) {
-	wDeiconifyWindow(wwin);
-    } else {
-	wSetFocusTo(menu->frame->screen_ptr, wwin);
-	wRaiseFrame(wwin->frame->core);
-    }
+    wMakeWindowVisible(wwin);
 
     x = wwin->frame_x;
     y = wwin->frame_y;

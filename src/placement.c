@@ -409,16 +409,22 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 }
 
 
-/* Alfredo, shouldn't the cascade placement follow the !dock->lowered flag
- * like smart placement?
- * I didn't knew your intention about this, so I did not coded it, but it is
- * quite simple to do, if you think it should. -Dan
- */
 static void 
 cascadeWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret,
               unsigned int width, unsigned int height, int h)
 {
     unsigned int extra_height;
+    unsigned int scr_width;
+    int xoffset = 0;
+
+    scr_width = scr->scr_width;
+    if (scr->dock && !scr->dock->lowered) {
+	if (scr->dock->on_right_side) {
+	    scr_width -= wPreferences.icon_size;
+	} else {
+	    xoffset = wPreferences.icon_size;
+	}
+    }
 
     if (wwin->frame)
 	extra_height = wwin->frame->top_width + wwin->frame->bottom_width;
@@ -429,7 +435,7 @@ cascadeWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret,
     *y_ret = h * scr->cascade_index + Y_ORIGIN;
     height += extra_height;
     
-    if (width + *x_ret > scr->scr_width || height + *y_ret > scr->scr_height) {
+    if (width + *x_ret > scr_width || height + *y_ret > scr->scr_height) {
 	scr->cascade_index = 0;
 	*x_ret = h*scr->cascade_index + X_ORIGIN;
 	*y_ret = h*scr->cascade_index + Y_ORIGIN;
@@ -468,11 +474,11 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
         if (scr->dock && !scr->dock->lowered) {
             int x2;
 
-            x2 = *x_ret + wwin->client.width;
+            x2 = *x_ret + width;
             if (scr->dock->on_right_side
                 && x2 > scr->scr_width - wPreferences.icon_size -
                         DOCK_EXTRA_SPACE)
-                *x_ret = scr->scr_width - wwin->client.width
+                *x_ret = scr->scr_width - width
                          - wPreferences.icon_size - DOCK_EXTRA_SPACE;
             else if (!scr->dock->on_right_side &&
                      X_ORIGIN < wPreferences.icon_size + DOCK_EXTRA_SPACE)
@@ -484,8 +490,8 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 	{
 	    int w, h;
 	    
-	    w = (scr->scr_width-wwin->client.width);
-	    h = (scr->scr_height-wwin->client.height);
+	    w = (scr->scr_width - width);
+	    h = (scr->scr_height - height);
 	    if (w<1) w = 1;
 	    if (h<1) h = 1;
 	    *x_ret = rand()%w;
@@ -493,11 +499,11 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 	    if (scr->dock && !scr->dock->lowered) {
 		int x2;
 		    
-		x2 = *x_ret + wwin->client.width;
+		x2 = *x_ret + width;
 		if (scr->dock->on_right_side 
                     && x2 > scr->scr_width - wPreferences.icon_size -
                             DOCK_EXTRA_SPACE)
-                    *x_ret = scr->scr_width - wwin->client.width
+                    *x_ret = scr->scr_width - width
                              - wPreferences.icon_size - DOCK_EXTRA_SPACE;
 		else if (!scr->dock->on_right_side 
 			 && *x_ret < wPreferences.icon_size)
@@ -516,13 +522,13 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
     
     if (*x_ret < 0)
 	*x_ret = 0;
-    else if (*x_ret + wwin->client.width > scr->scr_width)
-	*x_ret = scr->scr_width - wwin->client.width;
+    else if (*x_ret + width > scr->scr_width)
+	*x_ret = scr->scr_width - width;
     
     if (*y_ret < 0)
 	*y_ret = 0;
-    else if (*y_ret + wwin->client.height > scr->scr_height)
-	*y_ret = scr->scr_height - wwin->client.height;
+    else if (*y_ret + height > scr->scr_height)
+	*y_ret = scr->scr_height - height;
 }
 
 

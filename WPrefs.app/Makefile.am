@@ -12,7 +12,7 @@ wpdatadir = @wprefsdir@
 
 wpdata_DATA = WPrefs.tiff WPrefs.xpm
 
-EXTRA_DIST = $(wpdata_DATA) TexturePanel.icons
+EXTRA_DIST = $(wpdata_DATA) TexturePanel.icons 
 
 WPrefs_SOURCES = \
 	main.c \
@@ -58,9 +58,11 @@ WPrefs_LDADD = \
 	-L$(top_builddir)/WINGs -lWINGs\
 	-L$(top_builddir)/wrlib -lwraster \
 	-L$(top_builddir)/libPropList -lPropList \
+	@GFXLFLAGS@ \
 	@XLFLAGS@ \
 	@GFXLIBS@ \
 	@XLIBS@ \
 	@X_EXTRA_LIBS@ \
 	@INTLIBS@ \
 	-lm 
+

@@ -596,7 +596,27 @@ WDefaultEntry optionList[] = {
     },
     {"Workspace10Key", "None",			(void*)WKBD_WORKSPACE10,
 	  NULL,				getKeybind,	setKeyGrab
+    },
+    {"WindowShortcut1Key","None",		(void*)WKBD_WINDOW1,
+	    NULL, 			getKeybind,	setKeyGrab
+    },
+    {"WindowShortcut2Key","None",		(void*)WKBD_WINDOW2,
+	    NULL, 			getKeybind,	setKeyGrab
+    },
+    {"WindowShortcut3Key","None",		(void*)WKBD_WINDOW3,
+	    NULL, 			getKeybind,	setKeyGrab
+    },
+    {"WindowShortcut4Key","None",		(void*)WKBD_WINDOW4,
+	    NULL, 			getKeybind,	setKeyGrab
+    },
+#ifdef KEEP_XKB_LOCK_STATUS
+    {"ToggleKbdModeKey", "None",                      (void*)WKBD_TOGGLE,
+	    NULL,                       getKeybind,     setKeyGrab
+    },
+    {"KbdModeLock", "NO",  	                  NULL,
+	    &wPreferences.modelock, 	getBool,	NULL
     }
+#endif /* KEEP_XKB_LOCK_STATUS */
 };
 
 

@@ -223,6 +223,10 @@ typedef struct WPreferences {
 					* of their owners */
     char title_justification;	       /* titlebar text alignment */
 
+#ifdef KEEP_XKB_LOCK_STATUS
+    char modelock;
+#endif
+
     char no_dithering;		       /* use dithering or not */
     
     char no_sound;		       /* enable/disable sound */

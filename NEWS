@@ -2,6 +2,43 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+--- 0.20.3
+
+
+Hysteresis for menu item selection
+----------------------------------
+
+Hopefully it's intelligent enough, so you won't notice it.
+
+In case you want to know what's it, it's equivalent to that
+(insanely long) 2 second delay present in that Windoze95 menu, 
+but more usefull than annoying (I hope :). To see it, do the following
+with your current wmaker version and later with 0.20.3:
+
+- open the apps menu and stick it
+- click in the item for the "Workspaces" submenu and hold
+- drag the mouse to the 4th or bigger entry (like "Workspace 4") in a
+straight line, trying to select the target item before the submenu
+is unmapped when you dragged over other items in the main menu
+
+
+
+Window Shortcuts
+----------------
+
+Window shortcuts are shortcuts to arbitrary windows. You can make up to 4
+shortcuts. To assign a previously bound shortcut to a window use the "Select
+Shortcut" submenu in the window commands menu. If the shortcut is not yet
+assigned for any window, you can hit the shortcut to assign it to the active
+window. The shortcut will do the same as clicking in an entry in the window
+list menu. The keys for the shortcuts are defined in the ~/G/D/WindowMaker
+file or in WPrefs.app
+
+Option names are:
+
+WindowShortcut1Key through WindowShortcut4Key
+
+
 --- 0.20.2
 
 

@@ -203,6 +203,5 @@ void main(int argc, char **argv)
 
     XFlush(dpy);
 #endif
-    
     getchar();
 }

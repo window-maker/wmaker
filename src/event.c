@@ -39,6 +39,9 @@
 #include <gdk/gdk.h>
 #endif
 
+#ifdef KEEP_XKB_LOCK_STATUS     
+#include <X11/XKBlib.h>         
+#endif /* KEEP_XKB_LOCK_STATUS */
 
 #include "WindowMaker.h"
 #include "window.h"
@@ -69,6 +72,8 @@ extern Time LastFocusChange;
 extern WPreferences wPreferences;
 
 #define MOD_MASK wPreferences.modifier_mask
+
+extern Atom _XA_WM_COLORMAP_NOTIFY;
 
 extern Atom _XA_WM_CHANGE_STATE;
 extern Atom _XA_WM_DELETE_WINDOW;
@@ -116,6 +121,7 @@ static void handleClientMessage();
 static void handleKeyPress();
 static void handleFocusIn();
 static void handleMotionNotify();
+
 #ifdef SHAPE
 static void handleShapeNotify();
 #endif
@@ -148,7 +154,7 @@ static DeathHandler *deathHandler=NULL;
 
 
 
-WDeathHandlerID
+WMagicNumber
 wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata)
 {
     DeathHandler *handler;
@@ -171,7 +177,7 @@ wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata)
 
 
 void 
-wDeleteDeathHandler(WDeathHandlerID id)
+wDeleteDeathHandler(WMagicNumber id)
 {
     DeathHandler *tmp, *handler=(DeathHandler*)id;
 
@@ -259,7 +265,7 @@ DispatchEvent(XEvent *event)
      case ConfigureRequest:
 	handleConfigureRequest(event);
 	break;
-	
+
      case DestroyNotify:
 	handleDestroyNotify(event->xdestroywindow.window);
 	break;
@@ -271,7 +277,7 @@ DispatchEvent(XEvent *event)
      case UnmapNotify:
 	handleUnmapNotify(event);
 	break;
-	
+
      case ButtonPress:
 	handleButtonPress(event);
 	break;
@@ -522,8 +528,6 @@ handleMapRequest(XEvent *ev)
         if (state==WithdrawnState) {
 	    wwin->flags.mapped = 0;
 	    wClientSetState(wwin, WithdrawnState, None);
-	    XSelectInput(dpy, wwin->client_win, NoEventMask);
-	    XRemoveFromSaveSet(dpy, wwin->client_win);
 	    wUnmanageWindow(wwin, True);
         } else {
             wClientSetState(wwin, NormalState, None);
@@ -549,32 +553,6 @@ handleMapRequest(XEvent *ev)
                 wwin->flags.ignore_next_unmap = 1;
             }
         }
-#if 0
-        switch (state) {	    
-	 case WithdrawnState:
-	    wwin->flags.mapped = 0;
-	    wClientSetState(wwin, WithdrawnState, None);
-	    XSelectInput(dpy, wwin->client_win, NoEventMask);
-	    XRemoveFromSaveSet(dpy, wwin->client_win);
-	    wUnmanageWindow(wwin, True);
-	    break;
-	    
-	 case IconicState:
-            if (!wwin->flags.miniaturized) {
-                wwin->flags.ignore_next_unmap=1;
-                wwin->flags.skip_next_animation=1;
-                wIconifyWindow(wwin);
-            }
-	    break;
-/*
-	 case DontCareState:
-	 case NormalState:
- */
-	 default:
-	    wClientSetState(wwin, NormalState, None);
-	    break;
-        }
-#endif
     }
 }
 
@@ -674,7 +652,7 @@ handleButtonPress(XEvent *event)
 	    }
 	} else if (event->xbutton.button==wPreferences.select_button) {
 	    
-	    wUnselectWindows();
+	    wUnselectWindows(scr);
 	    wSelectWindows(scr, event);
 	}
     }
@@ -782,12 +760,19 @@ handleUnmapNotify(XEvent *event)
     if (XCheckTypedWindowEvent(dpy, wwin->client_win, DestroyNotify,&ev)) {
 	DispatchEvent(&ev);
     } else {
+	Bool reparented = False;
+
+	if (XCheckTypedWindowEvent(dpy, wwin->client_win, ReparentNotify, &ev))
+	    reparented = True;
+
 	/* withdraw window */
 	wwin->flags.mapped = 0;
-	XSelectInput(dpy, wwin->client_win, NoEventMask);
-	XRemoveFromSaveSet(dpy, wwin->client_win);
-	wClientSetState(wwin, WithdrawnState, None);
-	wUnmanageWindow(wwin, True);
+	if (!reparented)
+	    wClientSetState(wwin, WithdrawnState, None);
+	
+	/* if the window was reparented, do not reparent it back to the
+	 * root window */
+	wUnmanageWindow(wwin, !reparented);
     }
     XUngrabServer(dpy);
 }
@@ -856,6 +841,18 @@ handleClientMessage(XEvent *event)
 	if (!wwin) return;
 	if (!wwin->flags.miniaturized)
 	    wIconifyWindow(wwin);
+    } else if (event->xclient.message_type == _XA_WM_COLORMAP_NOTIFY
+	       && event->xclient.format == 32) {
+	WScreen *scr = wScreenForRootWindow(event->xclient.window);
+
+	if (!scr)
+	    return;
+
+	if (event->xclient.data.l[1] == 1) {   /* starting */
+	    wColormapAllowClientInstallation(scr, True);
+	} else {		       /* stopping */
+	    wColormapAllowClientInstallation(scr, False);
+	}
     } else if (event->xclient.message_type == _XA_WINDOWMAKER_WM_FUNCTION) {
 	WApplication *wapp;
 	int done=0;
@@ -1228,8 +1225,8 @@ handleColormapNotify(XEvent *event)
 	     && ((wwin = wWindowFor(event->xcolormap.window)) || 1));
 
     if (reinstall && scr->current_colormap!=None) {
-
-	XInstallColormap(dpy, scr->current_colormap);
+	if (!scr->flags.colormap_stuff_blocked)
+	    XInstallColormap(dpy, scr->current_colormap);
     }
 }
 
@@ -1286,6 +1283,9 @@ handleKeyPress(XEvent *event)
     int i;
     int modifiers;
     int command=-1;
+#ifdef KEEP_XKB_LOCK_STATUS   
+    XkbStateRec staterec;     
+#endif /*KEEP_XKB_LOCK_STATUS*/
 
     /* ignore CapsLock */
     modifiers = event->xkey.state & ValidModMask;
@@ -1428,7 +1428,7 @@ handleKeyPress(XEvent *event)
 	break;
     case WKBD_SELECT:
 	if (ISMAPPED(wwin) && ISFOCUSED(wwin)) {
-	    wSelectWindow(wwin);
+	    wSelectWindow(wwin, !wwin->flags.selected);
 	}
         break;
      case WKBD_FOCUSNEXT:
@@ -1488,7 +1488,21 @@ handleKeyPress(XEvent *event)
         else if (scr->current_workspace==0 && wPreferences.ws_cycle)
             wWorkspaceChange(scr, scr->workspace_count-1);
 	break;
-	
+     case WKBD_WINDOW1:
+     case WKBD_WINDOW2:
+     case WKBD_WINDOW3:
+     case WKBD_WINDOW4:
+        if (scr->shortcutWindow[command-WKBD_WINDOW1]) {
+            wMakeWindowVisible(scr->shortcutWindow[command-WKBD_WINDOW1]);
+        } else if (wwin && ISMAPPED(wwin) && ISFOCUSED(wwin)) {
+            scr->shortcutWindow[command-WKBD_WINDOW1] = wwin;
+	    wSelectWindow(wwin, !wwin->flags.selected);
+	    XFlush(dpy);
+	    wusleep(3000);
+	    wSelectWindow(wwin, !wwin->flags.selected);
+	    XFlush(dpy);
+        }
+        break;
      case WKBD_NEXTWSLAYER:
      case WKBD_PREVWSLAYER:
 	{
@@ -1518,6 +1532,17 @@ handleKeyPress(XEvent *event)
         if (!wPreferences.flags.noclip)
             wDockRaiseLower(scr->workspaces[scr->current_workspace]->clip);
         break;
+#ifdef KEEP_XKB_LOCK_STATUS
+     case WKBD_TOGGLE:
+        if(wPreferences.modelock){
+	    XkbGetState(dpy,XkbUseCoreKbd,&staterec);
+	    /*toggle*/
+	    XkbLockGroup(dpy,XkbUseCoreKbd,
+			 wwin->languagemode=staterec.compat_state&32?0:1);
+        }
+        break;
+#endif /* KEEP_XKB_LOCK_STATUS */
+
     }
 }
 

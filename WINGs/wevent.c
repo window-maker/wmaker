@@ -387,6 +387,10 @@ delayUntilNextTimerEvent(struct timeval *delay)
     } else {
 	delay->tv_sec = timerHandler->when.tv_sec - now.tv_sec;
 	delay->tv_usec = timerHandler->when.tv_usec - now.tv_usec;
+	if (delay->tv_usec < 0) {
+	    delay->tv_usec += 1000000;
+	    delay->tv_sec--;
+	}
     }
 }
 

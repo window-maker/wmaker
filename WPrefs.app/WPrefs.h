@@ -37,7 +37,7 @@
 #include <WUtil.h>
 
 
-#define WVERSION	"0.6"
+#define WVERSION	"0.7"
 #define WMVERSION	"0.20.x"
 
 

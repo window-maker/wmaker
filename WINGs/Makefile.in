@@ -63,6 +63,7 @@ CC = @CC@
 CPP_PATH = @CPP_PATH@
 DFLAGS = @DFLAGS@
 GFXFLAGS = @GFXFLAGS@
+GFXLFLAGS = @GFXLFLAGS@
 GFXLIBS = @GFXLIBS@
 I18N = @I18N@
 I18N_MB = @I18N_MB@
@@ -93,7 +94,8 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 SUBDIRS = Resources
 
-LIBLIST= -L$(top_builddir)/wrlib -lwraster @XLFLAGS@ @GFXLIBS@ @XLIBS@ \
+LIBLIST= -L$(top_builddir)/wrlib -lwraster\
+	 @GFXLFLAGS@ @XLFLAGS@ @GFXLIBS@ @XLIBS@ \
 	-lm -L$(top_builddir)/libPropList -lPropList
 
 lib_LIBRARIES = libWINGs.a
@@ -165,9 +167,9 @@ libWINGs_a_SOURCES = 	\
 	memory.c \
 	usleep.c
 
-INCLUDES = @XCFLAGS@ -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
+INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
 	-DRESOURCE_PATH=\"$(datadir)/WINGs\" $(GFXFLAGS) -DDEBUG \
-	-I$(top_srcdir)/libPropList
+	-I$(top_srcdir)/libPropList @XCFLAGS@
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../src/config.h
 CONFIG_CLEAN_FILES = 

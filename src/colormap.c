@@ -69,7 +69,13 @@ wColormapInstallForWindow(WScreen *scr, WWindow *wwin)
 
 	    if (scr->current_colormap != attributes.colormap) {
 		scr->current_colormap = attributes.colormap;
-		XInstallColormap(dpy, attributes.colormap);    
+		/*
+		 * ICCCM 2.0: some client requested permission
+		 * to install colormaps by itself and we granted.
+		 * So, we can't install any colormaps.
+		 */
+		if (!scr->flags.colormap_stuff_blocked)
+		    XInstallColormap(dpy, attributes.colormap);    
 	    }
 	}
     }
@@ -81,9 +87,11 @@ wColormapInstallForWindow(WScreen *scr, WWindow *wwin)
 
 	if (scr->current_colormap != attributes.colormap) {
 	    scr->current_colormap = attributes.colormap;
-	    XInstallColormap(dpy, attributes.colormap);    
+	    if (!scr->flags.colormap_stuff_blocked)
+		XInstallColormap(dpy, attributes.colormap);    
 	}
     }
+    XSync(dpy, False);
 }
 
 
@@ -110,3 +118,18 @@ wColormapUninstallRoot(WScreen *scr)
     }
 }
 
+
+void
+wColormapAllowClientInstallation(WScreen *scr, Bool starting)
+{
+    scr->flags.colormap_stuff_blocked = starting;
+    /* 
+     * Client stopped managing the colormap stuff. Restore the colormap
+     * that would be installed if the client did not request colormap
+     * stuff.
+     */
+    if (!starting) {
+	XInstallColormap(dpy, scr->current_colormap);
+	XSync(dpy, False);
+    }
+}

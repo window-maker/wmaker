@@ -947,7 +947,7 @@ makeClipOptionsMenu(WScreen *scr)
 	return NULL;
     }
 
-    entry = wMenuAddCallback(menu, _("Keep Clip On Top"),
+    entry = wMenuAddCallback(menu, _("Keep on top"),
                              toggleLoweredCallback, NULL);
     entry->flags.indicator = 1;
     entry->flags.indicator_on = 1;
@@ -995,7 +995,7 @@ dockMenuCreate(WScreen *scr, int type)
 
     menu = wMenuCreate(scr, NULL, False);
     if (type != WM_CLIP) {
-        entry = wMenuAddCallback(menu, _("Keep Dock On Top"),
+        entry = wMenuAddCallback(menu, _("Keep on top"),
                                  toggleLoweredCallback, NULL);
         entry->flags.indicator = 1;
         entry->flags.indicator_on = 1;
@@ -1194,8 +1194,8 @@ make_icon_state(WAppIcon *btn)
 {
     proplist_t node = NULL;
     proplist_t command, autolaunch, name, forced, host, position, buggy;
-    char buffer[256];
-
+    char *tmp;
+    char buffer[64];
 
     if (btn) {
 	if (!btn->command)
@@ -1205,16 +1205,11 @@ make_icon_state(WAppIcon *btn)
 
 	autolaunch = btn->auto_launch ? dYes : dNo;
 	
-	if (btn->wm_class && btn->wm_instance)
-	    sprintf(buffer, "%s.%s", btn->wm_instance, btn->wm_class);
-	else if (btn->wm_instance)
-	    sprintf(buffer, "%s", btn->wm_instance);
-	else if (btn->wm_class)
-	    sprintf(buffer, ".%s", btn->wm_class);
-	else
-	    sprintf(buffer, ".");
+	tmp = EscapeWM_CLASS(btn->wm_instance, btn->wm_class);
 	
-	name = PLMakeString(buffer);
+	name = PLMakeString(tmp);
+
+	free(tmp);
 
 	forced = btn->forced_dock ? dYes : dNo;
 	
@@ -1371,7 +1366,10 @@ restore_icon_state(WScreen *scr, proplist_t info, int type, int index)
 
     /* get commands */
 
-    command = wstrdup(PLGetString(cmd));
+    if (cmd)
+	command = wstrdup(PLGetString(cmd));
+    else
+	command = NULL;
 
     if (!command || strcmp(command, "-")==0) {
 	if (command)
@@ -3724,7 +3722,7 @@ showClipBalloon(WDock *dock, int workspace)
 
     text = scr->workspaces[workspace]->name;
 
-    w = wTextWidth(scr->clip_title_font->font, text, strlen(text)) + 4;
+    w = wTextWidth(scr->clip_title_font->font, text, strlen(text));
 
     h = scr->clip_title_font->height;
     XResizeWindow(dpy, scr->clip_balloon, w, h);

@@ -95,6 +95,8 @@ typedef struct _WScreen {
 					* Use this list if you want to
 					* traverse the entire window list
 					*/
+    
+    struct LinkedList *selected_windows;
 
     struct WAppIcon *app_icon_list;    /* list of all app-icons on screen */
 
@@ -242,11 +244,14 @@ typedef struct _WScreen {
     WMHandlerID *autoRaiseTimer;
     Window autoRaiseWindow;	       /* window that is scheduled to be
 					* raised */
+    
+    /* for window shortcuts */
+    struct WWindow *shortcutWindow[4];
 
 #ifdef XDE_DND
     char *xdestring;
 #endif
-
+    
     struct {
 	unsigned int startup:1;	       /* during window manager startup */
 	unsigned int regenerate_icon_textures:1;
@@ -257,6 +262,8 @@ typedef struct _WScreen {
 	unsigned int supports_tiff:1;
 	unsigned int clip_balloon_mapped:1;
 	unsigned int next_click_is_not_double:1;
+	/* some client has issued a WM_COLORMAP_NOTIFY */
+	unsigned int colormap_stuff_blocked:1;
     } flags;
 } WScreen;
 

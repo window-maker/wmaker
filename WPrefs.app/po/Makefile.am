@@ -41,6 +41,7 @@ WPrefs.pot: $(POTFILES)
 	    mv -f WPrefs.po WPrefs.pot; \
 	fi
 
+
 install-data-local:  $(CATALOGS)
 	$(mkinstalldirs) $(nlsdir) 
 	chmod 755 $(nlsdir) 
@@ -53,3 +54,4 @@ install-data-local:  $(CATALOGS)
 			$(INSTALL) -m 644 $$n $(nlsdir)/$$l/LC_MESSAGES/WPrefs.mo; \
 		fi; \
 	done
+

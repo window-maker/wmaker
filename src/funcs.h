@@ -31,9 +31,6 @@ typedef void (WCallBack)(void *cdata);
 
 typedef void (WDeathHandler)(pid_t pid, unsigned int status, void *cdata);
 
-typedef void* WDeathHandlerID;
-
-
 void RestoreDesktop(WScreen *scr);
 
 void Restart(char *manager);
@@ -62,7 +59,7 @@ void UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action);
 
 void UpdateSwitchMenuWorkspace(WScreen *scr, int workspace);
 
-WDeathHandlerID wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata);
+WMagicNumber wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata);
 
 void wColormapInstallForWindow(WScreen *scr, WWindow *wwin);
 
@@ -70,6 +67,7 @@ void wColormapInstallRoot(WScreen *scr);
 
 void wColormapUninstallRoot(WScreen *scr);
 
+void wColormapAllowClientInstallation(WScreen *scr, Bool starting);
 
 Pixmap LoadIcon(WScreen *scr, char *path, char *mask, int title_height);
 
@@ -107,6 +105,10 @@ void ParseWindowName(proplist_t value, char **winstance, char **wclass,
                      char *where);
 
 char *GetShortcutString(char *text);
+
+char *EscapeWM_CLASS(char *name, char *class);
+
+void UnescapeWM_CLASS(char *str, char **name, char **class);
 
 #ifdef NUMLOCK_HACK
 void wHackedGrabKey(int keycode, unsigned int modifiers,

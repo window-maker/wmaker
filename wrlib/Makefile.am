@@ -35,21 +35,23 @@ libwraster_a_SOURCES = 	\
 
 INCLUDES = @DFLAGS@ @XCFLAGS@ @GFXFLAGS@ @XSHM@
 
+LIBLIST = -L. -lwraster @GFXLFLAGS@ @XLFLAGS@ @GFXLIBS@ @XLIBS@ -lm
+
 view_SOURCES= view.c
 
-view_LDADD = -L. -lwraster @XLFLAGS@ @GFXLIBS@ @XLIBS@ -lm
+view_LDADD = $(LIBLIST)
 
 test_SOURCES = test.c
 
-test_LDADD = -L. -lwraster @XLFLAGS@ @GFXLIBS@ @XLIBS@ -lm
+test_LDADD = $(LIBLIST)
 
 testgrad_SOURCES = testgrad.c
 
-testgrad_LDADD = -L. -lwraster @XLFLAGS@ @GFXLIBS@ @XLIBS@ -lm
+testgrad_LDADD = $(LIBLIST)
 
 testdraw_SOURCES = testdraw.c
 
-testdraw_LDADD = -L. -lwraster @XLFLAGS@ @GFXLIBS@ @XLIBS@ -lm
+testdraw_LDADD = $(LIBLIST)
 
 
 libwraster_a_LIBADD = @ALLOCA@

@@ -47,10 +47,10 @@
 #define MC_MINIATURIZE	1
 #define MC_SHADE	2
 #define MC_HIDE		3
-#define MC_HIDE_OTHERS	4
-#define MC_SELECT       5
-#define MC_DUMMY_MOVETO	6
-#define MC_PROPERTIES   7
+#define MC_SELECT       4
+#define MC_DUMMY_MOVETO	5
+#define MC_PROPERTIES   6
+#define MC_SHORTCUT	7
 
 #define MC_CLOSE        8
 #define MC_KILL         9
@@ -111,7 +111,7 @@ execMenuCommand(WMenu *menu, WMenuEntry *entry)
 	    wShadeWindow(wwin);
 	break;
      case MC_SELECT:
-        wSelectWindow(wwin);
+        wSelectWindow(wwin, !wwin->flags.selected);
 	break;
      case MC_PROPERTIES:
 	if (wwin->wm_class || wwin->wm_instance)
@@ -122,9 +122,6 @@ execMenuCommand(WMenu *menu, WMenuEntry *entry)
 	wapp = wApplicationOf(wwin->main_window);
 	wHideApplication(wapp);
 	break;
-     case MC_HIDE_OTHERS:
-	wHideOtherApplications(wwin);
-	break;
     }
 }
 
@@ -134,9 +131,23 @@ switchWSCommand(WMenu *menu, WMenuEntry *entry)
 {
     WWindow *wwin = (WWindow*)entry->clientdata;
 
-    if (wwin->flags.selected)
-	wSelectWindow(wwin);
+    wSelectWindow(wwin, False);
     wWindowChangeWorkspace(wwin, entry->order);
+}
+
+
+static void
+makeShortcutCommand(WMenu *menu, WMenuEntry *entry)
+{
+    WWindow *wwin = (WWindow*)entry->clientdata;
+    
+    wwin->screen_ptr->shortcutWindow[entry->order] = wwin;
+    
+    wSelectWindow(wwin, !wwin->flags.selected);
+    XFlush(dpy);
+    wusleep(3000);
+    wSelectWindow(wwin, !wwin->flags.selected);
+    XFlush(dpy);
 }
 
 
@@ -172,20 +183,94 @@ updateWorkspaceMenu(WMenu *menu)
 }
 
 
+static void
+updateMakeShortcutMenu(WMenu *menu, WWindow *wwin)
+{
+    WMenu *smenu = menu->cascades[menu->entries[MC_SHORTCUT]->cascade];
+    int i;
+    char *buffer;
+    KeyCode kcode;
+
+    if (!smenu)
+	return;
+    
+    buffer = wmalloc(strlen(_("Shortcut"))+16);
+
+    for (i=0; i<smenu->entry_no; i++) {
+	char *tmp;
+	WWindow *twin = wwin->screen_ptr->shortcutWindow[i];
+	WMenuEntry *entry = smenu->entries[i];
+
+	sprintf(buffer, "%s %s %i", twin ? (twin == wwin ? "+" : "-" ) : " ",
+		_("Shortcut"), i+1);
+
+	if (strcmp(buffer, entry->text)!=0) {
+	    free(entry->text);
+	    entry->text = wstrdup(buffer);
+	    smenu->flags.realized = 0;
+	}
+
+	kcode = wKeyBindings[WKBD_WINDOW1+i].keycode;
+
+	if (kcode) {
+	    if ((tmp = XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0)))
+		&& (!entry->rtext || strcmp(tmp, entry->rtext)!=0)) {
+		if (entry->rtext)
+		    free(entry->rtext);
+		entry->rtext = wstrdup(tmp);
+		smenu->flags.realized = 0;
+	    }
+	    wMenuSetEnabled(smenu, i, True);
+	} else {
+	    wMenuSetEnabled(smenu, i, False);
+	    if (entry->rtext) {
+		free(entry->rtext);
+		entry->rtext = NULL;
+		smenu->flags.realized = 0;
+	    }
+	}
+	entry->clientdata = wwin;
+    }
+    free(buffer);
+    if (!smenu->flags.realized)
+	wMenuRealize(smenu);
+}
+
+
 static WMenu*
 makeWorkspaceMenu(WScreen *scr)
 {
     WMenu *menu;
     
     menu = wMenuCreate(scr, NULL, False);
-    if (!menu)
-	wwarning(_("could not create workspace submenu for window menu"));
+    if (!menu) {
+	wwarning(_("could not create submenu for window menu"));
+	return NULL;
+    }
 
     updateWorkspaceMenu(menu);
     
     return menu;
 }
 
+static WMenu*
+makeMakeShortcutMenu(WScreen *scr)
+{
+    WMenu *menu;
+
+    menu = wMenuCreate(scr, NULL, False);
+    if (!menu) {
+	wwarning(_("could not create submenu for window menu"));
+	return NULL;
+    }
+
+    wMenuAddCallback(menu, "", makeShortcutCommand, NULL);
+    wMenuAddCallback(menu, "", makeShortcutCommand, NULL);
+    wMenuAddCallback(menu, "", makeShortcutCommand, NULL);
+    wMenuAddCallback(menu, "", makeShortcutCommand, NULL);
+    
+    return menu;
+}
 
 static WMenu*
 createWindowMenu(WScreen *scr)
@@ -233,23 +318,25 @@ createWindowMenu(WScreen *scr)
 	if (kcode && (tmp = XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0))))
 	  entry->rtext = wstrdup(tmp);
     }
-    entry = wMenuAddCallback(menu, _("Hide Others"), execMenuCommand, NULL);
 
     entry = wMenuAddCallback(menu, _("Select"), execMenuCommand, NULL);
     if (wKeyBindings[WKBD_SELECT].keycode!=0) {
 	kcode = wKeyBindings[WKBD_SELECT].keycode;
-	
+
 	if (kcode && (tmp = XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0))))
 	  entry->rtext = wstrdup(tmp);
     }
-    
+
     entry = wMenuAddCallback(menu, _("Move To"), NULL, NULL);
     scr->workspace_submenu = makeWorkspaceMenu(scr);
     if (scr->workspace_submenu)
 	wMenuEntrySetCascade(menu, entry, scr->workspace_submenu);
 
     entry = wMenuAddCallback(menu, _("Attributes..."), execMenuCommand, NULL);
-    
+
+    entry = wMenuAddCallback(menu, _("Select Shortcut"), NULL, NULL);
+    wMenuEntrySetCascade(menu, entry, makeMakeShortcutMenu(scr));
+
     entry = wMenuAddCallback(menu, _("Close"), execMenuCommand, NULL);
     if (wKeyBindings[WKBD_CLOSE].keycode!=0) {
 	kcode = wKeyBindings[WKBD_CLOSE].keycode;
@@ -266,9 +353,17 @@ createWindowMenu(WScreen *scr)
 void
 CloseWindowMenu(WScreen *scr)
 {
-    if (scr->window_menu && scr->window_menu->flags.mapped)
-      wMenuUnmap(scr->window_menu);
+    if (scr->window_menu) {
+	if (scr->window_menu->flags.mapped)
+	    wMenuUnmap(scr->window_menu);
+	
+	if (scr->window_menu->entries[0]->clientdata) {
+	    WWindow *wwin = (WWindow*)scr->window_menu->entries[0]->clientdata;
 
+	    wwin->flags.menu_open_for_me = 0;
+	}
+	scr->window_menu->entries[0]->clientdata = NULL;
+    }
 }
 
 
@@ -280,11 +375,14 @@ OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard)
     WScreen *scr = wwin->screen_ptr;
     int i;
 
+    wwin->flags.menu_open_for_me = 1;
+
     if (!scr->window_menu) {
 	scr->window_menu = createWindowMenu(scr);
     } else {
 	updateWorkspaceMenu(scr->workspace_submenu);
     }
+
     menu = scr->window_menu;
     if (menu->flags.mapped) {
 	wMenuUnmap(menu);
@@ -292,6 +390,8 @@ OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard)
 	    return;
 	}
     }
+    
+    updateMakeShortcutMenu(menu, wwin);
 
     wMenuSetEnabled(menu, MC_HIDE, wapp!=NULL 
 		    && !wapp->main_window_desc->window_flags.no_appicon);
@@ -316,6 +416,7 @@ OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard)
     for (i = 0; i < menu->entry_no; i++) {
 	menu->entries[i]->clientdata = wwin;
     }
+
     for (i = 0; i < scr->workspace_submenu->entry_no; i++) {
 	scr->workspace_submenu->entries[i]->clientdata = wwin;
 	if (i == scr->current_workspace) {

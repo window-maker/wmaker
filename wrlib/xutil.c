@@ -124,7 +124,7 @@ RCreateXImage(RContext *context, int depth, unsigned width, unsigned height)
 	}
 	
 	rximg->info.shmaddr = shmat(rximg->info.shmid, 0, 0);
-	if ((int)rximg->info.shmaddr < 0) {
+	if (rximg->info.shmaddr == (void*)-1) {
 	    context->attribs->use_shared_memory = 0;
 	    if (shmctl(rximg->info.shmid, IPC_RMID, 0) < 0)
 		perror("wrlib:shmctl");
@@ -217,3 +217,4 @@ R_CreateXImageMappedPixmap(RContext *context, RXImage *rximage)
 }
 
 #endif /* XSHM */
+

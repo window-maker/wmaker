@@ -829,7 +829,7 @@ miniwindowMouseDown(WObjDescriptor *desc, XEvent *event)
 	    wRaiseFrame(icon->core);
         if (event->xbutton.state & ShiftMask) {
             wIconSelect(icon);
-            wSelectWindow(icon->owner);
+            wSelectWindow(icon->owner, !wwin->flags.selected);
         }
     }
 

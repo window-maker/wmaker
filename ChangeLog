@@ -1,3 +1,28 @@
+Changes since version 0.20.2:
+.............................
+
+- hysteresis for menu item selection (delayed selection for selecting
+  submenu items)
+- window shortcuts
+- removed Hide Others from window commands menu
+- window commands menu will close when the window for it is closed
+- made shade not set the Iconic state
+- fixed bug in miniaturizing atribute panel
+- made frame rectangles be more visible in PseudoColor (8bpp)
+- fixed bug for 64bit machines
+- added support for ICCCM 2.0  WM_COLORMAP_NOTIFY message
+- fixed bug for apps that put strings with . in WM_CLASS
+- added handling for reparented client windows
+- fixed bug with window positioning
+- fixed cascade window placement to account for dock
+- added modelock stuff
+- added X include path in gfx header when configure searches for headers
+- fixed bug in window positioning by clients
+- added run-time test for shared pixmap support on server
+- changed order of link flags in Makefiles
+- fixed problem with random window placement
+- fixed multiple window selection for multiheads
+
 Changes since version 0.20.1:
 .............................
 

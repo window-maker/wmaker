@@ -1,8 +1,10 @@
 /*
- * Demo user widget for WINGs.
+ * Demo user widget for WINGs
  *
- *  
- * Copyright (c) 1998 Alfredo K. Kojima
+ * Author: Alfredo K. Kojima
+ * 
+ * This file is in the public domain.
+ * 
  */
 
 

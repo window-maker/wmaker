@@ -1069,7 +1069,6 @@ void
 ParseWindowName(proplist_t value, char **winstance, char **wclass, char *where)
 {
     char *name;
-    char *dot;
 
     *winstance = *wclass = NULL;
 
@@ -1084,19 +1083,7 @@ ParseWindowName(proplist_t value, char **winstance, char **wclass, char *where)
 	return;
     }
 
-    dot = strchr(name, '.');
-    if (dot==name) {
-	*wclass = wstrdup(&name[1]);
-	*winstance = NULL;
-    } else if (!dot) {
-	*winstance = wstrdup(name);
-	*wclass = NULL;
-    } else {
-	*dot = 0;
-	*winstance = wstrdup(name);
-	*dot = '.'; /* restore old string */
-	*wclass = wstrdup(&dot[1]);
-    }
+    UnescapeWM_CLASS(name, winstance, wclass);
 }
 
 
@@ -1190,3 +1177,128 @@ GetShortcutString(char *text)
     return buffer;
 }
 
+
+char*
+EscapeWM_CLASS(char *name, char *class)
+{
+    char *ret;
+    char *ename = NULL, *eclass = NULL;
+    int i, j, l;
+
+    if (!name && !class)
+	return NULL;
+
+    if (name) {
+	l = strlen(name);
+	ename = wmalloc(l*2);
+	j = 0;
+	for (i=0; i<l; i++) {
+	    if (name[i]=='\\') {
+		ename[j++] = '\\';
+	    } else if (name[i]=='.') {
+		ename[j++] = '\\';
+	    }
+	    ename[j++] = name[i];
+	}
+	ename[j] = 0;
+    }
+    if (class) {
+	l = strlen(class);
+	eclass = wmalloc(l*2);
+	j = 0;
+	for (i=0; i<l; i++) {
+	    if (class[i]=='\\') {
+		eclass[j++] = '\\';
+	    } else if (class[i]=='.') {
+		eclass[j++] = '\\';
+	    }
+	    eclass[j++] = class[i];
+	}
+	eclass[j] = 0;
+    }
+
+    if (ename && eclass) {
+	ret = wmalloc(strlen(ename)+strlen(eclass)+4);
+	sprintf(ret, "%s.%s", ename, eclass);
+	free(ename);
+	free(eclass);
+    } else if (ename) {
+	ret = wstrdup(ename);
+	free(ename);
+    } else {
+	ret = wstrdup(eclass);
+	free(eclass);
+    }
+
+    return ret;
+}
+
+
+void
+UnescapeWM_CLASS(char *str, char **name, char **class)
+{
+    int i, j, k, dot;
+    Bool esc;
+    
+    j = strlen(str);
+    *name = wmalloc(j);
+    **name = 0;
+    *class = wmalloc(j);
+    **class = 0;
+
+    /* separate string in 2 parts */
+    esc = False;
+    dot = 0;
+    for (i = 0; i < j; i++) {
+	if (!esc) {
+	    if (str[i]=='\\') {
+		esc = True;
+	    } else if (str[i]=='.') {
+		dot = i;
+		break;
+	    }
+	} else {
+	    esc = False;
+	}
+    }
+
+    /* unescape strings */
+    esc = False;
+    k = 0;
+    for (i = 0; i < dot; i++) {
+	if (!esc) {
+	    if (str[i]=='\\') {
+		esc = True;
+	    } else {
+		(*name)[k++] = str[i];
+	    }
+	} else {
+	    esc = False;
+	}
+    }
+    (*name)[k] = 0;
+
+    esc = False;
+    k = 0;
+    for (i = dot+1; i<j; i++) {
+	if (!esc) {
+	    if (str[i]=='\\') {
+		esc = True;
+	    } else {
+		(*class)[k++] = str[i];
+	    }
+	} else {
+	    esc = False;
+	}
+    }
+    (*class)[k] = 0;
+    
+    if (!*name) {
+	free(*name);
+	*name = NULL;
+    }
+    if (!*class) {
+	free(*class);
+	*class = NULL;
+    }
+}

@@ -25,7 +25,7 @@
       }
     );
     Position = "-64,0";
-    Lowered = Yes;
+    Lowered = No;
   };
   Clip = {
     Command = "-";

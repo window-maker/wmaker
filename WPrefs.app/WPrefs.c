@@ -558,7 +558,7 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
 	wfatal(_("Make sure Window Maker is in your search path."));
 	
 	WMRunAlertPanel(scr, mainw, _("Error"),
-			_("Could not extract version from Window Maker. Make sure it is correctly installed."),
+			_("Could not extract version from Window Maker. Make sure it is correctly installed and is in your PATH environment variable."),
 			_("OK"), NULL, NULL);
 	exit(1);
     }

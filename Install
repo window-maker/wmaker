@@ -10,6 +10,7 @@ if test "$NLSDIR" = ""; then
 export NLSDIR;NLSDIR="/usr/lib/locale"
 fi
 
+
 OPTIONS=""
 PREFIX="/usr/local"
 
@@ -20,9 +21,7 @@ perai() {
 
 
 perform() {
-	result=
-	eval $*
-	if [ "$result" != 0 ]; then
+	if ! $* ; then
 		echo
 		echo "Window Maker installation failed or aborted by user."
 		exit 1
@@ -57,18 +56,6 @@ echo
 echo "Option Selection"
 echo "================"
 
-######################## Sound
-
-echo
-echo "Do you want sound support? Note that you need a module distributed"
-echo "separately to make it work. You can get it at:"
-echo "http://www.frontiernet.net/~southgat/wmsound"
-echo -n "<y/n> [y] "
-read SFX
-
-if [ "x$SFX" = "x" -o "$SFX" = "y" -o "$SFX" = "Y" ]; then
-	OPTIONS="$OPTIONS --enable-sound"
-fi
 
 ######################## NLS
 echo
@@ -88,10 +75,10 @@ if [ "$NLS" = "y" -o "$NLS" = "Y" ]; then
 		ALL_LINGUAS="$ALL_LINGUAS $lcode"
 		echo "$lcode $lname"
 	done
-	echo "Type in the locales you want  [$ALL_LINGUAS]"
+	echo "Type in the locales you want (all will install everything) [none]"
 	read foo
-	if test "x$foo" = "x"; then
-		LINGUAS=$ALL_LINGUAS
+	if test "$foo" = "all"; then
+		LINGUAS="$ALL_LINGUAS"
 	else
 		LINGUAS="$foo"
 	fi
@@ -173,11 +160,15 @@ echo "--------------------------"
 if [ `uname -s` = "SCO_SV" ]; then
 	echo "CFLAGS=\"$CFLAGS -belf -DANSICPP\" ./configure $OPTIONS"
 
-	perform CFLAGS=\"$CFLAGS -belf -DANSICPP\" ./configure $OPTIONS
+	CFLAGS="$CFLAGS -belf -DANSICPP" 
+
+	perform ./configure $OPTIONS
 else
 	echo "CFLAGS=\"$CFLAGS $GCCFLAGS\" ./configure $OPTIONS"
 
-	perform CFLAGS=\"$CFLAGS $GCCFLAGS\" ./configure $OPTIONS
+	CFLAGS="$CFLAGS $GCCFLAGS" 
+
+	perform ./configure $OPTIONS
 fi
 
 
@@ -185,7 +176,7 @@ fi
 echo "-------------------------"
 echo "Compiling Window Maker..."
 echo "-------------------------"
-perform (cd src; make clean)
+(cd src; perform make clean)
 perform make
 
 echo "--------------------------"

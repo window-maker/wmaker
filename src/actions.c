@@ -43,6 +43,8 @@
 #include "dock.h"
 #include "appmenu.h"
 #include "winspector.h"
+#include "list.h"
+#include "workspace.h"
 
 #ifdef WMSOUND
 #include "wmsound.h"
@@ -273,14 +275,15 @@ wShadeWindow(WWindow  *wwin)
 	while (h>wwin->frame->top_width+1) {
 	    XMoveWindow(dpy, wwin->client_win, 0, y);
 	    XResizeWindow(dpy, wwin->frame->core->window, w, h);
-	    XSync(dpy, 0);
+	    XFlush(dpy);
+
+	    if (time(NULL)-time0 > MAX_ANIMATION_TIME)
+		break;
+
             if (SHADE_DELAY > 0)
                 wusleep(SHADE_DELAY*1000L);
 	    h-=s;
 	    y-=s;
-
-	    if (time(NULL)-time0 > MAX_ANIMATION_TIME)
-		break;
 	}
 	XMoveWindow(dpy, wwin->client_win, 0, wwin->frame->top_width);
     }
@@ -300,7 +303,9 @@ wShadeWindow(WWindow  *wwin)
     /* for the client it's just like iconification */
     wFrameWindowResize(wwin->frame, wwin->frame->core->width,
 		       wwin->frame->top_width-1);
+    /*
     wClientSetState(wwin, IconicState, None);
+     */
 
     /* update window list to reflect shaded state */
     UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
@@ -368,8 +373,9 @@ wUnshadeWindow(WWindow  *wwin)
     wFrameWindowResize(wwin->frame, wwin->frame->core->width, 
 		       wwin->frame->top_width + wwin->client.height
 		       + wwin->frame->bottom_width);
-    
+    /*
     wClientSetState(wwin, NormalState, None);
+     */
     /* if the window is focused, set the focus again as it was disabled during
      * shading */
     if (wwin->flags.focused)
@@ -1592,3 +1598,37 @@ wArrangeIcons(WScreen *scr, Bool arrangeAll)
 }
 
 
+void
+wSelectWindow(WWindow *wwin, Bool flag)
+{
+    WScreen *scr = wwin->screen_ptr;
+    if (flag) {
+	wwin->flags.selected = 1;
+	XSetWindowBorder(dpy, wwin->frame->core->window, scr->white_pixel);
+	scr->selected_windows = list_cons(wwin, scr->selected_windows);
+    } else {
+	wwin->flags.selected = 0;
+	XSetWindowBorder(dpy, wwin->frame->core->window, 
+			 scr->frame_border_pixel);
+	scr->selected_windows = list_remove_elem(scr->selected_windows, wwin);
+    }
+}
+
+
+void
+wMakeWindowVisible(WWindow *wwin)
+{
+    wWorkspaceChange(wwin->screen_ptr, wwin->frame->workspace);
+
+    if (wwin->flags.shaded) {
+	wUnshadeWindow(wwin);
+    }
+    if (wwin->flags.hidden) {
+	wUnhideApplication(wApplicationOf(wwin->main_window), False, False);
+    } else if (wwin->flags.miniaturized) {
+	wDeiconifyWindow(wwin);
+    } else {
+	wSetFocusTo(wwin->screen_ptr, wwin);
+	wRaiseFrame(wwin->frame->core);
+    }
+}

@@ -277,8 +277,11 @@
 
 #define HIDE_ANIMATION_STEPS (MINIATURIZE_ANIMATION_STEPS*2/3)
 
-
+/* delay before balloon is showed */
 #define BALLOON_DELAY	1000
+
+/* delay for menu item selection hysteresis */
+#define MENU_SELECT_DELAY 300
 
 /* animation speed constants */
 
@@ -465,6 +468,10 @@
 #undef SHAPED_BALLOON
 #endif
 
+
+#ifdef XKB_MODELOCK
+#define KEEP_XKB_LOCK_STATUS
+#endif
 
 #if HAVE_LIBINTL_H && I18N
 # include <libintl.h>
