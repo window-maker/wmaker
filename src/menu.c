@@ -110,7 +110,8 @@ appearanceObserver(void *self, WMNotification *notif)
 	    wMenuRealize(menu);
 	}
 	if (flags & WTextureSettings) {
-	    updateTexture(menu);
+	    if (!menu->flags.brother)
+		updateTexture(menu);
 	}
 	if (flags & (WTextureSettings|WColorSettings)) {
 	    wMenuPaint(menu);
@@ -124,8 +125,9 @@ appearanceObserver(void *self, WMNotification *notif)
 	if (flags & WTextureSettings) {
 	    menu->frame->flags.need_texture_remake = 1;
 	}
-	if (flags & (WColorSettings|WTextureSettings))
+	if (flags & (WColorSettings|WTextureSettings)) {
 	    wFrameWindowPaint(menu->frame);
+	}
     }
 }
 
@@ -228,13 +230,13 @@ wMenuCreate(WScreen *screen, char *title, int main_menu)
 	brother = 0;
 	menu->brother->flags.brother = 1;
 	menu->brother->brother = menu;
-
-	WMAddNotificationObserver(appearanceObserver, menu,
-				  WNMenuTitleAppearanceSettingsChanged, menu);
-
-	WMAddNotificationObserver(appearanceObserver, menu,
-				  WNMenuAppearanceSettingsChanged, menu);
     }
+    WMAddNotificationObserver(appearanceObserver, menu,
+			      WNMenuAppearanceSettingsChanged, menu);
+
+    WMAddNotificationObserver(appearanceObserver, menu,
+			      WNMenuTitleAppearanceSettingsChanged, menu);
+
 
     return menu;
 }

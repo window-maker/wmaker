@@ -734,6 +734,7 @@ wClientGetNormalHints(WWindow *wwin, XWindowAttributes *wattribs, Bool geometry,
 void 
 GetColormapWindows(WWindow *wwin)
 {
+#ifndef NO_CRASHES
     if (wwin->cmap_windows) {
 	XFree(wwin->cmap_windows);
     }
@@ -747,4 +748,5 @@ GetColormapWindows(WWindow *wwin)
 	wwin->cmap_window_no = 0;
 	wwin->cmap_windows = NULL;
     }
+#endif
 }

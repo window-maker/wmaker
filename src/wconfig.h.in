@@ -179,6 +179,15 @@
 
 
 /*
+ * Define if you're experiencing crashes when launching programs.
+ * This will disable some important but not essential code.
+ * Use it until we figure what's wrong.
+ */
+#undef NO_CRASHES
+
+
+
+/*
  *..........................................................................
  * The following options WILL NOT BE MADE RUN-TIME. Please do not request.
  * They will only add unneeded bloat.
