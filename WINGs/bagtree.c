@@ -684,11 +684,36 @@ static void *replaceInBag(WMBag *self, int index, void *item)
 
 
 
+
 static int sortBag(WMBag *self, int (*comparer)(const void*, const void*))
 {
-    assert(0&&"not implemented");
+    void **items;
+    W_Node *tmp;
+    int i;
+
+
+    items = wmalloc(sizeof(void*)*SELF->count);
+    i = 0;
     
-    return 0;
+    tmp = treeMinimum(SELF->root, SELF->nil);
+    while (tmp != SELF->nil) {
+	items[i++] = tmp->data;
+	tmp = treeSuccessor(tmp, SELF->nil);
+    }
+
+    qsort(&items[0], SELF->count, sizeof(void*), comparer);
+    
+    i = 0;
+    tmp = treeMinimum(SELF->root, SELF->nil);
+    while (tmp != SELF->nil) {
+	tmp->index = i;
+	tmp->data = items[i++];
+	tmp = treeSuccessor(tmp, SELF->nil);
+    }
+    
+    wfree(items);
+    
+    return 1;
 }
 
 
