@@ -25,6 +25,7 @@ Changes since wmaker 0.80.1:
 - Added new Bool WMIsAAFont(WMFont *font) to check if a font is AA or not.
 - Added WMGetColorAlpha(WMColor *color)
 - Added WMCreateNonAAFont()
+- Better outline when drawing balloons.
 
 
 Changes since wmaker 0.80.0:

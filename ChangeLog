@@ -27,6 +27,7 @@ Changes since version 0.80.1:
 - Removed double no-position-display when cycling position display types
   with Shift key while moving windows.
 - Changed the default position display while moving a window to 'Center'.
+- Better outline when drawing balloons.
 
 
 Changes since version 0.80.0:

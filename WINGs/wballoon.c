@@ -275,40 +275,97 @@ W_BalloonHandleEnterView(WMView *view)
 
 
 static void
-drawBalloon(Display *dpy, Pixmap pix, GC gc, int x, int y, int w, int h, 
-	    int side)
+drawBalloon(WMScreen *scr, Pixmap bitmap, Pixmap pix, int x, int y, int w,
+            int h, int side)
 {
+    Display *dpy = scr->display;
+    WMColor *white = WMWhiteColor(scr);
+    WMColor *black = WMBlackColor(scr);
+    GC bgc = scr->monoGC;
+    GC gc = WMColorGC(white);
     int rad = h*3/10;
-    XPoint pt[3];
-    
-    XFillArc(dpy, pix, gc, x, y, rad, rad, 90*64, 90*64);
-    XFillArc(dpy, pix, gc, x, y+h-1-rad, rad, rad, 180*64, 90*64);
-    
-    XFillArc(dpy, pix, gc, x+w-1-rad, y, rad, rad, 0*64, 90*64);
-    XFillArc(dpy, pix, gc, x+w-1-rad, y+h-1-rad, rad, rad, 270*64, 90*64);
-    
-    XFillRectangle(dpy, pix, gc, x, y+rad/2, w, h-rad);
-    XFillRectangle(dpy, pix, gc, x+rad/2, y, w-rad, h);
+    XPoint pt[3], ipt[3];
+    int w1;
+
+    /* outline */
+    XSetForeground(dpy, bgc, 1);
+
+    XFillArc(dpy, bitmap, bgc, x, y, rad, rad, 90*64, 90*64);
+    XFillArc(dpy, bitmap, bgc, x, y+h-1-rad, rad, rad, 180*64, 90*64);
+
+    XFillArc(dpy, bitmap, bgc, x+w-1-rad, y, rad, rad, 0*64, 90*64);
+    XFillArc(dpy, bitmap, bgc, x+w-1-rad, y+h-1-rad, rad, rad, 270*64, 90*64);
+
+    XFillRectangle(dpy, bitmap, bgc, x, y+rad/2, w, h-rad);
+    XFillRectangle(dpy, bitmap, bgc, x+rad/2, y, w-rad, h);
+
+    /* interior */
+    XFillArc(dpy, pix, gc, x+1, y+1, rad, rad, 90*64, 90*64);
+    XFillArc(dpy, pix, gc, x+1, y+h-2-rad, rad, rad, 180*64, 90*64);
+
+    XFillArc(dpy, pix, gc, x+w-2-rad, y+1, rad, rad, 0*64, 90*64);
+    XFillArc(dpy, pix, gc, x+w-2-rad, y+h-2-rad, rad, rad, 270*64, 90*64);
+
+    XFillRectangle(dpy, pix, gc, x+1, y+1+rad/2, w-2, h-2-rad);
+    XFillRectangle(dpy, pix, gc, x+1+rad/2, y+1, w-2-rad, h-2);
 
     if (side & BOTTOM) {
-	pt[0].y = y+h-1;
+        pt[0].y = y+h-1;
 	pt[1].y = y+h-1+SPACE;
-	pt[2].y = y+h-1;
+        pt[2].y = y+h-1;
+        ipt[0].y = pt[0].y-1;
+        ipt[1].y = pt[1].y-1;
+        ipt[2].y = pt[2].y-1;
     } else {
-	pt[0].y = y;
-	pt[1].y = y-SPACE;
+        pt[0].y = y;
+        pt[1].y = y-SPACE;
 	pt[2].y = y;
+        ipt[0].y = pt[0].y+1;
+        ipt[1].y = pt[1].y+1;
+        ipt[2].y = pt[2].y+1;
     }
+
+    /*w1 = WMAX(h, 24);*/
+    w1 = WMAX(h, 21);
+
     if (side & RIGHT) {
-	pt[0].x = x+w-h+2*h/16;
-	pt[1].x = x+w-h+11*h/16;
-	pt[2].x = x+w-h+7*h/16;
+	pt[0].x = x+w-w1+2*w1/16;
+        pt[1].x = x+w-w1+11*w1/16;
+        pt[2].x = x+w-w1+7*w1/16;
+	ipt[0].x = x+1+w-w1+2*(w1-1)/16;
+        ipt[1].x = x+1+w-w1+11*(w1-1)/16;
+        ipt[2].x = x+1+w-w1+7*(w1-1)/16;
+        /*ipt[0].x = pt[0].x+1;
+        ipt[1].x = pt[1].x;
+        ipt[2].x = pt[2].x;*/
     } else {
-	pt[0].x = x+h-2*h/16;
-	pt[1].x = x+h-11*h/16;
-	pt[2].x = x+h-7*h/16;
+        pt[0].x = x+w1-2*w1/16;
+        pt[1].x = x+w1-11*w1/16;
+        pt[2].x = x+w1-7*w1/16;
+        ipt[0].x = x-1+w1-2*(w1-1)/16;
+        ipt[1].x = x-1+w1-11*(w1-1)/16;
+        ipt[2].x = x-1+w1-7*(w1-1)/16;
+        /*ipt[0].x = pt[0].x-1;
+        ipt[1].x = pt[1].x;
+        ipt[2].x = pt[2].x;*/
     }
-    XFillPolygon(dpy, pix, gc, pt, 3, Convex, CoordModeOrigin);
+
+    XFillPolygon(dpy, bitmap, bgc, pt, 3, Convex, CoordModeOrigin);
+    XFillPolygon(dpy, pix, gc, ipt, 3, Convex, CoordModeOrigin);
+
+    /* fix outline */
+    XDrawLines(dpy, pix, WMColorGC(black), pt, 3, CoordModeOrigin);
+    if (side & RIGHT) {
+        pt[0].x++;
+        pt[2].x--;
+    } else {
+        pt[0].x--;
+        pt[2].x++;
+    }
+    XDrawLines(dpy, pix, WMColorGC(black), pt, 3, CoordModeOrigin);
+
+    WMReleaseColor(white);
+    WMReleaseColor(black);
 }
 
 
@@ -320,7 +377,6 @@ makePixmap(WMScreen *scr, int width, int height, int side, Pixmap *mask)
     Pixmap pixmap;
     int x, y;
     WMColor *black = WMBlackColor(scr);
-    WMColor *white = WMWhiteColor(scr);
 
     bitmap = XCreatePixmap(dpy, scr->rootWin, width+SPACE, height+SPACE, 1);
 
@@ -328,10 +384,10 @@ makePixmap(WMScreen *scr, int width, int height, int side, Pixmap *mask)
     XFillRectangle(dpy, bitmap, scr->monoGC, 0, 0, width+SPACE, height+SPACE);
 
     pixmap = XCreatePixmap(dpy, scr->rootWin, width+SPACE, height+SPACE,
-			   scr->depth);
+                           scr->depth);
 
-    XFillRectangle(dpy, pixmap, WMColorGC(black), 0, 0, 
-		   width+SPACE, height+SPACE);
+    XFillRectangle(dpy, pixmap, WMColorGC(black), 0, 0, width+SPACE,
+                   height+SPACE);
 
     if (side & BOTTOM) {
 	y = 0;
@@ -340,22 +396,18 @@ makePixmap(WMScreen *scr, int width, int height, int side, Pixmap *mask)
     }
     x = 0;
 
-    XSetForeground(dpy, scr->monoGC, 1);
-    drawBalloon(dpy, bitmap, scr->monoGC, x, y, width, height, side);
-    drawBalloon(dpy, pixmap, WMColorGC(white), x+1, y+1, width-2, height-2,
-		side);
+    drawBalloon(scr, bitmap, pixmap, x, y, width, height, side);
 
     *mask = bitmap;
 
     WMReleaseColor(black);
-    WMReleaseColor(white);
 
     return pixmap;
 }
 
 
 static void
-showText(Balloon *bPtr, int x, int y, int h, int w, char *text)
+showText(Balloon *bPtr, int x, int y, int w, int h, char *text)
 {
     WMScreen *scr = bPtr->view->screen;
     Display *dpy = WMScreenDisplay(scr);

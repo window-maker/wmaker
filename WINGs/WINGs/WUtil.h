@@ -19,11 +19,13 @@
 #endif
 
 
-#if (!defined (__GNUC__) || __GNUC__ < 2 || \
-     __GNUC_MINOR__ < (defined (__cplusplus) ? 6 : 4))
-#define __ASSERT_FUNCTION       ((char *) 0)
-#else
-#define __ASSERT_FUNCTION       __PRETTY_FUNCTION__
+#ifndef __ASSERT_FUNCTION
+# if (!defined (__GNUC__) || (__GNUC__ < 2 && \
+      __GNUC_MINOR__ < (defined (__cplusplus) ? 6 : 4)))
+#  define __ASSERT_FUNCTION       ((char *) 0)
+# else
+#  define __ASSERT_FUNCTION       __PRETTY_FUNCTION__
+# endif
 #endif
 
 
