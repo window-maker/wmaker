@@ -398,22 +398,25 @@ renderMVGradient(unsigned width, unsigned height, RColor **colors, int count)
     gg = g>>16;
     bb = b>>16;
 
-    tmp = ptr;    
-    for (x=0; x<width/4; x++) {
-	*ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-	*ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-	*ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-	*ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-    }
-    switch (width%4) {
-     case 3: *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-     case 2: *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-     case 1: *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-    }
-    
-    for (j=k+1; j<width; j++) {
-	memcpy(ptr, tmp, width*3);
-	ptr += width*3;
+    if (k<height) {
+        tmp = ptr;
+        for (x=0; x<width/4; x++) {
+            *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
+            *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
+            *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
+            *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
+        }
+        switch (width%4) {
+        case 3: *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
+        case 2: *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
+        case 1: *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
+        default: break;
+        }
+
+        for (j=k+1; j<height; j++) {
+            memcpy(ptr, tmp, width*3);
+            ptr += width*3;
+        }
     }
     
     return image;
