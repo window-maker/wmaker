@@ -1313,7 +1313,8 @@ scrollersCallBack(WMWidget *w, void *self)
                     if (tPtr->vpos>16) tPtr->vpos-=16;
                     else tPtr->vpos=0;
                     scroll=True;
-            }break;
+                }
+                break;
 
             case WSIncrementLine: {
                 int limit = tPtr->docHeight - height;
@@ -1321,7 +1322,9 @@ scrollersCallBack(WMWidget *w, void *self)
                     if (tPtr->vpos<limit-16) tPtr->vpos+=16;
                     else tPtr->vpos=limit;
                     scroll = True;
-            }}break;
+                }
+            }
+            break;
 
             case WSDecrementPage:
                 if(((int)tPtr->vpos - (int)height) >= 0)
@@ -1337,7 +1340,7 @@ scrollersCallBack(WMWidget *w, void *self)
                 if (tPtr->vpos > (tPtr->docHeight - height))
                     tPtr->vpos = tPtr->docHeight - height;
                 scroll = True;
-            break;
+                break;
             
             
             case WSKnob:
@@ -2405,13 +2408,13 @@ handleActionEvents(XEvent *event, void *data)
 
             if (event->xbutton.button 
                 == WINGsConfiguration.mouseWheelDown)  {
-                WMScrollText(tPtr, -16);
+                WMScrollText(tPtr, 16);
                 break;
             }
 
             if (event->xbutton.button 
                 == WINGsConfiguration.mouseWheelUp)  {
-                WMScrollText(tPtr, 16);
+                WMScrollText(tPtr, -16);
                 break;
             }
 
