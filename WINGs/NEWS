@@ -218,9 +218,9 @@ WMSendConnectionData() can return 3 values: -1, 0, 1
 
 if the return value is 1, you can continue to send the next message, and so
 on, until the return value of such a send call will be 0.
-In this case you can continue sending, however, the data will not be sent
-over the connection because the operating system cannot accept any more data
-for the moment. Instead it will be queued inside the library, making your
+After it returns 0 you can continue sending, however, the data will not be
+sent over the connection because the operating system cannot accept any more
+data for the moment. Instead it will be queued inside the library, making your
 program's memory footprint increase. If the ammount of data you need to
 send is limited and not too big, this shouldn't be a problem, because your
 data will be queued and sent when the operating system will notify the

@@ -142,7 +142,7 @@ paintFrame(Frame *fPtr)
 	fh = view->size.height;
     }
 
-    if (fPtr->caption!=NULL && fPtr->flags.titlePosition!=WTPNoTitle) {
+    if (tlen>0 && fPtr->flags.titlePosition!=WTPNoTitle) {
 	tw = WMWidthOfString(font, fPtr->caption, tlen);
 
         tx = (view->size.width - tw) / 2;

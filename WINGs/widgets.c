@@ -1067,6 +1067,14 @@ WMSetWidgetBackgroundColor(WMWidget *w, WMColor *color)
 }
 
 
+WMColor*
+WMGetWidgetBackgroundColor(WMWidget *w)
+{
+    // shoul retain?
+    return W_VIEW(w)->backColor;
+}
+
+
 void
 WMRaiseWidget(WMWidget *w)
 {

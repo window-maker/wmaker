@@ -7,7 +7,7 @@
 #include <WINGs/WUtil.h>
 #include <X11/Xlib.h>
 
-#define WINGS_H_VERSION  20021008
+#define WINGS_H_VERSION  20021124
 
 
 #ifdef __cplusplus
@@ -463,11 +463,12 @@ typedef struct WMFontAttributes {
     char *encoding;
 } WMFontAttributes;
 
+/* A few useful constant font attributes masks */
 extern const WMFontAttributes *WFANormal;
 extern const WMFontAttributes *WFABold;
-extern const WMFontAttributes *WFANonBold;
+extern const WMFontAttributes *WFANotBold;
 extern const WMFontAttributes *WFAEmphasized;
-extern const WMFontAttributes *WFANonEmphasized;
+extern const WMFontAttributes *WFANotEmphasized;
 extern const WMFontAttributes *WFABoldEmphasized;
 
 
@@ -907,6 +908,8 @@ void WMMoveWidget(WMWidget *w, int x, int y);
 void WMResizeWidget(WMWidget *w, unsigned int width, unsigned int height);
 
 void WMSetWidgetBackgroundColor(WMWidget *w, WMColor *color);
+
+WMColor* WMGetWidgetBackgroundColor(WMWidget *w);
 
 void WMMapSubwidgets(WMWidget *w);
 

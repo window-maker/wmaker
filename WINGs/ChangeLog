@@ -40,7 +40,10 @@ Changes since wmaker 0.80.1:
   meant to replaces the obsoleted WMEmphasizeFont(), WMNormalizeFont(),
   WMStrenghtenFont() and the other similar functions. To get the same effect
   you pass some predefined structs to it: WFANormal, WFABold, WFAEmphasized,
-  etc)
+  etc which are declared in WINGs.h).
+- Fixed a bug with empty frame titles (Alexey Voinov <voins@voins.program.ru>)
+- Added WMGetWidgetBackgroundColor()
+- Code cleanup in wtext.c
 
 
 Changes since wmaker 0.80.0:

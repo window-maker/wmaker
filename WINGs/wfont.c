@@ -1061,126 +1061,54 @@ WMCopyFontWithChanges(WMScreen *scrPtr, WMFont *font,
 
 
 
+// should WFANormal also set "normal" or leave it alone?
 static const WMFontAttributes W_FANormal = {
-    WFAUnchanged,
-    WFAUnchanged,
-    "medium,normal,regular",
-    "r",
-    "normal",     /* not sure about this */
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged
+    WFAUnchanged, WFAUnchanged, "medium,normal,regular", "r", "normal",
+    WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged,
+    WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged
 };
 
 
 static const WMFontAttributes W_FABold = {
-    WFAUnchanged,
-    WFAUnchanged,
-    "bold",
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged
+    WFAUnchanged, WFAUnchanged, "bold", WFAUnchanged,
+    WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged,
+    WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged
 };
 
 
-static const WMFontAttributes W_FANonBold = {
-    WFAUnchanged,
-    WFAUnchanged,
-    "medium,normal,regular",
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged
+static const WMFontAttributes W_FANotBold = {
+    WFAUnchanged, WFAUnchanged, "medium,normal,regular", WFAUnchanged,
+    WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged,
+    WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged
 };
 
 
 static const WMFontAttributes W_FAEmphasized = {
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    "o,i",
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged
+    WFAUnchanged, WFAUnchanged, WFAUnchanged, "o,i",
+    WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged,
+    WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged
 };
 
 
-static const WMFontAttributes W_FANonEmphasized = {
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    "r",
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged
+static const WMFontAttributes W_FANotEmphasized = {
+    WFAUnchanged, WFAUnchanged, WFAUnchanged, "r",
+    WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged,
+    WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged
 };
 
 
 static const WMFontAttributes W_FABoldEmphasized = {
-    WFAUnchanged,
-    WFAUnchanged,
-    "bold",
-    "o,i",
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged,
-    WFAUnchanged
+    WFAUnchanged, WFAUnchanged, "bold", "o,i",
+    WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged,
+    WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged, WFAUnchanged
 };
 
 
-// by exposing a ptr to them we can allow one to alter their content
-// const doesn't prevent this effectively.
-// altering the content doesn't effectively work because it will core dump
-// if one tries, but still is not clean.
-// however passing the whole struct to the function instead of just the
-// pointer means passing a strcut with 14 pointers to char*
-//
 const WMFontAttributes *WFANormal         = &W_FANormal;
 const WMFontAttributes *WFABold           = &W_FABold;
-const WMFontAttributes *WFANonBold        = &W_FANonBold;
+const WMFontAttributes *WFANotBold        = &W_FANotBold;
 const WMFontAttributes *WFAEmphasized     = &W_FAEmphasized;
-const WMFontAttributes *WFANonEmphasized  = &W_FANonEmphasized;
+const WMFontAttributes *WFANotEmphasized  = &W_FANotEmphasized;
 const WMFontAttributes *WFABoldEmphasized = &W_FABoldEmphasized;
 
 

@@ -104,7 +104,7 @@ testFrame(WMScreen *scr)
 	frame = WMCreateFrame(win);
 	WMMoveWidget(frame, 8+(i%3)*130, 8+(i/3)*130);
 	WMResizeWidget(frame, 120, 120);
-	WMSetFrameTitle(frame, titles[i]);
+        WMSetFrameTitle(frame, titles[i]);
 	WMSetFrameTitlePosition(frame, pos[i]);
     }
 
@@ -604,14 +604,18 @@ testText(WMScreen *scr)
     WMSetTextHasVerticalScroller(text, True);
     WMSetTextEditable(text, False);
 
-    if (1) {
+    {
         WMFont *font, *ifont;
 
         font = WMDefaultSystemFont(scr);
         ifont = WMCopyFontWithChanges(scr, font, WFAEmphasized);
-        WMSetTextDefaultFont(text, ifont);
+        if (ifont) {
+            WMSetTextDefaultFont(text, ifont);
+            WMReleaseFont(ifont);
+        } else {
+            WMSetTextDefaultFont(text, font);
+        }
         WMReleaseFont(font);
-        WMReleaseFont(ifont);
     }
 
     if(file) {

@@ -422,7 +422,7 @@ setSelectionProperty(WMText *tPtr, WMFont *font, WMColor *color, int underlined)
     if (!tb || !tPtr->flags.ownsSelection)
         return;
 
-    if(font && (!color || underlined==-1))
+    if (font && (!color || underlined==-1))
         isFont = True;
 
     while (tb) {
@@ -567,9 +567,10 @@ removeSelection(Text *tPtr)
         tb = tb->next;
     }
     return True;
-} 
-    
-static TextBlock *
+}
+
+
+static TextBlock*
 getFirstNonGraphicBlockFor(TextBlock *tb, short dir)
 {
     TextBlock *hold = tb;
@@ -3303,31 +3304,37 @@ WMAppendTextStream(WMText *tPtr, char *text)
 }
 
 
-char * 
+char*
 WMGetTextStream(WMText *tPtr)
-{    
+{
     CHECK_CLASS(tPtr, WC_Text);
+
     return getStream(tPtr, 0, 0);
 }
 
-char * 
+
+char*
 WMGetTextSelectedStream(WMText *tPtr)
-{    
+{
     CHECK_CLASS(tPtr, WC_Text);
+
     return getStream(tPtr, 1, 0);
 }
 
-WMArray *
+
+WMArray*
 WMGetTextObjects(WMText *tPtr)
 {
     CHECK_CLASS(tPtr, WC_Text);
+
     return getStreamObjects(tPtr, 0);
 }
 
-WMArray *
+WMArray*
 WMGetTextSelectedObjects(WMText *tPtr)
 {
     CHECK_CLASS(tPtr, WC_Text);
+
     return getStreamObjects(tPtr, 1);
 }
 
@@ -3341,7 +3348,7 @@ WMSetTextDelegate(WMText *tPtr, WMTextDelegate *delegate)
 }
 
 
-void *
+void*
 WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w,
                             char *description, WMColor *color,
                             unsigned short first, unsigned short extraInfo)
@@ -3352,8 +3359,6 @@ WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w,
         return NULL;
 
     tb = wmalloc(sizeof(TextBlock));
-    if (!tb)
-         return NULL;
 
     tb->text = wstrdup(description);
     tb->used = strlen(description);
@@ -3376,9 +3381,9 @@ WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w,
 
     return tb;
 }
-    
 
-void *
+
+void*
 WMCreateTextBlockWithPixmap(WMText *tPtr, WMPixmap *p, 
                             char *description, WMColor *color,
                             unsigned short first, unsigned short extraInfo)
@@ -3389,8 +3394,6 @@ WMCreateTextBlockWithPixmap(WMText *tPtr, WMPixmap *p,
         return NULL;
 
     tb = wmalloc(sizeof(TextBlock));
-    if (!tb)
-         return NULL;
 
     tb->text = wstrdup(description);
     tb->used = strlen(description);
@@ -3425,8 +3428,6 @@ WMCreateTextBlockWithText(WMText *tPtr, char *text, WMFont *font, WMColor *color
         return NULL;
 
     tb = wmalloc(sizeof(TextBlock));
-    if (!tb)
-         return NULL;
 
     tb->allocated = reqBlockSize(len);
     tb->text = (char *)wmalloc(tb->allocated);
@@ -3459,6 +3460,7 @@ WMCreateTextBlockWithText(WMText *tPtr, char *text, WMFont *font, WMColor *color
     return tb;
 }
 
+
 void 
 WMSetTextBlockProperties(WMText *tPtr, void *vtb, unsigned int first, 
     unsigned int kanji, unsigned int underlined, int script, 
@@ -3474,8 +3476,9 @@ WMSetTextBlockProperties(WMText *tPtr, void *vtb, unsigned int first,
     tb->script = script;
     tb->marginN = newMargin(tPtr, margins);
 }
-    
-void 
+
+
+void
 WMGetTextBlockProperties(WMText *tPtr, void *vtb, unsigned int *first, 
     unsigned int *kanji, unsigned int *underlined, int *script, 
     WMRulerMargins *margins)
@@ -3490,15 +3493,14 @@ WMGetTextBlockProperties(WMText *tPtr, void *vtb, unsigned int *first,
     if (script) *script = tb->script;
     if (margins) margins = &tPtr->margins[tb->marginN];
 }
-    
 
 
-void 
+void
 WMPrependTextBlock(WMText *tPtr, void *vtb)
 {
     TextBlock *tb = (TextBlock *)vtb;
 
-    if (!tPtr || !tb)
+    if (!tb)
         return;
 
     if (tb->graphic) {
@@ -3539,14 +3541,14 @@ WMPrependTextBlock(WMText *tPtr, void *vtb)
 
     tPtr->currentTextBlock = tb;
 }
-    
 
-void 
+
+void
 WMAppendTextBlock(WMText *tPtr, void *vtb)
 {
     TextBlock *tb = (TextBlock *)vtb;
 
-    if (!tPtr || !tb)
+    if (!tb)
         return;
 
     if (tb->graphic) {
@@ -3597,8 +3599,8 @@ WMRemoveTextBlock(WMText *tPtr)
 {
     TextBlock *tb = NULL;
 
-    if (!tPtr || !tPtr->firstTextBlock || !tPtr->lastTextBlock
-            || !tPtr->currentTextBlock) {
+    if (!tPtr->firstTextBlock || !tPtr->lastTextBlock ||
+        !tPtr->currentTextBlock) {
         return NULL;
     }
 
@@ -3646,7 +3648,7 @@ void
 WMDestroyTextBlock(WMText *tPtr, void *vtb)
 {
     TextBlock *tb = (TextBlock *)vtb;
-    if (!tPtr || !tb)
+    if (!tb)
         return;
 
     if (tb->graphic) {
@@ -3679,33 +3681,31 @@ WMDestroyTextBlock(WMText *tPtr, void *vtb)
 void
 WMSetTextForegroundColor(WMText *tPtr, WMColor *color)
 {
-    if (!tPtr)
-        return;
+    if (tPtr->fgColor)
+        WMReleaseColor(tPtr->fgColor);
 
-    WMReleaseColor(tPtr->fgColor);
     tPtr->fgColor = WMRetainColor(color ? color : tPtr->view->screen->black);
 
     paintText(tPtr);
 }
 
+
 void
 WMSetTextBackgroundColor(WMText *tPtr, WMColor *color)
 {
-    if (!tPtr)
-        return;
+    if (tPtr->bgColor)
+        WMReleaseColor(tPtr->bgColor);
 
-    WMReleaseColor(tPtr->bgColor);
     tPtr->bgColor = WMRetainColor(color ? color : tPtr->view->screen->white);
     W_SetViewBackgroundColor(tPtr->view, tPtr->bgColor);
 
     paintText(tPtr);
 }
 
-void WMSetTextBackgroundPixmap(WMText *tPtr, WMPixmap *pixmap)
-{
-    if (!tPtr)
-        return;
 
+void
+WMSetTextBackgroundPixmap(WMText *tPtr, WMPixmap *pixmap)
+{
     if (tPtr->bgPixmap)
         WMReleasePixmap(tPtr->bgPixmap);
  
@@ -3715,21 +3715,18 @@ void WMSetTextBackgroundPixmap(WMText *tPtr, WMPixmap *pixmap)
         tPtr->bgPixmap = NULL;
 }
 
+
 void
 WMSetTextRelief(WMText *tPtr, WMReliefType relief)
 {
-    if (!tPtr)
-         return;
     tPtr->flags.relief = relief;
     textDidResize(tPtr->view->delegate, tPtr->view);
 }
 
+
 void 
 WMSetTextHasHorizontalScroller(WMText *tPtr, Bool shouldhave)
 {
-    if (!tPtr) 
-        return;
-
     if (shouldhave && !tPtr->hS) {
         tPtr->hS = WMCreateScroller(tPtr); 
         (W_VIEW(tPtr->hS))->attribs.cursor = tPtr->view->screen->defaultCursor;
@@ -3752,9 +3749,6 @@ WMSetTextHasHorizontalScroller(WMText *tPtr, Bool shouldhave)
 void
 WMSetTextHasRuler(WMText *tPtr, Bool shouldhave)
 {
-    if (!tPtr) 
-        return;
-        
     if(shouldhave && !tPtr->ruler) {
         tPtr->ruler = WMCreateRuler(tPtr);
         (W_VIEW(tPtr->ruler))->attribs.cursor =
@@ -3773,8 +3767,6 @@ WMSetTextHasRuler(WMText *tPtr, Bool shouldhave)
 void
 WMShowTextRuler(WMText *tPtr, Bool show)
 {
-    if(!tPtr)
-        return;
     if(!tPtr->ruler)
         return;
 
@@ -3789,16 +3781,14 @@ WMShowTextRuler(WMText *tPtr, Bool show)
     }
     
     textDidResize(tPtr->view->delegate, tPtr->view);
-}   
+}
+
 
 Bool
 WMGetTextRulerShown(WMText *tPtr)
 {
-    if(!tPtr)
-        return 0;
-
     if(!tPtr->ruler)
-        return 0;
+        return False;
 
     return tPtr->flags.rulerShown;
 }
@@ -3807,9 +3797,6 @@ WMGetTextRulerShown(WMText *tPtr)
 void 
 WMSetTextHasVerticalScroller(WMText *tPtr, Bool shouldhave)
 {
-    if (!tPtr) 
-        return;
-        
     if (shouldhave && !tPtr->vS) {
         tPtr->vS = WMCreateScroller(tPtr); 
         (W_VIEW(tPtr->vS))->attribs.cursor = tPtr->view->screen->defaultCursor;
@@ -3828,17 +3815,15 @@ WMSetTextHasVerticalScroller(WMText *tPtr, Bool shouldhave)
     textDidResize(tPtr->view->delegate, tPtr->view);
 }
 
-    
 
 Bool
 WMScrollText(WMText *tPtr, int amount)
 {
     Bool scroll=False;
-    if (!tPtr)
-        return False;
+
     if (amount == 0 || !tPtr->view->flags.realized)
         return False;
-    
+
     if (amount < 0) {
         if (tPtr->vpos > 0) {
             if (tPtr->vpos > abs(amount)) tPtr->vpos += amount;
@@ -3860,63 +3845,53 @@ WMScrollText(WMText *tPtr, int amount)
     }   
     tPtr->prevVpos = tPtr->vpos;
     return scroll;
-}   
+}
 
-Bool 
+
+Bool
 WMPageText(WMText *tPtr, Bool direction)
 {
-    if (!tPtr) return False;
-    if (!tPtr->view->flags.realized) return False;
+    if (!tPtr->view->flags.realized)
+        return False;
 
     return WMScrollText(tPtr, direction?tPtr->visible.h:-tPtr->visible.h);
 }
 
+
 void
 WMSetTextEditable(WMText *tPtr, Bool editable)
 {
-    if (!tPtr)
-        return;
     tPtr->flags.editable = editable;
 }
-    
-int 
+
+
+int
 WMGetTextEditable(WMText *tPtr)
 {
-    if (!tPtr)
-        return 0;
     return tPtr->flags.editable;
 }
 
 void
 WMSetTextIndentNewLines(WMText *tPtr, Bool indent)
 {
-    if (!tPtr)
-        return;
     tPtr->flags.indentNewLine = indent;
 }
 
 void
 WMSetTextIgnoresNewline(WMText *tPtr, Bool ignore)
 {
-    if (!tPtr)
-        return;
     tPtr->flags.ignoreNewLine = ignore;
 }
 
 Bool
 WMGetTextIgnoresNewline(WMText *tPtr)
 {
-    if (!tPtr)
-        return True;
     return tPtr->flags.ignoreNewLine;
 }
 
 void
 WMSetTextUsesMonoFont(WMText *tPtr, Bool mono)
 {
-    if (!tPtr)
-        return;
-
     if (mono) { 
         if(tPtr->flags.rulerShown)
             WMShowTextRuler(tPtr, False);
@@ -3931,8 +3906,6 @@ WMSetTextUsesMonoFont(WMText *tPtr, Bool mono)
 Bool
 WMGetTextUsesMonoFont(WMText *tPtr)
 {
-    if (!tPtr)
-        return True;
     return tPtr->flags.monoFont;
 }
 
@@ -3940,52 +3913,48 @@ WMGetTextUsesMonoFont(WMText *tPtr)
 void
 WMSetTextDefaultFont(WMText *tPtr, WMFont *font)
 {
-    if (!tPtr)
-        return;
-        
-    WMReleaseFont(tPtr->dFont);
-    if (font)
+    if (tPtr->dFont)
+        WMReleaseFont(tPtr->dFont);
+
+    if (font) {
         tPtr->dFont = WMRetainFont(font);
-    else
-        tPtr->dFont = WMRetainFont(WMSystemFontOfSize(tPtr->view->screen, 12));
+    } else {
+        tPtr->dFont = WMSystemFontOfSize(tPtr->view->screen, 12);
+    }
 }
 
-WMFont *
+
+WMFont*
 WMGetTextDefaultFont(WMText *tPtr)
 {
-    if (!tPtr)
-        return NULL;
-    else
-        return WMRetainFont(tPtr->dFont);
+    return WMRetainFont(tPtr->dFont);
 }
+
 
 void
 WMSetTextDefaultColor(WMText *tPtr, WMColor *color)
 {
-    if (!tPtr)
-        return;
-        
-    WMReleaseColor(tPtr->dColor);
-    if (color)
+    if (tPtr->dColor)
+        WMReleaseColor(tPtr->dColor);
+
+    if (color) {
         tPtr->dColor = WMRetainColor(color);
-    else
+    } else {
         tPtr->dColor = WMBlackColor(tPtr->view->screen);
+    }
 }
 
-WMColor *
+
+WMColor*
 WMGetTextDefaultColor(WMText *tPtr)
 {
-    if (!tPtr)
-        return NULL;
-    else
-        return WMRetainColor(tPtr->dColor);
+    return WMRetainColor(tPtr->dColor);
 }
+
 
 void
 WMSetTextAlignment(WMText *tPtr, WMAlignment alignment)
 {
-    if (!tPtr) 
-        return;
     if(tPtr->flags.monoFont)
         tPtr->flags.alignment = WALeft;
     else
@@ -3993,31 +3962,25 @@ WMSetTextAlignment(WMText *tPtr, WMAlignment alignment)
     WMThawText(tPtr);
 }
 
-int 
+
+int
 WMGetTextInsertType(WMText *tPtr)
 {
-    if (!tPtr)
-        return 0;
     return tPtr->flags.prepend;
 }
-    
+
 
 void 
 WMSetTextSelectionColor(WMText *tPtr, WMColor *color)
 {
-    if (!tPtr || !color)
-        return;
-
     setSelectionProperty(tPtr, NULL, color, -1);
 }
 
-WMColor *
+
+WMColor*
 WMGetTextSelectionColor(WMText *tPtr)
 {
     TextBlock *tb;
-
-    if (!tPtr)
-        return NULL;
 
     tb = tPtr->currentTextBlock;
 
@@ -4030,23 +3993,18 @@ WMGetTextSelectionColor(WMText *tPtr)
     return tb->color;
 }
 
-            
-void 
+
+void
 WMSetTextSelectionFont(WMText *tPtr, WMFont *font)
 {
-    if (!tPtr || !font)
-        return;
-    
     setSelectionProperty(tPtr, font, NULL, -1) ;
 }
 
-WMFont *
+
+WMFont*
 WMGetTextSelectionFont(WMText *tPtr)
 {
     TextBlock *tb;
-
-    if (!tPtr)
-        return NULL;
 
     tb = tPtr->currentTextBlock;
 
@@ -4064,24 +4022,22 @@ WMGetTextSelectionFont(WMText *tPtr)
     return (tb->selected ? tb->d.font : NULL);
 }
 
-            
-void 
+
+void
 WMSetTextSelectionUnderlined(WMText *tPtr, int underlined)
 {
-    if (!tPtr || (underlined!=0 && underlined !=1))
+    // check this
+    if (underlined!=0 && underlined!=1)
         return;
-    
+
     setSelectionProperty(tPtr, NULL, NULL, underlined);
 }
 
 
-int 
+int
 WMGetTextSelectionUnderlined(WMText *tPtr)
 {
     TextBlock *tb;
-
-    if (!tPtr)
-        return 0;
 
     tb = tPtr->currentTextBlock;
 
@@ -4098,9 +4054,6 @@ WMGetTextSelectionUnderlined(WMText *tPtr)
 void
 WMFreezeText(WMText *tPtr) 
 {
-    if (!tPtr)
-        return;
-
     tPtr->flags.frozen = True;
 }
 
@@ -4108,9 +4061,6 @@ WMFreezeText(WMText *tPtr)
 void
 WMThawText(WMText *tPtr) 
 {
-    if (!tPtr)
-        return;
-
     tPtr->flags.frozen = False;
 
     if(tPtr->flags.monoFont) {
@@ -4186,16 +4136,14 @@ mystrrstr(char *haystack, char *needle, unsigned short len, char *end,
 }
 
 
-Bool 
-WMFindInTextStream(WMText *tPtr, char *needle, Bool direction, 
-    Bool caseSensitive)
+Bool
+WMFindInTextStream(WMText *tPtr, char *needle, Bool direction,
+                   Bool caseSensitive)
 {
     TextBlock *tb;
     char *mark=NULL;
     unsigned short pos;
 
-    if (!tPtr || !needle)
-        return False;
 
 #if 0
     if (! (tb = tPtr->currentTextBlock)) {
@@ -4280,9 +4228,6 @@ WMFindInTextStream(WMText *tPtr, char *needle, Bool direction,
 Bool
 WMReplaceTextSelection(WMText *tPtr, char *replacement) 
 {
-    if (!tPtr)
-        return False;
-
     if (!tPtr->flags.ownsSelection)
         return False;
 

@@ -13,7 +13,7 @@ is inspired in OpenStep and it's implementation borrows some ideas
 from Tk. It has a reasonable set of widgets, sufficient for building
 small applications (like a CDPlayer or hacking something like rxvt). It
 also has other functions that are usefull for applications, like a
-User Defaults like configuration manager and a notification system.
+User Defaults alike configuration manager and a notification system.
 
    The library is limited and it's design is a little sloppy, 
 so it's not intended to build large or complex applications, like 
