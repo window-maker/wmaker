@@ -604,7 +604,7 @@ char *WMGetApplicationName();
 char *WMPathForResourceOfType(char *resource, char *ext);
 
 
-WMScreen *WMOpenScreen();
+WMScreen *WMOpenScreen(const char *display);
 
 WMScreen *WMCreateScreenWithRContext(Display *display, int screen, 
 				     RContext *context);
@@ -657,6 +657,9 @@ void WMMaskEvent(Display *dpy, long mask, XEvent *event);
 
 WMHandlerID WMAddTimerHandler(int milliseconds, WMCallback *callback, 
 			      void *cdata);
+
+WMHandlerID WMAddEternalTimerHandler(int milliseconds, WMCallback *callback,
+				     void *cdata);
 
 void WMDeleteTimerWithClientData(void *cdata);
 

@@ -1062,8 +1062,7 @@ handleLogoPush(XEvent *event, void *data)
     static char *msgs[] = {
 	    "Have a nice day!",
 	    "Focus follow mouse users will burn in hell!!!",
-	    "F'ck Canada!!!!",
-	    "F'ck Bastard Imperialists!!!",
+	    "Mooo Canada!!!!",
 	    "Hi! My name is bobby...",
 	    "AHH! The neurotic monkeys are after me!",
 	    "WHAT YOU SAY??",

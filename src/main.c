@@ -138,8 +138,10 @@ int wXkbEventBase;
 #endif
 
 /* special flags */
+char WProgramSigState = 0;
 char WProgramState = WSTATE_NORMAL;
 char WDelayedActionSet = 0;
+
 
 /* temporary stuff */
 int wVisualID = -1;

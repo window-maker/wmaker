@@ -7,6 +7,10 @@ Changes since version 0.64.0:
 - added WINDOWS_MENU submenu type for root menu (Bastien Nocera <hadess@hadess.net>)
 - added kbd shortcuts for icon chooser
 - use Hermes in wrlib
+- removed MOUSE_WS_WHEEL #defines
+- fixed bug with multibyte text on libc5 systems (Osamu Ajiki <osam-a@astroarts.co.jp>)
+- fixed race conditions on signal handlers 
+- SIGINT will gently exit, SIGTERM will not be handled
 
 Changes since version 0.63.1:
 .............................

@@ -516,13 +516,13 @@ loadPixmaps(WMScreen *scr)
 
 
 WMScreen*
-WMOpenScreen()
+WMOpenScreen(const char *display)
 {
-    Display *dpy = XOpenDisplay("");
+    Display *dpy = XOpenDisplay(display);
     
     if (!dpy) {
 	wwarning("WINGs: could not open display %s",
-		 XDisplayName(""));
+		 XDisplayName(display));
 	return NULL;
     }
     

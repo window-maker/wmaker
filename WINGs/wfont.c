@@ -42,9 +42,10 @@ generalize_xlfd (const char *xlfd)
     char *slant  = xlfd_get_element(xlfd, 4);
     char *pxlsz  = xlfd_get_element(xlfd, 7);
 
-    len = snprintf(NULL, 0, "%s,-*-*-%s-%s-*-*-%s-*-*-*-*-*-*-*,"
-		   "-*-*-*-*-*-*-%s-*-*-*-*-*-*-*,*",
-		   xlfd, weight, slant, pxlsz, pxlsz);
+#define Xstrlen(A) ((A)?strlen(A):0)
+    len = Xstrlen(xlfd)+Xstrlen(weight)+Xstrlen(slant)+Xstrlen(pxlsz)*2+50;
+#undef Xstrlen
+
     buf = wmalloc(len + 1);
     snprintf(buf, len + 1, "%s,-*-*-%s-%s-*-*-%s-*-*-*-*-*-*-*,"
 	     "-*-*-*-*-*-*-%s-*-*-*-*-*-*-*,*",

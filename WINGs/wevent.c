@@ -38,6 +38,7 @@ typedef struct TimerHandler {
     struct timeval	when;		       /* when to call the callback */
     void 		*clientData;
     struct TimerHandler *next;
+    Bool                permanent;
 } TimerHandler;
 
 
@@ -125,6 +126,9 @@ rightNow(struct timeval *tv) {
 				 (((t1).tv_sec == (t2).tv_sec) \
 				  && ((t1).tv_usec > (t2).tv_usec)))
 
+#define IS_ZERO(tv) (tv.tv_sec == 0 && tv.tv_usec == 0)
+
+#define SET_ZERO(tv) tv.tv_sec = 0, tv.tv_usec = 0
 
 static void
 addmillisecs(struct timeval *tv, int milliseconds)
@@ -136,19 +140,11 @@ addmillisecs(struct timeval *tv, int milliseconds)
 }
 
 
-WMHandlerID
-WMAddTimerHandler(int milliseconds, WMCallback *callback, void *cdata)
+static void
+enqueueTimerHandler(TimerHandler *handler)
 {
-    TimerHandler *handler, *tmp;
+    TimerHandler *tmp;
     
-    handler = malloc(sizeof(TimerHandler));
-    if (!handler)
-      return NULL;
-    
-    rightNow(&handler->when);
-    addmillisecs(&handler->when, milliseconds);
-    handler->callback = callback;
-    handler->clientData = cdata;
     /* insert callback in queue, sorted by time left */
     if (!timerHandler || !IS_AFTER(handler->when, timerHandler->when)) {
 	/* first in the queue */
@@ -161,7 +157,39 @@ WMAddTimerHandler(int milliseconds, WMCallback *callback, void *cdata)
 	}
 	handler->next = tmp->next;
 	tmp->next = handler;
-    }
+    }    
+}
+
+
+WMHandlerID
+WMAddTimerHandler(int milliseconds, WMCallback *callback, void *cdata)
+{
+    TimerHandler *handler;
+    
+    handler = malloc(sizeof(TimerHandler));
+    if (!handler)
+      return NULL;
+    
+    rightNow(&handler->when);
+    addmillisecs(&handler->when, milliseconds);
+    handler->callback = callback;
+    handler->clientData = cdata;
+    handler->permanent = False;
+    
+    enqueueTimerHandler(handler);
+
+    return handler;
+}
+
+
+WMHandlerID
+WMAddEternalTimerHandler(int milliseconds, WMCallback *callback, void *cdata)
+{
+    TimerHandler *handler = WMAddTimerHandler(milliseconds, callback, cdata);
+
+    if (handler != NULL)
+	handler->permanent = True;
+    
     return handler;
 }
 
@@ -174,15 +202,21 @@ WMDeleteTimerWithClientData(void *cdata)
 
     if (!cdata || !timerHandler)
         return;
-
+    
     tmp = timerHandler;
     if (tmp->clientData==cdata) {
-        timerHandler = tmp->next;
-        wfree(tmp);
+	tmp->permanent = False;
+	if (!IS_ZERO(tmp->when)) {
+	    timerHandler = tmp->next;
+	    wfree(tmp);
+	}
     } else {
         while (tmp->next) {
             if (tmp->next->clientData==cdata) {
                 handler = tmp->next;
+		handler->permanent = False;		
+		if (IS_ZERO(handler->when))
+		    break;
                 tmp->next = handler->next;
                 wfree(handler);
                 break;
@@ -203,6 +237,12 @@ WMDeleteTimerHandler(WMHandlerID handlerID)
       return;
 
     tmp = timerHandler;
+    
+    handler->permanent = False;
+    
+    if (IS_ZERO(handler->when))
+	return;
+    
     if (tmp==handler) {
 	timerHandler = handler->next;
 	wfree(handler);
@@ -239,7 +279,6 @@ WMAddIdleHandler(WMCallback *callback, void *cdata)
 
     return handler;
 }
-
 
 
 void
@@ -306,6 +345,7 @@ checkIdleHandlers()
     WMBag *handlerCopy;
     WMBagIterator iter;
 
+    
     if (!idleHandler || WMGetBagItemCount(idleHandler)==0) {
 	W_FlushIdleNotificationQueue();
         /* make sure an observer in queue didn't added an idle handler */
@@ -349,14 +389,26 @@ checkTimerHandlers()
 
     rightNow(&now);
 
-    while (timerHandler && IS_AFTER(now, timerHandler->when)) {
-	handler = timerHandler;
-	timerHandler = timerHandler->next;
-	handler->next = NULL;
+    handler = timerHandler;
+    while (handler && IS_AFTER(now, handler->when)) {
+	SET_ZERO(handler->when);
 	(*handler->callback)(handler->clientData);
-	wfree(handler);
+	handler = handler->next;
     }
 
+    while (timerHandler && IS_ZERO(handler->when)) {
+	handler = timerHandler;
+	timerHandler = timerHandler->next;	
+
+	if (handler->permanent) {
+	    rightNow(&handler->when);
+	    addmillisecs(&handler->when, milliseconds);
+	    enqueueTimerHandler(handler);
+	} else {
+	    wfree(handler);
+	}
+    }
+    
     W_FlushASAPNotificationQueue();
 }
 
@@ -932,7 +984,7 @@ WMNextEvent(Display *dpy, XEvent *event)
     while (XPending(dpy) == 0) {
 	/* Do idle stuff */
 	/* Do idle and timer stuff while there are no timer or X events */
-	while (!XPending(dpy) && checkIdleHandlers()) {
+	while (XPending(dpy) == 0 && checkIdleHandlers()) {
 	    /* dispatch timer events */
             checkTimerHandlers();
 	}
@@ -942,7 +994,7 @@ WMNextEvent(Display *dpy, XEvent *event)
 	 * timer/idle stuff. Or we might block forever waiting for
 	 * an event that already arrived. 
 	 */
-	/* wait to something happen */
+	/* wait for something to happen or a timer to expire */
 	W_WaitForEvent(dpy, 0);
 	
         /* Check any expired timers */

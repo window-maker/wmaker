@@ -247,10 +247,22 @@ typedef enum {
 
 
 #define WCHECK_STATE(state)	(state == WProgramState)
-#define WCHANGE_STATE(nstate)	\
-	if (WProgramState == WSTATE_NORMAL\
-		|| nstate != WSTATE_MODAL)\
-		 WProgramState = (nstate)
+
+
+#define WCHANGE_STATE(nstate) {\
+    if (WProgramState == WSTATE_NORMAL\
+	    || nstate != WSTATE_MODAL)\
+	WProgramState = (nstate); \
+    if (WProgramSigState != 0)\
+	WProgramState = WProgramSigState;\
+}
+
+
+/* only call inside signal handlers, with signals blocked */
+#define SIG_WCHANGE_STATE(nstate) {\
+    WProgramSigState = (nstate);\
+    WProgramState = (nstate);\
+}
 
 
 /* notifications */

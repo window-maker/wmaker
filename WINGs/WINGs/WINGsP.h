@@ -528,9 +528,9 @@ void W_HandleSelectionEvent(XEvent *event);
 
 void W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event);
 
-void W_FlushASAPNotificationQueue();
+void W_FlushASAPNotificationQueue(void);
 
-void W_FlushIdleNotificationQueue();
+void W_FlushIdleNotificationQueue(void);
 
 struct W_Balloon *W_CreateBalloon(WMScreen *scr);
 

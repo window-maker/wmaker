@@ -228,6 +228,8 @@ handleXIO(Display *xio_dpy)
 static void
 delayedAction(void *cdata)
 {
+    if (WDelatedActionSet == 0)
+	return;
     WDelayedActionSet = 0;
     /* 
      * Make the event dispatcher do whatever it needs to do,
@@ -238,6 +240,58 @@ delayedAction(void *cdata)
 }
 
 
+/*
+ *----------------------------------------------------------------------
+ * handleExitSig--
+ * 	User generated exit signal handler.
+ *---------------------------------------------------------------------- 
+ */
+static RETSIGTYPE
+handleExitSig(int sig)
+{
+    sigset_t sigs;
+
+    sigfillset(&sigs);
+    sigprocmask(SIG_BLOCK, &sigs, NULL);
+    
+    if (sig == SIGUSR1) {
+#ifdef SYS_SIGLIST_DECLARED
+        wwarning(_("got signal %i (%s) - restarting\n"), sig, sys_siglist[sig]);
+#else
+        wwarning(_("got signal %i - restarting\n"), sig);
+#endif
+
+	SIG_WCHANGE_STATE(WSTATE_NEED_RESTART);
+	/* setup idle handler, so that this will be handled when
+	 * the select() is returned becaused of the signal, even if
+	 * there are no X events in the queue */
+	WDelayedActionSet = 1;
+    } else if (sig == SIGUSR2) {
+#ifdef SYS_SIGLIST_DECLARED
+        wwarning(_("got signal %i (%s) - rereading defaults\n"), sig, sys_siglist[sig]);
+#else
+        wwarning(_("got signal %i - rereading defaults\n"), sig);
+#endif
+
+        SIG_WCHANGE_STATE(WSTATE_NEED_REREAD);
+        /* setup idle handler, so that this will be handled when
+         * the select() is returned becaused of the signal, even if
+         * there are no X events in the queue */
+        WDelayedActionSet = 1;
+    } else if (sig == SIGINT || sig == SIGHUP) {
+#ifdef SYS_SIGLIST_DECLARED
+        wwarning(_("got signal %i (%s) - exiting...\n"), sig, sys_siglist[sig]);
+#else
+        wwarning(_("got signal %i - exiting...\n"), sig);
+#endif
+
+	SIG_WCHANGE_STATE(WSTATE_NEED_EXIT);
+
+	WDelayedActionSet = 1;
+    }
+    
+    sigprocmask(SIG_UNBLOCK, &sigs, NULL);
+}
 
 /*
  *----------------------------------------------------------------------
@@ -262,53 +316,6 @@ handleSig(int sig)
      * here. Xlib calls are not reentrant so the integrity of Xlib is
      * not guaranteed if a Xlib call is made from a signal handler.
      */
-    if (sig == SIGUSR1) {
-#ifdef SYS_SIGLIST_DECLARED
-        wwarning(_("got signal %i (%s) - restarting\n"), sig, sys_siglist[sig]);
-#else
-        wwarning(_("got signal %i - restarting\n"), sig);
-#endif
-
-	WCHANGE_STATE(WSTATE_NEED_RESTART);
-	/* setup idle handler, so that this will be handled when
-	 * the select() is returned becaused of the signal, even if
-	 * there are no X events in the queue */
-	if (!WDelayedActionSet) {
-	    WDelayedActionSet = 1;
-	    WMAddIdleHandler(delayedAction, NULL);
-	}
-        return;
-    } else if (sig == SIGUSR2) {
-#ifdef SYS_SIGLIST_DECLARED
-        wwarning(_("got signal %i (%s) - rereading defaults\n"), sig, sys_siglist[sig]);
-#else
-        wwarning(_("got signal %i - rereading defaults\n"), sig);
-#endif
-
-        WCHANGE_STATE(WSTATE_NEED_REREAD);
-        /* setup idle handler, so that this will be handled when
-         * the select() is returned becaused of the signal, even if
-         * there are no X events in the queue */
-        if (!WDelayedActionSet) {
-            WDelayedActionSet = 1;
-            WMAddIdleHandler(delayedAction, NULL);
-	}
-        return;
-    } else if (sig == SIGTERM || sig == SIGHUP) {
-#ifdef SYS_SIGLIST_DECLARED
-        wwarning(_("got signal %i (%s) - exiting...\n"), sig, sys_siglist[sig]);
-#else
-        wwarning(_("got signal %i - exiting...\n"), sig);
-#endif
-
-	WCHANGE_STATE(WSTATE_NEED_EXIT);
-
-	if (!WDelayedActionSet) {
-	    WDelayedActionSet = 1;
-	    WMAddIdleHandler(delayedAction, NULL);
-	}
-	return;
-    }
 
 #ifdef SYS_SIGLIST_DECLARED
     wfatal(_("got signal %i (%s)\n"), sig, sys_siglist[sig]);
@@ -333,6 +340,10 @@ handleSig(int sig)
 
 	dumpcore = 1;
 
+	/*
+	 * Yeah, we shouldn't do this, but it's already crashed anyway :P
+	 */
+	
 #ifndef NO_EMERGENCY_AUTORESTART
         /* Close the X connection and open a new one. This is to avoid messing
          * Xlib because we call to Xlib functions in a signal handler.
@@ -385,17 +396,16 @@ handleSig(int sig)
 
 
 static RETSIGTYPE
-ignoreSig(int signal)
-{
-    return;
-}
-
-
-static RETSIGTYPE
 buryChild(int foo)
 {
     pid_t pid;
     int status;
+    int save_errno = errno;
+    sigset_t sigs;
+
+    sigfillset(&sigs);
+    /* Block signals so that NotifyDeadProcess() doesn't get fux0red */
+    sigprocmask(SIG_BLOCK, &sigs, NULL);
     
     /* R.I.P. */
     /* If 2 or more kids exit in a small time window, before this handler gets
@@ -406,15 +416,13 @@ buryChild(int foo)
      */
     while ((pid=waitpid(-1, &status, WNOHANG))>0 || (pid<0 && errno==EINTR)) {
 	NotifyDeadProcess(pid, WEXITSTATUS(status));
-	/* 
-	 * Make sure that the kid will be buried even if there are
-	 * no events in the X event queue
-	 */
-	if (!WDelayedActionSet) {
-	    WDelayedActionSet = 1;
-	    WMAddIdleHandler(delayedAction, NULL);
-        }
     }
+
+    WDelayedActionSet = 1;
+    
+    sigprocmask(SIG_UNBLOCK, &sigs, NULL);
+
+    errno = save_errno;    
 }
 
 
@@ -790,32 +798,34 @@ StartUp(Bool defaultScreenOnly)
     wCursor[WCUR_TEXT]     = XCreateFontCursor(dpy, XC_xterm); /* odd name???*/
     wCursor[WCUR_SELECT] = XCreateFontCursor(dpy, XC_cross);
     
+    /* signal handler stuff that gets called when a signal is caught */
+    WMAddEternalTimerHandler(500, delayedAction, NULL);
+
     /* emergency exit... */
     sig_action.sa_handler = handleSig;
     sigemptyset(&sig_action.sa_mask);
 
-    /* Here we don't care about SA_RESTART since these signals will close
-     * wmaker anyway.
-     * -Dan */
-    sig_action.sa_flags = 0;
-    sigaction(SIGINT, &sig_action, NULL);
-    sigaction(SIGTERM, &sig_action, NULL);
-    sigaction(SIGHUP, &sig_action, NULL);
+    sig_action.sa_flags = SA_RESTART;
     sigaction(SIGQUIT, &sig_action, NULL);
     sigaction(SIGSEGV, &sig_action, NULL);
     sigaction(SIGBUS, &sig_action, NULL);
     sigaction(SIGFPE, &sig_action, NULL);
     sigaction(SIGABRT, &sig_action, NULL);
 
+    sig_action.sa_handler = handleExitSig;
+    
     /* Here we set SA_RESTART for safety, because SIGUSR1 may not be handled
      * immediately.
      * -Dan */
     sig_action.sa_flags = SA_RESTART;
+/*    sigaction(SIGTERM, &sig_action, NULL);*/
+    sigaction(SIGINT, &sig_action, NULL);    
+    sigaction(SIGHUP, &sig_action, NULL);    
     sigaction(SIGUSR1, &sig_action, NULL);
     sigaction(SIGUSR2, &sig_action, NULL);
 
     /* ignore dead pipe */
-    sig_action.sa_handler = ignoreSig;
+    sig_action.sa_handler = SIG_IGN;
     sig_action.sa_flags = SA_RESTART;
     sigaction(SIGPIPE, &sig_action, NULL);
 
