@@ -636,7 +636,8 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 
 #ifdef VIRTUAL_DESKTOP
 
-void wWorkspaceManageEdge(WScreen *scr) {
+void wWorkspaceManageEdge(WScreen *scr)
+{
     int w;
     int vmask;
     XSetWindowAttributes attribs;
@@ -646,7 +647,7 @@ void wWorkspaceManageEdge(WScreen *scr) {
         initVDesk = True;
         for (w = 0; w < scr->workspace_count; w++) {
             puts("reset workspace");
-            wWorkspaceResizeViewPort(scr, w, 0, 0, wPreferences.vedge_maxwidth, wPreferences.vedge_maxheight);
+            wWorkspaceResizeViewPort(scr, w, wPreferences.vedge_maxwidth, wPreferences.vedge_maxheight);
             wWorkspaceSetViewPort(scr, w, 0, 0);
         }
 
@@ -677,7 +678,8 @@ void wWorkspaceManageEdge(WScreen *scr) {
     }
 }
 
-void wWorkspaceRaiseEdge(WScreen *scr) {
+void wWorkspaceRaiseEdge(WScreen *scr)
+{
     if (wPreferences.vedge_thickness && initVDesk) {
         XRaiseWindow(dpy, scr->virtual_edge_u);
         XRaiseWindow(dpy, scr->virtual_edge_d);
@@ -686,35 +688,21 @@ void wWorkspaceRaiseEdge(WScreen *scr) {
     }
 }
 
-void wWorkspaceResizeViewPort(WScreen *scr, int workspace, int x, int y, int width, int height)
+void wWorkspaceResizeViewPort(WScreen *scr, int workspace, int width, int height)
 {
-    if (width < scr->scr_width) return;
-    if (height < scr->scr_height) return;
-
-    scr->workspaces[workspace]->x = x;
-    scr->workspaces[workspace]->y = y;
     scr->workspaces[workspace]->width = WMAX(width,scr->scr_width);
     scr->workspaces[workspace]->height = WMAX(height,scr->scr_height);
-
+    
 }
 
-void wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y)
+void wWorkspaceAdjustViewPort(WScreen *scr, int workspace, int view_x, int view_y)
 {
+
     int diff_x, diff_y;
     WWindow *wwin;
 
-    if (view_x < scr->workspaces[workspace]->x
-     || view_y < scr->workspaces[workspace]->y
-     || view_x + scr->scr_width > scr->workspaces[workspace]->width
-     || view_y + scr->scr_height > scr->workspaces[workspace]->height) return;
-
     diff_x = scr->workspaces[workspace]->view_x - view_x;
     diff_y = scr->workspaces[workspace]->view_y - view_y;
-
-    scr->workspaces[workspace]->view_x = WMIN(view_x, scr->workspaces[workspace]->width - scr->scr_width);
-    scr->workspaces[workspace]->view_y = WMIN(view_y, scr->workspaces[workspace]->height - scr->scr_height);
-
-    printf("set view %d %d, %d\n",workspace, scr->workspaces[workspace]->view_x, scr->workspaces[workspace]->view_y);
 
     wwin = scr->focused_window;
     while (wwin) {
@@ -724,13 +712,49 @@ void wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y)
         }
         wwin = wwin->prev;
     }
+
+    if (scr->workspaces[workspace]->view_x < 0) {
+        scr->workspaces[workspace]->width -= view_x;
+        scr->workspaces[workspace]->view_x = 0;
+    } else if (scr->workspaces[workspace]->view_x > scr->workspaces[workspace]->width - scr->scr_width) {
+        scr->workspaces[workspace]->width = scr->workspaces[workspace]->view_x + scr->scr_width;
+    }
+
+    if (scr->workspaces[workspace]->view_y < 0) {
+        scr->workspaces[workspace]->height -= view_y;
+        scr->workspaces[workspace]->view_y = 0;
+    } else if (scr->workspaces[workspace]->view_y > scr->workspaces[workspace]->height - scr->scr_height) {
+        scr->workspaces[workspace]->height = scr->workspaces[workspace]->view_y + scr->scr_height;
+    }
+
+    scr->workspaces[workspace]->view_x = WMIN(view_x, scr->workspaces[workspace]->width - scr->scr_width);
+    scr->workspaces[workspace]->view_y = WMIN(view_y, scr->workspaces[workspace]->height - scr->scr_height);
+
+
+    /*
+printf("set view %d %d, %d\n",
+        workspace, scr->workspaces[workspace]->view_x, scr->workspaces[workspace]->view_y);
+        */
+
 }
 
-void wWorkspaceGetViewPosition(WScreen *scr, int workspace, int *view_x, int *view_y, int *x, int *y) {
+void wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y)
+{
+
+    if (view_x < 0) view_x = 0;
+    else if (view_x > scr->workspaces[workspace]->width - scr->scr_width)
+        view_x = scr->workspaces[workspace]->width - scr->scr_width;
+
+    if (view_y < 0) view_y = 0;
+    else if (view_y > scr->workspaces[workspace]->width - scr->scr_height)
+        view_y = scr->workspaces[workspace]->width - scr->scr_height;
+
+    wWorkspaceAdjustViewPort(scr, workspace, view_x, view_y);
+}
+
+void wWorkspaceGetViewPosition(WScreen *scr, int workspace, int *view_x, int *view_y) {
     if (view_x) *view_x = scr->workspaces[workspace]->view_x;
     if (view_y) *view_y = scr->workspaces[workspace]->view_y;
-    if (x) *x = scr->workspaces[workspace]->x;
-    if (y) *y = scr->workspaces[workspace]->y;
 }
 
 #endif
