@@ -478,8 +478,8 @@ renderMDGradient(unsigned width, unsigned height, RColor **colors, int count)
     width = width * 3;
 
     /* copy the first line to the other lines with corresponding offset */
-    for (offset=0; j<width*height; j += width) {
-	memcpy(&(image->data[0]), &ptr[3*(int)offset], width);
+    for (j=0, offset=0; j<width*height; j += width) {
+	memcpy(&(image->data[j]), &ptr[3*(int)offset], width);
         offset += a;
     }
     RDestroyImage(tmp);
