@@ -1,0 +1,19 @@
+
+
+Files:
+-----
+
+server		- server example of using WMConnection. It keeps a database of
+		  timeouts for a group of users, allowing one to add/remove
+		  users and update the timeouts associated with them.
+
+connect		- client example of using WMConnection. Works with the server
+		  program above. Just start both without any parameter and
+		  type help in the client to find out how to operate them.
+		  Rest is self explanatory.
+
+puzzle		- a nice zuPzel =)
+
+fontl		- a map of all characters with their corresponding ascii,
+		  hex, decimal and octal representations.
+

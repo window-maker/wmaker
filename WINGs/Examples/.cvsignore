@@ -1,5 +1,5 @@
 Makefile Makefile.in
-connect fontl puzzle
+connect server fontl puzzle UserTime.plist
 .libs
 .psrc .inslog2 tca.map tca.log
 *.rpt
