@@ -289,6 +289,7 @@ typedef struct _WScreen {
 
     /* for window shortcuts */
     struct WWindow *shortcutWindow[MAX_WINDOW_SHORTCUTS];
+    struct LinkedList *shortcutSelectedWindows[MAX_WINDOW_SHORTCUTS];
 
 #ifdef XDE_DND
     char *xdestring;
