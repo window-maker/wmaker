@@ -3101,13 +3101,13 @@ WMCreateTextForDocumentType(WMWidget *parent, WMAction *parser, WMAction *writer
         return NULL;
     }
 
+    dpy = tPtr->view->screen->display;
+    scr = tPtr->view->screen;
+
     tPtr->view->self = tPtr;
     tPtr->view->attribs.cursor = scr->textCursor;
     tPtr->view->attribFlags |= CWOverrideRedirect | CWCursor;
     W_ResizeView(tPtr->view, 250, 200);
-
-    dpy = tPtr->view->screen->display;
-    scr = tPtr->view->screen;
 
     tPtr->dColor = WMWhiteColor(scr);
     tPtr->bgGC = WMColorGC(tPtr->dColor);
