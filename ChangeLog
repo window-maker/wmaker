@@ -22,6 +22,8 @@ Changes since version 0.64.0:
 - Organized the inspector panel a bit better.
 - Replaced bags with arrays wherever appropriate. This will improve 
   performance a bit.
+- Made the Gnome tasklist skip the windows with the "Skip window list" flag
+  enabled. (Bastien Nocera <hadess@hadess.net>)
 
 
 Changes since version 0.63.1:

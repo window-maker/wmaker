@@ -525,19 +525,11 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 		    wWindowUnmap(tmp);
 		}
                 /* also unmap miniwindows not on this workspace */
-                if (tmp->flags.miniaturized && !IS_OMNIPRESENT(tmp)
-		    && tmp->icon) {
-                    if (!wPreferences.sticky_icons) {
-                        XUnmapWindow(dpy, tmp->icon->core->window);
-			tmp->icon->mapped = 0;
-		    }
-#if 0
-		    else {
-			tmp->icon->mapped = 1;
-			/* Why is this here? -Alfredo */
-                        XMapWindow(dpy, tmp->icon->core->window);
-		    }
-#endif
+                if (!wPreferences.sticky_icons && tmp->flags.miniaturized &&
+                    tmp->icon && !IS_OMNIPRESENT(tmp)) {
+
+                    XUnmapWindow(dpy, tmp->icon->core->window);
+                    tmp->icon->mapped = 0;
                 }
 		/* update current workspace of omnipresent windows */
 		if (IS_OMNIPRESENT(tmp)) {

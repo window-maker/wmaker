@@ -202,7 +202,8 @@ wGNOMEUpdateClientListHint(WScreen *scr)
     count = 0;
     wwin = scr->focused_window;
     while (wwin) {
-	if (!wwin->flags.internal_window) {
+        if (!wwin->flags.internal_window &&
+            !wwin->client_flags.skip_window_list) {
 
 	    windows[count++] = wwin->client_win;
 	}
