@@ -1792,12 +1792,7 @@ wMenuScroll(WMenu *menu, XEvent *event)
         WMNextEvent(dpy, &ev);
         switch (ev.type) {
 	 case EnterNotify:
-/*
-	this um causes a nasty crash ugly ugh i dont see *why* we do this,
-	everything seems fine without it. ( swivel )
             WMHandleEvent(&ev);
-*/
-		break;
 	 case MotionNotify:
             x = (ev.type==MotionNotify) ? ev.xmotion.x_root : ev.xcrossing.x_root;
             y = (ev.type==MotionNotify) ? ev.xmotion.y_root : ev.xcrossing.y_root;

@@ -979,26 +979,6 @@ handleEnterNotify(XEvent *event)
 	}
     }
 
-/* start my fix scrolled menus */
-    if (wPreferences.scrollable_menus) {
-        if (scr->flags.jump_back_pending ||
-            event->xcrossing.x_root <= 1 ||
-            event->xcrossing.x_root >= (scr->scr_width - 2) ||
-            event->xcrossing.y_root <= 1 ||
-            event->xcrossing.y_root >= (scr->scr_height - 2)) {
-#ifdef DEBUG
-            L("pointer at screen edge in EnterNotify event, fear");
-#endif
-           menu = wMenuUnderPointer(scr);
-           if (menu!=NULL) {
-              	wMenuScroll(menu, event);
-		return;
-	   }
-        }
-    }
-/* end fix scrolled menus */
-
-
     if (XFindContext(dpy, event->xcrossing.window, wWinContext,
                      (XPointer *)&desc)!=XCNOENT) {
         if(desc->handle_enternotify)
