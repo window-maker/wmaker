@@ -2312,6 +2312,8 @@ R_imaGFX:      if(tb->next) {
          }   
         else if (control_pressed && buffer[0] == '') 
             XBell(tPtr->view->screen->display, 0);
+	else
+	    WMRelayToNextResponder(tPtr->view, event);
     }
 
     if (!control_pressed && tPtr->flags.ownsSelection) 

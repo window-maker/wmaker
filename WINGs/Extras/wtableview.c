@@ -433,6 +433,12 @@ int WMGetTableViewClickedRow(WMTableView *table)
 }
 
 
+WMArray *WMGetTableViewSelectedRows(WMTableView *table)
+{
+    return table->selectedRows;
+}
+
+
 WMView *WMGetTableViewDocumentView(WMTableView *table)
 {
     return table->tableView;

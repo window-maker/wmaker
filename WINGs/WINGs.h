@@ -7,7 +7,7 @@
 #include <WINGs/WUtil.h>
 #include <X11/Xlib.h>
 
-#define WINGS_H_VERSION  20000521
+#define WINGS_H_VERSION  20010117
 
 
 #ifdef __cplusplus
@@ -848,6 +848,10 @@ WMPoint WMGetViewPosition(WMView *view);
 WMPoint WMGetViewScreenPosition(WMView *view);
 
 WMWidget *WMWidgetOfView(WMView *view);
+
+void WMSetViewNextResponder(WMView *view, WMView *responder);
+
+void WMRelayToNextResponder(WMView *view, XEvent *event);
 
 /* notifications */
 extern char *WMViewSizeDidChangeNotification;

@@ -8,7 +8,7 @@
 
 #include <WINGs/WINGs.h>
 
-#if WINGS_H_VERSION < 20000521
+#if WINGS_H_VERSION < 20010117
 #error There_is_an_old_WINGs.h_file_somewhere_in_your_system._Please_remove_it.
 #endif
 
@@ -321,6 +321,8 @@ typedef struct W_View {
     
     struct W_View *nextFocusChain;     /* next/prev in focus chain */
     struct W_View *prevFocusChain;
+    
+    struct W_View *nextResponder;      /* next to receive keyboard events */
         
     struct W_View *parent;	       /* parent WMView */
     
@@ -500,7 +502,7 @@ void W_SetFocusOfToplevel(W_View *toplevel, W_View *view);
 W_View *W_FocusedViewOfToplevel(W_View *view);
 
 void W_SetFocusOfTopLevel(W_View *toplevel, W_View *view);
-
+    
 void W_ReleaseView(WMView *view);
 
 WMView *W_RetainView(WMView *view);

@@ -523,6 +523,36 @@ W_CallDestroyHandlers(W_View *view)
 }
 
 
+
+void
+WMSetViewNextResponder(WMView *view, WMView *responder)
+{
+    /* set the widget to receive keyboard events that aren't handled
+     * by this widget */
+    
+    view->nextResponder = responder;
+}
+
+
+void
+WMRelayToNextResponder(WMView *view, XEvent *event)
+{
+    unsigned long mask = eventMasks[event->xany.type];
+
+    if (view->nextResponder) {
+	WMView *next = view->nextResponder;
+	W_EventHandler *hPtr;
+	WMBagIterator iter;
+
+	WM_ITERATE_BAG(next->eventHandlers, hPtr, iter) {
+	    if ((hPtr->eventMask & mask)) {
+		(*hPtr->proc)(event, hPtr->clientData);
+	    }
+	}
+    }
+}
+
+
 int
 WMHandleEvent(XEvent *event)
 {
@@ -627,7 +657,7 @@ WMHandleEvent(XEvent *event)
 	    (*hPtr->proc)(event, hPtr->clientData);
 	}
     }
-
+#if 0
     /* pass the event to the top level window of the widget */
     /* TODO: change this to a responder chain */
     if (view->parent != NULL) {
@@ -641,7 +671,7 @@ WMHandleEvent(XEvent *event)
 	    }
 	}
     }
-
+#endif
     /* save button click info to track double-clicks */
     if (view->screen->ignoreNextDoubleClick) {
 	view->screen->ignoreNextDoubleClick = 0;

@@ -77,6 +77,8 @@ void *WMGetTableViewClickedColumn(WMTableView *table);
 
 int WMGetTableViewClickedRow(WMTableView *table);
 
+WMArray *WMGetTableViewSelectedRows(WMTableView *table);
+    
 WMView *WMGetTableViewDocumentView(WMTableView *table);
 
 void WMEditTableViewRow(WMTableView *table, int row);

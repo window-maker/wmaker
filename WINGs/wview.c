@@ -673,7 +673,6 @@ W_RetainView(WMView *view)
 }
 
 
-
 void
 W_ReleaseView(WMView *view)
 {

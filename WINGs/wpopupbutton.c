@@ -571,10 +571,6 @@ static void
 popDownMenu(PopUpButton *bPtr)
 {
     W_UnmapView(bPtr->menuView);
-    
-    /* free the background pixmap used to draw the menu contents */
-    XSetWindowBackgroundPixmap(bPtr->view->screen->display, 
-			       bPtr->menuView->window, None);
 }
 
 
