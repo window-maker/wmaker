@@ -74,6 +74,7 @@ LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
 NLSDIR = @NLSDIR@
+NM = @NM@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 REDUCE_APPICONS = @REDUCE_APPICONS@
@@ -121,9 +122,10 @@ seticons_LDADD= $(liblist)
 
 geticonset_LDADD= $(liblist)
 
-wmsetbg_LDADD = $(top_builddir)/libPropList/libPropList.la \
+wmsetbg_LDADD = \
 	$(top_builddir)/wrlib/libwraster.la \
 	$(top_builddir)/WINGs/libWINGs.a \
+	$(top_builddir)/libPropList/libPropList.la \
 	@GFXLFLAGS@ @XLFLAGS@ @GFXLIBS@ @XLIBS@ -lm 
 
 getstyle_SOURCES = getstyle.c
@@ -178,8 +180,9 @@ geticonset_OBJECTS =  geticonset.o
 geticonset_DEPENDENCIES =  $(top_builddir)/libPropList/libPropList.la
 geticonset_LDFLAGS = 
 wmsetbg_OBJECTS =  wmsetbg.o
-wmsetbg_DEPENDENCIES =  $(top_builddir)/libPropList/libPropList.la \
-$(top_builddir)/wrlib/libwraster.la $(top_builddir)/WINGs/libWINGs.a
+wmsetbg_DEPENDENCIES =  $(top_builddir)/wrlib/libwraster.la \
+$(top_builddir)/WINGs/libWINGs.a \
+$(top_builddir)/libPropList/libPropList.la
 wmsetbg_LDFLAGS = 
 SCRIPTS =  $(bin_SCRIPTS)
 

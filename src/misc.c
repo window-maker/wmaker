@@ -782,7 +782,7 @@ getuserinput(WScreen *scr, char *line, int *ptr)
     char *ret;
     char *title;
     char *prompt;
-    int i, j, k, state;
+    int j, k, state;
     char tbuffer[256], pbuffer[256];
 
     title = _("Program Arguments");
@@ -796,10 +796,10 @@ getuserinput(WScreen *scr, char *line, int *ptr)
 
     state = _STARTING;
     j = 0;
-    for (i = 0; line[i]==0 && state!=_DONE; i++) {
+    for (; line[*ptr]==0 && state!=_DONE; *ptr++) {
 	switch (state) {
 	 case _STARTING:
-	    if (line[i]=='(') {
+	    if (line[*ptr]=='(') {
 		state = _TITLE;
 	    } else {
 		state = _DONE;
@@ -807,45 +807,45 @@ getuserinput(WScreen *scr, char *line, int *ptr)
 	    break;
 
 	 case _TITLE:
-	    if (j <= 0 && line[i]==',') {
+	    if (j <= 0 && line[*ptr]==',') {
 
 		j = 0;
-		if (i > 1) {
-		    strncpy(tbuffer, &line[1], WMIN(i, 255));
-		    tbuffer[WMIN(i, 255)] = 0;
+		if (*ptr > 1) {
+		    strncpy(tbuffer, &line[1], WMIN(*ptr, 255));
+		    tbuffer[WMIN(*ptr, 255)] = 0;
 		    title = (char*)tbuffer;
 		}
-		k = i+1;
+		k = *ptr+1;
 		state = _PROMPT;
 
-	    } else if (j <= 0 && line[i]==')') {
+	    } else if (j <= 0 && line[*ptr]==')') {
 
-		if (i > 1) {
-		    strncpy(tbuffer, &line[1], WMIN(i, 255));
-		    tbuffer[WMIN(i, 255)] = 0;
+		if (*ptr > 1) {
+		    strncpy(tbuffer, &line[1], WMIN(*ptr, 255));
+		    tbuffer[WMIN(*ptr, 255)] = 0;
 		    title = (char*)tbuffer;
 		}
 		state = _DONE;
 
-	    } else if (line[i]=='(') 
+	    } else if (line[*ptr]=='(') 
 		    j++;
-	    else if (line[i]==')')
+	    else if (line[*ptr]==')')
 		j--;
 
 	    break;
 
 	 case _PROMPT:
-	    if (line[i]==')' && j==0) {
+	    if (line[*ptr]==')' && j==0) {
 
-		if (i-k > 1) {
-		    strncpy(pbuffer, &line[k], WMIN(i-k, 255));
-		    pbuffer[WMIN(i-k, 255)] = 0;
+		if (*ptr-k > 1) {
+		    strncpy(pbuffer, &line[k], WMIN(*ptr-k, 255));
+		    pbuffer[WMIN(*ptr-k, 255)] = 0;
 		    title = (char*)pbuffer;
 		}
 		state = _DONE;
-	    } else if (line[i]=='(')
+	    } else if (line[*ptr]=='(')
 		    j++;
-	    else if (line[i]==')')
+	    else if (line[*ptr]==')')
 		j--;
 	    break;
 	}

@@ -9,7 +9,7 @@ RContext *ctx;
 RImage *img, *tile, *new, *mini, *tiled;
 Pixmap pix;
 
-void main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     RContextAttributes attr;
 	int a=0;

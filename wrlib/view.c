@@ -10,7 +10,7 @@ RContext *ctx;
 RImage *img;
 Pixmap pix;
 
-void main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     RContextAttributes attr;
 

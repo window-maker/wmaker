@@ -29,24 +29,12 @@ prefsdata_DATA =\
 	menu.ru\
 	menu.se\
 	menu.sl\
-	menu.tr
+	menu.tr\
+	plmenu\
+	plmenu.fr\
+	plmenu.hr\
+	wmmacros
 
-EXTRA_DIST = $(prefsdata_DATA) mkMakefile wmmacros.in plmenu.in\
-	plmenu.fr.in plmenu.hr.in
+EXTRA_DIST = $(prefsdata_DATA) mkMakefile
 
-CLEANFILES = wmmacros plmenu
-
-wmmacros: $(srcdir)/wmmacros.in ./Makefile
-	-rm -f wmmacros
-
-	sed -e "s:#pkgdatadir#:$(pkgdatadir):" -e "s://:/:" \
-		$(srcdir)/wmmacros.in > wmmacros; \
-	chmod 644 wmmacros
-
-plmenu: $(srcdir)/plmenu.in ./Makefile
-	-rm -f plmenu
-
-	sed -e "s:#pkgdatadir#:$(pkgdatadir):" -e "s://:/:" \
-		$(srcdir)/plmenu.in > plmenu; \
-	chmod 644 plmenu
 

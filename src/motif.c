@@ -67,7 +67,7 @@
 #define MWM_DECOR_MINIMIZE            (1L << 5)
 #define MWM_DECOR_MAXIMIZE            (1L << 6)
 
-#define PROP_MWM_HINTS_ELEMENTS       4
+#define PROP_MWM_HINTS_ELEMENTS       5
 
 /* Motif  window hints */
 typedef struct {
@@ -75,6 +75,7 @@ typedef struct {
     long functions;
     long decorations;
     long inputMode;
+    long unknown;
 } MWMHints;
 
 static Atom _XA_MOTIF_WM_HINTS;
@@ -220,6 +221,7 @@ static int
 getMWMHints(Window window, MWMHints *mwmhints)
 {
     unsigned long *data;
+    int count;
 
     if (!_XA_MOTIF_WM_HINTS) {
 	_XA_MOTIF_WM_HINTS = XInternAtom(dpy, "_MOTIF_WM_HINTS", False);
@@ -227,16 +229,19 @@ getMWMHints(Window window, MWMHints *mwmhints)
 
     data = (unsigned long*)PropGetCheckProperty(window, _XA_MOTIF_WM_HINTS,
 						_XA_MOTIF_WM_HINTS, 32,
-						PROP_MWM_HINTS_ELEMENTS, NULL);
+						0, &count);
 
     if (!data)
 	return 0;
 
-    mwmhints->flags = data[0];
-    mwmhints->functions = data[1];
-    mwmhints->decorations = data[2];
-    mwmhints->inputMode = data[3];
-
+    if (count >= 4) {
+    	mwmhints->flags = data[0];
+   	mwmhints->functions = data[1];
+   	mwmhints->decorations = data[2];
+    	mwmhints->inputMode = data[3];
+	if (count > 5)
+	    mwmhints->unknown = data[4];
+    }
     XFree(data);
 
     return 1;

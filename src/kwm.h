@@ -73,7 +73,7 @@ void wKWMSetUsableAreaHint(WScreen *scr, int workspace);
 
 void wKWMSetInitializedHint(WScreen *scr);
 
-void wKWMShutdown(WScreen *scr);
+void wKWMShutdown(WScreen *scr, Bool closeModules);
 
 void wKWMCheckModule(WScreen *scr, Window window);
 

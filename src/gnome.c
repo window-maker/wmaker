@@ -52,6 +52,10 @@
 #include "gnome.h"
 
 
+
+
+
+
 #define WIN_HINTS_SKIP_FOCUS      (1<<0) /*"alt-tab" skips this win*/
 #define WIN_HINTS_SKIP_WINLIST    (1<<1) /*do not show in window list*/
 #define WIN_HINTS_SKIP_TASKBAR    (1<<2) /*do not show on taskbar*/
@@ -94,6 +98,7 @@ static Atom _XA_WIN_WORKSPACE;
 static Atom _XA_WIN_WORKSPACE_COUNT;
 static Atom _XA_WIN_WORKSPACE_NAMES;
 static Atom _XA_WIN_CLIENT_LIST;
+static Atom _XA_WIN_DESKTOP_BUTTON_PROXY;
 
 
 void
@@ -130,6 +135,9 @@ wGNOMEInitStuff(WScreen *scr)
 	    XInternAtom(dpy, "_WIN_WORKSPACE_NAMES", False);
 
 	_XA_WIN_CLIENT_LIST = XInternAtom(dpy, "_WIN_CLIENT_LIST", False);
+
+	_XA_WIN_DESKTOP_BUTTON_PROXY = 
+	    XInternAtom(dpy, "_WIN_DESKTOP_BUTTON_PROXY", False);
     }
 
     /* I'd rather use the ICCCM 2.0 mechanisms, but
@@ -138,7 +146,7 @@ wGNOMEInitStuff(WScreen *scr)
 
     /* setup the "We're compliant, you idiot!" hint */
 
-    /* why XA_CARDINAL instead of XA_WINDOW? Only God knows.... */
+    /* why XA_CARDINAL instead of XA_WINDOW? */
     XChangeProperty(dpy, scr->root_win, _XA_WIN_SUPPORTING_WM_CHECK, 
 		    XA_CARDINAL, 32, PropModeReplace, 
 		    (unsigned char*)&scr->no_focus_win, 1);
@@ -147,6 +155,15 @@ wGNOMEInitStuff(WScreen *scr)
 		    XA_CARDINAL, 32, PropModeReplace, 
 		    (unsigned char*)&scr->no_focus_win, 1);
 
+    
+    /* setup the "desktop button proxy" thing */
+    XChangeProperty(dpy, scr->root_win, _XA_WIN_DESKTOP_BUTTON_PROXY,
+		    XA_CARDINAL, 32, PropModeReplace,
+		    (unsigned char*)&scr->no_focus_win, 1);
+    XChangeProperty(dpy, scr->no_focus_win, _XA_WIN_DESKTOP_BUTTON_PROXY,
+		    XA_CARDINAL, 32, PropModeReplace,
+		    (unsigned char*)&scr->no_focus_win, 1);
+    
 
     /* setup the list of supported protocols */
     count = 0;
@@ -317,7 +334,8 @@ wGNOMECheckClientHints(WWindow *wwin, int *layer, int *workspace)
 
 	XFree(data);
 
-	*workspace = val;
+	if (val > 0)
+	    *workspace = val;
     }
 
     /* reserved area */
@@ -434,8 +452,22 @@ wGNOMEUpdateClientStateHint(WWindow *wwin, Bool changedWorkspace)
 Bool
 wGNOMEProcessClientMessage(XClientMessageEvent *event)
 {
+    WScreen *scr;
     WWindow *wwin;
     Bool done = True;
+
+    scr = wScreenForRootWindow(event->window);
+    if (scr) {
+	/* generic client messages */
+	if (event->message_type == _XA_WIN_WORKSPACE) {
+	    wWorkspaceChange(scr, event->data.l[0]);
+	} else {
+	    done = False;
+	}
+	return done;
+    }
+
+    /* window specific client messages */    
 
     wwin = wWindowFor(event->window);
     if (!wwin)
@@ -515,6 +547,26 @@ wGNOMEProcessClientMessage(XClientMessageEvent *event)
     }
     
     return done;
+}
+
+
+Bool
+wGNOMEProxyizeButtonEvent(WScreen *scr, XEvent *event)
+{
+#ifndef MOUSE_WS_SWITCH
+    if (event->xbutton.button <= Button3
+	&& (event->xbutton.state & ValidModMask) == 0)
+	return False;
+#else
+    if ((event->xbutton.state & ValidModMask) == 0)
+	return False;
+#endif
+
+    if (event->type == ButtonPress)
+	XUngrabPointer(dpy, CurrentTime);
+    XSendEvent(dpy, scr->no_focus_win, False, SubstructureNotifyMask, event);
+
+    return True;
 }
 
 

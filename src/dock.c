@@ -2271,7 +2271,10 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
     int i, offset = ICON_SIZE/2;
     WAppIcon *aicon = NULL;
     WAppIcon *nicon = NULL;
+    int max_y_icons, max_x_icons;
 
+    max_x_icons = scr->scr_width/ICON_SIZE;
+    max_y_icons = scr->scr_height/ICON_SIZE-1;
 
     if (wPreferences.flags.noupdates)
 	return False;
@@ -2284,7 +2287,7 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
         (dock->icon_count >= dock->max_icons)) {
 	return False;
     }
-    
+
     /* exact position */
     if (req_y < dy)
         ex_y = (req_y - offset - dy)/ICON_SIZE;
@@ -2298,9 +2301,9 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
 
     /* check if the icon is outside the screen boundaries */
     if (dx + ex_x*ICON_SIZE < -ICON_SIZE+2 ||
-	dx + ex_x*ICON_SIZE > scr->scr_width-1 ||
+	dx + ex_x*ICON_SIZE >= scr->scr_width-1 ||
 	dy + ex_y*ICON_SIZE < -ICON_SIZE+2 ||
-	dy + ex_y*ICON_SIZE > scr->scr_height-1)
+	dy + ex_y*ICON_SIZE >= scr->scr_height-1)
 	return False;
 
     if (dock->type == WM_DOCK) {
@@ -2330,9 +2333,10 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
 	    if (abs(ex_x) > DOCK_DETTACH_THRESHOLD)
 		return False;
 
-	    if (ex_y >=0 && (aicon == icon || !aicon)) {
+	    if (ex_y >= 0 && ex_y < max_y_icons && (aicon == icon || !aicon)) {
 
 		*ret_y = ex_y;
+
 
 		return True;
 	    }
@@ -2365,7 +2369,7 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
 		}
 		sig = -sig;
 	    }
-	    if (done && closest >= 0 &&
+	    if (done && closest >= 0 && closest < max_y_icons &&
 		((ex_y >= closest && ex_y - closest < DOCK_DETTACH_THRESHOLD+1)
 		||
 		 (ex_y < closest && closest - ex_y <= DOCK_DETTACH_THRESHOLD+1))) {
@@ -2377,7 +2381,7 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
 	} else { /* !redocking */
 
 	    /* if slot is free and the icon is close enough, return it */
-	    if (!aicon && ex_x==0 && ex_y>=0) {
+	    if (!aicon && ex_x == 0 && ex_y >= 0 && ex_y < max_y_icons) {
 		*ret_y = ex_y;
 		return True;
 	    }

@@ -375,6 +375,8 @@ wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 		*level = WMSunkenLevel;
 	    else
 		*level = WMNormalLevel;
+	} else {
+	    *level = tmp_level;
 	}
 
 	if (tmp_workspace >= 0) {
@@ -1187,6 +1189,13 @@ wUnmanageWindow(WWindow *wwin, int restore)
     WWindow *newFocusedWindow;
     int wasNotFocused;
     WScreen *scr = wwin->screen_ptr;
+
+
+#ifdef KWM_HINTS
+    wwin->frame->workspace = -1;
+
+    wKWMUpdateClientWorkspace(wwin);
+#endif
 
     /* First close attribute editor window if open */
     if (wwin->flags.inspector_open) {

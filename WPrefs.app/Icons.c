@@ -242,17 +242,18 @@ createPanel(Panel *p)
 
     /***************** Options ****************/
     panel->optF = WMCreateFrame(panel->frame);
-    WMResizeWidget(panel->optF, 260, 65);
-    WMMoveWidget(panel->optF, 25, 155);
+    WMResizeWidget(panel->optF, 260, 70);
+    WMMoveWidget(panel->optF, 25, 150);
+    WMSetFrameTitle(panel->optF, _("Icon Display"));
     
     panel->arrB = WMCreateSwitchButton(panel->optF);
     WMResizeWidget(panel->arrB, 235, 20);
-    WMMoveWidget(panel->arrB, 15, 10);
+    WMMoveWidget(panel->arrB, 15, 15);
     WMSetButtonText(panel->arrB, _("Auto-arrange icons"));
 
     panel->omnB = WMCreateSwitchButton(panel->optF);
     WMResizeWidget(panel->omnB, 235, 20);
-    WMMoveWidget(panel->omnB, 15, 35);
+    WMMoveWidget(panel->omnB, 15, 40);
     WMSetButtonText(panel->omnB, _("Omnipresent miniwindows"));
 
     WMMapSubwidgets(panel->optF);

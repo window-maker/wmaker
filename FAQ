@@ -1171,10 +1171,7 @@ WM_NORMAL_HINTS(WM_SIZE_HINTS):
 
 Now, when scilab opens it's window, Window Maker nicely does exactly what it
 is told, that is, map the window at position 136679205, 1074468360 which
-obviously falls outside the screen no matter how big is your monitor ;) The
-bug has been reported by different users many times for more than a year now,
-but apparently it never got fixed. If you keep mailing it's developers,
-maybe it will get fixed some day :)
+obviously falls outside the screen no matter how big is your monitor ;) 
 
 Meanwhile, the workaround for this is to open the window list menu
 (click on the root window with the middle mouse button) and click 
@@ -1182,6 +1179,15 @@ on the ScilabGraphic entry. The window should be brought to your
 reach. Then, open the window commands menu (right click on window's
 titlebar) and open the Attributes panel. Go to the "Advanced Options"
 section, check the "Keep inside screen" option and save.
+
+If you can recompile Scilab, this came from a Scilab developer:
+
+replace 
+ size_hints.flags = USPosition | USSize | PMinSize;
+with
+ size_hints.flags = /** USPosition |**/ USSize | PMinSize;
+
+in routines/xsci/jpc_SGraph.c
 
 
 

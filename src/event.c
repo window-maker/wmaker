@@ -618,8 +618,15 @@ handleButtonPress(XEvent *event)
     wBalloonHide(scr);
 #endif
 
+    
 #ifndef LITE
     if (event->xbutton.window==scr->root_win) {
+
+#ifdef GNOME_STUFF
+	if (wGNOMEProxyizeButtonEvent(scr, event))
+	    return;
+#endif
+
 	if (event->xbutton.button==wPreferences.menu_button) {
 	    OpenRootMenu(scr, event->xbutton.x_root,
                          event->xbutton.y_root, False);

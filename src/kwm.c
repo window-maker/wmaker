@@ -27,7 +27,7 @@
  * kwm.h function/method	Notes
  *----------------------------------------------------------------------------
  * setUnsavedDataHint() 	currently, only gives visual clue that 
- *				there is saved data (broken X close button)
+ *				there is unsaved data (broken X close button)
  * setSticky()			
  * setIcon()			std X thing...
  * setDecoration()		
@@ -638,14 +638,16 @@ wKWMSetInitializedHint(WScreen *scr)
 
 
 void
-wKWMShutdown(WScreen *scr)
+wKWMShutdown(WScreen *scr, Bool closeModules)
 {
     KWMModuleList *ptr;
 
     XDeleteProperty(dpy, scr->root_win, _XA_KWM_RUNNING);
 
-    for (ptr = KWMModules; ptr != NULL; ptr = ptr->next) {
-	XKillClient(dpy, ptr->window);
+    if (closeModules) {
+	for (ptr = KWMModules; ptr != NULL; ptr = ptr->next) {
+	    XKillClient(dpy, ptr->window);
+	}
     }
 }
 
@@ -678,7 +680,7 @@ wKWMCheckClientHints(WWindow *wwin, int *workspace)
 	}
     }
     if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_DESKTOP, &val)) {
-	*workspace = val;
+	*workspace = val - 1;
     }
 }
 
@@ -1376,9 +1378,6 @@ wKWMUpdateWorkspaceNameHint(WScreen *scr, int workspace)
 {
     char buffer[64];
 
-    if (scr->flags.kwm_syncing_name)
-	return;
-
     assert(workspace >= 0 && workspace < MAX_WORKSPACES);
 
     if (_XA_KWM_DESKTOP_NAME_[workspace]==0) {
@@ -1485,6 +1484,11 @@ void
 wKWMSendEventMessage(WWindow *wwin, WKWMEventMessage message)
 {
     Atom msg;
+
+    if (wwin && (wwin->flags.internal_window
+		 || wwin->flags.kwm_hidden_for_modules
+		 || WFLAGP(wwin, skip_window_list)))
+	return;
 
     switch (message) {
      case WKWMAddWindow:

@@ -583,6 +583,7 @@ flushMotion()
 {
     XEvent ev;
 
+    XSync(dpy, False);
     while (XCheckMaskEvent(dpy, ButtonMotionMask, &ev)) ;
 }
 
@@ -657,7 +658,7 @@ _keyloop(_looper *lpr){
         }
         XUngrabServer(dpy);
         XSync(dpy, False);
-        usleep(10000);
+        wusleep(10000);
         XGrabServer(dpy);
         printf("called\n");
         if (!scr->selected_windows){
@@ -702,7 +703,7 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
     ctrlmode=done=off_x=off_y=0;
 
     XSync(dpy, False);
-    usleep(10000);
+    wusleep(10000);
     XGrabKeyboard(dpy, root, False, GrabModeAsync, GrabModeAsync, CurrentTime);
 
     if (!wwin->flags.selected) {
@@ -829,6 +830,8 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 	    done=1;
 	    break;
 	 default:
+	    WMHandleEvent(&event);
+	    break;
 	}
 	/*
 	 XUngrabServer(dpy);

@@ -195,7 +195,6 @@
 		"Loupe" EXEC xmag
 		"Carte des couleurs" EXEC xcmap
 		"XKill" EXEC xkill
-		"ASClock" EXEC asclock -shape
 		"Sélections" EXEC xclipboard
 	"Utilitaires" END
 	
@@ -217,9 +216,9 @@
 	"Espace de travail" END
 
 	"Apparence" MENU
-		"Thèmes" OPEN_MENU -noext THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Styles" OPEN_MENU -noext STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Jeu d'icônes" OPEN_MENU -noext  ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Thèmes" OPEN_MENU THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Styles" OPEN_MENU STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Jeu d'icônes" OPEN_MENU ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Fond d'écran" MENU
 			"Unifié" MENU
 				"Noir" WS_BACK '(solid, black)'
@@ -232,10 +231,16 @@
 				"Bordeaux" WS_BACK '(solid, "#400020")'
 			"Unifié" END
 			"Degradé" MENU
-				"Drapeau" WS_BACK '(mdgradient, green, red, white, green)'
+				"Coucher de Soleil" WS_BACK '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'
 				"Ciel" WS_BACK '(vgradient, blue4, white)'
+                                "Dégradés de Bleu" WS_BACK '(vgradient, "#7080a5", "#101020")'
+				"Dégradés d'Indigo" WS_BACK '(vgradient, "#746ebc", "#242e4c")'
+				"Dégradés de Violet" WS_BACK '(vgradient, "#654c66", "#151426")'
+				"Dégradés de Beige" WS_BACK '(vgradient, "#a09060", "#302010")'
+				"Dégradés de Gris" WS_BACK '(vgradient, "#636380", "#131318")'
+				"Dégradés de Bordeau" WS_BACK '(vgradient, "#600040", "#180010")'
 			"Degradé" END
-			"Images" OPEN_MENU -noext  BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+			"Images" OPEN_MENU BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Fond d'écran" END
 		"Sauver le thème" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Nom du theme)"
 		"Sauver le jeu d'icônes" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(Nom du jeu d'icones)"
@@ -245,6 +250,6 @@
 		"Redémarrer" RESTART
 		"Démarrer AfterStep" RESTART afterstep
 		"Quitter..." EXIT
-		"Terminer la session" SHUTDOWN
+		"Tuer la session..." SHUTDOWN
 	"Quitter" END
 "Applications" END

@@ -43,6 +43,20 @@ echo "Please read the INSTALL and FAQ files before e-mailing "
 echo "questions. (we are lazy to reply questions already answered "
 echo "there as much as you are lazy to read these ;) "
 perai
+echo "Did you read the INSTALL file?"
+echo -n "<y/n> "
+read rtfm
+if [ "$rtfm" != y ]; then
+	echo "Please read the INSTALL file before installing"
+	exit
+fi
+echo "Are you sure?"
+echo -n "<y/n> "
+read rtfm
+if [ "$rtfm" != y ]; then
+	echo "Please read the INSTALL file before installing"
+	exit
+fi
 
 if test "$USER" != "root"; then
 	echo
@@ -60,13 +74,13 @@ echo "================"
 ######################## KDE
 echo
 echo "Do you want KDE support?"
-echo -n <y/n> [n] "
+echo -n "<y/n> [n] "
 read kde
 if [ "$kde" = y -o "$kde" = Y ]; then
 	OPTIONS="$OPTIONS --enable-kde"
 	echo "Do you want to disable features that become duplicated with"
 	echo "KDE support (like root menus)?"
-	echo -n <y/n> [n] "
+	echo -n "<y/n> [n] "
 	read lite
 	if [ "$lite" = y -o "lite" = Y ]; then
 		OPTIONS="$OPTIONS --enable-lite"
@@ -76,7 +90,7 @@ fi
 ######################## GNOME
 echo
 echo "Do you want GNOME support?"
-echo -n <y/n> [n] "
+echo -n "<y/n> [n] "
 read gnome
 if [ "$gnome" = y -o "$gnome" = Y ]; then
 	OPTIONS="$OPTIONS --enable-gnome"
@@ -151,7 +165,7 @@ while [ $done = 0 ]; do
     echo
     echo "Where do you want to install Window Maker? [$PREFIX]"
     echo "Don't change it if you don't know what you're doing."
-    if test $USER != root; then
+    if test "$USER" != "root"; then
 	echo "Make sure to specify a path where you have write permission."
     fi
     echo "(The default will put Window Maker in $PREFIX/bin, $PREFIX/lib etc.)"
@@ -170,7 +184,9 @@ while [ $done = 0 ]; do
     	done=1
     fi
     echo
-    echo "$PREFIX/bin must be in the PATH environment variable of all users who use Window Maker"
+    echo "   $PREFIX/bin must be in the PATH environment variable of all users"
+    echo "will who use Window Maker"
+    echo "   Make sure $PREFIX/lib is in the /etc/ld.so.conf file"
     perai
 done
 
@@ -209,6 +225,10 @@ echo "Installing Window Maker..."
 echo "--------------------------"
 
 perform make install
+
+if [ `uname -s` = "Linux" ]; then
+	/sbin/ldconfig -v
+fi
 
 echo 
 echo "Installation Finished!"

@@ -257,7 +257,7 @@ createMainWindow(WMScreen *scr)
     WMResizeWidget(WPrefs.nameL, FRAME_WIDTH-20, 30);
     WMMoveWidget(WPrefs.nameL, 10, 25);
     WMSetLabelFont(WPrefs.nameL, font);
-    WMSetLabelText(WPrefs.nameL, "Window Maker Preferences Utility");
+    WMSetLabelText(WPrefs.nameL, _("Window Maker Preferences Utility"));
     WMReleaseFont(font);
 
     WPrefs.versionL = WMCreateLabel(WPrefs.banner);
@@ -471,7 +471,7 @@ Initialize(WMScreen *scr)
 	
 	tmp = RLoadImage(WMScreenRContext(scr), path, 0);
 	if (!tmp) {
-	    wwarning("could not load image file %s:%s", path, 
+	    wwarning(_("could not load image file %s:%s"), path,
 		     RMessageForError(RErrorCode));
 	} else {
 	    icon = WMCreatePixmapFromRImage(scr, tmp, 0);
@@ -522,9 +522,10 @@ Initialize(WMScreen *scr)
     WMRealizeWidget(WPrefs.scrollV);
 
     WMSetLabelText(WPrefs.statusL, 
-		   "WPrefs is free software and is distributed WITHOUT ANY "
-		   "WARRANTY under the terms of the GNU General Public License."
-		   "Redistribution of the icons in this program separately from the program itself is prohibited.");
+		   _("WPrefs is free software and is distributed WITHOUT ANY "
+		   "WARRANTY under the terms of the GNU General Public License. "
+		   "Redistribution of the icons in this program separately "
+		   "from the program is prohibited."));
 
 }
 

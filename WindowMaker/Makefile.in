@@ -125,12 +125,13 @@ prefsdata_DATA =\
 	menu.ru\
 	menu.se\
 	menu.sl\
-	menu.tr
+	menu.tr\
+	plmenu\
+	plmenu.fr\
+	plmenu.hr\
+	wmmacros
 
-EXTRA_DIST = $(prefsdata_DATA) mkMakefile wmmacros.in plmenu.in\
-	plmenu.fr.in plmenu.hr.in
-
-CLEANFILES = wmmacros plmenu
+EXTRA_DIST = $(prefsdata_DATA) mkMakefile
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../src/config.h
 CONFIG_CLEAN_FILES = 
@@ -332,20 +333,6 @@ install-data install uninstall all installdirs mostlyclean-generic \
 distclean-generic clean-generic maintainer-clean-generic clean \
 mostlyclean distclean maintainer-clean
 
-
-wmmacros: $(srcdir)/wmmacros.in ./Makefile
-	-rm -f wmmacros
-
-	sed -e "s:#pkgdatadir#:$(pkgdatadir):" -e "s://:/:" \
-		$(srcdir)/wmmacros.in > wmmacros; \
-	chmod 644 wmmacros
-
-plmenu: $(srcdir)/plmenu.in ./Makefile
-	-rm -f plmenu
-
-	sed -e "s:#pkgdatadir#:$(pkgdatadir):" -e "s://:/:" \
-		$(srcdir)/plmenu.in > plmenu; \
-	chmod 644 plmenu
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

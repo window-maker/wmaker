@@ -286,6 +286,7 @@ typedef struct WPreferences {
 
     char ws_cycle;                     /* Cycle existing workspaces */
 
+    
     unsigned int modifier_mask;	       /* mask to use as kbd modifier */
 
     char save_session_on_exit;	       /* automatically save session on exit */

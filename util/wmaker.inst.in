@@ -52,9 +52,14 @@ copy() {
 		sed -e "s|~/GNUstep|$GSDIR|g" $source > $target
 	else
 		if test "x$GNUSTEP_USER_ROOT" = "x"; then
-			cp $source $target
+			sed -e "s:#wmdatadir#:$GLOBALDIR:g" \
+				-e "s://:/:g" \
+					$source > $target
 		else
-			sed -e "s|~/GNUstep|$GSDIR|g" $source > $target
+			sed -e "s|~/GNUstep|$GSDIR|g" \
+				-e "s:#wmdatadir#:$GLOBALDIR:g" \
+				-e "s://:/:g" \
+					$source > $target
 		fi
 	fi
 }
@@ -66,7 +71,7 @@ echo "Installing WindowMaker $VERSION for current user..."
 
 if [ ! -d $GLOBALDIR ]; then
       echo "Could not find global configurations files"
-      echo "Make sure you've installed Window Maker correctly"
+      echo "Make sure you have installed Window Maker correctly"
       exit 1
 fi
 
@@ -195,7 +200,8 @@ else
 fi
 
 
-if test -z #LITE# ; then
+if test -z "#LITE#" ; then
+FILES=`(cd $GLOBALDIR; ls menu menu.* plmenu plmenu.?? wmmacros)`
 for i in $FILES; do
 	if [ -f "$GSDIR/Library/WindowMaker/$i" ]; then
 		echo "The file \"$i\" already exists in $GSDIR/Library/WindowMaker"
@@ -215,9 +221,12 @@ for i in $FILES; do
 done
 fi
 
+cp $GLOBALDIR/README.themes $GSDIR/Library/WindowMaker 
 cp $GLOBALDIR/README $GSDIR/Library/WindowMaker 
 cp -i $GLOBALDIR/autostart.sh $GSDIR/Library/WindowMaker/autostart
 chmod +rx $GSDIR/Library/WindowMaker/autostart
+cp -i $GLOBALDIR/exitscript.sh $GSDIR/Library/WindowMaker/exitscript
+chmod +rx $GSDIR/Library/WindowMaker/exitscript
 
 #
 #######################
@@ -229,7 +238,7 @@ show_end_message() {
 echo
 echo "Installation Finished"
 echo
-if test -z #LITE# ; then
+if test -z "#LITE#" ; then
  echo "There are menus in 2 different file formats. The plain text format and"
  echo "the property list format. The plain text format is more flexible, but"
  echo "the menu in the property list format can be edited graphically. The"
@@ -241,7 +250,7 @@ else
 fi
 }
 
-if test -z `grep wmaker ~/.xinitrc`; then
+if test -z "`grep wmaker ~/.xinitrc`"; then
 	show_end_message
 	exit 0
 fi

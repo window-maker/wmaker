@@ -10,9 +10,23 @@ dnl
 
 AC_INIT(src/WindowMaker.h)
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.50.0)
+AM_INIT_AUTOMAKE(WindowMaker, 0.50.2)
 
 AM_PROG_LIBTOOL
+
+# by Marcelo Magallon <mmagallo@efis.ucr.ac.cr>
+# Turn around -rpath problem with libtool 1.0c
+# This define should be improbable enough to not conflict with anything
+case ${host} in
+  *-pc-linux-gnu)
+    AC_MSG_RESULT([Fixing libtool for -rpath problems.])
+    sed < libtool > libtool-2 \
+    's/^hardcode_libdir_flag_spec.*$/hardcode_libdir_flag_spec=" -D__LIBTOOL_IS_A_FOOL__ "/'
+    mv libtool-2 libtool
+    chmod 755 libtool
+  ;;
+esac
+
 
 
 dnl configure/build bundled libraries
@@ -32,9 +46,9 @@ dnl Checks for programs.
 dnl ===================
 AC_ISC_POSIX
 AC_PROG_CC
-AC_PROG_MAKE_SET
+dnl AC_PROG_MAKE_SET -- already done by AM_INIT_AUTOMAKE
 #AC_PROG_RANLIB
-AC_PROG_INSTALL
+dnl AC_PROG_INSTALL -- already done by AM_INIT_AUTOMAKE
 AC_PROG_LN_S
 AC_PROG_GCC_TRADITIONAL
 
@@ -56,7 +70,7 @@ fi
 
 if test "x$CPP_PATH" = x; then
     AC_PATH_PROG(CPP_PATH, cpp, notfound,
-		/lib:/usr/bin:/bin:/usr/lib:/usr/ccs/lib:$PATH)
+		[/lib /usr/bin /bin /usr/lib /usr/ccs/lib $PATH])
 fi
 
 dnl
@@ -135,7 +149,7 @@ dnl ==================
 dnl List of supported locales
 dnl -------------------------
 supported_locales="cs de es fr gl it ja ko nl no pt ru se tr fi hr el pl ro"
-supported_wprefs_locales="pt hr fr ko ja"
+supported_wprefs_locales="pt hr fr ko ja cs"
 
 for lang in $LINGUAS; do
 	ok=0
@@ -739,9 +753,52 @@ dnl Output some helpfull data for compiling WINGs apps
 dnl ==================================================
 dnl
 
-echo "WFLAGS=\"$LIBPL_INC_PATH -I$prefix/include\"" > WINGs-flags
-echo "WLIBS=\"-L$exec_prefix/lib -lWINGs -lwraster $LIBPL_LIBS $GFXLIBS -lm\""\
-	| sed -e 's|\$(prefix)|'"$prefix|" >> WINGs-flags
+dnl echo "WFLAGS=\"$LIBPL_INC_PATH -I$prefix/include\"" > WINGs-flags
+dnl echo "WLIBS=\"-L$exec_prefix/lib -lWINGs -lwraster $LIBPL_LIBS $GFXLIBS -lm\""\
+dnl 	| sed -e 's|\$(prefix)|'"$prefix|" >> WINGs-flags
+
+dnl The #lp# and #rp# stuff below is a hack because [ and ] get lost when
+dnl parsed by m4
+
+cat <<EOF >WINGs-flags
+#!/bin/sh
+
+prefix="$prefix"
+exec_prefix=\$prefix
+
+WFLAGS="$LIBPL_INC_PATH -I\$prefix/include"
+WLIBS="-L\$exec_prefix/lib -lWINGs -lwraster $LIBPL_LIBS $GFXLIBS -lm"
+
+usage="Usage: WINGs-flags #lp#--libs#rp# #lp#--incs#rp#"
+
+if test \$# -eq 0; then
+      echo "\${usage}" 1>&2
+      exit 1
+fi
+
+while test \$# -gt 0; do
+  case \$1 in
+    --incs)
+	echo \$WFLAGS
+        ;;
+    --libs)
+	echo \$WLIBS
+        ;;
+    *)
+    	echo "\${usage}" 1>&2
+    	exit 1
+      	;;
+  esac
+  shift
+done
+
+
+EOF
+
+sed 's/#lp#/[/g' WINGs-flags | sed 's/#rp#/]/g' > WINGs/WINGs-flags
+
+chmod 755 WINGs/WINGs-flags
+rm -f WINGs-flags
 
 
 dnl

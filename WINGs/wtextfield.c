@@ -529,7 +529,8 @@ paintTextField(TextField *tPtr)
     }
 
     /* draw cursor */
-    if (tPtr->flags.focused && tPtr->flags.enabled && tPtr->flags.cursorOn) {
+    if (tPtr->flags.focused && tPtr->flags.enabled && tPtr->flags.cursorOn
+	&& !tPtr->flags.secure) {
 	paintCursor(tPtr);
     }
     

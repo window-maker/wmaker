@@ -2,6 +2,18 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+--- 0.50.1
+
+New option for WorkspaceBack. mpixmap is the same as spixmap, but
+it will scale the pixmap by keeping the aspect ratio (maximize or maxpect).
+The option only works for workspace backgrounds.
+
+Also added IGNORE_NOPPOSITION compile time flag, which is equivalent
+to NoPPosition from fvwm. 
+
+
+
+
 --- 0.50.0
 
 
@@ -117,6 +129,28 @@ before.
 
 StartMaximized window attribute. Will maximize the window when it
 is mapped.
+
+
+AutoRaiseLower option for the Clip. This allows automatic Raise/Lower of the
+Clip icons when the mouse pointer enter/leave the Clip. To avoid unwanted
+raising/lowering there is a time threshold before raising/lowering.
+The thresholds can be changed in wconfig.h by changing one or both of
+AUTO_LOWER_DELAY and AUTO_RAISE_DELAY (expressed in miliseconds).
+For example if you set AUTO_RAISE_DELAY to 0, then the Clip will be raised as
+soon as the mouse pointer enters it's area. Setting AUTO_RAISE_DELAY to a very
+big value, will make the Clip to practically do not auto raise unless clicked,
+but to be automatically lowered after AUTO_LOWER_DELAY (ms) when leaved.
+
+
+AutoRaiseLower option for the Clip. This allows automatic Raise/Lower of the
+Clip icons when the mouse pointer enter/leave the Clip. To avoid unwanted
+raising/lowering there is a time threshold before raising/lowering.
+The thresholds can be changed in wconfig.h by changing one or both of
+AUTO_LOWER_DELAY and AUTO_RAISE_DELAY (expressed in miliseconds).
+For example if you set AUTO_RAISE_DELAY to 0, then the Clip will be raised as
+soon as the mouse pointer enters it's area. Setting AUTO_RAISE_DELAY to a very
+big value, will make the Clip to practically do not auto raise unless clicked,
+but to be automatically lowered after AUTO_LOWER_DELAY (ms) when leaved.
 
 
 AutoRaiseLower option for the Clip. This allows automatic Raise/Lower of the

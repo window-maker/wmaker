@@ -2,6 +2,5 @@
 
 SUBDIRS = libPropList wrlib WINGs src util po WindowMaker wmlib test WPrefs.app doc
 
-
 EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N MIRRORS Install acconfig.h\
-	mkpatch
+	mkpatch README.KDE README.GNOME

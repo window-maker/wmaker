@@ -73,7 +73,7 @@ Shutdown(WShutdownMode mode)
 		    kill(scr->helper_pid, SIGKILL);
 		
 #ifdef KWM_HINTS
-		wKWMShutdown(scr);
+		wKWMShutdown(scr, True);
 #endif
 		wScreenSaveState(scr);
 
@@ -101,7 +101,7 @@ Shutdown(WShutdownMode mode)
 		if (scr->helper_pid)
 		    kill(scr->helper_pid, SIGKILL);
 #ifdef KWM_HINTS
-		wKWMShutdown(scr);
+		wKWMShutdown(scr, True);
 #endif
 		wScreenSaveState(scr);
 
@@ -121,7 +121,7 @@ Shutdown(WShutdownMode mode)
 		if (scr->helper_pid)
 		    kill(scr->helper_pid, SIGKILL);
 #ifdef KWM_HINTS
-		wKWMShutdown(scr);
+		wKWMShutdown(scr, False);
 #endif
 		wScreenSaveState(scr);
 

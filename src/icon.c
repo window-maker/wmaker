@@ -406,9 +406,11 @@ getnameforicon(WWindow *wwin)
     } else if (wwin->wm_class) {
 	suffix = wmalloc(strlen(wwin->wm_class)+1);
 	strcpy(suffix, wwin->wm_class);
-    } else {
+    } else if (wwin->wm_instance) {
 	suffix = wmalloc(strlen(wwin->wm_instance)+1);
 	strcpy(suffix, wwin->wm_instance);
+    } else {
+	return NULL;
     }
     
     prefix = getenv("GNUSTEP_USER_PATH");
@@ -471,6 +473,8 @@ wIconStore(WIcon *icon)
 	return NULL;
 
     path = getnameforicon(wwin);
+    if (!path)
+	return NULL;
 
     image = RCreateImageFromDrawable(icon->core->screen_ptr->rcontext,
 				     wwin->wm_hints->icon_pixmap,

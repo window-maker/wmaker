@@ -42,8 +42,8 @@
 
 /****/
 
-#define WVERSION	"0.9"
-#define WMVERSION	"0.20.x"
+#define WVERSION	"0.10"
+#define WMVERSION	"0.50.x"
 
 
 typedef struct _Panel Panel;

@@ -45,5 +45,7 @@ void wGNOMERemoveClient(WWindow *wwin);
 
 void wGNOMECheckInitialClientState(WWindow *wwin);
 
+Bool wGNOMEProxyizeButtonEvent(WScreen *scr, XEvent *event);
+
 #endif
 

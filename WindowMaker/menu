@@ -111,6 +111,7 @@
 		"Process List" EXEC xterm -e top
 		"Manual Browser" EXEC xman
 	"Info" END
+	"Run..." EXEC %a(Run,Type command to run:)
 	"XTerm" EXEC xterm -sb 
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
 	"Workspaces" WORKSPACE_MENU

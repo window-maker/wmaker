@@ -30,6 +30,7 @@
 #include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include <limits.h>
 #include <signal.h>
 
@@ -1926,33 +1927,23 @@ again:
     /* only do basic error checking and verify for None texture */
 
     nelem = PLGetNumberOfElements(value);
-    if (nelem < 1) {
-        wwarning(_("Too few elements in array for key \"WorkspaceBack\"."));
-        if (changed==0) {
-            value = entry->plvalue;
-            changed = 1;
-            wwarning(_("using default \"%s\" instead"), entry->default_value);
-            goto again;
-        }
-        return False;
+    if (nelem > 0) {
+	elem = PLGetArrayElement(value, 0);
+	if (!elem || !PLIsString(elem)) {
+	    wwarning(_("Wrong type for workspace background. Should be a texture type."));
+	    if (changed==0) {
+		value = entry->plvalue;
+		changed = 1;
+		wwarning(_("using default \"%s\" instead"), entry->default_value);
+		goto again;
+	    }
+	    return False;
+	}
+	val = PLGetString(elem);
+
+	if (strcasecmp(val, "None")==0)
+	    return True;
     }
-
-    elem = PLGetArrayElement(value, 0);
-    if (!elem || !PLIsString(elem)) {
-        wwarning(_("Wrong type for workspace background. Should be a texture type."));
-        if (changed==0) {
-            value = entry->plvalue;
-            changed = 1;
-            wwarning(_("using default \"%s\" instead"), entry->default_value);
-            goto again;
-        }
-        return False;
-    }
-    val = PLGetString(elem);
-
-    if (strcasecmp(val, "None")==0)
-        return True;
-
     *ret = PLRetain(value);
 
     return True;
@@ -1983,17 +1974,13 @@ again:
     /* only do basic error checking and verify for None texture */
 
     nelem = PLGetNumberOfElements(value);
-    if (nelem < 0) {
-	*ret = PLRetain(value);
-
-        return True;
-    }
-
-    while (nelem--) {
-	elem = PLGetArrayElement(value, nelem);
-	if (!elem || !PLIsArray(elem)) {
-	    wwarning(_("Wrong type for background of workspace %i. Should be a texture."),
-		     nelem);
+    if (nelem > 0) {
+	while (nelem--) {
+	    elem = PLGetArrayElement(value, nelem);
+	    if (!elem || !PLIsArray(elem)) {
+		wwarning(_("Wrong type for background of workspace %i. Should be a texture."),
+			 nelem);
+	    }
 	}
     }
 
@@ -2568,11 +2555,9 @@ setWorkspaceSpecificBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 
     if (scr->flags.backimage_helper_launched) {
 	if (PLGetNumberOfElements(value)==0) {
-	    kill(scr->helper_pid, SIGTERM);
-	    close(scr->helper_fd);
-	    scr->helper_fd = 0;
-	    scr->flags.backimage_helper_launched = 0;
-	    
+	    SendHelperMessage(scr, 'C', 0, NULL);
+	    SendHelperMessage(scr, 'K', 0, NULL);
+
 	    PLRelease(value);
 	    return 0;
 	}
@@ -2593,10 +2578,16 @@ setWorkspaceSpecificBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 	pid = fork();
 	if (pid < 0) {
 	    wsyserror("fork() failed:can't set workspace specific background image");
+	    if (close(filedes[0]) < 0)
+		wsyserror("could not close pipe");
+	    if (close(filedes[1]) < 0)
+		wsyserror("could not close pipe");
+
 	} else if (pid == 0) {
 	    SetupEnvironment(scr);
 
-	    close(0);
+	    if (close(0) < 0)
+		wsyserror("could not close pipe");
 	    if (dup(filedes[0]) < 0) {
 		wsyserror("dup() failed:can't set workspace specific background image");
 	    }
@@ -2604,6 +2595,14 @@ setWorkspaceSpecificBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 	    wsyserror("could not execute wmsetbg");
 	    exit(1);
 	} else {
+
+	    if (fcntl(filedes[0], F_SETFD, FD_CLOEXEC) < 0) {
+		wsyserror("error setting close-on-exec flag");
+	    }
+	    if (fcntl(filedes[1], F_SETFD, FD_CLOEXEC) < 0) {
+		wsyserror("error setting close-on-exec flag");
+	    }
+
 	    scr->helper_fd = filedes[1];
 	    scr->helper_pid = pid;
 	    scr->flags.backimage_helper_launched = 1;
@@ -2645,7 +2644,10 @@ setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 	if (str) {
 	    SendHelperMessage(scr, 'S', 0, str);
 	    free(str);
+	} else {
+	    SendHelperMessage(scr, 'U', 0, NULL);
 	}
+	SendHelperMessage(scr, 'C', scr->current_workspace+1, NULL);
     } else {
 	char *command;
 	char *text;

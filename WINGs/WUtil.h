@@ -31,7 +31,7 @@
 
 #if (!defined (__GNUC__) || __GNUC__ < 2 || \
      __GNUC_MINOR__ < (defined (__cplusplus) ? 6 : 4))
-#define __ASSERT_FUNCTION       ((__const char *) 0)
+#define __ASSERT_FUNCTION       ((char *) 0)
 #else
 #define __ASSERT_FUNCTION       __PRETTY_FUNCTION__
 #endif

@@ -563,7 +563,7 @@ openApplicationMenu(WApplication *wapp, int x, int y)
     
     if (!scr->icon_menu) {
 	scr->icon_menu = createApplicationMenu(scr);
-	free(scr->window_menu->entries[1]->text);
+	free(scr->icon_menu->entries[1]->text);
     }
 
     menu = scr->icon_menu;
@@ -677,6 +677,9 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
     if (event->xbutton.button == Button3) {
 	WObjDescriptor *desc;
 	WApplication *wapp = wApplicationOf(aicon->icon->owner->main_window);
+
+	if (!wapp)
+	    return;
 
 	openApplicationMenu(wapp, event->xbutton.x_root, 
 			    event->xbutton.y_root);

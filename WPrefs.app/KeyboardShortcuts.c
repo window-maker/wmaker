@@ -384,8 +384,8 @@ createPanel(Panel *p)
     WMAddListItem(panel->actLs, _("Lower active window"));
     WMAddListItem(panel->actLs, _("Raise/Lower window under mouse pointer"));
     WMAddListItem(panel->actLs, _("Shade active window"));
-    WMAddListItem(panel->actLs, _("Select active window"));
     WMAddListItem(panel->actLs, _("Move/Resize active window"));
+    WMAddListItem(panel->actLs, _("Select active window"));
     WMAddListItem(panel->actLs, _("Focus next window"));
     WMAddListItem(panel->actLs, _("Focus previous window"));
     WMAddListItem(panel->actLs, _("Switch to next workspace"));

@@ -528,11 +528,13 @@ updateMenuForWindow(WMenu *menu, WWindow *wwin)
 		     && !WFLAGP(wwin, no_closable)));
 
     if (wwin->flags.miniaturized) {
-	static char *text = _("Deminiaturize");
+	static char *text = NULL;
+	if (!text) text = _("Deminiaturize");
 
 	menu->entries[MC_MINIATURIZE]->text = text;
     } else {
-	static char *text = _("Miniaturize");
+	static char *text = NULL;
+	if (!text) text = _("Miniaturize");
 
 	menu->entries[MC_MINIATURIZE]->text = text;
     }
@@ -540,11 +542,13 @@ updateMenuForWindow(WMenu *menu, WWindow *wwin)
     wMenuSetEnabled(menu, MC_MINIATURIZE, !WFLAGP(wwin, no_miniaturizable));
 
     if (wwin->flags.maximized) {
-	static char *text = _("Unmaximize");
+	static char *text = NULL;
+	if (!text) text = _("Unmaximize");
 
 	menu->entries[MC_MAXIMIZE]->text = text;
     } else {
-	static char *text = _("Maximize");
+	static char *text = NULL;
+	if (!text) text = _("Maximize");
 
 	menu->entries[MC_MAXIMIZE]->text = text;
     }
@@ -552,11 +556,13 @@ updateMenuForWindow(WMenu *menu, WWindow *wwin)
     wMenuSetEnabled(menu, MC_MOVERESIZE, !WFLAGP(wwin, no_resizable));
 
     if (wwin->flags.shaded) {
-	static char *text = _("Unshade");
+	static char *text = NULL;
+	if (!text) text = _("Unshade");
 
 	menu->entries[MC_SHADE]->text = text;
     } else {
-	static char *text = _("Shade");
+	static char *text = NULL;
+	if (!text) text = _("Shade");
 
 	menu->entries[MC_SHADE]->text = text;
     }

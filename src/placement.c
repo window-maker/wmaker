@@ -38,6 +38,8 @@
 #include "appicon.h"
 #include "dock.h"
 
+#include "list.h"
+
 extern WPreferences wPreferences;
 
 
@@ -238,8 +240,6 @@ PlaceIcon(WScreen *scr, int *x_ret, int *y_ret)
 }
 
 
-
-
 static Bool
 smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
                  unsigned int width, unsigned int height, int tryCount)
@@ -251,7 +251,7 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
     WWindow *test_window;
     int extra_height;
     WArea usableArea = scr->totalUsableArea;
-
+    
     if (wwin->frame)
 	extra_height = wwin->frame->top_width + wwin->frame->bottom_width + 2;
     else
@@ -337,6 +337,7 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 	}
 	test_y += PLACETEST_VSTEP;
     }
+
     return loc_ok;
 }
 

@@ -1,3 +1,30 @@
+Changes since version 0.50.1:
+.............................
+
+- fixed wmsetbg
+- fixed parsing of WorkspaceSpecificBack
+- fixed initial workspace for new windows
+- added the workspace button proxy thingy for GNOME 
+- added more GNOME compatibility fixes
+- fixed bug in %a() macro in root menu
+
+Changes since version 0.50.0:
+.............................
+
+- fixed bug that allowed docking of icons to outside the screen
+- added extra code to handle kpager bug
+- fixed crash when opening appicon menu
+- fixed problem that caused Motif hints to be sometimes ignored
+- fixed bug in layer treatment of GNOME hints
+- fixed weirdness in initial window workspace
+- fixed problem with Sun compilers
+- fixed bug with () Workspace{Specific,}Back specs
+- added --disable-rpath option (from KDE) by request
+- maybe fixed bug with StarOffice
+- fixed pipe fd inheritance mess
+- fixed bug in kde workspace renaming
+- fixed installation problems
+
 Changes since version 0.20.3:
 .............................
 

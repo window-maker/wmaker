@@ -315,8 +315,8 @@ createPanel(Panel *p)
     WMMoveWidget(panel->tranF, 20, 175);
     
     panel->tranB = WMCreateSwitchButton(panel->tranF);
-    WMMoveWidget(panel->tranB, 10, 10);
-    WMResizeWidget(panel->tranB, 235, 20);
+    WMMoveWidget(panel->tranB, 10, 5);
+    WMResizeWidget(panel->tranB, 250, 30);
     WMSetButtonText(panel->tranB, _("Keep transients above their owners"));
     
     WMMapSubwidgets(panel->tranF);

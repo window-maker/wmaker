@@ -507,7 +507,7 @@ benchmark()
 }
 
 
-void main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     RContextAttributes attr;
     int visualID = -1;

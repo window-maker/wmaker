@@ -37,14 +37,17 @@ EXCEPT="Makefile.am Makefile.in Makefile mkMakefile $FILE"
 
 spit prefsdata_DATA =
 
-for f in `ls -1|grep -v .in|grep -v \~`; do
+FILES=`ls -1|grep -v \~`
+FILES=`echo $FILES`
+
+for f in $FILES; do
 	ok=1
 	for i in $EXCEPT; do
 		if test "$i" = "$f"; then
 			ok=0	
 			break
 		fi
-	done
+	done	
 	if [ -f $f -a $ok = 1 ]; then
 		spitln \\
 		spit "	$f"
@@ -55,26 +58,6 @@ done
 spitln
 spitln
 
-spitln EXTRA_DIST = '$(prefsdata_DATA)' mkMakefile wmmacros.in plmenu.in\\
-spitln "	plmenu.fr.in plmenu.hr.in"
+spitln EXTRA_DIST = '$(prefsdata_DATA)' mkMakefile
 spitln
-spitln CLEANFILES = wmmacros plmenu
 spitln
-cat << 'FIM' >> $FILE
-wmmacros: $(srcdir)/wmmacros.in ./Makefile
-	-rm -f wmmacros
-
-	sed -e "s:#pkgdatadir#:$(pkgdatadir):" -e "s://:/:" \
-		$(srcdir)/wmmacros.in > wmmacros; \
-	chmod 644 wmmacros
-
-plmenu: $(srcdir)/plmenu.in ./Makefile
-	-rm -f plmenu
-
-	sed -e "s:#pkgdatadir#:$(pkgdatadir):" -e "s://:/:" \
-		$(srcdir)/plmenu.in > plmenu; \
-	chmod 644 plmenu
-
-FIM
-
-

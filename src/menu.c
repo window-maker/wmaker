@@ -1164,6 +1164,7 @@ editEntry(WMenu *menu, WMenuEntry *entry)
 
 	     default:
 		WMHandleEvent(&event);
+		break;
 	    }
 	}
     }

@@ -32,6 +32,7 @@
 #include <pwd.h>
 #include <signal.h>
 #include <sys/types.h>
+#include <ctype.h>
 
 #include "../src/wconfig.h"
 
@@ -311,10 +312,12 @@ parseTexture(RContext *rc, char *text)
 	texture->pixmap = pixmap;
     } else if (strcasecmp(type, "cpixmap")==0
 	  || strcasecmp(type, "spixmap")==0
+	  || strcasecmp(type, "mpixmap")==0
 	  || strcasecmp(type, "tpixmap")==0) {
 	XColor color;
 	Pixmap pixmap;
 	RImage *image;
+	int w, h;
 
 	GETSTR(val, tmp, 1);
 
@@ -338,8 +341,7 @@ parseTexture(RContext *rc, char *text)
 	    rcolor.blue = color.blue >> 8;	    
 	    RGetClosestXColor(rc, &rcolor, &color);
 	}
-	switch (type[0]) {
-	 case 't':
+	switch (toupper(type[0])) {
 	 case 'T':
 	    texture->width = image->width;
 	    texture->height = image->height;
@@ -350,12 +352,12 @@ parseTexture(RContext *rc, char *text)
 		goto error;
 	    }
 	    break;
-	 case 's':
 	 case 'S':
-	    {
-		RImage *simage;
-		int w, h;
-
+	 case 'M':
+	    if (toupper(type[0])=='S') {
+		w = scrWidth;
+		h = scrHeight;
+	    } else {
 		if (image->width*scrHeight > image->height*scrWidth) {
 		    w = scrWidth;
 		    h = (scrWidth*image->height)/image->width;
@@ -363,6 +365,9 @@ parseTexture(RContext *rc, char *text)
 		    h = scrHeight;
 		    w = (scrHeight*image->width)/image->height;
 		}
+	    }
+	    {
+		RImage *simage;
 
 		simage = RScaleImage(image, w, h);
 		if (!simage) {
@@ -835,6 +840,12 @@ helperLoop(RContext *rc)
 	    setupTexture(rc, textures, &maxTextures, workspace, NULL);
 	    break;
 
+	 case 'K':
+#ifdef DEBUG
+	    printf("exit command\n");
+#endif
+	    exit(0);
+
 	 default:
 	    wwarning("unknown message received");
 	    break;
@@ -949,6 +960,7 @@ print_help(char *ProgName)
     puts(" -t		tile   image");
     puts(" -e		center image");
     puts(" -s		scale  image (default)");
+    puts(" -a		scale  image and keep aspect ratio");
     puts(" -u		update WindowMaker domain database");
     puts(" -D <domain>	update <domain> database");
     puts(" -c <cpc>	colors per channel to use");
@@ -1041,6 +1053,8 @@ main(int argc, char **argv)
 	    style = "tpixmap";
 	} else if (strcmp(argv[i], "-e")==0) {
 	    style = "cpixmap";
+	} else if (strcmp(argv[i], "-a")==0) {
+	    style = "mpixmap";	    
 	} else if (strcmp(argv[i], "-d")==0) {
 	    render_mode = RM_DITHER;
 	    obey_user++;

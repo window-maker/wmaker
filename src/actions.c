@@ -415,7 +415,7 @@ wUnshadeWindow(WWindow  *wwin)
     /* if the window is focused, set the focus again as it was disabled during
      * shading */
     if (wwin->flags.focused)
-      wSetFocusTo(wwin->screen_ptr, wwin);
+	wSetFocusTo(wwin->screen_ptr, wwin);
 
 #ifdef GNOME_STUFF
     wGNOMEUpdateClientStateHint(wwin, False);

@@ -145,7 +145,7 @@ speedClick(WMWidget *w, void *data)
     panel->lastClickedSpeed = panel->speedB[i];
     panel->acceleration = 0.5+(i*0.5);
 
-    sprintf(buffer, "Accel.: %.2f", 0.5+(i*0.5));
+    sprintf(buffer, _("Accel.: %.2f"), 0.5+(i*0.5));
     WMSetLabelText(panel->acceL, buffer);
     
     tmp = WMGetTextFieldText(panel->threT);

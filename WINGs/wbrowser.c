@@ -248,7 +248,8 @@ removeColumn(WMBrowser *bPtr, int column)
 
     if (column < bPtr->maxVisibleColumns) {
 	int tmp;
-#if 1
+#if 0
+	/* this code causes bugs */
 	int limit;
 
 	if(bPtr->usedColumnCount < bPtr->maxVisibleColumns)

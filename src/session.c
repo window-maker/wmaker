@@ -930,7 +930,7 @@ smDieProc(SmcConn smc_conn, SmPointer client_data)
 
     wSessionDisconnectManager();
 
-    Shutdown(WSExitMode);
+    Shutdown(WSExitMode, True);
 }
 
 
