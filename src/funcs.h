@@ -162,8 +162,8 @@ Bool wGetIconName(Display *dpy, Window win, char **iconname);
 
 /* debugging stuff */
 
-void dprintf(char *, ...);
-void dputs(char *);
+void dbprintf(char *, ...);
+void dbputs(char *);
 
 
 #endif

@@ -286,7 +286,7 @@ wMenuInsertCallback(WMenu *menu, int index, char *text,
 
 #ifdef DEBUG
     if (!menu) {
-	dprintf("Passed NULL as menu parameter to wMenuAddCallback() \n");
+	dbprintf("Passed NULL as menu parameter to wMenuAddCallback() \n");
 	return NULL;
     }    
 #endif
@@ -299,7 +299,7 @@ wMenuInsertCallback(WMenu *menu, int index, char *text,
     if (menu->entry_no >= menu->alloced_entries) {
 	void *tmp;
 #ifdef DEBUG
-	dputs("doing wrealloc()");
+	dbputs("doing wrealloc()");
 #endif	
 	tmp = wrealloc(menu->entries,
 		       sizeof(WMenuEntry)*(menu->alloced_entries+5));
@@ -1779,7 +1779,7 @@ wMenuScroll(WMenu *menu, XEvent *event)
     XEvent ev;
 
 #ifdef DEBUG
-    dputs("Entering menu Scroll");
+    dbputs("Entering menu Scroll");
 #endif
     
     if (omenu->jump_back)
@@ -1890,7 +1890,7 @@ wMenuScroll(WMenu *menu, XEvent *event)
 
 
 #ifdef DEBUG
-    dputs("Leaving menu Scroll");
+    dbputs("Leaving menu Scroll");
 #endif
 }
 
@@ -2314,7 +2314,7 @@ menuTitleMouseDown(WCoreWindow *sender, void *data, XEvent *event)
     Bool started;
 
 #ifdef DEBUG
-    dprintf("Moving menu\n");
+    dbprintf("Moving menu\n");
 #endif
 
     /* can't touch the menu copy */
@@ -2401,7 +2401,7 @@ menuTitleMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 	    if (ev.xbutton.button != event->xbutton.button)
 		break;
 #ifdef DEBUG
-	    dprintf("End menu move\n");
+	    dbprintf("End menu move\n");
 #endif
 	    XUngrabPointer(dpy, CurrentTime);
 	    return;

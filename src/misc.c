@@ -1462,7 +1462,7 @@ ExecuteShellCommand(WScreen *scr, char *command)
 
 
 
-void dprintf(char *format, ...)
+void dbprintf(char *format, ...)
 {
     va_list	args;
 
@@ -1474,7 +1474,7 @@ void dprintf(char *format, ...)
 
 
 
-void dputs(char *text)
+void dbputs(char *text)
 {
     puts(text);
     fflush(stdout);
