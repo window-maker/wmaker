@@ -69,6 +69,8 @@ typedef struct W_Scroller {
 #define DEFAULT_ARROWS_POSITION	WSAMinEnd
 
 
+#define BUTTON_SIZE             ((SCROLLER_WIDTH) - 4)
+
 
 static void destroyScroller(Scroller *sPtr);
 static void paintScroller(Scroller *sPtr);
@@ -241,20 +243,17 @@ paintArrow(WMScroller *sPtr, Drawable d, int part)
 {
     WMView *view = sPtr->view;
     WMScreen *scr = view->screen;
-    int ofs, bsize;
+    int ofs;
     W_Pixmap *arrow;
 
 #ifndef DOUBLE_BUFFER
     GC gc = scr->lightGC;
 #endif
-    
-    bsize = SCROLLER_WIDTH - 4;
-
 
     if (part == 0) { /* decrement button */
 	if (sPtr->flags.horizontal) {
 	    if (sPtr->flags.arrowsPosition == WSAMaxEnd) {
-		ofs = view->size.width - 2*(bsize+1) - 1;
+		ofs = view->size.width - 2*(BUTTON_SIZE+1) - 1;
 	    } else {
 		ofs = 2;
 	    }
@@ -265,7 +264,7 @@ paintArrow(WMScroller *sPtr, Drawable d, int part)
 	    
 	} else {
 	    if (sPtr->flags.arrowsPosition == WSAMaxEnd) {
-		ofs = view->size.height - 2*(bsize+1) - 1;
+		ofs = view->size.height - 2*(BUTTON_SIZE+1) - 1;
 	    } else {
 		ofs = 2;
 	    }
@@ -282,9 +281,9 @@ paintArrow(WMScroller *sPtr, Drawable d, int part)
     } else { /* increment button */
 	if (sPtr->flags.horizontal) {
 	    if (sPtr->flags.arrowsPosition == WSAMaxEnd) {
-		ofs = view->size.width - bsize+1 - 3;
+		ofs = view->size.width - BUTTON_SIZE+1 - 3;
 	    } else {
-		ofs = 2 + bsize+1;
+		ofs = 2 + BUTTON_SIZE+1;
 	    }
 	    if (sPtr->flags.incrDown)
 		arrow = scr->hiRightArrow;
@@ -292,9 +291,9 @@ paintArrow(WMScroller *sPtr, Drawable d, int part)
 		arrow = scr->rightArrow;
 	} else {
 	    if (sPtr->flags.arrowsPosition == WSAMaxEnd) {
-		ofs = view->size.height - bsize+1 - 3;
+		ofs = view->size.height - BUTTON_SIZE+1 - 3;
 	    } else {
-		ofs = 2 + bsize+1;
+		ofs = 2 + BUTTON_SIZE+1;
 	    }
 	    if (sPtr->flags.incrDown)
 		arrow = scr->hiDownArrow;
@@ -314,48 +313,48 @@ paintArrow(WMScroller *sPtr, Drawable d, int part)
 	/* paint button */
 #ifndef DOUBLE_BUFFER
 	XFillRectangle(scr->display, d, gc,
-		       ofs+1, 2+1, bsize+1-3, bsize-3);
+		       ofs+1, 2+1, BUTTON_SIZE+1-3, BUTTON_SIZE-3);
 #else
 	if ((!part&&sPtr->flags.decrDown) || (part&&sPtr->flags.incrDown))
 	    XFillRectangle(scr->display, d, WMColorGC(scr->white),
-			   ofs+1, 2+1, bsize+1-3, bsize-3);
+			   ofs+1, 2+1, BUTTON_SIZE+1-3, BUTTON_SIZE-3);
 #endif /* DOUBLE_BUFFER */
-	W_DrawRelief(scr, d, ofs, 2, bsize, bsize, WRRaised);
+	W_DrawRelief(scr, d, ofs, 2, BUTTON_SIZE, BUTTON_SIZE, WRRaised);
 	
 	/* paint arrow */
 	XSetClipMask(scr->display, scr->clipGC, arrow->mask);
 	XSetClipOrigin(scr->display, scr->clipGC,
-		       ofs + (bsize - arrow->width) / 2, 
-		       2 + (bsize - arrow->height) / 2);
+		       ofs + (BUTTON_SIZE - arrow->width) / 2, 
+		       2 + (BUTTON_SIZE - arrow->height) / 2);
 	
 	XCopyArea(scr->display, arrow->pixmap, d, scr->clipGC,
 		  0, 0, arrow->width, arrow->height,
-		  ofs + (bsize - arrow->width) / 2, 
-		  2 + (bsize - arrow->height) / 2);
+		  ofs + (BUTTON_SIZE - arrow->width) / 2, 
+		  2 + (BUTTON_SIZE - arrow->height) / 2);
 	
     } else { /* vertical */
 	
 	/* paint button */
 #ifndef DOUBLE_BUFFER
 	XFillRectangle(scr->display, d, gc,
-		       2+1, ofs+1, bsize-3, bsize+1-3);
+		       2+1, ofs+1, BUTTON_SIZE-3, BUTTON_SIZE+1-3);
 #else
 	if ((!part&&sPtr->flags.decrDown) || (part&&sPtr->flags.incrDown))
 	    XFillRectangle(scr->display, d, WMColorGC(scr->white),
-			   2+1, ofs+1, bsize-3, bsize+1-3);
+			   2+1, ofs+1, BUTTON_SIZE-3, BUTTON_SIZE+1-3);
 #endif /* DOUBLE_BUFFER */
-	W_DrawRelief(scr, d, 2, ofs, bsize, bsize, WRRaised);
+	W_DrawRelief(scr, d, 2, ofs, BUTTON_SIZE, BUTTON_SIZE, WRRaised);
 	
 	/* paint arrow */
 	
 	XSetClipMask(scr->display, scr->clipGC, arrow->mask);
 	XSetClipOrigin(scr->display, scr->clipGC, 
-		       2 + (bsize - arrow->width) / 2, 
-		       ofs + (bsize - arrow->height) / 2);
+		       2 + (BUTTON_SIZE - arrow->width) / 2, 
+		       ofs + (BUTTON_SIZE - arrow->height) / 2);
 	XCopyArea(scr->display, arrow->pixmap, d, scr->clipGC,
 		  0, 0, arrow->width, arrow->height,
-		  2 + (bsize - arrow->width) / 2, 
-		  ofs + (bsize - arrow->height) / 2);
+		  2 + (BUTTON_SIZE - arrow->width) / 2, 
+		  ofs + (BUTTON_SIZE - arrow->height) / 2);
     }
 }    
 
@@ -371,16 +370,14 @@ knobLength(Scroller *sPtr)
     else
 	length = sPtr->view->size.height - 4;
 
-    if (sPtr->flags.arrowsPosition == WSAMaxEnd) {
-	length -= (SCROLLER_WIDTH - 4 + 1)*2;
-    } else if (sPtr->flags.arrowsPosition == WSAMinEnd) {
-	length -= (SCROLLER_WIDTH - 4 + 1)*2;
+    if (sPtr->flags.arrowsPosition != WSANone) {
+	length -= 2*(BUTTON_SIZE+1);
     }
     
     tmp = (int)((float)length * sPtr->knobProportion + 0.5);
     /* keep minimum size */
-    if (tmp < SCROLLER_WIDTH-4)
-	tmp = SCROLLER_WIDTH-4;
+    if (tmp < BUTTON_SIZE)
+	tmp = BUTTON_SIZE;
     
     return tmp;
 }
@@ -423,71 +420,69 @@ paintScroller(Scroller *sPtr)
 	XFillRectangle(scr->display, d, scr->stippleGC, 2, 2,
 		       view->size.width-4, view->size.height-4);
     } else {
+        ofs = 2;
 	if (sPtr->flags.arrowsPosition==WSAMaxEnd) {
-	    ofs = 0;
-	    length -= (SCROLLER_WIDTH - 4 + 1)*2;
+	    length -= (BUTTON_SIZE+1)*2;
 	} else if (sPtr->flags.arrowsPosition==WSAMinEnd) {	
-	    ofs = (SCROLLER_WIDTH - 4 + 1)*2;
-	    length -= (SCROLLER_WIDTH - 4 + 1)*2;
-	} else {
-	    ofs = 0;
+	    ofs += (BUTTON_SIZE+1)*2;
+	    length -= (BUTTON_SIZE+1)*2;
 	}
 	
 	knobL = (float)knobLength(sPtr);
 
 	knobP = sPtr->floatValue * ((float)length - knobL);
-	
+
 	if (sPtr->flags.horizontal) {
 	    /* before */
 	    XFillRectangle(scr->display, d, scr->stippleGC,
-			   ofs+2, 2, (int)knobP, view->size.height-4);
+			   ofs, 2, (int)knobP, view->size.height-4);
 	    
 	    /* knob */
 #ifndef DOUBLE_BUFFER
 	    XFillRectangle(scr->display, d, scr->lightGC,
-			   ofs+2+(int)knobP+2, 2+2, (int)knobL-4,
+			   ofs+(int)knobP+2, 2+2, (int)knobL-4,
 			   view->size.height-4-4);
 #endif
-	    W_DrawRelief(scr, d, ofs+2+(int)knobP, 2, (int)knobL,
+	    W_DrawRelief(scr, d, ofs+(int)knobP, 2, (int)knobL,
 			 view->size.height-4, WRRaised);
 	    
 	    XCopyArea(scr->display, scr->scrollerDimple->pixmap, d, 
 		      scr->copyGC, 0, 0,
 		      scr->scrollerDimple->width, scr->scrollerDimple->height,
-		      ofs+2+(int)knobP+((int)knobL-scr->scrollerDimple->width-1)/2,
+		      ofs+(int)knobP+((int)knobL-scr->scrollerDimple->width-1)/2,
 		      (view->size.height-scr->scrollerDimple->height-1)/2);
 	    
 	    /* after */
 	    if ((int)(knobP+knobL) < length)
 		XFillRectangle(scr->display, d, scr->stippleGC,
-			       ofs+2+(int)(knobP+knobL), 2,
+			       ofs+(int)(knobP+knobL), 2,
 			       length-(int)(knobP+knobL),
 			       view->size.height-4);
 	} else {
 	    /* before */
 	    if (knobP>0.0)
 		XFillRectangle(scr->display, d, scr->stippleGC,
-			       2, ofs+2, view->size.width-4, (int)knobP);
+			       2, ofs, view->size.width-4, (int)knobP);
 	    
 	    /* knob */
 #ifndef DOUBLE_BUFFER
 	    XFillRectangle(scr->display, d, scr->lightGC,
-			   2+2, ofs+2+(int)knobP+2,
+			   2+2, ofs+(int)knobP+2,
 			   view->size.width-4-4, (int)knobL-4);
 #endif
 	    XCopyArea(scr->display, scr->scrollerDimple->pixmap, d, 
 		      scr->copyGC, 0, 0,
 		      scr->scrollerDimple->width, scr->scrollerDimple->height,
 		      (view->size.width-scr->scrollerDimple->width-1)/2,
-		      ofs+2+(int)knobP+((int)knobL-scr->scrollerDimple->height-1)/2);
+		      ofs+(int)knobP+((int)knobL-scr->scrollerDimple->height-1)/2);
 
-	    W_DrawRelief(scr, d, 2, ofs+2+(int)knobP,
+	    W_DrawRelief(scr, d, 2, ofs+(int)knobP,
 			 view->size.width-4, (int)knobL, WRRaised);
 
 	    /* after */
 	    if ((int)(knobP+knobL) < length)
 		XFillRectangle(scr->display, d, scr->stippleGC,
-			       2, ofs+2+(int)(knobP+knobL),
+			       2, ofs+(int)(knobP+knobL),
 			       view->size.width-4, 
 			       length-(int)(knobP+knobL));
 	}
@@ -652,21 +647,23 @@ handlePush(Scroller *sPtr, int pushX, int pushY, int alternate)
 	    sPtr->dragPoint = pushY;
 
 	{
-	    int noButtons = (sPtr->flags.arrowsPosition == WSANone);
 	    int length, knobP;
+            int buttonsLen;
+
+            if (sPtr->flags.arrowsPosition != WSANone)
+                buttonsLen = 2*(BUTTON_SIZE+1);
+            else
+                buttonsLen = 0;
 
 	    if (sPtr->flags.horizontal)
-		length = sPtr->view->size.width - 4;
+		length = sPtr->view->size.width - 4 - buttonsLen;
 	    else
-		length = sPtr->view->size.height - 4;
-
-	    if (!noButtons)
-		length -= 36;
+		length = sPtr->view->size.height - 4 - buttonsLen;
 
 	    knobP = (int)(sPtr->floatValue * (float)(length-knobLength(sPtr)));
 
 	    if (sPtr->flags.arrowsPosition == WSAMinEnd)
-		sPtr->dragPoint -= 2 + (noButtons ? 0 : 36) + knobP;
+		sPtr->dragPoint -= 2 + buttonsLen + knobP;
 	    else 
 		sPtr->dragPoint -= 2 + knobP;
 	}
@@ -691,21 +688,36 @@ handlePush(Scroller *sPtr, int pushX, int pushY, int alternate)
 
 
 static float
-floatValueForPoint(int slotOfs, int slotLength, int knobLength, int point)
+floatValueForPoint(Scroller *sPtr, int point)
 {
     float floatValue = 0;
     float position;
+    int slotOfs, slotLength, knobL;
 
+    if (sPtr->flags.horizontal)
+        slotLength = sPtr->view->size.width - 4;
+    else
+        slotLength = sPtr->view->size.height - 4;
+
+    slotOfs = 2;
+    if (sPtr->flags.arrowsPosition==WSAMaxEnd) {
+        slotLength -= (BUTTON_SIZE+1)*2;
+    } else if (sPtr->flags.arrowsPosition==WSAMinEnd) {
+        slotOfs += (BUTTON_SIZE+1)*2;
+        slotLength -= (BUTTON_SIZE+1)*2;
+    }
+
+    knobL = (float)knobLength(sPtr);
 #ifdef STRICT_NEXT_BEHAVIOUR
-    if (point < slotOfs + knobLength/2)
-	position = (float)(slotOfs + knobLength/2);
-    else if (point > slotOfs + slotLength - knobLength/2)
-	position = (float)(slotOfs + slotLength - knobLength/2);
+    if (point < slotOfs + knobL/2)
+	position = (float)(slotOfs + knobL/2);
+    else if (point > slotOfs + slotLength - knobL/2)
+	position = (float)(slotOfs + slotLength - knobL/2);
     else
 	position = (float)point;
     
     floatValue = (position-(float)(slotOfs+slotLength/2))
-	/(float)(slotLength-knobLength);
+	/(float)(slotLength-knobL);
 #else
     /* Adjust the last point to lie inside the knob slot */    
     if (point < slotOfs)
@@ -716,7 +728,7 @@ floatValueForPoint(int slotOfs, int slotLength, int knobLength, int point)
 	position = (float)point;
 
     /* Compute the float value */
-    floatValue = (position-(float)slotOfs) / (float)(slotLength-knobLength);
+    floatValue = (position-(float)slotOfs) / (float)(slotLength-knobL);
 #endif
 
     assert(!isnan(floatValue));
@@ -727,43 +739,22 @@ floatValueForPoint(int slotOfs, int slotLength, int knobLength, int point)
 static void
 handleMotion(Scroller *sPtr, int mouseX, int mouseY)
 {
-    int slotOffset;
-    int slotLength;
-    int noButtons = (sPtr->flags.arrowsPosition == WSANone);
-    
-    if (sPtr->flags.arrowsPosition == WSAMinEnd)
-	slotOffset = 2 + (noButtons ? 0 : 36);
-    else 
-	slotOffset = 2;
-
     if (sPtr->flags.draggingKnob) {
-	float newFloatValue;	
-#ifdef STRICT_NEXT_BEHAVIOUR
+        float newFloatValue;
+        int point;
+
 	if (sPtr->flags.horizontal) {
-	    slotLength = sPtr->view->size.width-4-(noButtons ? 0 : 36);
-	    newFloatValue = floatValueForPoint(slotOffset, slotLength,
-				       (int)(slotLength*sPtr->knobProportion),
-				       mouseX);
+            point = mouseX;
 	} else {
-	    slotLength = sPtr->view->size.height-4-(noButtons ? 0 : 36);
-	    newFloatValue = floatValueForPoint(slotOffset, slotLength,
-				       (int)(slotLength*sPtr->knobProportion),
-				       mouseY);
+            point = mouseY;
 	}
-#else
-	if (sPtr->flags.horizontal) {
-	    slotLength = sPtr->view->size.width-4-(noButtons ? 0 : 36);
-	    newFloatValue = floatValueForPoint(slotOffset, slotLength,
-				       (int)(slotLength*sPtr->knobProportion),
-				       mouseX-sPtr->dragPoint);
-	} else {
-	    slotLength = sPtr->view->size.height-4-(noButtons ? 0 : 36);
-	    newFloatValue = floatValueForPoint(slotOffset, slotLength,
-				       (int)(slotLength*sPtr->knobProportion),
-				       mouseY-sPtr->dragPoint);
-	}
-#endif /* !STRICT_NEXT_BEHAVIOUR */
-	WMSetScrollerParameters(sPtr, newFloatValue, sPtr->knobProportion);
+
+#ifndef STRICT_NEXT_BEHAVIOUR
+        point -= sPtr->dragPoint;
+#endif
+
+        newFloatValue = floatValueForPoint(sPtr, point);
+        WMSetScrollerParameters(sPtr, newFloatValue, sPtr->knobProportion);
 	if (sPtr->action) {
 	    (*sPtr->action)(sPtr, sPtr->clientData);
 	    WMPostNotificationName(WMScrollerDidScrollNotification, sPtr, 

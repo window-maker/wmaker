@@ -48,6 +48,9 @@ Changes since wmaker 0.64.0:
 - replaced some still left malloc's with wmalloc's.
 - fixed a bug in WMReparentWidget()
 - added WMReparentWidget() to WINGs.h
+- fixed a bug that made the scroller knob jump backwards when dragged (this
+  bug had no relation with the behavior that #define STRICT_NEXT_BEHAVIOUR
+  attempts to accomplish).
 
 
 changes since wmaker 0.63.1:
