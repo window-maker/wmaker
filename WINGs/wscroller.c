@@ -823,7 +823,9 @@ handleActionEvents(XEvent *event, void *data)
 	break;
 	
      case ButtonPress:
-	/* FIXME: change Mod1Mask with something else */
+        /* FIXME: change Mod1Mask with something else */
+        if (sPtr->flags.documentFullyVisible)
+            break;
 	if (event->xbutton.button==WINGsConfiguration.mouseWheelUp) {
             if (event->xbutton.state & ControlMask) {
                 sPtr->flags.hitPart = WSDecrementPage;
@@ -837,8 +839,7 @@ handleActionEvents(XEvent *event, void *data)
 		WMPostNotificationName(WMScrollerDidScrollNotification, sPtr, 
 				       NULL);
 	    }
-	}
-	else if (event->xbutton.button==WINGsConfiguration.mouseWheelDown) {
+	} else if (event->xbutton.button==WINGsConfiguration.mouseWheelDown) {
             if (event->xbutton.state & ControlMask) {
                 sPtr->flags.hitPart = WSIncrementPage;
             } else if (event->xbutton.state & ShiftMask) {
