@@ -121,12 +121,12 @@
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
 		"影像處理" END
-		"X File Manager" EXEC xfm
+		"X 檔案管理員" EXEC xfm
 		"OffiX Files" EXEC files
 		"LyX" EXEC lyx
 		"Netscape" EXEC netscape 
-  		"Ghostview" EXEC ghostview %a(GhostView,Enter file to view)
-		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobar,Enter PDF to view)
+  		"Ghostview" EXEC ghostview %a(GhostView,輸入要檢視的檔案)
+		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(輸入要檢視的 PDF)
   		"TkDesk" EXEC tkdesk
 	"應用程式" END
 	"編輯器" MENU
@@ -146,7 +146,7 @@
 		"計算機" EXEC xcalc
 		"Window Properties" SHEXEC xprop | xmessage -center -title 'xprop' -file -
 		"Font Chooser" EXEC xfontsel
-		"Terminal Emulator" EXEC xminicom
+		"終端機模擬器" EXEC xminicom
 		"Magnify" EXEC xmag
 		"Colormap" EXEC xcmap
 		"XKill" EXEC xkill
@@ -186,20 +186,28 @@
                         	"Wine" WS_BACK '(solid, "#400020")'
 			"實體色" END
 			"漸層色" MENU
-				"Flag" WS_BACK '(mdgradient, green, red, white, green)'
+				"Sunset" WS_BACK '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'
 				"Sky" WS_BACK '(vgradient, blue4, white)'
+    				"Blue Shades" WS_BACK '(vgradient, "#7080a5", "#101020")'
+				"Indigo Shades" WS_BACK '(vgradient, "#746ebc", "#242e4c")'
+			    	"Purple Shades" WS_BACK '(vgradient, "#654c66", "#151426")'
+    				"Wheat Shades" WS_BACK '(vgradient, "#a09060", "#302010")'
+    				"Grey Shades" WS_BACK '(vgradient, "#636380", "#131318")'
+    				"Wine Shades" WS_BACK '(vgradient, "#600040", "#180010")'
 			"漸層色" END
 			"圖片" OPEN_MENU BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"背景" END
-		"儲存主題" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
-		"儲存圖示集" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
+		"儲存主題" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(主題名稱)"
+		"儲存圖示集" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(圖示集名稱)"
+		"偏好設定公用程式" EXEC /usr/local/GNUstep/Apps/WPrefs.app/WPrefs
 	"外觀" END
 
 	"離開"	MENU
 		"重新啟動" RESTART
-		"啟動 AfterStep" RESTART afterstep
+		"啟動 BlackBox" RESTART blackbox
+		"啟動 kwm" RESTART kwm
+		"啟動 IceWM" RESTART icewm
 		"離開..."  EXIT
-		"結束視窗系統..." SHUTDOWN
 	"離開" END
 "應用程式" END
 
