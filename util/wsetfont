@@ -33,12 +33,11 @@ WDREAD="wdread"
 PROGRAM=`basename $0`
 
 help_msg() {
-    echo -e "\n"\
-	"$PROGRAM - font/language setting utility for Window Maker\n"\
-	"\n"\
-	"Usage:                              $VERSION\n"\
-	"        $PROGRAM [--nodef] [--auto] <font_family>" >/dev/stderr
     cat >/dev/stderr <<EOF
+$PROGRAM - font/language setting utility for Window Maker
+
+Usage:                              $VERSION
+        $PROGRAM [--nodef] [--auto] <font_family>
 -----------------------------------------------------------------------
 [font_fam]  [Fontset]                    [Font Information]
  default    helvetica                    
@@ -76,10 +75,10 @@ for i in $*; do
 	nodef="YES";;
     "--auto")
 	auto="YES";;
+    --locale=*)
+        new_locale=`echo $i |sed -e "s|--locale=||" -`;;
     *)
-	if echo $i |grep "^--locale=" >/dev/null 2>&1; then
-	    new_locale=$(echo $i |sed -e "s|--locale=||")
-	elif [ -z $family ]; then
+	if [ -z $family ]; then
 	    family=$i
 	else
 	    help_msg
@@ -234,10 +233,10 @@ for i in $Supported; do
     fi
 done
 if test -z "$is_supported"; then			# unknown coding
-    echo -e "\n"\
-	"Sorry, font coding $family or locale $locale not recognized.\n"\
-	"Type $PROGRAM with no arguments for list of supported font codings...\n"\
-	"" >/dev/stderr
+    cat >/dev/stderr <<EOT
+Sorry, font coding $family or locale $locale not recognized.
+Type $PROGRAM with no arguments for list of supported font codings...
+EOT
     exit 1
 fi
 
@@ -248,12 +247,12 @@ is_nodef_unable=""
 for i in $NodefUnable; do
     if test "$family" = "$i"; then
 	if test -n "$nodef"; then	# --nodef with one from $NodefUnable
-	    echo -e "\n"\
-		"Sorry, --nodef argument is not allowed for these font codings:\n"\
-		"    $NodefUnable\n"\
-		"Run $PROGRAM without --nodef argument to set default fonts for your\n"\
-		"font coding.\n"\
-		"" >/dev/stderr
+	    cat >/dev/stderr <<-EOT
+Sorry, --nodef argument is not allowed for these font codings:
+    $NodefUnable
+Run $PROGRAM without --nodef argument to set default fonts for your
+font coding.
+EOT
 	    exit 1
 	else
 	    is_nodef_unable="YES"
@@ -289,13 +288,14 @@ if test -z "$nodef"; then
 	fi
     done
 else
-    echo -e "\n"\
-	"You used --nodef command line argument. You should note, that this\n"\
-	"works with these font codings only:\n"\
-	"    $NodefAble\n"\
-	"You should not use it to change fonts from other font codings than\n"\
-	"those listed above. If your WindowMaker does not appear to find fonts,\n"\
-	"you should run $PROGRAM once again without --nodef argument." >/dev/stderr
+    cat >/dev/stderr <<EOT
+You used --nodef command line argument. You should note, that this
+works with these font codings only:
+    $NodefAble
+You should not use it to change fonts from other font codings than
+those listed above. If your WindowMaker does not appear to find fonts,
+you should run $PROGRAM once again without --nodef argument.
+EOT
 fi
 
 #
@@ -325,7 +325,7 @@ for i in $DomainNames; do
 #TODO:better (or at least any) check, whether wmaker is installed...
 		tmp1="${family}Coding"
 		eval _tmp1="\$${tmp1}"
-		eval $j=$($WDREAD $i $j | sed -e "s/\(^-.*-\).*-.*$/\1${_tmp1}/g")
+		eval $j=`$WDREAD $i $j | sed -e "s/\(^-.*-\).*-.*$/\1${_tmp1}/g"`
 		eval _j="\$$j"
 		if test -z "${_j}"; then		# failed, load default
 		    tmp2="Default$j"
