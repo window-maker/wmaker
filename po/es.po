@@ -8,13 +8,13 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: VersiÛn CVS-20020317\n"
+"Project-Id-Version: Versi√≥n CVS-20020317\n"
 "POT-Creation-Date: 2002-03-19 14:59+0100\n"
 "PO-Revision-Date: 2002-03-19 16:04CET\n"
 "Last-Translator: Quique <quique@sindominio.net>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 0.9.5\n"
 
@@ -42,17 +42,17 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-"La aplicaciÛn ser· cerrada a la fuerza (kill).\n"
-"Las modificaciones no guardadas se perder·n.\n"
+"La aplicaci√≥n ser√° cerrada a la fuerza (kill).\n"
+"Las modificaciones no guardadas se perder√°n.\n"
 "Confirme, por favor."
 
 #: ../src/appicon.c:464 ../src/dock.c:283 ../src/winmenu.c:125
 msgid "Kill Application"
-msgstr "Terminar aplicaciÛn"
+msgstr "Terminar aplicaci√≥n"
 
 #: ../src/appicon.c:465 ../src/dock.c:284 ../src/winmenu.c:127
 msgid "Yes"
-msgstr "SÌ"
+msgstr "S√≠"
 
 #: ../src/appicon.c:465 ../src/dock.c:284 ../src/winmenu.c:127
 msgid "No"
@@ -60,7 +60,7 @@ msgstr "No"
 
 #: ../src/appicon.c:495 ../src/dock.c:1178 ../src/dock.c:3492
 msgid "Unhide Here"
-msgstr "Mostrar aquÌ"
+msgstr "Mostrar aqu√≠"
 
 #: ../src/appicon.c:496 ../src/appicon.c:521 ../src/dock.c:1180
 #: ../src/dock.c:1182 ../src/dock.c:3504 ../src/winmenu.c:465
@@ -88,7 +88,7 @@ msgstr "recreando el icono ausente '%s'"
 #: ../src/defaults.c:922 ../src/defaults.c:1011
 #, c-format
 msgid "Domain %s (%s) of global defaults database is corrupted!"
-msgstr "°El dominio %s (%s) de la base de datos de preferencias globales est· corrompido!"
+msgstr "¬°El dominio %s (%s) de la base de datos de preferencias globales est√° corrompido!"
 
 #: ../src/defaults.c:927
 #, c-format
@@ -105,7 +105,7 @@ msgstr "no se pudo leer el dominio \"%s\" de la base de datos de las preferencia
 #: ../src/defaults.c:1196
 #, c-format
 msgid "Domain %s (%s) of defaults database is corrupted!"
-msgstr "°El dominio %s (%s) de la base de datos de las preferencias est· corrompido!"
+msgstr "¬°El dominio %s (%s) de la base de datos de las preferencias est√° corrompido!"
 
 #: ../src/defaults.c:1000 ../src/defaults.c:1119 ../src/defaults.c:1176
 #: ../src/defaults.c:1205 ../src/menureader.c:397
@@ -130,7 +130,7 @@ msgstr "no se pudo cargar imagen de logotipo para los paneles: %s"
 #: ../src/wdefaults.c:607
 #, c-format
 msgid "Wrong option format for key \"%s\". Should be %s."
-msgstr "Formato de opciÛn equivocado para la tecla \"%s\". DeberÌa ser %s."
+msgstr "Formato de opci√≥n equivocado para la tecla \"%s\". Deber√≠a ser %s."
 
 #: ../src/defaults.c:1416 ../src/defaults.c:1497 ../src/defaults.c:1529
 #: ../src/defaults.c:1561 ../src/defaults.c:1574 ../src/defaults.c:1589
@@ -145,7 +145,7 @@ msgstr "utilizando el valor predeterminado \"%s\" en su lugar"
 #: ../src/defaults.c:1447
 #, c-format
 msgid "wrong option value for key \"%s\". Should be one of %s"
-msgstr "valor de opciÛn no v·lido para la tecla \"%s\". DeberÌa ser uno de %s"
+msgstr "valor de opci√≥n no v√°lido para la tecla \"%s\". Deber√≠a ser uno de %s"
 
 #: ../src/defaults.c:1492
 #, c-format
@@ -160,12 +160,12 @@ msgstr "no se puede convertir \"%s\" a un valor entero para la tecla \"%s\""
 #: ../src/defaults.c:1569
 #, c-format
 msgid "Incorrect number of elements in array for key \"%s\"."
-msgstr "N˙mero de elementos incorrecto en la cadena para la tecla \"%s\"."
+msgstr "N√∫mero de elementos incorrecto en la cadena para la tecla \"%s\"."
 
 #: ../src/defaults.c:1584
 #, c-format
 msgid "Wrong value for key \"%s\". Should be Coordinate."
-msgstr "Valor incorrecto para la tecla \"%s\". DeberÌa ser Coordinada."
+msgstr "Valor incorrecto para la tecla \"%s\". Deber√≠a ser Coordinada."
 
 #: ../src/defaults.c:1599
 #, c-format
@@ -177,25 +177,25 @@ msgstr "no se puede convertir la cadena a enteros de \"%s\""
 #: ../src/defaults.c:1990 ../src/defaults.c:2028 ../src/defaults.c:2044
 #, c-format
 msgid "\"%s\" is not a valid color name"
-msgstr "\"%s\" no es un nombre de color v·lido"
+msgstr "\"%s\" no es un nombre de color v√°lido"
 
 #: ../src/defaults.c:1810 ../src/defaults.c:1862
 msgid "bad number of arguments in gradient specification"
-msgstr "n˙mero de argumentos no v·lido en la especificaciÛn de gradiente"
+msgstr "n√∫mero de argumentos no v√°lido en la especificaci√≥n de gradiente"
 
 #: ../src/defaults.c:1923
 msgid "too few arguments in multicolor gradient specification"
-msgstr "insuficientes argumentos en la especificaciÛn de gradiente multicolor"
+msgstr "insuficientes argumentos en la especificaci√≥n de gradiente multicolor"
 
 #: ../src/defaults.c:2017
 msgid "bad number of arguments in textured gradient specification"
-msgstr "n˙mero de argumentos no v·lido en la especificaciÛn de gradiente con textura"
+msgstr "n√∫mero de argumentos no v√°lido en la especificaci√≥n de gradiente con textura"
 
 #: ../src/defaults.c:2060
 #, c-format
 msgid "bad opacity value for tgradient texture \"%s\". Should be [0..255]"
 msgstr ""
-"valor de opacidad equivocado para la textura tgradient \"%s\". DeberÌa ser "
+"valor de opacidad equivocado para la textura tgradient \"%s\". Deber√≠a ser "
 "[0..255]"
 
 #: ../src/defaults.c:2120
@@ -206,32 +206,32 @@ msgstr "no se pudo inicializar la biblioteca %s"
 #: ../src/defaults.c:2123
 #, c-format
 msgid "could not find function %s::%s"
-msgstr "no se pudo encontrar la funciÛn %s::%s"
+msgstr "no se pudo encontrar la funci√≥n %s::%s"
 
 #: ../src/defaults.c:2130
 #, c-format
 msgid "invalid texture type %s"
-msgstr "tipo de textura no v·lido %s"
+msgstr "tipo de textura no v√°lido %s"
 
 #: ../src/defaults.c:2177
 #, c-format
 msgid "Error in texture specification for key \"%s\""
-msgstr "Error en la especificaciÛn de textura para la tecla \"%s\""
+msgstr "Error en la especificaci√≥n de textura para la tecla \"%s\""
 
 #: ../src/defaults.c:2226
 msgid "Wrong type for workspace background. Should be a texture type."
-msgstr "Tipo no v·lido para el fondo del ·rea de trabajo. DeberÌa ser de tipo textura."
+msgstr "Tipo no v√°lido para el fondo del √°rea de trabajo. Deber√≠a ser de tipo textura."
 
 #: ../src/defaults.c:2274
 #, c-format
 msgid "Wrong type for background of workspace %i. Should be a texture."
 msgstr ""
-"Tipo no v·lido para el fondo del ·rea de trabajo %i. DeberÌa ser una "
+"Tipo no v√°lido para el fondo del √°rea de trabajo %i. Deber√≠a ser una "
 "textura."
 
 #: ../src/defaults.c:2316
 msgid "could not load any usable font!!!"
-msgstr "°°°no se pudo cargar ninguna fuente usable!!!"
+msgstr "¬°¬°¬°no se pudo cargar ninguna fuente usable!!!"
 
 #: ../src/defaults.c:2343
 #, c-format
@@ -241,27 +241,27 @@ msgstr "no se pudo obtener color para la tecla \"%s\""
 #: ../src/defaults.c:2401 ../src/rootmenu.c:526
 #, c-format
 msgid "%s:invalid key modifier \"%s\""
-msgstr "%s:modificador de tecla no v·lido \"%s\""
+msgstr "%s:modificador de tecla no v√°lido \"%s\""
 
 #: ../src/defaults.c:2413
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\""
-msgstr "%s:especificaciÛn de atajo de teclado no v·lida \"%s\""
+msgstr "%s:especificaci√≥n de atajo de teclado no v√°lida \"%s\""
 
 #: ../src/defaults.c:2420
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\""
-msgstr "%s:tecla no v·lida en el atajo \"%s\""
+msgstr "%s:tecla no v√°lida en el atajo \"%s\""
 
 #: ../src/defaults.c:2445
 #, c-format
 msgid "%s: modifier key %s is not valid"
-msgstr "%s: la tecla modificadora %s no es v·lida"
+msgstr "%s: la tecla modificadora %s no es v√°lida"
 
 #: ../src/defaults.c:2477
 #, c-format
 msgid "could not load image in option %s: %s"
-msgstr "no pudo cargar imagen en la opciÛn %s: %s"
+msgstr "no pudo cargar imagen en la opci√≥n %s: %s"
 
 #: ../src/defaults.c:2594
 #, c-format
@@ -271,7 +271,7 @@ msgstr "no fue posible abrir el fichero bitmap \"%s\""
 #: ../src/defaults.c:2597
 #, c-format
 msgid "\"%s\" is not a valid bitmap file"
-msgstr "\"%s\" no es un fichero bitmap v·lido"
+msgstr "\"%s\" no es un fichero bitmap v√°lido"
 
 #: ../src/defaults.c:2600
 #, c-format
@@ -280,7 +280,7 @@ msgstr "no hay suficiente memoria para leer el fichero bitmap\"%s\""
 
 #: ../src/defaults.c:2639 ../src/defaults.c:2672
 msgid "bad number of arguments in cursor specification"
-msgstr "n˙mero no v·lido de argumentos en la especificaciÛn del cursor"
+msgstr "n√∫mero no v√°lido de argumentos en la especificaci√≥n del cursor"
 
 #: ../src/defaults.c:2655
 #, c-format
@@ -295,7 +295,7 @@ msgstr "fichero bitmap de cursor \"%s\" no encontrado"
 #: ../src/defaults.c:2741
 #, c-format
 msgid "Error in cursor specification for key \"%s\""
-msgstr "Error en la especificaciÛn del cursor para la tecla \"%s\""
+msgstr "Error en la especificaci√≥n del cursor para la tecla \"%s\""
 
 #: ../src/defaults.c:2826
 msgid "could not render texture for icon background"
@@ -303,7 +303,7 @@ msgstr "no se pudo representar la textura para el fondo del icono"
 
 #: ../src/dialog.c:157
 msgid "Save workspace state"
-msgstr "Guardar estado del ¡rea de trabajo"
+msgstr "Guardar estado del √Årea de trabajo"
 
 #: ../src/dialog.c:201 ../src/dialog.c:758 ../src/dock.c:558
 #: ../src/dockedapp.c:431 ../src/rootmenu.c:198 ../src/rootmenu.c:248
@@ -346,7 +346,7 @@ msgstr "Selector de iconos"
 #: ../src/dialog.c:1265 ../src/dialog.c:1375
 #, c-format
 msgid "Version %s"
-msgstr "VersiÛn %s"
+msgstr "Versi√≥n %s"
 
 #: ../src/dialog.c:1372
 msgid "Window Manager for X"
@@ -417,7 +417,7 @@ msgstr "Info"
 
 #: ../src/dialog.c:1527
 msgid "Merry Christmas!"
-msgstr "°Feliz Navidad!"
+msgstr "¬°Feliz Navidad!"
 
 #: ../src/dialog.c:1597
 msgid ""
@@ -437,20 +437,20 @@ msgid ""
 "02111-1307, USA."
 msgstr ""
 "    Window Maker es software libre; puede redistribuirlo y/o\n"
-"modificarlo bajo los tÈrminos de la Licencia P˙blica General de GNU\n"
-"(GNU GPL) publicada por la FundaciÛn para el Software Libre; bien la\n"
-"versiÛn 2 de la licencia, o (a su elecciÛn) cualquier versiÛn posterior.\n"
+"modificarlo bajo los t√©rminos de la Licencia P√∫blica General de GNU\n"
+"(GNU GPL) publicada por la Fundaci√≥n para el Software Libre; bien la\n"
+"versi√≥n 2 de la licencia, o (a su elecci√≥n) cualquier versi√≥n posterior.\n"
 "\n"
-"    Window Maker se distribuye con la esperanza de que sea ˙til, pero\n"
-"SIN NINGUNA GARANTÕA; ni siquiera la garantÌa implÌcita de\n"
-"MERCANTIBILIDAD o ADECUACI”N PARA UN PROP”SITO \n"
-"PARTICULAR. Lea la Licencia P˙blica General de GNU para m·s\n"
+"    Window Maker se distribuye con la esperanza de que sea √∫til, pero\n"
+"SIN NINGUNA GARANT√çA; ni siquiera la garant√≠a impl√≠cita de\n"
+"MERCANTIBILIDAD o ADECUACI√ìN PARA UN PROP√ìSITO \n"
+"PARTICULAR. Lea la Licencia P√∫blica General de GNU para m√°s\n"
 "detalles.\n"
 "\n"
-"    DeberÌa haber recibido una copia de la Licencia P˙blica General de\n"
-"GNU junto con este programa. Si no es asÌ, escriba a Free Software\n"
+"    Deber√≠a haber recibido una copia de la Licencia P√∫blica General de\n"
+"GNU junto con este programa. Si no es as√≠, escriba a Free Software\n"
 "Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA\n"
-"02111-1307, Estados Unidos de AmÈrica."
+"02111-1307, Estados Unidos de Am√©rica."
 
 #: ../src/dialog.c:1621
 msgid "Legal"
@@ -459,7 +459,7 @@ msgstr "Legal"
 #: ../src/dialog.c:1773 ../src/startup.c:394
 msgid "cannot open connection for crashing dialog panel. Aborting."
 msgstr ""
-"no fue posible abrir conexiÛn para caja de di·logo de errores fatales. "
+"no fue posible abrir conexi√≥n para caja de di√°logo de errores fatales. "
 "Abortando."
 
 #: ../src/dialog.c:1799
@@ -472,30 +472,30 @@ msgid ""
 "Window Maker received signal %i\n"
 "(%s)."
 msgstr ""
-"Window Maker recibiÛ la seÒal %i\n"
+"Window Maker recibi√≥ la se√±al %i\n"
 "(%s)."
 
 #: ../src/dialog.c:1813
 #, c-format
 msgid "Window Maker received signal %i."
-msgstr "Window Maker recibiÛ la seÒal %i."
+msgstr "Window Maker recibi√≥ la se√±al %i."
 
 #: ../src/dialog.c:1822
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
 "BUGFORM and report it to bugs@windowmaker.org."
 msgstr ""
-" Este error fatal ocurriÛ probablemente debido a un fallo.\n"
-" Por favor rellene el fichero BUGFORM adjunto y envÌelo a\n"
+" Este error fatal ocurri√≥ probablemente debido a un fallo.\n"
+" Por favor rellene el fichero BUGFORM adjunto y env√≠elo a\n"
 " bugs@windowmaker.org."
 
 #: ../src/dialog.c:1831
 msgid "What do you want to do now?"
-msgstr "øQuÈ quiere hacer ahora?"
+msgstr "¬øQu√© quiere hacer ahora?"
 
 #: ../src/dialog.c:1837
 msgid "Select action"
-msgstr "Seleccionar acciÛn"
+msgstr "Seleccionar acci√≥n"
 
 #: ../src/dialog.c:1838
 msgid "Abort and leave a core file"
@@ -529,11 +529,11 @@ msgstr "Acerca de GNUstep"
 #: ../src/dock.c:213
 #, c-format
 msgid "Type the name for workspace %i:"
-msgstr "Teclee el nombre para el ·rea de trabajo %i:"
+msgstr "Teclee el nombre para el √°rea de trabajo %i:"
 
 #: ../src/dock.c:214 ../src/dock.c:1142 ../src/dock.c:1145 ../src/dock.c:3410
 msgid "Rename Workspace"
-msgstr "Renombrar ¡rea de trabajo"
+msgstr "Renombrar √Årea de trabajo"
 
 #: ../src/dock.c:520 ../src/dock.c:528
 msgid "Warning"
@@ -545,9 +545,9 @@ msgid ""
 "is docked in the same positions on the other workspaces and the Clip is not "
 "full in some workspace."
 msgstr ""
-"Algunos iconos no se pueden hacer omnipresentes. Por favor, aseg˙rese de que\n"
-"no haya otros iconos en las mismas posiciones en las otras ·reas de trabajo, "
-"y de que el Clip no estÈ lleno en otra ·rea de trabajo."
+"Algunos iconos no se pueden hacer omnipresentes. Por favor, aseg√∫rese de que\n"
+"no haya otros iconos en las mismas posiciones en las otras √°reas de trabajo, "
+"y de que el Clip no est√© lleno en otra √°rea de trabajo."
 
 #: ../src/dock.c:529
 msgid ""
@@ -555,17 +555,17 @@ msgid ""
 "docked in the same position on the other workspaces and the Clip is not full "
 "in some workspace."
 msgstr ""
-"El icono no pudo hacer omnipresente. Por favor, aseg˙rese de que no "
-"haya otros iconos en la misma posiciÛn en las otras ·reas de trabajo, "
-"y de que el Clip no estÈ lleno en otra ·rea de trabajo."
+"El icono no pudo hacer omnipresente. Por favor, aseg√∫rese de que no "
+"haya otros iconos en la misma posici√≥n en las otras √°reas de trabajo, "
+"y de que el Clip no est√© lleno en otra √°rea de trabajo."
 
 #: ../src/dock.c:556
 msgid "Workspace Clip"
-msgstr "Clip del ¡rea de trabajo"
+msgstr "Clip del √Årea de trabajo"
 
 #: ../src/dock.c:557
 msgid "All selected icons will be removed!"
-msgstr "°Todos los iconos seleccionados ser·n borrados!"
+msgstr "¬°Todos los iconos seleccionados ser√°n borrados!"
 
 #: ../src/dock.c:608 ../src/dock.c:1157 ../src/dock.c:1159 ../src/dock.c:3446
 msgid "Keep Icon"
@@ -573,20 +573,20 @@ msgstr "Mantener el icono"
 
 #: ../src/dock.c:609 ../src/dock.c:2138 ../src/dock.c:2279
 msgid "Type the command used to launch the application"
-msgstr "Teclee la orden a usar para ejecutar la aplicaciÛn"
+msgstr "Teclee la orden a usar para ejecutar la aplicaci√≥n"
 
 #: ../src/dock.c:965
 #, c-format
 msgid "could not launch application %s\n"
-msgstr "no se pudo ejecutar la aplicaciÛn %s\n"
+msgstr "no se pudo ejecutar la aplicaci√≥n %s\n"
 
 #: ../src/dock.c:1020
 msgid "could not create workspace submenu for Clip menu"
-msgstr "no se pudo crear un submen˙ de ·rea de trabajo para el men˙ del Clip"
+msgstr "no se pudo crear un submen√∫ de √°rea de trabajo para el men√∫ del Clip"
 
 #: ../src/dock.c:1079
 msgid "could not create options submenu for Clip menu"
-msgstr "no se pudo crear un submen˙ de opciones para el men˙ del Clip"
+msgstr "no se pudo crear un submen√∫ de opciones para el men√∫ del Clip"
 
 #: ../src/dock.c:1083 ../src/dock.c:1131
 msgid "Keep on Top"
@@ -643,17 +643,17 @@ msgstr "Configuraciones..."
 #: ../src/dock.c:1549 ../src/dock.c:1656
 #, c-format
 msgid "bad value in docked icon state info %s"
-msgstr "valor no v·lido en la informaciÛn del estado de un icono en el dock %s"
+msgstr "valor no v√°lido en la informaci√≥n del estado de un icono en el dock %s"
 
 #: ../src/dock.c:1664
 #, c-format
 msgid "bad value in docked icon position %i,%i"
-msgstr "valor no v·lido en la posiciÛn de un icono en el dock %i,%i"
+msgstr "valor no v√°lido en la posici√≥n de un icono en el dock %i,%i"
 
 #: ../src/dock.c:1684
 #, c-format
 msgid "bad value in dock state info:%s"
-msgstr "valor no v·lido en la informaciÛn de estado del dock:%s"
+msgstr "valor no v√°lido en la informaci√≥n de estado del dock:%s"
 
 #: ../src/dock.c:1920
 msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
@@ -696,12 +696,12 @@ msgstr "Eliminar los iconos"
 
 #: ../src/dock.c:3494 ../src/kwm.c:643
 msgid "Bring Here"
-msgstr "Traer aquÌ"
+msgstr "Traer aqu√≠"
 
 #: ../src/dockedapp.c:149
 #, c-format
 msgid "could not find icon %s, used in a docked application"
-msgstr "no se pudo encontrar el icono %s, utilizado en una aplicaciÛn en el dock"
+msgstr "no se pudo encontrar el icono %s, utilizado en una aplicaci√≥n en el dock"
 
 #: ../src/dockedapp.c:229
 #, c-format
@@ -722,7 +722,7 @@ msgstr "Bloqueado (para prevenir borrado accidental)"
 
 #: ../src/dockedapp.c:344
 msgid "Application path and arguments"
-msgstr "Ruta de la aplicaciÛn y argumentos"
+msgstr "Ruta de la aplicaci√≥n y argumentos"
 
 #: ../src/dockedapp.c:357
 msgid "Command for middle-click launch"
@@ -731,7 +731,7 @@ msgstr ""
 #: ../src/dockedapp.c:371
 #, c-format
 msgid "%s will be replaced with current selection"
-msgstr "%s ser· reemplazado con la selecciÛn actual"
+msgstr "%s ser√° reemplazado con la selecci√≥n actual"
 
 #: ../src/dockedapp.c:376
 msgid "Command for files dropped with DND"
@@ -740,11 +740,11 @@ msgstr "Orden para archivos soltados con DND"
 #: ../src/dockedapp.c:390
 #, c-format
 msgid "%d will be replaced with the file name"
-msgstr "%d ser· sustituido por el nombre del fichero"
+msgstr "%d ser√° sustituido por el nombre del fichero"
 
 #: ../src/dockedapp.c:394
 msgid "DND support was not compiled in"
-msgstr "no se compilÛ con soporte para DND"
+msgstr "no se compil√≥ con soporte para DND"
 
 #: ../src/dockedapp.c:399
 msgid "Icon Image"
@@ -756,7 +756,7 @@ msgstr "Explorar..."
 
 #: ../src/dockedapp.c:466
 msgid "Docked Application Settings"
-msgstr "ConfiguraciÛn de AplicaciÛn en el Dock"
+msgstr "Configuraci√≥n de Aplicaci√≥n en el Dock"
 
 #: ../src/framewin.c:649 ../src/framewin.c:744 ../src/menu.c:456
 #: ../src/texture.c:594
@@ -769,12 +769,12 @@ msgstr "no se pudo representar la textura: %s"
 #: ../src/icon.c:350 ../src/menu.c:485
 #, c-format
 msgid "error rendering image:%s"
-msgstr "error en la representaciÛn de la imagen:%s"
+msgstr "error en la representaci√≥n de la imagen:%s"
 
 #: ../src/framewin.c:777
 #, c-format
 msgid "error rendering image: %s"
-msgstr "error en la representaciÛn de la imagen:%s"
+msgstr "error en la representaci√≥n de la imagen:%s"
 
 #: ../src/gnome.c:216 ../src/gnome.c:343 ../src/gnome.c:401
 msgid "out of memory while updating GNOME hints"
@@ -851,7 +851,7 @@ msgstr "%a(Ejecutar orden, Teclear orden a ejecutar:)"
 
 #: ../src/main.c:222
 msgid "failed to restart Window Maker."
-msgstr "fallÛ al reiniciar Window Maker."
+msgstr "fall√≥ al reiniciar Window Maker."
 
 #: ../src/main.c:225
 #, c-format
@@ -882,7 +882,7 @@ msgstr " -display host:dpy\tdisplay a utilizar"
 
 #: ../src/main.c:444
 msgid " --no-cpp \t\tdisable preprocessing of configuration files"
-msgstr " --no-cpp \t\tdesactiva preprocesamiento de ficheros de configuraciÛn"
+msgstr " --no-cpp \t\tdesactiva preprocesamiento de ficheros de configuraci√≥n"
 
 #: ../src/main.c:446
 msgid " --no-dock\t\tdo not open the application Dock"
@@ -890,15 +890,15 @@ msgstr " --no-dock\t\tdeshabilitar el Dock"
 
 #: ../src/main.c:447
 msgid " --no-clip\t\tdo not open the workspace Clip"
-msgstr " --no-clip\t\tno abre el ·rea de trabajo Clip"
+msgstr " --no-clip\t\tno abre el √°rea de trabajo Clip"
 
 #: ../src/main.c:448
 msgid " --no-autolaunch\tdo not autolaunch applications"
-msgstr " --no-autolaunch\t no lanza aplicaciones autom·ticamente"
+msgstr " --no-autolaunch\t no lanza aplicaciones autom√°ticamente"
 
 #: ../src/main.c:449
 msgid " --dont-restore\t\tdo not restore saved session"
-msgstr " --dont-restore\t\tno restaurar la sesiÛn guardada"
+msgstr " --dont-restore\t\tno restaurar la sesi√≥n guardada"
 
 #: ../src/main.c:451
 msgid " --locale locale\tlocale to use"
@@ -906,7 +906,7 @@ msgstr " --locale locale\tlocale a usar"
 
 #: ../src/main.c:453
 msgid " --create-stdcmap\tcreate the standard colormap hint in PseudoColor visuals"
-msgstr " --create-stdcmap\t crear el consejo de mapa de colores est·ndar en los visuales PseudoColor"
+msgstr " --create-stdcmap\t crear el consejo de mapa de colores est√°ndar en los visuales PseudoColor"
 
 #: ../src/main.c:454
 msgid " --visual-id visualid\tvisual id of visual to use"
@@ -918,15 +918,15 @@ msgstr " --static\t\tno guardar o actualizar configuraciones"
 
 #: ../src/main.c:456
 msgid " --no-polling\t\tdo not periodically check for configuration updates"
-msgstr " --no-polling\t\t no comprobar periÛdicamente si hay actualizaciones en la configuraciÛn"
+msgstr " --no-polling\t\t no comprobar peri√≥dicamente si hay actualizaciones en la configuraci√≥n"
 
 #: ../src/main.c:458
 msgid " --synchronous\t\tturn on synchronous display mode"
-msgstr " --synchronous\t\tencender la pantalla en modo sÌncrono"
+msgstr " --synchronous\t\tencender la pantalla en modo s√≠ncrono"
 
 #: ../src/main.c:460
 msgid " --version\t\tprint version and exit"
-msgstr " --versiÛn\t\tmostrar versiÛn y salir"
+msgstr " --versi√≥n\t\tmostrar versi√≥n y salir"
 
 #: ../src/main.c:461
 msgid " --help\t\t\tshow this message"
@@ -939,7 +939,7 @@ msgid ""
 "Make sure you have installed Window Maker correctly and run wmaker.inst"
 msgstr ""
 "no se pudo encontrar el directorio GNUstep del usuario (%s).\n"
-"Aseg˙rese de que WindowMaker est· instalado correctamente y ejecute "
+"Aseg√∫rese de que WindowMaker est√° instalado correctamente y ejecute "
 "wmaker.inst"
 
 #: ../src/main.c:479
@@ -953,22 +953,22 @@ msgid ""
 "have installed Window Maker correctly and run wmaker.inst"
 msgstr ""
 "Se ha producido un error mientras se creaba el directorio GNUstep, por favor "
-"aseg˙rese de que ha instalado correctamente Window Maker y ejecutado wmaker.inst"
+"aseg√∫rese de que ha instalado correctamente Window Maker y ejecutado wmaker.inst"
 
 #: ../src/main.c:485
 #, c-format
 msgid "%s directory created with default configuration."
-msgstr "creado directorio %s con la configuraciÛn predeterminada."
+msgstr "creado directorio %s con la configuraci√≥n predeterminada."
 
 #: ../src/main.c:505 ../src/main.c:510
 #, c-format
 msgid "%s:could not execute initialization script"
-msgstr "%s:no se pudo ejecutar el guiÛn de inicializaciÛn"
+msgstr "%s:no se pudo ejecutar el gui√≥n de inicializaci√≥n"
 
 #: ../src/main.c:530 ../src/main.c:535
 #, c-format
 msgid "%s:could not execute exit script"
-msgstr "%s:no se pudo ejecutar el guiÛn de salida"
+msgstr "%s:no se pudo ejecutar el gui√≥n de salida"
 
 #: ../src/main.c:663 ../src/main.c:671 ../src/main.c:679 ../src/main.c:699
 #, c-format
@@ -978,17 +978,17 @@ msgstr "argumentos insuficientes para %s"
 #: ../src/main.c:683
 #, c-format
 msgid "bad value for visualid: \"%s\""
-msgstr "valor no v·lido de visualID: \"%s\""
+msgstr "valor no v√°lido de visualID: \"%s\""
 
 #: ../src/main.c:707
 #, c-format
 msgid "%s: invalid argument '%s'\n"
-msgstr "%s: argumento no v·lido '%s'\n"
+msgstr "%s: argumento no v√°lido '%s'\n"
 
 #: ../src/main.c:708
 #, c-format
 msgid "Try '%s --help' for more information\n"
-msgstr "Pruebe '%s --help' para m·s informaciÛn\n"
+msgstr "Pruebe '%s --help' para m√°s informaci√≥n\n"
 
 #: ../src/main.c:739
 msgid "X server does not support locale"
@@ -1010,12 +1010,12 @@ msgstr ""
 #: ../src/menu.c:2578
 #, c-format
 msgid "bad value in menus state info:%s"
-msgstr "valor no v·lido en la informaciÛn de estado de los men˙s: %s"
+msgstr "valor no v√°lido en la informaci√≥n de estado de los men√∫s: %s"
 
 #: ../src/menureader.c:264 ../src/rootmenu.c:733
 #, c-format
 msgid "%s:could not stat menu"
-msgstr "%s:no fue posible men˙ r·pido"
+msgstr "%s:no fue posible men√∫ r√°pido"
 
 #: ../src/menureader.c:341 ../src/menureader.c:380
 #, c-format
@@ -1025,12 +1025,12 @@ msgstr ""
 #: ../src/menureader.c:416
 #, c-format
 msgid "could not find menu file '%s' referenced in WMRootMenu"
-msgstr "no se pudo encontrar el fichero de men˙ '%s' mencionado en WMRootMenu"
+msgstr "no se pudo encontrar el fichero de men√∫ '%s' mencionado en WMRootMenu"
 
 #: ../src/menureader.c:423
 #, c-format
 msgid "could not find any usable menu files. Please check '%s'"
-msgstr "no se pudo encontrar ning˙n fichero de men˙ usable. Por favor, compruebe '%s'"
+msgstr "no se pudo encontrar ning√∫n fichero de men√∫ usable. Por favor, compruebe '%s'"
 
 #: ../src/menureader.c:438 ../src/rootmenu.c:1668
 #, c-format
@@ -1038,7 +1038,7 @@ msgid ""
 "using default menu file \"%s\" as the menu referenced in WMRootMenu could "
 "not be found "
 msgstr ""
-"utilizando el men˙ por defecto \"%s\" ya que no se encontrÛ el men˙ mencionado en el fichero "
+"utilizando el men√∫ por defecto \"%s\" ya que no se encontr√≥ el men√∫ mencionado en el fichero "
 "WMRootMenu"
 
 #: ../src/menureader.c:457
@@ -1057,25 +1057,25 @@ msgstr "no se pudo definir el valor de %s para cpp"
 #: ../src/misc.c:101
 #, c-format
 msgid "could not get password entry for UID %i"
-msgstr "no se pudo obtener una entrada de contraseÒa para el UID %i"
+msgstr "no se pudo obtener una entrada de contrase√±a para el UID %i"
 
 #: ../src/misc.c:126
 #, c-format
 msgid "your machine is misconfigured. HOSTNAME is set to %s"
-msgstr "su m·quina est· mal configurada. Valor de HOSTNAME = %s"
+msgstr "su m√°quina est√° mal configurada. Valor de HOSTNAME = %s"
 
 #: ../src/misc.c:132
 #, c-format
 msgid "your machine is misconfigured. HOST is set to %s"
-msgstr "su m·quina est· mal configurada. Valor de HOST = %s"
+msgstr "su m√°quina est√° mal configurada. Valor de HOST = %s"
 
 #: ../src/misc.c:630
 msgid "Program Arguments"
-msgstr "Par·metros del Programa"
+msgstr "Par√°metros del Programa"
 
 #: ../src/misc.c:631
 msgid "Enter command arguments:"
-msgstr "Teclee los par·metros de la orden:"
+msgstr "Teclee los par√°metros de la orden:"
 
 #: ../src/misc.c:724
 msgid "unable to get dropped data from DND drop"
@@ -1092,33 +1092,33 @@ msgstr "falta de memoria recuperando datos abandonados por DND"
 #: ../src/misc.c:783 ../src/misc.c:923
 #, c-format
 msgid "out of memory during expansion of \"%s\""
-msgstr "falta de memoria durante expansiÛn de \"%s\""
+msgstr "falta de memoria durante expansi√≥n de \"%s\""
 
 #: ../src/misc.c:837
 msgid "out of memory during expansion of \"%w\""
-msgstr "falta de memoria durante expansiÛn de \"%w\""
+msgstr "falta de memoria durante expansi√≥n de \"%w\""
 
 #: ../src/misc.c:855
 msgid "out of memory during expansion of \"%W\""
-msgstr "falta de memoria durante expansiÛn de \"%W\""
+msgstr "falta de memoria durante expansi√≥n de \"%W\""
 
 #: ../src/misc.c:871
 msgid "out of memory during expansion of \"%a\""
-msgstr "falta de memoria durante expansiÛn de \"%a\""
+msgstr "falta de memoria durante expansi√≥n de \"%a\""
 
 #: ../src/misc.c:902
 #, c-format
 msgid "out of memory during expansion of \"%d\""
-msgstr "falta de memoria durante expansiÛn de \"%d\""
+msgstr "falta de memoria durante expansi√≥n de \"%d\""
 
 #: ../src/misc.c:916
 msgid "selection not available"
-msgstr "selecciÛn no disponible"
+msgstr "selecci√≥n no disponible"
 
 #: ../src/misc.c:972 ../src/misc.c:978
 #, c-format
 msgid "bad window name value in %s state info"
-msgstr "nombre de ventana no v·lido en %s declare informaciÛn"
+msgstr "nombre de ventana no v√°lido en %s declare informaci√≥n"
 
 #: ../src/misc.c:1235
 msgid "could not send message to background image helper"
@@ -1127,7 +1127,7 @@ msgstr "no fue posible enviar mensaje para el auxiliar de imagen de fondo"
 #: ../src/pixmap.c:235
 #, c-format
 msgid "could not load mask bitmap file \"%s\". Won't use mask"
-msgstr "no fue posible abrir archivo m·scara de bitmap \"%s\". No usar· m·scara"
+msgstr "no fue posible abrir archivo m√°scara de bitmap \"%s\". No usar√° m√°scara"
 
 #: ../src/resources.c:44
 #, c-format
@@ -1145,46 +1145,46 @@ msgstr "Salir"
 
 #: ../src/rootmenu.c:197
 msgid "Exit window manager?"
-msgstr "øSalir del gestor de ventanas?"
+msgstr "¬øSalir del gestor de ventanas?"
 
 #: ../src/rootmenu.c:245
 msgid "Close X session"
-msgstr "Cerrar sesiÛn de X"
+msgstr "Cerrar sesi√≥n de X"
 
 #: ../src/rootmenu.c:246
 msgid ""
 "Close Window System session?\n"
 "Kill might close applications with unsaved data."
 msgstr ""
-"øCerrar sesiÛn del sistema de ventanas?\n"
-"Terminar podrÌa cerrar aplicaciones con datos no guardados."
+"¬øCerrar sesi√≥n del sistema de ventanas?\n"
+"Terminar podr√≠a cerrar aplicaciones con datos no guardados."
 
 #: ../src/rootmenu.c:261
 msgid "Kill X session"
-msgstr "Cerrar sesiÛn X"
+msgstr "Cerrar sesi√≥n X"
 
 #: ../src/rootmenu.c:262
 msgid ""
 "Kill Window System session?\n"
 "(all applications will be closed)"
 msgstr ""
-"øCerrar sesiÛn del sistema de ventanas?\n"
-"(se cerrar·n todas las aplicaciones)"
+"¬øCerrar sesi√≥n del sistema de ventanas?\n"
+"(se cerrar√°n todas las aplicaciones)"
 
 #: ../src/rootmenu.c:539
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\" for entry %s"
-msgstr "%s:especificaciÛn de atajo en el teclado no v·lida \"%s\" para entrada %s"
+msgstr "%s:especificaci√≥n de atajo en el teclado no v√°lida \"%s\" para entrada %s"
 
 #: ../src/rootmenu.c:547
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\" for entry %s"
-msgstr "%s:tecla no v·lida en el atajo \"%s\" para entrada %s"
+msgstr "%s:tecla no v√°lida en el atajo \"%s\" para entrada %s"
 
 #: ../src/rootmenu.c:600
 #, c-format
 msgid "%s: unmatched '\"' in menu file"
-msgstr "%s: '\"' disparejo en el fichero de men˙"
+msgstr "%s: '\"' disparejo en el fichero de men√∫"
 
 #: ../src/rootmenu.c:650
 #, c-format
@@ -1194,31 +1194,31 @@ msgstr "%s: orden perdida"
 #: ../src/rootmenu.c:682
 #, c-format
 msgid "invalid OPEN_MENU specification: %s"
-msgstr "especificaciÛn de OPEN_MENU no v·lida: %s"
+msgstr "especificaci√≥n de OPEN_MENU no v√°lida: %s"
 
 #: ../src/rootmenu.c:741
 #, c-format
 msgid "%s:could not stat menu:%s"
-msgstr "%s:no fue posible men˙ r·pido: %s"
+msgstr "%s:no fue posible men√∫ r√°pido: %s"
 
 #: ../src/rootmenu.c:759
 #, c-format
 msgid "too many parameters in OPEN_MENU: %s"
-msgstr "exceso de par·metros en OPEN_MENU: %s"
+msgstr "exceso de par√°metros en OPEN_MENU: %s"
 
 #: ../src/rootmenu.c:803
 msgid ""
 "There are more than one WORKSPACE_MENU commands in the applications menu. "
 "Only one is allowed."
 msgstr ""
-"Hay m·s de una orden WORKSPACE_MENU en el men˙ de aplicaciones.\n"
-"SÛlo se permite una."
+"Hay m√°s de una orden WORKSPACE_MENU en el men√∫ de aplicaciones.\n"
+"S√≥lo se permite una."
 
 #: ../src/rootmenu.c:837
 msgid ""
 "There are more than one WINDOWS_MENU commands in the applications menu. Only "
 "one is allowed."
-msgstr "Hay m·s de una orden WINDOWS_MENU en el men˙ de aplicaciones. SÛlo se permite una."
+msgstr "Hay m√°s de una orden WINDOWS_MENU en el men√∫ de aplicaciones. S√≥lo se permite una."
 
 #: ../src/rootmenu.c:842
 msgid "Window List"
@@ -1227,74 +1227,74 @@ msgstr "Lista de ventanas"
 #: ../src/rootmenu.c:871 ../src/rootmenu.c:889 ../src/rootmenu.c:899
 #, c-format
 msgid "%s:missing parameter for menu command \"%s\""
-msgstr "%s:par·metro inexistente en la orden de men˙ \"%s\""
+msgstr "%s:par√°metro inexistente en la orden de men√∫ \"%s\""
 
 #: ../src/rootmenu.c:967
 #, c-format
 msgid "%s:unknown command \"%s\" in menu config."
-msgstr "%s:orden desconocida \"%s\" en la configuraciÛn del men˙."
+msgstr "%s:orden desconocida \"%s\" en la configuraci√≥n del men√∫."
 
 #: ../src/rootmenu.c:975
 #, c-format
 msgid "%s:can't add shortcut for entry \"%s\""
-msgstr "%s:no puede aÒadir atajo para entrada \"%s\""
+msgstr "%s:no puede a√±adir atajo para entrada \"%s\""
 
 #: ../src/rootmenu.c:1112
 #, c-format
 msgid "%s:maximal line size exceeded in menu config: %s"
-msgstr "%s:excedido el tamaÒo m·ximo de lÌnea en el men˙ de configuraciÛn: %s"
+msgstr "%s:excedido el tama√±o m√°ximo de l√≠nea en el men√∫ de configuraci√≥n: %s"
 
 #: ../src/rootmenu.c:1134 ../src/rootmenu.c:1227 ../src/rootmenu.c:1330
 #, c-format
 msgid "%s:missing command in menu config: %s"
-msgstr "%s:falta orden en el men˙ de configuraciÛn: %s"
+msgstr "%s:falta orden en el men√∫ de configuraci√≥n: %s"
 
 #: ../src/rootmenu.c:1164
 #, c-format
 msgid "%s:syntax error in menu file:END declaration missing"
-msgstr "%s:error de sintaxis en el fichero del men˙:falta un END"
+msgstr "%s:error de sintaxis en el fichero del men√∫:falta un END"
 
 #: ../src/rootmenu.c:1193 ../src/rootmenu.c:1294
 msgid "could not make arguments for menu file preprocessor"
-msgstr "no fue posible crear par·metros para el preprocesador del fichero del men˙"
+msgstr "no fue posible crear par√°metros para el preprocesador del fichero del men√∫"
 
 #: ../src/rootmenu.c:1200 ../src/rootmenu.c:1302
 #, c-format
 msgid "%s:could not open/preprocess menu file"
-msgstr "%s:no se pudo abrir/preprocesar el fichero de men˙"
+msgstr "%s:no se pudo abrir/preprocesar el fichero de men√∫"
 
 #: ../src/rootmenu.c:1212 ../src/rootmenu.c:1315
 #, c-format
 msgid "%s:could not open menu file"
-msgstr "%s:no se pudo abrir el fichero del men˙"
+msgstr "%s:no se pudo abrir el fichero del men√∫"
 
 #: ../src/rootmenu.c:1239
 #, c-format
 msgid "%s:invalid menu file. MENU command is missing"
-msgstr "%s:fichero de men˙ no v·lido. Falta la orden MENU"
+msgstr "%s:fichero de men√∫ no v√°lido. Falta la orden MENU"
 
 #: ../src/rootmenu.c:1248
 msgid "error reading preprocessed menu data"
-msgstr "error leyendo datos de men˙ preprocesados"
+msgstr "error leyendo datos de men√∫ preprocesados"
 
 #: ../src/rootmenu.c:1342
 #, c-format
 msgid "%s:no title given for the root menu"
-msgstr "%s:falta el tÌtulo del men˙ raÌz"
+msgstr "%s:falta el t√≠tulo del men√∫ ra√≠z"
 
 #: ../src/rootmenu.c:1433 ../src/rootmenu.c:1506 ../src/rootmenu.c:1547
 #, c-format
 msgid "out of memory while constructing directory menu %s"
-msgstr "memoria insuficiente durante la construcciÛn del men˙ de directorio %s"
+msgstr "memoria insuficiente durante la construcci√≥n del men√∫ de directorio %s"
 
 #: ../src/rootmenu.c:1443
 #, c-format
 msgid "%s:could not stat file \"%s\" in menu directory"
-msgstr "%s:no se pudo acceder al fichero \"%s\" en el men˙ de directorio"
+msgstr "%s:no se pudo acceder al fichero \"%s\" en el men√∫ de directorio"
 
 #: ../src/rootmenu.c:1601
 msgid "Commands"
-msgstr "”rdenes"
+msgstr "√ìrdenes"
 
 #: ../src/rootmenu.c:1604
 msgid "Restart"
@@ -1307,30 +1307,30 @@ msgstr "Salir..."
 #: ../src/rootmenu.c:1650
 #, c-format
 msgid "could not find menu file \"%s\" referenced in WMRootMenu"
-msgstr "no se pudo encontrar el fichero de men˙ \"%s\" mencionado en el WMRootMenu"
+msgstr "no se pudo encontrar el fichero de men√∫ \"%s\" mencionado en el WMRootMenu"
 
 #: ../src/rootmenu.c:1657
 #, c-format
 msgid "could not access menu \"%s\" referenced in WMRootMenu"
-msgstr "no se pudo acceder al fichero de men˙ \"%s\" mencionado en el WMRootMenu"
+msgstr "no se pudo acceder al fichero de men√∫ \"%s\" mencionado en el WMRootMenu"
 
 #: ../src/rootmenu.c:1691 ../src/rootmenu.c:1767
 #, c-format
 msgid "%s:format error in root menu configuration \"%s\""
-msgstr "%s:error de formato en la configuraciÛn de men˙ raÌz \"%s\""
+msgstr "%s:error de formato en la configuraci√≥n de men√∫ ra√≠z \"%s\""
 
 #: ../src/rootmenu.c:1855
 msgid ""
 "The applications menu could not be loaded. Look at the console output for a "
 "detailed description of the errors."
 msgstr ""
-"No se pudo cargar el men˙ de aplicaciones. Mire la salida\n"
-"en la consola para una descripciÛn detallada de los errores."
+"No se pudo cargar el men√∫ de aplicaciones. Mire la salida\n"
+"en la consola para una descripci√≥n detallada de los errores."
 
 #: ../src/screen.c:747
 #, c-format
 msgid "could not initialize graphics library context: %s"
-msgstr "no se pudo inicializar contexto de la biblioteca gr·fica: %s"
+msgstr "no se pudo inicializar contexto de la biblioteca gr√°fica: %s"
 
 #: ../src/screen.c:778
 msgid "could not do initialization of WINGs widget set"
@@ -1339,7 +1339,7 @@ msgstr "no se pudo inicializar el conjunto de elementos WINGs"
 #: ../src/screen.c:1144
 #, c-format
 msgid "could not save session state in %s"
-msgstr "no se pudo guardar la sesiÛn, informe en %s"
+msgstr "no se pudo guardar la sesi√≥n, informe en %s"
 
 #: ../src/session.c:183 ../src/wdefaults.c:589 ../src/winspector.c:454
 #, c-format
@@ -1348,11 +1348,11 @@ msgstr "no puede convertir\"%s\" a un valor booleano"
 
 #: ../src/session.c:1023
 msgid "out of memory while saving session state"
-msgstr "memoria insuficiente mientras se guardaba la sesiÛn"
+msgstr "memoria insuficiente mientras se guardaba la sesi√≥n"
 
 #: ../src/session.c:1106
 msgid "end of memory while saving session state"
-msgstr "fin de memoria mientras se guardaba la sesiÛn"
+msgstr "fin de memoria mientras se guardaba la sesi√≥n"
 
 #. This is not fatal but can mean the session manager exited.
 #. * If the session manager exited normally we would get a
@@ -1362,7 +1362,7 @@ msgstr "fin de memoria mientras se guardaba la sesiÛn"
 #.
 #: ../src/session.c:1244
 msgid "connection to the session manager was lost"
-msgstr "se perdiÛ la conexiÛn con el gestor de sesiones"
+msgstr "se perdi√≥ la conexi√≥n con el gestor de sesiones"
 
 #: ../src/stacking.c:79
 msgid "could not get window list!!"
@@ -1376,12 +1376,12 @@ msgstr "error interno de X: %s\n"
 #: ../src/startup.c:260
 #, c-format
 msgid "got signal %i (%s) - restarting\n"
-msgstr "seÒal %i (%s) recibida - reiniciando\n"
+msgstr "se√±al %i (%s) recibida - reiniciando\n"
 
 #: ../src/startup.c:262
 #, c-format
 msgid "got signal %i - restarting\n"
-msgstr "seÒal %i recibida - reiniciando\n"
+msgstr "se√±al %i recibida - reiniciando\n"
 
 #: ../src/startup.c:272
 #, c-format
@@ -1391,27 +1391,27 @@ msgstr ""
 #: ../src/startup.c:274
 #, c-format
 msgid "got signal %i - rereading defaults\n"
-msgstr "recibida seÒal %i - releyendo preferencias predefinidas\n"
+msgstr "recibida se√±al %i - releyendo preferencias predefinidas\n"
 
 #: ../src/startup.c:284
 #, c-format
 msgid "got signal %i (%s) - exiting...\n"
-msgstr "seÒal %i (%s) recibida - saliendo...\n"
+msgstr "se√±al %i (%s) recibida - saliendo...\n"
 
 #: ../src/startup.c:286
 #, c-format
 msgid "got signal %i - exiting...\n"
-msgstr "seÒal %i recibida - saliendo...\n"
+msgstr "se√±al %i recibida - saliendo...\n"
 
 #: ../src/startup.c:329
 #, c-format
 msgid "got signal %i (%s)\n"
-msgstr "seÒal %i recibida (%s)\n"
+msgstr "se√±al %i recibida (%s)\n"
 
 #: ../src/startup.c:331
 #, c-format
 msgid "got signal %i\n"
-msgstr "seÒal %i recibida\n"
+msgstr "se√±al %i recibida\n"
 
 #: ../src/startup.c:342
 msgid "crashed while trying to do some post-crash cleanup. Aborting immediatelly."
@@ -1435,23 +1435,23 @@ msgid ""
 "a fatal error has occured, probably due to a bug. Please fill the included "
 "BUGFORM and report it."
 msgstr ""
-"ucurriÛ un error fatal, debido probablemente a un gazapo (bug).\n"
-"Por favor, rellene y envÌe el archivo BUGFORM adjunto ."
+"ucurri√≥ un error fatal, debido probablemente a un gazapo (bug).\n"
+"Por favor, rellene y env√≠e el archivo BUGFORM adjunto ."
 
 #: ../src/startup.c:894
 #, c-format
 msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
 msgstr ""
-"el tamaÒo del Ìcono est· configurado a %i, pero es demasiado pequeÒo. Utilizando "
+"el tama√±o del √≠cono est√° configurado a %i, pero es demasiado peque√±o. Utilizando "
 "16 en su lugar\n"
 
 #: ../src/startup.c:922
 msgid "XKB is not supported. KbdModeLock is automatically disabled."
-msgstr "No se admite XKB. KbdModeLock deshabilitado autom·ticamente."
+msgstr "No se admite XKB. KbdModeLock deshabilitado autom√°ticamente."
 
 #: ../src/startup.c:941
 msgid "it seems that there is already a window manager running"
-msgstr "parece que ya se est· ejecutando un gestor de ventanas"
+msgstr "parece que ya se est√° ejecutando un gestor de ventanas"
 
 #: ../src/startup.c:947
 #, c-format
@@ -1484,11 +1484,11 @@ msgstr "no se pudo abrir la biblioteca \"%s\"."
 #: ../src/texture.c:446
 #, c-format
 msgid "function \"%s\" not found in library \"%s\""
-msgstr "no se encontrÛ la funciÛn \"%s\" en la biblioteca \"%s\""
+msgstr "no se encontr√≥ la funci√≥n \"%s\" en la biblioteca \"%s\""
 
 #: ../src/texture.c:453
 msgid "function textures not supported on this system, sorry."
-msgstr "desgraciadamente este sistema no admite la funciÛn de texturas."
+msgstr "desgraciadamente este sistema no admite la funci√≥n de texturas."
 
 #: ../src/texture.c:598
 msgid "could not allocate image buffer"
@@ -1497,7 +1497,7 @@ msgstr ""
 #: ../src/wdefaults.c:437
 #, c-format
 msgid "could not find icon file \"%s\""
-msgstr "no se encontrÛ el fichero de icono \"%s\""
+msgstr "no se encontr√≥ el fichero de icono \"%s\""
 
 #: ../src/window.c:2934 ../src/window.c:3073
 msgid ""
@@ -1505,7 +1505,7 @@ msgid ""
 "Turn it off or some mouse actions and keyboard shortcuts will not work."
 msgstr ""
 "la tecla NumLock, ScrollLock o similar parece estar activada.\n"
-"DesactÌvela o algunas acciones del ratÛn y atajo de teclado no funcionar·n."
+"Desact√≠vela o algunas acciones del rat√≥n y atajo de teclado no funcionar√°n."
 
 #: ../src/winmenu.c:126
 msgid ""
@@ -1513,8 +1513,8 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-"La aplicaciÛn ser· finalizada (kill).\n"
-"Se perder· cualquier modificaciÛn no guardada.\n"
+"La aplicaci√≥n ser√° finalizada (kill).\n"
+"Se perder√° cualquier modificaci√≥n no guardada.\n"
 "Confirme por favor."
 
 #: ../src/winmenu.c:272 ../src/winmenu.c:281
@@ -1523,7 +1523,7 @@ msgstr "Definir atajo"
 
 #: ../src/winmenu.c:359 ../src/winmenu.c:404
 msgid "could not create submenu for window menu"
-msgstr "no se pudo crear submen˙ para el men˙ de ventanas"
+msgstr "no se pudo crear submen√∫ para el men√∫ de ventanas"
 
 #: ../src/winmenu.c:408
 msgid "Keep on top"
@@ -1564,7 +1564,7 @@ msgstr "Quitar sombra"
 #: ../src/winspector.c:387
 #, c-format
 msgid "Could not find icon \"%s\" specified for this window"
-msgstr "No se encontrÛ el icono \"%s\" indicado para esta ventana"
+msgstr "No se encontr√≥ el icono \"%s\" indicado para esta ventana"
 
 #: ../src/winspector.c:404
 #, c-format
@@ -1587,7 +1587,7 @@ msgid ""
 "property set to the above selected\n"
 "name, when saved."
 msgstr ""
-"La configuraciÛn se aplicar· a todas\n"
+"La configuraci√≥n se aplicar√° a todas\n"
 "las ventanas que tengan su propiedad\n"
 "WMCLASS con el nombre seleccionado\n"
 "arriba, cuando se guarde."
@@ -1606,7 +1606,7 @@ msgstr "Recargar"
 
 #: ../src/winspector.c:1238 ../src/winspector.c:1248
 msgid "Window Specification"
-msgstr "EspecificaciÛn de Ventanas"
+msgstr "Especificaci√≥n de Ventanas"
 
 #: ../src/winspector.c:1239
 msgid "Window Attributes"
@@ -1618,11 +1618,11 @@ msgstr "Opciones Avanzadas"
 
 #: ../src/winspector.c:1241
 msgid "Icon and Initial Workspace"
-msgstr "Icono y ¡rea de Trabajo Inicial"
+msgstr "Icono y √Årea de Trabajo Inicial"
 
 #: ../src/winspector.c:1242
 msgid "Application Specific"
-msgstr "AplicaciÛn EspecÌfica"
+msgstr "Aplicaci√≥n Espec√≠fica"
 
 #: ../src/winspector.c:1256
 msgid "Defaults for all windows"
@@ -1648,19 +1648,19 @@ msgid ""
 "equivalent shortcut, if you changed the default\n"
 "settings)."
 msgstr ""
-"Retira la barra de tÌtulo de la ventana.\n"
-"Para acceder al men˙ de Ûrdenes de ventana en una ventana\n"
-"que no tiene barra de tÌtulo, presione Control+Esc (o\n"
-"el atajo equivalente, si usted modificÛ la configuraciÛn\n"
+"Retira la barra de t√≠tulo de la ventana.\n"
+"Para acceder al men√∫ de √≥rdenes de ventana en una ventana\n"
+"que no tiene barra de t√≠tulo, presione Control+Esc (o\n"
+"el atajo equivalente, si usted modific√≥ la configuraci√≥n\n"
 "de las teclas)."
 
 #: ../src/winspector.c:1344
 msgid "Disable resizebar"
-msgstr "Deshabilitar barra de tamaÒo"
+msgstr "Deshabilitar barra de tama√±o"
 
 #: ../src/winspector.c:1346
 msgid "Remove the resizebar of this window."
-msgstr "Retirar la barra de tamaÒo de esta ventana."
+msgstr "Retirar la barra de tama√±o de esta ventana."
 
 #: ../src/winspector.c:1349
 msgid "Disable close button"
@@ -1668,15 +1668,15 @@ msgstr ""
 
 #: ../src/winspector.c:1351
 msgid "Remove the `close window' button of this window."
-msgstr "Retira el botÛn cerrar de la ventana."
+msgstr "Retira el bot√≥n cerrar de la ventana."
 
 #: ../src/winspector.c:1354
 msgid "Disable miniaturize button"
-msgstr "Deshabilitar botÛn miniaturizar"
+msgstr "Deshabilitar bot√≥n miniaturizar"
 
 #: ../src/winspector.c:1356
 msgid "Remove the `miniaturize window' button of the window."
-msgstr "Retira el botÛn `minimizar' de la ventana."
+msgstr "Retira el bot√≥n `minimizar' de la ventana."
 
 #: ../src/winspector.c:1359
 msgid "Disable border"
@@ -1702,11 +1702,11 @@ msgstr "Mantener abajo (hundido)"
 
 #: ../src/winspector.c:1372
 msgid "Keep the window under all other windows."
-msgstr "Mantiene la ventana por debajo de todas las dem·s."
+msgstr "Mantiene la ventana por debajo de todas las dem√°s."
 
 #: ../src/winspector.c:1377
 msgid "Make window present in all workspaces."
-msgstr "Hacer presente la ventana en todas las ·reas de trabajo."
+msgstr "Hacer presente la ventana en todas las √°reas de trabajo."
 
 #: ../src/winspector.c:1380
 msgid "Start miniaturized"
@@ -1717,7 +1717,7 @@ msgid ""
 "Make the window be automatically miniaturized when it's\n"
 "first shown."
 msgstr ""
-"Hacer que la ventana sea autom·ticamente minimizada\n"
+"Hacer que la ventana sea autom√°ticamente minimizada\n"
 "la primera vez que se muestre."
 
 #: ../src/winspector.c:1386
@@ -1729,12 +1729,12 @@ msgid ""
 "Make the window be automatically maximized when it's\n"
 "first shown."
 msgstr ""
-"Hacer que la ventana sea autom·ticamente maximizada\n"
+"Hacer que la ventana sea autom√°ticamente maximizada\n"
 "la primera vez que se muestre."
 
 #: ../src/winspector.c:1392
 msgid "Full screen maximization"
-msgstr "MaximizaciÛn a pantalla completa"
+msgstr "Maximizaci√≥n a pantalla completa"
 
 #: ../src/winspector.c:1394
 msgid ""
@@ -1743,7 +1743,7 @@ msgid ""
 "to outside the screen."
 msgstr ""
 "Hacer que la ventana utilice toda la pantalla cuando sea\n"
-"maximizada. La barra de tÌtulo y de tamaÒo ser·n \n"
+"maximizada. La barra de t√≠tulo y de tama√±o ser√°n \n"
 "desplazadas fuera de la pantalla."
 
 #: ../src/winspector.c:1411
@@ -1762,21 +1762,21 @@ msgid ""
 "of your shortcut configuration."
 msgstr ""
 "No usar los atajos de teclado de Window Maker cuando\n"
-"esta ventana estÈ activa. Esto permitir· que la\n"
+"esta ventana est√© activa. Esto permitir√° que la\n"
 "ventana reciba todas las combinaciones de teclas\n"
-"sin importar su configuraciÛn de atajos."
+"sin importar su configuraci√≥n de atajos."
 
 #: ../src/winspector.c:1436
 msgid "Do not bind mouse clicks"
-msgstr "No ligar clicks del ratÛn"
+msgstr "No ligar clicks del rat√≥n"
 
 #: ../src/winspector.c:1438
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
 "in the window (when alt is the modifier you haveconfigured)."
 msgstr ""
-"No aÒadir acciones de ratÛn, tal como `Alt'+arrastre\n"
-"en la ventana (cuando Alt es el modificador que usted configurÛ)."
+"No a√±adir acciones de rat√≥n, tal como `Alt'+arrastre\n"
+"en la ventana (cuando Alt es el modificador que usted configur√≥)."
 
 #: ../src/winspector.c:1443
 msgid "Do not show in the window list"
@@ -1784,7 +1784,7 @@ msgstr "No mostrar en la lista de ventanas"
 
 #: ../src/winspector.c:1445
 msgid "Do not list the window in the window list menu."
-msgstr "No mostrar esta ventana en el men˙ de lista de ventanas."
+msgstr "No mostrar esta ventana en el men√∫ de lista de ventanas."
 
 #: ../src/winspector.c:1448
 msgid "Do not let it take focus"
@@ -1795,7 +1795,7 @@ msgid ""
 "Do not let the window take keyboard focus when you\n"
 "click on it."
 msgstr ""
-"No permitir que la ventana tome la atenciÛn del teclado\n"
+"No permitir que la ventana tome la atenci√≥n del teclado\n"
 "cuando haga click sobre ella."
 
 #: ../src/winspector.c:1454
@@ -1824,7 +1824,7 @@ msgstr ""
 
 #: ../src/winspector.c:1466
 msgid "Ignore 'Save Session'"
-msgstr "Ignorar 'Guardar sesiÛn'"
+msgstr "Ignorar 'Guardar sesi√≥n'"
 
 #: ../src/winspector.c:1468
 msgid ""
@@ -1833,13 +1833,13 @@ msgid ""
 "together with other applications when Window Maker\n"
 "starts."
 msgstr ""
-"No guardar la aplicaciÛn asociada en el estado de la sesiÛn\n"
+"No guardar la aplicaci√≥n asociada en el estado de la sesi√≥n\n"
 "para que no sea reiniciada junto con otras aplicaciones\n"
 "cuando se inicie Window Maker."
 
 #: ../src/winspector.c:1474
 msgid "Emulate application icon"
-msgstr "Emular icono de aplicaciÛn"
+msgstr "Emular icono de aplicaci√≥n"
 
 #: ../src/winspector.c:1476
 msgid ""
@@ -1847,17 +1847,17 @@ msgid ""
 "enough information to Window Maker for a dockable\n"
 "application icon to be created."
 msgstr ""
-"Hacer que esta ventana act˙e como una aplicaciÛn que\n"
-"proporcione suficiente informaciÛn a Window Maker\n"
-"para crear un icono de aplicaciÛn dockable."
+"Hacer que esta ventana act√∫e como una aplicaci√≥n que\n"
+"proporcione suficiente informaci√≥n a Window Maker\n"
+"para crear un icono de aplicaci√≥n dockable."
 
 #: ../src/winspector.c:1482
 msgid "Disable language button"
-msgstr "Deshabilitar botÛn de idioma"
+msgstr "Deshabilitar bot√≥n de idioma"
 
 #: ../src/winspector.c:1484
 msgid "Remove the `toggle language' button of the window."
-msgstr "Retirar el botÛn `cambiar idioma' de la ventana."
+msgstr "Retirar el bot√≥n `cambiar idioma' de la ventana."
 
 #: ../src/winspector.c:1501
 msgid "Miniwindow Image"
@@ -1873,15 +1873,15 @@ msgstr "Ignorar el icono proporcionado por el cliente"
 
 #: ../src/winspector.c:1548
 msgid "Initial Workspace"
-msgstr "¡rea de trabajo inicial"
+msgstr "√Årea de trabajo inicial"
 
 #: ../src/winspector.c:1550
 msgid "The workspace to place the window when it'sfirst shown."
-msgstr "El ·rea de trabajo dÛnde colocar la ventana la primera vez que se muestre."
+msgstr "El √°rea de trabajo d√≥nde colocar la ventana la primera vez que se muestre."
 
 #: ../src/winspector.c:1556
 msgid "Nowhere in particular"
-msgstr "Ning˙n sitio en particular"
+msgstr "Ning√∫n sitio en particular"
 
 #: ../src/winspector.c:1574
 msgid "Application Attributes"
@@ -1893,11 +1893,11 @@ msgstr "Iniciar oculto"
 
 #: ../src/winspector.c:1587
 msgid "Automatically hide application when it's started."
-msgstr "Ocultar autom·ticamente la aplicaciÛn cuando sea iniciada."
+msgstr "Ocultar autom√°ticamente la aplicaci√≥n cuando sea iniciada."
 
 #: ../src/winspector.c:1590
 msgid "No application icon"
-msgstr "Sin icono de aplicaciÛn"
+msgstr "Sin icono de aplicaci√≥n"
 
 #: ../src/winspector.c:1592
 msgid ""
@@ -1906,22 +1906,22 @@ msgid ""
 "and any icons that are already docked will stop\n"
 "working correctly."
 msgstr ""
-"Deshabilita el icono de aplicaciÛn de la aplicaciÛn.\n"
-"Observe que ya no podr· ponerlo en el dock,\n"
-"y que los iconos que ya estÈn en el dock\n"
-"dejar·n de funcionar correctamente."
+"Deshabilita el icono de aplicaci√≥n de la aplicaci√≥n.\n"
+"Observe que ya no podr√° ponerlo en el dock,\n"
+"y que los iconos que ya est√©n en el dock\n"
+"dejar√°n de funcionar correctamente."
 
 #: ../src/winspector.c:1598
 msgid "Shared application icon"
-msgstr "Icono de aplicaciÛn compartido"
+msgstr "Icono de aplicaci√≥n compartido"
 
 #: ../src/winspector.c:1600
 msgid ""
 "Use a single shared application icon for all of\n"
 "the instances of this application.\n"
 msgstr ""
-"Usar un ˙nico icono de aplicaciÛn compartido para todas\n"
-"las instancias de esta aplicaciÛn.\n"
+"Usar un √∫nico icono de aplicaci√≥n compartido para todas\n"
+"las instancias de esta aplicaci√≥n.\n"
 
 #: ../src/wmspec.c:277
 msgid "out of memory while updating wm hints"
@@ -1930,15 +1930,15 @@ msgstr "memoria insuficiente mientras se actualizaban los consejos de wm"
 #: ../src/workspace.c:107 ../src/workspace.c:108 ../src/workspace.c:893
 #, c-format
 msgid "Workspace %i"
-msgstr "¡rea de trabajo %i"
+msgstr "√Årea de trabajo %i"
 
 #: ../src/workspace.c:943
 msgid "Workspaces"
-msgstr "¡reas de trabajo"
+msgstr "√Åreas de trabajo"
 
 #: ../src/workspace.c:945
 msgid "could not create Workspace menu"
-msgstr "no se pudo crear men˙ de ¡rea de trabajo"
+msgstr "no se pudo crear men√∫ de √Årea de trabajo"
 
 #: ../src/workspace.c:952
 msgid "New"
@@ -1946,5 +1946,5 @@ msgstr "Nuevo"
 
 #: ../src/workspace.c:953
 msgid "Destroy Last"
-msgstr "Destruir el ˙ltimo"
+msgstr "Destruir el √∫ltimo"
 

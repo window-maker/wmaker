@@ -11,7 +11,7 @@ msgstr ""
 "Language-Team: Projek Gabai (Bahasa Melayu) <gabai-penyumbang@lists."
 "sourceforge.net>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../src/appicon.c:426 ../src/dialog.c:282 ../src/dock.c:3325

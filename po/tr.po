@@ -4,7 +4,7 @@ msgstr ""
 "From: KGF <kgf@wpi.edu>\n"
 "Language-Team: Turkish \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-9\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
 #: ../src/appicon.c:542 ../src/dialog.c:273 ../src/dialog.c:329 ../src/dock.c:262 ../src/dock.c:3106 ../src/rootmenu.c:162 ../src/winspector.c:269 ../src/winspector.c:277
@@ -13,11 +13,11 @@ msgstr "Hata"
 
 #: ../src/appicon.c:543 ../src/dock.c:263 ../src/winspector.c:278
 msgid "Could not open specified icon file"
-msgstr "Beliritilen simge dosyası açılamadı"
+msgstr "Beliritilen simge dosyasÄ± aÃ§Ä±lamadÄ±"
 
 #: ../src/appicon.c:563 ../src/dock.c:508 ../src/winmenu.c:83
 msgid "Kill Application"
-msgstr "Uygulamayı sonlandır"
+msgstr "UygulamayÄ± sonlandÄ±r"
 
 #: ../src/appicon.c:564 ../src/dock.c:509 ../src/winmenu.c:84
 msgid ""
@@ -25,17 +25,17 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-"Bu işlem uygulamayı sonlandıracaktır.\n"
-"Yaptığınız değişiklikleri kaybedebilirsiniz.\n"
-"Lütfen onaylayın."
+"Bu iÅŸlem uygulamayÄ± sonlandÄ±racaktÄ±r.\n"
+"YaptÄ±ÄŸÄ±nÄ±z deÄŸiÅŸiklikleri kaybedebilirsiniz.\n"
+"LÃ¼tfen onaylayÄ±n."
 
 #: ../src/appicon.c:580 ../src/dock.c:1140
 msgid "Unhide Here"
-msgstr "Burada göster"
+msgstr "Burada gÃ¶ster"
 
 #: ../src/appicon.c:581 ../src/dock.c:1138
 msgid "(Un)Hide"
-msgstr "Sakla/Göster"
+msgstr "Sakla/GÃ¶ster"
 
 #: ../src/appicon.c:582
 msgid "Set Icon..."
@@ -47,131 +47,131 @@ msgstr "Yok et"
 
 #: ../src/defaults.c:552 ../src/screen.c:465 ../src/screen.c:544 ../src/screen.c:550
 msgid "could not read domain \"%s\" from defaults database"
-msgstr "Öntanımlar veritabınından domain \"%s\" okunamadı"
+msgstr "Ã–ntanÄ±mlar veritabÄ±nÄ±ndan domain \"%s\" okunamadÄ±"
 
 #: ../src/defaults.c:1027
 msgid "can't convert \"%s\" to boolean for key \"%s\""
-msgstr "\"%s\", \"%s\" anahtarı için ikili bir değere dönüştürülemedi"
+msgstr "\"%s\", \"%s\" anahtarÄ± iÃ§in ikili bir deÄŸere dÃ¶nÃ¼ÅŸtÃ¼rÃ¼lemedi"
 
 #: ../src/defaults.c:1032 ../src/defaults.c:1065 ../src/defaults.c:1097 ../src/defaults.c:1110 ../src/defaults.c:1125 ../src/defaults.c:1140 ../src/defaults.c:1211 ../src/defaults.c:1223 ../src/defaults.c:1277 ../src/defaults.c:1321 ../src/defaults.c:1363 ../src/defaults.c:1409 ../src/defaults.c:1628 ../src/defaults.c:1642 ../src/defaults.c:1675 ../src/defaults.c:1687 ../src/defaults.c:1699 ../src/defaults.c:1723 ../src/defaults.c:1741 ../src/defaults.c:1754 ../src/defaults.c:1767 ../src/defaults.c:1802 ../src/defaults.c:1840 ../src/defaults.c:1904
 msgid "using default \"%s\" instead"
-msgstr "öntanımlı \"%s\" kullanılıyor"
+msgstr "Ã¶ntanÄ±mlÄ± \"%s\" kullanÄ±lÄ±yor"
 
 #: ../src/defaults.c:1062
 msgid "can't convert \"%s\" to integer for key \"%s\""
-msgstr "\"%s\", \"%s\" anahtarı için tamsayıya dönüştürülemedi"
+msgstr "\"%s\", \"%s\" anahtarÄ± iÃ§in tamsayÄ±ya dÃ¶nÃ¼ÅŸtÃ¼rÃ¼lemedi"
 
 #: ../src/defaults.c:1092 ../src/defaults.c:1206 ../src/defaults.c:1623 ../src/defaults.c:1670 ../src/wdefaults.c:537 ../src/wdefaults.c:573
 msgid "Wrong option format for key \"%s\". Should be %s."
-msgstr "\"%s\" anahtarı için yanlış seçenek biçimi. %s olmalıydı."
+msgstr "\"%s\" anahtarÄ± iÃ§in yanlÄ±ÅŸ seÃ§enek biÃ§imi. %s olmalÄ±ydÄ±."
 
 #: ../src/defaults.c:1105
 msgid "Incorrect number of elements in array for key \"%s\"."
-msgstr "\"%s\" anahtarı dizisinin eleman sayısı yanlış."
+msgstr "\"%s\" anahtarÄ± dizisinin eleman sayÄ±sÄ± yanlÄ±ÅŸ."
 
 #: ../src/defaults.c:1120
 msgid "Wrong value for key \"%s\". Should be Coordinate."
-msgstr "\"%s\" anahtarı için yanlış değer. Coordinate olmalıydı."
+msgstr "\"%s\" anahtarÄ± iÃ§in yanlÄ±ÅŸ deÄŸer. Coordinate olmalÄ±ydÄ±."
 
 #: ../src/defaults.c:1135
 msgid "can't convert array to integers for \"%s\"."
-msgstr " \"%s\" için dizi tamsayılara dönüştürülemiyor."
+msgstr " \"%s\" iÃ§in dizi tamsayÄ±lara dÃ¶nÃ¼ÅŸtÃ¼rÃ¼lemiyor."
 
 #: ../src/defaults.c:1272
 msgid "Invalid focus mode \"%s\". Should be Manual, Auto or Sloppy."
-msgstr "Geçersiz focus kipi \"%s\". Manual, Auto veya Sloppy olmalıydı."
+msgstr "GeÃ§ersiz focus kipi \"%s\". Manual, Auto veya Sloppy olmalÄ±ydÄ±."
 
 #: ../src/defaults.c:1315
 msgid "Invalid window placement mode \"%s\". Should be Auto, Cascade, Random or Manual."
-msgstr "Geçersiz pencere yerleştirme kipi \"%s\". Auto, Cascade, Random veya Manual olmalıydı."
+msgstr "GeÃ§ersiz pencere yerleÅŸtirme kipi \"%s\". Auto, Cascade, Random veya Manual olmalÄ±ydÄ±."
 
 #: ../src/defaults.c:1357
 msgid "Invalid geometry display type \"%s\". Should be Center, Corner, Floating or Line."
-msgstr "Geçersiz geometri görüntüleme kipi \"%s\". Center, Corner, Floating veya Line olmalıydı."
+msgstr "GeÃ§ersiz geometri gÃ¶rÃ¼ntÃ¼leme kipi \"%s\". Center, Corner, Floating veya Line olmalÄ±ydÄ±."
 
 #: ../src/defaults.c:1404
 msgid "Invalid speed \"%s\". Should be UltraFast, Fast, Medium, Slow or UltraSlow."
-msgstr "Geçersiz hız \"%s\". UltraFast, Fast, Medium, Slow veya UltraSlow. olmalıydı"
+msgstr "GeÃ§ersiz hÄ±z \"%s\". UltraFast, Fast, Medium, Slow veya UltraSlow. olmalÄ±ydÄ±"
 
 #: ../src/defaults.c:1470 ../src/defaults.c:1501 ../src/defaults.c:1513 ../src/defaults.c:1554 ../src/defaults.c:1590
 msgid "\"%s\" is not a valid color name"
-msgstr "\"%s\" geçerli bir renk ismi değil"
+msgstr "\"%s\" geÃ§erli bir renk ismi deÄŸil"
 
 #: ../src/defaults.c:1482
 msgid "bad number of arguments in gradient specification"
-msgstr "renk geçişi tanımında seçenek sayısı yanlış"
+msgstr "renk geÃ§iÅŸi tanÄ±mÄ±nda seÃ§enek sayÄ±sÄ± yanlÄ±ÅŸ"
 
 #: ../src/defaults.c:1528
 msgid "too few arguments in multicolor gradient specification"
-msgstr "çok renkli geçiş tanımında az parametre var."
+msgstr "Ã§ok renkli geÃ§iÅŸ tanÄ±mÄ±nda az parametre var."
 
 #: ../src/defaults.c:1637
 msgid "Error in texture specification for key \"%s\""
-msgstr "\"%s\" anahtarı için hatalı desen tanımı"
+msgstr "\"%s\" anahtarÄ± iÃ§in hatalÄ± desen tanÄ±mÄ±"
 
 #: ../src/defaults.c:1683 ../src/defaults.c:1719
 msgid "Too few elements in array for key \"WorkspaceBack\"."
-msgstr "\"WorkspaceBack\" anahtarı dizini için çok az birim tanımlanmış"
+msgstr "\"WorkspaceBack\" anahtarÄ± dizini iÃ§in Ã§ok az birim tanÄ±mlanmÄ±ÅŸ"
 
 #: ../src/defaults.c:1695
 msgid "Wrong type for workspace background. Should be Texture."
-msgstr "Çalışma alanı arkaplanı için yanlış kip. Texture olmalıydı."
+msgstr "Ã‡alÄ±ÅŸma alanÄ± arkaplanÄ± iÃ§in yanlÄ±ÅŸ kip. Texture olmalÄ±ydÄ±."
 
 #: ../src/defaults.c:1737
 msgid "Cannot get color entry for key \"WorkspaceBack\"."
-msgstr "\"WorkspaceBack\" için renk değeri bulunamıyor."
+msgstr "\"WorkspaceBack\" iÃ§in renk deÄŸeri bulunamÄ±yor."
 
 #: ../src/defaults.c:1749
 msgid "key \"WorkspaceBack\" has invalid color \"%s\""
-msgstr "\"WorkspaceBack\" anahtarı geçersiz \"%s\" rengini kullanıyor"
+msgstr "\"WorkspaceBack\" anahtarÄ± geÃ§ersiz \"%s\" rengini kullanÄ±yor"
 
 #: ../src/defaults.c:1763
 msgid "Cannot get file entry for key \"WorkspaceBack\"."
-msgstr "\"WorkspaceBack\" anahtarı için dosya değeri okunamıyor"
+msgstr "\"WorkspaceBack\" anahtarÄ± iÃ§in dosya deÄŸeri okunamÄ±yor"
 
 #: ../src/defaults.c:1779
 msgid "could not run \"%s\""
-msgstr "\"%s\" çalıştırılamadı"
+msgstr "\"%s\" Ã§alÄ±ÅŸtÄ±rÄ±lamadÄ±"
 
 #: ../src/defaults.c:1785
 msgid "could not find background image \"%s\""
-msgstr "Arkaplan görüntüsü \"%s\" bulunamadı"
+msgstr "Arkaplan gÃ¶rÃ¼ntÃ¼sÃ¼ \"%s\" bulunamadÄ±"
 
 #: ../src/defaults.c:1798
 msgid "Error in texture specification for key \"WorkspaceBack\""
-msgstr "\"WorkspaceBack\" anahtarı için geçersiz desen tanımı"
+msgstr "\"WorkspaceBack\" anahtarÄ± iÃ§in geÃ§ersiz desen tanÄ±mÄ±"
 
 #: ../src/defaults.c:1835
 msgid "Invalid justification type \"%s\". Should be Left, Center or Right"
-msgstr "Geçersiz hizalama tipi \"%s\". Left, Center veya Right olmalıydı"
+msgstr "GeÃ§ersiz hizalama tipi \"%s\". Left, Center veya Right olmalÄ±ydÄ±"
 
 #: ../src/defaults.c:1869
 msgid "could not load any usable font"
-msgstr "Kullanılabilecek bir yazı tipi bulunamadı."
+msgstr "KullanÄ±labilecek bir yazÄ± tipi bulunamadÄ±."
 
 #: ../src/defaults.c:1899
 msgid "could not get color for key \"%s\""
-msgstr "\"%s\" anahtarı için renk bulunamadı"
+msgstr "\"%s\" anahtarÄ± iÃ§in renk bulunamadÄ±"
 
 #: ../src/defaults.c:1958
 msgid "invalid key modifier \"%s\""
-msgstr "Geçersiz anahtar ek bilgisi \"%s\""
+msgstr "GeÃ§ersiz anahtar ek bilgisi \"%s\""
 
 #: ../src/defaults.c:1970
 msgid "invalid kbd shortcut specification \"%s\""
-msgstr "Geçersiz kısayol tanımlaması  \"%s\""
+msgstr "GeÃ§ersiz kÄ±sayol tanÄ±mlamasÄ±  \"%s\""
 
 #: ../src/defaults.c:1976
 msgid "invalid key in shortcut \"%s\""
-msgstr "kısayol içinde geçersiz tuş \"%s\""
+msgstr "kÄ±sayol iÃ§inde geÃ§ersiz tuÅŸ \"%s\""
 
 #: ../src/defaults.c:2070
 msgid "could not render texture for icon background"
-msgstr "simge arkaplanı için desen çizilemedi"
+msgstr "simge arkaplanÄ± iÃ§in desen Ã§izilemedi"
 
 #: ../src/defaults.c:2416
 msgid "could not render texture for workspace background"
-msgstr "Çalışma alanı arkaplanı için desen hesaplanamadı"
+msgstr "Ã‡alÄ±ÅŸma alanÄ± arkaplanÄ± iÃ§in desen hesaplanamadÄ±"
 
 #: ../src/dialog.c:81 ../src/dialog.c:93 ../src/dialog.c:176 ../src/dialog.c:504 ../src/dock.c:377
 msgid "OK"
@@ -179,11 +179,11 @@ msgstr "Peki"
 
 #: ../src/dialog.c:81 ../src/dialog.c:86 ../src/dialog.c:176 ../src/dialog.c:511 ../src/dock.c:383
 msgid "Cancel"
-msgstr "Vazgeç"
+msgstr "VazgeÃ§"
 
 #: ../src/dialog.c:86 ../src/rootmenu.c:203
 msgid "Exit"
-msgstr "Çıkış"
+msgstr "Ã‡Ä±kÄ±ÅŸ"
 
 #: ../src/dialog.c:98
 msgid "Yes"
@@ -191,15 +191,15 @@ msgstr "Evet"
 
 #: ../src/dialog.c:98
 msgid "No"
-msgstr "Hayır"
+msgstr "HayÄ±r"
 
 #: ../src/dialog.c:268
 msgid "Could not open directory "
-msgstr "Dizin açılamadı"
+msgstr "Dizin aÃ§Ä±lamadÄ±"
 
 #: ../src/dialog.c:324
 msgid "Could not load image file "
-msgstr "Görüntü dosyası yüklenemedi"
+msgstr "GÃ¶rÃ¼ntÃ¼ dosyasÄ± yÃ¼klenemedi"
 
 #: ../src/dialog.c:450
 msgid "Directories"
@@ -211,15 +211,15 @@ msgstr "Simgeler"
 
 #: ../src/dialog.c:494
 msgid "File Name:"
-msgstr "Dosya İsmi:"
+msgstr "Dosya Ä°smi:"
 
 #: ../src/dialog.c:517
 msgid "Choose File"
-msgstr "Dosya Seçimi"
+msgstr "Dosya SeÃ§imi"
 
 #: ../src/dialog.c:527
 msgid "Icon Chooser"
-msgstr "Simge Seçimi"
+msgstr "Simge SeÃ§imi"
 
 #: ../src/dock.c:318
 msgid "Command Arguments"
@@ -227,15 +227,15 @@ msgstr "Komut parametreleri"
 
 #: ../src/dock.c:329
 msgid "Command for files dropped by DND"
-msgstr "DND tarafından bırakılan dosyalar için komut"
+msgstr "DND tarafÄ±ndan bÄ±rakÄ±lan dosyalar iÃ§in komut"
 
 #: ../src/dock.c:341
 msgid "%d will be replaced with the file name"
-msgstr "%d dosya ismi ile değiştirilecektir"
+msgstr "%d dosya ismi ile deÄŸiÅŸtirilecektir"
 
 #: ../src/dock.c:345
 msgid "DND support was not compiled in"
-msgstr "DND desteği eklenmemiş."
+msgstr "DND desteÄŸi eklenmemiÅŸ."
 
 #: ../src/dock.c:351
 msgid "Icon"
@@ -247,19 +247,19 @@ msgstr "Tara..."
 
 #: ../src/dock.c:371
 msgid "Launch this application automatically"
-msgstr "Bu uygulamayı otomatik başlat"
+msgstr "Bu uygulamayÄ± otomatik baÅŸlat"
 
 #: ../src/dock.c:397
 msgid "Docked Application Settings"
-msgstr "Demirlenmiş Uygulama Seçenekleri"
+msgstr "DemirlenmiÅŸ Uygulama SeÃ§enekleri"
 
 #: ../src/dock.c:553
 msgid "Workspace Clip"
-msgstr "Çalışma Alanı Atacı"
+msgstr "Ã‡alÄ±ÅŸma AlanÄ± AtacÄ±"
 
 #: ../src/dock.c:554
 msgid "All selected icons will be removed!"
-msgstr "Tüm seçilen simgeler silinecek!"
+msgstr "TÃ¼m seÃ§ilen simgeler silinecek!"
 
 #: ../src/dock.c:601
 msgid "Keep Icon"
@@ -267,51 +267,51 @@ msgstr "Simgeyi tut"
 
 #: ../src/dock.c:602 ../src/dock.c:2076 ../src/dock.c:2192
 msgid "Type the command used to launch the application"
-msgstr "Uygulamayı çalıştıracak komutu girin"
+msgstr "UygulamayÄ± Ã§alÄ±ÅŸtÄ±racak komutu girin"
 
 #: ../src/dock.c:998
 msgid "could not create workspace submenu for Clip menu"
-msgstr "Ataç menüsü altında çalışma alanı alt menüsü yaratılamadıo"
+msgstr "AtaÃ§ menÃ¼sÃ¼ altÄ±nda Ã§alÄ±ÅŸma alanÄ± alt menÃ¼sÃ¼ yaratÄ±lamadÄ±o"
 
 #: ../src/dock.c:1056
 msgid "could not create options submenu for Clip menu"
-msgstr "Ataç menüsü için seçenekler alt menüsü yaratılamadı"
+msgstr "AtaÃ§ menÃ¼sÃ¼ iÃ§in seÃ§enekler alt menÃ¼sÃ¼ yaratÄ±lamadÄ±"
 
 #: ../src/dock.c:1058
 msgid "Floating Clip"
-msgstr "Görünür Ataç"
+msgstr "GÃ¶rÃ¼nÃ¼r AtaÃ§"
 
 #: ../src/dock.c:1064
 msgid "Collapsed"
-msgstr "Toplanmış"
+msgstr "ToplanmÄ±ÅŸ"
 
 #: ../src/dock.c:1070
 msgid "AutoCollapse"
-msgstr "Kendiliğinden Topla"
+msgstr "KendiliÄŸinden Topla"
 
 #: ../src/dock.c:1076
 msgid "AutoAttract Icons"
-msgstr "Simgeleri Çek"
+msgstr "Simgeleri Ã‡ek"
 
 #: ../src/dock.c:1082
 msgid "Keep Attracted Icons"
-msgstr "Çekilen simgeleri tut"
+msgstr "Ã‡ekilen simgeleri tut"
 
 #: ../src/dock.c:1106
 msgid "Floating Dock"
-msgstr "Simge Limanı"
+msgstr "Simge LimanÄ±"
 
 #: ../src/dock.c:1112
 msgid "Clip Options"
-msgstr "Ataç Seçenekleri"
+msgstr "AtaÃ§ SeÃ§enekleri"
 
 #: ../src/dock.c:1117
 msgid "(Un)Select Icon"
-msgstr "Simge Seç(me)"
+msgstr "Simge SeÃ§(me)"
 
 #: ../src/dock.c:1119
 msgid "(Un)Select All Icons"
-msgstr "Tüm Simgeleri Seç(me)"
+msgstr "TÃ¼m Simgeleri SeÃ§(me)"
 
 #: ../src/dock.c:1122
 msgid "Keep Icon(s)"
@@ -319,35 +319,35 @@ msgstr "Simgeleri Tut"
 
 #: ../src/dock.c:1124
 msgid "Move Icon(s) To"
-msgstr "Simgeleri Taşı"
+msgstr "Simgeleri TaÅŸÄ±"
 
 #: ../src/dock.c:1129
 msgid "Remove Icon(s)"
-msgstr "Simgeleri Kaldır"
+msgstr "Simgeleri KaldÄ±r"
 
 #: ../src/dock.c:1131
 msgid "Attract Icons"
-msgstr "Sİmgeleri çek"
+msgstr "SÄ°mgeleri Ã§ek"
 
 #: ../src/dock.c:1134
 msgid "Launch"
-msgstr "Çalıştır"
+msgstr "Ã‡alÄ±ÅŸtÄ±r"
 
 #: ../src/dock.c:1136
 msgid "Settings..."
-msgstr "Seçenekler.."
+msgstr "SeÃ§enekler.."
 
 #: ../src/dock.c:1586 ../src/dock.c:1600 ../src/dock.c:1609
 msgid "bad value in docked icon state info %s"
-msgstr "demirlenmiş simge durumunda yanlış değer %s"
+msgstr "demirlenmiÅŸ simge durumunda yanlÄ±ÅŸ deÄŸer %s"
 
 #: ../src/dock.c:1617
 msgid "bad value in docked icon position %i,%i"
-msgstr "demirlenmiş simge konumunda yanlış değer %i,%i"
+msgstr "demirlenmiÅŸ simge konumunda yanlÄ±ÅŸ deÄŸer %i,%i"
 
 #: ../src/dock.c:1846
 msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
-msgstr "Limana demirlenmiş çok fazla simge var. Sığmayanlarla ilgilenmiyorum"
+msgstr "Limana demirlenmiÅŸ Ã§ok fazla simge var. SÄ±ÄŸmayanlarla ilgilenmiyorum"
 
 #: ../src/dock.c:2075 ../src/dock.c:2191
 msgid "Dock Icon"
@@ -355,134 +355,134 @@ msgstr "Liman Simgesi"
 
 #: ../src/dock.c:3099 ../src/dock.c:3103
 msgid "Could not execute command \"%s\""
-msgstr "\"%s\" komutu çalıştırılamadı"
+msgstr "\"%s\" komutu Ã§alÄ±ÅŸtÄ±rÄ±lamadÄ±"
 
 #: ../src/event.c:429
 msgid "stack overflow: too many dead processes"
-msgstr "yığın taşması: Çok fazla ölü süreç."
+msgstr "yÄ±ÄŸÄ±n taÅŸmasÄ±: Ã‡ok fazla Ã¶lÃ¼ sÃ¼reÃ§."
 
 #: ../src/framewin.c:515
 msgid "could not render gradient: %s"
-msgstr "%s renk geçisi hesaplanamadı"
+msgstr "%s renk geÃ§isi hesaplanamadÄ±"
 
 #: ../src/framewin.c:531 ../src/framewin.c:546 ../src/framewin.c:557 ../src/framewin.c:564 ../src/framewin.c:571 ../src/icon.c:282 ../src/texture.c:503
 msgid "error rendering image:%s"
-msgstr "%s görüntüsünün hesaplanmasında hata"
+msgstr "%s gÃ¶rÃ¼ntÃ¼sÃ¼nÃ¼n hesaplanmasÄ±nda hata"
 
 #: ../src/icon.c:562
 msgid "could not find default icon \"%s\""
-msgstr "öntanımlı simge \"%s\" bulunamadı"
+msgstr "Ã¶ntanÄ±mlÄ± simge \"%s\" bulunamadÄ±"
 
 #: ../src/icon.c:569
 msgid "could not load default icon \"%s\""
-msgstr "öntanımlı simge \"%s\"yüklenemedi"
+msgstr "Ã¶ntanÄ±mlÄ± simge \"%s\"yÃ¼klenemedi"
 
 #: ../src/main.c:163
 msgid "Restart failed!!!"
-msgstr "Yeniden başlatma işlemi başarısız!"
+msgstr "Yeniden baÅŸlatma iÅŸlemi baÅŸarÄ±sÄ±z!"
 
 #: ../src/main.c:178
 msgid "%s aborted.\n"
-msgstr "%s işleminden vazgeçildi.\n"
+msgstr "%s iÅŸleminden vazgeÃ§ildi.\n"
 
 #: ../src/main.c:189
 msgid "usage: %s [-options]\n"
-msgstr "Kullanım: %s [-Seçenekler]\n"
+msgstr "KullanÄ±m: %s [-SeÃ§enekler]\n"
 
 #: ../src/main.c:190
 msgid "options:"
-msgstr "Seçenekler:"
+msgstr "SeÃ§enekler:"
 
 #: ../src/main.c:192
 msgid " -nocpp \t\tdisable preprocessing of configuration files"
-msgstr " -nocpp \t\tYapılandırma dosyalarının önişlemesini durdur "
+msgstr " -nocpp \t\tYapÄ±landÄ±rma dosyalarÄ±nÄ±n Ã¶niÅŸlemesini durdur "
 
 #: ../src/main.c:194
 msgid " -nodock\t\tdo not open the application Dock"
-msgstr " -nodock\t\tSimge Limanını çalıştırma"
+msgstr " -nodock\t\tSimge LimanÄ±nÄ± Ã§alÄ±ÅŸtÄ±rma"
 
 #: ../src/main.c:195
 msgid " -noclip\t\tdo not open the workspace Clip"
-msgstr " -noclip\t\tçalışma alanı atacını çalıştırma"
+msgstr " -noclip\t\tÃ§alÄ±ÅŸma alanÄ± atacÄ±nÄ± Ã§alÄ±ÅŸtÄ±rma"
 
 #.
 #. puts(_(" -locale locale		locale to use"));
 #.
 #: ../src/main.c:199
 msgid " -visualid visualid\tvisual id of visual to use"
-msgstr " -visualid visualid\tkullanılacak visual ID"
+msgstr " -visualid visualid\tkullanÄ±lacak visual ID"
 
 #: ../src/main.c:200
 msgid " -display host:dpy\tdisplay to use"
-msgstr " -display host:dpy\tkullanılacak ekran"
+msgstr " -display host:dpy\tkullanÄ±lacak ekran"
 
 #: ../src/main.c:201
 msgid " -version\t\tprint version and exit"
-msgstr " -version\t\tsadece sürüm sayısını yaz ve çık"
+msgstr " -version\t\tsadece sÃ¼rÃ¼m sayÄ±sÄ±nÄ± yaz ve Ã§Ä±k"
 
 #: ../src/main.c:216
 msgid "could not determine home directory"
-msgstr "kullanıcı dizini belirlenemedi"
+msgstr "kullanÄ±cÄ± dizini belirlenemedi"
 
 #: ../src/main.c:226
 msgid ""
 "could not find user GNUstep directory.\n"
 "Make sure you have installed WindowMaker correctly and run wmaker.inst"
 msgstr ""
-"kullanıcı GNUstep dizini bulunamadı.\n"
-"WindowMaker'in doğru kurulduğundan emin olun ve wmaker.inst komutunu çalıştırın"
+"kullanÄ±cÄ± GNUstep dizini bulunamadÄ±.\n"
+"WindowMaker'in doÄŸru kurulduÄŸundan emin olun ve wmaker.inst komutunu Ã§alÄ±ÅŸtÄ±rÄ±n"
 
 #: ../src/main.c:246
 msgid "%s:could not execute initialization script"
-msgstr "%s:yapılandırma betiği çalıştırılamadı"
+msgstr "%s:yapÄ±landÄ±rma betiÄŸi Ã§alÄ±ÅŸtÄ±rÄ±lamadÄ±"
 
 #: ../src/main.c:303 ../src/main.c:310 ../src/main.c:317
 msgid "too few arguments for %s"
-msgstr "%s için çok az seçenek"
+msgstr "%s iÃ§in Ã§ok az seÃ§enek"
 
 #: ../src/main.c:321
 msgid "bad value for visualid: \"%s\""
-msgstr "visual ID için kötü değer:\"%s\""
+msgstr "visual ID iÃ§in kÃ¶tÃ¼ deÄŸer:\"%s\""
 
 #: ../src/main.c:366
 msgid "X server does not support locale"
-msgstr "X sunucusu dil desteği vermiyor."
+msgstr "X sunucusu dil desteÄŸi vermiyor."
 
 #: ../src/main.c:369
 msgid "cannot set locale modifiers"
-msgstr "Dil ayarlamaları yapılamadı."
+msgstr "Dil ayarlamalarÄ± yapÄ±lamadÄ±."
 
 #: ../src/main.c:383
 msgid "could not open display \"%s\""
-msgstr "\"%s\"ekranı açılamadı"
+msgstr "\"%s\"ekranÄ± aÃ§Ä±lamadÄ±"
 
 #: ../src/menu.c:281
 msgid "wrealloc() failed while trying to add menu item"
-msgstr "Menü oluştururken wrealloc() hatası."
+msgstr "MenÃ¼ oluÅŸtururken wrealloc() hatasÄ±."
 
 #: ../src/misc.c:69
 msgid "could not define value for %s for cpp"
-msgstr "Önişlemci için %s değeri tanımlanamadı"
+msgstr "Ã–niÅŸlemci iÃ§in %s deÄŸeri tanÄ±mlanamadÄ±"
 
 #: ../src/misc.c:99
 msgid "could not get password entry for UID %i"
-msgstr "%i Kullanıcı kimliği için parola bilgisi alınamadı"
+msgstr "%i KullanÄ±cÄ± kimliÄŸi iÃ§in parola bilgisi alÄ±namadÄ±"
 
 #: ../src/misc.c:123
 msgid "your machine is misconfigured. HOSTNAME is set to %s"
-msgstr "makinanızın yapılandırmasında hata var. HOSTNAME değeri %s"
+msgstr "makinanÄ±zÄ±n yapÄ±landÄ±rmasÄ±nda hata var. HOSTNAME deÄŸeri %s"
 
 #: ../src/misc.c:129
 msgid "your machine is misconfigured. HOST is set to %s"
-msgstr "makinanızın yapılandırmasında hata var. HOST değeri %s"
+msgstr "makinanÄ±zÄ±n yapÄ±landÄ±rmasÄ±nda hata var. HOST deÄŸeri %s"
 
 #: ../src/misc.c:700
 msgid "selection timed-out"
-msgstr "seçim zamanı bitti"
+msgstr "seÃ§im zamanÄ± bitti"
 
 #: ../src/misc.c:714
 msgid "Program Arguments"
-msgstr "Yazılım Parametreleri"
+msgstr "YazÄ±lÄ±m Parametreleri"
 
 #: ../src/misc.c:733
 msgid "Enter command arguments:"
@@ -490,79 +490,79 @@ msgstr "Komut parametlerini girin:"
 
 #: ../src/misc.c:754
 msgid "unable to get dropped data from DND drop"
-msgstr "DND drop işleminden veri okunanamadı"
+msgstr "DND drop iÅŸleminden veri okunanamadÄ±"
 
 #: ../src/misc.c:762
 msgid "error getting dropped data from DND drop"
-msgstr "DND drop işleminde hata oluştu"
+msgstr "DND drop iÅŸleminde hata oluÅŸtu"
 
 #: ../src/misc.c:768
 msgid "out of memory while getting data from DND drop"
-msgstr "DND drop işlemi sırasında bellek bitti"
+msgstr "DND drop iÅŸlemi sÄ±rasÄ±nda bellek bitti"
 
 #: ../src/misc.c:812 ../src/misc.c:931
 msgid "out of memory during expansion of \"%s\""
-msgstr "\"%s\" açılırken bellek bitti"
+msgstr "\"%s\" aÃ§Ä±lÄ±rken bellek bitti"
 
 #: ../src/misc.c:866
 msgid "out of memory during expansion of \"%w\""
-msgstr "\"%w\" açılırken bellek bitti"
+msgstr "\"%w\" aÃ§Ä±lÄ±rken bellek bitti"
 
 #: ../src/misc.c:885
 msgid "out of memory during expansion of \"%a\""
-msgstr "\"%a\" açılırken bellek bitti"
+msgstr "\"%a\" aÃ§Ä±lÄ±rken bellek bitti"
 
 #: ../src/misc.c:907
 msgid "out of memory during expansion of \"%d\""
-msgstr "\"%d\" açılırken bellek bitti"
+msgstr "\"%d\" aÃ§Ä±lÄ±rken bellek bitti"
 
 #: ../src/misc.c:919
 msgid "selection not available"
-msgstr "seçilmiş bir şey yok"
+msgstr "seÃ§ilmiÅŸ bir ÅŸey yok"
 
 #: ../src/misc.c:997 ../src/misc.c:1003
 msgid "bad window name value in %s state info"
-msgstr "%s durum bilgisinde kötü pencere ismi"
+msgstr "%s durum bilgisinde kÃ¶tÃ¼ pencere ismi"
 
 #: ../src/pixmap.c:235
 msgid "could not load mask bitmap file \"%s\". Won't use mask"
-msgstr "\"%s\" bitmap dosyası yüklenemedi. Onsuz çalışıyorum."
+msgstr "\"%s\" bitmap dosyasÄ± yÃ¼klenemedi. Onsuz Ã§alÄ±ÅŸÄ±yorum."
 
 #: ../src/resources.c:71
 msgid "The following character sets are missing:"
-msgstr "Belirtilen yazı türleri bulunamadı:"
+msgstr "Belirtilen yazÄ± tÃ¼rleri bulunamadÄ±:"
 
 #: ../src/resources.c:75
 msgid "The string \"%s\" will be used in place"
-msgstr "Bulunmayan sembol için \"%s\" kullanılacak."
+msgstr "Bulunmayan sembol iÃ§in \"%s\" kullanÄ±lacak."
 
 #: ../src/resources.c:77
 msgid "of any characters from those sets."
-msgstr "(tüm bulunamayan karakterler için)."
+msgstr "(tÃ¼m bulunamayan karakterler iÃ§in)."
 
 #: ../src/resources.c:80
 msgid "could not create font set %s. Trying fixed"
-msgstr "%s yazıtipi yaratılamıyor. Fixed deniyorum"
+msgstr "%s yazÄ±tipi yaratÄ±lamÄ±yor. Fixed deniyorum"
 
 #: ../src/resources.c:97
 msgid "could not load font %s. Trying fixed"
-msgstr "%S yazıtipi yüklenemedi. Fİxed deniyorum"
+msgstr "%S yazÄ±tipi yÃ¼klenemedi. FÄ°xed deniyorum"
 
 #: ../src/resources.c:135
 msgid "could not parse color \"%s\""
-msgstr "\"%s\" rengi yorumlanamadı"
+msgstr "\"%s\" rengi yorumlanamadÄ±"
 
 #: ../src/resources.c:139
 msgid "could not allocate color \"%s\""
-msgstr "\"%s\" rengi ayrılamadı"
+msgstr "\"%s\" rengi ayrÄ±lamadÄ±"
 
 #: ../src/rootmenu.c:160
 msgid "Program \"%s\" not found or cannot be executed."
-msgstr "\"%s\" programı bulunamadı ya da çalıştırılamadı"
+msgstr "\"%s\" programÄ± bulunamadÄ± ya da Ã§alÄ±ÅŸtÄ±rÄ±lamadÄ±"
 
 #: ../src/rootmenu.c:204
 msgid "Exit window manager?"
-msgstr "Pencere Denetçisinden çıkmak mı istiyorsunuz ?"
+msgstr "Pencere DenetÃ§isinden Ã§Ä±kmak mÄ± istiyorsunuz ?"
 
 #: ../src/rootmenu.c:224
 msgid "Close X session"
@@ -573,12 +573,12 @@ msgid ""
 "Close Window System session?\n"
 "(all applications will be closed)"
 msgstr ""
-"Oturumu kapatayım mı?\n"
-"(Tüm uygulamalar durdurulacaktır)"
+"Oturumu kapatayÄ±m mÄ±?\n"
+"(TÃ¼m uygulamalar durdurulacaktÄ±r)"
 
 #: ../src/rootmenu.c:227
 msgid "Exiting...\n"
-msgstr "Çıkıyorum..\n"
+msgstr "Ã‡Ä±kÄ±yorum..\n"
 
 #: ../src/rootmenu.c:407
 msgid "%s:invalid key modifier \"%s\""
@@ -594,7 +594,7 @@ msgstr ""
 
 #: ../src/rootmenu.c:482
 msgid "%s: unmatched '\"' in menu file"
-msgstr "%s: menü dosyasında '\"' eşlemem hatası"
+msgstr "%s: menÃ¼ dosyasÄ±nda '\"' eÅŸlemem hatasÄ±"
 
 #: ../src/rootmenu.c:531
 msgid "%s: missing command"
@@ -602,71 +602,71 @@ msgstr "%s: eksik komut"
 
 #: ../src/rootmenu.c:564
 msgid "invalid OPEN_MENU specification: %s"
-msgstr "geçersiz OPEN_MENU tanımı: %s"
+msgstr "geÃ§ersiz OPEN_MENU tanÄ±mÄ±: %s"
 
 #: ../src/rootmenu.c:629
 msgid "%s:could not stat menu"
-msgstr "%s:menüye erişilemedi"
+msgstr "%s:menÃ¼ye eriÅŸilemedi"
 
 #: ../src/rootmenu.c:637
 msgid "%s:could not stat menu :%s"
-msgstr "%s:menüye erişilemedi :%s"
+msgstr "%s:menÃ¼ye eriÅŸilemedi :%s"
 
 #: ../src/rootmenu.c:655
 msgid "too many parameters in OPEN_MENU: %s"
-msgstr "OPEN?MENU için fazla parametre: %s"
+msgstr "OPEN?MENU iÃ§in fazla parametre: %s"
 
 #: ../src/rootmenu.c:714 ../src/rootmenu.c:737
 msgid "%s:missing parameter for menu command \"%s\""
-msgstr "%s:menü komutu \"%s\" için eksik parametre"
+msgstr "%s:menÃ¼ komutu \"%s\" iÃ§in eksik parametre"
 
 #: ../src/rootmenu.c:794
 msgid "%s:unknown command \"%s\" in menu config."
-msgstr "%s: menü yapılandırmasında anlaşılamayan komut \"%s\""
+msgstr "%s: menÃ¼ yapÄ±landÄ±rmasÄ±nda anlaÅŸÄ±lamayan komut \"%s\""
 
 #: ../src/rootmenu.c:802
 msgid "%s:can't add shortcut for entry \"%s\""
-msgstr "%s: \"%s\" girişi için kısayol eklenemiyor"
+msgstr "%s: \"%s\" giriÅŸi iÃ§in kÄ±sayol eklenemiyor"
 
 #: ../src/rootmenu.c:934
 msgid "%s:maximal line size exceeded in menu config: %s"
-msgstr "%s:menü yapılandırmasında satır boyu sınırı açıldı: %s"
+msgstr "%s:menÃ¼ yapÄ±landÄ±rmasÄ±nda satÄ±r boyu sÄ±nÄ±rÄ± aÃ§Ä±ldÄ±: %s"
 
 #: ../src/rootmenu.c:956 ../src/rootmenu.c:1048 ../src/rootmenu.c:1146
 msgid "%s:missing command in menu config: %s"
-msgstr "%s: menü yapılandırmasında eksik komut: %s"
+msgstr "%s: menÃ¼ yapÄ±landÄ±rmasÄ±nda eksik komut: %s"
 
 #: ../src/rootmenu.c:986
 msgid "%s:syntax error in menu file:END declaration missing"
-msgstr "%s: menü dosyasında hata: END tanımı bulunamıyor"
+msgstr "%s: menÃ¼ dosyasÄ±nda hata: END tanÄ±mÄ± bulunamÄ±yor"
 
 #: ../src/rootmenu.c:1015 ../src/rootmenu.c:1111
 msgid "could not make arguments for menu file preprocessor"
-msgstr "menü dosyası önişlemcisi için argüman hazırlanamadı"
+msgstr "menÃ¼ dosyasÄ± Ã¶niÅŸlemcisi iÃ§in argÃ¼man hazÄ±rlanamadÄ±"
 
 #: ../src/rootmenu.c:1021 ../src/rootmenu.c:1118
 msgid "%s:could not open/preprocess menu file"
-msgstr "%s:menü dosyası açılamadı/işlenemedi"
+msgstr "%s:menÃ¼ dosyasÄ± aÃ§Ä±lamadÄ±/iÅŸlenemedi"
 
 #: ../src/rootmenu.c:1033 ../src/rootmenu.c:1131
 msgid "%s:could not open menu file"
-msgstr "%s: menü dosyası açılamadı"
+msgstr "%s: menÃ¼ dosyasÄ± aÃ§Ä±lamadÄ±"
 
 #: ../src/rootmenu.c:1060
 msgid "%s:invalid menu file"
-msgstr "%s:geçersiz menü dosyası"
+msgstr "%s:geÃ§ersiz menÃ¼ dosyasÄ±"
 
 #: ../src/rootmenu.c:1158
 msgid "%s:no title given for the root menu"
-msgstr "%s:ana menü için başlık verilmemiş"
+msgstr "%s:ana menÃ¼ iÃ§in baÅŸlÄ±k verilmemiÅŸ"
 
 #: ../src/rootmenu.c:1212 ../src/rootmenu.c:1275 ../src/rootmenu.c:1319
 msgid "out of memory while constructing directory menu %s"
-msgstr "dizin menüsü yaratılırken bellek bitti"
+msgstr "dizin menÃ¼sÃ¼ yaratÄ±lÄ±rken bellek bitti"
 
 #: ../src/rootmenu.c:1222
 msgid "%s:could not stat file \"%s\" in menu directory"
-msgstr "%s: menü dizinindeki \"%s\" dosyasına erişilemedi"
+msgstr "%s: menÃ¼ dizinindeki \"%s\" dosyasÄ±na eriÅŸilemedi"
 
 #: ../src/rootmenu.c:1368
 msgid "Commands"
@@ -674,73 +674,73 @@ msgstr "Komutlar"
 
 #: ../src/rootmenu.c:1370
 msgid "Exit..."
-msgstr "Çıkış..."
+msgstr "Ã‡Ä±kÄ±ÅŸ..."
 
 #: ../src/rootmenu.c:1404
 msgid "%s:could not find menu file \"%s\""
-msgstr "%s:menü dosyası \"%s\" bulunamadı"
+msgstr "%s:menÃ¼ dosyasÄ± \"%s\" bulunamadÄ±"
 
 #: ../src/rootmenu.c:1410
 msgid "%s:could not stat menu \"%s\""
-msgstr "%s: \"%s\" menüsüne erişilemedi"
+msgstr "%s: \"%s\" menÃ¼sÃ¼ne eriÅŸilemedi"
 
 #: ../src/rootmenu.c:1434 ../src/rootmenu.c:1481
 msgid "%s:format error in root menu configuration \"%s\""
-msgstr "%s:ana menü yapılandırmasında biçim hatası \"%s\""
+msgstr "%s:ana menÃ¼ yapÄ±landÄ±rmasÄ±nda biÃ§im hatasÄ± \"%s\""
 
 #: ../src/screen.c:110
 msgid "it seems that there already is a window manager running"
-msgstr "galiba başka bir pencere denetçisi çalışıyor"
+msgstr "galiba baÅŸka bir pencere denetÃ§isi Ã§alÄ±ÅŸÄ±yor"
 
 #: ../src/screen.c:346
 msgid "could not load logo image for panels"
-msgstr "paneller için logo görüntüsü yüklenemedi"
+msgstr "paneller iÃ§in logo gÃ¶rÃ¼ntÃ¼sÃ¼ yÃ¼klenemedi"
 
 #: ../src/screen.c:349
 msgid "error making logo image for panel:%s"
-msgstr "panel için logo görüntüsü yaratılırken hata oluştu:%s"
+msgstr "panel iÃ§in logo gÃ¶rÃ¼ntÃ¼sÃ¼ yaratÄ±lÄ±rken hata oluÅŸtu:%s"
 
 #: ../src/screen.c:510
 msgid "could not initialize graphics library context: %s"
-msgstr "grafik kitaplığı ile ilgili sorun: %s"
+msgstr "grafik kitaplÄ±ÄŸÄ± ile ilgili sorun: %s"
 
 #: ../src/session.c:113 ../src/wdefaults.c:555 ../src/winspector.c:323
 msgid "can't convert \"%s\" to boolean"
-msgstr "\"%s\" ikili düzene çevrilemedi"
+msgstr "\"%s\" ikili dÃ¼zene Ã§evrilemedi"
 
 #: ../src/stacking.c:88
 msgid "could not get window list!!"
-msgstr "pencere dökümü alınamadı"
+msgstr "pencere dÃ¶kÃ¼mÃ¼ alÄ±namadÄ±"
 
 #: ../src/startup.c:149
 msgid "internal X error: %s\n"
-msgstr "dahili X hatası: %s\n"
+msgstr "dahili X hatasÄ±: %s\n"
 
 #: ../src/startup.c:189
 msgid "got signal %i (%s) - restarting\n"
-msgstr "%i (%s) işareti alındı, yeniden başlatılıyor\n"
+msgstr "%i (%s) iÅŸareti alÄ±ndÄ±, yeniden baÅŸlatÄ±lÄ±yor\n"
 
 #: ../src/startup.c:191
 msgid "got signal %i - restarting\n"
-msgstr "%i işareti alındı, yeniden başlatılıyor\n"
+msgstr "%i iÅŸareti alÄ±ndÄ±, yeniden baÅŸlatÄ±lÄ±yor\n"
 
 #: ../src/startup.c:198
 msgid "%s: Received signal SIGTERM. Exiting..."
-msgstr "%s: SIGTERM işareti alındı. Çıkılıyor.."
+msgstr "%s: SIGTERM iÅŸareti alÄ±ndÄ±. Ã‡Ä±kÄ±lÄ±yor.."
 
 #: ../src/startup.c:207
 msgid "got signal %i (%s)\n"
-msgstr "%i (%s) işareti alındı.\n"
+msgstr "%i (%s) iÅŸareti alÄ±ndÄ±.\n"
 
 #: ../src/startup.c:209
 msgid "got signal %i\n"
-msgstr "%i işareti alındı.\n"
+msgstr "%i iÅŸareti alÄ±ndÄ±.\n"
 
 #. restart another window manager so that the X session doesn't
 #. * go to space
 #: ../src/startup.c:218
 msgid "trying to start alternative window manager..."
-msgstr "alternatif pencere denetçisi çalıştırılıyor"
+msgstr "alternatif pencere denetÃ§isi Ã§alÄ±ÅŸtÄ±rÄ±lÄ±yor"
 
 #: ../src/switchmenu.c:124
 msgid "Windows"
@@ -748,35 +748,35 @@ msgstr "Pencereler"
 
 #: ../src/texture.c:260
 msgid "image file \"%s\" used as texture could not be found."
-msgstr "Desen olarak kullanılan \"%s\" dosyası bulunamıyor"
+msgstr "Desen olarak kullanÄ±lan \"%s\" dosyasÄ± bulunamÄ±yor"
 
 #: ../src/texture.c:266
 msgid "could not load texture pixmap \"%s\":%s"
-msgstr "desen pixmap dosyası \"%s\" yüklenemiyor:%s"
+msgstr "desen pixmap dosyasÄ± \"%s\" yÃ¼klenemiyor:%s"
 
 #: ../src/texture.c:362 ../src/texture.c:499
 msgid "could not render texture: %s"
-msgstr "desen hesaplanamadı:%s"
+msgstr "desen hesaplanamadÄ±:%s"
 
 #: ../src/wdefaults.c:387
 msgid "could not find icon file \"%s\""
-msgstr "simge dosyası \"%s\" bulunamadı"
+msgstr "simge dosyasÄ± \"%s\" bulunamadÄ±"
 
 #: ../src/winmenu.c:179
 msgid "could not create workspace submenu for window menu"
-msgstr "pencere menüsü için çalışma alanı altmenüsü yaratılamadı"
+msgstr "pencere menÃ¼sÃ¼ iÃ§in Ã§alÄ±ÅŸma alanÄ± altmenÃ¼sÃ¼ yaratÄ±lamadÄ±"
 
 #: ../src/winmenu.c:201
 msgid "(Un)Maximize"
-msgstr "Ekranı kapla"
+msgstr "EkranÄ± kapla"
 
 #: ../src/winmenu.c:202
 msgid "Miniaturize"
-msgstr "Küçült"
+msgstr "KÃ¼Ã§Ã¼lt"
 
 #: ../src/winmenu.c:211
 msgid "(Un)Shade"
-msgstr "Katla/Aç"
+msgstr "Katla/AÃ§"
 
 #: ../src/winmenu.c:219
 msgid "Hide"
@@ -784,11 +784,11 @@ msgstr "Sakla"
 
 #: ../src/winmenu.c:227
 msgid "Hide Others"
-msgstr "Diğerlerini Sakla"
+msgstr "DiÄŸerlerini Sakla"
 
 #: ../src/winmenu.c:229
 msgid "Select"
-msgstr "Seç"
+msgstr "SeÃ§"
 
 #: ../src/winmenu.c:231
 msgid "Move To"
@@ -796,7 +796,7 @@ msgstr "Aktar"
 
 #: ../src/winmenu.c:236
 msgid "Attributes..."
-msgstr "Özellikler..."
+msgstr "Ã–zellikler..."
 
 #: ../src/winmenu.c:238
 msgid "Close"
@@ -804,11 +804,11 @@ msgstr "Kapat"
 
 #: ../src/winspector.c:270
 msgid "Could not find specified icon file"
-msgstr "Belirtilen simge dosyası bulunamadı"
+msgstr "Belirtilen simge dosyasÄ± bulunamadÄ±"
 
 #: ../src/winspector.c:928
 msgid "not enough memory to open window inspector panel"
-msgstr "pencere inceleme paneli için yeterli bellek yok"
+msgstr "pencere inceleme paneli iÃ§in yeterli bellek yok"
 
 #: ../src/winspector.c:955
 msgid "Save"
@@ -824,27 +824,27 @@ msgstr "Geri al"
 
 #: ../src/winspector.c:976 ../src/winspector.c:984
 msgid "Window Specification"
-msgstr "Pencere Tanımları"
+msgstr "Pencere TanÄ±mlarÄ±"
 
 #: ../src/winspector.c:977
 msgid "Window Attributes"
-msgstr "Pencere Özellikleri"
+msgstr "Pencere Ã–zellikleri"
 
 #: ../src/winspector.c:978
 msgid "Advanced Options"
-msgstr "İleri Seçenekler"
+msgstr "Ä°leri SeÃ§enekler"
 
 #: ../src/winspector.c:979
 msgid "Icon and Initial Workspace"
-msgstr "Simge ve Kullanıcı alanı"
+msgstr "Simge ve KullanÄ±cÄ± alanÄ±"
 
 #: ../src/winspector.c:980
 msgid "Application Specific"
-msgstr "Uygulamaya Özgü"
+msgstr "Uygulamaya Ã–zgÃ¼"
 
 #: ../src/winspector.c:1019
 msgid "Defaults for all windows"
-msgstr "Tüm pencereler için öntanım"
+msgstr "TÃ¼m pencereler iÃ§in Ã¶ntanÄ±m"
 
 #: ../src/winspector.c:1027
 msgid ""
@@ -852,33 +852,33 @@ msgid ""
 "windows that have their WM_CLASS property set to the above selected\n"
 "name, when saved."
 msgstr ""
-"Bu yapılandırma kaydedildiğinde \n"
-"WM_CLASS özelliğini yukarıda seçili bulunan ismine ayarlamış tüm\n"
+"Bu yapÄ±landÄ±rma kaydedildiÄŸinde \n"
+"WM_CLASS Ã¶zelliÄŸini yukarÄ±da seÃ§ili bulunan ismine ayarlamÄ±ÅŸ tÃ¼m\n"
 "penceleri etkileyecektir.."
 
 #: ../src/winspector.c:1034
 msgid "Attributes"
-msgstr "Özellikler"
+msgstr "Ã–zellikler"
 
 #: ../src/winspector.c:1044
 msgid "Disable titlebar"
-msgstr "Başlık satırını kaldır"
+msgstr "BaÅŸlÄ±k satÄ±rÄ±nÄ± kaldÄ±r"
 
 #: ../src/winspector.c:1048
 msgid "Disable resizebar"
-msgstr "Boyutlandırma satırını kaldır"
+msgstr "BoyutlandÄ±rma satÄ±rÄ±nÄ± kaldÄ±r"
 
 #: ../src/winspector.c:1052
 msgid "Disable close button"
-msgstr "Kapatma tuşunu kaldır"
+msgstr "Kapatma tuÅŸunu kaldÄ±r"
 
 #: ../src/winspector.c:1056
 msgid "Disable miniaturize button"
-msgstr "Simgeleştir tulunu kaldır"
+msgstr "SimgeleÅŸtir tulunu kaldÄ±r"
 
 #: ../src/winspector.c:1060
 msgid "Keep on top"
-msgstr "En üstte tut"
+msgstr "En Ã¼stte tut"
 
 #: ../src/winspector.c:1064
 msgid "Omnipresent"
@@ -886,7 +886,7 @@ msgstr "Her zaman bulunsun"
 
 #: ../src/winspector.c:1068
 msgid "Start Miniaturized"
-msgstr "Simge halinde çalışşın"
+msgstr "Simge halinde Ã§alÄ±ÅŸÅŸÄ±n"
 
 #: ../src/winspector.c:1072
 msgid "Skip window list"
@@ -894,7 +894,7 @@ msgstr "Pencere listesine ekleme"
 
 #: ../src/winspector.c:1086
 msgid "Advanced"
-msgstr "İleri"
+msgstr "Ä°leri"
 
 #: ../src/winspector.c:1096
 msgid "Ignore HideOthers"
@@ -902,15 +902,15 @@ msgstr "HideOthers tan etkilenme"
 
 #: ../src/winspector.c:1100
 msgid "Don't bind keyboard shortcuts"
-msgstr "Kısayolları bağlama"
+msgstr "KÄ±sayollarÄ± baÄŸlama"
 
 #: ../src/winspector.c:1104
 msgid "Don't bind mouse clicks"
-msgstr "Fare tıklamalarını bağlama"
+msgstr "Fare tÄ±klamalarÄ±nÄ± baÄŸlama"
 
 #: ../src/winspector.c:1108
 msgid "Keep inside screen"
-msgstr "Ekran içinde tut"
+msgstr "Ekran iÃ§inde tut"
 
 #: ../src/winspector.c:1112
 msgid "No application icon"
@@ -918,7 +918,7 @@ msgstr "Uygulama simgesi ekleme"
 
 #: ../src/winspector.c:1116
 msgid "Don't let it take focus"
-msgstr "Focus almasına izin verme"
+msgstr "Focus almasÄ±na izin verme"
 
 #: ../src/winspector.c:1120
 msgid "Don't Save Session"
@@ -926,15 +926,15 @@ msgstr "Oturumu kaydetme"
 
 #: ../src/winspector.c:1135
 msgid "Enable the \"Don't bind...\" options to allow the application to receive all mouse or keyboard events."
-msgstr "\"..bağlama\" seçeneklerini seçerek, uygulamanızın tüm fare ve klavye olaylarını yakalamasını sağlayın. "
+msgstr "\"..baÄŸlama\" seÃ§eneklerini seÃ§erek, uygulamanÄ±zÄ±n tÃ¼m fare ve klavye olaylarÄ±nÄ± yakalamasÄ±nÄ± saÄŸlayÄ±n. "
 
 #: ../src/winspector.c:1142
 msgid "Miniwindow Image"
-msgstr "Minipencere görüntüsü"
+msgstr "Minipencere gÃ¶rÃ¼ntÃ¼sÃ¼"
 
 #: ../src/winspector.c:1160
 msgid "Update"
-msgstr "Güncelle"
+msgstr "GÃ¼ncelle"
 
 #: ../src/winspector.c:1165
 msgid "Icon file name:"
@@ -942,11 +942,11 @@ msgstr "Simge dosya ismi:"
 
 #: ../src/winspector.c:1175
 msgid "Ignore client supplied icon"
-msgstr "Uygulamanın simgesini gözardı et"
+msgstr "UygulamanÄ±n simgesini gÃ¶zardÄ± et"
 
 #: ../src/winspector.c:1181
 msgid "Initial Workspace"
-msgstr "Başlama çalışma alanı"
+msgstr "BaÅŸlama Ã§alÄ±ÅŸma alanÄ±"
 
 #: ../src/winspector.c:1188
 msgid "Nowhere in particular"
@@ -954,23 +954,23 @@ msgstr "Herhangi bir yerde"
 
 #: ../src/winspector.c:1219
 msgid "Application Wide"
-msgstr "Uygulama Çapında"
+msgstr "Uygulama Ã‡apÄ±nda"
 
 #: ../src/winspector.c:1229
 msgid "Start Hidden"
-msgstr "Saklı Başlat"
+msgstr "SaklÄ± BaÅŸlat"
 
 #: ../src/workspace.c:89 ../src/workspace.c:90 ../src/workspace.c:418
 msgid "Workspace %i"
-msgstr "Çalışma alanı %i"
+msgstr "Ã‡alÄ±ÅŸma alanÄ± %i"
 
 #: ../src/workspace.c:442
 msgid "Workspaces"
-msgstr "Çalışma Alanları"
+msgstr "Ã‡alÄ±ÅŸma AlanlarÄ±"
 
 #: ../src/workspace.c:444
 msgid "could not create Workspace menu"
-msgstr "Çalışma Alanı menüsü yaratılamadı"
+msgstr "Ã‡alÄ±ÅŸma AlanÄ± menÃ¼sÃ¼ yaratÄ±lamadÄ±"
 
 #: ../src/workspace.c:451
 msgid "New"
@@ -982,4 +982,4 @@ msgstr "Sonucuyu sil"
 
 #: ../src/xutil.c:220
 msgid "invalid data in selection"
-msgstr "Seçimde geçersiz veri"
+msgstr "SeÃ§imde geÃ§ersiz veri"

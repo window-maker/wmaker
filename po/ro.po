@@ -6,7 +6,7 @@ msgstr ""
 "From: AndreiVuta(gigi_man@manag.pub.ro)\n"
 "Language-Team: Romanian \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
 #: ../main.c:147

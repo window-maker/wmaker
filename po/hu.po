@@ -11,7 +11,7 @@ msgstr ""
 "Last-Translator: Horvath Szabolcs <horvathsz@penguinpowered.com>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../src/appicon.c:570 ../src/dialog.c:223 ../src/dock.c:3301 ../src/dockedapp.c:210 ../src/dockedapp.c:251 ../src/rootmenu.c:1754 ../src/winspector.c:290 ../src/winspector.c:306
@@ -20,7 +20,7 @@ msgstr "Hiba"
 
 #: ../src/appicon.c:571
 msgid "Could not open specified icon file"
-msgstr "Nem található a megadott ikon fájl!"
+msgstr "Nem talÃ¡lhatÃ³ a megadott ikon fÃ¡jl!"
 
 #: ../src/appicon.c:572 ../src/dialog.c:122 ../src/dialog.c:223 ../src/dialog.c:460 ../src/dialog.c:1477 ../src/dock.c:514 ../src/dock.c:522 ../src/dock.c:545 ../src/dock.c:3302 ../src/dockedapp.c:211 ../src/dockedapp.c:257 ../src/dockedapp.c:371 ../src/rootmenu.c:1758 ../src/winspector.c:291 ../src/winspector.c:307
 msgid "OK"
@@ -32,13 +32,13 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-" be lesz zárva.\n"
-"Minden el nem mentett információ elveszik.\n"
-"Erõsítsd meg."
+" be lesz zÃ¡rva.\n"
+"Minden el nem mentett informÃ¡ciÃ³ elveszik.\n"
+"ErÅ‘sÃ­tsd meg."
 
 #: ../src/appicon.c:605 ../src/dock.c:283 ../src/winmenu.c:125
 msgid "Kill Application"
-msgstr "Alkalmazás kilövése"
+msgstr "AlkalmazÃ¡s kilÃ¶vÃ©se"
 
 #: ../src/appicon.c:606 ../src/dock.c:284 ../src/winmenu.c:127
 msgid "Yes"
@@ -46,11 +46,11 @@ msgstr "OK"
 
 #: ../src/appicon.c:606 ../src/dock.c:284 ../src/winmenu.c:127
 msgid "No"
-msgstr "Mégsem"
+msgstr "MÃ©gsem"
 
 #: ../src/appicon.c:624 ../src/dock.c:1196
 msgid "Unhide Here"
-msgstr "Elõtérbe rak"
+msgstr "ElÅ‘tÃ©rbe rak"
 
 #: ../src/appicon.c:625 ../src/appicon.c:650 ../src/dock.c:1198 ../src/dock.c:1200 ../src/dock.c:3468 ../src/dock.c:3470 ../src/winmenu.c:465
 msgid "Hide"
@@ -62,156 +62,156 @@ msgstr "Ikon..."
 
 #: ../src/appicon.c:627 ../src/dock.c:1204 ../src/rootmenu.c:228 ../src/rootmenu.c:242 ../src/winmenu.c:512
 msgid "Kill"
-msgstr "Kilövés"
+msgstr "KilÃ¶vÃ©s"
 
 #: ../src/appicon.c:648 ../src/dock.c:3466
 msgid "Unhide"
-msgstr "Elõtérbe rak"
+msgstr "ElÅ‘tÃ©rbe rak"
 
 #: ../src/defaults.c:836 ../src/startup.c:767 ../src/startup.c:785 ../src/startup.c:791
 msgid "could not read domain \"%s\" from defaults database"
-msgstr "Az alapértelmezett adatbázisból a \"%s\" domain nem olvasható."
+msgstr "Az alapÃ©rtelmezett adatbÃ¡zisbÃ³l a \"%s\" domain nem olvashatÃ³."
 
 #: ../src/defaults.c:882 ../src/defaults.c:1007 ../src/defaults.c:1046 ../src/defaults.c:1076
 msgid "Domain %s (%s) of defaults database is corrupted!"
-msgstr "A %s (%s) domain adatbázisa nem megfelelõ formátumú!"
+msgstr "A %s (%s) domain adatbÃ¡zisa nem megfelelÅ‘ formÃ¡tumÃº!"
 
 #: ../src/defaults.c:887 ../src/defaults.c:1028 ../src/defaults.c:1059 ../src/defaults.c:1085
 msgid "could not load domain %s from user defaults database"
-msgstr "A felhasználói adatbázisból nem tölthetõ be a %s domain."
+msgstr "A felhasznÃ¡lÃ³i adatbÃ¡zisbÃ³l nem tÃ¶lthetÅ‘ be a %s domain."
 
 #: ../src/defaults.c:898 ../src/defaults.c:992
 msgid "Domain %s (%s) of global defaults database is corrupted!"
-msgstr "Az alapértelmezett adatbázisból a %s (%s) domain megsérült."
+msgstr "Az alapÃ©rtelmezett adatbÃ¡zisbÃ³l a %s (%s) domain megsÃ©rÃ¼lt."
 
 #: ../src/defaults.c:917 ../src/defaults.c:997
 msgid "could not load domain %s from global defaults database"
-msgstr "Az alapértelmezett adatbázisból a %s domaint nem lehet betölteni."
+msgstr "Az alapÃ©rtelmezett adatbÃ¡zisbÃ³l a %s domaint nem lehet betÃ¶lteni."
 
 #: ../src/defaults.c:1305
 msgid "wrong option value for key \"%s\". Should be one of %s"
-msgstr "rossz érték a következõ kulcshoz: \"%s\". Válassz ezek közül egyet: %s."
+msgstr "rossz Ã©rtÃ©k a kÃ¶vetkezÅ‘ kulcshoz: \"%s\". VÃ¡lassz ezek kÃ¶zÃ¼l egyet: %s."
 
 #: ../src/defaults.c:1352
 msgid "can't convert \"%s\" to boolean for key \"%s\""
-msgstr "a következõ adatot nem tudom logikai értékké alakítani: \"%s\". Ehhez a kulcshoz: \"%s\""
+msgstr "a kÃ¶vetkezÅ‘ adatot nem tudom logikai Ã©rtÃ©kkÃ© alakÃ­tani: \"%s\". Ehhez a kulcshoz: \"%s\""
 
 #: ../src/defaults.c:1357 ../src/defaults.c:1391 ../src/defaults.c:1423 ../src/defaults.c:1436 ../src/defaults.c:1451 ../src/defaults.c:1465 ../src/defaults.c:1537 ../src/defaults.c:1549 ../src/defaults.c:1955 ../src/defaults.c:1972 ../src/defaults.c:1985 ../src/defaults.c:2018 ../src/defaults.c:2034 ../src/defaults.c:2065 ../src/defaults.c:2155
 msgid "using default \"%s\" instead"
-msgstr "az alapbeállítást \"%s\" használom helyette"
+msgstr "az alapbeÃ¡llÃ­tÃ¡st \"%s\" hasznÃ¡lom helyette"
 
 #: ../src/defaults.c:1388
 msgid "can't convert \"%s\" to integer for key \"%s\""
-msgstr "a következõ adatot nem tudom egész típusúvá alakítani: \"%s\". Ehhez a kulcshoz: \"%s\""
+msgstr "a kÃ¶vetkezÅ‘ adatot nem tudom egÃ©sz tÃ­pusÃºvÃ¡ alakÃ­tani: \"%s\". Ehhez a kulcshoz: \"%s\""
 
 #: ../src/defaults.c:1418 ../src/defaults.c:1532 ../src/defaults.c:1950 ../src/defaults.c:1967 ../src/defaults.c:2013 ../src/defaults.c:2060 ../src/wdefaults.c:557 ../src/wdefaults.c:593
 msgid "Wrong option format for key \"%s\". Should be %s."
-msgstr "Hibás formátum a következõ kulcsnál: \"%s\". Valami ilyesminek kellene lennie: %s."
+msgstr "HibÃ¡s formÃ¡tum a kÃ¶vetkezÅ‘ kulcsnÃ¡l: \"%s\". Valami ilyesminek kellene lennie: %s."
 
 #: ../src/defaults.c:1431
 msgid "Incorrect number of elements in array for key \"%s\"."
-msgstr "A \"%s\" kulcshoz tartozó tömbben helytelen számú elem található."
+msgstr "A \"%s\" kulcshoz tartozÃ³ tÃ¶mbben helytelen szÃ¡mÃº elem talÃ¡lhatÃ³."
 
 #: ../src/defaults.c:1446
 msgid "Wrong value for key \"%s\". Should be Coordinate."
-msgstr "Rossz értéket adtál meg ennek a kulcsnak: \"%s\". Koordinátának kellene lennie."
+msgstr "Rossz Ã©rtÃ©ket adtÃ¡l meg ennek a kulcsnak: \"%s\". KoordinÃ¡tÃ¡nak kellene lennie."
 
 #: ../src/defaults.c:1461
 msgid "can't convert array to integers for \"%s\"."
-msgstr "nem tudom a tömböt számokká konvertálni: \"%s\"."
+msgstr "nem tudom a tÃ¶mbÃ¶t szÃ¡mokkÃ¡ konvertÃ¡lni: \"%s\"."
 
 #: ../src/defaults.c:1659 ../src/defaults.c:1691 ../src/defaults.c:1707 ../src/defaults.c:1753 ../src/defaults.c:1793 ../src/defaults.c:1831 ../src/defaults.c:1847
 msgid "\"%s\" is not a valid color name"
-msgstr "Ilyen szín nincs: \"%s\"!"
+msgstr "Ilyen szÃ­n nincs: \"%s\"!"
 
 #: ../src/defaults.c:1672
 msgid "bad number of arguments in gradient specification"
-msgstr "nem megfelelõ számú paraméter az összetevõk leírásában "
+msgstr "nem megfelelÅ‘ szÃ¡mÃº paramÃ©ter az Ã¶sszetevÅ‘k leÃ­rÃ¡sÃ¡ban "
 
 #: ../src/defaults.c:1726
 msgid "too few arguments in multicolor gradient specification"
-msgstr "Elégtelen változómeghatározás a színátmenet-leírásban."
+msgstr "ElÃ©gtelen vÃ¡ltozÃ³meghatÃ¡rozÃ¡s a szÃ­nÃ¡tmenet-leÃ­rÃ¡sban."
 
 #: ../src/defaults.c:1820
 msgid "bad number of arguments in textured gradient specification"
-msgstr "nem megfelelõ számú paraméter a mintázott színátmenet-leírásban."
+msgstr "nem megfelelÅ‘ szÃ¡mÃº paramÃ©ter a mintÃ¡zott szÃ­nÃ¡tmenet-leÃ­rÃ¡sban."
 
 #: ../src/defaults.c:1863
 msgid "bad opacity value for tgradient texture \"%s\". Should be [0..255]"
-msgstr "Rossz érték a tgradient minta áttetszõségénél: \"%s\". 0..255 közötti értéknek kell lennie."
+msgstr "Rossz Ã©rtÃ©k a tgradient minta Ã¡ttetszÅ‘sÃ©gÃ©nÃ©l: \"%s\". 0..255 kÃ¶zÃ¶tti Ã©rtÃ©knek kell lennie."
 
 #: ../src/defaults.c:1923
 msgid "could not initialize library %s"
-msgstr "A %s könyvtárat nem tudom kezdõállapotba hozni."
+msgstr "A %s kÃ¶nyvtÃ¡rat nem tudom kezdÅ‘Ã¡llapotba hozni."
 
 #: ../src/defaults.c:1926
 msgid "could not find function %s::%s"
-msgstr "A %s::%s függvény nem található."
+msgstr "A %s::%s fÃ¼ggvÃ©ny nem talÃ¡lhatÃ³."
 
 #. TEXTURE_PLUGIN
 #: ../src/defaults.c:1933
 msgid "invalid texture type %s"
-msgstr "Érvénytelen minta típus: %s"
+msgstr "Ã‰rvÃ©nytelen minta tÃ­pus: %s"
 
 #: ../src/defaults.c:1980
 msgid "Error in texture specification for key \"%s\""
-msgstr "A \"%s\" kulcsnál hiba van a minta leírásában."
+msgstr "A \"%s\" kulcsnÃ¡l hiba van a minta leÃ­rÃ¡sÃ¡ban."
 
 #: ../src/defaults.c:2030
 msgid "Wrong type for workspace background. Should be a texture type."
-msgstr "Rossz típust adtál meg a munkafelület hátterének. Minta típusnak kellene lennie."
+msgstr "Rossz tÃ­pust adtÃ¡l meg a munkafelÃ¼let hÃ¡tterÃ©nek. Minta tÃ­pusnak kellene lennie."
 
 #: ../src/defaults.c:2078
 msgid "Wrong type for background of workspace %i. Should be a texture."
-msgstr "Rossz típust adtál meg a %i. számú munkafelület hátterének. Mintának kellene lennie."
+msgstr "Rossz tÃ­pust adtÃ¡l meg a %i. szÃ¡mÃº munkafelÃ¼let hÃ¡tterÃ©nek. MintÃ¡nak kellene lennie."
 
 #: ../src/defaults.c:2122
 msgid "could not load any usable font!!!"
-msgstr "Egyetlen használható fontot sem tudok betölteni!!"
+msgstr "Egyetlen hasznÃ¡lhatÃ³ fontot sem tudok betÃ¶lteni!!"
 
 #: ../src/defaults.c:2150
 msgid "could not get color for key \"%s\""
-msgstr "a \"%s\" kulcshoz tartozó színt nem találom"
+msgstr "a \"%s\" kulcshoz tartozÃ³ szÃ­nt nem talÃ¡lom"
 
 #: ../src/defaults.c:2210 ../src/rootmenu.c:494
 msgid "%s:invalid key modifier \"%s\""
-msgstr "%s: érvénytelen billentyû-módosító \"%s\""
+msgstr "%s: Ã©rvÃ©nytelen billentyÅ±-mÃ³dosÃ­tÃ³ \"%s\""
 
 #: ../src/defaults.c:2222
 msgid "%s:invalid kbd shortcut specification \"%s\""
-msgstr "%s: érvénytelen gyorsbillentyû-leírás \"%s\""
+msgstr "%s: Ã©rvÃ©nytelen gyorsbillentyÅ±-leÃ­rÃ¡s \"%s\""
 
 #: ../src/defaults.c:2229
 msgid "%s:invalid key in shortcut \"%s\""
-msgstr "%s: érvénytelen billentyû a \"%s\" gyorsbillentyûben"
+msgstr "%s: Ã©rvÃ©nytelen billentyÅ± a \"%s\" gyorsbillentyÅ±ben"
 
 #: ../src/defaults.c:2255
 msgid "%s: modifier key %s is not valid"
-msgstr "%s: a %s módosító billentyû érvénytelen"
+msgstr "%s: a %s mÃ³dosÃ­tÃ³ billentyÅ± Ã©rvÃ©nytelen"
 
 #: ../src/defaults.c:2289
 msgid "could not load image in option %s: %s"
-msgstr "a kép nem betölthetõ a %s értékénél: %s"
+msgstr "a kÃ©p nem betÃ¶lthetÅ‘ a %s Ã©rtÃ©kÃ©nÃ©l: %s"
 
 #: ../src/defaults.c:2371
 msgid "could not render texture for icon background"
-msgstr "nem alakítható a minta háttérikonná."
+msgstr "nem alakÃ­thatÃ³ a minta hÃ¡ttÃ©rikonnÃ¡."
 
 #: ../src/dialog.c:122 ../src/dialog.c:467 ../src/dock.c:545 ../src/dockedapp.c:377 ../src/rootmenu.c:190 ../src/rootmenu.c:228 ../src/rootmenu.c:242
 msgid "Cancel"
-msgstr "Mégsem"
+msgstr "MÃ©gsem"
 
 #: ../src/dialog.c:218
 msgid "Could not open directory "
-msgstr "A könyvtár nem nyitható meg "
+msgstr "A kÃ¶nyvtÃ¡r nem nyithatÃ³ meg "
 
 #: ../src/dialog.c:271
 msgid "Could not load image file "
-msgstr "A kép nem lehet betölteni "
+msgstr "A kÃ©p nem lehet betÃ¶lteni "
 
 #: ../src/dialog.c:403
 msgid "Directories"
-msgstr "Könyvtárak"
+msgstr "KÃ¶nyvtÃ¡rak"
 
 #: ../src/dialog.c:412
 msgid "Icons"
@@ -219,248 +219,248 @@ msgstr "Ikonok"
 
 #: ../src/dialog.c:450
 msgid "File Name:"
-msgstr "Fájlnév:"
+msgstr "FÃ¡jlnÃ©v:"
 
 #: ../src/dialog.c:473
 msgid "Choose File"
-msgstr "Válassz fájlt"
+msgstr "VÃ¡lassz fÃ¡jlt"
 
 #: ../src/dialog.c:490 ../src/dialog.c:492
 msgid "Icon Chooser"
-msgstr "Ikon választó"
+msgstr "Ikon vÃ¡lasztÃ³"
 
 #: ../src/dialog.c:1401 ../src/startup.c:325
 msgid "cannot open connection for crashing dialog panel. Aborting."
-msgstr "az ütközõ dialógus panelhez nem tudok kapcsolatot nyitni. Megszakítom."
+msgstr "az Ã¼tkÃ¶zÅ‘ dialÃ³gus panelhez nem tudok kapcsolatot nyitni. MegszakÃ­tom."
 
 #: ../src/dialog.c:1427
 msgid "Fatal error"
-msgstr "Végzetes hiba"
+msgstr "VÃ©gzetes hiba"
 
 #: ../src/dialog.c:1438
 msgid ""
 "Window Maker received signal %i\n"
 "(%s)."
 msgstr ""
-"A WindowMaker egy %i jelzést vett.\n"
+"A WindowMaker egy %i jelzÃ©st vett.\n"
 "(%s)"
 
 #: ../src/dialog.c:1441
 msgid "Window Maker received signal %i."
-msgstr "Window Maker egy %i jelzést vett."
+msgstr "Window Maker egy %i jelzÃ©st vett."
 
 #: ../src/dialog.c:1450
 msgid " This fatal error occured probably due to a bug. Please fill the included BUGFORM and report it to bugs@windowmaker.org."
-msgstr " Ezt a végzetes hibát valószínûleg egy programozási hiba okozta. Légy szíves töltsd ki a mellékelt BUG-kérdõívet és küldd el a bugs@windowmaker.org e-mail címre. Köszi!"
+msgstr " Ezt a vÃ©gzetes hibÃ¡t valÃ³szÃ­nÅ±leg egy programozÃ¡si hiba okozta. LÃ©gy szÃ­ves tÃ¶ltsd ki a mellÃ©kelt BUG-kÃ©rdÅ‘Ã­vet Ã©s kÃ¼ldd el a bugs@windowmaker.org e-mail cÃ­mre. KÃ¶szi!"
 
 #: ../src/dialog.c:1458
 msgid "What do you want to do now?"
-msgstr "Mit szeretnél most csinálni?"
+msgstr "Mit szeretnÃ©l most csinÃ¡lni?"
 
 #: ../src/dialog.c:1464
 msgid "Select action"
-msgstr "Válassz ezek közül"
+msgstr "VÃ¡lassz ezek kÃ¶zÃ¼l"
 
 #: ../src/dialog.c:1465
 msgid "Abort and leave a core file"
-msgstr "Megszakít (core fájl keletkezik)"
+msgstr "MegszakÃ­t (core fÃ¡jl keletkezik)"
 
 #: ../src/dialog.c:1466
 msgid "Restart Window Maker"
-msgstr "Window Maker újraindítása"
+msgstr "Window Maker ÃºjraindÃ­tÃ¡sa"
 
 #: ../src/dialog.c:1467
 msgid "Start alternate window manager"
-msgstr "Másik ablakkezelõ indítása"
+msgstr "MÃ¡sik ablakkezelÅ‘ indÃ­tÃ¡sa"
 
 #: ../src/dock.c:212
 msgid "Type the name for workspace %i:"
-msgstr "Ird be a %i. munkafelület nevét:"
+msgstr "Ird be a %i. munkafelÃ¼let nevÃ©t:"
 
 #: ../src/dock.c:213 ../src/dock.c:1160 ../src/dock.c:1163 ../src/dock.c:3384
 msgid "Rename Workspace"
-msgstr "Átnevezés"
+msgstr "ÃtnevezÃ©s"
 
 #: ../src/dock.c:508 ../src/dock.c:516
 msgid "Warning"
-msgstr "Figyelmeztetés"
+msgstr "FigyelmeztetÃ©s"
 
 #: ../src/dock.c:509
 msgid "Some icons cannot be made omnipresent. Please make sure that no other icon is docked in the same positions on the other workspaces and the Clip is not full in some workspace."
-msgstr "Néhány ikont lehetetlen mindig láthatóvá tenni. Gyõzödj meg róla, hogy nincs-e másik ikon rögzítve ugyanebben a pozícióban másik munkafelületen vagy a Kapocs nincs-e megtelve valahol."
+msgstr "NÃ©hÃ¡ny ikont lehetetlen mindig lÃ¡thatÃ³vÃ¡ tenni. GyÅ‘zÃ¶dj meg rÃ³la, hogy nincs-e mÃ¡sik ikon rÃ¶gzÃ­tve ugyanebben a pozÃ­ciÃ³ban mÃ¡sik munkafelÃ¼leten vagy a Kapocs nincs-e megtelve valahol."
 
 #: ../src/dock.c:517
 msgid "Icon cannot be made omnipresent. Please make sure that no other icon is docked in the same position on the other workspaces and the Clip is not full in some workspace."
-msgstr "Ez az ikont lehetetlen mindig láthatóvá tenni. Gyõzödj meg róla, hogy nincs-e másik ikon rögzítve ugyanebben a pozícióban másik munkafelületen vagy a Kapocs nincs-e megtelve valahol."
+msgstr "Ez az ikont lehetetlen mindig lÃ¡thatÃ³vÃ¡ tenni. GyÅ‘zÃ¶dj meg rÃ³la, hogy nincs-e mÃ¡sik ikon rÃ¶gzÃ­tve ugyanebben a pozÃ­ciÃ³ban mÃ¡sik munkafelÃ¼leten vagy a Kapocs nincs-e megtelve valahol."
 
 #: ../src/dock.c:543
 msgid "Workspace Clip"
-msgstr "Munkafelület kapocs"
+msgstr "MunkafelÃ¼let kapocs"
 
 #: ../src/dock.c:544
 msgid "All selected icons will be removed!"
-msgstr "Minden kijelölt ikon el lesz távolítva!"
+msgstr "Minden kijelÃ¶lt ikon el lesz tÃ¡volÃ­tva!"
 
 #: ../src/dock.c:591 ../src/dock.c:1175 ../src/dock.c:1177 ../src/dock.c:3420
 msgid "Keep Icon"
-msgstr "Ikon megtartása"
+msgstr "Ikon megtartÃ¡sa"
 
 #: ../src/dock.c:592 ../src/dock.c:2130 ../src/dock.c:2264
 msgid "Type the command used to launch the application"
-msgstr "Írd be a parancsot, amivel az alkalmazás indul"
+msgstr "Ãrd be a parancsot, amivel az alkalmazÃ¡s indul"
 
 #: ../src/dock.c:973
 msgid "could not launch application %s\n"
-msgstr "Az %s alkalmazást nem tudom futtatni\n"
+msgstr "Az %s alkalmazÃ¡st nem tudom futtatni\n"
 
 #: ../src/dock.c:1028
 msgid "could not create workspace submenu for Clip menu"
-msgstr "a Kapocs menühöz nem tudok munkafelület almenüt létrehozni"
+msgstr "a Kapocs menÃ¼hÃ¶z nem tudok munkafelÃ¼let almenÃ¼t lÃ©trehozni"
 
 #: ../src/dock.c:1091
 msgid "could not create options submenu for Clip menu"
-msgstr "a Kapocs menühöz nem tudok opciók almenüt létrehozni"
+msgstr "a Kapocs menÃ¼hÃ¶z nem tudok opciÃ³k almenÃ¼t lÃ©trehozni"
 
 #: ../src/dock.c:1095
 msgid "Keep on Top"
-msgstr "Mindig felül"
+msgstr "Mindig felÃ¼l"
 
 #: ../src/dock.c:1101
 msgid "Collapsed"
-msgstr "Ikonok behúzása"
+msgstr "Ikonok behÃºzÃ¡sa"
 
 #: ../src/dock.c:1107
 msgid "AutoCollapse"
-msgstr "Automatikus behúzás"
+msgstr "Automatikus behÃºzÃ¡s"
 
 #: ../src/dock.c:1113
 msgid "AutoRaiseLower"
-msgstr "Automatikus elõtérbe/háttérbe rakás"
+msgstr "Automatikus elÅ‘tÃ©rbe/hÃ¡ttÃ©rbe rakÃ¡s"
 
 #: ../src/dock.c:1119
 msgid "AutoAttract Icons"
-msgstr "Automatikusan vonzódnak az ikonok"
+msgstr "Automatikusan vonzÃ³dnak az ikonok"
 
 #: ../src/dock.c:1125
 msgid "Keep Attracted Icons"
-msgstr "A vonzott ikonok megtartása"
+msgstr "A vonzott ikonok megtartÃ¡sa"
 
 #: ../src/dock.c:1149 ../src/winmenu.c:407
 msgid "Keep on top"
-msgstr "Mindig felül"
+msgstr "Mindig felÃ¼l"
 
 #: ../src/dock.c:1155
 msgid "Clip Options"
-msgstr "Kapocs beállítások"
+msgstr "Kapocs beÃ¡llÃ­tÃ¡sok"
 
 #: ../src/dock.c:1165
 msgid "Selected"
-msgstr "Kijelölt"
+msgstr "KijelÃ¶lt"
 
 #: ../src/dock.c:1170 ../src/dock.c:1173 ../src/dock.c:3411
 msgid "Select All Icons"
-msgstr "Minden ikon kijelölése"
+msgstr "Minden ikon kijelÃ¶lÃ©se"
 
 #: ../src/dock.c:1179 ../src/dock.c:1181 ../src/dock.c:3428
 msgid "Move Icon To"
-msgstr "Ikon mozgatása"
+msgstr "Ikon mozgatÃ¡sa"
 
 #: ../src/dock.c:1186 ../src/dock.c:1189 ../src/dock.c:3439
 msgid "Remove Icon"
-msgstr "Ikon törlése"
+msgstr "Ikon tÃ¶rlÃ©se"
 
 #: ../src/dock.c:1191
 msgid "Attract Icons"
-msgstr "Az ikonok vonzódnak"
+msgstr "Az ikonok vonzÃ³dnak"
 
 #: ../src/dock.c:1194
 msgid "Launch"
-msgstr "Indítás"
+msgstr "IndÃ­tÃ¡s"
 
 #: ../src/dock.c:1202
 msgid "Settings..."
-msgstr "Beállítások..."
+msgstr "BeÃ¡llÃ­tÃ¡sok..."
 
 #: ../src/dock.c:1595 ../src/dock.c:1609 ../src/dock.c:1623 ../src/dock.c:1633 ../src/dock.c:1658
 msgid "bad value in docked icon state info %s"
-msgstr "rossz érték a dokkolt ikon állapot-információjánál: %s"
+msgstr "rossz Ã©rtÃ©k a dokkolt ikon Ã¡llapot-informÃ¡ciÃ³jÃ¡nÃ¡l: %s"
 
 #: ../src/dock.c:1641
 msgid "bad value in docked icon position %i,%i"
-msgstr "rossz érték a dokkolt ikon pozícíójánál: %i, %i"
+msgstr "rossz Ã©rtÃ©k a dokkolt ikon pozÃ­cÃ­Ã³jÃ¡nÃ¡l: %i, %i"
 
 #: ../src/dock.c:1897
 msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
-msgstr "túl sok ikon van a dokkban tárolva. Figyelmen kívûl hagyom, ami nem fér ki"
+msgstr "tÃºl sok ikon van a dokkban tÃ¡rolva. Figyelmen kÃ­vÅ±l hagyom, ami nem fÃ©r ki"
 
 #. icon->forced_dock = 1;
 #: ../src/dock.c:2129 ../src/dock.c:2263
 msgid "Dock Icon"
-msgstr "Rögzített ikon"
+msgstr "RÃ¶gzÃ­tett ikon"
 
 #: ../src/dock.c:3294 ../src/dock.c:3298
 msgid "Could not execute command \"%s\""
-msgstr "A \"%s\" parancsot nem tudom végrehajtani"
+msgstr "A \"%s\" parancsot nem tudom vÃ©grehajtani"
 
 #: ../src/dock.c:3390
 msgid "Toggle Omnipresent"
-msgstr "Mindig látható mód ki/be"
+msgstr "Mindig lÃ¡thatÃ³ mÃ³d ki/be"
 
 #: ../src/dock.c:3395 ../src/winmenu.c:417 ../src/winspector.c:1197
 msgid "Omnipresent"
-msgstr "Mindig látható"
+msgstr "Mindig lÃ¡thatÃ³"
 
 #: ../src/dock.c:3409
 msgid "Unselect All Icons"
-msgstr "Az ikonok kijelölésének megszüntetése"
+msgstr "Az ikonok kijelÃ¶lÃ©sÃ©nek megszÃ¼ntetÃ©se"
 
 #: ../src/dock.c:3418
 msgid "Keep Icons"
-msgstr "Ikonok megtartása"
+msgstr "Ikonok megtartÃ¡sa"
 
 #: ../src/dock.c:3426
 msgid "Move Icons To"
-msgstr "Ikonok mozgatása"
+msgstr "Ikonok mozgatÃ¡sa"
 
 #: ../src/dock.c:3437
 msgid "Remove Icons"
-msgstr "Ikonok törlése"
+msgstr "Ikonok tÃ¶rlÃ©se"
 
 #: ../src/dockedapp.c:130
 msgid "could not find icon %s, used in a docked application"
-msgstr "a %s ikont nem találom (egy rögzített alkalmazás használná)"
+msgstr "a %s ikont nem talÃ¡lom (egy rÃ¶gzÃ­tett alkalmazÃ¡s hasznÃ¡lnÃ¡)"
 
 #: ../src/dockedapp.c:209
 msgid "Could not open specified icon file: %s"
-msgstr "A következõ ikon-fájlt nem tudom megnyitni: %s"
+msgstr "A kÃ¶vetkezÅ‘ ikon-fÃ¡jlt nem tudom megnyitni: %s"
 
 #: ../src/dockedapp.c:211
 msgid "Ignore"
-msgstr "Figyelmen kívûl hagy"
+msgstr "Figyelmen kÃ­vÅ±l hagy"
 
 #: ../src/dockedapp.c:252
 msgid "Sorry, icon cannot be made omnipresent. Please make sure that no other icon is docked in the same position on the other workspaces, and the Clip is not full in some workspace, then try again."
-msgstr "Bocs, ezt az ikont lehetetlen mindig láthatóvá tenni. Gyõzödj meg róla, hogy nincs-e másik ikon rögzítve ugyanebben a pozícióban másik munkafelület, illetve a Kapocs nincs-e valahol telítve. Utána próbáld újra. "
+msgstr "Bocs, ezt az ikont lehetetlen mindig lÃ¡thatÃ³vÃ¡ tenni. GyÅ‘zÃ¶dj meg rÃ³la, hogy nincs-e mÃ¡sik ikon rÃ¶gzÃ­tve ugyanebben a pozÃ­ciÃ³ban mÃ¡sik munkafelÃ¼let, illetve a Kapocs nincs-e valahol telÃ­tve. UtÃ¡na prÃ³bÃ¡ld Ãºjra. "
 
 #: ../src/dockedapp.c:313
 msgid "Start when WindowMaker is started"
-msgstr "Automatikus indítás"
+msgstr "Automatikus indÃ­tÃ¡s"
 
 #: ../src/dockedapp.c:319
 msgid "Application path and arguments"
-msgstr "Alkalmazás elérési útvonala és paraméterei"
+msgstr "AlkalmazÃ¡s elÃ©rÃ©si Ãºtvonala Ã©s paramÃ©terei"
 
 #: ../src/dockedapp.c:330
 msgid "Command for files dropped with DND"
-msgstr "Parancs a DND módszerrel történõ indításhoz"
+msgstr "Parancs a DND mÃ³dszerrel tÃ¶rtÃ©nÅ‘ indÃ­tÃ¡shoz"
 
 #: ../src/dockedapp.c:342
 msgid "%d will be replaced with the file name"
-msgstr "A %d helyére a fájl neve kerül"
+msgstr "A %d helyÃ©re a fÃ¡jl neve kerÃ¼l"
 
 #: ../src/dockedapp.c:346
 msgid "DND support was not compiled in"
-msgstr "DND-támogatás nincs belefordítva"
+msgstr "DND-tÃ¡mogatÃ¡s nincs belefordÃ­tva"
 
 #: ../src/dockedapp.c:352
 msgid "Icon Image"
@@ -468,291 +468,291 @@ msgstr "Ikon"
 
 #: ../src/dockedapp.c:364 ../src/winspector.c:1333
 msgid "Browse..."
-msgstr "Tallózás..."
+msgstr "TallÃ³zÃ¡s..."
 
 #: ../src/dockedapp.c:409
 msgid "Docked Application Settings"
-msgstr "Rögzített alkalmazások beállításai"
+msgstr "RÃ¶gzÃ­tett alkalmazÃ¡sok beÃ¡llÃ­tÃ¡sai"
 
 #: ../src/framewin.c:642 ../src/framewin.c:737 ../src/menu.c:467 ../src/texture.c:549
 msgid "could not render texture: %s"
-msgstr "a %s minta nem képezhetõ le"
+msgstr "a %s minta nem kÃ©pezhetÅ‘ le"
 
 #: ../src/framewin.c:665 ../src/framewin.c:676 ../src/framewin.c:692 ../src/framewin.c:703 ../src/framewin.c:710 ../src/framewin.c:717 ../src/icon.c:350 ../src/menu.c:496
 msgid "error rendering image:%s"
-msgstr "hiba a %s kép leképezésekor"
+msgstr "hiba a %s kÃ©p lekÃ©pezÃ©sekor"
 
 #: ../src/framewin.c:770
 msgid "error rendering image: %s"
-msgstr "hiba a %s kép leképezésekor"
+msgstr "hiba a %s kÃ©p lekÃ©pezÃ©sekor"
 
 #: ../src/icon.c:229 ../src/wdefaults.c:427
 msgid "error loading image file \"%s\""
-msgstr "hiba a \"%s\" kép betöltése közben"
+msgstr "hiba a \"%s\" kÃ©p betÃ¶ltÃ©se kÃ¶zben"
 
 #: ../src/icon.c:477 ../src/icon.c:486
 msgid "could not create directory %s"
-msgstr "A %s könyvtárat nem tudom létrehozni"
+msgstr "A %s kÃ¶nyvtÃ¡rat nem tudom lÃ©trehozni"
 
 #: ../src/icon.c:753
 msgid "could not find default icon \"%s\""
-msgstr "az alapértelmezett ikont \"%s\" nem találom"
+msgstr "az alapÃ©rtelmezett ikont \"%s\" nem talÃ¡lom"
 
 #: ../src/icon.c:759
 msgid "could not load default icon \"%s\":%s"
-msgstr "az alapértelmezett ikont nem tudom betölteni \"%s\":%s"
+msgstr "az alapÃ©rtelmezett ikont nem tudom betÃ¶lteni \"%s\":%s"
 
 #: ../src/main.c:193
 msgid "failed to restart Window Maker."
-msgstr "hiba a Window Maker újraindítása közben"
+msgstr "hiba a Window Maker ÃºjraindÃ­tÃ¡sa kÃ¶zben"
 
 #: ../src/main.c:196
 msgid "could not exec %s"
-msgstr "nem tudom végrehajtani: %s"
+msgstr "nem tudom vÃ©grehajtani: %s"
 
 #: ../src/main.c:245
 msgid "%s aborted.\n"
-msgstr "%s megszakítva \n"
+msgstr "%s megszakÃ­tva \n"
 
 #: ../src/main.c:256
 msgid "Usage: %s [options]\n"
-msgstr "Használat: %s [opciók]\n"
+msgstr "HasznÃ¡lat: %s [opciÃ³k]\n"
 
 #: ../src/main.c:257
 msgid "The Window Maker window manager for the X window system"
-msgstr "Window Maker ablakkezelõ az X window systemhez"
+msgstr "Window Maker ablakkezelÅ‘ az X window systemhez"
 
 #: ../src/main.c:259
 msgid " -display host:dpy\tdisplay to use"
-msgstr "-display host:dpy\tmegjelenítõ a használathoz"
+msgstr "-display host:dpy\tmegjelenÃ­tÅ‘ a hasznÃ¡lathoz"
 
 #: ../src/main.c:261
 msgid " --no-cpp \t\tdisable preprocessing of configuration files"
-msgstr " --no-cpp \t\ta konfigurációs fájlok elõre feldolgozásának letiltása"
+msgstr " --no-cpp \t\ta konfigurÃ¡ciÃ³s fÃ¡jlok elÅ‘re feldolgozÃ¡sÃ¡nak letiltÃ¡sa"
 
 #: ../src/main.c:263
 msgid " --no-dock\t\tdo not open the application Dock"
-msgstr "--no-dock\t\taz alkalmazások dokkja nem lesz kinyitva"
+msgstr "--no-dock\t\taz alkalmazÃ¡sok dokkja nem lesz kinyitva"
 
 #: ../src/main.c:264
 msgid " --no-clip\t\tdo not open the workspace Clip"
-msgstr "--no-clip\t\ta munkafelület kapocs nem lesz kinyitva"
+msgstr "--no-clip\t\ta munkafelÃ¼let kapocs nem lesz kinyitva"
 
 #: ../src/main.c:268
 msgid " --visual-id visualid\tvisual id of visual to use"
-msgstr "--visual-id visualid\tvizuális azonosító"
+msgstr "--visual-id visualid\tvizuÃ¡lis azonosÃ­tÃ³"
 
 #: ../src/main.c:269
 msgid " --static\t\tdo not update or save configurations"
-msgstr "--static\t\tne menti és nem is frissíti a beállításokat"
+msgstr "--static\t\tne menti Ã©s nem is frissÃ­ti a beÃ¡llÃ­tÃ¡sokat"
 
 #: ../src/main.c:271
 msgid " --synchronous\t\tturn on synchronous display mode"
-msgstr "--synchronous\t\tbekapcsolja a szinkronizált megjelenítést"
+msgstr "--synchronous\t\tbekapcsolja a szinkronizÃ¡lt megjelenÃ­tÃ©st"
 
 #: ../src/main.c:273
 msgid " --version\t\tprint version and exit"
-msgstr "--version\t\tkiírja a verziószámot és kilép"
+msgstr "--version\t\tkiÃ­rja a verziÃ³szÃ¡mot Ã©s kilÃ©p"
 
 #: ../src/main.c:274
 msgid " --help\t\t\tshow this message"
-msgstr "--help\t\t\tkiírja ezt a szöveget"
+msgstr "--help\t\t\tkiÃ­rja ezt a szÃ¶veget"
 
 #: ../src/main.c:286
 msgid ""
 "could not find user GNUstep directory (%s).\n"
 "Make sure you have installed Window Maker correctly and run wmaker.inst"
 msgstr ""
-"nem találom a felhasználó GNUstep könyvtárát (%s).\n"
-"Gyõzödj meg róla, hogy a Window Maker rendesen telepítve van és futtasd le a wmaker.inst scriptet!"
+"nem talÃ¡lom a felhasznÃ¡lÃ³ GNUstep kÃ¶nyvtÃ¡rÃ¡t (%s).\n"
+"GyÅ‘zÃ¶dj meg rÃ³la, hogy a Window Maker rendesen telepÃ­tve van Ã©s futtasd le a wmaker.inst scriptet!"
 
 #: ../src/main.c:307 ../src/main.c:312
 msgid "%s:could not execute initialization script"
-msgstr "%s: nem tudom futtatni a kezdeti beállításokat tartalmazó scriptet!"
+msgstr "%s: nem tudom futtatni a kezdeti beÃ¡llÃ­tÃ¡sokat tartalmazÃ³ scriptet!"
 
 #: ../src/main.c:332 ../src/main.c:337
 msgid "%s:could not execute exit script"
-msgstr "%s: nem tudom futtatni a kilépési programot"
+msgstr "%s: nem tudom futtatni a kilÃ©pÃ©si programot"
 
 #: ../src/main.c:410 ../src/main.c:417 ../src/main.c:425 ../src/main.c:441
 msgid "too few arguments for %s"
-msgstr "Elégtelen paraméter a következõhöz: %s"
+msgstr "ElÃ©gtelen paramÃ©ter a kÃ¶vetkezÅ‘hÃ¶z: %s"
 
 #: ../src/main.c:429
 msgid "bad value for visualid: \"%s\""
-msgstr "hibás érték a VisualID-nél: \"%s\""
+msgstr "hibÃ¡s Ã©rtÃ©k a VisualID-nÃ©l: \"%s\""
 
 #: ../src/main.c:449
 msgid "%s: invalid argument '%s'\n"
-msgstr "%s: érvénytelen paraméter '%s'\n"
+msgstr "%s: Ã©rvÃ©nytelen paramÃ©ter '%s'\n"
 
 #: ../src/main.c:450
 msgid "Try '%s --help' for more information\n"
-msgstr "Próbáld a '%s --help parancsot a további információkhoz\n"
+msgstr "PrÃ³bÃ¡ld a '%s --help parancsot a tovÃ¡bbi informÃ¡ciÃ³khoz\n"
 
 #: ../src/main.c:493
 msgid "X server does not support locale"
-msgstr "Az X-server nem támogatja a fordítások használatát"
+msgstr "Az X-server nem tÃ¡mogatja a fordÃ­tÃ¡sok hasznÃ¡latÃ¡t"
 
 #: ../src/main.c:496
 msgid "cannot set locale modifiers"
-msgstr "a lokális módosításokat nem tudom beállítani"
+msgstr "a lokÃ¡lis mÃ³dosÃ­tÃ¡sokat nem tudom beÃ¡llÃ­tani"
 
 #: ../src/main.c:513
 msgid "could not open display \"%s\""
-msgstr "nem tudom megnyitni a \"%s\" megjelenítõt"
+msgstr "nem tudom megnyitni a \"%s\" megjelenÃ­tÅ‘t"
 
 #: ../src/menu.c:303
 msgid "wrealloc() failed while trying to add menu item"
-msgstr "wrealloc() függvény hibázott, amikor menüpontot próbált hozzáadni"
+msgstr "wrealloc() fÃ¼ggvÃ©ny hibÃ¡zott, amikor menÃ¼pontot prÃ³bÃ¡lt hozzÃ¡adni"
 
 #: ../src/misc.c:71
 msgid "could not define value for %s for cpp"
-msgstr "nem tudok értéket meghatározni a %s-hoz a cpp-nek"
+msgstr "nem tudok Ã©rtÃ©ket meghatÃ¡rozni a %s-hoz a cpp-nek"
 
 #: ../src/misc.c:101
 msgid "could not get password entry for UID %i"
-msgstr "nem tudom a jelszó bejegyzést kivenni a %i felhasználó azonosítóhoz"
+msgstr "nem tudom a jelszÃ³ bejegyzÃ©st kivenni a %i felhasznÃ¡lÃ³ azonosÃ­tÃ³hoz"
 
 #: ../src/misc.c:125
 msgid "your machine is misconfigured. HOSTNAME is set to %s"
-msgstr "rosszul van beállítva a HOSTNAME: %s"
+msgstr "rosszul van beÃ¡llÃ­tva a HOSTNAME: %s"
 
 #: ../src/misc.c:131
 msgid "your machine is misconfigured. HOST is set to %s"
-msgstr "rosszul van beállítva a HOST: %s"
+msgstr "rosszul van beÃ¡llÃ­tva a HOST: %s"
 
 #: ../src/misc.c:749
 msgid "selection timed-out"
-msgstr "a kijelölés túllépte a megadott idõt"
+msgstr "a kijelÃ¶lÃ©s tÃºllÃ©pte a megadott idÅ‘t"
 
 #: ../src/misc.c:765
 msgid "Program Arguments"
-msgstr "Program paraméterek"
+msgstr "Program paramÃ©terek"
 
 #: ../src/misc.c:766
 msgid "Enter command arguments:"
-msgstr "Kérem a parancs paramétereit:"
+msgstr "KÃ©rem a parancs paramÃ©tereit:"
 
 #: ../src/misc.c:859
 msgid "unable to get dropped data from DND drop"
-msgstr "nem tudom az adatokat lekérdezni a DND parancshoz"
+msgstr "nem tudom az adatokat lekÃ©rdezni a DND parancshoz"
 
 #: ../src/misc.c:867
 msgid "error getting dropped data from DND drop"
-msgstr "hiba az adatok lekérdezése közben a DND parancsnál"
+msgstr "hiba az adatok lekÃ©rdezÃ©se kÃ¶zben a DND parancsnÃ¡l"
 
 #: ../src/misc.c:873
 msgid "out of memory while getting data from DND drop"
-msgstr "elfogyott a memória a DND parancs eredményének lekérdezése közben"
+msgstr "elfogyott a memÃ³ria a DND parancs eredmÃ©nyÃ©nek lekÃ©rdezÃ©se kÃ¶zben"
 
 #: ../src/misc.c:918 ../src/misc.c:1058
 msgid "out of memory during expansion of \"%s\""
-msgstr "elfogyott a memória a következõ vizsgálatánál: \"%s\""
+msgstr "elfogyott a memÃ³ria a kÃ¶vetkezÅ‘ vizsgÃ¡latÃ¡nÃ¡l: \"%s\""
 
 #: ../src/misc.c:972
 msgid "out of memory during expansion of \"%w\""
-msgstr "elfogyott a memória a következõ vizsgálatánál: \"%w\""
+msgstr "elfogyott a memÃ³ria a kÃ¶vetkezÅ‘ vizsgÃ¡latÃ¡nÃ¡l: \"%w\""
 
 #: ../src/misc.c:990
 msgid "out of memory during expansion of \"%W\""
-msgstr "elfogyott a memória a következõ vizsgálatánál: \"%W\""
+msgstr "elfogyott a memÃ³ria a kÃ¶vetkezÅ‘ vizsgÃ¡latÃ¡nÃ¡l: \"%W\""
 
 #: ../src/misc.c:1006
 msgid "out of memory during expansion of \"%a\""
-msgstr "elfogyott a memória a következõ vizsgálatánál: \"%a\""
+msgstr "elfogyott a memÃ³ria a kÃ¶vetkezÅ‘ vizsgÃ¡latÃ¡nÃ¡l: \"%a\""
 
 #: ../src/misc.c:1037
 msgid "out of memory during expansion of \"%d\""
-msgstr "elfogyott a memória a következõ vizsgálatánál: \"%d\""
+msgstr "elfogyott a memÃ³ria a kÃ¶vetkezÅ‘ vizsgÃ¡latÃ¡nÃ¡l: \"%d\""
 
 #: ../src/misc.c:1051
 msgid "selection not available"
-msgstr "kijelölés nem elérhetõ"
+msgstr "kijelÃ¶lÃ©s nem elÃ©rhetÅ‘"
 
 #: ../src/misc.c:1123 ../src/misc.c:1129
 msgid "bad window name value in %s state info"
-msgstr "hibás az \"ablak neve\" érték az %s információjában"
+msgstr "hibÃ¡s az \"ablak neve\" Ã©rtÃ©k az %s informÃ¡ciÃ³jÃ¡ban"
 
 #: ../src/misc.c:1384
 msgid "could not send message to background image helper"
-msgstr "nem tudok üzenetet küldeni a háttérkép súgójának"
+msgstr "nem tudok Ã¼zenetet kÃ¼ldeni a hÃ¡ttÃ©rkÃ©p sÃºgÃ³jÃ¡nak"
 
 #: ../src/pixmap.c:235
 msgid "could not load mask bitmap file \"%s\". Won't use mask"
-msgstr "nem tudom betölteni a bitkép fájl maszkját \"%s\". A maszk nem lesz használva."
+msgstr "nem tudom betÃ¶lteni a bitkÃ©p fÃ¡jl maszkjÃ¡t \"%s\". A maszk nem lesz hasznÃ¡lva."
 
 #: ../src/proplist.c:180
 msgid "unterminated string"
-msgstr "befejezetlen szöveg"
+msgstr "befejezetlen szÃ¶veg"
 
 #: ../src/proplist.c:247
 msgid "unterminated array"
-msgstr "befejezetlen tömb"
+msgstr "befejezetlen tÃ¶mb"
 
 #: ../src/proplist.c:256
 msgid "missing , in array or unterminated array"
-msgstr "hiányzó vesszõ (,) a tömbben vagy a tömb nincs befejezve"
+msgstr "hiÃ¡nyzÃ³ vesszÅ‘ (,) a tÃ¶mbben vagy a tÃ¶mb nincs befejezve"
 
 #: ../src/proplist.c:267
 msgid "could not get array element"
-msgstr "a tömb elemeit nem tudom elérni"
+msgstr "a tÃ¶mb elemeit nem tudom elÃ©rni"
 
 #: ../src/proplist.c:297
 msgid "unterminated dictionary"
-msgstr "befejezetlen szótár"
+msgstr "befejezetlen szÃ³tÃ¡r"
 
 #: ../src/proplist.c:315
 msgid "missing dictionary key"
-msgstr "hiányzó szótár kulcs"
+msgstr "hiÃ¡nyzÃ³ szÃ³tÃ¡r kulcs"
 
 #: ../src/proplist.c:317
 msgid "missing dictionary entry key or unterminated dictionary"
-msgstr "hiányzó szótár-kulcs bejegyzés vagy a szótár nincs befejezve"
+msgstr "hiÃ¡nyzÃ³ szÃ³tÃ¡r-kulcs bejegyzÃ©s vagy a szÃ³tÃ¡r nincs befejezve"
 
 #: ../src/proplist.c:323
 msgid "error parsing dictionary key"
-msgstr "hiba a szótár kulcspárjaiban"
+msgstr "hiba a szÃ³tÃ¡r kulcspÃ¡rjaiban"
 
 #: ../src/proplist.c:332
 msgid "missing = in dictionary entry"
-msgstr "hiányzó = a szótár bejegyzésében"
+msgstr "hiÃ¡nyzÃ³ = a szÃ³tÃ¡r bejegyzÃ©sÃ©ben"
 
 #: ../src/proplist.c:351
 msgid "missing ; in dictionary entry"
-msgstr "hiányzó ; a szótár bejegyzésben"
+msgstr "hiÃ¡nyzÃ³ ; a szÃ³tÃ¡r bejegyzÃ©sben"
 
 #: ../src/proplist.c:432
 msgid "was expecting a string, dictionary, data or array. If it's a string, try enclosing it with \"."
-msgstr "egy szöveget, szótárt, adatot vagy tömböt vártam. Ha ez egy szöveg, akkor próbáld meg bezárni egy \" jellel."
+msgstr "egy szÃ¶veget, szÃ³tÃ¡rt, adatot vagy tÃ¶mbÃ¶t vÃ¡rtam. Ha ez egy szÃ¶veg, akkor prÃ³bÃ¡ld meg bezÃ¡rni egy \" jellel."
 
 #: ../src/proplist.c:434
 msgid "Comments are not allowed inside WindowMaker owned domain files."
-msgstr "Magyarázatok nem lehetnek a WindowMaker saját domain fájljában"
+msgstr "MagyarÃ¡zatok nem lehetnek a WindowMaker sajÃ¡t domain fÃ¡jljÃ¡ban"
 
 #: ../src/proplist.c:453
 msgid "could not open domain file %s"
-msgstr "A következõ domain fájlt nem tudom megnyitni: %s"
+msgstr "A kÃ¶vetkezÅ‘ domain fÃ¡jlt nem tudom megnyitni: %s"
 
 #: ../src/proplist.c:466
 msgid "extra data after end of file"
-msgstr "extra adat a fájl-vége jel után"
+msgstr "extra adat a fÃ¡jl-vÃ©ge jel utÃ¡n"
 
 #: ../src/resources.c:44
 msgid "could not parse color \"%s\""
-msgstr "A \"%s\" színt nem tudom értelmezni"
+msgstr "A \"%s\" szÃ­nt nem tudom Ã©rtelmezni"
 
 #: ../src/resources.c:48
 msgid "could not allocate color \"%s\""
-msgstr "A \"%s\" színt nem tudom lefoglalni"
+msgstr "A \"%s\" szÃ­nt nem tudom lefoglalni"
 
 #: ../src/rootmenu.c:188 ../src/rootmenu.c:190
 msgid "Exit"
-msgstr "Kilépés"
+msgstr "KilÃ©pÃ©s"
 
 #: ../src/rootmenu.c:189
 msgid "Exit window manager?"
-msgstr "Biztos, hogy bezárod az ablakkezelõt?"
+msgstr "Biztos, hogy bezÃ¡rod az ablakkezelÅ‘t?"
 
 #: ../src/rootmenu.c:225
 msgid "Close X session"
@@ -763,116 +763,116 @@ msgid ""
 "Close Window System session?\n"
 "Kill might close applications with unsaved data."
 msgstr ""
-"Tényleg bezárod az X Window-t?\n"
-"Az alkalmazásokban néhány nem mentett adat elveszhet."
+"TÃ©nyleg bezÃ¡rod az X Window-t?\n"
+"Az alkalmazÃ¡sokban nÃ©hÃ¡ny nem mentett adat elveszhet."
 
 #: ../src/rootmenu.c:228 ../src/winmenu.c:505
 msgid "Close"
-msgstr "Bezárás"
+msgstr "BezÃ¡rÃ¡s"
 
 #: ../src/rootmenu.c:239
 msgid "Kill X session"
-msgstr "X bezárása"
+msgstr "X bezÃ¡rÃ¡sa"
 
 #: ../src/rootmenu.c:240
 msgid ""
 "Kill Window System session?\n"
 "(all applications will be closed)"
 msgstr ""
-"Tényleg lelövöd a X Window-t?\n"
-"(minden alkalmazás be lesz zárva)"
+"TÃ©nyleg lelÃ¶vÃ¶d a X Window-t?\n"
+"(minden alkalmazÃ¡s be lesz zÃ¡rva)"
 
 #: ../src/rootmenu.c:507
 msgid "%s:invalid kbd shortcut specification \"%s\" for entry %s"
-msgstr "%s: érvénytelen gyorsbillentyû-leírásában \"%s\" a következõ bejegyzéshez: %s"
+msgstr "%s: Ã©rvÃ©nytelen gyorsbillentyÅ±-leÃ­rÃ¡sÃ¡ban \"%s\" a kÃ¶vetkezÅ‘ bejegyzÃ©shez: %s"
 
 #: ../src/rootmenu.c:515
 msgid "%s:invalid key in shortcut \"%s\" for entry %s"
-msgstr "%s: érvénytelen billentyû a gyorsbillentyûben \"%s\" a következõ bejegyzéshez: %s"
+msgstr "%s: Ã©rvÃ©nytelen billentyÅ± a gyorsbillentyÅ±ben \"%s\" a kÃ¶vetkezÅ‘ bejegyzÃ©shez: %s"
 
 #: ../src/rootmenu.c:568
 msgid "%s: unmatched '\"' in menu file"
-msgstr "%s: nem egyezõ \" jelek a menü fájlban"
+msgstr "%s: nem egyezÅ‘ \" jelek a menÃ¼ fÃ¡jlban"
 
 #: ../src/rootmenu.c:618
 msgid "%s: missing command"
-msgstr "%s: hiányzó parancs"
+msgstr "%s: hiÃ¡nyzÃ³ parancs"
 
 #: ../src/rootmenu.c:651
 msgid "invalid OPEN_MENU specification: %s"
-msgstr "hibás OPEN_MENU leírás: %s"
+msgstr "hibÃ¡s OPEN_MENU leÃ­rÃ¡s: %s"
 
 #: ../src/rootmenu.c:699
 msgid "%s:could not stat menu"
-msgstr "%s: nem tudom elérni a menüt "
+msgstr "%s: nem tudom elÃ©rni a menÃ¼t "
 
 #: ../src/rootmenu.c:707
 msgid "%s:could not stat menu:%s"
-msgstr "%s: nem tudom elérni a menüt:%s"
+msgstr "%s: nem tudom elÃ©rni a menÃ¼t:%s"
 
 #: ../src/rootmenu.c:725
 msgid "too many parameters in OPEN_MENU: %s"
-msgstr "túl sok paraméter az OPEN_MENU-ben: %s"
+msgstr "tÃºl sok paramÃ©ter az OPEN_MENU-ben: %s"
 
 #: ../src/rootmenu.c:761
 msgid "There are more than one WORKSPACE_MENU commands in the applications menu. Only one is allowed."
-msgstr "Egynél több WORKSPACE_MENU-parancs van az alkalmazások menüben. Csak egy engedélyzett."
+msgstr "EgynÃ©l tÃ¶bb WORKSPACE_MENU-parancs van az alkalmazÃ¡sok menÃ¼ben. Csak egy engedÃ©lyzett."
 
 #: ../src/rootmenu.c:790 ../src/rootmenu.c:808 ../src/rootmenu.c:818
 msgid "%s:missing parameter for menu command \"%s\""
-msgstr "%s: hiányzó paraméter a menü parancshoz \"%s\""
+msgstr "%s: hiÃ¡nyzÃ³ paramÃ©ter a menÃ¼ parancshoz \"%s\""
 
 #: ../src/rootmenu.c:882
 msgid "%s:unknown command \"%s\" in menu config."
-msgstr "%s: ismeretlen parancs \"%s\" a menü beállításaiban."
+msgstr "%s: ismeretlen parancs \"%s\" a menÃ¼ beÃ¡llÃ­tÃ¡saiban."
 
 #: ../src/rootmenu.c:890
 msgid "%s:can't add shortcut for entry \"%s\""
-msgstr "%s: nem tudom a gyorsbillentyût a \"%s\" bejegyzéshez hozzáadni"
+msgstr "%s: nem tudom a gyorsbillentyÅ±t a \"%s\" bejegyzÃ©shez hozzÃ¡adni"
 
 #: ../src/rootmenu.c:1027
 msgid "%s:maximal line size exceeded in menu config: %s"
-msgstr "%s: a maximál sorhosszt meghaladja a menü beállításaiban: %s"
+msgstr "%s: a maximÃ¡l sorhosszt meghaladja a menÃ¼ beÃ¡llÃ­tÃ¡saiban: %s"
 
 #: ../src/rootmenu.c:1049 ../src/rootmenu.c:1141 ../src/rootmenu.c:1242
 msgid "%s:missing command in menu config: %s"
-msgstr "%s: hiányzó parancs a menü beállításaiban %s"
+msgstr "%s: hiÃ¡nyzÃ³ parancs a menÃ¼ beÃ¡llÃ­tÃ¡saiban %s"
 
 #: ../src/rootmenu.c:1079
 msgid "%s:syntax error in menu file:END declaration missing"
-msgstr "%s: szintaktikai hiba a menü fájlban: az END meghatározása hiányzik"
+msgstr "%s: szintaktikai hiba a menÃ¼ fÃ¡jlban: az END meghatÃ¡rozÃ¡sa hiÃ¡nyzik"
 
 #: ../src/rootmenu.c:1108 ../src/rootmenu.c:1207
 msgid "could not make arguments for menu file preprocessor"
-msgstr "nem tudok paramétereket készíteni a menü fájl elõfeldolgozójához"
+msgstr "nem tudok paramÃ©tereket kÃ©szÃ­teni a menÃ¼ fÃ¡jl elÅ‘feldolgozÃ³jÃ¡hoz"
 
 #: ../src/rootmenu.c:1114 ../src/rootmenu.c:1214
 msgid "%s:could not open/preprocess menu file"
-msgstr "%s: nem tudom megnyitni/elõre feldolgozni a menü fájlt"
+msgstr "%s: nem tudom megnyitni/elÅ‘re feldolgozni a menÃ¼ fÃ¡jlt"
 
 #: ../src/rootmenu.c:1126 ../src/rootmenu.c:1227
 msgid "%s:could not open menu file"
-msgstr "%s: nem tudom megnyitni a menü fájlt"
+msgstr "%s: nem tudom megnyitni a menÃ¼ fÃ¡jlt"
 
 #: ../src/rootmenu.c:1153
 msgid "%s:invalid menu file. MENU command is missing"
-msgstr "%s: érvénytelen menü fájl. MENU parancs hiányzik."
+msgstr "%s: Ã©rvÃ©nytelen menÃ¼ fÃ¡jl. MENU parancs hiÃ¡nyzik."
 
 #: ../src/rootmenu.c:1162
 msgid "error reading preprocessed menu data"
-msgstr "hiba az elõrefeldolgozott adatok olvasása közben"
+msgstr "hiba az elÅ‘refeldolgozott adatok olvasÃ¡sa kÃ¶zben"
 
 #: ../src/rootmenu.c:1254
 msgid "%s:no title given for the root menu"
-msgstr "%s: nincs megnevezve a gyökér (root) menü"
+msgstr "%s: nincs megnevezve a gyÃ¶kÃ©r (root) menÃ¼"
 
 #: ../src/rootmenu.c:1337 ../src/rootmenu.c:1404 ../src/rootmenu.c:1448
 msgid "out of memory while constructing directory menu %s"
-msgstr "elfogyott a memória amíg a könyvtár menüt hoztam létre"
+msgstr "elfogyott a memÃ³ria amÃ­g a kÃ¶nyvtÃ¡r menÃ¼t hoztam lÃ©tre"
 
 #: ../src/rootmenu.c:1347
 msgid "%s:could not stat file \"%s\" in menu directory"
-msgstr "%s: a menü könyvtárában a következõ fájlt nem sikerül elérnem: \"%s\""
+msgstr "%s: a menÃ¼ kÃ¶nyvtÃ¡rÃ¡ban a kÃ¶vetkezÅ‘ fÃ¡jlt nem sikerÃ¼l elÃ©rnem: \"%s\""
 
 #: ../src/rootmenu.c:1502
 msgid "Commands"
@@ -880,141 +880,141 @@ msgstr "Parancsok"
 
 #: ../src/rootmenu.c:1505
 msgid "Restart"
-msgstr "Újraindítás"
+msgstr "ÃšjraindÃ­tÃ¡s"
 
 #: ../src/rootmenu.c:1506
 msgid "Exit..."
-msgstr "Kilépés..."
+msgstr "KilÃ©pÃ©s..."
 
 #: ../src/rootmenu.c:1551
 msgid "could not find menu file \"%s\" referenced in WMRootMenu"
-msgstr "nem találom a menü fájlt \"%s\". A WMRootMenu hivatkozik rá."
+msgstr "nem talÃ¡lom a menÃ¼ fÃ¡jlt \"%s\". A WMRootMenu hivatkozik rÃ¡."
 
 #: ../src/rootmenu.c:1558
 msgid "could not access menu \"%s\" referenced in WMRootMenu"
-msgstr "a menü elérhetetlen: \"%s\". A WMRootMenu hivatkozik rá."
+msgstr "a menÃ¼ elÃ©rhetetlen: \"%s\". A WMRootMenu hivatkozik rÃ¡."
 
 #: ../src/rootmenu.c:1569
 msgid "using default menu file \"%s\" as the menu referenced in WMRootMenu could not be found "
-msgstr "az alap menü fájlt használom, mert a WMRootMenu-ben hivatkozott fájl \"%s\" nem található."
+msgstr "az alap menÃ¼ fÃ¡jlt hasznÃ¡lom, mert a WMRootMenu-ben hivatkozott fÃ¡jl \"%s\" nem talÃ¡lhatÃ³."
 
 #: ../src/rootmenu.c:1592 ../src/rootmenu.c:1668
 msgid "%s:format error in root menu configuration \"%s\""
-msgstr "%s: formai hiba a root menü konfigurációjában \"%s\""
+msgstr "%s: formai hiba a root menÃ¼ konfigurÃ¡ciÃ³jÃ¡ban \"%s\""
 
 #: ../src/rootmenu.c:1755
 msgid "The applications menu could not be loaded. Look at the console output for a detailed description of the errors."
-msgstr "Az alkalmazások menüjét nem tudom betölteni. Nézd meg a konzol kimenetét a hibák bõvebb leírásáért!"
+msgstr "Az alkalmazÃ¡sok menÃ¼jÃ©t nem tudom betÃ¶lteni. NÃ©zd meg a konzol kimenetÃ©t a hibÃ¡k bÅ‘vebb leÃ­rÃ¡sÃ¡Ã©rt!"
 
 #: ../src/screen.c:459
 msgid "could not load logo image for panels: %s"
-msgstr "nem tudom betölteni a logo-t a panelhez: %s"
+msgstr "nem tudom betÃ¶lteni a logo-t a panelhez: %s"
 
 #: ../src/screen.c:463
 msgid "error making logo image for panel:%s"
-msgstr "hiba a logo készítése közben: %s"
+msgstr "hiba a logo kÃ©szÃ­tÃ©se kÃ¶zben: %s"
 
 #: ../src/screen.c:751
 msgid "could not initialize graphics library context: %s"
-msgstr "nem tudom kezdõállapotba hozni a grafikáért felelõs könyvtárat: %s"
+msgstr "nem tudom kezdÅ‘Ã¡llapotba hozni a grafikÃ¡Ã©rt felelÅ‘s kÃ¶nyvtÃ¡rat: %s"
 
 #: ../src/screen.c:782
 msgid "could not do initialization of WINGs widget set"
-msgstr "nem tudom kezdõállapotba hozni a WING widget-et"
+msgstr "nem tudom kezdÅ‘Ã¡llapotba hozni a WING widget-et"
 
 #: ../src/screen.c:1114
 msgid "could not save session state in %s"
-msgstr "A session állapotát nem tudom elmenteni: %s"
+msgstr "A session Ã¡llapotÃ¡t nem tudom elmenteni: %s"
 
 #: ../src/session.c:182 ../src/wdefaults.c:575 ../src/winspector.c:354
 msgid "can't convert \"%s\" to boolean"
-msgstr "a \"%s\"-t nem tudom logikai értékké alakítani"
+msgstr "a \"%s\"-t nem tudom logikai Ã©rtÃ©kkÃ© alakÃ­tani"
 
 #: ../src/session.c:981
 msgid "out of memory while saving session state"
-msgstr "elfogyott a memória, miközben mentettem a session állapotát"
+msgstr "elfogyott a memÃ³ria, mikÃ¶zben mentettem a session Ã¡llapotÃ¡t"
 
 #: ../src/session.c:1072
 msgid "end of memory while saving session state"
-msgstr "a memória végére értem, miközben mentettem a session állapotát "
+msgstr "a memÃ³ria vÃ©gÃ©re Ã©rtem, mikÃ¶zben mentettem a session Ã¡llapotÃ¡t "
 
 #: ../src/session.c:1206
 msgid "connection to the session manager was lost"
-msgstr "a session kezelõvel létrehozott kapcsolat elveszett"
+msgstr "a session kezelÅ‘vel lÃ©trehozott kapcsolat elveszett"
 
 #: ../src/stacking.c:73
 msgid "could not get window list!!"
-msgstr "nem tudom lekérdezni az ablakok listáját!!"
+msgstr "nem tudom lekÃ©rdezni az ablakok listÃ¡jÃ¡t!!"
 
 #: ../src/startup.c:194
 msgid "internal X error: %s\n"
-msgstr "belsõ X-hiba: %s\n"
+msgstr "belsÅ‘ X-hiba: %s\n"
 
 #: ../src/startup.c:259
 msgid "got signal %i (%s) - restarting\n"
-msgstr "a következõ jelzést vettem: %i (%s) - újraindítás\n"
+msgstr "a kÃ¶vetkezÅ‘ jelzÃ©st vettem: %i (%s) - ÃºjraindÃ­tÃ¡s\n"
 
 #: ../src/startup.c:261
 msgid "got signal %i - restarting\n"
-msgstr "a következõ jelzést vettem: %i - újraindítás\n"
+msgstr "a kÃ¶vetkezÅ‘ jelzÃ©st vettem: %i - ÃºjraindÃ­tÃ¡s\n"
 
 #: ../src/startup.c:275
 msgid "got signal %i (%s) - exiting...\n"
-msgstr "a következõ jelzést vettem: %i (%s) - kilépés...\n"
+msgstr "a kÃ¶vetkezÅ‘ jelzÃ©st vettem: %i (%s) - kilÃ©pÃ©s...\n"
 
 #: ../src/startup.c:277
 msgid "got signal %i - exiting...\n"
-msgstr "a következõ jelzést vettem: %i - kilépek\n"
+msgstr "a kÃ¶vetkezÅ‘ jelzÃ©st vettem: %i - kilÃ©pek\n"
 
 #: ../src/startup.c:290
 msgid "got signal %i (%s)\n"
-msgstr "egy %i (%s) jelzést vettem\n"
+msgstr "egy %i (%s) jelzÃ©st vettem\n"
 
 #: ../src/startup.c:292
 msgid "got signal %i\n"
-msgstr "egy %i jelzést vettem\n"
+msgstr "egy %i jelzÃ©st vettem\n"
 
 #: ../src/startup.c:303
 msgid "crashed while trying to do some post-crash cleanup. Aborting immediatelly."
-msgstr "ütközés történt miközben a lefagyás után rendet akartam tenni. Megszakítom a mûveletet."
+msgstr "Ã¼tkÃ¶zÃ©s tÃ¶rtÃ©nt mikÃ¶zben a lefagyÃ¡s utÃ¡n rendet akartam tenni. MegszakÃ­tom a mÅ±veletet."
 
 #. we try to restart Window Maker
 #: ../src/startup.c:337
 msgid "trying to restart Window Maker..."
-msgstr "megpróbálom újraindítani a Window Makert"
+msgstr "megprÃ³bÃ¡lom ÃºjraindÃ­tani a Window Makert"
 
 #: ../src/startup.c:342
 msgid "trying to start alternate window manager..."
-msgstr "megpróbálok egy másik ablakkezelõt elindítani"
+msgstr "megprÃ³bÃ¡lok egy mÃ¡sik ablakkezelÅ‘t elindÃ­tani"
 
 #: ../src/startup.c:347
 msgid "failed to start alternate window manager. Aborting."
-msgstr "hiba a másik ablakkezelõ indításakor. Megszakítom."
+msgstr "hiba a mÃ¡sik ablakkezelÅ‘ indÃ­tÃ¡sakor. MegszakÃ­tom."
 
 #: ../src/startup.c:349
 msgid "a fatal error has occured, probably due to a bug. Please fill the included BUGFORM and report it."
-msgstr "végzetes hiba történt, valószínûleg egy programozási hibát találtál. Légy szíves töltsd ki a mellékelt BUG-kérdõívet és küldd el a megadott címre. Köszi!"
+msgstr "vÃ©gzetes hiba tÃ¶rtÃ©nt, valÃ³szÃ­nÅ±leg egy programozÃ¡si hibÃ¡t talÃ¡ltÃ¡l. LÃ©gy szÃ­ves tÃ¶ltsd ki a mellÃ©kelt BUG-kÃ©rdÅ‘Ã­vet Ã©s kÃ¼ldd el a megadott cÃ­mre. KÃ¶szi!"
 
 #. check sanity of some values
 #: ../src/startup.c:777
 msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
-msgstr "az ikon mérete jelenleg %i-re van állítva, de ez túl kicsi. Helyette 16-t használok.\n"
+msgstr "az ikon mÃ©rete jelenleg %i-re van Ã¡llÃ­tva, de ez tÃºl kicsi. Helyette 16-t hasznÃ¡lok.\n"
 
 #: ../src/startup.c:805
 msgid "XKB is not supported. KbdModeLock is automatically disabled."
-msgstr "XKB nincs támogatva. KbdModeLock automatikusan letiltódik."
+msgstr "XKB nincs tÃ¡mogatva. KbdModeLock automatikusan letiltÃ³dik."
 
 #: ../src/startup.c:824
 msgid "it seems that there is already a window manager running"
-msgstr "nekem úgy tûnik, hogy már fut egy másik ablakkezelõ"
+msgstr "nekem Ãºgy tÅ±nik, hogy mÃ¡r fut egy mÃ¡sik ablakkezelÅ‘"
 
 #: ../src/startup.c:830
 msgid "could not manage screen %i"
-msgstr "nem tudom a menedzselni a %i képernyõt"
+msgstr "nem tudom a menedzselni a %i kÃ©pernyÅ‘t"
 
 #: ../src/startup.c:890
 msgid "could not manage any screen"
-msgstr "egy képernyõt sem tudok kezelni"
+msgstr "egy kÃ©pernyÅ‘t sem tudok kezelni"
 
 #: ../src/switchmenu.c:114
 msgid "Windows"
@@ -1022,35 +1022,35 @@ msgstr "Ablakok"
 
 #: ../src/texture.c:290 ../src/texture.c:334
 msgid "image file \"%s\" used as texture could not be found."
-msgstr "A \"%s\" kép (ami mintaként használatos) nem tölthetõ be."
+msgstr "A \"%s\" kÃ©p (ami mintakÃ©nt hasznÃ¡latos) nem tÃ¶lthetÅ‘ be."
 
 #: ../src/texture.c:296 ../src/texture.c:340
 msgid "could not load texture pixmap \"%s\":%s"
-msgstr "nem tudom betölteni a \"%s\":%s mintát"
+msgstr "nem tudom betÃ¶lteni a \"%s\":%s mintÃ¡t"
 
 #: ../src/texture.c:400
 msgid "library \"%s\" cound not be opened."
-msgstr "a \"%s\" könyvtárat nem tudom megnyitni."
+msgstr "a \"%s\" kÃ¶nyvtÃ¡rat nem tudom megnyitni."
 
 #: ../src/texture.c:409
 msgid "function \"%s\" not found in library \"%s\""
-msgstr "A \"%s\" függvény nem található a \"%s\" könyvtárban"
+msgstr "A \"%s\" fÃ¼ggvÃ©ny nem talÃ¡lhatÃ³ a \"%s\" kÃ¶nyvtÃ¡rban"
 
 #: ../src/texture.c:416
 msgid "function textures not supported on this system, sorry."
-msgstr "A minta függvényeket ez a rendszer nem támogatja."
+msgstr "A minta fÃ¼ggvÃ©nyeket ez a rendszer nem tÃ¡mogatja."
 
 #: ../src/wdefaults.c:421
 msgid "could not find icon file \"%s\""
-msgstr "nem találom a \"%s\" ikon fájlt"
+msgstr "nem talÃ¡lom a \"%s\" ikon fÃ¡jlt"
 
 #: ../src/window.c:2607 ../src/window.c:2741
 msgid ""
 "the NumLock, ScrollLock or similar key seems to be turned on.\n"
 "Turn it off or some mouse actions and keyboard shortcuts will not work."
 msgstr ""
-"Úgy tûnik, hogy a NumLock vagy a ScrollLock vagy valamelyik hasonló billentyû be van kapcsolva.\n"
-"Kapcsold ki, vagy néhány egérmûvelet vagy billentyû-kombináció nem fog mûködni."
+"Ãšgy tÅ±nik, hogy a NumLock vagy a ScrollLock vagy valamelyik hasonlÃ³ billentyÅ± be van kapcsolva.\n"
+"Kapcsold ki, vagy nÃ©hÃ¡ny egÃ©rmÅ±velet vagy billentyÅ±-kombinÃ¡ciÃ³ nem fog mÅ±kÃ¶dni."
 
 #: ../src/winmenu.c:126
 msgid ""
@@ -1058,17 +1058,17 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-"Ez bezárja az alkalmazást.\n"
+"Ez bezÃ¡rja az alkalmazÃ¡st.\n"
 "Minden nem mentett adat elveszik.\n"
 "Biztos vagy benne?"
 
 #: ../src/winmenu.c:269 ../src/winmenu.c:277
 msgid "Set Shortcut"
-msgstr "Gyorsbillentyû "
+msgstr "GyorsbillentyÅ± "
 
 #: ../src/winmenu.c:357 ../src/winmenu.c:403
 msgid "could not create submenu for window menu"
-msgstr "az ablakok menüjéhez nem tudom az almenüt létrehozni"
+msgstr "az ablakok menÃ¼jÃ©hez nem tudom az almenÃ¼t lÃ©trehozni"
 
 #: ../src/winmenu.c:412
 msgid "Keep at bottom"
@@ -1076,59 +1076,59 @@ msgstr "Mindig alul"
 
 #: ../src/winmenu.c:440 ../src/winmenu.c:575
 msgid "Maximize"
-msgstr "Teljes méret"
+msgstr "Teljes mÃ©ret"
 
 #: ../src/winmenu.c:448 ../src/winmenu.c:561
 msgid "Miniaturize"
-msgstr "Ikonállapot"
+msgstr "IkonÃ¡llapot"
 
 #: ../src/winmenu.c:457 ../src/winmenu.c:592
 msgid "Shade"
-msgstr "Felhúzás"
+msgstr "FelhÃºzÃ¡s"
 
 #: ../src/winmenu.c:473
 msgid "Resize/Move"
-msgstr "Átméretezés/Mozgatás"
+msgstr "ÃtmÃ©retezÃ©s/MozgatÃ¡s"
 
 #: ../src/winmenu.c:481
 msgid "Select"
-msgstr "Kijelölés"
+msgstr "KijelÃ¶lÃ©s"
 
 #: ../src/winmenu.c:489
 msgid "Move To"
-msgstr "Mozgatás"
+msgstr "MozgatÃ¡s"
 
 #: ../src/winmenu.c:494
 msgid "Attributes..."
-msgstr "Tulajdonságok..."
+msgstr "TulajdonsÃ¡gok..."
 
 #: ../src/winmenu.c:496
 msgid "Options"
-msgstr "Beállítások"
+msgstr "BeÃ¡llÃ­tÃ¡sok"
 
 #: ../src/winmenu.c:556
 msgid "Deminiaturize"
-msgstr "Eredeti méret"
+msgstr "Eredeti mÃ©ret"
 
 #: ../src/winmenu.c:570
 msgid "Unmaximize"
-msgstr "Eredeti méret"
+msgstr "Eredeti mÃ©ret"
 
 #: ../src/winmenu.c:587
 msgid "Unshade"
-msgstr "Leeresztés"
+msgstr "LeeresztÃ©s"
 
 #: ../src/winspector.c:288
 msgid "Could not find icon \"%s\" specified for this window"
-msgstr "A \"%s\" ikon fájl ehhez az ablakhoz nem található"
+msgstr "A \"%s\" ikon fÃ¡jl ehhez az ablakhoz nem talÃ¡lhatÃ³"
 
 #: ../src/winspector.c:304
 msgid "Could not open specified icon \"%s\":%s"
-msgstr "Nem tudom megnyitni a következõ ikont \"%s\" : %s"
+msgstr "Nem tudom megnyitni a kÃ¶vetkezÅ‘ ikont \"%s\" : %s"
 
 #: ../src/winspector.c:1052
 msgid "Save"
-msgstr "Mentés"
+msgstr "MentÃ©s"
 
 #: ../src/winspector.c:1060
 msgid "Apply"
@@ -1136,31 +1136,31 @@ msgstr "Alkalmaz"
 
 #: ../src/winspector.c:1066
 msgid "Reload"
-msgstr "Újra"
+msgstr "Ãšjra"
 
 #: ../src/winspector.c:1075 ../src/winspector.c:1085
 msgid "Window Specification"
-msgstr "Ablak meghatározás"
+msgstr "Ablak meghatÃ¡rozÃ¡s"
 
 #: ../src/winspector.c:1076
 msgid "Window Attributes"
-msgstr "Ablak tulajdonságok"
+msgstr "Ablak tulajdonsÃ¡gok"
 
 #: ../src/winspector.c:1077
 msgid "Advanced Options"
-msgstr "Haladó beállítások"
+msgstr "HaladÃ³ beÃ¡llÃ­tÃ¡sok"
 
 #: ../src/winspector.c:1078
 msgid "Icon and Initial Workspace"
-msgstr "Ikon és munkafelület beállítások"
+msgstr "Ikon Ã©s munkafelÃ¼let beÃ¡llÃ­tÃ¡sok"
 
 #: ../src/winspector.c:1079
 msgid "Application Specific"
-msgstr "Alkalmazás beállításai"
+msgstr "AlkalmazÃ¡s beÃ¡llÃ­tÃ¡sai"
 
 #: ../src/winspector.c:1093
 msgid "Defaults for all windows"
-msgstr "Alapértelmezés minden ablaknak"
+msgstr "AlapÃ©rtelmezÃ©s minden ablaknak"
 
 #: ../src/winspector.c:1144
 msgid ""
@@ -1168,18 +1168,18 @@ msgid ""
 "windows that have their WM_CLASS property set to the above selected\n"
 "name, when saved."
 msgstr ""
-"A konfiguráció mentéskor alkalmazva lesz\n"
+"A konfigurÃ¡ciÃ³ mentÃ©skor alkalmazva lesz\n"
 "minden ablakra, ahol a WM_CLASS\n"
-"értéke a fentire van beállítva."
+"Ã©rtÃ©ke a fentire van beÃ¡llÃ­tva."
 
 #. *** attributes ***
 #: ../src/winspector.c:1151
 msgid "Attributes"
-msgstr "Tulajdonságok"
+msgstr "TulajdonsÃ¡gok"
 
 #: ../src/winspector.c:1162
 msgid "Disable Titlebar"
-msgstr "Címsor letiltás"
+msgstr "CÃ­msor letiltÃ¡s"
 
 #: ../src/winspector.c:1164                                                                    
 msgid ""
@@ -1189,99 +1189,99 @@ msgid ""
 "equivalent shortcut, if you changed the default\n"
 "settings)."
 msgstr ""
-"Eltünteti az ablak címsorát.\n"
-"Az ablak-parancsok menüjéhez a címsor nélküli\n"
-"ablakoknál a Control+Esc lenyomásával juthatsz\n"
-"(vagy egy ezzel egyenértékû gombkombinációval, ha\n"
-"közben átállítottad az alapértelmezést)."
+"EltÃ¼nteti az ablak cÃ­msorÃ¡t.\n"
+"Az ablak-parancsok menÃ¼jÃ©hez a cÃ­msor nÃ©lkÃ¼li\n"
+"ablakoknÃ¡l a Control+Esc lenyomÃ¡sÃ¡val juthatsz\n"
+"(vagy egy ezzel egyenÃ©rtÃ©kÅ± gombkombinÃ¡ciÃ³val, ha\n"
+"kÃ¶zben Ã¡tÃ¡llÃ­tottad az alapÃ©rtelmezÃ©st)."
 
 #: ../src/winspector.c:1171
 msgid "Disable Resizebar"
-msgstr "Átméretezés letiltás"
+msgstr "ÃtmÃ©retezÃ©s letiltÃ¡s"
 
 #: ../src/winspector.c:1173
 msgid "Remove the resizebar of this window."
-msgstr "Az átméretezõ sávot elrejti"
+msgstr "Az Ã¡tmÃ©retezÅ‘ sÃ¡vot elrejti"
 
 #: ../src/winspector.c:1176
 msgid "Disable Close Button"
-msgstr "Bezárás gomb letiltása"
+msgstr "BezÃ¡rÃ¡s gomb letiltÃ¡sa"
 
 #: ../src/winspector.c:1178
 msgid "Remove the `close window' button of this window."
-msgstr "Elrejti a `bezárás' gombot az ablakról"
+msgstr "Elrejti a `bezÃ¡rÃ¡s' gombot az ablakrÃ³l"
 
 #: ../src/winspector.c:1181
 msgid "Disable Miniaturize Button"
-msgstr "Ikonállapot gomb elrejtése"
+msgstr "IkonÃ¡llapot gomb elrejtÃ©se"
 
 #: ../src/winspector.c:1183
 msgid "Remove the `miniaturize window' button of the window."
-msgstr "Elrejti az `Ikonállapot' gombot az ablakról"
+msgstr "Elrejti az `IkonÃ¡llapot' gombot az ablakrÃ³l"
 
 #: ../src/winspector.c:1186
 msgid "Keep on Top / Floating"
-msgstr "Mindig felül / Lebegés"
+msgstr "Mindig felÃ¼l / LebegÃ©s"
 
 #: ../src/winspector.c:1188
 msgid ""
 "Keep the window over other windows, not allowing\n"
 "them to cover it."
 msgstr ""
-"Az ablakot mindig felülre teszi, nem engedi, hogy\n"
-"más ablak beterítse."
+"Az ablakot mindig felÃ¼lre teszi, nem engedi, hogy\n"
+"mÃ¡s ablak beterÃ­tse."
 
 #: ../src/winspector.c:1192
 msgid "Keep at Bottom / Sunken"
-msgstr "Mindig alul / Süllyesztés"
+msgstr "Mindig alul / SÃ¼llyesztÃ©s"
 
 #: ../src/winspector.c:1194
 msgid "Keep the window under all other windows."
-msgstr "Az ablak mindig a legalsó lesz."
+msgstr "Az ablak mindig a legalsÃ³ lesz."
 
 #: ../src/winspector.c:1199
 msgid "Make window occupy all workspaces."
-msgstr "Az ablak minden munkafelületen megjelenik."
+msgstr "Az ablak minden munkafelÃ¼leten megjelenik."
 
 #: ../src/winspector.c:1202
 msgid "Start Miniaturized"
-msgstr "Ikonállapotban indít"
+msgstr "IkonÃ¡llapotban indÃ­t"
 
 #: ../src/winspector.c:1204
 msgid ""
 "Make the window be automatically miniaturized when it's\n"
 "first shown."
 msgstr ""
-"Az ablak automatikusan ikonállapotba kerül, amikor\n"
-"elõször megjelenik."
+"Az ablak automatikusan ikonÃ¡llapotba kerÃ¼l, amikor\n"
+"elÅ‘szÃ¶r megjelenik."
 
 #: ../src/winspector.c:1208
 msgid "Start Maximized"
-msgstr "Teljes méretben indít"
+msgstr "Teljes mÃ©retben indÃ­t"
 
 #: ../src/winspector.c:1210
 msgid ""
 "Make the window be automatically maximized when it's\n"
 "first shown."
 msgstr ""
-"Az ablak automatikusan betölti az egész képernyõt, amikor\n"
-"elõször megjelenik."
+"Az ablak automatikusan betÃ¶lti az egÃ©sz kÃ©pernyÅ‘t, amikor\n"
+"elÅ‘szÃ¶r megjelenik."
 
 #: ../src/winspector.c:1214
 msgid "Skip Window List"
-msgstr "Ablak-lista átugrása"
+msgstr "Ablak-lista Ã¡tugrÃ¡sa"
 
 #: ../src/winspector.c:1216
 msgid "Do not list the window in the window list menu."
-msgstr "Az ablak nem jelenik meg az \"Ablakok listája\" menüben"
+msgstr "Az ablak nem jelenik meg az \"Ablakok listÃ¡ja\" menÃ¼ben"
 
 #: ../src/winspector.c:1231
 msgid "Advanced"
-msgstr "Haladó"
+msgstr "HaladÃ³"
 
 #: ../src/winspector.c:1246
 msgid "Ignore HideOthers"
-msgstr "\"HideOthers\" figyelmen kívûl"
+msgstr "\"HideOthers\" figyelmen kÃ­vÅ±l"
 
 #: ../src/winspector.c:1248
 msgid ""
@@ -1289,11 +1289,11 @@ msgid ""
 "`HideOthers' command."
 msgstr ""
 "Nem rejti el az ablakot, amikor a\n"
-"\"HideOthers\" parancsot hajtod végre."
+"\"HideOthers\" parancsot hajtod vÃ©gre."
 
 #: ../src/winspector.c:1252
 msgid "Don't Bind Keyboard Shortcuts"
-msgstr "Ne értelmezze a gyorsbillentyûket"
+msgstr "Ne Ã©rtelmezze a gyorsbillentyÅ±ket"
 
 #: ../src/winspector.c:1254
 msgid ""
@@ -1302,46 +1302,46 @@ msgid ""
 "window to receive all key combinations regardless\n"
 "of your shortcut configuration."
 msgstr ""
-"A Window Maker nem fogja értelmezni a gyorsbillentyûket,\n"
-"amikor ez az ablak aktív. Ez lehetõvé teszi, hogy az\n"
-"ablak _MINDEN_ gombkombinációt megkapjon, azt is, ami\n"
-"már esetleg szerepel a gyorsbillentyûid között."
+"A Window Maker nem fogja Ã©rtelmezni a gyorsbillentyÅ±ket,\n"
+"amikor ez az ablak aktÃ­v. Ez lehetÅ‘vÃ© teszi, hogy az\n"
+"ablak _MINDEN_ gombkombinÃ¡ciÃ³t megkapjon, azt is, ami\n"
+"mÃ¡r esetleg szerepel a gyorsbillentyÅ±id kÃ¶zÃ¶tt."
 
 #: ../src/winspector.c:1260
 msgid "Don't Bind Mouse Clicks"
-msgstr "Ne értelmezze az egérkattintásokat"
+msgstr "Ne Ã©rtelmezze az egÃ©rkattintÃ¡sokat"
 
 #: ../src/winspector.c:1262
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
 "in the window (when alt is the modifier you haveconfigured)."
 msgstr ""
-"Nem próbálja meg értelmezni az egér tevékenységét, pl az Alt+húzás-t\n"
-"az ablakon belül (ha az alt a módosító billentyûd)."
+"Nem prÃ³bÃ¡lja meg Ã©rtelmezni az egÃ©r tevÃ©kenysÃ©gÃ©t, pl az Alt+hÃºzÃ¡s-t\n"
+"az ablakon belÃ¼l (ha az alt a mÃ³dosÃ­tÃ³ billentyÅ±d)."
 
 #: ../src/winspector.c:1267
 msgid "Keep Inside Screen"
-msgstr "A képernyõn belül tart"
+msgstr "A kÃ©pernyÅ‘n belÃ¼l tart"
 
 #: ../src/winspector.c:1269
 msgid ""
 "Do not allow the window to move itself completely\n"
 "outside the screen. For bug compatibility.\n"
 msgstr ""
-"Nem engedélyezi az ablakot teljesen a képernyõ\n"
-"területén kívûlre rakni.\n"
+"Nem engedÃ©lyezi az ablakot teljesen a kÃ©pernyÅ‘\n"
+"terÃ¼letÃ©n kÃ­vÅ±lre rakni.\n"
 
 #: ../src/winspector.c:1273
 msgid "Don't Let It Take Focus"
-msgstr "Nem kaphat fókuszt"
+msgstr "Nem kaphat fÃ³kuszt"
 
 #: ../src/winspector.c:1275
 msgid ""
 "Do not let the window take keyboard focus when you\n"
 "click on it."
 msgstr ""
-"Amikor rákattintasz az ablakra, akkor a billentyûzet\n"
-"nem fókuszálódik rá."
+"Amikor rÃ¡kattintasz az ablakra, akkor a billentyÅ±zet\n"
+"nem fÃ³kuszÃ¡lÃ³dik rÃ¡."
 
 #: ../src/winspector.c:1279
 msgid "Don't Save Session"
@@ -1354,13 +1354,13 @@ msgid ""
 "together with other applications when Window Maker\n"
 "starts."
 msgstr ""
-"Nem menti a társított alkalmazás session tulajdonságait,\n"
-"így nem fog újraindulni más alkalmazásokkal együtt, amikor a\n"
+"Nem menti a tÃ¡rsÃ­tott alkalmazÃ¡s session tulajdonsÃ¡gait,\n"
+"Ã­gy nem fog Ãºjraindulni mÃ¡s alkalmazÃ¡sokkal egyÃ¼tt, amikor a\n"
 "Window Maker elindul."
 
 #: ../src/winspector.c:1287
 msgid "Emulate Application Icon"
-msgstr "Alkalmazás-ikon emuláció"
+msgstr "AlkalmazÃ¡s-ikon emulÃ¡ciÃ³"
 
 #: ../src/winspector.c:1289
 msgid ""
@@ -1368,13 +1368,13 @@ msgid ""
 "enough information to Window Maker for a dockable\n"
 "application icon to be created."
 msgstr ""
-"Az ablakot úgy állítja be, hogy elég információt szolgáltasson\n"
-"a Window Makernek ahhoz, hogy a dokkolt ikont létre tudja\n"
+"Az ablakot Ãºgy Ã¡llÃ­tja be, hogy elÃ©g informÃ¡ciÃ³t szolgÃ¡ltasson\n"
+"a Window Makernek ahhoz, hogy a dokkolt ikont lÃ©tre tudja\n"
 "hozni."
 
 #: ../src/winspector.c:1294
 msgid "Full Screen Maximization"
-msgstr "Teljes képernyõs üzemmód"
+msgstr "Teljes kÃ©pernyÅ‘s Ã¼zemmÃ³d"
 
 #: ../src/winspector.c:1296
 msgid ""
@@ -1382,53 +1382,53 @@ msgid ""
 "maximized. The titlebar and resizebar will be moved\n"
 "to outside the screen."
 msgstr ""
-"Az ablak az egész képernyõt el fogja foglalni, amikor\n"
-"maximalizálod. A címsor és az átméretezõsáv ki fog\n"
-"lógni a képernyõbõl."
+"Az ablak az egÃ©sz kÃ©pernyÅ‘t el fogja foglalni, amikor\n"
+"maximalizÃ¡lod. A cÃ­msor Ã©s az Ã¡tmÃ©retezÅ‘sÃ¡v ki fog\n"
+"lÃ³gni a kÃ©pernyÅ‘bÅ‘l."
 
 #: ../src/winspector.c:1302
 msgid "Disable Language Button"
-msgstr "Nyelv-gomb letiltása"
+msgstr "Nyelv-gomb letiltÃ¡sa"
 
 #: ../src/winspector.c:1304
 msgid "Remove the `toggle language' button of the window."
-msgstr "Eltünteti a `nyelv ki/be' gombot az ablakról"
+msgstr "EltÃ¼nteti a `nyelv ki/be' gombot az ablakrÃ³l"
 
 #: ../src/winspector.c:1321
 msgid "Miniwindow Image"
-msgstr "Miniablak-kép"
+msgstr "Miniablak-kÃ©p"
 
 #: ../src/winspector.c:1340
 msgid "Update"
-msgstr "Frissítés"
+msgstr "FrissÃ­tÃ©s"
 
 #: ../src/winspector.c:1355
 msgid "Icon File Name:"
-msgstr "Ikonfájl neve:"
+msgstr "IkonfÃ¡jl neve:"
 
 #: ../src/winspector.c:1367
 msgid "Ignore client supplied icon"
-msgstr "A kliens ikonjának letiltása"
+msgstr "A kliens ikonjÃ¡nak letiltÃ¡sa"
 
 #: ../src/winspector.c:1374
 msgid "Initial Workspace"
-msgstr "Kezdeti munkafelület"
+msgstr "Kezdeti munkafelÃ¼let"
 
 #: ../src/winspector.c:1376
 msgid "The workspace to place the window when it'sfirst shown."
-msgstr "Amikor megjelenik, melyik munkafelületre helyezze az ablakot"
+msgstr "Amikor megjelenik, melyik munkafelÃ¼letre helyezze az ablakot"
 
 #: ../src/winspector.c:1382
 msgid "Nowhere in particular"
-msgstr "Aktuális munkafelület"
+msgstr "AktuÃ¡lis munkafelÃ¼let"
 
 #: ../src/winspector.c:1400
 msgid "Application Wide"
-msgstr "Alkalmazás tulajdonságok"
+msgstr "AlkalmazÃ¡s tulajdonsÃ¡gok"
 
 #: ../src/winspector.c:1411
 msgid "Start Hidden"
-msgstr "Indításkor elrejt"
+msgstr "IndÃ­tÃ¡skor elrejt"
 
 #: ../src/winspector.c:1413
 msgid "Automatically hide application when it's started."
@@ -1436,7 +1436,7 @@ msgstr "Amikor elindul, automatikusan elrejti"
 
 #: ../src/winspector.c:1416
 msgid "No Application Icon"
-msgstr "Nincs alkalmazás-ikon"
+msgstr "Nincs alkalmazÃ¡s-ikon"
 
 #: ../src/winspector.c:1418
 msgid ""
@@ -1445,31 +1445,31 @@ msgid ""
 "and any icons that are already docked will stop\n"
 "working correctly."
 msgstr ""
-"Letiltja az alkalmazáshoz tartozó ikon megjelenését.\n"
-"Többé nem tudod dokkolni (rögzíteni) azt;\n"
-"és a többi ikon, ami már dokkolva van, lehetséges,\n"
-"hogy nem fog többé tökéletesen mûködni."
+"Letiltja az alkalmazÃ¡shoz tartozÃ³ ikon megjelenÃ©sÃ©t.\n"
+"TÃ¶bbÃ© nem tudod dokkolni (rÃ¶gzÃ­teni) azt;\n"
+"Ã©s a tÃ¶bbi ikon, ami mÃ¡r dokkolva van, lehetsÃ©ges,\n"
+"hogy nem fog tÃ¶bbÃ© tÃ¶kÃ©letesen mÅ±kÃ¶dni."
 
 #: ../src/workspace.c:107 ../src/workspace.c:108 ../src/workspace.c:703
 msgid "Workspace %i"
-msgstr "Munkafelület %i"
+msgstr "MunkafelÃ¼let %i"
 
 #: ../src/workspace.c:760
 msgid "Workspaces"
-msgstr "Munkafelületek"
+msgstr "MunkafelÃ¼letek"
 
 #: ../src/workspace.c:762
 msgid "could not create Workspace menu"
-msgstr "nem tudom létrehozni a Munkafelület menüt"
+msgstr "nem tudom lÃ©trehozni a MunkafelÃ¼let menÃ¼t"
 
 #: ../src/workspace.c:769
 msgid "New"
-msgstr "Új"
+msgstr "Ãšj"
 
 #: ../src/workspace.c:770
 msgid "Destroy Last"
-msgstr "Utolsó elpusztítása"
+msgstr "UtolsÃ³ elpusztÃ­tÃ¡sa"
 
 #: ../src/xutil.c:228
 msgid "invalid data in selection"
-msgstr "érvénytelen adat a kiválasztásban"
+msgstr "Ã©rvÃ©nytelen adat a kivÃ¡lasztÃ¡sban"

@@ -1,21 +1,21 @@
 # translation of bs.po to Bosanski
 # Copyright (C) 2004 Free Software Foundation, Inc.
-# Ahmet Mulaliæ <am@lugzdk.ba>, 2004.
+# Ahmet MulaliÄ‡ <am@lugzdk.ba>, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: bs\n"
 "PO-Revision-Date: 2004-08-30 00:23+0200\n"
-"Last-Translator: Ahmet Mulaliæ <am@lugzdk.ba>\n"
+"Last-Translator: Ahmet MulaliÄ‡ <am@lugzdk.ba>\n"
 "Language-Team: Bosanski <lugzdk@lugzdk.ba>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.3.1\n"
 
 #: ../src/appicon.c:509 ../src/dialog.c:215 ../src/dialog.c:271 ../src/dock.c:2953 ../src/dockedapp.c:206 ../src/winspector.c:279 ../src/winspector.c:295
 msgid "Error"
-msgstr "Gre¹ka"
+msgstr "GreÅ¡ka"
 
 #: ../src/appicon.c:510
 msgid "Could not open specified icon file"
@@ -35,8 +35,8 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-"Ovo æe ubiti aplikaciju.\n"
-"Promjene koje nisu saèuvane biti æe izgubljene.\n"
+"Ovo Ä‡e ubiti aplikaciju.\n"
+"Promjene koje nisu saÄuvane biti Ä‡e izgubljene.\n"
 "Molimo potvrdite."
 
 #: ../src/appicon.c:534 ../src/dock.c:270 ../src/winmenu.c:87
@@ -49,7 +49,7 @@ msgstr "Ne"
 
 #: ../src/appicon.c:548 ../src/dock.c:1030
 msgid "Unhide Here"
-msgstr "Poka¾i ovdje"
+msgstr "PokaÅ¾i ovdje"
 
 #: ../src/appicon.c:549 ../src/dock.c:1032
 msgid "(Un)Hide"
@@ -65,7 +65,7 @@ msgstr "Ubij"
 
 #: ../src/defaults.c:690 ../src/startup.c:686 ../src/startup.c:704 ../src/startup.c:710
 msgid "could not read domain \"%s\" from defaults database"
-msgstr "ne mogu proèitati domenu \"%s\" iz standardne baze podataka"
+msgstr "ne mogu proÄitati domenu \"%s\" iz standardne baze podataka"
 
 #: ../src/defaults.c:736 ../src/defaults.c:860 ../src/defaults.c:899 ../src/defaults.c:929
 msgid "Domain %s (%s) of defaults database is corrupted!"
@@ -73,7 +73,7 @@ msgstr "Domena %s (%s) standardne baze podataka je pokvarena!"
 
 #: ../src/defaults.c:741 ../src/defaults.c:881 ../src/defaults.c:912 ../src/defaults.c:938
 msgid "could not load domain %s from user defaults database"
-msgstr "ne mogu proèitati domenu %s iz korisnikove standardne baze podataka"
+msgstr "ne mogu proÄitati domenu %s iz korisnikove standardne baze podataka"
 
 #: ../src/defaults.c:752 ../src/defaults.c:845
 msgid "Domain %s (%s) of global defaults database is corrupted!"
@@ -81,15 +81,15 @@ msgstr "Domena %s (%s) globalne standardne baze podataka je pokvarena!"
 
 #: ../src/defaults.c:771 ../src/defaults.c:850
 msgid "could not load domain %s from global defaults database"
-msgstr "ne mogu uèitati domenu %s iz globalne standardne baze podataka"
+msgstr "ne mogu uÄitati domenu %s iz globalne standardne baze podataka"
 
 #: ../src/defaults.c:1240
 msgid "wrong option value for key \"%s\". Should be one of %s"
-msgstr "netaèna vrijednost opcije za kjluè \"%s\". Trebala bi biti jedna od %s"
+msgstr "netaÄna vrijednost opcije za kjluÄ \"%s\". Trebala bi biti jedna od %s"
 
 #: ../src/defaults.c:1287
 msgid "can't convert \"%s\" to boolean for key \"%s\""
-msgstr "ne mogu konvertovati \"%s\" u logièki izraz za \"%s\""
+msgstr "ne mogu konvertovati \"%s\" u logiÄki izraz za \"%s\""
 
 #: ../src/defaults.c:1292 ../src/defaults.c:1326 ../src/defaults.c:1358 ../src/defaults.c:1371 ../src/defaults.c:1386 ../src/defaults.c:1401 ../src/defaults.c:1472 ../src/defaults.c:1484 ../src/defaults.c:1739 ../src/defaults.c:1753 ../src/defaults.c:1791 ../src/defaults.c:1803 ../src/defaults.c:1815 ../src/defaults.c:1838 ../src/defaults.c:1865 ../src/defaults.c:1878 ../src/defaults.c:1891 ../src/defaults.c:1921 ../src/defaults.c:1962 ../src/defaults.c:1974 ../src/defaults.c:1986 ../src/defaults.c:2012 ../src/defaults.c:2032 ../src/defaults.c:2045 ../src/defaults.c:2060 ../src/defaults.c:2099 ../src/defaults.c:2164
 msgid "using default \"%s\" instead"
@@ -97,19 +97,19 @@ msgstr "umjesto toga koristim standardno \"%s\""
 
 #: ../src/defaults.c:1323
 msgid "can't convert \"%s\" to integer for key \"%s\""
-msgstr "ne mogu konvertovati \"%s\" u cijeli broj za kljuè \"%s\""
+msgstr "ne mogu konvertovati \"%s\" u cijeli broj za kljuÄ \"%s\""
 
 #: ../src/defaults.c:1353 ../src/defaults.c:1467 ../src/defaults.c:1734 ../src/defaults.c:1786 ../src/defaults.c:1957 ../src/wdefaults.c:544 ../src/wdefaults.c:580
 msgid "Wrong option format for key \"%s\". Should be %s."
-msgstr "Netaèna format opcija za kljuè \"%s\". Trebao bi biti %s"
+msgstr "NetaÄna format opcija za kljuÄ \"%s\". Trebao bi biti %s"
 
 #: ../src/defaults.c:1366
 msgid "Incorrect number of elements in array for key \"%s\"."
-msgstr "Netaèan broj elemenata u nizu za kljuè \"%s\""
+msgstr "NetaÄan broj elemenata u nizu za kljuÄ \"%s\""
 
 #: ../src/defaults.c:1381
 msgid "Wrong value for key \"%s\". Should be Coordinate."
-msgstr "Netaèna vrijednost za kljuè \"%s\". Trebale bi biti koordinate."
+msgstr "NetaÄna vrijednost za kljuÄ \"%s\". Trebale bi biti koordinate."
 
 #: ../src/defaults.c:1396
 msgid "can't convert array to integers for \"%s\"."
@@ -121,19 +121,19 @@ msgstr "\"%s\"je krivo ime za boju"
 
 #: ../src/defaults.c:1592
 msgid "bad number of arguments in gradient specification"
-msgstr "lo¹ broj argumenata u specifikaciji gradacije"
+msgstr "loÅ¡ broj argumenata u specifikaciji gradacije"
 
 #: ../src/defaults.c:1638
 msgid "too few arguments in multicolor gradient specification"
-msgstr "premalo argumenata u specifikaciji vi¹ebojne gradacije"
+msgstr "premalo argumenata u specifikaciji viÅ¡ebojne gradacije"
 
 #: ../src/defaults.c:1748
 msgid "Error in texture specification for key \"%s\""
-msgstr "Gre¹ka u specifikaciji teksture za kljuè \"%s\""
+msgstr "GreÅ¡ka u specifikaciji teksture za kljuÄ \"%s\""
 
 #: ../src/defaults.c:1799 ../src/defaults.c:1834 ../src/defaults.c:1970 ../src/defaults.c:2008
 msgid "Too few elements in array for key \"WorkspaceBack\"."
-msgstr "Premalo elemenata u nizu za kljuè \"WorkspaceBack\"."
+msgstr "Premalo elemenata u nizu za kljuÄ \"WorkspaceBack\"."
 
 #: ../src/defaults.c:1811 ../src/defaults.c:1982
 msgid "Wrong type for workspace background. Should be Texture."
@@ -141,23 +141,23 @@ msgstr "Krivi tip za pozadinu radnog prostora. Trebala bi biti tekstura."
 
 #: ../src/defaults.c:1861 ../src/defaults.c:2028
 msgid "Cannot get color entry for key \"WorkspaceBack\"."
-msgstr "Ne mogu uzeti boju za kljuè \"WorkspaceBack\"."
+msgstr "Ne mogu uzeti boju za kljuÄ \"WorkspaceBack\"."
 
 #: ../src/defaults.c:1873 ../src/defaults.c:2040
 msgid "key \"WorkspaceBack\" has invalid color \"%s\""
-msgstr "kljuè \"WorkspaceBack\" ima pogre¹nu boju \"%s\""
+msgstr "kljuÄ \"WorkspaceBack\" ima pogreÅ¡nu boju \"%s\""
 
 #: ../src/defaults.c:1887 ../src/defaults.c:2056
 msgid "Cannot get file entry for key \"WorkspaceBack\"."
-msgstr "Ne mogu uzeti unos datoteke za kljuè \"WorkspaceBack\"."
+msgstr "Ne mogu uzeti unos datoteke za kljuÄ \"WorkspaceBack\"."
 
 #: ../src/defaults.c:1900 ../src/defaults.c:2081
 msgid "could not find background image \"%s\""
-msgstr "ne mogu naæi sliku za pozadinu \"%s\""
+msgstr "ne mogu naÄ‡i sliku za pozadinu \"%s\""
 
 #: ../src/defaults.c:1917 ../src/defaults.c:2095
 msgid "Error in texture specification for key \"WorkspaceBack\""
-msgstr "Gre¹ka u specifikaciji teksture za kljuè \"WorkspaceBack\""
+msgstr "GreÅ¡ka u specifikaciji teksture za kljuÄ \"WorkspaceBack\""
 
 #: ../src/defaults.c:2076
 msgid "could not run \"%s\""
@@ -165,27 +165,27 @@ msgstr "ne mogu pokrenuti \"%s\""
 
 #: ../src/defaults.c:2129
 msgid "could not load any usable font"
-msgstr "ne mogu uèitati nijedan iskoristivi font"
+msgstr "ne mogu uÄitati nijedan iskoristivi font"
 
 #: ../src/defaults.c:2159
 msgid "could not get color for key \"%s\""
-msgstr "ne mogu uzeti boju za kljuè \"%s\""
+msgstr "ne mogu uzeti boju za kljuÄ \"%s\""
 
 #: ../src/defaults.c:2218 ../src/rootmenu.c:440
 msgid "%s:invalid key modifier \"%s\""
-msgstr "%s:netaèan kljuè modifiera \"%s\""
+msgstr "%s:netaÄan kljuÄ modifiera \"%s\""
 
 #: ../src/defaults.c:2230
 msgid "%s:invalid kbd shortcut specification \"%s\""
-msgstr "%s: netaèna specifikacija kbd preèice \"%s\""
+msgstr "%s: netaÄna specifikacija kbd preÄice \"%s\""
 
 #: ../src/defaults.c:2237
 msgid "%s:invalid key in shortcut \"%s\""
-msgstr "%s netaèan kljuè u preèici \"%s\""
+msgstr "%s netaÄan kljuÄ u preÄici \"%s\""
 
 #: ../src/defaults.c:2263
 msgid "%s: modifier key %s is not valid"
-msgstr "%s: modifier kljuè %s nije taèan"
+msgstr "%s: modifier kljuÄ %s nije taÄan"
 
 #: ../src/defaults.c:2339
 msgid "could not render texture for icon background"
@@ -193,11 +193,11 @@ msgstr "ne mogu predstaviti teksturu za pozadinu ikone"
 
 #: ../src/defaults.c:2695
 msgid "background texture rendering was unsuccessfull"
-msgstr "neuspje¹no predstavljanje teksure za pozadinu"
+msgstr "neuspjeÅ¡no predstavljanje teksure za pozadinu"
 
 #: ../src/defaults.c:2722
 msgid "could not load image %s for option %s:%s\n"
-msgstr "ne mogu uèitati sliku %s za opciju %s:%s\n"
+msgstr "ne mogu uÄitati sliku %s za opciju %s:%s\n"
 
 #: ../src/defaults.c:2738
 msgid "could not spawn texture rendering subprocess for option"
@@ -209,7 +209,7 @@ msgstr "ne mogu predstaviti teksturu za pozadinu radnog prostora"
 
 #: ../src/dialog.c:114 ../src/dialog.c:458 ../src/dock.c:420 ../src/dockedapp.c:356 ../src/rootmenu.c:207 ../src/rootmenu.c:236
 msgid "Cancel"
-msgstr "Poni¹ti"
+msgstr "PoniÅ¡ti"
 
 #: ../src/dialog.c:210
 msgid "Could not open directory "
@@ -217,7 +217,7 @@ msgstr "Ne mogu otvoriti direktorij "
 
 #: ../src/dialog.c:266
 msgid "Could not load image file "
-msgstr "Ne mogu uèitati image datoteku "
+msgstr "Ne mogu uÄitati image datoteku "
 
 #: ../src/dialog.c:395
 msgid "Directories"
@@ -237,11 +237,11 @@ msgstr "Odaberi datoteku"
 
 #: ../src/dialog.c:474
 msgid "Icon Chooser"
-msgstr "Biraè ikona"
+msgstr "BiraÄ ikona"
 
 #: ../src/dock.c:209
 msgid "Type the name for workspace %i:"
-msgstr "Upi¹i ime za radni prostor %i:"
+msgstr "UpiÅ¡i ime za radni prostor %i:"
 
 #: ../src/dock.c:210 ../src/dock.c:1009
 msgid "Rename Workspace"
@@ -253,15 +253,15 @@ msgstr "Clip radnog prostora"
 
 #: ../src/dock.c:419
 msgid "All selected icons will be removed!"
-msgstr "Sve odabrane ikone æe biti uklonjene!"
+msgstr "Sve odabrane ikone Ä‡e biti uklonjene!"
 
 #: ../src/dock.c:469
 msgid "Keep Icon"
-msgstr "Zadr¾i ikonu"
+msgstr "ZadrÅ¾i ikonu"
 
 #: ../src/dock.c:470 ../src/dock.c:1924 ../src/dock.c:2046
 msgid "Type the command used to launch the application"
-msgstr "Upi¹i naredbu za pokretanje aplikacije"
+msgstr "UpiÅ¡i naredbu za pokretanje aplikacije"
 
 #: ../src/dock.c:833
 msgid "could not launch application %s\n"
@@ -277,23 +277,23 @@ msgstr "ne mogu napraviti podizbornik opcija za Clip izbornik"
 
 #: ../src/dock.c:950 ../src/dock.c:998 ../src/winspector.c:1097
 msgid "Keep on top"
-msgstr "Zadr¾i na vrhu"
+msgstr "ZadrÅ¾i na vrhu"
 
 #: ../src/dock.c:956
 msgid "Collapsed"
-msgstr "Sru¹en"
+msgstr "SruÅ¡en"
 
 #: ../src/dock.c:962
 msgid "AutoCollapse"
-msgstr "Automatsko ru¹enje"
+msgstr "Automatsko ruÅ¡enje"
 
 #: ../src/dock.c:968
 msgid "AutoAttract Icons"
-msgstr "Automatsko privlaèenje ikona"
+msgstr "Automatsko privlaÄenje ikona"
 
 #: ../src/dock.c:974
 msgid "Keep Attracted Icons"
-msgstr "Zadr¾i privuèene ikone"
+msgstr "ZadrÅ¾i privuÄene ikone"
 
 #: ../src/dock.c:1004
 msgid "Clip Options"
@@ -309,7 +309,7 @@ msgstr "(De)Selektiraj sve ikone"
 
 #: ../src/dock.c:1016
 msgid "Keep Icon(s)"
-msgstr "Zadr¾i ikonu(e)"
+msgstr "ZadrÅ¾i ikonu(e)"
 
 #: ../src/dock.c:1018
 msgid "Move Icon(s) To"
@@ -333,7 +333,7 @@ msgstr "Postavke..."
 
 #: ../src/dock.c:1416 ../src/dock.c:1430 ../src/dock.c:1444 ../src/dock.c:1454
 msgid "bad value in docked icon state info %s"
-msgstr "lo¹a vrijednost u usidrenom info stanju ikone %s"
+msgstr "loÅ¡a vrijednost u usidrenom info stanju ikone %s"
 
 #: ../src/dock.c:1462
 msgid "bad value in docked icon position %i,%i"
@@ -341,7 +341,7 @@ msgstr "kriva vrijednost u usidrenoj poziciji ikone %i,%i"
 
 #: ../src/dock.c:1691
 msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
-msgstr "previ¹e je ikona stavljeno na dock. Zanemarujem ono ¹to ne stane"
+msgstr "previÅ¡e je ikona stavljeno na dock. Zanemarujem ono Å¡to ne stane"
 
 #. icon->forced_dock = 1;
 #: ../src/dock.c:1923 ../src/dock.c:2045
@@ -350,11 +350,11 @@ msgstr "Dock ikona"
 
 #: ../src/dock.c:2946 ../src/dock.c:2950
 msgid "Could not execute command \"%s\""
-msgstr "Ne mogu izvr¹iti naredbu \"%s\""
+msgstr "Ne mogu izvrÅ¡iti naredbu \"%s\""
 
 #: ../src/dockedapp.c:128
 msgid "could not find icon %s, used in a docked application"
-msgstr "ne mogu pronaæi ikonu %s, za usidrenu aplikaciju"
+msgstr "ne mogu pronaÄ‡i ikonu %s, za usidrenu aplikaciju"
 
 #: ../src/dockedapp.c:205
 msgid "Could not open specified icon file:%s"
@@ -370,15 +370,15 @@ msgstr "Putevi i argumenti aplikacije"
 
 #: ../src/dockedapp.c:309
 msgid "Command for files dropped with DND"
-msgstr "Naredba za datoteke spu¹tene sa DND-om"
+msgstr "Naredba za datoteke spuÅ¡tene sa DND-om"
 
 #: ../src/dockedapp.c:321
 msgid "%d will be replaced with the file name"
-msgstr "%d æe biti zamjenjeno imenom datoteke"
+msgstr "%d Ä‡e biti zamjenjeno imenom datoteke"
 
 #: ../src/dockedapp.c:325
 msgid "DND support was not compiled in"
-msgstr "Podr¹ka za DND nije ukompajlirana"
+msgstr "PodrÅ¡ka za DND nije ukompajlirana"
 
 #: ../src/dockedapp.c:331
 msgid "Icon Image"
@@ -394,7 +394,7 @@ msgstr "Postavke usidrene aplikacije"
 
 #: ../src/event.c:372
 msgid "stack overflow: too many dead processes"
-msgstr "stack overflow: previ¹e mrtvih procesa"
+msgstr "stack overflow: previÅ¡e mrtvih procesa"
 
 #: ../src/framewin.c:526
 msgid "could not render gradient: %s"
@@ -402,11 +402,11 @@ msgstr "ne mogu predstaviti gradaciju: %s"
 
 #: ../src/framewin.c:542 ../src/framewin.c:557 ../src/framewin.c:568 ../src/framewin.c:575 ../src/framewin.c:582 ../src/icon.c:296 ../src/texture.c:492
 msgid "error rendering image:%s"
-msgstr "gre¹ka pri predstavljanju slike: %s"
+msgstr "greÅ¡ka pri predstavljanju slike: %s"
 
 #: ../src/icon.c:182 ../src/wdefaults.c:402
 msgid "error loading image file \"%s\""
-msgstr "gre¹ka pri uèitavanju image datoteke \"%s\""
+msgstr "greÅ¡ka pri uÄitavanju image datoteke \"%s\""
 
 #: ../src/icon.c:428 ../src/icon.c:437
 msgid "could not create directory %s"
@@ -414,15 +414,15 @@ msgstr "ne mogu napraviti direktorij %s"
 
 #: ../src/icon.c:702
 msgid "could not find default icon \"%s\""
-msgstr "ne mogu naæi standardnu ikonu \"%s\""
+msgstr "ne mogu naÄ‡i standardnu ikonu \"%s\""
 
 #: ../src/icon.c:708
 msgid "could not load default icon \"%s\":%s"
-msgstr "ne mogu uèitati standardnu ikonu \"%s\":%s"
+msgstr "ne mogu uÄitati standardnu ikonu \"%s\":%s"
 
 #: ../src/main.c:186
 msgid "could not exec window manager"
-msgstr "ne mogu pokrenuti window menad¾er"
+msgstr "ne mogu pokrenuti window menadÅ¾er"
 
 #: ../src/main.c:187
 msgid "Restart failed!!!"
@@ -442,7 +442,7 @@ msgstr "opcije:"
 
 #: ../src/main.c:248
 msgid " -nocpp \t\tdisable preprocessing of configuration files"
-msgstr " -nocpp \t\tonemoguæi preprocesiranje konfiguracijskih datoteka"
+msgstr " -nocpp \t\tonemoguÄ‡i preprocesiranje konfiguracijskih datoteka"
 
 #: ../src/main.c:250
 msgid " -nodock\t\tdo not open the application Dock"
@@ -458,27 +458,27 @@ msgstr " -visualid visualid\tvisual id of visual to use"
 
 #: ../src/main.c:256
 msgid " -display host:dpy\tdisplay to use"
-msgstr " -display host:dpy\tprika¾i za kori¹tenje"
+msgstr " -display host:dpy\tprikaÅ¾i za koriÅ¡tenje"
 
 #: ../src/main.c:257
 msgid " -version\t\tprint version and exit"
-msgstr " -version\t\t¹tampaj verziju i izaği"
+msgstr " -version\t\tÅ¡tampaj verziju i izaÄ‘i"
 
 #: ../src/main.c:269
 msgid ""
 "could not find user GNUstep directory (%s).\n"
 "Make sure you have installed Window Maker correctly and run wmaker.inst"
 msgstr ""
-"Ne mogu naæi korisnièki GNUstep direktorij (%s).\n"
+"Ne mogu naÄ‡i korisniÄki GNUstep direktorij (%s).\n"
 "Provjerite da li ste pravilno instalirali Window Maker i pokrenuli wmaker.inst"
 
 #: ../src/main.c:291
 msgid "%s:could not execute initialization script"
-msgstr "%s:ne mogu izvr¹iti inicijalizacijsku skriptu"
+msgstr "%s:ne mogu izvrÅ¡iti inicijalizacijsku skriptu"
 
 #: ../src/main.c:310
 msgid "%s:could not execute exit script"
-msgstr "%s:ne mogu izvr¹iti izlaznu skriptu"
+msgstr "%s:ne mogu izvrÅ¡iti izlaznu skriptu"
 
 #: ../src/main.c:367 ../src/main.c:374 ../src/main.c:381
 msgid "too few arguments for %s"
@@ -486,11 +486,11 @@ msgstr "premalo argumenata za %s"
 
 #: ../src/main.c:385
 msgid "bad value for visualid: \"%s\""
-msgstr "lo¹a vrijednost za visualid: \"%s\""
+msgstr "loÅ¡a vrijednost za visualid: \"%s\""
 
 #: ../src/main.c:426
 msgid "X server does not support locale"
-msgstr "X server ne podr¾ava locale"
+msgstr "X server ne podrÅ¾ava locale"
 
 #: ../src/main.c:429
 msgid "cannot set locale modifiers"
@@ -502,7 +502,7 @@ msgstr "ne mogu otvoriti prikaz \"%s\""
 
 #: ../src/menu.c:285
 msgid "wrealloc() failed while trying to add menu item"
-msgstr "wrealloc() pao poku¹avajuæi dodati postavku u izbornik"
+msgstr "wrealloc() pao pokuÅ¡avajuÄ‡i dodati postavku u izbornik"
 
 #: ../src/misc.c:71
 msgid "could not define value for %s for cpp"
@@ -510,15 +510,15 @@ msgstr "ne mogu definirati vrijednost za %s za cpp"
 
 #: ../src/misc.c:101
 msgid "could not get password entry for UID %i"
-msgstr "ne mogu uzeti unos ¹ifre za UID %i"
+msgstr "ne mogu uzeti unos Å¡ifre za UID %i"
 
 #: ../src/misc.c:125
 msgid "your machine is misconfigured. HOSTNAME is set to %s"
-msgstr "va¹a ma¹ina je krivo konfigurirana. HOSTNAME je postavljen na %s"
+msgstr "vaÅ¡a maÅ¡ina je krivo konfigurirana. HOSTNAME je postavljen na %s"
 
 #: ../src/misc.c:131
 msgid "your machine is misconfigured. HOST is set to %s"
-msgstr "va¹a ma¹ina je krivo konfigurisana. HOST je postavljen na %s"
+msgstr "vaÅ¡a maÅ¡ina je krivo konfigurisana. HOST je postavljen na %s"
 
 #: ../src/misc.c:773
 msgid "selection timed-out"
@@ -530,35 +530,35 @@ msgstr "Argumenti programa"
 
 #: ../src/misc.c:807
 msgid "Enter command arguments:"
-msgstr "Upi¹i argumente naredbe:"
+msgstr "UpiÅ¡i argumente naredbe:"
 
 #: ../src/misc.c:833
 msgid "unable to get dropped data from DND drop"
-msgstr "ne mogu uzeti spu¹tene podatke od DND spu¹tanja"
+msgstr "ne mogu uzeti spuÅ¡tene podatke od DND spuÅ¡tanja"
 
 #: ../src/misc.c:841
 msgid "error getting dropped data from DND drop"
-msgstr "gre¹ka pri uzimanju spu¹tenih podataka od DND spu¹tanja"
+msgstr "greÅ¡ka pri uzimanju spuÅ¡tenih podataka od DND spuÅ¡tanja"
 
 #: ../src/misc.c:847
 msgid "out of memory while getting data from DND drop"
-msgstr "iskori¹tena sva memorija pri uzimanju podataka od DND spu¹tanja"
+msgstr "iskoriÅ¡tena sva memorija pri uzimanju podataka od DND spuÅ¡tanja"
 
 #: ../src/misc.c:891 ../src/misc.c:1011
 msgid "out of memory during expansion of \"%s\""
-msgstr "iskori¹tena sva memorija za vrijeme ¹irenja \"%s\""
+msgstr "iskoriÅ¡tena sva memorija za vrijeme Å¡irenja \"%s\""
 
 #: ../src/misc.c:945
 msgid "out of memory during expansion of \"%w\""
-msgstr "iskori¹tena sva memorija za vrijeme ¹irenja \"%w\""
+msgstr "iskoriÅ¡tena sva memorija za vrijeme Å¡irenja \"%w\""
 
 #: ../src/misc.c:964
 msgid "out of memory during expansion of \"%a\""
-msgstr "iskori¹tena sva memorija za vrijeme ¹irenja \"%a\""
+msgstr "iskoriÅ¡tena sva memorija za vrijeme Å¡irenja \"%a\""
 
 #: ../src/misc.c:990
 msgid "out of memory during expansion of \"%d\""
-msgstr "iskori¹tena sva memorija za vrijeme ¹irenja \"%d\""
+msgstr "iskoriÅ¡tena sva memorija za vrijeme Å¡irenja \"%d\""
 
 #: ../src/misc.c:1004
 msgid "selection not available"
@@ -566,23 +566,23 @@ msgstr "odabir nije dostupan"
 
 #: ../src/misc.c:1076 ../src/misc.c:1082
 msgid "bad window name value in %s state info"
-msgstr "lo¹a vrijednost imena za prozor u %s u info stanju"
+msgstr "loÅ¡a vrijednost imena za prozor u %s u info stanju"
 
 #: ../src/pixmap.c:235
 msgid "could not load mask bitmap file \"%s\". Won't use mask"
-msgstr "ne mogu uèitati bitmap datoteku \"%s\" za masku. Neæu koristiti masku."
+msgstr "ne mogu uÄitati bitmap datoteku \"%s\" za masku. NeÄ‡u koristiti masku."
 
 #: ../src/proplist.c:180
 msgid "unterminated string"
-msgstr "nedovr¹en string"
+msgstr "nedovrÅ¡en string"
 
 #: ../src/proplist.c:247
 msgid "unterminated array"
-msgstr "nedovr¹en niz"
+msgstr "nedovrÅ¡en niz"
 
 #: ../src/proplist.c:256
 msgid "missing , in array or unterminated array"
-msgstr "nedostaje , u nizu ili nedovr¹en niz"
+msgstr "nedostaje , u nizu ili nedovrÅ¡en niz"
 
 #: ../src/proplist.c:267
 msgid "could not get array element"
@@ -590,31 +590,31 @@ msgstr "ne mogu uzeti element niza"
 
 #: ../src/proplist.c:297
 msgid "unterminated dictionary"
-msgstr "nedovr¹en rijeènik"
+msgstr "nedovrÅ¡en rijeÄnik"
 
 #: ../src/proplist.c:315
 msgid "missing dictionary key"
-msgstr "nedostaje kljuè rijeènika"
+msgstr "nedostaje kljuÄ rijeÄnika"
 
 #: ../src/proplist.c:317
 msgid "missing dictionary entry key or unterminated dictionary"
-msgstr "nedostaje kljuè rijeènika ili nezavr¹en niz"
+msgstr "nedostaje kljuÄ rijeÄnika ili nezavrÅ¡en niz"
 
 #: ../src/proplist.c:323
 msgid "error parsing dictionary key"
-msgstr "gre¹ka pri analiziranju kljuèa rijeènika"
+msgstr "greÅ¡ka pri analiziranju kljuÄa rijeÄnika"
 
 #: ../src/proplist.c:332
 msgid "missing = in dictionary entry"
-msgstr "nedostaje = u rijeènièkom unosu"
+msgstr "nedostaje = u rijeÄniÄkom unosu"
 
 #: ../src/proplist.c:351
 msgid "missing ; in dictionary entry"
-msgstr "nedostaje ; u rijeènièkom unosu"
+msgstr "nedostaje ; u rijeÄniÄkom unosu"
 
 #: ../src/proplist.c:432
 msgid "was expecting a string, dictionary, data or array."
-msgstr "je oèekivao string, rijeènik, podatak ili niz."
+msgstr "je oÄekivao string, rijeÄnik, podatak ili niz."
 
 #: ../src/proplist.c:434
 msgid "Comments are not allowed inside WindowMaker owned domain files."
@@ -626,15 +626,15 @@ msgstr "ne mogu otvoriti domain datoteku %s"
 
 #: ../src/proplist.c:466
 msgid "extra data after end of file"
-msgstr "vi¹ak podataka nakon kraja datoteke"
+msgstr "viÅ¡ak podataka nakon kraja datoteke"
 
 #: ../src/resources.c:71
 msgid "The following character sets are missing in %s:"
-msgstr "Sljedeæi znak setovi nedostaju u %s:"
+msgstr "SljedeÄ‡i znak setovi nedostaju u %s:"
 
 #: ../src/resources.c:76
 msgid "The string \"%s\" will be used in place"
-msgstr "String \"%s\"æe biti kori¹ten na mjestu"
+msgstr "String \"%s\"Ä‡e biti koriÅ¡ten na mjestu"
 
 #: ../src/resources.c:78
 msgid "of any characters from those sets."
@@ -642,11 +642,11 @@ msgstr "od bilo kojih znakova iz tih setova"
 
 #: ../src/resources.c:81
 msgid "could not create font set %s. Trying fixed"
-msgstr "ne mogu napraviti font set %s. Probat æu fixed"
+msgstr "ne mogu napraviti font set %s. Probat Ä‡u fixed"
 
 #: ../src/resources.c:98
 msgid "could not load font %s. Trying fixed"
-msgstr "ne mogu uèitati font %s. Probat æu fixed"
+msgstr "ne mogu uÄitati font %s. Probat Ä‡u fixed"
 
 #: ../src/resources.c:136
 msgid "could not parse color \"%s\""
@@ -674,15 +674,15 @@ msgid ""
 "(all applications will be closed)"
 msgstr ""
 "Zatvoriti Window Sistem sesiju?\n"
-"(sve aplikacije æe biti zatvorene)"
+"(sve aplikacije Ä‡e biti zatvorene)"
 
 #: ../src/rootmenu.c:454
 msgid "%s:invalid kbd shortcut specification \"%s\" for entry %s"
-msgstr "%s:netaèna specifikacija za kbd preèicu \"%s\" za unos %s"
+msgstr "%s:netaÄna specifikacija za kbd preÄicu \"%s\" za unos %s"
 
 #: ../src/rootmenu.c:462
 msgid "%s:invalid key in shortcut \"%s\" for entry %s"
-msgstr "%s:netaèan kljuè u preèici \"%s\" za unos %s"
+msgstr "%s:netaÄan kljuÄ u preÄici \"%s\" za unos %s"
 
 #: ../src/rootmenu.c:515
 msgid "%s: unmatched '\"' in menu file"
@@ -694,7 +694,7 @@ msgstr "%s: nedostaje naredba"
 
 #: ../src/rootmenu.c:598
 msgid "invalid OPEN_MENU specification: %s"
-msgstr "netaèna OPEN_MENU specifikacija: %s"
+msgstr "netaÄna OPEN_MENU specifikacija: %s"
 
 #: ../src/rootmenu.c:663
 msgid "%s:could not stat menu"
@@ -706,11 +706,11 @@ msgstr "%s:ne mogu statirati izbornik: %s"
 
 #: ../src/rootmenu.c:689
 msgid "too many parameters in OPEN_MENU: %s"
-msgstr "previ¹e parametara u OPEN_MENU: %s"
+msgstr "previÅ¡e parametara u OPEN_MENU: %s"
 
 #: ../src/rootmenu.c:725
 msgid "There are more than one WORKSPACE_MENU commands in the applications menu. Only one is allowed."
-msgstr "Ima vi¹e nego jedna WORKSPACE_MENU naredba u izborniku aplikacija. Smije biti samo jedna."
+msgstr "Ima viÅ¡e nego jedna WORKSPACE_MENU naredba u izborniku aplikacija. Smije biti samo jedna."
 
 #: ../src/rootmenu.c:754 ../src/rootmenu.c:772
 msgid "%s:missing parameter for menu command \"%s\""
@@ -726,7 +726,7 @@ msgstr "%s:ne mogu dodati kraticu za unos \"%s\""
 
 #: ../src/rootmenu.c:980
 msgid "%s:maximal line size exceeded in menu config: %s"
-msgstr "%s prekoraèena maksimalna velièina linije u konfiguraciji izbornika: %s"
+msgstr "%s prekoraÄena maksimalna veliÄina linije u konfiguraciji izbornika: %s"
 
 #: ../src/rootmenu.c:1002 ../src/rootmenu.c:1094 ../src/rootmenu.c:1195
 msgid "%s:missing command in menu config: %s"
@@ -734,7 +734,7 @@ msgstr "%s:nedostaje naredba u konfiguraciji izbornika: %s"
 
 #: ../src/rootmenu.c:1032
 msgid "%s:syntax error in menu file:END declaration missing"
-msgstr "%s:gre¹ka u sintaksi u datoteci izbornika: nedostaje deklaracija END"
+msgstr "%s:greÅ¡ka u sintaksi u datoteci izbornika: nedostaje deklaracija END"
 
 #: ../src/rootmenu.c:1061 ../src/rootmenu.c:1160
 msgid "could not make arguments for menu file preprocessor"
@@ -750,11 +750,11 @@ msgstr "%s: ne mogu otvoriti datoteku izbornika"
 
 #: ../src/rootmenu.c:1106
 msgid "%s:invalid menu file. MENU command is missing"
-msgstr "%s:netaèna datoteka izbornika. Nedostaje MENU naredba"
+msgstr "%s:netaÄna datoteka izbornika. Nedostaje MENU naredba"
 
 #: ../src/rootmenu.c:1115
 msgid "error reading preprocessed menu data"
-msgstr "gre¹ka pri èitanju preprocesiranih podataka za izbornik"
+msgstr "greÅ¡ka pri Äitanju preprocesiranih podataka za izbornik"
 
 #: ../src/rootmenu.c:1207
 msgid "%s:no title given for the root menu"
@@ -762,7 +762,7 @@ msgstr "%s:nije naveden naslov za root izbornik"
 
 #: ../src/rootmenu.c:1261 ../src/rootmenu.c:1324 ../src/rootmenu.c:1368
 msgid "out of memory while constructing directory menu %s"
-msgstr "iskori¹tena sva memorija prilikom konstrukcije direktorija izbornika %s"
+msgstr "iskoriÅ¡tena sva memorija prilikom konstrukcije direktorija izbornika %s"
 
 #: ../src/rootmenu.c:1271
 msgid "%s:could not stat file \"%s\" in menu directory"
@@ -778,7 +778,7 @@ msgstr "Izlaz..."
 
 #: ../src/rootmenu.c:1486
 msgid "could not find menu file \"%s\" referenced in WMRootMenu"
-msgstr "ne mogu naæi datoteku izbornika \"%s\" navedenoj u WMRootMenu datoteci"
+msgstr "ne mogu naÄ‡i datoteku izbornika \"%s\" navedenoj u WMRootMenu datoteci"
 
 #: ../src/rootmenu.c:1493
 msgid "could not access menu \"%s\" referenced in WMRootMenu"
@@ -786,23 +786,23 @@ msgstr "ne mogu pristupiti datoteci izbornika \"%s\" navedenoj u WMRootMenu"
 
 #: ../src/rootmenu.c:1521 ../src/rootmenu.c:1576
 msgid "%s:format error in root menu configuration \"%s\""
-msgstr "%s:gre¹ka u formatu u konfiguraciji root izbornika \"%s\""
+msgstr "%s:greÅ¡ka u formatu u konfiguraciji root izbornika \"%s\""
 
 #: ../src/screen.c:412
 msgid "could not load logo image for panels"
-msgstr "ne mogu uèitati logo image za panele"
+msgstr "ne mogu uÄitati logo image za panele"
 
 #: ../src/screen.c:415
 msgid "error making logo image for panel:%s"
-msgstr "gre¹ka pri kreiranju logo imagea za panel:%s"
+msgstr "greÅ¡ka pri kreiranju logo imagea za panel:%s"
 
 #: ../src/screen.c:594
 msgid "could not initialize graphics library context: %s"
-msgstr "ne mogu inicijalizirati sadr¾aj grafièke biblioteke: %s"
+msgstr "ne mogu inicijalizirati sadrÅ¾aj grafiÄke biblioteke: %s"
 
 #: ../src/session.c:113 ../src/wdefaults.c:562 ../src/winspector.c:343
 msgid "can't convert \"%s\" to boolean"
-msgstr "ne mogu konvertovati \"%s\" u logièki izraz"
+msgstr "ne mogu konvertovati \"%s\" u logiÄki izraz"
 
 #: ../src/stacking.c:88
 msgid "could not get window list!!"
@@ -810,15 +810,15 @@ msgstr "ne mogu uzeti listu prozora!!"
 
 #: ../src/startup.c:188
 msgid "internal X error: %s\n"
-msgstr "interna X gre¹ka: %s\n"
+msgstr "interna X greÅ¡ka: %s\n"
 
 #: ../src/startup.c:251
 msgid "got signal %i (%s) - restarting\n"
-msgstr "dobio sam signal %i (%s) - ponovo pokreæem\n"
+msgstr "dobio sam signal %i (%s) - ponovo pokreÄ‡em\n"
 
 #: ../src/startup.c:253
 msgid "got signal %i - restarting\n"
-msgstr "primio signal %i - ponovo pokreæem\n"
+msgstr "primio signal %i - ponovo pokreÄ‡em\n"
 
 #: ../src/startup.c:267
 msgid "%s: Received signal SIGTERM. Exiting..."
@@ -834,21 +834,21 @@ msgstr "primio signal %i\n"
 
 #: ../src/startup.c:286
 msgid "crashed while trying to do some post-crash cleanup. Aborting immediatelly."
-msgstr "sru¹io se dok sam poku¹avao èistiti. Prekidam odmah."
+msgstr "sruÅ¡io se dok sam pokuÅ¡avao Äistiti. Prekidam odmah."
 
 #. restart another window manager so that the X session doesn't
 #. * go to space
 #: ../src/startup.c:297
 msgid "trying to start alternative window manager..."
-msgstr "poku¹avam pokrenuti drugi window menad¾er"
+msgstr "pokuÅ¡avam pokrenuti drugi window menadÅ¾er"
 
 #: ../src/startup.c:696
 msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
-msgstr "velièina ikone je konfigurirana da %i, ali je premala. Umjetsto toga koristim 16\n"
+msgstr "veliÄina ikone je konfigurirana da %i, ali je premala. Umjetsto toga koristim 16\n"
 
 #: ../src/startup.c:740
 msgid "it seems that there already is a window manager running"
-msgstr "èini se da je veæ pokrenut window menad¾er"
+msgstr "Äini se da je veÄ‡ pokrenut window menadÅ¾er"
 
 #: ../src/startup.c:746
 msgid "could not manage screen %i"
@@ -864,11 +864,11 @@ msgstr "Prozori"
 
 #: ../src/texture.c:267
 msgid "image file \"%s\" used as texture could not be found."
-msgstr "ne mogu naæi image datoteku \"%s\" koja se koristi kao tekstura."
+msgstr "ne mogu naÄ‡i image datoteku \"%s\" koja se koristi kao tekstura."
 
 #: ../src/texture.c:273
 msgid "could not load texture pixmap \"%s\":%s"
-msgstr "ne mogu uèitati teksturni pixmap \"%s\":%s"
+msgstr "ne mogu uÄitati teksturni pixmap \"%s\":%s"
 
 #: ../src/texture.c:377 ../src/texture.c:488
 msgid "could not render texture: %s"
@@ -876,19 +876,19 @@ msgstr "ne mogu predstaviti teksturu: %s"
 
 #: ../src/wdefaults.c:396
 msgid "could not find icon file \"%s\""
-msgstr "ne mogu pronaæi ikonu \"%s\""
+msgstr "ne mogu pronaÄ‡i ikonu \"%s\""
 
 #: ../src/window.c:2261 ../src/window.c:2404
 msgid ""
 "the NumLock, ScrollLock or similar key seems to be turned on.\n"
 "Turn it off or some mouse actions and keyboard shortcuts will not work."
 msgstr ""
-"èini se da su NumLock, ScrollLock ili slièni kljuèevi ukljuèeni.\n"
-"Iskljuèite ih ili neke akcije s mi¹om i tastaturom neæe raditi."
+"Äini se da su NumLock, ScrollLock ili sliÄni kljuÄevi ukljuÄeni.\n"
+"IskljuÄite ih ili neke akcije s miÅ¡om i tastaturom neÄ‡e raditi."
 
 #: ../src/winmenu.c:192 ../src/winmenu.c:199
 msgid "Shortcut"
-msgstr "Preèica"
+msgstr "PreÄica"
 
 #: ../src/winmenu.c:242 ../src/winmenu.c:258
 msgid "could not create submenu for window menu"
@@ -929,7 +929,7 @@ msgstr "Atributi..."
 
 #: ../src/winmenu.c:332
 msgid "Select Shortcut"
-msgstr "Odaberi preèicu"
+msgstr "Odaberi preÄicu"
 
 #: ../src/winmenu.c:335
 msgid "Close"
@@ -937,7 +937,7 @@ msgstr "Zatvori"
 
 #: ../src/winspector.c:277
 msgid "Could not find icon \"%s\" specified for this window"
-msgstr "Ne mogu pronaæi ikonu \"%s\" odreğenu za ovaj prozor"
+msgstr "Ne mogu pronaÄ‡i ikonu \"%s\" odreÄ‘enu za ovaj prozor"
 
 #: ../src/winspector.c:293
 msgid "Could not open specified icon \"%s\":%s"
@@ -945,7 +945,7 @@ msgstr "Ne mogu otvoriti navedenu ikonu \"%s\":%s"
 
 #: ../src/winspector.c:989
 msgid "Save"
-msgstr "Saèuvaj"
+msgstr "SaÄuvaj"
 
 #: ../src/winspector.c:995
 msgid "Apply"
@@ -969,11 +969,11 @@ msgstr "Napredne opcije"
 
 #: ../src/winspector.c:1013
 msgid "Icon and Initial Workspace"
-msgstr "Ikona i poèetni radni prostor"
+msgstr "Ikona i poÄetni radni prostor"
 
 #: ../src/winspector.c:1014
 msgid "Application Specific"
-msgstr "Specifièno za aplikaciju"
+msgstr "SpecifiÄno za aplikaciju"
 
 #: ../src/winspector.c:1028
 msgid "Defaults for all windows"
@@ -985,7 +985,7 @@ msgid ""
 "windows that have their WM_CLASS property set to the above selected\n"
 "name, when saved."
 msgstr ""
-"Kada bude saèuvano, konfiguracija æe\n"
+"Kada bude saÄuvano, konfiguracija Ä‡e\n"
 "biti primjenjena na sve prozore koji\n"
 "imaju svoju WM_CLASS postavku\n"
 "postavljenu na gore navedeno ime."
@@ -996,11 +996,11 @@ msgstr "Atributi"
 
 #: ../src/winspector.c:1081
 msgid "Disable titlebar"
-msgstr "Onemoguæi traku za naslov"
+msgstr "OnemoguÄ‡i traku za naslov"
 
 #: ../src/winspector.c:1085
 msgid "Disable resizebar"
-msgstr "Onemoguæi traku za promjenu velièine"
+msgstr "OnemoguÄ‡i traku za promjenu veliÄine"
 
 #: ../src/winspector.c:1089
 msgid "Disable close button"
@@ -1020,7 +1020,7 @@ msgstr "Pokreni minimizirano"
 
 #: ../src/winspector.c:1109
 msgid "Skip window list"
-msgstr "Preskoèi listu prozora"
+msgstr "PreskoÄi listu prozora"
 
 #: ../src/winspector.c:1123
 msgid "Advanced"
@@ -1028,19 +1028,19 @@ msgstr "Napredno"
 
 #: ../src/winspector.c:1133
 msgid "Ignore HideOthers"
-msgstr "Ignori¹i SakrijOstale"
+msgstr "IgnoriÅ¡i SakrijOstale"
 
 #: ../src/winspector.c:1137
 msgid "Don't bind keyboard shortcuts"
-msgstr "Ne primjenjuj kbd preèice"
+msgstr "Ne primjenjuj kbd preÄice"
 
 #: ../src/winspector.c:1141
 msgid "Don't bind mouse clicks"
-msgstr "Ne primjenjuj klikove mi¹a"
+msgstr "Ne primjenjuj klikove miÅ¡a"
 
 #: ../src/winspector.c:1145
 msgid "Keep inside screen"
-msgstr "Zadr¾i unutar ekrana"
+msgstr "ZadrÅ¾i unutar ekrana"
 
 #: ../src/winspector.c:1149
 msgid "Don't let it take focus"
@@ -1048,7 +1048,7 @@ msgstr "Ne daj da uzme fokus"
 
 #: ../src/winspector.c:1153
 msgid "Don't Save Session"
-msgstr "Nemoj saèuvati sesiju"
+msgstr "Nemoj saÄuvati sesiju"
 
 #: ../src/winspector.c:1157
 msgid "Emulate Application Icon"
@@ -1056,7 +1056,7 @@ msgstr "Emulirati aplikacijsku ikonu"
 
 #: ../src/winspector.c:1172
 msgid "Enable the \"Don't bind...\" options to allow the application to receive all mouse or keyboard events."
-msgstr "Omoguæi \"Ne primjenjuj...\" opcije da bi dopustio aplikaciji da primi sve mi¹ ili tastaturne dogağaje."
+msgstr "OmoguÄ‡i \"Ne primjenjuj...\" opcije da bi dopustio aplikaciji da primi sve miÅ¡ ili tastaturne dogaÄ‘aje."
 
 #: ../src/winspector.c:1179
 msgid "Miniwindow Image"
@@ -1072,11 +1072,11 @@ msgstr "Ime ikone:"
 
 #: ../src/winspector.c:1225
 msgid "Ignore client supplied icon"
-msgstr "Ignori¹i ponuğenu ikonu"
+msgstr "IgnoriÅ¡i ponuÄ‘enu ikonu"
 
 #: ../src/winspector.c:1232
 msgid "Initial Workspace"
-msgstr "Poèetni randi prostor"
+msgstr "PoÄetni randi prostor"
 
 #: ../src/winspector.c:1237
 msgid "Nowhere in particular"
@@ -1112,7 +1112,7 @@ msgstr "Novi"
 
 #: ../src/workspace.c:481
 msgid "Destroy Last"
-msgstr "Uni¹ti zadnju"
+msgstr "UniÅ¡ti zadnju"
 
 #: ../src/xutil.c:228
 msgid "invalid data in selection"
@@ -1122,37 +1122,37 @@ msgstr "krivi podaci u odabiru"
 # msgstr "ne mogu kreirati radni prostor podizbornik za prozor izbornik"
 #
 # msgid "Floating Dock"
-# msgstr "Plutajuæi dock"
+# msgstr "PlutajuÄ‡i dock"
 #
 # msgid "Program \"%s\" not found or cannot be executed."
-# msgstr "Program \"%s\" ne mo¾e biti nağen ili izvr¹en."
+# msgstr "Program \"%s\" ne moÅ¾e biti naÄ‘en ili izvrÅ¡en."
 #
 # msgid "Invalid justification type \"%s\". Should be Left, Center or Right"
-# msgstr "Pogre¹an tip poravnanja \"%s\". Trebao bi biti Left, Center ili Right"
+# msgstr "PogreÅ¡an tip poravnanja \"%s\". Trebao bi biti Left, Center ili Right"
 #
 # msgid "Invalid colormap focus mode \"%s\". Should be Manual or Auto."
-# msgstr "Pogre¹ni colormap fokus mod \"%s\". Trebao bi biti Manual ili Auto."
+# msgstr "PogreÅ¡ni colormap fokus mod \"%s\". Trebao bi biti Manual ili Auto."
 #
 # msgid "Invalid geometry display type \"%s\". Should be Center, Corner, Floating or Line."
-# msgstr "Pogre¹ni tip geometry prikaza \"%s\". Trebao bi biti Center, Corner, Floating ili Line."
+# msgstr "PogreÅ¡ni tip geometry prikaza \"%s\". Trebao bi biti Center, Corner, Floating ili Line."
 #
 # msgid "Invalid window placement mode \"%s\". Should be Auto, Cascade, Random or Manual."
-# msgstr "Pogre¹ni window placement mod \"%s\". Trebao bi biti Auto, Cascade, Random ili Manual."
+# msgstr "PogreÅ¡ni window placement mod \"%s\". Trebao bi biti Auto, Cascade, Random ili Manual."
 #
 # msgid "Invalid focus mode \"%s\". Should be Manual, Auto or Sloppy."
-# msgstr "Pogre¹ni fokus mod \"%s\". Trebao bi biti Manual, Auto ili Sloppy."
+# msgstr "PogreÅ¡ni fokus mod \"%s\". Trebao bi biti Manual, Auto ili Sloppy."
 #
 # msgid "Invalid mouse button \"%s\". Should be Left, Middle, Right or Button1 through Button5"
-# msgstr "Pogre¹no dugme mi¹a \"%s\". Trebalo bi biti Left, Middle, Right ili Button1 do Button5."
+# msgstr "PogreÅ¡no dugme miÅ¡a \"%s\". Trebalo bi biti Left, Middle, Right ili Button1 do Button5."
 #
 # msgid "Invalid iconification style \"%s\". Should be Zoom, Twist, Flip or None"
 # msgstr "Krivi stil ikonifikacije \"%s\". Trebao bi biti Zoom, Twist, Flip ili None"
 #
 # msgid "Invalid speed \"%s\". Should be UltraFast, Fast, Medium, Slow or UltraSlow."
-# msgstr "Pogre¹na brzina \"%s\". Trebala bi biti UltraFast, Fast, Medium, Slow ili UltraSlow."
+# msgstr "PogreÅ¡na brzina \"%s\". Trebala bi biti UltraFast, Fast, Medium, Slow ili UltraSlow."
 #
 # msgid "Floating Clip"
-# msgstr "Plutajuæi Clip"
+# msgstr "PlutajuÄ‡i Clip"
 #
 # msgid "Invalid icon Position \"%s\". Should be one of blv, blh, brv, brh, tlv, tlh, trv, trh"
 # msgstr "Kriva pozicija ikone \"%s\". Trebala bi biti: blv, blh, brv, brh, tlv, tlh, trv ili trh"
@@ -1161,7 +1161,7 @@ msgstr "krivi podaci u odabiru"
 # "could not find user GNUstep directory.\n"
 # "Make sure you have installed WindowMaker correctly and run wmaker.inst"
 # msgstr ""
-# "ne mogu naæi korisnikov GNUstep direktorij.\n"
+# "ne mogu naÄ‡i korisnikov GNUstep direktorij.\n"
 # "Provjerite da li ste ispravno instalirali WinowMaker i pokrenite wmaker.inst"
 #
 # msgid "Hide Others"
@@ -1171,25 +1171,25 @@ msgstr "krivi podaci u odabiru"
 # msgstr "Izlazim...\n"
 #
 # msgid "%s:could not find menu file \"%s\""
-# msgstr "%s:ne mogu naæi datoteku izbornika \"%s\""
+# msgstr "%s:ne mogu naÄ‡i datoteku izbornika \"%s\""
 #
 # msgid "%s:could not access menu \"%s\""
 # msgstr "%s:ne mogu pristupiti izborniku \"%s\""
 #
 # msgid "invalid kbd shortcut specification \"%s\""
-# msgstr "pogre¹na specifikacija kbd kratice \"%s\""
+# msgstr "pogreÅ¡na specifikacija kbd kratice \"%s\""
 #
 # msgid "invalid key modifier \"%s\""
-# msgstr "pogre¹ni modifier \"%s\""
+# msgstr "pogreÅ¡ni modifier \"%s\""
 #
 # msgid "Could not find icon file specified for this window"
-# msgstr "Ne mogu naæi ikonu specificiranu za ovaj prozor"
+# msgstr "Ne mogu naÄ‡i ikonu specificiranu za ovaj prozor"
 #
 # msgid "could not load clip tile image"
-# msgstr "ne mogu uèitati image za pozadinu clipa"
+# msgstr "ne mogu uÄitati image za pozadinu clipa"
 #
 # msgid "invalid key in shortcut \"%s\""
-# msgstr "krivi kljuè u kratici \"%s\""
+# msgstr "krivi kljuÄ u kratici \"%s\""
 #
 # msgid "not enough memory to open window inspector panel"
 # msgstr "premalo memorije za otvaranje window inspector panela"

@@ -1,7 +1,7 @@
 # Finnish translation of Window Maker
 # Copyright (C) 1998 Free Software Foundation, Inc.
 # Ramin Miraftabi <ramin@cs.joensuu.fi>,
-# Ville Hautam‰ki <villeh@cs.joensuu.fi>, 1998.
+# Ville Hautam√§ki <villeh@cs.joensuu.fi>, 1998.
 #
 # Updates: Tomi Kajala <tomi@iki.fi>, 1999-2001
 # Still more: Pauli Virtanen <pauli.virtanen@saunalahti.fi>, 2000
@@ -14,7 +14,7 @@ msgstr ""
 "Last-Translator: Tomi Kajala <tomi@iki.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
 #: ../src/appicon.c:542 ../src/dialog.c:224 ../src/dock.c:3244
@@ -25,7 +25,7 @@ msgstr "Virhe"
 
 #: ../src/appicon.c:543
 msgid "Could not open specified icon file"
-msgstr "M‰‰ritellyn kuvaketiedoston avaus ei onnistunut"
+msgstr "M√§√§ritellyn kuvaketiedoston avaus ei onnistunut"
 
 #: ../src/appicon.c:544 ../src/dialog.c:121 ../src/dialog.c:224
 #: ../src/dialog.c:672 ../src/dialog.c:1735 ../src/dock.c:493
@@ -41,7 +41,7 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-" suljetaan v‰kisin.\n"
+" suljetaan v√§kisin.\n"
 "Kaikki tallentamattomat muutokset katoavat.\n"
 "Vahvista."
 
@@ -51,7 +51,7 @@ msgstr "Tapa sovellus"
 
 #: ../src/appicon.c:578 ../src/dock.c:262 ../src/winmenu.c:130
 msgid "Yes"
-msgstr "Kyll‰"
+msgstr "Kyll√§"
 
 #: ../src/appicon.c:578 ../src/dock.c:262 ../src/winmenu.c:130
 msgid "No"
@@ -59,7 +59,7 @@ msgstr "Ei"
 
 #: ../src/appicon.c:596 ../src/dock.c:1139 ../src/dock.c:3410
 msgid "Unhide Here"
-msgstr "Tuo n‰kyviin t‰‰ll‰"
+msgstr "Tuo n√§kyviin t√§√§ll√§"
 
 #: ../src/appicon.c:597 ../src/appicon.c:623 ../src/dock.c:1141
 #: ../src/dock.c:1143 ../src/dock.c:3422 ../src/winmenu.c:465
@@ -68,7 +68,7 @@ msgstr "Piilota"
 
 #: ../src/appicon.c:598 ../src/appicon.c:629
 msgid "Collapse"
-msgstr "H‰ivyt‰"
+msgstr "H√§ivyt√§"
 
 #: ../src/appicon.c:599
 msgid "Set Icon..."
@@ -81,11 +81,11 @@ msgstr "Tapa"
 
 #: ../src/appicon.c:621 ../src/dock.c:3420
 msgid "Unhide"
-msgstr "Tuo n‰kyviin"
+msgstr "Tuo n√§kyviin"
 
 #: ../src/appicon.c:627
 msgid "Uncollapse"
-msgstr "H‰ivytys pois"
+msgstr "H√§ivytys pois"
 
 #: ../src/defaults.c:917 ../src/startup.c:890 ../src/startup.c:908
 #: ../src/startup.c:914
@@ -97,13 +97,13 @@ msgstr "tiedon \"%s\" luku oletustietokannasta ei onnistunut"
 #: ../src/defaults.c:1173
 #, c-format
 msgid "Domain %s (%s) of defaults database is corrupted!"
-msgstr "Oletustietokannan kentt‰ %s (%s) on vioittunut!"
+msgstr "Oletustietokannan kentt√§ %s (%s) on vioittunut!"
 
 #: ../src/defaults.c:968 ../src/defaults.c:1109 ../src/defaults.c:1156
 #: ../src/defaults.c:1182
 #, c-format
 msgid "could not load domain %s from user defaults database"
-msgstr "arvon %s lataaminen k‰ytt‰j‰n oletustietokannasta ei onnistu"
+msgstr "arvon %s lataaminen k√§ytt√§j√§n oletustietokannasta ei onnistu"
 
 #: ../src/defaults.c:979 ../src/defaults.c:1073
 #, c-format
@@ -128,7 +128,7 @@ msgstr "paneelien %s logo-kuvaa ei voitu ladata"
 #: ../src/defaults.c:1424
 #, c-format
 msgid "wrong option value for key \"%s\". Should be one of %s"
-msgstr "avaimella \"%s\" on v‰‰r‰ optioarvo. Pit‰isi olla joku n‰ist‰: %s"
+msgstr "avaimella \"%s\" on v√§√§r√§ optioarvo. Pit√§isi olla joku n√§ist√§: %s"
 
 #: ../src/defaults.c:1469
 #, c-format
@@ -143,7 +143,7 @@ msgstr "\"%s\":n muunto boolean-muotoon avaimelle \"%s\" ei onnistu"
 #: ../src/defaults.c:2713 ../src/defaults.c:2724
 #, c-format
 msgid "using default \"%s\" instead"
-msgstr "k‰ytet‰‰n sen sijaan oletusarvoa \"%s\""
+msgstr "k√§ytet√§√§n sen sijaan oletusarvoa \"%s\""
 
 #: ../src/defaults.c:1503
 #, c-format
@@ -155,17 +155,17 @@ msgstr "\"%s\":n muuntaminen kokonaisluvuksi avaimelle \"%s\" ei onnistu"
 #: ../src/defaults.c:2708 ../src/wdefaults.c:570 ../src/wdefaults.c:606
 #, c-format
 msgid "Wrong option format for key \"%s\". Should be %s."
-msgstr "Avaimella \"%s\" on v‰‰r‰ optiomuoto. Pit‰isi olla %s."
+msgstr "Avaimella \"%s\" on v√§√§r√§ optiomuoto. Pit√§isi olla %s."
 
 #: ../src/defaults.c:1546
 #, c-format
 msgid "Incorrect number of elements in array for key \"%s\"."
-msgstr "Taulukossa on v‰‰r‰ m‰‰r‰ alkioita avaimelle \"%s\"."
+msgstr "Taulukossa on v√§√§r√§ m√§√§r√§ alkioita avaimelle \"%s\"."
 
 #: ../src/defaults.c:1561
 #, c-format
 msgid "Wrong value for key \"%s\". Should be Coordinate."
-msgstr "Avaimella \"%s\" on v‰‰r‰ arvo. Pit‰isi olla koordinaatti."
+msgstr "Avaimella \"%s\" on v√§√§r√§ arvo. Pit√§isi olla koordinaatti."
 
 #: ../src/defaults.c:1576
 #, c-format
@@ -177,34 +177,34 @@ msgstr "taulukkoa ei voida muuntaa kokonaisluvuiksi \"%s\":lle."
 #: ../src/defaults.c:1967 ../src/defaults.c:2005 ../src/defaults.c:2021
 #, c-format
 msgid "\"%s\" is not a valid color name"
-msgstr "\"%s\" ei ole sallittu v‰rin nimi"
+msgstr "\"%s\" ei ole sallittu v√§rin nimi"
 
 #: ../src/defaults.c:1787 ../src/defaults.c:1839
 msgid "bad number of arguments in gradient specification"
-msgstr "virheellinen m‰‰r‰ argumentteja liukuv‰rin m‰‰ritelm‰ss‰"
+msgstr "virheellinen m√§√§r√§ argumentteja liukuv√§rin m√§√§ritelm√§ss√§"
 
 #: ../src/defaults.c:1900
 msgid "too few arguments in multicolor gradient specification"
-msgstr "liian v‰h‰n argumentteja moniv‰risen liukuv‰rin m‰‰ritelm‰ss‰"
+msgstr "liian v√§h√§n argumentteja moniv√§risen liukuv√§rin m√§√§ritelm√§ss√§"
 
 #: ../src/defaults.c:1994
 msgid "bad number of arguments in textured gradient specification"
-msgstr "virheellinen m‰‰r‰ argumentteja liukuv‰ritetyn kuvion m‰‰ritelm‰ss‰"
+msgstr "virheellinen m√§√§r√§ argumentteja liukuv√§ritetyn kuvion m√§√§ritelm√§ss√§"
 
 #: ../src/defaults.c:2037
 #, c-format
 msgid "bad opacity value for tgradient texture \"%s\". Should be [0..255]"
-msgstr "v‰‰r‰ peitt‰vyysarvo kuvioliukuv‰rille \"%s\". Pit‰isi olla [0..255]"
+msgstr "v√§√§r√§ peitt√§vyysarvo kuvioliukuv√§rille \"%s\". Pit√§isi olla [0..255]"
 
 #: ../src/defaults.c:2097
 #, c-format
 msgid "could not initialize library %s"
-msgstr "kirjaston %s alustus ep‰onnistui"
+msgstr "kirjaston %s alustus ep√§onnistui"
 
 #: ../src/defaults.c:2100
 #, c-format
 msgid "could not find function %s::%s"
-msgstr "funktiota %s::%s ei lˆydy"
+msgstr "funktiota %s::%s ei l√∂ydy"
 
 #: ../src/defaults.c:2107
 #, c-format
@@ -214,55 +214,55 @@ msgstr "virheellinen kuviotyyppi %s"
 #: ../src/defaults.c:2154
 #, c-format
 msgid "Error in texture specification for key \"%s\""
-msgstr "Virhe kuviom‰‰ritelm‰ss‰ avaimelle \"%s\""
+msgstr "Virhe kuviom√§√§ritelm√§ss√§ avaimelle \"%s\""
 
 #: ../src/defaults.c:2203
 msgid "Wrong type for workspace background. Should be a texture type."
-msgstr "V‰‰r‰ tyyppi tyˆtilan taustakuvaksi. Pit‰isi olla kuviotyyppi."
+msgstr "V√§√§r√§ tyyppi ty√∂tilan taustakuvaksi. Pit√§isi olla kuviotyyppi."
 
 #: ../src/defaults.c:2251
 #, c-format
 msgid "Wrong type for background of workspace %i. Should be a texture."
-msgstr "V‰‰r‰ tyyppi tyˆtilan %i taustakuvaksi. Pit‰isi olla kuvio."
+msgstr "V√§√§r√§ tyyppi ty√∂tilan %i taustakuvaksi. Pit√§isi olla kuvio."
 
 #: ../src/defaults.c:2293
 msgid "could not load any usable font!!!"
-msgstr "mink‰‰n k‰yttˆkelpoisen fontin lataaminen ei onnistunut!!!"
+msgstr "mink√§√§n k√§ytt√∂kelpoisen fontin lataaminen ei onnistunut!!!"
 
 #: ../src/defaults.c:2320
 #, c-format
 msgid "could not get color for key \"%s\""
-msgstr "en lˆyt‰nyt avainta \"%s\" vastaavaa v‰ri‰"
+msgstr "en l√∂yt√§nyt avainta \"%s\" vastaavaa v√§ri√§"
 
 #: ../src/defaults.c:2378 ../src/rootmenu.c:491
 #, c-format
 msgid "%s:invalid key modifier \"%s\""
-msgstr "%s: virheellinen avainm‰‰re \"%s\""
+msgstr "%s: virheellinen avainm√§√§re \"%s\""
 
 #: ../src/defaults.c:2390
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\""
-msgstr "%s: virheellinen n‰pp‰inpikavalinnan m‰‰rittely \"%s\""
+msgstr "%s: virheellinen n√§pp√§inpikavalinnan m√§√§rittely \"%s\""
 
 #: ../src/defaults.c:2397
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\""
-msgstr "%s: ep‰kelpo n‰pp‰in pikavalinnassa \"%s\""
+msgstr "%s: ep√§kelpo n√§pp√§in pikavalinnassa \"%s\""
 
 #: ../src/defaults.c:2422
 #, c-format
 msgid "%s: modifier key %s is not valid"
-msgstr "%s: muunnosn‰pp‰in %s ei ole voimassa"
+msgstr "%s: muunnosn√§pp√§in %s ei ole voimassa"
 
 #: ../src/defaults.c:2454
 #, c-format
 msgid "could not load image in option %s: %s"
-msgstr "optioon %s: %s liittyv‰n kuvan lataus ei onnistunut"
+msgstr "optioon %s: %s liittyv√§n kuvan lataus ei onnistunut"
 
 #: ../src/defaults.c:2573
 #, c-format
 msgid "failed to open bitmap file \"%s\""
-msgstr "bittikarttatiedoston \"%s\" lataus ep‰onnistui"
+msgstr "bittikarttatiedoston \"%s\" lataus ep√§onnistui"
 
 #: ../src/defaults.c:2576
 #, c-format
@@ -276,22 +276,22 @@ msgstr "muisti loppui luettaessa bittikarttatiedostoa \"%s\""
 
 #: ../src/defaults.c:2618 ../src/defaults.c:2651
 msgid "bad number of arguments in cursor specification"
-msgstr "kohdistinm‰‰ritelm‰ss‰ on virheellinen m‰‰r‰ argumentteja"
+msgstr "kohdistinm√§√§ritelm√§ss√§ on virheellinen m√§√§r√§ argumentteja"
 
 #: ../src/defaults.c:2634
 #, c-format
 msgid "unknown builtin cursor name \"%s\""
-msgstr "tuntematon sis‰‰nrakennettu kohdistinnimi \"%s\""
+msgstr "tuntematon sis√§√§nrakennettu kohdistinnimi \"%s\""
 
 #: ../src/defaults.c:2661 ../src/defaults.c:2673
 #, c-format
 msgid "could not find cursor bitmap file \"%s\""
-msgstr "kohdistinbittikarttatiedostoa \"%s\" ei lˆytynyt"
+msgstr "kohdistinbittikarttatiedostoa \"%s\" ei l√∂ytynyt"
 
 #: ../src/defaults.c:2720
 #, c-format
 msgid "Error in cursor specification for key \"%s\""
-msgstr "Virhe avaimen \"%s\" kohdistinm‰‰ritelm‰ss‰"
+msgstr "Virhe avaimen \"%s\" kohdistinm√§√§ritelm√§ss√§"
 
 #: ../src/defaults.c:2807
 msgid "could not render texture for icon background"
@@ -342,7 +342,7 @@ msgstr "Versio %s"
 
 #: ../src/dialog.c:1269
 msgid "Window Manager for X"
-msgstr "Ikkunamanageri X:‰‰n"
+msgstr "Ikkunamanageri X:√§√§n"
 
 #: ../src/dialog.c:1292
 #, c-format
@@ -351,25 +351,25 @@ msgstr ""
 
 #: ../src/dialog.c:1300
 msgid "(32 thousand colors)\n"
-msgstr "(32 000 v‰ri‰)\n"
+msgstr "(32 000 v√§ri√§)\n"
 
 #: ../src/dialog.c:1303
 msgid "(64 thousand colors)\n"
-msgstr "(64 000 v‰ri‰)\n"
+msgstr "(64 000 v√§ri√§)\n"
 
 #: ../src/dialog.c:1307
 msgid "(16 million colors)\n"
-msgstr "(16 miljoonaa v‰ri‰)\n"
+msgstr "(16 miljoonaa v√§ri√§)\n"
 
 #: ../src/dialog.c:1310
 #, c-format
 msgid "(%d colors)\n"
-msgstr "(%d v‰ri‰)\n"
+msgstr "(%d v√§ri√§)\n"
 
 #: ../src/dialog.c:1320
 #, c-format
 msgid "Total allocated memory: %i kB. Total memory in use: %i kB.\n"
-msgstr "Muistia varattu yhteens‰ %i kt. Muistia k‰ytˆss‰ yhteens‰ %i kt.\n"
+msgstr "Muistia varattu yhteens√§ %i kt. Muistia k√§yt√∂ss√§ yhteens√§ %i kt.\n"
 
 #: ../src/dialog.c:1327
 msgid "Supported image formats: "
@@ -389,13 +389,13 @@ msgstr " ja "
 msgid ""
 "\n"
 "Sound disabled"
-msgstr "\nƒ‰ni pois"
+msgstr "\n√Ñ√§ni pois"
 
 #: ../src/dialog.c:1369
 msgid ""
 "\n"
 "Sound enabled"
-msgstr "\nƒ‰ni p‰‰ll‰"
+msgstr "\n√Ñ√§ni p√§√§ll√§"
 
 #: ../src/dialog.c:1393
 msgid "Info"
@@ -424,31 +424,31 @@ msgid ""
 "Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA\n"
 "02111-1307, USA."
 msgstr ""
-"    Window Maker on vapaa ohjelmisto; voit jakaa sit‰ edelleen ja/tai\n"
-"muokata sit‰ Free Software Foundationin julkaiseman GNU General Public\n"
-"Licensen (version 2 tai halutessasi jonkin myˆhemm‰n version) ehtojen\n"
+"    Window Maker on vapaa ohjelmisto; voit jakaa sit√§ edelleen ja/tai\n"
+"muokata sit√§ Free Software Foundationin julkaiseman GNU General Public\n"
+"Licensen (version 2 tai halutessasi jonkin my√∂hemm√§n version) ehtojen\n"
 "mukaisesti.\n"
 "\n"
 "\n"
-"    Window Makeria jaetaan siin‰ toivossa, ett‰ siit‰ on hyˆty‰,\n"
-"mutta ILMAN MITƒƒN TAKUUTA; siihen ei sis‰lly edes ep‰suoraa\n"
-"takuuta siit‰, ett‰ se SOVELTUISI MARKKINOITAVAKSI tai SOPISI\n"
+"    Window Makeria jaetaan siin√§ toivossa, ett√§ siit√§ on hy√∂ty√§,\n"
+"mutta ILMAN MIT√Ñ√ÑN TAKUUTA; siihen ei sis√§lly edes ep√§suoraa\n"
+"takuuta siit√§, ett√§ se SOVELTUISI MARKKINOITAVAKSI tai SOPISI\n"
 "JOHONKIN TIETTYYN TARKOITUKSEEN. Katso tarkempia tietoja GNU\n"
-"General Public Licensest‰.\n"
+"General Public Licensest√§.\n"
 "\n"
 "\n"
-"    T‰m‰n ohjelman mukana pit‰isi tulla kopio GNU General Public\n"
-"Licensest‰. Jos n‰in ei ole, ilmoita siit‰ osoitteeseen Free Software\n"
+"    T√§m√§n ohjelman mukana pit√§isi tulla kopio GNU General Public\n"
+"Licensest√§. Jos n√§in ei ole, ilmoita siit√§ osoitteeseen Free Software\n"
 "Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA\n"
 "02111-1307, USA."
 
 #: ../src/dialog.c:1507
 msgid "Legal"
-msgstr "K‰yttˆehdot"
+msgstr "K√§ytt√∂ehdot"
 
 #: ../src/dialog.c:1658 ../src/startup.c:388
 msgid "cannot open connection for crashing dialog panel. Aborting."
-msgstr "yhteyden avaus kaatumis-valintapaneeliin ei onnistunut. Keskeytet‰‰n."
+msgstr "yhteyden avaus kaatumis-valintapaneeliin ei onnistunut. Keskeytet√§√§n."
 
 #: ../src/dialog.c:1684
 msgid "Fatal error"
@@ -473,12 +473,12 @@ msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
 "BUGFORM and report it to bugs@windowmaker.org."
 msgstr ""
-" T‰m‰ vakava virhe tapahtui luultavasti bugin johdosta. Ole hyv‰ ja t‰yt‰ "
-"oheinen bugi-kaavake ja l‰het‰ se osoitteeseen bugs@windowmaker.org."
+" T√§m√§ vakava virhe tapahtui luultavasti bugin johdosta. Ole hyv√§ ja t√§yt√§ "
+"oheinen bugi-kaavake ja l√§het√§ se osoitteeseen bugs@windowmaker.org."
 
 #: ../src/dialog.c:1716
 msgid "What do you want to do now?"
-msgstr "Mit‰ haluat nyt tehd‰?"
+msgstr "Mit√§ haluat nyt tehd√§?"
 
 #: ../src/dialog.c:1722
 msgid "Select action"
@@ -486,15 +486,15 @@ msgstr "Valitse toiminta"
 
 #: ../src/dialog.c:1723
 msgid "Abort and leave a core file"
-msgstr "Keskeyt‰ ja kirjoita core-tiedosto"
+msgstr "Keskeyt√§ ja kirjoita core-tiedosto"
 
 #: ../src/dialog.c:1724
 msgid "Restart Window Maker"
-msgstr "K‰ynnist‰ Window Maker uudelleen"
+msgstr "K√§ynnist√§ Window Maker uudelleen"
 
 #: ../src/dialog.c:1725
 msgid "Start alternate window manager"
-msgstr "K‰ynnist‰ vaihtoehtoinen ikkunamanageri"
+msgstr "K√§ynnist√§ vaihtoehtoinen ikkunamanageri"
 
 #: ../src/dialog.c:1903
 msgid ""
@@ -510,26 +510,26 @@ msgid ""
 msgstr ""
 "Window Maker on osa GNUstep-projektia.\n"
 "GNUstep-projektin tarkoituksena on luoda vapaa\n"
-"toteutus OpenStep(tm)-m‰‰rittelyst‰, joka on\n"
+"toteutus OpenStep(tm)-m√§√§rittelyst√§, joka on\n"
 "olio-orientoitunut kehys kehittyneiden\n"
 "graafisten, monilla alustoilla toimivien\n"
-"sovellusten luontiin. Kehyksen p‰‰lle tullaan\n"
-"lis‰ksi luomaan kehitys- ja k‰ytt‰j‰tyˆpˆyt‰-\n"
-"ymp‰ristˆ. Saat GNUstepist‰ lis‰‰ tietoa\n"
+"sovellusten luontiin. Kehyksen p√§√§lle tullaan\n"
+"lis√§ksi luomaan kehitys- ja k√§ytt√§j√§ty√∂p√∂yt√§-\n"
+"ymp√§rist√∂. Saat GNUstepist√§ lis√§√§ tietoa\n"
 "osoitteesta www.gnustep.org"
 
 #: ../src/dialog.c:1923
 msgid "About GNUstep"
-msgstr "Tietoa GNUstepist‰"
+msgstr "Tietoa GNUstepist√§"
 
 #: ../src/dock.c:213
 #, c-format
 msgid "Type the name for workspace %i:"
-msgstr "Kirjoita nimi tyˆtilalle %i:"
+msgstr "Kirjoita nimi ty√∂tilalle %i:"
 
 #: ../src/dock.c:214 ../src/dock.c:1103 ../src/dock.c:1106 ../src/dock.c:3328
 msgid "Rename Workspace"
-msgstr "Vaihda tyˆtilan nimi"
+msgstr "Vaihda ty√∂tilan nimi"
 
 #: ../src/dock.c:487 ../src/dock.c:495
 msgid "Warning"
@@ -541,9 +541,9 @@ msgid ""
 "is docked in the same positions on the other workspaces and the Clip is not "
 "full in some workspace."
 msgstr ""
-"Er‰it‰ kuvakkeita saada kaikkialla n‰kyviksi. Varmista, ettei toisia "
-"ikoneita ole telakoitu samoihin paikkoihin muissa tyˆtiloissa ja ettei "
-"Liitin ole t‰ynn‰ jossain tyˆtilassa."
+"Er√§it√§ kuvakkeita saada kaikkialla n√§kyviksi. Varmista, ettei toisia "
+"ikoneita ole telakoitu samoihin paikkoihin muissa ty√∂tiloissa ja ettei "
+"Liitin ole t√§ynn√§ jossain ty√∂tilassa."
 
 #: ../src/dock.c:496
 msgid ""
@@ -551,13 +551,13 @@ msgid ""
 "docked in the same position on the other workspaces and the Clip is not full "
 "in some workspace."
 msgstr ""
-"Kuvaketta ei saada kaikkialla n‰kyv‰ksi. Varmista, ettei toista ikonia ole "
-"telakoitu samaan kohtaan muissa tyˆtiloissa ja ettei Liitin ole t‰ynn‰ "
-"jossain tyˆtilassa."
+"Kuvaketta ei saada kaikkialla n√§kyv√§ksi. Varmista, ettei toista ikonia ole "
+"telakoitu samaan kohtaan muissa ty√∂tiloissa ja ettei Liitin ole t√§ynn√§ "
+"jossain ty√∂tilassa."
 
 #: ../src/dock.c:523
 msgid "Workspace Clip"
-msgstr "Tyˆtilan Liitin"
+msgstr "Ty√∂tilan Liitin"
 
 #: ../src/dock.c:524
 msgid "All selected icons will be removed!"
@@ -565,20 +565,20 @@ msgstr "Kaikki valitut kuvakkeet poistetaan!"
 
 #: ../src/dock.c:575 ../src/dock.c:1118 ../src/dock.c:1120 ../src/dock.c:3364
 msgid "Keep Icon"
-msgstr "Pid‰ kuvake"
+msgstr "Pid√§ kuvake"
 
 #: ../src/dock.c:576 ../src/dock.c:2083 ../src/dock.c:2218
 msgid "Type the command used to launch the application"
-msgstr "Kirjoita komento, jolla ohjelma k‰ynnistet‰‰n"
+msgstr "Kirjoita komento, jolla ohjelma k√§ynnistet√§√§n"
 
 #: ../src/dock.c:927
 #, c-format
 msgid "could not launch application %s\n"
-msgstr "sovelluksen %s k‰ynnistys ei onnistu\n"
+msgstr "sovelluksen %s k√§ynnistys ei onnistu\n"
 
 #: ../src/dock.c:982
 msgid "could not create workspace submenu for Clip menu"
-msgstr "Liittimen valikkoon ei voitu luoda tyˆtila-alivalikkoa"
+msgstr "Liittimen valikkoon ei voitu luoda ty√∂tila-alivalikkoa"
 
 #: ../src/dock.c:1040
 msgid "could not create options submenu for Clip menu"
@@ -586,15 +586,15 @@ msgstr "Liittimen valikkoon ei voitu luoda asetukset-alivalikkoa"
 
 #: ../src/dock.c:1044 ../src/dock.c:1092
 msgid "Keep on Top"
-msgstr "Pid‰ p‰‰llimm‰isen‰"
+msgstr "Pid√§ p√§√§llimm√§isen√§"
 
 #: ../src/dock.c:1050
 msgid "Collapsed"
-msgstr "H‰ivytetty"
+msgstr "H√§ivytetty"
 
 #: ../src/dock.c:1056
 msgid "Autocollapse"
-msgstr "Automaattinen h‰ivytys"
+msgstr "Automaattinen h√§ivytys"
 
 #: ../src/dock.c:1062
 msgid "Autoraise"
@@ -602,7 +602,7 @@ msgstr "Nosta automaattisesti"
 
 #: ../src/dock.c:1068
 msgid "Autoattract Icons"
-msgstr "Ker‰‰ kuvakkeet automaattisesti"
+msgstr "Ker√§√§ kuvakkeet automaattisesti"
 
 #: ../src/dock.c:1098
 msgid "Clip Options"
@@ -618,7 +618,7 @@ msgstr "Valitse kaikki kuvakkeet"
 
 #: ../src/dock.c:1122 ../src/dock.c:1124 ../src/dock.c:3372
 msgid "Move Icon To"
-msgstr "Siirr‰ kuvake tilaan"
+msgstr "Siirr√§ kuvake tilaan"
 
 #: ../src/dock.c:1129 ../src/dock.c:1132 ../src/dock.c:3383
 msgid "Remove Icon"
@@ -626,11 +626,11 @@ msgstr "Poista kuvake"
 
 #: ../src/dock.c:1134
 msgid "Attract Icons"
-msgstr "Ker‰‰ kuvakkeet"
+msgstr "Ker√§√§ kuvakkeet"
 
 #: ../src/dock.c:1137
 msgid "Launch"
-msgstr "K‰ynnist‰"
+msgstr "K√§ynnist√§"
 
 #: ../src/dock.c:1145
 msgid "Settings..."
@@ -648,7 +648,7 @@ msgstr "virheellinen arvo telakoidun kuvakkeen paikassa %i,%i"
 
 #: ../src/dock.c:1867
 msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
-msgstr "Telakassa on liikaa kuvakkeita. J‰t‰n huomiotta ne, jotka eiv‰t mahdu."
+msgstr "Telakassa on liikaa kuvakkeita. J√§t√§n huomiotta ne, jotka eiv√§t mahdu."
 
 #. icon->forced_dock = 1;
 #: ../src/dock.c:2082 ../src/dock.c:2217
@@ -662,11 +662,11 @@ msgstr "Komennon \"%s\" suoritus ei onnistunut"
 
 #: ../src/dock.c:3334
 msgid "Toggle Omnipresent"
-msgstr "N‰kyvyys kaikkialla p‰‰lle/pois"
+msgstr "N√§kyvyys kaikkialla p√§√§lle/pois"
 
 #: ../src/dock.c:3339 ../src/winmenu.c:417 ../src/winspector.c:1395
 msgid "Omnipresent"
-msgstr "N‰kyviss‰ kaikkialla"
+msgstr "N√§kyviss√§ kaikkialla"
 
 #: ../src/dock.c:3353
 msgid "Unselect All Icons"
@@ -674,11 +674,11 @@ msgstr "Kaikkien kuvakkeiden valinta pois"
 
 #: ../src/dock.c:3362
 msgid "Keep Icons"
-msgstr "Pid‰ kuvakkeet"
+msgstr "Pid√§ kuvakkeet"
 
 #: ../src/dock.c:3370
 msgid "Move Icons To"
-msgstr "Siirr‰ kuvakkeet ->"
+msgstr "Siirr√§ kuvakkeet ->"
 
 #: ../src/dock.c:3381
 msgid "Remove Icons"
@@ -686,29 +686,29 @@ msgstr "Poista kuvakkeet"
 
 #: ../src/dock.c:3412
 msgid "Bring Here"
-msgstr "Tuo t‰nne"
+msgstr "Tuo t√§nne"
 
 #: ../src/dockedapp.c:131
 #, c-format
 msgid "could not find icon %s, used in a docked application"
-msgstr "telakoidussa sovelluksessa k‰ytett‰v‰‰ kuvaketta %s ei lˆydy"
+msgstr "telakoidussa sovelluksessa k√§ytett√§v√§√§ kuvaketta %s ei l√∂ydy"
 
 #: ../src/dockedapp.c:211
 #, c-format
 msgid "Could not open specified icon file: %s"
-msgstr "M‰‰ritellyn kuvaketiedoston %s avaus ei onnistu"
+msgstr "M√§√§ritellyn kuvaketiedoston %s avaus ei onnistu"
 
 #: ../src/dockedapp.c:213
 msgid "Ignore"
-msgstr "J‰t‰ huomiotta"
+msgstr "J√§t√§ huomiotta"
 
 #: ../src/dockedapp.c:306
 msgid "Start when Window Maker is started"
-msgstr "K‰ynnist‰, kun WMaker k‰ynnistet‰‰n"
+msgstr "K√§ynnist√§, kun WMaker k√§ynnistet√§√§n"
 
 #: ../src/dockedapp.c:313
 msgid "Lock (prevent accidental removal)"
-msgstr "Lukitse (est‰ tahaton poisto)"
+msgstr "Lukitse (est√§ tahaton poisto)"
 
 #: ../src/dockedapp.c:319
 msgid "Application path and arguments"
@@ -716,16 +716,16 @@ msgstr "Sovelluksen polku ja argumentit"
 
 #: ../src/dockedapp.c:330
 msgid "Command for files dropped with DND"
-msgstr "Komento tiedostoille, jotka vedet‰‰n ja tiputetaan"
+msgstr "Komento tiedostoille, jotka vedet√§√§n ja tiputetaan"
 
 #: ../src/dockedapp.c:342
 #, c-format
 msgid "%d will be replaced with the file name"
-msgstr "%d korvataan tiedoston nimell‰"
+msgstr "%d korvataan tiedoston nimell√§"
 
 #: ../src/dockedapp.c:346
 msgid "DND support was not compiled in"
-msgstr "ved‰ ja tiputa -tukea ei k‰‰nnetty mukaan"
+msgstr "ved√§ ja tiputa -tukea ei k√§√§nnetty mukaan"
 
 #: ../src/dockedapp.c:352
 msgid "Icon Image"
@@ -743,19 +743,19 @@ msgstr "Telakoidun ohjelman asetukset"
 #: ../src/texture.c:594
 #, c-format
 msgid "could not render texture: %s"
-msgstr "kuviota %s ei voitu piirt‰‰"
+msgstr "kuviota %s ei voitu piirt√§√§"
 
 #: ../src/framewin.c:672 ../src/framewin.c:683 ../src/framewin.c:699
 #: ../src/framewin.c:710 ../src/framewin.c:717 ../src/framewin.c:724
 #: ../src/icon.c:350 ../src/menu.c:485
 #, c-format
 msgid "error rendering image:%s"
-msgstr "virhe piirrett‰ess‰ kuvaa:%s"
+msgstr "virhe piirrett√§ess√§ kuvaa:%s"
 
 #: ../src/framewin.c:777
 #, c-format
 msgid "error rendering image: %s"
-msgstr "virhe piirrett‰ess‰ kuvaa: %s"
+msgstr "virhe piirrett√§ess√§ kuvaa: %s"
 
 #: ../src/icon.c:229 ../src/wdefaults.c:440
 #, c-format
@@ -770,7 +770,7 @@ msgstr "hakemiston %s luonti ei onnistunut"
 #: ../src/icon.c:767
 #, c-format
 msgid "could not find default icon \"%s\""
-msgstr "Oletuskuvaketta \"%s\" ei lˆydy"
+msgstr "Oletuskuvaketta \"%s\" ei l√∂ydy"
 
 #: ../src/icon.c:773
 #, c-format
@@ -779,7 +779,7 @@ msgstr "oletuskuvakkeen \"%s\":%s lataus ei onnistu"
 
 #: ../src/main.c:205
 msgid "failed to restart Window Maker."
-msgstr "Window Makerin uudelleenk‰ynnistys ep‰onnistui."
+msgstr "Window Makerin uudelleenk√§ynnistys ep√§onnistui."
 
 #: ../src/main.c:208
 #, c-format
@@ -788,7 +788,7 @@ msgstr "%s:n suoritus ei onnistunut"
 
 #: ../src/main.c:254
 msgid "Could not execute command: "
-msgstr "Seuraavan komennon suoritus ep‰onnistui: "
+msgstr "Seuraavan komennon suoritus ep√§onnistui: "
 
 #: ../src/main.c:411
 #, c-format
@@ -798,39 +798,39 @@ msgstr "%s keskeytetty.\n"
 #: ../src/main.c:422
 #, c-format
 msgid "Usage: %s [options]\n"
-msgstr "k‰yttˆ: %s [optiot]\n"
+msgstr "k√§ytt√∂: %s [optiot]\n"
 
 #: ../src/main.c:423
 msgid "The Window Maker window manager for the X window system"
-msgstr "Window Maker -ikkunamanageri X-ikkunointij‰rjestelm‰lle"
+msgstr "Window Maker -ikkunamanageri X-ikkunointij√§rjestelm√§lle"
 
 #: ../src/main.c:425
 msgid " -display host:dpy\tdisplay to use"
-msgstr " -display host:dpy\tk‰ytett‰v‰ n‰yttˆ"
+msgstr " -display host:dpy\tk√§ytett√§v√§ n√§ytt√∂"
 
 #: ../src/main.c:427
 msgid " --no-cpp \t\tdisable preprocessing of configuration files"
-msgstr " --no-cpp \t\tkonfiguraatiotiedostojen esiprosessointi pois k‰ytˆst‰"
+msgstr " --no-cpp \t\tkonfiguraatiotiedostojen esiprosessointi pois k√§yt√∂st√§"
 
 #: ../src/main.c:429
 msgid " --no-dock\t\tdo not open the application Dock"
-msgstr " --no-dock\t\t‰l‰ avaa sovellustelakkaa"
+msgstr " --no-dock\t\t√§l√§ avaa sovellustelakkaa"
 
 #: ../src/main.c:430
 msgid " --no-clip\t\tdo not open the workspace Clip"
-msgstr " --no-clip\t\t‰l‰ avaa tyˆtilaliitint‰"
+msgstr " --no-clip\t\t√§l√§ avaa ty√∂tilaliitint√§"
 
 #: ../src/main.c:431
 msgid " --no-autolaunch\tdo not autolaunch applications"
-msgstr " --no-autolaunch\t‰l‰ k‰ynnist‰ sovelluksia automaattisesti"
+msgstr " --no-autolaunch\t√§l√§ k√§ynnist√§ sovelluksia automaattisesti"
 
 #: ../src/main.c:432
 msgid " --dont-restore\t\tdo not restore saved session"
-msgstr "--dont-restore\t\t‰l‰ palauta tallennettua istuntoa"
+msgstr "--dont-restore\t\t√§l√§ palauta tallennettua istuntoa"
 
 #: ../src/main.c:434
 msgid " --locale locale\tlocale to use"
-msgstr " --locale locale\tk‰ytett‰v‰ maa-asetus"
+msgstr " --locale locale\tk√§ytett√§v√§ maa-asetus"
 
 #: ../src/main.c:436
 msgid ""
@@ -839,20 +839,20 @@ msgstr ""
 
 #: ../src/main.c:437
 msgid " --visual-id visualid\tvisual id of visual to use"
-msgstr " --visual-id visualid\tk‰ytett‰v‰n visualin id"
+msgstr " --visual-id visualid\tk√§ytett√§v√§n visualin id"
 
 #: ../src/main.c:438
 msgid " --static\t\tdo not update or save configurations"
-msgstr " --static\t\t‰l‰ p‰ivit‰ tai tallenna asetuksia"
+msgstr " --static\t\t√§l√§ p√§ivit√§ tai tallenna asetuksia"
 
 #: ../src/main.c:439
 #, fuzzy
 msgid " --no-polling\t\tdo not periodically check for configuration updates"
-msgstr " --static\t\t‰l‰ p‰ivit‰ tai tallenna asetuksia"
+msgstr " --static\t\t√§l√§ p√§ivit√§ tai tallenna asetuksia"
 
 #: ../src/main.c:441
 msgid " --synchronous\t\tturn on synchronous display mode"
-msgstr " --synchronous\t\tsynkroninen n‰yttˆtila p‰‰lle"
+msgstr " --synchronous\t\tsynkroninen n√§ytt√∂tila p√§√§lle"
 
 #: ../src/main.c:443
 msgid " --version\t\tprint version and exit"
@@ -860,7 +860,7 @@ msgstr " --version\t\ttulosta versio ja poistu"
 
 #: ../src/main.c:444
 msgid " --help\t\t\tshow this message"
-msgstr " --help\t\t\tn‰yt‰ t‰m‰ viesti"
+msgstr " --help\t\t\tn√§yt√§ t√§m√§ viesti"
 
 #: ../src/main.c:456
 #, c-format
@@ -868,14 +868,14 @@ msgid ""
 "could not find user GNUstep directory (%s).\n"
 "Make sure you have installed Window Maker correctly and run wmaker.inst"
 msgstr ""
-"k‰ytt‰j‰n GNUstep-hakemistoa (%s) ei lˆydy.\n"
-"Tarkista, ett‰ olet asentanut Window Makerin oikein ja ajanut komennon "
+"k√§ytt√§j√§n GNUstep-hakemistoa (%s) ei l√∂ydy.\n"
+"Tarkista, ett√§ olet asentanut Window Makerin oikein ja ajanut komennon "
 "wmaker.inst"
 
 #: ../src/main.c:477 ../src/main.c:482
 #, c-format
 msgid "%s:could not execute initialization script"
-msgstr "%s:ei voi suorittaa alustusskripti‰"
+msgstr "%s:ei voi suorittaa alustusskripti√§"
 
 #: ../src/main.c:502 ../src/main.c:507
 #, c-format
@@ -885,12 +885,12 @@ msgstr "%s:lopetusskriptin suoritus ei onnistu"
 #: ../src/main.c:623 ../src/main.c:631 ../src/main.c:639 ../src/main.c:659
 #, c-format
 msgid "too few arguments for %s"
-msgstr "liian v‰h‰n argumentteja %s:lle"
+msgstr "liian v√§h√§n argumentteja %s:lle"
 
 #: ../src/main.c:643
 #, c-format
 msgid "bad value for visualid: \"%s\""
-msgstr "v‰‰r‰ arvo visualid:lle: \"%s\""
+msgstr "v√§√§r√§ arvo visualid:lle: \"%s\""
 
 #: ../src/main.c:667
 #, c-format
@@ -900,7 +900,7 @@ msgstr "%s: virheellinen argumentti '%s'\n"
 #: ../src/main.c:668
 #, c-format
 msgid "Try '%s --help' for more information\n"
-msgstr "Saat lis‰tietoa kirjoittamalla '%s --help'\n"
+msgstr "Saat lis√§tietoa kirjoittamalla '%s --help'\n"
 
 #: ../src/main.c:699
 msgid "X server does not support locale"
@@ -908,12 +908,12 @@ msgstr "X-palvelin ei tue maa-asetusta"
 
 #: ../src/main.c:703
 msgid "cannot set locale modifiers"
-msgstr "maa-asetus-m‰‰reiden asetus ei onnistu"
+msgstr "maa-asetus-m√§√§reiden asetus ei onnistu"
 
 #: ../src/main.c:719
 #, c-format
 msgid "could not open display \"%s\""
-msgstr "n‰ytˆn \"%s\" avaus ei onnistu"
+msgstr "n√§yt√∂n \"%s\" avaus ei onnistu"
 
 #: ../src/menu.c:1255
 #, fuzzy
@@ -923,22 +923,22 @@ msgstr "hakemiston %s luonti ei onnistunut"
 #: ../src/misc.c:71
 #, c-format
 msgid "could not define value for %s for cpp"
-msgstr "ei voitu m‰‰ritell‰ arvoa %s cpp:lle"
+msgstr "ei voitu m√§√§ritell√§ arvoa %s cpp:lle"
 
 #: ../src/misc.c:101
 #, c-format
 msgid "could not get password entry for UID %i"
-msgstr "k‰ytt‰j‰n, jonka UID on %i, salasanamerkint‰‰ ei saatu"
+msgstr "k√§ytt√§j√§n, jonka UID on %i, salasanamerkint√§√§ ei saatu"
 
 #: ../src/misc.c:126
 #, c-format
 msgid "your machine is misconfigured. HOSTNAME is set to %s"
-msgstr "koneesi on konfiguroity v‰‰rin. HOSTNAME on asetettu arvoon %s"
+msgstr "koneesi on konfiguroity v√§√§rin. HOSTNAME on asetettu arvoon %s"
 
 #: ../src/misc.c:132
 #, c-format
 msgid "your machine is misconfigured. HOST is set to %s"
-msgstr "koneesi on konfiguroity v‰‰rin. HOST on asetettu arvoon %s"
+msgstr "koneesi on konfiguroity v√§√§rin. HOST on asetettu arvoon %s"
 
 #: ../src/misc.c:626
 msgid "Program Arguments"
@@ -946,19 +946,19 @@ msgstr "Ohjelman argumentit"
 
 #: ../src/misc.c:627
 msgid "Enter command arguments:"
-msgstr "Syˆt‰ komentoriviargumentit:"
+msgstr "Sy√∂t√§ komentoriviargumentit:"
 
 #: ../src/misc.c:720
 msgid "unable to get dropped data from DND drop"
-msgstr "ved‰ ja tiputa -datan saanti ei onnistunut"
+msgstr "ved√§ ja tiputa -datan saanti ei onnistunut"
 
 #: ../src/misc.c:728
 msgid "error getting dropped data from DND drop"
-msgstr "virhe ved‰ ja tiputa -datan vastaanotossa"
+msgstr "virhe ved√§ ja tiputa -datan vastaanotossa"
 
 #: ../src/misc.c:734
 msgid "out of memory while getting data from DND drop"
-msgstr "muisti loppui vastaanotettaessa ved‰ ja tiputa -dataa"
+msgstr "muisti loppui vastaanotettaessa ved√§ ja tiputa -dataa"
 
 #: ../src/misc.c:779 ../src/misc.c:919
 #, c-format
@@ -993,12 +993,12 @@ msgstr "virheellinen ikkunan nimi tilatiedossa %s"
 
 #: ../src/misc.c:1248
 msgid "could not send message to background image helper"
-msgstr "viestin l‰hetys taustakuva-apurille ep‰onnistui"
+msgstr "viestin l√§hetys taustakuva-apurille ep√§onnistui"
 
 #: ../src/pixmap.c:235
 #, c-format
 msgid "could not load mask bitmap file \"%s\". Won't use mask"
-msgstr "maski-bittikarttatiedostoa \"%s\" ei voitu ladata. Maskia ei k‰ytet‰"
+msgstr "maski-bittikarttatiedostoa \"%s\" ei voitu ladata. Maskia ei k√§ytet√§"
 
 #: ../src/proplist.c:180
 msgid "unterminated string"
@@ -1030,28 +1030,28 @@ msgstr "sanakirja-avain puuttuu tai sanakirjaa ei ole terminoitu"
 
 #: ../src/proplist.c:323
 msgid "error parsing dictionary key"
-msgstr "virhe sanakirja-avainta j‰sennett‰ess‰"
+msgstr "virhe sanakirja-avainta j√§sennett√§ess√§"
 
 #: ../src/proplist.c:332
 msgid "missing = in dictionary entry"
-msgstr "sanakirjamerkinn‰st‰ puuttuu ="
+msgstr "sanakirjamerkinn√§st√§ puuttuu ="
 
 #: ../src/proplist.c:351
 msgid "missing ; in dictionary entry"
-msgstr "Sanakirjamerkinn‰st‰ puuttuu ;"
+msgstr "Sanakirjamerkinn√§st√§ puuttuu ;"
 
 #: ../src/proplist.c:432
 msgid ""
 "was expecting a string, dictionary, data or array. If it's a string, try "
 "enclosing it with \"."
 msgstr ""
-"odotettiin merkkijonoa, sanakirjaa, dataa tai taulukkoa. Jos kyseess‰ on "
+"odotettiin merkkijonoa, sanakirjaa, dataa tai taulukkoa. Jos kyseess√§ on "
 "merkkijono, kokeile laittaa se lainausmerkkeihin."
 
 #: ../src/proplist.c:434
 msgid "Comments are not allowed inside WindowMaker owned domain files."
 msgstr ""
-"Kommentit eiv‰t ole sallittuja Window Makerille kuuluvissa tiedostoissa."
+"Kommentit eiv√§t ole sallittuja Window Makerille kuuluvissa tiedostoissa."
 
 #: ../src/proplist.c:453
 #, c-format
@@ -1060,17 +1060,17 @@ msgstr "domain-tiedoston %s avaus ei onnistunut"
 
 #: ../src/proplist.c:466
 msgid "extra data after end of file"
-msgstr "ylim‰‰r‰ist‰ dataa tiedoston lopun per‰ss‰"
+msgstr "ylim√§√§r√§ist√§ dataa tiedoston lopun per√§ss√§"
 
 #: ../src/resources.c:44
 #, c-format
 msgid "could not parse color \"%s\""
-msgstr "v‰rin \"%s\" j‰sennys ei onnistunut"
+msgstr "v√§rin \"%s\" j√§sennys ei onnistunut"
 
 #: ../src/resources.c:48
 #, c-format
 msgid "could not allocate color \"%s\""
-msgstr "v‰rin \"%s\" varaus ei onnistunut"
+msgstr "v√§rin \"%s\" varaus ei onnistunut"
 
 #: ../src/rootmenu.c:183 ../src/rootmenu.c:185
 msgid "Exit"
@@ -1089,8 +1089,8 @@ msgid ""
 "Close Window System session?\n"
 "Kill might close applications with unsaved data."
 msgstr ""
-"Suljetaanko ikkunointij‰rjestelm‰n istunto?\n"
-"Tallentamatonta tietoa sis‰lt‰v‰t sovellukset saattavat sulkeutua."
+"Suljetaanko ikkunointij√§rjestelm√§n istunto?\n"
+"Tallentamatonta tietoa sis√§lt√§v√§t sovellukset saattavat sulkeutua."
 
 #.
 #. entry = wMenuAddCallback(menu, _("Select Shortcut"), NULL, NULL);
@@ -1109,23 +1109,23 @@ msgid ""
 "Kill Window System session?\n"
 "(all applications will be closed)"
 msgstr ""
-"Tapetaanko ikkunointij‰rjestelm‰n istunto?\n"
+"Tapetaanko ikkunointij√§rjestelm√§n istunto?\n"
 "(kaikki ohjelmat suljetaan)"
 
 #: ../src/rootmenu.c:504
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\" for entry %s"
-msgstr "%s: virheellinen n‰pp‰inpikavalinnan m‰‰rittely \"%s\" merkinn‰lle %s"
+msgstr "%s: virheellinen n√§pp√§inpikavalinnan m√§√§rittely \"%s\" merkinn√§lle %s"
 
 #: ../src/rootmenu.c:512
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\" for entry %s"
-msgstr "%s: v‰‰r‰nlainen n‰pp‰in pikavalinnassa \"%s\" merkinn‰lle %s"
+msgstr "%s: v√§√§r√§nlainen n√§pp√§in pikavalinnassa \"%s\" merkinn√§lle %s"
 
 #: ../src/rootmenu.c:565
 #, c-format
 msgid "%s: unmatched '\"' in menu file"
-msgstr "%s: valikkotiedostosta ei lˆydy paria merkille '\"'"
+msgstr "%s: valikkotiedostosta ei l√∂ydy paria merkille '\"'"
 
 #: ../src/rootmenu.c:615
 #, c-format
@@ -1135,7 +1135,7 @@ msgstr "%s: puuttuva komento"
 #: ../src/rootmenu.c:647
 #, c-format
 msgid "invalid OPEN_MENU specification: %s"
-msgstr "virheellinen OPEN_MENU-m‰‰ritelm‰: %s"
+msgstr "virheellinen OPEN_MENU-m√§√§ritelm√§: %s"
 
 #: ../src/rootmenu.c:695
 #, c-format
@@ -1157,7 +1157,7 @@ msgid ""
 "There are more than one WORKSPACE_MENU commands in the applications menu. "
 "Only one is allowed."
 msgstr ""
-"Sovellusvalikossa on enemm‰n kuin yksi WORKSPACE_MENU-komento. Vain yksi on "
+"Sovellusvalikossa on enemm√§n kuin yksi WORKSPACE_MENU-komento. Vain yksi on "
 "sallittu."
 
 #: ../src/rootmenu.c:799
@@ -1166,13 +1166,13 @@ msgid ""
 "There are more than one WINDOWS_MENU commands in the applications menu. Only "
 "one is allowed."
 msgstr ""
-"Sovellusvalikossa on enemm‰n kuin yksi WORKSPACE_MENU-komento. Vain yksi on "
+"Sovellusvalikossa on enemm√§n kuin yksi WORKSPACE_MENU-komento. Vain yksi on "
 "sallittu."
 
 #: ../src/rootmenu.c:804
 #, fuzzy
 msgid "Window List"
-msgstr "ƒl‰ n‰yt‰ ikkunaluettelossa"
+msgstr "√Ñl√§ n√§yt√§ ikkunaluettelossa"
 
 #: ../src/rootmenu.c:833 ../src/rootmenu.c:851 ../src/rootmenu.c:861
 #, c-format
@@ -1182,36 +1182,36 @@ msgstr "%s: puuttuva parametri valikkokomennolla \"%s\""
 #: ../src/rootmenu.c:929
 #, c-format
 msgid "%s:unknown command \"%s\" in menu config."
-msgstr "%s: tuntematon komento \"%s\" valikkom‰‰ritelm‰ss‰."
+msgstr "%s: tuntematon komento \"%s\" valikkom√§√§ritelm√§ss√§."
 
 #: ../src/rootmenu.c:937
 #, c-format
 msgid "%s:can't add shortcut for entry \"%s\""
-msgstr "%s: kohdalle \"%s\" ei voida lis‰t‰ pikavalintaa"
+msgstr "%s: kohdalle \"%s\" ei voida lis√§t√§ pikavalintaa"
 
 #: ../src/rootmenu.c:1074
 #, c-format
 msgid "%s:maximal line size exceeded in menu config: %s"
-msgstr "%s: rivin maksimipituus ylitetty valikkom‰‰ritelm‰ss‰: %s"
+msgstr "%s: rivin maksimipituus ylitetty valikkom√§√§ritelm√§ss√§: %s"
 
 #: ../src/rootmenu.c:1096 ../src/rootmenu.c:1189 ../src/rootmenu.c:1291
 #, c-format
 msgid "%s:missing command in menu config: %s"
-msgstr "%s: komento puuttuu valikkom‰‰ritelm‰ss‰: %s"
+msgstr "%s: komento puuttuu valikkom√§√§ritelm√§ss√§: %s"
 
 #: ../src/rootmenu.c:1126
 #, c-format
 msgid "%s:syntax error in menu file:END declaration missing"
-msgstr "%s: virhe valikkotiedoston syntaksissa: END-m‰‰re puuttuu"
+msgstr "%s: virhe valikkotiedoston syntaksissa: END-m√§√§re puuttuu"
 
 #: ../src/rootmenu.c:1155 ../src/rootmenu.c:1255
 msgid "could not make arguments for menu file preprocessor"
-msgstr "ei voitu tehd‰ argumentteja valikkotiedoston esik‰sittelij‰lle"
+msgstr "ei voitu tehd√§ argumentteja valikkotiedoston esik√§sittelij√§lle"
 
 #: ../src/rootmenu.c:1162 ../src/rootmenu.c:1263
 #, c-format
 msgid "%s:could not open/preprocess menu file"
-msgstr "%s: valikkotiedostoa ei voitu avata/esik‰sitell‰"
+msgstr "%s: valikkotiedostoa ei voitu avata/esik√§sitell√§"
 
 #: ../src/rootmenu.c:1174 ../src/rootmenu.c:1276
 #, c-format
@@ -1225,12 +1225,12 @@ msgstr "%s:virheellinen valikkotiedosto. MENU-komento puuttuu."
 
 #: ../src/rootmenu.c:1210
 msgid "error reading preprocessed menu data"
-msgstr "virhe luettaessa esik‰sitelty‰ valikkodataa"
+msgstr "virhe luettaessa esik√§sitelty√§ valikkodataa"
 
 #: ../src/rootmenu.c:1303
 #, c-format
 msgid "%s:no title given for the root menu"
-msgstr "%s: juurivalikolle ei ole annettu nime‰"
+msgstr "%s: juurivalikolle ei ole annettu nime√§"
 
 #: ../src/rootmenu.c:1394 ../src/rootmenu.c:1467 ../src/rootmenu.c:1508
 #, c-format
@@ -1248,7 +1248,7 @@ msgstr "Komennot"
 
 #: ../src/rootmenu.c:1565
 msgid "Restart"
-msgstr "K‰ynnist‰ uudelleen"
+msgstr "K√§ynnist√§ uudelleen"
 
 #: ../src/rootmenu.c:1566
 msgid "Exit..."
@@ -1257,12 +1257,12 @@ msgstr "Poistu..."
 #: ../src/rootmenu.c:1611
 #, c-format
 msgid "could not find menu file \"%s\" referenced in WMRootMenu"
-msgstr "WMRootMenussa mainittua valikkotiedostoa \"%s\" ei lˆydy"
+msgstr "WMRootMenussa mainittua valikkotiedostoa \"%s\" ei l√∂ydy"
 
 #: ../src/rootmenu.c:1618
 #, c-format
 msgid "could not access menu \"%s\" referenced in WMRootMenu"
-msgstr "WMRootMenussa mainittua valikkoa \"%s\" ei saada k‰yttˆˆn"
+msgstr "WMRootMenussa mainittua valikkoa \"%s\" ei saada k√§ytt√∂√∂n"
 
 #: ../src/rootmenu.c:1629
 #, c-format
@@ -1270,20 +1270,20 @@ msgid ""
 "using default menu file \"%s\" as the menu referenced in WMRootMenu could "
 "not be found "
 msgstr ""
-"k‰ytet‰‰n oletusvalikkoa \"%s\", koska WMRootMenussa mainittua valikkoa ei "
-"lˆydy"
+"k√§ytet√§√§n oletusvalikkoa \"%s\", koska WMRootMenussa mainittua valikkoa ei "
+"l√∂ydy"
 
 #: ../src/rootmenu.c:1652 ../src/rootmenu.c:1728
 #, c-format
 msgid "%s:format error in root menu configuration \"%s\""
-msgstr "%s: muotoiluvirhe juurivalikon m‰‰rittelyss‰ \"%s\""
+msgstr "%s: muotoiluvirhe juurivalikon m√§√§rittelyss√§ \"%s\""
 
 #: ../src/rootmenu.c:1816
 msgid ""
 "The applications menu could not be loaded. Look at the console output for a "
 "detailed description of the errors."
 msgstr ""
-"Sovellusvalikkoa ei voitu ladata. Saat virheist‰ tarkan kuvauksen katsomalla "
+"Sovellusvalikkoa ei voitu ladata. Saat virheist√§ tarkan kuvauksen katsomalla "
 "konsolitulostetta."
 
 #: ../src/screen.c:740
@@ -1303,7 +1303,7 @@ msgstr "istunnon tilan tallennus -> %s ei onnistunut"
 #: ../src/session.c:183 ../src/wdefaults.c:588 ../src/winspector.c:453
 #, c-format
 msgid "can't convert \"%s\" to boolean"
-msgstr "\"%s\":‰‰ ei voida muuttaa boolean-tyyppiseksi"
+msgstr "\"%s\":√§√§ ei voida muuttaa boolean-tyyppiseksi"
 
 #: ../src/session.c:1021
 msgid "out of memory while saving session state"
@@ -1330,27 +1330,27 @@ msgstr "ikkunaluetteloa ei saatu!!"
 #: ../src/startup.c:202
 #, c-format
 msgid "internal X error: %s\n"
-msgstr "sis‰inen X-virhe: %s\n"
+msgstr "sis√§inen X-virhe: %s\n"
 
 #: ../src/startup.c:260
 #, c-format
 msgid "got signal %i (%s) - restarting\n"
-msgstr "vastaanotettiin signaali %i (%s) - k‰ynnistet‰‰n uudelleen\n"
+msgstr "vastaanotettiin signaali %i (%s) - k√§ynnistet√§√§n uudelleen\n"
 
 #: ../src/startup.c:262
 #, c-format
 msgid "got signal %i - restarting\n"
-msgstr "vastaanotettiin signaali %i - k‰ynnistet‰‰n uudelleen\n"
+msgstr "vastaanotettiin signaali %i - k√§ynnistet√§√§n uudelleen\n"
 
 #: ../src/startup.c:272
 #, fuzzy, c-format
 msgid "got signal %i (%s) - rereading defaults\n"
-msgstr "vastaanotettiin signaali %i (%s) - k‰ynnistet‰‰n uudelleen\n"
+msgstr "vastaanotettiin signaali %i (%s) - k√§ynnistet√§√§n uudelleen\n"
 
 #: ../src/startup.c:274
 #, fuzzy, c-format
 msgid "got signal %i - rereading defaults\n"
-msgstr "vastaanotettiin signaali %i - k‰ynnistet‰‰n uudelleen\n"
+msgstr "vastaanotettiin signaali %i - k√§ynnistet√§√§n uudelleen\n"
 
 #: ../src/startup.c:284
 #, c-format
@@ -1376,53 +1376,53 @@ msgstr "vastaanotettiin signaali %i\n"
 msgid ""
 "crashed while trying to do some post-crash cleanup. Aborting immediatelly."
 msgstr ""
-"kaatui, kun yritettiin tehd‰ kaatumisen j‰lkeist‰ siivousta. Keskeytet‰‰n "
-"v‰littˆm‰sti."
+"kaatui, kun yritettiin tehd√§ kaatumisen j√§lkeist√§ siivousta. Keskeytet√§√§n "
+"v√§litt√∂m√§sti."
 
 #. we try to restart Window Maker
 #: ../src/startup.c:400
 msgid "trying to restart Window Maker..."
-msgstr "yritet‰‰n k‰ynnist‰‰ Window Maker uudelleen..."
+msgstr "yritet√§√§n k√§ynnist√§√§ Window Maker uudelleen..."
 
 #: ../src/startup.c:405
 msgid "trying to start alternate window manager..."
-msgstr "yritet‰‰n k‰ynnist‰‰ vaihtoehtoista ikkunamanageria..."
+msgstr "yritet√§√§n k√§ynnist√§√§ vaihtoehtoista ikkunamanageria..."
 
 #: ../src/startup.c:410
 msgid "failed to start alternate window manager. Aborting."
-msgstr "vaihtoehtoisen ikkunamanagerin k‰ynnistys ep‰onnistui. Keskeytet‰‰n."
+msgstr "vaihtoehtoisen ikkunamanagerin k√§ynnistys ep√§onnistui. Keskeytet√§√§n."
 
 #: ../src/startup.c:412
 msgid ""
 "a fatal error has occured, probably due to a bug. Please fill the included "
 "BUGFORM and report it."
 msgstr ""
-"vakava virhe on tapahtunut - luultavasti bugin johdosta. Ole hyv‰ ja t‰yt‰ "
-"oheinen bugi-kaavake ja l‰het‰ se."
+"vakava virhe on tapahtunut - luultavasti bugin johdosta. Ole hyv√§ ja t√§yt√§ "
+"oheinen bugi-kaavake ja l√§het√§ se."
 
 #: ../src/startup.c:900
 #, c-format
 msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
 msgstr ""
-"kuvakkeiden kooksi on s‰‰detty %i, mutta se on liian pieni. K‰ytet‰‰n sen "
+"kuvakkeiden kooksi on s√§√§detty %i, mutta se on liian pieni. K√§ytet√§√§n sen "
 "sijaan kokoa 16.\n"
 
 #: ../src/startup.c:928
 msgid "XKB is not supported. KbdModeLock is automatically disabled."
-msgstr "XKB:t‰ ei tueta. KbdModeLockin k‰yttˆ estet‰‰n automaattisesti."
+msgstr "XKB:t√§ ei tueta. KbdModeLockin k√§ytt√∂ estet√§√§n automaattisesti."
 
 #: ../src/startup.c:947
 msgid "it seems that there is already a window manager running"
-msgstr "n‰ytt‰‰ silt‰, ett‰ jokin ikkunamanageri on jo k‰ynniss‰"
+msgstr "n√§ytt√§√§ silt√§, ett√§ jokin ikkunamanageri on jo k√§ynniss√§"
 
 #: ../src/startup.c:953
 #, c-format
 msgid "could not manage screen %i"
-msgstr "ruudun %i k‰sittely ei onnistu"
+msgstr "ruudun %i k√§sittely ei onnistu"
 
 #: ../src/startup.c:1021
 msgid "could not manage any screen"
-msgstr "mink‰‰n ruudun k‰sittely ei onnistu"
+msgstr "mink√§√§n ruudun k√§sittely ei onnistu"
 
 #: ../src/switchmenu.c:114
 msgid "Windows"
@@ -1431,12 +1431,12 @@ msgstr "Ikkunat"
 #: ../src/texture.c:329 ../src/texture.c:371
 #, c-format
 msgid "image file \"%s\" used as texture could not be found."
-msgstr "kuviona k‰ytetty‰ kuvatiedostoa \"%s\" ei lˆydy."
+msgstr "kuviona k√§ytetty√§ kuvatiedostoa \"%s\" ei l√∂ydy."
 
 #: ../src/texture.c:335 ../src/texture.c:377
 #, c-format
 msgid "could not load texture pixmap \"%s\":%s"
-msgstr "kuvio-kuvakarttaa \"%s\":%s ei lˆydy"
+msgstr "kuvio-kuvakarttaa \"%s\":%s ei l√∂ydy"
 
 #: ../src/texture.c:437
 #, c-format
@@ -1446,28 +1446,28 @@ msgstr "kirjaston \"%s\" avaus ei onnistunut."
 #: ../src/texture.c:446
 #, c-format
 msgid "function \"%s\" not found in library \"%s\""
-msgstr "funktiota \"%s\" ei lˆytynyt kirjastosta \"%s\""
+msgstr "funktiota \"%s\" ei l√∂ytynyt kirjastosta \"%s\""
 
 #: ../src/texture.c:453
 msgid "function textures not supported on this system, sorry."
-msgstr "t‰m‰ j‰rjestelm‰ ei valitettavasti tue kuviofunktioita."
+msgstr "t√§m√§ j√§rjestelm√§ ei valitettavasti tue kuviofunktioita."
 
 #: ../src/texture.c:598
 msgid "could not allocate image buffer"
-msgstr "Kuvapuskurin varaus ep‰onnistui"
+msgstr "Kuvapuskurin varaus ep√§onnistui"
 
 #: ../src/wdefaults.c:434
 #, c-format
 msgid "could not find icon file \"%s\""
-msgstr "kuvaketiedostoa \"%s\" ei lˆytynyt"
+msgstr "kuvaketiedostoa \"%s\" ei l√∂ytynyt"
 
 #: ../src/window.c:2825 ../src/window.c:2960
 msgid ""
 "the NumLock, ScrollLock or similar key seems to be turned on.\n"
 "Turn it off or some mouse actions and keyboard shortcuts will not work."
 msgstr ""
-"NumLock, ScrollLock tai muu samantapainen n‰pp‰in n‰ytt‰‰ olevan p‰‰ll‰.\n"
-"Laita se pois, tai jotkut hiiritoiminnot ja n‰pp‰inpikavalinnat eiv‰t toimi."
+"NumLock, ScrollLock tai muu samantapainen n√§pp√§in n√§ytt√§√§ olevan p√§√§ll√§.\n"
+"Laita se pois, tai jotkut hiiritoiminnot ja n√§pp√§inpikavalinnat eiv√§t toimi."
 
 #: ../src/winmenu.c:129
 msgid ""
@@ -1475,8 +1475,8 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-"T‰m‰ sulkee ohjelman v‰kisin.\n"
-"Kaikki tallentamattomat muutokset menetet‰‰n.\n"
+"T√§m√§ sulkee ohjelman v√§kisin.\n"
+"Kaikki tallentamattomat muutokset menetet√§√§n.\n"
 "Vahvista."
 
 #: ../src/winmenu.c:271 ../src/winmenu.c:280
@@ -1489,11 +1489,11 @@ msgstr "ikkunavalikkoon ei voitu luoda alivalikkoa"
 
 #: ../src/winmenu.c:407
 msgid "Keep on top"
-msgstr "Pid‰ p‰‰llimm‰isen‰"
+msgstr "Pid√§ p√§√§llimm√§isen√§"
 
 #: ../src/winmenu.c:412
 msgid "Keep at bottom"
-msgstr "Pid‰ alimmaisena"
+msgstr "Pid√§ alimmaisena"
 
 #.
 #. * Warning: If you make some change that affects the order of the
@@ -1506,7 +1506,7 @@ msgstr "Suurenna"
 
 #: ../src/winmenu.c:448 ../src/winmenu.c:561
 msgid "Miniaturize"
-msgstr "Pienenn‰"
+msgstr "Pienenn√§"
 
 #: ../src/winmenu.c:457 ../src/winmenu.c:592
 msgid "Shade"
@@ -1514,7 +1514,7 @@ msgstr "Vain otsikkopalkki"
 
 #: ../src/winmenu.c:473
 msgid "Resize/Move"
-msgstr "Muuta kokoa/Siirr‰"
+msgstr "Muuta kokoa/Siirr√§"
 
 #: ../src/winmenu.c:481
 msgid "Select"
@@ -1522,7 +1522,7 @@ msgstr "Valitse"
 
 #: ../src/winmenu.c:489
 msgid "Move To"
-msgstr "Siirr‰ tyˆtilaan"
+msgstr "Siirr√§ ty√∂tilaan"
 
 #: ../src/winmenu.c:494
 msgid "Attributes..."
@@ -1542,17 +1542,17 @@ msgstr "Peruuta suurennus"
 
 #: ../src/winmenu.c:587
 msgid "Unshade"
-msgstr "Myˆs sis‰ltˆ"
+msgstr "My√∂s sis√§lt√∂"
 
 #: ../src/winspector.c:386
 #, c-format
 msgid "Could not find icon \"%s\" specified for this window"
-msgstr "T‰lle ikkunalle m‰‰ritelty‰ kuvaketta \"%s\" ei lˆytynyt"
+msgstr "T√§lle ikkunalle m√§√§ritelty√§ kuvaketta \"%s\" ei l√∂ytynyt"
 
 #: ../src/winspector.c:403
 #, c-format
 msgid "Could not open specified icon \"%s\":%s"
-msgstr "Ei voinut avata m‰‰ritelty‰ kuvaketta \"%s\":%s"
+msgstr "Ei voinut avata m√§√§ritelty√§ kuvaketta \"%s\":%s"
 
 #: ../src/winspector.c:1141
 #, c-format
@@ -1573,7 +1573,7 @@ msgstr ""
 "Kun asetukset tallennetaan, ne\n"
 "vaikuttavat kaikkiin ikkunoihin,\n"
 "joiden WM_CLASS-ominaisuus on asetettu\n"
-"yll‰ valituksi nimeksi."
+"yll√§ valituksi nimeksi."
 
 #: ../src/winspector.c:1235
 msgid "Save"
@@ -1589,7 +1589,7 @@ msgstr "Lataa uudelleen"
 
 #: ../src/winspector.c:1258 ../src/winspector.c:1268
 msgid "Window Specification"
-msgstr "Ikkunan m‰‰rittely"
+msgstr "Ikkunan m√§√§rittely"
 
 #: ../src/winspector.c:1259
 msgid "Window Attributes"
@@ -1601,7 +1601,7 @@ msgstr "Tarkemmat asetukset"
 
 #: ../src/winspector.c:1261
 msgid "Icon and Initial Workspace"
-msgstr "Kuvake ja alustava tyˆtila"
+msgstr "Kuvake ja alustava ty√∂tila"
 
 #: ../src/winspector.c:1262
 msgid "Application Specific"
@@ -1633,7 +1633,7 @@ msgid ""
 "equivalent shortcut, if you changed the default\n"
 "settings)."
 msgstr ""
-"Poista t‰m‰n ikkunan otsikkopalkki. P‰‰set\n"
+"Poista t√§m√§n ikkunan otsikkopalkki. P√§√§set\n"
 "otsikkopalkittoman ikkunan komentovalikkoon\n"
 "painamalla Control+Esc (tai vastaavaa\n"
 "pikavalintaa, jos muutit oletusasetuksia)."
@@ -1641,11 +1641,11 @@ msgstr ""
 #: ../src/winspector.c:1364
 #, fuzzy
 msgid "Disable resizebar"
-msgstr "Ei koons‰‰tˆpalkkia"
+msgstr "Ei koons√§√§t√∂palkkia"
 
 #: ../src/winspector.c:1366
 msgid "Remove the resizebar of this window."
-msgstr "Poista t‰m‰n ikkunan koons‰‰tˆpalkki."
+msgstr "Poista t√§m√§n ikkunan koons√§√§t√∂palkki."
 
 #: ../src/winspector.c:1369
 #, fuzzy
@@ -1654,7 +1654,7 @@ msgstr "Ei sulje-painiketta"
 
 #: ../src/winspector.c:1371
 msgid "Remove the `close window' button of this window."
-msgstr "Poista t‰m‰n ikkunan 'sulje ikkuna'-painike."
+msgstr "Poista t√§m√§n ikkunan 'sulje ikkuna'-painike."
 
 #: ../src/winspector.c:1374
 #, fuzzy
@@ -1663,7 +1663,7 @@ msgstr "Ei pienennyspainiketta"
 
 #: ../src/winspector.c:1376
 msgid "Remove the `miniaturize window' button of the window."
-msgstr "Poista t‰m‰n ikkunan 'pienenn‰ ikkuna'-painike."
+msgstr "Poista t√§m√§n ikkunan 'pienenn√§ ikkuna'-painike."
 
 #: ../src/winspector.c:1379
 #, fuzzy
@@ -1672,12 +1672,12 @@ msgstr "Ei reunaa"
 
 #: ../src/winspector.c:1381
 msgid "Remove the 1 pixel black border around the window."
-msgstr "Poista ikkunan ymp‰rilt‰ 1 pikselin levyinen musta reuna."
+msgstr "Poista ikkunan ymp√§rilt√§ 1 pikselin levyinen musta reuna."
 
 #: ../src/winspector.c:1384
 #, fuzzy
 msgid "Keep on top (floating)"
-msgstr "Pid‰ p‰‰llimm‰isen‰"
+msgstr "Pid√§ p√§√§llimm√§isen√§"
 
 #: ../src/winspector.c:1386
 #, fuzzy
@@ -1685,48 +1685,48 @@ msgid ""
 "Keep the window over other windows, not allowing\n"
 "them to cover it."
 msgstr ""
-"Pid‰ ikkuna muiden ikkunoiden p‰‰ll‰;\n"
-"‰l‰ anna niiden peitt‰‰ sit‰."
+"Pid√§ ikkuna muiden ikkunoiden p√§√§ll√§;\n"
+"√§l√§ anna niiden peitt√§√§ sit√§."
 
 #: ../src/winspector.c:1390
 #, fuzzy
 msgid "Keep at bottom (sunken)"
-msgstr "Pid‰ pohjimmaisena"
+msgstr "Pid√§ pohjimmaisena"
 
 #: ../src/winspector.c:1392
 msgid "Keep the window under all other windows."
-msgstr "Pid‰ ikkuna kaikkien muiden ikkunoiden alla."
+msgstr "Pid√§ ikkuna kaikkien muiden ikkunoiden alla."
 
 #: ../src/winspector.c:1397
 #, fuzzy
 msgid "Make window present in all workspaces."
-msgstr "N‰yt‰ ikkuna kaikissa tyˆtiloissa."
+msgstr "N√§yt√§ ikkuna kaikissa ty√∂tiloissa."
 
 #: ../src/winspector.c:1400
 #, fuzzy
 msgid "Start miniaturized"
-msgstr "K‰ynnist‰ pienennettyn‰"
+msgstr "K√§ynnist√§ pienennettyn√§"
 
 #: ../src/winspector.c:1402
 msgid ""
 "Make the window be automatically miniaturized when it's\n"
 "first shown."
 msgstr ""
-"Pienenn‰ ikkuna automaattisesti, kun se n‰ytet‰‰n\n"
-"ensimm‰isen kerran."
+"Pienenn√§ ikkuna automaattisesti, kun se n√§ytet√§√§n\n"
+"ensimm√§isen kerran."
 
 #: ../src/winspector.c:1406
 #, fuzzy
 msgid "Start maximized"
-msgstr "K‰ynnist‰ suurennettuna"
+msgstr "K√§ynnist√§ suurennettuna"
 
 #: ../src/winspector.c:1408
 msgid ""
 "Make the window be automatically maximized when it's\n"
 "first shown."
 msgstr ""
-"Suurenna ikkuna automaattisesti, kun se n‰ytet‰‰n\n"
-"ensimm‰isen kerran."
+"Suurenna ikkuna automaattisesti, kun se n√§ytet√§√§n\n"
+"ensimm√§isen kerran."
 
 #: ../src/winspector.c:1412
 #, fuzzy
@@ -1739,8 +1739,8 @@ msgid ""
 "maximized. The titlebar and resizebar will be moved\n"
 "to outside the screen."
 msgstr ""
-"Aseta ikkuna k‰ytt‰m‰‰n koko ruutualaa, kun se on\n"
-"suurennettu. Otsikko- ja koonmuutospalkki siirret‰‰n\n"
+"Aseta ikkuna k√§ytt√§m√§√§n koko ruutualaa, kun se on\n"
+"suurennettu. Otsikko- ja koonmuutospalkki siirret√§√§n\n"
 "ruudun ulkopuolelle."
 
 #: ../src/winspector.c:1431
@@ -1750,7 +1750,7 @@ msgstr "Tarkemmat asetukset"
 #: ../src/winspector.c:1448
 #, fuzzy
 msgid "Do not bind keyboard shortcuts"
-msgstr "ƒl‰ sido n‰pp‰inpikavalintoja"
+msgstr "√Ñl√§ sido n√§pp√§inpikavalintoja"
 
 #: ../src/winspector.c:1450
 msgid ""
@@ -1759,76 +1759,76 @@ msgid ""
 "window to receive all key combinations regardless\n"
 "of your shortcut configuration."
 msgstr ""
-"ƒl‰ sido Window Makerin n‰pp‰inpikavalintoja, kun\n"
-"t‰m‰ ikkuna on aktiivinen. T‰m‰ sallii ikkunan\n"
-"vastaanottaa kaikki n‰pp‰inyhdistelm‰t pika-\n"
+"√Ñl√§ sido Window Makerin n√§pp√§inpikavalintoja, kun\n"
+"t√§m√§ ikkuna on aktiivinen. T√§m√§ sallii ikkunan\n"
+"vastaanottaa kaikki n√§pp√§inyhdistelm√§t pika-\n"
 "valinta-asetuksistasi riippumatta."
 
 #: ../src/winspector.c:1456
 #, fuzzy
 msgid "Do not bind mouse clicks"
-msgstr "ƒl‰ sido hiiren napautuksia"
+msgstr "√Ñl√§ sido hiiren napautuksia"
 
 #: ../src/winspector.c:1458
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
 "in the window (when alt is the modifier you haveconfigured)."
 msgstr ""
-"ƒl‰ sido ikkunassa hiiritoimintoja kuten\n"
-"'Alt'-siirtoja (kun alt on m‰‰rittelem‰si modifier)."
+"√Ñl√§ sido ikkunassa hiiritoimintoja kuten\n"
+"'Alt'-siirtoja (kun alt on m√§√§rittelem√§si modifier)."
 
 #: ../src/winspector.c:1463
 #, fuzzy
 msgid "Do not show in the window list"
-msgstr "ƒl‰ n‰yt‰ kyseist‰ ikkunaa ikkunalista-valikossa."
+msgstr "√Ñl√§ n√§yt√§ kyseist√§ ikkunaa ikkunalista-valikossa."
 
 #: ../src/winspector.c:1465
 msgid "Do not list the window in the window list menu."
-msgstr "ƒl‰ n‰yt‰ kyseist‰ ikkunaa ikkunalista-valikossa."
+msgstr "√Ñl√§ n√§yt√§ kyseist√§ ikkunaa ikkunalista-valikossa."
 
 #: ../src/winspector.c:1468
 #, fuzzy
 msgid "Do not let it take focus"
-msgstr "ƒl‰ anna syˆttˆkohdistusta"
+msgstr "√Ñl√§ anna sy√∂tt√∂kohdistusta"
 
 #: ../src/winspector.c:1470
 msgid ""
 "Do not let the window take keyboard focus when you\n"
 "click on it."
 msgstr ""
-"ƒl‰ anna ikkunalle syˆttˆkohdistusta,\n"
-"kun napautat hiirell‰ sen alueella."
+"√Ñl√§ anna ikkunalle sy√∂tt√∂kohdistusta,\n"
+"kun napautat hiirell√§ sen alueella."
 
 #: ../src/winspector.c:1474
 #, fuzzy
 msgid "Keep inside screen"
-msgstr "Pid‰ n‰yttˆalueella"
+msgstr "Pid√§ n√§ytt√∂alueella"
 
 #: ../src/winspector.c:1476
 msgid ""
 "Do not allow the window to move itself completely\n"
 "outside the screen. For bug compatibility.\n"
 msgstr ""
-"ƒl‰ anna ikkunan siirty‰ kokonaan ruudun\n"
+"√Ñl√§ anna ikkunan siirty√§ kokonaan ruudun\n"
 "ulkopuolelle. Bugi-yhteensopivuuden takia.\n"
 
 #: ../src/winspector.c:1480
 #, fuzzy
 msgid "Ignore 'Hide Others'"
-msgstr "ƒl‰ v‰lit‰ PiilotaMuut-komennosta"
+msgstr "√Ñl√§ v√§lit√§ PiilotaMuut-komennosta"
 
 #: ../src/winspector.c:1482
 msgid ""
 "Do not hide the window when issuing the\n"
 "`HideOthers' command."
 msgstr ""
-"ƒl‰ piilota ikkunaa, kun annetaan\n"
+"√Ñl√§ piilota ikkunaa, kun annetaan\n"
 "'Piilota muut'-komento."
 
 #: ../src/winspector.c:1486
 #, fuzzy
 msgid "Ignore 'Save Session'"
-msgstr "ƒl‰ tallenna istuntoa"
+msgstr "√Ñl√§ tallenna istuntoa"
 
 #: ../src/winspector.c:1488
 msgid ""
@@ -1837,10 +1837,10 @@ msgid ""
 "together with other applications when Window Maker\n"
 "starts."
 msgstr ""
-"ƒl‰ tallenna ks. sovellusta istunnon tilaan,\n"
-"jotta sit‰ ei k‰ynnistet‰ uudelleen muiden\n"
+"√Ñl√§ tallenna ks. sovellusta istunnon tilaan,\n"
+"jotta sit√§ ei k√§ynnistet√§ uudelleen muiden\n"
 "sovellusten kanssa, kun Window Maker\n"
-"k‰ynnistyy."
+"k√§ynnistyy."
 
 #: ../src/winspector.c:1494
 #, fuzzy
@@ -1853,18 +1853,18 @@ msgid ""
 "enough information to Window Maker for a dockable\n"
 "application icon to be created."
 msgstr ""
-"Laita t‰m‰ ikkuna k‰ytt‰ytym‰‰n sovelluksena, joka\n"
+"Laita t√§m√§ ikkuna k√§ytt√§ytym√§√§n sovelluksena, joka\n"
 "tarjoaa Window Makerille tarpeeksi informaatiota, jotta\n"
 "voidaan luoda telakoituva sovelluskuvake."
 
 #: ../src/winspector.c:1502
 #, fuzzy
 msgid "Disable language button"
-msgstr "ƒl‰ k‰yt‰ kieli-painiketta"
+msgstr "√Ñl√§ k√§yt√§ kieli-painiketta"
 
 #: ../src/winspector.c:1504
 msgid "Remove the `toggle language' button of the window."
-msgstr "Poista ikkunan 'vaihda kielt‰'-painike."
+msgstr "Poista ikkunan 'vaihda kielt√§'-painike."
 
 #: ../src/winspector.c:1521
 msgid "Miniwindow Image"
@@ -1877,20 +1877,20 @@ msgstr "Kuvakkeen tiedostonimi:"
 
 #: ../src/winspector.c:1561
 msgid "Ignore client supplied icon"
-msgstr "ƒl‰ k‰yt‰ sovelluksen antamaa"
+msgstr "√Ñl√§ k√§yt√§ sovelluksen antamaa"
 
 #: ../src/winspector.c:1568
 msgid "Initial Workspace"
-msgstr "Tyˆtila k‰ynnistett‰ess‰"
+msgstr "Ty√∂tila k√§ynnistett√§ess√§"
 
 #: ../src/winspector.c:1570
 msgid "The workspace to place the window when it'sfirst shown."
 msgstr ""
-"Tyˆtila, johon ikkuna sijoitetaan, kun se n‰ytet‰‰n ensimm‰isen kerran."
+"Ty√∂tila, johon ikkuna sijoitetaan, kun se n√§ytet√§√§n ensimm√§isen kerran."
 
 #: ../src/winspector.c:1576
 msgid "Nowhere in particular"
-msgstr "Ei erityist‰ tilaa"
+msgstr "Ei erityist√§ tilaa"
 
 #: ../src/winspector.c:1594
 #, fuzzy
@@ -1900,11 +1900,11 @@ msgstr "Sovelluksenlaajuinen"
 #: ../src/winspector.c:1605
 #, fuzzy
 msgid "Start hidden"
-msgstr "K‰ynnist‰ piilotettuna"
+msgstr "K√§ynnist√§ piilotettuna"
 
 #: ../src/winspector.c:1607
 msgid "Automatically hide application when it's started."
-msgstr "Piilota sovellus automaattisesti, kun se k‰ynnistet‰‰n."
+msgstr "Piilota sovellus automaattisesti, kun se k√§ynnistet√§√§n."
 
 #: ../src/winspector.c:1610
 #, fuzzy
@@ -1918,34 +1918,34 @@ msgid ""
 "and any icons that are already docked will stop\n"
 "working correctly."
 msgstr ""
-"Poista sovelluksen sovelluskuvake. Huomaa, ett‰ et\n"
-"voi en‰‰ telakoida sit‰, ja jo telakoidut kuvakkeet\n"
+"Poista sovelluksen sovelluskuvake. Huomaa, ett√§ et\n"
+"voi en√§√§ telakoida sit√§, ja jo telakoidut kuvakkeet\n"
 "lakkaavat toimimasta oikein."
 
 #: ../src/winspector.c:1618
 msgid "Collapse application icons"
-msgstr "H‰ivyt‰ sovelluskuvakkeet"
+msgstr "H√§ivyt√§ sovelluskuvakkeet"
 
 #: ../src/winspector.c:1620
 msgid ""
 "Collapse application icons from other instances\n"
 "of this application into one.\n"
 msgstr ""
-"H‰ivyt‰ t‰m‰n sovelluksen muiden esiintymien\n"
+"H√§ivyt√§ t√§m√§n sovelluksen muiden esiintymien\n"
 "sovellusikonit yhdeksi.\n"
 
 #: ../src/workspace.c:110 ../src/workspace.c:111 ../src/workspace.c:897
 #, c-format
 msgid "Workspace %i"
-msgstr "Tyˆtila %i"
+msgstr "Ty√∂tila %i"
 
 #: ../src/workspace.c:954
 msgid "Workspaces"
-msgstr "Tyˆtilat"
+msgstr "Ty√∂tilat"
 
 #: ../src/workspace.c:956
 msgid "could not create Workspace menu"
-msgstr "Tyˆtilavalikon luonti ei onnistunut"
+msgstr "Ty√∂tilavalikon luonti ei onnistunut"
 
 #: ../src/workspace.c:963
 msgid "New"
@@ -1956,7 +1956,7 @@ msgid "Destroy Last"
 msgstr "Tuhoa viimeinen"
 
 #~ msgid "Sound"
-#~ msgstr "ƒ‰ni"
+#~ msgstr "√Ñ√§ni"
 
 #~ msgid "Allow Lowering"
 #~ msgstr "Salli peittyminen"
@@ -1968,7 +1968,7 @@ msgstr "Tuhoa viimeinen"
 #~ msgstr "valinta on vanhentunut"
 
 #~ msgid "Update"
-#~ msgstr "P‰ivit‰"
+#~ msgstr "P√§ivit√§"
 
 #~ msgid "invalid data in selection"
-#~ msgstr "virheellist‰ dataa valinnassa"
+#~ msgstr "virheellist√§ dataa valinnassa"

@@ -3,20 +3,20 @@
 # Text below is in ISO8859-2
 # David Sauer <xsauer@fel.cvut.cz>, 1998.
 # Lukas Tinkl <caybro@seznam.cz>, 1999.
-# Jiøí Hnídek <jiri.hnidek@vslib.cz>
-# Pá dub 23 09:21:16 CEST 1999 David ©auer
-# St èec 14 09:30:00 CEST 1999 Luká¹ Tinkl
-# St øíj 13 20:29:53 CEST 2001 Jiøí Hnídek
+# JiÅ™Ã­ HnÃ­dek <jiri.hnidek@vslib.cz>
+# PÃ¡ dub 23 09:21:16 CEST 1999 David Å auer
+# St Äec 14 09:30:00 CEST 1999 LukÃ¡Å¡ Tinkl
+# St Å™Ã­j 13 20:29:53 CEST 2001 JiÅ™Ã­ HnÃ­dek
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: WindowMaker 0.70.0\n"
 "POT-Creation-Date: 2001-10-11 13:49+0200\n"
 "PO-Revision-Date: 2001-10-14 20:29+53:00\n"
-"Last-Translator: Jiøí Hnídek <jiri.hnidek@vslib.cz>\n"
+"Last-Translator: JiÅ™Ã­ HnÃ­dek <jiri.hnidek@vslib.cz>\n"
 "Language-Team: czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: unknown\n"
 
 #: ../src/appicon.c:541 ../src/dialog.c:224 ../src/dock.c:3276
@@ -27,7 +27,7 @@ msgstr "Chyba"
 
 #: ../src/appicon.c:542
 msgid "Could not open specified icon file"
-msgstr "Nelze otevøít specifikovanı soubor s ikonou"
+msgstr "Nelze otevÅ™Ã­t specifikovanÃ½ soubor s ikonou"
 
 #: ../src/appicon.c:543 ../src/dialog.c:121 ../src/dialog.c:224
 #: ../src/dialog.c:671 ../src/dialog.c:1733 ../src/dock.c:493
@@ -43,13 +43,13 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-" bude násilnì ukonèen.\n"
-"Jakékoli zmìny budou ztraceny.\n"
-"Potvrïte prosím."
+" bude nÃ¡silnÄ› ukonÄen.\n"
+"JakÃ©koli zmÄ›ny budou ztraceny.\n"
+"PotvrÄte prosÃ­m."
 
 #: ../src/appicon.c:576 ../src/dock.c:261 ../src/winmenu.c:124
 msgid "Kill Application"
-msgstr "Ukonèit aplikaci"
+msgstr "UkonÄit aplikaci"
 
 #: ../src/appicon.c:577 ../src/dock.c:262 ../src/winmenu.c:126
 msgid "Yes"
@@ -61,12 +61,12 @@ msgstr "Ne"
 
 #: ../src/appicon.c:595 ../src/dock.c:1144 ../src/dock.c:3442
 msgid "Unhide Here"
-msgstr "Odkrıt zde"
+msgstr "OdkrÃ½t zde"
 
 #: ../src/appicon.c:596 ../src/appicon.c:622 ../src/dock.c:1146
 #: ../src/dock.c:1148 ../src/dock.c:3454 ../src/winmenu.c:461
 msgid "Hide"
-msgstr "Skrıt"
+msgstr "SkrÃ½t"
 
 #: ../src/appicon.c:597 ../src/appicon.c:628
 msgid "Collapse"
@@ -79,11 +79,11 @@ msgstr "Nastavit ikonu..."
 #: ../src/appicon.c:599 ../src/dock.c:1152 ../src/rootmenu.c:224
 #: ../src/rootmenu.c:238 ../src/winmenu.c:508
 msgid "Kill"
-msgstr "Ukonèit"
+msgstr "UkonÄit"
 
 #: ../src/appicon.c:620 ../src/dock.c:3452
 msgid "Unhide"
-msgstr "Odkrıt"
+msgstr "OdkrÃ½t"
 
 #: ../src/appicon.c:626
 msgid "Uncollapse"
@@ -92,55 +92,55 @@ msgstr "Rozvinout"
 #: ../src/application.c:394
 #, c-format
 msgid "recreating missing icon '%s'"
-msgstr "znovu vytvoøit chybìjící ikonu '%s'"
+msgstr "znovu vytvoÅ™it chybÄ›jÃ­cÃ­ ikonu '%s'"
 
 #: ../src/defaults.c:926 ../src/startup.c:889 ../src/startup.c:907
 #: ../src/startup.c:913
 #, c-format
 msgid "could not read domain \"%s\" from defaults database"
-msgstr "z databáze standardù nelze naèíst doménu \"%s\""
+msgstr "z databÃ¡ze standardÅ¯ nelze naÄÃ­st domÃ©nu \"%s\""
 
 #: ../src/defaults.c:972 ../src/defaults.c:1089 ../src/defaults.c:1127
 #: ../src/defaults.c:1173
 #, c-format
 msgid "Domain %s (%s) of defaults database is corrupted!"
-msgstr "V databázi standardù je po¹kozena doména %s (%s)!"
+msgstr "V databÃ¡zi standardÅ¯ je poÅ¡kozena domÃ©na %s (%s)!"
 
 #: ../src/defaults.c:977 ../src/defaults.c:1109 ../src/defaults.c:1156
 #: ../src/defaults.c:1182
 #, c-format
 msgid "could not load domain %s from user defaults database"
-msgstr "z u¾ivatelovy databáze standardù nelze naèíst doménu \"%s\""
+msgstr "z uÅ¾ivatelovy databÃ¡ze standardÅ¯ nelze naÄÃ­st domÃ©nu \"%s\""
 
 #: ../src/defaults.c:988 ../src/defaults.c:1074
 #, c-format
 msgid "Domain %s (%s) of global defaults database is corrupted!"
-msgstr "V globální databázi standardù je po¹kozena doména %s (%s)"
+msgstr "V globÃ¡lnÃ­ databÃ¡zi standardÅ¯ je poÅ¡kozena domÃ©na %s (%s)"
 
 #: ../src/defaults.c:1007
 #, c-format
 msgid "could not load domain %s from global defaults database (%s)"
-msgstr "nelze naèíst doménu %s z globální databáze standardù (%s)"
+msgstr "nelze naÄÃ­st domÃ©nu %s z globÃ¡lnÃ­ databÃ¡ze standardÅ¯ (%s)"
 
 #: ../src/defaults.c:1079
 #, c-format
 msgid "could not load domain %s from global defaults database"
-msgstr "z globální databáze standardù nelze naèíst doménu \"%s\""
+msgstr "z globÃ¡lnÃ­ databÃ¡ze standardÅ¯ nelze naÄÃ­st domÃ©nu \"%s\""
 
 #: ../src/defaults.c:1146 ../src/screen.c:458
 #, c-format
 msgid "could not load logo image for panels: %s"
-msgstr "pro panely nelze naèíst logo: %s"
+msgstr "pro panely nelze naÄÃ­st logo: %s"
 
 #: ../src/defaults.c:1424
 #, c-format
 msgid "wrong option value for key \"%s\". Should be one of %s"
-msgstr "Chybnı formát volby pro klíè \"%s\". Má bıt jeden z %s"
+msgstr "ChybnÃ½ formÃ¡t volby pro klÃ­Ä \"%s\". MÃ¡ bÃ½t jeden z %s"
 
 #: ../src/defaults.c:1469
 #, c-format
 msgid "can't convert \"%s\" to boolean for key \"%s\""
-msgstr "\"%s\" nelze zkonvertovat pro klíè \"%s\" na boolean "
+msgstr "\"%s\" nelze zkonvertovat pro klÃ­Ä \"%s\" na boolean "
 
 #: ../src/defaults.c:1474 ../src/defaults.c:1506 ../src/defaults.c:1538
 #: ../src/defaults.c:1551 ../src/defaults.c:1566 ../src/defaults.c:1580
@@ -150,59 +150,59 @@ msgstr "\"%s\" nelze zkonvertovat pro klíè \"%s\" na boolean "
 #: ../src/defaults.c:2713 ../src/defaults.c:2724
 #, c-format
 msgid "using default \"%s\" instead"
-msgstr "namísto toho pou¾iji implicitní %s"
+msgstr "namÃ­sto toho pouÅ¾iji implicitnÃ­ %s"
 
 #: ../src/defaults.c:1503
 #, c-format
 msgid "can't convert \"%s\" to integer for key \"%s\""
-msgstr "\"%s\" nelze zkonvertovat pro klíè \"%s\" na integer"
+msgstr "\"%s\" nelze zkonvertovat pro klÃ­Ä \"%s\" na integer"
 
 #: ../src/defaults.c:1533 ../src/defaults.c:1645 ../src/defaults.c:2124
 #: ../src/defaults.c:2141 ../src/defaults.c:2186 ../src/defaults.c:2233
 #: ../src/defaults.c:2708 ../src/wdefaults.c:565 ../src/wdefaults.c:601
 #, c-format
 msgid "Wrong option format for key \"%s\". Should be %s."
-msgstr "Chybnı formát volby pro klíè \"%s\". Má bıt %s."
+msgstr "ChybnÃ½ formÃ¡t volby pro klÃ­Ä \"%s\". MÃ¡ bÃ½t %s."
 
 #: ../src/defaults.c:1546
 #, c-format
 msgid "Incorrect number of elements in array for key \"%s\"."
-msgstr "Pro klíè %s je v poli chybnı poèet prvkù."
+msgstr "Pro klÃ­Ä %s je v poli chybnÃ½ poÄet prvkÅ¯."
 
 #: ../src/defaults.c:1561
 #, c-format
 msgid "Wrong value for key \"%s\". Should be Coordinate."
-msgstr "Chybná hodnota pro klíè \"%s\". Má bıt Coordinate."
+msgstr "ChybnÃ¡ hodnota pro klÃ­Ä \"%s\". MÃ¡ bÃ½t Coordinate."
 
 #: ../src/defaults.c:1576
 #, c-format
 msgid "can't convert array to integers for \"%s\"."
-msgstr "pole nelze konvertovat na èísla typu integer(pro %s)."
+msgstr "pole nelze konvertovat na ÄÃ­sla typu integer(pro %s)."
 
 #: ../src/defaults.c:1774 ../src/defaults.c:1806 ../src/defaults.c:1822
 #: ../src/defaults.c:1851 ../src/defaults.c:1874 ../src/defaults.c:1927
 #: ../src/defaults.c:1967 ../src/defaults.c:2005 ../src/defaults.c:2021
 #, c-format
 msgid "\"%s\" is not a valid color name"
-msgstr "\"%s\" není správné jméno barvy"
+msgstr "\"%s\" nenÃ­ sprÃ¡vnÃ© jmÃ©no barvy"
 
 #: ../src/defaults.c:1787 ../src/defaults.c:1839
 msgid "bad number of arguments in gradient specification"
-msgstr "chybnı poèet argumentù ve specifikaci gradientu"
+msgstr "chybnÃ½ poÄet argumentÅ¯ ve specifikaci gradientu"
 
 #: ../src/defaults.c:1900
 msgid "too few arguments in multicolor gradient specification"
-msgstr "nedostatek argumentù pøi specifikaci vícebarevného gradientu"
+msgstr "nedostatek argumentÅ¯ pÅ™i specifikaci vÃ­cebarevnÃ©ho gradientu"
 
 #: ../src/defaults.c:1994
 msgid "bad number of arguments in textured gradient specification"
-msgstr "chybnı poèet argumentù ve specifikaci texturovaného gradientu"
+msgstr "chybnÃ½ poÄet argumentÅ¯ ve specifikaci texturovanÃ©ho gradientu"
 
 #: ../src/defaults.c:2037
 #, c-format
 msgid "bad opacity value for tgradient texture \"%s\". Should be [0..255]"
 msgstr ""
-"chybná hodnota neprùhlednosti pro texturu tgradient \"%s\". Má bıt [0..255]"
+"chybnÃ¡ hodnota neprÅ¯hlednosti pro texturu tgradient \"%s\". MÃ¡ bÃ½t [0..255]"
 
 #: ../src/defaults.c:2097
 #, c-format
@@ -212,116 +212,116 @@ msgstr "nelze inicializovat knihovnu %s"
 #: ../src/defaults.c:2100
 #, c-format
 msgid "could not find function %s::%s"
-msgstr "nelze najít funkci %s::%s"
+msgstr "nelze najÃ­t funkci %s::%s"
 
 #: ../src/defaults.c:2107
 #, c-format
 msgid "invalid texture type %s"
-msgstr "chybnı typ textury %s"
+msgstr "chybnÃ½ typ textury %s"
 
 #: ../src/defaults.c:2154
 #, c-format
 msgid "Error in texture specification for key \"%s\""
-msgstr "Chyba ve specifikaci textury pro klíè \"%s\""
+msgstr "Chyba ve specifikaci textury pro klÃ­Ä \"%s\""
 
 #: ../src/defaults.c:2203
 msgid "Wrong type for workspace background. Should be a texture type."
-msgstr "Chybnı typ pro pozadí pracovní plochy. Má bıt textura."
+msgstr "ChybnÃ½ typ pro pozadÃ­ pracovnÃ­ plochy. MÃ¡ bÃ½t textura."
 
 #: ../src/defaults.c:2251
 #, c-format
 msgid "Wrong type for background of workspace %i. Should be a texture."
-msgstr "Chybnı typ pro pozadí pracovní plochy %i. Má bıt textura."
+msgstr "ChybnÃ½ typ pro pozadÃ­ pracovnÃ­ plochy %i. MÃ¡ bÃ½t textura."
 
 #: ../src/defaults.c:2293
 msgid "could not load any usable font!!!"
-msgstr "nelze naèíst ¾ádnı pou¾itelnı font!!!"
+msgstr "nelze naÄÃ­st Å¾Ã¡dnÃ½ pouÅ¾itelnÃ½ font!!!"
 
 #: ../src/defaults.c:2320
 #, c-format
 msgid "could not get color for key \"%s\""
-msgstr "nelze získat barvu pro klíè \"%s\""
+msgstr "nelze zÃ­skat barvu pro klÃ­Ä \"%s\""
 
 #: ../src/defaults.c:2378 ../src/rootmenu.c:492
 #, c-format
 msgid "%s:invalid key modifier \"%s\""
-msgstr "%s:chybnı modifikátor klávesy \"%s\""
+msgstr "%s:chybnÃ½ modifikÃ¡tor klÃ¡vesy \"%s\""
 
 #: ../src/defaults.c:2390
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\""
-msgstr "%s:chybná specifikace klávesové zkratky \"%s\""
+msgstr "%s:chybnÃ¡ specifikace klÃ¡vesovÃ© zkratky \"%s\""
 
 #: ../src/defaults.c:2397
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\""
-msgstr "%s:chybná klávesa v klávesové zkratce \"%s\""
+msgstr "%s:chybnÃ¡ klÃ¡vesa v klÃ¡vesovÃ© zkratce \"%s\""
 
 #: ../src/defaults.c:2422
 #, c-format
 msgid "%s: modifier key %s is not valid"
-msgstr "%s: klávesa modifikátoru %s není v poøádku"
+msgstr "%s: klÃ¡vesa modifikÃ¡toru %s nenÃ­ v poÅ™Ã¡dku"
 
 #: ../src/defaults.c:2454
 #, c-format
 msgid "could not load image in option %s: %s"
-msgstr "nelze naèíst obrázek ve volbì %s: %s"
+msgstr "nelze naÄÃ­st obrÃ¡zek ve volbÄ› %s: %s"
 
 #: ../src/defaults.c:2573
 #, c-format
 msgid "failed to open bitmap file \"%s\""
-msgstr "nelze otevøít soubor s obr8zkem \"%s\""
+msgstr "nelze otevÅ™Ã­t soubor s obr8zkem \"%s\""
 
 #: ../src/defaults.c:2576
 #, c-format
 msgid "\"%s\" is not a valid bitmap file"
-msgstr "\"%s\" není platnı soubor barvy"
+msgstr "\"%s\" nenÃ­ platnÃ½ soubor barvy"
 
 #: ../src/defaults.c:2579
 #, c-format
 msgid "out of memory reading bitmap file \"%s\""
-msgstr "nedostatek pamìti pøi otvírání obrázku \"%s\""
+msgstr "nedostatek pamÄ›ti pÅ™i otvÃ­rÃ¡nÃ­ obrÃ¡zku \"%s\""
 
 #: ../src/defaults.c:2618 ../src/defaults.c:2651
 msgid "bad number of arguments in cursor specification"
-msgstr "chybnı poèet argumentù ve specifikaci kursoru"
+msgstr "chybnÃ½ poÄet argumentÅ¯ ve specifikaci kursoru"
 
 #: ../src/defaults.c:2634
 #, c-format
 msgid "unknown builtin cursor name \"%s\""
-msgstr "neznámı interní název kursoru \"%s\""
+msgstr "neznÃ¡mÃ½ internÃ­ nÃ¡zev kursoru \"%s\""
 
 #: ../src/defaults.c:2661 ../src/defaults.c:2673
 #, c-format
 msgid "could not find cursor bitmap file \"%s\""
-msgstr "nelze nalézt soubor s kurzorem \"%s\""
+msgstr "nelze nalÃ©zt soubor s kurzorem \"%s\""
 
 #: ../src/defaults.c:2720
 #, c-format
 msgid "Error in cursor specification for key \"%s\""
-msgstr "Chyba ve specifikaci kurzoru pro klíè \"%s\""
+msgstr "Chyba ve specifikaci kurzoru pro klÃ­Ä \"%s\""
 
 #: ../src/defaults.c:2807
 msgid "could not render texture for icon background"
-msgstr "pro pozadí ikony nelze vykreslit texturu"
+msgstr "pro pozadÃ­ ikony nelze vykreslit texturu"
 
 #: ../src/dialog.c:121 ../src/dialog.c:678 ../src/dock.c:525
 #: ../src/dockedapp.c:431 ../src/rootmenu.c:186 ../src/rootmenu.c:224
 #: ../src/rootmenu.c:238
 msgid "Cancel"
-msgstr "Zru¹it"
+msgstr "ZruÅ¡it"
 
 #: ../src/dialog.c:219
 msgid "Could not open directory "
-msgstr "Nelze otevøít adresáø"
+msgstr "Nelze otevÅ™Ã­t adresÃ¡Å™"
 
 #: ../src/dialog.c:274
 msgid "Could not load image file "
-msgstr "Nelze naèíst obrázek"
+msgstr "Nelze naÄÃ­st obrÃ¡zek"
 
 #: ../src/dialog.c:605
 msgid "Directories"
-msgstr "Adresáøe"
+msgstr "AdresÃ¡Å™e"
 
 #: ../src/dialog.c:614
 msgid "Icons"
@@ -341,7 +341,7 @@ msgstr "Vyberte soubor"
 
 #: ../src/dialog.c:702 ../src/dialog.c:704
 msgid "Icon Chooser"
-msgstr "Vıbìr ikony"
+msgstr "VÃ½bÄ›r ikony"
 
 #: ../src/dialog.c:1160 ../src/dialog.c:1270
 #, c-format
@@ -350,24 +350,24 @@ msgstr "Verze %s"
 
 #: ../src/dialog.c:1267
 msgid "Window Manager for X"
-msgstr "Okenní mana¾er pro X"
+msgstr "OkennÃ­ manaÅ¾er pro X"
 
 #: ../src/dialog.c:1290
 #, c-format
 msgid "Using visual 0x%x: %s %ibpp "
-msgstr "Grafika pou¾ívá 0x%x: %s %ibpp "
+msgstr "Grafika pouÅ¾Ã­vÃ¡ 0x%x: %s %ibpp "
 
 #: ../src/dialog.c:1298
 msgid "(32 thousand colors)\n"
-msgstr "(32 tisíc barev)\n"
+msgstr "(32 tisÃ­c barev)\n"
 
 #: ../src/dialog.c:1301
 msgid "(64 thousand colors)\n"
-msgstr "(64 tisíc barev)\n"
+msgstr "(64 tisÃ­c barev)\n"
 
 #: ../src/dialog.c:1305
 msgid "(16 million colors)\n"
-msgstr "(16 milionù barev)\n"
+msgstr "(16 milionÅ¯ barev)\n"
 
 #: ../src/dialog.c:1308
 #, c-format
@@ -377,17 +377,17 @@ msgstr "(%d barev)\n"
 #: ../src/dialog.c:1318
 #, c-format
 msgid "Total allocated memory: %i kB. Total memory in use: %i kB.\n"
-msgstr "Pøidìlená pamì»: %i kB. Pou¾ívaná pamì»: %i kB.\n"
+msgstr "PÅ™idÄ›lenÃ¡ pamÄ›Å¥: %i kB. PouÅ¾Ã­vanÃ¡ pamÄ›Å¥: %i kB.\n"
 
 #: ../src/dialog.c:1325
 msgid "Supported image formats: "
-msgstr "Podporované formáty obrázkù: "
+msgstr "PodporovanÃ© formÃ¡ty obrÃ¡zkÅ¯: "
 
 #: ../src/dialog.c:1332
 msgid ""
 "\nAdditional support for: "
 msgstr ""
-"\nDodateèná podpora pro: "
+"\nDodateÄnÃ¡ podpora pro: "
 
 #: ../src/dialog.c:1355
 msgid " and "
@@ -399,7 +399,7 @@ msgid ""
 "Sound disabled"
 msgstr ""
 "\n"
-"Zvuk zakázán"
+"Zvuk zakÃ¡zÃ¡n"
 
 #: ../src/dialog.c:1367
 msgid ""
@@ -415,7 +415,7 @@ msgstr "Informace"
 
 #: ../src/dialog.c:1414
 msgid "Merry X'mas!"
-msgstr "Veselé vánose!"
+msgstr "VeselÃ© vÃ¡nose!"
 
 #: ../src/dialog.c:1484
 msgid ""
@@ -436,33 +436,33 @@ msgid ""
 "Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA\n"
 "02111-1307, USA."
 msgstr ""
-"Window Maker je volnì ¹iøitelnı software; mù¾ete ho pøedat dál nebo\n"
-"upravit podle podmínek GNU licence (Genral Public Licence), která\n"
-"byla uveøejnìna organizací Free Software Foundation; jedna ze\n"
-"dvou verzí licence, nebo (jestli chcete) nìjaká novìj¹í verze.\n"
+"Window Maker je volnÄ› Å¡iÅ™itelnÃ½ software; mÅ¯Å¾ete ho pÅ™edat dÃ¡l nebo\n"
+"upravit podle podmÃ­nek GNU licence (Genral Public Licence), kterÃ¡\n"
+"byla uveÅ™ejnÄ›na organizacÃ­ Free Software Foundation; jedna ze\n"
+"dvou verzÃ­ licence, nebo (jestli chcete) nÄ›jakÃ¡ novÄ›jÅ¡Ã­ verze.\n"
 "\n"
 "\n"
-"Window Maker je ¹íøen s nadìjí, ¾e bude pou¾itelnı, ale BEZ\n"
-" JAKÉKOLIV ZÁRUKY; bez pozdìji pøidanıch záruk OBCHODNÍKA\n"
-"nebo DOBØE MÍNÌNÉHO ÚMYSLU. Více informací naleznete v\n"
+"Window Maker je Å¡Ã­Å™en s nadÄ›jÃ­, Å¾e bude pouÅ¾itelnÃ½, ale BEZ\n"
+" JAKÃ‰KOLIV ZÃRUKY; bez pozdÄ›ji pÅ™idanÃ½ch zÃ¡ruk OBCHODNÃKA\n"
+"nebo DOBÅ˜E MÃNÄšNÃ‰HO ÃšMYSLU. VÃ­ce informacÃ­ naleznete v\n"
 "GNU licenci (Genral Public Licence)\n"
 "\n"
 "\n"
-"Mìli by jste obdr¾et kopii GNU licence s tímto programem; pokud\n"
-"tomu tak není napi¹te organizaci Free Software Foundation:\n"
+"MÄ›li by jste obdrÅ¾et kopii GNU licence s tÃ­mto programem; pokud\n"
+"tomu tak nenÃ­ napiÅ¡te organizaci Free Software Foundation:\n"
 "Inc., 59 Temple Place - Suite 330, Boston MA, 02111-1307, USA"
 
 #: ../src/dialog.c:1505
 msgid "Legal"
-msgstr "Licenèní podmínky"
+msgstr "LicenÄnÃ­ podmÃ­nky"
 
 #: ../src/dialog.c:1656 ../src/startup.c:395
 msgid "cannot open connection for crashing dialog panel. Aborting."
-msgstr "pro nefunkèní dialogovı panel nelze otevøít spojení. Konec."
+msgstr "pro nefunkÄnÃ­ dialogovÃ½ panel nelze otevÅ™Ã­t spojenÃ­. Konec."
 
 #: ../src/dialog.c:1682
 msgid "Fatal error"
-msgstr "Záva¾ná chyba"
+msgstr "ZÃ¡vaÅ¾nÃ¡ chyba"
 
 #: ../src/dialog.c:1693
 #, c-format
@@ -470,34 +470,34 @@ msgid ""
 "Window Maker received signal %i\n"
 "(%s)."
 msgstr ""
-"Window Maker obdr¾el signál %i\n"
+"Window Maker obdrÅ¾el signÃ¡l %i\n"
 "(%s)."
 
 #: ../src/dialog.c:1696
 #, c-format
 msgid "Window Maker received signal %i."
-msgstr "Window Maker pøijal signál %i."
+msgstr "Window Maker pÅ™ijal signÃ¡l %i."
 
 #: ../src/dialog.c:1705
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
 "BUGFORM and report it to bugs@windowmaker.org."
 msgstr ""
-" Tato záva¾ná chyba se vyskytla pravdìpodobnì v dùsledku chyby v kódu Window "
-"Makeru. Prosím, vyplòte soubor BUGFORM a za¹lete ho na bugs@windowmaker.org "
+" Tato zÃ¡vaÅ¾nÃ¡ chyba se vyskytla pravdÄ›podobnÄ› v dÅ¯sledku chyby v kÃ³du Window "
+"Makeru. ProsÃ­m, vyplÅˆte soubor BUGFORM a zaÅ¡lete ho na bugs@windowmaker.org "
 "(pouze anglicky)"
 
 #: ../src/dialog.c:1714
 msgid "What do you want to do now?"
-msgstr "Co byste chtìl(a) udìlat teï ?"
+msgstr "Co byste chtÄ›l(a) udÄ›lat teÄ ?"
 
 #: ../src/dialog.c:1720
 msgid "Select action"
-msgstr "Oznaèit ikonu"
+msgstr "OznaÄit ikonu"
 
 #: ../src/dialog.c:1721
 msgid "Abort and leave a core file"
-msgstr "Ukonèi a zapsat soubor s obsahem pamìti (core)"
+msgstr "UkonÄi a zapsat soubor s obsahem pamÄ›ti (core)"
 
 #: ../src/dialog.c:1722
 msgid "Restart Window Maker"
@@ -505,7 +505,7 @@ msgstr "Restart Window Makeru"
 
 #: ../src/dialog.c:1723
 msgid "Start alternate window manager"
-msgstr "Odstartovat alternativní okenní mana¾er"
+msgstr "Odstartovat alternativnÃ­ okennÃ­ manaÅ¾er"
 
 #: ../src/dialog.c:1901
 msgid ""
@@ -519,15 +519,15 @@ msgid ""
 "of the framework. For more information about\n"
 "GNUstep, please visit: www.gnustep.org"
 msgstr ""
-"Window maker je souèástí GNUstep projektu.\n"
-"GNUstep usiluje o vytvoøení volnì ¹iøitelné\n"
-"implementace prostøedí OpenStepu(tm), které\n"
-"má objektovì orientovanı systém pro vytváøení\n"
-"pokroèilıch grafickıch, multiplatformních\n"
-"aplikací. A navíc vıvoj u¾ivatelsky pøívìtivého\n"
-"prostøedí je nejdùle¾itìj¹í souèást projektu.\n"
-"Více informací o GNUstepu naleznete na\n"
-"webové stránce: www.gnustep.org"
+"Window maker je souÄÃ¡stÃ­ GNUstep projektu.\n"
+"GNUstep usiluje o vytvoÅ™enÃ­ volnÄ› Å¡iÅ™itelnÃ©\n"
+"implementace prostÅ™edÃ­ OpenStepu(tm), kterÃ©\n"
+"mÃ¡ objektovÄ› orientovanÃ½ systÃ©m pro vytvÃ¡Å™enÃ­\n"
+"pokroÄilÃ½ch grafickÃ½ch, multiplatformnÃ­ch\n"
+"aplikacÃ­. A navÃ­c vÃ½voj uÅ¾ivatelsky pÅ™Ã­vÄ›tivÃ©ho\n"
+"prostÅ™edÃ­ je nejdÅ¯leÅ¾itÄ›jÅ¡Ã­ souÄÃ¡st projektu.\n"
+"VÃ­ce informacÃ­ o GNUstepu naleznete na\n"
+"webovÃ© strÃ¡nce: www.gnustep.org"
 
 #: ../src/dialog.c:1921
 msgid "About GNUstep"
@@ -536,15 +536,15 @@ msgstr "O GNUstepu"
 #: ../src/dock.c:213
 #, c-format
 msgid "Type the name for workspace %i:"
-msgstr "Zadejte jméno pro plochu %i:"
+msgstr "Zadejte jmÃ©no pro plochu %i:"
 
 #: ../src/dock.c:214 ../src/dock.c:1108 ../src/dock.c:1111 ../src/dock.c:3360
 msgid "Rename Workspace"
-msgstr "Pøejmenovat plochu"
+msgstr "PÅ™ejmenovat plochu"
 
 #: ../src/dock.c:487 ../src/dock.c:495
 msgid "Warning"
-msgstr "Varování"
+msgstr "VarovÃ¡nÃ­"
 
 #: ../src/dock.c:488
 msgid ""
@@ -552,9 +552,9 @@ msgid ""
 "is docked in the same positions on the other workspaces and the Clip is not "
 "full in some workspace."
 msgstr ""
-"Nìkteré ikony nemohou bıt v¹udypøítomné. Ujistìte se prosím, ¾e ¾ádná dal¹í "
-"ikona není ukotvena na stejné pozici v ostatních pracovních plochách a ¾e "
-"Sponka není na nìkteré plo¹e zaplnìna."
+"NÄ›kterÃ© ikony nemohou bÃ½t vÅ¡udypÅ™Ã­tomnÃ©. UjistÄ›te se prosÃ­m, Å¾e Å¾Ã¡dnÃ¡ dalÅ¡Ã­ "
+"ikona nenÃ­ ukotvena na stejnÃ© pozici v ostatnÃ­ch pracovnÃ­ch plochÃ¡ch a Å¾e "
+"Sponka nenÃ­ na nÄ›kterÃ© ploÅ¡e zaplnÄ›na."
 
 #: ../src/dock.c:496
 msgid ""
@@ -562,9 +562,9 @@ msgid ""
 "docked in the same position on the other workspaces and the Clip is not full "
 "in some workspace."
 msgstr ""
-"Nìkteré ikony nemohou bıt v¹udypøítomné. Ujistìte se prosím, ¾e ¾ádná dal¹í "
-"ikona není ukotvena na stejné pozici v ostatních pracovních plochách a ¾e "
-"Sponka není na nìkteré plo¹e zaplnìna."
+"NÄ›kterÃ© ikony nemohou bÃ½t vÅ¡udypÅ™Ã­tomnÃ©. UjistÄ›te se prosÃ­m, Å¾e Å¾Ã¡dnÃ¡ dalÅ¡Ã­ "
+"ikona nenÃ­ ukotvena na stejnÃ© pozici v ostatnÃ­ch pracovnÃ­ch plochÃ¡ch a Å¾e "
+"Sponka nenÃ­ na nÄ›kterÃ© ploÅ¡e zaplnÄ›na."
 
 #: ../src/dock.c:523
 msgid "Workspace Clip"
@@ -572,15 +572,15 @@ msgstr "Sponka"
 
 #: ../src/dock.c:524
 msgid "All selected icons will be removed!"
-msgstr "V¹echny vybrané ikony budou odstranìny!"
+msgstr "VÅ¡echny vybranÃ© ikony budou odstranÄ›ny!"
 
 #: ../src/dock.c:575 ../src/dock.c:1123 ../src/dock.c:1125 ../src/dock.c:3396
 msgid "Keep Icon"
-msgstr "Dr¾et ikonu"
+msgstr "DrÅ¾et ikonu"
 
 #: ../src/dock.c:576 ../src/dock.c:2104 ../src/dock.c:2245
 msgid "Type the command used to launch the application"
-msgstr "Zadejte pøíkaz, kterı spustí aplikaci"
+msgstr "Zadejte pÅ™Ã­kaz, kterÃ½ spustÃ­ aplikaci"
 
 #: ../src/dock.c:932
 #, c-format
@@ -589,15 +589,15 @@ msgstr "aplikaci %s nelze odstartovat\n"
 
 #: ../src/dock.c:987
 msgid "could not create workspace submenu for Clip menu"
-msgstr "nelze vytvoøit submenu pracovní plochy pro menu Sponky"
+msgstr "nelze vytvoÅ™it submenu pracovnÃ­ plochy pro menu Sponky"
 
 #: ../src/dock.c:1045
 msgid "could not create options submenu for Clip menu"
-msgstr "nelze vytvoøit submenu voleb pro menu Sponky"
+msgstr "nelze vytvoÅ™it submenu voleb pro menu Sponky"
 
 #: ../src/dock.c:1049 ../src/dock.c:1097
 msgid "Keep on Top"
-msgstr "V¾dy navrchu"
+msgstr "VÅ¾dy navrchu"
 
 #: ../src/dock.c:1055
 msgid "Collapsed"
@@ -609,7 +609,7 @@ msgstr "Automaticky svinout"
 
 #: ../src/dock.c:1067
 msgid "Autoraise"
-msgstr "Automaticky Nahoru/Dolù"
+msgstr "Automaticky Nahoru/DolÅ¯"
 
 #: ../src/dock.c:1073
 msgid "Autoattract Icons"
@@ -621,15 +621,15 @@ msgstr "Volby Sponky"
 
 #: ../src/dock.c:1113
 msgid "Selected"
-msgstr "Vybraná"
+msgstr "VybranÃ¡"
 
 #: ../src/dock.c:1118 ../src/dock.c:1121 ../src/dock.c:3387
 msgid "Select All Icons"
-msgstr "(Od)Oznaèit v¹echny ikony"
+msgstr "(Od)OznaÄit vÅ¡echny ikony"
 
 #: ../src/dock.c:1127 ../src/dock.c:1129 ../src/dock.c:3404
 msgid "Move Icon To"
-msgstr "Pøesunout ikonu na"
+msgstr "PÅ™esunout ikonu na"
 
 #: ../src/dock.c:1134 ../src/dock.c:1137 ../src/dock.c:3415
 msgid "Remove Icon"
@@ -645,21 +645,21 @@ msgstr "Odstartovat"
 
 #: ../src/dock.c:1150
 msgid "Settings..."
-msgstr "Nastavení..."
+msgstr "NastavenÃ­..."
 
 #: ../src/dock.c:1515 ../src/dock.c:1622
 #, c-format
 msgid "bad value in docked icon state info %s"
-msgstr "chybná hodnota stavu ukotvené ikony %s"
+msgstr "chybnÃ¡ hodnota stavu ukotvenÃ© ikony %s"
 
 #: ../src/dock.c:1630
 #, c-format
 msgid "bad value in docked icon position %i,%i"
-msgstr "chybná hodnota pozice ukotvené ikony %i,%i"
+msgstr "chybnÃ¡ hodnota pozice ukotvenÃ© ikony %i,%i"
 
 #: ../src/dock.c:1886
 msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
-msgstr "v doku je pøíli¹ mnoho ikon. Co se nevejde, je zanedbáno"
+msgstr "v doku je pÅ™Ã­liÅ¡ mnoho ikon. Co se nevejde, je zanedbÃ¡no"
 
 #: ../src/dock.c:2103 ../src/dock.c:2244
 msgid "Dock Icon"
@@ -668,28 +668,28 @@ msgstr "Ukotvit ikonu"
 #: ../src/dock.c:3267 ../src/dock.c:3270 ../src/dock.c:3273
 #, c-format
 msgid "Could not execute command \"%s\""
-msgstr "Nelze provést pøíkaz \"%s\""
+msgstr "Nelze provÃ©st pÅ™Ã­kaz \"%s\""
 
 #: ../src/dock.c:3366
 msgid "Toggle Omnipresent"
-msgstr "V¹echny plochy"
+msgstr "VÅ¡echny plochy"
 
 #: ../src/dock.c:3371 ../src/kwm.c:637 ../src/winmenu.c:413
 #: ../src/winspector.c:1392
 msgid "Omnipresent"
-msgstr "V¹echny plochy"
+msgstr "VÅ¡echny plochy"
 
 #: ../src/dock.c:3385
 msgid "Unselect All Icons"
-msgstr "(Od)Oznaèit v¹echny ikony"
+msgstr "(Od)OznaÄit vÅ¡echny ikony"
 
 #: ../src/dock.c:3394
 msgid "Keep Icons"
-msgstr "Dr¾et ikonu"
+msgstr "DrÅ¾et ikonu"
 
 #: ../src/dock.c:3402
 msgid "Move Icons To"
-msgstr "Pøesunout ikonu(y) na"
+msgstr "PÅ™esunout ikonu(y) na"
 
 #: ../src/dock.c:3413
 msgid "Remove Icons"
@@ -697,17 +697,17 @@ msgstr "Odstranit ikonu(y)"
 
 #: ../src/dock.c:3444 ../src/kwm.c:643
 msgid "Bring Here"
-msgstr "Dr¾et zde"
+msgstr "DrÅ¾et zde"
 
 #: ../src/dockedapp.c:149
 #, c-format
 msgid "could not find icon %s, used in a docked application"
-msgstr "nelze najít ikonu %s, která byla pou¾ita pro aplikaci v doku"
+msgstr "nelze najÃ­t ikonu %s, kterÃ¡ byla pouÅ¾ita pro aplikaci v doku"
 
 #: ../src/dockedapp.c:229
 #, c-format
 msgid "Could not open specified icon file: %s"
-msgstr "Nelze otevøít specifikovanı soubor s ikonou: %s"
+msgstr "Nelze otevÅ™Ã­t specifikovanÃ½ soubor s ikonou: %s"
 
 #: ../src/dockedapp.c:231
 msgid "Ignore"
@@ -715,11 +715,11 @@ msgstr "Ignorovat"
 
 #: ../src/dockedapp.c:333
 msgid "Start when Window Maker is started"
-msgstr "Odstartovat pøi startu Window Makeru"
+msgstr "Odstartovat pÅ™i startu Window Makeru"
 
 #: ../src/dockedapp.c:340
 msgid "Lock (prevent accidental removal)"
-msgstr "Zamknout (pøed náhodnım odstranìním)"
+msgstr "Zamknout (pÅ™ed nÃ¡hodnÃ½m odstranÄ›nÃ­m)"
 
 #: ../src/dockedapp.c:344
 msgid "Application path and arguments"
@@ -727,25 +727,25 @@ msgstr "Cesty a argumenty pro aplikaci"
 
 #: ../src/dockedapp.c:357
 msgid "Command for middle-click launch"
-msgstr "Pøíkaz pro prostøední tlaèítko"
+msgstr "PÅ™Ã­kaz pro prostÅ™ednÃ­ tlaÄÃ­tko"
 
 #: ../src/dockedapp.c:371
 #, c-format
 msgid "%s will be replaced with current selection"
-msgstr "%s bude nahrazeno aktuálním vıbìrem"
+msgstr "%s bude nahrazeno aktuÃ¡lnÃ­m vÃ½bÄ›rem"
 
 #: ../src/dockedapp.c:376
 msgid "Command for files dropped with DND"
-msgstr "Pøíkaz pro polo¾enı soubor (DND)"
+msgstr "PÅ™Ã­kaz pro poloÅ¾enÃ½ soubor (DND)"
 
 #: ../src/dockedapp.c:390
 #, c-format
 msgid "%d will be replaced with the file name"
-msgstr "%d bude nahrazeno jménem souboru"
+msgstr "%d bude nahrazeno jmÃ©nem souboru"
 
 #: ../src/dockedapp.c:394
 msgid "DND support was not compiled in"
-msgstr "DND podpora nebylo zakompilována"
+msgstr "DND podpora nebylo zakompilovÃ¡na"
 
 #: ../src/dockedapp.c:399
 msgid "Icon Image"
@@ -757,7 +757,7 @@ msgstr "Hledat..."
 
 #: ../src/dockedapp.c:466
 msgid "Docked Application Settings"
-msgstr "Nastavení pro aplikaci v doku"
+msgstr "NastavenÃ­ pro aplikaci v doku"
 
 #: ../src/framewin.c:649 ../src/framewin.c:744 ../src/menu.c:456
 #: ../src/texture.c:594
@@ -770,36 +770,36 @@ msgstr "nelze vykreslit texturu: %s"
 #: ../src/icon.c:350 ../src/menu.c:485
 #, c-format
 msgid "error rendering image:%s"
-msgstr "nelze vykreslit obrázek:%s"
+msgstr "nelze vykreslit obrÃ¡zek:%s"
 
 #: ../src/framewin.c:777
 #, c-format
 msgid "error rendering image: %s"
-msgstr "chyba pøi vykreslení obrázku: %s"
+msgstr "chyba pÅ™i vykreslenÃ­ obrÃ¡zku: %s"
 
 #: ../src/gnome.c:214 ../src/gnome.c:341 ../src/gnome.c:399
 msgid "out of memory while updating GNOME hints"
-msgstr "nedostatek pamìti pøi obnovování pokynù pro GNOME"
+msgstr "nedostatek pamÄ›ti pÅ™i obnovovÃ¡nÃ­ pokynÅ¯ pro GNOME"
 
 #: ../src/icon.c:229 ../src/wdefaults.c:438
 #, c-format
 msgid "error loading image file \"%s\""
-msgstr "ze souboru \"%s\" nelze naèíst obrázek"
+msgstr "ze souboru \"%s\" nelze naÄÃ­st obrÃ¡zek"
 
 #: ../src/icon.c:491 ../src/icon.c:500
 #, c-format
 msgid "could not create directory %s"
-msgstr "Nelze vytvoøit adresáø %s"
+msgstr "Nelze vytvoÅ™it adresÃ¡Å™ %s"
 
 #: ../src/icon.c:767
 #, c-format
 msgid "could not find default icon \"%s\""
-msgstr "nelze najít standardní ikonu \"%s\""
+msgstr "nelze najÃ­t standardnÃ­ ikonu \"%s\""
 
 #: ../src/icon.c:773
 #, c-format
 msgid "could not load default icon \"%s\":%s"
-msgstr "nelze naèíst standardní ikonu \"%s\":%s"
+msgstr "nelze naÄÃ­st standardnÃ­ ikonu \"%s\":%s"
 
 #: ../src/kwm.c:633 ../src/winmenu.c:436 ../src/winmenu.c:571
 msgid "Maximize"
@@ -819,27 +819,27 @@ msgstr "Deminiaturizace"
 
 #: ../src/kwm.c:638
 msgid "Not Omnipresent"
-msgstr "Není v¹udypøítomnı"
+msgstr "NenÃ­ vÅ¡udypÅ™Ã­tomnÃ½"
 
 #: ../src/kwm.c:639
 msgid "Move"
-msgstr "Pøesun"
+msgstr "PÅ™esun"
 
 #: ../src/kwm.c:640
 msgid "Resize"
-msgstr "Zvìt¹it/Zmen¹it"
+msgstr "ZvÄ›tÅ¡it/ZmenÅ¡it"
 
 #: ../src/kwm.c:641 ../src/rootmenu.c:224 ../src/winmenu.c:501
 msgid "Close"
-msgstr "Uzavøít"
+msgstr "UzavÅ™Ã­t"
 
 #: ../src/kwm.c:642 ../src/winmenu.c:485
 msgid "Move To"
-msgstr "Pøesunout na"
+msgstr "PÅ™esunout na"
 
 #: ../src/kwm.c:1096
 msgid "%a(Run Command,Type the command to run:)"
-msgstr "%a(Spus» Pøikaz,Napi¹ pøíkaz ke spu¹tìní:)"
+msgstr "%a(SpusÅ¥ PÅ™ikaz,NapiÅ¡ pÅ™Ã­kaz ke spuÅ¡tÄ›nÃ­:)"
 
 #: ../src/main.c:222
 msgid "failed to restart Window Maker."
@@ -852,29 +852,29 @@ msgstr "nelze spustit: %s"
 
 #: ../src/main.c:271
 msgid "Could not execute command: "
-msgstr "Nelze provést pøíkaz:"
+msgstr "Nelze provÃ©st pÅ™Ã­kaz:"
 
 #: ../src/main.c:428
 #, c-format
 msgid "%s aborted.\n"
-msgstr "%s pøeru¹en.\n"
+msgstr "%s pÅ™eruÅ¡en.\n"
 
 #: ../src/main.c:439
 #, c-format
 msgid "Usage: %s [options]\n"
-msgstr "Pou¾ití: %s [volby]\n"
+msgstr "PouÅ¾itÃ­: %s [volby]\n"
 
 #: ../src/main.c:440
 msgid "The Window Maker window manager for the X window system"
-msgstr "Správce oken Window Maker pro X window"
+msgstr "SprÃ¡vce oken Window Maker pro X window"
 
 #: ../src/main.c:442
 msgid " -display host:dpy\tdisplay to use"
-msgstr " -display host:dpy\tkterı display pou¾ít"
+msgstr " -display host:dpy\tkterÃ½ display pouÅ¾Ã­t"
 
 #: ../src/main.c:444
 msgid " --no-cpp \t\tdisable preprocessing of configuration files"
-msgstr " --nocpp \t\tneprovádìj pøedzpracování konfiguraèních souborù"
+msgstr " --nocpp \t\tneprovÃ¡dÄ›j pÅ™edzpracovÃ¡nÃ­ konfiguraÄnÃ­ch souborÅ¯"
 
 #: ../src/main.c:446
 msgid " --no-dock\t\tdo not open the application Dock"
@@ -882,41 +882,41 @@ msgstr " --nodock\t\tnezobrazuj Dok pro ikony"
 
 #: ../src/main.c:447
 msgid " --no-clip\t\tdo not open the workspace Clip"
-msgstr " --noclip\t\tneotvírat aplikaci Sponku"
+msgstr " --noclip\t\tneotvÃ­rat aplikaci Sponku"
 
 #: ../src/main.c:448
 msgid " --no-autolaunch\tdo not autolaunch applications"
-msgstr " --no-autolaunch\tneodstartovat automaticky spou¹tìné aplikace"
+msgstr " --no-autolaunch\tneodstartovat automaticky spouÅ¡tÄ›nÃ© aplikace"
 
 #: ../src/main.c:449
 msgid " --dont-restore\t\tdo not restore saved session"
-msgstr " --dont-restore\t\tneobnovovat ulo¾ené sezení"
+msgstr " --dont-restore\t\tneobnovovat uloÅ¾enÃ© sezenÃ­"
 
 #: ../src/main.c:451
 msgid " --locale locale\tlocale to use"
-msgstr " --locale locale\tmístnínastavení"
+msgstr " --locale locale\tmÃ­stnÃ­nastavenÃ­"
 
 #: ../src/main.c:453
 msgid ""
 " --create-stdcmap\tcreate the standard colormap hint in PseudoColor visuals"
-msgstr " --create-stdcmap\tvytvoøit standardní barevnou paletu v pseudobarvách"
+msgstr " --create-stdcmap\tvytvoÅ™it standardnÃ­ barevnou paletu v pseudobarvÃ¡ch"
 
 #: ../src/main.c:454
 msgid " --visual-id visualid\tvisual id of visual to use"
 msgstr ""
-" --visual-id visualid\tèíslo obrazového módu(visual id), kterı bude pou¾it"
+" --visual-id visualid\tÄÃ­slo obrazovÃ©ho mÃ³du(visual id), kterÃ½ bude pouÅ¾it"
 
 #: ../src/main.c:455
 msgid " --static\t\tdo not update or save configurations"
-msgstr " --static\t\tneobnovovat a neukládat konfigurace"
+msgstr " --static\t\tneobnovovat a neuklÃ¡dat konfigurace"
 
 #: ../src/main.c:456
 msgid " --no-polling\t\tdo not periodically check for configuration updates"
-msgstr " --no-polling\t\tnekontrolovat periodicky konfiguraèní obnovení"
+msgstr " --no-polling\t\tnekontrolovat periodicky konfiguraÄnÃ­ obnovenÃ­"
 
 #: ../src/main.c:458
 msgid " --synchronous\t\tturn on synchronous display mode"
-msgstr " --synchronous\t\tsynchronizace vykreslování"
+msgstr " --synchronous\t\tsynchronizace vykreslovÃ¡nÃ­"
 
 #: ../src/main.c:460
 msgid " --version\t\tprint version and exit"
@@ -924,7 +924,7 @@ msgstr " --version\t\tzobraz verzi a konec"
 
 #: ../src/main.c:461
 msgid " --help\t\t\tshow this message"
-msgstr " --help\t\t\tuka¾ tuto zprávu"
+msgstr " --help\t\t\tukaÅ¾ tuto zprÃ¡vu"
 
 #: ../src/main.c:474
 #, c-format
@@ -932,95 +932,95 @@ msgid ""
 "could not find user GNUstep directory (%s).\n"
 "Make sure you have installed Window Maker correctly and run wmaker.inst"
 msgstr ""
-"nelze najít u¾ivatelùv adresáø GNUstep (%s).\n"
-"Ujistìte se, ¾e máte Window Maker správnì nainstalován, pøípadnì spus»te "
+"nelze najÃ­t uÅ¾ivatelÅ¯v adresÃ¡Å™ GNUstep (%s).\n"
+"UjistÄ›te se, Å¾e mÃ¡te Window Maker sprÃ¡vnÄ› nainstalovÃ¡n, pÅ™Ã­padnÄ› spusÅ¥te "
 "wmaker.inst"
 
 #: ../src/main.c:479
 #, c-format
 msgid "could not find user GNUstep directory (%s)."
-msgstr "nelze nalézt u¾ivatelskı GNUstep adresáø (%s)."
+msgstr "nelze nalÃ©zt uÅ¾ivatelskÃ½ GNUstep adresÃ¡Å™ (%s)."
 
 #: ../src/main.c:482
 msgid ""
 "There was an error while creating GNUstep directory, please make sure you "
 "have installed Window Maker correctly and run wmaker.inst"
 msgstr ""
-"Do¹lo k chybì pøi vytváøení adresáøe GNUstep, prosím ujistìte se, ¾e"
-"máte Window Maker správnì nainstalován, pøípadnì spus»te wmaker.inst"
+"DoÅ¡lo k chybÄ› pÅ™i vytvÃ¡Å™enÃ­ adresÃ¡Å™e GNUstep, prosÃ­m ujistÄ›te se, Å¾e"
+"mÃ¡te Window Maker sprÃ¡vnÄ› nainstalovÃ¡n, pÅ™Ã­padnÄ› spusÅ¥te wmaker.inst"
 
 #: ../src/main.c:485
 #, c-format
 msgid "%s directory created with default configuration."
-msgstr "%s adresáø vytvoøen se standardní konfigurací."
+msgstr "%s adresÃ¡Å™ vytvoÅ™en se standardnÃ­ konfiguracÃ­."
 
 #: ../src/main.c:505 ../src/main.c:510
 #, c-format
 msgid "%s:could not execute initialization script"
-msgstr "%s:nelze provést inicializaèní skript"
+msgstr "%s:nelze provÃ©st inicializaÄnÃ­ skript"
 
 #: ../src/main.c:530 ../src/main.c:535
 #, c-format
 msgid "%s:could not execute exit script"
-msgstr "%s:nelze provést ukonèovací skript"
+msgstr "%s:nelze provÃ©st ukonÄovacÃ­ skript"
 
 #: ../src/main.c:651 ../src/main.c:659 ../src/main.c:667 ../src/main.c:687
 #, c-format
 msgid "too few arguments for %s"
-msgstr "nedostatek argumetù pro %s"
+msgstr "nedostatek argumetÅ¯ pro %s"
 
 #: ../src/main.c:671
 #, c-format
 msgid "bad value for visualid: \"%s\""
-msgstr "chybná hodnota pro typ visual: \"%s\""
+msgstr "chybnÃ¡ hodnota pro typ visual: \"%s\""
 
 #: ../src/main.c:695
 #, c-format
 msgid "%s: invalid argument '%s'\n"
-msgstr "%s: chybnı argument '%s'\n"
+msgstr "%s: chybnÃ½ argument '%s'\n"
 
 #: ../src/main.c:696
 #, c-format
 msgid "Try '%s --help' for more information\n"
-msgstr "Zkuste '%s --help', získáte více informací.\n"
+msgstr "Zkuste '%s --help', zÃ­skÃ¡te vÃ­ce informacÃ­.\n"
 
 #: ../src/main.c:727
 msgid "X server does not support locale"
-msgstr "X server nepodporuje nastavení místních zvyklostí"
+msgstr "X server nepodporuje nastavenÃ­ mÃ­stnÃ­ch zvyklostÃ­"
 
 #: ../src/main.c:731
 msgid "cannot set locale modifiers"
-msgstr "nelze nastavit modifikátory místních zvyklostí"
+msgstr "nelze nastavit modifikÃ¡tory mÃ­stnÃ­ch zvyklostÃ­"
 
 #: ../src/main.c:747
 #, c-format
 msgid "could not open display \"%s\""
-msgstr "nelze otevøít displej \"%s\""
+msgstr "nelze otevÅ™Ã­t displej \"%s\""
 
 #: ../src/menu.c:1255
 msgid "could not grab keyboard"
-msgstr "nelze snímat klávesnici"
+msgstr "nelze snÃ­mat klÃ¡vesnici"
 
 #: ../src/misc.c:71
 #, c-format
 msgid "could not define value for %s for cpp"
-msgstr "pro %s pro cpp nelze urèit hodnotu"
+msgstr "pro %s pro cpp nelze urÄit hodnotu"
 
 #: ../src/misc.c:101
 #, c-format
 msgid "could not get password entry for UID %i"
-msgstr "pro u¾ivatele s UID %i nelze získat heslo"
+msgstr "pro uÅ¾ivatele s UID %i nelze zÃ­skat heslo"
 
 #: ../src/misc.c:126
 #, c-format
 msgid "your machine is misconfigured. HOSTNAME is set to %s"
 msgstr ""
-"vá¹ poèítaè není správnì konfigurován. Promìnná HOSTNAME je nastavena na %s"
+"vÃ¡Å¡ poÄÃ­taÄ nenÃ­ sprÃ¡vnÄ› konfigurovÃ¡n. PromÄ›nnÃ¡ HOSTNAME je nastavena na %s"
 
 #: ../src/misc.c:132
 #, c-format
 msgid "your machine is misconfigured. HOST is set to %s"
-msgstr "vá¹ poèítaè není správnì nakonfigurován. Promìnná HOST nastavena na %s"
+msgstr "vÃ¡Å¡ poÄÃ­taÄ nenÃ­ sprÃ¡vnÄ› nakonfigurovÃ¡n. PromÄ›nnÃ¡ HOST nastavena na %s"
 
 #: ../src/misc.c:628
 msgid "Program Arguments"
@@ -1028,60 +1028,60 @@ msgstr "Argumenty programu"
 
 #: ../src/misc.c:629
 msgid "Enter command arguments:"
-msgstr "Zadejte argumenty pro pøíkaz:"
+msgstr "Zadejte argumenty pro pÅ™Ã­kaz:"
 
 #: ../src/misc.c:722
 msgid "unable to get dropped data from DND drop"
-msgstr "nelze získat data z DND operace drop"
+msgstr "nelze zÃ­skat data z DND operace drop"
 
 #: ../src/misc.c:730
 msgid "error getting dropped data from DND drop"
-msgstr "chyba pøi získávání dat z operace DND drop"
+msgstr "chyba pÅ™i zÃ­skÃ¡vÃ¡nÃ­ dat z operace DND drop"
 
 #: ../src/misc.c:736
 msgid "out of memory while getting data from DND drop"
-msgstr "nedostatek pamìti pøi ètení dat z DND operace drop"
+msgstr "nedostatek pamÄ›ti pÅ™i ÄtenÃ­ dat z DND operace drop"
 
 #: ../src/misc.c:781 ../src/misc.c:921
 #, c-format
 msgid "out of memory during expansion of \"%s\""
-msgstr "nedostatek pamìti pøi expanzi \"%s\""
+msgstr "nedostatek pamÄ›ti pÅ™i expanzi \"%s\""
 
 #: ../src/misc.c:835
 msgid "out of memory during expansion of \"%w\""
-msgstr "nedostatek pamìti pøi expanzi \"%w\""
+msgstr "nedostatek pamÄ›ti pÅ™i expanzi \"%w\""
 
 #: ../src/misc.c:853
 msgid "out of memory during expansion of \"%W\""
-msgstr "nedostatek pamìti pøi expanzi \"%s\""
+msgstr "nedostatek pamÄ›ti pÅ™i expanzi \"%s\""
 
 #: ../src/misc.c:869
 msgid "out of memory during expansion of \"%a\""
-msgstr "nedostatek pamìti pøi expanzi \"%a\""
+msgstr "nedostatek pamÄ›ti pÅ™i expanzi \"%a\""
 
 #: ../src/misc.c:900
 #, c-format
 msgid "out of memory during expansion of \"%d\""
-msgstr "nedostatek pamìti pøi expanzi \"%d\""
+msgstr "nedostatek pamÄ›ti pÅ™i expanzi \"%d\""
 
 #: ../src/misc.c:914
 msgid "selection not available"
-msgstr "vıbìr není dostupnı"
+msgstr "vÃ½bÄ›r nenÃ­ dostupnÃ½"
 
 #: ../src/misc.c:970 ../src/misc.c:976
 #, c-format
 msgid "bad window name value in %s state info"
-msgstr "chybné jméno okna ve stavové informaci %s"
+msgstr "chybnÃ© jmÃ©no okna ve stavovÃ© informaci %s"
 
 #: ../src/misc.c:1233
 msgid "could not send message to background image helper"
-msgstr "nelze poslat zprávu umís»ovaèi pozadí"
+msgstr "nelze poslat zprÃ¡vu umÃ­sÅ¥ovaÄi pozadÃ­"
 
 #: ../src/pixmap.c:235
 #, c-format
 msgid "could not load mask bitmap file \"%s\". Won't use mask"
 msgstr ""
-"nelze naèíst masku bitové mapy ze souboru \"%s\". Masky nebudou pou¾ity."
+"nelze naÄÃ­st masku bitovÃ© mapy ze souboru \"%s\". Masky nebudou pouÅ¾ity."
 
 #: ../src/resources.c:44
 #, c-format
@@ -1091,7 +1091,7 @@ msgstr "nelze zpracovat barvu \"%s\""
 #: ../src/resources.c:48
 #, c-format
 msgid "could not allocate color \"%s\""
-msgstr "nelze alokovat polo¾ku pro barvu \"%s\""
+msgstr "nelze alokovat poloÅ¾ku pro barvu \"%s\""
 
 #: ../src/rootmenu.c:184 ../src/rootmenu.c:186
 msgid "Exit"
@@ -1099,78 +1099,78 @@ msgstr "Konec"
 
 #: ../src/rootmenu.c:185
 msgid "Exit window manager?"
-msgstr "Ukonèit mana¾era oken?"
+msgstr "UkonÄit manaÅ¾era oken?"
 
 #: ../src/rootmenu.c:221
 msgid "Close X session"
-msgstr "Ukonèit sezení X"
+msgstr "UkonÄit sezenÃ­ X"
 
 #: ../src/rootmenu.c:222
 msgid ""
 "Close Window System session?\n"
 "Kill might close applications with unsaved data."
 msgstr ""
-"Ukonèit sezení?\n"
-"Ukonèením aplikací mù¾e dojít ke ztrátì dat."
+"UkonÄit sezenÃ­?\n"
+"UkonÄenÃ­m aplikacÃ­ mÅ¯Å¾e dojÃ­t ke ztrÃ¡tÄ› dat."
 
 #: ../src/rootmenu.c:235
 msgid "Kill X session"
-msgstr "Ukonèit sezení X"
+msgstr "UkonÄit sezenÃ­ X"
 
 #: ../src/rootmenu.c:236
 msgid ""
 "Kill Window System session?\n"
 "(all applications will be closed)"
 msgstr ""
-"Ukonèit sezení?\n"
-"(v¹echny aplikace budou uzavøeny)"
+"UkonÄit sezenÃ­?\n"
+"(vÅ¡echny aplikace budou uzavÅ™eny)"
 
 #: ../src/rootmenu.c:505
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\" for entry %s"
-msgstr "%s:chybná specifikace klávesové zkratky \"%s\" pro polo¾ku %s"
+msgstr "%s:chybnÃ¡ specifikace klÃ¡vesovÃ© zkratky \"%s\" pro poloÅ¾ku %s"
 
 #: ../src/rootmenu.c:513
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\" for entry %s"
-msgstr "%s:chybná klávesa v klávesové zkratce \"%s\" pro polo¾ku %s"
+msgstr "%s:chybnÃ¡ klÃ¡vesa v klÃ¡vesovÃ© zkratce \"%s\" pro poloÅ¾ku %s"
 
 #: ../src/rootmenu.c:566
 #, c-format
 msgid "%s: unmatched '\"' in menu file"
-msgstr "%s: neodpovídající '\"' v souboru s menu"
+msgstr "%s: neodpovÃ­dajÃ­cÃ­ '\"' v souboru s menu"
 
 #: ../src/rootmenu.c:616
 #, c-format
 msgid "%s: missing command"
-msgstr "%s: oèekávám pøíkaz"
+msgstr "%s: oÄekÃ¡vÃ¡m pÅ™Ã­kaz"
 
 #: ../src/rootmenu.c:648
 #, c-format
 msgid "invalid OPEN_MENU specification: %s"
-msgstr "chybná specifikace OPEN_MENU: %s"
+msgstr "chybnÃ¡ specifikace OPEN_MENU: %s"
 
 #: ../src/rootmenu.c:696
 #, c-format
 msgid "%s:could not stat menu"
-msgstr "%s:nelze provést operaci 'stat' na menu"
+msgstr "%s:nelze provÃ©st operaci 'stat' na menu"
 
 #: ../src/rootmenu.c:704
 #, c-format
 msgid "%s:could not stat menu:%s"
-msgstr "%s:nelze provést operaci 'stat' na menu:%s"
+msgstr "%s:nelze provÃ©st operaci 'stat' na menu:%s"
 
 #: ../src/rootmenu.c:722
 #, c-format
 msgid "too many parameters in OPEN_MENU: %s"
-msgstr "pøíli¹ mnoho parametrù pro pøíkaz OPEN_MENU: %s"
+msgstr "pÅ™Ã­liÅ¡ mnoho parametrÅ¯ pro pÅ™Ã­kaz OPEN_MENU: %s"
 
 #: ../src/rootmenu.c:766
 msgid ""
 "There are more than one WORKSPACE_MENU commands in the applications menu. "
 "Only one is allowed."
 msgstr ""
-"V aplikaèním menu je více ne¾ jeden pøíkaz WORKSPACE_MENU. Je povolen jen "
+"V aplikaÄnÃ­m menu je vÃ­ce neÅ¾ jeden pÅ™Ã­kaz WORKSPACE_MENU. Je povolen jen "
 "jeden."
 
 #: ../src/rootmenu.c:800
@@ -1178,7 +1178,7 @@ msgid ""
 "There are more than one WINDOWS_MENU commands in the applications menu. Only "
 "one is allowed."
 msgstr ""
-"V aplikaèním menu je více ne¾ jeden pøíkaz WORKSPACE_MENU. Je povolen jen "
+"V aplikaÄnÃ­m menu je vÃ­ce neÅ¾ jeden pÅ™Ã­kaz WORKSPACE_MENU. Je povolen jen "
 "jeden."
 
 #: ../src/rootmenu.c:805
@@ -1188,74 +1188,74 @@ msgstr "Seznam oken"
 #: ../src/rootmenu.c:834 ../src/rootmenu.c:852 ../src/rootmenu.c:862
 #, c-format
 msgid "%s:missing parameter for menu command \"%s\""
-msgstr "%s:pro pøíkaz menu \"%s\" oèekávám parametr"
+msgstr "%s:pro pÅ™Ã­kaz menu \"%s\" oÄekÃ¡vÃ¡m parametr"
 
 #: ../src/rootmenu.c:930
 #, c-format
 msgid "%s:unknown command \"%s\" in menu config."
-msgstr "%s:neznámı pøíkaz \"%s\" v konfiguraci menu."
+msgstr "%s:neznÃ¡mÃ½ pÅ™Ã­kaz \"%s\" v konfiguraci menu."
 
 #: ../src/rootmenu.c:938
 #, c-format
 msgid "%s:can't add shortcut for entry \"%s\""
-msgstr "%s: pro polo¾ku \"%s\" nelze pøidat klávesou zkratku"
+msgstr "%s: pro poloÅ¾ku \"%s\" nelze pÅ™idat klÃ¡vesou zkratku"
 
 #: ../src/rootmenu.c:1075
 #, c-format
 msgid "%s:maximal line size exceeded in menu config: %s"
-msgstr "%s:v konfiguraci menu %s byla pøekroèena maximální délka øádky"
+msgstr "%s:v konfiguraci menu %s byla pÅ™ekroÄena maximÃ¡lnÃ­ dÃ©lka Å™Ã¡dky"
 
 #: ../src/rootmenu.c:1097 ../src/rootmenu.c:1190 ../src/rootmenu.c:1292
 #, c-format
 msgid "%s:missing command in menu config: %s"
-msgstr "%s:v konfiguraci menu %s oèekávám pøíkaz"
+msgstr "%s:v konfiguraci menu %s oÄekÃ¡vÃ¡m pÅ™Ã­kaz"
 
 #: ../src/rootmenu.c:1127
 #, c-format
 msgid "%s:syntax error in menu file:END declaration missing"
-msgstr "%s:syntaktická chyba v souboru s menu: oèekávána deklarace END"
+msgstr "%s:syntaktickÃ¡ chyba v souboru s menu: oÄekÃ¡vÃ¡na deklarace END"
 
 #: ../src/rootmenu.c:1156 ../src/rootmenu.c:1256
 msgid "could not make arguments for menu file preprocessor"
-msgstr "nelze vytvoøit argumety pro preprocesor souboru s menu"
+msgstr "nelze vytvoÅ™it argumety pro preprocesor souboru s menu"
 
 #: ../src/rootmenu.c:1163 ../src/rootmenu.c:1264
 #, c-format
 msgid "%s:could not open/preprocess menu file"
-msgstr "%s: nelze otevøít nebo pøedzpracovat soubor s menu"
+msgstr "%s: nelze otevÅ™Ã­t nebo pÅ™edzpracovat soubor s menu"
 
 #: ../src/rootmenu.c:1175 ../src/rootmenu.c:1277
 #, c-format
 msgid "%s:could not open menu file"
-msgstr "%s:nelze otevøít soubor s menu"
+msgstr "%s:nelze otevÅ™Ã­t soubor s menu"
 
 #: ../src/rootmenu.c:1202
 #, c-format
 msgid "%s:invalid menu file. MENU command is missing"
-msgstr "%s:syntaktická chyba v souboru s menu: oèekáván pøíkaz MENU"
+msgstr "%s:syntaktickÃ¡ chyba v souboru s menu: oÄekÃ¡vÃ¡n pÅ™Ã­kaz MENU"
 
 #: ../src/rootmenu.c:1211
 msgid "error reading preprocessed menu data"
-msgstr "chyba pøi ètení pøedzpracovaného souboru s menu"
+msgstr "chyba pÅ™i ÄtenÃ­ pÅ™edzpracovanÃ©ho souboru s menu"
 
 #: ../src/rootmenu.c:1304
 #, c-format
 msgid "%s:no title given for the root menu"
-msgstr "%s: pro hlavní menu nebyl urèen titulek"
+msgstr "%s: pro hlavnÃ­ menu nebyl urÄen titulek"
 
 #: ../src/rootmenu.c:1395 ../src/rootmenu.c:1468 ../src/rootmenu.c:1509
 #, c-format
 msgid "out of memory while constructing directory menu %s"
-msgstr "nedostatek pamìti pøi konstrukci menu z obsahu adresáøe %s"
+msgstr "nedostatek pamÄ›ti pÅ™i konstrukci menu z obsahu adresÃ¡Å™e %s"
 
 #: ../src/rootmenu.c:1405
 #, c-format
 msgid "%s:could not stat file \"%s\" in menu directory"
-msgstr "%s:nelze provést 'stat' na soubory \"%s\" v adresáøi s menu"
+msgstr "%s:nelze provÃ©st 'stat' na soubory \"%s\" v adresÃ¡Å™i s menu"
 
 #: ../src/rootmenu.c:1563
 msgid "Commands"
-msgstr "Pøíkazy"
+msgstr "PÅ™Ã­kazy"
 
 #: ../src/rootmenu.c:1566
 msgid "Restart"
@@ -1268,46 +1268,46 @@ msgstr "Konec..."
 #: ../src/rootmenu.c:1612
 #, c-format
 msgid "could not find menu file \"%s\" referenced in WMRootMenu"
-msgstr "nelze najít soubor s menu \"%s\", odkazovanı z WMRootMenu"
+msgstr "nelze najÃ­t soubor s menu \"%s\", odkazovanÃ½ z WMRootMenu"
 
 #: ../src/rootmenu.c:1619
 #, c-format
 msgid "could not access menu \"%s\" referenced in WMRootMenu"
-msgstr "není pøístup k souboru s menu \"%s\", odkazovaném z WMRootMenu"
+msgstr "nenÃ­ pÅ™Ã­stup k souboru s menu \"%s\", odkazovanÃ©m z WMRootMenu"
 
 #: ../src/rootmenu.c:1630
 #, c-format
 msgid ""
 "using default menu file \"%s\" as the menu referenced in WMRootMenu could "
 "not be found "
-msgstr "pou¾itı soubor s menu \"%s\", odkazovanı z WMRootMenu není nalezen "
+msgstr "pouÅ¾itÃ½ soubor s menu \"%s\", odkazovanÃ½ z WMRootMenu nenÃ­ nalezen "
 
 #: ../src/rootmenu.c:1653 ../src/rootmenu.c:1729
 #, c-format
 msgid "%s:format error in root menu configuration \"%s\""
-msgstr "%s:chybnı formát v konfiguraci hlavního menu \"%s\""
+msgstr "%s:chybnÃ½ formÃ¡t v konfiguraci hlavnÃ­ho menu \"%s\""
 
 #: ../src/rootmenu.c:1817
 msgid ""
 "The applications menu could not be loaded. Look at the console output for a "
 "detailed description of the errors."
 msgstr ""
-"Menu aplikací nemù¾e bıt naèteno. Podívejte se na konzoli, bude tam detailní "
+"Menu aplikacÃ­ nemÅ¯Å¾e bÃ½t naÄteno. PodÃ­vejte se na konzoli, bude tam detailnÃ­ "
 "popis chyby."
 
 #: ../src/screen.c:740
 #, c-format
 msgid "could not initialize graphics library context: %s"
-msgstr "nelze inicializovat kontext grafické knihovny: %s"
+msgstr "nelze inicializovat kontext grafickÃ© knihovny: %s"
 
 #: ../src/screen.c:771
 msgid "could not do initialization of WINGs widget set"
-msgstr "nelze provést inicalizovat pøípravky WINGs"
+msgstr "nelze provÃ©st inicalizovat pÅ™Ã­pravky WINGs"
 
 #: ../src/screen.c:1139
 #, c-format
 msgid "could not save session state in %s"
-msgstr "stav sezení nelze do %s ulo¾it"
+msgstr "stav sezenÃ­ nelze do %s uloÅ¾it"
 
 #: ../src/session.c:183 ../src/wdefaults.c:583 ../src/winspector.c:454
 #, c-format
@@ -1316,103 +1316,103 @@ msgstr "\"%s\" nelze zkonvertovat na boolean"
 
 #: ../src/session.c:1021
 msgid "out of memory while saving session state"
-msgstr "nedostatek pamìti pøi ukládání stavu sezení"
+msgstr "nedostatek pamÄ›ti pÅ™i uklÃ¡dÃ¡nÃ­ stavu sezenÃ­"
 
 #: ../src/session.c:1104
 msgid "end of memory while saving session state"
-msgstr "nedostatek pamìti pøi ukládání stavu sezení"
+msgstr "nedostatek pamÄ›ti pÅ™i uklÃ¡dÃ¡nÃ­ stavu sezenÃ­"
 
 #: ../src/session.c:1242
 msgid "connection to the session manager was lost"
-msgstr "pøipojení ke správci sezení bylo ztraceno"
+msgstr "pÅ™ipojenÃ­ ke sprÃ¡vci sezenÃ­ bylo ztraceno"
 
 #: ../src/stacking.c:79
 msgid "could not get window list!!"
-msgstr "nelze získat seznam oken!!!"
+msgstr "nelze zÃ­skat seznam oken!!!"
 
 #: ../src/startup.c:202
 #, c-format
 msgid "internal X error: %s\n"
-msgstr "interní chyba systému X: %s\n"
+msgstr "internÃ­ chyba systÃ©mu X: %s\n"
 
 #: ../src/startup.c:260
 #, c-format
 msgid "got signal %i (%s) - restarting\n"
-msgstr "pøijat signál %i (%s) - restartuji\n"
+msgstr "pÅ™ijat signÃ¡l %i (%s) - restartuji\n"
 
 #: ../src/startup.c:262
 #, c-format
 msgid "got signal %i - restarting\n"
-msgstr "pøijat signál %i - restartuji\n"
+msgstr "pÅ™ijat signÃ¡l %i - restartuji\n"
 
 #: ../src/startup.c:272
 #, c-format
 msgid "got signal %i (%s) - rereading defaults\n"
-msgstr "pøijat signál %i (%s) - obnovuji nastavení\n"
+msgstr "pÅ™ijat signÃ¡l %i (%s) - obnovuji nastavenÃ­\n"
 
 #: ../src/startup.c:274
 #, c-format
 msgid "got signal %i - rereading defaults\n"
-msgstr "pøijat signál %i - obnovuji nastavení\n"
+msgstr "pÅ™ijat signÃ¡l %i - obnovuji nastavenÃ­\n"
 
 #: ../src/startup.c:284
 #, c-format
 msgid "got signal %i (%s) - exiting...\n"
-msgstr "pøijat signál %i (%s) - konec...\n"
+msgstr "pÅ™ijat signÃ¡l %i (%s) - konec...\n"
 
 #: ../src/startup.c:286
 #, c-format
 msgid "got signal %i - exiting...\n"
-msgstr "pøijat signál %i - konec...\n"
+msgstr "pÅ™ijat signÃ¡l %i - konec...\n"
 
 #: ../src/startup.c:329
 #, c-format
 msgid "got signal %i (%s)\n"
-msgstr "pøijat signál %i (%s)\n"
+msgstr "pÅ™ijat signÃ¡l %i (%s)\n"
 
 #: ../src/startup.c:331
 #, c-format
 msgid "got signal %i\n"
-msgstr "získán signál %i\n"
+msgstr "zÃ­skÃ¡n signÃ¡l %i\n"
 
 #: ../src/startup.c:342
 msgid ""
 "crashed while trying to do some post-crash cleanup. Aborting immediatelly."
 msgstr ""
-"pøi úklidu po neoèekávané chybe do¹lo opìt k této chybì. Okam¾itı konec."
+"pÅ™i Ãºklidu po neoÄekÃ¡vanÃ© chybe doÅ¡lo opÄ›t k tÃ©to chybÄ›. OkamÅ¾itÃ½ konec."
 
 #: ../src/startup.c:407
 msgid "trying to restart Window Maker..."
-msgstr "pokou¹ím se restartovat Window Maker..."
+msgstr "pokouÅ¡Ã­m se restartovat Window Maker..."
 
 #: ../src/startup.c:412
 msgid "trying to start alternate window manager..."
-msgstr "zkou¹ím odstartovat alternativní okenní mana¾er"
+msgstr "zkouÅ¡Ã­m odstartovat alternativnÃ­ okennÃ­ manaÅ¾er"
 
 #: ../src/startup.c:417
 msgid "failed to start alternate window manager. Aborting."
-msgstr "alternativního správce oken nelze odstartovat. Konec."
+msgstr "alternativnÃ­ho sprÃ¡vce oken nelze odstartovat. Konec."
 
 #: ../src/startup.c:419
 msgid ""
 "a fatal error has occured, probably due to a bug. Please fill the included "
 "BUGFORM and report it."
 msgstr ""
-"fatální chyba, pravdìpodobnì chyba ve Window Makeru. Prosím vyplòte soubor "
-"BUGFORM(anglicky) a po¹lete ho."
+"fatÃ¡lnÃ­ chyba, pravdÄ›podobnÄ› chyba ve Window Makeru. ProsÃ­m vyplÅˆte soubor "
+"BUGFORM(anglicky) a poÅ¡lete ho."
 
 #: ../src/startup.c:899
 #, c-format
 msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
-msgstr "je nakonfigurována velikost ikony %i, to je ov¹em málo. Pou¾iji 16\n"
+msgstr "je nakonfigurovÃ¡na velikost ikony %i, to je ovÅ¡em mÃ¡lo. PouÅ¾iji 16\n"
 
 #: ../src/startup.c:927
 msgid "XKB is not supported. KbdModeLock is automatically disabled."
-msgstr "XKB není podporován. KbdModeLock byl automaticky vypnut."
+msgstr "XKB nenÃ­ podporovÃ¡n. KbdModeLock byl automaticky vypnut."
 
 #: ../src/startup.c:946
 msgid "it seems that there is already a window manager running"
-msgstr "mám ten pocit, ¾e zde ji¾ jeden mana¾er oken bì¾í"
+msgstr "mÃ¡m ten pocit, Å¾e zde jiÅ¾ jeden manaÅ¾er oken bÄ›Å¾Ã­"
 
 #: ../src/startup.c:952
 #, c-format
@@ -1421,7 +1421,7 @@ msgstr "nelze spravovat obrazovku %i"
 
 #: ../src/startup.c:1020
 msgid "could not manage any screen"
-msgstr "nelze spravovat ¾ádnou obrazovku"
+msgstr "nelze spravovat Å¾Ã¡dnou obrazovku"
 
 #: ../src/switchmenu.c:137
 msgid "Windows"
@@ -1430,43 +1430,43 @@ msgstr "Okna"
 #: ../src/texture.c:329 ../src/texture.c:371
 #, c-format
 msgid "image file \"%s\" used as texture could not be found."
-msgstr "soubor s obrázkem \"%s\" pou¾itım v textuøe nebyl nalezen."
+msgstr "soubor s obrÃ¡zkem \"%s\" pouÅ¾itÃ½m v textuÅ™e nebyl nalezen."
 
 #: ../src/texture.c:335 ../src/texture.c:377
 #, c-format
 msgid "could not load texture pixmap \"%s\":%s"
-msgstr "nelze naèíst obrázek s texturou: \"%s\":%s"
+msgstr "nelze naÄÃ­st obrÃ¡zek s texturou: \"%s\":%s"
 
 #: ../src/texture.c:437
 #, c-format
 msgid "library \"%s\" cound not be opened."
-msgstr "nelze otevøít knihovnu \"%s\"."
+msgstr "nelze otevÅ™Ã­t knihovnu \"%s\"."
 
 #: ../src/texture.c:446
 #, c-format
 msgid "function \"%s\" not found in library \"%s\""
-msgstr "funkce \"%s\" nebyla v knihovnì \"%s\" nalezena"
+msgstr "funkce \"%s\" nebyla v knihovnÄ› \"%s\" nalezena"
 
 #: ../src/texture.c:453
 msgid "function textures not supported on this system, sorry."
-msgstr "textury vytváøené funkcemi nejsou na tomto systému podporovány. Sorry."
+msgstr "textury vytvÃ¡Å™enÃ© funkcemi nejsou na tomto systÃ©mu podporovÃ¡ny. Sorry."
 
 #: ../src/texture.c:598
 msgid "could not allocate image buffer"
-msgstr "nelze alokovat pamì» pro obrázek"
+msgstr "nelze alokovat pamÄ›Å¥ pro obrÃ¡zek"
 
 #: ../src/wdefaults.c:432
 #, c-format
 msgid "could not find icon file \"%s\""
-msgstr "nelze získat soubor s ikonou \"%s\""
+msgstr "nelze zÃ­skat soubor s ikonou \"%s\""
 
 #: ../src/window.c:2796 ../src/window.c:2931
 msgid ""
 "the NumLock, ScrollLock or similar key seems to be turned on.\n"
 "Turn it off or some mouse actions and keyboard shortcuts will not work."
 msgstr ""
-"Klávesa NumLock, ScrollLock nebo podobná je zøejmì zapnuta..\n"
-"Vypnìte ji, nebo nìkteré akce my¹i a klávesové zkratky nebudou fungovat."
+"KlÃ¡vesa NumLock, ScrollLock nebo podobnÃ¡ je zÅ™ejmÄ› zapnuta..\n"
+"VypnÄ›te ji, nebo nÄ›kterÃ© akce myÅ¡i a klÃ¡vesovÃ© zkratky nebudou fungovat."
 
 #: ../src/winmenu.c:125
 msgid ""
@@ -1474,9 +1474,9 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-"Aplikace bude takto ukonèena.\n"
-"Jakékoli zmìny budou ztraceny.\n"
-"Potvrïte prosím."
+"Aplikace bude takto ukonÄena.\n"
+"JakÃ©koli zmÄ›ny budou ztraceny.\n"
+"PotvrÄte prosÃ­m."
 
 #: ../src/winmenu.c:267 ../src/winmenu.c:276
 msgid "Set Shortcut"
@@ -1484,15 +1484,15 @@ msgstr "Nastavit zkratku"
 
 #: ../src/winmenu.c:354 ../src/winmenu.c:399
 msgid "could not create submenu for window menu"
-msgstr "nelze vytvoøit submenu pro menu oken"
+msgstr "nelze vytvoÅ™it submenu pro menu oken"
 
 #: ../src/winmenu.c:403
 msgid "Keep on top"
-msgstr "V¾dy navrchu"
+msgstr "VÅ¾dy navrchu"
 
 #: ../src/winmenu.c:408
 msgid "Keep at bottom"
-msgstr "Dr¾et dole"
+msgstr "DrÅ¾et dole"
 
 #: ../src/winmenu.c:453 ../src/winmenu.c:588
 msgid "Shade"
@@ -1500,7 +1500,7 @@ msgstr "Titulek"
 
 #: ../src/winmenu.c:469
 msgid "Resize/Move"
-msgstr "Zvìt¹it/Pøesunout"
+msgstr "ZvÄ›tÅ¡it/PÅ™esunout"
 
 #: ../src/winmenu.c:477
 msgid "Select"
@@ -1516,26 +1516,26 @@ msgstr "Volby"
 
 #: ../src/winmenu.c:583
 msgid "Unshade"
-msgstr "Celé okno"
+msgstr "CelÃ© okno"
 
 #: ../src/winspector.c:387
 #, c-format
 msgid "Could not find icon \"%s\" specified for this window"
-msgstr "Pro toto okno nelze najít specifikovanou ikonu (%s)"
+msgstr "Pro toto okno nelze najÃ­t specifikovanou ikonu (%s)"
 
 #: ../src/winspector.c:404
 #, c-format
 msgid "Could not open specified icon \"%s\":%s"
-msgstr "Nelze otevøít specifikovanou ikonu \"%s\":%s"
+msgstr "Nelze otevÅ™Ã­t specifikovanou ikonu \"%s\":%s"
 
 #: ../src/winspector.c:1138
 #, c-format
 msgid "Inspecting  %s.%s"
-msgstr "Nastavení pro %s.%s"
+msgstr "NastavenÃ­ pro %s.%s"
 
 #: ../src/winspector.c:1164
 msgid "Click in the window you wish to inspect."
-msgstr "Kliknìte na okno, které chcete provìøit."
+msgstr "KliknÄ›te na okno, kterÃ© chcete provÄ›Å™it."
 
 #: ../src/winspector.c:1203
 msgid ""
@@ -1544,14 +1544,14 @@ msgid ""
 "property set to the above selected\n"
 "name, when saved."
 msgstr ""
-"Konfigurace bude aplikována na v¹echny\n"
-"klienty, kteøí mají nastavenu vlastnost\n"
-"WM_CLASS na vı¹e vybranou\n"
-"(pøi ulo¾ení této konfigurace)"
+"Konfigurace bude aplikovÃ¡na na vÅ¡echny\n"
+"klienty, kteÅ™Ã­ majÃ­ nastavenu vlastnost\n"
+"WM_CLASS na vÃ½Å¡e vybranou\n"
+"(pÅ™i uloÅ¾enÃ­ tÃ©to konfigurace)"
 
 #: ../src/winspector.c:1232
 msgid "Save"
-msgstr "Ulo¾it"
+msgstr "UloÅ¾it"
 
 #: ../src/winspector.c:1240
 msgid "Apply"
@@ -1571,11 +1571,11 @@ msgstr "Atributy okna"
 
 #: ../src/winspector.c:1257
 msgid "Advanced Options"
-msgstr "Dal¹í volby"
+msgstr "DalÅ¡Ã­ volby"
 
 #: ../src/winspector.c:1258
 msgid "Icon and Initial Workspace"
-msgstr "Ikona a poèáteèní plocha"
+msgstr "Ikona a poÄÃ¡teÄnÃ­ plocha"
 
 #: ../src/winspector.c:1259
 msgid "Application Specific"
@@ -1583,7 +1583,7 @@ msgstr "Atributy aplikace"
 
 #: ../src/winspector.c:1273
 msgid "Defaults for all windows"
-msgstr "Standard pro v¹echna okna"
+msgstr "Standard pro vÅ¡echna okna"
 
 #: ../src/winspector.c:1327
 msgid "Select window"
@@ -1595,7 +1595,7 @@ msgstr "Atributy"
 
 #: ../src/winspector.c:1352
 msgid "Disable titlebar"
-msgstr "Zakázat titulek"
+msgstr "ZakÃ¡zat titulek"
 
 #: ../src/winspector.c:1354
 msgid ""
@@ -1605,65 +1605,65 @@ msgid ""
 "equivalent shortcut, if you changed the default\n"
 "settings)."
 msgstr ""
-"Odstranit titulkovı pruh tohoto okna.\n"
-"Abyste pøesto mohli pou¾ívat pøíkazové menu okna\n"
-"bez titulkového pruhu, stisknìte Control+Esc (nebo\n"
-"ekvivalentní zkratku, jestli¾e jste zmìnili vıchozí\n"
-"nastavení)."
+"Odstranit titulkovÃ½ pruh tohoto okna.\n"
+"Abyste pÅ™esto mohli pouÅ¾Ã­vat pÅ™Ã­kazovÃ© menu okna\n"
+"bez titulkovÃ©ho pruhu, stisknÄ›te Control+Esc (nebo\n"
+"ekvivalentnÃ­ zkratku, jestliÅ¾e jste zmÄ›nili vÃ½chozÃ­\n"
+"nastavenÃ­)."
 
 #: ../src/winspector.c:1361
 msgid "Disable resizebar"
-msgstr "Zakázat zvìt¹ovací rù¾ek"
+msgstr "ZakÃ¡zat zvÄ›tÅ¡ovacÃ­ rÅ¯Å¾ek"
 
 #: ../src/winspector.c:1363
 msgid "Remove the resizebar of this window."
-msgstr "Odstranit zvìt¹ovací rù¾ek tohoto okna."
+msgstr "Odstranit zvÄ›tÅ¡ovacÃ­ rÅ¯Å¾ek tohoto okna."
 
 #: ../src/winspector.c:1366
 msgid "Disable close button"
-msgstr "Zakázat prvek pro uzavøení"
+msgstr "ZakÃ¡zat prvek pro uzavÅ™enÃ­"
 
 #: ../src/winspector.c:1368
 msgid "Remove the `close window' button of this window."
-msgstr "Odstranit zavírací tlaèítko tohoto okna."
+msgstr "Odstranit zavÃ­racÃ­ tlaÄÃ­tko tohoto okna."
 
 #: ../src/winspector.c:1371
 msgid "Disable miniaturize button"
-msgstr "Zakázat prvek pro minimalizaci"
+msgstr "ZakÃ¡zat prvek pro minimalizaci"
 
 #: ../src/winspector.c:1373
 msgid "Remove the `miniaturize window' button of the window."
-msgstr "Odstranit minimalizaèní tlaèítko tohoto okna."
+msgstr "Odstranit minimalizaÄnÃ­ tlaÄÃ­tko tohoto okna."
 
 #: ../src/winspector.c:1376
 msgid "Disable border"
-msgstr "Zakázat okraje"
+msgstr "ZakÃ¡zat okraje"
 
 #: ../src/winspector.c:1378
 msgid "Remove the 1 pixel black border around the window."
-msgstr "Odstranit jednopixelovı èernı okraj okolo okna."
+msgstr "Odstranit jednopixelovÃ½ ÄernÃ½ okraj okolo okna."
 
 #: ../src/winspector.c:1381
 msgid "Keep on top (floating)"
-msgstr "V¾dy navrch / plovoucí"
+msgstr "VÅ¾dy navrch / plovoucÃ­"
 
 #: ../src/winspector.c:1383
 msgid ""
 "Keep the window over other windows, not allowing\n"
 "them to cover it."
-msgstr "Dr¾et okno nad ostatními a zabránit jim v pøekryvu."
+msgstr "DrÅ¾et okno nad ostatnÃ­mi a zabrÃ¡nit jim v pÅ™ekryvu."
 
 #: ../src/winspector.c:1387
 msgid "Keep at bottom (sunken)"
-msgstr "Dr¾et vespod"
+msgstr "DrÅ¾et vespod"
 
 #: ../src/winspector.c:1389
 msgid "Keep the window under all other windows."
-msgstr "Dr¾et okno pod v¹emi ostatními."
+msgstr "DrÅ¾et okno pod vÅ¡emi ostatnÃ­mi."
 
 #: ../src/winspector.c:1394
 msgid "Make window present in all workspaces."
-msgstr "Zobrazit okno na v¹ech plochách."
+msgstr "Zobrazit okno na vÅ¡ech plochÃ¡ch."
 
 #: ../src/winspector.c:1397
 msgid "Start miniaturized"
@@ -1673,17 +1673,17 @@ msgstr "Odstartovat jako ikonu"
 msgid ""
 "Make the window be automatically miniaturized when it's\n"
 "first shown."
-msgstr "Automaticky minimalizovat okno, kdy¾ se uká¾e poprvé."
+msgstr "Automaticky minimalizovat okno, kdyÅ¾ se ukÃ¡Å¾e poprvÃ©."
 
 #: ../src/winspector.c:1403
 msgid "Start maximized"
-msgstr "Odstartovat jako velké okno"
+msgstr "Odstartovat jako velkÃ© okno"
 
 #: ../src/winspector.c:1405
 msgid ""
 "Make the window be automatically maximized when it's\n"
 "first shown."
-msgstr "Automaticky maximalizovat okno, kdy¾ se uká¾e poprvé."
+msgstr "Automaticky maximalizovat okno, kdyÅ¾ se ukÃ¡Å¾e poprvÃ©."
 
 #: ../src/winspector.c:1409
 msgid "Full screen maximization"
@@ -1695,17 +1695,17 @@ msgid ""
 "maximized. The titlebar and resizebar will be moved\n"
 "to outside the screen."
 msgstr ""
-"Nechat okno pou¾ívat celou obrazovku v maximalizovaném\n"
-"stavu. Titulkovı pruh a zvìt¹ovací rù¾ek budou pøesunuty\n"
+"Nechat okno pouÅ¾Ã­vat celou obrazovku v maximalizovanÃ©m\n"
+"stavu. TitulkovÃ½ pruh a zvÄ›tÅ¡ovacÃ­ rÅ¯Å¾ek budou pÅ™esunuty\n"
 "mimo obrazovku."
 
 #: ../src/winspector.c:1428
 msgid "Advanced"
-msgstr "Dal¹í volby"
+msgstr "DalÅ¡Ã­ volby"
 
 #: ../src/winspector.c:1445
 msgid "Do not bind keyboard shortcuts"
-msgstr "Klávesnice jen pro aplikaci"
+msgstr "KlÃ¡vesnice jen pro aplikaci"
 
 #: ../src/winspector.c:1447
 msgid ""
@@ -1714,23 +1714,23 @@ msgid ""
 "window to receive all key combinations regardless\n"
 "of your shortcut configuration."
 msgstr ""
-"Nepou¾ívat klávesové zkratky Window Makeru,\n"
-"je-li toto okno zamìøeno. Umo¾ní vám to, aby toto \n"
-"okno pøijalo v¹echny klávesové kombinace bez ohledu \n"
-"na va¹e nastavení klávesovıch zkratek."
+"NepouÅ¾Ã­vat klÃ¡vesovÃ© zkratky Window Makeru,\n"
+"je-li toto okno zamÄ›Å™eno. UmoÅ¾nÃ­ vÃ¡m to, aby toto \n"
+"okno pÅ™ijalo vÅ¡echny klÃ¡vesovÃ© kombinace bez ohledu \n"
+"na vaÅ¡e nastavenÃ­ klÃ¡vesovÃ½ch zkratek."
 
 #: ../src/winspector.c:1453
 msgid "Do not bind mouse clicks"
-msgstr "My¹ jen pro aplikaci"
+msgstr "MyÅ¡ jen pro aplikaci"
 
 #: ../src/winspector.c:1455
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
 "in the window (when alt is the modifier you haveconfigured)."
 msgstr ""
-"Pro okno nepou¾ívat akce my¹i jako napø. \n"
-"'Alt'+táhni (s my¹í:), je-li alt modifikátorem, \n"
-"kterı jste si nastavili."
+"Pro okno nepouÅ¾Ã­vat akce myÅ¡i jako napÅ™. \n"
+"'Alt'+tÃ¡hni (s myÅ¡Ã­:), je-li alt modifikÃ¡torem, \n"
+"kterÃ½ jste si nastavili."
 
 #: ../src/winspector.c:1460
 msgid "Do not show in the window list"
@@ -1742,39 +1742,39 @@ msgstr "Nevypisovat okno do seznamu oken."
 
 #: ../src/winspector.c:1465
 msgid "Do not let it take focus"
-msgstr "Nepovolit zamìøení"
+msgstr "Nepovolit zamÄ›Å™enÃ­"
 
 #: ../src/winspector.c:1467
 msgid ""
 "Do not let the window take keyboard focus when you\n"
 "click on it."
-msgstr "Nepovolit oknu získat zamìøení, kdy¾ na nìho kliknete."
+msgstr "Nepovolit oknu zÃ­skat zamÄ›Å™enÃ­, kdyÅ¾ na nÄ›ho kliknete."
 
 #: ../src/winspector.c:1471
 msgid "Keep inside screen"
-msgstr "Dr¾et uvnitø obrazovky"
+msgstr "DrÅ¾et uvnitÅ™ obrazovky"
 
 #: ../src/winspector.c:1473
 msgid ""
 "Do not allow the window to move itself completely\n"
 "outside the screen. For bug compatibility.\n"
 msgstr ""
-"Nepovolit oknu kompletní pøesun mimo obrazovku.\n"
-"(kvùli chybové kompatibilitì)\n"
+"Nepovolit oknu kompletnÃ­ pÅ™esun mimo obrazovku.\n"
+"(kvÅ¯li chybovÃ© kompatibilitÄ›)\n"
 
 #: ../src/winspector.c:1477
 msgid "Ignore 'Hide Others'"
-msgstr "Ignorovat \"Skrıt ostatní\""
+msgstr "Ignorovat \"SkrÃ½t ostatnÃ­\""
 
 #: ../src/winspector.c:1479
 msgid ""
 "Do not hide the window when issuing the\n"
 "`HideOthers' command."
-msgstr "Neskrıvat okno pøi pøíkazu 'Skrıt ostatní'."
+msgstr "NeskrÃ½vat okno pÅ™i pÅ™Ã­kazu 'SkrÃ½t ostatnÃ­'."
 
 #: ../src/winspector.c:1483
 msgid "Ignore 'Save Session'"
-msgstr "Neukládat stav sezení"
+msgstr "NeuklÃ¡dat stav sezenÃ­"
 
 #: ../src/winspector.c:1485
 msgid ""
@@ -1783,13 +1783,13 @@ msgid ""
 "together with other applications when Window Maker\n"
 "starts."
 msgstr ""
-"Neukládat pøidru¾enou aplikaci do stavu sezení,\n"
-"aby nebyla restartována s ostatními aplikacemi pøi\n"
+"NeuklÃ¡dat pÅ™idruÅ¾enou aplikaci do stavu sezenÃ­,\n"
+"aby nebyla restartovÃ¡na s ostatnÃ­mi aplikacemi pÅ™i\n"
 "startu Window Makeru."
 
 #: ../src/winspector.c:1491
 msgid "Emulate application icon"
-msgstr "Emulovat aplikaèní ikonu"
+msgstr "Emulovat aplikaÄnÃ­ ikonu"
 
 #: ../src/winspector.c:1493
 msgid ""
@@ -1797,17 +1797,17 @@ msgid ""
 "enough information to Window Maker for a dockable\n"
 "application icon to be created."
 msgstr ""
-"Donutit toto okno, aby se chovalo jako aplikace, která\n"
-"poskytuje dostatek informací pro Window Maker, aby mohla\n"
-"bıt vytvoøena ukotvitelná aplikaèní ikona."
+"Donutit toto okno, aby se chovalo jako aplikace, kterÃ¡\n"
+"poskytuje dostatek informacÃ­ pro Window Maker, aby mohla\n"
+"bÃ½t vytvoÅ™ena ukotvitelnÃ¡ aplikaÄnÃ­ ikona."
 
 #: ../src/winspector.c:1499
 msgid "Disable language button"
-msgstr "Zakázat tlaèítko jazyka"
+msgstr "ZakÃ¡zat tlaÄÃ­tko jazyka"
 
 #: ../src/winspector.c:1501
 msgid "Remove the `toggle language' button of the window."
-msgstr "Odstranit tlaèítko pøepnutí jazyka z tohoto okna."
+msgstr "Odstranit tlaÄÃ­tko pÅ™epnutÃ­ jazyka z tohoto okna."
 
 #: ../src/winspector.c:1518
 msgid "Miniwindow Image"
@@ -1823,15 +1823,15 @@ msgstr "Ignorovat klientovy ikony"
 
 #: ../src/winspector.c:1565
 msgid "Initial Workspace"
-msgstr "Poèáteèní plocha"
+msgstr "PoÄÃ¡teÄnÃ­ plocha"
 
 #: ../src/winspector.c:1567
 msgid "The workspace to place the window when it'sfirst shown."
-msgstr "Plocha, kam umístit okno pøi prvním ukázání."
+msgstr "Plocha, kam umÃ­stit okno pÅ™i prvnÃ­m ukÃ¡zÃ¡nÃ­."
 
 #: ../src/winspector.c:1573
 msgid "Nowhere in particular"
-msgstr "Neurèena"
+msgstr "NeurÄena"
 
 #: ../src/winspector.c:1591
 msgid "Application Attributes"
@@ -1839,15 +1839,15 @@ msgstr "Atributy aplikace"
 
 #: ../src/winspector.c:1602
 msgid "Start hidden"
-msgstr "Startovat skrytì"
+msgstr "Startovat skrytÄ›"
 
 #: ../src/winspector.c:1604
 msgid "Automatically hide application when it's started."
-msgstr "Automaticky skrıt aplikaci pøi startu."
+msgstr "Automaticky skrÃ½t aplikaci pÅ™i startu."
 
 #: ../src/winspector.c:1607
 msgid "No application icon"
-msgstr "Bez aplikaèní ikony"
+msgstr "Bez aplikaÄnÃ­ ikony"
 
 #: ../src/winspector.c:1609
 msgid ""
@@ -1856,22 +1856,22 @@ msgid ""
 "and any icons that are already docked will stop\n"
 "working correctly."
 msgstr ""
-"Zakázat aplikaèní ikonu pro tuto aplikaci.\n"
-"Uvìdomte si ale, ¾e ji nebudete moci více ukotvit\n"
-"do doku a v¹echny ji¾ ukotvené ikony pøestanou\n"
-"správnì pracovat."
+"ZakÃ¡zat aplikaÄnÃ­ ikonu pro tuto aplikaci.\n"
+"UvÄ›domte si ale, Å¾e ji nebudete moci vÃ­ce ukotvit\n"
+"do doku a vÅ¡echny jiÅ¾ ukotvenÃ© ikony pÅ™estanou\n"
+"sprÃ¡vnÄ› pracovat."
 
 #: ../src/winspector.c:1615
 msgid "Collapse application icons"
-msgstr "Zakázat více aplikaèních ikon"
+msgstr "ZakÃ¡zat vÃ­ce aplikaÄnÃ­ch ikon"
 
 #: ../src/winspector.c:1617
 msgid ""
 "Collapse application icons from other instances\n"
 "of this application into one.\n"
 msgstr ""
-"Zru¹ aplikaèní ikony ostatních instancí aplikace\n"
-"a pou¾ívej pouze aplikaèní ikonu tohoto okna.\n"
+"ZruÅ¡ aplikaÄnÃ­ ikony ostatnÃ­ch instancÃ­ aplikace\n"
+"a pouÅ¾Ã­vej pouze aplikaÄnÃ­ ikonu tohoto okna.\n"
 
 #: ../src/workspace.c:107 ../src/workspace.c:108 ../src/workspace.c:876
 #, c-format
@@ -1880,16 +1880,16 @@ msgstr "Plocha %i"
 
 #: ../src/workspace.c:926
 msgid "Workspaces"
-msgstr "Pracovní plochy"
+msgstr "PracovnÃ­ plochy"
 
 #: ../src/workspace.c:928
 msgid "could not create Workspace menu"
-msgstr "nelze vytvoøit menu pracovních ploch"
+msgstr "nelze vytvoÅ™it menu pracovnÃ­ch ploch"
 
 #: ../src/workspace.c:935
 msgid "New"
-msgstr "Nová"
+msgstr "NovÃ¡"
 
 #: ../src/workspace.c:936
 msgid "Destroy Last"
-msgstr "Zru¹it poslední"
+msgstr "ZruÅ¡it poslednÃ­"

@@ -11,18 +11,18 @@ msgstr ""
 "Last-Translator: Ihar Viarheichyk <iverg@mail.ru>\n"
 "Language-Team: Belarusian <be@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=cp1251\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../src/appicon.c:426 ../src/dialog.c:304 ../src/dock.c:3326
 #: ../src/dockedapp.c:230 ../src/main.c:273 ../src/rootmenu.c:1854
 #: ../src/winspector.c:389 ../src/winspector.c:406
 msgid "Error"
-msgstr "Памылка"
+msgstr "РџР°РјС‹Р»РєР°"
 
 #: ../src/appicon.c:427
 msgid "Could not open specified icon file"
-msgstr "Немагчыма адкрыць файл иконкі"
+msgstr "РќРµРјР°РіС‡С‹РјР° Р°РґРєСЂС‹С†СЊ С„Р°Р№Р» РёРєРѕРЅРєС–"
 
 #: ../src/appicon.c:428 ../src/dialog.c:201 ../src/dialog.c:304
 #: ../src/dialog.c:751 ../src/dialog.c:1850 ../src/dock.c:526
@@ -38,86 +38,86 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-" будзе прымусова закрыта.\n"
-"Незахаваныя змены будуць страчаны.\n"
-"Пацвердзце."
+" Р±СѓРґР·Рµ РїСЂС‹РјСѓСЃРѕРІР° Р·Р°РєСЂС‹С‚Р°.\n"
+"РќРµР·Р°С…Р°РІР°РЅС‹СЏ Р·РјРµРЅС‹ Р±СѓРґСѓС†СЊ СЃС‚СЂР°С‡Р°РЅС‹.\n"
+"РџР°С†РІРµСЂРґР·С†Рµ."
 
 #: ../src/appicon.c:464 ../src/dock.c:283 ../src/winmenu.c:125
 msgid "Kill Application"
-msgstr "Прымусова закрыць праграму"
+msgstr "РџСЂС‹РјСѓСЃРѕРІР° Р·Р°РєСЂС‹С†СЊ РїСЂР°РіСЂР°РјСѓ"
 
 #: ../src/appicon.c:465 ../src/dock.c:284 ../src/winmenu.c:127
 msgid "Yes"
-msgstr "Так"
+msgstr "РўР°Рє"
 
 #: ../src/appicon.c:465 ../src/dock.c:284 ../src/winmenu.c:127
 msgid "No"
-msgstr "Не"
+msgstr "РќРµ"
 
 #: ../src/appicon.c:495 ../src/dock.c:1178 ../src/dock.c:3492
 msgid "Unhide Here"
-msgstr "Схаваць тут"
+msgstr "РЎС…Р°РІР°С†СЊ С‚СѓС‚"
 
 #: ../src/appicon.c:496 ../src/appicon.c:521 ../src/dock.c:1180
 #: ../src/dock.c:1182 ../src/dock.c:3504 ../src/winmenu.c:465
 msgid "Hide"
-msgstr "Схаваць"
+msgstr "РЎС…Р°РІР°С†СЊ"
 
 #: ../src/appicon.c:497
 msgid "Set Icon..."
-msgstr "Задаць іконку..."
+msgstr "Р—Р°РґР°С†СЊ С–РєРѕРЅРєСѓ..."
 
 #: ../src/appicon.c:498 ../src/dock.c:1186 ../src/rootmenu.c:248
 #: ../src/rootmenu.c:264 ../src/winmenu.c:520
 msgid "Kill"
-msgstr "Закрыць прымусова"
+msgstr "Р—Р°РєСЂС‹С†СЊ РїСЂС‹РјСѓСЃРѕРІР°"
 
 #: ../src/appicon.c:519 ../src/dock.c:3502
 msgid "Unhide"
-msgstr "Паказаць"
+msgstr "РџР°РєР°Р·Р°С†СЊ"
 
 #: ../src/application.c:398
 #, c-format
 msgid "recreating missing icon '%s'"
-msgstr "ствараю адсутнічаючу іконку '%s'"
+msgstr "СЃС‚РІР°СЂР°СЋ Р°РґСЃСѓС‚РЅС–С‡Р°СЋС‡Сѓ С–РєРѕРЅРєСѓ '%s'"
 
 #: ../src/defaults.c:922 ../src/defaults.c:1011
 #, c-format
 msgid "Domain %s (%s) of global defaults database is corrupted!"
-msgstr "Дамен %s (%s) агульнай базы стандартных параметраў пашкоджаны"
+msgstr "Р”Р°РјРµРЅ %s (%s) Р°РіСѓР»СЊРЅР°Р№ Р±Р°Р·С‹ СЃС‚Р°РЅРґР°СЂС‚РЅС‹С… РїР°СЂР°РјРµС‚СЂР°Сћ РїР°С€РєРѕРґР¶Р°РЅС‹"
 
 #: ../src/defaults.c:927
 #, c-format
 msgid "could not load domain %s from global defaults database"
-msgstr "немагчыма загрузіць дамен %s з агульнай базы стандартных параметраў"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·Р°РіСЂСѓР·С–С†СЊ РґР°РјРµРЅ %s Р· Р°РіСѓР»СЊРЅР°Р№ Р±Р°Р·С‹ СЃС‚Р°РЅРґР°СЂС‚РЅС‹С… РїР°СЂР°РјРµС‚СЂР°Сћ"
 
 #: ../src/defaults.c:949 ../src/startup.c:884 ../src/startup.c:902
 #: ../src/startup.c:908
 #, c-format
 msgid "could not read domain \"%s\" from defaults database"
-msgstr "немагчыма загрузіць дамен %s з базы стандартных параметраў"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·Р°РіСЂСѓР·С–С†СЊ РґР°РјРµРЅ %s Р· Р±Р°Р·С‹ СЃС‚Р°РЅРґР°СЂС‚РЅС‹С… РїР°СЂР°РјРµС‚СЂР°Сћ"
 
 #: ../src/defaults.c:995 ../src/defaults.c:1099 ../src/defaults.c:1140
 #: ../src/defaults.c:1196
 #, c-format
 msgid "Domain %s (%s) of defaults database is corrupted!"
-msgstr "Дамен %s (%s) базы стандартных параметраў пашкоджаны"
+msgstr "Р”Р°РјРµРЅ %s (%s) Р±Р°Р·С‹ СЃС‚Р°РЅРґР°СЂС‚РЅС‹С… РїР°СЂР°РјРµС‚СЂР°Сћ РїР°С€РєРѕРґР¶Р°РЅС‹"
 
 #: ../src/defaults.c:1000 ../src/defaults.c:1119 ../src/defaults.c:1176
 #: ../src/defaults.c:1205 ../src/menureader.c:397
 #, c-format
 msgid "could not load domain %s from user defaults database"
-msgstr "немагчыма загрузіць дамен %s базы стандартных параметраў карыстальніка"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·Р°РіСЂСѓР·С–С†СЊ РґР°РјРµРЅ %s Р±Р°Р·С‹ СЃС‚Р°РЅРґР°СЂС‚РЅС‹С… РїР°СЂР°РјРµС‚СЂР°Сћ РєР°СЂС‹СЃС‚Р°Р»СЊРЅС–РєР°"
 
 #: ../src/defaults.c:1030
 #, c-format
 msgid "could not load domain %s from global defaults database (%s)"
-msgstr "немагчыма загрузіць дамен %s з агульнай базы стандартных параметраў (%s)"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·Р°РіСЂСѓР·С–С†СЊ РґР°РјРµРЅ %s Р· Р°РіСѓР»СЊРЅР°Р№ Р±Р°Р·С‹ СЃС‚Р°РЅРґР°СЂС‚РЅС‹С… РїР°СЂР°РјРµС‚СЂР°Сћ (%s)"
 
 #: ../src/defaults.c:1166 ../src/screen.c:460
 #, c-format
 msgid "could not load logo image for panels: %s"
-msgstr "немагчыма загрузіць выяву лагатыпу панэлей: %s"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·Р°РіСЂСѓР·С–С†СЊ РІС‹СЏРІСѓ Р»Р°РіР°С‚С‹РїСѓ РїР°РЅСЌР»РµР№: %s"
 
 #. --------------------------- Local -----------------------
 #: ../src/defaults.c:1414 ../src/defaults.c:1556 ../src/defaults.c:1668
@@ -126,7 +126,7 @@ msgstr "немагчыма загрузіць выяву лагатыпу панэлей: %s"
 #: ../src/wdefaults.c:607
 #, c-format
 msgid "Wrong option format for key \"%s\". Should be %s."
-msgstr "Памылковы фармат параметру дзеля ключа \"%s\". Павінен быць %s."
+msgstr "РџР°РјС‹Р»РєРѕРІС‹ С„Р°СЂРјР°С‚ РїР°СЂР°РјРµС‚СЂСѓ РґР·РµР»СЏ РєР»СЋС‡Р° \"%s\". РџР°РІС–РЅРµРЅ Р±С‹С†СЊ %s."
 
 #: ../src/defaults.c:1416 ../src/defaults.c:1497 ../src/defaults.c:1529
 #: ../src/defaults.c:1561 ../src/defaults.c:1574 ../src/defaults.c:1589
@@ -136,246 +136,246 @@ msgstr "Памылковы фармат параметру дзеля ключа \"%s\". Павінен быць %s."
 #: ../src/defaults.c:2348 ../src/defaults.c:2734 ../src/defaults.c:2745
 #, c-format
 msgid "using default \"%s\" instead"
-msgstr "будзе ужыта стандартнае значэнне \"%s\""
+msgstr "Р±СѓРґР·Рµ СѓР¶С‹С‚Р° СЃС‚Р°РЅРґР°СЂС‚РЅР°Рµ Р·РЅР°С‡СЌРЅРЅРµ \"%s\""
 
 #: ../src/defaults.c:1447
 #, c-format
 msgid "wrong option value for key \"%s\". Should be one of %s"
-msgstr "дрэннае значэнне для ключа \"%s\". Павінна быць адно з %s"
+msgstr "РґСЂСЌРЅРЅР°Рµ Р·РЅР°С‡СЌРЅРЅРµ РґР»СЏ РєР»СЋС‡Р° \"%s\". РџР°РІС–РЅРЅР° Р±С‹С†СЊ Р°РґРЅРѕ Р· %s"
 
 #: ../src/defaults.c:1492
 #, c-format
 msgid "can't convert \"%s\" to boolean for key \"%s\""
-msgstr "немагчыма прывесці \"%s\" да тыпу boolean для ключа \"%s\""
+msgstr "РЅРµРјР°РіС‡С‹РјР° РїСЂС‹РІРµСЃС†С– \"%s\" РґР° С‚С‹РїСѓ boolean РґР»СЏ РєР»СЋС‡Р° \"%s\""
 
 #: ../src/defaults.c:1526
 #, c-format
 msgid "can't convert \"%s\" to integer for key \"%s\""
-msgstr "немагчыма прывесці \"%s\" да тыпу integer для ключа \"%s\""
+msgstr "РЅРµРјР°РіС‡С‹РјР° РїСЂС‹РІРµСЃС†С– \"%s\" РґР° С‚С‹РїСѓ integer РґР»СЏ РєР»СЋС‡Р° \"%s\""
 
 #: ../src/defaults.c:1569
 #, c-format
 msgid "Incorrect number of elements in array for key \"%s\"."
-msgstr "Недапушчальная колькасць элементаў у масіве для ключа \"%s\"."
+msgstr "РќРµРґР°РїСѓС€С‡Р°Р»СЊРЅР°СЏ РєРѕР»СЊРєР°СЃС†СЊ СЌР»РµРјРµРЅС‚Р°Сћ Сѓ РјР°СЃС–РІРµ РґР»СЏ РєР»СЋС‡Р° \"%s\"."
 
 #: ../src/defaults.c:1584
 #, c-format
 msgid "Wrong value for key \"%s\". Should be Coordinate."
-msgstr "Дрэннае значэнне для ключа \"%s\". Павинна быць Coordinate."
+msgstr "Р”СЂСЌРЅРЅР°Рµ Р·РЅР°С‡СЌРЅРЅРµ РґР»СЏ РєР»СЋС‡Р° \"%s\". РџР°РІРёРЅРЅР° Р±С‹С†СЊ Coordinate."
 
 #: ../src/defaults.c:1599
 #, c-format
 msgid "can't convert array to integers for \"%s\"."
-msgstr "немагчыма сканвертаваць масіў да цэлых для \"%s\""
+msgstr "РЅРµРјР°РіС‡С‹РјР° СЃРєР°РЅРІРµСЂС‚Р°РІР°С†СЊ РјР°СЃС–Сћ РґР° С†СЌР»С‹С… РґР»СЏ \"%s\""
 
 #: ../src/defaults.c:1797 ../src/defaults.c:1829 ../src/defaults.c:1845
 #: ../src/defaults.c:1874 ../src/defaults.c:1897 ../src/defaults.c:1950
 #: ../src/defaults.c:1990 ../src/defaults.c:2028 ../src/defaults.c:2044
 #, c-format
 msgid "\"%s\" is not a valid color name"
-msgstr "\"%s\" не дапушчальнае імя для колера"
+msgstr "\"%s\" РЅРµ РґР°РїСѓС€С‡Р°Р»СЊРЅР°Рµ С–РјСЏ РґР»СЏ РєРѕР»РµСЂР°"
 
 #: ../src/defaults.c:1810 ../src/defaults.c:1862
 msgid "bad number of arguments in gradient specification"
-msgstr "неадпаведны лік агрументаў у спецыфікацыі градыенту"
+msgstr "РЅРµР°РґРїР°РІРµРґРЅС‹ Р»С–Рє Р°РіСЂСѓРјРµРЅС‚Р°Сћ Сѓ СЃРїРµС†С‹С„С–РєР°С†С‹С– РіСЂР°РґС‹РµРЅС‚Сѓ"
 
 #: ../src/defaults.c:1923
 msgid "too few arguments in multicolor gradient specification"
-msgstr "замала аргументаў у спецыфікацыі шматкаляровага градыенту"
+msgstr "Р·Р°РјР°Р»Р° Р°СЂРіСѓРјРµРЅС‚Р°Сћ Сѓ СЃРїРµС†С‹С„С–РєР°С†С‹С– С€РјР°С‚РєР°Р»СЏСЂРѕРІР°РіР° РіСЂР°РґС‹РµРЅС‚Сѓ"
 
 #: ../src/defaults.c:2017
 msgid "bad number of arguments in textured gradient specification"
-msgstr "неадпаведны лік аргументаў у спецыфікацыі тэкстурнага градыенту"
+msgstr "РЅРµР°РґРїР°РІРµРґРЅС‹ Р»С–Рє Р°СЂРіСѓРјРµРЅС‚Р°Сћ Сѓ СЃРїРµС†С‹С„С–РєР°С†С‹С– С‚СЌРєСЃС‚СѓСЂРЅР°РіР° РіСЂР°РґС‹РµРЅС‚Сѓ"
 
 #: ../src/defaults.c:2060
 #, c-format
 msgid "bad opacity value for tgradient texture \"%s\". Should be [0..255]"
 msgstr 
-"дрэннае значэнне непразрыстасці для градыетнай тэкстуры \"%s\"."
-"Павінна быць [0..255]"
+"РґСЂСЌРЅРЅР°Рµ Р·РЅР°С‡СЌРЅРЅРµ РЅРµРїСЂР°Р·СЂС‹СЃС‚Р°СЃС†С– РґР»СЏ РіСЂР°РґС‹РµС‚РЅР°Р№ С‚СЌРєСЃС‚СѓСЂС‹ \"%s\"."
+"РџР°РІС–РЅРЅР° Р±С‹С†СЊ [0..255]"
 
 #: ../src/defaults.c:2120
 #, c-format
 msgid "could not initialize library %s"
-msgstr "немагчыма ініцыялізаваць бібліятэку %s"
+msgstr "РЅРµРјР°РіС‡С‹РјР° С–РЅС–С†С‹СЏР»С–Р·Р°РІР°С†СЊ Р±С–Р±Р»С–СЏС‚СЌРєСѓ %s"
 
 #: ../src/defaults.c:2123
 #, c-format
 msgid "could not find function %s::%s"
-msgstr "немагчыма знайсці функцыю %s::%s"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·РЅР°Р№СЃС†С– С„СѓРЅРєС†С‹СЋ %s::%s"
 
 #: ../src/defaults.c:2130
 #, c-format
 msgid "invalid texture type %s"
-msgstr "дрэнны тып тэкстуры %s"
+msgstr "РґСЂСЌРЅРЅС‹ С‚С‹Рї С‚СЌРєСЃС‚СѓСЂС‹ %s"
 
 #: ../src/defaults.c:2177
 #, c-format
 msgid "Error in texture specification for key \"%s\""
-msgstr "Памылка ў спецыфікацыі тэкстуры з ключом \"%s\""
+msgstr "РџР°РјС‹Р»РєР° Сћ СЃРїРµС†С‹С„С–РєР°С†С‹С– С‚СЌРєСЃС‚СѓСЂС‹ Р· РєР»СЋС‡РѕРј \"%s\""
 
 #: ../src/defaults.c:2226
 msgid "Wrong type for workspace background. Should be a texture type."
-msgstr "Дрэнны тып фона працамесца. Павінен быць тэкстурай"
+msgstr "Р”СЂСЌРЅРЅС‹ С‚С‹Рї С„РѕРЅР° РїСЂР°С†Р°РјРµСЃС†Р°. РџР°РІС–РЅРµРЅ Р±С‹С†СЊ С‚СЌРєСЃС‚СѓСЂР°Р№"
 
 #: ../src/defaults.c:2274
 #, c-format
 msgid "Wrong type for background of workspace %i. Should be a texture."
-msgstr "Дрэнны тып фона працамесца %i. Павінен быць тэкстурай."
+msgstr "Р”СЂСЌРЅРЅС‹ С‚С‹Рї С„РѕРЅР° РїСЂР°С†Р°РјРµСЃС†Р° %i. РџР°РІС–РЅРµРЅ Р±С‹С†СЊ С‚СЌРєСЃС‚СѓСЂР°Р№."
 
 #: ../src/defaults.c:2316
 msgid "could not load any usable font!!!"
-msgstr "немагчыма загрузіць аніякі падыходзячы шрыфт!!!"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·Р°РіСЂСѓР·С–С†СЊ Р°РЅС–СЏРєС– РїР°РґС‹С…РѕРґР·СЏС‡С‹ С€СЂС‹С„С‚!!!"
 
 #: ../src/defaults.c:2343
 #, c-format
 msgid "could not get color for key \"%s\""
-msgstr "немагчыма знайсці колер дзеля ключа \"%s\""
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·РЅР°Р№СЃС†С– РєРѕР»РµСЂ РґР·РµР»СЏ РєР»СЋС‡Р° \"%s\""
 
 #: ../src/defaults.c:2401 ../src/rootmenu.c:526
 #, c-format
 msgid "%s:invalid key modifier \"%s\""
-msgstr "%s: дрэнны клавіятурны мадыфікатар \"%s\""
+msgstr "%s: РґСЂСЌРЅРЅС‹ РєР»Р°РІС–СЏС‚СѓСЂРЅС‹ РјР°РґС‹С„С–РєР°С‚Р°СЂ \"%s\""
 
 #: ../src/defaults.c:2413
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\""
-msgstr "%s: дрэнная спецыфікацыя гарачай клавішы \"%s\""
+msgstr "%s: РґСЂСЌРЅРЅР°СЏ СЃРїРµС†С‹С„С–РєР°С†С‹СЏ РіР°СЂР°С‡Р°Р№ РєР»Р°РІС–С€С‹ \"%s\""
 
 #: ../src/defaults.c:2420
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\""
-msgstr "%s: дрэнная спецыфікацыя клавішы \"%s\""
+msgstr "%s: РґСЂСЌРЅРЅР°СЏ СЃРїРµС†С‹С„С–РєР°С†С‹СЏ РєР»Р°РІС–С€С‹ \"%s\""
 
 #: ../src/defaults.c:2445
 #, c-format
 msgid "%s: modifier key %s is not valid"
-msgstr "%s: недапушчальны клавіятурны мадыфікатар %s"
+msgstr "%s: РЅРµРґР°РїСѓС€С‡Р°Р»СЊРЅС‹ РєР»Р°РІС–СЏС‚СѓСЂРЅС‹ РјР°РґС‹С„С–РєР°С‚Р°СЂ %s"
 
 #: ../src/defaults.c:2477
 #, c-format
 msgid "could not load image in option %s: %s"
-msgstr "немагчыма загрузіць выяву для %s: %s"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·Р°РіСЂСѓР·С–С†СЊ РІС‹СЏРІСѓ РґР»СЏ %s: %s"
 
 #: ../src/defaults.c:2594
 #, c-format
 msgid "failed to open bitmap file \"%s\""
-msgstr "немагчыма адкрыць bitmap файл \"%s\""
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р°РґРєСЂС‹С†СЊ bitmap С„Р°Р№Р» \"%s\""
 
 #: ../src/defaults.c:2597
 #, c-format
 msgid "\"%s\" is not a valid bitmap file"
-msgstr "\"%s\" не з'яўляецца карэктным файлам выявы"
+msgstr "\"%s\" РЅРµ Р·'СЏСћР»СЏРµС†С†Р° РєР°СЂСЌРєС‚РЅС‹Рј С„Р°Р№Р»Р°Рј РІС‹СЏРІС‹"
 
 #: ../src/defaults.c:2600
 #, c-format
 msgid "out of memory reading bitmap file \"%s\""
-msgstr "не хапае памяці для чытання bitmap файлу\"%s\""
+msgstr "РЅРµ С…Р°РїР°Рµ РїР°РјСЏС†С– РґР»СЏ С‡С‹С‚Р°РЅРЅСЏ bitmap С„Р°Р№Р»Сѓ\"%s\""
 
 #: ../src/defaults.c:2639 ../src/defaults.c:2672
 msgid "bad number of arguments in cursor specification"
-msgstr "неадпаведны лік агрументаў у спецыфікацыі курсора"
+msgstr "РЅРµР°РґРїР°РІРµРґРЅС‹ Р»С–Рє Р°РіСЂСѓРјРµРЅС‚Р°Сћ Сѓ СЃРїРµС†С‹С„С–РєР°С†С‹С– РєСѓСЂСЃРѕСЂР°"
 
 #: ../src/defaults.c:2655
 #, c-format
 msgid "unknown builtin cursor name \"%s\""
-msgstr "невядомае імя стандартнага курсору \"%s\""
+msgstr "РЅРµРІСЏРґРѕРјР°Рµ С–РјСЏ СЃС‚Р°РЅРґР°СЂС‚РЅР°РіР° РєСѓСЂСЃРѕСЂСѓ \"%s\""
 
 #: ../src/defaults.c:2682 ../src/defaults.c:2694
 #, c-format
 msgid "could not find cursor bitmap file \"%s\""
-msgstr "немагчыма знайсці файл з выявай курсора \"%s\""
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·РЅР°Р№СЃС†С– С„Р°Р№Р» Р· РІС‹СЏРІР°Р№ РєСѓСЂСЃРѕСЂР° \"%s\""
 
 #: ../src/defaults.c:2741
 #, c-format
 msgid "Error in cursor specification for key \"%s\""
-msgstr "Памылка ў спецыфікацыі курсору дзеля ключа \"%s\""
+msgstr "РџР°РјС‹Р»РєР° Сћ СЃРїРµС†С‹С„С–РєР°С†С‹С– РєСѓСЂСЃРѕСЂСѓ РґР·РµР»СЏ РєР»СЋС‡Р° \"%s\""
 
 #: ../src/defaults.c:2826
 msgid "could not render texture for icon background"
-msgstr "немагчыма згенераваць тэкстуру для фону іконкі"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·РіРµРЅРµСЂР°РІР°С†СЊ С‚СЌРєСЃС‚СѓСЂСѓ РґР»СЏ С„РѕРЅСѓ С–РєРѕРЅРєС–"
 
 #: ../src/dialog.c:157
 msgid "Save workspace state"
-msgstr "Захаваць стан працамесца"
+msgstr "Р—Р°С…Р°РІР°С†СЊ СЃС‚Р°РЅ РїСЂР°С†Р°РјРµСЃС†Р°"
 
 #: ../src/dialog.c:201 ../src/dialog.c:758 ../src/dock.c:558
 #: ../src/dockedapp.c:431 ../src/rootmenu.c:198 ../src/rootmenu.c:248
 #: ../src/rootmenu.c:264
 msgid "Cancel"
-msgstr "Адмена"
+msgstr "РђРґРјРµРЅР°"
 
 #: ../src/dialog.c:299
 msgid "Could not open directory "
-msgstr "Немагчыма адкрыць каталаг "
+msgstr "РќРµРјР°РіС‡С‹РјР° Р°РґРєСЂС‹С†СЊ РєР°С‚Р°Р»Р°Рі "
 
 #: ../src/dialog.c:354
 msgid "Could not load image file "
-msgstr "Немагчыма загрузіць файл выявы "
+msgstr "РќРµРјР°РіС‡С‹РјР° Р·Р°РіСЂСѓР·С–С†СЊ С„Р°Р№Р» РІС‹СЏРІС‹ "
 
 #: ../src/dialog.c:685
 msgid "Directories"
-msgstr "Каталагі"
+msgstr "РљР°С‚Р°Р»Р°РіС–"
 
 #: ../src/dialog.c:694
 msgid "Icons"
-msgstr "Іконкі"
+msgstr "Р†РєРѕРЅРєС–"
 
 #: ../src/dialog.c:727
 msgid "Preview"
-msgstr "Прагляд"
+msgstr "РџСЂР°РіР»СЏРґ"
 
 #: ../src/dialog.c:740
 msgid "File Name:"
-msgstr "Імя файла:"
+msgstr "Р†РјСЏ С„Р°Р№Р»Р°:"
 
 #: ../src/dialog.c:764
 msgid "Choose File"
-msgstr "Выбар файла"
+msgstr "Р’С‹Р±Р°СЂ С„Р°Р№Р»Р°"
 
 #: ../src/dialog.c:783 ../src/dialog.c:785
 msgid "Icon Chooser"
-msgstr "Выбар іконкі"
+msgstr "Р’С‹Р±Р°СЂ С–РєРѕРЅРєС–"
 
 #: ../src/dialog.c:1265 ../src/dialog.c:1375
 #, c-format
 msgid "Version %s"
-msgstr "Версія %s"
+msgstr "Р’РµСЂСЃС–СЏ %s"
 
 #: ../src/dialog.c:1372
 msgid "Window Manager for X"
-msgstr "Ваконны менеджар для X"
+msgstr "Р’Р°РєРѕРЅРЅС‹ РјРµРЅРµРґР¶Р°СЂ РґР»СЏ X"
 
 #: ../src/dialog.c:1397
 #, c-format
 msgid "Using visual 0x%x: %s %ibpp "
-msgstr "Відэарэжым 0x%x: %s %i бітаў на піксел"
+msgstr "Р’С–РґСЌР°СЂСЌР¶С‹Рј 0x%x: %s %i Р±С–С‚Р°Сћ РЅР° РїС–РєСЃРµР»"
 
 #: ../src/dialog.c:1405
 msgid "(32 thousand colors)\n"
-msgstr "(32 тысячы колераў)\n"
+msgstr "(32 С‚С‹СЃСЏС‡С‹ РєРѕР»РµСЂР°Сћ)\n"
 
 #: ../src/dialog.c:1408
 msgid "(64 thousand colors)\n"
-msgstr "(64 тысячы колераў)\n"
+msgstr "(64 С‚С‹СЃСЏС‡С‹ РєРѕР»РµСЂР°Сћ)\n"
 
 #: ../src/dialog.c:1412
 msgid "(16 million colors)\n"
-msgstr "(16 мільёнаў колераў)\n"
+msgstr "(16 РјС–Р»СЊС‘РЅР°Сћ РєРѕР»РµСЂР°Сћ)\n"
 
 #: ../src/dialog.c:1415
 #, c-format
 msgid "(%d colors)\n"
-msgstr "(%d колераў)\n"
+msgstr "(%d РєРѕР»РµСЂР°Сћ)\n"
 
 #: ../src/dialog.c:1425
 #, c-format
 msgid "Total allocated memory: %i kB. Total memory in use: %i kB.\n"
-msgstr "Зарэзервавана памяці: %i кБ. Выкарыстоўваецца: %i кБ.\n"
+msgstr "Р—Р°СЂСЌР·РµСЂРІР°РІР°РЅР° РїР°РјСЏС†С–: %i РєР‘. Р’С‹РєР°СЂС‹СЃС‚РѕСћРІР°РµС†С†Р°: %i РєР‘.\n"
 
 #: ../src/dialog.c:1432
 msgid "Supported image formats: "
-msgstr "Падтрымліваемыя графічныя фарматы: "
+msgstr "РџР°РґС‚СЂС‹РјР»С–РІР°РµРјС‹СЏ РіСЂР°С„С–С‡РЅС‹СЏ С„Р°СЂРјР°С‚С‹: "
 
 #: ../src/dialog.c:1439
 msgid ""
@@ -383,11 +383,11 @@ msgid ""
 "Additional support for: "
 msgstr ""
 "\n"
-"Дадаткова падтрымліваецца: "
+"Р”Р°РґР°С‚РєРѕРІР° РїР°РґС‚СЂС‹РјР»С–РІР°РµС†С†Р°: "
 
 #: ../src/dialog.c:1462
 msgid " and "
-msgstr " і "
+msgstr " С– "
 
 #: ../src/dialog.c:1472
 msgid ""
@@ -395,7 +395,7 @@ msgid ""
 "Sound disabled"
 msgstr ""
 "\n"
-"Звук забаронены"
+"Р—РІСѓРє Р·Р°Р±Р°СЂРѕРЅРµРЅС‹"
 
 #: ../src/dialog.c:1474
 msgid ""
@@ -403,15 +403,15 @@ msgid ""
 "Sound enabled"
 msgstr ""
 "\n"
-"Звук дазволены"
+"Р—РІСѓРє РґР°Р·РІРѕР»РµРЅС‹"
 
 #: ../src/dialog.c:1503
 msgid "Info"
-msgstr "Інфармацыя"
+msgstr "Р†РЅС„Р°СЂРјР°С†С‹СЏ"
 
 #: ../src/dialog.c:1527
 msgid "Merry Christmas!"
-msgstr "Вяселых Каляд!"
+msgstr "Р’СЏСЃРµР»С‹С… РљР°Р»СЏРґ!"
 
 #: ../src/dialog.c:1597
 msgid ""
@@ -430,30 +430,30 @@ msgid ""
 "Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA\n"
 "02111-1307, USA."
 msgstr ""
-"    Window Maker з'яўляецца свабодным праграмным\n"
-"забеспячэннем і распаўсюджваецца на ўмовах ліцэнзі\n"
-"GPL версіі 2 ці вышэй ад Free Software Foundation.\n"
+"    Window Maker Р·'СЏСћР»СЏРµС†С†Р° СЃРІР°Р±РѕРґРЅС‹Рј РїСЂР°РіСЂР°РјРЅС‹Рј\n"
+"Р·Р°Р±РµСЃРїСЏС‡СЌРЅРЅРµРј С– СЂР°СЃРїР°СћСЃСЋРґР¶РІР°РµС†С†Р° РЅР° СћРјРѕРІР°С… Р»С–С†СЌРЅР·С–\n"
+"GPL РІРµСЂСЃС–С– 2 С†С– РІС‹С€СЌР№ Р°Рґ Free Software Foundation.\n"
 "\n"
-"    Window Maker распаўсюджваецца з наздеяй што можа быць\n"
-"карысны, але без усялякіх гарантый. Падрабязную інфармацыю\n"
-"глядзіце ў GNU General Public License.\n"
+"    Window Maker СЂР°СЃРїР°СћСЃСЋРґР¶РІР°РµС†С†Р° Р· РЅР°Р·РґРµСЏР№ С€С‚Рѕ РјРѕР¶Р° Р±С‹С†СЊ\n"
+"РєР°СЂС‹СЃРЅС‹, Р°Р»Рµ Р±РµР· СѓСЃСЏР»СЏРєС–С… РіР°СЂР°РЅС‚С‹Р№. РџР°РґСЂР°Р±СЏР·РЅСѓСЋ С–РЅС„Р°СЂРјР°С†С‹СЋ\n"
+"РіР»СЏРґР·С–С†Рµ Сћ GNU General Public License.\n"
 "\n"
-"    Копія GNU GPL распаўсюджваецца разам з гэтай\n"
-"праграмай. Калі вы атрымалі гэтую праграму без копіі\n"
-"ліцэнзіі, звярніціся ў Free Software Foundation, Inc.,\n"
+"    РљРѕРїС–СЏ GNU GPL СЂР°СЃРїР°СћСЃСЋРґР¶РІР°РµС†С†Р° СЂР°Р·Р°Рј Р· РіСЌС‚Р°Р№\n"
+"РїСЂР°РіСЂР°РјР°Р№. РљР°Р»С– РІС‹ Р°С‚СЂС‹РјР°Р»С– РіСЌС‚СѓСЋ РїСЂР°РіСЂР°РјСѓ Р±РµР· РєРѕРїС–С–\n"
+"Р»С–С†СЌРЅР·С–С–, Р·РІСЏСЂРЅС–С†С–СЃСЏ Сћ Free Software Foundation, Inc.,\n"
 "59 Temple Place - Suite 330, Boston, Ma 02111-1307, USA."
 
 #: ../src/dialog.c:1621
 msgid "Legal"
-msgstr "Ліцэнзія"
+msgstr "Р›С–С†СЌРЅР·С–СЏ"
 
 #: ../src/dialog.c:1773 ../src/startup.c:394
 msgid "cannot open connection for crashing dialog panel. Aborting."
-msgstr "немагчыма ўсталяваць злучэнне ў вакне крытычнай памылкі. Выхад."
+msgstr "РЅРµРјР°РіС‡С‹РјР° СћСЃС‚Р°Р»СЏРІР°С†СЊ Р·Р»СѓС‡СЌРЅРЅРµ Сћ РІР°РєРЅРµ РєСЂС‹С‚С‹С‡РЅР°Р№ РїР°РјС‹Р»РєС–. Р’С‹С…Р°Рґ."
 
 #: ../src/dialog.c:1799
 msgid "Fatal error"
-msgstr "Крытычная памылка"
+msgstr "РљСЂС‹С‚С‹С‡РЅР°СЏ РїР°РјС‹Р»РєР°"
 
 #: ../src/dialog.c:1810
 #, c-format
@@ -461,41 +461,41 @@ msgid ""
 "Window Maker received signal %i\n"
 "(%s)."
 msgstr ""
-"Window Maker атрымаў сігнал %i\n"
+"Window Maker Р°С‚СЂС‹РјР°Сћ СЃС–РіРЅР°Р» %i\n"
 "(%s)."
 
 #: ../src/dialog.c:1813
 #, c-format
 msgid "Window Maker received signal %i."
-msgstr "Window Maker атрымаў сігнал %i."
+msgstr "Window Maker Р°С‚СЂС‹РјР°Сћ СЃС–РіРЅР°Р» %i."
 
 #: ../src/dialog.c:1822
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
 "BUGFORM and report it to bugs@windowmaker.org."
 msgstr ""
-" Гэты крытычны збой магчыма вызваны памылкамі ў WindowMaker."
-"Дашліце запоўненае паведамленне аб памылке (BUGFORM) на bugs@windowmaker.org"
+" Р“СЌС‚С‹ РєСЂС‹С‚С‹С‡РЅС‹ Р·Р±РѕР№ РјР°РіС‡С‹РјР° РІС‹Р·РІР°РЅС‹ РїР°РјС‹Р»РєР°РјС– Сћ WindowMaker."
+"Р”Р°С€Р»С–С†Рµ Р·Р°РїРѕСћРЅРµРЅР°Рµ РїР°РІРµРґР°РјР»РµРЅРЅРµ Р°Р± РїР°РјС‹Р»РєРµ (BUGFORM) РЅР° bugs@windowmaker.org"
 
 #: ../src/dialog.c:1831
 msgid "What do you want to do now?"
-msgstr "Што вы збіраецесь зараз рабіць?"
+msgstr "РЁС‚Рѕ РІС‹ Р·Р±С–СЂР°РµС†РµСЃСЊ Р·Р°СЂР°Р· СЂР°Р±С–С†СЊ?"
 
 #: ../src/dialog.c:1837
 msgid "Select action"
-msgstr "Выберыце дзеянне"
+msgstr "Р’С‹Р±РµСЂС‹С†Рµ РґР·РµСЏРЅРЅРµ"
 
 #: ../src/dialog.c:1838
 msgid "Abort and leave a core file"
-msgstr "Завершыць працу пакінуўшы core-файл"
+msgstr "Р—Р°РІРµСЂС€С‹С†СЊ РїСЂР°С†Сѓ РїР°РєС–РЅСѓСћС€С‹ core-С„Р°Р№Р»"
 
 #: ../src/dialog.c:1839
 msgid "Restart Window Maker"
-msgstr "Перазапусціць Window Maker"
+msgstr "РџРµСЂР°Р·Р°РїСѓСЃС†С–С†СЊ Window Maker"
 
 #: ../src/dialog.c:1840
 msgid "Start alternate window manager"
-msgstr "Запусціць іншы ваконны менеджар"
+msgstr "Р—Р°РїСѓСЃС†С–С†СЊ С–РЅС€С‹ РІР°РєРѕРЅРЅС‹ РјРµРЅРµРґР¶Р°СЂ"
 
 #: ../src/dialog.c:2018
 msgid ""
@@ -509,30 +509,30 @@ msgid ""
 "of the framework. For more information about\n"
 "GNUstep, please visit: www.gnustep.org"
 msgstr ""
-"Window Maker з'яўляецца часткай праекту GNUstep.\n"
-"Мэта GNUstep - стварэнне свабоднай рэалізацыі\n"
-"спецыфікацый OpenStep(tm) - аб'ектна-арыентаванага\n"
-"асяроддзя для стварэння графічных шматплатформенных\n"
-"дастасаванняў. На базе гэтага асяроддзя таксама\n"
-"ствараецца асяроддзе карыстальніка. Большь інфармацыі\n"
-"можна знайсці на сайце GNUstep: www.gnustep.org"
+"Window Maker Р·'СЏСћР»СЏРµС†С†Р° С‡Р°СЃС‚РєР°Р№ РїСЂР°РµРєС‚Сѓ GNUstep.\n"
+"РњСЌС‚Р° GNUstep - СЃС‚РІР°СЂСЌРЅРЅРµ СЃРІР°Р±РѕРґРЅР°Р№ СЂСЌР°Р»С–Р·Р°С†С‹С–\n"
+"СЃРїРµС†С‹С„С–РєР°С†С‹Р№ OpenStep(tm) - Р°Р±'РµРєС‚РЅР°-Р°СЂС‹РµРЅС‚Р°РІР°РЅР°РіР°\n"
+"Р°СЃСЏСЂРѕРґРґР·СЏ РґР»СЏ СЃС‚РІР°СЂСЌРЅРЅСЏ РіСЂР°С„С–С‡РЅС‹С… С€РјР°С‚РїР»Р°С‚С„РѕСЂРјРµРЅРЅС‹С…\n"
+"РґР°СЃС‚Р°СЃР°РІР°РЅРЅСЏСћ. РќР° Р±Р°Р·Рµ РіСЌС‚Р°РіР° Р°СЃСЏСЂРѕРґРґР·СЏ С‚Р°РєСЃР°РјР°\n"
+"СЃС‚РІР°СЂР°РµС†С†Р° Р°СЃСЏСЂРѕРґРґР·Рµ РєР°СЂС‹СЃС‚Р°Р»СЊРЅС–РєР°. Р‘РѕР»СЊС€СЊ С–РЅС„Р°СЂРјР°С†С‹С–\n"
+"РјРѕР¶РЅР° Р·РЅР°Р№СЃС†С– РЅР° СЃР°Р№С†Рµ GNUstep: www.gnustep.org"
 
 #: ../src/dialog.c:2041
 msgid "About GNUstep"
-msgstr "Аб GNUstep"
+msgstr "РђР± GNUstep"
 
 #: ../src/dock.c:213
 #, c-format
 msgid "Type the name for workspace %i:"
-msgstr "Задайце імя працамесца %i:"
+msgstr "Р—Р°РґР°Р№С†Рµ С–РјСЏ РїСЂР°С†Р°РјРµСЃС†Р° %i:"
 
 #: ../src/dock.c:214 ../src/dock.c:1142 ../src/dock.c:1145 ../src/dock.c:3410
 msgid "Rename Workspace"
-msgstr "Перайменаваць працамесца"
+msgstr "РџРµСЂР°Р№РјРµРЅР°РІР°С†СЊ РїСЂР°С†Р°РјРµСЃС†Р°"
 
 #: ../src/dock.c:520 ../src/dock.c:528
 msgid "Warning"
-msgstr "Увага"
+msgstr "РЈРІР°РіР°"
 
 #: ../src/dock.c:521
 msgid ""
@@ -540,9 +540,9 @@ msgid ""
 "is docked in the same positions on the other workspaces and the Clip is not "
 "full in some workspace."
 msgstr ""
-"Некаторыя іконкі ня могуць быць бачнымі на ўсіх працамесцах. Напэўна "
-"нейкая іконка задакавана ў той жа пазіцыі на іншым працамесцы ці скрэпка "
-"аднаго працамесца перапоўнена."
+"РќРµРєР°С‚РѕСЂС‹СЏ С–РєРѕРЅРєС– РЅСЏ РјРѕРіСѓС†СЊ Р±С‹С†СЊ Р±Р°С‡РЅС‹РјС– РЅР° СћСЃС–С… РїСЂР°С†Р°РјРµСЃС†Р°С…. РќР°РїСЌСћРЅР° "
+"РЅРµР№РєР°СЏ С–РєРѕРЅРєР° Р·Р°РґР°РєР°РІР°РЅР° Сћ С‚РѕР№ Р¶Р° РїР°Р·С–С†С‹С– РЅР° С–РЅС€С‹Рј РїСЂР°С†Р°РјРµСЃС†С‹ С†С– СЃРєСЂСЌРїРєР° "
+"Р°РґРЅР°РіРѕ РїСЂР°С†Р°РјРµСЃС†Р° РїРµСЂР°РїРѕСћРЅРµРЅР°."
 
 #: ../src/dock.c:529
 msgid ""
@@ -550,250 +550,250 @@ msgid ""
 "docked in the same position on the other workspaces and the Clip is not full "
 "in some workspace."
 msgstr ""
-"Гэту іконку нельга зрабіць прысутнічаючай на ўсіх працамесцах. Напэўна "
-"нейкая іконка задакавана ў той жа пазіцыі на іншым працамесцы ці скрэпка "
-"аднаго працамесца перапоўнена."
+"Р“СЌС‚Сѓ С–РєРѕРЅРєСѓ РЅРµР»СЊРіР° Р·СЂР°Р±С–С†СЊ РїСЂС‹СЃСѓС‚РЅС–С‡Р°СЋС‡Р°Р№ РЅР° СћСЃС–С… РїСЂР°С†Р°РјРµСЃС†Р°С…. РќР°РїСЌСћРЅР° "
+"РЅРµР№РєР°СЏ С–РєРѕРЅРєР° Р·Р°РґР°РєР°РІР°РЅР° Сћ С‚РѕР№ Р¶Р° РїР°Р·С–С†С‹С– РЅР° С–РЅС€С‹Рј РїСЂР°С†Р°РјРµСЃС†С‹ С†С– СЃРєСЂСЌРїРєР° "
+"Р°РґРЅР°РіРѕ РїСЂР°С†Р°РјРµСЃС†Р° РїРµСЂР°РїРѕСћРЅРµРЅР°."
 
 #: ../src/dock.c:556
 msgid "Workspace Clip"
-msgstr "Скрэпка працамесца"
+msgstr "РЎРєСЂСЌРїРєР° РїСЂР°С†Р°РјРµСЃС†Р°"
 
 #: ../src/dock.c:557
 msgid "All selected icons will be removed!"
-msgstr "Усе абраныя іконкі будуць выдалены!"
+msgstr "РЈСЃРµ Р°Р±СЂР°РЅС‹СЏ С–РєРѕРЅРєС– Р±СѓРґСѓС†СЊ РІС‹РґР°Р»РµРЅС‹!"
 
 #: ../src/dock.c:608 ../src/dock.c:1157 ../src/dock.c:1159 ../src/dock.c:3446
 msgid "Keep Icon"
-msgstr "Трымаць іконку"
+msgstr "РўСЂС‹РјР°С†СЊ С–РєРѕРЅРєСѓ"
 
 #: ../src/dock.c:609 ../src/dock.c:2138 ../src/dock.c:2279
 msgid "Type the command used to launch the application"
-msgstr "Каманда дзеля запуску праграмы"
+msgstr "РљР°РјР°РЅРґР° РґР·РµР»СЏ Р·Р°РїСѓСЃРєСѓ РїСЂР°РіСЂР°РјС‹"
 
 #: ../src/dock.c:965
 #, c-format
 msgid "could not launch application %s\n"
-msgstr "немагчыма запусціць праграму %s\n"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·Р°РїСѓСЃС†С–С†СЊ РїСЂР°РіСЂР°РјСѓ %s\n"
 
 #: ../src/dock.c:1020
 msgid "could not create workspace submenu for Clip menu"
-msgstr "немагчыма стварыць падменю працамесца для меню скрэпкі"
+msgstr "РЅРµРјР°РіС‡С‹РјР° СЃС‚РІР°СЂС‹С†СЊ РїР°РґРјРµРЅСЋ РїСЂР°С†Р°РјРµСЃС†Р° РґР»СЏ РјРµРЅСЋ СЃРєСЂСЌРїРєС–"
 
 #: ../src/dock.c:1079
 msgid "could not create options submenu for Clip menu"
-msgstr "немагчыма стварыць падменю параметраў для меню скрэпкі"
+msgstr "РЅРµРјР°РіС‡С‹РјР° СЃС‚РІР°СЂС‹С†СЊ РїР°РґРјРµРЅСЋ РїР°СЂР°РјРµС‚СЂР°Сћ РґР»СЏ РјРµРЅСЋ СЃРєСЂСЌРїРєС–"
 
 #: ../src/dock.c:1083 ../src/dock.c:1131
 msgid "Keep on Top"
-msgstr "Трымаць зверху"
+msgstr "РўСЂС‹РјР°С†СЊ Р·РІРµСЂС…Сѓ"
 
 #: ../src/dock.c:1089
 msgid "Collapsed"
-msgstr "Звёрнуты"
+msgstr "Р—РІС‘СЂРЅСѓС‚С‹"
 
 #: ../src/dock.c:1095
 msgid "Autocollapse"
-msgstr "Зварачвацца аўтаматычна"
+msgstr "Р—РІР°СЂР°С‡РІР°С†С†Р° Р°СћС‚Р°РјР°С‚С‹С‡РЅР°"
 
 #: ../src/dock.c:1101
 msgid "Autoraise"
-msgstr "Аўтаўсплыцце"
+msgstr "РђСћС‚Р°СћСЃРїР»С‹С†С†Рµ"
 
 #: ../src/dock.c:1107
 msgid "Autoattract Icons"
-msgstr "Прыцягваць іконкі"
+msgstr "РџСЂС‹С†СЏРіРІР°С†СЊ С–РєРѕРЅРєС–"
 
 #: ../src/dock.c:1137
 msgid "Clip Options"
-msgstr "Параметры скрэпкі"
+msgstr "РџР°СЂР°РјРµС‚СЂС‹ СЃРєСЂСЌРїРєС–"
 
 #: ../src/dock.c:1147
 msgid "Selected"
-msgstr "Абраная"
+msgstr "РђР±СЂР°РЅР°СЏ"
 
 #: ../src/dock.c:1152 ../src/dock.c:1155 ../src/dock.c:3437
 msgid "Select All Icons"
-msgstr "Абраць усе іконкі"
+msgstr "РђР±СЂР°С†СЊ СѓСЃРµ С–РєРѕРЅРєС–"
 
 #: ../src/dock.c:1161 ../src/dock.c:1163 ../src/dock.c:3454
 msgid "Move Icon To"
-msgstr "Перанесці іконку на"
+msgstr "РџРµСЂР°РЅРµСЃС†С– С–РєРѕРЅРєСѓ РЅР°"
 
 #: ../src/dock.c:1168 ../src/dock.c:1171 ../src/dock.c:3465
 msgid "Remove Icon"
-msgstr "Выдаліць іконку"
+msgstr "Р’С‹РґР°Р»С–С†СЊ С–РєРѕРЅРєСѓ"
 
 #: ../src/dock.c:1173
 msgid "Attract Icons"
-msgstr "Прыцягваць іконкі"
+msgstr "РџСЂС‹С†СЏРіРІР°С†СЊ С–РєРѕРЅРєС–"
 
 #: ../src/dock.c:1176
 msgid "Launch"
-msgstr "Запусціць"
+msgstr "Р—Р°РїСѓСЃС†С–С†СЊ"
 
 #: ../src/dock.c:1184
 msgid "Settings..."
-msgstr "Настройкі"
+msgstr "РќР°СЃС‚СЂРѕР№РєС–"
 
 #: ../src/dock.c:1549 ../src/dock.c:1656
 #, c-format
 msgid "bad value in docked icon state info %s"
-msgstr "дрэннае значэнне інфармацыі аб стане задакаванай іконкі %s"
+msgstr "РґСЂСЌРЅРЅР°Рµ Р·РЅР°С‡СЌРЅРЅРµ С–РЅС„Р°СЂРјР°С†С‹С– Р°Р± СЃС‚Р°РЅРµ Р·Р°РґР°РєР°РІР°РЅР°Р№ С–РєРѕРЅРєС– %s"
 
 #: ../src/dock.c:1664
 #, c-format
 msgid "bad value in docked icon position %i,%i"
-msgstr "дрэннае значэнне пазіцыі задакаванай іконкі %i,%i"
+msgstr "РґСЂСЌРЅРЅР°Рµ Р·РЅР°С‡СЌРЅРЅРµ РїР°Р·С–С†С‹С– Р·Р°РґР°РєР°РІР°РЅР°Р№ С–РєРѕРЅРєС– %i,%i"
 
 #: ../src/dock.c:1684
 #, c-format
 msgid "bad value in dock state info:%s"
-msgstr "дрэннае значэнне інфармацыі аб стане дока %s"
+msgstr "РґСЂСЌРЅРЅР°Рµ Р·РЅР°С‡СЌРЅРЅРµ С–РЅС„Р°СЂРјР°С†С‹С– Р°Р± СЃС‚Р°РЅРµ РґРѕРєР° %s"
 
 #: ../src/dock.c:1920
 msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
-msgstr "зашмат іконак задакавана. Лішнія будуць ігнараваны"
+msgstr "Р·Р°С€РјР°С‚ С–РєРѕРЅР°Рє Р·Р°РґР°РєР°РІР°РЅР°. Р›С–С€РЅС–СЏ Р±СѓРґСѓС†СЊ С–РіРЅР°СЂР°РІР°РЅС‹"
 
 #. icon->forced_dock = 1;
 #: ../src/dock.c:2137 ../src/dock.c:2278
 msgid "Dock Icon"
-msgstr "Задакаваць іконку"
+msgstr "Р—Р°РґР°РєР°РІР°С†СЊ С–РєРѕРЅРєСѓ"
 
 #: ../src/dock.c:3324
 #, c-format
 msgid "Could not execute command \"%s\""
-msgstr "Немагчыма выканаць каманду \"%s\""
+msgstr "РќРµРјР°РіС‡С‹РјР° РІС‹РєР°РЅР°С†СЊ РєР°РјР°РЅРґСѓ \"%s\""
 
 #: ../src/dock.c:3416
 msgid "Toggle Omnipresent"
-msgstr "Інвертаваць прысутнасць"
+msgstr "Р†РЅРІРµСЂС‚Р°РІР°С†СЊ РїСЂС‹СЃСѓС‚РЅР°СЃС†СЊ"
 
 #: ../src/dock.c:3421 ../src/kwm.c:637 ../src/winmenu.c:418
 #: ../src/winspector.c:1375
 msgid "Omnipresent"
-msgstr "На ўсіх працамесцах"
+msgstr "РќР° СћСЃС–С… РїСЂР°С†Р°РјРµСЃС†Р°С…"
 
 #: ../src/dock.c:3435
 msgid "Unselect All Icons"
-msgstr "Зняць вылучэнне з усіх іконак"
+msgstr "Р—РЅСЏС†СЊ РІС‹Р»СѓС‡СЌРЅРЅРµ Р· СѓСЃС–С… С–РєРѕРЅР°Рє"
 
 #: ../src/dock.c:3444
 msgid "Keep Icons"
-msgstr "Трымаць іконкі"
+msgstr "РўСЂС‹РјР°С†СЊ С–РєРѕРЅРєС–"
 
 #: ../src/dock.c:3452
 msgid "Move Icons To"
-msgstr "Перанесці іконкі на"
+msgstr "РџРµСЂР°РЅРµСЃС†С– С–РєРѕРЅРєС– РЅР°"
 
 #: ../src/dock.c:3463
 msgid "Remove Icons"
-msgstr "Выдаліць іконкі"
+msgstr "Р’С‹РґР°Р»С–С†СЊ С–РєРѕРЅРєС–"
 
 #: ../src/dock.c:3494 ../src/kwm.c:643
 msgid "Bring Here"
-msgstr "Перанесці сюды"
+msgstr "РџРµСЂР°РЅРµСЃС†С– СЃСЋРґС‹"
 
 #: ../src/dockedapp.c:149
 #, c-format
 msgid "could not find icon %s, used in a docked application"
-msgstr "немагчыма знайсці іконку %s для дакаванай праграмы"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·РЅР°Р№СЃС†С– С–РєРѕРЅРєСѓ %s РґР»СЏ РґР°РєР°РІР°РЅР°Р№ РїСЂР°РіСЂР°РјС‹"
 
 #: ../src/dockedapp.c:229
 #, c-format
 msgid "Could not open specified icon file: %s"
-msgstr "Немагчыма адкрыць азначаны файл іконкі: %s"
+msgstr "РќРµРјР°РіС‡С‹РјР° Р°РґРєСЂС‹С†СЊ Р°Р·РЅР°С‡Р°РЅС‹ С„Р°Р№Р» С–РєРѕРЅРєС–: %s"
 
 #: ../src/dockedapp.c:231
 msgid "Ignore"
-msgstr "Ігнараваць"
+msgstr "Р†РіРЅР°СЂР°РІР°С†СЊ"
 
 #: ../src/dockedapp.c:333
 msgid "Start when Window Maker is started"
-msgstr "Запускаць пры старце Window Maker"
+msgstr "Р—Р°РїСѓСЃРєР°С†СЊ РїСЂС‹ СЃС‚Р°СЂС†Рµ Window Maker"
 
 #: ../src/dockedapp.c:340
 msgid "Lock (prevent accidental removal)"
-msgstr "Заблакаваць ад нежаданага выдалення"
+msgstr "Р—Р°Р±Р»Р°РєР°РІР°С†СЊ Р°Рґ РЅРµР¶Р°РґР°РЅР°РіР° РІС‹РґР°Р»РµРЅРЅСЏ"
 
 #: ../src/dockedapp.c:344
 msgid "Application path and arguments"
-msgstr "Імя і аргументы праграмы"
+msgstr "Р†РјСЏ С– Р°СЂРіСѓРјРµРЅС‚С‹ РїСЂР°РіСЂР°РјС‹"
 
 #: ../src/dockedapp.c:357
 msgid "Command for middle-click launch"
-msgstr "Каманда для запуску пя сярэдняй кнопцы"
+msgstr "РљР°РјР°РЅРґР° РґР»СЏ Р·Р°РїСѓСЃРєСѓ РїСЏ СЃСЏСЂСЌРґРЅСЏР№ РєРЅРѕРїС†С‹"
 
 #: ../src/dockedapp.c:371
 #, c-format
 msgid "%s will be replaced with current selection"
-msgstr "%s заменіцца бягучым selection"
+msgstr "%s Р·Р°РјРµРЅС–С†С†Р° Р±СЏРіСѓС‡С‹Рј selection"
 
 #: ../src/dockedapp.c:376
 msgid "Command for files dropped with DND"
-msgstr "Каманда для перанесеных файлаў"
+msgstr "РљР°РјР°РЅРґР° РґР»СЏ РїРµСЂР°РЅРµСЃРµРЅС‹С… С„Р°Р№Р»Р°Сћ"
 
 #: ../src/dockedapp.c:390
 #, c-format
 msgid "%d will be replaced with the file name"
-msgstr "%d аменiцца імём файла"
+msgstr "%d Р°РјРµРЅiС†С†Р° С–РјС‘Рј С„Р°Р№Р»Р°"
 
 #: ../src/dockedapp.c:394
 msgid "DND support was not compiled in"
-msgstr "Падтрымка DND не была абрана пачдчас зборкі"
+msgstr "РџР°РґС‚СЂС‹РјРєР° DND РЅРµ Р±С‹Р»Р° Р°Р±СЂР°РЅР° РїР°С‡РґС‡Р°СЃ Р·Р±РѕСЂРєС–"
 
 #: ../src/dockedapp.c:399
 msgid "Icon Image"
-msgstr "Выява іконкі"
+msgstr "Р’С‹СЏРІР° С–РєРѕРЅРєС–"
 
 #: ../src/dockedapp.c:413 ../src/winspector.c:1513
 msgid "Browse..."
-msgstr "Выбар..."
+msgstr "Р’С‹Р±Р°СЂ..."
 
 #: ../src/dockedapp.c:466
 msgid "Docked Application Settings"
-msgstr "Параметры дакаванай праграмы"
+msgstr "РџР°СЂР°РјРµС‚СЂС‹ РґР°РєР°РІР°РЅР°Р№ РїСЂР°РіСЂР°РјС‹"
 
 #: ../src/framewin.c:649 ../src/framewin.c:744 ../src/menu.c:456
 #: ../src/texture.c:594
 #, c-format
 msgid "could not render texture: %s"
-msgstr "немагчыма згенераваць тэкстуру: %s"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·РіРµРЅРµСЂР°РІР°С†СЊ С‚СЌРєСЃС‚СѓСЂСѓ: %s"
 
 #: ../src/framewin.c:672 ../src/framewin.c:683 ../src/framewin.c:699
 #: ../src/framewin.c:710 ../src/framewin.c:717 ../src/framewin.c:724
 #: ../src/icon.c:350 ../src/menu.c:485
 #, c-format
 msgid "error rendering image:%s"
-msgstr "памылка адлюстравання выявы:%s"
+msgstr "РїР°РјС‹Р»РєР° Р°РґР»СЋСЃС‚СЂР°РІР°РЅРЅСЏ РІС‹СЏРІС‹:%s"
 
 #: ../src/framewin.c:777
 #, c-format
 msgid "error rendering image: %s"
-msgstr "памылка адлюстравання выявы: %s"
+msgstr "РїР°РјС‹Р»РєР° Р°РґР»СЋСЃС‚СЂР°РІР°РЅРЅСЏ РІС‹СЏРІС‹: %s"
 
 #: ../src/gnome.c:216 ../src/gnome.c:343 ../src/gnome.c:401
 msgid "out of memory while updating GNOME hints"
-msgstr "не хапіла памяці падчас абноўлення падказак GNOME"
+msgstr "РЅРµ С…Р°РїС–Р»Р° РїР°РјСЏС†С– РїР°РґС‡Р°СЃ Р°Р±РЅРѕСћР»РµРЅРЅСЏ РїР°РґРєР°Р·Р°Рє GNOME"
 
 #: ../src/icon.c:229 ../src/wdefaults.c:443
 #, c-format
 msgid "error loading image file \"%s\""
-msgstr "памылка загрузкі файла выявы \"%s\""
+msgstr "РїР°РјС‹Р»РєР° Р·Р°РіСЂСѓР·РєС– С„Р°Р№Р»Р° РІС‹СЏРІС‹ \"%s\""
 
 #: ../src/icon.c:493 ../src/icon.c:502
 #, c-format
 msgid "could not create directory %s"
-msgstr "немагчыма стварыць каталаг %s"
+msgstr "РЅРµРјР°РіС‡С‹РјР° СЃС‚РІР°СЂС‹С†СЊ РєР°С‚Р°Р»Р°Рі %s"
 
 #: ../src/icon.c:769
 #, c-format
 msgid "could not find default icon \"%s\""
-msgstr "немагчыма знайсці стандартную іконку \"%s\""
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·РЅР°Р№СЃС†С– СЃС‚Р°РЅРґР°СЂС‚РЅСѓСЋ С–РєРѕРЅРєСѓ \"%s\""
 
 #: ../src/icon.c:775
 #, c-format
 msgid "could not load default icon \"%s\":%s"
-msgstr "немагчыма знайсці стандартную іконку \"%s\":%s"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·РЅР°Р№СЃС†С– СЃС‚Р°РЅРґР°СЂС‚РЅСѓСЋ С–РєРѕРЅРєСѓ \"%s\":%s"
 
 #.
 #. * Warning: If you make some change that affects the order of the
@@ -802,31 +802,31 @@ msgstr "немагчыма знайсці стандартную іконку \"%s\":%s"
 #.
 #: ../src/kwm.c:633 ../src/winmenu.c:441 ../src/winmenu.c:583
 msgid "Maximize"
-msgstr "Максімізаваць"
+msgstr "РњР°РєСЃС–РјС–Р·Р°РІР°С†СЊ"
 
 #: ../src/kwm.c:634 ../src/winmenu.c:578
 msgid "Unmaximize"
-msgstr "Дэмаксімізаваць"
+msgstr "Р”СЌРјР°РєСЃС–РјС–Р·Р°РІР°С†СЊ"
 
 #: ../src/kwm.c:635 ../src/winmenu.c:449 ../src/winmenu.c:569
 msgid "Miniaturize"
-msgstr "Мінімізаваць"
+msgstr "РњС–РЅС–РјС–Р·Р°РІР°С†СЊ"
 
 #: ../src/kwm.c:636 ../src/winmenu.c:564
 msgid "Deminiaturize"
-msgstr "Дэмінімізаваць"
+msgstr "Р”СЌРјС–РЅС–РјС–Р·Р°РІР°С†СЊ"
 
 #: ../src/kwm.c:638
 msgid "Not Omnipresent"
-msgstr "Толькі на гэтым працамесцы"
+msgstr "РўРѕР»СЊРєС– РЅР° РіСЌС‚С‹Рј РїСЂР°С†Р°РјРµСЃС†С‹"
 
 #: ../src/kwm.c:639
 msgid "Move"
-msgstr "Перанесці"
+msgstr "РџРµСЂР°РЅРµСЃС†С–"
 
 #: ../src/kwm.c:640
 msgid "Resize"
-msgstr "Змяніць памер"
+msgstr "Р—РјСЏРЅС–С†СЊ РїР°РјРµСЂ"
 
 #.
 #. entry = wMenuAddCallback(menu, _("Select Shortcut"), NULL, NULL);
@@ -834,100 +834,100 @@ msgstr "Змяніць памер"
 #.
 #: ../src/kwm.c:641 ../src/rootmenu.c:248 ../src/winmenu.c:513
 msgid "Close"
-msgstr "Закрыць"
+msgstr "Р—Р°РєСЂС‹С†СЊ"
 
 #: ../src/kwm.c:642 ../src/winmenu.c:497
 msgid "Move To"
-msgstr "Перанесці на"
+msgstr "РџРµСЂР°РЅРµСЃС†С– РЅР°"
 
 #: ../src/kwm.c:1096
 msgid "%a(Run Command,Type the command to run:)"
-msgstr "%a(Выканаць каманду:)"
+msgstr "%a(Р’С‹РєР°РЅР°С†СЊ РєР°РјР°РЅРґСѓ:)"
 
 #: ../src/main.c:222
 msgid "failed to restart Window Maker."
-msgstr "немагчыма перазапусціць Window Maker."
+msgstr "РЅРµРјР°РіС‡С‹РјР° РїРµСЂР°Р·Р°РїСѓСЃС†С–С†СЊ Window Maker."
 
 #: ../src/main.c:225
 #, c-format
 msgid "could not exec %s"
-msgstr "немагчыма выканаць %s"
+msgstr "РЅРµРјР°РіС‡С‹РјР° РІС‹РєР°РЅР°С†СЊ %s"
 
 #: ../src/main.c:271
 msgid "Could not execute command: "
-msgstr "Немагчыма выканаць каманду: "
+msgstr "РќРµРјР°РіС‡С‹РјР° РІС‹РєР°РЅР°С†СЊ РєР°РјР°РЅРґСѓ: "
 
 #: ../src/main.c:428
 #, c-format
 msgid "%s aborted.\n"
-msgstr "%s завершана з-за памылкі.\n"
+msgstr "%s Р·Р°РІРµСЂС€Р°РЅР° Р·-Р·Р° РїР°РјС‹Р»РєС–.\n"
 
 #: ../src/main.c:439
 #, c-format
 msgid "Usage: %s [options]\n"
-msgstr "Выкарыстанне: %s [параметры]\n"
+msgstr "Р’С‹РєР°СЂС‹СЃС‚Р°РЅРЅРµ: %s [РїР°СЂР°РјРµС‚СЂС‹]\n"
 
 #: ../src/main.c:440
 msgid "The Window Maker window manager for the X window system"
-msgstr "Window Maker - ваконны менеджар для сістэмы X window"
+msgstr "Window Maker - РІР°РєРѕРЅРЅС‹ РјРµРЅРµРґР¶Р°СЂ РґР»СЏ СЃС–СЃС‚СЌРјС‹ X window"
 
 #: ../src/main.c:442
 msgid " -display host:dpy\tdisplay to use"
-msgstr " -display host:dpy\tвыкарыстоўваць дадзены дысплей"
+msgstr " -display host:dpy\tРІС‹РєР°СЂС‹СЃС‚РѕСћРІР°С†СЊ РґР°РґР·РµРЅС‹ РґС‹СЃРїР»РµР№"
 
 #: ../src/main.c:444
 msgid " --no-cpp \t\tdisable preprocessing of configuration files"
-msgstr " --no-cpp \t\tзабароніць прэпрацэссінг канфігурацыйных фацлаў"
+msgstr " --no-cpp \t\tР·Р°Р±Р°СЂРѕРЅС–С†СЊ РїСЂСЌРїСЂР°С†СЌСЃСЃС–РЅРі РєР°РЅС„С–РіСѓСЂР°С†С‹Р№РЅС‹С… С„Р°С†Р»Р°Сћ"
 
 #: ../src/main.c:446
 msgid " --no-dock\t\tdo not open the application Dock"
-msgstr " --no-dock\t\tзабароніць док"
+msgstr " --no-dock\t\tР·Р°Р±Р°СЂРѕРЅС–С†СЊ РґРѕРє"
 
 #: ../src/main.c:447
 msgid " --no-clip\t\tdo not open the workspace Clip"
-msgstr " --no-clip\t\tзабароніць скрэпку"
+msgstr " --no-clip\t\tР·Р°Р±Р°СЂРѕРЅС–С†СЊ СЃРєСЂСЌРїРєСѓ"
 
 #: ../src/main.c:448
 msgid " --no-autolaunch\tdo not autolaunch applications"
-msgstr " --no-autolaunch\tзабароніць аўтазапуск праграм"
+msgstr " --no-autolaunch\tР·Р°Р±Р°СЂРѕРЅС–С†СЊ Р°СћС‚Р°Р·Р°РїСѓСЃРє РїСЂР°РіСЂР°Рј"
 
 #: ../src/main.c:449
 msgid " --dont-restore\t\tdo not restore saved session"
-msgstr " --dont-restore\t\tне узнаўляць захаванцю сесію"
+msgstr " --dont-restore\t\tРЅРµ СѓР·РЅР°СћР»СЏС†СЊ Р·Р°С…Р°РІР°РЅС†СЋ СЃРµСЃС–СЋ"
 
 #: ../src/main.c:451
 msgid " --locale locale\tlocale to use"
-msgstr " --locale locale\tвыкарыстоўваць дадзеную лакаль"
+msgstr " --locale locale\tРІС‹РєР°СЂС‹СЃС‚РѕСћРІР°С†СЊ РґР°РґР·РµРЅСѓСЋ Р»Р°РєР°Р»СЊ"
 
 #: ../src/main.c:453
 msgid ""
 " --create-stdcmap\tcreate the standard colormap hint in PseudoColor visuals"
 msgstr ""
-" --create-stdcmap\tгенераваць стандартную карту колераў для PseudoColor"
+" --create-stdcmap\tРіРµРЅРµСЂР°РІР°С†СЊ СЃС‚Р°РЅРґР°СЂС‚РЅСѓСЋ РєР°СЂС‚Сѓ РєРѕР»РµСЂР°Сћ РґР»СЏ PseudoColor"
 
 #: ../src/main.c:454
 msgid " --visual-id visualid\tvisual id of visual to use"
-msgstr " --visual-id visualid\tвыкарыстроўваць дадзены відэарэжым"
+msgstr " --visual-id visualid\tРІС‹РєР°СЂС‹СЃС‚СЂРѕСћРІР°С†СЊ РґР°РґР·РµРЅС‹ РІС–РґСЌР°СЂСЌР¶С‹Рј"
 
 #: ../src/main.c:455
 msgid " --static\t\tdo not update or save configurations"
-msgstr " --static\t\tне захоўваць і не абнаўляць канфігурацыю"
+msgstr " --static\t\tРЅРµ Р·Р°С…РѕСћРІР°С†СЊ С– РЅРµ Р°Р±РЅР°СћР»СЏС†СЊ РєР°РЅС„С–РіСѓСЂР°С†С‹СЋ"
 
 #: ../src/main.c:456
 msgid " --no-polling\t\tdo not periodically check for configuration updates"
-msgstr " --no-polling\t\tзабароніць перыядычную праверку змен у канфігурацыі"
+msgstr " --no-polling\t\tР·Р°Р±Р°СЂРѕРЅС–С†СЊ РїРµСЂС‹СЏРґС‹С‡РЅСѓСЋ РїСЂР°РІРµСЂРєСѓ Р·РјРµРЅ Сѓ РєР°РЅС„С–РіСѓСЂР°С†С‹С–"
 
 #: ../src/main.c:458
 msgid " --synchronous\t\tturn on synchronous display mode"
-msgstr " --synchronous\t\tсінхронны рэжым для графікі"
+msgstr " --synchronous\t\tСЃС–РЅС…СЂРѕРЅРЅС‹ СЂСЌР¶С‹Рј РґР»СЏ РіСЂР°С„С–РєС–"
 
 #: ../src/main.c:460
 msgid " --version\t\tprint version and exit"
-msgstr " --version\t\tпаказаць версію ды выйсці"
+msgstr " --version\t\tРїР°РєР°Р·Р°С†СЊ РІРµСЂСЃС–СЋ РґС‹ РІС‹Р№СЃС†С–"
 
 #: ../src/main.c:461
 msgid " --help\t\t\tshow this message"
-msgstr " --help\t\t\tпаказаць гэты тэкст"
+msgstr " --help\t\t\tРїР°РєР°Р·Р°С†СЊ РіСЌС‚С‹ С‚СЌРєСЃС‚"
 
 #: ../src/main.c:474
 #, c-format
@@ -935,98 +935,98 @@ msgid ""
 "could not find user GNUstep directory (%s).\n"
 "Make sure you have installed Window Maker correctly and run wmaker.inst"
 msgstr ""
-"немагчыма знайсці карыстальніцкі каталаг GNUstep (%s).\n"
-"Праверце ці Window Maker правільна усталяваны і запусціце wmaker.inst"
+"РЅРµРјР°РіС‡С‹РјР° Р·РЅР°Р№СЃС†С– РєР°СЂС‹СЃС‚Р°Р»СЊРЅС–С†РєС– РєР°С‚Р°Р»Р°Рі GNUstep (%s).\n"
+"РџСЂР°РІРµСЂС†Рµ С†С– Window Maker РїСЂР°РІС–Р»СЊРЅР° СѓСЃС‚Р°Р»СЏРІР°РЅС‹ С– Р·Р°РїСѓСЃС†С–С†Рµ wmaker.inst"
 
 #: ../src/main.c:479
 #, c-format
 msgid "could not find user GNUstep directory (%s)."
-msgstr "немагчыма знайсці карыстальніцкі каталаг GNUstep (%s)."
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·РЅР°Р№СЃС†С– РєР°СЂС‹СЃС‚Р°Р»СЊРЅС–С†РєС– РєР°С‚Р°Р»Р°Рі GNUstep (%s)."
 
 #: ../src/main.c:482
 msgid ""
 "There was an error while creating GNUstep directory, please make sure you "
 "have installed Window Maker correctly and run wmaker.inst"
 msgstr ""
-"Памылка падчас стварэння каталага GNUstep. Праверце, што Window Maker"
-"усталяваны карэктна і запусціце wmaker.inst"
+"РџР°РјС‹Р»РєР° РїР°РґС‡Р°СЃ СЃС‚РІР°СЂСЌРЅРЅСЏ РєР°С‚Р°Р»Р°РіР° GNUstep. РџСЂР°РІРµСЂС†Рµ, С€С‚Рѕ Window Maker"
+"СѓСЃС‚Р°Р»СЏРІР°РЅС‹ РєР°СЂСЌРєС‚РЅР° С– Р·Р°РїСѓСЃС†С–С†Рµ wmaker.inst"
 
 #: ../src/main.c:485
 #, c-format
 msgid "%s directory created with default configuration."
-msgstr "створаны каталаг %s са стандартнай канфігурацыяй."
+msgstr "СЃС‚РІРѕСЂР°РЅС‹ РєР°С‚Р°Р»Р°Рі %s СЃР° СЃС‚Р°РЅРґР°СЂС‚РЅР°Р№ РєР°РЅС„С–РіСѓСЂР°С†С‹СЏР№."
 
 #: ../src/main.c:505 ../src/main.c:510
 #, c-format
 msgid "%s:could not execute initialization script"
-msgstr "%s: немагчыма выканаць ініцыялізацыйны скрыпт"
+msgstr "%s: РЅРµРјР°РіС‡С‹РјР° РІС‹РєР°РЅР°С†СЊ С–РЅС–С†С‹СЏР»С–Р·Р°С†С‹Р№РЅС‹ СЃРєСЂС‹РїС‚"
 
 #: ../src/main.c:530 ../src/main.c:535
 #, c-format
 msgid "%s:could not execute exit script"
-msgstr "немагчыма выканаць скрыпт па выхадзе"
+msgstr "РЅРµРјР°РіС‡С‹РјР° РІС‹РєР°РЅР°С†СЊ СЃРєСЂС‹РїС‚ РїР° РІС‹С…Р°РґР·Рµ"
 
 #: ../src/main.c:663 ../src/main.c:671 ../src/main.c:679 ../src/main.c:699
 #, c-format
 msgid "too few arguments for %s"
-msgstr "замала аргументаў для %s"
+msgstr "Р·Р°РјР°Р»Р° Р°СЂРіСѓРјРµРЅС‚Р°Сћ РґР»СЏ %s"
 
 #: ../src/main.c:683
 #, c-format
 msgid "bad value for visualid: \"%s\""
-msgstr "дрэннае значэнне ідэнтыфікатара відэарэжыму: \"%s\""
+msgstr "РґСЂСЌРЅРЅР°Рµ Р·РЅР°С‡СЌРЅРЅРµ С–РґСЌРЅС‚С‹С„С–РєР°С‚Р°СЂР° РІС–РґСЌР°СЂСЌР¶С‹РјСѓ: \"%s\""
 
 #: ../src/main.c:707
 #, c-format
 msgid "%s: invalid argument '%s'\n"
-msgstr "%s: дрэнны аргумент '%s'\n"
+msgstr "%s: РґСЂСЌРЅРЅС‹ Р°СЂРіСѓРјРµРЅС‚ '%s'\n"
 
 #: ../src/main.c:708
 #, c-format
 msgid "Try '%s --help' for more information\n"
-msgstr "%s --help можа даць больш інфармацыі\n"
+msgstr "%s --help РјРѕР¶Р° РґР°С†СЊ Р±РѕР»СЊС€ С–РЅС„Р°СЂРјР°С†С‹С–\n"
 
 #: ../src/main.c:739
 msgid "X server does not support locale"
-msgstr "X-сервер не падтрымлівае лакалі"
+msgstr "X-СЃРµСЂРІРµСЂ РЅРµ РїР°РґС‚СЂС‹РјР»С–РІР°Рµ Р»Р°РєР°Р»С–"
 
 #: ../src/main.c:743
 msgid "cannot set locale modifiers"
-msgstr "немагчыма задаць мадыфікатары лакалі"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·Р°РґР°С†СЊ РјР°РґС‹С„С–РєР°С‚Р°СЂС‹ Р»Р°РєР°Р»С–"
 
 #: ../src/main.c:759
 #, c-format
 msgid "could not open display \"%s\""
-msgstr "немагчыма адкрыць дысплей \"%s\""
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р°РґРєСЂС‹С†СЊ РґС‹СЃРїР»РµР№ \"%s\""
 
 #: ../src/menu.c:1264
 msgid "could not grab keyboard"
-msgstr "немагчыма захапіць клавіятуру"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·Р°С…Р°РїС–С†СЊ РєР»Р°РІС–СЏС‚СѓСЂСѓ"
 
 #: ../src/menu.c:2578
 #, c-format
 msgid "bad value in menus state info:%s"
-msgstr "дрэннае значэнне інфармацыі аб стане меню:%s"
+msgstr "РґСЂСЌРЅРЅР°Рµ Р·РЅР°С‡СЌРЅРЅРµ С–РЅС„Р°СЂРјР°С†С‹С– Р°Р± СЃС‚Р°РЅРµ РјРµРЅСЋ:%s"
 
 #: ../src/menureader.c:264 ../src/rootmenu.c:733
 #, c-format
 msgid "%s:could not stat menu"
-msgstr "%s: немагчыма атрымаць інфармацыю аб меню"
+msgstr "%s: РЅРµРјР°РіС‡С‹РјР° Р°С‚СЂС‹РјР°С†СЊ С–РЅС„Р°СЂРјР°С†С‹СЋ Р°Р± РјРµРЅСЋ"
 
 #: ../src/menureader.c:341 ../src/menureader.c:380
 #, c-format
 msgid "could not stat() menu file '%s'"
-msgstr "немагчыма выканаць stat() на файл меню '%s'"
+msgstr "РЅРµРјР°РіС‡С‹РјР° РІС‹РєР°РЅР°С†СЊ stat() РЅР° С„Р°Р№Р» РјРµРЅСЋ '%s'"
 
 #: ../src/menureader.c:416
 #, c-format
 msgid "could not find menu file '%s' referenced in WMRootMenu"
-msgstr "немагчыма знайсці файл меню '%s' на які ёсць спасылка ў WMRootMenu"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·РЅР°Р№СЃС†С– С„Р°Р№Р» РјРµРЅСЋ '%s' РЅР° СЏРєС– С‘СЃС†СЊ СЃРїР°СЃС‹Р»РєР° Сћ WMRootMenu"
 
 #: ../src/menureader.c:423
 #, c-format
 msgid "could not find any usable menu files. Please check '%s'"
-msgstr "немагчыма знайсці ніякіх файлаў меню. Калі ласка, праверце '%s'"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·РЅР°Р№СЃС†С– РЅС–СЏРєС–С… С„Р°Р№Р»Р°Сћ РјРµРЅСЋ. РљР°Р»С– Р»Р°СЃРєР°, РїСЂР°РІРµСЂС†Рµ '%s'"
 
 #: ../src/menureader.c:438 ../src/rootmenu.c:1668
 #, c-format
@@ -1034,8 +1034,8 @@ msgid ""
 "using default menu file \"%s\" as the menu referenced in WMRootMenu could "
 "not be found "
 msgstr ""
-"будзе ўжыты стандартны файл меню \"%s\" бо меню на якое спасылаецца "
-"WMRootMenu ня знойдзена"
+"Р±СѓРґР·Рµ СћР¶С‹С‚С‹ СЃС‚Р°РЅРґР°СЂС‚РЅС‹ С„Р°Р№Р» РјРµРЅСЋ \"%s\" Р±Рѕ РјРµРЅСЋ РЅР° СЏРєРѕРµ СЃРїР°СЃС‹Р»Р°РµС†С†Р° "
+"WMRootMenu РЅСЏ Р·РЅРѕР№РґР·РµРЅР°"
 
 #: ../src/menureader.c:457
 #, c-format
@@ -1044,313 +1044,313 @@ msgid ""
 "It should either be a property list menu or the path to the file, enclosed "
 "in \"."
 msgstr ""
-"Дрэнны склад файла менб '%s'.\n"
-"Павінны быць або меню са спісу ўласцівасцяў, або шлях да файла, заключаны "
-"ў двукоссі \""
+"Р”СЂСЌРЅРЅС‹ СЃРєР»Р°Рґ С„Р°Р№Р»Р° РјРµРЅР± '%s'.\n"
+"РџР°РІС–РЅРЅС‹ Р±С‹С†СЊ Р°Р±Рѕ РјРµРЅСЋ СЃР° СЃРїС–СЃСѓ СћР»Р°СЃС†С–РІР°СЃС†СЏСћ, Р°Р±Рѕ С€Р»СЏС… РґР° С„Р°Р№Р»Р°, Р·Р°РєР»СЋС‡Р°РЅС‹ "
+"Сћ РґРІСѓРєРѕСЃСЃС– \""
 
 #: ../src/misc.c:71
 #, c-format
 msgid "could not define value for %s for cpp"
-msgstr "немагчыма задаць значэнне %s для cpp"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·Р°РґР°С†СЊ Р·РЅР°С‡СЌРЅРЅРµ %s РґР»СЏ cpp"
 
 #: ../src/misc.c:101
 #, c-format
 msgid "could not get password entry for UID %i"
-msgstr "немагчыма атрымаць пароль для UID %i"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р°С‚СЂС‹РјР°С†СЊ РїР°СЂРѕР»СЊ РґР»СЏ UID %i"
 
 #: ../src/misc.c:126
 #, c-format
 msgid "your machine is misconfigured. HOSTNAME is set to %s"
-msgstr "ваша машына дрэнна сканфігуравана. HOSTNAME устаноўлена ў %s"
+msgstr "РІР°С€Р° РјР°С€С‹РЅР° РґСЂСЌРЅРЅР° СЃРєР°РЅС„С–РіСѓСЂР°РІР°РЅР°. HOSTNAME СѓСЃС‚Р°РЅРѕСћР»РµРЅР° Сћ %s"
 
 #: ../src/misc.c:132
 #, c-format
 msgid "your machine is misconfigured. HOST is set to %s"
-msgstr "ваша машына дрэнна сканфігуравана. HOST устаноўлена ў %s"
+msgstr "РІР°С€Р° РјР°С€С‹РЅР° РґСЂСЌРЅРЅР° СЃРєР°РЅС„С–РіСѓСЂР°РІР°РЅР°. HOST СѓСЃС‚Р°РЅРѕСћР»РµРЅР° Сћ %s"
 
 #: ../src/misc.c:630
 msgid "Program Arguments"
-msgstr "Аргументы праграмы"
+msgstr "РђСЂРіСѓРјРµРЅС‚С‹ РїСЂР°РіСЂР°РјС‹"
 
 #: ../src/misc.c:631
 msgid "Enter command arguments:"
-msgstr "Задайце агрументы праграмы:"
+msgstr "Р—Р°РґР°Р№С†Рµ Р°РіСЂСѓРјРµРЅС‚С‹ РїСЂР°РіСЂР°РјС‹:"
 
 #: ../src/misc.c:724
 msgid "unable to get dropped data from DND drop"
-msgstr "немагчыма атрымаць дазденыя перанесеныя з DND"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р°С‚СЂС‹РјР°С†СЊ РґР°Р·РґРµРЅС‹СЏ РїРµСЂР°РЅРµСЃРµРЅС‹СЏ Р· DND"
 
 #: ../src/misc.c:732
 msgid "error getting dropped data from DND drop"
-msgstr "памылка атрымання дазденых перанесеных з DND"
+msgstr "РїР°РјС‹Р»РєР° Р°С‚СЂС‹РјР°РЅРЅСЏ РґР°Р·РґРµРЅС‹С… РїРµСЂР°РЅРµСЃРµРЅС‹С… Р· DND"
 
 #: ../src/misc.c:738
 msgid "out of memory while getting data from DND drop"
-msgstr "не хапае памяці падчас атрымання дазденых перанесеных з DND"
+msgstr "РЅРµ С…Р°РїР°Рµ РїР°РјСЏС†С– РїР°РґС‡Р°СЃ Р°С‚СЂС‹РјР°РЅРЅСЏ РґР°Р·РґРµРЅС‹С… РїРµСЂР°РЅРµСЃРµРЅС‹С… Р· DND"
 
 #: ../src/misc.c:783 ../src/misc.c:923
 #, c-format
 msgid "out of memory during expansion of \"%s\""
-msgstr "не хапае памяці каб выканаць \"%s\""
+msgstr "РЅРµ С…Р°РїР°Рµ РїР°РјСЏС†С– РєР°Р± РІС‹РєР°РЅР°С†СЊ \"%s\""
 
 #: ../src/misc.c:837
 msgid "out of memory during expansion of \"%w\""
-msgstr "не хапіла памяці падчас падстаноўкі \"%w\""
+msgstr "РЅРµ С…Р°РїС–Р»Р° РїР°РјСЏС†С– РїР°РґС‡Р°СЃ РїР°РґСЃС‚Р°РЅРѕСћРєС– \"%w\""
 
 #: ../src/misc.c:855
 msgid "out of memory during expansion of \"%W\""
-msgstr "не хапіла памяці падчас падстаноўкі \"%W\""
+msgstr "РЅРµ С…Р°РїС–Р»Р° РїР°РјСЏС†С– РїР°РґС‡Р°СЃ РїР°РґСЃС‚Р°РЅРѕСћРєС– \"%W\""
 
 #: ../src/misc.c:871
 msgid "out of memory during expansion of \"%a\""
-msgstr "не хапіла памяці падчас падстаноўкі \"%a\""
+msgstr "РЅРµ С…Р°РїС–Р»Р° РїР°РјСЏС†С– РїР°РґС‡Р°СЃ РїР°РґСЃС‚Р°РЅРѕСћРєС– \"%a\""
 
 #: ../src/misc.c:902
 #, c-format
 msgid "out of memory during expansion of \"%d\""
-msgstr "не хапіла памяці падчас падстаноўкі \"%d\""
+msgstr "РЅРµ С…Р°РїС–Р»Р° РїР°РјСЏС†С– РїР°РґС‡Р°СЃ РїР°РґСЃС‚Р°РЅРѕСћРєС– \"%d\""
 
 #: ../src/misc.c:916
 msgid "selection not available"
-msgstr "вылучэнне недаступна"
+msgstr "РІС‹Р»СѓС‡СЌРЅРЅРµ РЅРµРґР°СЃС‚СѓРїРЅР°"
 
 #: ../src/misc.c:972 ../src/misc.c:978
 #, c-format
 msgid "bad window name value in %s state info"
-msgstr "дрэннае імя вакна ў інфармацыі аб стане %s"
+msgstr "РґСЂСЌРЅРЅР°Рµ С–РјСЏ РІР°РєРЅР° Сћ С–РЅС„Р°СЂРјР°С†С‹С– Р°Р± СЃС‚Р°РЅРµ %s"
 
 #: ../src/misc.c:1235
 msgid "could not send message to background image helper"
-msgstr "немагчыма даслаць паведамленне да фонавага апрацоўшчыка выяў"
+msgstr "РЅРµРјР°РіС‡С‹РјР° РґР°СЃР»Р°С†СЊ РїР°РІРµРґР°РјР»РµРЅРЅРµ РґР° С„РѕРЅР°РІР°РіР° Р°РїСЂР°С†РѕСћС€С‡С‹РєР° РІС‹СЏСћ"
 
 #: ../src/pixmap.c:235
 #, c-format
 msgid "could not load mask bitmap file \"%s\". Won't use mask"
-msgstr "немагчыма загрузіць файл бітавай маскі \"%s\". Маска ня будзе ужывацца"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·Р°РіСЂСѓР·С–С†СЊ С„Р°Р№Р» Р±С–С‚Р°РІР°Р№ РјР°СЃРєС– \"%s\". РњР°СЃРєР° РЅСЏ Р±СѓРґР·Рµ СѓР¶С‹РІР°С†С†Р°"
 
 #: ../src/resources.c:44
 #, c-format
 msgid "could not parse color \"%s\""
-msgstr "немагчыма апрацаваць колер \"%s\""
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р°РїСЂР°С†Р°РІР°С†СЊ РєРѕР»РµСЂ \"%s\""
 
 #: ../src/resources.c:48
 #, c-format
 msgid "could not allocate color \"%s\""
-msgstr "немагчыма вылучыць месца для колера \"%s\""
+msgstr "РЅРµРјР°РіС‡С‹РјР° РІС‹Р»СѓС‡С‹С†СЊ РјРµСЃС†Р° РґР»СЏ РєРѕР»РµСЂР° \"%s\""
 
 #: ../src/rootmenu.c:196 ../src/rootmenu.c:198
 msgid "Exit"
-msgstr "Выхад"
+msgstr "Р’С‹С…Р°Рґ"
 
 #: ../src/rootmenu.c:197
 msgid "Exit window manager?"
-msgstr "Выйці з ваконнага менеджара?"
+msgstr "Р’С‹Р№С†С– Р· РІР°РєРѕРЅРЅР°РіР° РјРµРЅРµРґР¶Р°СЂР°?"
 
 #: ../src/rootmenu.c:245
 msgid "Close X session"
-msgstr "Закрыць X-сесію"
+msgstr "Р—Р°РєСЂС‹С†СЊ X-СЃРµСЃС–СЋ"
 
 #: ../src/rootmenu.c:246
 msgid ""
 "Close Window System session?\n"
 "Kill might close applications with unsaved data."
 msgstr ""
-"Закрыць сесію ў Window System?\n"
-"Пры гэтым будуць закрыты праграмы з незахаванымі зменамі."
+"Р—Р°РєСЂС‹С†СЊ СЃРµСЃС–СЋ Сћ Window System?\n"
+"РџСЂС‹ РіСЌС‚С‹Рј Р±СѓРґСѓС†СЊ Р·Р°РєСЂС‹С‚С‹ РїСЂР°РіСЂР°РјС‹ Р· РЅРµР·Р°С…Р°РІР°РЅС‹РјС– Р·РјРµРЅР°РјС–."
 
 #: ../src/rootmenu.c:261
 msgid "Kill X session"
-msgstr "Прымусова закрыць X-сесію"
+msgstr "РџСЂС‹РјСѓСЃРѕРІР° Р·Р°РєСЂС‹С†СЊ X-СЃРµСЃС–СЋ"
 
 #: ../src/rootmenu.c:262
 msgid ""
 "Kill Window System session?\n"
 "(all applications will be closed)"
 msgstr ""
-"Завершыць прымусова сесію Window System?\n"
-"(усе праграмы будуць завершаны)"
+"Р—Р°РІРµСЂС€С‹С†СЊ РїСЂС‹РјСѓСЃРѕРІР° СЃРµСЃС–СЋ Window System?\n"
+"(СѓСЃРµ РїСЂР°РіСЂР°РјС‹ Р±СѓРґСѓС†СЊ Р·Р°РІРµСЂС€Р°РЅС‹)"
 
 #: ../src/rootmenu.c:539
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\" for entry %s"
-msgstr "%s: дрэнная камбінацыя клавіш \"%s\" для элемента %s"
+msgstr "%s: РґСЂСЌРЅРЅР°СЏ РєР°РјР±С–РЅР°С†С‹СЏ РєР»Р°РІС–С€ \"%s\" РґР»СЏ СЌР»РµРјРµРЅС‚Р° %s"
 
 #: ../src/rootmenu.c:547
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\" for entry %s"
-msgstr "%s: дрэнная клавіша ў камбінацыі \"%s\" для элемента %s"
+msgstr "%s: РґСЂСЌРЅРЅР°СЏ РєР»Р°РІС–С€Р° Сћ РєР°РјР±С–РЅР°С†С‹С– \"%s\" РґР»СЏ СЌР»РµРјРµРЅС‚Р° %s"
 
 #: ../src/rootmenu.c:600
 #, c-format
 msgid "%s: unmatched '\"' in menu file"
-msgstr "%s: двукоссе \" ня мае пары ў файле меню"
+msgstr "%s: РґРІСѓРєРѕСЃСЃРµ \" РЅСЏ РјР°Рµ РїР°СЂС‹ Сћ С„Р°Р№Р»Рµ РјРµРЅСЋ"
 
 #: ../src/rootmenu.c:650
 #, c-format
 msgid "%s: missing command"
-msgstr "%s: адсутнічае каманда"
+msgstr "%s: Р°РґСЃСѓС‚РЅС–С‡Р°Рµ РєР°РјР°РЅРґР°"
 
 #: ../src/rootmenu.c:682
 #, c-format
 msgid "invalid OPEN_MENU specification: %s"
-msgstr "дрэнная спецыфікацыя OPEN_MENU: %s"
+msgstr "РґСЂСЌРЅРЅР°СЏ СЃРїРµС†С‹С„С–РєР°С†С‹СЏ OPEN_MENU: %s"
 
 #: ../src/rootmenu.c:741
 #, c-format
 msgid "%s:could not stat menu:%s"
-msgstr "%s: немагчыма атрымаць інфармацыю аб меню:%s"
+msgstr "%s: РЅРµРјР°РіС‡С‹РјР° Р°С‚СЂС‹РјР°С†СЊ С–РЅС„Р°СЂРјР°С†С‹СЋ Р°Р± РјРµРЅСЋ:%s"
 
 #: ../src/rootmenu.c:759
 #, c-format
 msgid "too many parameters in OPEN_MENU: %s"
-msgstr "зашмат параметраў у OPEN_MENU: %s"
+msgstr "Р·Р°С€РјР°С‚ РїР°СЂР°РјРµС‚СЂР°Сћ Сѓ OPEN_MENU: %s"
 
 #: ../src/rootmenu.c:803
 msgid ""
 "There are more than one WORKSPACE_MENU commands in the applications menu. "
 "Only one is allowed."
 msgstr ""
-"Меню праграм мае некалькі каманд WORKSPACE_MENU. Дазваляецца толькі адна."
+"РњРµРЅСЋ РїСЂР°РіСЂР°Рј РјР°Рµ РЅРµРєР°Р»СЊРєС– РєР°РјР°РЅРґ WORKSPACE_MENU. Р”Р°Р·РІР°Р»СЏРµС†С†Р° С‚РѕР»СЊРєС– Р°РґРЅР°."
 
 #: ../src/rootmenu.c:837
 msgid ""
 "There are more than one WINDOWS_MENU commands in the applications menu. Only "
 "one is allowed."
 msgstr ""
-"Меню праграм мае некалькі каманд WINDOWS_MENU. Дазваляецца толькі адна."
+"РњРµРЅСЋ РїСЂР°РіСЂР°Рј РјР°Рµ РЅРµРєР°Р»СЊРєС– РєР°РјР°РЅРґ WINDOWS_MENU. Р”Р°Р·РІР°Р»СЏРµС†С†Р° С‚РѕР»СЊРєС– Р°РґРЅР°."
 
 #: ../src/rootmenu.c:842
 msgid "Window List"
-msgstr "Cпіс вакон"
+msgstr "CРїС–СЃ РІР°РєРѕРЅ"
 
 #: ../src/rootmenu.c:871 ../src/rootmenu.c:889 ../src/rootmenu.c:899
 #, c-format
 msgid "%s:missing parameter for menu command \"%s\""
-msgstr "%s:адсутнічае параметр для каманды меню \"%s\""
+msgstr "%s:Р°РґСЃСѓС‚РЅС–С‡Р°Рµ РїР°СЂР°РјРµС‚СЂ РґР»СЏ РєР°РјР°РЅРґС‹ РјРµРЅСЋ \"%s\""
 
 #: ../src/rootmenu.c:967
 #, c-format
 msgid "%s:unknown command \"%s\" in menu config."
-msgstr "%s:невядомая каманда \"%s\" у канфігурацыі меню."
+msgstr "%s:РЅРµРІСЏРґРѕРјР°СЏ РєР°РјР°РЅРґР° \"%s\" Сѓ РєР°РЅС„С–РіСѓСЂР°С†С‹С– РјРµРЅСЋ."
 
 #: ../src/rootmenu.c:975
 #, c-format
 msgid "%s:can't add shortcut for entry \"%s\""
-msgstr "%s:немагчыма задаць камбінацыю клавіш для \"%s\""
+msgstr "%s:РЅРµРјР°РіС‡С‹РјР° Р·Р°РґР°С†СЊ РєР°РјР±С–РЅР°С†С‹СЋ РєР»Р°РІС–С€ РґР»СЏ \"%s\""
 
 #: ../src/rootmenu.c:1112
 #, c-format
 msgid "%s:maximal line size exceeded in menu config: %s"
-msgstr "%s:перавышана максімальная даўжыня стракі ў канфігурацыі меню: %s"
+msgstr "%s:РїРµСЂР°РІС‹С€Р°РЅР° РјР°РєСЃС–РјР°Р»СЊРЅР°СЏ РґР°СћР¶С‹РЅСЏ СЃС‚СЂР°РєС– Сћ РєР°РЅС„С–РіСѓСЂР°С†С‹С– РјРµРЅСЋ: %s"
 
 #: ../src/rootmenu.c:1134 ../src/rootmenu.c:1227 ../src/rootmenu.c:1330
 #, c-format
 msgid "%s:missing command in menu config: %s"
-msgstr "%s:адсутнічае каманда ў канфігурацыі меню :%s"
+msgstr "%s:Р°РґСЃСѓС‚РЅС–С‡Р°Рµ РєР°РјР°РЅРґР° Сћ РєР°РЅС„С–РіСѓСЂР°С†С‹С– РјРµРЅСЋ :%s"
 
 #: ../src/rootmenu.c:1164
 #, c-format
 msgid "%s:syntax error in menu file:END declaration missing"
-msgstr "%s: сінтаксічная памылка ў файле меню: адсутнічае END"
+msgstr "%s: СЃС–РЅС‚Р°РєСЃС–С‡РЅР°СЏ РїР°РјС‹Р»РєР° Сћ С„Р°Р№Р»Рµ РјРµРЅСЋ: Р°РґСЃСѓС‚РЅС–С‡Р°Рµ END"
 
 #: ../src/rootmenu.c:1193 ../src/rootmenu.c:1294
 msgid "could not make arguments for menu file preprocessor"
-msgstr "немагчыма стварыць агрументы для прэпрацэсара меню"
+msgstr "РЅРµРјР°РіС‡С‹РјР° СЃС‚РІР°СЂС‹С†СЊ Р°РіСЂСѓРјРµРЅС‚С‹ РґР»СЏ РїСЂСЌРїСЂР°С†СЌСЃР°СЂР° РјРµРЅСЋ"
 
 #: ../src/rootmenu.c:1200 ../src/rootmenu.c:1302
 #, c-format
 msgid "%s:could not open/preprocess menu file"
-msgstr "%s: немагчыма адкрыць ці апрацаваць файл меню"
+msgstr "%s: РЅРµРјР°РіС‡С‹РјР° Р°РґРєСЂС‹С†СЊ С†С– Р°РїСЂР°С†Р°РІР°С†СЊ С„Р°Р№Р» РјРµРЅСЋ"
 
 #: ../src/rootmenu.c:1212 ../src/rootmenu.c:1315
 #, c-format
 msgid "%s:could not open menu file"
-msgstr "%s: немагчыма адкрыць файл меню"
+msgstr "%s: РЅРµРјР°РіС‡С‹РјР° Р°РґРєСЂС‹С†СЊ С„Р°Р№Р» РјРµРЅСЋ"
 
 #: ../src/rootmenu.c:1239
 #, c-format
 msgid "%s:invalid menu file. MENU command is missing"
-msgstr "%s: дрэнны файл меню. Адсутнічае каманда MENU"
+msgstr "%s: РґСЂСЌРЅРЅС‹ С„Р°Р№Р» РјРµРЅСЋ. РђРґСЃСѓС‚РЅС–С‡Р°Рµ РєР°РјР°РЅРґР° MENU"
 
 #: ../src/rootmenu.c:1248
 msgid "error reading preprocessed menu data"
-msgstr "памылка чытання апрацаваных дадзеных меню"
+msgstr "РїР°РјС‹Р»РєР° С‡С‹С‚Р°РЅРЅСЏ Р°РїСЂР°С†Р°РІР°РЅС‹С… РґР°РґР·РµРЅС‹С… РјРµРЅСЋ"
 
 #: ../src/rootmenu.c:1342
 #, c-format
 msgid "%s:no title given for the root menu"
-msgstr "%s: у галоўнага меню няма загалоўка"
+msgstr "%s: Сѓ РіР°Р»РѕСћРЅР°РіР° РјРµРЅСЋ РЅСЏРјР° Р·Р°РіР°Р»РѕСћРєР°"
 
 #: ../src/rootmenu.c:1433 ../src/rootmenu.c:1506 ../src/rootmenu.c:1547
 #, c-format
 msgid "out of memory while constructing directory menu %s"
-msgstr "не хапіла памяці каб пабудаваць меню каталагаў %s"
+msgstr "РЅРµ С…Р°РїС–Р»Р° РїР°РјСЏС†С– РєР°Р± РїР°Р±СѓРґР°РІР°С†СЊ РјРµРЅСЋ РєР°С‚Р°Р»Р°РіР°Сћ %s"
 
 #: ../src/rootmenu.c:1443
 #, c-format
 msgid "%s:could not stat file \"%s\" in menu directory"
-msgstr "%s:немагчыма атрымаць інфармацыю аб файле \"%s\" у каталаге меню"
+msgstr "%s:РЅРµРјР°РіС‡С‹РјР° Р°С‚СЂС‹РјР°С†СЊ С–РЅС„Р°СЂРјР°С†С‹СЋ Р°Р± С„Р°Р№Р»Рµ \"%s\" Сѓ РєР°С‚Р°Р»Р°РіРµ РјРµРЅСЋ"
 
 #: ../src/rootmenu.c:1601
 msgid "Commands"
-msgstr "Каманды"
+msgstr "РљР°РјР°РЅРґС‹"
 
 #: ../src/rootmenu.c:1604
 msgid "Restart"
-msgstr "Перазапуск"
+msgstr "РџРµСЂР°Р·Р°РїСѓСЃРє"
 
 #: ../src/rootmenu.c:1605
 msgid "Exit..."
-msgstr "Выхад..."
+msgstr "Р’С‹С…Р°Рґ..."
 
 #: ../src/rootmenu.c:1650
 #, c-format
 msgid "could not find menu file \"%s\" referenced in WMRootMenu"
-msgstr "немагчыма знайсці файл меню \"%s\" на які спасылаецца WMRootMenu"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·РЅР°Р№СЃС†С– С„Р°Р№Р» РјРµРЅСЋ \"%s\" РЅР° СЏРєС– СЃРїР°СЃС‹Р»Р°РµС†С†Р° WMRootMenu"
 
 #: ../src/rootmenu.c:1657
 #, c-format
 msgid "could not access menu \"%s\" referenced in WMRootMenu"
-msgstr "няма доступу да файла меню \"%s\" на які спасылаецца WMRootMenu"
+msgstr "РЅСЏРјР° РґРѕСЃС‚СѓРїСѓ РґР° С„Р°Р№Р»Р° РјРµРЅСЋ \"%s\" РЅР° СЏРєС– СЃРїР°СЃС‹Р»Р°РµС†С†Р° WMRootMenu"
 
 #: ../src/rootmenu.c:1691 ../src/rootmenu.c:1767
 #, c-format
 msgid "%s:format error in root menu configuration \"%s\""
-msgstr "%s: памылковы фармат канфігурацыі галоўнага меню \"%s\""
+msgstr "%s: РїР°РјС‹Р»РєРѕРІС‹ С„Р°СЂРјР°С‚ РєР°РЅС„С–РіСѓСЂР°С†С‹С– РіР°Р»РѕСћРЅР°РіР° РјРµРЅСЋ \"%s\""
 
 #: ../src/rootmenu.c:1855
 msgid ""
 "The applications menu could not be loaded. Look at the console output for a "
 "detailed description of the errors."
 msgstr ""
-"Немагчыма загрузіць меню праграм. Глядзіце падрабязнасці ў вывадзе на кансоль."
+"РќРµРјР°РіС‡С‹РјР° Р·Р°РіСЂСѓР·С–С†СЊ РјРµРЅСЋ РїСЂР°РіСЂР°Рј. Р“Р»СЏРґР·С–С†Рµ РїР°РґСЂР°Р±СЏР·РЅР°СЃС†С– Сћ РІС‹РІР°РґР·Рµ РЅР° РєР°РЅСЃРѕР»СЊ."
 
 #: ../src/screen.c:747
 #, c-format
 msgid "could not initialize graphics library context: %s"
-msgstr "немагчыма ініцыялізаваць кантэкст графічнай бібліятэкі: %s"
+msgstr "РЅРµРјР°РіС‡С‹РјР° С–РЅС–С†С‹СЏР»С–Р·Р°РІР°С†СЊ РєР°РЅС‚СЌРєСЃС‚ РіСЂР°С„С–С‡РЅР°Р№ Р±С–Р±Р»С–СЏС‚СЌРєС–: %s"
 
 #: ../src/screen.c:778
 msgid "could not do initialization of WINGs widget set"
-msgstr "немагчыма ініцыялізаваць бібліятэку віджэтаў WINGs"
+msgstr "РЅРµРјР°РіС‡С‹РјР° С–РЅС–С†С‹СЏР»С–Р·Р°РІР°С†СЊ Р±С–Р±Р»С–СЏС‚СЌРєСѓ РІС–РґР¶СЌС‚Р°Сћ WINGs"
 
 #: ../src/screen.c:1144
 #, c-format
 msgid "could not save session state in %s"
-msgstr "немагчыма захаваць стан сесіі ў %s"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·Р°С…Р°РІР°С†СЊ СЃС‚Р°РЅ СЃРµСЃС–С– Сћ %s"
 
 #: ../src/session.c:183 ../src/wdefaults.c:589 ../src/winspector.c:454
 #, c-format
 msgid "can't convert \"%s\" to boolean"
-msgstr "немагчыма сканвертаваць \"%s\" да boolean"
+msgstr "РЅРµРјР°РіС‡С‹РјР° СЃРєР°РЅРІРµСЂС‚Р°РІР°С†СЊ \"%s\" РґР° boolean"
 
 #: ../src/session.c:1023
 msgid "out of memory while saving session state"
-msgstr "не хапіла памяці каб захаваць стан сесіі"
+msgstr "РЅРµ С…Р°РїС–Р»Р° РїР°РјСЏС†С– РєР°Р± Р·Р°С…Р°РІР°С†СЊ СЃС‚Р°РЅ СЃРµСЃС–С–"
 
 #: ../src/session.c:1106
 msgid "end of memory while saving session state"
-msgstr "не хапіла памяці каб захаваць стан сесіі"
+msgstr "РЅРµ С…Р°РїС–Р»Р° РїР°РјСЏС†С– РєР°Р± Р·Р°С…Р°РІР°С†СЊ СЃС‚Р°РЅ СЃРµСЃС–С–"
 
 #. This is not fatal but can mean the session manager exited.
 #. * If the session manager exited normally we would get a
@@ -1360,150 +1360,150 @@ msgstr "не хапіла памяці каб захаваць стан сесіі"
 #.
 #: ../src/session.c:1244
 msgid "connection to the session manager was lost"
-msgstr "згублена злучэнне з менеджарам сесій"
+msgstr "Р·РіСѓР±Р»РµРЅР° Р·Р»СѓС‡СЌРЅРЅРµ Р· РјРµРЅРµРґР¶Р°СЂР°Рј СЃРµСЃС–Р№"
 
 #: ../src/stacking.c:79
 msgid "could not get window list!!"
-msgstr "немагчыма атрымаць спіс вакон!!"
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р°С‚СЂС‹РјР°С†СЊ СЃРїС–СЃ РІР°РєРѕРЅ!!"
 
 #: ../src/startup.c:202
 #, c-format
 msgid "internal X error: %s\n"
-msgstr "унутраная памылка X:%s\n"
+msgstr "СѓРЅСѓС‚СЂР°РЅР°СЏ РїР°РјС‹Р»РєР° X:%s\n"
 
 #: ../src/startup.c:260
 #, c-format
 msgid "got signal %i (%s) - restarting\n"
-msgstr "атрыманы сігнал %i (%s) - перазапуск\n"
+msgstr "Р°С‚СЂС‹РјР°РЅС‹ СЃС–РіРЅР°Р» %i (%s) - РїРµСЂР°Р·Р°РїСѓСЃРє\n"
 
 #: ../src/startup.c:262
 #, c-format
 msgid "got signal %i - restarting\n"
-msgstr "атрыманы сігнал %i - перазапуск\n"
+msgstr "Р°С‚СЂС‹РјР°РЅС‹ СЃС–РіРЅР°Р» %i - РїРµСЂР°Р·Р°РїСѓСЃРє\n"
 
 #: ../src/startup.c:272
 #, c-format
 msgid "got signal %i (%s) - rereading defaults\n"
-msgstr "атрыманы сігнал %i(%s) - перачытваю стандартную канфігурацыю\n"
+msgstr "Р°С‚СЂС‹РјР°РЅС‹ СЃС–РіРЅР°Р» %i(%s) - РїРµСЂР°С‡С‹С‚РІР°СЋ СЃС‚Р°РЅРґР°СЂС‚РЅСѓСЋ РєР°РЅС„С–РіСѓСЂР°С†С‹СЋ\n"
 
 #: ../src/startup.c:274
 #, c-format
 msgid "got signal %i - rereading defaults\n"
-msgstr "атрыманы сігнал %i - перачытваю стандартную канфігурацыю\n"
+msgstr "Р°С‚СЂС‹РјР°РЅС‹ СЃС–РіРЅР°Р» %i - РїРµСЂР°С‡С‹С‚РІР°СЋ СЃС‚Р°РЅРґР°СЂС‚РЅСѓСЋ РєР°РЅС„С–РіСѓСЂР°С†С‹СЋ\n"
 
 #: ../src/startup.c:284
 #, c-format
 msgid "got signal %i (%s) - exiting...\n"
-msgstr "атрыманы сігнал %i (%s) - выхад...\n"
+msgstr "Р°С‚СЂС‹РјР°РЅС‹ СЃС–РіРЅР°Р» %i (%s) - РІС‹С…Р°Рґ...\n"
 
 #: ../src/startup.c:286
 #, c-format
 msgid "got signal %i - exiting...\n"
-msgstr "атрыманы сігнал %i - выхад...\n"
+msgstr "Р°С‚СЂС‹РјР°РЅС‹ СЃС–РіРЅР°Р» %i - РІС‹С…Р°Рґ...\n"
 
 #: ../src/startup.c:329
 #, c-format
 msgid "got signal %i (%s)\n"
-msgstr "атрыманы сігнал %i (%s)\n"
+msgstr "Р°С‚СЂС‹РјР°РЅС‹ СЃС–РіРЅР°Р» %i (%s)\n"
 
 #: ../src/startup.c:331
 #, c-format
 msgid "got signal %i\n"
-msgstr "атрыманы сігнал %i\n"
+msgstr "Р°С‚СЂС‹РјР°РЅС‹ СЃС–РіРЅР°Р» %i\n"
 
 #: ../src/startup.c:342
 msgid ""
 "crashed while trying to do some post-crash cleanup. Aborting immediatelly."
 msgstr ""
-"крытычная памылка падчас апрацоўкі крытычнай памылкі. Тэрміновы выхад."
+"РєСЂС‹С‚С‹С‡РЅР°СЏ РїР°РјС‹Р»РєР° РїР°РґС‡Р°СЃ Р°РїСЂР°С†РѕСћРєС– РєСЂС‹С‚С‹С‡РЅР°Р№ РїР°РјС‹Р»РєС–. РўСЌСЂРјС–РЅРѕРІС‹ РІС‹С…Р°Рґ."
 
 #. we try to restart Window Maker
 #: ../src/startup.c:406
 msgid "trying to restart Window Maker..."
-msgstr "спроба перазапусціць Window Maker..."
+msgstr "СЃРїСЂРѕР±Р° РїРµСЂР°Р·Р°РїСѓСЃС†С–С†СЊ Window Maker..."
 
 #: ../src/startup.c:411
 msgid "trying to start alternate window manager..."
-msgstr "спроба запусціць іншы ваконны менеджар..."
+msgstr "СЃРїСЂРѕР±Р° Р·Р°РїСѓСЃС†С–С†СЊ С–РЅС€С‹ РІР°РєРѕРЅРЅС‹ РјРµРЅРµРґР¶Р°СЂ..."
 
 #: ../src/startup.c:417
 msgid "failed to start alternate window manager. Aborting."
-msgstr "не магчыма запусціць іншы ваконны менеджар. Выхад."
+msgstr "РЅРµ РјР°РіС‡С‹РјР° Р·Р°РїСѓСЃС†С–С†СЊ С–РЅС€С‹ РІР°РєРѕРЅРЅС‹ РјРµРЅРµРґР¶Р°СЂ. Р’С‹С…Р°Рґ."
 
 #: ../src/startup.c:419
 msgid ""
 "a fatal error has occured, probably due to a bug. Please fill the included "
 "BUGFORM and report it."
 msgstr ""
-" Гэты крытычны збой магчыма вызваны памылкамі ў WindowMaker."
-"Дашліце нам запоўненае паведамленне аб памылке (BUGFORM)"
+" Р“СЌС‚С‹ РєСЂС‹С‚С‹С‡РЅС‹ Р·Р±РѕР№ РјР°РіС‡С‹РјР° РІС‹Р·РІР°РЅС‹ РїР°РјС‹Р»РєР°РјС– Сћ WindowMaker."
+"Р”Р°С€Р»С–С†Рµ РЅР°Рј Р·Р°РїРѕСћРЅРµРЅР°Рµ РїР°РІРµРґР°РјР»РµРЅРЅРµ Р°Р± РїР°РјС‹Р»РєРµ (BUGFORM)"
 
 #: ../src/startup.c:894
 #, c-format
 msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
-msgstr "Памер іконкі абраны %i, але гэта замала. Будзе ужыта 16\n"
+msgstr "РџР°РјРµСЂ С–РєРѕРЅРєС– Р°Р±СЂР°РЅС‹ %i, Р°Р»Рµ РіСЌС‚Р° Р·Р°РјР°Р»Р°. Р‘СѓРґР·Рµ СѓР¶С‹С‚Р° 16\n"
 
 #: ../src/startup.c:922
 msgid "XKB is not supported. KbdModeLock is automatically disabled."
-msgstr "XKB не падтрымліваецца. KbdModeLock аўтаматычна забаронены."
+msgstr "XKB РЅРµ РїР°РґС‚СЂС‹РјР»С–РІР°РµС†С†Р°. KbdModeLock Р°СћС‚Р°РјР°С‚С‹С‡РЅР° Р·Р°Р±Р°СЂРѕРЅРµРЅС‹."
 
 #: ../src/startup.c:941
 msgid "it seems that there is already a window manager running"
-msgstr "здаецца нейкі іншы ваконны менеджар ужо працуе"
+msgstr "Р·РґР°РµС†С†Р° РЅРµР№РєС– С–РЅС€С‹ РІР°РєРѕРЅРЅС‹ РјРµРЅРµРґР¶Р°СЂ СѓР¶Рѕ РїСЂР°С†СѓРµ"
 
 #: ../src/startup.c:947
 #, c-format
 msgid "could not manage screen %i"
-msgstr "немагчыма кіраваць экранам %i"
+msgstr "РЅРµРјР°РіС‡С‹РјР° РєС–СЂР°РІР°С†СЊ СЌРєСЂР°РЅР°Рј %i"
 
 #: ../src/startup.c:1015
 msgid "could not manage any screen"
-msgstr "немагчыма кіраваць ніводным экранам"
+msgstr "РЅРµРјР°РіС‡С‹РјР° РєС–СЂР°РІР°С†СЊ РЅС–РІРѕРґРЅС‹Рј СЌРєСЂР°РЅР°Рј"
 
 #: ../src/switchmenu.c:137
 msgid "Windows"
-msgstr "Вокны"
+msgstr "Р’РѕРєРЅС‹"
 
 #: ../src/texture.c:329 ../src/texture.c:371
 #, c-format
 msgid "image file \"%s\" used as texture could not be found."
-msgstr "немагчыма знайсці файл выявы для тэкстуры \"%s\""
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·РЅР°Р№СЃС†С– С„Р°Р№Р» РІС‹СЏРІС‹ РґР»СЏ С‚СЌРєСЃС‚СѓСЂС‹ \"%s\""
 
 #: ../src/texture.c:335 ../src/texture.c:377
 #, c-format
 msgid "could not load texture pixmap \"%s\":%s"
-msgstr "немагчыма загрузіць выяву тэкстуры \"%s:%s\""
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·Р°РіСЂСѓР·С–С†СЊ РІС‹СЏРІСѓ С‚СЌРєСЃС‚СѓСЂС‹ \"%s:%s\""
 
 #: ../src/texture.c:437
 #, c-format
 msgid "library \"%s\" cound not be opened."
-msgstr "немагчыма адкрыць бібліятэку \"%s\""
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р°РґРєСЂС‹С†СЊ Р±С–Р±Р»С–СЏС‚СЌРєСѓ \"%s\""
 
 #: ../src/texture.c:446
 #, c-format
 msgid "function \"%s\" not found in library \"%s\""
-msgstr "немагчыма знайсці функцыю \"%s\" y бібліятэцы \"%s\""
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р·РЅР°Р№СЃС†С– С„СѓРЅРєС†С‹СЋ \"%s\" y Р±С–Р±Р»С–СЏС‚СЌС†С‹ \"%s\""
 
 #: ../src/texture.c:453
 msgid "function textures not supported on this system, sorry."
-msgstr "гэта сістэма не падтрымлівае працэдурныя тэкстуры."
+msgstr "РіСЌС‚Р° СЃС–СЃС‚СЌРјР° РЅРµ РїР°РґС‚СЂС‹РјР»С–РІР°Рµ РїСЂР°С†СЌРґСѓСЂРЅС‹СЏ С‚СЌРєСЃС‚СѓСЂС‹."
 
 #: ../src/texture.c:598
-msgid "could not allocatь image buffer"
-msgstr "немагчыма вылучыць памяць пад буфер выявы"
+msgid "could not allocatСЊ image buffer"
+msgstr "РЅРµРјР°РіС‡С‹РјР° РІС‹Р»СѓС‡С‹С†СЊ РїР°РјСЏС†СЊ РїР°Рґ Р±СѓС„РµСЂ РІС‹СЏРІС‹"
 
 #: ../src/wdefaults.c:437
 #, c-format
 msgid "could not find icon file \"%s\""
-msgstr "немагчыма адкрыць файл іконкі \"%s\""
+msgstr "РЅРµРјР°РіС‡С‹РјР° Р°РґРєСЂС‹С†СЊ С„Р°Р№Р» С–РєРѕРЅРєС– \"%s\""
 
 #: ../src/window.c:2942 ../src/window.c:3081
 msgid ""
 "the NumLock, ScrollLock or similar key seems to be turned on.\n"
 "Turn it off or some mouse actions and keyboard shortcuts will not work."
 msgstr ""
-"NumLock, ScrollLock ці падобная рэжым задзейнічаны.\n"
-"Выключыце яго, бо некаторыя клавіятурныя камбінацыі ня будуць працаваць."
+"NumLock, ScrollLock С†С– РїР°РґРѕР±РЅР°СЏ СЂСЌР¶С‹Рј Р·Р°РґР·РµР№РЅС–С‡Р°РЅС‹.\n"
+"Р’С‹РєР»СЋС‡С‹С†Рµ СЏРіРѕ, Р±Рѕ РЅРµРєР°С‚РѕСЂС‹СЏ РєР»Р°РІС–СЏС‚СѓСЂРЅС‹СЏ РєР°РјР±С–РЅР°С†С‹С– РЅСЏ Р±СѓРґСѓС†СЊ РїСЂР°С†Р°РІР°С†СЊ."
 
 #: ../src/winmenu.c:126
 msgid ""
@@ -1511,72 +1511,72 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-"Усе праграмы будуць прымусова завершаны.\n"
-"Незахаваныя змяненні будуць страчаны.\n"
-"Пацвердзце калі ласка."
+"РЈСЃРµ РїСЂР°РіСЂР°РјС‹ Р±СѓРґСѓС†СЊ РїСЂС‹РјСѓСЃРѕРІР° Р·Р°РІРµСЂС€Р°РЅС‹.\n"
+"РќРµР·Р°С…Р°РІР°РЅС‹СЏ Р·РјСЏРЅРµРЅРЅС– Р±СѓРґСѓС†СЊ СЃС‚СЂР°С‡Р°РЅС‹.\n"
+"РџР°С†РІРµСЂРґР·С†Рµ РєР°Р»С– Р»Р°СЃРєР°."
 
 #: ../src/winmenu.c:272 ../src/winmenu.c:281
 msgid "Set Shortcut"
-msgstr "Задаць камбінацыю клавіш"
+msgstr "Р—Р°РґР°С†СЊ РєР°РјР±С–РЅР°С†С‹СЋ РєР»Р°РІС–С€"
 
 #: ../src/winmenu.c:359 ../src/winmenu.c:404
 msgid "could not create submenu for window menu"
-msgstr "немагчыма стварыць падменю для ваконнага меню"
+msgstr "РЅРµРјР°РіС‡С‹РјР° СЃС‚РІР°СЂС‹С†СЊ РїР°РґРјРµРЅСЋ РґР»СЏ РІР°РєРѕРЅРЅР°РіР° РјРµРЅСЋ"
 
 #: ../src/winmenu.c:408
 msgid "Keep on top"
-msgstr "Трымаць над усімі"
+msgstr "РўСЂС‹РјР°С†СЊ РЅР°Рґ СѓСЃС–РјС–"
 
 #: ../src/winmenu.c:413
 msgid "Keep at bottom"
-msgstr "Трымаць пад усімі"
+msgstr "РўСЂС‹РјР°С†СЊ РїР°Рґ СѓСЃС–РјС–"
 
 #: ../src/winmenu.c:457 ../src/winmenu.c:600
 msgid "Shade"
-msgstr "Зкруціць"
+msgstr "Р—РєСЂСѓС†С–С†СЊ"
 
 #: ../src/winmenu.c:473
 msgid "Hide Others"
-msgstr "Схаваць іншыя"
+msgstr "РЎС…Р°РІР°С†СЊ С–РЅС€С‹СЏ"
 
 #: ../src/winmenu.c:481
 msgid "Resize/Move"
-msgstr "Змяніць памер/перанесці"
+msgstr "Р—РјСЏРЅС–С†СЊ РїР°РјРµСЂ/РїРµСЂР°РЅРµСЃС†С–"
 
 #: ../src/winmenu.c:489
 msgid "Select"
-msgstr "Абраць"
+msgstr "РђР±СЂР°С†СЊ"
 
 #: ../src/winmenu.c:502
 msgid "Attributes..."
-msgstr "Атрыбуты..."
+msgstr "РђС‚СЂС‹Р±СѓС‚С‹..."
 
 #: ../src/winmenu.c:504
 msgid "Options"
-msgstr "Параметры"
+msgstr "РџР°СЂР°РјРµС‚СЂС‹"
 
 #: ../src/winmenu.c:595
 msgid "Unshade"
-msgstr "Разкруціць"
+msgstr "Р Р°Р·РєСЂСѓС†С–С†СЊ"
 
 #: ../src/winspector.c:387
 #, c-format
 msgid "Could not find icon \"%s\" specified for this window"
-msgstr "Немагчыма знайсці азначаную для гэтага вакна іконку \"%s\""
+msgstr "РќРµРјР°РіС‡С‹РјР° Р·РЅР°Р№СЃС†С– Р°Р·РЅР°С‡Р°РЅСѓСЋ РґР»СЏ РіСЌС‚Р°РіР° РІР°РєРЅР° С–РєРѕРЅРєСѓ \"%s\""
 
 #: ../src/winspector.c:404
 #, c-format
 msgid "Could not open specified icon \"%s\":%s"
-msgstr "Немагчыма адкрыць азначаную іконку \"%s\""
+msgstr "РќРµРјР°РіС‡С‹РјР° Р°РґРєСЂС‹С†СЊ Р°Р·РЅР°С‡Р°РЅСѓСЋ С–РєРѕРЅРєСѓ \"%s\""
 
 #: ../src/winspector.c:1121
 #, c-format
 msgid "Inspecting  %s.%s"
-msgstr "Агляд %s.%s"
+msgstr "РђРіР»СЏРґ %s.%s"
 
 #: ../src/winspector.c:1147
 msgid "Click in the window you wish to inspect."
-msgstr "З дапамогай мышкі абярыце вакно для агляду."
+msgstr "Р— РґР°РїР°РјРѕРіР°Р№ РјС‹С€РєС– Р°Р±СЏСЂС‹С†Рµ РІР°РєРЅРѕ РґР»СЏ Р°РіР»СЏРґСѓ."
 
 #: ../src/winspector.c:1186
 msgid ""
@@ -1585,58 +1585,58 @@ msgid ""
 "property set to the above selected\n"
 "name, when saved."
 msgstr ""
-"Пасля захавання гэтая канфігурацыя\n"
-"будзе ўжывацца для ўсіх вакон,\n"
-"якія маюць вышэй азначаную\n"
-"ўласцівасць WM_CLASS."
+"РџР°СЃР»СЏ Р·Р°С…Р°РІР°РЅРЅСЏ РіСЌС‚Р°СЏ РєР°РЅС„С–РіСѓСЂР°С†С‹СЏ\n"
+"Р±СѓРґР·Рµ СћР¶С‹РІР°С†С†Р° РґР»СЏ СћСЃС–С… РІР°РєРѕРЅ,\n"
+"СЏРєС–СЏ РјР°СЋС†СЊ РІС‹С€СЌР№ Р°Р·РЅР°С‡Р°РЅСѓСЋ\n"
+"СћР»Р°СЃС†С–РІР°СЃС†СЊ WM_CLASS."
 
 #: ../src/winspector.c:1215
 msgid "Save"
-msgstr "Захаваць"
+msgstr "Р—Р°С…Р°РІР°С†СЊ"
 
 #: ../src/winspector.c:1223
 msgid "Apply"
-msgstr "Ужыць"
+msgstr "РЈР¶С‹С†СЊ"
 
 #: ../src/winspector.c:1229
 msgid "Reload"
-msgstr "Адкаціць"
+msgstr "РђРґРєР°С†С–С†СЊ"
 
 #: ../src/winspector.c:1238 ../src/winspector.c:1248
 msgid "Window Specification"
-msgstr "Спецыфікацыя вакна"
+msgstr "РЎРїРµС†С‹С„С–РєР°С†С‹СЏ РІР°РєРЅР°"
 
 #: ../src/winspector.c:1239
 msgid "Window Attributes"
-msgstr "Атрыбуты вакна"
+msgstr "РђС‚СЂС‹Р±СѓС‚С‹ РІР°РєРЅР°"
 
 #: ../src/winspector.c:1240
 msgid "Advanced Options"
-msgstr "Прасунутыя параметры"
+msgstr "РџСЂР°СЃСѓРЅСѓС‚С‹СЏ РїР°СЂР°РјРµС‚СЂС‹"
 
 #: ../src/winspector.c:1241
 msgid "Icon and Initial Workspace"
-msgstr "Іконка і пачатковае працамесца"
+msgstr "Р†РєРѕРЅРєР° С– РїР°С‡Р°С‚РєРѕРІР°Рµ РїСЂР°С†Р°РјРµСЃС†Р°"
 
 #: ../src/winspector.c:1242
 msgid "Application Specific"
-msgstr "Спецыфічныя настройкі"
+msgstr "РЎРїРµС†С‹С„С–С‡РЅС‹СЏ РЅР°СЃС‚СЂРѕР№РєС–"
 
 #: ../src/winspector.c:1256
 msgid "Defaults for all windows"
-msgstr "Стандартныя настройкі для ўсіх вакон"
+msgstr "РЎС‚Р°РЅРґР°СЂС‚РЅС‹СЏ РЅР°СЃС‚СЂРѕР№РєС– РґР»СЏ СћСЃС–С… РІР°РєРѕРЅ"
 
 #: ../src/winspector.c:1310
 msgid "Select window"
-msgstr "Абраць вакно"
+msgstr "РђР±СЂР°С†СЊ РІР°РєРЅРѕ"
 
 #: ../src/winspector.c:1324
 msgid "Attributes"
-msgstr "Атрыбуты"
+msgstr "РђС‚СЂС‹Р±СѓС‚С‹"
 
 #: ../src/winspector.c:1335
 msgid "Disable titlebar"
-msgstr "Забароніць загаловак"
+msgstr "Р—Р°Р±Р°СЂРѕРЅС–С†СЊ Р·Р°РіР°Р»РѕРІР°Рє"
 
 #: ../src/winspector.c:1337
 msgid ""
@@ -1646,92 +1646,92 @@ msgid ""
 "equivalent shortcut, if you changed the default\n"
 "settings)."
 msgstr ""
-"Не паказваць загаловак для гэтага вакна.\n"
-"Меню вакна без загалоўка можа быць вызвана\n"
-"па Control-Esc ці эквівалентнай камбінацыяй,\n"
-"калі стандартныя настройкі былі зменены."
+"РќРµ РїР°РєР°Р·РІР°С†СЊ Р·Р°РіР°Р»РѕРІР°Рє РґР»СЏ РіСЌС‚Р°РіР° РІР°РєРЅР°.\n"
+"РњРµРЅСЋ РІР°РєРЅР° Р±РµР· Р·Р°РіР°Р»РѕСћРєР° РјРѕР¶Р° Р±С‹С†СЊ РІС‹Р·РІР°РЅР°\n"
+"РїР° Control-Esc С†С– СЌРєРІС–РІР°Р»РµРЅС‚РЅР°Р№ РєР°РјР±С–РЅР°С†С‹СЏР№,\n"
+"РєР°Р»С– СЃС‚Р°РЅРґР°СЂС‚РЅС‹СЏ РЅР°СЃС‚СЂРѕР№РєС– Р±С‹Р»С– Р·РјРµРЅРµРЅС‹."
 
 #: ../src/winspector.c:1344
 msgid "Disable resizebar"
-msgstr "Забароніць рамку памеру"
+msgstr "Р—Р°Р±Р°СЂРѕРЅС–С†СЊ СЂР°РјРєСѓ РїР°РјРµСЂСѓ"
 
 #: ../src/winspector.c:1346
 msgid "Remove the resizebar of this window."
-msgstr "Не паказваць рамку змены памеру для вакна"
+msgstr "РќРµ РїР°РєР°Р·РІР°С†СЊ СЂР°РјРєСѓ Р·РјРµРЅС‹ РїР°РјРµСЂСѓ РґР»СЏ РІР°РєРЅР°"
 
 #: ../src/winspector.c:1349
 msgid "Disable close button"
-msgstr "Забароніць кнопку закрыцця"
+msgstr "Р—Р°Р±Р°СЂРѕРЅС–С†СЊ РєРЅРѕРїРєСѓ Р·Р°РєСЂС‹С†С†СЏ"
 
 #: ../src/winspector.c:1351
 msgid "Remove the `close window' button of this window."
-msgstr "Не паказваць кнопку закрыцця вакна"
+msgstr "РќРµ РїР°РєР°Р·РІР°С†СЊ РєРЅРѕРїРєСѓ Р·Р°РєСЂС‹С†С†СЏ РІР°РєРЅР°"
 
 #: ../src/winspector.c:1354
 msgid "Disable miniaturize button"
-msgstr "Забароніць кнопку мінімізацыі"
+msgstr "Р—Р°Р±Р°СЂРѕРЅС–С†СЊ РєРЅРѕРїРєСѓ РјС–РЅС–РјС–Р·Р°С†С‹С–"
 
 #: ../src/winspector.c:1356
 msgid "Remove the `miniaturize window' button of the window."
-msgstr "Не паказваць кнопку мінімізацыі для вакна"
+msgstr "РќРµ РїР°РєР°Р·РІР°С†СЊ РєРЅРѕРїРєСѓ РјС–РЅС–РјС–Р·Р°С†С‹С– РґР»СЏ РІР°РєРЅР°"
 
 #: ../src/winspector.c:1359
 msgid "Disable border"
-msgstr "Забароніць рамку"
+msgstr "Р—Р°Р±Р°СЂРѕРЅС–С†СЊ СЂР°РјРєСѓ"
 
 #: ../src/winspector.c:1361
 msgid "Remove the 1 pixel black border around the window."
-msgstr "Не паказваць вузкую чорную рамку для вакна."
+msgstr "РќРµ РїР°РєР°Р·РІР°С†СЊ РІСѓР·РєСѓСЋ С‡РѕСЂРЅСѓСЋ СЂР°РјРєСѓ РґР»СЏ РІР°РєРЅР°."
 
 #: ../src/winspector.c:1364
 msgid "Keep on top (floating)"
-msgstr "Трымаць над усімі"
+msgstr "РўСЂС‹РјР°С†СЊ РЅР°Рґ СѓСЃС–РјС–"
 
 #: ../src/winspector.c:1366
 msgid ""
 "Keep the window over other windows, not allowing\n"
 "them to cover it."
 msgstr ""
-"Трымаць вакно над усімі вокнамі, не дазваляючы\n"
-"ім яго перакрываць."
+"РўСЂС‹РјР°С†СЊ РІР°РєРЅРѕ РЅР°Рґ СѓСЃС–РјС– РІРѕРєРЅР°РјС–, РЅРµ РґР°Р·РІР°Р»СЏСЋС‡С‹\n"
+"С–Рј СЏРіРѕ РїРµСЂР°РєСЂС‹РІР°С†СЊ."
 
 #: ../src/winspector.c:1370
 msgid "Keep at bottom (sunken)"
-msgstr "Трымаць пад усімі"
+msgstr "РўСЂС‹РјР°С†СЊ РїР°Рґ СѓСЃС–РјС–"
 
 #: ../src/winspector.c:1372
 msgid "Keep the window under all other windows."
-msgstr "Трымаць вакно пад усімі іншымі вокнамі."
+msgstr "РўСЂС‹РјР°С†СЊ РІР°РєРЅРѕ РїР°Рґ СѓСЃС–РјС– С–РЅС€С‹РјС– РІРѕРєРЅР°РјС–."
 
 #: ../src/winspector.c:1377
 msgid "Make window present in all workspaces."
-msgstr "Вакно прысутнічае ва ўсіх працамесцах."
+msgstr "Р’Р°РєРЅРѕ РїСЂС‹СЃСѓС‚РЅС–С‡Р°Рµ РІР° СћСЃС–С… РїСЂР°С†Р°РјРµСЃС†Р°С…."
 
 #: ../src/winspector.c:1380
 msgid "Start miniaturized"
-msgstr "Запускаць мінімізаваным"
+msgstr "Р—Р°РїСѓСЃРєР°С†СЊ РјС–РЅС–РјС–Р·Р°РІР°РЅС‹Рј"
 
 #: ../src/winspector.c:1382
 msgid ""
 "Make the window be automatically miniaturized when it's\n"
 "first shown."
 msgstr ""
-"Мінімізаваць вакно пры першым з'яўленні на экране."
+"РњС–РЅС–РјС–Р·Р°РІР°С†СЊ РІР°РєРЅРѕ РїСЂС‹ РїРµСЂС€С‹Рј Р·'СЏСћР»РµРЅРЅС– РЅР° СЌРєСЂР°РЅРµ."
 
 #: ../src/winspector.c:1386
 msgid "Start maximized"
-msgstr "Запускаць максімізаваным"
+msgstr "Р—Р°РїСѓСЃРєР°С†СЊ РјР°РєСЃС–РјС–Р·Р°РІР°РЅС‹Рј"
 
 #: ../src/winspector.c:1388
 msgid ""
 "Make the window be automatically maximized when it's\n"
 "first shown."
 msgstr ""
-"Максімізаваць вакно пры першым з'яўленні на экране."
+"РњР°РєСЃС–РјС–Р·Р°РІР°С†СЊ РІР°РєРЅРѕ РїСЂС‹ РїРµСЂС€С‹Рј Р·'СЏСћР»РµРЅРЅС– РЅР° СЌРєСЂР°РЅРµ."
 
 #: ../src/winspector.c:1392
 msgid "Full screen maximization"
-msgstr "Максімізаваць на ўвесь экран"
+msgstr "РњР°РєСЃС–РјС–Р·Р°РІР°С†СЊ РЅР° СћРІРµСЃСЊ СЌРєСЂР°РЅ"
 
 #: ../src/winspector.c:1394
 msgid ""
@@ -1739,16 +1739,16 @@ msgid ""
 "maximized. The titlebar and resizebar will be moved\n"
 "to outside the screen."
 msgstr ""
-"Максімізаванае вакно будзе займаць увесь экран.\n"
-"Загаловак і рамка змянення памеру будуць за межамі экрану."
+"РњР°РєСЃС–РјС–Р·Р°РІР°РЅР°Рµ РІР°РєРЅРѕ Р±СѓРґР·Рµ Р·Р°Р№РјР°С†СЊ СѓРІРµСЃСЊ СЌРєСЂР°РЅ.\n"
+"Р—Р°РіР°Р»РѕРІР°Рє С– СЂР°РјРєР° Р·РјСЏРЅРµРЅРЅСЏ РїР°РјРµСЂСѓ Р±СѓРґСѓС†СЊ Р·Р° РјРµР¶Р°РјС– СЌРєСЂР°РЅСѓ."
 
 #: ../src/winspector.c:1411
 msgid "Advanced"
-msgstr "Прасунутыя параметры"
+msgstr "РџСЂР°СЃСѓРЅСѓС‚С‹СЏ РїР°СЂР°РјРµС‚СЂС‹"
 
 #: ../src/winspector.c:1428
 msgid "Do not bind keyboard shortcuts"
-msgstr "Не перахопліваць свае клавішы"
+msgstr "РќРµ РїРµСЂР°С…РѕРїР»С–РІР°С†СЊ СЃРІР°Рµ РєР»Р°РІС–С€С‹"
 
 #: ../src/winspector.c:1430
 msgid ""
@@ -1757,69 +1757,69 @@ msgid ""
 "window to receive all key combinations regardless\n"
 "of your shortcut configuration."
 msgstr ""
-"Не перахопліваць клавіятурныя камбінацыі Window Maker\n"
-"калі гэтае вакно валодае фокусам. Дазваляе вакну атрымліваць\n"
-"усе клавіятурныя камбінацыі, нават тыя, што выкарыстоўваюцца\n"
-"ў Window Maker"
+"РќРµ РїРµСЂР°С…РѕРїР»С–РІР°С†СЊ РєР»Р°РІС–СЏС‚СѓСЂРЅС‹СЏ РєР°РјР±С–РЅР°С†С‹С– Window Maker\n"
+"РєР°Р»С– РіСЌС‚Р°Рµ РІР°РєРЅРѕ РІР°Р»РѕРґР°Рµ С„РѕРєСѓСЃР°Рј. Р”Р°Р·РІР°Р»СЏРµ РІР°РєРЅСѓ Р°С‚СЂС‹РјР»С–РІР°С†СЊ\n"
+"СѓСЃРµ РєР»Р°РІС–СЏС‚СѓСЂРЅС‹СЏ РєР°РјР±С–РЅР°С†С‹С–, РЅР°РІР°С‚ С‚С‹СЏ, С€С‚Рѕ РІС‹РєР°СЂС‹СЃС‚РѕСћРІР°СЋС†С†Р°\n"
+"Сћ Window Maker"
 
 #: ../src/winspector.c:1436
 msgid "Do not bind mouse clicks"
-msgstr "Не перахопліваць падзеі мышы"
+msgstr "РќРµ РїРµСЂР°С…РѕРїР»С–РІР°С†СЊ РїР°РґР·РµС– РјС‹С€С‹"
 
 #: ../src/winspector.c:1438
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
 "in the window (when alt is the modifier you haveconfigured)."
 msgstr ""
-"Не перахопліваць паздеі ад мышы, такія як\n"
-"перацягванне вакна з дапамогай Alt, у гэтым вакне."
+"РќРµ РїРµСЂР°С…РѕРїР»С–РІР°С†СЊ РїР°Р·РґРµС– Р°Рґ РјС‹С€С‹, С‚Р°РєС–СЏ СЏРє\n"
+"РїРµСЂР°С†СЏРіРІР°РЅРЅРµ РІР°РєРЅР° Р· РґР°РїР°РјРѕРіР°Р№ Alt, Сѓ РіСЌС‚С‹Рј РІР°РєРЅРµ."
 
 #: ../src/winspector.c:1443
 msgid "Do not show in the window list"
-msgstr "Не паказваць у спісе вакон"
+msgstr "РќРµ РїР°РєР°Р·РІР°С†СЊ Сѓ СЃРїС–СЃРµ РІР°РєРѕРЅ"
 
 #: ../src/winspector.c:1445
 msgid "Do not list the window in the window list menu."
-msgstr "Не паказваць вакно ў меню спіса вакон."
+msgstr "РќРµ РїР°РєР°Р·РІР°С†СЊ РІР°РєРЅРѕ Сћ РјРµРЅСЋ СЃРїС–СЃР° РІР°РєРѕРЅ."
 
 #: ../src/winspector.c:1448
 msgid "Do not let it take focus"
-msgstr "Не атрымліваць фокус"
+msgstr "РќРµ Р°С‚СЂС‹РјР»С–РІР°С†СЊ С„РѕРєСѓСЃ"
 
 #: ../src/winspector.c:1450
 msgid ""
 "Do not let the window take keyboard focus when you\n"
 "click on it."
 msgstr ""
-"Не дазваляць вакну атрымліваць фокус."
+"РќРµ РґР°Р·РІР°Р»СЏС†СЊ РІР°РєРЅСѓ Р°С‚СЂС‹РјР»С–РІР°С†СЊ С„РѕРєСѓСЃ."
 
 #: ../src/winspector.c:1454
 msgid "Keep inside screen"
-msgstr "Трымаць у межах экрану"
+msgstr "РўСЂС‹РјР°С†СЊ Сѓ РјРµР¶Р°С… СЌРєСЂР°РЅСѓ"
 
 #: ../src/winspector.c:1456
 msgid ""
 "Do not allow the window to move itself completely\n"
 "outside the screen. For bug compatibility.\n"
 msgstr ""
-"Не дазваляць пераносіць вакно за межы экрану.\n"
-"Толькі дзеля сумясцімасці.\n"
+"РќРµ РґР°Р·РІР°Р»СЏС†СЊ РїРµСЂР°РЅРѕСЃС–С†СЊ РІР°РєРЅРѕ Р·Р° РјРµР¶С‹ СЌРєСЂР°РЅСѓ.\n"
+"РўРѕР»СЊРєС– РґР·РµР»СЏ СЃСѓРјСЏСЃС†С–РјР°СЃС†С–.\n"
 
 #: ../src/winspector.c:1460
 msgid "Ignore 'Hide Others'"
-msgstr "Ігнараваць 'Схаваць іншыя'"
+msgstr "Р†РіРЅР°СЂР°РІР°С†СЊ 'РЎС…Р°РІР°С†СЊ С–РЅС€С‹СЏ'"
 
 #: ../src/winspector.c:1462
 msgid ""
 "Do not hide the window when issuing the\n"
 "`HideOthers' command."
 msgstr ""
-"Не хаваць вакно калі вызвана\n"
-"каманда 'Схаваць іншыя'"
+"РќРµ С…Р°РІР°С†СЊ РІР°РєРЅРѕ РєР°Р»С– РІС‹Р·РІР°РЅР°\n"
+"РєР°РјР°РЅРґР° 'РЎС…Р°РІР°С†СЊ С–РЅС€С‹СЏ'"
 
 #: ../src/winspector.c:1466
 msgid "Ignore 'Save Session'"
-msgstr "Ігнараваць 'Захаваць сесію'"
+msgstr "Р†РіРЅР°СЂР°РІР°С†СЊ 'Р—Р°С…Р°РІР°С†СЊ СЃРµСЃС–СЋ'"
 
 #: ../src/winspector.c:1468
 msgid ""
@@ -1828,13 +1828,13 @@ msgid ""
 "together with other applications when Window Maker\n"
 "starts."
 msgstr ""
-"Не захоўваць інфармацыю аб праграме ў стане\n"
-"сесіі, так што яна не будзе запускацца разам\n"
-"з іншымі праграмамі пры запуске Window Maker"
+"РќРµ Р·Р°С…РѕСћРІР°С†СЊ С–РЅС„Р°СЂРјР°С†С‹СЋ Р°Р± РїСЂР°РіСЂР°РјРµ Сћ СЃС‚Р°РЅРµ\n"
+"СЃРµСЃС–С–, С‚Р°Рє С€С‚Рѕ СЏРЅР° РЅРµ Р±СѓРґР·Рµ Р·Р°РїСѓСЃРєР°С†С†Р° СЂР°Р·Р°Рј\n"
+"Р· С–РЅС€С‹РјС– РїСЂР°РіСЂР°РјР°РјС– РїСЂС‹ Р·Р°РїСѓСЃРєРµ Window Maker"
 
 #: ../src/winspector.c:1474
 msgid "Emulate application icon"
-msgstr "Эмуляваць іконку праграмы"
+msgstr "Р­РјСѓР»СЏРІР°С†СЊ С–РєРѕРЅРєСѓ РїСЂР°РіСЂР°РјС‹"
 
 #: ../src/winspector.c:1476
 msgid ""
@@ -1842,57 +1842,57 @@ msgid ""
 "enough information to Window Maker for a dockable\n"
 "application icon to be created."
 msgstr ""
-"Прымусіць вакно дзейнічаць як праграму, якая\n"
-"забяспечвае Window Maker неабходнай інфармацыяй\n"
-"для стварэння іконкі праграмы."
+"РџСЂС‹РјСѓСЃС–С†СЊ РІР°РєРЅРѕ РґР·РµР№РЅС–С‡Р°С†СЊ СЏРє РїСЂР°РіСЂР°РјСѓ, СЏРєР°СЏ\n"
+"Р·Р°Р±СЏСЃРїРµС‡РІР°Рµ Window Maker РЅРµР°Р±С…РѕРґРЅР°Р№ С–РЅС„Р°СЂРјР°С†С‹СЏР№\n"
+"РґР»СЏ СЃС‚РІР°СЂСЌРЅРЅСЏ С–РєРѕРЅРєС– РїСЂР°РіСЂР°РјС‹."
 
 #: ../src/winspector.c:1482
 msgid "Disable language button"
-msgstr "Забароніць кнопук мовы"
+msgstr "Р—Р°Р±Р°СЂРѕРЅС–С†СЊ РєРЅРѕРїСѓРє РјРѕРІС‹"
 
 #: ../src/winspector.c:1484
 msgid "Remove the `toggle language' button of the window."
-msgstr "Не паказваць кнопку выбара мовы для вакна"
+msgstr "РќРµ РїР°РєР°Р·РІР°С†СЊ РєРЅРѕРїРєСѓ РІС‹Р±Р°СЂР° РјРѕРІС‹ РґР»СЏ РІР°РєРЅР°"
 
 #: ../src/winspector.c:1501
 msgid "Miniwindow Image"
-msgstr "Выява мінівакна"
+msgstr "Р’С‹СЏРІР° РјС–РЅС–РІР°РєРЅР°"
 
 #: ../src/winspector.c:1528
 msgid "Icon filename:"
-msgstr "Імя файла іконкі:"
+msgstr "Р†РјСЏ С„Р°Р№Р»Р° С–РєРѕРЅРєС–:"
 
 #: ../src/winspector.c:1541
 msgid "Ignore client supplied icon"
-msgstr "Ігнараваць кліентскую іконку"
+msgstr "Р†РіРЅР°СЂР°РІР°С†СЊ РєР»С–РµРЅС‚СЃРєСѓСЋ С–РєРѕРЅРєСѓ"
 
 #: ../src/winspector.c:1548
 msgid "Initial Workspace"
-msgstr "Пачатковае працамесца"
+msgstr "РџР°С‡Р°С‚РєРѕРІР°Рµ РїСЂР°С†Р°РјРµСЃС†Р°"
 
 #: ../src/winspector.c:1550
 msgid "The workspace to place the window when it'sfirst shown."
-msgstr "Працамесца ў якім будзе адкрывацца вакно па запуску"
+msgstr "РџСЂР°С†Р°РјРµСЃС†Р° Сћ СЏРєС–Рј Р±СѓРґР·Рµ Р°РґРєСЂС‹РІР°С†С†Р° РІР°РєРЅРѕ РїР° Р·Р°РїСѓСЃРєСѓ"
 
 #: ../src/winspector.c:1556
 msgid "Nowhere in particular"
-msgstr "Дзе заўгодна"
+msgstr "Р”Р·Рµ Р·Р°СћРіРѕРґРЅР°"
 
 #: ../src/winspector.c:1574
 msgid "Application Attributes"
-msgstr "Атрыбуты праграмы"
+msgstr "РђС‚СЂС‹Р±СѓС‚С‹ РїСЂР°РіСЂР°РјС‹"
 
 #: ../src/winspector.c:1585
 msgid "Start hidden"
-msgstr "Запускаць схаваным"
+msgstr "Р—Р°РїСѓСЃРєР°С†СЊ СЃС…Р°РІР°РЅС‹Рј"
 
 #: ../src/winspector.c:1587
 msgid "Automatically hide application when it's started."
-msgstr "Аўтаматычна хаваць праграму пры запуску"
+msgstr "РђСћС‚Р°РјР°С‚С‹С‡РЅР° С…Р°РІР°С†СЊ РїСЂР°РіСЂР°РјСѓ РїСЂС‹ Р·Р°РїСѓСЃРєСѓ"
 
 #: ../src/winspector.c:1590
 msgid "No application icon"
-msgstr "Забароніць іконку праграмы"
+msgstr "Р—Р°Р±Р°СЂРѕРЅС–С†СЊ С–РєРѕРЅРєСѓ РїСЂР°РіСЂР°РјС‹"
 
 #: ../src/winspector.c:1592
 msgid ""
@@ -1901,43 +1901,43 @@ msgid ""
 "and any icons that are already docked will stop\n"
 "working correctly."
 msgstr ""
-"Забароніць іконку праграмы. Пры гэтым яго\n"
-"нельга будзе задакаваць, а ўжо задакаваныя іконкі\n"
-"гэтай праграмы будуць працаваць некарэктна."
+"Р—Р°Р±Р°СЂРѕРЅС–С†СЊ С–РєРѕРЅРєСѓ РїСЂР°РіСЂР°РјС‹. РџСЂС‹ РіСЌС‚С‹Рј СЏРіРѕ\n"
+"РЅРµР»СЊРіР° Р±СѓРґР·Рµ Р·Р°РґР°РєР°РІР°С†СЊ, Р° СћР¶Рѕ Р·Р°РґР°РєР°РІР°РЅС‹СЏ С–РєРѕРЅРєС–\n"
+"РіСЌС‚Р°Р№ РїСЂР°РіСЂР°РјС‹ Р±СѓРґСѓС†СЊ РїСЂР°С†Р°РІР°С†СЊ РЅРµРєР°СЂСЌРєС‚РЅР°."
 
 #: ../src/winspector.c:1598
 msgid "Shared application icon"
-msgstr "Падзяляемая іконка праграмы"
+msgstr "РџР°РґР·СЏР»СЏРµРјР°СЏ С–РєРѕРЅРєР° РїСЂР°РіСЂР°РјС‹"
 
 #: ../src/winspector.c:1600
 msgid ""
 "Use a single shared application icon for all of\n"
 "the instances of this application.\n"
 msgstr ""
-"Выкарыстоўваць адзіную іконку праграмы для\n"
-"ўсіх экзэмпляраў гэтай праграмы.\n"
+"Р’С‹РєР°СЂС‹СЃС‚РѕСћРІР°С†СЊ Р°РґР·С–РЅСѓСЋ С–РєРѕРЅРєСѓ РїСЂР°РіСЂР°РјС‹ РґР»СЏ\n"
+"СћСЃС–С… СЌРєР·СЌРјРїР»СЏСЂР°Сћ РіСЌС‚Р°Р№ РїСЂР°РіСЂР°РјС‹.\n"
 
 #: ../src/wmspec.c:277
 msgid "out of memory while updating wm hints"
-msgstr "не хапіла памяці падчас абноўлення падказак"
+msgstr "РЅРµ С…Р°РїС–Р»Р° РїР°РјСЏС†С– РїР°РґС‡Р°СЃ Р°Р±РЅРѕСћР»РµРЅРЅСЏ РїР°РґРєР°Р·Р°Рє"
 
 #: ../src/workspace.c:107 ../src/workspace.c:108 ../src/workspace.c:893
 #, c-format
 msgid "Workspace %i"
-msgstr "Працамесца %i"
+msgstr "РџСЂР°С†Р°РјРµСЃС†Р° %i"
 
 #: ../src/workspace.c:943
 msgid "Workspaces"
-msgstr "Працамесцы"
+msgstr "РџСЂР°С†Р°РјРµСЃС†С‹"
 
 #: ../src/workspace.c:945
 msgid "could not create Workspace menu"
-msgstr "немагчыма стварыць меню працамесца"
+msgstr "РЅРµРјР°РіС‡С‹РјР° СЃС‚РІР°СЂС‹С†СЊ РјРµРЅСЋ РїСЂР°С†Р°РјРµСЃС†Р°"
 
 #: ../src/workspace.c:952
 msgid "New"
-msgstr "Стварыць"
+msgstr "РЎС‚РІР°СЂС‹С†СЊ"
 
 #: ../src/workspace.c:953
 msgid "Destroy Last"
-msgstr "Знішчыць апоешняе"
+msgstr "Р—РЅС–С€С‡С‹С†СЊ Р°РїРѕРµС€РЅСЏРµ"

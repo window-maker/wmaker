@@ -1,6 +1,8 @@
 Translated Message Catalog Files
 ================================
 
+All files are now in UTF-8.
+
 File	Language	Note	Current Maintainer
 ------------------------------------------------------------------------------
 ja.po	Japanese	1	ABE Shige <sabe@ibm.net>

@@ -7,7 +7,7 @@ msgstr ""
 "From: John <forgoil@rsn.hk-r.se>\n"
 "Language-Team: Swedish \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
 #: ../main.c:147
@@ -20,7 +20,7 @@ msgstr "%s avbruten.\n"
 
 #: ../main.c:170
 msgid "usage: %s [-options]\n"
-msgstr "användning: %s [-alternativ]\n"
+msgstr "anvÃ¤ndning: %s [-alternativ]\n"
 
 #: ../main.c:171
 msgid "options:"
@@ -28,19 +28,19 @@ msgstr "alternativ:"
 
 #: ../main.c:173
 msgid " -nocpp \t\tdisable preprocessing of configuration files"
-msgstr " -nocpp \t\tstäng av preprocessing för konfigurationsfilerna"
+msgstr " -nocpp \t\tstÃ¤ng av preprocessing fÃ¶r konfigurationsfilerna"
 
 #: ../main.c:176
 msgid " -nodock\t\tdo not open the application Dock"
-msgstr " -nodock\t\töppna inte the Dock"
+msgstr " -nodock\t\tÃ¶ppna inte the Dock"
 
 #: ../main.c:178
 msgid " -locale locale\t\tlocale to use"
-msgstr " -locale locale\t\tlocale som skall användas"
+msgstr " -locale locale\t\tlocale som skall anvÃ¤ndas"
 
 #: ../main.c:179
 msgid " -display host:dpy\tdisplay to use"
-msgstr " -display host:dpy\tdisplay som skall användas"
+msgstr " -display host:dpy\tdisplay som skall anvÃ¤ndas"
 
 #: ../main.c:180
 msgid " -version\t\tprint version and exit"
@@ -48,27 +48,27 @@ msgstr " -version\t\tskriv ut version och avsluta"
 
 #: ../main.c:234
 msgid "cannot set locale %s"
-msgstr "kan inte sätta locale %s"
+msgstr "kan inte sÃ¤tta locale %s"
 
 #: ../main.c:235
 msgid "falling back to C locale"
-msgstr "går tillbaka till C locale"
+msgstr "gÃ¥r tillbaka till C locale"
 
 #: ../main.c:263
 msgid "X server does not support locale"
-msgstr "X servern har inte support för locale"
+msgstr "X servern har inte support fÃ¶r locale"
 
 #: ../main.c:266
 msgid "cannot set locale modifiers"
-msgstr "kan inte sätta locale-modifierare"
+msgstr "kan inte sÃ¤tta locale-modifierare"
 
 #: ../main.c:276
 msgid "could not open display %s"
-msgstr "kunde inte öppna display %s"
+msgstr "kunde inte Ã¶ppna display %s"
 
 #: ../event.c:230
 msgid "stack overflow: too many dead processes"
-msgstr "stacken full: för många döda processer"
+msgstr "stacken full: fÃ¶r mÃ¥nga dÃ¶da processer"
 
 #: ../startup.c:137
 msgid "internal X error: %s\n"
@@ -84,7 +84,7 @@ msgstr "fick signal %i\n"
 
 #: ../texture.c:317 ../texture.c:327
 msgid "unsupported visual/depth for gradients"
-msgstr "kan ej hantera gradienter på denna visual/färgdjup"
+msgstr "kan ej hantera gradienter pÃ¥ denna visual/fÃ¤rgdjup"
 
 #: ../menu.c:231
 msgid "wrealloc() failed while trying to add menu item"
@@ -92,7 +92,7 @@ msgstr "wrealloc() misslyckades vid addering av ett menyval"
 
 #: ../pixmap.c:211
 msgid "could not load mask bitmap file \"%s\". Won't use mask"
-msgstr "kunde inte ladda maskfil \"%s\". Kommer inte att använda masken"
+msgstr "kunde inte ladda maskfil \"%s\". Kommer inte att anvÃ¤nda masken"
 
 #: ../image.c:183 ../image.c:889 ../pixmap.c:261
 msgid "could not load XPM file \"%s\""
@@ -100,7 +100,7 @@ msgstr "kunde inte ladda XP- fil \"%s\""
 
 #: ../pixmap.c:264
 msgid "cannot load \"%s\": XPM support not compiled in"
-msgstr "kan inte ladda \"%s\": hantering av är inte inkompilerat"
+msgstr "kan inte ladda \"%s\": hantering av Ã¤r inte inkompilerat"
 
 #: ../pixmap.c:271
 msgid "could not load XBM file \"%s\""
@@ -112,11 +112,11 @@ msgstr "kan inte identifiera bildfil \"%s\""
 
 #: ../image.c:200 ../pixmap.c:279
 msgid "unknown image format in \"%s\""
-msgstr "okänt bildformat i \"%s\""
+msgstr "okÃ¤nt bildformat i \"%s\""
 
 #: ../image.c:65 ../image.c:494
 msgid "can't load pixmap file \"%s\". Size too weird"
-msgstr "kan inte ladda pixmap-fil \"%s\". Storleken för underlig"
+msgstr "kan inte ladda pixmap-fil \"%s\". Storleken fÃ¶r underlig"
 
 #: ../image.c:83 ../image.c:746 ../image.c:768
 msgid "virtual memory exhausted during pixmap load. Not fatal..."
@@ -124,7 +124,7 @@ msgstr "slut virtuellt minne vid laddning av pixmap. Inte fatalt..."
 
 #: ../image.c:100 ../image.c:510
 msgid "virtual memory exhausted. Continuing..."
-msgstr "slut virtuellt minne. Fortsätter..."
+msgstr "slut virtuellt minne. FortsÃ¤tter..."
 
 #: ../image.c:186
 msgid "cannot load \"%s\": XPM format not supported"
@@ -145,55 +145,55 @@ msgstr "kunde inte konvertera bilden \"%s\" till det interna formatet"
 
 #: ../image.c:901
 msgid "can't load \"%s\": unknown image format"
-msgstr "kan inte ladda \"%s\": okänt bildformat"
+msgstr "kan inte ladda \"%s\": okÃ¤nt bildformat"
 
 #: ../screen.c:83
 msgid "it seems that there already is a window manager running"
-msgstr "det verkar som en fönsterhanterare redan är igång"
+msgstr "det verkar som en fÃ¶nsterhanterare redan Ã¤r igÃ¥ng"
 
 #: ../screen.c:234 ../screen.c:344
 msgid "could not parse color %s"
-msgstr "felaktig färgspecifikation %s"
+msgstr "felaktig fÃ¤rgspecifikation %s"
 
 #: ../screen.c:289
 msgid "The following character sets are missing:"
-msgstr "Följande teckenuppsättningar saknas:"
+msgstr "FÃ¶ljande teckenuppsÃ¤ttningar saknas:"
 
 #: ../screen.c:293
 msgid "The string \"%s\" will be used in place"
-msgstr "Strängen \"%s\" kommer att användas istället"
+msgstr "StrÃ¤ngen \"%s\" kommer att anvÃ¤ndas istÃ¤llet"
 
 #: ../screen.c:295
 msgid "of any characters from those sets."
-msgstr "någon av de tecknena ifrån de uppsättningarna."
+msgstr "nÃ¥gon av de tecknena ifrÃ¥n de uppsÃ¤ttningarna."
 
 #: ../screen.c:298
 msgid "could not create font set %s. Using fixed"
-msgstr "kunde inte skapa typsnitt %s. Använder fixed"
+msgstr "kunde inte skapa typsnitt %s. AnvÃ¤nder fixed"
 
 #: ../screen.c:305
 msgid "could not load any usable font set"
-msgstr "kunde inte ladda någon användbar teckenuppsättning"
+msgstr "kunde inte ladda nÃ¥gon anvÃ¤ndbar teckenuppsÃ¤ttning"
 
 #: ../screen.c:315
 msgid "could not load font %s. Using fixed"
-msgstr "kunde inte ladda typsnitt %s. Använder fixed"
+msgstr "kunde inte ladda typsnitt %s. AnvÃ¤nder fixed"
 
 #: ../screen.c:318
 msgid "could not load any usable font"
-msgstr "kunde inte ladda någon användbart typsnitt"
+msgstr "kunde inte ladda nÃ¥gon anvÃ¤ndbart typsnitt"
 
 #: ../screen.c:439
 msgid "Gradient texture not supported for your display (PseudoColor %ibpp)"
-msgstr "Kan ej hantera \"gradient texture\" på denna display (PseudoColor %ibpp)"
+msgstr "Kan ej hantera \"gradient texture\" pÃ¥ denna display (PseudoColor %ibpp)"
 
 #: ../screen.c:442
 msgid "You must enable dithering to be able to use gradients with this display"
-msgstr "Du måste slå på dithering för att kunna använda gradienter med den här displayen"
+msgstr "Du mÃ¥ste slÃ¥ pÃ¥ dithering fÃ¶r att kunna anvÃ¤nda gradienter med den hÃ¤r displayen"
 
 #: ../screen.c:456
 msgid "Gradient texture available only for PseudoColor and TrueColor displays"
-msgstr "Gradient texture är bara tillgänglig för PseudoColor- och TrueColor-displayer"
+msgstr "Gradient texture Ã¤r bara tillgÃ¤nglig fÃ¶r PseudoColor- och TrueColor-displayer"
 
 #: ../screen.c:478
 msgid "could not allocate texture"
@@ -201,7 +201,7 @@ msgstr "kunde inte allokera textur"
 
 #: ../screen.c:1058
 msgid "colormap size value(s) too large"
-msgstr "färgpalettens storleks värde(n) för stora"
+msgstr "fÃ¤rgpalettens storleks vÃ¤rde(n) fÃ¶r stora"
 
 #: ../dialog.c:208 ../rootmenu.c:108
 msgid "Exit"
@@ -209,19 +209,19 @@ msgstr "Avsluta"
 
 #: ../rootmenu.c:109
 msgid "Exit window manager?"
-msgstr "Avsluta fönsterhanterare?"
+msgstr "Avsluta fÃ¶nsterhanterare?"
 
 #: ../rootmenu.c:128
 msgid "Close X session"
-msgstr "Stäng X-session"
+msgstr "StÃ¤ng X-session"
 
 #: ../rootmenu.c:129
 msgid ""
 "Close Window System session?\n"
 "(all applications will be closed)"
 msgstr ""
-"Stäng fönstersystems sessionen?\n"
-"(alla applikatoner kommer att stängas)"
+"StÃ¤ng fÃ¶nstersystems sessionen?\n"
+"(alla applikatoner kommer att stÃ¤ngas)"
 
 #: ../rootmenu.c:217 ../rootmenu.c:314 ../rootmenu.c:496
 msgid "Switch to %i"
@@ -229,7 +229,7 @@ msgstr "Byt till %i"
 
 #: ../rootmenu.c:283
 msgid "out of memory to store menu commands. Nuking it."
-msgstr "inget minne kvar för att spara menykommandon. Bombar det."
+msgstr "inget minne kvar fÃ¶r att spara menykommandon. Bombar det."
 
 #: ../rootmenu.c:303
 msgid "Workspaces"
@@ -245,7 +245,7 @@ msgstr "Ny"
 
 #: ../rootmenu.c:309
 msgid "Destroy Last"
-msgstr "Förstöra sista"
+msgstr "FÃ¶rstÃ¶ra sista"
 
 #: ../rootmenu.c:350
 msgid "missing command in menu config: %s"
@@ -257,7 +257,7 @@ msgstr "menyn kan bara ha en WORKSPACE_MENU (arbetsytemeny)"
 
 #: ../rootmenu.c:406
 msgid "unknown command \"%s\" in menu config."
-msgstr "okänt kommando \"%s\" i menykonfigurationen."
+msgstr "okÃ¤nt kommando \"%s\" i menykonfigurationen."
 
 #: ../rootmenu.c:410
 msgid "syntax error in menu config. END declaration missing"
@@ -269,7 +269,7 @@ msgstr "syntaxfel i menykonfigurationen. %s"
 
 #: ../rootmenu.c:443
 msgid "no title given for the root menu"
-msgstr "ingen titel (title) angiven för rot menyn"
+msgstr "ingen titel (title) angiven fÃ¶r rot menyn"
 
 #: ../rootmenu.c:455
 msgid "Commands"
@@ -285,19 +285,19 @@ msgstr "kunde inte stat(2): menykonfigurationsfilen \"%s\""
 
 #: ../rootmenu.c:578
 msgid "no read permision to menu configuration file"
-msgstr "inga läsrättigheter till menykonfigurationsfilen"
+msgstr "inga lÃ¤srÃ¤ttigheter till menykonfigurationsfilen"
 
 #: ../rootmenu.c:595
 msgid "could not make arguments for menu file preprocessor"
-msgstr "kunde inte skapa parametrar för förbehandling av menyfilen"
+msgstr "kunde inte skapa parametrar fÃ¶r fÃ¶rbehandling av menyfilen"
 
 #: ../rootmenu.c:603
 msgid "could not open menu configuration preprocessor"
-msgstr "kunde inte öppna menykonfigurations-preprocessorn"
+msgstr "kunde inte Ã¶ppna menykonfigurations-preprocessorn"
 
 #: ../rootmenu.c:613
 msgid "couldn't open menu configuration file \"%s\""
-msgstr "kunde inte öppna menykonfigurationsfilen \"%s\""
+msgstr "kunde inte Ã¶ppna menykonfigurationsfilen \"%s\""
 
 #: ../dock.c:689 ../rootmenu.c:646
 msgid "Error"
@@ -308,8 +308,8 @@ msgid ""
 "Could not read menu configuration\n"
 "(see console log for details)"
 msgstr ""
-"Kunde inte läsa menykonfigurationen\n"
-"(se konsol loggen för detaljer)"
+"Kunde inte lÃ¤sa menykonfigurationen\n"
+"(se konsol loggen fÃ¶r detaljer)"
 
 
 #: ../dialog.c:196
@@ -322,31 +322,31 @@ msgstr "Avbryt"
 
 #: ../resource.c:297 ../resource.c:359 ../resource.c:368 ../resource.c:497 ../resource.c:521 ../resource.c:530 ../resource.c:555
 msgid "%s: syntax error in line \"%s\""
-msgstr "%s: syntax fel på rad \"%s\""
+msgstr "%s: syntax fel pÃ¥ rad \"%s\""
 
 #: ../resource.c:309
 msgid "%s: invalid window attribute specification in \"%s\""
-msgstr "%s: felaktig fönsterattributspecifikation i \"%s\""
+msgstr "%s: felaktig fÃ¶nsterattributspecifikation i \"%s\""
 
 #: ../resource.c:336
 msgid "%s: unknown attribute in line \"%s\""
-msgstr "%s: okänt attribut på rad \"%s\""
+msgstr "%s: okÃ¤nt attribut pÃ¥ rad \"%s\""
 
 #: ../resource.c:416 ../resource.c:425 ../resource.c:437
 msgid "%s:invalid kbd shortcut specification \"%s\""
-msgstr "%s:felaktig tangenbordsgenvägsspecifikation \"%s\""
+msgstr "%s:felaktig tangenbordsgenvÃ¤gsspecifikation \"%s\""
 
 #: ../resource.c:477
 msgid "%s: expected section identifier but got %s"
-msgstr "%s: väntade sektions identifierare, men fick %s"
+msgstr "%s: vÃ¤ntade sektions identifierare, men fick %s"
 
 #: ../resource.c:510
 msgid "%s: unknown option in line \"%s\""
-msgstr "%s: okänt alternativ på rad \"%s\""
+msgstr "%s: okÃ¤nt alternativ pÃ¥ rad \"%s\""
 
 #: ../resource.c:559
 msgid "%s: invalid colormap size in line \"%s\""
-msgstr "%s: felaktig palettstorlek på rad \"%s\""
+msgstr "%s: felaktig palettstorlek pÃ¥ rad \"%s\""
 
 #: ../resource.c:579
 msgid "%s: invalid geometry display type \"%s\". Shouldbe center, corner, floating or line"
@@ -382,11 +382,11 @@ msgstr "kunde inte skapa argument till preference-filens preprocessor"
 
 #: ../resource.c:737
 msgid "could not open preference file preprocessor"
-msgstr "kunde inte öppna preference-filens preprocessor"
+msgstr "kunde inte Ã¶ppna preference-filens preprocessor"
 
 #: ../resource.c:744
 msgid "could not open configuration file: \"%s\""
-msgstr "kunde inte öppna konfigurationsfilen: \"%s\""
+msgstr "kunde inte Ã¶ppna konfigurationsfilen: \"%s\""
 
 #: ../resource.c:791
 msgid "could not find default icon \"%s\""
@@ -402,19 +402,19 @@ msgstr "kunde inte hitta ikonbakgrunden \"%s\""
 
 #: ../raster.c:183
 msgid "invalid dither colormap size specification.disabling"
-msgstr "Felaktig storlek för dither-paletten. Slår av"
+msgstr "Felaktig storlek fÃ¶r dither-paletten. SlÃ¥r av"
 
 #: ../raster.c:193
 msgid "Could not build PseudoColor color table\n"
-msgstr "Kunde inte skapa PseudoColor-färgtabell\n"
+msgstr "Kunde inte skapa PseudoColor-fÃ¤rgtabell\n"
 
 #: ../misc.c:50
 msgid "could not define value for %s for cpp"
-msgstr "kunde inte definiera värde för %s till cpp"
+msgstr "kunde inte definiera vÃ¤rde fÃ¶r %s till cpp"
 
 #: ../misc.c:80
 msgid "could not get password entry for UID %i"
-msgstr "kunde inte få lösenordspost för användar-ID %i"
+msgstr "kunde inte fÃ¥ lÃ¶senordspost fÃ¶r anvÃ¤ndar-ID %i"
 
 #: ../appmenu.c:114
 msgid "appmenu:could not create menu"
@@ -426,19 +426,19 @@ msgstr "appmenu:kunde inte skapa menypost"
 
 #: ../stacking.c:89 ../stacking.c:148
 msgid "could not get window list!!"
-msgstr "kunde inte få fönsterlista!!"
+msgstr "kunde inte fÃ¥ fÃ¶nsterlista!!"
 
 #: ../switchmenu.c:109
 msgid "Windows"
-msgstr "Fönster"
+msgstr "FÃ¶nster"
 
 #: ../dock.c:171
 msgid "could not open file \"%s\" to save Dock state"
-msgstr "kunde inte öppna filen \"%s\" för att spara Dockens tillstånd"
+msgstr "kunde inte Ã¶ppna filen \"%s\" fÃ¶r att spara Dockens tillstÃ¥nd"
 
 #: ../dock.c:687
 msgid "Could not execute program \"%s\""
-msgstr "kunde inte köra program \"%s\""
+msgstr "kunde inte kÃ¶ra program \"%s\""
 
 #: ../winmenu.c:119
 msgid "(Un)Maximize"
@@ -454,19 +454,19 @@ msgstr "(O)Skugga"
 
 #: ../winmenu.c:140
 msgid "Hide"
-msgstr "Gömma"
+msgstr "GÃ¶mma"
 
 #: ../winmenu.c:146
 msgid "Hide Others"
-msgstr "Gömma Andra"
+msgstr "GÃ¶mma Andra"
 
 #: ../winmenu.c:149
 msgid "Close"
-msgstr "Stäng"
+msgstr "StÃ¤ng"
 
 #: ../winmenu.c:156
 msgid "Kill"
-msgstr "Döda"
+msgstr "DÃ¶da"
 
 #: ../generic/error.c:46
 msgid " fatal error: "

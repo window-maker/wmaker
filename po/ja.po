@@ -17,18 +17,18 @@ msgstr ""
 "Last-Translator: Takeo Hashimoto <hashimototakeo@mac.com>\n"
 "Language-Team: Japanese \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=EUC-JP\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
 #: ../src/appicon.c:542 ../src/dialog.c:224 ../src/dock.c:3244
 #: ../src/dockedapp.c:212 ../src/main.c:256 ../src/rootmenu.c:1815
 #: ../src/winspector.c:388 ../src/winspector.c:405
 msgid "Error"
-msgstr "¥¨¥é¡¼"
+msgstr "ã‚¨ãƒ©ãƒ¼"
 
 #: ../src/appicon.c:543
 msgid "Could not open specified icon file"
-msgstr "»ØÄê¤µ¤ì¤¿¥¢¥¤¥³¥ó¥Õ¥¡¥¤¥ë¤ò³«¤±¤Ş¤»¤ó"
+msgstr "æŒ‡å®šã•ã‚ŒãŸã‚¢ã‚¤ã‚³ãƒ³ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã‘ã¾ã›ã‚“"
 
 #: ../src/appicon.c:544 ../src/dialog.c:121 ../src/dialog.c:224
 #: ../src/dialog.c:672 ../src/dialog.c:1735 ../src/dock.c:493
@@ -36,7 +36,7 @@ msgstr "»ØÄê¤µ¤ì¤¿¥¢¥¤¥³¥ó¥Õ¥¡¥¤¥ë¤ò³«¤±¤Ş¤»¤ó"
 #: ../src/dockedapp.c:213 ../src/dockedapp.c:371 ../src/main.c:256
 #: ../src/rootmenu.c:1819 ../src/winspector.c:389 ../src/winspector.c:406
 msgid "OK"
-msgstr "Î»²ò"
+msgstr "äº†è§£"
 
 #: ../src/appicon.c:571 ../src/dock.c:256
 msgid ""
@@ -44,99 +44,99 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-" ¤ò¶¯À©½ªÎ»¤µ¤»¤Ş¤¹\n"
-"ÊİÂ¸¤µ¤ì¤Æ¤¤¤Ê¤¤ÊÑ¹¹¤ÏÁ´¤Æ¼º¤ï¤ì¤Ş¤¹\n"
-"½ªÎ»¤µ¤»¤Ş¤¹¤«¡©"
+" ã‚’å¼·åˆ¶çµ‚äº†ã•ã›ã¾ã™\n"
+"ä¿å­˜ã•ã‚Œã¦ã„ãªã„å¤‰æ›´ã¯å…¨ã¦å¤±ã‚ã‚Œã¾ã™\n"
+"çµ‚äº†ã•ã›ã¾ã™ã‹ï¼Ÿ"
 
 #: ../src/appicon.c:577 ../src/dock.c:261 ../src/winmenu.c:128
 msgid "Kill Application"
-msgstr "¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¶¯À©½ªÎ»"
+msgstr "ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³å¼·åˆ¶çµ‚äº†"
 
 #: ../src/appicon.c:578 ../src/dock.c:262 ../src/winmenu.c:130
 msgid "Yes"
-msgstr "¤Ï¤¤"
+msgstr "ã¯ã„"
 
 #: ../src/appicon.c:578 ../src/dock.c:262 ../src/winmenu.c:130
 msgid "No"
-msgstr "¤¤¤¤¤¨"
+msgstr "ã„ã„ãˆ"
 
 #: ../src/appicon.c:596 ../src/dock.c:1139 ../src/dock.c:3410
 msgid "Unhide Here"
-msgstr "¤³¤Î¥ï¡¼¥¯¥¹¥Ú¡¼¥¹¤Ç¸µ¤ËÌá¤¹"
+msgstr "ã“ã®ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹ã§å…ƒã«æˆ»ã™"
 
 #: ../src/appicon.c:597 ../src/appicon.c:623 ../src/dock.c:1141
 #: ../src/dock.c:1143 ../src/dock.c:3422 ../src/winmenu.c:465
 msgid "Hide"
-msgstr "±£¤¹"
+msgstr "éš ã™"
 
 #: ../src/appicon.c:598 ../src/appicon.c:629
 msgid "Collapse"
-msgstr "ÀŞ¤ê¾ö¤à"
+msgstr "æŠ˜ã‚Šç•³ã‚€"
 
 #: ../src/appicon.c:599
 msgid "Set Icon..."
-msgstr "¥¢¥¤¥³¥óÀßÄê..."
+msgstr "ã‚¢ã‚¤ã‚³ãƒ³è¨­å®š..."
 
 #: ../src/appicon.c:600 ../src/dock.c:1147 ../src/rootmenu.c:223
 #: ../src/rootmenu.c:237 ../src/winmenu.c:512
 msgid "Kill"
-msgstr "¶¯À©½ªÎ»"
+msgstr "å¼·åˆ¶çµ‚äº†"
 
 #: ../src/appicon.c:621 ../src/dock.c:3420
 msgid "Unhide"
-msgstr "¸µ¤ËÌá¤¹"
+msgstr "å…ƒã«æˆ»ã™"
 
 #: ../src/appicon.c:627
 msgid "Uncollapse"
-msgstr "¹­¤²¤ë"
+msgstr "åºƒã’ã‚‹"
 
 #: ../src/defaults.c:917 ../src/startup.c:890 ../src/startup.c:908
 #: ../src/startup.c:914
 #, c-format
 msgid "could not read domain \"%s\" from defaults database"
-msgstr "É¸½à¥Ç¡¼¥¿¥Ù¡¼¥¹¤«¤é¥É¥á¥¤¥ó\"%s\"¤òÆÉ¤ß¹ş¤à¤³¤È¤¬¤Ç¤­¤Ş¤»¤ó"
+msgstr "æ¨™æº–ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‹ã‚‰ãƒ‰ãƒ¡ã‚¤ãƒ³\"%s\"ã‚’èª­ã¿è¾¼ã‚€ã“ã¨ãŒã§ãã¾ã›ã‚“"
 
 #: ../src/defaults.c:963 ../src/defaults.c:1088 ../src/defaults.c:1127
 #: ../src/defaults.c:1173
 #, c-format
 msgid "Domain %s (%s) of defaults database is corrupted!"
-msgstr "É¸½à¥Ç¡¼¥¿¥Ù¡¼¥¹¤Î¥É¥á¥¤¥ó%s (%s)¤¬¤ª¤«¤·¤¤¤Ç¤¹!"
+msgstr "æ¨™æº–ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®ãƒ‰ãƒ¡ã‚¤ãƒ³%s (%s)ãŒãŠã‹ã—ã„ã§ã™!"
 
 #: ../src/defaults.c:968 ../src/defaults.c:1109 ../src/defaults.c:1156
 #: ../src/defaults.c:1182
 #, c-format
 msgid "could not load domain %s from user defaults database"
-msgstr "¥æ¡¼¥¶É¸½à¥Ç¡¼¥¿¥Ù¡¼¥¹¤«¤é¥É¥á¥¤¥ó%s¤ò¥í¡¼¥É¤Ç¤­¤Ş¤»¤ó"
+msgstr "ãƒ¦ãƒ¼ã‚¶æ¨™æº–ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‹ã‚‰ãƒ‰ãƒ¡ã‚¤ãƒ³%sã‚’ãƒ­ãƒ¼ãƒ‰ã§ãã¾ã›ã‚“"
 
 #: ../src/defaults.c:979 ../src/defaults.c:1073
 #, c-format
 msgid "Domain %s (%s) of global defaults database is corrupted!"
-msgstr "¥°¥í¡¼¥Ğ¥ëÉ¸½à¥Ç¡¼¥¿¥Ù¡¼¥¹¤Î¥É¥á¥¤¥ó%s (%s)¤¬¤ª¤«¤·¤¤¤Ç¤¹!"
+msgstr "ã‚°ãƒ­ãƒ¼ãƒãƒ«æ¨™æº–ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®ãƒ‰ãƒ¡ã‚¤ãƒ³%s (%s)ãŒãŠã‹ã—ã„ã§ã™!"
 
 #: ../src/defaults.c:998
 #, c-format
 msgid "could not load domain %s from global defaults database (%s)"
-msgstr "¥°¥í¡¼¥Ğ¥ëÉ¸½à¥Ç¡¼¥¿¥Ù¡¼¥¹(%s)¤«¤é¥É¥á¥¤¥ó%s¤ò¥í¡¼¥É¤Ç¤­¤Ş¤»¤ó"
+msgstr "ã‚°ãƒ­ãƒ¼ãƒãƒ«æ¨™æº–ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹(%s)ã‹ã‚‰ãƒ‰ãƒ¡ã‚¤ãƒ³%sã‚’ãƒ­ãƒ¼ãƒ‰ã§ãã¾ã›ã‚“"
 
 #: ../src/defaults.c:1078
 #, c-format
 msgid "could not load domain %s from global defaults database"
-msgstr "¥°¥í¡¼¥Ğ¥ëÉ¸½à¥Ç¡¼¥¿¥Ù¡¼¥¹¤«¤é¥É¥á¥¤¥ó%s¤ò¥í¡¼¥É¤Ç¤­¤Ş¤»¤ó"
+msgstr "ã‚°ãƒ­ãƒ¼ãƒãƒ«æ¨™æº–ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‹ã‚‰ãƒ‰ãƒ¡ã‚¤ãƒ³%sã‚’ãƒ­ãƒ¼ãƒ‰ã§ãã¾ã›ã‚“"
 
 #: ../src/defaults.c:1146 ../src/screen.c:458
 #, c-format
 msgid "could not load logo image for panels: %s"
-msgstr "¥Ñ¥Í¥ëÍÑ¤Î¥í¥´²èÁü¤¬ÆÉ¤ß¹ş¤á¤Ş¤»¤ó"
+msgstr "ãƒ‘ãƒãƒ«ç”¨ã®ãƒ­ã‚´ç”»åƒãŒèª­ã¿è¾¼ã‚ã¾ã›ã‚“"
 
 #: ../src/defaults.c:1424
 #, c-format
 msgid "wrong option value for key \"%s\". Should be one of %s"
-msgstr "¥­¡¼\"%s\"¤ËÂĞ¤¹¤ë¥ª¥×¥·¥ç¥ó·Á¼°¤¬°ã¤¤¤Ş¤¹. %s·¿¤Ë¤·¤Æ²¼¤µ¤¤"
+msgstr "ã‚­ãƒ¼\"%s\"ã«å¯¾ã™ã‚‹ã‚ªãƒ—ã‚·ãƒ§ãƒ³å½¢å¼ãŒé•ã„ã¾ã™. %så‹ã«ã—ã¦ä¸‹ã•ã„"
 
 #: ../src/defaults.c:1469
 #, c-format
 msgid "can't convert \"%s\" to boolean for key \"%s\""
-msgstr "\"%s\"(\"%s\"¤Î°ú¿ô)¤òboolean·¿¤ØÊÑ´¹¤Ç¤­¤Ş¤»¤ó"
+msgstr "\"%s\"(\"%s\"ã®å¼•æ•°)ã‚’booleanå‹ã¸å¤‰æ›ã§ãã¾ã›ã‚“"
 
 #: ../src/defaults.c:1474 ../src/defaults.c:1506 ../src/defaults.c:1538
 #: ../src/defaults.c:1551 ../src/defaults.c:1566 ../src/defaults.c:1580
@@ -146,206 +146,206 @@ msgstr "\"%s\"(\"%s\"¤Î°ú¿ô)¤òboolean·¿¤ØÊÑ´¹¤Ç¤­¤Ş¤»¤ó"
 #: ../src/defaults.c:2713 ../src/defaults.c:2724
 #, c-format
 msgid "using default \"%s\" instead"
-msgstr "Âå¤ï¤ê¤ËÉ¸½à¤ÎÀßÄê\"%s\"¤ò»È¤¤¤Ş¤¹"
+msgstr "ä»£ã‚ã‚Šã«æ¨™æº–ã®è¨­å®š\"%s\"ã‚’ä½¿ã„ã¾ã™"
 
 #: ../src/defaults.c:1503
 #, c-format
 msgid "can't convert \"%s\" to integer for key \"%s\""
-msgstr "\"%s\"(\"%s\"¤Î°ú¿ô)¤òÀ°¿ô(integer·¿)¤ØÊÑ´¹¤Ç¤­¤Ş¤»¤ó"
+msgstr "\"%s\"(\"%s\"ã®å¼•æ•°)ã‚’æ•´æ•°(integerå‹)ã¸å¤‰æ›ã§ãã¾ã›ã‚“"
 
 #: ../src/defaults.c:1533 ../src/defaults.c:1645 ../src/defaults.c:2124
 #: ../src/defaults.c:2141 ../src/defaults.c:2186 ../src/defaults.c:2233
 #: ../src/defaults.c:2708 ../src/wdefaults.c:570 ../src/wdefaults.c:606
 #, c-format
 msgid "Wrong option format for key \"%s\". Should be %s."
-msgstr "\"%s\"¤ËÂĞ¤¹¤ë¥ª¥×¥·¥ç¥ó·Á¼°¤¬°ã¤¤¤Ş¤¹. %s·¿¤Ë¤·¤Æ²¼¤µ¤¤"
+msgstr "\"%s\"ã«å¯¾ã™ã‚‹ã‚ªãƒ—ã‚·ãƒ§ãƒ³å½¢å¼ãŒé•ã„ã¾ã™. %så‹ã«ã—ã¦ä¸‹ã•ã„"
 
 #: ../src/defaults.c:1546
 #, c-format
 msgid "Incorrect number of elements in array for key \"%s\"."
-msgstr "\"%s\"¤ËÂĞ¤¹¤ëÍ×ÁÇ¿ô¤¬Àµ¤·¤¯¤¢¤ê¤Ş¤»¤ó"
+msgstr "\"%s\"ã«å¯¾ã™ã‚‹è¦ç´ æ•°ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“"
 
 #: ../src/defaults.c:1561
 #, c-format
 msgid "Wrong value for key \"%s\". Should be Coordinate."
-msgstr "\"%s\"¤ËÂĞ¤¹¤ë»ØÄê¤¬ÉÔÀµ¤Ç¤¹. Coordinate·¿¤Ë¤·¤Æ¤¯¤À¤µ¤¤"
+msgstr "\"%s\"ã«å¯¾ã™ã‚‹æŒ‡å®šãŒä¸æ­£ã§ã™. Coordinateå‹ã«ã—ã¦ãã ã•ã„"
 
 #: ../src/defaults.c:1576
 #, c-format
 msgid "can't convert array to integers for \"%s\"."
-msgstr "\"%s\"¤ËÂĞ¤·¤ÆÀ°¿ôÎó¤ØÊÑ´¹¤Ç¤­¤Ş¤»¤ó"
+msgstr "\"%s\"ã«å¯¾ã—ã¦æ•´æ•°åˆ—ã¸å¤‰æ›ã§ãã¾ã›ã‚“"
 
 #: ../src/defaults.c:1774 ../src/defaults.c:1806 ../src/defaults.c:1822
 #: ../src/defaults.c:1851 ../src/defaults.c:1874 ../src/defaults.c:1927
 #: ../src/defaults.c:1967 ../src/defaults.c:2005 ../src/defaults.c:2021
 #, c-format
 msgid "\"%s\" is not a valid color name"
-msgstr "¥«¥é¡¼Ì¾¤Î»ØÄê\"%s\"¤¬´Ö°ã¤Ã¤Æ¤¤¤Ş¤¹"
+msgstr "ã‚«ãƒ©ãƒ¼åã®æŒ‡å®š\"%s\"ãŒé–“é•ã£ã¦ã„ã¾ã™"
 
 #: ../src/defaults.c:1787 ../src/defaults.c:1839
 msgid "bad number of arguments in gradient specification"
-msgstr "¥°¥é¥Ç¡¼¥·¥ç¥ó»ØÄê¤Î°ú¿ô¤Î¿ô¤¬´Ö°ã¤Ã¤Æ¤¤¤Ş¤¹"
+msgstr "ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³æŒ‡å®šã®å¼•æ•°ã®æ•°ãŒé–“é•ã£ã¦ã„ã¾ã™"
 
 #: ../src/defaults.c:1900
 msgid "too few arguments in multicolor gradient specification"
-msgstr "¥Ş¥ë¥Á¥«¥é¡¼¤Î¥°¥é¥Ç¡¼¥·¥ç¥ó»ØÄê¤Î°ú¿ô¤¬Â­¤ê¤Ş¤»¤ó"
+msgstr "ãƒãƒ«ãƒã‚«ãƒ©ãƒ¼ã®ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³æŒ‡å®šã®å¼•æ•°ãŒè¶³ã‚Šã¾ã›ã‚“"
 
 #: ../src/defaults.c:1994
 msgid "bad number of arguments in textured gradient specification"
-msgstr "¥°¥é¥Ç¡¼¥·¥ç¥ó»ØÄê¤Î°ú¿ô¤Î¿ô¤¬´Ö°ã¤Ã¤Æ¤¤¤Ş¤¹"
+msgstr "ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³æŒ‡å®šã®å¼•æ•°ã®æ•°ãŒé–“é•ã£ã¦ã„ã¾ã™"
 
 #: ../src/defaults.c:2037
 #, c-format
 msgid "bad opacity value for tgradient texture \"%s\". Should be [0..255]"
-msgstr "ÉÔÆ©ÌÀÅÙ¤Ë¤Ï %s ¤Ï»ØÄê¤Ç¤­¤Ş¤»¤ó. 0 ¤«¤é 255 ¤Ç»ØÄê¤·¤Æ¤¯¤À¤µ¤¤"
+msgstr "ä¸é€æ˜åº¦ã«ã¯ %s ã¯æŒ‡å®šã§ãã¾ã›ã‚“. 0 ã‹ã‚‰ 255 ã§æŒ‡å®šã—ã¦ãã ã•ã„"
 
 #: ../src/defaults.c:2097
 #, c-format
 msgid "could not initialize library %s"
-msgstr "%s ¥é¥¤¥Ö¥é¥ê¤Î½é´ü²½¤¬¤Ç¤­¤Ş¤»¤ó¤Ç¤·¤¿"
+msgstr "%s ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®åˆæœŸåŒ–ãŒã§ãã¾ã›ã‚“ã§ã—ãŸ"
 
 #: ../src/defaults.c:2100
 #, c-format
 msgid "could not find function %s::%s"
-msgstr "%s::%s ´Ø¿ô¤¬¸«¤Ä¤«¤ê¤Ş¤»¤ó¤Ç¤·¤¿"
+msgstr "%s::%s é–¢æ•°ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ"
 
 #: ../src/defaults.c:2107
 #, c-format
 msgid "invalid texture type %s"
-msgstr "¥Æ¥¯¥¹¥Á¥ã¤Î¥¿¥¤¥× %s ¤¬ÉÔÀµ¤Ç¤¹"
+msgstr "ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ã‚¿ã‚¤ãƒ— %s ãŒä¸æ­£ã§ã™"
 
 #: ../src/defaults.c:2154
 #, c-format
 msgid "Error in texture specification for key \"%s\""
-msgstr "`%s'¤ËÂĞ¤¹¤ë¥Æ¥¯¥¹¥Á¥ã¤Î»ØÄê¥¨¥é¡¼¤Ç¤¹"
+msgstr "`%s'ã«å¯¾ã™ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æŒ‡å®šã‚¨ãƒ©ãƒ¼ã§ã™"
 
 #: ../src/defaults.c:2203
 msgid "Wrong type for workspace background. Should be a texture type."
-msgstr "¥ï¡¼¥¯¥¹¥Ú¡¼¥¹ÇØ·Ê¤Î·Á¼°¤¬°ã¤¤¤Ş¤¹. Texture·¿¤Ë¤·¤Æ¤¯¤À¤µ¤¤"
+msgstr "ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹èƒŒæ™¯ã®å½¢å¼ãŒé•ã„ã¾ã™. Textureå‹ã«ã—ã¦ãã ã•ã„"
 
 #: ../src/defaults.c:2251
 #, c-format
 msgid "Wrong type for background of workspace %i. Should be a texture."
-msgstr "¥ï¡¼¥¯¥¹¥Ú¡¼¥¹ %i ¤ÎÇØ·Ê¤Î·Á¼°¤¬°ã¤¤¤Ş¤¹. Texture·¿¤Ë¤·¤Æ¤¯¤À¤µ¤¤"
+msgstr "ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹ %i ã®èƒŒæ™¯ã®å½¢å¼ãŒé•ã„ã¾ã™. Textureå‹ã«ã—ã¦ãã ã•ã„"
 
 #: ../src/defaults.c:2293
 msgid "could not load any usable font!!!"
-msgstr "»ÈÍÑ¤Ç¤­¤ë¥Õ¥©¥ó¥È¤¬ÆÉ¤ß¹ş¤á¤Ş¤»¤ó!!"
+msgstr "ä½¿ç”¨ã§ãã‚‹ãƒ•ã‚©ãƒ³ãƒˆãŒèª­ã¿è¾¼ã‚ã¾ã›ã‚“!!"
 
 #: ../src/defaults.c:2320
 #, c-format
 msgid "could not get color for key \"%s\""
-msgstr "\"%s\"¤ËÂĞ¤¹¤ë¥«¥é¡¼¤¬ÆÀ¤é¤ì¤Ş¤»¤ó"
+msgstr "\"%s\"ã«å¯¾ã™ã‚‹ã‚«ãƒ©ãƒ¼ãŒå¾—ã‚‰ã‚Œã¾ã›ã‚“"
 
 #: ../src/defaults.c:2378 ../src/rootmenu.c:491
 #, c-format
 msgid "%s:invalid key modifier \"%s\""
-msgstr "%s:¥­¡¼¤Î»ØÄê\"%s\"¤¬´Ö°ã¤Ã¤Æ¤¤¤Ş¤¹"
+msgstr "%s:ã‚­ãƒ¼ã®æŒ‡å®š\"%s\"ãŒé–“é•ã£ã¦ã„ã¾ã™"
 
 #: ../src/defaults.c:2390
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\""
-msgstr "%s:¥·¥ç¡¼¥È¥«¥Ã¥È\"%s\"¤Î¥­¡¼»ØÄê¤¬´Ö°ã¤Ã¤Æ¤¤¤Ş¤¹"
+msgstr "%s:ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆ\"%s\"ã®ã‚­ãƒ¼æŒ‡å®šãŒé–“é•ã£ã¦ã„ã¾ã™"
 
 #: ../src/defaults.c:2397
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\""
-msgstr "%s:¥·¥ç¡¼¥È¥«¥Ã¥È\"%s\"¤Î¥­¡¼»ØÄê¤¬´Ö°ã¤Ã¤Æ¤¤¤Ş¤¹"
+msgstr "%s:ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆ\"%s\"ã®ã‚­ãƒ¼æŒ‡å®šãŒé–“é•ã£ã¦ã„ã¾ã™"
 
 #: ../src/defaults.c:2422
 #, c-format
 msgid "%s: modifier key %s is not valid"
-msgstr "%s:¥­¡¼%s¤ÎÀßÄê¤¬Å¬ÀÚ¤Ç¤¢¤ê¤Ş¤»¤ó"
+msgstr "%s:ã‚­ãƒ¼%sã®è¨­å®šãŒé©åˆ‡ã§ã‚ã‚Šã¾ã›ã‚“"
 
 #: ../src/defaults.c:2454
 #, c-format
 msgid "could not load image in option %s: %s"
-msgstr "%s »ØÄê¤Ç²èÁü¤òÆÉ¤ß¹ş¤á¤Ş¤»¤ó: %s"
+msgstr "%s æŒ‡å®šã§ç”»åƒã‚’èª­ã¿è¾¼ã‚ã¾ã›ã‚“: %s"
 
 #: ../src/defaults.c:2573
 #, c-format
 msgid "failed to open bitmap file \"%s\""
-msgstr "¥Ó¥Ã¥È¥Ş¥Ã¥×¥Õ¥¡¥¤¥ë \"%s\" ¤ò³«¤±¤Ş¤»¤ó"
+msgstr "ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ« \"%s\" ã‚’é–‹ã‘ã¾ã›ã‚“"
 
 #: ../src/defaults.c:2576
 #, c-format
 msgid "\"%s\" is not a valid bitmap file"
-msgstr "\"%s\" ¤ÏÀµ¤·¤¤¥Ó¥Ã¥È¥Ş¥Ã¥×¥Õ¥¡¥¤¥ë¤Ç¤Ï¤¢¤ê¤Ş¤»¤ó"
+msgstr "\"%s\" ã¯æ­£ã—ã„ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ«ã§ã¯ã‚ã‚Šã¾ã›ã‚“"
 
 #: ../src/defaults.c:2579
 #, c-format
 msgid "out of memory reading bitmap file \"%s\""
-msgstr "¥Ó¥Ã¥È¥Ş¥Ã¥×¥Õ¥¡¥¤¥ë \"%s\" ¤òÆÉ¤ó¤Ç¤¤¤ë¤È¤­¤Ë¥á¥â¥ê¤¬ÉÔÂ­¤·¤Ş¤·¤¿"
+msgstr "ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ« \"%s\" ã‚’èª­ã‚“ã§ã„ã‚‹ã¨ãã«ãƒ¡ãƒ¢ãƒªãŒä¸è¶³ã—ã¾ã—ãŸ"
 
 #: ../src/defaults.c:2618 ../src/defaults.c:2651
 msgid "bad number of arguments in cursor specification"
-msgstr "¥«¡¼¥½¥ë»ØÄê¤Î°ú¿ô¤Î¿ô¤¬´Ö°ã¤Ã¤Æ¤¤¤Ş¤¹"
+msgstr "ã‚«ãƒ¼ã‚½ãƒ«æŒ‡å®šã®å¼•æ•°ã®æ•°ãŒé–“é•ã£ã¦ã„ã¾ã™"
 
 #: ../src/defaults.c:2634
 #, c-format
 msgid "unknown builtin cursor name \"%s\""
-msgstr "\"%s\" ¤È¤¤¤¦ÁÈ¤ß¹ş¤ß¥«¡¼¥½¥ë¤Ï¤ï¤«¤ê¤Ş¤»¤ó"
+msgstr "\"%s\" ã¨ã„ã†çµ„ã¿è¾¼ã¿ã‚«ãƒ¼ã‚½ãƒ«ã¯ã‚ã‹ã‚Šã¾ã›ã‚“"
 
 #: ../src/defaults.c:2661 ../src/defaults.c:2673
 #, c-format
 msgid "could not find cursor bitmap file \"%s\""
-msgstr "¥«¡¼¥½¥ë¥Ó¥Ã¥È¥Ş¥Ã¥× \"%s\" ¤ò¸«¤Ä¤±¤é¤ì¤Ş¤»¤ó"
+msgstr "ã‚«ãƒ¼ã‚½ãƒ«ãƒ“ãƒƒãƒˆãƒãƒƒãƒ— \"%s\" ã‚’è¦‹ã¤ã‘ã‚‰ã‚Œã¾ã›ã‚“"
 
 #: ../src/defaults.c:2720
 #, c-format
 msgid "Error in cursor specification for key \"%s\""
-msgstr "\"%s\" ¤ËÂĞ¤¹¤ë¥«¡¼¥½¥ë¤Î»ØÄê¥¨¥é¡¼¤Ç¤¹"
+msgstr "\"%s\" ã«å¯¾ã™ã‚‹ã‚«ãƒ¼ã‚½ãƒ«ã®æŒ‡å®šã‚¨ãƒ©ãƒ¼ã§ã™"
 
 #: ../src/defaults.c:2807
 msgid "could not render texture for icon background"
-msgstr "¥¢¥¤¥³¥óÇØ·Ê¤Î¥Æ¥¯¥¹¥Á¥ã¤Î¥ì¥ó¥À¥ê¥ó¥°¤¬¤Ç¤­¤Ş¤»¤ó¤Ç¤·¤¿"
+msgstr "ã‚¢ã‚¤ã‚³ãƒ³èƒŒæ™¯ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ãŒã§ãã¾ã›ã‚“ã§ã—ãŸ"
 
 #: ../src/dialog.c:121 ../src/dialog.c:679 ../src/dock.c:525
 #: ../src/dockedapp.c:377 ../src/rootmenu.c:185 ../src/rootmenu.c:223
 #: ../src/rootmenu.c:237
 msgid "Cancel"
-msgstr "¥­¥ã¥ó¥»¥ë"
+msgstr "ã‚­ãƒ£ãƒ³ã‚»ãƒ«"
 
 #: ../src/dialog.c:219
 msgid "Could not open directory "
-msgstr "¥Ç¥£¥ì¥¯¥È¥ê¤ò³«¤±¤Ş¤»¤ó"
+msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’é–‹ã‘ã¾ã›ã‚“"
 
 #: ../src/dialog.c:274
 msgid "Could not load image file "
-msgstr "²èÁü¥Õ¥¡¥¤¥ë¤òÆÉ¤ß¹ş¤á¤Ş¤»¤ó"
+msgstr "ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚ã¾ã›ã‚“"
 
 #: ../src/dialog.c:606
 msgid "Directories"
-msgstr "¥Ç¥£¥ì¥¯¥È¥ê"
+msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª"
 
 #: ../src/dialog.c:615
 msgid "Icons"
-msgstr "¥¢¥¤¥³¥ó"
+msgstr "ã‚¢ã‚¤ã‚³ãƒ³"
 
 #: ../src/dialog.c:648
 msgid "Preview"
-msgstr "¥×¥ì¥Ó¥å¡¼"
+msgstr "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼"
 
 #: ../src/dialog.c:661
 msgid "File Name:"
-msgstr "¥Õ¥¡¥¤¥ëÌ¾:"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«å:"
 
 #: ../src/dialog.c:685
 msgid "Choose File"
-msgstr "¥Õ¥¡¥¤¥ëÁªÂò"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«é¸æŠ"
 
 #: ../src/dialog.c:703 ../src/dialog.c:705
 msgid "Icon Chooser"
-msgstr "¥¢¥¤¥³¥óÁªÂò"
+msgstr "ã‚¢ã‚¤ã‚³ãƒ³é¸æŠ"
 
 #: ../src/dialog.c:1162 ../src/dialog.c:1272
 #, c-format
 msgid "Version %s"
-msgstr "¥Ğ¡¼¥¸¥ç¥ó %s"
+msgstr "ãƒãƒ¼ã‚¸ãƒ§ãƒ³ %s"
 
 #: ../src/dialog.c:1269
 msgid "Window Manager for X"
-msgstr "X ¥¦¥£¥ó¥É¥¦¥Ş¥Í¡¼¥¸¥ã"
+msgstr "X ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒãƒ¼ã‚¸ãƒ£"
 
 #: ../src/dialog.c:1292
 #, fuzzy, c-format
@@ -354,29 +354,29 @@ msgstr "Using visual 0x%x: %s %ibpp "
 
 #: ../src/dialog.c:1300
 msgid "(32 thousand colors)\n"
-msgstr "(3 Ëü 2 Àé¿§)\n"
+msgstr "(3 ä¸‡ 2 åƒè‰²)\n"
 
 #: ../src/dialog.c:1303
 msgid "(64 thousand colors)\n"
-msgstr "(6 Ëü 4 Àé¿§)\n"
+msgstr "(6 ä¸‡ 4 åƒè‰²)\n"
 
 #: ../src/dialog.c:1307
 msgid "(16 million colors)\n"
-msgstr "(1,600 Ëü¿§)\n"
+msgstr "(1,600 ä¸‡è‰²)\n"
 
 #: ../src/dialog.c:1310
 #, c-format
 msgid "(%d colors)\n"
-msgstr "(%d ¿§)\n"
+msgstr "(%d è‰²)\n"
 
 #: ../src/dialog.c:1320
 #, c-format
 msgid "Total allocated memory: %i kB. Total memory in use: %i kB.\n"
-msgstr "³äÅö¥á¥â¥ê: %i kB. »ÈÍÑÃæ¥á¥â¥ê: %i kB.\n"
+msgstr "å‰²å½“ãƒ¡ãƒ¢ãƒª: %i kB. ä½¿ç”¨ä¸­ãƒ¡ãƒ¢ãƒª: %i kB.\n"
 
 #: ../src/dialog.c:1327
 msgid "Supported image formats: "
-msgstr "ÂĞ±ş²èÁü·Á¼°: "
+msgstr "å¯¾å¿œç”»åƒå½¢å¼: "
 
 #: ../src/dialog.c:1334
 msgid ""
@@ -384,11 +384,11 @@ msgid ""
 "Additional support for: "
 msgstr ""
 "\n"
-"³ÈÄ¥ÂĞ±ş: "
+"æ‹¡å¼µå¯¾å¿œ: "
 
 #: ../src/dialog.c:1357
 msgid " and "
-msgstr ", ¤¢¤È, "
+msgstr ", ã‚ã¨, "
 
 #: ../src/dialog.c:1367
 msgid ""
@@ -396,7 +396,7 @@ msgid ""
 "Sound disabled"
 msgstr ""
 "\n"
-"¥µ¥¦¥ó¥ÉÌµ¸ú"
+"ã‚µã‚¦ãƒ³ãƒ‰ç„¡åŠ¹"
 
 #: ../src/dialog.c:1369
 msgid ""
@@ -404,15 +404,15 @@ msgid ""
 "Sound enabled"
 msgstr ""
 "\n"
-"¥µ¥¦¥ó¥ÉÍ­¸ú"
+"ã‚µã‚¦ãƒ³ãƒ‰æœ‰åŠ¹"
 
 #: ../src/dialog.c:1393
 msgid "Info"
-msgstr " ¾ğÊó "
+msgstr " æƒ…å ± "
 
 #: ../src/dialog.c:1416
 msgid "Merry X'mas!"
-msgstr "¥á¥ê¡¼¥¯¥ê¥¹¥Ş¥¹!"
+msgstr "ãƒ¡ãƒªãƒ¼ã‚¯ãƒªã‚¹ãƒã‚¹!"
 
 #: ../src/dialog.c:1486
 msgid ""
@@ -440,11 +440,11 @@ msgstr ""
 
 #: ../src/dialog.c:1658 ../src/startup.c:388
 msgid "cannot open connection for crashing dialog panel. Aborting."
-msgstr "¥À¥¤¥¢¥í¥°¤¬²õ¤ì¤ÆÀÜÂ³¤Ç¤­¤Ş¤»¤ó. Ãæ»ß¤·¤Ş¤¹"
+msgstr "ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ãŒå£Šã‚Œã¦æ¥ç¶šã§ãã¾ã›ã‚“. ä¸­æ­¢ã—ã¾ã™"
 
 #: ../src/dialog.c:1684
 msgid "Fatal error"
-msgstr "Ã×Ì¿Åª¤Ê¥¨¥é¡¼"
+msgstr "è‡´å‘½çš„ãªã‚¨ãƒ©ãƒ¼"
 
 #: ../src/dialog.c:1695
 #, c-format
@@ -452,41 +452,41 @@ msgid ""
 "Window Maker received signal %i\n"
 "(%s)."
 msgstr ""
-"Window Maker ¤Ï ¥·¥°¥Ê¥ë %i ¤ò¼õ¤±¤Ş¤·¤¿\n"
+"Window Maker ã¯ ã‚·ã‚°ãƒŠãƒ« %i ã‚’å—ã‘ã¾ã—ãŸ\n"
 "(%s)."
 
 #: ../src/dialog.c:1698
 #, c-format
 msgid "Window Maker received signal %i."
-msgstr "Window Maker ¤Ï¥·¥°¥Ê¥ë %i ¤ò¼õ¤±¤Ş¤·¤¿"
+msgstr "Window Maker ã¯ã‚·ã‚°ãƒŠãƒ« %i ã‚’å—ã‘ã¾ã—ãŸ"
 
 #: ../src/dialog.c:1707
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
 "BUGFORM and report it to bugs@windowmaker.org."
 msgstr ""
-"¤³¤ÎÃ×Ì¿Åª¤Ê¥¨¥é¡¼¤Ï¥Ğ¥°¤Ë¤è¤ë¤â¤Î¤«¤â¤·¤ì¤Ş¤»¤ó. ¥Ğ¥°¥Õ¥©¡¼¥à¤Ë¤·¤¿¤¬¤Ã¤Æ "
-"bugs@windowmaker.org °¸¤Æ¤Ë¥ì¥İ¡¼¥È¤·¤Æ²¼¤µ¤¤"
+"ã“ã®è‡´å‘½çš„ãªã‚¨ãƒ©ãƒ¼ã¯ãƒã‚°ã«ã‚ˆã‚‹ã‚‚ã®ã‹ã‚‚ã—ã‚Œã¾ã›ã‚“. ãƒã‚°ãƒ•ã‚©ãƒ¼ãƒ ã«ã—ãŸãŒã£ã¦ "
+"bugs@windowmaker.org å®›ã¦ã«ãƒ¬ãƒãƒ¼ãƒˆã—ã¦ä¸‹ã•ã„"
 
 #: ../src/dialog.c:1716
 msgid "What do you want to do now?"
-msgstr "º£, ¤É¤¦¤·¤Ş¤¹¤«?"
+msgstr "ä»Š, ã©ã†ã—ã¾ã™ã‹?"
 
 #: ../src/dialog.c:1722
 msgid "Select action"
-msgstr "Áª¤ó¤Ç¤¯¤À¤µ¤¤"
+msgstr "é¸ã‚“ã§ãã ã•ã„"
 
 #: ../src/dialog.c:1723
 msgid "Abort and leave a core file"
-msgstr "Ãæ»ß¤·¤Æ core ¥Õ¥¡¥¤¥ë¤ò»Ä¤¹"
+msgstr "ä¸­æ­¢ã—ã¦ core ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ®‹ã™"
 
 #: ../src/dialog.c:1724
 msgid "Restart Window Maker"
-msgstr "Window Maker ¤òºÆµ¯Æ°¤¹¤ë"
+msgstr "Window Maker ã‚’å†èµ·å‹•ã™ã‚‹"
 
 #: ../src/dialog.c:1725
 msgid "Start alternate window manager"
-msgstr "¤«¤ï¤ê¤Î¥¦¥£¥ó¥É¥¦¥Ş¥Í¡¼¥¸¥ã¤òµ¯Æ°¤¹¤ë"
+msgstr "ã‹ã‚ã‚Šã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’èµ·å‹•ã™ã‚‹"
 
 #: ../src/dialog.c:1903
 msgid ""
@@ -508,15 +508,15 @@ msgstr ""
 #: ../src/dock.c:213
 #, c-format
 msgid "Type the name for workspace %i:"
-msgstr "¥ï¡¼¥¯¥¹¥Ú¡¼¥¹%i¤ÎÌ¾Á°¤òÆşÎÏ¤·¤Æ²¼¤µ¤¤:"
+msgstr "ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹%iã®åå‰ã‚’å…¥åŠ›ã—ã¦ä¸‹ã•ã„:"
 
 #: ../src/dock.c:214 ../src/dock.c:1103 ../src/dock.c:1106 ../src/dock.c:3328
 msgid "Rename Workspace"
-msgstr "¥ï¡¼¥¯¥¹¥Ú¡¼¥¹Ì¾¤ÎÊÑ¹¹"
+msgstr "ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹åã®å¤‰æ›´"
 
 #: ../src/dock.c:487 ../src/dock.c:495
 msgid "Warning"
-msgstr "·Ù¹ğ"
+msgstr "è­¦å‘Š"
 
 #: ../src/dock.c:488
 msgid ""
@@ -524,9 +524,9 @@ msgid ""
 "is docked in the same positions on the other workspaces and the Clip is not "
 "full in some workspace."
 msgstr ""
-"¤¤¤¯¤Ä¤«¤Î¥¢¥¤¥³¥ó¤ò¡Ö¤É¤³¤Ç¤âÉ½¼¨¡×¤Ë¤Ç¤­¤Ş¤»¤ó. "
-"Â¾¤Î¥¢¥¤¥³¥ó¤¬°ã¤¦¥ï¡¼¥¯¥¹¥Ú¡¼¥¹¤ÇÆ±¤¸¾ì½ê¤Ë¥É¥Ã¥¯¤µ¤ì¤Æ¤¤¤Ê¤¤¤³¤È¤È, "
-"¥¯¥ê¥Ã¥×¤Ë¥ï¡¼¥¯¥¹¥Ú¡¼¥¹¤¬Ëä¤á¤Ä¤¯¤µ¤ì¤Æ¤¤¤Ê¤¤¤³¤È¤ò³ÎÇ§¤·¤Æ¤¯¤À¤µ¤¤"
+"ã„ãã¤ã‹ã®ã‚¢ã‚¤ã‚³ãƒ³ã‚’ã€Œã©ã“ã§ã‚‚è¡¨ç¤ºã€ã«ã§ãã¾ã›ã‚“. "
+"ä»–ã®ã‚¢ã‚¤ã‚³ãƒ³ãŒé•ã†ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹ã§åŒã˜å ´æ‰€ã«ãƒ‰ãƒƒã‚¯ã•ã‚Œã¦ã„ãªã„ã“ã¨ã¨, "
+"ã‚¯ãƒªãƒƒãƒ—ã«ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹ãŒåŸ‹ã‚ã¤ãã•ã‚Œã¦ã„ãªã„ã“ã¨ã‚’ç¢ºèªã—ã¦ãã ã•ã„"
 
 #: ../src/dock.c:496
 msgid ""
@@ -534,317 +534,317 @@ msgid ""
 "docked in the same position on the other workspaces and the Clip is not full "
 "in some workspace."
 msgstr ""
-"¥¢¥¤¥³¥ó¤ò¡Ö¤É¤³¤Ç¤âÉ½¼¨¡×¤Ë¤Ç¤­¤Ş¤»¤ó. "
-"Â¾¤Î¥¢¥¤¥³¥ó¤¬°ã¤¦¥ï¡¼¥¯¥¹¥Ú¡¼¥¹¤ÇÆ±¤¸¾ì½ê¤Ë¥É¥Ã¥¯¤µ¤ì¤Æ¤¤¤Ê¤¤¤³¤È¤È, "
-"¥¯¥ê¥Ã¥×¤Ë¥ï¡¼¥¯¥¹¥Ú¡¼¥¹¤¬Ëä¤á¤Ä¤¯¤µ¤ì¤Æ¤¤¤Ê¤¤¤³¤È¤ò³ÎÇ§¤·¤Æ¤¯¤À¤µ¤¤"
+"ã‚¢ã‚¤ã‚³ãƒ³ã‚’ã€Œã©ã“ã§ã‚‚è¡¨ç¤ºã€ã«ã§ãã¾ã›ã‚“. "
+"ä»–ã®ã‚¢ã‚¤ã‚³ãƒ³ãŒé•ã†ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹ã§åŒã˜å ´æ‰€ã«ãƒ‰ãƒƒã‚¯ã•ã‚Œã¦ã„ãªã„ã“ã¨ã¨, "
+"ã‚¯ãƒªãƒƒãƒ—ã«ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹ãŒåŸ‹ã‚ã¤ãã•ã‚Œã¦ã„ãªã„ã“ã¨ã‚’ç¢ºèªã—ã¦ãã ã•ã„"
 
 #: ../src/dock.c:523
 msgid "Workspace Clip"
-msgstr "¥ï¡¼¥¯¥¹¥Ú¡¼¥¹¥¯¥ê¥Ã¥×"
+msgstr "ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹ã‚¯ãƒªãƒƒãƒ—"
 
 #: ../src/dock.c:524
 msgid "All selected icons will be removed!"
-msgstr "ÁªÂò¤µ¤ì¤¿¥¢¥¤¥³¥óÁ´¤Æ¤¬ºï½ü¤µ¤ì¤Ş¤¹"
+msgstr "é¸æŠã•ã‚ŒãŸã‚¢ã‚¤ã‚³ãƒ³å…¨ã¦ãŒå‰Šé™¤ã•ã‚Œã¾ã™"
 
 #: ../src/dock.c:575 ../src/dock.c:1118 ../src/dock.c:1120 ../src/dock.c:3364
 msgid "Keep Icon"
-msgstr "¥¢¥¤¥³¥ó¤òÊİ»ı¤¹¤ë"
+msgstr "ã‚¢ã‚¤ã‚³ãƒ³ã‚’ä¿æŒã™ã‚‹"
 
 #: ../src/dock.c:576 ../src/dock.c:2083 ../src/dock.c:2218
 msgid "Type the command used to launch the application"
 msgstr ""
-"¤³¤Î¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¤òµ¯Æ°¤¹¤ë¤¿¤á¤Î\n"
-"¥³¥Ş¥ó¥É¤òÆşÎÏ¤·¤Æ¤¯¤À¤µ¤¤"
+"ã“ã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚’èµ·å‹•ã™ã‚‹ãŸã‚ã®\n"
+"ã‚³ãƒãƒ³ãƒ‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„"
 
 #: ../src/dock.c:927
 #, c-format
 msgid "could not launch application %s\n"
-msgstr "¥¢¥×¥ê¥±¡¼¥·¥ç¥ó%s¤òµ¯Æ°¤Ç¤­¤Ş¤»¤ó\n"
+msgstr "ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³%sã‚’èµ·å‹•ã§ãã¾ã›ã‚“\n"
 
 #: ../src/dock.c:982
 msgid "could not create workspace submenu for Clip menu"
-msgstr "¥¯¥ê¥Ã¥×¥á¥Ë¥å¡¼¤Î¥ï¡¼¥¯¥¹¥Ú¡¼¥¹¥µ¥Ö¥á¥Ë¥å¡¼¤¬ºîÀ®¤Ç¤­¤Ş¤»¤ó"
+msgstr "ã‚¯ãƒªãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹ã‚µãƒ–ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãŒä½œæˆã§ãã¾ã›ã‚“"
 
 #: ../src/dock.c:1040
 msgid "could not create options submenu for Clip menu"
-msgstr "¥¯¥ê¥Ã¥×¥á¥Ë¥å¡¼¤Î¥ª¥×¥·¥ç¥ó¥µ¥Ö¥á¥Ë¥å¡¼¤¬ºîÀ®¤Ç¤­¤Ş¤»¤ó"
+msgstr "ã‚¯ãƒªãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚µãƒ–ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãŒä½œæˆã§ãã¾ã›ã‚“"
 
 #: ../src/dock.c:1044 ../src/dock.c:1092
 msgid "Keep on Top"
-msgstr "¾ï¤Ë°ìÈÖ¾å¤ËÉ½¼¨"
+msgstr "å¸¸ã«ä¸€ç•ªä¸Šã«è¡¨ç¤º"
 
 #: ../src/dock.c:1050
 msgid "Collapsed"
-msgstr "ÀŞ¤ê¾ö¤à"
+msgstr "æŠ˜ã‚Šç•³ã‚€"
 
 #: ../src/dock.c:1056
 msgid "Autocollapse"
-msgstr "¼«Æ°Åª¤ËÀŞ¤ê¾ö¤à"
+msgstr "è‡ªå‹•çš„ã«æŠ˜ã‚Šç•³ã‚€"
 
 #: ../src/dock.c:1062
 msgid "Autoraise"
-msgstr "¼«Æ°Åª¤ËÁ°ÌÌ¤ËÉ½¼¨"
+msgstr "è‡ªå‹•çš„ã«å‰é¢ã«è¡¨ç¤º"
 
 #: ../src/dock.c:1068
 msgid "Autoattract Icons"
-msgstr "¥¢¥¤¥³¥ó¤ò¼«Æ°Åª¤Ë°ú¤­´ó¤»¤ë"
+msgstr "ã‚¢ã‚¤ã‚³ãƒ³ã‚’è‡ªå‹•çš„ã«å¼•ãå¯„ã›ã‚‹"
 
 #: ../src/dock.c:1098
 msgid "Clip Options"
-msgstr "¥¯¥ê¥Ã¥×¥ª¥×¥·¥ç¥ó"
+msgstr "ã‚¯ãƒªãƒƒãƒ—ã‚ªãƒ—ã‚·ãƒ§ãƒ³"
 
 #: ../src/dock.c:1108
 msgid "Selected"
-msgstr "ÁªÂò"
+msgstr "é¸æŠ"
 
 #: ../src/dock.c:1113 ../src/dock.c:1116 ../src/dock.c:3355
 msgid "Select All Icons"
-msgstr "Á´¤Æ¤Î¥¢¥¤¥³¥ó¤ÎÁªÂò"
+msgstr "å…¨ã¦ã®ã‚¢ã‚¤ã‚³ãƒ³ã®é¸æŠ"
 
 #: ../src/dock.c:1122 ../src/dock.c:1124 ../src/dock.c:3372
 msgid "Move Icon To"
-msgstr "¥¢¥¤¥³¥ó¤ò°ÜÆ°"
+msgstr "ã‚¢ã‚¤ã‚³ãƒ³ã‚’ç§»å‹•"
 
 #: ../src/dock.c:1129 ../src/dock.c:1132 ../src/dock.c:3383
 msgid "Remove Icon"
-msgstr "¥¢¥¤¥³¥ó¤Îºï½ü"
+msgstr "ã‚¢ã‚¤ã‚³ãƒ³ã®å‰Šé™¤"
 
 #: ../src/dock.c:1134
 msgid "Attract Icons"
-msgstr "¥¢¥¤¥³¥ó¤ò°ú¤­´ó¤»¤ë"
+msgstr "ã‚¢ã‚¤ã‚³ãƒ³ã‚’å¼•ãå¯„ã›ã‚‹"
 
 #: ../src/dock.c:1137
 msgid "Launch"
-msgstr "µ¯Æ°"
+msgstr "èµ·å‹•"
 
 #: ../src/dock.c:1145
 msgid "Settings..."
-msgstr "ÀßÄê..."
+msgstr "è¨­å®š..."
 
 #: ../src/dock.c:1504 ../src/dock.c:1607
 #, c-format
 msgid "bad value in docked icon state info %s"
-msgstr "ÅĞÏ¿¤µ¤ì¤¿¥¢¥¤¥³¥ó¤Î¾ğÊó%s¤ËÉÔÀµ¤ÊÆâÍÆ¤¬¤¢¤ê¤Ş¤¹"
+msgstr "ç™»éŒ²ã•ã‚ŒãŸã‚¢ã‚¤ã‚³ãƒ³ã®æƒ…å ±%sã«ä¸æ­£ãªå†…å®¹ãŒã‚ã‚Šã¾ã™"
 
 #: ../src/dock.c:1615
 #, c-format
 msgid "bad value in docked icon position %i,%i"
-msgstr "ÅĞÏ¿¤µ¤ì¤¿¥¢¥¤¥³¥ó¤Î°ÌÃÖ(%i, %i)¤ÏÉÔÀµ¤ÊÃÍ¤Ç¤¹"
+msgstr "ç™»éŒ²ã•ã‚ŒãŸã‚¢ã‚¤ã‚³ãƒ³ã®ä½ç½®(%i, %i)ã¯ä¸æ­£ãªå€¤ã§ã™"
 
 #: ../src/dock.c:1867
 msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
-msgstr "ÅĞÏ¿¤µ¤ì¤¿¥¢¥¤¥³¥ó¤¬Â¿¤¹¤®¤Ş¤¹. ÆâÍÆ¤Î°ìÉô¤ÏÌµ¸ú¤Ë¤Ê¤ê¤Ş¤¹"
+msgstr "ç™»éŒ²ã•ã‚ŒãŸã‚¢ã‚¤ã‚³ãƒ³ãŒå¤šã™ãã¾ã™. å†…å®¹ã®ä¸€éƒ¨ã¯ç„¡åŠ¹ã«ãªã‚Šã¾ã™"
 
 #. icon->forced_dock = 1;
 #: ../src/dock.c:2082 ../src/dock.c:2217
 msgid "Dock Icon"
-msgstr "¥É¥Ã¥¯ÅĞÏ¿¥¢¥¤¥³¥ó"
+msgstr "ãƒ‰ãƒƒã‚¯ç™»éŒ²ã‚¢ã‚¤ã‚³ãƒ³"
 
 #: ../src/dock.c:3237 ../src/dock.c:3241
 #, c-format
 msgid "Could not execute command \"%s\""
-msgstr "¥³¥Ş¥ó¥É\"%s\"¤ò¼Â¹Ô¤Ç¤­¤Ş¤»¤ó"
+msgstr "ã‚³ãƒãƒ³ãƒ‰\"%s\"ã‚’å®Ÿè¡Œã§ãã¾ã›ã‚“"
 
 #: ../src/dock.c:3334
 msgid "Toggle Omnipresent"
-msgstr "¤É¤Î¥ï¡¼¥¯¥¹¥Ú¡¼¥¹¤Ç¤âÉ½¼¨"
+msgstr "ã©ã®ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹ã§ã‚‚è¡¨ç¤º"
 
 #: ../src/dock.c:3339 ../src/winmenu.c:417 ../src/winspector.c:1395
 msgid "Omnipresent"
-msgstr "¤É¤Î¥ï¡¼¥¯¥¹¥Ú¡¼¥¹¤Ç¤âÉ½¼¨"
+msgstr "ã©ã®ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹ã§ã‚‚è¡¨ç¤º"
 
 #: ../src/dock.c:3353
 msgid "Unselect All Icons"
-msgstr "Á´¤Æ¤Î¥¢¥¤¥³¥ó¤ÎÁªÂò²ò½ü"
+msgstr "å…¨ã¦ã®ã‚¢ã‚¤ã‚³ãƒ³ã®é¸æŠè§£é™¤"
 
 #: ../src/dock.c:3362
 msgid "Keep Icons"
-msgstr "¥¢¥¤¥³¥ó¤òÊİ»ı¤¹¤ë"
+msgstr "ã‚¢ã‚¤ã‚³ãƒ³ã‚’ä¿æŒã™ã‚‹"
 
 #: ../src/dock.c:3370
 msgid "Move Icons To"
-msgstr "¥¢¥¤¥³¥ó¤ò°ÜÆ°"
+msgstr "ã‚¢ã‚¤ã‚³ãƒ³ã‚’ç§»å‹•"
 
 #: ../src/dock.c:3381
 msgid "Remove Icons"
-msgstr "¥¢¥¤¥³¥ó¤Îºï½ü"
+msgstr "ã‚¢ã‚¤ã‚³ãƒ³ã®å‰Šé™¤"
 
 #: ../src/dock.c:3412
 msgid "Bring Here"
-msgstr "»ı¤Ã¤Æ¤¯¤ë"
+msgstr "æŒã£ã¦ãã‚‹"
 
 #: ../src/dockedapp.c:131
 #, c-format
 msgid "could not find icon %s, used in a docked application"
-msgstr "ÅĞÏ¿¤µ¤ì¤¿¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¤Ç»È¤ï¤ì¤Æ¤¤¤ë¥¢¥¤¥³¥ó%s¤¬¸«¤Ä¤«¤ê¤Ş¤»¤ó"
+msgstr "ç™»éŒ²ã•ã‚ŒãŸã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã§ä½¿ã‚ã‚Œã¦ã„ã‚‹ã‚¢ã‚¤ã‚³ãƒ³%sãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“"
 
 #: ../src/dockedapp.c:211
 #, c-format
 msgid "Could not open specified icon file: %s"
-msgstr "»ØÄê¤Î¥¢¥¤¥³¥ó¥Õ¥¡¥¤¥ë¤¬³«¤±¤Ş¤»¤ó:%s"
+msgstr "æŒ‡å®šã®ã‚¢ã‚¤ã‚³ãƒ³ãƒ•ã‚¡ã‚¤ãƒ«ãŒé–‹ã‘ã¾ã›ã‚“:%s"
 
 #: ../src/dockedapp.c:213
 msgid "Ignore"
-msgstr "Ìµ»ë"
+msgstr "ç„¡è¦–"
 
 #: ../src/dockedapp.c:306
 msgid "Start when Window Maker is started"
-msgstr "Window Maker µ¯Æ°»ş¤Ë°ì½ï¤Ëµ¯Æ°"
+msgstr "Window Maker èµ·å‹•æ™‚ã«ä¸€ç·’ã«èµ·å‹•"
 
 #: ../src/dockedapp.c:313
 msgid "Lock (prevent accidental removal)"
-msgstr "¥í¥Ã¥¯¤¹¤ë (ÉÔÎ¸¤ÎÅĞÏ¿²ò½ü¤òÍ½ËÉ)"
+msgstr "ãƒ­ãƒƒã‚¯ã™ã‚‹ (ä¸æ…®ã®ç™»éŒ²è§£é™¤ã‚’äºˆé˜²)"
 
 #: ../src/dockedapp.c:319
 msgid "Application path and arguments"
-msgstr "¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¤Î¥Ñ¥¹¤È°ú¿ô"
+msgstr "ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒ‘ã‚¹ã¨å¼•æ•°"
 
 #: ../src/dockedapp.c:330
 msgid "Command for files dropped with DND"
-msgstr "DND¤Ë¤è¤ë¥Õ¥¡¥¤¥ë¥É¥í¥Ã¥×»ş¤Î¥³¥Ş¥ó¥É"
+msgstr "DNDã«ã‚ˆã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‰ãƒ­ãƒƒãƒ—æ™‚ã®ã‚³ãƒãƒ³ãƒ‰"
 
 #: ../src/dockedapp.c:342
 #, c-format
 msgid "%d will be replaced with the file name"
-msgstr "%d¤Ï¤½¤Î¥Õ¥¡¥¤¥ëÌ¾¤ËÃÖ¤­´¹¤¨¤é¤ì¤Ş¤¹"
+msgstr "%dã¯ãã®ãƒ•ã‚¡ã‚¤ãƒ«åã«ç½®ãæ›ãˆã‚‰ã‚Œã¾ã™"
 
 #: ../src/dockedapp.c:346
 msgid "DND support was not compiled in"
-msgstr "DNDÂĞ±ş¤Ç¥³¥ó¥Ñ¥¤¥ë¤µ¤ì¤Æ¤¤¤Ş¤»¤ó"
+msgstr "DNDå¯¾å¿œã§ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã•ã‚Œã¦ã„ã¾ã›ã‚“"
 
 #: ../src/dockedapp.c:352
 msgid "Icon Image"
-msgstr "¥¢¥¤¥³¥ó²èÁü"
+msgstr "ã‚¢ã‚¤ã‚³ãƒ³ç”»åƒ"
 
 #: ../src/dockedapp.c:364 ../src/winspector.c:1533
 msgid "Browse..."
-msgstr "»²¾È..."
+msgstr "å‚ç…§..."
 
 #: ../src/dockedapp.c:409
 msgid "Docked Application Settings"
-msgstr "¥É¥Ã¥¯¤ÎÅĞÏ¿¥¢¥×¥ê¥±¡¼¥·¥ç¥óÀßÄê"
+msgstr "ãƒ‰ãƒƒã‚¯ã®ç™»éŒ²ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³è¨­å®š"
 
 #: ../src/framewin.c:649 ../src/framewin.c:744 ../src/menu.c:456
 #: ../src/texture.c:594
 #, c-format
 msgid "could not render texture: %s"
-msgstr "¥Æ¥¯¥¹¥Á¥ã¤ò¥ì¥ó¥À¥ê¥ó¥°¤Ç¤­¤Ş¤»¤ó: %s"
+msgstr "ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã§ãã¾ã›ã‚“: %s"
 
 #: ../src/framewin.c:672 ../src/framewin.c:683 ../src/framewin.c:699
 #: ../src/framewin.c:710 ../src/framewin.c:717 ../src/framewin.c:724
 #: ../src/icon.c:350 ../src/menu.c:485
 #, c-format
 msgid "error rendering image:%s"
-msgstr "²èÁü¤Î¥ì¥ó¥À¥ê¥ó¥°¥¨¥é¡¼:%s"
+msgstr "ç”»åƒã®ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã‚¨ãƒ©ãƒ¼:%s"
 
 #: ../src/framewin.c:777
 #, c-format
 msgid "error rendering image: %s"
-msgstr "²èÁü¤Î¥ì¥ó¥À¥ê¥ó¥°¥¨¥é¡¼: %s"
+msgstr "ç”»åƒã®ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã‚¨ãƒ©ãƒ¼: %s"
 
 #: ../src/icon.c:229 ../src/wdefaults.c:440
 #, c-format
 msgid "error loading image file \"%s\""
-msgstr "²èÁü¥Õ¥¡¥¤¥ë\"%s\"¤Î¥í¡¼¥É¥¨¥é¡¼"
+msgstr "ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«\"%s\"ã®ãƒ­ãƒ¼ãƒ‰ã‚¨ãƒ©ãƒ¼"
 
 #: ../src/icon.c:491 ../src/icon.c:500
 #, c-format
 msgid "could not create directory %s"
-msgstr "¥Ç¥£¥ì¥¯¥È¥ê%s¤òºîÀ®¤Ç¤­¤Ş¤»¤ó"
+msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª%sã‚’ä½œæˆã§ãã¾ã›ã‚“"
 
 #: ../src/icon.c:767
 #, c-format
 msgid "could not find default icon \"%s\""
-msgstr "É¸½à¥¢¥¤¥³¥ó\"%s\"¤¬¸«¤Ä¤«¤ê¤Ş¤»¤ó"
+msgstr "æ¨™æº–ã‚¢ã‚¤ã‚³ãƒ³\"%s\"ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“"
 
 #: ../src/icon.c:773
 #, c-format
 msgid "could not load default icon \"%s\":%s"
-msgstr "É¸½à¥¢¥¤¥³¥ó\"%s\"¤ò¥í¡¼¥É¤Ç¤­¤Ş¤»¤ó"
+msgstr "æ¨™æº–ã‚¢ã‚¤ã‚³ãƒ³\"%s\"ã‚’ãƒ­ãƒ¼ãƒ‰ã§ãã¾ã›ã‚“"
 
 #: ../src/main.c:205
 msgid "failed to restart Window Maker."
-msgstr "Window Maker ¤ÎºÆµ¯Æ°¤Ë¼ºÇÔ¤·¤Ş¤·¤¿"
+msgstr "Window Maker ã®å†èµ·å‹•ã«å¤±æ•—ã—ã¾ã—ãŸ"
 
 #: ../src/main.c:208
 #, c-format
 msgid "could not exec %s"
-msgstr "%s ¤ò¼Â¹Ô¤Ç¤­¤Ş¤»¤ó"
+msgstr "%s ã‚’å®Ÿè¡Œã§ãã¾ã›ã‚“"
 
 #: ../src/main.c:254
 msgid "Could not execute command: "
-msgstr "¥³¥Ş¥ó¥É¤ò¼Â¹Ô¤Ç¤­¤Ş¤»¤ó: "
+msgstr "ã‚³ãƒãƒ³ãƒ‰ã‚’å®Ÿè¡Œã§ãã¾ã›ã‚“: "
 
 #: ../src/main.c:411
 #, c-format
 msgid "%s aborted.\n"
-msgstr "%s¤ÏÃæÃÇ¤·¤Ş¤·¤¿\n"
+msgstr "%sã¯ä¸­æ–­ã—ã¾ã—ãŸ\n"
 
 #: ../src/main.c:422
 #, c-format
 msgid "Usage: %s [options]\n"
-msgstr "»ÈÍÑË¡: %s [-¥ª¥×¥·¥ç¥ó]\n"
+msgstr "ä½¿ç”¨æ³•: %s [-ã‚ªãƒ—ã‚·ãƒ§ãƒ³]\n"
 
 #: ../src/main.c:423
 msgid "The Window Maker window manager for the X window system"
-msgstr "Window Maker -- X ¥¦¥£¥ó¥É¥¦¥·¥¹¥Æ¥à¤Î¤¿¤á¤Î¥¦¥£¥ó¥É¥¦¥Ş¥Í¡¼¥¸¥ã"
+msgstr "Window Maker -- X ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚·ã‚¹ãƒ†ãƒ ã®ãŸã‚ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒãƒ¼ã‚¸ãƒ£"
 
 #: ../src/main.c:425
 msgid " -display host:dpy\tdisplay to use"
-msgstr " -display ¥Û¥¹¥È:IDÈÖ¹æ\t¥Ç¥£¥¹¥×¥ì¥¤¤Î»ØÄê"
+msgstr " -display ãƒ›ã‚¹ãƒˆ:IDç•ªå·\tãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤ã®æŒ‡å®š"
 
 #: ../src/main.c:427
 msgid " --no-cpp \t\tdisable preprocessing of configuration files"
-msgstr " --no-cpp \t\tÀßÄê¥Õ¥¡¥¤¥ë¤ò¥×¥ê¥×¥í¥»¥Ã¥µ¤Ë¤«¤±¤Ê¤¤"
+msgstr " --no-cpp \t\tè¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ—ãƒªãƒ—ãƒ­ã‚»ãƒƒã‚µã«ã‹ã‘ãªã„"
 
 #: ../src/main.c:429
 msgid " --no-dock\t\tdo not open the application Dock"
-msgstr " --no-dock\t\t¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¡¦¥É¥Ã¥¯¤ò³«¤«¤Ê¤¤"
+msgstr " --no-dock\t\tã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ãƒ»ãƒ‰ãƒƒã‚¯ã‚’é–‹ã‹ãªã„"
 
 #: ../src/main.c:430
 msgid " --no-clip\t\tdo not open the workspace Clip"
-msgstr " --no-clip\t\t¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¡¦¥¯¥ê¥Ã¥×(Clip)¤ò³«¤«¤Ê¤¤"
+msgstr " --no-clip\t\tã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ãƒ»ã‚¯ãƒªãƒƒãƒ—(Clip)ã‚’é–‹ã‹ãªã„"
 
 #: ../src/main.c:431
 msgid " --no-autolaunch\tdo not autolaunch applications"
-msgstr " --no-autolaunch\t¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¤Î¼«Æ°µ¯Æ°¤ò¹Ô¤ï¤Ê¤¤"
+msgstr " --no-autolaunch\tã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®è‡ªå‹•èµ·å‹•ã‚’è¡Œã‚ãªã„"
 
 #: ../src/main.c:432
 msgid " --dont-restore\t\tdo not restore saved session"
-msgstr " --dont-restore\t\tÊİÂ¸¤·¤¿¥»¥Ã¥·¥ç¥ó¤òÉü¸µ¤·¤Ê¤¤"
+msgstr " --dont-restore\t\tä¿å­˜ã—ãŸã‚»ãƒƒã‚·ãƒ§ãƒ³ã‚’å¾©å…ƒã—ãªã„"
 
 #: ../src/main.c:434
 msgid " --locale locale\tlocale to use"
-msgstr " --locale locale\t»ÈÍÑ¤¹¤ëlocale¤Î»ØÄê"
+msgstr " --locale locale\tä½¿ç”¨ã™ã‚‹localeã®æŒ‡å®š"
 
 #: ../src/main.c:436
 msgid ""
 " --create-stdcmap\tcreate the standard colormap hint in PseudoColor visuals"
-msgstr " --create-stdcmap\tµ¼»÷¿§²òÁüÅÙ¤ËÉ¸½à¥«¥é¡¼¥Ş¥Ã¥×¥Ò¥ó¥È¤òºîÀ®¤¹¤ë"
+msgstr " --create-stdcmap\tæ“¬ä¼¼è‰²è§£åƒåº¦ã«æ¨™æº–ã‚«ãƒ©ãƒ¼ãƒãƒƒãƒ—ãƒ’ãƒ³ãƒˆã‚’ä½œæˆã™ã‚‹"
 
 #: ../src/main.c:437
 msgid " --visual-id visualid\tvisual id of visual to use"
-msgstr " --visual-id ¥Ó¥¸¥å¥¢¥ëID\t¥Ó¥¸¥å¥¢¥ëID¤Î»ØÄê"
+msgstr " --visual-id ãƒ“ã‚¸ãƒ¥ã‚¢ãƒ«ID\tãƒ“ã‚¸ãƒ¥ã‚¢ãƒ«IDã®æŒ‡å®š"
 
 #: ../src/main.c:438
 msgid " --static\t\tdo not update or save configurations"
-msgstr " --static\t\t¥¹¥¿¥Æ¥£¥Ã¥¯¥â¡¼¥É¤Çµ¯Æ°(ÀßÄê¤òÊİÂ¸¡¿¹¹¿·¤·¤Ê¤¤)"
+msgstr " --static\t\tã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ¢ãƒ¼ãƒ‰ã§èµ·å‹•(è¨­å®šã‚’ä¿å­˜ï¼æ›´æ–°ã—ãªã„)"
 
 #: ../src/main.c:439
 msgid " --no-polling\t\tdo not periodically check for configuration updates"
-msgstr " --no-polling\t\t¼ş´üÅª¤ËÀßÄê¥Õ¥¡¥¤¥ë¤Î¹¹¿·¤ò¥Á¥§¥Ã¥¯¤·¤Ê¤¤"
+msgstr " --no-polling\t\tå‘¨æœŸçš„ã«è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®æ›´æ–°ã‚’ãƒã‚§ãƒƒã‚¯ã—ãªã„"
 
 #: ../src/main.c:441
 msgid " --synchronous\t\tturn on synchronous display mode"
-msgstr " --synchronous\t\t²èÌÌ¤ÎÆ±´ü¥â¡¼¥É¤ò on ¤Ë¤¹¤ë"
+msgstr " --synchronous\t\tç”»é¢ã®åŒæœŸãƒ¢ãƒ¼ãƒ‰ã‚’ on ã«ã™ã‚‹"
 
 #: ../src/main.c:443
 msgid " --version\t\tprint version and exit"
-msgstr " --version\t\t¥Ğ¡¼¥¸¥ç¥ó¤òÉ½¼¨¤·¤Æ¤¹¤°½ªÎ»¤¹¤ë"
+msgstr " --version\t\tãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚’è¡¨ç¤ºã—ã¦ã™ãçµ‚äº†ã™ã‚‹"
 
 #: ../src/main.c:444
 msgid " --help\t\t\tshow this message"
-msgstr " --help\t\t¤³¤Î¥á¥Ã¥»¡¼¥¸¤òÉ½¼¨"
+msgstr " --help\t\tã“ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ç¤º"
 
 #: ../src/main.c:456
 #, c-format
@@ -852,118 +852,118 @@ msgid ""
 "could not find user GNUstep directory (%s).\n"
 "Make sure you have installed Window Maker correctly and run wmaker.inst"
 msgstr ""
-"¥æ¡¼¥¶¤ÎGNUstep¥Ç¥£¥ì¥¯¥È¥ê(%s)¤¬¸«¤Ä¤«¤ê¤Ş¤»¤ó\n"
-"Window Maker¤¬Àµ¤·¤¯¥¤¥ó¥¹¥È¡¼¥ë¤µ¤ì¤Æ¤¤¤ë¤³¤È¤ò³ÎÇ§¤·¤Æ, "
-"wmaker.inst¤ò¼Â¹Ô¤·¤Æ¤¯¤À¤µ¤¤"
+"ãƒ¦ãƒ¼ã‚¶ã®GNUstepãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª(%s)ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“\n"
+"Window MakerãŒæ­£ã—ãã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã•ã‚Œã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã—ã¦, "
+"wmaker.instã‚’å®Ÿè¡Œã—ã¦ãã ã•ã„"
 
 #: ../src/main.c:477 ../src/main.c:482
 #, c-format
 msgid "%s:could not execute initialization script"
-msgstr "%s:½é´ü²½¥¹¥¯¥ê¥×¥È¤ò¼Â¹Ô¤Ç¤­¤Ş¤»¤ó"
+msgstr "%s:åˆæœŸåŒ–ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’å®Ÿè¡Œã§ãã¾ã›ã‚“"
 
 #: ../src/main.c:502 ../src/main.c:507
 #, c-format
 msgid "%s:could not execute exit script"
-msgstr "%s:½ªÎ»¥¹¥¯¥ê¥×¥È¤ò¼Â¹Ô¤Ç¤­¤Ş¤»¤ó"
+msgstr "%s:çµ‚äº†ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’å®Ÿè¡Œã§ãã¾ã›ã‚“"
 
 #: ../src/main.c:623 ../src/main.c:631 ../src/main.c:639 ../src/main.c:659
 #, c-format
 msgid "too few arguments for %s"
-msgstr "%s¤ËÂĞ¤¹¤ë°ú¿ô¤¬Â­¤ê¤Ş¤»¤ó"
+msgstr "%sã«å¯¾ã™ã‚‹å¼•æ•°ãŒè¶³ã‚Šã¾ã›ã‚“"
 
 #: ../src/main.c:643
 #, c-format
 msgid "bad value for visualid: \"%s\""
-msgstr "¥Ó¥¸¥å¥¢¥ëID¤ÎÃÍ¤¬ÉÔÀµ¤Ç¤¹: \"%s\""
+msgstr "ãƒ“ã‚¸ãƒ¥ã‚¢ãƒ«IDã®å€¤ãŒä¸æ­£ã§ã™: \"%s\""
 
 #: ../src/main.c:667
 #, c-format
 msgid "%s: invalid argument '%s'\n"
-msgstr "%s: Ìµ¸ú¤Ê°ú¿ô¤Ç¤¹ '%s'\n"
+msgstr "%s: ç„¡åŠ¹ãªå¼•æ•°ã§ã™ '%s'\n"
 
 #: ../src/main.c:668
 #, c-format
 msgid "Try '%s --help' for more information\n"
-msgstr "ÄÉ²Ã¾ğÊó¤Î¤¿¤á¤Ë '%s --help' ¤ò»î¤·¤Æ¤ß¤Æ¤¯¤À¤µ¤¤\n"
+msgstr "è¿½åŠ æƒ…å ±ã®ãŸã‚ã« '%s --help' ã‚’è©¦ã—ã¦ã¿ã¦ãã ã•ã„\n"
 
 #: ../src/main.c:699
 msgid "X server does not support locale"
-msgstr "X¥µ¡¼¥Ğ¤¬¥í¥±¡¼¥ëµ¡Ç½¤ò¥µ¥İ¡¼¥È¤·¤Æ¤¤¤Ş¤»¤ó"
+msgstr "Xã‚µãƒ¼ãƒãŒãƒ­ã‚±ãƒ¼ãƒ«æ©Ÿèƒ½ã‚’ã‚µãƒãƒ¼ãƒˆã—ã¦ã„ã¾ã›ã‚“"
 
 #: ../src/main.c:703
 msgid "cannot set locale modifiers"
-msgstr "¥í¥±¡¼¥ë¤òÀßÄê¤Ç¤­¤Ş¤»¤ó"
+msgstr "ãƒ­ã‚±ãƒ¼ãƒ«ã‚’è¨­å®šã§ãã¾ã›ã‚“"
 
 #: ../src/main.c:719
 #, c-format
 msgid "could not open display \"%s\""
-msgstr "¥Ç¥£¥¹¥×¥ì¥¤`%s'¤ò³«¤±¤Ş¤»¤ó"
+msgstr "ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤`%s'ã‚’é–‹ã‘ã¾ã›ã‚“"
 
 #: ../src/menu.c:1255
 msgid "could not grab keyboard"
-msgstr "¥­¡¼¥Ü¡¼¥É¤ò³ÎÊİ¤Ç¤­¤Ş¤»¤ó"
+msgstr "ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã‚’ç¢ºä¿ã§ãã¾ã›ã‚“"
 
 #: ../src/misc.c:71
 #, c-format
 msgid "could not define value for %s for cpp"
-msgstr "cpp¤Î %s¤ÎÃÍ¤òÄêµÁ¤Ç¤­¤Ş¤»¤ó"
+msgstr "cppã® %sã®å€¤ã‚’å®šç¾©ã§ãã¾ã›ã‚“"
 
 #: ../src/misc.c:101
 #, c-format
 msgid "could not get password entry for UID %i"
-msgstr "¥æ¡¼¥¶ID %i ¤Î¥Ñ¥¹¥ï¡¼¥É¥¨¥ó¥È¥ê¤òÆÀ¤é¤ì¤Ş¤»¤ó"
+msgstr "ãƒ¦ãƒ¼ã‚¶ID %i ã®ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚¨ãƒ³ãƒˆãƒªã‚’å¾—ã‚‰ã‚Œã¾ã›ã‚“"
 
 #: ../src/misc.c:126
 #, c-format
 msgid "your machine is misconfigured. HOSTNAME is set to %s"
-msgstr "¤¢¤Ê¤¿¤Î¥Ş¥·¥ó¤ÎÀßÄê¤¬¤ª¤«¤·¤¤¤Ç¤¹. HOSTNAME ¤¬ %s ¤ËÀßÄê¤µ¤ì¤Æ¤¤¤Ş¤¹"
+msgstr "ã‚ãªãŸã®ãƒã‚·ãƒ³ã®è¨­å®šãŒãŠã‹ã—ã„ã§ã™. HOSTNAME ãŒ %s ã«è¨­å®šã•ã‚Œã¦ã„ã¾ã™"
 
 #: ../src/misc.c:132
 #, c-format
 msgid "your machine is misconfigured. HOST is set to %s"
-msgstr "¤¢¤Ê¤¿¤Î¥Ş¥·¥ó¤ÎÀßÄê¤¬¤ª¤«¤·¤¤¤Ç¤¹. HOST ¤¬ %s ¤ËÀßÄê¤µ¤ì¤Æ¤¤¤Ş¤¹"
+msgstr "ã‚ãªãŸã®ãƒã‚·ãƒ³ã®è¨­å®šãŒãŠã‹ã—ã„ã§ã™. HOST ãŒ %s ã«è¨­å®šã•ã‚Œã¦ã„ã¾ã™"
 
 #: ../src/misc.c:626
 msgid "Program Arguments"
-msgstr "¥×¥í¥°¥é¥à°ú¿ô"
+msgstr "ãƒ—ãƒ­ã‚°ãƒ©ãƒ å¼•æ•°"
 
 #: ../src/misc.c:627
 msgid "Enter command arguments:"
-msgstr "¥³¥Ş¥ó¥É¥é¥¤¥ó°ú¿ô¤òÆşÎÏ¤·¤Æ¤¯¤À¤µ¤¤"
+msgstr "ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„"
 
 #: ../src/misc.c:720
 msgid "unable to get dropped data from DND drop"
-msgstr "DND¥É¥í¥Ã¥×¤«¤é¥É¥í¥Ã¥×¾ğÊó¤òÆÀ¤é¤ì¤Ş¤»¤ó"
+msgstr "DNDãƒ‰ãƒ­ãƒƒãƒ—ã‹ã‚‰ãƒ‰ãƒ­ãƒƒãƒ—æƒ…å ±ã‚’å¾—ã‚‰ã‚Œã¾ã›ã‚“"
 
 #: ../src/misc.c:728
 msgid "error getting dropped data from DND drop"
-msgstr "DND¥É¥í¥Ã¥×¤«¤é¤Î¥É¥í¥Ã¥×¾ğÊó¼èÆÀ¤Ë¼ºÇÔ¤·¤Ş¤·¤¿"
+msgstr "DNDãƒ‰ãƒ­ãƒƒãƒ—ã‹ã‚‰ã®ãƒ‰ãƒ­ãƒƒãƒ—æƒ…å ±å–å¾—ã«å¤±æ•—ã—ã¾ã—ãŸ"
 
 #: ../src/misc.c:734
 msgid "out of memory while getting data from DND drop"
-msgstr "DND¥É¥í¥Ã¥×¤«¤é¥É¥í¥Ã¥×¾ğÊó¤òÆÀ¤ë¤È¤­¤Ë¥á¥â¥ê¤¬ÉÔÂ­¤·¤Ş¤·¤¿"
+msgstr "DNDãƒ‰ãƒ­ãƒƒãƒ—ã‹ã‚‰ãƒ‰ãƒ­ãƒƒãƒ—æƒ…å ±ã‚’å¾—ã‚‹ã¨ãã«ãƒ¡ãƒ¢ãƒªãŒä¸è¶³ã—ã¾ã—ãŸ"
 
 #: ../src/misc.c:779 ../src/misc.c:919
 #, c-format
 msgid "out of memory during expansion of \"%s\""
-msgstr "\"%s\"¤ÎÅ¸³«Ãæ¤Ë¥á¥â¥ê¤¬ÉÔÂ­¤·¤Ş¤·¤¿"
+msgstr "\"%s\"ã®å±•é–‹ä¸­ã«ãƒ¡ãƒ¢ãƒªãŒä¸è¶³ã—ã¾ã—ãŸ"
 
 #: ../src/misc.c:833
 msgid "out of memory during expansion of \"%w\""
-msgstr "\"%w\"¤ÎÅ¸³«Ãæ¤Ë¥á¥â¥ê¤¬ÉÔÂ­¤·¤Ş¤·¤¿"
+msgstr "\"%w\"ã®å±•é–‹ä¸­ã«ãƒ¡ãƒ¢ãƒªãŒä¸è¶³ã—ã¾ã—ãŸ"
 
 #: ../src/misc.c:851
 msgid "out of memory during expansion of \"%W\""
-msgstr "\"%W\"¤ÎÅ¸³«Ãæ¤Ë¥á¥â¥ê¤¬ÉÔÂ­¤·¤Ş¤·¤¿"
+msgstr "\"%W\"ã®å±•é–‹ä¸­ã«ãƒ¡ãƒ¢ãƒªãŒä¸è¶³ã—ã¾ã—ãŸ"
 
 #: ../src/misc.c:867
 msgid "out of memory during expansion of \"%a\""
-msgstr "\"%a\"¤ÎÅ¸³«Ãæ¤Ë¥á¥â¥ê¤¬ÉÔÂ­¤·¤Ş¤·¤¿"
+msgstr "\"%a\"ã®å±•é–‹ä¸­ã«ãƒ¡ãƒ¢ãƒªãŒä¸è¶³ã—ã¾ã—ãŸ"
 
 #: ../src/misc.c:898
 #, c-format
 msgid "out of memory during expansion of \"%d\""
-msgstr "\"%d\"¤ÎÅ¸³«Ãæ¤Ë¥á¥â¥ê¤¬ÉÔÂ­¤·¤Ş¤·¤¿"
+msgstr "\"%d\"ã®å±•é–‹ä¸­ã«ãƒ¡ãƒ¢ãƒªãŒä¸è¶³ã—ã¾ã—ãŸ"
 
 #: ../src/misc.c:912
 msgid "selection not available"
@@ -972,107 +972,107 @@ msgstr ""
 #: ../src/misc.c:985 ../src/misc.c:991
 #, c-format
 msgid "bad window name value in %s state info"
-msgstr "%s¥¹¥Æ¡¼¥È¾ğÊóÃæ¤ËÉÔÀµ¤Ê¥¦¥£¥ó¥É¥¦Ì¾¤¬¤¢¤ê¤Ş¤¹"
+msgstr "%sã‚¹ãƒ†ãƒ¼ãƒˆæƒ…å ±ä¸­ã«ä¸æ­£ãªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦åãŒã‚ã‚Šã¾ã™"
 
 #: ../src/misc.c:1248
 msgid "could not send message to background image helper"
-msgstr "ÇØ·Ê¥¤¥á¡¼¥¸¥Ø¥ë¥Ñ¡¼¤Ë¥á¥Ã¥»¡¼¥¸¤òÁ÷¿®¤Ç¤­¤Ş¤»¤ó"
+msgstr "èƒŒæ™¯ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ˜ãƒ«ãƒ‘ãƒ¼ã«ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€ä¿¡ã§ãã¾ã›ã‚“"
 
 #: ../src/pixmap.c:235
 #, c-format
 msgid "could not load mask bitmap file \"%s\". Won't use mask"
-msgstr "¥Ş¥¹¥¯¥Ó¥Ã¥È¥Ş¥Ã¥×¥Õ¥¡¥¤¥ë\"%s\"¤¬ÆÉ¤ß¹ş¤á¤Ş¤»¤ó. ¥Ş¥¹¥¯¤ò»È¤¤¤Ş¤»¤ó"
+msgstr "ãƒã‚¹ã‚¯ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ«\"%s\"ãŒèª­ã¿è¾¼ã‚ã¾ã›ã‚“. ãƒã‚¹ã‚¯ã‚’ä½¿ã„ã¾ã›ã‚“"
 
 #: ../src/proplist.c:180
 msgid "unterminated string"
-msgstr "Ê¸»úÎó¤Î½ªÃ¼¤¬¤¢¤ê¤Ş¤»¤ó"
+msgstr "æ–‡å­—åˆ—ã®çµ‚ç«¯ãŒã‚ã‚Šã¾ã›ã‚“"
 
 #: ../src/proplist.c:247
 msgid "unterminated array"
-msgstr "ÇÛÎó¤Î½ªÃ¼¤¬¤¢¤ê¤Ş¤»¤ó"
+msgstr "é…åˆ—ã®çµ‚ç«¯ãŒã‚ã‚Šã¾ã›ã‚“"
 
 #: ../src/proplist.c:256
 msgid "missing , in array or unterminated array"
-msgstr "ÇÛÎóÃæ¤Ç `,'¤¬Â­¤ê¤Ş¤»¤ó"
+msgstr "é…åˆ—ä¸­ã§ `,'ãŒè¶³ã‚Šã¾ã›ã‚“"
 
 #: ../src/proplist.c:267
 msgid "could not get array element"
-msgstr "ÇÛÎóÍ×ÁÇ¤òÆÀ¤ë¤³¤È¤¬¤Ç¤­¤Ş¤»¤ó"
+msgstr "é…åˆ—è¦ç´ ã‚’å¾—ã‚‹ã“ã¨ãŒã§ãã¾ã›ã‚“"
 
 #: ../src/proplist.c:297
 msgid "unterminated dictionary"
-msgstr "¼­½ñ¤Î½ªÃ¼¤¬¤¢¤ê¤Ş¤»¤ó"
+msgstr "è¾æ›¸ã®çµ‚ç«¯ãŒã‚ã‚Šã¾ã›ã‚“"
 
 #: ../src/proplist.c:315
 msgid "missing dictionary key"
-msgstr "¼­½ñ¥­¡¼¤¬¤¢¤ê¤Ş¤»¤ó"
+msgstr "è¾æ›¸ã‚­ãƒ¼ãŒã‚ã‚Šã¾ã›ã‚“"
 
 #: ../src/proplist.c:317
 msgid "missing dictionary entry key or unterminated dictionary"
-msgstr "¼­½ñ¥­¡¼¤¬¤Ê¤¤¤«, ¼­½ñ¤Î½ªÃ¼¤¬¤¢¤ê¤Ş¤»¤ó"
+msgstr "è¾æ›¸ã‚­ãƒ¼ãŒãªã„ã‹, è¾æ›¸ã®çµ‚ç«¯ãŒã‚ã‚Šã¾ã›ã‚“"
 
 #: ../src/proplist.c:323
 msgid "error parsing dictionary key"
-msgstr "¼­½ñ¥­¡¼¤Î²òÆÉÃæ¤Ë¥¨¥é¡¼¤¬È¯À¸¤·¤Ş¤·¤¿"
+msgstr "è¾æ›¸ã‚­ãƒ¼ã®è§£èª­ä¸­ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ"
 
 #: ../src/proplist.c:332
 msgid "missing = in dictionary entry"
-msgstr "¼­½ñ¥¨¥ó¥È¥ê¤Ë `='¤¬¤¢¤ê¤Ş¤»¤ó"
+msgstr "è¾æ›¸ã‚¨ãƒ³ãƒˆãƒªã« `='ãŒã‚ã‚Šã¾ã›ã‚“"
 
 #: ../src/proplist.c:351
 msgid "missing ; in dictionary entry"
-msgstr "¼­½ñ¥¨¥ó¥È¥ê¤Ë `;'¤¬Â­¤ê¤Ş¤»¤ó"
+msgstr "è¾æ›¸ã‚¨ãƒ³ãƒˆãƒªã« `;'ãŒè¶³ã‚Šã¾ã›ã‚“"
 
 #: ../src/proplist.c:432
 msgid ""
 "was expecting a string, dictionary, data or array. If it's a string, try "
 "enclosing it with \"."
 msgstr ""
-"¤Ë¤Ï, Ê¸»úÎó, ¼­½ñ, ¥Ç¡¼¥¿¤â¤·¤¯¤ÏÇÛÎó¤òÂ³¤±¤Æ¤¯¤À¤µ¤¤. Ê¸»úÎó¤Î¾ì¹ç, \" "
-"¤Ç¤¯¤¯¤ë¤³¤È¤â»î¤·¤Æ²¼¤µ¤¤. "
+"ã«ã¯, æ–‡å­—åˆ—, è¾æ›¸, ãƒ‡ãƒ¼ã‚¿ã‚‚ã—ãã¯é…åˆ—ã‚’ç¶šã‘ã¦ãã ã•ã„. æ–‡å­—åˆ—ã®å ´åˆ, \" "
+"ã§ããã‚‹ã“ã¨ã‚‚è©¦ã—ã¦ä¸‹ã•ã„. "
 
 #: ../src/proplist.c:434
 msgid "Comments are not allowed inside WindowMaker owned domain files."
-msgstr "WindowMaker¼«¿È¤ÎÆâÉô¥É¥á¥¤¥ó¥Õ¥¡¥¤¥ëÃæ¤Ç¤Ï¥³¥á¥ó¥È¤Ï½ñ¤±¤Ş¤»¤ó"
+msgstr "WindowMakerè‡ªèº«ã®å†…éƒ¨ãƒ‰ãƒ¡ã‚¤ãƒ³ãƒ•ã‚¡ã‚¤ãƒ«ä¸­ã§ã¯ã‚³ãƒ¡ãƒ³ãƒˆã¯æ›¸ã‘ã¾ã›ã‚“"
 
 #: ../src/proplist.c:453
 #, c-format
 msgid "could not open domain file %s"
-msgstr "¥É¥á¥¤¥ó¥Õ¥¡¥¤¥ë%s¤ò³«¤±¤Ş¤»¤ó"
+msgstr "ãƒ‰ãƒ¡ã‚¤ãƒ³ãƒ•ã‚¡ã‚¤ãƒ«%sã‚’é–‹ã‘ã¾ã›ã‚“"
 
 #: ../src/proplist.c:466
 msgid "extra data after end of file"
-msgstr "¥Õ¥¡¥¤¥ë½ªÃ¼¤ËÍ¾Ê¬¤Ê¥Ç¡¼¥¿¤¬¤¢¤ê¤Ş¤¹"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«çµ‚ç«¯ã«ä½™åˆ†ãªãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Šã¾ã™"
 
 #: ../src/resources.c:44
 #, c-format
 msgid "could not parse color \"%s\""
-msgstr "¥«¥é¡¼\"%s\"¤Î»ØÄê¤Ë¸í¤ê¤¬¤¢¤ê¤Ş¤¹"
+msgstr "ã‚«ãƒ©ãƒ¼\"%s\"ã®æŒ‡å®šã«èª¤ã‚ŠãŒã‚ã‚Šã¾ã™"
 
 #: ../src/resources.c:48
 #, c-format
 msgid "could not allocate color \"%s\""
-msgstr "¥«¥é¡¼\"%s\"¤òÍ½Ìó¤Ç¤­¤Ş¤»¤ó"
+msgstr "ã‚«ãƒ©ãƒ¼\"%s\"ã‚’äºˆç´„ã§ãã¾ã›ã‚“"
 
 #: ../src/rootmenu.c:183 ../src/rootmenu.c:185
 msgid "Exit"
-msgstr "½ªÎ»"
+msgstr "çµ‚äº†"
 
 #: ../src/rootmenu.c:184
 msgid "Exit window manager?"
-msgstr "¥¦¥£¥ó¥É¥¦¥Ş¥Í¡¼¥¸¥ã¤ò½ªÎ»¤·¤Ş¤¹¤«?"
+msgstr "ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’çµ‚äº†ã—ã¾ã™ã‹?"
 
 #: ../src/rootmenu.c:220
 msgid "Close X session"
-msgstr "X¥»¥Ã¥·¥ç¥ó¤Î½ªÎ»"
+msgstr "Xã‚»ãƒƒã‚·ãƒ§ãƒ³ã®çµ‚äº†"
 
 #: ../src/rootmenu.c:221
 msgid ""
 "Close Window System session?\n"
 "Kill might close applications with unsaved data."
 msgstr ""
-"¥¦¥£¥ó¥É¥¦¥·¥¹¥Æ¥à¤Î¥»¥Ã¥·¥ç¥ó¤ò½ªÎ»¤·¤Ş¤¹¤«?\n"
-"¶¯À©½ªÎ»¤Ë¤è¤êÌ¤ÊİÂ¸¤Î¥Ç¡¼¥¿¤Ï¼º¤ï¤ì¤ë²ÄÇ½À­¤¬¤¢¤ê¤Ş¤¹"
+"ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚·ã‚¹ãƒ†ãƒ ã®ã‚»ãƒƒã‚·ãƒ§ãƒ³ã‚’çµ‚äº†ã—ã¾ã™ã‹?\n"
+"å¼·åˆ¶çµ‚äº†ã«ã‚ˆã‚Šæœªä¿å­˜ã®ãƒ‡ãƒ¼ã‚¿ã¯å¤±ã‚ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™"
 
 #.
 #. entry = wMenuAddCallback(menu, _("Select Shortcut"), NULL, NULL);
@@ -1080,169 +1080,169 @@ msgstr ""
 #.
 #: ../src/rootmenu.c:223 ../src/winmenu.c:505
 msgid "Close"
-msgstr "ÊÄ¤¸¤ë"
+msgstr "é–‰ã˜ã‚‹"
 
 #: ../src/rootmenu.c:234
 msgid "Kill X session"
-msgstr "X¥»¥Ã¥·¥ç¥ó¤Î½ªÎ»"
+msgstr "Xã‚»ãƒƒã‚·ãƒ§ãƒ³ã®çµ‚äº†"
 
 #: ../src/rootmenu.c:235
 msgid ""
 "Kill Window System session?\n"
 "(all applications will be closed)"
 msgstr ""
-"¥¦¥£¥ó¥É¥¦¥·¥¹¥Æ¥à¤Î¥»¥Ã¥·¥ç¥ó¤ò½ªÎ»¤·¤Ş¤¹¤«?\n"
-"(Á´¤Æ¤Î¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¤¬ÊÄ¤¸¤é¤ì¤Ş¤¹)"
+"ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚·ã‚¹ãƒ†ãƒ ã®ã‚»ãƒƒã‚·ãƒ§ãƒ³ã‚’çµ‚äº†ã—ã¾ã™ã‹?\n"
+"(å…¨ã¦ã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ãŒé–‰ã˜ã‚‰ã‚Œã¾ã™)"
 
 #: ../src/rootmenu.c:504
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\" for entry %s"
-msgstr "%s:¥­¡¼¥Ü¡¼¥É¥·¥ç¡¼¥È¥«¥Ã¥È¤ÎÀßÄê\"%s\"¤¬´Ö°ã¤Ã¤Æ¤¤¤Ş¤¹(%s)"
+msgstr "%s:ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã®è¨­å®š\"%s\"ãŒé–“é•ã£ã¦ã„ã¾ã™(%s)"
 
 #: ../src/rootmenu.c:512
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\" for entry %s"
-msgstr "%s:¥­¡¼¥Ü¡¼¥É¥·¥ç¡¼¥È¥«¥Ã¥È\"%s\"¤¬´Ö°ã¤Ã¤Æ¤¤¤Ş¤¹(%s)"
+msgstr "%s:ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆ\"%s\"ãŒé–“é•ã£ã¦ã„ã¾ã™(%s)"
 
 #: ../src/rootmenu.c:565
 #, c-format
 msgid "%s: unmatched '\"' in menu file"
-msgstr "%s: ¥á¥Ë¥å¡¼¥Õ¥¡¥¤¥ëÃæ, '\"'¤¬ÂĞ±ş¤·¤Æ¤¤¤Ş¤»¤ó"
+msgstr "%s: ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ä¸­, '\"'ãŒå¯¾å¿œã—ã¦ã„ã¾ã›ã‚“"
 
 #: ../src/rootmenu.c:615
 #, c-format
 msgid "%s: missing command"
-msgstr "%s: ¥³¥Ş¥ó¥É¤Î»ØÄê¤¬¤¢¤ê¤Ş¤»¤ó"
+msgstr "%s: ã‚³ãƒãƒ³ãƒ‰ã®æŒ‡å®šãŒã‚ã‚Šã¾ã›ã‚“"
 
 #: ../src/rootmenu.c:647
 #, c-format
 msgid "invalid OPEN_MENU specification: %s"
-msgstr "OPEN_MENU¤Î»ØÄê¤¬ÉÔÅ¬ÀÚ¤Ç¤¹: %s"
+msgstr "OPEN_MENUã®æŒ‡å®šãŒä¸é©åˆ‡ã§ã™: %s"
 
 #: ../src/rootmenu.c:695
 #, c-format
 msgid "%s:could not stat menu"
-msgstr "%s:¥á¥Ë¥å¡¼¤òstat¤Ç¤­¤Ş¤»¤ó"
+msgstr "%s:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’statã§ãã¾ã›ã‚“"
 
 #: ../src/rootmenu.c:703
 #, c-format
 msgid "%s:could not stat menu:%s"
-msgstr "%s:¥á¥Ë¥å¡¼¤òstat¤Ç¤­¤Ş¤»¤ó: %s"
+msgstr "%s:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’statã§ãã¾ã›ã‚“: %s"
 
 #: ../src/rootmenu.c:721
 #, c-format
 msgid "too many parameters in OPEN_MENU: %s"
-msgstr "OPEN_MENU¤Î¥Ñ¥é¥á¡¼¥¿¤¬Â¿¤¹¤®¤Ş¤¹: %s"
+msgstr "OPEN_MENUã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒå¤šã™ãã¾ã™: %s"
 
 #: ../src/rootmenu.c:765
 msgid ""
 "There are more than one WORKSPACE_MENU commands in the applications menu. "
 "Only one is allowed."
 msgstr ""
-"¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¥á¥Ë¥å¡¼Ãæ, WORKSPACE_MENU¥³¥Ş¥ó¥É¤¬Ê£¿ôÂ¸ºß¤·¤Ş¤¹. "
-"°ì¤Ä¤Î¤ß²ÄÇ½¤Ç¤¹"
+"ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ä¸­, WORKSPACE_MENUã‚³ãƒãƒ³ãƒ‰ãŒè¤‡æ•°å­˜åœ¨ã—ã¾ã™. "
+"ä¸€ã¤ã®ã¿å¯èƒ½ã§ã™"
 
 #: ../src/rootmenu.c:799
 msgid ""
 "There are more than one WINDOWS_MENU commands in the applications menu. Only "
 "one is allowed."
 msgstr ""
-"¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¥á¥Ë¥å¡¼Ãæ, WINDOWS_MENU¥³¥Ş¥ó¥É¤¬Ê£¿ôÂ¸ºß¤·¤Ş¤¹. "
-"°ì¤Ä¤Î¤ß²ÄÇ½¤Ç¤¹"
+"ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ä¸­, WINDOWS_MENUã‚³ãƒãƒ³ãƒ‰ãŒè¤‡æ•°å­˜åœ¨ã—ã¾ã™. "
+"ä¸€ã¤ã®ã¿å¯èƒ½ã§ã™"
 
 #: ../src/rootmenu.c:804
 msgid "Window List"
-msgstr "¥¦¥£¥ó¥É¥¦°ìÍ÷"
+msgstr "ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä¸€è¦§"
 
 #: ../src/rootmenu.c:833 ../src/rootmenu.c:851 ../src/rootmenu.c:861
 #, c-format
 msgid "%s:missing parameter for menu command \"%s\""
-msgstr "%s:¥á¥Ë¥å¡¼¥³¥Ş¥ó¥É\"%s\"¤ËÂĞ¤¹¤ë¥Ñ¥é¥á¡¼¥¿¤¬¤¢¤ê¤Ş¤»¤ó"
+msgstr "%s:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚³ãƒãƒ³ãƒ‰\"%s\"ã«å¯¾ã™ã‚‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒã‚ã‚Šã¾ã›ã‚“"
 
 #: ../src/rootmenu.c:929
 #, c-format
 msgid "%s:unknown command \"%s\" in menu config."
-msgstr "%s:¥á¥Ë¥å¡¼ÀßÄêÃæ, ÉÔÀµ¤Ê¥³¥Ş¥ó¥É\"%s\"¤¬¤¢¤ê¤Ş¤¹"
+msgstr "%s:ãƒ¡ãƒ‹ãƒ¥ãƒ¼è¨­å®šä¸­, ä¸æ­£ãªã‚³ãƒãƒ³ãƒ‰\"%s\"ãŒã‚ã‚Šã¾ã™"
 
 #: ../src/rootmenu.c:937
 #, c-format
 msgid "%s:can't add shortcut for entry \"%s\""
-msgstr "%s:¥¨¥ó¥È¥ê\"%s\"¤Î¥·¥ç¡¼¥È¥«¥Ã¥È¤òÅĞÏ¿¤Ç¤­¤Ş¤»¤ó"
+msgstr "%s:ã‚¨ãƒ³ãƒˆãƒª\"%s\"ã®ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚’ç™»éŒ²ã§ãã¾ã›ã‚“"
 
 #: ../src/rootmenu.c:1074
 #, c-format
 msgid "%s:maximal line size exceeded in menu config: %s"
-msgstr "%s:¥á¥Ë¥å¡¼ÀßÄê¤ÎºÇÂç¹Ô¿ô¤ò±Û¤¨¤Ş¤·¤¿: %s"
+msgstr "%s:ãƒ¡ãƒ‹ãƒ¥ãƒ¼è¨­å®šã®æœ€å¤§è¡Œæ•°ã‚’è¶Šãˆã¾ã—ãŸ: %s"
 
 #: ../src/rootmenu.c:1096 ../src/rootmenu.c:1189 ../src/rootmenu.c:1291
 #, c-format
 msgid "%s:missing command in menu config: %s"
-msgstr "%s:¥á¥Ë¥å¡¼ÀßÄê¤Ë, ¥³¥Ş¥ó¥É¤¬¤¢¤ê¤Ş¤»¤ó: %s"
+msgstr "%s:ãƒ¡ãƒ‹ãƒ¥ãƒ¼è¨­å®šã«, ã‚³ãƒãƒ³ãƒ‰ãŒã‚ã‚Šã¾ã›ã‚“: %s"
 
 #: ../src/rootmenu.c:1126
 #, c-format
 msgid "%s:syntax error in menu file:END declaration missing"
-msgstr "%s:¥á¥Ë¥å¡¼¥Õ¥¡¥¤¥ë¤ËÊ¸Ë¡¥¨¥é¡¼¤¬¤¢¤ê¤Ş¤¹: END ¤Îµ­½Ò¤¬Â­¤ê¤Ş¤»¤ó"
+msgstr "%s:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã«æ–‡æ³•ã‚¨ãƒ©ãƒ¼ãŒã‚ã‚Šã¾ã™: END ã®è¨˜è¿°ãŒè¶³ã‚Šã¾ã›ã‚“"
 
 #: ../src/rootmenu.c:1155 ../src/rootmenu.c:1255
 msgid "could not make arguments for menu file preprocessor"
-msgstr "¥á¥Ë¥å¡¼¥Õ¥¡¥¤¥ë¡¦¥×¥ê¥×¥í¥»¥Ã¥µ¤Ø¤Î°ú¿ô¤¬ºîÀ®¤Ç¤­¤Ş¤»¤ó"
+msgstr "ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ãƒ»ãƒ—ãƒªãƒ—ãƒ­ã‚»ãƒƒã‚µã¸ã®å¼•æ•°ãŒä½œæˆã§ãã¾ã›ã‚“"
 
 #: ../src/rootmenu.c:1162 ../src/rootmenu.c:1263
 #, c-format
 msgid "%s:could not open/preprocess menu file"
-msgstr "%s:¥á¥Ë¥å¡¼¥Õ¥¡¥¤¥ë¤Î¥ª¡¼¥×¥ó¡¿¥×¥ê¥×¥í¥»¥¹¤¬¤Ç¤­¤Ş¤»¤ó"
+msgstr "%s:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ªãƒ¼ãƒ—ãƒ³ï¼ãƒ—ãƒªãƒ—ãƒ­ã‚»ã‚¹ãŒã§ãã¾ã›ã‚“"
 
 #: ../src/rootmenu.c:1174 ../src/rootmenu.c:1276
 #, c-format
 msgid "%s:could not open menu file"
-msgstr "%s:¥á¥Ë¥å¡¼¥Õ¥¡¥¤¥ë¤ò³«¤±¤Ş¤»¤ó"
+msgstr "%s:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã‘ã¾ã›ã‚“"
 
 #: ../src/rootmenu.c:1201
 #, c-format
 msgid "%s:invalid menu file. MENU command is missing"
-msgstr "%s: ¥á¥Ë¥å¡¼¥Õ¥¡¥¤¥ë¤¬ÉÔÅ¬Åö¤Ç¤¹. MENU¥³¥Ş¥ó¥É¤¬Â¸ºß¤·¤Ş¤»¤ó"
+msgstr "%s: ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ãŒä¸é©å½“ã§ã™. MENUã‚³ãƒãƒ³ãƒ‰ãŒå­˜åœ¨ã—ã¾ã›ã‚“"
 
 #: ../src/rootmenu.c:1210
 msgid "error reading preprocessed menu data"
-msgstr "¥×¥ê¥×¥í¥»¥¹¤µ¤ì¤¿¥á¥Ë¥å¡¼¥Ç¡¼¥¿¤ÎÆÉ¤ß¹ş¤ß¤Ë¥¨¥é¡¼¤¬µ¯¤­¤Ş¤·¤¿"
+msgstr "ãƒ—ãƒªãƒ—ãƒ­ã‚»ã‚¹ã•ã‚ŒãŸãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿ã«ã‚¨ãƒ©ãƒ¼ãŒèµ·ãã¾ã—ãŸ"
 
 #: ../src/rootmenu.c:1303
 #, c-format
 msgid "%s:no title given for the root menu"
-msgstr "%s:¥ë¡¼¥È¥á¥Ë¥å¡¼¤Î¥¿¥¤¥È¥ë¤¬¤¢¤ê¤Ş¤»¤ó"
+msgstr "%s:ãƒ«ãƒ¼ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ã‚¿ã‚¤ãƒˆãƒ«ãŒã‚ã‚Šã¾ã›ã‚“"
 
 #: ../src/rootmenu.c:1394 ../src/rootmenu.c:1467 ../src/rootmenu.c:1508
 #, c-format
 msgid "out of memory while constructing directory menu %s"
-msgstr "¥Ç¥£¥ì¥¯¥È¥ê¥á¥Ë¥å¡¼%s¤ÎºîÀ®¤¿¤á¤Î¥á¥â¥ê¤¬ÉÔÂ­¤·¤Æ¤Ş¤¹"
+msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ¡ãƒ‹ãƒ¥ãƒ¼%sã®ä½œæˆãŸã‚ã®ãƒ¡ãƒ¢ãƒªãŒä¸è¶³ã—ã¦ã¾ã™"
 
 #: ../src/rootmenu.c:1404
 #, c-format
 msgid "%s:could not stat file \"%s\" in menu directory"
-msgstr "%s:¥á¥Ë¥å¡¼¥Ç¥£¥ì¥¯¥È¥ê¤Î¥Õ¥¡¥¤¥ë\"%s\"¤òstat¤Ç¤­¤Ş¤»¤ó"
+msgstr "%s:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒ•ã‚¡ã‚¤ãƒ«\"%s\"ã‚’statã§ãã¾ã›ã‚“"
 
 #: ../src/rootmenu.c:1562
 msgid "Commands"
-msgstr "¥³¥Ş¥ó¥É"
+msgstr "ã‚³ãƒãƒ³ãƒ‰"
 
 #: ../src/rootmenu.c:1565
 msgid "Restart"
-msgstr "ºÆµ¯Æ°"
+msgstr "å†èµ·å‹•"
 
 #: ../src/rootmenu.c:1566
 msgid "Exit..."
-msgstr "½ªÎ»..."
+msgstr "çµ‚äº†..."
 
 #: ../src/rootmenu.c:1611
 #, c-format
 msgid "could not find menu file \"%s\" referenced in WMRootMenu"
-msgstr "WMRootMenu¤Ç»²¾È¤·¤Æ¤¤¤ë¥á¥Ë¥å¡¼\"%s\"¤ò¸«¤Ä¤±¤é¤ì¤Ş¤»¤ó"
+msgstr "WMRootMenuã§å‚ç…§ã—ã¦ã„ã‚‹ãƒ¡ãƒ‹ãƒ¥ãƒ¼\"%s\"ã‚’è¦‹ã¤ã‘ã‚‰ã‚Œã¾ã›ã‚“"
 
 #: ../src/rootmenu.c:1618
 #, c-format
 msgid "could not access menu \"%s\" referenced in WMRootMenu"
-msgstr "WMRootMenu¤Ç»²¾È¤·¤Æ¤¤¤ë¥á¥Ë¥å¡¼\"%s\"¤Ø¥¢¥¯¥»¥¹¤Ç¤­¤Ş¤»¤ó"
+msgstr "WMRootMenuã§å‚ç…§ã—ã¦ã„ã‚‹ãƒ¡ãƒ‹ãƒ¥ãƒ¼\"%s\"ã¸ã‚¢ã‚¯ã‚»ã‚¹ã§ãã¾ã›ã‚“"
 
 #: ../src/rootmenu.c:1629
 #, c-format
@@ -1250,48 +1250,48 @@ msgid ""
 "using default menu file \"%s\" as the menu referenced in WMRootMenu could "
 "not be found "
 msgstr ""
-"WMRootMenu¤Ç»²¾È¤·¤Æ¤¤¤ë¥á¥Ë¥å¡¼¸«¤Ä¤«¤é¤Ê¤¤¤Î¤Ç, "
-"¥Ç¥Õ¥©¥ë¥È¤Î¥á¥Ë¥å¡¼¥Õ¥¡¥¤¥ë \"%s\" ¤òÍÑ¤¤¤Ş¤¹"
+"WMRootMenuã§å‚ç…§ã—ã¦ã„ã‚‹ãƒ¡ãƒ‹ãƒ¥ãƒ¼è¦‹ã¤ã‹ã‚‰ãªã„ã®ã§, "
+"ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ« \"%s\" ã‚’ç”¨ã„ã¾ã™"
 
 #: ../src/rootmenu.c:1652 ../src/rootmenu.c:1728
 #, c-format
 msgid "%s:format error in root menu configuration \"%s\""
-msgstr "%s:¥ë¡¼¥È¥á¥Ë¥å¡¼ÀßÄê\"%s\"¤Ë¥Õ¥©¡¼¥Ş¥Ã¥È¥¨¥é¡¼¤¬¤¢¤ê¤Ş¤¹"
+msgstr "%s:ãƒ«ãƒ¼ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼è¨­å®š\"%s\"ã«ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚¨ãƒ©ãƒ¼ãŒã‚ã‚Šã¾ã™"
 
 #: ../src/rootmenu.c:1816
 msgid ""
 "The applications menu could not be loaded. Look at the console output for a "
 "detailed description of the errors."
 msgstr ""
-"¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¥á¥Ë¥å¡¼¤¬¥í¡¼¥É¤Ç¤­¤Ş¤»¤ó. "
-"¥¨¥é¡¼¤Î¾ÜºÙ¤Ï¥³¥ó¥½¡¼¥ë¤Ø¤Î½ĞÎÏ¤ò»²¾È¤·¤Æ¤¯¤À¤µ¤¤"
+"ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãŒãƒ­ãƒ¼ãƒ‰ã§ãã¾ã›ã‚“. "
+"ã‚¨ãƒ©ãƒ¼ã®è©³ç´°ã¯ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã¸ã®å‡ºåŠ›ã‚’å‚ç…§ã—ã¦ãã ã•ã„"
 
 #: ../src/screen.c:740
 #, c-format
 msgid "could not initialize graphics library context: %s"
-msgstr "¥°¥é¥Õ¥£¥Ã¥¯¥é¥¤¥Ö¥é¥ê¥³¥ó¥Æ¥­¥¹¥È¤ò½é´ü²½¤Ç¤­¤Ş¤»¤ó: %s"
+msgstr "ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‚’åˆæœŸåŒ–ã§ãã¾ã›ã‚“: %s"
 
 #: ../src/screen.c:771
 msgid "could not do initialization of WINGs widget set"
-msgstr "WINGs¥¦¥£¥¸¥§¥Ã¥È¥»¥Ã¥È¤Î½é´ü²½¤¬¤Ç¤­¤Ş¤»¤ó"
+msgstr "WINGsã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆã‚»ãƒƒãƒˆã®åˆæœŸåŒ–ãŒã§ãã¾ã›ã‚“"
 
 #: ../src/screen.c:1135
 #, c-format
 msgid "could not save session state in %s"
-msgstr "%s¤Î¥»¥Ã¥·¥ç¥ó¤òÊİÂ¸¤Ç¤­¤Ş¤»¤ó¤Ç¤·¤¿"
+msgstr "%sã®ã‚»ãƒƒã‚·ãƒ§ãƒ³ã‚’ä¿å­˜ã§ãã¾ã›ã‚“ã§ã—ãŸ"
 
 #: ../src/session.c:183 ../src/wdefaults.c:588 ../src/winspector.c:453
 #, c-format
 msgid "can't convert \"%s\" to boolean"
-msgstr "\"%s\"¤ò boolean·¿¤ËÊÑ´¹¤Ç¤­¤Ş¤»¤ó"
+msgstr "\"%s\"ã‚’ booleanå‹ã«å¤‰æ›ã§ãã¾ã›ã‚“"
 
 #: ../src/session.c:1021
 msgid "out of memory while saving session state"
-msgstr "¥»¥Ã¥·¥ç¥ó¤Î¾õÂÖ¤òÊİÂ¸¤·¤Æ¤¤¤ëÅÓÃæ¤Ë¥á¥â¥ê¤¬Â­¤ê¤Ê¤¯¤Ê¤ê¤Ş¤·¤¿"
+msgstr "ã‚»ãƒƒã‚·ãƒ§ãƒ³ã®çŠ¶æ…‹ã‚’ä¿å­˜ã—ã¦ã„ã‚‹é€”ä¸­ã«ãƒ¡ãƒ¢ãƒªãŒè¶³ã‚Šãªããªã‚Šã¾ã—ãŸ"
 
 #: ../src/session.c:1112
 msgid "end of memory while saving session state"
-msgstr "¥»¥Ã¥·¥ç¥ó¤Î¾õÂÖ¤òÊİÂ¸¤·¤Æ¤¤¤ëÅÓÃæ¤Ë¥á¥â¥ê¤¬¤Ê¤¯¤Ê¤ê¤Ş¤·¤¿"
+msgstr "ã‚»ãƒƒã‚·ãƒ§ãƒ³ã®çŠ¶æ…‹ã‚’ä¿å­˜ã—ã¦ã„ã‚‹é€”ä¸­ã«ãƒ¡ãƒ¢ãƒªãŒãªããªã‚Šã¾ã—ãŸ"
 
 #. This is not fatal but can mean the session manager exited.
 #. * If the session manager exited normally we would get a
@@ -1301,150 +1301,150 @@ msgstr "¥»¥Ã¥·¥ç¥ó¤Î¾õÂÖ¤òÊİÂ¸¤·¤Æ¤¤¤ëÅÓÃæ¤Ë¥á¥â¥ê¤¬¤Ê¤¯¤Ê¤ê¤Ş¤·¤¿"
 #.
 #: ../src/session.c:1250
 msgid "connection to the session manager was lost"
-msgstr "¥»¥Ã¥·¥ç¥ó¡¦¥Ş¥Í¡¼¥¸¥ã¤È¤ÎÀÜÂ³¤¬¼º¤ï¤ì¤Ş¤·¤¿"
+msgstr "ã‚»ãƒƒã‚·ãƒ§ãƒ³ãƒ»ãƒãƒãƒ¼ã‚¸ãƒ£ã¨ã®æ¥ç¶šãŒå¤±ã‚ã‚Œã¾ã—ãŸ"
 
 #: ../src/stacking.c:73
 msgid "could not get window list!!"
-msgstr "¥¦¥£¥ó¥É¥¦°ìÍ÷¤¬ÆÀ¤é¤ì¤Ş¤»¤ó!!"
+msgstr "ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä¸€è¦§ãŒå¾—ã‚‰ã‚Œã¾ã›ã‚“!!"
 
 #: ../src/startup.c:202
 #, c-format
 msgid "internal X error: %s\n"
-msgstr "XÆâÉô¥¨¥é¡¼: %s\n"
+msgstr "Xå†…éƒ¨ã‚¨ãƒ©ãƒ¼: %s\n"
 
 #: ../src/startup.c:260
 #, c-format
 msgid "got signal %i (%s) - restarting\n"
-msgstr "¥·¥°¥Ê¥ë%i(%s)¤ò¼õ¤±¤Ş¤·¤¿ -- ºÆµ¯Æ°¤·¤Ş¤¹\n"
+msgstr "ã‚·ã‚°ãƒŠãƒ«%i(%s)ã‚’å—ã‘ã¾ã—ãŸ -- å†èµ·å‹•ã—ã¾ã™\n"
 
 #: ../src/startup.c:262
 #, c-format
 msgid "got signal %i - restarting\n"
-msgstr "¥·¥°¥Ê¥ë%i¤ò¼õ¤±¤Ş¤·¤¿ -- ºÆµ¯Æ°¤·¤Ş¤¹\n"
+msgstr "ã‚·ã‚°ãƒŠãƒ«%iã‚’å—ã‘ã¾ã—ãŸ -- å†èµ·å‹•ã—ã¾ã™\n"
 
 #: ../src/startup.c:272
 #, c-format
 msgid "got signal %i (%s) - rereading defaults\n"
-msgstr "¥·¥°¥Ê¥ë%i(%s)¤ò¼õ¤±¤Ş¤·¤¿ -- ¥Ç¥Õ¥©¥ë¥È¤òºÆÆÉ¤ß¹ş¤ß¤·¤Ş¤¹\n"
+msgstr "ã‚·ã‚°ãƒŠãƒ«%i(%s)ã‚’å—ã‘ã¾ã—ãŸ -- ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚’å†èª­ã¿è¾¼ã¿ã—ã¾ã™\n"
 
 #: ../src/startup.c:274
 #, c-format
 msgid "got signal %i - rereading defaults\n"
-msgstr "¥·¥°¥Ê¥ë%i¤ò¼õ¤±¤Ş¤·¤¿ -- ¥Ç¥Õ¥©¥ë¥È¤òºÆÆÉ¤ß¹ş¤ß¤·¤Ş¤¹\n"
+msgstr "ã‚·ã‚°ãƒŠãƒ«%iã‚’å—ã‘ã¾ã—ãŸ -- ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚’å†èª­ã¿è¾¼ã¿ã—ã¾ã™\n"
 
 #: ../src/startup.c:284
 #, c-format
 msgid "got signal %i (%s) - exiting...\n"
-msgstr "¥·¥°¥Ê¥ë%i(%s)¤ò¼õ¤±¤Ş¤·¤¿ -- ½ªÎ»¤·¤Ş¤¹...\n"
+msgstr "ã‚·ã‚°ãƒŠãƒ«%i(%s)ã‚’å—ã‘ã¾ã—ãŸ -- çµ‚äº†ã—ã¾ã™...\n"
 
 #: ../src/startup.c:286
 #, c-format
 msgid "got signal %i - exiting...\n"
-msgstr "¥·¥°¥Ê¥ë%i¤ò¼õ¤±¤Ş¤·¤¿ -- ½ªÎ»¤·¤Ş¤¹...\n"
+msgstr "ã‚·ã‚°ãƒŠãƒ«%iã‚’å—ã‘ã¾ã—ãŸ -- çµ‚äº†ã—ã¾ã™...\n"
 
 #: ../src/startup.c:322
 #, c-format
 msgid "got signal %i (%s)\n"
-msgstr "¥·¥°¥Ê¥ë%i(%s)¤ò¼õ¤±¤Ş¤·¤¿\n"
+msgstr "ã‚·ã‚°ãƒŠãƒ«%i(%s)ã‚’å—ã‘ã¾ã—ãŸ\n"
 
 #: ../src/startup.c:324
 #, c-format
 msgid "got signal %i\n"
-msgstr "¥·¥°¥Ê¥ë%i¤ò¼õ¤±¤Ş¤·¤¿\n"
+msgstr "ã‚·ã‚°ãƒŠãƒ«%iã‚’å—ã‘ã¾ã—ãŸ\n"
 
 #: ../src/startup.c:335
 msgid ""
 "crashed while trying to do some post-crash cleanup. Aborting immediatelly."
-msgstr "¥¯¥é¥Ã¥·¥å¸å¤Î¾ô²½½èÍıÃæ¤Ë¥¯¥é¥Ã¥·¥å¤·¤Ş¤·¤¿. Ä¾¤Á¤ËÃæÃÇ¤·¤Ş¤¹"
+msgstr "ã‚¯ãƒ©ãƒƒã‚·ãƒ¥å¾Œã®æµ„åŒ–å‡¦ç†ä¸­ã«ã‚¯ãƒ©ãƒƒã‚·ãƒ¥ã—ã¾ã—ãŸ. ç›´ã¡ã«ä¸­æ–­ã—ã¾ã™"
 
 #. we try to restart Window Maker
 #: ../src/startup.c:400
 msgid "trying to restart Window Maker..."
-msgstr "Window Maker ¤òºÆµ¯Æ°¤·¤Æ¤¤¤Ş¤¹..."
+msgstr "Window Maker ã‚’å†èµ·å‹•ã—ã¦ã„ã¾ã™..."
 
 #: ../src/startup.c:405
 msgid "trying to start alternate window manager..."
-msgstr "¤«¤ï¤ê¤Î¥¦¥£¥ó¥É¥¦¥Ş¥Í¡¼¥¸¥ã¤òµ¯Æ°¤·¤Æ¤¤¤Ş¤¹..."
+msgstr "ã‹ã‚ã‚Šã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’èµ·å‹•ã—ã¦ã„ã¾ã™..."
 
 #: ../src/startup.c:410
 msgid "failed to start alternate window manager. Aborting."
-msgstr "¤«¤ï¤ê¤Î¥¦¥£¥ó¥É¥¦¥Ş¥Í¡¼¥¸¥ã¤òµ¯Æ°¤Ë¼ºÇÔ¤·¤Ş¤·¤¿. ÃæÃÇ¤·¤Ş¤¹."
+msgstr "ã‹ã‚ã‚Šã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’èµ·å‹•ã«å¤±æ•—ã—ã¾ã—ãŸ. ä¸­æ–­ã—ã¾ã™."
 
 #: ../src/startup.c:412
 msgid ""
 "a fatal error has occured, probably due to a bug. Please fill the included "
 "BUGFORM and report it."
 msgstr ""
-"¥Ğ¥°¤Ë¤è¤ë¤â¤Î¤È»×¤ï¤ì¤ëÃ×Ì¿Åª¤Ê¥¨¥é¡¼¤¬µ¯¤­¤Ş¤·¤¿. "
-"¥Ğ¥°¥Õ¥©¡¼¥à¤Ë¤·¤¿¤¬¤Ã¤Æ¥ì¥İ¡¼¥È¤·¤Æ²¼¤µ¤¤"
+"ãƒã‚°ã«ã‚ˆã‚‹ã‚‚ã®ã¨æ€ã‚ã‚Œã‚‹è‡´å‘½çš„ãªã‚¨ãƒ©ãƒ¼ãŒèµ·ãã¾ã—ãŸ. "
+"ãƒã‚°ãƒ•ã‚©ãƒ¼ãƒ ã«ã—ãŸãŒã£ã¦ãƒ¬ãƒãƒ¼ãƒˆã—ã¦ä¸‹ã•ã„"
 
 #: ../src/startup.c:900
 #, c-format
 msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
 msgstr ""
-"ÀßÄê¤µ¤ì¤Æ¤¤¤ë¥¢¥¤¥³¥ó¥µ¥¤¥º%i¤Ï¾®¤µ¤¹¤®¤Ş¤¹. ¤«¤ï¤ê¤Ë¥µ¥¤¥º16¤òÍÑ¤¤¤Ş¤¹\n"
+"è¨­å®šã•ã‚Œã¦ã„ã‚‹ã‚¢ã‚¤ã‚³ãƒ³ã‚µã‚¤ã‚º%iã¯å°ã•ã™ãã¾ã™. ã‹ã‚ã‚Šã«ã‚µã‚¤ã‚º16ã‚’ç”¨ã„ã¾ã™\n"
 
 #: ../src/startup.c:928
 msgid "XKB is not supported. KbdModeLock is automatically disabled."
-msgstr "XKB ¤Ï¥µ¥İ¡¼¥È¤µ¤ì¤Æ¤¤¤Ş¤»¤ó. KbdModeLock ¤Ï¼«Æ°Åª¤ËÌµ¸ú¤Ë¤Ê¤ê¤Ş¤¹"
+msgstr "XKB ã¯ã‚µãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã¾ã›ã‚“. KbdModeLock ã¯è‡ªå‹•çš„ã«ç„¡åŠ¹ã«ãªã‚Šã¾ã™"
 
 #: ../src/startup.c:947
 msgid "it seems that there is already a window manager running"
-msgstr "´û¤ËÂ¾¤Î¥¦¥£¥ó¥É¥¦¥Ş¥Í¡¼¥¸¥ã¤¬Î©¤Á¾å¤¬¤Ã¤Æ¤¤¤ë¤è¤¦¤Ç¤¹"
+msgstr "æ—¢ã«ä»–ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒãƒ¼ã‚¸ãƒ£ãŒç«‹ã¡ä¸ŠãŒã£ã¦ã„ã‚‹ã‚ˆã†ã§ã™"
 
 #: ../src/startup.c:953
 #, c-format
 msgid "could not manage screen %i"
-msgstr "¥¹¥¯¥ê¡¼¥ó %i¤ò¾¸°®¤Ç¤­¤Ş¤»¤ó"
+msgstr "ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ %iã‚’æŒæ¡ã§ãã¾ã›ã‚“"
 
 #: ../src/startup.c:1021
 msgid "could not manage any screen"
-msgstr "¾¸°®¤Ç¤­¤ë¥¹¥¯¥ê¡¼¥ó¤¬¤¢¤ê¤Ş¤»¤ó"
+msgstr "æŒæ¡ã§ãã‚‹ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãŒã‚ã‚Šã¾ã›ã‚“"
 
 #: ../src/switchmenu.c:114
 msgid "Windows"
-msgstr "¥¦¥£¥ó¥É¥¦°ìÍ÷"
+msgstr "ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä¸€è¦§"
 
 #: ../src/texture.c:329 ../src/texture.c:371
 #, c-format
 msgid "image file \"%s\" used as texture could not be found."
-msgstr "¥Æ¥¯¥¹¥Á¥ãÍÑ²èÁü¥Õ¥¡¥¤¥ë\"%s\"¤¬¸«¤Ä¤«¤ê¤Ş¤»¤ó"
+msgstr "ãƒ†ã‚¯ã‚¹ãƒãƒ£ç”¨ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«\"%s\"ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“"
 
 #: ../src/texture.c:335 ../src/texture.c:377
 #, c-format
 msgid "could not load texture pixmap \"%s\":%s"
-msgstr "¥Æ¥¯¥¹¥Á¥ã²èÁü\"%s\"¤ò¥í¡¼¥É¤Ç¤­¤Ş¤»¤ó:%s"
+msgstr "ãƒ†ã‚¯ã‚¹ãƒãƒ£ç”»åƒ\"%s\"ã‚’ãƒ­ãƒ¼ãƒ‰ã§ãã¾ã›ã‚“:%s"
 
 #: ../src/texture.c:437
 #, c-format
 msgid "library \"%s\" cound not be opened."
-msgstr "¥é¥¤¥Ö¥é¥ê \"%s\" ¤¬³«¤±¤Ş¤»¤ó"
+msgstr "ãƒ©ã‚¤ãƒ–ãƒ©ãƒª \"%s\" ãŒé–‹ã‘ã¾ã›ã‚“"
 
 #: ../src/texture.c:446
 #, c-format
 msgid "function \"%s\" not found in library \"%s\""
-msgstr "´Ø¿ô \"%s\" ¤Ï¥é¥¤¥Ö¥é¥ê \"%s\" ¤Ë¸«Åö¤¿¤ê¤Ş¤»¤ó"
+msgstr "é–¢æ•° \"%s\" ã¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒª \"%s\" ã«è¦‹å½“ãŸã‚Šã¾ã›ã‚“"
 
 #: ../src/texture.c:453
 msgid "function textures not supported on this system, sorry."
-msgstr "¥Æ¥¯¥¹¥Á¥ã¤Ï¤³¤Î¥·¥¹¥Æ¥à¤Ç¤Ï¥µ¥İ¡¼¥È¤µ¤ì¤Æ¤¤¤Ş¤»¤ó, ¤¢¤·¤«¤é¤º"
+msgstr "ãƒ†ã‚¯ã‚¹ãƒãƒ£ã¯ã“ã®ã‚·ã‚¹ãƒ†ãƒ ã§ã¯ã‚µãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã¾ã›ã‚“, ã‚ã—ã‹ã‚‰ãš"
 
 #: ../src/texture.c:598
 msgid "could not allocate image buffer"
-msgstr "²èÁü¥Ğ¥Ã¥Õ¥¡¤òÍ½Ìó¤Ç¤­¤Ş¤»¤ó"
+msgstr "ç”»åƒãƒãƒƒãƒ•ã‚¡ã‚’äºˆç´„ã§ãã¾ã›ã‚“"
 
 #: ../src/wdefaults.c:434
 #, c-format
 msgid "could not find icon file \"%s\""
-msgstr "¥¢¥¤¥³¥ó¥Õ¥¡¥¤¥ë \"%s\"¤¬¸«¤Ä¤«¤ê¤Ş¤»¤ó"
+msgstr "ã‚¢ã‚¤ã‚³ãƒ³ãƒ•ã‚¡ã‚¤ãƒ« \"%s\"ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“"
 
 #: ../src/window.c:2825 ../src/window.c:2960
 msgid ""
 "the NumLock, ScrollLock or similar key seems to be turned on.\n"
 "Turn it off or some mouse actions and keyboard shortcuts will not work."
 msgstr ""
-"NumLock, ScrollLock Åù¤Î¥­¡¼¤¬ON¤Ë¤Ê¤Ã¤Æ¤Ş¤¹\n"
-"¥Ş¥¦¥¹µ¡Ç½¤ä¥­¡¼¥Ü¡¼¥É¥·¥ç¡¼¥È¥«¥Ã¥È¤òÀµ¾ï¤ËÍøÍÑ¤¹¤ë¤Ë¤ÏOFF¤ËÀÚÂØ¤¨¤Æ²¼¤µ¤¤"
+"NumLock, ScrollLock ç­‰ã®ã‚­ãƒ¼ãŒONã«ãªã£ã¦ã¾ã™\n"
+"ãƒã‚¦ã‚¹æ©Ÿèƒ½ã‚„ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚’æ­£å¸¸ã«åˆ©ç”¨ã™ã‚‹ã«ã¯OFFã«åˆ‡æ›¿ãˆã¦ä¸‹ã•ã„"
 
 #: ../src/winmenu.c:129
 msgid ""
@@ -1452,25 +1452,25 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-"¤³¤Î¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¤ò¶¯À©½ªÎ»¤µ¤»¤Ş¤¹\n"
-"ÊİÂ¸¤µ¤ì¤Æ¤¤¤Ê¤¤ÊÑ¹¹¤ÏÁ´¤Æ¼º¤ï¤ì¤Ş¤¹\n"
-"½ªÎ»¤µ¤»¤Ş¤¹¤«¡©"
+"ã“ã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å¼·åˆ¶çµ‚äº†ã•ã›ã¾ã™\n"
+"ä¿å­˜ã•ã‚Œã¦ã„ãªã„å¤‰æ›´ã¯å…¨ã¦å¤±ã‚ã‚Œã¾ã™\n"
+"çµ‚äº†ã•ã›ã¾ã™ã‹ï¼Ÿ"
 
 #: ../src/winmenu.c:271 ../src/winmenu.c:280
 msgid "Set Shortcut"
-msgstr "¥·¥ç¡¼¥È¥«¥Ã¥ÈÀßÄê"
+msgstr "ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆè¨­å®š"
 
 #: ../src/winmenu.c:358 ../src/winmenu.c:403
 msgid "could not create submenu for window menu"
-msgstr "¥µ¥Ö¥á¥Ë¥å¡¼¤òºî¤ì¤Ş¤»¤ó"
+msgstr "ã‚µãƒ–ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’ä½œã‚Œã¾ã›ã‚“"
 
 #: ../src/winmenu.c:407
 msgid "Keep on top"
-msgstr "¾ï¤Ë°ìÈÖ¾å¤ËÉ½¼¨"
+msgstr "å¸¸ã«ä¸€ç•ªä¸Šã«è¡¨ç¤º"
 
 #: ../src/winmenu.c:412
 msgid "Keep at bottom"
-msgstr "¾ï¤Ë°ìÈÖ²¼¤ËÉ½¼¨"
+msgstr "å¸¸ã«ä¸€ç•ªä¸‹ã«è¡¨ç¤º"
 
 #.
 #. * Warning: If you make some change that affects the order of the
@@ -1479,67 +1479,67 @@ msgstr "¾ï¤Ë°ìÈÖ²¼¤ËÉ½¼¨"
 #.
 #: ../src/winmenu.c:440 ../src/winmenu.c:575
 msgid "Maximize"
-msgstr "ºÇÂç²½"
+msgstr "æœ€å¤§åŒ–"
 
 #: ../src/winmenu.c:448 ../src/winmenu.c:561
 msgid "Miniaturize"
-msgstr "ºÇ¾®²½"
+msgstr "æœ€å°åŒ–"
 
 #: ../src/winmenu.c:457 ../src/winmenu.c:592
 msgid "Shade"
-msgstr "¥·¥§¡¼¥É"
+msgstr "ã‚·ã‚§ãƒ¼ãƒ‰"
 
 #: ../src/winmenu.c:473
 msgid "Resize/Move"
-msgstr "¥µ¥¤¥ºÊÑ¹¹/°ÜÆ°"
+msgstr "ã‚µã‚¤ã‚ºå¤‰æ›´/ç§»å‹•"
 
 #: ../src/winmenu.c:481
 msgid "Select"
-msgstr "ÁªÂò"
+msgstr "é¸æŠ"
 
 #: ../src/winmenu.c:489
 msgid "Move To"
-msgstr "°ÜÆ°"
+msgstr "ç§»å‹•"
 
 #: ../src/winmenu.c:494
 msgid "Attributes..."
-msgstr "Â°À­..."
+msgstr "å±æ€§..."
 
 #: ../src/winmenu.c:496
 msgid "Options"
-msgstr "¥ª¥×¥·¥ç¥ó"
+msgstr "ã‚ªãƒ—ã‚·ãƒ§ãƒ³"
 
 #: ../src/winmenu.c:556
 msgid "Deminiaturize"
-msgstr "ºÇ¾®²½²ò½ü"
+msgstr "æœ€å°åŒ–è§£é™¤"
 
 #: ../src/winmenu.c:570
 msgid "Unmaximize"
-msgstr "ºÇÂç²½²ò½ü"
+msgstr "æœ€å¤§åŒ–è§£é™¤"
 
 #: ../src/winmenu.c:587
 msgid "Unshade"
-msgstr "¥·¥§¡¼¥É²ò½ü"
+msgstr "ã‚·ã‚§ãƒ¼ãƒ‰è§£é™¤"
 
 #: ../src/winspector.c:386
 #, c-format
 msgid "Could not find icon \"%s\" specified for this window"
-msgstr "¤³¤Î¥¦¥£¥ó¥É¥¦¤Ø»ØÄê¤µ¤ì¤¿¥¢¥¤¥³¥ó\"%s\"¤¬¸«¤Ä¤«¤ê¤Ş¤»¤ó"
+msgstr "ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¸æŒ‡å®šã•ã‚ŒãŸã‚¢ã‚¤ã‚³ãƒ³\"%s\"ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“"
 
 #: ../src/winspector.c:403
 #, c-format
 msgid "Could not open specified icon \"%s\":%s"
-msgstr "»ØÄê¤µ¤ì¤¿¥¢¥¤¥³¥ó\"%s\"¤¬³«¤±¤Ş¤»¤ó:%s"
+msgstr "æŒ‡å®šã•ã‚ŒãŸã‚¢ã‚¤ã‚³ãƒ³\"%s\"ãŒé–‹ã‘ã¾ã›ã‚“:%s"
 
 #: ../src/winspector.c:1141
 #, c-format
 msgid "Inspecting  %s.%s"
-msgstr "Â°À­ ( %s.%s )"
+msgstr "å±æ€§ ( %s.%s )"
 
-# msgstr "Ä´ºº ( %s.%s )"
+# msgstr "èª¿æŸ» ( %s.%s )"
 #: ../src/winspector.c:1167
 msgid "Click in the window you wish to inspect."
-msgstr "Ä´ººÂĞ¾İ¤Î¥¦¥£¥ó¥É¥¦¤ò¥¯¥ê¥Ã¥¯¤·¤Æ¤¯¤À¤µ¤¤."
+msgstr "èª¿æŸ»å¯¾è±¡ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¦ãã ã•ã„."
 
 #: ../src/winspector.c:1206
 msgid ""
@@ -1548,57 +1548,57 @@ msgid ""
 "property set to the above selected\n"
 "name, when saved."
 msgstr ""
-"¤³¤ÎÀßÄê¤¬ÊİÂ¸¤µ¤ì¤ë¤È, ¾å¤Ç\n"
-"»ØÄê¤µ¤ì¤¿WM_CLASS¥×¥í¥Ñ¥Æ¥£¤ò\n"
-"»ı¤ÄÁ´¤Æ¤Î¥¦¥£¥ó¥É¥¦¤ËÅ¬ÍÑ¤µ¤ì¤Ş¤¹"
+"ã“ã®è¨­å®šãŒä¿å­˜ã•ã‚Œã‚‹ã¨, ä¸Šã§\n"
+"æŒ‡å®šã•ã‚ŒãŸWM_CLASSãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’\n"
+"æŒã¤å…¨ã¦ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«é©ç”¨ã•ã‚Œã¾ã™"
 
 #: ../src/winspector.c:1235
 msgid "Save"
-msgstr "ÊİÂ¸"
+msgstr "ä¿å­˜"
 
 #: ../src/winspector.c:1243
 msgid "Apply"
-msgstr "Å¬ÍÑ"
+msgstr "é©ç”¨"
 
 #: ../src/winspector.c:1249
 msgid "Reload"
-msgstr "ºÆÆÉ¤ß¹ş¤ß"
+msgstr "å†èª­ã¿è¾¼ã¿"
 
 #: ../src/winspector.c:1258 ../src/winspector.c:1268
 msgid "Window Specification"
-msgstr "¥¦¥£¥ó¥É¥¦¤Î»ØÄê"
+msgstr "ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®æŒ‡å®š"
 
 #: ../src/winspector.c:1259
 msgid "Window Attributes"
-msgstr "¥¦¥£¥ó¥É¥¦¤ÎÂ°À­"
+msgstr "ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å±æ€§"
 
 #: ../src/winspector.c:1260
 msgid "Advanced Options"
-msgstr "¥¢¥É¥Ğ¥ó¥¹¥È¡¦¥ª¥×¥·¥ç¥ó"
+msgstr "ã‚¢ãƒ‰ãƒãƒ³ã‚¹ãƒˆãƒ»ã‚ªãƒ—ã‚·ãƒ§ãƒ³"
 
 #: ../src/winspector.c:1261
 msgid "Icon and Initial Workspace"
-msgstr "¥¢¥¤¥³¥ó¤È¥ï¡¼¥¯¥¹¥Ú¡¼¥¹"
+msgstr "ã‚¢ã‚¤ã‚³ãƒ³ã¨ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹"
 
 #: ../src/winspector.c:1262
 msgid "Application Specific"
-msgstr "¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¸ÇÍ­¤ÎÀßÄê"
+msgstr "ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³å›ºæœ‰ã®è¨­å®š"
 
 #: ../src/winspector.c:1276
 msgid "Defaults for all windows"
-msgstr "Á´¥¦¥£¥ó¥É¥¦¤ÎÉ¸½à"
+msgstr "å…¨ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®æ¨™æº–"
 
 #: ../src/winspector.c:1330
 msgid "Select window"
-msgstr "¥¦¥£¥ó¥É¥¦¤ÎÁªÂò"
+msgstr "ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®é¸æŠ"
 
 #: ../src/winspector.c:1344
 msgid "Attributes"
-msgstr "Â°À­"
+msgstr "å±æ€§"
 
 #: ../src/winspector.c:1355
 msgid "Disable titlebar"
-msgstr "¥¿¥¤¥È¥ë¥Ğ¡¼¤òÉ½¼¨¤·¤Ê¤¤"
+msgstr "ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã‚’è¡¨ç¤ºã—ãªã„"
 
 #: ../src/winspector.c:1357
 msgid ""
@@ -1608,88 +1608,88 @@ msgid ""
 "equivalent shortcut, if you changed the default\n"
 "settings)."
 msgstr ""
-"¤³¤Î¥¦¥£¥ó¥É¥¦¤Î¥¿¥¤¥È¥ë¥Ğ¡¼¤òÉ½¼¨¤·¤Ê¤¯¤·¤Ş¤¹.\n"
-"¥¿¥¤¥È¥ë¥Ğ¡¼¤Î¤Ê¤¤¥¦¥£¥ó¥É¥¦¤Î¥á¥Ë¥å¡¼¤òÉ½¼¨¤¹¤ë¤Ë¤Ï, \n"
-"¥³¥ó¥È¥í¡¼¥ë¥­¡¼ ¤È ¥¨¥¹¥±¡¼¥×¥­¡¼¤òÆ±»ş¤Ë²¡¤·¤Ş¤¹.\n"
-"(¤Ş¤¿¤Ï, ¤½¤ì¤ËÁêÅö¤¹¤ë¤¢¤Ê¤¿¤¬ÀßÄê¤·¤¿¥·¥ç¡¼¥È¥«¥Ã¥È¥­¡¼)"
+"ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã‚’è¡¨ç¤ºã—ãªãã—ã¾ã™.\n"
+"ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã®ãªã„ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’è¡¨ç¤ºã™ã‚‹ã«ã¯, \n"
+"ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚­ãƒ¼ ã¨ ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã‚­ãƒ¼ã‚’åŒæ™‚ã«æŠ¼ã—ã¾ã™.\n"
+"(ã¾ãŸã¯, ãã‚Œã«ç›¸å½“ã™ã‚‹ã‚ãªãŸãŒè¨­å®šã—ãŸã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚­ãƒ¼)"
 
 #: ../src/winspector.c:1364
 msgid "Disable resizebar"
-msgstr "¥ê¥µ¥¤¥º¥Ğ¡¼¤òÉ½¼¨¤·¤Ê¤¤"
+msgstr "ãƒªã‚µã‚¤ã‚ºãƒãƒ¼ã‚’è¡¨ç¤ºã—ãªã„"
 
 #: ../src/winspector.c:1366
 msgid "Remove the resizebar of this window."
-msgstr "¤³¤Î¥¦¥£¥ó¥É¥¦¤Î¥ê¥µ¥¤¥º¥Ğ¡¼¤òÉ½¼¨¤·¤Ê¤¯¤·¤Ş¤¹"
+msgstr "ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ãƒªã‚µã‚¤ã‚ºãƒãƒ¼ã‚’è¡¨ç¤ºã—ãªãã—ã¾ã™"
 
 #: ../src/winspector.c:1369
 msgid "Disable close button"
-msgstr "¥¯¥í¡¼¥º¥Ü¥¿¥ó¤òÉ½¼¨¤·¤Ê¤¤"
+msgstr "ã‚¯ãƒ­ãƒ¼ã‚ºãƒœã‚¿ãƒ³ã‚’è¡¨ç¤ºã—ãªã„"
 
 #: ../src/winspector.c:1371
 msgid "Remove the `close window' button of this window."
-msgstr "¤³¤Î¥¦¥£¥ó¥É¥¦¤Î¥¯¥í¡¼¥º¥Ü¥¿¥ó¤òÉ½¼¨¤·¤Ê¤¯¤·¤Ş¤¹"
+msgstr "ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚¯ãƒ­ãƒ¼ã‚ºãƒœã‚¿ãƒ³ã‚’è¡¨ç¤ºã—ãªãã—ã¾ã™"
 
 #: ../src/winspector.c:1374
 msgid "Disable miniaturize button"
-msgstr "ºÇ¾®²½¥Ü¥¿¥ó¤òÉ½¼¨¤·¤Ê¤¤"
+msgstr "æœ€å°åŒ–ãƒœã‚¿ãƒ³ã‚’è¡¨ç¤ºã—ãªã„"
 
 #: ../src/winspector.c:1376
 msgid "Remove the `miniaturize window' button of the window."
-msgstr "¥¦¥£¥ó¥É¥¦¤ÎºÇ¾®²½¥Ü¥¿¥ó¤òÉ½¼¨¤·¤Ê¤¯¤·¤Ş¤¹"
+msgstr "ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®æœ€å°åŒ–ãƒœã‚¿ãƒ³ã‚’è¡¨ç¤ºã—ãªãã—ã¾ã™"
 
 #: ../src/winspector.c:1379
 msgid "Disable border"
-msgstr "¥Ü¡¼¥À¡¼¤òÉ½¼¨¤·¤Ê¤¤"
+msgstr "ãƒœãƒ¼ãƒ€ãƒ¼ã‚’è¡¨ç¤ºã—ãªã„"
 
 #: ../src/winspector.c:1381
 msgid "Remove the 1 pixel black border around the window."
-msgstr "¥¦¥£¥ó¥É¥¦¼ş°Ï¤Î 1¥Ô¥¯¥»¥ë¤Î¶­³¦¤òÉ½¼¨¤·¤Ê¤¯¤·¤Ş¤¹"
+msgstr "ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦å‘¨å›²ã® 1ãƒ”ã‚¯ã‚»ãƒ«ã®å¢ƒç•Œã‚’è¡¨ç¤ºã—ãªãã—ã¾ã™"
 
 #: ../src/winspector.c:1384
 msgid "Keep on top (floating)"
-msgstr "¾ï¤Ë°ìÈÖ¾å¤ËÉ½¼¨"
+msgstr "å¸¸ã«ä¸€ç•ªä¸Šã«è¡¨ç¤º"
 
 #: ../src/winspector.c:1386
 msgid ""
 "Keep the window over other windows, not allowing\n"
 "them to cover it."
-msgstr "¾ï¤Ë°ìÈÖ¾å¤Ë(Éâ¤¤¤Æ)É½¼¨¤µ¤ì¤Ş¤¹."
+msgstr "å¸¸ã«ä¸€ç•ªä¸Šã«(æµ®ã„ã¦)è¡¨ç¤ºã•ã‚Œã¾ã™."
 
 #: ../src/winspector.c:1390
 msgid "Keep at bottom (sunken)"
-msgstr "¾ï¤Ë°ìÈÖ²¼¤ËÉ½¼¨"
+msgstr "å¸¸ã«ä¸€ç•ªä¸‹ã«è¡¨ç¤º"
 
 #: ../src/winspector.c:1392
 msgid "Keep the window under all other windows."
-msgstr "¾ï¤Ë°ìÈÖ²¼¤Ë(ÄÀ¤ó¤Ç)É½¼¨¤µ¤ì¤Ş¤¹."
+msgstr "å¸¸ã«ä¸€ç•ªä¸‹ã«(æ²ˆã‚“ã§)è¡¨ç¤ºã•ã‚Œã¾ã™."
 
 #: ../src/winspector.c:1397
 msgid "Make window present in all workspaces."
-msgstr "Á´¤Æ¤Î¥ï¡¼¥¯¥¹¥Ú¡¼¥¹¤ÇÉ½¼¨¤·¤Ş¤¹."
+msgstr "å…¨ã¦ã®ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹ã§è¡¨ç¤ºã—ã¾ã™."
 
 #: ../src/winspector.c:1400
 msgid "Start miniaturized"
-msgstr "ºÇ¾®²½¾õÂÖ¤Çµ¯Æ°¤¹¤ë"
+msgstr "æœ€å°åŒ–çŠ¶æ…‹ã§èµ·å‹•ã™ã‚‹"
 
 #: ../src/winspector.c:1402
 msgid ""
 "Make the window be automatically miniaturized when it's\n"
 "first shown."
-msgstr "ºÇ½é¤Ëµ¯Æ°¤µ¤ì¤¿»ş¤Ë¼«Æ°Åª¤ËºÇ¾®²½¤¹¤ë¤è¤¦¤Ë¤·¤Ş¤¹."
+msgstr "æœ€åˆã«èµ·å‹•ã•ã‚ŒãŸæ™‚ã«è‡ªå‹•çš„ã«æœ€å°åŒ–ã™ã‚‹ã‚ˆã†ã«ã—ã¾ã™."
 
 #: ../src/winspector.c:1406
 msgid "Start maximized"
-msgstr "ºÇÂç²½¾õÂÖ¤Çµ¯Æ°¤¹¤ë"
+msgstr "æœ€å¤§åŒ–çŠ¶æ…‹ã§èµ·å‹•ã™ã‚‹"
 
 #: ../src/winspector.c:1408
 msgid ""
 "Make the window be automatically maximized when it's\n"
 "first shown."
-msgstr "ºÇ½é¤Ëµ¯Æ°¤µ¤ì¤¿»ş¤Ë¼«Æ°Åª¤ËºÇÂç²½¤¹¤ë¤è¤¦¤Ë¤·¤Ş¤¹."
+msgstr "æœ€åˆã«èµ·å‹•ã•ã‚ŒãŸæ™‚ã«è‡ªå‹•çš„ã«æœ€å¤§åŒ–ã™ã‚‹ã‚ˆã†ã«ã—ã¾ã™."
 
 #: ../src/winspector.c:1412
 msgid "Full screen maximization"
-msgstr "Á´²èÌÌºÇÂç²½"
+msgstr "å…¨ç”»é¢æœ€å¤§åŒ–"
 
 #: ../src/winspector.c:1414
 msgid ""
@@ -1697,16 +1697,16 @@ msgid ""
 "maximized. The titlebar and resizebar will be moved\n"
 "to outside the screen."
 msgstr ""
-"ºÇÂç²½¤·¤¿»ş¤ËÁ´²èÌÌ¤ò»ÈÍÑ¤¹¤ë¤è¤¦¤Ë¤·¤Ş¤¹. \n"
-"¥¿¥¤¥È¥ë¥Ğ¡¼¤È¥ê¥µ¥¤¥º¥Ğ¡¼¤Ï²èÌÌ¤Î³°¤Ë¤Ï¤ß½Ğ¤·¤Ş¤¹."
+"æœ€å¤§åŒ–ã—ãŸæ™‚ã«å…¨ç”»é¢ã‚’ä½¿ç”¨ã™ã‚‹ã‚ˆã†ã«ã—ã¾ã™. \n"
+"ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã¨ãƒªã‚µã‚¤ã‚ºãƒãƒ¼ã¯ç”»é¢ã®å¤–ã«ã¯ã¿å‡ºã—ã¾ã™."
 
 #: ../src/winspector.c:1431
 msgid "Advanced"
-msgstr "¥¢¥É¥Ğ¥ó¥¹¥È"
+msgstr "ã‚¢ãƒ‰ãƒãƒ³ã‚¹ãƒˆ"
 
 #: ../src/winspector.c:1448
 msgid "Do not bind keyboard shortcuts"
-msgstr "¥­¡¼¥Ü¡¼¥É¤ÈÏ¢Æ°¤·¤Ê¤¤"
+msgstr "ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã¨é€£å‹•ã—ãªã„"
 
 #: ../src/winspector.c:1450
 msgid ""
@@ -1715,68 +1715,68 @@ msgid ""
 "window to receive all key combinations regardless\n"
 "of your shortcut configuration."
 msgstr ""
-"¥¦¥£¥ó¥É¥¦¤¬¥Õ¥©¡¼¥«¥¹¤µ¤ì¤Æ¤¤¤ë»ş¤Ë Window Maker ¤Î\n"
-"¥·¥ç¡¼¥È¥«¥Ã¥È¥­¡¼¤¬±Æ¶Á¤·¤Ê¤¤¤è¤¦¤Ë¤·¤Ş¤¹. \n"
-"¤¢¤Ê¤¿¤ÎÀßÄê¤·¤¿¥·¥ç¡¼¥È¥«¥Ã¥È¤â±Æ¶Á¤·¤Ê¤¤¤Î¤Ç, \n"
-"Á´¤Æ¤Î¥­¡¼Áàºî¤ò¥¦¥£¥ó¥É¥¦¤ËÅÁ¤¨¤ë¤³¤È¤¬¤Ç¤­¤Ş¤¹."
+"ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒãƒ•ã‚©ãƒ¼ã‚«ã‚¹ã•ã‚Œã¦ã„ã‚‹æ™‚ã« Window Maker ã®\n"
+"ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚­ãƒ¼ãŒå½±éŸ¿ã—ãªã„ã‚ˆã†ã«ã—ã¾ã™. \n"
+"ã‚ãªãŸã®è¨­å®šã—ãŸã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚‚å½±éŸ¿ã—ãªã„ã®ã§, \n"
+"å…¨ã¦ã®ã‚­ãƒ¼æ“ä½œã‚’ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«ä¼ãˆã‚‹ã“ã¨ãŒã§ãã¾ã™."
 
 #: ../src/winspector.c:1456
 msgid "Do not bind mouse clicks"
-msgstr "¥Ş¥¦¥¹¥¯¥ê¥Ã¥¯¤ÈÏ¢Æ°¤·¤Ê¤¤"
+msgstr "ãƒã‚¦ã‚¹ã‚¯ãƒªãƒƒã‚¯ã¨é€£å‹•ã—ãªã„"
 
 #: ../src/winspector.c:1458
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
 "in the window (when alt is the modifier you haveconfigured)."
 msgstr ""
-"¥¦¥£¥ó¥É¥¦Æâ¤Ç¤Î¥Ş¥¦¥¹¤ÎÆ°ºî(Alt+¥É¥é¥Ã¥°¤Ê¤É)\n"
-"¤¬±Æ¶Á¤·¤Ê¤¤¤è¤¦¤Ë¤·¤Ş¤¹."
+"ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦å†…ã§ã®ãƒã‚¦ã‚¹ã®å‹•ä½œ(Alt+ãƒ‰ãƒ©ãƒƒã‚°ãªã©)\n"
+"ãŒå½±éŸ¿ã—ãªã„ã‚ˆã†ã«ã—ã¾ã™."
 
 #: ../src/winspector.c:1463
 msgid "Do not show in the window list"
-msgstr "¥¦¥£¥ó¥É¥¦°ìÍ÷¤ËÉ½¼¨¤·¤Ê¤¤"
+msgstr "ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä¸€è¦§ã«è¡¨ç¤ºã—ãªã„"
 
 #: ../src/winspector.c:1465
 msgid "Do not list the window in the window list menu."
-msgstr "¥¦¥£¥ó¥É¥¦°ìÍ÷¤Ë¥¦¥£¥ó¥É¥¦¤ò¸õÊäÉ½¼¨¤·¤Ş¤»¤ó"
+msgstr "ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä¸€è¦§ã«ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’å€™è£œè¡¨ç¤ºã—ã¾ã›ã‚“"
 
 #: ../src/winspector.c:1468
 msgid "Do not let it take focus"
-msgstr "¥Õ¥©¡¼¥«¥¹¤·¤Ê¤¤"
+msgstr "ãƒ•ã‚©ãƒ¼ã‚«ã‚¹ã—ãªã„"
 
 #: ../src/winspector.c:1470
 msgid ""
 "Do not let the window take keyboard focus when you\n"
 "click on it."
 msgstr ""
-"¥¦¥£¥ó¥É¥¦¤ò¥¯¥ê¥Ã¥¯¤·¤¿»ş¤Ë¤â¥­¡¼¥Ü¡¼¥É¥Õ¥©¡¼¥«¥¹¤ò\n"
-"ÅÏ¤µ¤Ê¤¤¤è¤¦¤Ë¤·¤Ş¤¹"
+"ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸæ™‚ã«ã‚‚ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ãƒ•ã‚©ãƒ¼ã‚«ã‚¹ã‚’\n"
+"æ¸¡ã•ãªã„ã‚ˆã†ã«ã—ã¾ã™"
 
 #: ../src/winspector.c:1474
 msgid "Keep inside screen"
-msgstr "¥¹¥¯¥ê¡¼¥ó¤ÎÆâÂ¦¤ËÊİ»ı¤¹¤ë"
+msgstr "ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã®å†…å´ã«ä¿æŒã™ã‚‹"
 
 #: ../src/winspector.c:1476
 msgid ""
 "Do not allow the window to move itself completely\n"
 "outside the screen. For bug compatibility.\n"
 msgstr ""
-"¥¦¥£¥ó¥É¥¦¤¬¼«¿È¤ò´°Á´¤Ë²èÌÌ¤Î³°¤Ë°ÜÆ°¤µ¤»¤Æ¤·¤Ş¤ï¤Ê¤¤¤è¤¦¤Ë¤·¤Ş¤¹. \n"
-"(¥Ğ¥°¸ß´¹À­¤Î¤¿¤á)\n"
+"ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒè‡ªèº«ã‚’å®Œå…¨ã«ç”»é¢ã®å¤–ã«ç§»å‹•ã•ã›ã¦ã—ã¾ã‚ãªã„ã‚ˆã†ã«ã—ã¾ã™. \n"
+"(ãƒã‚°äº’æ›æ€§ã®ãŸã‚)\n"
 
 #: ../src/winspector.c:1480
 msgid "Ignore 'Hide Others'"
-msgstr "'Â¾¤ò±£¤¹'¤òÌµ»ë¤¹¤ë"
+msgstr "'ä»–ã‚’éš ã™'ã‚’ç„¡è¦–ã™ã‚‹"
 
 #: ../src/winspector.c:1482
 msgid ""
 "Do not hide the window when issuing the\n"
 "`HideOthers' command."
-msgstr "'Â¾¤ò±£¤¹'¥³¥Ş¥ó¥É¤¬¼Â¹Ô¤µ¤ì¤Æ¤â±£¤µ¤Ê¤¤¤è¤¦¤Ë¤·¤Ş¤¹"
+msgstr "'ä»–ã‚’éš ã™'ã‚³ãƒãƒ³ãƒ‰ãŒå®Ÿè¡Œã•ã‚Œã¦ã‚‚éš ã•ãªã„ã‚ˆã†ã«ã—ã¾ã™"
 
 #: ../src/winspector.c:1486
 msgid "Ignore 'Save Session'"
-msgstr "'¥»¥Ã¥·¥ç¥ó¤ÎÊİÂ¸'¤òÌµ»ë¤¹¤ë"
+msgstr "'ã‚»ãƒƒã‚·ãƒ§ãƒ³ã®ä¿å­˜'ã‚’ç„¡è¦–ã™ã‚‹"
 
 #: ../src/winspector.c:1488
 msgid ""
@@ -1785,13 +1785,13 @@ msgid ""
 "together with other applications when Window Maker\n"
 "starts."
 msgstr ""
-"¥»¥Ã¥·¥ç¥ó¤Î¾õÂÖ¤È¤³¤Î¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¤Î´ØÏ¢¤òÊİÂ¸\n"
-"¤·¤Ê¤¤¤è¤¦¤Ë¤·¤Ş¤¹. ¼¡¤Ë Window Maker ¤¬µ¯Æ°¤·¤¿»ş¤Ë\n"
-"¤³¤Î¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¤¬¼«Æ°Åª¤Ëµ¯Æ°¤·¤Ê¤¤¤è¤¦¤Ë¤Ê¤ê¤Ş¤¹."
+"ã‚»ãƒƒã‚·ãƒ§ãƒ³ã®çŠ¶æ…‹ã¨ã“ã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®é–¢é€£ã‚’ä¿å­˜\n"
+"ã—ãªã„ã‚ˆã†ã«ã—ã¾ã™. æ¬¡ã« Window Maker ãŒèµ·å‹•ã—ãŸæ™‚ã«\n"
+"ã“ã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ãŒè‡ªå‹•çš„ã«èµ·å‹•ã—ãªã„ã‚ˆã†ã«ãªã‚Šã¾ã™."
 
 #: ../src/winspector.c:1494
 msgid "Emulate application icon"
-msgstr "¥¢¥×¥ê¥¢¥¤¥³¥ó¤Î¥¨¥ß¥å¥ì¡¼¥È"
+msgstr "ã‚¢ãƒ—ãƒªã‚¢ã‚¤ã‚³ãƒ³ã®ã‚¨ãƒŸãƒ¥ãƒ¬ãƒ¼ãƒˆ"
 
 #: ../src/winspector.c:1496
 msgid ""
@@ -1799,56 +1799,56 @@ msgid ""
 "enough information to Window Maker for a dockable\n"
 "application icon to be created."
 msgstr ""
-"¤³¤Î¥¦¥£¥ó¥É¥¦¤¬¥É¥Ã¥¯²ÄÇ½¤Ê¥¢¥×¥ê¥¢¥¤¥³¥ó¤ò¼«Á°¤ÇÈ÷¤¨¤Æ¤¤¤ë\n"
-"¤«¤Î¤è¤¦¤Ë¿¶¤ëÉñ¤ï¤»¤Ş¤¹."
+"ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒãƒ‰ãƒƒã‚¯å¯èƒ½ãªã‚¢ãƒ—ãƒªã‚¢ã‚¤ã‚³ãƒ³ã‚’è‡ªå‰ã§å‚™ãˆã¦ã„ã‚‹\n"
+"ã‹ã®ã‚ˆã†ã«æŒ¯ã‚‹èˆã‚ã›ã¾ã™."
 
 #: ../src/winspector.c:1502
 msgid "Disable language button"
-msgstr "¸À¸ì¤ÎÀÚ¤êÂØ¤¨¤ÎÌµ¸ú²½"
+msgstr "è¨€èªã®åˆ‡ã‚Šæ›¿ãˆã®ç„¡åŠ¹åŒ–"
 
 #: ../src/winspector.c:1504
 msgid "Remove the `toggle language' button of the window."
-msgstr "'¸À¸ì¤òÀÚ¤êÂØ¤¨¤ë'¥Ü¥¿¥ó¤òÉ½¼¨¤·¤Ê¤¯¤·¤Ş¤¹"
+msgstr "'è¨€èªã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹'ãƒœã‚¿ãƒ³ã‚’è¡¨ç¤ºã—ãªãã—ã¾ã™"
 
 #: ../src/winspector.c:1521
 msgid "Miniwindow Image"
-msgstr "¥ß¥Ë¥¦¥£¥ó¥É¥¦²èÁü"
+msgstr "ãƒŸãƒ‹ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ç”»åƒ"
 
 #: ../src/winspector.c:1548
 msgid "Icon filename:"
-msgstr "¥¢¥¤¥³¥ó¥Õ¥¡¥¤¥ëÌ¾:"
+msgstr "ã‚¢ã‚¤ã‚³ãƒ³ãƒ•ã‚¡ã‚¤ãƒ«å:"
 
 #: ../src/winspector.c:1561
 msgid "Ignore client supplied icon"
-msgstr "¥¢¥×¥ê»ØÄê¤Î¥¢¥¤¥³¥ó¤òÌµ»ë"
+msgstr "ã‚¢ãƒ—ãƒªæŒ‡å®šã®ã‚¢ã‚¤ã‚³ãƒ³ã‚’ç„¡è¦–"
 
 #: ../src/winspector.c:1568
 msgid "Initial Workspace"
-msgstr "µ¯Æ°»ş¤Î¥ï¡¼¥¯¥¹¥Ú¡¼¥¹"
+msgstr "èµ·å‹•æ™‚ã®ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹"
 
 #: ../src/winspector.c:1570
 msgid "The workspace to place the window when it'sfirst shown."
-msgstr "¤³¤Î¥¦¥£¥ó¥É¥¦¤¬µ¯Æ°»ş¤Ë½Ğ¸½¤¹¤ë¥ï¡¼¥¯¥¹¥Ú¡¼¥¹."
+msgstr "ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒèµ·å‹•æ™‚ã«å‡ºç¾ã™ã‚‹ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹."
 
 #: ../src/winspector.c:1576
 msgid "Nowhere in particular"
-msgstr "ÆÃ¤Ë»ØÄê¤·¤Ê¤¤"
+msgstr "ç‰¹ã«æŒ‡å®šã—ãªã„"
 
 #: ../src/winspector.c:1594
 msgid "Application Attributes"
-msgstr "¥¢¥×¥ê¥±¡¼¥·¥ç¥óÂ°À­"
+msgstr "ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³å±æ€§"
 
 #: ../src/winspector.c:1605
 msgid "Start hidden"
-msgstr "µ¯Æ°»ş¤Ë±£¤¹"
+msgstr "èµ·å‹•æ™‚ã«éš ã™"
 
 #: ../src/winspector.c:1607
 msgid "Automatically hide application when it's started."
-msgstr "¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¤Îµ¯Æ°»ş¤Ë¼«Æ°Åª¤Ë±£¤ì¤ë¤è¤¦¤Ë¤¹¤ë"
+msgstr "ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®èµ·å‹•æ™‚ã«è‡ªå‹•çš„ã«éš ã‚Œã‚‹ã‚ˆã†ã«ã™ã‚‹"
 
 #: ../src/winspector.c:1610
 msgid "No application icon"
-msgstr "¥¢¥×¥ê¥¢¥¤¥³¥ó¤òÉ½¼¨¤·¤Ê¤¤"
+msgstr "ã‚¢ãƒ—ãƒªã‚¢ã‚¤ã‚³ãƒ³ã‚’è¡¨ç¤ºã—ãªã„"
 
 #: ../src/winspector.c:1612
 msgid ""
@@ -1857,42 +1857,42 @@ msgid ""
 "and any icons that are already docked will stop\n"
 "working correctly."
 msgstr ""
-"¤³¤Î¥¢¥×¥ê¥±¡¼¥·¥ç¥ó¤Î¥¢¥×¥ê¥¢¥¤¥³¥ó¤òÌµ¸ú¤Ë¤·¤Ş¤¹.\n"
-"Ãí°Õ: ¤¹¤ë¤È, ¥É¥Ã¥¯¤ä¥¯¥ê¥Ã¥×¤¬¤Ç¤­¤Ê¤¯¤Ê¤ê¤Ş¤¹. \n"
-"¤Ş¤¿, ¤¹¤Ç¤ËÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¥É¥Ã¥¯¤âÀµ¤·¤¯Æ°¤«¤Ê¤¯¤Ê¤ê¤Ş¤¹."
+"ã“ã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®ã‚¢ãƒ—ãƒªã‚¢ã‚¤ã‚³ãƒ³ã‚’ç„¡åŠ¹ã«ã—ã¾ã™.\n"
+"æ³¨æ„: ã™ã‚‹ã¨, ãƒ‰ãƒƒã‚¯ã‚„ã‚¯ãƒªãƒƒãƒ—ãŒã§ããªããªã‚Šã¾ã™. \n"
+"ã¾ãŸ, ã™ã§ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒ‰ãƒƒã‚¯ã‚‚æ­£ã—ãå‹•ã‹ãªããªã‚Šã¾ã™."
 
 #: ../src/winspector.c:1618
 msgid "Collapse application icons"
-msgstr "¥¢¥×¥ê¥¢¥¤¥³¥ó¤òÀŞ¤ê¾ö¤à"
+msgstr "ã‚¢ãƒ—ãƒªã‚¢ã‚¤ã‚³ãƒ³ã‚’æŠ˜ã‚Šç•³ã‚€"
 
 #: ../src/winspector.c:1620
 msgid ""
 "Collapse application icons from other instances\n"
 "of this application into one.\n"
 msgstr ""
-"Æ±¤¸¥¢¥×¥ê¤¬Ê£¿ôµ¯Æ°¤·¤Æ¤¤¤ë¤È¤­,\n"
-"¥¢¥×¥ê¥¢¥¤¥³¥ó¤ò£±¤Ä¤Ë¤Ş¤È¤á¤Ş¤¹.\n"
+"åŒã˜ã‚¢ãƒ—ãƒªãŒè¤‡æ•°èµ·å‹•ã—ã¦ã„ã‚‹ã¨ã,\n"
+"ã‚¢ãƒ—ãƒªã‚¢ã‚¤ã‚³ãƒ³ã‚’ï¼‘ã¤ã«ã¾ã¨ã‚ã¾ã™.\n"
 
 #: ../src/workspace.c:110 ../src/workspace.c:111 ../src/workspace.c:897
 #, c-format
 msgid "Workspace %i"
-msgstr "¥ï¡¼¥¯¥¹¥Ú¡¼¥¹ %i"
+msgstr "ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹ %i"
 
 #: ../src/workspace.c:954
 msgid "Workspaces"
-msgstr "¥ï¡¼¥¯¥¹¥Ú¡¼¥¹¤ÎÀßÄê"
+msgstr "ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹ã®è¨­å®š"
 
 #: ../src/workspace.c:956
 msgid "could not create Workspace menu"
-msgstr "¥ï¡¼¥¯¥¹¥Ú¡¼¥¹¥á¥Ë¥å¡¼¤òºîÀ®¤Ç¤­¤Ş¤»¤ó"
+msgstr "ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’ä½œæˆã§ãã¾ã›ã‚“"
 
 #: ../src/workspace.c:963
 msgid "New"
-msgstr "¿·¤·¤¤¥ï¡¼¥¯¥¹¥Ú¡¼¥¹¤òºîÀ®"
+msgstr "æ–°ã—ã„ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹ã‚’ä½œæˆ"
 
 #: ../src/workspace.c:964
 msgid "Destroy Last"
-msgstr "ºÇ¸å¤Î¥ï¡¼¥¯¥¹¥Ú¡¼¥¹¤òºï½ü"
+msgstr "æœ€å¾Œã®ãƒ¯ãƒ¼ã‚¯ã‚¹ãƒšãƒ¼ã‚¹ã‚’å‰Šé™¤"
 
 #~ msgid "Sound"
-#~ msgstr "¥µ¥¦¥ó¥É"
+#~ msgstr "ã‚µã‚¦ãƒ³ãƒ‰"

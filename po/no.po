@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: Marcus Ramberg <draven@mo.himolde.no>\n"
 "Language-Team: Norwegian \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
 #: ../src/generic/error.c:46
@@ -36,12 +36,12 @@ msgstr "kan ikke konvertere \"%s\" til boolean"
 #: ../src/wdefaults.c:383 ../src/wdefaults.c:416
 #, c-format
 msgid "Wrong option format for key \"%s\". Should be %s."
-msgstr "Feil konfigurasjonsformat for nøkkel \"%s\". Skulle ha vært %s."
+msgstr "Feil konfigurasjonsformat for nÃ¸kkel \"%s\". Skulle ha vÃ¦rt %s."
 
 #: ../src/defaults.c:999
 #, c-format
 msgid "Invalid focus mode \"%s\". Should be Manual, Auto or SemiAuto."
-msgstr "\"%s\". er en ugyldig fokus modus. Må være Manual, Auto eller SemiAuto."
+msgstr "\"%s\". er en ugyldig fokus modus. MÃ¥ vÃ¦re Manual, Auto eller SemiAuto."
 
 #: ../src/defaults.c:1034
 #, c-format
@@ -70,17 +70,17 @@ msgstr "Feil antall argumenter i definisjon av fargeovergangen"
 
 #: ../src/defaults.c:1188
 msgid "too few arguments in multicolor gradient specification"
-msgstr "For få argumenter i definisjon flerfarges fargeovergangen"
+msgstr "For fÃ¥ argumenter i definisjon flerfarges fargeovergangen"
 
 #: ../src/defaults.c:1289 ../src/defaults.c:1378
 #, c-format
 msgid "Error in texture specification for key \"%s\""
-msgstr "Feil i tekstur definisjonen for nøkkel \"%s\""
+msgstr "Feil i tekstur definisjonen for nÃ¸kkel \"%s\""
 
 #: ../src/defaults.c:1408
 #, c-format
 msgid "Invalid justification type \"%s\". Should be Left, Center or Right"
-msgstr "\"%s\" Er en ugyldig justering. Må være Left, Center eller Høyre"
+msgstr "\"%s\" Er en ugyldig justering. MÃ¥ vÃ¦re Left, Center eller HÃ¸yre"
 
 #: ../src/defaults.c:1436
 msgid "could not load any usable font"
@@ -89,7 +89,7 @@ msgstr "Kunne ikke finne noen fonter"
 #: ../src/defaults.c:1515
 #, c-format
 msgid "invalid key modifier \"%s\""
-msgstr "\"%s\" er et ugyldig nøkkel argument"
+msgstr "\"%s\" er et ugyldig nÃ¸kkel argument"
 
 #: ../src/defaults.c:1527
 #, c-format
@@ -107,7 +107,7 @@ msgstr "Kunne ikke bruke tekstur for ikon bakgrunnen"
 
 #: ../src/defaults.c:1949
 msgid "could not render texture for workspace background"
-msgstr "kunne ikke bruke tekstur for bakgrunn i arbeidsområde"
+msgstr "kunne ikke bruke tekstur for bakgrunn i arbeidsomrÃ¥de"
 
 #: ../src/dialog.c:74 ../src/dialog.c:86 ../src/dialog.c:134
 msgid "OK"
@@ -185,7 +185,7 @@ msgstr "Kommando:"
 #: ../src/dock.c:1855 ../src/dock.c:1859
 #, c-format
 msgid "Could not execute command \"%s\""
-msgstr "Kunne ikke utføre \"%s\""
+msgstr "Kunne ikke utfÃ¸re \"%s\""
 
 #: ../src/dock.c:1862 ../src/rootmenu.c:122 ../src/winspector.c:384
 #: ../src/winspector.c:392
@@ -194,7 +194,7 @@ msgstr "Feil"
 
 #: ../src/event.c:467
 msgid "stack overflow: too many dead processes"
-msgstr "stacken er full: for mange døde prossesser"
+msgstr "stacken er full: for mange dÃ¸de prossesser"
 
 #: ../src/framewin.c:601 ../src/framewin.c:722
 #, c-format
@@ -220,7 +220,7 @@ msgstr "Kunne ikke laste standard ikonet \"%s\""
 
 #: ../src/main.c:163
 msgid "Restart failed!!!"
-msgstr "Kunne ikke starte på nytt!!!"
+msgstr "Kunne ikke starte pÃ¥ nytt!!!"
 
 #: ../src/main.c:178
 #, c-format
@@ -242,11 +242,11 @@ msgstr "-nocpp \t\tskru av prosessering av konfigurasjonsfiler"
 
 #: ../src/main.c:192
 msgid " -nodock\t\tdo not open the application Dock"
-msgstr "-nodock\t\tIkke åpne docken"
+msgstr "-nodock\t\tIkke Ã¥pne docken"
 
 #: ../src/main.c:193
 msgid " -nofiend\t\tdo not open the application Fiend"
-msgstr "-nofiend\t\tIkke åpne binders"
+msgstr "-nofiend\t\tIkke Ã¥pne binders"
 
 #.
 #. puts(_(" -locale locale		locale to use"));
@@ -254,7 +254,7 @@ msgstr "-nofiend\t\tIkke åpne binders"
 #.
 #: ../src/main.c:199
 msgid " -display host:dpy\tdisplay to use"
-msgstr "- display maskin:dpy\t display du ønker å bruke"
+msgstr "- display maskin:dpy\t display du Ã¸nker Ã¥ bruke"
 
 #: ../src/main.c:200
 msgid " -version\t\tprint version and exit"
@@ -270,17 +270,17 @@ msgid ""
 "Make sure you have installed WindowMaker correctly and run wmaker.inst"
 msgstr ""
 "kunne ikke finne brukerens GNUstep katalog.\n"
-"Kontroller at du har installert WindowMaker rett og kjør wmaker.inst"
+"Kontroller at du har installert WindowMaker rett og kjÃ¸r wmaker.inst"
 
 #: ../src/main.c:245
 #, c-format
 msgid "%s:could not execute initialization script"
-msgstr "%s:Kunne ikke utføre oppstarts-skript"
+msgstr "%s:Kunne ikke utfÃ¸re oppstarts-skript"
 
 #: ../src/main.c:303 ../src/main.c:310 ../src/main.c:317
 #, c-format
 msgid "too few arguments for %s"
-msgstr "for få argumenter for %s"
+msgstr "for fÃ¥ argumenter for %s"
 
 #: ../src/main.c:321
 #, c-format
@@ -289,7 +289,7 @@ msgstr "ugyldig verdi for visualid: \"%s\""
 
 #: ../src/main.c:366
 msgid "X server does not support locale"
-msgstr "X serveren støtter ikke språkdefinisjon"
+msgstr "X serveren stÃ¸tter ikke sprÃ¥kdefinisjon"
 
 #: ../src/main.c:369
 msgid "cannot set locale modifiers"
@@ -298,7 +298,7 @@ msgstr "kan ikke sette lokale verdier"
 #: ../src/main.c:383
 #, c-format
 msgid "could not open display \"%s\""
-msgstr "Kunne ikke åpne display \"%s\""
+msgstr "Kunne ikke Ã¥pne display \"%s\""
 
 #: ../src/menu.c:274
 msgid "wrealloc() failed while trying to add menu item"
@@ -382,7 +382,7 @@ msgstr "Kunne ikke laste bitmap fil \"%s\". Bruker ikke mask"
 
 #: ../src/resources.c:71
 msgid "The following character sets are missing:"
-msgstr "De følgende tegn settende mangler:"
+msgstr "De fÃ¸lgende tegn settende mangler:"
 
 #: ../src/resources.c:75
 #, c-format
@@ -396,12 +396,12 @@ msgstr "av noen tegn fra disse tegnsettene."
 #: ../src/resources.c:80
 #, c-format
 msgid "could not create font set %s. Trying fixed"
-msgstr "Kunne ikke lage fontsett %s. Prøver fixed"
+msgstr "Kunne ikke lage fontsett %s. PrÃ¸ver fixed"
 
 #: ../src/resources.c:97
 #, c-format
 msgid "could not load font %s. Trying fixed"
-msgstr "Kunne ikke laste font %s. Prøver fixed"
+msgstr "Kunne ikke laste font %s. PrÃ¸ver fixed"
 
 #: ../src/resources.c:139
 #, c-format
@@ -411,7 +411,7 @@ msgstr "Kunne ikke allokere fargen \"%s\""
 #: ../src/rootmenu.c:120
 #, c-format
 msgid "Program \"%s\" not found or cannot be executed."
-msgstr "Programmet \"%s\" kan ikke finnes/utføres."
+msgstr "Programmet \"%s\" kan ikke finnes/utfÃ¸res."
 
 #: ../src/rootmenu.c:153
 msgid "Exit window manager?"
@@ -461,7 +461,7 @@ msgstr "%s:Ugyldig kommando \"%s\" i meny konfig"
 #: ../src/rootmenu.c:591
 #, c-format
 msgid "%s:maximal line size exceeded in menu config: %s"
-msgstr "%s: Går ut over maksimal linestørrelse i meny konfig: %s"
+msgstr "%s: GÃ¥r ut over maksimal linestÃ¸rrelse i meny konfig: %s"
 
 #: ../src/rootmenu.c:611
 #, c-format
@@ -480,12 +480,12 @@ msgstr "kunne ikke lage argumenter for meny fil behandleren"
 #: ../src/rootmenu.c:674 ../src/rootmenu.c:754
 #, c-format
 msgid "%s:could open/preprocess menu file"
-msgstr "%s:kunne ikke åpne/behandle meny filen"
+msgstr "%s:kunne ikke Ã¥pne/behandle meny filen"
 
 #: ../src/rootmenu.c:685 ../src/rootmenu.c:767
 #, c-format
 msgid "%s:could not open menu file"
-msgstr "%s:kunne ikke åpne meny filen"
+msgstr "%s:kunne ikke Ã¥pne meny filen"
 
 #: ../src/rootmenu.c:698
 #, c-format
@@ -515,7 +515,7 @@ msgstr "Gikk tom for minne mens katalog menyen %s ble konstruert"
 #: ../src/rootmenu.c:839
 #, c-format
 msgid "%s:could not stat file \"%s\" in menu directory"
-msgstr "%s: kunne ikke undersøke filen \"%s\" i meny katalogen"
+msgstr "%s: kunne ikke undersÃ¸ke filen \"%s\" i meny katalogen"
 
 #: ../src/rootmenu.c:871
 #, c-format
@@ -538,7 +538,7 @@ msgstr "%s:kunne ikke finne meny filen \"%s\""
 #: ../src/rootmenu.c:955
 #, c-format
 msgid "%s:could not stat menu \"%s\""
-msgstr "%s:kunne ikke undersøke meny \"%s\""
+msgstr "%s:kunne ikke undersÃ¸ke meny \"%s\""
 
 #: ../src/rootmenu.c:979 ../src/rootmenu.c:1026
 #, c-format
@@ -547,7 +547,7 @@ msgstr "%s:Formaterings feil i konfigurasjonen av hovedmenyen \"%s\""
 
 #: ../src/screen.c:89
 msgid "it seems that there already is a window manager running"
-msgstr "det ser ut til at en window manager allerede kjører"
+msgstr "det ser ut til at en window manager allerede kjÃ¸rer"
 
 #: ../src/screen.c:372
 msgid "could not load logo image for panels"
@@ -575,12 +575,12 @@ msgstr "intern X feil: %s\n"
 #: ../src/startup.c:157
 #, c-format
 msgid "got signal %i (%s) - restarting\n"
-msgstr "mottok %i (%s) signal - starter på nytt\n"
+msgstr "mottok %i (%s) signal - starter pÃ¥ nytt\n"
 
 #: ../src/startup.c:159
 #, c-format
 msgid "got signal %i - restarting\n"
-msgstr "mottok %i signal - starter på nytt\n"
+msgstr "mottok %i signal - starter pÃ¥ nytt\n"
 
 #: ../src/startup.c:167
 #, c-format
@@ -613,7 +613,7 @@ msgstr "kunne ikke bruke teksturen: %s"
 
 #: ../src/winmenu.c:169
 msgid "could not create workspace submenu for window menu"
-msgstr "Kunne ikke lage Arbeidsområde undermeny for vindusmenyen"
+msgstr "Kunne ikke lage ArbeidsomrÃ¥de undermeny for vindusmenyen"
 
 #: ../src/winmenu.c:186
 msgid "(Un)Maximize"
@@ -657,11 +657,11 @@ msgstr "Kunne ikke finne denne ikon filen"
 
 #: ../src/winspector.c:393
 msgid "Could not open specified icon file"
-msgstr "Kunne ikke åpne denne ikon filen"
+msgstr "Kunne ikke Ã¥pne denne ikon filen"
 
 #: ../src/winspector.c:974
 msgid "not enough memory to open window inspector panel"
-msgstr "Ikke nok ledig minne til å åpne window inspector panelet"
+msgstr "Ikke nok ledig minne til Ã¥ Ã¥pne window inspector panelet"
 
 #: ../src/winspector.c:1002
 msgid "Save"
@@ -669,7 +669,7 @@ msgstr "Lagre"
 
 #: ../src/winspector.c:1008
 msgid "Apply"
-msgstr "Utfør"
+msgstr "UtfÃ¸r"
 
 #: ../src/winspector.c:1015
 msgid "Revert"
@@ -692,7 +692,7 @@ msgid ""
 msgstr ""
 "Denne konfigurasjonen vill gjelde for\n"
 "alle vinduer som har WM_CLASS attributten satt til det navnet som er valgt"
-"over, når du lager."
+"over, nÃ¥r du lager."
 
 #. *** attributes ***
 #: ../src/winspector.c:1090
@@ -717,11 +717,11 @@ msgstr "Ikke minimerbar"
 
 #: ../src/winspector.c:1113
 msgid "Keep on top"
-msgstr "Alltid på topp"
+msgstr "Alltid pÃ¥ topp"
 
 #: ../src/winspector.c:1117
 msgid "Omnipresent"
-msgstr "Alle Arbeidsområder"
+msgstr "Alle ArbeidsomrÃ¥der"
 
 #: ../src/winspector.c:1121
 msgid "Don't let it take focus"
@@ -763,7 +763,7 @@ msgstr "Bilde for minivindu"
 
 #: ../src/winspector.c:1178
 msgid "Browse"
-msgstr "Søk"
+msgstr "SÃ¸k"
 
 #. WMBindEvent(panel->defaultIconBtn, WEV_CLICK, defaultIcon, panel);
 #: ../src/winspector.c:1185
@@ -780,24 +780,24 @@ msgstr "Ignorer innebygget ikon"
 
 #: ../src/winspector.c:1205
 msgid "Initial Workspace"
-msgstr "Opprinnelig Arbeidsområde"
+msgstr "Opprinnelig ArbeidsomrÃ¥de"
 
 #: ../src/winspector.c:1227
 msgid "Current workspace"
-msgstr "Nåværende Arbeidsområde"
+msgstr "NÃ¥vÃ¦rende ArbeidsomrÃ¥de"
 
 #: ../src/workspace.c:91 ../src/workspace.c:92 ../src/workspace.c:359
 #, c-format
 msgid "Workspace %i"
-msgstr "Arbeidsområde %i"
+msgstr "ArbeidsomrÃ¥de %i"
 
 #: ../src/workspace.c:385
 msgid "Workspaces"
-msgstr "Arbeidsområder"
+msgstr "ArbeidsomrÃ¥der"
 
 #: ../src/workspace.c:387
 msgid "could not create Workspace menu"
-msgstr "Kunne ikke opprette meny for Arbeidsområde"
+msgstr "Kunne ikke opprette meny for ArbeidsomrÃ¥de"
 
 #: ../src/workspace.c:394
 msgid "New"
