@@ -4,6 +4,7 @@ Changes since version 0.60.0:
 - fixed some problems with non gcc compilers.
 - fixed problem with showing instance.class in the inspector window.
 - fixed crash when displaying workspace name in some positions.
+- fixed compilation problem when WS_INDICATOR was defined.
 
 
 Changes since version 0.53.0:

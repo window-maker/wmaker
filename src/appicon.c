@@ -47,6 +47,8 @@
 #ifdef XDND
 #include "xdnd.h"
 #endif
+#include "WINGsP.h"
+
 
 /*
  * icon_file for the dock is got from the preferences file by

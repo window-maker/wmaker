@@ -95,7 +95,7 @@ This entry will work in the following way, depending on the context:
    while the ones that will fail for some reason to gain their new state,
    will remain selected.
 
-In both cases if there is not success in setting what user requested a panel
+In both cases if there is no success in setting what user requested a panel
 will inform user of the failure.
 (Note: trying to set an icon to not-omnipresent will never fail. Failures can
        be met only when trying to set omnipresent for an icon).
