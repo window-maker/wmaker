@@ -15,7 +15,7 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.62.0)
+AM_INIT_AUTOMAKE(WindowMaker, 0.62.1)
 
 AM_PROG_LIBTOOL
 
@@ -171,7 +171,7 @@ dnl Compiler/architecture specific optimizations
 dnl ============================================
     
 
-dnl GCC with MMX support
+dnl GCC/as with MMX support
 dnl --------------------
 
 if test "$ac_cv_prog_gcc" = yes; then
@@ -188,7 +188,7 @@ if test "$ac_cv_prog_gcc" = yes; then
 
 	AC_CACHE_CHECK(whether gcc supports MMX(tm) inline asm,
 		       ac_cv_c_inline_mmx,
-		       [AC_TRY_COMPILE(,[asm ("movq %mm0, %mm1");],
+		       [AC_TRY_LINK(,[asm ("movq %mm0, %mm1");],
 		       ac_cv_c_inline_mmx=yes,
 		       ac_cv_c_inline_mmx=no)])
 
@@ -533,12 +533,12 @@ if test "x$LIBPL" = "x"; then
    exit 1
 fi
 
-WM_CHECK_PROPLIST_VERSION(0.10.0, goodlPL=yes, goodlPL=no)
+WM_CHECK_PROPLIST_VERSION(0.10.1, goodlPL=yes, goodlPL=no)
 
 if test "$goodlPL" = no; then
    echo
    echo "ERROR!!! libPropList is an old version. Please consider upgrading"
-   echo "         to at least version 0.10.0. Older versions have bugs that"
+   echo "         to at least version 0.10.1. Older versions have bugs that"
    echo "         may cause Window Maker to crash randomly."
    echo "         If your libPropList is older than 0.9.2 it will also prevent"
    echo "         Window Maker from compiling because new functions were"
