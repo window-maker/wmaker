@@ -59,6 +59,15 @@ changes since wmaker 0.62.1:
   doesn't add "warning:" in the output message.
 - added WMBox widget
 - added W_SetViewCursor()
+- added WMGetConnectionUnsentData() (WMGetConnectionQueuedData() too as an
+  alias).
+- added WMSetConnectionCloseOnExec() to specify if the socket associated
+  with a connection survives an exec* call or not. When a new connection is
+  created using the WMCreate... or WMAcceptConnection() calls, it has the
+  close on exec flag set automatically to 'True' by the library. Unless
+  you want to let the socket of some connection to survive across an exec*
+  call, you need not to call this function.
+
 
 changes since wmaker 0.62.0:
 ............................

@@ -756,7 +756,9 @@ char* WMGetConnectionService(WMConnection *cPtr);
 
 char* WMGetConnectionProtocol(WMConnection *cPtr);
 
-void WMSetConnectionNonBlocking(WMConnection *cPtr, Bool flag);
+Bool WMSetConnectionNonBlocking(WMConnection *cPtr, Bool flag);
+
+Bool WMSetConnectionCloseOnExec(WMConnection *cPtr, Bool flag);
 
 void* WMGetConnectionClientData(WMConnection *cPtr);
 

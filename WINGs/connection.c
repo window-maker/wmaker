@@ -23,6 +23,7 @@
  * TODO:
  * - decide if we want to support connections with external sockets, else
  *   clean up the structure of the unneeded members.
+ * - decide what to do with all wsyserror() and wwarning() calls.
  *
  */
 
@@ -255,7 +256,7 @@ setSocketNonBlocking(int sock, Bool flag) /*FOLD00*/
     state = fcntl(sock, F_GETFL, 0);
 
     if (state < 0) {
-        wsyserror("Failed to get socket flags with fcntl.");
+        /*wsyserror("Failed to get socket flags with fcntl."); should we do this? -Dan*/
         return False;
     }
 
@@ -272,7 +273,7 @@ setSocketNonBlocking(int sock, Bool flag) /*FOLD00*/
     }
 
     if (fcntl(sock, F_SETFL, state) < 0) {
-        wsyserror("Failed to set socket flags with fcntl.");
+        /*wsyserror("Failed to set socket flags with fcntl."); should we do this? -Dan */
         return False;
     }
 
@@ -360,6 +361,8 @@ createConnectionWithSocket(int sock, Bool closeOnRelease) /*FOLD00*/
     wretain(cPtr);
     memset(cPtr, 0, sizeof(WMConnection));
 
+    fcntl(sock, F_SETFD, FD_CLOEXEC); /* by default close on exec */
+
     cPtr->sock = sock;
     cPtr->openTimeout.timeout = OpenTimeout;
     cPtr->openTimeout.handler = NULL;
@@ -381,7 +384,7 @@ createConnectionWithSocket(int sock, Bool closeOnRelease) /*FOLD00*/
 
     return cPtr;
 }
- /*FOLD00*/
+
 
 #if 0
 WMConnection*
@@ -420,7 +423,7 @@ WMCreateConnectionWithSocket(int sock, Bool closeOnRelease) /*FOLD00*/
     return cPtr;
 }
 #endif
- /*FOLD00*/
+
 
 /*
  * host     is the name on which we want to listen for incoming connections,
@@ -672,11 +675,8 @@ WMAcceptConnection(WMConnection *listener) /*FOLD00*/
     int newSock;
     WMConnection *newConnection;
 
-    if (listener->state!=WCListening) {
-        wwarning("Called 'WMAcceptConnection()' on a non-listening connection");
-        WCErrorCode = 0;
-        return NULL;
-    }
+    WCErrorCode = 0;
+    wassertrv(listener && listener->state==WCListening, NULL);
 
     size = sizeof(clientname);
     newSock = accept(listener->sock, (struct sockaddr*) &clientname, &size);
@@ -918,7 +918,7 @@ WMIsConnectionNonBlocking(WMConnection *cPtr) /*FOLD00*/
     state = fcntl(cPtr->sock, F_GETFL, 0);
 
     if (state < 0) {
-        wsyserror("Failed to get socket flags with fcntl.");
+        /*wsyserror("Failed to get socket flags with fcntl.");*/
         /* If we can't use fcntl on socket, this probably also means we could
          * not use fcntl to set non-blocking mode, and since a socket defaults
          * to blocking when created, return False as the best assumption */
@@ -933,17 +933,33 @@ WMIsConnectionNonBlocking(WMConnection *cPtr) /*FOLD00*/
 #endif
 
 
-void
+Bool
 WMSetConnectionNonBlocking(WMConnection *cPtr, Bool flag) /*FOLD00*/
 {
-    if (cPtr->sock < 0)
-        return;
+    wassertrv(cPtr!=NULL && cPtr->sock>=0, False);
 
     if (cPtr->isNonBlocking == flag)
-        return;
+        return True;
 
-    if (setSocketNonBlocking(cPtr->sock, flag)==True)
+    if (setSocketNonBlocking(cPtr->sock, flag)==True) {
         cPtr->isNonBlocking = flag;
+        return True;
+    }
+
+    return False;
+}
+
+
+Bool
+WMSetConnectionCloseOnExec(WMConnection *cPtr, Bool flag)
+{
+    wassertrv(cPtr!=NULL && cPtr->sock>=0, False);
+
+    if (fcntl(cPtr->sock, F_SETFD, (flag ? FD_CLOEXEC : 0)) < 0) {
+        return False;
+    }
+
+    return True;
 }
 
 
