@@ -43,7 +43,7 @@ testcolorpanel_SOURCES = testcolorpanel.c
 
 testcolorpanel_LDADD = libWINGs.a $(LIBLIST)
 
-testnot_SOURCES = testnot.c
+testnot_SOURCES = testnot.c $(LIBLIST)
 
 testnot_LDADD = libWUtil.a @LIBRARY_SEARCH_PATH@ @LIBPL@
 
