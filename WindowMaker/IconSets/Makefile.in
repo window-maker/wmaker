@@ -221,7 +221,9 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 Default.iconset: $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes
 	-rm -f Default.iconset
-	grep Icon $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes > Default.iconset
+	echo '{' > Default.iconset
+	grep Icon $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes >> Default.iconset
+	echo '}' >> Default.iconset
 	chmod 644 Default.iconset
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

@@ -718,12 +718,8 @@ wClientGetNormalHints(WWindow *wwin, XWindowAttributes *wattribs, Bool geometry,
 #ifdef IGNORE_PPOSITION
     wwin->normal_hints->flags &= ~PPosition;
 #endif
-#if 0
-    /* this seems obsoleted. Now geometry is taken from XGetWindowAttributes()
-     * in XGetNormalHints() we only have the hints themselves.
-     * check this. --Dan
-     */
-    if (/* check this !pre_icccm && */!wwin->screen_ptr->flags.startup && geometry) {
+
+    if (pre_icccm && !wwin->screen_ptr->flags.startup && geometry) {
 	if (wwin->normal_hints->flags & (USPosition|PPosition)) {
 	    *x = wwin->normal_hints->x;
 	    *y = wwin->normal_hints->y;
@@ -733,7 +729,6 @@ wClientGetNormalHints(WWindow *wwin, XWindowAttributes *wattribs, Bool geometry,
 	    *height = wwin->normal_hints->height;
 	}
     }
-#endif
 }
 
 
