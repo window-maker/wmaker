@@ -29,6 +29,10 @@
 
 extern char *_WINGS_progname;
 
+int WErrorCode = 0;
+
+
+
 #define MAXLINE	1024
 
 
@@ -141,4 +145,34 @@ wsyserror(const char *msg, ...)
     fflush(stdout);
     va_end(args);
 }
+
+
+/*********************************************************************
+ * Prints a system error message with variable arguments, being given
+ * the error code.
+ * 
+ * error - the error code foe which to print the message
+ * msg   - message to print with optional formatting
+ * ...   - arguments to use on formatting
+ *********************************************************************/
+void 
+wsyserrorwithcode(int error, const char *msg, ...)
+{
+    va_list args;
+    char buf[MAXLINE];
+
+    va_start(args, msg);
+    vsprintf(buf, msg, args);
+    fflush(stdout);
+    fputs(_WINGS_progname, stderr);
+    fputs(" error: ", stderr);
+    strcat(buf, ": ");
+    strcat(buf, wstrerror(error));
+    strcat(buf,"\n");
+    fputs(buf, stderr);
+    fflush(stderr);
+    fflush(stdout);
+    va_end(args);
+}
+
 

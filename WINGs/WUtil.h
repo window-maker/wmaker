@@ -148,6 +148,7 @@ char *wstrerror(int errnum);
 void wfatal(const char *msg, ...);
 void wwarning(const char *msg, ...);
 void wsyserror(const char *msg, ...);
+void wsyserrorwithcode(int error, const char *msg, ...);
 
 char *wfindfile(char *paths, char *file);
 
@@ -358,6 +359,13 @@ void WMSetUDBoolForKey(WMUserDefaults *database, Bool value,
 proplist_t WMGetUDSearchList(WMUserDefaults *database);
 
 void WMSetUDSearchList(WMUserDefaults *database, proplist_t list);
+
+
+/****** Global Variables *******/
+
+extern int WErrorCode;
+
+
 
 #ifdef __cplusplus
 }
