@@ -1349,10 +1349,6 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
     wwin->frame->on_mousedown_resizebar = resizebarMouseDown;
 
     wwin->client.y += wwin->frame->top_width;
-    if (!WFLAGP(wwin, no_border)) {
-	wwin->client.x += FRAME_BORDER_WIDTH;
-	wwin->client.y += FRAME_BORDER_WIDTH;
-    }
     XReparentWindow(dpy, wwin->client_win, wwin->frame->core->window, 
 		    0, wwin->frame->top_width);
 
@@ -1588,7 +1584,7 @@ wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 
     if (wasFocused) {
 	if (newFocusedWindow != owner && owner) {
-	    if (owner->flags.is_gnustep == 0)
+	    if (wwin->flags.is_gnustep == 0)
 	      wFrameWindowChangeState(owner->frame, WS_UNFOCUSED);
 	}
 	wSetFocusTo(scr, newFocusedWindow);
@@ -1996,22 +1992,16 @@ int req_width, req_height;	       /* new size of the client */
 	    || req_width > wwin->frame->core->width))
 	    XResizeWindow(dpy, wwin->client_win, req_width, req_height);
 
+	wwin->client.x = req_x;
+	wwin->client.y = req_y + wwin->frame->top_width;
 	wwin->client.width = req_width;
 	wwin->client.height = req_height;
     } else {
+	wwin->client.x = req_x;
+	wwin->client.y = req_y + wwin->frame->top_width;
+
 	XMoveWindow(dpy, wwin->frame->core->window, req_x, req_y);
     }
-
-    /*
-     * If the window was created with a frame border, adjust for it.
-     */
-    wwin->client.x = req_x;
-    wwin->client.y = req_y + wwin->frame->top_width;
-    if (!WFLAGP(wwin, no_border)) {
-	wwin->client.x += FRAME_BORDER_WIDTH;
-	wwin->client.y += FRAME_BORDER_WIDTH;
-    }
-
     wwin->frame_x = req_x;
     wwin->frame_y = req_y;
 
@@ -2050,10 +2040,6 @@ int req_x, req_y;		       /* new position of the frame */
 
     wwin->client.x = req_x;
     wwin->client.y = req_y + wwin->frame->top_width;
-    if (!WFLAGP(wwin, no_border)) {
-	wwin->client.x += FRAME_BORDER_WIDTH;
-	wwin->client.y += FRAME_BORDER_WIDTH;
-    }
 
     XMoveWindow(dpy, wwin->frame->core->window, req_x, req_y);
 
