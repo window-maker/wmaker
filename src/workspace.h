@@ -42,6 +42,7 @@ void wWorkspaceForceChange(WScreen *scr, int workspace);
 #ifdef VIRTUAL_DESKTOP 
 void wWorkspaceManageEdge(WScreen *scr);
 void wWorkspaceRaiseEdge(WScreen *scr);
+void wWorkspaceLowerEdge(WScreen *scr);
 void wWorkspaceResizeViewPort(WScreen *scr, int workspace, int width, int height);
 Bool wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y);
 Bool wWorkspaceAdjustViewPort(WScreen *scr, int workspace, int view_x, int view_y);

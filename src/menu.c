@@ -1620,23 +1620,6 @@ getScrollAmount(WMenu *menu, int *hamount, int *vamount)
     
     getPointerPosition(scr, &xroot, &yroot);
 
-#ifdef VIRTUAL_DESKTOP
-    if (wPreferences.vedge_thickness) {
-        if (xroot <= wPreferences.vedge_thickness + 1 && menuX1 < wPreferences.vedge_thickness) {
-            /* scroll to the right */
-            *hamount = WMIN(MENU_SCROLL_STEP, abs(menuX1));
-
-        } else if (xroot >= screenW-2-wPreferences.vedge_thickness && menuX2 > screenW-1-wPreferences.vedge_thickness) {
-            /* scroll to the left */
-            *hamount = WMIN(MENU_SCROLL_STEP, abs(menuX2-screenW-1));
-
-            if (*hamount==0)
-                *hamount = 1;
-
-            *hamount = -*hamount;
-        }
-    } else
-#endif
 
     if (xroot <= 1 && menuX1 < 0) {
 	/* scroll to the right */
@@ -1720,6 +1703,10 @@ scrollMenuCallback(void *data)
     int hamount = 0;		       /* amount to scroll */
     int vamount = 0;
 
+#ifdef VIRTUAL_DESKTOP
+    /* don't scroll if it is in vdesk mode */
+    if (!wPreferences.vedge_thickness)
+#endif
     getScrollAmount(menu, &hamount, &vamount);
     
     if (hamount != 0 || vamount != 0) {
@@ -1812,69 +1799,69 @@ wMenuScroll(WMenu *menu, XEvent *event)
 
         WMNextEvent(dpy, &ev);
         switch (ev.type) {
-	 case EnterNotify:
-            WMHandleEvent(&ev);
-	 case MotionNotify:
-            x = (ev.type==MotionNotify) ? ev.xmotion.x_root : ev.xcrossing.x_root;
-            y = (ev.type==MotionNotify) ? ev.xmotion.y_root : ev.xcrossing.y_root;
+            case EnterNotify:
+                WMHandleEvent(&ev);
+            case MotionNotify:
+                x = (ev.type==MotionNotify) ? ev.xmotion.x_root : ev.xcrossing.x_root;
+                y = (ev.type==MotionNotify) ? ev.xmotion.y_root : ev.xcrossing.y_root;
 
-	    /* on_border is != 0 if the pointer is between the menu
-	     * and the screen border and is close enough to the border */
-	    on_border = isPointNearBoder(menu, x, y);
+                /* on_border is != 0 if the pointer is between the menu
+                 * and the screen border and is close enough to the border */
+                on_border = isPointNearBoder(menu, x, y);
 
-            smenu = wMenuUnderPointer(scr);
-	    	    
-            if ((smenu==NULL && !on_border) || (smenu && parentMenu(smenu)!=omenu)) {
-                done = 1;
+                smenu = wMenuUnderPointer(scr);
+
+                if ((smenu==NULL && !on_border) || (smenu && parentMenu(smenu)!=omenu)) {
+                    done = 1;
+                    break;
+                }
+
+                on_x_edge = x <= 1 || x >= scr->scr_width - 2;
+                on_y_edge = y <= 1 || y >= scr->scr_height - 2;
+                on_border = on_x_edge || on_y_edge;
+
+                if (!on_border && !jump_back) {
+                    done = 1;
+                    break;
+                }
+
+                if (menu->timer && (smenu!=menu || (!on_y_edge && !on_x_edge))) {
+                    WMDeleteTimerHandler(menu->timer);
+                    menu->timer = NULL;
+                }
+
+                if (smenu != NULL)
+                    menu = smenu;
+
+                if (!menu->timer)
+                    scrollMenuCallback(menu);
                 break;
-            }
-
-            on_x_edge = x <= 1 || x >= scr->scr_width - 2;
-            on_y_edge = y <= 1 || y >= scr->scr_height - 2;
-            on_border = on_x_edge || on_y_edge;
-
-            if (!on_border && !jump_back) {
-                done = 1;
+            case ButtonPress:
+                /* True if we push on title, or drag the omenu to other position */
+                on_title = ev.xbutton.x_root >= omenu->frame_x &&
+                    ev.xbutton.x_root <= omenu->frame_x + MENUW(omenu) &&
+                    ev.xbutton.y_root >= omenu->frame_y &&
+                    ev.xbutton.y_root <= omenu->frame_y + omenu->frame->top_width;
+                WMHandleEvent(&ev);
+                smenu = wMenuUnderPointer(scr);
+                if (smenu == NULL || (smenu && smenu->flags.buttoned && smenu != omenu))
+                    done = 1;
+                else if (smenu==omenu && on_title) {
+                    jump_back = 0;
+                    done = 1;
+                }
                 break;
-            }
-
-            if (menu->timer && (smenu!=menu || (!on_y_edge && !on_x_edge))) {
-                WMDeleteTimerHandler(menu->timer);
-                menu->timer = NULL;
-            }
-
-            if (smenu != NULL)
-                menu = smenu;
-
-	    if (!menu->timer)
-		scrollMenuCallback(menu);
-            break;
-        case ButtonPress:
-            /* True if we push on title, or drag the omenu to other position */
-            on_title = ev.xbutton.x_root >= omenu->frame_x &&
-                ev.xbutton.x_root <= omenu->frame_x + MENUW(omenu) &&
-                ev.xbutton.y_root >= omenu->frame_y &&
-                ev.xbutton.y_root <= omenu->frame_y + omenu->frame->top_width;
-            WMHandleEvent(&ev);
-            smenu = wMenuUnderPointer(scr);
-            if (smenu == NULL || (smenu && smenu->flags.buttoned && smenu != omenu))
+            case KeyPress:
                 done = 1;
-            else if (smenu==omenu && on_title) {
-                jump_back = 0;
-                done = 1;
-            }
-            break;
-        case KeyPress:
-            done = 1;
-        default:
-            WMHandleEvent(&ev);
-            break;
+            default:
+                WMHandleEvent(&ev);
+                break;
         }
     }
 
     if (menu->timer) {
         WMDeleteTimerHandler(menu->timer);
-	menu->timer = NULL;
+        menu->timer = NULL;
     }
 
     if (jump_back) {
@@ -2012,6 +1999,12 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
 		dragScrollMenuCallback(menu);
         }
     }
+
+#ifdef VIRTUAL_DESKTOP
+    if (wPreferences.vedge_thickness) {
+        wWorkspaceLowerEdge(scr);
+    }
+#endif
     
     prevx = bev->x_root;
     prevy = bev->y_root;
@@ -2022,142 +2015,148 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
 
 	WMMaskEvent(dpy, ExposureMask|ButtonMotionMask|ButtonReleaseMask
 		    |ButtonPressMask, &ev);
-	switch (ev.type) {
-	 case MotionNotify:
+    switch (ev.type) {
+        case MotionNotify:
             smenu = findMenu(scr, &x, &y);
 
-	    if (smenu == NULL) {
-		/* moved mouse out of menu */
-		
-		if (!delayed_select && d_data.magic) {
-		    WMDeleteTimerHandler(d_data.magic);
-		    d_data.magic = NULL;
-		}
-		if (menu==NULL
-		    || (menu->selected_entry>=0
-			&& menu->entries[menu->selected_entry]->cascade>=0)) {
-		    prevx = ev.xmotion.x_root;
-		    prevy = ev.xmotion.y_root;
-		    
-		    break;
-		}
-		selectEntry(menu, -1);
-		menu = smenu;
-		prevx = ev.xmotion.x_root;
-		prevy = ev.xmotion.y_root;
-		break;
-	    } else if (menu && menu!=smenu
-		       && (menu->selected_entry<0
-			   || menu->entries[menu->selected_entry]->cascade<0)) {
-		selectEntry(menu, -1);
+            if (smenu == NULL) {
+                /* moved mouse out of menu */
 
-		if (!delayed_select && d_data.magic) {
-		    WMDeleteTimerHandler(d_data.magic);
-		    d_data.magic = NULL;
-		}
-	    } else {
-		
-		/* hysteresis for item selection */
+                if (!delayed_select && d_data.magic) {
+                    WMDeleteTimerHandler(d_data.magic);
+                    d_data.magic = NULL;
+                }
+                if (menu==NULL
+                        || (menu->selected_entry>=0
+                            && menu->entries[menu->selected_entry]->cascade>=0)) {
+                    prevx = ev.xmotion.x_root;
+                    prevy = ev.xmotion.y_root;
 
-		/* check if the motion was to the side, indicating that 
-		 * the user may want to cross to a submenu */
-		if (!delayed_select && menu) {
-		    int dx;
-		    Bool moved_to_submenu;/* moved to direction of submenu */
+                    break;
+                }
+                selectEntry(menu, -1);
+                menu = smenu;
+                prevx = ev.xmotion.x_root;
+                prevy = ev.xmotion.y_root;
+                break;
+            } else if (menu && menu!=smenu
+                    && (menu->selected_entry<0
+                        || menu->entries[menu->selected_entry]->cascade<0)) {
+                selectEntry(menu, -1);
 
-		    dx = abs(prevx - ev.xmotion.x_root);
+                if (!delayed_select && d_data.magic) {
+                    WMDeleteTimerHandler(d_data.magic);
+                    d_data.magic = NULL;
+                }
+            } else {
 
-		    moved_to_submenu = False;
-		    if (dx > 0 /* if moved enough to the side */
-			/* maybe a open submenu */
-			&& menu->selected_entry>=0 
-			/* moving to the right direction */
-			&& (wPreferences.align_menus
-			    || ev.xmotion.y_root >= prevy)) {
-			int index;
-			
-			index = menu->entries[menu->selected_entry]->cascade;
-			if (index>=0) {
-			    if (menu->cascades[index]->frame_x>menu->frame_x) {
-				if (prevx < ev.xmotion.x_root)
-				    moved_to_submenu = True;
-			    } else {
-				if (prevx > ev.xmotion.x_root)
-				    moved_to_submenu = True;
-			    }
-			}
-		    }
-		    
+                /* hysteresis for item selection */
 
-		    if (menu != smenu) {
-			if (d_data.magic) {
-			    WMDeleteTimerHandler(d_data.magic);
-			}
-			d_data.magic = NULL;
-		    } else if (moved_to_submenu) {
-			/* while we are moving, postpone the selection */
-			if (d_data.magic) {
-			    WMDeleteTimerHandler(d_data.magic);
-			}
-			d_data.delayed_select = NULL;
-			d_data.menu = menu;
-			d_data.magic = WMAddTimerHandler(MENU_SELECT_DELAY, 
-							 delaySelection,
-							 &d_data);
-			prevx = ev.xmotion.x_root;
-			prevy = ev.xmotion.y_root;
-			break;
-		    } else {
-			if (d_data.magic)
-			    WMDeleteTimerHandler(d_data.magic);
-			d_data.magic = NULL;
-		    }
-		}
-	    }
-	    prevx = ev.xmotion.x_root;
-	    prevy = ev.xmotion.y_root;
-	    if (menu!=smenu) {
-		/* pointer crossed menus */
-		if (menu && menu->timer) {
-		    WMDeleteTimerHandler(menu->timer);
-		    menu->timer = NULL;
-		}
-		if (smenu)
-		    dragScrollMenuCallback(smenu);
-	    }
-	    menu = smenu;
-	    if (!menu->timer)
-		dragScrollMenuCallback(menu);
-	    
+                /* check if the motion was to the side, indicating that 
+                 * the user may want to cross to a submenu */
+                if (!delayed_select && menu) {
+                    int dx;
+                    Bool moved_to_submenu;/* moved to direction of submenu */
+
+                    dx = abs(prevx - ev.xmotion.x_root);
+
+                    moved_to_submenu = False;
+                    if (dx > 0 /* if moved enough to the side */
+                            /* maybe a open submenu */
+                            && menu->selected_entry>=0 
+                            /* moving to the right direction */
+                            && (wPreferences.align_menus
+                                || ev.xmotion.y_root >= prevy)) {
+                        int index;
+
+                        index = menu->entries[menu->selected_entry]->cascade;
+                        if (index>=0) {
+                            if (menu->cascades[index]->frame_x>menu->frame_x) {
+                                if (prevx < ev.xmotion.x_root)
+                                    moved_to_submenu = True;
+                            } else {
+                                if (prevx > ev.xmotion.x_root)
+                                    moved_to_submenu = True;
+                            }
+                        }
+                    }
+
+
+                    if (menu != smenu) {
+                        if (d_data.magic) {
+                            WMDeleteTimerHandler(d_data.magic);
+                        }
+                        d_data.magic = NULL;
+                    } else if (moved_to_submenu) {
+                        /* while we are moving, postpone the selection */
+                        if (d_data.magic) {
+                            WMDeleteTimerHandler(d_data.magic);
+                        }
+                        d_data.delayed_select = NULL;
+                        d_data.menu = menu;
+                        d_data.magic = WMAddTimerHandler(MENU_SELECT_DELAY, 
+                                delaySelection,
+                                &d_data);
+                        prevx = ev.xmotion.x_root;
+                        prevy = ev.xmotion.y_root;
+                        break;
+                    } else {
+                        if (d_data.magic)
+                            WMDeleteTimerHandler(d_data.magic);
+                        d_data.magic = NULL;
+                    }
+                }
+            }
+            prevx = ev.xmotion.x_root;
+            prevy = ev.xmotion.y_root;
+            if (menu!=smenu) {
+                /* pointer crossed menus */
+                if (menu && menu->timer) {
+                    WMDeleteTimerHandler(menu->timer);
+                    menu->timer = NULL;
+                }
+                if (smenu)
+                    dragScrollMenuCallback(smenu);
+            }
+            menu = smenu;
+            if (!menu->timer)
+                dragScrollMenuCallback(menu);
+
             if (!delayed_select) {
                 entry_no = getEntryAt(menu, x, y);
                 if (entry_no>=0) {
                     entry = menu->entries[entry_no];
                     if (entry->flags.enabled && entry->cascade>=0 &&
-                        menu->cascades) {
+                            menu->cascades) {
                         WMenu *submenu = menu->cascades[entry->cascade];
                         if (submenu->flags.mapped && !submenu->flags.buttoned
-                            && menu->selected_entry!=entry_no) {
+                                && menu->selected_entry!=entry_no) {
                             wMenuUnmap(submenu);
                         }
                     }
                 }
                 selectEntry(menu, entry_no);
             }
-	    break;
-
-	 case ButtonPress:
-	    break;
-
-	 case ButtonRelease:
-	    if (ev.xbutton.button == event->xbutton.button)
-		done=1;
             break;
 
-	 case Expose: 
+        case ButtonPress:
+            break;
+
+        case ButtonRelease:
+            if (ev.xbutton.button == event->xbutton.button)
+                done=1;
+            break;
+
+        case Expose: 
             WMHandleEvent(&ev);
+#ifdef VIRTUAL_DESKTOP
+            /* since expose will raise edge up.. I need another ugly hack here */
+            if (wPreferences.vedge_thickness) {
+                wWorkspaceLowerEdge(scr);
+            }
+#endif
             break;
- 	}
+    }
     }
 
     if (menu && menu->timer) {
@@ -2221,6 +2220,11 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
 
 byebye:    
     ((WMenu*)desc->parent)->flags.inside_handler = 0;
+#ifdef VIRTUAL_DESKTOP
+    if (wPreferences.vedge_thickness) {
+        wWorkspaceRaiseEdge(scr);
+    }
+#endif
 }
 
 

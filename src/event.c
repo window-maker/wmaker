@@ -1006,6 +1006,7 @@ handleEnterNotify(XEvent *event)
             wWorkspaceGetViewPosition(scr, scr->current_workspace, &x, &y);
             wWorkspaceSetViewPort(scr, scr->current_workspace, x, y - VIRTUALEDGE_SCROLL_VSTEP);
         } else if (event->xcrossing.window == scr->virtual_edge_d) {
+            printf("enter bottom\n");
             XWarpPointer(dpy, None, scr->root_win, 0,0,0,0, event->xcrossing.x_root, scr->scr_height - wPreferences.vedge_thickness - 1);
             wWorkspaceGetViewPosition(scr, scr->current_workspace, &x, &y);
             wWorkspaceSetViewPort(scr, scr->current_workspace, x, y + VIRTUALEDGE_SCROLL_VSTEP);

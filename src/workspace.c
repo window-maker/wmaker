@@ -689,11 +689,23 @@ void wWorkspaceManageEdge(WScreen *scr)
 
 void wWorkspaceRaiseEdge(WScreen *scr)
 {
+    puts("raise edge");
     if (wPreferences.vedge_thickness && initVDesk) {
         XRaiseWindow(dpy, scr->virtual_edge_u);
         XRaiseWindow(dpy, scr->virtual_edge_d);
         XRaiseWindow(dpy, scr->virtual_edge_l);
         XRaiseWindow(dpy, scr->virtual_edge_r);
+    }
+}
+
+void wWorkspaceLowerEdge(WScreen *scr)
+{
+    puts("lower edge");
+    if (wPreferences.vedge_thickness && initVDesk) {
+        XLowerWindow(dpy, scr->virtual_edge_u);
+        XLowerWindow(dpy, scr->virtual_edge_d);
+        XLowerWindow(dpy, scr->virtual_edge_l);
+        XLowerWindow(dpy, scr->virtual_edge_r);
     }
 }
 
