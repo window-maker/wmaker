@@ -94,7 +94,8 @@ int MonitorLoop(int argc, char **argv)
     char **child_argv= wmalloc(sizeof(char*)*(argc+2));
     int i, status;
     time_t last_start;
-    
+    Bool error = False;
+
     for (i= 0; i < argc; i++)
         child_argv[i]= argv[i];
     child_argv[i++]= "--for-real";
@@ -122,9 +123,13 @@ int MonitorLoop(int argc, char **argv)
             if ((exited=waitpid(-1, &status, 0)) < 0)
             {
                 wsyserror(_("Error during monitoring of Window Maker process."));
+                error = True;
                 break;
             }
         } while (exited != pid);
+
+        if (error)
+            break;
 
         child_argv[argc]= "--for-real-";
         

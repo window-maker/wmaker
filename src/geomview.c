@@ -9,8 +9,9 @@ typedef struct W_GeometryView {
     W_Class widgetClass;
     WMView *view;
 
-    WMColor *black;
-    WMColor *gray;
+    WMColor *color;
+    WMColor *bgColor;
+
     WMFont *font;
 
     WMSize textSize;
@@ -39,6 +40,7 @@ WCreateGeometryView(WMScreen *scr)
     WGeometryView *gview;
     char buffer[64];
     static W_Class widgetClass = 0;
+    WMColor *color;
 
     if (!widgetClass) {
         widgetClass = W_RegisterUserWidget();
@@ -68,8 +70,8 @@ WCreateGeometryView(WMScreen *scr)
         return NULL;
     }
 
-    gview->black = WMBlackColor(scr);
-    gview->gray = WMGrayColor(scr);
+    gview->bgColor = WMCreateRGBColor(scr, 0x3333, 0x6666, 0x9999, True);
+    gview->color = WMWhiteColor(scr);
 
     WMCreateEventHandler(gview->view, ExposureMask, handleEvents, gview);
 
@@ -78,6 +80,8 @@ WCreateGeometryView(WMScreen *scr)
     gview->textSize.width = WMWidthOfString(gview->font, buffer,
                                             strlen(buffer));
     gview->textSize.height = WMFontHeight(gview->font);
+
+    WMSetWidgetBackgroundColor(gview, gview->bgColor);
 
     W_ResizeView(gview->view, gview->textSize.width+8,
                  gview->textSize.height+6);
@@ -125,7 +129,7 @@ paint(WGeometryView *gview)
 
     WMDrawImageString(W_VIEW_SCREEN(gview->view),
                       W_VIEW_DRAWABLE(gview->view),
-                      gview->black, gview->gray, gview->font,
+                      gview->color, gview->bgColor, gview->font,
                       (W_VIEW_WIDTH(gview->view)-gview->textSize.width)/2,
                       (W_VIEW_HEIGHT(gview->view)-gview->textSize.height)/2,
                       buffer, strlen(buffer));

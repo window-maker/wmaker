@@ -1395,10 +1395,11 @@ wShowInfoPanel(WScreen *scr)
         strbuf = wstrappend(strbuf, _("\nSound enabled"));
     }
 
-    strbuf = wstrappend(strbuf, _("; Antialiased text"));
-
 #ifdef VIRTUAL_DESKTOP
-    strbuf = wstrappend(strbuf, _(", VirtualDesktop"));
+    if (wPreferences.vedge_thickness == 0)
+        strbuf = wstrappend(strbuf, _(", VirtualDesktop disabled"));
+    else
+        strbuf = wstrappend(strbuf, _(", VirtualDesktop enabled"));
 #endif
 
 #ifdef XINERAMA
