@@ -7,7 +7,7 @@ bin_PROGRAMS = wxcopy wxpaste wdwrite getstyle setstyle seticons geticonset wmse
 
 bin_SCRIPTS = wmaker.inst wm-oldmenu2new wsetfont
 
-EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new
+EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new wsetfont
 
 INCLUDES = @DFLAGS@ -I$(top_srcdir)/wrlib -I$(top_srcdir)/libPropList\
 	 @XCFLAGS@ @GFXFLAGS@ 

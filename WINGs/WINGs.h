@@ -815,6 +815,8 @@ int WMAddBrowserColumn(WMBrowser *bPtr);
 
 void WMRemoveBrowserItem(WMBrowser *bPtr, int column, int row);
 
+void WMSetBrowserMaxVisibleColumns(WMBrowser *bPtr, int columns);
+
 void WMSetBrowserColumnTitle(WMBrowser *bPtr, int column, char *title);
 
 WMListItem *WMAddSortedBrowserItem(WMBrowser *bPtr, int column, char *text, Bool isBranch);

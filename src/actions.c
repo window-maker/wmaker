@@ -414,7 +414,7 @@ wMaximizeWindow(WWindow *wwin, int directions)
 
 	if (wwin->screen_ptr->dock 
 	    && (!wwin->screen_ptr->dock->lowered
-		|| wPreferences.no_window_under_dock)) {
+		|| wPreferences.no_window_over_dock)) {
 
 	    new_width -= wPreferences.icon_size + DOCK_EXTRA_SPACE;
 	    if (!wwin->screen_ptr->dock->on_right_side) 
@@ -673,6 +673,10 @@ animateResize(WScreen *scr, int x, int y, int w, int h,
 
     if (style == WIS_NONE)
         return;
+
+    if (style == WIS_RANDOM) {
+	style = rand()%3;
+    }
 
     k = (hiding ? 2 : 3);
     switch(style) {

@@ -800,18 +800,23 @@ wManageWindow(WScreen *scr, Window window)
      * or if the window wants to
      * start iconic.
      * If geometry was saved, restore it. */
-    if (win_state && win_state->state->use_geometry) {
-        x = win_state->state->x;
-        y = win_state->state->y;
-    } else if (wwin->transient_for==None && !scr->flags.startup &&
-               workspace==scr->current_workspace && !iconic &&
-               !(wwin->normal_hints->flags & (USPosition|PPosition))) {
-        PlaceWindow(wwin, &x, &y, width, height);
-    } 
-    
-    if (wwin->window_flags.dont_move_off)
-	wScreenBringInside(scr, &x, &y, width, height);
-    
+    {
+	Bool dontBring = False;
+
+	if (win_state && win_state->state->use_geometry) {
+	    x = win_state->state->x;
+	    y = win_state->state->y;
+	} else if (wwin->transient_for==None && !scr->flags.startup &&
+		   workspace==scr->current_workspace && !iconic &&
+		   !(wwin->normal_hints->flags & (USPosition|PPosition))) {
+	    PlaceWindow(wwin, &x, &y, width, height);
+	    if (wPreferences.window_placement == WPM_MANUAL)
+		dontBring = True;
+	} 
+
+	if (wwin->window_flags.dont_move_off && dontBring)
+	    wScreenBringInside(scr, &x, &y, width, height);
+    }
     /* 
      *--------------------------------------------------
      * 

@@ -38,6 +38,10 @@ part of the NEXTSTEP(tm) GUI. It's supposed to be relatively fast and small,
 feature rich, easy to configure and easy to use, with a simple and elegant
 appearance borrowed from NEXTSTEP(tm).
 
+Window Maker was designed keeping integration with GNUstep in mind and is the
+"official" window manager for it. Read more about GNUstep further on this
+file.
+
 Window Maker was previously called WindowMaker.
 
 Window Maker has no connection with Windowmaker, the software for
@@ -133,6 +137,26 @@ developerts, directly) *always* send information about the system you are
 using. You can use the system information section at the end of BUGFORM as a
 guideline. Another thing: please don't send HTML mail.
 
+
+GNUstep
+=======
+
+GNUstep is a complete object-oriented development system, based on the
+OpenStep specification released by NeXT(tm) (now Apple(tm)) and Sun(tm). It
+will provide everything one needs to produce cross-platform, object-oriented,
+graphical (and non-graphical) applications; providing among other things,
+base system libraries, a high-level GUI application framework that uses a
+Display PostScript(tm)-like imaging model (DGS), objects for accessing
+relational databases, distributed objects and a graphical development
+environment, with a interface builder, a project management system and other
+tools.
+
+GNUstep will be used to create a user environment, with everything needed for
+a complete graphical user interface, such as a file viewer, text editors and
+other applications. Note that the user environment (or "desktop environment")
+is only a small part of the whole GNUstep project.
+
+For more information on the GNUstep project, visit: http://www.gnustep.org
 
 
 Running multiple instances of Window Maker
@@ -260,6 +284,7 @@ Window Maker is copyrighted by Alfredo K. Kojima and is licensed through the
 GNU General Public License. Read the COPYING file for the complete license.
 
 NeXT, OpenStep and NEXTSTEP are a trademarks of NeXT Computer, Inc.
+All other trademarks are property of their respective owners.
 
 The authors reserve the right to make changes in the software without prior
 notice.

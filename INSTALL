@@ -26,6 +26,7 @@ SUPPORTED PLATFORMS
 - XFree86 / OS/2
 - Corel NetWinder
 - SunOS 4.x
+- MacOS / MachTen 4.1.1
 
 Patches to make it work on other platforms are welcome.
 

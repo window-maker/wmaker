@@ -1,3 +1,10 @@
+changes since wmaker 0.20.2:
+............................
+
+- WMSetBrowserMaxVisibleColumns() - untested
+
+
+
 changes since wmaker 0.20.0:
 ............................
 

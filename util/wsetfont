@@ -1,0 +1,185 @@
+#!/bin/sh
+#
+# language/font setting script for Window Maker
+#
+# by MANOME Tomonori <manome@itlb.te.noda.sut.ac.jp>
+#
+# [Special Thanks To]
+# Korean fontset info from: 
+#     Byeong-Chan, Kim <redhands@linux.sarang.net> 
+#     Chae-yong Chong <cychong@metro.telecom.samsung.co.kr>
+# Latin2 fontset info from: 
+#     Piotr Dembinski <pdemb@aurora.put.poznan.pl>
+#     Toni Bilic <root@toni.hr.tel.hr>
+# Greek fontset info from: 
+#     Nikolaos Papagrigoriou <papanikos@usa.net>
+# Quote bug fix info from:
+#     Luke Kendall <luke@research.canon.com.au>
+
+VERSION="Version 0.4  1998/11/10"
+
+WDWRITE="wdwrite"
+
+
+if test $# != 1; then
+    echo
+    echo "$0 - font/language setting utility for Window Maker"
+    echo 
+    echo "Usage:                              $VERSION"
+    echo "        $0 <option> "
+    cat <<EOF
+-----------------------------------------------------------------------
+[Option]   [Fontset]                    [Font Information]
+ default    helvetica                    
+ latin1     helvetica(iso8859-1)
+ latin2     helvetica(iso8859-2)          See *Note1.
+ greek      helvetica(iso8859-7)          See *Note1.
+ japanese   helvetica/-*-fixed(jisx02XX)  Included in X11R6/XFree("fnon" pkg)
+ korean     helvetica/-*-kodig(ksc5601)   See *Note1.
+ korean2    helvetica/daewoo(ksc5601)     Included in X11R6/XFree("fnon" pkg)
+ russian    helvetica(koi8-r)             Included in X11R6/XFree("fcyr" pkg)
+ turkish    unknown                       See *Note2
+-----------------------------------------------------------------------
+Latin1 Languages: Danish/Dutch/English/Finnish/French/Galician/German/
+                  Italian/Norwegian/Portuguese/Spanish/Swedish/...
+Latin2 Languages: Croatian/Czech/Polish/Romanian/Slovenian/...
+
+*Note1: Not included in X11R6/XFree86. You can download them from ...
+ Latin2 X fonts packages: http://sizif.mf.uni-lj.si/linux/cee/iso8859-2.html
+ Greek X fonts packages:  ftp://argeas.argos.hol.gr/pub/unix/linux/GREEK/fonts/
+                          ftp://ftp.ntua.gr/pub/fonts/X11/
+ Korean X fonts packages: ftp://linux.sarang.net  (Linux RPM)
+                          ftp://ftp.kaist.ac.kr/pub/hangul/fonts
+*Note2: please let me know appropriate font setting for WMGLOBAL/WindowMaker,
+        and the fonts' URL to download. mail-to: manome@itlb.te.noda.sut.ac.jp
+EOF
+    exit
+fi
+
+case $1 in
+   default)
+	SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*\"
+	BoldSystemFont=\"-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*\"
+	WindowTitleFont=\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*\"
+	MenuTitleFont=\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*\"
+	MenuTextFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*\"
+	IconTitleFont=\"-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-*-*\"
+	ClipTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*\"
+	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*\"
+	;;
+   latin1)
+	SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-iso8859-1\"
+	BoldSystemFont=\"-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-iso8859-1\"
+	WindowTitleFont=\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-iso8859-1\"
+	MenuTitleFont=\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-iso8859-1\"
+	MenuTextFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-iso8859-1\"
+	IconTitleFont=\"-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-iso8859-1\"
+	ClipTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-iso8859-1\"
+	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-iso8859-1\"
+	;;
+   latin2)
+	SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-iso8859-2\"
+	BoldSystemFont=\"-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-iso8859-2\"
+	WindowTitleFont=\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-iso8859-2\"
+	MenuTitleFont=\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-iso8859-2\"
+	MenuTextFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-iso8859-2\"
+	IconTitleFont=\"-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-iso8859-2\"
+	ClipTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-iso8859-2\"
+	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-iso8859-2\"
+	;;
+   greek)
+	SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-iso8859-7\"
+	BoldSystemFont=\"-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-iso8859-7\"
+	WindowTitleFont=\"-*-helvetica-bold-r-normal-*-14-*-*-*-*-*-iso8859-7\"
+	MenuTitleFont=\"-*-helvetica-medium-r-normal-*-14-*-*-*-*-*-iso8859-7\"
+	MenuTextFont=\"-*-helvetica-medium-r-normal-*-14-*-*-*-*-*-iso8859-7\"
+	IconTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-iso8859-7\"
+	ClipTitleFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-iso8859-7\"
+	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-iso8859-7\"
+	;;
+   russian)
+	SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-koi8-r\"
+	BoldSystemFont=\"-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-koi8-r\"
+	WindowTitleFont=\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-koi8-r\"
+	MenuTitleFont=\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-koi8-r\"
+	MenuTextFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-koi8-r\"
+	IconTitleFont=\"-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-koi8-r\"
+	ClipTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-koi8-r\"
+	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-koi8-r\"
+	;;
+   japanese)
+        SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-%d-*,-*-*-medium-r-normal-*-*-*\"
+	BoldSystemFont=\"-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-%d-*,-*-*-medium-r-normal-*-*-*\"
+	WindowTitleFont=\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-14-*,-*-*-medium-r-normal-*-*-*\"
+	MenuTitleFont=\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-14-*,-*-*-medium-r-normal-*-*-*\"
+	MenuTextFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-14-*,-*-*-medium-r-normal-*-*-*\"
+	IconTitleFont=\"-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-*-*\"
+	ClipTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-*-*\"
+	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-14-*,-*-*-medium-r-normal-*-*-*\"
+	;;
+   korean)
+	SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*,*-kodig-medium-r-normal--*-%d-*-*-*-*-*-*,*-*-medium-r-normal--*-%d-*-*-*-*-*-*,*-*-*-*-*--%d-*-*-*-*-*-*-*,*\"
+	BoldSystemFont=\"-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*,-*-kodig-bold-r-normal--*-%d-*-*-*-*-*-*,*-*-bold-r-normal--*-%d-*-*-*-*-*-*,*-*-*-*-*--%d-*-*-*-*-*-*-*,*\"
+	WindowTitleFont=\"7x14,-*-kodig-medium-r-normal--14-*-*-*-*-*-*-*,-*-*-medium-r-normal--14-*-*-*-*-*-*-*,-*-*-medium-r-normal--*-*-*-*-*-*-*-*,-*-*-*-r-normal--*-*-*-*-*-*-*-*,-*-*-*-*-*--*-*-*-*-*-*-*-*,*\"
+	MenuTitleFont=\"7x14,-*-kodig-medium-r-normal--14-*-*-*-*-*-*-*,-*-*-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
+	MenuTextFont=\"7x14,-*-kodig-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
+	IconTitleFont=\"7x14,-*-kodig-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
+	ClipTitleFont=\"7x14,-*-kodig-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
+	DisplayFont=\"7x14,-*-kodig-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
+	;;
+   korean2)
+	SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*,-*-medium-r-normal-*-%d-*,-*-medium-r-normal-*\"
+	BoldSystemFont=\"-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*,-*-medium-r-normal-*-%d-*,-*-medium-r-normal-*\"
+	WindowTitleFont=\"7x14,-*-gothic-medium-r-normal-*-16-*-*-*-*-*-ksc5601.1987-*\"
+	MenuTitleFont=\"7x14,-*-gothic-medium-r-normal-*-16-*-*-*-*-*-ksc5601.1987-*\"
+	MenuTextFont=\"7x14,-*-gothic-medium-r-normal-*-16-*-*-*-*-*-ksc5601.1987-*\"
+	IconTitleFont=\"-*-helvetica-medium-r-normal-*-10-*-*-*-*-*-*-*,-*-gothic-medium-r-normal-*-12-*-*-*-*-*-ksc5601.1987-*\"
+	ClipTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*,-*-gothic-medium-r-normal-*-12-*-*-*-*-*-ksc5601.1987-*\"
+	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*,-*-gothic-medium-r-normal-*-16-*-*-*-*-*-ksc5601.1987-*\"
+	;;
+   *)
+	echo "NOTICE:"
+	echo "Sorry I don't know appropriate font configuration for \"$1\""
+	echo "please let me know your settings for SystemFont,BoldSystemFont,"
+	echo "WindowTitleFont,MenuTitleFont,IconTitleFont,ClipTitleFont,and"
+	echo "DisplayFont thanks"
+        echo "and please let me know also the URL of the fonts to download"
+        echo "if your language need some special fonts not included in    "
+        echo "X11R6/XFree."
+	echo "mail-to: manome@itlb.te.noda.sut.ac.jp"
+	exit
+	;;
+esac
+
+
+#
+# setting fonts
+#
+
+echo "Setting up ~/GNUstep/Defaults/WMGLOBAL..."
+
+$WDWRITE WMGLOBAL SystemFont "$SystemFont"
+$WDWRITE WMGLOBAL BoldSystemFont "$BoldSystemFont"
+
+echo
+echo "    SystemFont=$SystemFont"
+echo "    BoldSystemFont=$BoldSystemFont"
+echo
+echo "Setting up  ~/GNUstep/Defaults/WindowMaker..."
+
+$WDWRITE WindowMaker WindowTitleFont "$WindowTitleFont"
+$WDWRITE WindowMaker MenuTitleFont "$MenuTitleFont"
+$WDWRITE WindowMaker MenuTextFont "$MenuTextFont"
+$WDWRITE WindowMaker IconTitleFont "$IconTitleFont"
+$WDWRITE WindowMaker ClipTitleFont "$ClipTitleFont"
+$WDWRITE WindowMaker DisplayFont "$DisplayFont"
+
+echo
+echo "WindowTitleFont=$WindowTitleFont"
+echo "MenuTitleFont=$MenuTitleFont"
+echo "MenuTextFont=$MenuTextFont"
+echo "IconTitleFont=$IconTitleFont"
+echo "ClipTitleFont=$ClipTitleFont"
+echo "DisplayFont=$DisplayFont"
+echo
+echo "Done."

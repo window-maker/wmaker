@@ -48,7 +48,9 @@
 
 char *ProgName;
 
-#ifdef at_one_step_from_the_trash
+#define fuckin_crap
+
+#ifdef fuckin_crap
 /* Alfredo please take a look at this function. I don't like the way
  * it sends the XKillClient. Should it interfere this way with the rest?
  * This was added by the patch to allow the transparent background for Eterm.
@@ -483,7 +485,7 @@ main(int argc, char **argv)
 #endif
     RDestroyImage(image);
     if (secretBuffer==None) {
-#ifdef at_one_step_from_the_trash
+#ifdef fuckin_crap
 	setPixmapProperty(pixmap, dpy, root_win);
 #endif
 	XSetWindowBackgroundPixmap(dpy, root_win, pixmap);

@@ -50,7 +50,8 @@ extern WPreferences wPreferences;
  */
 
 extern void
-InteractivePlaceWindow(WWindow *wwin, int *x_ret, int *y_ret);
+InteractivePlaceWindow(WWindow *wwin, int *x_ret, int *y_ret, 
+		       unsigned width, unsigned height);
 
 
 /*
@@ -375,7 +376,7 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 
     switch (wPreferences.window_placement) {
      case WPM_MANUAL:
-	InteractivePlaceWindow(wwin, x_ret, y_ret);
+	InteractivePlaceWindow(wwin, x_ret, y_ret, width, height);
 	break;
 
      case WPM_SMART:

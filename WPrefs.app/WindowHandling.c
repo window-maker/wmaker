@@ -297,7 +297,7 @@ createPanel(Panel *p)
     
     panel->miconB = WMCreateSwitchButton(panel->maxiF);
     WMResizeWidget(panel->miconB, 185, 20);
-    WMMoveWidget(panel->miconB, 10, 10);
+    WMMoveWidget(panel->miconB, 10, 15);
     WMSetButtonText(panel->miconB, _("...do not resize over icons"));
 
     panel->mdockB = WMCreateSwitchButton(panel->maxiF);

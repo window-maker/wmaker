@@ -1235,13 +1235,12 @@ wSelectWindows(WScreen *scr, XEvent *ev)
 
 
 void
-InteractivePlaceWindow(WWindow *wwin, int *x_ret, int *y_ret)
+InteractivePlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
+		       unsigned width, unsigned height)
 {
     WScreen *scr = wwin->screen_ptr;
     Window root = scr->root_win;
     int x, y, h = 0;
-    int width = wwin->client.width;
-    int height = wwin->client.height;
     XEvent event;
     KeyCode shiftl, shiftr;
     Window junkw;

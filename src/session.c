@@ -58,6 +58,9 @@
 
 
 #ifdef R6SM
+
+extern int wScreenCount;
+
 /* requested for SaveYourselfPhase2 */
 static Bool sWaitingPhase2 = False;
 
@@ -532,7 +535,8 @@ wSessionRestoreLastWorkspace(WScreen *scr)
 #ifdef R6SM
 /*
  * With full session management support, the part of WMState 
- * that store client window state will become obsolete,
+ * that store client window state will become obsolete (maybe we can reuse
+ *							the old code too),
  * but we still need to store state info like the dock and workspaces.
  * It is better to keep dock/wspace info in WMState because the user
  * might want to keep the dock configuration while not wanting to
@@ -559,11 +563,19 @@ wSessionRestoreLastWorkspace(WScreen *scr)
 /*
  * Windows are identified as:
  * 	WM_CLASS(instance.class).WM_WINDOW_ROLE
+ *
+ * Saved Info:
  * 
- * 
+ * WM_CLASS.instance 
+ * WM_CLASSS.class
+ * WM_WINDOW_ROLE
+ * geometry
+ * (state array (miniaturized, shaded, etc))
+ * workspace
+ * wich dock
  */
-static void
-saveClientState(WWindow *wwin, proplist_t dict)
+static proplist_t
+makeClientState(WWindow *wwin)
 {
     proplist_t key;
     
@@ -585,7 +597,7 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
     Bool gsPrefix = False;
     char *discardCmd = NULL;
     time_t t;
-    FILE *file;
+    proplist_t state;
 
 #ifdef DEBUG1
     puts("received SaveYourselfPhase2 SM message");
@@ -629,17 +641,57 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
 	free(prefix);
 
     /* save the states of all windows we're managing */
-    
-    file = fopen(statefile, "w");
-    if (!file) {
-	wsyserror(_("could not create state file %s"), statefile);
-	goto fail;
+    state = PLMakeArrayFromElements(NULL, NULL);
+
+    /*
+     * Format:
+     *
+     * state_file ::= dictionary with version_info ; state
+     * version_info ::= version = 1;
+     * state ::= state = array of screen_info
+     * screen_info ::= array of (screen number, window_info, window_info, ...)
+     * window_info ::= 
+     */
+    for (i=0; i<wScreenCount; i++) {
+	WScreen *scr;
+	WWindow *wwin;
+	char buf[32];
+	proplist_t pscreen;
+	
+	scr = wScreenWithNumber(i);
+
+	sprintf(buf, "%i", scr->screen);
+	pscreen = PLMakeArrayFromElements(PLMakeString(buf), NULL);
+
+	wwin = scr->focused_window;
+	while (wwin) {
+	    proplist_t pwindow;
+
+	    pwindow = makeClientState(wwin);
+	    PLAppendArrayElement(pscreen, pwindow);
+
+	    wwin = wwin->prev;
+	}
+
+	PLAppendArrayElement(state, pscreen);
     }
-    
-    
-    
-    fclose(file);
-    
+
+    {
+	proplist_t statefile;
+	
+	statefile = PLMakeDictionaryFromEntries(PLMakeString("Version"), 
+						PLMakeString("1"),
+
+						PLMakeString("Screens"),
+						state,
+
+						NULL);
+
+	PLSetFilename(statefile, PLMakeString(statefile));
+	PLSave(statefile, NO);
+
+	PLRelease(statefile);
+    }
 
     /* set the remaining properties that we didn't set at
      * startup time */

@@ -222,6 +222,7 @@ static WOptionEnumeration seIconificationStyles[] = {
     {"Twist", WIS_TWIST, 0},
     {"Flip", WIS_FLIP, 0},
     {"None", WIS_NONE, 0},
+    {"random", WIS_RANDOM, 0},
     {NULL, 0, 0}
 };
 
@@ -391,8 +392,8 @@ WDefaultEntry optionList[] = {
     {"AutoArrangeIcons", "NO",			NULL,
 	  &wPreferences.auto_arrange_icons, getBool,	NULL
     },
-    {"NoWindowUnderDock", "NO",			NULL,
-	  &wPreferences.no_window_under_dock, getBool,	NULL
+    {"NoWindowOverDock", "NO",			NULL,
+	  &wPreferences.no_window_over_dock, getBool,	NULL
     },
     {"NoWindowOverIcons", "NO",			NULL,
 	  &wPreferences.no_window_over_icons, getBool,  NULL

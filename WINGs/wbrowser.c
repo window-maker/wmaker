@@ -134,6 +134,30 @@ WMCreateBrowser(WMWidget *parent)
 }
 
 
+void
+WMSetBrowserMaxVisibleColumns(WMBrowser *bPtr, int columns)
+{
+    if (columns > bPtr->maxVisibleColumns) {
+
+	if (columns > bPtr->columnCount) {
+	    int i = columns - bPtr->columnCount;
+
+	    while (i--) {
+		WMAddBrowserColumn(bPtr);
+	    }
+	}
+
+	resizeBrowser(bPtr, bPtr->view->size.width, bPtr->view->size.height);
+
+    } else if (columns < bPtr->maxVisibleColumns) {
+
+	resizeBrowser(bPtr, bPtr->view->size.width, bPtr->view->size.height);
+    }
+
+    bPtr->maxVisibleColumns = columns;
+}
+
+
 int 
 WMGetBrowserNumberOfColumns(WMBrowser *bPtr)
 {

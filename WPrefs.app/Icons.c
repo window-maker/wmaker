@@ -37,12 +37,7 @@ typedef struct _Panel {
     WMFrame *posVF;
     WMFrame *posV;
 
-    WMButton *nwB;
-    WMButton *neB;
-    WMButton *swB;
-    WMButton *seB;
-    WMButton *verB;
-    WMButton *horB;
+    WMButton *posB[8];
 
     WMFrame *animF;
     WMButton *animB[4];
@@ -54,6 +49,7 @@ typedef struct _Panel {
     WMFrame *sizeF;
     WMPopUpButton *sizeP;
 
+    int iconPos;
 } _Panel;
 
 
@@ -66,8 +62,16 @@ showIconLayout(WMWidget *widget, void *data)
 {
     _Panel *panel = (_Panel*)data;
     int w, h;
+    int i;
     
-    if (WMGetButtonSelected(panel->horB)) {
+    for (i=0; i<8; i++) {
+	if (panel->posB[i] == widget) {
+	    panel->iconPos = i;
+	    break;
+	}
+    }
+
+    if (panel->iconPos & 1) {
 	w = 32;
 	h = 8;
     } else {
@@ -76,14 +80,19 @@ showIconLayout(WMWidget *widget, void *data)
     }
     WMResizeWidget(panel->posV, w, h);
     
-    if (WMGetButtonSelected(panel->nwB)) {
+    switch (panel->iconPos & ~1) {
+     case 0:
 	WMMoveWidget(panel->posV, 2, 2);
-    } else if (WMGetButtonSelected(panel->neB)) {
+	break;
+     case 2:
 	WMMoveWidget(panel->posV, 95-2-w, 2);
-    } else if (WMGetButtonSelected(panel->swB)) {
+	break;
+     case 4:
 	WMMoveWidget(panel->posV, 2, 70-2-h);
-    } else {
+	break;
+     default:
 	WMMoveWidget(panel->posV, 95-2-w, 70-2-h);
+	break;
     }
 }
 
@@ -111,23 +120,20 @@ showData(_Panel *panel)
     }
 
     if (str[0]=='t' || str[0]=='T') {
-	if (str[1]=='r' || str[1]=='R') {
-	    WMPerformButtonClick(panel->neB);
-	} else {
-	    WMPerformButtonClick(panel->nwB);
-	}
+	i = 0;
     } else {
-	if (str[1]=='r' || str[1]=='R') {
-	    WMPerformButtonClick(panel->seB);
-	} else {
-	    WMPerformButtonClick(panel->swB);
-	}
+	i = 4;
+    }
+    if (str[1]=='r' || str[1]=='R') {
+	i += 2;
     }
     if (str[2]=='v' || str[2]=='V') {
-	WMPerformButtonClick(panel->verB);
+	i += 0;
     } else {
-	WMPerformButtonClick(panel->horB);
+	i += 1;
     }
+    panel->iconPos = i;
+    WMPerformButtonClick(panel->posB[i]);
     
     i = GetIntegerForKey("IconSize");
     i = (i-24)/8;
@@ -171,56 +177,44 @@ createPanel(Panel *p)
     WMMoveWidget(panel->posF, 25, 10);
     WMSetFrameTitle(panel->posF, _("Icon Positioning"));
 
-    panel->nwB = WMCreateButton(panel->posF, WBTOnOff);
-    WMResizeWidget(panel->nwB, 24, 24);
-    WMMoveWidget(panel->nwB, 15, 25);
-    WMSetButtonAction(panel->nwB, showIconLayout, panel);
+    for (i=0; i<8; i++) {
+	panel->posB[i] = WMCreateButton(panel->posF, WBTOnOff);
+	WMSetButtonAction(panel->posB[i], showIconLayout, panel);
 
-    panel->neB = WMCreateButton(panel->posF, WBTOnOff);
-    WMResizeWidget(panel->neB, 24, 24);
-    WMMoveWidget(panel->neB, 115, 25);
-    WMSetButtonAction(panel->neB, showIconLayout, panel);
-    
-    panel->swB = WMCreateButton(panel->posF, WBTOnOff);
-    WMResizeWidget(panel->swB, 24, 24);
-    WMMoveWidget(panel->swB, 15, 100);
-    WMSetButtonAction(panel->swB, showIconLayout, panel);
+	if (i>0)
+	    WMGroupButtons(panel->posB[0], panel->posB[i]);
+    }
+    WMMoveWidget(panel->posB[1], 70, 23);
+    WMResizeWidget(panel->posB[1], 47, 15);
+    WMMoveWidget(panel->posB[3], 70+47, 23);
+    WMResizeWidget(panel->posB[3], 47, 15);
 
-    panel->seB = WMCreateButton(panel->posF, WBTOnOff);
-    WMResizeWidget(panel->seB, 24, 24);
-    WMMoveWidget(panel->seB, 115, 100);
-    WMSetButtonAction(panel->seB, showIconLayout, panel);
+    WMMoveWidget(panel->posB[0], 55, 38);
+    WMResizeWidget(panel->posB[0], 15, 35);
+    WMMoveWidget(panel->posB[4], 55, 38+35);
+    WMResizeWidget(panel->posB[4], 15, 35);
 
-    WMGroupButtons(panel->nwB, panel->neB);
-    WMGroupButtons(panel->nwB, panel->seB);
-    WMGroupButtons(panel->nwB, panel->swB);
+    WMMoveWidget(panel->posB[5], 70, 38+70);
+    WMResizeWidget(panel->posB[5], 47, 15);
+    WMMoveWidget(panel->posB[7], 70+47, 38+70);
+    WMResizeWidget(panel->posB[7], 47, 15);
+
+    WMMoveWidget(panel->posB[2], 70+95, 38);
+    WMResizeWidget(panel->posB[2], 15, 35);
+    WMMoveWidget(panel->posB[6], 70+95, 38+35);
+    WMResizeWidget(panel->posB[6], 15, 35);
 
     color = WMCreateRGBColor(WMWidgetScreen(panel->win), 0x5100, 0x5100, 
 			     0x7100, True);
     panel->posVF = WMCreateFrame(panel->posF);
     WMResizeWidget(panel->posVF, 95, 70);
-    WMMoveWidget(panel->posVF, 30, 38);
+    WMMoveWidget(panel->posVF, 70, 38);
     WMSetFrameRelief(panel->posVF, WRSunken);
     WMSetWidgetBackgroundColor(panel->posVF, color);
     WMReleaseColor(color);
 
     panel->posV = WMCreateFrame(panel->posVF);
     WMSetFrameRelief(panel->posV, WRSimple);
-
-    panel->verB = WMCreateRadioButton(panel->posF);
-    WMResizeWidget(panel->verB, 105, 20);
-    WMMoveWidget(panel->verB, 150, 45);
-    WMSetButtonText(panel->verB, "Vertical");
-    WMSetButtonAction(panel->verB, showIconLayout, panel);
-
-    panel->horB = WMCreateRadioButton(panel->posF);
-    WMResizeWidget(panel->horB, 105, 20);
-    WMMoveWidget(panel->horB, 150, 75);
-    WMSetButtonText(panel->horB, "Horizontal");   
-    WMSetButtonAction(panel->horB, showIconLayout, panel);
-    
-
-    WMGroupButtons(panel->horB, panel->verB);
     
     WMMapSubwidgets(panel->posF);
     
@@ -298,22 +292,19 @@ storeData(_Panel *panel)
     SetIntegerForKey(WMGetPopUpButtonSelectedItem(panel->sizeP)*8+24,
 		     "IconSize");
 
-    buf[3] = 0;    
-    if (WMGetButtonSelected(panel->nwB)) {
+    buf[3] = 0;
+
+    if (panel->iconPos < 4) {
 	buf[0] = 't';
-	buf[1] = 'l';
-    } else if (WMGetButtonSelected(panel->neB)) {
-	buf[0] = 't';
-	buf[1] = 'r';
-    } else if (WMGetButtonSelected(panel->swB)) {
-	buf[0] = 'b';
-	buf[1] = 'l';
     } else {
 	buf[0] = 'b';
-	buf[1] = 'r';
     }
-
-    if (WMGetButtonSelected(panel->horB)) {
+    if (panel->iconPos & 2) {
+	buf[1] = 'r';
+    } else {
+	buf[1] = 'l';
+    }
+    if (panel->iconPos & 1) {
 	buf[2] = 'h';
     } else {
 	buf[2] = 'v';

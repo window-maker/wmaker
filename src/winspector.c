@@ -1323,6 +1323,14 @@ createInspectorForWindow(WWindow *wwin)
 	WMSetPopUpButtonItemEnabled(panel->pagePopUp, 4, False);
 	panel->appFrm = NULL;
     }
+   
+    /* if the window is a transient, don't let it have a miniaturize
+     * button */
+    if (wwin->transient_for!=None && wwin->transient_for!=scr->root_win)
+	WMSetButtonEnabled(panel->attrChk[3], False);
+    else
+	WMSetButtonEnabled(panel->attrChk[3], True);
+
 
     WMRealizeWidget(panel->win);
 

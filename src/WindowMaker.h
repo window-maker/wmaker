@@ -141,7 +141,7 @@ typedef struct WObjDescriptor {
 #define WIS_TWIST       1
 #define WIS_FLIP        2
 #define WIS_NONE        3
-
+#define WIS_RANDOM	4 /* secret */
 
 /* switchmenu actions */
 #define ACTION_ADD	0
@@ -212,7 +212,7 @@ typedef struct WPreferences {
     
     char use_saveunders;	       /* turn on SaveUnders for menus,
 					* icons etc. */ 
-    char no_window_under_dock;
+    char no_window_over_dock;
 
     char no_window_over_icons;
 
