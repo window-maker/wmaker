@@ -71,7 +71,7 @@ typedef struct W_TextField {
         unsigned int waitingSelection:1; /* requested selection, but
         * didnt get yet */
 
-        /**/
+       
         unsigned int notIllegalMovement:1;
     } flags;
 } TextField;
@@ -312,6 +312,13 @@ selectionNotification(void *observerData, WMNotification *notification)
 }
 
 
+static void
+realizeObserver(void *self, WMNotification *not)
+{
+    W_CreateIC(((TextField*)self)->view);
+}
+
+
 WMTextField*
 WMCreateTextField(WMWidget *parent)
 {
@@ -364,6 +371,8 @@ WMCreateTextField(WMWidget *parent)
                               WMSelectionOwnerDidChangeNotification,
                               (void*)XA_PRIMARY);
 
+    WMAddNotificationObserver(realizeObserver, tPtr,
+                              WMViewRealizedNotification, tPtr->view);
 
     tPtr->flags.cursorOn = 1;
 
@@ -762,8 +771,11 @@ paintCursor(TextField *tPtr)
               cx, tPtr->offsetWidth, cx,
               tPtr->view->size.height - tPtr->offsetWidth - 1);
 
-    if (tPtr->flags.secure)
+    W_SetPreeditPositon(tPtr->view, cx, 0);
+
+    if (tPtr->flags.secure) {
         wfree(text);
+    }
 }
 
 
@@ -953,9 +965,9 @@ handleEvents(XEvent *event, void *data)
 
     CHECK_CLASS(data, WC_TextField);
 
-
     switch (event->type) {
     case FocusIn:
+        W_FocusIC(tPtr->view);
         if (W_FocusedViewOfToplevel(W_TopLevelOfView(tPtr->view))!=tPtr->view)
             return;
         tPtr->flags.focused = 1;
@@ -973,6 +985,7 @@ handleEvents(XEvent *event, void *data)
         break;
 
     case FocusOut:
+        W_UnFocusIC(tPtr->view);
         tPtr->flags.focused = 0;
 #if 0
         if (tPtr->timerID)
@@ -1021,7 +1034,8 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     controled = (event->xkey.state & ControlMask ? True : False);
     modified = shifted || controled;
 
-    count = XLookupString(&event->xkey, buffer, 63, &ksym, NULL);
+    count = W_LookupString(tPtr->view, &event->xkey, buffer, 63, &ksym, NULL);
+    //count = XLookupString(&event->xkey, buffer, 63, &ksym, NULL);
     buffer[count] = '\0';
 
     switch (ksym) {
@@ -1612,6 +1626,8 @@ destroyTextField(TextField *tPtr)
     if (tPtr->timerID)
         WMDeleteTimerHandler(tPtr->timerID);
 #endif
+
+    W_DestroyIC(tPtr->view);
 
     WMReleaseFont(tPtr->font);
     /*// use lostSelection() instead of WMDeleteSelectionHandler here?*/

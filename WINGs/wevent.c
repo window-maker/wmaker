@@ -213,6 +213,10 @@ WMHandleEvent(XEvent *event)
         return True;
     }
 
+    if (XFilterEvent(event, None) == True) {
+        return False;
+    }
+
     mask = eventMasks[event->xany.type];
 
     window = event->xany.window;

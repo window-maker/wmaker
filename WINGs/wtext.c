@@ -2299,6 +2299,7 @@ autoSelectText(Text *tPtr, int clicks)
 
 }
 
+# if 0
 static void
 fontChanged(void *observerData, WMNotification *notification)
 {
@@ -2312,6 +2313,7 @@ fontChanged(void *observerData, WMNotification *notification)
     if (tPtr->flags.ownsSelection)
         WMSetTextSelectionFont(tPtr, font);
 }
+#endif
 
 
 static  void

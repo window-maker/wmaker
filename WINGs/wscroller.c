@@ -672,6 +672,8 @@ handlePush(Scroller *sPtr, int pushX, int pushY, int alternate)
          handleMotion(sPtr, pushX, pushY); */
         break;
 
+    case WSDecrementWheel:
+    case WSIncrementWheel:
     case WSKnobSlot:
     case WSNoPart:
         /* dummy */

@@ -385,6 +385,7 @@ typedef struct W_View {
     WMPixmap *dragImage;
     int helpContext;
 
+    XIC xic;
 
     struct {
         unsigned int realized:1;
@@ -611,6 +612,22 @@ void W_DragDestinationStateHandler(WMDraggingInfo *info,
 void W_DragDestinationInfoClear(WMDraggingInfo *info);
 
 void W_FreeViewXdndPart(WMView *view);
+
+/* XIM */
+void W_InitIM(WMScreen *scr);
+
+void W_CreateIC(WMView *view);
+
+void W_DestroyIC(WMView *view);
+
+void W_FocusIC(WMView *view);
+
+void W_UnFocusIC(WMView *view);
+
+void W_SetPreeditPositon(W_View *view, int x, int y);
+
+int W_LookupString(W_View *view, XKeyPressedEvent *event, char *buffer,
+                   int buflen, KeySym *keysym, Status *status);
 
 #ifdef __cplusplus
 }

@@ -130,6 +130,8 @@ createView(W_Screen *screen, W_View *parent)
         adoptChildView(parent, view);
     }
 
+    view->xic = 0;
+
     view->refCount = 1;
 
     view->eventHandlers = WMCreateArrayWithDestructor(4, wfree);
@@ -212,7 +214,6 @@ W_RealizeView(W_View *view)
 
     assert(view->size.width > 0);
     assert(view->size.height > 0);
-
 
     if (view->parent && !view->parent->flags.realized) {
         wwarning("trying to realize widget of unrealized parent");

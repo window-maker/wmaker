@@ -631,9 +631,6 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     scrPtr->xftdraw = XftDrawCreate(scrPtr->display, W_DRAWABLE(scrPtr),
                                     scrPtr->visual, scrPtr->colormap);
 
-    /* create input method stuff */
-    W_InitIMStuff(scrPtr);
-
     /* Create missing CUT_BUFFERs */
     {
         Atom *rootWinProps;
@@ -772,6 +769,9 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 
         return NULL;
     }
+
+    /* create input method stuff */
+    W_InitIM(scrPtr);
 
     scrPtr->checkButtonImageOn = makePixmap(scrPtr, CHECK_BUTTON_ON,
                                             CHECK_BUTTON_ON_WIDTH,

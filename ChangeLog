@@ -3,6 +3,8 @@ Changes since version 0.91.0:
 - fixed crash with info panel and alt-tabbing
 - updated Japanese translations (Takeo Hashimoto <HashimotoTakeo@mac.com>)
 - allow disable of switch panel when SwitchPanelImages=None
+- added X Input Methods support in WINGs
+
 
 Changes since version 0.90.0:
 .............................

@@ -1047,6 +1047,8 @@ main(int argc, char **argv)
 
     testColorPanel(scr);
 
+    testTextField(scr);
+
 #if 0
 
     testBox(scr);

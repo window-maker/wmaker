@@ -53,7 +53,6 @@ W_ReadConfigurations(void)
     if (defaults) {
         char *buttonName;
         unsigned button;
-        char *str;
 
         WINGsConfiguration.systemFont =
             WMGetUDStringForKey(defaults, "SystemFont");
