@@ -28,6 +28,7 @@ prefsdata_DATA =\
 	Purplish.style\
 	Red.style\
 	RednBlue.style\
+	Spring.style\
 	Summer.style\
 	Traditional.style\
 	VioletBlue.style
