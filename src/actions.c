@@ -1074,7 +1074,7 @@ wDeiconifyWindow(WWindow  *wwin)
     if (!wwin->flags.shaded)
 	wwin->flags.mapped = 1;
 
-    if (!wPreferences.disable_miniwindows) {
+    if (!wPreferences.disable_miniwindows && wwin->icon != NULL) {
 	if (wwin->icon->selected)
 	    wIconSelect(wwin->icon);
 
@@ -1086,7 +1086,7 @@ wDeiconifyWindow(WWindow  *wwin)
     /* if the window is in another workspace, do it silently */
 #ifdef ANIMATIONS
     if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations
-	&& !wwin->flags.skip_next_animation) {
+	&& !wwin->flags.skip_next_animation && wwin->icon != NULL) {
 	int ix, iy, iw, ih;
 
 	if (!wPreferences.disable_miniwindows) {
@@ -1130,7 +1130,7 @@ wDeiconifyWindow(WWindow  *wwin)
     }
     mapTransientsFor(wwin);
 
-    if (!wPreferences.disable_miniwindows) {
+    if (!wPreferences.disable_miniwindows && wwin->icon != NULL) {
 	RemoveFromStackList(wwin->icon->core);
 	/*    removeIconGrabs(wwin->icon);*/
 	wIconDestroy(wwin->icon);
