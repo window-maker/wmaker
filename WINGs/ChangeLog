@@ -25,6 +25,10 @@ changes since wmaker 0.61.1:
 - fixed a bug in how input events were posted. Establishing 2 or more input 
   handlers for the same file descriptor, handling different (read/write/except)
   events, caused wrong handlers to be called.
+- Reimplemented the input and idle handlers with WMBag to avoid a functional
+  problem with them: inability to remove handlers next to the called one, from
+  the called handler itself. Trying to do this with the old version caused the
+  program to crash.
 
 changes since wmaker 0.61.0:
 ............................

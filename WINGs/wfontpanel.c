@@ -856,7 +856,7 @@ familyClick(WMWidget *w, void *data)
 
     for (i = 0; i < WMGetBagItemCount(family->typefaces); i++) {
 	char buffer[256];
-	int top;
+	int top=0;
 	WMListItem *fitem;
 
 	face = WMGetFromBag(family->typefaces, i);

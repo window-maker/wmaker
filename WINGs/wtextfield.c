@@ -976,7 +976,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     char buffer[64];
     KeySym ksym;
     char *textEvent = NULL;
-    void *data;
+    void *data = NULL;
     int count, refresh = 0;
     int control_pressed = 0;
     int cancelSelection = 1;

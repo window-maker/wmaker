@@ -43,7 +43,6 @@ typedef struct TimerHandler {
 typedef struct IdleHandler {
     WMCallback		*callback;
     void 		*clientData;
-    struct IdleHandler	*next;
 } IdleHandler;
 
 
@@ -52,16 +51,15 @@ typedef struct InputHandler {
     void		*clientData;
     int			fd;
     int			mask;
-    struct InputHandler *next;
 } InputHandler;
 
 
 /* queue of timer event handlers */
 static TimerHandler *timerHandler=NULL;
 
-static IdleHandler *idleHandler=NULL;
+static WMBag *idleHandler=NULL;
 
-static InputHandler *inputHandler=NULL;
+static WMBag *inputHandler=NULL;
 
 
 
@@ -176,7 +174,7 @@ WMDeleteTimerHandler(WMHandlerID handlerID)
 WMHandlerID
 WMAddIdleHandler(WMCallback *callback, void *cdata)
 {
-    IdleHandler *handler, *tmp;
+    IdleHandler *handler;
 
     handler = malloc(sizeof(IdleHandler));
     if (!handler)
@@ -184,17 +182,11 @@ WMAddIdleHandler(WMCallback *callback, void *cdata)
 
     handler->callback = callback;
     handler->clientData = cdata;
-    handler->next = NULL;
-    /* add callback at end of queue */
+    /* add handler at end of queue */
     if (!idleHandler) {
-	idleHandler = handler;
-    } else {
-	tmp = idleHandler;
-	while (tmp->next) {
-	    tmp = tmp->next;
-	}
-	tmp->next = handler;
+	idleHandler = WMCreateBag(16);
     }
+    WMPutInBag(idleHandler, handler);
 
     return handler;
 }
@@ -204,24 +196,16 @@ WMAddIdleHandler(WMCallback *callback, void *cdata)
 void
 WMDeleteIdleHandler(WMHandlerID handlerID)
 {
-    IdleHandler *tmp, *handler = (IdleHandler*)handlerID;
+    IdleHandler *handler = (IdleHandler*)handlerID;
+    int pos;
 
     if (!handler || !idleHandler)
 	return;
 
-    tmp = idleHandler;
-    if (tmp == handler) {
-	idleHandler = handler->next;
-	wfree(handler);
-    } else {
-	while (tmp->next) {
-	    if (tmp->next == handler) {
-		tmp->next = handler->next;
-		wfree(handler);
-		break;
-	    }
-	    tmp = tmp->next;
-	}
+    pos = WMGetFirstInBag(idleHandler, handler);
+    if (pos >= 0) {
+        wfree(handler);
+        WMDeleteFromBag(idleHandler, pos);
     }
 }
 
@@ -239,68 +223,68 @@ WMAddInputHandler(int fd, int condition, WMInputProc *proc, void *clientData)
     handler->callback = proc;
     handler->clientData = clientData;
 
-    handler->next = inputHandler;
-
-    inputHandler = handler;
+    if (!inputHandler)
+        inputHandler = WMCreateBag(16);
+    WMPutInBag(inputHandler, handler);
 
     return handler;
 }
 
 
+
 void
 WMDeleteInputHandler(WMHandlerID handlerID)
 {
-    InputHandler *tmp, *handler = (InputHandler*)handlerID;
+    InputHandler *handler = (InputHandler*)handlerID;
+    int pos;
 
     if (!handler || !inputHandler)
 	return;
 
-    tmp = inputHandler;
-    if (tmp == handler) {
-	inputHandler = handler->next;
-	wfree(handler);
-    } else {
-	while (tmp->next) {
-	    if (tmp->next == handler) {
-		tmp->next = handler->next;
-		wfree(handler);
-		break;
-	    }
-	    tmp = tmp->next;
-	}
+    pos = WMGetFirstInBag(inputHandler, handler);
+    if (pos >= 0) {
+        wfree(handler);
+        WMDeleteFromBag(inputHandler, pos);
     }
 }
+
 
 
 static Bool
 checkIdleHandlers()
 {
-    IdleHandler *handler, *tmp;
+    IdleHandler *handler;
+    WMBag *handlerCopy;
+    int i, n;
 
-    if (!idleHandler) {
+    if (!idleHandler || WMGetBagItemCount(idleHandler)==0) {
 	W_FlushIdleNotificationQueue();
         /* make sure an observer in queue didn't added an idle handler */
-        return (idleHandler!=NULL);
+        return (idleHandler!=NULL && WMGetBagItemCount(idleHandler)>0);
     }
 
-    handler = idleHandler;
+    n = WMGetBagItemCount(idleHandler);
+    handlerCopy = WMCreateBag(n);
+    for (i=0; i<n; i++)
+        WMPutInBag(handlerCopy, WMGetFromBag(idleHandler, i));
 
-    /* we will process all idleHandlers so, empty the handler list */
-    idleHandler = NULL;
+    for (i=0; i<n; i++) {
+        handler = WMGetFromBag(handlerCopy, i);
+        /* check if the handler still exist or was removed by a callback */
+        if (WMGetFirstInBag(idleHandler, handler)<0)
+            continue;
 
-    while (handler) {
-	tmp = handler->next;
 	(*handler->callback)(handler->clientData);
-	/* remove the handler */
-	wfree(handler);
-
-	handler = tmp;
+        WMDeleteIdleHandler(handler);
+        wfree(handler);
     }
+
+    WMFreeBag(handlerCopy);
 
     W_FlushIdleNotificationQueue();
 
     /* this is not necesarrily False, because one handler can re-add itself */
-    return (idleHandler!=NULL);
+    return (WMGetBagItemCount(idleHandler)>0);
 }
 
 
@@ -387,28 +371,24 @@ handleInputEvents(Bool waitForInput)
 #if defined(HAVE_POLL) && defined(HAVE_POLL_H) && !defined(HAVE_SELECT)
     struct pollfd *fds;
     InputHandler *handler;
-    int count, timeout, nfds, k;
+    int count, timeout, nfds, i;
 
-    if (!inputHandler) {
+    if (!inputHandler || (nfds=WMGetBagItemCount(inputHandler))==0) {
         W_FlushASAPNotificationQueue();
         return False;
     }
 
-    for (nfds = 0, handler = inputHandler;
-         handler != 0; handler = handler->next) nfds++;
-
     fds = wmalloc(nfds * sizeof(struct pollfd));
 
-    for (k = 0, handler = inputHandler;
-         handler;
-         handler = handler->next, k++) {
-        fds[k].fd = handler->fd;
-        fds[k].events = 0;
+    for (i = 0; i<nfds; i++) {
+        handler = WMGetFromBag(inputHandler, i);
+        fds[i].fd = handler->fd;
+        fds[i].events = 0;
 	if (handler->mask & WIReadMask)
-            fds[k].events |= POLLIN;
+            fds[i].events |= POLLIN;
 
 	if (handler->mask & WIWriteMask)
-            fds[k].events |= POLLOUT;
+            fds[i].events |= POLLOUT;
 
 #if 0 /* FIXME */
 	if (handler->mask & WIExceptMask)
@@ -434,36 +414,40 @@ handleInputEvents(Bool waitForInput)
     count = poll(fds, nfds, timeout);
 
     if (count > 0) {
-	handler = inputHandler;
-        k = 0;
-	while (handler) {
+        WMBag *handlerCopy = WMCreateBag(nfds);
+
+        for (i=0; i<nfds, i++)
+            WMPutInBag(handlerCopy, WMGetFromBag(inputHandler, i));
+
+        for (i=0; i<nfds; i++) {
 	    int mask;
-            InputHandler *next;
+
+            handler = WMGetFromBag(handlerCopy, i);
+            /* check if the handler still exist or was removed by a callback */
+            if (WMGetFirstInBag(inputHandler, handler)<0)
+                continue;
 
 	    mask = 0;
 
             if ((handler->mask & WIReadMask) &&
-                (fds[k].revents & (POLLIN|POLLRDNORM|POLLRDBAND|POLLPRI)))
+                (fds[i].revents & (POLLIN|POLLRDNORM|POLLRDBAND|POLLPRI)))
                 mask |= WIReadMask;
 
             if ((handler->mask & WIWriteMask) &&
-                (fds[k].revents & (POLLOUT | POLLWRBAND)))
+                (fds[i].revents & (POLLOUT | POLLWRBAND)))
                 mask |= WIWriteMask;
 
             if ((handler->mask & WIExceptMask) &&
-                (fds[k].revents & (POLLHUP | POLLNVAL | POLLERR)))
+                (fds[i].revents & (POLLHUP | POLLNVAL | POLLERR)))
                 mask |= WIExceptMask;
-
-            next = handler->next;
 
 	    if (mask!=0 && handler->callback) {
 		(*handler->callback)(handler->fd, mask,
 				     handler->clientData);
 	    }
+        }
 
-	    handler = next;
-            k++;
-	}
+        WMFreeBag(handlerCopy);
     }
 
     wfree(fds);
@@ -476,11 +460,11 @@ handleInputEvents(Bool waitForInput)
     struct timeval timeout;
     struct timeval *timeoutPtr;
     fd_set rset, wset, eset;
-    int maxfd;
+    int maxfd, nfds, i;
     int count;
-    InputHandler *handler = inputHandler;
+    InputHandler *handler;
 
-    if (!inputHandler) {
+    if (!inputHandler || (nfds=WMGetBagItemCount(inputHandler))==0) {
         W_FlushASAPNotificationQueue();
         return False;
     }
@@ -491,7 +475,8 @@ handleInputEvents(Bool waitForInput)
 
     maxfd = 0;
 
-    while (handler) {
+    for (i=0; i<nfds; i++) {
+        handler = WMGetFromBag(inputHandler, i);
 	if (handler->mask & WIReadMask)
 	    FD_SET(handler->fd, &rset);
 
@@ -503,8 +488,6 @@ handleInputEvents(Bool waitForInput)
 
 	if (maxfd < handler->fd)
 	    maxfd = handler->fd;
-
-	handler = handler->next;
     }
 
     /*
@@ -526,11 +509,18 @@ handleInputEvents(Bool waitForInput)
     count = select(1 + maxfd, &rset, &wset, &eset, timeoutPtr);
 
     if (count > 0) {
-	handler = inputHandler;
+        WMBag *handlerCopy = WMCreateBag(nfds);
 
-	while (handler) {
+        for (i=0; i<nfds; i++)
+            WMPutInBag(handlerCopy, WMGetFromBag(inputHandler, i));
+
+        for (i=0; i<nfds; i++) {
 	    int mask;
-            InputHandler *next;
+
+            handler = WMGetFromBag(handlerCopy, i);
+            /* check if the handler still exist or was removed by a callback */
+            if (WMGetFirstInBag(inputHandler, handler)<0)
+                continue;
 
 	    mask = 0;
 
@@ -543,16 +533,13 @@ handleInputEvents(Bool waitForInput)
 	    if ((handler->mask & WIExceptMask) && FD_ISSET(handler->fd, &eset))
 		mask |= WIExceptMask;
 
-            /* save it because the handler may remove itself! */
-            next = handler->next;
-
 	    if (mask!=0 && handler->callback) {
 		(*handler->callback)(handler->fd, mask,
 				     handler->clientData);
 	    }
+        }
 
-	    handler = next;
-	}
+        WMFreeBag(handlerCopy);
     }
 
     W_FlushASAPNotificationQueue();
@@ -575,11 +562,12 @@ WHandleEvents()
      * checkIdleHandlers() in a while loop, because else the while loop
      * can run forever (if some idle handler reinitiates itself).
      */
-    if (inputHandler) {
+    if (inputHandler && WMGetBagItemCount(inputHandler)>0) {
         /* Do idle and timer stuff while there are no input events */
-        /* We check InputHandler again because some idle handler could have
-         * removed them */
-        while (checkIdleHandlers() && inputHandler && !handleInputEvents(False)) {
+        /* Check again if there are still input handlers, because some idle
+         * handler could have removed them */
+        while (checkIdleHandlers() && WMGetBagItemCount(inputHandler)>0 &&
+               !handleInputEvents(False)) {
             /* dispatch timer events */
             checkTimerHandlers();
         }
