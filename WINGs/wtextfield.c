@@ -214,7 +214,7 @@ requestHandler(WMWidget *w, Atom selection, Atom target, Atom *type,
         ptr[0] = _TARGETS;
         ptr[1] = XA_STRING;
         ptr[2] = XInternAtom(dpy, "TEXT", False);
-        ptr[4] = XInternAtom(dpy, "COMPOUND_TEXT", False);
+        ptr[3] = XInternAtom(dpy, "COMPOUND_TEXT", False);
         *type = target;
         return True;
     }

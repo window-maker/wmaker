@@ -281,7 +281,7 @@ getInternalSelection(WMScreen *scr, Atom selection, Atom target,
      * do the conversion directly.
      */
 
-    data = NULL;
+    *data = NULL;
 
     owner = XGetSelectionOwner(scr->display, selection);
     if (!owner)
