@@ -399,7 +399,16 @@ wIconValidateIconSize(WScreen *scr, RImage *icon)
     
     if (!icon)
 	return NULL;
-    
+
+    if (wPreferences.icon_size != 64) {
+	w = wPreferences.icon_size * icon->width / 64;
+	h = wPreferences.icon_size * icon->height / 64;
+
+	tmp = RScaleImage(icon, w, h);
+	RDestroyImage(icon);
+	icon = tmp;
+    }
+#if 0
     if (icon->width > wPreferences.icon_size
         || icon->height > wPreferences.icon_size) {
 	if (icon->width > icon->height) {
@@ -413,6 +422,7 @@ wIconValidateIconSize(WScreen *scr, RImage *icon)
 	RDestroyImage(icon);
 	icon = tmp;
     }
+#endif
 
     return icon;
 }

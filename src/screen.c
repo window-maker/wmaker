@@ -736,14 +736,18 @@ wScreenInit(int screen_number)
     XDefineCursor(dpy, scr->root_win, wCursor[WCUR_DEFAULT]);
 
     /* screen descriptor for raster graphic library */
-    rattr.flags = RC_RenderMode | RC_ColorsPerChannel;
+    rattr.flags = RC_RenderMode | RC_ColorsPerChannel | RC_StandardColormap;
     rattr.render_mode = wPreferences.no_dithering 
 				? RBestMatchRendering
 				: RDitheredRendering;
 
+    /* if the std colormap stuff works ok, this will be ignored */
     rattr.colors_per_channel = wPreferences.cmap_size;
     if (rattr.colors_per_channel<2)
 	rattr.colors_per_channel = 2;
+
+    /* will only be accounted for in PseudoColor */
+    rattr.standard_colormap_mode = RCreateStdColormap;
 
     if (wVisualID>=0) {
 	rattr.flags |= RC_VisualID;
