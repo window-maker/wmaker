@@ -138,6 +138,7 @@ main(int argc, char **argv)
         bindtextdomain("WPrefs", getenv("NLSPATH"));
     else
         bindtextdomain("WPrefs", LOCALEDIR);
+    bind_textdomain_codeset("WPrefs", "UTF-8");
     textdomain("WPrefs");
 
     if (!XSupportsLocale()) {

@@ -43,6 +43,7 @@ WMInitializeApplication(char *applicationName, int *argc, char **argv)
         bindtextdomain("WINGs", getenv("NLSPATH"));
     else
         bindtextdomain("WINGs", LOCALEDIR);
+    bind_textdomain_codeset("WINGs", "UTF-8");
 #endif
 
     _WINGS_progname = argv[0];

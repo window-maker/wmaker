@@ -778,6 +778,7 @@ real_main(int argc, char **argv)
         bindtextdomain("WindowMaker", getenv("NLSPATH"));
     else
         bindtextdomain("WindowMaker", LOCALEDIR);
+    bind_textdomain_codeset("WindowMaker", "UTF-8");
     textdomain("WindowMaker");
 
     if (!XSupportsLocale()) {
