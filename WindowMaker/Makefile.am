@@ -11,7 +11,7 @@ prefsdata_DATA =\
 	menu.ca\
 	menu.cz\
 	menu.de\
-	menu.dk\
+	menu.da\
 	menu.el\
 	menu.es\
 	menu.fi\

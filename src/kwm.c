@@ -1744,9 +1744,10 @@ connectKFM(WScreen *scr)
 void
 wKWMSelectRootRegion(WScreen *scr, int x, int y, int w, int h, Bool control)
 {
+#if 0
     char buffer[128];
     int sock;
-#if 0
+
     puts("CONNECTING");
     sock = connectKFM(scr);
     if (sock < 0)

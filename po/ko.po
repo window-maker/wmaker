@@ -5,229 +5,244 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.51.0\n"
-"POT-Creation-Date: 1999-01-29 08:44+0900\n"
-"PO-Revision-Date: 1999-01-29 08:47+0900\n"
+"Project-Id-Version: 0.52.0\n"
+"POT-Creation-Date: 1999-04-10 01:12+0900\n"
+"PO-Revision-Date: 1999-04-10 01:30+0900\n"
 "Last-Translator: Byeong-Chan Kim <redhands@linux.sarang.net>\n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=EUC-KR\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: ../src/appicon.c:509 ../src/dialog.c:216 ../src/dialog.c:272
-#: ../src/dock.c:3060 ../src/dockedapp.c:208 ../src/winspector.c:281
-#: ../src/winspector.c:297
+#: ../src/appicon.c:540 ../src/dialog.c:216 ../src/dialog.c:272
+#: ../src/dock.c:3079 ../src/dockedapp.c:210 ../src/rootmenu.c:1741
+#: ../src/winspector.c:283 ../src/winspector.c:299
 msgid "Error"
 msgstr "오류"
 
-#: ../src/appicon.c:510
+#: ../src/appicon.c:541
 msgid "Could not open specified icon file"
 msgstr "지정한 아이콘을 열지 못함."
 
-#: ../src/appicon.c:511 ../src/dialog.c:115 ../src/dialog.c:216
-#: ../src/dialog.c:272 ../src/dialog.c:460 ../src/dock.c:424
-#: ../src/dock.c:3061 ../src/dockedapp.c:208 ../src/dockedapp.c:352
-#: ../src/winspector.c:282 ../src/winspector.c:298
+#: ../src/appicon.c:542 ../src/dialog.c:115 ../src/dialog.c:216
+#: ../src/dialog.c:272 ../src/dialog.c:460 ../src/dock.c:438
+#: ../src/dock.c:3080 ../src/dockedapp.c:210 ../src/dockedapp.c:354
+#: ../src/rootmenu.c:1745 ../src/winspector.c:284 ../src/winspector.c:300
 msgid "OK"
 msgstr "확인"
 
-#: ../src/appicon.c:532 ../src/dock.c:272 ../src/winmenu.c:123
-msgid "Kill Application"
-msgstr "애플리케이션 종료"
-
-#: ../src/appicon.c:533 ../src/dock.c:273 ../src/winmenu.c:124
+#: ../src/appicon.c:569 ../src/dock.c:281
 msgid ""
-"This will kill the application.\n"
+" will be forcibly closed.\n"
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-"애플리케이션을 강제 종료합니다.\n"
+" 강제 종료합니다.\n"
 "저장하지 않은 변경 사항은 잃게 됩니다.\n"
 "계속 하시겠습니까?"
 
-#: ../src/appicon.c:534 ../src/dock.c:274 ../src/winmenu.c:125
+#: ../src/appicon.c:575 ../src/dock.c:286 ../src/winmenu.c:124
+msgid "Kill Application"
+msgstr "애플리케이션 종료"
+
+#: ../src/appicon.c:576 ../src/dock.c:287 ../src/winmenu.c:126
 msgid "Yes"
 msgstr "예"
 
-#: ../src/appicon.c:534 ../src/dock.c:274 ../src/winmenu.c:125
+#: ../src/appicon.c:576 ../src/dock.c:287 ../src/winmenu.c:126
 msgid "No"
 msgstr "아니오"
 
-#: ../src/appicon.c:548 ../src/dock.c:1064
+#: ../src/appicon.c:594 ../src/dock.c:1074
 msgid "Unhide Here"
 msgstr "숨긴 것 이곳에 보임"
 
-#: ../src/appicon.c:549 ../src/appicon.c:574 ../src/dock.c:1066
-#: ../src/dock.c:1068 ../src/dock.c:3186 ../src/dock.c:3188
-#: ../src/winmenu.c:441
+#: ../src/appicon.c:595 ../src/appicon.c:620 ../src/dock.c:1076
+#: ../src/dock.c:1078 ../src/dock.c:3205 ../src/dock.c:3207
+#: ../src/winmenu.c:446
 msgid "Hide"
 msgstr "숨김"
 
-#: ../src/appicon.c:550
+#: ../src/appicon.c:596
 msgid "Set Icon..."
 msgstr "아이콘 지정..."
 
-#: ../src/appicon.c:551 ../src/dock.c:1072 ../src/rootmenu.c:226
-#: ../src/rootmenu.c:240 ../src/winmenu.c:488
+#: ../src/appicon.c:597 ../src/dock.c:1082 ../src/rootmenu.c:226
+#: ../src/rootmenu.c:240 ../src/winmenu.c:493
 msgid "Kill"
 msgstr "종료"
 
-#: ../src/appicon.c:572 ../src/dock.c:3184
+#: ../src/appicon.c:618 ../src/dock.c:3203
 msgid "Unhide"
 msgstr "(안)숨김"
 
-#: ../src/defaults.c:752 ../src/startup.c:709 ../src/startup.c:727
-#: ../src/startup.c:733
+#: ../src/defaults.c:780 ../src/startup.c:735 ../src/startup.c:753
+#: ../src/startup.c:759
 #, c-format
 msgid "could not read domain \"%s\" from defaults database"
 msgstr "기본 데이터베이스에서 도메인 \"%s\"를 읽을 수 없습니다"
 
-#: ../src/defaults.c:798 ../src/defaults.c:922 ../src/defaults.c:961
-#: ../src/defaults.c:991
+#: ../src/defaults.c:826 ../src/defaults.c:950 ../src/defaults.c:989
+#: ../src/defaults.c:1019
 #, c-format
 msgid "Domain %s (%s) of defaults database is corrupted!"
 msgstr "기본 데이터베이스의 도메인 %s (%s)이 깨졌습니다!"
 
-#: ../src/defaults.c:803 ../src/defaults.c:943 ../src/defaults.c:974
-#: ../src/defaults.c:1000
+#: ../src/defaults.c:831 ../src/defaults.c:971 ../src/defaults.c:1002
+#: ../src/defaults.c:1028
 #, c-format
 msgid "could not load domain %s from user defaults database"
 msgstr "사용자 기본 데이터베이스에서 도메인 %s를 읽을 수 없습니다"
 
-#: ../src/defaults.c:814 ../src/defaults.c:907
+#: ../src/defaults.c:842 ../src/defaults.c:935
 #, c-format
 msgid "Domain %s (%s) of global defaults database is corrupted!"
 msgstr "전역 기본 데이터베이스의 도메인 %s (%s)는 깨졌습니다!"
 
-#: ../src/defaults.c:833 ../src/defaults.c:912
+#: ../src/defaults.c:861 ../src/defaults.c:940
 #, c-format
 msgid "could not load domain %s from global defaults database"
 msgstr "전역 기본 데이터베이스에서 도메인 %s를 읽을 수 없습니다"
 
-#: ../src/defaults.c:1283
+#: ../src/defaults.c:1340
 #, c-format
 msgid "wrong option value for key \"%s\". Should be one of %s"
 msgstr "키 \"%s\"의 옵션 포맷이 잘못됨. %s중 하나이어야 합니다"
 
-#: ../src/defaults.c:1330
+#: ../src/defaults.c:1387
 #, c-format
 msgid "can't convert \"%s\" to boolean for key \"%s\""
 msgstr "\"%s\"를 키 \"%s\"에 대해 부울 값으로 변환할 수 없습니다"
 
-#: ../src/defaults.c:1335 ../src/defaults.c:1369 ../src/defaults.c:1401
-#: ../src/defaults.c:1414 ../src/defaults.c:1429 ../src/defaults.c:1443
-#: ../src/defaults.c:1515 ../src/defaults.c:1527 ../src/defaults.c:1875
-#: ../src/defaults.c:1892 ../src/defaults.c:1905 ../src/defaults.c:1938
-#: ../src/defaults.c:1954 ../src/defaults.c:1985 ../src/defaults.c:2058
+#: ../src/defaults.c:1392 ../src/defaults.c:1426 ../src/defaults.c:1458
+#: ../src/defaults.c:1471 ../src/defaults.c:1486 ../src/defaults.c:1500
+#: ../src/defaults.c:1572 ../src/defaults.c:1584 ../src/defaults.c:1990
+#: ../src/defaults.c:2007 ../src/defaults.c:2020 ../src/defaults.c:2053
+#: ../src/defaults.c:2069 ../src/defaults.c:2100 ../src/defaults.c:2188
 #, c-format
 msgid "using default \"%s\" instead"
 msgstr "기본값인 \"%s\" 를 대신 사용함"
 
-#: ../src/defaults.c:1366
+#: ../src/defaults.c:1423
 #, c-format
 msgid "can't convert \"%s\" to integer for key \"%s\""
 msgstr "\"%s\"를 키 \"%s\"에 대해 정수값으로 변환할 수 없습니다"
 
-#: ../src/defaults.c:1396 ../src/defaults.c:1510 ../src/defaults.c:1870
-#: ../src/defaults.c:1887 ../src/defaults.c:1933 ../src/defaults.c:1980
-#: ../src/wdefaults.c:541 ../src/wdefaults.c:577
+#: ../src/defaults.c:1453 ../src/defaults.c:1567 ../src/defaults.c:1985
+#: ../src/defaults.c:2002 ../src/defaults.c:2048 ../src/defaults.c:2095
+#: ../src/wdefaults.c:546 ../src/wdefaults.c:582
 #, c-format
 msgid "Wrong option format for key \"%s\". Should be %s."
 msgstr "\"%s\" 키의 옵션 포맷이 잘못됨. %s 이어야 합니다."
 
-#: ../src/defaults.c:1409
+#: ../src/defaults.c:1466
 #, c-format
 msgid "Incorrect number of elements in array for key \"%s\"."
 msgstr "키 \"%s\"에 대한 배열의 원소 수가 잘못되었습니다."
 
-#: ../src/defaults.c:1424
+#: ../src/defaults.c:1481
 #, c-format
 msgid "Wrong value for key \"%s\". Should be Coordinate."
 msgstr "\"%s\" 키 값이 잘못됨. 좌표가 되어야 합니다."
 
-#: ../src/defaults.c:1439
+#: ../src/defaults.c:1496
 #, c-format
 msgid "can't convert array to integers for \"%s\"."
 msgstr "\"%s\"에 대해 배열을 정수값으로 변환할 수 없음."
 
-#: ../src/defaults.c:1636 ../src/defaults.c:1668 ../src/defaults.c:1684
-#: ../src/defaults.c:1730 ../src/defaults.c:1770 ../src/defaults.c:1808
-#: ../src/defaults.c:1824
+#: ../src/defaults.c:1694 ../src/defaults.c:1726 ../src/defaults.c:1742
+#: ../src/defaults.c:1788 ../src/defaults.c:1828 ../src/defaults.c:1866
+#: ../src/defaults.c:1882
 #, c-format
 msgid "\"%s\" is not a valid color name"
 msgstr "\"%s\" 는 올바른 색상명이 아님"
 
-#: ../src/defaults.c:1649
+#: ../src/defaults.c:1707
 msgid "bad number of arguments in gradient specification"
 msgstr "그래디언트 지정시 인수의 수가 잘못되었습니다"
 
-#: ../src/defaults.c:1703
+#: ../src/defaults.c:1761
 msgid "too few arguments in multicolor gradient specification"
 msgstr "다중색 그래디언트 지정시 인수의 수가 너무 적습니다"
 
-#: ../src/defaults.c:1797
+#: ../src/defaults.c:1855
 msgid "bad number of arguments in textured gradient specification"
 msgstr "그래디언트 지정시 인수의 수가 잘못되었습니다"
 
-#: ../src/defaults.c:1840
+#: ../src/defaults.c:1898
 #, c-format
 msgid "bad opacity value for tgradient texture \"%s\". Should be [0..255]"
 msgstr "tgradient 텍스처 \"%s\"에 모호한 값이 있습니다. [0..255]여야 합니다."
 
-#: ../src/defaults.c:1853
+#: ../src/defaults.c:1958
+#, c-format
+msgid "could not initialize library %s"
+msgstr "%s 라이브러리를 초기화 할수 없음"
+
+#: ../src/defaults.c:1961
+#, c-format
+msgid "could not find function %s::%s"
+msgstr "%s 함수를 찾지 못함::%s"
+
+#: ../src/defaults.c:1968
 #, c-format
 msgid "invalid texture type %s"
 msgstr "잘못된 텍스처 유형 %s"
 
-#: ../src/defaults.c:1900
+#: ../src/defaults.c:2015
 #, c-format
 msgid "Error in texture specification for key \"%s\""
 msgstr "키 \"%s\"의 텍스처 지정에 오류가 있습니다"
 
-#: ../src/defaults.c:1950
+#: ../src/defaults.c:2065
 msgid "Wrong type for workspace background. Should be a texture type."
 msgstr "작업공간 배경 종류가 잘못되었습니다. 텍스처여야 합니다."
 
-#: ../src/defaults.c:1998
+#: ../src/defaults.c:2113
 #, c-format
 msgid "Wrong type for background of workspace %i. Should be a texture."
 msgstr "작업공간 배경 종류가 잘못되었습니다. 텍스처여야 합니다."
 
-#: ../src/defaults.c:2023
+#: ../src/defaults.c:2154
 msgid "could not load any usable font!!!"
 msgstr "사용 가능한 글꼴을 읽을 수 없습니다!!!"
 
-#: ../src/defaults.c:2053
+#: ../src/defaults.c:2183
 #, c-format
 msgid "could not get color for key \"%s\""
 msgstr "키 \"%s\"의 색을 얻을 수 없음"
 
-#: ../src/defaults.c:2112 ../src/rootmenu.c:454
+#: ../src/defaults.c:2242 ../src/rootmenu.c:491
 #, c-format
 msgid "%s:invalid key modifier \"%s\""
 msgstr "%s:잘못된 키 수정자 \"%s\""
 
-#: ../src/defaults.c:2124
+#: ../src/defaults.c:2254
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\""
 msgstr "%s:잘못된 키보드 단축키 지정 \"%s\""
 
-#: ../src/defaults.c:2131
+#: ../src/defaults.c:2261
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\""
 msgstr "%s:빨리가기 \"%s\"에 잘못된 키"
 
-#: ../src/defaults.c:2157
+#: ../src/defaults.c:2287
 #, c-format
 msgid "%s: modifier key %s is not valid"
 msgstr "%s: 잘못된 수정자 키 %s"
 
-#: ../src/defaults.c:2233
+#: ../src/defaults.c:2321
+#, c-format
+msgid "could not load image in option %s: %s"
+msgstr "%s 옵션의 이미지를 읽지 못함: %s"
+
+#: ../src/defaults.c:2403
 msgid "could not render texture for icon background"
 msgstr "아이콘 배경의 텍스처를 그릴 수 없습니다"
 
-#: ../src/dialog.c:115 ../src/dialog.c:467 ../src/dock.c:424
-#: ../src/dockedapp.c:358 ../src/rootmenu.c:188 ../src/rootmenu.c:226
+#: ../src/dialog.c:115 ../src/dialog.c:467 ../src/dock.c:438
+#: ../src/dockedapp.c:360 ../src/rootmenu.c:188 ../src/rootmenu.c:226
 #: ../src/rootmenu.c:240
 msgid "Cancel"
 msgstr "취소"
@@ -260,203 +275,199 @@ msgstr "파일 선택"
 msgid "Icon Chooser"
 msgstr "아이콘 선택기"
 
-#: ../src/dock.c:213
+#: ../src/dock.c:215
 #, c-format
 msgid "Type the name for workspace %i:"
 msgstr "작업공간 %i 의 이름을 입력하세요:"
 
-#: ../src/dock.c:214 ../src/dock.c:1043
+#: ../src/dock.c:216 ../src/dock.c:1053
 msgid "Rename Workspace"
 msgstr "작업공간 이름 바꿈"
 
-#: ../src/dock.c:422
+#: ../src/dock.c:436
 msgid "Workspace Clip"
 msgstr "작업공간 클립"
 
-#: ../src/dock.c:423
+#: ../src/dock.c:437
 msgid "All selected icons will be removed!"
 msgstr "선택한 모든 아이콘이 없어질 것입니다!!"
 
-#: ../src/dock.c:470
+#: ../src/dock.c:484
 msgid "Keep Icon"
 msgstr "아이콘 유지"
 
-#: ../src/dock.c:471 ../src/dock.c:1978 ../src/dock.c:2107
+#: ../src/dock.c:485 ../src/dock.c:1987 ../src/dock.c:2116
 msgid "Type the command used to launch the application"
 msgstr "애플리케이션을 실행해는데 필요한 명령을 입력합니다"
 
-#: ../src/dock.c:856
+#: ../src/dock.c:866
 #, c-format
 msgid "could not launch application %s\n"
 msgstr "애플리케이션 %s을 실행할 수 없습니다\n"
 
-#: ../src/dock.c:911
+#: ../src/dock.c:921
 msgid "could not create workspace submenu for Clip menu"
 msgstr "클립 메뉴를 위한 작업공간 하부메뉴를 만들 수 없습니다"
 
-#: ../src/dock.c:974
+#: ../src/dock.c:984
 msgid "could not create options submenu for Clip menu"
 msgstr "클립 메뉴를 위한 옵션 하부메뉴를 만들 수 없습니다"
 
-#: ../src/dock.c:978 ../src/dock.c:1032 ../src/winmenu.c:383
+#: ../src/dock.c:988 ../src/dock.c:1042 ../src/winmenu.c:388
 msgid "Keep on top"
 msgstr "항상 위로"
 
-#: ../src/dock.c:984
+#: ../src/dock.c:994
 msgid "Collapsed"
 msgstr "아이콘 숨김"
 
-#: ../src/dock.c:990
+#: ../src/dock.c:1000
 msgid "AutoCollapse"
 msgstr "자동 숨김"
 
-#: ../src/dock.c:996
+#: ../src/dock.c:1006
 msgid "AutoRaiseLower"
 msgstr "자동 올림/내림"
 
-#: ../src/dock.c:1002
+#: ../src/dock.c:1012
 msgid "AutoAttract Icons"
 msgstr "아이콘 자동 모음"
 
-#: ../src/dock.c:1008
+#: ../src/dock.c:1018
 msgid "Keep Attracted Icons"
 msgstr "모은 아이콘 유지"
 
-#: ../src/dock.c:1038
+#: ../src/dock.c:1048
 msgid "Clip Options"
 msgstr "클립 옵션"
 
-#: ../src/dock.c:1045
+#: ../src/dock.c:1055
 msgid "(Un)Select Icon"
 msgstr "아이콘 (안)선택"
 
-#: ../src/dock.c:1047
+#: ../src/dock.c:1057
 msgid "(Un)Select All Icons"
 msgstr "모든 아이콘 (안)선택"
 
-#: ../src/dock.c:1050
+#: ../src/dock.c:1060
 msgid "Keep Icon(s)"
 msgstr "아이콘 유지"
 
-#: ../src/dock.c:1052
+#: ../src/dock.c:1062
 msgid "Move Icon(s) To"
 msgstr "아이콘 옮김 :"
 
-#: ../src/dock.c:1057
+#: ../src/dock.c:1067
 msgid "Remove Icon(s)"
 msgstr "아이콘 없앰"
 
-#: ../src/dock.c:1059
+#: ../src/dock.c:1069
 msgid "Attract Icons"
 msgstr "아이콘 모음"
 
-#: ../src/dock.c:1062
+#: ../src/dock.c:1072
 msgid "Launch"
 msgstr "실행"
 
-#: ../src/dock.c:1070
+#: ../src/dock.c:1080
 msgid "Settings..."
 msgstr "설정..."
 
-#: ../src/dock.c:1455 ../src/dock.c:1469 ../src/dock.c:1483 ../src/dock.c:1493
+#: ../src/dock.c:1465 ../src/dock.c:1479 ../src/dock.c:1493 ../src/dock.c:1503
 #, c-format
 msgid "bad value in docked icon state info %s"
 msgstr "Dock 아이콘의 상태정보에 잘못된 값 %s"
 
-#: ../src/dock.c:1501
+#: ../src/dock.c:1511
 #, c-format
 msgid "bad value in docked icon position %i,%i"
 msgstr "Dock 아이콘의 위치값 %i,%i 는 잘못된 값"
 
-#: ../src/dock.c:1745
+#: ../src/dock.c:1754
 msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
 msgstr "Dock 에 들어간 아이콘이 너무 많음. 맞지 않는 것은 무시합니다"
 
 #. icon->forced_dock = 1;
-#: ../src/dock.c:1977 ../src/dock.c:2106
+#: ../src/dock.c:1986 ../src/dock.c:2115
 msgid "Dock Icon"
 msgstr "Dock 아이콘"
 
-#: ../src/dock.c:3053 ../src/dock.c:3057
+#: ../src/dock.c:3072 ../src/dock.c:3076
 #, c-format
 msgid "Could not execute command \"%s\""
 msgstr "\"%s\" 명령을 실행할 수 없음."
 
-#: ../src/dockedapp.c:128
+#: ../src/dockedapp.c:130
 #, c-format
 msgid "could not find icon %s, used in a docked application"
 msgstr "도킹된 애플리케이션에 사용할 아이콘 %s을 찾을 수 없음"
 
-#: ../src/dockedapp.c:207
+#: ../src/dockedapp.c:209
 #, c-format
 msgid "Could not open specified icon file:%s"
 msgstr "지정된 아이콘 파일을 열 수 없음:%s"
 
-#: ../src/dockedapp.c:293
+#: ../src/dockedapp.c:295
 msgid "Start when WindowMaker is started"
 msgstr "Window Maker를 실행할때 시작함"
 
-#: ../src/dockedapp.c:300
+#: ../src/dockedapp.c:302
 msgid "Application path and arguments"
 msgstr "애플리케이션 경로와 인수"
 
-#: ../src/dockedapp.c:311
+#: ../src/dockedapp.c:313
 msgid "Command for files dropped with DND"
 msgstr "드랙엔드롭으로 실행할 명령어"
 
-#: ../src/dockedapp.c:323
+#: ../src/dockedapp.c:325
 #, c-format
 msgid "%d will be replaced with the file name"
 msgstr "%d는 파일 이름으로 대체합니다"
 
-#: ../src/dockedapp.c:327
+#: ../src/dockedapp.c:329
 msgid "DND support was not compiled in"
 msgstr "컴파일시 DND 지원이 포함되지 않았습니다"
 
-#: ../src/dockedapp.c:333
+#: ../src/dockedapp.c:335
 msgid "Icon Image"
 msgstr "아이콘 이미지"
 
-#: ../src/dockedapp.c:345 ../src/winspector.c:1235
+#: ../src/dockedapp.c:347 ../src/winspector.c:1244
 msgid "Browse..."
 msgstr "찾기..."
 
-#: ../src/dockedapp.c:390
+#: ../src/dockedapp.c:392
 msgid "Docked Application Settings"
 msgstr "Dock 애플리케이션 설정"
 
-#: ../src/event.c:352
-msgid "stack overflow: too many dead processes"
-msgstr "스택 오버플로우: 죽은 프로세스가 너무 많음"
-
-#: ../src/framewin.c:485
+#: ../src/framewin.c:489
 #, c-format
 msgid "could not render gradient: %s"
 msgstr "그래디언트를 표현하지 못함: %s"
 
-#: ../src/framewin.c:501 ../src/framewin.c:516 ../src/framewin.c:527
-#: ../src/framewin.c:534 ../src/framewin.c:541 ../src/icon.c:296
-#: ../src/texture.c:578
+#: ../src/framewin.c:505 ../src/framewin.c:520 ../src/framewin.c:531
+#: ../src/framewin.c:538 ../src/framewin.c:545 ../src/icon.c:296
+#: ../src/texture.c:678
 #, c-format
 msgid "error rendering image:%s"
 msgstr "이미지 렌더링 에러:%s"
 
-#: ../src/icon.c:182 ../src/wdefaults.c:411
+#: ../src/icon.c:182 ../src/wdefaults.c:416
 #, c-format
 msgid "error loading image file \"%s\""
 msgstr "이미지 파일 \"%s\"를 읽는 중 에러"
 
-#: ../src/icon.c:430 ../src/icon.c:439
+#: ../src/icon.c:423 ../src/icon.c:432
 #, c-format
 msgid "could not create directory %s"
 msgstr "디렉토리 %s를 만들 수 없음"
 
-#: ../src/icon.c:706
+#: ../src/icon.c:699
 #, c-format
 msgid "could not find default icon \"%s\""
 msgstr "기본 아이콘 \"%s\"를 찾지 못함"
 
-#: ../src/icon.c:712
+#: ../src/icon.c:705
 #, c-format
 msgid "could not load default icon \"%s\":%s"
 msgstr "기본 아이콘 \"%s\"를 읽지 못함:%s"
@@ -481,7 +492,7 @@ msgstr "사용법: %s [-옵션]\n"
 
 #: ../src/main.c:255
 msgid "The Window Maker window manager for the X window system"
-msgstr ""
+msgstr "엑스 윈도우 시스템용 윈도우 메이커 창 관리자"
 
 #: ../src/main.c:257
 msgid " -display host:dpy\tdisplay to use"
@@ -499,6 +510,9 @@ msgstr " --no-dock\t\t애플리케이션 Dock을 열지 않음"
 msgid " --no-clip\t\tdo not open the workspace Clip"
 msgstr " --no-clip\t\t작업공간 클립을 열지 않음"
 
+#.
+#. puts(_(" --locale locale		locale to use"));
+#.
 #: ../src/main.c:266
 msgid " --visual-id visualid\tvisual id of visual to use"
 msgstr " --visual-id 비주얼ID\t사용할 비주얼의 비주얼 ID"
@@ -544,109 +558,109 @@ msgstr "%s를 위한 인자가 부족합니다"
 msgid "bad value for visualid: \"%s\""
 msgstr "비주얼 ID에 잘못된 값: \"%s\""
 
-#: ../src/main.c:414
+#: ../src/main.c:417
 #, c-format
-msgid "%s: invalid argument '%s'"
-msgstr "%s: '%s'에 잘못된 키"
+msgid "%s: invalid argument '%s'\n"
+msgstr "%s: 잘못된 인자 '%s'\n"
 
-#: ../src/main.c:415
+#: ../src/main.c:418
 #, c-format
-msgid "Try '%s --help' for more information"
-msgstr "더 많은 정보를 원하시면 '%s --help' 하시기 바랍니다."
+msgid "Try '%s --help' for more information\n"
+msgstr "더 많은 정보를 원하시면 '%s --help' 하시기 바랍니다.\n"
 
-#: ../src/main.c:458
+#: ../src/main.c:461
 msgid "X server does not support locale"
 msgstr "X 서버가 로케일을 지원하지 않습니다"
 
-#: ../src/main.c:461
+#: ../src/main.c:464
 msgid "cannot set locale modifiers"
 msgstr "로케일 수정자(modifier)를 설정할 수 없음"
 
-#: ../src/main.c:478
+#: ../src/main.c:481
 #, c-format
 msgid "could not open display \"%s\""
 msgstr "\"%s\" 디스플레이를 열지 못함."
 
-#: ../src/menu.c:285
+#: ../src/menu.c:288
 msgid "wrealloc() failed while trying to add menu item"
 msgstr "메뉴 아이템 추가 시도중 wrealloc() 실패"
 
-#: ../src/misc.c:71
+#: ../src/misc.c:69
 #, c-format
 msgid "could not define value for %s for cpp"
 msgstr "cpp의 %s를 위한 값이 정의되지 않음"
 
-#: ../src/misc.c:101
+#: ../src/misc.c:99
 #, c-format
 msgid "could not get password entry for UID %i"
 msgstr "UID %i의 암호 항목를 얻을 수 없습니다"
 
-#: ../src/misc.c:125
+#: ../src/misc.c:123
 #, c-format
 msgid "your machine is misconfigured. HOSTNAME is set to %s"
 msgstr "시스템 설정이 잘못되었습니다. HOSTNAME을 %s로 설정합니다"
 
-#: ../src/misc.c:131
+#: ../src/misc.c:129
 #, c-format
 msgid "your machine is misconfigured. HOST is set to %s"
 msgstr "시스템 설정이 잘못되었습니다. HOST를 %s로 설정합니다"
 
-#: ../src/misc.c:773
+#: ../src/misc.c:770
 msgid "selection timed-out"
 msgstr "선택시간 초과"
 
-#: ../src/misc.c:789
+#: ../src/misc.c:786
 msgid "Program Arguments"
 msgstr "프로그램 인수"
 
-#: ../src/misc.c:790
+#: ../src/misc.c:787
 msgid "Enter command arguments:"
 msgstr "명령어 인수를 입력하세요:"
 
-#: ../src/misc.c:887
+#: ../src/misc.c:885
 msgid "unable to get dropped data from DND drop"
 msgstr "DND 드롭에서 떨어뜨린 데이터를 얻을 수 없습니다"
 
-#: ../src/misc.c:895
+#: ../src/misc.c:893
 msgid "error getting dropped data from DND drop"
 msgstr "DND 드롭에서 떨어뜨린 데이터를 얻는데 오류가 발생하였습니다"
 
-#: ../src/misc.c:901
+#: ../src/misc.c:899
 msgid "out of memory while getting data from DND drop"
 msgstr "DND 드롭에서 떨어뜨린 데이터를 얻는데 메모리가 부족합니다"
 
-#: ../src/misc.c:946 ../src/misc.c:1081
+#: ../src/misc.c:944 ../src/misc.c:1079
 #, c-format
 msgid "out of memory during expansion of \"%s\""
 msgstr "\"%s\" 확장 중 메모리 부족"
 
-#: ../src/misc.c:1000
+#: ../src/misc.c:998
 msgid "out of memory during expansion of \"%w\""
 msgstr "\"%w\" 확장 중 메모리 부족"
 
-#: ../src/misc.c:1018
+#: ../src/misc.c:1016
 msgid "out of memory during expansion of \"%W\""
 msgstr "\"%W\" 확장 중 메모리 부족"
 
-#: ../src/misc.c:1034
+#: ../src/misc.c:1032
 msgid "out of memory during expansion of \"%a\""
 msgstr "\"%a\" 확장 중 메모리 부족"
 
-#: ../src/misc.c:1060
+#: ../src/misc.c:1058
 #, c-format
 msgid "out of memory during expansion of \"%d\""
 msgstr "\"%d\" 확장 중 메모리 부족"
 
-#: ../src/misc.c:1074
+#: ../src/misc.c:1072
 msgid "selection not available"
 msgstr "선택 불가능"
 
-#: ../src/misc.c:1146 ../src/misc.c:1152
+#: ../src/misc.c:1144 ../src/misc.c:1150
 #, c-format
 msgid "bad window name value in %s state info"
 msgstr "상태 정보 %s의 창 이름이 잘못됨"
 
-#: ../src/misc.c:1406
+#: ../src/misc.c:1405
 msgid "could not send message to background image helper"
 msgstr "배경 이미지 \"%s\" 를 찾을 수 없습니다"
 
@@ -766,7 +780,11 @@ msgstr ""
 "윈도우 시스템 세션을 종료하겠습니까?\n"
 "애플리케이션이 종료되고 저장하지 않은 자료는 잃습니다."
 
-#: ../src/rootmenu.c:226 ../src/winmenu.c:481
+#.
+#. entry = wMenuAddCallback(menu, _("Select Shortcut"), NULL, NULL);
+#. wMenuEntrySetCascade(menu, entry, makeMakeShortcutMenu(scr));
+#.
+#: ../src/rootmenu.c:226 ../src/winmenu.c:486
 msgid "Close"
 msgstr "닫기"
 
@@ -782,47 +800,47 @@ msgstr ""
 "윈도우 시스템 세션을 종료하겠습니까?\n"
 "(모든 애플리케이션이 종료됩니다)"
 
-#: ../src/rootmenu.c:467
+#: ../src/rootmenu.c:504
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\" for entry %s"
 msgstr "%s: 잘못된 키보드 단축키 지정 \"%s\"(엔트리 %s)"
 
-#: ../src/rootmenu.c:475
+#: ../src/rootmenu.c:512
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\" for entry %s"
 msgstr "%s: 빨리가기 \"%s\"(엔트리 %s)에 잘못된 키"
 
-#: ../src/rootmenu.c:528
+#: ../src/rootmenu.c:565
 #, c-format
 msgid "%s: unmatched '\"' in menu file"
 msgstr "%s: 메뉴 파일의 '\"' 짝이 맞지 않음"
 
-#: ../src/rootmenu.c:578
+#: ../src/rootmenu.c:615
 #, c-format
 msgid "%s: missing command"
 msgstr "%s: 명령어가 없음"
 
-#: ../src/rootmenu.c:611
+#: ../src/rootmenu.c:648
 #, c-format
 msgid "invalid OPEN_MENU specification: %s"
 msgstr "OPEN_MENU 지정이 잘못됨: %s"
 
-#: ../src/rootmenu.c:684
+#: ../src/rootmenu.c:696
 #, c-format
 msgid "%s:could not stat menu"
 msgstr "%s: 메뉴 파일에 접근할 수 없음"
 
-#: ../src/rootmenu.c:692
+#: ../src/rootmenu.c:704
 #, c-format
 msgid "%s:could not stat menu:%s"
 msgstr "%s: 메뉴 파일에 접근할 수 없음 :%s"
 
-#: ../src/rootmenu.c:710
+#: ../src/rootmenu.c:722
 #, c-format
 msgid "too many parameters in OPEN_MENU: %s"
 msgstr "OPEN_MENU에 인수가 너무 많음: %s"
 
-#: ../src/rootmenu.c:746
+#: ../src/rootmenu.c:758
 msgid ""
 "There are more than one WORKSPACE_MENU commands in the applications menu. "
 "Only one is allowed."
@@ -830,97 +848,97 @@ msgstr ""
 "애플리케이션 메뉴에 WORKSPACE_MENU 명령이 둘 이상 있습니다. 하나만 있어야 "
 "합니다. "
 
-#: ../src/rootmenu.c:775 ../src/rootmenu.c:793
+#: ../src/rootmenu.c:787 ../src/rootmenu.c:805
 #, c-format
 msgid "%s:missing parameter for menu command \"%s\""
 msgstr "%s: 메뉴 명령어 \"%s\" 의 인수가 빠졌음"
 
-#: ../src/rootmenu.c:856
+#: ../src/rootmenu.c:868
 #, c-format
 msgid "%s:unknown command \"%s\" in menu config."
 msgstr "%s:메뉴 설정의 \"%s\" 명령을 알 수 없음."
 
-#: ../src/rootmenu.c:864
+#: ../src/rootmenu.c:876
 #, c-format
 msgid "%s:can't add shortcut for entry \"%s\""
 msgstr "%s: 엔트리 \"%s\"에 빨리가기를 추가할 수 없음"
 
-#: ../src/rootmenu.c:1001
+#: ../src/rootmenu.c:1013
 #, c-format
 msgid "%s:maximal line size exceeded in menu config: %s"
 msgstr "%s:메뉴 설정의 최대 줄수를 초과함: %s"
 
-#: ../src/rootmenu.c:1023 ../src/rootmenu.c:1115 ../src/rootmenu.c:1216
+#: ../src/rootmenu.c:1035 ../src/rootmenu.c:1127 ../src/rootmenu.c:1228
 #, c-format
 msgid "%s:missing command in menu config: %s"
 msgstr "%s:메뉴 설정에서 명령을 찾을 수 없음: %s"
 
-#: ../src/rootmenu.c:1053
+#: ../src/rootmenu.c:1065
 #, c-format
 msgid "%s:syntax error in menu file:END declaration missing"
 msgstr "%s:메뉴파일 문법에러:END 선언문 없음"
 
-#: ../src/rootmenu.c:1082 ../src/rootmenu.c:1181
+#: ../src/rootmenu.c:1094 ../src/rootmenu.c:1193
 msgid "could not make arguments for menu file preprocessor"
 msgstr "메뉴 파일 전처리기를 위한 인수를 만들 수 없음"
 
-#: ../src/rootmenu.c:1088 ../src/rootmenu.c:1188
+#: ../src/rootmenu.c:1100 ../src/rootmenu.c:1200
 #, c-format
 msgid "%s:could not open/preprocess menu file"
 msgstr "%s: 메뉴 파일을 열거나 전처리할 수 없음"
 
-#: ../src/rootmenu.c:1100 ../src/rootmenu.c:1201
+#: ../src/rootmenu.c:1112 ../src/rootmenu.c:1213
 #, c-format
 msgid "%s:could not open menu file"
 msgstr "%s:메뉴 파일을 열 수 없음"
 
-#: ../src/rootmenu.c:1127
+#: ../src/rootmenu.c:1139
 #, c-format
 msgid "%s:invalid menu file. MENU command is missing"
 msgstr "%s:잘못된 메뉴 파일. MENU 명령이 빠졌습니다"
 
-#: ../src/rootmenu.c:1136
+#: ../src/rootmenu.c:1148
 msgid "error reading preprocessed menu data"
 msgstr "전처리된 메뉴 데이터를 읽는데 오류"
 
-#: ../src/rootmenu.c:1228
+#: ../src/rootmenu.c:1240
 #, c-format
 msgid "%s:no title given for the root menu"
 msgstr "%s:최상위 메뉴에 제목이 없습니다"
 
-#: ../src/rootmenu.c:1311 ../src/rootmenu.c:1378 ../src/rootmenu.c:1422
+#: ../src/rootmenu.c:1323 ../src/rootmenu.c:1390 ../src/rootmenu.c:1434
 #, c-format
 msgid "out of memory while constructing directory menu %s"
 msgstr "디렉토리 메뉴 %s 생성 중 메모리 부족"
 
-#: ../src/rootmenu.c:1321
+#: ../src/rootmenu.c:1333
 #, c-format
 msgid "%s:could not stat file \"%s\" in menu directory"
 msgstr "%s: 메뉴 디렉토리의 파일 \"%s\"에 접근할 수 없음"
 
-#: ../src/rootmenu.c:1476
+#: ../src/rootmenu.c:1488
 msgid "Commands"
 msgstr "명령어"
 
-#: ../src/rootmenu.c:1479
+#: ../src/rootmenu.c:1491
 msgid "Restart"
 msgstr "재시작"
 
-#: ../src/rootmenu.c:1480
+#: ../src/rootmenu.c:1492
 msgid "Exit..."
 msgstr "종료..."
 
-#: ../src/rootmenu.c:1553
+#: ../src/rootmenu.c:1537
 #, c-format
 msgid "could not find menu file \"%s\" referenced in WMRootMenu"
 msgstr "WMRootMenu에서 참조하는 메뉴 파일 \"%s\"를 찾을 수 없습니다"
 
-#: ../src/rootmenu.c:1560
+#: ../src/rootmenu.c:1544
 #, c-format
 msgid "could not access menu \"%s\" referenced in WMRootMenu"
 msgstr "WMRootMenu에서 참조하는 메뉴 \"%s\"에 접근할 수 없습니다"
 
-#: ../src/rootmenu.c:1571
+#: ../src/rootmenu.c:1555
 #, c-format
 msgid ""
 "using default menu file \"%s\" as the menu referenced in WMRootMenu could "
@@ -929,40 +947,51 @@ msgstr ""
 "WMRootMenu에서 참조하는 메뉴 파일을 찾을 수 없으므로 \"%s\"를 기본 메뉴 "
 "파일로 사용합니다"
 
-#: ../src/rootmenu.c:1594 ../src/rootmenu.c:1670
+#: ../src/rootmenu.c:1578 ../src/rootmenu.c:1654
 #, c-format
 msgid "%s:format error in root menu configuration \"%s\""
 msgstr "%s: 최상위 메뉴 설정 \"%s\"의 형식 오류"
 
-#: ../src/screen.c:428
-msgid "could not load logo image for panels"
-msgstr "패널에 쓰일 로고 이미지를 읽지 못함"
+#: ../src/rootmenu.c:1742
+msgid ""
+"The applications menu could not be loaded.Look at the console output for a "
+"detaileddescription of the errors"
+msgstr ""
 
-#: ../src/screen.c:431
+#: ../src/screen.c:433
+#, c-format
+msgid "could not load logo image for panels: %s"
+msgstr "패널에 쓰일 로고 이미지를 읽지 못함: %s"
+
+#: ../src/screen.c:437
 #, c-format
 msgid "error making logo image for panel:%s"
 msgstr "패널에 쓰일 로고 이미지를 만들지 못함:%s"
 
-#: ../src/screen.c:695
+#: ../src/screen.c:710
 #, c-format
 msgid "could not initialize graphics library context: %s"
 msgstr "그래픽 라이브러리 환경을 초기화 할수 없음: %s"
 
-#: ../src/screen.c:727
+#: ../src/screen.c:741
 msgid "could not do initialization of WINGs widget set"
 msgstr "%s: 초기화 스크립트를 실행할 수 없습니다."
 
-#: ../src/screen.c:1059
+#: ../src/screen.c:1073
 #, c-format
 msgid "could not save session state in %s"
 msgstr "%s의 세션 상태를 저장하지 못함"
 
-#: ../src/session.c:182 ../src/wdefaults.c:559 ../src/winspector.c:345
+#: ../src/session.c:182 ../src/wdefaults.c:564 ../src/winspector.c:347
 #, c-format
 msgid "can't convert \"%s\" to boolean"
 msgstr "\"%s\"를 부울 값으로 바꿀 수 없음"
 
-#: ../src/session.c:875 ../src/session.c:969
+#: ../src/session.c:873
+msgid "out of memory while saving session state"
+msgstr "세션 상태를 저장하는 중 메모리 부족"
+
+#: ../src/session.c:964
 msgid "end of memory while saving session state"
 msgstr "세션 상태를 저장하는 중 메모리 부족"
 
@@ -972,7 +1001,7 @@ msgstr "세션 상태를 저장하는 중 메모리 부족"
 #. * If the sm was the last client of session, then we'll die
 #. * anyway, otherwise we can continue doing our stuff.
 #.
-#: ../src/session.c:1103
+#: ../src/session.c:1098
 msgid "connection to the session manager was lost"
 msgstr "세션 관리자의 연결이 끊어졌습니다"
 
@@ -985,43 +1014,43 @@ msgstr "창 목록를 얻을 수 없습니다!!"
 msgid "internal X error: %s\n"
 msgstr "X 내부 에러: %s\n"
 
-#: ../src/startup.c:258
+#: ../src/startup.c:259
 #, c-format
 msgid "got signal %i (%s) - restarting\n"
 msgstr "%i (%s) 신호 감지 - 재시동함\n"
 
-#: ../src/startup.c:260
+#: ../src/startup.c:261
 #, c-format
 msgid "got signal %i - restarting\n"
 msgstr "%i 신호 감지 - 재시동함\n"
 
-#: ../src/startup.c:275
+#: ../src/startup.c:276
 #, c-format
 msgid "got signal %i (%s) - exiting...\n"
 msgstr "%i (%s) 신호 감지 - 종료함...\n"
 
-#: ../src/startup.c:277
+#: ../src/startup.c:278
 #, c-format
 msgid "got signal %i - exiting...\n"
 msgstr "%i 신호 감지 - 종료함...\n"
 
-#: ../src/startup.c:290
+#: ../src/startup.c:291
 #, c-format
 msgid "got signal %i (%s)\n"
 msgstr "%i (%s) 신호 감지\n"
 
-#: ../src/startup.c:292
+#: ../src/startup.c:293
 #, c-format
 msgid "got signal %i\n"
 msgstr "%i 신호 감지\n"
 
-#: ../src/startup.c:298
+#: ../src/startup.c:299
 msgid ""
 "crashed while trying to do some post-crash cleanup. Aborting immediatelly."
 msgstr ""
 "비정상 종료후 처리를 하려는 동안에 비정상 종료되었습니다. 즉시 종료합니다."
 
-#: ../src/startup.c:309
+#: ../src/startup.c:310
 msgid ""
 "a fatal error has occured, probably due to a bug. Please fill the included "
 "BUGFORM and report it."
@@ -1029,25 +1058,27 @@ msgstr ""
 "치명적인 오류 발생, 아마도 버그인 것 같습니다. BUGFORM을 작성해 보내주시길 "
 "부탁드립니다."
 
-#: ../src/startup.c:316
+#. restart another window manager so that the X session doesn't
+#. * go to space
+#: ../src/startup.c:317
 msgid "trying to start alternative window manager..."
 msgstr "대체용 창 관리자를 시작하겠습니다..."
 
-#: ../src/startup.c:719
+#: ../src/startup.c:745
 #, c-format
 msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
 msgstr "지정된 아이콘 크기(%i)가 너무 작음. 대신 16으로 바꿉니다\n"
 
-#: ../src/startup.c:763
+#: ../src/startup.c:789
 msgid "it seems that there already is a window manager running"
 msgstr "이미 다른 창 관리자가 동작하고 있는 것 같습니다"
 
-#: ../src/startup.c:769
+#: ../src/startup.c:795
 #, c-format
 msgid "could not manage screen %i"
 msgstr "화면 %i를 제어할 수 없음"
 
-#: ../src/startup.c:829
+#: ../src/startup.c:855
 msgid "could not manage any screen"
 msgstr "모든 화면을 제어할 수 없음"
 
@@ -1055,27 +1086,41 @@ msgstr "모든 화면을 제어할 수 없음"
 msgid "Windows"
 msgstr "창"
 
-#: ../src/texture.c:274 ../src/texture.c:318
+#: ../src/texture.c:294 ../src/texture.c:338
 #, c-format
 msgid "image file \"%s\" used as texture could not be found."
 msgstr "텍스처로 사용하는 이미지 파일 \"%s\"을 찾을 수 없습니다."
 
-#: ../src/texture.c:280 ../src/texture.c:324
+#: ../src/texture.c:300 ../src/texture.c:344
 #, c-format
 msgid "could not load texture pixmap \"%s\":%s"
 msgstr "텍스처 픽스맵 \"%s\"을 열 수가 없음: %s"
 
-#: ../src/texture.c:463 ../src/texture.c:574
+#: ../src/texture.c:404
+#, c-format
+msgid "library \"%s\" cound not be opened."
+msgstr "\"%s\" 라이브러리를 열 수 없음."
+
+#: ../src/texture.c:413
+#, c-format
+msgid "function \"%s\" not found in library \"%s\""
+msgstr "\"%s\" 함수가 \"%s\" 라이브러리에 없음"
+
+#: ../src/texture.c:420
+msgid "function textures not supported on this system, sorry."
+msgstr "이 시스템은 텍스쳐 함수를 지원하지 않습니다."
+
+#: ../src/texture.c:552 ../src/texture.c:674
 #, c-format
 msgid "could not render texture: %s"
 msgstr "텍스처 렌더링을 할 수 없음: %s"
 
-#: ../src/wdefaults.c:405
+#: ../src/wdefaults.c:410
 #, c-format
 msgid "could not find icon file \"%s\""
 msgstr "아이콘 파일 \"%s\"을 찾지 못했습니다"
 
-#: ../src/window.c:2377 ../src/window.c:2509
+#: ../src/window.c:2499 ../src/window.c:2631
 msgid ""
 "the NumLock, ScrollLock or similar key seems to be turned on.\n"
 "Turn it off or some mouse actions and keyboard shortcuts will not work."
@@ -1083,113 +1128,128 @@ msgstr ""
 "NumLock, ScrollLock 이나 다른 비슷한 종류의 키가 켜져 있는 것 같습니다.\n"
 "끄지 않으면 일부 마우스 동작이나 키보드 단축키가 동작하지 않습니다."
 
-#: ../src/winmenu.c:249 ../src/winmenu.c:257
+#: ../src/winmenu.c:125
+msgid ""
+"This will kill the application.\n"
+"Any unsaved changes will be lost.\n"
+"Please confirm."
+msgstr ""
+"애플리케이션을 강제 종료합니다.\n"
+"저장하지 않은 변경 사항은 잃게 됩니다.\n"
+"계속 하시겠습니까?"
+
+#: ../src/winmenu.c:252 ../src/winmenu.c:260
 msgid "Set Shortcut"
 msgstr "단축키 선택"
 
-#: ../src/winmenu.c:333 ../src/winmenu.c:379
+#: ../src/winmenu.c:338 ../src/winmenu.c:384
 msgid "could not create submenu for window menu"
 msgstr "창 메뉴를 위한 부메뉴를 만들 수 없습니다"
 
-#: ../src/winmenu.c:388
+#: ../src/winmenu.c:393
 msgid "Keep at bottom"
 msgstr "항상 아래로/가라앉음"
 
-#: ../src/winmenu.c:393 ../src/winspector.c:1141
+#: ../src/winmenu.c:398 ../src/winspector.c:1146
 msgid "Omnipresent"
 msgstr "항상 보임"
 
-#: ../src/winmenu.c:416 ../src/winmenu.c:551
+#.
+#. * Warning: If you make some change that affects the order of the
+#. * entries, you must update the command #defines in the top of
+#. * this file.
+#.
+#: ../src/winmenu.c:421 ../src/winmenu.c:556
 msgid "Maximize"
 msgstr "최대화"
 
-#: ../src/winmenu.c:424 ../src/winmenu.c:537
+#: ../src/winmenu.c:429 ../src/winmenu.c:542
 msgid "Miniaturize"
 msgstr "최소화"
 
-#: ../src/winmenu.c:433 ../src/winmenu.c:565
+#: ../src/winmenu.c:438 ../src/winmenu.c:573
 msgid "Shade"
 msgstr "가림"
 
-#: ../src/winmenu.c:449
+#: ../src/winmenu.c:454
 msgid "Resize/Move"
 msgstr "크기바꿈/이동"
 
-#: ../src/winmenu.c:457
+#: ../src/winmenu.c:462
 msgid "Select"
 msgstr "선택"
 
-#: ../src/winmenu.c:465
+#: ../src/winmenu.c:470
 msgid "Move To"
 msgstr "이동"
 
-#: ../src/winmenu.c:470
+#: ../src/winmenu.c:475
 msgid "Attributes..."
 msgstr "속성 설정..."
 
-#: ../src/winmenu.c:472
+#: ../src/winmenu.c:477
 msgid "Options"
 msgstr "옵션"
 
-#: ../src/winmenu.c:532
+#: ../src/winmenu.c:537
 msgid "Deminiaturize"
 msgstr "보통크기"
 
-#: ../src/winmenu.c:546
+#: ../src/winmenu.c:551
 msgid "Unmaximize"
 msgstr "보통크기"
 
-#: ../src/winmenu.c:560
+#: ../src/winmenu.c:568
 msgid "Unshade"
 msgstr "보임"
 
-#: ../src/winspector.c:279
+#: ../src/winspector.c:281
 #, c-format
 msgid "Could not find icon \"%s\" specified for this window"
 msgstr "이 창에서 지정한 아이콘 \"%s\"을 찾을 수 없음"
 
-#: ../src/winspector.c:295
+#: ../src/winspector.c:297
 #, c-format
 msgid "Could not open specified icon \"%s\":%s"
 msgstr "지정된 아이콘 \"%s\"을 열 수 없음:%s"
 
-#: ../src/winspector.c:1016
+#: ../src/winspector.c:1021
 msgid "Save"
 msgstr "저장"
 
-#: ../src/winspector.c:1024
+#: ../src/winspector.c:1029
 msgid "Apply"
 msgstr "적용"
 
-#: ../src/winspector.c:1030
+#: ../src/winspector.c:1035
 msgid "Reload"
 msgstr "다시읽기"
 
-#: ../src/winspector.c:1039 ../src/winspector.c:1049
+#: ../src/winspector.c:1044 ../src/winspector.c:1054
 msgid "Window Specification"
 msgstr "창 선택"
 
-#: ../src/winspector.c:1040
+#: ../src/winspector.c:1045
 msgid "Window Attributes"
 msgstr "창 속성"
 
-#: ../src/winspector.c:1041
+#: ../src/winspector.c:1046
 msgid "Advanced Options"
 msgstr "고급 옵션"
 
-#: ../src/winspector.c:1042
+#: ../src/winspector.c:1047
 msgid "Icon and Initial Workspace"
 msgstr "아이콘과 초기 작업공간"
 
-#: ../src/winspector.c:1043
+#: ../src/winspector.c:1048
 msgid "Application Specific"
 msgstr "애플리케이션에 따라 다른 설정"
 
-#: ../src/winspector.c:1057
+#: ../src/winspector.c:1062
 msgid "Defaults for all windows"
 msgstr "모든 창의 기본값으로"
 
-#: ../src/winspector.c:1100
+#: ../src/winspector.c:1105
 msgid ""
 "The configuration will apply to all\n"
 "windows that have their WM_CLASS property set to the above selected\n"
@@ -1199,79 +1259,83 @@ msgstr ""
 "위에서 지정한 이름으로 되어 있는\n"
 "모든 창에 그 설정이 적용됩니다."
 
-#: ../src/winspector.c:1107
+#: ../src/winspector.c:1112
 msgid "Attributes"
 msgstr "속성"
 
-#: ../src/winspector.c:1117
-msgid "Disable titlebar"
+#: ../src/winspector.c:1122
+msgid "Disable Titlebar"
 msgstr "제목 바 없앰"
 
-#: ../src/winspector.c:1121
-msgid "Disable resizebar"
+#: ../src/winspector.c:1126
+msgid "Disable Resizebar"
 msgstr "크기조정 바 없앰"
 
-#: ../src/winspector.c:1125
-msgid "Disable close button"
+#: ../src/winspector.c:1130
+msgid "Disable Close Button"
 msgstr "닫기 버튼 없앰"
 
-#: ../src/winspector.c:1129
-msgid "Disable miniaturize button"
+#: ../src/winspector.c:1134
+msgid "Disable Miniaturize Button"
 msgstr "최소화 버튼 없앰"
 
-#: ../src/winspector.c:1133
-msgid "Keep on top / floating"
-msgstr "항상 위로/뜸"
+#: ../src/winspector.c:1138
+msgid "Keep on Top / Floating"
+msgstr "항상 위로 / 뜸"
 
-#: ../src/winspector.c:1137
-msgid "Keep at bottom / sunken"
-msgstr "항상 아래로/가라앉음"
+#: ../src/winspector.c:1142
+msgid "Keep at Bottom / Sunken"
+msgstr "항상 아래로 / 가라앉음"
 
-#: ../src/winspector.c:1145
+#: ../src/winspector.c:1150
 msgid "Start Miniaturized"
 msgstr "최소화하여 실행"
 
-#: ../src/winspector.c:1149
+#: ../src/winspector.c:1154
 msgid "Start Maximized"
 msgstr "최대화하여 실행"
 
-#: ../src/winspector.c:1153
-msgid "Skip window list"
+#: ../src/winspector.c:1158
+msgid "Skip Window List"
 msgstr "창 목록에 나타나지 않음"
 
-#: ../src/winspector.c:1167
+#: ../src/winspector.c:1172
 msgid "Advanced"
 msgstr "고급 항목"
 
-#: ../src/winspector.c:1177
+#: ../src/winspector.c:1182
 msgid "Ignore HideOthers"
 msgstr "다른 것들 숨김 무시함"
 
-#: ../src/winspector.c:1181
-msgid "Don't bind keyboard shortcuts"
+#: ../src/winspector.c:1186
+msgid "Don't Bind Keyboard Shortcuts"
 msgstr "키보드 단축키 사용 안함"
 
-#: ../src/winspector.c:1185
-msgid "Don't bind mouse clicks"
+#: ../src/winspector.c:1190
+msgid "Don't Bind Mouse Clicks"
 msgstr "마우스 클릭 사용 안함"
 
-#: ../src/winspector.c:1189
-msgid "Keep inside screen"
+#: ../src/winspector.c:1194
+msgid "Keep Inside Screen"
 msgstr "항상 화면안에 위치"
 
-#: ../src/winspector.c:1193
-msgid "Don't let it take focus"
+#: ../src/winspector.c:1198
+msgid "Don't Let It Take Focus"
 msgstr "활성화 안됨"
 
-#: ../src/winspector.c:1197
+#: ../src/winspector.c:1202
 msgid "Don't Save Session"
 msgstr "세션을 저장하지 않음"
 
-#: ../src/winspector.c:1201
+#: ../src/winspector.c:1206
 msgid "Emulate Application Icon"
 msgstr "애플리케이션 아이콘 흉내내기"
 
-#: ../src/winspector.c:1216
+#: ../src/winspector.c:1210
+msgid "Full Screen Maximization"
+msgstr "전체 화면 최대화"
+
+#: ../src/winspector.c:1225
 msgid ""
 "Enable the \"Don't bind...\" options to allow the application to receive all "
 "mouse or keyboard events."
@@ -1279,40 +1343,40 @@ msgstr ""
 "애플리케이션이 모든 마우스와 키보드 이벤트를 받도록 \"... 사용 안함\" 옵션을 "
 "사용 가능하도록 합니다."
 
-#: ../src/winspector.c:1223
+#: ../src/winspector.c:1232
 msgid "Miniwindow Image"
 msgstr "아이콘 이미지"
 
-#: ../src/winspector.c:1242
+#: ../src/winspector.c:1251
 msgid "Update"
 msgstr "갱신"
 
-#: ../src/winspector.c:1257
-msgid "Icon file name:"
+#: ../src/winspector.c:1266
+msgid "Icon File Name:"
 msgstr "아이콘 파일명:"
 
-#: ../src/winspector.c:1269
+#: ../src/winspector.c:1278
 msgid "Ignore client supplied icon"
 msgstr "클라이언트 제공 아이콘 무시함"
 
-#: ../src/winspector.c:1276
+#: ../src/winspector.c:1285
 msgid "Initial Workspace"
 msgstr "초기 작업공간"
 
-#: ../src/winspector.c:1281
+#: ../src/winspector.c:1290
 msgid "Nowhere in particular"
 msgstr "특별한 설정 없음"
 
-#: ../src/winspector.c:1315
+#: ../src/winspector.c:1308
 msgid "Application Wide"
 msgstr "애플리케이션 와이드"
 
-#: ../src/winspector.c:1325
+#: ../src/winspector.c:1318
 msgid "Start Hidden"
 msgstr "숨겨서 실행"
 
-#: ../src/winspector.c:1329
-msgid "No application icon"
+#: ../src/winspector.c:1322
+msgid "No Application Icon"
 msgstr "애플리케이션 아이콘 없음"
 
 #: ../src/workspace.c:102 ../src/workspace.c:103 ../src/workspace.c:480

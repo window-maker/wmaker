@@ -4,7 +4,8 @@ nlsdir = $(NLSDIR)
 
 CLEANFILES = $(CATALOGS)
 
-EXTRA_DIST = pt.po hr.po fr.po ko.po cs.po ja.po zh_TW.Big5.po es.po
+EXTRA_DIST = pt.po hr.po fr.po ko.po cs.po ja.po zh_TW.Big5.po es.po\
+		zh_CN.GB2312.po
 
 POTFILES  = \
 	$(top_builddir)/WPrefs.app/main.c \

@@ -95,6 +95,7 @@ typedef struct {
 
 static void showData(_Panel *panel);
 
+static void changePage(WMWidget *w, void *data);
 
 static void OpenExtractPanelFor(_Panel *panel, char *path);
 
@@ -821,6 +822,8 @@ okEditTexture(void *data)
 
     if (titem->selectedFor)
 	updatePreviewBox(panel, titem->selectedFor);
+
+    changePage(panel->secP, panel);
 }
 
 
