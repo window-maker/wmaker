@@ -102,8 +102,7 @@ typedef enum {
 } WMConnectionState;
 
 
-
-typedef struct W_Bag WMBag; /* equivalent to a linked list or array */
+typedef struct W_Bag WMBag;
 typedef struct W_Data WMData;
 typedef struct W_HashTable WMHashTable;
 typedef struct W_UserDefaults WMUserDefaults;
@@ -139,6 +138,38 @@ typedef struct {
     /* NULL does nothing */
     void	(*releaseKey)(const void *);    
 } WMHashTableCallbacks;
+
+
+typedef struct W_BagFunctions {
+    int (*getItemCount)(WMBag *self);
+    int (*appendBag)(WMBag *self, WMBag *bag);
+    int (*putInBag)(WMBag *self, void *item);
+    int (*insertInBag)(WMBag *self, int index, void *item);
+    int (*removeFromBag)(WMBag *bag, void *item);
+    int (*deleteFromBag)(WMBag *bag, int index);
+    void *(*getFromBag)(WMBag *bag, int index);
+    int (*firstInBag)(WMBag *bag, void *item);
+    int (*countInBag)(WMBag *bag, void *item);
+    void *(*replaceInBag)(WMBag *bag, int index, void *item);
+    void (*sortBag)(WMBag *bag, int (*comparer)(const void*, const void*));
+    void (*emptyBag)(WMBag *bag);
+    void (*freeBag)(WMBag *bag);
+    WMBag *(*mapBag)(WMBag *bag, void * (*function)(void*));
+    int (*findInBag)(WMBag *bag, int (*match)(void*));
+    void *(*first)(WMBag *bag, void **ptr);
+    void *(*last)(WMBag *bag, void **ptr);
+    void *(*next)(WMBag *bag, void **ptr);
+    void *(*previous)(WMBag *bag, void **ptr);
+} W_BagFunctions;
+
+    
+struct W_Bag {
+    void *data;
+    
+    void (*destructor)(void *item);
+    
+    W_BagFunctions func;
+};
 
 
 
@@ -274,42 +305,58 @@ extern const WMHashTableCallbacks WMStringPointerHashCallbacks;
 /*......................................................................*/
 
 
-WMBag *WMCreateBag(int size);
+WMBag* WMCreateArrayBag(int size);
+WMBag* WMCreateArrayBagWithDestructor(int size, void (*destructor)(void*));
+
+
+WMBag *WMCreateListBag(void);
+WMBag *WMCreateListBagWithDestructor(void (*destructor)(void*));
+
+#define WMCreateBag(size) WMCreateArrayBag(size)
+
+#define WMGetBagItemCount(bag) bag->func.getItemCount(bag)
+
+#define WMAppendBag(bag, other) bag->func.appendBag(bag, other)
+
+#define WMPutInBag(bag, item) bag->func.putInBag(bag, item)
+
+#define WMInsertInBag(bag, index, item) bag->func.insertInBag(bag, index, item)
     
-int WMGetBagItemCount(WMBag *bag);
+#define WMRemoveFromBag(bag, item) bag->func.removeFromBag(bag, item)
 
-void WMAppendBag(WMBag *bag, WMBag *appendedBag);
+#define WMDeleteFromBag(bag, index) bag->func.deleteFromBag(bag, index)
 
-void WMPutInBag(WMBag *bag, void *item);
+#define WMGetFromBag(bag, index) bag->func.getFromBag(bag, index)
 
-void WMInsertInBag(WMBag *bag, int index, void *item);
+#define WMCountInBag(bag, item) bag->func.countInBag(bag, item)
 
-int WMGetFirstInBag(WMBag *bag, void *item);
+#define WMReplaceInBag(bag, index, item) bag->func.replaceInBag(bag, index, item)
 
-int WMGetLastInBag(WMBag *bag, void *item);
-
-void WMRemoveFromBag(WMBag *bag, void *item);
-
-void WMDeleteFromBag(WMBag *bag, int index);
-
-void *WMGetFromBag(WMBag *bag, int index);
-
-int WMCountInBag(WMBag *bag, void *item);
-
-void *WMReplaceInBag(WMBag *bag, int index, void *item);
-    
 /* comparer must return:
  * < 0 if a < b
  * > 0 if a > b
  * = 0 if a = b
  */
-void WMSortBag(WMBag *bag, int (*comparer)(const void*, const void*));
+#define WMSortBag(bag, comparer) bag->func.sortBag(bag, comparer)
 
-void WMEmptyBag(WMBag *bag);
+#define WMEmptyBag(bag) bag->func.emptyBag(bag)
     
-void WMFreeBag(WMBag *bag);
+#define WMFreeBag(bag) bag->func.freeBag(bag)
+    
+#define WMMapBag(bag, function) bag->func.mapBag(bag, function)
 
-WMBag *WMMapBag(WMBag *bag, void* (*function)(void*));
+#define WMGetFirstInBag(bag, item) bag->func.firstInBag(bag, item)
+    
+#define WMFindInBag(bag, match) bag->func.findInBag(bag, match)
+    
+#define WMBagFirst(bag, ptr) bag->func.first(bag, ptr)
+
+#define WMBagLast(bag, ptr) bag->func.last(bag, ptr)
+    
+#define WMBagNext(bag, ptr) bag->func.next(bag, ptr)
+    
+#define WMBagPrevious(bag, ptr) bag->func.previous(bag, ptr)
+
     
 /*-------------------------------------------------------------------------*/
 

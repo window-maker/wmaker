@@ -481,8 +481,16 @@ testTabView(WMScreen *scr)
     WMSetTabViewItemLabel(tab, "Bla!");
 
 
+
+    frame = WMCreateFrame(win);
+    WMSetFrameRelief(frame, WRFlat);
+    label = WMCreateLabel(frame);
+    WMResizeWidget(label, 100, 100);
+    WMMoveWidget(label, 160, 40);
+    WMSetLabelText(label, "Label fjweqklrj qwl");
+    WMMapWidget(label);
     tab = WMCreateTabViewItemWithIdentifier(0);
-    WMSetTabViewItemView(tab, WMWidgetView(frame));
+    WMSetTabViewItemView(tab, WMWidgetView(frame));    
     WMAddItemInTabView(tabv, tab);
     WMSetTabViewItemLabel(tab, "Weee!");
 

@@ -96,7 +96,8 @@ libWINGs_a_SOURCES = 	\
 	wview.c \
 	error.c \
 	findfile.c \
-	bag.c \
+	bagarray.c \
+	baglist.c \
 	connection.c \
 	data.c \
 	hashtable.c \
@@ -108,7 +109,8 @@ libWINGs_a_SOURCES = 	\
 libWUtil_a_SOURCES = 	\
 	WINGs.h \
 	WINGsP.h \
-	bag.c \
+	bagarray.c \
+	baglist.c \
 	connection.c \
 	data.c \
 	host.c \
