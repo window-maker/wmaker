@@ -337,6 +337,7 @@ typedef struct W_View {
 
     WMColor *backColor;
 
+    Cursor cursor;
 
     Atom *droppableTypes;
     struct W_DragSourceProcs *dragSourceProcs;
@@ -461,6 +462,8 @@ void W_ResizeView(W_View *view, unsigned int width, unsigned int height);
 
 void W_SetViewBackgroundColor(W_View *view, WMColor *color);
 
+void W_SetViewCursor(W_View *view, Cursor cursor);
+    
 void W_DrawRelief(W_Screen *scr, Drawable d, int x, int y, unsigned int width,
 		  unsigned int height, WMReliefType relief);
 

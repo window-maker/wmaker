@@ -73,6 +73,8 @@ WMCreateScrollView(WMWidget *parent)
 
     sPtr->view->delegate = &_ScrollViewViewDelegate;
 
+    W_SetViewBackgroundColor(sPtr->viewport, 
+			     WMBlackColor(WMWidgetScreen(parent)));
     sPtr->viewport->flags.mapWhenRealized = 1;
 
     WMCreateEventHandler(sPtr->view, StructureNotifyMask|ExposureMask,
@@ -163,7 +165,7 @@ reorganizeInterior(WMScrollView *sPtr)
 
     W_ResizeView(sPtr->viewport, cw, ch);
     W_MoveView(sPtr->viewport, cx, cy);
-        
+
     if (sPtr->flags.hasHScroller) {
 	WMResizeWidget(sPtr->hScroller, hw, 20);
 	WMMoveWidget(sPtr->hScroller, hx, hy);

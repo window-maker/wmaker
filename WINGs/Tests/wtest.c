@@ -115,12 +115,21 @@ testFrame(WMScreen *scr)
 }
 
 
+static void resizedWindow(void *self, WMNotification *notif)
+{
+    WMView *view = (WMView*)WMGetNotificationObject(notif);
+    WMSize size = WMGetViewSize(view);
+
+    WMResizeWidget((WMWidget*)self, size.width, size.height);
+}
+
 void
 testBox(WMScreen *scr)
 {
     WMWindow *win;
-    WMBox *box;
+    WMBox *box, *hbox;
     WMButton *btn;
+    WMPopUpButton *pop;
     int i;
 
     windowCount++;
@@ -128,18 +137,44 @@ testBox(WMScreen *scr)
     win = WMCreateWindow(scr, "testBox");
     WMSetWindowTitle(win, "Box");
     WMSetWindowCloseAction(win, closeAction, NULL);
-    WMResizeWidget(win, 400, 300);
+
+    WMSetViewNotifySizeChanges(WMWidgetView(win), True);
 
     box = WMCreateBox(win);
-    WMMoveWidget(box, 50, 50);
-    WMResizeWidget(box, 300, 200);
-//    WMSetBoxHorizontal(box, True);
+    WMSetBoxBorderWidth(box, 5);
+    
+    WMAddNotificationObserver(resizedWindow, box,
+			      WMViewSizeDidChangeNotification, 
+			      WMWidgetView(win));
+    WMResizeWidget(win, 400, 300);
+    
+
+/*    WMSetBoxHorizontal(box, True); */
     for (i = 0; i < 4; i++) {
 	btn = WMCreateCommandButton(box);
 	WMSetButtonText(btn, "bla");
 	WMMapWidget(btn);
 	WMAddBoxSubview(box, WMWidgetView(btn), i&1, True, 20, 0, 5);
     }
+    
+    pop = WMCreatePopUpButton(box);
+    WMAddPopUpButtonItem(pop, "ewqeq");
+    WMAddPopUpButtonItem(pop, "ewqeqrewrw");
+    WMAddBoxSubview(box, WMWidgetView(pop), False, True, 20, 0, 5);
+    WMMapWidget(pop);
+    
+    hbox = WMCreateBox(box);
+    WMSetBoxHorizontal(hbox, True);
+    WMAddBoxSubview(box, WMWidgetView(hbox), False, True, 24, 0, 0);
+    WMMapWidget(hbox);
+ 
+    for (i = 0; i < 4; i++) {
+	btn = WMCreateCommandButton(hbox);
+	WMSetButtonText(btn, "bla");
+	WMMapWidget(btn);
+	WMAddBoxSubview(hbox, WMWidgetView(btn), 1, True, 60, 0, i<3?5:0);
+    }
+     
     
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
@@ -1239,7 +1274,9 @@ main(int argc, char **argv)
      */
 
     testBox(scr);
-#if 0    
+
+#if 0
+    testTabView(scr);    
     testList(scr);
 
     testProgressIndicator(scr);
@@ -1259,7 +1296,6 @@ main(int argc, char **argv)
     testFrame(scr);
 
 
-    testTabView(scr);
 
 
 

@@ -82,12 +82,12 @@ rearrange(WMBox *box)
 {
     int i;
     int x, y;
-    int w, h;
+    int w = 1, h = 1;
     int total;
     int expands = 0;
     
     x = box->borderWidth;
-    y = box->borderWidth;    
+    y = box->borderWidth;
     if (box->horizontal) {
 	h = WMWidgetHeight(box) - 2 * box->borderWidth;
 	total = WMWidgetWidth(box) - 2 * box->borderWidth;
@@ -95,16 +95,19 @@ rearrange(WMBox *box)
 	w = WMWidgetWidth(box) - 2 * box->borderWidth;
 	total = WMWidgetHeight(box) - 2 * box->borderWidth;
     }
-    
-    
+
+    if (w <= 0 || h <= 0 || total <= 0) {
+	return;
+    }	
+
     for (i = 0; i < box->subviewCount; i++) {
 	total -= box->subviews[i].minSize;
-	total -= box->subviews[i].space;	
+	total -= box->subviews[i].space;
 	if (box->subviews[i].expand) {
 	    expands++;
 	}
     }
-    
+
     for (i = 0; i < box->subviewCount; i++) {
 	if (box->horizontal) {
 	    w = box->subviews[i].minSize;
@@ -115,8 +118,8 @@ rearrange(WMBox *box)
 	    if (box->subviews[i].expand)
 		h += total/expands;
 	}
-	W_ResizeView(box->subviews[i].view, w, h);
 	W_MoveView(box->subviews[i].view, x, y);
+	W_ResizeView(box->subviews[i].view, w, h);
 	if (box->horizontal) {
 	    x += w + box->subviews[i].space;
 	} else {

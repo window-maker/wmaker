@@ -37,6 +37,9 @@ typedef struct W_TabView {
 
 
 
+
+
+
 #define DEFAULT_WIDTH	40
 #define DEFAULT_HEIGHT	40
 
@@ -59,6 +62,19 @@ static void W_MapTabViewItem(WMTabViewItem *item);
 static WMView *W_TabViewItemView(WMTabViewItem *item);
 
 static void recalcTabWidth(TabView *tPtr);
+
+
+static void didResize(struct W_ViewDelegate*, WMView*);
+
+static W_ViewDelegate delegate = {
+    NULL,
+	NULL,
+	didResize,
+	NULL,
+	NULL
+};
+
+
 
 
 static void
@@ -131,6 +147,7 @@ WMCreateTabView(WMWidget *parent)
 	return NULL;
     }
     tPtr->view->self = tPtr;
+    tPtr->view->delegate = &delegate;
 
     tPtr->lightGray = WMCreateRGBColor(scr, 0xd9d9, 0xd9d9, 0xd9d9, False);
     tPtr->tabColor = WMCreateRGBColor(scr, 0x8420, 0x8420, 0x8420, False);
@@ -637,6 +654,32 @@ paintTabView(TabView *tPtr)
      case WTNoTabsNoBorder:
 	break;
     }
+}
+
+
+static void
+rearrange(TabView *tPtr)
+{
+    int i;
+    int width, height;
+    
+    recalcTabWidth(tPtr);
+    
+    width = tPtr->view->size.width - 3;
+    height = tPtr->view->size.height - tPtr->tabHeight - 3;
+    
+    for (i = 0; i < tPtr->itemCount; i++) {
+	W_ResizeView(W_TabViewItemView(tPtr->items[i]), width, height);
+    }
+    if (W_VIEW_MAPPED(tPtr->view) && W_VIEW_REALIZED(tPtr->view))
+	paintTabView(tPtr);
+}
+
+
+static void
+didResize(struct W_ViewDelegate *deleg, WMView *view)
+{
+    rearrange(view->self);
 }
 
 

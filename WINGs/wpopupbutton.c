@@ -224,6 +224,7 @@ WMSetPopUpButtonSelectedItem(WMPopUpButton *bPtr, int index)
 	paintPopUpButton(bPtr);
 }
 
+
 int
 WMGetPopUpButtonSelectedItem(WMPopUpButton *bPtr)
 {

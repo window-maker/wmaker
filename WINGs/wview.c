@@ -561,6 +561,18 @@ W_SetViewBackgroundColor(W_View *view, WMColor *color)
 }
 
 
+void 
+W_SetViewCursor(W_View *view, Cursor cursor)
+{
+    view->cursor = cursor;
+    if (W_VIEW_REALIZED(view)) {
+	XDefineCursor(W_VIEW_DISPLAY(view), W_VIEW_DRAWABLE(view), cursor);
+    } else {
+	view->attribFlags |= CWCursor;
+	view->attribs.cursor = cursor;
+    }
+}
+
 
 W_View*
 W_FocusedViewOfToplevel(W_View *view)
@@ -714,4 +726,3 @@ WMGetViewScreenPosition(WMView *view)
 }
 
 			
-
