@@ -330,8 +330,7 @@ getSelectionData(Display *dpy, Window win, Atom where)
 	return NULL;
     }
     
-    wdata = WMCreateDataWithBytesAndDestructor(data, len, 
-					       (WMFreeDataProc*)XFree);
+    wdata = WMCreateDataWithBytesNoCopy(data, len, (WMFreeDataProc*)XFree);
     if (wdata == NULL) {
 	return NULL;
     }

@@ -440,12 +440,11 @@ WMData* WMCreateDataWithLength(unsigned length);
 
 WMData* WMCreateDataWithBytes(void *bytes, unsigned length);
 
-WMData* WMCreateDataWithBytesNoCopy(void *bytes, unsigned length);
+/* destructor is a function called to free the data when releasing the data
+ * object, or NULL if no freeing of data is necesary. */
+WMData* WMCreateDataWithBytesNoCopy(void *bytes, unsigned length,
+                                    WMFreeDataProc *destructor);
 
-
-WMData* WMCreateDataWithBytesAndDestructor(void *bytes, unsigned length,
-					   WMFreeDataProc *destructor);
-    
 WMData* WMCreateDataWithData(WMData *aData);
 
 WMData* WMRetainData(WMData *aData);

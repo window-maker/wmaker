@@ -1,7 +1,7 @@
 /*
  *  WINGs WMData function library
  * 
- *  Copyright (c) 1999 Dan Pascu
+ *  Copyright (c) 1999-2000 Dan Pascu
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -51,12 +51,13 @@ WMCreateDataWithCapacity(unsigned capacity) /*FOLD00*/
         aData->bytes = wmalloc(capacity);
     else
         aData->bytes = NULL;
+
     aData->capacity = capacity;
     aData->growth = capacity/2 > 0 ? capacity/2 : 1;
     aData->length = 0;
     aData->retainCount = 1;
-    aData->freeData = 1;
     aData->format = 0;
+    aData->freeData = 1;
     aData->destructor = NULL;
 
     return aData;
@@ -92,27 +93,8 @@ WMCreateDataWithBytes(void *bytes, unsigned length) /*FOLD00*/
 
 
 WMData*
-WMCreateDataWithBytesNoCopy(void *bytes, unsigned length) /*FOLD00*/
-{
-    WMData *aData;
-
-    aData = (WMData*)wmalloc(sizeof(WMData));
-    aData->length = length;
-    aData->capacity = length;
-    aData->growth = length/2 > 0 ? length/2 : 1;
-    aData->bytes = bytes;
-    aData->retainCount = 1;
-    aData->freeData = 0;
-    aData->format = 0;
-    aData->destructor = NULL;
-
-    return aData;
-}
-
-
-WMData*
-WMCreateDataWithBytesAndDestructor(void *bytes, unsigned length,
-				   WMFreeDataProc *destructor)
+WMCreateDataWithBytesNoCopy(void *bytes, unsigned length, /*FOLD00*/
+                            WMFreeDataProc *destructor)
 {
     WMData *aData;
 
@@ -134,12 +116,12 @@ WMData*
 WMCreateDataWithData(WMData *aData) /*FOLD00*/
 {
     WMData *newData;
+
     if (aData->length > 0) {
         newData = WMCreateDataWithBytes(aData->bytes, aData->length);
     } else {
         newData = WMCreateDataWithCapacity(0);
     }
-    newData->destructor = aData->destructor;
     newData->format = aData->format;
 
     return newData;
@@ -160,11 +142,12 @@ WMReleaseData(WMData *aData) /*FOLD00*/
     aData->retainCount--;
     if (aData->retainCount > 0)
         return;
-    if (aData->bytes && aData->freeData) {
-	if (aData->destructor != NULL)
-	    aData->destructor(aData->bytes);
-	else
-	    wfree(aData->bytes);
+    if (aData->bytes != NULL) {
+        if (aData->destructor != NULL) {
+            aData->destructor(aData->bytes);
+        } else if (aData->freeData) {
+            wfree(aData->bytes);
+        }
     }
     wfree(aData);
 }
@@ -254,7 +237,7 @@ WMGetDataBytesWithLength(WMData *aData, void *buffer, unsigned length) /*FOLD00*
 void
 WMGetDataBytesWithRange(WMData *aData, void *buffer, WMRange aRange) /*FOLD00*/
 {
-	unsigned char *dataBytes = (unsigned char *)aData->bytes;
+    unsigned char *dataBytes = (unsigned char *)aData->bytes;
 
     wassertr(aRange.position < aData->length);
     wassertr(aRange.count <= aData->length-aRange.position);
@@ -274,8 +257,8 @@ WMGetSubdataWithRange(WMData *aData, WMRange aRange) /*FOLD00*/
 
     buffer = wmalloc(aRange.count);
     WMGetDataBytesWithRange(aData, buffer, aRange);
-    newData = WMCreateDataWithBytesNoCopy(buffer, aRange.count);
-    newData->destructor = aData->destructor;
+    newData = WMCreateDataWithBytesNoCopy(buffer, aRange.count, wfree);
+    //newData->freeData = 1;
     newData->format = aData->format;
     
     return newData;
@@ -310,7 +293,7 @@ WMAppendDataBytes(WMData *aData, void *bytes, unsigned length) /*FOLD00*/
 {
     unsigned oldLength = aData->length;
     unsigned newLength = oldLength + length;
-	unsigned char *dataBytes = (unsigned char *)aData->bytes;
+    unsigned char *dataBytes = (unsigned char *)aData->bytes;
 
     if (newLength > aData->capacity) {
         unsigned nextCapacity = aData->capacity + aData->growth;
