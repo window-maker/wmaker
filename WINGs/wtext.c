@@ -2158,7 +2158,7 @@ getStreamIntoBag(WMText *tPtr, int sel)
     if(!stream)
         return NULL;
 
-    bag = WMCreateArrayBagWithDestructor(4, releaseBagData);
+    bag = WMCreateBagWithDestructor(4, releaseBagData);
 
     start = stream;
     while (start) {
@@ -2265,7 +2265,7 @@ WMCreateText(WMWidget *parent)
     tPtr->currentTextBlock = NULL;
     tPtr->tpos = 0;
 
-    tPtr->gfxItems = WMCreateArrayBag(4);
+    tPtr->gfxItems = WMCreateBag(4);
 
     tPtr->parser = NULL;
     tPtr->writer = NULL;

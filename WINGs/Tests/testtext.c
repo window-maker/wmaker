@@ -1,8 +1,12 @@
-#include "WINGs.h"
+
 #include <stdio.h>
+#include <string.h>
+
+#include "WINGs.h"
 
 
-WMScreen	*scr;
+WMScreen *scr;
+
 
 void
 wAbort()

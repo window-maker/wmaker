@@ -11,6 +11,10 @@ changes since wmaker 0.62.1:
 - added WMCreateTabViewItem()
 - added W_CreateUnmanagedTopView()
 - added wtokenize()
+- restructured the directory tree. Added Documentation, Examples and Tests
+  subdirectories
+- removed WMArrayBag and reorganized WMTreeBag to be WMBag.
+
 
 changes since wmaker 0.62.0:
 ............................

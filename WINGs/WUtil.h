@@ -158,35 +158,11 @@ typedef struct {
     void	(*releaseKey)(const void *);    
 } WMHashTableCallbacks;
 
-    
+
 typedef void *WMBagIterator;
 
-typedef struct W_BagFunctions {
-    int (*getItemCount)(WMBag *self);
-    int (*appendBag)(WMBag *self, WMBag *bag);
-    int (*putInBag)(WMBag *self, void *item);
-    int (*insertInBag)(WMBag *self, int index, void *item);
-    int (*removeFromBag)(WMBag *bag, void *item);
-    int (*eraseFromBag)(WMBag *bag, int index);
-    int (*deleteFromBag)(WMBag *bag, int index);
-    void *(*getFromBag)(WMBag *bag, int index);
-    int (*firstInBag)(WMBag *bag, void *item);
-    int (*countInBag)(WMBag *bag, void *item);
-    void *(*replaceInBag)(WMBag *bag, int index, void *item);
-    int (*sortBag)(WMBag *bag, int (*comparer)(const void*, const void*));
-    void (*emptyBag)(WMBag *bag);
-    void (*freeBag)(WMBag *bag);
-    void (*mapBag)(WMBag *bag, void (*function)(void*, void*), void *data);
-    int (*findInBag)(WMBag *bag, int (*match)(void*, void*), void *cdata);
-    void *(*first)(WMBag *bag, WMBagIterator *ptr);
-    void *(*last)(WMBag *bag, WMBagIterator *ptr);
-    void *(*next)(WMBag *bag, WMBagIterator *ptr);
-    void *(*previous)(WMBag *bag, WMBagIterator *ptr);
-    void *(*iteratorAtIndex)(WMBag *bag, int index, WMBagIterator *ptr);
-    int (*indexForIterator)(WMBag *bag, WMBagIterator ptr);
-} W_BagFunctions;
 
-    
+#if 0
 struct W_Bag {
     void *data;
     
@@ -194,6 +170,7 @@ struct W_Bag {
     
     W_BagFunctions func;
 };
+#endif
 
 
 
@@ -373,77 +350,74 @@ WMBag* WMCreateArrayBagWithDestructor(int initialSize,
  * O(lg n) insertion/deletion/search
  * Slow for storing small numbers of elements
  */
-WMBag *WMCreateTreeBag(void);
-WMBag *WMCreateTreeBagWithDestructor(void (*destructor)(void*));
 
-    
-#define WMCreateArrayBag(a) WMCreateTreeBag()
-#define WMCreateArrayBagWithDestructor(a,d) WMCreateTreeBagWithDestructor(d)
-    
 #define WMCreateBag(size) WMCreateTreeBag()
 
 #define WMCreateBagWithDestructor(size, d) WMCreateTreeBagWithDestructor(d)
 
-#define WMGetBagItemCount(bag) bag->func.getItemCount(bag)
+WMBag* WMCreateTreeBag(void);
 
-#define WMAppendBag(bag, other) bag->func.appendBag(bag, other)
+WMBag* WMCreateTreeBagWithDestructor(void (*destructor)(void*));
 
-#define WMPutInBag(bag, item) bag->func.putInBag(bag, item)
+int WMGetBagItemCount(WMBag *self);
+
+int WMAppendBag(WMBag *self, WMBag *bag);
+
+int WMPutInBag(WMBag *self, void *item);
 
 /* insert will increment the index of elements after it by 1 */
-#define WMInsertInBag(bag, index, item) bag->func.insertInBag(bag, index, item)
+int WMInsertInBag(WMBag *self, int index, void *item);
 
 /* this is slow */
 /* erase will remove the element from the bag,
  * but will keep the index of the other elements unchanged */
-#define WMEraseFromBag(bag, index) bag->func.eraseFromBag(bag, index)
+int WMEraseFromBag(WMBag *self, int index);
 
 /* delete and remove will remove the elements and cause the elements
  * after them to decrement their indexes by 1 */
-#define WMRemoveFromBag(bag, item) bag->func.removeFromBag(bag, item)
+int WMRemoveFromBag(WMBag *self, void *item);
 
-#define WMDeleteFromBag(bag, index) bag->func.deleteFromBag(bag, index)
+int WMDeleteFromBag(WMBag *self, int index);
 
-#define WMGetFromBag(bag, index) bag->func.getFromBag(bag, index)
+void* WMGetFromBag(WMBag *self, int index);
 
-#define WMCountInBag(bag, item) bag->func.countInBag(bag, item)
+void* WMReplaceInBag(WMBag *self, int index, void *item);
 
-#define WMReplaceInBag(bag, index, item) bag->func.replaceInBag(bag, index, item)
-#define WMSetInBag(bag, index, item) bag->func.replaceInBag(bag, index, item)
+#define WMSetInBag(bag, index, item) WMReplaceInBag(bag, index, item)
 
 /* comparer must return:
  * < 0 if a < b
  * > 0 if a > b
  * = 0 if a = b
  */
-#define WMSortBag(bag, comparer) bag->func.sortBag(bag, comparer)
+int WMSortBag(WMBag *self, int (*comparer)(const void*, const void*));
 
-#define WMEmptyBag(bag) bag->func.emptyBag(bag)
-    
-#define WMFreeBag(bag) bag->func.freeBag(bag)
+void WMEmptyBag(WMBag *self);
 
-#define WMMapBag(bag, function, cdata) bag->func.mapBag(bag, function, cdata)
+void WMFreeBag(WMBag *self);
 
-#define WMGetFirstInBag(bag, item) bag->func.firstInBag(bag, item)
-    
-#define WMCountInBag(bag, item) bag->func.countInBag(bag, item)
+void WMMapBag(WMBag *self, void (*function)(void*, void*), void *data);
 
-#define WMFindInBag(bag, match, cdata) bag->func.findInBag(bag, match, cdata)
-    
-#define WMBagFirst(bag, ptr) bag->func.first(bag, ptr)
+int WMGetFirstInBag(WMBag *self, void *item);
 
-#define WMBagLast(bag, ptr) bag->func.last(bag, ptr)
-    
-#define WMBagNext(bag, ptr) bag->func.next(bag, ptr)
-    
-#define WMBagPrevious(bag, ptr) bag->func.previous(bag, ptr)
+int WMCountInBag(WMBag *self, void *item);
 
-#define WMBagIteratorAtIndex(bag, index, ptr) bag->func.iteratorAtIndex(bag, index, ptr)
+int WMFindInBag(WMBag *self, int (*match)(void*,void*), void *cdata);
 
-#define WMBagIndexForIterator(bag, ptr) bag->func.indexForIterator(bag, ptr)
+void* WMBagFirst(WMBag *self, WMBagIterator *ptr);
 
-    
-    
+void* WMBagLast(WMBag *self, WMBagIterator *ptr);
+
+void* WMBagNext(WMBag *self, WMBagIterator *ptr);
+
+void* WMBagPrevious(WMBag *self, WMBagIterator *ptr);
+
+void* WMBagIteratorAtIndex(WMBag *self, int index, WMBagIterator *ptr);
+
+int WMBagIndexForIterator(WMBag *bag, WMBagIterator ptr);
+
+
+
 #define WM_ITERATE_BAG(bag, var, i) \
       	for (var = WMBagFirst(bag, &(i)); (i) != NULL; \
 		var = WMBagNext(bag, &(i)))
@@ -452,8 +426,8 @@ WMBag *WMCreateTreeBagWithDestructor(void (*destructor)(void*));
       	for (var = WMBagLast(bag, &(i)); (i) != NULL; \
 		var = WMBagPrevious(bag, &(i)))
 
-    
-    
+
+
 /*-------------------------------------------------------------------------*/
 
 /* WMData handling */

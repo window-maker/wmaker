@@ -68,7 +68,6 @@ libWINGs_a_SOURCES = 	\
 	wview.c \
 	error.c \
 	findfile.c \
-	bagarray.c \
 	bagtree.c \
 	connection.c \
 	data.c \
@@ -82,7 +81,6 @@ libWINGs_a_SOURCES = 	\
 libWUtil_a_SOURCES = 	\
 	WINGs.h \
 	WINGsP.h \
-	bagarray.c \
 	bagtree.c \
 	connection.c \
 	data.c \
