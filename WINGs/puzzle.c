@@ -128,7 +128,6 @@ void ResetGame(void)
 }
 
 
-
 void buttonClick(WMWidget *w, void *ptr)
 {
     char buffer[300];

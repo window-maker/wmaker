@@ -10,7 +10,8 @@ bin_SCRIPTS = wmaker.inst wm-oldmenu2new wsetfont wkdemenu.pl
 EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new wsetfont directjpeg.c \
 		wkdemenu.pl
 
-INCLUDES = -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib @HEADER_SEARCH_PATH@
+INCLUDES = $(DFLAGS) -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib \
+	@HEADER_SEARCH_PATH@
 
 # X_EXTRA_LIBS is for libproplist in systems that need -lsocket
 liblist= @LIBRARY_SEARCH_PATH@ @LIBPL@ @X_EXTRA_LIBS@

@@ -179,7 +179,8 @@ convertTrueColor_generic(RXImage *ximg, RImage *image,
     int rer, ger, ber;
     unsigned char *ptr = image->data;
     int channels = image->format == RRGBAFormat ? 4 : 3;
-    
+
+
     /* convert and dither the image to XImage */
     for (y=0; y<image->height; y++) {
 	nerr[0] = 0;

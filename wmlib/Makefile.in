@@ -62,7 +62,6 @@ host_triplet = @host@
 AS = @AS@
 CC = @CC@
 CPP_PATH = @CPP_PATH@
-DFLAGS = @DFLAGS@
 DLLIBS = @DLLIBS@
 DLLTOOL = @DLLTOOL@
 GFXLIBS = @GFXLIBS@
@@ -100,7 +99,7 @@ lib_LIBRARIES = libWMaker.a
 
 include_HEADERS = WMaker.h
 
-INCLUDES = @DFLAGS@ @XCFLAGS@
+INCLUDES = $(DFLAGS) @XCFLAGS@
 
 libWMaker_a_SOURCES =  	menu.c 			app.c 			event.c 		command.c		app.h			menu.h	
 

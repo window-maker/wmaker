@@ -36,6 +36,10 @@
 #include <dirent.h>
 #include <limits.h>
 
+#ifdef HAVE_MALLOC_H
+#include <malloc.h>
+#endif
+
 #include <signal.h>
 #ifdef __FreeBSD__
 #include <sys/signal.h>
@@ -1181,6 +1185,16 @@ wShowInfoPanel(WScreen *scr)
 	    (unsigned)scr->w_visual->visualid,
 	    visuals[scr->w_visual->class], scr->w_depth, version);
 
+#if defined(HAVE_MALLOC_H) && defined(HAVE_MALLINFO)
+    {
+	struct mallinfo ma = mallinfo();
+	sprintf(buffer+strlen(buffer), 
+		"Total allocated memory: %i kB. Total memory in use: %i kB.\n",
+		(ma.arena+ma.hblkhd)/1024, (ma.uordblks+ma.hblkhd)/1024);
+	
+    }
+#endif
+    
     strcat(buffer, "Supported image formats: ");
     strl = RSupportedFileFormats();
     for (i=0; strl[i]!=NULL; i++) {

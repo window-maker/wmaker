@@ -12,6 +12,11 @@ Changes since version 0.62.0:
 - added option for f'n windoze cycling..
 - added --create-stdcmap and made std colormap creation off by default
 - updated get/setstyle to account for new options
+- fixed crash on restart bug
+- made GNOME wm hints take precedence over KDE.. KDE hint will only be read
+  if GNOME hints dont exist
+- updated kwm hint support (maximize hint)
+- added memory usage in info panel
 
 Changes since version 0.61.1:
 .............................

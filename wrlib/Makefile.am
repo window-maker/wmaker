@@ -57,7 +57,7 @@ x86_specific.o: x86_specific.c
 
 
 
-INCLUDES = @HEADER_SEARCH_PATH@
+INCLUDES = $(DFLAGS) @HEADER_SEARCH_PATH@
 
 LIBLIST = $(top_builddir)/wrlib/libwraster.la @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ -lm
 

@@ -309,9 +309,15 @@ bug report.
 
 To make a usefull backtrace, you need a core file with debugging
 information produced by Window Maker when it crashes. It should 
-have been installed without stripping too. If you
-get the dialog window telling you that wmaker crashed and asks you
-what to do, tell it to "Abort and leave a core file".
+have been installed without stripping too. 
+
+To compile wmaker with debugging information:
+
+./configure
+make CFLAGS=-g
+
+If you get the dialog window telling you that wmaker crashed and 
+asks you what to do, tell it to "Abort and leave a core file".
 
 script
 cd src

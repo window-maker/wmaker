@@ -5,6 +5,8 @@
   Dockit = {Icon = GNUstep3D.#extension#;};
   DockApp = {NoAppIcon = NO;};
   WMSoundServer = {Icon = sound.#extension#;};
+  panel.Panel = {NoAppIcon = YES;};
+  gmc.Gmc = {NoAppIcon = YES;};
   XTerm = {Icon = Terminal.#extension#;};
   NXTerm = {Icon = Terminal.#extension#;};
   ScilabGraphic0.Xscilab = {KeepInsideScreen=YES;};
