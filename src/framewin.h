@@ -58,6 +58,7 @@ typedef struct WFrameWindow {
     short workspace;		       /* workspace that the window occupies */
 
     short top_width;
+    int *title_clearance;
     short bottom_width;
 
     short resizebar_corner_width;
@@ -156,7 +157,7 @@ typedef struct WFrameWindow {
 
 WFrameWindow*
 wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y, 
-		   int width, int height, int flags,
+		   int width, int height, int *clearance, int flags,
 		   union WTexture **title_texture, 
 		   union WTexture **resize_texture,
 		   unsigned long *color, 

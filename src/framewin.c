@@ -63,7 +63,7 @@ static void updateTitlebar(WFrameWindow *fwin);
 
 WFrameWindow*
 wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y, 
-		   int width, int height, int flags,
+		   int width, int height, int *clearance, int flags,
 		   WTexture **title_texture, WTexture **resize_texture,
 		   unsigned long *color,
 #ifdef DRAWSTRING_PLUGIN
@@ -83,6 +83,7 @@ wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y,
     fwin->title_texture = title_texture;
     fwin->resizebar_texture = resize_texture;
     fwin->title_pixel = color;
+    fwin->title_clearance = clearance;
 #ifdef DRAWSTRING_PLUGIN
     fwin->drawstring_proc_offset = function_offset;
 #endif
@@ -136,7 +137,7 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
 	height = fwin->core->height - fwin->top_width - fwin->bottom_width;
 
     if (flags & WFF_TITLEBAR)
-	theight = WMFontHeight(*fwin->font) + TITLEBAR_EXTRA_HEIGHT + (wPreferences.title_clearance << 1);
+	theight = WMFontHeight(*fwin->font) + TITLEBAR_EXTRA_HEIGHT + *fwin->title_clearance * 2;
     else
 	theight = 0;
     
@@ -470,7 +471,7 @@ updateTitlebar(WFrameWindow *fwin)
     int x, w;
     int theight;
     
-	theight = WMFontHeight(*fwin->font) + TITLEBAR_EXTRA_HEIGHT + (wPreferences.title_clearance << 1);
+	theight = WMFontHeight(*fwin->font) + TITLEBAR_EXTRA_HEIGHT + *fwin->title_clearance * 2;
 
     x = 0;
     w = fwin->core->width + 1;
@@ -1081,16 +1082,16 @@ wFrameWindowPaint(WFrameWindow *fwin)
             proc.drawString(scr->drawstring_func[fwin->flags.state 
                     + fwin->drawstring_proc_offset]->arg,
                     fwin->titlebar->window, *fwin->title_gc,
-                    *fwin->font, x, wPreferences.title_clearance + TITLEBAR_EXTRA_HEIGHT/2,
+                    *fwin->font, x, *fwin->title_clearance + TITLEBAR_EXTRA_HEIGHT/2,
                     fwin->titlebar->width, fwin->top_width, title, titlelen);
     } else {
         WMDrawString(scr->wmscreen, fwin->titlebar->window, 
-                *fwin->title_gc, *fwin->font, x, wPreferences.title_clearance + TITLEBAR_EXTRA_HEIGHT/2, 
+                *fwin->title_gc, *fwin->font, x, *fwin->title_clearance + TITLEBAR_EXTRA_HEIGHT/2, 
                 title, titlelen);
     }
 #else
     WMDrawString(scr->wmscreen, fwin->titlebar->window, 
-            *fwin->title_gc, *fwin->font, x, wPreferences.title_clearance + TITLEBAR_EXTRA_HEIGHT/2, 
+            *fwin->title_gc, *fwin->font, x, *fwin->title_clearance + TITLEBAR_EXTRA_HEIGHT/2, 
             title, titlelen);
 #endif /* DRAWSTRING_PLUGIN */
 

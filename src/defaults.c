@@ -558,8 +558,14 @@ WDefaultEntry optionList[] = {
     {"WindowTitleFont",	DEF_TITLE_FONT,	       	NULL,
 	  NULL,				getFont,	setWinTitleFont,
     },
-    {"WindowTitleClearance",	DEF_TITLE_CLEARANCE,	       	NULL,
-      &wPreferences.title_clearance,	getInt,		setClearance
+    {"WindowTitleExtendSpace",	DEF_WINDOW_TITLE_EXTEND_SPACE,	       	NULL,
+      &wPreferences.window_title_clearance,	getInt,		setClearance
+    },
+    {"MenuTitleExtendSpace",	DEF_MENU_TITLE_EXTEND_SPACE,	       	NULL,
+      &wPreferences.menu_title_clearance,	getInt,		setClearance
+    },
+    {"MenuTextExtendSpace",	DEF_MENU_TEXT_EXTEND_SPACE,	       	NULL,
+      &wPreferences.menu_text_clearance,	getInt,		setClearance
     },
     {"MenuTitleFont",	DEF_MENU_TITLE_FONT,	NULL,
 	  NULL,				getFont,	setMenuTitleFont
@@ -2414,7 +2420,7 @@ setJustify(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
 static int
 setClearance(WScreen *scr, WDefaultEntry *entry, void *bar, void *foo)
 {
-    return REFRESH_WINDOW_FONT|REFRESH_BUTTON_IMAGES|REFRESH_MENU_TITLE_FONT;
+    return REFRESH_WINDOW_FONT|REFRESH_BUTTON_IMAGES|REFRESH_MENU_TITLE_FONT|REFRESH_MENU_FONT;
 }
 
 static int

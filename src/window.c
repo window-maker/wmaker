@@ -913,7 +913,8 @@ wManageWindow(WScreen *scr, Window window)
 	foo |= WFF_RESIZEBAR;
 
     wwin->frame = wFrameWindowCreate(scr, window_level, 
-				     x, y, width, height, foo,
+				     x, y, width, height,
+                     &wPreferences.window_title_clearance, foo,
 				     scr->window_title_texture,
 				     scr->resizebar_texture,
 				     scr->window_title_pixel, 
@@ -1278,7 +1279,8 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
 
     wwin->frame = wFrameWindowCreate(scr, WMFloatingLevel,
 				     wwin->frame_x, wwin->frame_y,
-				     width, height, foo,
+				     width, height,
+                     &wPreferences.window_title_clearance, foo,
 				     scr->window_title_texture,
 				     scr->resizebar_texture,
 				     scr->window_title_pixel, 

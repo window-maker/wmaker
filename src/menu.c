@@ -170,7 +170,7 @@ wMenuCreate(WScreen *screen, char *title, int main_menu)
 	menu->flags.titled = 1;
     }
     menu->frame =
-	wFrameWindowCreate(screen, tmp, 8, 2, 1, 1, flags,
+	wFrameWindowCreate(screen, tmp, 8, 2, 1, 1, &wPreferences.menu_title_clearance, flags,
 			   screen->menu_title_texture, NULL,
                            screen->menu_title_pixel,
 #ifdef DRAWSTRING_PLUGIN
@@ -551,7 +551,7 @@ wMenuRealize(WMenu *menu)
 	twidth = 0;
 	theight = 0;
     }
-    eheight = WMFontHeight(scr->menu_entry_font) + 6;
+    eheight = WMFontHeight(scr->menu_entry_font) + 6 + wPreferences.menu_text_clearance * 2;
     menu->entry_height = eheight;
     mrwidth = 0;
     mwidth = 0;
@@ -784,7 +784,7 @@ paintEntry(WMenu *menu, int index, int selected)
 	x += MENU_INDICATOR_SPACE + 2;
 
     WMDrawString(scr->wmscreen, win, textGC, scr->menu_entry_font, 
-		 x, 3 + y, entry->text, strlen(entry->text));
+		 x, 3 + y + wPreferences.menu_text_clearance, entry->text, strlen(entry->text));
 
     if (entry->cascade>=0) {
 	/* draw the cascade indicator */
