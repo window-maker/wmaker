@@ -190,7 +190,6 @@ enum {
 
 /* text field special events */
 enum {
-    WMSetTextEvent,
     WMInsertTextEvent,
     WMDeleteTextEvent
 };
