@@ -179,7 +179,7 @@
                         	"Èrna" WS_BACK '(solid, black)'
                         	"Modra"  WS_BACK '(solid, "#505075")'
 				"Indigo" WS_BACK '(solid, "#243e6c")'
-				"Temno modra" WS_BACK '(solid, "#180090")'
+				"Temno modra" WS_BACK '(solid, "#224477")'
                         	"Violièna" WS_BACK '(solid, "#554466")'
                         	"P¹enièna"  WS_BACK '(solid, "wheat4")'
                         	"Temno siva"  WS_BACK '(solid, "#333340")'

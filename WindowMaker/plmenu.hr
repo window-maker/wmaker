@@ -122,7 +122,7 @@
         (
           "Duboko Blue",
           EXEC,
-          "wdwrite WindowMaker WorkspaceBack '(solid, \"#180090\")'"
+          "wdwrite WindowMaker WorkspaceBack '(solid, \"#224477\")'"
         ),
         (
           "Ljubi\350asta",

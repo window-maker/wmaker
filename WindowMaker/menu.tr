@@ -165,7 +165,7 @@
                         	"Black" WS_BACK '(solid, black)'
                         	"Blue"  WS_BACK '(solid, "#505075")'
 				"Indigo" WS_BACK '(solid, "#243e6c")'
-				"Deep Blue" WS_BACK '(solid, "#180090")'
+				"Bleumarine" WS_BACK '(solid, "#224477")'
                         	"Purple" WS_BACK '(solid, "#554466")'
                         	"Wheat"  WS_BACK '(solid, "wheat4")'
                         	"Dark Gray"  WS_BACK '(solid, "#333340")'

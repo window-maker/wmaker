@@ -132,7 +132,7 @@ wMaker/IconSets WITH seticons"
         (
           "M\370rkebl\345",
           EXEC,
-          "wdwrite WindowMaker WorkspaceBack  '(solid, \"#180090\")'"
+          "wdwrite WindowMaker WorkspaceBack  '(solid, \"#224477\")'"
         ),
         (
           "Lilla",

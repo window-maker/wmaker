@@ -242,7 +242,7 @@
                	"Czarny"            WS_BACK '(solid, black)'
                	"Niebieski"         WS_BACK '(solid, "#505075")'
 				"Indigo"            WS_BACK '(solid, "#243e6c")'
-				"G³êboko Niebieski" WS_BACK '(solid, "#180090")'
+				"G³êboko Niebieski" WS_BACK '(solid, "#224477")'
                	"Fioletowy"         WS_BACK '(solid, "#554466")'
                	"Pszeniczny"        WS_BACK '(solid, "wheat4")'
                	"Ciemno Szary"      WS_BACK '(solid, "#333340")'

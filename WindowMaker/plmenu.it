@@ -74,7 +74,7 @@
     ("Nero", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, black)'"),
     ("Blu-Grigio",  EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#505075\")'"),
     ("Indaco", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#243e6c\")'"),
-    ("Blue", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#180090\")'"),
+    ("Blue", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#224477\")'"),
     ("Viola", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#554466\")'"),
     ("Beige", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, wheat4)'"),
     ("Grigio", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#333340\")'"),

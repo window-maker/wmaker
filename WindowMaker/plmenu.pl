@@ -139,7 +139,7 @@
                	("Czarny",            EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, black)'"),
                	("Niebieski",         EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, '#505075')'"),
 				("Indigo",            EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, '#243e6c')'"),
-				("G³êboko Niebieski", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, '#180090')'"),
+				("G³êboko Niebieski", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, '#224477')'"),
                	("Fioletowy",         EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, '#554466')'"),
                	("Pszeniczny",        EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, 'wheat4')'"),
                	("Ciemno Szary",      EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, '#333340')'"),

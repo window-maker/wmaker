@@ -180,7 +180,7 @@
                         	"Svart" WS_BACK '(solid, black)'
                         	"Blå"  WS_BACK '(solid, "#505075")'
 				"Indigo" WS_BACK '(solid, "#243e6c")'
-				"Mörkblå" WS_BACK '(solid, "#180090")'
+				"Mörkblå" WS_BACK '(solid, "#224477")'
                         	"Lila" WS_BACK '(solid, "#554466")'
                         	"Vete"  WS_BACK '(solid, "wheat4")'
                         	"Mörkgrå"  WS_BACK '(solid, "#333340")'

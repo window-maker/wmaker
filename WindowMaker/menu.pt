@@ -180,7 +180,7 @@
                         	"Preto" WS_BACK '(solid, black)'
                         	"Azul"  WS_BACK '(solid, "#505075")'
 				"Indigo" WS_BACK '(solid, "#243e6c")'
-				"Azul escuro" WS_BACK '(solid, "#180090")'
+				"Azul escuro" WS_BACK '(solid, "#224477")'
                         	"Roxo" WS_BACK '(solid, "#554466")'
                         	"Creme"  WS_BACK '(solid, "wheat4")'
                         	"Cinza Escuro"  WS_BACK '(solid, "#333340")'

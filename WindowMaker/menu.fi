@@ -171,7 +171,7 @@
                         	"Musta" WS_BACK '(solid, black)'
                         	"Sininen"  WS_BACK '(solid, "#505075")'
 				"Indigo" WS_BACK '(solid, "#243e6c")'
-				"Tumman Sininen" WS_BACK '(solid, "#180090")'
+				"Tumman Sininen" WS_BACK '(solid, "#224477")'
                         	"Purppura" WS_BACK '(solid, "#554466")'
                         	"Wheat"  WS_BACK '(solid, "wheat4")'
                         	"Tumman harmaa"  WS_BACK '(solid, "#333340")'

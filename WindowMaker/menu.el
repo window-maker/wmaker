@@ -193,7 +193,7 @@
                         	"Μαύρο" WS_BACK '(solid, black)'
                         	"Μπλε"  WS_BACK '(solid, "#505075")'
 				"Λουλακί" WS_BACK '(solid, "#243e6c")'
-				"Σκούρο Μπλε" WS_BACK '(solid, "#180090")'
+				"Σκούρο Μπλε" WS_BACK '(solid, "#224477")'
                         	"Βυσσινί" WS_BACK '(solid, "#554466")'
                         	"Σταρένιο"  WS_BACK '(solid, "wheat4")'
                         	"Σκούρο Γκρι"  WS_BACK '(solid, "#333340")'

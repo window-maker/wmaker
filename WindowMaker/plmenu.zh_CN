@@ -76,7 +76,7 @@
     ("∫⁄", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, black)'"),
     ("¿∂",  EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#505075\")'"),
     ("«‡", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#243e6c\")'"),
-    ("…Ó¿∂", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#180090\")'"),
+    ("…Ó¿∂", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#224477\")'"),
     ("◊œ", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#554466\")'"),
     ("µ≠ª∆", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, wheat4)'"),
     ("…Óª“", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#333340\")'"),

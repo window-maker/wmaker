@@ -74,7 +74,7 @@
     ("Schwarz", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, black)'"),
     ("Blau",  EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#505075\")'"),
     ("Indigo", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#243e6c\")'"),
-    ("Tiefblau", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#180090\")'"),
+    ("Tiefblau", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#224477\")'"),
     ("Purpur", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#554466\")'"),
     ("Weizen", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, wheat4)'"),
     ("Dunkelgrau", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#333340\")'"),

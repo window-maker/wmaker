@@ -228,7 +228,7 @@
 				"Noir" WS_BACK '(solid, black)'
 				"Bleu" WS_BACK '(solid, "#505075")'
 				"Indigo" WS_BACK '(solid, "#243e6c")'
-				"Bleu foncé" WS_BACK '(solid, "#180090")'
+				"Bleu foncé" WS_BACK '(solid, "#224477")'
 				"Violet" WS_BACK '(solid, "#554466")'
 				"Blanc crème" WS_BACK '(solid, "wheat4")'
 				"Gris foncé" WS_BACK '(solid, "#333340")'
