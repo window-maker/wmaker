@@ -125,7 +125,7 @@ int main(int argc, char **argv)
     if ((value = WMGetFromPLDictionary(dict, key)) == NULL)
 	return 2;	/* bad key */
 
-    printf("%s\n", WMGetFromPLString(value));
+    printf("%s\n", WMGetPropListDescription(value, True));
     return 0;
 }
 

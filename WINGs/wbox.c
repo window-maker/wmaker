@@ -253,7 +253,6 @@ WMSetBoxHorizontal(WMBox *box, Bool flag)
 static void
 destroyBox(Box *bPtr)
 {
-    WMRemoveNotificationObserver(bPtr);
     WMFreeArray(bPtr->subviews);
     wfree(bPtr);
 }

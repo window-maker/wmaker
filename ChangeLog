@@ -41,6 +41,7 @@ Changes since version 0.80.0:
 - Fixed segfault with incomplete WM_CLASS specifications. 
 - Fixed a bug about arranging subviews in a WMBox after removing a subview
   and a memleak occuring in the same situation.
+- Fixed a bug in wdread
 
 
 Changes since version 0.70.0:
