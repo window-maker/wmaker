@@ -32,14 +32,16 @@
 #define WMSOUND_UNHIDE      1008
 #define WMSOUND_APPSTART    1009
 #define WMSOUND_APPEXIT     1010
-
+#define WMSOUND_DOCK        1011
+#define WMSOUND_UNDOCK      1012
+#define WMSOUND_KABOOM      1013
 
 #if 0
 /* don't delete this */
 extern WWindow *wSoundServer;
 extern Atom WSStartup, WSShade, WSUnshade, WSShutdown;
 extern Atom WSMaximize, WSUnmaximize, WSIconify, WSUniconify, WSAppStart;
-extern Atom WSHide, WSUnhide, WSAppExit;
+extern Atom WSHide, WSUnhide, WSAppExit, WSDock, WSUnDock, WSKaboom;
 extern WApplication *wSoundApp;
 #endif
 
