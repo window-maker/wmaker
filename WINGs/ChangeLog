@@ -34,6 +34,8 @@ changes since wmaker 0.62.1:
 - added WSDecrementWheel and WSIncrementWheel for handling mouse wheel in
   scrollers and scrolled widgets. This should be treated like the WSxxxPage
   counterparts, except it should scroll by page_size/3 instead of one full page
+- added WMSetBrowserAllowMultipleSelection(), WMSetBrowserAllowEmptySelection()
+  WMBrowserAllowsMultipleSelection() and WMBrowserAllowsEmptySelection()
 
 
 changes since wmaker 0.62.0:
