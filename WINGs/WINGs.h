@@ -881,6 +881,8 @@ void WMSetTextFieldNextTextField(WMTextField *tPtr, WMTextField *next);
 
 void WMSetTextFieldPrevTextField(WMTextField *tPtr, WMTextField *prev);
 
+void WMSetTextFieldDelegate(WMTextField *tPtr, WMTextFieldDelegate *delegate);
+
 
 extern char *WMTextDidChangeNotification;
 extern char *WMTextDidBeginEditingNotification;

@@ -655,7 +655,9 @@ handlePush(Scroller *sPtr, int pushX, int pushY, int alternate)
 		sPtr->dragPoint -= 2 + knobP;
 	}
 #endif /* STRICT_NEXT_BEHAVIOUR */
-	handleMotion(sPtr, pushX, pushY);
+        /* This does not seem necesary here since we don't know yet if the
+         * knob will be dragged later. -Dan
+        handleMotion(sPtr, pushX, pushY); */
 	break;
 
      case WSKnobSlot:
