@@ -434,8 +434,7 @@ RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
 	}
     }
 #undef OP
-}
-
+}			
 
 
 

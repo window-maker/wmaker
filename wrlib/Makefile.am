@@ -8,7 +8,7 @@ libwraster_la_LDFLAGS = -version-info 2:0:0
 
 bin_SCRIPTS = get-wraster-flags
 
-noinst_PROGRAMS = testgrad testdraw view 
+noinst_PROGRAMS = testgrad testdraw view testrot
 
 EXTRA_DIST = test.png tile.xpm ballot_box.xpm 
 include_HEADERS = wraster.h
@@ -32,6 +32,7 @@ libwraster_la_SOURCES = 	\
 	context.c 	\
 	misc.c 		\
 	scale.c		\
+	rotate.c	\
 	convolve.c	\
 	nxpm.c		\
 	xpm.c 		\
@@ -65,6 +66,11 @@ view_LDADD = $(LIBLIST)
 testgrad_SOURCES = testgrad.c
 
 testgrad_LDADD = $(LIBLIST)
+
+testrot_SOURCES = testrot.c
+
+testrot_LDADD = $(LIBLIST)
+
 
 testdraw_SOURCES = testdraw.c
 

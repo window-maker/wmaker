@@ -1,7 +1,7 @@
 /*
  *  Raster graphics library
  * 
- *  Copyright (c) 1997, 1998, 1999 Alfredo K. Kojima
+ *  Copyright (c) 1997 ~ 2000 Alfredo K. Kojima
  * 
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -355,7 +355,10 @@ RImage *RScaleImage(RImage *image, unsigned new_width, unsigned new_height);
 
 RImage *RSmoothScaleImage(RImage *src, unsigned new_width, 
 			  unsigned new_height);
+
+RImage *RRotateImage(RImage *image, float angle);
     
+
 RImage *RMakeTiledImage(RImage *tile, unsigned width, unsigned height);
 
 RImage* RMakeCenteredImage(RImage *image, unsigned width, unsigned height,

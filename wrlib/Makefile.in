@@ -70,6 +70,7 @@ GFXLIBS = @GFXLIBS@
 HEADER_SEARCH_PATH = @HEADER_SEARCH_PATH@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
+LD = @LD@
 LIBPL = @LIBPL@
 LIBRARY_SEARCH_PATH = @LIBRARY_SEARCH_PATH@
 LIBTOOL = @LIBTOOL@
@@ -79,6 +80,7 @@ MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
 NETLIBS = @NETLIBS@
 NLSDIR = @NLSDIR@
+NM = @NM@
 OBJDUMP = @OBJDUMP@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
@@ -101,12 +103,12 @@ libwraster_la_LDFLAGS = -version-info 2:0:0
 
 bin_SCRIPTS = get-wraster-flags
 
-noinst_PROGRAMS = testgrad testdraw view 
+noinst_PROGRAMS = testgrad testdraw view testrot
 
 EXTRA_DIST = test.png tile.xpm ballot_box.xpm 
 include_HEADERS = wraster.h
 
-libwraster_la_SOURCES =  	LookupCmap.c		StdCmap.c		StdCmap.h		CrCmap.c		DelCmap.c		CmapAlloc.c		raster.c 		draw.c			color.c			load.c 			save.c			gradient.c 		xpixmap.c		convert.c 		x86_specific.c		context.c 		misc.c 			scale.c			convolve.c		nxpm.c			xpm.c 			xutil.c			ppm.c			png.c 			jpeg.c 			tiff.c			gif.c
+libwraster_la_SOURCES =  	LookupCmap.c		StdCmap.c		StdCmap.h		CrCmap.c		DelCmap.c		CmapAlloc.c		raster.c 		draw.c			color.c			load.c 			save.c			gradient.c 		xpixmap.c		convert.c 		x86_specific.c		context.c 		misc.c 			scale.c			rotate.c		convolve.c		nxpm.c			xpm.c 			xutil.c			ppm.c			png.c 			jpeg.c 			tiff.c			gif.c
 
 
 INCLUDES = @DFLAGS@ @HEADER_SEARCH_PATH@
@@ -120,6 +122,10 @@ view_LDADD = $(LIBLIST)
 testgrad_SOURCES = testgrad.c
 
 testgrad_LDADD = $(LIBLIST)
+
+testrot_SOURCES = testrot.c
+
+testrot_LDADD = $(LIBLIST)
 
 testdraw_SOURCES = testdraw.c
 
@@ -143,8 +149,8 @@ libwraster_la_DEPENDENCIES =  @ALLOCA@
 libwraster_la_OBJECTS =  LookupCmap.lo StdCmap.lo CrCmap.lo DelCmap.lo \
 CmapAlloc.lo raster.lo draw.lo color.lo load.lo save.lo gradient.lo \
 xpixmap.lo convert.lo x86_specific.lo context.lo misc.lo scale.lo \
-convolve.lo nxpm.lo xpm.lo xutil.lo ppm.lo png.lo jpeg.lo tiff.lo \
-gif.lo
+rotate.lo convolve.lo nxpm.lo xpm.lo xutil.lo ppm.lo png.lo jpeg.lo \
+tiff.lo gif.lo
 PROGRAMS =  $(noinst_PROGRAMS)
 
 testgrad_OBJECTS =  testgrad.o
@@ -156,6 +162,9 @@ testdraw_LDFLAGS =
 view_OBJECTS =  view.o
 view_DEPENDENCIES =  $(top_builddir)/wrlib/libwraster.la
 view_LDFLAGS = 
+testrot_OBJECTS =  testrot.o
+testrot_DEPENDENCIES =  $(top_builddir)/wrlib/libwraster.la
+testrot_LDFLAGS = 
 SCRIPTS =  $(bin_SCRIPTS)
 
 CFLAGS = @CFLAGS@
@@ -173,8 +182,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-SOURCES = $(libwraster_la_SOURCES) $(testgrad_SOURCES) $(testdraw_SOURCES) $(view_SOURCES)
-OBJECTS = $(libwraster_la_OBJECTS) $(testgrad_OBJECTS) $(testdraw_OBJECTS) $(view_OBJECTS)
+SOURCES = $(libwraster_la_SOURCES) $(testgrad_SOURCES) $(testdraw_SOURCES) $(view_SOURCES) $(testrot_SOURCES)
+OBJECTS = $(libwraster_la_OBJECTS) $(testgrad_OBJECTS) $(testdraw_OBJECTS) $(view_OBJECTS) $(testrot_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -273,6 +282,10 @@ testdraw: $(testdraw_OBJECTS) $(testdraw_DEPENDENCIES)
 view: $(view_OBJECTS) $(view_DEPENDENCIES)
 	@rm -f view
 	$(LINK) $(view_LDFLAGS) $(view_OBJECTS) $(view_LDADD) $(LIBS)
+
+testrot: $(testrot_OBJECTS) $(testrot_DEPENDENCIES)
+	@rm -f testrot
+	$(LINK) $(testrot_LDFLAGS) $(testrot_OBJECTS) $(testrot_LDADD) $(LIBS)
 
 install-binSCRIPTS: $(bin_SCRIPTS)
 	@$(NORMAL_INSTALL)

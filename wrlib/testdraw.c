@@ -282,6 +282,79 @@ testBevel()
 }
 
 
+void testScale()
+{
+    RImage *image;
+    RImage *scaled;
+    XSetWindowAttributes val;
+    Pixmap pix;
+    Window win;
+    
+    val.background_pixel = ctx->black;
+    val.colormap = ctx->cmap;
+    win = XCreateWindow(dpy, DefaultRootWindow(dpy), 10, 10, 140, 140,
+                        0, ctx->depth, InputOutput, ctx->visual,
+                        CWColormap|CWBackPixel, &val);
+    XStoreName(dpy, win, "Scale");
+    pix = XCreatePixmap(ctx->dpy, ctx->drawable, 140, 140, ctx->depth);
+    
+    image = RLoadImage(ctx, "ballot_box.xpm", 0);
+    if (!image) {
+	puts("couldnt load ballot_box.xpm");
+	return;
+    }
+    
+    scaled = RScaleImage(image, 140, 140);
+
+    RDestroyImage(image);
+    RConvertImage(ctx, scaled, &pix);
+    XSetWindowBackgroundPixmap(dpy, win, pix);
+    XMapRaised(dpy, win);
+    XClearWindow(dpy, win);
+    XFlush(dpy);
+}
+
+
+void testRotate()
+{
+
+    RImage *image;
+    RImage *rotated;
+    XSetWindowAttributes val;
+    Pixmap pix;
+    Window win;
+
+    image = RLoadImage(ctx, "ballot_box.xpm", 0);
+    if (!image) {
+	puts("couldnt load ballot_box.xpm");
+	return;
+    }
+    
+    image = RScaleImage(image, 90, 180);
+ 
+
+    val.background_pixel = ctx->black;
+    val.colormap = ctx->cmap;
+    win = XCreateWindow(dpy, DefaultRootWindow(dpy), 10, 10, image->height, 
+			image->width,
+                        0, ctx->depth, InputOutput, ctx->visual,
+                        CWColormap|CWBackPixel, &val);
+    XStoreName(dpy, win, "Rotate");
+    pix = XCreatePixmap(ctx->dpy, ctx->drawable, image->height, image->width,
+			ctx->depth);
+    
+    rotated = RRotateImage(image, 90.0);
+
+    RDestroyImage(image);
+    RConvertImage(ctx, rotated, &pix);
+    XSetWindowBackgroundPixmap(dpy, win, pix);
+    XMapRaised(dpy, win);
+    XClearWindow(dpy, win);
+    XFlush(dpy);
+}
+
+
+
 void
 drawClip()
 {
@@ -548,6 +621,10 @@ int main(int argc, char **argv)
     testBevel();
 
     drawClip();
+    
+    testScale();
+    
+    testRotate();
 
   /*  benchmark();*/
 
