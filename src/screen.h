@@ -24,7 +24,6 @@
 
 #include "wconfig.h"
 #include "WindowMaker.h"
-#include "plugin.h"
 #include <sys/types.h>
 
 #include <proplist.h>
