@@ -98,7 +98,7 @@ dnl not used anywhere
 dnl AC_FUNC_MEMCMP  
 AC_FUNC_VPRINTF
 AC_FUNC_ALLOCA
-AC_CHECK_FUNCS(gethostname select poll strerror strncasecmp setpgid atexit inet_aton)
+AC_CHECK_FUNCS(gethostname select poll strerror strncasecmp setpgid atexit)
 
 
 
@@ -327,13 +327,23 @@ dnl
 dnl Networking stuff for Sysv
 dnl
 
-XTRALIBS=""
+NETLIBS=""
 
 AC_CHECK_FUNC(connect,,
-	AC_CHECK_LIB(connect, socket, NETLIBS="$NETLIBS -lsocket",))
+	AC_CHECK_LIB(socket, connect, NETLIBS="$NETLIBS -lsocket",))
 
 AC_CHECK_FUNC(gethostbyname,,
-	AC_CHECK_LIB(gethostbyname, nsl, NETLIBS="$NETLIBS -lnsl",))
+	AC_CHECK_LIB(nsl, gethostbyname, NETLIBS="$NETLIBS -lnsl",))
+
+save_LIBS=$LIBS
+LIBS="$LIBS $NETLIBS -lresolv"
+AC_CHECK_FUNCS(inet_aton)
+if test $ac_cv_func_inet_aton = yes; then
+  NETLIBS="$NETLIBS -lresolv"
+fi
+
+LIBS=$save_LIBS
+
 
 AC_SUBST(NETLIBS)
 
