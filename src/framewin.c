@@ -994,15 +994,12 @@ wFrameWindowPaint(WFrameWindow *fwin)
                     DefaultDepth(dpy, DefaultScreen(dpy)));
             XFillRectangle(dpy, tmp_bg, (*fwin->title_texture)->solid.normal_gc,
                     0, 0, fwin->titlebar->width, tb);
-            printf("bevel 1 %s\n", fwin->title);
             wDrawBevel(tmp_bg, fwin->titlebar->width,
                     fwin->titlebar->height,
                     (WTexSolid*)fwin->title_texture[fwin->flags.state], 
                     WREL_RAISED);
-            XDrawLine(dpy, tmp_bg, fwin->resizebar_texture[0]->dim_gc, 0, 0, w, tb);
             background = &tmp_bg;
         } else {
-            printf("bevel 2\n");
             wDrawBevel(fwin->titlebar->window, fwin->titlebar->width,
                     fwin->titlebar->height,
                     (WTexSolid*)fwin->title_texture[fwin->flags.state], 
@@ -1151,6 +1148,10 @@ wFrameWindowPaint(WFrameWindow *fwin)
                 title, strlen(fwin->title), pd);
         wfree(pd);
     } else {
+        if (fwin->title && fwin->title_texture[fwin->flags.state]->any.type==WTEX_SOLID) {
+            XCopyArea(dpy, tmp_bg, fwin->titlebar->window, *fwin->title_gc,
+                    0, 0, fwin->titlebar->width, tb, 0, 0);
+        }
         WMDrawString(scr->wmscreen, fwin->titlebar->window, 
                 *fwin->title_gc, *fwin->font,
                 x, ((signed)fwin->top_width - (signed)WMFontHeight(*fwin->font))/2, 
