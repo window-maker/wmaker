@@ -45,6 +45,7 @@ typedef struct _Panel {
     /* texture list */
     WMLabel *texL;
     WMList *texLs;
+    WMLabel *texsL;
 
     WMButton *newB;
     WMButton *editB;
@@ -695,6 +696,9 @@ changePage(WMWidget *w, void *data)
 {
     _Panel *panel = (_Panel*)data;
     int section;
+    WMListItem *item;
+    TextureListItem *titem;
+    char *str;
 
     section = WMGetPopUpButtonSelectedItem(panel->secP);
 
@@ -702,6 +706,15 @@ changePage(WMWidget *w, void *data)
 
     WMSetListPosition(panel->texLs, panel->textureIndex[section] 
 		      - WMGetListNumberOfRows(panel->texLs)/2);
+
+    item = WMGetListItem(panel->texLs, panel->textureIndex[section]);
+
+    titem = (TextureListItem*)item->clientData;
+
+    str = wmalloc(strlen(titem->title) + strlen(titem->texture) + 4);
+    sprintf(str, "%s: %s", titem->title, titem->texture);
+    WMSetLabelText(panel->texsL, str);
+    free(str);
 }
 
 
@@ -736,6 +749,7 @@ textureDoubleClick(WMWidget *w, void *data)
     int i, section;
     WMListItem *item;
     TextureListItem *titem;
+    char *str;
 
     /* unselect old texture */
     section = WMGetPopUpButtonSelectedItem(panel->secP);
@@ -756,6 +770,11 @@ textureDoubleClick(WMWidget *w, void *data)
     panel->textureIndex[section] = i;
 
     WMRedisplayWidget(panel->texLs);
+
+    str = wmalloc(strlen(titem->title) + strlen(titem->texture) + 4);
+    sprintf(str, "%s: %s", titem->title, titem->texture);
+    WMSetLabelText(panel->texsL, str);
+    free(str);
 }
 
 
@@ -941,6 +960,12 @@ createPanel(Panel *p)
  */
     WMSetPopUpButtonAction(panel->secP, changePage, panel);
 
+    
+    panel->texsL = WMCreateLabel(panel->frame);
+    WMResizeWidget(panel->texsL, 260, 20);
+    WMMoveWidget(panel->texsL, 15, 205);
+    WMSetLabelWraps(panel->texsL, False);
+
     /* texture list */
     font = WMBoldSystemFontOfSize(scr, 12);
 
@@ -968,7 +993,7 @@ createPanel(Panel *p)
     WMHangData(panel->texLs, panel);
     WMSetListAction(panel->texLs, textureClick, panel);
     WMSetListDoubleAction(panel->texLs, textureDoubleClick, panel);
-
+    
     /* command buttons */
 
     font = WMSystemFontOfSize(scr, 10);
@@ -1023,6 +1048,8 @@ createPanel(Panel *p)
     WMSetPopUpButtonSelectedItem(panel->secP, 0);
 
     showData(panel);
+
+    changePage(panel->secP, panel);
 
     fillTextureList(panel->texLs);
 

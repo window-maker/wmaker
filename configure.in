@@ -102,6 +102,8 @@ AC_CHECK_FUNCS(gethostname select poll strerror strncasecmp setpgid atexit)
 
 dnl Loading of dynamic libraries at runtime
 dnl =======================================
+DLLIBS=""
+
 AC_CHECK_FUNC(dlopen, [HAVEDL="yes"], 
 	AC_CHECK_LIB(dl, dlopen, [DLLIBS="-ldl" HAVEDL="yes"],
 			 DLLIBS="" ))
@@ -169,8 +171,6 @@ dnl AM_GNU_GETTEXT
 
 
 INTLIBS=""
-DLLIBS=""
-
 
 AC_CHECK_FUNC(gettext, [HAVEGETTEXT="yes"], 
 	AC_CHECK_LIB(intl, gettext, [INTLIBS="-lintl" HAVEGETTEXT="yes"],
