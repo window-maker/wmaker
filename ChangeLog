@@ -24,6 +24,9 @@ Changes since version 0.70.0:
   default.
 - Mapping a new window that belongs to a running application that is hidden,
   will unhide the application.
+- Removed the collapse appicons thing.
+- Added real appicon sharing (apps of the same kind will have a single shared 
+  appicon).
 
 
 Changes since version 0.65.1:

@@ -154,7 +154,7 @@ static WMPropList *AStartMaximized;
 static WMPropList *ADontSaveSession;
 static WMPropList *AEmulateAppIcon;
 static WMPropList *AFullMaximize;
-static WMPropList *ACollapseAppIcons;
+static WMPropList *ASharedAppIcon;
 #ifdef XKB_BUTTON_HINT
 static WMPropList *ANoLanguageButton;
 #endif
@@ -222,7 +222,7 @@ make_keys()
     ADontSaveSession = WMCreatePLString("DontSaveSession");
     AEmulateAppIcon = WMCreatePLString("EmulateAppIcon");
     AFullMaximize = WMCreatePLString("FullMaximize");
-    ACollapseAppIcons = WMCreatePLString("CollapseAppIcons");    
+    ASharedAppIcon = WMCreatePLString("SharedAppIcon");
 #ifdef XKB_BUTTON_HINT
     ANoLanguageButton = WMCreatePLString("NoLanguageButton");
 #endif
@@ -661,7 +661,7 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 	different |= insertAttribute(dict, winDic, ANoAppIcon, value, flags);
 	
 	value = (WMGetButtonSelected(panel->appChk[2])!=0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, ACollapseAppIcons, value, flags);
+	different |= insertAttribute(dict, winDic, ASharedAppIcon, value, flags);
     } 
 
     WMRemoveFromPLDictionary(dict, key);
@@ -715,7 +715,7 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 					 flags);
 
 	    value = (WMGetButtonSelected(panel->appChk[2])!=0) ? Yes : No;
-	    different |= insertAttribute(dict, appDic, ACollapseAppIcons,  value, 
+	    different |= insertAttribute(dict, appDic, ASharedAppIcon,  value,
 					 flags);
 	    
 	    WMRemoveFromPLDictionary(dict, key);
@@ -902,7 +902,7 @@ applySettings(WMButton *button, InspectorPanel *panel)
 	WSETUFLAG(wapp->main_window_desc, no_appicon,
 		  WMGetButtonSelected(panel->appChk[1]));
 
-	WSETUFLAG(wapp->main_window_desc, collapse_appicons,
+	WSETUFLAG(wapp->main_window_desc, shared_appicon,
 		  WMGetButtonSelected(panel->appChk[2]));
 	
         if (WFLAGP(wapp->main_window_desc, no_appicon))
@@ -1040,7 +1040,7 @@ revertSettings(WMButton *button, InspectorPanel *panel)
 		flag = WFLAGP(wapp->main_window_desc, no_appicon);
 		break;
 	     case 2:
-		flag = WFLAGP(wapp->main_window_desc, collapse_appicons);
+		flag = WFLAGP(wapp->main_window_desc, shared_appicon);
 		break;
 	    }
 	    WMSetButtonSelected(panel->appChk[i], flag);
@@ -1609,10 +1609,10 @@ createInspectorForWindow(WWindow *wwin, int xpos, int ypos,
 			  "working correctly.");
 		break;
 	     case 2:
-		caption = _("Collapse application icons");
-		flag = WFLAGP(wapp->main_window_desc, collapse_appicons);
-		descr = _("Collapse application icons from other instances\n"
-			  "of this application into one.\n");
+		caption = _("Shared application icon");
+		flag = WFLAGP(wapp->main_window_desc, shared_appicon);
+                descr = _("Use a single shared application icon for all of\n"
+                          "the instances of this application.\n");
 		break;
 	    }
 	    panel->appChk[i] = WMCreateSwitchButton(panel->appFrm);

@@ -278,29 +278,12 @@ void
 wAppIconMove(WAppIcon *aicon, int x, int y)
 {
     WApplication *app;
-    WAppIcon *tmp;
-    
+
     app = wApplicationOf(aicon->icon->owner->main_window);
 
-    if (!WFLAGP(app->main_window_desc, collapse_appicons)) {	
-	XMoveWindow(dpy, aicon->icon->core->window, x, y);
-	aicon->x_pos = x;
-	aicon->y_pos = y;
-    } else {
-	tmp = aicon->icon->core->screen_ptr->app_icon_list;    
-    
-	/* move all icons of the same class/name to the same pos */
-	while (tmp) {
-	    if (strcmp(tmp->wm_class, aicon->wm_class) == 0 &&
-		strcmp(tmp->wm_instance, aicon->wm_instance) == 0 &&
-		!tmp->docked) {
-		XMoveWindow(dpy, tmp->icon->core->window, x, y);
-		tmp->x_pos = x;
-		tmp->y_pos = y;
-	    }
-	    tmp = tmp->next;
-	}
-    }
+    XMoveWindow(dpy, aicon->icon->core->window, x, y);
+    aicon->x_pos = x;
+    aicon->y_pos = y;
 }
 
 
@@ -341,79 +324,11 @@ updateDockNumbers(WScreen *scr)
 #endif /* WS_INDICATOR */
 
 
-
-WAppIcon*
-wAppIconNextSibling(WAppIcon *icon)
-{    
-    WApplication *app;
-    WAppIcon *tmp;
-    
-    app = wApplicationOf(icon->icon->owner->main_window);
-
-    if (!WFLAGP(app->main_window_desc, collapse_appicons)) {
-	return NULL;
-    }
-    
-    tmp = icon->next;
-    while (tmp) {
-	if (strcmp(tmp->wm_class, icon->wm_class) == 0
-	    && strcmp(tmp->wm_instance, icon->wm_instance) == 0
-	    && !tmp->docked) {
-	    return tmp;
-	}
-	tmp = tmp->next;
-    }
-    
-    tmp = icon->icon->core->screen_ptr->app_icon_list;
-    while (tmp && tmp != icon) {
-	if (strcmp(tmp->wm_class, icon->wm_class) == 0
-	    && strcmp(tmp->wm_instance, icon->wm_instance) == 0
-	    && !tmp->docked) {
-	    return tmp;
-	}
-	tmp = tmp->next;
-    }
-    
-    return NULL;
-}
-
-
-Bool
-wAppIconIsFirstInstance(WAppIcon *icon)
-{
-    WAppIcon *list = icon->icon->core->screen_ptr->app_icon_list;
-
-    if (!WFLAGP(icon->icon->owner, collapse_appicons))
-	return True;
-    
-    while (list) {
-	if (icon == list)
-	    return True;
-	
-	if (strcmp(icon->wm_instance,
-		   list->wm_instance) == 0
-	    &&
-	    strcmp(icon->wm_class,
-		   list->wm_class) == 0
-	    && !icon->docked)
-	    return False;
-
-	list = list->next;
-    }
-    
-    puts("OH SHIT!?!?!? HOW THE FUCK DID WE GET HERE!?!?!?!?!");
-    
-    return 0;
-}
-
-
-
 void
 wAppIconPaint(WAppIcon *aicon)
 {
     WApplication *wapp;    
     WScreen *scr = aicon->icon->core->screen_ptr;
-    int index;
 
     if (aicon->icon->owner)
 	wapp = wApplicationOf(aicon->icon->owner->main_window);
@@ -447,22 +362,6 @@ wAppIconPaint(WAppIcon *aicon)
 		  scr->dock_dots->height, 0, 0);        
     }
 #endif /* HIDDENDOT */
-
-    if (wapp)
-	index = wApplicationIndexOfGroup(wapp);
-    else
-	index = 0;
-    
-    if (index > 0) {
-	char buf[16];
-	
-	snprintf(buf, sizeof(buf), "%i", index);
-	
-	WMDrawString(scr->wmscreen, aicon->icon->core->window, 
-		     scr->clip_title_gc, scr->title_font,
-		     3, 3, buf, strlen(buf));
-    }
-
 
     if (aicon->omnipresent)
         drawCorner(aicon->icon);
@@ -500,16 +399,6 @@ unhideHereCallback(WMenu *menu, WMenuEntry *entry)
     WApplication *wapp = (WApplication*)entry->clientdata;
 
     wUnhideApplication(wapp, False, True);
-}
-
-
-static void
-collapseCallback(WMenu *menu, WMenuEntry *entry)
-{
-    WApplication *wapp = (WApplication*)entry->clientdata;
-    
-    wApplicationSetCollapse(wapp, 
-			    !WFLAGP(wapp->main_window_desc, collapse_appicons));
 }
 
 
@@ -557,6 +446,7 @@ static void
 killCallback(WMenu *menu, WMenuEntry *entry)
 {
     WApplication *wapp = (WApplication*)entry->clientdata;
+    WFakeGroupLeader *fPtr;
     char *buffer;
 
     if (!WCHECK_STATE(WSTATE_NORMAL))
@@ -571,12 +461,26 @@ killCallback(WMenu *menu, WMenuEntry *entry)
 			  "Any unsaved changes will be lost.\n"
 			  "Please confirm."));
 
+    fPtr = wapp->main_window_desc->fake_group;
+
     wretain(wapp->main_window_desc);
     if (wPreferences.dont_confirm_kill
 	|| wMessageDialog(menu->frame->screen_ptr, _("Kill Application"),
 			  buffer, _("Yes"), _("No"), NULL)==WAPRDefault) {
-	if (!wapp->main_window_desc->flags.destroyed)
-	    wClientKill(wapp->main_window_desc);
+        if (fPtr!=NULL) {
+            WWindow *wwin, *twin;
+
+            wwin = wapp->main_window_desc->screen_ptr->focused_window;
+            while (wwin) {
+                twin = wwin->prev;
+                if (wwin->fake_group == fPtr) {
+                    wClientKill(wwin);
+                }
+                wwin = twin;
+            }
+        } else if (!wapp->main_window_desc->flags.destroyed) {
+            wClientKill(wapp->main_window_desc);
+        }
     }
     wrelease(wapp->main_window_desc);
 
@@ -594,7 +498,6 @@ createApplicationMenu(WScreen *scr)
     menu = wMenuCreate(scr, NULL, False);
     wMenuAddCallback(menu, _("Unhide Here"), unhideHereCallback, NULL);
     wMenuAddCallback(menu, _("Hide"), hideCallback, NULL);
-    wMenuAddCallback(menu, _("Collapse"), collapseCallback, NULL);
     wMenuAddCallback(menu, _("Set Icon..."), setIconCallback, NULL);
     wMenuAddCallback(menu, _("Kill"), killCallback, NULL);
 
@@ -622,12 +525,6 @@ openApplicationMenu(WApplication *wapp, int x, int y)
 	menu->entries[1]->text = _("Hide");
     }
 
-    if (WFLAGP(wapp->main_window_desc, collapse_appicons)) {
-	menu->entries[2]->text = _("Uncollapse");
-    } else {
-	menu->entries[2]->text = _("Collapse");
-    }
-    
     menu->flags.realized = 0;
     wMenuRealize(menu);
 
@@ -712,7 +609,7 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
     if (aicon->editing || WCHECK_STATE(WSTATE_MODAL))
 	return;
 
-    if (event->xbutton.button == Button1 && IsDoubleClick(scr, event)) {
+    if (IsDoubleClick(scr, event)) {
 	iconDblClick(desc, event);
 	return;
     }
@@ -750,16 +647,6 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
     else
 	wRaiseFrame(icon->core);
 
-
-    if (clickButton == Button2) {
-	WAppIcon *next = wAppIconNextSibling(aicon);
-	    
-	if (next) {
-	    wRaiseFrame(next->icon->core);
-	}
-	return;
-    }
-    
     if (XGrabPointer(dpy, icon->core->window, True, ButtonMotionMask
 		     |ButtonReleaseMask|ButtonPressMask, GrabModeAsync,
 		     GrabModeAsync, None, None, CurrentTime) !=GrabSuccess) {
@@ -897,19 +784,10 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
                     wDockLower(workspace->clip);
 
 		if (!docked) {
-		    /* If icon could not be docked, slide it back to the old
-		     * position */
-		    SlideWindow(icon->core->window, x, y, oldX, oldY);
-		} else {
-		    WAppIcon *nextIcon = wAppIconNextSibling(aicon);
-		    
-		    if (nextIcon) {
-			/* move the next instance back to the old position */
-			SlideWindow(nextIcon->icon->core->window, x, y,
-				    oldX, oldY);
-			wAppIconMove(nextIcon, oldX, oldY);
-		    }
-		}
+                    /* If icon could not be docked, slide it back to the old
+                     * position */
+                    SlideWindow(icon->core->window, x, y, oldX, oldY);
+                }
 
 		wSoundPlay(WSOUND_DOCK);
             } else {

@@ -214,9 +214,6 @@
 #undef GRADIENT_CLIP_ARROWS
 
 
-#undef NO_WINDOW_ENUMERATOR
-
-
 /*
  *--------------------------------------------------------------------
  * 			Default Configuration

@@ -97,8 +97,4 @@ Bool wAppIconChangeImage(WAppIcon *icon, char *file);
 
 void wAppIconMove(WAppIcon *aicon, int x, int y);
 
-WAppIcon *wAppIconNextSibling(WAppIcon *icon);
-
-Bool wAppIconIsFirstInstance(WAppIcon *icon);
-
 #endif

@@ -110,6 +110,8 @@ typedef struct _WScreen {
 
     WMArray *selected_windows;
 
+    WMArray *fakeGroupLeaders;         /* list of fake window group ids */
+
     struct WAppIcon *app_icon_list;    /* list of all app-icons on screen */
 
     struct WApplication *wapp_list;    /* list of all aplications */

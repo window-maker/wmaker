@@ -36,12 +36,10 @@ typedef struct WApplication {
 
     struct WAppIcon *app_icon;
 
-    int index;
-    
     int refcount;
 
     struct WWindow *last_focused;      /* focused window before hide */
-    
+
     int last_workspace;		       /* last workspace used to work on the 
 					* app */
     struct {
@@ -59,10 +57,6 @@ WApplication *wApplicationOf(Window window);
 
 void wApplicationExtractDirPackIcon(WScreen *scr,char *path, char *wm_instance, 
 				    char *wm_class);
-
-int wApplicationIndexOfGroup(WApplication *app);
-
-void wApplicationSetCollapse(WApplication *app, Bool flag);
 
 #ifdef NEWAPPICON
 

@@ -80,11 +80,11 @@ static WMPropList *AUnfocusable;
 static WMPropList *AAlwaysUserIcon;
 static WMPropList *AStartMiniaturized;
 static WMPropList *AStartMaximized;
-static WMPropList *AStartHidden;	       /* app */
-static WMPropList *ADontSaveSession;    /* app */
+static WMPropList *AStartHidden;       /* app */
+static WMPropList *ADontSaveSession;   /* app */
 static WMPropList *AEmulateAppIcon;
 static WMPropList *AFullMaximize;
-static WMPropList *ACollapseAppIcons;   /* app */
+static WMPropList *ASharedAppIcon;     /* app */
 #ifdef XKB_BUTTON_HINT
 static WMPropList *ANoLanguageButton;
 #endif
@@ -125,7 +125,7 @@ init_wdefaults(WScreen *scr)
     ADontSaveSession = WMCreatePLString("DontSaveSession");
     AEmulateAppIcon = WMCreatePLString("EmulateAppIcon");
     AFullMaximize = WMCreatePLString("FullMaximize");
-    ACollapseAppIcons = WMCreatePLString("CollapseAppIcons");
+    ASharedAppIcon = WMCreatePLString("SharedAppIcon");
 #ifdef XKB_BUTTON_HINT
     ANoLanguageButton = WMCreatePLString("NoLanguageButton");
 #endif
@@ -256,13 +256,13 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
     /* get the data */        
     value = get_value(dw, dc, dn, da, ANoTitlebar, No, useGlobalDefault);
     APPLY_VAL(value, no_titlebar, ANoTitlebar);
-        
+
     value = get_value(dw, dc, dn, da, ANoResizebar, No, useGlobalDefault);
     APPLY_VAL(value, no_resizebar, ANoResizebar);
 
     value = get_value(dw, dc, dn, da, ANoMiniaturizeButton, No, useGlobalDefault);
     APPLY_VAL(value, no_miniaturize_button, ANoMiniaturizeButton);
-    
+
     value = get_value(dw, dc, dn, da, ANoCloseButton, No, useGlobalDefault);
     APPLY_VAL(value, no_close_button, ANoCloseButton);
 
@@ -271,19 +271,19 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
 
     value = get_value(dw, dc, dn, da, ANoHideOthers, No, useGlobalDefault);
     APPLY_VAL(value, no_hide_others, ANoHideOthers);
-    
+
     value = get_value(dw, dc, dn, da, ANoMouseBindings, No, useGlobalDefault);
     APPLY_VAL(value, no_bind_mouse, ANoMouseBindings);
-    
+
     value = get_value(dw, dc, dn, da, ANoKeyBindings, No, useGlobalDefault);
     APPLY_VAL(value, no_bind_keys, ANoKeyBindings);
-    
+
     value = get_value(dw, dc, dn, da, ANoAppIcon, No, useGlobalDefault);
     APPLY_VAL(value, no_appicon, ANoAppIcon);
 
-    value = get_value(dw, dc, dn, da, ACollapseAppIcons, No, useGlobalDefault);
-    APPLY_VAL(value, collapse_appicons, ACollapseAppIcons);
-    
+    value = get_value(dw, dc, dn, da, ASharedAppIcon, No, useGlobalDefault);
+    APPLY_VAL(value, shared_appicon, ASharedAppIcon);
+
     value = get_value(dw, dc, dn, da, AKeepOnTop, No, useGlobalDefault);
     APPLY_VAL(value, floating, AKeepOnTop);
 

@@ -56,7 +56,7 @@ typedef enum {
  * window attribute flags.
  * 
  * Note: attributes that should apply to the application as a
- * whole should only access the flags from the app->main_window_desc->window_flags
+ * whole should only access the flags from app->main_window_desc->window_flags
  * This is to make sure that the application doesn't have many different
  * values for the same option. For example, imagine xfoo, which has 
  * foo.bar as leader and it a child window named foo.baz. If you set
@@ -119,7 +119,7 @@ typedef struct {
     unsigned int no_hide_others:1;     /* hide window when doing hideothers */
     unsigned int no_appicon:1;	       /* make app icon */
 
-    unsigned int collapse_appicons:1;  /* collapse icons of the same name */
+    unsigned int shared_appicon:1;
 
     unsigned int dont_move_off:1;
 
@@ -167,6 +167,16 @@ typedef struct {
 
 
 /*
+ * Structure used for storing fake window group information
+ */
+typedef struct WFakeGroupLeader {
+    char *identifier;
+    Window window;
+    int retainCount;
+} WFakeGroupLeader;
+
+
+/*
  * Stores client window information. Each client window has it's
  * structure created when it's being first mapped.
  */
@@ -207,20 +217,23 @@ typedef struct WWindow {
     GNUstepWMAttributes *wm_gnustep_attr;/* GNUstep window attributes */
 
     int state;			       /* state as in ICCCM */
-    
+
     Window transient_for;	       /* WM_TRANSIENT_FOR */
+
+    WFakeGroupLeader *fake_group;      /* Fake group leader for grouping into
+                                          a single appicon */
     Window group_id;		       /* the leader window of the group */
     Window client_leader;	       /* WM_CLIENT_LEADER if not
-					internal_window */
+					  internal_window */
 
     Window main_window;		       /* main window for the application */
-      
+
     int cmap_window_no;
     Window *cmap_windows;
-    
+
     /* protocols */
     WProtocols protocols;	       /* accepted WM_PROTOCOLS */
-    
+
     FocusMode focus_mode;	       /* type of keyboard input focus */
 
 #ifdef OLWM_HINTS_unfinished

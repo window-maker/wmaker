@@ -234,11 +234,19 @@ toggleLoweredCallback(WMenu *menu, WMenuEntry *entry)
 }
 
 
+static int
+matchWindow(void *item, void *cdata)
+{
+    return (((WFakeGroupLeader*)item)->window == (Window)cdata);
+}
+
 
 static void
 killCallback(WMenu *menu, WMenuEntry *entry)
 {
+    WScreen *scr = menu->menu->screen_ptr;
     WAppIcon *icon;
+    WFakeGroupLeader *fPtr;
     char *buffer;
 
     if (!WCHECK_STATE(WSTATE_NORMAL))
@@ -257,10 +265,35 @@ killCallback(WMenu *menu, WMenuEntry *entry)
 			  "Any unsaved changes will be lost.\n"
 			  "Please confirm."));
 
+    if (icon->icon && icon->icon->owner) {
+        fPtr = icon->icon->owner->fake_group;
+    } else {
+        /* is this really necessary? can we kill a dock icon not running? */
+        Window win = icon->main_window;
+        int index;
+
+        index = WMFindInArray(scr->fakeGroupLeaders, matchWindow, (void*)win);
+        if (index != WANotFound)
+            fPtr = WMGetFromArray(scr->fakeGroupLeaders, index);
+        else
+            fPtr = NULL;
+    }
+
     if (wPreferences.dont_confirm_kill
 	|| wMessageDialog(menu->frame->screen_ptr, _("Kill Application"),
 			  buffer, _("Yes"), _("No"), NULL)==WAPRDefault) {
-	if (icon->icon && icon->icon->owner) {
+        if (fPtr!=NULL) {
+            WWindow *wwin, *twin;
+
+            wwin = scr->focused_window;
+            while (wwin) {
+                twin = wwin->prev;
+                if (wwin->fake_group == fPtr) {
+                    wClientKill(wwin);
+                }
+                wwin = twin;
+            }
+        } else if (icon->icon && icon->icon->owner) {
 	    wClientKill(icon->icon->owner);
 	}
     }
@@ -2396,14 +2429,6 @@ wDockDetach(WDock *dock, WAppIcon *icon)
 	wAppIconPaint(icon);
         if (wPreferences.auto_arrange_icons) {
 	    wArrangeIcons(dock->screen_ptr, True);
-	} else {
-	    WAppIcon *bla = wAppIconNextSibling(icon);
-	    
-	    if (bla) {
-		SlideWindow(icon->icon->core->window, icon->x_pos, icon->y_pos,
-			    bla->x_pos, bla->y_pos);
-		wAppIconMove(icon, bla->x_pos, bla->y_pos);
-	    }
 	}
     }
     if (dock->auto_collapse || dock->auto_raise_lower)
@@ -3123,7 +3148,7 @@ wDockTrackWindowLaunch(WDock *dock, Window window)
 
 	if (XGetCommand(dpy, window, &argv, &argc)) {
 	    if (argc > 0 && argv != NULL)
-		command = wtokenjoin(argv,argc);
+		command = wtokenjoin(argv, argc);
 	    if (argv) {
 		XFreeStringList(argv);
 	    }
@@ -3262,16 +3287,17 @@ trackDeadProcess(pid_t pid, unsigned char status, WDock *dock)
 	    icon->pid = 0;
 	    if (status==111) {
 		char msg[PATH_MAX];
+                char *cmd;
 
-		if (icon->drop_launch)
-		    snprintf(msg, sizeof(msg), _("Could not execute command \"%s\""),
-			     icon->dnd_command);
+                if (icon->drop_launch)
+                    cmd = icon->dnd_command;
 		else if (icon->paste_launch)
-		    snprintf(msg, sizeof(msg), _("Could not execute command \"%s\""),
-			     icon->paste_command);
+                    cmd = icon->paste_command;
 		else
-		    snprintf(msg, sizeof(msg), _("Could not execute command \"%s\""),
-			     icon->command);
+                    cmd = icon->command;
+
+                snprintf(msg, sizeof(msg),
+                         _("Could not execute command \"%s\""), cmd);
 
 		wMessageDialog(dock->screen_ptr, _("Error"), msg,
 			       _("OK"), NULL, NULL);

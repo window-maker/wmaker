@@ -1538,7 +1538,7 @@ wArrangeIcons(WScreen *scr, Bool arrangeAll)
     pi = 0;
     si = 0;
     while (aicon) {	
-        if (!aicon->docked && wAppIconIsFirstInstance(aicon)) {
+        if (!aicon->docked) {
             if (aicon->x_pos != X || aicon->y_pos != Y) {
 #ifdef ANIMATIONS
                 if (!wPreferences.no_animations) {

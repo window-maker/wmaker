@@ -270,8 +270,13 @@ wApplicationCreate(WScreen *scr, Window main_window)
     
     wapp = wApplicationOf(main_window);
     if (wapp) {
-	wapp->refcount++;
-	return wapp;
+        wapp->refcount++;
+        if (wapp->app_icon && wapp->app_icon->docked &&
+            wapp->app_icon->relaunching && wapp->main_window_desc->fake_group) {
+            wDockFinishLaunch(wapp->app_icon->dock, wapp->app_icon);
+        }
+
+        return wapp;
     }
     
     wapp = wmalloc(sizeof(WApplication));
@@ -330,7 +335,7 @@ wApplicationCreate(WScreen *scr, Window main_window)
                     break;
             }
         }
-                    
+
         if (wapp->app_icon) {
             WWindow *mainw = wapp->main_window_desc;
 
@@ -413,56 +418,7 @@ wApplicationCreate(WScreen *scr, Window main_window)
         if (!tmp)
 	    extractClientIcon(wapp->app_icon);
     }
-    /* set the application instance index */
-    {
-        WApplication *list = scr->wapp_list;
-        WApplication *prev = NULL;
-	int index = 0;
-	WWindow *wwin = wapp->main_window_desc;
-/*
-    if (!WFLAGP(wwin, collapse_appicons))
-	return 0;
- */
-#define Xstreql(a, b) ((a) == (b) || (a && b && strcmp(a, b)==0))
 
-
-	/* look for a free index # */
-	while (list) {
-	    if (Xstreql(wwin->wm_instance,
-		       list->main_window_desc->wm_instance) 
-		&&
-		Xstreql(wwin->wm_class,
-		       list->main_window_desc->wm_class)) {
-		
-		if (list->index == index) {
-		    index++;
-		    
-		    /* restart list traversal */
-                    list = scr->wapp_list;
-                    prev = NULL;
-		    continue;
-		}
-	    }
-
-            prev = list;
-	    list = list->next;
-	}
-	
-        wapp->index = index;
-
-	wapp->next = NULL;
-	wapp->prev = NULL;
-
-	/* append to app list */
-	if (!prev) {
-	    scr->wapp_list = wapp;
-	} else {
-	    prev->next = wapp;
-	    wapp->prev = prev;
-	}
-    }
-    
-    
     wSoundPlay(WSOUND_APPSTART);
 
 #ifdef DEBUG
@@ -544,42 +500,4 @@ wApplicationDestroy(WApplication *wapp)
 }
 
 
-
-void 
-wApplicationSetCollapse(WApplication *app, Bool flag)
-{
-    WApplication *list = app->main_window_desc->screen_ptr->wapp_list;
-    WWindow *wwin = app->main_window_desc;
-
-    if (WFLAGP(app->main_window_desc, collapse_appicons) == flag)
-	return;
-
-
-    while (list) {
-	if (strcmp(wwin->wm_instance,
-		   list->main_window_desc->wm_instance) == 0
-	    &&
-	    strcmp(wwin->wm_class,
-		   list->main_window_desc->wm_class) == 0)
-	    WSETUFLAG(list->main_window_desc, collapse_appicons, flag);
-
-	list = list->next;
-    }
-
-    if (app->app_icon && flag)
-	wAppIconMove(app->app_icon, app->app_icon->x_pos, app->app_icon->y_pos);
-}
-
-
-
-
-/*
- * Returns index number of the app in case there are more than
- * one instance of the same class/name.
- */
-int
-wApplicationIndexOfGroup(WApplication *app)
-{
-    return app->index;
-}
 

@@ -436,7 +436,11 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 		i = 0;
 	    }
 	}
-	
+
+        if (wwin->fake_group!=NULL) {
+            i = 7;
+        }
+
 	if (wwin->wm_hints)
 	  XFree(wwin->wm_hints);
 
@@ -475,7 +479,10 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 	    wwin->group_id = wwin->main_window;
 	    wApplicationCreate(wwin->screen_ptr, wwin->main_window);
 	    break;
-	}
+         /* 7 - we have a fake window group id, so just ignore anything else */
+         case 7:
+            break;
+        }
 #ifdef DEBUG
 	if (i) {
 	    printf("window leader update caused state transition %i\n",i);
@@ -504,8 +511,10 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 	      wwin->flags.urgent = 1;
 	    else
 	      wwin->flags.urgent = 0;
-	} else {
-	    wwin->group_id = None;
+        } else if (wwin->fake_group!=NULL) {
+            wwin->group_id = wwin->fake_group->window;
+        } else {
+            wwin->group_id = None;
 	}
 	break;
 	

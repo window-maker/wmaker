@@ -373,7 +373,7 @@ extern const WMHashTableCallbacks WMStringHashCallbacks;
  * and freed with wfree() */
 
 extern const WMHashTableCallbacks WMStringPointerHashCallbacks;
-/* keys are strings, bug they are not copied */
+/* keys are strings, but they are not copied */
 
 
 /*......................................................................*/

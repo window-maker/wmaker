@@ -660,6 +660,8 @@ wScreenInit(int screen_number)
     scr->totalUsableArea.x2 = scr->scr_width;
     scr->totalUsableArea.y2 = scr->scr_height;
 
+    scr->fakeGroupLeaders = WMCreateArray(16);
+
 #if 0
     if (!aquireManagerSelection(scr)) {
 	wfree(scr);

@@ -238,23 +238,33 @@ wWindowDestroy(WWindow *wwin)
 	}
     }
 
+    if (wwin->fake_group) {
+        if (wwin->fake_group->retainCount > 0)
+            wwin->fake_group->retainCount--;
+        if (wwin->fake_group->retainCount==0 && wwin->fake_group->window!=None) {
+                XDestroyWindow(dpy, wwin->fake_group->window);
+                wwin->fake_group->window = None;
+                XFlush(dpy);
+        }
+    }
+
     if (wwin->normal_hints)
-      XFree(wwin->normal_hints);
-    
+        XFree(wwin->normal_hints);
+
     if (wwin->wm_hints)
-      XFree(wwin->wm_hints);
-    
+        XFree(wwin->wm_hints);
+
     if (wwin->wm_instance)
-      XFree(wwin->wm_instance);
+        XFree(wwin->wm_instance);
 
     if (wwin->wm_class)
-      XFree(wwin->wm_class);
+        XFree(wwin->wm_class);
 
     if (wwin->wm_gnustep_attr)
-      wfree(wwin->wm_gnustep_attr);
+        wfree(wwin->wm_gnustep_attr);
 
     if (wwin->cmap_windows)
-      XFree(wwin->cmap_windows);
+        XFree(wwin->cmap_windows);
 
     XDeleteContext(dpy, wwin->client_win, wWinContext);
 
@@ -524,6 +534,45 @@ wWindowObscuresWindow(WWindow *wwin, WWindow *obscured)
 }
 
 
+static Window
+createFakeWindowGroupLeader(WScreen *scr, Window win, char *instance, char *class)
+{
+    XClassHint *classHint;
+    XWMHints *hints;
+    Window leader;
+    int argc;
+    char **argv;
+
+    leader = XCreateSimpleWindow(dpy, scr->root_win, 10, 10, 10, 10, 0, 0, 0);
+    /* set class hint */
+    classHint = XAllocClassHint();
+    classHint->res_name = instance;
+    classHint->res_class = class;
+    XSetClassHint(dpy, leader, classHint);
+    XFree(classHint);
+
+    /* set window group leader to self */
+    hints = XAllocWMHints();
+    hints->window_group = leader;
+    hints->flags = WindowGroupHint;
+    XSetWMHints(dpy, leader, hints);
+    XFree(hints);
+
+    if (XGetCommand(dpy, win, &argv, &argc)!=0 && argc > 0) {
+        XSetCommand(dpy, leader, argv, argc);
+        XFreeStringList(argv);
+    }
+
+    return leader;
+}
+
+
+static int
+matchIdentifier(void *item, void *cdata)
+{
+    return (strcmp(((WFakeGroupLeader*)item)->identifier, (char*)cdata)==0);
+}
+
 
 /*
  *----------------------------------------------------------------
@@ -690,7 +739,7 @@ wManageWindow(WScreen *scr, Window window)
     }
 
     PropGetProtocols(window, &wwin->protocols);
-    
+
     if (!XGetTransientForHint(dpy, window, &wwin->transient_for)) {
 	wwin->transient_for = None;
     } else {
@@ -744,11 +793,51 @@ wManageWindow(WScreen *scr, Window window)
     }
 #endif /* OLWM_HINTS */
 
-    /*
-     * Make broken apps behave as a nice app.
-     */
+    /* Make broken apps behave as a nice app. */
     if (WFLAGP(wwin, emulate_appicon)) {
 	wwin->main_window = wwin->client_win;
+    }
+
+    if (!withdraw && wwin->main_window && WFLAGP(wwin, shared_appicon)) {
+        char *buffer, *instance, *class;
+        WFakeGroupLeader *fPtr;
+        int index;
+
+        PropGetWMClass(wwin->main_window, &class, &instance);
+        buffer = wmalloc(strlen(instance)+strlen(class)+2);
+        sprintf(buffer, "%s.%s", instance, class);
+
+        index = WMFindInArray(scr->fakeGroupLeaders, matchIdentifier, (void*)buffer);
+        if (index != WANotFound) {
+            fPtr = WMGetFromArray(scr->fakeGroupLeaders, index);
+            if (fPtr->retainCount == 0) {
+                fPtr->window = createFakeWindowGroupLeader(scr, wwin->main_window,
+                                                           instance, class);
+            }
+            fPtr->retainCount++;
+            wwin->fake_group = fPtr;
+            wwin->group_id = fPtr->window;
+            wwin->main_window = wwin->group_id;
+            wfree(buffer);
+        } else {
+            fPtr = (WFakeGroupLeader*)wmalloc(sizeof(WFakeGroupLeader));
+
+            fPtr->identifier = buffer;
+            fPtr->window = createFakeWindowGroupLeader(scr, wwin->main_window,
+                                                       instance, class);
+            fPtr->retainCount = 1;
+
+            WMAddToArray(scr->fakeGroupLeaders, fPtr);
+
+            wwin->fake_group = fPtr;
+            wwin->group_id = fPtr->window;
+            wwin->main_window = wwin->group_id;
+        }
+        if (instance)
+            XFree(instance);
+        if (class)
+            XFree(class);
+
     }
 
     /*
@@ -1098,6 +1187,8 @@ wManageWindow(WScreen *scr, Window window)
 	app = wApplicationCreate(scr, wwin->main_window);
         if (app) {
             app->last_workspace = workspace;
+
+            app->main_window_desc->fake_group = wwin->fake_group;
 
             /*
              * Do application specific stuff, like setting application
@@ -1747,47 +1838,23 @@ wWindowUnfocus(WWindow *wwin)
 void
 wWindowUpdateName(WWindow *wwin, char *newTitle)
 {
-    WApplication *app = wApplicationOf(wwin->main_window);
-    int instIndex = 0;
-    char prefix[32] = "";
     char *title;
     
     if (!wwin->frame)
 	return;
-    
-    if (app) 
-	instIndex = wApplicationIndexOfGroup(app);
-    
     
     wwin->flags.wm_name_changed = 1;
     
     if (!newTitle) {
 	/* the hint was removed */
 	title = DEF_WINDOW_TITLE;
-
-	WMPostNotificationName(WMNChangedName, wwin, NULL);
     } else {
 	title = newTitle;
     }
-    
-#ifndef NO_WINDOW_ENUMERATOR
-    if (instIndex > 0) {
-	snprintf(prefix, sizeof(prefix), "  [%i]", instIndex);
-	
-	title = wstrconcat(title, prefix);
-    }
-#endif
-    
-    if (wFrameWindowChangeTitle(wwin->frame, title)) {
 
+    if (wFrameWindowChangeTitle(wwin->frame, title)) {
 	WMPostNotificationName(WMNChangedName, wwin, NULL);
     }
-
-#ifndef NO_WINDOW_ENUMERATOR
-    if (instIndex > 0)
-	wfree(title);
-#endif
-
 }
 
 
