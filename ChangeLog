@@ -9,6 +9,8 @@ Changes since version 0.80.1:
 - Patch to add binary mode on opening files (needed for Windows with Cygwin)
   (sent by luke <luke@posh.optushome.com.au>)
 - Updated French translations (Antoine Hulin <antoine@origan.fdn.org>)
+- removed Hermes lib dependency in wrlib
+- put back asm/MMX code in wrlib
 
 
 Changes since version 0.80.0:
