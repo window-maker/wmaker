@@ -343,6 +343,12 @@ WMReleaseFont(WMFont *font)
 }
 
 
+Bool
+WMIsAAFont(WMFont *font)
+{
+    return font->antialiased;
+}
+
 
 unsigned int
 WMFontHeight(WMFont *font)

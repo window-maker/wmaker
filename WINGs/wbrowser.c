@@ -540,15 +540,14 @@ willResizeBrowser(W_ViewDelegate *self, WMView *view,
 
 
 static void
-paintItem(WMList *lPtr, int index, Drawable drawable, char *text, int state,
-          WMRect *rect)
+paintItem(WMList *lPtr, int index, Drawable d, char *text, int state, WMRect *rect)
 {
     WMView *view = W_VIEW(lPtr);
     W_Screen *scr = view->screen;
     Display *display = scr->display;
     WMFont *font = ((state & WLDSIsBranch) ? scr->boldFont : scr->normalFont);
+    WMColor *backColor = ((state & WLDSSelected) ? scr->white : view->backColor);
     int width, height, x, y, textLen;
-    Drawable d = drawable;
 
     width = rect->size.width;
     height = rect->size.height;
@@ -556,20 +555,7 @@ paintItem(WMList *lPtr, int index, Drawable drawable, char *text, int state,
     y = rect->pos.y;
     textLen = strlen(text);
 
-#ifdef DOUBLE_BUFFER_no
-    x = y = 0;
-    d = XCreatePixmap(display, drawable, width, height, scr->depth);
-    if (state & WLDSSelected)
-        XFillRectangle(display, d, WMColorGC(scr->white), 0, 0, width, height);
-    else
-        XFillRectangle(display, d, WMColorGC(view->backColor), 0, 0, width, height);
-#else
-    if (state & WLDSSelected)
-	XFillRectangle(display, d, WMColorGC(scr->white), x, y, width, height);
-    else
-        //XFillRectangle(display, d, WMColorGC(view->backColor), x, y, width, height);
-	XClearArea(display, d, x, y, width, height, False);
-#endif
+    XFillRectangle(display, d, WMColorGC(backColor), x, y, width, height);
 
     if (text) {
         /* Avoid overlaping... */
@@ -586,23 +572,15 @@ paintItem(WMList *lPtr, int index, Drawable drawable, char *text, int state,
     }
 
     if (state & WLDSIsBranch) {
+        WMColor *lineColor = ((state & WLDSSelected) ? scr->gray : scr->white);
+
 	XDrawLine(display, d, WMColorGC(scr->darkGray), x+width-11, y+3,
 		  x+width-6, y+height/2);
-	if (state & WLDSSelected)
-	    XDrawLine(display, d,WMColorGC(scr->gray), x+width-11, y+height-5,
-		      x+width-6, y+height/2);
-	else
-	    XDrawLine(display, d,WMColorGC(scr->white), x+width-11, y+height-5,
-		      x+width-6, y+height/2);
+        XDrawLine(display, d, WMColorGC(lineColor), x+width-11, y+height-5,
+                  x+width-6, y+height/2);
 	XDrawLine(display, d, WMColorGC(scr->black), x+width-12, y+3,
 		  x+width-12, y+height-5);
     }
-
-#ifdef DOUBLE_BUFFER_no
-    XCopyArea(display, d, drawable, scr->copyGC, 0, 0, width, height,
-              rect->pos.x, rect->pos.y);
-    XFreePixmap(display, d);
-#endif
 }
 
 

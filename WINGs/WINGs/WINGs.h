@@ -709,6 +709,8 @@ void WMReleaseFont(WMFont *font);
 
 unsigned int WMFontHeight(WMFont *font);
 
+Bool WMIsAAFont(WMFont *font);
+
 /*
 WMFont* WMUserFontOfSize(WMScreen *scrPtr, int size);
 
@@ -819,6 +821,8 @@ unsigned short WMRedComponentOfColor(WMColor *color);
 unsigned short WMGreenComponentOfColor(WMColor *color);
 
 unsigned short WMBlueComponentOfColor(WMColor *color);
+
+unsigned short WMGetColorAlpha(WMColor *color);
 
 char* WMGetColorRGBDescription(WMColor *color);
 

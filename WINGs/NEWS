@@ -1,3 +1,124 @@
+*** Mon Oct 14 19:42:42 EEST 2002 - Dan
+
+Double buffering
+----------------
+
+To avoid flickering caused by redrawing the widgets on Expose events, a
+double buffering tehnique was implemented for most of the widgets.
+This flickering effect has gotten more vizible with the introduction
+of antialiased text. If with normal text one can redraw the text over the
+old one over and over again without any degradation of the text (new pixels
+simply overwrite old pixels), with antialiased text the situation is
+different.
+The pixels that constitute the antialias around the text are partially
+transparent pixels, which let part of the background be visible through them.
+If antialiased text is drawn over and over again, whithout first erasing the
+old one, the partially transparent pixels of the antialias will no longer
+see the background through them, but some of them will see the old pixels of
+the antialias around the old text that was there before. This for example
+will make a black antialiased text over a white background get thicker as
+the pixels of the antialias around it, combine with semitransparent black
+pixels of the old antialias instead of combining with the white background.
+The result is that the antialias will get darker (in this case) and the text
+will be altered.
+
+Because of this the area where text is drawn needs to be cleared before
+antialiased text can be drawn again. But between the moment whent he area is
+cleared and the moment when the text is drawn again there is a small time
+gap that results in flickering. This doesn't happen with normal text where
+one doesn't need to clear the area before drawing the text, but instead can
+simply draw over and over again.
+
+To avoid this situation, a double buffering tehnique was used. Instead of
+drawing directly in the wisget's window (which is mapped and will flicker as
+described above), we draw in a pixmap (unmapped) and after all is done we
+XCopyArea() from that pixmap to the real window.
+Since all this takes place off-screen, no flickering will be observed in
+this case.
+
+This is a change that that will be automatically available for your
+applications and will require no change from you.
+However there is an exception from this in case of WMList if you delegate
+the drawing of items to userspace (read below for the compelte details).
+
+
+*** Mon Oct 14 22:07:42 EEST 2002 - Dan
+
+WMList change
+-------------
+
+In case of WMList there is the posibility to delegate the drawing of the
+list items to the application that is linked with WINGs, and this code will
+not be inside the WINGs library, but in userland. Since we use the double
+buffering tehnique in this case too (to allow all widgets based on WMList
+and the ones that draw their list items by themselves to benefit from the
+double buffering advantage automatically), we no longer pass the window to
+the user code doing item drawing, but instead pass this pixmap in which we
+draw before copying to the real window.
+
+Since one cannot use XClearWindow() or XClearArea() on pixmaps, but only on
+windows, if your list item drawing code used to contain these to clear the
+item area before drawing it needs to change, else the application will die
+when it tires to XClearArea() on a pixmap.
+
+This means that in your application if you ever used WMSetListUserDrawProc()
+so set a userspace routine which draws WMList items in a particular fashion,
+you need to make sure your function will not call XClearArea() or
+XClearWindow() on the drawable that was passed to draw in.
+
+Instead you should use XFillRectangle().
+
+This change also means that you no longer need to do double buffering in
+your code, if you ever used to do. It is not done by WINGs and you benefit
+from it automatically.
+
+
+*** Mon Oct 14 19:28:35 EEST 2002 - Dan
+
+API change
+----------
+
+WMDrawString() and WMDrawImageString() no longer take a GC as argument.
+Instead WMDrawString() takes a WMColor* as the color for the string to be
+drawn, while WMDrawImageString() takes 2 WMColor* arguments in place of the
+old GC: first for text color and second for background color.
+
+This change is required to support extending WMFont to allow it to handle
+antialiased fonts through the XFree86 Xft extension.
+
+This also has the advantage of hiding low level X11 details and use WINGs
+internat objects instead.
+
+To fix your old code to work with the new WINGs API you need to replace the
+GC passed to WMDraw***String() in your code with a WMColor*.
+Most of the old code used to be like this:
+
+WMDrawString(screen, window, WMColorGC(color), font, x, y, txt, len);
+
+for the new API it should be replaced by:
+
+WMDrawString(screen, window, color, font, x, y, txt, len);
+
+However if you used a particular GC created by yourself to suit your special
+needs, you need to pass a color which is the same as the foreground color of
+that gc.
+
+For WMDrawImageString(), from:
+
+WMDrawImageString(screen, window, gc, font, x, y, txt, len);
+
+becomes
+
+WMDrawImageString(screen, window, textColor, backColor, font, x, y, txt, len);
+
+where textColor and backColor are declared like:
+
+WMColor *textColor, *backColor;
+
+and have the color of the foreground respective the background of the old gc.
+
+
+
 *** Wed Oct  9 07:10:04 EEST 2002 - Dan
 
 Xft support in WINGs

@@ -97,12 +97,12 @@ static int intersectArea(int x1, int y1, int w1, int h1,
     rect1.x1 = x1;
     rect1.y1 = y1;
     rect1.x2 = x1+w1;
-    rect1.x2 = y1+w1;
+    rect1.y2 = y1+h1;
     
     rect2.x1 = x2;
     rect2.y1 = y2;
     rect2.x2 = x2+w2;
-    rect2.x2 = y2+w2;
+    rect2.y2 = y2+h2;
     
     if (intersect_rectangles(&rect1, &rect2, &result))
 	return (result.x2-result.x1)*(result.y2-result.y1);
@@ -195,7 +195,8 @@ int wGetHeadForPointerLocation(WScreen *scr)
 }
 
 /* get the dimensions of the head */
-WMRect wGetRectForHead(WScreen *scr, int head)
+WMRect
+wGetRectForHead(WScreen *scr, int head)
 {
     WMRect rect;
 
@@ -204,38 +205,35 @@ WMRect wGetRectForHead(WScreen *scr, int head)
 	rect.pos.y = scr->xine_screens[head].y_org;
 	rect.size.width = scr->xine_screens[head].width;
 	rect.size.height = scr->xine_screens[head].height;	
-
-	return rect;
     } else {
-	
 	rect.pos.x = 0;
 	rect.pos.y = 0;
 	rect.size.width = scr->scr_width;
 	rect.size.height = scr->scr_height;
-	
-	return rect;
     }
+
+    return rect;
 }
 
 
-WMRect wGetUsableRectForHead(WScreen *scr, int head)
+WMRect
+wGetUsableRectForHead(WScreen *scr, int head)
 {
+    WMRect rect;
+
     if (head < scr->xine_count) {
 	rect.pos.x = scr->xine_screens[head].x_org;
 	rect.pos.y = scr->xine_screens[head].y_org;
 	rect.size.width = scr->xine_screens[head].width;
 	rect.size.height = scr->xine_screens[head].height;	
-
-	return rect;
     } else {
-	
 	rect.pos.x = 0;
 	rect.pos.y = 0;
 	rect.size.width = scr->scr_width;
 	rect.size.height = scr->scr_height;
-	
-	return rect;
     }
+
+    return rect;
 }
 
 #endif 

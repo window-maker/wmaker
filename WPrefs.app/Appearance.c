@@ -1296,7 +1296,7 @@ paintListItem(WMList *lPtr, int index, Drawable d, char *text, int state,
     WMScreen *scr = WMWidgetScreen(lPtr);
     int width, height, x, y;
     Display *dpy = WMScreenDisplay(scr);
-    WMColor *white = WMWhiteColor(scr);
+    WMColor *back = (state & WLDSSelected) ? WMWhiteColor(scr) : WMGrayColor(scr);
     WMListItem *item;
     WMColor *black = WMBlackColor(scr);
     TextureListItem *titem;
@@ -1304,7 +1304,7 @@ paintListItem(WMList *lPtr, int index, Drawable d, char *text, int state,
     item = WMGetListItem(lPtr, index);
     titem = (TextureListItem*)item->clientData;
     if (!titem) {
-	WMReleaseColor(white);
+	WMReleaseColor(back);
 	WMReleaseColor(black);
 	return;
     }
@@ -1314,11 +1314,7 @@ paintListItem(WMList *lPtr, int index, Drawable d, char *text, int state,
     x = rect->pos.x;
     y = rect->pos.y;
 
-    if (state & WLDSSelected)
-        XFillRectangle(dpy, d, WMColorGC(white), x, y, width, height);
-    else
-        XClearArea(dpy, d, x, y, width, height, False);
-
+    XFillRectangle(dpy, d, WMColorGC(back), x, y, width, height);
 
     if (titem->preview)
 	XCopyArea(dpy, titem->preview, d, WMColorGC(black), 0, 0, 
@@ -1338,7 +1334,7 @@ paintListItem(WMList *lPtr, int index, Drawable d, char *text, int state,
 		 strlen(titem->texture));
 
 
-    WMReleaseColor(white);
+    WMReleaseColor(back);
     WMReleaseColor(black);
 }
 

@@ -40,16 +40,8 @@ W_ViewDelegate _ProgressIndicatorDelegate = {
 
 static void destroyProgressIndicator(ProgressIndicator *pPtr);
 static void paintProgressIndicator(ProgressIndicator *pPtr);
-static void realizeProgressIndicator(ProgressIndicator *pPtr);
 static void handleEvents(XEvent *event, void *data);
 
-
-
-static void
-realizeObserver(void *self, WMNotification *not)
-{
-    realizeProgressIndicator(self);
-}
 
 
 WMProgressIndicator*
@@ -83,9 +75,6 @@ WMCreateProgressIndicator(WMWidget *parent)
     pPtr->value = 0;
     pPtr->minValue = 0;
     pPtr->maxValue = 100;
-    
-    WMAddNotificationObserver(realizeObserver, pPtr,
-			      WMViewRealizedNotification, pPtr->view);
     
     return pPtr;
 }
@@ -166,13 +155,6 @@ WMGetProgressIndicatorValue(WMProgressIndicator *progressindicator)
     CHECK_CLASS(progressindicator, WC_ProgressIndicator);
     
     return progressindicator->value;
-}
-
-
-static void
-realizeProgressIndicator(ProgressIndicator *pPtr)
-{
-    W_RealizeView(pPtr->view);
 }
 
 

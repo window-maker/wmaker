@@ -213,7 +213,7 @@ W_RealizeView(W_View *view)
     assert(view->size.width > 0);
     assert(view->size.height > 0);
 
-    
+
     if (view->parent && !view->parent->flags.realized) {
 	wwarning("trying to realize widget of unrealized parent");
 	return;
@@ -226,7 +226,7 @@ W_RealizeView(W_View *view)
 				     view->screen->depth, InputOutput,
 				     view->screen->visual, view->attribFlags,
 				     &view->attribs);
-    
+
 	XSaveContext(dpy, view->window, ViewContext, (XPointer)view);
 
 	view->flags.realized = 1;
@@ -253,7 +253,7 @@ void
 W_ReparentView(W_View *view, W_View *newParent, int x, int y)
 {
     Display *dpy = view->screen->display;
-    
+
     assert(!view->flags.topLevel);
 
     unparentView(view);
@@ -481,7 +481,7 @@ void
 W_MoveView(W_View *view, int x, int y)
 {
     assert(view->flags.root==0);
-
+    //TODO move this after the test pos==oldpos
     if (view->delegate && view->delegate->willMove) {
 	(*view->delegate->willMove)(view->delegate, view, &x, &y);
     }
@@ -503,9 +503,9 @@ W_MoveView(W_View *view, int x, int y)
 
 void
 W_ResizeView(W_View *view, unsigned int width, unsigned int height)
-{    
+{
     int shrinked;
-
+    // TODO move this after the test size==oldsize
     if (view->delegate && view->delegate->willResize) {
 	(*view->delegate->willResize)(view->delegate, view, &width, &height);
     }
@@ -520,7 +520,7 @@ W_ResizeView(W_View *view, unsigned int width, unsigned int height)
     
     if (view->flags.realized) {
 	XResizeWindow(view->screen->display, view->window, width, height);
-    } 
+    }
     view->size.width = width;
     view->size.height = height;
 

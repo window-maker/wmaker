@@ -53,6 +53,7 @@ typedef struct _Panel {
 
     WMColor *white;
     WMColor *black;
+    WMColor *gray;
     WMFont *font;
 
     /**/
@@ -433,17 +434,14 @@ paintItem(WMList *lPtr, int index, Drawable d, char *text, int state,
     _Panel *panel = (_Panel*)WMGetHangedData(lPtr);
     WMScreen *scr = WMWidgetScreen(lPtr);
     Display *dpy = WMScreenDisplay(scr);
+    WMColor *backColor = (state & WLDSSelected) ? panel->white : panel->gray;
 
     width = rect->size.width;
     height = rect->size.height;
     x = rect->pos.x;
     y = rect->pos.y;
 
-    if (state & WLDSSelected)
-	XFillRectangle(dpy, d, WMColorGC(panel->white), x, y, width, height);
-    else
-        //XClearArea(dpy, d, x, y, width, height, False);
-        XFillRectangle(dpy, d, WMColorGC(WMGrayColor(scr)), x, y, width, height);
+    XFillRectangle(dpy, d, WMColorGC(backColor), x, y, width, height);
 
     if (panel->shortcuts[index]) {
 	WMPixmap *pix = WMGetSystemPixmap(scr, WSICheckMark);
@@ -466,8 +464,11 @@ createPanel(Panel *p)
     WMFont *boldFont;
 
     panel->capturing = 0;
-    
 
+    panel->white = WMWhiteColor(scr);
+    panel->black = WMBlackColor(scr);
+    panel->gray = WMGrayColor(scr);
+    panel->font = WMSystemFontOfSize(scr, 12);
 
     panel->box = WMCreateBox(panel->parent);
     WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
@@ -485,9 +486,7 @@ createPanel(Panel *p)
     color = WMDarkGrayColor(scr);
     WMSetWidgetBackgroundColor(panel->actL, color); 
     WMReleaseColor(color);
-    color = WMWhiteColor(scr);
-    WMSetLabelTextColor(panel->actL, color);
-    WMReleaseColor(color);
+    WMSetLabelTextColor(panel->actL, panel->white);
     
     panel->actLs = WMCreateList(panel->box);
     WMResizeWidget(panel->actLs, 280, 190);
@@ -632,18 +631,14 @@ InitKeyboardShortcuts(WMScreen *scr, WMWidget *parent)
     panel->sectionName = _("Keyboard Shortcut Preferences");
 
     panel->description = _("Change the keyboard shortcuts for actions such\n"
-			   "as changing workspaces and opening menus.");
+                           "as changing workspaces and opening menus.");
 
     panel->parent = parent;
-    
+
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;
 
-    panel->white = WMWhiteColor(scr);
-    panel->black = WMBlackColor(scr);
-    panel->font = WMSystemFontOfSize(scr, 12);
-
     AddSection(panel, ICON_FILE);
-    
+
     return panel;
 }

@@ -835,7 +835,7 @@ paintTextField(TextField *tPtr)
     }
 
     totalWidth = tPtr->view->size.width - 2*bd;
-    
+
     drawbuffer = XCreatePixmap(screen->display, view->window,
             view->size.width, view->size.height, screen->depth);
     XFillRectangle(screen->display, drawbuffer, WMColorGC(screen->white),
@@ -849,7 +849,7 @@ paintTextField(TextField *tPtr)
     if (tPtr->textLen > 0) {
     	tw = WMWidthOfString(tPtr->font, &(text[tPtr->viewPosition]),
 			     tPtr->textLen - tPtr->viewPosition);
-    
+
 	th = WMFontHeight(tPtr->font);
 
 	ty = tPtr->offsetWidth;

@@ -342,6 +342,13 @@ WMBlueComponentOfColor(WMColor *color)
 }
 
 
+unsigned short
+WMGetColorAlpha(WMColor *color)
+{
+    return color->alpha;
+}
+
+
 char*
 WMGetColorRGBDescription(WMColor *color)
 {

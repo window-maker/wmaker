@@ -445,7 +445,7 @@ realizeWindow(WMWindow *win)
     if (win->title || win->miniTitle)
 	XmbSetWMProperties(scr->display, win->view->window, win->title, 
 			   win->miniTitle, NULL, 0, NULL, NULL, NULL);
-	
+
     setWindowMakerHints(win);
 
     setSizeHints(win);

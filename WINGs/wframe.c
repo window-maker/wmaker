@@ -8,7 +8,6 @@ typedef struct W_Frame {
 
     char *caption;
 
-    
     struct {
 	WMReliefType relief:4;
 	WMTitlePosition titlePosition:4;
@@ -43,9 +42,9 @@ void
 WMSetFrameRelief(WMFrame *fPtr, WMReliefType relief)
 {
     fPtr->flags.relief = relief;
-    
-   if (fPtr->view->flags.realized) {
-	repaintFrame(fPtr);
+
+    if (fPtr->view->flags.realized) {
+        repaintFrame(fPtr);
     }
 }
 
@@ -54,14 +53,15 @@ void
 WMSetFrameTitle(WMFrame *fPtr, char *title)
 {
     if (fPtr->caption)
-	wfree(fPtr->caption);
-    if (title)
-	fPtr->caption = wstrdup(title);
-    else
-	fPtr->caption = NULL;
+        wfree(fPtr->caption);
 
-   if (fPtr->view->flags.realized) {
-	repaintFrame(fPtr);
+    if (title)
+        fPtr->caption = wstrdup(title);
+    else
+        fPtr->caption = NULL;
+
+    if (fPtr->view->flags.realized) {
+        repaintFrame(fPtr);
     }
 }
 
@@ -197,8 +197,8 @@ paintFrame(Frame *fPtr)
 
     if (drawTitle) {
         /* can't draw AA text over and over again because it gets messed */
+        // TODO create the dbl buffer pixmap when create/set frame title
         if (font->antialiased) {
-#ifdef DOUBLE_BUFFER
             Drawable d;
 
             d = XCreatePixmap(display, view->window, tw, th, scrPtr->depth);
@@ -207,11 +207,6 @@ paintFrame(Frame *fPtr)
             WMDrawString(scrPtr, d, scrPtr->black, font, 0, 0, fPtr->caption, tlen);
             XCopyArea(display, d, view->window, scrPtr->copyGC, 0, 0, tw, th, tx, ty);
             XFreePixmap(display, d);
-#else
-            XClearArea(display, view->window, tx, ty, tw, th, False);
-            WMDrawString(scrPtr, view->window, scrPtr->black, font, tx, ty,
-                         fPtr->caption, tlen);
-#endif
         } else {
             WMDrawString(scrPtr, view->window, scrPtr->black, font, tx, ty,
                          fPtr->caption, tlen);

@@ -3422,12 +3422,13 @@ static void
 colorListPaintItem(WMList *lPtr, int index, Drawable d, char *text, 
 		   int state, WMRect *rect)
 {
-    int			width, height, x, y;
-    RColor		color = *((RColor *)WMGetListItem(lPtr, index)->clientData);
-    WMScreen		*scr = WMWidgetScreen(lPtr);
-    Display		*dpy = WMScreenDisplay(scr);
-    W_ColorPanel	*panel = WMGetHangedData(lPtr);
-    WMColor		*fillColor;
+    WMScreen *scr = WMWidgetScreen(lPtr);
+    Display *dpy = WMScreenDisplay(scr);
+    WMView *view = W_VIEW(lPtr);
+    RColor color = *((RColor *)WMGetListItem(lPtr, index)->clientData);
+    W_ColorPanel *panel = WMGetHangedData(lPtr);
+    int	width, height, x, y;
+    WMColor *fillColor;
     
     width = rect->size.width;
     height = rect->size.height;
@@ -3435,15 +3436,14 @@ colorListPaintItem(WMList *lPtr, int index, Drawable d, char *text,
     y = rect->pos.y;
     
     if (state & WLDSSelected)
-	WMPaintColorSwatch(scr->white, d, x +15, y, width -15, height);
+        XFillRectangle(dpy, d, WMColorGC(scr->white), x, y, width, height);
     else
-	XClearArea(dpy, d, x +15, y, width -15, height, False);
+        XFillRectangle(dpy, d, WMColorGC(view->backColor), x, y, width, height);
     
-    fillColor = WMCreateRGBColor(scr, color.red*256, color.green*256, 
-				 color.blue*256, False);
+    fillColor = WMCreateRGBColor(scr, color.red<<8, color.green<<8,
+                                 color.blue<<8, True);
     
-    WMSetColorInGC(fillColor, WMColorGC(fillColor));
-    WMPaintColorSwatch(fillColor, d, x, y, 15, 15);
+    XFillRectangle(dpy, d, WMColorGC(fillColor), x, y, 15, height);
     WMReleaseColor(fillColor);
     
     WMDrawString(scr, d, scr->black, panel->font12, x+18, y, text, strlen(text));

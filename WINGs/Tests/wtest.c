@@ -240,7 +240,7 @@ testList(WMScreen *scr)
     list = WMCreateList(win);
     /*WMSetListAllowEmptySelection(list, True);*/
     WMMoveWidget(list, 10, 40);
-    for (i=0; i<14050; i++) {
+    for (i=0; i<105; i++) {
 	sprintf(text, "Item %i", i);
 	WMAddListItem(list, text);
     }
@@ -248,7 +248,7 @@ testList(WMScreen *scr)
     WMSetListAllowMultipleSelection(mlist, True);
     /*WMSetListAllowEmptySelection(mlist, True);*/
     WMMoveWidget(mlist, 210, 40);
-    for (i=0; i<14135; i++) {
+    for (i=0; i<135; i++) {
 	sprintf(text, "Item %i", i);
 	WMAddListItem(mlist, text);
     }
@@ -1264,7 +1264,7 @@ main(int argc, char **argv)
      * Do NOT use it unless when debugging. It will cause a major
      * slowdown in your application
      */
-#if 1
+#if 0
     XSynchronize(dpy, True);
 #endif
     /*
@@ -1292,8 +1292,10 @@ main(int argc, char **argv)
 
     testDragAndDrop(scr);
     testText(scr);
+
     testFontPanel(scr);
     testList(scr);
+
 #if 0
     testColorPanel(scr);
     testScrollView(scr);

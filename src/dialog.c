@@ -438,76 +438,67 @@ listIconPaths(WMList *lPtr)
 
 
 void
-drawIconProc(WMList *lPtr, int index, Drawable d, char *text,
-	     int state, WMRect *rect)
+drawIconProc(WMList *lPtr, int index, Drawable d, char *text, int state,
+             WMRect *rect)
 {
     IconPanel *panel = WMGetHangedData(lPtr);
     GC gc = panel->scr->draw_gc;
     GC copygc = panel->scr->copy_gc;
     char *file, *dirfile;
     WMPixmap *pixmap;
-    WMColor *blackcolor;
-    WMColor *whitecolor;
+    WMColor *black, *white, *gray, *back;
     WMSize size;
     WMScreen *wmscr = WMWidgetScreen(panel->win);
     RColor color;
-    int width;
+    int x, y, width, height, len;
 
     if(!panel->preview) return;
 
+    x = rect->pos.x;
+    y = rect->pos.y;
     width = rect->size.width;
+    height = rect->size.height;
 
-    blackcolor = WMBlackColor(wmscr);
-    whitecolor = WMWhiteColor(wmscr);
+    black = WMBlackColor(wmscr);
+    white = WMWhiteColor(wmscr);
+    gray = WMGrayColor(wmscr);
+    back = (state & WLDSSelected) ? white : gray;
 
     dirfile = wexpandpath(WMGetListSelectedItem(panel->dirList)->text);
-    {
-	int len = strlen(dirfile)+strlen(text)+4;
-	file = wmalloc(len);
-	snprintf(file, len, "%s/%s", dirfile, text);
-    }
+    len = strlen(dirfile)+strlen(text)+4;
+    file = wmalloc(len);
+    snprintf(file, len, "%s/%s", dirfile, text);
     wfree(dirfile);
 
-    if ((state & WLDSSelected) != 0) {
-        color.red = color.green = color.blue = 0xff;
-        color.alpha = 0;
-    } else {
-        color.red = color.blue = 0xae;
-        color.green = 0xaa; color.alpha = 0;
-    }
+    color.red = WMRedComponentOfColor(back) >> 8;
+    color.green = WMGreenComponentOfColor(back) >> 8;
+    color.blue = WMBlueComponentOfColor(back) >> 8;
+    color.alpha = WMGetColorAlpha(back) >> 8;
+
     pixmap = WMCreateBlendedPixmapFromFile(wmscr, file, &color);
     wfree(file);
 
     if (!pixmap) {
-        WMRemoveListItem(lPtr, index);
+        /*WMRemoveListItem(lPtr, index);*/
+        WMReleaseColor(black);
+        WMReleaseColor(white);
+        WMReleaseColor(gray);
         return;
     }
 
-    XClearArea(dpy, d, rect->pos.x, rect->pos.y, width, rect->size.height,
-	       False);
+    XFillRectangle(dpy, d, WMColorGC(back), x, y, width, height);
+
     XSetClipMask(dpy, gc, None);
-    /*
-    XDrawRectangle(dpy, d, WMColorGC(whitecolor), rect->pos.x + 5,
-		   rect->pos.y +5, width - 10, 54);
-     */
-    XDrawLine(dpy, d, WMColorGC(whitecolor), rect->pos.x,
-	      rect->pos.y+rect->size.height-1, rect->pos.x+width,
-	      rect->pos.y+rect->size.height-1);
-
-
-    if (state&WLDSSelected) {
-        XFillRectangle(dpy, d, WMColorGC(whitecolor), rect->pos.x,
-		       rect->pos.y, width, rect->size.height);
-    }
+    /*XDrawRectangle(dpy, d, WMColorGC(white), x+5, y+5, width-10, 54);*/
+    XDrawLine(dpy, d, WMColorGC(white), x, y+height-1, x+width, y+height-1);
 
     size = WMGetPixmapSize(pixmap);
 
     XSetClipMask(dpy, copygc, WMGetPixmapMaskXID(pixmap));
-    XSetClipOrigin(dpy, copygc, rect->pos.x + (width-size.width)/2,
-		   rect->pos.y+2);
+    XSetClipOrigin(dpy, copygc, x + (width-size.width)/2, y+2);
     XCopyArea(dpy, WMGetPixmapXID(pixmap), d, copygc, 0, 0,
 	      size.width>100?100:size.width, size.height>64?64:size.height,
-	      rect->pos.x + (width-size.width)/2, rect->pos.y+2);
+	      x + (width-size.width)/2, y+2);
 
     {
         int i,j;
@@ -516,15 +507,15 @@ drawIconProc(WMList *lPtr, int index, Drawable d, char *text,
 	int twidth = WMWidthOfString(panel->normalfont, text, tlen);
 	int ofx, ofy;
 
-	ofx = rect->pos.x + (width - twidth)/2;
-	ofy = rect->pos.y + 64 - fheight;
+	ofx = x + (width - twidth)/2;
+	ofy = y + 64 - fheight;
 
         for(i=-1;i<2;i++)
 	    for(j=-1;j<2;j++)
-                WMDrawString(wmscr, d, whitecolor, panel->normalfont,
+                WMDrawString(wmscr, d, white, panel->normalfont,
                              ofx+i, ofy+j, text, tlen);
 
-        WMDrawString(wmscr, d, blackcolor, panel->normalfont, ofx, ofy,
+        WMDrawString(wmscr, d, black, panel->normalfont, ofx, ofy,
                      text, tlen);
     }
 
@@ -532,8 +523,9 @@ drawIconProc(WMList *lPtr, int index, Drawable d, char *text,
     /* I hope it is better to do not use cache / on my box it is fast nuff */
     XFlush(dpy);
 
-    WMReleaseColor(blackcolor);
-    WMReleaseColor(whitecolor);
+    WMReleaseColor(black);
+    WMReleaseColor(white);
+    WMReleaseColor(gray);
 }
 
 

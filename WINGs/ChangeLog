@@ -7,6 +7,7 @@ Changes since wmaker 0.80.1:
 - WMDrawString() and WMDrawImageString() now take WMColor instead of GC as
   arguments. WMDrawImageString() receives 2 colors (text & background).
   This is to allow easy extension for Xft/Xrender and hide X low level details
+  Read NEWS for details since this will break backward compatibility.
 - Added alpha channel to WMColor. 2 new functions also:
   WMCreateRGBAColor() and WMSetColorAlpha()
 - Miscelaneous code cleanups in wtext.c
@@ -18,7 +19,11 @@ Changes since wmaker 0.80.1:
 - Fixed some improper calls to snprintf in wfont.c
 - Added double buffering when drawing a WMFrame title with an AA font to avoid 
   flickering.
-- Added double buffering when drawing WMList items to avoid flickering
+- Added double buffering when drawing WMList items to avoid flickering.
+  Double buffering for list also works for user drawn lists. Read NEWS for
+  details and incompatibilities introduced by this change.
+- Added new Bool WMIsAAFont(WMFont *font) to check if a font is AA or not.
+- Added WMGetColorAlpha(WMColor *color)
 
 
 Changes since wmaker 0.80.0:

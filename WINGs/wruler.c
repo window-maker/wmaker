@@ -95,7 +95,8 @@ drawLeftMarker(Ruler * rPtr)
    |
 
  */
-static void drawRightMarker(Ruler * rPtr)
+static void
+drawRightMarker(Ruler * rPtr)
 {
     XPoint points[4];
     int xpos = (rPtr->flags.whichMarker==2 ? rPtr->motion : rPtr->margins.right);
@@ -121,7 +122,8 @@ static void drawRightMarker(Ruler * rPtr)
    |
 
  */
-static void drawFirstMarker(Ruler * rPtr)
+static void
+drawFirstMarker(Ruler * rPtr)
 {
     int xpos = ((rPtr->flags.whichMarker == 3 || rPtr->flags.whichMarker == 6) ?
         rPtr->motion : rPtr->margins.first);
@@ -137,7 +139,8 @@ static void drawFirstMarker(Ruler * rPtr)
    \   /
     \./
  */
-static void drawBodyMarker(Ruler * rPtr)
+static void
+drawBodyMarker(Ruler * rPtr)
 {
     XPoint points[4];
     int xpos = ((rPtr->flags.whichMarker == 4 || rPtr->flags.whichMarker == 6) ?
@@ -154,13 +157,14 @@ static void drawBodyMarker(Ruler * rPtr)
 }
 
 
-static void createDrawBuffer(Ruler * rPtr)
+static void
+createDrawBuffer(Ruler * rPtr)
 {
     if(!rPtr->view->flags.realized)
         return;
 
     if (rPtr->drawBuffer)
-    XFreePixmap(rPtr->view->screen->display, rPtr->drawBuffer);
+        XFreePixmap(rPtr->view->screen->display, rPtr->drawBuffer);
 
     rPtr->drawBuffer = XCreatePixmap(rPtr->view->screen->display,
               rPtr->view->window, rPtr->view->size.width, 40,
@@ -170,7 +174,8 @@ static void createDrawBuffer(Ruler * rPtr)
 }
 
 
-static void drawRulerOnPixmap(Ruler * rPtr)
+static void
+drawRulerOnPixmap(Ruler * rPtr)
 {
     int i, j, w, m;
     char c[3];
@@ -220,7 +225,8 @@ static void drawRulerOnPixmap(Ruler * rPtr)
 }
 
 
-static void paintRuler(Ruler * rPtr)
+static void
+paintRuler(Ruler * rPtr)
 {
     if (!rPtr->drawBuffer || !rPtr->view->flags.realized)
         return;
@@ -234,7 +240,7 @@ static void paintRuler(Ruler * rPtr)
 
 
 static Bool
- verifyMarkerMove(Ruler * rPtr, int x)
+verifyMarkerMove(Ruler * rPtr, int x)
 {
     if (rPtr->flags.whichMarker < 1 || rPtr->flags.whichMarker > 6)
     return False;
@@ -279,7 +285,8 @@ static Bool
 }
 
 
-static int whichMarker(Ruler * rPtr, int x, int y)
+static int
+whichMarker(Ruler * rPtr, int x, int y)
 {
     if (x < rPtr->offset || y > 22)
     return 0;
@@ -320,7 +327,8 @@ static int whichMarker(Ruler * rPtr, int x, int y)
     return 0;
 }
 
-static void rulerDidResize(W_ViewDelegate * self, WMView * view)
+static void
+rulerDidResize(W_ViewDelegate * self, WMView * view)
 {
     Ruler *rPtr = (Ruler *) view->self;
 
@@ -331,7 +339,8 @@ static void rulerDidResize(W_ViewDelegate * self, WMView * view)
 }
 
 
-static void handleEvents(XEvent * event, void *data)
+static void
+handleEvents(XEvent * event, void *data)
 {
     Ruler *rPtr = (Ruler *) data;
 
@@ -470,7 +479,8 @@ WMCreateRuler(WMWidget * parent)
 }
 
 
-void WMSetRulerMargins(WMRuler * rPtr, WMRulerMargins margins)
+void
+WMSetRulerMargins(WMRuler * rPtr, WMRulerMargins margins)
 {
     if (!rPtr)
     return;
@@ -529,7 +539,8 @@ WMIsMarginEqualToMargin(WMRulerMargins *aMargin, WMRulerMargins *anotherMargin)
 
 
 
-void WMSetRulerOffset(WMRuler * rPtr, int pixels)
+void
+WMSetRulerOffset(WMRuler * rPtr, int pixels)
 {
     if (!rPtr || pixels < 0 || pixels + MIN_DOC_WIDTH >= rPtr->view->size.width)
     return;
@@ -538,7 +549,8 @@ void WMSetRulerOffset(WMRuler * rPtr, int pixels)
 }
 
 
-int WMGetRulerOffset(WMRuler * rPtr)
+int
+WMGetRulerOffset(WMRuler * rPtr)
 {
     if (!rPtr)
         return 0; /* what value should return if no ruler? -1 or 0? */
@@ -546,7 +558,8 @@ int WMGetRulerOffset(WMRuler * rPtr)
 }
 
 
-void WMSetRulerReleaseAction(WMRuler * rPtr, WMAction * action, void *clientData)
+void
+WMSetRulerReleaseAction(WMRuler * rPtr, WMAction * action, void *clientData)
 {
     if (!rPtr)
     return;
@@ -556,7 +569,8 @@ void WMSetRulerReleaseAction(WMRuler * rPtr, WMAction * action, void *clientData
 }
 
 
-void WMSetRulerMoveAction(WMRuler * rPtr, WMAction * action, void *clientData)
+void
+WMSetRulerMoveAction(WMRuler * rPtr, WMAction * action, void *clientData)
 {
     if (!rPtr)
     return;
@@ -567,7 +581,8 @@ void WMSetRulerMoveAction(WMRuler * rPtr, WMAction * action, void *clientData)
 
 
 /* _which_ one was released */
-int WMGetReleasedRulerMargin(WMRuler * rPtr)
+int
+WMGetReleasedRulerMargin(WMRuler * rPtr)
 {
     if (!rPtr)
     return 0;
@@ -576,7 +591,8 @@ int WMGetReleasedRulerMargin(WMRuler * rPtr)
 
 
 /* _which_ one is being grabbed */
-int WMGetGrabbedRulerMargin(WMRuler * rPtr)
+int
+WMGetGrabbedRulerMargin(WMRuler * rPtr)
 {
     if (!rPtr)
         return 0;

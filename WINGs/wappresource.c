@@ -102,7 +102,7 @@ WMCreateApplicationIconBlendedPixmap(WMScreen *scr, RColor *color)
         gray.red = 0xae;
         gray.green = 0xaa;
         gray.blue = 0xae;
-        gray.alpha = 0;
+        gray.alpha = 0xff;
 
         if (!color)
             color = &gray;

@@ -49,6 +49,7 @@ typedef struct _Panel {
     WMColor *red;
     WMColor *black;
     WMColor *white;
+    WMColor *gray;
     WMFont *font;
 } _Panel;
 
@@ -180,24 +181,20 @@ browseForFile(WMWidget *w, void *data)
 
 
 static void
-paintItem(WMList *lPtr, int index, Drawable d, char *text, int state, 
-	  WMRect *rect)
+paintItem(WMList *lPtr, int index, Drawable d, char *text, int state, WMRect *rect)
 {
     int width, height, x, y;
     _Panel *panel = (_Panel*)WMGetHangedData(lPtr);
     WMScreen *scr = WMWidgetScreen(lPtr);
     Display *dpy = WMScreenDisplay(scr);
+    WMColor *backColor = (state & WLDSSelected) ? panel->white : panel->gray;
 
     width = rect->size.width;
     height = rect->size.height;
     x = rect->pos.x;
     y = rect->pos.y;
 
-    if (state & WLDSSelected)
-	XFillRectangle(dpy, d, WMColorGC(panel->white), x, y, width, 
-		       height);
-    else 
-	XClearArea(dpy, d, x, y, width, height, False);
+    XFillRectangle(dpy, d, WMColorGC(backColor), x, y, width, height);
 
     if (state & 1) {
 	WMDrawString(scr, d, panel->red, panel->font, x+4, y, text, strlen(text));
@@ -244,6 +241,7 @@ createPanel(Panel *p)
 
     panel->white = WMWhiteColor(scr);
     panel->black = WMBlackColor(scr);
+    panel->gray = WMGrayColor(scr);
     panel->red = WMCreateRGBColor(scr, 0xffff, 0, 0, True);
     panel->font = WMSystemFontOfSize(scr, 12);
     

@@ -52,7 +52,6 @@ W_ViewDelegate _SliderViewDelegate = {
 
 static void destroySlider(Slider *sPtr);
 static void paintSlider(Slider *sPtr);
-static void realizeSlider(Slider *sPtr);
 
 static void handleEvents(XEvent *event, void *data);
 static void handleActionEvents(XEvent *event, void *data);
@@ -62,11 +61,11 @@ static void makeKnobPixmap(Slider *sPtr);
 static void
 realizeObserver(void *self, WMNotification *not)
 {
-    realizeSlider(self);
+    makeKnobPixmap(self);
 }
 
 
-	      
+
 WMSlider*
 WMCreateSlider(WMWidget *parent)
 {
@@ -103,8 +102,8 @@ WMCreateSlider(WMWidget *parent)
     sPtr->knobThickness = 20;
 
     sPtr->flags.continuous = 1;
-    
-    WMAddNotificationObserver(realizeObserver, sPtr, 
+
+    WMAddNotificationObserver(realizeObserver, sPtr,
 			      WMViewRealizedNotification, sPtr->view);
 
     return sPtr;
@@ -291,15 +290,6 @@ makeKnobPixmap(Slider *sPtr)
     if (sPtr->knobPixmap)
 	XFreePixmap(scr->display, sPtr->knobPixmap);
     sPtr->knobPixmap = pix;
-}
-
-
-static void
-realizeSlider(Slider *sPtr)
-{
-    W_RealizeView(sPtr->view);
-
-    makeKnobPixmap(sPtr);
 }
 
 

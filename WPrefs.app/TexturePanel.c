@@ -465,11 +465,12 @@ paintGradListItem(WMList *lPtr, int index, Drawable d, char *text, int state,
 {
     TexturePanel *panel = (TexturePanel*)WMGetHangedData(lPtr);
     WMScreen *scr = WMWidgetScreen(lPtr);
+    WMColor *white = WMWhiteColor(scr);
+    WMColor *black = WMBlackColor(scr);
+    WMColor *gray = WMGrayColor(scr);
+    WMListItem *item;
     int width, height, x, y;
     Display *dpy;
-    WMColor *white = WMWhiteColor(scr);
-    WMListItem *item;
-    WMColor *black = WMBlackColor(scr);
 
     dpy = WMScreenDisplay(scr);
 
@@ -481,7 +482,7 @@ paintGradListItem(WMList *lPtr, int index, Drawable d, char *text, int state,
     if (state & WLDSSelected)
         XFillRectangle(dpy, d, WMColorGC(white), x, y, width, height);
     else
-        XClearArea(dpy, d, x, y, width, height, False);
+        XFillRectangle(dpy, d, WMColorGC(gray), x, y, width, height);
 
     item = WMGetListItem(lPtr, index);
 
@@ -494,6 +495,7 @@ paintGradListItem(WMList *lPtr, int index, Drawable d, char *text, int state,
 
     WMReleaseColor(white);
     WMReleaseColor(black);
+    WMReleaseColor(gray);
 }
 
 

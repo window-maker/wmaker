@@ -33,6 +33,8 @@ typedef struct W_List {
 
     WMScroller *vScroller;
 
+    Pixmap doubleBuffer;
+
     struct {
         unsigned int allowMultipleSelection:1;
         unsigned int allowEmptySelection:1;
@@ -81,6 +83,30 @@ W_ViewDelegate _ListViewDelegate = {
     NULL,
     NULL
 };
+
+
+static void
+updateDoubleBufferPixmap(WMList *lPtr)
+{
+    WMView *view = lPtr->view;
+    WMScreen *scr = view->screen;
+
+    if (!view->flags.realized)
+        return;
+
+    if (lPtr->doubleBuffer)
+        XFreePixmap(scr->display, lPtr->doubleBuffer);
+    lPtr->doubleBuffer =
+        XCreatePixmap(scr->display, view->window, view->size.width,
+                      lPtr->itemHeight, scr->depth);
+}
+
+
+static void
+realizeObserver(void *self, WMNotification *not)
+{
+    updateDoubleBufferPixmap(self);
+}
 
 
 static void
@@ -137,6 +163,9 @@ WMCreateList(WMWidget *parent)
     WMMapWidget(lPtr->vScroller);
 
     W_ResizeView(lPtr->view, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+    WMAddNotificationObserver(realizeObserver, lPtr,
+                              WMViewRealizedNotification, lPtr->view);
 
     return lPtr;
 }
@@ -274,10 +303,14 @@ WMSetListUserDrawProc(WMList *lPtr, WMListDrawProc *proc)
 void
 WMSetListUserDrawItemHeight(WMList *lPtr, unsigned short height)
 {
+    W_Screen *scr = lPtr->view->screen;
+
     assert(height > 0);
 
     lPtr->flags.userItemHeight = 1;
     lPtr->itemHeight = height;
+
+    updateDoubleBufferPixmap(lPtr);
 
     updateGeometry(lPtr);
 }
@@ -494,6 +527,7 @@ paintItem(List *lPtr, int index)
     Display *display = scr->display;
     int width, height, x, y, tlen;
     WMListItem *itemPtr;
+    Drawable d = lPtr->doubleBuffer;
 
     itemPtr = WMGetFromArray(lPtr->items, index);
 
@@ -505,14 +539,13 @@ paintItem(List *lPtr, int index)
 
     if (lPtr->flags.userDrawn) {
         WMRect rect;
-        Drawable d = view->window;
         int flags;
 
 
         rect.size.width = width;
         rect.size.height = height;
-        rect.pos.x = x;
-        rect.pos.y = y;
+        rect.pos.x = 0;
+        rect.pos.y = 0;
 
         flags = itemPtr->uflags;
         if (itemPtr->disabled)
@@ -522,41 +555,18 @@ paintItem(List *lPtr, int index)
         if (itemPtr->isBranch)
             flags |= WLDSIsBranch;
 
-#ifdef DOUBLE_BUFFER_no
-        d = XCreatePixmap(display, view->window, view->size.width,
-                          view->size.height, scr->depth);
-#endif
-
         if (lPtr->draw)
             (*lPtr->draw)(lPtr, index, d, itemPtr->text, flags, &rect);
 
-#ifdef DOUBLE_BUFFER_no
-        XCopyArea(display, d, view->window, scr->copyGC, x, y, width, height, x, y);
-        XFreePixmap(display, d);
-#endif
+        XCopyArea(display, d, view->window, scr->copyGC, 0, 0, width, height, x, y);
     } else {
-#ifdef DOUBLE_BUFFER
         WMColor *back = (itemPtr->selected ? scr->white : view->backColor);
-        Drawable d;
 
-        d = XCreatePixmap(display, view->window, width, height, scr->depth);
         XFillRectangle(display, d, WMColorGC(back), 0, 0, width, height);
 
         W_PaintText(view, d, scr->normalFont,  4, 0, width, WALeft, scr->black,
                     False, itemPtr->text, tlen);
         XCopyArea(display, d, view->window, scr->copyGC, 0, 0, width, height, x, y);
-        XFreePixmap(display, d);
-#else
-        if (itemPtr->selected) {
-            XFillRectangle(display, view->window, WMColorGC(scr->white),
-                           x, y, width, height);
-        } else {
-            XClearArea(display, view->window, x, y, width, height, False);
-        }
-
-        W_PaintText(view, view->window, scr->normalFont,  x+4, y, width,
-                    WALeft, scr->black, False, itemPtr->text, tlen);
-#endif
     }
 
     if ((index-lPtr->topItem+lPtr->fullFitLines)*lPtr->itemHeight >
@@ -1224,8 +1234,11 @@ static void
 didResizeList(W_ViewDelegate *self, WMView *view)
 {
     WMList *lPtr = (WMList*)view->self;
+    W_Screen *scr = view->screen;
 
     WMResizeWidget(lPtr->vScroller, 1, view->size.height-2);
+
+    updateDoubleBufferPixmap(lPtr);
 
     updateGeometry(lPtr);
 }
@@ -1247,6 +1260,9 @@ destroyList(List *lPtr)
 
     if (lPtr->items)
         WMFreeArray(lPtr->items);
+
+    if (lPtr->doubleBuffer)
+        XFreePixmap(lPtr->view->screen->display, lPtr->doubleBuffer);
 
     wfree(lPtr);
 }
