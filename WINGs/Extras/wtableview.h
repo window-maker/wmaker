@@ -62,6 +62,7 @@ void WMAddTableViewColumn(WMTableView *table, WMTableColumn *column);
 
 void WMSetTableViewDelegate(WMTableView *table, WMTableViewDelegate *delegate);
 
+WMView *WMGetTableViewDocumentView(WMTableView *table);
 
 void *WMTableViewDataForCell(WMTableView *table, WMTableColumn *column, 
 			     int row);
