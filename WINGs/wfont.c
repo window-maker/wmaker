@@ -479,16 +479,28 @@ changeFontProp(char *fname, char *newprop, int which)
 
 
 WMFont *
-WMConvertFontToPlain(WMScreen *scr, WMFont *font) 
-{
+WMNormalizeFont(WMScreen *scr, WMFont *font)
+{   
+    WMFont *newfont=NULL;
+    char fname[256];
+    
     if(!scr || !font)
         return NULL;
-
-    return font;
+    
+    snprintf(fname, 255, font->name); 
+    changeFontProp(fname, "medium", 2);
+	changeFontProp(fname, "r", 3);
+    newfont = WMCreateNormalFont(scr, fname);
+    
+    if(!newfont)
+        return NULL;
+    
+    return newfont;
 }
 
+
 WMFont *
-WMConvertFontToBold(WMScreen *scr, WMFont *font) 
+WMStrengthenFont(WMScreen *scr, WMFont *font) 
 {
 	WMFont *newfont=NULL;
 	char fname[256];
@@ -508,7 +520,7 @@ WMConvertFontToBold(WMScreen *scr, WMFont *font)
 
 
 WMFont *
-WMConvertFontToUnbold(WMScreen *scr, WMFont *font) 
+WMUnstrengthenFont(WMScreen *scr, WMFont *font) 
 {
 	WMFont *newfont=NULL;
 	char fname[256];
@@ -528,7 +540,7 @@ WMConvertFontToUnbold(WMScreen *scr, WMFont *font)
 
 
 WMFont *
-WMConvertFontToItalic(WMScreen *scr, WMFont *font) 
+WMEmphasizeFont(WMScreen *scr, WMFont *font) 
 {
 	WMFont *newfont=NULL;
 	char fname[256];
@@ -546,8 +558,9 @@ WMConvertFontToItalic(WMScreen *scr, WMFont *font)
 	return newfont;
 }
 
+
 WMFont *
-WMConvertFontToUnitalic(WMScreen *scr, WMFont *font) 
+WMUnemphasizeFont(WMScreen *scr, WMFont *font) 
 {
 	WMFont *newfont=NULL;
 	char fname[256];

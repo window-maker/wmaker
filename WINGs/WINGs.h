@@ -691,15 +691,15 @@ WMFont *WMBoldSystemFontOfSize(WMScreen *scrPtr, int size);
 
 XFontSet WMGetFontFontSet(WMFont *font);
 
-WMFont * WMConvertFontToPlain(WMScreen *scr, WMFont *font);
+WMFont * WMNormalizeFont(WMScreen *scr, WMFont *font);
 
-WMFont * WMConvertFontToBold(WMScreen *scr, WMFont *font);
+WMFont * WMStrengthenFont(WMScreen *scr, WMFont *font);
 
-WMFont * WMConvertFontToUnbold(WMScreen *scr, WMFont *font);
+WMFont * WMUnstrengthenFont(WMScreen *scr, WMFont *font);
 
-WMFont * WMConvertFontToItalic(WMScreen *scr, WMFont *font);
+WMFont * WMEmphasizeFont(WMScreen *scr, WMFont *font);
 
-WMFont * WMConvertFontToUnitalic(WMScreen *scr, WMFont *font);
+WMFont * WMUnemphasizeFont(WMScreen *scr, WMFont *font);
 
 WMFont * WMGetFontOfSize(WMScreen *scr, WMFont *font, int size);
 
