@@ -1132,11 +1132,11 @@ wManageWindow(WScreen *scr, Window window)
 	    } else {
 		PlaceWindow(wwin, &x, &y, width, height);
 	    }
-	    if (wPreferences.window_placement == WPM_MANUAL)
-		dontBring = True;
-	} 
-	else if (scr->xine_info.count &&
-		  wwin->normal_hints->flags & PPosition) {
+            if (wPreferences.window_placement == WPM_MANUAL) {
+                dontBring = True;
+            }
+        } else if (scr->xine_info.count &&
+                   (wwin->normal_hints->flags & PPosition)) {
 	    int head, flags;
 	    WMRect rect;
 	    int reposition = 0;
@@ -3005,8 +3005,9 @@ wWindowDeleteSavedStatesForPID(pid_t pid)
 void
 wWindowSetOmnipresent(WWindow *wwin, Bool flag)
 {
+    if ( wwin->flags.omnipresent == flag) return;
+
     wwin->flags.omnipresent = flag;
-    
     WMPostNotificationName(WMNChangedState, wwin, "omnipresent");
 }
 

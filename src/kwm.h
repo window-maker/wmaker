@@ -43,9 +43,9 @@ typedef enum {
 
 void wKWMInitStuff(WScreen *scr);
 
-Bool wKWMGetUsableArea(WScreen *scr, WArea *area);
+Bool wKWMGetUsableArea(WScreen *scr, int head, WArea *area);
 
-void wKWMCheckClientHints(WWindow *wwin, int *layer, int *workspace);
+Bool wKWMCheckClientHints(WWindow *wwin, int *layer, int *workspace);
 
 Bool wKWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event);
 
@@ -67,7 +67,7 @@ void wKWMUpdateClientStateHint(WWindow *wwin, WKWMStateFlag flags);
 
 Bool wKWMManageableClient(WScreen *scr, Window win, char *title);
 
-void wKWMCheckClientInitialState(WWindow *wwin);
+Bool wKWMCheckClientInitialState(WWindow *wwin);
 
 #ifdef not_used
 void wKWMSetUsableAreaHint(WScreen *scr, int workspace);

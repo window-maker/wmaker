@@ -371,7 +371,7 @@ wApplicationCreate(WScreen *scr, Window main_window)
             }
             wDockAttachIcon(clip, wapp->app_icon, x, y);
         } else {
-            PlaceIcon(scr, &x, &y);
+            PlaceIcon(scr, &x, &y, wGetHeadForWindow(wapp->main_window_desc));
 	    wAppIconMove(wapp->app_icon, x, y);
 	    wLowerFrame(icon->core);
         }

@@ -748,7 +748,7 @@ makeAppIconFor(WApplication *wapp)
 	    }
             wDockAttachIcon(clip, wapp->app_icon, x, y);
         } else {
-            PlaceIcon(scr, &x, &y);
+            PlaceIcon(scr, &x, &y, wGetHeadForWindow(wapp->main_window_desc));
 	    wAppIconMove(wapp->app_icon, x, y);
         }
         if (!clip || !wapp->app_icon->attracted || !clip->collapsed)

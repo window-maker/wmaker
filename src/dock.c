@@ -577,7 +577,8 @@ removeIconsCallback(WMenu *menu, WMenuEntry *entry)
         keepit = aicon->running && wApplicationOf(aicon->main_window);
         wDockDetach(dock, aicon);
         if (keepit) {
-            PlaceIcon(dock->screen_ptr, &aicon->x_pos, &aicon->y_pos);
+	    /* XXX: can: aicon->icon == NULL ? */
+            PlaceIcon(dock->screen_ptr, &aicon->x_pos, &aicon->y_pos, wGetHeadForWindow(aicon->icon->owner));
             XMoveWindow(dpy, aicon->icon->core->window,
                         aicon->x_pos, aicon->y_pos);
             if (!dock->mapped || dock->collapsed)
@@ -1261,7 +1262,8 @@ wDockDestroy(WDock *dock)
             int keepit = aicon->running && wApplicationOf(aicon->main_window);
             wDockDetach(dock, aicon);
             if (keepit) {
-                PlaceIcon(dock->screen_ptr, &aicon->x_pos, &aicon->y_pos);
+		/* XXX: can: aicon->icon == NULL ? */
+                PlaceIcon(dock->screen_ptr, &aicon->x_pos, &aicon->y_pos, wGetHeadForWindow(aicon->icon->owner));
                 XMoveWindow(dpy, aicon->icon->core->window,
                             aicon->x_pos, aicon->y_pos);
                 if (!dock->mapped || dock->collapsed)
@@ -3245,7 +3247,8 @@ retry:
                 aicon = wAppIconCreateForDock(dock->screen_ptr, NULL,
                                               wm_instance, wm_class,
                                               TILE_NORMAL);
-                PlaceIcon(dock->screen_ptr, &x0, &y0);
+		/* XXX: can: aicon->icon == NULL ? */
+                PlaceIcon(dock->screen_ptr, &x0, &y0, wGetHeadForWindow(aicon->icon->owner));
                 wAppIconMove(aicon, x0, y0);
                 /* Should this always be lowered? -Dan */
                 if (dock->lowered)

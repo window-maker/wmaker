@@ -45,10 +45,10 @@
 extern WPreferences wPreferences;
 
 
-#define X_ORIGIN(scr) WMAX((scr)->totalUsableArea.x1,\
+#define X_ORIGIN(scr) WMAX(usableArea.x1,\
 				wPreferences.window_place_origin.x)
 
-#define Y_ORIGIN(scr) WMAX((scr)->totalUsableArea.y1,\
+#define Y_ORIGIN(scr) WMAX(usableArea.y1,\
 				wPreferences.window_place_origin.y)
 
 
@@ -124,7 +124,7 @@ iconPosition(WCoreWindow *wcore, int sx1, int sy1, int sx2, int sy2,
 
 
 void
-PlaceIcon(WScreen *scr, int *x_ret, int *y_ret)
+PlaceIcon(WScreen *scr, int *x_ret, int *y_ret, int head)
 {
     int pf;			       /* primary axis */
     int sf;			       /* secondary axis */
@@ -148,7 +148,8 @@ PlaceIcon(WScreen *scr, int *x_ret, int *y_ret)
     /*
      * Allows each head to have miniwindows
      */
-    WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+    WArea area = wGetUsableAreaForHead(scr, head, NULL, False);
+    WMRect rect = (WMRect){ area.x1, area.y1, area.x2-area.x1, area.y2-area.y1 };
 
     sx1 = rect.pos.x;
     sy1 = rect.pos.y;
@@ -157,12 +158,14 @@ PlaceIcon(WScreen *scr, int *x_ret, int *y_ret)
     sx2 = sx1 + sw;
     sy2 = sy1 + sh;
 
+#if 0
     if (scr->dock) {
 	if (scr->dock->on_right_side)
             sx2 -= isize + DOCK_EXTRA_SPACE;
 	else
 	    sx1 += isize + DOCK_EXTRA_SPACE;
     }
+#endif
 
     sw = isize * (sw/isize);
     sh = isize * (sh/isize);
@@ -590,7 +593,7 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
     int h = WMFontHeight(scr->title_font) + (wPreferences.window_title_clearance + TITLEBAR_EXTEND_SPACE) * 2;
     WArea usableArea = wGetUsableAreaForHead(scr, 
 					     wGetHeadForPointerLocation(scr),
-					     NULL);
+					     NULL, True);
    
     switch (wPreferences.window_placement) {
      case WPM_MANUAL:

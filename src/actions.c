@@ -409,38 +409,27 @@ void
 wMaximizeWindow(WWindow *wwin, int directions)
 {
     int new_width, new_height, new_x, new_y;
-    WArea usableArea = wwin->screen_ptr->totalUsableArea;
-    WArea totalArea;
+    WArea usableArea, totalArea;
 
     if (WFLAGP(wwin, no_resizable))
 	return;
     
-    totalArea.x1 = 0;
-    totalArea.y1 = 0;
-    totalArea.x2 = wwin->screen_ptr->scr_width;
-    totalArea.y2 = wwin->screen_ptr->scr_height;
+    usableArea = totalArea = (WArea){
+	0, 0,
+	wwin->screen_ptr->scr_width,
+	wwin->screen_ptr->scr_height
+    };
 
-    if (wwin->screen_ptr->xine_info.count > 0
-	&& !(directions & MAX_IGNORE_XINERAMA)) {
+    if (!(directions & MAX_IGNORE_XINERAMA)) {
 	WScreen *scr = wwin->screen_ptr;
-	WMRect rect;
 	int head;
 
-	/* XXX:
-	if ( keyboard) {
-	    rect.pos.x = wwin->frame_x;
-	    rect.pos.y = wwin->frame_y;
-	    rect.size.width = wwin->frame->core->width;
-	    rect.size.height = wwin->frame->core->height;
+	if (directions & MAX_KEYBOARD)
+	    head = wGetHeadForWindow(wwin);
+	else
+	    head = wGetHeadForPointerLocation(scr);
 
-	    head = wGetHeadForRect(scr, rect);
-	} else
-	*/
-	head = wGetHeadForPointerLocation(scr);
-
-	rect = wGetRectForHead(scr, head);
-
-	usableArea = wGetUsableAreaForHead(scr, head, &totalArea);
+	usableArea = wGetUsableAreaForHead(scr, head, &totalArea, True);
     }
 
     if (WFLAGP(wwin, full_maximize)) {
@@ -920,7 +909,7 @@ wIconifyWindow(WWindow *wwin)
 
     if (!wPreferences.disable_miniwindows) {
 	if (!wwin->flags.icon_moved) {
-	    PlaceIcon(wwin->screen_ptr, &wwin->icon_x, &wwin->icon_y);
+	    PlaceIcon(wwin->screen_ptr, &wwin->icon_x, &wwin->icon_y, wGetHeadForWindow(wwin));
 	}
 	wwin->icon = wIconCreate(wwin);
 
@@ -1503,6 +1492,168 @@ wArrangeIcons(WScreen *scr, Bool arrangeAll)
 {
     WWindow *wwin;
     WAppIcon *aicon;
+
+    int head;
+    const int heads = wXineramaHeads(scr);
+
+    struct {
+	int pf;			       /* primary axis */
+	int sf;			       /* secondary axis */
+	int fullW;
+	int fullH;
+	int pi, si;
+	int sx1, sx2, sy1, sy2;	       /* screen boundary */
+	int sw, sh;
+	int xo, yo;
+	int xs, ys;
+    } vars[heads];
+
+    int isize = wPreferences.icon_size;
+
+    for (head = 0; head < heads; ++head) {
+#if 0
+	WMRect rect = wGetRectForHead(scr, head);
+#else
+	WArea area = wGetUsableAreaForHead(scr, head, NULL, False);
+	WMRect rect = (WMRect){ area.x1, area.y1, area.x2-area.x1, area.y2-area.y1 };
+#endif
+
+	vars[head].pi = vars[head].si = 0;
+	vars[head].sx1 = rect.pos.x;
+	vars[head].sy1 = rect.pos.y;
+	vars[head].sw = rect.size.width;
+	vars[head].sh = rect.size.height;
+	vars[head].sx2 = vars[head].sx1 + vars[head].sw;
+	vars[head].sy2 = vars[head].sy1 + vars[head].sh;
+
+#if 0
+	if (scr->dock) {
+	    if (scr->dock->on_right_side)
+	        vars[head].sx2 -= isize + DOCK_EXTRA_SPACE;
+	    else
+	        vars[head].sx1 += isize + DOCK_EXTRA_SPACE;
+	}
+#endif
+
+	vars[head].sw = isize * (vars[head].sw/isize);
+	vars[head].sh = isize * (vars[head].sh/isize);
+	vars[head].fullW = (vars[head].sx2-vars[head].sx1)/isize;
+	vars[head].fullH = (vars[head].sy2-vars[head].sy1)/isize;
+
+	/* icon yard boundaries */    
+	if (wPreferences.icon_yard & IY_VERT) {
+	    vars[head].pf = vars[head].fullH;
+	    vars[head].sf = vars[head].fullW;
+	} else {
+	    vars[head].pf = vars[head].fullW;
+	    vars[head].sf = vars[head].fullH;
+	}
+	if (wPreferences.icon_yard & IY_RIGHT) {
+	    vars[head].xo = vars[head].sx2 - isize;
+	    vars[head].xs = -1;
+	} else {
+	    vars[head].xo = vars[head].sx1;
+	    vars[head].xs = 1;
+	}
+	if (wPreferences.icon_yard & IY_TOP) {
+	    vars[head].yo = vars[head].sy1;
+	    vars[head].ys = 1;
+	} else {
+	    vars[head].yo = vars[head].sy2 - isize;
+	    vars[head].ys = -1;
+	}
+    }
+
+#define X ((wPreferences.icon_yard & IY_VERT) \
+	   ? vars[head].xo + vars[head].xs*(vars[head].si*isize) \
+	   : vars[head].xo + vars[head].xs*(vars[head].pi*isize))
+
+#define Y ((wPreferences.icon_yard & IY_VERT) \
+	   ? vars[head].yo + vars[head].ys*(vars[head].pi*isize) \
+	   : vars[head].yo + vars[head].ys*(vars[head].si*isize))
+
+
+    /* arrange application icons */
+    aicon = scr->app_icon_list;
+    /* reverse them to avoid unnecessarily sliding of icons */
+    while (aicon && aicon->next)
+	aicon = aicon->next;
+
+    while (aicon) {
+	if (!aicon->docked) {
+	    /* XXX: can: icon == NULL ? */
+           /* The intention here is to place the AppIcon on the head that contains most of the applications _main_ window. */
+/*	    printf( "appicon: %x %x\n", aicon->icon->core->window, aicon->main_window); */
+	    head = wGetHeadForWindow(aicon->icon->owner);
+
+	    if (aicon->x_pos != X || aicon->y_pos != Y) {
+#ifdef ANIMATIONS
+		if (!wPreferences.no_animations) {
+		    SlideWindow(aicon->icon->core->window, 
+				aicon->x_pos, aicon->y_pos, X, Y);
+		}
+#endif /* ANIMATIONS */
+	    }
+	    wAppIconMove(aicon, X, Y);
+	    vars[head].pi++;
+	    if (vars[head].pi >= vars[head].pf) {
+		vars[head].pi = 0;
+		vars[head].si++;
+	    }
+	}
+	aicon = aicon->prev;
+    }
+
+    /* arrange miniwindows */
+    wwin = scr->focused_window;
+    /* reverse them to avoid unnecessarily shuffling */
+    while (wwin && wwin->prev)
+	wwin = wwin->prev;
+
+    while (wwin) {
+        if (wwin->icon && wwin->flags.miniaturized && !wwin->flags.hidden &&
+            (wwin->frame->workspace==scr->current_workspace ||
+             IS_OMNIPRESENT(wwin) || wPreferences.sticky_icons)) {
+
+	    head = wGetHeadForWindow(wwin);
+	    
+	    if (arrangeAll || !wwin->flags.icon_moved) {
+		if (wwin->icon_x != X || wwin->icon_y != Y) {
+#ifdef ANIMATIONS
+		    if (wPreferences.no_animations) {
+			XMoveWindow(dpy, wwin->icon->core->window, X, Y);
+		    } else {
+			SlideWindow(wwin->icon->core->window, wwin->icon_x, 
+				    wwin->icon_y, X, Y);
+		    }
+#else
+		    XMoveWindow(dpy, wwin->icon->core->window, X, Y);
+#endif /* ANIMATIONS */
+		}
+		wwin->icon_x = X;
+		wwin->icon_y = Y;
+
+		vars[head].pi++;
+		if (vars[head].pi >= vars[head].pf) {
+		    vars[head].pi = 0;
+		    vars[head].si++;
+		}
+	    }
+	}
+	if (arrangeAll) {
+	    wwin->flags.icon_moved = 0;
+	}
+        /* we reversed the order, so we use next */
+        wwin = wwin->next;
+    }
+}
+
+#if 0
+void
+wArrangeIcons(WScreen *scr, Bool arrangeAll)
+{
+    WWindow *wwin;
+    WAppIcon *aicon;
     int pf;			       /* primary axis */
     int sf;			       /* secondary axis */
     int fullW;
@@ -1531,7 +1682,7 @@ wArrangeIcons(WScreen *scr, Bool arrangeAll)
     sy2 = sy1 + sh;
     if (scr->dock) {
 	if (scr->dock->on_right_side)
-            sx2 -= isize + DOCK_EXTRA_SPACE;
+	    sx2 -= isize + DOCK_EXTRA_SPACE;
 	else
 	    sx1 += isize + DOCK_EXTRA_SPACE;
     }
@@ -1543,7 +1694,6 @@ wArrangeIcons(WScreen *scr, Bool arrangeAll)
     sw = isize * (sw/isize);
     sh = isize * (sh/isize);
 #endif
-    fullW = (sx2-sx1)/isize;
     fullW = (sx2-sx1)/isize;
     fullH = (sy2-sy1)/isize;
 
@@ -1647,7 +1797,7 @@ wArrangeIcons(WScreen *scr, Bool arrangeAll)
 	}
     }
 }
-
+#endif
 
 void
 wSelectWindow(WWindow *wwin, Bool flag)

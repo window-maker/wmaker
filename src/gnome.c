@@ -49,6 +49,7 @@
 #include "actions.h"
 #include "stacking.h"
 #include "client.h"
+#include "xinerama.h"
 
 #include "gnome.h"
 
@@ -417,6 +418,45 @@ wGNOMECheckClientHints(WWindow *wwin, int *layer, int *workspace)
     }
     
     return hasHints;
+}
+
+
+Bool
+wGNOMEGetUsableArea(WScreen *scr, int head, WArea *area)
+{
+    WReservedArea *cur;
+    WMRect rect;
+
+    if(!scr->reservedAreas)
+        return False;
+
+    area->x1 = area->y1 = area->x2 = area->y2 = 0;
+
+    for(cur = scr->reservedAreas ; cur ; cur = cur->next) {
+	WWindow * wwin = wWindowFor(cur->window);
+	if (wWindowTouchesHead(wwin, head)) {
+	    if(cur->area.x1 > area->x1)
+		area->x1 = cur->area.x1;
+	    if(cur->area.y1 > area->y1)
+		area->y1 = cur->area.y1;
+	    if(cur->area.x2 > area->x2)
+		area->x2 = cur->area.x2;
+	    if(cur->area.y2 > area->y2)
+		area->y2 = cur->area.y2;
+	}
+    }
+
+    if (area->x1==0 && area->x2==0 &&
+	area->y1==0 && area->y2==0) return False;
+
+    rect = wGetRectForHead(scr, head);
+
+    area->x1 = rect.pos.x + area->x1;
+    area->x2 = rect.pos.x + rect.size.width - area->x2;
+    area->y1 = rect.pos.y + area->y1;
+    area->y2 = rect.pos.y + rect.size.height - area->y2;
+
+    return True;
 }
 
 

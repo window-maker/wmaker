@@ -133,8 +133,7 @@ initXinerama()
     }
 # else /* !SOLARIS_XINERAMA */
     if (XineramaIsActive(dpy)) {
-        XineramaInfo *xine_screens;
-        WXineramaInfo *info = &scr->xine_info;
+        XineramaScreenInfo *xine_screens;
         int i;
         
         xine_screens = XineramaQueryScreens(dpy, &xineInfo.count);
@@ -142,10 +141,10 @@ initXinerama()
         xineInfo.screens = wmalloc(sizeof(WMRect)*(xineInfo.count+1));
         
         for (i=0; i<xineInfo.count; i++) {
-            xineInfo.screens[i].pos.x = xineInfo.screens[i].x_org;
-            xineInfo.screens[i].pos.y = xineInfo.screens[i].y_org;
-            xineInfo.screens[i].size.width = xineInfo.screens[i].width;
-            xineInfo.screens[i].size.height = xineInfo.screens[i].height;
+            xineInfo.screens[i].pos.x = xine_screens[i].x_org;
+            xineInfo.screens[i].pos.y = xine_screens[i].y_org;
+            xineInfo.screens[i].size.width = xine_screens[i].width;
+            xineInfo.screens[i].size.height = xine_screens[i].height;
         }
         XFree(xine_screens);
     }

@@ -81,11 +81,23 @@ Changes since version 0.80.2:
 - Added support for generating pkgconfig files for WINGS, wmlib and wrlib.
   ("Marcelo E. Magallon" <mmagallo@debian.org>)
 - Support for multiline balloons (Vitaly Ovtchinnikov <ov@rbcmail.ru>)
+- Improved wsetfont (Mike FABIAN <mfabian@suse.de>)
 - Updated single-click contrib patch (steve lion <steve.lion@verizon.net>
   and vlaad)
 - Updated French translations (Antoine Hulin <antoine@origan.fdn.org>)
 - Xinerama support for Solaris
 - Added global menu support (see NEWS)
+- Fixed sloppy focus bug
+- Made maximizing behaves differently with keyboard/mouse for xinerama
+  (Peter Zijlstra <a.p.zijlstra@chello.nl>)
+- A few leftover xinerama fixes (Peter Zijlstra <a.p.zijlstra@chello.nl>)
+- Extended the 'strut' to multiple heads 
+  (Peter Zijlstra <a.p.zijlstra@chello.nl>)
+- Icon placement now takes into account the new xinerama extended 'strut'
+  (Peter Zijlstra <a.p.zijlstra@chello.nl>)
+- Icon arrangement that takes the new extended xinerama 'strut' into account
+  (Peter Zijlstra <a.p.zijlstra@chello.nl>)
+
 
 Changes since version 0.80.1:
 .............................

@@ -47,5 +47,7 @@ Bool wGNOMECheckInitialClientState(WWindow *wwin);
 
 Bool wGNOMEProxyizeButtonEvent(WScreen *scr, XEvent *event);
 
+Bool wGNOMEGetUsableArea(WScreen *scr, int head, WArea *area);
+
 #endif
 

@@ -606,6 +606,7 @@ wScreenInit(int screen_number)
     extern int wVisualID;
     long event_mask;
     XErrorHandler oldHandler;
+    int i;
 
     scr = wmalloc(sizeof(WScreen));
     memset(scr, 0, sizeof(WScreen));
@@ -621,10 +622,18 @@ wScreenInit(int screen_number)
     scr->scr_width = WidthOfScreen(ScreenOfDisplay(dpy, screen_number));
     scr->scr_height = HeightOfScreen(ScreenOfDisplay(dpy, screen_number));
 
-    scr->usableArea.x2 = scr->scr_width;
-    scr->usableArea.y2 = scr->scr_height;
-    scr->totalUsableArea.x2 = scr->scr_width;
-    scr->totalUsableArea.y2 = scr->scr_height;
+    wInitXinerama(scr);
+
+    scr->usableArea = (WArea *)wmalloc( sizeof(WArea)*wXineramaHeads(scr)); /* XXX: checl NULL */
+    scr->totalUsableArea = (WArea *)wmalloc( sizeof(WArea)*wXineramaHeads(scr)); /* XXX: */
+
+    for ( i=0; i<wXineramaHeads(scr); ++i) {
+	WMRect rect = wGetRectForHead(scr, i);
+	scr->usableArea[i].x1 = scr->totalUsableArea[i].x1 = rect.pos.x;
+	scr->usableArea[i].y1 = scr->totalUsableArea[i].y1 = rect.pos.y;
+	scr->usableArea[i].x2 = scr->totalUsableArea[i].x2 = rect.pos.x + rect.size.width;
+	scr->usableArea[i].y2 = scr->totalUsableArea[i].y2 = rect.pos.y + rect.size.height;
+    }
 
     scr->fakeGroupLeaders = WMCreateArray(16);
 
@@ -665,8 +674,6 @@ wScreenInit(int screen_number)
 	return NULL;
     }
     
-    wInitXinerama(scr);
-
     XDefineCursor(dpy, scr->root_win, wCursor[WCUR_ROOT]);
 
     /* screen descriptor for raster graphic library */
@@ -827,12 +834,154 @@ wScreenInit(int screen_number)
 }
 
 
+void
+wScreenUpdateUsableArea(WScreen *scr)
+{
+    /*
+     *  scr->totalUsableArea[] will become the usableArea used for Windowplacement,
+     *  scr->usableArea[] will be used for iconplacement, hence no iconyard nor border.
+     */
 
+    int i;
+    unsigned long best_area = 0, tmp_area;
+    WArea area;
+    int dock_head = scr->xine_info.primary_head;
+
+    if ( scr->dock) {
+	WMRect rect = { scr->dock->x_pos, scr->dock->y_pos, wPreferences.icon_size, wPreferences.icon_size };
+	dock_head = wGetHeadForRect(scr, rect);
+    }
+    
+    for ( i=0; i<wXineramaHeads(scr); ++i) {
+	WMRect rect = wGetRectForHead(scr, i);
+	scr->totalUsableArea[i] = (WArea){ 
+	    rect.pos.x, 
+	    rect.pos.y,
+	    rect.pos.x + rect.size.width,
+	    rect.pos.y + rect.size.height
+	};
+
+	if ( scr->dock && dock_head==i &&
+	     (!scr->dock->lowered || wPreferences.no_window_over_dock)) {
+	    int offset = wPreferences.icon_size + DOCK_EXTRA_SPACE;
+
+	    if ( scr->dock->on_right_side) {
+		scr->totalUsableArea[i].x2 -= offset;
+	    } else {
+		scr->totalUsableArea[i].x1 += offset;
+	    }
+	}
+
+#ifdef NETWM_HINTS
+	{
+	    WArea area;
+	    if ( wNETWMGetUsableArea(scr, i, &area)) {
+		scr->totalUsableArea[i].x1 = WMAX(scr->totalUsableArea[i].x1, area.x1);
+		scr->totalUsableArea[i].y1 = WMAX(scr->totalUsableArea[i].y1, area.y1);
+		scr->totalUsableArea[i].x2 = WMIN(scr->totalUsableArea[i].x2, area.x2);
+		scr->totalUsableArea[i].y2 = WMIN(scr->totalUsableArea[i].y2, area.y2);
+	    }
+	}
+#endif
+
+#ifdef GNOME_STUFF
+	{
+	    WArea area;
+	    if ( wGNOMEGetUsableArea(scr, i, &area)) {
+		scr->totalUsableArea[i].x1 = WMAX(scr->totalUsableArea[i].x1, area.x1);
+		scr->totalUsableArea[i].y1 = WMAX(scr->totalUsableArea[i].y1, area.y1);
+		scr->totalUsableArea[i].x2 = WMIN(scr->totalUsableArea[i].x2, area.x2);
+		scr->totalUsableArea[i].y2 = WMIN(scr->totalUsableArea[i].y2, area.y2);
+	    }
+	}
+#endif
+
+#ifdef KWM_HINTS
+	{
+	    WArea area;
+	    if ( wKWMGetUsableArea(scr, i, &area)) {
+		scr->totalUsableArea[i].x1 = WMAX(scr->totalUsableArea[i].x1, area.x1);
+		scr->totalUsableArea[i].y1 = WMAX(scr->totalUsableArea[i].y1, area.y1);
+		scr->totalUsableArea[i].x2 = WMIN(scr->totalUsableArea[i].x2, area.x2);
+		scr->totalUsableArea[i].y2 = WMIN(scr->totalUsableArea[i].y2, area.y2);
+	    }
+	}
+#endif
+
+	scr->usableArea[i] = scr->totalUsableArea[i];
+
+#if 0
+	printf( "usableArea[%d]: %d %d %d %d\n", i, 
+		scr->usableArea[i].x1,
+		scr->usableArea[i].x2,
+		scr->usableArea[i].y1,
+		scr->usableArea[i].y2);
+#endif
+
+	if ( wPreferences.no_window_over_icons) {
+	    if ( wPreferences.icon_yard & IY_VERT) {
+		if ( wPreferences.icon_yard & IY_RIGHT) {
+		    scr->totalUsableArea[i].x1 += wPreferences.icon_size;
+		} else {
+		    scr->totalUsableArea[i].x2 -= wPreferences.icon_size;
+		}
+	    } else {
+		if ( wPreferences.icon_yard & IY_TOP) {
+		    scr->totalUsableArea[i].y1 += wPreferences.icon_size;
+		} else {
+		    scr->totalUsableArea[i].y2 -= wPreferences.icon_size;
+		}
+	    }
+	}
+
+	if (scr->totalUsableArea[i].x2 - scr->totalUsableArea[i].x1 < rect.size.width/2) {
+	    scr->totalUsableArea[i].x1 = rect.pos.x;
+	    scr->totalUsableArea[i].x2 = rect.pos.x + rect.size.width;
+	}
+	if (scr->totalUsableArea[i].y2 - scr->totalUsableArea[i].y1 < rect.size.height/2) {
+	    scr->totalUsableArea[i].y1 = rect.pos.y;
+	    scr->totalUsableArea[i].y2 = rect.pos.y + rect.size.height;
+	}
+
+	tmp_area = (scr->totalUsableArea[i].x2 - scr->totalUsableArea[i].x1) * 
+	    (scr->totalUsableArea[i].y2 - scr->totalUsableArea[i].y1);
+
+	if ( tmp_area > best_area) {
+	    best_area = tmp_area;
+	    area = scr->totalUsableArea[i];
+	}
+
+	{
+	    unsigned size = wPreferences.workspace_border_size;
+	    unsigned position = wPreferences.workspace_border_position;
+
+	    if (size>0 && position!=WB_NONE) {
+		if (position & WB_LEFTRIGHT) {
+		    scr->totalUsableArea[i].x1 += size;
+		    scr->totalUsableArea[i].x2 -= size;
+		}
+		if (position & WB_TOPBOTTOM) {
+		    scr->totalUsableArea[i].y1 += size;
+		    scr->totalUsableArea[i].y2 -= size;
+		}
+	    }
+	}
+    }
+
+#ifdef NETWM_HINTS
+    wNETWMUpdateWorkarea(scr, area);
+#endif
+
+    if (wPreferences.auto_arrange_icons) {
+        wArrangeIcons(scr, True);
+    }
+}
+
+#if 0
 void
 wScreenUpdateUsableArea(WScreen *scr)
 {
     scr->totalUsableArea = scr->usableArea;
-
 
     if (scr->dock && (!scr->dock->lowered 
 		      || wPreferences.no_window_over_dock)) {
@@ -961,7 +1110,11 @@ wScreenUpdateUsableArea(WScreen *scr)
         }
     }
 
+    if (wPreferences.auto_arrange_icons) {
+        wArrangeIcons(scr, True);
+    }
 }
+#endif
 
 
 void

@@ -609,6 +609,10 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
         }
     }
 
+#ifdef KWM_HINTS
+    wScreenUpdateUsableArea(scr);
+#endif
+
     showWorkspaceName(scr, workspace);
 
     WMPostNotificationName(WMNWorkspaceChanged, scr, (void*)workspace);

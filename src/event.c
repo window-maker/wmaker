@@ -1141,11 +1141,11 @@ handleEnterNotify(XEvent *event)
     }
 
     if (event->xcrossing.window == event->xcrossing.root
-	&& (event->xcrossing.mode == NotifyNormal ||
-	    event->xcrossing.mode == NotifyUngrab )
-	&& event->xcrossing.detail == NotifyInferior
+	&& event->xcrossing.detail == NotifyNormal
+	&& event->xcrossing.detail != NotifyInferior
 	&& wPreferences.focus_mode != WKF_CLICK) {
-	    wSetFocusTo(scr, NULL);
+	
+	wSetFocusTo(scr, scr->focused_window);
     }
 
 #ifdef BALLOON_TEXT
@@ -1449,7 +1449,7 @@ handleKeyPress(XEvent *event)
 	    if (wwin->flags.maximized) {
 		wUnmaximizeWindow(wwin);
 	    } else {
-		wMaximizeWindow(wwin, MAX_VERTICAL|MAX_HORIZONTAL);
+		wMaximizeWindow(wwin, MAX_VERTICAL|MAX_HORIZONTAL|MAX_KEYBOARD);
 	    }
 	}
 	break;
@@ -1460,7 +1460,7 @@ handleKeyPress(XEvent *event)
 	    if (wwin->flags.maximized) {
 		wUnmaximizeWindow(wwin);
 	    } else {
-		wMaximizeWindow(wwin, MAX_VERTICAL);
+		wMaximizeWindow(wwin, MAX_VERTICAL|MAX_KEYBOARD);
 	    }
 	}
 	break;
@@ -1471,7 +1471,7 @@ handleKeyPress(XEvent *event)
 	    if (wwin->flags.maximized) {
 		wUnmaximizeWindow(wwin);
 	    } else {
-		wMaximizeWindow(wwin, MAX_HORIZONTAL);
+		wMaximizeWindow(wwin, MAX_HORIZONTAL|MAX_KEYBOARD);
 	    }
 	}
 	break;

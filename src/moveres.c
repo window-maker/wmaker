@@ -1051,15 +1051,16 @@ updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
         /* horizontal movement: check horizontal edge resistances */
         if (dx || dy) {
             WMRect rect;
-            int i;
+            int i, head;
             /* window is the leftmost window: check against screen edge */
 
             /* Add inter head resistance 1/2 (if needed) */
-            rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+	    head = wGetHeadForPointerLocation(scr);
+            rect = wGetRectForHead(scr, head);
 
-            l_edge = WMAX(scr->totalUsableArea.x1, rect.pos.x);
+            l_edge = WMAX(scr->totalUsableArea[head].x1, rect.pos.x);
             edge_l = l_edge - resist;
-            edge_r = WMIN(scr->totalUsableArea.x2, rect.pos.x + rect.size.width);
+            edge_r = WMIN(scr->totalUsableArea[head].x2, rect.pos.x + rect.size.width);
             r_edge = edge_r + resist;
 
             /* 1 */
@@ -1157,9 +1158,9 @@ updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
 
             /* VeRT */
             /* Add inter head resistance 2/2 (if needed) */
-            t_edge = WMAX(scr->totalUsableArea.y1, rect.pos.y);
+            t_edge = WMAX(scr->totalUsableArea[head].y1, rect.pos.y);
             edge_t = t_edge - resist;
-            edge_b = WMIN(scr->totalUsableArea.y2, rect.pos.y + rect.size.height);
+            edge_b = WMIN(scr->totalUsableArea[head].y2, rect.pos.y + rect.size.height);
             b_edge = edge_b + resist;
 
             if ((data->bottomIndex >= 0) && (data->bottomIndex <= data->count)) {

@@ -135,10 +135,10 @@ typedef struct _WScreen {
 
     WReservedArea *reservedAreas;      /* used to build totalUsableArea */
 
-    WArea usableArea;		       /* area of the workspace where
+    WArea *usableArea;		       /* area of the workspace where
 					* we can put windows on, as defined
 					* by other clients (not us) */
-    WArea totalUsableArea;	       /* same as above, but including
+    WArea *totalUsableArea;	       /* same as above, but including
 					* the dock and other stuff */
 
     WMColor *black;
@@ -302,7 +302,7 @@ typedef struct _WScreen {
     Window kwm_dock;
 #endif
     
-#ifdef NET_HINTS
+#ifdef NETWM_HINTS
     struct NetData *netdata;
 #endif
 

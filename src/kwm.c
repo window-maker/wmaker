@@ -102,8 +102,9 @@
  */
 
 /*
- * TODO
+ * XXX
  * different WORKAREA for each workspace
+ *  -- done by rebuilding usableArea at each workspace switch.
  */
 
 
@@ -140,6 +141,7 @@
 #include "workspace.h"
 #include "dialog.h"
 #include "stacking.h"
+#include "xinerama.h"
 
 #include "kwm.h"
 
@@ -749,16 +751,18 @@ wKWMShutdown(WScreen *scr, Bool closeModules)
 }
 
 
-void
+Bool
 wKWMCheckClientHints(WWindow *wwin, int *layer, int *workspace)
 {
     long val;
+    Bool hasHint = False;
 
     if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_UNSAVED_DATA, &val)	
 	&& val) {
 
 	wwin->client_flags.broken_close = 1;
-    }
+	hasHint = True;
+    } else
     if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_DECORATION, &val)) {
 	if (val & KWMnoFocus) {
 	    wwin->client_flags.no_focusable = 1;
@@ -790,27 +794,34 @@ wKWMCheckClientHints(WWindow *wwin, int *layer, int *workspace)
 	 default:
 	    break;
 	}
-    }
+	hasHint = True;
+    } else
     if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_DESKTOP, &val)) {
 	*workspace = val - 1;
+	hasHint = True;
     }
+
+    return hasHint;
 }
 
 
-void
+Bool
 wKWMCheckClientInitialState(WWindow *wwin)
 {
     long val;
     WArea area;
+    Bool hasHint = False;
 
     if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_STICKY, &val) && val) {
 
 	wwin->client_flags.omnipresent = 1;
-    }
+	hasHint = True;
+    } else
     if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_ICONIFIED, &val) && val) {
 
 	wwin->flags.miniaturized = 1;
-    }
+	hasHint = True;
+    } else
     if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_MAXIMIZED, &val)) {
 	if (val == 2)
 	    wwin->flags.maximized = MAX_VERTICAL;
@@ -818,7 +829,8 @@ wKWMCheckClientInitialState(WWindow *wwin)
 	    wwin->flags.maximized = MAX_HORIZONTAL;
 	else if (val == 3)
 	    wwin->flags.maximized = MAX_VERTICAL|MAX_HORIZONTAL;
-    }
+	hasHint = True;
+    } else
     if (getAreaHint(wwin->client_win, _XA_KWM_WIN_GEOMETRY_RESTORE, &area)
 	&& (wwin->old_geometry.x != area.x1
 	    || wwin->old_geometry.y != area.y1
@@ -829,7 +841,10 @@ wKWMCheckClientInitialState(WWindow *wwin)
 	wwin->old_geometry.y = area.y1;
 	wwin->old_geometry.width = area.x2 - area.x1;
 	wwin->old_geometry.height = area.y2 - area.y1;
+	hasHint = True;
     }
+
+    return hasHint;
 }
 
 
@@ -1373,6 +1388,7 @@ wKWMCheckRootHintChange(WScreen *scr, XPropertyEvent *event)
 		 processed = True;
 		 break;
 	     } else if (event->atom == _XA_KWM_WINDOW_REGION_[i]) {
+#if 0
 		 WArea area;
 
 		 if (getAreaHint(scr->root_win, event->atom, &area)) {
@@ -1384,6 +1400,10 @@ wKWMCheckRootHintChange(WScreen *scr, XPropertyEvent *event)
 			 wScreenUpdateUsableArea(scr);
 		     }
 		 }
+#else
+		 if ( i == scr->current_workspace % MAX_WORKSPACES)
+		     wScreenUpdateUsableArea(scr);
+#endif
 
 		 processed = True;
 		 break;
@@ -1596,17 +1616,30 @@ wKWMUpdateClientStateHint(WWindow *wwin, WKWMStateFlag flags)
 
 
 Bool
-wKWMGetUsableArea(WScreen *scr, WArea *area)
+wKWMGetUsableArea(WScreen *scr, int head, WArea *area)
 {
     char buffer[64];
+    Bool ok;
+    int region = scr->current_workspace % MAX_WORKSPACES;
 
-    if (_XA_KWM_WINDOW_REGION_[0]==0) {
-	snprintf(buffer, sizeof(buffer), "KWM_WINDOW_REGION_%d", 1);
+    if (_XA_KWM_WINDOW_REGION_[region]==0) {
+	snprintf(buffer, sizeof(buffer), "KWM_WINDOW_REGION_%d", 1+region);
 
-	_XA_KWM_WINDOW_REGION_[0] = XInternAtom(dpy, buffer, False);
+	_XA_KWM_WINDOW_REGION_[region] = XInternAtom(dpy, buffer, False);
     }
 
-    return getAreaHint(scr->root_win, _XA_KWM_WINDOW_REGION_[0], area);
+    ok = getAreaHint(scr->root_win, _XA_KWM_WINDOW_REGION_[region], area);
+
+    if ( ok) {
+	WMRect rect = wGetRectForHead(scr, head);
+
+	area->x1 = WMAX( area->x1, rect.pos.x);
+	area->x2 = WMIN( area->x2, rect.pos.x + rect.size.width);
+	area->y1 = WMAX( area->y1, rect.pos.y);
+	area->y2 = WMIN( area->y2, rect.pos.y + rect.size.height);
+    }
+
+    return ok;
 }
 
 
