@@ -527,19 +527,36 @@ resizeTextField(WMTextField *tPtr, unsigned int width, unsigned int height)
 }
 
 
+static char*
+makeHiddenString(int length)
+{
+    char *data = wmalloc(length+1);
+
+    memset(data, '*', length);
+    data[length] = '\0';
+    return data;
+}
+
+
 static void
 paintCursor(TextField *tPtr)
 {
     int cx;
     WMScreen *screen = tPtr->view->screen;
     int textWidth;
+    char *text;
 
-    cx = WMWidthOfString(tPtr->font, &(tPtr->text[tPtr->viewPosition]),
+    if (tPtr->flags.secure)
+        text = makeHiddenString(strlen(tPtr->text));
+    else
+        text = tPtr->text;
+
+    cx = WMWidthOfString(tPtr->font, &(text[tPtr->viewPosition]),
 			 tPtr->cursorPosition-tPtr->viewPosition);
 
     switch (tPtr->flags.alignment) {
      case WARight:
-	textWidth = WMWidthOfString(tPtr->font, tPtr->text, tPtr->textLen);
+	textWidth = WMWidthOfString(tPtr->font, text, tPtr->textLen);
 	if (textWidth < tPtr->usableWidth)
 	    cx += tPtr->offsetWidth + tPtr->usableWidth - textWidth + 1;
 	else
@@ -551,7 +568,7 @@ paintCursor(TextField *tPtr)
      case WAJustified:
 	/* not supported */
      case WACenter:
-	textWidth = WMWidthOfString(tPtr->font, tPtr->text, tPtr->textLen);
+	textWidth = WMWidthOfString(tPtr->font, text, tPtr->textLen);
 	if (textWidth < tPtr->usableWidth)
 	    cx += tPtr->offsetWidth + (tPtr->usableWidth-textWidth)/2;
 	else
@@ -567,6 +584,9 @@ paintCursor(TextField *tPtr)
     XDrawLine(screen->display, tPtr->view->window, screen->xorGC,
 	      cx, tPtr->offsetWidth, cx,
 	      tPtr->view->size.height - tPtr->offsetWidth - 1);
+
+    if (tPtr->flags.secure)
+        free(text);
 }
 
 
@@ -617,6 +637,7 @@ paintTextField(TextField *tPtr)
     int rx;
     int bd;
     int totalWidth;
+    char *text;
 
     
     if (!view->flags.realized || !view->flags.mapped)
@@ -628,10 +649,16 @@ paintTextField(TextField *tPtr)
 	bd = 2;
     }
 
+    if (tPtr->flags.secure) {
+        text = makeHiddenString(strlen(tPtr->text));
+    } else {
+        text = tPtr->text;
+    }
+
     totalWidth = tPtr->view->size.width - 2*bd;
 
     if (tPtr->textLen > 0) {
-    	tw = WMWidthOfString(tPtr->font, &(tPtr->text[tPtr->viewPosition]),
+    	tw = WMWidthOfString(tPtr->font, &(text[tPtr->viewPosition]),
 			     tPtr->textLen - tPtr->viewPosition);
     
 	th = WMFontHeight(tPtr->font);
@@ -662,54 +689,51 @@ paintTextField(TextField *tPtr)
 	    break;
 	}
 
-	if (!tPtr->flags.secure) {
-	    if (!tPtr->flags.enabled)
-		WMSetColorInGC(screen->darkGray, screen->textFieldGC);
+        if (!tPtr->flags.enabled)
+            WMSetColorInGC(screen->darkGray, screen->textFieldGC);
 
-	    WMDrawImageString(screen, view->window, screen->textFieldGC, 
-			      tPtr->font, tx, ty,
-			      &(tPtr->text[tPtr->viewPosition]), 
-			      tPtr->textLen - tPtr->viewPosition);
+        WMDrawImageString(screen, view->window, screen->textFieldGC,
+                          tPtr->font, tx, ty,
+                          &(text[tPtr->viewPosition]),
+                          tPtr->textLen - tPtr->viewPosition);
 
-            if (tPtr->selection.count) {
-		int count;
+        if (tPtr->selection.count) {
+            int count;
 
-		count = tPtr->selection.count < 0
-		    ? tPtr->selection.position + tPtr->selection.count 
-		    : tPtr->selection.position;
+            count = tPtr->selection.count < 0
+                ? tPtr->selection.position + tPtr->selection.count
+                : tPtr->selection.position;
 
-		/*
-                rx = tx + WMWidthOfString(tPtr->font,
-					  &(tPtr->text[tPtr->viewPosition]),
-					  count)
-			- WMWidthOfString(tPtr->font,
-					tPtr->text,tPtr->viewPosition);
-					*/
-		rx = tPtr->offsetWidth + 1 + WMWidthOfString(tPtr->font,tPtr->text,count)
-			- WMWidthOfString(tPtr->font,tPtr->text,tPtr->viewPosition);
+            /*
+             rx = tx + WMWidthOfString(tPtr->font,
+             &(text[tPtr->viewPosition]),
+             count)
+             - WMWidthOfString(tPtr->font,
+             text,tPtr->viewPosition);
+             */
+            rx = tPtr->offsetWidth + 1 + WMWidthOfString(tPtr->font,text,count)
+                - WMWidthOfString(tPtr->font,text,tPtr->viewPosition);
 
-                XSetBackground(screen->display, screen->textFieldGC, 
-			       screen->gray->color.pixel);
+            XSetBackground(screen->display, screen->textFieldGC,
+                           screen->gray->color.pixel);
 
-		WMDrawImageString(screen, view->window, screen->textFieldGC,
-				  tPtr->font, rx, ty, &(tPtr->text[count]),
-				  abs(tPtr->selection.count));
+            WMDrawImageString(screen, view->window, screen->textFieldGC,
+                              tPtr->font, rx, ty, &(text[count]),
+                              abs(tPtr->selection.count));
 
-                XSetBackground(screen->display, screen->textFieldGC, 
-			       screen->white->color.pixel);
-            }
+            XSetBackground(screen->display, screen->textFieldGC,
+                           screen->white->color.pixel);
+        }
 
-	    if (!tPtr->flags.enabled)
-		WMSetColorInGC(screen->black, screen->textFieldGC);
-	}
+        if (!tPtr->flags.enabled)
+            WMSetColorInGC(screen->black, screen->textFieldGC);
     } else {
 	XClearArea(screen->display, view->window, bd, bd, totalWidth,
 		   view->size.height - 2*bd, False);
     }
 
     /* draw cursor */
-    if (tPtr->flags.focused && tPtr->flags.enabled && tPtr->flags.cursorOn
-	&& !tPtr->flags.secure) {
+    if (tPtr->flags.focused && tPtr->flags.enabled && tPtr->flags.cursorOn) {
 	paintCursor(tPtr);
     }
     
@@ -717,6 +741,9 @@ paintTextField(TextField *tPtr)
     if (tPtr->flags.bordered) {
 	drawRelief(view, tPtr->flags.beveled);
     }
+
+    if (tPtr->flags.secure)
+        free(text);
 }
 
 

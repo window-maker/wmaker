@@ -751,7 +751,7 @@ fi
 
 PACKAGE=WindowMaker
 
-VERSION=0.53.1
+VERSION=0.54.0
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
@@ -2987,7 +2987,7 @@ fi
 
 
 supported_locales="cs de es fr gl it ja ko nl no pt ru se tr fi hr el pl ro da zh_TW.Big5 zh_CN sk"
-supported_wprefs_locales="pt hr fr ko ja cs zh_TW.Big5 es zh_CN"
+supported_wprefs_locales="pt hr fr ko ja cs zh_TW.Big5 es zh_CN fi"
 
 for lang in $LINGUAS; do
 	ok=0
