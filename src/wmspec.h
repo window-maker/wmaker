@@ -25,6 +25,21 @@
 #ifndef _WMSPEC_H_
 #define _WMSPEC_H_
 
+#include <screen.h>
+#include <window.h>
+#include <X11/Xlib.h>
 
+void wNETWMInitStuff(WScreen *scr);
+void wNETWMUpdateWorkarea(WScreen *scr, WArea usableArea);
+Bool wNETWMGetUsableArea(WScreen *scr, int head, WArea *area);
+Bool wNETWMCheckInitialClientState(WWindow *wwin);
+Bool wNETWMProcessClientMessage(XClientMessageEvent *event);
+Bool wNETWMCheckClientHints(WWindow *wwin, int *layer, int *workspace);
+Bool wNETWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event);
+void wNETWMShowingDesktop(WScreen *scr, Bool show);
+void wNETWMUpdateActions(WWindow *wwin, Bool del);
+void wNETWMUpdateDesktop(WScreen *scr);
+void wNETWMPositionSplash(WWindow *wwin, int *x, int *y, int width, int height);
+int wNETWMGetPidForWindow(Window window);
 
 #endif

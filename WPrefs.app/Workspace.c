@@ -180,7 +180,7 @@ createPanel(Panel *p)
     WMResizeWidget(panel->cyclB, 280, 34);
     WMMoveWidget(panel->cyclB, 75, 30);
     WMSetButtonText(panel->cyclB,
-		   _("wrap to the first workspace after the\nlast workspace."));
+		   _("Wrap to the first workspace from the last workspace."));
 
     panel->cyclL = WMCreateLabel(panel->navF);
     WMResizeWidget(panel->cyclL, 60, 60);
@@ -202,7 +202,7 @@ createPanel(Panel *p)
     WMResizeWidget(panel->linkB, 280, 34);
     WMMoveWidget(panel->linkB, 75, 75);
     WMSetButtonText(panel->linkB,
-		   _("switch workspaces while dragging windows."));
+		   _("Switch workspaces while dragging windows."));
 
     panel->linkL = WMCreateLabel(panel->navF);
     WMResizeWidget(panel->linkL, 60, 40);
@@ -224,7 +224,7 @@ createPanel(Panel *p)
     WMResizeWidget(panel->newB, 280, 34);
     WMMoveWidget(panel->newB, 75, 120);
     WMSetButtonText(panel->newB,
-		   _("automatically create new workspaces."));
+		   _("Automatically create new workspaces."));
 
     panel->newL = WMCreateLabel(panel->navF);
     WMResizeWidget(panel->newL, 60, 20);

@@ -211,8 +211,6 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
 {
     WScreen *scr = wwin->screen_ptr;
     Window win;
-    int argc;
-    char **argv;
     int i;
     unsigned mask;
     char *class, *instance, *command=NULL, buffer[512];
@@ -225,10 +223,7 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
     else
         win = wwin->client_win;
 
-    if (XGetCommand(dpy, win, &argv, &argc) && argc>0) {
-        command = wtokenjoin(argv, argc);
-        XFreeStringList(argv);
-    }
+    command = GetCommandForWindow(win);
     if (!command)
         return NULL;
 
@@ -266,14 +261,14 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
 	shortcut = WMCreatePLString(buffer);
 
         win_state = WMCreatePLDictionary(sName, name,
-                                                sCommand, cmd,
-                                                sWorkspace, workspace,
-                                                sShaded, shaded,
-                                                sMiniaturized, miniaturized,
-                                                sHidden, hidden,
-						sShortcutMask, shortcut,
-                                                sGeometry, geometry,
-                                                NULL);
+                                         sCommand, cmd,
+                                         sWorkspace, workspace,
+                                         sShaded, shaded,
+                                         sMiniaturized, miniaturized,
+                                         sHidden, hidden,
+                                         sShortcutMask, shortcut,
+                                         sGeometry, geometry,
+                                         NULL);
 
         WMReleasePropList(name);
         WMReleasePropList(cmd);
@@ -321,7 +316,7 @@ wSessionSaveState(WScreen *scr)
     make_keys();
 
     if (!scr->session_state) {
-        scr->session_state = WMCreatePLDictionary(NULL, NULL, NULL);
+        scr->session_state = WMCreatePLDictionary(NULL, NULL);
         if (!scr->session_state)
             return;
     }
@@ -1072,9 +1067,9 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
     }
 
     plState = WMCreatePLDictionary(WMCreatePLString("Version"),
-                                          WMCreatePLString("1.0"),
-                                          WMCreatePLString("Screens"),
-                                          state, NULL);
+                                   WMCreatePLString("1.0"),
+                                   WMCreatePLString("Screens"),
+                                   state, NULL);
 
     WMWritePropListToFile(plState, statefile, False);
 

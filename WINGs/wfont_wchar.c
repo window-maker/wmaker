@@ -6,6 +6,14 @@
 #include <X11/Xft/Xft.h>
 #include <fontconfig/fontconfig.h>
 
+#if defined(HAVE_MBSNRTOWCS)
+# define __USE_GNU
+#endif
+
+#ifdef HAVE_WCHAR_H
+# include <wchar.h>
+#endif
+
 #include <stdlib.h>
 
 #include "WINGsP.h"
@@ -15,7 +23,130 @@
 #include <X11/Xlocale.h>
 
 
-#define DEFAULT_SIZE WINGsConfiguration.defaultFontSize
+// && defined(HAVE_MBSTATE_T___COUNT)
+// in configure.ac use AC_CHECK_MEMBER(struct mbstate_t.__count,
+//                                     have=1, have=0, [#include <wchar.h>])
+#if defined(HAVE_MBSNRTOWCS)
+
+static size_t
+wmbsnrtowcs(wchar_t *dest, const char **src, size_t nbytes, size_t len)
+{
+    mbstate_t ps;
+    size_t n;
+
+    memset(&ps, 0, sizeof(mbstate_t));
+    n = mbsnrtowcs(dest, src, nbytes, len, &ps);
+    if (n!=(size_t)-1 && *src) {
+        *src -= ps.__count;
+    }
+
+    return n;
+}
+
+#elif defined(HAVE_MBRTOWC)
+
+// This is 8 times slower than the version above.
+static size_t
+wmbsnrtowcs(wchar_t *dest, const char **src, size_t nbytes, size_t len)
+{
+    mbstate_t ps;
+    const char *ptr;
+    size_t n;
+    int nb;
+
+    if (nbytes==0)
+        return 0;
+
+    memset(&ps, 0, sizeof(mbstate_t));
+
+    if (dest == NULL) {
+        for (ptr=*src, n=0; nbytes>0; n++) {
+            nb = mbrtowc(NULL, ptr, nbytes, &ps);
+            if (nb == -1) {
+                return ((size_t)-1);
+            } else if (nb==0 || nb==-2) {
+                return n;
+            }
+            ptr += nb;
+            nbytes -= nb;
+        }
+    }
+
+    for (ptr=*src, n=0; n<len && nbytes>0; n++, dest++) {
+        nb = mbrtowc(dest, ptr, nbytes, &ps);
+        if (nb == -2) {
+            *src = ptr;
+            return n;
+        } else if (nb == -1) {
+            *src = ptr;
+            return ((size_t)-1);
+        } else if (nb == 0) {
+            *src = NULL;
+            return n;
+        }
+        ptr += nb;
+        nbytes -= nb;
+    }
+
+    *src = ptr;
+    return n;
+}
+
+#else
+
+// Not only 8 times slower than the version based on mbsnrtowcs
+// but also this version is not thread safe nor reentrant
+
+static size_t
+wmbsnrtowcs(wchar_t *dest, const char **src, size_t nbytes, size_t len)
+{
+    const char *ptr;
+    size_t n;
+    int nb;
+
+    if (nbytes==0)
+        return 0;
+
+    mbtowc(NULL, NULL, 0); /* reset shift state */
+
+    if (dest == NULL) {
+        for (ptr=*src, n=0; nbytes>0; n++) {
+            nb = mbtowc(NULL, ptr, nbytes);
+            if (nb == -1) {
+                mbtowc(NULL, NULL, 0);
+                nb = mbtowc(NULL, ptr, strlen(ptr));
+                return (nb == -1 ? (size_t)-1 : n);
+            } else if (nb==0) {
+                return n;
+            }
+            ptr += nb;
+            nbytes -= nb;
+        }
+    }
+
+    for (ptr=*src, n=0; n<len && nbytes>0; n++, dest++) {
+        nb = mbtowc(dest, ptr, nbytes);
+        if (nb == -1) {
+            mbtowc(NULL, NULL, 0);
+            nb = mbtowc(NULL, ptr, strlen(ptr));
+            *src = ptr;
+            return (nb == -1 ? (size_t)-1 : n);
+        } else if (nb == 0) {
+            *src = NULL;
+            return n;
+        }
+        ptr += nb;
+        nbytes -= nb;
+    }
+
+    *src = ptr;
+    return n;
+}
+
+#endif
+
+
+#define DEFAULT_SIZE 12
 
 static char*
 fixXLFD(char *xlfd, int size)
@@ -275,10 +406,37 @@ WMWidthOfString(WMFont *font, char *text, int length)
 {
     XGlyphInfo extents;
 
-    wassertrv(font!=NULL && text!=NULL, 0);
+    wassertrv(font!=NULL, 0);
+    wassertrv(text!=NULL, 0);
 
-    XftTextExtentsUtf8(font->screen->display, font->font,
-                       (XftChar8 *)text, length, &extents);
+    if (font->screen->useWideChar) {
+        wchar_t *wtext;
+        const char *mtext;
+        int len;
+
+        wtext = (wchar_t *)wmalloc(sizeof(wchar_t)*(length+1));
+        mtext = text;
+        len = wmbsnrtowcs(wtext, &mtext, length, length);
+        if (len>0) {
+            wtext[len] = L'\0'; /* not really necessary here */
+            XftTextExtents32(font->screen->display, font->font,
+                             (XftChar32 *)wtext, len, &extents);
+        } else {
+            if (len==-1) {
+                wwarning(_("Conversion to widechar failed (possible "
+                           "invalid multibyte sequence): '%s':(pos %d)\n"),
+                         text, mtext-text+1);
+            }
+            extents.xOff = 0;
+        }
+        wfree(wtext);
+    } else if (font->screen->useMultiByte) {
+        XftTextExtentsUtf8(font->screen->display, font->font,
+                           (XftChar8 *)text, length, &extents);
+    } else {
+        XftTextExtents8(font->screen->display, font->font,
+                        (XftChar8 *)text, length, &extents);
+    }
 
     return extents.xOff; /* don't ask :P */
 }
@@ -301,8 +459,34 @@ WMDrawString(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
 
     XftDrawChange(scr->xftdraw, d);
 
-    XftDrawStringUtf8(scr->xftdraw, &xftcolor, font->font,
-                      x, y + font->y, (XftChar8*)text, length);
+    if (font->screen->useWideChar) {
+        wchar_t *wtext;
+        const char *mtext;
+        int len;
+
+        wtext = (wchar_t *)wmalloc(sizeof(wchar_t)*(length+1));
+        mtext = text;
+        len = wmbsnrtowcs(wtext, &mtext, length, length);
+        if (len>0) {
+            XftDrawString32(scr->xftdraw, &xftcolor, font->font,
+                            x, y + font->y, (XftChar32*)wtext, len);
+        } else if (len==-1) {
+            wwarning(_("Conversion to widechar failed (possible invalid "
+                       "multibyte sequence): '%s':(pos %d)\n"),
+                     text, mtext-text+1);
+            /* we can draw normal text, or we can draw as much widechar
+             * text as was already converted until the error. go figure */
+            /*XftDrawString8(scr->xftdraw, &xftcolor, font->font,
+             x, y + font->y, (XftChar8*)text, length);*/
+        }
+        wfree(wtext);
+    } else if (font->screen->useMultiByte) {
+        XftDrawStringUtf8(scr->xftdraw, &xftcolor, font->font,
+                          x, y + font->y, (XftChar8*)text, length);
+    } else {
+        XftDrawString8(scr->xftdraw, &xftcolor, font->font,
+                       x, y + font->y, (XftChar8*)text, length);
+    }
 }
 
 
@@ -333,8 +517,34 @@ WMDrawImageString(WMScreen *scr, Drawable d, WMColor *color, WMColor *background
                 WMWidthOfString(font, text, length),
                 font->height);
 
-    XftDrawStringUtf8(scr->xftdraw, &textColor, font->font,
-                      x, y + font->y, (XftChar8*)text, length);
+    if (font->screen->useWideChar) {
+        wchar_t *wtext;
+        const char *mtext;
+        int len;
+
+        mtext = text;
+        wtext = (wchar_t *)wmalloc(sizeof(wchar_t)*(length+1));
+        len = wmbsnrtowcs(wtext, &mtext, length, length);
+        if (len>0) {
+            XftDrawString32(scr->xftdraw, &textColor, font->font,
+                            x, y + font->y, (XftChar32*)wtext, len);
+        } else if (len==-1) {
+            wwarning(_("Conversion to widechar failed (possible invalid "
+                       "multibyte sequence): '%s':(pos %d)\n"),
+                     text, mtext-text+1);
+            /* we can draw normal text, or we can draw as much widechar
+             * text as was already converted until the error. go figure */
+            /*XftDrawString8(scr->xftdraw, &textColor, font->font,
+             x, y + font->y, (XftChar8*)text, length);*/
+        }
+        wfree(wtext);
+    } else if (font->screen->useMultiByte) {
+        XftDrawStringUtf8(scr->xftdraw, &textColor, font->font,
+                          x, y + font->y, (XftChar8*)text, length);
+    } else {
+        XftDrawString8(scr->xftdraw, &textColor, font->font,
+                       x, y + font->y, (XftChar8*)text, length);
+    }
 }
 
 

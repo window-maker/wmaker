@@ -35,6 +35,7 @@
 #include "actions.h"
 #include "properties.h"
 #include "stacking.h"
+#include "workspace.h"
 
 
 /*** Global Variables ***/
@@ -152,6 +153,9 @@ CommitStacking(WScreen *scr)
     XRestackWindows(dpy, windows, i);
     wfree(windows);
 
+#ifdef VIRTUAL_DESKTOP
+    wWorkspaceRaiseEdge(scr);
+#endif
     
     WMPostNotificationName(WMNResetStacking, scr, NULL);
 }
@@ -376,6 +380,10 @@ wLowerFrame(WCoreWindow *frame)
     }
 
     notifyStackChange(frame, "lower");        
+    
+#ifdef VIRTUAL_DESKTOP
+    wWorkspaceRaiseEdge(scr);
+#endif
 }
 
 
@@ -510,6 +518,10 @@ MoveInStackListAbove(WCoreWindow *next, WCoreWindow *frame)
     }
 
     WMPostNotificationName(WMNResetStacking, scr, NULL);
+    
+#ifdef VIRTUAL_DESKTOP
+    wWorkspaceRaiseEdge(scr);
+#endif
 }
 
 

@@ -79,11 +79,21 @@
 #define WKBD_SWITCH_SCREEN      45
 
 #ifdef KEEP_XKB_LOCK_STATUS
-# define WKBD_TOGGLE            46
-# define WKBD_LAST              47
+# define WKBD_TOGGLE		46
+# define WKBD_TMP		47
 #else
-# define WKBD_LAST              46
-#endif /* KEEP_XKB_LOCK_STATUS */
+# define WKBD_TMP		46
+#endif
+
+#ifdef VIRTUAL_DESKTOP
+# define WKBD_VDESK_LEFT	WKBD_TMP
+# define WKBD_VDESK_RIGHT	(WKBD_TMP+1)
+# define WKBD_VDESK_UP		(WKBD_TMP+2)
+# define WKBD_VDESK_DOWN	(WKBD_TMP+3)
+# define WKBD_LAST		(WKBD_TMP+4)
+#else
+# define WKBD_LAST		WKBD_TMP
+#endif /* VIRTUAL_DESKTOP */
 
 
 typedef struct WShortKey {

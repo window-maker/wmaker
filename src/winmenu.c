@@ -586,10 +586,10 @@ updateMenuForWindow(WMenu *menu, WWindow *wwin)
 
 	menu->entries[MC_MAXIMIZE]->text = text;
     }
-    wMenuSetEnabled(menu, MC_MAXIMIZE, !WFLAGP(wwin, no_resizable));
+    wMenuSetEnabled(menu, MC_MAXIMIZE, IS_RESIZABLE(wwin));
 
 
-    wMenuSetEnabled(menu, MC_MOVERESIZE, !WFLAGP(wwin, no_resizable) 
+    wMenuSetEnabled(menu, MC_MOVERESIZE, IS_RESIZABLE(wwin) 
 		    && !wwin->flags.miniaturized);
 
     if (wwin->flags.shaded) {

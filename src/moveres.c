@@ -66,7 +66,7 @@
 /* True if window currently has a border. This also includes borderless
  * windows which are currently selected
  */
-#define HAS_BORDER(w) ((w)->flags.selected || !WFLAGP((w), no_border))
+#define HAS_BORDER_WITH_SELECT(w) ((w)->flags.selected || HAS_BORDER(w))
 
 
 /****** Global Variables ******/
@@ -236,8 +236,7 @@ mapPositionDisplay(WWindow *wwin, int x, int y, int w, int h)
         return;
     } else if (wPreferences.move_display == WDIS_CENTER) {
         rect = wGetRectForHead(scr, wGetHeadForWindow(wwin));
-        moveGeometryDisplayCentered(scr,
-                                    rect.pos.x + rect.size.width/2,
+        moveGeometryDisplayCentered(scr, rect.pos.x + rect.size.width/2,
                                     rect.pos.y + rect.size.height/2);
     } else if (wPreferences.move_display == WDIS_TOPLEFT) {
         rect = wGetRectForHead(scr, wGetHeadForWindow(wwin));
@@ -265,7 +264,7 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
      * x2-1 everywhere below in the code). But why only for x? */
     x1--; x2--;
 
-    if (HAS_BORDER(wwin)) {
+    if (HAS_BORDER_WITH_SELECT(wwin)) {
         x1 += FRAME_BORDER_WIDTH;
         x2 += FRAME_BORDER_WIDTH;
         y1 += FRAME_BORDER_WIDTH;
@@ -407,8 +406,7 @@ cycleGeometryDisplay(WWindow *wwin, int x, int y, int w, int h, int dir)
     } else {
         if (wPreferences.size_display == WDIS_CENTER) {
             rect = wGetRectForHead(scr, wGetHeadForWindow(wwin));
-            moveGeometryDisplayCentered(scr,
-                                        rect.pos.x + rect.size.width/2,
+            moveGeometryDisplayCentered(scr, rect.pos.x + rect.size.width/2,
                                         rect.pos.y + rect.size.height/2);
         } else if (wPreferences.size_display == WDIS_TOPLEFT) {
             rect = wGetRectForHead(scr, wGetHeadForWindow(wwin));
@@ -434,8 +432,7 @@ mapGeometryDisplay(WWindow *wwin, int x, int y, int w, int h)
 
     if (wPreferences.size_display == WDIS_CENTER) {
         rect = wGetRectForHead(scr, wGetHeadForWindow(wwin));
-        moveGeometryDisplayCentered(scr,
-                                    rect.pos.x + rect.size.width/2,
+        moveGeometryDisplayCentered(scr, rect.pos.x + rect.size.width/2,
                                     rect.pos.y + rect.size.height/2);
     } else if (wPreferences.size_display == WDIS_TOPLEFT) {
         rect = wGetRectForHead(scr, wGetHeadForWindow(wwin));
@@ -497,15 +494,15 @@ drawTransparentFrame(WWindow *wwin, int x, int y, int width, int height)
     int h = 0;
     int bottom = 0;
 
-    if (HAS_BORDER(wwin)) {
+    if (HAS_BORDER_WITH_SELECT(wwin)) {
         x += FRAME_BORDER_WIDTH;
         y += FRAME_BORDER_WIDTH;
     }
 
-    if (!WFLAGP(wwin, no_titlebar) && !wwin->flags.shaded) {
+    if (HAS_TITLEBAR(wwin) && !wwin->flags.shaded) {
         h = WMFontHeight(wwin->screen_ptr->title_font) + (wPreferences.window_title_clearance + TITLEBAR_EXTEND_SPACE) * 2;
     }
-    if (!WFLAGP(wwin, no_resizebar) && !wwin->flags.shaded) {
+    if (HAS_RESIZEBAR(wwin) && !wwin->flags.shaded) {
         /* Can't use wwin-frame->bottom_width because, in some cases
          (e.g. interactive placement), frame does not point to anything. */
         bottom = RESIZEBAR_HEIGHT;
@@ -640,9 +637,9 @@ typedef struct {
 #define WTOP(w) (w)->frame_y
 #define WLEFT(w) (w)->frame_x
 #define WRIGHT(w) ((w)->frame_x + (int)(w)->frame->core->width - 1 + \
-    (HAS_BORDER(w) ? 2*FRAME_BORDER_WIDTH : 0))
+    (HAS_BORDER_WITH_SELECT(w) ? 2*FRAME_BORDER_WIDTH : 0))
 #define WBOTTOM(w) ((w)->frame_y + (int)(w)->frame->core->height - 1 + \
-    (HAS_BORDER(w) ? 2*FRAME_BORDER_WIDTH : 0))
+    (HAS_BORDER_WITH_SELECT(w) ? 2*FRAME_BORDER_WIDTH : 0))
 
 static int
 compareWTop(const void *a, const void *b)
@@ -900,9 +897,9 @@ initMoveData(WWindow *wwin, MoveData *data)
     data->calcY = wwin->frame_y;
 
     data->winWidth = wwin->frame->core->width +
-        (HAS_BORDER(wwin) ? 2*FRAME_BORDER_WIDTH : 0);
+        (HAS_BORDER_WITH_SELECT(wwin) ? 2*FRAME_BORDER_WIDTH : 0);
     data->winHeight = wwin->frame->core->height +
-        (HAS_BORDER(wwin) ? 2*FRAME_BORDER_WIDTH : 0);
+        (HAS_BORDER_WITH_SELECT(wwin) ? 2*FRAME_BORDER_WIDTH : 0);
 }
 
 
@@ -1293,6 +1290,9 @@ updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
 
 #define _KS KEY_CONTROL_WINDOW_WEIGHT
 
+#define MOVABLE_BIT	0x01
+#define RESIZABLE_BIT	0x02
+
 int
 wKeyboardMoveResizeWindow(WWindow *wwin)
 {
@@ -1309,14 +1309,23 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
     int done,off_x,off_y,ww,wh;
     int kspeed = _KS;
     Time lastTime = 0;
+    KeyCode shiftl, shiftr, ctrll, ctrlmode;
     KeySym keysym=NoSymbol;
     int moment=0;
-    KeyCode shiftl,shiftr,ctrll,ctrlmode;
+    int modes = ((IS_MOVABLE(wwin)   ? MOVABLE_BIT   : 0) |
+                 (IS_RESIZABLE(wwin) ? RESIZABLE_BIT : 0));
+    int head = ((wPreferences.auto_arrange_icons && wXineramaHeads(scr)>1)
+                ? wGetHeadForWindow(wwin)
+                : scr->xine_info.primary_head);
 
     shiftl = XKeysymToKeycode(dpy, XK_Shift_L);
     shiftr = XKeysymToKeycode(dpy, XK_Shift_R);
     ctrll = XKeysymToKeycode(dpy, XK_Control_L);
     ctrlmode=done=off_x=off_y=0;
+
+    if (modes == RESIZABLE_BIT) {
+	ctrlmode = 1;
+    }
 
     XSync(dpy, False);
     wusleep(10000);
@@ -1383,14 +1392,15 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
             }
             if (kspeed < _KS) kspeed = _KS;
             lastTime = event.xkey.time;
-
-            if (event.xkey.state & ControlMask && !wwin->flags.shaded) {
-                ctrlmode=1;
-                wUnselectWindows(scr);
-            }
-            else {
-                ctrlmode=0;
-            }
+	    if (modes == (MOVABLE_BIT|RESIZABLE_BIT)) {
+		if ((event.xkey.state & ControlMask) && !wwin->flags.shaded) {
+		    ctrlmode=1;
+		    wUnselectWindows(scr);
+		}
+		else {
+		    ctrlmode=0;
+		}
+	    }
             if (event.xkey.keycode == shiftl || event.xkey.keycode == shiftr) {
                 if (ctrlmode)
                     cycleGeometryDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh, 0);
@@ -1544,7 +1554,7 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
             showGeometry(wwin, src_x+off_x, src_y+off_y, src_x+off_x+ww, src_y+off_y+wh,0);
         } else if(!scr->selected_windows)
             showPosition(wwin, src_x+off_x, src_y+off_y);
-        /**/
+       
 
         if (done) {
             scr->keymove_tick=0;
@@ -1599,6 +1609,17 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
                 wWindowChangeWorkspace(wwin, scr->current_workspace);
                 wSetFocusTo(scr, wwin);
             }
+
+	    if (wPreferences.auto_arrange_icons && wXineramaHeads(scr)>1 &&
+                head != wGetHeadForWindow(wwin)) {
+                wArrangeIcons(scr, True);
+            }
+
+
+#if defined(NETWM_HINTS) && defined(VIRTUAL_DESKTOP)
+	    wWorkspaceResizeViewPort(scr, scr->current_workspace);
+#endif
+
             return 1;
         }
     }
@@ -1638,12 +1659,15 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
     /* This needs not to change while moving, else bad things can happen */
     int opaqueMove = wPreferences.opaque_move;
     MoveData moveData;
+    int head = ((wPreferences.auto_arrange_icons && wXineramaHeads(scr) > 1)
+                ? wGetHeadForWindow(wwin)
+                : scr->xine_info.primary_head);
 #ifdef GHOST_WINDOW_MOVE
-    RImage *rimg;
-
-    rimg = InitGhostWindowMove(scr);
+    RImage *rimg = InitGhostWindowMove(scr);
 #endif
 
+    if (!IS_MOVABLE(wwin))
+        return False;
 
     if (wPreferences.opaque_move && !wPreferences.use_saveunders) {
         XSetWindowAttributes attr;
@@ -1873,7 +1897,6 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
     if (wPreferences.opaque_move && !wPreferences.use_saveunders) {
         XSetWindowAttributes attr;
 
-
         attr.save_under = False;
         XChangeWindowAttributes(dpy, wwin->frame->core->window,
                                 CWSaveUnder, &attr);
@@ -1881,6 +1904,16 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
     }
 
     freeMoveData(&moveData);
+
+    if (started && wPreferences.auto_arrange_icons && wXineramaHeads(scr)>1 &&
+        head != wGetHeadForWindow(wwin)) {
+        wArrangeIcons(scr, True);
+    }
+
+#if defined(NETWM_HINTS) && defined(VIRTUAL_DESKTOP)
+    if (started)
+	wWorkspaceResizeViewPort(scr, scr->current_workspace);
+#endif
 
     return started;
 }
@@ -1964,6 +1997,12 @@ wMouseResizeWindow(WWindow *wwin, XEvent *ev)
     int orig_fy = fy;
     int orig_fw = fw;
     int orig_fh = fh;
+    int head = ((wPreferences.auto_arrange_icons && wXineramaHeads(scr)>1)
+                ? wGetHeadForWindow(wwin)
+                : scr->xine_info.primary_head);
+
+    if (!IS_RESIZABLE(wwin))
+        return;
 
     if (wwin->flags.shaded) {
         wwarning("internal error: tryein");
@@ -1984,7 +2023,7 @@ wMouseResizeWindow(WWindow *wwin, XEvent *ev)
     ry2 = fy + fh - 1;
     shiftl = XKeysymToKeycode(dpy, XK_Shift_L);
     shiftr = XKeysymToKeycode(dpy, XK_Shift_R);
-    if (!WFLAGP(wwin, no_titlebar))
+    if (HAS_TITLEBAR(wwin))
         h = WMFontHeight(wwin->screen_ptr->title_font) + (wPreferences.window_title_clearance + TITLEBAR_EXTEND_SPACE) * 2;
     else
         h = 0;
@@ -2165,6 +2204,15 @@ wMouseResizeWindow(WWindow *wwin, XEvent *ev)
             WMHandleEvent(&event);
         }
     }
+
+    if (wPreferences.auto_arrange_icons && wXineramaHeads(scr) > 1 &&
+        head != wGetHeadForWindow(wwin)) {
+        wArrangeIcons(scr, True);
+    }
+
+#if defined(NETWM_HINTS) && defined(VIRTUAL_DESKTOP)
+    wWorkspaceResizeViewPort(scr, scr->current_workspace);
+#endif
 }
 
 #undef LEFT
@@ -2316,11 +2364,11 @@ InteractivePlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
         *y_ret = 0;
         return;
     }
-    if (!WFLAGP(wwin, no_titlebar)) {
+    if (HAS_TITLEBAR(wwin)) {
         h = WMFontHeight(scr->title_font) + (wPreferences.window_title_clearance + TITLEBAR_EXTEND_SPACE) * 2;
         height += h;
     }
-    if (!WFLAGP(wwin, no_resizebar)) {
+    if (HAS_RESIZEBAR(wwin)) {
         height += RESIZEBAR_HEIGHT;
     }
     XGrabKeyboard(dpy, root, False, GrabModeAsync, GrabModeAsync, CurrentTime);

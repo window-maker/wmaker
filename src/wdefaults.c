@@ -500,7 +500,7 @@ wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file)
     int same = 0;
 
     if (!dict) {
-        dict = WMCreatePLDictionary(NULL, NULL, NULL);
+        dict = WMCreatePLDictionary(NULL, NULL);
         if (dict) {
             db->dictionary = dict;
         } else {

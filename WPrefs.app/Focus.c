@@ -219,7 +219,7 @@ createPanel(Panel *p)
 	WMSetBoxHorizontal(box, False);
 	
 	panel->kfocB[0] = WMCreateRadioButton(box);
-	WMSetButtonText(panel->kfocB[0], _("Manual:  Click on the window to set "\
+        WMSetButtonText(panel->kfocB[0], _("Manual:  Click on the window to set "\
 			"keyboard input focus"));
 	WMAddBoxSubview(box, WMWidgetView(panel->kfocB[0]), True, True,
 			20, 0, 0);
@@ -243,13 +243,13 @@ createPanel(Panel *p)
     WMSetFrameTitle(panel->cfocF, _("Install colormap in the window..."));
 
     panel->manB = WMCreateRadioButton(panel->cfocF);
-    WMResizeWidget(panel->manB, 220, 20);
-    WMMoveWidget(panel->manB, 15, 18);
+    WMResizeWidget(panel->manB, 225, 20);
+    WMMoveWidget(panel->manB, 10, 18);
     WMSetButtonText(panel->manB, _("...that has the input focus."));
 
     panel->autB = WMCreateRadioButton(panel->cfocF);
-    WMResizeWidget(panel->autB, 220, 20);
-    WMMoveWidget(panel->autB, 15, 40);
+    WMResizeWidget(panel->autB, 225, 20);
+    WMMoveWidget(panel->autB, 10, 43);
     WMSetButtonText(panel->autB, _("...that is under the mouse pointer."));
     WMGroupButtons(panel->manB, panel->autB);
     
@@ -331,15 +331,15 @@ createPanel(Panel *p)
     WMMoveWidget(panel->optF, 265, 95);
     
     panel->ignB = WMCreateSwitchButton(panel->optF);
-    WMResizeWidget(panel->ignB, 210, 50);
-    WMMoveWidget(panel->ignB, 15, 10);
-    WMSetButtonText(panel->ignB, _("Do not let applications receive\n"
-			    	"the click used to focus windows."));
+    WMResizeWidget(panel->ignB, 225, 50);
+    WMMoveWidget(panel->ignB, 10, 10);
+    WMSetButtonText(panel->ignB, _("Do not let applications receive "
+                                   "the click used to focus windows."));
 
     panel->newB = WMCreateSwitchButton(panel->optF);
-    WMResizeWidget(panel->newB, 210, 35);
-    WMMoveWidget(panel->newB, 15, 70);
-    WMSetButtonText(panel->newB, _("Automatically focus new\nwindows."));
+    WMResizeWidget(panel->newB, 225, 35);
+    WMMoveWidget(panel->newB, 10, 70);
+    WMSetButtonText(panel->newB, _("Automatically focus new windows."));
 
     WMMapSubwidgets(panel->optF);
 

@@ -62,6 +62,9 @@
 #ifdef OLWM_HINTS
 # include "openlook.h"
 #endif
+#ifdef NETWM_HINTS
+# include "wmspec.h"
+#endif
 
 #include "xinerama.h"
 
@@ -787,6 +790,10 @@ wScreenInit(int screen_number)
     wOLWMInitStuff(scr);
 #endif
 
+#ifdef NETWM_HINTS
+    wNETWMInitStuff(scr);
+#endif
+
     /* create initial workspace */
     wWorkspaceNew(scr);
 
@@ -1014,10 +1021,21 @@ wScreenUpdateUsableArea(WScreen *scr)
 	}
     }
 
+#ifdef NETWM_HINTS
+    {
+	WArea area;
+	if (wNETWMGetUsableArea(scr, &area)) {
+	    scr->totalUsableArea.x1 = WMAX(scr->totalUsableArea.x1, area.x1);
+	    scr->totalUsableArea.y1 = WMAX(scr->totalUsableArea.y1, area.y1);
+	    scr->totalUsableArea.x2 = WMIN(scr->totalUsableArea.x2, area.x2);
+	    scr->totalUsableArea.y2 = WMIN(scr->totalUsableArea.y2, area.y2);
+	}
+    }
+#endif
+
 #ifdef KWM_HINTS
     {
 	WArea area;
-
 	if (wKWMGetUsableArea(scr, &area)) {
 	    scr->totalUsableArea.x1 = WMAX(scr->totalUsableArea.x1, area.x1);
 	    scr->totalUsableArea.y1 = WMAX(scr->totalUsableArea.y1, area.y1);
@@ -1094,6 +1112,10 @@ wScreenUpdateUsableArea(WScreen *scr)
 #endif
 #endif
 
+#ifdef NETWM_HINTS
+    wNETWMUpdateWorkarea(scr);
+#endif
+
     {
         unsigned size = wPreferences.workspace_border_size;
         unsigned position = wPreferences.workspace_border_position;
@@ -1146,7 +1168,16 @@ wScreenRestoreState(WScreen *scr)
 	wfree(path);
     }
 
-    if (!wPreferences.flags.noclip && scr->session_state) {
+    if (!scr->session_state) {
+        scr->session_state = WMCreatePLDictionary(NULL, NULL);
+    }
+
+    if (!wPreferences.flags.nodock) {
+        state = WMGetFromPLDictionary(scr->session_state, dDock);
+        scr->dock = wDockRestoreState(scr, state, WM_DOCK);
+    }
+
+    if (!wPreferences.flags.noclip) {
         state = WMGetFromPLDictionary(scr->session_state, dClip);
         scr->clip_icon = wClipRestoreState(scr, state);
     }
@@ -1154,16 +1185,9 @@ wScreenRestoreState(WScreen *scr)
     wWorkspaceRestoreState(scr);
 
 #ifdef VIRTUAL_DESKTOP
-        /*
-         *      * create inputonly windows at the border of screen
-         *           */
-        wWorkspaceManageEdge(scr);
+    /* create inputonly windows at the border of screen */
+    wWorkspaceManageEdge(scr);
 #endif
-
-    if (!wPreferences.flags.nodock && scr->session_state) {
-        state = WMGetFromPLDictionary(scr->session_state, dDock);
-        scr->dock = wDockRestoreState(scr, state, WM_DOCK);
-    }
 
     wScreenUpdateUsableArea(scr);
 }
@@ -1201,7 +1225,7 @@ wScreenSaveState(WScreen *scr)
 
 
     old_state = scr->session_state;
-    scr->session_state = WMCreatePLDictionary(NULL, NULL, NULL);
+    scr->session_state = WMCreatePLDictionary(NULL, NULL);
 
     WMPLSetCaseSensitive(True);
 
@@ -1239,9 +1263,9 @@ wScreenSaveState(WScreen *scr)
 
     wMenuSaveState(scr);
 
-    if (wScreenCount == 1)
+    if (wScreenCount == 1) {
 	str = wdefaultspathfordomain("WMState");
-    else {
+    } else {
 	char buf[16];
 	snprintf(buf, sizeof(buf), "WMState.%i", scr->screen);
 	str = wdefaultspathfordomain(buf);

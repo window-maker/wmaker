@@ -678,7 +678,8 @@ image2StandardPseudoColor(RContext *ctx, RImage *image)
 	int x1, ofs;
 
 #ifdef DEBUG
-        printf("pseudo color dithering with %d colors per channel\n", cpc);
+        printf("pseudo color dithering with %d colors per channel\n",
+               ctx->attribs->colors_per_channel);
 #endif
 	err = (short*)malloc(3*(image->width+2)*sizeof(short));
 	nerr = (short*)malloc(3*(image->width+2)*sizeof(short));

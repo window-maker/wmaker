@@ -77,10 +77,8 @@ typedef struct _WScreen {
     int scr_height;
 
 #ifdef VIRTUAL_DESKTOP
-    Window virtual_edge_u;
-    Window virtual_edge_d;
-    Window virtual_edge_l;
-    Window virtual_edge_r;
+    int virtual_nr_edges;
+    Window * virtual_edges;
 #endif
 
     Window root_win;		       /* root window of screen */
@@ -328,6 +326,7 @@ typedef struct _WScreen {
 	unsigned int colormap_stuff_blocked:1;
 	unsigned int doing_alt_tab:1;
 	unsigned int jump_back_pending:1;
+        unsigned int ignore_focus_events:1;
 #ifdef KWM_HINTS
 	unsigned int kwm_syncing_name:1;
 	unsigned int kwm_syncing_count:1;

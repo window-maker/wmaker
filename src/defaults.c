@@ -155,6 +155,9 @@ static int setUTitleBack();
 static int setResizebarBack();
 static int setWorkspaceBack();
 static int setWorkspaceSpecificBack();
+#ifdef VIRTUAL_DESKTOP
+static int setVirtualEdgeThickness();
+#endif
 static int setMenuTitleColor();
 static int setMenuTextColor();
 static int setMenuDisabledColor();
@@ -436,22 +439,34 @@ WDefaultEntry optionList[] = {
     },
 #ifdef VIRTUAL_DESKTOP
     {"VirtualEdgeThickness", "1",   NULL,
-    &wPreferences.vedge_thickness, getInt,        NULL
+    &wPreferences.vedge_thickness, getInt,        setVirtualEdgeThickness
     },
     {"VirtualEdgeExtendSpace", "0",   NULL,
     &wPreferences.vedge_bordersize, getInt,        NULL
     },
-    {"VirtualEdgeHorizonScrollSpeed", "1",  NULL,
+    {"VirtualEdgeHorizonScrollSpeed", "30",  NULL,
     &wPreferences.vedge_hscrollspeed, getInt,     NULL
     },
-    {"VirtualEdgeVerticalScrollSpeed", "1", NULL,
+    {"VirtualEdgeVerticalScrollSpeed", "30", NULL,
     &wPreferences.vedge_vscrollspeed, getInt,     NULL
     },
-    {"VirtualEdgeMaximumWidth", "3000",    NULL,
-    &wPreferences.vedge_maxwidth, getInt,        NULL
+    {"VirtualEdgeResistance", "30", NULL,
+    &wPreferences.vedge_resistance, getInt,     NULL
     },
-    {"VirtualEdgeMaximumHeight", "3000",   NULL,
-    &wPreferences.vedge_maxheight, getInt,       NULL
+    {"VirtualEdgeAttraction", "30", NULL,
+    &wPreferences.vedge_attraction, getInt,     NULL
+    },
+    {"VirtualEdgeLeftKey", "None",		    (void*)WKBD_VDESK_LEFT,
+    NULL,				getKeybind,	setKeyGrab
+    },
+    {"VirtualEdgeRightKey", "None",		    (void*)WKBD_VDESK_RIGHT,
+    NULL,				getKeybind,	setKeyGrab
+    },
+    {"VirtualEdgeUpKey", "None",		    (void*)WKBD_VDESK_UP,
+    NULL,				getKeybind,	setKeyGrab
+    },
+    {"VirtualEdgeDownKey", "None",		    (void*)WKBD_VDESK_DOWN,
+    NULL,				getKeybind,	setKeyGrab
     },
 #endif
     {"StickyIcons", "NO",			NULL,
@@ -3350,6 +3365,16 @@ setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, WMPropList *value,
 
     return 0;
 }
+
+
+#ifdef VIRTUAL_DESKTOP
+static int
+setVirtualEdgeThickness(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
+{
+    wWorkspaceUpdateEdge(scr);
+    return 0;
+}
+#endif
 
 
 static int

@@ -21,7 +21,8 @@ int MoveCount;
 int WinSize = 120;
 
 
-Bool CheckWin(void)
+Bool
+CheckWin(void)
 {
     int i;
  
@@ -34,15 +35,17 @@ Bool CheckWin(void)
 }
 
 
-void MoveButton(int button, int x, int y)
+void
+MoveButton(int button, int x, int y)
 {
     WMMoveWidget(Button[button], x*(WinSize/Size), y*(WinSize/Size));
 }
 
 
-Bool SlideButton(int button)
+Bool
+SlideButton(int button)
 {
-    int x, y, done = 0;
+    int x=0, y=0, done = 0;
     
     /* locate the button */
     for (y = 0; y < Size; y++) {

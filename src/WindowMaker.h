@@ -70,6 +70,7 @@ enum {
 	WMSubmenuLevel = 6,
 	WMMainMenuLevel = 20,
 	WMStatusLevel = 21,
+	WMFullscreenLevel = 50,
 	WMModalLevel = 100,
 	WMPopUpLevel = 101,
 	WMScreensaverLevel = 1000,
@@ -118,40 +119,41 @@ typedef enum {
 #define WBUT_ICONIFY            2
 #define WBUT_KILL		3
 #ifdef XKB_BUTTON_HINT
-#define WBUT_XKBGROUP1      4
-#define WBUT_XKBGROUP2      5
-#define WBUT_XKBGROUP3      6
-#define WBUT_XKBGROUP4      7
+#define WBUT_XKBGROUP1		4
+#define WBUT_XKBGROUP2		5
+#define WBUT_XKBGROUP3		6
+#define WBUT_XKBGROUP4		7
 #define PRED_BPIXMAPS		8 /* reserved for 4 groups */
 #else
 #define PRED_BPIXMAPS		4 /* count of WBUT icons */
 #endif /* XKB_BUTTON_HINT */
 
 /* cursors */
-#define WCUR_DEFAULT    0
-#define WCUR_NORMAL 	0
-#define WCUR_MOVE	1
-#define WCUR_RESIZE	2
+#define WCUR_DEFAULT		0
+#define WCUR_NORMAL		0
+#define WCUR_MOVE		1
+#define WCUR_RESIZE		2
 #define WCUR_TOPLEFTRESIZE	3
 #define WCUR_TOPRIGHTRESIZE	4
 #define WCUR_BOTTOMLEFTRESIZE	5
 #define WCUR_BOTTOMRIGHTRESIZE	6
-#define WCUR_VERTICALRESIZE 7
-#define WCUR_HORIZONRESIZE 8
-#define WCUR_WAIT	9
-#define WCUR_ARROW	10
-#define WCUR_QUESTION	11
-#define WCUR_TEXT	12
-#define WCUR_SELECT	13
-#define WCUR_ROOT	14
-#define WCUR_LAST   15
+#define WCUR_VERTICALRESIZE	7
+#define WCUR_HORIZONRESIZE	8
+#define WCUR_WAIT		9
+#define WCUR_ARROW		10
+#define WCUR_QUESTION		11
+#define WCUR_TEXT		12
+#define WCUR_SELECT		13
+#define WCUR_ROOT		14
+#define WCUR_EMPTY		15
+#define WCUR_LAST		16
 
 /* geometry displays */
-#define WDIS_NEW	0	       /* new style */
-#define WDIS_CENTER	1	       /* center of screen */
-#define WDIS_TOPLEFT	2	       /* top left corner of screen */
-#define WDIS_FRAME_CENTER 3	       /* center of the frame */
-#define WDIS_NONE       4
+#define WDIS_NEW		0	/* new style */
+#define WDIS_CENTER		1	/* center of screen */
+#define WDIS_TOPLEFT		2	/* top left corner of screen */
+#define WDIS_FRAME_CENTER	3	/* center of the frame */
+#define WDIS_NONE		4
 
 /* keyboard input focus mode */
 #define WKF_CLICK	0
@@ -181,10 +183,10 @@ typedef enum {
 #define WIS_RANDOM	4 /* secret */
 
 /* switchmenu actions */
-#define ACTION_ADD	0
-#define ACTION_REMOVE	1
-#define ACTION_CHANGE	2
-#define ACTION_CHANGE_WORKSPACE 3
+#define ACTION_ADD		0
+#define ACTION_REMOVE		1
+#define ACTION_CHANGE		2
+#define ACTION_CHANGE_WORKSPACE	3
 #define ACTION_CHANGE_STATE	4
 
 
@@ -202,8 +204,8 @@ typedef enum {
 #define WS_PFOCUSED	2
 
 /* clip title colors */
-#define CLIP_NORMAL    0
-#define CLIP_COLLAPSED 1
+#define CLIP_NORMAL	0
+#define CLIP_COLLAPSED	1
 
 
 /* icon yard position */
@@ -420,8 +422,8 @@ typedef struct WPreferences {
     unsigned int vedge_bordersize;
     unsigned int vedge_hscrollspeed;
     unsigned int vedge_vscrollspeed;
-    unsigned int vedge_maxheight;
-    unsigned int vedge_maxwidth;
+    unsigned int vedge_resistance;
+    unsigned int vedge_attraction;
 #endif
 
     char ws_cycle;                     /* Cycle existing workspaces */

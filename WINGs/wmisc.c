@@ -30,26 +30,26 @@ W_DrawReliefWithGC(W_Screen *scr, Drawable d, int x, int y, unsigned int width,
      case WRSimple:
 	XDrawRectangle(dpy, d, black, x, y, width-1, height-1);
 	return;
-	
+
      case WRRaised:
 	bgc = black;
 	dgc = dark;
 	wgc = white;
 	lgc = light;
 	break;
-	
+
      case WRSunken:
 	wgc = dark;
 	lgc = black;
 	bgc = white;
 	dgc = light;
 	break;
-	
+
      case WRPushed:
 	lgc = wgc = black;
 	dgc = bgc = white;
 	break;
-	
+
      case WRRidge:
 	lgc = bgc = dark;
 	dgc = wgc = white;
@@ -59,7 +59,7 @@ W_DrawReliefWithGC(W_Screen *scr, Drawable d, int x, int y, unsigned int width,
 	wgc = dgc = dark;
 	lgc = bgc = white;
 	break;
-	
+
      default:
 	return;
     }
@@ -68,12 +68,12 @@ W_DrawReliefWithGC(W_Screen *scr, Drawable d, int x, int y, unsigned int width,
     if (width > 2 && relief != WRRaised && relief!=WRPushed) {
 	XDrawLine(dpy, d, lgc, x+1, y+1, x+width-3, y+1);
     }
-    
+
     XDrawLine(dpy, d, wgc, x, y, x, y+height-1);
     if (height > 2 && relief != WRRaised && relief!=WRPushed) {
 	XDrawLine(dpy, d, lgc, x+1, y+1, x+1, y+height-3);
     }
-    
+
     /* bottom right */
     XDrawLine(dpy, d, bgc, x, y+height-1, x+width-1, y+height-1);
     if (width > 2 && relief!=WRPushed) {
@@ -87,22 +87,82 @@ W_DrawReliefWithGC(W_Screen *scr, Drawable d, int x, int y, unsigned int width,
 }
 
 
+static int
+findNextWord(char *text, int limit)
+{
+    int pos, len;
+
+    len = strcspn(text, " \t\n\r");
+    pos = len + strspn(text+len, " \t\n\r");
+    if (pos > limit)
+        pos = limit;
+
+    return pos;
+}
 
 
 static int
 fitText(char *text, WMFont *font, int width, int wrap)
 {
+    int i, w, beforecrlf, word1, word2;
+
+    /* text length before first cr/lf */
+    beforecrlf = strcspn(text, "\n\r");
+
+    if (!wrap || beforecrlf==0)
+        return beforecrlf;
+
+    w = WMWidthOfString(font, text, beforecrlf);
+    if (w <= width) {
+        /* text up to first crlf fits */
+        return beforecrlf;
+    }
+
+    word1 = 0;
+    while (1) {
+        word2 = word1 + findNextWord(text+word1, beforecrlf-word1);
+        if (word2 >= beforecrlf)
+            break;
+        w = WMWidthOfString(font, text, word2);
+        if (w > width)
+            break;
+        word1 = word2;
+    }
+
+    for (i=word1; i<word2; i++) {
+        w = WMWidthOfString(font, text, i);
+        if (w > width) {
+            break;
+        }
+    }
+
+    /* keep words complete if possible */
+    if (!isspace(text[i]) && word1>0) {
+        i = word1;
+    } else if (isspace(text[i]) && i<beforecrlf) {
+        /* keep space on current row, so new row has next word in column 1 */
+        i++;
+    }
+
+    return i;
+}
+
+
+#ifdef OLD_CODE
+static int
+fitText(char *text, WMFont *font, int width, int wrap)
+{
     int i, j;
     int w;
-    
+
     if (text[0]==0)
 	return 0;
-    
+
     i = 0;
     if (wrap) {
 	if (text[0]=='\n')
 	    return 0;
-	
+
 	do {
 	    i++;
 	    w = WMWidthOfString(font, text, i);
@@ -110,7 +170,7 @@ fitText(char *text, WMFont *font, int width, int wrap)
 
 	if (text[i]=='\n')
 	    return i;
-	
+
 	/* keep words complete */
 	if (!isspace(text[i])) {
 	    j = i;
@@ -120,11 +180,11 @@ fitText(char *text, WMFont *font, int width, int wrap)
 		i = j;
 	}
     } else {
-	while (text[i]!='\n' && text[i]!=0)
-	    i++;
+        i = strcspn(text, "\n\r");
     }
     return i;
 }
+#endif
 
 
 int
@@ -203,7 +263,7 @@ W_PaintTextAndImage(W_View *view, int wrap, WMColor *textColor, W_Font *font,
 
 
 #ifdef DOUBLE_BUFFER
-    d = XCreatePixmap(screen->display, view->window, 
+    d = XCreatePixmap(screen->display, view->window,
 		      view->size.width, view->size.height, screen->depth);
 #endif
 
@@ -215,7 +275,7 @@ W_PaintTextAndImage(W_View *view, int wrap, WMColor *textColor, W_Font *font,
 #ifndef DOUBLE_BUFFER
 	XClearWindow(screen->display, d);
 #else
-	XSetForeground(screen->display, screen->copyGC, 
+	XSetForeground(screen->display, screen->copyGC,
 		       view->attribs.background_pixel);
 	XFillRectangle(screen->display, d, screen->copyGC, 0, 0,
 		       view->size.width, view->size.height);
@@ -232,7 +292,7 @@ W_PaintTextAndImage(W_View *view, int wrap, WMColor *textColor, W_Font *font,
 	x = 1;
 	y = 1;
 	w = view->size.width - 3;
-	h = view->size.height - 3;	
+	h = view->size.height - 3;
     }
 
     /* calc. image alignment */
@@ -247,7 +307,7 @@ W_PaintTextAndImage(W_View *view, int wrap, WMColor *textColor, W_Font *font,
 	    y = 0;
 	     */
 	    break;
-	    
+
 	 case WIPLeft:
 	    ix = x;
 	    iy = y + (h - image->height) / 2;
@@ -255,20 +315,20 @@ W_PaintTextAndImage(W_View *view, int wrap, WMColor *textColor, W_Font *font,
 	    y = 0;
 	    w -= image->width + 5;
 	    break;
-	    
+
 	 case WIPRight:
 	    ix = view->size.width - image->width - x;
 	    iy = y + (h - image->height) / 2;
 	    w -= image->width + 5;
 	    break;
-	    
+
 	 case WIPBelow:
 	    ix = (view->size.width - image->width) / 2;
 	    iy = h - image->height;
 	    y = 0;
 	    h -= image->height;
 	    break;
-	    
+
 	 default:
 	 case WIPAbove:
 	    ix = (view->size.width - image->width) / 2;
@@ -277,7 +337,7 @@ W_PaintTextAndImage(W_View *view, int wrap, WMColor *textColor, W_Font *font,
 	    h -= image->height;
 	    break;
 	}
-	
+
 	ix += ofs;
 	iy += ofs;
 
@@ -295,7 +355,7 @@ W_PaintTextAndImage(W_View *view, int wrap, WMColor *textColor, W_Font *font,
     /* draw text */
     if (position != WIPImageOnly && text!=NULL) {
 	int textHeight;
-	
+
 	textHeight = W_GetTextHeight(font, text, w-8, wrap);
 	W_PaintText(view, d, font, x+ofs+4, y+ofs + (h-textHeight)/2, w-8,
 		    alignment, textColor, wrap, text, strlen(text));
@@ -314,26 +374,26 @@ W_PaintTextAndImage(W_View *view, int wrap, WMColor *textColor, W_Font *font,
 
 
 
-WMPoint 
+WMPoint
 wmkpoint(int x, int y)
 {
     WMPoint point;
-    
+
     point.x = x;
     point.y = y;
-    
+
     return point;
 }
 
 
-WMSize 
+WMSize
 wmksize(unsigned int width, unsigned int height)
 {
     WMSize size;
-    
+
     size.width = width;
     size.height = height;
-    
+
     return size;
 }
 

@@ -349,33 +349,32 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
                  unsigned int width, unsigned int height,
 		 WArea usableArea)
 {
-    WScreen *scr = wwin->screen_ptr;
+    //WScreen *scr = wwin->screen_ptr;
     int test_x = 0, test_y = Y_ORIGIN(scr);
     int from_x, to_x, from_y, to_y;
     int sx;
     int min_isect, min_isect_x, min_isect_y;
     int sum_isect;
-    int extra_height;
 
-    if (wwin->frame)
-	extra_height = wwin->frame->top_width + wwin->frame->bottom_width;
-    else
-        extra_height = 24; /* random value */
-
+    if (wwin->frame) {
+	height += wwin->frame->top_width + wwin->frame->bottom_width;
+    } else {
+	if (HAS_TITLEBAR(wwin)) height += 18;
+	if (HAS_RESIZEBAR(wwin)) height += 8;
+    }
+    if (HAS_BORDER(wwin)) {
+	height += 2;
+	width += 2;
+    }
     sx = X_ORIGIN(scr);
 
     min_isect = INT_MAX;
     min_isect_x = sx;
     min_isect_y = test_y;
     
-    height += extra_height;
-
     while (((test_y + height) < usableArea.y2)) {
-
 	test_x = sx;
-
 	while ((test_x + width) < usableArea.x2) {
-
             sum_isect = calcSumOfCoveredAreas(wwin, test_x, test_y,
                                               width, height);
 
@@ -430,20 +429,22 @@ autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
     int loc_ok = False, tw,tx,ty,th;
     int swidth, sx;
     WWindow *test_window;
-    int extra_height;
 
-    
-    if (wwin->frame)
-	extra_height = wwin->frame->top_width + wwin->frame->bottom_width + 2;
-    else
-	extra_height = 24; /* random value */
+    if (wwin->frame) {
+	height += wwin->frame->top_width + wwin->frame->bottom_width;
+    } else {
+	if (HAS_TITLEBAR(wwin)) height += 18;
+	if (HAS_RESIZEBAR(wwin)) height += 8;
+    }
+    if (HAS_BORDER(wwin)) {
+	height += 2;
+	width += 2;
+    }
 
     swidth = usableArea.x2-usableArea.x1;
     sx = X_ORIGIN(scr);
 
     /* this was based on fvwm2's smart placement */
-
-    height += extra_height;
 
     while (((test_y + height) < (usableArea.y2 - usableArea.y1)) && !loc_ok) {
 	test_x = sx;
@@ -539,17 +540,19 @@ cascadeWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret,
               unsigned int width, unsigned int height, int h,
 	      WArea usableArea)
 {
-    unsigned int extra_height;
-
-
-    if (wwin->frame)
-	extra_height = wwin->frame->top_width + wwin->frame->bottom_width;
-    else
-	extra_height = 24; /* random value */
+    if (wwin->frame) {
+	height += wwin->frame->top_width + wwin->frame->bottom_width;
+    } else {
+	if (HAS_TITLEBAR(wwin)) height += 18;
+	if (HAS_RESIZEBAR(wwin)) height += 8;
+    }
+    if (HAS_BORDER(wwin)) {
+	height += 2;
+	width += 2;
+    }
     
     *x_ret = h * scr->cascade_index + X_ORIGIN(scr);
     *y_ret = h * scr->cascade_index + Y_ORIGIN(scr);
-    height += extra_height;
 
     if (width + *x_ret > usableArea.x2 || height + *y_ret > usableArea.y2) {
 	scr->cascade_index = 0;
@@ -564,15 +567,21 @@ randomPlaceWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret,
 		  unsigned int width, unsigned int height,
 		  WArea usableArea)
 {
-    int w, h, extra_height;
+    int w, h;
     
-    if (wwin->frame)
-	extra_height = wwin->frame->top_width + wwin->frame->bottom_width + 2;
-    else
-	extra_height = 24; /* random value */
+    if (wwin->frame) {
+	height += wwin->frame->top_width + wwin->frame->bottom_width;
+    } else {
+	if (HAS_TITLEBAR(wwin)) height += 18;
+	if (HAS_RESIZEBAR(wwin)) height += 8;
+    }
+    if (HAS_BORDER(wwin)) {
+	height += 2;
+	width += 2;
+    }
     
     w = ((usableArea.x2-X_ORIGIN(scr)) - width);
-    h = ((usableArea.y2-Y_ORIGIN(scr)) - height - extra_height);
+    h = ((usableArea.y2-Y_ORIGIN(scr)) - height);
     if (w<1) w = 1;
     if (h<1) h = 1;
     *x_ret = X_ORIGIN(scr) + rand()%w;

@@ -111,6 +111,7 @@ extern int wXkbEventBase;
 extern XContext wWinContext;
 extern XContext wAppWinContext;
 extern XContext wStackContext;
+extern XContext wVEdgeContext;
 
 /* atoms */
 extern Atom _XA_WM_STATE;
@@ -756,6 +757,7 @@ StartUp(Bool defaultScreenOnly)
     wWinContext = XUniqueContext();
     wAppWinContext = XUniqueContext();
     wStackContext = XUniqueContext();
+    wVEdgeContext = XUniqueContext();
 
 /*    _XA_VERSION = XInternAtom(dpy, "VERSION", False);*/
 
@@ -820,6 +822,17 @@ StartUp(Bool defaultScreenOnly)
     wCursor[WCUR_QUESTION] = XCreateFontCursor(dpy, XC_question_arrow);
     wCursor[WCUR_TEXT]     = XCreateFontCursor(dpy, XC_xterm); /* odd name???*/
     wCursor[WCUR_SELECT] = XCreateFontCursor(dpy, XC_cross);
+    {
+	Pixmap cur = XCreatePixmap(dpy, DefaultRootWindow(dpy), 16, 16, 1);
+	GC gc = XCreateGC(dpy, cur, 0, NULL);
+	XColor black;
+	memset(&black, 0, sizeof(XColor));
+	XSetForeground(dpy, gc, 0);
+	XFillRectangle(dpy, cur, gc, 0, 0, 16, 16);
+	XFreeGC(dpy, gc);
+	wCursor[WCUR_EMPTY] = XCreatePixmapCursor(dpy, cur, cur, &black, &black, 0, 0);
+	XFreePixmap(dpy, cur);
+    }
     
     /* signal handler stuff that gets called when a signal is caught */
     WMAddPersistentTimerHandler(500, delayedAction, NULL);
@@ -1119,7 +1132,7 @@ manageAllWindows(WScreen *scr, int crashRecovery)
             if (crashRecovery) {
                 int border;
 
-                border = (WFLAGP(wwin, no_border) ? 0 : FRAME_BORDER_WIDTH);
+                border = (!HAS_BORDER(wwin) ? 0 : FRAME_BORDER_WIDTH);
 
                 wWindowMove(wwin, wwin->frame_x - border,
                             wwin->frame_y - border -

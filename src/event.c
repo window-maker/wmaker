@@ -66,9 +66,13 @@
 #ifdef KWM_HINTS
 # include "kwm.h"
 #endif
+#ifdef NETWM_HINTS
+# include "wmspec.h"
+#endif
 
 /******** Global Variables **********/
 extern XContext wWinContext;
+extern XContext wVEdgeContext;
 
 extern Cursor wCursor[WCUR_LAST];
 
@@ -323,13 +327,46 @@ void
 EventLoop()
 {
     XEvent event;
-   
+
     for(;;) {
 	WMNextEvent(dpy, &event);
 	WMHandleEvent(&event);
     }
 }
 
+
+/*
+ *----------------------------------------------------------------------
+ * ProcessPendingEvents --
+ * 	Processes the events that are currently pending (at the time
+ *      this function is called) in the display's queue.
+ *
+ * Returns:
+ *      After the pending events that were present at the function call
+ *      are processed.
+ *
+ * Side effects:
+ * 	Many -- whatever handling events may involve.  
+ *
+ *----------------------------------------------------------------------
+ */
+void
+ProcessPendingEvents()
+{
+    XEvent event;
+    int count;
+
+    XSync(dpy, False);
+
+    /* Take a snapshot of the event count in the queue */
+    count = XPending(dpy);
+
+    while (count>0 && XPending(dpy)) {
+        WMNextEvent(dpy, &event);
+        WMHandleEvent(&event);
+        count--;
+    }
+}
 
 
 Bool 
@@ -478,7 +515,7 @@ handleMapRequest(XEvent *ev)
     Window window = ev->xmaprequest.window;
 
 #ifdef DEBUG
-    L("got map request for %x\n", (unsigned)window);
+    printf("got map request for %x\n", (unsigned)window);
 #endif
     if ((wwin = wWindowFor(window))) {
 	if (wwin->flags.shaded) {
@@ -553,7 +590,7 @@ handleDestroyNotify(XEvent *event)
     int index;
 
 #ifdef DEBUG
-    L("got destroy notify");
+    printf("got destroy notify\n");
 #endif
     wwin = wWindowFor(window);
     if (wwin) {
@@ -607,7 +644,7 @@ handleExpose(XEvent *event)
     XEvent ev;
 
 #ifdef DEBUG
-    L("got expose");
+    printf("got expose\n");
 #endif
     while (XCheckTypedWindowEvent(dpy, event->xexpose.window, Expose, &ev));
 
@@ -662,7 +699,7 @@ handleButtonPress(XEvent *event)
     WScreen *scr;
     
 #ifdef DEBUG
-    L("got button press");
+    printf("got button press\n");
 #endif
     scr = wScreenForRootWindow(event->xbutton.root);
     
@@ -749,7 +786,7 @@ handleMapNotify(XEvent *event)
 {
     WWindow *wwin;
 #ifdef DEBUG
-    L("got map");
+    printf("got map\n");
 #endif
     wwin = wWindowFor(event->xmap.event);
     if (wwin && wwin->client_win == event->xmap.event) {
@@ -772,7 +809,7 @@ handleUnmapNotify(XEvent *event)
     XEvent ev;
     Bool withdraw = False;
 #ifdef DEBUG
-    L("got unmap");
+    printf("got unmap\n");
 #endif
     /* only process windows with StructureNotify selected 
      * (ignore SubstructureNotify) */
@@ -824,7 +861,7 @@ handleConfigureRequest(XEvent *event)
 {
     WWindow *wwin;
 #ifdef DEBUG
-    L("got configure request");
+    printf("got configure request\n");
 #endif
     if (!(wwin=wWindowFor(event->xconfigurerequest.window))) {
 	/*
@@ -847,7 +884,7 @@ handlePropertyNotify(XEvent *event)
     unsigned int ju;
     WScreen *scr;
 #ifdef DEBUG
-    L("got property notify");
+    printf("got property notify\n");
 #endif
     if ((wwin=wWindowFor(event->xproperty.window))) {
 	if (!XGetGeometry(dpy, wwin->client_win, &jr, &ji, &ji,
@@ -876,7 +913,7 @@ handleClientMessage(XEvent *event)
     WWindow *wwin;
     WObjDescriptor *desc;
 #ifdef DEBUG
-    L("got client message");
+    printf("got client message\n");
 #endif
     /* handle transition from Normal to Iconic state */
     if (event->xclient.message_type == _XA_WM_CHANGE_STATE
@@ -962,6 +999,10 @@ handleClientMessage(XEvent *event)
 	    wFrameWindowChangeState(wwin->frame, WS_FOCUSED);
 	    break;
 	}
+#ifdef NETWM_HINTS
+    } else if (wNETWMProcessClientMessage(&event->xclient)) {
+	/* do nothing */
+#endif
 #ifdef GNOME_STUFF
     } else if (wGNOMEProcessClientMessage(&event->xclient)) {
 	/* do nothing */
@@ -1035,34 +1076,19 @@ handleEnterNotify(XEvent *event)
 {
     WWindow *wwin;
     WObjDescriptor *desc = NULL;
+#ifdef VIRTUAL_DESKTOP
+    void (*vdHandler)(XEvent * event);
+#endif
     XEvent ev;
     WScreen *scr = wScreenForRootWindow(event->xcrossing.root);
 #ifdef DEBUG
-    L("got enter notify");
+    printf("got enter notify\n");
 #endif
 
 #ifdef VIRTUAL_DESKTOP
-    /* TODO: acceleration code */
-    if (wPreferences.vedge_thickness) {
-        int x,y;
-        if (event->xcrossing.window == scr->virtual_edge_r) {
-            XWarpPointer(dpy, None, scr->root_win, 0,0,0,0, scr->scr_width - wPreferences.vedge_thickness - 1, event->xcrossing.y_root);
-            wWorkspaceGetViewPosition(scr, scr->current_workspace, &x, &y);
-            wWorkspaceSetViewPort(scr, scr->current_workspace, x + VIRTUALEDGE_SCROLL_HSTEP, y);
-        } else if (event->xcrossing.window == scr->virtual_edge_l) {
-            XWarpPointer(dpy, None, scr->root_win, 0,0,0,0, wPreferences.vedge_thickness + 1, event->xcrossing.y_root);
-            wWorkspaceGetViewPosition(scr, scr->current_workspace, &x, &y);
-            wWorkspaceSetViewPort(scr, scr->current_workspace, x - VIRTUALEDGE_SCROLL_HSTEP, y);
-        } else if (event->xcrossing.window == scr->virtual_edge_u) {
-            XWarpPointer(dpy, None, scr->root_win, 0,0,0,0, event->xcrossing.x_root, wPreferences.vedge_thickness + 1);
-            wWorkspaceGetViewPosition(scr, scr->current_workspace, &x, &y);
-            wWorkspaceSetViewPort(scr, scr->current_workspace, x, y - VIRTUALEDGE_SCROLL_VSTEP);
-        } else if (event->xcrossing.window == scr->virtual_edge_d) {
-            printf("enter bottom\n");
-            XWarpPointer(dpy, None, scr->root_win, 0,0,0,0, event->xcrossing.x_root, scr->scr_height - wPreferences.vedge_thickness - 1);
-            wWorkspaceGetViewPosition(scr, scr->current_workspace, &x, &y);
-            wWorkspaceSetViewPort(scr, scr->current_workspace, x, y + VIRTUALEDGE_SCROLL_VSTEP);
-        }
+    if (XFindContext(dpy, event->xcrossing.window, wVEdgeContext,
+                     (XPointer *)&vdHandler)!=XCNOENT) {
+	(*vdHandler)( event);
     }
 #endif
 
@@ -1178,7 +1204,7 @@ handleShapeNotify(XEvent *event)
     WWindow *wwin;
     XEvent ev;
 #ifdef DEBUG
-    L("got shape notify");
+    printf("got shape notify\n");
 #endif
     while (XCheckTypedWindowEvent(dpy, shev->window, event->type, &ev)) {
 	XShapeEvent *sev = (XShapeEvent*)&ev;
@@ -1446,7 +1472,7 @@ handleKeyPress(XEvent *event)
 	}
 	break;
      case WKBD_MAXIMIZE:
-	if (ISMAPPED(wwin) && ISFOCUSED(wwin) && !WFLAGP(wwin, no_resizable)) {
+	if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
             int newdir = (MAX_VERTICAL|MAX_HORIZONTAL);
 
             CloseWindowMenu(scr);
@@ -1459,7 +1485,7 @@ handleKeyPress(XEvent *event)
 	}
 	break;
      case WKBD_VMAXIMIZE:
-	if (ISMAPPED(wwin) && ISFOCUSED(wwin) && !WFLAGP(wwin, no_resizable)) {
+	if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
             int newdir = (MAX_VERTICAL ^ wwin->flags.maximized);
 
 	    CloseWindowMenu(scr);
@@ -1472,7 +1498,7 @@ handleKeyPress(XEvent *event)
 	}
 	break;
      case WKBD_HMAXIMIZE:
-	if (ISMAPPED(wwin) && ISFOCUSED(wwin) && !WFLAGP(wwin, no_resizable)) {
+	if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
             int newdir = (MAX_HORIZONTAL ^ wwin->flags.maximized);
 
 	    CloseWindowMenu(scr);
@@ -1515,7 +1541,8 @@ handleKeyPress(XEvent *event)
 	}
 	break;
      case WKBD_MOVERESIZE:
-	if (ISMAPPED(wwin) && ISFOCUSED(wwin)) {
+	if (ISMAPPED(wwin) && ISFOCUSED(wwin) && 
+		(IS_RESIZABLE(wwin) || IS_MOVABLE(wwin))) {
 	    CloseWindowMenu(scr);
 	    
 	    wKeyboardMoveResizeWindow(wwin);
@@ -1718,6 +1745,23 @@ handleKeyPress(XEvent *event)
         }
         break;
 #endif /* KEEP_XKB_LOCK_STATUS */
+#ifdef VIRTUAL_DESKTOP
+     case WKBD_VDESK_LEFT:
+	wWorkspaceKeyboardMoveDesktop(scr, VEC_LEFT);
+	break;
+
+     case WKBD_VDESK_RIGHT:
+	wWorkspaceKeyboardMoveDesktop(scr, VEC_RIGHT);
+	break;
+
+     case WKBD_VDESK_UP:
+	wWorkspaceKeyboardMoveDesktop(scr, VEC_UP);
+	break;
+
+     case WKBD_VDESK_DOWN:
+	wWorkspaceKeyboardMoveDesktop(scr, VEC_DOWN);
+	break;
+#endif
 
     }
 }
@@ -1739,7 +1783,7 @@ handleMotionNotify(XEvent *event)
 	    p.y >= (rect.pos.y + rect.size.height - 2)) {
     	    WMenu *menu;
 #ifdef DEBUG
-            L("pointer at screen edge");
+            printf("pointer at screen edge\n");
 #endif
             menu = wMenuUnderPointer(scr);
             if (menu!=NULL)
@@ -1773,13 +1817,13 @@ handleMotionNotify(XEvent *event)
 	    && event->xmotion.x_root >= wwin->frame_x
 	    && event->xmotion.x_root <= wwin->frame_x + wwin->frame->core->width) {
 
-	    if (!WFLAGP(wwin, no_titlebar)
+	    if (HAS_BORDER(wwin)
 		&& wwin->frame_y <= - wwin->frame->top_width) {
 
 		wWindowMove(wwin, wwin->frame_x, 0);
 		wwin->flags.dragged_while_fmaximized = 0;
 
-	    } else if (!WFLAGP(wwin, no_resizebar)
+	    } else if (HAS_RESIZEBAR(wwin)
 		       && wwin->frame_y + wwin->frame->core->height >=
 		       scr->scr_height + wwin->frame->bottom_width) {
 		

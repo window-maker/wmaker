@@ -956,9 +956,8 @@ launchDockedApplication(WAppIcon *btn, Bool withSelection)
 	btn->drop_launch = 0;
 	btn->paste_launch = withSelection;
         scr->last_dock = btn->dock;
-        btn->pid = execCommand(btn, 
-			       withSelection ? btn->paste_command : btn->command,
-			       NULL);
+        btn->pid = execCommand(btn, (withSelection ? btn->paste_command :
+                                     btn->command), NULL);
         if (btn->pid>0) {
 	    if (btn->buggy_app) {
 		/* give feedback that the app was launched */
@@ -972,8 +971,9 @@ launchDockedApplication(WAppIcon *btn, Bool withSelection)
         } else {
 	    wwarning(_("could not launch application %s\n"), btn->command);
             btn->launching = 0;
-            if (!btn->relaunching)
+            if (!btn->relaunching) {
                 btn->running = 0;
+            }
         }
     }
 }
@@ -1386,13 +1386,13 @@ make_icon_state(WAppIcon *btn)
         position = WMCreatePLString(buffer);
 
         node = WMCreatePLDictionary(dCommand, command,
-                                           dName, name,
-                                           dAutoLaunch, autolaunch,
-					   dLock, lock,
-                                           dForced, forced,
-					   dBuggyApplication, buggy,
-                                           dPosition, position,
-                                           NULL);
+                                    dName, name,
+                                    dAutoLaunch, autolaunch,
+                                    dLock, lock,
+                                    dForced, forced,
+                                    dBuggyApplication, buggy,
+                                    dPosition, position,
+                                    NULL);
         WMReleasePropList(command);
         WMReleasePropList(name);
         WMReleasePropList(position);
@@ -1450,8 +1450,7 @@ dockSaveState(WDock *dock)
         }
     }
     
-    dock_state = WMCreatePLDictionary(dApplications, list, 
-					     NULL);
+    dock_state = WMCreatePLDictionary(dApplications, list, NULL);
 
     if (dock->type == WM_DOCK) {
 	snprintf(buffer, sizeof(buffer), "Applications%i", dock->screen_ptr->scr_height);
@@ -1512,9 +1511,8 @@ wDockSaveState(WScreen *scr, WMPropList *old_state)
 	    if (strncasecmp(WMGetFromPLString(tmp), "applications", 12) == 0
 		&& !WMGetFromPLDictionary(dock_state, tmp)) {
 
-		WMPutInPLDictionary(dock_state,
-					tmp, 
-					WMGetFromPLDictionary(old_state, tmp));
+                WMPutInPLDictionary(dock_state, tmp,
+                                    WMGetFromPLDictionary(old_state, tmp));
 	    }
 	}
 	WMReleasePropList(keys);
@@ -1774,9 +1772,9 @@ wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type)
     value = WMGetFromPLDictionary(dock_state, dPosition);
 
     if (value) {
-        if (!WMIsPLString(value))
+        if (!WMIsPLString(value)) {
             COMPLAIN("Position");
-        else {
+        } else {
 	    WMRect rect;
 	    int flags;
 
@@ -1795,12 +1793,13 @@ wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type)
 		wScreenKeepInside(scr, &x, &dock->y_pos, ICON_SIZE, ICON_SIZE);
 	    }
 
-            /* This is no more needed. ??? */
+            /* Is this needed any more? */
             if (type == WM_CLIP) {
-                if (dock->x_pos < 0)
+                if (dock->x_pos < 0) {
                     dock->x_pos = 0;
-                else if (dock->x_pos > scr->scr_width-ICON_SIZE)
+                } else if (dock->x_pos > scr->scr_width-ICON_SIZE) {
                     dock->x_pos = scr->scr_width-ICON_SIZE;
+                }
             } else {
                 if (dock->x_pos >= 0) {
                     dock->x_pos = DOCK_EXTRA_SPACE;
@@ -1820,11 +1819,12 @@ wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type)
     value = WMGetFromPLDictionary(dock_state, dLowered);
 
     if (value) {
-        if (!WMIsPLString(value))
+        if (!WMIsPLString(value)) {
             COMPLAIN("Lowered");
-        else {
-            if (strcasecmp(WMGetFromPLString(value), "YES")==0)
+        } else {
+            if (strcasecmp(WMGetFromPLString(value), "YES")==0) {
                 dock->lowered = 1;
+            }
         }
     }
 
@@ -1836,11 +1836,12 @@ wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type)
     value = WMGetFromPLDictionary(dock_state, dCollapsed);
 
     if (value) {
-        if (!WMIsPLString(value))
+        if (!WMIsPLString(value)) {
             COMPLAIN("Collapsed");
-        else {
-            if (strcasecmp(WMGetFromPLString(value), "YES")==0)
+        } else {
+            if (strcasecmp(WMGetFromPLString(value), "YES")==0) {
                 dock->collapsed = 1;
+            }
         }
     }
 
@@ -1850,9 +1851,9 @@ wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type)
     value = WMGetFromPLDictionary(dock_state, dAutoCollapse);
 
     if (value) {
-        if (!WMIsPLString(value))
+        if (!WMIsPLString(value)) {
             COMPLAIN("AutoCollapse");
-        else {
+        } else {
 	    if (strcasecmp(WMGetFromPLString(value), "YES")==0) {
                 dock->auto_collapse = 1;
 		dock->collapsed = 1;
@@ -1866,9 +1867,9 @@ wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type)
     value = WMGetFromPLDictionary(dock_state, dAutoRaiseLower);
 
     if (value) {
-        if (!WMIsPLString(value))
+        if (!WMIsPLString(value)) {
             COMPLAIN("AutoRaiseLower");
-        else {
+        } else {
 	    if (strcasecmp(WMGetFromPLString(value), "YES")==0) {
                 dock->auto_raise_lower = 1;
 	    }
@@ -1882,11 +1883,12 @@ wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type)
     value = WMGetFromPLDictionary(dock_state, dAutoAttractIcons);
 
     if (value) {
-        if (!WMIsPLString(value))
+        if (!WMIsPLString(value)) {
             COMPLAIN("AutoAttractIcons");
-        else {
-            if (strcasecmp(WMGetFromPLString(value), "YES")==0)
+        } else {
+            if (strcasecmp(WMGetFromPLString(value), "YES")==0) {
                 dock->attract_icons = 1;
+            }
         }
     }
 
@@ -2136,21 +2138,19 @@ Bool
 wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 {
     WWindow *wwin;
-    char **argv;
-    int argc;
     int index;
 
     wwin = icon->icon->owner;
     if (icon->command==NULL) {
-	icon->editing = 0;
-	if (XGetCommand(dpy, wwin->client_win, &argv, &argc) && argc>0) {
+        char *command;
 
-	    icon->command = wtokenjoin(argv, argc);
-	    XFreeStringList(argv);
+        icon->editing = 0;
+
+        command = GetCommandForWindow(wwin->client_win);
+        if (command) {
+	    icon->command = command;
 	} else {
-	    char *command=NULL;
-
-/*	    icon->forced_dock = 1;*/
+            /* icon->forced_dock = 1;*/
             if (dock->type!=WM_CLIP || !icon->attracted) {
 		icon->editing = 1;
                 if (wInputDialog(dock->screen_ptr, _("Dock Icon"),
@@ -2181,7 +2181,7 @@ wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 		    }
                 }
             }
-	}
+        }
     } else {
 	icon->editing = 0;
     }
@@ -2266,8 +2266,7 @@ Bool
 moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y)
 {
     WWindow *wwin;
-    char **argv;
-    int argc;
+    char *command;
     int index;
 
     if (src == dest)
@@ -2285,15 +2284,12 @@ moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y)
      * moved icons it applies. -Dan
      */
     if ((dest->type==WM_DOCK /*|| dest->keep_attracted*/) && icon->command==NULL) {
-        if (XGetCommand(dpy, wwin->client_win, &argv, &argc) && argc>0) {
-
-            icon->command = wtokenjoin(argv, argc);
-            XFreeStringList(argv);
+        command = GetCommandForWindow(wwin->client_win);
+        if (command) {
+            icon->command = command;
         } else {
-            char *command=NULL;
-
 	    icon->editing = 1;
-/*            icon->forced_dock = 1;*/
+            /* icon->forced_dock = 1;*/
             if (wInputDialog(src->screen_ptr, _("Dock Icon"),
 			     _("Type the command used to launch the application"),
                              &command)) {
@@ -3177,22 +3173,15 @@ wDockTrackWindowLaunch(WDock *dock, Window window)
     Bool found = False;
     char *command = NULL;
 
-    {
-	int argc;
-	char **argv;
-
-	if (XGetCommand(dpy, window, &argv, &argc)) {
-	    if (argc > 0 && argv != NULL)
-		command = wtokenjoin(argv, argc);
-	    if (argv) {
-		XFreeStringList(argv);
-	    }
-	}
-    }
+    command = GetCommandForWindow(window);
 
     if (!PropGetWMClass(window, &wm_class, &wm_instance) ||
-	(!wm_class && !wm_instance))
-	return;
+        (!wm_class && !wm_instance)) {
+
+        if (command)
+            wfree(command);
+        return;
+    }
 
 retry:
     for (i=0; i<dock->max_icons; i++) {
@@ -3232,9 +3221,9 @@ retry:
 		    icon->forced_dock = 1;
 		    icon->running = 0;
 		}
-		if (!icon->forced_dock)
-		    icon->main_window = window;
-
+                if (!icon->forced_dock) {
+                    icon->main_window = window;
+                }
 	    }
             found = True;
             if (!wPreferences.no_animations && !icon->launching &&
@@ -3598,8 +3587,7 @@ iconDblClick(WObjDescriptor *desc, XEvent *event)
 	    wWorkspaceChange(dock->screen_ptr, wapp->last_workspace);
 	}
 
-	wUnhideApplication(wapp, event->xbutton.button==Button2,
-			   unhideHere);
+	wUnhideApplication(wapp, event->xbutton.button==Button2, unhideHere);
 
 	if (event->xbutton.state & MOD_MASK) {
 	    wHideOtherApplications(btn->icon->owner);
@@ -3620,9 +3608,8 @@ iconDblClick(WObjDescriptor *desc, XEvent *event)
 		    (!btn->running || (event->xbutton.state & ControlMask))) {
 		    launchDockedApplication(btn, False);
                 }
-            } else if (btn->xindex == 0 && btn->yindex == 0
-		       && btn->dock->type == WM_DOCK) {
-
+            } else if (btn->xindex==0 && btn->yindex==0 &&
+                       btn->dock->type==WM_DOCK) {
 		wShowGNUstepPanel(dock->screen_ptr);
 	    }
         }

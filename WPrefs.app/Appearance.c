@@ -109,9 +109,9 @@ typedef struct _Panel {
 
     char oldTabItem;
 
-    char menuStyle;
+    int menuStyle;
 
-    char titleAlignment;
+    int titleAlignment;
 
     Pixmap preview;
     Pixmap previewNoText;

@@ -47,6 +47,11 @@
 #include "dock.h"
 #include "client.h"
 
+#ifdef NETWM_HINTS
+#include "wmspec.h"
+#endif
+
+#include "xinerama.h"
 
 #include <WINGs/WUtil.h>
 
@@ -540,7 +545,7 @@ saveSettings(WMButton *button, InspectorPanel *panel)
         return;
 
     if (!dict) {
-        dict = WMCreatePLDictionary(NULL, NULL, NULL);
+        dict = WMCreatePLDictionary(NULL, NULL);
         if (dict) {
             db->dictionary = dict;
         } else {
@@ -555,8 +560,8 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 
     WMPLSetCaseSensitive(True);
 
-    winDic = WMCreatePLDictionary(NULL, NULL, NULL);
-    appDic = WMCreatePLDictionary(NULL, NULL, NULL);
+    winDic = WMCreatePLDictionary(NULL, NULL);
+    appDic = WMCreatePLDictionary(NULL, NULL);
 
     /* Update icon for window */
     icon_file = WMGetTextFieldText(panel->fileText);
@@ -875,6 +880,9 @@ applySettings(WMButton *button, InspectorPanel *panel)
     wwin->frame->flags.need_texture_change = 1;
     wWindowConfigureBorders(wwin);
     wFrameWindowPaint(wwin->frame);
+#ifdef NETWM_HINTS
+    wNETWMUpdateActions(wwin, False);
+#endif
 
     /*
      * Can't apply emulate_appicon because it will probably cause problems.

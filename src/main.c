@@ -85,6 +85,7 @@ WDDomain *WDRootMenu = NULL;
 XContext wWinContext;
 XContext wAppWinContext;
 XContext wStackContext;
+XContext wVEdgeContext;
 
 /* Atoms */
 Atom _XA_WM_STATE;
@@ -123,9 +124,9 @@ Atom _XA_DND_SELECTION;
 Cursor wCursor[WCUR_LAST];
 
 /* last event timestamp for XSetInputFocus */
-Time LastTimestamp;
+Time LastTimestamp = CurrentTime;
 /* timestamp on the last time we did XSetInputFocus() */
-Time LastFocusChange;
+Time LastFocusChange = CurrentTime;
 
 #ifdef SHAPE
 Bool wShapeSupported;
@@ -494,8 +495,10 @@ check_defaults()
 static void
 execInitScript()
 {
-    char *file;
-    char *paths = wstrconcat(wusergnusteppath(), ":"DEF_CONFIG_PATHS);
+    char *file, *paths;
+
+    paths = wstrconcat(wusergnusteppath(), "/Library/WindowMaker");
+    paths = wstrappend(paths, ":"DEF_CONFIG_PATHS);
 
     file = wfindfile(paths, DEF_INIT_SCRIPT);
     wfree(paths);
@@ -519,8 +522,10 @@ execInitScript()
 void
 ExecExitScript()
 {
-    char *file;
-    char *paths = wstrconcat(wusergnusteppath(), ":"DEF_CONFIG_PATHS);
+    char *file, *paths;
+
+    paths = wstrconcat(wusergnusteppath(), "/Library/WindowMaker");
+    paths = wstrappend(paths, ":"DEF_CONFIG_PATHS);
 
     file = wfindfile(paths, DEF_EXIT_SCRIPT);
     wfree(paths);
@@ -717,22 +722,25 @@ main(int argc, char **argv)
     }
 
 
-    if (!Locale) {
-	Locale = getenv("LC_ALL");
-    }
-    if (!Locale) {
-    	Locale = getenv("LANG");
+    if (Locale) {
+        /* return of wstrconcat should not be free-ed! read putenv man page */
+        putenv(wstrconcat("LANG=", Locale));
+    } else {
+        Locale = getenv("LC_ALL");
+        if (!Locale) {
+            Locale = getenv("LANG");
+        }
     }
 
     setlocale(LC_ALL, "");
 
     if (!Locale || strcmp(Locale, "C")==0 || strcmp(Locale, "POSIX")==0) 
-      Locale = NULL;
+        Locale = NULL;
 #ifdef I18N
     if (getenv("NLSPATH"))
-      bindtextdomain("WindowMaker", getenv("NLSPATH"));
+        bindtextdomain("WindowMaker", getenv("NLSPATH"));
     else
-      bindtextdomain("WindowMaker", LOCALEDIR);
+        bindtextdomain("WindowMaker", LOCALEDIR);
     textdomain("WindowMaker");
 
     if (!XSupportsLocale()) {

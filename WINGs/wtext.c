@@ -2026,7 +2026,7 @@ insertTextInteractively(Text *tPtr, char *text, int len)
         int s = tb->used - tPtr->tpos;
 
         if (!tb->blank && nlen>0) {
-            char *save;
+            char *save=NULL;
 
             if (s > 0) {
                 save = wmalloc(s);

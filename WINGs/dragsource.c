@@ -425,6 +425,8 @@ sendEnterMessage(WMDraggingInfo *info)
 }
 
 
+// this functon doesn't return something in all cases.
+// control reaches end of non-void function. fix this -Dan
 static Bool
 sendPositionMessage(WMDraggingInfo *info, WMPoint *mousePos)
 {
@@ -740,7 +742,6 @@ isXdndAware(WMScreen *scr, Window win)
     int format;
     unsigned long count, remain;
     unsigned char *winXdndVersion;
-    unsigned char *proxy;
 
     if (win == None)
         return False;
@@ -876,7 +877,7 @@ initMotionProcess(WMView *view, WMDraggingInfo *info,
 static void
 processMotion(WMDraggingInfo *info, Window windowUnderDrag, WMPoint *mousePos)
 {
-    WMScreen *scr = sourceScreen(info);
+    /* // WMScreen *scr = sourceScreen(info); */
     Window newDestination = findDestination(info, mousePos);
 
     W_DragSourceStopTimer();
@@ -1058,6 +1059,7 @@ traceStatusMsg(Display *dpy, XClientMessageEvent *statusEvent)
 #endif
 
 
+static void
 storeDropAction(WMDraggingInfo *info, Atom destAction)
 {
     WMView* sourceView = XDND_SOURCE_VIEW(info);

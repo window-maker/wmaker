@@ -95,6 +95,7 @@ typedef struct {
 #ifdef XKB_BUTTON_HINT
     unsigned int no_language_button:1;
 #endif
+    unsigned int no_movable:1;
 
     /* decorations */
     unsigned int no_resizebar:1;       /* draw the bottom handle? */
@@ -134,6 +135,10 @@ typedef struct {
     unsigned int dont_save_session:1;  /* do not save app's state in session */
 
     unsigned int full_maximize:1;
+
+#ifdef VIRTUAL_DESKTOP
+    unsigned int virtual_stick:1;
+#endif
 
     /*
      * emulate_app_icon must be automatically disabled for apps that can
@@ -201,6 +206,11 @@ typedef struct WWindow {
 	unsigned int width, height;    /* original geometry of the window */
     } old_geometry;		       /* (before things like maximize) */
 
+    struct {
+	int x, y;
+	unsigned int width, height;    /* original geometry of the window */
+    } bfs_geometry;		       /* (before fullscreen) */
+
     /* client window info */
     short old_border_width;	       /* original border width of client_win*/
     Window client_win;		       /* the window we're managing */
@@ -257,6 +267,7 @@ typedef struct WWindow {
 	unsigned int hidden:1;
 	unsigned int shaded:1;
 	unsigned int maximized:2;
+	unsigned int fullscreen:1;
 	unsigned int omnipresent:1;
 
 	unsigned int semi_focused:1;
@@ -307,19 +318,36 @@ typedef struct WWindow {
 	unsigned int olwm_push_pin_out:1;/* emulate pushpin behaviour */
 	unsigned int olwm_limit_menu:1;
 #endif
-#ifdef NET_HINTS
+#ifdef NETWM_HINTS
 	unsigned int net_state_from_client:1; /* state hint was set by client */
-	unsigned int net_skip_taskbar:1;
 	unsigned int net_skip_pager:1;
+	unsigned int net_handle_icon:1;
+	unsigned int net_show_desktop:1;
 #endif
     } flags;		/* state of the window */
 
     struct WIcon *icon;		       /* icon info for the window */
     int icon_x, icon_y;		       /* position of the icon */
+#ifdef NETWM_HINTS
+    int icon_w, icon_h;
+    RImage *net_icon_image;
+    Atom type;
+#endif
 } WWindow;
 
 
-#define IS_OMNIPRESENT(w) ((w)->flags.omnipresent ^ WFLAGP(w, omnipresent))
+#define HAS_TITLEBAR(w)	    (!(WFLAGP((w), no_titlebar) || (w)->flags.fullscreen))
+#define HAS_RESIZEBAR(w)    (!(WFLAGP((w), no_resizebar) || (w)->flags.fullscreen))
+#define HAS_BORDER(w)	    (!(WFLAGP((w), no_border) || (w)->flags.fullscreen))
+#define IS_MOVABLE(w)	    (!(WFLAGP((w), no_movable) || (w)->flags.fullscreen))
+#define IS_RESIZABLE(w)    (!(WFLAGP((w), no_resizable) || (w)->flags.fullscreen))
+
+#ifdef VIRTUAL_DESKTOP
+# define IS_VSTUCK(w)	    (WFLAGP((w), virtual_stick) || (w)->flags.fullscreen)
+#endif
+
+/* XXX: CHECK THIS,.. IT SEEMED WEIRD TO ME!!! */
+#define IS_OMNIPRESENT(w) ((w)->flags.omnipresent | WFLAGP(w, omnipresent))
 
 #define WINDOW_LEVEL(w) ((w)->frame->core->stacking->window_level)
 

@@ -43,6 +43,7 @@
 #include "stacking.h"
 #include "text.h"
 #include "xinerama.h"
+#include "workspace.h"
 
 
 /****** Global Variables ******/
@@ -2259,9 +2260,7 @@ byebye:
 
     ((WMenu*)desc->parent)->flags.inside_handler = 0;
 #ifdef VIRTUAL_DESKTOP
-    if (wPreferences.vedge_thickness) {
         wWorkspaceRaiseEdge(scr);
-    }
 #endif
 }
 
@@ -2510,7 +2509,7 @@ wMenuSaveState(WScreen *scr)
     WMPropList *menus, *key;
     int save_menus = 0;
 
-    menus = WMCreatePLDictionary(NULL, NULL, NULL);
+    menus = WMCreatePLDictionary(NULL, NULL);
 
 #ifndef LITE
     if (scr->switch_menu && scr->switch_menu->flags.buttoned) {

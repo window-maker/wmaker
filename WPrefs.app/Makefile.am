@@ -42,7 +42,9 @@ WPrefs_SOURCES = \
 	imagebrowser.h \
 	xmodifier.c
 
-AM_CPPFLAGS = @CPPFLAGS@ -DLOCALEDIR=\"$(NLSDIR)\"
+AM_CPPFLAGS = -DLOCALEDIR=\"$(NLSDIR)\"
+
+AM_CFLAGS = -fno-strict-aliasing
 
 INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/WINGs @HEADER_SEARCH_PATH@ 
 

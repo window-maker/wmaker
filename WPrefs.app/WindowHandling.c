@@ -397,17 +397,15 @@ createPanel(Panel *p)
     WMMoveWidget(panel->resL, 95, 20);
 
     panel->resaB = WMCreateRadioButton(panel->resF);
-    WMMoveWidget(panel->resaB, 130, 14);
-    WMResizeWidget(panel->resaB, 70, 26);
+    WMMoveWidget(panel->resaB, 130, 15);
+    WMResizeWidget(panel->resaB, 70, 25);
     WMSetButtonText(panel->resaB, _("Resist"));
 
     panel->resrB = WMCreateRadioButton(panel->resF);
-    WMMoveWidget(panel->resrB, 200, 12);
-    WMResizeWidget(panel->resrB, 65, 30);
+    WMMoveWidget(panel->resrB, 200, 15);
+    WMResizeWidget(panel->resrB, 70, 25);
     WMSetButtonText(panel->resrB, _("Attract"));
     WMGroupButtons(panel->resrB, panel->resaB);
-
-
 
     WMMapSubwidgets(panel->resF);
 
@@ -420,7 +418,7 @@ createPanel(Panel *p)
     panel->tranB = WMCreateSwitchButton(panel->tranF);
     WMMoveWidget(panel->tranB, 10, 5);
     WMResizeWidget(panel->tranB, 250, 30);
-    WMSetButtonText(panel->tranB, _("Open dialogs in same workspace\nas their owners"));
+    WMSetButtonText(panel->tranB, _("Open dialogs in the same workspace\nas their owners"));
     
     WMMapSubwidgets(panel->tranF);
     

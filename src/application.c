@@ -50,6 +50,8 @@
 #include "dock.h"
 #include "wsound.h"
 
+#include "xinerama.h"
+
 
 /******** Global variables ********/
 
@@ -123,16 +125,14 @@ findDockIconFor(WDock *dock, Window main_window)
 static void
 extractIcon(WWindow *wwin)
 {
-    int argc;
-    char **argv;
-    
-    if (!XGetCommand(dpy, wwin->client_win, &argv, &argc) || argc < 1)
-	return;
+    char *progname;
 
-    wApplicationExtractDirPackIcon(wwin->screen_ptr,argv[0], 
-				   wwin->wm_instance,
-				   wwin->wm_class);
-    XFreeStringList(argv);
+    progname = GetProgramNameForWindow(wwin->client_win);
+    if (progname) {
+        wApplicationExtractDirPackIcon(wwin->screen_ptr, progname,
+                                       wwin->wm_instance, wwin->wm_class);
+        wfree(progname);
+    }
 }
 
 
@@ -172,7 +172,7 @@ saveIconNameFor(char *iconPath, char *wm_instance, char *wm_class)
 	val = WMGetFromPLDictionary(adict, iconk);
     } else {
 	/* no dictionary for app, so create one */
-	adict = WMCreatePLDictionary(NULL, NULL, NULL);
+	adict = WMCreatePLDictionary(NULL, NULL);
 	WMPutInPLDictionary(dict, key, adict);
 	WMReleasePropList(adict);
 	val = NULL;
@@ -246,8 +246,10 @@ extractClientIcon(WAppIcon *icon)
 
 
 WApplication*
-wApplicationCreate(WScreen *scr, Window main_window)
+wApplicationCreate(WWindow *wwin)
 {
+    WScreen *scr = wwin->screen_ptr;
+    Window main_window = wwin->main_window;
     WApplication *wapp;
     WWindow *leader;
 
@@ -294,6 +296,11 @@ wApplicationCreate(WScreen *scr, Window main_window)
 	wfree(wapp);
 	return NULL;
     }
+    
+    wapp->main_window_desc->fake_group = wwin->fake_group;
+#ifdef NETWM_HINTS
+    wapp->main_window_desc->net_icon_image = RRetainImage(wwin->net_icon_image);
+#endif
     
     extractIcon(wapp->main_window_desc);
 

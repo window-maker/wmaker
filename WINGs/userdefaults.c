@@ -272,7 +272,7 @@ WMGetStandardUserDefaults(void)
     defaults = wmalloc(sizeof(WMUserDefaults));
     memset(defaults, 0, sizeof(WMUserDefaults));
 
-    defaults->defaults = WMCreatePLDictionary(NULL, NULL, NULL);
+    defaults->defaults = WMCreatePLDictionary(NULL, NULL);
 
     defaults->searchList = wmalloc(sizeof(WMPropList*)*3);
 
@@ -293,7 +293,7 @@ WMGetStandardUserDefaults(void)
     domain = WMReadPropListFromFile(path);
 
     if (!domain)
-        domain = WMCreatePLDictionary(NULL, NULL, NULL);
+        domain = WMCreatePLDictionary(NULL, NULL);
 
     if (path)
         wfree(path);
@@ -314,7 +314,7 @@ WMGetStandardUserDefaults(void)
     wfree(path);
 
     if (!domain)
-        domain = WMCreatePLDictionary(NULL, NULL, NULL);
+        domain = WMCreatePLDictionary(NULL, NULL);
 
     if (domain)
         WMPutInPLDictionary(defaults->defaults, key, domain);
@@ -367,7 +367,7 @@ WMGetDefaultsFromPath(char *path)
     defaults = wmalloc(sizeof(WMUserDefaults));
     memset(defaults, 0, sizeof(WMUserDefaults));
 
-    defaults->defaults = WMCreatePLDictionary(NULL, NULL, NULL);
+    defaults->defaults = WMCreatePLDictionary(NULL, NULL);
 
     defaults->searchList = wmalloc(sizeof(WMPropList*)*2);
 
@@ -387,7 +387,7 @@ WMGetDefaultsFromPath(char *path)
     domain = WMReadPropListFromFile(path);
 
     if (!domain)
-        domain = WMCreatePLDictionary(NULL, NULL, NULL);
+        domain = WMCreatePLDictionary(NULL, NULL);
 
     defaults->path = wstrdup(path);
 

@@ -1488,11 +1488,13 @@ titlebarMouseDown(WObjDescriptor *desc, XEvent *event)
     WCoreWindow *titlebar = desc->self;
     
     if (IsDoubleClick(fwin->core->screen_ptr, event)) {
-	if (fwin->on_dblclick_titlebar)
-	    (*fwin->on_dblclick_titlebar)(titlebar, fwin->child, event);
+        if (fwin->on_dblclick_titlebar) {
+            (*fwin->on_dblclick_titlebar)(titlebar, fwin->child, event);
+        }
     } else {
-	if (fwin->on_mousedown_titlebar)
-	    (*fwin->on_mousedown_titlebar)(titlebar, fwin->child, event);
+        if (fwin->on_mousedown_titlebar) {
+            (*fwin->on_mousedown_titlebar)(titlebar, fwin->child, event);
+        }
     }
 }
 
@@ -1534,8 +1536,9 @@ buttonMouseDown(WObjDescriptor *desc, XEvent *event)
     } 
 #ifdef XKB_BUTTON_HINT
     if (button == fwin->language_button) {
-    if (!wPreferences.modelock) return;
-	image = fwin->languagebutton_image;
+        if (!wPreferences.modelock)
+            return;
+        image = fwin->languagebutton_image;
     }
 #endif
     

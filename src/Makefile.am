@@ -96,6 +96,8 @@ wmaker_SOURCES = 	\
 	winmenu.c \
 	winspector.h \
 	winspector.c \
+	wmspec.h \
+	wmspec.c \
 	workspace.c \
 	workspace.h \
 	wsound.c \
@@ -104,7 +106,9 @@ wmaker_SOURCES = 	\
 	text.h 
 
 
-AM_CPPFLAGS = @CPPFLAGS@ $(DFLAGS) -DLOCALEDIR=\"$(NLSDIR)\"
+AM_CPPFLAGS = $(DFLAGS) -DLOCALEDIR=\"$(NLSDIR)\"
+
+AM_CFLAGS = -fno-strict-aliasing
 
 
 INCLUDES = \

@@ -1,8 +1,8 @@
-/* 
+/*
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 #include "wconfig.h"
@@ -51,8 +51,6 @@
 
 
 /**** global variables *****/
-
-extern char *DisplayName;
 
 extern WPreferences wPreferences;
 
@@ -91,7 +89,7 @@ static char*
 username()
 {
     char *tmp;
-    
+
     tmp = getlogin();
     if (!tmp) {
 	struct passwd *user;
@@ -109,7 +107,7 @@ username()
     }
     return tmp;
 }
-       
+
 char *
 MakeCPPArgs(char *path)
 {
@@ -117,7 +115,7 @@ MakeCPPArgs(char *path)
     char buffer[MAXLINE], *buf, *line;
     Visual *visual;
     char *tmp;
-    
+
     line = wmalloc(MAXLINE);
     *line = 0;
     i=1;
@@ -125,13 +123,13 @@ MakeCPPArgs(char *path)
 	if (buf[0]=='(') {
 	    wwarning(_("your machine is misconfigured. HOSTNAME is set to %s"),
 		     buf);
-	} else 
+	} else
 	  putdef(line, " -DHOST=", buf);
     } else if ((buf=getenv("HOST"))!=NULL) {
 	if (buf[0]=='(') {
 	    wwarning(_("your machine is misconfigured. HOST is set to %s"),
 		     buf);
-	} else 
+	} else
 	  putdef(line, " -DHOST=", buf);
     }
     buf = username();
@@ -141,14 +139,14 @@ MakeCPPArgs(char *path)
     buf = XDisplayName(DisplayString(dpy));
     putdef(line, " -DDISPLAY=", buf);
     putdef(line, " -DWM_VERSION=", VERSION);
-    
+
     visual = DefaultVisual(dpy, DefaultScreen(dpy));
     putidef(line, " -DVISUAL=", visual->class);
-    
+
     putidef(line, " -DDEPTH=", DefaultDepth(dpy, DefaultScreen(dpy)));
 
     putidef(line, " -DSCR_WIDTH=", WidthOfScreen(DefaultScreenOfDisplay(dpy)));
-    putidef(line, " -DSCR_HEIGHT=", 
+    putidef(line, " -DSCR_HEIGHT=",
 	    HeightOfScreen(DefaultScreenOfDisplay(dpy)));
 
     /* put the dir where the menu is being read from to the
@@ -181,7 +179,7 @@ MakeCPPArgs(char *path)
 	char * wgethomedir();
 	/* home is statically allocated. Don't free it! */
 	char *home = wgethomedir();
-	
+
 	strcpy(fullpath, home);
 	strcat(fullpath, &(buf[1]));
       }
@@ -189,7 +187,7 @@ MakeCPPArgs(char *path)
       putdef(line, " -I", fullpath);
 
     } while ((buf = strtok(NULL, ":"))!=NULL);
-    
+
 #undef arg
 #ifdef DEBUG
     puts("CPP ARGS");
@@ -211,14 +209,14 @@ isBelow(WWindow *win1, WWindow *win2)
 {
     int i;
     WCoreWindow *tmp;
-    
+
     tmp = win1->frame->core->stacking->under;
     while (tmp) {
 	if (tmp == win2->frame->core)
 	    return True;
 	tmp = tmp->stacking->under;
     }
-    
+
     for (i=win1->frame->core->stacking->window_level-1; i>=0; i--) {
 	tmp = win1->screen_ptr->stacking_list[i];
 	while (tmp) {
@@ -272,7 +270,7 @@ char **winname;
     } else {
 	/* the hint is probably not set */
 	*winname = NULL;
-	
+
 	return False;
     }
 }
@@ -291,7 +289,7 @@ char **iconname;
     XTextProperty text_prop;
     char **list;
     int num;
-    
+
     if (XGetWMIconName(dpy, win, &text_prop) != 0 && text_prop.value
 	&& text_prop.nitems > 0) {
 	if (text_prop.encoding == XA_STRING)
@@ -313,20 +311,20 @@ char **iconname;
 }
 
 
-static void 
+static void
 eatExpose()
 {
     XEvent event, foo;
-    
+
     /* compress all expose events into a single one */
-    
+
     if (XCheckMaskEvent(dpy, ExposureMask, &event)) {
 	/* ignore other exposure events for this window */
 	while (XCheckWindowEvent(dpy, event.xexpose.window, ExposureMask,
 			       &foo));
 	/* eat exposes for other windows */
 	eatExpose();
-	
+
 	event.xexpose.count = 0;
 	XPutBackEvent(dpy, &event);
     }
@@ -351,8 +349,8 @@ SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
 	{ICON_SLIDE_DELAY_M, ICON_SLIDE_STEPS_M, ICON_SLIDE_SLOWDOWN_M},
 	{ICON_SLIDE_DELAY_S, ICON_SLIDE_STEPS_S, ICON_SLIDE_SLOWDOWN_S},
 	{ICON_SLIDE_DELAY_US, ICON_SLIDE_STEPS_US, ICON_SLIDE_SLOWDOWN_US}};
-    
-    
+
+
 
     dx = (float)(to_x-from_x);
     dy = (float)(to_y-from_y);
@@ -477,7 +475,7 @@ ShrinkString(WMFont *font, char *string, int width)
 	} else if (w<width) {
 	    p1 = t;
 	    t = p1+(p2-p1)/2;
-	} else 
+	} else
 	  p2=p1=t;
     }
     strcat(text, &string[p-p1]);
@@ -516,7 +514,7 @@ static char*
 getTextSelection(WScreen *screen, Atom selection)
 {
     int buffer = -1;
-    
+
     switch (selection) {
      case XA_CUT_BUFFER0:
 	buffer = 0;
@@ -559,21 +557,21 @@ getTextSelection(WScreen *screen, Atom selection)
 	int timeout = 0;
 	XEvent ev;
 	static Atom clipboard = 0;
-	
-	if (!clipboard) 
+
+	if (!clipboard)
 	    clipboard = XInternAtom(dpy, "CLIPBOARD", False);
-	
+
 	XDeleteProperty(dpy, screen->info_window, clipboard);
-	
+
 	XConvertSelection(dpy, selection, XA_STRING,
 			  clipboard, screen->info_window,
 			  CurrentTime);
-	
+
 	timer = WMAddTimerHandler(1000, timeoutHandler, &timeout);
-	
+
 	while (!XCheckTypedWindowEvent(dpy, screen->info_window,
 				       SelectionNotify, &ev) && !timeout);
-	
+
 	if (!timeout) {
 	    WMDeleteTimerHandler(timer);
 	} else {
@@ -607,7 +605,7 @@ static char*
 getselection(WScreen *scr)
 {
     char *tmp;
-    
+
     tmp = getTextSelection(scr, XA_PRIMARY);
     if (!tmp)
 	tmp = getTextSelection(scr, XA_CUT_BUFFER0);
@@ -623,10 +621,10 @@ getuserinput(WScreen *scr, char *line, int *ptr)
     char *prompt;
     int j, state;
     int begin = 0;
-#define BUFSIZE 512        
+#define BUFSIZE 512
     char tbuffer[BUFSIZE], pbuffer[BUFSIZE];
 
-    
+
     title = _("Program Arguments");
     prompt = _("Enter command arguments:");
     ret = NULL;
@@ -716,17 +714,17 @@ get_dnd_selection(WScreen *scr)
     char **list;
     char *flat_string;
     int count;
-    
+
     result=XGetTextProperty(dpy, scr->root_win, &text_ret, _XA_DND_SELECTION);
-    
+
     if (result==0 || text_ret.value==NULL || text_ret.encoding==None
 	|| text_ret.format==0 || text_ret.nitems == 0) {
 	wwarning(_("unable to get dropped data from DND drop"));
 	return NULL;
     }
-    
+
     XTextPropertyToStringList(&text_ret, &list, &count);
-    
+
     if (!list || count<1) {
 	XFree(text_ret.value);
 	wwarning(_("error getting dropped data from DND drop"));
@@ -737,7 +735,7 @@ get_dnd_selection(WScreen *scr)
     if (!flat_string) {
 	wwarning(_("out of memory while getting data from DND drop"));
     }
-    
+
     XFreeStringList(list);
     XFree(text_ret.value);
     return flat_string;
@@ -749,7 +747,7 @@ get_dnd_selection(WScreen *scr)
 #define S_ESCAPE 1
 #define S_OPTION 2
 
-/* 
+/*
  * state    	input   new-state	output
  * NORMAL	%	OPTION		<nil>
  * NORMAL	\	ESCAPE		<nil>
@@ -808,15 +806,15 @@ ExpandOptions(WScreen *scr, char *cmdline)
 	     case 'n':
 		out[optr++]=10;
 		break;
-		
+
 	     case 'r':
 		out[optr++]=13;
 		break;
-		
+
 	     case 't':
 		out[optr++]=9;
 		break;
-		
+
 	     default:
 		out[optr++]=cmdline[ptr];
 	    }
@@ -828,7 +826,7 @@ ExpandOptions(WScreen *scr, char *cmdline)
 	     case 'w':
 		if (scr->focused_window
 		    && scr->focused_window->flags.focused) {
-		    snprintf(tmpbuf, sizeof(tmpbuf), "0x%x", 
+		    snprintf(tmpbuf, sizeof(tmpbuf), "0x%x",
 			    (unsigned int)scr->focused_window->client_win);
 		    slen = strlen(tmpbuf);
 		    olen += slen;
@@ -844,9 +842,9 @@ ExpandOptions(WScreen *scr, char *cmdline)
 		    out[optr++]=' ';
 		}
 		break;
-		
+
 	     case 'W':
-		snprintf(tmpbuf, sizeof(tmpbuf), "0x%x", 
+		snprintf(tmpbuf, sizeof(tmpbuf), "0x%x",
 			(unsigned int)scr->current_workspace + 1);
 		slen = strlen(tmpbuf);
 		olen += slen;
@@ -859,10 +857,10 @@ ExpandOptions(WScreen *scr, char *cmdline)
 		strcat(out,tmpbuf);
 		optr+=slen;
 		break;
-		
+
 	     case 'a':
 		ptr++;
-		user_input = getuserinput(scr, cmdline, &ptr); 
+		user_input = getuserinput(scr, cmdline, &ptr);
 		if (user_input) {
 		    slen = strlen(user_input);
 		    olen += slen;
@@ -907,7 +905,7 @@ ExpandOptions(WScreen *scr, char *cmdline)
 		optr+=slen;
 		break;
 #endif /* OFFIX_DND */
-		
+
 	     case 's':
 		if (!selection) {
 		    selection = getselection(scr);
@@ -940,7 +938,7 @@ ExpandOptions(WScreen *scr, char *cmdline)
     if (selection)
       XFree(selection);
     return out;
-    
+
     error:
     wfree(out);
     if (selection)
@@ -1007,21 +1005,21 @@ GetShortcutString(char *text)
 /*    KeySym ksym;*/
     int control = 0;
     char *tmp;
-    
+
     tmp = text = wstrdup(text);
 
     /* get modifiers */
     while ((k = strchr(text, '+'))!=NULL) {
 	int mod;
-	
+
 	*k = 0;
 	mod = wXModifierFromKey(text);
 	if (mod<0) {
 	    return wstrdup("bug");
 	}
-		
+
 	modmask |= mod;
-	
+
 	if (strcasecmp(text, "Meta")==0) {
 	    buffer = wstrappend(buffer, "M+");
 	} else if (strcasecmp(text, "Alt")==0) {
@@ -1029,15 +1027,15 @@ GetShortcutString(char *text)
 	} else if (strcasecmp(text, "Shift")==0) {
 	    buffer = wstrappend(buffer, "Sh+");
 	} else if (strcasecmp(text, "Mod1")==0) {
-	    buffer = wstrappend(buffer, "M1+"); 
+	    buffer = wstrappend(buffer, "M1+");
 	} else if (strcasecmp(text, "Mod2")==0) {
-	    buffer = wstrappend(buffer, "M2+"); 
+	    buffer = wstrappend(buffer, "M2+");
 	} else if (strcasecmp(text, "Mod3")==0) {
 	    buffer = wstrappend(buffer, "M3+");
 	} else if (strcasecmp(text, "Mod4")==0) {
-	    buffer = wstrappend(buffer, "M4+"); 
+	    buffer = wstrappend(buffer, "M4+");
 	} else if (strcasecmp(text, "Mod5")==0) {
-	    buffer = wstrappend(buffer, "M5+"); 
+	    buffer = wstrappend(buffer, "M5+");
 	} else if (strcasecmp(text, "Control")==0) {
 	    control = 1;
 	} else {
@@ -1050,7 +1048,7 @@ GetShortcutString(char *text)
 	buffer = wstrappend(buffer, "^");
     }
     buffer = wstrappend(buffer, text);
-    
+
     /* get key */
 /*    ksym = XStringToKeysym(text);
     tmp = keysymToString(ksym, modmask);
@@ -1185,7 +1183,7 @@ SendHelperMessage(WScreen *scr, char type, int workspace, char *msg)
     if (!scr->flags.backimage_helper_launched) {
 	return;
     }
-    
+
     len = (msg ? strlen(msg) : 0) + (workspace >=0 ? 4 : 0) + 1 ;
     buffer = wmalloc(len+5);
     snprintf(buf, len, "%4i", len);
@@ -1244,22 +1242,141 @@ UpdateDomainFile(WDDomain *domain)
 }
 
 
-
 char*
 StrConcatDot(char *a, char *b)
 {
     int len;
     char *str;
-    
+
     if (!a)
 	a = "";
     if (!b)
 	b = "";
-    
+
     len = strlen(a)+strlen(b)+4;
     str = wmalloc(len);
-    
+
     snprintf(str, len, "%s.%s", a, b);
-    
+
     return str;
 }
+
+
+#ifndef NETWM_HINTS
+
+static Atom net_wm_pid = None;
+
+int
+GetPidForWindow(Window win)
+{
+    Atom type_ret;
+    int fmt_ret;
+    unsigned long nitems_ret;
+    unsigned long bytes_after_ret;
+    long *data = 0;
+    int pid;
+
+    if (net_wm_pid == None) {
+        net_wm_pid = XInternAtom(dpy, "_NET_WM_PID", False);
+    }
+
+    if (XGetWindowProperty(dpy, win, net_wm_pid, 0, 1, False,
+                           XA_CARDINAL, &type_ret, &fmt_ret, &nitems_ret,
+                           &bytes_after_ret,
+                           (unsigned char**)&data)==Success && data) {
+
+        pid = *data;
+        XFree(data);
+    } else {
+        pid = 0;
+    }
+
+    return pid;
+}
+
+#endif
+
+
+Bool
+GetCommandForPid(int pid, char ***argv, int *argc)
+{
+    char buf[1024];
+    FILE *fPtr;
+    int count, i, j;
+
+    sprintf(buf, "/proc/%d/cmdline", pid);
+    fPtr = fopen(buf, "r");
+    if (fPtr) {
+        count = read(fileno(fPtr), buf, 1024);
+        if (count > 0) {
+            buf[count] = 0;
+            for (i=0, *argc=0; i<count; i++) {
+                if (buf[i] == 0) {
+                    (*argc)++;
+                }
+            }
+            if ((*argc) == 0) {
+                *argv = NULL;
+                return False;
+            }
+            *argv = (char**) wmalloc(sizeof(char*) * (*argc));
+            (*argv)[0] = buf;
+            for (i=0, j=1; i<count; i++) {
+                if (buf[i] != 0)
+                    continue;
+                if (i < count-1) {
+                    (*argv)[j++] = &buf[i+1];
+                }
+            }
+
+            return True;
+        }
+
+        fclose(fPtr);
+    }
+
+    return False;
+}
+
+
+static char*
+getCommandForWindow(Window win, int elements)
+{
+    char **argv, *command = NULL;
+    int argc;
+
+    if (XGetCommand(dpy, win, &argv, &argc)) {
+        if (argc > 0 && argv != NULL) {
+            if (elements==0)
+                elements = argc;
+            command = wtokenjoin(argv, WMIN(argc, elements));
+            if (command[0] == 0) {
+                wfree(command);
+                command = NULL;
+            }
+        }
+        if (argv) {
+            XFreeStringList(argv);
+        }
+    }
+
+    return command;
+}
+
+
+/* Free result when done */
+char*
+GetCommandForWindow(Window win)
+{
+    return getCommandForWindow(win, 0);
+}
+
+
+/* Free result when done */
+char*
+GetProgramNameForWindow(Window win)
+{
+    return getCommandForWindow(win, 1);
+}
+
+

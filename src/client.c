@@ -46,6 +46,9 @@
 #ifdef KWM_HINTS
 #include "kwm.h"
 #endif
+#ifdef NETWM_HINTS
+# include "wmspec.h"
+#endif
 
 
 /****** Global Variables ******/
@@ -239,7 +242,7 @@ wClientConfigure(WWindow *wwin, XConfigureRequestEvent *xcre)
         /* If the window is shaded, wrong height will be set for the window */
         if (xcre->value_mask & CWX) {
             nx = xcre->x;
-	    if (!WFLAGP(wwin, no_border))
+	    if (HAS_BORDER(wwin))
 	      nx -= FRAME_BORDER_WIDTH;
 	}
         else
@@ -247,7 +250,7 @@ wClientConfigure(WWindow *wwin, XConfigureRequestEvent *xcre)
 
         if (xcre->value_mask & CWY) {
             ny = xcre->y - ((ofs_y < 0) ? 0 : wwin->frame->top_width);
-	    if (!WFLAGP(wwin, no_border))
+	    if (HAS_BORDER(wwin))
 	      ny -= FRAME_BORDER_WIDTH;
 	}
         else
@@ -353,22 +356,17 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
      case XA_WM_COMMAND:
 	if (wwin->main_window!=None) {
 	    WApplication *wapp = wApplicationOf(wwin->main_window);
-	    char **argv;
-	    int argc;
+            char *command;
 
-            if (!wapp || !wapp->app_icon)
+            if (!wapp || !wapp->app_icon || wapp->app_icon->docked)
 		break;
 
-	    if (XGetCommand(dpy, wwin->main_window, &argv, &argc)) {
-		if (argc > 0 && argv != NULL) {
-		    if (wapp->app_icon->command)
-		        wfree(wapp->app_icon->command);
-		    wapp->app_icon->command = wtokenjoin(argv, argc);
-		}
-		if (argv) {
-		    XFreeStringList(argv);
-		}
-	    }
+            command = GetCommandForWindow(wwin->main_window);
+	    if (command) {
+                if (wapp->app_icon->command)
+                    wfree(wapp->app_icon->command);
+                wapp->app_icon->command = command;
+            }
 	}
 	break;
 
@@ -457,7 +455,7 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 	    wApplicationDestroy(wApplicationOf(wwin->main_window));
 	    wwin->main_window = wwin->client_leader;
 	    wwin->group_id = None;
-	    wApplicationCreate(wwin->screen_ptr, wwin->main_window);
+	    wApplicationCreate(wwin);
 	    break;
 
 	 /* 1,2,4 - change leader to new value of window_group */
@@ -467,7 +465,7 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 	    wApplicationDestroy(wApplicationOf(wwin->main_window));
 	    wwin->main_window = new_hints->window_group;
 	    wwin->group_id = wwin->main_window;
-	    wApplicationCreate(wwin->screen_ptr, wwin->main_window);
+	    wApplicationCreate(wwin);
 	    break;
 	    
 	 /* 5 - destroy application */
@@ -481,7 +479,7 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 	 case 6:
 	    wwin->main_window = new_hints->window_group;
 	    wwin->group_id = wwin->main_window;
-	    wApplicationCreate(wwin->screen_ptr, wwin->main_window);
+	    wApplicationCreate(wwin);
 	    break;
          /* 7 - we have a fake window group id, so just ignore anything else */
          case 7:
@@ -630,7 +628,7 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
                             else
                                 foo->main_window = None;
                             if (foo->main_window) {
-                                wapp = wApplicationCreate(scr, foo->main_window);
+                                wapp = wApplicationCreate(foo);
                             }
                         }
                         foo = foo->prev;
@@ -665,11 +663,18 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 	    
 	    XFree(attr);
 	} else {
+#if defined(KWM_HINTS) || defined(NETWM_HINTS)
+            Bool done = False;
+#endif
 #ifdef KWM_HINTS
-	    Bool done;
-
-	    done = wKWMCheckClientHintChange(wwin, event);
+	    if (!done)
+                done = wKWMCheckClientHintChange(wwin, event);
 #endif /* KWM_HINTS */
+#ifdef NETWM_HINTS
+            if (!done) {
+                done = wNETWMCheckClientHintChange(wwin, event);
+            }
+#endif
 	}
     }
 }

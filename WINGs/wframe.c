@@ -149,6 +149,7 @@ paintFrame(Frame *fPtr)
 
         drawTitle = True;
     } else {
+        tw = tx = 0;
         drawTitle = False;
     }
 
@@ -160,6 +161,11 @@ paintFrame(Frame *fPtr)
 
         region = XCreateRegion();
 
+        rect.x = 0;
+        rect.y = 0;
+        rect.width = view->size.width;
+        rect.height = view->size.height;
+        XUnionRectWithRegion(&rect, region, region);
         if (drawTitle) {
             tmp = XCreateRegion();
             rect.x = tx;
@@ -167,13 +173,6 @@ paintFrame(Frame *fPtr)
             rect.width = tw;
             rect.height = th;
             XUnionRectWithRegion(&rect, tmp, tmp);
-        }
-        rect.x = 0;
-        rect.y = 0;
-        rect.width = view->size.width;
-        rect.height = view->size.height;
-        XUnionRectWithRegion(&rect, region, region);
-        if (drawTitle) {
             XSubtractRegion(region, tmp, region);
             XDestroyRegion(tmp);
         }

@@ -1,8 +1,8 @@
 Changes since wmaker 0.80.1:
 ............................
 
-- added WMSetConnectionShutdownOnClose()
-- added an extra member to the ConnectionDelegate: canResumeSending
+- Added WMSetConnectionShutdownOnClose()
+- Added an extra member to the ConnectionDelegate: canResumeSending
   see NEWS for details.
 - WMDrawString() and WMDrawImageString() now take WMColor instead of GC as
   arguments. WMDrawImageString() receives 2 colors (text & background).
@@ -49,12 +49,13 @@ Changes since wmaker 0.80.1:
 - Fixed a memleak in the file panel.
 - Double/triple-click selection in text widgets 
   (Vitaly Ovtchinnikov <ov@rbcmail.ru>)
-- fixed bug in tableview (clicked row callback got incorrect row)
+- Fixed bug in tableview (clicked row callback got incorrect row)
   (Carlos Torres <vlaadbrain@operamail.com>)
 - Fixed bug in resizing a scrollview
 - Fixed bug with wrong text wrapping (Alexey Voinov <voins@voins.program.ru>)
 - Added wmkrect()
 - Added xdnd v3 support (Sylvain Reynal <sreynal@nerim.net>)
+- Fixed and enhanced text wrapping.
 
 
 Changes since wmaker 0.80.0:

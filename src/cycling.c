@@ -198,7 +198,9 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     if (hasModifier) {
 	keymap = XGetModifierMapping(dpy);
 
-    
+#ifdef DEBUG
+        printf("Grabbing keyboard\n");
+#endif
 	XGrabKeyboard(dpy, scr->root_win, False, GrabModeAsync, GrabModeAsync, 
 		      CurrentTime);
     }
@@ -223,11 +225,6 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     wWindowFocus(newFocused, scr->focused_window);
     oldFocused = newFocused;
 
-    if (hasModifier)
-	done = False;
-    else
-	done = True;
-    
 #if 0
     if (wPreferences.popup_switchmenu && 
 	(!scr->switch_menu || !scr->switch_menu->flags.mapped)) {
@@ -236,8 +233,9 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 	openedSwitchMenu = True;
     }
 #endif
-    while (!done) {
-	WMMaskEvent(dpy,KeyPressMask|KeyReleaseMask|ExposureMask, &ev);
+
+    while (hasModifier && !done) {
+	WMMaskEvent(dpy, KeyPressMask|KeyReleaseMask|ExposureMask, &ev);
 
 	if (ev.type != KeyRelease && ev.type != KeyPress) {
 	    WMHandleEvent(&ev);
@@ -247,7 +245,10 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 	modifiers = ev.xkey.state & ValidModMask;
 
 	if (ev.type == KeyPress) {
-	    if (wKeyBindings[WKBD_FOCUSNEXT].keycode == ev.xkey.keycode
+#ifdef DEBUG
+            printf("Got key press\n");
+#endif
+            if (wKeyBindings[WKBD_FOCUSNEXT].keycode == ev.xkey.keycode
 		&& wKeyBindings[WKBD_FOCUSNEXT].modifier == modifiers) {
 
 		newFocused = nextToFocusAfter(newFocused);
@@ -274,12 +275,18 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 		}
 
 	    } else {
+#ifdef DEBUG
+                printf("Got something else\n");
+#endif
 		somethingElse = True;
 		done = True;
 	    }
 	} else if (ev.type == KeyRelease) {
 	    int i;
 
+#ifdef DEBUG
+            printf("Got key release\n");
+#endif
 	    for (i = 0; i < 8 * keymap->max_keypermod; i++) {
 		if (keymap->modifiermap[i] == ev.xkey.keycode &&
 		    wKeyBindings[WKBD_FOCUSNEXT].modifier 
@@ -294,6 +301,9 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 	XFreeModifiermap(keymap);
 
     if (hasModifier) {
+#ifdef DEBUG
+        printf("Ungrabbing keyboard\n");
+#endif
 	XUngrabKeyboard(dpy, CurrentTime);
     }
     wSetFocusTo(scr, newFocused);

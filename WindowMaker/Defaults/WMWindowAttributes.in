@@ -75,6 +75,9 @@
     DontSaveSession = Yes;
     Unfocusable = Yes;
   };
+  kio_uiserver = {NoAppIcon = Yes;};
+  kcmshell = {NoAppIcon = Yes;};
+  kded = {NoAppIcon = Yes;};
   "." = {NoAppIcon = Yes;};
   "*" = {Icon = defaultAppIcon.#extension#;SharedAppIcon = Yes;};
 }

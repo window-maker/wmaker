@@ -152,6 +152,18 @@ void ExecExitScript();
 Bool wFetchName(Display *dpy, Window win, char **winname);
 Bool wGetIconName(Display *dpy, Window win, char **iconname);
 
+/* Free returned string it when done. (applies to the next 2 functions) */
+char* GetCommandForWindow(Window win);
+char* GetProgramNameForWindow(Window win);
+
+Bool GetCommandForPid(int pid, char ***argv, int *argc);
+
+#ifdef NETWM_HINTS
+#include "wmspec.h"
+#define GetPidForWindow(win) wNETWMGetPidForWindow(win)
+#else
+int GetPidForWindow(Window win);
+#endif
 
 
 #endif

@@ -785,7 +785,7 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
 	/* check if the file the user selected is not the one that
 	 * would be loaded by default with the current search path */
 	*file = WMGetListSelectedItem(panel->iconList)->text;
-	if ((*file)[0]==0) {
+	if (**file==0) {
 	    wfree(*file);
 	    *file = NULL;
 	} else {
@@ -804,6 +804,8 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
 	*file = NULL;
     }
 
+    result = panel->result;
+
     WMReleaseFont(panel->normalfont);
 
     WMUnmapWidget(panel->win);
@@ -811,8 +813,6 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
     WMDestroyWidget(panel->win);
 
     wUnmanageWindow(wwin, False, False);
-
-    result= panel->result;
 
     wfree(panel);
 
@@ -862,8 +862,8 @@ typedef struct {
 
 
 #define COPYRIGHT_TEXT  \
-     "Copyright © 1997-2004 Alfredo K. Kojima <kojima@windowmaker.org>\n"\
-     "Copyright © 1998-2004 Dan Pascu <dan@windowmaker.org>"
+     "Copyright \xc2\xa9 1997-2004 Alfredo K. Kojima <kojima@windowmaker.org>\n"\
+     "Copyright \xc2\xa9 1998-2004 Dan Pascu <dan@windowmaker.org>"
 
 
 
@@ -1314,8 +1314,6 @@ wShowInfoPanel(WScreen *scr)
     WMMoveWidget(panel->copyrL, 15, 185);
     WMSetLabelTextAlignment(panel->copyrL, WALeft);
     WMSetLabelText(panel->copyrL, COPYRIGHT_TEXT);
-    /* we want the (c) character in the font, so don't use a FontSet here */
-    // fix this -Dan font = WMCreateFontWithFlags(scr->wmscreen, "SystemFont-11", WFNormalFont);
     font = WMSystemFontOfSize(scr->wmscreen, 11);
     if (font) {
         WMSetLabelFont(panel->copyrL, font);
@@ -1368,7 +1366,7 @@ wShowInfoPanel(WScreen *scr)
 
     strbuf = wstrappend(strbuf, _("\nAdditional support for: "));
     {
-	char *list[8];
+	char *list[9];
 	char buf[80];
 	int j = 0;
 
@@ -1383,6 +1381,9 @@ wShowInfoPanel(WScreen *scr)
 #endif
 #ifdef OLWM_HINTS
 	list[j++] = "OLWM";
+#endif
+#ifdef NETWM_HINTS
+	list[j++] = "WMSPEC";
 #endif
 
 	buf[0] = 0;
@@ -1406,6 +1407,23 @@ wShowInfoPanel(WScreen *scr)
 
 #ifdef XFT
     strbuf = wstrappend(strbuf, _("; Antialiased text"));
+#endif
+
+#ifdef VIRTUAL_DESKTOP
+    strbuf = wstrappend(strbuf, _("; VirtualDesktop"));
+#endif
+
+#ifdef XINERAMA
+    strbuf = wstrappend(strbuf, _("\n"));
+#ifdef SOLARIS_XINERAMA
+    strbuf = wstrappend(strbuf, _("Solaris "));
+#endif
+    strbuf = wstrappend(strbuf, _("Xinerama: "));
+    {
+	char tmp[128];
+	snprintf(tmp, sizeof(tmp)-1, "%d heads found.", scr->xine_info.count);
+	strbuf = wstrappend(strbuf, tmp);
+    }
 #endif
 
 

@@ -50,7 +50,7 @@ typedef struct WApplication {
 } WApplication;
 
 
-WApplication *wApplicationCreate(WScreen *scr, Window main_window);
+WApplication *wApplicationCreate(struct WWindow *wwin);
 void wApplicationDestroy(WApplication *wapp);
 
 WApplication *wApplicationOf(Window window);

@@ -845,10 +845,10 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
     }
 
     if (!db) {
-	db = WMCreatePLDictionary(NULL, NULL, NULL);
+	db = WMCreatePLDictionary(NULL, NULL);
     }
     if (!gdb) {
-	gdb = WMCreatePLDictionary(NULL, NULL, NULL);
+	gdb = WMCreatePLDictionary(NULL, NULL);
     }
 
     GlobalDB = gdb;

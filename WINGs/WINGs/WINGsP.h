@@ -22,19 +22,14 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define DOUBLE_BUFFER
 
-
+#define DOUBLE_BUFFER   1
 
 #define WC_UserWidget	128
 
+#define SCROLLER_WIDTH	20
 
-
-#define SCROLLER_WIDTH	 20
-
-
-
-#define XDND_VERSION 4
+#define XDND_VERSION    4
 
 
 typedef struct W_Application {

@@ -112,6 +112,12 @@ static char *keyOptions[] = {
 	"WindowShortcut9Key",
 	"WindowShortcut10Key",
 	"ScreenSwitchKey",
+#ifdef VIRTUAL_DESKTOP
+	"VirtualEdgeLeftKey",
+	"VirtualEdgeRightKey",
+	"VirtualEdgeUpKey",
+	"VirtualEdgeDownKey",
+#endif
 	"ClipRaiseKey",
 	"ClipLowerKey",
 #ifndef XKB_MODELOCK
@@ -326,7 +332,7 @@ captureClick(WMWidget *w, void *data)
     }
     panel->capturing = 0;
     WMSetButtonText(w, _("Capture"));
-    WMSetLabelText(panel->instructionsL, _("Click Capture to interactively define the shortcut key."));
+    WMSetLabelText(panel->instructionsL, _("Click on Capture to interactively define the shortcut key."));
     XUngrabKeyboard(dpy, CurrentTime);
 }
 
@@ -537,6 +543,12 @@ createPanel(Panel *p)
     WMAddListItem(panel->actLs, _("Shortcut for window 9"));
     WMAddListItem(panel->actLs, _("Shortcut for window 10"));
     WMAddListItem(panel->actLs, _("Switch to Next Screen/Monitor"));
+#ifdef VIRTUAL_DESKTOP
+    WMAddListItem(panel->actLs, _("Move VirtualDesktop to next left edge"));
+    WMAddListItem(panel->actLs, _("Move VirtualDesktop to next right edge"));
+    WMAddListItem(panel->actLs, _("Move VirtualDesktop to next top edge"));
+    WMAddListItem(panel->actLs, _("Move VirtualDesktop to next bottom edge"));
+#endif
     WMAddListItem(panel->actLs, _("Raise Clip"));
     WMAddListItem(panel->actLs, _("Lower Clip"));
     WMAddListItem(panel->actLs, _("Raise/Lower Clip"));
@@ -580,7 +592,7 @@ createPanel(Panel *p)
     WMMoveWidget(panel->instructionsL, 15, 140);
     WMSetLabelTextAlignment(panel->instructionsL, WACenter);
     WMSetLabelWraps(panel->instructionsL, True);
-    WMSetLabelText(panel->instructionsL, _("Click Capture to interactively define the shortcut key."));
+    WMSetLabelText(panel->instructionsL, _("Click on Capture to interactively define the shortcut key."));
 
     WMMapSubwidgets(panel->shoF);
     

@@ -106,7 +106,7 @@ main(int argc, char **argv)
 	exit(1);
     }
 
-    iconset = WMCreatePLDictionary(NULL, NULL, NULL);
+    iconset = WMCreatePLDictionary(NULL, NULL);
 
     keylist = WMGetPLDictionaryKeys(all_windows);
     icon_key = WMCreatePLString("Icon");
@@ -122,10 +122,7 @@ main(int argc, char **argv)
 	if (window_attrs && WMIsPLDictionary(window_attrs)) {
 	    icon_value = WMGetFromPLDictionary(window_attrs, icon_key);
 	    if (icon_value) {
-		
-		icondic = WMCreatePLDictionary(icon_key, icon_value, 
-						      NULL);
-
+		icondic = WMCreatePLDictionary(icon_key, icon_value, NULL);
 		WMPutInPLDictionary(iconset, window_name, icondic);
 	    }
 	}

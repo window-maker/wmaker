@@ -15,7 +15,7 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.90.0)
+AM_INIT_AUTOMAKE(WindowMaker, 0.85.0)
 
 AC_PROG_LIBTOOL
 
@@ -224,7 +224,7 @@ if test "$ac_cv_prog_gcc" = yes; then
 
        AC_CACHE_CHECK(whether gcc supports MMX(tm) inline asm,
                       ac_cv_c_inline_mmx,
-                      [AC_TRY_LINK(,[asm ("movq %mm0, %mm1");],
+                      [AC_TRY_LINK(,[__asm__ ("movq %mm0, %mm1");],
                       ac_cv_c_inline_mmx=yes,
                       ac_cv_c_inline_mmx=no)])
 
@@ -295,7 +295,7 @@ dnl ==================
 
 dnl List of supported locales
 dnl -------------------------
-supported_locales="be bg ca cs da de el es et fi fr gl hr hu it ja ko ms nl no pl pt ro ru sk sv tr zh_CN zh_TW.Big5"
+supported_locales="be bg bs ca cs da de el es et fi fr gl hr hu it ja ko ms nl no pl pt ro ru sk sv tr zh_CN zh_TW.Big5"
 supported_wprefs_locales="bg ca cs de es et fi fr hr hu it ja ko pt ru sk zh_CN zh_TW.Big5"
 supported_wings_locales="bg ca cs de fr sk"
 
@@ -376,6 +376,12 @@ AC_SUBST(supported_locales)
 dnl Support for various hint things
 dnl ===============================
 
+gnome_on="no"
+kde_on="no"
+openlook_on="no"
+netwm_on="no"
+vdesktop_on="no"
+
 
 AC_ARG_ENABLE(gnome,
   [  --enable-gnome          enable stuff needed for GNOME ],
@@ -398,6 +404,22 @@ AC_ARG_ENABLE(openlook,
   [if test x$enableval = xyes; then
     AC_DEFINE(OLWM_HINTS, 1, [define if you want OPEN LOOK(tm) hint support])
     openlook_on=yes
+  fi])
+
+
+AC_ARG_ENABLE(netwm,
+  [  --enable-netwm          enable support for FreeDesktop hints ],
+  [if test x$enableval = xyes; then
+    AC_DEFINE(NETWM_HINTS, 1, [define if you want NETWM hints support])
+    netwm_on=yes
+  fi])
+
+
+AC_ARG_ENABLE(vdesktop,
+  [  --enable-vdesktop       enable virtual desktop],
+  [if test x$enableval = xyes; then
+    AC_DEFINE(VIRTUAL_DESKTOP, 1, [define if you want virtual desktop support])
+    vdesktop_on=yes
   fi])
 
 
@@ -519,34 +541,53 @@ fi
 
 dnl Xft antialiased font support
 dnl ============================
+
 xft=yes
 XFTLIBS=""
-AC_ARG_ENABLE(xft, 
-[  --disable-xft           disable Xft antialiased font support],
-		xft=$enableval, xft=yes)
 
-if test "$xft" = yes; then
-	if test "x$PKGCONFIG" != x -a "`$PKGCONFIG xft; echo $?`" = 0; then
-		XFTCONFIG="$PKGCONFIG xft"
-		pkgconfig_xft=yes
-	else
-		AC_CHECK_PROG(XFTCONFIG, xft-config, xft-config)
-	fi
-	AC_MSG_CHECKING([for the Xft2 library])
-	if test "x$XFTCONFIG" != x; then
-		XFTLIBS=`$XFTCONFIG --libs`
-		XFTFLAGS=`$XFTCONFIG --cflags`
-		AC_MSG_RESULT([found])
-	else
-		xft=no
-		AC_MSG_RESULT([not found])
-	fi
-	if test "$xft" = yes; then
-		AC_SUBST(XFTFLAGS)
-		AC_SUBST(XFTLIBS)
-		AC_DEFINE(XFT, 1, [define if you want support for antialiased fonts (set by configure)])
-	fi
+if test "x$PKGCONFIG" != x -a "`$PKGCONFIG xft; echo $?`" = 0; then
+        XFTCONFIG="$PKGCONFIG xft"
+        pkgconfig_xft=yes
+else
+        AC_CHECK_PROG(XFTCONFIG, xft-config, xft-config)
 fi
+
+AC_MSG_CHECKING([for the Xft2 library])
+
+if test "x$XFTCONFIG" != x; then
+        XFTLIBS=`$XFTCONFIG --libs`
+        XFTFLAGS=`$XFTCONFIG --cflags`
+        AC_MSG_RESULT([found])
+else
+        AC_MSG_RESULT([not found])
+        echo
+        echo "ERROR!!! libXft2 is not installed or could not be found."
+        echo "         Xft2 is a requirement for building Window Maker."
+        echo "         Please install it (along with fontconfig) before continuing."
+        echo
+        exit 1
+fi
+
+minXFT="2.1.2"
+goodxft="no"
+
+dnl
+dnl The macro below will use $XFTFLAGS (defined above) to find Xft.h
+dnl
+WM_CHECK_XFT_VERSION($minXFT, goodxft=yes, goodxft=no)
+
+if test "$goodxft" = no; then
+        echo
+        echo "ERROR!!! libXft on this system is an old version."
+        echo "         Please consider upgrading to at least version ${minXFT}."
+        echo
+        exit 1
+fi
+
+AC_SUBST(XFTFLAGS)
+AC_SUBST(XFTLIBS)
+AC_DEFINE(XFT, 1, [define if you want support for antialiased fonts (set by configure)])
+
 
 dnl XINERAMA support
 dnl ================
@@ -845,14 +886,14 @@ AC_ARG_WITH(appspath,
 [  --with-appspath=PATH    specify the directory for GNUstep applications], appspath=$withval )
 
 if test "x$appspath" = "x"; then
-    gnustepdir='$(prefix)/GNUstep'
+    gnustepdir='${prefix}/GNUstep'
 
     if test "x$GNUSTEP_LOCAL_ROOT" != "x" ; then
 	gnustepdir=`echo "$GNUSTEP_LOCAL_ROOT" | sed -e "s|^${prefix}|prefix|"`
 	gnustepdir=`echo $gnustepdir | sed -e 's|^prefix|${prefix}|'`
     fi
 
-    with_appspath=$gnustepdir/Apps
+    with_appspath=$gnustepdir/Applications
 fi
 
 wprefsdir=$with_appspath/WPrefs.app
@@ -1075,29 +1116,48 @@ dnl ==========================
 supported_gfx="$supported_gfx builtin-PPM"
 
 if test "x$MOFILES" = "x"; then
-	mof=none
+	mof=None
 else
 	mof=`echo $MOFILES`
 fi
 
 if test "x$MOFILES" = "x"; then
-	languages=none
+	languages=None
 else
 	languages=`echo $MOFILES | sed 's/.mo//g'`
 fi
 
+extrasupport=''
+if test "$openlook_on" = "yes"; then
+  extrasupport="OpenLook $extrasupport"
+fi
+if test "$gnome_on" = "yes"; then
+  extrasupport="Gnome $extrasupport"
+fi
+if test "$kde_on" = "yes"; then
+  extrasupport="KDE $extrasupport"
+fi
+if test "$netwm_on" = "yes"; then
+  extrasupport="NetWM $extrasupport"
+fi
+
+if test "x$extrasupport" = "x"; then
+  extrasupport="None"
+fi
 
 echo
 echo "Window Maker was configured as follows:"
 echo
 echo "Installation path prefix            : $prefix"
 echo "Installation path for binaries      : $_bindir"
-echo "Installation path for WPrefs.app    : $wprefsdir" | sed -e 's|\$(prefix)|'"$prefix|"
+echo "Installation path for WPrefs.app    : $with_appspath" | sed -e 's|\${prefix}|'"$prefix|"
 echo "Supported graphic format libraries  : $supported_gfx"
-echo "Antialiased text support for WINGs  : $xft"
-echo "Xinerama extension support          : $xinerama"
 echo "Use assembly routines for wrlib     : $asm_support"
 echo "Use inline MMX(tm) x86 assembly     : $mmx_support"
+echo "Antialiased text support in WINGs   : $xft"
+echo "Xinerama extension support          : $xinerama"
+echo "Virtual desktop support             : $vdesktop_on"
+echo "Additionally supported environments : $extrasupport"
 echo "Translated message files to install : $mof"
 dnl echo "Supported languages beside English  : $languages"
 if test "x$MOFILES" != "x"; then

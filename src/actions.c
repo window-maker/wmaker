@@ -69,6 +69,8 @@ extern WPreferences wPreferences;
 
 extern Atom _XA_WM_TAKE_FOCUS;
 
+extern void ProcessPendingEvents();
+
 
 /******* Local Variables *******/
 static struct {
@@ -83,37 +85,6 @@ static struct {
 
 #define SHADE_STEPS	shadePars[(int)wPreferences.shade_speed].steps
 #define SHADE_DELAY	shadePars[(int)wPreferences.shade_speed].delay
-
-
-static int ignoreTimestamp=0;
-
-
-#ifdef ANIMATIONS
-static void
-processEvents(int event_count)
-{
-    XEvent event;
-
-    /*
-     * This is a hack. When animations are enabled, processing of
-     * events ocurred during a animation are delayed until it's end.
-     * Calls that consider the TimeStamp, like XSetInputFocus(), will
-     * fail because the TimeStamp is too old. Then, for example, if
-     * the user changes window focus while a miniaturize animation is
-     * in course, the window will not get focus properly after the end
-     * of the animation. This tries to workaround it by passing CurrentTime
-     * as the TimeStamp for XSetInputFocus() for all events ocurred during
-     * the animation.
-     */
-    ignoreTimestamp=1;
-    while (XPending(dpy) && event_count--) {
-        WMNextEvent(dpy, &event);
-        WMHandleEvent(&event);
-    }
-    ignoreTimestamp=0;
-}
-#endif /* ANIMATIONS */
-
 
 
 /*
@@ -139,33 +110,21 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
     int timestamp=LastTimestamp;
     WApplication *oapp=NULL, *napp=NULL;
     int wasfocused;
+ 
+    if (scr->flags.ignore_focus_events || LastFocusChange > timestamp)
+        return;
 
     if (!old_scr)
         old_scr=scr;
     old_focused=old_scr->focused_window;
 
-    /*
-     * Safeguard: make sure the timestamp is monotonically increasing
-     * (very unlikely that this will be needed, still a safeguard)
-     */
-    if (timestamp <= LastFocusChange)
-        timestamp = LastFocusChange + 1;
-
     LastFocusChange = timestamp;
-
-    /*
-     * This is a hack, because XSetInputFocus() should have a proper
-     * timestamp instead of CurrentTime but it seems that some times
-     * clients will not receive focus properly that way.
-     */
-    if (ignoreTimestamp)
-        timestamp = CurrentTime;
 
     if (old_focused)
         oapp = wApplicationOf(old_focused->main_window);
 
     if (wwin == NULL) {
-        XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, timestamp);
+        XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, CurrentTime);
         if (old_focused) {
             wWindowUnfocus(old_focused);
         }
@@ -199,12 +158,12 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
         /* set input focus */
         switch (wwin->focus_mode) {
         case WFM_NO_INPUT:
-            XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, timestamp);
+            XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, CurrentTime);
             break;
 
         case WFM_PASSIVE:
         case WFM_LOCALLY_ACTIVE:
-            XSetInputFocus(dpy, wwin->client_win, RevertToParent, timestamp);
+            XSetInputFocus(dpy, wwin->client_win, RevertToParent, CurrentTime);
             break;
 
         case WFM_GLOBALLY_ACTIVE:
@@ -216,7 +175,7 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
         }
         XSync(dpy, False);
     } else {
-        XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, timestamp);
+        XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, CurrentTime);
     }
     if (WFLAGP(wwin, no_focusable))
         return;
@@ -333,9 +292,8 @@ wShadeWindow(WWindow  *wwin)
 
 #ifdef ANIMATIONS
     if (!wwin->screen_ptr->flags.startup) {
-        /* Look at processEvents() for reason of this code. */
-        XSync(dpy, 0);
-        processEvents(XPending(dpy));
+        /* Catch up with events not processed while animation was running */
+        ProcessPendingEvents();
     }
 #endif
 }
@@ -419,7 +377,7 @@ wMaximizeWindow(WWindow *wwin, int directions)
     int changed_h, changed_v, shrink_h, shrink_v;
     WArea usableArea, totalArea;
 
-    if (WFLAGP(wwin, no_resizable))
+    if (!IS_RESIZABLE(wwin))
         return;
 
     totalArea.x1 = 0;
@@ -549,6 +507,65 @@ wUnmaximizeWindow(WWindow *wwin)
 
     wSoundPlay(WSOUND_UNMAXIMIZE);
 }
+
+
+void
+wFullscreenWindow(WWindow *wwin)
+{
+    int head;
+    WMRect rect;
+
+    if (wwin->flags.fullscreen)
+        return;
+
+    wwin->flags.fullscreen = True;
+
+    wWindowConfigureBorders(wwin);
+
+    ChangeStackingLevel(wwin->frame->core, WMFullscreenLevel);
+
+    wwin->bfs_geometry.x = wwin->frame_x;
+    wwin->bfs_geometry.y = wwin->frame_y;
+    wwin->bfs_geometry.width = wwin->frame->core->width;
+    wwin->bfs_geometry.height = wwin->frame->core->height;
+
+    head = wGetHeadForWindow(wwin);
+    rect = wGetRectForHead(wwin->screen_ptr, head);
+    wWindowConfigure(wwin, rect.pos.x, rect.pos.y,
+                     rect.size.width, rect.size.height);
+
+    WMPostNotificationName(WMNChangedState, wwin, "fullscreen");
+}
+
+
+void
+wUnfullscreenWindow(WWindow *wwin)
+{
+    if (!wwin->flags.fullscreen)
+        return;
+
+    wwin->flags.fullscreen = False;
+
+    if (wwin->frame->core->stacking->window_level == WMFullscreenLevel) {
+        if (WFLAGP(wwin, sunken)) {
+	    ChangeStackingLevel(wwin->frame->core, WMSunkenLevel);
+        } else if (WFLAGP(wwin, floating)) {
+	    ChangeStackingLevel(wwin->frame->core, WMFloatingLevel);
+        } else {
+            ChangeStackingLevel(wwin->frame->core, WMNormalLevel);
+        }
+    }
+
+    wWindowConfigure(wwin, wwin->bfs_geometry.x, wwin->bfs_geometry.y,
+                     wwin->bfs_geometry.width, wwin->bfs_geometry.height);
+
+    wWindowConfigureBorders(wwin);
+    // seems unnecessary, but also harmless (doesn't generate flicker) -Dan
+    wFrameWindowPaint(wwin->frame);
+
+    WMPostNotificationName(WMNChangedState, wwin, "fullscreen");
+}
+
 
 #ifdef ANIMATIONS
 static void
@@ -943,7 +960,11 @@ wIconifyWindow(WWindow *wwin)
                      GrabModeAsync, None, None, CurrentTime);
     }
 
-    if (!wPreferences.disable_miniwindows) {
+    if (!wPreferences.disable_miniwindows 
+#ifdef NETWM_HINTS
+	&& !wwin->flags.net_handle_icon
+#endif
+	) {
         if (!wwin->flags.icon_moved) {
             PlaceIcon(wwin->screen_ptr, &wwin->icon_x, &wwin->icon_y, wGetHeadForWindow(wwin));
         }
@@ -968,7 +989,11 @@ wIconifyWindow(WWindow *wwin)
          * something before the animation starts (and the server is grabbed) */
         XSync(dpy, 0);
 
-        if (wPreferences.disable_miniwindows)
+	if (wPreferences.disable_miniwindows 
+#ifdef NETWM_HINTS
+	    || wwin->flags.net_handle_icon
+#endif
+	    )
             wClientSetState(wwin, IconicState, None);
         else
             wClientSetState(wwin, IconicState, wwin->icon->icon_win);
@@ -979,7 +1004,11 @@ wIconifyWindow(WWindow *wwin)
             && !wPreferences.no_animations) {
             int ix, iy, iw, ih;
 
-            if (!wPreferences.disable_miniwindows) {
+	    if (!wPreferences.disable_miniwindows 
+#ifdef NETWM_HINTS
+		&& !wwin->flags.net_handle_icon
+#endif
+		) {
                 ix = wwin->icon_x;
                 iy = wwin->icon_y;
                 iw = wwin->icon->core->width;
@@ -995,6 +1024,14 @@ wIconifyWindow(WWindow *wwin)
                     ih = area.y2 - iy;
                 } else
 #endif /* KWM_HINTS */
+#ifdef NETWM_HINTS
+		if (wwin->flags.net_handle_icon) {
+		    ix = wwin->icon_x;
+		    iy = wwin->icon_y;
+		    iw = wwin->icon_w;
+		    ih = wwin->icon_h;
+		} else
+#endif
                 {
                     ix = 0;
                     iy = 0;
@@ -1011,7 +1048,11 @@ wIconifyWindow(WWindow *wwin)
 
     wwin->flags.skip_next_animation = 0;
 
-    if (!wPreferences.disable_miniwindows) {
+    if (!wPreferences.disable_miniwindows
+#ifdef NETWM_HINTS
+	&& !wwin->flags.net_handle_icon
+#endif
+	) {
 
         if (wwin->screen_ptr->current_workspace==wwin->frame->workspace ||
             IS_OMNIPRESENT(wwin) || wPreferences.sticky_icons)
@@ -1051,20 +1092,27 @@ wIconifyWindow(WWindow *wwin)
 
 #ifdef ANIMATIONS
         if (!wwin->screen_ptr->flags.startup) {
+            /* Catch up with events not processed while animation was running */
             Window clientwin = wwin->client_win;
 
-            XSync(dpy, 0);
-            processEvents(XPending(dpy));
+            ProcessPendingEvents();
 
-            /* the window can disappear while doing the processEvents() */
-            if (!wWindowFor(clientwin))
+            /* the window can disappear while ProcessPendingEvents() runs */
+            if (!wWindowFor(clientwin)) {
                 return;
+            }
         }
 #endif
     }
 
-
-    if (wwin->flags.selected && !wPreferences.disable_miniwindows)
+    /* maybe we want to do this regardless of net_handle_icon 
+     * it seems to me we might break behaviour this way.
+     */
+    if (wwin->flags.selected && !wPreferences.disable_miniwindows
+#ifdef NETWM_HINTS
+	&& !wwin->flags.net_handle_icon
+#endif
+	)
         wIconSelect(wwin->icon);
 
     WMPostNotificationName(WMNChangedState, wwin, "iconify");
@@ -1076,7 +1124,16 @@ wIconifyWindow(WWindow *wwin)
 void
 wDeiconifyWindow(WWindow  *wwin)
 {
-    wWindowChangeWorkspace(wwin, wwin->screen_ptr->current_workspace);
+#ifdef NETWM_HINTS
+    /* we're hiding for show_desktop */
+    int netwm_hidden = wwin->flags.net_show_desktop &&
+	wwin->frame->workspace!=wwin->screen_ptr->current_workspace;
+#else
+    int netwm_hidden = False;
+#endif
+
+    if (!netwm_hidden)
+	wWindowChangeWorkspace(wwin, wwin->screen_ptr->current_workspace);
 
     if (!wwin->flags.miniaturized)
         return;
@@ -1094,86 +1151,121 @@ wDeiconifyWindow(WWindow  *wwin)
     }
 
     wwin->flags.miniaturized = 0;
-    if (!wwin->flags.shaded)
+
+    if (!netwm_hidden && !wwin->flags.shaded) {
         wwin->flags.mapped = 1;
-
-    if (!wPreferences.disable_miniwindows && wwin->icon != NULL) {
-        if (wwin->icon->selected)
-            wIconSelect(wwin->icon);
-
-        XUnmapWindow(dpy, wwin->icon->core->window);
     }
 
-    wSoundPlay(WSOUND_DEICONIFY);
+    if (!netwm_hidden || wPreferences.sticky_icons) {
+	/* maybe we want to do this regardless of net_handle_icon 
+	 * it seems to me we might break behaviour this way.
+	 */
+	if (!wPreferences.disable_miniwindows
+#ifdef NETWM_HINTS
+	    && !wwin->flags.net_handle_icon 
+#endif
+	    && wwin->icon != NULL) {
+	    if (wwin->icon->selected)
+		wIconSelect(wwin->icon);
+
+	    XUnmapWindow(dpy, wwin->icon->core->window);
+	}
+    }
+
+    if (!netwm_hidden)
+	wSoundPlay(WSOUND_DEICONIFY);
 
     /* if the window is in another workspace, do it silently */
+    if (!netwm_hidden) {
 #ifdef ANIMATIONS
-    if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations
-        && !wwin->flags.skip_next_animation && wwin->icon != NULL) {
-        int ix, iy, iw, ih;
+	if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations
+	    && !wwin->flags.skip_next_animation && wwin->icon != NULL) {
+	    int ix, iy, iw, ih;
 
-        if (!wPreferences.disable_miniwindows) {
-            ix = wwin->icon_x;
-            iy = wwin->icon_y;
-            iw = wwin->icon->core->width;
-            ih = wwin->icon->core->height;
-        } else {
+	    if (!wPreferences.disable_miniwindows 
+#ifdef NETWM_HINTS
+		&& !wwin->flags.net_handle_icon
+#endif
+	       ) {
+		ix = wwin->icon_x;
+		iy = wwin->icon_y;
+		iw = wwin->icon->core->width;
+		ih = wwin->icon->core->height;
+	    } else {
 #ifdef KWM_HINTS
-            WArea area;
+		WArea area;
 
-            if (wKWMGetIconGeometry(wwin, &area)) {
-                ix = area.x1;
-                iy = area.y1;
-                iw = area.x2 - ix;
-                ih = area.y2 - iy;
-            } else
+		if (wKWMGetIconGeometry(wwin, &area)) {
+		    ix = area.x1;
+		    iy = area.y1;
+		    iw = area.x2 - ix;
+		    ih = area.y2 - iy;
+		} else
 #endif /* KWM_HINTS */
-            {
-                ix = 0;
-                iy = 0;
-                iw = wwin->screen_ptr->scr_width;
-                ih = wwin->screen_ptr->scr_height;
-            }
-        }
-        animateResize(wwin->screen_ptr, ix, iy, iw, ih,
-                      wwin->frame_x, wwin->frame_y,
-                      wwin->frame->core->width, wwin->frame->core->height,
-                      False);
-    }
+#ifdef NETWM_HINTS
+		if (wwin->flags.net_handle_icon) {
+		    ix = wwin->icon_x;
+		    iy = wwin->icon_y;
+		    iw = wwin->icon_w;
+		    ih = wwin->icon_h;
+		} else
+#endif
+		{
+		    ix = 0;
+		    iy = 0;
+		    iw = wwin->screen_ptr->scr_width;
+		    ih = wwin->screen_ptr->scr_height;
+		}
+	    }
+	    animateResize(wwin->screen_ptr, ix, iy, iw, ih,
+			  wwin->frame_x, wwin->frame_y,
+			  wwin->frame->core->width, wwin->frame->core->height,
+			  False);
+	}
 #endif /* ANIMATIONS */
-    wwin->flags.skip_next_animation = 0;
-    XGrabServer(dpy);
-    if (!wwin->flags.shaded) {
-        XMapWindow(dpy, wwin->client_win);
+	wwin->flags.skip_next_animation = 0;
+	XGrabServer(dpy);
+	if (!wwin->flags.shaded) {
+	    XMapWindow(dpy, wwin->client_win);
+	}
+	XMapWindow(dpy, wwin->frame->core->window);
+	wRaiseFrame(wwin->frame->core);
+	if (!wwin->flags.shaded) {
+	    wClientSetState(wwin, NormalState, None);
+	}
+	mapTransientsFor(wwin);
     }
-    XMapWindow(dpy, wwin->frame->core->window);
-    wRaiseFrame(wwin->frame->core);
-    if (!wwin->flags.shaded) {
-        wClientSetState(wwin, NormalState, None);
-    }
-    mapTransientsFor(wwin);
 
-    if (!wPreferences.disable_miniwindows && wwin->icon != NULL) {
+    if (!wPreferences.disable_miniwindows && wwin->icon != NULL
+#ifdef NETWM_HINTS
+        && !wwin->flags.net_handle_icon
+#endif
+	 ) {
         RemoveFromStackList(wwin->icon->core);
         /*    removeIconGrabs(wwin->icon);*/
         wIconDestroy(wwin->icon);
         wwin->icon = NULL;
     }
-    XUngrabServer(dpy);
 
-    wSetFocusTo(wwin->screen_ptr, wwin);
+    if (!netwm_hidden) {
+	XUngrabServer(dpy);
+
+	wSetFocusTo(wwin->screen_ptr, wwin);
 
 #ifdef ANIMATIONS
-    if (!wwin->screen_ptr->flags.startup) {
-        Window clientwin = wwin->client_win;
+	if (!wwin->screen_ptr->flags.startup) {
+            /* Catch up with events not processed while animation was running */
+	    Window clientwin = wwin->client_win;
 
-        XSync(dpy, 0);
-        processEvents(XPending(dpy));
+	    ProcessPendingEvents();
 
-        if (!wWindowFor(clientwin))
-            return;
-    }
+            /* the window can disappear while ProcessPendingEvents() runs */
+            if (!wWindowFor(clientwin)) {
+                return;
+            }
+	}
 #endif
+    }
 
     if (wPreferences.auto_arrange_icons) {
         wArrangeIcons(wwin->screen_ptr, True);
@@ -1182,7 +1274,8 @@ wDeiconifyWindow(WWindow  *wwin)
     WMPostNotificationName(WMNChangedState, wwin, "iconify");
 
     /* In case we were shaded and iconified, also unshade */
-    wUnshadeWindow(wwin);
+    if (!netwm_hidden)
+	wUnshadeWindow(wwin);
 }
 
 
@@ -1618,9 +1711,9 @@ wArrangeIcons(WScreen *scr, Bool arrangeAll)
 
     while (aicon) {
         if (!aicon->docked) {
-            /* XXX: can: icon == NULL ? */
-            /* The intention here is to place the AppIcon on the head that contains most of the applications _main_ window. */
-            /*	    printf("appicon: %x %x\n", aicon->icon->core->window, aicon->main_window); */
+            /* CHECK: can icon be NULL here ? */
+            /* The intention here is to place the AppIcon on the head that
+             * contains most of the applications _main_ window. */
             head = wGetHeadForWindow(aicon->icon->owner);
 
             if (aicon->x_pos != X || aicon->y_pos != Y) {
@@ -1847,7 +1940,7 @@ wSelectWindow(WWindow *wwin, Bool flag)
         wwin->flags.selected = 1;
         XSetWindowBorder(dpy, wwin->frame->core->window, scr->white_pixel);
 
-        if (WFLAGP(wwin, no_border)) {
+	if (!HAS_BORDER(wwin)) {	
             XSetWindowBorderWidth(dpy, wwin->frame->core->window,
                                   FRAME_BORDER_WIDTH);
         }
@@ -1860,7 +1953,7 @@ wSelectWindow(WWindow *wwin, Bool flag)
         XSetWindowBorder(dpy, wwin->frame->core->window,
                          scr->frame_border_pixel);
 
-        if (WFLAGP(wwin, no_border)) {
+	if (!HAS_BORDER(wwin)) {	
             XSetWindowBorderWidth(dpy, wwin->frame->core->window, 0);
         }
 
