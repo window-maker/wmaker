@@ -1,7 +1,7 @@
 /*
  *  WINGs WMConnection function library
  *
- *  Copyright (c) 1999-2002 Dan Pascu
+ *  Copyright (c) 1999-2003 Dan Pascu
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

@@ -1,6 +1,6 @@
 /*  session.h
  *
- *  Copyright (c) 1999-2002 Alfredo K. Kojima
+ *  Copyright (c) 1999-2003 Alfredo K. Kojima
  *
  *  Window Maker window manager
  *

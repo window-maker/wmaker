@@ -1,8 +1,8 @@
 /* color.c - color stuff (rgb -> hsv convertion etc.)
  * 
- *  Raster graphics library
+ * Raster graphics library
  * 
- *  Copyright (c) 1998-2002 Alfredo K. Kojima
+ * Copyright (c) 1998-2003 Alfredo K. Kojima
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public

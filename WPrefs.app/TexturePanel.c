@@ -2,7 +2,7 @@
  * 
  *  WPrefs - WindowMaker Preferences Program
  * 
- *  Copyright (c) 1998-2002 Alfredo K. Kojima
+ *  Copyright (c) 1998-2003 Alfredo K. Kojima
  *  Copyright (c) 1998 James Thompson
  * 
  *  This program is free software; you can redistribute it and/or modify

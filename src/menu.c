@@ -2,8 +2,8 @@
  *
  *  Window Maker window manager
  *
- *  Copyright (c) 1997-2002 Alfredo K. Kojima
- *  Copyright (c) 1998-2002 Dan Pascu
+ *  Copyright (c) 1997-2003 Alfredo K. Kojima
+ *  Copyright (c) 1998-2003 Dan Pascu
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1949,23 +1949,31 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
     int old_frame_y = 0;
     delay_data d_data = {NULL, NULL, NULL};
 
+    /* Doesn't seem to be needed anymore (if delayed selection handler is
+     * added only if not present). there seem to be no other side effects
+     * from removing this and it is also possible that it was only added
+     * to avoid problems with adding the delayed selection timer handler
+     * multiple times
+     */
+    /*if (menu->flags.inside_handler) {
+        return;
+    }*/
+    menu->flags.inside_handler = 1;
+
     if (!wPreferences.wrap_menus) {
         smenu = parentMenu(menu);
         old_frame_x = smenu->frame_x;
         old_frame_y = smenu->frame_y;
     } else if (event->xbutton.window == menu->frame->core->window) {
         /* This is true if the menu was launched with right click on root window */
-        delayed_select = 1;
-        d_data.delayed_select = &delayed_select;
-        d_data.menu = menu;
-        d_data.magic = WMAddTimerHandler(wPreferences.dblclick_time,
-                                         delaySelection, &d_data);
+        if (!d_data.magic) {
+            delayed_select = 1;
+            d_data.delayed_select = &delayed_select;
+            d_data.menu = menu;
+            d_data.magic = WMAddTimerHandler(wPreferences.dblclick_time,
+                                             delaySelection, &d_data);
+        }
     }
-
-    if (menu->flags.inside_handler) {
-        return;
-    }
-    menu->flags.inside_handler = 1;
 
     wRaiseFrame(menu->frame->core);
 
@@ -2102,8 +2110,8 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
                     if (menu != smenu) {
                         if (d_data.magic) {
                             WMDeleteTimerHandler(d_data.magic);
+                            d_data.magic = NULL;
                         }
-                        d_data.magic = NULL;
                     } else if (moved_to_submenu) {
                         /* while we are moving, postpone the selection */
                         if (d_data.magic) {
@@ -2118,9 +2126,10 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
                         prevy = ev.xmotion.y_root;
                         break;
                     } else {
-                        if (d_data.magic)
+                        if (d_data.magic) {
                             WMDeleteTimerHandler(d_data.magic);
-                        d_data.magic = NULL;
+                            d_data.magic = NULL;
+                        }
                     }
                 }
             }
@@ -2180,8 +2189,10 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
         WMDeleteTimerHandler(menu->timer);
         menu->timer = NULL;
     }
-    if (d_data.magic!=NULL)
+    if (d_data.magic!=NULL) {
         WMDeleteTimerHandler(d_data.magic);
+        d_data.magic = NULL;
+    }
 
     if (menu && menu->selected_entry>=0) {
         entry = menu->entries[menu->selected_entry];
@@ -2236,6 +2247,16 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
         wMenuMove(parentMenu(desc->parent), old_frame_x, old_frame_y, True);
 
 byebye:
+    /* Just to be sure in case we skip the 2 above because of a goto byebye */
+    if (menu && menu->timer) {
+        WMDeleteTimerHandler(menu->timer);
+        menu->timer = NULL;
+    }
+    if (d_data.magic!=NULL) {
+        WMDeleteTimerHandler(d_data.magic);
+        d_data.magic = NULL;
+    }
+
     ((WMenu*)desc->parent)->flags.inside_handler = 0;
 #ifdef VIRTUAL_DESKTOP
     if (wPreferences.vedge_thickness) {

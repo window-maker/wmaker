@@ -2,8 +2,8 @@
  * 
  *  Window Maker window manager
  * 
- *  Copyright (c) 1997-2002 Alfredo K. Kojima
- *  Copyright (c) 1998-2002 Dan Pascu
+ *  Copyright (c) 1997-2003 Alfredo K. Kojima
+ *  Copyright (c) 1998-2003 Dan Pascu
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1807,7 +1807,7 @@ OpenRootMenu(WScreen *scr, int x, int y, int keyboard)
 	domain = WMCreatePLString("WMRootMenu");
     }
      */
-    
+
     scr->flags.root_menu_changed_shortcuts = 0;
     scr->flags.added_workspace_menu = 0;
     scr->flags.added_windows_menu = 0;

@@ -1,7 +1,7 @@
 /* session.c - session state handling and R6 style session management
  *
- *  Copyright (c) 1998-2002 Dan Pascu
- *  Copyright (c) 1998-2002 Alfredo Kojima
+ *  Copyright (c) 1998-2003 Dan Pascu
+ *  Copyright (c) 1998-2003 Alfredo Kojima
  *
  *  Window Maker window manager
  *

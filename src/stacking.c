@@ -1,8 +1,8 @@
 /*
  *  Window Maker window manager
  * 
- *  Copyright (c) 1997-2002 Alfredo K. Kojima
- *  Copyright (c) 1998-2002 Dan Pascu
+ *  Copyright (c) 1997-2003 Alfredo K. Kojima
+ *  Copyright (c) 1998-2003 Dan Pascu
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -208,10 +208,12 @@ wRaiseFrame(WCoreWindow *frame)
 	frame->stacking->under->stacking->above = frame->stacking->above;
     if (frame->stacking->above)
 	frame->stacking->above->stacking->under = frame->stacking->under;
-	
+
     frame->stacking->above = NULL;
     frame->stacking->under = WMGetFromBag(scr->stacking_list, level);
-    frame->stacking->under->stacking->above = frame;
+    if (frame->stacking->under) {
+        frame->stacking->under->stacking->above = frame;
+    }
     WMSetInBag(scr->stacking_list, level, frame);
 
     /* raise transients under us from bottom to top 
@@ -325,9 +327,9 @@ wLowerFrame(WCoreWindow *frame)
     wlist = WMGetFromBag(scr->stacking_list, level);
 
     /* look for place to put this window */
-    {
+    if (wlist) {
 	WCoreWindow *owner = frame->stacking->child_of;
-	
+
 	if (owner != wlist) {
 	    while (wlist->stacking->under) {
 		/* if this is a transient, it should not be placed under 
@@ -337,13 +339,17 @@ wLowerFrame(WCoreWindow *frame)
 		wlist = wlist->stacking->under;
 	    }
 	}
-    } 
+    }
     /* insert under the place found */
     frame->stacking->above = wlist;
-    frame->stacking->under = wlist->stacking->under;
-    if (wlist->stacking->under)
-	wlist->stacking->under->stacking->above = frame;
-    wlist->stacking->under = frame;
+    if (wlist) {
+        frame->stacking->under = wlist->stacking->under;
+        if (wlist->stacking->under)
+            wlist->stacking->under->stacking->above = frame;
+        wlist->stacking->under = frame;
+    } else {
+        frame->stacking->under = NULL;
+    }
 
     if (frame->stacking->above == NULL) {
 	WMBagIterator iter;

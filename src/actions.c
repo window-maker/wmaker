@@ -2,8 +2,8 @@
  * 
  *  Window Maker window manager
  * 
- *  Copyright (c) 1997-2002 Alfredo K. Kojima
- *  Copyright (c) 1998-2002 Dan Pascu
+ *  Copyright (c) 1997-2003 Alfredo K. Kojima
+ *  Copyright (c) 1998-2003 Dan Pascu
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -462,19 +462,14 @@ wMaximizeWindow(WWindow *wwin, int directions)
 #endif
 
     if (directions & MAX_HORIZONTAL) {
-
 	new_width = (usableArea.x2-usableArea.x1)-FRAME_BORDER_WIDTH*2;	
 	new_x = usableArea.x1;
-
     } else {
-
 	new_x = wwin->frame_x;
 	new_width = wwin->frame->core->width;
-
     }
 
     if (directions & MAX_VERTICAL) {
-
 	new_height = (usableArea.y2-usableArea.y1)-FRAME_BORDER_WIDTH*2;
 	new_y = usableArea.y1;
 	if (WFLAGP(wwin, full_maximize)) {
