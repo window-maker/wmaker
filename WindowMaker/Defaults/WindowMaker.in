@@ -48,7 +48,7 @@
   RaiseDelay = 0;
   AutoFocus = YES;
   WindowPlacement = auto;
-  WindowPlaceOrigin = (64, 64);
+  WindowPlaceOrigin = (64, 0);
   UseSaveUnders = NO;
   DisableSound = NO;
   DisableAnimations = NO;
