@@ -199,8 +199,15 @@ typedef struct W_Screen {
     struct W_Pixmap *trashcanIcon;
     struct W_Pixmap *altTrashcanIcon;
 
+    struct W_Pixmap *createDirIcon;
+    struct W_Pixmap *altCreateDirIcon;
+
     struct W_Pixmap *disketteIcon;
     struct W_Pixmap *altDisketteIcon;
+    struct W_Pixmap *mountIcon;
+    struct W_Pixmap *altMountIcon;
+    struct W_Pixmap *unmountIcon;
+    struct W_Pixmap *altUnmountIcon;
 
     struct W_Pixmap *magnifyIcon;
 /*    struct W_Pixmap *altMagnifyIcon;*/
