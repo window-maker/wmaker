@@ -1320,6 +1320,13 @@ windowUnderPointer(WScreen *scr)
 }
 
 
+static int CheckFullScreenWindowFocused(WScreen *scr)
+{
+  if (scr->focused_window && scr->focused_window->flags.fullscreen)
+      return 1;
+  else
+      return 0;
+}
 
 
 static void
@@ -1386,13 +1393,13 @@ handleKeyPress(XEvent *event)
 #ifndef LITE
     case WKBD_ROOTMENU:
         /*OpenRootMenu(scr, event->xkey.x_root, event->xkey.y_root, True);*/
-        {
+        if (!CheckFullScreenWindowFocused(scr)) {
             WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
             OpenRootMenu(scr, rect.pos.x + rect.size.width/2, rect.pos.y + rect.size.height/2, True);
         }
         break;
     case WKBD_WINDOWLIST:
-        {
+        if (!CheckFullScreenWindowFocused(scr)) {
             WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
             OpenSwitchMenu(scr, rect.pos.x + rect.size.width/2, rect.pos.y + rect.size.height/2, True);
         }
