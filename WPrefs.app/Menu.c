@@ -1625,6 +1625,8 @@ processData(char *title, ItemData *data)
 
     switch (data->type) {
      case ExecInfo:
+	if (data->param.exec.command == NULL)
+	    return NULL;
 #if 1
 	if (strpbrk(data->param.exec.command, "&$*|><?`=;")) {
 	    s1 = "SHEXEC";
@@ -1753,6 +1755,9 @@ processSubmenu(WEditMenu *menu)
 	} else {
 	    pl = processData(s, WGetEditMenuItemData(item));
 	}
+
+	if (!pl)
+	    continue;
 
 	PLAppendArrayElement(pmenu, pl);
     }
