@@ -7,9 +7,12 @@ single_click.diff
 
 allows single click in dock
 
-for version: 0.52.0
+for version: 0.65.0
 
 author:
 Sebastien Bauer <seb_bauer@bigfoot.com>
 John Morrissey <jwm@horde.net>
+
+updated for Window Maker 0.65.0 by:
+Daniel Richard G. <skunk@graphics.lcs.mit.edu>
 
