@@ -1,5 +1,3 @@
 Makefile Makefile.in
-.libs
-test
 .psrc .inslog2 tca.map tca.log
 *.rpt
