@@ -1593,7 +1593,7 @@ WMReadPropListFromFile(char *file)
     struct stat stbuf;
     size_t length;
 
-    f = fopen(file, "r");
+    f = fopen(file, "rb");
     if (!f) {
         /* let the user print the error message if he really needs to */
         /*wsyserror(_("could not open domain file '%s' for reading"), file);*/
@@ -1672,7 +1672,7 @@ WMWritePropListToFile(WMPropList *plist, char *path, Bool atomically)
         mask = umask(0);
         umask(mask);
         fchmod(fd, 0644 & ~mask);
-        if ((theFile = fdopen(fd, "w")) == NULL) {
+        if ((theFile = fdopen(fd, "wb")) == NULL) {
             close(fd);
         }
 #else

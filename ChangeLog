@@ -6,6 +6,8 @@ Changes since version 0.80.1:
   the root menu (sent by "Marc-Christian Petersen" <m.c.p@wolk-project.de>)
 - Fixed dock's menu mapping position when dock is on the right side.
 - Map clip's menu so that it never gets out of screen on the left or the right.
+- Patch to add binary mode on opening files (needed for Windows with Cygwin)
+  (sent by luke <luke@posh.optushome.com.au>)
 
 
 Changes since version 0.80.0:

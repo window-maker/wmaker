@@ -586,7 +586,7 @@ testText(WMScreen *scr)
 {
     WMWindow *win;
     WMText *text;
-    FILE *file = fopen("wm.html", "r");
+    FILE *file = fopen("wm.html", "rb");
 
     windowCount++;
 

@@ -67,7 +67,7 @@ RLoadPNG(RContext *context, char *file, int index)
     png_bytep *png_rows;
     unsigned char *ptr;
     
-    f = fopen(file, "r");
+    f = fopen(file, "rb");
     if (!f) {
 	RErrorCode = RERR_OPEN;
 	return NULL;

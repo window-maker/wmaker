@@ -1739,7 +1739,7 @@ connectKFM(WScreen *scr)
     wfree(buffer);
 
     /* pid file */
-    f = fopen(path, "r");
+    f = fopen(path, "rb");
     wfree(path);
     if (!f)
 	return -1;
@@ -1771,7 +1771,7 @@ connectKFM(WScreen *scr)
     }
 
     path = wstrconcat(wgethomedir(), "/.kde/share/apps/kfm/magic");
-    f = fopen(path, "r");
+    f = fopen(path, "rb");
     wfree(path);
     if (!f) {
 	return -1;

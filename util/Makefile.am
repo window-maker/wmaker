@@ -15,10 +15,7 @@ INCLUDES = $(DFLAGS) -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib \
 	@HEADER_SEARCH_PATH@ \
 	-DETCDIR=\"sysconfdir\" -DDATADIR=\"pkgdatadir\"
 
-# X_EXTRA_LIBS is for libproplist in systems that need -lsocket
-# remove after we require lPL 0.10.2 which automatically resolves its
-# library dependancies using the libPropList.la file
-liblist= @LIBRARY_SEARCH_PATH@ @X_EXTRA_LIBS@ @INTLIBS@
+liblist= @LIBRARY_SEARCH_PATH@ @INTLIBS@
 
 wdwrite_LDADD = $(top_builddir)/WINGs/libWUtil.a $(liblist)
 

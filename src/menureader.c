@@ -202,7 +202,7 @@ static WRootMenuData *text_openMenuFile(char *path)
     data = wmalloc(sizeof(TextMenuReaderData));
     data->reader = TextMenuReader;
     
-    data->file = fopen(path, "r");
+    data->file = fopen(path, "rb");
     if (!data->file) {
 
 	return NULL;

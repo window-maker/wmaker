@@ -120,7 +120,7 @@ main(int argc, char **argv)
 	}
     }
     if (filename) {
-	file = fopen(filename, "r");
+	file = fopen(filename, "rb");
 	if (!file) {
 	    char line[1024];
 	    sprintf(line, "%s: could not open \"%s\"", argv[0], filename);

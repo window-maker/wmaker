@@ -245,7 +245,7 @@ RLoadXPM(RContext *context, char *file, int index)
     int w, h, ccount, csize;
     FILE *f;
     
-    f = fopen(file, "r");
+    f = fopen(file, "rb");
     if (!f) {
 	RErrorCode = RERR_OPEN;
 	return NULL;
@@ -569,7 +569,7 @@ RSaveXPM(RImage *image, char *filename)
     char transp[16];
     char buf[128];
 
-    file = fopen(filename, "w+");
+    file = fopen(filename, "wb+");
     if (!file) {
 	RErrorCode = RERR_OPEN;
 	return False;

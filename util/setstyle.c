@@ -595,7 +595,7 @@ readBlackBoxStyle(char *path)
     char buffer[128], char token[128];
     WMPropList *style, *p;
 
-    f = fopen(path, "r");
+    f = fopen(path, "rb");
     if (!f) {
 	perror(path);
 	return NULL;

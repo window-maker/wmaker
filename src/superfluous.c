@@ -492,7 +492,7 @@ loadData(WScreen *scr)
     RImage *image;
     Pixmap d[12];
 
-    f = fopen(PKGDATADIR"/xtree.dat", "r");
+    f = fopen(PKGDATADIR"/xtree.dat", "rb");
     if (!f)
 	return False;
 

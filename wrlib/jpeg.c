@@ -109,7 +109,7 @@ RLoadJPEG(RContext *context, char *file_name, int index)
      */
     struct my_error_mgr jerr;
 
-    file = fopen(file_name, "r");
+    file = fopen(file_name, "rb");
     if (!file) {
 	RErrorCode = RERR_OPEN;
 	return NULL;

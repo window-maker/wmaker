@@ -282,6 +282,10 @@ enum {
 #define M_PI 3.14159265358979323846
 #endif
 
+/* Silly hack for Windows systems with cygwin */
+#ifndef O_BINARY
+# define O_BINARY 0
+#endif
 
 static int fetchFile(char* toPath, char *imageSrcFile,
 	char *imageDestFileName);
@@ -302,9 +306,9 @@ static WMPoint magnifyInitialize(W_ColorPanel *panel);
 static void magnifyPutCursor(WMWidget *w, void *data);
 static Pixmap magnifyCreatePixmap(WMColorPanel *panel);
 static void magnifyGetImageStored(W_ColorPanel *panel, int x1, int y1, 
-	int x2, int y2);
+                                  int x2, int y2);
 static XImage* magnifyGetImage(WMScreen *scr, XImage *image, int x, int y,
-	int w, int h);
+                               int w, int h);
 
 static wheelMatrix* wheelCreateMatrix(unsigned int width , unsigned int height);
 static void wheelDestroyMatrix(wheelMatrix *matrix);
@@ -1282,7 +1286,7 @@ readXColors(W_ColorPanel *panel)
 	return;
     }
     else {
-	if ((rgbtxt = fopen(RGBTXT, "r"))) {
+	if ((rgbtxt = fopen(RGBTXT, "rb"))) {
 	    while (fgets(line, MAX_LENGTH, rgbtxt)) {
 		if (sscanf(line, "%d%d%d %[^\n]", &red, &green, &blue, name)) {
 		    color = wmalloc(sizeof(RColor));
@@ -3644,13 +3648,13 @@ fetchFile(char *toPath, char *srcFile, char *destFile)
     char	*tmp;
     char	buf[BUFSIZE];
     
-    if ((src = open(srcFile, O_RDONLY)) == 0) {
+    if ((src = open(srcFile, O_RDONLY|O_BINARY)) == 0) {
 	wsyserror(_("Could not open %s"), srcFile);
 	return -1;
     }
     
     tmp = wstrconcat(toPath, destFile);
-    if ((dest = open( tmp, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) 
+    if ((dest = open( tmp, O_RDWR|O_CREAT|O_BINARY, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) 
 	== 0) {
 	wsyserror(_("Could not create %s"), tmp);
 	wfree(tmp);

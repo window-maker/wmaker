@@ -127,7 +127,7 @@ RLoadPPM(RContext *context, char *file_name, int index)
 
 #define GETL() if (!fgets(buffer, 255, file)) goto short_file
     
-    file = fopen(file_name, "r");
+    file = fopen(file_name, "rb");
     if (!file) {
 	RErrorCode = RERR_OPEN;
 	return NULL;

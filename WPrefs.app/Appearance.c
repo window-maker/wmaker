@@ -420,7 +420,7 @@ dumpRImage(char *path, RImage *image)
     FILE *f;
     int channels = (image->format == RRGBAFormat ? 4 : 3);
 
-    f = fopen(path, "w");
+    f = fopen(path, "wb");
     if (!f) {
 	wsyserror(path);
 	return;
@@ -1352,7 +1352,7 @@ loadRImage(WMScreen *scr, char *path)
     int w, h, d;
     Pixmap pixmap;
 
-    f = fopen(path, "r");
+    f = fopen(path, "rb");
     if (!f)
 	return None;
 

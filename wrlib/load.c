@@ -37,6 +37,10 @@
 
 #include "wraster.h"
 
+/* Silly hack for Windows systems with cygwin */
+#ifndef O_BINARY
+# define O_BINARY 0
+#endif
 
 typedef struct RCachedImage {
     RImage 	*image;
@@ -321,7 +325,7 @@ identFile(char *path)
 
     assert(path!=NULL);
 
-    fd = open(path, O_RDONLY);
+    fd = open(path, O_RDONLY|O_BINARY);
     if (fd < 0) {
 	RErrorCode = RERR_OPEN;
 	return IM_ERROR;

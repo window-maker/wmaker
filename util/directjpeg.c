@@ -133,7 +133,7 @@ LoadJPEG(RContext *rc, char *file_name, int *width, int *height)
     if (!canLoad(rc))
 	return None;
 
-    file = fopen(file_name, "r");
+    file = fopen(file_name, "rb");
     if (!file) {
 	return None;
     }

@@ -1207,7 +1207,7 @@ readMenuFile(WScreen *scr, char *file_name)
 #endif /* USECPP */
 
     if (!file) {
-	file = fopen(file_name, "r");
+	file = fopen(file_name, "rb");
 	if (!file) {
 	    wsyserror(_("%s:could not open menu file"), file_name);
 	    return NULL;
@@ -1309,7 +1309,7 @@ readMenuPipe(WScreen *scr, char **file_name)
 #endif /* USECPP */
 
     if (!file) {
-       file = popen(filename, "r");
+       file = popen(filename, "rb");
 
        if (!file) {
            wsyserror(_("%s:could not open menu file"), filename);

@@ -701,9 +701,9 @@ storeCommandInScript(char *cmd, char *line)
 
     path = wstrconcat(wusergnusteppath(), "/Library/WindowMaker/autostart");
     
-    f = fopen(path, "r");
+    f = fopen(path, "rb");
     if (!f) {
-	f = fopen(path, "w");
+	f = fopen(path, "wb");
 	if (!f) {
 	    wsyserror(_("could not create %s"), path);
 	    goto end;
@@ -719,7 +719,7 @@ storeCommandInScript(char *cmd, char *line)
 
 	tmppath = wstrconcat(wusergnusteppath(), 
 			     "/Library/WindowMaker/autostart.tmp");
-	fo = fopen(tmppath, "w");
+	fo = fopen(tmppath, "wb");
 	if (!fo) {
             wsyserror(_("could not create temporary file %s"), tmppath);
             wfree(tmppath);

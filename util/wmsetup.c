@@ -296,7 +296,7 @@ Bool copyAllFiles(char *gsdir)
 
     sprintf(path, "%s/USER_FILES", DATADIR);
     
-    f = fopen(path, "r");
+    f = fopen(path, "rb");
     while (!feof(f)) {
 	if (!fgets(file, 255, f)) {
 	    break;
@@ -319,7 +319,7 @@ Bool copyAllFiles(char *gsdir)
     
     sprintf(path, "%s/USER_FILES", ETCDIR);
 
-    f = fopen(path, "r");
+    f = fopen(path, "rb");
     while (!feof(f)) {
 	if (!fgets(path, 255, f)) {
 	    break;
