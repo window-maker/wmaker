@@ -552,9 +552,11 @@ void WMDragImageFromView(WMView *view, WMPixmap *image, WMPoint atLocation,
 
 /* ....................................................................... */
 
-WMFont *WMCreateFont(WMScreen *scrPtr, char *fontName);
+WMFont *WMCreateFontSet(WMScreen *scrPtr, char *fontName);
 
-WMFont *WMCreateFontInDefaultEncoding(WMScreen *scrPtr, char *fontName);
+WMFont *WMCreateNormalFont(WMScreen *scrPtr, char *fontName);
+
+WMFont *WMCreateFont(WMScreen *scrPtr, char *fontName);
 
 WMFont *WMRetainFont(WMFont *font);
 

@@ -41,6 +41,9 @@ changes since wmaker 0.53.0:
   wstrdup()'ed copy. DO NOT FREE IT ANYMORE!
 - added MultiByteText option to userdefaults file to control use of multibyte
   string drawing functions
+- renamed WMCreateFont() to WMCreateFontSet()
+- renamed WMCreateFontInDefaultEncoding() to WMCreateNormalFont()
+- added WMCreateFont() with different semantics
 
 
 changes since wmaker 0.52.0:

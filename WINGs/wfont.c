@@ -9,7 +9,7 @@ static char *makeFontSetOfSize(char *fontset, int size);
 
 
 WMFont*
-WMCreateFont(WMScreen *scrPtr, char *fontName)
+WMCreateFontSet(WMScreen *scrPtr, char *fontName)
 {
     WMFont *font;
     Display *display = scrPtr->display;
@@ -70,7 +70,7 @@ WMCreateFont(WMScreen *scrPtr, char *fontName)
 
 
 WMFont*
-WMCreateFontInDefaultEncoding(WMScreen *scrPtr, char *fontName)
+WMCreateNormalFont(WMScreen *scrPtr, char *fontName)
 {
     WMFont *font;
     Display *display = scrPtr->display;
@@ -106,6 +106,17 @@ WMCreateFontInDefaultEncoding(WMScreen *scrPtr, char *fontName)
     assert(WMHashInsert(scrPtr->fontCache, font->name, font)==NULL);
 
     return font;    
+}
+
+
+
+WMFont*
+WMCreateFont(WMScreen *scrPtr, char *fontName)
+{
+    if (WINGsConfiguration.useMultiByte)
+	return WMCreateFontSet(scrPtr, fontName);
+    else
+	return WMCreateNormalFont(scrPtr, fontName);
 }
 
 
@@ -162,20 +173,20 @@ WMSystemFontOfSize(WMScreen *scrPtr, int size)
     fontSpec = makeFontSetOfSize(WINGsConfiguration.systemFont, size);
 
     if (WINGsConfiguration.useMultiByte)
-	font = WMCreateFont(scrPtr, fontSpec);
+	font = WMCreateFontSet(scrPtr, fontSpec);
     else
-	font = WMCreateFontInDefaultEncoding(scrPtr, fontSpec);
+	font = WMCreateNormalFont(scrPtr, fontSpec);
 
     if (!font) {
 	if (WINGsConfiguration.useMultiByte) {
 	    wwarning("could not load font set %s. Trying fixed.", fontSpec);
-	    font = WMCreateFont(scrPtr, "fixed");
+	    font = WMCreateFontSet(scrPtr, "fixed");
 	    if (!font) {
-		font = WMCreateFont(scrPtr, "-*-fixed-medium-r-normal-*-14-*-*-*-*-*-*-*");
+		font = WMCreateFontSet(scrPtr, "-*-fixed-medium-r-normal-*-14-*-*-*-*-*-*-*");
 	    }
 	} else {
 	    wwarning("could not load font %s. Trying fixed.", fontSpec);
-	    font = WMCreateFontInDefaultEncoding(scrPtr, "fixed");
+	    font = WMCreateNormalFont(scrPtr, "fixed");
 	}
 	if (!font) {
 	    wwarning("could not load fixed font!");
@@ -198,20 +209,20 @@ WMBoldSystemFontOfSize(WMScreen *scrPtr, int size)
     fontSpec = makeFontSetOfSize(WINGsConfiguration.boldSystemFont, size);
 
     if (WINGsConfiguration.useMultiByte)
-	font = WMCreateFont(scrPtr, fontSpec);
+	font = WMCreateFontSet(scrPtr, fontSpec);
     else
-	font = WMCreateFontInDefaultEncoding(scrPtr, fontSpec);
+	font = WMCreateNormalFont(scrPtr, fontSpec);
 
     if (!font) {
 	if (WINGsConfiguration.useMultiByte) {
 	    wwarning("could not load font set %s. Trying fixed.", fontSpec);
-	    font = WMCreateFont(scrPtr, "fixed");
+	    font = WMCreateFontSet(scrPtr, "fixed");
 	    if (!font) {
-		font = WMCreateFont(scrPtr, "-*-fixed-medium-r-normal-*-14-*-*-*-*-*-*-*");
+		font = WMCreateFontSet(scrPtr, "-*-fixed-medium-r-normal-*-14-*-*-*-*-*-*-*");
 	    }
 	} else {
 	    wwarning("could not load font %s. Trying fixed.", fontSpec);
-	    font = WMCreateFontInDefaultEncoding(scrPtr, "fixed");
+	    font = WMCreateNormalFont(scrPtr, "fixed");
 	}
 	if (!font) {
 	    wwarning("could not load fixed font!");
