@@ -548,8 +548,10 @@ wUnfullscreenWindow(WWindow *wwin)
                      wwin->bfs_geometry.width, wwin->bfs_geometry.height);
 
     wWindowConfigureBorders(wwin);
+    /*
     // seems unnecessary, but also harmless (doesn't generate flicker) -Dan
     wFrameWindowPaint(wwin->frame);
+     */
 
     WMPostNotificationName(WMNChangedState, wwin, "fullscreen");
 }

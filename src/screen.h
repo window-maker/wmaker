@@ -288,10 +288,6 @@ typedef struct _WScreen {
     Window autoRaiseWindow;	       /* window that is scheduled to be
                                         * raised */
 
-
-    Window scrolledFMaximize;	       /* full maximized window which was
-                                          scrolled down for titlebar access */
-
     /* for window shortcuts */
     WMArray *shortcutWindows[MAX_WINDOW_SHORTCUTS];
 

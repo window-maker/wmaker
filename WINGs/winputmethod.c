@@ -35,7 +35,6 @@ W_InitIMStuff(WMScreen *scr)
         return False;
     }
 
-    //XGetIMValues(scr->display,
 }
 
 
@@ -63,7 +62,8 @@ W_CreateIC(WMView *view)
     ctx->next = scr->imctx->icList;
     if (scr->imctx->icList)
         scr->imctx->icList->prev = ctx;
-    //scr->imctx = ctx;
+
+
 }
 
 

@@ -1645,7 +1645,6 @@ wsobserver(void *self, WMNotification *notif)
 {
     WScreen *scr = (WScreen*)WMGetNotificationObject(notif);
     const char *name = WMGetNotificationName(notif);
-    //void *data = WMGetNotificationClientData(notif);
 
     if (strcmp(name, WMNWorkspaceCreated) == 0) {
         updateWorkspaceCount(scr);

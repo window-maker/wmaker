@@ -45,10 +45,10 @@
 extern WPreferences wPreferences;
 
 
-#define X_ORIGIN(scr) WMAX(usableArea.x1,\
+#define X_ORIGIN WMAX(usableArea.x1,\
     wPreferences.window_place_origin.x)
 
-#define Y_ORIGIN(scr) WMAX(usableArea.y1,\
+#define Y_ORIGIN WMAX(usableArea.y1,\
     wPreferences.window_place_origin.y)
 
 
@@ -348,8 +348,7 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
                  unsigned int width, unsigned int height,
                  WArea usableArea)
 {
-    //WScreen *scr = wwin->screen_ptr;
-    int test_x = 0, test_y = Y_ORIGIN(scr);
+    int test_x = 0, test_y = Y_ORIGIN;
     int from_x, to_x, from_y, to_y;
     int sx;
     int min_isect, min_isect_x, min_isect_y;
@@ -365,7 +364,7 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
         height += 2;
         width += 2;
     }
-    sx = X_ORIGIN(scr);
+    sx = X_ORIGIN;
 
     min_isect = INT_MAX;
     min_isect_x = sx;
@@ -389,13 +388,13 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
     }
 
     from_x = min_isect_x - PLACETEST_HSTEP + 1;
-    from_x = WMAX(from_x, X_ORIGIN(scr));
+    from_x = WMAX(from_x, X_ORIGIN);
     to_x = min_isect_x + PLACETEST_HSTEP;
     if (to_x + width > usableArea.x2)
         to_x = usableArea.x2 - width;
 
     from_y = min_isect_y - PLACETEST_VSTEP + 1;
-    from_y = WMAX(from_y, Y_ORIGIN(scr));
+    from_y = WMAX(from_y, Y_ORIGIN);
     to_y = min_isect_y + PLACETEST_VSTEP;
     if (to_y + height > usableArea.y2)
         to_y = usableArea.y2 - height;
@@ -424,7 +423,7 @@ autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
                 WArea usableArea)
 {
     WScreen *scr = wwin->screen_ptr;
-    int test_x = 0, test_y = Y_ORIGIN(scr);
+    int test_x = 0, test_y = Y_ORIGIN;
     int loc_ok = False, tw,tx,ty,th;
     int swidth, sx;
     WWindow *test_window;
@@ -441,7 +440,7 @@ autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
     }
 
     swidth = usableArea.x2-usableArea.x1;
-    sx = X_ORIGIN(scr);
+    sx = X_ORIGIN;
 
     /* this was based on fvwm2's smart placement */
 
@@ -550,13 +549,13 @@ cascadeWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret,
         width += 2;
     }
 
-    *x_ret = h * scr->cascade_index + X_ORIGIN(scr);
-    *y_ret = h * scr->cascade_index + Y_ORIGIN(scr);
+    *x_ret = h * scr->cascade_index + X_ORIGIN;
+    *y_ret = h * scr->cascade_index + Y_ORIGIN;
 
     if (width + *x_ret > usableArea.x2 || height + *y_ret > usableArea.y2) {
         scr->cascade_index = 0;
-        *x_ret = X_ORIGIN(scr);
-        *y_ret = Y_ORIGIN(scr);
+        *x_ret = X_ORIGIN;
+        *y_ret = Y_ORIGIN;
     }
 }
 
@@ -579,12 +578,12 @@ randomPlaceWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret,
         width += 2;
     }
 
-    w = ((usableArea.x2-X_ORIGIN(scr)) - width);
-    h = ((usableArea.y2-Y_ORIGIN(scr)) - height);
+    w = ((usableArea.x2-X_ORIGIN) - width);
+    h = ((usableArea.y2-Y_ORIGIN) - height);
     if (w<1) w = 1;
     if (h<1) h = 1;
-    *x_ret = X_ORIGIN(scr) + rand()%w;
-    *y_ret = Y_ORIGIN(scr) + rand()%h;
+    *x_ret = X_ORIGIN + rand()%w;
+    *y_ret = Y_ORIGIN + rand()%h;
 }
 
 

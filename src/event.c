@@ -1759,54 +1759,6 @@ handleMotionNotify(XEvent *event)
                 wMenuScroll(menu, event);
         }
     }
-
-#if 0 // what is with this? -Dan
-    if (event->xmotion.subwindow == None)
-        return;
-
-    if (scr->scrolledFMaximize != None) {
-        WWindow *twin;
-
-        twin = wWindowFor(scr->scrolledFMaximize);
-        if (twin && twin->frame_y ==) {
-
-
-        }
-        scr->scrolledFMaximize = NULL;
-
-    } else {
-
-        /* scroll full maximized window */
-        if (event->xmotion.y_root < 1
-            || event->xmotion.y_root > scr->scr_height - 1) {
-
-            wwin = wWindowFor(event->xmotion.subwindow);
-
-            if (wwin && (wwin->flags.maximized & MAX_VERTICAL)
-                && WFLAGP(wwin, full_maximize)
-                && event->xmotion.x_root >= wwin->frame_x
-                && event->xmotion.x_root <= wwin->frame_x + wwin->frame->core->width) {
-
-                if (HAS_BORDER(wwin)
-                    && wwin->frame_y <= - wwin->frame->top_width) {
-
-                    wWindowMove(wwin, wwin->frame_x, 0);
-                    wwin->flags.dragged_while_fmaximized = 0;
-
-                } else if (HAS_RESIZEBAR(wwin)
-                           && wwin->frame_y + wwin->frame->core->height >=
-                           scr->scr_height + wwin->frame->bottom_width) {
-
-                    int y = scr->scr_height + wwin->frame->bottom_width;
-
-                    y = scr->scr_height - wwin->frame_y - wwin->frame->core->height;
-
-                    wWindowMove(wwin, wwin->frame_x, y);
-                    wwin->flags.dragged_while_fmaximized = 0;
-                }
-            }
-        }
-#endif
 }
 
 
