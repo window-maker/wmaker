@@ -174,8 +174,10 @@ wXDNDProcessSelection(XEvent *event)
         }
         WMFreeBag(items);
         wDockReceiveDNDDrop(scr,event);
+        /*
         printf("free ");
         puts(scr->xdestring);
+        */
         free(scr->xdestring); /* this xdestring is not from Xlib (no XFree) */
     }
 }
@@ -297,9 +299,11 @@ wXDNDProcessClientMessage(XClientMessageEvent *event)
             XConvertSelection(dpy, _XA_XdndSelection, atom_support,
                     _XA_WINDOWMAKER_XDNDEXCHANGE, event->window, CurrentTime);
         }
-        /*
-        else puts("wierd selection owner");
-        */
+        else {
+            puts("wierd selection owner? QT?");
+            XConvertSelection(dpy, _XA_XdndSelection, atom_support,
+                    _XA_WINDOWMAKER_XDNDEXCHANGE, event->window, CurrentTime);
+        }
         return True;
     } else if (event->message_type == _XA_XdndPosition) {
         XEvent xevent;
