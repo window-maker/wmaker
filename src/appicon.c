@@ -431,30 +431,6 @@ wAppIconPaint(WAppIcon *aicon)
     }
 #endif /* HIDDENDOT */
 
-#ifdef NEWAPPICON
-    if (!wPreferences.strict_ns && aicon->icon->owner!=NULL) {
-	int active=0;
-	if (aicon->main_window==None) {
-	    active = (aicon->icon->owner->flags.focused ? 1 : 0);
-	} else {
-	    WApplication *wapp;
-
-	    wapp = wApplicationOf(aicon->main_window);
-	    if (!wapp) {
-		active = aicon->icon->owner->flags.focused;
-		wwarning("error in wAppIconPaint(). Please report it");
-	    } else {
-		active = wapp->main_window_desc->flags.focused;
-		if (wapp->main_window_desc->flags.hidden
-		    || !wapp->main_window_desc->flags.mapped)
-		  active = -1;
-	    }
-	}
-	if (active>=0)
-	  drawCorner(aicon->icon, aicon->icon->owner, active);
-    }
-#endif /* NEWAPPICON */
-
     if (aicon->omnipresent)
         drawCorner(aicon->icon);
 

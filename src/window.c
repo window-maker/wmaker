@@ -908,7 +908,27 @@ wManageWindow(WScreen *scr, Window window)
 		   && !wwin->flags.miniaturized
 		   && !wwin->flags.maximized
 		   && !(wwin->normal_hints->flags & (USPosition|PPosition))) {
-	    PlaceWindow(wwin, &x, &y, width, height);
+	    
+	    if (transientOwner && transientOwner->flags.mapped) {
+		int offs = WMAX(20, 2*transientOwner->frame->top_width);
+		
+		x = transientOwner->frame_x + 
+		    abs((transientOwner->frame->core->width - width)/2) + offs;
+		y = transientOwner->frame_y +
+		    abs((transientOwner->frame->core->height - height)/3) + offs;
+
+		if (x < 0)
+		    x = 0;
+		else if (x + width > scr->scr_width)
+		    x = scr->scr_width - width;
+
+		if (y < 0)
+		    y = 0;
+		else if (y + height > scr->scr_height)
+		    y = scr->scr_height - height;
+	    } else {
+		PlaceWindow(wwin, &x, &y, width, height);
+	    }
 	    if (wPreferences.window_placement == WPM_MANUAL)
 		dontBring = True;
 	} 
