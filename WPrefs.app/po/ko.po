@@ -124,7 +124,7 @@ msgstr "아이콘 파일 %s를 읽을 수 없음"
 #: ../../WPrefs.app/WPrefs.c:553
 #, c-format
 msgid "could not load image file %s:%s"
-msgstr "이미지 파일 %s를 읽을 수 없음"
+msgstr "이미지 파일 %s를 읽을 수 없음:%s"
 
 #: ../../WPrefs.app/WPrefs.c:572
 msgid "Loading Window Maker configuration files..."

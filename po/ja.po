@@ -8,7 +8,6 @@
 #
 # Last Update: version 0.65.1
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: WindowMaker 0.65.1\n"
@@ -126,7 +125,7 @@ msgstr "グローバル標準データベースからドメイン%sをロード�
 #: ../src/defaults.c:1146 ../src/screen.c:458
 #, c-format
 msgid "could not load logo image for panels: %s"
-msgstr "パネル用のロゴ画像が読み込めません"
+msgstr "パネル用のロゴ画像が読み込めません: %s"
 
 #: ../src/defaults.c:1424
 #, c-format
@@ -760,7 +759,7 @@ msgstr "標準アイコン\"%s\"が見つかりません"
 #: ../src/icon.c:773
 #, c-format
 msgid "could not load default icon \"%s\":%s"
-msgstr "標準アイコン\"%s\"をロードできません"
+msgstr "標準アイコン\"%s\"をロードできません: %s"
 
 #: ../src/main.c:205
 msgid "failed to restart Window Maker."

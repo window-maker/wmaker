@@ -6,7 +6,6 @@
 #
 # Last Update: version 0.45
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: WPrefs.app 0.45\n"
@@ -227,7 +226,7 @@ msgstr "警告"
 #: ../../WPrefs.app/WPrefs.c:817
 #, c-format
 msgid "could not run \"%s --global_defaults_path\"."
-msgstr "\"wmaker -global_defaults_path\" を実行できません"
+msgstr "\"%s -global_defaults_path\" を実行できません"
 
 #: ../../WPrefs.app/WPrefs.c:839
 #, c-format

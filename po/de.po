@@ -4,10 +4,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: WindowMaker 0.80.0\n"
 "POT-Creation-Date: 2002-01-22 21:20+0100\n"
 "PO-Revision-Date: 2002-01-25 16:42GMT\n"
 "Last-Translator: Torsten Marek <shlomme@gmx.net>\n"
+"Language-Team: German \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"

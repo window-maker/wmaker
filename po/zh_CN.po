@@ -1037,7 +1037,7 @@ msgstr "找不到在'WMRootMenu'中引用的菜单文件\"%s\""
 #: ../src/rootmenu.c:1558
 #, c-format
 msgid "could not access menu \"%s\" referenced in WMRootMenu"
-msgstr "不能存取在'WMRootMenu'中引用的菜单"
+msgstr "不能存取在'WMRootMenu'中引用的菜单 \"%s\""
 
 #: ../src/rootmenu.c:1569
 #, c-format

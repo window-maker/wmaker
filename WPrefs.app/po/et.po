@@ -795,7 +795,7 @@ msgstr "ei őnnestu leida vaikimisi kasutatavat ikooni \"%s\""
 #: ../src/icon.c:773
 #, c-format
 msgid "could not load default icon \"%s\":%s"
-msgstr "Ei őnnestu laadida vaikimisi kasutatavat ikooni \"%s\""
+msgstr "Ei őnnestu laadida vaikimisi kasutatavat ikooni \"%s\":%s"
 
 #: ../src/main.c:205
 msgid "failed to restart Window Maker."

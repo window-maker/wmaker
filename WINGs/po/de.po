@@ -3,7 +3,6 @@
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: WINGs 0.80.0\n"
@@ -573,7 +572,7 @@ msgstr ""
 #: ../../WINGs/wfont.c:287 ../../WINGs/wfont.c:323
 #, c-format
 msgid "could not load font set %s. Trying fixed."
-msgstr "konnte Fonts nicht laden. Nehme fixed-Font."
+msgstr "konnte Fonts %s nicht laden. Nehme fixed-Font."
 
 #: ../../WINGs/wfont.c:293 ../../WINGs/wfont.c:329
 #, c-format
@@ -587,7 +586,7 @@ msgstr "konnte fixed-Font nicht laden!"
 #: ../../WINGs/wfont.c:428
 #, c-format
 msgid "font description %s is too large."
-msgstr "Fontbeschreibung ist zu groß."
+msgstr "Fontbeschreibung %s ist zu groß."
 
 #: ../../WINGs/wfontpanel.c:205
 msgid "Test!!!"

@@ -801,7 +801,7 @@ msgstr "ei õnnestu leida vaikimisi kasutatavat ikooni \"%s\""
 #: ../src/icon.c:773
 #, c-format
 msgid "could not load default icon \"%s\":%s"
-msgstr "Ei õnnestu laadida vaikimisi kasutatavat ikooni \"%s\""
+msgstr "Ei õnnestu laadida vaikimisi kasutatavat ikooni \"%s\":%s"
 
 #.
 #. * Warning: If you make some change that affects the order of the

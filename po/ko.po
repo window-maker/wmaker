@@ -207,7 +207,7 @@ msgstr "작업공간 배경 종류가 잘못되었습니다. 텍스처여야 합
 #: ../src/defaults.c:2184
 #, c-format
 msgid "Wrong type for background of workspace %i. Should be a texture."
-msgstr "작업공간 배경 종류가 잘못되었습니다. 텍스처여야 합니다."
+msgstr "작업공간 배경 종류가 잘못되었습니다 %i. 텍스처여야 합니다."
 
 #: ../src/defaults.c:2226
 msgid "could not load any usable font!!!"

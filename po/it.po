@@ -768,7 +768,7 @@ msgstr "Impossibile trovare l'icona predefinita \"%s\""
 #: ../src/icon.c:770
 #, c-format
 msgid "could not load default icon \"%s\":%s"
-msgstr "Impossibile caricare l'icona predefinita \"%s\""
+msgstr "Impossibile caricare l'icona predefinita \"%s\":%s"
 
 #: ../src/main.c:205
 msgid "failed to restart Window Maker."

@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: WindowMaker 0.80.0\n"
 "POT-Creation-Date: 2002-08-11 19:48+0300\n"
 "PO-Revision-Date: 2002-10-17 19:02+0300\n"
 "Last-Translator: Ihar Viarheichyk <iverg@mail.ru>\n"
@@ -964,7 +964,7 @@ msgstr "%s: немагчыма выканаць ініцыялізацыйны �
 #: ../src/main.c:530 ../src/main.c:535
 #, c-format
 msgid "%s:could not execute exit script"
-msgstr "немагчыма выканаць скрыпт па выхадзе"
+msgstr "%s:немагчыма выканаць скрыпт па выхадзе"
 
 #: ../src/main.c:663 ../src/main.c:671 ../src/main.c:679 ../src/main.c:699
 #, c-format
@@ -1567,7 +1567,7 @@ msgstr "Немагчыма знайсці азначаную для гэтага
 #: ../src/winspector.c:404
 #, c-format
 msgid "Could not open specified icon \"%s\":%s"
-msgstr "Немагчыма адкрыць азначаную іконку \"%s\""
+msgstr "Немагчыма адкрыць азначаную іконку \"%s\":%s"
 
 #: ../src/winspector.c:1121
 #, c-format

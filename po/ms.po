@@ -248,7 +248,7 @@ msgstr "%s: kekunci tidak sah pasa pintasan \"%s\""
 #: ../src/defaults.c:2442
 #, c-format
 msgid "%s: modifier key %s is not valid"
-msgstr "%s: kekunci modifier adalah tidak sah"
+msgstr "%s: kekunci modifier %s adalah tidak sah"
 
 #: ../src/defaults.c:2474
 #, c-format
@@ -707,7 +707,7 @@ msgstr "Arahan untuk pelancaran klik-tengah"
 #: ../src/dockedapp.c:371
 #, c-format
 msgid "%s will be replaced with current selection"
-msgstr "%d akan digantikan dengan pilihan semasa"
+msgstr "%s akan digantikan dengan pilihan semasa"
 
 #: ../src/dockedapp.c:376
 msgid "Command for files dropped with DND"
@@ -1032,7 +1032,7 @@ msgstr ""
 #: ../src/misc.c:71
 #, c-format
 msgid "could not define value for %s for cpp"
-msgstr "Tak dapat nyatakan nilai untuk % cpp"
+msgstr "Tak dapat nyatakan nilai untuk %s cpp"
 
 #: ../src/misc.c:101
 #, c-format
@@ -1089,7 +1089,7 @@ msgstr "tak cukup memori semasa pengembangan \"%a\""
 #: ../src/misc.c:902
 #, c-format
 msgid "out of memory during expansion of \"%d\""
-msgstr "tak cukup memori semasa pengembangan \"%a\""
+msgstr "tak cukup memori semasa pengembangan \"%d\""
 
 #: ../src/misc.c:916
 msgid "selection not available"
@@ -1229,11 +1229,11 @@ msgstr "%s:melebihi had maksima baris pada konfigurasi menu: %s"
 #: ../src/rootmenu.c:1131 ../src/rootmenu.c:1224 ../src/rootmenu.c:1326
 #, c-format
 msgid "%s:missing command in menu config: %s"
-msgstr "%s:arahan hilang pada konfigurasi menu: %"
+msgstr "%s:arahan hilang pada konfigurasi menu: %s"
 
 #: ../src/rootmenu.c:1161
 #, c-format
-msgid "%s:syntax error in menu file:END declaration missing"
+msgid "%s:syntax error in menu file:%s"
 msgstr "%s:ralat sintaks pada fail menu:%s"
 
 #: ../src/rootmenu.c:1190 ../src/rootmenu.c:1290
@@ -1427,7 +1427,7 @@ msgstr ""
 #, c-format
 msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
 msgstr ""
-"saiz ikon dikonfigurasikan sebagai %s, tapi ianya terlalu kecik. Menggunakan "
+"saiz ikon dikonfigurasikan sebagai %i, tapi ianya terlalu kecik. Menggunakan "
 "16 sebaliknya\n"
 
 #: ../src/startup.c:922
