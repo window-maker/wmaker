@@ -2,7 +2,7 @@
  * 
  *  WPrefs - Window Maker Preferences Program
  * 
- *  Copyright (c) 1999 Alfredo K. Kojima
+ *  Copyright (c) 2000 Alfredo K. Kojima
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  *  USA.
  */
 
-#if 0
+
 #include <WINGsP.h>
 #include <WUtil.h>
 #include <stdlib.h>
@@ -33,13 +33,19 @@ typedef struct W_EditMenuItem {
     W_Class widgetClass;
     WMView *view;
 
-    struct W_EditMenu *menu;
+    struct W_EditMenu *parent;
 
     char *label;
 
-    WMTextField *textField;
+    void *data;
+    WMCallback *destroyData;
 
     struct W_EditMenu *submenu;	       /* if it's a cascade, NULL otherwise */
+    
+    struct {
+	unsigned isTitle:1;
+	unsigned isHighlighted:1;
+    } flags;
 } EditMenuItem;
 
 
@@ -49,21 +55,40 @@ typedef struct W_EditMenu {
 
     struct W_EditMenu *parent;
 
-    char *label;
-
-    int itemCount;
-    int itemsAlloced;
-    struct W_EditMenuItem **items;
+    WMBag *items; /* EditMenuItem */
+    
+    EditMenuItem *selectedItem;
+    
+    WMTextField *tfield;
 
     int titleHeight;
     int itemHeight;
-
-    struct W_EditMenu *next;
-    struct W_EditMenu *prev;
+    
+    WEditMenuDelegate *delegate;
 
     /* item dragging */
     int draggedItem;
     int dragX, dragY;
+    
+    struct W_EditMenu **dropTargets;
+    
+    /* only for non-standalone menu */
+    WMSize maxSize;
+    WMSize minSize;
+    
+    struct {
+	unsigned standalone:1;
+	unsigned isTitled:1;
+	
+	unsigned isFactory:1;
+	unsigned isSelectable:1;
+	unsigned isEditable:1;
+
+	unsigned isTornOff:1;
+	
+	unsigned isDragging:1;
+	unsigned isEditing:1;
+    } flags;
 } EditMenu;
 
 
@@ -72,16 +97,9 @@ typedef struct W_EditMenu {
 
 static void destroyEditMenuItem(WEditMenuItem *iPtr);
 static void paintEditMenuItem(WEditMenuItem *iPtr);
-
 static void handleItemEvents(XEvent *event, void *data);
-static void handleItemActionEvents(XEvent *event, void *data);
 
-
-static W_ViewProcedureTable WEditMenuItemViewProcedures = {
-	NULL,
-	NULL,
-	NULL
-};
+static void handleItemClick(XEvent *event, void *data);
 
 
 static W_Class EditMenuItemClass = 0;
@@ -92,7 +110,7 @@ InitEditMenuItem(WMScreen *scr)
 {
     /* register our widget with WINGs and get our widget class ID */
     if (!EditMenuItemClass) {
-	EditMenuItemClass = W_RegisterUserWidget(&WEditMenuItemViewProcedures);
+	EditMenuItemClass = W_RegisterUserWidget();
     }
 
     return EditMenuItemClass;
@@ -100,12 +118,13 @@ InitEditMenuItem(WMScreen *scr)
 
 
 WEditMenuItem*
-WCreateEditMenuItem(WMWidget *parent, char *title)
+WCreateEditMenuItem(WMWidget *parent, char *title, Bool isTitle)
 {
     WEditMenuItem *iPtr;
+    WMScreen *scr = WMWidgetScreen(parent);
 
     if (!EditMenuItemClass)
-	InitEditMenuItem(WMWidgetScreen(parent));
+	InitEditMenuItem(scr);
 
 
     iPtr = wmalloc(sizeof(WEditMenuItem));
@@ -121,16 +140,40 @@ WCreateEditMenuItem(WMWidget *parent, char *title)
     }
     iPtr->view->self = iPtr;
 
+    iPtr->parent = parent;
+    
     iPtr->label = wstrdup(title);
-
+    
+    iPtr->flags.isTitle = isTitle;
+    
+    if (isTitle) {
+	WMSetWidgetBackgroundColor(iPtr, WMBlackColor(scr));
+    }
+    
     WMCreateEventHandler(iPtr->view, ExposureMask|StructureNotifyMask,
 			 handleItemEvents, iPtr);
+    
+    WMCreateEventHandler(iPtr->view, ButtonPressMask|ButtonReleaseMask
+			 |ButtonMotionMask, handleItemClick, iPtr);
 
-    WMCreateEventHandler(iPtr->view, ButtonPressMask, handleItemActionEvents,
-			 iPtr);
 
     return iPtr;
 }
+
+
+void *WGetEditMenuItemData(WEditMenuItem *item)
+{
+    return item->data;
+}
+
+
+void WSetEditMenuItemData(WEditMenuItem *item, void *data, 
+			   WMCallback *destroyer)
+{
+    item->data = data;
+    item->destroyData = destroyer;
+}
+
 
 
 
@@ -138,21 +181,76 @@ static void
 paintEditMenuItem(WEditMenuItem *iPtr)
 {
     WMScreen *scr = WMWidgetScreen(iPtr);
-    WMColor *black = scr->black;
+    WMColor *color;
     Window win = W_VIEW(iPtr)->window;
     int w = W_VIEW(iPtr)->size.width;
-    int h = WMFontHeight(scr->normalFont) + 6;
+    int h = W_VIEW(iPtr)->size.height;
+    WMFont *font = (iPtr->flags.isTitle ? scr->boldFont : scr->normalFont);
 
     if (!iPtr->view->flags.realized)
 	return;
+    
+    color = scr->black;
+    if (iPtr->flags.isTitle && !iPtr->flags.isHighlighted) {
+	color = scr->white;
+    }
+    
 
     XClearWindow(scr->display, win);
 
     W_DrawRelief(scr, win, 0, 0, w+1, h, WRRaised);
 
-    WMDrawString(scr, win, WMColorGC(black), scr->normalFont, 5, 3, iPtr->label,
+    WMDrawString(scr, win, WMColorGC(color), font, 5, 3, iPtr->label,
 		 strlen(iPtr->label));
+    
+    if (iPtr->submenu) {
+	/* draw the cascade indicator */
+	XDrawLine(scr->display,win,WMColorGC(scr->darkGray), 
+		  w-11, 6, w-6, h/2-1);
+	XDrawLine(scr->display,win,WMColorGC(scr->white),
+		  w-11, h-8, w-6, h/2-1);
+	XDrawLine(scr->display,win,WMColorGC(scr->black), 
+		  w-12, 6, w-12, h-8);
+    }
 }
+
+
+static void
+highlightItem(WEditMenuItem *iPtr, Bool high)
+{   
+    if (iPtr->flags.isTitle)
+	return;
+    
+    iPtr->flags.isHighlighted = high;
+
+    if (high) {
+	WMSetWidgetBackgroundColor(iPtr, WMWhiteColor(WMWidgetScreen(iPtr)));
+    } else {
+	if (!iPtr->flags.isTitle) {
+	    WMSetWidgetBackgroundColor(iPtr,
+				       WMGrayColor(WMWidgetScreen(iPtr)));
+	} else {
+	    WMSetWidgetBackgroundColor(iPtr,
+				       WMBlackColor(WMWidgetScreen(iPtr)));
+	}
+    }
+}
+
+
+static int
+getItemTextWidth(WEditMenuItem *iPtr)
+{
+    WMScreen *scr = WMWidgetScreen(iPtr);
+    
+    if (iPtr->flags.isTitle) {
+	return WMWidthOfString(scr->boldFont, iPtr->label, 
+			       strlen(iPtr->label));
+    } else {
+	return WMWidthOfString(scr->normalFont, iPtr->label, 
+			       strlen(iPtr->label));
+    }
+}
+
 
 
 static void
@@ -160,33 +258,18 @@ handleItemEvents(XEvent *event, void *data)
 {
     WEditMenuItem *iPtr = (WEditMenuItem*)data;
 
-
     switch (event->type) {	
      case Expose:
 	if (event->xexpose.count!=0)
 	    break;
 	paintEditMenuItem(iPtr);
 	break;
-	
+
      case DestroyNotify:
 	destroyEditMenuItem(iPtr);
 	break;
-	
     }
 }
-
-
-static void
-handleItemActionEvents(XEvent *event, void *data)
-{
-    WEditMenuItem *iPtr = (WEditMenuItem*)data;
-
-    switch (event->type) {
-     case ButtonPress:
-	break;
-    }
-}
-
 
 
 static void
@@ -194,6 +277,8 @@ destroyEditMenuItem(WEditMenuItem *iPtr)
 {
     if (iPtr->label)
 	free(iPtr->label);
+    if (iPtr->data && iPtr->destroyData)
+	(*iPtr->destroyData)(iPtr->data);
 
     free(iPtr);
 }
@@ -202,25 +287,15 @@ destroyEditMenuItem(WEditMenuItem *iPtr)
 
 /******************** WEditMenu *******************/
 
-
-static WEditMenu *EditMenuList = NULL;
-
 static void destroyEditMenu(WEditMenu *mPtr);
-static void paintEditMenu(WEditMenu *mPtr, int y);
 
 static void updateMenuContents(WEditMenu *mPtr);
 
 static void handleEvents(XEvent *event, void *data);
 static void handleActionEvents(XEvent *event, void *data);
 
-static void handleItemDrag(XEvent *event, void *data);
-
-
-static W_ViewProcedureTable WEditMenuViewProcedures = {
-	NULL,
-	NULL,
-	NULL
-};
+static void editItemLabel(WEditMenuItem *item);
+static void stopEditItem(WEditMenu *menu, Bool apply);
 
 
 static W_Class EditMenuClass = 0;
@@ -232,7 +307,7 @@ InitEditMenu(WMScreen *scr)
     /* register our widget with WINGs and get our widget class ID */
     if (!EditMenuClass) {
 
-	EditMenuClass = W_RegisterUserWidget(&WEditMenuViewProcedures);
+	EditMenuClass = W_RegisterUserWidget();
     }
 
     return EditMenuClass;
@@ -293,100 +368,106 @@ realizeObserver(void *self, WMNotification *not)
 }
 
 
-WEditMenu*
-WCreateEditMenu(WMScreen *scr, char *title)
+static WEditMenu*
+makeEditMenu(WMScreen *scr, WMWidget *parent, char *title)
 {
     WEditMenu *mPtr;
+    WEditMenuItem *item;
 
     if (!EditMenuClass)
 	InitEditMenu(scr);
 
 
     mPtr = wmalloc(sizeof(WEditMenu));
-
     memset(mPtr, 0, sizeof(WEditMenu));
 
     mPtr->widgetClass = EditMenuClass;
 
-    mPtr->view = W_CreateTopView(scr);
+    if (parent) {
+	mPtr->view = W_CreateView(W_VIEW(parent));
+	mPtr->flags.standalone = 0;
+    } else {
+	mPtr->view = W_CreateTopView(scr);
+	mPtr->flags.standalone = 1;
+    }
     if (!mPtr->view) {
 	free(mPtr);
 	return NULL;
     }
     mPtr->view->self = mPtr;
 
+    mPtr->flags.isSelectable = 1;
+    mPtr->flags.isEditable = 1;
+
+    W_SetViewBackgroundColor(mPtr->view, scr->darkGray);
+
     WMAddNotificationObserver(realizeObserver, mPtr,
                               WMViewRealizedNotification, mPtr->view);
 
-    W_SetViewBackgroundColor(mPtr->view, mPtr->view->screen->darkGray);
-
-    mPtr->label = wstrdup(title);
-
-    mPtr->itemsAlloced = 10;
-    mPtr->items = wmalloc(sizeof(WEditMenuItem*)*mPtr->itemsAlloced);
+    mPtr->items = WMCreateBag(4);
 
     WMCreateEventHandler(mPtr->view, ExposureMask|StructureNotifyMask,
 			 handleEvents, mPtr);
 
     WMCreateEventHandler(mPtr->view, ButtonPressMask,handleActionEvents, mPtr);
+    
 
-    updateMenuContents(mPtr);
+    if (title != NULL) {
+	item = WCreateEditMenuItem(mPtr, title, True);
 
+	WMMapWidget(item);
+	WMPutInBag(mPtr->items, item);
+
+	mPtr->flags.isTitled = 1;
+    }
 
     mPtr->itemHeight = WMFontHeight(scr->normalFont) + 6;
     mPtr->titleHeight = WMFontHeight(scr->boldFont) + 8;
 
-    mPtr->draggedItem = -1;
-
-    mPtr->next = EditMenuList;
-    if (EditMenuList)
-	EditMenuList->prev = mPtr;
-    EditMenuList = mPtr;
-
+    updateMenuContents(mPtr);
+    
     return mPtr;
 }
 
 
+WEditMenu*
+WCreateEditMenu(WMScreen *scr, char *title)
+{
+    return makeEditMenu(scr, NULL, title);
+}
+
+
+WEditMenu*
+WCreateEditMenuPad(WMWidget *parent)
+{
+    return makeEditMenu(WMWidgetScreen(parent), parent, NULL);
+}
+
+
+void
+WSetEditMenuDelegate(WEditMenu *mPtr, WEditMenuDelegate *delegate)
+{
+    mPtr->delegate = delegate;
+}
+
+
 WEditMenuItem*
-WInsertMenuItemWithTitle(WEditMenu *mPtr, char *title, int index)
+WInsertMenuItemWithTitle(WEditMenu *mPtr, int index, char *title)
 {
     WEditMenuItem *item;
 
-    item = WCreateEditMenuItem(mPtr, title);
-    item->menu = mPtr;
-
-    WMCreateEventHandler(item->view, ButtonPressMask|ButtonReleaseMask
-			 |Button1MotionMask, handleItemDrag, item);
+    item = WCreateEditMenuItem(mPtr, title, False);
 
     WMMapWidget(item);
-
-    if (index < 0)
-	index = 0;
-    else if (index > mPtr->itemCount)
-	index = mPtr->itemCount;
-
-    if (mPtr->itemCount == mPtr->itemsAlloced) {
-	WEditMenuItem **newList;
-
-	newList = wmalloc(sizeof(WEditMenuItem*)*(mPtr->itemsAlloced+10));
-	memset(newList, 0, sizeof(WEditMenuItem*)*(mPtr->itemsAlloced+10));
-
-	memcpy(newList, mPtr->items, mPtr->itemsAlloced*sizeof(WEditMenuItem*));
-
-	mPtr->itemsAlloced += 10;
-
-	free(mPtr->items);
-
-	mPtr->items = newList;
-    }
-
-    if (index < mPtr->itemCount) {
-	memmove(&mPtr->items[index+1], &mPtr->items[index], 
-		sizeof(WEditMenuItem*));
-	mPtr->items[index] = item;
-	mPtr->itemCount++;
-    } else {
-	mPtr->items[mPtr->itemCount++] = item;
+    
+    if (index >= WMGetBagItemCount(mPtr->items))
+	WMPutInBag(mPtr->items, item);
+    else {
+	if (index < 0)
+	    index = 0;
+	if (mPtr->flags.isTitled)
+	    index++;
+	WMInsertInBag(mPtr->items, index, item);
     }
 
     updateMenuContents(mPtr);
@@ -395,8 +476,30 @@ WInsertMenuItemWithTitle(WEditMenu *mPtr, char *title, int index)
 }
 
 
+
+WEditMenuItem*
+WAddMenuItemWithTitle(WEditMenu *mPtr, char *title)
+{
+    return WInsertMenuItemWithTitle(mPtr, WMGetBagItemCount(mPtr->items),
+				    title);
+}
+
+
 void
-WSetMenuSubmenu(WEditMenu *mPtr, WEditMenu *submenu, WEditMenuItem *item)
+WSetEditMenuItemDropTargets(WEditMenu *mPtr, WEditMenu **dropTargets, 
+			    int count)
+{
+    if (mPtr->dropTargets)
+	free(mPtr->dropTargets);
+    
+    mPtr->dropTargets = wmalloc(sizeof(WEditMenu*)*(count+1));
+    memcpy(mPtr->dropTargets, dropTargets, sizeof(WEditMenu*)*count);
+    mPtr->dropTargets[count] = NULL;
+}
+
+
+void
+WSetEditMenuSubmenu(WEditMenu *mPtr, WEditMenuItem *item, WEditMenu *submenu)
 {
     item->submenu = submenu;
     submenu->parent = mPtr;
@@ -404,79 +507,207 @@ WSetMenuSubmenu(WEditMenu *mPtr, WEditMenu *submenu, WEditMenuItem *item)
     paintEditMenuItem(item);
 }
 
+static int simpleMatch(void *a, void *b)
+{
+    if (a == b)
+	return 1;
+    else
+	return 0;
+}
+
 
 void
-WRemoveMenuItem(WEditMenu *mPtr, WEditMenuItem *item)
+WRemoveEditMenuItem(WEditMenu *mPtr, WEditMenuItem *item)
 {
+    int index;
+
+    index = WMFindInBag(mPtr->items, simpleMatch, item);
     
+    if (index == WBNotFound) {
+	return;
+    }
+    
+    WMDeleteFromBag(mPtr->items, index);
+
+    updateMenuContents(mPtr);
+}
+
+
+void
+WSetEditMenuSelectable(WEditMenu *mPtr, Bool flag)
+{
+    mPtr->flags.isSelectable = flag;
+}
+
+
+void
+WSetEditMenuEditable(WEditMenu *mPtr, Bool flag)
+{
+    mPtr->flags.isEditable = flag;
+}
+
+
+void
+WSetEditMenuIsFactory(WEditMenu *mPtr, Bool flag)
+{
+    mPtr->flags.isFactory = flag;
+}
+
+
+void
+WSetEditMenuMinSize(WEditMenu *mPtr, WMSize size)
+{
+    mPtr->minSize.width = size.width;
+    mPtr->minSize.height = size.height;
+}
+
+
+void
+WSetEditMenuMaxSize(WEditMenu *mPtr, WMSize size)
+{
+    mPtr->maxSize.width = size.width;
+    mPtr->maxSize.height = size.height;
+}
+
+
+WMPoint
+WGetEditMenuLocationForSubmenu(WEditMenu *mPtr, WEditMenu *submenu)
+{
+    WMBagIterator iter;
+    WEditMenuItem *item;
+    int y;
+    
+    if (mPtr->flags.isTitled) {
+	y = mPtr->titleHeight;
+    } else {
+	y = 0;
+    }
+    WM_ITERATE_BAG(mPtr->items, item, iter) {
+	if (item->submenu == submenu) {
+	    return wmkpoint(mPtr->view->pos.x + mPtr->view->size.width, y);
+	}
+	y += mPtr->itemHeight;
+    }
+
+    puts("invalid submenu passed to WGetEditMenuLocationForSubmenu()");
+    
+    return wmkpoint(0,0);
+}
+
+
+Bool
+WEditMenuIsTornOff(WEditMenu *mPtr)
+{
+    return !mPtr->flags.isTornOff;
 }
 
 
 static void
 updateMenuContents(WEditMenu *mPtr)
 {
-    WMScreen *scr = WMWidgetScreen(mPtr);
-    int i;
     int newW, newH;
     int w;
+    int i;
     int iheight = mPtr->itemHeight;
+    int offs = 1;
+    WMBagIterator iter;
+    WEditMenuItem *item;
 
-    newW = WMWidthOfString(scr->boldFont, mPtr->label,
-			   strlen(mPtr->label)) + 12 + iheight;
+    newW = 0;
+    newH = offs;
 
-    newH = mPtr->titleHeight;
+    i = 0;
+    WM_ITERATE_BAG(mPtr->items, item, iter) {	
+	w = getItemTextWidth(item);
 
-    for (i = 0; i < mPtr->itemCount; i++) {
-	w = WMWidthOfString(scr->normalFont, mPtr->items[i]->label,
-			    strlen(mPtr->items[i]->label)) + 5;
-	if (w > newW)
-	    newW = w;
+	newW = WMAX(w, newW);
 
-	W_MoveView(mPtr->items[i]->view, 0, newH);
-	newH += iheight;
+	WMMoveWidget(item, offs, newH);
+	if (i == 0 && mPtr->flags.isTitled) {
+	    newH += mPtr->titleHeight;
+	} else {
+	    newH += iheight;
+	}
+	i = 1;
     }
 
+    newW += iheight + 5;
     newH--;
+    
+    if (mPtr->minSize.width)
+	newW = WMAX(newW, mPtr->minSize.width);
+    if (mPtr->maxSize.width)
+	newW = WMIN(newW, mPtr->maxSize.width); 
+   
+    if (mPtr->minSize.height)
+	newH = WMAX(newH, mPtr->minSize.height);
+    if (mPtr->maxSize.height)
+	newH = WMIN(newH, mPtr->maxSize.height);
 
-    W_ResizeView(mPtr->view, newW, newH);
+    W_ResizeView(mPtr->view, newW, newH+1);
 
-    for (i = 0; i < mPtr->itemCount; i++) {
-	W_ResizeView(mPtr->items[i]->view, newW, iheight);
+    newW -= 2*offs;
+    
+    i = 0;
+    WM_ITERATE_BAG(mPtr->items, item, iter) {
+	if (i == 0 && mPtr->flags.isTitled) {
+	    WMResizeWidget(item, newW, mPtr->titleHeight);	    
+	} else {
+	    WMResizeWidget(item, newW, iheight);
+	}
+	i = 1;
+    }
+}
+
+
+static void
+selectItem(WEditMenu *menu, WEditMenuItem *item)
+{
+    if (!menu->flags.isSelectable) {
+	return;
     }
 
-    paintEditMenu(mPtr, -1);
+    if (menu->selectedItem) {
+	highlightItem(menu->selectedItem, False);
+
+	if (menu->delegate) {
+	    (*menu->delegate->itemDeselected)(menu->delegate, menu, 
+					      menu->selectedItem);
+	}
+    }
+
+    if (menu->flags.isEditing) {
+	stopEditItem(menu, False);
+    }
+
+    if (item) {
+	highlightItem(item, True);
+
+	if (item->submenu) {
+	    WMPoint pt;
+	    
+	    pt = WGetEditMenuLocationForSubmenu(menu, item->submenu);
+	    WMMoveWidget(item->submenu, pt.x, pt.y);
+	    WMMapWidget(item->submenu);
+	}
+	
+	if (menu->delegate) {
+	    (*menu->delegate->itemSelected)(menu->delegate, menu, item);
+	}
+    }
+
+    menu->selectedItem = item;
 }
 
 
 static void
-paintMenuTitle(WEditMenu *mPtr)
+paintMenu(WEditMenu *mPtr)
 {
-    WMScreen *scr = WMWidgetScreen(mPtr);
-    WMColor *black = scr->black;
-    WMColor *white = scr->white;
-    Window win = W_VIEW(mPtr)->window;
-    int w = W_VIEW(mPtr)->size.width;
-    int h = mPtr->titleHeight;
-
-    XFillRectangle(scr->display, win, WMColorGC(black), 0, 0, w, h);
-
-    W_DrawRelief(scr, win, 0, 0, w+1, h, WRRaised);
-
-    WMDrawString(scr, win, WMColorGC(white), scr->boldFont, 5, 4, mPtr->label,
-		 strlen(mPtr->label));
+    W_View *view = mPtr->view;
+    
+    W_DrawRelief(W_VIEW_SCREEN(view), W_VIEW_DRAWABLE(view), 0, 0,
+		 W_VIEW_WIDTH(view), W_VIEW_HEIGHT(view), WRSimple);
 }
-
-
-static void
-paintEditMenu(WEditMenu *mPtr, int y)
-{
-    if (!mPtr->view->flags.realized)
-	return;
-
-    if (y < mPtr->titleHeight || y < 0)
-	paintMenuTitle(mPtr);
-}
-
 
 
 static void
@@ -484,16 +715,15 @@ handleEvents(XEvent *event, void *data)
 {
     WEditMenu *mPtr = (WEditMenu*)data;
 
-
     switch (event->type) {	
-     case Expose:
-	paintEditMenu(mPtr, event->xexpose.y);
-	break;
-	
      case DestroyNotify:
 	destroyEditMenu(mPtr);
 	break;
 	
+     case Expose:
+	if (event->xexpose.count == 0)
+	    paintMenu(mPtr);
+	break;
     }
 }
 
@@ -503,7 +733,7 @@ handleEvents(XEvent *event, void *data)
 static void
 handleActionEvents(XEvent *event, void *data)
 {
-    WEditMenu *mPtr = (WEditMenu*)data;
+//    WEditMenu *mPtr = (WEditMenu*)data;
 
     switch (event->type) {
      case ButtonPress:
@@ -512,99 +742,303 @@ handleActionEvents(XEvent *event, void *data)
 }
 
 
+/* -------------------------- Menu Label Editing ------------------------ */
+
+
 static void
-editItemLabel(WEditMenuItem *iPtr)
+stopEditItem(WEditMenu *menu, Bool apply)
 {
-    WMTextField *tPtr;
+    char *text;
+    
+    if (apply) {
+	text = WMGetTextFieldText(menu->tfield);
+	
+	free(menu->selectedItem->label);
+	menu->selectedItem->label = wstrdup(text);
 
-    tPtr = WMCreateTextField(iPtr);
-    WMResizeWidget(tPtr, iPtr->view->size.width - 20, 
-		   iPtr->view->size.height - 3);
-    WMMoveWidget(tPtr, 4, 1);
-    WMSetTextFieldBeveled(tPtr, False);
-    WMMapWidget(tPtr);
-
-    WMRealizeWidget(tPtr);
-
-    iPtr->textField = tPtr;
+	updateMenuContents(menu);
+    } 
+    WMUnmapWidget(menu->tfield);
+    menu->flags.isEditing = 0;
 }
 
 
 static void
-handleItemDrag(XEvent *event, void *data)
+textEndedEditing(struct WMTextFieldDelegate *self, WMNotification *notif)
 {
-    WEditMenuItem *iPtr = (WEditMenuItem*)data;
-    WEditMenu *mPtr = iPtr->menu;
-    WMScreen *scr = WMWidgetScreen(mPtr);
-    Bool done = False;
-    int y;
+    WEditMenu *menu = (WEditMenu*)self->data;
+    int reason;
     int i;
-    int newIdx, oldIdx;
-    int newY;
+    WEditMenuItem *item;
 
-    switch (event->type) {
-     case ButtonPress:
-	if (WMIsDoubleClick(event)) {
-
-	    editItemLabel(iPtr);
-
-	} else if (event->xbutton.button == Button1) {
-	    mPtr->draggedItem = 1;
-	    mPtr->dragX = event->xbutton.x;
-	    mPtr->dragY = event->xbutton.y;
-	}
+    if (!menu->flags.isEditing)
 	return;
-     case ButtonRelease:
-	if (event->xbutton.button == Button1) {
-	    mPtr->draggedItem = -1;
-	}
-	return;
-     case MotionNotify:
-	if (mPtr->draggedItem >= 0) {
-	    if (abs(event->xmotion.y - mPtr->dragY) > 3
-		|| abs(event->xmotion.x - mPtr->dragX) > 3) {
-		mPtr->draggedItem = -1;
-	    } else {
-		return;
-	    }
-	} else {
-	    return;
+
+    reason = (int)WMGetNotificationClientData(notif);
+    
+    switch (reason) {	
+     case WMEscapeTextMovement:
+	stopEditItem(menu, False);
+	break;
+	
+     case WMReturnTextMovement:
+	stopEditItem(menu, True);
+	break;
+	
+     case WMTabTextMovement:
+	stopEditItem(menu, True);
+
+	i = WMFindInBag(menu->items, simpleMatch, menu->selectedItem);
+	item = WMGetFromBag(menu->items, i+1);
+	if (item != NULL) {
+	    selectItem(menu, item);
+	    editItemLabel(item);
 	}
 	break;
-     default:
+	
+     case WMBacktabTextMovement:
+	stopEditItem(menu, True);
+
+	i = WMFindInBag(menu->items, simpleMatch, menu->selectedItem);
+	item = WMGetFromBag(menu->items, i-1);
+	if (item != NULL) {
+	    selectItem(menu, item);
+	    editItemLabel(item);
+	}
+	break;
+    }
+}
+
+
+
+static WMTextFieldDelegate textFieldDelegate = {
+    NULL,
+	NULL,
+	NULL,
+	textEndedEditing,
+	NULL,
+	NULL
+};
+
+
+static void
+editItemLabel(WEditMenuItem *item)
+{
+    WEditMenu *mPtr = item->parent;
+    WMTextField *tf;
+    int i;
+    
+    if (!mPtr->flags.isEditable) {
 	return;
     }
 
-    XRaiseWindow(scr->display, iPtr->view->window);
+    if (!mPtr->tfield) {
+	mPtr->tfield = WMCreateTextField(mPtr);
+	WMSetTextFieldBeveled(mPtr->tfield, False);
+	WMRealizeWidget(mPtr->tfield);
+	
+	textFieldDelegate.data = mPtr;
 
-    XGrabPointer(scr->display, mPtr->view->window, False,
-		 PointerMotionMask|ButtonReleaseMask|ButtonPressMask
-		 |ButtonPressMask,
-		 GrabModeAsync, GrabModeAsync, None, None, CurrentTime);
+	WMSetTextFieldDelegate(mPtr->tfield, &textFieldDelegate);
+    }
+    tf = mPtr->tfield;
 
-    y = iPtr->view->pos.y;
+    i = WMFindInBag(mPtr->items, simpleMatch, item);
+
+    WMSetTextFieldText(tf, item->label);
+    WMSelectTextFieldRange(tf, wmkrange(0, strlen(item->label)));
+    WMResizeWidget(tf, mPtr->view->size.width, mPtr->itemHeight);
+    WMMoveWidget(tf, 0, item->view->pos.y);
+    WMMapWidget(tf);
+    WMSetFocusToWidget(tf);
+    
+    mPtr->flags.isEditing = 1;
+}
+
+
+
+/* -------------------------------------------------- */
+
+
+static void
+slideWindow(Display *dpy, Window win, int srcX, int srcY, int dstX, int dstY)
+{
+    double x, y, dx, dy;
+    int i;
+    int iterations;
+
+    iterations = WMIN(25, WMAX(abs(dstX-srcX), abs(dstY-srcY)));
+    
+    x = srcX;
+    y = srcY;
+    
+    dx = (double)(dstX-srcX)/iterations;
+    dy = (double)(dstY-srcY)/iterations;
+
+    for (i = 0; i <= iterations; i++) {
+	XMoveWindow(dpy, win, x, y);
+        XFlush(dpy);
+        
+	wusleep(800);
+	
+        x += dx;
+        y += dy;
+    }
+}
+
+
+static WEditMenu*
+getEditMenuForWindow(WEditMenu **menus, Window window)
+{
+    while (*menus) {
+	if (W_VIEW_DRAWABLE((*menus)->view) == window) {
+	    return *menus;
+	}
+	menus++;
+    }
+    
+    return NULL;
+}
+
+
+static WEditMenu*
+findMenuInWindow(Display *dpy, Window toplevel, int x, int y,
+		  WEditMenu **menus)
+{
+    Window foo, bar;
+    Window *children;
+    unsigned nchildren;
+    int i;
+    WEditMenu *menu;
+
+    menu = getEditMenuForWindow(menus, toplevel);
+    if (menu)
+	return menu;
+    
+    if (!XQueryTree(dpy, toplevel, &foo, &bar,
+		    &children, &nchildren) || children == NULL) {
+	return NULL;
+    }
+    
+    /* first window that contains the point is the one */
+    for (i = nchildren-1; i >= 0; i--) {
+	XWindowAttributes attr;
+
+	if (XGetWindowAttributes(dpy, children[i], &attr)
+	    && attr.map_state == IsViewable
+	    && x >= attr.x && y >= attr.y
+	    && x < attr.x + attr.width && y < attr.y + attr.height) {
+	    Window tmp;
+
+	    tmp = children[i];
+
+	    menu = findMenuInWindow(dpy, tmp, x - attr.x, y - attr.y, menus);
+	    if (menu) {
+		XFree(children);
+		return menu;
+	    }
+	}
+    }
+
+    XFree(children);
+    return NULL;
+}
+
+
+static void
+handleDragOver(WEditMenu *menu, WMView *view, WEditMenuItem *item, 
+	       int x, int y)
+{
+    WMScreen *scr = W_VIEW_SCREEN(menu->view);
+    Window blaw;
+    int mx, my;
+    int offs;
+
+    XTranslateCoordinates(scr->display, W_VIEW_DRAWABLE(menu->view),
+			  scr->rootWin, 0, 0, &mx, &my, &blaw);
+    
+    offs = menu->flags.standalone ? 0 : 1;
+    
+    W_MoveView(view, mx + offs, y);
+    if (view->size.width != menu->view->size.width) {
+	W_ResizeView(view, menu->view->size.width - 2*offs, 
+		     menu->itemHeight);
+	W_ResizeView(item->view, menu->view->size.width - 2*offs,
+		     menu->itemHeight);
+    }
+}
+
+
+static void
+handleItemDrop(WEditMenu *menu, WEditMenuItem *item, int x, int y)
+{ 
+    WMScreen *scr = W_VIEW_SCREEN(menu->view);
+    Window blaw;
+    int mx, my;
+    int index;
+
+    XTranslateCoordinates(scr->display, W_VIEW_DRAWABLE(menu->view),
+			  scr->rootWin, 0, 0, &mx, &my, &blaw);
+
+    index = y - my;
+    if (menu->flags.isTitled) {
+	index -= menu->titleHeight;
+    }
+    index = (index + menu->itemHeight/2) / menu->itemHeight;
+    if (index < 0)
+	index = 0;
+
+    if (menu->flags.isTitled) {
+	index++;
+    }
+    
+    if (index > WMGetBagItemCount(menu->items)) {
+	WMPutInBag(menu->items, item);
+    } else {
+	WMInsertInBag(menu->items, index, item);
+    }
+
+    W_ReparentView(item->view, menu->view, 0, index*menu->itemHeight);
+    
+    item->parent = menu;
+
+    updateMenuContents(menu);
+}
+
+
+static void
+dragMenu(WEditMenu *menu)
+{
+    WMScreen *scr = W_VIEW_SCREEN(menu->view);
+    XEvent ev;
+    Bool done = False;
+    int dx, dy;
+    unsigned blau;
+    Window blaw;
+    
+    XGetGeometry(scr->display, W_VIEW_DRAWABLE(menu->view), &blaw, &dx, &dy,
+		 &blau, &blau, &blau, &blau);
+    XTranslateCoordinates(scr->display, W_VIEW_DRAWABLE(menu->view),
+			  scr->rootWin, dx, dy, &dx, &dy, &blaw);
+    dx = menu->dragX - dx;
+    dy = menu->dragY - dy;
+
+    XGrabPointer(scr->display, scr->rootWin, False,
+		 ButtonReleaseMask|ButtonMotionMask,
+		 GrabModeAsync, GrabModeAsync, None, scr->defaultCursor,
+		 CurrentTime);
 
     while (!done) {
-	XEvent ev;
-
-	WMMaskEvent(scr->display, ButtonReleaseMask|PointerMotionMask
-		    |ExposureMask, &ev);
-
+	WMNextEvent(scr->display, &ev);
+	
 	switch (ev.type) {
 	 case ButtonRelease:
-	    if (ev.xbutton.button == Button1)
-		done = True;
+	    done = True;
 	    break;
 
 	 case MotionNotify:
-	    y = ev.xbutton.y - mPtr->dragY;
-
-	    if (y < mPtr->titleHeight)
-		y = mPtr->titleHeight;
-	    else if (y > mPtr->view->size.height - mPtr->itemHeight + 1)
-		y = mPtr->view->size.height - mPtr->itemHeight + 1;
-
-	    W_MoveView(iPtr->view, 0, y);
+	    WMMoveWidget(menu, ev.xmotion.x_root - dx,
+			 ev.xmotion.y_root - dy);
 	    break;
 
 	 default:
@@ -612,36 +1046,170 @@ handleItemDrag(XEvent *event, void *data)
 	    break;
 	}
     }
-    XUngrabPointer(scr->display, CurrentTime);
 
-    for (oldIdx = 0; oldIdx < mPtr->itemCount; oldIdx++) {
-	if (mPtr->items[oldIdx] == iPtr) {
+    XUngrabPointer(scr->display, CurrentTime);
+}
+
+
+
+static void
+dragItem(WEditMenu *menu, WEditMenuItem *item)
+{
+    Display *dpy = W_VIEW_DISPLAY(menu->view);
+    WMScreen *scr = W_VIEW_SCREEN(menu->view);
+    int x, y;
+    int dx, dy;
+    Bool done = False;
+    Window blaw;
+    int blai;
+    unsigned blau;
+    Window win;
+    WMView *dview;
+    int orix, oriy;
+    Bool enteredMenu = False;
+    WMSize oldSize = item->view->size;
+    WEditMenu *dmenu = NULL;
+
+    
+    if (item->flags.isTitle) {
+	WMRaiseWidget(menu);
+
+	dragMenu(menu);
+
+	return;
+    }
+
+    
+    selectItem(menu, NULL);
+
+    assert(menu->dropTargets != NULL);
+
+
+    win = scr->rootWin;
+    
+    XTranslateCoordinates(dpy, W_VIEW_DRAWABLE(item->view), win,
+			  0, 0, &orix, &oriy, &blaw);
+
+    dview = W_CreateUnmanagedTopView(scr);
+    W_SetViewBackgroundColor(dview, scr->black);
+    W_ResizeView(dview, W_VIEW_WIDTH(item->view), W_VIEW_HEIGHT(item->view));
+    W_MoveView(dview, orix, oriy);
+    W_RealizeView(dview);
+    
+    if (menu->flags.isFactory) {
+	WEditMenuItem *nitem;
+
+	nitem = WCreateEditMenuItem(menu, item->label, False);
+	
+	if (menu->delegate) {
+	    (*menu->delegate->itemCloned)(menu->delegate, menu, item, nitem);
+	}
+	item = nitem;
+	
+	W_ReparentView(item->view, dview, 0, 0);
+	WMResizeWidget(item, oldSize.width, oldSize.height);
+	WMRealizeWidget(item);
+	WMMapWidget(item);
+    } else {
+	W_ReparentView(item->view, dview, 0, 0);
+    }
+
+    W_MapView(dview);
+
+    dx = menu->dragX - orix;
+    dy = menu->dragY - oriy;
+    
+    XGrabPointer(dpy, scr->rootWin, False,
+		 ButtonPressMask|ButtonReleaseMask|ButtonMotionMask,
+		 GrabModeAsync, GrabModeAsync, None, scr->defaultCursor,
+		 CurrentTime);
+
+    while (!done) {
+	XEvent ev;
+
+	WMNextEvent(dpy, &ev);
+
+	switch (ev.type) {
+	 case MotionNotify:
+	    XQueryPointer(dpy, win, &blaw, &blaw, &blai, &blai, &x, &y, &blau);
+
+	    dmenu = findMenuInWindow(dpy, win, x, y, menu->dropTargets);
+		
+	    if (dmenu) {
+		handleDragOver(dmenu, dview, item, x - dx, y - dy);
+		enteredMenu = True;
+	    } else {
+		if (enteredMenu) {
+		    W_ResizeView(dview, oldSize.width, oldSize.height);
+		    W_ResizeView(item->view, oldSize.width, oldSize.height);
+		    enteredMenu = False;
+		}
+		W_MoveView(dview, x - dx, y - dy);
+	    }
+	    
+	    break;
+	    
+	 case ButtonRelease:
+	    done = True;
+	    break;
+	    
+	 default:
+	    WMHandleEvent(&ev);
 	    break;
 	}
     }
-    assert(oldIdx < mPtr->itemCount);
+    XUngrabPointer(dpy, CurrentTime);
 
-    newIdx = (y - mPtr->titleHeight + mPtr->itemHeight/2) / mPtr->itemHeight;
-
-    if (newIdx < 0)
-	newIdx = 0;
-    else if (newIdx >= mPtr->itemCount)
-	newIdx = mPtr->itemCount - 1;
-
-    newY = mPtr->titleHeight + newIdx * mPtr->itemHeight;
-    for (i = 0; i <= 15; i++) {
-	W_MoveView(iPtr->view, 0, ((newY*i)/15 + (y - (y*i)/15)));
-	XFlush(scr->display);
+    if (menu->flags.isFactory && !enteredMenu) {
+	slideWindow(dpy, W_VIEW_DRAWABLE(dview), x-dx, y-dy, orix, oriy);
+    } else {
+	WRemoveEditMenuItem(menu, item);
+	if (enteredMenu) {
+	    handleItemDrop(dmenu, item, x-dy, y-dy);
+	}
     }
 
-    if (oldIdx != newIdx) {
-	WEditMenuItem *item;
+    /* can't destroy now because we're being called from 
+     * the event handler of the item. and destroying now,
+     * would mean destroying the item too in some cases.
+     */
+    WMAddIdleHandler((WMCallback*)W_DestroyView, dview);
+}
 
-	item = mPtr->items[oldIdx];
-	mPtr->items[oldIdx] = mPtr->items[newIdx];
-	mPtr->items[newIdx] = item;
 
-	updateMenuContents(mPtr);
+
+static void
+handleItemClick(XEvent *event, void *data)
+{
+    WEditMenuItem *item = (WEditMenuItem*)data;
+    WEditMenu *menu = item->parent;
+
+    switch (event->type) {
+     case ButtonPress:
+	selectItem(menu, item);
+
+	if (WMIsDoubleClick(event)) {
+	    editItemLabel(item);
+	}
+	
+	menu->flags.isDragging = 1;
+	menu->dragX = event->xbutton.x_root;
+	menu->dragY = event->xbutton.y_root;
+	break;
+	
+     case ButtonRelease:
+	menu->flags.isDragging = 0;
+	break;
+	
+     case MotionNotify:
+	if (menu->flags.isDragging) {
+	    if (abs(event->xbutton.x_root - menu->dragX) > 5
+		|| abs(event->xbutton.y_root - menu->dragY) > 5) {
+		menu->flags.isDragging = 0;
+		dragItem(menu, item);
+	    }
+	}
+	break;
     }
 }
 
@@ -651,19 +1219,12 @@ destroyEditMenu(WEditMenu *mPtr)
 {
     WMRemoveNotificationObserver(mPtr);
 
-    if (mPtr->next)
-	mPtr->next->prev = mPtr->prev;
-    if (mPtr->prev)
-	mPtr->prev->next = mPtr->next;
-    if (EditMenuList == mPtr)
-	EditMenuList = mPtr->next;
-
-    if (mPtr->label)
-	free(mPtr->label);
-
-    if (mPtr->items)
-	free(mPtr->items);
+    WMFreeBag(mPtr->items);
+    
+    free(mPtr->dropTargets);
 
     free(mPtr);
 }
-#endif
+
+
+

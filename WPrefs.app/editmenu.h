@@ -2,7 +2,7 @@
  * 
  *  WPrefs - Window Maker Preferences Program
  * 
- *  Copyright (c) 1999 Alfredo K. Kojima
+ *  Copyright (c) 2000 Alfredo K. Kojima
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,20 +21,18 @@
  */
 
 
-
 typedef struct W_EditMenu WEditMenu;
-
 typedef struct W_EditMenuItem WEditMenuItem;
 
 
-WEditMenuItem *WCreateEditMenuItem(WMWidget *parent, char *title);
-
-
-WEditMenu *WCreateEditMenu(WMScreen *scr, char *title);
-
-WEditMenuItem *WInsertMenuItemWithTitle(WEditMenu *mPtr, char *title,
-					int index);
-
-void WSetMenuSubmenu(WEditMenu *mPtr, WEditMenu *submenu, WEditMenuItem *item);
-
-void WRemoveMenuItem(WEditMenu *mPtr, WEditMenuItem *item);
+typedef struct WEditMenuDelegate {
+    void *data;
+    
+    void (*itemCloned)(struct WEditMenuDelegate*, WEditMenu *menu,
+		       WEditMenuItem *origItem, WEditMenuItem *newItem);
+    void (*itemSelected)(struct WEditMenuDelegate*, WEditMenu *menu,
+			 WEditMenuItem *item);
+    void (*itemDeselected)(struct WEditMenuDelegate*, WEditMenu *menu,
+			   WEditMenuItem *item);
+    
+} WEditMenuDelegate;
