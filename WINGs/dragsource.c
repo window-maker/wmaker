@@ -555,6 +555,53 @@ selectionDone(WMView *view, Atom selection, Atom target, void *cdata)
 
 
 
+static void
+setMouseOffsetHint(WMView *view, WMSize mouseOffset)
+{
+    WMScreen *scr = W_VIEW_SCREEN(view);
+    long hint[2];
+
+    /*
+     * Tell the offset from the topleft corner of the icon being
+     * dragged. Not from XDND, but it's backwards compatible.
+     */
+    
+    hint[0] = mouseOffset.width;
+    hint[1] = mouseOffset.height;
+    
+    XChangeProperty(scr->display, W_VIEW_DRAWABLE(view), 
+		    scr->wmIconDragOffsetAtom, XA_INTEGER, 32,
+		    PropModeReplace, (unsigned char*)hint, 2);
+}
+
+
+static Bool
+getMouseOffsetHint(WMScreen *scr, Window source, WMSize *mouseOffset)
+{
+    long *hint;
+    Atom type_ret;
+    int fmt_ret;
+    unsigned long nitems_ret, bytes_after_ret;
+    Bool ok = False;
+    
+
+    hint = NULL;
+    
+    XGetWindowProperty(scr->display, source, 
+		       scr->wmIconDragOffsetAtom, 0, 2, False, XA_INTEGER,
+		       &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
+		       (unsigned char **)&hint);
+    
+    if (hint && nitems_ret == 2) {
+	mouseOffset->width = hint[0];
+	mouseOffset->height = hint[1];
+	ok = True;
+    }
+    if (hint)
+	XFree(hint);
+    
+    return ok;
+}
 
 
 
@@ -612,6 +659,7 @@ WMDragImageFromView(WMView *view, WMPixmap *image, char *dataTypes[],
 {
     WMScreen *scr = view->screen;
     Display *dpy = scr->display;
+    WMView *toplevel = W_TopLevelOfView(view);
     Window icon;
     XEvent ev;
     WMRect rect = {{0,0},{0,0}};
@@ -655,7 +703,7 @@ WMDragImageFromView(WMView *view, WMPixmap *image, char *dataTypes[],
     memset(&oldDragInfo, 0, sizeof(WMDraggingInfo));
     dragInfo.image = image;
     dragInfo.sourceView = view;
-    dragInfo.sourceWindow = W_VIEW_DRAWABLE(W_TopLevelOfView(view));
+    dragInfo.sourceWindow = W_VIEW_DRAWABLE(toplevel);
 
     dragInfo.destinationWindow = dragInfo.sourceWindow;
 
@@ -681,6 +729,8 @@ WMDragImageFromView(WMView *view, WMPixmap *image, char *dataTypes[],
 	wwarning("could not get ownership or DND selection");
 	return;
     }
+    
+    setMouseOffsetHint(toplevel, mouseOffset);
 
     if (view->dragSourceProcs->beganDragImage != NULL) {
 	view->dragSourceProcs->beganDragImage(view, image, atLocation);
@@ -1126,12 +1176,18 @@ W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event)
 	scr->dragInfo.sourceWindow = source = event->data.l[0];
 	scr->dragInfo.destinationWindow = event->window;
 	
+	getMouseOffsetHint(scr, source, &scr->dragInfo.mouseOffset);
+	
 	/* XXX */
 	scr->dragInfo.image = NULL;
 	
 	XQueryPointer(scr->display, scr->rootWin, &foo, &bar,
 		      &scr->dragInfo.location.x, &scr->dragInfo.location.y,
 		      &bla, &bla, &ble);
+	
+	scr->dragInfo.imageLocation = scr->dragInfo.location;
+	scr->dragInfo.imageLocation.x -= scr->dragInfo.mouseOffset.width;
+	scr->dragInfo.imageLocation.y -= scr->dragInfo.mouseOffset.height;
 
 	translateCoordinates(scr, scr->dragInfo.destinationWindow,
 			     scr->dragInfo.location.x,
@@ -1147,8 +1203,10 @@ W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event)
 
 	scr->dragInfo.location.x = event->data.l[2] >> 16;
 	scr->dragInfo.location.y = event->data.l[2] & 0xffff;
-	
+
 	scr->dragInfo.imageLocation = scr->dragInfo.location;
+	scr->dragInfo.imageLocation.x -= scr->dragInfo.mouseOffset.width;
+	scr->dragInfo.imageLocation.y -= scr->dragInfo.mouseOffset.height;
 
 	if (scr->dragInfo.protocolVersion >= 1) {
 	    scr->dragInfo.timestamp = event->data.l[3];
