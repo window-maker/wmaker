@@ -1134,6 +1134,9 @@ createPanel(_Panel *p)
     WMSetBrowserTitled(panel->browser, False);
     WMResizeWidget(panel->browser, 295, 160);
     WMMoveWidget(panel->browser, 15, 65);
+    
+    browserDelegate.data = panel;
+    
     WMSetBrowserDelegate(panel->browser, &browserDelegate);
     WMHangData(panel->browser, panel);
     WMSetBrowserPathSeparator(panel->browser, "\r");
