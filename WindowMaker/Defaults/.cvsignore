@@ -1,2 +1,4 @@
 Makefile Makefile.in
 WMState WMWindowAttributes WindowMaker
+.psrc .inslog2 tca.map tca.log
+*.rpt

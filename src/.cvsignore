@@ -2,3 +2,5 @@ Makefile Makefile.in
 config.h wconfig.h stamp-h
 .libs
 wmaker
+.psrc .inslog2 tca.map tca.log
+*.rpt

@@ -1,4 +1,6 @@
 Makefile Makefile.in
 *.lo *.la
-view testgrad testdraw get-wraster-flags
+view testgrad testdraw testrot get-wraster-flags
 .libs
+.psrc .inslog2 tca.map tca.log
+*.rpt

@@ -1,2 +1,4 @@
 Makefile Makefile.in
 configure config.log config.cache config.status libtool
+.psrc .inslog2 tca.map tca.log
+*.rpt
