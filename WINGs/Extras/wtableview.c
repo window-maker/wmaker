@@ -142,6 +142,8 @@ struct W_TableView {
     void *dataSource;
 
     WMTableViewDelegate *delegate;
+
+    int editingRow;
     
     unsigned headerHeight;
     
@@ -296,6 +298,8 @@ WMTableView *WMCreateTableView(WMWidget *parent)
 	table->gridGC = XCreateGC(WMScreenDisplay(scr), W_DRAWABLE(scr),
 				  GCForeground, &gcv);
     }
+    
+    table->editingRow = -1;
         
     table->drawsGrid = 1;
     table->rowHeight = 16;
@@ -425,6 +429,13 @@ void *WMTableViewDataForCell(WMTableView *table, WMTableColumn *column,
 			     int row)
 {
     return (*table->delegate->valueForCell)(table->delegate, column, row);
+}
+
+
+void WMSetTableViewDataForCell(WMTableView *table, WMTableColumn *column, 
+			       int row, void *data)
+{
+    (*table->delegate->setValueForCell)(table->delegate, column, row, data);
 }
 
 
@@ -686,15 +697,37 @@ static void repaintTable(WMTableView *table, int x, int y,
 }
 
 
-static void startRowEdit(WMTableView *table, int row)
+static void stopRowEdit(WMTableView *table, int row)
 {
     int i;
     WMTableColumn *column;
-       
+
+    table->editingRow = -1;
     for (i = 0; i < WMGetArrayItemCount(table->columns); i++) {
 	column = WMGetFromArray(table->columns, i);
 
-	wassertr(column->delegate && column->delegate->drawCell);
+	wassertr(column->delegate && column->delegate->endCellEdit);
+	
+	(*column->delegate->endCellEdit)(column->delegate, column, row);
+    }
+}
+
+
+
+void WMEditTableViewRow(WMTableView *table, int row)
+{
+    int i;
+    WMTableColumn *column;
+
+    if (table->editingRow >= 0) {
+	stopRowEdit(table, table->editingRow);
+    }
+    
+    table->editingRow = row;
+    for (i = 0; i < WMGetArrayItemCount(table->columns); i++) {
+	column = WMGetFromArray(table->columns, i);
+
+	wassertr(column->delegate && column->delegate->beginCellEdit);
 	
 	(*column->delegate->beginCellEdit)(column->delegate, column, row);
     }
@@ -708,7 +741,6 @@ static void handleTableEvents(XEvent *event, void *data)
     switch (event->type) {
      case ButtonPress:
 	setRowSelected(table, event->xbutton.y/table->rowHeight, True);
-	startRowEdit(table, event->xbutton.y/table->rowHeight);
 	break;
 
      case Expose:

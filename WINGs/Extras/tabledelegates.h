@@ -6,7 +6,9 @@
 extern "C" {
 #endif
 
-WMTableColumnDelegate *WTCreateStringDelegate(WMScreen *scr);
+WMTableColumnDelegate *WTCreateStringDelegate(WMTableView *table);
+WMTableColumnDelegate *WTCreateStringEditorDelegate(WMTableView *table);
+WMTableColumnDelegate *WTCreateEnumSelectorDelegate(WMTableView *table);
 
 #ifdef __cplusplus
 }

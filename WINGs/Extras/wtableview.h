@@ -72,9 +72,14 @@ void WMSetTableViewDelegate(WMTableView *table, WMTableViewDelegate *delegate);
 
 WMView *WMGetTableViewDocumentView(WMTableView *table);
 
+void WMEditTableViewRow(WMTableView *table, int row);
+    
 void *WMTableViewDataForCell(WMTableView *table, WMTableColumn *column, 
 			     int row);
 
+void WMSetTableViewDataForCell(WMTableView *table, WMTableColumn *column, 
+			       int row, void *data);
+    
 WMRect WMTableViewRectForCell(WMTableView *table, WMTableColumn *column, 
 			      int row);
 
