@@ -25,6 +25,32 @@
 #include <unistd.h>
 #include <fontconfig/fontconfig.h>
 
+
+/* workaround for older fontconfig, that doesn't define these constants */
+#ifndef FC_WEIGHT_NORMAL
+/* Weights */
+# define FC_WEIGHT_THIN              10
+# define FC_WEIGHT_EXTRALIGHT        40
+# define FC_WEIGHT_ULTRALIGHT        FC_WEIGHT_EXTRALIGHT
+# define FC_WEIGHT_REGULAR           80
+# define FC_WEIGHT_NORMAL            FC_WEIGHT_REGULAR
+# define FC_WEIGHT_SEMIBOLD          FC_WEIGHT_DEMIBOLD
+# define FC_WEIGHT_EXTRABOLD         205
+# define FC_WEIGHT_ULTRABOLD         FC_WEIGHT_EXTRABOLD
+# define FC_WEIGHT_HEAVY             FC_WEIGHT_BLACK
+/* Widths */
+# define FC_WIDTH_ULTRACONDENSED     50
+# define FC_WIDTH_EXTRACONDENSED     63
+# define FC_WIDTH_CONDENSED          75
+# define FC_WIDTH_SEMICONDENSED      87
+# define FC_WIDTH_NORMAL             100
+# define FC_WIDTH_SEMIEXPANDED       113
+# define FC_WIDTH_EXPANDED           125
+# define FC_WIDTH_EXTRAEXPANDED      150
+# define FC_WIDTH_ULTRAEXPANDED      200
+#endif
+
+
 #define SAMPLE_TEXT "The Lazy Fox Jumped Ipsum Foobar 1234 - 56789"
 
 
