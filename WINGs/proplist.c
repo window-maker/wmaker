@@ -409,7 +409,7 @@ indentedDescription(WMPropList *plist, int level)
     WMHashEnumerator e;
     int i;
 
-    if (plist->type==WPLArray || plist->type==WPLDictionary) {
+    if (plist->type==WPLArray/* || plist->type==WPLDictionary*/) {
         retstr = description(plist);
 
         if (retstr && ((2*(level+1) + strlen(retstr)) <= 77)) {
