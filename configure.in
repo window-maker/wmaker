@@ -1,7 +1,12 @@
 dnl
 dnl Window Maker autoconf input.
 dnl
-dnl Process with: aclocal; autoconf; automake
+dnl Process with:
+dnl               aclocal
+dnl               autoheader
+dnl               autoconf
+dnl               libtoolize --force --automake
+dnl               automake -a --gnu --include-deps
 dnl
 dnl
 
