@@ -16,6 +16,7 @@ Changes since version 0.70.0:
 - SIGTERM is now handled and saves the internal state before exiting (like
   SIGHUP and SIGINT already do). Now a "kill wmaker_pid" will exit cleanly
   saving dock/clip/session information on exit.
+- added an internal strcasecmp() to WINGs (only on systems where's not present)
 
 
 Changes since version 0.65.1:

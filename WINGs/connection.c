@@ -28,7 +28,6 @@
  */
 
 
-#include "../src/config.h"
 #include "wconfig.h"
 
 #include <unistd.h>

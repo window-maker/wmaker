@@ -19,8 +19,6 @@
  */
 
 
-#include "../src/config.h"
-
 #include "wconfig.h"
 
 #include <stdio.h>

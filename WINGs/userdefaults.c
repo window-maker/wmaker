@@ -7,8 +7,6 @@
 #include <sys/stat.h>
 
 
-#include "../src/config.h"
-
 #include "wconfig.h"
 
 #include "WINGs.h"
