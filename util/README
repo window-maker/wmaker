@@ -22,6 +22,8 @@ wxcopy- copy input file or stdin into X cutbuffer
 
 wxpaste- copy content of X cutbuffer into stdout
 
+wcopy, wpaste- see 'man wcopy'
+
 wmsetbg- set the workspace background into a image and make it persist between
 	sessions.
 

@@ -72,14 +72,8 @@ copy() {
                 	source=$GLOBALDIR/plmenu.${LOCALE%.*}
             	    elif [ -f $GLOBALDIR/plmenu.${LOCALE%_*} ]; then
                 	source=$GLOBALDIR/plmenu.${LOCALE%_*}
-            	    if [ -f $GLOBALDIR/plmenu.${LOCALE%_*.*} ]; then
-                	source=$GLOBALDIR/plmenu.${LOCALE%_*.*}
-		    elif [ -f $GLOBALDIR/menu.${LOCALE} ]; then
-			source=$GLOBALDIR/menu.${LOCALE}
 		    elif [ -f $GLOBALDIR/menu.${LOCALE%_*} ]; then
 			source=$GLOBALDIR/menu.${LOCALE%_*}
-		    elif [ -f $GLOBALDIR/menu.${LOCALE%_*.*} ]; then
-			source=$GLOBALDIR/menu.${LOCALE%_*.*}
 		    else
 			source=$GLOBALDIR/plmenu 
             	    fi
