@@ -29,7 +29,6 @@
 #include <unistd.h>
 #include <string.h>
 
-#include <nana.h>
 
 
 #include <X11/Xlib.h>
