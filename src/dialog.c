@@ -442,11 +442,12 @@ drawIconProc(WMList *lPtr, int index, Drawable d, char *text, int state,
              WMRect *rect)
 {
     IconPanel *panel = WMGetHangedData(lPtr);
-    GC gc = panel->scr->draw_gc;
-    GC copygc = panel->scr->copy_gc;
+    WScreen *scr = panel->scr;
+    GC gc = scr->draw_gc;
+    GC copygc = scr->copy_gc;
     char *file, *dirfile;
     WMPixmap *pixmap;
-    WMColor *black, *white, *gray, *back;
+    WMColor *back;
     WMSize size;
     WMScreen *wmscr = WMWidgetScreen(panel->win);
     RColor color;
@@ -459,10 +460,7 @@ drawIconProc(WMList *lPtr, int index, Drawable d, char *text, int state,
     width = rect->size.width;
     height = rect->size.height;
 
-    black = WMBlackColor(wmscr);
-    white = WMWhiteColor(wmscr);
-    gray = WMGrayColor(wmscr);
-    back = (state & WLDSSelected) ? white : gray;
+    back = (state & WLDSSelected) ? scr->white : scr->gray;
 
     dirfile = wexpandpath(WMGetListSelectedItem(panel->dirList)->text);
     len = strlen(dirfile)+strlen(text)+4;
@@ -480,9 +478,6 @@ drawIconProc(WMList *lPtr, int index, Drawable d, char *text, int state,
 
     if (!pixmap) {
         /*WMRemoveListItem(lPtr, index);*/
-        WMReleaseColor(black);
-        WMReleaseColor(white);
-        WMReleaseColor(gray);
         return;
     }
 
@@ -490,7 +485,7 @@ drawIconProc(WMList *lPtr, int index, Drawable d, char *text, int state,
 
     XSetClipMask(dpy, gc, None);
     /*XDrawRectangle(dpy, d, WMColorGC(white), x+5, y+5, width-10, 54);*/
-    XDrawLine(dpy, d, WMColorGC(white), x, y+height-1, x+width, y+height-1);
+    XDrawLine(dpy, d, WMColorGC(scr->white), x, y+height-1, x+width, y+height-1);
 
     size = WMGetPixmapSize(pixmap);
 
@@ -512,20 +507,16 @@ drawIconProc(WMList *lPtr, int index, Drawable d, char *text, int state,
 
         for(i=-1;i<2;i++)
 	    for(j=-1;j<2;j++)
-                WMDrawString(wmscr, d, white, panel->normalfont,
+                WMDrawString(wmscr, d, scr->white, panel->normalfont,
                              ofx+i, ofy+j, text, tlen);
 
-        WMDrawString(wmscr, d, black, panel->normalfont, ofx, ofy,
+        WMDrawString(wmscr, d, scr->black, panel->normalfont, ofx, ofy,
                      text, tlen);
     }
 
     WMReleasePixmap(pixmap);
     /* I hope it is better to do not use cache / on my box it is fast nuff */
     XFlush(dpy);
-
-    WMReleaseColor(black);
-    WMReleaseColor(white);
-    WMReleaseColor(gray);
 }
 
 

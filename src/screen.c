@@ -266,7 +266,6 @@ allocGCs(WScreen *scr)
 {
     XGCValues gcv;
     XColor color;
-    unsigned long mtextcolor;
     int gcm;
 
     scr->stipple_bitmap = 
@@ -291,7 +290,7 @@ allocGCs(WScreen *scr)
     gcv.dash_offset = 0;
     gcv.dashes      = 4;
     gcv.graphics_exposures = False;
-   
+
     gcm = GCFunction | GCGraphicsExposures;
     gcm |= GCForeground | GCBackground;
     gcm |= GCLineWidth | GCLineStyle;
@@ -300,30 +299,11 @@ allocGCs(WScreen *scr)
 
     scr->icon_select_gc = XCreateGC(dpy, scr->w_win, gcm, &gcv);
 
-    gcm = GCForeground|GCGraphicsExposures;
-    
-    scr->menu_title_pixel[0] = scr->white_pixel;
-    gcv.foreground = scr->white_pixel;
-    gcv.graphics_exposures = False;
-    scr->menu_title_gc = XCreateGC(dpy, scr->w_win, gcm, &gcv);
+    scr->menu_title_color[0] = WMRetainColor(scr->white);
 
-    scr->mtext_pixel = scr->black_pixel;
-    mtextcolor = gcv.foreground = scr->black_pixel;
-    scr->menu_entry_gc = XCreateGC(dpy, scr->w_win, gcm, &gcv);
-
-    /* selected menu entry GC */
-    gcm = GCForeground|GCBackground|GCGraphicsExposures;
-    gcv.foreground = scr->white_pixel;
-    gcv.background = scr->white_pixel;
-    gcv.graphics_exposures = False;
-    scr->select_menu_gc = XCreateGC(dpy, scr->w_win, gcm, &gcv);
-
-    /* disabled menu entry GC */
-    scr->dtext_pixel = scr->black_pixel;
-    gcm = GCForeground|GCBackground|GCStipple|GCGraphicsExposures;
-    gcv.stipple = scr->stipple_bitmap;
-    gcv.graphics_exposures = False;
-    scr->disabled_menu_entry_gc = XCreateGC(dpy, scr->w_win, gcm, &gcv);
+    /* don't retain scr->black here because we may alter its alpha */
+    scr->mtext_color = WMCreateRGBColor(scr->wmscreen, 0, 0, 0, True);
+    scr->dtext_color = WMCreateRGBColor(scr->wmscreen, 0, 0, 0, True);
 
     /* frame GC */
     wGetColor(scr, DEF_FRAME_COLOR, &color);
@@ -359,21 +339,17 @@ allocGCs(WScreen *scr)
     gcv.cap_style = CapRound;
     gcv.graphics_exposures = False;
     gcm = GCForeground|GCFunction|GCSubwindowMode|GCLineWidth|GCCapStyle
-	|GCGraphicsExposures;
+        |GCGraphicsExposures;
     scr->line_gc = XCreateGC(dpy, scr->root_win, gcm, &gcv);
 
     scr->line_pixel = gcv.foreground;
-    
+
     /* copy GC */
     gcv.foreground = scr->white_pixel;
     gcv.background = scr->black_pixel;
     gcv.graphics_exposures = False;
     scr->copy_gc = XCreateGC(dpy, scr->w_win, GCForeground|GCBackground
 			     |GCGraphicsExposures, &gcv);
-
-    /* window title text GC */
-    gcv.graphics_exposures = False;
-    scr->window_title_gc = XCreateGC(dpy, scr->w_win,GCGraphicsExposures,&gcv);
 
     /* clip title GC */
     scr->clip_title_gc = XCreateGC(dpy, scr->w_win, GCGraphicsExposures, &gcv);
@@ -764,26 +740,24 @@ wScreenInit(int screen_number)
     scr->w_depth = scr->rcontext->depth;
     scr->w_colormap = scr->rcontext->cmap;
 
-    scr->black_pixel = scr->rcontext->black;
-    scr->white_pixel = scr->rcontext->white;    
-
     /* create screen descriptor for WINGs */
     scr->wmscreen = WMCreateScreenWithRContext(dpy, screen_number,
 					       scr->rcontext);
 
     if (!scr->wmscreen) {
-	wfatal(_("could not do initialization of WINGs widget set"));
-
+	wfatal(_("could not initialize WINGs widget set"));
 	return NULL;
     }
 
-    color = WMGrayColor(scr->wmscreen);
-    scr->light_pixel = WMColorPixel(color);
-    WMReleaseColor(color);
+    scr->black    = WMBlackColor(scr->wmscreen);
+    scr->white    = WMWhiteColor(scr->wmscreen);
+    scr->gray     = WMGrayColor(scr->wmscreen);
+    scr->darkGray = WMDarkGrayColor(scr->wmscreen);
 
-    color = WMDarkGrayColor(scr->wmscreen);
-    scr->dark_pixel = WMColorPixel(color);
-    WMReleaseColor(color);
+    scr->black_pixel = WMColorPixel(scr->black); /*scr->rcontext->black;*/
+    scr->white_pixel = WMColorPixel(scr->white); /*scr->rcontext->white;*/
+    scr->light_pixel = WMColorPixel(scr->gray);
+    scr->dark_pixel  = WMColorPixel(scr->darkGray);
 
     {
 	XColor xcol;
@@ -795,7 +769,6 @@ wScreenInit(int screen_number)
     /* create GCs with default values */
     allocGCs(scr);
 
-    
     /* for our window manager info notice board. Need to
      * create before reading the defaults, because it will be used there. 
      */

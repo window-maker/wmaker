@@ -278,7 +278,7 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 		wwin->normal_hints->height_inc);
 	fw = WMWidthOfString(scr->info_text_font, num, strlen(num));
 	
-	/* XSetForeground(dpy, gc, scr->window_title_pixel[WS_UNFOCUSED]); */
+	/* XSetForeground(dpy, gc, WMColorPixel(scr->window_title_color[WS_UNFOCUSED])); */
 
         color = WMBlackColor(scr->wmscreen);
         saveGC = scr->wmscreen->drawStringGC;
@@ -286,7 +286,7 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 
         /* Display the height. */
 
-        /* ugly hack */
+        /* // ugly hack */
         color->color.pixel = scr->line_pixel;
         scr->wmscreen->drawStringGC = gc;
 	WMDrawString(scr->wmscreen, root, color, scr->info_text_font,
@@ -344,10 +344,10 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 	
 	XDrawSegments(dpy, root, gc, segment, 4);
 	
-	/* XSetForeground(dpy, gc, scr->window_title_pixel[WS_UNFOCUSED]); */
+	/* XSetForeground(dpy, gc, WMColorPixel(scr->window_title_color[WS_UNFOCUSED])); */
 	
 	/* Display the width. */
-        /* ugly hack */
+        /* // ugly hack */
         color->color.pixel = scr->line_pixel;
         scr->wmscreen->drawStringGC = gc;
 	WMDrawString(scr->wmscreen, root, color, scr->info_text_font,

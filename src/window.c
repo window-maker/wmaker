@@ -1154,7 +1154,7 @@ wManageWindow(WScreen *scr, Window window)
 				     &wPreferences.window_title_clearance, foo,
 				     scr->window_title_texture,
 				     scr->resizebar_texture,
-				     scr->window_title_pixel, 
+				     scr->window_title_color,
 				     &scr->title_font);
 
     wwin->frame->flags.is_client_window_frame = 1;
@@ -1513,7 +1513,7 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
                      &wPreferences.window_title_clearance, foo,
 				     scr->window_title_texture,
 				     scr->resizebar_texture,
-				     scr->window_title_pixel, 
+				     scr->window_title_color,
 				     &scr->title_font);
     
     XSaveContext(dpy, window, wWinContext, (XPointer)&wwin->client_descriptor);

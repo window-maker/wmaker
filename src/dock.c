@@ -4221,7 +4221,8 @@ showClipBalloon(WDock *dock, int workspace)
     XMoveWindow(dpy, scr->clip_balloon, x, y);
     XClearWindow(dpy, scr->clip_balloon);
     WMDrawString(scr->wmscreen, scr->clip_balloon,
-                 scr->clip_title_color[CLIP_NORMAL], scr->clip_title_font,
+                 scr->clip_title_color[CLIP_NORMAL],
+                 scr->clip_title_font,
                  0, 0, text, strlen(text));
 }
 

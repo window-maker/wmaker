@@ -67,7 +67,7 @@ WFrameWindow*
 wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y, 
 		   int width, int height, int *clearance, int flags,
 		   WTexture **title_texture, WTexture **resize_texture,
-		   unsigned long *color, WMFont **font)
+		   WMColor **color, WMFont **font)
 {
     WFrameWindow *fwin;
     
@@ -80,7 +80,7 @@ wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y,
     
     fwin->title_texture = title_texture;
     fwin->resizebar_texture = resize_texture;
-    fwin->title_pixel = color;
+    fwin->title_color = color;
     fwin->title_clearance = clearance;
     fwin->font = font;
 #ifdef KEEP_XKB_LOCK_STATUS
@@ -1050,14 +1050,12 @@ wFrameWindowPaint(WFrameWindow *fwin)
 
 	if (fwin->title) {
             char *title;
-            WMColor *color;
-            WMPixel pixel;
-	    
+
 	    title = ShrinkString(*fwin->font, fwin->title,
 				 fwin->titlebar->width - lofs - rofs);
 	    titlelen = strlen(title);
 	    w = WMWidthOfString(*fwin->font, title, titlelen);
-	    
+
 	    switch (fwin->flags.justification) {
 	     case WTJ_LEFT:
 		x = lofs;
@@ -1074,20 +1072,16 @@ wFrameWindowPaint(WFrameWindow *fwin)
 		    x = (fwin->titlebar->width - w) / 2;
 		break;
 	    }
-	    
-            color = WMBlackColor(scr->wmscreen);
-            /* ugly hack */
-            pixel = color->color.pixel;
-            color->color.pixel = fwin->title_pixel[fwin->flags.state];
-            WMDrawString(scr->wmscreen, fwin->titlebar->window, color,
-                         *fwin->font, x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE,
+
+            WMDrawString(scr->wmscreen, fwin->titlebar->window,
+                         fwin->title_color[fwin->flags.state],
+                         *fwin->font, x,
+                         *fwin->title_clearance + TITLEBAR_EXTEND_SPACE,
                          title, titlelen);
-            color->color.pixel = pixel;
-            WMReleaseColor(color);
-	    
+
 	    wfree(title);
 	}
-	
+
 	if (fwin->left_button)
 	    handleButtonExpose(&fwin->left_button->descriptor, NULL);
 	if (fwin->right_button)
@@ -1095,7 +1089,7 @@ wFrameWindowPaint(WFrameWindow *fwin)
 #ifdef XKB_BUTTON_HINT
 	if (fwin->language_button)
 	    handleButtonExpose(&fwin->language_button->descriptor, NULL);
-#endif 
+#endif
     }
 }
 
@@ -1255,7 +1249,7 @@ wFrameWindowUpdatePushButton(WFrameWindow *fwin, Bool pushed)
     fwin->flags.right_button_pushed_in = pushed;
 
     paintButton(fwin->right_button, fwin->title_texture[fwin->flags.state],
-		fwin->title_pixel[fwin->flags.state],
+		WMColorPixel(fwin->title_color[fwin->flags.state]),
 		fwin->rbutton_image, pushed);
 }
 #endif /* OLWM_HINTS */
@@ -1266,7 +1260,7 @@ void
 wFrameWindowUpdateLanguageButton(WFrameWindow *fwin)
 {
     paintButton(fwin->language_button, fwin->title_texture[fwin->flags.state],
-		fwin->title_pixel[fwin->flags.state],
+		WMColorPixel(fwin->title_color[fwin->flags.state]),
 		fwin->languagebutton_image, True);
 }
 #endif /* XKB_BUTTON_HINT */
@@ -1433,14 +1427,14 @@ handleButtonExpose(WObjDescriptor *desc, XEvent *event)
     if (button == fwin->language_button) {
         if (wPreferences.modelock){
             paintButton(button, fwin->title_texture[fwin->flags.state],
-                    fwin->title_pixel[fwin->flags.state],
+                    WMColorPixel(fwin->title_color[fwin->flags.state]),
                     fwin->languagebutton_image, False);
         }
     } else 
 #endif
     if (button == fwin->left_button) {
         paintButton(button, fwin->title_texture[fwin->flags.state],
-                fwin->title_pixel[fwin->flags.state],
+                WMColorPixel(fwin->title_color[fwin->flags.state]),
                 fwin->lbutton_image, False);
     } else {
         Bool pushed = False;
@@ -1451,7 +1445,7 @@ handleButtonExpose(WObjDescriptor *desc, XEvent *event)
 #endif
 	/* emulate the olwm pushpin in the "out" state */
 	paintButton(button, fwin->title_texture[fwin->flags.state],
-		    fwin->title_pixel[fwin->flags.state],
+		    WMColorPixel(fwin->title_color[fwin->flags.state]),
 		    fwin->rbutton_image, pushed);
     }
 }
@@ -1515,7 +1509,7 @@ buttonMouseDown(WObjDescriptor *desc, XEvent *event)
     }
 #endif
     
-    pixel = fwin->title_pixel[fwin->flags.state];
+    pixel = WMColorPixel(fwin->title_color[fwin->flags.state]);
     texture = fwin->title_texture[fwin->flags.state];
     paintButton(button, texture, pixel, image, True);
     

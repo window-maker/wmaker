@@ -81,7 +81,7 @@ typedef struct WFrameWindow {
     
     union WTexture **title_texture;
     union WTexture **resizebar_texture;
-    unsigned long *title_pixel;
+    WMColor **title_color;
     WMFont **font;
 
     char *title;		       /* window name (title) */
@@ -156,7 +156,7 @@ wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y,
 		   int width, int height, int *clearance, int flags,
 		   union WTexture **title_texture, 
 		   union WTexture **resize_texture,
-		   unsigned long *color, WMFont **font);
+		   WMColor **color, WMFont **font);
 
 void wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags);
 

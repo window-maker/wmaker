@@ -275,7 +275,6 @@ showWorkspaceName(WScreen *scr, int workspace)
     WorkspaceNameData *data;
     RXImage *ximg;
     Pixmap text, mask;
-    WMColor *color;
     int w, h;
     int px, py;
     char *name = scr->workspaces[workspace]->name;
@@ -342,40 +341,34 @@ showWorkspaceName(WScreen *scr, int workspace)
     text = XCreatePixmap(dpy, scr->w_win, w+4, h+4, scr->w_depth);
     mask = XCreatePixmap(dpy, scr->w_win, w+4, h+4, 1);
 
-    XSetForeground(dpy, scr->draw_gc, scr->black_pixel);
-    XFillRectangle(dpy, text, scr->draw_gc, 0, 0, w+4, h+4);
+    /*XSetForeground(dpy, scr->mono_gc, 0);
+    XFillRectangle(dpy, mask, scr->mono_gc, 0, 0, w+4, h+4);*/
 
-    XSetForeground(dpy, scr->mono_gc, 0);
-    XFillRectangle(dpy, mask, scr->mono_gc, 0, 0, w+4, h+4);
-
-    XSetForeground(dpy, scr->mono_gc, 1);
-
-    color = WMWhiteColor(scr->wmscreen);
+    XFillRectangle(dpy, text, WMColorGC(scr->black), 0, 0, w+4, h+4);
 
     for (x = 0; x <= 4; x++) {
-        GC saveGC = scr->wmscreen->drawStringGC;
-        WMPixel pixel = color->color.pixel;
-
-        /* ugly hack */
-        color->color.pixel = 1;
-        scr->wmscreen->drawStringGC = scr->mono_gc;
-
 	for (y = 0; y <= 4; y++) {
-	    WMDrawString(scr->wmscreen, mask, color,
-			 scr->workspace_name_font, x, y, name, len);
+	    WMDrawString(scr->wmscreen, text, scr->white,
+	        	 scr->workspace_name_font, x, y, name, len);
         }
-
-        scr->wmscreen->drawStringGC = saveGC;
-        color->color.pixel = pixel;
     }
 
-    WMDrawString(scr->wmscreen, text, color, scr->workspace_name_font,
-		 2, 2, scr->workspaces[workspace]->name,
-                 strlen(scr->workspaces[workspace]->name));
-    WMReleaseColor(color);
+    XSetForeground(dpy, scr->mono_gc, 1);
+    XSetBackground(dpy, scr->mono_gc, 0);
+
+    XCopyPlane(dpy, text, mask, scr->mono_gc, 0, 0, w+4, h+4, 0, 0, 1<<(scr->w_depth-1));
+
+    /*XSetForeground(dpy, scr->mono_gc, 1);*/
+    XSetBackground(dpy, scr->mono_gc, 1);
+
+    XFillRectangle(dpy, text, WMColorGC(scr->black), 0, 0, w+4, h+4);
+
+    WMDrawString(scr->wmscreen, text, scr->white, scr->workspace_name_font,
+                 2, 2, name, len);
+
 #ifdef SHAPE
     XShapeCombineMask(dpy, scr->workspace_name, ShapeBounding, 0, 0, mask,
-		      ShapeSet);
+        	      ShapeSet);
 #endif
     XSetWindowBackgroundPixmap(dpy, scr->workspace_name, text);
     XClearWindow(dpy, scr->workspace_name);

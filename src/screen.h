@@ -140,6 +140,10 @@ typedef struct _WScreen {
     WArea totalUsableArea;	       /* same as above, but including
 					* the dock and other stuff */
 
+    WMColor *black;
+    WMColor *white;
+    WMColor *gray;
+    WMColor *darkGray;
 
     WMPixel black_pixel;
     WMPixel white_pixel;
@@ -159,14 +163,14 @@ typedef struct _WScreen {
 					* hint boxes */
     WMFont *workspace_name_font;
 
-    WMPixel select_pixel;
-    WMPixel select_text_pixel;
+    WMColor *select_color;
+    WMColor *select_text_color;
     /* foreground colors */
-    WMPixel window_title_pixel[3];     /* window titlebar text (foc, unfoc, pfoc)*/
-    WMPixel menu_title_pixel[3];       /* menu titlebar text */
+    WMColor *window_title_color[3];    /* window titlebar text (foc, unfoc, pfoc)*/
+    WMColor *menu_title_color[3];      /* menu titlebar text */
     WMColor *clip_title_color[2];      /* clip title text */
-    WMPixel mtext_pixel;	       /* menu item text */
-    WMPixel dtext_pixel;	       /* disabled menu item text */
+    WMColor *mtext_color;	       /* menu item text */
+    WMColor *dtext_color;	       /* disabled menu item text */
     WMPixel line_pixel;
     WMPixel frame_border_pixel;	       /* frame border */
 
@@ -180,19 +184,14 @@ typedef struct _WScreen {
     struct WTexSolid *menu_item_auxtexture; /* additional texture to draw menu
 					* cascade arrows */
     struct WTexSolid *icon_title_texture;/* icon titles */
-    
+
     struct WTexSolid *widget_texture;
 
     struct WTexSolid *icon_back_texture; /* icon back color for shadowing */
 
-    GC window_title_gc;		       /* window title text GC */
-    GC menu_title_gc;		       /* menu titles */
-    
+
     WMColor *icon_title_color;	       /* icon title color */
     GC clip_title_gc;		       /* clip title */
-    GC menu_entry_gc;		       /* menu entries */
-    GC select_menu_gc;		       /* selected menu entries */
-    GC disabled_menu_entry_gc;	       /* disabled menu entries */
     GC info_text_gc;		       /* for size/position display */
     GC icon_select_gc;
 

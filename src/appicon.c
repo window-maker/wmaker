@@ -290,10 +290,6 @@ updateDockNumbers(WScreen *scr)
     int length;
     char *ws_numbers;
     WAppIcon *dicon = scr->dock->icon_array[0];
-    WMColor *black, *white;
-
-    black = WMBlackColor(scr->wmscreen);
-    white = WMWhiteColor(scr->wmscreen);
 
     ws_numbers = wmalloc(20);
     snprintf(ws_numbers, 20, "%i [ %i ]", scr->current_workspace+1,
@@ -303,14 +299,12 @@ updateDockNumbers(WScreen *scr)
     XClearArea(dpy, dicon->icon->core->window, 2, 2, 50,
 	       WMFontHeight(scr->icon_title_font)+1, False);
     
-    WMDrawString(scr->wmscreen, dicon->icon->core->window, black,
+    WMDrawString(scr->wmscreen, dicon->icon->core->window, scr->black,
 		 scr->icon_title_font, 4, 3, ws_numbers, length);
 
-    WMDrawString(scr->wmscreen, dicon->icon->core->window, white,
+    WMDrawString(scr->wmscreen, dicon->icon->core->window, scr->white,
 		 scr->icon_title_font, 3, 2, ws_numbers, length);
 
-    WMReleaseColor(black);
-    WMReleaseColor(white);
     wfree(ws_numbers);
 }
 #endif /* WS_INDICATOR */
