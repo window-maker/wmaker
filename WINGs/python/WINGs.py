@@ -2,9 +2,6 @@
 
 import sys
 import wings
-from exceptions import Exception, StandardError
-from types import *
-
 
 # Some useful constants
 
@@ -16,6 +13,8 @@ True = 1
 ################################################################################
 # Exceptions
 ################################################################################
+from exceptions import Exception, StandardError
+
 class Error(StandardError):
     pass
 
@@ -160,9 +159,7 @@ class WMFrame(WMWidget):
     def setRelief(self, relief):
         wings.WMSetFrameRelief(self._o, relief)
 
-    def setTitle(self, title=None):
-        title = title or ""
-        assert type(title)==StringType
+    def setTitle(self, title=""):
         wings.WMSetFrameTitle(self._o, title)
 
     def setTitlePosition(self, position):
@@ -175,15 +172,13 @@ class WMLabel(WMWidget):
         self.setText(text)
 
     def setWraps(self, flag):
-        assert type(flag)==IntType
+        # bool(flag) for python2.2
         wings.WMSetLabelWraps(self._o, flag)
 
     def setRelief(self, relief):
         wings.WMSetLabelRelief(self._o, relief)
 
-    def setText(self, text=None):
-        text = text or ""
-        assert type(text)==StringType
+    def setText(self, text=""):
         wings.WMSetLabelText(self._o, text)
 
     def setTextColor(self, color):
@@ -217,11 +212,10 @@ class WMBox(WMWidget):
         self._o = wings.WMCreateBox(parent._o)
 
     def setHorizontal(self, flag):
-        assert type(flag)==IntType
+        # bool(flag) for python2.2
         wings.WMSetBoxHorizontal(self._o, flag)
 
     def setBorderWidth(self, width):
-        assert type(width)==IntType
         wings.WMSetBoxBorderWidth(self._o, width)
 
     def addSubview(self, view, expand, fill, minSize, maxSize, space):
@@ -241,8 +235,7 @@ class WMButton(WMWidget): # not for user instantiation
             raise Error, "a WMButton can't be instantiated directly"
 
 
-    def setText(self, text):
-        assert type(text) == StringType
+    def setText(self, text=""):
         wings.WMSetButtonText(self._o, text)
 
     def setAction(self, action, data=None):
@@ -254,14 +247,14 @@ class WMButton(WMWidget): # not for user instantiation
         wings.WMPerformButtonClick(self._o)
 
     def setEnabled(self, flag):
-        assert type(flag) == IntType
+        # bool(flag) for python2.2
         wings.WMSetButtonEnabled(self._o, flag)
 
     def isEnabled(self):
         return wings.WMGetButtonEnabled(self._o)
 
     def setImageDimsWhenDisabled(self, flag):
-        assert type(flag) == IntType
+        # bool(flag)
         wings.WMSetButtonImageDimsWhenDisabled(self._o, flag)
     
     def setImage(self, image):
@@ -307,26 +300,23 @@ class WMList(WMWidget):
         self._o = wings.WMCreateList(parent._o)
 
     def allowEmptySelection(self, flag):
-        assert type(flag) == IntType
+        # bool(flag)
         wings.WMSetListAllowEmptySelection(self._o, flag)
 
     def allowMultipleSelection(self, flag):
-        assert type(flag) == IntType
+        # bool(flag)
         wings.WMSetListAllowMultipleSelection(self._o, flag)
 
     def addItem(self, item):
-        assert type(item) == StringType
         wings.WMAddListItem(self._o, item)
 
     def insertItem(self, row, item):
-        assert type(row) == IntType and type(item) == StringType
-        wings.WMAddListItem(self._o, item)
+        wings.WMInsertListItem(self._o, row, item)
 
     def sortItems(self):
         wings.WMSortListItems(self._o)
 
     def rowWithTitle(self, title):
-        assert type(title) == StringType
         return wings.WMFindRowOfListItemWithTitle(self._o, title)
 
     def selectedItemRow(self):
@@ -336,15 +326,12 @@ class WMList(WMWidget):
         return wings.WMGetListSelectedItem(self._o)
 
     def removeItem(self, index):
-        assert type(index)==IntType
         wings.WMRemoveListItem(self._o, index)
 
     def selectItem(self, index):
-        assert type(index)==IntType
         wings.WMSelectListItem(self._o, index)
 
     def unselectItem(self, index):
-        assert type(index)==IntType
         wings.WMUnselectListItem(self._o, index)
 
 
@@ -369,11 +356,9 @@ class WMTextFieldDelegate:
 
 
 class WMTextField(WMWidget):
-    def __init__(self, parent, text=None):
+    def __init__(self, parent, text=""):
         WMWidget.__init__(self)
         self._o = wings.WMCreateTextField(parent._o)
-        text = text or ""
-        assert type(text) == StringType
         wings.WMSetTextFieldText(self._o, text)
 
     def setDelegate(self, delegate):
@@ -388,23 +373,22 @@ class WMTextField(WMWidget):
         return wings.WMGetTextFieldText(self._o)
 
     def setEditable(self, flag):
-        assert type(flag) == IntType
+        # bool(flag)
         wings.WMSetTextFieldEditable(self._o, flag)
 
     def setBordered(self, flag):
-        assert type(flag) == IntType
+        # bool(flag)
         wings.WMSetTextFieldBordered(self._o, flag)
 
     def setBeveled(self, flag):
-        assert type(flag) == IntType
+        # bool(flag)
         wings.WMSetTextFieldBeveled(self._o, flag)
 
     def setSecure(self, flag):
-        assert type(flag) == IntType
+        # bool(flag)
         wings.WMSetTextFieldSecure(self._o, flag)
 
     def setCursorPosition(self, position):
-        assert type(position) == IntType
         wings.WMSetTextFieldCursorPosition(self._o, position)
 
     def setNextText(self, next):
@@ -420,15 +404,12 @@ class WMTextField(WMWidget):
         return wings.WMGetTextFieldEditable(self._o)
 
     def insertText(self, text, position):
-        assert type(text)==StringType and type(position)==IntType
         wings.WMInsertTextFieldText(self._o, text, position)
 
     def deleteText(self, start, count):
-        assert type(start)==IntType and type(count)==IntType
         wings.WMDeleteTextFieldRange(self._o, wings.wmkrange(start, count))
 
     def selectText(self, start, count):
-        assert type(start)==IntType and type(count)==IntType
         wings.WMSelectTextFieldRange(self._o, wings.wmkrange(start, count))
 
     def setFont(self, font):

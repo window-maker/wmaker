@@ -93,7 +93,7 @@ if __name__ == "__main__":
     txtdel.didEndEditing = dee
     txtdel.didChange = dc
 
-    txt = WMTextField(win, "abc")
+    txt = WMTextField(win)
     txt.resize(95, 20)
     txt.move(295, 20)
     txt.setDelegate(txtdel)
