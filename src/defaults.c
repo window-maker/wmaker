@@ -2032,12 +2032,9 @@ getTextRenderer(WScreen *scr, WDefaultEntry *entry, proplist_t value,
         wPluginDestroyFunction(scr->drawstring_func[changed = W_STRING_MTEXT]);
         scr->drawstring_func[W_STRING_MTEXT] = NULL;
     }
-    if (PLIsString(value)) { 
-        return getColor(scr,entry,value,addr,ret);
-    }
 
     if (PLIsArray(value)) {
-        if ((argc = PLGetNumberOfElements(value)) < 3) return False;
+        if ((argc = PLGetNumberOfElements(value)) < 4) return False;
         argc -= 2;
         argv = (char **)wmalloc(argc * sizeof(char *));
 
@@ -2051,20 +2048,14 @@ getTextRenderer(WScreen *scr, WDefaultEntry *entry, proplist_t value,
             elem = PLGetArrayElement(value, 2); /* function name */
             if (!elem || !PLIsString(elem)) return False;
             func = PLGetString(elem);
-            scr->drawstring_func[changed] = wPluginCreateFunction (W_FUNCTION_DRAWSTRING, lib, NULL, func, NULL, value, NULL);
-
-            if (scr->drawstring_func[changed]) {
-                void (*initFunc) (Display *, Colormap);
-                initFunc = dlsym(scr->drawstring_func[changed]->handle, "initWindowMaker");
-                if (initFunc) {
-                    initFunc(dpy, scr->w_colormap);
-                } else {
-                    wwarning(_("could not initialize library %s"), lib);
-                }
-            } else {
-                wwarning(_("could not find function %s::%s"), lib, func);
-            }
+            scr->drawstring_func[changed] = wPluginCreateFunction (W_FUNCTION_DRAWSTRING,
+                    lib, "initDrawString", func, NULL, value,
+                    wPluginPackInitData(3, dpy, scr->w_colormap,"-DATA-"));
         }
+
+        return getColor(scr, entry, PLGetArrayElement(value,3), addr, ret);
+    } else if (PLIsString(value)) {
+        return getColor(scr, entry, value, addr, ret);
     }
 }
 #endif /* DRAWSTRING_PLUGIN */
@@ -2678,6 +2669,9 @@ setMenuTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
 {
     if (scr->menu_title_pixel[0]!=scr->white_pixel &&
 	scr->menu_title_pixel[0]!=scr->black_pixel) {
+#ifdef DRAWSTRING_PLUGIN
+        if(!scr->drawstring_func[W_STRING_MTITLE])
+#endif
 	wFreeColor(scr, scr->menu_title_pixel[0]);
     }
     

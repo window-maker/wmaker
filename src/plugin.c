@@ -26,6 +26,8 @@
 
 #include "plugin.h"
 
+#include <stdarg.h>
+
 #ifdef TEXTURE_PLUGIN
 # ifdef HAVE_DLFCN_H
 #  include <dlfcn.h>
@@ -33,6 +35,23 @@
 #endif
 
 #include <proplist.h>
+
+
+void** wPluginPackInitData(int members, ...) {
+    void **p;
+    va_list vp;
+    int i;
+    p = wmalloc(sizeof(void *) * (members + 1));
+    bzero(p, sizeof(void *) * (members + 1));
+    va_start(vp, members);
+    for(i=0;i<members;i++) {
+        p[i] = va_arg(vp, void *);
+        printf(" %d > %d\n",i,p[i]);
+    }
+        printf(" s> %s\n",p[2]);
+    va_end(vp);
+    return p;
+}
 
 WFunction *
 wPluginCreateFunction(int type, char *library_name,
@@ -63,9 +82,11 @@ wPluginCreateFunction(int type, char *library_name,
         function->freeData = dlsym(function->handle, free_data_proc_name);
         if (!function->freeData) {
             wwarning(_("function \"%s\" not found in library \"%s\""), free_data_proc_name, library_name);
+            /*
             dlclose(function->handle);
             free(function);
             return NULL;
+            */
         }
     }
 
@@ -74,13 +95,11 @@ wPluginCreateFunction(int type, char *library_name,
     if (init_proc_name) {
         initProc = dlsym(function->handle, init_proc_name);
         if (initProc) {
-            initProc(function->arg, &function->data);
+            initProc(function->arg, function->data);
         } else {
             /* Where's my english teacher? -- ]d
-            wwarning(_("?"),?);
+            wwarning(_("ignore?"),?);
             */
-            dlclose(function->handle);
-            free(function);
         }
     }
 
@@ -103,5 +122,3 @@ wPluginDestroyFunction(WFunction *function) {
     return;
 }
 
-/* hmmmm, need another function to pack a va_list 
- * but better move on something else for now :D */

@@ -50,7 +50,7 @@ typedef void _DL_AnyProc(proplist_t);
 #define W_STRING_MTEXT  4
 #define W_STRING_MEMBERS 5
 
-typedef void _DL_DrawStringProc(Display *, proplist_t, Drawable, GC, WMFont *, int, int, unsigned, unsigned, char *, int);
+typedef void _DL_DrawStringProc(proplist_t, Drawable, GC, WMFont *, int, int, unsigned, unsigned, char *, int);
 #endif
 
 typedef void _DL_FreeDataProc(void *free_me);
@@ -85,6 +85,7 @@ typedef struct _WFunction {
  * for each instance of function in each WFunction) to the initializing
  * code for drawstring function... may be I can change this to a variable
  * packer function? or use va_list? I dunno...
+ *
  * --]d
  */
 
@@ -94,8 +95,6 @@ WFunction* wPluginCreateFunction(int type, char *library_name,
 
 void wPluginDestroyFunction(WFunction *function);
 
-/*
-void* wPluginPackInitData(ansi_boy_wanna_pack_his_toy, ...);
-*/
+void** wPluginPackInitData(int members, ...);
 
 #endif

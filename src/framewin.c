@@ -1078,7 +1078,7 @@ wFrameWindowPaint(WFrameWindow *fwin)
 #ifdef DRAWSTRING_PLUGIN
     if (scr->drawstring_func[fwin->flags.state + fwin->drawstring_proc_offset]) {
         scr->drawstring_func[fwin->flags.state + fwin->drawstring_proc_offset]->
-            proc.drawString(dpy, scr->drawstring_func[fwin->flags.state 
+            proc.drawString(scr->drawstring_func[fwin->flags.state 
                     + fwin->drawstring_proc_offset]->arg,
                     fwin->titlebar->window, *fwin->title_gc,
                     *fwin->font, x, TITLEBAR_EXTRA_HEIGHT/2,
