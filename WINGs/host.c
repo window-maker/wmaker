@@ -115,7 +115,7 @@ WMGetCurrentHost()
         return NULL;
     }
 
-    name[W_MAXHOSTNAMELEN] = '\0';
+    name[W_MAXHOSTNAMELEN] = 0;
 
     return WMGetHostWithName(name);
 }
@@ -127,10 +127,7 @@ WMGetHostWithName(char *name)
     struct hostent *host;
     WMHost *hPtr;
 
-    if (name == NULL) {
-        wwarning("NULL host name in 'WMGetHostWithName()'");
-        return NULL;
-    }
+    wassertrv(name!=NULL, NULL);
 
     if (hostCacheEnabled) {
         if ((hPtr = getHostFromCache(name)) != NULL) {
@@ -157,10 +154,7 @@ WMGetHostWithAddress(char *address)
     struct in_addr in;
     WMHost *hPtr;
 
-    if (address == NULL) {
-        wwarning("NULL address in 'WMGetHostWithAddress()'");
-        return NULL;
-    }
+    wassertrv(address!=NULL, NULL);
 
     if (hostCacheEnabled) {
         if ((hPtr = getHostFromCache(address)) != NULL) {

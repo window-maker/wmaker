@@ -67,6 +67,12 @@ changes since wmaker 0.62.1:
   close on exec flag set automatically to 'True' by the library. Unless
   you want to let the socket of some connection to survive across an exec*
   call, you need not to call this function.
+- removed all the wsyserror() and wwarning() calls from host.c and
+  connection.c and replaced where appropriate with assertions. If a function
+  returns some invalid result, you can still get the system error message if
+  you need, by calling wsyserrorwithcode() and passing WCErrorCode, if
+  WCErrorCode > 0. If WCErrorCode==0, that is not a system error, and
+  wsyserrorwithcode() should not be called in this case.
 
 
 changes since wmaker 0.62.0:

@@ -23,7 +23,8 @@
  * TODO:
  * - decide if we want to support connections with external sockets, else
  *   clean up the structure of the unneeded members.
- * - decide what to do with all wsyserror() and wwarning() calls.
+ * - decide what to do with all wsyserror() and wwarning() calls that are
+ *   still there.
  *
  */
 
@@ -197,6 +198,7 @@ inputHandler(int fd, int mask, void *clientData) /*FOLD00*/
             int	result;
             int	len = sizeof(result);
 
+            WCErrorCode = 0;
             if (getsockopt(cPtr->sock, SOL_SOCKET, SO_ERROR,
                            (void*)&result, &len) == 0 && result != 0) {
                 cPtr->state = WCFailed;
@@ -256,7 +258,7 @@ setSocketNonBlocking(int sock, Bool flag) /*FOLD00*/
     state = fcntl(sock, F_GETFL, 0);
 
     if (state < 0) {
-        /*wsyserror("Failed to get socket flags with fcntl."); should we do this? -Dan*/
+        /* set WCErrorCode here? -Dan*/
         return False;
     }
 
@@ -273,7 +275,7 @@ setSocketNonBlocking(int sock, Bool flag) /*FOLD00*/
     }
 
     if (fcntl(sock, F_SETFL, state) < 0) {
-        /*wsyserror("Failed to set socket flags with fcntl."); should we do this? -Dan */
+        /* set WCErrorCode here? -Dan*/
         return False;
     }
 
@@ -299,7 +301,7 @@ getSocketAddress(char* name, char* service, char* protocol) /*FOLD00*/
     static struct sockaddr_in socketaddr;
     struct servent *sp;
 
-    if (!protocol || protocol[0]=='\0')
+    if (!protocol || protocol[0]==0)
         protocol = "tcp";
 
     memset(&socketaddr, 0, sizeof(struct sockaddr_in));
@@ -310,7 +312,7 @@ getSocketAddress(char* name, char* service, char* protocol) /*FOLD00*/
      * Otherwise we expect the given name to be an address unless it is
      * NULL (any address).
      */
-    if (name && name[0]!='\0') {
+    if (name && name[0]!=0) {
         WMHost *host = WMGetHostWithName(name);
 
         if (!host)
@@ -330,7 +332,7 @@ getSocketAddress(char* name, char* service, char* protocol) /*FOLD00*/
         socketaddr.sin_addr.s_addr = htonl(INADDR_ANY);
     }
 
-    if (!service || service[0]=='\0') {
+    if (!service || service[0]==0) {
         socketaddr.sin_port = 0;
     } else if ((sp = getservbyname(service, protocol))==0) {
         char *endptr;
@@ -338,7 +340,7 @@ getSocketAddress(char* name, char* service, char* protocol) /*FOLD00*/
 
         portNumber = strtoul(service, &endptr, 10);
 
-        if (service[0]!='\0' && *endptr=='\0' && portNumber<65536) {
+        if (service[0]!=0 && *endptr==0 && portNumber<65536) {
             socketaddr.sin_port = htons(portNumber);
         } else {
             return NULL;
@@ -442,8 +444,9 @@ WMCreateConnectionAsServerAtAddress(char *host, char *service, char *protocol) /
     struct sockaddr_in *socketaddr;
     int sock, size, on;
 
+    WCErrorCode = 0;
+
     if ((socketaddr = getSocketAddress(host, service, protocol)) == NULL) {
-        WCErrorCode = 0;
         wwarning("Bad address-service-protocol combination");
         return NULL;
     }
@@ -452,7 +455,6 @@ WMCreateConnectionAsServerAtAddress(char *host, char *service, char *protocol) /
     sock = socket(PF_INET, SOCK_STREAM, 0);
     if (sock<0) {
         WCErrorCode = errno;
-        wsyserror("Unable to create socket");
         return NULL;
     }
 
@@ -466,17 +468,12 @@ WMCreateConnectionAsServerAtAddress(char *host, char *service, char *protocol) /
 
     if (bind(sock, (struct sockaddr *)socketaddr, sizeof(*socketaddr)) < 0) {
         WCErrorCode = errno;
-        wsyserror("Unable to bind to address '%s:%hu'",
-                  inet_ntoa(socketaddr->sin_addr),
-                  ntohs(socketaddr->sin_port));
         close(sock);
         return NULL;
     }
 
     if (listen(sock, 10) < 0) {
         WCErrorCode = errno;
-        wsyserror("Unable to listen on port '%hu'",
-                  ntohs(socketaddr->sin_port));
         close(sock);
         return NULL;
     }
@@ -486,7 +483,6 @@ WMCreateConnectionAsServerAtAddress(char *host, char *service, char *protocol) /
     size = sizeof(*socketaddr);
     if (getsockname(sock, (struct sockaddr*)socketaddr, &size) < 0) {
         WCErrorCode = errno;
-        wsyserror("Unable to get socket address");
         close(sock);
         return NULL;
     }
@@ -508,17 +504,14 @@ WMCreateConnectionToAddress(char *host, char *service, char *protocol) /*FOLD00*
     struct sockaddr_in *socketaddr;
     int sock;
 
-    if (service==NULL || service[0]=='\0') {
-        WCErrorCode = 0;
-        wwarning("Bad argument - service is not specified");
-        return NULL;
-    }
+    WCErrorCode = 0;
 
-    if (host==NULL || host[0]=='\0')
+    wassertrv(service!=NULL && service[0]!=0, NULL);
+
+    if (host==NULL || host[0]==0)
         host = "localhost";
 
     if ((socketaddr = getSocketAddress(host, service, protocol)) == NULL) {
-        WCErrorCode = 0;
         wwarning("Bad address-service-protocol combination");
         return NULL;
     }
@@ -527,16 +520,12 @@ WMCreateConnectionToAddress(char *host, char *service, char *protocol) /*FOLD00*
     sock = socket(PF_INET, SOCK_STREAM, 0);
     if (sock<0) {
         WCErrorCode = errno;
-        wsyserror("Unable to create socket");
         return NULL;
     }
     /* make socket blocking while we connect. */
     setSocketNonBlocking(sock, False);
     if (connect(sock, (struct sockaddr*)socketaddr, sizeof(*socketaddr)) < 0) {
         WCErrorCode = errno;
-        wsyserror("Unable to make connection to address '%s:%hu'",
-                  inet_ntoa(socketaddr->sin_addr),
-                  ntohs(socketaddr->sin_port));
         close(sock);
         return NULL;
     }
@@ -558,17 +547,14 @@ WMCreateConnectionToAddressAndNotify(char *host, char *service, char *protocol) 
     int sock;
     Bool isNonBlocking;
 
-    if (service==NULL || service[0]=='\0') {
-        WCErrorCode = 0;
-        wwarning("Bad argument - service is not specified");
-        return NULL;
-    }
+    WCErrorCode = 0;
 
-    if (host==NULL || host[0]=='\0')
+    wassertrv(service!=NULL && service[0]!=0, NULL);
+
+    if (host==NULL || host[0]==0)
         host = "localhost";
 
     if ((socketaddr = getSocketAddress(host, service, protocol)) == NULL) {
-        WCErrorCode = 0;
         wwarning("Bad address-service-protocol combination");
         return NULL;
     }
@@ -577,16 +563,12 @@ WMCreateConnectionToAddressAndNotify(char *host, char *service, char *protocol) 
     sock = socket(PF_INET, SOCK_STREAM, 0);
     if (sock<0) {
         WCErrorCode = errno;
-        wsyserror("Unable to create socket");
         return NULL;
     }
     isNonBlocking = setSocketNonBlocking(sock, True);
     if (connect(sock, (struct sockaddr*)socketaddr, sizeof(*socketaddr)) < 0) {
         if (errno!=EINPROGRESS) {
             WCErrorCode = errno;
-            wsyserror("Unable to make connection to address '%s:%hu'",
-                      inet_ntoa(socketaddr->sin_addr),
-                      ntohs(socketaddr->sin_port));
             close(sock);
             return NULL;
         }
@@ -681,12 +663,7 @@ WMAcceptConnection(WMConnection *listener) /*FOLD00*/
     size = sizeof(clientname);
     newSock = accept(listener->sock, (struct sockaddr*) &clientname, &size);
     if (newSock<0) {
-        if (errno!=EAGAIN && errno!=EWOULDBLOCK) {
-            WCErrorCode = errno;
-            wsyserror("Could not accept connection");
-        } else {
-            WCErrorCode = 0;
-        }
+        WCErrorCode = ((errno!=EAGAIN && errno!=EWOULDBLOCK) ? errno : 0);
         return NULL;
     }
 
@@ -918,7 +895,6 @@ WMIsConnectionNonBlocking(WMConnection *cPtr) /*FOLD00*/
     state = fcntl(cPtr->sock, F_GETFL, 0);
 
     if (state < 0) {
-        /*wsyserror("Failed to get socket flags with fcntl.");*/
         /* If we can't use fcntl on socket, this probably also means we could
          * not use fcntl to set non-blocking mode, and since a socket defaults
          * to blocking when created, return False as the best assumption */
