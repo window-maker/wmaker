@@ -392,7 +392,7 @@ const WMHashTableCallbacks WMStringHashCallbacks = {
     (hashFunc)hashString,
 	(isEqualFunc)compareStrings,
 	(retainFunc)wstrdup,
-	(releaseFunc)free
+	(releaseFunc)wfree
 };
 
 

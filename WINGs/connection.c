@@ -77,9 +77,13 @@
 #define DEF_TIMEOUT             600   /* 600 seconds == 10 minutes */
 
 
+
 int WCErrorCode = 0;
 
 static Bool SigInitialized = False;
+
+static unsigned int DefaultTimeout = DEF_TIMEOUT;
+static unsigned int OpenTimeout = DEF_TIMEOUT;
 
 
 
@@ -106,8 +110,10 @@ typedef struct W_Connection {
     unsigned bufPos;
 
     TimeoutData sendTimeout;
+    TimeoutData openTimeout;
 
     WMConnectionState state;
+    WMConnectionTimeoutState timeoutState;
 
     char *address;
     char *service;
@@ -118,7 +124,6 @@ typedef struct W_Connection {
     Bool isNonBlocking;
 
 } W_Connection;
-
 
 
 
@@ -137,20 +142,48 @@ clearOutputQueue(WMConnection *cPtr) /*FOLD00*/
 
 
 static void
+openTimeout(void *cdata) /*FOLD00*/
+{
+    WMConnection *cPtr = (WMConnection*) cdata;
+
+    cPtr->openTimeout.handler = NULL;
+    if (cPtr->handler.write) {
+        WMDeleteInputHandler(cPtr->handler.write);
+        cPtr->handler.write = NULL;
+    }
+    if (cPtr->state != WCConnected) {
+        cPtr->state = WCTimedOut;
+        cPtr->timeoutState = WCTWhileOpening;
+        if (cPtr->delegate && cPtr->delegate->didTimeout) {
+            (*cPtr->delegate->didTimeout)(cPtr->delegate, cPtr);
+        } else {
+            WMCloseConnection(cPtr);
+            cPtr->state = WCTimedOut; /* the above set state to WCClosed */
+        }
+    }
+}
+
+
+static void
 sendTimeout(void *cdata) /*FOLD00*/
 {
     WMConnection *cPtr = (WMConnection*) cdata;
-    TimeoutData *tPtr = &cPtr->sendTimeout;
 
-    tPtr->handler = NULL;
+    cPtr->sendTimeout.handler = NULL;
     if (cPtr->handler.write) {
         WMDeleteInputHandler(cPtr->handler.write);
         cPtr->handler.write = NULL;
     }
     if (WMGetBagItemCount(cPtr->outputQueue)>0) {
         clearOutputQueue(cPtr);
-        if (cPtr->delegate && cPtr->delegate->didTimeout)
+        cPtr->state = WCTimedOut;
+        cPtr->timeoutState = WCTWhileSending;
+        if (cPtr->delegate && cPtr->delegate->didTimeout) {
             (*cPtr->delegate->didTimeout)(cPtr->delegate, cPtr);
+        } else {
+            WMCloseConnection(cPtr);
+            cPtr->state = WCTimedOut; /* the above set state to WCClosed */
+        }
     }
 }
 
@@ -183,6 +216,11 @@ inputHandler(int fd, int mask, void *clientData) /*FOLD00*/
             if (cPtr->handler.write) {
                 WMDeleteInputHandler(cPtr->handler.write);
                 cPtr->handler.write = NULL;
+            }
+
+            if (cPtr->openTimeout.handler) {
+                WMDeleteTimerHandler(cPtr->openTimeout.handler);
+                cPtr->openTimeout.handler = NULL;
             }
 
             if (cPtr->delegate && cPtr->delegate->didInitialize)
@@ -329,11 +367,14 @@ createConnectionWithSocket(int sock, Bool closeOnRelease) /*FOLD00*/
     memset(cPtr, 0, sizeof(WMConnection));
 
     cPtr->sock = sock;
-    cPtr->sendTimeout.timeout = DEF_TIMEOUT;
+    cPtr->openTimeout.timeout = OpenTimeout;
+    cPtr->openTimeout.handler = NULL;
+    cPtr->sendTimeout.timeout = DefaultTimeout;
     cPtr->sendTimeout.handler = NULL;
     cPtr->closeOnRelease = closeOnRelease;
     cPtr->outputQueue = WMCreateBag(16);
     cPtr->state = WCNotConnected;
+    cPtr->timeoutState = WCTNone;
 
     /* ignore dead pipe */
     if (!SigInitialized) {
@@ -515,7 +556,6 @@ WMConnection*
 WMCreateConnectionToAddressAndNotify(char *host, char *service, char *protocol) /*FOLD00*/
 {
     WMConnection *cPtr;
-    /*TimeoutData *tPtr;*/
     struct sockaddr_in *socketaddr;
     int sock;
     Bool isNonBlocking;
@@ -558,11 +598,11 @@ WMCreateConnectionToAddressAndNotify(char *host, char *service, char *protocol) 
     cPtr->state = WCInProgress;
     cPtr->isNonBlocking = isNonBlocking;
 
-    /*tPtr = &cPtr->sendTimeout;
-     tPtr->handler = WMAddTimerHandler(tPtr->timeout*1000, connectTimeout, cPtr);
-    */
     cPtr->handler.write = WMAddInputHandler(cPtr->sock, WIWriteMask,
                                             inputHandler, cPtr);
+
+    cPtr->openTimeout.handler =
+        WMAddTimerHandler(cPtr->openTimeout.timeout*1000, openTimeout, cPtr);
 
     setConnectionAddress(cPtr, socketaddr);
 
@@ -579,12 +619,15 @@ removeAllHandlers(WMConnection *cPtr) /*FOLD00*/
         WMDeleteInputHandler(cPtr->handler.write);
     if (cPtr->handler.exception)
         WMDeleteInputHandler(cPtr->handler.exception);
+    if (cPtr->openTimeout.handler)
+        WMDeleteTimerHandler(cPtr->openTimeout.handler);
     if (cPtr->sendTimeout.handler)
         WMDeleteTimerHandler(cPtr->sendTimeout.handler);
 
     cPtr->handler.read = NULL;
     cPtr->handler.write = NULL;
     cPtr->handler.exception = NULL;
+    cPtr->openTimeout.handler = NULL;
     cPtr->sendTimeout.handler = NULL;
 }
 
@@ -694,6 +737,13 @@ WMConnectionState
 WMGetConnectionState(WMConnection *cPtr) /*FOLD00*/
 {
     return cPtr->state;
+}
+
+
+WMConnectionTimeoutState
+WMGetConnectionTimeoutState(WMConnection *cPtr)
+{
+    return cPtr->timeoutState;
 }
 
 
@@ -934,12 +984,35 @@ WMSetConnectionFlags(WMConnection *cPtr, unsigned int flags) /*FOLD00*/
 
 
 void
+WMSetConnectionDefaultTimeout(unsigned int timeout)
+{
+    if (timeout == 0) {
+        DefaultTimeout = DEF_TIMEOUT;
+    } else {
+        DefaultTimeout = timeout;
+    }
+}
+
+
+void
+WMSetConnectionOpenTimeout(unsigned int timeout)
+{
+    if (timeout == 0) {
+        OpenTimeout = DefaultTimeout;
+    } else {
+        OpenTimeout = timeout;
+    }
+}
+
+
+void
 WMSetConnectionSendTimeout(WMConnection *cPtr, unsigned int timeout) /*FOLD00*/
 {
-    if (timeout == 0)
-        timeout = DEF_TIMEOUT;
-
-    cPtr->sendTimeout.timeout = timeout;
+    if (timeout == 0) {
+        cPtr->sendTimeout.timeout = DefaultTimeout;
+    } else {
+        cPtr->sendTimeout.timeout = timeout;
+    }
 }
 
 

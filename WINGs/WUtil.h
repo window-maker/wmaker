@@ -96,9 +96,18 @@ typedef enum {
     WCInProgress,
     WCFailed,
     WCConnected,
+    WCTimedOut,
     WCDied,
     WCClosed
 } WMConnectionState;
+
+
+/* The possible states for connection timeouts */
+typedef enum {
+    WCTNone=0,
+    WCTWhileOpening,
+    WCTWhileSending
+} WMConnectionTimeoutState;
 
 
 
@@ -117,10 +126,10 @@ typedef struct W_Host WMHost;
 typedef struct W_Connection WMConnection;
 
 
-    
+
 typedef void WMFreeDataProc(void *data);
 
-    
+
 
 typedef struct {
     int position;
@@ -310,7 +319,7 @@ extern const WMHashTableCallbacks WMIntHashCallbacks;
 
 extern const WMHashTableCallbacks WMStringHashCallbacks;
 /* keys are strings. Strings will be copied with wstrdup() 
- * and freed with free() */
+ * and freed with wfree() */
 
 extern const WMHashTableCallbacks WMStringPointerHashCallbacks;
 /* keys are strings, bug they are not copied */
@@ -703,6 +712,20 @@ int WMGetConnectionSocket(WMConnection *cPtr);
 
 WMConnectionState WMGetConnectionState(WMConnection *cPtr);
 
+WMConnectionTimeoutState WMGetConnectionTimeoutState(WMConnection *cPtr);
+
+/*
+ * Passing timeout==0 in the SetTimeout functions below, will reset that
+ * timeout to its default value.
+ */
+
+/* The default timeout inherited by all WMConnection operations, if none set */
+void WMSetConnectionDefaultTimeout(unsigned int timeout);
+
+/* Global timeout for all WMConnection objects, for opening a new connection */
+void WMSetConnectionOpenTimeout(unsigned int timeout);
+
+/* Connection specific timeout for sending out data */
 void WMSetConnectionSendTimeout(WMConnection *cPtr, unsigned int timeout);
 
 

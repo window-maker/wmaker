@@ -6,6 +6,9 @@ changes since wmaker 0.62.0:
 - added clientdata to WMFindInBag
 - removed SetWindowInitialSize()
 - added SetWindowAspectRatio()
+- added initial timeout when establishing a connection.
+- added WMSetConnectionDefaultTimeout() and WMSetConnectionOpenTimeout();
+- added WMGetConnectionTimeoutState()
 
 changes since wmaker 0.61.1:
 ............................
