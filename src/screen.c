@@ -1069,11 +1069,6 @@ wScreenRestoreState(WScreen *scr)
 
     wWorkspaceRestoreState(scr);
 
-#ifdef VIRTUAL_DESKTOP
-    /* create inputonly windows at the border of screen */
-    wWorkspaceManageEdge(scr);
-#endif
-
     wScreenUpdateUsableArea(scr);
 }
 

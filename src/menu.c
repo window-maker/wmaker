@@ -1724,7 +1724,7 @@ scrollMenuCallback(void *data)
 
 #ifdef VIRTUAL_DESKTOP
     /* don't scroll if it is in vdesk mode */
-    if (!wPreferences.vedge_thickness)
+    if (!wPreferences.vdesk_enable)
 #endif
         getScrollAmount(menu, &hamount, &vamount);
 
@@ -2033,7 +2033,7 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
     }
 
 #ifdef VIRTUAL_DESKTOP
-    if (wPreferences.vedge_thickness) {
+    if (wPreferences.vdesk_enable) {
         wWorkspaceLowerEdge(scr);
     }
 #endif
@@ -2184,7 +2184,7 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
             WMHandleEvent(&ev);
 #ifdef VIRTUAL_DESKTOP
             /* since expose will raise edge up.. I need another ugly hack here */
-            if (wPreferences.vedge_thickness) {
+            if (wPreferences.vdesk_enable) {
                 wWorkspaceLowerEdge(scr);
             }
 #endif

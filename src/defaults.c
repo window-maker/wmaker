@@ -156,7 +156,7 @@ static int setResizebarBack();
 static int setWorkspaceBack();
 static int setWorkspaceSpecificBack();
 #ifdef VIRTUAL_DESKTOP
-static int setVirtualEdgeThickness();
+static int setVirtualDeskEnable();
 #endif
 static int setMenuTitleColor();
 static int setMenuTextColor();
@@ -438,8 +438,8 @@ WDefaultEntry optionList[] = {
     &wPreferences.workspace_border_size, getInt, updateUsableArea
     },
 #ifdef VIRTUAL_DESKTOP
-    {"VirtualEdgeThickness", "1",               NULL,
-    &wPreferences.vedge_thickness, getInt,      setVirtualEdgeThickness
+    {"EnableVirtualDesktop", "NO",              NULL,
+    &wPreferences.vdesk_enable, getBool,        setVirtualDeskEnable
     },
     {"VirtualEdgeExtendSpace", "0",             NULL,
     &wPreferences.vedge_bordersize, getInt,     NULL
@@ -3361,7 +3361,7 @@ setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, WMPropList *value,
 
 #ifdef VIRTUAL_DESKTOP
 static int
-setVirtualEdgeThickness(WScreen *scr, WDefaultEntry *entry, int *value, void *dummy)
+setVirtualDeskEnable(WScreen *scr, WDefaultEntry *entry, void *foo, void *bar)
 {
     wWorkspaceUpdateEdge(scr);
     return 0;

@@ -40,7 +40,6 @@ Bool wWorkspaceDelete(WScreen *scr, int workspace);
 void wWorkspaceChange(WScreen *scr, int workspace);
 void wWorkspaceForceChange(WScreen *scr, int workspace);
 #ifdef VIRTUAL_DESKTOP
-void wWorkspaceManageEdge(WScreen *scr);
 void wWorkspaceUpdateEdge(WScreen *scr);
 void wWorkspaceRaiseEdge(WScreen *scr);
 void wWorkspaceLowerEdge(WScreen *scr);

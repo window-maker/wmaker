@@ -1397,10 +1397,10 @@ wShowInfoPanel(WScreen *scr)
     }
 
 #ifdef VIRTUAL_DESKTOP
-    if (wPreferences.vedge_thickness == 0)
-        strbuf = wstrappend(strbuf, _(", VirtualDesktop disabled"));
-    else
+    if (wPreferences.vdesk_enable)
         strbuf = wstrappend(strbuf, _(", VirtualDesktop enabled"));
+    else
+        strbuf = wstrappend(strbuf, _(", VirtualDesktop disabled"));
 #endif
 
 #ifdef XINERAMA

@@ -765,7 +765,7 @@ vdMouseMoveDesktop(XEvent *event, WMPoint direction)
         getViewPosition(scr, scr->current_workspace, &x, &y);
         if (wWorkspaceSetViewport(scr, scr->current_workspace,
                                   x+step.x, y+step.y)) {
-            step = vec_scale(direction, wPreferences.vedge_thickness + 1);
+            step = vec_scale(direction, 2);
             XWarpPointer(dpy, None, scr->root_win, 0,0,0,0,
                          event->xcrossing.x_root - step.x,
                          event->xcrossing.y_root - step.y);
@@ -880,10 +880,10 @@ vdHandleEnter_r(XEvent *event) {
 #define BOTTOM_EDGE 0x08
 #define ALL_EDGES   0x0F
 
-void
-wWorkspaceManageEdge(WScreen *scr)
+static void
+createEdges(WScreen *scr)
 {
-    if (!scr->virtual_edges && wPreferences.vedge_thickness) {
+    if (!scr->virtual_edges) {
         int i, j, w;
         int vmask;
         XSetWindowAttributes attribs;
@@ -891,7 +891,7 @@ wWorkspaceManageEdge(WScreen *scr)
         int heads = wXineramaHeads(scr);
         int *hasEdges = (int*)wmalloc(sizeof(int)*heads);
 
-        int thickness = wPreferences.vedge_thickness;
+        int thickness = 1;
         int nr_edges = 0;
         int max_edges = 4*heads;
         int head;
@@ -1005,7 +1005,7 @@ wWorkspaceManageEdge(WScreen *scr)
 
 
 static void
-destroyEdge(WScreen *scr)
+destroyEdges(WScreen *scr)
 {
     if (scr->virtual_edges) {
         int i;
@@ -1026,23 +1026,10 @@ destroyEdge(WScreen *scr)
 void
 wWorkspaceUpdateEdge(WScreen *scr)
 {
-    static int thickness = -1;
-
-    if ((int)wPreferences.vedge_thickness < 0)
-        wPreferences.vedge_thickness = 0;
-    else if ((int)wPreferences.vedge_thickness > 10)
-        wPreferences.vedge_thickness = 10;
-
-    if (wPreferences.vedge_thickness == thickness)
-        return;
-
-    thickness = wPreferences.vedge_thickness;
-
-    if (wPreferences.vedge_thickness) {
-        destroyEdge(scr);
-        wWorkspaceManageEdge(scr);
+    if (wPreferences.vdesk_enable) {
+        createEdges(scr);
     } else {
-        destroyEdge(scr);
+        destroyEdges(scr);
     }
 }
 

@@ -418,7 +418,7 @@ typedef struct WPreferences {
     char ws_advance;                   /* Create new workspace and advance */
 
 #ifdef VIRTUAL_DESKTOP
-    unsigned int vedge_thickness;
+    unsigned int vdesk_enable;
     unsigned int vedge_bordersize;
     unsigned int vedge_hscrollspeed;
     unsigned int vedge_vscrollspeed;
