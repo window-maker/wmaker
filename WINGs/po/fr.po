@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WINGs 0.80.0\n"
-"POT-Creation-Date: 2002-07-20 23:57+0200\n"
+"POT-Creation-Date: 2003-05-02 15:39+0200\n"
 "PO-Revision-Date: 2002-01-09 21:20+0100\n"
 "Last-Translator: Emmanuel Benoit <tseeker@neptune.fr>\n"
 "Language-Team: Français <fr@li.org>\n"
@@ -14,8 +14,8 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: unknown\n"
 
-#: ../../WINGs/connection.c:461 ../../WINGs/connection.c:526
-#: ../../WINGs/connection.c:569
+#: ../../WINGs/connection.c:467 ../../WINGs/connection.c:532
+#: ../../WINGs/connection.c:575
 msgid "Bad address-service-protocol combination"
 msgstr "Mauvaise combinaison adresse-service-protocole"
 
@@ -191,132 +191,132 @@ msgid "rename ('%s' to '%s') failed"
 msgstr "impossible de renommer '%s' en '%s'"
 
 #. something happened with the file. just overwrite it
-#: ../../WINGs/userdefaults.c:192 ../../WINGs/userdefaults.c:208
+#: ../../WINGs/userdefaults.c:188 ../../WINGs/userdefaults.c:204
 #, c-format
 msgid "cannot read domain from file '%s' when syncing"
 msgstr ""
 "impossible de lire le domaine depuis le fichier '%s' pendant la "
 "synchronisation"
 
-#: ../../WINGs/wcolor.c:198 ../../WINGs/wcolor.c:211 ../../WINGs/wcolor.c:250
-#: ../../WINGs/wcolor.c:291
+#: ../../WINGs/wcolor.c:224 ../../WINGs/wcolor.c:236 ../../WINGs/wcolor.c:275
+#: ../../WINGs/wcolor.c:316
 #, c-format
 msgid "could not allocate %s color"
 msgstr "impossible d'allouer la couleur %s"
 
-#: ../../WINGs/wcolor.c:198
+#: ../../WINGs/wcolor.c:224
 msgid "white"
 msgstr "blanc"
 
-#: ../../WINGs/wcolor.c:211
+#: ../../WINGs/wcolor.c:236
 msgid "black"
 msgstr "noir"
 
-#: ../../WINGs/wcolor.c:250
+#: ../../WINGs/wcolor.c:275
 msgid "gray"
 msgstr "gris"
 
-#: ../../WINGs/wcolor.c:291
+#: ../../WINGs/wcolor.c:316
 msgid "dark gray"
 msgstr "gris sombre"
 
-#: ../../WINGs/wcolorpanel.c:415
+#: ../../WINGs/wcolorpanel.c:420
 msgid "Colors"
 msgstr "Couleurs"
 
-#: ../../WINGs/wcolorpanel.c:605 ../../WINGs/wcolorpanel.c:2824
+#: ../../WINGs/wcolorpanel.c:610 ../../WINGs/wcolorpanel.c:2829
 msgid "Brightness"
 msgstr "Luminosité"
 
-#: ../../WINGs/wcolorpanel.c:607 ../../WINGs/wcolorpanel.c:683
-#: ../../WINGs/wcolorpanel.c:716 ../../WINGs/wcolorpanel.c:750
-#: ../../WINGs/wcolorpanel.c:810 ../../WINGs/wcolorpanel.c:844
-#: ../../WINGs/wcolorpanel.c:878 ../../WINGs/wcolorpanel.c:913
-#: ../../WINGs/wcolorpanel.c:2164 ../../WINGs/wcolorpanel.c:2826
-#: ../../WINGs/wcolorpanel.c:2862 ../../WINGs/wcolorpanel.c:2898
-#: ../../WINGs/wcolorpanel.c:3746
+#: ../../WINGs/wcolorpanel.c:612 ../../WINGs/wcolorpanel.c:688
+#: ../../WINGs/wcolorpanel.c:721 ../../WINGs/wcolorpanel.c:755
+#: ../../WINGs/wcolorpanel.c:815 ../../WINGs/wcolorpanel.c:849
+#: ../../WINGs/wcolorpanel.c:883 ../../WINGs/wcolorpanel.c:918
+#: ../../WINGs/wcolorpanel.c:2169 ../../WINGs/wcolorpanel.c:2831
+#: ../../WINGs/wcolorpanel.c:2867 ../../WINGs/wcolorpanel.c:2903
+#: ../../WINGs/wcolorpanel.c:3745
 msgid "Color Panel: Could not allocate memory"
 msgstr "Panneau de Sélection des Couleur: impossible d'allouer la mémoire"
 
-#: ../../WINGs/wcolorpanel.c:680 ../../WINGs/wcolorpanel.c:681
+#: ../../WINGs/wcolorpanel.c:685 ../../WINGs/wcolorpanel.c:686
 msgid "Red"
 msgstr "Rouge"
 
-#: ../../WINGs/wcolorpanel.c:713 ../../WINGs/wcolorpanel.c:714
+#: ../../WINGs/wcolorpanel.c:718 ../../WINGs/wcolorpanel.c:719
 msgid "Green"
 msgstr "Vert"
 
-#: ../../WINGs/wcolorpanel.c:747 ../../WINGs/wcolorpanel.c:748
+#: ../../WINGs/wcolorpanel.c:752 ../../WINGs/wcolorpanel.c:753
 msgid "Blue"
 msgstr "Bleu"
 
-#: ../../WINGs/wcolorpanel.c:807 ../../WINGs/wcolorpanel.c:808
+#: ../../WINGs/wcolorpanel.c:812 ../../WINGs/wcolorpanel.c:813
 msgid "Cyan"
 msgstr "Cyan"
 
-#: ../../WINGs/wcolorpanel.c:841 ../../WINGs/wcolorpanel.c:842
+#: ../../WINGs/wcolorpanel.c:846 ../../WINGs/wcolorpanel.c:847
 msgid "Magenta"
 msgstr "Magenta"
 
-#: ../../WINGs/wcolorpanel.c:875 ../../WINGs/wcolorpanel.c:876
+#: ../../WINGs/wcolorpanel.c:880 ../../WINGs/wcolorpanel.c:881
 msgid "Yellow"
 msgstr "Jaune"
 
-#: ../../WINGs/wcolorpanel.c:910 ../../WINGs/wcolorpanel.c:911
+#: ../../WINGs/wcolorpanel.c:915 ../../WINGs/wcolorpanel.c:916
 msgid "Black"
 msgstr "Noir"
 
-#: ../../WINGs/wcolorpanel.c:991
+#: ../../WINGs/wcolorpanel.c:996
 msgid "Spectrum"
 msgstr "Spectre"
 
-#: ../../WINGs/wcolorpanel.c:1021
+#: ../../WINGs/wcolorpanel.c:1026
 msgid "Palette"
 msgstr "Palette"
 
-#: ../../WINGs/wcolorpanel.c:1027
+#: ../../WINGs/wcolorpanel.c:1032
 msgid "New from File..."
 msgstr "Nouveau d'après le fichier..."
 
-#: ../../WINGs/wcolorpanel.c:1028 ../../WINGs/wcolorpanel.c:1076
-#: ../../WINGs/wcolorpanel.c:1093
+#: ../../WINGs/wcolorpanel.c:1033 ../../WINGs/wcolorpanel.c:1081
+#: ../../WINGs/wcolorpanel.c:1098
 msgid "Rename..."
 msgstr "Renommer..."
 
-#: ../../WINGs/wcolorpanel.c:1029 ../../WINGs/wcolorpanel.c:1077
-#: ../../WINGs/wcolorpanel.c:1094 ../../WINGs/wcolorpanel.c:3321
+#: ../../WINGs/wcolorpanel.c:1034 ../../WINGs/wcolorpanel.c:1082
+#: ../../WINGs/wcolorpanel.c:1099 ../../WINGs/wcolorpanel.c:3326
 msgid "Remove"
 msgstr "Supprimer"
 
-#: ../../WINGs/wcolorpanel.c:1030
+#: ../../WINGs/wcolorpanel.c:1035
 msgid "Copy"
 msgstr "Copier"
 
-#: ../../WINGs/wcolorpanel.c:1031
+#: ../../WINGs/wcolorpanel.c:1036
 msgid "New from Clipboard"
 msgstr "Nouveau d'après le presse-papier"
 
-#: ../../WINGs/wcolorpanel.c:1052
+#: ../../WINGs/wcolorpanel.c:1057
 msgid "X11-Colors"
 msgstr "Couleurs X11"
 
-#: ../../WINGs/wcolorpanel.c:1069
+#: ../../WINGs/wcolorpanel.c:1074
 msgid "Color"
 msgstr "Couleur"
 
-#: ../../WINGs/wcolorpanel.c:1075
+#: ../../WINGs/wcolorpanel.c:1080
 msgid "Add..."
 msgstr "Ajouter..."
 
-#: ../../WINGs/wcolorpanel.c:1085
+#: ../../WINGs/wcolorpanel.c:1090
 msgid "List"
 msgstr "Liste"
 
-#: ../../WINGs/wcolorpanel.c:1092
+#: ../../WINGs/wcolorpanel.c:1097
 msgid "New..."
 msgstr "Nouveau..."
 
-#: ../../WINGs/wcolorpanel.c:1231
+#: ../../WINGs/wcolorpanel.c:1236
 #, c-format
 msgid ""
 "Color Panel: Could not create directory %s needed to store configurations"
@@ -325,79 +325,79 @@ msgstr ""
 "requis pour enregistrer les configurations."
 
 #. Delete the file, it doesn't belong here
-#: ../../WINGs/wcolorpanel.c:1237 ../../WINGs/wcolorpanel.c:3207
-#: ../../WINGs/wcolorpanel.c:3211
+#: ../../WINGs/wcolorpanel.c:1242 ../../WINGs/wcolorpanel.c:3212
+#: ../../WINGs/wcolorpanel.c:3216
 msgid "File Error"
 msgstr "Erreur de fichier"
 
-#: ../../WINGs/wcolorpanel.c:1238
+#: ../../WINGs/wcolorpanel.c:1243
 msgid "Could not create ColorPanel configuration directory"
 msgstr ""
 "Impossible de créer le répertoire pour la configuration du panneau de "
 "sélection des couleurs."
 
-#: ../../WINGs/wcolorpanel.c:1239 ../../WINGs/wcolorpanel.c:3208
-#: ../../WINGs/wcolorpanel.c:3213 ../../WINGs/wcolorpanel.c:3240
-#: ../../WINGs/wfilepanel.c:250 ../../WINGs/wfilepanel.c:647
-#: ../../WINGs/wfilepanel.c:659 ../../WINGs/wfilepanel.c:760
-#: ../../WINGs/wfilepanel.c:971 ../../WINGs/wfontpanel.c:709
+#: ../../WINGs/wcolorpanel.c:1244 ../../WINGs/wcolorpanel.c:3213
+#: ../../WINGs/wcolorpanel.c:3218 ../../WINGs/wcolorpanel.c:3245
+#: ../../WINGs/wfilepanel.c:250 ../../WINGs/wfilepanel.c:650
+#: ../../WINGs/wfilepanel.c:662 ../../WINGs/wfilepanel.c:763
+#: ../../WINGs/wfilepanel.c:974 ../../WINGs/wfontpanel.c:751
 msgid "OK"
 msgstr "OK"
 
-#: ../../WINGs/wcolorpanel.c:1245 ../../WINGs/wcolorpanel.c:1281
-#: ../../WINGs/wcolorpanel.c:1299
+#: ../../WINGs/wcolorpanel.c:1250 ../../WINGs/wcolorpanel.c:1286
+#: ../../WINGs/wcolorpanel.c:1304
 msgid "Color Panel: Could not find file"
 msgstr "Panneau de sélection des couleurs : Impossible de trouver le fichier."
 
-#: ../../WINGs/wcolorpanel.c:1486 ../../WINGs/wcolorpanel.c:1551
-#: ../../WINGs/wcolorpanel.c:1615
+#: ../../WINGs/wcolorpanel.c:1491 ../../WINGs/wcolorpanel.c:1556
+#: ../../WINGs/wcolorpanel.c:1620
 msgid "Color Panel: X failed request"
 msgstr "Panneau de sélection des couleurs : échec d'une requête X"
 
-#: ../../WINGs/wcolorpanel.c:2860
+#: ../../WINGs/wcolorpanel.c:2865
 msgid "Saturation"
 msgstr "Saturation"
 
-#: ../../WINGs/wcolorpanel.c:2896
+#: ../../WINGs/wcolorpanel.c:2901
 msgid "Hue"
 msgstr "Teinte"
 
-#: ../../WINGs/wcolorpanel.c:3146
+#: ../../WINGs/wcolorpanel.c:3151
 msgid "Open Palette"
 msgstr "Ouvrir une palette"
 
-#: ../../WINGs/wcolorpanel.c:3208
+#: ../../WINGs/wcolorpanel.c:3213
 msgid "Invalid file format !"
 msgstr "Format de fichier invalide !"
 
-#: ../../WINGs/wcolorpanel.c:3210
+#: ../../WINGs/wcolorpanel.c:3215
 #, c-format
 msgid "can't remove file %s"
 msgstr "Impossible de supprimer le fichier %s."
 
-#: ../../WINGs/wcolorpanel.c:3212
+#: ../../WINGs/wcolorpanel.c:3217
 msgid "Couldn't remove file from Configuration Directory !"
 msgstr "Impossible de supprimer le fichier du répertoire de configuration !"
 
-#: ../../WINGs/wcolorpanel.c:3239
+#: ../../WINGs/wcolorpanel.c:3244
 msgid "Rename"
 msgstr "Renommer"
 
-#: ../../WINGs/wcolorpanel.c:3239
+#: ../../WINGs/wcolorpanel.c:3244
 msgid "Rename palette to:"
 msgstr "Renommer la palette en :"
 
-#: ../../WINGs/wcolorpanel.c:3240 ../../WINGs/wfilepanel.c:259
-#: ../../WINGs/wfilepanel.c:659 ../../WINGs/wfilepanel.c:760
+#: ../../WINGs/wcolorpanel.c:3245 ../../WINGs/wfilepanel.c:259
+#: ../../WINGs/wfilepanel.c:662 ../../WINGs/wfilepanel.c:763
 msgid "Cancel"
 msgstr "Annuler"
 
 #. Careful, this palette exists already
-#: ../../WINGs/wcolorpanel.c:3256 ../../WINGs/wfilepanel.c:760
+#: ../../WINGs/wcolorpanel.c:3261 ../../WINGs/wfilepanel.c:763
 msgid "Warning"
 msgstr "Avertissement"
 
-#: ../../WINGs/wcolorpanel.c:3257
+#: ../../WINGs/wcolorpanel.c:3262
 msgid ""
 "Palette already exists !\n"
 "\n"
@@ -407,24 +407,24 @@ msgstr ""
 "\n"
 "Écraser ?"
 
-#: ../../WINGs/wcolorpanel.c:3257 ../../WINGs/wcolorpanel.c:3321
+#: ../../WINGs/wcolorpanel.c:3262 ../../WINGs/wcolorpanel.c:3326
 msgid "No"
 msgstr "Non"
 
-#: ../../WINGs/wcolorpanel.c:3257 ../../WINGs/wcolorpanel.c:3321
+#: ../../WINGs/wcolorpanel.c:3262 ../../WINGs/wcolorpanel.c:3326
 msgid "Yes"
 msgstr "Oui"
 
-#: ../../WINGs/wcolorpanel.c:3289
+#: ../../WINGs/wcolorpanel.c:3294
 #, c-format
 msgid "Couldn't rename palette %s to %s\n"
 msgstr "Impossible de renommer la palette %s en %s.\n"
 
-#: ../../WINGs/wcolorpanel.c:3315
+#: ../../WINGs/wcolorpanel.c:3320
 msgid "This will permanently remove the palette "
 msgstr "Ceci détruira définitivement la palette "
 
-#: ../../WINGs/wcolorpanel.c:3318
+#: ../../WINGs/wcolorpanel.c:3323
 msgid ""
 ".\n"
 "\n"
@@ -434,27 +434,27 @@ msgstr ""
 "\n"
 "Êtes-vous sûr de vouloir supprimer cette palette ?"
 
-#: ../../WINGs/wcolorpanel.c:3343
+#: ../../WINGs/wcolorpanel.c:3348
 #, c-format
 msgid "Couldn't remove palette %s\n"
 msgstr "Impossible de détruire la palette %s.\n"
 
-#: ../../WINGs/wcolorpanel.c:3648
+#: ../../WINGs/wcolorpanel.c:3647
 #, c-format
 msgid "Could not open %s"
 msgstr "Impossible d'ouvrir %s."
 
-#: ../../WINGs/wcolorpanel.c:3655
+#: ../../WINGs/wcolorpanel.c:3654
 #, c-format
 msgid "Could not create %s"
 msgstr "Impossible de créer %s."
 
-#: ../../WINGs/wcolorpanel.c:3666
+#: ../../WINGs/wcolorpanel.c:3665
 #, c-format
 msgid "Write error on file %s"
 msgstr "Erreur d'écriture dans le fichier %s."
 
-#: ../../WINGs/wcolorpanel.c:3711
+#: ../../WINGs/wcolorpanel.c:3710
 msgid "Color Panel: Color unspecified"
 msgstr "Panneau de sélection des couleurs: couleur non spécifiée."
 
@@ -470,206 +470,263 @@ msgstr "Ouvrir"
 msgid "Save"
 msgstr "Enregistrer"
 
-#: ../../WINGs/wfilepanel.c:562
+#: ../../WINGs/wfilepanel.c:565
 #, c-format
 msgid "WINGs: could not open directory %s\n"
 msgstr "WINGs : Impossible d'ouvrir le répertoire %s.\n"
 
-#: ../../WINGs/wfilepanel.c:580
+#: ../../WINGs/wfilepanel.c:583
 #, c-format
 msgid "WINGs: could not stat %s\n"
 msgstr "WINGs : impossible de lire l'état du fichier %s.\n"
 
-#: ../../WINGs/wfilepanel.c:647 ../../WINGs/wfilepanel.c:970
-#: ../../WINGs/wfontpanel.c:708
+#: ../../WINGs/wfilepanel.c:650 ../../WINGs/wfilepanel.c:973
+#: ../../WINGs/wfontpanel.c:750
 msgid "Error"
 msgstr "Erreur"
 
-#: ../../WINGs/wfilepanel.c:658
+#: ../../WINGs/wfilepanel.c:661
 msgid "Create Directory"
 msgstr "Créer un répertoire"
 
-#: ../../WINGs/wfilepanel.c:659
+#: ../../WINGs/wfilepanel.c:662
 msgid "Enter directory name"
 msgstr "Saisissez le nom du répertoire"
 
-#: ../../WINGs/wfilepanel.c:695 ../../WINGs/wfilepanel.c:734
-#: ../../WINGs/wfilepanel.c:765 ../../WINGs/wfilepanel.c:793
+#: ../../WINGs/wfilepanel.c:698 ../../WINGs/wfilepanel.c:737
+#: ../../WINGs/wfilepanel.c:768 ../../WINGs/wfilepanel.c:796
 msgid "Permission denied."
 msgstr "Permission refusée."
 
-#: ../../WINGs/wfilepanel.c:698
+#: ../../WINGs/wfilepanel.c:701
 #, c-format
 msgid "'%s' already exists."
 msgstr "'%s' existe déjà."
 
-#: ../../WINGs/wfilepanel.c:701
+#: ../../WINGs/wfilepanel.c:704
 msgid "Path does not exist."
 msgstr "Le chemin n'existe pas."
 
-#: ../../WINGs/wfilepanel.c:731 ../../WINGs/wfilepanel.c:790
+#: ../../WINGs/wfilepanel.c:734 ../../WINGs/wfilepanel.c:793
 #, c-format
 msgid "'%s' does not exist."
 msgstr "'%s' n'existe pas."
 
-#: ../../WINGs/wfilepanel.c:738 ../../WINGs/wfilepanel.c:797
+#: ../../WINGs/wfilepanel.c:741 ../../WINGs/wfilepanel.c:800
 msgid "Insufficient memory available."
 msgstr "Mémoire disponible insuffisante."
 
-#: ../../WINGs/wfilepanel.c:742 ../../WINGs/wfilepanel.c:801
+#: ../../WINGs/wfilepanel.c:745 ../../WINGs/wfilepanel.c:804
 #, c-format
 msgid "'%s' is on a read-only filesystem."
 msgstr "'%s' est sur un système de fichiers en lecture seule."
 
-#: ../../WINGs/wfilepanel.c:745 ../../WINGs/wfilepanel.c:777
-#: ../../WINGs/wfilepanel.c:804
+#: ../../WINGs/wfilepanel.c:748 ../../WINGs/wfilepanel.c:780
+#: ../../WINGs/wfilepanel.c:807
 #, c-format
 msgid "Can not delete '%s'."
 msgstr "Impossible de supprimer '%s'."
 
-#: ../../WINGs/wfilepanel.c:752
+#: ../../WINGs/wfilepanel.c:755
 #, c-format
 msgid "Delete directory %s ?"
 msgstr "Supprimer le répertoire %s ?"
 
-#: ../../WINGs/wfilepanel.c:756
+#: ../../WINGs/wfilepanel.c:759
 #, c-format
 msgid "Delete file %s ?"
 msgstr "Supprimer le fichier %s ?"
 
-#: ../../WINGs/wfilepanel.c:768
+#: ../../WINGs/wfilepanel.c:771
 #, c-format
 msgid "Directory '%s' does not exist."
 msgstr "Le répertoire '%s' n'existe pas."
 
-#: ../../WINGs/wfilepanel.c:771
+#: ../../WINGs/wfilepanel.c:774
 #, c-format
 msgid "Directory '%s' is not empty."
 msgstr "Le répertoire '%s' n'est pas vide."
 
-#: ../../WINGs/wfilepanel.c:774
+#: ../../WINGs/wfilepanel.c:777
 #, c-format
 msgid "Directory '%s' is busy."
 msgstr "Le répertoire '%s' est occupé."
 
-#: ../../WINGs/wfilepanel.c:787
+#: ../../WINGs/wfilepanel.c:790
 #, c-format
 msgid "'%s' is a directory."
 msgstr "'%s' est un répertoire."
 
-#: ../../WINGs/wfilepanel.c:829
+#: ../../WINGs/wfilepanel.c:832
 #, c-format
 msgid "An error occured browsing '%s'."
 msgstr "Une erreur s'est produite pendant le parcours de '%s'."
 
-#: ../../WINGs/wfilepanel.c:833
+#: ../../WINGs/wfilepanel.c:836
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "'%s' n'est pas un répertoire."
 
-#: ../../WINGs/wfilepanel.c:970
+#: ../../WINGs/wfilepanel.c:973
 msgid "File does not exist."
 msgstr "Le fichier n'existe pas."
 
-#: ../../WINGs/wfont.c:129
+#: ../../WINGs/wfont.c:133 ../../WINGs/wfont.c:143
+#, c-format
+msgid "Invalid size specification '%s' in %s. Using default %d\n"
+msgstr ""
+"Taille invalide dans %2$s : '%1$s'. Utilisation de la valeur par défaut %3"
+"$d\n"
+
+#: ../../WINGs/wfont.c:187
 #, c-format
 msgid "the following character sets are missing in %s:"
 msgstr "Les jeux de caractères suivants manquent dans %s :"
 
-#: ../../WINGs/wfont.c:136
+#: ../../WINGs/wfont.c:193
 #, c-format
 msgid ""
 "the string \"%s\" will be used in place of any characters from those sets."
 msgstr ""
-"La chaîne \"%s\" sera utilisée à la place de tous les caractères de ces jeux."
+"La chaîne « %s » sera utilisée à la place de tous les caractères de ces jeux."
 
-#: ../../WINGs/wfont.c:300 ../../WINGs/wfont.c:336
+#. is arial a good fallback for multibyte?
+#: ../../WINGs/wfont.c:599 ../../WINGs/wfont.c:614
 #, c-format
-msgid "could not load font set %s. Trying fixed."
+msgid "could not load font %s. Trying arial."
+msgstr ""
+"Impossible de charger la police de caractères %s, essai de la police "
+"« arial »."
+
+#: ../../WINGs/wfont.c:606
+msgid "could not load antialiased font set. Reverting to standard font sets."
+msgstr ""
+"Impossible de charger les polices lissées, utilisation des polices normales."
+
+#: ../../WINGs/wfont.c:609
+#, c-format
+msgid "could not load FontSet %s. Trying fixed."
 msgstr ""
 "Impossible de charger la famille de polices %s, essai de la famille "
 "« fixed »."
 
-#: ../../WINGs/wfont.c:306 ../../WINGs/wfont.c:342
+#: ../../WINGs/wfont.c:621
+msgid "could not load antialiased fonts. Reverting to normal fonts."
+msgstr ""
+"Impossible de charger les polices lissées, utilisation des polices normales."
+
+#: ../../WINGs/wfont.c:624 ../../WINGs/wfont.c:635
 #, c-format
 msgid "could not load font %s. Trying fixed."
 msgstr ""
 "Impossible de charger la police de caractères %s, essai de la police "
 "« fixed »."
 
-#: ../../WINGs/wfont.c:310 ../../WINGs/wfont.c:346
+#: ../../WINGs/wfont.c:629
+#, c-format
+msgid "could not load font set %s. Trying fixed."
+msgstr ""
+"Impossible de charger la famille de polices %s, essai de la famille "
+"« fixed »."
+
+#: ../../WINGs/wfont.c:639
 msgid "could not load fixed font!"
 msgstr "Impossible de charger la police de caractères « fixed » !"
 
-#: ../../WINGs/wfont.c:441
+#: ../../WINGs/wfont.c:704 ../../WINGs/wfont.c:765 ../../WINGs/wfont.c:836
+#, c-format
+msgid ""
+"Conversion to widechar failed (possible invalid multibyte sequence): '%s':"
+"(pos %d)\n"
+msgstr ""
+"Échec de la conversion en widechar (probablement une séquence d'octets "
+"erronée) : « %s » (pos %d)\n"
+
+#: ../../WINGs/wfont.c:887
 #, c-format
 msgid "font description %s is too large."
 msgstr "La description de la police de caractères %s est trop volumineuse."
 
-#: ../../WINGs/wfontpanel.c:205
+#. // remove warning later. or maybe not
+#: ../../WINGs/wfont.c:935
+#, c-format
+msgid "Invalid font specification: '%s'\n"
+msgstr "Déclaration de police invalide : « %s »\n"
+
+#: ../../WINGs/wfontpanel.c:235
 msgid "Test!!!"
 msgstr "Test !"
 
-#: ../../WINGs/wfontpanel.c:211
+#: ../../WINGs/wfontpanel.c:241
 msgid "Family"
 msgstr "Famille"
 
-#: ../../WINGs/wfontpanel.c:222
+#: ../../WINGs/wfontpanel.c:252
 msgid "Typeface"
 msgstr "Caractère"
 
-#: ../../WINGs/wfontpanel.c:233
+#: ../../WINGs/wfontpanel.c:263
 msgid "Size"
 msgstr "Taille"
 
-#: ../../WINGs/wfontpanel.c:252
+#: ../../WINGs/wfontpanel.c:282
 msgid "Set"
 msgstr "Famille"
 
-#: ../../WINGs/wfontpanel.c:257
+#: ../../WINGs/wfontpanel.c:288
 msgid "Revert"
 msgstr "Revenir"
 
-#: ../../WINGs/wfontpanel.c:709
+#: ../../WINGs/wfontpanel.c:751
 msgid "Could not retrieve font list"
 msgstr "Impossible de lire la liste des polices de caractères."
 
-#: ../../WINGs/wfontpanel.c:721
+#: ../../WINGs/wfontpanel.c:765
 #, c-format
 msgid "font name %s is longer than 256, which is invalid."
 msgstr ""
 "Le nom de police %s a plus de 256 caractères et est par conséquent invalide."
 
-#: ../../WINGs/wfontpanel.c:868
+#: ../../WINGs/wfontpanel.c:913
 msgid "Roman"
 msgstr "Roman"
 
-#: ../../WINGs/wfontpanel.c:871
+#: ../../WINGs/wfontpanel.c:916
 msgid "Italic"
 msgstr "Italique"
 
-#: ../../WINGs/wfontpanel.c:873
+#: ../../WINGs/wfontpanel.c:918
 msgid "Oblique"
 msgstr "Penché"
 
-#: ../../WINGs/wfontpanel.c:875
+#: ../../WINGs/wfontpanel.c:920
 msgid "Rev Italic"
 msgstr "Italique inverse"
 
-#: ../../WINGs/wfontpanel.c:877
+#: ../../WINGs/wfontpanel.c:922
 msgid "Rev Oblique"
 msgstr "Penché inverse"
 
-#: ../../WINGs/wfontpanel.c:883
+#: ../../WINGs/wfontpanel.c:928
 msgid "Normal"
 msgstr "Normal"
 
-#: ../../WINGs/widgets.c:415
+#: ../../WINGs/widgets.c:419
 #, c-format
 msgid "WINGs: could not load widget images file: %s"
 msgstr "WINGs : impossible de charger le fichier d'images de widget '%s'."
 
-#: ../../WINGs/widgets.c:763
+#: ../../WINGs/widgets.c:770
+msgid ""
+"Text antialiasing is enabled in the configuration but the X server doesn't "
+"have the required capabilities (missing RENDER extension). Disabling text "
+"antialiasing."
+msgstr ""
+"Le lissage du texte est activé dans la configuration mais le serveur X ne "
+"dispose pas de l'extension adéquate (extension RENDER). Desactivation du "
+"lissage."
+
+#: ../../WINGs/widgets.c:787
 msgid ""
 "could not load any fonts. Make sure your font installation and locale "
 "settings are correct."
@@ -677,6 +734,6 @@ msgstr ""
 "Aucune police n'a pu être chargée. Veuillez vérifier que vos polices sont "
 "correctement installées et que votre langue est bien configurée."
 
-#: ../../WINGs/wruler.c:189
+#: ../../WINGs/wruler.c:192
 msgid "0   inches"
 msgstr "0   pouces"

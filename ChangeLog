@@ -83,6 +83,7 @@ Changes since version 0.80.2:
 - Support for multiline balloons (Vitaly Ovtchinnikov <ov@rbcmail.ru>)
 - Updated single-click contrib patch (steve lion <steve.lion@verizon.net>
   and vlaad)
+- Updated French translations (Antoine Hulin <antoine@origan.fdn.org>)
 
 
 Changes since version 0.80.1:
