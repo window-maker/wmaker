@@ -841,7 +841,7 @@ paintEntry(WMenu *menu, int index, int selected)
 			     strlen(entry->rtext));
 
 	WMDrawString(scr->wmscreen, win, textGC, scr->menu_entry_font, w-6-tw, 
-		     y + 3, entry->rtext, strlen(entry->rtext));
+		     y + 3 + wPreferences.menu_text_clearance, entry->rtext, strlen(entry->rtext));
     }
 }
 
