@@ -124,6 +124,7 @@ notifySelection(XEvent *event, Atom prop)
     ev.xselection.display = event->xselectionrequest.display;
     ev.xselection.requestor = event->xselectionrequest.requestor;
     ev.xselection.target = event->xselectionrequest.target;
+    ev.xselection.selection = event->xselectionrequest.selection;
     ev.xselection.property = prop;
     ev.xselection.time = event->xselectionrequest.time;
     
