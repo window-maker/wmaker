@@ -180,7 +180,7 @@ WMRemovePopUpButtonItem(WMPopUpButton *bPtr, int index)
 	if (index < bPtr->selectedItemIndex)
 	    bPtr->selectedItemIndex--;
 	else if (index == bPtr->selectedItemIndex) {
-	    /* reselect first item if the removed item is the 
+	    /* reselect first item if the removed item is the
 	     * selected one */
 	    bPtr->selectedItemIndex = 0;
 	    if (bPtr->view->flags.mapped)
@@ -301,6 +301,9 @@ WMGetPopUpButtonItem(WMPopUpButton *bPtr, int index)
 {
     WMMenuItem *item;
 
+    if (index >= WMGetBagItemCount(bPtr->items) || index < 0)
+	return NULL;
+    
     item = WMGetFromBag(bPtr->items, index);
     if (!item)
 	return NULL;
@@ -335,7 +338,7 @@ paintPopUpButton(PopUpButton *bPtr)
 	if (bPtr->selectedItemIndex < 0) {
 	    /* if no item selected, show the caption */
 	    caption = bPtr->caption;
-	} else {	    
+	} else {
 	    caption = WMGetPopUpButtonItem(bPtr, bPtr->selectedItemIndex);
 	}
     }
