@@ -741,77 +741,77 @@ void WMEnqueueCoalesceNotification(WMNotificationQueue *queue,
 
 /* Property Lists handling */
 
-void WMPLSetCaseSensitive(Bool useCase);
+void WMPLSetCaseSensitive(Bool caseSensitive);
 
-WMPropList* WMPLCreateString(char *str);
+WMPropList* WMCreatePLString(char *str);
 
-WMPropList* WMPLCreateData(WMData *data);
+WMPropList* WMCreatePLData(WMData *data);
 
-WMPropList* WMPLCreateDataWithBytes(unsigned char *bytes, unsigned int length);
+WMPropList* WMCreatePLDataWithBytes(unsigned char *bytes, unsigned int length);
 
-WMPropList* WMPLCreateDataWithBytesNoCopy(unsigned char *bytes,
+WMPropList* WMCreatePLDataWithBytesNoCopy(unsigned char *bytes,
                                           unsigned int length,
                                           WMFreeDataProc *destructor);
 
-WMPropList* WMPLCreateArray(WMPropList *elem, ...);
+WMPropList* WMCreatePLArray(WMPropList *elem, ...);
 
-WMPropList* WMPLCreateDictionary(WMPropList *key, WMPropList *value, ...);
+WMPropList* WMCreatePLDictionary(WMPropList *key, WMPropList *value, ...);
 
-void WMPLInsertInArray(WMPropList *plist, int index, WMPropList *item);
+void WMInsertInPLArray(WMPropList *plist, int index, WMPropList *item);
 
-void WMPLAddToArray(WMPropList *plist, WMPropList *item);
+void WMAddToPLArray(WMPropList *plist, WMPropList *item);
 
-void WMPLDeleteFromArray(WMPropList *plist, int index);
+void WMDeleteFromPLArray(WMPropList *plist, int index);
 
-void WMPLRemoveFromArray(WMPropList *plist, WMPropList *item);
+void WMRemoveFromPLArray(WMPropList *plist, WMPropList *item);
 
-void WMPLPutInDictionary(WMPropList *plist, WMPropList *key, WMPropList *value);
+void WMPutInPLDictionary(WMPropList *plist, WMPropList *key, WMPropList *value);
 
-void WMPLRemoveFromDictionary(WMPropList *plist, WMPropList *key);
+void WMRemoveFromPLDictionary(WMPropList *plist, WMPropList *key);
 
-WMPropList* WMPLMergeDictionaries(WMPropList *dest, WMPropList *source);
+WMPropList* WMMergePLDictionaries(WMPropList *dest, WMPropList *source);
 
-WMPropList* WMPLRetain(WMPropList *plist);
+WMPropList* WMRetainPropList(WMPropList *plist);
 
-void WMPLRelease(WMPropList *plist);
+void WMReleasePropList(WMPropList *plist);
 
-Bool WMPLIsString(WMPropList *plist);
+Bool WMIsPLString(WMPropList *plist);
 
-Bool WMPLIsData(WMPropList *plist);
+Bool WMIsPLData(WMPropList *plist);
 
-Bool WMPLIsArray(WMPropList *plist);
+Bool WMIsPLArray(WMPropList *plist);
 
-Bool WMPLIsDictionary(WMPropList *plist);
+Bool WMIsPLDictionary(WMPropList *plist);
 
-Bool WMPLIsEqualToPL(WMPropList *plist, WMPropList *other);
+Bool WMIsPropListEqualTo(WMPropList *plist, WMPropList *other);
 
-int WMPLGetItemCount(WMPropList *plist);
+int WMGetPropListItemCount(WMPropList *plist);
 
-char* WMPLGetString(WMPropList *plist);
+char* WMGetFromPLString(WMPropList *plist);
 
-WMData* WMPLGetData(WMPropList *plist);
+WMData* WMGetFromPLData(WMPropList *plist);
 
-const unsigned char* WMPLGetDataBytes(WMPropList *plist);
+const unsigned char* WMGetPLDataBytes(WMPropList *plist);
 
-int WMPLGetDataLength(WMPropList *plist);
+int WMGetPLDataLength(WMPropList *plist);
 
-WMPropList* WMPLGetFromArray(WMPropList *plist, int index);
+WMPropList* WMGetFromPLArray(WMPropList *plist, int index);
 
-WMPropList* WMPLGetFromDictionary(WMPropList *plist, WMPropList *key);
+WMPropList* WMGetFromPLDictionary(WMPropList *plist, WMPropList *key);
 
-WMPropList* WMPLGetDictionaryKeys(WMPropList *plist);
+WMPropList* WMGetPLDictionaryKeys(WMPropList *plist);
 
-char* WMPLGetDescription(WMPropList *plist, Bool indented);
+WMPropList* WMShallowCopyPropList(WMPropList *plist);
 
-Bool WMPLWriteToFile(WMPropList *plist, char *path, Bool atomically);
+WMPropList* WMDeepCopyPropList(WMPropList *plist);
 
-WMPropList* WMPLShallowCopy(WMPropList *plist);
+char* WMGetPropListDescription(WMPropList *plist, Bool indented);
 
-WMPropList* WMPLDuplicate(WMPropList *plist);
+WMPropList* WMCreatePropListFromDescription(char *desc);
 
-WMPropList* WMPLGetWithDescription(char *desc);
+WMPropList* WMReadPropListFromFile(char *file);
 
-WMPropList* WMPLReadFromFile(char *file);
+Bool WMWritePropListToFile(WMPropList *plist, char *path, Bool atomically);
 
 /*......................................................................*/
 

@@ -1232,7 +1232,7 @@ readMenuPipe(WScreen *scr, char **file_name)
     char params[MAXLINE];
     char shortcut[MAXLINE];
     char *line;
-    char * filename;
+    char *filename;
     char flat_file[MAXLINE];
     int i;
 #ifdef USECPP
@@ -1242,7 +1242,7 @@ readMenuPipe(WScreen *scr, char **file_name)
 
     flat_file[0] = '\0';
 
-    for(i = 0 ; file_name[i] != NULL ; i++) {
+    for(i=0; file_name[i]!=NULL; i++) {
 	strcat(flat_file, file_name[i]);
 	strcat(flat_file, " ");
     }
