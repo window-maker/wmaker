@@ -57,9 +57,9 @@ wmbsnrtowcs(wchar_t *dest, const char **src, size_t nbytes, size_t len)
     if (dest == NULL) {
         for (;;) {
             nb = mbrtowc(NULL, ptr, nbytes, &ps);
-            if (nb < 0) {
+            if (nb == -1) {
                 return ((size_t)-1);
-            } else if (nb==0 || nb>nbytes) {
+            } else if (nb==0 || nb==-2) {
                 return n;
             }
             ptr += nb;
