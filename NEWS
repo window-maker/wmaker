@@ -33,6 +33,22 @@ will automatically hack it so that wmaker will make the theme work like
 before.
 
 
+New crash dialog panel
+----------------------
+
+From now on, whenever a fatal situation appears, Window Maker will display a
+dialog panel to the user and let him choose what to do.
+The options are:
+- Abort and leave a core file (usefull for debugging and getting backtraces)
+- Restart Window Maker (default behaviour)
+- Start alternate window manager (the one defined as fallback, or if not
+  possible fvwm or twm in this order).
+
+If it will not be able to restart or start the alternate window manager, it
+will abort and leave the core file.
+
+
+
 --- 0.52.0
 
 

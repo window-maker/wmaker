@@ -20,6 +20,10 @@ Changes since version 0.52.0:
 - added ResizebarBack and added appropriate backwards compat. hacks in setstyle
 - applied ]d's patch to allow DEMATERIALIZE_ICON over windows
 - made clip arrows gradiented
+- added a crashing dialog panel to select what to do on crashes.
+- fixed the problem with showing a window as focused in the window list menu
+  while it was on another workspace.
+
 
 Changes since version 0.51.2:
 .............................

@@ -3,6 +3,7 @@
  *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
+ *  Copyright (c) 1998       Dan Pascu
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1016,7 +1017,8 @@ wIconifyWindow(WWindow *wwin)
 	    tmp = wwin->prev;
 	    while (tmp) {
 		if (!WFLAGP(tmp, no_focusable)
-		    && !(tmp->flags.hidden||tmp->flags.miniaturized))
+		    && !(tmp->flags.hidden||tmp->flags.miniaturized)
+		    && (wwin->frame->workspace == tmp->frame->workspace))
 		    break;
 		tmp = tmp->prev;
 	    }

@@ -5,7 +5,8 @@
 Author: Kresten Krab Thorup
 
 Many modifications by Alfredo K. Kojima
- 
+Some fixes and additions by Dan Pascu
+
 
 This file is part of GNU CC.
 

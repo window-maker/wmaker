@@ -58,6 +58,9 @@
 
 Display	*dpy;
 
+char **Arguments;
+int ArgCount;
+
 char *ProgName;
 
 unsigned int ValidModMask = 0xff;
@@ -148,8 +151,6 @@ int wVisualID = -1;
 /******** End Global Variables *****/
 
 static char *DisplayName = NULL;
-static char **Arguments;
-static int ArgCount;
 
 extern void EventLoop();
 extern void StartUp();
@@ -267,6 +268,9 @@ print_help()
     */
     puts(_(" --visual-id visualid	visual id of visual to use"));
     puts(_(" --static		do not update or save configurations"));
+#ifdef DEBUG
+    puts(_(" --synchronous		turn on synchronous display mode"));
+#endif
     puts(_(" --version		print version and exit"));
     puts(_(" --help			show this message"));
 }
@@ -342,6 +346,9 @@ main(int argc, char **argv)
     Bool multiHead = True;
     char *str;
     int d, s;
+#ifdef DEBUG
+    Bool doSync = False;
+#endif
 
     wsetabort(wAbort);
     
@@ -383,6 +390,10 @@ main(int argc, char **argv)
 	    } else if (strcmp(argv[i], "--global_defaults_path")==0) {
 		puts(SYSCONFDIR);
 		exit(0);
+#ifdef DEBUG
+            } else if (strcmp(argv[i], "--synchronous")==0) {
+                doSync = 1;
+#endif
 	    } else if (strcmp(argv[i], "-locale")==0
 		       || strcmp(argv[i], "--locale")==0) {
 		i++;
@@ -515,7 +526,8 @@ main(int argc, char **argv)
     putenv(str);
 
 #ifdef DEBUG
-    XSynchronize(dpy, True);
+    if (doSync)
+        XSynchronize(dpy, True);
 #endif
 
     wXModifierInitialize();
