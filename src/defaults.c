@@ -83,6 +83,7 @@ extern proplist_t ReadProplistFromFile(char *file);
 
 extern WDDomain *WDWindowMaker;
 extern WDDomain *WDWindowAttributes;
+extern WDDomain *WDRootMenu;
 
 extern int wScreenCount;
 
@@ -1150,6 +1151,33 @@ wDefaultsCheckDomains(void *foo)
 	}
 	WDWindowAttributes->timestamp = stbuf.st_mtime;
     }
+
+#ifndef LITE
+    if (stat(WDRootMenu->path, &stbuf)>=0
+        && WDRootMenu->timestamp < stbuf.st_mtime) {
+        dict = ReadProplistFromFile(WDRootMenu->path);
+#ifdef HEARTBEAT
+        puts("Checking WMRootMenu domain");
+#endif
+        if (dict) {
+            if (!PLIsArray(dict) && !PLIsString(dict)) {
+                PLRelease(dict);
+                dict = NULL;
+                wwarning(_("Domain %s (%s) of defaults database is corrupted!"),
+                         "WMRootMenu", WDRootMenu->path);
+            } else {
+                if (WDRootMenu->dictionary) {
+                    PLRelease(WDRootMenu->dictionary);
+                }
+                WDRootMenu->dictionary = dict;
+            }
+        } else {
+            wwarning(_("could not load domain %s from user defaults database"),
+                     "WMRootMenu");
+        }
+        WDRootMenu->timestamp = stbuf.st_mtime;
+    }
+#endif /* !LITE */
 
     if (!foo)
 	WMAddTimerHandler(DEFAULTS_CHECK_INTERVAL, wDefaultsCheckDomains, foo);
