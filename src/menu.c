@@ -552,15 +552,15 @@ wMenuRealize(WMenu *menu)
     wFrameWindowUpdateBorders(menu->frame, flags);
 
     if (menu->flags.titled) {
-	twidth = wTextWidth(scr->menu_title_font->font, menu->frame->title,
-			     strlen(menu->frame->title));
+	twidth = WMWidthOfString(scr->menu_title_font, menu->frame->title,
+				 strlen(menu->frame->title));
         theight = menu->frame->top_width;
         twidth += theight + (wPreferences.new_style ? 16 : 8);
     } else {
 	twidth = 0;
 	theight = 0;
     }
-    eheight = scr->menu_entry_font->height + 6;
+    eheight = WMFontHeight(scr->menu_entry_font) + 6;
     menu->entry_height = eheight;
     mrwidth = 0;
     mwidth = 0;
@@ -569,7 +569,7 @@ wMenuRealize(WMenu *menu)
 
 	/* search widest text */
 	text = menu->entries[i]->text;
-	width = wTextWidth(scr->menu_entry_font->font, text, strlen(text))+10;
+	width = WMWidthOfString(scr->menu_entry_font, text, strlen(text))+10;
 
 	if (menu->entries[i]->flags.indicator) {
 	    width += MENU_INDICATOR_SPACE;
@@ -581,8 +581,8 @@ wMenuRealize(WMenu *menu)
 	/* search widest text on right */
 	text = menu->entries[i]->rtext;
 	if (text)
-	    rwidth = wTextWidth(scr->menu_entry_font->font, text,
-				 strlen(text)) + 5;
+	    rwidth = WMWidthOfString(scr->menu_entry_font, text, strlen(text))
+		+ 5;
 	else if (menu->entries[i]->cascade>=0)
 	    rwidth = 16;
 	else
@@ -792,9 +792,8 @@ paintEntry(WMenu *menu, int index, int selected)
     if (entry->flags.indicator)
 	x += MENU_INDICATOR_SPACE + 2;
 
-    wDrawString(win, scr->menu_entry_font, 
-		  textGC, x, 3+y+scr->menu_entry_font->y, entry->text, 
-		  strlen(entry->text));
+    WMDrawString(scr->wmscreen, win, textGC, scr->menu_entry_font, 
+		 x, 3 + y, entry->text, strlen(entry->text));
 
     if (entry->cascade>=0) {
 	/* draw the cascade indicator */
@@ -847,12 +846,11 @@ paintEntry(WMenu *menu, int index, int selected)
     /* draw right text */
     
     if (entry->rtext && entry->cascade<0) {
-	tw = wTextWidth(scr->menu_entry_font->font, entry->rtext,
-			 strlen(entry->rtext));
+	tw = WMWidthOfString(scr->menu_entry_font, entry->rtext,
+			     strlen(entry->rtext));
 
-	wDrawString(win, scr->menu_entry_font, textGC, w-6-tw, 
-		    3+y+scr->menu_entry_font->y, entry->rtext,
-		    strlen(entry->rtext));
+	WMDrawString(scr->wmscreen, win, textGC, scr->menu_entry_font, w-6-tw, 
+		     y + 3, entry->rtext, strlen(entry->rtext));
     }
 }
 

@@ -317,6 +317,7 @@ typedef struct WPreferences {
     char title_shadow;
 #endif
 
+    char multi_byte_text;
 #ifdef KEEP_XKB_LOCK_STATUS
     char modelock;
 #endif

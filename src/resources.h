@@ -22,8 +22,7 @@
 #ifndef WMRESOURCES_H_
 #define WMRESOURCES_H_
 
-WFont *wLoadFont(char *font_name);
-void wFreeFont(WFont *font);
 int wGetColor(WScreen *scr, char *color_name, XColor *color);
 void wFreeColor(WScreen *scr, unsigned long pixel);
+
 #endif

@@ -170,7 +170,7 @@ showText(WScreen *scr, int x, int y, int h, int w, char *text)
     int height;
     Pixmap pixmap;
     Pixmap mask;
-    WFont *font = scr->info_text_font;
+    WMFont *font = scr->info_text_font;
     int side = 0;
     int ty;
     int bx, by;
@@ -178,8 +178,8 @@ showText(WScreen *scr, int x, int y, int h, int w, char *text)
     if (scr->balloon->contents)
 	XFreePixmap(dpy, scr->balloon->contents);
 
-    width = wTextWidth(font->font, text, strlen(text))+16;
-    height = font->height + 4;
+    width = WMWidthOfString(font, text, strlen(text))+16;
+    height = WMFontHeight(font) + 4;
     
     if (height < 16)
 	height = 16;
@@ -212,13 +212,13 @@ showText(WScreen *scr, int x, int y, int h, int w, char *text)
 
     XSetForeground(dpy, scr->info_text_gc, scr->black_pixel);
 
-    wDrawString(pixmap, font, scr->info_text_gc, 8, 
-		ty + font->y + (height - font->height)/2,
-		text, strlen(text));
+    WMDrawString(scr->wmscreen, pixmap, scr->info_text_gc, font, 8,
+		 ty + (height - WMFontHeight(font))/2,
+		 text, strlen(text));
 
     XSetWindowBackgroundPixmap(dpy, scr->balloon->window, pixmap);
     scr->balloon->contents = pixmap;
-    
+
     XResizeWindow(dpy, scr->balloon->window, width, height+SPACE);
     XShapeCombineMask(dpy, scr->balloon->window, ShapeBounding, 0, 0, mask,
 		      ShapeSet);
@@ -235,13 +235,13 @@ showText(WScreen *scr, int x, int y, int h, int w, char *text)
     int width;
     int height;
     Pixmap pixmap;
-    WFont *font = scr->info_text_font;
+    WMFont *font = scr->info_text_font;
 
     if (scr->balloon->contents)
 	XFreePixmap(dpy, scr->balloon->contents);
 
-    width = wTextWidth(font->font, text, strlen(text))+8;
-    height = font->height + 4;
+    width = WMWidthOfString(font, text, strlen(text))+8;
+    height = WMFontHeight(font) + 4;
 
     if (x < 0)
 	x = 0;
@@ -267,9 +267,9 @@ showText(WScreen *scr, int x, int y, int h, int w, char *text)
 
     XSetForeground(dpy, scr->info_text_gc, scr->window_title_pixel[0]);
 
-    wDrawString(pixmap, font->font, scr->info_text_gc, 4, font->y+2, text, 
-		strlen(text));
-    
+    WMDrawString(scr->wmscreen, pixmap, scr->info_text_gc, font, 
+		 4, 2, text, strlen(text));
+
     XResizeWindow(dpy, scr->balloon->window, width, height);
     XMoveWindow(dpy, scr->balloon->window, x, y);
 

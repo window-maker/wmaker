@@ -1265,17 +1265,18 @@ wClipIconPaint(WAppIcon *aicon)
     else
         XSetForeground(dpy, gc, scr->clip_title_pixel[CLIP_COLLAPSED]);
 
-    ty = ICON_SIZE - scr->clip_title_font->height - 3;
+    ty = ICON_SIZE - WMFontHeight(scr->clip_title_font) - 3;
 
     tx = CLIP_BUTTON_SIZE*ICON_SIZE/64;
 
-    wDrawString(win, scr->clip_title_font, gc, tx,
-		ty + scr->clip_title_font->y, ws_name, length);
+    WMDrawString(scr->wmscreen, win, gc, scr->clip_title_font, tx,
+		 ty, ws_name, length);
 
-    tx = (ICON_SIZE/2 - wTextWidth(scr->clip_title_font->font, ws_number, nlength))/2;
+    tx = (ICON_SIZE/2 - WMWidthOfString(scr->clip_title_font, ws_number, 
+					nlength))/2;
 
-    wDrawString(win, scr->clip_title_font, gc, tx,
-		scr->clip_title_font->y + 2, ws_number, nlength);
+    WMDrawString(scr->wmscreen, win, gc, scr->clip_title_font, tx,
+		 2, ws_number, nlength);
 
     free(ws_name);
 
@@ -4066,13 +4067,13 @@ showClipBalloon(WDock *dock, int workspace)
 
     text = scr->workspaces[workspace]->name;
 
-    w = wTextWidth(scr->clip_title_font->font, text, strlen(text));
+    w = WMWidthOfString(scr->clip_title_font, text, strlen(text));
 
-    h = scr->clip_title_font->height;
+    h = WMFontHeight(scr->clip_title_font);
     XResizeWindow(dpy, scr->clip_balloon, w, h);
 
     x = dock->x_pos + CLIP_BUTTON_SIZE*ICON_SIZE/64;
-    y = dock->y_pos + ICON_SIZE-scr->clip_title_font->height - 3;
+    y = dock->y_pos + ICON_SIZE - WMFontHeight(scr->clip_title_font) - 3;
 
     if (x+w > scr->scr_width) {
 	x = scr->scr_width - w;
@@ -4090,8 +4091,8 @@ showClipBalloon(WDock *dock, int workspace)
     XSetForeground(dpy, scr->clip_title_gc,
 		   scr->clip_title_pixel[CLIP_NORMAL]);
     XClearWindow(dpy, scr->clip_balloon);
-    wDrawString(scr->clip_balloon, scr->clip_title_font, scr->clip_title_gc,
-		0, scr->clip_title_font->y, text, strlen(text));
+    WMDrawString(scr->wmscreen, scr->clip_balloon, scr->clip_title_gc,
+		 scr->clip_title_font, 0, 0, text, strlen(text));
 }
 
 

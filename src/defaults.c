@@ -174,7 +174,7 @@ static int setClipTitleFont();
 static int setClipTitleColor();
 
 static int setMenuStyle();
-
+static int setMultiByte();
 
 static int updateUsableArea();
 
@@ -351,6 +351,9 @@ WDefaultEntry staticOptionList[] = {
     {"DisableMiniwindows", "NO",		NULL,
 	&wPreferences.disable_miniwindows, getBool,	NULL
     },
+    {"MultiByteText", "NO", 			NULL,
+	&wPreferences.multi_byte_text, getBool,		setMultiByte
+    }
 };
 
 
@@ -2104,14 +2107,14 @@ static int
 getFont(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
 	void **ret)
 {
-    static WFont *font;
+    static WMFont *font;
     char *val;
 
     STRINGP("Font");
 
     val = PLGetString(value);
 
-    font = wLoadFont(val);
+    font = WMCreateFont(scr->wmscreen, val);
     if (!font) {
 	wfatal(_("could not load any usable font!!!"));
 	exit(1);
@@ -2416,106 +2419,77 @@ setIconTile(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
 
 
 static int 
-setWinTitleFont(WScreen *scr, WDefaultEntry *entry, WFont *font, void *foo)
+setWinTitleFont(WScreen *scr, WDefaultEntry *entry, WMFont *font, void *foo)
 {
     if (scr->title_font) {
-	wFreeFont(scr->title_font);
+	WMReleaseFont(scr->title_font);
     }
-    
     scr->title_font = font;
-
-#ifndef I18N_MB
-    XSetFont(dpy, scr->window_title_gc, font->font->fid);
-#endif
     
     return REFRESH_WINDOW_FONT|REFRESH_BUTTON_IMAGES;
 }
 
 
 static int 
-setMenuTitleFont(WScreen *scr, WDefaultEntry *entry, WFont *font, void *foo)
+setMenuTitleFont(WScreen *scr, WDefaultEntry *entry, WMFont *font, void *foo)
 {
     if (scr->menu_title_font) {
-	wFreeFont(scr->menu_title_font);
+	WMReleaseFont(scr->menu_title_font);
     }
     
     scr->menu_title_font = font;
-
-#ifndef I18N_MB
-    XSetFont(dpy, scr->menu_title_gc, font->font->fid);
-#endif
 
     return REFRESH_MENU_TITLE_FONT;
 }
 
 
 static int 
-setMenuTextFont(WScreen *scr, WDefaultEntry *entry, WFont *font, void *foo)
+setMenuTextFont(WScreen *scr, WDefaultEntry *entry, WMFont *font, void *foo)
 {
     if (scr->menu_entry_font) {
-	wFreeFont(scr->menu_entry_font);
-    }
-    
+	WMReleaseFont(scr->menu_entry_font);
+    }    
     scr->menu_entry_font = font;
 
-#ifndef I18N_MB
-    XSetFont(dpy, scr->menu_entry_gc, font->font->fid);
-    XSetFont(dpy, scr->disabled_menu_entry_gc, font->font->fid);
-    XSetFont(dpy, scr->select_menu_gc, font->font->fid);
-#endif
-    
     return REFRESH_MENU_FONT;
 }
 
 
 
 static int 
-setIconTitleFont(WScreen *scr, WDefaultEntry *entry, WFont *font, void *foo)
+setIconTitleFont(WScreen *scr, WDefaultEntry *entry, WMFont *font, void *foo)
 {
     if (scr->icon_title_font) {
-	wFreeFont(scr->icon_title_font);
+	WMReleaseFont(scr->icon_title_font);
     }
     
     scr->icon_title_font = font;
-
-#ifndef I18N_MB
-    XSetFont(dpy, scr->icon_title_gc, font->font->fid);
-#endif
 		 
     return REFRESH_ICON_FONT;
 }
 
 
 static int 
-setClipTitleFont(WScreen *scr, WDefaultEntry *entry, WFont *font, void *foo)
+setClipTitleFont(WScreen *scr, WDefaultEntry *entry, WMFont *font, void *foo)
 {
     if (scr->clip_title_font) {
-	wFreeFont(scr->clip_title_font);
+	WMReleaseFont(scr->clip_title_font);
     }
     
     scr->clip_title_font = font;
 
-#ifndef I18N_MB
-    XSetFont(dpy, scr->clip_title_gc, font->font->fid);
-#endif
-		 
     return REFRESH_ICON_FONT;
 }
 
 
 static int
-setDisplayFont(WScreen *scr, WDefaultEntry *entry, WFont *font, void *foo)
+setDisplayFont(WScreen *scr, WDefaultEntry *entry, WMFont *font, void *foo)
 {
     if (scr->info_text_font) {
-	wFreeFont(scr->info_text_font);
+	WMReleaseFont(scr->info_text_font);
     }
-    
-    scr->info_text_font = font;
 
-#ifndef I18N_MB
-    XSetFont(dpy, scr->info_text_gc, font->font->fid);
-    XSetFont(dpy, scr->line_gc, font->font->fid);
-#endif
+    scr->info_text_font = font;
 
     /* This test works because the scr structure is initially zeroed out
        and None = 0. Any other time, the window should be valid. */
@@ -2531,10 +2505,10 @@ setDisplayFont(WScreen *scr, WDefaultEntry *entry, WFont *font, void *foo)
 
 
 static int
-setLargeDisplayFont(WScreen *scr, WDefaultEntry *entry, WFont *font, void *foo)
+setLargeDisplayFont(WScreen *scr, WDefaultEntry *entry, WMFont *font, void *foo)
 {
     if (scr->workspace_name_font) {
-	wFreeFont(scr->workspace_name_font);
+	WMReleaseFont(scr->workspace_name_font);
     }
     
     scr->workspace_name_font = font;
@@ -3040,6 +3014,18 @@ setDoubleClick(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
         *(int*)foo = 1;
 
     WINGsConfiguration.doubleClickDelay = *value;
+    
+    return 0;
+}
+
+
+
+static int
+setMultiByte(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
+{
+    extern _WINGsConfiguration WINGsConfiguration;
+
+    WINGsConfiguration.useMultiByte = *value;
     
     return 0;
 }

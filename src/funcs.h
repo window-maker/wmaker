@@ -109,7 +109,7 @@ WWindow *PrevFocusWindow(WScreen *scr);
 
 void SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y);
 
-char *ShrinkString(WFont *font, char *string, int width);
+char *ShrinkString(WMFont *font, char *string, int width);
 
 char *FindImage(char *paths, char *file);
 
@@ -157,23 +157,5 @@ void ExecExitScript();
 
 Bool wFetchName(Display *dpy, Window win, char **winname);
 Bool wGetIconName(Display *dpy, Window win, char **iconname);
-
-#ifdef I18N_MB
-/*void wTextWidth(XFontSet *font, char *text, int length);*/
-#define wDrawString(d,f,gc,x,y,text,textlen)	\
-	XmbDrawString(dpy, d, (f)->font, gc, (x), (y), text, textlen)
-
-#define wTextWidth(font,text,textlen) XmbTextEscapement(font,text,textlen)
-
-#else /* !I18N_MB */
-
-#define wTextWidth(font,text,textlen) XTextWidth(font,text,textlen)
-
-/*void wTextWidth(XFontStruct *font, char *text, int length);*/
-#define wDrawString(d,font,gc,x,y,text,textlen)	\
-	XDrawString(dpy, d, gc, (x), (y), text, textlen)
-
-#endif /* !I18N_MB */
-
 
 #endif

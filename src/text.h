@@ -37,7 +37,7 @@ typedef struct {
                                   * cursor position.              */
 typedef struct {
   WCoreWindow *core;
-  WFont       *font;
+  WMFont       *font;
   WTextBlock  text;
   GC	gc;
   GC    regGC;                     /* the normal GC                 */

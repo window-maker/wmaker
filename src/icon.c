@@ -308,7 +308,7 @@ makeIcon(WScreen *scr, RImage *icon, int titled, int shadowed, int tileType)
     Pixmap pixmap;
     int x, y, sx, sy;
     unsigned w, h;
-    int theight = scr->icon_title_font->height;
+    int theight = WMFontHeight(scr->icon_title_font);
     
     if (tileType == TILE_NORMAL)
 	tile = RCloneImage(scr->icon_tile);
@@ -605,7 +605,7 @@ void
 wIconUpdate(WIcon *icon)
 {
     WScreen *scr = icon->core->screen_ptr;
-    int title_height = scr->icon_title_font->height;
+    int title_height = WMFontHeight(scr->icon_title_font);
     WWindow *wwin = icon->owner;
 
     assert(scr->icon_tile!=NULL);
@@ -815,15 +815,15 @@ wIconPaint(WIcon *icon)
 
 	tmp = ShrinkString(scr->icon_title_font, icon->icon_name,
 			   wPreferences.icon_size-4);
-	w = wTextWidth(scr->icon_title_font->font, tmp, l=strlen(tmp));
+	w = WMWidthOfString(scr->icon_title_font, tmp, l=strlen(tmp));
 
 	if (w > icon->core->width - 4)
 	  x = (icon->core->width - 4) - w;
 	else
 	  x = (icon->core->width - w)/2;
 
- 	wDrawString(icon->core->window, scr->icon_title_font, gc, 
- 		      x, 1 + scr->icon_title_font->y, tmp, l);
+	WMDrawString(scr->wmscreen, icon->core->window, gc,
+		     scr->icon_title_font, x, 1, tmp, l);
 	free(tmp);
     }
 

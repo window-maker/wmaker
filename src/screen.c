@@ -473,10 +473,8 @@ createPixmaps(WScreen *scr)
 
     scr->dock_dots = make3Dots(scr);
 
-#ifndef NEWSTUFF
     /* titlebar button pixmaps */
     allocButtonPixmaps(scr);
-#endif
 }
 
 
@@ -503,7 +501,7 @@ createInternalWindows(WScreen *scr)
 
     /* window for displaying geometry information during resizes and moves */
     vmask = CWBorderPixel|CWBackPixmap|CWBackPixel|CWCursor|CWSaveUnder|CWOverrideRedirect;
-    attribs.border_pixel = 0;
+    attribs.border_pixel = scr->black_pixel;
     attribs.save_under = True;
     attribs.override_redirect = True;    
     attribs.cursor = wCursor[WCUR_DEFAULT];
@@ -537,7 +535,7 @@ createInternalWindows(WScreen *scr)
  
     /* shadow window for dock buttons */
     vmask = CWBorderPixel|CWBackPixmap|CWBackPixel|CWCursor|CWSaveUnder|CWOverrideRedirect;
-    attribs.border_pixel = 0;
+    attribs.border_pixel = scr->black_pixel;
     attribs.save_under = True;
     attribs.override_redirect = True;
     attribs.background_pixmap = None;

@@ -72,13 +72,9 @@ void
 wGetGeometryWindowSize(WScreen *scr, unsigned int *width, 
 		       unsigned int *height)
 {
-#ifdef I18N_MB
-    *width = XmbTextEscapement(scr->info_text_font->font, "-8888 x -8888", 13);
-    *height = (7 * scr->info_text_font->height) / 4 - 1;
-#else
-    *width = XTextWidth(scr->info_text_font->font, "-8888 x -8888", 13);
-    *height = (7 * scr->info_text_font->font->ascent) / 4 - 1;
-#endif
+    *width = WMWidthOfString(scr->info_text_font, "-8888 x -8888", 13);
+
+    *height = (7 * WMFontHeight(scr->info_text_font)) / 4 - 1;
 }
 
 
@@ -140,15 +136,15 @@ showPosition(WWindow *wwin, int x, int y)
 		   scr->geometry_display_width-2, scr->geometry_display_height-2,
 		   False);
 	sprintf(num, "%+i  %-+i", x, y);
-	fw = wTextWidth(scr->info_text_font->font, num, strlen(num));
+	fw = WMWidthOfString(scr->info_text_font, num, strlen(num));
 
 	XSetForeground(dpy, gc, scr->black_pixel);
 	
-	fh = scr->info_text_font->height;
-	wDrawString(scr->geometry_display, scr->info_text_font, gc, 
+	fh = WMFontHeight(scr->info_text_font);
+	WMDrawString(scr->wmscreen, scr->geometry_display, gc,
+		     scr->info_text_font, 
 		    (scr->geometry_display_width - 2 - fw) / 2,
-		    (scr->geometry_display_height-fh)/2 + scr->info_text_font->y,
-		    num, strlen(num));
+		    (scr->geometry_display_height-fh)/2, num, strlen(num));
 	wDrawBevel(scr->geometry_display, scr->geometry_display_width+1,
 		   scr->geometry_display_height+1, 
 		   scr->widget_texture, WREL_RAISED);
@@ -216,8 +212,8 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
     
     ty = y1 + wwin->frame->top_width;
     by = y2 - wwin->frame->bottom_width;
-    fw = wTextWidth(scr->info_text_font->font, "8888", 4);
-    fh = scr->info_text_font->height;
+    fw = WMWidthOfString(scr->info_text_font, "8888", 4);
+    fh = WMFontHeight(scr->info_text_font);
 
     if (wPreferences.size_display == WDIS_NEW) {
 	XSetForeground(dpy, gc, scr->line_pixel);
@@ -270,14 +266,13 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 	
 	sprintf(num, "%i", (by - ty - wwin->normal_hints->base_height) /
 		wwin->normal_hints->height_inc);
-	fw = wTextWidth(scr->info_text_font->font, num, strlen(num));
+	fw = WMWidthOfString(scr->info_text_font, num, strlen(num));
 	
 	/* XSetForeground(dpy, gc, scr->window_title_pixel[WS_UNFOCUSED]); */
 	
 	/* Display the height. */
-	wDrawString(root, scr->info_text_font, gc,
-		      x - s + 3 - fw/2, my - fh/2 + scr->info_text_font->y + 1,
-		      num, strlen(num));
+	WMDrawString(scr->wmscreen, root, gc, scr->info_text_font, 
+		      x - s + 3 - fw/2, my - fh/2 + 1, num, strlen(num));
 	XSetForeground(dpy, gc, scr->line_pixel);
 	/* horizontal geometry */
 	if (y1 < 15) {
@@ -290,7 +285,7 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 	mx = x1 + (x2 - x1)/2;
 	sprintf(num, "%i", (x2 - x1 - wwin->normal_hints->base_width) /
 		wwin->normal_hints->width_inc);
-	fw = wTextWidth(scr->info_text_font->font, num, strlen(num));
+	fw = WMWidthOfString(scr->info_text_font, num, strlen(num));
 	
 	/* left arrow */
 	/* end bar */
@@ -331,8 +326,8 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 	/* XSetForeground(dpy, gc, scr->window_title_pixel[WS_UNFOCUSED]); */
 	
 	/* Display the width. */
-	wDrawString(root, scr->info_text_font, gc,
-		    mx - fw/2 + 1, y - s + fh/2 + 1, num, strlen(num));	
+	WMDrawString(scr->wmscreen, root, gc, scr->info_text_font,
+		     mx - fw/2 + 1, y - s + fh/2 + 1, num, strlen(num));
     } else {
 	XClearArea(dpy, scr->geometry_display, 1, 1, 
 		   scr->geometry_display_width-2, scr->geometry_display_height-2,
@@ -341,16 +336,15 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 		/ wwin->normal_hints->width_inc,
 		(by - ty - wwin->normal_hints->base_height)
 		/ wwin->normal_hints->height_inc);
-	fw = wTextWidth(scr->info_text_font->font, num, strlen(num));
+	fw = WMWidthOfString(scr->info_text_font, num, strlen(num));
 
 	XSetForeground(dpy, scr->info_text_gc, scr->black_pixel);
 
 	/* Display the height. */
-	wDrawString(scr->geometry_display, scr->info_text_font,
-		    scr->info_text_gc,
+	WMDrawString(scr->wmscreen, scr->geometry_display, scr->info_text_gc,
+		     scr->info_text_font,		    
 		    (scr->geometry_display_width-fw)/2,
-		    (scr->geometry_display_height-fh)/2 +scr->info_text_font->y,
-		    num, strlen(num));
+		    (scr->geometry_display_height-fh)/2, num, strlen(num));
 	wDrawBevel(scr->geometry_display, scr->geometry_display_width+1,
 		   scr->geometry_display_height+1,
 		   scr->widget_texture, WREL_RAISED);
@@ -451,7 +445,7 @@ drawTransparentFrame(WWindow *wwin, int x, int y, int width, int height)
     int bottom = 0;
     
     if (!WFLAGP(wwin, no_titlebar) && !wwin->flags.shaded) {
-	h = wwin->screen_ptr->title_font->height + TITLEBAR_EXTRA_HEIGHT;
+	h = WMFontHeight(wwin->screen_ptr->title_font) + TITLEBAR_EXTRA_HEIGHT;
     }
     if (!WFLAGP(wwin, no_resizebar) && !wwin->flags.shaded) {
 	/* Can't use wwin-frame->bottom_width because, in some cases 
@@ -1765,7 +1759,7 @@ wMouseResizeWindow(WWindow *wwin, XEvent *ev)
     shiftl = XKeysymToKeycode(dpy, XK_Shift_L);
     shiftr = XKeysymToKeycode(dpy, XK_Shift_R);
     if (!WFLAGP(wwin, no_titlebar))
-    	h = wwin->screen_ptr->title_font->height + TITLEBAR_EXTRA_HEIGHT;
+    	h = WMFontHeight(wwin->screen_ptr->title_font) + TITLEBAR_EXTRA_HEIGHT;
     else
 	h = 0;
     while (1) {
@@ -2060,7 +2054,7 @@ InteractivePlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 	return;
     }
     if (!WFLAGP(wwin, no_titlebar)) {
-	h = scr->title_font->height + TITLEBAR_EXTRA_HEIGHT;
+	h = WMFontHeight(scr->title_font) + TITLEBAR_EXTRA_HEIGHT;
 	height += h;
     }
     if (!WFLAGP(wwin, no_resizebar)) {

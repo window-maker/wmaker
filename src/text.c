@@ -186,7 +186,7 @@ textXtoPos( WTextInput *wtext, int x )
     if( x < 0 )
       break;
     else
-      x -= wTextWidth( wtext->font->font, &(wtext->text.txt[pos]), 1 );
+      x -= WMWidthOfString( wtext->font, &(wtext->text.txt[pos]), 1 );
     }
   
   return pos;
@@ -230,35 +230,23 @@ wTextCreate( WCoreWindow *core, int x, int y, int width, int height )
 
     gcv.foreground = core->screen_ptr->black_pixel;
     gcv.background = core->screen_ptr->white_pixel;
-#ifndef I18N_MB
-    gcv.font       = wtext->font->font->fid;
-#endif
     gcv.line_width = 1;
     gcv.function   = GXcopy;
 
     wtext->gc = XCreateGC( dpy, wtext->core->window,
                            (GCForeground|GCBackground|
-#ifndef I18N_MB
-                            GCFont|
-#endif
                             GCFunction|GCLineWidth),
                            &gcv );
 
     /* set up the regular context */
     gcv.foreground = core->screen_ptr->black_pixel;
     gcv.background = core->screen_ptr->white_pixel;
-#ifndef I18N_MB
-    gcv.font       = wtext->font->font->fid;
-#endif
     gcv.line_width = 1;
     gcv.function   = GXcopy;
 
     wtext->regGC = XCreateGC( dpy, wtext->core->window,
                               (GCForeground|GCBackground|
-#ifndef I18N_MB
-                               GCFont|
-#endif
-                               GCFunction|GCLineWidth),
+			       GCFunction|GCLineWidth),
                               &gcv );
 
     /* set up the inverted context */
@@ -266,9 +254,6 @@ wTextCreate( WCoreWindow *core, int x, int y, int width, int height )
 
     wtext->invGC = XCreateGC( dpy, wtext->core->window,
                               (GCForeground|GCBackground|
-#ifndef I18N_MB
-                               GCFont|
-#endif
                                GCFunction|GCLineWidth),
                               &gcv );
 
@@ -277,7 +262,7 @@ wTextCreate( WCoreWindow *core, int x, int y, int width, int height )
     }
   
   /* Figure out the y-offset... */
-  wtext->yOffset = (height - wtext->font->height)/2;
+  wtext->yOffset = (height - WMFontHeight(wtext->font))/2;
   wtext->xOffset = wtext->yOffset;
 
   wtext->canceled     = False;
@@ -351,16 +336,17 @@ textRefresh( WTextInput *wtext )
   /* x2,y2 is the lower right corner of the text box */
   x2 = wtext->core->width - wtext->xOffset;
   y2 = wtext->core->height - wtext->yOffset;
-  
+
   /* Fill in the text field.  Use the invGC to draw the rectangle, 
    * becuase then it will be the background color */
   XFillRectangle( dpy, wtext->core->window, wtext->invGC,
                 x1, y1, x2-x1, y2-y1 );
 
   /* Draw the text normally */
-  wDrawString(wtext->core->window, wtext->font, wtext->regGC, 
-		x1, y2+TEXT_SHIFT, ptr, wtext->text.length);
-  
+  WMDrawString(wtext->core->screen_ptr->wmscreen, wtext->core->window, 
+	       wtext->regGC, wtext->font,
+	       x1, y2+TEXT_SHIFT, ptr, wtext->text.length);
+
   /* Draw the selected text */
   if( wtext->text.startPos != wtext->text.endPos )
     {
@@ -378,10 +364,10 @@ textRefresh( WTextInput *wtext )
       }
     
     /* x1,y1 is now the upper-left of the selected area */
-    x1 += wTextWidth( wtext->font->font, ptr, sp );
+    x1 += WMWidthOfString( wtext->font, ptr, sp );
     /* and x2,y2 is the lower-right of the selected area */
     ptr += sp * sizeof(char);
-    x2 = x1 +wTextWidth( wtext->font->font, ptr, (ep - sp) );
+    x2 = x1 + WMWidthOfString( wtext->font, ptr, (ep - sp) );
     /* Fill in the area  where the selected text will go:     *
      * use the regGC to draw the rectangle, becuase then it   *
      * will be the color of the non-selected text             */
@@ -390,12 +376,12 @@ textRefresh( WTextInput *wtext )
     
     /* Draw the selected text... use invGC so it will be the
      * opposite color as the filled rectangle */
-    wDrawString(wtext->core->window, wtext->font, wtext->invGC, 
-	 	  x1, y2+TEXT_SHIFT, ptr, (ep - sp));
+    WMDrawString(wtext->core->screen_ptr->wmscreen, wtext->core->window, 
+		 wtext->invGC, wtext->font, x1, y2+TEXT_SHIFT, ptr, (ep - sp));
     }
   
   /* And draw a quick little line for the cursor position */
-  x1 = wTextWidth( wtext->font->font, wtext->text.txt, wtext->text.endPos )
+  x1 = WMWidthOfString( wtext->font, wtext->text.txt, wtext->text.endPos )
        + wtext->xOffset;
   XDrawLine( dpy, wtext->core->window, wtext->regGC, x1, 2, x1, 
 	     wtext->core->height - 3 );
@@ -571,7 +557,7 @@ blink(void *data)
 	gc = wtext->invGC;
 	wtext->blink_on = 1;
     }
-    x = wTextWidth( wtext->font->font, wtext->text.txt, wtext->text.endPos )
+    x = WMWidthOfString( wtext->font, wtext->text.txt, wtext->text.endPos )
 	+ wtext->xOffset;
     XDrawLine( dpy, wtext->core->window, gc, x, 2, x, wtext->core->height-3);
 

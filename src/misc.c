@@ -365,27 +365,6 @@ char **iconname;
 }
 
 
-#if 0
-#ifdef I18N_MB
-void
-wTextWidth(XFontSet font, char *text, int length) 
-{
-    XRectangle rect;
-    XRectangle AIXsucks;
-    
-    XmbTextExtents(font, text, length, &AIXsucks, &rec);
-
-    return rect.width;
-}
-#else
-void
-wTextWidth(XFontStruct *font, char *text, int length) 
-{
-    return XTextWidth(font, text, length);
-}
-#endif
-#endif
-
 static void 
 eatExpose()
 {
@@ -493,21 +472,19 @@ SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
 
 
 char*
-ShrinkString(WFont *font, char *string, int width)
+ShrinkString(WMFont *font, char *string, int width)
 {
-#ifndef I18N_MB
     int w, w1=0;
     int p;
     char *pos;
     char *text;
     int p1, p2, t;
-#endif
 
-#ifdef I18N_MB
-    return wstrdup(string);
-#else
+    if (wPreferences.multi_byte_text)
+	return wstrdup(string);
+
     p = strlen(string);
-    w = wTextWidth(font->font, string, p);
+    w = WMWidthOfString(font, string, p);
     text = wmalloc(strlen(string)+8);
     strcpy(text, string);
     if (w<=width)
@@ -520,8 +497,8 @@ ShrinkString(WFont *font, char *string, int width)
     if (pos) {
 	*pos = 0;
 	p = strlen(text);
-	w1=wTextWidth(font->font, text, p);
-	if (w1>width) {
+	w1 = WMWidthOfString(font, text, p);
+	if (w1 > width) {
 	    w1 = 0;
 	    p = 0;
 	    *pos = ' ';
@@ -537,14 +514,14 @@ ShrinkString(WFont *font, char *string, int width)
 	*text=0;
     }
     strcat(text, "...");
-    width -= wTextWidth(font->font, "...", 3);
+    width -= WMWidthOfString(font, "...", 3);
     
     pos = string;
     p1=0;
     p2=p;
     t = (p2-p1)/2;
     while (p2>p1 && p1!=t) {
-	w = wTextWidth(font->font, &string[p-t], t);
+	w = WMWidthOfString(font, &string[p-t], t);
 	if (w>width) {
 	    p2 = t;
 	    t = p1+(p2-p1)/2;
@@ -555,8 +532,8 @@ ShrinkString(WFont *font, char *string, int width)
 	  p2=p1=t;
     }
     strcat(text, &string[p-p1]);
+
     return text;
-#endif /* I18N_MB */
 }
 
 

@@ -409,7 +409,6 @@ handleDeadProcess(void *foo)
 static void
 saveTimestamp(XEvent *event)
 {
-    WScreen *scr = wScreenForWindow(event->xany.window);
     LastTimestamp = CurrentTime;
 
     switch (event->type) {
@@ -973,7 +972,7 @@ raiseWindow(WScreen *scr)
     if (!wwin)
 	return;
 
-    if (!wwin->flags.destroyed) {
+    if (!wwin->flags.destroyed && wwin->flags.focused) {
 	wRaiseFrame(wwin->frame->core);
 	/* this is needed or a race condition will occur */
 	XSync(dpy, False);

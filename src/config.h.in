@@ -99,9 +99,6 @@
  * set by configure */
 #undef I18N
 
-/* Multi-byte (japanese, korean, chinese etc.) character support */
-#undef I18N_MB
-
 /* define if you want sound support */
 #undef WMSOUND
 

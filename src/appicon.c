@@ -330,46 +330,35 @@ wAppIconMove(WAppIcon *aicon, int x, int y)
 static void
 updateDockNumbers(WScreen *scr)
 {
-   int length;
-   char *ws_numbers;
-   GC numbers_gc;
-   XGCValues my_gc_values;
-   unsigned long my_v_mask = (GCForeground);
-   WAppIcon *dicon = scr->dock->icon_array[0];
+    int length;
+    char *ws_numbers;
+    GC numbers_gc;
+    XGCValues my_gc_values;
+    unsigned long my_v_mask = (GCForeground);
+    WAppIcon *dicon = scr->dock->icon_array[0];
+    
+    my_gc_values.foreground = scr->white_pixel;
+    numbers_gc = XCreateGC(dpy, dicon->icon->core->window,
+			   my_v_mask, &my_gc_values);
 
-   my_gc_values.foreground = scr->white_pixel;
-   numbers_gc = XCreateGC(dpy, dicon->icon->core->window,
-			  my_v_mask, &my_gc_values);
+    ws_numbers = malloc(20);
+    sprintf(ws_numbers, "%i [ %i ]", scr->current_workspace+1,
+	    ((scr->current_workspace/10)+1));
+    length = strlen(ws_numbers);
+    
+    XClearArea(dpy, dicon->icon->core->window, 2, 2, 50,
+	       scr->icon_title_font->y+1, False);
+    
+    XSetForeground(dpy, numbers_gc, scr->black_pixel);
+    WMDrawString(scr->wmscreen, dicon->icon->core->window, numbers_gc,
+		 scr->icon_title_font->font, 4, 3, ws_numbers, length);
 
-   ws_numbers = malloc(20);
-   sprintf(ws_numbers, "%i [ %i ]", scr->current_workspace+1,
-	   ((scr->current_workspace/10)+1));
-   length = strlen(ws_numbers);
+    XSetForeground(dpy, numbers_gc, scr->white_pixel);
+    WMDrawString(scr->wmscreen, dicon->icon->core->window, numbers_gc,
+		 scr->icon_title_font->font, 3, 2, ws_numbers, length);
 
-   XClearArea(dpy, dicon->icon->core->window, 2, 2, 50,
-	      scr->icon_title_font->y+1, False);
-
-#ifndef I18N_MB
-   XSetFont(dpy, numbers_gc, scr->icon_title_font->font->fid);
-   XSetForeground(dpy, numbers_gc, scr->black_pixel);
-   XDrawString(dpy, dicon->icon->core->window,
-               numbers_gc, 4, scr->icon_title_font->y+3, ws_numbers, length);
-   XSetForeground(dpy, numbers_gc, scr->white_pixel);
-   XDrawString(dpy, dicon->icon->core->window,
-               numbers_gc, 3, scr->icon_title_font->y+2, ws_numbers, length);
-#else
-   XSetForeground(dpy, numbers_gc, scr->black_pixel);
-   XmbDrawString(dpy, dicon->icon->core->window,
-                 scr->icon_title_font->font, numbers_gc, 4,
-                 scr->icon_title_font->y+3, ws_numbers, length);
-   XSetForeground(dpy, numbers_gc, scr->white_pixel);
-   XmbDrawString(dpy, dicon->icon->core->window,
-                 scr->icon_title_font->font, numbers_gc, 3,
-                 scr->icon_title_font->y+2, ws_numbers, length);
-#endif /* I18N_MB */
-
-   XFreeGC(dpy, numbers_gc);
-   free(ws_numbers);
+    XFreeGC(dpy, numbers_gc);
+    free(ws_numbers);
 }
 #endif /* WS_INDICATOR */
 

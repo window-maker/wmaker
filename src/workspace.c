@@ -307,15 +307,10 @@ showWorkspaceName(WScreen *scr, int workspace)
 	free(scr->workspace_name_data);
     }
 
-#ifndef I18N_MB
-    XSetFont(dpy, scr->mono_gc, scr->workspace_name_font->font->fid);
-    XSetFont(dpy, scr->draw_gc, scr->workspace_name_font->font->fid);
-#endif
-
     data = wmalloc(sizeof(WorkspaceNameData));
 
-    w = wTextWidth(scr->workspace_name_font->font, name, len);
-    h = scr->workspace_name_font->height;
+    w = WMWidthOfString(scr->workspace_name_font, name, len);
+    h = WMFontHeight(scr->workspace_name_font);
 
     switch (wPreferences.workspace_name_display_position) {
      case WD_CENTER:
@@ -362,16 +357,15 @@ showWorkspaceName(WScreen *scr, int workspace)
     XSetForeground(dpy, scr->mono_gc, 1);
     for (x = 0; x <= 4; x++) {
 	for (y = 0; y <= 4; y++) {
-	    wDrawString(mask, scr->workspace_name_font, scr->mono_gc,
-			x, scr->workspace_name_font->y + y, name, len);
+	    WMDrawString(scr->wmscreen, mask, scr->mono_gc,
+			 scr->workspace_name_font, x, y, name, len);
 	}
     }
 
     XSetForeground(dpy, scr->draw_gc, scr->white_pixel);
-    wDrawString(text, scr->workspace_name_font, scr->draw_gc,
-		2, scr->workspace_name_font->y + 2, 
-		scr->workspaces[workspace]->name,
-		strlen(scr->workspaces[workspace]->name));
+    WMDrawString(scr->wmscreen, text, scr->draw_gc, scr->workspace_name_font, 
+		 2, 2, scr->workspaces[workspace]->name,
+		 strlen(scr->workspaces[workspace]->name));
 #ifdef SHAPE
     XShapeCombineMask(dpy, scr->workspace_name, ShapeBounding, 0, 0, mask,
 		      ShapeSet);

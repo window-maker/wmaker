@@ -29,17 +29,6 @@
 #include <proplist.h>
 
 
-typedef struct WFont {
-#ifndef I18N_MB
-    XFontStruct *font;
-#else
-    XFontSet font;
-#endif
-    short height;
-    short y;
-} WFont;
-
-
 #define WTB_LEFT	0
 #define WTB_RIGHT	1
 
@@ -146,14 +135,14 @@ typedef struct _WScreen {
     Pixmap stipple_bitmap;
     Pixmap transp_stipple;	       /* for making holes in icon masks for
 					* transparent icon simulation */
-    WFont *title_font;		       /* default font for the titlebars */
-    WFont *menu_title_font;	       /* font for menu titlebars */
-    WFont *menu_entry_font;	       /* font for menu items */
-    WFont *icon_title_font;	       /* for icon titles */
-    WFont *clip_title_font;	       /* for clip titles */
-    WFont *info_text_font;	       /* text on things like geometry
+    WMFont *title_font;		       /* default font for the titlebars */
+    WMFont *menu_title_font;	       /* font for menu titlebars */
+    WMFont *menu_entry_font;	       /* font for menu items */
+    WMFont *icon_title_font;	       /* for icon titles */
+    WMFont *clip_title_font;	       /* for clip titles */
+    WMFont *info_text_font;	       /* text on things like geometry
 					* hint boxes */
-    WFont *workspace_name_font;
+    WMFont *workspace_name_font;
 
     WMPixel select_pixel;
     WMPixel select_text_pixel;
