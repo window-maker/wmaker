@@ -130,6 +130,16 @@ typedef struct W_Host WMHost;
 typedef struct W_Connection WMConnection;
 
 
+
+/* Some typedefs for the handler stuff */
+typedef void *WMHandlerID;
+
+typedef void WMCallback(void *data);
+
+typedef void WMInputProc(int fd, int mask, void *clientData);
+
+
+
 typedef int WMCompareDataProc(const void *item1, const void *item2);
 
 typedef void WMFreeDataProc(void *data);
@@ -278,6 +288,28 @@ int wsprintesc(char *buffer, int length, char *format, WMSEscapes **escapes,
 #endif
 
 /*......................................................................*/
+
+/* Event handlers: timer, idle, input */
+
+WMHandlerID WMAddTimerHandler(int milliseconds, WMCallback *callback,
+			      void *cdata);
+
+WMHandlerID WMAddPersistentTimerHandler(int milliseconds, WMCallback *callback,
+                                        void *cdata);
+
+void WMDeleteTimerWithClientData(void *cdata);
+
+void WMDeleteTimerHandler(WMHandlerID handlerID);
+
+WMHandlerID WMAddIdleHandler(WMCallback *callback, void *cdata);
+
+void WMDeleteIdleHandler(WMHandlerID handlerID);
+
+WMHandlerID WMAddInputHandler(int fd, int condition, WMInputProc *proc, 
+			      void *clientData);
+
+void WMDeleteInputHandler(WMHandlerID handlerID);
+
 
 /* This function is used _only_ if you create a non-GUI program.
  * For GUI based programs use WMNextEvent()/WMHandleEvent() instead.

@@ -439,10 +439,6 @@ typedef struct {
 /* All indentation and tab markers are _relative_ to the left margin marker */
 
 
-typedef void *WMHandlerID;
-
-typedef void WMInputProc(int fd, int mask, void *clientData);
-
 typedef void WMEventProc(XEvent *event, void *clientData);
 
 typedef void WMEventHook(XEvent *event);
@@ -454,8 +450,6 @@ typedef void WMAction(WMWidget *self, void *clientData);
 /* same as WMAction, but for stuff that arent widgets */
 typedef void WMAction2(void *self, void *clientData);
 
-
-typedef void WMCallback(void *data);
 
 typedef void WMDropDataCallback(WMView *view, WMData *data);
 
@@ -654,26 +648,6 @@ int WMIsTripleClick(XEvent *event);
 void WMNextEvent(Display *dpy, XEvent *event);
 
 void WMMaskEvent(Display *dpy, long mask, XEvent *event);
-
-WMHandlerID WMAddTimerHandler(int milliseconds, WMCallback *callback, 
-			      void *cdata);
-
-WMHandlerID WMAddPersistentTimerHandler(int milliseconds, WMCallback *callback,
-                                        void *cdata);
-
-void WMDeleteTimerWithClientData(void *cdata);
-
-void WMDeleteTimerHandler(WMHandlerID handlerID);
-
-WMHandlerID WMAddIdleHandler(WMCallback *callback, void *cdata);
-
-void WMDeleteIdleHandler(WMHandlerID handlerID);
-
-WMHandlerID WMAddInputHandler(int fd, int condition, WMInputProc *proc, 
-			      void *clientData);
-
-void WMDeleteInputHandler(WMHandlerID handlerID);
-
 
 
 Bool WMCreateSelectionHandler(WMView *view, Atom selection, Time timestamp,
