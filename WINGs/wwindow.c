@@ -29,6 +29,7 @@ typedef struct W_Window {
     WMPoint maxAspect;
 
     WMPoint upos;
+    WMPoint ppos;
 
     WMAction *closeAction;
     void *closeData;
@@ -40,7 +41,8 @@ typedef struct W_Window {
 	unsigned configured:1;
 	unsigned documentEdited:1;
 
-	unsigned setPPos:1;
+        unsigned setUPos:1;
+        unsigned setPPos:1;
 	unsigned setAspect:1;
     } flags;
 } _Window;
@@ -314,6 +316,11 @@ setSizeHints(WMWindow *win)
 
     if (win->flags.setPPos) {
 	hints->flags |= PPosition;
+	hints->x = win->ppos.x;
+	hints->y = win->ppos.y;
+    }
+    if (win->flags.setUPos) {
+	hints->flags |= USPosition;
 	hints->x = win->upos.x;
 	hints->y = win->upos.y;
     }
@@ -470,6 +477,19 @@ void
 WMSetWindowInitialPosition(WMWindow *win, int x, int y)
 {
     win->flags.setPPos = 1;
+    win->ppos.x = x;
+    win->ppos.y = y;
+    if (win->view->flags.realized)
+	setSizeHints(win);
+    WMMoveWidget(win, x, y);
+}
+
+
+
+void
+WMSetWindowUserPosition(WMWindow *win, int x, int y)
+{
+    win->flags.setUPos = 1;
     win->upos.x = x;
     win->upos.y = y;
     if (win->view->flags.realized)

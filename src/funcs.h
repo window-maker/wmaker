@@ -126,8 +126,6 @@ BOOL StringCompareHook(proplist_t pl1, proplist_t pl2);
 
 int IsEof(FILE * stream);	/* feof that stats pipes */
 
-char *FlattenStringList(char **list, int count);
-
 void ParseWindowName(proplist_t value, char **winstance, char **wclass,
                      char *where);
 
@@ -150,8 +148,6 @@ void wHackedGrabButton(unsigned int button, unsigned int modifiers,
 		       unsigned int event_mask, int pointer_mode, 
 		       int keyboard_mode, Window confine_to, Cursor cursor);
 
-
-void TokenizeString(char *command, char ***argv, int *argc);
 
 void ExecExitScript();
 

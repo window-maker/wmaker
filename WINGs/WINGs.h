@@ -880,6 +880,8 @@ void WMSetWindowCloseAction(WMWindow *win, WMAction *action, void *clientData);
 
 void WMSetWindowInitialPosition(WMWindow *win, int x, int y);
 
+void WMSetWindowUserPosition(WMWindow *win, int x, int y);
+
 void WMSetWindowAspectRatio(WMWindow *win, int minX, int minY,
 			    int maxX, int maxY);
 

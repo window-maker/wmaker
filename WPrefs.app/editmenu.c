@@ -789,6 +789,7 @@ WEditMenuShowAt(WEditMenu *menu, int x, int y)
 		      W_VIEW_DRAWABLE(menu->view),
 		      hints);
     XFree(hints);
+
     WMMapWidget(menu);
 }
 

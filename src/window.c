@@ -2632,7 +2632,7 @@ wWindowGetSavedState(Window win)
 
     if (XGetCommand(dpy, win, &argv, &argc)) {
 	if (argc > 0)
-	    command = FlattenStringList(argv, argc);
+	    command = wtokenjoin(argv, argc);
         XFreeStringList(argv);
     }
     if (!command)

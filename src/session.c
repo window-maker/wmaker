@@ -226,7 +226,7 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
         win = wwin->client_win;
 
     if (XGetCommand(dpy, win, &argv, &argc) && argc>0) {
-        command = FlattenStringList(argv, argc);
+        command = wtokenjoin(argv, argc);
         XFreeStringList(argv);
     }
     if (!command)
@@ -381,7 +381,7 @@ execCommand(WScreen *scr, char *command, char *host)
     char **argv;
     int argc;
 
-    TokenizeString(command, &argv, &argc);
+    wtokensplit(command, &argv, &argc);
 
     if (argv==NULL) {
         return 0;

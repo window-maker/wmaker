@@ -242,7 +242,7 @@ static WRootMenuData *dir_openMenuFile(char *paths, time_t *timestamp)
 
     /* timestamp for directory is a "checksum" of the directory times */
 
-    TokenizeString(paths, &dirs, &dirN);
+    wtokensplit(paths, &dirs, &dirN);
 
     if (dirN == 0) {
 	return NULL;

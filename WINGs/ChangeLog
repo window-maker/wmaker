@@ -10,13 +10,14 @@ changes since wmaker 0.62.1:
 - added WMReparentWidget()
 - added WMCreateTabViewItem()
 - added W_CreateUnmanagedTopView()
-- added wtokenize()
+- added wtokenjoin(), wtokensplit(), wtokenfree(), wtrimspace()
 - added WMWidgetIsMapped()
 - added WMSetApplicationIconWindow()
 - restructured the directory tree. Added Documentation, Examples and Tests
   subdirectories
 - removed WMArrayBag and reorganized WMTreeBag to be WMBag.
 - added WMArray class.
+- added WMSetWindowUserPosition()
 
 
 changes since wmaker 0.62.0:

@@ -2108,7 +2108,7 @@ wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 	icon->editing = 0;
 	if (XGetCommand(dpy, wwin->client_win, &argv, &argc) && argc>0) {
 
-	    icon->command = FlattenStringList(argv, argc);
+	    icon->command = wtokenjoin(argv, argc);
 	    XFreeStringList(argv);
 	} else {
 	    char *command=NULL;
@@ -2243,7 +2243,7 @@ moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y)
     if ((dest->type==WM_DOCK /*|| dest->keep_attracted*/) && icon->command==NULL) {
         if (XGetCommand(dpy, wwin->client_win, &argv, &argc) && argc>0) {
 
-            icon->command = FlattenStringList(argv, argc);
+            icon->command = wtokenjoin(argv, argc);
             XFreeStringList(argv);
         } else {
             char *command=NULL;
@@ -2940,7 +2940,7 @@ execCommand(WAppIcon *btn, char *command, WSavedState *state)
         return 0;
     }
 
-    TokenizeString(cmdline, &argv, &argc);
+    wtokensplit(cmdline, &argv, &argc);
 
     if (argv==NULL) {
         if (cmdline)
@@ -3131,7 +3131,7 @@ wDockTrackWindowLaunch(WDock *dock, Window window)
 
 	if (XGetCommand(dpy, window, &argv, &argc)) {
 	    if (argc > 0 && argv != NULL)
-		command = FlattenStringList(argv,argc);
+		command = wtokenjoin(argv,argc);
 	    if (argv) {
 		XFreeStringList(argv);
 	    }
