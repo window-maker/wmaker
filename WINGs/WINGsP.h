@@ -108,8 +108,6 @@ struct W_DraggingInfo {
     WMView *destView;
 
     /* only valid if in the same app.. should be treated as internal data */
-//    WMView *destination;
-//    WMView *source;
 };
     
 
