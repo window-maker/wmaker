@@ -1,6 +1,6 @@
 
 /*
- * Header foy demo widget.
+ * Header for demo widget.
  * 
  */
 

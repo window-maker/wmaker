@@ -17,7 +17,7 @@
 	Position = "0,1";
       },
       {
-	Command = "/usr/local/GNUstep/Local/Apps/WPrefs.app/WPrefs";
+	Command = "/usr/local/GNUstep/Apps/WPrefs.app/WPrefs";
 	Name = groupLeader.WPrefs;
 	AutoLaunch = No;
 	Forced = No;
