@@ -88,7 +88,7 @@ Changes since version 0.80.2:
 - Xinerama support for Solaris
 - Added global menu support (see NEWS)
 - Fixed sloppy focus bug
-- Made maximizing behaves differently with keyboard/mouse for xinerama
+- Made maximize behave differently with keyboard/mouse for xinerama
   (Peter Zijlstra <a.p.zijlstra@chello.nl>)
 - A few leftover xinerama fixes (Peter Zijlstra <a.p.zijlstra@chello.nl>)
 - Extended the 'strut' to multiple heads 
@@ -102,6 +102,10 @@ Changes since version 0.80.2:
 - Fixed aspect of window list menu (window name was too close to workspace
   indicator)
 - Fixed menu panel in WPrefs.app. Explanatory text did not fit into the label
+- Implemented a better logic to preserve the window's old geometry when
+  maximizing to support succesive maximizations in different directions
+  without the need to do an intermediary un-maximize step (eliminates flicker)
+- Made keyboard/mouse maximization behavior consinstent relative to each other
 
 
 Changes since version 0.80.1:

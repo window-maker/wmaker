@@ -409,6 +409,7 @@ void
 wMaximizeWindow(WWindow *wwin, int directions)
 {
     int new_width, new_height, new_x, new_y;
+    int changed_h, changed_v, shrink_h, shrink_v;
     WArea usableArea, totalArea;
 
     if (WFLAGP(wwin, no_resizable))
@@ -440,11 +441,33 @@ wMaximizeWindow(WWindow *wwin, int directions)
 	wwin->flags.skip_next_animation = 1;
 	wUnshadeWindow(wwin);
     }
+    /* Only save directions, not kbd or xinerama hints */
+    directions &= (MAX_HORIZONTAL|MAX_VERTICAL);
+
+    changed_h = ((wwin->flags.maximized ^ directions) & MAX_HORIZONTAL);
+    changed_v = ((wwin->flags.maximized ^ directions) & MAX_VERTICAL);
+    shrink_h = (changed_h && (directions & MAX_HORIZONTAL)==0);
+    shrink_v = (changed_v && (directions & MAX_VERTICAL)==0);
+
+    if (wwin->flags.maximized) {
+        /* if already maximized in some direction, we only update the
+         * appropriate old x, old y coordinates. This is necessary to
+         * allow succesive maximizations in different directions without
+         * the need to first do an un-maximize (to avoid flicker).
+         */
+        if (!(wwin->flags.maximized & MAX_HORIZONTAL)) {
+            wwin->old_geometry.x = wwin->frame_x;
+        }
+        if (!(wwin->flags.maximized & MAX_VERTICAL)) {
+            wwin->old_geometry.y = wwin->frame_y;
+        }
+    } else {
+        wwin->old_geometry.width = wwin->client.width;
+        wwin->old_geometry.height = wwin->client.height;
+        wwin->old_geometry.x = wwin->frame_x;
+        wwin->old_geometry.y = wwin->frame_y;
+    }
     wwin->flags.maximized = directions;
-    wwin->old_geometry.width = wwin->client.width;
-    wwin->old_geometry.height = wwin->client.height;
-    wwin->old_geometry.x = wwin->frame_x;
-    wwin->old_geometry.y = wwin->frame_y;
 
 #ifdef KWM_HINTS
     wKWMUpdateClientGeometryRestore(wwin);
@@ -453,6 +476,9 @@ wMaximizeWindow(WWindow *wwin, int directions)
     if (directions & MAX_HORIZONTAL) {
 	new_width = (usableArea.x2-usableArea.x1)-FRAME_BORDER_WIDTH*2;	
 	new_x = usableArea.x1;
+    } else if (shrink_h) {
+	new_x = wwin->old_geometry.x;
+	new_width = wwin->old_geometry.width;
     } else {
 	new_x = wwin->frame_x;
 	new_width = wwin->frame->core->width;
@@ -465,6 +491,9 @@ wMaximizeWindow(WWindow *wwin, int directions)
 	    new_y -= wwin->frame->top_width;
 	    new_height += wwin->frame->bottom_width - 1;
 	}
+    } else if (shrink_v) {
+	new_y = wwin->old_geometry.y;
+	new_height = wwin->old_geometry.height;
     } else {
 	new_y = wwin->frame_y;
 	new_height = wwin->frame->core->height;

@@ -1444,35 +1444,41 @@ handleKeyPress(XEvent *event)
 	break;
      case WKBD_MAXIMIZE:
 	if (ISMAPPED(wwin) && ISFOCUSED(wwin) && !WFLAGP(wwin, no_resizable)) {
-	    CloseWindowMenu(scr);
-	    
-	    if (wwin->flags.maximized) {
+            int newdir = (MAX_VERTICAL|MAX_HORIZONTAL);
+
+            CloseWindowMenu(scr);
+
+	    if (wwin->flags.maximized == newdir) {
 		wUnmaximizeWindow(wwin);
-	    } else {
-		wMaximizeWindow(wwin, MAX_VERTICAL|MAX_HORIZONTAL|MAX_KEYBOARD);
+            } else {
+		wMaximizeWindow(wwin, newdir|MAX_KEYBOARD);
 	    }
 	}
 	break;
      case WKBD_VMAXIMIZE:
 	if (ISMAPPED(wwin) && ISFOCUSED(wwin) && !WFLAGP(wwin, no_resizable)) {
+            int newdir = (MAX_VERTICAL ^ wwin->flags.maximized);
+
 	    CloseWindowMenu(scr);
-	    
-	    if (wwin->flags.maximized) {
-		wUnmaximizeWindow(wwin);
+
+            if (newdir) {
+		wMaximizeWindow(wwin, newdir|MAX_KEYBOARD);
 	    } else {
-		wMaximizeWindow(wwin, MAX_VERTICAL|MAX_KEYBOARD);
-	    }
+		wUnmaximizeWindow(wwin);
+            }
 	}
 	break;
      case WKBD_HMAXIMIZE:
 	if (ISMAPPED(wwin) && ISFOCUSED(wwin) && !WFLAGP(wwin, no_resizable)) {
+            int newdir = (MAX_HORIZONTAL ^ wwin->flags.maximized);
+
 	    CloseWindowMenu(scr);
-	    
-	    if (wwin->flags.maximized) {
-		wUnmaximizeWindow(wwin);
+
+            if (newdir) {
+		wMaximizeWindow(wwin, newdir|MAX_KEYBOARD);
 	    } else {
-		wMaximizeWindow(wwin, MAX_HORIZONTAL|MAX_KEYBOARD);
-	    }
+		wUnmaximizeWindow(wwin);
+            }
 	}
 	break;
      case WKBD_RAISE:

@@ -609,14 +609,11 @@ wGNOMEProcessClientMessage(XClientMessageEvent *event)
 	}
 
 	if (maximize != wwin->flags.maximized) {
-#define both (MAX_HORIZONTAL|MAX_VERTICAL)
-	    if (!(maximize & both) && (wwin->flags.maximized & both)) {
-		wUnmaximizeWindow(wwin);
-	    }
-	    if ((maximize & both) && !(wwin->flags.maximized & both)) {
+	    if (maximize) {
 		wMaximizeWindow(wwin, maximize);
-	    }
-#undef both
+            } else {
+		wUnmaximizeWindow(wwin);
+            }
 	}
 
 	if (mask & WIN_STATE_SHADED) {
