@@ -413,7 +413,7 @@ opción --prefix al ejecutar configure en el paso 2 de compilando Window Maker.
 También necesitará proporcionar la opción --with-appspath, para especificar la ruta
 para WPrefs.app. Ejemplo:
 
-./configure --prefix=/home/jshmoe --with-appspath=/home/jshmoe/GNUstep/Apps
+./configure --prefix=/home/jshmoe --with-appspath=/home/jshmoe/GNUstep/Applications
 
 Luego haga /home/jshmoe/bin para que se lo incluya en su ruta de búsqueda, agregue
 /home/jshmoe/lib a su variable de entorno LD_LIBRARY_PATH y ejecute bin/wmaker.inst

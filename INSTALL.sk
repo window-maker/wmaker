@@ -417,7 +417,7 @@ v druhom kroku kompilácie Window Makera. Tie¾ musíte pou¾i» voµbu
 --with-appspath, pomocou ktorej ¹pecifikujete cestu pre WPrefs.app.
 Príklad:
 
-./configure --prefix=/home/jshome --with-appspath=/home/jshome/GNUstep/Apps
+./configure --prefix=/home/jshome --with-appspath=/home/jshome/GNUstep/Applications
 
 Poto pridajte adresár /home/jshome/bin do premennej PATH, /home/jshome/lib
 do premennej LD_LIBRARY_PATH a spustite bin/wmaker.inst

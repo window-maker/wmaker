@@ -76,7 +76,7 @@ if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
 %config /etc/X11/WindowMaker
 /usr/X11R6/bin/*
 /usr/X11R6/lib/lib*
-/usr/X11R6/lib/GNUstep/Apps/WPrefs.app
+/usr/X11R6/lib/GNUstep/Applications/WPrefs.app
 /usr/include/*
 /usr/share/WindowMaker
 /usr/share/locale/*/LC_MESSAGES/*

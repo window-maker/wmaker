@@ -383,7 +383,7 @@ when running configure in step 2 of building Window Maker. You will
 also need to supply the --with-appspath option, to specify the path for
 WPrefs.app Example:
 
-./configure --prefix=/home/jshmoe --with-appspath=/home/jshmoe/GNUstep/Apps
+./configure --prefix=/home/jshmoe --with-appspath=/home/jshmoe/GNUstep/Applications
 
 
 Then make /home/jshmoe/bin be included in your search PATH, add

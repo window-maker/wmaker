@@ -373,7 +373,7 @@ Compilando o Window Maker.
 Você ainda precisará fornecer a opção --with-appspath, para especificar o
 caminho do WPrefs.app. Exemplo:
 
-./configure --prefix=/home/jshmoe --with-appspath=/home/jshmoe/GNUstep/Apps
+./configure --prefix=/home/jshmoe --with-appspath=/home/jshmoe/GNUstep/Applications
 
 Depois faça com que /home/jshome/bin seja incluído na variável PATH, adicione
 /home/jshome/lib na variável de ambiente LD_LIBRARY_PATH e rode bin/wmaker.inst

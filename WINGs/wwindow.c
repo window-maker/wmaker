@@ -257,13 +257,11 @@ setMiniwindow(WMWindow *win, RImage *image)
     CARD32 *data;
     int x, y;
     int o;
-    
+
     if (!image)
       return;
-    
-    data= malloc((image->width * image->height + 2) * sizeof(CARD32));
-    if (!data)
-      return;
+
+    data = wmalloc((image->width * image->height + 2) * sizeof(CARD32));
 
     o= 0;
     data[o++] = image->width;
@@ -283,13 +281,12 @@ setMiniwindow(WMWindow *win, RImage *image)
         }
     }
 
-    XChangeProperty(scr->display, win->view->window,
-                    scr->netwmIcon, XA_CARDINAL, 32,
-                    PropModeReplace,
-                    (unsigned char *)data, 
-                    (image->width * image->height + 2) * sizeof(CARD32));
-    
-    free(data);
+    XChangeProperty(scr->display, win->view->window, scr->netwmIcon,
+                    XA_CARDINAL, 32, PropModeReplace,
+                    (unsigned char *)data,
+                    (image->width * image->height + 2));
+
+    wfree(data);
 }
 
 

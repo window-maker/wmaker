@@ -117,12 +117,12 @@ WMPathForResourceOfType(char *resource, char *ext)
      * Paths are searched in this order:
      * - resourcePath/ext
      * - argv[0]/ext
-     * - GNUSTEP_USER_ROOT/Apps/ApplicationName.app/ext
-     * - ~/GNUstep/Apps/ApplicationName.app/ext
-     * - GNUSTEP_LOCAL_ROOT/Apps/ApplicationName.app/ext
-     * - /usr/local/GNUstep/Apps/ApplicationName.app/ext
-     * - GNUSTEP_SYSTEM_ROOT/Apps/ApplicationName.app/ext
-     * - /usr/GNUstep/Apps/ApplicationName.app/ext
+     * - GNUSTEP_USER_ROOT/Applications/ApplicationName.app/ext
+     * - ~/GNUstep/Applications/ApplicationName.app/ext
+     * - GNUSTEP_LOCAL_ROOT/Applications/ApplicationName.app/ext
+     * - /usr/local/GNUstep/Applications/ApplicationName.app/ext
+     * - GNUSTEP_SYSTEM_ROOT/Applications/ApplicationName.app/ext
+     * - /usr/GNUstep/Applications/ApplicationName.app/ext
      */
 
     if (WMApplication.resourcePath) {

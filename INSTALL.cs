@@ -426,7 +426,7 @@ domovského adresáøe. K tomu musíte pou¾ít volbu --prefix pøi spu¹tìní
 cestu pro WPrefs.app.
 Pøíklad:
 
-./configure --prefix=/home/karel --with-appspath=/home/karel/GNUstep/Apps
+./configure --prefix=/home/karel --with-appspath=/home/karel/GNUstep/Applications
 
 Potom pøidejte adresáø /home/karel/bin do systémové promìnné PATH a adresáø
 /home/karel/lib do sytémové promìnné LD_LIBRARY_PATH a nakonec spus»te

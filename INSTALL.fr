@@ -447,7 +447,7 @@ l'option --prefix correctement renseignée au moment de l'exécution de ./configur
 Il est aussi nécessaire d'utiliser l'option --with-appspath, afin de préciser
 le chemin d'accès à WPrefs.app. Par exemple :
 
-./configure --prefix=/home/jshmoe --with-appspath=/home/jshmoe/GNUstep/Apps
+./configure --prefix=/home/jshmoe --with-appspath=/home/jshmoe/GNUstep/Applications
 
 
 Puis, faites en sorte que /home/jshmoe/bin soit inclus dans votre PATH, ajoutez
