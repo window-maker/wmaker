@@ -478,10 +478,97 @@ renderMDGradient(unsigned width, unsigned height, RColor **colors, int count)
     width = width * 3;
 
     /* copy the first line to the other lines with corresponding offset */
-    for (j=0, offset=0; j<width*height; j += width) {
-	memcpy(&(image->data[j]), &ptr[3*(int)offset], width);
+    for (offset=0; j<width*height; j += width) {
+	memcpy(&(image->data[0]), &ptr[3*(int)offset], width);
         offset += a;
     }
     RDestroyImage(tmp);
     return image;
 }
+
+
+
+
+RImage *RRenderInterwovenGradient(unsigned width, unsigned height,
+				  RColor colors1[2], int thickness1,
+				  RColor colors2[2], int thickness2)
+{
+    int i, j, k, l, ll;
+    unsigned long r1, g1, b1, dr1, dg1, db1;
+    unsigned long r2, g2, b2, dr2, dg2, db2;
+    RImage *image;
+    unsigned char *ptr;
+    unsigned char rr, gg, bb;
+
+    image = RCreateImage(width, height, False);
+    if (!image) {
+	return NULL;
+    }    
+    ptr = image->data;
+
+    r1 = colors1[0].red<<16;
+    g1 = colors1[0].green<<16;
+    b1 = colors1[0].blue<<16;
+
+    r2 = colors2[0].red<<16;
+    g2 = colors2[0].green<<16;
+    b2 = colors2[0].blue<<16;
+
+    dr1 = ((colors1[1].red-colors1[0].red)<<16)/(int)height;
+    dg1 = ((colors1[1].green-colors1[0].green)<<16)/(int)height;
+    db1 = ((colors1[1].blue-colors1[0].blue)<<16)/(int)height;
+
+    dr2 = ((colors2[1].red-colors2[0].red)<<16)/(int)height;
+    dg2 = ((colors2[1].green-colors2[0].green)<<16)/(int)height;
+    db2 = ((colors2[1].blue-colors2[0].blue)<<16)/(int)height;
+
+    for (i=0,k=0,l=0,ll=thickness1; i<height; i++) {
+	if (k == 0) {
+	    rr = r1>>16;
+	    gg = g1>>16;
+	    bb = b1>>16;
+	} else {
+	    rr = r2>>16;
+	    gg = g2>>16;
+	    bb = b2>>16;
+	}
+	for (j=0; j<width/8; j++) {
+	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	}
+	switch (width%8) {
+	 case 7: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	 case 6: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	 case 5: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	 case 4: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	 case 3: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	 case 2: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	 case 1: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	}
+	if (++l == ll) {
+	    if (k == 0) {
+		k = 1;
+		ll = thickness2;
+	    } else {
+		k = 0;
+		ll = thickness1;
+	    }
+	    l = 0;
+	}
+	r1+=dr1;
+	g1+=dg1;
+	b1+=db1;
+	
+	r2+=dr2;
+	g2+=dg2;
+	b2+=db2;
+    }
+    return image;
+}
+

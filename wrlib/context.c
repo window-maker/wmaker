@@ -560,7 +560,6 @@ getColormap(RContext *context, int screen_number)
 			 &cmaps, &ncmaps, XA_RGB_DEFAULT_MAP)) { 
 	for (i=0; i<ncmaps; ++i) {
 	    if (cmaps[i].visualid == context->visual->visualid) {
-		puts("ACHOU");
 		cmap = cmaps[i].colormap;
 		break;
 	    }

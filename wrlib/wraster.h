@@ -39,8 +39,8 @@
 #define RLRASTER_H_
 
 
-/* version of the header for the library: 0.20 */
-#define WRASTER_HEADER_VERSION	20
+/* version of the header for the library: 0.21 */
+#define WRASTER_HEADER_VERSION	21
 
 
 #include <X11/Xlib.h>
@@ -417,6 +417,10 @@ RImage *RRenderGradient(unsigned width, unsigned height, RColor *from,
 RImage *RRenderMultiGradient(unsigned width, unsigned height, RColor **colors, 
 			     int style);
 
+
+RImage *RRenderInterwovenGradient(unsigned width, unsigned height,
+				  RColor colors1[2], int thickness1,
+				  RColor colors2[2], int thickness2);
 
 
 /*

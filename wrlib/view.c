@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 	RDestroyImage(tmp);
     }
      */
-
+#if 1
     if (argc > 2) {
 	img = RScaleImage(img, img->width*atof(argv[2]), 
 			  img->height*atof(argv[2]));
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
 	RCombineArea(tmp, img, 0, 0, 20, 20, 10, 10);
 	img = tmp;
     }
-
+#endif
     
     if (!RConvertImage(ctx, img, &pix)) {
 	puts(RMessageForError(RErrorCode));
