@@ -1,4 +1,3 @@
-
 /*
  *  Window Maker window manager
  * 

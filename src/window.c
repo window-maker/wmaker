@@ -1135,7 +1135,7 @@ wManageWindow(WScreen *scr, Window window)
 	    if (wPreferences.window_placement == WPM_MANUAL)
 		dontBring = True;
 	} 
-	else if (scr->xine_count &&
+	else if (scr->xine_info.count &&
 		  wwin->normal_hints->flags & PPosition) {
 	    int head, flags;
 	    WMRect rect;

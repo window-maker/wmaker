@@ -28,10 +28,6 @@
 
 #include <WINGs/WUtil.h>
 
-#ifdef XINERAMA
-#include <X11/extensions/Xinerama.h>
-#endif
-
 
 #define WTB_LEFT	0
 #define WTB_RIGHT	1
@@ -40,6 +36,15 @@
 #define WTB_UNFOCUSED	2
 #define WTB_PFOCUSED	4
 #define WTB_MENU 6
+
+
+
+typedef struct {
+    WMRect *screens;
+    int count;                 /* screen count, 0 = inactive */
+    int primary_head;	       /* main working screen */
+} WXineramaInfo;
+
 
 
 /* an area of the screen reserved by some window */
@@ -92,12 +97,8 @@ typedef struct _WScreen {
     Visual *w_visual;
     int  w_depth;
     Colormap w_colormap;	       /* our colormap */
-    
-#ifdef XINERAMA
-    XineramaScreenInfo *xine_screens;
-#endif
-    int xine_count;		       /* 0 means not active */
-    int xine_primary_head;	       /* main working screen */
+
+    WXineramaInfo xine_info;
 
     Window no_focus_win;	       /* window to get focus when nobody
 					* else can do it */

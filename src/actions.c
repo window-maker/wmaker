@@ -420,7 +420,7 @@ wMaximizeWindow(WWindow *wwin, int directions)
     totalArea.x2 = wwin->screen_ptr->scr_width;
     totalArea.y2 = wwin->screen_ptr->scr_height;
 
-    if (wwin->screen_ptr->xine_count > 0
+    if (wwin->screen_ptr->xine_info.count > 0
 	&& !(directions & MAX_IGNORE_XINERAMA)) {
 	WScreen *scr = wwin->screen_ptr;
 	WMRect rect;

@@ -125,7 +125,7 @@ moveGeometryDisplayCentered(WScreen *scr, int x, int y)
     y -= h / 2;
 
     /* dead area check */
-    if (scr->xine_count) {
+    if (scr->xine_info.count) {
         WMRect rect;
         int head, flags;
 

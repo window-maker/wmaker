@@ -532,8 +532,15 @@ AC_ARG_ENABLE(xinerama,
 		xinerama=$enableval, xinerama=no)
 
 if test "$xinerama" = yes; then
-	AC_CHECK_LIB(Xinerama, XineramaQueryScreens, [XLIBS="-lXinerama $XLIBS"
-		AC_DEFINE(XINERAMA, 1, [define if you want support for the XINERAMA extension (set by configure)])],
+	AC_CHECK_LIB(Xinerama, XineramaQueryScreens, 
+                [XLIBS="-lXinerama $XLIBS"
+		AC_DEFINE(XINERAMA, 1, [define if you want support for the XINERAMA extension (XFree86 version/set by configure)])
+                xinerama=yes],
+		xinerama=no, $XLFLAGS $XLIBS)
+
+	AC_CHECK_LIB(Xext, XineramaGetInfo,
+                [AC_DEFINE(SOLARIS_XINERAMA, 1, [define if you want support for the XINERAMA extension (Solaris version/set by configure)])
+                xinerama=yes],
 		xinerama=no, $XLFLAGS $XLIBS)
 fi
 
