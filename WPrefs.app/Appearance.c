@@ -26,6 +26,8 @@
 #include <unistd.h>
 #include <errno.h>
 
+
+
 #include "TexturePanel.h"
 
 typedef struct _Panel {
@@ -36,7 +38,7 @@ typedef struct _Panel {
 
     WMWindow *win;
 
-    WMButton *prevB;
+    WMLabel *prevL;
 
     WMPopUpButton *secP;
 
@@ -69,15 +71,7 @@ typedef struct _Panel {
     WMPixmap *onLed;
     WMPixmap *offLed;
 
-    /* for preview shit */
     Pixmap preview;
-    Pixmap ftitle;
-    Pixmap utitle;
-    Pixmap otitle;
-    Pixmap icon;
-    Pixmap back;
-    Pixmap mtitle;
-    Pixmap mitem;
 
     char *fprefix;
 } _Panel;
@@ -98,6 +92,8 @@ typedef struct {
 
 static void showData(_Panel *panel);
 
+
+static void OpenExtractPanelFor(_Panel *panel, char *path);
 
 #define ICON_FILE	"appearance"
 
@@ -235,7 +231,7 @@ dumpRImage(char *path, RImage *image)
 
 static Pixmap
 renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
-	      char *path, Bool bordered)
+	      char *path, int border)
 {
     char *type;
     RImage *image;
@@ -324,7 +320,15 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	path = wfindfileinarray(GetObjectForKey("PixmapPath"), str);
 	timage = RLoadImage(rc, path, 0);
 	free(path);
-	if (timage) {
+	
+	if (toupper(type[0]) == 'T') {
+	    if (timage->width < TEXPREV_WIDTH 
+		|| timage->height < TEXPREV_HEIGHT) {
+		image = RMakeTiledImage(timage, TEXPREV_WIDTH, TEXPREV_HEIGHT);
+		RDestroyImage(timage);
+		timage = image;
+	    }
+	} else if (timage) {
 	    w = timage->width;
 	    h = timage->height;
 	
@@ -336,11 +340,16 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 
 	    image = RScaleImage(timage, w, h);
 	    RDestroyImage(timage);
+	    timage = image;
 	}
     }
 
     if (path) {
 	dumpRImage(path, image);
+    }
+    
+    if (border) {
+	RBevelImage(image, border);
     }
 
     RConvertImage(rc, image, &pixmap);
@@ -350,7 +359,8 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 }
 
 
-#if 0
+
+
 static void
 updatePreviewBox(_Panel *panel, int elements)
 {
@@ -358,28 +368,78 @@ updatePreviewBox(_Panel *panel, int elements)
     Display *dpy = WMScreenDisplay(scr);
  /*   RContext *rc = WMScreenRContext(scr);*/
     int refresh = 0;
-    char *tmp;
+    Pixmap pix;
+    GC gc;
+
+    gc = XCreateGC(dpy, WMWidgetXID(panel->win), 0, NULL);
+    
 
     if (!panel->preview) {
+	WMColor *color;
+
 	panel->preview = XCreatePixmap(dpy, WMWidgetXID(panel->win),
 				       220-4, 185-4, WMScreenDepth(scr));
+
+	color = WMGrayColor(scr);
+	XFillRectangle(dpy, panel->preview, WMColorGC(color),
+		       0, 0, 220-4, 185-4);
+	WMReleaseColor(color);
 
 	refresh = -1;
     }
 
     if (elements & FTITLE) {
-	if (panel->ftitle)
-	    XFreePixmap(dpy, panel->ftitle);
+	pix = renderTexture(scr, panel->ftitleTex, 180, 20, NULL, 
+			    RBEV_RAISED2);
 
-	panel->ftitle = renderTexture(scr, tmp, 180, 20, NULL, True);
-	free(tmp);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 180, 20, 5, 10);
+
+	XFreePixmap(dpy, pix);
+    }
+    if (elements & UTITLE) {
+	pix = renderTexture(scr, panel->utitleTex, 180, 20, NULL, 
+			    RBEV_RAISED2);
+
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 180, 20, 10, 35);
+
+	XFreePixmap(dpy, pix);
+    }
+    if (elements & OTITLE) {
+	pix = renderTexture(scr, panel->ptitleTex, 180, 20, NULL, 
+			    RBEV_RAISED2);
+
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 180, 20, 15, 60);
+
+	XFreePixmap(dpy, pix);
+    }
+    if (elements & MTITLE) {
+	pix = renderTexture(scr, panel->mtitleTex, 100, 20, NULL, 
+			    RBEV_RAISED2);
+
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 20, 20, 95);
+
+	XFreePixmap(dpy, pix);
+    }
+    if (elements & MITEM) {
+	pix = renderTexture(scr, panel->menuTex, 100, 18, NULL, 
+			    RBEV_RAISED2);
+
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 20, 20, 115);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 20, 20, 115+18);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 20, 20, 115+36);
+
+	XFreePixmap(dpy, pix);
+    }
+    if (elements & ICON) {
+	pix = renderTexture(scr, panel->iconTex, 64, 64, NULL, 
+			    RBEV_RAISED3);
+
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 64, 64, 130, 100);
+
+	XFreePixmap(dpy, pix);
     }
 
-    /* have to repaint everything to make things simple, eliminating
-     * clipping stuff */
-    if (refresh) {
-	
-    }
+
     
     if (refresh<0) {
 	WMPixmap *pix;
@@ -389,22 +449,10 @@ updatePreviewBox(_Panel *panel, int elements)
 	WMSetLabelImage(panel->prevL, pix);
 	WMReleasePixmap(pix);
     }
+
+    XFreeGC(dpy, gc);
 }
 
-
-
-static char*
-getStrArrayForKey(char *key)
-{
-    proplist_t v;
-
-    v = GetObjectForKey(key);
-    if (!v)
-	return NULL;
-
-    return PLGetDescription(v);
-}
-#endif
 
 
 
@@ -469,7 +517,7 @@ okNewTexture(void *data)
 
     titem->path = makeFileName(panel->fprefix, name);
     titem->preview = renderTexture(scr, prop, TEXPREV_WIDTH, TEXPREV_HEIGHT,
-				   titem->path, False);
+				   titem->path, 0);
 
     item = WMAddListItem(panel->texLs, "");
     item->clientData = titem;
@@ -514,7 +562,7 @@ okEditTexture(void *data)
     XFreePixmap(WMScreenDisplay(WMWidgetScreen(panel->texLs)), titem->preview);
     titem->preview = renderTexture(WMWidgetScreen(panel->texLs), titem->prop,
 				   TEXPREV_WIDTH, TEXPREV_HEIGHT, 
-				   titem->path, False);
+				   titem->path, 0);
 
     WMRedisplayWidget(panel->texLs);
 }
@@ -599,6 +647,34 @@ deleteTexture(WMWidget *w, void *data)
     WMRemoveListItem(panel->texLs, row);
     WMSetButtonEnabled(panel->delB, False);
 }
+
+
+
+
+static void
+extractTexture(WMWidget *w, void *data)
+{
+    _Panel *panel = (_Panel*)data;
+    char *path;
+    WMOpenPanel *opanel;
+    WMScreen *scr = WMWidgetScreen(w);
+
+    opanel = WMGetOpenPanel(scr);
+    WMSetFilePanelCanChooseDirectories(opanel, False);
+    WMSetFilePanelCanChooseFiles(opanel, True);
+
+    if (WMRunModalFilePanelForDirectory(opanel, panel->win, wgethomedir(),
+					_("Select File"), NULL)) {
+	path = WMGetFilePanelFileName(opanel);
+
+	puts(path);
+	OpenExtractPanelFor(panel, path);
+
+	free(path);
+    }
+}
+
+
 
 
 static void
@@ -782,7 +858,7 @@ fillTextureList(WMList *lPtr)
 	titem->preview = loadRImage(scr, titem->path);
 	if (!titem->preview) {
 	    titem->preview = renderTexture(scr, titem->prop, TEXPREV_WIDTH, 
-					   TEXPREV_HEIGHT, NULL, False);
+					   TEXPREV_HEIGHT, NULL, 0);
 	}
 	item = WMAddListItem(lPtr, "");
 	item->clientData = titem;
@@ -832,10 +908,10 @@ createPanel(Panel *p)
     WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
 
     /* preview box */
-    panel->prevB = WMCreateCommandButton(panel->frame);
-    WMResizeWidget(panel->prevB, 260, 165);
-    WMMoveWidget(panel->prevB, 15, 10);
-    WMSetButtonImagePosition(panel->prevB, WIPImageOnly);
+    panel->prevL = WMCreateLabel(panel->frame);
+    WMResizeWidget(panel->prevL, 260, 165);
+    WMMoveWidget(panel->prevL, 15, 10);
+    WMSetLabelImagePosition(panel->prevL, WIPImageOnly);
 
     panel->secP = WMCreatePopUpButton(panel->frame);
     WMResizeWidget(panel->secP, 260, 20);
@@ -899,6 +975,7 @@ createPanel(Panel *p)
     WMSetButtonFont(panel->ripB, font);
     WMSetButtonImagePosition(panel->ripB, WIPAbove);
     WMSetButtonText(panel->ripB, _("Extract..."));
+    WMSetButtonAction(panel->ripB, extractTexture, panel);
     SetButtonAlphaImage(scr, panel->ripB, TEXTR_FILE);
 
     WMSetButtonEnabled(panel->ripB, False);
@@ -962,7 +1039,7 @@ setupTextureFor(WMList *list, char *key, char *defValue, char *title,
     titem->selectedFor = 1<<index;
 
     titem->preview = renderTexture(WMWidgetScreen(list), titem->prop,
-				   TEXPREV_WIDTH, TEXPREV_HEIGHT, NULL, False);
+				   TEXPREV_WIDTH, TEXPREV_HEIGHT, NULL, 0);
 
     item = WMAddListItem(list, "");
     item->clientData = titem;
@@ -1006,6 +1083,8 @@ showData(_Panel *panel)
 				     "(solid, black)", "[Workspace]", i);
     panel->textureIndex[i] = i++;
  */
+
+    updatePreviewBox(panel, EVERYTHING);
 }
 
 
@@ -1085,3 +1164,88 @@ InitAppearance(WMScreen *scr, WMWindow *win)
 
     return panel;
 }
+
+
+
+/****************************************************************************/
+
+
+
+typedef struct ExtractPanel {
+    WMWindow *win;
+
+    WMLabel *label;
+    WMList *list;
+
+    WMButton *closeB;
+    WMButton *extrB;
+} ExtractPanel;
+
+
+
+static void
+OpenExtractPanelFor(_Panel *panel, char *path)
+{
+    ExtractPanel *epanel;
+    WMColor *color;
+    WMFont *font;
+    WMScreen *scr = WMWidgetScreen(panel->win);
+
+    epanel = wmalloc(sizeof(ExtractPanel));
+    epanel->win = WMCreatePanelWithStyleForWindow(panel->win, "extract",
+						  WMTitledWindowMask
+						  |WMClosableWindowMask);
+    WMResizeWidget(epanel->win, 245, 250);
+    WMSetWindowTitle(epanel->win, _("Extract Texture"));
+
+    epanel->label = WMCreateLabel(epanel->win);
+    WMResizeWidget(epanel->label, 225, 18);
+    WMMoveWidget(epanel->label, 10, 10);
+    WMSetLabelTextAlignment(epanel->label, WACenter);
+    WMSetLabelRelief(epanel->label, WRSunken);
+
+    color = WMDarkGrayColor(scr);
+    WMSetWidgetBackgroundColor(epanel->label, color);
+    WMReleaseColor(color);
+
+    color = WMWhiteColor(scr);
+    WMSetLabelTextColor(epanel->label, color);
+    WMReleaseColor(color);
+
+    font = WMBoldSystemFontOfSize(scr, 12);
+    WMSetLabelFont(epanel->label, font);
+    WMReleaseFont(font);
+
+    WMSetLabelText(epanel->label, _("Textures"));
+
+    epanel->list = WMCreateList(epanel->win);
+    WMResizeWidget(epanel->list, 225, 165);
+    WMMoveWidget(epanel->list, 10, 30);
+
+    
+
+    epanel->closeB = WMCreateCommandButton(epanel->win);
+    WMResizeWidget(epanel->closeB, 74, 24);
+    WMMoveWidget(epanel->closeB, 165, 215);
+    WMSetButtonText(epanel->closeB, _("Close"));
+
+    epanel->extrB = WMCreateCommandButton(epanel->win);
+    WMResizeWidget(epanel->extrB, 74, 24);
+    WMMoveWidget(epanel->extrB, 80, 215);
+    WMSetButtonText(epanel->extrB, _("Extract"));
+
+    WMMapSubwidgets(epanel->win);
+
+    
+    /* take textures from file */
+    
+    
+
+    WMRealizeWidget(epanel->win);
+    
+    WMMapWidget(epanel->win);
+}
+
+
+
+

@@ -502,9 +502,9 @@ main(int argc, char **argv)
     sprintf(str, "DISPLAY=%s", DisplayName);
     putenv(str);
 
-//#ifdef DEBUG
+#ifdef DEBUG
     XSynchronize(dpy, True);
-//#endif
+#endif
 
     wXModifierInitialize();
 

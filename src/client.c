@@ -641,8 +641,8 @@ void
 wClientGetNormalHints(WWindow *wwin, XWindowAttributes *wattribs, Bool geometry,
 		      int *x, int *y, unsigned *width, unsigned *height)
 {
-    int pre_icccm=0;
-    
+    int pre_icccm = 0;		       /* not used */
+
     /* find a position for the window */
     if (!wwin->normal_hints)
         wwin->normal_hints = XAllocSizeHints();
@@ -714,8 +714,7 @@ wClientGetNormalHints(WWindow *wwin, XWindowAttributes *wattribs, Bool geometry,
 	wwin->normal_hints->min_width = wwin->normal_hints->max_width;
     }
 
-    /* pre ICCCM (old) client */
-    if (pre_icccm && !wwin->screen_ptr->flags.startup && geometry) {
+    if (/*pre_icccm && */!wwin->screen_ptr->flags.startup && geometry) {
 #ifdef DEBUG
 	printf("PRE ICCCM\n");	
 #endif	
@@ -723,6 +722,7 @@ wClientGetNormalHints(WWindow *wwin, XWindowAttributes *wattribs, Bool geometry,
 	wwin->normal_hints->flags &= ~PPosition;
 #endif
 	if (wwin->normal_hints->flags & (USPosition|PPosition)) {
+	    puts("QWEWQEWQ");
 	    *x = wwin->normal_hints->x;
 	    *y = wwin->normal_hints->y;
 	}

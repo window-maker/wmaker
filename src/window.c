@@ -816,7 +816,9 @@ wManageWindow(WScreen *scr, Window window)
 	if (win_state && win_state->state->use_geometry) {
 	    x = win_state->state->x;
 	    y = win_state->state->y;
-	} else if (wwin->transient_for==None && !scr->flags.startup 
+	} else if ((wwin->transient_for==None
+		    || wPreferences.window_placement!=WPM_MANUAL)
+		   && !scr->flags.startup 
 		   && workspace == scr->current_workspace
 		   && !wwin->flags.miniaturized
 		   && !wwin->flags.maximized
@@ -861,7 +863,7 @@ wManageWindow(WScreen *scr, Window window)
 
     /* setup button images */
     wWindowUpdateButtonImages(wwin);
-    
+
     /* hide unused buttons */
     foo = 0;
     if (WFLAGP(wwin, no_close_button))
@@ -917,6 +919,7 @@ wManageWindow(WScreen *scr, Window window)
 	if (gy > 0)
 	    y -= wwin->frame->top_width + wwin->frame->bottom_width;
     }
+
     /* 
      * wWindowConfigure() will init the client window's size
      * (wwin->client.{width,height}) and all other geometry

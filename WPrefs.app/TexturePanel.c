@@ -36,9 +36,8 @@
 
 #include "WPrefs.h"
 
-//#include "TexturePanel.h"
+#include "TexturePanel.h"
 
-typedef struct _TexturePanel TexturePanel;
 
 #define MAX_SECTION_PARTS 4
 
@@ -1012,7 +1011,7 @@ SetTexturePanelPixmapPath(TexturePanel *panel, proplist_t array)
 
 TexturePanel*
 CreateTexturePanel(WMWindow *keyWindow)
-//CreateTexturePanel(WMScreen *scr)
+/*CreateTexturePanel(WMScreen *scr)*/
 {
     TexturePanel *panel;
     WMScreen *scr = WMWidgetScreen(keyWindow);

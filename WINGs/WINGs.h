@@ -6,7 +6,7 @@
 #include <wraster.h>
 #include <X11/Xlib.h>
 
-#define WINGS_H_VERSION  990222
+#define WINGS_H_VERSION  990316
 
 
 #ifdef __cplusplus
@@ -659,6 +659,10 @@ void WMSetWindowMiniwindowTitle(WMWindow *win, char *title);
 void WMSetWindowMiniwindowImage(WMWindow *win, WMPixmap *pixmap);
 
 void WMSetWindowCloseAction(WMWindow *win, WMAction *action, void *clientData);
+
+void WMSetWindowUPosition(WMWindow *win, int x, int y);
+
+void WMSetWindowUSize(WMWindow *win, unsigned width, unsigned height);
 
 void WMSetWindowMaxSize(WMWindow *win, unsigned width, unsigned height);
 

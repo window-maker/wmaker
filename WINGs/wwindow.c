@@ -26,6 +26,9 @@ typedef struct W_Window {
     WMSize minSize;
     WMSize maxSize;
 
+    WMPoint upos;
+    WMSize usize;
+
     WMAction *closeAction;
     void *closeData;
     
@@ -35,7 +38,8 @@ typedef struct W_Window {
 	unsigned style:4;
 	unsigned configured:1;
 	unsigned documentEdited:1;
-	unsigned moved:1;
+
+	unsigned upos_set:1;
     } flags;
 } _Window;
 
@@ -76,7 +80,7 @@ static void moveWindow(WMWidget *, int, int);
 struct W_ViewProcedureTable _WindowViewProcedures = {
     NULL,
 	resizeWindow,
-	moveWindow
+	NULL
 };
 
 
@@ -267,14 +271,6 @@ WMSetWindowCloseAction(WMWindow *win, WMAction *action, void *clientData)
 }
 
 
-static void
-moveWindow(WMWidget *w, int x, int y)
-{
-    ((WMWindow*)w)->flags.moved = 1;
-
-    W_MoveView(W_VIEW(w), x, y);
-}
-
 
 static void
 resizeWindow(WMWidget *w, unsigned width, unsigned height)
@@ -311,6 +307,17 @@ setSizeHints(WMWindow *win)
     }
 
     hints->flags = 0;
+
+    if (win->flags.upos_set) {
+	hints->flags |= USPosition;
+	hints->x = win->upos.x;
+	hints->y = win->upos.y;
+    }
+    if (win->usize.width>0 && win->usize.height>0) {
+	hints->flags |= USSize;
+	hints->width = win->usize.width;
+	hints->height = win->usize.height;
+    }
     if (win->minSize.width>0 && win->minSize.height>0) {
 	hints->flags |= PMinSize;
 	hints->min_width = win->minSize.width;
@@ -389,12 +396,6 @@ realizeWindow(WMWindow *win)
     Atom atoms[4];
     int count;
 
-    if (!win->flags.moved && win->owner!=NULL) {
-	W_MoveView(win->view,
-		   (scr->rootView->size.width-win->view->size.width)/2,
-		   (scr->rootView->size.height-win->view->size.height)/2);
-    }
-
     classHint = XAllocClassHint();
     classHint->res_name = win->wname;
     classHint->res_class = WMGetApplicationName();
@@ -439,6 +440,29 @@ realizeWindow(WMWindow *win)
 	XSetTransientForHint(scr->display, win->view->window,
 			     win->owner->view->window);
     }
+}
+
+
+
+void
+WMSetWindowUPosition(WMWindow *win, int x, int y)
+{
+    win->flags.upos_set = 1;
+    win->upos.x = x;
+    win->upos.y = y;
+    if (win->view->flags.realized)
+	setSizeHints(win);
+}
+
+
+
+void
+WMSetWindowUSize(WMWindow *win, unsigned width, unsigned height)
+{
+    win->usize.width = width;
+    win->usize.height = height;
+    if (win->view->flags.realized)
+	setSizeHints(win);
 }
 
 

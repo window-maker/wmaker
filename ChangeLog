@@ -13,6 +13,7 @@ Changes since version 0.51.2:
 - added a dot to mark hidden applications (compile time) (id@windowmaker.org)
 - enhancements to the modelock patch (id@windowmaker.org)
 - show kbd mode for modelock  (id@windowmaker.org)
+- enhanced positioning of transient windows
 
 
 Changes since version 0.51.1:
