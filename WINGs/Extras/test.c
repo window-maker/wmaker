@@ -120,7 +120,6 @@ main(int argc, char **argv)
     WMSetTableColumnDelegate(col, colDeleg);
     WMSetTableColumnId(col, (void*)2);	
 
-    
     colDeleg = WTCreateBooleanSwitchDelegate(table);
 
     col = WMCreateTableColumn("Bool");

@@ -189,50 +189,80 @@ static void scrollObserver(void *self, WMNotification *notif)
     WMTableView *table = (WMTableView*)self;
     WMRect rect;
     int i, x;
-    
+
     rect = WMGetScrollViewVisibleRect(table->scrollView);
     
     x = 0;
     for (i = 0; i < WMGetArrayItemCount(table->columns); i++) {
 	WMTableColumn *column;
+	WMView *splitter;
 	
 	column = WMGetFromArray(table->columns, i);
 	
 	WMMoveWidget(column->titleW, x - rect.pos.x, 0);
-	
-	if (i > 0) {
-	    WMView *splitter;
-
-	    splitter = WMGetFromArray(table->splitters, i-1);
-	    W_MoveView(splitter, x - rect.pos.x - 1, 0);
-	}
-	
+		
 	x += W_VIEW_WIDTH(WMWidgetView(column->titleW)) + 1;
+	
+	splitter = WMGetFromArray(table->splitters, i);
+	W_MoveView(splitter, x - rect.pos.x - 1, 0);	
     }
 }
 
 
 static void splitterHandler(XEvent *event, void *data)
 {
-    WMTableView *table = (WMTableView*)data;
+    WMTableColumn *column = (WMTableColumn*)data;
+    WMTableView *table = column->table;
     int done = 0;
+    int cx, ox, offsX;
+    WMPoint pos;
+    WMScreen *scr = WMWidgetScreen(table);
+    GC gc = scr->ixorGC;
+    Display *dpy = WMScreenDisplay(scr);
+    int h = WMWidgetHeight(table) - 22;
+    Window w = WMViewXID(table->view);
     
+    pos = WMGetViewPosition(WMWidgetView(column->titleW));
+
+    offsX = pos.x + column->width;
+    
+    ox = cx = offsX;
+    
+    XDrawLine(dpy, w, gc, cx+20, 0, cx+20, h);
+
     while (!done) {
 	XEvent ev;
-	
-	WMMaskEvent(event->xany.display, ButtonMotionMask|ButtonReleaseMask,
-		    &ev);
-	
-	switch (event->type) {
+
+	WMMaskEvent(dpy, ButtonMotionMask|ButtonReleaseMask, &ev);
+
+	switch (ev.type) {
 	 case MotionNotify:
-	    printf("%i\n", event->xmotion.x);
-	    break;
+	    ox = cx;
+	    if (column->width + ev.xmotion.x < column->minWidth)
+		cx = pos.x + column->minWidth;
+	    else
+		cx = offsX + ev.xmotion.x;
 	    
+	    if (column->maxWidth > 0) {
+		if (column->width + ev.xmotion.x > column->maxWidth) 
+		    cx = pos.x + column->maxWidth;
+		else
+		    cx = offsX + ev.xmotion.x;
+	    }
+
+	    XDrawLine(dpy, w, gc, ox+20, 0, ox+20, h);	    
+	    XDrawLine(dpy, w, gc, cx+20, 0, cx+20, h);
+	    break;
+
 	 case ButtonRelease:
+	    column->width = cx - pos.x;
+	    rearrangeHeader(table);
 	    done = 1;
 	    break;
 	}
     }
+    
+    XDrawLine(dpy, w, gc, cx+20, 0, cx+20, h);    
 }
 
 
@@ -294,8 +324,6 @@ WMTableView *WMCreateTableView(WMWidget *parent)
     W_ResizeView(table->tableView, 100, 1000);
     W_MapView(table->tableView);
     
-    WMSetScrollViewContentView(table->scrollView, table->tableView);
-
     table->tableView->flags.dontCompressExpose = 1;
     
     table->gridColor = WMCreateNamedColor(scr, "#cccccc", False);
@@ -337,6 +365,8 @@ WMTableView *WMCreateTableView(WMWidget *parent)
     WMCreateEventHandler(table->tableView, ExposureMask|ButtonPressMask|
 			 ButtonReleaseMask|ButtonMotionMask,
                          handleTableEvents, table);
+
+    WMSetScrollViewContentView(table->scrollView, table->tableView);
     
     return table;
     
@@ -377,9 +407,9 @@ void WMAddTableViewColumn(WMTableView *table, WMTableColumn *column)
 	WMMapWidget(column->titleW);
     }
     
-    if (WMGetArrayItemCount(table->columns) > 1) {
+    {
 	WMView *splitter = W_CreateView(WMWidgetView(table->header));
-
+	
 	W_SetViewBackgroundColor(splitter, WMWhiteColor(scr));
 
 	if (W_VIEW_REALIZED(table->view))
@@ -387,10 +417,10 @@ void WMAddTableViewColumn(WMTableView *table, WMTableColumn *column)
 
 	W_ResizeView(splitter, 2, table->headerHeight-1);
 	W_MapView(splitter);
-	
+
 	W_SetViewCursor(splitter, table->splitterCursor);
-	WMCreateEventHandler(splitter, ButtonPressMask,
-			     splitterHandler, table);
+	WMCreateEventHandler(splitter, ButtonPressMask|ButtonReleaseMask,
+			     splitterHandler, column);
 
 	WMAddToArray(table->splitters, splitter);
     }
@@ -924,22 +954,21 @@ static void rearrangeHeader(WMTableView *table)
 {
     int width;
     int count;
-    int i;
+    int i;    
+    WMRect rect = WMGetScrollViewVisibleRect(table->scrollView);    
+    
     width = 0;
     
     count = WMGetArrayItemCount(table->columns);
     for (i = 0; i < count; i++) {
 	WMTableColumn *column = WMGetFromArray(table->columns, i);
+	WMView *splitter = WMGetFromArray(table->splitters, i);
 
 	WMMoveWidget(column->titleW, width, 0);
 	WMResizeWidget(column->titleW, column->width-1, table->headerHeight);
-	
-	if (i > 0) {
-	    WMView *splitter = WMGetFromArray(table->splitters, i-1);
 
-	    W_MoveView(splitter, width-1, 0);
-	}
 	width += column->width;
+	W_MoveView(splitter, width-1, 0);	
     }
     
     wassertr(table->delegate && table->delegate->numberOfRows);
@@ -948,6 +977,6 @@ static void rearrangeHeader(WMTableView *table)
 
     W_ResizeView(table->tableView, width+1,
 		 table->rows * table->rowHeight + 1);
-    
+
     table->tableWidth = width + 1;    
 }

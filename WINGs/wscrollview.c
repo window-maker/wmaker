@@ -120,6 +120,8 @@ applyScrollerValues(WMScrollView *sPtr)
 	y = 0;
     }
     
+    
+    
     x = WMAX(0, x);
     y = WMAX(0, y);
     
@@ -551,9 +553,17 @@ updateScrollerProportion(ScrollView *sPtr)
     float prop, value;
     
     if (sPtr->flags.hasHScroller) {
-	prop = (float)sPtr->viewport->size.width/sPtr->contentView->size.width;
-	value = WMGetScrollerValue(sPtr->hScroller);
+	float oldV, oldP;
 	
+	oldV = WMGetScrollerValue(sPtr->hScroller);
+	oldP = WMGetScrollerKnobProportion(sPtr->hScroller);
+	
+	prop = (float)sPtr->viewport->size.width/sPtr->contentView->size.width;
+
+	if (oldP == 1.0) 
+	    value = 0;
+	else
+	    value = (prop * oldV) / oldP;
 	WMSetScrollerParameters(sPtr->hScroller, value, prop);
     }
     if (sPtr->flags.hasVScroller) {
@@ -563,6 +573,7 @@ updateScrollerProportion(ScrollView *sPtr)
 	
 	WMSetScrollerParameters(sPtr->vScroller, value, prop);
     }
+    applyScrollerValues(sPtr);
 }
 
 

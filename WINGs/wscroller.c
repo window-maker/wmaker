@@ -194,6 +194,8 @@ WMSetScrollerParameters(WMScroller *sPtr, float floatValue,
 
     if (sPtr->view->flags.realized)
 	paintScroller(sPtr);
+    
+    WMPostNotificationName(WMScrollerDidScrollNotification, sPtr, NULL);
 }
 
 

@@ -1,3 +1,8 @@
+Changes since wmaker 0.64.0:
+............................
+
+- made programmatic scroller changes send notifications
+
 changes since wmaker 0.63.1:
 ............................
 - added WMRunModalLoop() and WMBreakModalLoop()
