@@ -1,5 +1,4 @@
 Makefile Makefile.in
-*.lo *.la
-get-wraster-flags
+view testgrad testdraw testrot
 .libs *.pc
 .psrc .inslog2 tca.map tca.log pchdir *.rpt

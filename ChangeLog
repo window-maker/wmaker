@@ -10,6 +10,7 @@ Changes since version 0.91.0:
 - Removed --with-appsdir option and replaced it with --with-gnustepdir. Also,
   default installation path (for non GNUstep users) is now $(prefix)/bin
 - fixed bug with infinite loop in some circumstances in fitText() in WINGs
+- fixed to allow parallel builds on SMP systems using make -j
 
 
 Changes since version 0.90.0:

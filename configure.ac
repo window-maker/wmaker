@@ -894,7 +894,8 @@ AC_OUTPUT(Makefile po/Makefile util/Makefile test/Makefile \
 	WINGs/Makefile WINGs/WINGs/Makefile WINGs/Documentation/Makefile \
 	WINGs/Examples/Makefile WINGs/Resources/Makefile WINGs/Tests/Makefile \
 	WINGs/Extras/Makefile WINGs/po/Makefile \
-	wmlib/Makefile wrlib/Makefile src/Makefile src/wconfig.h \
+	wmlib/Makefile wrlib/Makefile wrlib/tests/Makefile \
+	src/Makefile src/wconfig.h \
 	doc/Makefile doc/sk/Makefile \
 	WindowMaker/Makefile WindowMaker/Backgrounds/Makefile \
 	WindowMaker/Defaults/Makefile WindowMaker/IconSets/Makefile \

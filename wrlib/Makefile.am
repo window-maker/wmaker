@@ -1,5 +1,7 @@
 ## automake input file for wrlib
 
+SUBDIRS = . tests
+
 AUTOMAKE_OPTIONS = no-dependencies
 
 lib_LTLIBRARIES = libwraster.la
@@ -8,9 +10,6 @@ libwraster_la_LDFLAGS = -version-info 4:0:1
 
 bin_SCRIPTS = get-wraster-flags
 
-noinst_PROGRAMS = testgrad testdraw view testrot
-
-EXTRA_DIST = test.png tile.xpm ballot_box.xpm 
 include_HEADERS = wraster.h
 
 libwraster_la_SOURCES = 	\
@@ -56,26 +55,6 @@ x86_specific.o: x86_specific.c
 
 
 INCLUDES = $(DFLAGS) @HEADER_SEARCH_PATH@
-
-LIBLIST = $(top_builddir)/wrlib/libwraster.la
-
-view_SOURCES= view.c
-
-view_LDADD = $(LIBLIST)
-
-testgrad_SOURCES = testgrad.c
-
-testgrad_LDADD = $(LIBLIST)
-
-testrot_SOURCES = testrot.c
-
-testrot_LDADD = $(LIBLIST)
-
-
-testdraw_SOURCES = testdraw.c
-
-testdraw_LDADD = $(LIBLIST)
-
 
 libwraster_la_LIBADD = @ALLOCA@ @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ -lm
 
