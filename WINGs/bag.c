@@ -74,7 +74,15 @@ WMInsertInBag(WMBag *bag, int index, void *item)
 	bag->items = wrealloc(bag->items, sizeof(void*) * bag->size);
     }
 
-    bag->items[bag->count++] = item;
+    if (index >= 0 && index < bag->count) {
+        memmove(&bag->items[index+1], &bag->items[index],
+                (bag->count - index) * sizeof(void*));
+    } else {
+        /* If index is invalid, place it at end */
+        index = bag->count;
+    }
+    bag->items[index] = item;
+    bag->count++;
 }
 
 
