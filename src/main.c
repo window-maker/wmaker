@@ -78,7 +78,6 @@ WShortKey wKeyBindings[WKBD_LAST];
 
 /* defaults domains */
 WDDomain *WDWindowMaker = NULL;
-WDDomain *WDRootMenu = NULL;
 WDDomain *WDWindowAttributes = NULL;
 
 
@@ -427,9 +426,9 @@ print_help()
     puts(_(" --no-dock		do not open the application Dock"));
     puts(_(" --no-clip		do not open the workspace Clip"));
     puts(_(" --no-autolaunch	do not autolaunch applications"));
-    puts(_(" --dont-restore	do not restore saved session"));
+    puts(_(" --dont-restore		do not restore saved session"));
 
-    puts(_(" --locale locale		locale to use"));
+    puts(_(" --locale locale	locale to use"));
 
     puts(_(" --create-stdcmap	create the standard colormap hint in PseudoColor visuals"));
     puts(_(" --visual-id visualid	visual id of visual to use"));
@@ -621,7 +620,8 @@ main(int argc, char **argv)
 		    exit(0);
 		}
 		Locale = argv[i];
-	    } else if (strcmp(argv[i], "-display")==0) {
+	    } else if (strcmp(argv[i], "-display")==0
+	    	       || strcmp(argv[i], "--display")==0) {
 		i++;
 		if (i>=argc) {
 		    wwarning(_("too few arguments for %s"), argv[i-1]);
