@@ -14,7 +14,11 @@ Changes since version 0.61.1:
 - fixed crashing bug in WPrefs.app's Appearance section.
 - fixed sorting of names in icon chooser, and file browser.
 - fixed name completion problem in file browser.
-
+- added new sound events (from pascal)
+- fixed bug when moving/resizing internal windows
+- propagation of -noext for submenus (David Reviejo <dreviejo@arrakis.es>)
+- fixed problem with mouse sampling rate in SGIs
+- optimized frame drawing (Swivel <swivel@gnugeneration.com>)
 
 Changes since version 0.61.0:
 .............................

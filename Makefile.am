@@ -4,7 +4,7 @@ SUBDIRS = wrlib WINGs src util po WindowMaker wmlib test WPrefs.app doc\
 	contrib
 
 EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N MIRRORS COPYING.OPL \
-	Install acconfig.h INSTALL.pt\
+	Install acconfig.h INSTALL.pt README.pt\
 	mkpatch README.KDE README.GNOME WindowMaker.lsm.in\
 	docklib-0.2.tar.gz libwmfun-0.0.2.tar.gz 
 

@@ -199,13 +199,18 @@ from the same user (so that wmaker will use the same configuration
 files) at the same time. You might get unexpected behaviour when Window Maker
 updates it's configuration files.
 
+If you really desire to do this, try running Window Maker with the 
+command line option --static so that it will not update or change
+any of the configuration files.
 
 Sound support
 =============
 
 Sound is supported for Linux and FreeBSD systems with the use of a
-separately distributed module. You can download it at:
-http://www.frontiernet.net/~southgat/wmsound
+separately distributed module called WSoundServer. There is also a graphical
+configuration tool for setting up your sounds called WSoundPrefs.
+You can download these at:
+http://shadowmere.student.utwente.nl/
 
 Note that you must compile Window Maker with the --enable-sound configure
 flag and set the DisableSound option to NO.
