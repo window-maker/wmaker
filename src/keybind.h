@@ -69,25 +69,19 @@
 #define WKBD_WINDOW4		37
 #define WKBD_WINDOW5		38
 #define WKBD_WINDOW6		39
-#ifdef EXTEND_WINDOWSHORTCUT
-# define WKBD_WINDOW7		40
-# define WKBD_WINDOW8		41
-# define WKBD_WINDOW9		42
-# define WKBD_WINDOW10		43
-# ifdef KEEP_XKB_LOCK_STATUS
-#  define WKBD_TOGGLE             44
-#  define WKBD_LAST               45
-# else
-#  define WKBD_LAST               44
-# endif /* KEEP_XKB_LOCK_STATUS */
-#else /* !EXTEND_WINDOWSHORTCUT */
-# ifdef KEEP_XKB_LOCK_STATUS
-#  define WKBD_TOGGLE             40
-#  define WKBD_LAST               41
-# else
-#  define WKBD_LAST               42
-# endif /* KEEP_XKB_LOCK_STATUS */
-#endif /* !EXTEND_WINDOWSHORTCUT */
+#define WKBD_WINDOW7		40
+#define WKBD_WINDOW8		41
+#define WKBD_WINDOW9		42
+#define WKBD_WINDOW10		43
+
+#define WKBD_SWITCH_SCREEN      44
+
+#ifdef KEEP_XKB_LOCK_STATUS
+# define WKBD_TOGGLE             45
+# define WKBD_LAST               46
+#else
+# define WKBD_LAST               45
+#endif /* KEEP_XKB_LOCK_STATUS */
 
 
 typedef struct WShortKey {

@@ -1521,14 +1521,12 @@ handleKeyPress(XEvent *event)
      case WKBD_WINDOW2:
      case WKBD_WINDOW3:
      case WKBD_WINDOW4:
-#ifdef EXTEND_WINDOWSHORTCUT
      case WKBD_WINDOW5:
      case WKBD_WINDOW6:
      case WKBD_WINDOW7:
      case WKBD_WINDOW8:
      case WKBD_WINDOW9:
      case WKBD_WINDOW10:
-#endif
 
 #define INITBAG(bag)  if (bag) WMEmptyBag(bag); else bag = WMCreateBag(4)
 
@@ -1604,6 +1602,30 @@ handleKeyPress(XEvent *event)
 #undef INITBAG
 
         break;
+	
+     case WKBD_SWITCH_SCREEN:
+	if (wScreenCount > 1) {
+	    WScreen *scr2;
+	    int i;
+	    
+	    /* find index of this screen */
+	    for (i = 0;  < wScreenCount; i++) {
+		if (wScreenWithNumber(i) == scr)
+		    break;
+	    }
+	    i++;
+	    if (i >= wScreenCount) {
+		i = 0;
+	    }
+	    scr2 = wScreenWithNumber(i);
+	    
+	    if (scr2) {
+		XWarpPointer(dpy, scr->root_win, scr2->root_win, 0, 0, 0, 0,
+			     scr2->scr_width/2, scr2->scr_height/2);
+	    }
+	}
+	break;
+	
      case WKBD_NEXTWSLAYER:
      case WKBD_PREVWSLAYER:
 	{

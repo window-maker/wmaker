@@ -83,7 +83,6 @@ extern proplist_t ReadProplistFromFile(char *file);
 
 extern WDDomain *WDWindowMaker;
 extern WDDomain *WDWindowAttributes;
-extern WDDomain *WDRootMenu;
 
 extern int wScreenCount;
 
@@ -182,8 +181,9 @@ static int setClipTitleFont();
 static int setClipTitleColor();
 
 static int setMenuStyle();
+#if 0
 static int setMultiByte();
-
+#endif
 static int updateUsableArea();
 
 #ifdef DEFINABLE_CURSOR
@@ -374,10 +374,12 @@ WDefaultEntry staticOptionList[] = {
     },
     {"DisableMiniwindows", "NO",		NULL,
 	&wPreferences.disable_miniwindows, getBool,	NULL
-    },
-    {"MultiByteText", "NO", 			NULL,
-	&wPreferences.multi_byte_text, getBool,		setMultiByte
     }
+#if 0
+    ,{"MultiByteText", "NO", 			NULL,
+	&wPreferences.multi_byte_text, getBool,	setMultiByte
+    }
+#endif
 };
 
 
@@ -786,7 +788,6 @@ WDefaultEntry optionList[] = {
     {"WindowShortcut4Key","None",		(void*)WKBD_WINDOW4,
 	    NULL, 			getKeybind,	setKeyGrab
     }
-#ifdef EXTEND_WINDOWSHORTCUT
     ,{"WindowShortcut5Key","None",		(void*)WKBD_WINDOW5,
 	    NULL, 			getKeybind,	setKeyGrab
     },
@@ -804,8 +805,10 @@ WDefaultEntry optionList[] = {
     },
     {"WindowShortcut10Key","None",		(void*)WKBD_WINDOW10,
 	    NULL, 			getKeybind,	setKeyGrab
-    }
-#endif /* EXTEND_WINDOWSHORTCUT */
+    },
+    {"ScreenSwitchKey",  "None",		(void*)WKBD_SWITCH_SCREEN,
+	    NULL, 			getKeybind,	setKeyGrab	
+    },
 
 #ifdef KEEP_XKB_LOCK_STATUS
     ,{"ToggleKbdModeKey", "None",                      (void*)WKBD_TOGGLE,
@@ -1147,33 +1150,6 @@ wDefaultsCheckDomains(void *foo)
 	}
 	WDWindowAttributes->timestamp = stbuf.st_mtime;
     }
-
-#ifndef LITE
-    if (stat(WDRootMenu->path, &stbuf)>=0
-	&& WDRootMenu->timestamp < stbuf.st_mtime) {
-	dict = ReadProplistFromFile(WDRootMenu->path);
-#ifdef HEARTBEAT
-	puts("Checking WMRootMenu domain");
-#endif
-	if (dict) {
-	    if (!PLIsArray(dict) && !PLIsString(dict)) {
-		PLRelease(dict);
-		dict = NULL;
-		wwarning(_("Domain %s (%s) of defaults database is corrupted!"),
-			 "WMRootMenu", WDRootMenu->path);
-	    } else {
-		if (WDRootMenu->dictionary) {
-		    PLRelease(WDRootMenu->dictionary);
-		}
-		WDRootMenu->dictionary = dict;
-	    }
-	} else {
-	    wwarning(_("could not load domain %s from user defaults database"),
-		     "WMRootMenu");
-	}
-	WDRootMenu->timestamp = stbuf.st_mtime;
-    }
-#endif /* !LITE */
 
     if (!foo)
 	WMAddTimerHandler(DEFAULTS_CHECK_INTERVAL, wDefaultsCheckDomains, foo);
@@ -3471,7 +3447,7 @@ setDoubleClick(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
 }
 
 
-
+#if 0
 static int
 setMultiByte(WScreen *scr, WDefaultEntry *entry, char *value, void *foo)
 {
@@ -3481,7 +3457,7 @@ setMultiByte(WScreen *scr, WDefaultEntry *entry, char *value, void *foo)
     
     return 0;
 }
-
+#endif
 
 #ifdef DEFINABLE_CURSOR
 static int
