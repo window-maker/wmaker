@@ -79,14 +79,11 @@ RScaleImage(RImage *image, unsigned new_width, unsigned new_height)
     d = img->data;
 
     if (image->format == RRGBAFormat) {
-	int ot;
-	ot = -1;
 	for (y=0; y<new_height; y++) {
 	    t = image->width*(py>>16);
 
-	    s = image->data+t;
+	    s = image->data+(t<<2); /* image->data+t*4 */
 
-	    ot = t;
 	    ox = 0;
 	    px = 0;
 	    for (x=0; x<new_width; x++) {
@@ -105,14 +102,11 @@ RScaleImage(RImage *image, unsigned new_width, unsigned new_height)
 	    py += dy;
 	}
     } else {
-	int ot;
-	ot = -1;
 	for (y=0; y<new_height; y++) {
 	    t = image->width*(py>>16);
 
-	    s = image->data+t;
+	    s = image->data+(t<<1)+t; /* image->data+t*3 */
 	    
-	    ot = t;
 	    ox = 0;
 	    px = 0;
 	    for (x=0; x<new_width; x++) {
@@ -122,7 +116,7 @@ RScaleImage(RImage *image, unsigned new_width, unsigned new_height)
 		*(d++) = *(s+1);
 		*(d++) = *(s+2);
 		
-		t = (px-ox)>>16;
+		t = (px - ox)>>16;
 		ox += t<<16;
 		
 		s += (t<<1)+t; /* t*3 */
