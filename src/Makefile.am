@@ -32,6 +32,7 @@ wmaker_SOURCES = 	\
 	dockedapp.c \
 	dock.h \
 	event.c \
+	extend_pixmaps.h \
 	framewin.c \
 	framewin.h \
 	gnome.c \
