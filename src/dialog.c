@@ -1085,8 +1085,9 @@ handleLogoPush(XEvent *event, void *data)
         "Mooo Canada!!!!",
         "Hi! My name is bobby...",
         "AHH! The neurotic monkeys are after me!",
-        "WHAT YOU SAY??",
         "WE GET SIGNAL",
+        "HOW ARE YOU GENTLEMEN?",
+        "WHAT YOU SAY??",
         "SOMEBODY SET UP US THE BOMB",
         "ALL YOUR BASE ARE BELONG TO US!",
         "Oh My God!!! Larry is back!"

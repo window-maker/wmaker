@@ -840,11 +840,8 @@ dnl parsed by m4
 cat <<EOF >get-wraster-flags
 #!/bin/sh
 
-prefix="$prefix"
-exec_prefix=\$prefix
-
-WCFLAGS="-I\$prefix/include $inc_search_path"
-WLFLAGS="-L\$exec_prefix/lib $lib_search_path"
+WCFLAGS="$inc_search_path"
+WLFLAGS="$lib_search_path"
 WLIBS="-lwraster $GFXLIBS $XLIBS -lm"
 
 usage="Usage: get-wraster-flags #lp#--cflags#rp# #lp#--ldflags#rp# #lp#--libs#rp#"
@@ -879,12 +876,9 @@ EOF
 cat <<EOF >get-wings-flags
 #!/bin/sh
 
-prefix="$prefix"
-exec_prefix=\$prefix
-
-WCFLAGS="-I\$prefix/include $inc_search_path"
-WLFLAGS="-L\$exec_prefix/lib $lib_search_path"
-WLIBS="-lWINGs -lwraster $GFXLIBS $XLIBS -lm $NETLIBS"
+WCFLAGS="$inc_search_path"
+WLFLAGS="$lib_search_path"
+WLIBS="-lWINGs -lwraster $GFXLIBS $XLIBS -lm $NETLIBS $INTLIBS"
 
 usage="Usage: get-wings-flags #lp#--cflags#rp# #lp#--ldflags#rp# #lp#--libs#rp#"
 
@@ -918,12 +912,9 @@ EOF
 cat <<EOF >get-wutil-flags
 #!/bin/sh
 
-prefix="$prefix"
-exec_prefix=\$prefix
-
-WCFLAGS="-I\$prefix/include $inc_search_path"
-WLFLAGS="-L\$exec_prefix/lib $lib_search_path"
-WLIBS="-lWUtil $NETLIBS"
+WCFLAGS="-I`eval echo ${includedir}`"
+WLFLAGS="-L${_libdir}"
+WLIBS="-lWUtil $NETLIBS $INTLIBS"
 
 usage="Usage: get-wutil-flags #lp#--cflags#rp# #lp#--ldflags#rp# #lp#--libs#rp#"
 
