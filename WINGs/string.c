@@ -162,15 +162,15 @@ wtrimspace(char *s)
 {
     char *t;
     char *c;
-    
+
     while (isspace(*s) && *s) s++;
-    t = s+strlen(s);
+    t = s+strlen(s)-1;
     while (t > s && isspace(*t)) t--;
-    
-    c = wmalloc(t-s + 1);
-    memcpy(c, s, t-s);
-    c[t-s] = 0;
-    
+
+    c = wmalloc(t-s+2);
+    memcpy(c, s, t-s+1);
+    c[t-s+1] = 0;
+
     return c;
 }
 
