@@ -4,9 +4,96 @@
 
 #include <wraster.h>
 #include <assert.h>
+#include <X11/Xlocale.h>
 
 static char *makeFontSetOfSize(char *fontset, int size);
 
+
+
+/* XLFD pattern matching */
+static char*
+xlfd_get_element (const char *xlfd, int index)
+{
+    const char *p = xlfd;
+    while (*p != 0) {
+	if (*p == '-' && --index == 0) {
+	    const char *end = strchr(p + 1, '-');
+	    char *buf;
+	    size_t len;
+	    if (end == 0) end = p + strlen(p);
+	    len = end - (p + 1);
+	    buf = wmalloc(len);
+	    memcpy(buf, p + 1, len);
+	    buf[len] = 0;
+	    return buf;
+	}
+	p++;
+    }
+    return strdup("*");
+}
+
+/* XLFD pattern matching */
+static char*
+generalize_xlfd (const char *xlfd)
+{
+    char *buf;
+    int len;
+    char *weight = xlfd_get_element(xlfd, 3);
+    char *slant  = xlfd_get_element(xlfd, 4);
+    char *pxlsz  = xlfd_get_element(xlfd, 7);
+
+    len = snprintf(NULL, 0, "%s,-*-*-%s-%s-*-*-%s-*-*-*-*-*-*-*,"
+		   "-*-*-*-*-*-*-%s-*-*-*-*-*-*-*,*",
+		   xlfd, weight, slant, pxlsz, pxlsz);
+    buf = wmalloc(len + 1);
+    snprintf(buf, len + 1, "%s,-*-*-%s-%s-*-*-%s-*-*-*-*-*-*-*,"
+	     "-*-*-*-*-*-*-%s-*-*-*-*-*-*-*,*",
+	     xlfd, weight, slant, pxlsz, pxlsz);
+
+    free(pxlsz);
+    free(slant);
+    free(weight);
+
+    return buf;
+}
+
+/* XLFD pattern matching */
+static XFontSet
+W_CreateFontSetWithGuess(Display *dpy, char *xlfd, char ***missing,
+			int *nmissing, char **def_string)
+{
+    XFontSet fs = XCreateFontSet(dpy, xlfd, missing, nmissing, def_string);
+
+    if (fs != NULL && *nmissing == 0) return fs;
+
+    /* for non-iso8859-1 language and iso8859-1 specification
+       (this fontset is only for pattern analysis) */
+    if (fs == NULL) {
+	char *old_locale = setlocale(LC_CTYPE, NULL);
+	if (*nmissing != 0) XFreeStringList(*missing);
+	setlocale(LC_CTYPE, "C");
+	fs = XCreateFontSet(dpy, xlfd, missing, nmissing, def_string);
+	setlocale(LC_CTYPE, old_locale);
+    }
+
+    /* make XLFD font name for pattern analysis */
+    if (fs != NULL) {
+	XFontStruct **fontstructs;
+	char **fontnames;
+	if (XFontsOfFontSet(fs, &fontstructs, &fontnames) > 0)
+	    xlfd = fontnames[0];
+    }
+
+    xlfd = generalize_xlfd (xlfd);
+
+    if (*nmissing != 0) XFreeStringList(*missing);
+    if (fs != 0) XFreeFontSet(dpy, fs);
+
+    fs = XCreateFontSet(dpy, xlfd, missing, nmissing, def_string);
+
+    free(xlfd);
+    return fs;
+}
 
 WMFont*
 WMCreateFontSet(WMScreen *scrPtr, char *fontName)
@@ -33,8 +120,8 @@ WMCreateFontSet(WMScreen *scrPtr, char *fontName)
 
     font->screen = scrPtr;
 
-    font->font.set = XCreateFontSet(display, fontName, &missing, &nmissing,
-				    &defaultString);
+    font->font.set = W_CreateFontSetWithGuess(display, fontName, &missing,
+					     &nmissing, &defaultString);
     if (nmissing > 0 && font->font.set) {
 	int i;
 	
