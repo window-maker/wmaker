@@ -2557,9 +2557,10 @@ prepareForDragOperation(WMView *self, WMDraggingInfo *info)
 
 char *badbadbad;
 
+static void
 receivedData(WMView *view, Atom selection, Atom target, Time timestamp,
          void *cdata, WMData *data)
-{             
+{
 badbadbad = wstrdup((char *)WMDataBytes(data));
 }
 

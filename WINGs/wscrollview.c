@@ -258,7 +258,7 @@ doScrolling(WMWidget *self, void *data)
 	vpsize = 1;
 
     switch (WMGetScrollerHitPart(self)) {
-     case WSDecrementLine:
+    case WSDecrementLine:
 	if (pos > 0) {
 	    pos-=sPtr->lineScroll;
 	    if (pos < 0)
@@ -268,7 +268,7 @@ doScrolling(WMWidget *self, void *data)
 				    WMGetScrollerKnobProportion(self));
 	}
 	break;
-     case WSIncrementLine:
+    case WSIncrementLine:
 	if (pos < size) {
 	    pos+=sPtr->lineScroll;
 	    if (pos > size)
@@ -278,12 +278,13 @@ doScrolling(WMWidget *self, void *data)
 				    WMGetScrollerKnobProportion(self));
 	}
 	break;
-     case WSKnob:
+
+    case WSKnob:
 	value = WMGetScrollerValue(self);
 	pos = value*size;
 	break;
-	
-     case WSDecrementPage:
+
+    case WSDecrementPage:
 	if (pos > 0) {
 	    pos -= vpsize;
 	    if (pos < 0)
@@ -292,9 +293,20 @@ doScrolling(WMWidget *self, void *data)
 	    WMSetScrollerParameters(self, value,
 				    WMGetScrollerKnobProportion(self));
 	}
+        break;
+
+    case WSDecrementWheel:
+	if (pos > 0) {
+	    pos -= vpsize/3;
+	    if (pos < 0)
+		pos = 0;
+	    value = (float)pos / size;
+	    WMSetScrollerParameters(self, value,
+				    WMGetScrollerKnobProportion(self));
+	}
 	break;
-	
-     case WSIncrementPage:
+
+    case WSIncrementPage:
 	if (pos < size) {
 	    pos += vpsize;
 	    if (pos > size)
@@ -304,7 +316,18 @@ doScrolling(WMWidget *self, void *data)
 				    WMGetScrollerKnobProportion(self));
 	}
 	break;
-	
+
+    case WSIncrementWheel:
+	if (pos < size) {
+	    pos += vpsize/3;
+	    if (pos > size)
+		pos = size;
+	    value = (float)pos / size;
+	    WMSetScrollerParameters(self, value,
+				    WMGetScrollerKnobProportion(self));
+	}
+	break;
+
      case WSNoPart:
      case WSKnobSlot:
 	break;

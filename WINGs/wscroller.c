@@ -817,9 +817,11 @@ handleActionEvents(XEvent *event, void *data)
 	/* FIXME: change Mod1Mask with something else */
 	if (event->xbutton.button==WINGsConfiguration.mouseWheelUp) {
             if (event->xbutton.state & ControlMask) {
+                sPtr->flags.hitPart = WSDecrementPage;
+            } else if (event->xbutton.state & ShiftMask) {
                 sPtr->flags.hitPart = WSDecrementLine;
             } else {
-                sPtr->flags.hitPart = WSDecrementPage;
+                sPtr->flags.hitPart = WSDecrementWheel;
             }
 	    if (sPtr->action) {
 		(*sPtr->action)(sPtr, sPtr->clientData);
@@ -827,9 +829,11 @@ handleActionEvents(XEvent *event, void *data)
 	}
 	else if (event->xbutton.button==WINGsConfiguration.mouseWheelDown) {
             if (event->xbutton.state & ControlMask) {
+                sPtr->flags.hitPart = WSIncrementPage;
+            } else if (event->xbutton.state & ShiftMask) {
                 sPtr->flags.hitPart = WSIncrementLine;
             } else {
-                sPtr->flags.hitPart = WSIncrementPage;
+                sPtr->flags.hitPart = WSIncrementWheel;
             }
 	    if (sPtr->action) {
 		(*sPtr->action)(sPtr, sPtr->clientData);

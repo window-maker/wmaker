@@ -23,15 +23,17 @@ changes since wmaker 0.62.1:
 - added WMSetListAllowEmptySelection(), WMListAllowsEmptySelection().
 - WMListSelectionDidChangeNotification passes NULL as the notification 
   client data (previously passed the selected item row).
-- WMRemoveListItem() returns an int : 1 success, 0 fail (previously was void).
 - added WMUnselectListItem(), WMSelectAllListItems(), WMUnselectAllListItems()
 - better behavior of wheel mices in WMList. Simple mouse wheel events
-  will scroll by 1/3 of the WMList height. Using Control as a modifier will
-  scroll line by line, while using Shift as a modifier will scroll page
+  will scroll by 1/3 of the WMList height. Using Shift as a modifier will
+  scroll line by line, while using Control as a modifier will scroll page
   by page.
-- better behavior of WMScroller regarding mouse wheel events. Control modifier
-  will scroll line by line, while Shift modifier will scroll page by page.
+- better behavior of WMScroller regarding mouse wheel events. 'Shift' modifier
+  will scroll line by line, while 'Control' modifier will scroll page by page.
 - fixed some buffer overflow allowing bugs.
+- added WSDecrementWheel and WSIncrementWheel for handling mouse wheel in
+  scrollers and scrolled widgets. This should be treated like the WSxxxPage
+  counterparts, except it should scroll by page_size/3 instead of one full page
 
 
 changes since wmaker 0.62.0:

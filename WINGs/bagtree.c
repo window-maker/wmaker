@@ -423,22 +423,19 @@ WMGetBagItemCount(WMBag *self)
 }
 
 
-int
+void
 WMAppendBag(WMBag *self, WMBag *bag)
 {
     WMBagIterator ptr;
     void *data;
 
     for (data = WMBagFirst(bag, &ptr); data != NULL; data = WMBagNext(bag, &ptr)) {
-        if (!WMPutInBag(self, data))
-            return 0;
+        WMPutInBag(self, data);
     }
-
-    return 1;
 }
 
 
-int
+void
 WMPutInBag(WMBag *self, void *item)
 {
     W_Node *ptr;
@@ -454,12 +451,10 @@ WMPutInBag(WMBag *self, void *item)
     rbTreeInsert(self, ptr);
 
     self->count++;
-
-    return 1;
 }
 
 
-int
+void
 WMInsertInBag(WMBag *self, int index, void *item)
 {
     W_Node *ptr;
@@ -480,8 +475,6 @@ WMInsertInBag(WMBag *self, int index, void *item)
 
 
     self->count++;
-
-    return 1;
 }
 
 
@@ -720,9 +713,7 @@ void
 WMFreeBag(WMBag *self)
 {
     WMEmptyBag(self);
-
     free(self->nil);
-
     free(self);
 }
 
@@ -785,11 +776,9 @@ WMBagFirst(WMBag *self, WMBagIterator *ptr)
 
     if (node == self->nil) {
         *ptr = NULL;
-
         return NULL;
     } else {
         *ptr = node;
-
         return node->data;
     }
 }
@@ -805,11 +794,9 @@ WMBagLast(WMBag *self, WMBagIterator *ptr)
 
     if (node == self->nil) {
         *ptr = NULL;
-
         return NULL;
     } else {
         *ptr = node;
-
         return node->data;
     }
 }
@@ -827,11 +814,9 @@ WMBagNext(WMBag *self, WMBagIterator *ptr)
 
     if (node == self->nil) {
         *ptr = NULL;
-
         return NULL;
     } else {
         *ptr = node;
-
         return node->data;
     }
 }
@@ -849,11 +834,9 @@ WMBagPrevious(WMBag *self, WMBagIterator *ptr)
 
     if (node == self->nil) {
         *ptr = NULL;
-
         return NULL;
     } else {
         *ptr = node;
-
         return node->data;
     }
 }

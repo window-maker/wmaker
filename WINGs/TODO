@@ -1,4 +1,8 @@
 - move paint to idle handlers
+- finish the multiple selection code for lists (check for
+  allowEmptySelection and add handlers for scrolling while drag-selecting).
+- check whether WMDestroyWidget() should first call WMUnmapWidget().
+
 
 - optimize color allocation for repeated colors
 - make it work in 8bpp

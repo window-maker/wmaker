@@ -332,6 +332,8 @@ WMArray* WMCreateArray(int initialSize);
 
 WMArray* WMCreateArrayWithDestructor(int initialSize, WMFreeDataProc *destructor);
 
+WMArray* WMCreateArrayWithArray(WMArray *array);
+
 void WMEmptyArray(WMArray *array);
 
 void WMFreeArray(WMArray *array);
@@ -339,15 +341,15 @@ void WMFreeArray(WMArray *array);
 int WMGetArrayItemCount(WMArray *array);
 
 /* appends other to array. other remains unchanged */
-int WMAppendArray(WMArray *array, WMArray *other);
+void WMAppendArray(WMArray *array, WMArray *other);
 
 /* add will place the element at the end of the array */
-int WMAddToArray(WMArray *array, void *item);
+void WMAddToArray(WMArray *array, void *item);
 
 #define WMPushInArray(array, item) WMAddToArray(array, item)
 
 /* insert will increment the index of elements after it by 1 */
-int WMInsertInArray(WMArray *array, int index, void *item);
+void WMInsertInArray(WMArray *array, int index, void *item);
 
 /* replace and set will return the old item WITHOUT calling the
  * destructor on it even if its available. Free the returned item yourself.
@@ -387,6 +389,7 @@ void WMSortArray(WMArray *array, WMCompareDataProc *comparer);
 
 void WMMapArray(WMArray *array, void (*function)(void*, void*), void *data);
 
+WMArray* WMGetSubarrayWithRange(WMArray* array, WMRange aRange);
 
 
 /*..........................................................................*/
@@ -414,12 +417,12 @@ WMBag* WMCreateTreeBagWithDestructor(WMFreeDataProc *destructor);
 
 int WMGetBagItemCount(WMBag *bag);
 
-int WMAppendBag(WMBag *bag, WMBag *other);
+void WMAppendBag(WMBag *bag, WMBag *other);
 
-int WMPutInBag(WMBag *bag, void *item);
+void WMPutInBag(WMBag *bag, void *item);
 
 /* insert will increment the index of elements after it by 1 */
-int WMInsertInBag(WMBag *bag, int index, void *item);
+void WMInsertInBag(WMBag *bag, int index, void *item);
 
 /* this is slow */
 /* erase will remove the element from the bag,

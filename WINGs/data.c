@@ -243,14 +243,14 @@ WMGetSubdataWithRange(WMData *aData, WMRange aRange) /*FOLD00*/
     void *buffer;
     WMData *newData;
 
-    /* return an empty subdata instead if aRange.count is 0 ? */
-    wassertrv(aRange.count > 0, NULL);
+    if (aRange.count <= 0)
+        return WMCreateDataWithCapacity(0);
 
     buffer = wmalloc(aRange.count);
     WMGetDataBytesWithRange(aData, buffer, aRange);
     newData = WMCreateDataWithBytesNoCopy(buffer, aRange.count, wfree);
     newData->format = aData->format;
-    
+
     return newData;
 }
 

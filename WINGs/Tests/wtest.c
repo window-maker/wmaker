@@ -115,6 +115,41 @@ testFrame(WMScreen *scr)
     
 }
 
+
+static void
+singleClick(WMWidget *self, void *data)
+{
+}
+
+
+static void
+doubleClick(WMWidget *self, void *data)
+{
+    WMLabel *label = (WMLabel*)data;
+    WMList *lPtr = (WMList*)self;
+    char buf[255];
+
+    WMSelectAllListItems(lPtr);
+
+    //sprintf(buf, "Selected items: %d",
+    //        WMGetArrayItemCount(WMGetListSelectedItems(lPtr)));;
+    //WMSetLabelText(label, buf);
+}
+
+
+static void
+listSelectionObserver(void *observer, WMNotification *notification)
+{
+    WMLabel *label = (WMLabel*)observer;
+    WMList *lPtr = (WMList*)WMGetNotificationObject(notification);
+    char buf[255];
+
+    sprintf(buf, "Selected items: %d",
+            WMGetArrayItemCount(WMGetListSelectedItems(lPtr)));;
+    WMSetLabelText(label, buf);
+}
+
+
 void
 testList(WMScreen *scr)
 {
@@ -123,27 +158,67 @@ testList(WMScreen *scr)
     WMList *mlist;
     WMLabel *label;
     WMLabel *mlabel;
+    WMLabel *title;
+    WMLabel *mtitle;
     char text[100];
     int i;
 
     windowCount++;
 
     win = WMCreateWindow(scr, "testList");
+    WMResizeWidget(win, 370, 250);
     WMSetWindowTitle(win, "List");
     WMSetWindowCloseAction(win, closeAction, NULL);
 
+    title = WMCreateLabel(win);
+    WMResizeWidget(title, 150, 20);
+    WMMoveWidget(title, 10, 10);
+    WMSetLabelRelief(title, WRRidge);
+    WMSetLabelText(title, "Single selection list");
+
+    mtitle = WMCreateLabel(win);
+    WMResizeWidget(mtitle, 150, 20);
+    WMMoveWidget(mtitle, 210, 10);
+    WMSetLabelRelief(mtitle, WRRidge);
+    WMSetLabelText(mtitle, "Multiple selection list");
+
     list = WMCreateList(win);
+    WMMoveWidget(list, 10, 40);
     for (i=0; i<50; i++) {
 	sprintf(text, "Item %i", i);
 	WMAddListItem(list, text);
     }
     mlist = WMCreateList(win);
     WMSetListAllowMultipleSelection(mlist, True);
-    WMMoveWidget(mlist, 220, 0);
-    for (i=0; i<50; i++) {
+    WMMoveWidget(mlist, 210, 40);
+    for (i=0; i<135; i++) {
 	sprintf(text, "Item %i", i);
 	WMAddListItem(mlist, text);
     }
+
+    label = WMCreateLabel(win);
+    WMResizeWidget(label, 150, 40);
+    WMMoveWidget(label, 10, 200);
+    WMSetLabelRelief(label, WRRidge);
+    WMSetLabelText(label, "Selected items: 0");
+
+    mlabel = WMCreateLabel(win);
+    WMResizeWidget(mlabel, 150, 40);
+    WMMoveWidget(mlabel, 210, 200);
+    WMSetLabelRelief(mlabel, WRRidge);
+    WMSetLabelText(mlabel, "Selected items: 0");
+
+    WMSetListAction(list, singleClick, label);
+    WMSetListDoubleAction(list, doubleClick, label);
+    WMSetListAction(mlist, singleClick, mlabel);
+    WMSetListDoubleAction(mlist, doubleClick, mlabel);
+
+    WMAddNotificationObserver(listSelectionObserver, label,
+			      WMListSelectionDidChangeNotification, list);
+    WMAddNotificationObserver(listSelectionObserver, mlabel,
+			      WMListSelectionDidChangeNotification, mlist);
+
+
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
     WMMapWidget(win);

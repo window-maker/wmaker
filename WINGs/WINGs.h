@@ -145,6 +145,8 @@ typedef enum {
 	WSIncrementPage,
 	WSDecrementLine,
 	WSIncrementLine,
+	WSDecrementWheel,
+	WSIncrementWheel,
 	WSKnob,
 	WSKnobSlot
 } WMScrollerPart;
@@ -1088,11 +1090,17 @@ WMListItem *WMGetListItem(WMList *lPtr, int row);
 
 WMArray *WMGetListItems(WMList *lPtr);
 
-int WMRemoveListItem(WMList *lPtr, int row);
+void WMRemoveListItem(WMList *lPtr, int row);
 
 void WMSelectListItem(WMList *lPtr, int row);
 
 void WMUnselectListItem(WMList *lPtr, int row);
+
+/* This will select all items in range, and deselect all the others */
+void WMSetListSelectionToRange(WMList *lPtr, WMRange range);
+
+/* This will select all items in range, leaving the others as they are */
+void WMSelectListItemsInRange(WMList *lPtr, WMRange range);
 
 void WMSelectAllListItems(WMList *lPtr);
 

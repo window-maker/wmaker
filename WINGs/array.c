@@ -41,7 +41,7 @@ WMCreateArrayWithDestructor(int initialSize, WMFreeDataProc *destructor)
 
     array = wmalloc(sizeof(WMArray));
 
-    if (initialSize == 0) {
+    if (initialSize <= 0) {
         initialSize = INITIAL_SIZE;
     }
 
@@ -52,6 +52,24 @@ WMCreateArrayWithDestructor(int initialSize, WMFreeDataProc *destructor)
     array->destructor = destructor;
 
     return array;
+}
+
+
+WMArray*
+WMCreateArrayWithArray(WMArray *array)
+{
+    WMArray *newArray;
+
+    newArray = wmalloc(sizeof(WMArray));
+
+    newArray->items = wmalloc(sizeof(void*) * array->allocSize);
+    memcpy(newArray->items, array->items, sizeof(void*)*array->itemCount);
+
+    newArray->itemCount = array->itemCount;
+    newArray->allocSize = array->allocSize;
+    newArray->destructor = NULL;
+
+    return newArray;
 }
 
 
@@ -85,11 +103,11 @@ WMGetArrayItemCount(WMArray *array)
 }
 
 
-int
+void
 WMAppendArray(WMArray *array, WMArray *other)
 {
     if (other->itemCount == 0)
-        return 1;
+        return;
 
     if (array->itemCount + other->itemCount > array->allocSize) {
         array->allocSize += other->allocSize;
@@ -99,12 +117,10 @@ WMAppendArray(WMArray *array, WMArray *other)
     memcpy(array->items+array->itemCount, other->items,
            sizeof(void*)*other->itemCount);
     array->itemCount += other->itemCount;
-
-    return 1;
 }
 
 
-int
+void
 WMAddToArray(WMArray *array, void *item)
 {
     if (array->itemCount >= array->allocSize) {
@@ -114,15 +130,13 @@ WMAddToArray(WMArray *array, void *item)
     array->items[array->itemCount] = item;
 
     array->itemCount++;
-
-    return 1;
 }
 
 
-int
+void
 WMInsertInArray(WMArray *array, int index, void *item)
 {
-    wassertrv(index >= 0 && index <= array->itemCount, 0);
+    wassertr(index >= 0 && index <= array->itemCount);
 
     if (array->itemCount >= array->allocSize) {
         array->allocSize += RESIZE_INCREMENT;
@@ -135,8 +149,6 @@ WMInsertInArray(WMArray *array, int index, void *item)
     array->items[index] = item;
 
     array->itemCount++;
-
-    return 1;
 }
 
 
@@ -147,6 +159,7 @@ WMReplaceInArray(WMArray *array, int index, void *item)
 
     wassertrv(index >= 0 && index <= array->itemCount, NULL);
 
+    /* is it really useful to perform append if index == array->itemCount ? -Dan */
     if (index == array->itemCount) {
         WMAddToArray(array, item);
         return NULL;
@@ -186,7 +199,8 @@ WMRemoveFromArray(WMArray *array, void *item)
 
     for (i = 0; i < array->itemCount; i++) {
         if (array->items[i] == item) {
-            return WMDeleteFromArray(array, i);
+            WMDeleteFromArray(array, i);
+            return 1;
         }
     }
 
@@ -263,6 +277,30 @@ WMMapArray(WMArray *array, void (*function)(void*, void*), void *data)
     for (i=0; i<array->itemCount; i++) {
         (*function)(array->items[i], data);
     }
+}
+
+
+WMArray*
+WMGetSubarrayWithRange(WMArray* array, WMRange aRange)
+{
+    WMArray *newArray;
+
+    if (aRange.count <= 0)
+        return WMCreateArray(0);
+
+    if (aRange.position < 0)
+        aRange.position = 0;
+    if (aRange.position >= array->itemCount)
+        aRange.position = array->itemCount - 1;
+    if (aRange.position + aRange.count > array->itemCount)
+        aRange.count = array->itemCount - aRange.position;
+
+    newArray = WMCreateArray(aRange.count);
+    memcpy(newArray->items, array->items+aRange.position,
+           sizeof(void*)*aRange.count);
+    newArray->itemCount = aRange.count;
+
+    return newArray;
 }
 
 

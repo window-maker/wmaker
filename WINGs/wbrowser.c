@@ -571,14 +571,15 @@ scrollCallback(WMWidget *scroller, void *self)
 #define LAST_VISIBLE_COLUMN  bPtr->firstVisibleColumn+bPtr->maxVisibleColumns
 
     switch (WMGetScrollerHitPart(sPtr)) {
-     case WSDecrementLine:
+    case WSDecrementLine:
 	if (bPtr->firstVisibleColumn > 0) {
 	    scrollToColumn(bPtr, bPtr->firstVisibleColumn-1, True);
 	}
 	break;
 
-     case WSDecrementPage:
-	if (bPtr->firstVisibleColumn > 0) {
+    case WSDecrementPage:
+    case WSDecrementWheel:
+        if (bPtr->firstVisibleColumn > 0) {
 	    newFirst = bPtr->firstVisibleColumn - bPtr->maxVisibleColumns;
 
 	    scrollToColumn(bPtr, newFirst, True);
@@ -586,13 +587,14 @@ scrollCallback(WMWidget *scroller, void *self)
 	break;
 
 
-     case WSIncrementLine:
+    case WSIncrementLine:
 	if (LAST_VISIBLE_COLUMN < bPtr->usedColumnCount) {
 	    scrollToColumn(bPtr, bPtr->firstVisibleColumn+1, True);
 	}
 	break;
 
-     case WSIncrementPage:
+    case WSIncrementPage:
+    case WSIncrementWheel:
 	if (LAST_VISIBLE_COLUMN < bPtr->usedColumnCount) {
 	    newFirst = bPtr->firstVisibleColumn + bPtr->maxVisibleColumns;
 
@@ -603,7 +605,7 @@ scrollCallback(WMWidget *scroller, void *self)
 	}
 	break;
 
-     case WSKnob:
+    case WSKnob:
 	{
 	    double floatValue;
 	    double value = bPtr->columnCount - bPtr->maxVisibleColumns;
@@ -624,8 +626,8 @@ scrollCallback(WMWidget *scroller, void *self)
 	}
 	break;
 
-     case WSKnobSlot:
-     case WSNoPart:
+    case WSKnobSlot:
+    case WSNoPart:
 	/* do nothing */
 	break;
     }
