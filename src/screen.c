@@ -88,6 +88,10 @@ extern Atom _XA_WINDOWMAKER_NOTICEBOARD;
 
 extern int wScreenCount;
 
+#ifdef KEEP_XKB_LOCK_STATUS     
+extern int wXkbSupported;
+#endif
+
 extern WDDomain *WDWindowMaker;
 
 
@@ -713,8 +717,11 @@ wScreenInit(int screen_number)
     XSelectInput(dpy, scr->root_win, event_mask);
 
 #ifdef KEEP_XKB_LOCK_STATUS     
-    XkbSelectEventDetails(dpy,XkbUseCoreKbd,XkbIndicatorStateNotify,
-            XkbIndicatorStateNotifyMask, XkbIndicatorStateNotifyMask);
+    if (wXkbSupported) {
+        XkbSelectEvents(dpy,XkbUseCoreKbd,
+                XkbStateNotifyMask,
+                XkbStateNotifyMask);
+    }
 #endif /* KEEP_XKB_LOCK_STATUS */
 
     XSync(dpy, False);

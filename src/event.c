@@ -96,6 +96,10 @@ extern Bool wShapeSupported;
 extern int wShapeEventBase;
 #endif
 
+#ifdef KEEP_XKB_LOCK_STATUS     
+extern int wXkbEventBase;
+#endif
+
 /* special flags */
 extern char WDelayedActionSet;
 
@@ -447,18 +451,15 @@ static void
 handleExtensions(XEvent *event)
 {
     XkbEvent *xkbevent;
-    xkbevent = event;
+    xkbevent = (XkbEvent *)event;
 #ifdef SHAPE
     if (wShapeSupported && event->type == (wShapeEventBase+ShapeNotify)) {
 	handleShapeNotify(event);
     }
 #endif	
 #ifdef KEEP_XKB_LOCK_STATUS   
-    if (wPreferences.modelock &&
-            (event->type == 0x54)){
-	    /* if someone know how to call this 0x50
-	     * or how to clean code this please tell ]d */
-	handleXkbIndicatorStateNotify(event);
+    if (wPreferences.modelock && (xkbevent->type == wXkbEventBase)){
+        handleXkbIndicatorStateNotify(event);
     }
 #endif /*KEEP_XKB_LOCK_STATUS*/
 }
