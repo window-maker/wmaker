@@ -1311,7 +1311,9 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
                 done=1;
                 break;
              case XK_Up:
+#ifdef XK_KP_Up
              case XK_KP_Up:
+#endif
              case XK_k:
                 if (ctrlmode){
                 if (moment != UP)
@@ -1323,7 +1325,9 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
                 else off_y-=kspeed;
                 break;
              case XK_Down:
+#ifdef XK_KP_Down
              case XK_KP_Down:
+#endif
              case XK_j:
                 if (ctrlmode){
                 if (moment != DOWN)
@@ -1334,7 +1338,9 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
                 else off_y+=kspeed;
                 break;
              case XK_Left:
+#ifdef XK_KP_Left
              case XK_KP_Left:
+#endif
              case XK_h:
                 if (ctrlmode) {
                 if (moment != LEFT)
@@ -1346,7 +1352,9 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
                 else off_x-=kspeed;
                 break;
              case XK_Right:
+#ifdef XK_KP_Right
              case XK_KP_Right:
+#endif
              case XK_l:
                 if (ctrlmode) {
                 if (moment != RIGHT)

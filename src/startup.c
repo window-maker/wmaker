@@ -901,7 +901,7 @@ StartUp(Bool defaultScreenOnly)
 	    wScreen[j]->last_dock = wScreen[j]->dock;
 	
 	manageAllWindows(wScreen[j]);
-	
+		
 	/* restore saved menus */
 	wMenuRestoreState(wScreen[j]);
 	

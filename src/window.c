@@ -818,6 +818,7 @@ wManageWindow(WScreen *scr, Window window)
 	    !WFLAGP(wwin, no_miniaturizable)) {
             wwin->flags.miniaturized = win_state->state->miniaturized;
         }
+
         if (!IS_OMNIPRESENT(wwin)) {
             int w = wDefaultGetStartWorkspace(scr, wwin->wm_instance,
                                               wwin->wm_class);
@@ -842,13 +843,34 @@ wManageWindow(WScreen *scr, Window window)
 	    wwin->flags.shaded = wstate->shaded;
 	    wwin->flags.hidden = wstate->hidden;
 	    wwin->flags.miniaturized = wstate->miniaturized;
-	    workspace = wstate->workspace;
+	    wwin->flags.maximized = wstate->maximized;
+	    if (wwin->flags.maximized) {
+		wwin->old_geometry.x = wstate->x;
+		wwin->old_geometry.y = wstate->y;
+		wwin->old_geometry.width = wstate->w;
+		wwin->old_geometry.height = wstate->h;
+	    }
 
-	    if (scr->flags.startup && wstate->window_shortcuts > 0) {
+	    workspace = wstate->workspace;
+	} else {
+	    wstate = NULL;
+	}
+
+	/* restore window shortcut */
+	if (wstate != NULL || win_state != NULL) {
+	    unsigned mask = 0;
+
+	    if (win_state != NULL)
+		mask = win_state->state->window_shortcuts;
+	    
+	    if (wstate != NULL && mask == 0)
+		mask = wstate->window_shortcuts;
+
+	    if (mask > 0) {
 		int i;
 
 		for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
-		    if (wstate->window_shortcuts & (1<<i)) {
+		    if (mask & (1<<i)) {
 			if (!scr->shortcutWindows[i])
 			    scr->shortcutWindows[i] = WMCreateBag(4);
 
@@ -856,6 +878,8 @@ wManageWindow(WScreen *scr, Window window)
 		    }
 		}
 	    }
+	}
+	if (wstate != NULL) {
 	    free(wstate);
 	}
     }
@@ -895,7 +919,7 @@ wManageWindow(WScreen *scr, Window window)
     }
 
     /* setup window geometry */
-    if (win_state && win_state->state->use_geometry) {
+    if (win_state && win_state->state->w > 0) {
         width = win_state->state->w;
         height = win_state->state->h;
     }
@@ -908,7 +932,7 @@ wManageWindow(WScreen *scr, Window window)
     {
 	Bool dontBring = False;
 
-	if (win_state && win_state->state->use_geometry) {
+	if (win_state && win_state->state->w > 0) {
 	    x = win_state->state->x;
 	    y = win_state->state->y;
 	} else if ((wwin->transient_for==None
@@ -973,7 +997,7 @@ wManageWindow(WScreen *scr, Window window)
 
     wwin->frame = wFrameWindowCreate(scr, window_level, 
 				     x, y, width, height,
-                     &wPreferences.window_title_clearance, foo,
+				     &wPreferences.window_title_clearance, foo,
 				     scr->window_title_texture,
 				     scr->resizebar_texture,
 				     scr->window_title_pixel, 
@@ -2299,6 +2323,18 @@ wWindowSaveState(WWindow *wwin)
     data[1] = wwin->flags.miniaturized;
     data[2] = wwin->flags.shaded;
     data[3] = wwin->flags.hidden;
+    data[4] = wwin->flags.maximized;
+    if (wwin->flags.maximized == 0) {
+	data[5] = wwin->frame_x;
+	data[6] = wwin->frame_y;
+	data[7] = wwin->frame->core->width;
+	data[8] = wwin->frame->core->height;
+    } else {
+	data[5] = wwin->old_geometry.x;
+	data[6] = wwin->old_geometry.y;
+	data[7] = wwin->old_geometry.width;
+	data[8] = wwin->old_geometry.height;
+    }
 
     for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
 	if (wwin->screen_ptr->shortcutWindows[i] &&
@@ -2333,7 +2369,7 @@ getSavedState(Window window, WSavedState **state)
 	(*state)->miniaturized = data[1];
 	(*state)->shaded = data[2];
 	(*state)->hidden = data[3];
-	(*state)->use_geometry = data[4];
+	(*state)->maximized = data[4];
 	(*state)->x = data[5];
 	(*state)->y = data[6];
 	(*state)->w = data[7];

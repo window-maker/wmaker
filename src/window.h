@@ -310,9 +310,9 @@ typedef struct WSavedState {
     int miniaturized;
     int shaded;
     int hidden;
-    int use_geometry;
-    int x;
-    int y;
+    int maximized;
+    int x;			       /* original geometry of the */
+    int y;			       /* window if it's maximized */
     unsigned int w;
     unsigned int h;
     unsigned window_shortcuts; /* mask like 1<<shortcut_number */

@@ -1,7 +1,7 @@
 /*
  *  Window Maker window manager
  * 
- *  Copyright (c) 1997, 1998 Alfredo K. Kojima
+ *  Copyright (c) 1997-2000 Alfredo K. Kojima
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,11 +43,12 @@
 #define WTEX_MHGRADIENT	((1<<5)|WREL_BORDER_MASK)
 #define WTEX_MVGRADIENT	((1<<6)|WREL_BORDER_MASK)
 #define WTEX_MDGRADIENT	((1<<7)|WREL_BORDER_MASK)
-#define WTEX_PIXMAP	(1<<8)
-#define WTEX_THGRADIENT	((1<<9)|WREL_BORDER_MASK)
-#define WTEX_TVGRADIENT	((1<<10)|WREL_BORDER_MASK)
-#define WTEX_TDGRADIENT	((1<<11)|WREL_BORDER_MASK)
-#define WTEX_FUNCTION	((1<<12)|WREL_BORDER_MASK)
+#define WTEX_IGRADIENT	((1<<8)|WREL_BORDER_MASK)
+#define WTEX_PIXMAP	(1<<10)
+#define WTEX_THGRADIENT	((1<<11)|WREL_BORDER_MASK)
+#define WTEX_TVGRADIENT	((1<<12)|WREL_BORDER_MASK)
+#define WTEX_TDGRADIENT	((1<<13)|WREL_BORDER_MASK)
+#define WTEX_FUNCTION	((1<<14)|WREL_BORDER_MASK)
 
 /* pixmap subtypes */
 #define WTP_TILE	2
@@ -100,6 +101,19 @@ typedef struct WTexMGradient {
 } WTexMGradient;
 
 
+typedef struct WTexIGradient {
+    short type;
+    char dummy;
+    XColor normal;
+    GC normal_gc;
+
+    RColor colors1[2];
+    RColor colors2[2];
+    int thickness1;
+    int thickness2;
+} WTexIGradient;
+
+
 typedef struct WTexPixmap {
     short type;
     char subtype;
@@ -137,6 +151,7 @@ typedef union WTexture {
     WTexAny any;    
     WTexSolid solid;
     WTexGradient gradient;
+    WTexIGradient igradient;
     WTexMGradient mgradient;
     WTexPixmap pixmap;
     WTexTGradient tgradient;
@@ -148,6 +163,7 @@ WTexSolid *wTextureMakeSolid(WScreen*, XColor*);
 WTexGradient *wTextureMakeGradient(WScreen*, int, RColor*, RColor*);
 WTexMGradient *wTextureMakeMGradient(WScreen*, int, RColor**);
 WTexTGradient *wTextureMakeTGradient(WScreen*, int, RColor*, RColor*, char *, int);
+WTexIGradient *wTextureMakeIGradient(WScreen*, int, RColor[], int, RColor[]);
 WTexPixmap *wTextureMakePixmap(WScreen *scr, int style, char *pixmap_file, 
 			       XColor *color);
 #ifdef TEXTURE_PLUGIN

@@ -449,17 +449,12 @@ getWindowState(WScreen *scr, proplist_t win_state)
     
     value = PLGetDictionaryEntry(win_state, sGeometry);
     if (value && PLIsString(value)) {
-        if (sscanf(PLGetString(value), "%ix%i+%i+%i",
+        if (!(sscanf(PLGetString(value), "%ix%i+%i+%i",
                    &state->w, &state->h, &state->x, &state->y)==4 &&
-            (state->w>0 && state->h>0)) {
-            state->use_geometry = 1;
-        } else if (sscanf(PLGetString(value), "%i,%i,%i,%i",
-                   &state->x, &state->y, &state->w, &state->h)==4 &&
-            (state->w>0 && state->h>0)) { 
-	    /* TODO: remove redundant sscanf() in version 0.20.x */
-            state->use_geometry = 1;
-        }
-
+	      (state->w>0 && state->h>0))) {
+	    state->w = 0;
+	    state->h = 0;
+	}
     }
 
     return state;

@@ -500,7 +500,8 @@ wGNOMEProcessClientMessage(XClientMessageEvent *event)
 
 	if (mask & WIN_STATE_STICKY) {
 	    if ((flags & WIN_STATE_STICKY) != WFLAGP(wwin, omnipresent)) {
-		wwin->client_flags.omnipresent = 1;
+		wwin->client_flags.omnipresent = (flags & WIN_STATE_STICKY)!=0;
+		wGNOMEUpdateClientStateHint(wwin, False);
 		updateWindowList = True;
 	    }
 	}

@@ -100,6 +100,9 @@ execWindowOptionCommand(WMenu *menu, WMenuEntry *entry)
      case WO_OMNIPRESENT:
 	wwin->flags.omnipresent^=1;
 	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_WORKSPACE);
+#ifdef GNOME_STUFF
+	wGNOMEUpdateClientStateHint(wwin, False);
+#endif
 	break;
     }
 }

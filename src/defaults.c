@@ -405,7 +405,7 @@ WDefaultEntry optionList[] = {
     {"RaiseDelay",	"0",			NULL,
 	  &wPreferences.raise_delay,	getInt,		NULL
     },
-    {"WindowsCycling",  "YES",			NULL,
+    {"WindozeCycling",  "YES",			NULL,
 	  &wPreferences.windows_cycling,getBool,	NULL
     },
     {"CirculateRaise",	"NO",			NULL,
@@ -1701,6 +1701,8 @@ getEnum(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
  * (dgradient <color> <color>)
  * (mhgradient <color> <color> ...)
  * (mvgradient <color> <color> ...)
+ * (mdgradient <color> <color> ...)
+ * (igradient <color1> <color1> <thickness1> <color2> <color2> <thickness2>)
  * (tpixmap <file> <color>)
  * (spixmap <file> <color>)
  * (cpixmap <file> <color>)
@@ -1800,7 +1802,66 @@ parse_texture(WScreen *scr, proplist_t pl)
 	color2.blue = xcolor.blue >> 8;
 
 	texture = (WTexture*)wTextureMakeGradient(scr, type, &color1, &color2);
-	
+
+    } else if (strcasecmp(val, "igradient")==0) {
+	RColor colors1[2], colors2[2];
+	int th1, th2;
+	XColor xcolor;
+        int i;
+
+	if (nelem != 7) {
+	    wwarning(_("bad number of arguments in gradient specification"));
+	    return NULL;
+	}
+
+	/* get from color */
+	for (i = 0; i < 2; i++) {
+	    elem = PLGetArrayElement(pl, 1+i);
+	    if (!elem || !PLIsString(elem))
+		return NULL;
+	    val = PLGetString(elem);
+
+	    if (!XParseColor(dpy, scr->w_colormap, val, &xcolor)) {
+		wwarning(_("\"%s\" is not a valid color name"), val);
+		return NULL;
+	    }
+	    colors1[i].alpha = 255;
+	    colors1[i].red = xcolor.red >> 8;
+	    colors1[i].green = xcolor.green >> 8;
+	    colors1[i].blue = xcolor.blue >> 8;
+	}
+	elem = PLGetArrayElement(pl, 3);
+	if (!elem || !PLIsString(elem))
+	    return NULL;
+	val = PLGetString(elem);
+	th1 = atoi(val);
+
+
+	/* get from color */
+	for (i = 0; i < 2; i++) {
+	    elem = PLGetArrayElement(pl, 4+i);
+	    if (!elem || !PLIsString(elem))
+		return NULL;
+	    val = PLGetString(elem);
+
+	    if (!XParseColor(dpy, scr->w_colormap, val, &xcolor)) {
+		wwarning(_("\"%s\" is not a valid color name"), val);
+		return NULL;
+	    }
+	    colors2[i].alpha = 255;
+	    colors2[i].red = xcolor.red >> 8;
+	    colors2[i].green = xcolor.green >> 8;
+	    colors2[i].blue = xcolor.blue >> 8;
+	}
+	elem = PLGetArrayElement(pl, 6);
+	if (!elem || !PLIsString(elem))
+	    return NULL;
+	val = PLGetString(elem);
+	th2 = atoi(val);
+
+	texture = (WTexture*)wTextureMakeIGradient(scr, th1, colors1,
+						   th2, colors2);
+
     } else if (strcasecmp(val, "mhgradient")==0
 	       || strcasecmp(val, "mvgradient")==0
 	       || strcasecmp(val, "mdgradient")==0) {
@@ -3208,7 +3269,7 @@ setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 		SendHelperMessage(scr, 'U', 0, NULL);
 	    }
 	}
-    } else {
+    } else if (PLGetNumberOfElements(value) > 0) {
 	char *command;
 	char *text;
 

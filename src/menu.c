@@ -972,13 +972,17 @@ keyboardMenu(WMenu *menu)
 		break;
 
 	     case XK_Home:
+#ifdef XK_KP_Home
 	     case XK_KP_Home:
+#endif
 		selectEntry(menu, 0);
 		makeVisible(menu);
 		break;
 		
 	     case XK_End:
+#ifdef XK_KP_End
 	     case XK_KP_End:
+#endif
 		selectEntry(menu, menu->entry_no-1);
 		makeVisible(menu);
 		break;
@@ -987,7 +991,9 @@ keyboardMenu(WMenu *menu)
 #ifdef ARROWLESS_KBD
 	     case XK_k:
 #endif
+#ifdef XK_KP_Up
 	     case XK_KP_Up:
+#endif
 		if (menu->selected_entry <= 0)
                     selectEntry(menu, menu->entry_no-1);
 		else
@@ -999,7 +1005,9 @@ keyboardMenu(WMenu *menu)
 #ifdef ARROWLESS_KBD
 	     case XK_j:
 #endif
+#ifdef XK_KP_Down
 	     case XK_KP_Down:
+#endif
 		if (menu->selected_entry<0) 
                     selectEntry(menu, 0);
                 else if (menu->selected_entry == menu->entry_no-1)
@@ -1013,7 +1021,9 @@ keyboardMenu(WMenu *menu)
 #ifdef ARROWLESS_KBD
 	     case XK_l:
 #endif
+#ifdef XK_KP_Right
 	     case XK_KP_Right:
+#endif
 		if (menu->selected_entry>=0) {
 		    WMenuEntry *entry;
 		    entry = menu->entries[menu->selected_entry];
@@ -1038,7 +1048,9 @@ keyboardMenu(WMenu *menu)
 #ifdef ARROWLESS_KBD
 	     case XK_h:
 #endif
+#ifdef XK_KP_Left
 	     case XK_KP_Left:
+#endif
 		if (menu->parent!=NULL && menu->parent->selected_entry>=0) {
 		    selectEntry(menu, -1);
 		    move_menus(menu, old_pos_x, old_pos_y);
@@ -1582,8 +1594,6 @@ wMenuUnderPointer(WScreen *screen)
 
 
 
-#define MIN(a,b)  (((a) > (b)) ? (b) : (a))
-
 
 static void
 getPointerPosition(WScreen *scr, int *x, int *y)
@@ -1617,11 +1627,11 @@ getScrollAmount(WMenu *menu, int *hamount, int *vamount)
     if (wPreferences.vedge_thickness) {
         if (xroot <= wPreferences.vedge_thickness + 1 && menuX1 < wPreferences.vedge_thickness) {
             /* scroll to the right */
-            *hamount = MIN(MENU_SCROLL_STEP, abs(menuX1));
+            *hamount = WMIN(MENU_SCROLL_STEP, abs(menuX1));
 
         } else if (xroot >= screenW-2-wPreferences.vedge_thickness && menuX2 > screenW-1-wPreferences.vedge_thickness) {
             /* scroll to the left */
-            *hamount = MIN(MENU_SCROLL_STEP, abs(menuX2-screenW-1));
+            *hamount = WMIN(MENU_SCROLL_STEP, abs(menuX2-screenW-1));
 
             if (*hamount==0)
                 *hamount = 1;
@@ -1633,11 +1643,11 @@ getScrollAmount(WMenu *menu, int *hamount, int *vamount)
 
     if (xroot <= 1 && menuX1 < 0) {
 	/* scroll to the right */
-	*hamount = MIN(MENU_SCROLL_STEP, abs(menuX1));
+	*hamount = WMIN(MENU_SCROLL_STEP, abs(menuX1));
 
     } else if (xroot >= screenW-2 && menuX2 > screenW-1) {
 	/* scroll to the left */
-	*hamount = MIN(MENU_SCROLL_STEP, abs(menuX2-screenW-1));
+	*hamount = WMIN(MENU_SCROLL_STEP, abs(menuX2-screenW-1));
 	
 	if (*hamount==0)
 	    *hamount = 1;
@@ -1647,11 +1657,11 @@ getScrollAmount(WMenu *menu, int *hamount, int *vamount)
     
     if (yroot <= 1 && menuY1 < 0) {
 	/* scroll down */
-	*vamount = MIN(MENU_SCROLL_STEP, abs(menuY1));
+	*vamount = WMIN(MENU_SCROLL_STEP, abs(menuY1));
         
     } else if (yroot >= screenH-2 && menuY2 > screenH-1) {
 	/* scroll up */
-	*vamount = MIN(MENU_SCROLL_STEP, abs(menuY2-screenH-2));
+	*vamount = WMIN(MENU_SCROLL_STEP, abs(menuY2-screenH-2));
         
 	*vamount = -*vamount;
     }

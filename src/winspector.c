@@ -1506,24 +1506,17 @@ createInspectorForWindow(WWindow *wwin, int xpos, int ypos,
     WMSetFrameTitle(panel->iconFrm, _("Miniwindow Image"));
 
     panel->iconLbl = WMCreateLabel(panel->iconFrm);
-    WMMoveWidget(panel->iconLbl, PWIDTH - (2 * 15) - 22 - 64, 30);
+    WMMoveWidget(panel->iconLbl, PWIDTH - (2 * 15) - 22 - 64, 20);
     WMResizeWidget(panel->iconLbl, 64, 64);
     WMSetLabelRelief(panel->iconLbl, WRGroove);
     WMSetLabelImagePosition(panel->iconLbl, WIPImageOnly);
     
     panel->browseIconBtn = WMCreateCommandButton(panel->iconFrm);
     WMSetButtonAction(panel->browseIconBtn, chooseIconCallback, panel);
-    WMMoveWidget(panel->browseIconBtn, 22, 30);
-    WMResizeWidget(panel->browseIconBtn, 100, 26);
+    WMMoveWidget(panel->browseIconBtn, 22, 32);
+    WMResizeWidget(panel->browseIconBtn, 120, 26);
     WMSetButtonText(panel->browseIconBtn, _("Browse..."));
 
-#if 0
-    panel->updateIconBtn = WMCreateCommandButton(panel->iconFrm);
-    WMSetButtonAction(panel->updateIconBtn, (WMAction*)updateIcon, panel);
-    WMMoveWidget(panel->updateIconBtn, 22, 65);
-    WMResizeWidget(panel->updateIconBtn, 100, 26);
-    WMSetButtonText(panel->updateIconBtn, _("Update"));
-#endif
 #ifdef wrong_behaviour
     WMSetButtonImagePosition(panel->updateIconBtn, WIPRight);
     pixmap = WMGetSystemPixmap(scr->wmscreen, WSIReturnArrow);
@@ -1535,20 +1528,21 @@ createInspectorForWindow(WWindow *wwin, int xpos, int ypos,
 #endif
 
     panel->fileLbl = WMCreateLabel(panel->iconFrm);
-    WMMoveWidget(panel->fileLbl, 20, 95);
+    WMMoveWidget(panel->fileLbl, 20, 85);
     WMResizeWidget(panel->fileLbl, PWIDTH - (2 * 15) - (2 * 20), 14);
     WMSetLabelText(panel->fileLbl, _("Icon File Name:"));
 
     panel->fileText = WMCreateTextField(panel->iconFrm);
-    WMMoveWidget(panel->fileText, 20, 115);
-    WMResizeWidget(panel->fileText, PWIDTH - (2 * 15) - (2 * 15), 20);
+    WMMoveWidget(panel->fileText, 20, 105);
+    WMResizeWidget(panel->fileText, PWIDTH - (2 * 20) - (2 * 15), 20);
     WMSetTextFieldText(panel->fileText, NULL);
     WMAddNotificationObserver(textEditedObserver, panel, 
 			      WMTextDidEndEditingNotification, 
 			      panel->fileText);
+
     panel->alwChk = WMCreateSwitchButton(panel->iconFrm);
-    WMMoveWidget(panel->alwChk, 20, 140);
-    WMResizeWidget(panel->alwChk, PWIDTH - (2 * 15) - (2 * 15), 20);
+    WMMoveWidget(panel->alwChk, 20, 130);
+    WMResizeWidget(panel->alwChk, PWIDTH - (2 * 15) - (2 * 15), 30);
     WMSetButtonText(panel->alwChk, _("Ignore client supplied icon"));
     WMSetButtonSelected(panel->alwChk, WFLAGP(wwin, always_user_icon));
 
