@@ -207,7 +207,7 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
                 WWindow *tmp;
                 if (swpanel) {
                     tmp = wSwitchPanelHandleEvent(swpanel, &ev);
-                    if (tmp && tmp != newFocused) {
+                    if (tmp) {
                         newFocused = tmp;
                         wWindowFocus(newFocused, oldFocused);
                         oldFocused = newFocused;

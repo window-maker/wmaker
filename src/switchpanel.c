@@ -479,7 +479,7 @@ WWindow *wSwitchPanelHandleEvent(WSwitchPanel *panel, XEvent *event)
             }
         }
 
-        if (focus >= 0) {
+        if (focus >= 0 && panel->current != focus) {
             WWindow *wwin;
             
             changeImage(panel, panel->current, 0);
