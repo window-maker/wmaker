@@ -245,7 +245,7 @@ doScrolling(WMWidget *self, void *data)
     int vpsize;
     float size;
     
-    if (sPtr->hScroller == self) {
+    if (sPtr->hScroller == (WMScroller *)self) {
 	pos = -sPtr->contentView->pos.x;
 	size = sPtr->contentView->size.width-sPtr->viewport->size.width;
 	vpsize = sPtr->viewport->size.width - sPtr->pageScroll;
@@ -310,7 +310,7 @@ doScrolling(WMWidget *self, void *data)
 	break;
     }
     
-    if (sPtr->hScroller == self) {
+    if (sPtr->hScroller == (WMScroller *)self) {
 	W_MoveView(sPtr->contentView, -pos, sPtr->contentView->pos.y);
     } else {
 	W_MoveView(sPtr->contentView, sPtr->contentView->pos.x, -pos);

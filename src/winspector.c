@@ -1095,14 +1095,16 @@ createInspectorForWindow(WWindow *wwin)
     WMSetButtonAction(panel->defaultRb, selectSpecification, panel);
 
     if (wwin->wm_class && wwin->wm_instance) {
-	char *str;
+	char *str, *tmp;
 
-	str = wstrappend(wwin->wm_instance, wwin->wm_class);
+        tmp = wstrappend(wwin->wm_instance, ".");
+        str = wstrappend(tmp, wwin->wm_class);
 	panel->bothRb = WMCreateRadioButton(panel->specFrm);
 	WMMoveWidget(panel->bothRb, 10, 18);
 	WMResizeWidget(panel->bothRb, frame_width - (2 * 10), 20);
 	WMSetButtonText(panel->bothRb, str);
-	free(str);
+        free(tmp);
+        free(str);
 	WMGroupButtons(panel->defaultRb, panel->bothRb);
 
 	if (!selectedBtn)
@@ -1136,6 +1138,9 @@ createInspectorForWindow(WWindow *wwin)
 
 	WMSetButtonAction(panel->clsRb, selectSpecification, panel);
     }
+
+    if (selectedBtn)
+        WMSetButtonSelected(selectedBtn, True);
 
     panel->specLbl = WMCreateLabel(panel->win);
     WMMoveWidget(panel->specLbl, 15, 170);

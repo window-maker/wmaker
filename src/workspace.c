@@ -314,33 +314,34 @@ showWorkspaceName(WScreen *scr, int workspace)
     h = WMFontHeight(scr->workspace_name_font);
 
     switch (wPreferences.workspace_name_display_position) {
-     case WD_CENTER:
-	px = (scr->scr_width - (w+4))/2;
-	py = (scr->scr_height - (h+4))/2;
-	break;
      case WD_TOP:
 	px = (scr->scr_width - (w+4))/2;
 	py = 0;
 	break;
      case WD_BOTTOM:
 	px = (scr->scr_width - (w+4))/2;
-	py = scr->scr_height - h;
+	py = scr->scr_height - (h+4);
 	break;
      case WD_TOPLEFT:
 	px = 0;
 	py = 0;
 	break;
      case WD_TOPRIGHT:
-	px = scr->scr_width - w;
+	px = scr->scr_width - (w+4);
 	py = 0;
 	break;
      case WD_BOTTOMLEFT:
 	px = 0;
-	py = scr->scr_height - h;
+	py = scr->scr_height - (h+4);
 	break;
      case WD_BOTTOMRIGHT:
-	px = scr->scr_width - w;
-	py = scr->scr_height - h;
+	px = scr->scr_width - (w+4);
+	py = scr->scr_height - (h+4);
+	break;
+     case WD_CENTER:
+     default:
+	px = (scr->scr_width - (w+4))/2;
+	py = (scr->scr_height - (h+4))/2;
 	break;
     }
     XResizeWindow(dpy, scr->workspace_name, w+4, h+4);
@@ -389,7 +390,7 @@ showWorkspaceName(WScreen *scr, int workspace)
     ximg = RGetXImage(scr->rcontext, scr->root_win, px, py,
 		      data->text->width, data->text->height);
 
-    if (!ximg) {
+    if (!ximg || !ximg->image) {
 	goto erro;
     }
 

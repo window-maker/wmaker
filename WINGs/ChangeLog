@@ -1,3 +1,10 @@
+changes since wmaker 0.60.0:
+............................
+
+- added WMScreenWidth() and WMScreenHeight() functions.
+- fixed some problems when compiling with non gcc compilers.
+
+
 changes since wmaker 0.53.0:
 ............................
 

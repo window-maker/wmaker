@@ -215,7 +215,8 @@ image2TrueColorD16(RContext *ctx, RImage *image)
 		nberr[x+1]+=ber-2*b;
 	    }
 	    ofs += image->width;
-	    (char*)dataP += line_offset;
+            /*(char*)dataP += line_offset;*/
+            dataP = (unsigned short *)((char *)dataP + line_offset);
 	    /* skip to next line */
 	    terr = rerr;
 	    rerr = nrerr;
@@ -433,7 +434,7 @@ image2PseudoColor(RContext *ctx, RImage *image)
     grn = image->data[1];
     blu = image->data[2];
 
-    data = ximg->image->data;
+    data = (unsigned char *)ximg->image->data;
 
     /* Tables are same at the moment because rmask==gmask==bmask. */
     rtable = computeTable(rmask);
@@ -605,7 +606,7 @@ image2GrayScale(RContext *ctx, RImage *image)
     grn = image->data[1];
     blu = image->data[2];
 
-    data = ximg->image->data;
+    data = (unsigned char *)ximg->image->data;
 
     if (ctx->vclass == StaticGray)
 	gmask = (1<<ctx->depth) - 1; /* use all grays */

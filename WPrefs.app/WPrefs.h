@@ -38,6 +38,7 @@
 #include <WUtil.h>
 
 /** some config options **/
+/* is not easier to include ../src/wconfig.h ?? */
 #undef EXTEND_WINDOWSHORTCUT
 
 /****/

@@ -3526,7 +3526,6 @@ iconDblClick(WObjDescriptor *desc, XEvent *event)
 	((btn->icon->owner == NULL) && (btn->applist != NULL))) {
 	    if (btn->icon->owner == NULL)
 	    	btn->icon->owner = btn->applist->wapp->main_window_desc;
-    }
 #else
     if (btn->icon->owner && !(event->xbutton.state & ControlMask)) {
 #endif

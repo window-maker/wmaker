@@ -379,11 +379,11 @@ updateDockNumbers(WScreen *scr)
     
     XSetForeground(dpy, numbers_gc, scr->black_pixel);
     WMDrawString(scr->wmscreen, dicon->icon->core->window, numbers_gc,
-		 scr->icon_title_font->font, 4, 3, ws_numbers, length);
+		 scr->icon_title_font, 4, 3, ws_numbers, length);
 
     XSetForeground(dpy, numbers_gc, scr->white_pixel);
     WMDrawString(scr->wmscreen, dicon->icon->core->window, numbers_gc,
-		 scr->icon_title_font->font, 3, 2, ws_numbers, length);
+		 scr->icon_title_font, 3, 2, ws_numbers, length);
 
     XFreeGC(dpy, numbers_gc);
     free(ws_numbers);

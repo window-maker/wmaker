@@ -593,7 +593,6 @@ WMHandleEvent(XEvent *event)
 
     if (event->type == SelectionNotify || event->type == SelectionClear
 	|| event->type == SelectionRequest) {
-	puts("REQREWQ");
 	/* handle selection related events */
 	W_HandleSelectionEvent(event);
     }

@@ -672,6 +672,10 @@ int WMWidthOfString(WMFont *font, char *text, int length);
 
 WMScreen *WMWidgetScreen(WMWidget *w);
 
+unsigned int WMScreenWidth(WMScreen *scr);
+
+unsigned int WMScreenHeight(WMScreen *scr);
+
 void WMUnmapWidget(WMWidget *w);
 
 void WMMapWidget(WMWidget *w);

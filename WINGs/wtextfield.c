@@ -1260,7 +1260,6 @@ handleTextFieldActionEvents(XEvent *event, void *data)
             {
                 WMNotification *notif = WMCreateNotification("_lostOwnership",
                         NULL,tPtr);
-                puts("notify it");
                 WMPostNotification(notif);
                 WMReleaseNotification(notif);
             }

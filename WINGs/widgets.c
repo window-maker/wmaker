@@ -953,6 +953,20 @@ WMScreenDepth(WMScreen *scr)
 }
 
 
+unsigned int 
+WMScreenWidth(WMScreen *scr)
+{
+    return scr->rootView->size.width;
+}
+
+
+unsigned int
+WMScreenHeight(WMScreen *scr)
+{
+    return scr->rootView->size.height;
+}
+
+
 void 
 WMRedisplayWidget(WMWidget *w)
 {

@@ -357,9 +357,9 @@ typedef struct WPreferences {
 
     int icon_size;		       /* size of the icon */
 
-    int menu_style;		       /* menu decoration style */
+    char menu_style;		       /* menu decoration style */
 
-    int workspace_name_display_position;
+    char workspace_name_display_position;
     
     unsigned int modifier_mask;	       /* mask to use as kbd modifier */
 
