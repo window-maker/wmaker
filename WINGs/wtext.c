@@ -2432,15 +2432,16 @@ handleTextKeyPress(Text *tPtr, XEvent *event)
             Bool i = !tPtr->flags.rulerShown; 
             WMShowTextRuler(tPtr, i);
             tPtr->flags.rulerShown = i;
-         }   
-        else if (control_pressed && *buffer == '') 
+        } else if (control_pressed && *buffer == '\a') {
             XBell(tPtr->view->screen->display, 0);
-    else    
-        WMRelayToNextResponder(tPtr->view, event);
+        } else {
+            WMRelayToNextResponder(tPtr->view, event);
+        }
     }
 
-    if (!control_pressed && tPtr->flags.ownsSelection) 
+    if (!control_pressed && tPtr->flags.ownsSelection) {
         releaseSelection(tPtr);
+    }
 }
 
 

@@ -59,6 +59,9 @@ Changes since version 0.80.2:
 - Fixed a bug with not showing shaded window frames when the application is
   hidden and another window belonging to the app is selected in the window
   list menu
+- Autoarrange icons after unhiding an application that has miniaturized
+  windows, else they may cover other icons which are now in the positions
+  they have occupied before hiding
 
 
 Changes since version 0.80.1:

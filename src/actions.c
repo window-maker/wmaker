@@ -1361,6 +1361,7 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
     WScreen *scr;
     WWindow *wlist, *next;
     WWindow *focused=NULL;
+    Bool shouldArrangeIcons = False;
 
     if (!wapp)
 	return;
@@ -1398,6 +1399,7 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
                     wlist->frame->workspace == scr->current_workspace) {
                     wDeiconifyWindow(wlist);
                 }
+                shouldArrangeIcons = True;
                 WMPostNotificationName(WMNChangedState, wlist, "hide");
             } else if (wlist->flags.shaded) {
                 if (bringToCurrentWS)
@@ -1437,7 +1439,7 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
         wSetFocusTo(scr, focused);
     }
     wapp->last_focused = NULL;
-    if (wPreferences.auto_arrange_icons) {
+    if (shouldArrangeIcons || wPreferences.auto_arrange_icons) {
         wArrangeIcons(scr, True);
     }
 #ifdef HIDDENDOT
