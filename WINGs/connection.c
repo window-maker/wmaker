@@ -185,11 +185,12 @@ inputHandler(int fd, int mask, void *clientData) /*FOLD00*/
                 cPtr->handler.write = NULL;
             }
 
-            /* if the connection failed it may get destroyed in the delegate */
             if (cPtr->delegate && cPtr->delegate->didInitialize)
                 (*cPtr->delegate->didInitialize)(cPtr->delegate, cPtr);
 
-            /* don't access cPtr since it may have been destroyed by delegate */
+            /* we use failed and not cPtr->state here, because cPtr may be
+             * destroyed by the delegate called above if the connection failed
+             */
             if (failed)
                 return;
         } else if (cPtr->state == WCConnected) {
