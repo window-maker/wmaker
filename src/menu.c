@@ -1861,8 +1861,6 @@ wMenuScroll(WMenu *menu, XEvent *event)
 	menu->timer = NULL;
     }
 
-    if (jump_back)
-        wMenuMove(omenu, old_frame_x, old_frame_y, True);
     if (jump_back) {
         _delay *delayer;
         if (!omenu->jump_back) {
