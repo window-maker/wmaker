@@ -1439,7 +1439,7 @@ buildSubmenu(_Panel *panel, proplist_t pl)
     char *title;
     proplist_t tp, bp;
     int i;
-
+    
     tp = PLGetArrayElement(pl, 0);
     title = PLGetString(tp);
 
@@ -1455,7 +1455,7 @@ buildSubmenu(_Panel *panel, proplist_t pl)
 	
 	title = PLGetString(tp);
 
-	if (PLIsArray(bp)) {	       /* it's a submenu */
+	if (!bp || PLIsArray(bp)) {	       /* it's a submenu */
 	    WEditMenu *submenu;
 	    
 	    submenu = buildSubmenu(panel, pi);

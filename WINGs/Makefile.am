@@ -8,6 +8,9 @@ SUBDIRS = . Documentation Resources Examples Extras Tests
 
 #libWINGs_la_LDFLAGS = -version-info 1:1:0
 
+# is this a kluge? if so, how should i do it?
+includedir = @includedir@/WINGs
+
 include_HEADERS = WINGs.h WUtil.h WINGsP.h
 
 bin_SCRIPTS = get-wings-flags get-wutil-flags

@@ -4,6 +4,9 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 
 
+# is this a kluge? if so, how should i do it?
+includedir = @includedir@/WINGs
+
 include_HEADERS = wtableview.h wtabledelegates.h 
 
 

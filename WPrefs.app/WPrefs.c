@@ -410,6 +410,9 @@ savePanelData(Panel *panel)
 static void 
 changeSection(WMWidget *self, void *data)
 {
+    if (WPrefs.currentPanel == data)
+	return;
+	
     if (WPrefs.banner) {
 	WMDestroyWidget(WPrefs.banner);
 	WPrefs.banner = NULL;

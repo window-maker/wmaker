@@ -176,11 +176,20 @@ RGetImageFromXPMData(RContext *context, char **data)
 		if (k==ccount)
 		    k = 0;
 		
-		*(r++) = color_table[0][k];
-		*(g++) = color_table[1][k];
-		*(b++) = color_table[2][k];
-		if (a)
-		    *(a++) = color_table[3][k];
+		*r = color_table[0][k];
+		*g = color_table[1][k];
+		*b = color_table[2][k];
+		if (a) {
+		    *a = color_table[3][k];
+		    r += 4;
+		    g += 4;
+		    b += 4;
+		    a += 4;
+		} else {
+		    r += 3;
+		    g += 3;
+		    b += 3;
+		}
 	    }
 	} else {
 	    for (j=0; j<w*2; j++) {
@@ -194,11 +203,20 @@ RGetImageFromXPMData(RContext *context, char **data)
 		if (k==ccount)
 		    k = 0;
 	
-		*(r++) = color_table[0][k];
-		*(g++) = color_table[1][k];
-		*(b++) = color_table[2][k];
-		if (a)
-		    *(a++) = color_table[3][k];
+		*r = color_table[0][k];
+		*g = color_table[1][k];
+		*b = color_table[2][k];
+		if (a) {
+		    *a = color_table[3][k];
+		    r += 4;
+		    g += 4;
+		    b += 4;
+		    a += 4;
+		} else {
+		    r += 3;
+		    g += 3;
+		    b += 3;
+		}
 	    }
 	}
 	line++;

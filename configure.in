@@ -886,7 +886,7 @@ cat <<EOF >get-wraster-flags
 prefix="$prefix"
 exec_prefix=\$prefix
 
-WCFLAGS="-I\$prefix/include $inc_search_path"
+WCFLAGS="-I\$prefix/include/WINGs $inc_search_path"
 WLFLAGS="-L\$exec_prefix/lib $lib_search_path"
 WLIBS="-lwraster $GFXLIBS $XLIBS -lm"
 

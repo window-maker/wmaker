@@ -11,6 +11,12 @@ else
 fi
 # /xx herbert
 
+
+LOCALE=$LANG
+if [ -z "$LOCALE" ]; then
+	LOCALE=$LC_ALL
+fi
+
 # directory where system wide configuration is stored
 GLOBALDIR="#pkgdatadir#"
 GLOBALDEFDIR="#sysconfdir#"
@@ -56,6 +62,16 @@ copy() {
 	rm -f $target
 	if [ "$file" = "WindowMaker" ]; then
 		sed -e "s|~/GNUstep|$GSDIR|g" $source > $target
+	elif [ "$file" = "WMRootMenu" ]; then
+		if [ "$LOCALE" ]; then
+            	    if [ -f $GLOBALDIR/plmenu.${LOCALE%_*} ]; then
+                	cp $GLOBALDIR/plmenu.${LOCALE%_*} $GSDIR/Defaults/WMRootMenu
+		    else
+			cp $GLOBALDIR/plmenu $GSDIR/Defaults/WMRootMenu
+            	    fi
+        	else
+            	    cp $GLOBALDIR/plmenu $GSDIR/Defaults/WMRootMenu
+        	fi
 	else
 		if test "x$GNUSTEP_USER_ROOT" = "x"; then
 			sed -e "s:#wmdatadir#:$GLOBALDIR:g" \

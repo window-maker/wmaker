@@ -4,6 +4,10 @@ Changes since version 0.63.0:
 - decreased nice() value in wmsetbg
 - applied gnome panel not-covering patch from (Bastien Nocera <hadess@hadess.net>)
 - added item copy to WPrefs menu editor
+- added locale selection code for menu in wmaker.inst (Eliphas Levy Theodoro <eliphas@conectiva.com.br>)
+- fixed bug in built-in xpm support (Alessandro Strada <a.strada@libero.it>)
+- removed plugin support
+- fixed a crash bug in WPrefs menu editor
 
 Changes since version 0.62.1:
 .............................
