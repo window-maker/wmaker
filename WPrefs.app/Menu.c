@@ -75,6 +75,7 @@ typedef struct _Panel {
     char capturing;		       /* shortcut capture */
     char unsaved;		       /* if there are unsaved changes */
     char dontSave;
+    char scrolledBrowser;
 } _Panel;
 
 
@@ -503,6 +504,7 @@ performCommand(WMWidget *w, void *data)
      case CRemove:
 	if (row < 0)
 	    return;
+	panel->scrolledBrowser = 0;
 	WMRemoveBrowserItem(panel->browser, column, row);
 	menuItem = PLGetArrayElement(menu, row+1);
 	if (strcmp(getItemCommand(menuItem), "WORKSPACE_MENU")==0) {
@@ -514,9 +516,11 @@ performCommand(WMWidget *w, void *data)
 	updateForItemType(panel, TNothing);
 	panel->editedItem = NULL;
 	panel->unsaved = 1;
-	if (pop == panel->cmd1P) {
+
+	if (pop == panel->cmd1P && !panel->scrolledBrowser) {
 	    WMSetTextFieldText(panel->tit2T, NULL);
 	}
+
 	removed = True;
 	return;
      case CCut:
@@ -1034,8 +1038,10 @@ scrolledBrowser(WMBrowserDelegate *self, WMBrowser *sender)
     WMSetTextFieldText(panel->tit1T, getItemTitle(item));
 
     item = getSubmenuInColumn(panel, column + 1);
-    if (item)
+    if (item) {
 	WMSetTextFieldText(panel->tit2T, getItemTitle(item));
+    }
+    panel->scrolledBrowser = 1;
 }
 
 
