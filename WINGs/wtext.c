@@ -20,6 +20,23 @@
 #include <ctype.h>
 
 
+typedef enum {
+    ctText=0,
+    ctImage=1
+} ChunkType;
+
+typedef enum {
+    dtDelete=0,
+    dtBackSpace
+} DeleteType;
+
+typedef enum {
+    wrWord=0,
+    wrChar=1,
+    wrNone=2
+} Wrapping;
+
+
 void wgdbFree(void *ptr)
 {
     if(!ptr) printf("err... cannot ");
@@ -28,11 +45,7 @@ void wgdbFree(void *ptr)
 }
 
 
-typedef enum {ctText=0, ctImage=1} ChunkType;
-typedef enum { dtDelete=0, dtBackSpace } DeleteType;
-typedef enum {wrWord=0, wrChar=1, wrNone=2} Wrapping;
-
-/* Why singly-linked and not say doubly-linked?
+/* Why single-linked and not say double-linked?
  99% of the time (draw, append), the "prior"
  member would have been a useless memory and CPU overhead,
  and deletes _are_ relatively infrequent.
@@ -40,52 +53,54 @@ typedef enum {wrWord=0, wrChar=1, wrNone=2} Wrapping;
  doing things the hard way will be incurred... but seldomly. */
 
 
-/* a Chunk is a singly-linked list of chunks containing:
- o text with a given format
- o or an image
- o but NOT both */
+/* a Chunk is a single-linked list of chunks containing:
+ *   o text with a given format
+ *   o or an image
+ *   o but NOT both
+ */
 typedef struct _Chunk {
     char *text;			/* the text in the chunk */
-    WMPixmap *pixmap;	/* OR the pixmap it holds */
+    WMPixmap *pixmap;	        /* OR the pixmap it holds */
     short chars; 		/* the number of characters in this chunk */
-    short mallocedSize;	/* the number of characters that can be held */
+    short mallocedSize;	        /* the number of characters that can be held */
 
     WMFont *font;		/* the chunk's font */
     WMColor *color;		/* the chunk's color */
     short ul:1;			/* underlined or not */
-    ChunkType type:1;	/* a "Text" or "Image" chunk */
+    ChunkType type:1;	        /* a "Text" or "Image" chunk */
     short script:4;		/* script in points: negative for subscript */
     /* hrmm selec... */
     ushort selected;
     ushort sStart;
     ushort sEnd;
     ushort RESERVED:10;
-    struct _Chunk *next;/*the next member in this list */
+    struct _Chunk *next;        /*the next member in this list */
 
-}Chunk;
+} Chunk;
 
 
 
 /* a Paragraph is a singly-linked list of paragraphs containing:
- o a list of chunks in that paragraph
- o the formats for that paragraph
- o its (draw) position relative to the entire document */
+ *   o a list of chunks in that paragraph
+ *   o the formats for that paragraph
+ *   o its (draw) position relative to the entire document
+ */
 typedef struct _Paragraph {
-    Chunk *chunks;		/* the list of text and/or image chunks */
-    short fmargin;		/* the start position of the first line */
-    short bmargin;		/* the start positions of the rest of the lines */
-    short rmargin;		/* the end position of the entire paragraph */
-    short numTabs;		/* the number of tabstops */
-    short *tabstops;	/* an array of tabstops */
+    Chunk *chunks;	 /* the list of text and/or image chunks */
+    short fmargin;	 /* the start position of the first line */
+    short bmargin;	 /* the start positions of the rest of the lines */
+    short rmargin;	 /* the end position of the entire paragraph */
+    short numTabs;	 /* the number of tabstops */
+    short *tabstops;	 /* an array of tabstops */
 
-    Pixmap drawbuffer;	/* the pixmap onto which the (entire)
-    paragraph will be drawn */
-    WMPixmap *bulletPix;/* the pixmap to use for bulleting */
-    int top;			/* the top of the paragraph relative to document */
-    int bottom;		/* the bottom of the paragraph relative to document */
-    int width;		/* the width of the paragraph */
-    int height;		/* the height of the paragraph */
-    WMAlignment align:2;/* justification of this paragraph */
+    Pixmap drawbuffer;	 /* the pixmap onto which the (entire)
+                            paragraph will be drawn */
+    WMPixmap *bulletPix; /* the pixmap to use for bulleting */
+    int top;		 /* the top of the paragraph relative to document */
+    int bottom;		 /* the bottom of the paragraph relative to document */
+    int width;		 /* the width of the paragraph */
+    int height;		 /* the height of the paragraph */
+    WMAlignment align:2; /* justification of this paragraph */
     ushort RESERVED:14;
 
     struct _Paragraph *next; /* the next member in this list */
@@ -101,11 +116,12 @@ static char *default_bullet[] = {
     ".XX..o",
     ".....o",
     " ...oo",
-    "  ooo "};
+    "  ooo "
+};
 
 /* this is really a shrunk down version of the original
  "broken" icon... I did not draw it, I simply shrunk it */
- static char * unk_xpm[] = {
+static char * unk_xpm[] = {
      "24 24 17 1",
      "   c None", ".  c #0B080C", "+  c #13A015", "@  c #5151B8",
      "#  c #992719", "$  c #5B1C20", "%  c #1DF51D", "&  c #D1500D", "*  c #2F304A",
@@ -134,50 +150,51 @@ static char *default_bullet[] = {
      "............**@)!)>->...",
      "........................",
      "........................",
-     "........................"};
+     "........................"
+};
 
 typedef struct W_Text {
     W_Class widgetClass;	/* the class number of this widget */
-    W_View  *view;			/* the view referring to this instance */
-    WMColor *bg;			/* the background color to use when drawing */
+    W_View  *view;		/* the view referring to this instance */
+    WMColor *bg;		/* the background color to use when drawing */
 
-    WMRuler *ruler;			/* the ruler subwiget to maipulate paragraphs */
+    WMRuler *ruler;		/* the ruler subwiget to maipulate paragraphs */
 
     WMScroller *hscroller;	/* the horizontal scroller */
-    short hpos;				/* the current horizontal position */
-    short prevHpos;			/* the previous horizontal position */
+    short hpos;			/* the current horizontal position */
+    short prevHpos;		/* the previous horizontal position */
 
     WMScroller *vscroller;	/* the vertical scroller */
-    int vpos;				/* the current vertical position */
-    int prevVpos;			/* the previous vertical position */
+    int vpos;			/* the current vertical position */
+    int prevVpos;		/* the previous vertical position */
 
-    int visibleW;			/* the actual horizontal space available */
-    int visibleH;			/* the actual vertical space available */
+    int visibleW;		/* the actual horizontal space available */
+    int visibleH;		/* the actual vertical space available */
 
     Paragraph *paragraphs;	/* the linked list of the paragraphs in the doc. */
-    int docWidth;			/* the width of the entire document */
+    int docWidth;		/* the width of the entire document */
     int docHeight;		/* the height of the entire document */
 
-    WMFont *dFont;			/* the default font */
+    WMFont *dFont;		/* the default font */
     WMColor *dColor;		/* the default color */
     WMPixmap *dBulletPix; 	/* the default pixmap for bullets */
     WMPixmap *dUnknownImg; 	/* the pixmap for (missing/broken) images */
 
-    WMRect sRect; 			/* the selected area */
+    WMRect sRect; 		/* the selected area */
     Paragraph *currentPara;	/* the current paragraph, in which actions occur */
     Chunk *currentChunk;	/* the current chunk, about which actions occur */
-    short tpos;				/* the cursor position (text position) */
+    short tpos;			/* the cursor position (text position) */
     WMParseAction *parser;	/* what action to use to parse input text */
     WMParseAction *writer;	/* what action to use to write text */
     WMParserActions funcs;	/* the "things" that parsers/writers might do */
-    XPoint clicked;			/* the position of the last mouse click */
-    XPoint cursor;			/* where the cursor is "placed" */
-    short clheight;			/* the height of the "line" clicked on */
-    short clwidth;			/* the width of the "line" clicked on */
+    XPoint clicked;		/* the position of the last mouse click */
+    XPoint cursor;		/* where the cursor is "placed" */
+    short clheight;		/* the height of the "line" clicked on */
+    short clwidth;		/* the width of the "line" clicked on */
 
-    WMReliefType relief:2;	/* the relief to display with */
+    WMReliefType relief:3;	/* the relief to display with */
     Wrapping wrapping:2;	/* the type of wrapping to use in drawing */
-    WMAlignment dAlignment:2;/* default justification */
+    WMAlignment dAlignment:2;   /* default justification */
     ushort monoFont:1;		/* whether to ignore "rich" commands */
     ushort fixedPitch:1;	/* assume each char in dFont is the same size */
     ushort editable:1;		/* whether to accept user changes or not*/
@@ -185,13 +202,13 @@ typedef struct W_Text {
     ushort cursorShown:1;	/* whether the cursor is currently being shown */
     ushort frozen:1;		/* whether screen updates are to be made */
     ushort focused:1;		/* whether this instance has input focus */
-    ushort pointerGrabbed:1;/* whether this instance has the pointer */
+    ushort pointerGrabbed:1;    /* whether this instance has the pointer */
     ushort buttonHeld:1;	/* the user is still holding down the button */
     ushort ignoreNewLine:1;	/* whether to ignore the newline character */
-    ushort waitingForSelection:1;	/* whether there is a pending paste event */
-    ushort ownsSelection:1; /* whether it ownz the current selection */
-    ushort findingClickPoint:1;/* whether the search for a clickpoint is on */
-    ushort foundClickPoint:1;/* whether the clickpoint has been found */
+    ushort waitingForSelection:1; /* whether there is a pending paste event */
+    ushort ownsSelection:1;     /* whether it ownz the current selection */
+    ushort findingClickPoint:1; /* whether the search for a clickpoint is on */
+    ushort foundClickPoint:1;   /* whether the clickpoint has been found */
     ushort hasVscroller:1;	/* whether to enable the vertical scroller */
     ushort hasHscroller:1;	/* whether to enable the horizontal scroller */
     ushort RESERVED:10;
@@ -207,6 +224,7 @@ typedef struct W_Text {
 /* max on a line */
 #define MAX_CHUNX 64
 #define MIN_DOC_WIDTH 200
+
 typedef struct _LocalMargins {
     short left, right, first, body;
 } LocalMargins;
@@ -216,7 +234,7 @@ typedef struct _MyTextItems {
     WMPixmap *pix;
     short chars;
     short x;
-    Chunk *chunk;/* used for "click" events */
+    Chunk *chunk;       /* used for "click" events */
     short start;	/* ditto... where in the chunk we start (ie. wrapped chunk) */
     ushort type:1;
     ushort RESERVED:15;
