@@ -88,8 +88,9 @@ typedef struct _currentFormat {
 	short u;
 	short fmargin;
 	short bmargin;
-	WMAlignment align:2;
+	short first:1;
 	short type:1;
+	WMAlignment align:2;
 	short ul:3; /* how "nested"... up to 8 levels deep */
 	short comment:1; /* ignore text till --> */
 	short RESERVED:10;
@@ -118,7 +119,6 @@ getArg(char *t, short type, void *arg)
 void parseToken(WMText *tPtr, char *token, short tk)
 {
 	short mode=0; /* 0 starts, 1 closes */
-	int first = True;
 	void *tb= NULL;
 	int prepend = WMGetTextInsertType(tPtr);
 
@@ -156,17 +156,18 @@ void parseToken(WMText *tPtr, char *token, short tk)
 						WMGetBagItemCount(cfmt.fonts)-1); 
 				} break;
 			case 'p': 
-				first = True;
+				cfmt.first = True;
 				tb = WMCreateTextBlockWithText(NULL, cfmt.cfont, 	
-					cfmt.ccolor, first, 0);
-				WMSetTextBlockProperties(tb, first, False, (cfmt.u?1:0), 0, 0);
+					cfmt.ccolor, cfmt.first, 0);
+				WMSetTextBlockProperties(tb, cfmt.first, False, (cfmt.u?1:0), 0, 0);
 				WMAppendTextBlock(tPtr, tb);
+				cfmt.first = False;
 				break;
 			case 'u': cfmt.u = !mode; break;
 		}
 	} else { /* the <HTML> tag is, as far as I'm concerned, useless */
 		if(mystrcasecmp(token, "br")) {
-				first = True;
+				cfmt.first = True;
 		}
 		else if(mystrcasecmp(token, "ul")) {
 			if(mode) { 
@@ -177,7 +178,7 @@ void parseToken(WMText *tPtr, char *token, short tk)
 				cfmt.fmargin = cfmt.bmargin-10;
 			} else cfmt.fmargin = cfmt.bmargin = 0;
 		} else if(mystrcasecmp(token, "li")) {
-				first = True;
+				cfmt.first = True;
 //change margins... create a new margin....
 			//(cfmt.fmargin, cfmt.bmargin, 
 		} else if(mystrcasecmp(token, "align"))
@@ -186,7 +187,6 @@ void parseToken(WMText *tPtr, char *token, short tk)
 			if(!mode) {
 				char *mark=NULL;
 				WMPixmap *pixmap; 
-				WMLabel *l;
 				token+=3;
 				while(isspace(*(token))) token++;
 				do { 
@@ -203,16 +203,12 @@ void parseToken(WMText *tPtr, char *token, short tk)
 				 if(*img == '\"') { img[strlen(img)-1] = 0; iptr++;}
 				pixmap = WMCreatePixmapFromFile(scr, iptr);
 				if(pixmap) {
-					l = WMCreateLabel(tPtr);
-					WMResizeWidget(l, 48, 48);
-					WMSetLabelRelief(l, WRFlat);
-					WMSetLabelImagePosition(l, WIPImageOnly);
-					WMSetLabelImage(l, pixmap); 
-					tb = WMCreateTextBlockWithObject(l, 
-						iptr, cfmt.ccolor, first, 0);
-					WMSetTextBlockProperties(tb, first, 
+					tb = WMCreateTextBlockWithPixmap(pixmap, 
+						iptr, cfmt.ccolor, cfmt.first, 0);
+					WMSetTextBlockProperties(tb, cfmt.first, 
 						False, (cfmt.u?1:0), 0, 0);
 					WMAppendTextBlock(tPtr, tb);
+					cfmt.first = False;
 				}
 				printf("[%s]\n", iptr);
 				} } break; } } while(*(token++));
@@ -231,7 +227,7 @@ void parseToken(WMText *tPtr, char *token, short tk)
 printf("center\n");
 			if(mode) cfmt.align = WALeft;
 			else cfmt.align = WACenter;
-				first = True;
+				cfmt.first = True;
 //change margins...
 		}
 	}
@@ -275,7 +271,6 @@ void HTMLParser(WMWidget *w, void *clientData)
 	short mode=0;
 	short tk=0, textlen=0;
 	short wasspace=0;
-	int first = False;
 
     if(!tPtr || !stream)
         return;
@@ -325,9 +320,10 @@ void HTMLParser(WMWidget *w, void *clientData)
 			if(textlen>0) { 
 				text[textlen] = 0;
 				tb = WMCreateTextBlockWithText(text, cfmt.cfont,
-					 cfmt.ccolor, first, textlen);
-				WMSetTextBlockProperties(tb, first, False, (cfmt.u?1:0), 0, 0);
+					 cfmt.ccolor, cfmt.first, textlen);
+				WMSetTextBlockProperties(tb, cfmt.first, False, (cfmt.u?1:0), 0, 0);
 				WMAppendTextBlock(tPtr, tb);
+				cfmt.first = False;
 //printf("%s\n", text);
 			}
 			textlen = 0;
@@ -352,9 +348,10 @@ void HTMLParser(WMWidget *w, void *clientData)
 				WMGetBagItemCount(cfmt.fonts)-1), 
 			(WMColor *)WMGetFromBag(cfmt.colors,
 				WMGetBagItemCount(cfmt.colors)-1), 
-			first, textlen);
-		WMSetTextBlockProperties(tb, first, False, (cfmt.u?1:0), 0, 0);
+			cfmt.first, textlen);
+		WMSetTextBlockProperties(tb, cfmt.first, False, (cfmt.u?1:0), 0, 0);
 		WMAppendTextBlock(tPtr, tb);
+		cfmt.first = False;
 	}
 		
 }
@@ -362,11 +359,14 @@ void HTMLParser(WMWidget *w, void *clientData)
 
 /* ================= the driver ================== */
 
+Display		*dpy;
+
 static void
 buttonPressCB(WMWidget *w, void *client)
 {
 	WMText *tPtr = (WMText *)client;
 	WMAppendTextStream(tPtr, NULL);
+	XBell(dpy, 0);
 	WMAppendTextStream(tPtr, 
 		"<p><b>You</b> just <i>had</i> to press that button, didn't you? "
 		"Well, this sort of thing is bound to happen when you go about "
@@ -378,7 +378,6 @@ buttonPressCB(WMWidget *w, void *client)
 int
 main(int argc, char **argv)
 {
-	Display		*dpy;
 	WMWidget		*win;
 	WMText 		*text;
 	WMRulerMargins margins;
@@ -402,12 +401,13 @@ main(int argc, char **argv)
 
 	text = WMCreateText(win);
 	WMRealizeWidget(text);
+	WMSetTextHasRuler(text, True);
 	//WMSetTextHasHorizontalScroller(text, True);
 	WMResizeWidget(text, 480, 280);
 	WMMoveWidget(text, 10, 10);
 	WMSetTextRelief(text, WRSunken);
 	WMSetTextHasVerticalScroller(text, True);
-	WMSetTextUseMonoFont(text, !True);
+	WMSetTextUsesMonoFont(text, !True);
 	WMSetTextParser(text, HTMLParser);
 #if 0
 	WMSetTextUseFixedPitchFont(text, False);
@@ -415,7 +415,6 @@ main(int argc, char **argv)
 	WMShowTextRuler(text, True);
 	WMSetTextHasVerticalScroller(text, True);
 	//WMSetTextHasHorizontalScroller(text, True);
-	WMSetTextEditable(text, True);
 	WMFreezeText(text);
 #endif
 
@@ -426,7 +425,7 @@ main(int argc, char **argv)
 
 
 	WMAppendTextStream(text, 
-"<p><img src=logo.xpm></i> \
+"README: <p> <p><img src=logo.xpm></i> \
 <b><i>WINGs</b></i> is a <i>small</i> widget set with \
 a <u>very</u> nice look and feel. Its API is <i>inspired</i> \
 and its implementation borrows some ideas from interesting places.\
@@ -472,15 +471,15 @@ interesting widgets like this list widget: ");
 
 	{
 		WMText *te = WMCreateText(text);
-		WMRealizeWidget(te);
-		WMResizeWidget(te, 120, 90);
+		WMResizeWidget(te, 140, 120);
 		WMSetTextParser(te, HTMLParser);
 		WMSetTextRelief(te, WRFlat);
 	//	WMSetTextBackgroundColor(te, WMCreateNamedColor(scr, "Red", False)); 
 		WMSetTextDefaultFont(te, WMSystemFontOfSize(scr, 10));
 		WMAppendTextStream(te, "into which you can easily embed other "
-			"<i><b>WINGs</b></i> objects (such as this one), "
-			" without breaking a sweat (type in here)");
+			"<i><b>WINGs</b></i> objects (such as this text object), "
+			" as well as pixmaps <img src=upbtn.xpm> (thus) "
+			"without breaking a sweat (type in here)");
 		tb = WMCreateTextBlockWithObject(te, "{a text object}", 
 			WMBlackColor(scr), False, 0);
 		WMAppendTextBlock(text, tb);
@@ -490,7 +489,6 @@ interesting widgets like this list widget: ");
 
  {
         WMText *te = WMCreateText(text);
-        WMRealizeWidget(te);
         WMResizeWidget(te, 120, 90);
         WMSetTextParser(te, HTMLParser);
         WMSetTextRelief(te, WRFlat);
@@ -512,7 +510,7 @@ interesting widgets like this list widget: ");
 		
 	WMAppendTextStream(text, 
 " .<p><p> Not bad eh? \
-<p><p> Since <i><b>WINGs</b></i> is \
+<p><p>Since<i><b>WINGs</b></i>is \
 written in C and is sort of \
 low-level, it is \
 small and faster than say, Motif or even Athena (just you try 
