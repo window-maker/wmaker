@@ -1942,7 +1942,9 @@ showData(_Panel *panel)
 	if (!str)
 	    str = colorOptions[i*2+1];
 
-	color = WMCreateNamedColor(WMWidgetScreen(panel->frame), str, False);
+	if (!(color = WMCreateNamedColor(WMWidgetScreen(panel->frame), str, False))) {
+        color = WMCreateNamedColor(WMWidgetScreen(panel->frame), "#000000", False);
+    }
 
 	panel->colors[i] = color;
     }
