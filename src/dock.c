@@ -2535,6 +2535,7 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 {
     WScreen *scr = dock->screen_ptr;
     WAppIcon *btn;
+    WAppIconChain *chain;
     unsigned char *slot_map;
     int mwidth;
     int r;
@@ -2542,10 +2543,14 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
     int i, done = False;
     int corner;
     int sx=0, sy=0, ex=scr->scr_width, ey=scr->scr_height;
+    int extra_count=0;
 
+    if (dock->type == WM_CLIP &&
+        dock != scr->workspaces[scr->current_workspace]->clip)
+        extra_count = scr->global_icon_count;
 
     /* if the dock is full */
-    if (dock->icon_count >= dock->max_icons) {
+    if (dock->icon_count+extra_count >= dock->max_icons) {
 	return False;
     }
 
@@ -2606,7 +2611,15 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 		    vmap[btn->yindex] = 1;
 		else if (btn->yindex==0 && btn->xindex>0 && btn->xindex<hcount)
 		    hmap[btn->xindex] = 1;
-	    }
+            }
+            for (chain=scr->global_icons; chain!=NULL; chain=chain->next) {
+                btn = chain->aicon;
+		if (btn->xindex==0 && btn->yindex > 0 && btn->yindex < vcount)
+		    vmap[btn->yindex] = 1;
+		else if (btn->yindex==0 && btn->xindex>0 && btn->xindex<hcount)
+		    hmap[btn->xindex] = 1;
+            }
+            break;
 	 case C_NW:
 	    for (i=0; i<dock->max_icons; i++) {
 		btn = dock->icon_array[i];
@@ -2617,7 +2630,15 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 		    vmap[btn->yindex] = 1;
 		else if (btn->yindex==0 && btn->xindex<0 &&btn->xindex>-hcount)
 		    hmap[-btn->xindex] = 1;
-	    }
+            }
+            for (chain=scr->global_icons; chain!=NULL; chain=chain->next) {
+                btn = chain->aicon;
+		if (btn->xindex==0 && btn->yindex > 0 && btn->yindex < vcount)
+		    vmap[btn->yindex] = 1;
+		else if (btn->yindex==0 && btn->xindex<0 &&btn->xindex>-hcount)
+		    hmap[-btn->xindex] = 1;
+            }
+            break;
 	 case C_SE:
 	    for (i=0; i<dock->max_icons; i++) {
 		btn = dock->icon_array[i];
@@ -2628,7 +2649,15 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 		    vmap[-btn->yindex] = 1;
 		else if (btn->yindex==0 && btn->xindex>0 && btn->xindex<hcount)
 		    hmap[btn->xindex] = 1;
-	    }
+            }
+            for (chain=scr->global_icons; chain!=NULL; chain=chain->next) {
+                btn = chain->aicon;
+		if (btn->xindex==0 && btn->yindex < 0 && btn->yindex > -vcount)
+		    vmap[-btn->yindex] = 1;
+		else if (btn->yindex==0 && btn->xindex>0 && btn->xindex<hcount)
+		    hmap[btn->xindex] = 1;
+            }
+            break;
 	 case C_SW:
 	 default:
 	    for (i=0; i<dock->max_icons; i++) {
@@ -2641,6 +2670,13 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 		else if (btn->yindex==0 && btn->xindex<0 &&btn->xindex>-hcount)
 		    hmap[-btn->xindex] = 1;
 	    }
+            for (chain=scr->global_icons; chain!=NULL; chain=chain->next) {
+                btn = chain->aicon;
+		if (btn->xindex==0 && btn->yindex < 0 && btn->yindex > -vcount)
+		    vmap[-btn->yindex] = 1;
+		else if (btn->yindex==0 && btn->xindex<0 &&btn->xindex>-hcount)
+		    hmap[-btn->xindex] = 1;
+            }
 	}
 	x=0; y=0;
 	done = 0;
@@ -2702,6 +2738,9 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 	btn = dock->icon_array[i];
 	if (btn)
 	    slot_map[XY2OFS(btn->xindex, btn->yindex)] = 1;
+    }
+    for (chain=scr->global_icons; chain!=NULL; chain=chain->next) {
+        slot_map[XY2OFS(chain->aicon->xindex, chain->aicon->yindex)] = 1;
     }
     /* Find closest slot from the center that is free by scanning the
      * map from the center to outward in circular passes.
@@ -4191,7 +4230,6 @@ iconCanBeOmnipresent(WAppIcon *aicon)
     WDock *clip;
     WAppIcon *btn;
     int i, j;
-    Bool ocupied = False;
 
     for (i=0; i<scr->workspace_count; i++) {
         clip = scr->workspaces[i]->clip;
@@ -4199,16 +4237,17 @@ iconCanBeOmnipresent(WAppIcon *aicon)
         if (clip == aicon->dock)
             continue;
 
+        if (clip->icon_count + scr->global_icon_count >= clip->max_icons)
+            return False; /* Clip is full in some workspace */
+
         for (j=0; j<clip->max_icons; j++) {
             btn = clip->icon_array[j];
-            if(btn && btn->xindex==aicon->xindex && btn->yindex==aicon->yindex) {
-                ocupied = True;
-                break;
-            }
+            if(btn && btn->xindex==aicon->xindex && btn->yindex==aicon->yindex)
+                return False;
         }
     }
 
-    return !ocupied;
+    return True;
 }
 
 
@@ -4240,6 +4279,7 @@ wClipMakeIconOmnipresent(WAppIcon *aicon, int omnipresent)
 
                 tmp->next = new_entry;
             }
+            scr->global_icon_count++;
         } else {
             aicon->omnipresent = 0;
             status = WO_FAILED;
@@ -4250,6 +4290,7 @@ wClipMakeIconOmnipresent(WAppIcon *aicon, int omnipresent)
             tmp = scr->global_icons->next;
             free(scr->global_icons);
             scr->global_icons = tmp;
+            scr->global_icon_count--;
         } else {
             tmp = scr->global_icons;
             while (tmp->next) {
@@ -4257,6 +4298,7 @@ wClipMakeIconOmnipresent(WAppIcon *aicon, int omnipresent)
                     tmp1 = tmp->next->next;
                     free(tmp->next);
                     tmp->next = tmp1;
+                    scr->global_icon_count--;
                     break;
                 }
                 tmp = tmp->next;

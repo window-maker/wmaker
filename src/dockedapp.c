@@ -252,7 +252,8 @@ panelBtnCallback(WMWidget *self, void *data)
                            _("Sorry, icon cannot be made omnipresent. "
                              "Please make sure that no other icon is "
                              "docked in the same position on the other "
-                             "workspaces, and try again."),
+                             "workspaces, and the Clip is not full in "
+                             "some workspace, then try again."),
                            _("OK"), NULL, NULL);
             return;
         }

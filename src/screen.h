@@ -236,6 +236,7 @@ typedef struct _WScreen {
     struct WMenu *clip_ws_menu;	       /* workspace menu for clip */
     struct WDock *last_dock;
     WAppIconChain *global_icons;       /* for omnipresent icons chain in clip */
+    int global_icon_count;	       /* How many global icons do we have */
     
     Window clip_balloon;	       /* window for workspace name */
     
