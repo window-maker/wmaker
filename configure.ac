@@ -189,7 +189,49 @@ AC_C_CONST
 #AC_TYPE_PID_T
 AC_TYPE_SIGNAL
 
-    
+
+
+dnl Compiler/architecture specific optimizations
+dnl ============================================
+
+
+dnl GCC/as with MMX support
+dnl -----------------------
+
+# until we fix it, leave it disabled
+asm_support=no
+mmx_support=no
+if test "$ac_cv_prog_gcc" = yes; then
+    x86=0
+    changequote(,)dnl
+    case "$host_cpu" in
+       i[3456]86) x86=1
+       ;;
+    esac
+    changequote([,])dnl
+
+    if test "$host_os" != "linux" -a "$host_os" != "linux-gnu" ; then
+       x86=0
+    fi
+
+    if test $x86 = 1; then
+       AC_DEFINE(ASM_X86)
+       asm_support=yes
+
+       AC_CACHE_CHECK(whether gcc supports MMX(tm) inline asm,
+                      ac_cv_c_inline_mmx,
+                      [AC_TRY_LINK(,[asm ("movq %mm0, %mm1");],
+                      ac_cv_c_inline_mmx=yes,
+                      ac_cv_c_inline_mmx=no)])
+
+       if test "x$ac_cv_c_inline_mmx" = xyes; then
+          AC_DEFINE(ASM_X86_MMX)
+          mmx_support=yes
+       fi
+    fi
+fi
+
+
 
 dnl gettext
 dnl =======
@@ -547,28 +589,6 @@ AC_SUBST(X_EXTRA_LIBS)
 dnl ===============================================
 dnl 		End of stuff that uses X
 dnl ===============================================
-
-
-
-dnl Hermes Support
-dnl ==============
-
-AC_ARG_ENABLE(hermes,
-  [  --disable-hermes	  disable Hermes support for wrlib ],
-     hermes=$enableval, hermes=yes)
-
-if test x$hermes = xyes; then
-   WM_CHECK_LIB(Hermes, Hermes_ConverterRequest, [])
-   
-   if test x$ac_cv_lib_Hermes_Hermes_ConverterRequest = xyes; then
-      WM_CHECK_HEADER(Hermes/Hermes.h)
-      if test x$ac_cv_header_Hermes_Hermes_h = xyes; then
-      	 GFXLIBS="$GFXLIBS -lHermes"
-	 AC_DEFINE(HAVE_HERMES)
-         hermes_support=yes
-      fi
-   fi
-fi
 
 
 
@@ -974,9 +994,8 @@ echo "Installation path prefix: $prefix"
 echo "Installation path prefix for binaries: $_bindir"
 echo "Installation path for WPrefs.app: $wprefsdir" | sed -e 's|\$(prefix)|'"$prefix|"
 echo "Graphic format libraries: $supported_gfx"
-if test x$hermes_support = xyes; then
-    echo "Hermes support for wrlib enabled"
-fi
+echo "Use assembly routines for wrlib: $asm_support"
+echo "Use inline MMX(tm) x86 assembly: $mmx_support"
 dnl echo "Sound support: yes"
 echo "Translated message files to install: $mof"
 if test "x$MOFILES" != "x"; then

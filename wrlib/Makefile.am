@@ -4,7 +4,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 lib_LTLIBRARIES = libwraster.la
 
-libwraster_la_LDFLAGS = -version-info 4:0:2
+libwraster_la_LDFLAGS = -version-info 5:0:3
 
 bin_SCRIPTS = get-wraster-flags
 
@@ -20,7 +20,6 @@ libwraster_la_SOURCES = 	\
 	CrCmap.c	\
 	DelCmap.c	\
 	CmapAlloc.c	\
-	wrasterP.h	\
 	raster.c 	\
 	draw.c		\
 	color.c		\
@@ -29,6 +28,7 @@ libwraster_la_SOURCES = 	\
 	gradient.c 	\
 	xpixmap.c	\
 	convert.c 	\
+	x86_specific.c	\
 	context.c 	\
 	misc.c 		\
 	scale.c		\
@@ -43,6 +43,16 @@ libwraster_la_SOURCES = 	\
 	tiff.c		\
 	gif.c
 
+
+LTCOMPILE2=`echo $(LTCOMPILE) | sed -e s/-fomit-frame-pointer//`
+COMPILE2=`echo $(COMPILE) | sed -e s/-fomit-frame-pointer//`
+
+# cant compile asm stuff with optimizations
+x86_specific.lo: x86_specific.c
+	$(LTCOMPILE2) -O0 -c $<
+
+x86_specific.o: x86_specific.c
+	$(COMPILE2) -O0 -c $<
 
 
 INCLUDES = $(DFLAGS) @HEADER_SEARCH_PATH@

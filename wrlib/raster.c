@@ -95,21 +95,6 @@ RReleaseImage(RImage *image)
 }
 
 
-/* Obsoleted function. Use RReleaseImage() instead. This was kept only to
- * allow a smoother transition and to avoid breaking existing programs, but
- * it will be removed in a future release. Right now is just an alias to
- * RReleaseImage(). Do _NOT_ use RDestroyImage() anymore in your programs.
- * Being an alias to RReleaseImage() this function no longer actually
- * destroys the image, unless the image is no longer retained in some other
- * place.
- */
-void 
-RDestroyImage(RImage *image)
-{
-    RReleaseImage(image);
-}
-
-
 RImage*
 RCloneImage(RImage *image)
 {

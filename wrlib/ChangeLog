@@ -1,3 +1,7 @@
+- removed obsoleted RDestroyImage()
+- removed Hermes code.
+- Put back asm/mmx optimized code.
+
 - fixed a bug in RCombineAreaWithOpaqueness() (Brad <lists@anomie.yi.org>)       
 
 - Added retain/release mechanism to RImage by adding RRetainImage() and

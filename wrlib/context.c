@@ -32,12 +32,6 @@
 
 #include <math.h>
 
-#include "wrasterP.h"
-
-#ifdef HAVE_HERMES
-#include <Hermes/Hermes.h>
-#endif
-
 #include "StdCmap.h"
 
 #include "wraster.h"
@@ -706,66 +700,17 @@ RCreateContext(Display *dpy, int screen_number, RContextAttributes *attribs)
     context->copy_gc = XCreateGC(dpy, context->drawable, GCFunction
 				 |GCGraphicsExposures, &gcv);
 
-#ifdef HAVE_HERMES
-    context->hermes_data = malloc(sizeof(RHermesData));
-    if (!context->hermes_data) {
-	RErrorCode = RERR_NOMEMORY;
-	free(context);
-	return NULL;
-    }
-
-    Hermes_Init();
-
-    context->hermes_data->palette = Hermes_PaletteInstance();
-    {
-	unsigned long flags = 0;
-	
-	if (context->attribs->render_mode == RDitheredRendering) {
-	    flags |= HERMES_CONVERT_DITHER;
-	}
-	context->hermes_data->converter = Hermes_ConverterInstance(flags);
-    }
-#endif
-    
     if (context->vclass == PseudoColor || context->vclass == StaticColor) {
 	if (!setupPseudoColorColormap(context)) {
 	    free(context);
 	    return NULL;
 	}
-#ifdef HAVE_HERMES
-	{
-	    int32 palette[256];
-	    int i;
-
-	    for (i = 0; i < context->ncolors; i++) {
-		palette[i] = ((context->colors[i].red >> 8) << 16) ||
-		    ((context->colors[i].green >> 8) << 8) ||
-		    ((context->colors[i].blue >> 8));
-	    }
-	    
-	    Hermes_PaletteSet(context->hermes_data->palette, palette);
-	}			  
-#endif
     } else if (context->vclass == GrayScale || context->vclass == StaticGray) {
 	context->colors = allocateGrayScale(context);
 	if (!context->colors) {
 	    free(context);
 	    return NULL;
 	}
-#ifdef HAVE_HERMES
-	{
-	    int32 palette[256];
-	    int i;
-
-	    for (i = 0; i < context->ncolors; i++) {
-		palette[i] = ((context->colors[i].red >> 8) << 16) ||
-		    ((context->colors[i].green >> 8) << 8) ||
-		    ((context->colors[i].blue >> 8));
-	    }
-	    
-	    Hermes_PaletteSet(context->hermes_data->palette, palette);
-	}			  
-#endif	
     } else if (context->vclass == TrueColor) {
     	/* calc offsets to create a TrueColor pixel */
 	context->red_offset = count_offset(context->visual->red_mask);
@@ -776,10 +721,7 @@ RCreateContext(Display *dpy, int screen_number, RContextAttributes *attribs)
 	    context->attribs->render_mode = RBestMatchRendering;
     }
 
-#ifdef HAVE_HERMES
-    
-#endif
-    
+
     /* check avaiability of MIT-SHM */
 #ifdef XSHM
     if (!(context->attribs->flags & RC_UseSharedMemory)) {

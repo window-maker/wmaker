@@ -86,8 +86,11 @@
 /* define if your X server has XConvertCase() */
 #undef HAVE_XCONVERTCASE
 
-/* define if you want Hermes support */
-#undef HAVE_HERMES
+/* define if processor is x86 */
+#undef ASM_X86
+
+/* define if processor is x86 with MMX(tm) support */
+#undef ASM_X86_MMX
 
 /* define if you have vsnprintf with C99 semantics */
 #undef HAVE_C99_VSNPRINTF

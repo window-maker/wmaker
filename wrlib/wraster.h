@@ -40,7 +40,7 @@
 
 
 /* version of the header for the library: 0.21 */
-#define WRASTER_HEADER_VERSION	21
+#define WRASTER_HEADER_VERSION	22
 
 
 #include <X11/Xlib.h>
@@ -87,9 +87,9 @@ extern "C" {
 /* std colormap usage/creation modes */
 enum {
     RUseStdColormap,		       /* default. fallbacks to RIgnore.. if 
-					there is none defined */
-	RCreateStdColormap,
-	RIgnoreStdColormap
+					  there is none defined */
+    RCreateStdColormap,
+    RIgnoreStdColormap
 };
     
 
@@ -148,8 +148,6 @@ typedef struct RContext {
 	unsigned int use_shared_pixmap:1;
 	unsigned int optimize_for_speed:1;
     } flags;
-    
-    struct RHermesData *hermes_data;   /* handle for Hermes stuff */
 } RContext;
 
 
@@ -326,16 +324,6 @@ RImage *RLoadImage(RContext *context, char *file, int index);
 RImage* RRetainImage(RImage *image);
 
 void RReleaseImage(RImage *image);
-
-/* Obsoleted function. Use RReleaseImage() instead. This was kept only to
- * allow a smoother transition and to avoid breaking existing programs, but
- * it will be removed in a future release. Right now is just an alias to
- * RReleaseImage(). Do _NOT_ use RDestroyImage() anymore in your programs.
- * Being an alias to RReleaseImage() this function no longer actually
- * destroys the image, unless the image is no longer retained in some other
- * place.
- */
-void RDestroyImage(RImage *image);
 
 RImage *RGetImageFromXPMData(RContext *context, char **xpmData);
 

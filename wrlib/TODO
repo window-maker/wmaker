@@ -2,4 +2,4 @@
 supports PseudoColor and TrueColor in some depths)
 - Gimp's xcf format?
 - add clipping code to RCombineArea()
-- figure out what is producing those speckles when dithering is used.
+- remake and optimize converters
