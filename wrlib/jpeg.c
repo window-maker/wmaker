@@ -185,7 +185,9 @@ RLoadJPEG(RContext *context, char *file_name, int index)
 	    jpeg_read_scanlines(&cinfo, buffer,(JDIMENSION) 1);
 	    bptr = buffer[0];
 	    for (i=0; i<cinfo.image_width; i++) {
-		*ptr++ = *ptr++ = *ptr++ = *bptr++;
+                *ptr = *(ptr+1) = *(ptr+2) = *bptr;
+                bptr++;
+                ptr += 3;
 	    }
 	}
     }

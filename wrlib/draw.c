@@ -98,9 +98,9 @@ RPutPixel(RImage *image, int x, int y, RColor *color)
         alpha = color->alpha;
         nalpha = 255 - alpha;
 
-        *ptr++ = (((int)*ptr * nalpha) + (r * alpha))/256;
-        *ptr++ = (((int)*ptr * nalpha) + (g * alpha))/256;
-        *ptr++ = (((int)*ptr * nalpha) + (b * alpha))/256;
+        *ptr = (((int)*ptr * nalpha) + (r * alpha))/256; ptr++;
+        *ptr = (((int)*ptr * nalpha) + (g * alpha))/256; ptr++;
+        *ptr = (((int)*ptr * nalpha) + (b * alpha))/256; ptr++;
         if (image->format == RRGBAFormat) {
             *ptr = alpha + ((int)*ptr * nalpha)/256;
 	}

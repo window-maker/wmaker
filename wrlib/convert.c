@@ -593,10 +593,10 @@ image2StandardPseudoColor(RContext *ctx, RImage *image)
 
     if (ctx->attribs->render_mode == RBestMatchRendering) {
 	for (y=0; y<image->height; y++) {
-	    for (x=0; x<image->width; x++, ptr+=channels-3) {
+	    for (x=0; x<image->width; x++, ptr+=channels) {
 		/* reduce pixel */
-		pixel = (rtable[*ptr++] + gtable[*ptr++]
-			 + btable[*ptr++] + base_pixel) & 0xffffffff;
+		pixel = (rtable[*ptr] + gtable[*(ptr+1)]
+			 + btable[*(ptr+2)] + base_pixel) & 0xffffffff;
 
                 XPutPixel(ximg->image, x, y, pixel);
 	    }
@@ -625,7 +625,8 @@ image2StandardPseudoColor(RContext *ctx, RImage *image)
 	    err[x++] = ptr[x1++];
 	    err[x++] = ptr[x1++];
 	}
-        err[x++] = err[x++] = err[x++] = 0;
+        err[x] = err[x+1] = err[x+2] = 0;
+        x += 3;
 	/* convert and dither the image to XImage */
 	for (y=0, ofs=0; y<image->height; y++) {
 	    if (y<image->height-1) {
@@ -742,8 +743,8 @@ image2GrayScale(RContext *ctx, RImage *image)
 	for (y=0; y<image->height; y++) {
 	    for (x=0; x<image->width; x++) {
                 /* reduce pixel */
-                g = table[(*ptr++ * 30 + *ptr++ * 59 + *ptr++ * 11)/100];
-
+                g = table[(*ptr * 30 + *(ptr+1) * 59 + *(ptr+2) * 11)/100];
+                ptr += 3;
                 /*data[ofs] = ctx->colors[g].pixel;*/
                 XPutPixel(ximg->image, x, y, ctx->colors[g].pixel);
 	    }
@@ -776,14 +777,12 @@ image2GrayScale(RContext *ctx, RImage *image)
 	for (y=0; y<image->height; y++) {
 	    if (y<image->height-1) {
 		int x1;
-		for (x=0, x1=(y+1)*image->width*3;
-		     x<image->width; 
-		     x1+=channels-3) {
-		    ngerr[x] = (ptr[x1++]*30 + ptr[x1++]*59 + ptr[x1++]*11)/100;
+		for (x=0, x1=(y+1)*image->width*3; x<image->width; x1+=channels) {
+		    ngerr[x] = (ptr[x1]*30 + ptr[x1+1]*59 + ptr[x1+2]*11)/100;
 		}
 		/* last column */
 		x1-=channels;
-		ngerr[x] = (ptr[x1++]*30 + ptr[x1++]*59 + ptr[x1++]*11)/100;
+		ngerr[x] = (ptr[x1]*30 + ptr[x1+1]*59 + ptr[x1+2]*11)/100;
 	    }
 	    for (x=0; x<image->width; x++) {
 		/* reduce pixel */

@@ -1,3 +1,18 @@
+- fixed code dependant on the order of evaluation. code like
+  *ptr++ = *ptr++ = *ptr++ = color;
+  is wrong, because there is no guarantee that ptr will be incremented
+  _between_ the assignment operations. it can be incremented after all 
+  assignment operations as well. Because of this both of these are valid
+  implementations for a compiler:
+   a. assign, increment, assign, increment, assign, increment
+   b. assign, assign, assign, increment by 3
+  In case b. only the first memory location of the 3 will be modified, being
+  assigned 3 times the same value, while the other 2 remain unchanged.
+  For example egcs-2.91.66 (and possibly gcc-2.95.x too) implement this in
+  the second way (like in case b.)
+  Also the order in which the assignement is made is undefined (left to right 
+  or right to left).
+
 - added RMakeCenteredImage()
 
 - Added code to draw pixels and lines. Both writing absolute values, or

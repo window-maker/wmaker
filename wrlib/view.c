@@ -11,7 +11,8 @@ Pixmap pix;
 
 
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
     RContextAttributes attr;
 
@@ -82,5 +83,6 @@ int main(int argc, char **argv)
     XMapRaised(dpy, win);
     XFlush(dpy);
     getchar();
-    exit(0);
+
+    return 0;
 }
