@@ -2830,10 +2830,11 @@ titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event)
 
 	    /* maximize window */
 	    if (dir !=0 && !WFLAGP(wwin, no_resizable)) {
-		if (wwin->flags.maximized) 
+		int ndir = dir ^ wwin->flags.maximized;
+		if (wwin->flags.maximized != 0)
 		    wUnmaximizeWindow(wwin);
-		 else
-		    wMaximizeWindow(wwin, dir);
+		if (ndir != 0)
+		    wMaximizeWindow(wwin, ndir);
 	    }
 	}
     } else if (event->xbutton.button==Button3) {
