@@ -820,8 +820,6 @@ extractTexture(WMWidget *w, void *data)
 }
 
 
-
-
 static void
 changePage(WMWidget *w, void *data)
 {
@@ -873,6 +871,34 @@ changePage(WMWidget *w, void *data)
     WMRedisplayWidget(panel->prevL);
 }
 
+
+
+static void
+previewClick(XEvent *event, void *clientData)
+{
+    _Panel *panel = (_Panel*)clientData;
+    int i;
+    static WMRect parts[6] = {
+	{{30, 10},{210, 20}},
+	{{30,35},{210,20}},
+	{{30,60},{210,20}},
+	{{30,95},{100,20}},
+	{{30,115},{100,60}},
+	{{170,90},{64,64}}
+    };
+
+    for (i = 0; i < 6; i++) {
+	if (event->xbutton.x >= parts[i].pos.x
+	    && event->xbutton.y >= parts[i].pos.y
+	    && event->xbutton.x < parts[i].pos.x + parts[i].size.width
+	    && event->xbutton.y < parts[i].pos.y + parts[i].size.height) {
+	    
+	    WMSetPopUpButtonSelectedItem(panel->secP, i);
+	    changePage(panel->secP, panel);
+	    return;
+	}
+    }
+}
 
 
 static void
@@ -1104,6 +1130,10 @@ createPanel(Panel *p)
     WMMoveWidget(panel->prevL, 15, 10);
     WMSetLabelRelief(panel->prevL, WRSunken);
     WMSetLabelImagePosition(panel->prevL, WIPImageOnly);
+    
+    WMCreateEventHandler(WMWidgetView(panel->prevL), ButtonPressMask,
+			 previewClick, panel);
+    
 
     panel->secP = WMCreatePopUpButton(panel->frame);
     WMResizeWidget(panel->secP, 260, 20);

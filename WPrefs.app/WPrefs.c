@@ -268,7 +268,8 @@ createMainWindow(WMScreen *scr)
     WMMoveWidget(WPrefs.banner, FRAME_LEFT, FRAME_TOP);
     WMSetFrameRelief(WPrefs.banner, WRFlat);
 
-    font = WMCreateFont(scr, "-*-times-bold-r-*-*-24-*-*-*-*-*-*-*");
+    font = WMCreateFont(scr, "-*-times-bold-r-*-*-24-*-*-*-*-*-*-*,"
+			"-*-fixed-medium-r-normal-*-24-*");
     if (!font)
 	font = WMBoldSystemFontOfSize(scr, 24);
     WPrefs.nameL = WMCreateLabel(WPrefs.banner);
