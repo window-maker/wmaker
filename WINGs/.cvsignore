@@ -1,6 +1,4 @@
 Makefile Makefile.in
-fontl testcolorpanel testmywidget testnot wmfile wtest wmquery testtext
-connect puzzle
 get-wings-flags get-wutil-flags
 .libs
 .psrc .inslog2 tca.map tca.log
