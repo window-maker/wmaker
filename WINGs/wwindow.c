@@ -689,12 +689,14 @@ destroyWindow(_Window *win)
 	WMWindow *ptr;
 	ptr = scr->windowList;
 	
-	while (ptr->nextPtr) {
-	    if (ptr->nextPtr==win) {
-		ptr->nextPtr = ptr->nextPtr->nextPtr;
-		break;
+	if (ptr) {
+	    while (ptr->nextPtr) {
+		if (ptr->nextPtr==win) {
+		    ptr->nextPtr = ptr->nextPtr->nextPtr;
+		    break;
+		}
+		ptr = ptr->nextPtr;
 	    }
-	    ptr = ptr->nextPtr;
 	}
     }
 
