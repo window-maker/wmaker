@@ -3,12 +3,13 @@
 AUTOMAKE_OPTIONS = no-dependencies
 
 
-noinst_PROGRAMS = connect server fontl puzzle
+noinst_PROGRAMS = connect server fontl puzzle colorpick
 
 
 LDADD= $(top_builddir)/WINGs/libWINGs.a $(top_builddir)/wrlib/libwraster.la \
 	@XFTLIBS@ @INTLIBS@
 
+colorpick_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
 
 fontl_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
 
