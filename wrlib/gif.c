@@ -78,7 +78,7 @@ RLoadGIF(RContext *context, char *file, int index)
 	return NULL;
     }
 
-    if (gif->Image.Width<1 || gif->Image.Height<1) {
+    if (gif->SWidth<1 || gif->SHeight<1) {
         DGifCloseFile(gif);
 	RErrorCode = RERR_BADIMAGEFILE;
         return NULL;
