@@ -240,11 +240,13 @@ updateWorkspaceMenu(WMenu *menu)
 	    if (strcmp(menu->entries[i]->text,scr->workspaces[i]->name)!=0) {
 		wfree(menu->entries[i]->text);
 		strncpy(title, scr->workspaces[i]->name, MAX_WORKSPACENAME_WIDTH);
+		title[MAX_WORKSPACENAME_WIDTH] = 0;
 		menu->entries[i]->text = wstrdup(title);
 		menu->flags.realized = 0;
 	    }
 	} else {
 	    strncpy(title, scr->workspaces[i]->name, MAX_WORKSPACENAME_WIDTH);
+	    title[MAX_WORKSPACENAME_WIDTH] = 0;
 
 	    wMenuAddCallback(menu, title, switchWSCommand, NULL);
 	    

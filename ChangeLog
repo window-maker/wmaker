@@ -18,6 +18,12 @@ Changes since version 0.80.1:
   This will definitely enforce the need to use autoconf 2.5x
 - Added Xft support to WINGs, for rendering antialiased fonts with 
   transparency. Details in WINGs/ChangeLog.
+- Fixed problem with long, preset workspace names (Wanderlei Antonio Cavassin 
+  <cavassin@conectiva.com.br>)
+- Added kinput2 bug workaround in stock WMWindowAttributes (Seiichi SATO 
+  <sato@cvs-net.co.jp>)
+- Added Belarusian translation (Ihar Viarheichyk <iverg@mail.ru>)
+- Fixed wrlib to not try to load braindead images with 0x0 size
 
 
 Changes since version 0.80.0:

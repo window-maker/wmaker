@@ -270,7 +270,7 @@ bellow:
 - to reduce memory usage, disable the icon cache, by setting the RIMAGE_CACHE
   environment variable to 0. If you want to increase performance at the cost
   of memory usage, set it's value to a value like the number of different
-  icons you use.
+  icons you use. Also, disable anti-aliased text support in ~/GNUstep/Defaults/WMGLOBAL.
 
 
 Keyboard Mouse Control

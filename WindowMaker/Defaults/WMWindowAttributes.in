@@ -29,6 +29,23 @@
     Omnipresent = Yes;
     KeepInsideScreen = Yes;
   };
+  Kinput2 = { 
+   NoTitlebar = Yes; 
+   NoResizebar = Yes; 
+   NotClosable = Yes; 
+   NotMiniaturizable = Yes; 
+   KeepOnTop = Yes; 
+   Omnipresent = Yes; 
+   SkipWindowList = Yes; 
+   NoHideOthers = Yes; 
+   NoKeyBindings = Yes; 
+   NoMouseBindings = Yes; 
+   KeepInsideScreen = Yes; 
+   NoAppIcon = Yes; 
+   Unfocusable = Yes; 
+   DontSaveSession = Yes; 
+  }; 
+
   bookmarks.Netscape = {NoAppIcon = YES;};
   xcalc = {AlwaysUserIcon = Yes;Icon = "HP-16C-48.xpm";};
   Netscape = {Icon = Netscape.xpm;};
