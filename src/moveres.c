@@ -1437,6 +1437,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
     XEvent event;
     Window root = scr->root_win;
     KeyCode shiftl, shiftr;
+    Bool done = False;
     int started = 0;
     int warped = 0;
     /* This needs not to change while moving, else bad things can happen */
@@ -1470,7 +1471,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 #endif
     shiftl = XKeysymToKeycode(dpy, XK_Shift_L);
     shiftr = XKeysymToKeycode(dpy, XK_Shift_R);
-    while (1) {
+    while (!done) {
 	if (warped) {
             int junk;
             Window junkw;
@@ -1629,9 +1630,8 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 #ifdef DEBUG
 	    puts("End move window");
 #endif
-	    freeMoveData(&moveData);
-
-	    return started;
+	    done = True;
+	    break;
 
 	 default:
 	    if (started && !opaqueMove) {
@@ -1662,7 +1662,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 
     freeMoveData(&moveData);
 
-    return 0;
+    return started;
 }
 
 
