@@ -1359,11 +1359,13 @@ handleKeyPress(XEvent *event)
     switch (command) {
 #ifndef LITE
      case WKBD_ROOTMENU:
-	OpenRootMenu(scr, event->xkey.x_root, event->xkey.y_root, True);
-	break;
+	/*OpenRootMenu(scr, event->xkey.x_root, event->xkey.y_root, True);*/
+        OpenRootMenu(scr, scr->scr_width/2, scr->scr_height/2, True);
+        break;
      case WKBD_WINDOWLIST:
-	OpenSwitchMenu(scr, event->xkey.x_root, event->xkey.y_root, True);
-	break;
+	/*OpenSwitchMenu(scr, event->xkey.x_root, event->xkey.y_root, True);*/
+        OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, True);
+        break;
 #endif /* !LITE */
      case WKBD_WINDOWMENU:
 	if (ISMAPPED(wwin) && ISFOCUSED(wwin))

@@ -123,10 +123,21 @@ OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard)
     }
     
     if (switchmenu) {
+        int newx, newy;
+
 	if (!switchmenu->flags.realized)
 	    wMenuRealize(switchmenu);
-	wMenuMapAt(switchmenu, x-switchmenu->frame->core->width/2, y, 
-		   keyboard);
+
+        if (keyboard && x==0 && y==0) {
+            newx = newy = 0;
+        } else if (keyboard && x==scr->scr_width/2 && y==scr->scr_height/2) {
+            newx = x - switchmenu->frame->core->width/2;
+            newy = y - switchmenu->frame->core->height/2;
+        } else {
+            newx = x - switchmenu->frame->core->width/2;
+            newy = y;
+        }
+        wMenuMapAt(switchmenu, newx, newy, keyboard);
     }
 }
 

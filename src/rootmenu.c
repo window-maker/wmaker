@@ -1803,7 +1803,18 @@ OpenRootMenu(WScreen *scr, int x, int y, int keyboard)
 	scr->root_menu = menu;
     }
     if (menu) {
-	wMenuMapAt(menu, x-menu->frame->core->width/2, y, keyboard);
+        int newx, newy;
+
+        if (keyboard && x==0 && y==0) {
+            newx = newy = 0;
+        } else if (keyboard && x==scr->scr_width/2 && y==scr->scr_height/2) {
+            newx = x - menu->frame->core->width/2;
+            newy = y - menu->frame->core->height/2;
+        } else {
+            newx = x - menu->frame->core->width/2;
+            newy = y;
+        }
+        wMenuMapAt(menu, newx, newy, keyboard);
     }
     
     if (scr->flags.root_menu_changed_shortcuts)
