@@ -762,8 +762,12 @@ void WMEditTableViewRow(WMTableView *table, int row)
     if (table->editingRow >= 0) {
 	stopRowEdit(table, table->editingRow);
     }
-    
+
     table->editingRow = row;
+    
+    if (row < 0)
+	return;
+    
     for (i = 0; i < WMGetArrayItemCount(table->columns); i++) {
 	column = WMGetFromArray(table->columns, i);
 

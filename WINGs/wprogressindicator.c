@@ -23,7 +23,7 @@ typedef struct W_ProgressIndicator {
 #define DEFAULT_PROGRESS_INDICATOR_HEIGHT	16
 
 /* define if only the ticks within the progress region should be displayed */
-#define SHOW_PROGRESS_TICKS_ONLY
+#undef SHOW_PROGRESS_TICKS_ONLY
 
 
 static void didResizeProgressIndicator();
