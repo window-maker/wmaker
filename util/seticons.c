@@ -138,7 +138,7 @@ main(int argc, char **argv)
 	window_attrs = WMGetFromPLDictionary(all_windows, window_name);
 	if (window_attrs) {
 	    if (WMIsPLDictionary(window_attrs)) {
-		WMMergePLDictionaries(window_attrs, icon_value);
+		WMMergePLDictionaries(window_attrs, icon_value, True);
 	    }
 	} else {
 	    WMPutInPLDictionary(all_windows, window_name, icon_value);

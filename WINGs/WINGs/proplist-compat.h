@@ -86,7 +86,7 @@ typedef WMPropList* proplist_t;
 #define PLRemoveArrayElement(array, pos) WMDeleteFromPLArray(array, pos)
 #define PLInsertDictionaryEntry(dict, key, value) WMPutInPLDictionary(dict, key, value)
 #define PLRemoveDictionaryEntry(dict, key) WMRemoveFromPLDictionary(dict, key)
-#define PLMergeDictionaries(dest, source) WMMergePLDictionaries(dest, source)
+#define PLMergeDictionaries(dest, source) WMMergePLDictionaries(dest, source, False)
 
 #define PLGetNumberOfElements(pl) WMGetPropListItemCount(pl)
 

@@ -171,7 +171,8 @@ typedef struct {
  */
 typedef struct WFakeGroupLeader {
     char *identifier;
-    Window window;
+    Window leader;
+    Window origLeader;
     int retainCount;
 } WFakeGroupLeader;
 

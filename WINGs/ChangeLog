@@ -6,6 +6,7 @@ Changes since wmaker 0.70.0:
   included too
 - removed a wsyserror() message when reading a property list from file
   (the programmer should decide if to give that message or just ignore).
+- added a 'Bool recursive' flag to WMMergePLDictionaries()
 
 
 Changes since wmaker 0.65.0:

@@ -7,8 +7,8 @@
   WSoundServer = {Icon = sound.#extension#;};
   panel.Panel = {NoAppIcon = YES;};
   gmc.Gmc = {NoAppIcon = YES;};
-  XTerm = {SharedAppIcon = Yes;Icon = Terminal.#extension#;};
-  NXTerm = {SharedAppIcon = Yes;Icon = Terminal.#extension#;};
+  XTerm = {Icon = Terminal.#extension#;};
+  NXTerm = {Icon = Terminal.#extension#;};
   ScilabGraphic0.Xscilab = {KeepInsideScreen=YES;};
   ScilabGraphic1.Xscilab = {KeepInsideScreen=YES;};
   ScilabGraphic2.Xscilab = {KeepInsideScreen=YES;};
@@ -46,11 +46,11 @@
   Xmag = {Icon = inspect.xpm;};
   Xmessage = {Icon = Reference.xpm;};
   XConsole = {Icon = inspect.xpm;Omnipresent = Yes;};
-  Fte = {SharedAppIcon = Yes;Icon = Clipboard.tif;};
+  Fte = {Icon = Clipboard.tif;};
   xjed = {Icon = Clipboard.xpm;};
   xedit = {Icon = notepad.#extension#;};
   xmixer = {Icon = mixer.#extension#;};
   xmcd = {Icon = Radio.xpm;};
   xplaycd = {Icon = Radio.xpm;};
-  "*" = {Icon = defaultAppIcon.#extension#;};
+  "*" = {Icon = defaultAppIcon.#extension#;SharedAppIcon = Yes;};
 }

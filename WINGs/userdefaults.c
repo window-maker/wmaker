@@ -181,7 +181,7 @@ WMSynchronizeUserDefaults(WMUserDefaults *database)
         if (database->dirty && fileIsNewer) {
             plF = WMReadPropListFromFile(path);
             if (plF) {
-                plF = WMMergePLDictionaries(plF, database->appDomain);
+                plF = WMMergePLDictionaries(plF, database->appDomain, False);
                 WMReleasePropList(database->appDomain);
                 database->appDomain = plF;
                 key = database->searchList[0];

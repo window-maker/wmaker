@@ -540,7 +540,7 @@ wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file)
     if ((attr = WMGetFromPLDictionary(dict, key)) != NULL) {
         if (WMIsPLDictionary(attr)) {
             if (icon_value!=NULL && !same)
-                WMMergePLDictionaries(attr, icon_value);
+                WMMergePLDictionaries(attr, icon_value, False);
             else
                 WMRemoveFromPLDictionary(attr, AIcon);
         }

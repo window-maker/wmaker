@@ -439,6 +439,13 @@ saveTimestamp(XEvent *event)
 }
 
 
+static int
+matchWindow(void *item, void *cdata)
+{
+    return (((WFakeGroupLeader*)item)->origLeader == (Window)cdata);
+}
+
+
 static void
 handleExtensions(XEvent *event)
 {
@@ -538,6 +545,8 @@ handleDestroyNotify(XEvent *event)
     WWindow *wwin;
     WApplication *app;
     Window window = event->xdestroywindow.window;
+    WScreen *scr = wScreenForRootWindow(event->xdestroywindow.event);
+    int index;
 
 #ifdef DEBUG
     L("got destroy notify");
@@ -546,6 +555,23 @@ handleDestroyNotify(XEvent *event)
     if (wwin) {
 	wUnmanageWindow(wwin, False, True);
     }
+
+    index = WMFindInArray(scr->fakeGroupLeaders, matchWindow, (void*)window);
+    if (index != WANotFound) {
+        WFakeGroupLeader *fPtr;
+
+        fPtr = WMGetFromArray(scr->fakeGroupLeaders, index);
+        if (fPtr->retainCount > 0) {
+            fPtr->retainCount--;
+            if (fPtr->retainCount==0 && fPtr->leader!=None) {
+                XDestroyWindow(dpy, fPtr->leader);
+                fPtr->leader = None;
+                XFlush(dpy);
+            }
+        }
+        fPtr->origLeader = None;
+    }
+
 
     app = wApplicationOf(window);
     if (app) {

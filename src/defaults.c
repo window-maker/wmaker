@@ -989,7 +989,7 @@ wDefaultsInitDomain(char *domain, Bool requireDictionary)
 	    } else {
 		if (db->dictionary && WMIsPLDictionary(shared_dict) &&
 		    WMIsPLDictionary(db->dictionary)) {
-		    WMMergePLDictionaries(shared_dict, db->dictionary);
+		    WMMergePLDictionaries(shared_dict, db->dictionary, True);
 		    WMReleasePropList(db->dictionary);
 		    db->dictionary = shared_dict;
 		    if (stbuf.st_mtime > db->timestamp)
@@ -1087,7 +1087,7 @@ wDefaultsCheckDomains(void *foo)
 			 "WindowMaker", WDWindowMaker->path);
 	    } else {
 		if (shared_dict) {
-		    WMMergePLDictionaries(shared_dict, dict);
+		    WMMergePLDictionaries(shared_dict, dict, True);
 		    WMReleasePropList(dict);
 		    dict = shared_dict;
 		    shared_dict = NULL;

@@ -549,7 +549,7 @@ main(int argc, char **argv)
 	}
     }
 
-    WMMergePLDictionaries(prop, style);
+    WMMergePLDictionaries(prop, style, True);
 
     WMWritePropListToFile(prop, path, True);
     {

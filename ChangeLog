@@ -27,6 +27,8 @@ Changes since version 0.70.0:
 - Removed the collapse appicons thing.
 - Added real appicon sharing (apps of the same kind will have a single shared 
   appicon).
+- Fixed user and global defaults domain merging to preserve values present in
+  global but not in user in subdictionaries.
 
 
 Changes since version 0.65.1:

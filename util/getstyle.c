@@ -597,7 +597,7 @@ main(int argc, char **argv)
     path = globalDefaultsPathForDomain("WindowMaker");
     val = WMReadPropListFromFile(path);
     if (val) {
-	WMMergePLDictionaries(val, prop);
+	WMMergePLDictionaries(val, prop, True);
 	WMReleasePropList(prop);
 	prop = val;
     }

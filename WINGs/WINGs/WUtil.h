@@ -772,7 +772,8 @@ void WMRemoveFromPLDictionary(WMPropList *plist, WMPropList *key);
 /* It inserts all key/value pairs from source into dest, overwriting
  * the values with the same keys from dest, keeping all values with keys
  * only present in dest unchanged */
-WMPropList* WMMergePLDictionaries(WMPropList *dest, WMPropList *source);
+WMPropList* WMMergePLDictionaries(WMPropList *dest, WMPropList *source,
+                                  Bool recursive);
 
 int WMGetPropListItemCount(WMPropList *plist);
 

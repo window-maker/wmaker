@@ -238,13 +238,13 @@ wWindowDestroy(WWindow *wwin)
 	}
     }
 
-    if (wwin->fake_group) {
-        if (wwin->fake_group->retainCount > 0)
-            wwin->fake_group->retainCount--;
-        if (wwin->fake_group->retainCount==0 && wwin->fake_group->window!=None) {
-                XDestroyWindow(dpy, wwin->fake_group->window);
-                wwin->fake_group->window = None;
-                XFlush(dpy);
+    if (wwin->fake_group && wwin->fake_group->retainCount>0) {
+        wwin->fake_group->retainCount--;
+        if (wwin->fake_group->retainCount==0 && wwin->fake_group->leader!=None) {
+            XDestroyWindow(dpy, wwin->fake_group->leader);
+            wwin->fake_group->leader = None;
+            wwin->fake_group->origLeader = None;
+            XFlush(dpy);
         }
     }
 
@@ -811,27 +811,36 @@ wManageWindow(WScreen *scr, Window window)
         if (index != WANotFound) {
             fPtr = WMGetFromArray(scr->fakeGroupLeaders, index);
             if (fPtr->retainCount == 0) {
-                fPtr->window = createFakeWindowGroupLeader(scr, wwin->main_window,
+                fPtr->leader = createFakeWindowGroupLeader(scr, wwin->main_window,
                                                            instance, class);
             }
             fPtr->retainCount++;
+            if (wwin->main_window!=wwin->client_win && fPtr->origLeader==None) {
+                fPtr->retainCount++;
+                fPtr->origLeader = wwin->main_window;
+            }
             wwin->fake_group = fPtr;
-            wwin->group_id = fPtr->window;
-            wwin->main_window = wwin->group_id;
+            //wwin->group_id = fPtr->leader;
+            wwin->main_window = fPtr->leader;
             wfree(buffer);
         } else {
             fPtr = (WFakeGroupLeader*)wmalloc(sizeof(WFakeGroupLeader));
 
             fPtr->identifier = buffer;
-            fPtr->window = createFakeWindowGroupLeader(scr, wwin->main_window,
+            fPtr->leader = createFakeWindowGroupLeader(scr, wwin->main_window,
                                                        instance, class);
+            fPtr->origLeader = None;
             fPtr->retainCount = 1;
 
             WMAddToArray(scr->fakeGroupLeaders, fPtr);
 
+            if (wwin->main_window!=wwin->client_win) {
+                fPtr->retainCount++;
+                fPtr->origLeader = wwin->main_window;
+            }
             wwin->fake_group = fPtr;
-            wwin->group_id = fPtr->window;
-            wwin->main_window = wwin->group_id;
+            //wwin->group_id = fPtr->leader;
+            wwin->main_window = fPtr->leader;
         }
         if (instance)
             XFree(instance);

@@ -512,7 +512,7 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 	    else
 	      wwin->flags.urgent = 0;
         } else if (wwin->fake_group!=NULL) {
-            wwin->group_id = wwin->fake_group->window;
+            wwin->group_id = wwin->fake_group->leader;
         } else {
             wwin->group_id = None;
 	}

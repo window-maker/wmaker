@@ -1211,16 +1211,25 @@ WMRemoveFromPLDictionary(WMPropList *plist, WMPropList *key)
 
 
 WMPropList*
-WMMergePLDictionaries(WMPropList *dest, WMPropList *source)
+WMMergePLDictionaries(WMPropList *dest, WMPropList *source, Bool recursive)
 {
-    WMPropList *key, *value;
+    WMPropList *key, *value, *dvalue;
     WMHashEnumerator e;
 
     wassertr(source->type==WPLDictionary && dest->type==WPLDictionary);
 
     e = WMEnumerateHashTable(source->d.dict);
     while (WMNextHashEnumeratorItemAndKey(&e, (void**)&value, (void**)&key)) {
-        WMPutInPLDictionary(dest, key, value);
+        if (recursive && value->type==WPLDictionary) {
+            dvalue = WMGetFromPLDictionary(dest, key);
+            if (dvalue && dvalue->type==WPLDictionary) {
+                WMMergePLDictionaries(dvalue, value, recursive);
+            } else {
+                WMPutInPLDictionary(dest, key, value);
+            }
+        } else {
+            WMPutInPLDictionary(dest, key, value);
+        }
     }
 
     return dest;

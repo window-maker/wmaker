@@ -237,7 +237,7 @@ toggleLoweredCallback(WMenu *menu, WMenuEntry *entry)
 static int
 matchWindow(void *item, void *cdata)
 {
-    return (((WFakeGroupLeader*)item)->window == (Window)cdata);
+    return (((WFakeGroupLeader*)item)->leader == (Window)cdata);
 }
 
 
