@@ -91,7 +91,7 @@ X_EXTRA_LIBS = @X_EXTRA_LIBS@
 X_LIBRARY_PATH = @X_LIBRARY_PATH@
 wprefsdir = @wprefsdir@
 
-EXTRA_DIST = README single_click.diff
+EXTRA_DIST = README single_click.diff WindowMaker.spec.in
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../src/config.h
 CONFIG_CLEAN_FILES = 

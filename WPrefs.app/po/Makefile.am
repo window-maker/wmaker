@@ -14,6 +14,7 @@ POTFILES  = \
 	$(top_builddir)/WPrefs.app/Configurations.c \
 	$(top_builddir)/WPrefs.app/Expert.c \
 	$(top_builddir)/WPrefs.app/Focus.c \
+	$(top_builddir)/WPrefs.app/Font.c \
 	$(top_builddir)/WPrefs.app/Icons.c \
 	$(top_builddir)/WPrefs.app/KeyboardSettings.c \
 	$(top_builddir)/WPrefs.app/KeyboardShortcuts.c \
@@ -23,7 +24,6 @@ POTFILES  = \
 	$(top_builddir)/WPrefs.app/NoMenuAlert.c \
 	$(top_builddir)/WPrefs.app/Paths.c \
 	$(top_builddir)/WPrefs.app/Preferences.c \
-	$(top_builddir)/WPrefs.app/Text.c \
 	$(top_builddir)/WPrefs.app/TexturePanel.c \
 	$(top_builddir)/WPrefs.app/Themes.c \
 	$(top_builddir)/WPrefs.app/WindowHandling.c \

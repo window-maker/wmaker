@@ -450,8 +450,8 @@ wBalloonEnteredObject(WScreen *scr, WObjDescriptor *object)
      case WCLASS_DOCK_ICON:
 	if (object->parent != scr->clip_icon && wPreferences.appicon_balloon)
 	    appiconBalloon(object);
-    else
-        wBalloonHide(scr);
+        else
+            wBalloonHide(scr);
 	break;
 
      case WCLASS_MINIWINDOW:
