@@ -751,7 +751,7 @@ paintEntry(WMenu *menu, int index, int selected)
 
     /* paint background */
     if (selected) {
-        XFillRectangle(dpy, win, WMColorGC(scr->white), 1, y+1, w-2, h-3);
+        XFillRectangle(dpy, win, WMColorGC(scr->select_color), 1, y+1, w-2, h-3);
         if (scr->menu_item_texture->any.type == WTEX_SOLID)
             drawFrame(scr, win, y, w, h, type);
     } else {
@@ -820,7 +820,7 @@ paintEntry(WMenu *menu, int index, int selected)
         XSetClipOrigin(dpy, scr->copy_gc, 5, y+(h-ih)/2);
         if (selected) {
             if (entry->flags.enabled) {
-                XSetForeground(dpy, scr->copy_gc, scr->black_pixel);
+                XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->select_text_color));
             } else {
                 XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->dtext_color));
             }
