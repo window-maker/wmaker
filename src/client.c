@@ -234,14 +234,19 @@ wClientConfigure(WWindow *wwin, XConfigureRequestEvent *xcre)
 
     if (!wwin->flags.shaded) {
         /* If the window is shaded, wrong height will be set for the window */
-        if (xcre->value_mask & CWX)
-            nx = xcre->x - FRAME_BORDER_WIDTH;
+        if (xcre->value_mask & CWX) {
+            nx = xcre->x;
+	    if (!WFLAGP(wwin, no_border))
+	      nx -= FRAME_BORDER_WIDTH;
+	}
         else
             nx = wwin->frame_x;
 
-        if (xcre->value_mask & CWY)
-            ny = xcre->y - ((ofs_y < 0) ? 0 : wwin->frame->top_width)
-		- FRAME_BORDER_WIDTH;
+        if (xcre->value_mask & CWY) {
+            ny = xcre->y - ((ofs_y < 0) ? 0 : wwin->frame->top_width);
+	    if (!WFLAGP(wwin, no_border))
+	      ny -= FRAME_BORDER_WIDTH;
+	}
         else
             ny = wwin->frame_y;
 
