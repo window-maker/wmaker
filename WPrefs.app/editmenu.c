@@ -61,6 +61,8 @@ typedef struct W_EditMenu {
     
     WMTextField *tfield;
 
+    WMButton *closeB;
+
     int titleHeight;
     int itemHeight;
     
@@ -639,10 +641,35 @@ WGetEditMenuLocationForSubmenu(WEditMenu *mPtr, WEditMenu *submenu)
 }
 
 
+
+static void
+closeMenuAction(WMWidget *w, void *data)
+{
+    WEditMenu *menu = (WEditMenu*)data;
+
+    WMAddIdleHandler(WMDestroyWidget, menu->closeB);
+    menu->closeB = NULL;
+
+    WMUnmapWidget(menu);
+}
+
+
 void
 WTearOffEditMenu(WEditMenu *menu, WEditMenu *submenu)
 {
+    WEditMenuItem *item;
+    
     submenu->flags.isTornOff = 1;
+    
+    item = (WEditMenuItem*)WMGetFromBag(submenu->items, 0);
+    
+    submenu->closeB = WMCreateCommandButton(item);
+    WMResizeWidget(submenu->closeB, 15, 15);
+    WMMoveWidget(submenu->closeB, W_VIEW(submenu)->size.width - 20, 3);
+    WMRealizeWidget(submenu->closeB);
+    WMSetButtonText(submenu->closeB, "X");
+    WMSetButtonAction(submenu->closeB, closeMenuAction, submenu);
+    WMMapWidget(submenu->closeB);
 
     if (menu->selectedItem && menu->selectedItem->submenu == submenu)
 	deselectItem(menu);
@@ -686,7 +713,7 @@ updateMenuContents(WEditMenu *mPtr)
 	i = 1;
     }
 
-    newW += iheight + 5;
+    newW += iheight + 10;
     newH--;
     
     if (mPtr->minSize.width)
