@@ -274,6 +274,12 @@
 #define DEF_PIXMAP_PATHS \
 "(\"~/pixmaps\",\"~/GNUstep/Library/WindowMaker/Pixmaps\",\""PIXMAPDIR"\")"
 
+#ifdef USER_MENU
+#define GLOBAL_USER_MENU_PATH SYSCONFDIR"/UserMenus"
+#define DEF_USER_MENU_PATHS \
+"~/GNUstep/Defaults/UserMenus:"GLOBAL_USER_MENU_PATH
+#endif
+
 /* icon path */
 #define DEF_ICON_PATHS \
 "(\"~/pixmaps\",\"~/GNUstep/Library/Icons\",\"/usr/include/X11/pixmaps/\",\""PIXMAPDIR"\")"

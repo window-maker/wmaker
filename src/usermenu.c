@@ -92,6 +92,9 @@ notifyClient(WMenu *menu, WMenuEntry *entry){
         event.xkey.same_screen = YES;
         XSendEvent(dpy, window, False, NoEventMask, &event);
         XFlush(dpy);
+        event.xkey.type = KeyRelease;
+        XSendEvent(dpy, window, False, NoEventMask, &event);
+        XFlush(dpy);
     }
 }
 
@@ -322,27 +325,20 @@ WMenu*
 wUserMenuGet(WScreen *scr, WWindow *wwin){
     WMenu *menu = NULL;
     char buffer[100];
-    char *prefix, *menufile;
+    char *path = NULL;
+    char *tmp;
 
-    prefix = getenv("HOME");
-    if (!prefix)
-        prefix = ".";
-    /* this file/path code will be replaced :D - ]d */
-    menufile = malloc(strlen(prefix)+128);
-    if (!menufile) return NULL;
+    tmp=wmalloc(strlen(wwin->wm_instance)+strlen(wwin->wm_class)+7);
+    path = wfindfile(DEF_USER_MENU_PATHS,tmp);
+    free(tmp);
+
+    if (!path) return NULL;
     
     if (wwin) {
-        FILE *f;
-        sprintf(menufile, "%s/GNUstep/Library/WindowMaker/UserMenus/%s.%s.menu",
-                    prefix, wwin->wm_instance, wwin->wm_class);
-        f = fopen(menufile, "r");
-        if (f) {
-            fclose(f);
-            menu = readUserMenuFile(scr, menufile);
-        }
+        menu = readUserMenuFile(scr, path);
     }
 
-    free(menufile);
+    free(path);
     return menu;
 }
 
