@@ -60,7 +60,7 @@ cp -f WindowMaker/plmenu WindowMaker/Defaults/WMRootMenu
 make install DESTDIR=$RPM_BUILD_ROOT
 
 strip $RPM_BUILD_ROOT/usr/X11R6/bin/* || :
-strip $RPM_BUILD_ROOT/usr/X11R6/lib/GNUstep/Apps/WPrefs.app/WPrefs
+strip $RPM_BUILD_ROOT/usr/X11R6/lib/GNUstep/Applications/WPrefs.app/WPrefs
 
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig

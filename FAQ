@@ -1102,12 +1102,12 @@ keep-on-top options for the dock and clip.
 4.18 How do I restore the configuration app to the dock?
 ----------------------------------]
 You should start it from a terminal using its full path name, which is
-/usr/local/GNUstep/Apps/WPrefs.app/WPrefs
+/usr/local/GNUstep/Applications/WPrefs.app/WPrefs
 by default.
 
 
 4.19 How do I define my own icon for a program?  I don't like the one it
-	 supplies.
+     supplies.
 ----------------------------------
 Right-click the titlebar of the running application and start the Attributes
 Editor.  Check the "Ignore client supplied icon" box.  "Apply" and "Save",

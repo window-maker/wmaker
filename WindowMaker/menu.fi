@@ -202,7 +202,7 @@
 		"Taustat" END
 		"Tallenna teema" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Teeman nimi,Kirjoita teematiedoston nimi:)"
 		"Tallenna kuvakkeet" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(Kuvakesetin nimi,Kirjoita tiedostonnimi:)"
-		"Asetukset" EXEC /usr/local/GNUstep/Apps/WPrefs.app/WPrefs
+		"Asetukset" EXEC /usr/local/GNUstep/Applications/WPrefs.app/WPrefs
 	"Ulkonäkö" END
 
 	"Lopeta"	MENU

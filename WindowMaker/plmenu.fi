@@ -357,7 +357,7 @@
 		(
 		"Asetukset",
 		EXEC,
-		"/usr/local/GNUstep/Apps/WPrefs.app/WPrefs"
+		"/usr/local/GNUstep/Applications/WPrefs.app/WPrefs"
 		)
 	),
 	(

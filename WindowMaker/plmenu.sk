@@ -94,7 +94,7 @@
    ),   
   ("Uložiť tému", SHEXEC, "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/\"%a(Theme name)\""),
   ("Uložiť sadu ikon", SHEXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(IconSet name)\""),
-  ("Konfiguračný nástroj", EXEC, "/usr/local/GNUstep/Apps/WPrefs.app/WPrefs")
+  ("Konfiguračný nástroj", EXEC, "/usr/local/GNUstep/Applications/WPrefs.app/WPrefs")
   ), 
  ("Koniec",
   ("Reštartovať", RESTART),

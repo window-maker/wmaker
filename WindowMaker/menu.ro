@@ -202,7 +202,7 @@
 		"Fundal" END
 		"Salvează Tema" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name,Enter file name:)"
 		"Salvează Setul de Iconiţe" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name,Enter file name:)"
-		"Utilitar de Configurare" EXEC /usr/local/GNUstep/Apps/WPrefs.app/WPrefs
+		"Utilitar de Configurare" EXEC /usr/local/GNUstep/Applications/WPrefs.app/WPrefs
 	"Configurare" END
 
 	"Ieşire" MENU

@@ -197,7 +197,7 @@ wApplicationExtractDirPackIcon(WScreen *scr, char *path,
 {
     char *iconPath=NULL;
     /* Maybe the app is a .app and it has an icon in it, like
-     * /usr/local/GNUstep/Apps/WPrefs.app/WPrefs.tiff
+     * /usr/local/GNUstep/Applications/WPrefs.app/WPrefs.tiff
      */
     if (strstr(path, ".app")) {
         char *tmp;

@@ -15,7 +15,7 @@ user guide to be fully aware of all available options and other features
 of WindowMaker that are not related to configuration.
 
     To run WPrefs, do not put it in your search path. Instead, run it
-with the full path, like /usr/local/GNUstep/Apps/WPrefs.app/WPrefs
+with the full path, like /usr/local/GNUstep/Applications/WPrefs.app/WPrefs
 Then, dock it's application icon. The dock will automatically detect it's
 icon and use it.
 

@@ -94,7 +94,7 @@
    ),   
   ("Guardar tema", SHEXEC, "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/\"%a(Theme name)\""),
   ("Guardar iconos", SHEXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(IconSet name)\""),
-  ("Preferencias", EXEC, "/usr/local/GNUstep/Apps/WPrefs.app/WPrefs")
+  ("Preferencias", EXEC, "/usr/local/GNUstep/Applications/WPrefs.app/WPrefs")
   ), 
  ("Salir",
   ("Reiniciar", RESTART),

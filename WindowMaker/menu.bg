@@ -209,7 +209,7 @@
 		"Фон" END
 		"Запази темата" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name,Enter file name:)"
 		"Запази колекцията иконки" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name,Enter file name:)"
-		"Пособие за настройки" EXEC /usr/local/GNUstep/Apps/WPrefs.app/WPrefs
+		"Пособие за настройки" EXEC /usr/local/GNUstep/Applications/WPrefs.app/WPrefs
 	"Изглед" END
 
 	"Изход"	MENU

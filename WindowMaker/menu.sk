@@ -216,7 +216,7 @@
 		"Pozadie" END
 		"Uložiť tému" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Meno témy,Zadajte názov súboru:)"
 		"Uložiť sadu ikon" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(Meno sady ikon,Zadajte názov súboru:)"
-		"Konfiguračný nástroj" EXEC /usr/local/GNUstep/Apps/WPrefs.app/WPrefs
+		"Konfiguračný nástroj" EXEC /usr/local/GNUstep/Applications/WPrefs.app/WPrefs
 	"Vzhľad" END
 
 	"Koniec" MENU
