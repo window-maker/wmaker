@@ -7,6 +7,7 @@ Changes since version 0.61.0:
 - fixed problem with window shortcut assignment from the menu
 - fixed problem with fonts in WINGs (Masahide -mac- NODA 
 					<mac@flab.fujitsu.co.jp>)
+- fixed multihead bugs (Morten Bøgeskov" <mb@dbc.dk>)
 - fixed crashing bug when saving session information.
 - fixed crashing bug related to onmipresent icons in Clip
 
