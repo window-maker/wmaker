@@ -551,10 +551,15 @@ createFakeWindowGroupLeader(WScreen *scr, Window win, char *instance, char *clas
     XSetClassHint(dpy, leader, classHint);
     XFree(classHint);
 
+    /* inherit these from the original leader if available */
+    hints = XGetWMHints(dpy, win);
+    if (!hints) {
+        hints = XAllocWMHints();
+        hints->flags = 0;
+    }
     /* set window group leader to self */
-    hints = XAllocWMHints();
     hints->window_group = leader;
-    hints->flags = WindowGroupHint;
+    hints->flags |= WindowGroupHint;
     XSetWMHints(dpy, leader, hints);
     XFree(hints);
 

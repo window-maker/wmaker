@@ -185,8 +185,9 @@ saveIconNameFor(char *iconPath, char *wm_instance, char *wm_class)
     WMReleasePropList(key);
     WMReleasePropList(iconk);
 
-    if (val && !wPreferences.flags.noupdates)
-	WMWritePropListToFile(dict, WDWindowAttributes->path, True);
+    if (val && !wPreferences.flags.noupdates) {
+        UpdateDomainFile(WDWindowAttributes);
+    }
 }
 
 

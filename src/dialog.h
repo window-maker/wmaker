@@ -35,6 +35,9 @@ int wMessageDialog(WScreen *scr, char *title, char *message,
 		   char *defBtn, char *altBtn, char *othBtn);
 int wInputDialog(WScreen *scr, char *title, char *message, char **text);
 
+int wExitDialog(WScreen *scr, char *title, char *message, char *defBtn,
+                char *altBtn, char *othBtn);
+
 Bool wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class);
 
 void wShowInfoPanel(WScreen *scr);

@@ -1236,3 +1236,38 @@ SendHelperMessage(WScreen *scr, char type, int workspace, char *msg)
     }
     wfree(buffer);
 }
+
+
+Bool
+UpdateDomainFile(WDDomain *domain)
+{
+    struct stat stbuf;
+    char path[PATH_MAX];
+    WMPropList *shared_dict=NULL, *dict;
+    Bool result, freeDict = False;
+
+    dict = domain->dictionary;
+    if (WMIsPLDictionary(domain->dictionary)) {
+        /* retrieve global system dictionary */
+        snprintf(path, sizeof(path), "%s/WindowMaker/%s",
+                 SYSCONFDIR, domain->domain_name);
+        if (stat(path, &stbuf) >= 0) {
+            shared_dict = WMReadPropListFromFile(path);
+            if (shared_dict && WMIsPLDictionary(shared_dict)) {
+                freeDict = True;
+                dict = WMDeepCopyPropList(domain->dictionary);
+                WMSubtractPLDictionaries(dict, shared_dict, True);
+            }
+        }
+    }
+
+    result = WMWritePropListToFile(dict, domain->path, True);
+
+    if (freeDict) {
+        WMReleasePropList(dict);
+    }
+
+    return result;
+}
+
+

@@ -905,6 +905,29 @@ initDefaults()
 }
 
 
+static WMPropList*
+readGlobalDomain(char *domainName, Bool requireDictionary)
+{
+    WMPropList *globalDict = NULL;
+    char path[PATH_MAX];
+    struct stat stbuf;
+
+    snprintf(path, sizeof(path), "%s/WindowMaker/%s", SYSCONFDIR, domainName);
+    if (stat(path, &stbuf)>=0) {
+        globalDict = WMReadPropListFromFile(path);
+        if (globalDict && requireDictionary && !WMIsPLDictionary(globalDict)) {
+            wwarning(_("Domain %s (%s) of global defaults database is corrupted!"),
+                     domainName, path);
+            WMReleasePropList(globalDict);
+            globalDict = NULL;
+        } else if (!globalDict) {
+            wwarning(_("could not load domain %s from global defaults database"),
+                     domainName);
+        }
+    }
+
+    return globalDict;
+}
 
 
 #if 0
@@ -989,7 +1012,7 @@ wDefaultsInitDomain(char *domain, Bool requireDictionary)
 	    } else {
 		if (db->dictionary && WMIsPLDictionary(shared_dict) &&
 		    WMIsPLDictionary(db->dictionary)) {
-		    WMMergePLDictionaries(shared_dict, db->dictionary, True);
+                    WMMergePLDictionaries(shared_dict, db->dictionary, True);
 		    WMReleasePropList(db->dictionary);
 		    db->dictionary = shared_dict;
 		    if (stbuf.st_mtime > db->timestamp)
@@ -1048,35 +1071,22 @@ wDefaultsCheckDomains(void *foo)
 {
     WScreen *scr;
     struct stat stbuf;
+    WMPropList *shared_dict = NULL;
     WMPropList *dict;
     int i;
-    char path[PATH_MAX];
 
 #ifdef HEARTBEAT
     puts("Checking domains...");
 #endif
     if (stat(WDWindowMaker->path, &stbuf)>=0
 	&& WDWindowMaker->timestamp < stbuf.st_mtime) {
-	WMPropList *shared_dict = NULL;
 #ifdef HEARTBEAT
 	puts("Checking WindowMaker domain");
 #endif
 	WDWindowMaker->timestamp = stbuf.st_mtime;	
 
 	/* global dictionary */
-	snprintf(path, sizeof(path), "%s/WindowMaker/WindowMaker", SYSCONFDIR);
-	if (stat(path, &stbuf)>=0) {
-	    shared_dict = WMReadPropListFromFile(path);
-	    if (shared_dict && !WMIsPLDictionary(shared_dict)) {
-		wwarning(_("Domain %s (%s) of global defaults database is corrupted!"),
-			 "WindowMaker", path);
-		WMReleasePropList(shared_dict);
-		shared_dict = NULL;
-	    } else if (!shared_dict) {
-		wwarning(_("could not load domain %s from global defaults database"),
-			 "WindowMaker");
-	    }
-	}
+        shared_dict = readGlobalDomain("WindowMaker", True);
 	/* user dictionary */
 	dict = WMReadPropListFromFile(WDWindowMaker->path);
 	if (dict) {
@@ -1087,7 +1097,7 @@ wDefaultsCheckDomains(void *foo)
 			 "WindowMaker", WDWindowMaker->path);
 	    } else {
 		if (shared_dict) {
-		    WMMergePLDictionaries(shared_dict, dict, True);
+                    WMMergePLDictionaries(shared_dict, dict, True);
 		    WMReleasePropList(dict);
 		    dict = shared_dict;
 		    shared_dict = NULL;
@@ -1116,6 +1126,9 @@ wDefaultsCheckDomains(void *foo)
 #ifdef HEARTBEAT
 	puts("Checking WMWindowAttributes domain");
 #endif
+	/* global dictionary */
+        shared_dict = readGlobalDomain("WMWindowAttributes", True);
+	/* user dictionary */
 	dict = WMReadPropListFromFile(WDWindowAttributes->path);
 	if (dict) {
 	    if (!WMIsPLDictionary(dict)) {
@@ -1124,8 +1137,15 @@ wDefaultsCheckDomains(void *foo)
 		wwarning(_("Domain %s (%s) of defaults database is corrupted!"),
 			 "WMWindowAttributes", WDWindowAttributes->path);
 	    } else {
-		if (WDWindowAttributes->dictionary)
-		    WMReleasePropList(WDWindowAttributes->dictionary);
+		if (shared_dict) {
+                    WMMergePLDictionaries(shared_dict, dict, True);
+		    WMReleasePropList(dict);
+		    dict = shared_dict;
+		    shared_dict = NULL;
+		}
+                if (WDWindowAttributes->dictionary) {
+                    WMReleasePropList(WDWindowAttributes->dictionary);
+                }
 		WDWindowAttributes->dictionary = dict;
 		for (i=0; i<wScreenCount; i++) {
 		    scr = wScreenWithNumber(i);
@@ -1154,6 +1174,9 @@ wDefaultsCheckDomains(void *foo)
 		     "WMWindowAttributes");
 	}
 	WDWindowAttributes->timestamp = stbuf.st_mtime;
+	if (shared_dict) {
+	    WMReleasePropList(shared_dict);
+	}
     }
 
 #ifndef LITE

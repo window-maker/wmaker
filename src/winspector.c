@@ -713,7 +713,7 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     WMReleasePropList(key); 
     WMReleasePropList(winDic);
 
-    WMWritePropListToFile(dict, db->path, True);
+    UpdateDomainFile(db);
 
     /* clean up */
     WMPLSetCaseSensitive(False);

@@ -1218,17 +1218,55 @@ WMMergePLDictionaries(WMPropList *dest, WMPropList *source, Bool recursive)
 
     wassertr(source->type==WPLDictionary && dest->type==WPLDictionary);
 
+    if (source == dest)
+        return dest;
+
     e = WMEnumerateHashTable(source->d.dict);
     while (WMNextHashEnumeratorItemAndKey(&e, (void**)&value, (void**)&key)) {
         if (recursive && value->type==WPLDictionary) {
-            dvalue = WMGetFromPLDictionary(dest, key);
+            dvalue = WMHashGet(dest->d.dict, key);
             if (dvalue && dvalue->type==WPLDictionary) {
-                WMMergePLDictionaries(dvalue, value, recursive);
+                WMMergePLDictionaries(dvalue, value, True);
             } else {
                 WMPutInPLDictionary(dest, key, value);
             }
         } else {
             WMPutInPLDictionary(dest, key, value);
+        }
+    }
+
+    return dest;
+}
+
+
+WMPropList*
+WMSubtractPLDictionaries(WMPropList *dest, WMPropList *source, Bool recursive)
+{
+    WMPropList *key, *value, *dvalue;
+    WMHashEnumerator e;
+
+    wassertr(source->type==WPLDictionary && dest->type==WPLDictionary);
+
+    if (source == dest) {
+        WMPropList *keys = WMGetPLDictionaryKeys(dest);
+        int i;
+
+        for (i=0; i<WMGetArrayItemCount(keys->d.array); i++) {
+            WMRemoveFromPLDictionary(dest, WMGetFromArray(keys->d.array, i));
+        }
+        return dest;
+    }
+
+    e = WMEnumerateHashTable(source->d.dict);
+    while (WMNextHashEnumeratorItemAndKey(&e, (void**)&value, (void**)&key)) {
+        dvalue = WMHashGet(dest->d.dict, key);
+        if (!dvalue)
+            continue;
+        if (WMIsPropListEqualTo(value, dvalue)) {
+            WMRemoveFromPLDictionary(dest, key);
+        } else if (recursive && value->type==WPLDictionary &&
+            dvalue->type==WPLDictionary) {
+            WMSubtractPLDictionaries(dvalue, value, True);
         }
     }
 

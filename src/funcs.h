@@ -26,6 +26,7 @@
 #include <stdio.h>
 
 #include "window.h"
+#include "defaults.h"
 
 typedef void (WCallBack)(void *cdata);
 
@@ -123,6 +124,8 @@ char *GetShortcutString(char *text);
 char *EscapeWM_CLASS(char *name, char *class);
 
 void UnescapeWM_CLASS(char *str, char **name, char **class);
+
+Bool UpdateDomainFile(WDDomain *domain);
 
 #ifdef NUMLOCK_HACK
 void wHackedGrabKey(int keycode, unsigned int modifiers,

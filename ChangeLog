@@ -39,6 +39,12 @@ Changes since version 0.70.0:
   adapt to newer/faster machines. Also used wusleep(10) when the delay was 0
   to get rid of the jerky animation when there was no delay.
 - Fixed bug with Unhide mapping windows from other workspaces.
+- Saving a domain file will first strip all entries that are also present in
+  the global domain as well and are exactly the same. This fixes a bug where
+  settings from the global domain file were merged in the user domain file
+  and further changes in the global domain file for those merged values was
+  ignored making a system admin unable to set global defaults for all users
+  using the global domains.
 
 
 Changes since version 0.65.1:

@@ -547,8 +547,9 @@ wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file)
     } else if (icon_value!=NULL && !same) {
         WMPutInPLDictionary(dict, key, icon_value);
     }
-    if (!wPreferences.flags.noupdates)
-	WMWritePropListToFile(dict, db->path, True);
+    if (!wPreferences.flags.noupdates) {
+        UpdateDomainFile(db);
+    }
 
     WMReleasePropList(key);
     if(icon_value)

@@ -27,9 +27,9 @@ Need to do:
   docked apps, balloons for the dock etc
 - check whether apps with name.class set to empty strings should be treated
   like if name.class is NULL.NULL
-- review the defaults handling code (not to save globals in user, not to 
-  reread after we update a domain if possible, check WINGs apps updating
-  WMWindowAttributes after start making screen to flash on update)
+- review the defaults handling code (not to reread after we update a
+  domain if possible, check WINGs apps updating WMWindowAttributes after
+  start making screen to flash on update)
 
 
 Maybe some day:
