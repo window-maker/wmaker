@@ -78,6 +78,7 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
     int i;
     int w, h;
 	int run;
+	XEvent event;
 
     h = w = wPreferences.icon_size;
     if (x < 0 || x + w > scr->scr_width || y < 0 || y + h > scr->scr_height)
@@ -126,6 +127,10 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
 	XFlush(dpy);
 	if(!run) wusleep(1000);
     }
+
+    while (XCheckTypedEvent(dpy, MotionNotify, &event)) {
+    }
+	XPutBackEvent(dpy, &event);
     XFlush(dpy);
 
     XUngrabServer(dpy);
