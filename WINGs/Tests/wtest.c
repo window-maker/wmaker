@@ -130,10 +130,6 @@ doubleClick(WMWidget *self, void *data)
     char buf[255];
 
     WMSelectAllListItems(lPtr);
-
-    //sprintf(buf, "Selected items: %d",
-    //        WMGetArrayItemCount(WMGetListSelectedItems(lPtr)));;
-    //WMSetLabelText(label, buf);
 }
 
 
@@ -145,7 +141,7 @@ listSelectionObserver(void *observer, WMNotification *notification)
     char buf[255];
 
     sprintf(buf, "Selected items: %d",
-            WMGetArrayItemCount(WMGetListSelectedItems(lPtr)));;
+            WMGetArrayItemCount(WMGetListSelectedItems(lPtr)));
     WMSetLabelText(label, buf);
 }
 

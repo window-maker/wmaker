@@ -62,6 +62,8 @@ static void vScrollCallBack(WMWidget *scroller, void *self);
 static void updateGeometry(WMList *lPtr);
 static void didResizeList();
 
+static void unselectAllListItems(WMList *lPtr, WMListItem *exceptThis);
+
 
 W_ViewDelegate _ListViewDelegate = {
     NULL,
@@ -650,11 +652,7 @@ WMSelectListItem(WMList *lPtr, int row)
 
     if (!lPtr->flags.allowMultipleSelection) {
         /* unselect previous selected items */
-        int foo = lPtr->flags.allowEmptySelection;
-
-        lPtr->flags.allowEmptySelection = 1;
-        WMUnselectAllListItems(lPtr);
-        lPtr->flags.allowEmptySelection = foo;
+        unselectAllListItems(lPtr, NULL);
     }
 
     /* select item */
@@ -838,23 +836,25 @@ WMSelectAllListItems(WMList *lPtr)
     WMPostNotificationName(WMListSelectionDidChangeNotification, lPtr, NULL);
 }
 
-
-void
-WMUnselectAllListItems(WMList *lPtr)
+/*
+ * Be careful from where you call this function! It doesn't honor the
+ * allowEmptySelection flag and doesn't send a notification about selection
+ * change! You need to manage these in the functions from where you call it.
+ *
+ * This will unselect all items if exceptThis is NULL, else will keep
+ * exceptThis selected.
+ * Make sure that exceptThis is one of the already selected items if not NULL!
+ *
+ */
+static void
+unselectAllListItems(WMList *lPtr, WMListItem *exceptThis)
 {
-    int i, keep;
-    WMListItem *item, *keepItem;
-
-    keep = lPtr->flags.allowEmptySelection ? 0 : 1;
-
-    if (WMGetArrayItemCount(lPtr->selectedItems) == keep)
-        return;
-
-    keepItem = (keep==1 ? WMGetFromArray(lPtr->selectedItems, 0) : NULL);
+    int i;
+    WMListItem *item;
 
     for (i=0; i<WMGetArrayItemCount(lPtr->items); i++) {
         item = WMGetFromArray(lPtr->items, i);
-        if (item!=keepItem && item->selected) {
+        if (item!=exceptThis && item->selected) {
             item->selected = 0;
             if (lPtr->view->flags.mapped && i>=lPtr->topItem
                 && i<=lPtr->topItem+lPtr->fullFitLines) {
@@ -864,8 +864,27 @@ WMUnselectAllListItems(WMList *lPtr)
     }
 
     WMEmptyArray(lPtr->selectedItems);
-    if (keepItem!=NULL)
-        WMAddToArray(lPtr->selectedItems, keepItem);
+    if (exceptThis!=NULL) {
+        exceptThis->selected = 1;
+        WMAddToArray(lPtr->selectedItems, exceptThis);
+    }
+}
+
+
+void
+WMUnselectAllListItems(WMList *lPtr)
+{
+    int keep;
+    WMListItem *keepItem;
+
+    keep = lPtr->flags.allowEmptySelection ? 0 : 1;
+
+    if (WMGetArrayItemCount(lPtr->selectedItems) == keep)
+        return;
+
+    keepItem = (keep==1 ? WMGetFromArray(lPtr->selectedItems, 0) : NULL);
+
+    unselectAllListItems(lPtr, keepItem);
 
     WMPostNotificationName(WMListSelectionDidChangeNotification, lPtr, NULL);
 }
