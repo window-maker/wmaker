@@ -11,6 +11,8 @@ Changes since wmaker 0.64.0:
 - fixed mem leak that occured when input handling was done with poll
 - simpler and more straightforward event handling for timer, idle, input
   and X events (also fixed some problems the old handling logic had)
+- moved timer, dile and input handler definitions and prototypes from
+  WINGs.h to WUtil.h because they're not GUI related.
 
 changes since wmaker 0.63.1:
 ............................
