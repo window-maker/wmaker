@@ -205,23 +205,19 @@ dnl -----------------------
 asm_support=no
 mmx_support=no
 if test "$ac_cv_prog_gcc" = yes; then
-   
-    # gcc-3.4 complains about some of our stuff without this
+
+    # gcc-3.3 or newer complains about some of our stuff without this
     NOSTRICTALIASING="-fno-strict-aliasing"
 
-    x86=0
-    changequote(,)dnl
-    case "$host_cpu" in
-       i[3456]86) x86=1
-       ;;
-    esac
-    changequote([,])dnl
+    AC_CACHE_CHECK(whether gcc supports x86 inline asm,
+                   ac_cv_c_inline_asm,
+                   [AC_TRY_LINK(,[{int x; asm volatile("movl %%eax, %%ebx\n"::
+                          "m" (x),"m" (x),"m" (x),"m" (x),"m" (x),"m" (x),
+                          "m" (x),"m" (x),"m" (x),"m" (x),"m" (x),"m" (x));}],
+                   ac_cv_c_inline_asm=yes,
+                   ac_cv_c_inline_asm=no)])
 
-    if test "$host_os" != "linux" -a "$host_os" != "linux-gnu" ; then
-       x86=0
-    fi
-
-    if test $x86 = 1; then
+    if test "x$ac_cv_c_inline_asm" = xyes; then
        AC_DEFINE(ASM_X86, 1, [define if processor is x86 (normally detected by configure)])
        asm_support=yes
 
