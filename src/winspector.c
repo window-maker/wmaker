@@ -512,14 +512,14 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     WWindow *wwin = panel->inspected;
     WDDomain *db = WDWindowAttributes;
     WMPropList *dict = db->dictionary;
-    WMPropList *winDic, *value, *key;
+    WMPropList *winDic, *appDic, *value, *key, *key2;
     char *icon_file;
     int flags = 0;
-    int different = 0;
+    int different = 0, different2 = 0;
 
     /* Save will apply the changes and save them */
     applySettings(panel->applyBtn, panel);
-	
+
     if (WMGetButtonSelected(panel->instRb) != 0)
         key = WMCreatePLString(wwin->wm_instance);
     else if (WMGetButtonSelected(panel->clsRb) != 0)
@@ -557,6 +557,7 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     WMPLSetCaseSensitive(True);
 
     winDic = WMCreatePLDictionary(NULL, NULL, NULL);
+    appDic = WMCreatePLDictionary(NULL, NULL, NULL);
 
     /* Update icon for window */
     icon_file = WMGetTextFieldText(panel->fileText);
@@ -564,6 +565,7 @@ saveSettings(WMButton *button, InspectorPanel *panel)
         if (icon_file[0] != 0) {
             value = WMCreatePLString(icon_file);
             different |= insertAttribute(dict, winDic, AIcon, value, flags);
+            different2 |= insertAttribute(dict, appDic, AIcon, value, flags);
             WMReleasePropList(value);
         }
         wfree(icon_file);
@@ -650,19 +652,58 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     different |= insertAttribute(dict, winDic, ANoLanguageButton, value, flags);
 #endif
 
-    /* application wide settings for when */
-    /* the window is the leader, save the attribute with the others */
-    if (panel->inspected->main_window == panel->inspected->client_win) {
-	
-	value = (WMGetButtonSelected(panel->appChk[0])!=0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, AStartHidden, value, flags);
+    value = (WMGetButtonSelected(panel->appChk[0])!=0) ? Yes : No;
+    different2 |= insertAttribute(dict, appDic, AStartHidden, value, flags);
 
-	value = (WMGetButtonSelected(panel->appChk[1])!=0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, ANoAppIcon, value, flags);
-	
-	value = (WMGetButtonSelected(panel->appChk[2])!=0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, ASharedAppIcon, value, flags);
-    } 
+    value = (WMGetButtonSelected(panel->appChk[1])!=0) ? Yes : No;
+    different2 |= insertAttribute(dict, appDic, ANoAppIcon, value, flags);
+
+    value = (WMGetButtonSelected(panel->appChk[2])!=0) ? Yes : No;
+    different2 |= insertAttribute(dict, appDic, ASharedAppIcon, value, flags);
+
+    if (panel->inspected->fake_group) {
+        key2 = WMCreatePLString(panel->inspected->fake_group->identifier);
+        if (WMIsPropListEqualTo(key, key2)) {
+            WMMergePLDictionaries(winDic, appDic, True);
+            different |= different2;
+        } else {
+            WMRemoveFromPLDictionary(dict, key2);
+            if (different2) {
+                WMPutInPLDictionary(dict, key2, appDic);
+            }
+        }
+        WMReleasePropList(key2);
+        WMReleasePropList(appDic);
+    } else if (panel->inspected->main_window != panel->inspected->client_win) {
+        WApplication *wapp = wApplicationOf(panel->inspected->main_window);
+
+	if (wapp) {
+            char *instance = wapp->main_window_desc->wm_instance;
+            char *class = wapp->main_window_desc->wm_class;
+            char *buffer;
+
+            buffer = wmalloc(strlen(instance)+strlen(class)+2);
+            sprintf(buffer, "%s.%s", instance, class);
+	    key2 = WMCreatePLString(buffer);
+            wfree(buffer);
+
+            if (WMIsPropListEqualTo(key, key2)) {
+                WMMergePLDictionaries(winDic, appDic, True);
+                different |= different2;
+            } else {
+                WMRemoveFromPLDictionary(dict, key2);
+                if (different2) {
+                    WMPutInPLDictionary(dict, key2, appDic);
+                }
+            }
+            WMReleasePropList(key2);
+            WMReleasePropList(appDic);
+        }
+    } else {
+        WMMergePLDictionaries(winDic, appDic, True);
+        different |= different2;
+        WMReleasePropList(appDic);
+    }
 
     WMRemoveFromPLDictionary(dict, key);
     if (different) {
@@ -671,61 +712,6 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 
     WMReleasePropList(key); 
     WMReleasePropList(winDic);
-
-    different = 0;
-    
-    /* application wide settings */
-    if (panel->inspected->main_window != panel->inspected->client_win
-	&& !(flags & UPDATE_DEFAULTS)) {
-	WApplication *wapp;
-	WMPropList *appDic;
-
-	wapp = wApplicationOf(panel->inspected->main_window);
-	if (wapp) {
-            char *instance = wapp->main_window_desc->wm_instance;
-            char *class = wapp->main_window_desc->wm_class;
-	    char *iconFile, *buffer;
-
-	    appDic = WMCreatePLDictionary(NULL, NULL, NULL);
-
-	    assert(instance!=NULL);
-	    assert(class!=NULL);
-
-            buffer = wmalloc(strlen(instance)+strlen(class)+2);
-            sprintf(buffer, "%s.%s", instance, class);
-	    key = WMCreatePLString(buffer);
-            wfree(buffer);
-
-            iconFile = wDefaultGetIconFile(wwin->screen_ptr,
-                                           instance, class, False);
-
-	    if (iconFile && iconFile[0]!=0) {
-		value = WMCreatePLString(iconFile);
-		different |= insertAttribute(dict, appDic, AIcon, value,
-					     flags&~IS_BOOLEAN);
-		WMReleasePropList(value);
-	    }
-		
-	    value = (WMGetButtonSelected(panel->appChk[0])!=0) ? Yes : No;
-	    different |= insertAttribute(dict, appDic, AStartHidden,  value, 
-					 flags);
-
-	    value = (WMGetButtonSelected(panel->appChk[1])!=0) ? Yes : No;
-	    different |= insertAttribute(dict, appDic, ANoAppIcon,  value, 
-					 flags);
-
-	    value = (WMGetButtonSelected(panel->appChk[2])!=0) ? Yes : No;
-	    different |= insertAttribute(dict, appDic, ASharedAppIcon,  value,
-					 flags);
-	    
-	    WMRemoveFromPLDictionary(dict, key);
-	    if (different) {
-		WMPutInPLDictionary(dict, key, appDic);
-	    }
-	    WMReleasePropList(key);
-	    WMReleasePropList(appDic);
-	}
-    }
 
     WMWritePropListToFile(dict, db->path, True);
 

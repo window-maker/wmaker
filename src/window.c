@@ -793,6 +793,10 @@ wManageWindow(WScreen *scr, Window window)
     }
 #endif /* OLWM_HINTS */
 
+    if (wwin->flags.is_gnustep) {
+        WSETUFLAG(wwin, shared_appicon, 0);
+    }
+
     /* Make broken apps behave as a nice app. */
     if (WFLAGP(wwin, emulate_appicon)) {
 	wwin->main_window = wwin->client_win;
@@ -802,6 +806,8 @@ wManageWindow(WScreen *scr, Window window)
         char *buffer, *instance, *class;
         WFakeGroupLeader *fPtr;
         int index;
+
+#define ADEQUATE(x) ((x)!=None && (x)!=wwin->client_win && (x)!=fPtr->leader)
 
         PropGetWMClass(wwin->main_window, &class, &instance);
         buffer = wmalloc(strlen(instance)+strlen(class)+2);
@@ -815,9 +821,25 @@ wManageWindow(WScreen *scr, Window window)
                                                            instance, class);
             }
             fPtr->retainCount++;
-            if (wwin->main_window!=wwin->client_win && fPtr->origLeader==None) {
-                fPtr->retainCount++;
-                fPtr->origLeader = wwin->main_window;
+#undef method2
+            if (fPtr->origLeader==None) {
+#ifdef method2
+                if (ADEQUATE(wwin->group_id)) {
+                    fPtr->retainCount++;
+                    fPtr->origLeader = wwin->group_id;
+                } else if (ADEQUATE(wwin->client_leader)) {
+                    fPtr->retainCount++;
+                    fPtr->origLeader = wwin->client_leader;
+                } else if (ADEQUATE(wwin->main_window)) {
+                    fPtr->retainCount++;
+                    fPtr->origLeader = wwin->main_window;
+                }
+#else
+                if (ADEQUATE(wwin->main_window)) {
+                    fPtr->retainCount++;
+                    fPtr->origLeader = wwin->main_window;
+                }
+#endif
             }
             wwin->fake_group = fPtr;
             /*wwin->group_id = fPtr->leader;*/
@@ -834,10 +856,23 @@ wManageWindow(WScreen *scr, Window window)
 
             WMAddToArray(scr->fakeGroupLeaders, fPtr);
 
-            if (wwin->main_window!=wwin->client_win) {
+#ifdef method2
+            if (ADEQUATE(wwin->group_id)) {
+                fPtr->retainCount++;
+                fPtr->origLeader = wwin->group_id;
+            } else if (ADEQUATE(wwin->client_leader)) {
+                fPtr->retainCount++;
+                fPtr->origLeader = wwin->client_leader;
+            } else if (ADEQUATE(wwin->main_window)) {
                 fPtr->retainCount++;
                 fPtr->origLeader = wwin->main_window;
             }
+#else
+            if (ADEQUATE(wwin->main_window)) {
+                fPtr->retainCount++;
+                fPtr->origLeader = wwin->main_window;
+            }
+#endif
             wwin->fake_group = fPtr;
             /*wwin->group_id = fPtr->leader;*/
             wwin->main_window = fPtr->leader;
@@ -847,6 +882,8 @@ wManageWindow(WScreen *scr, Window window)
         if (class)
             XFree(class);
 
+#undef method2
+#undef ADEQUATE
     }
 
     /*

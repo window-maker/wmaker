@@ -52,5 +52,6 @@
   xmixer = {Icon = mixer.#extension#;};
   xmcd = {Icon = Radio.xpm;};
   xplaycd = {Icon = Radio.xpm;};
+  xmms.Xmms = {NoAppIcon = Yes;};
   "*" = {Icon = defaultAppIcon.#extension#;SharedAppIcon = Yes;};
 }

@@ -556,8 +556,8 @@ handleDestroyNotify(XEvent *event)
 	wUnmanageWindow(wwin, False, True);
     }
 
-    index = WMFindInArray(scr->fakeGroupLeaders, matchWindow, (void*)window);
-    if (index != WANotFound) {
+    while ((index = WMFindInArray(scr->fakeGroupLeaders, matchWindow,
+                                  (void*)window)) != WANotFound) {
         WFakeGroupLeader *fPtr;
 
         fPtr = WMGetFromArray(scr->fakeGroupLeaders, index);

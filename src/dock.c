@@ -3203,7 +3203,7 @@ retry:
 	    }
             found = True;
             if (!wPreferences.no_animations && !icon->launching &&
-                !dock->screen_ptr->flags.startup) {
+                !dock->screen_ptr->flags.startup && !dock->collapsed) {
                 WAppIcon *aicon;
                 int x0, y0;
 
