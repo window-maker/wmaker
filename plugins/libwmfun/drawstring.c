@@ -1,11 +1,12 @@
 #include <proplist.h>
 #include <WINGs.h>
 #include <WINGsP.h>
+#include "generic.h"
+
 #ifdef USE_FREETYPE
 #include <freetype/freetype.h>
 #endif
 
-#include "generic.h"
 #define MAX_GLYPHS 256
 
 #define _debug(f...) {fprintf(stderr, "debug: ");fprintf(stderr, ##f);fflush(stderr);}
