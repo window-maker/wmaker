@@ -113,13 +113,49 @@
 		"进程列表" EXEC xterm -e top
 		"手册浏览器" EXEC xman
 	"信息" END
-	"运行..." EXEC %a(Run,Type command to run:)
+	"运行..." EXEC %a(运行,要执行的命令:)
 	"XTerm" EXEC xterm -sb 
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
-
-	"程序" OPEN_MENU | wmconfig --output wmaker 2>/dev/null
-
 	"工作空间" WORKSPACE_MENU
+	"应用程序" OPEN_MENU
+		"图形" MENU
+                        "Gimp" SHEXEC gimp >/dev/null
+                        "XV" EXEC xv
+                        "XPaint" EXEC xpaint
+                        "XFig" EXEC xfig
+		"图形" END
+                "X文件管理器" EXEC xfm
+                "OffiX Files" EXEC files
+                "LyX" EXEC lyx
+                "Netscape" EXEC netscape
+                "Ghostview" EXEC ghostview %a(GhostView,输入要查看的文件名)
+                "Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobat,输入要查看的PDF文件名)
+                "TkDesk" EXEC tkdesk
+        "应用程序" END
+        "编辑器" MENU
+                "XFte" EXEC xfte
+                "XEmacs" SHEXEC xemacs || emacs
+                "XJed" EXEC xjed
+                "NEdit" EXEC nedit
+                "Xedit" EXEC xedit
+                "VI" EXEC xterm -e vi
+        "编辑器" END
+        "其他" MENU
+                "Xmcd" SHEXEC xmcd 2> /dev/null
+                "Xplaycd" EXEC xplaycd
+                "Xmixer" EXEC xmixer
+        "其他" END
+        "工具" MENU
+                "计算器" EXEC xcalc
+                "窗口属性" SHEXEC xprop | xmessage -center -title 'xpro
+p' -file -
+                "字体选择" EXEC xfontsel
+                "终端模拟器" EXEC xminicom
+                "放大" EXEC xmag
+                "颜色表" EXEC xcmap
+                "XKill" EXEC xkill
+                "剪贴板" EXEC xclipboard
+        "工具" END
 
 	"选择" MENU
 		"复制" SHEXEC echo '%s' | wxcopy
@@ -165,19 +201,16 @@
 			"过渡色" END
 			"图像" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"背景" END
-		"保存主题" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name,Enter file name:)"
-		"保存图标集" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name,Enter file name:)"
+		"保存主题" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(主题名,输入文件名:)"
+		"保存图标集" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(图标集名,输入文件名:)"
 	"外观" END
 
 	"退出"	MENU
 		"重新启动" RESTART
-		"切换到..." MENU
-			"AfterStep"             RESTART /usr/X11R6/bin/RunWM.AfterStep
-			"Fvwm2 (Fvwm95外观)"   RESTART /usr/X11R6/bin/RunWM.Fvwm95
-			"Fvwm2 (MWM外观)"      RESTART /usr/X11R6/bin/RunWM.MWM
-		"切换到..." END                              
+		"启动 BlackBox" RESTART blackbox
+                "启动 kwm" RESTART kwm
+                "启动 IceWM" RESTART icewm
 		"退出..."  EXIT
-		"强制结束会话..." SHUTDOWN
 	"退出" END
 "应用程序" END
 

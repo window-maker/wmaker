@@ -96,15 +96,35 @@ RGetImageFromXPMData(RContext *context, char **data)
 
     for (i=0; i<xpm.ncolors; i++) {
 	XColor xcolor;
+        char * color = NULL;
 
-	if (strncmp(xpm.colorTable[i].c_color,"None",4)==0) {
+        if (xpm.colorTable[i].c_color)
+             color = xpm.colorTable[i].c_color;
+        else if (xpm.colorTable[i].g_color)
+             color = xpm.colorTable[i].g_color;
+        else if (xpm.colorTable[i].g4_color)
+             color = xpm.colorTable[i].g4_color;
+        else if (xpm.colorTable[i].m_color)
+             color = xpm.colorTable[i].m_color;
+        else if (xpm.colorTable[i].symbolic)
+             color = xpm.colorTable[i].symbolic;
+
+        if (!color) {
+	    color_table[0][i] = 0xbe;
+	    color_table[1][i] = 0xbe;
+	    color_table[2][i] = 0xbe;
+	    color_table[3][i] = 0xff;
+            continue;
+        }
+	
+	if (strncmp(color,"None",4)==0) {
 	    color_table[0][i]=0;
 	    color_table[1][i]=0;
 	    color_table[2][i]=0;
 	    color_table[3][i]=0;
 	    continue;
 	}
-	if (XParseColor(dpy, cmap, xpm.colorTable[i].c_color, &xcolor)) {
+	if (XParseColor(dpy, cmap, color, &xcolor)) {
 	    color_table[0][i] = xcolor.red>>8;
 	    color_table[1][i] = xcolor.green>>8;
 	    color_table[2][i] = xcolor.blue>>8;
@@ -203,15 +223,35 @@ RLoadXPM(RContext *context, char *file, int index)
 
     for (i=0; i<xpm.ncolors; i++) {
 	XColor xcolor;
+        char * color = NULL;
+
+        if (xpm.colorTable[i].c_color)
+             color = xpm.colorTable[i].c_color;
+        else if (xpm.colorTable[i].g_color)
+             color = xpm.colorTable[i].g_color;
+        else if (xpm.colorTable[i].g4_color)
+             color = xpm.colorTable[i].g4_color;
+        else if (xpm.colorTable[i].m_color)
+             color = xpm.colorTable[i].m_color;
+        else if (xpm.colorTable[i].symbolic)
+             color = xpm.colorTable[i].symbolic;
+
+        if (!color) {
+	    color_table[0][i] = 0xbe;
+	    color_table[1][i] = 0xbe;
+	    color_table[2][i] = 0xbe;
+	    color_table[3][i] = 0xff;
+            continue;
+        }
 	
-	if (strncmp(xpm.colorTable[i].c_color,"None",4)==0) {
+	if (strncmp(color,"None",4)==0) {
 	    color_table[0][i]=0;
 	    color_table[1][i]=0;
 	    color_table[2][i]=0;
 	    color_table[3][i]=0;
 	    continue;
 	}
-	if (XParseColor(dpy, cmap, xpm.colorTable[i].c_color, &xcolor)) {
+	if (XParseColor(dpy, cmap, color, &xcolor)) {
 	    color_table[0][i] = xcolor.red>>8;
 	    color_table[1][i] = xcolor.green>>8;
 	    color_table[2][i] = xcolor.blue>>8;
