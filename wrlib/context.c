@@ -67,8 +67,7 @@ static RContextAttributes DEFAULT_CONTEXT_ATTRIBS = {
  * 		allocate colors according to colors_per_channel
  * 
  * 	best/default:
- * 		if there's a std colormap defined
- 		then use it
+ * 		if there's a std colormap defined then use it
  * 
  * 		else
  * 			create a std colormap and set it
@@ -113,6 +112,17 @@ allocateStandardPseudoColor(RContext *ctx, XStandardColormap *stdcmap)
 	return False;
     }
     
+    ctx->pixels = malloc(sizeof(unsigned long)*ctx->ncolors);
+    if (!ctx->pixels) {
+	
+	free(ctx->colors);
+	ctx->colors = NULL;
+	
+	RErrorCode = RERR_NOMEMORY;
+
+	return False;
+    }
+
     
 #define calc(max,mult) (((i / stdcmap->mult) % \
                          (stdcmap->max + 1)) * 65535) / stdcmap->max
@@ -122,6 +132,8 @@ allocateStandardPseudoColor(RContext *ctx, XStandardColormap *stdcmap)
 	ctx->colors[i].red = calc(red_max, red_mult);
 	ctx->colors[i].green = calc(green_max, green_mult);
 	ctx->colors[i].blue = calc(blue_max, blue_mult);
+	
+	ctx->pixels[i] = ctx->colors[i].pixel;
     }
 
 #undef calc
@@ -177,6 +189,14 @@ allocatePseudoColor(RContext *ctx)
 	RErrorCode = RERR_NOMEMORY;
 	return False;
     }
+
+    ctx->pixels = malloc(sizeof(unsigned long)*ncolors);
+    if (!ctx->pixels) {
+	free(colors);
+	RErrorCode = RERR_NOMEMORY;
+	return False;
+    }
+    
     i=0;
 
     if ((ctx->attribs->flags & RC_GammaCorrection) && ctx->attribs->rgamma > 0
@@ -275,6 +295,11 @@ allocatePseudoColor(RContext *ctx)
     
     ctx->colors = colors;
     ctx->ncolors = ncolors;
+    
+    /* fill the pixels shortcut array */
+    for (i = 0; i < ncolors; i++) {
+	ctx->pixels[i] = ctx->colors[i].pixel;
+    }
     
     return True;
 }

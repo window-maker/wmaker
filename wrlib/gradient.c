@@ -250,13 +250,13 @@ renderDGradient(unsigned width, unsigned height, int r0, int g0, int b0,
         return NULL;
     }
 
-    a = (((width - 1)<<16) / (height - 1)) * 3;
+    a = (((width - 1)<<16) / (height - 1))*3;
 
     width *= 3;
     /* copy the first line to the other lines with corresponding offset */
     for (i=0, j=0, offset = 0; i<height; i++, j+= width) {
         offset += a;
-        memcpy(&(image->data[j]), &(tmp->data[(offset>>16)]), width);
+	memcpy(&(image->data[j]), &(tmp->data[(offset>>16)]), width);
     }
     RDestroyImage(tmp);
     return image;

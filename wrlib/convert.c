@@ -45,17 +45,17 @@ extern Pixmap R_CreateXImageMappedPixmap(RContext *context, RXImage *ximage);
 
 extern int x86_check_mmx();
 
-extern void x86_TrueColor_32_to_16(unsigned char *image, 
-				   unsigned short *ximage,
-				   short *err, short *nerr,
-				   short *rtable, short *gtable,
-				   short *btable,
-				   int dr, int dg, int db,
-				   unsigned int roffs,
-				   unsigned int goffs, 
-				   unsigned int boffs, 
-				   int width, int height, 
-				   int line_offset);
+extern void x86_mmx_TrueColor_32_to_16(unsigned char *image, 
+				       unsigned short *ximage,
+				       short *err, short *nerr,
+				       short *rtable, short *gtable,
+				       short *btable,
+				       int dr, int dg, int db,
+				       unsigned int roffs,
+				       unsigned int goffs, 
+				       unsigned int boffs, 
+				       int width, int height, 
+				       int line_offset);
 
 
 
@@ -311,14 +311,14 @@ image2TrueColor(RContext *ctx, RImage *image)
 	    memset(err, 0, 8*(image->width+3));
 	    memset(nerr, 0, 8*(image->width+3));
 	    
-	    x86_TrueColor_32_to_16(image->data, 
-				   (unsigned short*)ximg->image->data, 
-				   err+8, nerr+8,
-				   rtable, gtable, btable,
-				   dr, dg, db, 
-				   roffs, goffs, boffs,
-				   image->width, image->height,
-				   ximg->image->bytes_per_line - 2*image->width);
+	    x86_mmx_TrueColor_32_to_16(image->data, 
+				       (unsigned short*)ximg->image->data, 
+				       err+8, nerr+8,
+				       rtable, gtable, btable,
+				       dr, dg, db, 
+				       roffs, goffs, boffs,
+				       image->width, image->height,
+				       ximg->image->bytes_per_line - 2*image->width);
 
 	    free(err);
 	    free(nerr);
@@ -361,6 +361,82 @@ image2TrueColor(RContext *ctx, RImage *image)
 
 /***************************************************************************/
 
+static void
+convertPseudoColor_to_8(RXImage *ximg, RImage *image,
+			   char *err, char *nerr,
+			   const short *rtable, 
+			   const short *gtable,
+			   const short *btable,
+			   const int dr, const int dg, const int db,
+			   unsigned long *pixels,
+			   int cpc)
+{
+    char *terr;
+    int x, y, r, g, b;
+    int pixel;
+    int rer, ger, ber;
+    unsigned char *ptr = image->data;
+    unsigned char *optr = ximg->image->data;
+    int channels = image->format == RRGBAFormat ? 4 : 3;
+    int cpcpc = cpc*cpc;
+
+    /* convert and dither the image to XImage */
+    for (y=0; y<image->height; y++) {
+	nerr[0] = 0;
+	nerr[1] = 0;
+	nerr[2] = 0;
+	for (x=0; x<image->width*3; x+=3, ptr+=channels) {
+
+	    /* reduce pixel */
+	    pixel = *ptr + err[x];
+	    if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
+	    r = rtable[pixel];
+	    /* calc error */
+	    rer = pixel - r*dr;
+
+	    /* reduce pixel */
+	    pixel = *(ptr+1) + err[x+1];
+	    if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
+	    g = gtable[pixel];
+	    /* calc error */
+	    ger = pixel - g*dg;
+
+	    /* reduce pixel */
+	    pixel = *(ptr+2) + err[x+2];
+	    if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
+	    b = btable[pixel];
+	    /* calc error */
+	    ber = pixel - b*db;
+
+	    *optr++ = pixels[r*cpcpc + g*cpc + b];
+
+	    /* distribute error */
+	    r = (rer*3)/8;
+	    g = (ger*3)/8;
+	    b = (ber*3)/8;
+	    /* x+1, y */
+	    err[x+3*1]+=r;
+	    err[x+1+3*1]+=g;
+	    err[x+2+3*1]+=b;
+	    /* x, y+1 */
+	    nerr[x]+=r;
+	    nerr[x+1]+=g;
+	    nerr[x+2]+=b;
+	    /* x+1, y+1 */
+	    nerr[x+3*1]=rer-2*r;
+	    nerr[x+1+3*1]=ger-2*g;
+	    nerr[x+2+3*1]=ber-2*b;
+	}
+	/* skip to next line */
+	terr = err;
+	err = nerr;
+	nerr = terr;
+	
+	optr += ximg->image->bytes_per_line - image->width;
+    }
+}
+
+
 
 static RXImage*
 image2PseudoColor(RContext *ctx, RImage *image)
@@ -375,10 +451,7 @@ image2PseudoColor(RContext *ctx, RImage *image)
     const unsigned short bmask = rmask;
     unsigned short *rtable, *gtable, *btable;
     const int cpccpc = cpc*cpc;
-    unsigned char *data;
-    int ofs;
     int channels = image->format == RRGBAFormat ? 4 : 3;
-    /*register unsigned char maxrgb = 0xff;*/
 
     ximg = RCreateXImage(ctx, ctx->depth, image->width, image->height);
     if (!ximg) {
@@ -386,8 +459,6 @@ image2PseudoColor(RContext *ctx, RImage *image)
     }
 
     ptr = image->data;
-
-    data = (unsigned char *)ximg->image->data;
 
     /* Tables are same at the moment because rmask==gmask==bmask. */
     rtable = computeTable(rmask);
@@ -418,20 +489,18 @@ image2PseudoColor(RContext *ctx, RImage *image)
 	}
     } else {
 	/* dither */
-	short *err;
-	short *nerr;
-	short *terr;
-	int rer, ger, ber;
+	char *err;
+	char *nerr;
 	const int dr=0xff/rmask;
 	const int dg=0xff/gmask;
 	const int db=0xff/bmask;
-	int i;
+
 
 #ifdef DEBUG
         printf("pseudo color dithering with %d colors per channel\n", cpc);
 #endif
-	err = (short*)malloc(3*(image->width+2)*sizeof(short));
-	nerr = (short*)malloc(3*(image->width+2)*sizeof(short));
+	err = malloc(3*(image->width+2));
+	nerr = malloc(3*(image->width+2));
 	if (!err || !nerr) {
 	    if (nerr)
 		free(nerr);
@@ -439,77 +508,17 @@ image2PseudoColor(RContext *ctx, RImage *image)
 	    RDestroyXImage(ctx, ximg);
 	    return NULL;
 	}
-	for (x=0, i=0; x<image->width*3; x+=channels-3) {
-	    err[i++] = ptr[x++];
-	    err[i++] = ptr[x++];
-	    err[i++] = ptr[x++];
-	}
-        err[x++] = err[x++] = err[x++] = 0;
-	/* convert and dither the image to XImage */
-	for (ofs=0, y=0; y<image->height; y++) {
-	    if (y<image->height-1) {
-		int x1;
-		for (x=0, x1=((y+1)*image->width)*channels;
-		     x<image->width*3; x1+=channels-3) {
-		    nerr[x++] = ptr[x1++];
-		    nerr[x++] = ptr[x1++];
-		    nerr[x++] = ptr[x1++];
-		}
-		/* last column */
-		x1-=channels;
-		nerr[x++] = ptr[x1++];
-		nerr[x++] = ptr[x1++];
-		nerr[x++] = ptr[x1++];
-	    }
-	    for (x=0; x<image->width*3; x+=3, ofs++) {
-		/* reduce pixel */
-                if (err[x]>0xff) err[x]=0xff; else if (err[x]<0) err[x]=0;
-                if (err[x+1]>0xff) err[x+1]=0xff; else if (err[x+1]<0) err[x+1]=0;
-                if (err[x+2]>0xff) err[x+2]=0xff; else if (err[x+2]<0) err[x+2]=0;
+	memset(err, 0, 3*(image->width+3));
+	memset(nerr, 0, 3*(image->width+3));
+  
+	convertPseudoColor_to_8(ximg, image, err+4, nerr+4,
+				rtable,	gtable,	btable,
+				dr, dg, db, ctx->pixels, cpc);
 
-                r = rtable[err[x]];
-                g = gtable[err[x+1]];
-                b = btable[err[x+2]];
-
-		pixel = r*cpccpc + g*cpc + b;
-                data[ofs] = ctx->colors[pixel].pixel;
-
-		/* calc error */
-		rer = err[x] - r*dr;
-		ger = err[x+1] - g*dg;
-		ber = err[x+2] - b*db;
-
-		/* distribute error */
-		err[x+3*1]+=(rer*7)/16;
-		err[x+1+3*1]+=(ger*7)/16;
-		err[x+2+3*1]+=(ber*7)/16;
-		
-		nerr[x]+=(rer*5)/16;
-		nerr[x]+=(ger*5)/16;
-		nerr[x]+=(ber*5)/16;
-
-		if (x>0) {
-		    nerr[x-3*1]+=(rer*3)/16;
-		    nerr[x-(3*1)+1]+=(ger*3)/16;
-		    nerr[x-(3*1)+2]+=(ber*3)/16;
-		}
-
-		nerr[x+3*1]+=rer/16;
-		nerr[x+1+3*1]+=ger/16;
-		nerr[x+2+3*1]+=ber/16;
-	    }
-	    /* skip to next line */
-	    terr = err;
-	    err = nerr;
-	    nerr = terr;
-	    
-	    ofs += ximg->image->bytes_per_line - image->width;
-	}
 	free(err);
 	free(nerr);
     }
-    ximg->image->data = (char*)data;
-
+    
     return ximg;
 }
 
@@ -621,9 +630,6 @@ image2StandardPseudoColor(RContext *ctx, RImage *image)
 		pixel = r + g + b;
 
                 data[ofs] = base_pixel + pixel;
-/*
-                XPutPixel(ximg->image, x, y, pixel+base_pixel);
- */
 
 		/* calc error */
 		rer = err[x] - (ctx->colors[pixel].red>>8);
@@ -832,11 +838,16 @@ RConvertImage(RContext *context, RImage *image, Pixmap *pixmap)
     } else if (context->vclass == PseudoColor 
 	       || context->vclass == StaticColor) {
 
+#ifdef BENCH
+	cycle_bench(1);
+#endif
 	if (context->attribs->standard_colormap_mode != RIgnoreStdColormap)
 	    ximg = image2StandardPseudoColor(context, image);
 	else
 	    ximg = image2PseudoColor(context, image);
-
+#ifdef BENCH
+	cycle_bench(0);
+#endif
     } else if (context->vclass == GrayScale || context->vclass == StaticGray) {
 
 	ximg = image2GrayScale(context, image);

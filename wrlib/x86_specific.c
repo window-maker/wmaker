@@ -21,26 +21,30 @@
 
 #include <config.h>
 
+#ifdef ASM_X86
+
 
 #ifdef ASM_X86_MMX
 
 int
 x86_check_mmx()
 {
-    static int result = 1;
+    static int result = -1;
 
+    return 1;    
+    
     if (result >= 0)
 	return result;
-
+    
     result = 0;
-#if 0
+
     asm volatile
 	("pushfl		\n" // check whether cpuid supported
 	 "pop %%eax		\n"
 	 "movl %%eax, %%ebx	\n"
 	 "xorl 1<<21, %%eax	\n"
-	 "pushfl %%eax		\n"
-	 "popfd			\n"
+	 "pushl %%eax		\n"
+	 "popfl			\n"
 	 "pushfl		\n"
 	 "popl %%eax		\n"
 	 "xorl %%eax, %%ebx	\n"
@@ -52,35 +56,46 @@ x86_check_mmx()
 	 "cpuid			\n"
 	 "test 1<<23, %%edx	\n"
 	 "jz .NotMMX		\n"
-	 "movl $1, %%0		\n"
+	 "movl $1, %0		\n"
 
 	 ".NotMMX:		\n"
 	 ".Bye:			\n"
 	 ".NotPentium:		\n"
 
 	 : "=rm" (result));
-#endif
+
     return result;
 }
 
 
+/*
+ * TODO:
+ * 		32/8	24/8	32/16	24/16	32/24	24/24
+ * PPlain	YES	YES	
+ * MMX				DONE
+ *
+ */
+
+
+
+
 void
-x86_TrueColor_32_to_16(unsigned char *image, // 8
-		       unsigned short *ximage, // 12
-		       short *err, // 16
-		       short *nerr, // 20
-		       short *rtable, // 24
-		       short *gtable, // 28
-		       short *btable, // 32
-		       int dr, // 36
-		       int dg, // 40
-		       int db, // 44
-		       unsigned int roffs, // 48
-		       unsigned int goffs, // 52
-		       unsigned int boffs, // 56
-		       int width, // 60
-		       int height, // 64
-		       int line_offset) // 68
+x86_mmx_TrueColor_32_to_16(unsigned char *image, // 8
+			   unsigned short *ximage, // 12
+			   short *err, // 16
+			   short *nerr, // 20
+			   short *rtable, // 24
+			   short *gtable, // 28
+			   short *btable, // 32
+			   int dr, // 36
+			   int dg, // 40
+			   int db, // 44
+			   unsigned int roffs, // 48
+			   unsigned int goffs, // 52
+			   unsigned int boffs, // 56
+			   int width, // 60
+			   int height, // 64
+			   int line_offset) // 68
 {
     /*
      int x; //-4
@@ -92,7 +107,8 @@ x86_TrueColor_32_to_16(unsigned char *image, // 8
 
     asm volatile
 	(
-	 "subl $64, %esp		\n" // alloc some more stack
+	 "andl $-8, %ebp		\n" // make it align
+	 "subl $128, %esp		\n" // alloc some more stack
 
 	 "pusha				\n"
 
@@ -129,27 +145,27 @@ x86_TrueColor_32_to_16(unsigned char *image, // 8
 	 // process 1 pixel / cycle, each component treated as 16bit
 	 "movl 8(%ebp), %esi		\n" // esi = image->data
 
-".LoopY:				\n"
+".LoopYa:				\n"
 	 "movl 60(%ebp), %eax		\n"
 	 "movl %eax, -4(%ebp)		\n" // x = width
 
 	 "movl 64(%ebp), %eax		\n"
 	 "decl %eax			\n" // y--
 	 "movl %eax, 64(%ebp)		\n"
-	 "js .End			\n" // if y < 0, goto end
+	 "js .Enda			\n" // if y < 0, goto end
 	 "andl $1, %eax			\n"
-	 "jz .LoopY_1			\n" // if (y&1) goto LoopY_1
+	 "jz .LoopY_1a			\n" // if (y&1) goto LoopY_1
 
-".LoopY_0:				\n"
+".LoopY_0a:				\n"
 
 	 "movl 16(%ebp), %ebx		\n" // ebx = err
 	 "movl %ebx, -36(%ebp)		\n" // [-36] = err
 	 "movl 20(%ebp), %eax		\n" //
 	 "movl %eax, -32(%ebp)		\n" // [-32] = nerr
 
-	 "jmp .LoopX			\n"
+	 "jmp .LoopXa			\n"
 
-".LoopY_1:				\n"
+".LoopY_1a:				\n"
 
 	 "movl 20(%ebp), %ebx		\n" // ebx = nerr
 	 "movl %ebx, -36(%ebp)		\n" // [-36] = nerr
@@ -157,7 +173,7 @@ x86_TrueColor_32_to_16(unsigned char *image, // 8
 	 "movl %eax, -32(%ebp)		\n" // [-32] = eerr
 
 
-".LoopX:				\n"
+".LoopXa:				\n"
 
 	 // calculate errors and pixel components
 	 
@@ -261,7 +277,7 @@ x86_TrueColor_32_to_16(unsigned char *image, // 8
 	 
 
 	 "decl -4(%ebp)			\n" // x--
-	 "jnz .LoopX			\n" // if x>0, goto .LoopX
+	 "jnz .LoopXa			\n" // if x>0, goto .LoopX
 
 
 	 // depend on edx
@@ -269,9 +285,9 @@ x86_TrueColor_32_to_16(unsigned char *image, // 8
 	 "movl %edx, 12(%ebp)		\n"
 	 
 
-	 "jmp .LoopY			\n"
+	 "jmp .LoopYa			\n"
 
-".End:					\n" // THE END
+".Enda:					\n" // THE END
 	 
 	 "emms				\n"
 
@@ -280,6 +296,139 @@ x86_TrueColor_32_to_16(unsigned char *image, // 8
 }
 
 
-
 #endif /* ASM_X86_MMX */
 
+#if 0
+
+    /* convert and dither the image to XImage */
+    for (y=0; y<image->height; y++) {
+	nerr[0] = 0;
+	nerr[1] = 0;
+	nerr[2] = 0;
+	for (x=0; x<image->width*3; x+=3, ptr+=channels) {
+
+	    /* reduce pixel */
+	    pixel = *ptr + err[x];
+	    if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
+	    r = rtable[pixel];
+	    /* calc error */
+	    rer = pixel - r*dr;
+
+	    /* reduce pixel */
+	    pixel = *(ptr+1) + err[x+1];
+	    if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
+	    g = gtable[pixel];
+	    /* calc error */
+	    ger = pixel - g*dg;
+
+	    /* reduce pixel */
+	    pixel = *(ptr+2) + err[x+2];
+	    if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
+	    b = btable[pixel];
+	    /* calc error */
+	    ber = pixel - b*db;
+
+	    *optr++ = pixels[r*cpcpc + g*cpc + b];
+
+	    /* distribute error */
+	    r = (rer*3)/8;
+	    g = (ger*3)/8;
+	    b = (ber*3)/8;
+	    /* x+1, y */
+	    err[x+3*1]+=r;
+	    err[x+1+3*1]+=g;
+	    err[x+2+3*1]+=b;
+	    /* x, y+1 */
+	    nerr[x]+=r;
+	    nerr[x+1]+=g;
+	    nerr[x+2]+=b;
+	    /* x+1, y+1 */
+	    nerr[x+3*1]=rer-2*r;
+	    nerr[x+1+3*1]=ger-2*g;
+	    nerr[x+2+3*1]=ber-2*b;
+	}
+	/* skip to next line */
+	terr = err;
+	err = nerr;
+	nerr = terr;
+	
+	optr += ximg->image->bytes_per_line - image->width;
+    }
+}
+#endif
+
+
+void
+x86_PseudoColor_32_to_8(unsigned char *image, // 8
+			unsigned char *ximage, // 12
+			char *err, // 16
+			char *nerr, // 20
+			short *rtable, // 24
+			short *gtable, // 28
+			short *btable, // 32
+			int dr, // 36
+			int dg, // 40
+			int db, // 44
+			unsigned long *pixels, // 48
+			int cpc, // 52
+			int width, // 56
+			int height, // 60
+			int line_offset) // 64
+{
+    asm volatile
+	(
+	 "andl $-8, %ebp		\n"
+	 "subl $128, %esp		\n" // alloc some stack space
+	 "pusha				\n"
+
+	 // process 1 pixel / cycle, each component treated as 16bit
+	 "movl 8(%ebp), %esi		\n" // esi = image->data
+
+".LoopYb:				\n"
+	 "movl 56(%ebp), %eax		\n"
+	 "movl %eax, -4(%ebp)		\n" // x = width
+
+	 "movl 60(%ebp), %eax		\n"
+	 "decl %eax			\n" // y--
+	 "movl %eax, 64(%ebp)		\n"
+	 "js .Endb			\n" // if y < 0, goto end
+	 "andl $1, %eax			\n"
+	 "jz .LoopY_1b			\n" // if (y&1) goto LoopY_1
+
+".LoopY_0b:				\n"
+
+	 "movl 16(%ebp), %ebx		\n" // ebx = err
+	 "movl %ebx, -36(%ebp)		\n" // [-36] = err
+	 "movl 20(%ebp), %eax		\n" //
+	 "movl %eax, -32(%ebp)		\n" // [-32] = nerr
+
+	 "movl $0, -32(%ebp)		\n" // init error of nerr[0] to 0
+
+	 "jmp .LoopXb			\n"
+
+".LoopY_1b:				\n"
+
+	 "movl 20(%ebp), %ebx		\n" // ebx = nerr
+	 "movl %ebx, -36(%ebp)		\n" // [-36] = nerr
+	 "movl 16(%ebp), %eax		\n" //
+	 "movl %eax, -32(%ebp)		\n" // [-32] = err
+
+	 "movl $0, -32(%ebp)		\n" // init error of nerr[0] to 0
+
+".LoopXb:				\n"
+	 
+	 "movl (%esi), %edx		\n" // fetch a pixel
+
+//	 "movl  				\n"
+	 
+
+
+".Endb:					\n"
+	 
+	 "popa				\n"
+	 );
+    
+    
+}
+
+#endif /* ASM_X86 */

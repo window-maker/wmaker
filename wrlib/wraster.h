@@ -142,6 +142,7 @@ typedef struct RContext {
     
     int ncolors;		       /* total number of colors we can use */
     XColor *colors;		       /* internal colormap */
+    unsigned long *pixels;	       /* RContext->colors[].pixel */
 
     struct {
 	unsigned int use_shared_pixmap:1;
