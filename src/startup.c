@@ -313,7 +313,7 @@ handleSig(int sig)
     static int already_crashed = 0;
     int dumpcore = 0;
 #ifndef NO_EMERGENCY_AUTORESTART
-    int crashAction;
+    int crashAction, i;
     char *argv[2];
     
     argv[1] = NULL;
@@ -362,7 +362,6 @@ handleSig(int sig)
         if (dpy) {
             CARD32 data[2];
             WWindow *wwin;
-            int i;
 
 	    XGrabServer(dpy);
             crashAction = wShowCrashingDialogPanel(sig);
@@ -411,9 +410,10 @@ handleSig(int sig)
 
     	wmessage(_("trying to start alternate window manager..."));
 
-        Restart(FALLBACK_WINDOWMANAGER, False);
-        Restart("fvwm", False);
-        Restart("twm", False);
+        for (i=0; i<WMGetArrayItemCount(wPreferences.fallbackWMs); i++) {
+            Restart(WMGetFromArray(wPreferences.fallbackWMs, i), False);
+        }
+
         wfatal(_("failed to start alternate window manager. Aborting."));
 #else
         wfatal(_("a fatal error has occured, probably due to a bug. "

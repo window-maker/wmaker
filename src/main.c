@@ -582,7 +582,7 @@ int
 main(int argc, char **argv)
 {
     int i, restart=0;
-    char *str;
+    char *str, *alt;
     int d, s;
 #ifdef DEBUG
     Bool doSync = False;
@@ -610,9 +610,21 @@ main(int argc, char **argv)
 
 
     restart = 0;
-    
+
     memset(&wPreferences, 0, sizeof(WPreferences));
-    
+
+    wPreferences.fallbackWMs = WMCreateArray(8);
+    alt = getenv("WINDOWMAKER_ALT_WM");
+    if (alt != NULL)
+        WMAddToArray(wPreferences.fallbackWMs, wstrdup(alt));
+
+    WMAddToArray(wPreferences.fallbackWMs, wstrdup(FALLBACK_WINDOWMANAGER));
+    WMAddToArray(wPreferences.fallbackWMs, wstrdup("fvwm"));
+    WMAddToArray(wPreferences.fallbackWMs, wstrdup("twm"));
+    WMAddToArray(wPreferences.fallbackWMs, NULL);
+    WMAddToArray(wPreferences.fallbackWMs, wstrdup("rxvt"));
+    WMAddToArray(wPreferences.fallbackWMs, wstrdup("xterm"));
+
     if (argc>1) {
 	for (i=1; i<argc; i++) {
 #ifdef USECPP
