@@ -2080,9 +2080,7 @@ wheelInitMatrix(W_ColorPanel *panel)
 	    ycor = 2 * y - 4 - colorWheelSize;
 
 	    /* RColor.saturation is unsigned char and will wrap after 255 */
-	    sat = rint(255.0 *
-			sqrtf( (float)(xcor*xcor) + (float)(ycor*ycor)) /
-			(float)colorWheelSize);
+	    sat = rint(255.0 * sqrt(xcor*xcor + ycor*ycor) / colorWheelSize);
 	    
 	    cpColor.hsv.saturation = (unsigned char)sat;
 	    
