@@ -33,7 +33,7 @@ Changes since version 0.80.0:
   manager" option in the crashing dialog panel.
 - Window Maker will now use the WINDOWMAKER_ALT_WM environment variable (if
   it is defined) to overwrite the default hardcoded fallback window manager.
-
+- Added Czech translations of documentation (Jiri Hnidek <Jiri.Hnidek@vslib.cz>)
 
 Changes since version 0.70.0:
 .............................

@@ -1,0 +1,10 @@
+x geticonset.1x
+x getstyle.1x
+x seticons.1x
+x setstyle.1x
+x wdwrite.1x
+x wmaker.1x
+x wmsetbg.1x
+x wsetfont.1x
+x wxcopy.1x
+x wxpaste.1x
