@@ -1411,7 +1411,7 @@ msgstr "保持在上/浮动"
 #: ../src/winspector.c:1188
 msgid ""
 "Keep the window over other windows, not allowing\n"
-"them to covert it."
+"them to cover it."
 msgstr ""
 "保持这个窗口在其他窗口之上, 不允许它们覆盖\n"
 "这个窗口."

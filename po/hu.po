@@ -1226,7 +1226,7 @@ msgstr "Mindig felül / Lebegés"
 #: ../src/winspector.c:1188
 msgid ""
 "Keep the window over other windows, not allowing\n"
-"them to covert it."
+"them to cover it."
 msgstr ""
 "Az ablakot mindig felülre teszi, nem engedi, hogy\n"
 "más ablak beterítse."

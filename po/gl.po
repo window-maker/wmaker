@@ -1496,7 +1496,7 @@ msgstr "Manter por Riba / Flotando"
 #: ../src/winspector.c:1371
 msgid ""
 "Keep the window over other windows, not allowing\n"
-"them to covert it."
+"them to cover it."
 msgstr ""
 "Manter a fiestra por riba das outras, non deixando\n"
 "que a cubran."

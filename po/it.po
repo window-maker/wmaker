@@ -1308,7 +1308,7 @@ msgstr "In primo piano / Galleggiante"
 #: ../src/winspector.c:1188
 msgid ""
 "Keep the window over other windows, not allowing\n"
-"them to covert it."
+"them to cover it."
 msgstr ""
 "Mantiene la finestra sopra tutte le altre,\n"
 "evitando che esse la coprano."

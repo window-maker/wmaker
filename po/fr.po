@@ -1440,7 +1440,7 @@ msgstr "Garder au-dessus / Flottante"
 #: ../src/winspector.c:1354
 msgid ""
 "Keep the window over other windows, not allowing\n"
-"them to covert it."
+"them to cover it."
 msgstr ""
 "Garde la fenêtre au-dessus des autres, leur interdisant\n"
 "de la recouvrir."

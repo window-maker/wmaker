@@ -1466,7 +1466,7 @@ msgstr "Pid‰ p‰‰llimm‰isen‰"
 #: ../src/winspector.c:1371
 msgid ""
 "Keep the window over other windows, not allowing\n"
-"them to covert it."
+"them to cover it."
 msgstr "Pid‰ ikkuna muiden ikkunoiden p‰‰ll‰."
 
 #: ../src/winspector.c:1375

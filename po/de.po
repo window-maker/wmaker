@@ -1218,7 +1218,7 @@ msgstr "Immer Oben"
 #: ../src/winspector.c:1188
 msgid ""
 "Keep the window over other windows, not allowing\n"
-"them to covert it.\n"
+"them to cover it.\n"
 msgstr ""
 "Halte dieses Fenster über allen anderen. Erlaube keinem\n"
 "anderen Fenster, dieses zu überdecken.\n"

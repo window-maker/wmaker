@@ -1534,7 +1534,7 @@ msgstr "V¾dy navrchu"
 #: ../src/winspector.c:1367
 msgid ""
 "Keep the window over other windows, not allowing\n"
-"them to covert it."
+"them to cover it."
 msgstr ""
 "Dr¾a» okno v¾dy nad ostatnými,\n"
 "a nedovoli», aby ho prekryli."

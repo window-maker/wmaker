@@ -1488,7 +1488,7 @@ msgstr "Manter sobre outros / Flutando"
 #: ../src/winspector.c:1371
 msgid ""
 "Keep the window over other windows, not allowing\n"
-"them to covert it."
+"them to cover it."
 msgstr "Mantém a janela sobre todas as outras, não permitindo que a cubram."
 
 #: ../src/winspector.c:1375

@@ -1632,7 +1632,7 @@ msgstr "Дръж отгоре"
 #: ../src/winspector.c:1371
 msgid ""
 "Keep the window over other windows, not allowing\n"
-"them to covert it."
+"them to cover it."
 msgstr ""
 "Държи прозореца над другите прозорци,\n"
 "като не позволява те да го закрият."

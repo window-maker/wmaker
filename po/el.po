@@ -1424,7 +1424,7 @@ msgstr "Πάντα στο Προσκήνιο"
 #: ../src/winspector.c:1193
 msgid ""
 "Keep the window over other windows, not allowing\n"
-"them to covert it."
+"them to cover it."
 msgstr ""
 "Διατήρηση του παραθύρου πάνω από όλα τα άλλα, χωρίς\n"
 "να μπορούν άλλα παράθυρα να το καλύψουςν."
