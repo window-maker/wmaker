@@ -18,9 +18,6 @@ LDADD= libWINGs.a $(top_builddir)/wrlib/libwraster.la @LIBPL@ @INTLIBS@
 
 EXTRA_DIST = BUGS
 
-wingsincludedir = $(includedir)/WINGs
-wingsinclude_HEADERS = WINGs.h WUtil.h WINGsP.h
-
 # wbutton.c 
 libWINGs_a_SOURCES = 	\
 	array.c \
@@ -101,7 +98,8 @@ libWUtil_a_SOURCES = 	\
 	usleep.c \
 	wapplication.c \
 	wconfig.h \
-	wutil.c
+	wutil.c\
+	snprintf.c
 
 CPPFLAGS = @CPPFLAGS@ -DLOCALEDIR=\"$(NLSDIR)\"
 
