@@ -6,6 +6,7 @@ Changes since wmaker 0.80.0:
   have the same names and collide in the cache giving unwanted results)
 - fixed labels not to display '\n' as a character if multiple '\n' are passed
   but just skip to the next line.
+- better warning when importing non-digit characters in PropList Data.
 
 
 Changes since wmaker 0.70.0:
