@@ -30,6 +30,7 @@
 #include <X11/Xlib.h>
 
 void wNETWMInitStuff(WScreen *scr);
+void wNETWMCleanup(WScreen *scr);
 void wNETWMUpdateWorkarea(WScreen *scr, WArea usableArea);
 Bool wNETWMGetUsableArea(WScreen *scr, int head, WArea *area);
 Bool wNETWMCheckInitialClientState(WWindow *wwin);
@@ -42,4 +43,6 @@ void wNETWMUpdateDesktop(WScreen *scr);
 void wNETWMPositionSplash(WWindow *wwin, int *x, int *y, int width, int height);
 int wNETWMGetPidForWindow(Window window);
 int wNETWMGetCurrentDesktopFromHint(WScreen *scr);
+char *wNETWMGetIconName(Window window);
+char *wNETWMGetWindowName(Window window);
 #endif

@@ -1084,8 +1084,6 @@ wScreenSaveState(WScreen *scr)
     WWindow *wwin;
     char *str;
     WMPropList *old_state, *foo;
-    CARD32 data[2];
-
 
     make_keys();
 

@@ -36,6 +36,7 @@
 #include "properties.h"
 #include "session.h"
 #include "winspector.h"
+#include "wmspec.h"
 
 extern Atom _XA_WM_DELETE_WINDOW;
 extern Time LastTimestamp;
@@ -197,6 +198,7 @@ RestoreDesktop(WScreen *scr)
     XSetInputFocus(dpy, PointerRoot, RevertToParent, CurrentTime);
     wColormapInstallForWindow(scr, NULL);
     PropCleanUp(scr->root_win);
+    wNETWMCleanup(scr);
     XSync(dpy, 0);
 }
 

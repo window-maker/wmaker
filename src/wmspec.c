@@ -74,10 +74,10 @@ static Atom net_moveresize_window;		    /* TODO */
 static Atom net_wm_moveresize;			    /* TODO */
 
 /* Application Window Properties */
-static Atom net_wm_name;			    /* TODO */
-static Atom net_wm_visible_name;		    /* TODO */
-static Atom net_wm_icon_name;			    /* TODO */
-static Atom net_wm_visible_icon_name;		    /* TODO */
+static Atom net_wm_name;
+static Atom net_wm_visible_name;		    /* TODO (unnecessary?) */
+static Atom net_wm_icon_name;
+static Atom net_wm_visible_icon_name;		    /* TODO (unnecessary?) */
 static Atom net_wm_desktop;
 static Atom net_wm_window_type;
 static Atom net_wm_window_type_desktop;
@@ -295,6 +295,9 @@ setSupportedHints(WScreen *scr)
     atom[i++] = net_wm_icon_geometry;
     atom[i++] = net_wm_icon;
     atom[i++] = net_wm_handled_icons;
+    
+    atom[i++] = net_wm_name;
+    atom[i++] = net_wm_icon_name;
 
     XChangeProperty(dpy, scr->root_win, net_supported, XA_ATOM, 32,
                     PropModeReplace, (unsigned char*)atom, i);
@@ -532,6 +535,16 @@ wNETWMInitStuff(WScreen *scr)
     updateShowDesktop(scr, False);
 
     wScreenUpdateUsableArea(scr);
+}
+
+
+void
+wNETWMCleanup(WScreen *scr)
+{
+    int i;
+
+    for (i= 0; i < atomNr; i++)
+      XDeleteProperty(dpy, scr->root_win, *atomNames[i].atom);
 }
 
 
@@ -1018,6 +1031,7 @@ doStateAtom(WWindow *wwin, Atom state, int set, Bool init)
             }
         }
     } else if (state == net_wm_state_fullscreen) {
+        puts("GoT FS ST");
         if (set == _NET_WM_STATE_TOGGLE) {
             set = !(wwin->flags.fullscreen);
         }
@@ -1502,6 +1516,15 @@ wNETWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event)
         updateNetIconInfo(wwin);
     } else if (event->atom == net_wm_window_type) {
         updateWindowType(wwin);
+    } else if (event->atom == net_wm_name) {
+        char *name= wNETWMGetWindowName(wwin->client_win);
+        wWindowUpdateName(wwin, name);
+        if (name) wfree(name);
+    } else if (event->atom == net_wm_icon_name) {
+        if (wwin->icon) {
+            char *name= wNETWMGetIconName(wwin->client_win);
+            wIconChangeTitle(wwin->icon, name);
+        }
     } else {
         ret = False;
     }
@@ -1532,6 +1555,46 @@ wNETWMGetPidForWindow(Window window)
     }
 
     return pid;
+}
+
+
+char*
+wNETWMGetWindowName(Window window)
+{
+    char *name;
+    char *ret;
+    int size;
+
+    name= (char*)PropGetCheckProperty(window,
+                                      net_wm_name, utf8_string, 0,
+                                      0, &size);
+    if (name) {
+        ret= wstrndup(name, size);
+        XFree(name);
+    }
+    else
+        ret= NULL;
+    return ret;
+}
+
+
+char*
+wNETWMGetIconName(Window window)
+{
+    char *name;
+    char *ret;
+    int size;
+    
+    name= (char*)PropGetCheckProperty(window,
+                                      net_wm_icon_name, utf8_string, 0,
+                                      0, &size);
+    if (name) {
+        ret= wstrndup(name, size);
+        XFree(name);
+    }
+    else
+        ret= NULL;
+    return ret;
 }
 
 

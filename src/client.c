@@ -325,25 +325,31 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 
     switch (event->atom) {
     case XA_WM_NAME:
-        /* window title was changed */
-        if (!wFetchName(dpy, wwin->client_win, &tmp)) {
-            wWindowUpdateName(wwin, NULL);
-        } else {
-            wWindowUpdateName(wwin, tmp);
+        if (!wwin->flags.net_has_title)
+        {
+            /* window title was changed */
+            if (!wFetchName(dpy, wwin->client_win, &tmp)) {
+                wWindowUpdateName(wwin, NULL);
+            } else {
+                wWindowUpdateName(wwin, tmp);
+            }
+            if (tmp)
+              XFree(tmp);
         }
-        if (tmp)
-            XFree(tmp);
         break;
 
     case XA_WM_ICON_NAME:
-        if (!wwin->icon)
-            break;
-        else {
-            char *new_title;
-
-            /* icon title was changed */
-            wGetIconName(dpy, wwin->client_win, &new_title);
-            wIconChangeTitle(wwin->icon, new_title);
+        if (!wwin->flags.net_has_icon_title)
+        {
+            if (!wwin->icon)
+              break;
+            else {
+                char *new_title;
+                
+                /* icon title was changed */
+                wGetIconName(dpy, wwin->client_win, &new_title);
+                wIconChangeTitle(wwin->icon, new_title);
+            }
         }
         break;
 

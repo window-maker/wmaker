@@ -159,6 +159,8 @@ Changes since version 0.80.2:
 - Removed old code to store/restore workspace state (now relies on netwm)
 - Added a (simple) Font Configuration for fontconfig fonts
 - MacOS X style window switching panel (navigate through windows with Alt-Tab or  arrow keys)
+- Added support for NET_WM_NAME/NET_WM_ICON_NAME
+- moved out font name conversion code from getstyle/setstyle/convertfonts and made it support fontsets
 
 Changes since version 0.80.1:
 .............................

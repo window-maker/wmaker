@@ -272,9 +272,6 @@ test -f ~$GSDIR/Library/WindowMaker/exitscript || \
     cp $GLOBALDIR/exitscript.sh $GSDIR/Library/WindowMaker/exitscript
 chmod +rx $GSDIR/Library/WindowMaker/exitscript
 
-# no need to call wmchlocale --auto, since national menu is already copied
-wsetfont --auto
-
 # xx herbert
 if test -n "$BATCH" ; then
   echo "Installation Finished"

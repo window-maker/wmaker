@@ -43,8 +43,9 @@
 #include "application.h"
 #include "defaults.h"
 #include "appicon.h"
+#include "wmspec.h"
 
-/**** Global variables ****/
+/**** Global varianebles ****/
 extern WPreferences wPreferences;
 
 #define MOD_MASK wPreferences.modifier_mask
@@ -179,7 +180,11 @@ wIconCreate(WWindow *wwin)
         icon->file = wstrdup(file);
     }
 
-    wGetIconName(dpy, wwin->client_win, &icon->icon_name);
+    icon->icon_name = wNETWMGetIconName(wwin->client_win);
+    if (icon->icon_name)
+      wwin->flags.net_has_icon_title= 1;
+    else
+      wGetIconName(dpy, wwin->client_win, &icon->icon_name);
 
     icon->tile_type = TILE_NORMAL;
 

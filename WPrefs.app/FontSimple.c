@@ -234,17 +234,6 @@ lookup_available_fonts(_Panel *panel)
       FcObjectSetDestroy(os);
     if (pat)
       FcPatternDestroy(pat);
-    
-    panel->fonts->families[panel->fonts->familyn++].name= wstrdup("sans-serif");
-    family= panel->fonts->families + panel->fonts->familyn-1;
-    family->styles= wmalloc(sizeof(FontStyle)*2);
-    family->stylen= 2;
-    family->styles[0].weight= FC_WEIGHT_MEDIUM;
-    family->styles[0].slant= FC_SLANT_ROMAN;
-    family->styles[0].width= FC_WIDTH_NORMAL;
-    family->styles[1].weight= FC_WEIGHT_BOLD;
-    family->styles[1].slant= FC_SLANT_ROMAN;
-    family->styles[1].width= FC_WIDTH_NORMAL;
 
     panel->fonts->families[panel->fonts->familyn++].name= wstrdup("sans");
     family= panel->fonts->families + panel->fonts->familyn-1;

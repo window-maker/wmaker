@@ -722,11 +722,13 @@ wManageWindow(WScreen *scr, Window window)
         return NULL;
     }
 
-    if (!wFetchName(dpy, window, &title)) {
-        title = NULL;
-    }
-
     wwin = wWindowCreate();
+
+    title= wNETWMGetWindowName(window);
+    if (title)
+      wwin->flags.net_has_title= 1;
+    if (!title && !wFetchName(dpy, window, &title))
+        title = NULL;
 
     XSaveContext(dpy, window, wWinContext, (XPointer)&wwin->client_descriptor);
 
