@@ -1,3 +1,11 @@
+Changes since version 0.70.0:
+.............................
+
+- Disabled window birth animation by default (while it was ok with normal 
+  windows, it was very annoying with menus editing in WPrefs.app)
+- Added ability to shade/unshade a window using the mouse wheel.
+
+
 Changes since version 0.65.1:
 .............................
 

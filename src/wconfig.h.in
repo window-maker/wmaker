@@ -201,12 +201,12 @@
 #undef ICON_KABOOM_EXTRA
 
 /*
- * #undef if you dont want the window creation animation when superfluous
- * is enabled.
+ * #define if you want the window creation animation when superfluous
+ * is enabled. Only enable one of them.
  */
 #undef WINDOW_BIRTH_ZOOM
 
-#define WINDOW_BIRTH_ZOOM2
+#undef WINDOW_BIRTH_ZOOM2
 
 /*
  * whether arrow drawing in clip buttons should be gradiented

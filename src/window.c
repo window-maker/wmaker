@@ -34,6 +34,8 @@
 #include <stdio.h>
 #include <string.h>
 
+/* For getting mouse wheel mappings from WINGs */
+#include <WINGs/WINGsP.h>
 
 #include "WindowMaker.h"
 #include "GNUstep.h"
@@ -2864,7 +2866,7 @@ titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event)
             }
 
 	    /* maximize window */
-	    if (dir !=0 && !WFLAGP(wwin, no_resizable)) {
+	    if (dir!=0 && !WFLAGP(wwin, no_resizable)) {
 		int ndir = dir ^ wwin->flags.maximized;
 		if (wwin->flags.maximized != 0)
 		    wUnmaximizeWindow(wwin);
@@ -2878,6 +2880,10 @@ titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event)
 	}
     } else if (event->xbutton.button==Button2) {
 	wSelectWindow(wwin, !wwin->flags.selected);
+    } else if (event->xbutton.button == WINGsConfiguration.mouseWheelUp) {
+        wShadeWindow(wwin);
+    } else if (event->xbutton.button == WINGsConfiguration.mouseWheelDown) {
+        wUnshadeWindow(wwin);
     }
 }
 

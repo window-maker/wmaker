@@ -2,6 +2,28 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+--- 0.70.1
+
+Shading/Unshading windows using mouse wheel on their titlebar
+---------------------------------------------------------
+
+In addition to the known methods of shading/unshading a window,  one can now
+do this by using the mouse wheel on the window's titlebar. The mouse events
+are interpreted via a mapping in the global WINGs configuration file,
+WMGLOBAL, by the MouseWheelUp and MouseWheelDown directives which will do
+shading and unshading respectfully.
+
+However, to avoid unwanted triggers of shading/unshading the window, two
+consecutive mouse wheel events in the same direction are required. The
+trigger won't occur if the events are separated by more than a double-click's 
+worth of time, which is technically speaking like making a double-click with
+the button that corresponds to the mouse wheel direction.
+
+Practically speaking, this means that you have to move the mouse wheel up
+or down quickly, like when you want to quickly scroll over something big.
+
+
+
 --- 0.70.0
 
 New dock option
