@@ -3,7 +3,7 @@ defsdatadir = $(sysconfdir)/WindowMaker
 
 defsdata_DATA = WMRootMenu WMWindowAttributes WindowMaker WMState WMGLOBAL
 
-EXTRA_DIST = $(defsdata_DATA) WMWindowAttributes.in WindowMaker.in WMState.in
+EXTRA_DIST = WMRootMenu WMGLOBAL WMWindowAttributes.in WindowMaker.in WMState.in
 
 CLEANFILES = WMWindowAttributes WindowMaker WMState
 
