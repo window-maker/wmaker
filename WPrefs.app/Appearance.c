@@ -66,6 +66,12 @@ typedef struct _Panel {
     /* text color */
     WMFrame *colF;
 
+    WMPopUpButton *colP;
+
+    WMColorWell *colW;
+
+    WMColorWell *sampW[15];
+
     /* options */
     WMFrame *optF;
 
@@ -1396,6 +1402,32 @@ createPanel(Panel *p)
     WMAddItemInTabView(panel->tabv, item);
 
 
+    panel->colP = WMCreatePopUpButton(panel->colF);
+    WMResizeWidget(panel->colP, 228, 20);
+    WMMoveWidget(panel->colP, 7, 7);
+    WMSetPopUpButtonSelectedItem(panel->colP, 0);
+    WMAddPopUpButtonItem(panel->colP, _("Focused Window Title"));
+    WMAddPopUpButtonItem(panel->colP, _("Unfocused Window Title"));
+
+/*    WMSetPopUpButtonAction(panel->colP, changePage, panel);
+ */
+    
+    panel->colW = WMCreateColorWell(panel->colF);
+    WMResizeWidget(panel->colW, 65, 50);
+    WMMoveWidget(panel->colW, 40, 75);
+
+    for (i = 0; i < 3; i++) {
+	int j;
+	for (j = 0; j < 5; j++) {
+	    panel->sampW[i] = WMCreateColorWell(panel->colF);
+	    WMResizeWidget(panel->sampW[i], 28, 28);
+	    WMMoveWidget(panel->sampW[i], 140 + i*28, 40 + j*28);
+	    WSetColorWellBordered(panel->sampW[i], False);
+	}
+    }
+
+    WMMapSubwidgets(panel->colF);
+
     /*** options ***/
     panel->optF = WMCreateFrame(panel->frame);
     WMSetFrameRelief(panel->optF, WRFlat);
@@ -1547,6 +1579,10 @@ showData(_Panel *panel)
  */
 
     updatePreviewBox(panel, EVERYTHING);
+
+    for (i = 0; i < 3; i++) {
+	WMSetButtonSelected(panel->mstyB[i], i==panel->menuStyle);
+    }
 }
 
 
