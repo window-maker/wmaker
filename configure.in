@@ -100,7 +100,7 @@ dnl not used anywhere
 dnl AC_FUNC_MEMCMP  
 AC_FUNC_VPRINTF
 AC_FUNC_ALLOCA
-AC_CHECK_FUNCS(gethostname select poll strerror strcasecmp strncasecmp setpgid atexit mallinfo vsnprintf vasprintf)
+AC_CHECK_FUNCS(gethostname select poll strerror strcasecmp strncasecmp setpgid atexit mallinfo vsnprintf vasprintf mkstemp)
 
 
 
@@ -151,7 +151,7 @@ dnl Checks for header files.
 dnl =======================
 AC_HEADER_SYS_WAIT
 AC_HEADER_TIME
-AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h sys/time.h sys/types.h libintl.h sys/select.h poll.h malloc.h ctype.h stdlib.h)
+AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h sys/time.h sys/types.h libintl.h sys/select.h poll.h malloc.h ctype.h stdlib.h string.h strings.h)
 
 
 
@@ -436,9 +436,9 @@ fi
 dnl XINERAMA support
 dnl ================
 xinerama=no
-AC_ARG_ENABLE(xinerama, 
-[  --disable-xinerama	  disable XInerama extension support],
-		xinerama=$enableval, xinerama=yes)
+#AC_ARG_ENABLE(xinerama, 
+#[  --disable-xinerama	  disable XInerama extension support],
+#		xinerama=$enableval, xinerama=yes)
 
 if test "$xinerama" = yes; then
 	AC_CHECK_LIB(Xinerama, XineramaQueryScreens, [XLIBS="-lXinerama $XLIBS"

@@ -22,6 +22,8 @@
 #include <config.h>
 
 
+/* Avoid a compiler warning */
+#undef HAVE_STDLIB_H
 
 
 

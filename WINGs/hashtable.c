@@ -223,6 +223,43 @@ WMHashGet(WMHashTable *table, const void *key)
 }
 
 
+Bool
+WMHashGetItemAndKey(WMHashTable *table, const void *key,
+                    void **retItem, void **retKey)
+{
+    unsigned h;
+    HashItem *item;
+    
+    h = HASH(table, key);
+    item = table->table[h];
+    
+    if (table->callbacks.keyIsEqual) {
+	while (item) {
+	    if ((*table->callbacks.keyIsEqual)(key, item->key)) {
+		break;
+	    }
+	    item = item->next;
+	}
+    } else {
+	while (item) {
+	    if (key == item->key) {
+		break;
+	    }
+	    item = item->next;
+	}
+    }
+    if (item) {
+        if (retKey)
+            *retKey = (void*)item->key;
+        if (retItem)
+            *retItem = (void*)item->data;
+	return True;
+    } else {
+        return False;
+    }
+}
+
+
 
 void*
 WMHashInsert(WMHashTable *table, const void *key, const void *data)
@@ -414,8 +451,10 @@ WMNextHashEnumeratorItemAndKey(WMHashEnumerator *enumerator,
     }
 
     if (enumerator->nextItem) {
-        *item = (void*)((HashItem*)enumerator->nextItem)->data;
-        *key = (void*)((HashItem*)enumerator->nextItem)->key;
+        if (item)
+            *item = (void*)((HashItem*)enumerator->nextItem)->data;
+        if (key)
+            *key = (void*)((HashItem*)enumerator->nextItem)->key;
         enumerator->nextItem = ((HashItem*)enumerator->nextItem)->next;
 
         return True;

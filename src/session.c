@@ -709,12 +709,12 @@ wSessionSendSaveYourself(WScreen *scr)
  * - this state file is not meant to be edited by users
  * 
  * The old session code will become obsolete. When wmaker is
- * compiled with R6 sm support compiled in, itll be better to
+ * compiled with R6 sm support compiled in, it'll be better to
  * use a totally rewritten state saving code, but we can keep
  * the current code for when XSMP_ENABLED is not compiled in. 
  * 
  * This will be confusing to old users (well get lots of "SAVE_SESSION broke!"
- * messages), but itll be better.
+ * messages), but it'll be better.
  * 
  * -readme
  */

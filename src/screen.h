@@ -336,11 +336,6 @@ typedef struct _WScreen {
 typedef struct WWorkspaceState {
     int flags;
     int workspace;
-#if 0  /* obsoleted by saving menus position in WMState */
-    int menu_x, menu_y;
-    int smenu_x, smenu_y;
-    int wmenu_x, wmenu_y;
-#endif
 } WWorkspaceState;
 
 

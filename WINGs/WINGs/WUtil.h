@@ -336,6 +336,17 @@ unsigned WMCountHashTable(WMHashTable *table);
 
 void* WMHashGet(WMHashTable *table, const void *key);
 
+/* Returns True if there is a value associated with <key> in the table, in
+ * which case <retKey> and <retItem> will contain the item's internal key
+ * address and the item's value respectively.
+ * If there is no value associated with <key> it will return False and in
+ * this case <retKey> and <retItem> will be undefined.
+ * Use this when you need to perform your own custom retain/release mechanism
+ * which requires access to the keys too.
+ */
+Bool WMHashGetItemAndKey(WMHashTable *table, const void *key,
+                         void **retItem, void **retKey);
+
 /* put data in table, replacing already existing data and returning
  * the old value */
 void* WMHashInsert(WMHashTable *table, const void *key, const void *data);
@@ -682,17 +693,6 @@ WMTreeNode* WMFindInTree(WMTreeNode *aTree, WMMatchDataProc *match, void *cdata)
 
 /*--------------------------------------------------------------------------*/
 
-/* Dictionaries */
-/*
-WMDictionary* WMCreateDictionaryFromElements(void *key, void *value, ...);
-
-#define WMGetDictionaryEntryForKey(dict, key) WMHashGet(dict, key)
-
-WMArray* WMGetAllDictionaryKeys(WMDictionary *dPtr);
-*/
-
-/*--------------------------------------------------------------------------*/
-
 
 WMNotification* WMCreateNotification(const char *name, void *object, void *clientData);
 
@@ -758,6 +758,19 @@ WMPropList* WMCreatePropListArrayFromElements(WMPropList *elem, ...);
 WMPropList* WMCreatePropListDictionaryFromEntries(WMPropList *key,
                                                   WMPropList *value, ...);
 
+void WMInsertPropListArrayElement(WMPropList *plist, WMPropList *item, int index);
+
+void WMAppendPropListArrayElement(WMPropList *plist, WMPropList *item);
+
+void WMRemovePropListArrayElement(WMPropList *plist, int index);
+
+void WMInsertPropListDictionaryEntry(WMPropList *plist, WMPropList *key,
+                                     WMPropList *value);
+
+void WMRemovePropListDictionaryEntry(WMPropList *plist, WMPropList *key);
+
+WMPropList* WMMergePropListDictionaries(WMPropList *dest, WMPropList *source);
+
 WMPropList* WMRetainPropList(WMPropList *plist);
 
 void WMReleasePropList(WMPropList *plist);
@@ -774,8 +787,31 @@ Bool WMPropListIsSimple(WMPropList *plist);
 
 Bool WMPropListIsCompound(WMPropList *plist);
 
-Bool WMArePropListsEqual(WMPropList *plist, WMPropList *other);
+Bool WMIsPropListEqualToPropList(WMPropList *plist, WMPropList *other);
 
+int WMGetPropListNumberOfElements(WMPropList *plist);
+
+char* WMGetPropListString(WMPropList *plist);
+
+WMData* WMGetPropListData(WMPropList *plist);
+
+const unsigned char* WMGetPropListDataBytes(WMPropList *plist);
+
+int WMGetPropListDataLength(WMPropList *plist);
+
+WMPropList* WMGetPropListArrayElement(WMPropList *plist, int index);
+
+WMPropList* WMGetPropListDictionaryEntry(WMPropList *plist, WMPropList *key);
+
+WMPropList* WMGetPropListAllDictionaryKeys(WMPropList *plist);
+
+char* WMGetPropListDescription(WMPropList *plist, Bool indented);
+
+Bool WMSavePropListToFile(WMPropList *plist, char *path, Bool atomically);
+
+WMPropList* WMShallowCopyPropList(WMPropList *plist);
+
+WMPropList* WMDeepCopyPropList(WMPropList *plist);
 
 /*......................................................................*/
 
