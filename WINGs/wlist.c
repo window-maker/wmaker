@@ -1150,7 +1150,7 @@ handleActionEvents(XEvent *event, void *data)
     case MotionNotify:
 #ifdef behavior2
         height = WMWidgetHeight(lPtr);
-        if (lPtr->selectID && event->xmotion.y>=0 && event->xmotion.y<=height) {
+        if (lPtr->selectID && event->xmotion.y>0 && event->xmotion.y<height) {
             WMDeleteTimerHandler(lPtr->selectID);
             lPtr->selectID = NULL;
         }
