@@ -990,12 +990,14 @@ void WMSetLabelImage(WMLabel *lPtr, WMPixmap *image);
 
 WMPixmap *WMGetLabelImage(WMLabel *lPtr);
 
+char *WMGetLabelText(WMLabel *lPtr);
+
 void WMSetLabelImagePosition(WMLabel *lPtr, WMImagePosition position);
-	
+
 void WMSetLabelTextAlignment(WMLabel *lPtr, WMAlignment alignment);
 
 void WMSetLabelRelief(WMLabel *lPtr, WMReliefType relief);
-	
+
 void WMSetLabelText(WMLabel *lPtr, char *text);
 
 void WMSetLabelFont(WMLabel *lPtr, WMFont *font);
