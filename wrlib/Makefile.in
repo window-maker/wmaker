@@ -69,7 +69,6 @@ GFXLIBS = @GFXLIBS@
 HEADER_SEARCH_PATH = @HEADER_SEARCH_PATH@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
-LD = @LD@
 LIBPL = @LIBPL@
 LIBRARY_SEARCH_PATH = @LIBRARY_SEARCH_PATH@
 LIBTOOL = @LIBTOOL@
@@ -79,7 +78,6 @@ MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
 NETLIBS = @NETLIBS@
 NLSDIR = @NLSDIR@
-NM = @NM@
 OBJDUMP = @OBJDUMP@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
@@ -182,7 +180,7 @@ Makefile.in NEWS TODO alloca.c configure.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP_ENV = --best
 SOURCES = $(libwraster_la_SOURCES) $(testgrad_SOURCES) $(testdraw_SOURCES) $(view_SOURCES) $(testrot_SOURCES)
 OBJECTS = $(libwraster_la_OBJECTS) $(testgrad_OBJECTS) $(testdraw_OBJECTS) $(view_OBJECTS) $(testrot_OBJECTS)
@@ -191,7 +189,7 @@ all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .lo .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu wrlib/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps wrlib/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -360,7 +358,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$/$$file $(distdir)/$$file; \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \

@@ -67,7 +67,6 @@ GFXLIBS = @GFXLIBS@
 HEADER_SEARCH_PATH = @HEADER_SEARCH_PATH@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
-LD = @LD@
 LIBPL = @LIBPL@
 LIBRARY_SEARCH_PATH = @LIBRARY_SEARCH_PATH@
 LIBTOOL = @LIBTOOL@
@@ -77,7 +76,6 @@ MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
 NETLIBS = @NETLIBS@
 NLSDIR = @NLSDIR@
-NM = @NM@
 OBJDUMP = @OBJDUMP@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
@@ -193,7 +191,7 @@ DIST_COMMON =  README Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP_ENV = --best
 SOURCES = $(wxcopy_SOURCES) $(wxpaste_SOURCES) $(wdwrite_SOURCES) $(getstyle_SOURCES) $(setstyle_SOURCES) $(seticons_SOURCES) $(geticonset_SOURCES) $(wmsetbg_SOURCES)
 OBJECTS = $(wxcopy_OBJECTS) $(wxpaste_OBJECTS) $(wdwrite_OBJECTS) $(getstyle_OBJECTS) $(setstyle_OBJECTS) $(seticons_OBJECTS) $(geticonset_OBJECTS) $(wmsetbg_OBJECTS)
@@ -202,7 +200,7 @@ all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .lo .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu util/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps util/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -360,7 +358,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$/$$file $(distdir)/$$file; \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \

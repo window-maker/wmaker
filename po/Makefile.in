@@ -69,7 +69,6 @@ GFXLIBS = @GFXLIBS@
 HEADER_SEARCH_PATH = @HEADER_SEARCH_PATH@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
-LD = @LD@
 LIBPL = @LIBPL@
 LIBRARY_SEARCH_PATH = @LIBRARY_SEARCH_PATH@
 LIBTOOL = @LIBTOOL@
@@ -79,7 +78,6 @@ MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
 NETLIBS = @NETLIBS@
 NLSDIR = @NLSDIR@
-NM = @NM@
 OBJDUMP = @OBJDUMP@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
@@ -120,15 +118,15 @@ DIST_COMMON =  README Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .mo .po
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu po/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps po/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -141,15 +139,10 @@ distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 subdir = po
 
 distdir: $(DISTFILES)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(top_distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu po/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$/$$file $(distdir)/$$file; \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
