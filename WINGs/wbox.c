@@ -229,6 +229,7 @@ WMRemoveBoxSubview(WMBox *bPtr, WMView *view)
 	    break;
 	}
     }
+    rearrange(bPtr);
 }
 
 

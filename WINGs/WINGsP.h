@@ -6,7 +6,7 @@
 #include <X11/Xutil.h>
 
 
-#include "WINGs.h"
+#include <WINGs/WINGs.h>
 
 #if WINGS_H_VERSION < 20000521
 #error There_is_an_old_WINGs.h_file_somewhere_in_your_system._Please_remove_it.

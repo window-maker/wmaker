@@ -1361,6 +1361,7 @@ wShowLegalPanel(WScreen *scr)
 
     
     panel->licenseL = WMCreateLabel(panel->win);
+    WMSetLabelWraps(panel->licenseL, True);
     WMResizeWidget(panel->licenseL, 400, 230);
     WMMoveWidget(panel->licenseL, 10, 10);
     WMSetLabelTextAlignment(panel->licenseL, WALeft);

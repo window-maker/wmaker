@@ -144,7 +144,7 @@ if [ "$NLS" = "y" -o "$NLS" = "Y" ]; then
 	ling=` (cd po; /bin/ls *.po) `
 	ALL_LINGUAS=""
 	for l in $ling; do
-		lname=`(cd po; grep Language-Team $l|cut -f 2 -d: |cut -f 2 -d\ )`
+	        lname=`(cd po; grep Language-Team $l|cut -f2 -d: |cut -f2 -d\ |cut -f1 -d\\)`
 		lname=`echo $lname`
 		lcode=`basename $l .po`
 		ALL_LINGUAS="$ALL_LINGUAS $lcode"

@@ -21,7 +21,7 @@ lib_LIBRARIES = libWINGs.a libWUtil.a
 LDADD= libWINGs.a $(top_builddir)/wrlib/libwraster.la @LIBPL@
 
 
-EXTRA_DIST = BUGS
+EXTRA_DIST = BUGS WINGs
 
 # wbutton.c 
 libWINGs_a_SOURCES = 	\

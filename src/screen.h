@@ -1,7 +1,7 @@
 /*
  *  Window Maker window manager
  * 
- *  Copyright (c) 1997, 1998 Alfredo K. Kojima
+ *  Copyright (c) 1997-2001 Alfredo K. Kojima
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,6 +27,10 @@
 #include <sys/types.h>
 
 #include <proplist.h>
+
+#ifdef XINERAMA
+#include <X11/Xinerama.h>
+#endif
 
 
 #define WTB_LEFT	0
@@ -89,6 +93,12 @@ typedef struct _WScreen {
     Visual *w_visual;
     int  w_depth;
     Colormap w_colormap;	       /* our colormap */
+    
+#ifdef XINERAMA
+    XineramaScreenInfo *xine_screens;
+    int xine_count;		       /* 0 means not active */
+    int xine_primary_screen;	       /* main working screen */
+#endif
 
     Window no_focus_win;	       /* window to get focus when nobody
 					* else can do it */

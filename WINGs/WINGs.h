@@ -4,7 +4,7 @@
 #define _WINGS_H_
 
 #include <wraster.h>
-#include <WUtil.h>
+#include <WINGs/WUtil.h>
 #include <X11/Xlib.h>
 
 #define WINGS_H_VERSION  20000521
@@ -1675,6 +1675,8 @@ void WMAddBoxSubview(WMBox *bPtr, WMView *view, Bool expand, Bool fill,
 
 void WMAddBoxSubviewAtEnd(WMBox *bPtr, WMView *view, Bool expand, Bool fill,
 			  int minSize, int maxSize, int space);
+
+void WMRemoveBoxSubview(WMBox *bPtr, WMView *view);
 
 void WMSetBoxHorizontal(WMBox *box, Bool flag);
 

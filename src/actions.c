@@ -427,17 +427,38 @@ wMaximizeWindow(WWindow *wwin, int directions)
 {
     int new_width, new_height, new_x, new_y;
     WArea usableArea = wwin->screen_ptr->totalUsableArea;
+    WArea totalArea;
 
 
     if (WFLAGP(wwin, no_resizable))
 	return;
-
     
+    totalArea.x1 = 0;
+    totalArea.y1 = 0;
+    totalArea.x2 = wwin->screen_ptr->scr_width;
+    totalArea.y2 = wwin->screen_ptr->scr_height;
+
+#ifdef XINERAMA
+    if (wwin->screen_ptr->xine_count > 0
+	&& !(directions & MAX_IGNORE_XINERAMA)) {
+	WScreen *scr = wwin->screen_ptr;
+	WMRect rect;
+	
+	rect = wGetRectForHead(scr, wGetHeadForWindow(wwin));
+	totalArea.x1 = rect.pos.x;
+	totalArea.y1 = rect.pos.y;
+	totalArea.x2 = totalArea.x1 + rect.size.width;
+	totalArea.y2 = totalArea.y1 + rect.size.height;
+	
+	usableArea.x1 = WMAX(totalArea.x1, usableArea.x1);
+	usableArea.y1 = WMAX(totalArea.y1, usableArea.y1);
+	usableArea.x2 = WMIN(totalArea.x2, usableArea.x2);
+	usableArea.y2 = WMIN(totalArea.y2, usableArea.y2);
+    }
+#endif /* XINERAMA */
+
     if (WFLAGP(wwin, full_maximize)) {
-	usableArea.x1 = 0;
-	usableArea.y1 = 0;
-	usableArea.x2 = wwin->screen_ptr->scr_width;
-	usableArea.y2 = wwin->screen_ptr->scr_height;
+	usableArea = totalArea;
     }
 
     if (wwin->flags.shaded) {

@@ -1,6 +1,8 @@
 Changes since version 0.63.1:
 .............................
 - fixed messup in get-{wings,wutil,wraster}-flags
+- fixed #wmdatadir# substitution in wmaker.inst 
+	(Seiichi SATO <sato@cvs-net.co.jp>)
 
 
 Changes since version 0.63.0:
