@@ -134,7 +134,7 @@ applyImage(RContext *rc, BackgroundTexture *texture, RImage *image, char type,
     switch (toupper(type)) {
     case 'S':
     case 'M':
-        if (type == 'S') {
+        if (toupper(type) == 'S') {
             w = width;
             h = height;
         } else {

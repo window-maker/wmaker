@@ -14,7 +14,6 @@ Do ASAP:
 
 Need to do:
 ===========
-- fix scaling/maxscaling code. it seem to always maxscale
 - impelment a generic pixmap type, which receives attributes
   (scaled/maxscaled/centered/tiled, smoothed, size/position, ...)
 - allow user to select/restore default root menu from wprefs

@@ -62,6 +62,9 @@ Changes since version 0.80.2:
 - Autoarrange icons after unhiding an application that has miniaturized
   windows, else they may cover other icons which are now in the positions
   they have occupied before hiding
+- Fixed Clip's workspace menu mapping to be consistent with the others
+- Fixed bug in wmsetbg that caused scale and maxscale to both do maxscale
+  (Alexey Voinov <voins@voins.program.ru>)
 
 
 Changes since version 0.80.1:

@@ -2641,17 +2641,16 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
 }
 
 
-static int onScreen(WScreen *scr, int x, int y, int sx, int ex, int sy, int ey)
+static int
+onScreen(WScreen *scr, int x, int y, int sx, int ex, int sy, int ey)
 {
-    WMRect rect = { (x), (y), (ICON_SIZE), (ICON_SIZE) };
-    int flags; 
+    WMRect rect = {x, y, ICON_SIZE, ICON_SIZE};
+    int flags;
 
     wGetRectPlacementInfo(scr, rect, &flags);
 
     return !(flags & (XFLAG_DEAD | XFLAG_PARTIAL));
 }
-
-#define ON_SCREEN(x, y, sx, ex, sy, ey) onScreen(scr, x, y, sx, ex, sy, ey)
 
 
 /*
@@ -2886,7 +2885,7 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 	    y = -i;
 	    ty = dock->y_pos + y*ICON_SIZE;
 	    if (slot_map[XY2OFS(x,y)]==0
-		&& ON_SCREEN(tx, ty, sx, ex, sy, ey)) {
+		&& onScreen(scr, tx, ty, sx, ex, sy, ey)) {
 		*x_pos = x;
 		*y_pos = y;
 		done = 1;
@@ -2895,7 +2894,7 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 	    y = i;
 	    ty = dock->y_pos + y*ICON_SIZE;
 	    if (slot_map[XY2OFS(x,y)]==0
-		&& ON_SCREEN(tx, ty, sx, ex, sy, ey)) {
+		&& onScreen(scr, tx, ty, sx, ex, sy, ey)) {
 		*x_pos = x;
 		*y_pos = y;
 		done = 1;
@@ -2908,7 +2907,7 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 	    x = -i;
 	    tx = dock->x_pos + x*ICON_SIZE;
 	    if (slot_map[XY2OFS(x,y)]==0
-		&& ON_SCREEN(tx, ty, sx, ex, sy, ey)) {
+		&& onScreen(scr, tx, ty, sx, ex, sy, ey)) {
 		*x_pos = x;
 		*y_pos = y;
 		done = 1;
@@ -2917,7 +2916,7 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 	    x = i;
 	    tx = dock->x_pos + x*ICON_SIZE;
 	    if (slot_map[XY2OFS(x,y)]==0
-		&& ON_SCREEN(tx, ty, sx, ex, sy, ey)) {
+		&& onScreen(scr, tx, ty, sx, ex, sy, ey)) {
 		*x_pos = x;
 		*y_pos = y;
 		done = 1;
@@ -3573,17 +3572,6 @@ openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
 }
 
 
-static void
-openClipWorkspaceMenu(WScreen *scr, int x, int y)
-{
-    if (!scr->clip_ws_menu) {
-	scr->clip_ws_menu = wWorkspaceMenuMake(scr, False);
-    }
-    wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
-    wMenuMapAt(scr->clip_ws_menu, x, y, False);
-}
-
-
 /******************************************************************/
 static void
 iconDblClick(WObjDescriptor *desc, XEvent *event)
@@ -4157,13 +4145,24 @@ iconMouseDown(WObjDescriptor *desc, XEvent *event)
 
     } else if (event->xbutton.button==Button2 && dock->type==WM_CLIP &&
                aicon==scr->clip_icon) {
-        openClipWorkspaceMenu(scr, event->xbutton.x_root+2,
-			      event->xbutton.y_root+2);
+        if (!scr->clip_ws_menu) {
+            scr->clip_ws_menu = wWorkspaceMenuMake(scr, False);
+        }
         if (scr->clip_ws_menu) {
-            WMenu *menu;
-	    menu = scr->clip_ws_menu;
-            desc = &menu->menu->descriptor;
+            WMenu *wsMenu = scr->clip_ws_menu;
+            int xpos;
 
+            wWorkspaceMenuUpdate(scr, wsMenu);
+
+            xpos = event->xbutton.x_root - wsMenu->frame->core->width/2 - 1;
+            if (xpos < 0) {
+                xpos = 0;
+            } else if (xpos + wsMenu->frame->core->width > scr->scr_width-2) {
+                xpos = scr->scr_width - wsMenu->frame->core->width - 4;
+            }
+            wMenuMapAt(wsMenu, xpos, event->xbutton.y_root+2, False);
+
+            desc = &wsMenu->menu->descriptor;
             event->xany.send_event = True;
             (*desc->handle_mousedown)(desc, event);
         }
@@ -4182,11 +4181,11 @@ iconMouseDown(WObjDescriptor *desc, XEvent *event)
 	openDockMenu(dock, aicon, event);
     } else if (event->xbutton.button == Button2) {
 	WAppIcon *btn = desc->parent;
-	
+
 	if (!btn->launching &&
 	    (!btn->running || (event->xbutton.state & ControlMask))) {
 	    launchDockedApplication(btn, True);
-	}	
+        }
     }
 }
 
