@@ -9,6 +9,7 @@ Changes since version 0.65.1:
 - fixed default clip title font in WindowMaker.in
 - fixed some locale related problems (Yukihiro Nakai <ynakai@redhat.com>)
 - fixed a bug in RCombineAreaWithOpaqueness() (Brad <lists@anomie.yi.org>)
+- added spanish INSTALL file (Efrain Maximiliano Palermo <max_drake2001@yahoo.com.ar>)
 
 Changes since version 0.65.0:
 .............................
