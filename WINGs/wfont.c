@@ -89,15 +89,15 @@ makeFontOfSize(char *font, int size, char *fallback)
 
     //FcPatternPrint(pattern);
     if (size > 0) {
-        FcPatternDel(pattern, "pixelsize");
-        FcPatternAddDouble(pattern, "pixelsize", (double)size);
+        FcPatternDel(pattern, FC_PIXEL_SIZE);
+        FcPatternAddDouble(pattern, FC_PIXEL_SIZE, (double)size);
     } else if (size==0 && !hasProperty(pattern, "size") &&
-               !hasProperty(pattern, "pixelsize")) {
-        FcPatternAddDouble(pattern, "pixelsize", (double)DEFAULT_SIZE);
+               !hasProperty(pattern, FC_PIXEL_SIZE)) {
+        FcPatternAddDouble(pattern, FC_PIXEL_SIZE, (double)DEFAULT_SIZE);
     }
 
-    if (fallback && !hasPropertyWithStringValue(pattern, "family", fallback)) {
-        FcPatternAddString(pattern, "family", fallback);
+    if (fallback && !hasPropertyWithStringValue(pattern, FC_FAMILY, fallback)) {
+        FcPatternAddString(pattern, FC_FAMILY, fallback);
     }
 
     result = FcNameUnparse(pattern);
@@ -348,27 +348,27 @@ WMCopyFontWithStyle(WMScreen *scrPtr, WMFont *font, WMFontStyle style)
     pattern = FcNameParse(WMGetFontName(font));
     switch (style) {
     case WFSNormal:
-        FcPatternDel(pattern, "weight");
-        FcPatternDel(pattern, "slant");
-        FcPatternAddString(pattern, "weight", "regular");
-        FcPatternAddString(pattern, "weight", "medium");
-        FcPatternAddString(pattern, "slant", "roman");
+        FcPatternDel(pattern, FC_WEIGHT);
+        FcPatternDel(pattern, FC_SLANT);
+        FcPatternAddString(pattern, FC_WEIGHT, "regular");
+        FcPatternAddString(pattern, FC_WEIGHT, "medium");
+        FcPatternAddString(pattern, FC_SLANT, "roman");
         break;
     case WFSBold:
-        FcPatternDel(pattern, "weight");
-        FcPatternAddString(pattern, "weight", "bold");
+        FcPatternDel(pattern, FC_WEIGHT);
+        FcPatternAddString(pattern, FC_WEIGHT, "bold");
         break;
     case WFSEmphasized:
-        FcPatternDel(pattern, "slant");
-        FcPatternAddString(pattern, "slant", "italic");
-        FcPatternAddString(pattern, "slant", "oblique");
+        FcPatternDel(pattern, FC_SLANT);
+        FcPatternAddString(pattern, FC_SLANT, "italic");
+        FcPatternAddString(pattern, FC_SLANT, "oblique");
         break;
     case WFSBoldEmphasized:
-        FcPatternDel(pattern, "weight");
-        FcPatternDel(pattern, "slant");
-        FcPatternAddString(pattern, "weight", "bold");
-        FcPatternAddString(pattern, "slant", "italic");
-        FcPatternAddString(pattern, "slant", "oblique");
+        FcPatternDel(pattern, FC_WEIGHT);
+        FcPatternDel(pattern, FC_SLANT);
+        FcPatternAddString(pattern, FC_WEIGHT, "bold");
+        FcPatternAddString(pattern, FC_SLANT, "italic");
+        FcPatternAddString(pattern, FC_SLANT, "oblique");
         break;
     }
 
