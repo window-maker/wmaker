@@ -346,7 +346,12 @@ makeFontSetOfSize(char *fontset, int size)
 	    end = 0;
 
 	tmp = wmalloc(end + strlen(f) + 8);
-	sprintf(tmp + end, f, size);
+	if (end != 0) {
+	    sprintf(tmp, "%s,", newfs);
+	    sprintf(tmp + end + 1, f, size);
+	} else {
+	    sprintf(tmp + end, f, size);
+	}
 
 	if (newfs)
 	    free(newfs);

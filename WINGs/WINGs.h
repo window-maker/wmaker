@@ -474,6 +474,16 @@ typedef struct WMTabViewDelegate {
 
 
 
+/* ...................................................................... */
+
+
+WMRange wmkrange(int start, int count);
+
+WMPoint wmkpoint(int x, int y);
+
+WMSize wmksize(unsigned int width, unsigned int height);
+
+
 /* ....................................................................... */
 
 
@@ -883,6 +893,8 @@ void WMSetTextFieldText(WMTextField *tPtr, char *text);
 void WMSetTextFieldAlignment(WMTextField *tPtr, WMAlignment alignment);
 
 void WMSetTextFieldFont(WMTextField *tPtr, WMFont *font);
+
+WMFont *WMGetTextFieldFont(WMTextField *tPtr);
 
 void WMSetTextFieldBordered(WMTextField *tPtr, Bool bordered);
 

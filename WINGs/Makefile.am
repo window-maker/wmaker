@@ -45,7 +45,7 @@ testcolorpanel_LDADD = libWINGs.a $(LIBLIST)
 
 testnot_SOURCES = testnot.c
 
-testnot_LDADD = libWUtil.a @LIBRARY_SEARCH_PATH@ @LIBPL@
+testnot_LDADD = libWUtil.a $(LIBLIST)
 
 
 wmquery_SOURCES = wmquery.c 

@@ -27,7 +27,6 @@ typedef struct W_FontPanel {
     WMList *sizLs;
 
     WMButton *revertB;
-    WMButton *previewB;
     WMButton *setB;
     
     proplist_t fdb;
@@ -71,6 +70,7 @@ static int scalableFontSizes[] = {
 
 	
 
+static void getSelectedFont(FontPanel *panel, char buffer[]);
 
 
 static void arrangeLowerFrame(FontPanel *panel);
@@ -78,9 +78,6 @@ static void arrangeLowerFrame(FontPanel *panel);
 static void familyClick(WMWidget *, void *);
 static void typefaceClick(WMWidget *, void *);
 static void sizeClick(WMWidget *, void *);
-
-
-static void previewClick(WMWidget *w, void *data);
 
 
 static void listFamilies(WMScreen *scr, WMFontPanel *panel);
@@ -107,7 +104,7 @@ notificationObserver(void *self, WMNotification *notif)
 	    WMResizeWidget(panel->split, w, h-BUTTON_SPACE_HEIGHT);
 
 	    WMMoveWidget(panel->setB, w-80, h-(BUTTON_SPACE_HEIGHT-5));
-	    WMMoveWidget(panel->previewB, w-160, h-(BUTTON_SPACE_HEIGHT-5));
+
 	    WMMoveWidget(panel->revertB, w-240, h-(BUTTON_SPACE_HEIGHT-5));
 
 	} else if (object == WMWidgetView(panel->upperF)) {
@@ -156,7 +153,7 @@ WMGetFontPanel(WMScreen *scr)
     memset(panel, 0, sizeof(FontPanel));
     
     panel->win = WMCreateWindow(scr, "fontPanel");
-//    WMSetWidgetBackgroundColor(panel->win, WMWhiteColor(scr));
+/*    WMSetWidgetBackgroundColor(panel->win, WMWhiteColor(scr));*/
     WMResizeWidget(panel->win, DEF_WIDTH, DEF_HEIGHT);
     WMSetWindowMinSize(panel->win, MIN_WIDTH, MIN_HEIGHT);
     WMSetViewNotifySizeChanges(WMWidgetView(panel->win), True);
@@ -171,7 +168,7 @@ WMGetFontPanel(WMScreen *scr)
     WMSetFrameRelief(panel->upperF, WRFlat);
     WMSetViewNotifySizeChanges(WMWidgetView(panel->upperF), True);
     panel->lowerF = WMCreateFrame(panel->win);
-//    WMSetWidgetBackgroundColor(panel->lowerF, WMBlackColor(scr));
+/*    WMSetWidgetBackgroundColor(panel->lowerF, WMBlackColor(scr));*/
     WMSetFrameRelief(panel->lowerF, WRFlat);
     WMSetViewNotifySizeChanges(WMWidgetView(panel->lowerF), True);
 
@@ -238,12 +235,6 @@ WMGetFontPanel(WMScreen *scr)
     WMResizeWidget(panel->setB, 70, 24);
     WMMoveWidget(panel->setB, 240, DEF_HEIGHT - (BUTTON_SPACE_HEIGHT-5));
     WMSetButtonText(panel->setB, "Set");
-
-    panel->previewB = WMCreateCommandButton(panel->win);
-    WMResizeWidget(panel->previewB, 70, 24);
-    WMMoveWidget(panel->previewB, 160, DEF_HEIGHT - (BUTTON_SPACE_HEIGHT-5));
-    WMSetButtonText(panel->previewB, "Preview");
-    WMSetButtonAction(panel->previewB, previewClick, panel);
 
     panel->revertB = WMCreateCommandButton(panel->win);
     WMResizeWidget(panel->revertB, 70, 24);
@@ -313,22 +304,34 @@ WMHideFontPanel(WMFontPanel *panel)
 void
 WMSetFontPanelFont(WMFontPanel *panel, WMFont *font)
 {
+    
+}
+
+
+Bool
+WMSetFontPanelFontName(WMFontPanel *panel, char *fontName)
+{
+ 
+    return True;
 }
 
 
 WMFont*
 WMGetFontPanelFont(WMFontPanel *panel)
 {
-    return NULL;
+    return WMGetTextFieldFont(panel->sampleT);
 }
 
 
 char*
 WMGetFontPanelFontName(WMFontPanel *panel)
 {
-    return NULL;
-}
+    char name[256];
 
+    getSelectedFont(panel, name);
+
+    return wstrdup(name);
+}
 
 
 
@@ -571,6 +574,7 @@ addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
     Family *fam;
     WMBag *family;
 
+
     family = WMHashGet(families, fontFields[FAMILY]);
     
     if (family) {
@@ -583,7 +587,7 @@ addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
 	    enc = (strcmp(fam->encoding, fontFields[ENCODING]) == 0);
 	    reg = (strcmp(fam->registry, fontFields[REGISTRY]) == 0);
 	    found = (strcmp(fam->foundry, fontFields[FOUNDRY]) == 0);
-	    
+
 	    if (enc && reg && found) {
 		addTypefaceToFamily(fam, fontFields);
 		return;
@@ -600,7 +604,7 @@ addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
 
 	    if (enc && reg) {
 		/* has the same encoding, but the foundry is different */
-		fam->showRegistry = 1;
+		fam->showFoundry = 1;
 
 		fam = wmalloc(sizeof(Family));
 		memset(fam, 0, sizeof(Family));
@@ -609,12 +613,11 @@ addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
 		fam->foundry = wstrdup(fontFields[FOUNDRY]);
 		fam->registry = wstrdup(fontFields[REGISTRY]);
 		fam->encoding = wstrdup(fontFields[ENCODING]);
-		fam->showRegistry = 1;
+		fam->showFoundry = 1;
 
 		addTypefaceToFamily(fam, fontFields);
 
 		WMPutInBag(family, fam);
-
 		return;
 	    }
 	}
@@ -628,7 +631,7 @@ addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
 
 	    if (found) {
 		/* has the same foundry, but encoding is different */
-		fam->showFoundry = 1;
+		fam->showRegistry = 1;
 
 		fam = wmalloc(sizeof(Family));
 		memset(fam, 0, sizeof(Family));
@@ -637,12 +640,11 @@ addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
 		fam->foundry = wstrdup(fontFields[FOUNDRY]);
 		fam->registry = wstrdup(fontFields[REGISTRY]);
 		fam->encoding = wstrdup(fontFields[ENCODING]);
-		fam->showFoundry = 1;
+		fam->showRegistry = 1;
 
 		addTypefaceToFamily(fam, fontFields);
 
 		WMPutInBag(family, fam);
-
 		return;
 	    }
 	}
@@ -660,7 +662,6 @@ addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
 	addTypefaceToFamily(fam, fontFields);
 
 	WMPutInBag(family, fam);
-	
 	return;
     }
 
@@ -758,6 +759,56 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
 }
 
 
+static void
+getSelectedFont(FontPanel *panel, char buffer[])
+{
+    WMListItem *item;
+    Family *family;
+    Typeface *face;
+    char *size;
+
+    
+    item = WMGetListSelectedItem(panel->famLs);
+    if (!item)
+	return;
+    family = (Family*)item->clientData;
+
+    item = WMGetListSelectedItem(panel->typLs);
+    if (!item)
+	return;
+    face = (Typeface*)item->clientData;
+
+    size = WMGetTextFieldText(panel->sizT);
+
+    sprintf(buffer, "-%s-%s-%s-%s-%s-%s-%s-*-*-*-*-*-%s-%s",
+	    family->foundry,
+	    family->name,
+	    face->weight,
+	    face->slant,
+	    face->setWidth,
+	    face->addStyle,
+	    size,
+	    family->registry,
+	    family->encoding);
+}
+
+
+
+static void
+preview(FontPanel *panel)
+{
+    char buffer[256];
+    WMFont *font;
+    
+    getSelectedFont(panel, buffer);
+    
+    font = WMCreateFont(WMWidgetScreen(panel->win), buffer);
+    if (font) {
+	WMSetTextFieldFont(panel->sampleT, font);
+	WMReleaseFont(font);
+    }
+}
+
 
 
 static void 
@@ -775,7 +826,7 @@ familyClick(WMWidget *w, void *data)
     int facei = -1;
     int sizei = -1;
 
-    /* must try to keep the same type face and size for the new family */
+    /* must try to keep the same typeface and size for the new family */
     item = WMGetListSelectedItem(panel->typLs);
     if (item)
 	oface = wstrdup(item->text);
@@ -853,6 +904,9 @@ familyClick(WMWidget *w, void *data)
 
     if (osize)
 	free(osize);
+
+
+    preview(panel);
 }
 
 
@@ -903,6 +957,8 @@ typefaceClick(WMWidget *w, void *data)
 
     if (osize)
 	free(osize);
+
+    preview(panel);
 }
 
 
@@ -915,49 +971,9 @@ sizeClick(WMWidget *w, void *data)
     item = WMGetListSelectedItem(panel->sizLs);
 
     WMSetTextFieldText(panel->sizT, item->text);
+    
+    WMSelectTextFieldRange(panel->sizT, wmkrange(0, strlen(item->text));
+
+    preview(panel);
 }
 
-
-static void
-previewClick(WMWidget *w, void *data)
-{
-    FontPanel *panel = (FontPanel*)data;
-    char buffer[256];
-    WMListItem *item;
-    Family *family;
-    Typeface *face;
-    char *size;
-    WMFont *font;
-
-    
-    item = WMGetListSelectedItem(panel->famLs);
-    if (!item)
-	return;
-    family = (Family*)item->clientData;
-
-    item = WMGetListSelectedItem(panel->typLs);
-    if (!item)
-	return;
-    face = (Typeface*)item->clientData;
-
-    size = WMGetTextFieldText(panel->sizT);
-
-    sprintf(buffer, "-%s-%s-%s-%s-%s-%s-%s-*-*-*-*-*-%s-%s",
-	    family->foundry,
-	    family->name,
-	    face->weight,
-	    face->slant,
-	    face->setWidth,
-	    face->addStyle,
-	    size,
-	    family->registry,
-	    family->encoding);
-
-    font = WMCreateFont(WMWidgetScreen(w), buffer);
-    if (font) {
-	WMSetTextFieldFont(panel->sampleT, font);
-	WMReleaseFont(font);
-    }
-}
-
-    

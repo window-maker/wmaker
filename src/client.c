@@ -585,7 +585,7 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 
 	    if (wwin->frame)
 		wWindowUpdateButtonImages(wwin);
-	    
+
 	} else if (event->atom==_XA_WM_COLORMAP_WINDOWS) {
 	    
 	    GetColormapWindows(wwin);

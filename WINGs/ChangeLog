@@ -1,3 +1,9 @@
+changes since wmaker 0.61.0:
+............................
+
+- added WMGetTextFieldFont()
+
+
 changes since wmaker 0.60.0:
 ............................
 

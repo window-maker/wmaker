@@ -2010,6 +2010,7 @@ int req_x, req_y;		       /* new position of the frame */
 #endif
 }
 
+
 void
 wWindowUpdateButtonImages(WWindow *wwin)
 {

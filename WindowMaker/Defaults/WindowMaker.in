@@ -1,6 +1,6 @@
 {
   MultiByteText = NO;
-  SmoothWorkspaceBack = YES;
+  SmoothWorkspaceBack = NO;
   WindozeCycling = NO;
   PopupSwitchMenu = NO;
   MenuStyle = normal;

@@ -64,6 +64,7 @@ Widgets provided by WINGs:
 - file panel
 - color panel
 - alert panel 
+- font panel
 
 Planned:
 --------
@@ -74,8 +75,6 @@ Planned:
 If you think you can code the following, please do. They are needed by
 WPrefs.app, but the number of other things I have to do is huge.
 
-- font panel (the UI part is done. Might require a rewrite of the font list
-  retrievel code. Might also require a WMFontManager)
 - input method support (XIM). I have no idea of how to code it. People who use
 different characters than ASCII will have trouble editing menus without it...
 

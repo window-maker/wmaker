@@ -153,11 +153,13 @@ MakeCPPArgs(char *path)
 
     /* put the dir where the menu is being read from to the
      * search path */
-    tmp = wstrdup(path);
-    buf = strrchr(tmp, '/');
-    if (buf) *buf = 0; /* trunc filename */
-    putdef(line, " -I", tmp);
-    free(tmp);
+    if (path) {
+	tmp = wstrdup(path);
+	buf = strrchr(tmp, '/');
+	if (buf) *buf = 0; /* trunc filename */
+	putdef(line, " -I", tmp);
+	free(tmp);
+    }
 
 
     /* this should be done just once, but it works this way */

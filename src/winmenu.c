@@ -215,6 +215,10 @@ makeShortcutCommand(WMenu *menu, WMenuEntry *entry)
 
 	    WMPutInBag(scr->shortcutWindows[index], tmp);
         }
+    } else {
+	scr->shortcutWindows[index] = WMCreateBag(4);
+
+	WMPutInBag(scr->shortcutWindows[index], wwin);
     }
 
     wSelectWindow(wwin, !wwin->flags.selected);

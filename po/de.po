@@ -958,7 +958,7 @@ msgstr "Signal %i (%s) erhalten - breche ab...\n"
 
 #: ../src/startup.c:277
 msgid "got signal %i - exiting...\n"
-msgstr "Signal %i erhalten - breche ab"
+msgstr "Signal %i erhalten - breche ab\n"
 
 #: ../src/startup.c:290
 msgid "got signal %i (%s)\n"
@@ -1180,7 +1180,7 @@ msgid ""
 "To access the window commands menu of a window\n"
 "without it's titlebar, press Control+Esc (or the\n"
 "equivalent shortcut, if you changed the default\n"
-"settings)."
+"settings).\n"
 msgstr ""
 "Die Titelzeile dieses Fensters entfernen.\n"
 "Drücken Sie Strg+Esc (oder das entsprechende\n"
@@ -1218,7 +1218,7 @@ msgstr "Immer Oben"
 #: ../src/winspector.c:1188
 msgid ""
 "Keep the window over other windows, not allowing\n"
-"them to covert it."
+"them to covert it.\n"
 msgstr ""
 "Halte dieses Fenster über allen anderen. Erlaube keinem\n"
 "anderen Fenster, dieses zu überdecken.\n"

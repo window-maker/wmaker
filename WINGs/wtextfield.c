@@ -604,6 +604,13 @@ WMSetTextFieldFont(WMTextField *tPtr, WMFont *font)
 }
 
 
+WMFont*
+WMGetTextFieldFont(WMTextField *tPtr)
+{
+    return tPtr->font;
+}
+
+
 
 static void 
 didResizeTextField(W_ViewDelegate *self, WMView *view)
