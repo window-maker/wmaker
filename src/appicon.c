@@ -317,6 +317,34 @@ drawCorner(WIcon *icon, WWindow *wwin, int active)
 #endif /* NEWAPPICON */
 
 
+static void
+drawCorner(WIcon *icon)
+{
+    WScreen *scr = icon->core->screen_ptr;
+    XPoint points[3];
+
+    points[0].x = 1;
+    points[0].y = 1;
+    points[1].x = 12;
+    points[1].y = 1;
+    points[2].x = 1;
+    points[2].y = 12;
+    XFillPolygon(dpy, icon->core->window, scr->icon_title_texture->normal_gc,
+                 points, 3, Convex, CoordModeOrigin);
+    XDrawLine(dpy, icon->core->window, scr->icon_title_texture->light_gc,
+              0, 0, 0, 12);
+    XDrawLine(dpy, icon->core->window, scr->icon_title_texture->light_gc,
+              0, 0, 12, 0);
+    /* drawing the second line gives a weird concave look. -Dan */
+#if 0
+    XDrawLine(dpy, icon->core->window, scr->icon_title_texture->light_gc,
+              1, 1, 1, 11);
+    XDrawLine(dpy, icon->core->window, scr->icon_title_texture->light_gc,
+              1, 1, 11, 1);
+#endif
+}
+
+
 void
 wAppIconMove(WAppIcon *aicon, int x, int y)
 {
@@ -422,6 +450,9 @@ wAppIconPaint(WAppIcon *aicon)
 	  drawCorner(aicon->icon, aicon->icon->owner, active);
     }
 #endif /* NEWAPPICON */
+
+    if (aicon->omnipresent)
+        drawCorner(aicon->icon);
 
     XSetClipMask(dpy, scr->copy_gc, None);
     if (aicon->launching) {

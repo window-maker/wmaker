@@ -4042,11 +4042,9 @@ iconMouseDown(WObjDescriptor *desc, XEvent *event)
             event->xany.send_event = True;
             (*desc->handle_mousedown)(desc, event);
         }
-#if 1
     } else if (event->xbutton.button==Button2 && dock->type==WM_CLIP &&
                (event->xbutton.state & ShiftMask) && aicon!=scr->clip_icon) {
         wClipMakeIconOmnipresent(aicon, !aicon->omnipresent);
-#endif
     } else if (event->xbutton.button == Button3) {
 	openDockMenu(dock, aicon, event);
     }
@@ -4360,6 +4358,8 @@ wClipMakeIconOmnipresent(WAppIcon *aicon, int omnipresent)
             }
         }
     }
+
+    wAppIconPaint(aicon);
 
     return status;
 }
