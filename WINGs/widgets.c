@@ -1070,7 +1070,6 @@ WMSetWidgetBackgroundColor(WMWidget *w, WMColor *color)
 WMColor*
 WMGetWidgetBackgroundColor(WMWidget *w)
 {
-    // should retain?
     return W_VIEW(w)->backColor;
 }
 

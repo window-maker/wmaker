@@ -1401,7 +1401,7 @@ WMGetColorPanelColor(WMColorPanel *panel)
     return WMGetColorWellColor(panel->colorWell);
 }
 
-	
+
 void
 WMSetColorPanelColor(WMColorPanel *panel, WMColor *color)
 {

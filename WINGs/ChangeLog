@@ -47,6 +47,8 @@ Changes since wmaker 0.80.1:
 - Fixed a memory leak in wfontpanel.c
 - Added a check that only %d is used in a font specification in WMGLOBAL and at
   most once for each font in a fontset (eliminates a possible security exploit)
+- Fixed WMGetTextDefaultColor() not to retain the returned color. It returns
+  only a reference to the internal color, which you shouldn't release
 
 
 Changes since wmaker 0.80.0:

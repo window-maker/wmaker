@@ -3948,7 +3948,7 @@ WMSetTextDefaultColor(WMText *tPtr, WMColor *color)
 WMColor*
 WMGetTextDefaultColor(WMText *tPtr)
 {
-    return WMRetainColor(tPtr->dColor);
+    return tPtr->dColor;
 }
 
 
