@@ -14,6 +14,7 @@ prefsdata_DATA =\
 	Copper.style\
 	DarkBlue.style\
 	DarkRed.style\
+	Emerald.style\
 	Fire.style\
 	Food.style\
 	Golden.style\

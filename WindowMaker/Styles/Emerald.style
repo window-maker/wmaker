@@ -1,0 +1,27 @@
+{
+  ClipTitleFont = "-b&h-lucida-medium-r-normal-*-10-*-*-*-p-*-iso8859-1";
+  WindowTitleFont = "-b&h-lucida-medium-r-normal-*-12-*-*-*-p-*-iso8859-1";
+  MenuTitleFont = "-b&h-lucida-bold-r-normal-*-12-*-*-*-p-*-iso8859-1";
+  MenuTextFont = "-b&h-lucida-medium-r-normal-*-12-*-*-*-p-*-iso8859-1";
+  IconTitleFont = "-b&h-lucida-medium-r-normal-*-10-*-*-*-p-*-iso8859-1";
+  DisplayFont = "-b&h-lucida-medium-r-normal-*-12-*-*-*-p-*-iso8859-1";
+  HighlightColor = "#595d8e";
+  HighlightTextColor = "#71b6d7";
+  ClipTitleColor = white;
+  CClipTitleColor = gray60;
+  FTitleColor = "#ffffff";
+  PTitleColor = "#ffffff";
+  UTitleColor = "#d7d7d7";
+  FTitleBack = (mdgradient, "#9e9aa6", "#051626", "#7391bb");
+  PTitleBack = (mdgradient, "#9e9aa6", "#212526", "#474a70");
+  UTitleBack = (mdgradient, "#9e9aa6", "#051c26", "#59999f");
+  ResizebarBack = (mdgradient, "#9e9aa6", "#051c26", "#59999f");
+  MenuTitleColor = "#ffffff";
+  MenuTextColor = "#ffffff";
+  MenuDisabledColor = "#aeaeae";
+  MenuTitleBack = (mdgradient, "#9e9aa6", "#051626", "#7391bb");
+  MenuTextBack = (mdgradient, "#9e9aa6", "#051c26", "#59999f");
+  IconBack = (mdgradient, "#9e9aa6", "#051626", "#496c83");
+  IconTitleColor = white;
+  IconTitleBack = "#18191f";
+}
