@@ -8,7 +8,6 @@
 
 
 
-
 static void cellPainter(WMTableColumnDelegate *self, WMTableColumn *column,
 			int row)
 {
@@ -23,13 +22,19 @@ static void cellPainter(WMTableColumnDelegate *self, WMTableColumn *column,
 
 
 
-WMTableColumnDelegate *WTCreateStringDelegate(WMScreen *scr)
+WMTableColumnDelegate *WTCreateStringDelegate(WMTableView *parent)
 {
     WMTableColumnDelegate *delegate = wmalloc(sizeof(WMTableColumnDelegate)); 
     
-    delegate->data = WFCreateStringEditor(scr);
+    delegate->data = wmalloc(sizeof(StringEditorData));
+    delegate->data->widget = WFCreateStringEditor(WMWidgetScreen(parent));
+    delegate->data->table = parent;
     delegate->drawCell = cellPainter;
-    delegate->editCell = NULL;
+    delegate->beginCellEdit = NULL;
+    delegate->endCellEdit = NULL;
     
     return delegate;
 }
+
+
+
