@@ -1,7 +1,7 @@
 {
   MultiByteText = NO;
   SmoothWorkspaceBack = NO;
-  WindozeCycling = NO;
+  WindozeCycling = YES;
   PopupSwitchMenu = NO;
   MenuStyle = normal;
   DisableMiniwindows = NO;
@@ -39,7 +39,7 @@
   NewStyle = YES;
   DisableDock = NO;
   DisableClip = NO;
-  Superfluous = NO;
+  Superfluous = YES;
   StickyIcons = NO;
   SaveSessionOnExit = NO;
   ColormapMode = auto;

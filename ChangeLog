@@ -1,3 +1,8 @@
+Changes since version 0.62.1:
+.............................
+- added blackbox style igradient (interwoven)
+- added wmagnify utility
+
 Changes since version 0.62.0:
 .............................
 - made shortcuts available during alt+tab
@@ -17,6 +22,8 @@ Changes since version 0.62.0:
   if GNOME hints dont exist
 - updated kwm hint support (maximize hint)
 - added memory usage in info panel
+- fixed sticky hint handling in GNOME
+- fixed saving of maximized state for restart
 
 Changes since version 0.61.1:
 .............................

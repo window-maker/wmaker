@@ -82,6 +82,14 @@ typedef struct _Panel {
     WMFrame *taliF;
     WMButton *taliB[3];
 
+    /* root bg */
+    WMFrame *bgF;
+    
+    WMLabel *bgprevL;
+    WMButton *selbgB;
+
+    WMPopUpButton *modeB[3];
+    
     /* */
 
     int textureIndex[8];
@@ -531,6 +539,25 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 
 	image = RCreateImage(width, height, False);
 	RClearImage(image, &rcolor);
+    } else if (strcasecmp(type, "igradient")==0) {
+	int t1, t2;
+	RColor c1[2], c2[2];
+
+	str = PLGetString(PLGetArrayElement(texture, 1));
+	str2rcolor(rc, str, &c1[0]);
+	str = PLGetString(PLGetArrayElement(texture, 2));
+	str2rcolor(rc, str, &c1[1]);
+	str = PLGetString(PLGetArrayElement(texture, 3));
+	t1 = atoi(str);
+
+	str = PLGetString(PLGetArrayElement(texture, 4));
+	str2rcolor(rc, str, &c2[0]);
+	str = PLGetString(PLGetArrayElement(texture, 5));
+	str2rcolor(rc, str, &c2[1]);
+	str = PLGetString(PLGetArrayElement(texture, 6));
+	t2 = atoi(str);
+
+	image = RRenderInterwovenGradient(width, height, c1, t1, c2, t2);
     } else if (strcasecmp(&type[1], "gradient")==0) {
 	int style;
 	RColor rcolor2;
@@ -1599,7 +1626,7 @@ changedTabItem(struct WMTabViewDelegate *self, WMTabView *tabView,
 	}
 	changeColorPage(panel->colP, panel);
 	break;
-     case 2:
+     case 3:
 	switch (panel->oldTabItem) {
 	 case 0:
 	    changePage(NULL, panel);
@@ -1867,12 +1894,38 @@ createPanel(Panel *p)
     }
 
     WMMapSubwidgets(panel->colF);
+    
+    /*** root bg ***/
+    
+    panel->bgF = WMCreateFrame(panel->frame);
+    WMSetFrameRelief(panel->bgF, WRFlat);
+    
+    item = WMCreateTabViewItemWithIdentifier(2);
+    WMSetTabViewItemView(item, WMWidgetView(panel->bgF));
+    WMSetTabViewItemLabel(item, _("Background"));
+
+    WMAddItemInTabView(panel->tabv, item);
+
+    panel->bgprevL = WMCreateLabel(panel->bgF);
+    WMResizeWidget(panel->bgprevL, 230, 155);
+    WMMoveWidget(panel->bgprevL, 5, 5);
+    WMSetLabelRelief(panel->bgprevL, WRSunken);
+
+    panel->selbgB = WMCreateCommandButton(panel->bgF);
+    WMMoveWidget(panel->selbgB, 5, 165);
+    WMResizeWidget(panel->selbgB, 100, 24);
+    WMSetButtonText(panel->selbgB, _("Browse..."));
+    
+    
+    
+    
+    WMMapSubwidgets(panel->bgF);
 
     /*** options ***/
     panel->optF = WMCreateFrame(panel->frame);
     WMSetFrameRelief(panel->optF, WRFlat);
 
-    item = WMCreateTabViewItemWithIdentifier(2);
+    item = WMCreateTabViewItemWithIdentifier(3);
     WMSetTabViewItemView(item, WMWidgetView(panel->optF));
     WMSetTabViewItemLabel(item, _("Options"));
 

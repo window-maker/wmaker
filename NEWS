@@ -2,6 +2,29 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+--- 0.62.1
+
+
+Interwoven Gradient
+-------------------
+
+interwoven gradients rip^Winspired on blackbox. Will render a texture that
+interweaves 2 different ones.
+
+(igradient, from1, to1, thickness1, from2, to2, thickness2)
+
+Will render a interwoven texture with the 2 specified gradients,
+with each section having the specified thickness.
+
+wmagnify
+--------
+
+The wmagnify utility will magnify the area on teh screen where
+your mouse pointer is located, updating it in real-time.
+
+tip: maximize it horizontally, make it Omnipresent and Always at Bottom.
+Then leave it in the bottom of the screen.
+
 --- 0.62.0
 
 

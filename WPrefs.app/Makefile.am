@@ -39,6 +39,7 @@ WPrefs_SOURCES = \
 	double.h \
 	editmenu.c \
 	editmenu.h \
+	imagebrowser.c \
 	MenuGuru.c \
 	xmodifier.c
 
