@@ -79,6 +79,24 @@ recreated if missing, but this time it will be saved with the new XPM save
 code which produces good XPM images.
 All the rest of the process is transparent to the user.
 
+Hermes library support
+----------------------
+
+If configure finds hermes library (an optimized pixel format conversion
+library) installed it will use it to do the pixel format conversion in
+the wraster library for some cases (TrueColor visuals without dithering).
+Currently the hermes routines cannot convert to an indexed destination,
+so we can't use hermes for PseudoColor, GrayScale and StaticGray visuals.
+Also hermes only does dithering for just 2 combinations of source/destination
+bits/masks none of them useful to out needs so for dithering we still
+use out routines.
+
+The Hermes library is completely optional, you can build Window Maker
+without having it, it just speeds up the things a little for some
+situations.
+
+hermes library is available here: http://www.clanlib.org/hermes/
+
 
 --- 0.64.0
 

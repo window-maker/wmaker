@@ -120,6 +120,11 @@ might work too.
 	For GIF image support
 	ftp://prtr-13.ucsc.edu/pub/libungif/
 
+- libHermes 1.3.2 or newer
+	For faster pixel conversion in the wraster library
+        (its used only in some conversions - for TrueColor visuals)
+	http://www.clanlib.org/hermes/
+
 - GNU xgettext
 	If you want to use translated messages, you will need GNU gettext.
 	Other versions of gettext are not compatible and will not work.
