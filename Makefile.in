@@ -109,9 +109,9 @@ GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -278,11 +278,6 @@ distdir: $(DISTFILES)
 	-rm -rf $(distdir)
 	mkdir $(distdir)
 	-chmod 777 $(distdir)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
@@ -303,7 +298,6 @@ distdir: $(DISTFILES)
 	      || exit 1; \
 	  fi; \
 	done
-	$(MAKE) $(AM_MAKEFLAGS) top_distdir="$(top_distdir)" distdir="$(distdir)" dist-hook
 info-am:
 info: info-recursive
 dvi-am:
@@ -384,12 +378,12 @@ WindowMaker.lsm: WindowMaker.lsm.in
 		-e "s/SIZE/$$size M/"\
 		WindowMaker.lsm.in > WindowMaker-$(VERSION).lsm
 
-dist-hook:
-	touch `find -name configure.in -print`
-	touch `find -name aclocal.m4 -print`
-	touch `find -name Makefile.am -print`
-	touch `find -name Makefile.in -print`
-	touch `find -name configure -print`
+#dist-hook:
+#	touch `find -name configure.in -print`
+#	touch `find -name aclocal.m4 -print`
+#	touch `find -name Makefile.am -print`
+#	touch `find -name Makefile.in -print`
+#	touch `find -name configure -print`
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
