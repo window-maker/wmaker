@@ -22,8 +22,12 @@ Changes since version 0.51.2:
 - remember window shortcuts after restart
 - change edge resistance to account for panels and stuffs
 - narrower menus
-- fixed auto raise/lower behaviour of clip for docked icons that have their
-  own window
+- fixed auto raise/lower behaviour of clip for docked applications that have
+  their own window (applets).
+- cleaned up Clip's autocollapsing code, and made it to be similar to the
+  auto raise/lower code (much cleaner).
+- fixed a race condition in Clip behavior when changing workspaces, if set to
+  autocollapsing.
 
 
 Changes since version 0.51.1:

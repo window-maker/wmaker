@@ -43,6 +43,7 @@ typedef struct WDock {
 #define EXTENDED_DOCK  WM_CLIP
     int type;
 
+    WMagicNumber auto_expand_magic;
     WMagicNumber auto_collapse_magic;
     WMagicNumber auto_raise_magic;
     WMagicNumber auto_lower_magic;

@@ -1652,7 +1652,7 @@ wWindowConstrainSize(WWindow *wwin, int *nwidth, int *nheight)
 		}
 	    } else {
 		width = (height * sizeh->min_aspect.x) / sizeh->min_aspect.y;
-		if (width > sizeh->min_width) {
+		if (width < sizeh->min_width) {
 		    width = sizeh->min_width;
 		    height = (width*sizeh->min_aspect.y) / sizeh->min_aspect.x;
 		}

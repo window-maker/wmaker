@@ -635,9 +635,9 @@ bevelImage(RImage *image, int relief)
      case WREL_MENUENTRY:
 	color.red = color.green = color.blue = 80;
 	color.alpha = 0;
-	/*
+	/**/
 	ROperateLine(image, RAddOperation, 1, 0, width-2, 0, &color);
-	 */
+	/**/
 
 	ROperateLine(image, RAddOperation, 0, 0, 0, height-1, &color);
 
@@ -646,14 +646,14 @@ bevelImage(RImage *image, int relief)
 	ROperateLine(image, RSubtractOperation, width-1, 0, width-1, 
 		     height-1, &color);
 
-	/*
+	/**/
 	ROperateLine(image, RSubtractOperation, 1, height-2, width-2,
 		     height-2, &color);
 
 	color.red = color.green = color.blue = 0;
 	color.alpha = 255;
 	RDrawLine(image, 0, height-1, width-1, height-1, &color);
-	 */
+	/**/
 	break;
 
     }

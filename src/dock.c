@@ -139,6 +139,7 @@ Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y)
 static void clipEnterNotify(WObjDescriptor *desc, XEvent *event);
 static void clipLeaveNotify(WObjDescriptor *desc, XEvent *event);
 static void clipAutoCollapse(void *cdata);
+static void clipAutoExpand(void *cdata);
 static void launchDockedApplication(WAppIcon *btn);
 
 static void clipAutoLower(void *cdata);
@@ -682,10 +683,10 @@ toggleAutoCollapseCallback(WMenu *menu, WMenuEntry *entry)
     dock = (WDock*) entry->clientdata;
 
     dock->auto_collapse = !dock->auto_collapse;
-    if (dock->auto_collapse_magic) {
-        WMDeleteTimerHandler(dock->auto_collapse_magic);
-        dock->auto_collapse_magic = NULL;
-    }
+    //if (dock->auto_collapse_magic) {
+    //    WMDeleteTimerHandler(dock->auto_collapse_magic);
+    //    dock->auto_collapse_magic = NULL;
+    //}
 
     entry->flags.indicator_on = ((WDock*)entry->clientdata)->auto_collapse;
 
@@ -3028,10 +3029,20 @@ wClipUpdateForWorkspaceChange(WScreen *scr, int workspace)
             WDock *old_clip = scr->workspaces[scr->current_workspace]->clip;
 
             wDockHideIcons(old_clip);
-            if (old_clip->auto_raise_lower)
+            if (old_clip->auto_raise_lower) {
+                if (old_clip->auto_raise_magic) {
+                    WMDeleteTimerHandler(old_clip->auto_raise_magic);
+                    old_clip->auto_raise_magic = NULL;
+                }
                 wDockLower(old_clip);
-            if (old_clip->auto_collapse && !old_clip->collapsed)
+            }
+            if (old_clip->auto_collapse) {
+                if (old_clip->auto_expand_magic) {
+                    WMDeleteTimerHandler(old_clip->auto_expand_magic);
+                    old_clip->auto_expand_magic = NULL;
+                }
                 old_clip->collapsed = 1;
+            }
             wDockShowIcons(scr->workspaces[workspace]->clip);
         }
 	if (scr->flags.clip_balloon_mapped)
@@ -3901,14 +3912,26 @@ clipEnterNotify(WObjDescriptor *desc, XEvent *event)
     if (!dock || dock->type!=WM_CLIP)
         return;
 
+    /* The auto raise/lower code */
     if (dock->auto_lower_magic) {
         WMDeleteTimerHandler(dock->auto_lower_magic);
         dock->auto_lower_magic = NULL;
     }
-    if (dock->auto_raise_lower) {
+    if (dock->auto_raise_lower && !dock->auto_raise_magic) {
         dock->auto_raise_magic = WMAddTimerHandler(AUTO_RAISE_DELAY,
                                                    clipAutoRaise,
                                                    (void *)dock);
+    }
+
+    /* The auto expand/collapse code */
+    if (dock->auto_collapse_magic) {
+        WMDeleteTimerHandler(dock->auto_collapse_magic);
+        dock->auto_collapse_magic = NULL;
+    }
+    if (dock->auto_collapse && !dock->auto_expand_magic) {
+        dock->auto_expand_magic = WMAddTimerHandler(AUTO_EXPAND_DELAY,
+                                                    clipAutoExpand,
+                                                    (void *)dock);
     }
 
     if (btn->xindex == 0 && btn->yindex == 0)
@@ -3918,15 +3941,6 @@ clipEnterNotify(WObjDescriptor *desc, XEvent *event)
 	    XUnmapWindow(dpy, dock->screen_ptr->clip_balloon);
 	    dock->screen_ptr->flags.clip_balloon_mapped = 0;
 	}
-    }
-    if (dock->auto_collapse) {
-        if (dock->auto_collapse_magic) {
-            WMDeleteTimerHandler(dock->auto_collapse_magic);
-            dock->auto_collapse_magic = NULL;
-        }
-
-        if (dock->collapsed)
-            toggleCollapsed(dock);
     }
 }
 
@@ -3961,22 +3975,20 @@ clipLeave(WDock *dock)
         WMDeleteTimerHandler(dock->auto_raise_magic);
         dock->auto_raise_magic = NULL;
     }
-    if (dock->auto_raise_lower) {
+    if (dock->auto_raise_lower && !dock->auto_lower_magic) {
         dock->auto_lower_magic = WMAddTimerHandler(AUTO_LOWER_DELAY,
                                                    clipAutoLower,
                                                    (void *)dock);
     }
 
-    if (dock->auto_collapse) {
-        if (dock->auto_collapse_magic) {
-            WMDeleteTimerHandler(dock->auto_collapse_magic);
-            dock->auto_collapse_magic = NULL;
-        }
-        if (!dock->collapsed) {
-            dock->auto_collapse_magic = WMAddTimerHandler(AUTO_COLLAPSE_DELAY,
-                                                          clipAutoCollapse,
-                                                          (void *)dock);
-        }
+    if (dock->auto_expand_magic) {
+        WMDeleteTimerHandler(dock->auto_expand_magic);
+        dock->auto_expand_magic = NULL;
+    }
+    if (dock->auto_collapse && !dock->auto_collapse_magic) {
+        dock->auto_collapse_magic = WMAddTimerHandler(AUTO_COLLAPSE_DELAY,
+                                                      clipAutoCollapse,
+                                                      (void *)dock);
     }
 }
 
@@ -4003,10 +4015,27 @@ clipAutoCollapse(void *cdata)
     if (dock->type!=WM_CLIP || !dock->auto_collapse)
         return;
 
-    if (!dock->collapsed && dock->auto_collapse_magic!=NULL) {
-        toggleCollapsed(dock);
+    if (dock->auto_collapse_magic) {
+        dock->collapsed = 1;
+        wDockHideIcons(dock);
     }
     dock->auto_collapse_magic = NULL;
+}
+
+
+static void
+clipAutoExpand(void *cdata)
+{
+    WDock *dock = (WDock *)cdata;
+
+    if (dock->type!=WM_CLIP || !dock->auto_collapse)
+        return;
+
+    if (dock->auto_expand_magic) {
+        dock->collapsed = 0;
+        wDockShowIcons(dock);
+    }
+    dock->auto_expand_magic = NULL;
 }
 
 

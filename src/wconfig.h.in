@@ -426,12 +426,16 @@
 /* Delay (in ms) after which the clip will autocollapse when leaved */
 #define AUTO_COLLAPSE_DELAY     1000
 
+/* Delay (in ms) after which the clip will autoexpand when entered.
+ * Set this to zero if you want instant expanding. */
+#define AUTO_EXPAND_DELAY       600
+
 /* Delay (in ms) after which the clip will be lowered when leaved */
 #define AUTO_LOWER_DELAY        1000
 
 /* Delay (in ms) after which the clip will be raised when entered.
  * Set this to zero if you want instant raise. */
-#define AUTO_RAISE_DELAY        650
+#define AUTO_RAISE_DELAY        600
 
 
 /* Max. number of icons the clip can have */
