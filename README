@@ -51,6 +51,8 @@ Documentation
 in the directories.
 
 * INSTALL has installation instructions and some troubleshooting tips.
+You're meant to read it before installing. it was not written just to 
+fill up space in the package...
 
 * FAQ: Frequently Asked Questions. READ IT!!! FAQ.I18N is for
 internationalization related questions.
@@ -122,6 +124,9 @@ in the body of the message to wmaker-request@linuxcenter.com
 If you got a problem, ask there (after reading the docs, of course). The
 people there is more likely to be able to answer your questions than we are.
 For bug reports use the BUGFORM.
+
+If you have a problem with a precompiled version of Window Maker 
+(rpm, deb etc), first ask the person who made the package.
 
 IMPORTANT NOTE: when asking for help (in the mailing list or to the
 developerts, directly) *always* send information about the system you are
@@ -248,13 +253,16 @@ The file named typescript will contain the backtrace.
 
 
 
-Copyrights
-==========
+Copyrights & Disclaimers
+========================
 
 Window Maker is copyrighted by Alfredo K. Kojima and is licensed through the
 GNU General Public License. Read the COPYING file for the complete license.
 
 NeXT, OpenStep and NEXTSTEP are a trademarks of NeXT Computer, Inc.
+
+The authors reserve the right to make changes in the software without prior
+notice.
 
 
 Authors

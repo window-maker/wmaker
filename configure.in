@@ -288,6 +288,16 @@ fi
 
 AC_SUBST(XSHM)
 
+
+dnl R6 Style Session Management Support
+dnl ===================================
+
+#
+#
+#AC_DEFINE(R6SM)
+#AC_SUBST(XSMPLIBS)
+#
+
 dnl ==============================================
 dnl         Graphic Format Libraries
 dnl ==============================================
@@ -352,10 +362,9 @@ AC_CHECK_LIB(z, gzread, zlib=yes, zlib=no, $GFX_INC_PATH $GFXLFLAGS $XLFLAGS)
 dnl PNG Support
 dnl ===========
 png=yes
-# assume libz is present...
-#AC_ARG_ENABLE(png, 
-#[  --disable-png	  	  disable PNG support through libpng],
-#	png=$enableval, png=yes)
+AC_ARG_ENABLE(png, 
+[  --disable-png	  	  disable PNG support through libpng],
+	png=$enableval, png=yes)
 
 
 if test "$png" = yes -a "$zlib" = yes ; then
@@ -457,6 +466,7 @@ if test "$tif" = yes; then
 dnl
 dnl Retry with zlib
 dnl
+    unset ac_cv_lib_tiff_TIFFGetVersion
     if test "$my_libok" = no; then
     	if test "$zlib" = "yes"; then
     	    AC_CHECK_LIB(tiff, TIFFGetVersion,
@@ -493,75 +503,6 @@ dnl ==============================================
 dnl         End of Graphic Format Libraries
 dnl ==============================================
 
-dnl =====================================================
-dnl        Check for libPropList
-dnl Always use the included libPropList, even if it is 
-dnl already installed.
-dnl =====================================================
-
-
-#LIBPL_LIBS="-L${top_builddir}/libPropList -lPropList"
-#LIBPL_INC_PATH="-I${top_srcdir}/libPropList"
-#
-#
-#PLPATH=`pwd`/libPropList
-#
-#if test -f $PLPATH/libPropList.a; then
-#	echo "using bundled libPropList, already compiled."
-#	needtobuild=no
-#	LIBPL_LIBS="-L$PLPATH -lPropList"
-#	LIBPL_INC_PATH="-I$PLPATH"
-#else
-#	AC_CHECK_LIB(PropList, PLGetString,
-#		[LIBPL_LIBS=-lPropList LIBPL_INC_PATH="" needtobuild=no],
-#		[LIBPL_LIBS="-L$PLPATH -lPropList"
-#		 LIBPL_INC_PATH="-I$PLPATH"
-#		 needtobuild=yes])
-#fi
-#
-#
-#if test "$needtobuild" = yes; then
-#    if test -f libPropList/libPropList.a; then
-#	echo "using included libPropList"
-#    else
-#	echo "********** WARNING *************"
-#	echo "libPropList is not installed in your system."
-#	echo "You need to build it before building Window Maker (if you already"
-#	echo "did that, remove config.cache and rerun configure)."
-#	echo "Please read the INSTALL file for detailed instructions."
-#	echo "Press <Return> to continue configuring Window Maker or"
-#	echo "type b and <Return> to build it now."
-#	read foo
-#	if test "$foo" = b; then
-#	    echo
-#	    echo "Building libPropList..."
-#	    echo
-#	    if test ! -d libPropList; then
-#		gzip -d -c libPropList.tar.gz | tar xf -
-#	    fi
-#	    ok=no
-#	    if (cd libPropList; ./configure); then
-#		if (cd libPropList; make); then
-#		    ok=yes
-#		fi
-#	    fi
-#	    if test "$ok" = no; then
-#		echo "********** WARNING **********"
-#		echo "An error occurred while building libPropList"
-#		echo "Please build it manually."
-#		echo "Press <Return> to continue."
-#		read foo
-#	    fi
-#	    echo
-#	    echo "resuming Window Maker configuration..."
-#	    echo
-#	fi
-#   fi
-#fi
-#
-#AC_SUBST(LIBPL_LIBS)
-#AC_SUBST(LIBPL_INC_PATH)
-
 
 dnl Debugging setup
 dnl ===============
@@ -597,7 +538,7 @@ if test "${prefix}" = "NONE"; then
 	prefix="/usr/local"
 fi
 if test "${exec_prefix}" = "NONE"; then
-	exec_prefix="${prefix}"
+	exec_prefix='$(prefix)'
 fi
 
 dnl Support for PIXMAPDIR option
@@ -608,7 +549,7 @@ AC_ARG_WITH(pixmapdir,
 if test "x$with_pixmapdir" != "x"; then
 	pixmapdir=$with_pixmapdir
 else
-	pixmapdir="${datadir}/pixmaps"
+	pixmapdir='$(datadir)/pixmaps'
 fi
 
 AC_SUBST(pixmapdir)
@@ -620,13 +561,15 @@ dnl ==============================================
 appspath=""
 
 AC_ARG_WITH(appspath,
-[  --with-appspath=PATH    specify the path of the GNUstep applications directory])
+[  --with-appspath=PATH    specify the path of the GNUstep applications
+directory], appspath=$withval )
 
-if test "x$with_appspath" = "x"; then
+if test "x$appspath" = "x"; then
     gnustepdir='$(prefix)/GNUstep'
 
     if test "x$GNUSTEP_LOCAL_ROOT" != "x" ; then
-	gnustepdir=`echo "$GNUSTEP_LOCAL_ROOT" | sed -e "s%${prefix}%\${prefix}%"`
+	gnustepdir=`echo "$GNUSTEP_LOCAL_ROOT" | sed -e "s|^${prefix}|prefix|"`
+	gnustepdir=`echo $gnustepdir | sed -e 's|^prefix|${prefix}|'`
     fi
 
     with_appspath=$gnustepdir/Apps
@@ -667,19 +610,6 @@ AC_TYPE_SIZE_T
 AC_TYPE_PID_T
 AC_HEADER_TIME
 
-
-dnl Some decisions....
-dnl ==================
-if test "$GCC" = "yes"; then
-#	ceflagues=""
-#	for i in $CFLAGS; do
-#           if test "$i" != "-g" ; then
-#	        ceflagues="$ceflagues $i"
-#	    fi
-#	fi
-#	CFLAGS="$ceflagues -Wall -Wno-implicit-int -finline-functions"
-	CFLAGS="$CFLAGS -Wall -Wno-implicit-int -Wcast-align"
-fi
 
 
 dnl Shared Library Support (unfinished)
@@ -814,8 +744,8 @@ echo
 echo "Window Maker was configured as follows:"
 echo
 echo "Installation path prefix: $prefix"
-echo "Installation path prefix for binaries: $exec_prefix"
-echo "Installation path for WPrefs.app: $wprefsdir"
+echo "Installation path prefix for binaries: $exec_prefix" | sed -e 's|\$(prefix)|'"$prefix|"
+echo "Installation path for WPrefs.app: $wprefsdir" | sed -e 's|\$(prefix)|'"$prefix|"
 echo "Graphic format libraries: $supported_gfx"
 echo "Sound support: $sound"
 echo "Translated message files to install: $mof"

@@ -119,12 +119,6 @@
 		"Salva area di lavoro" EXEC SAVE_WORKSPACE
 	"Area di lavoro" END
 	
-#if (UID==0)	// root only stuff
-	"Sistema" MENU
-		// the RedHat control panel program
-		"Pannello di controllo RH"  EXEC control-panel
-	"Sistema" END
-#endif
 	"Uscire"	MENU
 		"Restart" RESTART
 		"Avviare AfterStep" RESTART afterstep

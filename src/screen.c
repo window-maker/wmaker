@@ -747,6 +747,11 @@ wScreenSaveState(WScreen *scr)
 	wwin = wwin->prev;
     }
 
+
+    if (wPreferences.flags.noupdates)
+	return;
+
+
     old_state = scr->session_state;
     scr->session_state = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
 
@@ -796,7 +801,9 @@ wScreenSaveState(WScreen *scr)
     path = PLMakeString(str);
     free(str);
     PLSetFilename(scr->session_state, path);
-    PLSave(scr->session_state, YES);
+    if (!PLSave(scr->session_state, YES)) {
+	wwarning(_("could not save session state in %s"), PLGetString(path));
+    }
     PLRelease(path);
     PLRelease(old_state);
 }

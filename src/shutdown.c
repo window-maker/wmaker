@@ -37,12 +37,13 @@
 
 extern Atom _XA_WM_DELETE_WINDOW;
 extern Time LastTimestamp;
+extern int wScreenCount;
 
 /*
  *----------------------------------------------------------------------
  * RestoreDesktop--
  * 	Puts the desktop in a usable state when exiting.
- * 
+ *
  * Side effects:
  * 	All frame windows are removed and windows are reparented
  * back to root. Windows that are outside the screen are 
@@ -54,6 +55,18 @@ void
 RestoreDesktop(WScreen *scr)
 {
     int i;
+
+    if (!scr) {
+	int j;
+	for (j=0; j<wScreenCount; j++) {
+	    WScreen *scr;
+	    scr = wScreenWithNumber(j);
+	    if (scr) {
+		RestoreDesktop(scr);
+	    }
+	}
+	return;
+    }
     
     XGrabServer(dpy);
     wDestroyInspectorPanels();
@@ -107,7 +120,19 @@ void
 WipeDesktop(WScreen *scr)
 {
     WWindow *wwin;
-    
+
+    if (!scr) {
+	int j;
+	for (j=0; j<wScreenCount; j++) {
+	    WScreen *scr;
+	    scr = wScreenWithNumber(j);
+	    if (scr) {
+		WipeDesktop(scr);
+	    }
+	}
+	return;
+    }
+
     wwin = scr->focused_window;
     while (wwin) {
 	if (wwin->protocols.DELETE_WINDOW)

@@ -46,6 +46,7 @@
 #include "keybind.h"
 #include "xmodifier.h"
 #include "defaults.h"
+#include "session.h"
 
 #include <proplist.h>
 
@@ -157,6 +158,16 @@ extern void EventLoop();
 extern void StartUp();
 
 
+void
+Exit(int status)
+{
+#ifdef R6SM
+    wSessionDisconnectManager();
+#endif
+    XCloseDisplay(dpy);
+
+    exit(status);
+}
 
 void
 Restart(char *manager)
@@ -174,7 +185,9 @@ Restart(char *manager)
 	    }
 	}
     }
-
+#ifdef R6SM
+    wSessionDisconnectManager();
+#endif
     XCloseDisplay(dpy);
     if (!prog)
       execvp(Arguments[0], Arguments);
@@ -254,6 +267,7 @@ print_help()
     */
     puts(_(" -visualid visualid	visual id of visual to use"));
     puts(_(" -display host:dpy	display to use"));
+    puts(_(" -static		do not update or save configurations"));
     puts(_(" -version		print version and exit"));
 }
 
@@ -276,7 +290,6 @@ check_defaults()
 }
 
 
-
 static void
 execInitScript()
 {
@@ -285,7 +298,7 @@ execInitScript()
     file = wfindfile(DEF_CONFIG_PATHS, DEF_INIT_SCRIPT);
     if (file) {
 	if (fork()==0) {
-	    close(ConnectionNumber(dpy));
+	    CloseDescriptors();
 
 	    execl("/bin/sh", "/bin/sh", "-c", file, NULL);
 	    wsyserror(_("%s:could not execute initialization script"), file);
@@ -304,7 +317,7 @@ ExecExitScript()
     file = wfindfile(DEF_CONFIG_PATHS, DEF_EXIT_SCRIPT);
     if (file) {
 	if (fork()==0) {
-	    close(ConnectionNumber(dpy));
+	    CloseDescriptors();
 
 	    execl("/bin/sh", "/bin/sh", "-c", file, NULL);
 	    wsyserror(_("%s:could not execute exit script"), file);
@@ -336,10 +349,7 @@ main(int argc, char **argv)
     else
       ProgName++;
 
-    
-    /* check existence of Defaults DB directory */
-    check_defaults();
-    
+
     restart = 0;
     
     memset(&wPreferences, 0, sizeof(WPreferences));
@@ -385,12 +395,29 @@ main(int argc, char **argv)
 		    wwarning(_("bad value for visualid: \"%s\""), argv[i]);
 		    exit(0);
 		}
+	    } else if (strcmp(argv[i], "-static")==0) {
+		wPreferences.flags.noupdates = 1;
+#ifdef R6SM
+	    } else if (strcmp(argv[i], "-clientid")==0
+		       || strcmp(argv[i], "-restore")==0) {
+		i++;
+		if (i>=argc) {
+		    wwarning(_("too few arguments for %s"), argv[i-1]);
+		    exit(0);
+		}
+#endif
 	    } else {
 		print_help();
 		exit(0);
 	    }
 	}
     }
+    
+    if (!wPreferences.flags.noupdates) {
+	/* check existence of Defaults DB directory */
+	check_defaults();
+    }
+
 #if 0
     tmp = getenv("LANG");
     if (tmp) {
@@ -429,16 +456,16 @@ main(int argc, char **argv)
  	wwarning(_("cannot set locale modifiers"));
     }
 #endif
-    
+
     if (Locale) {
 	char *ptr;
-	
+
 	Locale = wstrdup(Locale);
 	ptr = strchr(Locale, '.');
 	if (ptr)
 	    *ptr = 0;
     }
-    
+
 
     /* open display */
     dpy = XOpenDisplay(DisplayName);
@@ -472,6 +499,11 @@ main(int argc, char **argv)
 #ifdef SOUNDS
     wSoundInitialize();
 #endif
+
+#ifdef R6SM
+    wSessionConnectManager(argv, argc);
+#endif
+    
     StartUp(!multiHead);
 
     execInitScript();

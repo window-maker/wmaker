@@ -601,8 +601,8 @@ FlattenStringList(char **list, int count)
 	return NULL;
     }
 
-    strcpy(flat_string, list[0]);
-    for (i=1; i<count; i++) {
+    *flat_string = 0;
+    for (i=0; i<count; i++) {
 	if (list[i]!=NULL && list[i][0]!=0) {
             strcat(flat_string, " ");
             wspace = strpbrk(list[i], " \t");
@@ -613,7 +613,7 @@ FlattenStringList(char **list, int count)
                 strcat(flat_string, "\"");
 	}
     }
-    
+
     return flat_string;
 }
 
@@ -804,7 +804,7 @@ getuserinput(WScreen *scr, char *line, int *ptr)
     }
 
     ret = NULL;
-    if (wInputDialog(scr, tmp, _("Enter command arguments:"), &ret)!= WDB_OK)
+    if (!wInputDialog(scr, tmp, _("Enter command arguments:"), &ret))
 	return NULL;
     else
 	return ret;

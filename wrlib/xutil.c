@@ -89,6 +89,8 @@ RCreateXImage(RContext *context, int depth, unsigned width, unsigned height)
 #else /* XSHM */    
     if (!context->attribs->use_shared_memory) {
     retry_without_shm:
+
+	context->attribs->use_shared_memory = 0;
 	rximg->is_shared = 0;
 	rximg->image = XCreateImage(context->dpy, visual, depth,
 				    ZPixmap, 0, NULL, width, height, 8, 0);
@@ -115,7 +117,7 @@ RCreateXImage(RContext *context, int depth, unsigned width, unsigned height)
 
 	rximg->info.shmid = shmget(IPC_PRIVATE, 
 				   rximg->image->bytes_per_line*height,
-				   IPC_CREAT|0666);
+				   IPC_CREAT|0777);
 	if (rximg->info.shmid < 0) {
 	    context->attribs->use_shared_memory = 0;
 	    perror("wrlib:could not allocate shared memory segment");
@@ -150,7 +152,8 @@ RCreateXImage(RContext *context, int depth, unsigned width, unsigned height)
 		perror("wrlib:shmdt");
 	    if (shmctl(rximg->info.shmid, IPC_RMID, 0) < 0)
 		perror("wrlib:shmctl");
-	    printf("wrlib:error attaching shared memory segment to XImage\n");
+/*	    printf("wrlib:error attaching shared memory segment to XImage\n");
+ */
 	    goto retry_without_shm;
 	}
     }

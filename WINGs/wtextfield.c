@@ -839,7 +839,7 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 							 event->xbutton.x);
 	    paintTextField(tPtr);
 	}
-	if (event->xbutton.button == Button2) {
+	if (event->xbutton.button == Button2 && tPtr->flags.enabled) {
 	    char *text;
 	    
 	    text = W_GetTextSelection(tPtr->view->screen, XA_PRIMARY);

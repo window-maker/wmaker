@@ -65,6 +65,7 @@ extern Time LastTimestamp;
 
 extern WPreferences wPreferences;
 
+extern int wScreenCount;
 
 static WMenu *readMenuPipe(WScreen *scr, char **file_name);
 static WMenu *readMenuFile(WScreen *scr, char *file_name);
@@ -152,12 +153,18 @@ execCommand(WMenu *menu, WMenuEntry *entry)
 {
     char *cmdline;
     static char *shell = NULL;
-    
+
+    /*
+     * This have a problem: if the shell is tcsh (not sure about others)
+     * and ~/.tcshrc have /bin/stty erase ^H somewhere on it, the shell
+     * will block and the command will not be executed.
     if (!shell) {
 	shell = getenv("SHELL");
 	if (!shell)
 	    shell = "/bin/sh";
     }
+     */
+    shell = "/bin/sh";
 
     cmdline = ExpandOptions(menu->frame->screen_ptr, (char*)entry->clientdata);
 
@@ -175,14 +182,17 @@ execCommand(WMenu *menu, WMenuEntry *entry)
 	 * Ok. -Alfredo
          */
         if (fork()==0) {
+
 	    SetupEnvironment(menu->frame->screen_ptr);
-	    close(ConnectionNumber(dpy));
+
+	    CloseDescriptors();
+
 #ifdef HAVE_SETPGID
             setpgid(0, 0);
 #endif
             execl(shell, shell, "-c", cmdline, NULL);
 	    wsyserror("could not exec %s -c %s\n", shell, cmdline);
-            exit(-1);
+            Exit(-1);
         }
 	free(cmdline);
     }
@@ -205,16 +215,22 @@ exitCommand(WMenu *menu, WMenuEntry *entry)
 	|| wMessageDialog(menu->frame->screen_ptr, _("Exit"),
 			  _("Exit window manager?"), 
 			  _("Exit"), _("Cancel"), NULL)==WAPRDefault) {
+	int i;
 #ifdef DEBUG
 	printf("Exiting WindowMaker.\n");
 #endif
+	for (i=0; i<wScreenCount; i++) {
+	    WScreen *scr;
 
-	wScreenSaveState(menu->frame->screen_ptr);
-	
-	RestoreDesktop(menu->frame->screen_ptr);
+	    scr = wScreenWithNumber(i);
+	    if (scr)
+		wScreenSaveState(scr);
+	}
+
+	RestoreDesktop(NULL);
 	
 	ExecExitScript();
-	exit(0);
+	Exit(0);
     }
     inside = 0;
 }
@@ -224,25 +240,74 @@ static void
 shutdownCommand(WMenu *menu, WMenuEntry *entry)
 {
     static int inside = 0;
+    int result;
+    int i;
 
     /* prevent reentrant calls */
     if (inside)
 	return;
     inside = 1;
 
-    if ((int)entry->clientdata==M_QUICK
-	|| wMessageDialog(menu->frame->screen_ptr, _("Close X session"), 
-	  _("Close Window System session?\n(all applications will be closed)"),
-			  _("Exit"), _("Cancel"), NULL)==WAPRDefault) {
-/*	printf(_("Exiting...\n"));*/
-	
-	wScreenSaveState(menu->frame->screen_ptr);
+#define R_CANCEL 0
+#define R_CLOSE 1
+#define R_KILL 2
 
- 	WipeDesktop(menu->frame->screen_ptr);
-	
-	ExecExitScript();
-	exit(0);
+    
+    result = R_CANCEL;
+    if ((int)entry->clientdata==M_QUICK)
+	result = R_CLOSE;
+    else {
+#ifdef R6SM
+	if (wSessionIsManaged()) {
+	    int r;
+	    
+	    r = wMessageDialog(menu->frame->screen_ptr, 
+			       _("Close X session"), 
+			       _("Close Window System session?\n"
+				 "Kill might close applications with unsaved data."),
+			       _("Close"), _("Kill"), _("Cancel"));
+	    if (r==WAPRDefault)
+		result = R_CLOSE;
+	    else if (r==WAPRAlternate)
+		result = R_KILL;
+	} else
+#endif
+	{
+	    int r;
+
+	    r = wMessageDialog(menu->frame->screen_ptr, 
+			       _("Kill X session"), 
+			       _("Kill Window System session?\n"
+				 "(all applications will be closed)"),
+			       _("Kill"), _("Cancel"), NULL);
+	    if (r==WAPRDefault)
+		result = R_KILL;
+	}
+    } 
+    
+    if (result!=R_CANCEL) {
+#ifdef R6SM
+	if (result == R_CLOSE) {
+	    wSessionRequestShutdown();
+	} else 
+#endif /* R6SM */
+	{
+	    for (i=0; i<wScreenCount; i++) {
+		WScreen *scr;
+		
+		scr = wScreenWithNumber(i);
+		if (scr)
+		    wScreenSaveState(scr);
+	    }
+	    WipeDesktop(NULL);
+	    
+	    ExecExitScript();
+	    Exit(0);
+	}
     }
+#undef R_CLOSE
+#undef R_CANCEL
+#undef R_KILL
     inside = 0;
 }
 
@@ -250,9 +315,16 @@ shutdownCommand(WMenu *menu, WMenuEntry *entry)
 static void
 restartCommand(WMenu *menu, WMenuEntry *entry)
 {
-    wScreenSaveState(menu->frame->screen_ptr);
-
-    RestoreDesktop(menu->frame->screen_ptr);
+    int i;
+    
+    for (i=0; i<wScreenCount; i++) {
+	WScreen *scr;
+	
+	scr = wScreenWithNumber(i);
+	if (scr)
+	    wScreenSaveState(scr);
+    }
+    RestoreDesktop(NULL);
     Restart((char*)entry->clientdata);
 }
 
@@ -1256,6 +1328,9 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
                 strcmp(dentry->d_name, "..")==0)
                 continue;
 
+	    if (dentry->d_name[0] == '.')
+		continue;
+
             buffer = wmalloc(strlen(path[i])+strlen(dentry->d_name)+4);
             if (!buffer) {
                 wsyserror(_("out of memory while constructing directory menu %s"),
@@ -1444,6 +1519,7 @@ configureMenu(WScreen *scr, proplist_t definition)
     if (PLIsString(definition)) {
 	struct stat stat_buf;
 	char *path = NULL;
+	Bool menu_is_default = False;
 
 	/* menu definition is a string. Probably a path, so parse the file */
 	
@@ -1483,6 +1559,11 @@ configureMenu(WScreen *scr, proplist_t definition)
 	    path = wfindfile(DEF_CONFIG_PATHS, tmp);
 
 	if (!path) {
+	    path = wfindfile(DEF_CONFIG_PATHS, DEF_MENU_FILE);
+	    menu_is_default = True;
+	}
+
+	if (!path) {
 	    wsyserror(_("could not find menu file \"%s\" referenced in WMRootMenu"),
 		     tmp);
 	    free(tmp);
@@ -1499,6 +1580,12 @@ configureMenu(WScreen *scr, proplist_t definition)
 	if (!scr->root_menu || stat_buf.st_mtime > scr->root_menu->timestamp
 	    /* if the pointer in WMRootMenu has changed */
 	    || WDRootMenu->timestamp > scr->root_menu->timestamp) {
+	    
+	    if (menu_is_default) {
+		wwarning(_("using default menu file \"%s\" as the menu referenced in WMRootMenu could not be found "),
+			 path);
+	    }
+
 	    menu = readMenuFile(scr, path);
 	    if (menu)
 		menu->timestamp = MAX(stat_buf.st_mtime, WDRootMenu->timestamp);
@@ -1649,6 +1736,7 @@ OpenRootMenu(WScreen *scr, int x, int y, int keyboard)
 		menu = configureMenu(scr, definition);
 		if (menu)
 		    menu->timestamp = WDRootMenu->timestamp;
+
 	    } else
 		menu = NULL;
 	} else {

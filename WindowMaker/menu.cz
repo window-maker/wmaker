@@ -133,12 +133,6 @@
 		"Zámek" EXEC xlock -allowroot -usefirst
 		"Ulo¾ vzhled" EXEC SAVE_WORKSPACE
 	"Pracovní plocha" END
-#if (UID==0)	// root only stuff
-	"Správa systému" MENU
-		// RedHat control panel pro u¾ivatele root
-		"RH ControlPanel" EXEC control-panel
-	"Správa systému" END
-#endif
 	"Konec"	MENU
 // 'Restartovat' není opravdu pøíli¹ èeské slovo, najde nìkdo lep¹í ?
 		"Restartovat" RESTART

@@ -166,7 +166,13 @@ WMGetStandardUserDefaults(void)
 	sharedUserDefaults = defaults;
 	
 	/* set to save changes in defaults when program is exited */
+
+
+#if !defined(HAVE_ATEXIT) && defined(HAVE_ON_EXIT)
+	on_exit(saveDefaultsChanges,0);
+#else
 	atexit(saveDefaultsChanges);
+#endif
     }
 
     return sharedUserDefaults;

@@ -59,6 +59,7 @@
 #define THEMES_DIR		/usr/local/share/WindowMaker/Themes
 #define STYLES_DIR		/usr/local/share/WindowMaker/Styles
 #define ICON_SETS_DIR		/usr/local/share/WindowMaker/IconSets
+#define SOUND_SETS_DIR		/usr/local/share/WindowMaker/SoundSets
 #define BACKGROUNDS_DIR		/usr/local/share/WindowMaker/Backgrounds
 
 

@@ -71,6 +71,7 @@ static proplist_t ANoMouseBindings;
 static proplist_t ANoKeyBindings;
 static proplist_t ANoAppIcon;	       /* app */
 static proplist_t AKeepOnTop;
+static proplist_t AKeepOnBottom;
 static proplist_t AOmnipresent;
 static proplist_t ASkipWindowList;
 static proplist_t AKeepInsideScreen;
@@ -104,6 +105,7 @@ init_wdefaults(WScreen *scr)
     ANoKeyBindings = PLMakeString("NoKeyBindings");
     ANoAppIcon = PLMakeString("NoAppIcon");
     AKeepOnTop = PLMakeString("KeepOnTop");
+    AKeepOnBottom = PLMakeString("KeepOnBottom");
     AOmnipresent = PLMakeString("Omnipresent");
     ASkipWindowList = PLMakeString("SkipWindowList");
     AKeepInsideScreen = PLMakeString("KeepInsideScreen");
@@ -253,6 +255,10 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
     value = get_value(dw, dc, dn, da, AKeepOnTop, No, useGlobalDefault);
     if (value)
 	attr->floating = getBool(AKeepOnTop, value);
+
+    value = get_value(dw, dc, dn, da, AKeepOnBottom, No, useGlobalDefault);
+    if (value)
+	attr->floating = getBool(AKeepOnBottom, value);
 
     value = get_value(dw, dc, dn, da, AOmnipresent, No, useGlobalDefault);
     if (value)
@@ -522,7 +528,8 @@ wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file)
     else if (icon_value!=NULL && !same) {
         PLInsertDictionaryEntry(dict, key, icon_value);
     }
-    PLSave(dict, YES);
+    if (!wPreferences.flags.noupdates)
+	PLSave(dict, YES);
 
     PLRelease(key);
     if(icon_value)

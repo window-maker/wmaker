@@ -222,12 +222,12 @@ DispatchEvent(XEvent *event)
 	    scr = wScreenWithNumber(i);
 	    if (scr) {
 		wScreenSaveState(scr);
-		RestoreDesktop(scr);
 	    }
 	}
+	RestoreDesktop(NULL);
 	ExecExitScript();
 	/* received SIGTERM */
-	exit(0);
+	Exit(0);
     } else if (WProgramState == WSTATE_NEED_RESTART) {
 	WProgramState = WSTATE_RESTARTING;
 
@@ -236,9 +236,9 @@ DispatchEvent(XEvent *event)
 	    scr = wScreenWithNumber(i);
 	    if (scr) {
 		wScreenSaveState(scr);
-		RestoreDesktop(scr);
 	    }
 	}
+	RestoreDesktop(NULL);
 	/* received SIGHUP */
 	Restart(NULL);
     }
@@ -350,10 +350,10 @@ EventLoop()
 Bool 
 IsDoubleClick(WScreen *scr, XEvent *event)
 {
-    if ((scr->last_click_time>0) &&
+    if ((scr->last_click_time>0) && 
 	(event->xbutton.time-scr->last_click_time<=wPreferences.dblclick_time)
 	&& (event->xbutton.button == scr->last_click_button)
-	&& (event->xbutton.window == scr->last_click_window)) {
+	&& (event->xbutton.subwindow == scr->last_click_window)) {
 
 	scr->flags.next_click_is_not_double = 1;
 	scr->last_click_time = 0;
@@ -655,12 +655,27 @@ handleButtonPress(XEvent *event)
 	    wUnselectWindows(scr);
 	    wSelectWindows(scr, event);
 	}
+#ifdef MOUSE_WS_SWITCH
+	else if (event->xbutton.button==Button4) {
+
+	    if (scr->current_workspace > 0)
+		wWorkspaceChange(scr, scr->current_workspace-1);
+
+	} else if (event->xbutton.button==Button5) {
+
+	    if (scr->current_workspace < scr->workspace_count-1)
+		wWorkspaceChange(scr, scr->current_workspace+1);
+
+	}
+#endif /* MOUSE_WS_SWITCH */
     }
 
-
-    if (XFindContext(dpy, event->xbutton.window, wWinContext, 
+    if (XFindContext(dpy, event->xbutton.subwindow, wWinContext,
 		     (XPointer *)&desc)==XCNOENT) {
-	return;
+	if (XFindContext(dpy, event->xbutton.window, wWinContext,
+			 (XPointer *)&desc)==XCNOENT) {
+	    return;
+	}
     }
 
     if (desc->parent_type == WCLASS_WINDOW) {
@@ -697,7 +712,7 @@ handleButtonPress(XEvent *event)
     } else {
 	scr->last_click_time = event->xbutton.time;
 	scr->last_click_button = event->xbutton.button;
-	scr->last_click_window = event->xbutton.window;
+	scr->last_click_window = event->xbutton.subwindow;
     }
 }
 
@@ -1213,7 +1228,10 @@ handleColormapNotify(XEvent *event)
 		       scr->current_colormap == event->xcolormap.colormap) {
 
 		/* some bastard app (like XV) removed our colormap */
-		reinstall = True;
+		/* 
+		 * can't enforce or things like xscreensaver wont work
+		 * reinstall = True;
+		 */
 	    } else if (event->xcolormap.state == ColormapInstalled &&
 		       scr->current_colormap == event->xcolormap.colormap) {
 

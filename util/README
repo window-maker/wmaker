@@ -30,3 +30,5 @@ wmsetbg- set the workspace background into a image and make it persist between
 
 wdwrite- write data into the defaults database (configuration files).
 
+wsetfont- set locale the fonts needed for a specific locale for Window Maker
+

@@ -1,6 +1,7 @@
-/* session.c - session state handling
+/* session.c - session state handling and R6 style session management
  *
  *  Copyright (c) 1998 Dan Pascu
+ *  Copyright (c) 1998 Alfredo Kojima
  *
  *  Window Maker window manager
  *
@@ -24,10 +25,17 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+
+#ifdef R6SM
+#include <X11/SM/SMlib.h>
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
+
 
 #include "WindowMaker.h"
 #include "screen.h"
@@ -41,11 +49,25 @@
 #include "application.h"
 #include "appicon.h"
 
+
 #include "dock.h"
 
 #include "list.h"
 
 #include <proplist.h>
+
+
+#ifdef R6SM
+/* requested for SaveYourselfPhase2 */
+static Bool sWaitingPhase2 = False;
+
+static SmcConn sSMCConn = NULL;
+
+static WMHandlerID sSMInputHandler = NULL;
+
+/* our SM client ID */
+static char *sClientID = NULL;
+#endif
 
 
 static proplist_t sApplications = NULL;
@@ -288,8 +310,8 @@ execCommand(WScreen *scr, char *command, char *host)
 
 	SetupEnvironment(scr);
 
-	close(ConnectionNumber(dpy));
-	
+	CloseDescriptors();
+
         args = malloc(sizeof(char*)*(argc+1));
         if (!args)
             exit(111);
@@ -506,3 +528,418 @@ wSessionRestoreLastWorkspace(WScreen *scr)
 }
 
 
+
+#ifdef R6SM
+/*
+ * With full session management support, the part of WMState 
+ * that store client window state will become obsolete,
+ * but we still need to store state info like the dock and workspaces.
+ * It is better to keep dock/wspace info in WMState because the user
+ * might want to keep the dock configuration while not wanting to
+ * resume a previously saved session. 
+ * So, wmaker specific state info can be saved in 
+ * ~/GNUstep/.AppInfo/WindowMaker/statename.state 
+ * Its better to not put it in the defaults directory because:
+ * - its not a defaults file (having domain names like wmaker0089504baa
+ * in the defaults directory wouldn't be very neat)
+ * - this state file is not meant to be edited by users
+ * 
+ * The old session code will become obsolete. When wmaker is
+ * compiled with R6 sm support compiled in, itll be better to
+ * use a totally rewritten state saving code, but we can keep
+ * the current code for when R6SM is not compiled in. 
+ * 
+ * This will be confusing to old users (well get lots of "SAVE_SESSION broke!"
+ * messages), but itll be better.
+ * 
+ * -readme
+ */
+
+
+/*
+ * Windows are identified as:
+ * 	WM_CLASS(instance.class).WM_WINDOW_ROLE
+ * 
+ * 
+ */
+static void
+saveClientState(WWindow *wwin, proplist_t dict)
+{
+    proplist_t key;
+    
+
+}
+
+
+static void
+smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
+{
+    SmProp props[4];
+    SmPropValue prop1val, prop2val, prop3val, prop4val;
+    char **argv = (char**)client_data;
+    int argc;
+    int i, j;
+    Bool ok = False;
+    char *statefile = NULL;
+    char *prefix;
+    Bool gsPrefix = False;
+    char *discardCmd = NULL;
+    time_t t;
+    FILE *file;
+
+#ifdef DEBUG1
+    puts("received SaveYourselfPhase2 SM message");
+#endif
+
+    /* save session state */
+    
+    /* the file that will contain the state */
+    prefix = getenv("SM_SAVE_DIR");
+    if (!prefix) {
+	prefix = wusergnusteppath();
+	if (prefix)
+	    gsPrefix = True;
+    }
+    if (!prefix) {
+	prefix = getenv("HOME");
+    }
+    if (!prefix)
+	prefix = ".";
+
+    statefile = malloc(strlen(prefix)+64);
+    if (!statefile) {
+	if (gsPrefix)
+	    free(prefix);
+	wwarning(_("end of memory while saving session state"));
+	goto fail;
+    }
+
+    t = time();
+    i = 0;
+    do {
+	if (gsPrefix)
+	    sprintf(statefile, "%s/.AppInfo/WindowMaker/%l%i.state",
+		    prefix, t, i);
+	else
+	    sprintf(statefile, "%s/wmaker.%l%i.state", prefix, t, i);
+	i++;
+    } while (access(F_OK, statefile)!=-1);
+
+    if (gsPrefix)
+	free(prefix);
+
+    /* save the states of all windows we're managing */
+    
+    file = fopen(statefile, "w");
+    if (!file) {
+	wsyserror(_("could not create state file %s"), statefile);
+	goto fail;
+    }
+    
+    
+    
+    fclose(file);
+    
+
+    /* set the remaining properties that we didn't set at
+     * startup time */
+
+    for (argc=0, i=0; argv[i]!=NULL; i++) {
+	if (strcmp(argv[i], "-clientid")==0
+	    || strcmp(argv[i], "-restore")==0) {
+	    i++;
+	} else {
+	    argc++;
+	}
+    }
+
+    prop[0].name = SmRestartCommand;
+    prop[0].type = SmLISTofARRAY8;
+    prop[0].vals = malloc(sizeof(SmPropValue)*(argc+4));
+    prop[0].num_vals = argc+4;
+
+    prop[1].name = SmCloneCommand;
+    prop[1].type = SmLISTofARRAY8;
+    prop[1].vals = malloc(sizeof(SmPropValue)*(argc));
+    prop[1].num_vals = argc;
+
+    if (!prop[0].vals || !prop[1].vals) {
+	wwarning(_("end of memory while saving session state"));
+	goto fail;
+    }
+
+    for (j=0, i=0; i<argc+4; i++) {
+	if (strcmp(argv[i], "-clientid")==0
+	    || strcmp(argv[i], "-restore")==0) {
+	    i++;
+	} else {
+	    prop[0].vals[j].value = argv[i];
+	    prop[0].vals[j].length = strlen(argv[i]);
+	    prop[1].vals[j].value = argv[i];
+	    prop[1].vals[j].length = strlen(argv[i]);
+	    j++;
+	}
+    }
+    prop[0].vals[j].value = "-clientid";
+    prop[0].vals[j].length = 9;
+    j++;
+    prop[0].vals[j].value = sClientID;
+    prop[0].vals[j].length = strlen(sClientID);
+    j++;
+    prop[0].vals[j].value = "-restore";
+    prop[0].vals[j].length = 11;
+    j++;
+    prop[0].vals[j].value = statefile;
+    prop[0].vals[j].length = strlen(statefile);
+
+    discardCmd = malloc(strlen(statefile)+8);
+    if (!discardCmd)
+	goto fail;
+    sprintf(discardCmd, "rm %s", statefile);
+    prop[2].name = SmDiscardCommand;
+    prop[2].type = SmARRAY8;
+    prop[2].vals[0] = discardCmd;
+    prop[2].num_vals = 1;
+
+    SmcSetProperties(sSMCConn, 3, prop);
+
+    ok = True;
+fail:
+    SmcSaveYourselfDone(smc_conn, ok);
+    
+    if (prop[0].vals)
+	free(prop[0].vals);
+    if (prop[1].vals)
+	free(prop[1].vals);
+    if (discardCmd)
+	free(discardCmd);
+
+    if (!ok) {
+	remove(statefile);
+    }
+    if (statefile)
+	free(statefile);
+}
+
+
+static void
+smSaveYourselfProc(SmcConn smc_conn, SmPointer client_data, int save_type,
+		   Bool shutdown, int interact_style, Bool fast)
+{
+#ifdef DEBUG1
+    puts("received SaveYourself SM message");
+#endif
+
+    if (!SmcRequestSaveYourselfPhase2(smc_conn, smSaveYourselfPhase2Proc,
+				      client_data)) {
+
+	SmcSaveYourselfDone(smc_conn, False);
+	sWaitingPhase2 = False;
+    } else {
+#ifdef DEBUG1
+	puts("successfull request of SYS phase 2");
+#endif
+	sWaitingPhase2 = True;
+    }
+}
+
+
+static void
+smDieProc(SmcConn smc_conn, SmPointer client_data)
+{
+#ifdef DEBUG1
+    puts("received Die SM message");
+#endif
+
+    wSessionDisconnectManager();
+
+    RestoreDesktop(NULL);
+
+    ExecExitScript();
+    Exit(0);
+}
+
+
+
+static void
+smSaveCompleteProc(SmcConn smc_conn)
+{
+    /* it means that we can resume doing things that can change our state */
+#ifdef DEBUG1
+    puts("received SaveComplete SM message");
+#endif
+}
+
+
+static void
+smShutdownCancelledProc(SmcConn smc_conn, SmPointer client_data)
+{
+    if (sWaitingPhase2) {
+
+	sWaitingPhase2 = False;
+
+	SmcSaveYourselfDone(smc_conn, False);
+    }
+}
+
+
+static void
+iceMessageProc(int fd, int mask, void *clientData)
+{
+    IceConn iceConn = (IceConn)clientData;
+
+    IceProcessMessages(iceConn, NULL, NULL);
+}
+
+
+static void
+iceIOErrorHandler(IceConnection ice_conn)
+{
+    /* This is not fatal but can mean the session manager exited.
+     * If the session manager exited normally we would get a 
+     * Die message, so this probably means an abnormal exit.
+     * If the sm was the last client of session, then we'll die
+     * anyway, otherwise we can continue doing our stuff.
+     */
+    wwarning(_("connection to the session manager was lost"));
+    wSessionDisconnectManager();
+}
+
+
+void
+wSessionConnectManager(char **argv, int argc)
+{
+    IceConn iceConn;
+    char *previous_id = NULL;
+    char buffer[256];
+    SmcCallbacks callbacks;
+    unsigned long mask;
+    char uid[32];
+    char pid[32];
+    SmProp props[4];
+    SmPropValue prop1val, prop2val, prop3val, prop4val;
+    char restartStyle;
+    int i;
+
+    mask = SmcSaveYourselfProcMask|SmcDieProcMask|SmcSaveCompleteProcMask
+	|SmcShutdownCancelledProcMask;
+
+    callbacks.save_yourself.callback = smSaveYourselfProc;
+    callbacks.save_yourself.client_data = argv;
+
+    callbacks.die.callback = smDieProc;
+    callbacks.die.client_data = NULL;
+
+    callbacks.save_complete.callback = smSaveCompleteProc;
+    callbacks.save_complete.client_data = NULL;
+
+    callbacks.shutdown_cancelled.callback = smShutdownCancelledProc;
+    callbacks.shutdown_cancelled.client_data = NULL;
+
+    for (i=0; i<argc; i++) {
+	if (strcmp(argv[i], "-clientid")==0) {
+	    previous_id = argv[i+1];
+	    break;
+	}
+    }
+
+    /* connect to the session manager */
+    sSMCConn = SmcOpenConnection(NULL, NULL, SmProtoMajor, SmProtoMinor,
+				 mask, &callbacks, previous_id,
+				 &sClientID, 255, buffer);
+    if (!sSMCConn) {
+	return;
+    }
+#ifdef DEBUG1
+    puts("connected to the session manager");
+#endif
+
+/*    IceSetIOErrorHandler(iceIOErrorHandler);*/
+
+    /* check for session manager clients */
+    iceConn = SmcGetIceConnection(smcConn);
+    
+
+    sSMInputHandler = WMAddInputHandler(IceConnectionNumber(iceConn), 
+					WIReadMask, iceMessageProc, iceConn);
+
+    /* setup information about ourselves */
+
+    /* program name */
+    prop1val.value = argv[0];
+    prop1val.length = strlen(argv[0]);
+    prop[0].name = SmProgram;
+    prop[0].type = SmARRAY8;
+    prop[0].num_vals = 1;
+    prop[0].vals = &prop1val;
+
+    /* The XSMP doc from X11R6.1 says it contains the user name,
+     * but every client implementation I saw places the uid # */
+    sprintf(uid, "%i", getuid());
+    prop2val.value = uid;
+    prop2val.length = strlen(uid);
+    prop[1].name = SmUserID;
+    prop[1].type = SmARRAY8;
+    prop[1].num_vals = 1;
+    prop[1].vals = &prop2val;
+
+    /* Restart style. We should restart only if we were running when
+     * the previous session finished. */
+    restartStyle = SmRestartIfRunning;
+    prop3val.value = &restartStyle;
+    prop3val.length = 1;
+    prop[2].name = SmRestartStyleHint;
+    prop[2].type = SmCARD8;
+    prop[2].num_vals = 1;
+    prop[2].vals = &prop3val;
+
+    /* Our PID. Not required but might be usefull */
+    sprintf(pid, "%i", getpid());
+    prop4val.value = pid;
+    prop4val.length = strlen(pid);
+    prop[3].name = SmProcessID;
+    prop[3].type = SmARRAY8;
+    prop[3].num_vals = 1;
+    prop[3].vals = &prop4val;
+
+    /* we'll set the rest of the hints later */
+
+    SmcSetProperties(sSMCConn, 4, props);
+
+}
+
+void
+_wSessionCloseDescriptors(void)
+{
+    if (sSMCConn)
+	close(IceConnectionNumber(SmcGetIceConnection(smcConn)));
+}
+
+void
+wSessionDisconnectManager(void)
+{
+    if (sSMCConn) {
+	WMDeleteInputHandler(sSMInputHandler);
+	sSMInputHandler = NULL;
+
+	SmcCloseConnection(sSMCConn, 0, NULL);
+	sSMCConn = NULL;
+    }
+}
+
+void
+wSessionRequestShutdown(void)
+{
+    /* request a shutdown to the session manager */
+    if (sSMCConn)
+	SmcRequestSaveYourself(sSMCConn, SmSaveBoth, True, SmInteractStyleAny,
+			       False, True);
+}
+
+Bool 
+wSessionIsManaged(void)
+{
+    return sSMCConn!=NULL;
+}
+
+#endif /* !R6SM */

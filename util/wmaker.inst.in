@@ -12,13 +12,15 @@ VERSION="#version#"
 
 BINDIR="#bindir#"
 
-
+make_dir() {
+	make_dir $1
+	chmod +rw $1
+}
 
 make_script() {
 	ISCRIPT=$1
 
 	cat << EOF >> $ISCRIPT
-#!/bin/sh
 # Window Maker default X session startup script 
 
 PATH="\$PATH:$BINDIR"
@@ -79,7 +81,7 @@ if test "x$GNUSTEP_USER_ROOT" = "x"; then
 	GSDIR=$USERDIR/GNUstep
 	if [ ! -d $GSDIR ]; then
 		echo "Creating $GSDIR user directory"
-		mkdir $GSDIR
+		make_dir $GSDIR
 	fi
 else
 	GSDIR=$GNUSTEP_USER_ROOT
@@ -93,11 +95,11 @@ fi
 
 
 if [ ! -d "$GSDIR/.AppInfo" ]; then
-	mkdir $GSDIR/.AppInfo
+	make_dir $GSDIR/.AppInfo
 fi
 
 if [ ! -d "$GSDIR/Defaults" ]; then
-	mkdir $GSDIR/Defaults
+	make_dir $GSDIR/Defaults
 fi
 
 echo "Copying defaults database..."
@@ -126,23 +128,23 @@ done
 if [ ! -d "$GSDIR/Library/Icons/" ]; then
       echo "Creating icon library directory $GSDIR/Library/Icons"
       if [ ! -d $GSDIR/Library ]; then
-              mkdir $GSDIR/Library
+              make_dir $GSDIR/Library
       fi
-      mkdir $GSDIR/Library/Icons
+      make_dir $GSDIR/Library/Icons
 fi
 
 
 if [ ! -d "$GSDIR/Library/WindowMaker/" ]; then
       echo "Creating WindowMaker data library directory $GSDIR/Library/WindowMaker"
       if [ ! -d $GSDIR/Library ]; then
-              mkdir $GSDIR/Library
+              make_dir $GSDIR/Library
       fi
-      mkdir $GSDIR/Library/WindowMaker
+      make_dir $GSDIR/Library/WindowMaker
 fi
 
 if [ ! -d "$GSDIR/Library/WindowMaker/Styles" ]; then
 	echo "Creating style library $GSDIR/Library/WindowMaker/Styles"
-	mkdir $GSDIR/Library/WindowMaker/Styles
+	make_dir $GSDIR/Library/WindowMaker/Styles
 else
 	echo "Styles directory already exists. Skipping..."
 fi
@@ -150,7 +152,7 @@ fi
 
 if [ ! -d "$GSDIR/Library/WindowMaker/Themes" ]; then
 	echo "Creating theme library $GSDIR/Library/WindowMaker/Themes"
-	mkdir  $GSDIR/Library/WindowMaker/Themes
+	make_dir  $GSDIR/Library/WindowMaker/Themes
 else
 	echo "Themes directory already exists. Skipping..."
 fi
@@ -158,7 +160,7 @@ fi
 
 if [ ! -d "$GSDIR/Library/WindowMaker/Backgrounds" ]; then
 	echo "Creating bg image library $GSDIR/Library/WindowMaker/Backgrounds"
-	mkdir  $GSDIR/Library/WindowMaker/Backgrounds
+	make_dir  $GSDIR/Library/WindowMaker/Backgrounds
 else
 	echo "Default Backgrounds directory already exists. Skipping..."
 fi
@@ -166,7 +168,7 @@ fi
 
 if [ ! -d "$GSDIR/Library/WindowMaker/IconSets" ]; then
 	echo "Creating icon setup library $GSDIR/Library/WindowMaker/IconSets"
-	mkdir  $GSDIR/Library/WindowMaker/IconSets
+	make_dir  $GSDIR/Library/WindowMaker/IconSets
 else
 	echo "Default IconSets directory already exists. Skipping..."
 fi
@@ -174,7 +176,7 @@ fi
 
 if [ ! -d "$GSDIR/Library/WindowMaker/Pixmaps" ]; then
 	echo "Creating pixmap library $GSDIR/Library/WindowMaker/Pixmaps"
-	mkdir  $GSDIR/Library/WindowMaker/Pixmaps
+	make_dir  $GSDIR/Library/WindowMaker/Pixmaps
 else
 	echo "Default Pixmaps directory already exists. Skipping..."
 fi
@@ -182,7 +184,7 @@ fi
 
 if [ ! -d "$GSDIR/Library/WindowMaker/Sounds" ]; then
 	echo "Creating sound library $GSDIR/Library/WindowMaker/Sounds"
-	mkdir  $GSDIR/Library/WindowMaker/Sounds
+	make_dir  $GSDIR/Library/WindowMaker/Sounds
 else
 	echo "Default Sounds directory already exists. Skipping..."
 fi
@@ -190,7 +192,7 @@ fi
 
 if [ ! -d "$GSDIR/Library/WindowMaker/SoundSets" ]; then
 	echo "Creating sound set library $GSDIR/Library/WindowMaker/SoundSets"
-	mkdir  $GSDIR/Library/WindowMaker/SoundSets
+	make_dir  $GSDIR/Library/WindowMaker/SoundSets
 else
 	echo "Default SoundSets directory already exists. Skipping..."
 fi

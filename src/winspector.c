@@ -62,6 +62,7 @@ static proplist_t ANoMouseBindings;
 static proplist_t ANoKeyBindings;
 static proplist_t ANoAppIcon;
 static proplist_t AKeepOnTop;
+static proplist_t AKeepOnBottom;
 static proplist_t AOmnipresent;
 static proplist_t ASkipWindowList;
 static proplist_t AKeepInsideScreen;
@@ -106,6 +107,7 @@ make_keys()
     ANoKeyBindings = PLMakeString("NoKeyBindings");
     ANoAppIcon = PLMakeString("NoAppIcon");
     AKeepOnTop = PLMakeString("KeepOnTop");
+    AKeepOnBottom = PLMakeString("KeepOnBottom");
     AOmnipresent = PLMakeString("Omnipresent");
     ASkipWindowList = PLMakeString("SkipWindowList");
     AKeepInsideScreen = PLMakeString("KeepInsideScreen");
@@ -494,12 +496,15 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     insertAttribute(dict, winDic, AKeepOnTop,         value, &different, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[5])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, AOmnipresent,       value, &different, flags);
+    insertAttribute(dict, winDic, AKeepOnBottom,         value, &different, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[6])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, AStartMiniaturized, value, &different, flags);
+    insertAttribute(dict, winDic, AOmnipresent,       value, &different, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[7])!=0) ? Yes : No;
+    insertAttribute(dict, winDic, AStartMiniaturized, value, &different, flags);
+
+    value = (WMGetButtonSelected(panel->attrChk[8])!=0) ? Yes : No;
     insertAttribute(dict, winDic, ASkipWindowList,    value, &different, flags);
 
 
@@ -627,9 +632,6 @@ makeAppIconFor(WApplication *wapp)
         } else {
             PlaceIcon(scr, &x, &y);
 	    wAppIconMove(wapp->app_icon, x, y);
-#ifndef STRICTNS
-            wLowerFrame(icon->core);
-#endif
         }
         if (!clip || !wapp->app_icon->attracted || !clip->collapsed)
 	    XMapWindow(dpy, icon->core->window);
@@ -677,7 +679,7 @@ applySettings(WMButton *button, InspectorPanel *panel)
     WWindowAttributes *wflags = &wwin->window_flags;
     WWindowAttributes oldFlags = *wflags;
     WApplication *wapp = wApplicationOf(wwin->main_window);
-    int floating, skip_window_list;
+    int floating, sunken, skip_window_list;
 
     showIconFor(WMWidgetScreen(button), panel, NULL, NULL, USE_TEXT_FIELD);
 
@@ -686,9 +688,11 @@ applySettings(WMButton *button, InspectorPanel *panel)
     wflags->no_close_button    =  WMGetButtonSelected(panel->attrChk[2]);
     wflags->no_miniaturize_button = WMGetButtonSelected(panel->attrChk[3]);
     floating                   =  WMGetButtonSelected(panel->attrChk[4]);
-    wflags->omnipresent        =  WMGetButtonSelected(panel->attrChk[5]);
-    wflags->start_miniaturized =  WMGetButtonSelected(panel->attrChk[6]);
-    skip_window_list           =  WMGetButtonSelected(panel->attrChk[7]);
+    sunken                     =  WMGetButtonSelected(panel->attrChk[5]);
+    wflags->omnipresent        =  WMGetButtonSelected(panel->attrChk[6]);
+    wflags->start_miniaturized =  WMGetButtonSelected(panel->attrChk[7]);
+    skip_window_list           =  WMGetButtonSelected(panel->attrChk[8]);
+
     wflags->no_hide_others     =  WMGetButtonSelected(panel->moreChk[0]);
     wflags->no_bind_keys       =  WMGetButtonSelected(panel->moreChk[1]);
     wflags->no_bind_mouse      =  WMGetButtonSelected(panel->moreChk[2]);
@@ -702,12 +706,21 @@ applySettings(WMButton *button, InspectorPanel *panel)
         wUnshadeWindow(wwin);
     wflags->no_shadeable = wflags->no_titlebar;
 
-    if (wflags->floating != floating) {
-        int wlevel = ((wflags->floating = floating))
-            ? WMFloatingWindowLevel : WMNormalWindowLevel;
-        ChangeStackingLevel(wwin->frame->core, wlevel);
+    if (floating) {
+	if (!wflags->floating)
+	    ChangeStackingLevel(wwin->frame->core, WMFloatingLevel);
+    } else if (sunken) {
+	if (!wflags->sunken)
+	    ChangeStackingLevel(wwin->frame->core, WMSunkenLevel);
+    } else {
+	if (wflags->floating || wflags->sunken)
+	    ChangeStackingLevel(wwin->frame->core, WMNormalLevel);
     }
 
+    wflags->sunken = sunken;
+    wflags->floating = floating;
+
+    
     if (wflags->skip_window_list != skip_window_list) {
         int action = ((wflags->skip_window_list = skip_window_list))
             ? ACTION_REMOVE : ACTION_ADD;
@@ -767,7 +780,7 @@ revertSettings(WMButton *button, InspectorPanel *panel)
 {
     WWindow *wwin = panel->inspected;
     WApplication *wapp = wApplicationOf(wwin->main_window);
-    int i, n, floating, skip_window_list;
+    int i, n, floating, sunken, skip_window_list;
     char *wm_instance = NULL;
     char *wm_class = NULL;
 
@@ -797,7 +810,7 @@ revertSettings(WMButton *button, InspectorPanel *panel)
 
     wwin->window_flags.no_shadeable = wwin->window_flags.no_titlebar;
 
-    for (i=0; i < 8; i++) {
+    for (i=0; i < 9; i++) {
 	int flag = 0;
 	
 	switch (i) {
@@ -814,27 +827,18 @@ revertSettings(WMButton *button, InspectorPanel *panel)
 	    flag = wwin->window_flags.no_miniaturize_button;
 	    break;
 	 case 4:
-            floating = WMGetButtonSelected(panel->attrChk[4]);
-            if (wwin->window_flags.floating != floating) {
-                int wlevel = (wwin->window_flags.floating != 0)
-                    ? WMFloatingWindowLevel : WMNormalWindowLevel;
-                ChangeStackingLevel(wwin->frame->core, wlevel);
-            }
             flag = wwin->window_flags.floating;
 	    break;
 	 case 5:
-	    flag = wwin->window_flags.omnipresent;
+            flag = wwin->window_flags.sunken;
 	    break;
 	 case 6:
-	    flag = wwin->window_flags.no_focusable;
+	    flag = wwin->window_flags.omnipresent;
 	    break;
 	 case 7:
-            skip_window_list = WMGetButtonSelected(panel->attrChk[7]);
-            if (wwin->window_flags.skip_window_list != skip_window_list) {
-                int action = (wwin->window_flags.skip_window_list != 0)
-                    ? ACTION_REMOVE : ACTION_ADD;
-                UpdateSwitchMenu(wwin->screen_ptr, wwin, action);
-            }
+	    flag = wwin->window_flags.no_focusable;
+	    break;
+	 case 8:
 	    flag = wwin->window_flags.skip_window_list;
 	    break;
 	}
@@ -988,6 +992,8 @@ createInspectorForWindow(WWindow *wwin)
     WMMoveWidget(panel->saveBtn, 15, 310);
     WMSetButtonText(panel->saveBtn, _("Save"));
     WMResizeWidget(panel->saveBtn, btn_width, 28);
+    if (wPreferences.flags.noupdates)
+	WMSetButtonEnabled(panel->saveBtn, False);
 
     panel->applyBtn = WMCreateCommandButton(panel->win);
     WMSetButtonAction(panel->applyBtn, (WMAction*)applySettings, panel);
@@ -1072,7 +1078,7 @@ createInspectorForWindow(WWindow *wwin)
     WMMoveWidget(panel->attrFrm, 15, 50);
     WMResizeWidget(panel->attrFrm, frame_width, 240);
 
-    for (i=0; i < 8; i++) {
+    for (i=0; i < 9; i++) {
 	char *caption = NULL;
 	int flag = 0;
 	
@@ -1094,18 +1100,22 @@ createInspectorForWindow(WWindow *wwin)
 	    flag = wwin->window_flags.no_miniaturize_button;
 	    break;
 	 case 4:
-	    caption = _("Keep on top");
+	    caption = _("Keep on top / floating");
 	    flag = wwin->window_flags.floating;
 	    break;
 	 case 5:
+	    caption = _("Keep on bottom / sunken");
+	    flag = wwin->window_flags.sunken;
+	    break;
+	 case 6:
 	    caption = _("Omnipresent");
 	    flag = wwin->window_flags.omnipresent;
 	    break;
-	 case 6:
+	 case 7:
 	    caption = _("Start Miniaturized");
 	    flag = wwin->window_flags.start_miniaturized;
 	    break;
-	 case 7:
+	 case 8:
 	    caption = _("Skip window list");
 	    flag = wwin->window_flags.skip_window_list;
 	    break;

@@ -208,7 +208,7 @@ renameCallback(WMenu *menu, WMenuEntry *entry)
 
     sprintf(buffer, _("Type the name for workspace %i:"), wspace+1);
     if (wInputDialog(dock->screen_ptr, _("Rename Workspace"), buffer,
-		     &name)==WDB_OK) {
+		     &name)) {
 	wWorkspaceRename(dock->screen_ptr, wspace, name);
     }
     if (name) {
@@ -432,9 +432,6 @@ removeIconsCallback(WMenu *menu, WMenuEntry *entry)
         wDockDetach(dock, aicon);
         if (keepit) {
             PlaceIcon(dock->screen_ptr, &aicon->x_pos, &aicon->y_pos);
-#ifndef STRICTNS
-            wLowerFrame(aicon->icon->core);
-#endif
             XMoveWindow(dpy, aicon->icon->core->window,
                         aicon->x_pos, aicon->y_pos);
             if (!dock->mapped || dock->collapsed)
@@ -468,7 +465,7 @@ keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 	    clickedIcon->editing = 1;
 	    if (wInputDialog(dock->screen_ptr, _("Keep Icon"),
 			     _("Type the command used to launch the application"),
-			     &command)==WDB_OK) {
+			     &command)) {
 		if (command && (command[0]==0 ||
 				(command[0]=='-' && command[1]==0))) {
 		    free(command);
@@ -748,7 +745,7 @@ mainIconCreate(WScreen *scr, int type)
     btn->icon->core->descriptor.handle_mousedown = iconMouseDown;
     btn->icon->core->descriptor.parent_type = WCLASS_DOCK_ICON;
     btn->icon->core->descriptor.parent = btn;
-    /*ChangeStackingLevel(btn->icon->core, NSDockWindowLevel);*/
+    /*ChangeStackingLevel(btn->icon->core, WMDockLevel);*/
     XMapWindow(dpy, btn->icon->core->window);
     btn->x_pos = x_pos;
     btn->y_pos = 0;
@@ -1104,9 +1101,6 @@ wDockDestroy(WDock *dock)
             wDockDetach(dock, aicon);
             if (keepit) {
                 PlaceIcon(dock->screen_ptr, &aicon->x_pos, &aicon->y_pos);
-#ifndef STRICTNS
-                wLowerFrame(aicon->icon->core);
-#endif
                 XMoveWindow(dpy, aicon->icon->core->window,
                             aicon->x_pos, aicon->y_pos);
                 if (!dock->mapped || dock->collapsed)
@@ -1703,9 +1697,9 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
             aicon->y_pos = dock->y_pos + (aicon->yindex*ICON_SIZE);
             
             if (dock->lowered)
-                ChangeStackingLevel(aicon->icon->core, WMNormalWindowLevel);
+                ChangeStackingLevel(aicon->icon->core, WMNormalLevel);
             else
-                ChangeStackingLevel(aicon->icon->core, WMDockWindowLevel);
+                ChangeStackingLevel(aicon->icon->core, WMDockLevel);
             
             wCoreConfigure(aicon->icon->core, aicon->x_pos, aicon->y_pos,
                            0, 0);
@@ -1725,9 +1719,9 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
         old_top->x_pos = dock->x_pos;
         old_top->y_pos = dock->y_pos;
         if (dock->lowered)         
-            ChangeStackingLevel(old_top->icon->core, WMNormalWindowLevel);
+            ChangeStackingLevel(old_top->icon->core, WMNormalLevel);
         else
-            ChangeStackingLevel(old_top->icon->core, WMDockWindowLevel);
+            ChangeStackingLevel(old_top->icon->core, WMDockLevel);
         dock->icon_array[0] = old_top;
         XMoveWindow(dpy, old_top->icon->core->window, dock->x_pos, dock->y_pos);
         /* we don't need to increment dock->icon_count here because it was
@@ -1911,18 +1905,18 @@ wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
     if (icon->command==NULL) {
 	icon->editing = 0;
 	if (XGetCommand(dpy, wwin->client_win, &argv, &argc) && argc>0) {
-	    
+
 	    icon->command = FlattenStringList(argv, argc);
 	    XFreeStringList(argv);
 	} else {
 	    char *command=NULL;
-	    
+
 /*	    icon->forced_dock = 1;*/
             if (!icon->attracted || dock->type!=WM_CLIP || dock->keep_attracted) {
 		icon->editing = 1;
                 if (wInputDialog(dock->screen_ptr, _("Dock Icon"),
                                  _("Type the command used to launch the application"),
-				 &command)==WDB_OK) {
+				 &command)) {
                     if (command && (command[0]==0 ||
                                     (command[0]=='-' && command[1]==0))) {
                         free(command);
@@ -1990,6 +1984,13 @@ wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
     if (wPreferences.auto_arrange_icons)
         wArrangeIcons(dock->screen_ptr, True);
     
+#ifdef OFFIX_DND
+    if (icon->command && !icon->dnd_command) {
+	icon->dnd_command = wmalloc(strlen(icon->command)+8);
+	sprintf(icon->dnd_command, "%s %%d", icon->command);
+    }
+#endif
+
     return True;
 }
 
@@ -2044,7 +2045,7 @@ moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y)
 /*            icon->forced_dock = 1;*/
             if (wInputDialog(src->screen_ptr, _("Dock Icon"),
 			     _("Type the command used to launch the application"),
-                             &command)==WDB_OK) {
+                             &command)) {
                 if (command && (command[0]==0 ||
                                 (command[0]=='-' && command[1]==0))) {
                     free(command);
@@ -2181,7 +2182,9 @@ wDockDetach(WDock *dock, WAppIcon *icon)
 	icon->icon->core->descriptor.handle_leavenotify = NULL;
         icon->icon->core->descriptor.parent_type = WCLASS_APPICON;
 	icon->icon->core->descriptor.parent = icon;
-	ChangeStackingLevel(icon->icon->core, WMNormalWindowLevel);
+
+	ChangeStackingLevel(icon->icon->core, NORMAL_ICON_LEVEL);
+
 	wAppIconPaint(icon);
         if (wPreferences.auto_arrange_icons) {
 	    wArrangeIcons(dock->screen_ptr, True);
@@ -2198,7 +2201,7 @@ wDockDetach(WDock *dock, WAppIcon *icon)
  * 
  * Returns False if icon can't be docked.
  */
-int
+Bool
 wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, 
 	      int *ret_x, int *ret_y, int redocking)
 {
@@ -2209,6 +2212,9 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
     WAppIcon *aicon = NULL;
     WAppIcon *nicon = NULL;
 
+
+    if (wPreferences.flags.noupdates)
+	return False;
 
     dx = dock->x_pos;
     dy = dock->y_pos;
@@ -2238,6 +2244,9 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
 	return False;
 
     if (dock->type == WM_DOCK) {
+	if (icon->dock != dock && ex_x != 0)
+	    return False;
+
 	for (i=0; i<dock->max_icons; i++) {
 	    nicon = dock->icon_array[i];
 	    if (nicon && nicon->yindex == ex_y) {
@@ -2333,8 +2342,8 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
 		break;
 	    }
 	}
-	if ((!redocking && neighbours && !aicon) ||
-	    (redocking && neighbours && (aicon == icon || !aicon))) {
+
+	if (neighbours && (aicon==NULL || (redocking && aicon == icon))) {
 	    *ret_x = ex_x;
 	    *ret_y = ex_y;
 	    return True;
@@ -2356,7 +2365,7 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
  * in which case it changes x_pos and y_pos accordingly.
  * Else returns false.
  */
-int
+Bool
 wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 {
     WScreen *scr = dock->screen_ptr;
@@ -2368,6 +2377,7 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
     int i, done = False;
     int corner;
     int sx=0, sy=0, ex=scr->scr_width, ey=scr->scr_height;
+
 
     /* if the dock is full */
     if (dock->icon_count >= dock->max_icons) {
@@ -2666,7 +2676,7 @@ execCommand(WAppIcon *btn, char *command, WSavedState *state)
 	
 	SetupEnvironment(scr);
 
-	close(ConnectionNumber(dpy));
+	CloseDescriptors();
 
 #ifdef HAVE_SETPGID
         setpgid(0, 0);
@@ -2674,7 +2684,7 @@ execCommand(WAppIcon *btn, char *command, WSavedState *state)
 	
 	args = malloc(sizeof(char*)*(argc+1));
 	if (!args)
-	  exit(111);
+	    exit(111);
 	for (i=0; i<argc; i++) {
 	    args[i] = argv[i];
 	}
@@ -2743,7 +2753,7 @@ wDockShowIcons(WDock *dock)
     btn = dock->icon_array[0];
     moveDock(dock, btn->x_pos, btn->y_pos);
 
-    newlevel = dock->lowered ? WMNormalWindowLevel : WMDockWindowLevel;
+    newlevel = dock->lowered ? WMNormalLevel : WMDockLevel;
     ChangeStackingLevel(btn->icon->core, newlevel);
 
     for (i=1; i<dock->max_icons; i++) {
@@ -2967,10 +2977,10 @@ toggleLowered(WDock *dock)
 
     /* lower/raise Dock */
     if (!dock->lowered) {
-	newlevel = WMNormalWindowLevel;
+	newlevel = WMNormalLevel;
 	dock->lowered = 1;
     } else {
-	newlevel = WMDockWindowLevel;
+	newlevel = WMDockLevel;
 	dock->lowered = 0;
     }
     
@@ -3083,7 +3093,8 @@ openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
     /* settings */
     entry = dock->menu->entries[++index];
     entry->clientdata = aicon; 
-    wMenuSetEnabled(dock->menu, index, !aicon->editing);
+    wMenuSetEnabled(dock->menu, index, !aicon->editing
+		    && !wPreferences.flags.noupdates);
 
     /* kill */
     entry = dock->menu->entries[++index];
@@ -3374,6 +3385,9 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
     Bool docked;
     int superfluous = wPreferences.superfluous; /* we catch it to avoid problems */
 
+    if (wPreferences.flags.noupdates)
+	return;
+    
     if (XGrabPointer(dpy, icon->core->window, True, ButtonMotionMask
 		     |ButtonReleaseMask|ButtonPressMask, GrabModeAsync,
 		     GrabModeAsync, None, None, CurrentTime) !=GrabSuccess) {

@@ -613,7 +613,7 @@ RConvertImage(RContext *context, RImage *image, Pixmap *pixmap)
 			    image->height, context->depth);
     
 #ifdef XSHM
-    if (context->flags.use_shared_pixmap)
+    if (context->flags.use_shared_pixmap && ximg->is_shared)
         tmp = R_CreateXImageMappedPixmap(context, ximg);
     else
 	tmp = None;

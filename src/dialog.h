@@ -24,12 +24,6 @@
 #define WMDIALOG_H_
 
 
-#define WDB_OK		(0)
-#define WDB_CANCEL	(1)
-#define WDB_YES		(2)
-#define WDB_NO		(3)
-#define WDB_EXIT	(4)
-
 int wMessageDialog(WScreen *scr, char *title, char *message, 
 		   char *defBtn, char *altBtn, char *othBtn);
 int wInputDialog(WScreen *scr, char *title, char *message, char **text);

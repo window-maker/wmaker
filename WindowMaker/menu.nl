@@ -98,12 +98,6 @@
 		"Blokkeren" EXEC xlock -allowroot -usefirst
 		"Opslaan werkplaats" EXEC SAVE_WORKSPACE
 	"Werkplaats" END
-#if (UID==0)	// enkel voor root
-	"Systeem" MENU
-		// the RedHat control panel program
-		"RH Controle Paneel" EXEC control-panel
-	"Systeem" END
-#endif
 	"Exit"	MENU
 		"Herstart" RESTART
 		"Start AfterStep" RESTART afterstep

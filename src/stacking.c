@@ -41,25 +41,6 @@ extern XContext wStackContext;
 extern WPreferences wPreferences;
 
 
-static int
-levelToIndex(int level)
-{
-    switch (level) {
-     case WMNormalWindowLevel:
-	return 0;
-     case WMFloatingWindowLevel:
-	return 1;
-     case WMDockWindowLevel:
-	return 2;
-     case WMSubmenuWindowLevel:
-	return 3;
-     case WMMainMenuWindowLevel:
-	return 4;
-     default:
-	return 0;
-    }
-}
-
 /*
  *---------------------------------------------------------------------- 
  * RemakeStackList--
@@ -91,7 +72,7 @@ RemakeStackList(WScreen *scr)
 	for (i=0; i<MAX_WINDOW_LEVELS; i++) {
 	    scr->stacking_list[i] = NULL;
 	    onbotw[i] = NULL;
-	    scr->window_level_count[i] = 0;
+/*	    scr->window_level_count[i] = 0;*/
 	}
 	/* verify list integrity */
 	c=0;
@@ -102,13 +83,13 @@ RemakeStackList(WScreen *scr)
 	    }
 	    if (!frame) continue;
 	    c++;
-	    level = levelToIndex(frame->stacking->window_level);
+	    level = frame->stacking->window_level;
 	    if (onbotw[level])
 	      onbotw[level]->stacking->above = frame;
 	    frame->stacking->under = onbotw[level];
 	    frame->stacking->above = NULL;
 	    onbotw[level] = frame;
-	    scr->window_level_count[level]++;
+/*	    scr->window_level_count[level]++;*/
         }
         XFree(windows);
 #ifdef DEBUG
@@ -209,7 +190,7 @@ void
 wRaiseFrame(WCoreWindow *frame)
 {
     WCoreWindow *wlist=frame;
-    int level = levelToIndex(frame->stacking->window_level);
+    int level = frame->stacking->window_level;
     int i;
 
     /* already on top */
@@ -312,7 +293,7 @@ wLowerFrame(WCoreWindow *frame)
 {
     WScreen *scr=frame->screen_ptr;
     WCoreWindow *prev, *wlist=frame;
-    int level = levelToIndex(frame->stacking->window_level);
+    int level = frame->stacking->window_level;
     int i;
 
     /* already in bottom */
@@ -401,10 +382,10 @@ void
 AddToStackList(WCoreWindow *frame)
 {
     WCoreWindow *prev, *tmpw, *wlist;
-    int index = levelToIndex(frame->stacking->window_level);
+    int index = frame->stacking->window_level;
 
     frame->screen_ptr->window_count++;
-    frame->screen_ptr->window_level_count[index]++;
+/*    frame->screen_ptr->window_level_count[index]++;*/
     XSaveContext(dpy, frame->window, wStackContext, (XPointer)frame);
     tmpw = frame->screen_ptr->stacking_list[index];
     if (!tmpw) {
@@ -474,7 +455,7 @@ MoveInStackListAbove(WCoreWindow *next, WCoreWindow *frame)
     if (frame->stacking->window_level != next->stacking->window_level)
         ChangeStackingLevel(frame, next->stacking->window_level);
 
-    index = levelToIndex(frame->stacking->window_level);
+    index = frame->stacking->window_level;
 
     tmpw = frame->screen_ptr->stacking_list[index];
     if (tmpw == frame)
@@ -541,7 +522,7 @@ MoveInStackListUnder(WCoreWindow *prev, WCoreWindow *frame)
     if (frame->stacking->window_level != prev->stacking->window_level)
         ChangeStackingLevel(frame, prev->stacking->window_level);
 
-    index = levelToIndex(frame->stacking->window_level);
+    index = frame->stacking->window_level;
 
     tmpw = frame->screen_ptr->stacking_list[index];
     if (tmpw == frame)
@@ -562,7 +543,7 @@ MoveInStackListUnder(WCoreWindow *prev, WCoreWindow *frame)
 void
 RemoveFromStackList(WCoreWindow *frame)
 {
-    int index = levelToIndex(frame->stacking->window_level);
+    int index = frame->stacking->window_level;
 
     if (XDeleteContext(dpy, frame->window, wStackContext)==XCNOENT) {
 #ifdef DEBUG0
@@ -579,7 +560,7 @@ RemoveFromStackList(WCoreWindow *frame)
       frame->screen_ptr->stacking_list[index] = frame->stacking->under;
 
     frame->screen_ptr->window_count--;
-    frame->screen_ptr->window_level_count[index]--;
+/*    frame->screen_ptr->window_level_count[index]--;*/
 }
 
 

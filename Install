@@ -40,7 +40,8 @@ echo "NOTE: If this script fails, read the INSTALL file and"
 echo "install by hand."
 echo
 echo "Please read the INSTALL and FAQ files before e-mailing "
-echo "questions."
+echo "questions. (we are lazy to reply questions already answered "
+echo "there as much as you are lazy to read these ;) "
 perai
 
 if test "$USER" != "root"; then

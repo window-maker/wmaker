@@ -203,7 +203,7 @@
 		"Restart" RESTART
 		"Start AfterStep" RESTART afterstep
 		"Exit..."  EXIT
-		"Exit session..." SHUTDOWN
+		"Kill session..." SHUTDOWN
 	"Exit" END
 "Applications" END
 

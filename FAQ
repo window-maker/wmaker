@@ -28,6 +28,7 @@ Installation
  - How do I switch CDE's windowmanager to use WindowMaker?
  - Do I need to rerun wmaker.inst with every new version of WindowMaker? 
  - When I run wmaker it quits complaing about something __register_frame_info.
+ - The libxyz image format library is not detected.
 
 Usage 
  - What is an appicon? 
@@ -74,6 +75,7 @@ Other Applications
  - How do I get different icons for rxvt's (or xterms) running different
    programs? 
  - How do I allow Alt+# to work in an rxvt session? (with irc for example) 
+ - When I use Netscape with Window Maker it crashes.
 
 Programming 
  - How do I get a normal X application to produce an appicon? 
@@ -386,6 +388,21 @@ When I run wmaker it quits complaing about something __register_frame_info.
 
 This seems to be related to pgcc, gcc-2.8.0 or something. Try using gcc
 2.7.x to compile wmaker.
+
+
+The libxyz image format library is not detected.
+------------------------------------------------
+
+Always look at config.log and see why configure isn't detecting the library.
+If that doens't help you much, check the following:
+
+- if there is only one set of libraries in your system (look in
+/usr/openwin/lib, check if you have different versions of the library etc)
+- if the header file(s) of that library are installed (make sure you
+have installed the devel packages of that library)
+- supply the path of that library to configure: 
+	./configure --with-gfx-libs=/the/path/to/the/lib
+
 
 ###
 
@@ -843,6 +860,19 @@ Keyboard shortcuts'.
 Click 'Save' and 'Apply' and you should be able to run your session without the
 shortcuts. 
 
+
+When I use Netscape with Window Maker it crashes
+------------------------------------------------
+
+(the problem where you get a message with something like _MOTIF_DRAG_WINDOW
+was deleted or something)
+
+You are probably are running a glibc system and using libc5 version of
+Netscape. To solve this, upgrade Netscape to a glibc version.
+
+BTW: blaming wmaker for something like this is nonsensical. It makes as 
+much sense as blaming the pizza you ate yesterday for a disentery
+your dog is having.
 
 
 -=-=-=-=-=-=-

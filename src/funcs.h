@@ -33,6 +33,8 @@ typedef void (WDeathHandler)(pid_t pid, unsigned int status, void *cdata);
 
 void RestoreDesktop(WScreen *scr);
 
+void Exit(int status);
+
 void Restart(char *manager);
 
 void SetupEnvironment(WScreen *scr);

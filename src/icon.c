@@ -103,7 +103,7 @@ wIconCreate(WWindow *wwin)
     icon->core->stacking = wmalloc(sizeof(WStacking));
     icon->core->stacking->above = NULL;
     icon->core->stacking->under = NULL;
-    icon->core->stacking->window_level = WMNormalWindowLevel;
+    icon->core->stacking->window_level = NORMAL_ICON_LEVEL;
     icon->core->stacking->child_of = NULL;
 
     icon->owner = wwin;
@@ -173,7 +173,7 @@ wIconCreateWithIconFile(WScreen *scr, char *iconfile, int tile)
     icon->core->stacking = wmalloc(sizeof(WStacking));
     icon->core->stacking->above = NULL;
     icon->core->stacking->under = NULL;
-    icon->core->stacking->window_level = WMNormalWindowLevel;
+    icon->core->stacking->window_level = NORMAL_ICON_LEVEL;
     icon->core->stacking->child_of = NULL;
 
     if (iconfile) {

@@ -59,6 +59,7 @@
 #define THEMES_DIR		#pkgdatadir#/Themes
 #define STYLES_DIR		#pkgdatadir#/Styles
 #define ICON_SETS_DIR		#pkgdatadir#/IconSets
+#define SOUND_SETS_DIR		#pkgdatadir#/SoundSets
 #define BACKGROUNDS_DIR		#pkgdatadir#/Backgrounds
 
 

@@ -44,6 +44,9 @@ typedef struct _Panel {
     WMButton *verB;
     WMButton *horB;
 
+    WMFrame *animF;
+    WMButton *animB[4];
+
     WMFrame *optF;
     WMButton *arrB;
     WMButton *omnB;
@@ -133,7 +136,18 @@ showData(_Panel *panel)
 	i = 0;
     else if (i>9)
 	i = 9;
-    WMSetPopUpButtonSelectedItem(panel->sizeP, i);    
+    WMSetPopUpButtonSelectedItem(panel->sizeP, i);
+    
+    str = GetStringForKey("IconificationStyle");
+    if (strcasecmp(str, "none")==0)
+	WMPerformButtonClick(panel->animB[3]);
+    else if (strcasecmp(str, "twist")==0)
+	WMPerformButtonClick(panel->animB[1]);
+    else if (strcasecmp(str, "flip")==0)
+	WMPerformButtonClick(panel->animB[2]);
+    else {
+	WMPerformButtonClick(panel->animB[0]);
+    }
 }
 
 
@@ -153,38 +167,28 @@ createPanel(Panel *p)
     
     /***************** Positioning of Icons *****************/
     panel->posF = WMCreateFrame(panel->frame);
-    WMResizeWidget(panel->posF, 475, 135);
+    WMResizeWidget(panel->posF, 260, 135);
     WMMoveWidget(panel->posF, 25, 10);
     WMSetFrameTitle(panel->posF, _("Icon Positioning"));
 
-    panel->nwB = WMCreateRadioButton(panel->posF);
-    WMResizeWidget(panel->nwB, 110, 20);
+    panel->nwB = WMCreateButton(panel->posF, WBTOnOff);
+    WMResizeWidget(panel->nwB, 24, 24);
     WMMoveWidget(panel->nwB, 15, 25);
-    WMSetButtonImagePosition(panel->nwB, WIPRight);
-    WMSetButtonTextAlignment(panel->nwB, WARight);
-    WMSetButtonText(panel->nwB, "Top left");
     WMSetButtonAction(panel->nwB, showIconLayout, panel);
 
-    panel->neB = WMCreateRadioButton(panel->posF);
-    WMResizeWidget(panel->neB, 110, 20);
-    WMMoveWidget(panel->neB, 230, 25);
-    WMSetButtonImagePosition(panel->neB, WIPLeft);
-    WMSetButtonTextAlignment(panel->neB, WALeft);
-    WMSetButtonText(panel->neB, "Top right");
+    panel->neB = WMCreateButton(panel->posF, WBTOnOff);
+    WMResizeWidget(panel->neB, 24, 24);
+    WMMoveWidget(panel->neB, 115, 25);
     WMSetButtonAction(panel->neB, showIconLayout, panel);
     
-    panel->swB = WMCreateRadioButton(panel->posF);
-    WMResizeWidget(panel->swB, 110, 20);
-    WMMoveWidget(panel->swB, 15, 95);
-    WMSetButtonText(panel->swB, "Bottom left");
-    WMSetButtonTextAlignment(panel->swB, WARight);
-    WMSetButtonImagePosition(panel->swB, WIPRight);
+    panel->swB = WMCreateButton(panel->posF, WBTOnOff);
+    WMResizeWidget(panel->swB, 24, 24);
+    WMMoveWidget(panel->swB, 15, 100);
     WMSetButtonAction(panel->swB, showIconLayout, panel);
 
-    panel->seB = WMCreateRadioButton(panel->posF);
-    WMResizeWidget(panel->seB, 110, 20);
-    WMMoveWidget(panel->seB, 230, 95);
-    WMSetButtonText(panel->seB, "Bottom right");
+    panel->seB = WMCreateButton(panel->posF, WBTOnOff);
+    WMResizeWidget(panel->seB, 24, 24);
+    WMMoveWidget(panel->seB, 115, 100);
     WMSetButtonAction(panel->seB, showIconLayout, panel);
 
     WMGroupButtons(panel->nwB, panel->neB);
@@ -195,7 +199,7 @@ createPanel(Panel *p)
 			     0x7100, True);
     panel->posVF = WMCreateFrame(panel->posF);
     WMResizeWidget(panel->posVF, 95, 70);
-    WMMoveWidget(panel->posVF, 130, 35);
+    WMMoveWidget(panel->posVF, 30, 38);
     WMSetFrameRelief(panel->posVF, WRSunken);
     WMSetWidgetBackgroundColor(panel->posVF, color);
     WMReleaseColor(color);
@@ -204,14 +208,14 @@ createPanel(Panel *p)
     WMSetFrameRelief(panel->posV, WRSimple);
 
     panel->verB = WMCreateRadioButton(panel->posF);
-    WMResizeWidget(panel->verB, 120, 20);
-    WMMoveWidget(panel->verB, 345, 45);
+    WMResizeWidget(panel->verB, 105, 20);
+    WMMoveWidget(panel->verB, 150, 45);
     WMSetButtonText(panel->verB, "Vertical");
     WMSetButtonAction(panel->verB, showIconLayout, panel);
 
     panel->horB = WMCreateRadioButton(panel->posF);
-    WMResizeWidget(panel->horB, 120, 20);
-    WMMoveWidget(panel->horB, 345, 80);
+    WMResizeWidget(panel->horB, 105, 20);
+    WMMoveWidget(panel->horB, 150, 75);
     WMSetButtonText(panel->horB, "Horizontal");   
     WMSetButtonAction(panel->horB, showIconLayout, panel);
     
@@ -220,6 +224,28 @@ createPanel(Panel *p)
     
     WMMapSubwidgets(panel->posF);
     
+    /***************** Animation ****************/
+    panel->animF = WMCreateFrame(panel->frame);
+    WMResizeWidget(panel->animF, 205, 135);
+    WMMoveWidget(panel->animF, 295, 10);
+    WMSetFrameTitle(panel->animF, _("Iconification Animation"));
+
+    for (i=0; i<4; i++) {
+	panel->animB[i] = WMCreateRadioButton(panel->animF);
+	WMResizeWidget(panel->animB[i], 170, 20);
+	WMMoveWidget(panel->animB[i], 20, 24+i*25);
+    }
+    WMGroupButtons(panel->animB[0], panel->animB[1]);
+    WMGroupButtons(panel->animB[0], panel->animB[2]);
+    WMGroupButtons(panel->animB[0], panel->animB[3]);
+
+    WMSetButtonText(panel->animB[0], _("Shrinking/Zooming"));
+    WMSetButtonText(panel->animB[1], _("Spinning/Twisting"));
+    WMSetButtonText(panel->animB[2], _("3D-flipping"));
+    WMSetButtonText(panel->animB[3], _("None"));
+
+    WMMapSubwidgets(panel->animF);
+
     /***************** Options ****************/
     panel->optF = WMCreateFrame(panel->frame);
     WMResizeWidget(panel->optF, 260, 65);
@@ -265,7 +291,7 @@ static void
 storeData(_Panel *panel)
 {
     char buf[8];
-    
+
     SetBoolForKey(WMGetButtonSelected(panel->arrB), "AutoArrangeIcons");
     SetBoolForKey(WMGetButtonSelected(panel->omnB), "StickyIcons");
 
@@ -293,6 +319,15 @@ storeData(_Panel *panel)
 	buf[2] = 'v';
     }
     SetStringForKey(buf, "IconPosition");
+
+    if (WMGetButtonSelected(panel->animB[0]))
+	SetStringForKey("zoom", "IconificationStyle");
+    else if (WMGetButtonSelected(panel->animB[1]))
+	SetStringForKey("twist", "IconificationStyle");
+    else if (WMGetButtonSelected(panel->animB[2]))
+	SetStringForKey("flip", "IconificationStyle");
+    else 
+	SetStringForKey("none", "IconificationStyle");
 }
 
 

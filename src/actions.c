@@ -411,15 +411,11 @@ wMaximizeWindow(WWindow *wwin, int directions)
 	    if (!(wPreferences.icon_yard & IY_RIGHT))
 		new_x += wPreferences.icon_size;
 	}
-#if 0
-	if (wPreferences.no_window_under_dock
-	    && wwin->screen_ptr->dock) {
-	    new_width -= wPreferences.icon_size + DOCK_EXTRA_SPACE;
-	    if (!wwin->screen_ptr->dock->on_right_side) 
-		new_x += wPreferences.icon_size + DOCK_EXTRA_SPACE;
-	}
-#endif
-	if (wwin->screen_ptr->dock && !wwin->screen_ptr->dock->lowered) {
+
+	if (wwin->screen_ptr->dock 
+	    && (!wwin->screen_ptr->dock->lowered
+		|| wPreferences.no_window_under_dock)) {
+
 	    new_width -= wPreferences.icon_size + DOCK_EXTRA_SPACE;
 	    if (!wwin->screen_ptr->dock->on_right_side) 
 		new_x += wPreferences.icon_size + DOCK_EXTRA_SPACE;
@@ -900,9 +896,8 @@ wIconifyWindow(WWindow *wwin)
         wwin->window_flags.omnipresent || wPreferences.sticky_icons)
         XMapWindow(dpy, wwin->icon->core->window);
     AddToStackList(wwin->icon->core);
-#ifndef STRICTNS
+
     wLowerFrame(wwin->icon->core);
-#endif
 
     if (present) {
 	WWindow *owner = recursiveTransientFor(wwin->screen_ptr->focused_window);
@@ -1263,6 +1258,10 @@ wHideApplication(WApplication *wapp)
     }
     
     wapp->flags.hidden = 1;
+    
+    if(wPreferences.auto_arrange_icons) {
+	wArrangeIcons(scr, True);
+    }
 }
 
 
@@ -1564,7 +1563,7 @@ wArrangeIcons(WScreen *scr, Bool arrangeAll)
         wwin = wwin->prev;
 
     while (wwin) { 
-        if (wwin->icon && wwin->flags.miniaturized &&
+        if (wwin->icon && wwin->flags.miniaturized && !wwin->flags.hidden &&
             (wwin->frame->workspace==scr->current_workspace ||
              wwin->window_flags.omnipresent ||
              wPreferences.sticky_icons)) {

@@ -112,9 +112,9 @@ wMenuCreate(WScreen *screen, char *title, int main_menu)
     memset(menu, 0, sizeof(WMenu));
 
 #ifdef SINGLE_MENULEVEL
-    tmp = WMSubmenuWindowLevel;
+    tmp = WMSubmenuLevel;
 #else
-    tmp = (main_menu ? WMMainMenuWindowLevel : WMSubmenuWindowLevel);
+    tmp = (main_menu ? WMMainMenuLevel : WMSubmenuLevel);
 #endif
 
     flags = WFF_SINGLE_STATE;
@@ -359,10 +359,10 @@ wMenuEntrySetCascade(WMenu *menu, WMenuEntry *entry, WMenu *cascade)
     if (menu->flags.lowered) {
 	
 	cascade->flags.lowered = 1;
-	ChangeStackingLevel(cascade->frame->core, WMNormalWindowLevel);
+	ChangeStackingLevel(cascade->frame->core, WMNormalLevel);
 	
 	cascade->brother->flags.lowered = 1;
-	ChangeStackingLevel(cascade->brother->frame->core, WMNormalWindowLevel);
+	ChangeStackingLevel(cascade->brother->frame->core, WMNormalLevel);
     }
     
     if (!menu->flags.realized)
@@ -2110,12 +2110,12 @@ changeMenuLevels(WMenu *menu, int lower)
     int i;
 
     if (!lower) {
-	ChangeStackingLevel(menu->frame->core, (!menu->parent ? WMMainMenuWindowLevel
-					  : WMSubmenuWindowLevel));
+	ChangeStackingLevel(menu->frame->core, (!menu->parent ? WMMainMenuLevel
+					  : WMSubmenuLevel));
 	wRaiseFrame(menu->frame->core);
 	menu->flags.lowered = 0;
     } else {
-	ChangeStackingLevel(menu->frame->core, WMNormalWindowLevel);
+	ChangeStackingLevel(menu->frame->core, WMNormalLevel);
 	wLowerFrame(menu->frame->core);
 	menu->flags.lowered = 1;
     }

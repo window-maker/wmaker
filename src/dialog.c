@@ -148,13 +148,13 @@ wInputDialog(WScreen *scr, char *title, char *message, char **text)
     XDestroyWindow(dpy, parent);
 
     if (result==NULL)
-	return WDB_CANCEL;
+	return False;
     else {
         if (*text)
             free(*text);
         *text = result;
 
-        return WDB_OK;
+        return True;
     }
 }
 

@@ -9,6 +9,8 @@ Do ASAP:
 - make unhide app map windows in the same stacking order they were before
 hiding
 - blink border of clients with UrgencyHint set between red and black
+- finish session stuff
+- order window list menu by workspace
 
 Need to do:
 ===========
@@ -30,8 +32,9 @@ Need to do:
 - remake internal string processing to use wchar? unicode?
 - -stateprefix cmd arg to specify sufix for WMState domain (multiple instance
 	support)
-- R6 style session management (or something to make wmaker compatible/aware 
-  of it)
+- GNOME stuff
+- add new file for stuff like default commands and dnd commands for
+docked apps, balloons for the dock etc
 
 
 Maybe some day:

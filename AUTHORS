@@ -1,4 +1,4 @@
-Bjoern Giesler <giesler@ira.uka.de>
+Information about locale translators is at src/po/README and
 Library/WindowMaker/README
 
 Many thanks to the following people who have contributed
@@ -108,7 +108,7 @@ Marcelo E. Magallon <mmagallo@efis.ucr.ac.cr>
 CPP search path improvement, man pages
 
 Tim Malone <mrgone@eskimo.com>
-bug fix
+bug fix, jpeg bug fix
 
 MANOME Tomonori <manome@itlb.te.noda.sut.ac.jp>
 I18N bug fixes and japanese locale
@@ -154,6 +154,9 @@ REDUCE_APPICON/single-icon
 
 Chong Shang Shan <chongsha@sps.nus.edu.sg>
 flipping iconification animation
+
+Paul D. Smith <psmith@BayNetworks.COM>
+SunOS portability, configure fixes
 
 Phillip Smith <teknix@alloy.net>
 FTP, WWW, mailing list site provider/maintainer (Net logistics)

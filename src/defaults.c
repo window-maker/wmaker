@@ -391,11 +391,9 @@ WDefaultEntry optionList[] = {
     {"AutoArrangeIcons", "NO",			NULL,
 	  &wPreferences.auto_arrange_icons, getBool,	NULL
     },
-	/*
     {"NoWindowUnderDock", "NO",			NULL,
 	  &wPreferences.no_window_under_dock, getBool,	NULL
     },
-	 */
     {"NoWindowOverIcons", "NO",			NULL,
 	  &wPreferences.no_window_over_icons, getBool,  NULL
     },
@@ -1209,7 +1207,7 @@ wDefaultUpdateIcons(WScreen *scr)
 
 #define STRINGP(x) if (!PLIsString(value)) { \
 	wwarning(_("Wrong option format for key \"%s\". Should be %s."), \
-	PLGetString(entry->plkey), x); \
+		entry->key, x); \
 	return False; }
 
 
@@ -1285,7 +1283,7 @@ again:
 		data = 0;
 	} else {
 	    wwarning(_("can't convert \"%s\" to boolean for key \"%s\""),
-		     val, PLGetString(entry->plkey));
+		     val, entry->key);
 	    if (second_pass==0) {
 		val = PLGetString(entry->plvalue);
 		second_pass = 1;
@@ -1321,7 +1319,7 @@ getInt(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
     
     if (sscanf(val, "%i", &data)!=1) {
         wwarning(_("can't convert \"%s\" to integer for key \"%s\""),
-                 val, PLGetString(entry->plkey));
+                 val, entry->key);
         val = PLGetString(entry->plvalue);
         wwarning(_("using default \"%s\" instead"), val);
         if (sscanf(val, "%i", &data)!=1) {
@@ -1351,7 +1349,7 @@ getCoord(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
 again:
     if (!PLIsArray(value)) {
         wwarning(_("Wrong option format for key \"%s\". Should be %s."),
-                 PLGetString(entry->plkey), "Coordinate");
+                 entry->key, "Coordinate");
         if (changed==0) {
             value = entry->plvalue;
             changed = 1;
@@ -1364,7 +1362,7 @@ again:
     nelem = PLGetNumberOfElements(value);
     if (nelem != 2) {
         wwarning(_("Incorrect number of elements in array for key \"%s\"."),
-                 PLGetString(entry->plkey));
+                 entry->key);
         if (changed==0) {
             value = entry->plvalue;
             changed = 1;
@@ -1379,7 +1377,7 @@ again:
     
     if (!elem_x || !elem_y || !PLIsString(elem_x) || !PLIsString(elem_y)) {
         wwarning(_("Wrong value for key \"%s\". Should be Coordinate."),
-                 PLGetString(entry->plkey));
+                 entry->key);
         if (changed==0) {
             value = entry->plvalue;
             changed = 1;
@@ -1393,8 +1391,7 @@ again:
     val_y = PLGetString(elem_y);
 
     if (sscanf(val_x, "%i", &data.x)!=1 || sscanf(val_y, "%i", &data.y)!=1) {
-        wwarning(_("can't convert array to integers for \"%s\"."),
-                 PLGetString(entry->plkey));
+        wwarning(_("can't convert array to integers for \"%s\"."), entry->key);
         if (changed==0) {
             value = entry->plvalue;
             changed = 1;
@@ -1465,7 +1462,7 @@ getPathList(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
 again:
     if (!PLIsArray(value)) {
 	wwarning(_("Wrong option format for key \"%s\". Should be %s."),
-                 PLGetString(entry->plkey), "an array of paths");
+                 entry->key, "an array of paths");
         if (changed==0) {
             value = entry->plvalue;
             changed = 1;
@@ -1516,7 +1513,7 @@ getEnum(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
 {
     static char data;
 
-    data = string2index(entry->key, value, entry->default_value,
+    data = string2index(entry->plkey, value, entry->default_value,
 			(WOptionEnumeration*)entry->extra_data);
     if (data < 0)
 	return False;
@@ -1732,7 +1729,7 @@ getTexture(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
 again:
     if (!PLIsArray(value)) { 
 	wwarning(_("Wrong option format for key \"%s\". Should be %s."),
-		 PLGetString(entry->plkey), "Texture");
+		 entry->key, "Texture");
         if (changed==0) {
             value = entry->plvalue;
             changed = 1;
@@ -1741,12 +1738,28 @@ again:
         }
         return False;
     }
+    
+    if (strcmp(entry->key, "WidgetColor")==0 && !changed) {
+	proplist_t pl;
+	
+	pl = PLGetArrayElement(value, 0);
+	if (!pl || !PLIsString(pl) || !PLGetString(pl)
+	    || strcasecmp(PLGetString(pl), "solid")!=0) {
+	    wwarning(_("Wrong option format for key \"%s\". Should be %s."),
+		     entry->key, "Solid Texture");
+
+	    value = entry->plvalue;
+	    changed = 1;
+	    wwarning(_("using default \"%s\" instead"), entry->default_value);
+	    goto again;
+	}
+    }
 
     texture = parse_texture(scr, value);
 
     if (!texture) {
 	wwarning(_("Error in texture specification for key \"%s\""),
-		 PLGetString(entry->plkey));
+		 entry->key);
         if (changed==0) {
             value = entry->plvalue;
             changed = 1;
@@ -2069,8 +2082,8 @@ again:
         if (file) {
             if (fork()==0) {
 		SetupEnvironment(scr);
-				 
-		close(ConnectionNumber(dpy));
+		
+		CloseDescriptors();
 		
                 execlp(program, program, style, "-c", cpc, "-b", back, file, NULL);
                 wwarning(_("could not run \"%s\""), program);
@@ -2157,7 +2170,7 @@ getColor(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
 again:
     if (!wGetColor(scr, val, &color)) {
         wwarning(_("could not get color for key \"%s\""),
-                 PLGetString(entry->plkey));
+                 entry->key);
         if (second_pass==0) {
             val = PLGetString(entry->plvalue);
             second_pass = 1;
@@ -2741,7 +2754,7 @@ makeWorkspaceTexture(WScreen *scr, WTexture *texture, char *file, char *option)
 		
 		SetupEnvironment(scr);
 		
-		close(ConnectionNumber(dpy));
+		CloseDescriptors();
 
 		colorn = wmalloc(32);
 		sprintf(colorn, "\"#%2x%2x%2x\"",

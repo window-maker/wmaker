@@ -91,7 +91,8 @@ typedef struct {
     unsigned int no_shadeable:1;
     unsigned int omnipresent:1;
     unsigned int skip_window_list:1;
-    unsigned int floating:1;	       /* put in NSFloatingWindowLevel */
+    unsigned int floating:1;	       /* put in WMFloatingLevel */
+    unsigned int sunken:1;	       /* put in WMSunkenLevel */
     unsigned int no_bind_keys:1;       /* intercept wm kbd binds
 					* while window is focused */
     unsigned int no_bind_mouse:1;      /* intercept mouse events

@@ -5,7 +5,7 @@ pkgdatadir  = $(datadir)/@PACKAGE@
 
 bin_PROGRAMS = wxcopy wxpaste wdwrite getstyle setstyle seticons geticonset wmsetbg
 
-bin_SCRIPTS = wmaker.inst wm-oldmenu2new
+bin_SCRIPTS = wmaker.inst wm-oldmenu2new wsetfont
 
 EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new
 
@@ -52,7 +52,7 @@ wmsetbg_SOURCES = wmsetbg.c
 
 CLEANFILES = wmaker.inst
 
-wmaker.inst: $(srcdir)/wmaker.inst.in $(srcdir)/Makefile
+wmaker.inst: $(srcdir)/wmaker.inst.in ./Makefile
 	-rm -f wmaker.inst
 	sed -e "s:#pkgdatadir#:$(pkgdatadir):" \
 		-e "s/#version#/$(VERSION)/" \

@@ -90,8 +90,8 @@ updateCommand(WAppIcon *icon, char *command)
     }
     icon->command = command;
 
-    if (!icon->wm_class && !icon->wm_instance &&
-	icon->command && strlen(icon->command)>0) {
+    if (!icon->wm_class && !icon->wm_instance && icon->command 
+	&& strlen(icon->command)>0) {
 	icon->forced_dock = 1;
     }
 }
@@ -216,7 +216,7 @@ panelBtnCallback(WMWidget *self, void *data)
 	    else
 		wAppIconPaint(aicon);
 
-	    wDefaultChangeIcon(panel->wwin->screen_ptr, aicon->wm_instance, 
+	    wDefaultChangeIcon(panel->wwin->screen_ptr, aicon->wm_instance,
 			       aicon->wm_class, text);
 	}
 	if (text)
@@ -236,11 +236,11 @@ panelBtnCallback(WMWidget *self, void *data)
 	text = WMGetTextFieldText(panel->dndCommandField);
 	updateDNDCommand(panel->editedIcon, text);
 #endif
-	
+
 	panel->editedIcon->auto_launch = 
 	    WMGetButtonSelected(panel->autoLaunchBtn);
     }
-    
+
     if (done)
 	DestroyDockAppSettingsPanel(panel);
 }

@@ -210,12 +210,5 @@
 "Applications" END
 
 
-	
-#if (UID==0)	// root only stuff
-	"시스템" MENU
-		// the RedHat control panel program
-		"RH ControlPanel" EXEC control-panel
-	"시스템" END
-#endif
 "윈도우메이커" END
 

@@ -224,7 +224,7 @@ main(int argc, char **argv)
     if (buf == NULL) {
       status = 1;
     } else {
-      if (write(STDIN_FILENO, buf, l) == -1)
+      if (write(STDOUT_FILENO, buf, l) == -1)
 	status = errno;
       else
 	status = 0;

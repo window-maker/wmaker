@@ -70,6 +70,12 @@ extern const char * const sys_siglist[];
 #endif
 #endif
 
+/* for SunOS */
+#ifndef SA_RESTART
+# define SA_RESTART 0
+#endif
+
+
 /****** Global Variables ******/
 
 extern WPreferences wPreferences;
@@ -148,6 +154,9 @@ static void manageAllWindows();
 
 extern void NotifyDeadProcess(pid_t pid, unsigned char status);
 
+#ifdef R6SM
+extern void _wSessionCloseDescriptors();
+#endif
 
 
 static int 
@@ -199,9 +208,8 @@ catchXError(Display *dpy, XErrorEvent *error)
 static int
 handleXIO(Display *dpy)
 {
-    exit(0);
+    Exit(0);
 }
-
 
 
 /*
@@ -554,6 +562,16 @@ wScreenForWindow(Window window)
 }
 
 
+void
+CloseDescriptors()
+{
+    if (dpy)
+	close(ConnectionNumber(dpy));
+#ifdef R6SM
+    _wSessionCloseDescriptors();
+#endif
+}
+
 
 /*
  *----------------------------------------------------------
@@ -738,7 +756,7 @@ StartUp(Bool defaultScreenOnly)
 	    wScreen[wScreenCount] = wScreenInit(DefaultScreen(dpy));
 	    if (!wScreen[wScreenCount]) {
 		wfatal(_("it seems that there already is a window manager running"));
-		exit(1);
+		Exit(1);
 	    }
 	} else {
 	    wScreen[wScreenCount] = wScreenInit(j);
@@ -800,11 +818,13 @@ StartUp(Bool defaultScreenOnly)
     
     if (wScreenCount == 0) {
 	wfatal(_("could not manage any screen"));
-	exit(1);
+	Exit(1);
     }
 
-    /* setup defaults file polling */
-    WMAddTimerHandler(3000, wDefaultsCheckDomains, NULL);
+    if (!wPreferences.flags.noupdates) {
+	/* setup defaults file polling */
+	WMAddTimerHandler(3000, wDefaultsCheckDomains, NULL);
+    }
 }
 
 

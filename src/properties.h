@@ -35,13 +35,18 @@ void PropGetProtocols(Window window, WProtocols *prots);
 int PropGetWMClass(Window window, char **wm_class, char **wm_instance);
 int PropGetGNUstepWMAttr(Window window, GNUstepWMAttributes **attr);
 void PropWriteGNUstepWMAttr(Window window, GNUstepWMAttributes *attr);
-int PropGetClientLeader(Window window, Window *leader);
 
 void PropSetWMakerProtocols(Window root);
 void PropCleanUp(Window root);
 
 #ifdef MWM_HINTS
 int PropGetMotifWMHints(Window window, MWMHints **mwmhints);
+#endif
+
+Window PropGetClientLeader(Window window);
+
+#ifdef R6SM
+char *PropGetClientID(Window window);
 #endif
 
 #endif

@@ -180,7 +180,7 @@ saveIconNameFor(char *iconPath, char *wm_instance, char *wm_class)
     }
     PLRelease(key);
 
-    if (val)
+    if (val && !wPreferences.flags.noupdates)
 	PLSave(dict, YES);
 }
 
@@ -382,9 +382,7 @@ wApplicationCreate(WScreen *scr, Window main_window)
         } else {
             PlaceIcon(scr, &x, &y);
 	    wAppIconMove(wapp->app_icon, x, y);
-#ifndef STRICTNS
-            wLowerFrame(icon->core);
-#endif
+	    wLowerFrame(icon->core);
         }
         if (!clip || !wapp->app_icon->attracted || !clip->collapsed)
 	    XMapWindow(dpy, icon->core->window);

@@ -675,7 +675,7 @@ msgid ""
 "Close Window System session?\n"
 "(all applications will be closed)"
 msgstr ""
-"Fermer la session X-Window"
+"Fermer la session X-Window\n"
 "(toutes les applications seront fermées)"
 
 #: ../src/rootmenu.c:230

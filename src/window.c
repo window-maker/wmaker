@@ -401,6 +401,9 @@ wWindowCheckAttributeSanity(WWindow *wwin, WWindowAttributes *wflags)
     if (wwin->transient_for!=None 
 	&& wwin->transient_for!=wwin->screen_ptr->root_win)
 	wflags->emulate_appicon = 0;
+    
+    if (wflags->sunken && wflags->floating)
+	wflags->sunken = 0;
 }
 
 
@@ -527,11 +530,9 @@ wManageWindow(WScreen *scr, Window window)
 	motif_hints = NULL;
 #endif /* MWM_HINTS */
 
-    if (!PropGetClientLeader(window, &wwin->client_leader)) {
-	wwin->client_leader = None;
-    } else {
+    wwin->client_leader = PropGetClientLeader(window);
+    if (wwin->client_leader!=None)
 	wwin->main_window = wwin->client_leader;
-    }
 
     if (wwin->wm_hints)
 	XFree(wwin->wm_hints);
@@ -642,11 +643,32 @@ wManageWindow(WScreen *scr, Window window)
     /* set GNUstep window attributes */
     if (wwin->wm_gnustep_attr) {
 	setupGNUstepHints(&wwin->window_flags, wwin->wm_gnustep_attr);
+
 	if (wwin->wm_gnustep_attr->flags & GSWindowLevelAttr) {
-	    window_level = wwin->wm_gnustep_attr->window_level;
+
+	    switch (wwin->wm_gnustep_attr->window_level) {
+	     case WMNormalWindowLevel:
+		window_level = WMNormalLevel;
+		break;
+	     case WMFloatingWindowLevel:
+		window_level = WMFloatingLevel;
+		break;
+	     case WMDockWindowLevel:
+		window_level = WMDockLevel;
+		break;
+	     case WMSubmenuWindowLevel:
+		window_level = WMSubmenuLevel;
+		break;
+	     case WMMainMenuWindowLevel:
+		window_level = WMMainMenuLevel;
+		break;
+	     default:
+		window_level = WMNormalLevel;
+		break;
+	    }
 	} else {
 	    /* setup defaults */
-	    window_level = WMNormalWindowLevel;
+	    window_level = WMNormalLevel;
 	}
     } else {
 #ifdef MWM_HINTS
@@ -655,9 +677,11 @@ wManageWindow(WScreen *scr, Window window)
 	}
 #endif /* MWM_HINTS */
 	if (wwin->window_flags.floating)
-	    window_level = WMFloatingWindowLevel;
+	    window_level = WMFloatingLevel;
+	else if (wwin->window_flags.sunken)
+	    window_level = WMSunkenLevel;
 	else
-	    window_level = WMNormalWindowLevel;
+	    window_level = WMNormalLevel;
     }
 #ifdef MWM_HINTS
     if (motif_hints)
@@ -1080,7 +1104,7 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
     foo = WFF_RIGHT_BUTTON;
     foo |= WFF_TITLEBAR;
 
-    wwin->frame = wFrameWindowCreate(scr, WMFloatingWindowLevel,
+    wwin->frame = wFrameWindowCreate(scr, WMFloatingLevel,
 				     wwin->frame_x, wwin->frame_y,
 				     width, height, foo,
 				     scr->window_title_texture,
@@ -1474,6 +1498,7 @@ wWindowChangeWorkspace(WWindow *wwin, int workspace)
 {
     WScreen *scr = wwin->screen_ptr;
     WApplication *wapp;
+    int unmap = 0;
 
     if (workspace >= scr->workspace_count || workspace < 0 
 	|| workspace == wwin->frame->workspace)
@@ -1489,7 +1514,7 @@ wWindowChangeWorkspace(WWindow *wwin, int workspace)
 	    if (wapp) {
 		wapp->last_workspace = workspace;
 	    }
-	    XUnmapWindow(dpy, wwin->frame->core->window);
+	    unmap = 1;
 	    wwin->flags.mapped = 0;
 	    wSetFocusTo(scr, NULL);
 	}
@@ -1504,6 +1529,8 @@ wWindowChangeWorkspace(WWindow *wwin, int workspace)
 	wwin->frame->workspace = workspace;
         UpdateSwitchMenu(scr, wwin, ACTION_CHANGE_WORKSPACE);
     }
+    if (unmap)
+	XUnmapWindow(dpy, wwin->frame->core->window);
 }
 
 
@@ -2028,13 +2055,21 @@ wWindowSetKeyGrabs(WWindow *wwin)
 void
 wWindowResetMouseGrabs(WWindow *wwin)
 {
+    /* Mouse grabs can't be done on the client window because of
+     * ICCCM and because clients that try to do the same will crash.
+     * 
+     * But there is a problem wich makes tbar buttons of unfocused
+     * windows not usable as the click goes to the frame window instead
+     * of the button itself. Must figure a way to fix that.
+     */
+
     XUngrabButton(dpy, AnyButton, AnyModifier, wwin->client_win);
 
     if (!wwin->window_flags.no_bind_mouse) {
 	/* grabs for Meta+drag */
-	wHackedGrabButton(AnyButton, MOD_MASK, wwin->client_win, 
+	wHackedGrabButton(AnyButton, MOD_MASK, wwin->client_win,
 			  True, ButtonPressMask, GrabModeSync, 
-			  GrabModeAsync, None, wCursor[WCUR_ARROW]);
+			  GrabModeAsync, None, None);
     }
     
     if (!wwin->flags.focused) {
@@ -2255,9 +2290,7 @@ resizebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
     if (event->xbutton.button == Button1)
 	wRaiseFrame(wwin->frame->core);
 
-    if (event->xbutton.state & MOD_MASK) {
-	/* move the window */
-#if 0
+    if (event->xbutton.window != wwin->frame->resizebar->window) {
 	if (XGrabPointer(dpy, wwin->frame->resizebar->window, True,
 			 ButtonMotionMask|ButtonReleaseMask|ButtonPressMask,
 			 GrabModeAsync, GrabModeAsync, None, 
@@ -2267,22 +2300,13 @@ resizebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 #endif
 	    return;
 	}
-#endif
+    }
+    
+    if (event->xbutton.state & MOD_MASK) {
+	/* move the window */
 	wMouseMoveWindow(wwin, event);
 	XUngrabPointer(dpy, CurrentTime);
     } else {
-#if 0
-        /* resize the window */
-        if (XGrabPointer(dpy, wwin->frame->resizebar->window, True,
-                         ButtonMotionMask|ButtonReleaseMask|ButtonPressMask,
-                         GrabModeAsync, GrabModeAsync, None,
-                         None, CurrentTime)!=GrabSuccess) {
-#ifdef DEBUG0
-            wwarning("pointer grab failed for window resize");
-#endif
-            return;
-        }
-#endif
         wMouseResizeWindow(wwin, event);
         XUngrabPointer(dpy, CurrentTime);
     }
@@ -2385,17 +2409,15 @@ titlebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 		"Turn it off or some mouse actions and keyboard shortcuts will not work."));
     }
 #endif
-
     event->xbutton.state &= ValidModMask;
-    
 
     CloseWindowMenu(wwin->screen_ptr);
-    
+
     if (wPreferences.focus_mode==WKF_CLICK 
 	&& !(event->xbutton.state&ControlMask)) {
 	wSetFocusTo(wwin->screen_ptr, wwin);
     }
-    
+
     if (event->xbutton.button == Button1
 	|| event->xbutton.button == Button2) {
 	
@@ -2411,13 +2433,36 @@ titlebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 	    wSelectWindow(wwin, !wwin->flags.selected);
 	    return;
 	}
+	if (event->xbutton.window != wwin->frame->titlebar->window
+	    && XGrabPointer(dpy, wwin->frame->titlebar->window, False,
+			    ButtonMotionMask|ButtonReleaseMask|ButtonPressMask,
+			    GrabModeAsync, GrabModeAsync, None, 
+			    None, CurrentTime)!=GrabSuccess) {
+#ifdef DEBUG0
+	    wwarning("pointer grab failed for window move");
+#endif
+	    return;
+	}
+
 	/* move the window */
 	wMouseMoveWindow(wwin, event);
+
 	XUngrabPointer(dpy, CurrentTime);
     } else if (event->xbutton.button == Button3 && event->xbutton.state==0
 	       && !wwin->flags.internal_window) {
 	WObjDescriptor *desc;
-	
+
+	if (event->xbutton.window != wwin->frame->titlebar->window
+	    && XGrabPointer(dpy, wwin->frame->titlebar->window, False,
+			    ButtonMotionMask|ButtonReleaseMask|ButtonPressMask,
+			    GrabModeAsync, GrabModeAsync, None, 
+			    None, CurrentTime)!=GrabSuccess) {
+#ifdef DEBUG0
+	    wwarning("pointer grab failed for window move");
+#endif
+	    return;
+	}
+
 	OpenWindowMenu(wwin, event->xbutton.x_root, 
 		       wwin->frame_y+wwin->frame->top_width, False);
 
@@ -2425,6 +2470,8 @@ titlebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 	desc = &wwin->screen_ptr->window_menu->menu->descriptor;
 	event->xany.send_event = True;
 	(*desc->handle_mousedown)(desc, event);
+	
+	XUngrabPointer(dpy, CurrentTime);
     }
 }
 

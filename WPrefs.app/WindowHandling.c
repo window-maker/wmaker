@@ -44,6 +44,7 @@ typedef struct _Panel {
     
     WMFrame *maxiF;
     WMButton *miconB;
+    WMButton *mdockB;
     
     WMFrame *opaqF;
     WMButton *opaqB;
@@ -144,6 +145,8 @@ showData(_Panel *panel)
     WMSetButtonSelected(panel->opaqB, GetBoolForKey("OpaqueMove"));
     
     WMSetButtonSelected(panel->miconB, GetBoolForKey("NoWindowOverIcons"));
+
+    WMSetButtonSelected(panel->mdockB, GetBoolForKey("NoWindowOverDock"));
 }
 
 
@@ -154,6 +157,7 @@ storeData(_Panel *panel)
     char x[16], y[16];
     
     SetBoolForKey(WMGetButtonSelected(panel->miconB), "NoWindowOverIcons");
+    SetBoolForKey(WMGetButtonSelected(panel->mdockB), "NoWindowOverDock");
     SetBoolForKey(WMGetButtonSelected(panel->opaqB), "OpaqueMove");
     SetBoolForKey(WMGetButtonSelected(panel->tranB), "OnTopTransients");
     SetStringForKey(placements[WMGetPopUpButtonSelectedItem(panel->placP)],
@@ -292,9 +296,15 @@ createPanel(Panel *p)
     WMSetFrameTitle(panel->maxiF, _("When maximizing..."));
     
     panel->miconB = WMCreateSwitchButton(panel->maxiF);
-    WMResizeWidget(panel->miconB, 185, 35);
-    WMMoveWidget(panel->miconB, 10, 20);
+    WMResizeWidget(panel->miconB, 185, 20);
+    WMMoveWidget(panel->miconB, 10, 10);
     WMSetButtonText(panel->miconB, _("...do not resize over icons"));
+
+    panel->mdockB = WMCreateSwitchButton(panel->maxiF);
+    WMResizeWidget(panel->mdockB, 185, 20);
+    WMMoveWidget(panel->mdockB, 10, 40);
+
+    WMSetButtonText(panel->mdockB, _("...do not resize over dock"));
 
     WMMapSubwidgets(panel->maxiF);
     

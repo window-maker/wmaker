@@ -37,8 +37,6 @@
 #endif
 
 
-/* max. number of distinct window levels */
-#define MAX_WINDOW_LEVELS	5
 
 
 /* class codes */
@@ -56,6 +54,17 @@ typedef enum {
 } WClassType;
 
 
+/* generic window levels (a superset of the N*XTSTEP ones) */
+enum {
+    WMDesktopLevel = 0,
+	WMSunkenLevel = 1,
+	WMNormalLevel = 2,
+	WMFloatingLevel = 3,
+	WMDockLevel = 4,
+	WMSubmenuLevel = 5,
+	WMMainMenuLevel = 6
+};
+#define MAX_WINDOW_LEVELS 7
 
 /*
  * WObjDescriptor will be used by the event dispatcher to
@@ -203,9 +212,7 @@ typedef struct WPreferences {
     
     char use_saveunders;	       /* turn on SaveUnders for menus,
 					* icons etc. */ 
-/*
     char no_window_under_dock;
- */
 
     char no_window_over_icons;
 
@@ -307,6 +314,7 @@ typedef struct WPreferences {
         unsigned int nodock:1;	       /* don't display the dock */
         unsigned int noclip:1;        /* don't display the clip */
 	unsigned int nocpp:1;	       /* don't use cpp */
+	unsigned int noupdates:1;      /* don't require ~/GNUstep (-static) */
     } flags;			       /* internal flags */
 } WPreferences;
 

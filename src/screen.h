@@ -110,7 +110,7 @@ typedef struct _WScreen {
 					* is ordered from the topmost to
 					* the lowest window
 					*/
-    int window_level_count[MAX_WINDOW_LEVELS];
+/*    int window_level_count[MAX_WINDOW_LEVELS];*/
     int window_count;		       /* number of windows in window_list */
 
 #ifdef EXPERIMENTAL

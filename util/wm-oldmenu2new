@@ -10,7 +10,7 @@
 # Local dependencies:
 #   None.
 #
-# Authors: Luke Kendall, Toby J Sargeant 
+# Authors: Luke Kendall, Toby J Sargeant
 #
 # Copyright waived; no warranty provided.
 #
@@ -24,12 +24,12 @@ MYNAME=`basename $0`
 USAGE="usage: $MYNAME [menu-file-specifier]
     E.g.	$MYNAME menu.pt
     or		$MYNAME pt
-    the default menu if no arguments are given is the English one, 'menu'."
+    The default menu if no arguments are given is the English one, 'menu'."
 
 #
 # Process arguments - work out which language menu we're converting.
-# I am *assuming* that foreign language locales have the .lang suffix
-# attached to the WMRootMenu name.  I hope that's right!
+# Note that foreign language locales do *not* have the .lang suffix
+# attached to the WMRootMenu name.
 #
 OLD_MENU=menu
 NEW_MENU=WMRootMenu
@@ -38,12 +38,12 @@ then
     if [ -s "$WLW/menu.$1" ]
     then
 	OLD_MENU="menu.$1"
-	NEW_MENU="WMRootMenu.$1"
+	NEW_MENU="WMRootMenu"
     elif [ -s "$WLW/$1" ]
     then
 	OLD_MENU="$1"
 	x=`expr "$1" : "menu\.\(.*\)"`
-	[ "x$x" != "x" ] && NEW_MENU="WMRootMenu.$x"
+	[ "x$x" != "x" ] && NEW_MENU="WMRootMenu"
     else
 	echo "$MYNAME: $WLW/$1 does not exist" >&2
 	exit 1
@@ -91,11 +91,19 @@ set -e
 CC=`which1 cc`
 [ "x$CC" = "x" ] && CC=`which1 gcc`
 [ "x$CC" = "x" ] && "$MYNAME: no cc, gcc found - can't preprocess" >&2 && exit 1
+
+#
+# Use the "parse as if it's C option" if cc is gcc, because
+# newer versions apparently get confused.  Apparently gcc -E does
+# not simply run the preprocessor (that's sad).
+#
+strings "$CC" | grep -l gcc > /dev/null && GCC_FLAGS="-x c"
+
 cp $OLD_MENU $T-c
 #
 # Given the set -e, the exit 1 shouldn't be needed.  But it is, on my NeXT!
 #
-$CC -E -I. $T-c > $T+c || exit 1
+$CC -E -I. $GCC_FLAGS $T-c > $T+c || exit 1
 sed '/^#/d;/^[ 	]*$/d' $T+c > $T
 rm $T-c $T+c
 set +e
@@ -123,7 +131,8 @@ perl - $T <<-'EOF' > $T-p
 	}
 	@foo2=();
 	for (@foo) {
-		s/^(\s*)"([^"]*)"\s\s*OPEN_MENU\s\s*(.*)$/\1($v\n\1"\2",$v\n\1OPEN_MENU,$v\n\1"\3"$v\n\1),/;
+		 
+s/^(\s*)"([^"]*)"\s\s*OPEN_MENU\s\s*(.*)$/\1($v\n\1"\2",$v\n\1OPEN_MENU,$v\n\1"\3"$v\n\1),/;
 		push @foo2,split "\n";
 	}
 	@foo=();
@@ -139,7 +148,8 @@ perl - $T <<-'EOF' > $T-p
 	}
 	@foo=();
 	for (@foo2) {
-		s/^(\s*)([^ 	]*)\s\s*OPEN_MENU\s\s*(.*)$/\1($v\n\1"\2",$v\n\1OPEN_MENU,$v\n\1"\3"$v\n\1),/;
+		s/^(\s*)([^ 	 
+]*)\s\s*OPEN_MENU\s\s*(.*)$/\1($v\n\1"\2",$v\n\1OPEN_MENU,$v\n\1"\3"$v\n\1),/;
 		push @foo,split "\n";
 	}
 	@foo2=();
@@ -200,4 +210,3 @@ then
     mv $NEW_MENU $NEW_MENU.sav
 fi
 mv $NEW_MENU.new $NEW_MENU && echo "Created new $WD/$NEW_MENU"
-

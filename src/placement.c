@@ -52,87 +52,6 @@ extern WPreferences wPreferences;
 extern void
 InteractivePlaceWindow(WWindow *wwin, int *x_ret, int *y_ret);
 
-#if 0
-void
-PlaceIcon(WScreen *scr, int *x_ret, int *y_ret)
-{
-    int x1, y1, x2, y2;
-    int icon_x, icon_y;
-    int left_margin, right_margin;
-    WCoreWindow *wcore;
-
-    left_margin = 0;
-    right_margin = scr->scr_width;
-    if (scr->dock) {
-	if (scr->dock->on_right_side)
-            right_margin -= wPreferences.icon_size + DOCK_EXTRA_SPACE;
-	else
-	    left_margin += wPreferences.icon_size + DOCK_EXTRA_SPACE;
-    }
-
-    x1 = left_margin;
-    y2 = scr->scr_height;
-    y1 = y2-wPreferences.icon_size*2;
-    x2 = left_margin+wPreferences.icon_size;
-
-    while (1) {
-	wcore = scr->stacking_list[0];
-	
-	while (wcore) {
-            void *parent;
-
-	    if (x2>=right_margin+wPreferences.icon_size) {
-		x1 = left_margin;
-		x2 = left_margin+wPreferences.icon_size*2;
-		y1 -= wPreferences.icon_size;
-		y2 -= wPreferences.icon_size;
-		if (y2<wPreferences.icon_size) {
-		    /* what's this guy doing!? */
-		    *x_ret = 0;
-		    *y_ret = 0;
-		    return;
-		}
-		break;
-	    }
-
-            parent = (void*) wcore->descriptor.parent;
-
-	    /* if it is an application icon */
-	    if (wcore->descriptor.parent_type == WCLASS_APPICON) {
-		icon_x = ((WAppIcon*)parent)->x_pos;
-		icon_y = ((WAppIcon*)parent)->y_pos;
-            } else if (wcore->descriptor.parent_type == WCLASS_MINIWINDOW &&
-                       (((WIcon*)parent)->owner->frame->workspace==scr->current_workspace
-                        || ((WIcon*)parent)->owner->window_flags.omnipresent
-                        || wPreferences.sticky_icons)) {
-		icon_x = ((WIcon*)parent)->owner->icon_x;
-		icon_y = ((WIcon*)parent)->owner->icon_y;
-	    } else {
-		wcore = wcore->stacking->under;
-		continue;
-	    }
-	    wcore = wcore->stacking->under;
-	    
-	    /* test if place is taken */
-	    if (icon_y>y1 && icon_y<y2) {
-		if (icon_x<x2 && icon_x>=x1) { 
-		    x2 = icon_x+wPreferences.icon_size*2;
-		    x1 = icon_x+wPreferences.icon_size;
-		    /* this place can't be used */
-		    wcore = scr->stacking_list[0];
-		    break;
-		}
-	    }
-	}
-	if (!wcore) {
-	    /* found spot */
-	    break;
-	}
-    }
-    *x_ret = x1;
-    *y_ret = y2-wPreferences.icon_size;
-}
-#endif
 
 /*
  * Returns True if it is an icon and is in this workspace.
@@ -143,7 +62,7 @@ iconPosition(WCoreWindow *wcore, int sx1, int sy1, int sx2, int sy2,
 {
     void *parent;
     int ok = 0;
-    
+
     parent = wcore->descriptor.parent;
 
     /* if it is an application icon */
@@ -155,14 +74,15 @@ iconPosition(WCoreWindow *wcore, int sx1, int sy1, int sx2, int sy2,
     } else if (wcore->descriptor.parent_type == WCLASS_MINIWINDOW &&
 	       (((WIcon*)parent)->owner->frame->workspace==workspace
 		|| ((WIcon*)parent)->owner->window_flags.omnipresent
-		|| wPreferences.sticky_icons)) {
+		|| wPreferences.sticky_icons)
+	       && !((WIcon*)parent)->owner->flags.hidden) {
 
 	*retX = ((WIcon*)parent)->owner->icon_x;
 	*retY = ((WIcon*)parent)->owner->icon_y;
 
 	ok = 1;
     }
-    
+
     /*
      * Check if it is inside the screen.
      */
@@ -201,6 +121,7 @@ PlaceIcon(WScreen *scr, int *x_ret, int *y_ret)
     int x, y;
     int isize = wPreferences.icon_size;
     int done = 0;
+    int level;
 
     /*
      * Find out screen boundaries.
@@ -257,27 +178,29 @@ PlaceIcon(WScreen *scr, int *x_ret, int *y_ret)
 
 #define INDEX(x,y)	(((y)+1)*(sw+2) + (x) + 1)
 
-    obj = scr->stacking_list[0];
-    while (obj) {
-	int x, y;
+    for (level = WMNormalLevel; level >= WMDesktopLevel; level--) {
+	obj = scr->stacking_list[level];
+	
+	while (obj) {
+	    int x, y;
 
-	if (iconPosition(obj, sx1, sy1, sx2, sy2, scr->current_workspace, 
-			 &x, &y)) {
-	    int xdi, ydi;	       /* rounded down */
-	    int xui, yui;	       /* rounded up */
+	    if (iconPosition(obj, sx1, sy1, sx2, sy2, scr->current_workspace, 
+			     &x, &y)) {
+		int xdi, ydi;	       /* rounded down */
+		int xui, yui;	       /* rounded up */
 
-	    xdi = x/isize;
-	    ydi = y/isize;
-	    xui = (x+isize/2)/isize;
-	    yui = (y+isize/2)/isize;
-	    map[INDEX(xdi,ydi)] = 1;
-	    map[INDEX(xdi,yui)] = 1;
-	    map[INDEX(xui,ydi)] = 1;
-	    map[INDEX(xui,yui)] = 1;
+		xdi = x/isize;
+		ydi = y/isize;
+		xui = (x+isize/2)/isize;
+		yui = (y+isize/2)/isize;
+		map[INDEX(xdi,ydi)] = 1;
+		map[INDEX(xdi,yui)] = 1;
+		map[INDEX(xui,ydi)] = 1;
+		map[INDEX(xui,yui)] = 1;
+	    }
+	    obj = obj->stacking->under;
 	}
-	obj = obj->stacking->under;
     }
-
     /*
      * Default position
      */

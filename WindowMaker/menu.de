@@ -114,12 +114,6 @@
 #endif
 		"Arbeitsplatz sichern" EXEC SAVE_WORKSPACE
 	"Arbeitsplatz" END
-#if (UID==0)	// nur für root
-	"System" MENU
-		// das RedHat control panel Programm
-		"RH ControlPanel" EXEC control-panel
-	"System" END
-#endif
 	"Beenden"	MENU
 		"Neustart" RESTART
 		"AfterStep starten" RESTART afterstep

@@ -143,26 +143,39 @@ RLoadJPEG(RContext *context, char *file_name, int index)
 	goto bye;
     }
 
-    cinfo.out_color_space = JCS_RGB;
+    
+    if(cinfo.jpeg_color_space==JCS_GRAYSCALE) {
+       cinfo.out_color_space=JCS_GRAYSCALE;
+    } else
+        cinfo.out_color_space = JCS_RGB;
     cinfo.quantize_colors = FALSE;
     cinfo.do_fancy_upsampling = FALSE;
     cinfo.do_block_smoothing = FALSE;
-
+    jpeg_calc_output_dimensions(&cinfo);
+    image = RCreateImage(cinfo.image_width, cinfo.image_height, False);
+    if (!image) {
+       RErrorCode = RERR_NOMEMORY;
+       goto bye;
+    }
     jpeg_start_decompress(&cinfo);
 
     r = image->data[0];
     g = image->data[1];
     b = image->data[2];
 
-    while (cinfo.output_scanline < cinfo.image_height) {
-        jpeg_read_scanlines(&cinfo, buffer, 1);
+    while (cinfo.output_scanline < cinfo.output_height) {
+        jpeg_read_scanlines(&cinfo, buffer,(JDIMENSION) 1);
 	for (i=0,j=0; i<cinfo.image_width; i++) {
-	    *(r++) = buffer[0][j++];
-	    *(g++) = buffer[0][j++];
-	    *(b++) = buffer[0][j++];
+	    if(cinfo.out_color_space==JCS_RGB) {
+		*(r++) = buffer[0][j++];
+		*(g++) = buffer[0][j++];
+		*(b++) = buffer[0][j++];}
+	    else {
+		*(r++) = *(g++) = *(b++) = buffer[0][j++];
+	    }
 	}
     }
-/*
+    /*
     jpeg_finish_decompress(&cinfo);
 */
   bye:

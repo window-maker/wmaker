@@ -43,14 +43,6 @@
 
 
 /*
- * mimic N*XTSTEP behaviour as close as possible.
- * affected behaviour:
- * - disable auto-lower miniwindows
- */
-#undef STRICTNS
-
-
-/*
  * undefine USECPP if you don't want your config files to be preprocessed
  * by cpp
  */
@@ -114,6 +106,11 @@
 #define MWM_HINTS
 
 
+/* Define if you have a 5 button mouse and want to use button 4
+ * (in the root window) for switching to the previous workspace
+ * and 5 for the next */
+#undef MOUSE_WS_SWITCH
+ 
 /*
  * Turn on a hack to make mouse and keyboard actions work even if
  * the NumLock or ScrollLock modifiers are turned on. They might
@@ -199,6 +196,8 @@
 #define DEF_CONFIG_PATHS \
 "~/GNUstep/Library/WindowMaker:"PKGDATADIR
 
+#define DEF_MENU_FILE	"menu"
+
 /* name of the script to execute at startup */
 #define DEF_INIT_SCRIPT "autostart"
 
@@ -248,6 +247,10 @@
 /* default position of application menus */
 #define DEF_APPMENU_X		10
 #define DEF_APPMENU_Y		10
+
+
+/* Window level where icons reside */
+#define NORMAL_ICON_LEVEL WMNormalLevel
 
 /* do not divide main menu and submenu in different tiers, 
  * opposed to OpenStep */

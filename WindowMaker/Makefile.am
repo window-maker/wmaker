@@ -8,14 +8,14 @@ prefsdata_DATA = wmmacros README menu plmenu autostart.sh exitscript.sh \
 	menu.fi menu.hr menu.dk menu.sl
 
 
-EXTRA_DIST = $(prefsdata_DATA) wmmacros.in plmenu.in
+EXTRA_DIST = $(prefsdata_DATA) wmmacros.in plmenu.in plmenu.fr.in plmenu.hr.in
 
 CLEANFILES = wmmacros plmenu
 
 wmmacros: $(srcdir)/wmmacros.in ./Makefile
 	-rm -f wmmacros
 
-	sed -e "s:#pkgdatadir#:$(pkgdatadir):" \
+	sed -e "s:#pkgdatadir#:$(pkgdatadir):" -e "s://:/:" \
 		$(srcdir)/wmmacros.in > wmmacros; \
 	chmod 644 wmmacros
 
@@ -23,7 +23,7 @@ wmmacros: $(srcdir)/wmmacros.in ./Makefile
 plmenu: $(srcdir)/plmenu.in ./Makefile
 	-rm -f plmenu
 
-	sed -e "s:#pkgdatadir#:$(pkgdatadir):" \
+	sed -e "s:#pkgdatadir#:$(pkgdatadir):" -e "s://:/:" \
 		$(srcdir)/plmenu.in > plmenu; \
 	chmod 644 plmenu
 

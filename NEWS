@@ -5,6 +5,39 @@ NEWS for veteran Window Maker users
 --- 0.20.3
 
 
+Icon (miniwindow) stacking
+--------------------------
+
+If you want miniwindows to reside under normal windows, edit
+wconfig.h and change WNormalLevel (just grep for it) to
+WDesktopLevel
+
+
+5 Button Mouse
+--------------
+
+If you have a 5 button mouse and want to give some utility for
+the extra 2 buttons, edit the appropriate line in src/wconfig.h
+Clicking Button4 in the root window will switch you to the previous 
+workspace and Button5 will do that for the next.
+
+
+Option Changes
+--------------
+
+put NoWindowOverDock back
+
+KeepOnBottom window attribute
+
+
+-static command line option
+---------------------------
+
+wmaker -static will start Window Maker in static mode. This will
+prevent wmaker from checking or making any configuration changes.
+That makes it possible to run wmaker before running wmaker.inst
+
+
 Hysteresis for menu item selection
 ----------------------------------
 

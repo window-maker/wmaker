@@ -43,6 +43,11 @@ extern Atom _XA_WM_CLIENT_LEADER;
 extern Atom _XA_WM_TAKE_FOCUS;
 extern Atom _XA_WM_DELETE_WINDOW;
 extern Atom _XA_WM_SAVE_YOURSELF;
+#ifdef R6SM
+extern Atom _XA_WM_WINDOW_ROLE;
+extern Atom _XA_SM_CLIENT_ID;
+#endif
+
 
 extern Atom _XA_GNUSTEP_WM_ATTR;
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
@@ -209,35 +214,90 @@ PropSetWMakerProtocols(Window root)
 }
 
 
-int
-PropGetClientLeader(Window window, Window *leader)
+Window
+PropGetClientLeader(Window window)
 {
     Atom type_ret;
     int fmt_ret;
     unsigned long nitems_ret;
     unsigned long bytes_after_ret;
     Window *win;
+    Window leader;
 
-    if (XGetWindowProperty(dpy, window, _XA_WM_CLIENT_LEADER, 0, 4,
+    if (XGetWindowProperty(dpy, window, _XA_WM_CLIENT_LEADER, 0, 1,
 			   False, AnyPropertyType,
 			   &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
-			   (unsigned char**)&win)!=Success)
-      return 0;
+			   (unsigned char**)&win)!=Success || !win)
+      return None;
 
-    if (!win) return 0;
-    *leader = (Window)*win;
+    leader = (Window)*win;
     XFree(win);
-    return 1;
+
+    if (type_ret == XA_WINDOW && fmt_ret == 32 && nitems_ret == 1 
+	&& bytes_after_ret == 0)
+	return leader;
+    else
+	return None;
 }
 
+
+#ifdef R6SM
+char*
+PropGetClientID(Window window)
+{
+    XTextProperty txprop;
+    
+    txprop.value = NULL;
+
+    if (XGetTextProperty(dpy, window, &txprop, _XA_SM_CLIENT_ID)!=Success) {
+	return NULL;
+    }
+    
+    if (txprop.encoding == XA_STRING &&	txprop.format == 8 
+	&& txprop.nitems > 0) {
+
+	return (char*)txprop.value;
+    } else {
+
+	if (txprop.value)
+	    XFree(txprop.value);
+
+	return NULL;
+    }
+}
+
+
+char*
+PropGetWindowRole(Window window)
+{
+    XTextProperty txprop;
+    
+    txprop.value = NULL;
+
+    if (XGetTextProperty(dpy, window, &txprop, _XA_WM_WINDOW_ROLE)!=Success) {
+	return NULL;
+    }
+
+    if (txprop.encoding == XA_STRING &&	txprop.format == 8 
+	&& txprop.nitems > 0) {
+
+	return (char*)txprop.value;
+    } else {
+
+	if (txprop.value)
+	    XFree(txprop.value);
+
+	return NULL;
+    }
+}
+#endif /* R6SM */
 
 
 void
 PropWriteGNUstepWMAttr(Window window, GNUstepWMAttributes *attr)
 {
-    CARD32 data[9];
+    unsigned long data[9];
         
-    /* handle idiot compilers where array of CARD32 != struct of CARD32 */
     data[0] = attr->flags;
     data[1] = attr->window_style;
     data[2] = attr->window_level;

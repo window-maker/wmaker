@@ -22,6 +22,24 @@ Changes since version 0.20.2:
 - changed order of link flags in Makefiles
 - fixed problem with random window placement
 - fixed multiple window selection for multiheads
+- grayscale and 8bit jpeg support
+- fixed client restoration in restart/exit in multiheads
+- started session management code
+- fixed problem with docked programs that have names with spaces
+- updated WPrefs.app for iconificationstyle
+- added -static command line option
+- put redundant NoWindowOverDock
+- fixed overlapping clip icon bug
+- extended window level code
+- added KeepOnBottom hint
+- added iconification style to WPrefs.app
+- fixed crash with bad value in defaults file
+- changed icon stacking code
+- added primitive support for 5 button mouse (for switching workspaces)
+- fixed BadAccess and crash on programs that do XGrabButton
+- fixed bug with rootmenu Exec not working when stty is called from ~/.tcshrc
+- fixed bug with Move menu and sloppy focus
+- temporarily removed SHELL support in apps menu
 
 Changes since version 0.20.1:
 .............................

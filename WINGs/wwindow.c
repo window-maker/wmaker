@@ -330,7 +330,7 @@ setSizeHints(WMWindow *win)
 static void
 writeGNUstepWMAttr(WMScreen *scr, Window window, GNUstepWMAttributes *attr)
 {
-    CARD32 data[9];
+    unsigned long data[9];
         
     /* handle idiot compilers where array of CARD32 != struct of CARD32 */
     data[0] = attr->flags;
