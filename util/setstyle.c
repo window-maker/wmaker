@@ -362,7 +362,7 @@ main(int argc, char **argv)
 	}
     }
     
-    if (!PLIsArray(style)) {
+    if (!PLIsDictionary(style)) {
 	printf("%s: '%s' is not a style file/theme\n", ProgName, file);
 	exit(1);
     }

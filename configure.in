@@ -736,10 +736,6 @@ AC_OUTPUT(Makefile po/Makefile util/Makefile test/Makefile wmlib/Makefile \
 	WindowMaker/IconSets/Makefile WindowMaker/Icons/Makefile \
 	WindowMaker/Pixmaps/Makefile WindowMaker/Styles/Makefile \
 	WindowMaker/Themes/Makefile \
-	WindowMaker/Themes/Night.themed/Makefile \
-	WindowMaker/Themes/LeetWM.themed/Makefile \
-	WindowMaker/Themes/Checker.themed/Makefile \
-	WindowMaker/Themes/STEP2000.themed/Makefile \
 	WPrefs.app/Makefile WPrefs.app/tiff/Makefile WPrefs.app/xpm/Makefile \
 	WPrefs.app/po/Makefile )
 

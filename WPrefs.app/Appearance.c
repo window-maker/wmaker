@@ -776,6 +776,7 @@ fillTextureList(WMList *lPtr)
 	titem->selectedFor = 0;
 	titem->path = wstrdup(PLGetString(PLGetArrayElement(texture, 2)));
 
+	puts(titem->path);
 	titem->preview = loadRImage(scr, titem->path);
 	if (!titem->preview) {
 	    titem->preview = renderTexture(scr, titem->prop, TEXPREV_WIDTH, 
