@@ -158,6 +158,7 @@ Changes since version 0.80.2:
 - Made NetWM support be enabled by default
 - Removed old code to store/restore workspace state (now relies on netwm)
 - Added a (simple) Font Configuration for fontconfig fonts
+- MacOS X style window switching panel (navigate through windows with Alt-Tab or  arrow keys)
 
 Changes since version 0.80.1:
 .............................

@@ -134,9 +134,9 @@ int MonitorLoop(int argc, char **argv)
              WTERMSIG(status) == SIGFPE))
         {
             /* If so, we check when was the last restart.
-             * If it was less than 5s ago, it's a bad sign, so we show
+             * If it was less than 3s ago, it's a bad sign, so we show
              * the crash panel and ask the user what to do */
-            if (time(NULL) - last_start < 5)
+            if (time(NULL) - last_start < 3)
             {
                 if (showCrashDialog(WTERMSIG(status)) == 0)
                   return 1;

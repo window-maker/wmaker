@@ -132,7 +132,7 @@ paint(WGeometryView *gview)
 
     W_DrawRelief(W_VIEW_SCREEN(gview->view), W_VIEW_DRAWABLE(gview->view),
                  0, 0, W_VIEW_WIDTH(gview->view), W_VIEW_HEIGHT(gview->view),
-                 WRRaised);
+                 WRSimple);
 }
 
 

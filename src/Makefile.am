@@ -69,6 +69,7 @@ wmaker_SOURCES = 	\
 	session.h \
 	session.c \
 	shutdown.c \
+	switchpanel.c \
 	stacking.c \
 	stacking.h \
 	startup.c \
