@@ -1,5 +1,9 @@
 - removed FocusFollowMouse from wmaker and WPrefs
 - fixed problem with alpha images showing a blue tint on big endian machines
+- fixed problem with WINGs based apps exiting with a "X_RotateProperties"
+  related error when text was selected in a textfiled (including WPrefs.app
+  and Window Maker itself).
+
 
 Changes since version 0.64.0:
 .............................

@@ -1,3 +1,7 @@
+- fixed problem with WINGs based apps exiting with a "X_RotateProperties"
+  related error when text was selected in a textfiled.
+
+
 Changes since wmaker 0.64.0:
 ............................
 

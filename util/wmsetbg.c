@@ -1156,9 +1156,8 @@ getFullPixmapPath(char *file)
 	char *path = wmalloc(bsize);
 	
 	while (!getcwd(path, bsize)) {
-	    wfree(path);
 	    bsize += bsize/2;
-	    path = malloc(bsize);
+	    path = wrealloc(path, bsize);
 	}
 
 	tmp = wstrconcat(path, "/");

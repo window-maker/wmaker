@@ -114,24 +114,19 @@ print_help()
 char*
 globalDefaultsPathForDomain(char *domain)
 {
-    char path[1024];
-    char *tmp;
+    static char path[1024];
 
     sprintf(path, "%s/WindowMaker/%s", SYSCONFDIR, domain);
 
-    tmp = malloc(strlen(path)+2);
-    assert(tmp!=NULL);
-    strcpy(tmp, path);
-
-    return tmp;
+    return path;
 }
 
 
 char*
 defaultsPathForDomain(char *domain)
 {
-    char path[1024];
-    char *gspath, *tmp;
+    static char path[1024];
+    char *gspath;
 
     gspath = getenv("GNUSTEP_USER_ROOT");
     if (gspath) {
@@ -152,10 +147,7 @@ defaultsPathForDomain(char *domain)
     strcat(path, "/");
     strcat(path, domain);
 
-    tmp = malloc(strlen(path)+2);
-    strcpy(tmp, path);
-    
-    return tmp;
+    return path;
 }
 
 
@@ -602,7 +594,6 @@ main(int argc, char **argv)
 	       ProgName, path);
 	exit(1);
     }
-    free(path);
 
     /* get global value */
     path = globalDefaultsPathForDomain("WindowMaker");

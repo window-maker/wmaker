@@ -1249,7 +1249,7 @@ wClipIconPaint(WAppIcon *aicon)
     wIconPaint(aicon->icon);
 
     length = strlen(workspace->name);
-    ws_name = malloc(length + 1);
+    ws_name = wmalloc(length + 1);
     sprintf(ws_name, "%s", workspace->name);
     sprintf(ws_number, "%i", scr->current_workspace + 1);
     nlength = strlen(ws_number);

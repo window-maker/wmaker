@@ -319,7 +319,7 @@ updateDockNumbers(WScreen *scr)
     numbers_gc = XCreateGC(dpy, dicon->icon->core->window,
 			   my_v_mask, &my_gc_values);
 
-    ws_numbers = malloc(20);
+    ws_numbers = wmalloc(20);
     sprintf(ws_numbers, "%i [ %i ]", scr->current_workspace+1,
 	    ((scr->current_workspace/10)+1));
     length = strlen(ws_numbers);

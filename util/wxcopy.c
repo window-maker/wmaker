@@ -1,7 +1,7 @@
 /* wxcopy.c- copy stdin or file into cutbuffer
- * 
+ *
  *  Copyright (c) 1997-1999 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -82,7 +82,7 @@ main(int argc, char **argv)
 		if (i<argc-1) {
 		    i++;
 		    if (sscanf(argv[i],"%i", &buffer)!=1) {
-			fprintf(stderr, "%s: could not convert '%s' to int\n", 
+			fprintf(stderr, "%s: could not convert '%s' to int\n",
 			       argv[0], argv[i]);
 			exit(1);
 		    }
@@ -136,17 +136,56 @@ main(int argc, char **argv)
 		XDisplayName(display_name));
 	exit(1);
     }
+
     if (buffer<0) {
+        Atom *rootWinProps;
+        int exists[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+        int i, count;
+
+        /* Create missing CUT_BUFFERs */
+        rootWinProps = XListProperties(dpy, DefaultRootWindow(dpy), &count);
+        for (i=0; i<count; i++) {
+            switch(rootWinProps[i]) {
+            case XA_CUT_BUFFER0:
+                exists[0] = 1; break;
+            case XA_CUT_BUFFER1:
+                exists[1] = 1; break;
+            case XA_CUT_BUFFER2:
+                exists[2] = 1; break;
+            case XA_CUT_BUFFER3:
+                exists[3] = 1; break;
+            case XA_CUT_BUFFER4:
+                exists[4] = 1; break;
+            case XA_CUT_BUFFER5:
+                exists[5] = 1; break;
+            case XA_CUT_BUFFER6:
+                exists[6] = 1; break;
+            case XA_CUT_BUFFER7:
+                exists[7] = 1; break;
+            default:
+                break;
+            }
+        }
+        if (rootWinProps) {
+            XFree(rootWinProps);
+        }
+        for (i=0; i<8; i++) {
+            if (!exists[i]) {
+                XStoreBuffer(dpy, "", 0, i);
+            }
+        }
+
 	XRotateBuffers(dpy, 1);
 	buffer=0;
     }
+
     while (!feof(file)) {
 	char *nbuf;
 	char tmp[LINESIZE+2];
 	int nl=0;
 
 	/*
-	 * Use read() instead of fgets() to preserve NULs, since
+	 * Use read() instead of fgets() to preserve NULLs, since
 	 * especially since there's no reason to read one line at a time.
 	 */
 	if ((nl = fread(tmp, 1, LINESIZE, file)) <= 0) {
@@ -154,21 +193,22 @@ main(int argc, char **argv)
 	}
 	if (buf_len == 0) {
 	    nbuf = malloc(buf_len = l+nl+1);
-	}
-	else {
-	    if (buf_len < l+nl+1) {
-		/*
-		 * To avoid terrible performance on big input buffers,
-		 * grow by doubling, not by the minimum needed for the
-		 * current line.
-		 */
-		buf_len = 2 * buf_len + nl + 1;
-		nbuf = realloc(buf, buf_len);
-	    }
-	    else {
-		nbuf = buf;
-	    }
-	}
+	} else if (buf_len < l+nl+1) {
+            /*
+             * To avoid terrible performance on big input buffers,
+             * grow by doubling, not by the minimum needed for the
+             * current line.
+             */
+            buf_len = 2 * buf_len + nl + 1;
+            /* some realloc implementations don't do malloc if buf==NULL */
+            if (buf == NULL) {
+                nbuf = malloc(buf_len);
+            } else {
+                nbuf = realloc(buf, buf_len);
+            }
+        } else {
+            nbuf = buf;
+        }
 	if (!nbuf) {
 	    fprintf(stderr, "%s: out of memory\n", argv[0]);
 	    exit(1);

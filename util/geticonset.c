@@ -38,8 +38,8 @@ char *ProgName;
 char*
 defaultsPathForDomain(char *domain)
 {
-    char path[1024];
-    char *gspath, *tmp;
+    static char path[1024];
+    char *gspath;
 
     gspath = getenv("GNUSTEP_USER_ROOT");
     if (gspath) {
@@ -60,10 +60,7 @@ defaultsPathForDomain(char *domain)
     strcat(path, "/");
     strcat(path, domain);
 
-    tmp = malloc(strlen(path)+2);
-    strcpy(tmp, path);
-    
-    return tmp;
+    return path;
 }
 
 void

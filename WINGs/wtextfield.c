@@ -674,7 +674,7 @@ didResizeTextField(W_ViewDelegate *self, WMView *view)
     tPtr->offsetWidth = 
 	WMAX((tPtr->view->size.height - WMFontHeight(tPtr->font))/2, 1);
 
-    tPtr->usableWidth = tPtr->view->size.width - 2*tPtr->offsetWidth + 2;
+    tPtr->usableWidth = tPtr->view->size.width - 2*tPtr->offsetWidth /*+ 2*/;
 }
 
 

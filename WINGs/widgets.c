@@ -3,6 +3,7 @@
 #include "WINGsP.h"
 
 #include <X11/Xutil.h>
+#include <X11/Xatom.h>
 #include <X11/keysym.h>
 #include <X11/cursorfont.h>
 
@@ -583,7 +584,7 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 	    "WM_STATE"
     };
     Atom atoms[sizeof(atomNames)/sizeof(char*)];
-    int i = 0;
+    int i;
 
     if (!initialized) {
 
@@ -615,6 +616,45 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     scrPtr->rootWin = RootWindow(display, screen);
 
     scrPtr->fontCache = WMCreateHashTable(WMStringPointerHashCallbacks);
+
+    /* Create missing CUT_BUFFERs */
+    {
+        Atom *rootWinProps;
+        int exists[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+        int count;
+
+        rootWinProps = XListProperties(display, scrPtr->rootWin, &count);
+        for (i=0; i<count; i++) {
+            switch(rootWinProps[i]) {
+            case XA_CUT_BUFFER0:
+                exists[0] = 1; break;
+            case XA_CUT_BUFFER1:
+                exists[1] = 1; break;
+            case XA_CUT_BUFFER2:
+                exists[2] = 1; break;
+            case XA_CUT_BUFFER3:
+                exists[3] = 1; break;
+            case XA_CUT_BUFFER4:
+                exists[4] = 1; break;
+            case XA_CUT_BUFFER5:
+                exists[5] = 1; break;
+            case XA_CUT_BUFFER6:
+                exists[6] = 1; break;
+            case XA_CUT_BUFFER7:
+                exists[7] = 1; break;
+            default:
+                break;
+            }
+        }
+        if (rootWinProps) {
+            XFree(rootWinProps);
+        }
+        for (i=0; i<8; i++) {
+            if (!exists[i]) {
+                XStoreBuffer(display, "", 0, i);
+            }
+        }
+    }
 
     scrPtr->ignoredModifierMask = 0;
     {
@@ -816,11 +856,8 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     XInternAtoms(display, atomNames, sizeof(atomNames)/sizeof(char*), False,
 		 atoms);
 #else
-    {
-	int i;
-	for (i = 0; i < sizeof(atomNames)/sizeof(char*); i++) {
-	    atoms[i] = XInternAtom(display, atomNames[i], False);
-	}
+    for (i = 0; i < sizeof(atomNames)/sizeof(char*); i++) {
+        atoms[i] = XInternAtom(display, atomNames[i], False);
     }
 #endif
 
@@ -852,15 +889,14 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     scrPtr->wmIconDragOffsetAtom = atoms[i++];
 
     scrPtr->wmStateAtom = atoms[i++];
-	
-    scrPtr->rootView = W_CreateRootView(scrPtr);
 
+    scrPtr->rootView = W_CreateRootView(scrPtr);
 
     scrPtr->balloon = W_CreateBalloon(scrPtr);
 
 
     W_InitApplication(scrPtr);
-    
+
     return scrPtr;
 }
 
