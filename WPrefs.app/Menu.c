@@ -850,6 +850,7 @@ createPanel(_Panel *p)
 		     " - drag items from the left to the menu to add new items\n"
 		     " - drag items out of the menu to remove items\n"
 		     " - drag items in menu to change their position\n"
+		     " - drag items with Control pressed to copy them\n"
 		     " - double click in a menu item to change the label\n"
 		     " - click on a menu item to change related information"));
     WMMapWidget(label);

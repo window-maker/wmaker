@@ -1334,7 +1334,7 @@ duplicateMenu(WEditMenu *menu)
 
 
 static void
-dragItem(WEditMenu *menu, WEditMenuItem *item)
+dragItem(WEditMenu *menu, WEditMenuItem *item, Bool copy)
 {
     static XColor black = {0, 0,0,0, DoRed|DoGreen|DoBlue};
     static XColor green = {0x0045b045, 0x4500,0xb000,0x4500, DoRed|DoGreen|DoBlue};
@@ -1377,7 +1377,7 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
     W_MoveView(dview, orix, oriy);
     W_RealizeView(dview);
     
-    if (menu->flags.isFactory) {
+    if (menu->flags.isFactory || copy) {
 	dritem = duplicateItem(item);
 
 	W_ReparentView(dritem->view, dview, 0, 0);
@@ -1449,7 +1449,7 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
     if (!enteredMenu) {
 	Bool rem = True;
 	
-	if (!menu->flags.isFactory) {
+	if (!menu->flags.isFactory && !copy) {
 	    W_UnmapView(dview);
 	    if (menu->delegate && menu->delegate->shouldRemoveItem) {
 		rem = (*menu->delegate->shouldRemoveItem)(menu->delegate,
@@ -1458,10 +1458,10 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
 	    W_MapView(dview);
 	}
 
-	if (!rem || menu->flags.isFactory) {
+	if (!rem || menu->flags.isFactory || copy) {
 	    slideWindow(dpy, W_VIEW_DRAWABLE(dview), x-dx, y-dy, orix, oriy);
 
-	    if (!menu->flags.isFactory) {
+	    if (!menu->flags.isFactory && !copy) {
 		WRemoveEditMenuItem(menu, dritem);
 		handleItemDrop(dmenu ? dmenu : menu, dritem, orix, oriy);
 	    }
@@ -1472,14 +1472,14 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
 	WRemoveEditMenuItem(menu, dritem);
 
 	if (menu->delegate && menu->delegate->itemCloned
-	    && menu->flags.isFactory) {
+	    && (menu->flags.isFactory || copy)) {
 	    (*menu->delegate->itemCloned)(menu->delegate, menu,
 					  item, dritem);
 	}
 	
 	handleItemDrop(dmenu, dritem, x-dy, y-dy);
 	
-	if (item->submenu && menu->flags.isFactory) {
+	if (item->submenu && (menu->flags.isFactory || copy)) {
 	    WEditMenu *submenu;
 	    
 	    submenu = duplicateMenu(item->submenu);
@@ -1524,7 +1524,7 @@ handleItemClick(XEvent *event, void *data)
 	    if (abs(event->xbutton.x_root - menu->dragX) > 5
 		|| abs(event->xbutton.y_root - menu->dragY) > 5) {
 		menu->flags.isDragging = 0;
-		dragItem(menu, item);
+		dragItem(menu, item, event->xbutton.state & ControlMask);
 	    }
 	}
 	break;

@@ -3,6 +3,7 @@ Changes since version 0.63.0:
 - fixed compile prob with SGI compiler
 - decreased nice() value in wmsetbg
 - applied gnome panel not-covering patch from (Bastien Nocera <hadess@hadess.net>)
+- added item copy to WPrefs menu editor
 
 Changes since version 0.62.1:
 .............................
