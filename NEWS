@@ -78,6 +78,13 @@ It just adds some extra capabilities to the Clip for people who think that this
 is useful.
 
 
+XDND drop on dock support
+-------------------------
+
+Support for XDE on dock is now replaced by XDND.
+To enable, edit src/wconfig.h
+
+
 
 --- 0.53.0
 
