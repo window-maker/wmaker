@@ -3662,26 +3662,23 @@ WMDestroyTextBlock(WMText *tPtr, void *vtb)
              * need to find a safer way. till then... this stays commented out */
             /* 5 months later... destroy it 10 seconds after now which should
              * be enough time for the widget's action to be completed... :-) */
-            // This is a bad assumption. Just destroy the widget here.
+            /* This is a bad assumption. Just destroy the widget here.
             // if the caller needs it, it can protect it with W_RetainView()
-            //WMAddTimerHandler(10000, destroyWidget, (void *)tb->d.widget);
+            //WMAddTimerHandler(10000, destroyWidget, (void *)tb->d.widget);*/
             WMDestroyWidget(tb->d.widget);
-            //tb->d.widget = NULL;
         } else {
             WMReleasePixmap(tb->d.pixmap);
-            //tb->d.pixmap = NULL;
         }
     } else {
         WMReleaseFont(tb->d.font);
     }
 
     WMReleaseColor(tb->color);
-    // isn't this going to memleak if nsections==0? if (tb->sections && tb->nsections > 0)
+    /* isn't this going to memleak if nsections==0? if (tb->sections && tb->nsections > 0) */
     if (tb->sections)
         wfree(tb->sections);
     wfree(tb->text);
     wfree(tb);
-    //tb = NULL;
 }
 
 

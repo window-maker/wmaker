@@ -120,9 +120,9 @@ int main(int argc, char **argv)
     strcat(path, argv[1]);
 
     if ((dict = PLGetProplistWithPath(path)) == NULL)
-	return 1;	// bad domain
+	return 1;	/* bad domain */
     if ((value = PLGetDictionaryEntry(dict, key)) == NULL)
-	return 2;	// bad key
+	return 2;	/* bad key */
 
     printf("%s\n", PLGetString(value));
     return 0;
