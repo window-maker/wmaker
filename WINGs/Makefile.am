@@ -16,7 +16,9 @@ lib_LIBRARIES = libWINGs.a libWUtil.a
 LDADD= libWINGs.a $(top_builddir)/wrlib/libwraster.la @INTLIBS@
 
 
-EXTRA_DIST = BUGS
+EXTRA_DIST = BUGS python/Makefile python/README python/WINGs.i \
+	python/WINGs.py python/setup.py python/test.py
+
 
 # wbutton.c 
 libWINGs_a_SOURCES = 	\
