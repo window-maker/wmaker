@@ -704,8 +704,8 @@ static void iconMouseStuff(XEvent *event, void *cdata)
     
     switch (event->type) {
      case ButtonPress:
-	stuff->x = event->xbutton.x_root;
-	stuff->y = event->xbutton.y_root;
+	stuff->x = event->xbutton.x;
+	stuff->y = event->xbutton.y;
 	stuff->mouseDown = True;
 	break;
      case ButtonRelease:
@@ -715,16 +715,16 @@ static void iconMouseStuff(XEvent *event, void *cdata)
 	if (!stuff->mouseDown)
 	    break;
 	
-	if (abs(stuff->x - event->xmotion.x_root)>4
-	    || abs(stuff->y - event->xmotion.y_root)>4) {
+	if (abs(stuff->x - event->xmotion.x)>4
+	    || abs(stuff->y - event->xmotion.y)>4) {
 	    
 	    where = WMGetViewScreenPosition(WMWidgetView(label));
 	    
-	    WMDragImageFromView(WMWidgetView(label), 
+	    WMDragImageFromView(WMWidgetView(label),
 				WMGetLabelImage(label),
 				NULL, /* XXX */
 				where,
-				wmksize(event->xmotion.x, event->xmotion.y),
+				wmksize(stuff->x, stuff->y),
 				event, True);
 	}
 	break;
