@@ -4441,8 +4441,7 @@ wClipMakeIconOmnipresent(WAppIcon *aicon, int omnipresent)
     WAppIconChain *new_entry, *tmp, *tmp1;
     int status = WO_SUCCESS;
 
-    if ((!wPreferences.flags.nodock && aicon->dock == scr->dock) ||
-        aicon == scr->clip_icon) {
+    if ((scr->dock && aicon->dock==scr->dock) || aicon==scr->clip_icon) {
         return WO_NOT_APPLICABLE;
     }
 
