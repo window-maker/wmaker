@@ -46,10 +46,7 @@ typedef struct WFont {
 #define WTB_FOCUSED	0
 #define WTB_UNFOCUSED	2
 #define WTB_PFOCUSED	4
-#define WTB_MENU	6
-#ifdef XKB_BUTTON_HINT
-#define WTB_THAI    7
-#endif
+#define WTB_MENU 6
 
 #ifdef GNOME_STUFF
 /* an area of the screen reserved by some window */
@@ -263,11 +260,7 @@ typedef struct _WScreen {
     struct WDialogData *dialog_data;
 
 #ifdef NEWSTUFF
-#ifdef XKB_BUTTON_HINT
-    struct RImage *button_images[3][PRED_BPIXMAPS];
-#else
     struct RImage *button_images[2][PRED_BPIXMAPS];/* scaled tbar btn images */
-#endif
 #endif
 
     /* state and other informations */

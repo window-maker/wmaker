@@ -37,7 +37,7 @@
 #define WFF_BORDER	(1<<4)
 #define WFF_SINGLE_STATE (1<<5)
 #ifdef XKB_BUTTON_HINT
-#define WFF_THAI_BUTTON	(1<<6)
+#define WFF_XKB_BUTTON	(1<<6)
 #endif
 
 
@@ -51,7 +51,7 @@ typedef struct WFrameWindow {
     WCoreWindow *titlebar;	       /* the titlebar */
     WCoreWindow *left_button;	       /* miniaturize button */
 #ifdef XKB_BUTTON_HINT
-    WCoreWindow *thai_button;
+    WCoreWindow *language_button;
 #endif
     WCoreWindow *right_button;	       /* close button */
 
@@ -69,13 +69,13 @@ typedef struct WFrameWindow {
     Pixmap lbutton_back[3];
     Pixmap rbutton_back[3];
 #ifdef XKB_BUTTON_HINT
-    Pixmap tbutton_back[3];
+    Pixmap languagebutton_back[3];
 #endif
 
     WPixmap *lbutton_image;
     WPixmap *rbutton_image;
 #ifdef XKB_BUTTON_HINT
-    WPixmap *tbutton_image;
+    WPixmap *languagebutton_image;
 #endif
     
     union WTexture **title_texture;
@@ -88,6 +88,7 @@ typedef struct WFrameWindow {
 
 #ifdef KEEP_XKB_LOCK_STATUS
     int languagemode;
+    int last_languagemode;
 #endif /* KEEP_XKB_LOCK_STATUS */
 
     /* thing that uses this frame. passed as data to callbacks */
@@ -96,7 +97,7 @@ typedef struct WFrameWindow {
     /* callbacks */
     void (*on_click_left)(WCoreWindow *sender, void *data, XEvent *event);
 #ifdef XKB_BUTTON_HINT
-    void (*on_click_thai)(WCoreWindow *sender, void *data, XEvent *event);
+    void (*on_click_language)(WCoreWindow *sender, void *data, XEvent *event);
 #endif
     
     void (*on_click_right)(WCoreWindow *sender, void *data, XEvent *event);
@@ -115,7 +116,7 @@ typedef struct WFrameWindow {
 	unsigned int left_button:1;
 	unsigned int right_button:1;
 #ifdef XKB_BUTTON_HINT
-	unsigned int thai_button:1;
+	unsigned int language_button:1;
 #endif
 
 	unsigned int need_texture_remake:1;
@@ -125,7 +126,7 @@ typedef struct WFrameWindow {
 	unsigned int hide_left_button:1;
 	unsigned int hide_right_button:1;
 #ifdef XKB_BUTTON_HINT
-	unsigned int hide_thai_button:1;
+	unsigned int hide_language_button:1;
 #endif
 	
 	unsigned int need_texture_change:1;
@@ -133,7 +134,7 @@ typedef struct WFrameWindow {
 	unsigned int lbutton_dont_fit:1;
 	unsigned int rbutton_dont_fit:1;
 #ifdef XKB_BUTTON_HINT
-	unsigned int tbutton_dont_fit:1;
+	unsigned int languagebutton_dont_fit:1;
 #endif
 
 	unsigned int repaint_only_titlebar:1;

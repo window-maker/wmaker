@@ -446,13 +446,16 @@ saveTimestamp(XEvent *event)
 static void
 handleExtensions(XEvent *event)
 {
+    XkbEvent *xkbevent;
+    xkbevent = event;
 #ifdef SHAPE
     if (wShapeSupported && event->type == (wShapeEventBase+ShapeNotify)) {
 	handleShapeNotify(event);
     }
 #endif	
 #ifdef KEEP_XKB_LOCK_STATUS   
-    if (wPreferences.modelock && event->type == (0x50|XkbIndicatorStateNotify)){
+    if (wPreferences.modelock &&
+            (event->type == 0x54)){
 	    /* if someone know how to call this 0x50
 	     * or how to clean code this please tell ]d */
 	handleXkbIndicatorStateNotify(event);
@@ -1157,23 +1160,20 @@ handleXkbIndicatorStateNotify(XEvent *event)
     XkbStateRec staterec;
     int i;
 
-    XkbGetState(dpy,XkbUseCoreKbd,&staterec);
     for (i=0; i<wScreenCount; i++) {
         scr = wScreenWithNumber(i);
 	wwin = scr->focused_window;
 	if (wwin->flags.focused) {
-	    wwin->frame->languagemode=staterec.compat_state&32?1:0;
+        XkbGetState(dpy,XkbUseCoreKbd,&staterec);
+        if (wwin->frame->languagemode != staterec.group) {
+            wwin->frame->last_languagemode = wwin->frame->languagemode;
+            wwin->frame->languagemode = staterec.group;
+        }
 #ifdef XKB_BUTTON_HINT
         if (wwin->frame->titlebar) {
             wFrameWindowPaint(wwin->frame);
         }
 #endif
-#ifdef XKB_TITLE_HINT
-            if (wwin->frame->titlebar) {
-	        XClearWindow(dpy, wwin->frame->titlebar->window);
-	        wFrameWindowPaint(wwin->frame);
-	    }
-#endif /* XKB_TITLE_HINT */
 	}
     }
 }
@@ -1774,11 +1774,11 @@ handleKeyPress(XEvent *event)
             if (wwin && wwin->flags.mapped
                 && wwin->frame->workspace == wwin->screen_ptr->current_workspace
                 && !wwin->flags.miniaturized && !wwin->flags.hidden) {
-                    XkbGetState(dpy,XkbUseCoreKbd,&staterec);
+                XkbGetState(dpy,XkbUseCoreKbd,&staterec);
 
-		    wwin->frame->languagemode = staterec.compat_state&32 
-						? 0 : 1;
-                    XkbLockGroup(dpy,XkbUseCoreKbd, wwin->frame->languagemode);
+                wwin->frame->languagemode = wwin->frame->last_languagemode;
+                wwin->frame->last_languagemode = staterec.group;
+                XkbLockGroup(dpy,XkbUseCoreKbd, wwin->frame->languagemode);
                                  
             }
         }

@@ -176,14 +176,22 @@ allocButtonPixmaps(WScreen *scr)
       pix->shared = 1;
     scr->b_pixmaps[WBUT_ICONIFY] = pix;
 #ifdef XKB_BUTTON_HINT
-    pix = wPixmapCreateFromXPMData(scr, PRED_THAI_XPM);
+    pix = wPixmapCreateFromXPMData(scr, PRED_XKBGROUP1_XPM);
     if (pix)
       pix->shared = 1;
-    scr->b_pixmaps[WBUT_THAI] = pix;
-    pix = wPixmapCreateFromXPMData(scr, PRED_ENGL_XPM);
+    scr->b_pixmaps[WBUT_XKBGROUP1] = pix;
+    pix = wPixmapCreateFromXPMData(scr, PRED_XKBGROUP2_XPM);
     if (pix)
       pix->shared = 1;
-    scr->b_pixmaps[WBUT_ENGL] = pix;
+    scr->b_pixmaps[WBUT_XKBGROUP2] = pix;
+    pix = wPixmapCreateFromXPMData(scr, PRED_XKBGROUP3_XPM);
+    if (pix)
+      pix->shared = 1;
+    scr->b_pixmaps[WBUT_XKBGROUP3] = pix;
+    pix = wPixmapCreateFromXPMData(scr, PRED_XKBGROUP4_XPM);
+    if (pix)
+      pix->shared = 1;
+    scr->b_pixmaps[WBUT_XKBGROUP4] = pix;
 #endif
 
     
@@ -705,8 +713,8 @@ wScreenInit(int screen_number)
     XSelectInput(dpy, scr->root_win, event_mask);
 
 #ifdef KEEP_XKB_LOCK_STATUS     
-    XkbSelectEvents(dpy,XkbUseCoreKbd,XkbIndicatorStateNotifyMask,
-                                            XkbIndicatorStateNotifyMask);
+    XkbSelectEventDetails(dpy,XkbUseCoreKbd,XkbIndicatorStateNotify,
+            XkbIndicatorStateNotifyMask, XkbIndicatorStateNotifyMask);
 #endif /* KEEP_XKB_LOCK_STATUS */
 
     XSync(dpy, False);

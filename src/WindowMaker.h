@@ -109,12 +109,12 @@ typedef enum {
 #define WBUT_ICONIFY            2
 #define WBUT_KILL		3
 #ifdef XKB_BUTTON_HINT
-#define WBUT_THAI   4
-#define WBUT_ENGL   5
-
-#define PRED_BPIXMAPS		6 /* count of WBUT icons */
+#define WBUT_XKBGROUP1      4
+#define WBUT_XKBGROUP2      5
+#define WBUT_XKBGROUP3      6
+#define WBUT_XKBGROUP4      7
+#define PRED_BPIXMAPS		8 /* reserved for 4 groups */
 #else
-
 #define PRED_BPIXMAPS		4 /* count of WBUT icons */
 #endif /* XKB_BUTTON_HINT */
 
