@@ -8,7 +8,6 @@ changes since wmaker 0.61.0:
 - changed WMList to use WMBag internally, instead of a linked list
 - replaced WMAddSortedListItem() with WMSortListItems()
 - replaced WMAddSortedBrowserItem() with WMSortBrowserColumn()
-- added WMGetListItems()
 
 changes since wmaker 0.60.0:
 ............................
