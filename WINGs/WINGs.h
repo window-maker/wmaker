@@ -1562,6 +1562,9 @@ void WMSetTextAlignment(WMText *tPtr, WMAlignment alignment);
 Bool WMFindInTextStream(WMText *tPtr, char *needle, Bool direction,
     Bool caseSensitive);
 
+Bool WMReplaceTextSelection(WMText *tPtr, char *replacement);
+
+
 /* parser related stuff... use only if implementing a new parser */
 
 void *WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w, char *description,

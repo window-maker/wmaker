@@ -84,10 +84,7 @@ typedef struct _TextBlock {
 
 /* I'm lazy: visible.h vs. visible.size.height :-) */
 typedef struct {
-    unsigned int y;
-    unsigned int x;
-    unsigned int h;
-    unsigned int w;
+    int y, x, h, w;
 } myRect;
 
 
@@ -1554,6 +1551,8 @@ layOutDocument(Text *tPtr)
     if ( tPtr->flags.frozen || (!(tb = tPtr->firstTextBlock)) )
         return;
 
+    assert(tPtr->visible.w > 20);
+    
     tPtr->docWidth = tPtr->visible.w;
     x = tPtr->margins[tb->marginN].first; 
     bmargin = tPtr->margins[tb->marginN].body;
@@ -1671,16 +1670,16 @@ _layOut:
                     width = WMWidthOfString(font, 
                         &tb->text[begin], end-begin);
 
-                    /* if it won't fit,  break it up */
-                    if (width > tPtr->visible.w) { 
+                    /* if it won't fit, char wrap it */
+                    if (width >= tPtr->visible.w) { 
                         char *t = &tb->text[begin];
                         int l=end-begin, i=0;
                         do { 
                             width = WMWidthOfString(font, t, ++i);
                         } while (width < tPtr->visible.w && i < l);  
+                        if(i>2) i--;
                         end = begin+i;
-                        if (start) 
-                             start -= l-i;    
+                        start = &tb->text[end];
                     }
 
                     lw += width;
@@ -1856,6 +1855,7 @@ clearText(Text *tPtr)
 {
     tPtr->vpos = tPtr->hpos = 0;
     tPtr->docHeight = tPtr->docWidth = 0;
+    tPtr->cursor.x = -23;
 
     if (!tPtr->firstTextBlock) 
         return;
@@ -3993,6 +3993,28 @@ WMFindInTextStream(WMText *tPtr, char *needle, Bool direction,
     }
 
     return False;
+}
+
+
+Bool
+WMReplaceTextSelection(WMText *tPtr, char *replacement) 
+{
+    if (!tPtr)
+        return False;
+
+    if (!tPtr->flags.ownsSelection)
+        return False;
+
+    removeSelection(tPtr);
+
+    if(replacement) {
+        insertTextInteractively(tPtr, replacement, strlen(replacement));
+        updateCursorPosition(tPtr);
+        paintText(tPtr);
+    }
+
+    return True;
+
 }
 
 
