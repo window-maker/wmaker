@@ -427,28 +427,49 @@ loadPixmaps(WMScreen *scr)
     RDestroyImage(tmp);
 
     /* trash can */
-    tmp = RGetSubImage(image, 105, 0, 24, 24);
+    tmp = RGetSubImage(image, 104, 0, 24, 24);
     RCombineImageWithColor(tmp, &white);
     scr->trashcanIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
     RDestroyImage(tmp);
-    tmp = RGetSubImage(image, 105, 0, 24, 24);
+    tmp = RGetSubImage(image, 104, 0, 24, 24);
     RCombineImageWithColor(tmp, &white);
     scr->altTrashcanIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
     RDestroyImage(tmp);
-    /* diskette */
-    tmp = RGetSubImage(image, 105, 25, 24, 24);
+    /* create dir */
+    tmp = RGetSubImage(image, 104, 24, 24, 24);
+    RCombineImageWithColor(tmp, &white);
+    scr->createDirIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
+    RDestroyImage(tmp);
+    tmp = RGetSubImage(image, 104, 24, 24, 24);
+    RCombineImageWithColor(tmp, &white);
+    scr->altCreateDirIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
+    RDestroyImage(tmp);
+    /* diskettes */
+    tmp = RGetSubImage(image, 24, 80, 24, 24);
     RCombineImageWithColor(tmp, &white);
     scr->disketteIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
     RDestroyImage(tmp);
-    tmp = RGetSubImage(image, 105, 25, 24, 24);
+    tmp = RGetSubImage(image, 24, 80, 24, 24);
     RCombineImageWithColor(tmp, &white);
     scr->altDisketteIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
     RDestroyImage(tmp);
-
-
-    tmp = RGetSubImage(image, 0, 0, 24, 24);
+    /* mount */
+    tmp = RGetSubImage(image, 0, 80, 24, 24);
     RCombineImageWithColor(tmp, &white);
-    scr->altHomeIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
+    scr->mountIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
+    RDestroyImage(tmp);
+    tmp = RGetSubImage(image, 0, 80, 24, 24);
+    RCombineImageWithColor(tmp, &white);
+    scr->altMountIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
+    RDestroyImage(tmp);
+    /* unmount */
+    tmp = RGetSubImage(image, 48, 80, 24, 24);
+    RCombineImageWithColor(tmp, &white);
+    scr->unmountIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
+    RDestroyImage(tmp);
+    tmp = RGetSubImage(image, 48, 80, 24, 24);
+    RCombineImageWithColor(tmp, &white);
+    scr->altUnmountIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
     RDestroyImage(tmp);
 
     /* Magnifying Glass Icon for ColorPanel */
