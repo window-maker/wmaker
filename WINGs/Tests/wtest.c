@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 
 /*
  * You need to define this function to link any program to WINGs.
@@ -590,6 +590,8 @@ testText(WMScreen *scr)
 {
     WMWindow *win;
     WMText *text;
+    WMFont *font;
+    void *tb;
     FILE *file = fopen("wm.html", "rb");
 
     windowCount++;
@@ -604,23 +606,22 @@ testText(WMScreen *scr)
     WMMoveWidget(text, 10, 10);
     WMSetTextHasVerticalScroller(text, True);
     WMSetTextEditable(text, False);
+    WMSetTextIgnoresNewline(text, False);
 
-    {
-        WMFont *font, *ifont;
+#define FNAME "Verdana,Luxi Sans:pixelsize=12"
+#define MSG \
+    "Window Maker is the GNU window manager for the " \
+    "X Window System. It was designed to emulate the " \
+    "look and feel of part of the NEXTSTEP(tm) GUI. It's " \
+    "supposed to be relatively fast and small, feature " \
+    "rich, easy to configure and easy to use, with a simple " \
+    "and elegant appearance borrowed from NEXTSTEP(tm)."
 
-        font = WMDefaultSystemFont(scr);
-        //ifont = WMCopyFontWithStyle(scr, font, WFSEmphasized);
-        ifont = WMCreateFont(scr, "verdana,sans:pixelsize=12:italic");
-        if (ifont) {
-            WMSetTextDefaultFont(text, ifont);
-            WMReleaseFont(ifont);
-        } else {
-            WMSetTextDefaultFont(text, font);
-        }
-        WMReleaseFont(font);
-    }
+    font = WMCreateFont(scr, FNAME":autohint=false");
+    WMSetTextDefaultFont(text, font);
+    WMReleaseFont(font);
 
-    if (file) {
+    if (0 && file) {
         char buf[1024];
 
         WMFreezeText(text);
@@ -630,13 +631,16 @@ testText(WMScreen *scr)
         fclose(file);
         WMThawText(text);
     } else {
-        WMAppendTextStream(text,
-                           "Window Maker is the GNU window manager for the "
-                           "X Window System. It was designed to emulate the "
-                           "look and feel of part of the NEXTSTEP(tm) GUI. Its "
-                           "supposed to be relatively fast and small, feature "
-                           "rich, easy to configure and easy to use, with a simple "
-                           "and elegant appearance borrowed from NEXTSTEP(tm).");
+        WMAppendTextStream(text, "First paragraph has autohinting turned off, "
+                           "while the second has it turned on:");
+        WMAppendTextStream(text, "\n\n\n");
+        WMAppendTextStream(text, MSG);
+        WMAppendTextStream(text, "\n\n\n");
+        font = WMCreateFont(scr, FNAME":autohint=true");
+        tb = WMCreateTextBlockWithText(text, MSG, font, WMBlackColor(scr),
+                                       0, strlen(MSG));
+        WMAppendTextBlock(text, tb);
+        WMReleaseFont(font);
     }
 
     WMRealizeWidget(win);
@@ -1043,7 +1047,6 @@ main(int argc, char **argv)
 
     testColorPanel(scr);
 
-    testFrame(scr);
 #if 0
 
     testBox(scr);

@@ -5,13 +5,9 @@ To do before next release:
   and give a warning if font is not converted, but let user manually convert
   it with convertfonts as the process may need manual tweaking for best
   results)
-- figure out a better gnustep path for wprefs.app installation
 - check whether window states are being saved/restored properly via netwm
   on restart/crash-restart (grep for XXX/TODO)
 
-1. make AntialiasedText in WMGLOBAL work
-2. make wmaker read old xlfd, but warn about them so people use convert 
-   (I think it reads them, but the warning needs to be added)
 
 =====================================================================
 
@@ -29,6 +25,7 @@ Do ASAP:
 
 Need to do:
 ===========
+- figure out a better gnustep path for wprefs.app installation
 - impelment a generic pixmap type, which receives attributes
   (scaled/maxscaled/centered/tiled, smoothed, size/position, ...)
 - allow user to select/restore default root menu from wprefs

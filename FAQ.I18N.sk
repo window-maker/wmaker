@@ -35,10 +35,6 @@ Ak vám nefunguje podpora miestnych nastavení, skontrolujte nasledujúce:
 
 		 ftp://ftp.linux.or.jp/pub/RPM/glibc
 
-	- ak chcete zobrazova» multibyte znaky, nastavte mo¾nos»
-	  MultiByteText YES v ~/GNUstep/Defaults/WindowMaker a
-	  ~/GNUstep/Defaults/WMGLOBAL	
-
 	- fonty, ktoré pou¾ívate, podporujú va¹e miesne nastavenia.
 	  Ak va¹e nastavenia fontov v ~/GNUstep/Defaults/WindowMaker
 	  vyzerajú takto:

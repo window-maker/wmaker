@@ -13,11 +13,15 @@
 #include <X11/Xlocale.h>
 
 
+#define DEFAULT_FONT "sans-serif:pixelsize=12"
+
 #define DEFAULT_SIZE WINGsConfiguration.defaultFontSize
 
-static char*
-fixXLFD(char *xlfd, int size)
+
+static FcPattern*
+xlfdToFcPattern(char *xlfd, int size)
 {
+    FcPattern *pattern;
     char *fname, *ptr;
 
     fname = wmalloc(strlen(xlfd) + 20);
@@ -29,6 +33,28 @@ fixXLFD(char *xlfd, int size)
     if ((ptr = strchr(fname, ','))) {
         *ptr = 0;
     }
+
+    pattern = XftXlfdParse(fname, False, False);
+    wfree(fname);
+
+    if (!pattern) {
+        wwarning(_("invalid font: %s. Using default %s"), xlfd, DEFAULT_FONT);
+        pattern = FcNameParse(DEFAULT_FONT);
+    }
+
+    return pattern;
+}
+
+
+static char*
+xlfdToFcName(char *xlfd, int size)
+{
+    FcPattern *pattern;
+    char *fname;
+
+    pattern = xlfdToFcPattern(xlfd, size);
+    fname = FcNameUnparse(pattern);
+    FcPatternDestroy(pattern);
 
     return fname;
 }
@@ -68,7 +94,6 @@ hasPropertyWithStringValue(FcPattern *pattern, const char *object, char *value)
 }
 
 
-// also handle an xlfd with %d for size?
 static char*
 makeFontOfSize(char *font, int size, char *fallback)
 {
@@ -76,16 +101,13 @@ makeFontOfSize(char *font, int size, char *fallback)
     char *result;
 
     if (font[0]=='-') {
-        char *fname;
-
-        fname = fixXLFD(font, size);
-        pattern = XftXlfdParse(fname, False, False);
-        wfree(fname);
+        pattern = xlfdToFcPattern(font, size);
     } else {
         pattern = FcNameParse(font);
     }
 
-    //FcPatternPrint(pattern);
+    /*FcPatternPrint(pattern);*/
+
     if (size > 0) {
         FcPatternDel(pattern, FC_PIXEL_SIZE);
         FcPatternAddDouble(pattern, FC_PIXEL_SIZE, (double)size);
@@ -98,6 +120,8 @@ makeFontOfSize(char *font, int size, char *fallback)
         FcPatternAddString(pattern, FC_FAMILY, fallback);
     }
 
+    /*FcPatternPrint(pattern);*/
+
     result = FcNameUnparse(pattern);
     FcPatternDestroy(pattern);
 
@@ -108,18 +132,18 @@ makeFontOfSize(char *font, int size, char *fallback)
 WMFont*
 WMCreateFont(WMScreen *scrPtr, char *fontName)
 {
-    WMFont *font;
     Display *display = scrPtr->display;
-    char *fname, *ptr;
+    WMFont *font;
+    char *fname;
 
-    /* This is for back-compat (to allow reading of old xlfd descriptions) */
-    if (fontName[0]=='-' && (ptr = strchr(fontName, ','))) {
-        // warn for deprecation
-        fname = wmalloc(ptr - fontName + 1);
-        strncpy(fname, fontName, ptr - fontName);
-        fname[ptr - fontName] = 0;
+    if (fontName[0]=='-'){
+        fname = xlfdToFcName(fontName, 0);
     } else {
         fname = wstrdup(fontName);
+    }
+
+    if (!WINGsConfiguration.antialiasedText && !strstr(fname, ":antialias=")) {
+        fname = wstrappend(fname, ":antialias=false");
     }
 
     font = WMHashGet(scrPtr->fontCache, fname);
@@ -134,12 +158,7 @@ WMCreateFont(WMScreen *scrPtr, char *fontName)
 
     font->screen = scrPtr;
 
-    if (fname[0] == '-') {
-        // Backward compat thing. Remove in a later version
-        font->font = XftFontOpenXlfd(display, scrPtr->screen, fname);
-    } else {
-        font->font = XftFontOpenName(display, scrPtr->screen, fname);
-    }
+    font->font = XftFontOpenName(display, scrPtr->screen, fname);
     if (!font->font) {
         wfree(font);
         wfree(fname);
@@ -231,12 +250,12 @@ WMSystemFontOfSize(WMScreen *scrPtr, int size)
     WMFont *font;
     char *fontSpec;
 
-    fontSpec = makeFontOfSize(WINGsConfiguration.systemFont, size, "sans");
+    fontSpec = makeFontOfSize(WINGsConfiguration.systemFont, size, NULL);
 
     font = WMCreateFont(scrPtr, fontSpec);
 
     if (!font) {
-        wwarning(_("could not load font %s."), fontSpec);
+        wwarning(_("could not load font: %s."), fontSpec);
     }
 
     wfree(fontSpec);
@@ -251,12 +270,12 @@ WMBoldSystemFontOfSize(WMScreen *scrPtr, int size)
     WMFont *font;
     char *fontSpec;
 
-    fontSpec = makeFontOfSize(WINGsConfiguration.boldSystemFont, size, "sans");
+    fontSpec = makeFontOfSize(WINGsConfiguration.boldSystemFont, size, NULL);
 
     font = WMCreateFont(scrPtr, fontSpec);
 
     if (!font) {
-        wwarning(_("could not load font %s."), fontSpec);
+        wwarning(_("could not load font: %s."), fontSpec);
     }
 
     wfree(fontSpec);
@@ -348,23 +367,29 @@ WMCopyFontWithStyle(WMScreen *scrPtr, WMFont *font, WMFontStyle style)
     case WFSNormal:
         FcPatternDel(pattern, FC_WEIGHT);
         FcPatternDel(pattern, FC_SLANT);
-        FcPatternAddString(pattern, FC_WEIGHT, "regular");
-        FcPatternAddString(pattern, FC_WEIGHT, "medium");
-        FcPatternAddString(pattern, FC_SLANT, "roman");
+        //FcPatternAddString(pattern, FC_WEIGHT, "medium");
+        //FcPatternAddString(pattern, FC_WEIGHT, "light");
+        //FcPatternAddString(pattern, FC_SLANT, "roman");
         break;
     case WFSBold:
         FcPatternDel(pattern, FC_WEIGHT);
         FcPatternAddString(pattern, FC_WEIGHT, "bold");
+        FcPatternAddString(pattern, FC_WEIGHT, "demibold");
+        FcPatternAddString(pattern, FC_WEIGHT, "black");
         break;
-    case WFSEmphasized:
+    case WFSItalic:
         FcPatternDel(pattern, FC_SLANT);
         FcPatternAddString(pattern, FC_SLANT, "italic");
         FcPatternAddString(pattern, FC_SLANT, "oblique");
+        //FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_ITALIC);
+        //FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_OBLIQUE);
         break;
-    case WFSBoldEmphasized:
+    case WFSBoldItalic:
         FcPatternDel(pattern, FC_WEIGHT);
         FcPatternDel(pattern, FC_SLANT);
         FcPatternAddString(pattern, FC_WEIGHT, "bold");
+        FcPatternAddString(pattern, FC_WEIGHT, "demibold");
+        FcPatternAddString(pattern, FC_WEIGHT, "black");
         FcPatternAddString(pattern, FC_SLANT, "italic");
         FcPatternAddString(pattern, FC_SLANT, "oblique");
         break;

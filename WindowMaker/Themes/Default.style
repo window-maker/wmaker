@@ -1,11 +1,12 @@
 {
   TitleJustify = left;
-  WindowTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
-  MenuTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
-  MenuTextFont = "-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*";
-  IconTitleFont = "-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-*-*";
-  ClipTitleFont = "-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*";
-  DisplayFont = "-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*";
+  WindowTitleFont = "Trebuchet MS,Luxi Sans:bold:pixelsize=12";
+  MenuTitleFont = "Trebuchet MS,Luxi Sans:bold:pixelsize=12";
+  MenuTextFont = "Trebuchet MS,Luxi Sans:pixelsize=12";
+  IconTitleFont = "Arial,Luxi Sans:pixelsize=9";
+  ClipTitleFont = "Verdana:bold:pixelsize=10";
+  DisplayFont = "Trebuchet MS,Luxi Sans:pixelsize=12";
+  LargeDisplayFont = "Trebuchet MS,Luxi Sans:pixelsize=24";
   HighlightColor = white;
   HighlightTextColor = black;
   ClipTitleColor = black;

@@ -322,7 +322,8 @@ createMainWindow(WMScreen *scr)
     WMMoveWidget(WPrefs.banner, FRAME_LEFT, FRAME_TOP);
     WMSetFrameRelief(WPrefs.banner, WRFlat);
 
-    font = WMCreateFont(scr, "Lucida Sans,URW Gothic L,Times New Roman,serif:bold:pixelsize=26");
+    font = WMCreateFont(scr, "Lucida Sans,URW Gothic L,Times New Roman,serif"
+                        ":bold:pixelsize=26:antialias=true");
     WPrefs.nameL = WMCreateLabel(WPrefs.banner);
     WMSetLabelTextAlignment(WPrefs.nameL, WACenter);
     WMResizeWidget(WPrefs.nameL, FRAME_WIDTH-20, 60);

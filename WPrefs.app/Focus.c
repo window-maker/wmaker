@@ -220,14 +220,14 @@ createPanel(Panel *p)
 
         panel->kfocB[0] = WMCreateRadioButton(box);
         WMSetButtonText(panel->kfocB[0], _("Manual:  Click on the window to set "\
-                                           "keyboard input focus"));
+                                           "keyboard input focus."));
         WMAddBoxSubview(box, WMWidgetView(panel->kfocB[0]), True, True,
                         20, 0, 0);
 
         panel->kfocB[1] = WMCreateRadioButton(box);
         WMGroupButtons(panel->kfocB[0], panel->kfocB[1]);
         WMSetButtonText(panel->kfocB[1], _("Auto:  Set keyboard input focus to "\
-                                           "the window under the mouse pointer"));
+                                           "the window under the mouse pointer."));
         WMAddBoxSubview(box, WMWidgetView(panel->kfocB[1]), True, True,
                         20, 0, 0);
 
@@ -250,7 +250,7 @@ createPanel(Panel *p)
     panel->autB = WMCreateRadioButton(panel->cfocF);
     WMResizeWidget(panel->autB, 225, 20);
     WMMoveWidget(panel->autB, 10, 43);
-    WMSetButtonText(panel->autB, _("...that is under the mouse pointer."));
+    WMSetButtonText(panel->autB, _("...that's under the mouse pointer."));
     WMGroupButtons(panel->manB, panel->autB);
 
     WMMapSubwidgets(panel->cfocF);

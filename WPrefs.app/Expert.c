@@ -73,7 +73,7 @@ createPanel(Panel *p)
         WMMoveWidget(panel->swi[i], 20, 20+i*25);
     }
 
-    WMSetButtonText(panel->swi[0], _("Disable miniwindows (icons for miniaturized windows). For use with KDE/GNOME."));
+    WMSetButtonText(panel->swi[0], _("Disable miniwindows (icons for minimized windows). For use with KDE/GNOME."));
     WMSetButtonText(panel->swi[1], _("Do not set non-WindowMaker specific parameters (do not use xset)."));
     WMSetButtonText(panel->swi[2], _("Automatically save session when exiting Window Maker."));
     WMSetButtonText(panel->swi[3], _("Use SaveUnder in window frames, icons, menus and other objects."));

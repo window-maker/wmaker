@@ -32,24 +32,35 @@ If I18N support does not work for you, check these:
 		here:
 		ftp://ftp.linux.or.jp/pub/RPM/glibc
 
-	- if you'd like to display multibyte characters, set the
-	  MultiByteText option to YES in ~/GNUstep/Defaults/WindowMaker
-	  and ~/GNUstep/Defaults/WMGLOBAL
-
 	- the fonts you're using support your locale. if your font
 	  setting on $HOME/GNUstep/Defaults/WindowMaker is like..
 
-	  WindowTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
-	  MenuTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
+	  WindowTitleFont = "Trebuchet MS:bold:pixelsize=12";
+	  MenuTitleFont   = "Trebuchet MS:bold:pixelsize=12";
 	  ......................................................
 
-	  then you can't display non iso8859-x charcters by helvetica. 
-	  so quick way to display various languages' font is to change
-	  all the font settings into:
-	  
-		"-*-*-medium-r-normal-*-14-*-*-*-*-*-*-*"
+	  then you can't display asian language (ja,ko,ch) characters using
+          Trebuchet MS. A font that is guaranteed to work for any language is
+          sans (or sans-serif). sans is not a font itself, but an alias which
+          points to multiple fonts and will load the first in that list that
+          has the ability to show glyphs in your language. If you don't know
+          a font that is suited for you language you can always set all your
+          fonts to something like:
 
-	  and also you need to change font settings in style files in
+		"sans:pixelsize=12"
+
+          However, please note that if your font is something like:
+
+          	"Trebuchet MS,Luxi Sans,sans:pixelsize=12"
+
+	  this will not be able to display asian languages if any of the
+          previous fonts before sans are installed. This is because unlike
+          the proper font pickup that sans guarantees for your language,
+          this construct only allows a font fallback mechanism, which tries
+          all the fonts in the list in order, until it finds one that is
+          available, even if it doesn't support your language.
+
+	  Also you need to change font settings in style files in
 	  the "$HOME/Library/WindowMaker/Style" directory.
 
 	- the LC_CTYPE environment variable is unset or it has the correct

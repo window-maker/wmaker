@@ -1270,7 +1270,8 @@ wShowInfoPanel(WScreen *scr)
     WMResizeWidget(panel->name1L, 240, 30 - sepWidth);
     WMMoveWidget(panel->name1L, 100, 30);
 
-    name = "Lucida Sans,Comic Sans MS,URW Gothic L,Trebuchet MS,sans:bold:pixelsize=26";
+    name = "Lucida Sans,Comic Sans MS,URW Gothic L,Trebuchet MS"
+        ":bold:pixelsize=26:antialias=true";
     font = WMCreateFont(scr->wmscreen, name);
     strbuf = "Window Maker";
     if (font) {
@@ -1290,7 +1291,7 @@ wShowInfoPanel(WScreen *scr)
     panel->name2L = WMCreateLabel(panel->win);
     WMResizeWidget(panel->name2L, 240, 24);
     WMMoveWidget(panel->name2L, 100, 60);
-    name = "URW Gothic L,Nimbus Sans L,sans:pixelsize=16";
+    name = "URW Gothic L,Nimbus Sans L:pixelsize=16:antialias=true";
     font = WMCreateFont(scr->wmscreen, name);
     if (font) {
         WMSetLabelFont(panel->name2L, font);

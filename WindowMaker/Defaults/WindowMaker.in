@@ -108,10 +108,10 @@
   WindowTitleFont = "Trebuchet MS,Luxi Sans:bold:pixelsize=12";
   MenuTitleFont = "Trebuchet MS,Luxi Sans:bold:pixelsize=12";
   MenuTextFont = "Trebuchet MS,Luxi Sans:pixelsize=12";
-  IconTitleFont = "Trebuchet MS,Luxi Sans:pixelsize=8";
-  ClipTitleFont = "Trebuchet MS,Luxi Sans:bold:pixelsize=10";
-  DisplayFont = "Trebuchet MS,Luxi Sans:pixelsize=10";
-  LargeDisplayFont = "Trebuchet MS,Luxi Sans:bold:pixelsize=24";
+  IconTitleFont = "Arial,Luxi Sans:pixelsize=9";
+  ClipTitleFont = "Verdana:bold:pixelsize=10";
+  DisplayFont = "Trebuchet MS,Luxi Sans:pixelsize=12";
+  LargeDisplayFont = "Trebuchet MS,Luxi Sans:pixelsize=24";
   HighlightColor = white;
   HighlightTextColor = black;
   ClipTitleColor = black;

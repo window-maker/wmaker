@@ -431,8 +431,8 @@ typedef struct WMInputPanel {
 typedef enum WMFontStyle {
     WFSNormal = 0,
     WFSBold   = 1,
-    WFSEmphasized = 2,
-    WFSBoldEmphasized = 3
+    WFSItalic = 2,
+    WFSBoldItalic = 3
 } WMFontStyle;
 
 

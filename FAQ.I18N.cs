@@ -44,12 +44,6 @@ Pokud vám nefunguje podpora I18N, tak zkontrolujte tato nastavení:
 
                 ftp://ftp.linux.or.jp/pub/RPM/glibc
 
-        - pokud chcete zobrazovat multibyte znaky, nastavte volbu MultiByteText
-          na YES v souborech:
-
-                ~/GNUstep/Defaults/WindowMaker
-                ~/GNUstep/Defaults/WMGLOBAL
-
         - fonty, které pou¾íváte by mìli být podporované va¹ím místním nastavením.
           Jestli¾e va¹e nastavení fontù v souboru ~/GNUstep/Defaults/WindowMaker
           vypadá takto:
