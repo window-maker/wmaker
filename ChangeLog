@@ -6,6 +6,8 @@ Changes since version 0.60.0:
 - fixed crash when displaying workspace name in some positions.
 - fixed compilation problem when WS_INDICATOR was defined.
 - added edge attraction. See NEWS.
+- fixed buggy RSaveXPM() in wraster library. Its output was messed up, and
+  caused crashes for icons with more than 1024 colors.
 
 
 Changes since version 0.53.0:

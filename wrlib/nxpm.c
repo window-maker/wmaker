@@ -483,13 +483,13 @@ addcolor(XPMColor **list, unsigned r, unsigned g, unsigned b, int *colors)
 
 
 static char*
-index2str(char *buffer, int index, int colorCount)
+index2str(char *buffer, int index, int charsPerPixel)
 {
     int i;
 
-    for (i=0; i<colorCount/64+1; i++) {
+    for (i=0; i<charsPerPixel; i++) {
 	buffer[i] = I2CHAR(index&63);
-	index >>= 5;
+	index >>= 6;
     }
     buffer[i] = 0;
     
@@ -498,7 +498,7 @@ index2str(char *buffer, int index, int colorCount)
 
 
 static void
-outputcolormap(FILE *file, XPMColor *colormap, int colorCount)
+outputcolormap(FILE *file, XPMColor *colormap, int charsPerPixel)
 {
     int index;
     char buf[128];
@@ -509,7 +509,7 @@ outputcolormap(FILE *file, XPMColor *colormap, int colorCount)
     for (index=0; colormap!=NULL; colormap=colormap->next,index++) {
 	colormap->index = index;
 	fprintf(file, "\"%s c #%02x%02x%02x\",\n", 
-		index2str(buf, index, colorCount), colormap->red,
+		index2str(buf, index, charsPerPixel), colormap->red,
 		colormap->green, colormap->blue);
     }
 }
@@ -536,6 +536,7 @@ RSaveXPM(RImage *image, char *filename)
     FILE *file;
     int x, y;
     int colorCount=0;
+    int charsPerPixel;
     XPMColor *colormap = NULL;
     XPMColor *tmpc;
     int i;
@@ -572,13 +573,17 @@ RSaveXPM(RImage *image, char *filename)
 	}
     }
 
+    charsPerPixel = 1;
+    while ((1 << charsPerPixel*6) < colorCount)
+        charsPerPixel++;
+
     /* write header info */
     fprintf(file, "\"%i %i %i %i\",\n", image->width, image->height, 
-	    colorCount, colorCount/64+1);
+	    colorCount, charsPerPixel);
 
     /* write colormap data */
     if (image->data[3]) {
-	for (i=0; i<colorCount/64+1; i++)
+	for (i=0; i<charsPerPixel; i++)
 	    transp[i] = ' ';
 	transp[i] = 0;
 
@@ -586,7 +591,7 @@ RSaveXPM(RImage *image, char *filename)
     }
     
     i = 0;
-    outputcolormap(file, colormap, colorCount);
+    outputcolormap(file, colormap, charsPerPixel);
 
     r = image->data[0];
     g = image->data[1];
@@ -604,7 +609,7 @@ RSaveXPM(RImage *image, char *filename)
 	    if (!a || *a++>127) {
 		tmpc = lookfor(colormap, (unsigned)*r<<16|(unsigned)*g<<8|(unsigned)*b);
 
-		fprintf(file, index2str(buf, tmpc->index, colorCount));
+		fprintf(file, index2str(buf, tmpc->index, charsPerPixel));
 	    } else {
 		fprintf(file, transp);
 	    }
