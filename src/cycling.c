@@ -124,8 +124,7 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
         int i;
 
         WMMaskEvent(dpy, KeyPressMask|KeyReleaseMask|ExposureMask
-                    |PointerMotionMask|EnterWindowMask|LeaveWindowMask
-                    |ButtonReleaseMask, &ev);
+                    |PointerMotionMask|ButtonReleaseMask, &ev);
 
         /* ignore CapsLock */
         modifiers = ev.xkey.state & ValidModMask;
@@ -201,15 +200,14 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
                 }
             }
             break;
-
-        case EnterNotify:
-        case LeaveNotify:
+            
+        case MotionNotify:
         case ButtonRelease:
             {
                 WWindow *tmp;
                 if (swpanel) {
                     tmp = wSwitchPanelHandleEvent(swpanel, &ev);
-                    if (tmp) {
+                    if (tmp && tmp != newFocused) {
                         newFocused = tmp;
                         wWindowFocus(newFocused, oldFocused);
                         oldFocused = newFocused;

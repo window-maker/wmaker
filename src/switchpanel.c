@@ -469,22 +469,28 @@ WWindow *wSwitchPanelHandleEvent(WSwitchPanel *panel, XEvent *event)
     if (!panel->win)
       return NULL;
 
-    if (event->type == EnterNotify) {
+    if (event->type == MotionNotify) {
         int focus= -1;
 
         WM_ITERATE_ARRAY(panel->icons, label, i) {
-            if (WMWidgetXID(label) == event->xcrossing.window) {
+            if (WMWidgetXID(label) == event->xmotion.window) {
                 focus= i;
                 break;
             }
         }
 
         if (focus >= 0) {
+            WWindow *wwin;
+            
             changeImage(panel, panel->current, 0);
             changeImage(panel, focus, 1);
             panel->current= focus;
             
-            return WMGetFromArray(panel->windows, focus);
+            wwin= WMGetFromArray(panel->windows, focus);
+            
+            WMSetLabelText(panel->label, wwin->frame->title);
+            
+            return wwin;
         }
     }
 
