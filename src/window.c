@@ -145,7 +145,15 @@ appearanceObserver(void *self, WMNotification *notif)
 	return;
 
     if (flags & WFontSettings) {
-	wWindowConfigureBorders(wwin);
+        wWindowConfigureBorders(wwin);
+        if(wwin->flags.shaded) {
+            wFrameWindowResize(wwin->frame, wwin->frame->core->width,
+                    wwin->frame->top_width - 1);
+
+            wwin->client.y = wwin->frame_y - wwin->client.height 
+                + wwin->frame->top_width;
+            wWindowSynthConfigureNotify(wwin);
+        }
     }
     if (flags & WTextureSettings) {
 	wwin->frame->flags.need_texture_remake = 1;

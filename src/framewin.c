@@ -136,7 +136,7 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
 	height = fwin->core->height - fwin->top_width - fwin->bottom_width;
 
     if (flags & WFF_TITLEBAR)
-	theight = WMFontHeight(*fwin->font) + TITLEBAR_EXTRA_HEIGHT;
+	theight = WMFontHeight(*fwin->font) + TITLEBAR_EXTRA_HEIGHT + (wPreferences.title_clearance << 1);
     else
 	theight = 0;
     
@@ -470,7 +470,7 @@ updateTitlebar(WFrameWindow *fwin)
     int x, w;
     int theight;
     
-    theight = WMFontHeight(*fwin->font) + TITLEBAR_EXTRA_HEIGHT;
+	theight = WMFontHeight(*fwin->font) + TITLEBAR_EXTRA_HEIGHT + (wPreferences.title_clearance << 1);
 
     x = 0;
     w = fwin->core->width + 1;
@@ -1081,16 +1081,16 @@ wFrameWindowPaint(WFrameWindow *fwin)
             proc.drawString(scr->drawstring_func[fwin->flags.state 
                     + fwin->drawstring_proc_offset]->arg,
                     fwin->titlebar->window, *fwin->title_gc,
-                    *fwin->font, x, TITLEBAR_EXTRA_HEIGHT/2,
+                    *fwin->font, x, wPreferences.title_clearance + TITLEBAR_EXTRA_HEIGHT/2,
                     fwin->titlebar->width, fwin->top_width, title, titlelen);
     } else {
         WMDrawString(scr->wmscreen, fwin->titlebar->window, 
-                *fwin->title_gc, *fwin->font, x, TITLEBAR_EXTRA_HEIGHT/2, 
+                *fwin->title_gc, *fwin->font, x, wPreferences.title_clearance + TITLEBAR_EXTRA_HEIGHT/2, 
                 title, titlelen);
     }
 #else
     WMDrawString(scr->wmscreen, fwin->titlebar->window, 
-            *fwin->title_gc, *fwin->font, x, TITLEBAR_EXTRA_HEIGHT/2, 
+            *fwin->title_gc, *fwin->font, x, wPreferences.title_clearance + TITLEBAR_EXTRA_HEIGHT/2, 
             title, titlelen);
 #endif /* DRAWSTRING_PLUGIN */
 

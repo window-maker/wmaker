@@ -141,6 +141,7 @@ static int getRImage();
 
 /* value setting functions */
 static int setJustify();
+static int setClearance();
 static int setIfDockPresent();
 static int setStickyIcons();
 /*
@@ -556,6 +557,9 @@ WDefaultEntry optionList[] = {
     },
     {"WindowTitleFont",	DEF_TITLE_FONT,	       	NULL,
 	  NULL,				getFont,	setWinTitleFont,
+    },
+    {"WindowTitleClearance",	DEF_TITLE_CLEARANCE,	       	NULL,
+      &wPreferences.title_clearance,	getInt,		setClearance
     },
     {"MenuTitleFont",	DEF_MENU_TITLE_FONT,	NULL,
 	  NULL,				getFont,	setMenuTitleFont
@@ -2407,6 +2411,11 @@ setJustify(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
     return REFRESH_WINDOW_TITLE_COLOR;
 }
 
+static int
+setClearance(WScreen *scr, WDefaultEntry *entry, void *bar, void *foo)
+{
+    return REFRESH_WINDOW_FONT|REFRESH_BUTTON_IMAGES|REFRESH_MENU_TITLE_FONT;
+}
 
 static int
 setIfDockPresent(WScreen *scr, WDefaultEntry *entry, int *flag, long which)

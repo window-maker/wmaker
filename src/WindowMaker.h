@@ -311,6 +311,8 @@ typedef struct WPreferences {
 					same workspace as parent */
     signed char title_justification;	       /* titlebar text alignment */
 
+    int title_clearance;
+
     char multi_byte_text;
 #ifdef KEEP_XKB_LOCK_STATUS
     char modelock;
