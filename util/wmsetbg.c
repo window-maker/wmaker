@@ -52,7 +52,7 @@
 
 #include <proplist.h>
 
-#define PROG_VERSION	"wmsetbg (Window Maker) 2.2"
+#define PROG_VERSION	"wmsetbg (Window Maker) 2.3"
 
 
 #define WORKSPACE_COUNT (MAX_WORKSPACES+1)
@@ -999,6 +999,11 @@ updateDomain(char *domain, char *key, char *texture)
 {
     char *program = "wdwrite";
 
+    if (smooth)
+	system("wdwrite SmoothWorkspaceBack YES");
+    else
+	system("wdwrite SmoothWorkspaceBack NO");
+
     execlp(program, program, domain, key, texture, NULL);
     wwarning("warning could not run \"%s\"", program);
 }
@@ -1344,6 +1349,14 @@ main(int argc, char **argv)
 
     
     PixmapPath = getPixmapPath(domain);
+    if (!smooth) {
+	proplist_t val;
+	
+	val = PLGetDictionaryEntry(domain, 
+				   PLMakeString("SmoothWorkspaceBack"));
+	if (val && PLIsString(val) && strcasecmp(PLGetString(val), "YES")==0)
+	    smooth = True;
+    }
 
     dpy = XOpenDisplay(display);
     if (!dpy) {

@@ -84,6 +84,10 @@ static void menuCloseClick(WCoreWindow *sender, void *data, XEvent *event);
 
 static void updateTexture(WMenu *menu);
 
+#ifndef LITE
+static int saveMenuRecurs(proplist_t menus, WScreen *scr, WMenu *menu);
+static int restoreMenuRecurs(WScreen *scr, proplist_t menus, WMenu *menu, char *path);
+#endif /* !LITE */
 
 static void selectEntry(WMenu *menu, int entry_no);
 static void closeCascade(WMenu *menu);
@@ -2437,22 +2441,12 @@ wMenuSaveState(WScreen *scr)
 {
     proplist_t menus, key, value;
     int save_menus = 0;
+
     char buffer[256];
 
     menus = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
 
 #ifndef LITE
-    if (scr->root_menu && scr->root_menu->flags.buttoned) {
-        sprintf(buffer, "%i,%i", scr->root_menu->frame_x,
-                                 scr->root_menu->frame_y);
-        key = PLMakeString("RootMenu");
-        value = PLMakeString(buffer);
-        PLInsertDictionaryEntry(menus, key, value);
-        PLRelease(key);
-        PLRelease(value);
-        save_menus = 1;
-    }
-
     if (scr->switch_menu && scr->switch_menu->flags.buttoned) {
         sprintf(buffer, "%i,%i", scr->switch_menu->frame_x,
                                  scr->switch_menu->frame_y);
@@ -2463,6 +2457,10 @@ wMenuSaveState(WScreen *scr)
         PLRelease(value);
         save_menus = 1;
     }
+
+    if (saveMenuRecurs(menus, scr, scr->root_menu))
+	save_menus = 1;
+
 #endif /* !LITE */
     if (scr->workspace_menu && scr->workspace_menu->flags.buttoned) {
         sprintf(buffer, "%i,%i", scr->workspace_menu->frame_x,
@@ -2484,13 +2482,80 @@ wMenuSaveState(WScreen *scr)
 }
 
 
+#ifndef LITE
+
+static Bool
+getMenuPath(WMenu *menu, char *buffer, int bufSize)
+{
+    Bool ok = True;
+    int len = 0;
+
+    if (!menu->flags.titled || !menu->frame->title[0])
+	return False;
+
+    len = strlen(menu->frame->title);
+    if (len >= bufSize)
+	return False;
+
+    if (menu->parent) {
+	ok = getMenuPath(menu->parent, buffer, bufSize - len - 1);
+	if (!ok)
+	    return False;
+    }
+
+    strcat(buffer, "\\");
+    strcat(buffer, menu->frame->title);
+
+    return True;
+}
+
+static Bool
+saveMenuRecurs(proplist_t menus, WScreen *scr, WMenu *menu)
+{
+    proplist_t key, value;
+    int save_menus = 0, i;
+    char buffer[512];
+    Bool ok = True;
+
+    
+    if (menu->flags.brother)
+	menu = menu->brother;
+
+    if (menu->flags.buttoned && menu != scr->switch_menu) {
+
+	sprintf(buffer, "%i,%i", menu->frame_x, menu->frame_y);
+	value = PLMakeString(buffer);
+
+	buffer[0] = '\0';
+	ok = getMenuPath(menu, buffer, 510);
+
+	if (ok) {
+	    key = PLMakeString(buffer);
+	    PLInsertDictionaryEntry(menus, key, value);
+	    PLRelease(key);
+	    PLRelease(value);
+	    save_menus = 1;
+	}
+    }
+
+    if (ok) {
+	for (i = 0; i < menu->cascade_no; i++) {
+	    if (saveMenuRecurs(menus, scr, menu->cascades[i]))
+		save_menus = 1;
+	}
+    }
+    return save_menus;
+}
+#endif /* !LITE */
+
+
 #define COMPLAIN(key) wwarning(_("bad value in menus state info:%s"), key)
 
 
 static int
 restoreMenu(WScreen *scr, proplist_t menu, int which)
 {
-    int i, x, y;
+    int x, y;
     WMenu *pmenu = NULL;
     
     if (!menu)
@@ -2505,27 +2570,11 @@ restoreMenu(WScreen *scr, proplist_t menu, int which)
         COMPLAIN("Position");
 
 #ifndef LITE
-    if (which & WSS_ROOTMENU) {
-        OpenRootMenu(scr, x, y, False);
-        pmenu = scr->root_menu;
-    } else if (which & WSS_SWITCHMENU) {
+    if (which & WSS_SWITCHMENU) {
         OpenSwitchMenu(scr, x, y, False);
         pmenu = scr->switch_menu;
-    } else
-#endif /* !LITE */
-	if (which & WSS_WSMENU) {
-        OpenWorkspaceMenu(scr, x, y);
-        pmenu = scr->workspace_menu;
-        if (pmenu->parent) {
-            /* make parent map the copy in place of the original */
-            for (i=0; i<pmenu->parent->cascade_no; i++) {
-                if (pmenu->parent->cascades[i] == pmenu) {
-                    pmenu->parent->cascades[i] = pmenu->brother;
-                    break;
-                }
-            }
-        }
     }
+#endif /* !LITE */
 
     if (pmenu) {
         int width = MENUW(pmenu);
@@ -2544,10 +2593,69 @@ restoreMenu(WScreen *scr, proplist_t menu, int which)
 }
 
 
+#ifndef LITE
+static int
+restoreMenuRecurs(WScreen *scr, proplist_t menus, WMenu *menu, char *path)
+{
+    proplist_t key, entry;
+    char buffer[512];
+    int i, x, y, res;
+
+    if (strlen(path) + strlen(menu->frame->title) > 510)
+	return False;
+
+    sprintf(buffer, "%s\\%s", path, menu->frame->title);
+    key = PLMakeString(buffer);
+    entry = PLGetDictionaryEntry(menus, key);
+    res = False;
+
+    if (entry && PLIsString(entry)) {
+
+	if (sscanf(PLGetString(entry), "%i,%i", &x, &y) != 2)
+	    COMPLAIN("Position");
+
+	if (!menu->flags.mapped) {
+	    int width = MENUW(menu);
+	    int height = MENUH(menu);
+
+	    wMenuMapAt(menu, x, y, False);
+
+	    if (menu->parent) {
+		/* make parent map the copy in place of the original */
+		for (i=0; i<menu->parent->cascade_no; i++) {
+		    if (menu->parent->cascades[i] == menu) {
+			menu->parent->cascades[i] = menu->brother;
+			break;
+		    }
+		}
+	    }
+	    x = (x < -width) ? 0 : x;
+	    x = (x > scr->scr_width) ? scr->scr_width - width : x;
+	    y = (y < 0) ? 0 : y;
+	    y = (y > scr->scr_height) ? scr->scr_height - height : y;
+	    wMenuMove(menu, x, y, True);
+	    menu->flags.buttoned = 1;
+	    wFrameWindowShowButton(menu->frame, WFF_RIGHT_BUTTON);
+	    res = True;
+	}
+    }
+    
+    PLRelease(key);
+
+    for (i=0; i<menu->cascade_no; i++) {
+	if (restoreMenuRecurs(scr, menus, menu->cascades[i], buffer) != False)
+	    res = True;
+    }
+
+    return res;
+}
+#endif /* !LITE */
+
+
 void
 wMenuRestoreState(WScreen *scr)
 {
-    proplist_t menus, menu, key, rkey, skey, wkey;
+    proplist_t menus, menu, key, skey;
 
     key = PLMakeString("Menus");
     menus = PLGetDictionaryEntry(scr->session_state, key);
@@ -2558,19 +2666,19 @@ wMenuRestoreState(WScreen *scr)
 
     /* restore menus */
 
-    rkey = PLMakeString("RootMenu");
     skey = PLMakeString("SwitchMenu");
-    wkey = PLMakeString("WorkspaceMenu");
-    menu = PLGetDictionaryEntry(menus, rkey);
-    restoreMenu(scr, menu, WSS_ROOTMENU);
     menu = PLGetDictionaryEntry(menus, skey);
     restoreMenu(scr, menu, WSS_SWITCHMENU);
-    menu = PLGetDictionaryEntry(menus, wkey);
-    restoreMenu(scr, menu, WSS_WSMENU);
 
-    PLRelease(rkey);
+#ifndef LITE
+    if (!scr->root_menu) {
+        OpenRootMenu(scr, scr->scr_width*2, 0, False);
+        wMenuUnmap(scr->root_menu);
+    }
+    restoreMenuRecurs(scr, menus, scr->root_menu, "");
+#endif /* !LITE */
+
     PLRelease(skey);
-    PLRelease(wkey);
 }
 
 
@@ -2603,8 +2711,7 @@ OpenWorkspaceMenu(WScreen *scr, int x, int y)
                 wRaiseFrame(menu->frame->core);
 		wMenuMapCopyAt(menu, x, y);
             }
-        }
-        else {
+        } else {
             wMenuMapAt(menu, x, y, False);
         }
     }

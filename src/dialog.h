@@ -41,6 +41,9 @@ void wShowInfoPanel(WScreen *scr);
 
 void wShowLegalPanel(WScreen *scr);
 
+void wShowGNUstepPanel(WScreen *scr);
+
 int wShowCrashingDialogPanel(int whatSig);
+
 
 #endif

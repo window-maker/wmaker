@@ -1,0 +1,361 @@
+diff -rc WindowMaker-0.52.0.ori/WPrefs.app/Appearance.c WindowMaker-0.52.0/WPrefs.app/Appearance.c
+*** WindowMaker-0.52.0.ori/WPrefs.app/Appearance.c	Mon Mar 22 12:16:49 1999
+--- WindowMaker-0.52.0/WPrefs.app/Appearance.c	Wed Apr 21 08:24:11 1999
+***************
+*** 1286,1315 ****
+  
+      setupTextureFor(panel->texLs, "FTitleBack", "(solid, black)", 
+  		    "[Focused]", i);
+!     panel->textureIndex[i] = i++;
+  
+      setupTextureFor(panel->texLs, "UTitleBack", "(solid, gray)", 
+  		    "[Unfocused]", i);
+!     panel->textureIndex[i] = i++;
+  
+      setupTextureFor(panel->texLs, "PTitleBack", "(solid, \"#616161\")",
+  		    "[Owner of Focused]", i);
+!     panel->textureIndex[i] = i++;
+  
+      setupTextureFor(panel->texLs, "MenuTitleBack", "(solid, black)", 
+  		    "[Menu Title]", i);
+!     panel->textureIndex[i] = i++;
+  
+      setupTextureFor(panel->texLs, "MenuTextBack", "(solid, gray)", 
+  		    "[Menu Item]", i);
+!     panel->textureIndex[i] = i++;
+  
+      setupTextureFor(panel->texLs, "IconBack", "(solid, gray)", "[Icon]", i);
+!     panel->textureIndex[i] = i++;
+  /*
+      setupTextureFor(panel->texLs, "WorkspaceBack", "(solid, black)", 
+  		    "[Workspace]", i);
+!     panel->textureIndex[i] = i++;
+   */
+  
+      updatePreviewBox(panel, EVERYTHING);
+--- 1286,1315 ----
+  
+      setupTextureFor(panel->texLs, "FTitleBack", "(solid, black)", 
+  		    "[Focused]", i);
+!     panel->textureIndex[i++] = i;
+  
+      setupTextureFor(panel->texLs, "UTitleBack", "(solid, gray)", 
+  		    "[Unfocused]", i);
+!     panel->textureIndex[i++] = i;
+  
+      setupTextureFor(panel->texLs, "PTitleBack", "(solid, \"#616161\")",
+  		    "[Owner of Focused]", i);
+!     panel->textureIndex[i++] = i;
+  
+      setupTextureFor(panel->texLs, "MenuTitleBack", "(solid, black)", 
+  		    "[Menu Title]", i);
+!     panel->textureIndex[i++] = i;
+  
+      setupTextureFor(panel->texLs, "MenuTextBack", "(solid, gray)", 
+  		    "[Menu Item]", i);
+!     panel->textureIndex[i++] = i;
+  
+      setupTextureFor(panel->texLs, "IconBack", "(solid, gray)", "[Icon]", i);
+!     panel->textureIndex[i++] = i;
+  /*
+      setupTextureFor(panel->texLs, "WorkspaceBack", "(solid, black)", 
+  		    "[Workspace]", i);
+!     panel->textureIndex[i++] = i;
+   */
+  
+      updatePreviewBox(panel, EVERYTHING);
+diff -rc WindowMaker-0.52.0.ori/WPrefs.app/Expert.c WindowMaker-0.52.0/WPrefs.app/Expert.c
+*** WindowMaker-0.52.0.ori/WPrefs.app/Expert.c	Thu Mar 18 17:39:22 1999
+--- WindowMaker-0.52.0/WPrefs.app/Expert.c	Thu Apr 15 09:02:54 1999
+***************
+*** 31,37 ****
+      
+      WMWindow *win;
+  
+!     WMButton *swi[5];
+  
+  } _Panel;
+  
+--- 31,37 ----
+      
+      WMWindow *win;
+  
+!     WMButton *swi[6];
+  
+  } _Panel;
+  
+***************
+*** 50,55 ****
+--- 50,56 ----
+      WMSetButtonSelected(panel->swi[2], GetBoolForKey("SaveSessionOnExit"));
+      WMSetButtonSelected(panel->swi[3], GetBoolForKey("UseSaveUnders"));
+      WMSetButtonSelected(panel->swi[4], GetBoolForKey("DisableBlinking"));
++     WMSetButtonSelected(panel->swi[5], GetBoolForKey("SingleClickLaunch"));
+  }
+  
+  
+***************
+*** 63,69 ****
+      WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
+      WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
+  
+!     for (i=0; i<5; i++) {
+  	panel->swi[i] = WMCreateSwitchButton(panel->frame);
+  	WMResizeWidget(panel->swi[i], FRAME_WIDTH-40, 25);
+  	WMMoveWidget(panel->swi[i], 20, 20+i*25);
+--- 64,70 ----
+      WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
+      WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
+  
+!     for (i=0; i<6; i++) {
+  	panel->swi[i] = WMCreateSwitchButton(panel->frame);
+  	WMResizeWidget(panel->swi[i], FRAME_WIDTH-40, 25);
+  	WMMoveWidget(panel->swi[i], 20, 20+i*25);
+***************
+*** 74,79 ****
+--- 75,81 ----
+      WMSetButtonText(panel->swi[2], _("Automatically save session when exiting WindowMaker"));
+      WMSetButtonText(panel->swi[3], _("Use SaveUnder in window frames, icons, menus and other objects"));
+      WMSetButtonText(panel->swi[4], _("Disable cycling color highlighting of icons."));
++     WMSetButtonText(panel->swi[5], _("Launch applications and restore windows with a single click"));
+  
+      WMRealizeWidget(panel->frame);
+      WMMapSubwidgets(panel->frame);
+***************
+*** 94,99 ****
+--- 96,102 ----
+      SetBoolForKey(WMGetButtonSelected(panel->swi[2]), "SaveSessionOnExit");
+      SetBoolForKey(WMGetButtonSelected(panel->swi[3]), "UseSaveUnders");
+      SetBoolForKey(WMGetButtonSelected(panel->swi[4]), "DisableBlinking");
++     SetBoolForKey(WMGetButtonSelected(panel->swi[5]), "SingleClickLaunch");
+  }
+  
+  
+diff -rc WindowMaker-0.52.0.ori/src/WindowMaker.h WindowMaker-0.52.0/src/WindowMaker.h
+*** WindowMaker-0.52.0.ori/src/WindowMaker.h	Mon Mar 22 12:16:50 1999
+--- WindowMaker-0.52.0/src/WindowMaker.h	Wed Apr 14 10:35:40 1999
+***************
+*** 348,353 ****
+--- 348,356 ----
+      /* shading animation */
+      char shade_speed;
+  
++ 	/* single click to lauch applications */
++ 	char single_click;
++ 
+      int edge_resistance;
+  
+      struct {
+diff -rc WindowMaker-0.52.0.ori/src/appicon.c WindowMaker-0.52.0/src/appicon.c
+*** WindowMaker-0.52.0.ori/src/appicon.c	Thu Apr  1 12:33:57 1999
+--- WindowMaker-0.52.0/src/appicon.c	Wed Apr 14 10:38:03 1999
+***************
+*** 710,715 ****
+--- 710,716 ----
+      int shad_x = 0, shad_y = 0, docking=0, dockable, collapsed = 0;
+      int ix, iy;
+      int clickButton = event->xbutton.button;
++ 	Bool hasMoved;
+      Pixmap ghost = None;
+  
+      if (aicon->editing || WCHECK_STATE(WSTATE_MODAL))
+***************
+*** 758,763 ****
+--- 759,765 ----
+        dockable = canBeDocked(icon->owner);
+  
+  
++ 	hasMoved = False;
+      while (!done) {
+  	WMMaskEvent(dpy, PointerMotionMask|ButtonReleaseMask|ButtonPressMask
+  		    |ButtonMotionMask|ExposureMask, &ev);
+***************
+*** 767,772 ****
+--- 769,775 ----
+  	    break;
+  
+  	 case MotionNotify:
++ 		hasMoved = True;
+  	    if (!grabbed) {
+  		if (abs(dx-ev.xmotion.x)>=MOVE_THRESHOLD
+  		    || abs(dy-ev.xmotion.y)>=MOVE_THRESHOLD) {
+***************
+*** 917,922 ****
+--- 920,928 ----
+  		XSetWindowBackground(dpy, scr->dock_shadow, scr->white_pixel);
+  	    }
+  	    done = 1;
++ 		if (!hasMoved && wPreferences.single_click) {
++ 			iconDblClick(desc, event);
++ 		}
+  	    break;
+  	}
+      }
+diff -rc WindowMaker-0.52.0.ori/src/defaults.c WindowMaker-0.52.0/src/defaults.c
+*** WindowMaker-0.52.0.ori/src/defaults.c	Mon Mar 22 12:16:51 1999
+--- WindowMaker-0.52.0/src/defaults.c	Wed Apr 14 10:54:24 1999
+***************
+*** 445,450 ****
+--- 445,453 ----
+      {"DisableBlinking",	"NO",		NULL,
+  	   &wPreferences.dont_blink,	getBool,	NULL
+      },
++ 	{"SingleClickLaunch", "NO",		NULL,
++ 	   &wPreferences.single_click,	getBool,	NULL
++ 	},
+  #ifdef WEENDOZE_CYCLE
+      {"WindozeCycling","NO", NULL,
+  	    &wPreferences.windoze_cycling,	getBool, NULL
+diff -rc WindowMaker-0.52.0.ori/src/dock.c WindowMaker-0.52.0/src/dock.c
+*** WindowMaker-0.52.0.ori/src/dock.c	Mon Mar 22 12:16:51 1999
+--- WindowMaker-0.52.0/src/dock.c	Wed Apr 14 10:37:30 1999
+***************
+*** 3484,3490 ****
+  
+  
+  
+! static void
+  handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
+  {
+      WScreen *scr = dock->screen_ptr;
+--- 3484,3490 ----
+  
+  
+  
+! static int
+  handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
+  {
+      WScreen *scr = dock->screen_ptr;
+***************
+*** 3499,3507 ****
+      int ix = aicon->xindex, iy = aicon->yindex;
+      int tmp;
+      Pixmap ghost = None;
+!     Bool docked;
+      int superfluous = wPreferences.superfluous; /* we catch it to avoid problems */
+  
+      if (wPreferences.flags.noupdates)
+  	return;
+      
+--- 3499,3508 ----
+      int ix = aicon->xindex, iy = aicon->yindex;
+      int tmp;
+      Pixmap ghost = None;
+!     Bool docked, hasMoved;
+      int superfluous = wPreferences.superfluous; /* we catch it to avoid problems */
+  
++ 	hasMoved = False;
+      if (wPreferences.flags.noupdates)
+  	return;
+      
+***************
+*** 3551,3556 ****
+--- 3552,3558 ----
+  	    break;
+  
+  	 case MotionNotify:
++ 		hasMoved = True;
+  	    if (!grabbed) {
+  		if (abs(ofs_x-ev.xmotion.x)>=MOVE_THRESHOLD
+  		    || abs(ofs_y-ev.xmotion.y)>=MOVE_THRESHOLD) {
+***************
+*** 3690,3696 ****
+  #ifdef DEBUG
+  	    puts("End icon move");
+  #endif
+! 	    return;
+  	}
+      }
+  }
+--- 3692,3701 ----
+  #ifdef DEBUG
+  	    puts("End icon move");
+  #endif
+! 		if (!hasMoved) {
+! 			return 1;
+! 		}
+! 	    return 0;
+  	}
+      }
+  }
+***************
+*** 3807,3813 ****
+  	XUnmapWindow(dpy, scr->clip_balloon);
+  	scr->flags.clip_balloon_mapped = 0;
+      }
+!     
+  #ifdef DEBUG
+      puts("handling dock");
+  #endif
+--- 3812,3818 ----
+  	XUnmapWindow(dpy, scr->clip_balloon);
+  	scr->flags.clip_balloon_mapped = 0;
+      }
+!  
+  #ifdef DEBUG
+      puts("handling dock");
+  #endif
+***************
+*** 3830,3836 ****
+              else
+                  handleDockMove(dock, aicon, event);
+          } else
+! 	    handleIconMove(dock, aicon, event);
+  	
+      } else if (event->xbutton.button==Button2 && dock->type==WM_CLIP &&
+                 aicon->xindex==0 && aicon->yindex==0) {
+--- 3835,3843 ----
+              else
+                  handleDockMove(dock, aicon, event);
+          } else
+! 	    if (handleIconMove(dock, aicon, event) != 0 &&
+! 				wPreferences.single_click)
+!             iconDblClick(desc, event);
+  	
+      } else if (event->xbutton.button==Button2 && dock->type==WM_CLIP &&
+                 aicon->xindex==0 && aicon->yindex==0) {
+diff -rc WindowMaker-0.52.0.ori/src/icon.c WindowMaker-0.52.0/src/icon.c
+*** WindowMaker-0.52.0.ori/src/icon.c	Thu Mar 18 17:39:39 1999
+--- WindowMaker-0.52.0/src/icon.c	Wed Apr 14 10:37:02 1999
+***************
+*** 809,814 ****
+--- 809,815 ----
+      int dx=event->xbutton.x, dy=event->xbutton.y;
+      int grabbed=0;
+      int clickButton=event->xbutton.button;
++ 	Bool hasMoved;
+  
+      if (WCHECK_STATE(WSTATE_MODAL))
+  	return;
+***************
+*** 851,856 ****
+--- 852,858 ----
+  	wwarning("pointer grab failed for icon move");
+  #endif
+      }
++ 	hasMoved = False;
+      while(1) {
+  	WMMaskEvent(dpy, PointerMotionMask|ButtonReleaseMask|ButtonPressMask
+  		   |ButtonMotionMask|ExposureMask, &ev);
+***************
+*** 860,865 ****
+--- 862,868 ----
+  	    break;
+  
+  	 case MotionNotify:
++ 		hasMoved = True;
+  	    if (!grabbed) {
+  		if (abs(dx-ev.xmotion.x)>=MOVE_THRESHOLD
+  		    || abs(dy-ev.xmotion.y)>=MOVE_THRESHOLD) {
+***************
+*** 897,902 ****
+--- 900,908 ----
+  
+  	    if (wPreferences.auto_arrange_icons)
+  		wArrangeIcons(wwin->screen_ptr, True);
++ 		if (!hasMoved && wPreferences.single_click) {
++ 			miniwindowDblClick(desc, event);
++ 		}
+  	    return;
+  	    
+  	}

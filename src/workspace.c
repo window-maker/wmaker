@@ -409,8 +409,8 @@ showWorkspaceName(WScreen *scr, int workspace)
 
     data->count = 10;
 
-    /* set a 2 second timeout for the effect */
-    data->timeout = time(NULL) + 1 +
+    /* set a timeout for the effect */
+    data->timeout = time(NULL) + 2 +
 	(WORKSPACE_NAME_DELAY + WORKSPACE_NAME_FADE_DELAY*data->count)/1000;
 
     scr->workspace_name_data = data;

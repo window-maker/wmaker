@@ -10,8 +10,8 @@ typedef struct W_Frame {
 
     
     struct {
-	WMReliefType relief:3;
-	WMTitlePosition titlePosition:3;
+	WMReliefType relief:4;
+	WMTitlePosition titlePosition:4;
     } flags;
 } Frame;
 

@@ -38,7 +38,7 @@ pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
-top_builddir = ../..
+top_builddir = ..
 
 ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
@@ -88,17 +88,10 @@ XLIBS = @XLIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 wprefsdir = @wprefsdir@
 
-defsdatadir = $(pkgdatadir)/Icons
-
-defsdata_DATA =  	BitchX.tiff 	DefaultAppIcon.tiff 	GNUstep.tiff 	GNUstep3D.tiff 	GNUstepGlow.tiff 	GNUterm.tiff 	clip.tiff 	clip2.tiff 	defaultAppIcon.tiff 	defaultterm.tiff 	draw.tiff 	linuxterm.tiff 	mixer.tiff 	notepad.tiff 	pdf.tiff 	ps.tiff 	real.tiff 	sgiterm.tiff 	sound.tiff 	staroffice2.tiff 	timer.tiff 	wilber.tiff 	write.tiff 	xdvi.tiff 	xv.tiff 	BitchX.xpm 	GNUstep.xpm 	GNUstep3D.xpm 	GNUstepGlow.xpm 	GNUterm.xpm 	clip.xpm 	clip2.xpm 	defaultAppIcon.xpm 	defaultterm.xpm 	draw.xpm 	linuxterm.xpm 	mixer.xpm 	notepad.xpm 	pdf.xpm 	ps.xpm 	real.xpm 	sgiterm.xpm 	sound.xpm 	staroffice2.xpm 	timer.xpm 	wilber.xpm 	write.xpm 	xdvi.xpm 	xv.xpm
-
-
-EXTRA_DIST = $(defsdata_DATA) 
+EXTRA_DIST = README single_click.diff
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_HEADER = ../../src/config.h
+CONFIG_HEADER = ../src/config.h
 CONFIG_CLEAN_FILES = 
-DATA =  $(defsdata_DATA)
-
 DIST_COMMON =  README Makefile.am Makefile.in
 
 
@@ -109,45 +102,26 @@ GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu WindowMaker/Icons/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu contrib/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-
-install-defsdataDATA: $(defsdata_DATA)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(defsdatadir)
-	@list='$(defsdata_DATA)'; for p in $$list; do \
-	  if test -f $(srcdir)/$$p; then \
-	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(defsdatadir)/$$p"; \
-	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(defsdatadir)/$$p; \
-	  else if test -f $$p; then \
-	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(defsdatadir)/$$p"; \
-	    $(INSTALL_DATA) $$p $(DESTDIR)$(defsdatadir)/$$p; \
-	  fi; fi; \
-	done
-
-uninstall-defsdataDATA:
-	@$(NORMAL_UNINSTALL)
-	list='$(defsdata_DATA)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(defsdatadir)/$$p; \
-	done
 tags: TAGS
 TAGS:
 
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
-subdir = WindowMaker/Icons
+subdir = contrib
 
 distdir: $(DISTFILES)
 	here=`cd $(top_builddir) && pwd`; \
 	top_distdir=`cd $(top_distdir) && pwd`; \
 	distdir=`cd $(distdir) && pwd`; \
 	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu WindowMaker/Icons/Makefile
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu contrib/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
@@ -169,20 +143,19 @@ installcheck: installcheck-am
 install-exec-am:
 install-exec: install-exec-am
 
-install-data-am: install-defsdataDATA
+install-data-am:
 install-data: install-data-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-am
-uninstall-am: uninstall-defsdataDATA
+uninstall-am:
 uninstall: uninstall-am
-all-am: Makefile $(DATA)
+all-am: Makefile
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(defsdatadir)
 
 
 mostlyclean-generic:
@@ -213,12 +186,12 @@ maintainer-clean-am:  maintainer-clean-generic distclean-am
 
 maintainer-clean: maintainer-clean-am
 
-.PHONY: uninstall-defsdataDATA install-defsdataDATA tags distdir info-am \
-info dvi-am dvi check check-am installcheck-am installcheck \
-install-exec-am install-exec install-data-am install-data install-am \
-install uninstall-am uninstall all-redirect all-am all installdirs \
-mostlyclean-generic distclean-generic clean-generic \
-maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+.PHONY: tags distdir info-am info dvi-am dvi check check-am \
+installcheck-am installcheck install-exec-am install-exec \
+install-data-am install-data install-am install uninstall-am uninstall \
+all-redirect all-am all installdirs mostlyclean-generic \
+distclean-generic clean-generic maintainer-clean-generic clean \
+mostlyclean distclean maintainer-clean
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

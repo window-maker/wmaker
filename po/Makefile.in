@@ -94,7 +94,7 @@ CATALOGS = @MOFILES@
 
 CLEANFILES = $(CATALOGS) WindowMaker.pot
 
-EXTRA_DIST = cs.po de.po es.po fr.po gl.po ja.po ko.po nl.po pt.po se.po it.po 	no.po ru.po tr.po fi.po hr.po el.po pl.po ro.po zh_TW.Big5.po 	zh_CN.po sk.po
+EXTRA_DIST = cs.po de.po es.po fr.po gl.po ja.po ko.po nl.po pt.po se.po it.po 	no.po ru.po tr.po fi.po hr.po el.po pl.po ro.po zh_TW.Big5.po 	zh_CN.po sk.po da.po
 
 
 POTFILES =  	$(top_builddir)/src/appicon.c 	$(top_builddir)/src/defaults.c 	$(top_builddir)/src/dialog.c 	$(top_builddir)/src/dock.c 	$(top_builddir)/src/dockedapp.c 	$(top_builddir)/src/event.c 	$(top_builddir)/src/framewin.c 	$(top_builddir)/src/icon.c 	$(top_builddir)/src/main.c 	$(top_builddir)/src/menu.c 	$(top_builddir)/src/misc.c 	$(top_builddir)/src/pixmap.c 	$(top_builddir)/src/proplist.c 	$(top_builddir)/src/resources.c 	$(top_builddir)/src/rootmenu.c 	$(top_builddir)/src/screen.c 	$(top_builddir)/src/session.c 	$(top_builddir)/src/stacking.c 	$(top_builddir)/src/startup.c 	$(top_builddir)/src/switchmenu.c 	$(top_builddir)/src/texture.c 	$(top_builddir)/src/wdefaults.c 	$(top_builddir)/src/window.c 	$(top_builddir)/src/winmenu.c 	$(top_builddir)/src/winspector.c 	$(top_builddir)/src/workspace.c 	$(top_builddir)/src/xutil.c 
@@ -120,9 +120,9 @@ all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .mo .po
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps po/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu po/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -135,6 +135,11 @@ distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 subdir = po
 
 distdir: $(DISTFILES)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(top_distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	cd $(top_srcdir) \
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu po/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \

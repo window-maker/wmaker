@@ -1730,8 +1730,7 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
 	    }
         }
     }
-    
-    
+
     /* restore attract icons state */
     
     dock->attract_icons = 0;
@@ -3299,9 +3298,7 @@ iconDblClick(WObjDescriptor *desc, XEvent *event)
 	((btn->icon->owner == NULL) && (btn->applist != NULL))) {
 	    if (btn->icon->owner == NULL)
 	    	btn->icon->owner = btn->applist->wapp->main_window_desc;
-#ifdef I_HATE_THIS
     }
-#endif
 #else
     if (btn->icon->owner && !(event->xbutton.state & ControlMask)) {
 #endif
@@ -3339,7 +3336,11 @@ iconDblClick(WObjDescriptor *desc, XEvent *event)
 		    (!btn->running || (event->xbutton.state & ControlMask))) {
 		    launchDockedApplication(btn);
                 }
-            }
+            } else if (btn->xindex == 0 && btn->yindex == 0
+		       && btn->dock->type == WM_DOCK) {
+
+		wShowGNUstepPanel(dock->screen_ptr);
+	    }
         }
     }
 }
@@ -3550,7 +3551,8 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 #endif
     }
 
-/*    wRaiseFrame(icon->core);*/
+    if (event->xbutton.state & MOD_MASK)
+	wRaiseFrame(icon->core);
 
     if (!wPreferences.flags.noclip)
         clip = scr->workspaces[scr->current_workspace]->clip;

@@ -33,6 +33,7 @@ xpmdata_DATA = \
 	oldstyle.xpm \
 	opaque.xpm \
 	paths.xpm \
+	smooth.xpm \
 	sound.xpm \
 	speed0.xpm \
 	speed0s.xpm \

@@ -487,17 +487,18 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	    free(colors);
 	}
     } else if (strcasecmp(&type[1], "pixmap")==0) {
-	RImage *timage;
+	RImage *timage = NULL;
 	char *path;
 	RColor color;
 
 	str = PLGetString(PLGetArrayElement(texture, 1));
 
 	path = wfindfileinarray(GetObjectForKey("PixmapPath"), str);
-	timage = RLoadImage(rc, path, 0);
+	if (path)
+	    timage = RLoadImage(rc, path, 0);
 
 	if (!timage) {
-	    wwarning("could not load file '%s': %s", path,
+	    wwarning("could not load file '%s': %s", path ? path : str,
 		     RMessageForError(RErrorCode));
 	} else {
 	    str = PLGetString(PLGetArrayElement(texture, 2));

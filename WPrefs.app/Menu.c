@@ -1314,7 +1314,8 @@ postProcessMenu(proplist_t menu)
 	    if (strcmp(cmd, "RESTARTW")==0) {
 		changeItemCommand(item, "RESTART");
 		removeParameter(item);
-	    } else if (strcmp(cmd, "EXEC")==0 || strcmp(cmd, "OPEN_MENU")==0) {
+	    } else if (strcmp(cmd, "EXEC")==0 || strcmp(cmd, "SHEXEC")==0 || 
+		       strcmp(cmd, "OPEN_MENU")==0) {
 		/* do nothing */
 	    } else if (strcmp(cmd, "RESTART")==0 || strcmp(cmd, "SHUTDOWN")==0
 		       || strcmp(cmd, "EXIT")==0) {

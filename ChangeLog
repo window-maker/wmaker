@@ -27,6 +27,9 @@ Changes since version 0.53.0:
 - HP-UX compiler compatibility workarounds (Sebastien Bauer
 						seb_bauer@bigfoot.com)
 - fixed crash with attributes panel
+- save state of all menus when exiting (Sebastien Bauer
+						seb_bauer@bigfoot.com)
+- added GNUstep info panel (still needs beautification..)
 
 Changes since version 0.52.0:
 .............................

@@ -31,11 +31,11 @@ typedef struct W_Scroller {
 					* dragged */
 #endif
     struct {
-	WMScrollArrowPosition arrowsPosition:3;
+	WMScrollArrowPosition arrowsPosition:4;
 
 	unsigned int horizontal:1;
 
-	WMScrollerPart hitPart:3;
+	WMScrollerPart hitPart:4;
 
 	/* */	
 	unsigned int documentFullyVisible:1;   /* document is fully visible */

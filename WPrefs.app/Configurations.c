@@ -49,6 +49,9 @@ typedef struct _Panel {
     WMButton *sfxB;
     WMLabel *noteL;
 
+    WMFrame *smoF;
+    WMButton *smoB;
+
     WMFrame *dithF;
     WMButton *dithB;
     WMSlider *dithS;
@@ -69,6 +72,7 @@ typedef struct _Panel {
 #define ANIM_IMAGE	"animations"
 #define SUPERF_IMAGE	"moreanim"
 #define SOUND_IMAGE	"sound"
+#define SMOOTH_IMAGE	"smooth"
 
 #define SPEED_IMAGE 	"speed%i"
 #define SPEED_IMAGE_S 	"speed%is"
@@ -97,7 +101,9 @@ showData(_Panel *panel)
     WMSetButtonSelected(panel->supB, GetBoolForKey("Superfluous"));
 
     WMSetButtonSelected(panel->sfxB, !GetBoolForKey("DisableSound"));
-    
+
+    WMSetButtonSelected(panel->smoB, GetBoolForKey("SmoothWorkspaceBack"));
+
     WMSetButtonSelected(panel->dithB, GetBoolForKey("DisableDithering"));
     
     WMSetSliderValue(panel->dithS, GetIntegerForKey("ColormapSize"));
@@ -192,14 +198,14 @@ createPanel(Panel *p)
     /*********** Icon Slide Speed **********/
     
     panel->icoF = WMCreateFrame(panel->frame);
-    WMResizeWidget(panel->icoF, 230, 55);
+    WMResizeWidget(panel->icoF, 230, 45);
     WMMoveWidget(panel->icoF, 15, 10);
     WMSetFrameTitle(panel->icoF, _("Icon Slide Speed"));
     
     /*********** Shade Animation Speed **********/
     panel->shaF = WMCreateFrame(panel->frame);
-    WMResizeWidget(panel->shaF, 230, 55);
-    WMMoveWidget(panel->shaF, 15, 70);
+    WMResizeWidget(panel->shaF, 230, 45);
+    WMMoveWidget(panel->shaF, 15, 60);
     WMSetFrameTitle(panel->shaF, _("Shade Animation Speed"));
 
     
@@ -209,9 +215,9 @@ createPanel(Panel *p)
     for (i = 0; i < 5; i++) {
 	panel->icoB[i] = WMCreateCustomButton(panel->icoF, WBBStateChangeMask);
 	panel->shaB[i] = WMCreateCustomButton(panel->shaF, WBBStateChangeMask);
-	WMResizeWidget(panel->icoB[i], 40, 35);
+	WMResizeWidget(panel->icoB[i], 40, 24);
 	WMMoveWidget(panel->icoB[i], 10+(40*i), 15);
-	WMResizeWidget(panel->shaB[i], 40, 35);
+	WMResizeWidget(panel->shaB[i], 40, 24);
 	WMMoveWidget(panel->shaB[i], 10+(40*i), 15);
 	WMSetButtonBordered(panel->icoB[i], False);
 	WMSetButtonImagePosition(panel->icoB[i], WIPImageOnly);
@@ -257,15 +263,58 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->icoF);
     WMMapSubwidgets(panel->shaF);
 
+
+    /***************** Smoothed Scaling *****************/
+    panel->smoF = WMCreateFrame(panel->frame);
+    WMResizeWidget(panel->smoF, 115, 110);
+    WMMoveWidget(panel->smoF, 18, 115);
+    WMSetFrameTitle(panel->smoF, _("Smooth Scaling"));
+    WMSetBalloonTextForView(_("Smooth scaled background images, neutralizing\n"
+			      "the `pixelization' effect. This will slow\n"
+			      "down loading of background images considerably."),
+			     WMWidgetView(panel->smoF));
+
+    panel->smoB = WMCreateButton(panel->smoF, WBTToggle);
+    WMResizeWidget(panel->smoB, 64, 64);
+    WMMoveWidget(panel->smoB, 25, 25);
+    WMSetButtonImagePosition(panel->smoB, WIPImageOnly);
+    path = LocateImage(SMOOTH_IMAGE);
+    if (path) {
+	RImage *image, *scaled;
+
+	image = RLoadImage(WMScreenRContext(scr), path, 0);
+	free(path);
+	
+	scaled = RScaleImage(image, 61, 61);
+	icon = WMCreatePixmapFromRImage(scr, scaled, 128);
+	RDestroyImage(scaled);
+	if (icon) {
+	    WMSetButtonImage(panel->smoB, icon);
+	    WMReleasePixmap(icon);
+	}
+
+	scaled = RSmoothScaleImage(image, 61, 61);
+	icon = WMCreatePixmapFromRImage(scr, scaled, 128);
+	RDestroyImage(scaled);
+	if (icon) {
+	    WMSetButtonAltImage(panel->smoB, icon);
+	    WMReleasePixmap(icon);
+	}
+
+	RDestroyImage(image);
+    }
+
+    WMMapSubwidgets(panel->smoF);
+
     /***************** Titlebar Style Size ****************/
     panel->titlF = WMCreateFrame(panel->frame);
-    WMResizeWidget(panel->titlF, 230, 95);
-    WMMoveWidget(panel->titlF, 15, 130);
+    WMResizeWidget(panel->titlF, 105, 110);
+    WMMoveWidget(panel->titlF, 140, 115);
     WMSetFrameTitle(panel->titlF, _("Titlebar Style"));
     
     panel->newsB = WMCreateButton(panel->titlF, WBTOnOff);
-    WMResizeWidget(panel->newsB, 90, 60);
-    WMMoveWidget(panel->newsB, 25, 20);
+    WMResizeWidget(panel->newsB, 74, 40);
+    WMMoveWidget(panel->newsB, 15, 20);
     WMSetButtonImagePosition(panel->newsB, WIPImageOnly);
     path = LocateImage(NEWS_IMAGE);
     if (path) {
@@ -277,8 +326,8 @@ createPanel(Panel *p)
     }
 
     panel->oldsB = WMCreateButton(panel->titlF, WBTOnOff);
-    WMResizeWidget(panel->oldsB, 90, 60);
-    WMMoveWidget(panel->oldsB, 115, 20);
+    WMResizeWidget(panel->oldsB, 74, 40);
+    WMMoveWidget(panel->oldsB, 15, 60);
     WMSetButtonImagePosition(panel->oldsB, WIPImageOnly);
     path = LocateImage(OLDS_IMAGE);
     if (path) {
@@ -451,6 +500,8 @@ storeData(_Panel *panel)
     SetBoolForKey(!WMGetButtonSelected(panel->animB), "DisableAnimations");
     SetBoolForKey(WMGetButtonSelected(panel->supB), "Superfluous");
     SetBoolForKey(!WMGetButtonSelected(panel->sfxB), "DisableSound");
+
+    SetBoolForKey(!WMGetButtonSelected(panel->smoB), "SmoothWorkspaceBack");
     
     SetBoolForKey(WMGetButtonSelected(panel->dithB), "DisableDithering");
     SetIntegerForKey(WMGetSliderValue(panel->dithS), "ColormapSize");

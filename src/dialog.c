@@ -1221,8 +1221,10 @@ wShowLegalPanel(WScreen *scr)
     WWindow *wwin;
 
     if (legalPanel) {
-	wRaiseFrame(legalPanel->wwin->frame->core);
-	wSetFocusTo(scr, legalPanel->wwin);
+	if (legalPanel->scr == scr) {
+	    wRaiseFrame(legalPanel->wwin->frame->core);
+	    wSetFocusTo(scr, legalPanel->wwin);
+	}
 	return;
     }
 
@@ -1508,3 +1510,175 @@ wShowCrashingDialogPanel(int whatSig)
 }
 
 
+
+
+/*****************************************************************************
+ *			About GNUstep Panel
+ *****************************************************************************/
+
+
+static void
+drawGNUstepLogo(Display *dpy, Drawable d, int width, int height,
+		unsigned long blackPixel, unsigned long whitePixel)
+{
+    GC gc;
+    XGCValues gcv;
+    XRectangle rects[3];
+
+    gcv.foreground = blackPixel;
+    gc = XCreateGC(dpy, d, GCForeground, &gcv);
+
+    XFillArc(dpy, d, gc, width/45, height/45, 
+	     width - 2*width/45, height - 2*height/45, 0, 360*64);
+
+    rects[0].x = 0;
+    rects[0].y = 37*height/45;
+    rects[0].width = width/3;
+    rects[0].height = height - rects[0].y;
+
+    rects[1].x = rects[0].width;
+    rects[1].y = height/2;
+    rects[1].width = width - 2*width/3;
+    rects[1].height = height - rects[1].y;
+
+    rects[2].x = 2*width/3;
+    rects[2].y = height - 37*height/45;
+    rects[2].width = width/3;
+    rects[2].height = height - rects[2].y;
+
+    XSetClipRectangles(dpy, gc, 0, 0, rects, 3, Unsorted);
+    XFillRectangle(dpy, d, gc, 0, 0, width, height);
+
+    XSetForeground(dpy, gc, whitePixel);
+    XFillArc(dpy, d, gc, width/45, height/45, 
+	     width - 2*width/45, height - 2*height/45, 0, 360*64);
+
+    XFreeGC(dpy, gc);
+}
+
+
+
+#define GNUSTEP_TEXT \
+	"Window Maker is part of the GNUstep project.\n"\
+	"The GNUstep project aims to create a free\n"\
+	"implementation of the OpenStep(tm) specification\n"\
+	"which is a object-oriented framework for\n"\
+	"creating advanced graphical, multi-platform\n"\
+	"applications. Aditionally, a development and\n"\
+	"user desktop enviroment will be created on top\n"\
+	"of the framework. For more information about\n"\
+	"GNUstep, please visit: www.gnustep.org"
+
+
+typedef struct {
+    WScreen *scr;
+    
+    WWindow *wwin;
+
+    WMWindow *win;
+
+    WMLabel *gstepL;
+    WMLabel *textL;
+} GNUstepPanel;
+
+
+static GNUstepPanel *gnustepPanel = NULL;
+
+static void
+destroyGNUstepPanel(WCoreWindow *foo, void *data, XEvent *event)
+{
+    WMUnmapWidget(gnustepPanel->win);
+
+    WMDestroyWidget(gnustepPanel->win);    
+
+    wUnmanageWindow(gnustepPanel->wwin, False, False);
+
+    free(gnustepPanel);
+
+    gnustepPanel = NULL;
+}
+
+
+void
+wShowGNUstepPanel(WScreen *scr)
+{
+    GNUstepPanel *panel;
+    Window parent;
+    WWindow *wwin;
+    WMPixmap *pixmap;
+    WMColor *color;
+
+    if (gnustepPanel) {
+	if (gnustepPanel->scr == scr) {
+	    wRaiseFrame(gnustepPanel->wwin->frame->core);
+	    wSetFocusTo(scr, gnustepPanel->wwin);
+	}
+	return;
+    }
+
+    panel = wmalloc(sizeof(GNUstepPanel));
+
+    panel->scr = scr;
+
+    panel->win = WMCreateWindow(scr->wmscreen, "About GNUstep");
+    WMResizeWidget(panel->win, 325, 200);
+
+    pixmap = WMCreatePixmap(scr->wmscreen, 130, 130, 
+			    WMScreenDepth(scr->wmscreen), True);
+
+    color = WMCreateNamedColor(scr->wmscreen, "gray50", True);
+
+    drawGNUstepLogo(dpy, WMGetPixmapXID(pixmap), 130, 130,
+		    WMColorPixel(color), scr->white_pixel);
+
+    WMReleaseColor(color);
+
+    drawGNUstepLogo(dpy, WMGetPixmapMaskXID(pixmap), 130, 130, 1, 1);
+
+    panel->gstepL = WMCreateLabel(panel->win);
+    WMResizeWidget(panel->gstepL, 285, 64);
+    WMMoveWidget(panel->gstepL, 20, 0);
+    WMSetLabelTextAlignment(panel->gstepL, WARight);
+    WMSetLabelText(panel->gstepL, "GNUstep");
+    {
+	WMFont *font = WMBoldSystemFontOfSize(scr->wmscreen, 24);
+
+	WMSetLabelFont(panel->gstepL, font);
+	WMReleaseFont(font);
+    }
+
+    panel->textL = WMCreateLabel(panel->win);
+    WMResizeWidget(panel->textL, 275, 130);
+    WMMoveWidget(panel->textL, 30, 50);
+    WMSetLabelTextAlignment(panel->textL, WARight);
+    WMSetLabelImagePosition(panel->textL, WIPOverlaps);
+    WMSetLabelText(panel->textL, GNUSTEP_TEXT);
+    WMSetLabelImage(panel->textL, pixmap);
+
+    WMReleasePixmap(pixmap);
+
+    WMRealizeWidget(panel->win);
+    WMMapSubwidgets(panel->win);
+
+    parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 325, 200, 0, 0, 0);
+
+    XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
+
+    wwin = wManageInternalWindow(scr, parent, None, "About GNUstep",
+				 (scr->scr_width - 325)/2,
+				 (scr->scr_height - 200)/2, 325, 200);
+
+    WSETUFLAG(wwin, no_closable, 0);
+    WSETUFLAG(wwin, no_close_button, 0);
+    wWindowUpdateButtonImages(wwin);
+    wFrameWindowShowButton(wwin->frame, WFF_RIGHT_BUTTON);
+    wwin->frame->on_click_right = destroyGNUstepPanel;
+    
+    panel->wwin = wwin;
+    
+    WMMapWidget(panel->win);
+
+    wWindowMap(wwin);
+
+    gnustepPanel = panel;
+}

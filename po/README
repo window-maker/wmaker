@@ -4,7 +4,7 @@ Translated Message Catalog Files
 File	Language	Note	Current Maintainer
 ------------------------------------------------------------------------------
 ja.po	Japanese	1	ABE Shige <sabe@ibm.net>
-				MANOME Tomonori <manome@itlb.te.noda.sut.ac.jp> 
+				MANOME Tomonori <manome@itlb.te.noda.sut.ac.jp>
 pt.po	Portuguese		Eliphas Levy Theodoro <eliphas@conectiva.com.br>
 de.po	German			Carsten Schaar 
 					<nhadcasc@fs-maphy.uni-hannover.de>
@@ -29,7 +29,7 @@ hr.po	Croatian	3	Toni Bilic <tbilic@efos.hr>
 el.po	Greek			Nikolaos Papagrigoriou <papanikos@usa.net>
 pl.po	Polish			Piotr Dembiñski <pdemb@aurora.put.poznan.pl>
 ro.po	Romanian		Andrei Vuta <gigi_man@manag.pub.ro>
-dk.po	Danish			Birger Langkjer <langkjer@post3.tele.dk>
+da.po	Danish			Birger Langkjer <langkjer@post3.tele.dk>
 zh_TW.Big5.po Chinese		Li Wei Jih <lwj83@cs.ccu.edu.tw>
 zh_CN.po Chinese		Wang Jian <wangjian2@asiainfo.com>
 sk.po	Slovak			Milan Hromada <mhromada@elas.sk>

@@ -33,6 +33,7 @@ tiffdata_DATA = \
 	oldstyle.tiff \
 	opaque.tiff \
 	paths.tiff \
+	smooth.tiff \
 	sound.tiff \
 	speed0.tiff \
 	speed0s.tiff \

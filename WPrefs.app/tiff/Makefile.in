@@ -90,7 +90,7 @@ wprefsdir = @wprefsdir@
 
 tiffdatadir = $(wprefsdir)/tiff
 
-tiffdata_DATA =  	advancetonewworkspace.tiff 	animations.tiff 	appearance.tiff 	clip.tiff 	configs.tiff 	cycleworkspaces.tiff 	dock.tiff 	dontlinkworkspaces.tiff 	ergonomic.tiff 	ergowood.tiff 	expert.tiff 	fonts.tiff 	iconprefs.tiff 	keyboard.tiff 	keyboardprefs.tiff 	keyshortcuts.tiff 	menualign1.tiff 	menualign2.tiff 	menuprefs.tiff 	menus.tiff 	minimouseleft.tiff 	minimousemiddle.tiff 	minimouseright.tiff 	miscprefs2.tiff 	moreanim.tiff 	mousesettings.tiff 	mousespeed.tiff 	newstyle.tiff 	nonopaque.tiff 	oldstyle.tiff 	opaque.tiff 	paths.tiff 	sound.tiff 	speed0.tiff 	speed0s.tiff 	speed1.tiff 	speed1s.tiff 	speed2.tiff 	speed2s.tiff 	speed3.tiff 	speed3s.tiff 	speed4.tiff 	speed4s.tiff 	tdel.tiff 	tedit.tiff 	temp.tiff 	textr.tiff 	theme.tiff 	timer0.tiff 	timer0s.tiff 	timer1.tiff 	timer1s.tiff 	timer2.tiff 	timer2s.tiff 	timer3.tiff 	timer3s.tiff 	timer4.tiff 	timer4s.tiff 	timer5.tiff 	timer5s.tiff 	tnew.tiff 	whandling.tiff 	windowfocus.tiff 	workspace.tiff 	xis.tiff 
+tiffdata_DATA =  	advancetonewworkspace.tiff 	animations.tiff 	appearance.tiff 	clip.tiff 	configs.tiff 	cycleworkspaces.tiff 	dock.tiff 	dontlinkworkspaces.tiff 	ergonomic.tiff 	ergowood.tiff 	expert.tiff 	fonts.tiff 	iconprefs.tiff 	keyboard.tiff 	keyboardprefs.tiff 	keyshortcuts.tiff 	menualign1.tiff 	menualign2.tiff 	menuprefs.tiff 	menus.tiff 	minimouseleft.tiff 	minimousemiddle.tiff 	minimouseright.tiff 	miscprefs2.tiff 	moreanim.tiff 	mousesettings.tiff 	mousespeed.tiff 	newstyle.tiff 	nonopaque.tiff 	oldstyle.tiff 	opaque.tiff 	paths.tiff 	smooth.tiff 	sound.tiff 	speed0.tiff 	speed0s.tiff 	speed1.tiff 	speed1s.tiff 	speed2.tiff 	speed2s.tiff 	speed3.tiff 	speed3s.tiff 	speed4.tiff 	speed4s.tiff 	tdel.tiff 	tedit.tiff 	temp.tiff 	textr.tiff 	theme.tiff 	timer0.tiff 	timer0s.tiff 	timer1.tiff 	timer1s.tiff 	timer2.tiff 	timer2s.tiff 	timer3.tiff 	timer3s.tiff 	timer4.tiff 	timer4s.tiff 	timer5.tiff 	timer5s.tiff 	tnew.tiff 	whandling.tiff 	windowfocus.tiff 	workspace.tiff 	xis.tiff 
 
 
 EXTRA_DIST = $(tiffdata_DATA)
@@ -109,9 +109,9 @@ GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps WPrefs.app/tiff/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu WPrefs.app/tiff/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -143,6 +143,11 @@ distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 subdir = WPrefs.app/tiff
 
 distdir: $(DISTFILES)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(top_distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	cd $(top_srcdir) \
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu WPrefs.app/tiff/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
