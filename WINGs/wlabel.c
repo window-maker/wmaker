@@ -153,6 +153,13 @@ WMSetLabelText(WMLabel *lPtr, char *text)
 }
 
 
+WMFont*
+WMGetLabelFont(WMLabel *lPtr)
+{
+    return lPtr->font;
+}
+
+
 void
 WMSetLabelFont(WMLabel *lPtr, WMFont *font)
 {	

@@ -1037,6 +1037,8 @@ void WMSetLabelRelief(WMLabel *lPtr, WMReliefType relief);
 
 void WMSetLabelText(WMLabel *lPtr, char *text);
 
+WMFont* WMGetLabelFont(WMLabel *lPtr);
+
 void WMSetLabelFont(WMLabel *lPtr, WMFont *font);
 
 void WMSetLabelTextColor(WMLabel *lPtr, WMColor *color);

@@ -782,6 +782,7 @@ typedef struct {
     RImage *icon;
     RImage *pic;
     WMPixmap *oldPix;
+    WMFont *oldFont;
     char *str;
     int x;
 #endif
@@ -884,6 +885,7 @@ logoPushCallback(void *data)
     InfoPanel *panel = (InfoPanel*)data;
     char buffer[512];
     int i;
+    static int oldi = 0;
     int len;
     static int jingobeu[] = {
 	329, 150, -1, 100, 329, 150, -1, 100, 329, 300, -1, 250,
@@ -920,19 +922,27 @@ XChangeKeyboardControl(dpy,KBBellPitch|KBBellDuration|KBBellPercent,&kc);
 	WMReleasePixmap(pix);
     }
 
-    i = panel->cycle%200;
+    /* slow down text a little */
+    i = (int)(panel->cycle * 50.0/85.0)%200;
 
-    len = strlen(panel->str);
+    if (i != oldi) {
+        len = strlen(panel->str);
 
-    strncpy(buffer, panel->str, i<len ? i : len);
-    if (i >= len)
-	memset(&buffer[len], ' ', i-len);
+        strncpy(buffer, panel->str, i<len ? i : len);
+        if (i >= len)
+            memset(&buffer[len], ' ', i-len);
 
-    strncpy(buffer, panel->str, i<len ? i : len);
-    if (i >= len)
-	memset(&buffer[len], ' ', i-len);
-    buffer[i]=0;
-    WMSetLabelText(panel->versionL, buffer);
+        strncpy(buffer, panel->str, i<len ? i : len);
+        if (i >= len)
+            memset(&buffer[len], ' ', i-len);
+        buffer[i]=0;
+
+        WMSetLabelText(panel->versionL, buffer);
+
+        XFlush(WMScreenDisplay(WMWidgetScreen(panel->versionL)));
+
+        oldi = i;
+    }
 
     panel->timer = WMAddTimerHandler(50, logoPushCallback, panel);
     panel->cycle++;
@@ -1062,7 +1072,8 @@ handleLogoPush(XEvent *event, void *data)
     clicks++;
 	       
     if (!panel->timer && !broken && clicks > 0) {
-	char *file;
+        WMFont *font;
+        char *file;
 	char *path;
 
 	panel->x = 0;
@@ -1116,7 +1127,17 @@ handleLogoPush(XEvent *event, void *data)
 
 	panel->timer = WMAddTimerHandler(50, logoPushCallback, panel);
 	panel->cycle = 0;
-	panel->oldPix = WMRetainPixmap(WMGetLabelImage(panel->logoL));
+        panel->oldPix = WMRetainPixmap(WMGetLabelImage(panel->logoL));
+        /* If we don't use a fixed font, scrolling will be jumpy */
+        /* Alternatively we can draw text in a pixmap and scroll it smoothly */
+        if ((panel->oldFont = WMGetLabelFont(panel->versionL))!=NULL)
+            WMRetainFont(panel->oldFont);
+        font = WMCreateFont(WMWidgetScreen(panel->versionL), "-*-fixed-*-*-*-*-14-*-*-*-*-*-*-*");
+        if (font) {
+            WMSetLabelFont(panel->versionL, font);
+            WMReleaseFont(font);
+        }
+        WMSetLabelText(panel->versionL, "");
     } else if (panel->timer) {
 	char version[20];
 
@@ -1129,8 +1150,14 @@ handleLogoPush(XEvent *event, void *data)
 	WMDeleteTimerHandler(panel->timer);
 	panel->timer = NULL;
 
+        WMSetLabelFont(panel->versionL, panel->oldFont);
+        if (panel->oldFont) {
+            WMReleaseFont(panel->oldFont);
+            panel->oldFont = NULL;
+        }
 	sprintf(version, _("Version %s"), VERSION);
-	WMSetLabelText(panel->versionL, version);
+        WMSetLabelText(panel->versionL, version);
+        XFlush(WMScreenDisplay(WMWidgetScreen(panel->versionL)));
     }
 
     {
