@@ -74,6 +74,7 @@
     SkipWindowList = Yes;
     DontSaveSession = Yes;
     Unfocusable = Yes;
+    NoAppIcon = Yes;
   };
   kio_uiserver = {NoAppIcon = Yes;};
   kcmshell = {NoAppIcon = Yes;};

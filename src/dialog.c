@@ -862,8 +862,8 @@ typedef struct {
 
 
 #define COPYRIGHT_TEXT  \
-    "Copyright \xc2\xa9 1997-2004 Alfredo K. Kojima\n"\
-    "Copyright \xc2\xa9 1998-2004 Dan Pascu"
+    "Copyright \xc2\xa9 1997-2005 Alfredo K. Kojima\n"\
+    "Copyright \xc2\xa9 1998-2005 Dan Pascu"
 
 
 

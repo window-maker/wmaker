@@ -2250,10 +2250,10 @@ wWindowSynthConfigureNotify(WWindow *wwin)
     sevent.xconfigure.height = wwin->client.height;
 
     sevent.xconfigure.border_width = wwin->old_border_width;
-    if (!HAS_TITLEBAR(wwin))
-        sevent.xconfigure.above = None;
-    else
+    if (HAS_TITLEBAR(wwin) && wwin->frame->titlebar)
         sevent.xconfigure.above = wwin->frame->titlebar->window;
+    else
+        sevent.xconfigure.above = None;
 
     sevent.xconfigure.override_redirect = False;
     XSendEvent(dpy, wwin->client_win, False, StructureNotifyMask, &sevent);
