@@ -694,7 +694,7 @@ int main(int argc, char **argv)
     testSplitView(scr);
     testFontPanel(scr);
     testGradientButtons(scr);
-#if 0
+#if 1
 
     testProgressIndicator(scr);
     testColorWell(scr);
