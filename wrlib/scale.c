@@ -418,9 +418,6 @@ CLIST	*contrib;		/* array of contribution lists */
 #define CLAMP(v,l,h)    ((v)<(l) ? (l) : (v) > (h) ? (h) : v)
 
 
-#include "bench.h"
-
-
 RImage*
 RSmoothScaleImage(RImage *src, unsigned new_width, unsigned new_height)
 {    
