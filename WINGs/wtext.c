@@ -13,15 +13,17 @@
 /* if monoFont, ignore pixmaps, colors, fonts, script, underline */
 
 
-#include <WINGs.h>
+//#include <WINGs.h>
 #include <WMaker.h>
 #include <WINGsP.h>
 #include <X11/keysym.h>
 #include <X11/Xatom.h>
 #include <ctype.h>
 
+#if 0
 #include "wruler.h"
 #include "wtext.h"
+#endif
 
 void wgdbFree(void *ptr) 
 { if(!ptr) printf("err... cannot ");
