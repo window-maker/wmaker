@@ -114,6 +114,9 @@ void *wrealloc(void *ptr, size_t newsize)
 
     if (!ptr) {
 	nptr = wmalloc(newsize);
+    } else if (newsize==0) {
+        wfree(ptr);
+        nptr = NULL;
     } else {
 #ifdef TEST_WITH_GC
 	nptr = GC_realloc(ptr, newsize);
