@@ -155,7 +155,6 @@ convertTrueColor_generic(RXImage *ximg, RImage *image,
     unsigned char *ptr = image->data;
     int channels = (image->format == RRGBAFormat ? 4 : 3);
 
-
     /* convert and dither the image to XImage */
     for (y=0; y<image->height; y++) {
 	nerr[0] = 0;
@@ -210,6 +209,57 @@ convertTrueColor_generic(RXImage *ximg, RImage *image,
 	err = nerr;
 	nerr = terr;
     }
+    
+    /* redither the 1st line to distribute error better */
+    ptr=image->data;
+    y=0;
+    nerr[0] = 0;
+    nerr[1] = 0;
+    nerr[2] = 0;
+    for (x=0; x<image->width; x++, ptr+=channels) {
+	
+	/* reduce pixel */
+	pixel = *ptr + err[x];
+	if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
+	r = rtable[pixel];
+	/* calc error */
+	rer = pixel - r*dr;
+
+	/* reduce pixel */
+	pixel = *(ptr+1) + err[x+1];
+	if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
+	g = gtable[pixel];
+	/* calc error */
+	ger = pixel - g*dg;
+	
+	/* reduce pixel */
+	pixel = *(ptr+2) + err[x+2];
+	if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
+	b = btable[pixel];
+	/* calc error */
+	ber = pixel - b*db;
+	
+	
+	pixel = (r<<roffs) | (g<<goffs) | (b<<boffs);
+	XPutPixel(ximg->image, x, y, pixel);
+	
+	/* distribute error */
+	r = (rer*3)/8;
+	g = (ger*3)/8;
+	b = (ber*3)/8;
+	/* x+1, y */
+	err[x+3*1]+=r;
+	err[x+1+3*1]+=g;
+	err[x+2+3*1]+=b;
+	/* x, y+1 */
+	nerr[x]+=r;
+	nerr[x+1]+=g;
+	nerr[x+2]+=b;
+	/* x+1, y+1 */
+	nerr[x+3*1]=rer-2*r;
+	nerr[x+1+3*1]=ger-2*g;
+	nerr[x+2+3*1]=ber-2*b;
+    }    
 }
 
 
