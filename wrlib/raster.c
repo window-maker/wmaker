@@ -24,7 +24,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <limits.h>
 #include <X11/Xlib.h>
 #include "wraster.h"
 
@@ -39,8 +38,9 @@ int RErrorCode=RERR_NONE;
 #define HAS_ALPHA(I)	((I)->format == RRGBAFormat)
 
 
-#define MAX_WIDTH 30000
-#define MAX_HEIGHT 30000
+#define MAX_WIDTH 20000
+#define MAX_HEIGHT 20000
+/* 20000^2*4 < 2G */
 
 
 RImage*
