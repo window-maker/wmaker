@@ -27,6 +27,8 @@ Changes since version 0.80.0:
   option for a window using the window Inspector.
 - Let XRender transparent window be see-through to desktop
 - Added Greek (el) language pixmap (Michalis Kabrianis <Michalis@bigfoot.com>)
+- Fixes icons being reduced twice when icon size != 64x64
+  Eduardo Pereira Habkost <ehabkost@conectiva.com.br>
 - Fixed a bug that crashed wmaker when selecting the "Start alternate window 
   manager" option in the crashing dialog panel.
 - Window Maker will now use the WINDOWMAKER_ALT_WM environment variable (if
