@@ -2,23 +2,27 @@
 
 import sys
 import wings
-import exceptions
+from exceptions import Exception, StandardError
 from types import *
+
+
+# Some useful constants
+
+False = 0
+True = 1
 
 # check about None as action for buttonAction/windowCloseAction ...
 
 ################################################################################
 # Exceptions
 ################################################################################
-class Error(exceptions.Exception):
-    def __init__(self, msg):
-        self.msg = msg
-    def __str__(self):
-        return self.msg
-    __repr__ = __str__
+class Error(StandardError):
+    pass
+
+del Exception, StandardError
 
 class WMTimer:
-    def __init__(self, milliseconds, callback, cdata=None, persistent=0):
+    def __init__(self, milliseconds, callback, cdata=None, persistent=False):
         if persistent:
             self._o = wings.pyWMAddPersistentTimerHandler(milliseconds, (callback, cdata))
         else:
@@ -30,15 +34,17 @@ class WMTimer:
 
 class WMPersistentTimer(WMTimer):
     def __init__(self, milliseconds, callback, cdata=None):
-        WMTimer.__init__(self, milliseconds, callback, cdata, persistent=1)
+        WMTimer.__init__(self, milliseconds, callback, cdata, persistent=True)
 
 
 class WMScreen:
     __readonly = ('display', 'width', 'height', 'depth')
 
-    def __init__(self, appname, display="", simpleapp=0):
+    def __init__(self, appname, display="", simpleapp=False):
         wings.WMInitializeApplication(appname, len(sys.argv), sys.argv)	
         self._o = wings.pyWMOpenScreen(display, simpleapp)
+        if not self._o:
+            raise Error, "Cannot open display %s" % display
         self.__dict__['display'] = wings.WMScreenDisplay(self._o)
         self.__dict__['width'] = wings.WMScreenWidth(self._o)
         self.__dict__['height'] = wings.WMScreenHeight(self._o)
@@ -69,7 +75,7 @@ class WMScreen:
 class WMView:
     pass
 
-    
+
 class WMWidget(WMView):
     def __init__(self):
         self._o = None
@@ -429,7 +435,7 @@ class WMTextField(WMWidget):
         wings.WMSetTextFieldFont(self._o, font)
 
     def font(self):
-        return wings.WMGettextFieldFont(self._o)
+        return wings.WMGetTextFieldFont(self._o)
 
 
 ################################################################################
@@ -509,7 +515,7 @@ if __name__ == "__main__":
         win2.hide()
 
     def dc(object, data, action):
-        print "didChnage:", object, data, action
+        print "didChange:", object, data, action
 
     def dbe(object, data, action):
         print "didBeginEditing:", object, data, action
@@ -520,7 +526,7 @@ if __name__ == "__main__":
                 object.setFocusTo(txt2)
             else:
                 object.setFocusTo(txt)
-        print "didEndEditing:", object, data, action, txt.text()
+        print "didEndEditing:", object, data, action, object.text()
 
     def tcb(one):
         old = list.selectedItemRow()
@@ -625,7 +631,7 @@ if __name__ == "__main__":
     timer = WMPersistentTimer(1000, tcb, win)
     #del(timer)
     #timer.delete()
-    
+
     win2 = WMPanel(win, "anotherWindow", WMTitledWindowMask)
     win2.setTitle("transient test window")
     win2.resize(150, 50)

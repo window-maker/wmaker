@@ -24,7 +24,7 @@ if __name__ == "__main__":
         win2.hide()
 
     def dc(object, data, action):
-        print "didChnage:", object, data, action
+        print "didChange:", object, data, action
 
     def dbe(object, data, action):
         print "didBeginEditing:", object, data, action
@@ -35,7 +35,7 @@ if __name__ == "__main__":
                 object.setFocusTo(txt2)
             else:
                 object.setFocusTo(txt)
-        print "didEndEditing:", object, data, action, txt.text()
+        print "didEndEditing:", object, data, action, object.text()
 
     def tcb(one):
         old = list.selectedItemRow()

@@ -62,36 +62,31 @@ static WMEventHook *extraEventHandler=NULL;
  * WMCreateEventHandler--
  * 	Create an event handler and put it in the event handler list for the
  * view. If the same callback and clientdata are already used in another
- * handler, the masks are swapped.
+ * handler, the masks are OR'ed.
  * 
  */
 void
 WMCreateEventHandler(WMView *view, unsigned long mask, WMEventProc *eventProc,
 		     void *clientData)
 {
-    W_EventHandler *handler, *ptr;
-    unsigned long eventMask;
+    W_EventHandler *hPtr;
     WMArrayIterator iter;
 
-
-    handler = NULL;
-    eventMask = mask;
-
-    WM_ITERATE_ARRAY(view->eventHandlers, ptr, iter) {
-	if (ptr->clientData == clientData && ptr->proc == eventProc) {
-	    handler = ptr;
-	    eventMask |= ptr->eventMask;
+    WM_ITERATE_ARRAY(view->eventHandlers, hPtr, iter) {
+	if (hPtr->clientData==clientData && hPtr->proc==eventProc) {
+            hPtr->eventMask |= mask;
+            return;
 	}
     }
-    if (!handler) {
-	handler = wmalloc(sizeof(W_EventHandler));
 
-	WMAddToArray(view->eventHandlers, handler);
-    }
+    hPtr = wmalloc(sizeof(W_EventHandler));
+
     /* select events for window */
-    handler->eventMask = eventMask;
-    handler->proc = eventProc;
-    handler->clientData = clientData;
+    hPtr->eventMask = mask;
+    hPtr->proc = eventProc;
+    hPtr->clientData = clientData;
+
+    WMAddToArray(view->eventHandlers, hPtr);
 }
 
 

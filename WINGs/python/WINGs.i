@@ -28,7 +28,7 @@
         return NULL;
     }
 }
-// This cleans up the char ** array we mallocd before the function call
+// This cleans up the char ** array we malloc-ed before the function call
 %typemap(python, freearg) char ** {
     wfree($1);
 }
@@ -95,7 +95,7 @@
     $1 = PyFile_AsFile($input);
 }
 
-/* These are for freeing the return of functions that need to be freed
+/* These are for free-ing the return of functions that need to be freed
  * before returning control to python. */
 %typemap(python, ret) char* WMGetTextFieldText { wfree($1); };
 
@@ -173,6 +173,7 @@
 
 
 //%rename WMScreenMainLoop _WMScreenMainLoop;
+//%rename(_WMScreenMainLoop) WMScreenMainLoop;
 //%rename WMRunModalLoop _WMRunModalLoop;
 
 
@@ -529,13 +530,33 @@
 %}
 
 
+/* ignore structures we will not use */
+%ignore ConnectionDelegate;
+
+/* ignore functions we don't need */
+// should we ignore vararg functions, or just convert them to functions with
+// a fixed number of parameters?
+%varargs(char*) wmessage;
+//%ignore wmessage;
+%ignore wwarning;
+%ignore wfatal;
+%ignore wsyserror;
+%ignore wsyserrorwithcode;
+%ignore WMCreatePLArray;
+%ignore WMCreatePLDictionary;
+
 %apply int *INPUT { int *argc };
 
 #define Bool int
 
 %include "WINGs/WUtil.h"
 
+/* ignore structures we will not use */
+
+/* ignore functions we don't need */
+
 %include "WINGs/WINGs.h"
+
 
 %{
 void
@@ -557,6 +578,7 @@ WHandleEvents()
     W_CheckTimerHandlers();
 }
 %}
+
 
 /* rewrite functions originally defined as macros */
 %inline %{

@@ -495,9 +495,7 @@ wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
     
     /* windows that have takefocus=False shouldn't take focus at all */
     if (wwin->focus_mode == WFM_NO_INPUT) {
-	/* dont use WSETUFLAG, since this was not an attribute change 
-	 * made by the user */
-	wwin->user_flags.no_focusable = 1;
+	wwin->client_flags.no_focusable = 1;
     }
 }
 

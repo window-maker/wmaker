@@ -2,7 +2,7 @@ CATALOGS = @WPMOFILES@
 
 nlsdir = $(NLSDIR)
 
-CLEANFILES = $(CATALOGS)
+CLEANFILES = WPrefs.pot $(CATALOGS)
 
 EXTRA_DIST = pt.po hr.po fr.po ko.po cs.po ja.po zh_TW.Big5.po es.po\
 		zh_CN.po fi.po it.po ru.po de.po hu.po bg.po sk.po\
@@ -35,6 +35,8 @@ SUFFIXES = .po .mo
 .po.mo: 
 	msgfmt -o $@ $<
 
+
+all-local: $(CATALOGS)
 
 WPrefs.pot: $(POTFILES)
 	xgettext --default-domain=WPrefs \

@@ -159,7 +159,7 @@ WMCreateColorWell(WMWidget *parent)
     cPtr->view->self = cPtr;
 
     cPtr->view->delegate = &_ColorWellViewDelegate;
-    
+
     cPtr->colorView = W_CreateView(cPtr->view);
     if (!cPtr->colorView) {
 	W_DestroyView(cPtr->view);
@@ -167,10 +167,10 @@ WMCreateColorWell(WMWidget *parent)
 	return NULL;
     }
     cPtr->colorView->self = cPtr;
-	
+
     WMCreateEventHandler(cPtr->view, ExposureMask|StructureNotifyMask
 			 |ClientMessageMask, handleEvents, cPtr);
-    
+
     WMCreateEventHandler(cPtr->colorView, ExposureMask, handleEvents, cPtr);
 
     WMCreateEventHandler(cPtr->colorView, ButtonPressMask|ButtonMotionMask
@@ -192,16 +192,16 @@ WMCreateColorWell(WMWidget *parent)
 
     WMAddNotificationObserver(colorChangedObserver, cPtr,
 			      WMColorPanelColorChangedNotification, NULL);
-    
-    WMSetViewDragSourceProcs(cPtr->view, &_DragSourceProcs);
-    WMSetViewDragDestinationProcs(cPtr->view, &_DragDestinationProcs);
+
+    WMSetViewDragSourceProcs(cPtr->colorView, &_DragSourceProcs);
+    WMSetViewDragDestinationProcs(cPtr->colorView, &_DragDestinationProcs);
 
     {
 	char *types[2] = {"application/X-color", NULL};
-	
-	WMRegisterViewForDraggedTypes(cPtr->view, types);
+
+	WMRegisterViewForDraggedTypes(cPtr->colorView, types);
     }
-    
+
     return cPtr;
 }
 
@@ -370,12 +370,11 @@ handleDragEvents(XEvent *event, void *data)
 		offs.height = 2;
 		pixmap = makeDragPixmap(cPtr);
 
-		WMDragImageFromView(cPtr->view, pixmap, types,
+		WMDragImageFromView(cPtr->colorView, pixmap, types,
 				    wmkpoint(event->xmotion.x_root,
 					     event->xmotion.y_root),
 				    offs, event, True);
-				   
-		
+
 		WMReleasePixmap(pixmap);
 	    }
 	}
@@ -419,7 +418,7 @@ destroyColorWell(ColorWell *cPtr)
 
     if (cPtr->color)
 	WMReleaseColor(cPtr->color);
-   
+
     wfree(cPtr);
 }
 

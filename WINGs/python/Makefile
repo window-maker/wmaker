@@ -1,7 +1,7 @@
 
 all: WINGs.c
 	python setup.py build
-	ln -s `find build/ -name wings.so` .
+	ln -sf `find build/ -name wings.so` .
 
 install: WINGs.c
 	python setup.py install

@@ -11,6 +11,7 @@ wings = os.popen("get-wings-flags --cflags", "r")
 lines = [x.strip() for x in wings.readlines()]
 flags = reduce(lambda x,y: x+y, [x.split() for x in lines if x])
 include_dirs = [x[2:] for x in flags]
+#include_dirs += [".."]
 wings.close()
 
 ## Get the library dirs
@@ -18,6 +19,7 @@ wings = os.popen("get-wings-flags --ldflags", "r")
 lines = [x.strip() for x in wings.readlines()]
 flags = reduce(lambda x,y: x+y, [x.split() for x in lines if x])
 library_dirs = [x[2:] for x in flags]
+#library_dirs += [".."]
 wings.close()
 
 ## Get the libraries

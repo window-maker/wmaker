@@ -46,6 +46,8 @@ SUFFIXES = .po .mo
 	msgfmt -o $@ $<
 
 
+all-local: $(CATALOGS)
+
 WindowMaker.pot: $(POTFILES)
 	xgettext --default-domain=WindowMaker \
 	--add-comments --keyword=_ $(POTFILES)

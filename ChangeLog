@@ -39,6 +39,7 @@ Changes since version 0.80.1:
 - Added a check that only %d is used in a font specification in WMGLOBAL and at
   most once for each font in a fontset (eliminates a possible security exploit)
 - Added fontpanel callback
+- Fixed focus handling for windows that set WM_HINTS.take_focus = False.
 
 
 Changes since version 0.80.0:

@@ -4,7 +4,7 @@ CATALOGS = @WINGSMOFILES@
 
 CLEANFILES = $(CATALOGS) WINGs.pot
 
-EXTRA_DIST = cs.po de.po sk.po fr.po
+EXTRA_DIST = cs.po de.po fr.po sk.po
 
 POTFILES  = \
 	$(top_builddir)/WINGs/connection.c \
@@ -26,6 +26,8 @@ SUFFIXES = .po .mo
 .po.mo: 
 	msgfmt -o $@ $<
 
+
+all-local: $(CATALOGS)
 
 WINGs.pot: $(POTFILES)
 	xgettext --default-domain=WINGs \

@@ -1,15 +1,140 @@
-diff -ur WindowMaker-0.65.1/WPrefs.app/Expert.c WindowMaker-0.65.1-patched/WPrefs.app/Expert.c
---- WindowMaker-0.65.1/WPrefs.app/Expert.c	Mon Jun  4 13:47:32 2001
-+++ WindowMaker-0.65.1-patched/WPrefs.app/Expert.c	Sat Aug 18 03:53:25 2001
-@@ -33,7 +33,7 @@
-     
-     WMWidget *parent;
+diff -urN WindowMaker-0.80.2/src/appicon.c WindowMaker-0.80.2.modif/src/appicon.c
+--- WindowMaker-0.80.2/src/appicon.c	2002-01-08 14:45:07.000000000 +0100
++++ WindowMaker-0.80.2.modif/src/appicon.c	2002-12-09 08:59:22.000000000 +0100
+@@ -596,6 +596,7 @@
+     int shad_x = 0, shad_y = 0, docking=0, dockable, collapsed = 0;
+     int ix, iy;
+     int clickButton = event->xbutton.button;
++    Bool hasMoved = False;
+     Pixmap ghost = None;
+     Window wins[2];
+     Bool movingSingle = False;
+@@ -676,6 +677,7 @@
+ 	    break;
  
--    WMButton *swi[8];
-+    WMButton *swi[9];
+ 	 case MotionNotify:
++	    hasMoved = True;
+ 	    if (!grabbed) {
+ 		if (abs(dx-ev.xmotion.x)>=MOVE_THRESHOLD
+ 		    || abs(dy-ev.xmotion.y)>=MOVE_THRESHOLD) {
+@@ -812,7 +814,8 @@
  
- } _Panel;
+ 	    if (wPreferences.auto_arrange_icons)
+ 		wArrangeIcons(scr, True);
+-
++	    if (!hasMoved && wPreferences.single_click)
++		iconDblClick(desc, event);
+ 	    done = 1;
+ 	    break;
+ 	}
+diff -urN WindowMaker-0.80.2/src/defaults.c WindowMaker-0.80.2.modif/src/defaults.c
+--- WindowMaker-0.80.2/src/defaults.c	2002-01-08 14:45:07.000000000 +0100
++++ WindowMaker-0.80.2.modif/src/defaults.c	2002-12-09 09:00:01.000000000 +0100
+@@ -548,6 +548,9 @@
+     {"DisableBlinking",	"NO",		NULL,
+ 	   &wPreferences.dont_blink,	getBool,	NULL
+     },
++    {"SingleClickLaunch", "NO",		NULL,
++	   &wPreferences.single_click,	getBool,	NULL
++    },   
+       /* style options */
+     {"MenuStyle", 	"normal",  		seMenuStyles,
+ 	&wPreferences.menu_style, getEnum, 	setMenuStyle
+diff -urN WindowMaker-0.80.2/src/dock.c WindowMaker-0.80.2.modif/src/dock.c
+--- WindowMaker-0.80.2/src/dock.c	2002-02-21 12:28:48.000000000 +0100
++++ WindowMaker-0.80.2.modif/src/dock.c	2002-12-09 09:02:58.000000000 +0100
+@@ -3773,7 +3773,7 @@
  
+ 
+ 
+-static void
++static Bool
+ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
+ {
+     WScreen *scr = dock->screen_ptr;
+@@ -3789,6 +3789,7 @@
+     int tmp;
+     Pixmap ghost = None;
+     Bool docked;
++    Bool hasMoved = False;
+     int superfluous = wPreferences.superfluous; /* we catch it to avoid problems */
+     int omnipresent = aicon->omnipresent; /* this must be cached!!! */
+ 
+@@ -3843,6 +3844,7 @@
+ 	    break;
+ 
+ 	 case MotionNotify:
++	    hasMoved = True;
+ 	    if (!grabbed) {
+ 		if (abs(ofs_x-ev.xmotion.x)>=MOVE_THRESHOLD
+ 		    || abs(ofs_y-ev.xmotion.y)>=MOVE_THRESHOLD) {
+@@ -3992,7 +3994,7 @@
+ #ifdef DEBUG
+ 	    puts("End icon move");
+ #endif
+-	    return;
++	    return hasMoved;
+ 	}
+     }
+ }
+@@ -4131,8 +4133,11 @@
+                 handleClipChangeWorkspace(scr, event);
+             else
+                 handleDockMove(dock, aicon, event);
+-        } else
+-	    handleIconMove(dock, aicon, event);
++	} else {
++	    Bool hasMoved = handleIconMove(dock, aicon, event);
++	    if (!hasMoved && wPreferences.single_click)
++	        iconDblClick(desc, event);
++	}
+ 
+     } else if (event->xbutton.button==Button2 && dock->type==WM_CLIP &&
+                aicon==scr->clip_icon) {
+diff -urN WindowMaker-0.80.2/src/icon.c WindowMaker-0.80.2.modif/src/icon.c
+--- WindowMaker-0.80.2/src/icon.c	2002-02-21 12:28:48.000000000 +0100
++++ WindowMaker-0.80.2.modif/src/icon.c	2002-12-09 09:04:53.000000000 +0100
+@@ -879,6 +879,7 @@
+     int dx=event->xbutton.x, dy=event->xbutton.y;
+     int grabbed=0;
+     int clickButton=event->xbutton.button;
++    Bool hasMoved = False;
+ 
+     if (WCHECK_STATE(WSTATE_MODAL))
+ 	return;
+@@ -930,6 +931,7 @@
+ 	    break;
+ 
+ 	 case MotionNotify:
++	    hasMoved = True;
+ 	    if (!grabbed) {
+ 		if (abs(dx-ev.xmotion.x)>=MOVE_THRESHOLD
+ 		    || abs(dy-ev.xmotion.y)>=MOVE_THRESHOLD) {
+@@ -967,6 +969,8 @@
+ 
+ 	    if (wPreferences.auto_arrange_icons)
+ 		wArrangeIcons(wwin->screen_ptr, True);
++	    if (!hasMoved && wPreferences.single_click)
++		miniwindowDblClick(desc, event);
+ 	    return;
+ 	    
+ 	}
+diff -urN WindowMaker-0.80.2/src/WindowMaker.h WindowMaker-0.80.2.modif/src/WindowMaker.h
+--- WindowMaker-0.80.2/src/WindowMaker.h	2002-02-21 12:28:48.000000000 +0100
++++ WindowMaker-0.80.2.modif/src/WindowMaker.h	2002-12-09 08:57:47.000000000 +0100
+@@ -464,6 +464,9 @@
+     /* shading animation */
+     signed char shade_speed;
+ 
++    /* single click to lauch applications */
++    char single_click;
++
+     int edge_resistance;
+     char attract;
+ 
+diff -urN WindowMaker-0.80.2/WPrefs.app/Expert.c WindowMaker-0.80.2.modif/WPrefs.app/Expert.c
+--- WindowMaker-0.80.2/WPrefs.app/Expert.c	2002-01-08 14:44:38.000000000 +0100
++++ WindowMaker-0.80.2.modif/WPrefs.app/Expert.c	2002-12-09 08:56:09.000000000 +0100
 @@ -54,6 +54,7 @@
      WMSetButtonSelected(panel->swi[4], GetBoolForKey("WindozeCycling"));
      WMSetButtonSelected(panel->swi[5], GetBoolForKey("DontConfirmKill"));
@@ -42,138 +167,3 @@ diff -ur WindowMaker-0.65.1/WPrefs.app/Expert.c WindowMaker-0.65.1-patched/WPref
 +    SetBoolForKey(WMGetButtonSelected(panel->swi[7]), "SingleClickLaunch");
  }
  
- 
-diff -ur WindowMaker-0.65.1/src/WindowMaker.h WindowMaker-0.65.1-patched/src/WindowMaker.h
---- WindowMaker-0.65.1/src/WindowMaker.h	Wed Jun  6 15:07:42 2001
-+++ WindowMaker-0.65.1-patched/src/WindowMaker.h	Sat Aug 18 03:47:36 2001
-@@ -463,6 +463,9 @@
-     /* shading animation */
-     signed char shade_speed;
- 
-+    /* single click to lauch applications */
-+    char single_click;
-+
-     int edge_resistance;
-     char attract;
- 
-diff -ur WindowMaker-0.65.1/src/appicon.c WindowMaker-0.65.1-patched/src/appicon.c
---- WindowMaker-0.65.1/src/appicon.c	Mon Jul 23 14:32:46 2001
-+++ WindowMaker-0.65.1-patched/src/appicon.c	Sat Aug 18 03:47:36 2001
-@@ -704,6 +704,7 @@
-     int shad_x = 0, shad_y = 0, docking=0, dockable, collapsed = 0;
-     int ix, iy;
-     int clickButton = event->xbutton.button;
-+    Bool hasMoved = False;
-     Pixmap ghost = None;
-     Window wins[2];
-     Bool movingSingle = False;
-@@ -794,6 +795,7 @@
- 	    break;
- 
- 	 case MotionNotify:
-+	    hasMoved = True;
- 	    if (!grabbed) {
- 		if (abs(dx-ev.xmotion.x)>=MOVE_THRESHOLD
- 		    || abs(dy-ev.xmotion.y)>=MOVE_THRESHOLD) {
-@@ -939,6 +941,8 @@
- 
- 	    if (wPreferences.auto_arrange_icons)
- 		wArrangeIcons(scr, True);
-+	    if (!hasMoved && wPreferences.single_click)
-+		iconDblClick(desc, event);
- 
- 	    done = 1;
- 	    break;
-diff -ur WindowMaker-0.65.1/src/defaults.c WindowMaker-0.65.1-patched/src/defaults.c
---- WindowMaker-0.65.1/src/defaults.c	Mon Jul 23 14:31:36 2001
-+++ WindowMaker-0.65.1-patched/src/defaults.c	Sat Aug 18 03:47:36 2001
-@@ -557,6 +557,9 @@
-     {"DisableBlinking",	"NO",		NULL,
- 	   &wPreferences.dont_blink,	getBool,	NULL
-     },
-+    {"SingleClickLaunch", "NO",		NULL,
-+	   &wPreferences.single_click,	getBool,	NULL
-+    },
-       /* style options */
-     {"MenuStyle", 	"normal",  		seMenuStyles,
- 	&wPreferences.menu_style, getEnum, 	setMenuStyle
-diff -ur WindowMaker-0.65.1/src/dock.c WindowMaker-0.65.1-patched/src/dock.c
---- WindowMaker-0.65.1/src/dock.c	Mon Jul 23 14:37:25 2001
-+++ WindowMaker-0.65.1-patched/src/dock.c	Sat Aug 18 03:47:36 2001
-@@ -3690,7 +3690,7 @@
- 
- 
- 
--static void
-+static Bool
- handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
- {
-     WScreen *scr = dock->screen_ptr;
-@@ -3706,6 +3706,7 @@
-     int tmp;
-     Pixmap ghost = None;
-     Bool docked;
-+    Bool hasMoved = False;
-     int superfluous = wPreferences.superfluous; /* we catch it to avoid problems */
-     int omnipresent = aicon->omnipresent; /* this must be cached!!! */
- 
-@@ -3760,6 +3761,7 @@
- 	    break;
- 
- 	 case MotionNotify:
-+	    hasMoved = True;
- 	    if (!grabbed) {
- 		if (abs(ofs_x-ev.xmotion.x)>=MOVE_THRESHOLD
- 		    || abs(ofs_y-ev.xmotion.y)>=MOVE_THRESHOLD) {
-@@ -3909,7 +3911,7 @@
- #ifdef DEBUG
- 	    puts("End icon move");
- #endif
--	    return;
-+	    return hasMoved;
- 	}
-     }
- }
-@@ -4048,8 +4050,11 @@
-                 handleClipChangeWorkspace(scr, event);
-             else
-                 handleDockMove(dock, aicon, event);
--        } else
--	    handleIconMove(dock, aicon, event);
-+	} else {
-+	    Bool hasMoved = handleIconMove(dock, aicon, event);
-+	    if (!hasMoved && wPreferences.single_click)
-+	        iconDblClick(desc, event);
-+	}
- 
-     } else if (event->xbutton.button==Button2 && dock->type==WM_CLIP &&
-                aicon==scr->clip_icon) {
-diff -ur WindowMaker-0.65.1/src/icon.c WindowMaker-0.65.1-patched/src/icon.c
---- WindowMaker-0.65.1/src/icon.c	Mon Jul 23 14:20:27 2001
-+++ WindowMaker-0.65.1-patched/src/icon.c	Sat Aug 18 03:47:36 2001
-@@ -877,6 +877,7 @@
-     int dx=event->xbutton.x, dy=event->xbutton.y;
-     int grabbed=0;
-     int clickButton=event->xbutton.button;
-+    Bool hasMoved = False;
- 
-     if (WCHECK_STATE(WSTATE_MODAL))
- 	return;
-@@ -928,6 +929,7 @@
- 	    break;
- 
- 	 case MotionNotify:
-+	    hasMoved = True;
- 	    if (!grabbed) {
- 		if (abs(dx-ev.xmotion.x)>=MOVE_THRESHOLD
- 		    || abs(dy-ev.xmotion.y)>=MOVE_THRESHOLD) {
-@@ -965,6 +967,9 @@
- 
- 	    if (wPreferences.auto_arrange_icons)
- 		wArrangeIcons(wwin->screen_ptr, True);
-+	    if (!hasMoved && wPreferences.single_click)
-+		miniwindowDblClick(desc, event);
-+
- 	    return;
- 	    
- 	}

@@ -387,7 +387,7 @@ void
 WMSetFontPanelAction(WMFontPanel *panel, WMAction2 *action, void *data)
 {
     panel->action = action;
-    panel->actionData = data;
+    panel->data = data;
 }
 
 
