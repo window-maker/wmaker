@@ -20,72 +20,91 @@
 
 
 typedef struct {
-    void **items;		       /* the array data */
-    unsigned length;		       /* # of items in array */
-    unsigned allocSize;		       /* allocated size of array */
+    void **items;		      /* the array data */
+    unsigned int length;	      /* # of items in array */
+    unsigned int allocSize;	      /* allocated size of array */
+    void (*destructor)(void *item);   /* the destructor to free elements */
 } W_Array;
 
 
 WMArray*
 WMCreateArray(unsigned initialSize)
 {
-    Array *a;
+    WMCreateArrayWithDestructor(initialSize, NULL);
+}
 
-    a = malloc(sizeof(Array));
-    sassertrv(a!=NULL, NULL);
+
+WMArray*
+WMCreateArrayWithDestructor(unsigned initialSize, void (*destructor)(void*))
+{
+    WMArray *array;
+
+    array = wmalloc(sizeof(WMArray));
 
     if (initialSize == 0) {
         initialSize = INITIAL_SIZE;
     }
 
-    a->items = malloc(sizeof(void*)*initialSize);
-    sassertdo(a->items!=NULL,
-              free(a);
-              return NULL;
-             );
-    a->length = 0;
-    a->allocSize = initialSize;
+    array->items = wmalloc(sizeof(void*) * initialSize);
 
-    return a;
+    array->length = 0;
+    array->allocSize = initialSize;
+    array->destructor = destructor;
+
+    return array;
 }
 
 
-void ArrayFree(Array *array)
+void
+WMEmptyArray(WMArray *array)
 {
+    if (array->destructor) {
+        while (array->length-- > 0) {
+            array->destructor(array->items[array->length]);
+        }
+    }
+    /*memset(array->items, 0, array->length * sizeof(void*));*/
+    array->length = 0;
+}
+
+
+void
+WMFreeArray(WMArray *array)
+{
+    WMEmptyArray(array);
     free(array->items);
     free(array);
 }
 
 
-void ArrayClear(Array *array)
+int
+WMReplaceInArray(WMArray *array, unsigned int index, void *data)
 {
-    memset(array->items, 0, array->length*sizeof(void*));
-    array->length = 0;
-}
-
-
-int ArraySet(Array *array, unsigned index, void *data)
-{
-    sassertrv(index > array->length, 0);
+    wassertrv(index > array->length, 0);
 
     if (index == array->length)
-        return ArrayAppend(array, data);
+        return WMArrayAppend(array, data);
 
+    if (array->destructor) {
+        array->destructor(array->items[index]);
+    }
     array->items[index] = data;
 
     return 1;
 }
 
 
-#if 0
-void *ArrayGet(Array *array, unsigned index)
+void*
+WMGetFromArray(WMArray *array, unsigned int index)
 {
+    if (index < 0 || index >= array->length)
+        return NULL;
+
     return array->items[index];
 }
-#endif
 
 
-int ArrayAppend(Array *array, void *data)
+int WMArrayAppend(WMArray *array, void *data)
 {
     if (array->length >= array->allocSize) {
         array->allocSize += RESIZE_INCREMENT;
@@ -98,7 +117,7 @@ int ArrayAppend(Array *array, void *data)
 }
 
 
-int ArrayInsert(Array *array, unsigned index, void *data)
+int WMArrayInsert(WMArray *array, unsigned index, void *data)
 {
     sassertrv(index < array->length, 0);
 
@@ -118,7 +137,7 @@ int ArrayInsert(Array *array, unsigned index, void *data)
 }
 
 
-void ArrayDelete(Array *array, unsigned index)
+void WMArrayDelete(WMArray *array, unsigned index)
 {
     sassertr(index < array->length);
 
@@ -130,17 +149,17 @@ void ArrayDelete(Array *array, unsigned index)
 
 
 
-void *ArrayPop(Array *array)
+void *WMArrayPop(WMArray *array)
 {
-    void *d = ArrayGet(array, array->length-1);
+    void *d = WMArrayGet(array, array->length-1);
 
-    ArrayDelete(array, array->length-1);
+    WMArrayDelete(array, array->length-1);
 
     return d;
 }
 
 
-int ArrayIndex(Array *array, void *data)
+int WMArrayIndex(WMArray *array, void *data)
 {
     unsigned i;
 
@@ -150,3 +169,5 @@ int ArrayIndex(Array *array, void *data)
 
     return -1;
 }
+
+

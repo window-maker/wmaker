@@ -486,9 +486,9 @@ void WMResetDataBytesInRange(WMData *aData, WMRange aRange);
 
 void WMSetData(WMData *aData, WMData *anotherData);
 
-    
+
 void WMSetDataFormat(WMData *aData, unsigned format);
-    
+
 unsigned WMGetDataFormat(WMData *aData);
 /* Storing data */
 
