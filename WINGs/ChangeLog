@@ -1,3 +1,11 @@
+changes since wmaker 0.62.0:
+............................
+- added WM{S,G}etDataFormat()
+- added drag and drop
+- changed selection code
+- added clientdata to WMFindInBag
+
+
 changes since wmaker 0.61.1:
 ............................
 

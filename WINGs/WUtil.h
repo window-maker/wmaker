@@ -163,7 +163,7 @@ typedef struct W_BagFunctions {
     void (*emptyBag)(WMBag *bag);
     void (*freeBag)(WMBag *bag);
     void (*mapBag)(WMBag *bag, void (*function)(void*, void*), void *data);
-    int (*findInBag)(WMBag *bag, int (*match)(void*));
+    int (*findInBag)(WMBag *bag, int (*match)(void*, void*), void *cdata);
     void *(*first)(WMBag *bag, WMBagIterator *ptr);
     void *(*last)(WMBag *bag, WMBagIterator *ptr);
     void *(*next)(WMBag *bag, WMBagIterator *ptr);
@@ -398,7 +398,7 @@ WMBag *WMCreateTreeBagWithDestructor(void (*destructor)(void*));
     
 #define WMCountInBag(bag, item) bag->func.countInBag(bag, item)
 
-#define WMFindInBag(bag, match) bag->func.findInBag(bag, match)
+#define WMFindInBag(bag, match, cdata) bag->func.findInBag(bag, match, cdata)
     
 #define WMBagFirst(bag, ptr) bag->func.first(bag, ptr)
 
@@ -486,6 +486,10 @@ void WMResetDataBytesInRange(WMData *aData, WMRange aRange);
 
 void WMSetData(WMData *aData, WMData *anotherData);
 
+    
+void WMSetDataFormat(WMData *aData, unsigned format);
+    
+unsigned WMGetDataFormat(WMData *aData);
 /* Storing data */
 
 

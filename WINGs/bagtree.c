@@ -44,7 +44,7 @@ static int sortBag(WMBag *bag, int (*comparer)(const void*, const void*));
 static void emptyBag(WMBag *bag);
 static void freeBag(WMBag *bag);
 static void mapBag(WMBag *bag, void (*function)(void*, void*), void *data);
-static int findInBag(WMBag *bag, int (*match)(void*));;
+static int findInBag(WMBag *bag, int (*match)(void*,void*), void *data);
 static void *first(WMBag *bag, WMBagIterator *ptr);
 static void *last(WMBag *bag, WMBagIterator *ptr);
 static void *next(WMBag *bag, WMBagIterator *ptr);
@@ -785,28 +785,29 @@ static void mapBag(WMBag *self, void (*function)(void*, void*), void *data)
 
 
 
-static int findInTree(W_TreeBag *tree, W_Node *node, int (*function)(void*))
+static int findInTree(W_TreeBag *tree, W_Node *node, 
+		      int (*function)(void*,void*), void *cdata)
 {
     int index;
     
     if (node == tree->nil)
 	return WBNotFound;
     
-    index = findInTree(tree, node->left, function);
+    index = findInTree(tree, node->left, function, cdata);
     if (index != WBNotFound)
 	return index;
 
-    if ((*function)(node->data)) {
+    if ((*function)(node->data, cdata)) {
 	return node->index;
     }
 
-    return findInTree(tree, node->right, function);
+    return findInTree(tree, node->right, function, cdata);
 }
 
 
-static int findInBag(WMBag *self, int (*match)(void*))
+static int findInBag(WMBag *self, int (*match)(void*,void*), void *cdata)
 {
-    return findInTree(SELF, SELF->root, match);
+    return findInTree(SELF, SELF->root, match, cdata);
 }
 
 
