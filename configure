@@ -5297,10 +5297,11 @@ cat <<EOF >get-wraster-flags
 prefix="$prefix"
 exec_prefix=\$prefix
 
-WFLAGS="-I\$prefix/include $XCFLAGS"
-WLIBS="-L\$exec_prefix/lib $XLFLAGS -lwraster $GFXLIBS $XLIBS -lm"
+WCFLAGS="-I\$prefix/include $XCFLAGS $GFXFLAGS"
+WLFLAGS="-L\$exec_prefix/lib $XLFLAGS $GFXLFLAGS"
+WLIBS="-lwraster $GFXLIBS $XLIBS -lm"
 
-usage="Usage: get-wraster-flags #lp#--libs#rp# #lp#--incs#rp#"
+usage="Usage: get-wraster-flags #lp#--cflags#rp# #lp#--lflags#rp# #lp#--libs#rp#"
 
 if test \$# -eq 0; then
       echo "\${usage}" 1>&2
@@ -5309,8 +5310,11 @@ fi
 
 while test \$# -gt 0; do
   case \$1 in
-    --incs)
-	echo \$WFLAGS
+    --cflags)
+	echo \$WCFLAGS
+        ;;
+    --lflags)
+	echo \$WLFLAGS
         ;;
     --libs)
 	echo \$WLIBS
