@@ -611,16 +611,14 @@ static WMRange columnsInRect(WMTableView *table, WMRect rect)
 		j = 1;
 	    }
 	} else {
+	    range.count++;
 	    if (width > rect.pos.x + rect.size.width) {
-		range.count = i - range.position;
 		break;
 	    }
 	}
 	width += column->width;
     }
-    
     range.count = WMAX(1, WMIN(range.count, totalColumns - range.position));
-
     return range;
 }
 
@@ -681,7 +679,6 @@ static void setRowSelected(WMTableView *table, unsigned row, Bool flag)
 {
     int repaint = 0;
 
-    
     if (WMFindInArray(table->selectedRows, NULL, (void*)row) != WANotFound) {
 	if (!flag) {
 	    WMRemoveFromArray(table->selectedRows, (void*)row);
@@ -693,8 +690,7 @@ static void setRowSelected(WMTableView *table, unsigned row, Bool flag)
 	    repaint = 1;
 	}
     }
-
-    if (repaint) {	
+    if (repaint && row < table->rows) {
 	drawFullRow(table, row);
     }
 }
@@ -725,7 +721,7 @@ static void repaintTable(WMTableView *table, int x, int y,
     }
     
     rows = rowsInRect(table, rect);
-    for (i = rows.position; 
+    for (i = rows.position;
 	 i < WMIN(rows.position+rows.count + 1, table->rows);
 	 i++) {
 	drawRow(table, i, rect);
@@ -773,16 +769,17 @@ void WMSelectTableViewRow(WMTableView *table, int row)
     if (table->clickedRow >= 0)
 	setRowSelected(table, table->clickedRow, False);
     
-    if (row <= table->rows)
+    if (row >= table->rows) {
 	return;
+    }
     
     setRowSelected(table, row, True);
     table->clickedRow = row;
-    
+
     if (table->action)
 	(*table->action)(table, table->clientData);
     WMPostNotificationName(WMTableViewSelectionDidChangeNotification,
-			   table, NULL);    
+			   table, NULL);
 }
 
 
@@ -790,10 +787,22 @@ void WMReloadTableView(WMTableView *table)
 {
     WMRect rect = WMGetScrollViewVisibleRect(table->scrollView);
 
+    /* when this is called, nothing in the table can be assumed to be
+     * like the last time we accessed it (ie, rows might have disappeared) */
+
+    WMEmptyArray(table->selectedRows);
+    
+    if (table->clickedRow >= 0) {
+	table->clickedRow = -1;
+
+	if (table->action)
+	    (*table->action)(table, table->clientData);
+	WMPostNotificationName(WMTableViewSelectionDidChangeNotification,
+			       table, NULL);
+    }
+
     repaintTable(table, 0, 0, 
 		 W_VIEW_WIDTH(table->tableView), rect.size.height);
-    
-    table->clickedRow = -1;
 }
 
 
@@ -863,7 +872,7 @@ static void handleEvents(XEvent *event, void *data)
 	
 	if (event->xexpose.serial == 0) {
 	    WMRect rect = WMGetScrollViewVisibleRect(table->scrollView);
-	    
+
 	    repaintTable(table, rect.pos.x, rect.pos.y,
 			 rect.size.width, rect.size.height);
 	}

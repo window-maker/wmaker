@@ -588,7 +588,10 @@ handleEvents(XEvent *event, void *data)
      case Expose:
 	if (event->xexpose.count!=0)
 	    break;
-	paintScrollView(sPtr);
+	if (event->xexpose.serial == 0) /* means it's artificial */
+	    W_RedisplayView(sPtr->contentView);
+	else
+	    paintScrollView(sPtr);
 	break;
 	
      case DestroyNotify:
@@ -601,9 +604,7 @@ handleEvents(XEvent *event, void *data)
 
 static void
 destroyScrollView(ScrollView *sPtr)
-{
-    puts("destroyScrollView not implemented");
-   
+{   
     wfree(sPtr);
 }
 

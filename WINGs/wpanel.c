@@ -99,7 +99,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 		   char *alternateButton, char *otherButton)
 {
     WMAlertPanel *panel;
-    int x, dw=0, aw=0, ow=0, w;
+    int dw=0, aw=0, ow=0, w;
     WMBox *hbox;
     
     
@@ -130,6 +130,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     WMMapWidget(panel->vbox);
 
     hbox = WMCreateBox(panel->vbox);
+    WMSetBoxBorderWidth(hbox, 10);
     WMSetBoxHorizontal(hbox, True);
     WMMapWidget(hbox);
     WMAddBoxSubview(panel->vbox, WMWidgetView(hbox), False, True, 80, 0, 5);
@@ -139,7 +140,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     WMMapWidget(panel->iLbl);
     WMAddBoxSubview(hbox, WMWidgetView(panel->iLbl), False, True, 64, 0, 10);
 
-    if (scrPtr->applicationIcon) {		
+    if (scrPtr->applicationIcon) {
 	WMSetLabelImage(panel->iLbl, scrPtr->applicationIcon);
     }
 
@@ -178,6 +179,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     }
     
     hbox = WMCreateBox(panel->vbox);
+    WMSetBoxBorderWidth(hbox, 10);
     WMSetBoxHorizontal(hbox, True);
     WMMapWidget(hbox);
     WMAddBoxSubview(panel->vbox, WMWidgetView(hbox), False, True, 24, 0, 0);
@@ -215,37 +217,29 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 	dw += t/3;
     }
 
-    x = 400;
-
     if (defaultButton) {
-	x -= dw + 10;
-
-	panel->defBtn = WMCreateCommandButton(panel->win);
+	panel->defBtn = WMCreateCommandButton(hbox);
 	WMSetButtonAction(panel->defBtn, alertPanelOnClick, panel);
 	WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->defBtn),
-			     False, True, dw, 0, 5);
+			     False, True, dw, 0, 0);
 	WMSetButtonText(panel->defBtn, defaultButton);
 	WMSetButtonImage(panel->defBtn, scrPtr->buttonArrow);
 	WMSetButtonAltImage(panel->defBtn, scrPtr->pushedButtonArrow);
 	WMSetButtonImagePosition(panel->defBtn, WIPRight);
     }
     if (alternateButton) {
-	x -= aw + 10;
-
-	panel->altBtn = WMCreateCommandButton(panel->win);
+	panel->altBtn = WMCreateCommandButton(hbox);
 	WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->altBtn),
 			     False, True, aw, 0, 5);
 	WMSetButtonAction(panel->altBtn, alertPanelOnClick, panel);
 	WMSetButtonText(panel->altBtn, alternateButton);
     }
     if (otherButton) {
-	x -= ow + 10;
-	
-	panel->othBtn = WMCreateCommandButton(panel->win);
+	panel->othBtn = WMCreateCommandButton(hbox);
 	WMSetButtonAction(panel->othBtn, alertPanelOnClick, panel);
 	WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->othBtn),
 			     False, True, ow, 0, 5);
-	WMSetButtonText(panel->othBtn, otherButton);	
+	WMSetButtonText(panel->othBtn, otherButton);
     }
     
     WMMapSubwidgets(hbox);

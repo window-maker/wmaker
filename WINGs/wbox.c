@@ -230,6 +230,8 @@ WMSetBoxExpandsToParent(WMBox *box)
 			      WMViewSizeDidChangeNotification, 
 			      W_VIEW(box)->parent);
     WMSetViewNotifySizeChanges(W_VIEW(box)->parent, True);
+    WMResizeWidget(box, W_VIEW(box)->parent->size.width,
+		   W_VIEW(box)->parent->size.height);
 }
 
 

@@ -1617,6 +1617,8 @@ WMTabView *WMCreateTabView(WMWidget *parent);
 
 void WMSetTabViewType(WMTabView *tPtr, WMTabViewType type);
 
+void WMSetTabViewEnabled(WMTabView *tPtr, Bool flag);
+
 void WMSetTabViewFont(WMTabView *tPtr, WMFont *font);
 
 void WMAddItemInTabView(WMTabView *tPtr, WMTabViewItem *item);

@@ -29,6 +29,7 @@ typedef struct W_TabView {
 	WMTitlePosition titlePosition:4;
 	WMTabViewType type:2;
 
+	unsigned enabled:1;
 	unsigned tabbed:1;
 	unsigned dontFitAll:1;
 	unsigned bordered:1;
@@ -54,7 +55,8 @@ static void paintTabView(TabView *tPtr);
 
 static void W_SetTabViewItemParent(WMTabViewItem *item, WMTabView *parent);
 
-static void W_DrawLabel(WMTabViewItem *item, Drawable d, WMRect rect);
+static void W_DrawLabel(WMTabViewItem *item, Drawable d, WMRect rect,
+			Bool enabled);
 
 static void W_UnmapTabViewItem(WMTabViewItem *item);
 
@@ -144,7 +146,7 @@ handleEvents(XEvent *event, void *data)
 	break;
 
      case ButtonPress:
-	{
+	if (tPtr->flags.enabled) {
 	    WMTabViewItem *item = WMTabViewItemAtPoint(tPtr,
 						       event->xbutton.x,
 						       event->xbutton.y);
@@ -209,6 +211,7 @@ WMCreateTabView(WMWidget *parent)
     tPtr->flags.type = WTTopTabsBevelBorder;
     tPtr->flags.bordered = 1;
     tPtr->flags.uniformTabs = 0;
+    tPtr->flags.enabled = 1;
 
     WMCreateEventHandler(tPtr->view, ExposureMask|StructureNotifyMask
 			 |ButtonPressMask, handleEvents, tPtr);
@@ -247,6 +250,15 @@ void
 WMAddItemInTabView(WMTabView *tPtr, WMTabViewItem *item)
 {
     WMInsertItemInTabView(tPtr, tPtr->itemCount, item);
+}
+
+
+void
+WMSetTabViewEnabled(WMTabView *tPtr, Bool flag)
+{
+    tPtr->flags.enabled = flag;
+    if (W_VIEW_REALIZED(tPtr->view))
+	paintTabView(tPtr);
 }
 
 
@@ -737,7 +749,8 @@ paintTabView(TabView *tPtr)
 	    rect.pos.y = ty;
 	    rect.size.width = W_TabViewItemTabWidth(tPtr->items[first+i]);
 	    rect.size.height = theight;
-	    W_DrawLabel(tPtr->items[first+i], buffer, rect);
+	    W_DrawLabel(tPtr->items[first+i], buffer, rect, 
+			tPtr->flags.enabled);
 	}
 
 	if (moreAtLeft) {
@@ -858,15 +871,16 @@ W_SetTabViewItemParent(WMTabViewItem *item, WMTabView *parent)
 
 
 static void
-W_DrawLabel(WMTabViewItem *item, Drawable d, WMRect rect)
+W_DrawLabel(WMTabViewItem *item, Drawable d, WMRect rect, Bool enabled)
 {
     WMScreen *scr = W_VIEW(item->tabView)->screen;
 
     if (!item->label)
 	return;
 
-    WMDrawString(scr, d, WMColorGC(scr->black), item->tabView->font,
-		 rect.pos.x, rect.pos.y, item->label, strlen(item->label));
+    WMDrawString(scr, d, WMColorGC(enabled ? scr->black : scr->darkGray),
+		 item->tabView->font, rect.pos.x, rect.pos.y, 
+		 item->label, strlen(item->label));
 }
 
 
