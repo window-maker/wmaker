@@ -123,13 +123,19 @@ typedef enum {
 #define WCUR_NORMAL 	0
 #define WCUR_MOVE	1
 #define WCUR_RESIZE	2
-#define WCUR_WAIT	3
-#define WCUR_ARROW	4
-#define WCUR_QUESTION	5
-#define WCUR_TEXT	6
-#define WCUR_SELECT	7
-#define WCUR_ROOT	8
-#define WCUR_LAST    	9
+#define WCUR_TOPLEFTRESIZE	3
+#define WCUR_TOPRIGHTRESIZE	4
+#define WCUR_BOTTOMLEFTRESIZE	5
+#define WCUR_BOTTOMRIGHTRESIZE	6
+#define WCUR_VERTICALRESIZE 7
+#define WCUR_HORIZONRESIZE 8
+#define WCUR_WAIT	9
+#define WCUR_ARROW	10
+#define WCUR_QUESTION	11
+#define WCUR_TEXT	12
+#define WCUR_SELECT	13
+#define WCUR_ROOT	14
+#define WCUR_LAST   15
 
 /* geometry displays */
 #define WDIS_NEW	0	       /* new style */

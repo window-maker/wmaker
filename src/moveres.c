@@ -427,7 +427,7 @@ drawTransparentFrame(WWindow *wwin, int x, int y, int width, int height)
     int bottom = 0;
     
     if (!WFLAGP(wwin, no_titlebar) && !wwin->flags.shaded) {
-	h = WMFontHeight(wwin->screen_ptr->title_font) + wPreferences.window_title_clearance * 2;
+	h = WMFontHeight(wwin->screen_ptr->title_font) + (wPreferences.window_title_clearance + TITLEBAR_EXTEND_SPACE) * 2;
     }
     if (!WFLAGP(wwin, no_resizebar) && !wwin->flags.shaded) {
 	/* Can't use wwin-frame->bottom_width because, in some cases 
@@ -1853,7 +1853,7 @@ wMouseResizeWindow(WWindow *wwin, XEvent *ev)
     shiftl = XKeysymToKeycode(dpy, XK_Shift_L);
     shiftr = XKeysymToKeycode(dpy, XK_Shift_R);
     if (!WFLAGP(wwin, no_titlebar))
-    	h = WMFontHeight(wwin->screen_ptr->title_font) + wPreferences.window_title_clearance * 2;
+    	h = WMFontHeight(wwin->screen_ptr->title_font) + (wPreferences.window_title_clearance + TITLEBAR_EXTEND_SPACE) * 2;
     else
 	h = 0;
     while (1) {
@@ -1936,9 +1936,35 @@ wMouseResizeWindow(WWindow *wwin, XEvent *ev)
 					 orig_x - event.xmotion.x_root,
 					 orig_y - event.xmotion.y_root, flags);
 
-		XChangeActivePointerGrab(dpy, ButtonMotionMask
-					 | ButtonReleaseMask | ButtonPressMask,
-					 wCursor[WCUR_RESIZE], CurrentTime);
+        if (res == (UP|LEFT))
+            XChangeActivePointerGrab(dpy, ButtonMotionMask
+                    | ButtonReleaseMask | ButtonPressMask,
+                    wCursor[WCUR_TOPLEFTRESIZE], CurrentTime);
+        else if (res == (UP|RIGHT))
+            XChangeActivePointerGrab(dpy, ButtonMotionMask
+                    | ButtonReleaseMask | ButtonPressMask,
+                    wCursor[WCUR_TOPRIGHTRESIZE], CurrentTime);
+        else if (res == (DOWN|LEFT))
+            XChangeActivePointerGrab(dpy, ButtonMotionMask
+                    | ButtonReleaseMask | ButtonPressMask,
+                    wCursor[WCUR_BOTTOMLEFTRESIZE], CurrentTime);
+        else if (res == (DOWN|RIGHT))
+            XChangeActivePointerGrab(dpy, ButtonMotionMask
+                    | ButtonReleaseMask | ButtonPressMask,
+                    wCursor[WCUR_BOTTOMRIGHTRESIZE], CurrentTime);
+        else if (res == DOWN || res == UP)
+            XChangeActivePointerGrab(dpy, ButtonMotionMask
+                    | ButtonReleaseMask | ButtonPressMask,
+                    wCursor[WCUR_VERTICALRESIZE], CurrentTime);
+        else if (res & (DOWN|UP))
+            XChangeActivePointerGrab(dpy, ButtonMotionMask
+                    | ButtonReleaseMask | ButtonPressMask,
+                    wCursor[WCUR_VERTICALRESIZE], CurrentTime);
+        else if (res & (LEFT|RIGHT))
+            XChangeActivePointerGrab(dpy, ButtonMotionMask
+                    | ButtonReleaseMask | ButtonPressMask,
+                    wCursor[WCUR_HORIZONRESIZE], CurrentTime);
+        
 		XGrabKeyboard(dpy, root, False, GrabModeAsync, GrabModeAsync, 
 			      CurrentTime);
 
@@ -2159,7 +2185,7 @@ InteractivePlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 	return;
     }
     if (!WFLAGP(wwin, no_titlebar)) {
-	h = WMFontHeight(scr->title_font) + wPreferences.window_title_clearance * 2;
+	h = WMFontHeight(scr->title_font) + (wPreferences.window_title_clearance + TITLEBAR_EXTEND_SPACE) * 2;
 	height += h;
     }
     if (!WFLAGP(wwin, no_resizebar)) {

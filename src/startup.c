@@ -743,6 +743,12 @@ StartUp(Bool defaultScreenOnly)
     wCursor[WCUR_ARROW] = XCreateFontCursor(dpy, XC_top_left_arrow);
     wCursor[WCUR_MOVE] = XCreateFontCursor(dpy, XC_fleur);
     wCursor[WCUR_RESIZE] = XCreateFontCursor(dpy, XC_sizing);
+    wCursor[WCUR_TOPLEFTRESIZE] = XCreateFontCursor(dpy, XC_top_left_corner);
+    wCursor[WCUR_TOPRIGHTRESIZE] = XCreateFontCursor(dpy, XC_top_right_corner);
+    wCursor[WCUR_BOTTOMLEFTRESIZE] = XCreateFontCursor(dpy, XC_bottom_left_corner);
+    wCursor[WCUR_BOTTOMRIGHTRESIZE] = XCreateFontCursor(dpy, XC_bottom_right_corner);
+    wCursor[WCUR_VERTICALRESIZE] = XCreateFontCursor(dpy, XC_sb_v_double_arrow);
+    wCursor[WCUR_HORIZONRESIZE] = XCreateFontCursor(dpy, XC_sb_h_double_arrow);
     wCursor[WCUR_WAIT] = XCreateFontCursor(dpy, XC_watch);
     wCursor[WCUR_QUESTION] = XCreateFontCursor(dpy, XC_question_arrow);
     wCursor[WCUR_TEXT]     = XCreateFontCursor(dpy, XC_xterm); /* odd name???*/
