@@ -7,7 +7,8 @@ Changes since wmaker 0.65.0:
 - added property list handling code making libPropList unnecessary and
   obsolete. Backward compatibility is provided through the 
   WINGs/proplist-compat.h header file which has #defines from old libPropList
-  function names to new function names with minimal changes.
+  function names to new function names with minimal changes. Read this
+  header file and the NEWS file for more details about this subject.
 - Renamed WMGetUDAllKeys() to WMGetUDKeys()
 
 

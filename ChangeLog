@@ -25,7 +25,8 @@ Changes since version 0.65.1:
   compatibility header file is provided which maps old libPropList
   function names to the new WINGs based proplist names allowing old code
   to be linked to WINGs with minimal changes. For details on how to use
-  the compat mode, read the comments on the top of WINGs/proplist-compat.h
+  the compat mode, read the comments on top of WINGs/WINGs/proplist-compat.h
+  More details about this can be found in WINGs/ChangeLog and WINGs/NEWS.
   Say bye, bye libPropList =)
 - rewrote all Window Maker code to use the new WINGs based proplist functions.
 - fixed a few compilation warnings and a problem caused by an uninitialized 

@@ -6,15 +6,49 @@ Property lists handling code
 
 Code to handle property lists was added to WINGs. It is more robust
 than the libPropList code, mostly because some conflicting concepts 
-borrowed from UserDefaults (which libPropList uses) are no longer used in
-the property lists code.
-It is also better integrated with the other data types from WINGs.
+borrowed from UserDefaults (which libPropList use) are no longer used in
+the WINGs property lists code. These borrowed concepts conflicted with the
+retain/release mechanism of property lists and could lead in certain cases
+to segmentation faults when executing libPropList based code. But the worse
+part was that these libPropList problems were practically unsolvable without
+removing one of those conflicting concepts and without a complete redesign. 
+The new WINGs property lists code is also better integrated with the other
+data types from WINGs and is actively maintained.
 
-Old libPropList based code can still run with the new WINGs proplist
-code with minimal changes which are described in detail in the comments
-at the top of the WINGs/proplist-compat.h header file (the same file
-carries the #defines for mapping old libPropList functions to the new
-WINGs proplist functions).
+Practically the things that were removed from the WINGs property list
+implementation compared to the old libPropList implementation, are exactly
+the UserDefaults borrowed concepts that conflict with the retain/release
+mechanism:
+- The container of a proplist object and the associated functions are gone.
+- The filename associated with a proplist object and the corresponding
+  functions are gone. Now the saving function needs the filename as a
+  parameter.
+- The synchronization functions are no longer supported. They are part of
+  the UserDefaults and are implemented there.
+- No functions related to domains/registering were implemented in the WINGs
+  property lists code, because they are also not part of property lists.
+  They are more in connection with UserDefaults and a central point of access
+  for domains.
+
+The above 2 concepts: container and filename were added to libPropList just
+to let it support synchronization which was borrowed from UserDefaults.
+Property lists as defined in the openstep specification are just complex
+data structures composed of strings, data, arrays, dictionaries and a mix of
+them and are not associated with any file in particular. UserDefaults on the
+other hand are property lists read from a specific file and they associate
+that property list with that file and allow them to be synchronized.
+
+Old libPropList based code can still be used by linking against the WINGs
+library containing the new proplist code with minimal changes which are
+described in detail in the comments at the top of the WINGs/proplist-compat.h
+header file (the same file carries the #defines for mapping old libPropList
+functions to the new WINGs proplist functions).
+Our recommendation is to move to the new functions WINGs provide because
+they better integrate with other function naming conventions in WINGs.
+The proplist-compat.h header file is just a way to have old code up and
+running with minimal changes so that we can remove the old and unmaintained
+libPropList from systems while keeping to use old libPropList based code
+without rewriting it and it should not be used for other purposes.
 
 
 *** Sat Apr 21 09:12:09 EEST 2001 -Dan

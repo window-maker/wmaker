@@ -805,7 +805,7 @@ WMPropList* WMGetFromPLDictionary(WMPropList *plist, WMPropList *key);
 
 /* Returns a PropList array with all the dictionary keys. Release it when
  * you're done. Keys in array are retained from the original dictionary
- * not copied */
+ * not copied and need NOT to be released individually. */
 WMPropList* WMGetPLDictionaryKeys(WMPropList *plist);
 
 /* Creates only the first level deep object. All the elements inside are
@@ -817,7 +817,7 @@ WMPropList* WMDeepCopyPropList(WMPropList *plist);
 
 WMPropList* WMCreatePropListFromDescription(char *desc);
 
-/* Free the returned string when you're done */
+/* Free the returned string when you no longer need it */
 char* WMGetPropListDescription(WMPropList *plist, Bool indented);
 
 WMPropList* WMReadPropListFromFile(char *file);

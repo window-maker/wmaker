@@ -61,6 +61,16 @@
 
 typedef WMPropList* proplist_t;
 
+
+#ifndef YES
+#define YES True
+#endif
+
+#ifndef NO
+#define NO False
+#endif
+
+
 #define PLSetCaseSensitive(c) WMPLSetCaseSensitive(c)
 
 #define PLMakeString(bytes) WMCreatePLString(bytes)
@@ -108,22 +118,21 @@ typedef WMPropList* proplist_t;
 #define PLSave(pl, file, atm) WMWritePropListToFile(pl, file, atm)
 
 
-#if 0
-#define PLSetStringCmpHook(fn)
-#define PLDeepSynchronize(pl) PLDeepSynchronize_is_not_supported
-#define PLSynchronize(pl) PLSynchronize_is_not_supported
+/* Unsupported functions. Do not ask for them. They're evil :P */
+#define PLSetStringCmpHook(fn) error_PLSetStringCmpHook_is_not_supported
+#define PLDeepSynchronize(pl) error_PLDeepSynchronize_is_not_supported
+#define PLSynchronize(pl) error_PLSynchronize_is_not_supported
 #define PLShallowSynchronize(pl) error_PLShallowSynchronize_is_not_supported
 #define PLSetFilename(pl, filename) error_PLSetFilename_is_not_supported
 #define PLGetFilename(pl, filename) error_PLGetFilename_is_not_supported
-#define PLGetContainer(pl)
+#define PLGetContainer(pl) error_PLGetContainer_is_not_supported
 
-#define PLGetDomainNames()
-#define PLGetDomain(name)
-#define PLSetDomain(name, value, kickme)
-#define PLDeleteDomain(name, kickme)
-#define PLRegister(name, callback)
-#define PLUnregister(name)
-#endif
+#define PLGetDomainNames error_PLGetDomainNames_is_not_supported
+#define PLGetDomain(name) error_PLGetDomain_is_not_supported
+#define PLSetDomain(name, value, kickme) error_PLSetDomain_is_not_supported
+#define PLDeleteDomain(name, kickme) error_PLDeleteDomain_is_not_supported
+#define PLRegister(name, callback) error_PLRegister_is_not_supported
+#define PLUnregister(name) error_PLUnregister_is_not_supported
 
 
 #endif

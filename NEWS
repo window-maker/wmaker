@@ -18,8 +18,12 @@ Less dependancies
 
 starting with 0.70.0 libPropList is no longer required to build Window
 Maker. PropList handling code was added to WINGs being now better
-integrated with all the rest. For more details check the Changelog
-./WINGs/NEWS, ./WINGs/WINGs/WUtil.h and ./WINGs/WINGs/proplist-compat.h
+integrated with all the rest. For more details check the Changelog and the 
+following files:
+./WINGs/ChangeLog
+./WINGs/NEWS
+./WINGs/WINGs/WUtil.h
+./WINGs/WINGs/proplist-compat.h
 
 
 
