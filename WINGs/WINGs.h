@@ -481,20 +481,9 @@ typedef struct WMTextFieldDelegate {
 typedef struct WMTextDelegate {
     void *data;
 
-    void (*didBeginEditing)(struct WMTextDelegate *self,
-                            WMNotification *notif);
+    Bool (*didDoubleClickOnPicture)(struct WMTextDelegate *self,
+                            void *description);
 
-    void (*didChange)(struct WMTextDelegate *self,
-                      WMNotification *notif);
-
-    void (*didEndEditing)(struct WMTextDelegate *self,
-                          WMNotification *notif);
-
-    Bool (*shouldBeginEditing)(struct WMTextDelegate *self,
-                               WMText *tPtr);
-
-    Bool (*shouldEndEditing)(struct WMTextDelegate *self,
-                             WMText *tPtr);
 } WMTextDelegate;
 
 
@@ -703,8 +692,11 @@ WMFont *WMBoldSystemFontOfSize(WMScreen *scrPtr, int size);
 XFontSet WMGetFontFontSet(WMFont *font);
 
 WMFont * WMConvertFontToPlain(WMScreen *scr, WMFont *font);
+
 WMFont * WMConvertFontToBold(WMScreen *scr, WMFont *font);
+
 WMFont * WMConvertFontToItalic(WMScreen *scr, WMFont *font);
+
 WMFont * WMGetFontOfSize(WMScreen *scr, WMFont *font, int size);
 
 /* ....................................................................... */
@@ -1476,9 +1468,12 @@ void WMSetRulerReleaseAction(WMRuler *rPtr, WMAction *action, void *clientData);
 
 /* ....................................................................... */
 
-WMText *WMCreateText(WMWidget *parent);
 
-void WMRefreshText(WMText *tPtr, int vpos, int hpos);
+#define WMCreateText(parent) WMCreateTextForDocumentType \
+    ((parent), (NULL), (NULL))
+
+WMText *WMCreateTextForDocumentType(WMWidget *parent, 
+	WMAction *parser, WMAction *writer);
 
 void WMFreezeText(WMText *tPtr); 
 
@@ -1528,10 +1523,10 @@ void WMAppendTextStream(WMText *tPtr, char *text);
 char * WMGetTextStream(WMText *tPtr);
 
 /* free the text */
-char * WMGetTextSelected(WMText *tPtr);
+char * WMGetTextSelectedStream(WMText *tPtr);
 
 /* destroy the array */
-WMArray * WMGetTextStreamObjects(WMText *tPtr);
+WMArray * WMGetTextObjects(WMText *tPtr);
 
 /* destroy the array */
 WMArray* WMGetTextSelectedObjects(WMText *tPtr);
@@ -1546,10 +1541,6 @@ Bool WMFindInTextStream(WMText *tPtr, char *needle, Bool direction,
     Bool caseSensitive);
 
 /* parser related stuff... use only if implementing a new parser */
-
-void WMSetTextParser(WMText *tPtr, WMAction *parser);
-
-void WMSetTextWriter(WMText *tPtr, WMAction *writer);
 
 void *WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w, char *description,
     WMColor *color, unsigned short first, unsigned short extraInfo);
