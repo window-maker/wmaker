@@ -269,26 +269,15 @@
 #define DEF_FRAME_COLOR   "white"
 
 
-#ifdef I18N
-#define DEF_TITLE_FONT "\"-*-*-medium-r-normal--14-*\""
-#define DEF_MENU_TITLE_FONT "\"-*-*-medium-r-normal--14-*\""
-#define DEF_MENU_ENTRY_FONT "\"-*-*-medium-r-normal--14-*\""
-#define DEF_ICON_TITLE_FONT "\"-*-*-medium-r-normal--10-*\""
-#define DEF_CLIP_TITLE_FONT "\"-*-*-medium-r-normal--10-*\""
-#define DEF_INFO_TEXT_FONT "\"-*-*-medium-r-normal--14-*\""
-#define DEF_ADDITONAL_FONT "-*-*-medium-r-normal--12-*"
+#define DEF_TITLE_FONT "Trebuchet MS,Luxi Sans:bold:pixelsize=12"
+#define DEF_MENU_TITLE_FONT "Trebuchet MS,Luxi Sans:bold:pixelsize=12"
+#define DEF_MENU_ENTRY_FONT "Trebuchet MS,Luxi Sans:pixelsize=12"
+#define DEF_ICON_TITLE_FONT "Trebuchet MS,Luxi Sans:pixelsize=8"
+#define DEF_CLIP_TITLE_FONT "Trebuchet MS,Luxi Sans:bold:pixelsize=10"
+#define DEF_INFO_TEXT_FONT "Trebuchet MS,Luxi Sans:pixelsize=12"
 
-#define DEF_WORKSPACE_NAME_FONT "\"-*-*-medium-r-normal--24-*\""
-#else /* !I18N */
-#define DEF_TITLE_FONT "\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*\""
-#define DEF_MENU_TITLE_FONT "\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*\""
-#define DEF_MENU_ENTRY_FONT "\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*\""
-#define DEF_ICON_TITLE_FONT "\"-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-*-*\""
-#define DEF_CLIP_TITLE_FONT "\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*\""
-#define DEF_INFO_TEXT_FONT "\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*\""
+#define DEF_WORKSPACE_NAME_FONT "Trebuchet MS,Luxi Sans:bold:pixelsize=24"
 
-#define DEF_WORKSPACE_NAME_FONT "\"-*-lucida-bold-r-*-*-24-*-*-*-*-*-*-*\""
-#endif /* !I18N */
 
 #define DEF_FRAME_THICKNESS 1	       /* linewidth of the move/resize frame */
 

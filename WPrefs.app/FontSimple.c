@@ -325,13 +325,20 @@ static void
 selectedFamily(WMWidget *w, void *data)
 {
     _Panel *panel= (_Panel*)data;
-    WMListItem *item= WMGetListSelectedItem(panel->familyL);
+    WMListItem *item;
+    FontStyle *oldStyle= NULL;
     char buffer[1024];
     
+    item= WMGetListSelectedItem(panel->styleL);
+    if (item)
+      oldStyle= (FontStyle*)item->clientData;
+
+    item= WMGetListSelectedItem(panel->familyL);
+
     if (item)
     {
         FontFamily *family= (FontFamily*)item->clientData;
-        int i;
+        int i, oldi= 0, oldscore= 0;
 
         WMClearList(panel->styleL);
         for (i = 0; i < family->stylen; i++)
@@ -367,8 +374,25 @@ selectedFamily(WMWidget *w, void *data)
             
             item= WMAddListItem(panel->styleL, buffer);
             item->clientData= family->styles+i;
+            
+            if (oldStyle) {
+                int score= 0;
+                
+                if (oldStyle->width == family->styles[i].width)
+                  score |= 1;
+                if (oldStyle->weight == family->styles[i].weight)
+                  score |= 2;
+                if (oldStyle->slant == family->styles[i].slant)
+                  score |= 4;
+
+                if (score > oldscore)
+                {
+                    oldi= i;
+                    oldscore= score;
+                }
+            }
         }
-        WMSelectListItem(panel->styleL, 0);
+        WMSelectListItem(panel->styleL, oldi);
 
         {
             int index= WMGetPopUpButtonSelectedItem(panel->optionP);

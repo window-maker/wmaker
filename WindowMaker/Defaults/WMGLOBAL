@@ -1,6 +1,6 @@
 {
-  SystemFont = "Trebuchet MS,Luxi Sans,sans:slant=0:weight=100";
-  BoldSystemFont = "Trebuchet MS,Luxi Sans,sans:slant=0:weight=200";
+  SystemFont = "Trebuchet MS,Luxi Sans";
+  BoldSystemFont = "Trebuchet MS,Luxi Sans:bold";
   DefaultFontSize = 12;
   AntialiasedText = No;
   MultiByteText = AUTO;
