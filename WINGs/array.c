@@ -249,12 +249,10 @@ WMCountInArray(WMArray *array, void *item)
 }
 
 
-int
+void
 WMSortArray(WMArray *array, WMCompareDataProc *comparer)
 {
     qsort(array->items, array->itemCount, sizeof(void*), comparer);
-
-    return 1;
 }
 
 

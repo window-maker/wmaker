@@ -657,7 +657,7 @@ WMReplaceInBag(WMBag *self, int index, void *item)
 }
 
 
-int
+void
 WMSortBag(WMBag *self, WMCompareDataProc *comparer)
 {
     void **items;
@@ -665,7 +665,7 @@ WMSortBag(WMBag *self, WMCompareDataProc *comparer)
     int i;
 
     if (self->count == 0)
-        return 1;
+        return;
 
     items = wmalloc(sizeof(void*)*self->count);
     i = 0;
@@ -687,8 +687,6 @@ WMSortBag(WMBag *self, WMCompareDataProc *comparer)
     }
 
     wfree(items);
-
-    return 1;
 }
 
 

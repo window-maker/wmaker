@@ -381,7 +381,7 @@ int WMCountInArray(WMArray *array, void *item);
  * > 0 if a > b
  * = 0 if a = b
  */
-int WMSortArray(WMArray *array, WMCompareDataProc *comparer);
+void WMSortArray(WMArray *array, WMCompareDataProc *comparer);
 
 void WMMapArray(WMArray *array, void (*function)(void*, void*), void *data);
 
@@ -441,7 +441,7 @@ void* WMReplaceInBag(WMBag *bag, int index, void *item);
  * > 0 if a > b
  * = 0 if a = b
  */
-int WMSortBag(WMBag *bag, WMCompareDataProc *comparer);
+void WMSortBag(WMBag *bag, WMCompareDataProc *comparer);
 
 void WMEmptyBag(WMBag *bag);
 
