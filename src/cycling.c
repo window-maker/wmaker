@@ -219,9 +219,11 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     swpanel =  wInitSwitchPanel(scr, 0);
     oldFocused = wwin;
   
-  newFocused = wSwitchPanelSelectNext(swpanel, next);
-  wWindowFocus(newFocused, oldFocused);
-  oldFocused = newFocused;
+    if (swpanel) {
+        newFocused = wSwitchPanelSelectNext(swpanel, next);
+        wWindowFocus(newFocused, oldFocused);
+        oldFocused = newFocused;
+    }
 #else /* !MOX_CYCLING */
     if (next) {
         if (wPreferences.windows_cycling)
@@ -260,9 +262,11 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
                 || ev.xkey.keycode == rightKey) {
 
 #ifdef MOX_CYCLING
-                newFocused = wSwitchPanelSelectNext(swpanel, False);
-                wWindowFocus(newFocused, oldFocused);
-                oldFocused = newFocused;
+                if (swpanel) {
+                    newFocused = wSwitchPanelSelectNext(swpanel, False);
+                    wWindowFocus(newFocused, oldFocused);
+                    oldFocused = newFocused;
+                }
 #else /* !MOX_CYCLING */
                 newFocused = nextToFocusAfter(newFocused);
                 wWindowFocus(newFocused, oldFocused);
@@ -279,9 +283,11 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
                        || ev.xkey.keycode == leftKey) {
 
 #ifdef MOX_CYCLING
-                newFocused = wSwitchPanelSelectNext(swpanel, True);
-                wWindowFocus(newFocused, oldFocused);
-                oldFocused = newFocused;
+                if (swpanel) {
+                    newFocused = wSwitchPanelSelectNext(swpanel, True);
+                    wWindowFocus(newFocused, oldFocused);
+                    oldFocused = newFocused;
+                }
 #else /* !MOX_CYCLING */
                 newFocused = nextToFocusBefore(newFocused);
                 wWindowFocus(newFocused, oldFocused);
@@ -294,13 +300,15 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
                 }
 #endif /* !MOX_CYCLING */
             } else if (ev.type == MotionNotify) {
-              WWindow *tmp;
-              tmp = wSwitchPanelHandleEvent(swpanel, &ev);
-              if (tmp) {
-                newFocused = tmp;
-                wWindowFocus(newFocused, oldFocused);
-                oldFocused = newFocused;
-              }
+                WWindow *tmp;
+                if (swpanel) {
+                    tmp = wSwitchPanelHandleEvent(swpanel, &ev);
+                    if (tmp) {
+                        newFocused = tmp;
+                        wWindowFocus(newFocused, oldFocused);
+                        oldFocused = newFocused;
+                    }
+                }
             } else {
 #ifdef DEBUG
                 printf("Got something else\n");
@@ -340,7 +348,7 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
         wSwitchPanelDestroy(swpanel);
 #endif
 
-    if (wPreferences.circ_raise) {
+    if (wPreferences.circ_raise && newFocused) {
         wRaiseFrame(newFocused->frame->core);
         CommitStacking(scr);
     }

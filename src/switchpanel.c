@@ -50,6 +50,7 @@ struct SwitchPanel {
 
 extern WPreferences wPreferences;
 
+#define ICON_IDEAL_SIZE 64
 #define ICON_EXTRASPACE 4
 
 static void addIconForWindow(WSwitchPanel *panel, WWindow *wwin, int iconWidth)
@@ -64,11 +65,9 @@ static void addIconForWindow(WSwitchPanel *panel, WWindow *wwin, int iconWidth)
       image = RRetainImage(wwin->net_icon_image);
   if (!image)
     image = wDefaultGetImage(panel->scr, wwin->wm_instance, wwin->wm_class);
-  if (!image)
 
-  if (image && (abs(image->width - iconWidth) > 4 || abs(image->height - iconWidth) > 4)) {
+  if (image && (abs(image->width - iconWidth) > 2 || abs(image->height - iconWidth) > 2)) {
     RImage *nimage;
-
     nimage= RScaleImage(image, iconWidth, (image->height * iconWidth / image->width));
     RReleaseImage(image);
     image= nimage;
@@ -116,7 +115,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, int workspace)
   int i;
   int width;
   int height;
-  int iconWidth = 48;
+  int iconWidth = ICON_IDEAL_SIZE;
   WMBox *vbox;
   
   panel->current= 0;
@@ -143,7 +142,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, int workspace)
     iconWidth = width / WMGetArrayItemCount(panel->windows) - ICON_EXTRASPACE;
   }
   
-  if (iconWidth < 16)
+  if (iconWidth < 16 || WMGetArrayItemCount(panel->windows) == 0)
   {
     /* if there are too many windows, don't bother trying to show the panel */
     WMFreeArray(panel->windows);
@@ -151,7 +150,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, int workspace)
     return NULL;
   }
 
-  height= 48 + 20 + 10 + ICON_EXTRASPACE;
+  height= iconWidth + 20 + 10 + ICON_EXTRASPACE;
   
   panel->icons= WMCreateArray(WMGetArrayItemCount(panel->windows));
   
