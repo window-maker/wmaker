@@ -18,8 +18,7 @@ lib_LIBRARIES = libWINGs.a libWUtil.a
 
 include_HEADERS = WINGs.h WUtil.h WINGsP.h
 
-noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel \
-			testnot
+noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel
 
 testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h
 
@@ -42,10 +41,6 @@ wmfile_LDADD = libWINGs.a $(LIBLIST)
 testcolorpanel_SOURCES = testcolorpanel.c
 
 testcolorpanel_LDADD = libWINGs.a $(LIBLIST)
-
-testnot_SOURCES = testnot.c
-
-testnot_LDADD = libWUtil.a $(LIBLIST)
 
 
 wmquery_SOURCES = wmquery.c 
