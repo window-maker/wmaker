@@ -1,7 +1,9 @@
 Changes since version 0.90.0:
 .............................
 
-- added _NET_WM_NAME, _ICON_NAME and _ICON to WINGs
+- added _NET_WM_NAME, _NET_WM_ICON_NAME and _NET_WM_ICON to WINGs
+- new WPrefs icon (thanks to Largo)
+
 
 Changes since version 0.80.2:
 .............................
