@@ -34,10 +34,10 @@ void *valueForCell(WMTableViewDelegate *self, WMTableColumn *column, int row)
 	    col2[i] = 0;
 	}
     }
-    if (WMGetTableColumnId(column) == 1)
+    if ((int)WMGetTableColumnId(column) == 1)
 	return col1[row];
     else
-	return col2[row];
+	return (void*)col2[row];
 }
 
 
@@ -47,7 +47,7 @@ void setValueForCell(WMTableViewDelegate *self, WMTableColumn *column, int row,
     if (WMGetTableColumnId(column) == 1)
 	col1[row] = data;
     else
-	col2[row] = data;
+	col2[row] = (int)data;
 }
 
 

@@ -1,3 +1,7 @@
+Changes since version 0.63.0:
+.............................
+- fixed compile prob with SGI compiler
+
 Changes since version 0.62.1:
 .............................
 - added blackbox style igradient (interwoven)

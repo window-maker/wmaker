@@ -44,7 +44,7 @@ typedef struct _WPluginData {
     void **array;
 } WPluginData;
 
-typedef void _DL_AnyProc(proplist_t);
+typedef void (*_DL_AnyProc)(proplist_t);
 
 /* first 3 must == WS_FOCUSED WS_UNFOCUSED WS_PFOCUSED -- ]d */
 #ifdef DRAWSTRING_PLUGIN

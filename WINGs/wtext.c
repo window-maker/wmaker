@@ -1807,11 +1807,7 @@ W_ViewDelegate _TextViewDelegate =
 };
 
 /* nice, divisble-by-16 blocks */
-static inline unsigned short
-reqBlockSize(unsigned short requested)
-{
-    return requested + 16 - (requested%16);
-}
+#define reqBlockSize(requested)  (requested + 16 - (requested%16))
 
 
 static void
