@@ -153,7 +153,7 @@ convertTrueColor_generic(RXImage *ximg, RImage *image,
     int pixel;
     int rer, ger, ber;
     unsigned char *ptr = image->data;
-    int channels = image->format == RRGBAFormat ? 4 : 3;
+    int channels = (image->format == RRGBAFormat ? 4 : 3);
 
 
     /* convert and dither the image to XImage */
@@ -294,7 +294,7 @@ image2TrueColor(RContext *ctx, RImage *image)
 	{
 	    char *err;
 	    char *nerr;
-	    int ch = image->format == RRGBAFormat ? 4 : 3;
+	    int ch = (image->format == RRGBAFormat ? 4 : 3);
 
 	    err = malloc(ch*(image->width+2));
 	    nerr = malloc(ch*(image->width+2));
@@ -344,7 +344,7 @@ convertPseudoColor_to_8(RXImage *ximg, RImage *image,
     int rer, ger, ber;
     unsigned char *ptr = image->data;
     unsigned char *optr = ximg->image->data;
-    int channels = image->format == RRGBAFormat ? 4 : 3;
+    int channels = (image->format == RRGBAFormat ? 4 : 3);
     int cpcpc = cpc*cpc;
 
     /* convert and dither the image to XImage */
@@ -419,7 +419,7 @@ image2PseudoColor(RContext *ctx, RImage *image)
     const unsigned short bmask = rmask;
     unsigned short *rtable, *gtable, *btable;
     const int cpccpc = cpc*cpc;
-    int channels = image->format == RRGBAFormat ? 4 : 3;
+    int channels = (image->format == RRGBAFormat ? 4 : 3);
 
     ximg = RCreateXImage(ctx, ctx->depth, image->width, image->height);
     if (!ximg) {
@@ -504,8 +504,8 @@ image2StandardPseudoColor(RContext *ctx, RImage *image)
     unsigned char *data;
     unsigned int *rtable, *gtable, *btable;
     unsigned int base_pixel = ctx->std_rgb_map->base_pixel;
-    int channels = image->format == RRGBAFormat ? 4 : 3;
-    /*register unsigned char maxrgb = 0xff;*/
+    int channels = (image->format == RRGBAFormat ? 4 : 3);
+
 
     ximg = RCreateXImage(ctx, ctx->depth, image->width, image->height);
     if (!ximg) {
@@ -652,9 +652,8 @@ image2GrayScale(RContext *ctx, RImage *image)
     unsigned short gmask;
     unsigned short *table;
     unsigned char *data;
-    int channels = image->format == RRGBAFormat ? 4 : 3;
+    int channels = (image->format == RRGBAFormat ? 4 : 3);
 
-    /*register unsigned char maxrgb = 0xff;*/
 
     ximg = RCreateXImage(ctx, ctx->depth, image->width, image->height);
     if (!ximg) {
@@ -687,7 +686,7 @@ image2GrayScale(RContext *ctx, RImage *image)
 	    for (x=0; x<image->width; x++) {
                 /* reduce pixel */
                 g = table[(*ptr * 30 + *(ptr+1) * 59 + *(ptr+2) * 11)/100];
-                ptr += 3;
+                ptr += channels;
                 /*data[ofs] = ctx->colors[g].pixel;*/
                 XPutPixel(ximg->image, x, y, ctx->colors[g].pixel);
 	    }
@@ -712,15 +711,15 @@ image2GrayScale(RContext *ctx, RImage *image)
 	    RDestroyXImage(ctx, ximg);
 	    return NULL;
 	}
-	for (x=0; x<image->width; x++) {
-	    gerr[x] = (ptr[x*3]*30 + ptr[x*3+1]*59 + ptr[x*3+2]*11)/100;
+	for (x=0, y=0; x<image->width; x++, y+=channels) {
+	    gerr[x] = (ptr[y]*30 + ptr[y+1]*59 + ptr[y+2]*11)/100;
 	}
 	gerr[x] = 0;
 	/* convert and dither the image to XImage */
 	for (y=0; y<image->height; y++) {
 	    if (y<image->height-1) {
 		int x1;
-		for (x=0, x1=(y+1)*image->width*3; x<image->width; x1+=channels) {
+		for (x=0, x1=(y+1)*image->width*channels; x<image->width; x++, x1+=channels) {
 		    ngerr[x] = (ptr[x1]*30 + ptr[x1+1]*59 + ptr[x1+2]*11)/100;
 		}
 		/* last column */
@@ -801,7 +800,7 @@ hermesConvert(RContext *context, RImage *image)
 	return NULL;
     }
     
-    /* The masks look weird for images with alpha. but they work this way
+    /* The masks look weird for images with alpha. but they work this way.
      * wth does hermes do internally?
      */
     source.r = 0xff0000;
@@ -812,7 +811,8 @@ hermesConvert(RContext *context, RImage *image)
     source.indexed = 0;
     source.has_colorkey = 0;
 
-    /* This is a hack and certainly looks weird, but it works :P */
+    /* This is a hack and certainly looks weird, but it works :P
+     * it assumes though that green is inbetween red and blue (the mask) */
     if (ximage->image->byte_order==LSBFirst) {
         dest.b = context->visual->red_mask;
         dest.g = context->visual->green_mask;
@@ -867,17 +867,22 @@ RConvertImage(RContext *context, RImage *image, Pixmap *pixmap)
     assert(image!=NULL);
     assert(pixmap!=NULL);
 
-#ifdef HAVE_HERMES
-    ximg = hermesConvert(context, image);
-#else /* !HAVE_HERMES */    
-    /* clear error message */
     switch (context->vclass) {
-     case TrueColor:
-	ximg = image2TrueColor(context, image);
+    case TrueColor:
+#ifdef HAVE_HERMES
+        if (context->attribs->render_mode == RBestMatchRendering) {
+            ximg = hermesConvert(context, image);
+        } else {
+            ximg = image2TrueColor(context, image);
+        }
+#else /* !HAVE_HERMES */
+        ximg = image2TrueColor(context, image);
+#endif
 	break;
-	
-     case PseudoColor:
-     case StaticColor:
+
+    case PseudoColor:
+    case StaticColor:
+        /* For StaticColor we can also use hermes, but it doesn't dither */
 #ifdef BENCH
 	cycle_bench(1);
 #endif
@@ -890,17 +895,16 @@ RConvertImage(RContext *context, RImage *image, Pixmap *pixmap)
 #endif
 	break;
 
-     case GrayScale:
-     case StaticGray:
+    case GrayScale:
+    case StaticGray:
 	ximg = image2GrayScale(context, image);
 	break;
-    }    
-#endif /* !HAVE_HERMES */
-    
+    }
+
+
     if (!ximg) {
 	return False;
     }
-
 
     *pixmap = XCreatePixmap(context->dpy, context->drawable, image->width,
 			    image->height, context->depth);
