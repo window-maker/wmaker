@@ -812,18 +812,18 @@ WDefaultEntry optionList[] = {
     },
 
 #ifdef KEEP_XKB_LOCK_STATUS
-    ,{"ToggleKbdModeKey", "None",                      (void*)WKBD_TOGGLE,
+    {"ToggleKbdModeKey", "None",                      (void*)WKBD_TOGGLE,
 	    NULL,                       getKeybind,     setKeyGrab
     },
     {"KbdModeLock", "NO",  	                  NULL,
 	    &wPreferences.modelock, 	getBool,	NULL
-    }
+    },
 #endif /* KEEP_XKB_LOCK_STATUS */
 #ifdef DEFINABLE_CURSOR
-    ,{"NormalCursor", "(builtin, left_ptr)",	(void*)WCUR_ROOT,
+    {"NormalCursor", "(builtin, left_ptr)",	(void*)WCUR_ROOT,
           NULL,				getCursor,	setCursor
-    }
-    ,{"MoveCursor", "(builtin, fleur)",		(void*)WCUR_MOVE,
+    },
+    {"MoveCursor", "(builtin, fleur)",		(void*)WCUR_MOVE,
           NULL,				getCursor,	setCursor
     },
 #if 0
