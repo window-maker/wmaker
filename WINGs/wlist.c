@@ -213,7 +213,7 @@ WMInsertListItem(WMList *lPtr, int row, char *text)
 int
 WMRemoveListItem(WMList *lPtr, int row)
 {
-    WMLIstItem *item;
+    WMListItem *item;
     int topItem = lPtr->topItem;
     int selNotify = 0;
 
@@ -223,7 +223,7 @@ WMRemoveListItem(WMList *lPtr, int row)
         return 0;
 
     item = WMGetFromArray(lPtr->items, row);
-    if (item->flags.selected) {
+    if (item->selected) {
         WMRemoveFromArray(lPtr->selectedItems, item);
         //WMUnselectListItem(lPtr, row);
         selNotify = 1;
