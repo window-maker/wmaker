@@ -34,6 +34,12 @@
 #include <limits.h>
 #include <signal.h>
 
+#ifdef HAVE_DLFCN_H
+# include <dlfcn.h>
+#endif
+
+
+
 #ifndef PATH_MAX
 #define PATH_MAX DEFAULT_PATH_MAX
 #endif
@@ -1860,7 +1866,8 @@ parse_texture(WScreen *scr, proplist_t pl)
     }
 #ifdef TEXTURE_PLUGIN
     else if (strcasecmp(val, "function")==0) {
-
+	WTexFunction *function;
+	void (*initFunc) (Display *, Colormap);
 	char *lib, *func, **argv;
 	int i, argc;
 
@@ -1881,20 +1888,36 @@ parse_texture(WScreen *scr, proplist_t pl)
 	}
 	func = PLGetString(elem);
 
-	argc = nelem - 3;
-	argv = (char **) wmalloc (argc * sizeof (char *));
+	argc = nelem - 2;
+	argv = (char **)wmalloc(argc * sizeof(char *));
 
 	/* get the parameters */
-	for (i=0; i<argc; i++) {
-	    elem = PLGetArrayElement(pl, 3+i);
+	argv[0] = wstrdup(func);
+	for (i = 0; i < argc - 1; i++) {
+	    elem = PLGetArrayElement(pl, 3 + i);
 	    if (!elem || !PLIsString(elem)) {
-		free (argv);
+		free(argv);
+
 		return NULL;
 	    }
-	    argv[i] = PLGetString(elem);
+	    argv[i+1] = wstrdup(PLGetString(elem));
 	}
 
-	texture = (WTexture*)wTextureMakeFunction(scr, lib, func, argc, argv);
+	function = wTextureMakeFunction(scr, lib, func, argc, argv);
+
+#ifdef HAVE_DLFCN_H
+	if (function) {
+	    initFunc = dlsym(function->handle, "initWindowMaker");
+	    if (initFunc) {
+		initFunc(dpy, scr->w_colormap);
+	    } else {
+		wwarning(_("could not initialize library %s"), lib);
+	    }
+	} else {
+	    wwarning(_("could not find function %s::%s"), lib, func);
+	}
+#endif /* HAVE_DLFCN_H */
+	texture = (WTexture*)function;
     }
 #endif /* TEXTURE_PLUGIN */
     else {

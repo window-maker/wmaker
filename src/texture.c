@@ -188,10 +188,13 @@ wTextureDestroy(WScreen *scr, WTexture *texture)
      case WTEX_FUNCTION:
 #ifdef HAVE_DLFCN_H
         if (texture->function.handle) {
-	    dlclose (texture->function.handle);
+	    dlclose(texture->function.handle);
 	}
 #endif
-	free (texture->function.argv);
+	for (i = 0; i < texture->function.argc; i++) {
+	    free(texture->function.argv[i]);
+	}
+	free(texture->function.argv);
 	break;
 #endif /* TEXTURE_PLUGIN */
     }
@@ -374,15 +377,27 @@ wTextureMakeTGradient(WScreen *scr, int style, RColor *from, RColor *to,
 WTexFunction*
 wTextureMakeFunction(WScreen *scr, char *lib, char *func, int argc, char **argv)
 {
+    XColor fallbackColor;
+    XGCValues gcv;
     WTexFunction *texture;
+    
     texture = wmalloc(sizeof(WTexture));
     texture->type = WTEX_FUNCTION;
     texture->handle = NULL;
     texture->render = 0;
     texture->argc = argc;
     texture->argv = argv;
-
-#ifdef HAVE_DLFCN_H
+    
+    fallbackColor.red = 0x8000;
+    fallbackColor.green = 0x8000;
+    fallbackColor.blue = 0x8000;
+    
+    gcv.background = gcv.foreground = fallbackColor.pixel;
+    gcv.graphics_exposures = False;
+    texture->normal_gc = XCreateGC(dpy, scr->w_win, GCForeground|GCBackground
+				   |GCGraphicsExposures, &gcv);
+    
+# ifdef HAVE_DLFCN_H
     /* open the library */
     texture->handle = dlopen(lib, RTLD_LAZY);
     if (!texture->handle) {
@@ -391,20 +406,20 @@ wTextureMakeFunction(WScreen *scr, char *lib, char *func, int argc, char **argv)
 	free(texture);
 	return NULL;
     }
-
+    
     /* find the function */
-    texture->render = dlsym (texture->handle, func);
+    texture->render = dlsym(texture->handle, func);
     if (!texture->render) {
-        wwarning(_("function \"%s\" not founf in library \"%s\""), func, lib);
+        wwarning(_("function \"%s\" not found in library \"%s\""), func, lib);
 	free(argv);
 	dlclose(texture->handle);
 	free(texture);
 	return NULL;
     }
-#else
+# else
     wwarning(_("function textures not supported on this system, sorry."));
-#endif
-
+# endif
+    
     /* success! */
     return texture;
 }
@@ -519,6 +534,9 @@ wTextureRenderImage(WTexture *texture, int width, int height, int relief)
 		width, height, relief);
 	}
 #endif
+	if (!image) {
+	    RErrorCode = RERR_INTERNAL;
+	}
         break;
 #endif /* TEXTURE_PLUGIN */
 
@@ -529,8 +547,17 @@ wTextureRenderImage(WTexture *texture, int width, int height, int relief)
     }
 
     if (!image) {
+	RColor gray;
+
 	wwarning(_("could not render texture: %s"), RMessageForError(RErrorCode));
-	return None;
+
+	image = RCreateImage(width, height, False);
+       
+	gray.red = 190;
+	gray.green = 190;
+	gray.blue = 190;
+        gray.alpha = 255;
+	RClearImage(image, &gray);
     }
 
 
