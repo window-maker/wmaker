@@ -658,7 +658,7 @@ WMReplaceInBag(WMBag *self, int index, void *item)
 
 
 int
-WMSortBag(WMBag *self, int (*comparer)(const void*, const void*))
+WMSortBag(WMBag *self, WMCompareDataProc *comparer)
 {
     void **items;
     W_Node *tmp;

@@ -250,7 +250,7 @@ WMCountInArray(WMArray *array, void *item)
 
 
 int
-WMSortArray(WMArray *array, int (*comparer)(const void*, const void*))
+WMSortArray(WMArray *array, WMCompareDataProc *comparer)
 {
     qsort(array->items, array->itemCount, sizeof(void*), comparer);
 

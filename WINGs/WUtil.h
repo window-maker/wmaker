@@ -129,6 +129,8 @@ typedef struct W_Connection WMConnection;
 
 
 
+typedef int WMCompareDataProc(const void *item1, const void *item2);
+
 typedef void WMFreeDataProc(void *data);
 
 /* Used by WMBag or WMArray for matching data */
@@ -379,7 +381,7 @@ int WMCountInArray(WMArray *array, void *item);
  * > 0 if a > b
  * = 0 if a = b
  */
-int WMSortArray(WMArray *array, int (*comparer)(const void*, const void*));
+int WMSortArray(WMArray *array, WMCompareDataProc *comparer);
 
 void WMMapArray(WMArray *array, void (*function)(void*, void*), void *data);
 
@@ -439,7 +441,7 @@ void* WMReplaceInBag(WMBag *bag, int index, void *item);
  * > 0 if a > b
  * = 0 if a = b
  */
-int WMSortBag(WMBag *bag, int (*comparer)(const void*, const void*));
+int WMSortBag(WMBag *bag, WMCompareDataProc *comparer);
 
 void WMEmptyBag(WMBag *bag);
 
