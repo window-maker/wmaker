@@ -1,6 +1,7 @@
 {
   SystemFont = "-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*";
   BoldSystemFont = "-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*";
+  FloppyPath = "/floppy";
   MultiByteText = NO;
   DoubleClickTime = 250;
   MouseWheelUp = Button4;

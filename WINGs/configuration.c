@@ -13,6 +13,8 @@ _WINGsConfiguration WINGsConfiguration;
 
 #define BOLD_SYSTEM_FONT "-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-bold-r-*-*-%d-*-*-*-*-*-*-*"
 
+#define FLOPPY_PATH "/floppy"
+
 
 static unsigned
 getButtonWithName(const char *name, unsigned defaultButton)
@@ -63,6 +65,9 @@ W_ReadConfigurations(void)
 	WINGsConfiguration.doubleClickDelay = 
 	    WMGetUDIntegerForKey(defaults, "DoubleClickTime");	
 
+	WINGsConfiguration.floppyPath =
+	    WMGetUDStringForKey(defaults, "FloppyPath");
+
         buttonName = WMGetUDStringForKey(defaults, "MouseWheelUp");
         if (buttonName) {
             button = getButtonWithName(buttonName, Button4);
@@ -96,6 +101,9 @@ W_ReadConfigurations(void)
     }
     if (!WINGsConfiguration.boldSystemFont) {
 	WINGsConfiguration.boldSystemFont = BOLD_SYSTEM_FONT;
+    }
+    if (!WINGsConfiguration.floppyPath) {
+	WINGsConfiguration.floppyPath = FLOPPY_PATH;
     }
     if (WINGsConfiguration.doubleClickDelay == 0) {
 	WINGsConfiguration.doubleClickDelay = 250;

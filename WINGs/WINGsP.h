@@ -389,6 +389,7 @@ typedef struct _WINGsConfiguration {
     char *boldSystemFont;
     int  defaultFontSize;
     Bool useMultiByte;
+    char *floppyPath;
     unsigned doubleClickDelay;
     unsigned mouseWheelUp;
     unsigned mouseWheelDown;

@@ -12,9 +12,6 @@
 #define PATH_MAX 1024
 #endif
 
-#ifndef FLOPPY_PATH
-#define FLOPPY_PATH "/floppy"
-#endif
 
 typedef struct W_FilePanel {
     WMWindow *win;
@@ -846,20 +843,20 @@ goUnmount(WMButton *bPtr, WMFilePanel *panel)
 static void
 goFloppy(WMButton *bPtr, WMFilePanel *panel)
 {
-    char *file;
     struct stat filestat;
     WMScreen *scr = WMWidgetScreen(panel->win);
 
-    file = FLOPPY_PATH;
-    if (stat(FLOPPY_PATH,&filestat)) {
-        showError(scr, panel->win, "An error occured browsing '%s'.", file);
+    if (stat(WINGsConfiguration.floppyPath, &filestat)) {
+        showError(scr, panel->win, "An error occured browsing '%s'.",
+                  WINGsConfiguration.floppyPath);
         return;
     } else if (!S_ISDIR(filestat.st_mode)) {
-        showError(scr, panel->win, "'%s' is not a directory.", file);
+        showError(scr, panel->win, "'%s' is not a directory.",
+                  WINGsConfiguration.floppyPath);
         return;
     }
     
-    WMSetFilePanelDirectory(panel, FLOPPY_PATH);
+    WMSetFilePanelDirectory(panel, WINGsConfiguration.floppyPath);
 }
 
 
