@@ -5,7 +5,7 @@
     ("Info Panel...", INFO_PANEL),
     (Legal..., LEGAL_PANEL),
     ("Sistemska konzola", EXEC, xconsole),
-    ("Optere\346enje sistema", EXEC, "xosview || xload"),
+    ("Optere\346enje sistema", SHEXEC, "xosview || xload"),
     ("Lista procesa", EXEC, "xterm -e top"),
     ("Pretra\276iva\350 manuala", EXEC, xman)
   ),
@@ -18,7 +18,7 @@
     Programi,
     (
       Grafika,
-      (Gimp, EXEC, "gimp >/dev/null"),
+      (Gimp, SHEXEC, "gimp >/dev/null"),
       (XV, EXEC, xv),
       (XPaint, EXEC, xpaint),
       (XFig, EXEC, xfig)
@@ -38,7 +38,7 @@
   (
     Editori,
     (XFte, EXEC, xfte),
-    (XEmacs, EXEC, "xemacs || emacs"),
+    (XEmacs, SHEXEC, "xemacs || emacs"),
     (XJed, EXEC, xjed),
     (NEdit, EXEC, nedit),
     (Xedit, EXEC, xedit),
@@ -46,7 +46,7 @@
   ),
   (
     Razno,
-    (Xmcd, EXEC, "xmcd 2> /dev/null"),
+    (Xmcd, SHEXEC, "xmcd 2> /dev/null"),
     (Xplaycd, EXEC, xplaycd),
     (Xmixer, EXEC, xmixer)
   ),
@@ -55,7 +55,7 @@
     (Kalkulator, EXEC, xcalc),
     (
       "Info o prozoru",
-      EXEC,
+      SHEXEC,
       "xprop | xmessage -center -title 'xprop' -file -"
     ),
     ("Bira\350 fontova", EXEC, xfontsel),
@@ -68,7 +68,7 @@
   ),
   (
     Odabir,
-    (Kopiraj, EXEC, "echo '%s' | wxcopy"),
+    (Kopiraj, SHEXEC, "echo '%s' | wxcopy"),
     ("Po\271alji e-mail", EXEC, "xterm -name mail -T Pine -e pine %s"),
     ("Otvori web", EXEC, "netscape %s"),
     ("Potra\276i u manualu", EXEC, "MANUAL_SEARCH(%s)")

@@ -14,10 +14,11 @@
  *	MENU - (부)메뉴 정의를 시작한다.
  *	OPEN_MENU - 파일이나 파이프 혹은 디렉토리 내용으로 부터 메뉴를 열고
  *                  명령어를 실행한다.
- *	END  - (부)메뉴 정의를 마친다. 
+ *	END  - (부)메뉴 정의를 마친다.
  *	WORKSPACE_MENU - 워크스페이스 조작에 관한 서브메뉴를 추가한다.
- *	EXEC <program> - 외부 프로그램을 실행한다. 
- *	EXIT - 윈도우 매니저를 종료시킨다. 
+ *	EXEC <program> - 외부 프로그램을 실행한다.
+ *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
+ *	EXIT - 윈도우 매니저를 종료시킨다.
  *	RESTART [<window manager>] - Windowmaker를 다시시작하거나 다른 윈도우
  *                      매니저를 실행시킨다.
  *	REFRESH - 화면을 다시 그린다.
@@ -98,11 +99,11 @@
 	"정    보" MENU
 		"Info Panel..." INFO_PANEL
 		"Legal" LEGAL_PANEL
-		"시스템 로드" EXEC xosview || xload
+		"시스템 로드" SHEXEC xosview || xload
 		"프로세서 보기" EXEC xterm -e top
 		"맨 페이지 보기" EXEC xman
 	"정    보" END
-//	"XTerm" EXEC xterm -sb || color-xterm -sb || xterm -sb
+//	"XTerm" SHEXEC xterm -sb || color-xterm -sb || xterm -sb
 	"한    텀" EXEC hanterm -sb -sl 3000 -fg WHITE -bg black -hfn -kaist-iyagi-bold-r-normal--16-120-100-100-c-160-ksc5601.1987-0
 	"풀 그 림" MENU
 		"터미널" MENU
@@ -126,7 +127,7 @@
 		"가  우" EXEC gau 
                 "LynX" EXEC hanterm -sb -sl 3000 -e lynx
 		"모질라" EXEC netscape 
-  		"포스트스크립트" EXEC gv %a(gv) || ghostview %a(Enter file to view)
+  		"포스트스크립트" SHEXEC gv %a(gv) || ghostview %a(Enter file to view)
 		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobat)
   		"TkDesk" EXEC tkdesk
                 "X File Manager" EXEC xfm
@@ -134,7 +135,7 @@
 	"풀 그 림" END
 	"문서편집" MENU
 		"vi" EXEC hanterm -sb -sl 3000 -fg white -bg black -e vi
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"한글/X" EXEC hwpx 
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
@@ -150,15 +151,15 @@
 		"Colormap" EXEC xcmap
 		"어플 종료시키기" EXEC xkill
 		"클립보드" EXEC xclipboard
-		"윈도우 속성" EXEC xprop | xmessage -center -title 'xprop' -file -
+		"윈도우 속성" SHEXEC xprop | xmessage -center -title 'xprop' -file -
 	"유틸리티" END
 
 	"Selection" MENU
-		"복사하기" EXEC echo '%s' | wxcopy
+		"복사하기" SHEXEC echo '%s' | wxcopy
 		"메일 보내기" EXEC hanterm -name mail -T "Pine" -e pine %s
-	        "Navigate" EXEC netscape -noraise -remote \
+	        "Navigate" SHEXEC netscape -noraise -remote \
 			'openURL(%s,new-window)' || netscape %s
-		"메뉴얼에서 찾기" EXEC MANUAL_SEARCH(%s)
+		"메뉴얼에서 찾기" SHEXEC MANUAL_SEARCH(%s)
 	"Selection" END
 	"가상화면" WORKSPACE_MENU
 	"작업공간" MENU

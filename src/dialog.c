@@ -1633,6 +1633,9 @@ wShowGNUstepPanel(WScreen *scr)
 
     WMReleaseColor(color);
 
+    XSetForeground(dpy, scr->mono_gc, 0);
+    XFillRectangle(dpy, WMGetPixmapMaskXID(pixmap), scr->mono_gc, 0, 0, 
+		   130, 130);
     drawGNUstepLogo(dpy, WMGetPixmapMaskXID(pixmap), 130, 130, 1, 1);
 
     panel->gstepL = WMCreateLabel(panel->win);

@@ -12,6 +12,7 @@
 //	MENU - escomenza a definición do (sub)menú.
 //	END  - remata a definición do (sub)menu.
 //	EXEC <programa> - executa un programa externo
+//	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
 //	EXIT - sae do xestor de fiestras
 //	RESTART [<xestor de fiestras>] - reinicializa WindowMaker ou
 //			arranca outro xestor de fiestras
@@ -44,7 +45,7 @@
 	"Información" MENU
 		"Info Panel..." INFO_PANEL
 		"Legal" LEGAL_PANEL
-		"Carga do sistema" EXEC xosview || xload
+		"Carga do sistema" SHEXEC xosview || xload
 		"Lista de tarefas" EXEC rxvt -ls -fg white -bg black -fn vga -e top
 		"Manual" EXEC xman
 	"Información" END
@@ -67,14 +68,14 @@
   		"TkDesk" EXEC tkdesk
 	"Aplicacións" END
 	"Editores" MENU
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
 	"Editores" END
 	"Variedade" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"Variedade" END

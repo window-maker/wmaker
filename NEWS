@@ -5,6 +5,18 @@ NEWS for veteran Window Maker users
 --- 0.54.0
 
 
+root menu INCOMPATIBLE changes
+------------------------------
+
+EXEC <program> will execute the named program
+
+SHEXEC <command> will execute the shell command.
+
+If you want to execute something like blabla > /dev/null, then use SHEXEC
+
+Dont forget to update your menus.
+
+
 New Option For setstyle
 -----------------------
 
@@ -30,15 +42,6 @@ SmoothWorkspaceBack = YES/NO
 
 will enable smoothing of scaled workspace background images.
 
-
-root menu
----------
-
-EXEC <program> will execute the named program
-
-SHEXEC <command> will execute the shell command.
-
-If you want to execute something like blabla > /dev/null, then use SHEXEC
 
 
 Application User Menu Path Changes

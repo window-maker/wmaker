@@ -14,6 +14,7 @@
  *	END  - заканчивает определение (под)меню
  *	WORKSPACE_MENU - добавляет подменю для операций с Рабочим местом
  *	EXEC <program> - выполняет внешнюю программу
+ *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
  *	EXIT - завершает работу менеджера окон
  *	RESTART [<window manager>] - перезапускает WindowMaker или запускает
  *			другой менеджер окон
@@ -56,7 +57,7 @@
 	"Информация" MENU
 		"Info Panel..." INFO_PANEL
 		"Legal" LEGAL_PANEL
-		"Нагрузка Системы" EXEC xosview || xload
+		"Нагрузка Системы" SHEXEC xosview || xload
 		"Список Процессов" EXEC xterm -e top
 		"Просмотр Руководств" EXEC xman
 	"Информация" END
@@ -66,7 +67,7 @@
 	"Рабочие места" WORKSPACE_MENU
 	"Приложения" MENU
 		"Графические" MENU
-			"Gimp" EXEC gimp >/dev/null
+			"Gimp" SHEXEC gimp >/dev/null
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
@@ -80,14 +81,14 @@
   		"TkDesk" EXEC tkdesk
 	"Приложения" END
 	"Редакторы" MENU
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed 
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
 	"Редакторы" END
 	"Разное" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"Разное" END
@@ -102,7 +103,7 @@
 	"Утилиты" END
 
 	"Выделение" MENU
-		"Копировать" EXEC echo '%s' | wxcopy
+		"Копировать" SHEXEC echo '%s' | wxcopy
 		"Отправить" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Искать в Интернет" EXEC netscape %s
 		"Искать в Руководствах" EXEC MANUAL_SEARCH(%s)

@@ -112,7 +112,7 @@
 		"Info..." INFO_PANEL
 		"Legal..." LEGAL_PANEL
 		"System Console" EXEC xconsole
-		"System Load" EXEC xosview || xload
+		"System Load" SHEXEC xosview || xload
 		"Process List" EXEC xterm -e top
 		"Βοήθεια" EXEC xman
 	"Πληροφορίες" END
@@ -121,7 +121,7 @@
 	"Επιφάνειες" WORKSPACE_MENU
 	"Προγράμματα" MENU
 		"Γραφικά" MENU
-			"Gimp" EXEC gimp >/dev/null
+			"Gimp" SHEXEC gimp >/dev/null
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
@@ -136,20 +136,20 @@
 	"Προγράμματα" END
 	"Κειμενογράφοι" MENU
 		"XFte" EXEC xfte
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed 
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
 	"Κειμενογράφοι" END
 	"Διάφορα" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"Διάφορα" END
 	"Εργαλεία" MENU
 		"Αριθμομηχανή" EXEC xcalc
-		"Ιδιότητες Παραθύρου" EXEC xprop | xmessage -center -title 'Ιδιότητες Παραθύρου' -file -
+		"Ιδιότητες Παραθύρου" SHEXEC xprop | xmessage -center -title 'Ιδιότητες Παραθύρου' -file -
 		"Επιλογή Γραμματοσειράς" EXEC xfontsel
 		"Εξομοιωτής Τερματικού" EXEC xminicom
 		"Μεγέθυνση" EXEC xmag
@@ -160,7 +160,7 @@
 	"Εργαλεία" END
 
 	"Επιλογή" MENU
-		"Αντιγραφή" EXEC echo '%s' | wxcopy
+		"Αντιγραφή" SHEXEC echo '%s' | wxcopy
 		"Ταχυδρόμηση Προς" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Εξερεύνηση στο διαδίκτυο" EXEC netscape %s
 		"Αναζήτηση Βοήθειας" EXEC MANUAL_SEARCH(%s)

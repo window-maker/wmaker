@@ -15,6 +15,7 @@
  *	END  - end (sub)menu definition
  *	WORKSPACE_MENU - adds a submenu for workspace operations
  *	EXEC <program> - executes an external program
+ *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
  *	EXIT - exits the window manager
  *	RESTART [<window manager>] - restarts WindowMaker or start another
  *			window manager
@@ -97,7 +98,7 @@
                 "Info Panel..." INFO_PANEL
                 "Legal..." LEGAL_PANEL
                 "Sistemska konzola" EXEC xconsole
-                "Optereæenje sistema" EXEC xosview || xload
+                "Optereæenje sistema" SHEXEC xosview || xload
                 "Lista procesa" EXEC xterm -e top
                 "Pretra¾ivaè manuala" EXEC xman
 	"Informacije" END
@@ -107,7 +108,7 @@
 	"Radni prostori" WORKSPACE_MENU
 	"Programi" MENU
 		"Grafika" MENU
-			"Gimp" EXEC gimp >/dev/null
+			"Gimp" SHEXEC gimp >/dev/null
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
@@ -122,20 +123,20 @@
 	"Programi" END
 	"Editori" MENU
 		"XFte" EXEC xfte
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed 
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
 	"Editori" END
 	"Razno" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"Razno" END
 	"Pomoæni programi" MENU
 		"Kalkulator" EXEC xcalc
-		"Informacije o prozoru" EXEC xprop | xmessage -center -title 'xprop' -file -
+		"Informacije o prozoru" SHEXEC xprop | xmessage -center -title 'xprop' -file -
 		"Biraè fontova" EXEC xfontsel
 		"Emulator Terminala" EXEC xminicom
 		"Poveæalo" EXEC xmag
@@ -146,10 +147,10 @@
 	"Pomoæni programi" END
 
 	"Odabir" MENU
-		"Kopiraj" EXEC echo '%s' | wxcopy
+		"Kopiraj" SHEXEC echo '%s' | wxcopy
 		"Po¹alji e-po¹tu" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Otvori web-stranicu" EXEC netscape %s
-		"Potra¾i u manualu" EXEC MANUAL_SEARCH(%s)
+		"Potra¾i u manualu" SHEXEC MANUAL_SEARCH(%s)
 	"Odabir" END
 
 	"Radni prostor" MENU

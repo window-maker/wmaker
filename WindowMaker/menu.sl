@@ -22,6 +22,7 @@
  *	WORKSPACE_MENU - adds a submenu for workspace operations. Only one
  *		    workspace_menu is allowed. 		
  *	EXEC <program> - executes an external program
+ *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
  *	EXIT - exits the window manager
  *	RESTART [<window manager>] - restarts WindowMaker or start another
  *			window manager
@@ -105,7 +106,7 @@
 		"Informacije o programu..." INFO_PANEL
 		"Licenca..." LEGAL_PANEL
 		"Sistemska konzola" EXEC xconsole
-		"Obremenitev sistema" EXEC xosview || xload
+		"Obremenitev sistema" SHEXEC xosview || xload
 		"Seznam procesov" EXEC xterm -e top
 		"Pomoè (Iskalec man strani)" EXEC xman
 	"Informacije" END
@@ -114,7 +115,7 @@
 	"Delovni prostori" WORKSPACE_MENU
 	"Aplikacije" MENU
 		"Grafika" MENU
-			"Gimp" EXEC gimp >/dev/null
+			"Gimp" SHEXEC gimp >/dev/null
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
@@ -129,20 +130,20 @@
 	"Aplikacije" END
 	"Urejevalniki besedil" MENU
 		"XFte" EXEC xfte
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed 
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
 	"Urejevalniki besedil" END
 	"Drugo" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"Drugo" END
 	"Uporabi programi" MENU
 		"Kalkulator" EXEC xcalc
-		"Lastnosti oken" EXEC xprop | xmessage -center -title 'xprop' -file -
+		"Lastnosti oken" SHEXEC xprop | xmessage -center -title 'xprop' -file -
 		"Pregled pisav" EXEC xfontsel
 		"Terminal emulator" EXEC xminicom
 		"Povecevalno steklo" EXEC xmag
@@ -153,7 +154,7 @@
 	"Uporabni programi" END
 
 	"Izbira" MENU
-		"Kopiraj" EXEC echo '%s' | wxcopy
+		"Kopiraj" SHEXEC echo '%s' | wxcopy
 		"Po¹lji po po¹ti" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Odpri WEB stran" EXEC netscape %s
 		"Poi¹èi v navodilih" EXEC MANUAL_SEARCH(%s)

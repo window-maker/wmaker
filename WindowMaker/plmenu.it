@@ -3,7 +3,7 @@
   ("Info Panel...", INFO_PANEL),
   ("Legal...", LEGAL_PANEL),
   ("Console di sistema", EXEC, "xconsole"),
-  ("Carico del Sistema", EXEC, "xosview || xload"),
+  ("Carico del Sistema", SHEXEC, "xosview || xload"),
   ("Lista dei Processi", EXEC, "xterm -e top"),
   ("Ricerca Manuali", EXEC, "xman")
   ),
@@ -13,7 +13,7 @@
  ("Workspace", WORKSPACE_MENU),
  ("Programmi",
   ("Grafica",
-   ("Gimp", EXEC, "gimp >/dev/null"),
+   ("Gimp", SHEXEC, "gimp >/dev/null"),
    ("XV", EXEC, "xv"),
    ("XPaint", EXEC, "xpaint"),
    ("XFig", EXEC, "xfig")
@@ -23,27 +23,25 @@
   ("LyX", EXEC, "lyx"),
   ("Netscape", EXEC, "netscape"),
   ("Ghostview", EXEC, "ghostview %a(Enter file to view)"),
-  ("Acrobat", EXEC, "/usr/local/Acrobat3/bin/acroread %a(Enter PDF to
-view)"),
+  ("Acrobat", EXEC, "/usr/local/Acrobat3/bin/acroread %a(Enter PDF to view)"),
   ("TkDesk", EXEC, "tkdesk")
   ),
  ("Editor",
   ("XFte", EXEC, "xfte"),
-  ("XEmacs", EXEC, "xemacs || emacs"),
+  ("XEmacs", SHEXEC, "xemacs || emacs"),
   ("XJed", EXEC, "xjed"),
   ("NEdit", EXEC, "nedit"),
   ("Xedit", EXEC, "xedit"),
   ("VI", EXEC, "xterm -e vi")
   ),
  ("Varie",
-  ("Xmcd", EXEC, "xmcd 2> /dev/null"),
+  ("Xmcd", SHEXEC, "xmcd 2> /dev/null"),
   ("Xplaycd", EXEC, "xplaycd"),
   ("Xmixer", EXEC, "xmixer")
   ),
  ("Utilità",
   ("Calcolatrice", EXEC, "xcalc"),
-  ("Proprietà finestra", EXEC, "xprop | xmessage -center -title 'xprop'
--file -"),
+  ("Proprietà finestra", SHEXEC, "xprop | xmessage -center -title 'xprop' -file -"),
   ("Selezione Font", EXEC, "xfontsel"),
   ("Emulatore di terminale", EXEC, "xminicom"),
   ("Lente", EXEC, "xmag"),
@@ -53,10 +51,10 @@ view)"),
   ("Clipboard", EXEC, "xclipboard")
   ),
  ("Selezione",
-  ("Copia", EXEC, "echo '%s' | wxcopy"),
+  ("Copia", SHEXEC, "echo '%s' | wxcopy"),
   ("Spedisci a...", EXEC, "xterm -name mail -T Pine -e pine %s"),
   ("Naviga", EXEC, "netscape %s"),
-  ("Cerca nei Manuali", EXEC, "MANUAL_SEARCH(%s)")
+  ("Cerca nei Manuali", SHEXEC, "MANUAL_SEARCH(%s)")
   ),
  ("Workspace",
   ("Nascondi gli altri", HIDE_OTHERS),
@@ -68,54 +66,34 @@ view)"),
   ("Cancella Sessione salvata", CLEAR_SESSION)
   ),
  ("Visualizzazione",
-  ("Temi", OPEN_MENU, "-noext /usr/X11R6/share/WindowMaker/Themes
-~/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
-  ("Stili", OPEN_MENU, "-noext /usr/X11R6/share/WindowMaker/Styles
-~/GNUstep/Library/WindowMaker/Styles WITH setstyle"),
-  ("Set di Icone", OPEN_MENU, "-noext /usr/X11R6/share/WindowMaker/IconSets
-~/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
+  ("Temi", OPEN_MENU, "-noext /usr/X11R6/share/WindowMaker/Themes ~/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
+  ("Stili", OPEN_MENU, "-noext /usr/X11R6/share/WindowMaker/Styles ~/GNUstep/Library/WindowMaker/Styles WITH setstyle"),
+  ("Set di Icone", OPEN_MENU, "-noext /usr/X11R6/share/WindowMaker/IconSets ~/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
   ("Sfondo",
    ("Tinta unita",
     ("Nero", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, black)'"),
-    ("Blu-Grigio",  EXEC, "wdwrite WindowMaker WorkspaceBack '(solid,
-\"#505075\")'"),
-    ("Indaco", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid,
-\"#243e6c\")'"),
-    ("Blue", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid,
-\"#180090\")'"),
-    ("Viola", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid,
-\"#554466\")'"),
+    ("Blu-Grigio",  EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#505075\")'"),
+    ("Indaco", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#243e6c\")'"),
+    ("Blue", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#180090\")'"),
+    ("Viola", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#554466\")'"),
     ("Beige", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, wheat4)'"),
-    ("Grigio", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid,
-\"#333340\")'"),
-    ("Vinaccia", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid,
-\"#400020\")'")
+    ("Grigio", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#333340\")'"),
+    ("Vinaccia", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#400020\")'")
     ),
    ("Sfumato",
-    ("Tramonto", EXEC, "wdwrite WindowMaker WorkspaceBack '(mvgradient,
-deepskyblue4, black, deepskyblue4, tomato4)'"),
-    ("Cielo", EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, blue4,
-white)'"),
-    ("Sfumature Blu",   EXEC, "wdwrite WindowMaker WorkspaceBack
-'(vgradient, \"#7080a5\", \"#101020\")'"),
-    ("Sfumature Indaco", EXEC, "wdwrite WindowMaker WorkspaceBack
-'(vgradient, \"#746ebc\", \"#242e4c\")'"),
-    ("Sfumature Viola", EXEC, "wdwrite WindowMaker WorkspaceBack
-'(vgradient, \"#654c66\", \"#151426\")'"),
-    ("Sfumature Beige",  EXEC, "wdwrite WindowMaker WorkspaceBack
-'(vgradient, \"#a09060\", \"#302010\")'"),
-    ("Sfumature Grigie",   EXEC, "wdwrite WindowMaker WorkspaceBack
-'(vgradient, \"#636380\", \"#131318\")'"),
-    ("Sfumature Vinaccia",   EXEC, "wdwrite WindowMaker WorkspaceBack
-'(vgradient, \"#600040\", \"#180010\")'")
+    ("Tramonto", EXEC, "wdwrite WindowMaker WorkspaceBack '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'"),
+    ("Cielo", EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, blue4, white)'"),
+    ("Sfumature Blu",   EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#7080a5\", \"#101020\")'"),
+    ("Sfumature Indaco", EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#746ebc\", \"#242e4c\")'"),
+    ("Sfumature Viola", EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#654c66\", \"#151426\")'"),
+    ("Sfumature Beige",  EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#a09060\", \"#302010\")'"),
+    ("Sfumature Grigie",   EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#636380\", \"#131318\")'"),
+    ("Sfumature Vinaccia",   EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#600040\", \"#180010\")'")
     ),
-   ("Immagini", OPEN_MENU, "-noext /usr/X11R6/share/WindowMaker/Backgrounds
-~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
+   ("Immagini", OPEN_MENU, "-noext /usr/X11R6/share/WindowMaker/Backgrounds ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
    ),
-  ("Salva il tema", EXEC, "getstyle -t
-~/GNUstep/Library/WindowMaker/Themes/\"%a(Nome Tema)\""),
-  ("Salva il set icone", EXEC, "geticonset
-~/GNUstep/Library/WindowMaker/IconSets/\"%a(Nome IconSet)\"")
+  ("Salva il tema", EXEC, "getstyle -t ~/GNUstep/Library/WindowMaker/Themes/\"%a(Nome Tema)\""),
+  ("Salva il set icone", EXEC, "geticonset ~/GNUstep/Library/WindowMaker/IconSets/\"%a(Nome IconSet)\"")
   ),
  ("Esci",
   ("Riavvia", RESTART),

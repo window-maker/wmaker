@@ -21,6 +21,7 @@
  *	WORKSPACE_MENU - lägger till en undermeny med kommandon som påverkar
  *			 arbetsbordet. Endast en workspace_menu är tillåten.
  *      EXEC <program> - kör ett externt program.
+ *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
  *	EXIT - avslutar WindowMaker.
  *	RESTART [<fönsterhanterare>] - startar WindowMaker eller annan
  *				       fönsterhanterare.
@@ -105,7 +106,7 @@
 		"Informationsruta..." INFO_PANEL
 		"Licens..." LEGAL_PANEL
 		"Systemkonsoll" EXEC xconsole
-		"Systembelastning" EXEC xosview || xload
+		"Systembelastning" SHEXEC xosview || xload
 		"Processlista" EXEC xterm -e top
 		"Manualläsare" EXEC xman
 	"Info" END
@@ -115,7 +116,7 @@
 	"Arbetsbord" WORKSPACE_MENU
 	"Program" MENU
 		"Grafik" MENU
-			"Gimp" EXEC gimp >/dev/null
+			"Gimp" SHEXEC gimp >/dev/null
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
@@ -130,20 +131,20 @@
 	"Program" END
 	"Textredigerare" MENU
 		"XFte" EXEC xfte
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed 
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
 	"Textredigerare" END
 	"Diverse" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"Diverse" END
 	"Verktyg" MENU
 		"Miniräknare" EXEC xcalc
-		"Window Properties" EXEC xprop | xmessage -center -title 'xprop' -file -
+		"Window Properties" SHEXEC xprop | xmessage -center -title 'xprop' -file -
 		"Fontväljare" EXEC xfontsel
 		"Terminalemulator" EXEC xminicom
 		"Förstora" EXEC xmag
@@ -154,7 +155,7 @@
 	"Verktyg" END
 
 	"Markering" MENU
-		"Kopiera" EXEC echo '%s' | wxcopy
+		"Kopiera" SHEXEC echo '%s' | wxcopy
 		"Skicka e-mail" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Gå till webbsida" EXEC netscape %s
 		"Sök i manualer" EXEC MANUAL_SEARCH(%s)

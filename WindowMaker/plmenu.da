@@ -5,7 +5,7 @@
     ("Info Panel...", INFO_PANEL),
     (Copyright..., LEGAL_PANEL),
     (Systemkonsol, EXEC, xconsole),
-    (Systembelastning, EXEC, "xosview || xload"),
+    (Systembelastning, SHEXEC, "xosview || xload"),
     (Procesliste, EXEC, "rxvt -fn 6x10 -geometry 80x50 -e top"),
     (Brugsanvisninger, EXEC, xman),
     (Kontrolpanel, EXEC, "control-panel"),
@@ -18,7 +18,7 @@
     Programmer,
     (
       Grafik,
-      (Gimp, EXEC, "gimp >/dev/null"),
+      (Gimp, SHEXEC, "gimp >/dev/null"),
       ("Electric Eyes", EXEC, ee),
       (XV, EXEC, xv),
       (XPaint, EXEC, xpaint),
@@ -156,14 +156,14 @@
   ),
   (
     Diverse,
-    (Xmcd, EXEC, "xmcd 2> /dev/null"),
+    (Xmcd, SHEXEC, "xmcd 2> /dev/null"),
     (Xplaycd, EXEC, xplaycd),
     (Xmixer, EXEC, xmixer)
   ),
   (
     "Tilbeh\370r",
     (Lommeregner, EXEC, xcalc),
-    ("Window Egenskaber", EXEC, "xprop | xmessage -center -title 'xprop' -file -"),
+    ("Window Egenskaber", SHEXEC, "xprop | xmessage -center -title 'xprop' -file -"),
     ("V\346lg skrifttype", EXEC, xfontsel),
     (Terminalemulator, EXEC, xminicom),
     ("Forst\370rrelsesglas", EXEC, xmag),
@@ -174,7 +174,7 @@
   ),
   (
     Markering,
-    (Kopier, EXEC, "echo '%s' | wxcopy"),
+    (Kopier, SHEXEC, "echo '%s' | wxcopy"),
     ("Send e-post", EXEC, "rxvt -name mail -T Pine -e pine %s"),
     ("Indtast URL", EXEC, "netscape %s"),
     ("S\370g i manual", EXEC, "MANUAL_SEARCH(%s)")

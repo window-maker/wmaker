@@ -15,6 +15,7 @@
  *	END  - finaliza una definición de (sub)menu
  *	WORKSPACE_MENU - Añade el submenu para operaciones con el escritorio
  *	EXEC <programa> - ejecuta un programa externo
+ *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
  *	EXIT - sale del gestor de ventanas
  *	RESTART [<Gestor de ventanas>] - rearrancar WindowMaker o arranca otro gestor de ventanas
  *	REFRESH - refrescar el escritorio
@@ -93,7 +94,7 @@
 		"Info Panel..." INFO_PANEL
 		"Legal" LEGAL_PANEL
 		"Consola del Sistema" EXEC xconsole
-		"Carga del Sistema" EXEC xosview || xload
+		"Carga del Sistema" SHEXEC xosview || xload
 		"Lista de Procesos" EXEC xterm -e top
 		"Manual de usuario" EXEC xman
 	"Info" END
@@ -102,7 +103,7 @@
 	"Escritorios" WORKSPACE_MENU
 	"Aplicaciones" MENU
 		"Gráficos" MENU
-			"Gimp" EXEC gimp >/dev/null
+			"Gimp" SHEXEC gimp >/dev/null
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
@@ -117,20 +118,20 @@
 	"Aplicaciones" END
 	"Editores" MENU
 		"XFte" EXEC xfte
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed 
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
 	"Editores" END
 	"Miscelánea" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"Miscelánea" END
 	"Utilidades" MENU
 		"Calculadora" EXEC xcalc
-		"Propiedades de ventana" EXEC xprop | xmessage -center -title 'xprop' -file -
+		"Propiedades de ventana" SHEXEC xprop | xmessage -center -title 'xprop' -file -
 		"Selector de Fuentes" EXEC xfontsel
 		"Emulador de Terminal" EXEC xminicom
 		"Lupa" EXEC xmag
@@ -141,10 +142,10 @@
 	"Utilidades" END
 
 	"Selección" MENU
-		"Copiar" EXEC echo '%s' | wxcopy
+		"Copiar" SHEXEC echo '%s' | wxcopy
 		"Enviar a" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Navigar" EXEC netscape %s
-		"Buscar en el Manual" EXEC MANUAL_SEARCH(%s)
+		"Buscar en el Manual" SHEXEC MANUAL_SEARCH(%s)
 	"Selección" END
 
 	"Escritorio" MENU

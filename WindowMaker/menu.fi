@@ -15,6 +15,7 @@
  *	END  - end (sub)menu definition
  *	WORKSPACE_MENU - adds a submenu for workspace operations
  *	EXEC <program> - executes an external program
+ *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
  *	EXIT - exits the window manager
  *	RESTART [<window manager>] - restarts WindowMaker or start another
  *			window manager
@@ -97,7 +98,7 @@
 		"Info Panel..." INFO_PANEL
 		"Legal" LEGAL_PANEL
 		"Järjestelmän konsoli" EXEC xconsole
-		"Järjestelmän kuorma" EXEC xosview || xload
+		"Järjestelmän kuorma" SHEXEC xosview || xload
 		"Prosessilista" EXEC xterm -e top
 		"Manuaalin selain" EXEC xman
 	"Info" END
@@ -106,7 +107,7 @@
 	"Työtilat" WORKSPACE_MENU
 	"Sovellukset" MENU
 		"Grafiikka" MENU
-			"Gimp" EXEC gimp >/dev/null
+			"Gimp" SHEXEC gimp >/dev/null
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
@@ -121,20 +122,20 @@
 	"Sovellukset" END
 	"Editorit" MENU
 		"XFte" EXEC xfte
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed 
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
 	"Editorit" END
 	"Muut" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"Muut" END
 	"Työkalut" MENU
 		"Laskin" EXEC xcalc
-		"Ikkunoiden asetukset" EXEC xprop | xmessage -center -title 'xprop' -file -
+		"Ikkunoiden asetukset" SHEXEC xprop | xmessage -center -title 'xprop' -file -
 		"Kirjasinlajin valitsin" EXEC xfontsel
 		"Pääte-emulaattori" EXEC xminicom
 		"Suurenuslasi" EXEC xmag
@@ -145,10 +146,10 @@
 	"Työkalut" END
 
 	"Leikkaa-liimaa" MENU
-		"Kopioi" EXEC echo '%s' | wxcopy
+		"Kopioi" SHEXEC echo '%s' | wxcopy
 		"Lähetä sähköpostilla" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Selaa" EXEC netscape %s
-		"Etsi manuaalista" EXEC MANUAL_SEARCH(%s)
+		"Etsi manuaalista" SHEXEC MANUAL_SEARCH(%s)
 	"Leikkaa-liimaa" END
 
 	"Työtilat" MENU

@@ -111,7 +111,7 @@
                 "Info Panel..." INFO_PANEL
                 "Legal..." LEGAL_PANEL
                 "Consola del Sistema" EXEC xconsole
-                "Càrrega del Sistema" EXEC xosview || xload
+                "Càrrega del Sistema" SHEXEC xosview || xload
                 "Llista de Processos" EXEC xterm -e top
                 "Manual d'instruccions" EXEC xman
         "Informació" END
@@ -120,7 +120,7 @@
         "Escriptoris" WORKSPACE_MENU
         "Aplicacions" MENU
                 "Gràfics" MENU
-                        "Gimp" EXEC gimp >/dev/null
+                        "Gimp" SHEXEC gimp >/dev/null
                         "XV" EXEC xv
                         "XPaint" EXEC xpaint
                         "XFig" EXEC xfig
@@ -135,20 +135,20 @@
         "Aplicacions" END
         "Editors" MENU
                 "XFte" EXEC xfte
-                "XEmacs" EXEC xemacs || emacs
+                "XEmacs" SHEXEC xemacs || emacs
                 "XJed" EXEC xjed 
                 "NEdit" EXEC nedit
                 "Xedit" EXEC xedit
                 "VI" EXEC xterm -e vi
         "Editors" END
         "Miscel·lani" MENU
-                "Xmcd" EXEC xmcd 2> /dev/null
+                "Xmcd" SHEXEC xmcd 2> /dev/null
                 "Xplaycd" EXEC xplaycd
                 "Xmixer" EXEC xmixer
         "Miscel·lani" END
         "Utilitats" MENU
                 "Calculadora" EXEC xcalc
-                "Propietats de la finestra" EXEC xprop | xmessage -center -title 'xprop' -file -
+                "Propietats de la finestra" SHEXEC xprop | xmessage -center -title 'xprop' -file -
                 "Sel·lecciona una Font" EXEC xfontsel
                 "Emulador de Terminal" EXEC xminicom
                 "Lupa" EXEC xmag
@@ -158,10 +158,10 @@
         "Utilitats" END
 
         "Sel·lecció" MENU
-                "Copiar" EXEC echo '%s' | wxcopy
+                "Copiar" SHEXEC echo '%s' | wxcopy
                 "Enviar a" EXEC xterm -name mail -T "Pine" -e pine %s
                 "Enviar al Navegador" EXEC netscape %s
-                "Buscar al Manual" EXEC MANUAL_SEARCH(%s)
+                "Buscar al Manual" SHEXEC MANUAL_SEARCH(%s)
         "Sel·lecció" END
 
         "Escriptori" MENU

@@ -3,7 +3,7 @@
   ("信息面板...", INFO_PANEL),
   ("版权...", LEGAL_PANEL),
   ("系统控制台", EXEC, "xconsole"),
-  ("系统负载", EXEC, "xosview || xload"),
+  ("系统负载", SHEXEC, "xosview || xload"),
   ("进程列表", EXEC, "xterm -e top"),
   ("手册浏览器", EXEC, "xman")
   ),
@@ -13,10 +13,10 @@
  ("程序", OPEN_MENU, "| wmconfig --output wmaker 2>/dev/null"),
  ("工作空间", WORKSPACE_MENU),
  ("选择",
-  ("复制", EXEC, "echo '%s' | wxcopy"),
+  ("复制", SHEXEC, "echo '%s' | wxcopy"),
   ("发送邮件", EXEC, "xterm -name mail -T Pine -e pine %s"),
   ("浏览", EXEC, "netscape %s"),
-  ("查找手册", EXEC, "MANUAL_SEARCH(%s)")
+  ("查找手册", SHEXEC, "MANUAL_SEARCH(%s)")
   ),
  ("工作空间",
   ("隐藏其他", HIDE_OTHERS),

@@ -15,6 +15,7 @@
  *	END  - end (sub)menu definition
  *	WORKSPACE_MENU - adds a submenu for workspace operations
  *	EXEC <program> - executes an external program
+ *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
  *	EXIT - exits the window manager
  *	RESTART [<window manager>] - restarts WindowMaker or start another
  *			window manager
@@ -96,7 +97,7 @@
 	"עדימ" MENU
 		"Info Panel..." INFO_PANEL
 		"Legal" LEGAL_PANEL
-		"System Load" EXEC xosview || xload
+		"System Load" SHEXEC xosview || xload
 		"Process List" EXEC xterm -e top
 		"Manual Browser" EXEC xman
 	"עדימ" END
@@ -105,7 +106,7 @@
 	"הדובע יבחרמ" WORKSPACE_MENU
 	"םימושי" MENU
 		"הקיפרג" MENU
-			"Gimp" EXEC gimp >/dev/null
+			"Gimp" SHEXEC gimp >/dev/null
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
@@ -120,20 +121,20 @@
 	"םימושי" END
 	"םיכרוע" MENU
 		"XFte" EXEC xfte
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed 
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
 	"םיכרוע" END
 	"יללכ" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"יללכ" END
 	"םילכ" MENU
 		"Calculator" EXEC xcalc
-		"Window Properties" EXEC xprop | xmessage -center -title 'xprop' -file -
+		"Window Properties" SHEXEC xprop | xmessage -center -title 'xprop' -file -
 		"Font Chooser" EXEC xfontsel
 		"Terminal Emulator" EXEC xminicom
 		"Magnify" EXEC xmag
@@ -144,10 +145,10 @@
 	"םילכ" END
 
 	"הריחב" MENU
-		"קתעה" EXEC echo '%s' | wxcopy
+		"קתעה" SHEXEC echo '%s' | wxcopy
 		"...ל ראודה חלש" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Navigate" EXEC netscape %s
-		"Search in Manual" EXEC MANUAL_SEARCH(%s)
+		"Search in Manual" SHEXEC MANUAL_SEARCH(%s)
 	"הריחב" END
 
 	"הדובע בחרמ" MENU

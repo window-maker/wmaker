@@ -107,7 +107,7 @@
 		"資訊面板..." INFO_PANEL
 		"法律..." LEGAL_PANEL
 		"系統主控台" EXEC xconsole
-		"系統負載" EXEC xosview || xload
+		"系統負載" SHEXEC xosview || xload
 		"行程清單" EXEC xterm -e top
 		"手冊瀏覽器" EXEC xman
 	"資訊" END
@@ -116,7 +116,7 @@
 	"工作區" WORKSPACE_MENU
 	"應用程式" MENU
 		"影像處理" MENU
-			"Gimp" EXEC gimp >/dev/null
+			"Gimp" SHEXEC gimp >/dev/null
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
@@ -131,20 +131,20 @@
 	"應用程式" END
 	"編輯器" MENU
 		"XFte" EXEC xfte
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed 
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
 	"編輯器" END
 	"雜項" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"雜項" END
 	"公用程式" MENU
 		"計算機" EXEC xcalc
-		"Window Properties" EXEC xprop | xmessage -center -title 'xprop' -file -
+		"Window Properties" SHEXEC xprop | xmessage -center -title 'xprop' -file -
 		"Font Chooser" EXEC xfontsel
 		"Terminal Emulator" EXEC xminicom
 		"Magnify" EXEC xmag
@@ -154,10 +154,10 @@
 	"公用程式" END
 
 	"選取" MENU
-		"複製" EXEC echo '%s' | wxcopy
+		"複製" SHEXEC echo '%s' | wxcopy
 		"郵寄至" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Navigate" EXEC netscape %s
-		"在手冊中搜尋" EXEC MANUAL_SEARCH(%s)
+		"在手冊中搜尋" SHEXEC MANUAL_SEARCH(%s)
 	"選取" END
 
 	"工作區" MENU

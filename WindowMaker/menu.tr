@@ -19,6 +19,7 @@
  *	END  - Alt)Menü tanýmýný bitirir
  *	WORKSPACE_MENU - Çalýþma alanlarý için altmenüyü ekler
  *	EXEC <program> - programý çalýþtýrýr
+ *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
  *	EXIT - pencere denetçisinden çýkar.
  *	RESTART [<pencere denetçisi>] - Belirtilen pencere denetçisini
  *				        yeniden baþlatýr.
@@ -91,7 +92,7 @@
 		"Copyright..." EXEC xmessage -center -font variable -title \
 	'WindowMaker 'WM_VERSION -file $HOME/GNUstep/Library/WindowMaker/Copyright
 		"Sistem Konsolu" EXEC xconsole
-		"Sistem Yükü" EXEC xosview || xload
+		"Sistem Yükü" SHEXEC xosview || xload
 		"Süreç Dökümü" EXEC xterm -e top
 		"Kýlavuz Tarayýcýsý" EXEC xman
 	"Bilgi" END
@@ -100,7 +101,7 @@
 	"Çalýþma Alanlarý" WORKSPACE_MENU
 	"Uygulamalar" MENU
 		"Görüntü" MENU
-			"Gimp" EXEC gimp >/dev/null
+			"Gimp" SHEXEC gimp >/dev/null
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
@@ -115,20 +116,20 @@
 	"Uygulamalar" END
 	"Düzenleyiciler" MENU
 		"XFte" EXEC xfte
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed 
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
 	"Düzenleyiciler" END
 	"Çeþitli" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"Çeþitli" END
 	"Yardýmcýlar" MENU
 		"Hesap Makinasý" EXEC xcalc
-		"Pencere Özellikleri" EXEC xprop | xmessage -center -title 'xprop' -file -
+		"Pencere Özellikleri" SHEXEC xprop | xmessage -center -title 'xprop' -file -
 		"Yazý tipi Tarayýcýsý" EXEC xfontsel
 		"Terminal Öykümcüsü" EXEC xminicom
 		"Büyüteç" EXEC xmag
@@ -139,10 +140,10 @@
 	"Yardýmcýlar" END
 
 	"Seçim" MENU
-		"Kopyala" EXEC echo '%s' | wxcopy
+		"Kopyala" SHEXEC echo '%s' | wxcopy
 		"Mail ile gönder" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Að'da tara" EXEC netscape %s
-		"Kýlavuzda ara" EXEC MANUAL_SEARCH(%s)
+		"Kýlavuzda ara" SHEXEC MANUAL_SEARCH(%s)
 	"Seçim" END
 
 	"Çalýþma Alaný" MENU

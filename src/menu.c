@@ -122,7 +122,7 @@ appearanceObserver(void *self, WMNotification *notif)
 	    wMenuRealize(menu);
 	}
 	if (flags & WTextureSettings) {
-	    menu->frame->flags.need_texture1_remake = 1;
+	    menu->frame->flags.need_texture_remake = 1;
 	}
 	if (flags & (WColorSettings|WTextureSettings))
 	    wFrameWindowPaint(menu->frame);

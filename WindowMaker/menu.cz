@@ -63,20 +63,20 @@
 			"X Gnu debbuger" EXEC xxgdb
 			"Emacs" EXEC emacs
 			"Resource editor" EXEC editres
-		"Vývojové" END                                                                          
-                "Hry" MENU                                                                   
-	    		"Bludi¹»ì"      EXEC maze                                      
-//              	"Karty "        EXEC spider                                         
-			"©achy "        EXEC xboard                                         
-			"Xeyes"         EXEC xeyes -geometry 51x23                         
-			"Xlogo"         EXEC xlogo                                         
-			"Brouci"        EXEC xroach                                        
-            		"Xtetris"       EXEC xtetris -color                                
-			"Xvier"         EXEC xvier                                         
-			"Xgas"          EXEC xgas                                          
-	    		"Xkobo"         EXEC xkobo                                         
-			"xboing"        EXEC xboing -sound                                 
-			"XBill"         EXEC xbill                                         
+		"Vývojové" END
+                "Hry" MENU
+	    		"Bludi¹»ì"      EXEC maze
+//              	"Karty "        EXEC spider
+			"©achy "        EXEC xboard
+			"Xeyes"         EXEC xeyes -geometry 51x23
+			"Xlogo"         EXEC xlogo
+			"Brouci"        EXEC xroach
+            		"Xtetris"       EXEC xtetris -color
+			"Xvier"         EXEC xvier
+			"Xgas"          EXEC xgas
+	    		"Xkobo"         EXEC xkobo
+			"xboing"        EXEC xboing -sound
+			"XBill"         EXEC xbill
 			"Civilization"   EXEC civ
 		"Hry" END
 //		"X File Manager" EXEC xfm
@@ -97,7 +97,7 @@
 		"Joe" EXEC xterm -T 'Joe' -e joe
 	"Editory" END
 	"Rùzné" MENU
-//		"Xmcd" EXEC xmcd 2> /dev/null
+//		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"Rùzné" END

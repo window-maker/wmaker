@@ -13,6 +13,7 @@
 //	END  - beeindigd een (sub)menu definitie
 //	EXEC <programma> - voert een extern programma uit
 //	EXIT - afsluiten windowmanager
+//	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
 //	RESTART [<windowmanager>] - herstarts WindowMaker of start een andere
 //			windowmanager of
 //	REFRESH - herteken het bureaublad
@@ -38,7 +39,7 @@
 		"Top"	EXEC xterm -e top
 		"Handleidingszoeker" EXEC xman
 	"Info" END
-	"XTerm" EXEC xterm -sb || color-xterm -sb || xterm -sb
+	"XTerm" SHEXEC xterm -sb || color-xterm -sb || xterm -sb
 	"XJed"	EXEC xjed
 	"Werkplaatsen" WORKSPACE_MENU
 	"Applicaties" MENU
@@ -64,7 +65,7 @@
 		"VI" EXEC xterm -e vi
 	"Editors" END
 	"Diverse" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"Diverse" END

@@ -33,6 +33,8 @@
  *
  *	EXEC			    Execute un programme externe
  *
+ *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
+ *
  *	EXIT			    Quitte le gestionnaire de fenêtres
  *
  *	RESTART	[<window manager>]  Redémarre WindowMaker ou démarre un
@@ -157,7 +159,7 @@
 		"Panneau d'informations" INFO_PANEL
 		"Panneau d'informations légales" LEGAL_PANEL
 		"Console système" EXEC xconsole
-		"Charge système" EXEC xosview || xload
+		"Charge système" SHEXEC xosview || xload
 		"Liste des processus" EXEC xterm -e top
 		"Butineur d'aide" EXEC xman
 	"Informations" END
@@ -167,7 +169,7 @@
 	"Espaces de travail" WORKSPACE_MENU
 	"Applications" MENU
 		"Graphismes" MENU
-			"Gimp" EXEC gimp >/dev/null
+			"Gimp" SHEXEC gimp >/dev/null
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
@@ -182,20 +184,20 @@
 	"Applications" END
 	"Editeurs" MENU
 		"XFte" EXEC xfte
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
 	"Editeurs" END
 	"Divers" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"Divers" END
 	"Utilitaires" MENU
 		"Calculatrice" EXEC xcalc
-		"Propriétés de la fenêtre" EXEC xprop | xmessage -center -title 'xprop' -file -
+		"Propriétés de la fenêtre" SHEXEC xprop | xmessage -center -title 'xprop' -file -
 		"Sélecteur de polices" EXEC xfontsel
 		"Emulateur de terminal" EXEC xminicom
 		"Loupe" EXEC xmag
@@ -205,10 +207,10 @@
 	"Utilitaires" END
 	
 	"Sélection" MENU
-		"Copier" EXEC echo '%s' | wxcopy
+		"Copier" SHEXEC echo '%s' | wxcopy
 		"Envoyer à" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Naviguer" EXEC netscape %s
-		"Rechercher dans le manuel" EXEC MANUAL_SEARCH(%s)
+		"Rechercher dans le manuel" SHEXEC MANUAL_SEARCH(%s)
 	"Sélection" END
 	
 	"Espace de travail" MENU

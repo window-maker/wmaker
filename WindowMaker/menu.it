@@ -10,8 +10,9 @@
 //
 // <Comando> uno dei seguenti comandi: 
 //	MENU - inizio della definizione di un sottomenu 
-//	END  - fine della definizione di un sottomenu 
+//	END  - fine della definizione di un sottomenu
 //	EXEC <programma> - esegue un programma
+//	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
 //	EXIT - esce dal gestore di finestre (Window Manager)
 //	RESTART [<window manager>] - reinizializza WindowMaker o lancia un altro
 //			window manager
@@ -44,11 +45,11 @@
 	"Informazioni" MENU
 		"Info Panel..." INFO_PANEL
 		"Legal" LEGAL_PANEL
-		"Carico del Sistema" EXEC xosview || xload
+		"Carico del Sistema" SHEXEC xosview || xload
 		"Lista dei Processi" EXEC xterm -e top
 		"Ricerca Manuali" EXEC xman
 	"Informazioni" END
-	"XTerm" EXEC xterm -sb || color-xterm -sb || xterm -sb
+	"XTerm" SHEXEC xterm -sb || color-xterm -sb || xterm -sb
 	"XJed"	EXEC xjed 
 	"Area di lavoro" WORKSPACE_MENU
 	"Applicazioni" MENU
@@ -68,14 +69,14 @@
   		"TkDesk" EXEC tkdesk
 	"Applicazioni" END
 	"Editori" MENU
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
 	"Editori" END
 	"Varie" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"Varie" END
@@ -91,7 +92,7 @@
 
 	"Selezione" MENU
 		"Invio posta a.." EXEC xterm -name mail -T "Pine" -e pine %s
-	        "Navigare" EXEC netscape -noraise -remote \
+	        "Navigare" SHEXEC netscape -noraise -remote \
 			'openURL(%s,new-window)' || netscape %s
 		"Ricerca nei Manuali" EXEC MANUAL_SEARCH(%s)
 	"Selezione" END

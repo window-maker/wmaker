@@ -17,6 +17,7 @@
  *	END  - メニュー(サブメニュー)の定義の終了を示します。
  *	WORKSPACE_MENU - ワークスペースの操作のためのサブメニューを追加します。
  *	EXEC <program> - 外部プログラムの呼びだし
+ *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
  *	EXIT - ウィンドウマネージャの終了
  *	RESTART [<window manager>] - WindowMakerの再起動か、または、別の
  *			ウィンドウマネージャを起動します。
@@ -102,7 +103,7 @@
 	"情報" MENU
 		"Info パネル..." INFO_PANEL
 		"Legal パネル..." LEGAL_PANEL
-		"システム負荷" EXEC xosview || xload
+		"システム負荷" SHEXEC xosview || xload
 		"プロセス一覧" EXEC xterm -e top
 		"マニュアルブラウザ" EXEC xman
 	"情報" END
@@ -111,7 +112,7 @@
 	"ワークスペース" WORKSPACE_MENU
 	"アプリケーション" MENU
 		"グラフィックス" MENU
-			"Gimp" EXEC gimp >/dev/null
+			"Gimp" SHEXEC gimp >/dev/null
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
@@ -127,20 +128,20 @@
 	"エディタ" MENU
 		"Mule" EXEC mule
 		"XFte" EXEC xfte
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed 
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC kterm -e vi
 	"エディタ" END
 	"いろいろ" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"いろいろ" END
 	"ユーティリティ" MENU
 		"電卓" EXEC xcalc
-		"プロパティ表示" EXEC xprop | xmessage -center -title 'xprop' -file -
+		"プロパティ表示" SHEXEC xprop | xmessage -center -title 'xprop' -file -
 		"フォントセレクタ" EXEC xfontsel
 		"端末エミュレータ" EXEC xminicom
 		"眼鏡" EXEC xmag
@@ -151,10 +152,10 @@
 	"ユーティリティー" END
 
 	"セレクション" MENU
-		"コピー" EXEC echo '%s' | wxcopy
+		"コピー" SHEXEC echo '%s' | wxcopy
 		"Mail To" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Netscape" EXEC netscape %s
-		"マニュアル検索" EXEC MANUAL_SEARCH(%s)
+		"マニュアル検索" SHEXEC MANUAL_SEARCH(%s)
 	"セレクション" END
 
 	"ワークスペース" MENU

@@ -17,6 +17,7 @@
  *			 områder
  *	EXEC <program> - starter et eksternt program.
  *	EXIT - Avslutter WindowMaker
+ *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
  *	RESTART - [<window manager>] - restarter WindowMaker eller starter opp
  *				       annen "window manager".
  *	REFRESH - tegner opp skjermbildet på nytt.
@@ -99,7 +100,7 @@
 	"Info" MENU
 		"Lisens..." INFO_PANEL
 		"Legal" LEGAL_PANEL
-		"System Belastning" EXEC xosview || xload
+		"System Belastning" SHEXEC xosview || xload
 		"Prosess Liste" EXEC xterm -e top
 		"Manual leser" EXEC stepman
 	"Info" END
@@ -108,7 +109,7 @@
 	"Arbeids-Områder" WORKSPACE_MENU
 	"Applikasjoner" MENU
 		"Grafikk" MENU
-			"Gimp" EXEC gimp >/dev/null
+			"Gimp" SHEXEC gimp >/dev/null
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
@@ -123,14 +124,14 @@
 	"Applikasjoner" END
 	"Tekst Redigering" MENU
 		"XFte" EXEC xfte
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed 
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
 	"Tekst Redigering" END
 	"Diverse" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"Diverse" END
@@ -145,10 +146,10 @@
 	"Verktøy" END
 
 	"Utvalg" MENU
-		"Kopier" EXEC echo '%s' | wxcopy
+		"Kopier" SHEXEC echo '%s' | wxcopy
 		"Send e-mail" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Gå til (www)" EXEC netscape %s
-		"Søke i manualer" EXEC MANUAL_SEARCH(%s)
+		"Søke i manualer" SHEXEC MANUAL_SEARCH(%s)
 	"UtValg" END
 
 	"Arbeidsområder" MENU

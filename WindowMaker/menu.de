@@ -12,6 +12,7 @@
 //	MENU - beginnt (Unter)menüdefinition
 //	END  - beendet (Unter)menüdefinition
 //	EXEC <program> - führt ein externes Programm aus
+//	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
 //	EXIT - beendet den Fenstermanager
 //	RESTART [<window manager>] - startet WindowMaker neu oder
 //			startet einen anderen Fenstermanager.
@@ -43,11 +44,11 @@
 	"Info" MENU
 		"Info Panel..." INFO_PANEL
 		"Legal" LEGAL_PANEL
-  		"Systemauslastung" EXEC xosview || xload
+  		"Systemauslastung" SHEXEC xosview || xload
               	"Prozeßtabelle" EXEC xterm -e top
 		"Anleitungen" EXEC xman
 	"Info" END
-	"XTerm" EXEC xterm -sb || color-xterm -sb || xterm -sb
+	"XTerm" SHEXEC xterm -sb || color-xterm -sb || xterm -sb
 	"XJed"	EXEC xjed
 	"Arbeitsfläche" WORKSPACE_MENU
 	"Anwendungen" MENU
@@ -67,14 +68,14 @@
   		"TkDesk" EXEC tkdesk
 	"Anwendungen" END
 	"Editoren" MENU
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
 	"Editoren" END
 	"Sonstiges" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"Sonstiges" END
@@ -88,7 +89,7 @@
 	"Hilfsmittel" END
         "Markierung" MENU
                 "email an" EXEC xterm -name mail -T "Pine" -e pine %s
-                "Navigate" EXEC netscape -noraise -remote \
+                "Navigate" SHEXEC netscape -noraise -remote \
                        'openURL(%s,new-window)' || netscape %s
                 "in Anleitung suchen" EXEC MANUAL_SEARCH(%s)
 	"Markierung" END

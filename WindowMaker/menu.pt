@@ -21,6 +21,7 @@
  *	WORKSPACE_MENU - adiciona menu para operações sobre Áreas de Trabalho
  *	EXEC <programa> - executa um programa
  *	EXIT - termina o gerenciador de janelas
+ *	SHEXEC <command> - executa comando de shell (ex.: gimp > /dev/null)
  *	RESTART [<gerenciador de janelas>] - reinicia o WindowMaker ou inicia 
  *		 	outro gerenciador de janelas
  *	REFRESH - força repintagem da área de trabalho
@@ -106,7 +107,7 @@
 		"Informações..." INFO_PANEL
 		"Informações Legais" LEGAL_PANEL
 		"Console do Sistema" EXEC xconsole
-		"Carga do Sistema" EXEC xosview || xload
+		"Carga do Sistema" SHEXEC xosview || xload
 		"Lista de Processos" EXEC xterm -e top
 		"Leitor de Manual" EXEC xman
 	"Informações" END
@@ -115,7 +116,7 @@
 	"Áreas de Trabalho" WORKSPACE_MENU
 	"Aplicações" MENU
 		"Gráficos" MENU
-			"Gimp" EXEC gimp >/dev/null
+			"Gimp" SHEXEC gimp >/dev/null
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
@@ -130,20 +131,20 @@
 	"Aplicações" END
 	"Editores" MENU
 		"XFte" EXEC xfte
-		"XEmacs" EXEC xemacs || emacs
+		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed 
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
 	"Editores" END
 	"Diversos" MENU
-		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"Diversos" END
 	"Utilitários" MENU
 		"Calculadora" EXEC xcalc
-		"Propriedades da Janela" EXEC xprop | xmessage -center -title 'xprop' -file -
+		"Propriedades da Janela" SHEXEC xprop | xmessage -center -title 'xprop' -file -
 		"Seletor de Fontes" EXEC xfontsel
 		"Emulador de Terminal" EXEC xminicom
 		"Lente de Aumento" EXEC xmag
@@ -154,10 +155,10 @@
 	"Utilitários" END
 
 	"Seleção" MENU
-		"Copiar" EXEC echo '%s' | wxcopy
+		"Copiar" SHEXEC echo '%s' | wxcopy
 		"eMail Para" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Navegar" EXEC netscape %s
-		"Procurar Manual" EXEC MANUAL_SEARCH(%s)
+		"Procurar Manual" SHEXEC MANUAL_SEARCH(%s)
 	"Seleção" END
 
 	"Área de Trabalho" MENU

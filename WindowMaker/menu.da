@@ -21,6 +21,7 @@
  *      WORKSPACE_MENU - tilføjer en undermenu med arbejdsbords-
  *                       kommandoer. Kun WORKSPACE_MENU er tilladt.
  *      EXEC <program> - kører et eksternt program.
+ *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
  *      EXIT - afslutter WindowMaker (men ikke X).
  *      RESTART [<window manager>] - genstarter WindowMaker eller starter en
  *                                     anden window manager.
@@ -103,7 +104,7 @@
                 "Info Panel..." INFO_PANEL
                 "Copyright..." LEGAL_PANEL
                 "Systemkonsol" EXEC xconsole
-                "Systembelastning" EXEC xosview || xload
+                "Systembelastning" SHEXEC xosview || xload
                 "Procesliste" EXEC xterm -e top
                 "Brugsanvisninger" EXEC xman
         "Info" END
@@ -113,7 +114,7 @@
         "Arbejdsborde" WORKSPACE_MENU
         "Applikationer" MENU
                 "Grafik" MENU
-                        "Gimp" EXEC gimp >/dev/null
+                        "Gimp" SHEXEC gimp >/dev/null
                         "XV" EXEC xv
                         "XPaint" EXEC xpaint
                         "XFig" EXEC xfig
@@ -128,20 +129,20 @@
         "Applikationer" END
         "Tekstbehandling" MENU
                 "XFte" EXEC xfte
-                "Emacs" EXEC xemacs || emacs
+                "Emacs" SHEXEC xemacs || emacs
                 "XJed" EXEC xjed 
                 "NEdit" EXEC nedit
                 "Xedit" EXEC xedit
                 "VI" EXEC xterm -e vi
         "Tekstbehandling" END
         "Diverse" MENU
-                "Xmcd" EXEC xmcd 2> /dev/null
+                "Xmcd" SHEXEC xmcd 2> /dev/null
                 "Xplaycd" EXEC xplaycd
                 "Xmixer" EXEC xmixer
         "Diverse" END
         "Tilbehør" MENU
                 "Lommeregner" EXEC xcalc
-                "Window Egenskaber" EXEC xprop | xmessage -center -title 'xprop' -file
+                "Window Egenskaber" SHEXEC xprop | xmessage -center -title 'xprop' -file
                 "Vælg skrifttype" EXEC xfontsel
                 "Terminalemulator" EXEC xminicom
                 "Forstørrelsesglas" EXEC xmag
@@ -152,10 +153,10 @@
         "Tilbehør" END
 
         "Markering" MENU
-                "Kopier" EXEC echo '%s' | wxcopy
+                "Kopier" SHEXEC echo '%s' | wxcopy
                 "Send e-post" EXEC xterm -name mail -T "Pine" -e pine %s
                 "Indtast URL" EXEC netscape %s
-                "Søg i manual" EXEC MANUAL_SEARCH(%s)
+                "Søg i manual" SHEXEC MANUAL_SEARCH(%s)
         "Markering" END
 
         "Arbejdsbord" MENU

@@ -3,7 +3,7 @@
   ("Info Panel...", INFO_PANEL),
   ("Legal...", LEGAL_PANEL),
   ("System Console", EXEC, "xconsole"),
-  ("System Load", EXEC, "xosview || xload"),
+  ("System Load", SHEXEC, "xosview || xload"),
   ("Process List", EXEC, "xterm -e top"),
   ("Manual Browser", EXEC, "xman")
   ),
@@ -13,7 +13,7 @@
  ("Workspaces", WORKSPACE_MENU),
  ("Applications",
   ("Graphics",
-   ("Gimp", EXEC, "gimp >/dev/null"),
+   ("Gimp", SHEXEC, "gimp >/dev/null"),
    ("XV", EXEC, "xv"),
    ("XPaint", EXEC, "xpaint"),
    ("XFig", EXEC, "xfig")
@@ -28,20 +28,20 @@
   ),
  ("Editors",
   ("XFte", EXEC, "xfte"),
-  ("XEmacs", EXEC, "xemacs || emacs"),
+  ("XEmacs", SHEXEC, "xemacs || emacs"),
   ("XJed", EXEC, "xjed"),
   ("NEdit", EXEC, "nedit"),
   ("Xedit", EXEC, "xedit"),
   ("VI", EXEC, "xterm -e vi")
   ),
  ("Miscellaneous",
-  ("Xmcd", EXEC, "xmcd 2> /dev/null"),
+  ("Xmcd", SHEXEC, "xmcd 2> /dev/null"),
   ("Xplaycd", EXEC, "xplaycd"),
   ("Xmixer", EXEC, "xmixer")
   ),
  ("Utils",
   ("Calculator", EXEC, "xcalc"),
-  ("Window Properties", EXEC, "xprop | xmessage -center -title 'xprop' -file -"),
+  ("Window Properties", SHEXEC, "xprop | xmessage -center -title 'xprop' -file -"),
   ("Font Chooser", EXEC, "xfontsel"),
   ("Terminal Emulator", EXEC, "xminicom"),
   ("Magnify", EXEC, "xmag"),
@@ -51,7 +51,7 @@
   ("Clipboard", EXEC, "xclipboard")
   ),
  ("Selection",
-  ("Copy", EXEC, "echo '%s' | wxcopy"),
+  ("Copy", SHEXEC, "echo '%s' | wxcopy"),
   ("Mail To", EXEC, "xterm -name mail -T Pine -e pine %s"),
   ("Navigate", EXEC, "netscape %s"),
   ("Search in Manual", EXEC, "MANUAL_SEARCH(%s)")

@@ -57,10 +57,6 @@ static void paintButton(WCoreWindow *button, WTexture *texture,
 
 static void updateTitlebar(WFrameWindow *fwin);
 
-static void remakeTexture(WFrameWindow *fwin, int state, int newWidth);
-
-static void updateTexture(WFrameWindow *fwin);
-
 
 WFrameWindow*
 wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y, 
@@ -142,15 +138,13 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
 	if (flags & WFF_TITLEBAR) {
 	    fwin->top_width = theight;
 
-	    fwin->flags.need_texture1_remake = 1;
-	    fwin->flags.need_texture2_remake = 1;
-	    fwin->flags.need_texture3_remake = 1;
-
+	    fwin->flags.need_texture_remake = 1;
+	    
 	    if (wPreferences.new_style) {
 		if (fwin->left_button) {
 		    wCoreConfigure(fwin->left_button, 0, 0, bsize, bsize);
 		}
-
+		
 		if (fwin->right_button) {
 		    wCoreConfigure(fwin->right_button, width-bsize+1,
 				   0, bsize, bsize);
@@ -160,7 +154,7 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
 		    wCoreConfigure(fwin->left_button, 3, (theight-bsize)/2,
 				   bsize, bsize);
 		}
-
+		
 		if (fwin->right_button) {
 		    wCoreConfigure(fwin->right_button, width-bsize-3,
 				   (theight-bsize)/2, bsize, bsize);
@@ -179,25 +173,25 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
 	    if (fwin->left_button)
 		wCoreDestroy(fwin->left_button);
 	    fwin->left_button = NULL;
-
+	    
 	    if (fwin->right_button)
 		wCoreDestroy(fwin->right_button);
 	    fwin->right_button = NULL;
-
+	    
 	    wCoreDestroy(fwin->titlebar);
 	    fwin->titlebar = NULL;
-
+	    
 	    fwin->top_width = 0;
 	}
     } else {
 	/* if we didn't have a titlebar and are being requested for
 	 * one, create it */
-	if (flags & WFF_TITLEBAR) {
+	if (flags & WFF_TITLEBAR) {		
 	    fwin->top_width = theight;
-
+	    
 	    fwin->flags.titlebar = 1;
 	    fwin->titlebar = wCoreCreate(fwin->core, 0, 0, width+1, theight);
-
+	    
 	    if (flags & WFF_LEFT_BUTTON) {
 		fwin->flags.left_button = 1;
                 if (wPreferences.new_style) {
@@ -251,9 +245,7 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
 
 	    XMapRaised(dpy, fwin->titlebar->window);
 
-	    fwin->flags.need_texture1_remake = 1;
-	    fwin->flags.need_texture2_remake = 1;
-	    fwin->flags.need_texture3_remake = 1;
+	    fwin->flags.need_texture_remake = 1;
 	}
     }
     checkTitleSize(fwin);
@@ -280,9 +272,7 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
 	    XMapWindow(dpy, fwin->resizebar->window);
 	    XLowerWindow(dpy, fwin->resizebar->window);
 	    
-	    fwin->flags.need_texture1_remake = 1;
-	    fwin->flags.need_texture2_remake = 1;
-	    fwin->flags.need_texture3_remake = 1;
+	    fwin->flags.need_texture_remake = 1;
 	} else {
 	    if (height+fwin->top_width+fwin->bottom_width != fwin->core->height) {
 		wCoreConfigure(fwin->resizebar, 0, height + fwin->top_width,
@@ -415,11 +405,8 @@ updateTitlebar(WFrameWindow *fwin)
 	}
     }
 
-    if (wPreferences.new_style || fwin->titlebar->width!=w) {
-	fwin->flags.need_texture1_remake = 1;
-	fwin->flags.need_texture2_remake = 1;
-	fwin->flags.need_texture3_remake = 1;
-    }
+    if (wPreferences.new_style || fwin->titlebar->width!=w)
+	fwin->flags.need_texture_remake = 1;
 
     wCoreConfigure(fwin->titlebar, x, 0, w, theight);
 }
@@ -492,7 +479,7 @@ renderTexture(WScreen *scr, WTexture *texture, int width, int height,
     RImage *img;
     RImage *limg, *rimg, *mimg;
     int x, w;
-    
+
     *title = None;
     *lbutton = None;
     *rbutton = None;
@@ -659,13 +646,12 @@ updateTexture(WFrameWindow *fwin)
 	    handleButtonExpose(&fwin->right_button->descriptor, NULL);
 	}
     }
-    XFlush(dpy);
 }
 
 
 
 static void
-remakeTexture(WFrameWindow *fwin, int state, int newWidth)
+remakeTexture(WFrameWindow *fwin, int state)
 {
     Pixmap pmap, lpmap, rpmap;
 
@@ -686,7 +672,7 @@ remakeTexture(WFrameWindow *fwin, int state, int newWidth)
 	    right = fwin->right_button && !fwin->flags.hide_right_button
 		&& !fwin->flags.rbutton_dont_fit;
 
-	    width = newWidth+1;
+	    width = fwin->core->width+1;
 
 	    renderTexture(fwin->screen_ptr, fwin->title_texture[state],
 			  width, fwin->titlebar->height,
@@ -701,7 +687,7 @@ remakeTexture(WFrameWindow *fwin, int state, int newWidth)
 	}
     }
     if (fwin->resizebar_texture && fwin->resizebar_texture[0] 
-	&& fwin->resizebar && state == fwin->flags.state) {
+	&& fwin->resizebar && state == 0) {
 
 	FREE_PIXMAP(fwin->resizebar_back[0]);
 
@@ -709,7 +695,8 @@ remakeTexture(WFrameWindow *fwin, int state, int newWidth)
 
 	    renderResizebarTexture(fwin->screen_ptr,
 				   fwin->resizebar_texture[0],
-				   newWidth, fwin->resizebar->height,
+				   fwin->resizebar->width,
+				   fwin->resizebar->height,
 				   fwin->resizebar_corner_width,
 				   &pmap);
 
@@ -735,42 +722,31 @@ wFrameWindowPaint(WFrameWindow *fwin)
     if (fwin->flags.is_client_window_frame)
 	fwin->flags.justification = wPreferences.title_justification;
 
-    if (fwin->flags.need_texture1_remake || fwin->flags.need_texture2_remake
-	 || fwin->flags.need_texture3_remake) {
+    if (fwin->flags.need_texture_remake) {
+	int i;
+
+	fwin->flags.need_texture_remake = 0;
+	fwin->flags.need_texture_change = 0;
 
 	if (fwin->flags.single_texture) {
+	    remakeTexture(fwin, 0);
+	    updateTexture(fwin);
+	} else {
+	    /* first render the texture for the current state... */
+	    remakeTexture(fwin, fwin->flags.state);
+	    /* ... and paint it */
+	    updateTexture(fwin);
 
-	    fwin->flags.need_texture_change = 1;
-
-	    fwin->flags.need_texture1_remake = 0;
-	    fwin->flags.need_texture2_remake = 0;
-	    fwin->flags.need_texture3_remake = 0;
-
-	    remakeTexture(fwin, 0, fwin->core->width);
-
-	} else if (fwin->flags.state==0 && fwin->flags.need_texture1_remake) {
-
-	    fwin->flags.need_texture_change = 1;
-	    fwin->flags.need_texture1_remake = 0;
-	    remakeTexture(fwin, fwin->flags.state, fwin->core->width);
-
-	} else if (fwin->flags.state==1 && fwin->flags.need_texture2_remake) {
-
-	    fwin->flags.need_texture_change = 1;
-	    fwin->flags.need_texture2_remake = 0;
-	    remakeTexture(fwin, fwin->flags.state, fwin->core->width);
-
-	} else if (fwin->flags.state==2 && fwin->flags.need_texture3_remake) {
-
-	    fwin->flags.need_texture_change = 1;
-	    fwin->flags.need_texture3_remake = 0;
-	    remakeTexture(fwin, fwin->flags.state, fwin->core->width);
+	    for (i=0; i < 3; i++) {
+		if (i!=fwin->flags.state)
+		    remakeTexture(fwin, i);
+	    }
 	}
     }
     
     if (fwin->flags.need_texture_change) {	
 	fwin->flags.need_texture_change = 0;
-
+	
 	updateTexture(fwin);
     }
     
@@ -877,7 +853,7 @@ wFrameWindowPaint(WFrameWindow *fwin)
 	}
 
 #ifdef TITLE_TEXT_SHADOW
-       if(wPreferences.title_shadow) {
+       if(wPreferences.title_shadow){
           int shadowx,shadowy;
           XSetForeground(dpy, *fwin->title_gc, 
               fwin->title_pixel[fwin->flags.state+3]);
@@ -928,6 +904,7 @@ reconfigure(WFrameWindow *fwin, int x, int y, int width, int height,
 		 height - fwin->resizebar->height);
      */
     if (fwin->core->width != width) {
+        fwin->flags.need_texture_remake = 1;
 	resizedHorizontally = 1;
     }
     
@@ -996,13 +973,11 @@ reconfigure(WFrameWindow *fwin, int x, int y, int width, int height,
     }
 }
 
-
 void 
 wFrameWindowConfigure(WFrameWindow *fwin, int x, int y, int width, int height)
 {
     reconfigure(fwin, x, y, width, height, False);
 }
-
 
 void
 wFrameWindowResize(WFrameWindow *fwin, int width, int height)
