@@ -2750,6 +2750,10 @@ wMenuRestoreState(WScreen *scr)
 {
     WMPropList *menus, *menu, *key, *skey;
 
+    if (!scr->session_state) {
+        return;
+    }
+
     key = WMCreatePLString("Menus");
     menus = WMGetFromPLDictionary(scr->session_state, key);
     WMReleasePropList(key);
