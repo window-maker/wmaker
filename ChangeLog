@@ -47,6 +47,12 @@ Changes since version 0.64.0:
   a need to restart as until now).
 - Fixed a bug in the icon chooser dialog that made the selected icon look
   wrong if it had alpha blending.
+- Removed the following 3 options from configuration: SelectWindowsMouseButton,
+  WindowListMouseButton and ApplicationMenuMouseButton.
+- Added 4 options to the configuration file for binding workspace actions to
+  mouse buttons: MouseLeftButtonAction, MouseMiddleButtonAction,
+  MouseRightButtonAction and MouseWheelAction. They replace the above 3
+  removed options, but use a different semantic. More in NEWS.
 
 
 Changes since version 0.63.1:

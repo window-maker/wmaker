@@ -262,13 +262,17 @@ static WOptionEnumeration seSpeeds[] = {
     {NULL, 0, 0}
 };
 
-static WOptionEnumeration seMouseButtons[] = {
-    {"None", -1, 0},
-    {"Left", Button1, 0}, {"Button1", Button1, 1},
-    {"Middle", Button2, 0}, {"Button2", Button2, 1},
-    {"Right", Button3, 0}, {"Button3", Button3, 1},
-    {"Button4", Button4, 0},
-    {"Button5", Button5, 0},
+static WOptionEnumeration seMouseButtonActions[] = {
+    {"None", WA_NONE, 0},
+    {"SelectWindows", WA_SELECT_WINDOWS, 0},
+    {"OpenApplicationsMenu", WA_OPEN_APPMENU, 0},
+    {"OpenWindowListMenu", WA_OPEN_WINLISTMENU, 0},
+    {NULL, 0, 0}
+};
+
+static WOptionEnumeration seMouseWheelActions[] = {
+    {"None", WA_NONE, 0},
+    {"SwitchWorkspaces", WA_SWITCH_WORKSPACES, 0},
     {NULL, 0, 0}
 };
 
@@ -389,14 +393,17 @@ WDefaultEntry optionList[] = {
     {"IconificationStyle", "Zoom",             seIconificationStyles,
          &wPreferences.iconification_style,    getEnum, NULL
     },
-    {"SelectWindowsMouseButton", "Left",	seMouseButtons,
-	  &wPreferences.select_button, 	getEnum,	NULL
+    {"MouseLeftButtonAction", "SelectWindows",	seMouseButtonActions,
+	  &wPreferences.mouse_button1, 	getEnum,	NULL
     },
-    {"WindowListMouseButton", "Middle",		seMouseButtons,
-	  &wPreferences.windowl_button, getEnum,	NULL
+    {"MouseMiddleButtonAction", "OpenWindowListMenu",	seMouseButtonActions,
+	  &wPreferences.mouse_button2, getEnum,	NULL
     },
-    {"ApplicationMenuMouseButton", "Right",	seMouseButtons,
-	  &wPreferences.menu_button,	getEnum,	NULL
+    {"MouseRightButtonAction", "OpenApplicationsMenu",	seMouseButtonActions,
+	  &wPreferences.mouse_button3,	getEnum,	NULL
+    },
+    {"MouseWheelAction", "None",	seMouseWheelActions,
+	  &wPreferences.mouse_wheel,	getEnum,	NULL
     },
     {"PixmapPath",	DEF_PIXMAP_PATHS,	NULL,
 	  &wPreferences.pixmap_path,	getPathList,	NULL

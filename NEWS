@@ -10,6 +10,51 @@ Single AppIcon
 Removed --single-appicon patch and replaced it with a application
 specific collapsing option. Check inspector panel and appicon menu.
 
+New options to configure the workspace mouse actions
+----------------------------------------------------
+
+The following options were removed from the WindowMaker defaults configuration
+file:
+
+SelectWindowsMouseButton, WindowListMouseButton and ApplicationMenuMouseButton.
+
+They were replaced with the following 3+1:
+
+MouseLeftButtonAction, MouseMiddleButtonAction and MouseRightButtonAction plus
+MouseWheelAction
+
+In the old way because all gravitated around the workspace actions to which
+specific mouse buttons could have been bound, it allowed one to specify in
+the configuration file settings which would have led to weird situations
+that also had undesirable results.
+For example the same mouse button (for example left) could have been
+assigned to all workspace actions: 'select windows', 'show window list menu'
+and 'show applications menu' which of course were not only impossible to
+accomplish while still having a properly working workspace, but they also
+allowed one to specify some settings in the configuration file that were
+never in fact translatable to proper workspace actions.
+
+To void this kind of user interface inconsistency, the new options now
+gravitate around the physical device (the mouse and its buttons) to which
+specific workspace actions can be bound. This way, even if one assigns the
+same action to all mouse buttons, that situation while gives redundant and
+unpractical settings it will still translatable to proper workspace actions:
+all buttons will execute the same action, but a button will execute only one
+action at a time.
+
+The new options take the following values:
+all Mouse...ButtonAction can have one of the following values:
+
+None, SelectWindows, OpenApplicationsMenu or OpenWindowListMenu
+
+MouseWheelAction can be one of None or SwitchWorkspaces
+
+If you had the default actions bound to mouse buttons before, then it will
+work for you without any intervention in the configuration files.
+Else you need to use WPrefs.app to bind the actions to the mouse buttons
+again to your old settings. Also if you want to change the mouse wheel
+behavior regarding workspaces you can now (use WPrefs.app to do this).
+
 
 --- 0.64.0
 

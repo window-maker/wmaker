@@ -217,6 +217,12 @@ typedef enum {
 #define MS_SINGLE_TEXTURE	1
 #define MS_FLAT			2
 
+/* workspace actions */
+#define WA_NONE                 0
+#define WA_SELECT_WINDOWS       1
+#define WA_OPEN_APPMENU         2
+#define WA_OPEN_WINLISTMENU     3
+#define WA_SWITCH_WORKSPACES    4
 
 /* workspace display position */
 #define WD_NONE		0
@@ -431,9 +437,10 @@ typedef struct WPreferences {
     char superfluous;		       /* Use superfluous things */
 
     /* root window mouse bindings */
-    signed char select_button;		       /* button for window selection */
-    signed char windowl_button;	       /* button for window list menu */
-    signed char menu_button;		       /* button for app menu */
+    signed char mouse_button1;	       /* action for left mouse button */
+    signed char mouse_button2;	       /* action for middle mouse button */
+    signed char mouse_button3;	       /* action for right mouse button */
+    signed char mouse_wheel;	       /* action for mouse wheel */
 
     /* balloon text */
     char window_balloon;

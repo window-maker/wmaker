@@ -590,6 +590,39 @@ handleExpose(XEvent *event)
     }
 }
 
+static void
+executeButtonAction(WScreen *scr, XEvent *event, int action)
+{
+    switch(action) {
+    case WA_SELECT_WINDOWS:
+        wUnselectWindows(scr);
+        wSelectWindows(scr, event);
+        break;
+    case WA_OPEN_APPMENU:
+        OpenRootMenu(scr, event->xbutton.x_root, event->xbutton.y_root, False);
+        /* ugly hack */
+        if (scr->root_menu) {
+            if (scr->root_menu->brother->flags.mapped)
+                event->xbutton.window = scr->root_menu->brother->frame->core->window;
+            else
+                event->xbutton.window = scr->root_menu->frame->core->window;
+        }
+        break;
+    case WA_OPEN_WINLISTMENU:
+        OpenSwitchMenu(scr, event->xbutton.x_root, event->xbutton.y_root, False);
+        if (scr->switch_menu) {
+            if (scr->switch_menu->brother->flags.mapped)
+                event->xbutton.window = scr->switch_menu->brother->frame->core->window;
+            else
+                event->xbutton.window = scr->switch_menu->frame->core->window;
+        }
+        break;
+    default:
+        break;
+    }
+}
+
+
 /* bindable */
 static void
 handleButtonPress(XEvent *event)
@@ -609,33 +642,22 @@ handleButtonPress(XEvent *event)
     
 #ifndef LITE
     if (event->xbutton.window==scr->root_win) {	
-	if (event->xbutton.button==wPreferences.menu_button) {
-	    OpenRootMenu(scr, event->xbutton.x_root,
-                         event->xbutton.y_root, False);
-	    /* ugly hack */
-	    if (scr->root_menu) {
-		if (scr->root_menu->brother->flags.mapped)
-		  event->xbutton.window = scr->root_menu->brother->frame->core->window;
-		else
-		  event->xbutton.window = scr->root_menu->frame->core->window;
-	    }
-	} else if (event->xbutton.button==wPreferences.windowl_button) {
-	    OpenSwitchMenu(scr, event->xbutton.x_root,
-			   event->xbutton.y_root, False);
-	    if (scr->switch_menu) {
-		if (scr->switch_menu->brother->flags.mapped)
-		  event->xbutton.window = scr->switch_menu->brother->frame->core->window;
-		else
-		  event->xbutton.window = scr->switch_menu->frame->core->window;
-	    }
-	} else if (event->xbutton.button==wPreferences.select_button) {
-	    wUnselectWindows(scr);
-	    wSelectWindows(scr, event);
-	} else if (event->xbutton.button==Button5) {
-	    wWorkspaceRelativeChange(scr, -1);
-	} else if (event->xbutton.button==Button4) {
+        if (event->xbutton.button==Button1 &&
+            wPreferences.mouse_button1!=WA_NONE) {
+            executeButtonAction(scr, event, wPreferences.mouse_button1);
+        } else if (event->xbutton.button==Button2 &&
+                   wPreferences.mouse_button2!=WA_NONE) {
+            executeButtonAction(scr, event, wPreferences.mouse_button2);
+        } else if (event->xbutton.button==Button3 &&
+                   wPreferences.mouse_button3!=WA_NONE) {
+            executeButtonAction(scr, event, wPreferences.mouse_button3);
+        } else if (event->xbutton.button==Button4 &&
+                   wPreferences.mouse_wheel!=WA_NONE) {
 	    wWorkspaceRelativeChange(scr, 1);
-	}
+        } else if (event->xbutton.button==Button5 &&
+                   wPreferences.mouse_wheel!=WA_NONE) {
+            wWorkspaceRelativeChange(scr, -1);
+        }
 #ifdef GNOME_STUFF
 	else if (wGNOMEProxyizeButtonEvent(scr, event))
 	    return;

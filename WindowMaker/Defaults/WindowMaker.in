@@ -31,9 +31,10 @@
   IconSize = 64;
   FocusMode = manual;
   DisableWSMouseActions = NO;
-  SelectWindowsMouseButton = left;
-  WindowListMouseButton = middle;
-  ApplicationMenuMouseButton = right;
+  MouseLeftButtonAction = SelectWindows;
+  MouseMiddleButtonAction = OpenWindowListMenu;
+  MouseRightButtonAction = OpenApplicationsMenu;
+  MouseWheelAction = None;
   ColormapSize = 4;
   DisableDithering = NO;
   ModifierKey = Mod1;

@@ -270,10 +270,10 @@ createPanel(Panel *p)
     WMAddPopUpButtonItem(panel->posP, _("Center"));
     WMAddPopUpButtonItem(panel->posP, _("Top"));
     WMAddPopUpButtonItem(panel->posP, _("Bottom"));
-    WMAddPopUpButtonItem(panel->posP, _("Top/left"));
-    WMAddPopUpButtonItem(panel->posP, _("Top/right"));
-    WMAddPopUpButtonItem(panel->posP, _("Bottom/left"));
-    WMAddPopUpButtonItem(panel->posP, _("Bottom/right"));
+    WMAddPopUpButtonItem(panel->posP, _("Top/Left"));
+    WMAddPopUpButtonItem(panel->posP, _("Top/Right"));
+    WMAddPopUpButtonItem(panel->posP, _("Bottom/Left"));
+    WMAddPopUpButtonItem(panel->posP, _("Bottom/Right"));
     
     WMMapSubwidgets(panel->navF);
 
