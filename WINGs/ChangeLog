@@ -58,7 +58,8 @@ Changes since wmaker 0.80.1:
 - Fixed small memory leak in the font panel code.
 - Fixed call to qsort in WMSortArray.
 - Fixed a memleak in the file panel.
-
+- Double/triple-click selection in text widgets (Vitaly Ovtchinnikov
+  <ov@rbcmail.ru>)
 
 Changes since wmaker 0.80.0:
 ............................

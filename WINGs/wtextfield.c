@@ -1396,6 +1396,7 @@ handleTextFieldActionEvents(XEvent *event, void *data)
     TextField *tPtr = (TextField*)data;
     static int move = 0;
     static Time lastButtonReleasedEvent = 0;
+	static Time lastButtonReleasedEvent2 = 0;
     Display *dpy = event->xany.display;
     
     CHECK_CLASS(data, WC_TextField);
@@ -1554,8 +1555,30 @@ handleTextFieldActionEvents(XEvent *event, void *data)
         if (!tPtr->flags.secure &&
             event->xbutton.time - lastButtonReleasedEvent
             <= WINGsConfiguration.doubleClickDelay) {
-	    tPtr->selection.position = 0;
-	    tPtr->selection.count = tPtr->textLen;
+
+			if (event->xbutton.time - lastButtonReleasedEvent2 <= 2*WINGsConfiguration.doubleClickDelay) {
+				tPtr->selection.position = 0;
+				tPtr->selection.count = tPtr->textLen;
+			} else {
+				int pos, cnt;
+				char *txt;
+				pos = tPtr->selection.position;
+				cnt = tPtr->selection.count;
+				txt = tPtr->text;
+				while(pos >= 0) {
+					if (txt[pos] == ' ' || txt[pos] == '\t') break;
+					pos--;
+				}
+				pos++;
+
+				while(pos + cnt < tPtr->textLen) {
+					if (txt[pos + cnt] == ' ' || txt[pos + cnt] == '\t')
+						break;
+					cnt++;
+				}
+				tPtr->selection.position = pos;
+				tPtr->selection.count = cnt;
+			}
             paintTextField(tPtr);
 	    
 	    if (!tPtr->flags.ownsSelection) {
@@ -1574,6 +1597,7 @@ handleTextFieldActionEvents(XEvent *event, void *data)
                                          &selectionHandler, NULL);
         }
 
+	lastButtonReleasedEvent2 = lastButtonReleasedEvent;
 	lastButtonReleasedEvent = event->xbutton.time;
 		
         break;
