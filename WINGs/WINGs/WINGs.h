@@ -658,8 +658,8 @@ void WMMaskEvent(Display *dpy, long mask, XEvent *event);
 WMHandlerID WMAddTimerHandler(int milliseconds, WMCallback *callback, 
 			      void *cdata);
 
-WMHandlerID WMAddEternalTimerHandler(int milliseconds, WMCallback *callback,
-				     void *cdata);
+WMHandlerID WMAddPersistentTimerHandler(int milliseconds, WMCallback *callback,
+                                        void *cdata);
 
 void WMDeleteTimerWithClientData(void *cdata);
 

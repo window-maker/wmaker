@@ -538,6 +538,14 @@ void W_BalloonHandleEnterView(WMView *view);
 
 void W_BalloonHandleLeaveView(WMView *view);
 
+Bool W_CheckIdleHandlers(void);
+
+void W_CheckTimerHandlers(void);
+
+Bool W_HaveInputHandlers(void);
+
+Bool W_HandleInputEvents(Bool waitForInput, int inputfd);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

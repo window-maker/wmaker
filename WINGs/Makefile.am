@@ -29,6 +29,7 @@ libWINGs_a_SOURCES = 	\
 	dragsource.c \
 	error.c \
 	findfile.c \
+	handlers.c \
 	hashtable.c \
 	host.c \
 	international.c \
@@ -81,6 +82,7 @@ libWUtil_a_SOURCES = 	\
 	data.c \
 	error.c \
 	findfile.c \
+	handlers.c \
 	hashtable.c \
 	host.c \
 	international.c \

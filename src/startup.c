@@ -800,7 +800,7 @@ StartUp(Bool defaultScreenOnly)
     wCursor[WCUR_SELECT] = XCreateFontCursor(dpy, XC_cross);
     
     /* signal handler stuff that gets called when a signal is caught */
-    WMAddEternalTimerHandler(500, delayedAction, NULL);
+    WMAddPersistentTimerHandler(500, delayedAction, NULL);
 
     /* emergency exit... */
     sig_action.sa_handler = handleSig;

@@ -4,7 +4,9 @@ Changes since wmaker 0.64.0:
 - made programmatic scroller changes send notifications
 - replaced WMSetBoxExpandsToParent with WMSetViewExpands...
 - added WMGetLabelFont()
-- added WMAddEternalTimerHandler()
+- added WMAddPersistentTimerHandler()
+- Moved all internal handlers (timer, idle and input) to handlers.c
+- simplified wevent.c and wutil.c.
 
 changes since wmaker 0.63.1:
 ............................
