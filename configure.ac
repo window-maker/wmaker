@@ -535,7 +535,7 @@ else
         exit 1
 fi
 
-minXFT="2.1.2"
+minXFT="2.1.0"
 goodxft="no"
 
 dnl

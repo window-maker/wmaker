@@ -1074,6 +1074,9 @@ keyboardMenu(WMenu *menu)
                 break;
 
             case XK_Return:
+#ifdef XK_KP_Enter
+            case XK_KP_Enter:
+#endif
                 done = 2;
                 break;
 

@@ -383,17 +383,16 @@ updateIconImage(WScreen *scr, WWindow *wwin)
 
     if (rc==Success && prop_return) {
         unsigned int *data = (unsigned int *)prop_return;
-        unsigned int pos = 0, len = 0;
-        unsigned int best_pos = 0, best_tmp = ~0;
-        extern WPreferences wPreferences;
+        unsigned int pos = 0, len = 0, best_pos = 0, best_tmp = ~0;
         unsigned int pref_size = wPreferences.icon_size;
         unsigned int pref_sq = pref_size*pref_size;
+        unsigned int tmp;
         char *src, *dst;
         RImage *new_rimage;
 
         do {
             len = data[pos+0]*data[pos+1];
-            unsigned int tmp = pref_sq-len;
+            tmp = pref_sq-len;
             if (tmp < best_tmp && tmp > 0) {
                 best_tmp = tmp;
                 best_pos = pos;

@@ -5,6 +5,8 @@ Changes since version 0.91.0:
 - allow disable of switch panel when SwitchPanelImages=None
 - added X Input Methods support in WINGs
 - fixed issues with compiling on Solaris with openwin
+- reduced minimum required version number for the Xft library to 2.1.0
+- fixed some compilation issues with gcc-2.9x
 
 
 Changes since version 0.90.0:
