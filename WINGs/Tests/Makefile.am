@@ -16,6 +16,7 @@ wtest_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
 EXTRA_DIST = logo.xpm upbtn.xpm wm.html wm.png
 
 INCLUDES = -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
-	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @HEADER_SEARCH_PATH@ -DDEBUG
+	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @XFTFLAGS@ @HEADER_SEARCH_PATH@ \
+	-DDEBUG
 
 

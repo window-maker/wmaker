@@ -63,20 +63,20 @@ static WMEventHook *extraEventHandler=NULL;
  * 	Create an event handler and put it in the event handler list for the
  * view. If the same callback and clientdata are already used in another
  * handler, the masks are OR'ed.
- * 
+ *
  */
 void
-WMCreateEventHandler(WMView *view, unsigned long mask, WMEventProc *eventProc,
-		     void *clientData)
+    WMCreateEventHandler(WMView *view, unsigned long mask, WMEventProc *eventProc,
+                         void *clientData)
 {
     W_EventHandler *hPtr;
     WMArrayIterator iter;
 
     WM_ITERATE_ARRAY(view->eventHandlers, hPtr, iter) {
-	if (hPtr->clientData==clientData && hPtr->proc==eventProc) {
+        if (hPtr->clientData==clientData && hPtr->proc==eventProc) {
             hPtr->eventMask |= mask;
             return;
-	}
+        }
     }
 
     hPtr = wmalloc(sizeof(W_EventHandler));
@@ -105,11 +105,11 @@ matchHandler(void *item, void *cdata)
  * WMDeleteEventHandler--
  * 	Delete event handler matching arguments from windows
  * event handler list.
- * 
+ *
  */
 void
-WMDeleteEventHandler(WMView *view, unsigned long mask, WMEventProc *eventProc, 
-		     void *clientData)
+WMDeleteEventHandler(WMView *view, unsigned long mask, WMEventProc *eventProc,
+                     void *clientData)
 {
     W_EventHandler tmp;
 
@@ -124,27 +124,27 @@ static Time
 getEventTime(WMScreen *screen, XEvent *event)
 {
     switch (event->type) {
-     case ButtonPress:
-     case ButtonRelease:
-	return event->xbutton.time;
-     case KeyPress:
-     case KeyRelease:
-	return event->xkey.time;
-     case MotionNotify:
-	return event->xmotion.time;
-     case EnterNotify:
-     case LeaveNotify:
-	return event->xcrossing.time;
-     case PropertyNotify:
-	return event->xproperty.time;
-     case SelectionClear:
-	return event->xselectionclear.time;
-     case SelectionRequest:
-	return event->xselectionrequest.time;
-     case SelectionNotify:
-	return event->xselection.time;
-     default:
-	return screen->lastEventTime;	
+    case ButtonPress:
+    case ButtonRelease:
+        return event->xbutton.time;
+    case KeyPress:
+    case KeyRelease:
+        return event->xkey.time;
+    case MotionNotify:
+        return event->xmotion.time;
+    case EnterNotify:
+    case LeaveNotify:
+        return event->xcrossing.time;
+    case PropertyNotify:
+        return event->xproperty.time;
+    case SelectionClear:
+        return event->xselectionclear.time;
+    case SelectionRequest:
+        return event->xselectionrequest.time;
+    case SelectionNotify:
+        return event->xselection.time;
+    default:
+        return screen->lastEventTime;
     }
 }
 
@@ -162,9 +162,9 @@ W_CallDestroyHandlers(W_View *view)
     event.xdestroywindow.event = view->window;
 
     WM_ITERATE_ARRAY(view->eventHandlers, hPtr, iter) {
-	if (hPtr->eventMask & StructureNotifyMask) {
-	    (*hPtr->proc)(&event, hPtr->clientData);
-	}
+        if (hPtr->eventMask & StructureNotifyMask) {
+            (*hPtr->proc)(&event, hPtr->clientData);
+        }
     }
 }
 
@@ -175,7 +175,7 @@ WMSetViewNextResponder(WMView *view, WMView *responder)
 {
     /* set the widget to receive keyboard events that aren't handled
      * by this widget */
-    
+
     view->nextResponder = responder;
 }
 
@@ -186,15 +186,15 @@ WMRelayToNextResponder(WMView *view, XEvent *event)
     unsigned long mask = eventMasks[event->xany.type];
 
     if (view->nextResponder) {
-	WMView *next = view->nextResponder;
-	W_EventHandler *hPtr;
-	WMArrayIterator iter;
+        WMView *next = view->nextResponder;
+        W_EventHandler *hPtr;
+        WMArrayIterator iter;
 
         WM_ITERATE_ARRAY(next->eventHandlers, hPtr, iter) {
-	    if ((hPtr->eventMask & mask)) {
-		(*hPtr->proc)(event, hPtr->clientData);
-	    }
-	}
+            if ((hPtr->eventMask & mask)) {
+                (*hPtr->proc)(event, hPtr->clientData);
+            }
+        }
     }
 }
 
@@ -209,28 +209,28 @@ WMHandleEvent(XEvent *event)
     WMArrayIterator iter;
 
     if (event->type == MappingNotify) {
-	XRefreshKeyboardMapping(&event->xmapping);
-	return True;
+        XRefreshKeyboardMapping(&event->xmapping);
+        return True;
     }
 
     mask = eventMasks[event->xany.type];
-    
+
     window = event->xany.window;
 
     /* diferentiate SubstructureNotify with StructureNotify */
     if (mask == StructureNotifyMask) {
-	if (event->xmap.event != event->xmap.window) {
-	    mask = SubstructureNotifyMask;
-	    window = event->xmap.event;
-	}
+        if (event->xmap.event != event->xmap.window) {
+            mask = SubstructureNotifyMask;
+            window = event->xmap.event;
+        }
     }
     view = W_GetViewForXWindow(event->xany.display, window);
 
     if (!view) {
-	if (extraEventHandler)
-	    (extraEventHandler)(event);
+        if (extraEventHandler)
+            (extraEventHandler)(event);
 
-	return False;
+        return False;
     }
 
     view->screen->lastEventTime = getEventTime(view->screen, event);
@@ -238,22 +238,19 @@ WMHandleEvent(XEvent *event)
     toplevel = W_TopLevelOfView(view);
 
     if (event->type == SelectionNotify || event->type == SelectionClear
-	|| event->type == SelectionRequest) {
-	/* handle selection related events */
-	W_HandleSelectionEvent(event);
-	
-    } else if (event->type == ClientMessage) {
-	
-	W_HandleDNDClientMessage(toplevel, &event->xclient);
+        || event->type == SelectionRequest) {
+        /* handle selection related events */
+        W_HandleSelectionEvent(event);
+
     }
 
     /* if it's a key event, redispatch it to the focused control */
     if (mask & (KeyPressMask|KeyReleaseMask)) {
-	W_View *focused = W_FocusedViewOfToplevel(toplevel);
-	
-	if (focused) {
-	    view = focused;
-	}
+        W_View *focused = W_FocusedViewOfToplevel(toplevel);
+
+        if (focused) {
+            view = focused;
+        }
     }
 
     /* compress Motion events */
@@ -261,37 +258,37 @@ WMHandleEvent(XEvent *event)
         while (XPending(event->xmotion.display)) {
             XEvent ev;
             XPeekEvent(event->xmotion.display, &ev);
-            if (ev.type == MotionNotify 
-		&& event->xmotion.window == ev.xmotion.window 
-		&& event->xmotion.subwindow == ev.xmotion.subwindow) {
-		/* replace events */
+            if (ev.type == MotionNotify
+                && event->xmotion.window == ev.xmotion.window
+                && event->xmotion.subwindow == ev.xmotion.subwindow) {
+                /* replace events */
                 XNextEvent(event->xmotion.display, event);
             } else break;
         }
     }
-    
+
     /* compress expose events */
     if (event->type == Expose && !view->flags.dontCompressExpose) {
         while (XCheckTypedWindowEvent(event->xexpose.display, view->window,
-				      Expose, event));
+                                      Expose, event));
     }
 
 
     if (view->screen->modalLoop && toplevel!=view->screen->modalView
-	&& !toplevel->flags.worksWhenModal) {
-	if (event->type == KeyPress || event->type == KeyRelease
-	    || event->type == MotionNotify || event->type == ButtonPress
-	    || event->type == ButtonRelease
-	    || event->type == FocusIn || event->type == FocusOut) {
-	    return True;
-	}
+        && !toplevel->flags.worksWhenModal) {
+        if (event->type == KeyPress || event->type == KeyRelease
+            || event->type == MotionNotify || event->type == ButtonPress
+            || event->type == ButtonRelease
+            || event->type == FocusIn || event->type == FocusOut) {
+            return True;
+        }
     }
 
     /* do balloon stuffs */
     if (event->type == EnterNotify)
-	W_BalloonHandleEnterView(view);
+        W_BalloonHandleEnterView(view);
     else if (event->type == LeaveNotify)
-	W_BalloonHandleLeaveView(view);
+        W_BalloonHandleLeaveView(view);
 
     /* This is a hack. It will make the panel be secure while
      * the event handlers are handled, as some event handler
@@ -299,33 +296,38 @@ WMHandleEvent(XEvent *event)
     W_RetainView(toplevel);
 
     WM_ITERATE_ARRAY(view->eventHandlers, hPtr, iter) {
-	if ((hPtr->eventMask & mask)) {
-	    (*hPtr->proc)(event, hPtr->clientData);
-	}
+        if ((hPtr->eventMask & mask)) {
+            (*hPtr->proc)(event, hPtr->clientData);
+        }
     }
 #if 0
     /* pass the event to the top level window of the widget */
     /* TODO: change this to a responder chain */
     if (view->parent != NULL) {
-	vPtr = view;
-	while (vPtr->parent != NULL)
-	    vPtr = vPtr->parent;
+        vPtr = view;
+        while (vPtr->parent != NULL)
+            vPtr = vPtr->parent;
 
-	WM_ITERATE_ARRAY(vPtr->eventHandlers, hPtr, iter) {
-	    if (hPtr->eventMask & mask) {
-		(*hPtr->proc)(event, hPtr->clientData);
-	    }
-	}
+        WM_ITERATE_ARRAY(vPtr->eventHandlers, hPtr, iter) {
+            if (hPtr->eventMask & mask) {
+                (*hPtr->proc)(event, hPtr->clientData);
+            }
+        }
     }
 #endif
     /* save button click info to track double-clicks */
     if (view->screen->ignoreNextDoubleClick) {
-	view->screen->ignoreNextDoubleClick = 0;
+        view->screen->ignoreNextDoubleClick = 0;
     } else {
-	if (event->type == ButtonPress) {
-	    view->screen->lastClickWindow = event->xbutton.window;
-	    view->screen->lastClickTime = event->xbutton.time;
-	}
+        if (event->type == ButtonPress) {
+            view->screen->lastClickWindow = event->xbutton.window;
+            view->screen->lastClickTime = event->xbutton.time;
+        }
+    }
+
+    if (event->type == ClientMessage) {
+        /* must be handled at the end, for such message can destroy the view */
+        W_HandleDNDClientMessage(toplevel, &event->xclient);
     }
 
     W_ReleaseView(toplevel);
@@ -338,26 +340,26 @@ int
 WMIsDoubleClick(XEvent *event)
 {
     W_View *view;
-    
+
     if (event->type != ButtonPress)
-	return False;
-    
+        return False;
+
     view = W_GetViewForXWindow(event->xany.display, event->xbutton.window);
 
     if (!view)
-	return False;
-    
+        return False;
+
     if (view->screen->lastClickWindow != event->xbutton.window)
-	return False;
-    
-    if (event->xbutton.time - view->screen->lastClickTime 
-	< WINGsConfiguration.doubleClickDelay) {
-	view->screen->lastClickTime = 0;
-	view->screen->lastClickWindow = None;
-	view->screen->ignoreNextDoubleClick = 1;
-	return True;
+        return False;
+
+    if (event->xbutton.time - view->screen->lastClickTime
+        < WINGsConfiguration.doubleClickDelay) {
+        view->screen->lastClickTime = 0;
+        view->screen->lastClickWindow = None;
+        view->screen->ignoreNextDoubleClick = 1;
+        return True;
     } else
-	return False;
+        return False;
 }
 
 
@@ -381,14 +383,14 @@ waitForEvent(Display *dpy, unsigned long xeventmask, Bool waitForInput)
 {
     XSync(dpy, False);
     if (xeventmask==0) {
-	if (XPending(dpy))
-	    return True;
+        if (XPending(dpy))
+            return True;
     } else {
-	XEvent ev;
-	if (XCheckMaskEvent(dpy, xeventmask, &ev)) {
-	    XPutBackEvent(dpy, &ev);
-	    return True;
-	}
+        XEvent ev;
+        if (XCheckMaskEvent(dpy, xeventmask, &ev)) {
+            XPutBackEvent(dpy, &ev);
+            return True;
+        }
     }
 
     return W_HandleInputEvents(waitForInput, ConnectionNumber(dpy));
@@ -402,19 +404,19 @@ WMNextEvent(Display *dpy, XEvent *event)
     W_CheckTimerHandlers();
 
     while (XPending(dpy) == 0) {
-	/* Do idle and timer stuff while there are no input or X events */
-	while (!waitForEvent(dpy, 0, False) && W_CheckIdleHandlers()) {
-	    /* dispatch timer events */
+        /* Do idle and timer stuff while there are no input or X events */
+        while (!waitForEvent(dpy, 0, False) && W_CheckIdleHandlers()) {
+            /* dispatch timer events */
             W_CheckTimerHandlers();
-	}
+        }
 
-	/*
-	 * Make sure that new events did not arrive while we were doing
-	 * timer/idle stuff. Or we might block forever waiting for
-	 * an event that already arrived. 
-	 */
-	/* wait for something to happen or a timer to expire */
-	waitForEvent(dpy, 0, True);
+        /*
+         * Make sure that new events did not arrive while we were doing
+         * timer/idle stuff. Or we might block forever waiting for
+         * an event that already arrived.
+         */
+        /* wait for something to happen or a timer to expire */
+        waitForEvent(dpy, 0, True);
 
         /* Check any expired timers */
         W_CheckTimerHandlers();
@@ -431,16 +433,16 @@ WMMaskEvent(Display *dpy, long mask, XEvent *event)
     W_CheckTimerHandlers();
 
     while (!XCheckMaskEvent(dpy, mask, event)) {
-	/* Do idle and timer stuff while there are no input or X events */
+        /* Do idle and timer stuff while there are no input or X events */
         while (!waitForEvent(dpy, mask, False) && W_CheckIdleHandlers()) {
             W_CheckTimerHandlers();
-	}
+        }
 
         if (XCheckMaskEvent(dpy, mask, event))
             return;
 
         /* Wait for input on the X connection socket or another input handler */
-	waitForEvent(dpy, mask, True);
+        waitForEvent(dpy, mask, True);
 
         /* Check any expired timers */
         W_CheckTimerHandlers();
@@ -452,9 +454,9 @@ Bool
 WMScreenPending(WMScreen *scr)
 {
     if (XPending(scr->display))
-	return True;
+        return True;
     else
-	return False;
+        return False;
 }
 
 
@@ -462,9 +464,9 @@ WMEventHook*
 WMHookEventHandler(WMEventHook *handler)
 {
     WMEventHook *oldHandler = extraEventHandler;
-    
+
     extraEventHandler = handler;
-    
+
     return oldHandler;
 }
 

@@ -54,7 +54,7 @@ showData(_Panel *panel)
     WMSetButtonSelected(panel->swi[4], GetBoolForKey("WindozeCycling"));
     WMSetButtonSelected(panel->swi[5], GetBoolForKey("DontConfirmKill"));
     WMSetButtonSelected(panel->swi[6], GetBoolForKey("DisableBlinking"));
-    if (WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
+    //if (WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
         WMSetButtonSelected(panel->swi[7], GetBoolForKey("AntialiasedText"));
 }
 
@@ -83,7 +83,7 @@ createPanel(Panel *p)
     WMSetButtonText(panel->swi[6], _("Disable selection animation for selected icons."));
     WMSetButtonText(panel->swi[7], _("Smooth font edges (needs restart)."));
 
-    if (!WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
+    //if (!WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
         WMSetButtonEnabled(panel->swi[7], False);
 
     WMRealizeWidget(panel->box);
@@ -107,7 +107,7 @@ storeDefaults(_Panel *panel)
     SetBoolForKey(WMGetButtonSelected(panel->swi[4]), "WindozeCycling");
     SetBoolForKey(WMGetButtonSelected(panel->swi[5]), "DontConfirmKill");
     SetBoolForKey(WMGetButtonSelected(panel->swi[6]), "DisableBlinking");
-    if (WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
+    //if (WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
         SetBoolForKey(WMGetButtonSelected(panel->swi[7]), "AntialiasedText");
 }
 

@@ -821,9 +821,11 @@ wScreenInit(int screen_number)
 
     scr->info_text_font = WMBoldSystemFontOfSize(scr->wmscreen, 12);
 
-    scr->tech_draw_font = WMCreateFontWithFlags(scr->wmscreen,
-                                                "BoldSystemFont-12",
-                                                WFNotAntialiased);
+    // fix this too -Dan
+    //scr->tech_draw_font = WMCreateFontWithFlags(scr->wmscreen,
+    //                                            "BoldSystemFont-12",
+    //                                            WFNotAntialiased);
+    scr->tech_draw_font = WMBoldSystemFontOfSize(scr->wmscreen, 12);
 
     scr->gview = WCreateGeometryView(scr->wmscreen);
     WMRealizeWidget(scr->gview);

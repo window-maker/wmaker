@@ -1312,7 +1312,8 @@ wShowInfoPanel(WScreen *scr)
     WMSetLabelTextAlignment(panel->copyrL, WALeft);
     WMSetLabelText(panel->copyrL, COPYRIGHT_TEXT);
     /* we want the (c) character in the font, so don't use a FontSet here */
-    font = WMCreateFontWithFlags(scr->wmscreen, "SystemFont-11", WFNormalFont);
+    // fix this -Dan font = WMCreateFontWithFlags(scr->wmscreen, "SystemFont-11", WFNormalFont);
+    font = WMSystemFontOfSize(scr->wmscreen, 11);
     if (font) {
         WMSetLabelFont(panel->copyrL, font);
         WMReleaseFont(font);

@@ -322,8 +322,8 @@ static int userWidgetCount=0;
 
 
 static void
-renderPixmap(W_Screen *screen, Pixmap d, Pixmap mask, char **data, 
-	     int width, int height)
+renderPixmap(W_Screen *screen, Pixmap d, Pixmap mask, char **data,
+             int width, int height)
 {
     int x, y;
     GC whiteGC = WMColorGC(screen->white);
@@ -333,37 +333,37 @@ renderPixmap(W_Screen *screen, Pixmap d, Pixmap mask, char **data,
 
 
     if (mask)
-	XSetForeground(screen->display, screen->monoGC, 0);
-	
-    for (y = 0; y < height; y++) {
-	for (x = 0; x < width; x++) {
-	    switch (data[y][x]) {		
-	     case ' ':
-	     case 'w':
-		XDrawPoint(screen->display, d, whiteGC, x, y);
-		break;
+        XSetForeground(screen->display, screen->monoGC, 0);
 
-	     case '=':
-		if (mask)
-		    XDrawPoint(screen->display, mask, screen->monoGC, x, y);
-		       
-	     case '.':
-	     case 'l':
-		XDrawPoint(screen->display, d, lightGC, x, y);
-		break;
-		
-	     case '%':
-	     case 'd':
-		XDrawPoint(screen->display, d, darkGC, x, y);
-		break;
-		
-	     case '#':
-	     case 'b':
-	     default:
-		XDrawPoint(screen->display, d, blackGC, x, y);
-		break;
-	    }
-	}
+    for (y = 0; y < height; y++) {
+        for (x = 0; x < width; x++) {
+            switch (data[y][x]) {
+            case ' ':
+            case 'w':
+                XDrawPoint(screen->display, d, whiteGC, x, y);
+                break;
+
+            case '=':
+                if (mask)
+                    XDrawPoint(screen->display, mask, screen->monoGC, x, y);
+
+            case '.':
+            case 'l':
+                XDrawPoint(screen->display, d, lightGC, x, y);
+                break;
+
+            case '%':
+            case 'd':
+                XDrawPoint(screen->display, d, darkGC, x, y);
+                break;
+
+            case '#':
+            case 'b':
+            default:
+                XDrawPoint(screen->display, d, blackGC, x, y);
+                break;
+            }
+        }
     }
 }
 
@@ -373,20 +373,20 @@ static WMPixmap*
 makePixmap(W_Screen *sPtr, char **data, int width, int height, int masked)
 {
     Pixmap pixmap, mask = None;
-    
-    pixmap = XCreatePixmap(sPtr->display, W_DRAWABLE(sPtr), width, height, 
-			   sPtr->depth);
-    
+
+    pixmap = XCreatePixmap(sPtr->display, W_DRAWABLE(sPtr), width, height,
+                           sPtr->depth);
+
     if (masked) {
-	mask = XCreatePixmap(sPtr->display, W_DRAWABLE(sPtr), width, height, 1);
-	XSetForeground(sPtr->display, sPtr->monoGC, 1);
-	XFillRectangle(sPtr->display, mask, sPtr->monoGC, 0, 0, width, height);
+        mask = XCreatePixmap(sPtr->display, W_DRAWABLE(sPtr), width, height, 1);
+        XSetForeground(sPtr->display, sPtr->monoGC, 1);
+        XFillRectangle(sPtr->display, mask, sPtr->monoGC, 0, 0, width, height);
     }
 
     renderPixmap(sPtr, pixmap, mask, data, width, height);
 
     return WMCreatePixmapFromXPixmaps(sPtr, pixmap, mask, width, height,
-				      sPtr->depth);
+                                      sPtr->depth);
 }
 
 
@@ -414,11 +414,11 @@ loadPixmaps(WMScreen *scr)
 
     image = RLoadImage(scr->rcontext, T_WINGS_IMAGES_FILE, 0);
     if (!image)
-	image = RLoadImage(scr->rcontext, X_WINGS_IMAGES_FILE, 0);
+        image = RLoadImage(scr->rcontext, X_WINGS_IMAGES_FILE, 0);
     if (!image) {
-	wwarning(_("WINGs: could not load widget images file: %s"), 
-		 RMessageForError(RErrorCode));
-	return False;
+        wwarning(_("WINGs: could not load widget images file: %s"),
+                 RMessageForError(RErrorCode));
+        return False;
     }
     /* home icon */
     /* make it have a gray background */
@@ -502,19 +502,19 @@ loadPixmaps(WMScreen *scr)
     tmp = RGetSubImage(image, 41, 57, 40, 24);
     scr->colorListIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
     RReleaseImage(tmp);
-    
+
     RReleaseImage(image);
 
 #if 0
     scr->defaultObjectIcon =
-	WMCreatePixmapFromFile(scr, T_DEFAULT_OBJECT_ICON_FILE);
-    if (!scr->defaultObjectIcon) { 
-	scr->defaultObjectIcon =
-	    WMCreatePixmapFromFile(scr, X_DEFAULT_OBJECT_ICON_FILE);
+        WMCreatePixmapFromFile(scr, T_DEFAULT_OBJECT_ICON_FILE);
+    if (!scr->defaultObjectIcon) {
+        scr->defaultObjectIcon =
+            WMCreatePixmapFromFile(scr, X_DEFAULT_OBJECT_ICON_FILE);
     }
     if (!scr->defaultObjectIcon) {
-	wwarning("WINGs: could not load default icon file");
-	return False;
+        wwarning("WINGs: could not load default icon file");
+        return False;
     }
 #endif
     return True;
@@ -525,13 +525,13 @@ WMScreen*
 WMOpenScreen(const char *display)
 {
     Display *dpy = XOpenDisplay(display);
-    
+
     if (!dpy) {
-	wwarning("WINGs: could not open display %s",
-		 XDisplayName(display));
-	return NULL;
+        wwarning("WINGs: could not open display %s",
+                 XDisplayName(display));
+        return NULL;
     }
-    
+
     return WMCreateSimpleApplicationScreen(dpy);
 }
 
@@ -540,12 +540,12 @@ WMScreen*
 WMCreateSimpleApplicationScreen(Display *display)
 {
     WMScreen *scr;
-    
+
     scr = WMCreateScreen(display, DefaultScreen(display));
-    
+
     scr->aflags.hasAppIcon = 0;
     scr->aflags.simpleApplication = 1;
-    
+
     return scr;
 }
 
@@ -555,7 +555,7 @@ WMScreen*
 WMCreateScreen(Display *display, int screen)
 {
     return WMCreateScreenWithRContext(display, screen,
-				      RCreateContext(display, screen, NULL));
+                                      RCreateContext(display, screen, NULL));
 }
 
 
@@ -567,46 +567,48 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     Pixmap stipple;
     static int initialized = 0;
     static char *atomNames[] = {
-	"_GNUSTEP_WM_ATTR",
-	    "WM_DELETE_WINDOW",
-	    "WM_PROTOCOLS",
-	    "CLIPBOARD",
-	    "XdndAware",
-	    "XdndSelection",
-	    "XdndEnter",
-	    "XdndLeave",
-	    "XdndPosition",
-	    "XdndDrop",
-	    "XdndFinished",
-	    "XdndTypeList",
-	    "XdndActionCopy",
-	    "XdndActionMove",
-	    "XdndActionLink",
-	    "XdndActionAsk",
-	    "XdndActionPrivate",
-	    "XdndStatus",
-	    "_WINGS_DND_MOUSE_OFFSET",
-	    "WM_STATE"
+        "_GNUSTEP_WM_ATTR",
+        "WM_DELETE_WINDOW",
+        "WM_PROTOCOLS",
+        "CLIPBOARD",
+        "XdndAware",
+        "XdndSelection",
+        "XdndEnter",
+        "XdndLeave",
+        "XdndPosition",
+        "XdndDrop",
+        "XdndFinished",
+        "XdndTypeList",
+        "XdndActionList",
+        "XdndActionDescription",
+        "XdndStatus",
+        "XdndActionCopy",
+        "XdndActionMove",
+        "XdndActionLink",
+        "XdndActionAsk",
+        "XdndActionPrivate",
+        "_WINGS_DND_MOUSE_OFFSET",
+        "WM_STATE"
     };
     Atom atoms[sizeof(atomNames)/sizeof(char*)];
     int i;
 
     if (!initialized) {
 
-	initialized = 1;
+        initialized = 1;
 
-	W_ReadConfigurations();
+        W_ReadConfigurations();
 
-	assert(W_ApplicationInitialized());
+        assert(W_ApplicationInitialized());
     }
-    
+
     scrPtr = malloc(sizeof(W_Screen));
     if (!scrPtr)
-	return NULL;
+        return NULL;
     memset(scrPtr, 0, sizeof(W_Screen));
-    
+
     scrPtr->aflags.hasAppIcon = 1;
-    
+
     scrPtr->display = display;
     scrPtr->screen = screen;
     scrPtr->rcontext = context;
@@ -671,77 +673,77 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 
     scrPtr->ignoredModifierMask = 0;
     {
-	int i;
-	XModifierKeymap *modmap;
-	KeyCode nlock, slock;
-	static int mask_table[8] = {
-	    ShiftMask,LockMask,ControlMask,Mod1Mask,
-		Mod2Mask, Mod3Mask, Mod4Mask, Mod5Mask
-	};
-	unsigned int numLockMask=0, scrollLockMask=0;
-	
-	nlock = XKeysymToKeycode(display, XK_Num_Lock);
-	slock = XKeysymToKeycode(display, XK_Scroll_Lock);
-	
-	/*
-	 * Find out the masks for the NumLock and ScrollLock modifiers,
-	 * so that we can bind the grabs for when they are enabled too.
-	 */
-	modmap = XGetModifierMapping(display);
-	
-	if (modmap!=NULL && modmap->max_keypermod>0) {
-	    for (i=0; i<8*modmap->max_keypermod; i++) {
-		if (modmap->modifiermap[i]==nlock && nlock!=0)
-		    numLockMask = mask_table[i/modmap->max_keypermod];
-		else if (modmap->modifiermap[i]==slock && slock!=0)
-		    scrollLockMask = mask_table[i/modmap->max_keypermod];
-	    }
-	}
-	
-	if (modmap)
-	    XFreeModifiermap(modmap);
-	
-	
-	scrPtr->ignoredModifierMask = numLockMask|scrollLockMask|LockMask;
+        int i;
+        XModifierKeymap *modmap;
+        KeyCode nlock, slock;
+        static int mask_table[8] = {
+            ShiftMask,LockMask,ControlMask,Mod1Mask,
+            Mod2Mask, Mod3Mask, Mod4Mask, Mod5Mask
+        };
+        unsigned int numLockMask=0, scrollLockMask=0;
+
+        nlock = XKeysymToKeycode(display, XK_Num_Lock);
+        slock = XKeysymToKeycode(display, XK_Scroll_Lock);
+
+        /*
+         * Find out the masks for the NumLock and ScrollLock modifiers,
+         * so that we can bind the grabs for when they are enabled too.
+         */
+        modmap = XGetModifierMapping(display);
+
+        if (modmap!=NULL && modmap->max_keypermod>0) {
+            for (i=0; i<8*modmap->max_keypermod; i++) {
+                if (modmap->modifiermap[i]==nlock && nlock!=0)
+                    numLockMask = mask_table[i/modmap->max_keypermod];
+                else if (modmap->modifiermap[i]==slock && slock!=0)
+                    scrollLockMask = mask_table[i/modmap->max_keypermod];
+            }
+        }
+
+        if (modmap)
+            XFreeModifiermap(modmap);
+
+
+        scrPtr->ignoredModifierMask = numLockMask|scrollLockMask|LockMask;
     }
-    
+
     /* initially allocate some colors */
     WMWhiteColor(scrPtr);
     WMBlackColor(scrPtr);
     WMGrayColor(scrPtr);
     WMDarkGrayColor(scrPtr);
-    
+
     gcv.graphics_exposures = False;
-    
+
     gcv.function = GXxor;
     gcv.foreground = W_PIXEL(scrPtr->white);
     if (gcv.foreground == 0) gcv.foreground = 1;
     scrPtr->xorGC = XCreateGC(display, W_DRAWABLE(scrPtr), GCFunction
-			      |GCGraphicsExposures|GCForeground, &gcv);
+                              |GCGraphicsExposures|GCForeground, &gcv);
 
     gcv.function = GXxor;
     gcv.foreground = W_PIXEL(scrPtr->gray);
     gcv.subwindow_mode = IncludeInferiors;
     scrPtr->ixorGC = XCreateGC(display, W_DRAWABLE(scrPtr), GCFunction
-			       |GCGraphicsExposures|GCForeground
-			       |GCSubwindowMode, &gcv);
+                               |GCGraphicsExposures|GCForeground
+                               |GCSubwindowMode, &gcv);
 
     gcv.function = GXcopy;
     scrPtr->copyGC = XCreateGC(display, W_DRAWABLE(scrPtr), GCFunction
-			       |GCGraphicsExposures, &gcv);
+                               |GCGraphicsExposures, &gcv);
 
     scrPtr->clipGC = XCreateGC(display, W_DRAWABLE(scrPtr), GCFunction
-			       |GCGraphicsExposures, &gcv);
+                               |GCGraphicsExposures, &gcv);
 
-    stipple = XCreateBitmapFromData(display, W_DRAWABLE(scrPtr), 
-				    STIPPLE_BITS, STIPPLE_WIDTH, STIPPLE_HEIGHT);
+    stipple = XCreateBitmapFromData(display, W_DRAWABLE(scrPtr),
+                                    STIPPLE_BITS, STIPPLE_WIDTH, STIPPLE_HEIGHT);
     gcv.foreground = W_PIXEL(scrPtr->darkGray);
     gcv.background = W_PIXEL(scrPtr->gray);
     gcv.fill_style = FillStippled;
     gcv.stipple = stipple;
     scrPtr->stippleGC = XCreateGC(display, W_DRAWABLE(scrPtr),
-				  GCForeground|GCBackground|GCStipple
-				  |GCFillStyle|GCGraphicsExposures, &gcv);
+                                  GCForeground|GCBackground|GCStipple
+                                  |GCFillStyle|GCGraphicsExposures, &gcv);
 
     scrPtr->drawStringGC   = XCreateGC(display, W_DRAWABLE(scrPtr),
                                        GCGraphicsExposures, &gcv);
@@ -759,67 +761,67 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 
     scrPtr->antialiasedText = WINGsConfiguration.antialiasedText;
 
-    scrPtr->normalFont = WMSystemFontOfSize(scrPtr, 
-		WINGsConfiguration.defaultFontSize);
+    scrPtr->normalFont = WMSystemFontOfSize(scrPtr,
+                                            WINGsConfiguration.defaultFontSize);
 
-    scrPtr->boldFont = WMBoldSystemFontOfSize(scrPtr, 
-		WINGsConfiguration.defaultFontSize);
+    scrPtr->boldFont = WMBoldSystemFontOfSize(scrPtr,
+                                              WINGsConfiguration.defaultFontSize);
 
     if (!scrPtr->boldFont)
-	scrPtr->boldFont = scrPtr->normalFont;
+        scrPtr->boldFont = scrPtr->normalFont;
 
     if (!scrPtr->normalFont) {
-	wwarning(_("could not load any fonts. Make sure your font installation"
+        wwarning(_("could not load any fonts. Make sure your font installation"
                    " and locale settings are correct."));
 
-	return NULL;
+        return NULL;
     }
 
     scrPtr->checkButtonImageOn = makePixmap(scrPtr, CHECK_BUTTON_ON,
-					    CHECK_BUTTON_ON_WIDTH,
-					    CHECK_BUTTON_ON_HEIGHT, False);
+                                            CHECK_BUTTON_ON_WIDTH,
+                                            CHECK_BUTTON_ON_HEIGHT, False);
 
     scrPtr->checkButtonImageOff = makePixmap(scrPtr, CHECK_BUTTON_OFF,
                                              CHECK_BUTTON_OFF_WIDTH,
                                              CHECK_BUTTON_OFF_HEIGHT, False);
 
     scrPtr->radioButtonImageOn = makePixmap(scrPtr, RADIO_BUTTON_ON,
-					    RADIO_BUTTON_ON_WIDTH,
-					    RADIO_BUTTON_ON_HEIGHT, False);
+                                            RADIO_BUTTON_ON_WIDTH,
+                                            RADIO_BUTTON_ON_HEIGHT, False);
 
     scrPtr->radioButtonImageOff = makePixmap(scrPtr, RADIO_BUTTON_OFF,
                                              RADIO_BUTTON_OFF_WIDTH,
                                              RADIO_BUTTON_OFF_HEIGHT, False);
 
-    scrPtr->buttonArrow = makePixmap(scrPtr, BUTTON_ARROW, 
-				     BUTTON_ARROW_WIDTH, BUTTON_ARROW_HEIGHT, 
-				     False);
+    scrPtr->buttonArrow = makePixmap(scrPtr, BUTTON_ARROW,
+                                     BUTTON_ARROW_WIDTH, BUTTON_ARROW_HEIGHT,
+                                     False);
 
     scrPtr->pushedButtonArrow = makePixmap(scrPtr, BUTTON_ARROW2,
-			           BUTTON_ARROW2_WIDTH, BUTTON_ARROW2_HEIGHT, 
-				   False);
+                                           BUTTON_ARROW2_WIDTH, BUTTON_ARROW2_HEIGHT,
+                                           False);
 
 
     scrPtr->scrollerDimple = makePixmap(scrPtr, SCROLLER_DIMPLE,
-					SCROLLER_DIMPLE_WIDTH,
-					SCROLLER_DIMPLE_HEIGHT, False);
+                                        SCROLLER_DIMPLE_WIDTH,
+                                        SCROLLER_DIMPLE_HEIGHT, False);
 
 
     scrPtr->upArrow = makePixmap(scrPtr, SCROLLER_ARROW_UP,
-				 SCROLLER_ARROW_UP_WIDTH,
-				 SCROLLER_ARROW_UP_HEIGHT, True);
+                                 SCROLLER_ARROW_UP_WIDTH,
+                                 SCROLLER_ARROW_UP_HEIGHT, True);
 
     scrPtr->downArrow = makePixmap(scrPtr, SCROLLER_ARROW_DOWN,
-				   SCROLLER_ARROW_DOWN_WIDTH,
-				   SCROLLER_ARROW_DOWN_HEIGHT, True);
+                                   SCROLLER_ARROW_DOWN_WIDTH,
+                                   SCROLLER_ARROW_DOWN_HEIGHT, True);
 
     scrPtr->leftArrow = makePixmap(scrPtr, SCROLLER_ARROW_LEFT,
-				   SCROLLER_ARROW_LEFT_WIDTH,
-				   SCROLLER_ARROW_LEFT_HEIGHT, True);
+                                   SCROLLER_ARROW_LEFT_WIDTH,
+                                   SCROLLER_ARROW_LEFT_HEIGHT, True);
 
     scrPtr->rightArrow = makePixmap(scrPtr, SCROLLER_ARROW_RIGHT,
-				    SCROLLER_ARROW_RIGHT_WIDTH,
-				    SCROLLER_ARROW_RIGHT_HEIGHT, True);
+                                    SCROLLER_ARROW_RIGHT_WIDTH,
+                                    SCROLLER_ARROW_RIGHT_HEIGHT, True);
 
     scrPtr->hiUpArrow = makePixmap(scrPtr, HI_SCROLLER_ARROW_UP,
                                    SCROLLER_ARROW_UP_WIDTH,
@@ -838,16 +840,16 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
                                       SCROLLER_ARROW_RIGHT_HEIGHT, True);
 
     scrPtr->popUpIndicator = makePixmap(scrPtr, POPUP_INDICATOR,
-					POPUP_INDICATOR_WIDTH,
-					POPUP_INDICATOR_HEIGHT, True);
+                                        POPUP_INDICATOR_WIDTH,
+                                        POPUP_INDICATOR_HEIGHT, True);
 
     scrPtr->pullDownIndicator = makePixmap(scrPtr, PULLDOWN_INDICATOR,
-					   PULLDOWN_INDICATOR_WIDTH,
-					   PULLDOWN_INDICATOR_HEIGHT, True);
+                                           PULLDOWN_INDICATOR_WIDTH,
+                                           PULLDOWN_INDICATOR_HEIGHT, True);
 
     scrPtr->checkMark = makePixmap(scrPtr, CHECK_MARK,
-				   CHECK_MARK_WIDTH,
-				   CHECK_MARK_HEIGHT, True);
+                                   CHECK_MARK_WIDTH,
+                                   CHECK_MARK_HEIGHT, True);
 
     loadPixmaps(scrPtr);
 
@@ -856,21 +858,21 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     scrPtr->textCursor = XCreateFontCursor(display, XC_xterm);
 
     {
-	XColor bla;
-	Pixmap blank;
+        XColor bla;
+        Pixmap blank;
 
-	blank = XCreatePixmap(display, scrPtr->stipple, 1, 1, 1);
-	XSetForeground(display, scrPtr->monoGC, 0);
-	XFillRectangle(display, blank, scrPtr->monoGC, 0, 0, 1, 1);
+        blank = XCreatePixmap(display, scrPtr->stipple, 1, 1, 1);
+        XSetForeground(display, scrPtr->monoGC, 0);
+        XFillRectangle(display, blank, scrPtr->monoGC, 0, 0, 1, 1);
 
-	scrPtr->invisibleCursor = XCreatePixmapCursor(display, blank, blank,
-						      &bla, &bla, 0, 0);
-	XFreePixmap(display, blank);
+        scrPtr->invisibleCursor = XCreatePixmapCursor(display, blank, blank,
+                                                      &bla, &bla, 0, 0);
+        XFreePixmap(display, blank);
     }
 
 #ifdef HAVE_XINTERNATOMS
     XInternAtoms(display, atomNames, sizeof(atomNames)/sizeof(char*), False,
-		 atoms);
+                 atoms);
 #else
     for (i = 0; i < sizeof(atomNames)/sizeof(char*); i++) {
         atoms[i] = XInternAtom(display, atomNames[i], False);
@@ -883,7 +885,7 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     scrPtr->deleteWindowAtom = atoms[i++];
 
     scrPtr->protocolsAtom = atoms[i++];
-    
+
     scrPtr->clipboardAtom = atoms[i++];
 
     scrPtr->xdndAwareAtom = atoms[i++];
@@ -894,6 +896,8 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     scrPtr->xdndDropAtom = atoms[i++];
     scrPtr->xdndFinishedAtom = atoms[i++];
     scrPtr->xdndTypeListAtom = atoms[i++];
+    scrPtr->xdndActionListAtom = atoms[i++];
+    scrPtr->xdndActionDescriptionAtom = atoms[i++];
     scrPtr->xdndStatusAtom = atoms[i++];
 
     scrPtr->xdndActionCopy = atoms[i++];
@@ -935,7 +939,7 @@ WMSetWidgetDefaultBoldFont(WMScreen *scr, WMFont *font)
 
 
 
-void 
+void
 WMHangData(WMWidget *widget, void *data)
 {
     W_VIEW(widget)->hangedData = data;
@@ -968,7 +972,7 @@ WMSetFocusToWidget(WMWidget *widget)
 /*
  * WMRealizeWidget-
  * 	Realizes the widget and all it's children.
- * 
+ *
  */
 void
 WMRealizeWidget(WMWidget *w)
@@ -978,7 +982,7 @@ WMRealizeWidget(WMWidget *w)
 
 void
 WMMapWidget(WMWidget *w)
-{        
+{
     W_MapView(W_VIEW(w));
 }
 
@@ -994,36 +998,36 @@ static void
 makeChildrenAutomap(W_View *view, int flag)
 {
     view = view->childrenList;
-    
+
     while (view) {
-	view->flags.mapWhenRealized = flag;
-	makeChildrenAutomap(view, flag);
-	
-	view = view->nextSister;
+        view->flags.mapWhenRealized = flag;
+        makeChildrenAutomap(view, flag);
+
+        view = view->nextSister;
     }
 }
 
 
 void
 WMMapSubwidgets(WMWidget *w)
-{   
+{
     /* make sure that subwidgets created after the parent was realized
      * are mapped too */
     if (!W_VIEW(w)->flags.realized) {
-	makeChildrenAutomap(W_VIEW(w), True);
+        makeChildrenAutomap(W_VIEW(w), True);
     } else {
-	W_MapSubviews(W_VIEW(w));
+        W_MapSubviews(W_VIEW(w));
     }
 }
 
 
 void
 WMUnmapSubwidgets(WMWidget *w)
-{   
+{
     if (!W_VIEW(w)->flags.realized) {
-	makeChildrenAutomap(W_VIEW(w), False);
+        makeChildrenAutomap(W_VIEW(w), False);
     } else {
-	W_UnmapSubviews(W_VIEW(w));
+        W_UnmapSubviews(W_VIEW(w));
     }
 }
 
@@ -1031,7 +1035,7 @@ WMUnmapSubwidgets(WMWidget *w)
 
 void
 WMUnmapWidget(WMWidget *w)
-{   
+{
     W_UnmapView(W_VIEW(w));
 }
 
@@ -1048,7 +1052,7 @@ WMSetWidgetBackgroundColor(WMWidget *w, WMColor *color)
 {
     W_SetViewBackgroundColor(W_VIEW(w), color);
     if (W_VIEW(w)->flags.mapped)
-	WMRedisplayWidget(w);
+        WMRedisplayWidget(w);
 }
 
 
@@ -1062,14 +1066,14 @@ WMGetWidgetBackgroundColor(WMWidget *w)
 void
 WMRaiseWidget(WMWidget *w)
 {
-     W_RaiseView(W_VIEW(w));
+    W_RaiseView(W_VIEW(w));
 }
 
 
 void
 WMLowerWidget(WMWidget *w)
 {
-     W_LowerView(W_VIEW(w));
+    W_LowerView(W_VIEW(w));
 }
 
 
@@ -1106,7 +1110,7 @@ WMScreenRContext(WMScreen *scr)
 
 
 
-unsigned int 
+unsigned int
 WMWidgetWidth(WMWidget *w)
 {
     return W_VIEW(w)->size.width;
@@ -1139,10 +1143,10 @@ void
 WMScreenMainLoop(WMScreen *scr)
 {
     XEvent event;
-	
+
     while (1) {
-	WMNextEvent(scr->display, &event);
-	WMHandleEvent(&event);
+        WMNextEvent(scr->display, &event);
+        WMHandleEvent(&event);
     }
 }
 
@@ -1166,10 +1170,10 @@ WMRunModalLoop(WMScreen *scr, WMView *view)
 
     scr->modalLoop = 1;
     while (scr->modalLoop) {
-	XEvent event;
-	
-	WMNextEvent(scr->display, &event);
-	WMHandleEvent(&event);
+        XEvent event;
+
+        WMNextEvent(scr->display, &event);
+        WMHandleEvent(&event);
     }
 
     scr->modalView = oldModalView;
@@ -1184,14 +1188,14 @@ WMScreenDisplay(WMScreen *scr)
 }
 
 
-int 
+int
 WMScreenDepth(WMScreen *scr)
 {
     return scr->depth;
 }
 
 
-unsigned int 
+unsigned int
 WMScreenWidth(WMScreen *scr)
 {
     return scr->rootView->size.width;
@@ -1205,7 +1209,7 @@ WMScreenHeight(WMScreen *scr)
 }
 
 
-void 
+void
 WMRedisplayWidget(WMWidget *w)
 {
     W_RedisplayView(W_VIEW(w));

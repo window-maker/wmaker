@@ -98,48 +98,48 @@ W_ReadConfigurations(void)
     if (defaults) {
         char *buttonName;
         unsigned button;
-	char *str;
+        char *str;
 
-	WINGsConfiguration.systemFont = 
-	    WMGetUDStringForKey(defaults, "SystemFont");
+        WINGsConfiguration.systemFont =
+            WMGetUDStringForKey(defaults, "SystemFont");
 
-	WINGsConfiguration.boldSystemFont = 
-	    WMGetUDStringForKey(defaults, "BoldSystemFont");
+        WINGsConfiguration.boldSystemFont =
+            WMGetUDStringForKey(defaults, "BoldSystemFont");
 
 #ifdef XFT
-	WINGsConfiguration.antialiasedText =
+        WINGsConfiguration.antialiasedText =
             WMGetUDBoolForKey(defaults, "AntialiasedText");
 #else
         WINGsConfiguration.antialiasedText = False;
 #endif
 
-	WINGsConfiguration.useMultiByte = False;
-	str = WMGetUDStringForKey(defaults, "MultiByteText");
-	if (str) {
-	    if (strcasecmp(str, "YES") == 0) {
-		WINGsConfiguration.useMultiByte = True;
-	    } else if (strcasecmp(str, "AUTO") == 0) {
-		char *locale;
-		
-		/* if it's a multibyte language (japanese, chinese or korean)
-		 * then set it to True */
-		locale = setlocale(LC_CTYPE, NULL);
-		if (locale != NULL 
-		    && (strncmp(locale, "ja", 2) == 0
-			|| strncmp(locale, "zh", 2) == 0
-			|| strncmp(locale, "ru", 2) == 0
-			|| strncmp(locale, "ko", 2) == 0)) {
+        WINGsConfiguration.useMultiByte = False;
+        str = WMGetUDStringForKey(defaults, "MultiByteText");
+        if (str) {
+            if (strcasecmp(str, "YES") == 0) {
+                WINGsConfiguration.useMultiByte = True;
+            } else if (strcasecmp(str, "AUTO") == 0) {
+                char *locale;
 
-		    WINGsConfiguration.useMultiByte = True;
-		}
-	    }
-	}
+                /* if it's a multibyte language (japanese, chinese or korean)
+                 * then set it to True */
+                locale = setlocale(LC_CTYPE, NULL);
+                if (locale != NULL
+                    && (strncmp(locale, "ja", 2) == 0
+                        || strncmp(locale, "zh", 2) == 0
+                        || strncmp(locale, "ru", 2) == 0
+                        || strncmp(locale, "ko", 2) == 0)) {
 
-	WINGsConfiguration.doubleClickDelay = 
-	    WMGetUDIntegerForKey(defaults, "DoubleClickTime");	
+                    WINGsConfiguration.useMultiByte = True;
+                }
+            }
+        }
 
-	WINGsConfiguration.floppyPath =
-	    WMGetUDStringForKey(defaults, "FloppyPath");
+        WINGsConfiguration.doubleClickDelay =
+            WMGetUDIntegerForKey(defaults, "DoubleClickTime");
+
+        WINGsConfiguration.floppyPath =
+            WMGetUDStringForKey(defaults, "FloppyPath");
 
         buttonName = WMGetUDStringForKey(defaults, "MouseWheelUp");
         if (buttonName) {
@@ -164,7 +164,7 @@ W_ReadConfigurations(void)
             WINGsConfiguration.mouseWheelDown = Button5;
         }
 
-	WINGsConfiguration.defaultFontSize = 
+        WINGsConfiguration.defaultFontSize =
             WMGetUDIntegerForKey(defaults, "DefaultFontSize");
     }
 
@@ -172,22 +172,22 @@ W_ReadConfigurations(void)
         WINGsConfiguration.systemFont = SYSTEM_FONT;
     }
     if (missingOrInvalidXLFD(WINGsConfiguration.boldSystemFont)) {
-	WINGsConfiguration.boldSystemFont = BOLD_SYSTEM_FONT;
+        WINGsConfiguration.boldSystemFont = BOLD_SYSTEM_FONT;
     }
     if (!WINGsConfiguration.floppyPath) {
-	WINGsConfiguration.floppyPath = FLOPPY_PATH;
+        WINGsConfiguration.floppyPath = FLOPPY_PATH;
     }
     if (WINGsConfiguration.doubleClickDelay == 0) {
-	WINGsConfiguration.doubleClickDelay = 250;
+        WINGsConfiguration.doubleClickDelay = 250;
     }
     if (WINGsConfiguration.mouseWheelUp == 0) {
-	WINGsConfiguration.mouseWheelUp = Button4;
+        WINGsConfiguration.mouseWheelUp = Button4;
     }
     if (WINGsConfiguration.mouseWheelDown == 0) {
-	WINGsConfiguration.mouseWheelDown = Button5;
+        WINGsConfiguration.mouseWheelDown = Button5;
     }
     if (WINGsConfiguration.defaultFontSize == 0) {
-	WINGsConfiguration.defaultFontSize = 12;
+        WINGsConfiguration.defaultFontSize = 12;
     }
 
 }

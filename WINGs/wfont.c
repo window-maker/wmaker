@@ -149,8 +149,8 @@ alreadyHasStringValue(XftPattern *pattern, const char *object, char *value)
         return True;
 
     id = 0;
-    while ((r=XftPatternGetString(pattern, object, id, &s))!=XftResultNoId) {
-        if (r == XftResultMatch && strcasecmp(value, s) == 0) {
+    while ((r=XftPatternGetString(pattern, object, id, &s))==XftResultMatch) {
+        if (strcasecmp(value, s) == 0) {
             return True;
         }
         id++;
@@ -165,23 +165,21 @@ alreadyHasStringValue(XftPattern *pattern, const char *object, char *value)
 static char*
 makeFontOfSize(char *font, int size, char *fallback)
 {
-    XftPattern *pattern;
+    FcPattern *pattern;
     char *result;
-    int len;
 
-    len = strlen(font) + 64;
     pattern = XftNameParse(font);
     XftPatternDel(pattern, "pixelsize");
     XftPatternAddDouble(pattern, "pixelsize", (double)size);
+
     if (fallback) {
         if (!alreadyHasStringValue(pattern, "family", fallback)) {
-            len += strlen(fallback);
             XftPatternAddString(pattern, "family", fallback);
         }
     }
-    result = wmalloc(len);
-    XftNameUnparse(pattern, result, len);
-    XftPatternDestroy(pattern);
+
+    result = FcNameUnparse(pattern);
+    FcPatternDestroy(pattern);
 
     return result;
 }
@@ -198,17 +196,17 @@ WMCreateFont(WMScreen *scrPtr, char *fontName)
     if (fontName[0]=='-' && (ptr = strchr(fontName, ','))) {
         // warn for deprecation
         fname = wmalloc(ptr - fontName + 1);
-	strncpy(fname, fontName, ptr - fontName);
-	fname[ptr - fontName] = 0;
+        strncpy(fname, fontName, ptr - fontName);
+        fname[ptr - fontName] = 0;
     } else {
-	fname = wstrdup(fontName);
+        fname = wstrdup(fontName);
     }
 
     font = WMHashGet(scrPtr->fontCache, fname);
     if (font) {
-	WMRetainFont(font);
-	wfree(fname);
-	return font;
+        WMRetainFont(font);
+        wfree(fname);
+        return font;
     }
 
     font = wmalloc(sizeof(WMFont));
@@ -217,7 +215,7 @@ WMCreateFont(WMScreen *scrPtr, char *fontName)
     font->screen = scrPtr;
 
     // remove
-    printf("%s\n", fname);
+    printf("WMCreateFont: %s\n", fname);
 
     if (fname[0] == '-') {
         // Backward compat thing. Remove in a later version
@@ -264,9 +262,9 @@ WMReleaseFont(WMFont *font)
         XftFontClose(font->screen->display, font->font);
         if (font->name) {
             WMHashRemove(font->screen->fontCache, font->name);
-	    wfree(font->name);
-	}
-	wfree(font);
+            wfree(font->name);
+        }
+        wfree(font);
     }
 }
 
@@ -489,164 +487,48 @@ WMDrawImageString(WMScreen *scr, Drawable d, WMColor *color, WMColor *background
 
 
 WMFont*
-WMCopyFontWithChanges(WMScreen *scrPtr, WMFont *font,
-                      const WMFontAttributes *changes)
+WMCopyFontWithStyle(WMScreen *scrPtr, WMFont *font, WMFontStyle style)
 {
-    int index[FONT_PROPS], count[FONT_PROPS];
-    int totalProps, i, j, carry;
-    char fname[512];
-    WMFontFlags fFlags;
-    WMBag *props;
-    WMArray *options;
-    WMFont *result;
-    char *prop;
+    FcPattern *pattern;
+    WMFont *copy;
+    char *name;
 
-    snprintf(fname, 512, "%s", font->name);
+    if (!font)
+        return NULL;
 
-    fFlags = (font->antialiased ? WFAntialiased : WFNotAntialiased);
-    fFlags |= (font->notFontSet ? WFNormalFont : WFFontSet);
-
-    props = WMCreateBagWithDestructor(1, (WMFreeDataProc*)WMFreeArray);
-
-    totalProps = 0;
-    for (i=0; i<FONT_PROPS; i++) {
-        prop = ((W_FontAttributes*)changes)->props[i];
-        count[i] = index[i] = 0;
-        if (!prop) {
-            /* No change for this property */
-            continue;
-        } else if (strchr(prop, ',')==NULL) {
-            /* Simple option */
-            changeFontProp(fname, prop, i);
-        } else {
-            /* Option with fallback alternatives */
-            if ((changes==WFAEmphasized || changes==WFABoldEmphasized) &&
-                font->antialiased && strcmp(prop, "o,i")==0) {
-                options = getOptions("i,o");
-            } else {
-                options = getOptions(prop);
-            }
-            WMInsertInBag(props, i, options);
-            count[i] = WMGetArrayItemCount(options);
-            if (totalProps==0)
-                totalProps = 1;
-            totalProps = totalProps * count[i];
-        }
+    pattern = XftNameParse(WMGetFontName(font));
+    switch (style) {
+    case WFSNormal:
+        XftPatternDel(pattern, "weight");
+        XftPatternDel(pattern, "slant");
+        XftPatternAddString(pattern, "weight", "medium");
+        XftPatternAddString(pattern, "slant", "roman");
+        break;
+    case WFSBold:
+        XftPatternDel(pattern, "weight");
+        XftPatternAddString(pattern, "weight", "bold");
+        break;
+    case WFSEmphasized:
+        XftPatternDel(pattern, "slant");
+        XftPatternAddString(pattern, "slant", "italic");
+        XftPatternAddString(pattern, "slant", "oblique");
+        break;
+    case WFSBoldEmphasized:
+        XftPatternDel(pattern, "weight");
+        XftPatternDel(pattern, "slant");
+        XftPatternAddString(pattern, "weight", "bold");
+        XftPatternAddString(pattern, "slant", "italic");
+        XftPatternAddString(pattern, "slant", "oblique");
+        break;
     }
 
-    if (totalProps == 0) {
-        /* No options with fallback alternatives at all */
-        WMFreeBag(props);
-        return WMCreateFontWithFlags(scrPtr, fname, fFlags);
-    }
+    name = FcNameUnparse(pattern);
+    copy = WMCreateFont(scrPtr, name);
+    FcPatternDestroy(pattern);
+    wfree(name);
 
-    for (i=0; i<totalProps; i++) {
-        for (j=0; j<FONT_PROPS; j++) {
-            if (count[j]!=0) {
-                options = WMGetFromBag(props, j);
-                prop = WMGetFromArray(options, index[j]);
-                if (prop) {
-                    changeFontProp(fname, prop, j);
-                }
-            }
-        }
-        result = WMCreateFontWithFlags(scrPtr, fname, fFlags);
-        if (result) {
-            WMFreeBag(props);
-            return result;
-        }
-        for (j=FONT_PROPS-1, carry=1; j>=0; j--) {
-            if (count[j]!=0) {
-                index[j] += carry;
-                carry = (index[j]==count[j]);
-                index[j] %= count[j];
-            }
-        }
-    }
-
-    WMFreeBag(props);
-
-    return NULL;
+    return copy;
 }
-
-
-#if 0
-
-#define FONT_PROPS 14
-
-typedef struct {
-    char *props[FONT_PROPS];
-} W_FontAttributes;
-
-
-static void
-changeFontProp(char *buf, char *newprop, int position)
-{
-    char buf2[512];
-    char *ptr, *pptr, *rptr;
-    int count;
-
-    if (buf[0]!='-') {
-        /* // remove warning later. or maybe not */
-        wwarning(_("Invalid font specification: '%s'\n"), buf);
-        return;
-    }
-
-    ptr = pptr = rptr = buf;
-    count = 0;
-    while (*ptr && *ptr!=',') {
-        if (*ptr == '-') {
-            count++;
-            if (count-1==position+1) {
-                rptr = ptr;
-                break;
-            }
-            if (count-1==position) {
-                pptr = ptr+1;
-            }
-        }
-        ptr++;
-    }
-    if (position==FONT_PROPS-1) {
-        rptr = ptr;
-    }
-
-    *pptr = 0;
-    snprintf(buf2, 512, "%s%s%s", buf, newprop, rptr);
-    strcpy(buf, buf2);
-}
-
-
-static WMArray*
-getOptions(char *options)
-{
-    char *ptr, *ptr2, *str;
-    WMArray *result;
-    int count;
-
-    result = WMCreateArrayWithDestructor(2, (WMFreeDataProc*)wfree);
-
-    ptr = options;
-    while (1) {
-        ptr2 = strchr(ptr, ',');
-        if (!ptr2) {
-            WMAddToArray(result, wstrdup(ptr));
-            break;
-        } else {
-            count = ptr2 - ptr;
-            str = wmalloc(count+1);
-            memcpy(str, ptr, count);
-            str[count] = 0;
-            WMAddToArray(result, str);
-            ptr = ptr2 + 1;
-        }
-    }
-
-    return result;
-}
-
-
-#endif
 
 
 #else /* No XFT support */
@@ -662,18 +544,18 @@ getElementFromXLFD(const char *xlfd, int index)
 {
     const char *p = xlfd;
     while (*p != 0) {
-	if (*p == '-' && --index == 0) {
-	    const char *end = strchr(p + 1, '-');
-	    char *buf;
-	    size_t len;
-	    if (end == 0) end = p + strlen(p);
-	    len = end - (p + 1);
-	    buf = wmalloc(len);
-	    memcpy(buf, p + 1, len);
-	    buf[len] = 0;
-	    return buf;
-	}
-	p++;
+        if (*p == '-' && --index == 0) {
+            const char *end = strchr(p + 1, '-');
+            char *buf;
+            size_t len;
+            if (end == 0) end = p + strlen(p);
+            len = end - (p + 1);
+            buf = wmalloc(len);
+            memcpy(buf, p + 1, len);
+            buf[len] = 0;
+            return buf;
+        }
+        p++;
     }
     return strdup("*");
 }
@@ -695,8 +577,8 @@ generalizeXLFD(const char *xlfd)
 
     buf = wmalloc(len + 1);
     snprintf(buf, len + 1, "%s,-*-*-%s-%s-*-*-%s-*-*-*-*-*-*-*,"
-	     "-*-*-*-*-*-*-%s-*-*-*-*-*-*-*,*",
-	     xlfd, weight, slant, pxlsz, pxlsz);
+             "-*-*-*-*-*-*-%s-*-*-*-*-*-*-*,*",
+             xlfd, weight, slant, pxlsz, pxlsz);
 
     wfree(pxlsz);
     wfree(slant);
@@ -708,27 +590,27 @@ generalizeXLFD(const char *xlfd)
 /* XLFD pattern matching */
 static XFontSet
 W_CreateFontSetWithGuess(Display *dpy, char *xlfd, char ***missing,
-			int *nmissing, char **def_string)
+                         int *nmissing, char **def_string)
 {
     XFontSet fs = XCreateFontSet(dpy, xlfd, missing, nmissing, def_string);
 
     if (fs != NULL && *nmissing == 0) return fs;
 
     /* for non-iso8859-1 language and iso8859-1 specification
-       (this fontset is only for pattern analysis) */
+     (this fontset is only for pattern analysis) */
     if (fs == NULL) {
-	if (*nmissing != 0) XFreeStringList(*missing);
-	setlocale(LC_CTYPE, "C");
-	fs = XCreateFontSet(dpy, xlfd, missing, nmissing, def_string);
-	setlocale(LC_CTYPE, "");
+        if (*nmissing != 0) XFreeStringList(*missing);
+        setlocale(LC_CTYPE, "C");
+        fs = XCreateFontSet(dpy, xlfd, missing, nmissing, def_string);
+        setlocale(LC_CTYPE, "");
     }
 
     /* make XLFD font name for pattern analysis */
     if (fs != NULL) {
-	XFontStruct **fontstructs;
-	char **fontnames;
-	if (XFontsOfFontSet(fs, &fontstructs, &fontnames) > 0)
-	    xlfd = fontnames[0];
+        XFontStruct **fontstructs;
+        char **fontnames;
+        if (XFontsOfFontSet(fs, &fontstructs, &fontnames) > 0)
+            xlfd = fontnames[0];
     }
 
     xlfd = generalizeXLFD(xlfd);
@@ -805,7 +687,7 @@ WMCreateFontSet(WMScreen *scrPtr, char *fontName)
     if (font) {
         WMRetainFont(font);
         wfree(fname);
-	return font;
+        return font;
     }
 
     font = wmalloc(sizeof(WMFont));
@@ -819,21 +701,21 @@ WMCreateFontSet(WMScreen *scrPtr, char *fontName)
     font->font.set = W_CreateFontSetWithGuess(display, fname, &missing,
                                               &nmissing, &defaultString);
     if (nmissing > 0 && font->font.set) {
-	int i;
+        int i;
 
-	wwarning(_("the following character sets are missing in %s:"), fname);
-	for (i = 0; i < nmissing; i++) {
-	    wwarning(missing[i]);
-	}
-	XFreeStringList(missing);
-	if (defaultString)
-	    wwarning(_("the string \"%s\" will be used in place of any characters from those sets."),
-		     defaultString);
+        wwarning(_("the following character sets are missing in %s:"), fname);
+        for (i = 0; i < nmissing; i++) {
+            wwarning(missing[i]);
+        }
+        XFreeStringList(missing);
+        if (defaultString)
+            wwarning(_("the string \"%s\" will be used in place of any characters from those sets."),
+                     defaultString);
     }
     if (!font->font.set) {
         wfree(font);
         wfree(fname);
-	return NULL;
+        return NULL;
     }
 
     extents = XExtentsOfFontSet(font->font.set);
@@ -862,20 +744,20 @@ WMCreateNormalFont(WMScreen *scrPtr, char *fontName)
     fontName = xlfdFromFontName(fontName, False);
 
     if ((ptr = strchr(fontName, ','))) {
-	fname = wmalloc(ptr - fontName + 1);
-	strncpy(fname, fontName, ptr - fontName);
-	fname[ptr - fontName] = 0;
+        fname = wmalloc(ptr - fontName + 1);
+        strncpy(fname, fontName, ptr - fontName);
+        fname[ptr - fontName] = 0;
     } else {
-	fname = wstrdup(fontName);
+        fname = wstrdup(fontName);
     }
 
     wfree(fontName);
 
     font = WMHashGet(scrPtr->fontCache, fname);
     if (font) {
-	WMRetainFont(font);
-	wfree(fname);
-	return font;
+        WMRetainFont(font);
+        wfree(fname);
+        return font;
     }
 
     font = wmalloc(sizeof(WMFont));
@@ -916,20 +798,20 @@ WMCreateAntialiasedFont(WMScreen *scrPtr, char *fontName)
     fontName = xlfdFromFontName(fontName, True);
 
     if ((ptr = strchr(fontName, ','))) {
-	fname = wmalloc(ptr - fontName + 1);
-	strncpy(fname, fontName, ptr - fontName);
-	fname[ptr - fontName] = 0;
+        fname = wmalloc(ptr - fontName + 1);
+        strncpy(fname, fontName, ptr - fontName);
+        fname[ptr - fontName] = 0;
     } else {
-	fname = wstrdup(fontName);
+        fname = wstrdup(fontName);
     }
 
     wfree(fontName);
 
     font = WMHashGet(scrPtr->xftFontCache, fname);
     if (font) {
-	WMRetainFont(font);
-	wfree(fname);
-	return font;
+        WMRetainFont(font);
+        wfree(fname);
+        return font;
     }
 
     font = wmalloc(sizeof(WMFont));
@@ -993,19 +875,19 @@ WMCreateAntialiasedFontSet(WMScreen *scrPtr, char *fontName)
 
     if ((ptr = strchr(fontName, ','))) {
         fname = wmalloc(ptr - fontName + 1);
-	strncpy(fname, fontName, ptr - fontName);
-	fname[ptr - fontName] = 0;
+        strncpy(fname, fontName, ptr - fontName);
+        fname[ptr - fontName] = 0;
     } else {
-	fname = wstrdup(fontName);
+        fname = wstrdup(fontName);
     }
 
     wfree(fontName);
 
     font = WMHashGet(scrPtr->xftFontSetCache, fname);
     if (font) {
-	WMRetainFont(font);
-	wfree(fname);
-	return font;
+        WMRetainFont(font);
+        wfree(fname);
+        return font;
     }
 
     font = wmalloc(sizeof(WMFont));
@@ -1096,7 +978,7 @@ WMCreateFontWithFlags(WMScreen *scrPtr, char *fontName, WMFontFlags flags)
             font = WMCreateNormalFont(scrPtr, fontName);
         }
     } else if (multiByte) {
-	font = WMCreateFontSet(scrPtr, fontName);
+        font = WMCreateFontSet(scrPtr, fontName);
     } else {
         font = WMCreateNormalFont(scrPtr, fontName);
     }
@@ -1145,9 +1027,9 @@ WMReleaseFont(WMFont *font)
             } else {
                 WMHashRemove(font->screen->fontSetCache, font->name);
             }
-	    wfree(font->name);
-	}
-	wfree(font);
+            wfree(font->name);
+        }
+        wfree(font);
     }
 }
 
@@ -1401,7 +1283,7 @@ WMDrawString(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
                 /* we can draw normal text, or we can draw as much widechar
                  * text as was already converted until the error. go figure */
                 /*XftDrawString8(scr->xftdraw, &xftcolor, font->font.xft,
-                               x, y + font->y, (XftChar8*)text, length);*/
+                 x, y + font->y, (XftChar8*)text, length);*/
             }
             wfree(wtext);
         } else {
@@ -1472,7 +1354,7 @@ WMDrawImageString(WMScreen *scr, Drawable d, WMColor *color, WMColor *background
                 /* we can draw normal text, or we can draw as much widechar
                  * text as was already converted until the error. go figure */
                 /*XftDrawString8(scr->xftdraw, &textColor, font->font.xft,
-                               x, y + font->y, (XftChar8*)text, length);*/
+                 x, y + font->y, (XftChar8*)text, length);*/
             }
             wfree(wtext);
         } else {
@@ -1507,42 +1389,42 @@ makeFontSetOfSize(char *fontset, int size)
     char *ptr;
 
     do {
-	char *tmp;
-	int end;
+        char *tmp;
+        int end;
 
 
-	f = fontset;
-	ptr = strchr(fontset, ',');
-	if (ptr) {
-	    int count = ptr-fontset;
+        f = fontset;
+        ptr = strchr(fontset, ',');
+        if (ptr) {
+            int count = ptr-fontset;
 
-	    if (count > 255) {
-		wwarning(_("font description %s is too large."), fontset);
-	    } else {
-		memcpy(font, fontset, count);
-		font[count] = 0;
-		f = (char*)font;
-	    }
-	}
+            if (count > 255) {
+                wwarning(_("font description %s is too large."), fontset);
+            } else {
+                memcpy(font, fontset, count);
+                font[count] = 0;
+                f = (char*)font;
+            }
+        }
 
-	if (newfs)
-	    end = strlen(newfs);
-	else
-	    end = 0;
+        if (newfs)
+            end = strlen(newfs);
+        else
+            end = 0;
 
-	tmp = wmalloc(end + strlen(f) + 8);
-	if (end != 0) {
-	    sprintf(tmp, "%s,", newfs);
-	    sprintf(tmp + end + 1, f, size);
-	} else {
-	    sprintf(tmp + end, f, size);
-	}
+        tmp = wmalloc(end + strlen(f) + 8);
+        if (end != 0) {
+            sprintf(tmp, "%s,", newfs);
+            sprintf(tmp + end + 1, f, size);
+        } else {
+            sprintf(tmp + end, f, size);
+        }
 
-	if (newfs)
-	    wfree(newfs);
-	newfs = tmp;
+        if (newfs)
+            wfree(newfs);
+        newfs = tmp;
 
-	fontset = ptr+1;
+        fontset = ptr+1;
     } while (ptr!=NULL);
 
     return newfs;
@@ -1622,6 +1504,25 @@ getOptions(char *options)
     return result;
 }
 
+
+#define WFAUnchanged (NULL)
+/* Struct for font change operations */
+typedef struct WMFontAttributes {
+    char *foundry;
+    char *family;
+    char *weight;
+    char *slant;
+    char *setWidth;
+    char *addStyle;
+    char *pixelSize;
+    char *pointSize;
+    char *resolutionX;
+    char *resolutionY;
+    char *spacing;
+    char *averageWidth;
+    char *registry;
+    char *encoding;
+} WMFontAttributes;
 
 WMFont*
 WMCopyFontWithChanges(WMScreen *scrPtr, WMFont *font,
@@ -1704,9 +1605,6 @@ WMCopyFontWithChanges(WMScreen *scrPtr, WMFont *font,
     return NULL;
 }
 
-#endif
-
-
 // should WFANormal also set "normal" or leave it alone?
 static const WMFontAttributes W_FANormal = {
     WFAUnchanged, WFAUnchanged, "medium,normal,regular", "r", "normal",
@@ -1756,5 +1654,8 @@ const WMFontAttributes *WFANotBold        = &W_FANotBold;
 const WMFontAttributes *WFAEmphasized     = &W_FAEmphasized;
 const WMFontAttributes *WFANotEmphasized  = &W_FANotEmphasized;
 const WMFontAttributes *WFABoldEmphasized = &W_FABoldEmphasized;
+
+
+#endif
 
 

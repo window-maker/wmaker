@@ -28,13 +28,13 @@ Display *dpy;
 int windowCount = 0;
 
 void
-closeAction(WMWidget *self, void *data)
+    closeAction(WMWidget *self, void *data)
 {
     WMDestroyWidget(self);
     windowCount--;
     printf("window closed, window count = %d\n", windowCount);
     if (windowCount < 1)
-	exit(0);
+        exit(0);
 }
 
 
@@ -66,7 +66,7 @@ testFontPanel(WMScreen *scr)
 
     WMShowFontPanel(panel);
 
-/*    WMFreeFontPanel(panel);*/
+    /*WMFreeFontPanel(panel);*/
 }
 
 
@@ -78,15 +78,15 @@ testFrame(WMScreen *scr)
     WMFrame *frame;
     int i;
     static char* titles[] = {
-	"AboveTop",
-	    "AtTop",
-	    "BelowTop",
-	    "AboveBottom",
-	    "AtBottom",
-	    "BelowBottom"
+        "AboveTop",
+        "AtTop",
+        "BelowTop",
+        "AboveBottom",
+        "AtBottom",
+        "BelowBottom"
     };
     static WMTitlePosition pos[] = {
-	WTPAboveTop,
+        WTPAboveTop,
         WTPAtTop,
         WTPBelowTop,
         WTPAboveBottom,
@@ -102,11 +102,11 @@ testFrame(WMScreen *scr)
     WMResizeWidget(win, 400, 300);
 
     for (i = 0; i < 6; i++) {
-	frame = WMCreateFrame(win);
-	WMMoveWidget(frame, 8+(i%3)*130, 8+(i/3)*130);
-	WMResizeWidget(frame, 120, 120);
+        frame = WMCreateFrame(win);
+        WMMoveWidget(frame, 8+(i%3)*130, 8+(i/3)*130);
+        WMResizeWidget(frame, 120, 120);
         WMSetFrameTitle(frame, titles[i]);
-	WMSetFrameTitlePosition(frame, pos[i]);
+        WMSetFrameTitlePosition(frame, pos[i]);
     }
 
     WMRealizeWidget(win);
@@ -147,31 +147,31 @@ testBox(WMScreen *scr)
 
     /*WMSetBoxHorizontal(box, True);*/
     for (i = 0; i < 4; i++) {
-	btn = WMCreateCommandButton(box);
-	WMSetButtonText(btn, "bla");
-	WMMapWidget(btn);
-	WMAddBoxSubview(box, WMWidgetView(btn), i&1, True, 20, 0, 5);
+        btn = WMCreateCommandButton(box);
+        WMSetButtonText(btn, "bla");
+        WMMapWidget(btn);
+        WMAddBoxSubview(box, WMWidgetView(btn), i&1, True, 20, 0, 5);
     }
-    
+
     pop = WMCreatePopUpButton(box);
     WMAddPopUpButtonItem(pop, "ewqeq");
     WMAddPopUpButtonItem(pop, "ewqeqrewrw");
     WMAddBoxSubview(box, WMWidgetView(pop), False, True, 20, 0, 5);
     WMMapWidget(pop);
-    
+
     hbox = WMCreateBox(box);
     WMSetBoxHorizontal(hbox, True);
     WMAddBoxSubview(box, WMWidgetView(hbox), False, True, 24, 0, 0);
     WMMapWidget(hbox);
- 
+
     for (i = 0; i < 4; i++) {
-	btn = WMCreateCommandButton(hbox);
-	WMSetButtonText(btn, "bla");
-	WMMapWidget(btn);
-	WMAddBoxSubview(hbox, WMWidgetView(btn), 1, True, 60, 0, i<3?5:0);
+        btn = WMCreateCommandButton(hbox);
+        WMSetButtonText(btn, "bla");
+        WMMapWidget(btn);
+        WMAddBoxSubview(hbox, WMWidgetView(btn), 1, True, 60, 0, i<3?5:0);
     }
-     
-    
+
+
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
     WMMapWidget(win);
@@ -242,16 +242,16 @@ testList(WMScreen *scr)
     /*WMSetListAllowEmptySelection(list, True);*/
     WMMoveWidget(list, 10, 40);
     for (i=0; i<105; i++) {
-	sprintf(text, "Item %i", i);
-	WMAddListItem(list, text);
+        sprintf(text, "Item %i", i);
+        WMAddListItem(list, text);
     }
     mlist = WMCreateList(win);
     WMSetListAllowMultipleSelection(mlist, True);
     /*WMSetListAllowEmptySelection(mlist, True);*/
     WMMoveWidget(mlist, 210, 40);
     for (i=0; i<135; i++) {
-	sprintf(text, "Item %i", i);
-	WMAddListItem(mlist, text);
+        sprintf(text, "Item %i", i);
+        WMAddListItem(mlist, text);
     }
 
     label = WMCreateLabel(win);
@@ -272,9 +272,9 @@ testList(WMScreen *scr)
     WMSetListDoubleAction(mlist, doubleClick, mlabel);
 
     WMAddNotificationObserver(listSelectionObserver, label,
-			      WMListSelectionDidChangeNotification, list);
+                              WMListSelectionDidChangeNotification, list);
     WMAddNotificationObserver(listSelectionObserver, mlabel,
-			      WMListSelectionDidChangeNotification, mlist);
+                              WMListSelectionDidChangeNotification, mlist);
 
 
     WMRealizeWidget(win);
@@ -289,14 +289,14 @@ testButton(WMScreen *scr)
     WMWindow *win;
     int i;
     char *types[] = {
-	"MomentaryPush",
-	    "PushOnPushOff",
-	    "Toggle",
-	    "Switch",
-	    "Radio",
-	    "MomentaryChange",
-	    "OnOff",
-	    "MomentaryLigh"
+        "MomentaryPush",
+        "PushOnPushOff",
+        "Toggle",
+        "Switch",
+        "Radio",
+        "MomentaryChange",
+        "OnOff",
+        "MomentaryLigh"
     };
 
     windowCount++;
@@ -308,11 +308,11 @@ testButton(WMScreen *scr)
     WMSetWindowCloseAction(win, closeAction, NULL);
 
     for (i = 1; i < 9; i++) {
-	WMButton *b;
-	b = WMCreateButton(win, i);
-	WMResizeWidget(b, 150, 24);
-	WMMoveWidget(b, 20, i*30);
-	WMSetButtonText(b, types[i-1]);
+        WMButton *b;
+        b = WMCreateButton(win, i);
+        WMResizeWidget(b, 150, 24);
+        WMMoveWidget(b, 20, i*30);
+        WMSetButtonText(b, types[i-1]);
     }
 
     WMRealizeWidget(win);
@@ -404,7 +404,7 @@ testGradientButtons(WMScreen *scr)
     WMSetButtonTextColor(btn, color);
 
     WMSetBalloonTextForView("This is yet another button.\nBut the balloon has 3 lines.\nYay!",
-			    WMWidgetView(btn));
+                            WMWidgetView(btn));
 
     WMReleaseColor(color);
     WMReleaseColor(altColor);
@@ -450,12 +450,12 @@ testScrollView(WMScreen *scr)
     WMSetFrameRelief(f, WRFlat);
 
     for (i=0; i<20; i++) {
-	l = WMCreateLabel(f);
-	WMResizeWidget(l, 50, 18);
-	WMMoveWidget(l, 10, 20*i);
-	sprintf(buffer, "Label %i", i);
-	WMSetLabelText(l, buffer);
-	WMSetLabelRelief(l, WRSimple);
+        l = WMCreateLabel(f);
+        WMResizeWidget(l, 50, 18);
+        WMMoveWidget(l, 10, 20*i);
+        sprintf(buffer, "Label %i", i);
+        WMSetLabelText(l, buffer);
+        WMSetLabelRelief(l, WRSimple);
     }
     WMMapSubwidgets(f);
     WMMapWidget(f);
@@ -509,10 +509,10 @@ testColorPanel(WMScreen *scr)
     WMColorPanel *panel = WMGetColorPanel(scr);
 
     /*if (colorname) {
-        startcolor = WMCreateNamedColor(scr, colorname, False);
-        WMSetColorPanelColor(panel, startcolor);
-        WMReleaseColor(startcolor);
-    }*/
+     startcolor = WMCreateNamedColor(scr, colorname, False);
+     WMSetColorPanelColor(panel, startcolor);
+     WMReleaseColor(startcolor);
+     }*/
 
     WMShowColorPanel(panel);
 }
@@ -609,7 +609,7 @@ testText(WMScreen *scr)
         WMFont *font, *ifont;
 
         font = WMDefaultSystemFont(scr);
-        ifont = WMCopyFontWithChanges(scr, font, WFAEmphasized);
+        ifont = WMCopyFontWithStyle(scr, font, WFSEmphasized);
         if (ifont) {
             WMSetTextDefaultFont(text, ifont);
             WMReleaseFont(ifont);
@@ -804,21 +804,21 @@ testTabView(WMScreen *scr)
 
 void
 splitViewConstrainProc(WMSplitView *sPtr, int indView,
-		       int *minSize, int *maxSize)
+                       int *minSize, int *maxSize)
 {
     switch (indView) {
     case 0:
-    	*minSize = 20;
-	break;
+        *minSize = 20;
+        break;
     case 1:
-    	*minSize = 40;
-    	*maxSize = 80;
-	break;
+        *minSize = 40;
+        *maxSize = 80;
+        break;
     case 2:
-    	*maxSize = 60;
-	break;
+        *maxSize = 60;
+        break;
     default:
-    	break;
+        break;
     }
 }
 
@@ -829,14 +829,14 @@ resizeSplitView(XEvent *event, void *data)
     WMSplitView *sPtr = (WMSplitView*)data;
 
     if (event->type == ConfigureNotify) {
-	int width = event->xconfigure.width - 10;
+        int width = event->xconfigure.width - 10;
 
-	if (width < WMGetSplitViewDividerThickness(sPtr))
-	    width = WMGetSplitViewDividerThickness(sPtr);
+        if (width < WMGetSplitViewDividerThickness(sPtr))
+            width = WMGetSplitViewDividerThickness(sPtr);
 
-	if (width != WMWidgetWidth(sPtr) ||
+        if (width != WMWidgetWidth(sPtr) ||
             event->xconfigure.height != WMWidgetHeight(sPtr))
-	    WMResizeWidget(sPtr, width, event->xconfigure.height - 55);
+            WMResizeWidget(sPtr, width, event->xconfigure.height - 55);
     }
 }
 
@@ -862,9 +862,9 @@ removeSubviewButtonAction(WMWidget *self, void *data)
     int count = WMGetSplitViewSubviewsCount(sPtr);
 
     if (count > 2) {
-    	WMView *view = WMGetSplitViewSubviewAt(sPtr, count-1);
-	WMDestroyWidget(WMWidgetOfView(view));
-    	WMRemoveSplitViewSubviewAt(sPtr, count-1);
+        WMView *view = WMGetSplitViewSubviewAt(sPtr, count-1);
+        WMDestroyWidget(WMWidgetOfView(view));
+        WMRemoveSplitViewSubviewAt(sPtr, count-1);
     }
 }
 
@@ -969,275 +969,6 @@ testSplitView(WMScreen *scr)
 }
 
 
-/*******************************************************************/
-
-#include <sys/types.h>
-#include <dirent.h>
-#include <string.h>
-
-
-typedef struct {
-    int x, y;
-    Bool mouseDown;
-    char *filename;
-} DNDStuff;
-
-WMPixmap*
-getImage(WMScreen *scr, char *file)
-{
-    char buffer[1000];
-    WMPixmap *pix;
-
-    sprintf(buffer, "../../WindowMaker/Icons/%s", file);
-    pix = WMCreatePixmapFromFile(scr, buffer);
-
-    return pix;
-}
-
-
-
-
-static void
-iconMouseStuff(XEvent *event, void *cdata)
-{
-    WMLabel *label = (WMLabel*)cdata;
-    DNDStuff *stuff = WMGetHangedData(label);
-    WMPoint where;
-
-    switch (event->type) {
-     case ButtonPress:
-	stuff->x = event->xbutton.x;
-	stuff->y = event->xbutton.y;
-	stuff->mouseDown = True;
-	break;
-     case ButtonRelease:
-	stuff->mouseDown = False;
-	break;
-     case MotionNotify:
-	if (!stuff->mouseDown)
-	    break;
-
-	if (abs(stuff->x - event->xmotion.x)>4
-	    || abs(stuff->y - event->xmotion.y)>4) {
-
-	    where = WMGetViewScreenPosition(WMWidgetView(label));
-
-	    WMDragImageFromView(WMWidgetView(label),
-				WMGetLabelImage(label),
-				NULL, /* XXX */
-				where,
-				wmksize(stuff->x, stuff->y),
-				event, True);
-	}
-	break;
-    }
-}
-
-
-static void
-endedDragImage(WMView *self, WMPixmap *image, WMPoint point, Bool deposited)
-{
-    DNDStuff *stuff = WMGetHangedData(WMWidgetOfView(self));
-
-    if (deposited) {
-	WMDestroyWidget(WMWidgetOfView(self));
-    }
-
-    stuff->mouseDown = False;
-}
-
-
-static WMData*
-fetchDragData(WMView *self, char *type)
-{
-    DNDStuff *stuff = WMGetHangedData(WMWidgetOfView(self));
-
-    return WMCreateDataWithBytes(stuff->filename, strlen(stuff->filename)+1);
-}
-
-
-WMDragSourceProcs dragSourceProcs = {
-    NULL,
-    NULL,
-    endedDragImage,
-    fetchDragData
-};
-
-
-/************************/
-
-
-unsigned
-draggingEntered(WMView *self, WMDraggingInfo *info)
-{
-    return WDOperationCopy;
-}
-
-
-unsigned
-draggingUpdated(WMView *self, WMDraggingInfo *info)
-{
-    return WDOperationCopy;
-}
-
-/*
- void (*draggingExited)(WMView *self, WMDraggingInfo *info);
- */
-char*
-prepareForDragOperation(WMView *self, WMDraggingInfo *info)
-{
-    return "application/X-WINGs-Bla";
-}
-
-
-WMLabel* makeDraggableLabel(WMWidget *w, char *file, int x, int y);
-
-Bool
-performDragOperation(WMView *self, WMDraggingInfo *info, WMData *data)
-{
-    char *file = (char*)WMDataBytes(data);
-    WMPoint pos;
-
-    pos = WMGetDraggingInfoImageLocation(info);
-
-    if (file!=NULL) {
-	WMLabel *label;
-	WMPoint pos2 = WMGetViewScreenPosition(self);
-
-
-	label = makeDraggableLabel(WMWidgetOfView(self), file,
-				   pos.x-pos2.x, pos.y-pos2.y);
-	WMRealizeWidget(label);
-	WMMapWidget(label);
-    }
-
-
-    return True;
-}
-
-
-void
-concludeDragOperation(WMView *self, WMDraggingInfo *info)
-{
-
-}
-
-
-
-WMDragDestinationProcs dragDestProcs = {
-    draggingEntered,
-	draggingUpdated,
-	NULL,
-	prepareForDragOperation,
-	performDragOperation,
-	concludeDragOperation
-};
-
-
-
-
-WMLabel*
-makeDraggableLabel(WMWidget *w, char *file, int x, int y)
-{
-    DNDStuff *stuff;
-    WMLabel *label;
-    WMPixmap *image = getImage(WMWidgetScreen(w), file);
-
-    stuff = wmalloc(sizeof(DNDStuff));
-    stuff->mouseDown = False;
-
-    stuff->filename = wstrdup(file);
-
-    label = WMCreateLabel(w);
-    WMResizeWidget(label, 48, 48);
-    WMMoveWidget(label, x, y);
-
-    WMSetViewDragSourceProcs(WMWidgetView(label), &dragSourceProcs);
-
-    WMHangData(label, stuff);
-
-    WMCreateEventHandler(WMWidgetView(label),
-			 ButtonPressMask|ButtonReleaseMask|ButtonMotionMask,
-			 iconMouseStuff, label);
-
-
-    if (image != NULL) {
-	WMSetLabelImagePosition(label, WIPImageOnly);
-	WMSetLabelImage(label, image);
-	WMReleasePixmap(image);
-    } else puts(file);
-
-    return label;
-}
-
-
-
-void
-testDragAndDrop(WMScreen *scr)
-{
-    WMWindow *win;
-    WMFrame *frame;
-    WMLabel *label;
-    int i, j;
-    DIR *dir;
-    struct dirent *ent;
-    char *types[] = {
-	"application/X-WINGs-Bla",
-        NULL
-    };
-
-    windowCount++;
-
-    win = WMCreateWindow(scr, "dragDrop");
-    WMResizeWidget(win, 300, 300);
-    WMSetWindowCloseAction(win, closeAction, NULL);
-    WMSetWindowTitle(win, "Drag and Drop");
-
-
-    frame = WMCreateFrame(win);
-    WMSetFrameRelief(frame, WRSunken);
-    WMResizeWidget(frame, 250, 250);
-    WMMoveWidget(frame, 25, 25);
-
-    WMRegisterViewForDraggedTypes(WMWidgetView(frame), types);
-    WMSetViewDragDestinationProcs(WMWidgetView(frame), &dragDestProcs);
-
-    dir = opendir("../../WindowMaker/Icons");
-    if (!dir) {
-	perror("../../WindowMaker/Icons");
-	return;
-    }
-
-    for (i = 0, j=0; j < 8; i++) {
-	ent = readdir(dir);
-	if (!ent)
-	    break;
-
-	if (strstr(ent->d_name, ".xpm")==NULL) {
-	    continue;
-	}
-
-	label = makeDraggableLabel(frame, ent->d_name,4+(j/4)*64, 4+(j%4)*64);
-
-	j++;
-    }
-
-    closedir(dir);
-
-    WMMapSubwidgets(frame);
-
-    WMMapSubwidgets(win);
-    WMRealizeWidget(win);
-    WMMapWidget(win);
-}
-
-
-
-
-
-/*******************************************************************/
-
-
 void
 testUD()
 {
@@ -1271,8 +1002,8 @@ main(int argc, char **argv)
     dpy = XOpenDisplay("");
 
     if (!dpy) {
-	puts("could not open display");
-	exit(1);
+        puts("could not open display");
+        exit(1);
     }
 
     /* This is used to disable buffering of X protocol requests.
@@ -1295,7 +1026,10 @@ main(int argc, char **argv)
     /*
      * Makes the logo be used in standard dialog panels.
      */
-    WMSetApplicationIconPixmap(scr, pixmap); WMReleasePixmap(pixmap);
+    if (pixmap) {
+        WMSetApplicationIconPixmap(scr, pixmap);
+        WMReleasePixmap(pixmap);
+    }
 
     /*
      * Do some test stuff.
@@ -1303,12 +1037,13 @@ main(int argc, char **argv)
      * Put the testSomething() function you want to test here.
      */
 
-
     testText(scr);
     testFontPanel(scr);
 
+    testColorPanel(scr);
 
 #if 0
+
     testBox(scr);
     testButton(scr);
     testColorPanel(scr);

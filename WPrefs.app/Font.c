@@ -1,9 +1,9 @@
 /* Font.c- text/font settings
- * 
+ *
  *  WPrefs - Window Maker Preferences Program
- * 
+ *
  *  Copyright (c) 1999-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -27,12 +27,12 @@
 
 typedef struct _Panel {
     WMBox *box;
-    char *sectionName;   
+    char *sectionName;
 
     char *description;
 
     CallbackRec callbacks;
-    
+
     WMWidget *parent;
 
 
@@ -47,15 +47,15 @@ typedef struct _Panel {
     WMPopUpButton *langP;
 	WMFrame *aaF;
 	WMButton *togAA;
-        
+
     /* single byte */
     WMTextField *fontT;
     WMButton *changeB;
-    
+
     /* multibyte */
     WMLabel *fsetL;
     WMList *fsetLs;
-    
+
     WMButton *addB;
     WMButton *editB;
     WMButton *remB;
@@ -67,7 +67,7 @@ typedef struct _Panel {
     WMColor *black;
     WMColor *light;
     WMColor *dark;
-    
+
     WMColor *back;
 	WMColor *colors[9];
 
@@ -78,7 +78,7 @@ typedef struct _Panel {
 	WMPixmap *down_arrow;
 	WMPixmap *alt_up_arrow;
 	WMPixmap *alt_down_arrow;
-	
+
 	int oldsection;
 	char menuStyle;
 	char titleAlignment;
@@ -104,7 +104,7 @@ static WMRect previewPositions[] = {
 	{{156, 35},{64, 64}},
 #define PICON		5
 	{{156, 105},{64, 64}}
-};	
+};
 #define EVERYTHING 0xff
 
 static char *colorOptions[] = {
@@ -277,7 +277,7 @@ static char* getFontEncoding(void *data);
 static char* getFontSampleString(void *data);
 
 /* note single element */
-static WMFont* getFontForPreview(void *data, int element);  
+static WMFont* getFontForPreview(void *data, int element);
 static WMFont* getDefaultSystemFont(void *data, int element);
 
 static WMPropList* getDefaultFontProp(void *data, char *encoding, int section);
@@ -289,7 +289,7 @@ static void
 str2rcolor(RContext *rc, char *name, RColor *color)
 {
     XColor xcolor;
-    
+
     XParseColor(rc->dpy, rc->cmap, name, &xcolor);
 
     color->alpha = 255;
@@ -304,22 +304,22 @@ drawMenuBevel(RImage *img)
     RColor light, dark, mid;
     int i;
     int iheight = img->height / 4;
-    
+
     light.alpha = 0;
     light.red = light.green = light.blue = 80;
-    
+
     dark.alpha = 255;
     dark.red = dark.green = dark.blue = 0;
-    
+
     mid.alpha = 0;
     mid.red = mid.green = mid.blue = 40;
-    
+
     for (i = 1; i < 4; i++) {
 	ROperateLine(img, RSubtractOperation, 0, i*iheight-2,
 		     img->width-1, i*iheight-2, &mid);
-	
+
 	RDrawLine(img, 0, i*iheight-1, img->width-1, i*iheight-1, &dark);
-	
+
 	ROperateLine(img, RAddOperation, 1, i*iheight,
 		     img->width-2, i*iheight, &light);
     }
@@ -368,7 +368,7 @@ paintItems(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
 }
 
 static void
-paintIcon(WMScreen *scr,Drawable d, WMColor *color, WMColor *Iback, 
+paintIcon(WMScreen *scr,Drawable d, WMColor *color, WMColor *Iback,
 		WMFont *font, int part, char *text)
 {
 	Display *dpy = WMScreenDisplay(scr);
@@ -377,14 +377,14 @@ paintIcon(WMScreen *scr,Drawable d, WMColor *color, WMColor *Iback,
 	int y = previewPositions[part].pos.y+1;
 	int w = previewPositions[part].size.width-2;
 	int h = WMFontHeight(font)+2;
-	
+
 	XFillRectangle(dpy, d, WMColorGC(Iback), x, y, w, h);
 	x += (w - WMWidthOfString(font, text, l))/2;
-	WMDrawString(scr, d, color, font, x, 
+	WMDrawString(scr, d, color, font, x,
 					y + (h - WMFontHeight(font))/2, text, l);
 
 }
-	
+
 static void
 drawFonts(_Panel *panel, int elements)
 {
@@ -400,7 +400,7 @@ drawFonts(_Panel *panel, int elements)
 		WINTITLE, panel->titleAlignment, _("Window Title Font"));
 		}
 	if(elements & DISCOL) {
-	paintTitle(scr, d, panel->white, getFontForPreview(panel, DISTITLE), 
+	paintTitle(scr, d, panel->white, getFontForPreview(panel, DISTITLE),
 			DISTITLE, WACenter, _("Display"));
 	}
 	if(elements & MTITLE) {
@@ -412,13 +412,13 @@ drawFonts(_Panel *panel, int elements)
 		PMITEM, _("Menu Item"));
 	}
 	if(elements & CLIP) {
-	WMDrawString(scr, d, panel->colors[4], 
+	WMDrawString(scr, d, panel->colors[4],
 					getFontForPreview(panel, PCLIP), 169,37, "1",1);
-	WMDrawString(scr, d, panel->colors[3], 
+	WMDrawString(scr, d, panel->colors[3],
 					getFontForPreview(panel, PCLIP),179, 84, _("Clip title"), 10);
 	}
 	if(elements & ICONT) {
-	paintIcon(scr, d, panel->colors[5], panel->colors[6], 
+	paintIcon(scr, d, panel->colors[5], panel->colors[6],
 			getFontForPreview(panel, PICON), PICON, _("Icon Title"));
 	}
 }
@@ -554,14 +554,14 @@ renderTexture(WMScreen *scr, WMPropList *texture, int width, int height,
 	if (!path || !timage) {
 	    wwarning("could not load file '%s': %s", path,
 		     RMessageForError(RErrorCode));
-	} else {	
+	} else {
 	    grad = RRenderGradient(width, height, &rcolor, &rcolor2, style);
 
 	    image = RMakeTiledImage(timage, width, height);
 	    RReleaseImage(timage);
 
 	    i = atoi(WMGetFromPLString(WMGetFromPLArray(texture, 2)));
-	
+
 	    RCombineImagesWithOpaqueness(image, grad, i);
 	    RReleaseImage(grad);
 	}
@@ -584,7 +584,7 @@ renderTexture(WMScreen *scr, WMPropList *texture, int width, int height,
 	}
 
 	j = WMGetPropListItemCount(texture);
-	
+
 	if (j > 0) {
 	    colors = wmalloc(j * sizeof(RColor*));
 
@@ -596,7 +596,7 @@ renderTexture(WMScreen *scr, WMPropList *texture, int width, int height,
 	    colors[i-2] = NULL;
 
 	    image = RRenderMultiGradient(width, height, colors, style);
-	    
+
 	    for (i = 0; colors[i]!=NULL; i++)
 		wfree(colors[i]);
 	    wfree(colors);
@@ -647,7 +647,7 @@ renderTexture(WMScreen *scr, WMPropList *texture, int width, int height,
     if (path) {
 	dumpRImage(path, image);
     }
-    
+
     if (border < 0) {
 	if (border == MENU_BEVEL) {
 	    drawMenuBevel(image);
@@ -695,7 +695,7 @@ renderMenu(_Panel *panel, WMPropList *texture, int width, int iheight)
     return pix;
 }
 
-static void 
+static void
 renderClip(_Panel *panel, GC gc, int part, int relief)
 {
     WMScreen *scr = WMWidgetScreen(panel->box);
@@ -703,7 +703,7 @@ renderClip(_Panel *panel, GC gc, int part, int relief)
     RContext *rc = WMScreenRContext(scr);
     WMPropList *prop;
     Pixmap pix;
-	XImage *original; 
+	XImage *original;
     XPoint p[4];
     RImage *tile;
     RColor black;
@@ -714,22 +714,22 @@ renderClip(_Panel *panel, GC gc, int part, int relief)
 
 	prop = GetObjectForKey(textureOptions[part]);
 
-    pix = renderTexture(scr, prop, 
+    pix = renderTexture(scr, prop,
 			previewPositions[part].size.width,
 			previewPositions[part].size.height,
 			NULL, relief);
 
-	
+
 	original = XGetImage(dpy, pix, 0, 0, 64, 64,
 					AllPlanes, ZPixmap);
-	if (!original){ 
+	if (!original){
 	wwarning(_("error capturing \"original\" tile image"),
 					RMessageForError(RErrorCode));
 	}
 	tile = RCreateImageFromXImage(rc, original, NULL);
 
 	XDestroyImage(original);
-    XFreePixmap(WMScreenDisplay(scr), pix); 
+    XFreePixmap(WMScreenDisplay(scr), pix);
 
     pt = CLIP_BUTTON_SIZE*ICON_SIZE/64;
     tp = ICON_SIZE-1 - pt;
@@ -797,8 +797,8 @@ renderClip(_Panel *panel, GC gc, int part, int relief)
 	XFillPolygon(dpy, pix, WMColorGC(panel->colors[4]), p, 3, Convex, CoordModeOrigin);
     XDrawLines(dpy, pix, WMColorGC(panel->colors[4]), p, 4, CoordModeOrigin);
 
-    XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 
-	      previewPositions[part].size.width, 
+    XCopyArea(dpy, pix, panel->preview, gc, 0, 0,
+	      previewPositions[part].size.width,
 	      previewPositions[part].size.height,
 	      previewPositions[part].pos.x,
 	      previewPositions[part].pos.y);
@@ -816,13 +816,13 @@ renderPreview(_Panel *panel, GC gc, int part, int relief)
 
 	prop = GetObjectForKey(textureOptions[part]);
 
-    pix = renderTexture(scr, prop, 
+    pix = renderTexture(scr, prop,
 			previewPositions[part].size.width,
 			previewPositions[part].size.height,
 			NULL, relief);
-    XCopyArea(WMScreenDisplay(scr), pix, 
-		  panel->preview, gc, 0, 0, 
-	      previewPositions[part].size.width, 
+    XCopyArea(WMScreenDisplay(scr), pix,
+		  panel->preview, gc, 0, 0,
+	      previewPositions[part].size.width,
 	      previewPositions[part].size.height,
 	      previewPositions[part].pos.x,
 	      previewPositions[part].pos.y);
@@ -841,10 +841,10 @@ paintPreviewBox(Panel *panel, int elements)
 	Pixmap mitem;
 
 	gc = XCreateGC(dpy, WMWidgetXID(panel->parent), 0, NULL);
-    
+
     if (panel->preview == None) {
 	WMPixmap *pix;
-	
+
 	panel->preview = XCreatePixmap(dpy, WMWidgetXID(panel->parent),
 				       240-4, 190-4, WMScreenDepth(scr));
 
@@ -885,23 +885,23 @@ paintPreviewBox(Panel *panel, int elements)
 
 	prop = GetObjectForKey(textureOptions[PMITEM]);
 	mitem = renderMenu(panel, prop,
-			 previewPositions[PMITEM].size.width, 
+			 previewPositions[PMITEM].size.width,
 			 previewPositions[PMITEM].size.height/4);
 
 	XCopyArea(dpy, mitem, panel->preview, gc, 0, 0,
-		  previewPositions[PMITEM].size.width, 
+		  previewPositions[PMITEM].size.width,
 		  previewPositions[PMITEM].size.height,
 		  previewPositions[PMITEM].pos.x,
 		  previewPositions[PMITEM].pos.y);
 
 	XFreePixmap(dpy, mitem);
-    } 
+    }
     if (elements & (1<<PMITEM|1<<PMTITLE)) {
 	XDrawLine(dpy, panel->preview, gc, 29, 125, 29, 125+20*4+25);
-	XDrawLine(dpy, panel->preview, gc, 119, 125, 119, 125+20*4+25); 
+	XDrawLine(dpy, panel->preview, gc, 119, 125, 119, 125+20*4+25);
     }
     if (elements & (1<<PCLIP)) {
-	renderClip(panel, gc, PCLIP, RBEV_RAISED3); 
+	renderClip(panel, gc, PCLIP, RBEV_RAISED3);
 	XDrawRectangle(dpy, panel->preview, WMColorGC(black),
 		       previewPositions[PCLIP].pos.x-1,
 		       previewPositions[PCLIP].pos.y-1,
@@ -922,7 +922,7 @@ paintPreviewBox(Panel *panel, int elements)
 	WMReleaseColor(black);
 }
 
-static void 
+static void
 paintTextField(void *data, int section)
 {
 	_Panel *panel = (_Panel*)data;
@@ -932,45 +932,45 @@ paintTextField(void *data, int section)
 	WMSetTextFieldFont(panel->fontT, getFontForPreview(panel, section));
 	switch(encoding) {
 		case 0:  /* Current Font in theme */
-			WMSetTextFieldText(panel->fontT, 
-					"ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz0123456789\x00e0\x00e6\x00e7\x00eb\x00ee\x00f0\x00f1\x00f3\x00f9\x00fd\x00c0\x00c6\x00c7\x00cb\x00ce\x00d0\x00d1\x00d3\x00d9\x00dd"); 
+			WMSetTextFieldText(panel->fontT,
+					"ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz0123456789\x00e0\x00e6\x00e7\x00eb\x00ee\x00f0\x00f1\x00f3\x00f9\x00fd\x00c0\x00c6\x00c7\x00cb\x00ce\x00d0\x00d1\x00d3\x00d9\x00dd");
 			break;
 		case 1:  /* default */
 			WMSetTextFieldText(panel->fontT, getFontSampleString(panel));
-				//	"ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz0123456789\x00e0\x00e6\x00e7\x00eb\x00ee\x00f0\x00f1\x00f3\x00f9\x00fd\x00c0\x00c6\x00c7\x00cb\x00ce\x00d0\x00d1\x00d3\x00d9\x00dd"); 
+				//	"ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz0123456789\x00e0\x00e6\x00e7\x00eb\x00ee\x00f0\x00f1\x00f3\x00f9\x00fd\x00c0\x00c6\x00c7\x00cb\x00ce\x00d0\x00d1\x00d3\x00d9\x00dd");
 			break;
 		case 2:  /* latin1 iso8859-1 */
 			WMSetTextFieldText(panel->fontT, getFontSampleString(panel));
-				//  "ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz0123456789\x00e0\x00e6\x00e7\x00eb\x00ee\x00f0\x00f1\x00f3\x00f9\x00fd\x00c0\x00c6\x00c7\x00cb\x00ce\x00d0\x00d1\x00d3\x00d9\x00dd"); 
+				//  "ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz0123456789\x00e0\x00e6\x00e7\x00eb\x00ee\x00f0\x00f1\x00f3\x00f9\x00fd\x00c0\x00c6\x00c7\x00cb\x00ce\x00d0\x00d1\x00d3\x00d9\x00dd");
 			break;
 		case 3:  /* latin2 iso8859-2 */
 			WMSetTextFieldText(panel->fontT, getFontSampleString(panel));
-			//		"ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz0123456789\x00e0\x00e6\x00e7\x00eb\x00ee\x00f0\x00f1\x00f3\x00f9\x00fd\x00c0\x00c6\x00c7\x00cb\x00ce\x00d0\x00d1\x00d3\x00d9\x00dd"); 
+			//		"ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz0123456789\x00e0\x00e6\x00e7\x00eb\x00ee\x00f0\x00f1\x00f3\x00f9\x00fd\x00c0\x00c6\x00c7\x00cb\x00ce\x00d0\x00d1\x00d3\x00d9\x00dd");
 			break;
 		case 4:  /* Greek iso8859-7 */
 			WMSetTextFieldText(panel->fontT, getFontSampleString(panel));
-			//		"ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz0123456789\x00e0\x00e6\x00e7\x00eb\x00ee\x00f0\x00f1\x00f3\x00f9\x00fd\x00c0\x00c6\x00c7\x00cb\x00ce\x00d0\x00d1\x00d3\x00d9\x00dd"); 
+			//		"ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz0123456789\x00e0\x00e6\x00e7\x00eb\x00ee\x00f0\x00f1\x00f3\x00f9\x00fd\x00c0\x00c6\x00c7\x00cb\x00ce\x00d0\x00d1\x00d3\x00d9\x00dd");
 			break;
 /* luckily all these happen to have the MultiByte chars in the same places */
 		case 5:  /* Japanese jisx0208.1983 */
 			WMSetTextFieldText(panel->fontT, getFontSampleString(panel));
-			//		"Window Maker ÀßÄê¥æ¡¼¥Æ¥£¥ê¥Æ¥£"); 
+			//		"Window Maker ÀßÄê¥æ¡¼¥Æ¥£¥ê¥Æ¥£");
 			break;
 		case 6:  /* Korean ksc5601.1987 */
 			WMSetTextFieldText(panel->fontT, getFontSampleString(panel));
-			//		"À©µµ¿ì ¸ÞÀÌÄ¿ ¼³Á¤"); 
+			//		"À©µµ¿ì ¸ÞÀÌÄ¿ ¼³Á¤");
 			break;
-		case 7:  /* korean2 daewoo */ 
+		case 7:  /* korean2 daewoo */
 			WMSetTextFieldText(panel->fontT, getFontSampleString(panel));
-			//		"À©µµ¿ì ¸ÞÀÌÄ¿ ¼³Á¤"); 
+			//		"À©µµ¿ì ¸ÞÀÌÄ¿ ¼³Á¤");
 			break;
 		case 8:  /* Russian koi8-r */
 			WMSetTextFieldText(panel->fontT, getFontSampleString(panel));
-			//		"ó×ÏÊÓÔ×Á Window Maker"); 
+			//		"ó×ÏÊÓÔ×Á Window Maker");
 			break;
 		case 9:  /* Ukranian koi8-u */
 			WMSetTextFieldText(panel->fontT, getFontSampleString(panel));
-			//		"ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz0123456789\x00e0\x00e6\x00e7\x00eb\x00ee\x00f0\x00f1\x00f3\x00f9\x00fd\x00c0\x00c6\x00c7\x00cb\x00ce\x00d0\x00d1\x00d3\x00d9\x00dd"); 
+			//		"ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz0123456789\x00e0\x00e6\x00e7\x00eb\x00ee\x00f0\x00f1\x00f3\x00f9\x00fd\x00c0\x00c6\x00c7\x00cb\x00ce\x00d0\x00d1\x00d3\x00d9\x00dd");
 			break;
 	}
 }
@@ -984,11 +984,11 @@ previewClick(XEvent *event, void *clientData)
 	for (i = 0; i < sizeof(previewPositions)/sizeof(WMRect); i++) {
 	    if (event->xbutton.x >= previewPositions[i].pos.x
 		&& event->xbutton.y >= previewPositions[i].pos.y
-		&& event->xbutton.x < previewPositions[i].pos.x 
+		&& event->xbutton.x < previewPositions[i].pos.x
 		+ previewPositions[i].size.width
-		&& event->xbutton.y < previewPositions[i].pos.y 
+		&& event->xbutton.y < previewPositions[i].pos.y
 		+ previewPositions[i].size.height) {
-		
+
 		WMSetPopUpButtonSelectedItem(panel->fontSel, i);
 		changePage(panel->fontSel, panel);
 		return;
@@ -1020,13 +1020,13 @@ changePage(WMWidget *w, void *data)
 
 	color = WMCreateRGBColor(scr, 0x5100, 0x5100, 0x7100, True);
 	XFillRectangle(rc->dpy, panel->preview, WMColorGC(color),
-		       positions[panel->oldsection].x, 
+		       positions[panel->oldsection].x,
 		       positions[panel->oldsection].y, 22, 22);
 	WMReleaseColor(color);
     }
     if (w) {
 	panel->oldsection = section;
-	WMDrawPixmap(panel->hand, panel->preview, positions[section].x, 
+	WMDrawPixmap(panel->hand, panel->preview, positions[section].x,
 		     positions[section].y);
     }
     WMRedisplayWidget(panel->prevL);
@@ -1047,7 +1047,7 @@ setLanguageType(void *data, Bool multiByte)
 	WMMapWidget(p->remB);
 	WMMapWidget(p->upB);
 	WMMapWidget(p->downB);
-	
+
 	WMUnmapWidget(p->fontT);
 	WMUnmapWidget(p->changeB);
     } else {
@@ -1058,7 +1058,7 @@ setLanguageType(void *data, Bool multiByte)
 	WMUnmapWidget(p->remB);
 	WMUnmapWidget(p->upB);
 	WMUnmapWidget(p->downB);
-	
+
 	WMMapWidget(p->fontT);
 	WMMapWidget(p->changeB);
     }
@@ -1084,7 +1084,7 @@ refillFontSetList(void *data)
 	} else {
 	for (i = 0; i < WMGetPropListItemCount(array); i++) {
 		WMGetFromPLArray(array, i);
-		WMAddListItem( panel->fsetLs, 
+		WMAddListItem( panel->fsetLs,
 				WMGetFromPLString(
 					WMGetFromPLArray(array, i)));
 	}
@@ -1113,7 +1113,7 @@ insertCurrentFont(char *data, char *type)
 	}
 	wfree(str);
 
-	
+
 	WMPutInPLDictionary(CurrentFontArray, key, array);
 }
 
@@ -1130,7 +1130,7 @@ readFontEncodings(void *data)
 	msg = _("Could not locate font information file WPrefs.app/font.data");
 	goto error;
     }
-    
+
     pl = WMReadPropListFromFile(path);
     if (!pl) {
 	msg = _("Could not read font information file WPrefs.app/font.data");
@@ -1140,7 +1140,7 @@ readFontEncodings(void *data)
 	WMPropList *key = WMCreatePLString("Encodings");
 	WMPropList *array;
 	WMMenuItem *mi;
-	
+
 	array = WMGetFromPLDictionary(pl, key);
 	WMReleasePropList(key);
 	if (!array || !WMIsPLArray(array)) {
@@ -1150,7 +1150,7 @@ readFontEncodings(void *data)
 	}
 
 	WMAddPopUpButtonItem(panel->langP, _("Current"));
-	
+
 	for (i = 0; i < WMGetPropListItemCount(array); i++) {
 	    WMPropList *item, *str;
 
@@ -1161,11 +1161,11 @@ readFontEncodings(void *data)
 	}
 	WMSetPopUpButtonSelectedItem(panel->langP, 0);
 
-	
+
 	key = WMCreatePLString("WindowTitleFont");
 	DefaultWindowTitleFont = WMRetainPropList(WMGetFromPLDictionary(pl, key));
 	WMReleasePropList(key);
-	
+
 	key = WMCreatePLString("MenuTitleFont");
 	DefaultMenuTitleFont = WMRetainPropList(WMGetFromPLDictionary(pl, key));
 	WMReleasePropList(key);
@@ -1193,20 +1193,20 @@ error:
     if (pl)
 	WMReleasePropList(pl);
 
-    WMRunAlertPanel(WMWidgetScreen(panel->parent), panel->parent, 
+    WMRunAlertPanel(WMWidgetScreen(panel->parent), panel->parent,
 		    _("Error"), msg, _("OK"), NULL, NULL);
 }
 
-static void 
+static void
 checkListForArrows(void *data)
 {
 	_Panel *panel = (_Panel*)data;
 	int list;
 	list = WMGetListNumberOfRows(panel->fsetLs);
-	
-	if(list > 1) 
+
+	if(list > 1)
 	{
-		if(WMGetListSelectedItemRow(panel->fsetLs) == 0) { 
+		if(WMGetListSelectedItemRow(panel->fsetLs) == 0) {
 			WMSetButtonEnabled(panel->upB, False);
 			WMSetButtonEnabled(panel->downB, True);
 		} else if(WMGetListSelectedItemRow(panel->fsetLs) == list-1) {
@@ -1222,9 +1222,9 @@ checkListForArrows(void *data)
 		WMSetButtonEnabled(panel->downB, False);
 	}
 	/* added to control the Remove button */
-	if(list > 1) 
+	if(list > 1)
 		WMSetButtonEnabled(panel->remB, True);
-	else 
+	else
 		WMSetButtonEnabled(panel->remB, False);
 }
 
@@ -1238,14 +1238,14 @@ fontOfLang(void *data, char *encoding, int section)
 
 	if(!encoding)
 	array = getCurrentFontProp(panel, section);
-	else 
+	else
 	array = getDefaultFontProp(panel, encoding, section);
 
 	if(!array) {
 		wwarning("error no font prop given");
 		return NULL;
 	} else {
-	for(i=0; i<WMGetPropListItemCount(array); i++) 
+	for(i=0; i<WMGetPropListItemCount(array); i++)
 	{
 		if(buf) buf = wstrconcat(buf, ",");
 		buf = wstrconcat(buf, WMGetFromPLString(WMGetFromPLArray(array, i)));
@@ -1264,7 +1264,7 @@ changeLanguageAction(WMWidget *w, void *data)
 
 	section = WMGetPopUpButtonSelectedItem(w);
 
-	if(isEncodingMultiByte(panel)) { 
+	if(isEncodingMultiByte(panel)) {
 		setLanguageType(panel, True);
 	} else {
 		if(panel->MultiByteText) setLanguageType(panel, True);
@@ -1279,34 +1279,34 @@ static WMFont*
 getFontForPreview(void *data, int element)
 {
     _Panel *panel = (_Panel*)data;
-	WMFont *font; 
+	WMFont *font;
 	char *fname;
     WMScreen *scr = WMWidgetScreen(panel->box);
 	char *encoding = getFontEncoding(panel);
 	fname = fontOfLang(panel, encoding, element);
-	if (WMHasAntialiasingSupport(scr))
-	{
+	//if (WMHasAntialiasingSupport(scr)) {
 		if(panel->AntialiasedText) {
-			font = WMCreateFontWithFlags(scr, fname, WFAntialiased);
+            // fix this -Dan font = WMCreateFontWithFlags(scr, fname, WFAntialiased);
+            font = WMCreateFont(scr, fname);
 		} else {
 			font = WMCreateFont(scr, fname);
 		}
-	} else {
-		font = WMCreateFont(scr, fname);
-	}
+	//} else {
+	//	font = WMCreateFont(scr, fname);
+	//}
 	if(!font) {
 		char *msg;
 		int length;
 		length = strlen("\"")+
 			strlen(fname)+strlen("\" was not loaded correctly.  Make sure the font is available for that encoding.\nLoadind default system font.");
 		msg = wmalloc(length +1);
-		snprintf(msg, length + 1, 
-				"\"%s\" was not loaded correctly.  Make sure the font is available for that encoding.\nLoading default system font.", 
+		snprintf(msg, length + 1,
+				"\"%s\" was not loaded correctly.  Make sure the font is available for that encoding.\nLoading default system font.",
 				fname);
-		WMRunAlertPanel(WMWidgetScreen(panel->parent),panel->parent, 
+		WMRunAlertPanel(WMWidgetScreen(panel->parent),panel->parent,
 				_("Warning"), msg, _("OK"), NULL, NULL);
 		font = getDefaultSystemFont(panel, element);
-	} 
+	}
 	return font;
 }
 
@@ -1393,17 +1393,17 @@ getCurrentFontProp(void *data, int section)
 			break;
 		case 1:
 			array = WMRetainPropList(
-					WMGetFromPLDictionary(CurrentFontArray, 
+					WMGetFromPLDictionary(CurrentFontArray,
 						WMCreatePLString("LargeDisplayFont")));
 			break;
 		case 2:
 			array = WMRetainPropList(
-					WMGetFromPLDictionary(CurrentFontArray, 
+					WMGetFromPLDictionary(CurrentFontArray,
 						WMCreatePLString("MenuTitleFont")));
 			break;
 		case 3:
 			array = WMRetainPropList(
-					WMGetFromPLDictionary(CurrentFontArray, 
+					WMGetFromPLDictionary(CurrentFontArray,
 						WMCreatePLString("MenuTextFont")));
 			break;
 		case 4:
@@ -1413,7 +1413,7 @@ getCurrentFontProp(void *data, int section)
 			break;
 		case 5:
 			array = WMRetainPropList(
-					WMGetFromPLDictionary(CurrentFontArray, 
+					WMGetFromPLDictionary(CurrentFontArray,
 						WMCreatePLString("IconTitleFont")));
 			break;
 	}
@@ -1511,7 +1511,7 @@ multiClick(WMWidget *w, void *data)
 	}
 }
 
-static void 
+static void
 toggleAA(WMWidget *w, void *data)
 {
 	_Panel *panel = (_Panel*)data;
@@ -1521,18 +1521,18 @@ toggleAA(WMWidget *w, void *data)
 	else
 		panel->AntialiasedText = True;
 	/* hmm now i gotta redraw all the fonts in the preview section
-	 * and the text field 
+	 * and the text field
 	 */
 	paintPreviewBox(panel, EVERYTHING);
 	changePage(panel->fontSel, panel);
 	if(isEncodingMultiByte(panel)) setLanguageType(panel, True);
-} 
+}
 
 static void
 listClick(WMWidget *w, void *data)
 {
 	_Panel *panel = (_Panel*)data;
-	
+
 	checkListForArrows(panel);
 }
 
@@ -1704,11 +1704,11 @@ removeButtonClick(WMWidget *w, void *data)
 
 	list = WMGetListNumberOfRows(panel->fsetLs);
 	if(list != 0) {
-	if(list > pos) 
+	if(list > pos)
 		WMSelectListItem(panel->fsetLs, pos);
-	else if(list == pos) 
+	else if(list == pos)
 		WMSelectListItem(panel->fsetLs, list-1);
-	else 
+	else
 		WMSelectListItem(panel->fsetLs, 0);
 	}
 	checkListForArrows(panel);
@@ -1723,15 +1723,15 @@ showData(_Panel *panel)
     WMScreen *scr = WMWidgetScreen(panel->parent);
     char *str;
 	int i;
-    
+
 	CurrentFontArray = WMCreatePLDictionary(NULL, NULL);
 
     str = GetStringForKey("WindowTitleFont");
 	insertCurrentFont(wstrdup(str), "WindowTitleFont");
-    
+
 	str = GetStringForKey("LargeDisplayFont");
 	insertCurrentFont(wstrdup(str), "LargeDisplayFont");
-    
+
     str = GetStringForKey("MenuTitleFont");
 	insertCurrentFont(wstrdup(str), "MenuTitleFont");
 
@@ -1785,56 +1785,55 @@ showData(_Panel *panel)
 			WMSetButtonText(panel->togMulti, "Yes");
 			printf("yes multi\n");
 			panel->MultiByteText = True;
-		} else if (strcasecmp(str, "AUTO") == 0) { 
+		} else if (strcasecmp(str, "AUTO") == 0) {
 			char *locale;
 			locale = setlocale(LC_CTYPE, NULL);
-			if(locale != NULL 
+			if(locale != NULL
 				&& (strncmp(locale, "ja", 2) == 0
 				|| strncmp(locale, "zh", 2) == 0
 				|| strncmp(locale, "ko", 2) == 0)) {
-				setLanguageType(panel, True); 
+				setLanguageType(panel, True);
 				WMSetButtonText(panel->togMulti, "Auto");
 				printf("auto multi\n");
 				panel->MultiByteText = True;
-			} else { 
+			} else {
 				setLanguageType(panel, False);
 				WMSetButtonText(panel->togMulti, "Auto");
 				panel->MultiByteText = False;
 			}
 		}
-	} else { 
+	} else {
 		char *locale;
 		locale = setlocale(LC_CTYPE, NULL);
-		if(locale != NULL 
+		if(locale != NULL
 		&& (strncmp(locale, "ja", 2) == 0
 		|| strncmp(locale, "zh", 2) == 0
 		|| strncmp(locale, "ko", 2) == 0)) {
-			setLanguageType(panel, True); 
+			setLanguageType(panel, True);
 			WMSetButtonText(panel->togMulti, "Auto");
 			printf("auto multi\n");
 			panel->MultiByteText = True;
-		} else { 
+		} else {
 			setLanguageType(panel, False);
 			WMSetButtonText(panel->togMulti, "Auto");
 			panel->MultiByteText = False;
 		}
 	}
-	/* gotta check for Antialiasing AFTER MultiByte incase the use has both 
+	/* gotta check for Antialiasing AFTER MultiByte incase the use has both
 	 * to maintain behavior in Current Fonts set or i could add another if
 	 * statement to setLanguageType =) */
-	if (WMHasAntialiasingSupport(scr))
-	{
+	//if (WMHasAntialiasingSupport(scr)) {
 		WMMapWidget(panel->togAA);
 		if(GetBoolForKey("AntialiasedText")){
 		WMSetButtonSelected(panel->togAA, True);
 		panel->AntialiasedText = True;
-		} else { 
+		} else {
 		WMSetButtonSelected(panel->togAA, False);
 		panel->AntialiasedText = False;
 		}
-	} else {
-		WMUnmapWidget(panel->togAA);
-	}
+	//} else {
+	//	WMUnmapWidget(panel->togAA);
+	//}
 
 
     paintPreviewBox(panel, EVERYTHING);
@@ -1842,14 +1841,14 @@ showData(_Panel *panel)
 
 static void
 createPanel(Panel *p)
-{    
+{
     _Panel *panel = (_Panel*)p;
     WMScreen *scr = WMWidgetScreen(panel->parent);
-    
+
 
     panel->box = WMCreateBox(panel->parent);
     WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
-    
+
 	panel->hand = WMCreatePixmapFromXPMData(scr, hand_xpm);
 	panel->up_arrow = WMCreatePixmapFromXPMData(scr, up_arrow_xpm);
 	panel->down_arrow = WMCreatePixmapFromXPMData(scr, down_arrow_xpm);
@@ -1893,7 +1892,7 @@ createPanel(Panel *p)
 	WMSetButtonAction(panel->togMulti, multiClick, panel);
 
 	WMMapSubwidgets(panel->multiF);
-    
+
     /* language selection */
     panel->langF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->langF, 165, 50);
@@ -1909,17 +1908,16 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->langF);
 
 	/* Antialiasing */
-	if (WMHasAntialiasingSupport(scr))
-	{
-	panel->togAA = WMCreateSwitchButton(panel->box);
-	WMResizeWidget(panel->togAA, 110, 20);
-	WMMoveWidget(panel->togAA, 155, 10);
-	WMSetButtonText(panel->togAA, _("Smooth Fonts"));
-	WMSetBalloonTextForView(_("Smooth Font edges for the eye candy\n"
-							 "requires a restart after saving"), 
-							 WMWidgetView(panel->togAA));
-	WMSetButtonAction(panel->togAA, toggleAA, panel); 
-	}
+	//if (WMHasAntialiasingSupport(scr)) {
+        panel->togAA = WMCreateSwitchButton(panel->box);
+        WMResizeWidget(panel->togAA, 110, 20);
+        WMMoveWidget(panel->togAA, 155, 10);
+        WMSetButtonText(panel->togAA, _("Smooth Fonts"));
+        WMSetBalloonTextForView(_("Smooth Font edges for the eye candy\n"
+                                  "requires a restart after saving"),
+                                WMWidgetView(panel->togAA));
+        WMSetButtonAction(panel->togAA, toggleAA, panel);
+	//}
     /* multibyte */
     panel->fsetL = WMCreateLabel(panel->box);
     WMResizeWidget(panel->fsetL, 245, 20);
@@ -1930,16 +1928,16 @@ createPanel(Panel *p)
     {
 	WMFont *font;
 	WMColor *color;
-	
+
 	color = WMDarkGrayColor(scr);
 	font = WMBoldSystemFontOfSize(scr, 12);
-	
+
 	WMSetWidgetBackgroundColor(panel->fsetL, color);
 	WMSetLabelFont(panel->fsetL, font);
-	
+
 	WMReleaseFont(font);
 	WMReleaseColor(color);
-	
+
 	color = WMWhiteColor(scr);
 	WMSetLabelTextColor(panel->fsetL, color);
 	WMReleaseColor(color);
@@ -1992,24 +1990,24 @@ createPanel(Panel *p)
     panel->fontT = WMCreateTextField(panel->box);
     WMResizeWidget(panel->fontT, 245, 30);
     WMMoveWidget(panel->fontT, 265, 120);
-    
+
     panel->changeB = WMCreateCommandButton(panel->box);
     WMResizeWidget(panel->changeB, 104, 24);
     WMMoveWidget(panel->changeB, 335, 160);
     WMSetButtonText(panel->changeB, _("Change..."));
 	WMSetButtonAction(panel->changeB, changeButtonClick, panel);
 
-    
+
     panel->black = WMBlackColor(scr);
     panel->white = WMWhiteColor(scr);
     panel->light = WMGrayColor(scr);
     panel->dark = WMDarkGrayColor(scr);
-    panel->back = WMCreateRGBColor(scr, 0x5100, 0x5100, 0x7100, True); 
+    panel->back = WMCreateRGBColor(scr, 0x5100, 0x5100, 0x7100, True);
 
 	/* Font Panel !!!!! */
 	panel->fontPanel = WMGetFontPanel(scr);
-    
-#if 0    
+
+#if 0
     for (i = 0; Languages[i].language != NULL; i++) {
 	WMAddPopUpButtonItem(panel->langP, Languages[i].language);
     }
@@ -2037,33 +2035,33 @@ storeData(Panel *p)
 	{
 		switch(i) {
 			case 0:
-				SetStringForKey(fontOfLang(panel, encoding, i), 
+				SetStringForKey(fontOfLang(panel, encoding, i),
 						"WindowTitleFont");
 				break;
 			case 1:
-				SetStringForKey(fontOfLang(panel, encoding, i), 
+				SetStringForKey(fontOfLang(panel, encoding, i),
 						"LargeDisplayFont");
 				break;
 			case 2:
-				SetStringForKey(fontOfLang(panel, encoding, i), 
+				SetStringForKey(fontOfLang(panel, encoding, i),
 						"MenuTitleFont");
 				break;
 			case 3:
-				SetStringForKey(fontOfLang(panel, encoding, i), 
+				SetStringForKey(fontOfLang(panel, encoding, i),
 						"MenuTextFont");
 				break;
 			case 4:
-				SetStringForKey(fontOfLang(panel, encoding, i), 
+				SetStringForKey(fontOfLang(panel, encoding, i),
 						"ClipTitleFont");
 				break;
 			case 5:
-				SetStringForKey(fontOfLang(panel, encoding, i), 
+				SetStringForKey(fontOfLang(panel, encoding, i),
 						"IconTitleFont");
 				break;
 		}
 	}
 
-	if (WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
+	//if (WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
 		SetBoolForKey(WMGetButtonSelected(panel->togAA), "AntialiasedText");
 
 	if(panel->MultiByteText)
@@ -2080,8 +2078,8 @@ prepClosure(Panel *p)
     _Panel *panel = (_Panel*)p;
 	WMFreeFontPanel(panel->fontPanel);
 	WMReleasePropList(CurrentFontArray);
-	/* and what ever else i've forgotten or overlooked 
-	 * maybe someone will add them */ 
+	/* and what ever else i've forgotten or overlooked
+	 * maybe someone will add them */
 }
 
 Panel*
@@ -2096,13 +2094,13 @@ InitFont(WMScreen *scr, WMWidget *parent)
     panel->description = _("Font Configurations for Windows, Menus etc");
 
     panel->parent = parent;
-    
+
     panel->callbacks.createWidgets = createPanel;
 	panel->callbacks.updateDomain = storeData;
 	panel->callbacks.prepareForClose = prepClosure;
-    
+
     AddSection(panel, ICON_FILE);
-    
+
     return panel;
 }
 

@@ -8,7 +8,7 @@
 
 #include <WINGs/WINGs.h>
 
-#if WINGS_H_VERSION < 20021124
+#if WINGS_H_VERSION < 20040406
 #error There_is_an_old_WINGs.h_file_somewhere_in_your_system._Please_remove_it.
 #endif
 
@@ -97,6 +97,53 @@ typedef struct W_FocusInfo {
 
 
 
+typedef void* W_DndState(WMView *destView, XClientMessageEvent *event,
+                         WMDraggingInfo *info);
+
+
+typedef struct W_DragOperationItem {
+    WMDragOperationType type;
+    char* text;
+} W_DragOperationItem;
+
+
+typedef struct W_DragSourceInfo {
+    WMView *sourceView;
+    Window destinationWindow;
+    W_DndState *state;
+    WMSelectionProcs *selectionProcs;
+    Window icon;
+    WMPoint imageLocation;
+    WMPoint mouseOffset; /* mouse pos in icon */
+    Cursor dragCursor;
+    WMRect noPositionMessageZone;
+    Atom firstThreeTypes[3];
+} W_DragSourceInfo;
+
+
+typedef struct W_DragDestinationInfo {
+    WMView *destView;
+    Window sourceWindow;
+    W_DndState *state;
+    WMArray *sourceTypes;
+    WMArray *requiredTypes;
+    Bool typeListAvailable;
+    WMArray *dropDatas;
+} W_DragDestinationInfo;
+
+
+struct W_DraggingInfo {
+    unsigned char protocolVersion;
+    Time timestamp;
+
+    Atom sourceAction;
+    Atom destinationAction;
+
+    W_DragSourceInfo* sourceInfo;    /* infos needed by source */
+    W_DragDestinationInfo* destInfo; /* infos needed by destination */
+} W_DraggingInfo;
+
+/* original
 struct W_DraggingInfo {
     Window destinationWindow;
     Window sourceWindow;
@@ -113,12 +160,13 @@ struct W_DraggingInfo {
 
     int protocolVersion;
 
-    /* should be treated as internal data */
+    // should be treated as internal data
     WMView *sourceView;
     WMView *destView;
     WMSize mouseOffset;
     unsigned finished:1;
 };
+*/
 
 
 typedef struct W_Screen {
@@ -173,7 +221,7 @@ typedef struct W_Screen {
 
     struct W_View *dragSourceView;
     struct W_DraggingInfo dragInfo;
-    
+
     /* colors */
     W_Color *white;
     W_Color *black;
@@ -181,12 +229,12 @@ typedef struct W_Screen {
     W_Color *darkGray;
 
     GC stippleGC;
-    
+
     GC copyGC;
     GC clipGC;
-    
+
     GC monoGC;			       /* GC for 1bpp visuals */
-    
+
     GC xorGC;
 
     GC ixorGC;			       /* IncludeInferiors XOR */
@@ -214,7 +262,7 @@ typedef struct W_Screen {
 
     struct W_Pixmap *checkButtonImageOn;
     struct W_Pixmap *checkButtonImageOff;
-    
+
     struct W_Pixmap *radioButtonImageOn;
     struct W_Pixmap *radioButtonImageOff;
 
@@ -222,12 +270,12 @@ typedef struct W_Screen {
     struct W_Pixmap *pushedButtonArrow;
 
     struct W_Pixmap *scrollerDimple;
-    
+
     struct W_Pixmap *upArrow;
     struct W_Pixmap *downArrow;
     struct W_Pixmap *leftArrow;
     struct W_Pixmap *rightArrow;
-    
+
     struct W_Pixmap *hiUpArrow;
     struct W_Pixmap *hiDownArrow;
     struct W_Pixmap *hiLeftArrow;
@@ -261,19 +309,19 @@ typedef struct W_Screen {
     struct W_Pixmap *hsbIcon;
     struct W_Pixmap *customPaletteIcon;
     struct W_Pixmap *colorListIcon;
-	
+
     struct W_Pixmap *defaultObjectIcon;
 
     Cursor defaultCursor;
-    
+
     Cursor textCursor;
 
     Cursor invisibleCursor;
-    
+
     Atom attribsAtom;		       /* GNUstepWindowAttributes */
-    
+
     Atom deleteWindowAtom;	       /* WM_DELETE_WINDOW */
-    
+
     Atom protocolsAtom;		       /* _XA_WM_PROTOCOLS */
 
     Atom clipboardAtom;		       /* CLIPBOARD */
@@ -286,6 +334,8 @@ typedef struct W_Screen {
     Atom xdndDropAtom;
     Atom xdndFinishedAtom;
     Atom xdndTypeListAtom;
+    Atom xdndActionListAtom;
+    Atom xdndActionDescriptionAtom;
     Atom xdndStatusAtom;
 
     Atom xdndActionCopy;
@@ -293,7 +343,7 @@ typedef struct W_Screen {
     Atom xdndActionLink;
     Atom xdndActionAsk;
     Atom xdndActionPrivate;
-    
+
     Atom wmIconDragOffsetAtom;
 
     Atom wmStateAtom;		       /* WM_STATE */
@@ -335,30 +385,30 @@ typedef struct W_View {
     Window window;
 
     WMSize size;
-    
+
     short topOffs;
     short leftOffs;
     short bottomOffs;
     short rightOffs;
 
     WMPoint pos;
-    
+
     struct W_View *nextFocusChain;     /* next/prev in focus chain */
     struct W_View *prevFocusChain;
-    
+
     struct W_View *nextResponder;      /* next to receive keyboard events */
-        
+
     struct W_View *parent;	       /* parent WMView */
-    
+
     struct W_View *childrenList;       /* first in list of child windows */
-    
+
     struct W_View *nextSister;	       /* next on parent's children list */
-    
+
     WMArray *eventHandlers;	       /* event handlers for this window */
 
     unsigned long attribFlags;
     XSetWindowAttributes attribs;
-    
+
     void *hangedData;		       /* data holder for user program */
 
     WMColor *backColor;
@@ -366,35 +416,36 @@ typedef struct W_View {
     Cursor cursor;
 
     Atom *droppableTypes;
-    struct W_DragSourceProcs *dragSourceProcs;
+    struct W_DragSourceProcs      *dragSourceProcs;
     struct W_DragDestinationProcs *dragDestinationProcs;
+    WMPixmap *dragImage;
     int helpContext;
 
 
     struct {
-	unsigned int realized:1;
-	unsigned int mapped:1;
-	unsigned int parentDying:1;
-	unsigned int dying:1;	       /* the view is being destroyed */
-	unsigned int topLevel:1;       /* is a top level window */
-	unsigned int root:1;	       /* is the root window */
-	unsigned int mapWhenRealized:1;/* map the view when it's realized */
-	unsigned int alreadyDead:1;    /* view was freed */
+        unsigned int realized:1;
+        unsigned int mapped:1;
+        unsigned int parentDying:1;
+        unsigned int dying:1;	        /* the view is being destroyed */
+        unsigned int topLevel:1;        /* is a top level window */
+        unsigned int root:1;	        /* is the root window */
+        unsigned int mapWhenRealized:1; /* map the view when it's realized */
+        unsigned int alreadyDead:1;     /* view was freed */
 
-	unsigned int dontCompressMotion:1;   /* motion notify event compress */
-	unsigned int notifySizeChanged:1;
-	unsigned int dontCompressExpose:1;   /* will compress all expose
-					      events into one */
-	/* toplevel only */
-	unsigned int worksWhenModal:1;
-	unsigned int pendingRelease1:1;
-	unsigned int pendingRelease2:1;
-	unsigned int pendingRelease3:1;
-	unsigned int pendingRelease4:1;
-	unsigned int pendingRelease5:1;
-	unsigned int xdndHintSet:1;
+        unsigned int dontCompressMotion:1; /* motion notify event compress */
+        unsigned int notifySizeChanged:1;
+        unsigned int dontCompressExpose:1; /* expose event compress */
+
+        /* toplevel only */
+        unsigned int worksWhenModal:1;
+        unsigned int pendingRelease1:1;
+        unsigned int pendingRelease2:1;
+        unsigned int pendingRelease3:1;
+        unsigned int pendingRelease4:1;
+        unsigned int pendingRelease5:1;
+        unsigned int xdndHintSet:1;
     } flags;
-    
+
     int refCount;
 } W_View;
 
@@ -434,7 +485,7 @@ extern _WINGsConfiguration WINGsConfiguration;
 
 #define W_VIEW_REALIZED(view)	(view)->flags.realized
 #define W_VIEW_MAPPED(view)	(view)->flags.mapped
- 
+
 #define W_VIEW_DISPLAY(view)    (view)->screen->display
 #define W_VIEW_SCREEN(view)	(view)->screen
 #define W_VIEW_DRAWABLE(view)	(view)->window
@@ -492,19 +543,19 @@ void W_SetViewBackgroundColor(W_View *view, WMColor *color);
 void W_SetViewCursor(W_View *view, Cursor cursor);
 
 void W_DrawRelief(W_Screen *scr, Drawable d, int x, int y, unsigned int width,
-		  unsigned int height, WMReliefType relief);
+                  unsigned int height, WMReliefType relief);
 
 void W_DrawReliefWithGC(W_Screen *scr, Drawable d, int x, int y,
-			unsigned int width, unsigned int height,
-			WMReliefType relief,
-			GC black, GC dark, GC light, GC white);
+                        unsigned int width, unsigned int height,
+                        WMReliefType relief,
+                        GC black, GC dark, GC light, GC white);
 
 void W_CallDestroyHandlers(W_View *view);
 
 void W_PaintTextAndImage(W_View *view, int wrap, WMColor *textColor,
                          W_Font *font, WMReliefType relief, char *text,
-			 WMAlignment alignment, W_Pixmap *image, 
-			 WMImagePosition position, WMColor *backColor, int ofs);
+                         WMAlignment alignment, W_Pixmap *image,
+                         WMImagePosition position, WMColor *backColor, int ofs);
 
 void W_PaintText(W_View *view, Drawable d, WMFont *font,  int x, int y,
 		 int width, WMAlignment alignment, WMColor *color,
@@ -525,7 +576,7 @@ void W_SetFocusOfToplevel(W_View *toplevel, W_View *view);
 W_View *W_FocusedViewOfToplevel(W_View *view);
 
 void W_SetFocusOfTopLevel(W_View *toplevel, W_View *view);
-    
+
 void W_ReleaseView(WMView *view);
 
 WMView *W_RetainView(WMView *view);
@@ -559,6 +610,44 @@ Bool W_CheckIdleHandlers(void);
 void W_CheckTimerHandlers(void);
 
 Bool W_HandleInputEvents(Bool waitForInput, int inputfd);
+
+/* XDnD */
+Atom W_OperationToAction(WMScreen *scr, WMDragOperationType operation);
+
+WMDragOperationType W_ActionToOperation(WMScreen *scr, Atom action);
+
+void W_FreeDragOperationItem(void* item);
+
+Bool W_SendDnDClientMessage(Display *dpy, Window win, Atom message,
+                            unsigned long data1, unsigned long data2,
+                            unsigned long data3, unsigned long data4,
+                            unsigned long data5);
+
+void W_DragSourceStartTimer(WMDraggingInfo *info);
+
+void W_DragSourceStopTimer();
+
+void W_DragSourceStateHandler(WMDraggingInfo *info, XClientMessageEvent *event);
+
+void W_DragDestinationStartTimer(WMDraggingInfo *info);
+
+void W_DragDestinationStopTimer();
+
+void W_DragDestinationStoreEnterMsgInfo(WMDraggingInfo *info, WMView *toplevel,
+                                        XClientMessageEvent *event);
+
+void W_DragDestinationStorePositionMsgInfo(WMDraggingInfo *info,
+                                           WMView *toplevel,
+                                           XClientMessageEvent *event);
+
+void W_DragDestinationCancelDropOnEnter(WMView *toplevel, WMDraggingInfo *info);
+
+void W_DragDestinationStateHandler(WMDraggingInfo *info,
+                                   XClientMessageEvent *event);
+
+void W_DragDestinationInfoClear(WMDraggingInfo *info);
+
+void W_FreeViewXdndPart(WMView *view);
 
 #ifdef __cplusplus
 }

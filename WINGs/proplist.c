@@ -865,7 +865,7 @@ getPropList(PLData *pldata)
         break;
 
     case '(':
-        DPUT("Getting PropList srrsy");
+        DPUT("Getting PropList array");
         plist = getPLArray(pldata);
         break;
 

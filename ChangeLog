@@ -122,6 +122,7 @@ Changes since version 0.80.2:
 - Added workaround in global WMWindowAttributes, to avoid creating a second
   appicon when a KDE3 application opens a config panel.
 - Updated slovak translation (Jan Tomka <judas@linux.sk>)
+- Added xdnd v3 support in WINGs (Sylvain Reynal <sreynal@nerim.net>)
 
 
 Changes since version 0.80.1:

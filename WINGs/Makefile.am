@@ -27,6 +27,7 @@ libWINGs_a_SOURCES = 	\
 	configuration.c \
 	connection.c \
 	data.c \
+	dragcommon.c \
 	dragdestination.c \
 	dragsource.c \
 	error.c \
