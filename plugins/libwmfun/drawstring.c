@@ -54,9 +54,9 @@ int getColor (const char *string, Colormap cmap, XColor *xcolor) {
 }
 
 void
-initDrawPlainString(Display *dpy, Colormap cmap) {
+initDrawPlainString(Display *dpy, Colormap *cmap) {
     ds_dpy = dpy;
-    ds_cmap = cmap;
+    ds_cmap = *cmap;
 }
 
 void
@@ -193,10 +193,10 @@ void initDrawFreeTypeString(proplist_t pl, void **init_data) {
     WMFreeTypeData *data;
     XColor xcolor;
 
-    _debug("invoke initDrawFreeTypeString with init_data[2] %s\n", init_data[2]);
+    _debug("invoke initDrawFreeTypeString with init_data[3] %s\n", init_data[3]);
 
     _debug("%x is ds_dpy\n", ds_dpy);
-    initDrawPlainString((Display *)init_data[0], (Colormap)init_data[1]);
+    initDrawPlainString((Display *)init_data[1], (Colormap *)init_data[2]);
     _debug("then %x is ds_dpy\n", ds_dpy);
 
     /* set init_data[2] to array of RImage */
@@ -205,8 +205,8 @@ void initDrawFreeTypeString(proplist_t pl, void **init_data) {
     * this would better to have sharable font system but
     * I want to see this more in WINGs though -- ]d
     */
-    init_data[2] = malloc(sizeof(WMFreeTypeData));
-    data = init_data[2];
+    init_data[3] = malloc(sizeof(WMFreeTypeData));
+    data = init_data[3];
     getColor(PLGetString(PLGetArrayElement(pl, 3)), ds_cmap, &xcolor);
     data->color.red = xcolor.red >> 8;
     data->color.green = xcolor.green >> 8;
@@ -243,7 +243,7 @@ destroyDrawFreeTypeString(proplist_t pl, void **func_data) {
     int i; /* error? no no no */
     WMFreeTypeData *data;
 
-    data = (WMFreeTypeData *) ((void **)*func_data)[2];
+    data = (WMFreeTypeData *) func_data[3];
     for (i = 0; i < MAX_GLYPHS; i++) {
         if (data->glyphs_array[i]) {
             if (data->glyphs_array[i]->image)
@@ -307,23 +307,27 @@ logicalCombineArea(RImage *bg, RImage *image,
 
 void
 drawFreeTypeString (proplist_t pl, Drawable d,
-        int x, int y, unsigned width, unsigned height,
-        unsigned char *text, void **func_data) {
+        int x, int y, 
+        unsigned char *text, int length, void **func_data) {
     WMFreeTypeData *data;
     RImage *rimg;
-    int i, j;
-    int length = strlen(text);
+    int i, j, width, height;
     Pixmap pixmap;
     GC gc;
     int xwidth, xheight, dummy;
     Window wdummy;
 
-    /*pixmap = XCreatePixmap(ds_dpy, d, width, height, DefaultDepth(ds_dpy, DefaultScreen(ds_dpy)));*/
-    gc = func_data[0];
-    data = ((void **)func_data[2])[2];
-    pixmap = (Pixmap)func_data[3];
+    /* see framewin.c for the order of arguments (look in wPluginPackData) */
+    data = ((void **)func_data[1])[3]; /* initialized data */
+    if (func_data[2])
+        pixmap = *(Pixmap *)func_data[2];
+    gc = *(GC *)func_data[3];
+    width = *(int *)func_data[5];
+    height = *(int *)func_data[6];
+
+
     /* create temp for drawing */
-    if (!pixmap) {
+    if (!func_data[2]) {
         XGetGeometry(ds_dpy, d, &wdummy, &dummy, &dummy, &xwidth, &xheight, &dummy, &dummy);
         pixmap = XCreatePixmap(ds_dpy, d, xwidth, xheight, DefaultDepth(ds_dpy, DefaultScreen(ds_dpy)));
         XCopyArea(ds_dpy, d, pixmap, gc, 0, 0, xwidth, xheight, 0, 0);
@@ -360,16 +364,15 @@ drawFreeTypeString (proplist_t pl, Drawable d,
         RConvertImage(rc, rimg, &pixmap);
         XCopyArea(ds_dpy, pixmap, d, gc, 0, 0, rimg->width, height, 0, y);
         XFreePixmap(ds_dpy, pixmap);
+        RDestroyImage(rimg);
+
         /*
         _debug("%d\n", height);
-        */
-        /*
         i = (height + data->face->size->metrics.y_ppem)/2 - data->face->size->metrics.y_ppem;
         XDrawLine(ds_dpy, d, gc, 5, y + i, 100, y + data->face->size->metrics.y_ppem);
         XDrawLine(ds_dpy, d, gc, 100, y + i, 5, y + data->face->size->metrics.y_ppem);
         */
 
-        RDestroyImage(rimg);
     }
 }
  
@@ -389,7 +392,7 @@ void
 initDrawString (proplist_t pl, void **init_data) {
     _debug("invoke initDrawString: %s\n", PLGetString(PLGetArrayElement(pl, 2)));
     if (strcmp(PLGetString(PLGetArrayElement(pl, 2)), "drawPlainString") == 0) 
-        initDrawPlainString((Display *)init_data[0], (Colormap)init_data[1]);
+        initDrawPlainString((Display *)init_data[1], (Colormap *)init_data[2]);
 #ifdef USE_FREETYPE
     else if (strcmp(PLGetString(PLGetArrayElement(pl, 2)), "drawFreeTypeString") == 0) 
         initDrawFreeTypeString(pl, init_data);
