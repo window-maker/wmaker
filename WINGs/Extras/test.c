@@ -2,7 +2,7 @@
 
 #include <WINGs.h>
 #include "wtableview.h"
-#include "tabledelegates.h"
+#include "wtabledelegates.h"
 
 
 static char *col1[20] = {0};

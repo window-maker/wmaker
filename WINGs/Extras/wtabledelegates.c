@@ -4,6 +4,7 @@
 
 #include "wtableview.h"
 
+#include "wtabledelegates.h"
 
 typedef struct {
     WMTableView *table;
