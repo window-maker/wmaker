@@ -3874,19 +3874,13 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 			if (aicon->icon->selected)
 			    wIconSelect(aicon->icon);
 
-#ifdef WSOUND
 			wSoundPlay(WSOUND_KABOOM);
-#endif
 			DoKaboom(scr,aicon->icon->core->window, x, y);
-#ifdef WSOUND
 		    } else {
-			    wSoundPlay(WSOUND_UNDOCK);
-#endif
-		    }
-#ifdef WSOUND
+                        wSoundPlay(WSOUND_UNDOCK);
+                    }
 		} else {
-			wSoundPlay(WSOUND_UNDOCK);
-#endif
+                    wSoundPlay(WSOUND_UNDOCK);
                 }
                 if (clip && clip->auto_raise_lower)
                     wDockLower(clip);

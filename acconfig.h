@@ -48,16 +48,12 @@
  * set by configure */
 #undef I18N
 
-/* define if you want sound support */
-#undef WSOUND
-
 /* define if you want the 'lite' version */
 #undef LITE
 
 /* define if you want support for shaped windows
  * set by configure */
 #undef SHAPE
-
 
 /* define if you want support for the XINERAMA extension
  * set by configure */

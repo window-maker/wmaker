@@ -28,6 +28,29 @@ perform() {
 	fi
 }
 
+help() {
+	echo "Usage: $(basename $0) <switch>"
+	echo "Where switches are:"
+	echo "    -s   --quiet  make silent build"
+	echo "    -h   --help   show this message"
+	echo ""
+	exit $1
+}
+
+
+OPTIONS=""
+MAKE_OPTIONS=""
+while [ -n "$1" ]
+do
+	case "$1" in
+		"-s"|"--quiet")	OPTIONS="--quiet"
+				MAKE_OPTIONS="-s";;
+		"-h"|"--help")	help 0;;
+		*)		echo "bad command-line parameter $1"
+				help 1;;
+	esac
+	shift
+done
 
 trap "echo Window Maker installation aborted. ; exit 1" 2 3
 
@@ -144,7 +167,7 @@ if [ "$NLS" = "y" -o "$NLS" = "Y" ]; then
 	ling=` (cd po; /bin/ls *.po) `
 	ALL_LINGUAS=""
 	for l in $ling; do
-	        lname=`(cd po; grep Language-Team $l|cut -f2 -d: |cut -f2 -d\ |cut -f1 -d\\)`
+		lname=`(cd po; grep Language-Team $l|cut -f2- -d:|cut -f1 -d\\\\|cut -f1 -d\<)`
 		lname=`echo $lname`
 		lcode=`basename $l .po`
 		ALL_LINGUAS="$ALL_LINGUAS $lcode"
@@ -218,6 +241,17 @@ done
 OPTIONS="$OPTIONS --prefix=$PREFIX"
 
 
+##################### Install stripped binaries?
+
+INSTALL="install"
+echo "Do you want stripped binaries to be installed?"
+echo "Installed binaries will be smaller (with debug info removed)."
+echo -n "<y/n> [n] "
+read foo
+if [ "$foo" = y -o "$foo" = Y ]; then
+	INSTALL="install-strip"
+fi
+
 
 #####################  Configure
 echo "--------------------------"
@@ -242,14 +276,14 @@ fi
 echo "-------------------------"
 echo "Compiling Window Maker..."
 echo "-------------------------"
-(cd src; perform make clean)
-perform make
+(cd src; perform make $MAKE_OPTIONS clean)
+perform make $MAKE_OPTIONS
 
 echo "--------------------------"
 echo "Installing Window Maker..."
 echo "--------------------------"
 
-perform make install
+perform make $MAKE_OPTIONS $INSTALL
 
 if [ `uname -s` = "Linux" ]; then
     echo

@@ -47,6 +47,7 @@
 #include "appmenu.h"
 #include "winspector.h"
 #include "workspace.h"
+#include "wsound.h"
 
 #ifdef GNOME_STUFF
 # include "gnome.h"
@@ -55,9 +56,6 @@
 # include "kwm.h"
 #endif
 
-#ifdef WSOUND
-#include "wsound.h"
-#endif
 
 
 /****** Global Variables ******/
@@ -272,9 +270,7 @@ wShadeWindow(WWindow  *wwin)
 
     XLowerWindow(dpy, wwin->client_win);    
 
-#ifdef WSOUND
     wSoundPlay(WSOUND_SHADE);
-#endif
 
 #ifdef ANIMATIONS
     if (!wwin->screen_ptr->flags.startup && !wwin->flags.skip_next_animation
@@ -359,9 +355,7 @@ wUnshadeWindow(WWindow  *wwin)
     wwin->flags.mapped = 1;
     XMapWindow(dpy, wwin->client_win);
 
-#ifdef WSOUND
     wSoundPlay(WSOUND_UNSHADE);
-#endif
 
 #ifdef ANIMATIONS
     if (!wPreferences.no_animations && !wwin->flags.skip_next_animation) {
@@ -514,9 +508,7 @@ wMaximizeWindow(WWindow *wwin, int directions)
     wKWMSendEventMessage(wwin, WKWMChangedClient);
 #endif
 
-#ifdef WSOUND
     wSoundPlay(WSOUND_MAXIMIZE);
-#endif
 }
 
 
@@ -548,9 +540,7 @@ wUnmaximizeWindow(WWindow *wwin)
     wKWMSendEventMessage(wwin, WKWMChangedClient);
 #endif
 
-#ifdef WSOUND
     wSoundPlay(WSOUND_UNMAXIMIZE);
-#endif
 }
 
 #ifdef ANIMATIONS
@@ -969,9 +959,7 @@ wIconifyWindow(WWindow *wwin)
     unmapTransientsFor(wwin);
 
     if (present) {
-#ifdef WSOUND
 	wSoundPlay(WSOUND_ICONIFY);
-#endif
 
 	XUngrabPointer(dpy, CurrentTime);
 	wWindowUnmap(wwin);
@@ -1123,9 +1111,7 @@ wDeiconifyWindow(WWindow  *wwin)
 	XUnmapWindow(dpy, wwin->icon->core->window);
     }
 
-#ifdef WSOUND
     wSoundPlay(WSOUND_DEICONIFY);
-#endif
 
     /* if the window is in another workspace, do it silently */
 #ifdef ANIMATIONS
@@ -1241,9 +1227,7 @@ hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate)
 
     wClientSetState(wwin, IconicState, icon->icon_win);
     flushExpose();
-#ifdef WSOUND
     wSoundPlay(WSOUND_HIDE);
-#endif
 #ifdef ANIMATIONS
     if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations &&
 	!wwin->flags.skip_next_animation && animate) {
@@ -1390,9 +1374,7 @@ unhideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate,
     wwin->flags.hidden=0;
     wwin->flags.mapped=1;
     
-#ifdef WSOUND
     wSoundPlay(WSOUND_UNHIDE);
-#endif
 #ifdef ANIMATIONS
     if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations 
 	&& animate) {

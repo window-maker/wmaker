@@ -1319,7 +1319,7 @@ wShowInfoPanel(WScreen *scr)
 	strcat(buffer, " ");
     }
 
-    strcat(buffer, _("\nAdditional Support For: "));
+    strcat(buffer, _("\nAdditional support for: "));
     {
 	char *list[8];
 	char buf[80];
@@ -1337,9 +1337,6 @@ wShowInfoPanel(WScreen *scr)
 #ifdef OLWM_HINTS
 	list[j++] = "OLWM";
 #endif
-#ifdef WSOUND
-	list[j++] = _("Sound");
-#endif
 
 	buf[0] = 0;
 	for (i = 0; i < j; i++) {
@@ -1352,6 +1349,12 @@ wShowInfoPanel(WScreen *scr)
 	    strcat(buf, list[i]);
 	}
 	strcat(buffer, buf);
+    }
+
+    if (wPreferences.no_sound) {
+        strcat(buffer, _("\nSound support disabled"));
+    } else {
+        strcat(buffer, _("\nSound support enabled"));
     }
 
 

@@ -11,7 +11,6 @@
 #include "funcs.h"
 #include "wsound.h"
 
-#ifdef WSOUND
 
 
 
@@ -41,4 +40,4 @@ wSoundPlay(long event_sound)
     }
 }
 
-#endif /* WSOUND */
+

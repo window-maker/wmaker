@@ -912,9 +912,7 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
 		    }
 		}
 
-#ifdef WSOUND
 		wSoundPlay(WSOUND_DOCK);
-#endif
             } else {
 		if (movingSingle) {
 		    /* move back to its place */

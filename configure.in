@@ -736,17 +736,6 @@ dnl         End of Graphic Format Libraries
 dnl ==============================================
 
 
-dnl Sound support - Dan
-dnl =============================================
-sound=yes
-AC_ARG_ENABLE(sound, 
-[  --disable-sound	  disable sound support ],
-		sound=$enableval, sound=yes)
-if test "$sound" = yes; then	
-        AC_DEFINE(WSOUND)
-fi
-
-
 # AC_PREFIX_PROGRAM(wmaker)
 
 dnl Support for PIXMAPDIR option
@@ -1006,7 +995,7 @@ echo "Graphic format libraries: $supported_gfx"
 if test x$hermes_support = xyes; then
     echo "Hermes support for wrlib enabled"
 fi
-echo "Sound support: $sound"
+dnl echo "Sound support: yes"
 echo "Translated message files to install: $mof"
 if test "x$MOFILES" != "x"; then
 	echo "Installation path of translated messages: $NLSDIR" | sed -e 's|\$(prefix)|'"$prefix|"

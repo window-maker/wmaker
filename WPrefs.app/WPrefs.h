@@ -41,8 +41,8 @@
 
 /****/
 
-#define WVERSION	"0.44"
-#define WMVERSION	"0.64.x"
+#define WVERSION	"0.45"
+#define WMVERSION	"0.65.x"
 
 extern char *NOptionValueChanged;
 

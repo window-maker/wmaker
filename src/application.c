@@ -47,12 +47,8 @@
 #include "actions.h"
 #include "defaults.h"
 #include "workspace.h"
-
 #include "dock.h"
-
-#ifdef WSOUND
 #include "wsound.h"
-#endif
 
 
 /******** Global variables ********/
@@ -436,11 +432,8 @@ wApplicationCreate(WScreen *scr, Window main_window)
         if (!tmp)
 	    extractClientIcon(wapp->app_icon);
     }
-    
-    
-#ifdef WSOUND
+
     wSoundPlay(WSOUND_APPSTART);
-#endif
 
 #ifdef DEBUG
     printf("Created application for %x\n", (unsigned)main_window);
@@ -517,9 +510,7 @@ wApplicationDestroy(WApplication *wapp)
         wArrangeIcons(scr, True);
     }
 
-#ifdef WSOUND
     wSoundPlay(WSOUND_APPEXIT);
-#endif
 }
 
 
