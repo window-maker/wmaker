@@ -1330,11 +1330,11 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     scr->flags.doing_alt_tab = 1;
 
 
-    XRaiseWindow(dpy, newFocused->frame->core->window);
+    if (wPreferences.circ_raise)
+	XRaiseWindow(dpy, newFocused->frame->core->window);
     wWindowFocus(newFocused, scr->focused_window);
     oldFocused = newFocused;
-    if (wPreferences.circ_raise)
-    	wRaiseFrame(newFocused->frame->core);
+
 #if 0
     if (wPreferences.popup_switchmenu && 
 	(!scr->switch_menu || !scr->switch_menu->flags.mapped)) {
@@ -1364,10 +1364,12 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 		wWindowFocus(newFocused, oldFocused);
 		oldFocused = newFocused;
 	    
-		/* restore order */
-		CommitStacking(scr);
-		XRaiseWindow(dpy, newFocused->frame->core->window);
-	    
+		if (wPreferences.circ_raise) {
+		    /* restore order */
+		    CommitStacking(scr);
+		    XRaiseWindow(dpy, newFocused->frame->core->window);
+		}
+
 		UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
 
 	    } else if (wKeyBindings[WKBD_FOCUSPREV].keycode == ev.xkey.keycode
@@ -1378,10 +1380,11 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 		wWindowFocus(newFocused, oldFocused);
 		oldFocused = newFocused;
 
-		/* restore order */
-		CommitStacking(scr);
-		XRaiseWindow(dpy, newFocused->frame->core->window);
-
+		if (wPreferences.circ_raise) {
+		    /* restore order */
+		    CommitStacking(scr);
+		    XRaiseWindow(dpy, newFocused->frame->core->window);
+		}
 		UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
 
 	    } else if (wKeyBindings[WKBD_LOWER].keycode == ev.xkey.keycode
@@ -1414,9 +1417,6 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 
     if (wPreferences.circ_raise) {
 	wRaiseFrame(newFocused->frame->core);
-    	CommitStacking(scr);
-    } else {
-    	/* restore order */
     	CommitStacking(scr);
     }
 
