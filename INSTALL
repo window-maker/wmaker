@@ -64,26 +64,18 @@ The following software is required to use Window Maker:
 The following is required to build Window Maker:
 
 - Basic obvious stuff
-	If you will build Window Maker, make sure you have gcc (or some
-	other ANSI C compiler) and the X header files installed. Specially
-	for newbie Linux users: you must install all X development packages
-	and the gcc suite. Otherwise you won't be able to build any X
-	program, including Window Maker.
+	gcc (or some other ANSI C compiler)
+	glibc development files (usually glibc-devel in Linux distributions)
+	X development files (XFree86-devel or something similar)
 
 - autoconf, automake and libtool
-	These tools are NOT needed, but IF you have one or
-	more of them installed, make sure you have ALL of the following 
-	with exactly these versions:
-		autoconf 2.54
-		automake 1.4
-		libtool 1.4.2
-	If you have a different version, disable them by temporarily
-	renaming them to something else or uninstalling them from your
-	system. If you don't develop software you don't need them,
-	so you can safely uninstall.
+	autoconf 2.54
+	automake 1.4
+	libtool 1.4.2
 
-- Xft2 and its dependencies (such as freetype2 and fontconfig)
-	For the Antialiased text support.
+- Xft2
+	and its dependencies (such as freetype2 and fontconfig)
+	You will also need the development files for it (xft2-devel)
 
 
 OPTIONAL:
@@ -134,7 +126,7 @@ some Window Maker features. Example:
 ./configure --enable-modelock --disable-gif
 
 will configure Window Maker with modelock supported and disable gif support.
-
+Normally, you won't need any of them.
 
 To get a list of other options, run ./configure --help
 
