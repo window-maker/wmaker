@@ -178,10 +178,10 @@ textEditedObserver(void *observerData, WMNotification *notification)
      case WMIllegalTextMovement:
 	if (WMGetNotificationObject(notification) == panel->icoT) {
 	    WMSetButtonImage(panel->icoaB, NULL);
-	    WMSetButtonImage(panel->icoaB, NULL);
+	    WMSetButtonAltImage(panel->icoaB, NULL);
 	} else {	
 	    WMSetButtonImage(panel->pixaB, NULL);
-	    WMSetButtonImage(panel->pixaB, NULL);
+	    WMSetButtonAltImage(panel->pixaB, NULL);
 	}
 	break;
     } 

@@ -15,10 +15,8 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: unknown\n"
 
-#: ../../WPrefs.app/Configurations.c:142
-../../WPrefs.app/Configurations.c:148
-#: ../../WPrefs.app/MouseSettings.c:547
-../../WPrefs.app/WindowHandling.c:311
+#: ../../WPrefs.app/Configurations.c:142 ../../WPrefs.app/Configurations.c:148
+#: ../../WPrefs.app/MouseSettings.c:547 ../../WPrefs.app/WindowHandling.c:311
 #: ../../WPrefs.app/WindowHandling.c:323 ../../WPrefs.app/Workspace.c:71
 #: ../../WPrefs.app/Workspace.c:77
 #, c-format
@@ -43,14 +41,12 @@ msgstr "Velocità delle icone"
 msgid "Shade Animation Speed"
 msgstr "Velocità dell'arrotolamento"
 
-#: ../../WPrefs.app/Configurations.c:234
-../../WPrefs.app/Configurations.c:246
+#: ../../WPrefs.app/Configurations.c:234 ../../WPrefs.app/Configurations.c:246
 #: ../../WPrefs.app/Focus.c:314 ../../WPrefs.app/Focus.c:325
 #: ../../WPrefs.app/MenuPreferences.c:135
 #: ../../WPrefs.app/MenuPreferences.c:146
 #: ../../WPrefs.app/MenuPreferences.c:174
-#: ../../WPrefs.app/MenuPreferences.c:189
-../../WPrefs.app/MouseSettings.c:575
+#: ../../WPrefs.app/MenuPreferences.c:189 ../../WPrefs.app/MouseSettings.c:575
 #: ../../WPrefs.app/MouseSettings.c:586 ../../WPrefs.app/MouseSettings.c:650
 #: ../../WPrefs.app/MouseSettings.c:661 ../../WPrefs.app/MouseSettings.c:717
 #: ../../WPrefs.app/MouseSettings.c:732 ../../WPrefs.app/MouseSettings.c:748
@@ -670,8 +666,7 @@ msgstr "<< Indietro"
 
 #: ../../WPrefs.app/MenuGuru.c:271
 msgid ""
-"This process will help you create a submenu which definition is located in
-"
+"This process will help you create a submenu which definition is located in "
 "another file or is created dynamically.\n"
 "What do you want to use as the contents of the submenu?"
 msgstr ""
@@ -681,8 +676,7 @@ msgstr ""
 
 #: ../../WPrefs.app/MenuGuru.c:279
 msgid ""
-"A file containing the menu definition in the plain text (non-property list)
-"
+"A file containing the menu definition in the plain text (non-property list) "
 "menu format."
 msgstr ""
 "Un file contenete la definizione del menu nel formato 'plain text' "
@@ -702,7 +696,7 @@ msgstr "Scrivi il percorso del file di menu:"
 
 #: ../../WPrefs.app/MenuGuru.c:318
 msgid ""
-"The menu file must contain a menu in the plain text menu file format. This"
+"The menu file must contain a menu in the plain text menu file format. This "
 "format is described in the menu files included with WindowMaker, probably at "
 "~/GNUstep/Library/WindowMaker/menu"
 msgstr ""
@@ -757,13 +751,13 @@ msgstr ""
 #: ../../WPrefs.app/MenuGuru.c:426
 msgid ""
 "Each file in the directory will have an item and they will be opened with "
-"the supplied command.For example, if the directory contains image files and"
+"the supplied command.For example, if the directory contains image files and "
 "the command is \"xv -root\", each file in the directory will have a menu "
 "item like \"xv -root imagefile\"."
 msgstr ""
 "Ogni file nella directory avrà un elemento ed essi saranno aperti con il "
 "comando fornito. Per esempio, se la directory contiene immagini e il "
-"comando è \"ee -root\", ogni file nella directory avrà un elemento di menu"
+"comando è \"ee -root\", ogni file nella directory avrà un elemento di menu "
 "come\n\"ee -root nomefile\"."
 
 #: ../../WPrefs.app/MenuPreferences.c:112
@@ -796,7 +790,7 @@ msgstr "Valore di accelerazione del maouse non valido. Deve essere un valore rea
 
 #: ../../WPrefs.app/MouseSettings.c:173
 msgid ""
-"Invalid mouse acceleration threshold value. Must be the number of pixels to"
+"Invalid mouse acceleration threshold value. Must be the number of pixels to "
 "travel before accelerating."
 msgstr ""
 "Valore della soglia di accelerazione del mouse non valido. Deve essere "
@@ -1013,6 +1007,7 @@ msgstr ""
 "abcdefghijklmnopqrstuvxywz\n"
 "ABCDEFGHIJKLMNOPQRSTUVXYWZ\n"
 "0123456789"
+
 
 #: ../../WPrefs.app/Text.c:285
 msgid "Alignment"
