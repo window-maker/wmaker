@@ -732,7 +732,7 @@ paintTextField(TextField *tPtr)
 
             WMDrawImageString(screen, drawbuffer, screen->textFieldGC,
                     tPtr->font, rx, ty, &(text[count]),
-                    abs(tPtr->selection.count));
+                    count2);
 
             XSetBackground(screen->display, screen->textFieldGC,
                     screen->white->color.pixel);
