@@ -16,7 +16,7 @@ typedef struct W_List {
 
     short itemHeight;
 
-    short topItem;	    /* index of first visible item */
+    int topItem;	    /* index of first visible item */
 
     short fullFitLines;	    /* no of lines that fit entirely */
 

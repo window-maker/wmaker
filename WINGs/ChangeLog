@@ -7,6 +7,7 @@ changes since wmaker 0.63.1:
   use #include <WINGs/header_file_name> in your application from now on.
   Also updated get-{wings|wutil}-flags.
 - Fixed a mem leak in WMList.
+- Fixed a bug that caused sigsegv for a WMList with more than 32767 items.
 
 
 changes since wmaker 0.62.1:
