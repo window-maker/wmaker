@@ -110,6 +110,9 @@ include_HEADERS = wraster.h
 libwraster_la_SOURCES =  	LookupCmap.c		StdCmap.c		StdCmap.h		CrCmap.c		DelCmap.c		CmapAlloc.c		raster.c 		draw.c			color.c			load.c 			save.c			gradient.c 		xpixmap.c		convert.c 		x86_specific.c		context.c 		misc.c 			scale.c			rotate.c		convolve.c		nxpm.c			xpm.c 			xutil.c			ppm.c			png.c 			jpeg.c 			tiff.c			gif.c
 
 
+LTCOMPILE2 = `echo $(LTCOMPILE) | sed -e s/-fomit-frame-pointer//`
+COMPILE2 = `echo $(COMPILE) | sed -e s/-fomit-frame-pointer//`
+
 INCLUDES = @DFLAGS@ @HEADER_SEARCH_PATH@
 
 LIBLIST = $(top_builddir)/wrlib/libwraster.la @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ -lm
@@ -179,7 +182,7 @@ Makefile.in NEWS TODO alloca.c configure.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = tar
+TAR = gtar
 GZIP_ENV = --best
 SOURCES = $(libwraster_la_SOURCES) $(testgrad_SOURCES) $(testdraw_SOURCES) $(view_SOURCES) $(testrot_SOURCES)
 OBJECTS = $(libwraster_la_OBJECTS) $(testgrad_OBJECTS) $(testdraw_OBJECTS) $(view_OBJECTS) $(testrot_OBJECTS)
@@ -188,7 +191,7 @@ all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .lo .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps wrlib/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu wrlib/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -357,7 +360,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$d/$$file $(distdir)/$$file; \
+	    cp -pr $$/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
@@ -449,10 +452,10 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 # cant compile asm stuff with optimizations
 x86_specific.lo: x86_specific.c
-	$(LTCOMPILE) -O0 -c $<
+	$(LTCOMPILE2) -O0 -c $<
 
 x86_specific.o: x86_specific.c
-	$(COMPILE) -O0 -c $<
+	$(COMPILE2) -O0 -c $<
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

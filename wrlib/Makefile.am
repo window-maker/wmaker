@@ -44,13 +44,15 @@ libwraster_la_SOURCES = 	\
 	gif.c
 
 
+LTCOMPILE2=`echo $(LTCOMPILE) | sed -e s/-fomit-frame-pointer//`
+COMPILE2=`echo $(COMPILE) | sed -e s/-fomit-frame-pointer//`
 
 # cant compile asm stuff with optimizations
 x86_specific.lo: x86_specific.c
-	$(LTCOMPILE) -O0 -c $<
+	$(LTCOMPILE2) -O0 -c $<
 
 x86_specific.o: x86_specific.c
-	$(COMPILE) -O0 -c $<
+	$(COMPILE2) -O0 -c $<
 
 
 

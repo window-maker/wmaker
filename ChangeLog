@@ -67,6 +67,7 @@ Changes since version 0.61.0:
 - fixed crashing bug related to onmipresent icons in Clip
 - added _WINDOWMAKER_ICON_TILE and _WINDOWMAKER_ICON_SIZE hint in
   the noticeboard window
+- color dragging works correctly now
 
 
 Changes since version 0.60.0:
