@@ -37,6 +37,9 @@
 #include <WINGs.h>
 #include <WUtil.h>
 
+/* For EXTENDED_WINDOWSHORTCUT */
+#include "../src/wconfig.h"
+
 /****/
 
 #define WVERSION	"0.41"
