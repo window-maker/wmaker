@@ -360,6 +360,11 @@ checkTimerHandlers()
     TimerHandler *handler;
     struct timeval now;
 
+    if (!timerHandler) {
+        W_FlushASAPNotificationQueue();
+        return;
+    }
+
     rightNow(&now);
 
     while (timerHandler && IS_AFTER(now, timerHandler->when)) {
@@ -919,17 +924,14 @@ void
 WMNextEvent(Display *dpy, XEvent *event)
 { 
     /* Check any expired timers */
-    if (timerPending()) {
-	checkTimerHandlers();
-    }
+    checkTimerHandlers();
 
     while (XPending(dpy) == 0) {
 	/* Do idle stuff */
 	/* Do idle and timer stuff while there are no timer or X events */
 	while (!XPending(dpy) && checkIdleHandlers()) {
 	    /* dispatch timer events */
-	    if (timerPending())
-		checkTimerHandlers();
+            checkTimerHandlers();
 	}
 
 	/*
@@ -941,9 +943,7 @@ WMNextEvent(Display *dpy, XEvent *event)
 	W_WaitForEvent(dpy, 0);
 	
         /* Check any expired timers */
-        if (timerPending()) {
-            checkTimerHandlers();
-        }
+        checkTimerHandlers();
     }
 
     XNextEvent(dpy, event);
@@ -986,9 +986,7 @@ WMMaskEvent(Display *dpy, long mask, XEvent *event)
 	       timeoutOrInfty);
 
         /* Check any expired timers */
-        if (timerPending()) {
-            checkTimerHandlers();
-        }
+        checkTimerHandlers();
     }
 }
 #endif
@@ -1014,9 +1012,7 @@ WMMaskEvent(Display *dpy, long mask, XEvent *event)
 	W_WaitForEvent(dpy, mask);
 
         /* Check any expired timers */
-        if (timerPending()) {
-            checkTimerHandlers();
-        }
+        checkTimerHandlers();
     }
 }
 #endif

@@ -311,6 +311,11 @@ checkTimerHandlers()
     TimerHandler *handler;
     struct timeval now;
 
+    if (!timerHandler) {
+        W_FlushASAPNotificationQueue();
+        return;
+    }
+
     rightNow(&now);
 
     while (timerHandler && IS_AFTER(now, timerHandler->when)) {
@@ -333,7 +338,7 @@ delayUntilNextTimerEvent(struct timeval *delay)
 
     if (!timerHandler) {
         /* The return value of this function is only valid if there _are_
-         timers active. */
+         * active timers. */
 	delay->tv_sec = 0;
 	delay->tv_usec = 0;
 	return;
@@ -384,8 +389,10 @@ handleInputEvents(Bool waitForInput)
     InputHandler *handler;
     int count, timeout, nfds, k;
 
-    if (!inputHandler)
+    if (!inputHandler) {
+        W_FlushASAPNotificationQueue();
         return False;
+    }
 
     for (nfds = 0, handler = inputHandler;
          handler != 0; handler = handler->next) nfds++;
@@ -470,8 +477,10 @@ handleInputEvents(Bool waitForInput)
     int count;
     InputHandler *handler = inputHandler;
 
-    if (!inputHandler)
+    if (!inputHandler) {
+        W_FlushASAPNotificationQueue();
         return False;
+    }
 
     FD_ZERO(&rset);
     FD_ZERO(&wset);
@@ -556,9 +565,7 @@ void
 WHandleEvents()
 {
     /* Check any expired timers */
-    if (timerPending()) {
-        checkTimerHandlers();
-    }
+    checkTimerHandlers();
 
     /* We need to make sure that we have some input handler before calling
      * checkIdleHandlers() in a while loop, because else the while loop
@@ -566,24 +573,22 @@ WHandleEvents()
      */
     if (inputHandler) {
         /* Do idle and timer stuff while there are no input events */
+        /* We check InputHandler again because some idle handler could have
+         * removed them */
         while (checkIdleHandlers() && inputHandler && !handleInputEvents(False)) {
             /* dispatch timer events */
-            if (timerPending())
-                checkTimerHandlers();
+            checkTimerHandlers();
         }
     } else {
         checkIdleHandlers();
         /* dispatch timer events */
-        if (timerPending())
-            checkTimerHandlers();
+        checkTimerHandlers();
     }
 
     handleInputEvents(True);
 
     /* Check any expired timers */
-    if (timerPending()) {
-        checkTimerHandlers();
-    }
+    checkTimerHandlers();
 }
 
 
