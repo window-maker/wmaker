@@ -197,6 +197,8 @@ wGNOMEInitStuff(WScreen *scr)
     WMAddNotificationObserver(observer, NULL, WMNChangedStacking, NULL);
     WMAddNotificationObserver(observer, NULL, WMNChangedName, NULL);
 
+    WMAddNotificationObserver(wsobserver, NULL, WMNWorkspaceCreated, NULL);
+    WMAddNotificationObserver(wsobserver, NULL, WMNWorkspaceDestroyed, NULL);
     WMAddNotificationObserver(wsobserver, NULL, WMNWorkspaceChanged, NULL);
     WMAddNotificationObserver(wsobserver, NULL, WMNWorkspaceNameChanged, NULL);
 }

@@ -900,7 +900,8 @@ createPanel(_Panel *p)
 	
 	pos.y = WMAX(pos.y - 100, 0);
 	
-	if( panel->menu ) WEditMenuShowAt(panel->menu, pos.x, pos.y);
+        if (panel->menu)
+            WEditMenuShowAt(panel->menu, pos.x, pos.y);
     }
 }
 
@@ -1807,14 +1808,16 @@ storeData(_Panel *panel)
 static void
 showMenus(_Panel *panel)
 {
-    if( panel->menu ) WEditMenuUnhide(panel->menu);
+    if (panel->menu)
+        WEditMenuUnhide(panel->menu);
 }
 
 
 static void
 hideMenus(_Panel *panel)
 {
-    if( panel->menu ) WEditMenuHide(panel->menu);
+    if (panel->menu)
+        WEditMenuHide(panel->menu);
 }
 
 

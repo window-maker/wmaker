@@ -10,6 +10,9 @@ Changes since version 0.70.0:
 - Updated slovak .po files (Jan Tomka <judas@linux.sk>)
 - Added "Save workspace state" switch button on the exit confirmation panel
   (based on a patch sent by Jan Tomka <judas@linux.sk>)
+- Fixed WPrefs crash when clicking on the menu editor to keep the current menu
+  (Alexey Voinov <voins@voins.program.ru>)
+- Added patch to fix some gnome issues (Les Schaffer <schaffer@optonline.net>)
 
 
 Changes since version 0.65.1:
