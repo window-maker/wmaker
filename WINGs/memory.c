@@ -111,6 +111,19 @@ wmalloc(size_t size)
 
 
 void*
+wmalloc0(size_t size)
+{
+    void *ptr= wmalloc(size);
+    if (!ptr)
+      return NULL;
+
+    memset(ptr, 0, size);
+
+    return ptr;
+}
+
+
+void*
 wrealloc(void *ptr, size_t newsize)
 {
     void *nptr;

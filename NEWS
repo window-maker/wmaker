@@ -332,9 +332,10 @@ behavior regarding workspaces you can now (use WPrefs.app to do this).
 Client supplied icons
 ---------------------
 
-Window Maker saves the client supplied icons in ~/GNUstep/.AppInfo/WindowMaker
-in XPM format for later use when the app is no longer running (to have the
-image to display for docked icons for example).
+Window Maker saves the client supplied icons in 
+~/GNUstep/Library/WindowMaker/CachedPixmaps in XPM format for later use 
+when the app is no longer running (to have the image to display for docked 
+icons for example).
 
 Until recently the XPM images saved by Window Maker were incorrect, but a
 recent fix in the code to save XPM's fixed them. But with this fix, all
@@ -342,12 +343,12 @@ previously saved XPM's in that directory are no longer readable (they give
 wrong images on screen or fail to load).
 
 To avoid the need for the user to fix this by hand editing WMWindowAttributes 
-and removing all references to icons in ~/GNUstep/.AppInfo/WindowMaker which
-can be annoying, new code was added to Window Maker to permit the regeneration
-of images in ~/GNUstep/.AppInfo/WindowMaker if they are missing.
+and removing all references to icons in ~/GNUstep/Library/WindowMaker/CachedPixmaps 
+which can be annoying, new code was added to Window Maker to permit the 
+regeneration of images in ~/GNUstep/Library/WindowMaker/CachedPixmaps if they are missing.
 
 With this addition, all you need to do to fix your old broken images, is to
-delete all *.xpm files from ~/GNUstep/.AppInfo/WindowMaker. Next time the
+delete all *.xpm files from ~/GNUstep/Library/WindowMaker/CachedPixmaps. Next time the
 application that is supplying an icon image will start the icon will be
 recreated if missing, but this time it will be saved with the new XPM save
 code which produces good XPM images.
@@ -1213,7 +1214,7 @@ Persistent Program Suplied Icons
 
 Application supplied icons are now stored, so that the dock will keep
 showing them after the app is exited. The icons are stored at
-~/GNUstep/.AppInfo/WindowMaker/
+~/GNUstep/Library/WindowMaker/CachedPixmaps
 
 
 Sound support

@@ -234,9 +234,12 @@ char* wexpandpath(char *path);
 char* wgethomedir();
 
 void* wmalloc(size_t size);
+void* wmalloc0(size_t size);
 void* wrealloc(void *ptr, size_t newsize);
 void wfree(void *ptr);
 
+#define wnew(type, count) wmalloc(sizeof(type)*count)
+#define wnew0(type, count) wmalloc0(sizeof(type)*count)
 
 void wrelease(void *ptr);
 void* wretain(void *ptr);
