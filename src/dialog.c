@@ -917,7 +917,7 @@ XChangeKeyboardControl(dpy,KBBellPitch|KBBellDuration|KBBellPercent,&kc);
 	RImage *image;
 	WMPixmap *pix;
 
-	image = RCloneImage(panel->icon);
+        image = RScaleImage(panel->icon, panel->pic->width, panel->pic->height);
 	RCombineImagesWithOpaqueness(image, panel->pic, panel->cycle*255/30);
 	pix = WMCreatePixmapFromRImage(panel->scr->wmscreen, image, 128);
 	RDestroyImage(image);
@@ -1107,8 +1107,7 @@ handleLogoPush(XEvent *event, void *data)
 	}
 	if (!panel->pic) {
 	    panel->pic = RGetImageFromXPMData(panel->scr->rcontext, pic_data);
-	    if (!panel->pic || panel->icon->width!=panel->pic->width
-		|| panel->icon->height!=panel->pic->height) {
+	    if (!panel->pic) {
 		broken = 1;
 		RDestroyImage(panel->icon);
 		panel->icon = NULL;
