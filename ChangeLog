@@ -50,6 +50,8 @@ Changes since version 0.80.2:
   which also happens in this case, since shading is a form of miniaturization)
 - Fixed bug with tpixmap from previous xinerama patch
 - Fixed edge resistance and move/resize frame drawing for borderless windows
+- Fixed wrong display position for the move/resize widgets after xinerama
+  patch (Peter Zijlstra <a.p.zijlstra@chello.nl>)
 
 
 Changes since version 0.80.1:
