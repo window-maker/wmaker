@@ -1609,7 +1609,7 @@ handleKeyPress(XEvent *event)
 	    int i;
 	    
 	    /* find index of this screen */
-	    for (i = 0;  < wScreenCount; i++) {
+	    for (i = 0; i < wScreenCount; i++) {
 		if (wScreenWithNumber(i) == scr)
 		    break;
 	    }

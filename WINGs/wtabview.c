@@ -164,7 +164,7 @@ WMAddTabViewItemWithView(WMTabView *tPtr, WMView *view, int identifier,
     item = WMCreateTabViewItemWithIdentifier(identifier);
     WMSetTabViewItemView(item, view);
     WMAddItemInTabView(tPtr, item);
-    WMSetTabViewItemLabel(tPtr, label);
+    WMSetTabViewItemLabel(item, label);
 
     return item;
 }
