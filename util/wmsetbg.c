@@ -46,7 +46,7 @@
 
 #include "../src/wconfig.h"
 
-#include <WINGs.h>
+#include <WINGs/WINGs.h>
 #include <wraster.h>
 
 #include <proplist.h>

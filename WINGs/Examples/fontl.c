@@ -24,8 +24,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "WINGs.h"
-#include "WUtil.h"
+#include <WINGs/WINGs.h>
+#include <WINGs/WUtil.h>
 
 void
 wAbort()

@@ -33,7 +33,7 @@
 #include <math.h>
 #include <time.h>
 
-#include <WUtil.h>
+#include <WINGs/WUtil.h>
 #include <wraster.h>
 
 

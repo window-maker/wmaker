@@ -4,7 +4,7 @@
  * 
  */
 
-#include "WINGsP.h"
+#include <WINGs/WINGsP.h>
 
 #include "double.h"
 

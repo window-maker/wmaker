@@ -854,16 +854,18 @@ dnl AC_CHECK_PROG(TEXI2HTML, texi2html, texi2html, ,$PATH)
   
 dnl AC_SUBST(DOCTYPES)
 
-AC_OUTPUT(Makefile po/Makefile util/Makefile test/Makefile wmlib/Makefile \
-	WINGs/Makefile WINGs/Documentation/Makefile WINGs/Examples/Makefile \
-	WINGs/Resources/Makefile WINGs/Tests/Makefile WINGs/Extras/Makefile \
-	wrlib/Makefile src/Makefile src/wconfig.h doc/Makefile \
-	contrib/Makefile WindowMaker/Makefile WindowMaker/Backgrounds/Makefile \
+AC_OUTPUT(Makefile po/Makefile util/Makefile test/Makefile \
+	WINGs/Makefile WINGs/WINGs/Makefile WINGs/Documentation/Makefile \
+	WINGs/Examples/Makefile WINGs/Resources/Makefile WINGs/Tests/Makefile \
+	WINGs/Extras/Makefile \
+	wmlib/Makefile wrlib/Makefile src/Makefile src/wconfig.h doc/Makefile \
+	WindowMaker/Makefile WindowMaker/Backgrounds/Makefile \
 	WindowMaker/Defaults/Makefile WindowMaker/IconSets/Makefile \
 	WindowMaker/Icons/Makefile WindowMaker/Pixmaps/Makefile \
 	WindowMaker/Styles/Makefile WindowMaker/Themes/Makefile \
 	WPrefs.app/Makefile WPrefs.app/tiff/Makefile WPrefs.app/xpm/Makefile \
-	WPrefs.app/po/Makefile contrib/WindowMaker.spec )
+	WPrefs.app/po/Makefile \
+	contrib/Makefile contrib/WindowMaker.spec )
 #	plugins/Makefile plugins/libwmfun/Makefile)
 
 
@@ -925,7 +927,7 @@ cat <<EOF >get-wings-flags
 prefix="$prefix"
 exec_prefix=\$prefix
 
-WCFLAGS="-I\$prefix/include/WINGs $inc_search_path"
+WCFLAGS="-I\$prefix/include $inc_search_path"
 WLFLAGS="-L\$exec_prefix/lib $lib_search_path"
 WLIBS="-lWINGs -lwraster $GFXLIBS $XLIBS -lm $NETLIBS -lPropList"
 
@@ -964,7 +966,7 @@ cat <<EOF >get-wutil-flags
 prefix="$prefix"
 exec_prefix=\$prefix
 
-WCFLAGS="-I\$prefix/include/WINGs $inc_search_path"
+WCFLAGS="-I\$prefix/include $inc_search_path"
 WLFLAGS="-L\$exec_prefix/lib $lib_search_path"
 WLIBS="-lWUtil $NETLIBS -lPropList"
 

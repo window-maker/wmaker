@@ -33,7 +33,7 @@ main()
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include <WINGs.h>
+#include <WINGs/WINGs.h>
 
 #include "../src/config.h"
 

@@ -28,8 +28,8 @@
 # define _(a) a
 #endif
 
-#include <WINGs.h>
-#include <WINGsP.h>
+#include <WINGs/WINGs.h>
+#include <WINGs/WINGsP.h>
 #include <assert.h>
 #include <ctype.h>
 #include <stdlib.h>

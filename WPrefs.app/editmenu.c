@@ -21,8 +21,8 @@
  */
 
 
-#include <WINGsP.h>
-#include <WUtil.h>
+#include <WINGs/WINGsP.h>
+#include <WINGs/WUtil.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <ctype.h>

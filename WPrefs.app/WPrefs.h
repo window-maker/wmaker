@@ -34,8 +34,7 @@
 
 #include <wraster.h>
 
-#include <WINGs.h>
-#include <WUtil.h>
+#include <WINGs/WINGs.h>
 
 /* For EXTENDED_WINDOWSHORTCUT */
 #include "../src/wconfig.h"

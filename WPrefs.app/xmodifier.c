@@ -35,7 +35,7 @@ Boston, MA 02111-1307, USA.  */
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 
-#include "WUtil.h"
+#include <WINGs/WUtil.h>
 
 
 

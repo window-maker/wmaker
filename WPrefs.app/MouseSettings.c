@@ -90,7 +90,7 @@ typedef struct _Panel {
 
 
 /* need access to the double click variables */
-#include "WINGsP.h"
+#include <WINGs/WINGsP.h>
 
 
 

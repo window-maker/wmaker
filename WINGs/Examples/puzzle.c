@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <WINGs.h>
+#include <WINGs/WINGs.h>
 
 
 

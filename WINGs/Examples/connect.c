@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#include "WINGs.h"
+#include <WINGs/WINGs.h>
 
 
 

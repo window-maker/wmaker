@@ -14,7 +14,7 @@
  *
  * 
  */
-#include "WINGsP.h"
+#include <WINGs/WINGsP.h>
 
 /*
  * Our public header.

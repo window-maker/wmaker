@@ -1,6 +1,6 @@
 
 
-#include <WINGs.h>
+#include <WINGs/WINGs.h>
 #include "wtableview.h"
 #include "wtabledelegates.h"
 

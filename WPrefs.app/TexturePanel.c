@@ -31,8 +31,7 @@
 #include <X11/Xlib.h>
 
 
-#include <WINGs.h>
-#include <WUtil.h>
+#include <WINGs/WINGs.h>
 
 #include "WPrefs.h"
 

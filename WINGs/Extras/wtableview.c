@@ -1,6 +1,6 @@
 
 
-#include <WINGsP.h>
+#include <WINGs/WINGsP.h>
 #include <X11/cursorfont.h>
 
 #include "wtableview.h"

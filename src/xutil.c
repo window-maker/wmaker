@@ -29,7 +29,7 @@
 
 #include "xutil.h"
 
-#include <WUtil.h>
+#include <WINGs/WUtil.h>
 #if 0
 static Atom Clipboard=0;
 #endif

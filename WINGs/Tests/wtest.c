@@ -2,7 +2,7 @@
  * WINGs test application
  */
 
-#include "WINGs.h"
+#include <WINGs/WINGs.h>
 
 #include <stdio.h>
 
@@ -1206,7 +1206,6 @@ testDragAndDrop(WMScreen *scr)
 
 /*******************************************************************/
 
-#include "WUtil.h"
 
 void
 testUD()

@@ -26,8 +26,7 @@
 
 #include <assert.h>
 
-#include "WINGs.h"
-#include "WUtil.h"
+#include <WINGs/WINGs.h>
 
 #if HAVE_LIBINTL_H && I18N
 # include <libintl.h>

@@ -3376,7 +3376,7 @@ setButtonImages(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
  * wmaker panels will have the same dbl-click values. 
  * TODO: figure a better way of dealing with it.
  */
-#include "WINGsP.h"
+#include <WINGs/WINGsP.h>
 
 static int
 setDoubleClick(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)

@@ -2,16 +2,11 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 
-SUBDIRS = . Documentation Resources Examples Extras Tests
+SUBDIRS = WINGs . Documentation Resources Examples Extras Tests
 
 
 
 #libWINGs_la_LDFLAGS = -version-info 1:1:0
-
-# is this a kluge? if so, how should i do it?
-includedir = @includedir@/WINGs
-
-include_HEADERS = WINGs.h WUtil.h WINGsP.h
 
 bin_SCRIPTS = get-wings-flags get-wutil-flags
 
@@ -21,12 +16,10 @@ lib_LIBRARIES = libWINGs.a libWUtil.a
 LDADD= libWINGs.a $(top_builddir)/wrlib/libwraster.la @LIBPL@
 
 
-EXTRA_DIST = BUGS WINGs
+EXTRA_DIST = BUGS
 
 # wbutton.c 
 libWINGs_a_SOURCES = 	\
-	WINGs.h \
-	WINGsP.h \
 	array.c \
 	bagtree.c \
 	configuration.c \
@@ -82,8 +75,6 @@ libWINGs_a_SOURCES = 	\
 
 
 libWUtil_a_SOURCES = 	\
-	WINGs.h \
-	WINGsP.h \
 	array.c \
 	bagtree.c \
 	connection.c \
@@ -103,7 +94,7 @@ libWUtil_a_SOURCES = 	\
 	wutil.c
 
 
-INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
+INCLUDES = -I$(top_srcdir)/WINGs/WINGs -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
 	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @HEADER_SEARCH_PATH@ -DDEBUG
 
 

@@ -48,7 +48,7 @@
 #include "xdnd.h"
 #endif
 #include "wsound.h"
-#include "WINGsP.h"
+#include <WINGs/WINGsP.h>
 
 
 /*
