@@ -190,7 +190,7 @@ enum RImageFormat {
  */
 typedef struct RImage {
     unsigned char *data;	       /* image data RGBA or RGB */
-    unsigned width, height;	       /* size of the image */
+    int width, height;	       /* size of the image */
     enum RImageFormat format;
     RColor background;		       /* background color */
 } RImage;
