@@ -683,10 +683,6 @@ toggleAutoCollapseCallback(WMenu *menu, WMenuEntry *entry)
     dock = (WDock*) entry->clientdata;
 
     dock->auto_collapse = !dock->auto_collapse;
-    //if (dock->auto_collapse_magic) {
-    //    WMDeleteTimerHandler(dock->auto_collapse_magic);
-    //    dock->auto_collapse_magic = NULL;
-    //}
 
     entry->flags.indicator_on = ((WDock*)entry->clientdata)->auto_collapse;
 
@@ -4012,10 +4008,10 @@ clipAutoCollapse(void *cdata)
 {
     WDock *dock = (WDock *)cdata;
 
-    if (dock->type!=WM_CLIP || !dock->auto_collapse)
+    if (dock->type!=WM_CLIP)
         return;
 
-    if (dock->auto_collapse_magic) {
+    if (dock->auto_collapse) {
         dock->collapsed = 1;
         wDockHideIcons(dock);
     }
@@ -4028,10 +4024,10 @@ clipAutoExpand(void *cdata)
 {
     WDock *dock = (WDock *)cdata;
 
-    if (dock->type!=WM_CLIP || !dock->auto_collapse)
+    if (dock->type!=WM_CLIP)
         return;
 
-    if (dock->auto_expand_magic) {
+    if (dock->auto_collapse) {
         dock->collapsed = 0;
         wDockShowIcons(dock);
     }
