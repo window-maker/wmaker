@@ -72,7 +72,8 @@ paintFrame(Frame *fPtr)
     W_Screen *scrPtr = view->screen;
     int tx, ty, tw, th;
     int fy, fh;
-
+    Bool drawTitle;
+    
     if (fPtr->caption!=NULL)
 	th = WMFontHeight(scrPtr->normalFont);
     else {
@@ -124,27 +125,66 @@ paintFrame(Frame *fPtr)
 	fy = 0;
 	fh = view->size.height;
     }
-/*
-    XClearArea(scrPtr->display, view->window, fy+2, 2, fh-4, view->size.width-4,
-	       False);
- */
-    XClearWindow(scrPtr->display, view->window);
-    
-    W_DrawRelief(scrPtr, view->window, 0, fy, view->size.width, fh, 
-		 fPtr->flags.relief);
 
     if (fPtr->caption!=NULL && fPtr->flags.titlePosition!=WTPNoTitle) {
-	
-	
 	tw = WMWidthOfString(scrPtr->normalFont, fPtr->caption, 
-			 strlen(fPtr->caption));
-    	
-	tx = (view->size.width - tw) / 2;
-    
-	XFillRectangle(scrPtr->display, view->window, WMColorGC(scrPtr->gray),
-		       tx, ty, tw, th);
+			     strlen(fPtr->caption));
 
-	WMDrawString(scrPtr, view->window, WMColorGC(scrPtr->black), 
+	tx = (view->size.width - tw) / 2;
+	
+	drawTitle = True;
+    } else {
+	drawTitle = False;
+    }
+
+/*    XClearArea(scrPtr->display, view->window, x, y, width, height, False);
+ */
+
+    {
+	XRectangle rect;
+	Region region, tmp;
+	GC gc[4];
+	int i;
+
+	region = XCreateRegion();
+
+	if (drawTitle) {
+	    tmp = XCreateRegion();
+	    rect.x = tx;
+	    rect.y = ty;
+	    rect.width = tw;
+	    rect.height = th;
+	    XUnionRectWithRegion(&rect, tmp, tmp);
+	}
+	rect.x = 0;
+	rect.y = 0;
+	rect.width = view->size.width;
+	rect.height = view->size.height;
+	XUnionRectWithRegion(&rect, region, region);
+	if (drawTitle) {
+	    XSubtractRegion(region, tmp, region);
+	    XDestroyRegion(tmp);
+	}
+	gc[0] = WMColorGC(scrPtr->black);
+	gc[1] = WMColorGC(scrPtr->darkGray);
+	gc[2] = WMColorGC(scrPtr->gray);
+	gc[3] = WMColorGC(scrPtr->white);
+
+	for (i = 0; i < 4; i++) {
+	    XSetRegion(scrPtr->display, gc[i], region);
+	}
+	XDestroyRegion(region);
+
+	W_DrawReliefWithGC(scrPtr, view->window, 0, fy, view->size.width, fh, 
+			   fPtr->flags.relief, gc[0], gc[1], gc[2], gc[3]);
+
+	for (i = 0; i < 4; i++) {
+	    XSetClipMask(scrPtr->display, gc[i], None);
+	}
+    }
+
+    if (drawTitle) {
+	WMDrawString(scrPtr, view->window, WMColorGC(scrPtr->black),
 		     scrPtr->normalFont, tx, ty, fPtr->caption,
 		     strlen(fPtr->caption));
     }
@@ -163,9 +203,8 @@ handleEvents(XEvent *event, void *data)
 
     switch (event->type) {
      case Expose:
-	if (event->xexpose.count!=0)
-	    break;
-	paintFrame(fPtr);
+	if (event->xexpose.count == 0)
+	    paintFrame(fPtr);
 	break;
 	
      case DestroyNotify:

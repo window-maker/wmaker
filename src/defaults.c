@@ -405,6 +405,9 @@ WDefaultEntry optionList[] = {
     {"RaiseDelay",	"0",			NULL,
 	  &wPreferences.raise_delay,	getInt,		NULL
     },
+    {"WindowsCycling",  "YES",			NULL,
+	  &wPreferences.windows_cycling,getBool,	NULL
+    },
     {"CirculateRaise",	"NO",			NULL,
 	  &wPreferences.circ_raise, 	getBool, 	NULL
     },
@@ -825,14 +828,14 @@ WDefaultEntry optionList[] = {
     },
     {"WaitCursor", "(builtin, watch)",		(void*)WCUR_WAIT,
           NULL,				getCursor,	setCursor
-    }
-    ,{"ArrowCursor", "(builtin, top_left_arrow)",	(void*)WCUR_ARROW,
+    },
+    {"ArrowCursor", "(builtin, top_left_arrow)",	(void*)WCUR_ARROW,
           NULL,				getCursor,	setCursor
-    }
-    ,{"QuestionCursor", "(builtin, question_arrow)",	(void*)WCUR_QUESTION,
+    },
+    {"QuestionCursor", "(builtin, question_arrow)",	(void*)WCUR_QUESTION,
           NULL,				getCursor,	setCursor
-    }
-    ,{"TextCursor", "(builtin, xterm)",		(void*)WCUR_TEXT,
+    },
+    {"TextCursor", "(builtin, xterm)",		(void*)WCUR_TEXT,
           NULL,				getCursor,	setCursor
     }
 #endif
@@ -2541,20 +2544,19 @@ static WCursorLookup cursor_table[] =
 
 static void check_bitmap_status(int status, char *filename, Pixmap bitmap)
 {
-   switch(status)
-    {
+    switch(status) {
      case BitmapOpenFailed:
-       wwarning(_("failed to open bitmap file \"%s\""), filename);
-       break;
+	wwarning(_("failed to open bitmap file \"%s\""), filename);
+	break;
      case BitmapFileInvalid:
-       wwarning(_("\"%s\" is not a valid bitmap file"), filename);
-       break;
+	wwarning(_("\"%s\" is not a valid bitmap file"), filename);
+	break;
      case BitmapNoMemory:
-       wwarning(_("out of memory reading bitmap file \"%s\""), filename);
-       break;
+	wwarning(_("out of memory reading bitmap file \"%s\""), filename);
+	break;
      case BitmapSuccess:
-       XFreePixmap(dpy, bitmap);
-       break;
+	XFreePixmap(dpy, bitmap);
+	break;
     }
 }
 
@@ -2565,172 +2567,147 @@ static void check_bitmap_status(int status, char *filename, Pixmap bitmap)
  */
 static int parse_cursor(WScreen *scr, proplist_t pl, Cursor *cursor)
 {
-   proplist_t elem;
-   char *val;
-   int nelem;
-   int status = 0;
-   
-   nelem = PLGetNumberOfElements(pl);
-   if (nelem < 1)
-    {
-       return(status);
+    proplist_t elem;
+    char *val;
+    int nelem;
+    int status = 0;
+    
+    nelem = PLGetNumberOfElements(pl);
+    if (nelem < 1) {
+	return(status);
     }
-   elem = PLGetArrayElement(pl, 0);
-   if (!elem || !PLIsString(elem))
-    {
-       return(status);
+    elem = PLGetArrayElement(pl, 0);
+    if (!elem || !PLIsString(elem)) {
+	return(status);
     }
-   val = PLGetString(elem);
-   
-   if (0 == strcasecmp(val, "none")) 
-    {
-       status = 1;
-       *cursor = None;
-    }
-   else if (0 == strcasecmp(val, "builtin")) 
-    {
-       int i;
-       int cursor_id = CURSOR_ID_NONE;
-       
-       if (2 != nelem)
-	{
-	   wwarning(_("bad number of arguments in cursor specification"));
-	   return(status);
+    val = PLGetString(elem);
+    
+    if (0 == strcasecmp(val, "none")) {
+	status = 1;
+	*cursor = None;
+    } else if (0 == strcasecmp(val, "builtin")) {
+	int i;
+	int cursor_id = CURSOR_ID_NONE;
+	
+	if (2 != nelem) {
+	    wwarning(_("bad number of arguments in cursor specification"));
+	    return(status);
 	}
-       elem = PLGetArrayElement(pl, 1);
-       if (!elem || !PLIsString(elem))
-	{
-	   return(status);
+	elem = PLGetArrayElement(pl, 1);
+	if (!elem || !PLIsString(elem)) {
+	    return(status);
 	}
-       val = PLGetString(elem);
-       
-       for (i = 0; NULL != cursor_table[i].name; i++)
-	{
-	   if (0 == strcasecmp(val, cursor_table[i].name))
-	    {
-	       cursor_id = cursor_table[i].id;
-	       break;
+	val = PLGetString(elem);
+
+	for (i = 0; NULL != cursor_table[i].name; i++) {
+	    if (0 == strcasecmp(val, cursor_table[i].name)) {
+		cursor_id = cursor_table[i].id;
+		break;
 	    }
 	}
-       if (CURSOR_ID_NONE == cursor_id) 
-	{
-	   wwarning(_("unknown builtin cursor name \"%s\""), val);
+	if (CURSOR_ID_NONE == cursor_id) {
+	    wwarning(_("unknown builtin cursor name \"%s\""), val);
+	} else {
+	    *cursor = XCreateFontCursor(dpy, cursor_id);
+	    status = 1;
 	}
-       else
-	{
-	   *cursor = XCreateFontCursor(dpy, cursor_id);
-	   status = 1;
+    } else if (0 == strcasecmp(val, "bitmap")) {
+	char *bitmap_name;
+	char *mask_name;
+	int bitmap_status;
+	int mask_status;
+	Pixmap bitmap;
+	Pixmap mask;
+	unsigned int w, h;
+	int x, y;
+	XColor fg, bg;
+	
+	if (3 != nelem) {
+	    wwarning(_("bad number of arguments in cursor specification"));
+	    return(status);
 	}
+	elem = PLGetArrayElement(pl, 1);
+	if (!elem || !PLIsString(elem)) {
+	    return(status);
+	}
+	val = PLGetString(elem);
+	bitmap_name = FindImage(wPreferences.pixmap_path, val);
+	if (!bitmap_name) {
+	    wwarning(_("could not find cursor bitmap file \"%s\""), val);
+	    return(status);
+	}
+	elem = PLGetArrayElement(pl, 2);
+	if (!elem || !PLIsString(elem)) {
+	    free(bitmap_name);
+	    return(status);
+	}
+	val = PLGetString(elem);
+	mask_name = FindImage(wPreferences.pixmap_path, val);
+	if (!mask_name) {
+	    free(bitmap_name);
+	    wwarning(_("could not find cursor bitmap file \"%s\""), val);
+	    return(status);
+	}
+	mask_status = XReadBitmapFile(dpy, scr->w_win, mask_name, &w, &h,
+				      &mask, &x, &y);
+	bitmap_status = XReadBitmapFile(dpy, scr->w_win, bitmap_name, &w, &h,
+					&bitmap, &x, &y);
+	if ((BitmapSuccess == bitmap_status) &&
+	    (BitmapSuccess == mask_status)) {
+	    fg.pixel = scr->black_pixel;
+	    bg.pixel = scr->white_pixel;
+	    XQueryColor(dpy, scr->w_colormap, &fg);
+	    XQueryColor(dpy, scr->w_colormap, &bg);
+	    *cursor = XCreatePixmapCursor(dpy, bitmap, mask, &fg, &bg, x, y);
+	    status = 1;
+	}
+	check_bitmap_status(bitmap_status, bitmap_name, bitmap);
+	check_bitmap_status(mask_status, mask_name, mask);
+	free(bitmap_name);
+	free(mask_name);
     }
-   else if (0 == strcasecmp(val, "bitmap"))
-    {
-       char *bitmap_name;
-       char *mask_name;
-       int bitmap_status;
-       int mask_status;
-       Pixmap bitmap;
-       Pixmap mask;
-       unsigned int w, h;
-       int x, y;
-       XColor fg, bg;
-       
-       if (3 != nelem)
-	{
-	   wwarning(_("bad number of arguments in cursor specification"));
-	   return(status);
-	}
-       elem = PLGetArrayElement(pl, 1);
-       if (!elem || !PLIsString(elem))
-	{
-	   return(status);
-	}
-       val = PLGetString(elem);
-       bitmap_name = FindImage(wPreferences.pixmap_path, val);
-       if (!bitmap_name)
-	{
-	   wwarning(_("could not find cursor bitmap file \"%s\""), val);
-	   return(status);
-	}
-       elem = PLGetArrayElement(pl, 2);
-       if (!elem || !PLIsString(elem))
-	{
-	   free(bitmap_name);
-	   return(status);
-	}
-       val = PLGetString(elem);
-       mask_name = FindImage(wPreferences.pixmap_path, val);
-       if (!mask_name)
-	{
-	   free(bitmap_name);
-	   wwarning(_("could not find cursor bitmap file \"%s\""), val);
-	   return(status);
-	}
-       mask_status = XReadBitmapFile(dpy, scr->w_win, mask_name, &w, &h,
-				     &mask, &x, &y);
-       bitmap_status = XReadBitmapFile(dpy, scr->w_win, bitmap_name, &w, &h,
-				       &bitmap, &x, &y);
-       if ((BitmapSuccess == bitmap_status) &&
-	   (BitmapSuccess == mask_status))
-	{
-	   fg.pixel = scr->black_pixel;
-	   bg.pixel = scr->white_pixel;
-	   XQueryColor(dpy, scr->w_colormap, &fg);
-	   XQueryColor(dpy, scr->w_colormap, &bg);
-	   *cursor = XCreatePixmapCursor(dpy, bitmap, mask, &fg, &bg, x, y);
-	   status = 1;
-	}
-       check_bitmap_status(bitmap_status, bitmap_name, bitmap);
-       check_bitmap_status(mask_status, mask_name, mask);
-       free(bitmap_name);
-       free(mask_name);
-    }
-   return(status);
+    return(status);
 }
+
 
 static int
 getCursor(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
 	  void **ret)
 {
-   static Cursor cursor;
-   int status;
-   int changed = 0;
-   
+    static Cursor cursor;
+    int status;
+    int changed = 0;
+    
 again:
-   if (!PLIsArray(value))
-    {
-       wwarning(_("Wrong option format for key \"%s\". Should be %s."),
-		entry->key, "cursor specification");
-       if (!changed)
-	{
-	   value = entry->plvalue;
-	   changed = 1;
-	   wwarning(_("using default \"%s\" instead"), entry->default_value);
-	   goto again;
+    if (!PLIsArray(value)) {
+	wwarning(_("Wrong option format for key \"%s\". Should be %s."),
+		 entry->key, "cursor specification");
+	if (!changed) {
+	    value = entry->plvalue;
+	    changed = 1;
+	    wwarning(_("using default \"%s\" instead"), entry->default_value);
+	    goto again;
 	}
-       return(False);
+	return(False);
     }
-   status = parse_cursor(scr, value, &cursor);
-   if (!status)
-    {
-       wwarning(_("Error in cursor specification for key \"%s\""), entry->key);
-       if (!changed)
-	{
-	   value = entry->plvalue;
-	   changed = 1;
-	   wwarning(_("using default \"%s\" instead"), entry->default_value);
-	   goto again;
+    status = parse_cursor(scr, value, &cursor);
+    if (!status) {
+	wwarning(_("Error in cursor specification for key \"%s\""), entry->key);
+	if (!changed) {
+	    value = entry->plvalue;
+	    changed = 1;
+	    wwarning(_("using default \"%s\" instead"), entry->default_value);
+	    goto again;
 	}
-       return(False);
+	return(False);
     }
-   if (ret)
-    {
-       *ret = &cursor;
+    if (ret) {
+	*ret = &cursor;
     }
-   if (addr)
-    {
-       *(Cursor *)addr = cursor;
+    if (addr) {
+	*(Cursor *)addr = cursor;
     }
-   return(True);
+    return(True);
 }
 #undef CURSOR_ID_NONE
 
@@ -2739,7 +2716,7 @@ again:
 
 /* ---------------- value setting functions --------------- */
 static int
-setJustify(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
+    setJustify(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
 {
     return REFRESH_WINDOW_TITLE_COLOR;
 }

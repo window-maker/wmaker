@@ -70,6 +70,50 @@ testFontPanel(WMScreen *scr)
 
 
 void
+testFrame(WMScreen *scr)
+{
+    WMWindow *win;
+    WMFrame *frame;
+    int i;
+    static char* titles[] = {
+	"AboveTop",
+	    "AtTop",
+	    "BelowTop",
+	    "AboveBottom",
+	    "AtBottom",
+	    "BelowBottom"
+    };
+    static WMTitlePosition pos[] = {
+	WTPAboveTop,
+        WTPAtTop,
+        WTPBelowTop,
+        WTPAboveBottom,
+        WTPAtBottom,
+        WTPBelowBottom
+    };
+
+    windowCount++;
+    
+    win = WMCreateWindow(scr, "testFrame");
+    WMSetWindowTitle(win, "Frame");
+    WMSetWindowCloseAction(win, closeAction, NULL);
+    WMResizeWidget(win, 400, 300);
+
+    for (i = 0; i < 6; i++) {
+	frame = WMCreateFrame(win);
+	WMMoveWidget(frame, 8+(i%3)*130, 8+(i/3)*130);
+	WMResizeWidget(frame, 120, 120);
+	WMSetFrameTitle(frame, titles[i]);
+	WMSetFrameTitlePosition(frame, pos[i]);
+    }
+    
+    WMRealizeWidget(win);
+    WMMapSubwidgets(win);
+    WMMapWidget(win);
+    
+}
+
+void
 testList(WMScreen *scr)
 {
     WMWindow *win;
@@ -812,8 +856,7 @@ Bool performDragOperation(WMView *self, WMDraggingInfo *info,
 
 void concludeDragOperation(WMView *self, WMDraggingInfo *info)
 {
-    puts("concluded");
-		       
+
 }
 
 
@@ -955,7 +998,7 @@ int main(int argc, char **argv)
      * Do NOT use it unless when debugging. It will cause a major 
      * slowdown in your application
      */
-#ifdef DEBUG
+#if 1
     XSynchronize(dpy, True);
 #endif
     /*
@@ -978,12 +1021,15 @@ int main(int argc, char **argv)
      * 
      * Put the testSomething() function you want to test here.
      */
+    
+
+    testDragAndDrop(scr);
+    testDragAndDrop(scr);
+
+#if 0    
+    testFrame(scr);
 
     
-    testDragAndDrop(scr);
-    testDragAndDrop(scr);
-
-#if 0
     testColorWell(scr);
 
     testTabView(scr);

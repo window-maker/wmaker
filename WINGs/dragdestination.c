@@ -108,13 +108,12 @@ static void defDraggingExited(WMView *self, WMDraggingInfo *info)
 {
 }
 
-static char* defPrepareForDragOperation(WMView *self, WMDraggingInfo *info)
+static Bool defPrepareForDragOperation(WMView *self, WMDraggingInfo *info)
 {
-    return NULL;
+    return False;
 }
 
-static Bool defPerformDragOperation(WMView *self, WMDraggingInfo *info,
-				    WMData *data)
+static Bool defPerformDragOperation(WMView *self, WMDraggingInfo *info)
 {
     return False;
 }
@@ -168,3 +167,49 @@ WMPoint WMGetDraggingInfoImageLocation(WMDraggingInfo *info)
 {
     return info->imageLocation;
 }
+
+
+
+static void
+receivedData(WMView *view, Atom selection, Atom target, Time timestamp, 
+	     void *cdata, WMData *data)
+{
+    
+}
+
+
+
+Bool WMRequestDroppedData(WMView *view, WMDraggingInfo *info, char *type,
+			  WMDropDataCallback *callback)
+{
+    WMScreen *scr = W_VIEW_SCREEN(view);
+#if 0
+    if (info->finished) {
+	return False;
+    }
+    
+    if (type != NULL) {
+	if (!WMRequestSelection(scr->dragInfo.destView,
+				scr->xdndSelectionAtom,
+				XInternAtom(scr->display, type, False),
+				scr->dragInfo.timestamp,
+				receivedData, &scr->dragInfo)) {
+	    wwarning("could not request data for dropped data");
+
+	    /* send finished message */
+	    sendClientMessage(scr->display, source,
+			      scr->xdndFinishedAtom,
+			      scr->dragInfo.destinationWindow,
+			      0, 0, 0, 0);
+	}
+    } else {
+	/* send finished message */
+	sendClientMessage(scr->display, source,
+			  scr->xdndFinishedAtom,
+			  scr->dragInfo.destinationWindow,
+			  0, 0, 0, 0);
+    }
+#endif
+}
+
+

@@ -261,8 +261,6 @@ lookForToplevel(WMScreen *scr, Window window, Bool *isAware)
 	}
 	
 	XFree(children);
-	
-	
     }
     
     return toplevel;
@@ -1093,7 +1091,7 @@ receivedData(WMView *view, Atom selection, Atom target,
     WMDraggingInfo *info = (WMDraggingInfo*)cdata;
     Bool res;
 
-    res = view->dragDestinationProcs->performDragOperation(view, info, data);
+    res = view->dragDestinationProcs->performDragOperation(view, info);
 
     if (res) {
 	DISPATCH(view, concludeDragOperation, info);
@@ -1297,30 +1295,16 @@ W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event)
 	
      case WDrop:
 	{
-	    char *type;
+	    Bool res;
 	    
-	    type = DISPATCH(oldView, prepareForDragOperation, &scr->dragInfo);
+	    res = DISPATCH(oldView, prepareForDragOperation, &scr->dragInfo);
 
-	    if (type != NULL) {
-		if (!WMRequestSelection(scr->dragInfo.destView,
-					scr->xdndSelectionAtom,
-					XInternAtom(scr->display, type, False),
-					scr->dragInfo.timestamp,
-					receivedData, &scr->dragInfo)) {
-		    wwarning("could not request data for dropped data");
-
-		    /* send finished message */
-		    sendClientMessage(scr->display, source,
-				      scr->xdndFinishedAtom,
-				      scr->dragInfo.destinationWindow,
-				      0, 0, 0, 0);
-		}
-	    } else {
-		/* send finished message */
-		sendClientMessage(scr->display, source,
-				  scr->xdndFinishedAtom,
-				  scr->dragInfo.destinationWindow,
-				  0, 0, 0, 0);		
+	    if (res) {
+		res = DISPATCH(oldView, performDragOperation, &scr->dragInfo);
+	    }
+	    
+	    if (res) {
+		
 	    }
 	}
 	break;

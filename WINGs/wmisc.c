@@ -9,6 +9,17 @@ void
 W_DrawRelief(W_Screen *scr, Drawable d, int x, int y, unsigned int width,
 	     unsigned int height, WMReliefType relief)
 {
+    W_DrawReliefWithGC(scr, d, x, y, width, height, relief,
+		       WMColorGC(scr->black), WMColorGC(scr->darkGray),
+		       WMColorGC(scr->gray), WMColorGC(scr->white));
+}
+
+
+void
+W_DrawReliefWithGC(W_Screen *scr, Drawable d, int x, int y, unsigned int width,
+		   unsigned int height, WMReliefType relief,
+		   GC black, GC dark, GC light, GC white)
+{
     Display *dpy = scr->display;
     GC bgc;
     GC wgc;
@@ -17,37 +28,36 @@ W_DrawRelief(W_Screen *scr, Drawable d, int x, int y, unsigned int width,
 
     switch (relief) {
      case WRSimple:
-	XDrawRectangle(dpy, d, WMColorGC(scr->black), x, y, width-1, height-1);
+	XDrawRectangle(dpy, d, black, x, y, width-1, height-1);
 	return;
-	break;
 	
      case WRRaised:
-	bgc = WMColorGC(scr->black);
-	dgc = WMColorGC(scr->darkGray);
-	wgc = WMColorGC(scr->white);
-	lgc = WMColorGC(scr->gray);
+	bgc = black;
+	dgc = dark;
+	wgc = white;
+	lgc = light;
 	break;
 	
      case WRSunken:
-	wgc = WMColorGC(scr->darkGray);
-	lgc = WMColorGC(scr->black);
-	bgc = WMColorGC(scr->white);
-	dgc = WMColorGC(scr->gray);
+	wgc = dark;
+	lgc = black;
+	bgc = white;
+	dgc = light;
 	break;
 	
      case WRPushed:
-	lgc = wgc = WMColorGC(scr->black);
-	dgc = bgc = WMColorGC(scr->white);
+	lgc = wgc = black;
+	dgc = bgc = white;
 	break;
 	
      case WRRidge:
-	lgc = bgc = WMColorGC(scr->darkGray);
-	dgc = wgc = WMColorGC(scr->white);
+	lgc = bgc = dark;
+	dgc = wgc = white;
 	break;
 
      case WRGroove:
-	wgc = dgc = WMColorGC(scr->darkGray);
-	lgc = bgc = WMColorGC(scr->white);
+	wgc = dgc = dark;
+	lgc = bgc = white;
 	break;
 	
      default:
@@ -75,6 +85,8 @@ W_DrawRelief(W_Screen *scr, Drawable d, int x, int y, unsigned int width,
 	XDrawLine(dpy, d, dgc, x+width-2, y+1, x+width-2, y+height-2);
     }
 }
+
+
 
 
 static int

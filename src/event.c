@@ -1304,131 +1304,6 @@ windowUnderPointer(WScreen *scr)
 
 
 static void
-doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
-{
-    WScreen *scr = wScreenForRootWindow(event->xkey.root);
-    Bool done = False;
-    Bool openedSwitchMenu = False;
-    WWindow *newFocused;
-    WWindow *oldFocused;
-    int modifiers;
-    XModifierKeymap *keymap;
-    Bool somethingElse = False;
-    XEvent ev;
-
-    if (!wwin)
-	return;
-
-    keymap = XGetModifierMapping(dpy);
-
-    
-    XGrabKeyboard(dpy, scr->root_win, False, GrabModeAsync, GrabModeAsync, 
-		  CurrentTime);
-
-    if (next) {
-	newFocused = NextToFocusAfter(wwin);
-    } else {
-	newFocused = NextToFocusBefore(wwin); 
-    }
-
-    scr->flags.doing_alt_tab = 1;
-
-
-    if (wPreferences.circ_raise)
-	XRaiseWindow(dpy, newFocused->frame->core->window);
-    wWindowFocus(newFocused, scr->focused_window);
-    oldFocused = newFocused;
-
-#if 0
-    if (wPreferences.popup_switchmenu && 
-	(!scr->switch_menu || !scr->switch_menu->flags.mapped)) {
-
-	OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);
-	openedSwitchMenu = True;
-    }
-#endif	
-    while (!done) {
-	WMMaskEvent(dpy,KeyPressMask|KeyReleaseMask|ExposureMask, &ev);
-
-	if (ev.type != KeyRelease && ev.type != KeyPress) {
-	    WMHandleEvent(&ev);
-	    continue;
-	}
-	/* ignore CapsLock */
-	modifiers = ev.xkey.state & ValidModMask;
-
-	if (ev.type == KeyPress) {
-	    if (wKeyBindings[WKBD_FOCUSNEXT].keycode == ev.xkey.keycode
-		&& wKeyBindings[WKBD_FOCUSNEXT].modifier == modifiers) {
-
-		UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
-		newFocused = NextToFocusAfter(newFocused);
-		wWindowFocus(newFocused, oldFocused);
-		oldFocused = newFocused;
-	    
-		if (wPreferences.circ_raise) {
-		    /* restore order */
-		    CommitStacking(scr);
-		    XRaiseWindow(dpy, newFocused->frame->core->window);
-		}
-
-		UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
-
-	    } else if (wKeyBindings[WKBD_FOCUSPREV].keycode == ev.xkey.keycode
-		       && wKeyBindings[WKBD_FOCUSPREV].modifier == modifiers) {
-
-		UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
-		newFocused = NextToFocusBefore(newFocused);
-		wWindowFocus(newFocused, oldFocused);
-		oldFocused = newFocused;
-
-		if (wPreferences.circ_raise) {
-		    /* restore order */
-		    CommitStacking(scr);
-		    XRaiseWindow(dpy, newFocused->frame->core->window);
-		}
-		UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
-
-	    } else {
-		somethingElse = True;
-		done = True;
-	    }
-	} else if (ev.type == KeyRelease) {
-	    int i;
-
-	    for (i = 0; i < 8 * keymap->max_keypermod; i++) {
-		if (keymap->modifiermap[i] == ev.xkey.keycode &&
-		    wKeyBindings[WKBD_FOCUSNEXT].modifier 
-		    & 1<<(i/keymap->max_keypermod)) {
-		    done = True;
-		    break;
-		}
-	    }
-	}
-    }
-    XFreeModifiermap(keymap);
-
-    XUngrabKeyboard(dpy, CurrentTime);
-    wSetFocusTo(scr, newFocused);
-
-    if (wPreferences.circ_raise) {
-	wRaiseFrame(newFocused->frame->core);
-    	CommitStacking(scr);
-    }
-
-    scr->flags.doing_alt_tab = 0;
-    if (openedSwitchMenu) 
-	OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);
-    
-    if (somethingElse) {
-	handleKeyPress(&ev);
-    }
-}
-
-
-
-
-static void
 handleKeyPress(XEvent *event)
 {
     WScreen *scr = wScreenForRootWindow(event->xkey.root);
@@ -1598,17 +1473,19 @@ handleKeyPress(XEvent *event)
 	}
         break;
      case WKBD_FOCUSNEXT:
-	if (wKeyBindings[WKBD_FOCUSNEXT].modifier != 0)
-	    doWindozeCycle(wwin, event, True);
+	if (wKeyBindings[WKBD_FOCUSNEXT].modifier != 0 
+	    && wPreferences.windows_cycling)
+	    StartWindozeCycle(wwin, event, True);
 	else
-	    puts("NEXT");
+	    CycleWindow(scr, True);
 	break;
 
      case WKBD_FOCUSPREV:
-	if (wKeyBindings[WKBD_FOCUSPREV].modifier != 0)
-	    doWindozeCycle(wwin, event, False);
+	if (wKeyBindings[WKBD_FOCUSPREV].modifier != 0
+	    && wPreferences.windows_cycling)
+	    StartWindozeCycle(wwin, event, False);
 	else
-	    puts("PREV");
+	    CycleWindow(scr, False);
 	break;
 
 #if (defined(__STDC__) && !defined(UNIXCPP)) || defined(ANSICPP)

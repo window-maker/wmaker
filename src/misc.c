@@ -202,64 +202,6 @@ MakeCPPArgs(char *path)
 
 
 
-
-WWindow*
-NextToFocusAfter(WWindow *wwin)
-{
-    WWindow *tmp = wwin->prev;
-
-    while (tmp) {
-	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
-	    return tmp;
-	}
-	tmp = tmp->prev;
-    }
-
-    tmp = wwin;
-    /* start over from the beginning of the list */
-    while (tmp->next)
-	tmp = tmp->next;
-
-    while (tmp && tmp != wwin) {
-	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
-	    return tmp;
-	}
-	tmp = tmp->prev;
-    }
-
-    return wwin;
-}
-
-
-WWindow*
-NextToFocusBefore(WWindow *wwin)
-{
-    WWindow *tmp = wwin->next;
-
-    while (tmp) {
-	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
-	    return tmp;
-	}
-	tmp = tmp->next;
-    }
-
-    /* start over from the beginning of the list */
-    tmp = wwin;
-    while (tmp->prev)
-	tmp = tmp->prev;
-
-    while (tmp && tmp != wwin) {
-	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
-
-	    return tmp;
-	}
-	tmp = tmp->next;
-    }
-
-    return wwin;
-}
-
-
 #if 0
 /*
  * Is win2 below win1?

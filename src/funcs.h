@@ -94,6 +94,11 @@ void PlaceIcon(WScreen *scr, int *x_ret, int *y_ret);
 void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
                  unsigned int width, unsigned int height);
 
+
+void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next);
+
+void CycleWindow(WScreen *scr, Bool forward);
+
 #ifdef USECPP
 char *MakeCPPArgs(char *path);
 #endif

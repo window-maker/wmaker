@@ -308,6 +308,7 @@ typedef struct WPreferences {
     char constrain_window_size;	       /* don't let windows get bigger than 
 					* screen */
 
+    char windows_cycling;	       /* windoze cycling */
     char circ_raise;		       /* raise window after Alt-tabbing */
 
     char ignore_focus_click;
@@ -426,6 +427,7 @@ typedef struct WPreferences {
 	unsigned int noupdates:1;      /* don't require ~/GNUstep (-static) */
 	unsigned int noautolaunch:1;   /* don't autolaunch apps */
 	unsigned int norestore:1;      /* don't restore session */
+	unsigned int createstdcmap:1;  /* create std colormap */
     } flags;			       /* internal flags */
 } WPreferences;
 

@@ -402,6 +402,7 @@ typedef void WMAction2(void *self, void *clientData);
 
 typedef void WMCallback(void *data);
 
+typedef void WMDropDataCallback(WMView *view, WMData *data);
 
 /* delegate method like stuff */
 typedef void WMListDrawProc(WMList *lPtr, int index, Drawable d, char *text,
@@ -509,9 +510,8 @@ typedef struct W_DragDestinationProcs {
     unsigned (*draggingEntered)(WMView *self, WMDraggingInfo *info);
     unsigned (*draggingUpdated)(WMView *self, WMDraggingInfo *info);
     void (*draggingExited)(WMView *self, WMDraggingInfo *info);
-    char *(*prepareForDragOperation)(WMView *self, WMDraggingInfo *info);
-    Bool (*performDragOperation)(WMView *self, WMDraggingInfo *info,
-				 WMData *data);
+    Bool (*prepareForDragOperation)(WMView *self, WMDraggingInfo *info);
+    Bool (*performDragOperation)(WMView *self, WMDraggingInfo *info);
     void (*concludeDragOperation)(WMView *self, WMDraggingInfo *info);
 } WMDragDestinationProcs;
 

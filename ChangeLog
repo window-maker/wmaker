@@ -6,6 +6,11 @@ Changes since version 0.62.0:
 - added check for XInternAtoms in configure and replacement code
 - fixed window cycling with single key shortcut
 - fixed WPrefs crash on menu editor
+- install only needed icons for WPrefs.app
+- updated Finnish translations
+- fixed user-whining-windoze-cycling bug
+- added option for f'n windoze cycling..
+- added --create-stdcmap and made std colormap creation off by default
 
 Changes since version 0.61.1:
 .............................

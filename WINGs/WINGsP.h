@@ -454,6 +454,10 @@ void W_SetViewBackgroundColor(W_View *view, WMColor *color);
 void W_DrawRelief(W_Screen *scr, Drawable d, int x, int y, unsigned int width,
 		  unsigned int height, WMReliefType relief);
 
+void W_DrawReliefWithGC(W_Screen *scr, Drawable d, int x, int y,
+			unsigned int width, unsigned int height,
+			WMReliefType relief,
+			GC black, GC dark, GC light, GC white);
 
 void W_CleanUpEvents(W_View *view);
 

@@ -205,9 +205,6 @@ To get a list of other options, run ./configure --help
 --disable-shape
 	disables shaped windows (for oclock, xeyes etc.)
 
---enable-debug
-	Do not use it unless you know what you're doing.
-
 
 PLATFORM SPECIFIC NOTES:
 ========================
