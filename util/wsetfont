@@ -17,8 +17,11 @@
 #     Luke Kendall <luke@research.canon.com.au>
 # Bug fix info for Korean font section from:
 #     CHOI Junho <junker@jazz.snu.ac.kr>
+# LargeDisplayFont and Belarusian, Bulgarian, Macedonian, Serbian and
+# Ukrainian fontset info from:
+#     Anton Zinoviev <zinoviev@debian.org>
 
-VERSION="Version 0.5  1998/12/07"
+VERSION="Version 0.6  2000/11/14"
 
 WDWRITE="wdwrite"
 PROGRAM=`basename $0`
@@ -31,16 +34,21 @@ if test $# != 1; then
     echo "        $PROGRAM <option> "
     cat <<EOF
 -----------------------------------------------------------------------
-[Option]   [Fontset]                    [Font Information]
- default    helvetica                    
- latin1     helvetica(iso8859-1)
- latin2     helvetica(iso8859-2)          See *Note1.
- greek      helvetica(iso8859-7)          See *Note1.
- japanese   helvetica/-*-fixed(jisx02XX)  Included in X11R6/XFree86("fnon" pkg)
- korean     helvetica/-*-kodig(ksc5601)   See *Note1.
- korean2    helvetica/daewoo(ksc5601)     Included in X11R6/XFree86("fnon" pkg)
- russian    helvetica(koi8-r)             Included in X11R6/XFree86("fcyr" pkg)
- turkish    unknown                       See *Note2.
+[Option]    [Fontset]                    [Font Information]
+ default     helvetica                    
+ latin1      helvetica(iso8859-1)
+ latin2      helvetica(iso8859-2)         See *Note1.
+ belarusian  helvetica(cp1251)            See *Note1
+ bulgarian   helvetica(cp1251)            See *Note1
+ greek       helvetica(iso8859-7)         See *Note1.
+ japanese    helvetica/-*-fixed(jisx02XX) Included in X11R6/XFree86("fnon" pkg)
+ korean      helvetica/-*-kodig(ksc5601)  See *Note1.
+ korean2     helvetica/daewoo(ksc5601)    Included in X11R6/XFree86("fnon" pkg)
+ macedonian  helvetica(iso8859-5)         See *Note1
+ russian     helvetica(koi8-r)            Included in X11R6/XFree86("fcyr" pkg)
+ serbian     helvetica(iso8859-5)         See *Note1
+ ukrainian   helvetica(koi8-u)            See *Note1
+ turkish     unknown                      See *Note2.
 -----------------------------------------------------------------------
 Latin1 Languages: Danish/Dutch/English/Finnish/French/Galician/German/
                   Italian/Norwegian/Portuguese/Spanish/Swedish/...
@@ -52,6 +60,8 @@ Latin2 Languages: Croatian/Czech/Polish/Romanian/Slovenian/...
                           ftp://ftp.ntua.gr/pub/fonts/X11/
  Korean X fonts packages: ftp://linux.sarang.net  (Linux RPM)
                           ftp://ftp.kaist.ac.kr/pub/hangul/fonts
+ Cyrillic X fonts packages for all encodings:
+                          ftp://ftp.inp.nsk.su/pub/BINP/X11/fonts/cyr-rfx/
 *Note2: please let me know appropriate font setting for WMGLOBAL/WindowMaker,
         and the fonts' URL to download. mail-to: manome@itlb.te.noda.sut.ac.jp
 EOF
@@ -68,6 +78,7 @@ case $1 in
 	IconTitleFont=\"-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-*-*\"
 	ClipTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*\"
 	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*\"
+        LargeDisplayFont=\"-*-lucida-bold-r-*-*-24-*-*-*-*-*-*-*\"
 	;;
    latin1)
 	SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-iso8859-1\"
@@ -78,6 +89,7 @@ case $1 in
 	IconTitleFont=\"-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-iso8859-1\"
 	ClipTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-iso8859-1\"
 	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-iso8859-1\"
+        LargeDisplayFont=\"-*-lucida-bold-r-*-*-24-*-*-*-*-*-iso8859-1\"
 	;;
    latin2)
 	SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-iso8859-2\"
@@ -88,6 +100,7 @@ case $1 in
 	IconTitleFont=\"-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-iso8859-2\"
 	ClipTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-iso8859-2\"
 	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-iso8859-2\"
+        LargeDisplayFont=\"-*-lucida-bold-r-*-*-24-*-*-*-*-*-iso8859-2\"
 	;;
    greek)
 	SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-iso8859-7\"
@@ -98,6 +111,7 @@ case $1 in
 	IconTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-iso8859-7\"
 	ClipTitleFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-iso8859-7\"
 	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-iso8859-7\"
+        LargeDisplayFont=\"-*-*-bold-r-*-*-24-*-*-*-*-*-iso8859-7\"
 	;;
    russian)
 	SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-koi8-r\"
@@ -108,7 +122,41 @@ case $1 in
 	IconTitleFont=\"-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-koi8-r\"
 	ClipTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-koi8-r\"
 	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-koi8-r\"
+        LargeDisplayFont=\"-*-serene-bold-r-*-*-24-*-*-*-*-*-koi8-r\"
 	;;
+   ukrainian)
+	SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-koi8-u\"
+	BoldSystemFont=\"-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-koi8-u\"
+	WindowTitleFont=\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-koi8-u\"
+	MenuTitleFont=\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-koi8-u\"
+	MenuTextFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-koi8-u\"
+	IconTitleFont=\"-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-koi8-u\"
+	ClipTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-koi8-u\"
+	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-koi8-u\"
+        LargeDisplayFont=\"-*-serene-bold-r-*-*-24-*-*-*-*-*-koi8-u\"
+	;;
+   bulgarian|belarusian)
+        SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-microsoft-cp1251\"
+        BoldSystemFont=\"-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-microsoft-cp1251\"
+        WindowTitleFont=\"-*-helvetica-bold-r-normal-*-14-*-*-*-*-*-microsoft-cp1251\"
+        MenuTitleFont=\"-*-helvetica-medium-r-normal-*-14-*-*-*-*-*-microsoft-cp1251\"
+        MenuTextFont=\"-*-helvetica-medium-r-normal-*-14-*-*-*-*-*-microsoft-cp1251\"
+        IconTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-microsoft-cp1251\"
+        ClipTitleFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-microsoft-cp1251\"
+        DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-microsoft-cp1251\"
+        LargeDisplayFont=\"-*-serene-bold-r-*-*-24-*-*-*-*-*-microsoft-cp1251\"
+        ;;
+   serbian|macedonian)
+        SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-iso8859-5\"
+        BoldSystemFont=\"-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-iso8859-5\"
+        WindowTitleFont=\"-*-helvetica-bold-r-normal-*-14-*-*-*-*-*-iso8859-5\"
+        MenuTitleFont=\"-*-helvetica-medium-r-normal-*-14-*-*-*-*-*-iso8859-5\"
+        MenuTextFont=\"-*-helvetica-medium-r-normal-*-14-*-*-*-*-*-iso8859-5\"
+        IconTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-iso8859-5\"
+        ClipTitleFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-iso8859-5\"
+        DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-iso8859-5\"
+        LargeDisplayFont=\"-*-serene-bold-r-*-*-24-*-*-*-*-*-iso8859-5\"
+        ;;
    japanese)
         SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-%d-*,-*-*-medium-r-normal-*-*-*\"
 	BoldSystemFont=\"-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-%d-*,-*-*-medium-r-normal-*-*-*\"
@@ -118,6 +166,7 @@ case $1 in
 	IconTitleFont=\"-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-*-*\"
 	ClipTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-*-*\"
 	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-14-*,-*-*-medium-r-normal-*-*-*\"
+	LargeDisplayFont=\"-*-helvetica-bold-r-normal-*-24-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-24-*,-*-*-medium-r-normal-*-*-*\"
 	;;
    korean)
 	SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*,-*-kodig-medium-r-normal--%d-*-*-*-*-*-*-*,*-*-medium-r-normal-*-%d-*-*-*-*-*-*-*,*-*-*-*-*--%d-*-*-*-*-*-*-*,*\"
@@ -128,6 +177,7 @@ case $1 in
 	IconTitleFont=\"-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-*-*,-*-kodig-medium-r-normal--10-*-*-*-*-*-*-*,*-*-medium-r-normal--10-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
 	ClipTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*,-*-kodig-medium-r-normal--10-*-*-*-*-*-*-*,*-*-medium-r-normal--10-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
 	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*,-*-kodig-medium-r-normal--12-*-*-*-*-*-*-*,*-*-medium-r-normal--12-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
+	LargeDisplayFont=\"-*-helvetica-bold-r-normal-*-24-*-*-*-*-*-*-*,-*-kodig-bold-r-normal--24-*-*-*-*-*-*-*,-*-*-medium-r-normal--24-*-*-*-*-*-*-*,*-*-bold-r-normal-*-24-*-*-*-*-*-*-*,*-*-*-*-*--24-*-*-*-*-*-*-*,*\"
 	;;
    korean2)
 	SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*,-*-medium-r-normal-*-%d-*,-*-medium-r-normal-*\"
@@ -138,6 +188,7 @@ case $1 in
 	IconTitleFont=\"-*-helvetica-medium-r-normal-*-10-*-*-*-*-*-*-*,-*-gothic-medium-r-normal-*-12-*-*-*-*-*-ksc5601.1987-*\"
 	ClipTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*,-*-gothic-medium-r-normal-*-12-*-*-*-*-*-ksc5601.1987-*\"
 	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*,-*-gothic-medium-r-normal-*-16-*-*-*-*-*-ksc5601.1987-*\"
+	LargeDisplayFont=\"-*-helvetica-bold-r-normal-*-24-*-*-*-*-*-*-*,-*-medium-r-normal-*-24-*,-*-medium-r-normal-*\"
 	;;
    *)
 	echo "NOTICE:"
@@ -175,6 +226,7 @@ $WDWRITE WindowMaker MenuTextFont "$MenuTextFont"
 $WDWRITE WindowMaker IconTitleFont "$IconTitleFont"
 $WDWRITE WindowMaker ClipTitleFont "$ClipTitleFont"
 $WDWRITE WindowMaker DisplayFont "$DisplayFont"
+$WDWRITE WindowMaker LargeDisplayFont "$LargeDisplayFont"
 
 echo
 echo "WindowTitleFont=$WindowTitleFont"
@@ -183,5 +235,6 @@ echo "MenuTextFont=$MenuTextFont"
 echo "IconTitleFont=$IconTitleFont"
 echo "ClipTitleFont=$ClipTitleFont"
 echo "DisplayFont=$DisplayFont"
+echo "LargeDisplayFont=$LargeDisplayFont"
 echo
 echo "Done."
