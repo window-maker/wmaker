@@ -127,6 +127,13 @@ WMSynchronizeUserDefaults(WMUserDefaults *database)
 }
 
 
+void
+WMSaveUserDefaults(WMUserDefaults *database)
+{
+    PLSave(database->appDomain, YES);
+}
+
+
 WMUserDefaults*
 WMGetStandardUserDefaults(void)
 {

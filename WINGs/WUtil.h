@@ -318,7 +318,9 @@ WMUserDefaults *WMGetStandardUserDefaults(void);
 WMUserDefaults *WMGetDefaultsFromPath(char *path);
 
 void WMSynchronizeUserDefaults(WMUserDefaults *database);
-    
+
+void WMSaveUserDefaults(WMUserDefaults *database);
+
 proplist_t WMGetUDObjectForKey(WMUserDefaults *database, char *defaultName);
 
 void WMSetUDObjectForKey(WMUserDefaults *database, proplist_t object,
