@@ -688,7 +688,7 @@ storeCommandInScript(char *cmd, char *line)
     FILE *f;
     char buffer[128];
 
-    path = wstrappend(wusergnusteppath(), "/Library/WindowMaker/autostart");
+    path = wstrconcat(wusergnusteppath(), "/Library/WindowMaker/autostart");
     
     f = fopen(path, "r");
     if (!f) {
@@ -706,7 +706,7 @@ storeCommandInScript(char *cmd, char *line)
 	char *tmppath;
 	FILE *fo;
 
-	tmppath = wstrappend(wusergnusteppath(), 
+	tmppath = wstrconcat(wusergnusteppath(), 
 			     "/Library/WindowMaker/autostart.tmp");
 	fo = fopen(tmppath, "w");
 	if (!fo) {

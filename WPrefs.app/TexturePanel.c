@@ -602,7 +602,7 @@ updateImage(TexturePanel *panel, char *path)
 	if (!image) {
 	    char *message;
 	    
-	    message = wstrappend(_("Could not load the selected file: "),
+	    message = wstrconcat(_("Could not load the selected file: "),
 				 (char*)RMessageForError(RErrorCode));
 
 	    WMRunAlertPanel(scr, panel->win, _("Error"), message,

@@ -1011,8 +1011,8 @@ updateDomain(char *domain, char *key, char *texture)
     char *program = "wdwrite";
 
     /* here is a mem leak */
-    system(wstrappend("wdwrite ", 
-		      wstrappend(domain, smooth ? " SmoothWorkspaceBack YES"
+    system(wstrconcat("wdwrite ", 
+		      wstrconcat(domain, smooth ? " SmoothWorkspaceBack YES"
 				 : " SmoothWorkspaceBack NO")));
 
     execlp(program, program, domain, key, texture, NULL);
@@ -1161,9 +1161,9 @@ getFullPixmapPath(char *file)
 	    path = malloc(bsize);
 	}
 
-	tmp = wstrappend(path, "/");
+	tmp = wstrconcat(path, "/");
 	wfree(path);
-	path = wstrappend(tmp, file);
+	path = wstrconcat(tmp, file);
 	wfree(tmp);
 
 	return path;

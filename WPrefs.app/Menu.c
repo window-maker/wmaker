@@ -1092,27 +1092,27 @@ updateFrameTitle(_Panel *panel, char *title, InfoType type)
 
 	switch (type) {
 	 case ExecInfo:
-	    tmp = wstrappend(title, _(": Execute Program"));
+	    tmp = wstrconcat(title, _(": Execute Program"));
 	    break;
 
 	 case CommandInfo:
-	    tmp = wstrappend(title, _(": Perform Internal Command"));
+	    tmp = wstrconcat(title, _(": Perform Internal Command"));
 	    break;
 
 	 case ExternalInfo:
-	    tmp = wstrappend(title, _(": Open a Submenu"));
+	    tmp = wstrconcat(title, _(": Open a Submenu"));
 	    break;
 
 	 case PipeInfo:
-	    tmp = wstrappend(title, _(": Program Generated Submenu"));
+	    tmp = wstrconcat(title, _(": Program Generated Submenu"));
 	    break;
 
 	 case DirectoryInfo:
-	    tmp = wstrappend(title, _(": Directory Contents Menu"));
+	    tmp = wstrconcat(title, _(": Directory Contents Menu"));
 	    break;
 
 	 case WSMenuInfo:
-	    tmp = wstrappend(title, _(": Open Workspaces Submenu"));
+	    tmp = wstrconcat(title, _(": Open Workspaces Submenu"));
 	    break;
 
 	 default:
@@ -1669,7 +1669,7 @@ processData(char *title, ItemData *data)
 	
      case PipeInfo:
 	PLAppendArrayElement(item, pomenu);
-	s1 = wstrappend("| ", data->param.pipe.command);
+	s1 = wstrconcat("| ", data->param.pipe.command);
 	PLAppendArrayElement(item, PLMakeString(s1));
 	wfree(s1);
 	break;

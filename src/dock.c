@@ -273,7 +273,7 @@ killCallback(WMenu *menu, WMenuEntry *entry)
 	tapplist = tapplist->next;
     }
 #else
-    buffer = wstrappend(icon->wm_class,
+    buffer = wstrconcat(icon->wm_class,
 			_(" will be forcibly closed.\n"
 			  "Any unsaved changes will be lost.\n"
 			  "Please confirm."));

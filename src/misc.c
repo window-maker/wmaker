@@ -1029,7 +1029,7 @@ appendrealloc(char *a, char *b)
     if (a == NULL)
 	return wstrdup(b);
     else {
-	char *c = wstrappend(a, b);
+	char *c = wstrconcat(a, b);
 	wfree(a);
 	return c;
     }
@@ -1093,7 +1093,7 @@ GetShortcutString(char *text)
 /*    ksym = XStringToKeysym(text);
     tmp = keysymToString(ksym, modmask);
     puts(tmp);
-    buffer = wstrappend(buffer, tmp);
+    buffer = wstrconcat(buffer, tmp);
 */
     wfree(tmp);
 

@@ -761,7 +761,7 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
     {
 	char *command;
 
-	command = wstrappend(path, " --version");
+	command = wstrconcat(path, " --version");
 	file = popen(command, "r");
 	wfree(command);
     }
@@ -802,7 +802,7 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
     {
 	char *command;
 	
-	command = wstrappend(path, " --global_defaults_path");
+	command = wstrconcat(path, " --global_defaults_path");
 	file = popen(command, "r");
 	wfree(command);
     }

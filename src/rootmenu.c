@@ -806,7 +806,7 @@ addMenuEntry(WMenu *menu, char *title, char *shortcut, char *command,
 		     file_name, command);
 	else {
 	    entry = wMenuAddCallback(menu, title, execCommand, 
-				     wstrappend("exec ", params));
+				     wstrconcat("exec ", params));
 	    entry->free_cdata = free;
 	    shortcutOk = True;
 	}

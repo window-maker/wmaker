@@ -236,7 +236,7 @@ void *wretain(void *ptr);
 
 char *wstrdup(char *str);
 
-char *wstrappend(char *dst, char *src);
+char *wstrconcat(char *dst, char *src);
 
 
 

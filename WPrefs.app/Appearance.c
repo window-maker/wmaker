@@ -933,7 +933,7 @@ makeFileName(char *prefix)
 
 	wfree(fname);
 	sprintf(buf, "%08lx.cache", time(NULL));
-	fname = wstrappend(prefix, buf);
+	fname = wstrconcat(prefix, buf);
     }
 
     return fname;
@@ -1695,7 +1695,7 @@ createPanel(Panel *p)
     char *tmp;
     Bool ok = True;
     
-    panel->fprefix = wstrappend(wusergnusteppath(), "/.AppInfo");
+    panel->fprefix = wstrconcat(wusergnusteppath(), "/.AppInfo");
 
     if (access(panel->fprefix, F_OK)!=0) {
 	if (mkdir(panel->fprefix, 0755) < 0) {
@@ -1704,7 +1704,7 @@ createPanel(Panel *p)
 	}
     }
     if (ok) {
-	tmp = wstrappend(panel->fprefix, "/WPrefs/");
+	tmp = wstrconcat(panel->fprefix, "/WPrefs/");
 	wfree(panel->fprefix);
 	panel->fprefix = tmp;
 	if (access(panel->fprefix, F_OK)!=0) {

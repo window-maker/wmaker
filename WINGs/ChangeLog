@@ -43,6 +43,10 @@ changes since wmaker 0.62.1:
 - added WMScrollerDidScrollNotification to scroller
 - added WMGetScrollViewVisibleRect()
 - fixed a mem leak in the browser code.
+- renamed wstrappend() to wstrconcat(). Be sure to rename all occurences of
+  wstrappend() in your own code with wstrconcat(), else weird things may
+  happen, because a new wstrappend() with different semantics is to be
+  implemented!
 
 
 changes since wmaker 0.62.0:

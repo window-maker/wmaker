@@ -249,7 +249,7 @@ shellCommandHandler(pid_t pid, unsigned char status, _tuple *data)
     if (status == 127) {
 	char *buffer;
 
-	buffer = wstrappend(_("Could not execute command: "), data->command);
+	buffer = wstrconcat(_("Could not execute command: "), data->command);
 
 	wMessageDialog(data->scr, _("Error"), buffer, _("OK"), NULL, NULL);
 	wfree(buffer);
@@ -464,7 +464,7 @@ static void
 execInitScript()
 {
     char *file;
-    char *paths = wstrappend(wusergnusteppath(), ":"DEF_CONFIG_PATHS);
+    char *paths = wstrconcat(wusergnusteppath(), ":"DEF_CONFIG_PATHS);
 
     file = wfindfile(paths, DEF_INIT_SCRIPT);
     wfree(paths);
@@ -489,7 +489,7 @@ void
 ExecExitScript()
 {
     char *file;
-    char *paths = wstrappend(wusergnusteppath(), ":"DEF_CONFIG_PATHS);
+    char *paths = wstrconcat(wusergnusteppath(), ":"DEF_CONFIG_PATHS);
 
     file = wfindfile(paths, DEF_EXIT_SCRIPT);
     wfree(paths);
@@ -540,7 +540,7 @@ getFullPath(char *path)
 	
 
     } else {
-	return wstrappend(path);
+	return wstrconcat(path);
     }
 
     return tmp;
@@ -562,7 +562,7 @@ main(int argc, char **argv)
 
     /* for telling WPrefs what's the name of the wmaker binary being ran */
 
-    str = wstrappend("WMAKER_BIN_NAME=", argv[0]);
+    str = wstrconcat("WMAKER_BIN_NAME=", argv[0]);
     putenv(str);
 
     ArgCount = argc;

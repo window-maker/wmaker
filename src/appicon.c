@@ -575,7 +575,7 @@ killCallback(WMenu *menu, WMenuEntry *entry)
 
     assert(entry->clientdata!=NULL);
 
-    buffer = wstrappend(wapp->app_icon ? wapp->app_icon->wm_class : NULL,
+    buffer = wstrconcat(wapp->app_icon ? wapp->app_icon->wm_class : NULL,
 			_(" will be forcibly closed.\n"
 			  "Any unsaved changes will be lost.\n"
 			  "Please confirm."));

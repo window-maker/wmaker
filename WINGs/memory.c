@@ -228,7 +228,7 @@ wstrdup(char *str)
 
 
 char*
-wstrappend(char *dst, char *src)
+wstrconcat(char *dst, char *src)
 {
     char *str;
     

@@ -421,7 +421,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     panel->mode = WMWheelModeColorPanel;
     panel->lastChanged = 0;
     panel->slidersmode = WMRGBModeColorPanel;
-    panel->configurationPath = wstrappend(wusergnusteppath(), 
+    panel->configurationPath = wstrconcat(wusergnusteppath(), 
 					  "/Library/Colors/");
     
     /* Some General Purpose Widgets */
@@ -1249,7 +1249,7 @@ readConfiguration(W_ColorPanel *panel)
     
     while ((dp = readdir(dPtr)) != NULL) {
 	unsigned int 	perm_mask;
-	char		*path = wstrappend(panel->configurationPath,
+	char		*path = wstrconcat(panel->configurationPath,
 		dp->d_name);
 	
 	if (dp->d_name[0] != '.') {
@@ -3163,7 +3163,7 @@ customPaletteMenuNewFromFile(W_ColorPanel *panel)
 	filename = wstrdup(filepath + i);
 	
 	/* Check for duplicate files, and rename it if there are any */
-	tmp = wstrappend(panel->configurationPath, filename);
+	tmp = wstrconcat(panel->configurationPath, filename);
 	while (access (tmp, F_OK) == 0) {
 	    char	*newName;
 	    
@@ -3173,7 +3173,7 @@ customPaletteMenuNewFromFile(W_ColorPanel *panel)
 	    wfree(filename);
 	    filename = newName;
 	    
-	    tmp = wstrappend(panel->configurationPath, filename);
+	    tmp = wstrconcat(panel->configurationPath, filename);
 	}
 	wfree(tmp);
 	
@@ -3183,7 +3183,7 @@ customPaletteMenuNewFromFile(W_ColorPanel *panel)
 	    
 	    /* filepath is a "local" path now the file has been copied */
 	    wfree(filepath);
-	    filepath = wstrappend(panel->configurationPath, filename);
+	    filepath = wstrconcat(panel->configurationPath, filename);
 	    
 	    /* load the image & add menu entries */
 	    tmpImg = RLoadImage(scr->rcontext, filepath, 0);
@@ -3202,7 +3202,7 @@ customPaletteMenuNewFromFile(W_ColorPanel *panel)
 					     panel->currentPalette);
 	    }
 	} else {
-	    tmp = wstrappend(panel->configurationPath, filename);
+	    tmp = wstrconcat(panel->configurationPath, filename);
 	    
 	    i = remove(tmp);	/* Delete the file, it doesn't belong here */			
 	    WMRunAlertPanel(scr, panel->win, "File Error", 
@@ -3249,8 +3249,8 @@ customPaletteMenuRename(W_ColorPanel *panel)
 	}
 	
 	/* For normal people */
-	fromPath = wstrappend(panel->configurationPath, fromName);
-	toPath   = wstrappend(panel->configurationPath, toName);
+	fromPath = wstrconcat(panel->configurationPath, fromName);
+	toPath   = wstrconcat(panel->configurationPath, toName);
 	
 	if (access (toPath, F_OK) == 0)	{	
 	    /* Careful, this palette exists already */
@@ -3313,9 +3313,9 @@ customPaletteMenuRemove(W_ColorPanel *panel)
     
     item = WMGetPopUpButtonSelectedItem(panel->customPaletteHistoryBtn);
     
-    tmp = wstrappend( "This will permanently remove the palette ", 
+    tmp = wstrconcat( "This will permanently remove the palette ", 
 		     WMGetPopUpButtonItem(panel->customPaletteHistoryBtn, item ));
-    text = wstrappend( tmp, 
+    text = wstrconcat( tmp, 
 	    ".\n\nAre you sure you want to remove this palette ?");
     wfree(tmp);
     
@@ -3326,7 +3326,7 @@ customPaletteMenuRemove(W_ColorPanel *panel)
     
     if (choice == 0) {
 	
-	tmp = wstrappend(panel->configurationPath, 
+	tmp = wstrconcat(panel->configurationPath, 
 			 WMGetPopUpButtonItem(panel->customPaletteHistoryBtn, item ));
 	
 	if ( remove(tmp) == 0) { 
@@ -3372,7 +3372,7 @@ customPaletteHistoryCallback(WMWidget *w, void *data)
 		False );
     } else {
 	/* Load file from configpath */
-	filename = wstrappend( panel->configurationPath, 
+	filename = wstrconcat( panel->configurationPath, 
 			      WMGetPopUpButtonItem(panel->customPaletteHistoryBtn, item) );
 	
 	/* If the file corresponding to the item does not exist,
@@ -3650,7 +3650,7 @@ fetchFile(char *toPath, char *srcFile, char *destFile)
 	return -1;
     }
     
-    tmp = wstrappend(toPath, destFile);
+    tmp = wstrconcat(toPath, destFile);
     if ((dest = open( tmp, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) 
 	== 0) {
 	wsyserror("Could not create %s", tmp);
@@ -3688,7 +3688,7 @@ generateNewFilename(char *curName)
     ptr = curName;	
     
     if (((ptr = strrchr(ptr, '{'))==0) || sscanf(ptr, "{%i}%c", &n, &c)!=1)
-	return wstrappend(curName, " {1}");
+	return wstrconcat(curName, " {1}");
     
     baseLen = ptr - curName -1;
     

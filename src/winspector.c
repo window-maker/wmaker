@@ -1266,8 +1266,8 @@ createInspectorForWindow(WWindow *wwin, int xpos, int ypos,
     if (wwin->wm_class && wwin->wm_instance) {
 	char *str, *tmp;
 
-        tmp = wstrappend(wwin->wm_instance, ".");
-        str = wstrappend(tmp, wwin->wm_class);
+        tmp = wstrconcat(wwin->wm_instance, ".");
+        str = wstrconcat(tmp, wwin->wm_class);
 
 	panel->bothRb = WMCreateRadioButton(panel->specFrm);
 	WMMoveWidget(panel->bothRb, 10, 18);

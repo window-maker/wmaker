@@ -1699,7 +1699,7 @@ connectKFM(WScreen *scr)
     int sock = 0;
     struct sockaddr_un addr;
 
-    path = wstrappend(wgethomedir(), "/.kde/share/apps/kfm/pid");
+    path = wstrconcat(wgethomedir(), "/.kde/share/apps/kfm/pid");
     strcpy(buffer, getenv("DISPLAY"));
 
     ptr = strchr(buffer, ':');
@@ -1716,7 +1716,7 @@ connectKFM(WScreen *scr)
 	strcat(buffer, b);
     }
     ptr = path;
-    path = wstrappend(ptr, buffer);
+    path = wstrconcat(ptr, buffer);
     wfree(ptr);
 
     /* pid file */
@@ -1749,7 +1749,7 @@ connectKFM(WScreen *scr)
 	return -1;
     }
 
-    path = wstrappend(wgethomedir(), "/.kde/share/apps/kfm/magic");
+    path = wstrconcat(wgethomedir(), "/.kde/share/apps/kfm/magic");
     f = fopen(path, "r");
     if (!f) {
 	return -1;
@@ -1761,7 +1761,7 @@ connectKFM(WScreen *scr)
     }
     puts(buffer);
 
-    ptr = wstrappend("auth", buffer);
+    ptr = wstrconcat("auth", buffer);
 
     writeSocket(sock, ptr);
     wfree(ptr);
