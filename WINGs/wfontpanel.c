@@ -647,7 +647,7 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
 	    *fontList[i] = '\0';
 	    continue;
 	}
-	addFontToFamily(families, (char**)fields);
+	addFontToFamily(families, fields);
     }
 }
 

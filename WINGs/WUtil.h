@@ -258,7 +258,7 @@ int WMCountInBag(WMBag *bag, void *item);
  * > 0 if a > b
  * = 0 if a = b
  */
-void WMSortBag(WMBag *bag, int (*comparer)(void*,void*));
+void WMSortBag(WMBag *bag, int (*comparer)(const void*, const void*));
 
 void WMEmptyBag(WMBag *bag);
     

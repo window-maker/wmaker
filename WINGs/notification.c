@@ -440,7 +440,7 @@ WMDequeueNotificationMatching(WMNotificationQueue *queue,
 	for (i = 0; i < WMGetBagItemCount(queue->asapQueue); i++) {
 	    tmp = WMGetFromBag(queue->asapQueue, i);
 
-	    if (strcmp(notification->name, tmp) == 0) {
+	    if (strcmp(notification->name, tmp->name) == 0) {
 		WMRemoveFromBag(queue->asapQueue, tmp);
 		WMReleaseNotification(tmp);
 		break;
@@ -449,7 +449,7 @@ WMDequeueNotificationMatching(WMNotificationQueue *queue,
 	for (i = 0; i < WMGetBagItemCount(queue->idleQueue); i++) {
 	    tmp = WMGetFromBag(queue->idleQueue, i);
 
-	    if (strcmp(notification->name, tmp) == 0) {
+	    if (strcmp(notification->name, tmp->name) == 0) {
 		WMRemoveFromBag(queue->idleQueue, tmp);
 		WMReleaseNotification(tmp);
 		break;

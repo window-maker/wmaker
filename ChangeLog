@@ -42,6 +42,7 @@ Changes since version 0.60.0:
 - fixed crash with Assertion "bad_root_window" && 0' failed. on startup
 - fixed crash when more than 1 dockapp fails to launch on startup
 - added a different dock setup config for each screen size
+- fixed PPosition handling
 
 
 Changes since version 0.53.0:

@@ -311,12 +311,12 @@ setSizeHints(WMWindow *win)
     hints->flags = 0;
 
     if (win->flags.upos_set) {
-	hints->flags |= USPosition;
+	hints->flags |= USPosition;  /* shouldn't be PPosition ? --Dan */
 	hints->x = win->upos.x;
 	hints->y = win->upos.y;
     }
     if (win->usize.width>0 && win->usize.height>0) {
-	hints->flags |= USSize;
+	hints->flags |= USSize;      /* shouldn't be PSize ? --Dan */
 	hints->width = win->usize.width;
 	hints->height = win->usize.height;
     }

@@ -188,7 +188,7 @@ DIST_COMMON =  README Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP_ENV = --best
 SOURCES = $(wxcopy_SOURCES) $(wxpaste_SOURCES) $(wdwrite_SOURCES) $(getstyle_SOURCES) $(setstyle_SOURCES) $(seticons_SOURCES) $(geticonset_SOURCES) $(wmsetbg_SOURCES)
 OBJECTS = $(wxcopy_OBJECTS) $(wxpaste_OBJECTS) $(wdwrite_OBJECTS) $(getstyle_OBJECTS) $(setstyle_OBJECTS) $(seticons_OBJECTS) $(geticonset_OBJECTS) $(wmsetbg_OBJECTS)

@@ -157,7 +157,7 @@ WMCountInBag(WMBag *bag, void *item)
 
 
 void
-WMSortBag(WMBag *bag, int (*comparer)(void*, void*))
+WMSortBag(WMBag *bag, int (*comparer)(const void*, const void*))
 {
     qsort(bag->items, bag->count, sizeof(void*), comparer);
 }

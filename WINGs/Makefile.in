@@ -131,7 +131,7 @@ testcolorpanel_LDADD = libWINGs.a $(LIBLIST)
 
 testnot_SOURCES = testnot.c
 
-testnot_LDADD = libWINGs.a $(LIBLIST)
+testnot_LDADD = libWUtil.a @LIBPL@
 
 wmquery_SOURCES = wmquery.c 
 
@@ -197,7 +197,7 @@ testcolorpanel_DEPENDENCIES =  libWINGs.a \
 $(top_builddir)/wrlib/libwraster.la
 testcolorpanel_LDFLAGS = 
 testnot_OBJECTS =  testnot.o
-testnot_DEPENDENCIES =  libWINGs.a $(top_builddir)/wrlib/libwraster.la
+testnot_DEPENDENCIES =  libWUtil.a
 testnot_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -211,7 +211,7 @@ DIST_COMMON =  README ChangeLog Makefile.am Makefile.in TODO
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP_ENV = --best
 SOURCES = $(libWINGs_a_SOURCES) $(libWUtil_a_SOURCES) $(wtest_SOURCES) $(wmquery_SOURCES) $(wmfile_SOURCES) $(fontl_SOURCES) $(testmywidget_SOURCES) $(testcolorpanel_SOURCES) $(testnot_SOURCES)
 OBJECTS = $(libWINGs_a_OBJECTS) $(libWUtil_a_OBJECTS) $(wtest_OBJECTS) $(wmquery_OBJECTS) $(wmfile_OBJECTS) $(fontl_OBJECTS) $(testmywidget_OBJECTS) $(testcolorpanel_OBJECTS) $(testnot_OBJECTS)
