@@ -15,7 +15,7 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.62.1)
+AM_INIT_AUTOMAKE(WindowMaker, 0.62.2)
 
 AM_PROG_LIBTOOL
 

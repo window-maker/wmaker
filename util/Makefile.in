@@ -60,7 +60,6 @@ host_triplet = @host@
 AS = @AS@
 CC = @CC@
 CPP_PATH = @CPP_PATH@
-DFLAGS = @DFLAGS@
 DLLIBS = @DLLIBS@
 DLLTOOL = @DLLTOOL@
 GFXLIBS = @GFXLIBS@

@@ -831,12 +831,6 @@ WDefaultEntry optionList[] = {
     },
     {"ArrowCursor", "(builtin, top_left_arrow)",	(void*)WCUR_ARROW,
           NULL,				getCursor,	setCursor
-    },
-    {"QuestionCursor", "(builtin, question_arrow)",	(void*)WCUR_QUESTION,
-          NULL,				getCursor,	setCursor
-    },
-    {"TextCursor", "(builtin, xterm)",		(void*)WCUR_TEXT,
-          NULL,				getCursor,	setCursor
     }
 #endif
 #endif /* DEFINABLE_CURSOR */

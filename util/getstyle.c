@@ -2,7 +2,7 @@
  *
  *  WindowMaker window manager
  * 
- *  Copyright (c) 1997, 1998 Alfredo K. Kojima
+ *  Copyright (c) 1997~2000 Alfredo K. Kojima
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
  */
 
 
-#define PROG_VERSION "getstyle (Window Maker) 0.4"
+#define PROG_VERSION "getstyle (Window Maker) 0.5"
 
 
 
@@ -71,6 +71,10 @@ static char *options[] = {
     "IconTitleColor",
     "IconTitleBack",
     "MenuStyle",
+    "WindowTitleExtendSpace",
+    "MenuTitleExtendSpace",
+    "MenuTextExtendSpace",
+    "NormalCursor",
     NULL
 };
 
@@ -473,13 +477,16 @@ makeThemePack(proplist_t style, char *themeName)
 
 	    type = PLGetArrayElement(value, 0);
 	    t = PLGetString(type);
-	    if (t && (strcasecmp(t, "tpixmap")==0
-		      || strcasecmp(t, "spixmap")==0
-		      || strcasecmp(t, "cpixmap")==0
-		      || strcasecmp(t, "mpixmap")==0
-		      || strcasecmp(t, "tdgradient")==0
-		      || strcasecmp(t, "tvgradient")==0
-		      || strcasecmp(t, "thgradient")==0)) {
+	    if (t == NULL)
+		continue;
+	    
+	    if (strcasecmp(t, "tpixmap")==0
+		|| strcasecmp(t, "spixmap")==0
+		|| strcasecmp(t, "cpixmap")==0
+		|| strcasecmp(t, "mpixmap")==0
+		|| strcasecmp(t, "tdgradient")==0
+		|| strcasecmp(t, "tvgradient")==0
+		|| strcasecmp(t, "thgradient")==0) {
 		proplist_t file;
 		char *p;
 		char *newPath;
@@ -493,6 +500,39 @@ makeThemePack(proplist_t style, char *themeName)
 		    newPath = wstrdup(p+1);
 		    PLRemoveArrayElement(value, 1);
 		    PLInsertArrayElement(value, PLMakeString(newPath), 1);
+		    free(newPath);
+		} else {
+		    findCopyFile(themeDir, PLGetString(file));
+		}
+	    } else if (strcasecmp(t, "bitmap")==0) {
+		proplist_t file;
+		char *p;
+		char *newPath;
+
+		file = PLGetArrayElement(value, 1);
+
+		p = strrchr(PLGetString(file), '/');
+		if (p) {
+		    copyFile(themeDir, PLGetString(file));
+
+		    newPath = wstrdup(p+1);
+		    PLRemoveArrayElement(value, 1);
+		    PLInsertArrayElement(value, PLMakeString(newPath), 1);
+		    free(newPath);
+		} else {
+		    findCopyFile(themeDir, PLGetString(file));
+		}
+		
+		
+		file = PLGetArrayElement(value, 2);
+
+		p = strrchr(PLGetString(file), '/');
+		if (p) {
+		    copyFile(themeDir, PLGetString(file));
+
+		    newPath = wstrdup(p+1);
+		    PLRemoveArrayElement(value, 2);
+		    PLInsertArrayElement(value, PLMakeString(newPath), 2);
 		    free(newPath);
 		} else {
 		    findCopyFile(themeDir, PLGetString(file));

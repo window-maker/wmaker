@@ -11,6 +11,7 @@ Changes since version 0.62.0:
 - fixed user-whining-windoze-cycling bug
 - added option for f'n windoze cycling..
 - added --create-stdcmap and made std colormap creation off by default
+- updated get/setstyle to account for new options
 
 Changes since version 0.61.1:
 .............................

@@ -2,7 +2,7 @@
  *
  *  WindowMaker window manager
  * 
- *  Copyright (c) 1997, 1998, 1999 Alfredo K. Kojima
+ *  Copyright (c) 1997~2000 Alfredo K. Kojima
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
  */
 
 
-#define PROG_VERSION "setstyle (Window Maker) 0.5"
+#define PROG_VERSION "setstyle (Window Maker) 0.6"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -104,13 +104,15 @@ hackPathInTexture(proplist_t texture, char *prefix)
     /* get texture type */
     type = PLGetArrayElement(texture, 0);
     t = PLGetString(type);
-    if (t && (strcasecmp(t, "tpixmap")==0
-	      || strcasecmp(t, "spixmap")==0
-	      || strcasecmp(t, "mpixmap")==0
-	      || strcasecmp(t, "cpixmap")==0
-	      || strcasecmp(t, "tvgradient")==0
-	      || strcasecmp(t, "thgradient")==0		
-	      || strcasecmp(t, "tdgradient")==0)) {
+    if (t == NULL)
+	return;
+    if (strcasecmp(t, "tpixmap")==0
+	|| strcasecmp(t, "spixmap")==0
+	|| strcasecmp(t, "mpixmap")==0
+	|| strcasecmp(t, "cpixmap")==0
+	|| strcasecmp(t, "tvgradient")==0
+	|| strcasecmp(t, "thgradient")==0		
+	|| strcasecmp(t, "tdgradient")==0) {
 	proplist_t file;
 	char buffer[4018];
 
@@ -120,6 +122,23 @@ hackPathInTexture(proplist_t texture, char *prefix)
 	/* replace path with full path */
 	PLRemoveArrayElement(texture, 1);
 	PLInsertArrayElement(texture, PLMakeString(buffer), 1);
+    } else if (strcasecmp(t, "bitmap") == 0) {
+	proplist_t file;
+	char buffer[4018];
+
+	/* get bitmap file path */
+	file = PLGetArrayElement(texture, 1);
+	sprintf(buffer, "%s/%s", prefix, PLGetString(file));
+	/* replace path with full path */
+	PLRemoveArrayElement(texture, 1);
+	PLInsertArrayElement(texture, PLMakeString(buffer), 1);
+	
+	/* get mask file path */
+	file = PLGetArrayElement(texture, 2);
+	sprintf(buffer, "%s/%s", prefix, PLGetString(file));
+	/* replace path with full path */
+	PLRemoveArrayElement(texture, 2);
+	PLInsertArrayElement(texture, PLMakeString(buffer), 2);
     }
 }
 
