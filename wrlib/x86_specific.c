@@ -55,12 +55,16 @@ x86_check_mmx()
 	 "cpuid			\n"
 	 "test $(1<<23), %%edx	\n"
 	 "jz .NotMMX		\n"
-	 "movl $1, %0		\n"
+
+         "popal			\n" // this is needed because the address of
+         "movl $1, %0		\n" // variable %0 may be kept in a register
+         "jmp .noPop		\n"
 
 	 ".NotMMX:		\n"
 	 ".Bye:			\n"
 	 ".NotPentium:		\n"
          "popal			\n"
+         ".noPop:		\n"
 
 	 : "=rm" (result));
 
