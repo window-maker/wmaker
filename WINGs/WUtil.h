@@ -2,14 +2,13 @@
 #define _WUTIL_H_
 
 #include <X11/Xlib.h>
-
+#include <limits.h>
 #include <sys/types.h>
 
 /* SunOS 4.x Blargh.... */
 #ifndef NULL
 #define NULL ((void*)0)
 #endif
-
 
 /*
  * Warning: proplist.h #defines BOOL which will clash with the
@@ -102,6 +101,12 @@ typedef enum {
 } WMConnectionState;
 
 
+
+enum {
+    WBNotFound = INT_MAX /* element was not found in bag */
+};
+
+
 typedef struct W_Bag WMBag;
 typedef struct W_Data WMData;
 typedef struct W_HashTable WMHashTable;
@@ -139,6 +144,8 @@ typedef struct {
     void	(*releaseKey)(const void *);    
 } WMHashTableCallbacks;
 
+    
+typedef void *WMBagIterator;
 
 typedef struct W_BagFunctions {
     int (*getItemCount)(WMBag *self);
@@ -151,15 +158,17 @@ typedef struct W_BagFunctions {
     int (*firstInBag)(WMBag *bag, void *item);
     int (*countInBag)(WMBag *bag, void *item);
     void *(*replaceInBag)(WMBag *bag, int index, void *item);
-    void (*sortBag)(WMBag *bag, int (*comparer)(const void*, const void*));
+    int (*sortBag)(WMBag *bag, int (*comparer)(const void*, const void*));
     void (*emptyBag)(WMBag *bag);
     void (*freeBag)(WMBag *bag);
-    WMBag *(*mapBag)(WMBag *bag, void * (*function)(void*));
+    void (*mapBag)(WMBag *bag, void (*function)(void*, void*), void *data);
     int (*findInBag)(WMBag *bag, int (*match)(void*));
-    void *(*first)(WMBag *bag, void **ptr);
-    void *(*last)(WMBag *bag, void **ptr);
-    void *(*next)(WMBag *bag, void **ptr);
-    void *(*previous)(WMBag *bag, void **ptr);
+    void *(*first)(WMBag *bag, WMBagIterator *ptr);
+    void *(*last)(WMBag *bag, WMBagIterator *ptr);
+    void *(*next)(WMBag *bag, WMBagIterator *ptr);
+    void *(*previous)(WMBag *bag, WMBagIterator *ptr);
+    void *(*iteratorAtIndex)(WMBag *bag, int index, WMBagIterator *ptr);
+    int (*indexForIterator)(WMBag *bag, WMBagIterator ptr);
 } W_BagFunctions;
 
     
@@ -305,14 +314,44 @@ extern const WMHashTableCallbacks WMStringPointerHashCallbacks;
 /*......................................................................*/
 
 
-WMBag* WMCreateArrayBag(int size);
-WMBag* WMCreateArrayBagWithDestructor(int size, void (*destructor)(void*));
+/*
+ * Array bags use an array to store the elements.
+ * Item indexes may be any integer number.
+ * 
+ * Pros:
+ * Fast [O(1)] access to elements
+ * Fast [O(1)] push/pop
+ * 
+ * Cons:
+ * A little slower [O(n)] for insertion/deletion of elements that 
+ * 	arent in the end
+ * Element indexes with large difference will cause large holes
+ */
+#if 0
+WMBag* WMCreateArrayBag(int initialSize);
+WMBag* WMCreateArrayBagWithDestructor(int initialSize, 
+				      void (*destructor)(void*));
+#endif
+/*
+ * Tree bags use a red-black tree for storage.
+ * Item indexes may be any integer number.
+ * 
+ * Pros:
+ * O(lg n) insertion/deletion/search
+ * Good for large numbers of elements with sparse indexes
+ * 
+ * Cons:
+ * O(lg n) insertion/deletion/search
+ * Slow for storing small numbers of elements
+ */
+WMBag *WMCreateTreeBag(void);
+WMBag *WMCreateTreeBagWithDestructor(void (*destructor)(void*));
 
-
-WMBag *WMCreateListBag(void);
-WMBag *WMCreateListBagWithDestructor(void (*destructor)(void*));
-
-#define WMCreateBag(size) WMCreateArrayBag(size)
+    
+#define WMCreateArrayBag(a) WMCreateTreeBag()
+#define WMCreateArrayBagWithDestructor(a,d) WMCreateTreeBagWithDestructor(d)
+    
+#define WMCreateBag(size) WMCreateTreeBag()
 
 #define WMGetBagItemCount(bag) bag->func.getItemCount(bag)
 
@@ -321,7 +360,8 @@ WMBag *WMCreateListBagWithDestructor(void (*destructor)(void*));
 #define WMPutInBag(bag, item) bag->func.putInBag(bag, item)
 
 #define WMInsertInBag(bag, index, item) bag->func.insertInBag(bag, index, item)
-    
+
+/* this is slow */
 #define WMRemoveFromBag(bag, item) bag->func.removeFromBag(bag, item)
 
 #define WMDeleteFromBag(bag, index) bag->func.deleteFromBag(bag, index)
@@ -331,6 +371,7 @@ WMBag *WMCreateListBagWithDestructor(void (*destructor)(void*));
 #define WMCountInBag(bag, item) bag->func.countInBag(bag, item)
 
 #define WMReplaceInBag(bag, index, item) bag->func.replaceInBag(bag, index, item)
+#define WMSetInBag(bag, index, item) bag->func.replaceInBag(bag, index, item)
 
 /* comparer must return:
  * < 0 if a < b
@@ -342,8 +383,8 @@ WMBag *WMCreateListBagWithDestructor(void (*destructor)(void*));
 #define WMEmptyBag(bag) bag->func.emptyBag(bag)
     
 #define WMFreeBag(bag) bag->func.freeBag(bag)
-    
-#define WMMapBag(bag, function) bag->func.mapBag(bag, function)
+
+#define WMMapBag(bag, function, cdata) bag->func.mapBag(bag, function, cdata)
 
 #define WMGetFirstInBag(bag, item) bag->func.firstInBag(bag, item)
     
@@ -358,6 +399,10 @@ WMBag *WMCreateListBagWithDestructor(void (*destructor)(void*));
 #define WMBagNext(bag, ptr) bag->func.next(bag, ptr)
     
 #define WMBagPrevious(bag, ptr) bag->func.previous(bag, ptr)
+
+#define WMBagIteratorAtIndex(bag, index, ptr) bag->func.iteratorAtIndex(bag, index, ptr)
+
+#define WMBagIndexForIterator(bag, ptr) bag->func.indexForIterator(bag, ptr)
 
     
 /*-------------------------------------------------------------------------*/

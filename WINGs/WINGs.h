@@ -474,6 +474,31 @@ typedef struct WMTabViewDelegate {
 
 
 
+typedef struct W_DraggingInfo WMDraggingInfo;
+
+
+typedef struct W_DragSourceProcs {
+    unsigned (*draggingSourceOperation)(WMView *self, Bool local);
+    void (*beganDragImage)(WMView *self, WMPixmap *image, WMPoint point);
+    void (*endedDragImage)(WMView *self, WMPixmap *image, WMPoint point,
+			   Bool deposited);
+    WMData* (*fetchDragData)(WMView *self, char *type, Bool local);
+/*    Bool (*ignoreModifierKeysWhileDragging)(WMView *view);*/
+} WMDragSourceProcs;
+
+
+
+typedef struct W_DragDestinationProcs {
+    unsigned (*draggingEntered)(WMView *self, WMDraggingInfo *info);
+    unsigned (*draggingUpdated)(WMView *self, WMDraggingInfo *info);
+    void (*draggingExited)(WMView *self, WMDraggingInfo *info);
+    Bool (*prepareForDragOperation)(WMView *self, WMDraggingInfo *info);
+    Bool (*performDragOperation)(WMView *self, WMDraggingInfo *info);
+    void (*concludeDragOperation)(WMView *self, WMDraggingInfo *info);
+} WMDragDestinationProcs;
+
+
+
 /* ...................................................................... */
 
 
@@ -726,6 +751,8 @@ void WMSetViewNotifySizeChanges(WMView *view, Bool flag);
 WMSize WMGetViewSize(WMView *view);
 
 WMPoint WMGetViewPosition(WMView *view);
+
+WMPoint WMGetViewScreenPosition(WMView *view);
 
 WMWidget *WMWidgetOfView(WMView *view);
 

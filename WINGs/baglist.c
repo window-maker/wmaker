@@ -12,6 +12,7 @@ typedef struct W_Item {
     struct W_Item *next;
     struct W_Item *prev;
     void *data;
+    int index;
 } W_Item;
 
 
@@ -20,9 +21,6 @@ typedef struct W_ListBag {
     W_Item *last;
     int count;
 } W_ListBag;
-
-
-
 
 
 
@@ -39,12 +37,15 @@ static void *replaceInBag(WMBag *bag, int index, void *item);
 static void sortBag(WMBag *bag, int (*comparer)(const void*, const void*));
 static void emptyBag(WMBag *bag);
 static void freeBag(WMBag *bag);
-static WMBag *mapBag(WMBag *bag, void * (*function)(void*));
+static void mapBag(WMBag *bag, void (*function)(void*, void*), void *data);
 static int findInBag(WMBag *bag, int (*match)(void*));;
-static void *first(WMBag *bag, void **ptr);
-static void *last(WMBag *bag, void **ptr);
-static void *next(WMBag *bag, void **ptr);
-static void *previous(WMBag *bag, void **ptr);
+static void *first(WMBag *bag, WMBagIterator *ptr);
+static void *last(WMBag *bag, WMBagIterator *ptr);
+static void *next(WMBag *bag, WMBagIterator *ptr);
+static void *previous(WMBag *bag, WMBagIterator *ptr);
+static void *iteratorAtIndex(WMBag *bag, int index, WMBagIterator *ptr);
+static int indexForIterator(WMBag *bag, WMBagIterator ptr);
+
 
 static W_BagFunctions bagFunctions = {
     getItemCount,
@@ -65,7 +66,9 @@ static W_BagFunctions bagFunctions = {
 	first,
 	last,
 	next,
-	previous
+	previous,
+	iteratorAtIndex,
+	indexForIterator
 };
 
 
@@ -353,14 +356,14 @@ static void freeBag(WMBag *self)
 }
 
 
-static WMBag *mapBag(WMBag *self, void * (*function)(void*))
+static WMBag *mapBag(WMBag *self, void * (*function)(void*, void*), void *data)
 {
     WMBag *bag = WMCreateListBagWithDestructor(self->destructor);
     W_Item *ptr = SELF->first;
     
     while (ptr) {
-	if ((*function)(ptr->data))
-	    putInBag(bag, ptr->data);
+	(*function)(ptr->data, data);
+
 	ptr = ptr->next;
     }
     return bag;
@@ -386,7 +389,7 @@ static int findInBag(WMBag *self, int (*match)(void*))
 
 
 
-static void *first(WMBag *self, void **ptr)
+static void *first(WMBag *self, WMBagIterator *ptr)
 {
     *ptr = SELF->first;
 
@@ -398,7 +401,7 @@ static void *first(WMBag *self, void **ptr)
 
 
 
-static void *last(WMBag *self, void **ptr)
+static void *last(WMBag *self, WMBagIterator *ptr)
 {
     *ptr = SELF->last;
     
@@ -410,7 +413,7 @@ static void *last(WMBag *self, void **ptr)
 
 
 
-static void *next(WMBag *bag, void **ptr)
+static void *next(WMBag *bag, WMBagIterator *ptr)
 {
     W_Item *item = *(W_Item**)ptr;
 
@@ -424,7 +427,7 @@ static void *next(WMBag *bag, void **ptr)
 
 
 
-static void *previous(WMBag *bag, void **ptr)
+static void *previous(WMBag *bag, WMBagIterator *ptr)
 {
     W_Item *item = *(W_Item**)ptr;
 
@@ -438,4 +441,12 @@ static void *previous(WMBag *bag, void **ptr)
 
 
 
+static void *iteratorAtIndex(WMBag *bag, int index, WMBagIterator *ptr)
+{
+}
+
+
+static int indexForIterator(WMBag *bag, WMBagIterator ptr)
+{
+}
 

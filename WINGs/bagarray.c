@@ -13,6 +13,10 @@ typedef struct W_ArrayBag {
     void **items;
     int size;
     int count;
+
+    int base;
+    int first;
+    int last;
 } W_ArrayBag;
 
 
@@ -26,15 +30,17 @@ static void*  getFromBag(WMBag *bag, int index);
 static int    firstInBag(WMBag *bag, void *item);
 static int    countInBag(WMBag *bag, void *item);
 static void*  replaceInBag(WMBag *bag, int index, void *item);
-static void   sortBag(WMBag *bag, int (*comparer)(const void*, const void*));
+static int   sortBag(WMBag *bag, int (*comparer)(const void*, const void*));
 static void   emptyBag(WMBag *bag);
 static void   freeBag(WMBag *bag);
-static WMBag* mapBag(WMBag *bag, void *(*function)(void *));
-static int findInBag(WMBag *bag, int (*match)(void*));
+static void mapBag(WMBag *bag, void (*function)(void*, void*), void *data);
+static int    findInBag(WMBag *bag, int (*match)(void*));
 static void*  first(WMBag *bag, void **ptr);
 static void*  last(WMBag *bag, void **ptr);
 static void*  next(WMBag *bag, void **ptr);
 static void*  previous(WMBag *bag, void **ptr);
+static void*  iteratorAtIndex(WMBag *bag, int index, WMBagIterator *ptr);
+static int    indexForIterator(WMBag *bag, WMBagIterator ptr);
 
 
 static W_BagFunctions arrayFunctions = {
@@ -56,21 +62,26 @@ static W_BagFunctions arrayFunctions = {
     first,
     last,
     next,
-    previous
+    previous,
+    iteratorAtIndex,
+    indexForIterator
 };
 
 
 #define ARRAY ((W_ArrayBag*)bag->data)
 
 
+#define I2O(a, i) ((a)->base + i)
+
+
 WMBag*
-WMCreateArrayBagWithDestructor(int size, void (*destructor)(void*))
+WMCreateArrayBagWithDestructor(int initialSize, void (*destructor)(void*))
 {
     WMBag *bag;
     W_ArrayBag *array;
+    int size;
 
-    wassertrv(size > 0, NULL);
-
+ 
     bag = wmalloc(sizeof(WMBag));
     
     array = wmalloc(sizeof(W_ArrayBag));
@@ -80,6 +91,9 @@ WMCreateArrayBagWithDestructor(int size, void (*destructor)(void*))
     array->items = wmalloc(sizeof(void*) * size);
     array->size = size;
     array->count = 0;
+    array->first = 0;
+    array->last = 0;
+    array->base = 0;
 
     bag->func = arrayFunctions;
 
@@ -90,9 +104,9 @@ WMCreateArrayBagWithDestructor(int size, void (*destructor)(void*))
 
 
 WMBag*
-WMCreateArrayBag(int size)
+WMCreateArrayBag(int initialSize)
 {
-    return WMCreateArrayBagWithDestructor(size, NULL);
+    return WMCreateArrayBagWithDestructor(initialSize, NULL);
 }
 
 
@@ -106,20 +120,18 @@ getItemCount(WMBag *bag)
 static int
 appendBag(WMBag *bag, WMBag *appendedBag)
 {
-    W_ArrayBag *array1 = ARRAY;
-    W_ArrayBag *array2 = (W_ArrayBag*)appendedBag->data;
+    W_ArrayBag *array = (W_ArrayBag*)appendedBag->data;
+    int ok;
+    int i;
 
-    if (array1->count + array2->count >= array1->size) {
-	array1->items =
-	    wrealloc(array1->items, sizeof(void*) * (array1->size+array2->count));
-	array1->size += array2->count;
+    for (i = array->first; i <= array->last; i++) {
+	if (array->items[array->base+i]) {
+	    ok = putInBag(bag, array->items[array->base+i]);
+	    if (!ok)
+		return 0;
+	}
     }
-    
-    memcpy(array1->items + array1->count, array2->items,
-           sizeof(void*) * array2->count);
 
-    array1->count += array2->count;
-    
     return 1;
 }
 
@@ -128,7 +140,7 @@ appendBag(WMBag *bag, WMBag *appendedBag)
 static int
 putInBag(WMBag *bag, void *item)
 {
-    return insertInBag(bag, ARRAY->count, item);
+    return insertInBag(bag, ARRAY->last+1, item);
 }
 
 
@@ -138,19 +150,29 @@ insertInBag(WMBag *bag, int index, void *item)
 {
     W_ArrayBag *array = ARRAY;
     
-    if (array->count == array->size) {
-	array->size += 16;
+    if (I2O(array, index) >= array->size) {
+	array->size = WMAX(array->size + 16, I2O(array, index));
 	array->items = wrealloc(array->items, sizeof(void*) * array->size);
+	memset(array->items + I2O(array, array->last), 0,
+	       sizeof(void*) * (array->size - I2O(array, array->last)));
     }
-
-    if (index >= 0 && index < array->count) {
-        memmove(&array->items[index+1], &array->items[index],
-                (array->count - index) * sizeof(void*));
+    
+    if (index > array->last) {
+	array->last = index;
+    } else if (index >= array->first) {
+	memmove(array->items + I2O(array, index),
+		array->items + (I2O(array, index) + 1), sizeof(void*));
+	array->last++;
     } else {
-        /* If index is invalid, place it at end */
-        index = array->count;
+	memmove(array->items,
+		array->items + (abs(index) - array->base),
+		sizeof(void*) * (abs(index) - array->base));
+	memset(array->items, 0, sizeof(void*) * (abs(index) - array->base));
+	array->first = index;
+	array->base = abs(index);
     }
-    array->items[index] = item;
+    
+    array->items[array->base + index] = item;
     array->count++;
     
     return 1;
@@ -261,10 +283,11 @@ replaceInBag(WMBag *bag, int index, void *item)
 }
 
 
-static void
+static int
 sortBag(WMBag *bag, int (*comparer)(const void*, const void*))
 {
     qsort(ARRAY->items, ARRAY->count, sizeof(void*), comparer);
+    return 1;
 }
 
 
@@ -294,20 +317,15 @@ freeBag(WMBag *bag)
 }
 
 
-static WMBag*
-mapBag(WMBag *bag, void *(*function)(void *))
+static void
+mapBag(WMBag *bag, void (*function)(void *, void *), void *clientData)
 {
     int i;
-    void *data;
-    WMBag *new = WMCreateArrayBagWithDestructor(ARRAY->size, bag->destructor);
     
-    for (i = 0; i < ARRAY->count; i++) {
-	data = (*function)(ARRAY->items[i]);
-	if (data)
-	    putInBag(new, data);
+    for (i = 0; i < ARRAY->last; i++) {
+	if (ARRAY->items[i])
+	    (*function)(ARRAY->items[i], clientData);
     }
-    
-    return new;
 }
 
 
@@ -316,7 +334,7 @@ findInBag(WMBag *bag, int (*match)(void*))
 {
     int i;
     
-    for (i = 0; i < ARRAY->count; i++) {
+    for (i = 0; i < ARRAY->last; i++) {
 	if ((*match)(ARRAY->items[i]))
 	    return i;
     }
@@ -384,3 +402,15 @@ previous(WMBag *bag, void **ptr)
 }
 
 
+
+static void* 
+iteratorAtIndex(WMBag *bag, int index, WMBagIterator *ptr)
+{
+}
+
+
+static int
+indexForIterator(WMBag *bag, WMBagIterator ptr)
+{
+    
+}

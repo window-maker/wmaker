@@ -60,6 +60,8 @@ libWINGs_a_SOURCES = 	\
 	WINGs.h \
 	WINGsP.h \
 	configuration.c \
+	dragdestination.c \
+	dragsource.c \
 	international.c \
 	notification.c \
 	selection.c \
@@ -97,7 +99,7 @@ libWINGs_a_SOURCES = 	\
 	error.c \
 	findfile.c \
 	bagarray.c \
-	baglist.c \
+	bagtree.c \
 	connection.c \
 	data.c \
 	hashtable.c \
@@ -110,7 +112,7 @@ libWUtil_a_SOURCES = 	\
 	WINGs.h \
 	WINGsP.h \
 	bagarray.c \
-	baglist.c \
+	bagtree.c \
 	connection.c \
 	data.c \
 	host.c \

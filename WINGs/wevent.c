@@ -304,7 +304,7 @@ checkIdleHandlers()
 {
     IdleHandler *handler;
     WMBag *handlerCopy;
-    int i, n;
+    WMBagIterator iter;
 
     if (!idleHandler || WMGetBagItemCount(idleHandler)==0) {
 	W_FlushIdleNotificationQueue();
@@ -312,15 +312,14 @@ checkIdleHandlers()
         return (idleHandler!=NULL && WMGetBagItemCount(idleHandler)>0);
     }
 
-    n = WMGetBagItemCount(idleHandler);
-    handlerCopy = WMCreateBag(n);
-    for (i=0; i<n; i++)
-        WMPutInBag(handlerCopy, WMGetFromBag(idleHandler, i));
+    handlerCopy = WMCreateBag(WMGetBagItemCount(idleHandler));
+    WMAppendBag(handlerCopy, idleHandler);
 
-    for (i=0; i<n; i++) {
-        handler = WMGetFromBag(handlerCopy, i);
+    for (handler = WMBagFirst(handlerCopy, &iter);
+	 iter != NULL;
+	 handler = WMBagNext(handlerCopy, &iter)) {
         /* check if the handler still exist or was removed by a callback */
-        if (WMGetFirstInBag(idleHandler, handler)<0)
+        if (WMGetFirstInBag(idleHandler, handler) == WBNotFound)
             continue;
 
 	(*handler->callback)(handler->clientData);
@@ -586,6 +585,10 @@ WMHandleEvent(XEvent *event)
 	|| event->type == SelectionRequest) {
 	/* handle selection related events */
 	W_HandleSelectionEvent(event);
+	
+    } else if (event->type == ClientMessage) {
+	
+	//W_HandleDNDClientMessage(toplevel, &event->xclient);
     }
 
     /* if it's a key event, redispatch it to the focused control */
@@ -640,12 +643,12 @@ WMHandleEvent(XEvent *event)
     W_RetainView(toplevel);
 
     hPtr = view->handlerList;
-			     
+
     while (hPtr!=NULL) {
 	W_EventHandler *tmp;
 
 	tmp = hPtr->nextHandler;
-	
+
 	if ((hPtr->eventMask & mask)) {
 	    (*hPtr->proc)(event, hPtr->clientData);
 	}
@@ -654,14 +657,14 @@ WMHandleEvent(XEvent *event)
     }
     
     /* pass the event to the top level window of the widget */
-    if (view->parent!=NULL) {
+    if (view->parent != NULL) {
 	vPtr = view;
-	while (vPtr->parent!=NULL)
+	while (vPtr->parent != NULL)
 	    vPtr = vPtr->parent;
 	
 	hPtr = vPtr->handlerList;
 
-	while (hPtr!=NULL) {
+	while (hPtr != NULL) {
 	
 	    if (hPtr->eventMask & mask) {
 		(*hPtr->proc)(event, hPtr->clientData);

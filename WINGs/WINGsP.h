@@ -24,7 +24,7 @@ extern "C" {
 
 #define DOUBLE_BUFFER
 
-
+    
 
 #define WC_UserWidget	128
 
@@ -32,22 +32,11 @@ extern "C" {
 
 #define SCROLLER_WIDTH	 20
 
-/* internal messages */
-#define WM_UPDATE_COLORWELL	130
+    
+    
+#define XDND_VERSION 4
 
-
-#define WM_USER_MESSAGE	1024
-
-
-#define SETUP_INTERNAL_MESSAGE(event, scrPtr) \
-		event.xclient.type=ClientMessage;\
-		event.xclient.display=scrPtr->display;\
-		event.xclient.send_event=False;\
-		event.xclient.serial=0;\
-		event.xclient.format=32;\
-		event.xclient.message_type=scrPtr->internalMessage;
-
-
+    
 typedef struct W_Application {
     char *applicationName;
     int argc;
@@ -101,6 +90,27 @@ typedef struct W_FocusInfo {
 } W_FocusInfo;
 
 
+
+struct W_DraggingInfo {
+    Window destinationWindow;
+    Window sourceWindow;
+    
+    WMPoint location;
+
+    unsigned sourceOperation;
+    WMPixmap *image;
+    WMPoint imageLocation;
+    
+    Time timestamp;
+    
+    int protocolVersion;
+
+    /* only valid if in the same app.. should be treated as internal data */
+//    WMView *destination;
+//    WMView *source;
+};
+    
+
 typedef struct W_Screen {
     Display *display;
     int screen;
@@ -145,6 +155,8 @@ typedef struct W_Screen {
 
     Pixmap stipple;
 
+    struct W_DraggingInfo dragInfo;
+    
     /* colors */
     W_Color *white;
     W_Color *black;
@@ -232,17 +244,26 @@ typedef struct W_Screen {
     Cursor textCursor;
 
     Cursor invisibleCursor;
-
-    Atom internalMessage;	       /* for ClientMessage */
     
     Atom attribsAtom;		       /* GNUstepWindowAttributes */
     
     Atom deleteWindowAtom;	       /* WM_DELETE_WINDOW */
     
     Atom protocolsAtom;		       /* _XA_WM_PROTOCOLS */
-    
+
     Atom clipboardAtom;		       /* CLIPBOARD */
 
+    Atom xdndAwareAtom;		       /* XdndAware */
+    Atom xdndSelectionAtom;
+    Atom xdndEnterAtom;
+    Atom xdndLeaveAtom;
+    Atom xdndPositionAtom;
+    Atom xdndDropAtom;
+    Atom xdndFinishedAtom;
+    Atom xdndTypeListAtom;
+    Atom xdndStatusAtom;
+    
+    Atom wmStateAtom;		       /* WM_STATE */
 
     /* stuff for detecting double-clicks */
     Time lastClickTime;		       /* time of last mousedown event */
@@ -302,11 +323,12 @@ typedef struct W_View {
 
     WMColor *backColor;
 
-#if 0
+
+    Atom *droppableTypes;
     struct W_DragSourceProcs *dragSourceProcs;
     struct W_DragDestinationProcs *dragDestinationProcs;
     int helpContext;
-#endif
+
 
     struct {
 	unsigned int realized:1;
@@ -329,6 +351,7 @@ typedef struct W_View {
 	unsigned int pendingRelease3:1;
 	unsigned int pendingRelease4:1;
 	unsigned int pendingRelease5:1;
+	unsigned int xdndHintSet:1;
     } flags;
     
     int refCount;
@@ -442,8 +465,6 @@ void W_BroadcastMessage(W_View *targetParent, XEvent *event);
 
 void W_DispatchMessage(W_View *target, XEvent *event);
 
-Bool W_CheckInternalMessage(W_Screen *scr, XClientMessageEvent *cev, int event);
-
 void W_SetFocusOfToplevel(W_View *toplevel, W_View *view);
 
 W_View *W_FocusedViewOfToplevel(W_View *view);
@@ -468,6 +489,7 @@ char *W_GetTextSelection(WMScreen *scr, Atom selection);
 
 void W_HandleSelectionEvent(XEvent *event);
 
+void W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event);
 
 void W_FlushASAPNotificationQueue();
 

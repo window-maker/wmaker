@@ -718,10 +718,11 @@ int main(int argc, char **argv)
      * Put the testSomething() function you want to test here.
      */
 
-    testTabView(scr);
 
     testColorWell(scr);
 #if 0
+    testTabView(scr);
+
     testFontPanel(scr);
 
     testSplitView(scr);

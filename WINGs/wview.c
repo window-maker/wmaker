@@ -229,18 +229,6 @@ W_RealizeView(W_View *view)
 }
 
 
-
-Bool
-W_CheckInternalMessage(W_Screen *scr, XClientMessageEvent *cev, int event)
-{
-    if (cev->message_type == scr->internalMessage
-	&& cev->format == 32 && cev->data.l[1] == event)
-	return True;
-    else
-	return False;
-}
-
-
 void
 W_ReparentView(W_View *view, W_View *newParent, int x, int y)
 {
@@ -414,6 +402,9 @@ destroyView(W_View *view)
     unparentView(view);
 
     W_CleanUpEvents(view);
+    
+ //   WMUnregisterViewDraggedTypes(view);
+    
 #if 0    
     if (view->dragSourceProcs)
 	wfree(view->dragSourceProcs);
@@ -658,4 +649,20 @@ WMViewXID(WMView *view)
 {
     return view->window;
 }
+
+
+WMPoint
+WMGetViewScreenPosition(WMView *view)
+{
+    WMScreen *scr = W_VIEW_SCREEN(view);
+    Window foo;
+    int x, y;
+    
+    XTranslateCoordinates(scr->display, W_VIEW_DRAWABLE(view),
+			  scr->rootWin, 0, 0, &x, &y, &foo);
+    
+    return wmkpoint(x, y);
+}
+
+			
 

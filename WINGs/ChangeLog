@@ -1,6 +1,14 @@
 changes since wmaker 0.61.1:
 ............................
 
+- WARNING: semantic of bags has changed!
+	An index assigned to an item will always keep that index unless
+	you insert an item before it.
+
+	For example:
+		bag = WMCreateBag();
+		WMSetInBag(bag, 10, "bla");
+	That code will put "bla" in index 10, instead of 0, as it used to be.
 - fixed WMInsertInBag(). It ignored index, and always put the new item at end.
 - added WMSaveUserDefaults().
 - rewrote WMPopUpButton to use WMMenuItem

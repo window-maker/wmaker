@@ -69,6 +69,7 @@ GFXLIBS = @GFXLIBS@
 HEADER_SEARCH_PATH = @HEADER_SEARCH_PATH@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
+LD = @LD@
 LIBPL = @LIBPL@
 LIBRARY_SEARCH_PATH = @LIBRARY_SEARCH_PATH@
 LIBTOOL = @LIBTOOL@
@@ -78,6 +79,7 @@ MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
 NETLIBS = @NETLIBS@
 NLSDIR = @NLSDIR@
+NM = @NM@
 OBJDUMP = @OBJDUMP@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
@@ -144,10 +146,10 @@ connect_LDADD = libWUtil.a @LIBRARY_SEARCH_PATH@ @NETLIBS@ @LIBPL@
 EXTRA_DIST = logo.xpm BUGS
 
 # wbutton.c 
-libWINGs_a_SOURCES =  	WINGs.h 	WINGsP.h 	configuration.c 	international.c 	notification.c 	selection.c 	userdefaults.c 	wapplication.c 	wappresource.c 	wballoon.c 	wbrowser.c 	wbutton.c 	wcolor.c 	wcolorpanel.c 	wcolorwell.c 	wevent.c 	wfilepanel.c 	wframe.c 	wfont.c 	wfontpanel.c 	widgets.c 	wlabel.c 	wlist.c 	wmenuitem.c 	wmisc.c 	wpanel.c 	wpixmap.c 	wpopupbutton.c 	wprogressindicator.c 	wscroller.c 	wscrollview.c 	wslider.c 	wsplitview.c 	wtabview.c 	wtextfield.c 	wwindow.c 	wview.c 	error.c 	findfile.c 	bagarray.c 	baglist.c 	connection.c 	data.c 	hashtable.c 	host.c 	memory.c 	usleep.c
+libWINGs_a_SOURCES =  	WINGs.h 	WINGsP.h 	configuration.c 	dragdestination.c 	dragsource.c 	international.c 	notification.c 	selection.c 	userdefaults.c 	wapplication.c 	wappresource.c 	wballoon.c 	wbrowser.c 	wbutton.c 	wcolor.c 	wcolorpanel.c 	wcolorwell.c 	wevent.c 	wfilepanel.c 	wframe.c 	wfont.c 	wfontpanel.c 	widgets.c 	wlabel.c 	wlist.c 	wmenuitem.c 	wmisc.c 	wpanel.c 	wpixmap.c 	wpopupbutton.c 	wprogressindicator.c 	wscroller.c 	wscrollview.c 	wslider.c 	wsplitview.c 	wtabview.c 	wtextfield.c 	wwindow.c 	wview.c 	error.c 	findfile.c 	bagarray.c 	bagtree.c 	connection.c 	data.c 	hashtable.c 	host.c 	memory.c 	usleep.c
 
 
-libWUtil_a_SOURCES =  	WINGs.h 	WINGsP.h 	bagarray.c 	baglist.c 	connection.c 	data.c 	host.c 	international.c 	notification.c 	userdefaults.c 	wapplication.c 	wutil.c 	error.c 	findfile.c 	hashtable.c 	memory.c 	usleep.c
+libWUtil_a_SOURCES =  	WINGs.h 	WINGsP.h 	bagarray.c 	bagtree.c 	connection.c 	data.c 	host.c 	international.c 	notification.c 	userdefaults.c 	wapplication.c 	wutil.c 	error.c 	findfile.c 	hashtable.c 	memory.c 	usleep.c
 
 
 INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/src 	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @HEADER_SEARCH_PATH@ -DDEBUG
@@ -166,16 +168,17 @@ X_CFLAGS = @X_CFLAGS@
 X_LIBS = @X_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 libWINGs_a_LIBADD = 
-libWINGs_a_OBJECTS =  configuration.o international.o notification.o \
-selection.o userdefaults.o wapplication.o wappresource.o wballoon.o \
-wbrowser.o wbutton.o wcolor.o wcolorpanel.o wcolorwell.o wevent.o \
-wfilepanel.o wframe.o wfont.o wfontpanel.o widgets.o wlabel.o wlist.o \
-wmenuitem.o wmisc.o wpanel.o wpixmap.o wpopupbutton.o \
-wprogressindicator.o wscroller.o wscrollview.o wslider.o wsplitview.o \
-wtabview.o wtextfield.o wwindow.o wview.o error.o findfile.o bagarray.o \
-baglist.o connection.o data.o hashtable.o host.o memory.o usleep.o
+libWINGs_a_OBJECTS =  configuration.o dragdestination.o dragsource.o \
+international.o notification.o selection.o userdefaults.o \
+wapplication.o wappresource.o wballoon.o wbrowser.o wbutton.o wcolor.o \
+wcolorpanel.o wcolorwell.o wevent.o wfilepanel.o wframe.o wfont.o \
+wfontpanel.o widgets.o wlabel.o wlist.o wmenuitem.o wmisc.o wpanel.o \
+wpixmap.o wpopupbutton.o wprogressindicator.o wscroller.o wscrollview.o \
+wslider.o wsplitview.o wtabview.o wtextfield.o wwindow.o wview.o \
+error.o findfile.o bagarray.o bagtree.o connection.o data.o hashtable.o \
+host.o memory.o usleep.o
 libWUtil_a_LIBADD = 
-libWUtil_a_OBJECTS =  bagarray.o baglist.o connection.o data.o host.o \
+libWUtil_a_OBJECTS =  bagarray.o bagtree.o connection.o data.o host.o \
 international.o notification.o userdefaults.o wapplication.o wutil.o \
 error.o findfile.o hashtable.o memory.o usleep.o
 AR = ar
@@ -217,7 +220,7 @@ DIST_COMMON =  README ChangeLog Makefile.am Makefile.in TODO
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = tar
+TAR = gtar
 GZIP_ENV = --best
 SOURCES = $(libWINGs_a_SOURCES) $(libWUtil_a_SOURCES) $(wtest_SOURCES) $(wmquery_SOURCES) $(wmfile_SOURCES) $(fontl_SOURCES) $(testmywidget_SOURCES) $(testcolorpanel_SOURCES) $(connect_SOURCES)
 OBJECTS = $(libWINGs_a_OBJECTS) $(libWUtil_a_OBJECTS) $(wtest_OBJECTS) $(wmquery_OBJECTS) $(wmfile_OBJECTS) $(fontl_OBJECTS) $(testmywidget_OBJECTS) $(testcolorpanel_OBJECTS) $(connect_OBJECTS)
@@ -226,7 +229,7 @@ all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .lo .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps WINGs/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu WINGs/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -481,7 +484,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$d/$$file $(distdir)/$$file; \
+	    cp -pr $$/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \

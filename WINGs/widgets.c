@@ -546,6 +546,23 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     XGCValues gcv;
     Pixmap stipple;
     static int initialized = 0;
+    static char *atomNames[] = {
+	"_GNUSTEP_WM_ATTR",
+	    "WM_DELETE_WINDOW",
+	    "WM_PROTOCOLS",
+	    "CLIPBOARD",
+	    "XdndAware",
+	    "XdndSelection",
+	    "XdndEnter",
+	    "XdndLeave",
+	    "XdndPosition",
+	    "XdndDrop",
+	    "XdndFinished",
+	    "XdndTypeList",
+	    "XdndStatus",
+	    "WM_STATE"
+    };
+    Atom atoms[sizeof(atomNames)/sizeof(char*)];
 
     if (!initialized) {
 
@@ -738,16 +755,29 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 	XFreePixmap(display, blank);
     }
 
-    scrPtr->internalMessage = XInternAtom(display, "_WINGS_MESSAGE", False);
+    XInternAtoms(display, atomNames, sizeof(atomNames)/sizeof(char*), False,
+		 atoms);
+    
+    scrPtr->attribsAtom = atoms[0];
+    
+    scrPtr->deleteWindowAtom = atoms[1];
 
-    scrPtr->attribsAtom = XInternAtom(display, "_GNUSTEP_WM_ATTR", False);
+    scrPtr->protocolsAtom = atoms[2];
     
-    scrPtr->deleteWindowAtom = XInternAtom(display, "WM_DELETE_WINDOW", False);
+    scrPtr->clipboardAtom = atoms[3];
 
-    scrPtr->protocolsAtom = XInternAtom(display, "WM_PROTOCOLS", False);
-    
-    scrPtr->clipboardAtom = XInternAtom(display, "CLIPBOARD", False);
-    
+    scrPtr->xdndAwareAtom = atoms[4];
+    scrPtr->xdndSelectionAtom = atoms[5];
+    scrPtr->xdndEnterAtom = atoms[6];
+    scrPtr->xdndLeaveAtom = atoms[7];
+    scrPtr->xdndPositionAtom = atoms[8];
+    scrPtr->xdndDropAtom = atoms[9];
+    scrPtr->xdndFinishedAtom = atoms[10];
+    scrPtr->xdndTypeListAtom = atoms[11];
+    scrPtr->xdndStatusAtom = atoms[12];
+
+    scrPtr->wmStateAtom = atoms[13];
+	
     scrPtr->rootView = W_CreateRootView(scrPtr);
 
 

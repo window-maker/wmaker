@@ -30,6 +30,7 @@ typedef struct W_Data {
     unsigned   growth;      /* How much to grow */
     void       *bytes;      /* Actual data */
     unsigned   retainCount;
+    unsigned   freeData:1;  /* whether the data should be released */
 } W_Data;
 
 
@@ -52,6 +53,7 @@ WMCreateDataWithCapacity(unsigned capacity) /*FOLD00*/
     aData->growth = capacity/2 > 0 ? capacity/2 : 1;
     aData->length = 0;
     aData->retainCount = 1;
+    aData->freeData = 1;
 
     return aData;
 }
@@ -96,6 +98,7 @@ WMCreateDataWithBytesNoCopy(void *bytes, unsigned length) /*FOLD00*/
     aData->growth = length/2 > 0 ? length/2 : 1;
     aData->bytes = bytes;
     aData->retainCount = 1;
+    aData->freeData = 0;
 
     return aData;
 }
@@ -125,7 +128,7 @@ WMReleaseData(WMData *aData) /*FOLD00*/
     aData->retainCount--;
     if (aData->retainCount > 0)
         return;
-    if (aData->bytes)
+    if (aData->bytes && aData->freeData)
         wfree(aData->bytes);
     wfree(aData);
 }
