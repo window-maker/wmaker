@@ -1,3 +1,8 @@
+Changes since version 0.63.1:
+.............................
+- fixed messup in get-{wings,wutil,wraster}-flags
+
+
 Changes since version 0.63.0:
 .............................
 - fixed compile prob with SGI compiler
