@@ -505,7 +505,6 @@ testTextField(WMScreen *scr)
 }
 
 
-#if 0
 void
 testText(WMScreen *scr)
 {
@@ -529,7 +528,6 @@ testText(WMScreen *scr)
     if(file) {
         char buf[1024];
 
-<<<<<<< wtest.c
 		WMFreezeText(text);
 		while(fgets(buf, 1023, file))
 			WMAppendTextStream(text, buf);
@@ -539,24 +537,11 @@ testText(WMScreen *scr)
 	} else {
 		WMAppendTextStream(text, "<HTML><i>Where's</i> the <b>README</b>?"); 
 	}
-=======
-        WMFreezeText(text);
-        while(fgets(buf, 1023, file))
-            WMAppendTextStream(text, buf);
-
-        fclose(file);
-        WMThawText(text);
-        WMRefreshText(text, 0, 0);
-    } else {
-        WMAppendTextStream(text, "<HTML><i>Where's</i> the <b>README</b>?");
-    }
->>>>>>> 1.12
 
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
     WMMapWidget(win);
 }
-#endif
 
 
 void
