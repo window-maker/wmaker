@@ -126,7 +126,7 @@ wPluginDestroyFunction(WFunction *function)
 
     if (function->data) {
         if (function->freeData) {
-            function->freeData(&function->data);
+            function->freeData(function->arg, &function->data);
         } else {
             wfree(function->data);
         }

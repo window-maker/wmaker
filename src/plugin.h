@@ -53,7 +53,7 @@ typedef void _DL_AnyProc(proplist_t);
 typedef void _DL_DrawStringProc(proplist_t, Drawable, GC, WMFont *, int, int, unsigned, unsigned, char *, int);
 #endif
 
-typedef void _DL_FreeDataProc(void *free_me);
+typedef void _DL_FreeDataProc(proplist_t pl, void *free_data);
 
 typedef int _DL_InitDataProc(proplist_t pl, void *init_data); /* prototype
                                                                  for function
