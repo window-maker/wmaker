@@ -3,6 +3,7 @@ Changes since wmaker 0.64.0:
 
 - made programmatic scroller changes send notifications
 - replaced WMSetBoxExpandsToParent with WMSetViewExpands...
+- added WMGetLabelFont()
 
 changes since wmaker 0.63.1:
 ............................
