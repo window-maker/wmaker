@@ -303,8 +303,6 @@ WMSetListUserDrawProc(WMList *lPtr, WMListDrawProc *proc)
 void
 WMSetListUserDrawItemHeight(WMList *lPtr, unsigned short height)
 {
-    W_Screen *scr = lPtr->view->screen;
-
     assert(height > 0);
 
     lPtr->flags.userItemHeight = 1;
@@ -1234,7 +1232,6 @@ static void
 didResizeList(W_ViewDelegate *self, WMView *view)
 {
     WMList *lPtr = (WMList*)view->self;
-    W_Screen *scr = view->screen;
 
     WMResizeWidget(lPtr->vScroller, 1, view->size.height-2);
 

@@ -104,6 +104,51 @@ W_CreateFontSetWithGuess(Display *dpy, char *xlfd, char ***missing,
 }
 
 
+static char*
+xlfdFromFontName(char *fontName, Bool antialiased)
+{
+    char *systemFont, *boldSystemFont;
+    char *font;
+    int size;
+
+    if (antialiased) {
+        systemFont = WINGsConfiguration.antialiasedSystemFont;
+        boldSystemFont = WINGsConfiguration.antialiasedBoldSystemFont;
+    } else {
+        systemFont = WINGsConfiguration.systemFont;
+        boldSystemFont = WINGsConfiguration.boldSystemFont;
+    }
+
+    size = WINGsConfiguration.defaultFontSize;
+
+    if (strcmp(fontName, "SystemFont")==0) {
+        font = systemFont;
+        size = WINGsConfiguration.defaultFontSize;
+    } else if (strncmp(fontName, "SystemFont-", 11)==0) {
+        font = systemFont;
+        if (sscanf(&fontName[11], "%i", &size)!=1) {
+            size = WINGsConfiguration.defaultFontSize;
+            wwarning(_("Invalid size specification '%s' in %s. "
+                       "Using default %d\n"), &fontName[11], fontName, size);
+        }
+    } else if (strcmp(fontName, "BoldSystemFont")==0) {
+        font = boldSystemFont;
+        size = WINGsConfiguration.defaultFontSize;
+    } else if (strncmp(fontName, "BoldSystemFont-", 15)==0) {
+        font = boldSystemFont;
+        if (sscanf(&fontName[15], "%i", &size)!=1) {
+            size = WINGsConfiguration.defaultFontSize;
+            wwarning(_("Invalid size specification '%s' in %s. "
+                       "Using default %d\n"), &fontName[15], fontName, size);
+        }
+    } else {
+        font = NULL;
+    }
+
+    return (font!=NULL ? makeFontSetOfSize(font, size) : wstrdup(fontName));
+}
+
+
 WMFont*
 WMCreateFontSet(WMScreen *scrPtr, char *fontName)
 {
@@ -112,17 +157,19 @@ WMCreateFontSet(WMScreen *scrPtr, char *fontName)
     char **missing;
     int nmissing = 0;
     char *defaultString;
+    char *fname;
     XFontSetExtents *extents;
 
-    font = WMHashGet(scrPtr->fontSetCache, fontName);
+    fname = xlfdFromFontName(fontName, False);
+
+    font = WMHashGet(scrPtr->fontSetCache, fname);
     if (font) {
-	WMRetainFont(font);
+        WMRetainFont(font);
+        wfree(fname);
 	return font;
     }
 
-    font = malloc(sizeof(WMFont));
-    if (!font)
-        return NULL;
+    font = wmalloc(sizeof(WMFont));
     memset(font, 0, sizeof(WMFont));
 
     font->notFontSet = 0;
@@ -130,13 +177,12 @@ WMCreateFontSet(WMScreen *scrPtr, char *fontName)
 
     font->screen = scrPtr;
 
-    font->font.set = W_CreateFontSetWithGuess(display, fontName, &missing,
+    font->font.set = W_CreateFontSetWithGuess(display, fname, &missing,
                                               &nmissing, &defaultString);
     if (nmissing > 0 && font->font.set) {
 	int i;
 	
-	wwarning(_("the following character sets are missing in %s:"),
-		 fontName);
+	wwarning(_("the following character sets are missing in %s:"), fname);
 	for (i = 0; i < nmissing; i++) {
 	    wwarning(missing[i]);
 	}
@@ -146,7 +192,8 @@ WMCreateFontSet(WMScreen *scrPtr, char *fontName)
 		     defaultString);
     }
     if (!font->font.set) {
-	wfree(font);
+        wfree(font);
+        wfree(fname);
 	return NULL;
     }
     
@@ -157,7 +204,7 @@ WMCreateFontSet(WMScreen *scrPtr, char *fontName)
 
     font->refCount = 1;
 
-    font->name = wstrdup(fontName);
+    font->name = fname;
 
     assert(WMHashInsert(scrPtr->fontSetCache, font->name, font)==NULL);
 
@@ -173,6 +220,8 @@ WMCreateNormalFont(WMScreen *scrPtr, char *fontName)
     Display *display = scrPtr->display;
     char *fname, *ptr;
 
+    fontName = xlfdFromFontName(fontName, False);
+
     if ((ptr = strchr(fontName, ','))) {
 	fname = wmalloc(ptr - fontName + 1);
 	strncpy(fname, fontName, ptr - fontName);
@@ -181,6 +230,8 @@ WMCreateNormalFont(WMScreen *scrPtr, char *fontName)
 	fname = wstrdup(fontName);
     }
 
+    wfree(fontName);
+
     font = WMHashGet(scrPtr->fontCache, fname);
     if (font) {
 	WMRetainFont(font);
@@ -188,11 +239,7 @@ WMCreateNormalFont(WMScreen *scrPtr, char *fontName)
 	return font;
     }
 
-    font = malloc(sizeof(WMFont));
-    if (!font) {
-	wfree(fname);
-	return NULL;
-    }
+    font = wmalloc(sizeof(WMFont));
     memset(font, 0, sizeof(WMFont));
 
     font->notFontSet = 1;
@@ -220,12 +267,17 @@ WMCreateNormalFont(WMScreen *scrPtr, char *fontName)
 
 
 WMFont*
-WMCreateAAFont(WMScreen *scrPtr, char *fontName)
+WMCreateAntialiasedFont(WMScreen *scrPtr, char *fontName)
 {
 #ifdef XFT
     WMFont *font;
     Display *display = scrPtr->display;
     char *fname, *ptr;
+
+    if (!scrPtr->hasXftSupport)
+        return NULL;
+
+    fontName = xlfdFromFontName(fontName, True);
 
     if ((ptr = strchr(fontName, ','))) {
 	fname = wmalloc(ptr - fontName + 1);
@@ -235,18 +287,16 @@ WMCreateAAFont(WMScreen *scrPtr, char *fontName)
 	fname = wstrdup(fontName);
     }
 
-    font = WMHashGet(scrPtr->fontCache, fname);
+    wfree(fontName);
+
+    font = WMHashGet(scrPtr->xftFontCache, fname);
     if (font) {
 	WMRetainFont(font);
 	wfree(fname);
 	return font;
     }
 
-    font = malloc(sizeof(WMFont));
-    if (!font) {
-	wfree(fname);
-	return NULL;
-    }
+    font = wmalloc(sizeof(WMFont));
     memset(font, 0, sizeof(WMFont));
 
     font->notFontSet = 1;
@@ -254,7 +304,9 @@ WMCreateAAFont(WMScreen *scrPtr, char *fontName)
 
     font->screen = scrPtr;
 
-    /* // Xft sux */
+#if 0
+    /* // Xft sux. Loading a font that doesn't exist will load the default
+     * defined in XftConfig without any warning or error */
     font->font.normal = XLoadQueryFont(display, fname);
     if (!font->font.normal) {
         wfree(font);
@@ -262,6 +314,7 @@ WMCreateAAFont(WMScreen *scrPtr, char *fontName)
         return NULL;
     }
     XFreeFont(display, font->font.normal);
+#endif
 
     font->font.xft = XftFontOpenXlfd(display, scrPtr->screen, fname);
     if (!font->font.xft) {
@@ -276,7 +329,7 @@ WMCreateAAFont(WMScreen *scrPtr, char *fontName)
 
     font->name = fname;
 
-    assert(WMHashInsert(scrPtr->fontCache, font->name, font)==NULL);
+    assert(WMHashInsert(scrPtr->xftFontCache, font->name, font)==NULL);
 
     return font;
 #else
@@ -286,27 +339,48 @@ WMCreateAAFont(WMScreen *scrPtr, char *fontName)
 
 
 WMFont*
-WMCreateNonAAFont(WMScreen *scrPtr, char *fontName)
+WMCreateFont(WMScreen *scrPtr, char *fontName)
 {
-    if (scrPtr->useMultiByte) {
-	return WMCreateFontSet(scrPtr, fontName);
-    } else {
-        return WMCreateNormalFont(scrPtr, fontName);
-    }
+    return WMCreateFontWithFlags(scrPtr, fontName, WFDefaultFont);
 }
 
 
 WMFont*
-WMCreateFont(WMScreen *scrPtr, char *fontName)
+WMCreateFontWithFlags(WMScreen *scrPtr, char *fontName, WMFontFlags flags)
 {
-    if (scrPtr->useMultiByte) {
-	return WMCreateFontSet(scrPtr, fontName);
-    } else if (scrPtr->antialiasedText) {
-        WMFont *font = WMCreateAAFont(scrPtr, fontName);
-        return font ? font : WMCreateNormalFont(scrPtr, fontName);
-    } else {
-        return WMCreateNormalFont(scrPtr, fontName);
+    Bool multiByte = scrPtr->useMultiByte;
+    Bool antialiased = scrPtr->antialiasedText;
+    WMFont *font;
+
+    if (flags & WFFontSet) {
+        multiByte = True;
+    } else if (flags & WFNormalFont) {
+        multiByte = False;
     }
+    if (flags & WFAntialiased) {
+        antialiased = True;
+    } else if (flags & WFNotAntialiased) {
+        antialiased = False;
+    }
+
+    /* Multibyte with antialiasing is not implemented. To avoid problems,
+     * if both multiByte and antialiasing are enabled, ignore antialiasing
+     * and return a FontSet.
+     */
+    if (multiByte) {
+	font = WMCreateFontSet(scrPtr, fontName);
+    } else if (antialiased) {
+        font = WMCreateAntialiasedFont(scrPtr, fontName);
+        /* If we cannot create an antialiased font and antialiasing is
+         * not explicitly requested in flags, fallback to normal font */
+        if (!font && (flags & WFAntialiased)==0) {
+            font = WMCreateNormalFont(scrPtr, fontName);
+        }
+    } else {
+        font = WMCreateNormalFont(scrPtr, fontName);
+    }
+
+    return font;
 }
 
 
@@ -341,8 +415,10 @@ WMReleaseFont(WMFont *font)
         } else {
 	    XFreeFontSet(font->screen->display, font->font.set);
 	}
-	if (font->name) {
-            if (font->notFontSet) {
+        if (font->name) {
+            if (font->antialiased) {
+                WMHashRemove(font->screen->xftFontCache, font->name);
+            } else if (font->notFontSet) {
                 WMHashRemove(font->screen->fontCache, font->name);
             } else {
                 WMHashRemove(font->screen->fontSetCache, font->name);
@@ -355,7 +431,21 @@ WMReleaseFont(WMFont *font)
 
 
 Bool
-WMIsAAFont(WMFont *font)
+WMHasAntialiasingSupport(WMScreen *scrPtr)
+{
+    return scrPtr->hasXftSupport;
+}
+
+
+Bool
+WMIsAntialiasingEnabled(WMScreen *scrPtr)
+{
+    return scrPtr->antialiasedText;
+}
+
+
+Bool
+WMIsAntialiasedFont(WMFont *font)
 {
     return font->antialiased;
 }
@@ -388,22 +478,22 @@ static WMFont*
 makeSystemFontOfSize(WMScreen *scrPtr, int size, Bool bold)
 {
     WMFont *font;
-    char *fontSpec, *aaFontSpec;
+    char *fontSpec, *xftFontSpec;
 
 #define WConf WINGsConfiguration
     if (bold) {
         fontSpec = makeFontSetOfSize(WConf.boldSystemFont, size);
-        aaFontSpec = makeFontSetOfSize(WConf.antialiasedBoldSystemFont, size);
+        xftFontSpec = makeFontSetOfSize(WConf.antialiasedBoldSystemFont, size);
     } else {
         fontSpec = makeFontSetOfSize(WConf.systemFont, size);
-        aaFontSpec = makeFontSetOfSize(WConf.antialiasedSystemFont, size);
+        xftFontSpec = makeFontSetOfSize(WConf.antialiasedSystemFont, size);
     }
 #undef WConf
 
     if (scrPtr->useMultiByte) {
         font = WMCreateFontSet(scrPtr, fontSpec);
     } else if (scrPtr->antialiasedText) {
-        font = WMCreateAAFont(scrPtr, aaFontSpec);
+        font = WMCreateAntialiasedFont(scrPtr, xftFontSpec);
     } else {
         font = WMCreateNormalFont(scrPtr, fontSpec);
     }
@@ -416,11 +506,11 @@ makeSystemFontOfSize(WMScreen *scrPtr, int size, Bool bold)
                 font = WMCreateFontSet(scrPtr, "-*-fixed-medium-r-normal-*-14-*-*-*-*-*-*-*");
             }
         } else if (scrPtr->antialiasedText) {
-            wwarning(_("could not load font %s. Trying arial."), aaFontSpec);
+            wwarning(_("could not load font %s. Trying arial."), xftFontSpec);
             if (bold) {
-                font = WMCreateAAFont(scrPtr, "-*-arial-bold-r-normal-*-12-*-*-*-*-*-*-*");
+                font = WMCreateAntialiasedFont(scrPtr, "-*-arial-bold-r-normal-*-12-*-*-*-*-*-*-*");
             } else {
-                font = WMCreateAAFont(scrPtr, "-*-arial-medium-r-normal-*-12-*-*-*-*-*-*-*");
+                font = WMCreateAntialiasedFont(scrPtr, "-*-arial-medium-r-normal-*-12-*-*-*-*-*-*-*");
             }
             if (!font) {
                 wwarning(_("could not load antialiased fonts. Reverting to normal fonts."));
@@ -437,12 +527,12 @@ makeSystemFontOfSize(WMScreen *scrPtr, int size, Bool bold)
         if (!font) {
             wwarning(_("could not load fixed font!"));
             wfree(fontSpec);
-            wfree(aaFontSpec);
+            wfree(xftFontSpec);
             return NULL;
         }
     }
     wfree(fontSpec);
-    wfree(aaFontSpec);
+    wfree(xftFontSpec);
 
     return font;
 }
@@ -682,6 +772,7 @@ WMFont*
 WMNormalizeFont(WMScreen *scr, WMFont *font)
 {
     char fname[256];
+    WMFontFlags flag;
 
     if (!scr || !font)
         return NULL;
@@ -689,10 +780,8 @@ WMNormalizeFont(WMScreen *scr, WMFont *font)
     snprintf(fname, 255, "%s", font->name);
     changeFontProp(fname, "medium", 2);
     changeFontProp(fname, "r", 3);
-    if (font->antialiased)
-        return WMCreateAAFont(scr, fname);
-    else
-        return WMCreateNonAAFont(scr, fname);
+    flag = (font->antialiased ? WFAntialiased : WFNotAntialiased);
+    return WMCreateFontWithFlags(scr, fname, flag);
 }
 
 
@@ -700,16 +789,15 @@ WMFont*
 WMStrengthenFont(WMScreen *scr, WMFont *font)
 {
     char fname[256];
+    WMFontFlags flag;
 
     if (!scr || !font)
         return NULL;
 
     snprintf(fname, 255, "%s", font->name);
     changeFontProp(fname, "bold", 2);
-    if (font->antialiased)
-        return WMCreateAAFont(scr, fname);
-    else
-        return WMCreateNonAAFont(scr, fname);
+    flag = (font->antialiased ? WFAntialiased : WFNotAntialiased);
+    return WMCreateFontWithFlags(scr, fname, flag);
 }
 
 
@@ -717,16 +805,15 @@ WMFont*
 WMUnstrengthenFont(WMScreen *scr, WMFont *font)
 {
     char fname[256];
+    WMFontFlags flag;
 
     if (!scr || !font)
         return NULL;
 
     snprintf(fname, 255, "%s", font->name);
     changeFontProp(fname, "medium", 2);
-    if (font->antialiased)
-        return WMCreateAAFont(scr, fname);
-    else
-        return WMCreateNonAAFont(scr, fname);
+    flag = (font->antialiased ? WFAntialiased : WFNotAntialiased);
+    return WMCreateFontWithFlags(scr, fname, flag);
 }
 
 
@@ -734,6 +821,7 @@ WMFont*
 WMEmphasizeFont(WMScreen *scr, WMFont *font)
 {
     char fname[256];
+    WMFontFlags flag;
 
     if (!scr || !font)
         return NULL;
@@ -744,10 +832,8 @@ WMEmphasizeFont(WMScreen *scr, WMFont *font)
     else
         changeFontProp(fname, "o", 3);
 
-    if (font->antialiased)
-        return WMCreateAAFont(scr, fname);
-    else
-        return WMCreateNonAAFont(scr, fname);
+    flag = (font->antialiased ? WFAntialiased : WFNotAntialiased);
+    return WMCreateFontWithFlags(scr, fname, flag);
 }
 
 
@@ -755,16 +841,15 @@ WMFont*
 WMUnemphasizeFont(WMScreen *scr, WMFont *font)
 {
     char fname[256];
+    WMFontFlags flag;
 
     if (!scr || !font)
         return NULL;
 
     snprintf(fname, 255, "%s", font->name);
     changeFontProp(fname, "r", 3);
-    if (font->antialiased)
-        return WMCreateAAFont(scr, fname);
-    else
-        return WMCreateNonAAFont(scr, fname);
+    flag = (font->antialiased ? WFAntialiased : WFNotAntialiased);
+    return WMCreateFontWithFlags(scr, fname, flag);
 }
 
 

@@ -757,6 +757,7 @@ paintCursor(TextField *tPtr)
 		   tPtr->view->size.height - 2*tPtr->offsetWidth - 1);
 	printf("%d %d\n",cx,tPtr->cursorPosition);
      */
+
     XDrawLine(screen->display, tPtr->view->window, screen->xorGC,
 	      cx, tPtr->offsetWidth, cx,
 	      tPtr->view->size.height - tPtr->offsetWidth - 1);
@@ -1553,7 +1554,7 @@ handleTextFieldActionEvents(XEvent *event, void *data)
             <= WINGsConfiguration.doubleClickDelay) {
 	    tPtr->selection.position = 0;
 	    tPtr->selection.count = tPtr->textLen;
-	    paintTextField(tPtr);
+            paintTextField(tPtr);
 	    
 	    if (!tPtr->flags.ownsSelection) {
                 tPtr->flags.ownsSelection =

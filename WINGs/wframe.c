@@ -197,7 +197,7 @@ paintFrame(Frame *fPtr)
 
     if (drawTitle) {
         /* can't draw AA text over and over again because it gets messed */
-        // TODO create the dbl buffer pixmap when create/set frame title
+        /* // TODO create the dbl buffer pixmap when create/set frame title */
         if (font->antialiased) {
             Drawable d;
 

@@ -226,10 +226,11 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 
     ty = y1 + wwin->frame->top_width;
     by = y2 - wwin->frame->bottom_width;
-    fw = WMWidthOfString(scr->info_text_font, "8888", 4);
-    fh = WMFontHeight(scr->info_text_font);
 
     if (wPreferences.size_display == WDIS_NEW) {
+        fw = WMWidthOfString(scr->tech_draw_font, "8888", 4);
+        fh = WMFontHeight(scr->tech_draw_font);
+
         XSetForeground(dpy, gc, scr->line_pixel);
 
         /* vertical geometry */
@@ -280,7 +281,7 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 
         snprintf(num, sizeof(num), "%i", (by - ty - wwin->normal_hints->base_height) /
                  wwin->normal_hints->height_inc);
-        fw = WMWidthOfString(scr->info_text_font, num, strlen(num));
+        fw = WMWidthOfString(scr->tech_draw_font, num, strlen(num));
 
         /* XSetForeground(dpy, gc, WMColorPixel(scr->window_title_color[WS_UNFOCUSED])); */
 
@@ -293,7 +294,7 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
         /* // ugly hack */
         color->color.pixel = scr->line_pixel;
         scr->wmscreen->drawStringGC = gc;
-        WMDrawString(scr->wmscreen, root, color, scr->info_text_font,
+        WMDrawString(scr->wmscreen, root, color, scr->tech_draw_font,
                      x - s + 3 - fw/2, my - fh/2 + 1, num, strlen(num));
         scr->wmscreen->drawStringGC = saveGC;
         color->color.pixel = pixel;
@@ -310,7 +311,7 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
         mx = x1 + (x2 - x1)/2;
         snprintf(num, sizeof(num), "%i", (x2 - x1 - wwin->normal_hints->base_width) /
                  wwin->normal_hints->width_inc);
-        fw = WMWidthOfString(scr->info_text_font, num, strlen(num));
+        fw = WMWidthOfString(scr->tech_draw_font, num, strlen(num));
 
         /* left arrow */
         /* end bar */
@@ -354,7 +355,7 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
         /* // ugly hack */
         color->color.pixel = scr->line_pixel;
         scr->wmscreen->drawStringGC = gc;
-        WMDrawString(scr->wmscreen, root, color, scr->info_text_font,
+        WMDrawString(scr->wmscreen, root, color, scr->tech_draw_font,
                      mx - fw/2 + 1, y - s - fh/2 + 1, num, strlen(num));
         scr->wmscreen->drawStringGC = saveGC;
         color->color.pixel = pixel;

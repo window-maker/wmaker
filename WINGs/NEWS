@@ -130,7 +130,7 @@ You need at least Xfree86 version 4.0.x for this but at least 4.1.x is
 recommended.
 
 For Xft support there is a new function to create a font that will render
-using antialiasing and transparency: WMCreateAAFont().
+using antialiasing and transparency: WMCreateAntialiasedFont().
 Passing such a font to WMDrawString() or WMDrawImageString() will result
 in antialiased text displayed on screen. Modifying the alpha value for the
 WMColor passed to WMDrawString() or WMDrawImageString() will result in text
@@ -140,12 +140,12 @@ To control antialiased font behavior, there are 3 new options that go into
 WMGLOBAL. Two of them are to set the system font used when an antialiased
 font is required. They operate in a similar way as SystemFont and
 BoldSystemFont, just they are used when antialiased fonts are requested.
-They are named AASystemFont respectively AABoldSystemFont. They are kept
-separate from SystemFont and BoldSystemFont because the same fonts don't
-render well as both normal and antialiased if they are not TrueType fonts.
-Even though you can specify any font in the XLFD format for these new
-options, it is recomended to use TrueType fonts for the antialiased case
-since other fonts (standard X fonts)  don't render well and give ugly
+They are named AntialiasedSystemFont respectively AntialiasedBoldSystemFont.
+They are kept separate from SystemFont and BoldSystemFont because the same
+fonts don't render well as both normal and antialiased if they are not
+TrueType fonts. Even though you can specify any font in the XLFD format for
+these new options, it is recomended to use TrueType fonts for the antialiased
+case since other fonts (standard X fonts)  don't render well and give ugly
 results.
 
 The third option is an option that globally controls if WINGs uses or not
@@ -155,11 +155,45 @@ was compiled in, and antialiased fonts can be found) then revert to normal
 fonts if not possible. Note that this applies if WMCreateFont(),
 WMSystemFont(), WMSystemFontOfSize(), WMBoldSystemFont() or
 WMBoldSystemFontOFize() are used. If any of the direct creation functions
-are used, such as WMCreateAAFont() or WMCreateNormalFont(), then that kind
-of font is returned independently of the value of AntialiasedText.
+are used, such as WMCreateAntialiasedFont() or WMCreateNormalFont(), then
+that kind of font is returned independently of the value of AntialiasedText.
 (However note that an antialiased font cannot be created if Xft support was
-no compiled into WINGs, even if you call WMCreateAAFont() directly. In this
-case WMCreateAAFont() will always return NULL)
+no compiled into WINGs, even if you call WMCreateAntialiasedFont() directly.
+In this case WMCreateAntialiasedFont() will always return NULL)
+
+These 3 options from WMGLOBAL (which apply to all WINGs applications) can be
+overwritten on a per application basis by putting them in the application's 
+specific domain file (usually ~/GNUstep/Defaults/application_name).
+
+There is also another new font creation function available.
+WMCreateFontWithFlags(screen, fontName, flags)
+
+flags will specify what kind of font to create. They are defined in WINGs.h
+as an enum: WMFontFlags
+
+If WFDefaultFont is passed then the function will work exactly like 
+WMCreateFont() by creating a font according to the options from the
+configuration.
+However if some specific flag is passed than that option will be altered. All
+the other options will keep their default values.
+
+There are 2 font options available (at this time):
+1. Font type (if a normal font or a font set)
+2. Font antialiasing (if it's an antialiased font or not)
+
+If flags specifies a value for each of the available options then a specific
+font which only takes into account those flag values will be created and all
+the font options specified in the configuration (like MultiByte or Antialiasing)
+will be ignored.
+However if only some of the options are specified, then for the missing options
+the default values from the configuration will be used.
+
+For example if antialiasing is enabled in the configuration and you pass
+WFNotAntialiased as the flag, then a font with all the properties defined in
+the configuration (except antialiasing) will be created. This means that if 
+MultiByte is defined a fontset will be created, else a normal font will be 
+created and you don't have to worry about the rest of the flags you didn't
+specify.
 
 
 

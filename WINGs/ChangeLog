@@ -12,20 +12,23 @@ Changes since wmaker 0.80.1:
   WMCreateRGBAColor() and WMSetColorAlpha()
 - Miscelaneous code cleanups in wtext.c
 - Added Xft support in WINGs (for drawing antialiased fonts with transparency).
-- Added a new function: WMCreateAAFont() to create a font which will be
-  drawn antialiased using Xft (if available, else function returns NULL)
-- New options in WMGLOBAL: AntialiasedText, AASystemFont and AABoldSystemFont.
-  Check NEWS for details.
+- Added a new function: WMCreateAntialiasedFont() to create a font which will
+  be drawn antialiased using Xft (if available, else function returns NULL)
+- New options in WMGLOBAL: AntialiasedText, AntialiasedSystemFont and
+  AntialiasedBoldSystemFont. Check NEWS for details.
 - Fixed some improper calls to snprintf in wfont.c
-- Added double buffering when drawing a WMFrame title with an AA font to avoid 
-  flickering.
+- Added double buffering when drawing a WMFrame title with an antialiased font
+  to avoid flickering.
 - Added double buffering when drawing WMList items to avoid flickering.
   Double buffering for list also works for user drawn lists. Read NEWS for
   details and incompatibilities introduced by this change.
-- Added new Bool WMIsAAFont(WMFont *font) to check if a font is AA or not.
+- Added WMIsAntialiasedFont(WMFont *font) to check if a font is antialiased.
 - Added WMGetColorAlpha(WMColor *color)
-- Added WMCreateNonAAFont()
 - Better outline when drawing balloons.
+- Added WMCreateFontWithFlags()
+- You can now pass "SystemFont", "BoldSystemFont", "SystemFont-##" or
+  "BoldSystemFont-##", with ## being the font size to any font creating
+  function to create a font with the (bold) system font font specification.
 
 
 Changes since wmaker 0.80.0:

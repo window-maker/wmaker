@@ -131,13 +131,15 @@ typedef struct W_Screen {
 
     Window rootWin;
 
-    struct _XftDraw *xftdraw;
-
     struct W_View *rootView;
 
     RContext *rcontext;
 
     struct W_IMContext *imctx;
+
+    struct _XftDraw *xftdraw;          /* shared XftDraw */
+
+    Bool hasXftSupport;                /* if it can antialias text */
 
     /* application related */
 
@@ -197,6 +199,8 @@ typedef struct W_Screen {
     W_Font *boldFont;
 
     WMHashTable *fontCache;
+
+    WMHashTable *xftFontCache;
 
     WMHashTable *fontSetCache;
 

@@ -85,58 +85,83 @@ enum {
 /* button types */
 typedef enum {
     /* 0 is reserved for internal use */
-	WBTMomentaryPush = 1,
-	WBTPushOnPushOff = 2,
-	WBTToggle = 3,
-	WBTSwitch = 4,
-	WBTRadio = 5,
-	WBTMomentaryChange = 6,
-	WBTOnOff = 7,
-	WBTMomentaryLight = 8
+    WBTMomentaryPush = 1,
+    WBTPushOnPushOff = 2,
+    WBTToggle = 3,
+    WBTSwitch = 4,
+    WBTRadio = 5,
+    WBTMomentaryChange = 6,
+    WBTOnOff = 7,
+    WBTMomentaryLight = 8
 } WMButtonType;
 
 /* button behaviour masks */
 enum {
-    WBBSpringLoadedMask = 	(1 << 0),
-	WBBPushInMask = 	(1 << 1),
-	WBBPushChangeMask = 	(1 << 2),
-	WBBPushLightMask = 	(1 << 3),
-	WBBStateLightMask = 	(1 << 5),
-	WBBStateChangeMask = 	(1 << 6),
-	WBBStatePushMask = 	(1 << 7)
+    WBBSpringLoadedMask = (1 << 0),
+    WBBPushInMask       = (1 << 1),
+    WBBPushChangeMask   = (1 << 2),
+    WBBPushLightMask    = (1 << 3),
+    WBBStateLightMask   = (1 << 5),
+    WBBStateChangeMask  = (1 << 6),
+    WBBStatePushMask    = (1 << 7)
+};
+
+
+/* Font flags */
+typedef enum {
+    WFDefaultFont    = 0,
+    WFNormalFont     = (1<<0),
+    WFFontSet        = (1<<1),
+    WFAntialiased    = (1<<2),
+    WFNotAntialiased = (1<<3)
+} WMFontFlags;
+
+
+/* Font copy masks */
+typedef enum {
+    WFMUnchanged     = 0,
+    WFMMediumWeight  = 1,
+    WFMNormalWeight  = 2,
+    WFMRegularWeight = 3
+} WMCopyFontMask;
+
+
+/* Use default system font size in system font name */
+enum {
+    WFDefaultSize = -1
 };
 
 
 /* frame title positions */
 typedef enum {
     WTPNoTitle,
-	WTPAboveTop,
-	WTPAtTop,
-	WTPBelowTop,
-	WTPAboveBottom,
-	WTPAtBottom,
-	WTPBelowBottom
+    WTPAboveTop,
+    WTPAtTop,
+    WTPBelowTop,
+    WTPAboveBottom,
+    WTPAtBottom,
+    WTPBelowBottom
 } WMTitlePosition;
 
 
 /* relief types */
 typedef enum {
     WRFlat,
-	WRSimple,
-	WRRaised,
-	WRSunken,
-	WRGroove,
-	WRRidge,
-	WRPushed
+    WRSimple,
+    WRRaised,
+    WRSunken,
+    WRGroove,
+    WRRidge,
+    WRPushed
 } WMReliefType;
 
 
 /* alignment types */
 typedef enum {
     WALeft,
-	WACenter,
-	WARight,
-	WAJustified		       /* not valid for textfields */
+    WACenter,
+    WARight,
+    WAJustified		       /* not valid for textfields */
 } WMAlignment;
 
 
@@ -155,58 +180,58 @@ typedef enum {
 /* scroller arrow position */
 typedef enum {
     WSAMaxEnd,
-	WSAMinEnd,
-	WSANone
+    WSAMinEnd,
+    WSANone
 } WMScrollArrowPosition;
 
 /* scroller parts */
 typedef enum {
     WSNoPart,
-	WSDecrementPage,
-	WSIncrementPage,
-	WSDecrementLine,
-	WSIncrementLine,
-	WSDecrementWheel,
-	WSIncrementWheel,
-	WSKnob,
-	WSKnobSlot
+    WSDecrementPage,
+    WSIncrementPage,
+    WSDecrementLine,
+    WSIncrementLine,
+    WSDecrementWheel,
+    WSIncrementWheel,
+    WSKnob,
+    WSKnobSlot
 } WMScrollerPart;
 
 /* usable scroller parts */
 typedef enum {
     WSUNoParts,
-	WSUOnlyArrows,
-	WSUAllParts
+    WSUOnlyArrows,
+    WSUAllParts
 } WMUsableScrollerParts;
 
 /* matrix types */
 typedef enum {
     WMRadioMode,
-	WMHighlightMode,
-	WMListMode,
-	WMTrackMode
+    WMHighlightMode,
+    WMListMode,
+    WMTrackMode
 } WMMatrixTypes;
 
 
 typedef enum {
     WTTopTabsBevelBorder,
-	WTNoTabsBevelBorder,
-	WTNoTabsLineBorder,
-	WTNoTabsNoBorder
+    WTNoTabsBevelBorder,
+    WTNoTabsLineBorder,
+    WTNoTabsNoBorder
 } WMTabViewType;
 
 
 /* text movement types */
 enum {
     WMIllegalTextMovement,
-	WMReturnTextMovement,
-	WMEscapeTextMovement,
-	WMTabTextMovement,
-	WMBacktabTextMovement,
-	WMLeftTextMovement,
-	WMRightTextMovement,
-	WMUpTextMovement,
-	WMDownTextMovement
+    WMReturnTextMovement,
+    WMEscapeTextMovement,
+    WMTabTextMovement,
+    WMBacktabTextMovement,
+    WMLeftTextMovement,
+    WMRightTextMovement,
+    WMUpTextMovement,
+    WMDownTextMovement
 };
 
 /* text field special events */
@@ -233,13 +258,13 @@ typedef enum {
 
 
 typedef enum {
-	WMGrayModeColorPanel = 1,
- 	WMRGBModeColorPanel = 2,
-	WMCMYKModeColorPanel = 3,
-	WMHSBModeColorPanel = 4,
-	WMCustomPaletteModeColorPanel = 5,
-	WMColorListModeColorPanel = 6,
-	WMWheelModeColorPanel = 7
+    WMGrayModeColorPanel = 1,
+    WMRGBModeColorPanel = 2,
+    WMCMYKModeColorPanel = 3,
+    WMHSBModeColorPanel = 4,
+    WMCustomPaletteModeColorPanel = 5,
+    WMColorListModeColorPanel = 6,
+    WMWheelModeColorPanel = 7
 } WMColorPanelMode;
 
 
@@ -260,17 +285,17 @@ typedef enum {
 
 enum {
     WLDSSelected = (1 << 16),
-	WLDSDisabled = (1 << 17),
-	WLDSFocused = (1 << 18),
-	WLDSIsBranch = (1 << 19)
+    WLDSDisabled = (1 << 17),
+    WLDSFocused = (1 << 18),
+    WLDSIsBranch = (1 << 19)
 };
 
 /* alert panel return values */
 enum {
     WAPRDefault = 0,
-	WAPRAlternate = 1,
-	WAPROther = -1,
-	WAPRError = -2
+    WAPRAlternate = 1,
+    WAPROther = -1,
+    WAPRError = -2
 };
 
 
@@ -278,8 +303,8 @@ enum {
 /* types of input observers */
 enum {
     WIReadMask = (1 << 0),
-	WIWriteMask = (1 << 1),
-	WIExceptMask = (1 << 2)
+    WIWriteMask = (1 << 1),
+    WIExceptMask = (1 << 2)
 };
 
 
@@ -314,7 +339,7 @@ enum {
 typedef struct W_WidgetType {
     W_Class widgetClass;
     struct W_View *view;
-    
+
 } W_WidgetType;
 
 
@@ -695,15 +720,21 @@ WMPoint WMGetDraggingInfoImageLocation(WMDraggingInfo *info);
 
 /* ....................................................................... */
 
+Bool WMHasAntialiasingSupport(WMScreen *scrPtr);
+
+Bool WMIsAntialiasingEnabled(WMScreen *scrPtr);
+
+/* ....................................................................... */
+
 WMFont* WMCreateFontSet(WMScreen *scrPtr, char *fontName);
 
 WMFont* WMCreateNormalFont(WMScreen *scrPtr, char *fontName);
 
-WMFont* WMCreateAAFont(WMScreen *scrPtr, char *fontName);
-
-WMFont* WMCreateNonAAFont(WMScreen *scrPtr, char *fontName);
+WMFont* WMCreateAntialiasedFont(WMScreen *scrPtr, char *fontName);
 
 WMFont* WMCreateFont(WMScreen *scrPtr, char *fontName);
+
+WMFont* WMCreateFontWithFlags(WMScreen *scrPtr, char *fontName, WMFontFlags flags);
 
 WMFont* WMRetainFont(WMFont *font);
 
@@ -711,7 +742,7 @@ void WMReleaseFont(WMFont *font);
 
 unsigned int WMFontHeight(WMFont *font);
 
-Bool WMIsAAFont(WMFont *font);
+Bool WMIsAntialiasedFont(WMFont *font);
 
 /*
 WMFont* WMUserFontOfSize(WMScreen *scrPtr, int size);

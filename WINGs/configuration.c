@@ -14,9 +14,9 @@ _WINGsConfiguration WINGsConfiguration;
 
 #define BOLD_SYSTEM_FONT "-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-bold-r-*-*-%d-*-*-*-*-*-*-*"
 
-#define AASYSTEM_FONT "-*-arial-medium-r-normal-*-%d-*-*-*-*-*-*-*"
+#define XFTSYSTEM_FONT "-*-arial-medium-r-normal-*-%d-*-*-*-*-*-*-*"
 
-#define AABOLD_SYSTEM_FONT "-*-arial-bold-r-normal-*-%d-*-*-*-*-*-*-*"
+#define XFTBOLD_SYSTEM_FONT "-*-arial-bold-r-normal-*-%d-*-*-*-*-*-*-*"
 
 #define FLOPPY_PATH "/floppy"
 
@@ -140,10 +140,10 @@ W_ReadConfigurations(void)
 	WINGsConfiguration.boldSystemFont = BOLD_SYSTEM_FONT;
     }
     if (!WINGsConfiguration.antialiasedSystemFont) {
-	WINGsConfiguration.antialiasedSystemFont = AASYSTEM_FONT;
+	WINGsConfiguration.antialiasedSystemFont = XFTSYSTEM_FONT;
     }
     if (!WINGsConfiguration.antialiasedBoldSystemFont) {
-	WINGsConfiguration.antialiasedBoldSystemFont = AABOLD_SYSTEM_FONT;
+	WINGsConfiguration.antialiasedBoldSystemFont = XFTBOLD_SYSTEM_FONT;
     }
     if (!WINGsConfiguration.floppyPath) {
 	WINGsConfiguration.floppyPath = FLOPPY_PATH;

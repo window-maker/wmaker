@@ -295,8 +295,6 @@
 #define DEF_WORKSPACE_NAME_FONT "\"-*-lucida-bold-r-*-*-24-*-*-*-*-*-*-*\""
 #endif /* !I18N */
 
-#define HELVETICA10_FONT "-*-helvetica-medium-r-normal-*-10-*-*-*-*-*-*-*"
-
 #define DEF_FRAME_THICKNESS 1	       /* linewidth of the move/resize frame */
 
 #define DEF_WINDOW_TITLE_EXTEND_SPACE	"0"

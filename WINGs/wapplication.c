@@ -34,19 +34,19 @@ WMInitializeApplication(char *applicationName, int *argc, char **argv)
     assert(argc!=NULL);
     assert(argv!=NULL);
     assert(applicationName!=NULL);
-   
 
+    /* // TODO: check if to move inside #ifdef I18N */
     setlocale(LC_ALL, "");
-    
+
 #ifdef I18N
     if (getenv("NLSPATH"))
 	bindtextdomain("WINGs", getenv("NLSPATH"));
     else
 	bindtextdomain("WINGs", LOCALEDIR);
 #endif
-    
+
     _WINGS_progname = argv[0];
-    
+
     WMApplication.applicationName = wstrdup(applicationName);
     WMApplication.argc = *argc;
 
@@ -55,7 +55,7 @@ WMInitializeApplication(char *applicationName, int *argc, char **argv)
 	WMApplication.argv[i] = wstrdup(argv[i]);
     }
     WMApplication.argv[i] = NULL;
-    
+
     /* initialize notification center */
     W_InitNotificationCenter();
 }

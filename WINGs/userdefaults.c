@@ -39,6 +39,7 @@ static UserDefaults *sharedUserDefaults = NULL;
 char *WMUserDefaultsDidChangeNotification = "WMUserDefaultsDidChangeNotification";
 
 
+static void synchronizeUserDefaults(void *foo);
 
 extern char *WMGetApplicationName();
 
@@ -93,19 +94,14 @@ wdefaultspathfordomain(char *domain)
 
 
 static void
-#ifndef HAVE_ATEXIT
-saveDefaultsChanges(int foo, void *bar)
-#else
+#ifdef HAVE_ATEXIT
 saveDefaultsChanges(void)
+#else
+saveDefaultsChanges(int foo, void *bar)
 #endif
 {
     /* save the user defaults databases */
-    UserDefaults *tmp = sharedUserDefaults;
-
-    while (tmp) {
-        WMSynchronizeUserDefaults(tmp);
-        tmp = tmp->next;
-    }
+    synchronizeUserDefaults(NULL);
 }
 
 
@@ -116,10 +112,10 @@ registerSaveOnExit(void)
     static Bool registeredSaveOnExit = False;
 
     if (!registeredSaveOnExit) {
-#ifndef HAVE_ATEXIT
-        on_exit(saveDefaultsChanges, (void*)NULL);
-#else
+#ifdef HAVE_ATEXIT
         atexit(saveDefaultsChanges);
+#else
+        on_exit(saveDefaultsChanges, (void*)NULL);
 #endif
         registeredSaveOnExit = True;
     }
@@ -136,7 +132,6 @@ synchronizeUserDefaults(void *foo)
             WMSynchronizeUserDefaults(database);
         database = database->next;
     }
-    WMAddTimerHandler(UD_SYNC_INTERVAL, synchronizeUserDefaults, NULL);
 }
 
 
@@ -146,7 +141,8 @@ addSynchronizeTimerHandler(void)
     static Bool initialized = False;
 
     if (!initialized) {
-        WMAddTimerHandler(UD_SYNC_INTERVAL, synchronizeUserDefaults, NULL);
+        WMAddPersistentTimerHandler(UD_SYNC_INTERVAL, synchronizeUserDefaults,
+                                    NULL);
         initialized = True;
     }
 }
@@ -265,7 +261,7 @@ WMGetStandardUserDefaults(void)
     if (sharedUserDefaults) {
         defaults = sharedUserDefaults;
         while (defaults) {
-            /* Trick, path == NULL only for StandardUserDefaults db */
+            /* path == NULL only for StandardUserDefaults db */
             if (defaults->path == NULL)
                 return defaults;
             defaults = defaults->next;
@@ -284,18 +280,17 @@ WMGetStandardUserDefaults(void)
     key = WMCreatePLString(WMGetApplicationName());
     defaults->searchList[0] = key;
 
-    /* temporary kluge */
+    /* temporary kluge. wmaker handles synchronization itself */
     if (strcmp(WMGetApplicationName(), "WindowMaker")==0) {
-        domain = NULL;
-        path = NULL;
-    } else {
-        path = wdefaultspathfordomain(WMGetFromPLString(key));
-
-        if (stat(path, &stbuf) >= 0)
-            defaults->timestamp = stbuf.st_mtime;
-
-        domain = WMReadPropListFromFile(path);
+        defaults->dontSync = 1;
     }
+
+    path = wdefaultspathfordomain(WMGetFromPLString(key));
+
+    if (stat(path, &stbuf) >= 0)
+        defaults->timestamp = stbuf.st_mtime;
+
+    domain = WMReadPropListFromFile(path);
 
     if (!domain)
         domain = WMCreatePLDictionary(NULL, NULL, NULL);
@@ -332,7 +327,7 @@ WMGetStandardUserDefaults(void)
     i = 0;
     while (defaults->searchList[i]) {
         WMAddToPLArray(defaults->searchListArray,
-                             defaults->searchList[i]);
+                       defaults->searchList[i]);
         i++;
     }
 
@@ -409,7 +404,7 @@ WMGetDefaultsFromPath(char *path)
     i = 0;
     while (defaults->searchList[i]) {
         WMAddToPLArray(defaults->searchListArray,
-                             defaults->searchList[i]);
+                       defaults->searchList[i]);
         i++;
     }
 
@@ -669,6 +664,7 @@ WMSetUDSearchList(WMUserDefaults *database, WMPropList *list)
     for (i=0; i<c; i++) {
 	database->searchList[i] = WMGetFromPLArray(list, i);
     }
+    database->searchList[c] = NULL;
     
     database->searchListArray = WMDeepCopyPropList(list);
 }

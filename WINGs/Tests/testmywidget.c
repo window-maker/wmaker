@@ -1,6 +1,7 @@
 
 
 #include <WINGs/WINGs.h>
+#include <stdlib.h>
 
 #include "mywidget.h"
 

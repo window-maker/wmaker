@@ -622,9 +622,13 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 
     scrPtr->fontCache = WMCreateHashTable(WMStringPointerHashCallbacks);
 
+    scrPtr->xftFontCache = WMCreateHashTable(WMStringPointerHashCallbacks);
+
     scrPtr->fontSetCache = WMCreateHashTable(WMStringPointerHashCallbacks);
 
 #ifdef XFT
+    scrPtr->hasXftSupport = XftDefaultHasRender(scrPtr->display);
+
     scrPtr->xftdraw = XftDrawCreate(scrPtr->display, W_DRAWABLE(scrPtr),
                                     scrPtr->visual, scrPtr->colormap);
 #endif
@@ -680,7 +684,7 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 	    ShiftMask,LockMask,ControlMask,Mod1Mask,
 		Mod2Mask, Mod3Mask, Mod4Mask, Mod5Mask
 	};
-	unsigned int numLockMask, scrollLockMask;
+	unsigned int numLockMask=0, scrollLockMask=0;
 	
 	nlock = XKeysymToKeycode(display, XK_Num_Lock);
 	slock = XKeysymToKeycode(display, XK_Scroll_Lock);
@@ -757,7 +761,16 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 
     scrPtr->useMultiByte = WINGsConfiguration.useMultiByte;
 
-    scrPtr->antialiasedText = WINGsConfiguration.antialiasedText;
+    if (scrPtr->hasXftSupport) {
+        scrPtr->antialiasedText = WINGsConfiguration.antialiasedText;
+    } else {
+        if (WINGsConfiguration.antialiasedText) {
+            wwarning(_("Text antialiasing is enabled in the configuration but"
+                       " the X server doesn't have the required capabilities "
+                       "(missing RENDER extension). Disabling text antialiasing."));
+        }
+        scrPtr->antialiasedText = False;
+    }
 
     scrPtr->normalFont = WMSystemFontOfSize(scrPtr, 
 		WINGsConfiguration.defaultFontSize);

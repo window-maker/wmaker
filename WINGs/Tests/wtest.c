@@ -5,7 +5,7 @@
 #include <WINGs/WINGs.h>
 
 #include <stdio.h>
-
+#include <stdlib.h>
 
 
 /*
@@ -1292,6 +1292,8 @@ main(int argc, char **argv)
 
     testDragAndDrop(scr);
     testText(scr);
+
+    testFontPanel(scr);
 
 #if 0
     testColorPanel(scr);

@@ -161,6 +161,8 @@ typedef struct _WScreen {
     WMFont *clip_title_font;	       /* for clip titles */
     WMFont *info_text_font;	       /* text on things like geometry
 					* hint boxes */
+    WMFont *tech_draw_font;
+
     WMFont *workspace_name_font;
 
     WMColor *select_color;

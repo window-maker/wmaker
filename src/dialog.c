@@ -62,6 +62,8 @@
 #include "defaults.h"
 #include "xinerama.h"
 
+
+
 extern WPreferences wPreferences;
 
 
@@ -844,6 +846,7 @@ typedef struct {
 
     WMLabel *logoL;
     WMLabel *name1L;
+    WMFrame *lineF;
     WMLabel *name2L;
 
     WMLabel *versionL;
@@ -905,53 +908,6 @@ destroyInfoPanel(WCoreWindow *foo, void *data, XEvent *event)
     thePanel = NULL;
 }
 
-
-WMPixmap*
-renderText(WMScreen *scr, char *text, char *font, RColor *from, RColor *to)
-{
-    WMPixmap *wpix = NULL;
-    Pixmap grad = None;
-    Pixmap mask = None;
-    RContext *rc = WMScreenRContext(scr);
-    XFontStruct *f = NULL;
-    int w, h;
-    GC gc = None;
-
-    f = XLoadQueryFont(dpy, font);
-    if (!f)
-	return NULL;
-
-    w = XTextWidth(f, text, strlen(text));
-    h = f->ascent+f->descent;
-
-    mask = XCreatePixmap(dpy, rc->drawable, w, h, 1);
-    gc = XCreateGC(dpy, mask, 0, NULL);
-    XSetForeground(dpy, gc, 0);
-    XSetFont(dpy, gc, f->fid);
-    XFillRectangle(dpy, mask, gc, 0, 0, w, h);
-
-    XSetForeground(dpy, gc, 1);
-    XDrawString(dpy, mask, gc, 0, f->ascent, text, strlen(text));
-    XSetLineAttributes(dpy, gc, 3, LineSolid, CapRound, JoinMiter);
-    XDrawLine(dpy, mask, gc, 0, h-2, w, h-2);
-
-    grad = XCreatePixmap(dpy, rc->drawable, w, h, rc->depth);
-    {
-	WMColor *color;
-
-	color = WMBlackColor(scr);
-	XFillRectangle(dpy, grad, WMColorGC(color), 0, 0, w, h);
-	WMReleaseColor(color);
-    }
-
-    wpix = WMCreatePixmapFromXPixmaps(scr, grad, mask, w, h, rc->depth);
-
-    if (gc)
-	XFreeGC(dpy, gc);
-    XFreeFont(dpy, f);
-
-    return wpix;
-}
 
 #ifdef SILLYNESS
 
@@ -1221,7 +1177,7 @@ handleLogoPush(XEvent *event, void *data)
         /* Alternatively we can draw text in a pixmap and scroll it smoothly */
         if ((panel->oldFont = WMGetLabelFont(panel->versionL))!=NULL)
             WMRetainFont(panel->oldFont);
-        font = WMCreateFont(WMWidgetScreen(panel->versionL), "-*-fixed-*-*-*-*-14-*-*-*-*-*-*-*");
+        font = WMCreateFont(WMWidgetScreen(panel->versionL), "-*-fixed-medium-r-*-*-13-*-*-*-*-*-*-*");
         if (font) {
             WMSetLabelFont(panel->versionL, font);
             WMReleaseFont(font);
@@ -1269,9 +1225,8 @@ wShowInfoPanel(WScreen *scr)
     char buffer[256];
     Window parent;
     WWindow *wwin;
-    RColor color1, color2;
     char **strl;
-    int i;
+    int i, width, sepWidth;
     char *visuals[] = {
 	"StaticGray",
 	    "GrayScale",
@@ -1296,7 +1251,7 @@ wShowInfoPanel(WScreen *scr)
     panel->scr = scr;
 
     panel->win = WMCreateWindow(scr->wmscreen, "info");
-    WMResizeWidget(panel->win, 382, 230);
+    WMResizeWidget(panel->win, 390, 230);
 
     logo = WMCreateApplicationIconBlendedPixmap(scr->wmscreen, (RColor*)NULL);
     if (!logo) {
@@ -1316,30 +1271,31 @@ wShowInfoPanel(WScreen *scr)
         WMReleasePixmap(logo);
     }
 
+    sepWidth = 3;
     panel->name1L = WMCreateLabel(panel->win);
-    WMResizeWidget(panel->name1L, 240, 30);
+    WMResizeWidget(panel->name1L, 240, 30 - sepWidth);
     WMMoveWidget(panel->name1L, 100, 30);
-    color1.red = 0;
-    color1.green = 0;
-    color1.blue = 0;
-    color2.red = 0x50;
-    color2.green = 0x50;
-    color2.blue = 0x70;
-    logo = renderText(scr->wmscreen, "Window Maker",
-		      "-*-utopia-*-r-*-*-25-*", &color1, &color2);
-    if (logo) {
-	WMSetLabelImagePosition(panel->name1L, WIPImageOnly);
-	WMSetLabelImage(panel->name1L, logo);
-	WMReleasePixmap(logo);
+
+    if (WMIsAntialiasingEnabled(scr->wmscreen)) {
+        font = WMBoldSystemFontOfSize(scr->wmscreen, 24);
     } else {
-	font = WMBoldSystemFontOfSize(scr->wmscreen, 20);
-	if (font) {
-	    WMSetLabelFont(panel->name1L, font);
-	    WMReleaseFont(font);
-	}
-	WMSetLabelTextAlignment(panel->name1L, WACenter);
-	WMSetLabelText(panel->name1L, "Window Maker");
+        font = WMCreateFont(scr->wmscreen, "-*-utopia-*-r-*-*-25-*");
+        font = font ? font : WMBoldSystemFontOfSize(scr->wmscreen, 24);
     }
+    strbuf = "Window Maker";
+    if (font) {
+        width = WMWidthOfString(font, strbuf, strlen(strbuf));
+        WMSetLabelFont(panel->name1L, font);
+        WMReleaseFont(font);
+    }
+    WMSetLabelTextAlignment(panel->name1L, WACenter);
+    WMSetLabelText(panel->name1L, strbuf);
+
+    panel->lineF = WMCreateFrame(panel->win);
+    WMResizeWidget(panel->lineF, width, sepWidth);
+    WMMoveWidget(panel->lineF, 100+(240-width)/2, 60 - sepWidth);
+    WMSetFrameRelief(panel->lineF, WRSimple);
+    WMSetWidgetBackgroundColor(panel->lineF, scr->black);
 
     panel->name2L = WMCreateLabel(panel->win);
     WMResizeWidget(panel->name2L, 240, 24);
@@ -1353,7 +1309,6 @@ wShowInfoPanel(WScreen *scr)
     WMSetLabelTextAlignment(panel->name2L, WACenter);
     WMSetLabelText(panel->name2L, _("Window Manager for X"));
 
-    
     snprintf(buffer, sizeof(buffer), _("Version %s"), VERSION);
     panel->versionL = WMCreateLabel(panel->win);
     WMResizeWidget(panel->versionL, 310, 16);
@@ -1363,12 +1318,12 @@ wShowInfoPanel(WScreen *scr)
     WMSetLabelWraps(panel->versionL, False);
 
     panel->copyrL = WMCreateLabel(panel->win);
-    WMResizeWidget(panel->copyrL, 340, 40);
+    WMResizeWidget(panel->copyrL, 360, 40);
     WMMoveWidget(panel->copyrL, 15, 185);
     WMSetLabelTextAlignment(panel->copyrL, WALeft);
     WMSetLabelText(panel->copyrL, COPYRIGHT_TEXT);
-    /* we want the (c) character in the helvetica font */
-    font = WMCreateNormalFont(scr->wmscreen, HELVETICA10_FONT);
+    /* we want the (c) character in the font, so don't use a FontSet here */
+    font = WMCreateFontWithFlags(scr->wmscreen, "SystemFont-11", WFNormalFont);
     if (font) {
         WMSetLabelFont(panel->copyrL, font);
         WMReleaseFont(font);
@@ -1461,7 +1416,7 @@ wShowInfoPanel(WScreen *scr)
     WMResizeWidget(panel->infoL, 350, 75);
     WMMoveWidget(panel->infoL, 15, 115);
     WMSetLabelText(panel->infoL, strbuf);
-    font = WMCreateFont(scr->wmscreen, HELVETICA10_FONT);
+    font = WMSystemFontOfSize(scr->wmscreen, 11);
     if (font) {
 	WMSetLabelFont(panel->infoL, font);
         WMReleaseFont(font);
