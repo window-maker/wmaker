@@ -75,7 +75,8 @@ libWINGs_a_SOURCES = 	\
 	wtext.c \
 	wtextfield.c \
 	wview.c \
-	wwindow.c
+	wwindow.c \
+	snprintf.c
 
 
 libWUtil_a_SOURCES = 	\
