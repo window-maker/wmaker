@@ -292,17 +292,17 @@ numberOfSelectedIcons(WDock *dock)
 }
 
 
-static WMBag*
+static WMArray*
 getSelected(WDock *dock)
 {
-    WMBag *ret = WMCreateBag(8);
+    WMArray *ret = WMCreateArray(8);
     WAppIcon *btn;
     int i;
 
     for (i=1; i<dock->max_icons; i++) {
         btn = dock->icon_array[i];
         if (btn && btn->icon->selected) {
-	    WMPutInBag(ret, btn);
+	    WMAddToArray(ret, btn);
         }
     }
 
@@ -461,9 +461,9 @@ omnipresentCallback(WMenu *menu, WMenuEntry *entry)
     WAppIcon *clickedIcon = entry->clientdata;
     WAppIcon *aicon;
     WDock *dock;
-    WMBag *selectedIcons;
+    WMArray *selectedIcons;
+    WMArrayIterator iter;
     int failed;
-    int i;
 
     assert(entry->clientdata!=NULL);
 
@@ -471,19 +471,17 @@ omnipresentCallback(WMenu *menu, WMenuEntry *entry)
 
     selectedIcons = getSelected(dock);
 
-    if (!WMGetBagItemCount(selectedIcons))
-        WMPutInBag(selectedIcons, clickedIcon);
+    if (!WMGetArrayItemCount(selectedIcons))
+        WMAddToArray(selectedIcons, clickedIcon);
 
     failed = 0;
-    for (i = 0; i < WMGetBagItemCount(selectedIcons); i++) {
-        aicon = WMGetFromBag(selectedIcons, i);
-
+    WM_ITERATE_ARRAY(selectedIcons, aicon, iter) {
         if (wClipMakeIconOmnipresent(aicon, !aicon->omnipresent) == WO_FAILED)
             failed++;
         else if (aicon->icon->selected)
             wIconSelect(aicon->icon);
     }
-    WMFreeBag(selectedIcons);
+    WMFreeArray(selectedIcons);
 
     if (failed > 1) {
         wMessageDialog(dock->screen_ptr, _("Warning"),
@@ -511,9 +509,9 @@ removeIconsCallback(WMenu *menu, WMenuEntry *entry)
     WAppIcon *clickedIcon = (WAppIcon*)entry->clientdata;
     WDock *dock;
     WAppIcon *aicon;
-    WMBag *selectedIcons;
+    WMArray *selectedIcons;
     int keepit;
-    WMBagIterator it;
+    WMArrayIterator it;
 
     assert(clickedIcon!=NULL);
 
@@ -521,22 +519,22 @@ removeIconsCallback(WMenu *menu, WMenuEntry *entry)
 
     selectedIcons = getSelected(dock);
 
-    if (WMGetBagItemCount(selectedIcons)) {
+    if (WMGetArrayItemCount(selectedIcons)) {
 	if (wMessageDialog(dock->screen_ptr, _("Workspace Clip"),
 			   _("All selected icons will be removed!"),
 			   _("OK"), _("Cancel"), NULL)!=WAPRDefault) {
-	    WMFreeBag(selectedIcons);
+	    WMFreeArray(selectedIcons);
 	    return;
 	}
     } else {
 	if (clickedIcon->xindex==0 && clickedIcon->yindex==0) {
-	    WMFreeBag(selectedIcons);
+	    WMFreeArray(selectedIcons);
 	    return;
 	}
-	WMPutInBag(selectedIcons, clickedIcon);
+	WMAddToArray(selectedIcons, clickedIcon);
     }
 
-    WM_ITERATE_BAG(selectedIcons, aicon, it) {
+    WM_ITERATE_ARRAY(selectedIcons, aicon, it) {
         keepit = aicon->running && wApplicationOf(aicon->main_window);
         wDockDetach(dock, aicon);
         if (keepit) {
@@ -547,7 +545,7 @@ removeIconsCallback(WMenu *menu, WMenuEntry *entry)
                 XMapWindow(dpy, aicon->icon->core->window);
         }
     }
-    WMFreeBag(selectedIcons);
+    WMFreeArray(selectedIcons);
 
     if (wPreferences.auto_arrange_icons)
         wArrangeIcons(dock->screen_ptr, True);
@@ -560,15 +558,15 @@ keepIconsCallback(WMenu *menu, WMenuEntry *entry)
     WAppIcon *clickedIcon = (WAppIcon*)entry->clientdata;
     WDock *dock;
     WAppIcon *aicon;
-    WMBag *selectedIcons;
-    WMBagIterator it;
+    WMArray *selectedIcons;
+    WMArrayIterator it;
 
     assert(clickedIcon!=NULL);
     dock = clickedIcon->dock;
 
     selectedIcons = getSelected(dock);
 
-    if (!WMGetBagItemCount(selectedIcons) 
+    if (!WMGetArrayItemCount(selectedIcons) 
 	&& clickedIcon!=dock->screen_ptr->clip_icon) {
 	char *command = NULL;
 	
@@ -588,15 +586,15 @@ keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 		clickedIcon->editing = 0;
 		if (command)
 		    wfree(command);
-		WMFreeBag(selectedIcons);
+		WMFreeArray(selectedIcons);
 		return;
 	    }
 	}
 
-	WMPutInBag(selectedIcons, clickedIcon);
+	WMAddToArray(selectedIcons, clickedIcon);
     }
 
-    WM_ITERATE_BAG(selectedIcons, aicon, it) {
+    WM_ITERATE_ARRAY(selectedIcons, aicon, it) {
 	if (aicon->icon->selected)
             wIconSelect(aicon->icon);
         if (aicon && aicon->attracted && aicon->command) {
@@ -608,7 +606,7 @@ keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 	    }
         }
     }
-    WMFreeBag(selectedIcons);
+    WMFreeArray(selectedIcons);
 }
 
 
@@ -695,7 +693,8 @@ selectIconsCallback(WMenu *menu, WMenuEntry *entry)
 {
     WAppIcon *clickedIcon = (WAppIcon*)entry->clientdata;
     WDock *dock;
-    WMBag *selectedIcons;
+    WMArray *selectedIcons;
+    WMArrayIterator iter;
     WAppIcon *btn;
     int i;
 
@@ -704,7 +703,7 @@ selectIconsCallback(WMenu *menu, WMenuEntry *entry)
 
     selectedIcons = getSelected(dock);
 
-    if (!WMGetBagItemCount(selectedIcons)) {
+    if (!WMGetArrayItemCount(selectedIcons)) {
         for (i=1; i<dock->max_icons; i++) {
             btn = dock->icon_array[i];
             if (btn && !btn->icon->selected) {
@@ -712,12 +711,11 @@ selectIconsCallback(WMenu *menu, WMenuEntry *entry)
             }
         }
     } else {
-        for (i = 0; i < WMGetBagItemCount(selectedIcons); i++) {
-            btn = WMGetFromBag(selectedIcons, i);
+        WM_ITERATE_ARRAY(selectedIcons, btn, iter) {
 	    wIconSelect(btn->icon);
         }
     }
-    WMFreeBag(selectedIcons);
+    WMFreeArray(selectedIcons);
 
     wMenuPaint(menu);
 }
@@ -861,7 +859,7 @@ switchWSCommand(WMenu *menu, WMenuEntry *entry)
     WAppIcon *btn, *icon = (WAppIcon*) entry->clientdata;
     WScreen *scr = icon->icon->core->screen_ptr;
     WDock *src, *dest;
-    WMBag *selectedIcons;
+    WMArray *selectedIcons;
     int x, y;
 
     if (entry->order == scr->current_workspace)
@@ -871,10 +869,10 @@ switchWSCommand(WMenu *menu, WMenuEntry *entry)
 
     selectedIcons = getSelected(src);
 
-    if (WMGetBagItemCount(selectedIcons)) {
-	int i;
-	for (i = 0; i < WMGetBagItemCount(selectedIcons); i++) {
-            btn = WMGetFromBag(selectedIcons, i);
+    if (WMGetArrayItemCount(selectedIcons)) {
+        WMArrayIterator iter;
+
+        WM_ITERATE_ARRAY(selectedIcons, btn, iter) {
             if (wDockFindFreeSlot(dest, &x, &y)) {
                 moveIconBetweenDocks(src, dest, btn, x, y);
                 XUnmapWindow(dpy, btn->icon->core->window);
@@ -886,7 +884,7 @@ switchWSCommand(WMenu *menu, WMenuEntry *entry)
             XUnmapWindow(dpy, icon->icon->core->window);
         }
     }
-    WMFreeBag(selectedIcons);
+    WMFreeArray(selectedIcons);
 }
 
 

@@ -156,7 +156,7 @@ typedef struct DeathHandler {
     void 		*client_data;
 } DeathHandler;
 
-static WMBag *deathHandlers=NULL;
+static WMArray *deathHandlers=NULL;
 
 
 
@@ -174,9 +174,9 @@ wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata)
     handler->client_data = cdata;
 
     if (!deathHandlers)
-	deathHandlers = WMCreateBag(8);
+	deathHandlers = WMCreateArrayWithDestructor(8, wfree);
 
-    WMPutInBag(deathHandlers, handler);
+    WMAddToArray(deathHandlers, handler);
 
     return handler;
 }
@@ -191,9 +191,8 @@ wDeleteDeathHandler(WMagicNumber id)
     if (!handler || !deathHandlers)
       return;
 
-    WMRemoveFromBag(deathHandlers, handler);
-
-    wfree(handler);
+    /* array destructor will call wfree(handler) */
+    WMRemoveFromArray(deathHandlers, handler);
 }
 
 
@@ -384,8 +383,8 @@ handleDeadProcess(void *foo)
     while (deadProcessPtr>0) {
 	deadProcessPtr--;
 
-	for (i = WMGetBagItemCount(deathHandlers)-1; i >= 0; i--) {
-	    tmp = WMGetFromBag(deathHandlers, i);
+	for (i = WMGetArrayItemCount(deathHandlers)-1; i >= 0; i--) {
+	    tmp = WMGetFromArray(deathHandlers, i);
 	    if (!tmp)
 		continue;
 
@@ -1514,25 +1513,20 @@ handleKeyPress(XEvent *event)
      case WKBD_WINDOW9:
      case WKBD_WINDOW10:
 
-#define INITBAG(bag)  if (bag) WMEmptyBag(bag); else bag = WMCreateBag(4)
-
 	index = command-WKBD_WINDOW1;
 	
         if (scr->shortcutWindows[index]) {
-            WMBag *list = scr->shortcutWindows[index];
+            WMArray *list = scr->shortcutWindows[index];
             int cw;
-	    int count = WMGetBagItemCount(list);
+	    int count = WMGetArrayItemCount(list);
 	    WWindow *twin;
-	    WMBagIterator iter;
+	    WMArrayIterator iter;
 	    WWindow *wwin;
 
             wUnselectWindows(scr);
             cw = scr->current_workspace;
 
-	    for (wwin = WMBagLast(list, &iter);
-		 iter != NULL;
-		 wwin = WMBagPrevious(list, &iter)) {
-			
+            WM_ETARETI_ARRAY(list, wwin, iter) {
 		if (count > 1)
 		    wWindowChangeWorkspace(wwin, cw);
 
@@ -1543,26 +1537,26 @@ handleKeyPress(XEvent *event)
             }
 	    
 	    /* rotate the order of windows, to create a cycling effect */
-	    twin = WMBagFirst(list, &iter);
-	    WMRemoveFromBag(list, twin);
-	    WMPutInBag(list, twin);
+	    twin = WMGetFromArray(list, 0);
+	    WMDeleteFromArray(list, 0);
+	    WMAddToArray(list, twin);
 
         } else if (wwin && ISMAPPED(wwin) && ISFOCUSED(wwin)) {
-
-	    INITBAG(scr->shortcutWindows[index]);
-            WMPutInBag(scr->shortcutWindows[index], wwin);
+            if (scr->shortcutWindows[index]) {
+                WMFreeArray(scr->shortcutWindows[index]);
+                scr->shortcutWindows[index] = NULL;
+            }
 
             if (wwin->flags.selected && scr->selected_windows) {
-                WMBag *selwins = scr->selected_windows;
-		int i;
-
-		for (i = 0; i < WMGetBagItemCount(selwins); i++) {
-		    WWindow *tmp = WMGetFromBag(selwins, i);
-
-		    if (tmp != wwin)
-			WMPutInBag(scr->shortcutWindows[index], tmp);
-                }
+                scr->shortcutWindows[index] =
+                    WMDuplicateArray(scr->selected_windows);
+                /*WMRemoveFromArray(scr->shortcutWindows[index], wwin);
+                WMInsertInArray(scr->shortcutWindows[index], 0, wwin);*/
+            } else {
+                scr->shortcutWindows[index] = WMCreateArray(4);
+                WMAddToArray(scr->shortcutWindows[index], wwin);
             }
+
             wSelectWindow(wwin, !wwin->flags.selected);
             XFlush(dpy);
             wusleep(3000);
@@ -1570,22 +1564,16 @@ handleKeyPress(XEvent *event)
             XFlush(dpy);
 
         } else if (scr->selected_windows 
-		   && WMGetBagItemCount(scr->selected_windows)) {
+		   && WMGetArrayItemCount(scr->selected_windows)) {
 
             if (wwin->flags.selected && scr->selected_windows) {
-                WMBag *selwins = scr->selected_windows;
-		int i;
-
-                INITBAG(scr->shortcutWindows[index]);
-
-		for (i = 0; i < WMGetBagItemCount(selwins); i++) {
-		    WWindow *tmp = WMGetFromBag(selwins, i);
-
-                    WMPutInBag(scr->shortcutWindows[index],  tmp);
+                if (scr->shortcutWindows[index]) {
+                    WMFreeArray(scr->shortcutWindows[index]);
                 }
+                scr->shortcutWindows[index] =
+                    WMDuplicateArray(scr->selected_windows);
             }
         }
-#undef INITBAG
 
         break;
 	

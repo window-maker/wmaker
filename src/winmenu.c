@@ -203,25 +203,17 @@ makeShortcutCommand(WMenu *menu, WMenuEntry *entry)
     int index = entry->order-WO_ENTRIES;
 
     if (scr->shortcutWindows[index]) {
-	WMFreeBag(scr->shortcutWindows[index]);
+	WMFreeArray(scr->shortcutWindows[index]);
 	scr->shortcutWindows[index] = NULL;
     }
 
     if (wwin->flags.selected && scr->selected_windows) {
-        WMBag *selwin = scr->selected_windows;
-	int i;
-	
-	scr->shortcutWindows[index] = WMCreateBag(4);
-
-        for (i = 0; i < WMGetBagItemCount(selwin); i++) {
-	    WWindow *tmp = WMGetFromBag(selwin, i);
-
-	    WMPutInBag(scr->shortcutWindows[index], tmp);
-        }
+        scr->shortcutWindows[index] = WMDuplicateArray(scr->selected_windows);
+        /*WMRemoveFromArray(scr->shortcutWindows[index], wwin);
+        WMInsertInArray(scr->shortcutWindows[index], 0, wwin);*/
     } else {
-	scr->shortcutWindows[index] = WMCreateBag(4);
-
-	WMPutInBag(scr->shortcutWindows[index], wwin);
+	scr->shortcutWindows[index] = WMCreateArray(4);
+	WMAddToArray(scr->shortcutWindows[index], wwin);
     }
 
     wSelectWindow(wwin, !wwin->flags.selected);
@@ -281,7 +273,7 @@ updateMakeShortcutMenu(WMenu *menu, WWindow *wwin)
 	char *tmp;
 	int shortcutNo = i-WO_ENTRIES;
 	WMenuEntry *entry = smenu->entries[i];
-	WMBag *shortSelWindows = wwin->screen_ptr->shortcutWindows[shortcutNo];
+	WMArray *shortSelWindows = wwin->screen_ptr->shortcutWindows[shortcutNo];
 
 	sprintf(buffer, "%s %i", _("Set Shortcut"), shortcutNo+1);
 	
@@ -289,7 +281,7 @@ updateMakeShortcutMenu(WMenu *menu, WWindow *wwin)
 	    entry->flags.indicator_on = 0;
 	} else {
 	    entry->flags.indicator_on = 1;
-	    if (WMCountInBag(shortSelWindows, wwin))
+	    if (WMCountInArray(shortSelWindows, wwin))
 		entry->flags.indicator_type = MI_DIAMOND;
 	    else
 		entry->flags.indicator_type = MI_CHECK;

@@ -38,9 +38,9 @@ typedef struct SelectionCallback {
 } SelectionCallback;
 
 
-WMBag *selCallbacks = NULL;
+WMArray *selCallbacks = NULL;
 
-WMBag *selHandlers = NULL;
+WMArray *selHandlers = NULL;
 
 
 void
@@ -49,13 +49,13 @@ WMDeleteSelectionHandler(WMView *view, Atom selection, Time timestamp)
     SelectionHandler *handler;
     Display *dpy = W_VIEW_SCREEN(view)->display;
     Window win = W_VIEW_DRAWABLE(view);
-    WMBagIterator iter;
+    WMArrayIterator iter;
 
     if (!selHandlers)
         return;
     
     
-    WM_ITERATE_BAG(selHandlers, handler, iter) {
+    WM_ITERATE_ARRAY(selHandlers, handler, iter) {
 	if (handler->view == view
 	    && (handler->selection == selection || selection == None)
 	    && (handler->timestamp == timestamp || timestamp == CurrentTime)) {
@@ -64,8 +64,7 @@ WMDeleteSelectionHandler(WMView *view, Atom selection, Time timestamp)
 		handler->flags.delete_pending = 1;
 		return;
 	    }
-	    WMRemoveFromBag(selHandlers, handler);
-	    wfree(handler);
+	    WMRemoveFromArray(selHandlers, handler);
 	    break;
         }
     }
@@ -83,12 +82,12 @@ void
 WMDeleteSelectionCallback(WMView *view, Atom selection, Time timestamp)
 {
     SelectionCallback *handler;
-    WMBagIterator iter;
+    WMArrayIterator iter;
 
     if (!selCallbacks)
         return;
     
-    WM_ITERATE_BAG(selCallbacks, handler, iter) {
+    WM_ITERATE_ARRAY(selCallbacks, handler, iter) {
 	if (handler->view == view
 	    && (handler->selection == selection || selection == 0)
 	    && (handler->timestamp == timestamp || timestamp == CurrentTime)) {
@@ -97,8 +96,7 @@ WMDeleteSelectionCallback(WMView *view, Atom selection, Time timestamp)
 		handler->flags.delete_pending = 1;
 		return;
 	    }
-	    WMRemoveFromBag(selCallbacks, handler);
-	    wfree(handler);
+	    WMRemoveFromArray(selCallbacks, handler);
 	    break;
         }
     }
@@ -170,38 +168,15 @@ notifySelection(XEvent *event, Atom prop)
 }
 
 
-
-static void
-deleteHandlers(WMBagIterator iter)
-{
-    SelectionHandler *handler;
-    
-    if (iter == NULL)
-	handler = WMBagFirst(selHandlers, &iter);
-    else
-	handler = WMBagNext(selHandlers, &iter);
-
-    if (handler == NULL)
-	return;
-    
-    deleteHandlers(iter);
-
-    if (handler->flags.delete_pending) {
-	WMDeleteSelectionHandler(handler->view, handler->selection,
-				 handler->timestamp);
-    }
-}
-
-
-
 static void
 handleRequestEvent(XEvent *event)
 {
     SelectionHandler *handler;
-    WMBagIterator iter;
+    WMArrayIterator iter;
+    WMArray *copy;
     Bool handledRequest = False;
 
-    WM_ITERATE_BAG(selHandlers, handler, iter) {
+    WM_ITERATE_ARRAY(selHandlers, handler, iter) {
 
 	switch (event->type) {
 	 case SelectionClear:
@@ -285,33 +260,16 @@ handleRequestEvent(XEvent *event)
 	}
     }
 
-    deleteHandlers(NULL);
-}
-
-
-
-static void
-deleteCallbacks(WMBagIterator iter)
-{
-    SelectionCallback *handler;
-    
-    if (iter == NULL)
-	handler = WMBagFirst(selCallbacks, &iter);
-    else
-	handler = WMBagNext(selCallbacks, &iter);
-
-    if (handler == NULL)
-	return;
-    
-    deleteCallbacks(iter);
-
-    if (handler->flags.delete_pending) {
-	WMDeleteSelectionCallback(handler->view, handler->selection,
-				  handler->timestamp);
+    /* delete handlers */
+    copy = WMDuplicateArray(selHandlers);
+    WM_ITERATE_ARRAY(copy, handler, iter) {
+        if (handler && handler->flags.delete_pending) {
+            WMDeleteSelectionHandler(handler->view, handler->selection,
+                                     handler->timestamp);
+        }
     }
+    WMFreeArray(copy);
 }
-
-
 
 
 static WMData*
@@ -344,10 +302,11 @@ static void
 handleNotifyEvent(XEvent *event)
 {
     SelectionCallback *handler;
-    WMBagIterator iter;
+    WMArrayIterator iter;
+    WMArray *copy;
     WMData *data;
 
-    WM_ITERATE_BAG(selCallbacks, handler, iter) {
+    WM_ITERATE_ARRAY(selCallbacks, handler, iter) {
 	
 	if (W_VIEW_DRAWABLE(handler->view) != event->xselection.requestor
 	    && handler->selection == event->xselection.selection) {
@@ -373,7 +332,16 @@ handleNotifyEvent(XEvent *event)
 	handler->flags.done_pending = 0;
 	handler->flags.delete_pending = 1;
     }
-    deleteCallbacks(NULL);
+
+    /* delete callbacks */
+    copy = WMDuplicateArray(selCallbacks);
+    WM_ITERATE_ARRAY(copy, handler, iter) {
+        if (handler && handler->flags.delete_pending) {
+            WMDeleteSelectionCallback(handler->view, handler->selection,
+                                      handler->timestamp);
+        }
+    }
+    WMFreeArray(copy);
 }
 
 
@@ -414,10 +382,10 @@ WMCreateSelectionHandler(WMView *view, Atom selection, Time timestamp,
     memset(&handler->flags, 0, sizeof(handler->flags));
 
     if (selHandlers == NULL) {
-	selHandlers = WMCreateTreeBag();
+	selHandlers = WMCreateArrayWithDestructor(4, wfree);
     }
     
-    WMPutInBag(selHandlers, handler);
+    WMAddToArray(selHandlers, handler);
     
     return True;
 }
@@ -444,10 +412,10 @@ WMRequestSelection(WMView *view, Atom selection, Atom target, Time timestamp,
     memset(&handler->flags, 0, sizeof(handler->flags));
     
     if (selCallbacks == NULL) {
-	selCallbacks = WMCreateTreeBag();
+	selCallbacks = WMCreateArrayWithDestructor(4, wfree);
     }
 
-    WMPutInBag(selCallbacks, handler);
+    WMAddToArray(selCallbacks, handler);
 
     if (!XConvertSelection(W_VIEW_SCREEN(view)->display, selection, target,
 			   W_VIEW_SCREEN(view)->clipboardAtom,

@@ -193,14 +193,23 @@ WMDeleteFromArray(WMArray *array, int index)
 
 
 int
-WMRemoveFromArray(WMArray *array, void *item)
+WMRemoveFromArrayMatching(WMArray *array, WMMatchDataProc *match, void *cdata)
 {
     int i;
 
-    for (i = 0; i < array->itemCount; i++) {
-        if (array->items[i] == item) {
-            WMDeleteFromArray(array, i);
-            return 1;
+    if (match != NULL) {
+        for (i = 0; i < array->itemCount; i++) {
+            if ((*match)(array->items[i], cdata)) {
+                WMDeleteFromArray(array, i);
+                return 1;
+            }
+        }
+    } else {
+        for (i = 0; i < array->itemCount; i++) {
+            if (array->items[i] == cdata) {
+                WMDeleteFromArray(array, i);
+                return 1;
+            }
         }
     }
 
@@ -302,5 +311,56 @@ WMGetSubarrayWithRange(WMArray* array, WMRange aRange)
 
     return newArray;
 }
+
+
+void*
+WMArrayFirst(WMArray *array, WMArrayIterator *iter)
+{
+    if (array->itemCount == 0) {
+        *iter = WANotFound;
+        return NULL;
+    } else {
+        *iter = 0;
+        return array->items[0];
+    }
+}
+
+
+void*
+WMArrayLast(WMArray *array, WMArrayIterator *iter)
+{
+    if (array->itemCount == 0) {
+        *iter = WANotFound;
+        return NULL;
+    } else {
+        *iter = array->itemCount-1;
+        return array->items[*iter];
+    }
+}
+
+
+void*
+WMArrayNext(WMArray *array, WMArrayIterator *iter)
+{
+    if (*iter >= 0 && *iter < array->itemCount-1) {
+        return array->items[++(*iter)];
+    } else {
+        *iter = WANotFound;
+        return NULL;
+    }
+}
+
+
+void*
+WMArrayPrevious(WMArray *array, WMArrayIterator *iter)
+{
+    if (*iter > 0 && *iter < array->itemCount) {
+        return array->items[--(*iter)];
+    } else {
+        *iter = WANotFound;
+        return NULL;
+    }
+}
+
 
 

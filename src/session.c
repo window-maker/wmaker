@@ -256,7 +256,7 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
 	
 	for (mask = 0, i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
 	    if (scr->shortcutWindows[i] != NULL &&
-		WMGetFirstInBag(scr->shortcutWindows[i], wwin) != WBNotFound) {
+		WMGetFirstInArray(scr->shortcutWindows[i], wwin) != WANotFound) {
 		mask |= 1<<i;
 	    }
 	}
@@ -314,7 +314,7 @@ wSessionSaveState(WScreen *scr)
     WWindow *wwin = scr->focused_window;
     proplist_t win_info, wks;
     proplist_t list=NULL;
-    WMBag *wapp_list=NULL;
+    WMArray *wapp_list=NULL;
 
 
     make_keys();
@@ -327,13 +327,13 @@ wSessionSaveState(WScreen *scr)
 
     list = PLMakeArrayFromElements(NULL);
 
-    wapp_list = WMCreateBag(16);
+    wapp_list = WMCreateArray(16);
 
     while (wwin) {
         WApplication *wapp=wApplicationOf(wwin->main_window);
 
         if (wwin->transient_for==None 
-	    && WMGetFirstInBag(wapp_list, wapp)==WBNotFound
+	    && WMGetFirstInArray(wapp_list, wapp)==WANotFound
 	    && !WFLAGP(wwin, dont_save_session)) {
             /* A entry for this application was not yet saved. Save one. */
             if ((win_info = makeWindowState(wwin, wapp))!=NULL) {
@@ -344,7 +344,7 @@ wSessionSaveState(WScreen *scr)
                  * application list, so no multiple entries for the same
                  * application are saved.
                  */
-		WMPutInBag(wapp_list, wapp);
+		WMAddToArray(wapp_list, wapp);
             }
         }
         wwin = wwin->prev;
@@ -357,7 +357,7 @@ wSessionSaveState(WScreen *scr)
     PLInsertDictionaryEntry(scr->session_state, sWorkspace, wks);
     PLRelease(wks);
 
-    WMFreeBag(wapp_list);
+    WMFreeArray(wapp_list);
 }
 
 

@@ -601,7 +601,7 @@ static void
 separateCommand(char *line, char ***file, char **command)
 {
     char *token, *tmp = line;
-    WMBag *bag = WMCreateBag(4);
+    WMArray *array = WMCreateArray(4);
     int count, i;
 
     *file = NULL;
@@ -616,19 +616,19 @@ separateCommand(char *line, char ***file, char **command)
                     wwarning(_("%s: missing command"), line);
                 break;
             }
-	    WMPutInBag(bag, token);
+	    WMAddToArray(array, token);
         }
     } while (token!=NULL && tmp!=NULL);
 
-    count = WMGetBagItemCount(bag);
+    count = WMGetArrayItemCount(array);
     if (count>0) {
         *file = wmalloc(sizeof(char*)*(count+1));
         (*file)[count] = NULL;
         for (i = 0; i < count; i++) {
-            (*file)[i] = WMGetFromBag(bag, i);
+            (*file)[i] = WMGetFromArray(array, i);
         }
     }
-    WMFreeBag(bag);
+    WMFreeArray(array);
 }
 
 
@@ -1334,14 +1334,15 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
     struct stat stat_buf;
     WMenu *menu=NULL;
     char *buffer;
-    WMBag *dirs = NULL, *files = NULL;
+    WMArray *dirs = NULL, *files = NULL;
+    WMArrayIterator iter;
     int length, i, have_space=0;
     dir_data *data;
     int stripExtension = 0;
 
     
-    dirs = WMCreateBag(16);
-    files = WMCreateBag(16);
+    dirs = WMCreateArray(16);
+    files = WMCreateArray(16);
     
     i=0;
     while (path[i]!=NULL) {
@@ -1395,7 +1396,7 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
 			data->name = wstrdup(dentry->d_name);
 			data->index = i;
 
-			WMPutInBag(dirs, data);
+			WMAddToArray(dirs, data);
                     }
                 } else if (S_ISREG(stat_buf.st_mode) || isFilePack) {
                     /* Hack because access always returns X_OK success for user root */
@@ -1408,7 +1409,7 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
 			data->name = wstrdup(dentry->d_name);
 			data->index = i;
 
-			WMPutInBag(files, data);
+			WMAddToArray(files, data);
                     }
                 }
             }
@@ -1419,24 +1420,22 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
         i++;
     }
     
-    if (!WMGetBagItemCount(dirs) && !WMGetBagItemCount(files)) {
-	WMFreeBag(dirs);
-	WMFreeBag(files);
+    if (!WMGetArrayItemCount(dirs) && !WMGetArrayItemCount(files)) {
+	WMFreeArray(dirs);
+	WMFreeArray(files);
         return NULL;
     }
 
-    WMSortBag(dirs, myCompare);
-    WMSortBag(files, myCompare);
+    WMSortArray(dirs, myCompare);
+    WMSortArray(files, myCompare);
 
     menu = wMenuCreate(scr, title, False);
     menu->on_destroy = removeShortcutsForMenu;
 
-    for (i = 0; i < WMGetBagItemCount(dirs); i++) {
+    WM_ITERATE_ARRAY(dirs, data, iter) {
         /* New directory. Use same OPEN_MENU command that was used
          * for the current directory. */
-        dir_data *d = (dir_data*)WMGetFromBag(dirs, i);
-
-        length = strlen(path[d->index])+strlen(d->name)+6;
+        length = strlen(path[data->index])+strlen(data->name)+6;
 	if (stripExtension)
 	    length += 7;
         if (command)
@@ -1444,7 +1443,7 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
         buffer = malloc(length);
         if (!buffer) {
             wsyserror(_("out of memory while constructing directory menu %s"),
-                     path[d->index]);
+                     path[data->index]);
             break;
         }
 	
@@ -1452,15 +1451,15 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
         if (stripExtension)
             strcat(buffer, "-noext ");
 
-        have_space = strchr(path[d->index], ' ')!=NULL ||
-                     strchr(d->name, ' ')!=NULL;
+        have_space = strchr(path[data->index], ' ')!=NULL ||
+                     strchr(data->name, ' ')!=NULL;
 
 	if (have_space)
             strcat(buffer, "\"");
-	strcat(buffer, path[d->index]);
+	strcat(buffer, path[data->index]);
 
         strcat(buffer, "/");
-        strcat(buffer, d->name);
+        strcat(buffer, data->name);
         if (have_space)
             strcat(buffer, "\"");
         if (command) {
@@ -1468,66 +1467,64 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
             strcat(buffer, command);
         }
 
-        addMenuEntry(menu, d->name, NULL, "OPEN_MENU", buffer, path[d->index]);
+        addMenuEntry(menu, data->name, NULL, "OPEN_MENU", buffer, path[data->index]);
 
         wfree(buffer);
-	if (d->name)
-	    wfree(d->name);
-	wfree(d);
+	if (data->name)
+	    wfree(data->name);
+	wfree(data);
     }
 
-    for (i = 0; i < WMGetBagItemCount(files); i++) {
+    WM_ITERATE_ARRAY(files, data, iter) {
         /* executable: add as entry */
-        dir_data *f = (dir_data*)WMGetFromBag(files, i);
-
-        length = strlen(path[f->index])+strlen(f->name)+6;
+        length = strlen(path[data->index])+strlen(data->name)+6;
         if (command)
             length += strlen(command);
 
         buffer = malloc(length);
         if (!buffer) {
             wsyserror(_("out of memory while constructing directory menu %s"),
-                     path[f->index]);
+                     path[data->index]);
             break;
         }
 
-        have_space = strchr(path[f->index], ' ')!=NULL ||
-                     strchr(f->name, ' ')!=NULL;
+        have_space = strchr(path[data->index], ' ')!=NULL ||
+                     strchr(data->name, ' ')!=NULL;
         if (command!=NULL) {
             strcpy(buffer, command);
             strcat(buffer, " ");
             if (have_space)
                 strcat(buffer, "\"");
-            strcat(buffer, path[f->index]);
+            strcat(buffer, path[data->index]);
         } else {
             if (have_space) {
                 buffer[0] = '"';
                 buffer[1] = 0;
-                strcat(buffer, path[f->index]);
+                strcat(buffer, path[data->index]);
             } else {
-                strcpy(buffer, path[f->index]);
+                strcpy(buffer, path[data->index]);
             }
         }
         strcat(buffer, "/");
-        strcat(buffer, f->name);
+        strcat(buffer, data->name);
         if (have_space)
             strcat(buffer, "\"");
 
 	if (stripExtension) {
-	    char *ptr = strrchr(f->name, '.');
-	    if (ptr && ptr!=f->name)
+	    char *ptr = strrchr(data->name, '.');
+	    if (ptr && ptr!=data->name)
 		*ptr = 0;
 	}
-        addMenuEntry(menu, f->name, NULL, "SHEXEC", buffer, path[f->index]);
+        addMenuEntry(menu, data->name, NULL, "SHEXEC", buffer, path[data->index]);
 
         wfree(buffer);
-	if (f->name)
-	    wfree(f->name);
-	wfree(f);
+	if (data->name)
+	    wfree(data->name);
+	wfree(data);
     }
     
-    WMFreeBag(files);
-    WMFreeBag(dirs);
+    WMFreeArray(files);
+    WMFreeArray(dirs);
 
     return menu;
 }

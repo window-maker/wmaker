@@ -471,7 +471,7 @@ typedef struct {
     char showSetWidth; /* when duplicated */
     char showAddStyle; /* when duplicated */
     
-    WMBag *sizes;
+    WMArray *sizes;
 } Typeface;
 
 
@@ -484,7 +484,7 @@ typedef struct {
     char showFoundry; /* when duplicated */
     char showRegistry; /* when duplicated */
 
-    WMBag *typefaces;
+    WMArray *typefaces;
 } Family;
 
 
@@ -515,15 +515,15 @@ addSizeToTypeface(Typeface *face, int size)
 	for (j = 0; j < sizeof(scalableFontSizes)/sizeof(int); j++) {
 	    size = scalableFontSizes[j];
 
-	    if (!WMCountInBag(face->sizes, (void*)size)) {
-		WMPutInBag(face->sizes, (void*)size);
+	    if (!WMCountInArray(face->sizes, (void*)size)) {
+		WMAddToArray(face->sizes, (void*)size);
 	    }
 	}
-	WMSortBag(face->sizes, compare_int);
+	WMSortArray(face->sizes, compare_int);
     } else {
-	if (!WMCountInBag(face->sizes, (void*)size)) {
-	    WMPutInBag(face->sizes, (void*)size);
-	    WMSortBag(face->sizes, compare_int);
+	if (!WMCountInArray(face->sizes, (void*)size)) {
+	    WMAddToArray(face->sizes, (void*)size);
+	    WMSortArray(face->sizes, compare_int);
 	}
     }
 }
@@ -534,12 +534,10 @@ static void
 addTypefaceToFamily(Family *family, char fontFields[NUM_FIELDS][256])
 {
     Typeface *face;
-    WMBagIterator i;
+    WMArrayIterator i;
 
     if (family->typefaces) {
-	for (face = WMBagFirst(family->typefaces, &i);
-	     face != NULL;
-	     face = WMBagNext(family->typefaces, &i)) {
+        WM_ITERATE_ARRAY(family->typefaces, face, i) {
 	    int size;
 
 	    if (strcmp(face->weight, fontFields[WEIGHT]) != 0) {
@@ -556,7 +554,7 @@ addTypefaceToFamily(Family *family, char fontFields[NUM_FIELDS][256])
 	    return;
 	}
     } else {
-	family->typefaces = WMCreateBag(4);
+	family->typefaces = WMCreateArray(4);
     }
 
     face = wmalloc(sizeof(Typeface));
@@ -567,16 +565,16 @@ addTypefaceToFamily(Family *family, char fontFields[NUM_FIELDS][256])
     face->setWidth = wstrdup(fontFields[SETWIDTH]);
     face->addStyle = wstrdup(fontFields[ADD_STYLE]);
 
-    face->sizes = WMCreateBag(4);
+    face->sizes = WMCreateArray(4);
     addSizeToTypeface(face, atoi(fontFields[PIXEL_SIZE]));
 
-    WMPutInBag(family->typefaces, face);
+    WMAddToArray(family->typefaces, face);
 }
 
 
 
 /*
- * families (same family name) (Hashtable of family -> bag)
+ * families (same family name) (Hashtable of family -> array)
  * 	registries (same family but different registries)
  * 
  */
@@ -584,18 +582,16 @@ addTypefaceToFamily(Family *family, char fontFields[NUM_FIELDS][256])
 static void
 addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
 {
-    WMBagIterator i;
+    WMArrayIterator i;
     Family *fam;
-    WMBag *family;
+    WMArray *family;
 
 
     family = WMHashGet(families, fontFields[FAMILY]);
     
     if (family) {
 	/* look for same encoding/registry and foundry */
-	for (fam = WMBagFirst(family, &i);
-	     fam != NULL;
-	     fam = WMBagNext(family, &i)) {
+        WM_ITERATE_ARRAY(family, fam, i) {
 	    int enc, reg, found;
 
 	    enc = (strcmp(fam->encoding, fontFields[ENCODING]) == 0);
@@ -608,9 +604,7 @@ addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
 	    }
 	}
 	/* look for same encoding/registry */
-	for (fam = WMBagFirst(family, &i);
-	     fam != NULL;
-	     fam = WMBagNext(family, &i)) {
+        WM_ITERATE_ARRAY(family, fam, i) {
 	    int enc, reg;
 	    
 	    enc = (strcmp(fam->encoding, fontFields[ENCODING]) == 0);
@@ -631,14 +625,12 @@ addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
 
 		addTypefaceToFamily(fam, fontFields);
 
-		WMPutInBag(family, fam);
+		WMAddToArray(family, fam);
 		return;
 	    }
 	}
 	/* look for same foundry */
-	for (fam = WMBagFirst(family, &i);
-	     fam != NULL;
-	     fam = WMBagNext(family, &i)) {
+        WM_ITERATE_ARRAY(family, fam, i) {
 	    int found;
 	    
 	    found = (strcmp(fam->foundry, fontFields[FOUNDRY]) == 0);
@@ -658,7 +650,7 @@ addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
 
 		addTypefaceToFamily(fam, fontFields);
 
-		WMPutInBag(family, fam);
+		WMAddToArray(family, fam);
 		return;
 	    }
 	}
@@ -675,11 +667,11 @@ addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
 
 	addTypefaceToFamily(fam, fontFields);
 
-	WMPutInBag(family, fam);
+	WMAddToArray(family, fam);
 	return;
     }
 
-    family = WMCreateBag(8);
+    family = WMCreateArray(8);
 
     fam = wmalloc(sizeof(Family));
     memset(fam, 0, sizeof(Family));
@@ -691,7 +683,7 @@ addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
 	
     addTypefaceToFamily(fam, fontFields);
     
-    WMPutInBag(family, fam);
+    WMAddToArray(family, fam);
 
     WMHashInsert(families, fam->name, family);
 }
@@ -707,7 +699,7 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
     WMHashTable *families = WMCreateHashTable(WMStringPointerHashCallbacks);
     char fields[NUM_FIELDS][256];
     WMHashEnumerator enumer;
-    WMBag *bag;
+    WMArray *array;
     
     fontList = XListFonts(scr->display, ALL_FONTS_MASK, MAX_FONTS_TO_RETRIEVE, 
                           &count);
@@ -739,16 +731,13 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
 
     enumer = WMEnumerateHashTable(families);
     
-    while ((bag = WMNextHashEnumeratorItem(&enumer))) {
-	WMBagIterator i;
+    while ((array = WMNextHashEnumeratorItem(&enumer))) {
+	WMArrayIterator i;
 	Family *fam;
 	char buffer[256];
 	WMListItem *item;
 
-	for (fam = WMBagFirst(bag, &i);
-	     fam != NULL;
-	     fam = WMBagNext(bag, &i)) {
-	    
+        WM_ITERATE_ARRAY(array, fam, i) {
 	    strcpy(buffer, fam->name);
 
 	    if (fam->showFoundry) {
@@ -767,7 +756,8 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
 	    
 	    item->clientData = fam;
 	}
-	WMFreeBag(bag);
+        /* Isn't this going to memleak since items weren't released? --Dan */
+        WMFreeArray(array);
     }
     WMSortListItems(panel->famLs);
     
@@ -835,7 +825,7 @@ familyClick(WMWidget *w, void *data)
     Family *family;
     FontPanel *panel = (FontPanel*)data;
     Typeface *face;
-    WMBagIterator i;
+    WMArrayIterator i;
     /* current typeface and size */
     char *oface = NULL;
     char *osize = NULL;
@@ -856,9 +846,7 @@ familyClick(WMWidget *w, void *data)
     WMClearList(panel->typLs);
 
 
-    for (face = WMBagFirst(family->typefaces, &i);
-	 face != NULL;
-	 face = WMBagNext(family->typefaces, &i)) {
+    WM_ITERATE_ARRAY(family->typefaces, face, i) {
 	char buffer[256];
 	int top=0;
 	WMListItem *fitem;
@@ -933,12 +921,12 @@ typefaceClick(WMWidget *w, void *data)
     FontPanel *panel = (FontPanel*)data;
     WMListItem *item;
     Typeface *face;
-    WMBagIterator i;
+    WMArrayIterator i;
     char buffer[32];
 
     char *osize = NULL;
     int sizei = -1;
-    int size;
+    void *size;
 
     osize = WMGetTextFieldText(panel->sizT);
 
@@ -948,12 +936,9 @@ typefaceClick(WMWidget *w, void *data)
     
     WMClearList(panel->sizLs);
 
-    for (size = (int)WMBagFirst(face->sizes, &i);
-	 i != NULL;
-	 size = (int)WMBagNext(face->sizes, &i)) {
-
-	if (size != 0) {
-	    sprintf(buffer, "%i", size);
+    WM_ITERATE_ARRAY(face->sizes, size, i) {
+	if ((int)size != 0) {
+	    sprintf(buffer, "%i", (int)size);
 
 	    WMAddListItem(panel->sizLs, buffer);
 	}

@@ -23,8 +23,7 @@
  * TODO:
  * - decide if we want to support connections with external sockets, else
  *   clean up the structure of the unneeded members.
- * - decide what to do with all wsyserror() and wwarning() calls that are
- *   still there.
+ * - decide what to do with all wwarning() calls that are still there.
  *
  */
 

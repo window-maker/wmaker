@@ -1699,8 +1699,8 @@ wSelectWindow(WWindow *wwin, Bool flag)
 	}
 
 	if (!scr->selected_windows)
-	    scr->selected_windows = WMCreateBag(4);
-	WMPutInBag(scr->selected_windows, wwin);
+	    scr->selected_windows = WMCreateArray(4);
+	WMAddToArray(scr->selected_windows, wwin);
     } else {
 	wwin->flags.selected = 0;
 	XSetWindowBorder(dpy, wwin->frame->core->window,
@@ -1711,7 +1711,7 @@ wSelectWindow(WWindow *wwin, Bool flag)
 	}
 
 	if (scr->selected_windows) {
-	    WMRemoveFromBag(scr->selected_windows, wwin);
+	    WMRemoveFromArray(scr->selected_windows, wwin);
 	}
     }
 }

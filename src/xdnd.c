@@ -102,7 +102,7 @@ wXDNDProcessSelection(XEvent *event)
     char * delme;
     XEvent xevent;
     Window selowner = XGetSelectionOwner(dpy,_XA_XdndSelection);
-    WMBag *items;
+    WMArray *items;
 
 
     XGetWindowProperty(dpy, event->xselection.requestor,
@@ -125,11 +125,12 @@ wXDNDProcessSelection(XEvent *event)
 
     /*process dropping*/
     if (scr->xdestring) {
+        WMArrayIterator iter;
         int length, str_size;
         int total_size = 0;
         char *tmp;
 
-        items = WMCreateBag(1);
+        items = WMCreateArray(4);
         retain = wstrdup(scr->xdestring);
         XFree(scr->xdestring); /* since xdestring was created by Xlib */
 
@@ -143,24 +144,23 @@ wXDNDProcessSelection(XEvent *event)
             if (retain[length] == '\n') {
                 str_size = strlen(&retain[length + 1]);
                 if(str_size) {
-                    WMPutInBag(items, wstrdup(&retain[length + 1]));
+                    WMAddToArray(items, wstrdup(&retain[length + 1]));
                     total_size += str_size + 3; /* reserve for " \"\"" */
-                    if (length)
-                        WMAppendBag(items, WMCreateBag(1));
+                    /* this is nonsense -- if (length)
+                        WMAppendArray(items, WMCreateArray(1));*/
                 }
                 retain[length] = 0;
             }
         }
         /* final one */
-        WMPutInBag(items, wstrdup(retain));
+        WMAddToArray(items, wstrdup(retain));
         total_size += strlen(retain) + 3;
         wfree(retain);
 
         /* now pack new string */
         scr->xdestring = wmalloc(total_size);
         scr->xdestring[0]=0; /* empty string */
-        for(length = WMGetBagItemCount(items)-1; length >=0; length--) {
-            tmp = WMGetFromBag(items, length);
+        WM_ETARETI_ARRAY(items, tmp, iter) {
             if (!strncmp(tmp,"file:",5)) {
                 /* add more 2 chars while removing 5 is harmless */
                 strcat(scr->xdestring, " \"");
@@ -172,7 +172,7 @@ wXDNDProcessSelection(XEvent *event)
             }
             wfree(tmp);
         }
-        WMFreeBag(items);
+        WMFreeArray(items);
         wDockReceiveDNDDrop(scr,event);
         /*
         printf("free ");

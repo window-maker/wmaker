@@ -20,6 +20,8 @@ Changes since version 0.64.0:
   desktop level.
 - Fixed incorrect parsing of display and screen number from $DISPLAY.
 - Organized the inspector panel a bit better.
+- Replaced bags with arrays wherever appropriate. This will improve 
+  performance a bit.
 
 
 Changes since version 0.63.1:

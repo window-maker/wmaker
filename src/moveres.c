@@ -390,19 +390,19 @@ mapGeometryDisplay(WWindow *wwin, int x, int y, int w, int h)
 
 
 static void
-doWindowMove(WWindow *wwin, WMBag *bag, int dx, int dy)
+doWindowMove(WWindow *wwin, WMArray *array, int dx, int dy)
 {
     WWindow *tmpw;
     int x, y;
     int scr_width = wwin->screen_ptr->scr_width;
     int scr_height = wwin->screen_ptr->scr_height;
 
-    if (!bag || !WMGetBagItemCount(bag)) {
+    if (!array || !WMGetArrayItemCount(array)) {
         wWindowMove(wwin, wwin->frame_x + dx, wwin->frame_y + dy);
     } else {
-	int i;
-	for (i = 0; i < WMGetBagItemCount(bag); i++) {
-	    tmpw = WMGetFromBag(bag, i);
+        WMArrayIterator iter;
+
+        WM_ITERATE_ARRAY(array, tmpw, iter) {
 	    x = tmpw->frame_x + dx;
 	    y = tmpw->frame_y + dy;
 	    
@@ -455,14 +455,14 @@ drawTransparentFrame(WWindow *wwin, int x, int y, int width, int height)
 
 
 static void
-drawFrames(WWindow *wwin, WMBag *bag, int dx, int dy)
+drawFrames(WWindow *wwin, WMArray *array, int dx, int dy)
 {
     WWindow *tmpw;
     int scr_width = wwin->screen_ptr->scr_width;
     int scr_height = wwin->screen_ptr->scr_height;
     int x, y;
     
-    if (!bag) {
+    if (!array) {
 
         x = wwin->frame_x + dx;
         y = wwin->frame_y + dy;
@@ -472,9 +472,9 @@ drawFrames(WWindow *wwin, WMBag *bag, int dx, int dy)
 			     wwin->frame->core->height);
 	
     } else {
-	int i;
-	for (i = 0; i < WMGetBagItemCount(bag); i++) {
-	    tmpw = WMGetFromBag(bag, i);
+        WMArrayIterator iter;
+
+        WM_ITERATE_ARRAY(array, tmpw, iter) {
 	    x = tmpw->frame_x + dx;
 	    y = tmpw->frame_y + dy;
 	    
@@ -1492,11 +1492,13 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
                         wWindowMove(wwin, src_x+off_x, src_y+off_y);
                         wWindowSynthConfigureNotify(wwin);
                     } else {
-                        int i;
-                        WMBag *bag = scr->selected_windows;
-                        doWindowMove(wwin,scr->selected_windows,off_x,off_y);
-                        for (i = 0; i < WMGetBagItemCount(bag); i++) {
-                            wWindowSynthConfigureNotify(WMGetFromBag(bag, i));
+                        WMArrayIterator iter;
+                        WWindow *foo;
+
+                        doWindowMove(wwin, scr->selected_windows, off_x, off_y);
+
+                        WM_ITERATE_ARRAY(scr->selected_windows, foo, iter) {
+                            wWindowSynthConfigureNotify(foo);
                         }
                     }
                 } else {
@@ -2096,16 +2098,14 @@ wUnselectWindows(WScreen *scr)
     if (!scr->selected_windows)
 	return;
     
-    while (WMGetBagItemCount(scr->selected_windows)) {
-	WMBagIterator dummy;
-	
-	wwin = WMBagFirst(scr->selected_windows, &dummy);
+    while (WMGetArrayItemCount(scr->selected_windows)) {
+	wwin = WMGetFromArray(scr->selected_windows, 0);
         if (wwin->flags.miniaturized && wwin->icon && wwin->icon->selected)
             wIconSelect(wwin->icon);
 
 	wSelectWindow(wwin, False);
     }
-    WMFreeBag(scr->selected_windows);
+    WMFreeArray(scr->selected_windows);
     scr->selected_windows = NULL;
 }
 

@@ -385,8 +385,8 @@ WMPostNotificationName(const char *name, void *object, void *clientData)
 
 
 typedef struct W_NotificationQueue {
-    WMBag *asapQueue;
-    WMBag *idleQueue;
+    WMArray *asapQueue;
+    WMArray *idleQueue;
 
     struct W_NotificationQueue *next;
 } NotificationQueue;
@@ -415,8 +415,10 @@ WMCreateNotificationQueue(void)
 
     queue = wmalloc(sizeof(NotificationQueue));
 
-    queue->asapQueue = WMCreateBag(8);
-    queue->idleQueue = WMCreateBag(8);
+    queue->asapQueue =
+        WMCreateArrayWithDestructor(8, (WMFreeDataProc*)WMReleaseNotification);
+    queue->idleQueue =
+        WMCreateArrayWithDestructor(8, (WMFreeDataProc*)WMReleaseNotification);
     queue->next = notificationQueueList;
 
     notificationQueueList = queue;
@@ -435,62 +437,50 @@ WMEnqueueNotification(WMNotificationQueue *queue, WMNotification *notification,
 }
 
 
+#define NOTIF ((WMNotification*)cdata)
+#define ITEM  ((WMNotification*)item)
+
+static int
+matchSenderAndName(void *item, void *cdata)
+{
+    return (NOTIF->object==ITEM->object && strcmp(NOTIF->name, ITEM->name)==0);
+}
+
+
+static int
+matchSender(void *item, void *cdata)
+{
+    return (NOTIF->object == ITEM->object);
+}
+
+
+static int
+matchName(void *item, void *cdata)
+{
+    return (strcmp(NOTIF->name, ITEM->name)==0);
+}
+
+#undef NOTIF
+#undef ITEM
+
 
 void
 WMDequeueNotificationMatching(WMNotificationQueue *queue, 
 			      WMNotification *notification, unsigned mask)
 {
-    WMBagIterator i;
-    WMNotification *tmp;
+    WMMatchDataProc *matchFunc;
 
-    if ((mask & WNCOnName) && (mask & WNCOnSender)) {
-	WM_ITERATE_BAG(queue->asapQueue, tmp, i) {
-            if (notification->object == tmp->object &&
-                strcmp(notification->name, tmp->name) == 0) {
-		WMRemoveFromBag(queue->asapQueue, tmp);
-		WMReleaseNotification(tmp);
-		break;
-	    }
-	}
-	WM_ITERATE_BAG(queue->idleQueue, tmp, i) {
-            if (notification->object == tmp->object &&
-                strcmp(notification->name, tmp->name) == 0) {
-		WMRemoveFromBag(queue->idleQueue, tmp);
-		WMReleaseNotification(tmp);
-		break;
-	    }
-	}
-    } else if (mask & WNCOnName) {
-	WM_ITERATE_BAG(queue->asapQueue, tmp, i) {
-	    if (strcmp(notification->name, tmp->name) == 0) {
-		WMRemoveFromBag(queue->asapQueue, tmp);
-		WMReleaseNotification(tmp);
-		break;
-	    }
-	}
-	WM_ITERATE_BAG(queue->idleQueue, tmp, i) {
-	    if (strcmp(notification->name, tmp->name) == 0) {
-		WMRemoveFromBag(queue->idleQueue, tmp);
-		WMReleaseNotification(tmp);
-		break;
-	    }
-	}
-    } else if (mask & WNCOnSender) {
-	WM_ITERATE_BAG(queue->asapQueue, tmp, i) {
-	    if (notification->object == tmp->object) {
-		WMRemoveFromBag(queue->asapQueue, tmp);
-		WMReleaseNotification(tmp);
-		break;
-	    }
-	}
-	WM_ITERATE_BAG(queue->idleQueue, tmp, i) {
-	    if (notification->object == tmp->object) {
-		WMRemoveFromBag(queue->idleQueue, tmp);
-		WMReleaseNotification(tmp);
-		break;
-	    }
-	}
-    }
+    if ((mask & WNCOnName) && (mask & WNCOnSender))
+        matchFunc = matchSenderAndName;
+    else if (mask & WNCOnName)
+        matchFunc = matchName;
+    else if (mask & WNCOnSender)
+        matchFunc = matchSender;
+    else
+        return;
+
+    WMRemoveFromArrayMatching(queue->asapQueue, matchFunc, notification);
+    WMRemoveFromArrayMatching(queue->idleQueue, matchFunc, notification);
 }
 
 
@@ -510,11 +500,11 @@ WMEnqueueCoalesceNotification(WMNotificationQueue *queue,
         break;
 
      case WMPostASAP:
-	WMPutInBag(queue->asapQueue, notification);
+	WMAddToArray(queue->asapQueue, notification);
 	break;
 
      case WMPostWhenIdle:
-	WMPutInBag(queue->idleQueue, notification);
+	WMAddToArray(queue->idleQueue, notification);
 	break;
     }
 }
@@ -526,12 +516,9 @@ W_FlushASAPNotificationQueue()
     WMNotificationQueue *queue = notificationQueueList;
 
     while (queue) {
-	while (WMGetBagItemCount(queue->asapQueue)) {
-	    WMNotification *tmp = WMGetFromBag(queue->asapQueue, 0);
-
-	    WMPostNotification(tmp);
-            WMReleaseNotification(tmp);
-            WMDeleteFromBag(queue->asapQueue, 0);
+	while (WMGetArrayItemCount(queue->asapQueue)) {
+            WMPostNotification(WMGetFromArray(queue->asapQueue, 0));
+            WMDeleteFromArray(queue->asapQueue, 0);
 	}
 
 	queue = queue->next;
@@ -545,12 +532,9 @@ W_FlushIdleNotificationQueue()
     WMNotificationQueue *queue = notificationQueueList;
 
     while (queue) {
-	while (WMGetBagItemCount(queue->idleQueue)) {
-	    WMNotification *tmp = WMGetFromBag(queue->idleQueue, 0);
-
-	    WMPostNotification(tmp);
-            WMReleaseNotification(tmp);
-	    WMDeleteFromBag(queue->idleQueue, 0);
+	while (WMGetArrayItemCount(queue->idleQueue)) {
+	    WMPostNotification(WMGetFromArray(queue->idleQueue, 0));
+	    WMDeleteFromArray(queue->idleQueue, 0);
 	}
 
 	queue = queue->next;

@@ -58,7 +58,7 @@ struct _ImageBrowser {
     
     ImageBrowserDelegate *delegate;
     
-    WMBag *previews;
+    WMArray *previews;
 };
 
 

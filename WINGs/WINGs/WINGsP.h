@@ -337,7 +337,7 @@ typedef struct W_View {
     
     struct W_View *nextSister;	       /* next on parent's children list */
     
-    WMBag *eventHandlers;	       /* event handlers for this window */
+    WMArray *eventHandlers;	       /* event handlers for this window */
 
     unsigned long attribFlags;
     XSetWindowAttributes attribs;
@@ -480,8 +480,6 @@ void W_DrawReliefWithGC(W_Screen *scr, Drawable d, int x, int y,
 			unsigned int width, unsigned int height,
 			WMReliefType relief,
 			GC black, GC dark, GC light, GC white);
-
-void W_CleanUpEvents(W_View *view);
 
 void W_CallDestroyHandlers(W_View *view);
 

@@ -19,6 +19,15 @@ Changes since wmaker 0.64.0:
 - fixed secure textfields not to allow text selection, to avoid compromising
   sensitive information by pasting it to a terminal.
 - replaced wmkrange(), wmkpoint() and wmksize() functions with macros.
+- added WMRemoveFromArrayMatching(array, match, cdata), which will remove the
+  first element in the array that is matched by match(item, cdata)==True.
+- added WMArrayFirst(), WMArrayLast(), WMArrayNext() and WMArrayPrevious()
+  functions and also WM_ITERATE_ARRAY() and WM_ETARETI_ARRAY() macros, to make
+  interfaces to WMBag and WMArray similar and to make life a little simpler
+  when iterating through all elements of an array.
+- replaced bags with arrays wherever appropriate. This will improve
+  performance a bit.
+- replaced some recursive code with iterative code in selection.c
 
 
 changes since wmaker 0.63.1:

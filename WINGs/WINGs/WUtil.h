@@ -178,6 +178,7 @@ typedef struct {
 } WMHashTableCallbacks;
 
 
+typedef int WMArrayIterator;
 typedef void *WMBagIterator;
 
 
@@ -415,7 +416,9 @@ void* WMReplaceInArray(WMArray *array, int index, void *item);
  */
 int WMDeleteFromArray(WMArray *array, int index);
 
-int WMRemoveFromArray(WMArray *array, void *item);
+#define WMRemoveFromArray(array, item) WMRemoveFromArrayMatching(array, NULL, item)
+
+int WMRemoveFromArrayMatching(WMArray *array, WMMatchDataProc *match, void *cdata);
 
 void* WMGetFromArray(WMArray *array, int index);
 
@@ -442,6 +445,24 @@ void WMMapArray(WMArray *array, void (*function)(void*, void*), void *data);
 
 WMArray* WMGetSubarrayWithRange(WMArray* array, WMRange aRange);
 
+void* WMArrayFirst(WMArray *array, WMArrayIterator *iter);
+
+void* WMArrayLast(WMArray *array, WMArrayIterator *iter);
+
+/* The following 2 functions assume that the array doesn't change between calls */
+void* WMArrayNext(WMArray *array, WMArrayIterator *iter);
+
+void* WMArrayPrevious(WMArray *array, WMArrayIterator *iter);
+
+
+/* The following 2 macros assume that the array doesn't change in the for loop */
+#define WM_ITERATE_ARRAY(array, var, i) \
+      	for (var = WMArrayFirst(array, &(i)); (i) != WANotFound; \
+		var = WMArrayNext(array, &(i)))
+
+#define WM_ETARETI_ARRAY(array, var, i) \
+      	for (var = WMArrayLast(array, &(i)); (i) != WANotFound; \
+		var = WMArrayPrevious(array, &(i)))
 
 /*..........................................................................*/
 
@@ -514,6 +535,7 @@ void* WMBagFirst(WMBag *bag, WMBagIterator *ptr);
 
 void* WMBagLast(WMBag *bag, WMBagIterator *ptr);
 
+/* The following 4 functions assume that the bag doesn't change between calls */
 void* WMBagNext(WMBag *bag, WMBagIterator *ptr);
 
 void* WMBagPrevious(WMBag *bag, WMBagIterator *ptr);
@@ -523,6 +545,7 @@ void* WMBagIteratorAtIndex(WMBag *bag, int index, WMBagIterator *ptr);
 int WMBagIndexForIterator(WMBag *bag, WMBagIterator ptr);
 
 
+/* The following 2 macros assume that the bag doesn't change in the for loop */
 #define WM_ITERATE_BAG(bag, var, i) \
       	for (var = WMBagFirst(bag, &(i)); (i) != NULL; \
 		var = WMBagNext(bag, &(i)))

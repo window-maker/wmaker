@@ -302,7 +302,7 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
     WMResizeWidget(panel->autoLaunchBtn, PWIDTH-30, 20);
     WMMoveWidget(panel->autoLaunchBtn, 15, 80);
     WMSetButtonText(panel->autoLaunchBtn,
-		    _("Start when WindowMaker is started"));
+		    _("Start when Window Maker is started"));
     WMSetButtonSelected(panel->autoLaunchBtn, aicon->auto_launch);
 
     panel->lockBtn = WMCreateSwitchButton(panel->win);

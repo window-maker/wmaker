@@ -132,7 +132,7 @@ createView(W_Screen *screen, W_View *parent)
 
     view->refCount = 1;
 
-    view->eventHandlers = WMCreateBag(4);
+    view->eventHandlers = WMCreateArrayWithDestructor(4, wfree);
 
     return view;
 }
@@ -441,9 +441,8 @@ destroyView(W_View *view)
     /* remove self from parent's children list */
     unparentView(view);
 
-    W_CleanUpEvents(view);
-    
-    WMFreeBag(view->eventHandlers);
+    /* the array has a wfree() destructor that will be called automatically */
+    WMFreeArray(view->eventHandlers);
     view->eventHandlers = NULL;
     
     WMUnregisterViewDraggedTypes(view);

@@ -51,9 +51,9 @@ typedef struct InputHandler {
 /* queue of timer event handlers */
 static TimerHandler *timerHandler=NULL;
 
-static WMBag *idleHandler=NULL;
+static WMArray *idleHandler=NULL;
 
-static WMBag *inputHandler=NULL;
+static WMArray *inputHandler=NULL;
 
 #define timerPending()	(timerHandler)
 
@@ -248,9 +248,9 @@ WMAddIdleHandler(WMCallback *callback, void *cdata)
     handler->clientData = cdata;
     /* add handler at end of queue */
     if (!idleHandler) {
-        idleHandler = WMCreateBag(16);
+        idleHandler = WMCreateArrayWithDestructor(16, wfree);
     }
-    WMPutInBag(idleHandler, handler);
+    WMAddToArray(idleHandler, handler);
 
     return handler;
 }
@@ -265,11 +265,7 @@ WMDeleteIdleHandler(WMHandlerID handlerID)
     if (!handler || !idleHandler)
         return;
 
-    pos = WMGetFirstInBag(idleHandler, handler);
-    if (pos != WBNotFound) {
-        wfree(handler);
-        WMDeleteFromBag(idleHandler, pos);
-    }
+    WMRemoveFromArray(idleHandler, handler);
 }
 
 
@@ -287,8 +283,8 @@ WMAddInputHandler(int fd, int condition, WMInputProc *proc, void *clientData)
     handler->clientData = clientData;
 
     if (!inputHandler)
-        inputHandler = WMCreateBag(16);
-    WMPutInBag(inputHandler, handler);
+        inputHandler = WMCreateArrayWithDestructor(16, wfree);
+    WMAddToArray(inputHandler, handler);
 
     return handler;
 }
@@ -304,11 +300,7 @@ WMDeleteInputHandler(WMHandlerID handlerID)
     if (!handler || !inputHandler)
 	return;
 
-    pos = WMGetFirstInBag(inputHandler, handler);
-    if (pos != WBNotFound) {
-        wfree(handler);
-        WMDeleteFromBag(inputHandler, pos);
-    }
+    WMRemoveFromArray(inputHandler, handler);
 }
 
 
@@ -316,35 +308,32 @@ Bool
 W_CheckIdleHandlers(void)
 {
     IdleHandler *handler;
-    WMBag *handlerCopy;
-    WMBagIterator iter;
+    WMArray *handlerCopy;
+    WMArrayIterator iter;
 
-    if (!idleHandler || WMGetBagItemCount(idleHandler)==0) {
+    if (!idleHandler || WMGetArrayItemCount(idleHandler)==0) {
 	W_FlushIdleNotificationQueue();
         /* make sure an observer in queue didn't added an idle handler */
-        return (idleHandler!=NULL && WMGetBagItemCount(idleHandler)>0);
+        return (idleHandler!=NULL && WMGetArrayItemCount(idleHandler)>0);
     }
 
-    handlerCopy = WMCreateBag(WMGetBagItemCount(idleHandler));
-    WMAppendBag(handlerCopy, idleHandler);
+    handlerCopy = WMDuplicateArray(idleHandler);
 
-    for (handler = WMBagFirst(handlerCopy, &iter);
-	 iter != NULL;
-	 handler = WMBagNext(handlerCopy, &iter)) {
+    WM_ITERATE_ARRAY(handlerCopy, handler, iter) {
         /* check if the handler still exist or was removed by a callback */
-        if (WMGetFirstInBag(idleHandler, handler) == WBNotFound)
+        if (WMGetFirstInArray(idleHandler, handler) == WANotFound)
             continue;
 
 	(*handler->callback)(handler->clientData);
         WMDeleteIdleHandler(handler);
     }
 
-    WMFreeBag(handlerCopy);
+    WMFreeArray(handlerCopy);
 
     W_FlushIdleNotificationQueue();
 
     /* this is not necesarrily False, because one handler can re-add itself */
-    return (WMGetBagItemCount(idleHandler)>0);
+    return (WMGetArrayItemCount(idleHandler)>0);
 }
 
 
@@ -433,7 +422,7 @@ W_HandleInputEvents(Bool waitForInput, int inputfd)
     extrafd = (inputfd < 0) ? 0 : 1;
 
     if (inputHandler)
-        nfds = WMGetBagItemCount(inputHandler);
+        nfds = WMGetArrayItemCount(inputHandler);
     else
         nfds = 0;
 
@@ -449,8 +438,9 @@ W_HandleInputEvents(Bool waitForInput, int inputfd)
         fds[nfds].events = POLLIN;
     }
 
+    /* use WM_ITERATE_ARRAY() here */
     for (i = 0; i<nfds; i++) {
-        handler = WMGetFromBag(inputHandler, i);
+        handler = WMGetFromArray(inputHandler, i);
         fds[i].fd = handler->fd;
         fds[i].events = 0;
         if (handler->mask & WIReadMask)
@@ -482,17 +472,14 @@ W_HandleInputEvents(Bool waitForInput, int inputfd)
     count = poll(fds, nfds+extrafd, timeout);
 
     if (count>0 && nfds>0) {
-        WMBag *handlerCopy = WMCreateBag(nfds);
+        WMArray *handlerCopy = WMDuplicateArray(inputHandler);
+        int mask;
 
-        for (i=0; i<nfds; i++)
-            WMPutInBag(handlerCopy, WMGetFromBag(inputHandler, i));
-
+        /* use WM_ITERATE_ARRAY() here */
         for (i=0; i<nfds; i++) {
-            int mask;
-
-            handler = WMGetFromBag(handlerCopy, i);
+            handler = WMGetFromArray(handlerCopy, i);
             /* check if the handler still exist or was removed by a callback */
-            if (WMGetFirstInBag(inputHandler, handler) == WBNotFound)
+            if (WMGetFirstInArray(inputHandler, handler) == WANotFound)
                 continue;
 
             mask = 0;
@@ -515,11 +502,8 @@ W_HandleInputEvents(Bool waitForInput, int inputfd)
             }
         }
 
-        WMFreeBag(handlerCopy);
+        WMFreeArray(handlerCopy);
     }
-
-    /* --oldway-- retval = ((inputfd < 0) ? (count > 0) :
-     fds[nfds].revents & (POLLIN|POLLRDNORM|POLLRDBAND|POLLPRI));*/
 
     wfree(fds);
 
@@ -536,7 +520,7 @@ W_HandleInputEvents(Bool waitForInput, int inputfd)
     InputHandler *handler;
 
     if (inputHandler)
-        nfds = WMGetBagItemCount(inputHandler);
+        nfds = WMGetArrayItemCount(inputHandler);
     else
         nfds = 0;
 
@@ -556,8 +540,9 @@ W_HandleInputEvents(Bool waitForInput, int inputfd)
         maxfd = inputfd;
     }
 
+    /* use WM_ITERATE_ARRAY() here */
     for (i=0; i<nfds; i++) {
-        handler = WMGetFromBag(inputHandler, i);
+        handler = WMGetFromArray(inputHandler, i);
         if (handler->mask & WIReadMask)
             FD_SET(handler->fd, &rset);
 
@@ -588,17 +573,14 @@ W_HandleInputEvents(Bool waitForInput, int inputfd)
     count = select(1 + maxfd, &rset, &wset, &eset, timeoutPtr);
 
     if (count>0 && nfds>0) {
-        WMBag *handlerCopy = WMCreateBag(nfds);
+        WMArray *handlerCopy = WMDuplicateArray(inputHandler);
+        int mask;
 
-        for (i=0; i<nfds; i++)
-            WMPutInBag(handlerCopy, WMGetFromBag(inputHandler, i));
-
+        /* use WM_ITERATE_ARRAY() here */
         for (i=0; i<nfds; i++) {
-            int mask;
-
-            handler = WMGetFromBag(handlerCopy, i);
+            handler = WMGetFromArray(handlerCopy, i);
             /* check if the handler still exist or was removed by a callback */
-            if (WMGetFirstInBag(inputHandler, handler) == WBNotFound)
+            if (WMGetFirstInArray(inputHandler, handler) == WANotFound)
                 continue;
 
             mask = 0;
@@ -618,7 +600,7 @@ W_HandleInputEvents(Bool waitForInput, int inputfd)
             }
         }
 
-        WMFreeBag(handlerCopy);
+        WMFreeArray(handlerCopy);
     }
 
     W_FlushASAPNotificationQueue();

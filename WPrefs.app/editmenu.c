@@ -56,7 +56,7 @@ typedef struct W_EditMenu {
 
     struct W_EditMenu *parent;
 
-    WMBag *items; /* EditMenuItem */
+    WMArray *items; /* EditMenuItem */
     
     EditMenuItem *selectedItem;
     
@@ -457,7 +457,7 @@ makeEditMenu(WMScreen *scr, WMWidget *parent, char *title)
     WMAddNotificationObserver(itemSelectObserver, mPtr,
                               "EditMenuItemSelected", NULL);
 
-    mPtr->items = WMCreateBag(4);
+    mPtr->items = WMCreateArray(4);
 
     WMCreateEventHandler(mPtr->view, ExposureMask|StructureNotifyMask,
 			 handleEvents, mPtr);
@@ -467,7 +467,7 @@ makeEditMenu(WMScreen *scr, WMWidget *parent, char *title)
 	item = WCreateEditMenuItem(mPtr, title, True);
 
 	WMMapWidget(item);
-	WMPutInBag(mPtr->items, item);
+	WMAddToArray(mPtr->items, item);
 
 	mPtr->flags.isTitled = 1;
     }
@@ -511,14 +511,14 @@ WInsertMenuItemWithTitle(WEditMenu *mPtr, int index, char *title)
 
     WMMapWidget(item);
 
-    if (index >= WMGetBagItemCount(mPtr->items)) {
-	WMPutInBag(mPtr->items, item);
+    if (index >= WMGetArrayItemCount(mPtr->items)) {
+	WMAddToArray(mPtr->items, item);
     } else {
 	if (index < 0)
 	    index = 0;
 	if (mPtr->flags.isTitled)
 	    index++;
-	WMInsertInBag(mPtr->items, index, item);
+	WMInsertInArray(mPtr->items, index, item);
     }
 
     updateMenuContents(mPtr);
@@ -530,17 +530,17 @@ WInsertMenuItemWithTitle(WEditMenu *mPtr, int index, char *title)
 WEditMenuItem*
 WGetEditMenuItem(WEditMenu *mPtr, int index)
 {
-    if (index >= WMGetBagItemCount(mPtr->items))
+    if (index >= WMGetArrayItemCount(mPtr->items))
 	return NULL;
-    else
-	return WMGetFromBag(mPtr->items, index + (mPtr->flags.isTitled ? 1 : 0));
+
+    return WMGetFromArray(mPtr->items, index + (mPtr->flags.isTitled ? 1 : 0));
 }
 
 
 WEditMenuItem*
 WAddMenuItemWithTitle(WEditMenu *mPtr, char *title)
 {
-    return WInsertMenuItemWithTitle(mPtr, WMGetBagItemCount(mPtr->items),
+    return WInsertMenuItemWithTitle(mPtr, WMGetArrayItemCount(mPtr->items),
 				    title);
 }
 
@@ -551,7 +551,7 @@ WSetEditMenuTitle(WEditMenu *mPtr, char *title)
 {
     WEditMenuItem *item;
 
-    item = WMGetFromBag(mPtr->items, 0);
+    item = WMGetFromArray(mPtr->items, 0);
 
     wfree(item->label);
     item->label = wstrdup(title);
@@ -568,7 +568,7 @@ WGetEditMenuTitle(WEditMenu *mPtr)
 {
     WEditMenuItem *item;
 
-    item = WMGetFromBag(mPtr->items, 0);
+    item = WMGetFromArray(mPtr->items, 0);
 
     return item->label;
 }
@@ -598,27 +598,12 @@ WGetEditMenuSubmenu(WEditMenu *mPtr, WEditMenuItem *item)
 }
 
 
-static int
-simpleMatch(void *a, void *b)
-{
-    return ((a == b) ? 1 : 0);
-}
-
-
 void
 WRemoveEditMenuItem(WEditMenu *mPtr, WEditMenuItem *item)
 {
-    int index;
-
-    index = WMFindInBag(mPtr->items, simpleMatch, item);
-    
-    if (index == WBNotFound) {
-	return;
+    if (WMRemoveFromArray(mPtr->items, item) != 0) {
+        updateMenuContents(mPtr);
     }
-    
-    WMDeleteFromBag(mPtr->items, index);
-
-    updateMenuContents(mPtr);
 }
 
 
@@ -662,7 +647,7 @@ WSetEditMenuMaxSize(WEditMenu *mPtr, WMSize size)
 WMPoint
 WGetEditMenuLocationForSubmenu(WEditMenu *mPtr, WEditMenu *submenu)
 {
-    WMBagIterator iter;
+    WMArrayIterator iter;
     WEditMenuItem *item;
     int y;
 
@@ -670,7 +655,7 @@ WGetEditMenuLocationForSubmenu(WEditMenu *mPtr, WEditMenu *submenu)
 	y = -mPtr->titleHeight;
     else
 	y = 0;
-    WM_ITERATE_BAG(mPtr->items, item, iter) {
+    WM_ITERATE_ARRAY(mPtr->items, item, iter) {
 	if (item->submenu == submenu) {
 	    WMPoint pt = WMGetViewScreenPosition(mPtr->view);
 
@@ -705,7 +690,7 @@ WTearOffEditMenu(WEditMenu *menu, WEditMenu *submenu)
     
     submenu->flags.isTornOff = 1;
     
-    item = (WEditMenuItem*)WMGetFromBag(submenu->items, 0);
+    item = (WEditMenuItem*)WMGetFromArray(submenu->items, 0);
     
     submenu->closeB = WMCreateCommandButton(item);
     WMResizeWidget(submenu->closeB, 15, 15);
@@ -802,14 +787,14 @@ updateMenuContents(WEditMenu *mPtr)
     int i;
     int iheight = mPtr->itemHeight;
     int offs = 1;
-    WMBagIterator iter;
+    WMArrayIterator iter;
     WEditMenuItem *item;
 
     newW = 0;
     newH = offs;
 
     i = 0;
-    WM_ITERATE_BAG(mPtr->items, item, iter) {	
+    WM_ITERATE_ARRAY(mPtr->items, item, iter) {	
 	w = getItemTextWidth(item);
 
 	newW = WMAX(w, newW);
@@ -847,7 +832,7 @@ updateMenuContents(WEditMenu *mPtr)
     newW -= 2*offs;
     
     i = 0;
-    WM_ITERATE_BAG(mPtr->items, item, iter) {
+    WM_ITERATE_ARRAY(mPtr->items, item, iter) {
 	if (i == 0 && mPtr->flags.isTitled) {
 	    WMResizeWidget(item, newW, mPtr->titleHeight);	    
 	} else {
@@ -999,8 +984,8 @@ textEndedEditing(struct WMTextFieldDelegate *self, WMNotification *notif)
      case WMTabTextMovement:
 	stopEditItem(menu, True);
 
-	i = WMFindInBag(menu->items, simpleMatch, menu->selectedItem);
-	item = WMGetFromBag(menu->items, i+1);
+	i = WMGetFirstInArray(menu->items, menu->selectedItem);
+	item = WMGetFromArray(menu->items, i+1);
 	if (item != NULL) {
 	    selectItem(menu, item);
 	    editItemLabel(item);
@@ -1010,8 +995,8 @@ textEndedEditing(struct WMTextFieldDelegate *self, WMNotification *notif)
      case WMBacktabTextMovement:
 	stopEditItem(menu, True);
 
-	i = WMFindInBag(menu->items, simpleMatch, menu->selectedItem);
-	item = WMGetFromBag(menu->items, i-1);
+	i = WMGetFirstInArray(menu->items, menu->selectedItem);
+	item = WMGetFromArray(menu->items, i-1);
 	if (item != NULL) {
 	    selectItem(menu, item);
 	    editItemLabel(item);
@@ -1037,7 +1022,6 @@ editItemLabel(WEditMenuItem *item)
 {
     WEditMenu *mPtr = item->parent;
     WMTextField *tf;
-    int i;
     
     if (!mPtr->flags.isEditable) {
 	return;
@@ -1057,8 +1041,6 @@ editItemLabel(WEditMenuItem *item)
 	WMSetTextFieldDelegate(mPtr->tfield, mPtr->tdelegate);
     }
     tf = mPtr->tfield;
-
-    i = WMFindInBag(mPtr->items, simpleMatch, item);
 
     WMSetTextFieldText(tf, item->label);
     WMSelectTextFieldRange(tf, wmkrange(0, strlen(item->label)));
@@ -1210,10 +1192,10 @@ handleItemDrop(WEditMenu *menu, WEditMenuItem *item, int x, int y)
 	index++;
     }
     
-    if (index > WMGetBagItemCount(menu->items)) {
-	WMPutInBag(menu->items, item);
+    if (index > WMGetArrayItemCount(menu->items)) {
+	WMAddToArray(menu->items, item);
     } else {
-	WMInsertInBag(menu->items, index, item);
+	WMInsertInArray(menu->items, index, item);
     }
 
     W_ReparentView(item->view, menu->view, 0, index*menu->itemHeight);
@@ -1300,7 +1282,7 @@ duplicateMenu(WEditMenu *menu)
 {
     WEditMenu *nmenu;
     WEditMenuItem *item;
-    WMBagIterator iter;
+    WMArrayIterator iter;
     Bool first = menu->flags.isTitled;
 
     nmenu = WCreateEditMenu(WMWidgetScreen(menu), WGetEditMenuTitle(menu));
@@ -1308,7 +1290,7 @@ duplicateMenu(WEditMenu *menu)
     memcpy(&nmenu->flags, &menu->flags, sizeof(menu->flags));
     nmenu->delegate = menu->delegate;
     
-    WM_ITERATE_BAG(menu->items, item, iter) {
+    WM_ITERATE_ARRAY(menu->items, item, iter) {
 	WEditMenuItem *nitem;
 	
 	if (first) {
@@ -1536,17 +1518,17 @@ static void
 destroyEditMenu(WEditMenu *mPtr)
 {
     WEditMenuItem *item;
-    WMBagIterator iter;
+    WMArrayIterator iter;
 
     WMRemoveNotificationObserver(mPtr);
 
-    WM_ITERATE_BAG(mPtr->items, item, iter) {
+    WM_ITERATE_ARRAY(mPtr->items, item, iter) {
 	if (item->submenu) {
 	    WMDestroyWidget(item->submenu);
 	}
     }
     
-    WMFreeBag(mPtr->items);
+    WMFreeArray(mPtr->items);
     
     wfree(mPtr->tdelegate);
     

@@ -71,13 +71,13 @@ WMCreateEventHandler(WMView *view, unsigned long mask, WMEventProc *eventProc,
 {
     W_EventHandler *handler, *ptr;
     unsigned long eventMask;
-    WMBagIterator iter;
+    WMArrayIterator iter;
 
-    
+
     handler = NULL;
     eventMask = mask;
 
-    WM_ITERATE_BAG(view->eventHandlers, ptr, iter) {
+    WM_ITERATE_ARRAY(view->eventHandlers, ptr, iter) {
 	if (ptr->clientData == clientData && ptr->proc == eventProc) {
 	    handler = ptr;
 	    eventMask |= ptr->eventMask;
@@ -86,12 +86,23 @@ WMCreateEventHandler(WMView *view, unsigned long mask, WMEventProc *eventProc,
     if (!handler) {
 	handler = wmalloc(sizeof(W_EventHandler));
 
-	WMPutInBag(view->eventHandlers, handler);
+	WMAddToArray(view->eventHandlers, handler);
     }
     /* select events for window */
     handler->eventMask = eventMask;
     handler->proc = eventProc;
     handler->clientData = clientData;
+}
+
+
+static int
+matchHandler(void *item, void *cdata)
+{
+#define H1 ((W_EventHandler*)item)
+#define H2 ((W_EventHandler*)cdata)
+
+    return (H1->eventMask==H2->eventMask && H1->proc==H2->proc &&
+            H1->clientData==H2->clientData);
 }
 
 
@@ -105,40 +116,13 @@ void
 WMDeleteEventHandler(WMView *view, unsigned long mask, WMEventProc *eventProc, 
 		     void *clientData)
 {
-    W_EventHandler *handler, *ptr;
-    WMBagIterator iter;
-        
-    handler = NULL;
-    
-    WM_ITERATE_BAG(view->eventHandlers, ptr, iter) {
-	if (ptr->eventMask == mask && ptr->proc == eventProc 
-	    && ptr->clientData == clientData) {
-	    handler = ptr;
-	    break;
-	}
-    }
-    
-    if (!handler)
-	return;
-    
-    WMRemoveFromBag(view->eventHandlers, handler);
+    W_EventHandler tmp;
 
-    wfree(handler);
+    tmp.eventMask = mask;
+    tmp.proc = eventProc;
+    tmp.clientData = clientData;
+    WMRemoveFromArrayMatching(view->eventHandlers, matchHandler, (void*)&tmp);
 }
-
-
-
-void
-W_CleanUpEvents(WMView *view)
-{
-    W_EventHandler *ptr;
-    WMBagIterator iter;
-    
-    WM_ITERATE_BAG(view->eventHandlers, ptr, iter) {
-	wfree(ptr);
-    }
-}
-
 
 
 static Time
@@ -174,14 +158,15 @@ void
 W_CallDestroyHandlers(W_View *view)
 {
     XEvent event;
-    WMBagIterator iter;
+    WMArrayIterator iter;
     W_EventHandler *hPtr;
-    
+
+
     event.type = DestroyNotify;
     event.xdestroywindow.window = view->window;
     event.xdestroywindow.event = view->window;
 
-    WM_ITERATE_BAG(view->eventHandlers, hPtr, iter) {
+    WM_ITERATE_ARRAY(view->eventHandlers, hPtr, iter) {
 	if (hPtr->eventMask & StructureNotifyMask) {
 	    (*hPtr->proc)(&event, hPtr->clientData);
 	}
@@ -208,9 +193,9 @@ WMRelayToNextResponder(WMView *view, XEvent *event)
     if (view->nextResponder) {
 	WMView *next = view->nextResponder;
 	W_EventHandler *hPtr;
-	WMBagIterator iter;
+	WMArrayIterator iter;
 
-	WM_ITERATE_BAG(next->eventHandlers, hPtr, iter) {
+        WM_ITERATE_ARRAY(next->eventHandlers, hPtr, iter) {
 	    if ((hPtr->eventMask & mask)) {
 		(*hPtr->proc)(event, hPtr->clientData);
 	    }
@@ -226,7 +211,7 @@ WMHandleEvent(XEvent *event)
     W_View *view, *vPtr, *toplevel;
     unsigned long mask;
     Window window;
-    WMBagIterator iter;
+    WMArrayIterator iter;
 
     if (event->type == MappingNotify) {
 	XRefreshKeyboardMapping(&event->xmapping);
@@ -318,7 +303,7 @@ WMHandleEvent(XEvent *event)
      * might destroy the widget. */
     W_RetainView(toplevel);
 
-    WM_ITERATE_BAG(view->eventHandlers, hPtr, iter) {
+    WM_ITERATE_ARRAY(view->eventHandlers, hPtr, iter) {
 	if ((hPtr->eventMask & mask)) {
 	    (*hPtr->proc)(event, hPtr->clientData);
 	}
@@ -331,7 +316,7 @@ WMHandleEvent(XEvent *event)
 	while (vPtr->parent != NULL)
 	    vPtr = vPtr->parent;
 
-	WM_ITERATE_BAG(vPtr->eventHandlers, hPtr, iter) {
+	WM_ITERATE_ARRAY(vPtr->eventHandlers, hPtr, iter) {
 	    if (hPtr->eventMask & mask) {
 		(*hPtr->proc)(event, hPtr->clientData);
 	    }

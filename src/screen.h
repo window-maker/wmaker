@@ -107,8 +107,8 @@ typedef struct _WScreen {
 					* Use this list if you want to
 					* traverse the entire window list
 					*/
-    
-    WMBag *selected_windows;
+
+    WMArray *selected_windows;
 
     struct WAppIcon *app_icon_list;    /* list of all app-icons on screen */
 
@@ -291,7 +291,7 @@ typedef struct _WScreen {
 					scrolled down for titlebar access */
 
     /* for window shortcuts */
-    WMBag *shortcutWindows[MAX_WINDOW_SHORTCUTS];
+    WMArray *shortcutWindows[MAX_WINDOW_SHORTCUTS];
 
 #ifdef XDND
     char *xdestring;
