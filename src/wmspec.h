@@ -41,5 +41,5 @@ void wNETWMUpdateActions(WWindow *wwin, Bool del);
 void wNETWMUpdateDesktop(WScreen *scr);
 void wNETWMPositionSplash(WWindow *wwin, int *x, int *y, int width, int height);
 int wNETWMGetPidForWindow(Window window);
-
+int wNETWMGetCurrentDesktopFromHint(WScreen *scr);
 #endif

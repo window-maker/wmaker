@@ -95,10 +95,6 @@ extern Atom _XA_GNUSTEP_TITLEBAR_STATE;
 extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
 extern Atom _XA_WINDOWMAKER_COMMAND;
 
-#ifdef OFFIX_DND
-extern Atom _XA_DND_PROTOCOL;
-#endif
-
 
 #ifdef SHAPE
 extern Bool wShapeSupported;
@@ -1017,16 +1013,7 @@ handleClientMessage(XEvent *event)
     } else if (wXDNDProcessClientMessage(&event->xclient)) {
         /* do nothing */
 #endif /* XDND */
-#ifdef OFFIX_DND
-    } else if (event->xclient.message_type==_XA_DND_PROTOCOL) {
-        WScreen *scr = wScreenForWindow(event->xclient.window);
-        if (scr && wDockReceiveDNDDrop(scr,event))
-            goto redirect_message;
-#endif /* OFFIX_DND */
     } else {
-#ifdef OFFIX_DND
-    redirect_message:
-#endif
         /*
          * Non-standard thing, but needed by OffiX DND.
          * For when the icon frame gets a ClientMessage

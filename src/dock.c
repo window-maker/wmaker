@@ -81,10 +81,6 @@ extern WPreferences wPreferences;
 
 extern XContext wWinContext;
 
-#ifdef OFFIX_DND
-extern Atom _XA_DND_PROTOCOL;
-#endif
-
 
 #define MOD_MASK wPreferences.modifier_mask
 
@@ -97,7 +93,7 @@ extern void appIconMouseDown(WObjDescriptor *desc, XEvent *event);
 
 static WMPropList *dCommand=NULL;
 static WMPropList *dPasteCommand=NULL;
-#ifdef OFFIX_DND
+#ifdef XDND /* XXX was OFFIX */
 static WMPropList *dDropCommand=NULL;
 #endif
 static WMPropList *dAutoLaunch, *dLock;
@@ -142,22 +138,6 @@ static void clipAutoRaise(void *cdata);
 
 static void showClipBalloon(WDock *dock, int workspace);
 
-#ifdef OFFIX_DND
-
-#define DndNotDnd       -1
-#define DndUnknown      0
-#define DndRawData      1
-#define DndFile         2
-#define DndFiles        3
-#define DndText         4
-#define DndDir          5
-#define DndLink         6
-#define DndExe          7
-
-#define DndEND          8
-
-#endif /* OFFIX_DND */
-
 
 
 static void
@@ -168,7 +148,9 @@ make_keys()
 
     dCommand = WMRetainPropList(WMCreatePLString("Command"));
     dPasteCommand = WMRetainPropList(WMCreatePLString("PasteCommand"));
+#ifdef XDND
     dDropCommand = WMRetainPropList(WMCreatePLString("DropCommand"));
+#endif
     dLock = WMRetainPropList(WMCreatePLString("Lock"));
     dAutoLaunch = WMRetainPropList(WMCreatePLString("AutoLaunch"));
     dName = WMRetainPropList(WMCreatePLString("Name"));
@@ -1402,13 +1384,13 @@ make_icon_state(WAppIcon *btn)
             (btn->xindex != 0 || btn->yindex != 0))
             WMPutInPLDictionary(node, dOmnipresent, omnipresent);
 
-#ifdef OFFIX_DND
+#ifdef XDND /* was OFFIX */
         if (btn->dnd_command) {
             command = WMCreatePLString(btn->dnd_command);
             WMPutInPLDictionary(node, dDropCommand, command);
             WMReleasePropList(command);
         }
-#endif /* OFFIX_DND */
+#endif /* XDND */
 
         if (btn->paste_command) {
             command = WMCreatePLString(btn->paste_command);
@@ -1625,7 +1607,7 @@ restore_icon_state(WScreen *scr, WMPropList *info, int type, int index)
     aicon->icon->core->descriptor.parent = aicon;
 
 
-#ifdef OFFIX_DND
+#ifdef XDND /* was OFFIX */
     cmd = WMGetFromPLDictionary(info, dDropCommand);
     if (cmd)
         aicon->dnd_command = wstrdup(WMGetFromPLString(cmd));
@@ -1732,7 +1714,7 @@ wClipRestoreState(WScreen *scr, WMPropList *clip_state)
         }
     }
 
-#ifdef OFFIX_DND
+#ifdef XDND /* was OFFIX */
     value = WMGetFromPLDictionary(clip_state, dDropCommand);
     if (value && WMIsPLString(value))
         icon->dnd_command = wstrdup(WMGetFromPLString(value));
@@ -2042,7 +2024,7 @@ wDockDoAutoLaunch(WDock *dock, int workspace)
 }
 
 
-#ifdef OFFIX_DND
+#ifdef XDND /* was OFFIX */
 static WDock*
 findDock(WScreen *scr, XEvent *event, int *icon_pos)
 {
@@ -2130,7 +2112,7 @@ wDockReceiveDNDDrop(WScreen *scr, XEvent *event)
     }
     return False;
 }
-#endif /* OFFIX_DND */
+#endif /* XDND */
 
 
 
@@ -2225,7 +2207,7 @@ wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
     if (wPreferences.auto_arrange_icons)
         wArrangeIcons(dock->screen_ptr, True);
 
-#ifdef OFFIX_DND
+#ifdef XDND /* was OFFIX */
     if (icon->command && !icon->dnd_command) {
         int len = strlen(icon->command)+8;
         icon->dnd_command = wmalloc(len);
@@ -2407,7 +2389,7 @@ wDockDetach(WDock *dock, WAppIcon *icon)
         wfree(icon->command);
         icon->command = NULL;
     }
-#ifdef OFFIX_DND
+#ifdef XDND /* was OFFIX */
     if (icon->dnd_command) {
         wfree(icon->dnd_command);
         icon->dnd_command = NULL;
@@ -3337,9 +3319,12 @@ trackDeadProcess(pid_t pid, unsigned char status, WDock *dock)
                 char msg[PATH_MAX];
                 char *cmd;
 
+#ifdef XDND
                 if (icon->drop_launch)
                     cmd = icon->dnd_command;
-                else if (icon->paste_launch)
+                else
+#endif
+                if (icon->paste_launch)
                     cmd = icon->paste_command;
                 else
                     cmd = icon->command;

@@ -50,6 +50,7 @@ wmaker_SOURCES = 	\
 	menu.c \
 	menu.h \
 	misc.c \
+	monitor.c \
 	motif.c \
 	motif.h \
 	moveres.c \

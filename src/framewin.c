@@ -1076,7 +1076,7 @@ wFrameWindowPaint(WFrameWindow *fwin)
                 break;
             }
 
-            y = *fwin->title_clearance + TITLEBAR_EXTEND_SPACE;
+            y = *fwin->title_clearance + TITLEBAR_EXTEND_SPACE - 1;
             h = WMFontHeight(*fwin->font);
 
             /* We use a w+2 buffer to have an extra pixel on the left and

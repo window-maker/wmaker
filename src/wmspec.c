@@ -40,6 +40,7 @@
 #include "icon.h"
 #include "stacking.h"
 #include "xinerama.h"
+#include "properties.h"
 
 
 #ifdef DEBUG_WMSPEC
@@ -348,6 +349,24 @@ wNETWMUpdateDesktop(WScreen *scr)
 }
 
 
+int
+wNETWMGetCurrentDesktopFromHint(WScreen *scr)
+{
+    int count;
+    unsigned char *prop;
+    
+    prop= PropGetCheckProperty(scr->root_win, net_current_desktop, XA_CARDINAL,
+                               0, 1, &count);
+    if (prop)
+    {
+        int desktop= *(CARD32*)prop;
+        XFree(prop);
+        return desktop;
+    }
+    return -1;
+}
+
+
 static void
 updateIconImage(WScreen *scr, WWindow *wwin)
 {
@@ -509,7 +528,6 @@ wNETWMInitStuff(WScreen *scr)
     updateClientList(scr);
     updateClientListStacking(scr, NULL);
     updateWorkspaceCount(scr);
-    updateCurrentWorkspace(scr);
     updateWorkspaceNames(scr);
     updateShowDesktop(scr, False);
 

@@ -335,16 +335,6 @@ typedef struct _WScreen {
 } WScreen;
 
 
-#define WSS_ROOTMENU	(1<<0)
-#define WSS_SWITCHMENU	(1<<1)
-#define WSS_WSMENU	(1<<2)
-
-/* changes must update wSaveScreenState/getWorkspaceState */
-typedef struct WWorkspaceState {
-    int flags;
-    int workspace;
-} WWorkspaceState;
-
 
 WScreen *wScreenInit(int screen_number);
 void wScreenSaveState(WScreen *scr);

@@ -152,7 +152,11 @@ Changes since version 0.80.2:
   has. (This also is to fix problems with KDE 3.3.0 apps, but not only them).
 - Fixed bug with autostart and exit scripts not being executed if user
   GNUstep path was different from ~/GNUstep (when setting GNUSTEP_USER_ROOT)
-
+- Removed legacy OFFIX_DND support code
+- Fixed the signal handler for crashes (ie, removed it) and made wmaker
+  restarting be made automatically by a monitoring process.
+- Made NetWM support be enabled by default
+- Removed old code to store/restore workspace state (now relies on netwm)
 
 Changes since version 0.80.1:
 .............................

@@ -119,7 +119,7 @@ updatePasteCommand(WAppIcon *icon, char *command)
 
 
 
-#ifdef OFFIX_DND
+#ifdef XDND
 static void
 updateDNDCommand(WAppIcon *icon, char *command)
 {
@@ -131,7 +131,7 @@ updateDNDCommand(WAppIcon *icon, char *command)
     }
     icon->dnd_command = command;
 }
-#endif /* OFFIX_DND */
+#endif /* XDND */
 
 
 static void
@@ -258,7 +258,7 @@ panelBtnCallback(WMWidget *self, void *data)
             text = NULL;
         }
         updateCommand(panel->editedIcon, text);
-#ifdef OFFIX_DND
+#ifdef XDND
         /* cannot free text from this, because it will be not be duplicated
          * in updateDNDCommand */
         text = WMGetTextFieldText(panel->dndCommandField);
@@ -385,7 +385,7 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
     panel->dndCommandLabel = WMCreateLabel(panel->dndCommandFrame);
     WMResizeWidget(panel->dndCommandLabel, 256, 18);
     WMMoveWidget(panel->dndCommandLabel, 10, 45);
-#ifdef OFFIX_DND
+#ifdef XDND
     WMSetTextFieldText(panel->dndCommandField, aicon->dnd_command);
     WMSetLabelText(panel->dndCommandLabel,
                    _("%d will be replaced with the file name"));

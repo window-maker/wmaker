@@ -138,11 +138,6 @@ extern Atom _XA_WINDOWMAKER_ICON_TILE;
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_GNUSTEP_TITLEBAR_STATE;
 
-#ifdef OFFIX_DND
-extern Atom _XA_DND_PROTOCOL;
-extern Atom _XA_DND_SELECTION;
-#endif
-
 
 /* cursors */
 extern Cursor wCursor[WCUR_LAST];
@@ -311,25 +306,10 @@ dummyHandler(int sig)
 static RETSIGTYPE
 handleSig(int sig)
 {
-    static int already_crashed = 0;
-    int dumpcore = 0;
-#ifndef NO_EMERGENCY_AUTORESTART
-    int crashAction, i;
-    char *argv[2];
-
-    argv[1] = NULL;
-#endif
-
-    /*
-     * No functions that potentially do Xlib calls should be called from
-     * here. Xlib calls are not reentrant so the integrity of Xlib is
-     * not guaranteed if a Xlib call is made from a signal handler.
-     */
-
 #ifdef SYS_SIGLIST_DECLARED
-    wfatal(_("got signal %i (%s)\n"), sig, sys_siglist[sig]);
+    wfatal("got signal %i (%s)\n", sig, sys_siglist[sig]);
 #else
-    wfatal(_("got signal %i\n"), sig);
+    wfatal("got signal %i\n", sig);
 #endif
 
     /* Setting the signal behaviour back to default and then reraising the
@@ -339,95 +319,12 @@ handleSig(int sig)
      */
     if (sig==SIGSEGV || sig==SIGFPE || sig==SIGBUS || sig==SIGILL
         || sig==SIGABRT) {
-        if (already_crashed) {
-            wfatal(_("crashed while trying to do some post-crash cleanup. Aborting immediatelly."));
-            signal(sig, SIG_DFL);
-            kill(getpid(), sig);
-            return;
-        }
-        already_crashed = 1;
-
-        dumpcore = 1;
-
-        /*
-         * Yeah, we shouldn't do this, but it's already crashed anyway :P
-         */
-
-#ifndef NO_EMERGENCY_AUTORESTART
-        /* Close the X connection and open a new one. This is to avoid messing
-         * Xlib because we call to Xlib functions in a signal handler.
-         */
-        if (dpy)
-            XCloseDisplay(dpy);
-        dpy = XOpenDisplay("");
-        if (dpy) {
-            CARD32 data[2];
-            WWindow *wwin;
-
-            XGrabServer(dpy);
-            crashAction = wShowCrashingDialogPanel(sig);
-
-            /*
-             * Save current workspace, so can go back to it if restarting.
-             * Also add hint that we crashed, so that windows will be placed
-             * correctly upon restart.
-             */
-            for (i=0; i<wScreenCount; i++) {
-                data[0] = wScreen[i]->current_workspace; /* workspace number */
-                data[1] = WFLAGS_CRASHED; /* signal that we crashed */
-
-                XChangeProperty(dpy, wScreen[i]->root_win,
-                                _XA_WINDOWMAKER_STATE, _XA_WINDOWMAKER_STATE,
-                                32, PropModeReplace, (unsigned char*) data, 2);
-
-                /* save state of windows */
-                wwin = wScreen[i]->focused_window;
-                while (wwin) {
-                    wWindowSaveState(wwin);
-                    wwin = wwin->prev;
-                }
-
-            }
-
-            XCloseDisplay(dpy);
-            dpy = NULL;
-        } else {
-            wsyserror(_("cannot open connection for crashing dialog panel. Aborting."));
-            crashAction = WMAbort;
-        }
-
-        if (crashAction == WMAbort) {
-            signal(sig, SIG_DFL);
-            kill(getpid(), sig);
-            return;
-        }
-
-        if (crashAction == WMRestart) {
-            /* we try to restart Window Maker */
-            wmessage(_("trying to restart Window Maker..."));
-            Restart(NULL, False);
-            /* fallback to alternate window manager then */
-        }
-
-        wmessage(_("trying to start alternate window manager..."));
-
-        for (i=0; i<WMGetArrayItemCount(wPreferences.fallbackWMs); i++) {
-            Restart(WMGetFromArray(wPreferences.fallbackWMs, i), False);
-        }
-
-        wfatal(_("failed to start alternate window manager. Aborting."));
-#else
-        wfatal(_("a fatal error has occured, probably due to a bug. "
-                 "Please fill the included BUGFORM and report it."));
-#endif /* !NO_EMERGENCY_AUTORESTART */
-
         signal(sig, SIG_DFL);
         kill(getpid(), sig);
         return;
-
     }
 
-    wAbort(dumpcore);
+    wAbort(0);
 }
 
 
@@ -459,34 +356,6 @@ buryChild(int foo)
     sigprocmask(SIG_UNBLOCK, &sigs, NULL);
 
     errno = save_errno;
-}
-
-
-static int
-getWorkspaceState(Window root, WWorkspaceState **state)
-{
-    Atom type_ret;
-    int fmt_ret;
-    unsigned long nitems_ret;
-    unsigned long bytes_after_ret;
-    CARD32 *data;
-
-    if (XGetWindowProperty(dpy, root, _XA_WINDOWMAKER_STATE, 0, 2,
-                           True, _XA_WINDOWMAKER_STATE,
-                           &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
-                           (unsigned char **)&data)!=Success || !data)
-        return 0;
-
-    *state = wmalloc(sizeof(WWorkspaceState));
-    (*state)->workspace = data[0];
-    (*state)->flags = data[1];
-
-    XFree(data);
-
-    if (*state && type_ret==_XA_WINDOWMAKER_STATE)
-        return 1;
-    else
-        return 0;
 }
 
 
@@ -735,7 +604,6 @@ static char *atomNames[] = {
 void
 StartUp(Bool defaultScreenOnly)
 {
-    WWorkspaceState *ws_state;
     struct sigaction sig_action;
     int j, max;
     Atom atom[sizeof(atomNames)/sizeof(char*)];
@@ -797,10 +665,6 @@ StartUp(Bool defaultScreenOnly)
     _XA_GNUSTEP_WM_MINIATURIZE_WINDOW = atom[18];
     _XA_GNUSTEP_TITLEBAR_STATE = atom[19];
 
-#ifdef OFFIX_DND
-    _XA_DND_SELECTION = XInternAtom(dpy, "DndSelection", False);
-    _XA_DND_PROTOCOL = XInternAtom(dpy, "DndProtocol", False);
-#endif
 #ifdef XDND
     wXDNDInitializeAtoms();
 #endif
@@ -843,10 +707,14 @@ StartUp(Bool defaultScreenOnly)
 
     sig_action.sa_flags = SA_RESTART;
     sigaction(SIGQUIT, &sig_action, NULL);
+    /* instead of catching these, we let the default handler abort the
+     * program. The new monitor process will take appropriate action
+     * when it detects the crash.
     sigaction(SIGSEGV, &sig_action, NULL);
     sigaction(SIGBUS, &sig_action, NULL);
     sigaction(SIGFPE, &sig_action, NULL);
     sigaction(SIGABRT, &sig_action, NULL);
+     */
 
     sig_action.sa_handler = handleExitSig;
 
@@ -971,12 +839,9 @@ StartUp(Bool defaultScreenOnly)
 
     /* initialize/restore state for the screens */
     for (j = 0; j < wScreenCount; j++) {
-        int crashed;
+        int lastDesktop;
 
-        /* restore workspace state */
-        if (!getWorkspaceState(wScreen[j]->root_win, &ws_state)) {
-            ws_state = NULL;
-        }
+        lastDesktop= wNETWMGetCurrentDesktopFromHint(wScreen[j]);
 
         wScreenRestoreState(wScreen[j]);
 
@@ -984,18 +849,13 @@ StartUp(Bool defaultScreenOnly)
         if (!wPreferences.flags.nodock && wScreen[j]->dock)
             wScreen[j]->last_dock = wScreen[j]->dock;
 
-        if (ws_state && (ws_state->flags & WFLAGS_CRASHED)!=0)
-            crashed = 1;
-        else
-            crashed = 0;
-
-        manageAllWindows(wScreen[j], crashed);
+        manageAllWindows(wScreen[j], wPreferences.flags.restarting==2);
 
         /* restore saved menus */
         wMenuRestoreState(wScreen[j]);
 
-        /* If we're not restarting restore session */
-        if (ws_state == NULL && !wPreferences.flags.norestore)
+        /* If we're not restarting, restore session */
+        if (wPreferences.flags.restarting==0 && !wPreferences.flags.norestore)
             wSessionRestoreState(wScreen[j]);
 
         if (!wPreferences.flags.noautolaunch) {
@@ -1017,9 +877,8 @@ StartUp(Bool defaultScreenOnly)
         }
 
         /* go to workspace where we were before restart */
-        if (ws_state) {
-            wWorkspaceForceChange(wScreen[j], ws_state->workspace);
-            wfree(ws_state);
+        if (lastDesktop >= 0) {
+            wWorkspaceForceChange(wScreen[j], lastDesktop);
         } else {
             wSessionRestoreLastWorkspace(wScreen[j]);
         }

@@ -1204,14 +1204,6 @@ wScreenSaveState(WScreen *scr)
 
     make_keys();
 
-    /* Save current workspace, so can go back to it upon restart. */
-    data[0] = scr->current_workspace;
-    data[1] = WFLAGS_NONE;
-
-    XChangeProperty(dpy, scr->root_win, _XA_WINDOWMAKER_STATE,
-                    _XA_WINDOWMAKER_STATE, 32, PropModeReplace,
-                    (unsigned char *) data, 2);
-
     /* save state of windows */
     wwin = scr->focused_window;
     while (wwin) {

@@ -412,14 +412,6 @@ AC_ARG_ENABLE(openlook,
   fi])
 
 
-AC_ARG_ENABLE(netwm,
-  [  --enable-netwm          enable support for FreeDesktop hints ],
-  [if test x$enableval = xyes; then
-    AC_DEFINE(NETWM_HINTS, 1, [define if you want NETWM hints support])
-    netwm_on=yes
-  fi])
-
-
 AC_ARG_ENABLE(vdesktop,
   [  --enable-vdesktop       enable virtual desktop],
   [if test x$enableval = xyes; then
@@ -1137,15 +1129,11 @@ if test "$openlook_on" = "yes"; then
   extrasupport="OpenLook $extrasupport"
 fi
 if test "$gnome_on" = "yes"; then
-  extrasupport="Gnome $extrasupport"
+extrasupport="Gnome-1.x $extrasupport"
 fi
 if test "$kde_on" = "yes"; then
-  extrasupport="KDE $extrasupport"
+  extrasupport="KDE-1.x $extrasupport"
 fi
-if test "$netwm_on" = "yes"; then
-  extrasupport="NetWM $extrasupport"
-fi
-
 if test "x$extrasupport" = "x"; then
   extrasupport="None"
 fi
@@ -1162,7 +1150,7 @@ echo "Use inline MMX(tm) x86 assembly     : $mmx_support"
 echo "Antialiased text support in WINGs   : $xft"
 echo "Xinerama extension support          : $xinerama"
 echo "Virtual desktop support             : $vdesktop_on"
-echo "Additionally supported environments : $extrasupport"
+echo "Supported legacy environments       : $extrasupport"
 echo "Translated message files to install : $mof"
 dnl echo "Supported languages beside English  : $languages"
 if test "x$MOFILES" != "x"; then

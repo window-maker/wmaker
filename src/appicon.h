@@ -45,7 +45,7 @@ typedef struct WAppIcon {
 
     char *command;		       /* command used to launch app */
 
-#ifdef OFFIX_DND
+#ifdef XDND
     char *dnd_command;		       /* command to use when something is */
                                        /* dropped on us */
 #endif

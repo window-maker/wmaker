@@ -574,7 +574,7 @@ fixLeaderProperties(WWindow *wwin)
 
     classHint = XAllocClassHint();
     clientHints = XGetWMHints(dpy, wwin->client_win);
-    pid = GetPidForWindow(wwin->client_win);
+    pid = wNETWMGetPidForWindow(wwin->client_win);
     if (pid > 0) {
         haveCommand = GetCommandForPid(pid, &argv, &argc);
     } else {

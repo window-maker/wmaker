@@ -193,7 +193,7 @@ wAppIconDestroy(WAppIcon *aicon)
     wIconDestroy(aicon->icon);
     if (aicon->command)
         wfree(aicon->command);
-#ifdef OFFIX_DND
+#ifdef XDND
     if (aicon->dnd_command)
         wfree(aicon->dnd_command);
 #endif

@@ -62,10 +62,8 @@
 
 /* #define CPP_PATH @CPP_PATH@ */
 
-/*
- * support for OffiX DND drag and drop in the Dock
- */
-#define OFFIX_DND
+
+#define NETWM_HINTS
 
 /*
  * support for XDND drop in the Dock. Experimental

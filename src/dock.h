@@ -92,7 +92,7 @@ WAppIcon *wDockFindIconForWindow(WDock *dock, Window window);
 void wDockDoAutoLaunch(WDock *dock, int workspace);
 void wDockLaunchWithState(WDock *dock, WAppIcon *btn, WSavedState *state);
 
-#ifdef OFFIX_DND
+#ifdef XDND
 int wDockReceiveDNDDrop(WScreen *scr, XEvent *event);
 #endif
 

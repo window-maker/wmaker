@@ -67,6 +67,12 @@ extern WPreferences wPreferences;
 
 /***** Local Stuff ******/
 
+
+#define WSS_ROOTMENU	(1<<0)
+#define WSS_SWITCHMENU	(1<<1)
+#define WSS_WSMENU	(1<<2)
+
+
 static struct {
     int steps;
     int delay;

@@ -481,6 +481,7 @@ typedef struct WPreferences {
         unsigned int norestore:1;      /* don't restore session */
         unsigned int create_stdcmap:1; /* create std colormap */
         unsigned int nopolling:1;      /* don't poll for defaults changes */
+        unsigned int restarting:2;
     } flags;			       /* internal flags */
 } WPreferences;
 

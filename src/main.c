@@ -115,11 +115,6 @@ Atom _XA_WINDOWMAKER_ICON_SIZE;
 Atom _XA_WINDOWMAKER_ICON_TILE;
 
 
-#ifdef OFFIX_DND
-Atom _XA_DND_PROTOCOL;
-Atom _XA_DND_SELECTION;
-#endif
-
 /* cursors */
 Cursor wCursor[WCUR_LAST];
 
@@ -148,7 +143,6 @@ char WDelayedActionSet = 0;
 int wVisualID = -1;
 
 
-
 /* notifications */
 const char *WMNManaged = "WMNManaged";
 const char *WMNUnmanaged = "WMNUnmanaged";
@@ -175,12 +169,15 @@ static int ArgCount;
 
 extern void EventLoop();
 extern void StartUp();
+extern int MonitorLoop(int argc, char **argv);
 
 static Bool multiHead = True;
 
 /* stdi/o for log shell */
 static int LogStdIn = -1, LogStdOut = -1, LogStdErr = -1;
 
+
+static int real_main(int argc, char **argv);
 
 void
 Exit(int status)
@@ -226,7 +223,7 @@ Restart(char *manager, Bool abortOnFailure)
         wsyserror(_("could not exec %s"), prog);
     }
     if (abortOnFailure)
-        exit(-1);
+        exit(7);
 }
 
 
@@ -583,8 +580,32 @@ getFullPath(char *path)
 }
 #endif
 
+
+
 int
 main(int argc, char **argv)
+{
+    int i;
+    int i_am_the_monitor= 1;
+    
+    for (i= 1; i < argc; i++)
+    {
+        if (strncmp(argv[i], "--for-real", strlen("--for-real"))==0)
+        {
+            i_am_the_monitor= 0;
+            break;
+        }
+    }
+    
+    if (i_am_the_monitor)
+      return MonitorLoop(argc, argv);
+    else
+      return real_main(argc, argv);
+}
+
+
+static int 
+real_main(int argc, char **argv)
 {
     int i, restart=0;
     char *str, *alt;
@@ -601,8 +622,13 @@ main(int argc, char **argv)
     str = wstrconcat("WMAKER_BIN_NAME=", argv[0]);
     putenv(str);
 
-    ArgCount = argc;
-    Arguments = argv;
+    ArgCount = argc+1;
+    Arguments = wmalloc(sizeof(char*)*(ArgCount+2));
+    for (i= 0; i < argc; i++)
+      Arguments[i]= argv[i];
+    /* add the extra option to signal that we're just restarting wmaker */
+    Arguments[argc]= "--for-real=";
+    Arguments[argc+1]= NULL;
 
     WMInitializeApplication("WindowMaker", &argc, argv);
 
@@ -638,7 +664,13 @@ main(int argc, char **argv)
                 wPreferences.flags.nocpp=1;
             } else
 #endif
-                if (strcmp(argv[i], "-no-autolaunch")==0
+                if (strcmp(argv[i], "--for-real")==0) {
+                    wPreferences.flags.restarting = 0;
+                } else if (strcmp(argv[i], "--for-real=")==0) {
+                    wPreferences.flags.restarting = 1;
+                } else if (strcmp(argv[i], "--for-real-")==0) {
+                    wPreferences.flags.restarting = 2;
+                } else if (strcmp(argv[i], "-no-autolaunch")==0
                     || strcmp(argv[i], "--no-autolaunch")==0) {
                     wPreferences.flags.noautolaunch = 1;
                 } else if (strcmp(argv[i], "-dont-restore")==0

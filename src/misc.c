@@ -56,10 +56,6 @@ extern WPreferences wPreferences;
 
 extern Time LastTimestamp;
 
-#ifdef OFFIX_DND
-extern Atom _XA_DND_SELECTION;
-#endif
-
 
 #ifdef USECPP
 static void
@@ -705,44 +701,6 @@ getuserinput(WScreen *scr, char *line, int *ptr)
 }
 
 
-#ifdef OFFIX_DND
-static char*
-get_dnd_selection(WScreen *scr)
-{
-    XTextProperty text_ret;
-    int result;
-    char **list;
-    char *flat_string;
-    int count;
-
-    result=XGetTextProperty(dpy, scr->root_win, &text_ret, _XA_DND_SELECTION);
-
-    if (result==0 || text_ret.value==NULL || text_ret.encoding==None
-        || text_ret.format==0 || text_ret.nitems == 0) {
-        wwarning(_("unable to get dropped data from DND drop"));
-        return NULL;
-    }
-
-    XTextPropertyToStringList(&text_ret, &list, &count);
-
-    if (!list || count<1) {
-        XFree(text_ret.value);
-        wwarning(_("error getting dropped data from DND drop"));
-        return NULL;
-    }
-
-    flat_string = wtokenjoin(list, count);
-    if (!flat_string) {
-        wwarning(_("out of memory while getting data from DND drop"));
-    }
-
-    XFreeStringList(list);
-    XFree(text_ret.value);
-    return flat_string;
-}
-#endif /* OFFIX_DND */
-
-
 #define S_NORMAL 0
 #define S_ESCAPE 1
 #define S_OPTION 2
@@ -768,7 +726,7 @@ ExpandOptions(WScreen *scr, char *cmdline)
     char *out, *nout;
     char *selection=NULL;
     char *user_input=NULL;
-#if defined(OFFIX_DND) || defined(XDND)
+#ifdef XDND
     char *dropped_thing=NULL;
 #endif
     char tmpbuf[TMPBUFSIZE];
@@ -879,13 +837,11 @@ ExpandOptions(WScreen *scr, char *cmdline)
                 }
                 break;
 
-#if defined(OFFIX_DND) || defined(XDND)
-            case 'd':
 #ifdef XDND
+            case 'd':
                 if(scr->xdestring) {
                     dropped_thing = wstrdup(scr->xdestring);
                 }
-#endif
                 if (!dropped_thing) {
                     dropped_thing = get_dnd_selection(scr);
                 }
@@ -904,7 +860,7 @@ ExpandOptions(WScreen *scr, char *cmdline)
                 strcat(out,dropped_thing);
                 optr+=slen;
                 break;
-#endif /* OFFIX_DND */
+#endif /* XDND */
 
             case 's':
                 if (!selection) {
@@ -1260,41 +1216,6 @@ StrConcatDot(char *a, char *b)
 
     return str;
 }
-
-
-#ifndef NETWM_HINTS
-
-static Atom net_wm_pid = None;
-
-int
-GetPidForWindow(Window win)
-{
-    Atom type_ret;
-    int fmt_ret;
-    unsigned long nitems_ret;
-    unsigned long bytes_after_ret;
-    long *data = 0;
-    int pid;
-
-    if (net_wm_pid == None) {
-        net_wm_pid = XInternAtom(dpy, "_NET_WM_PID", False);
-    }
-
-    if (XGetWindowProperty(dpy, win, net_wm_pid, 0, 1, False,
-                           XA_CARDINAL, &type_ret, &fmt_ret, &nitems_ret,
-                           &bytes_after_ret,
-                           (unsigned char**)&data)==Success && data) {
-
-        pid = *data;
-        XFree(data);
-    } else {
-        pid = 0;
-    }
-
-    return pid;
-}
-
-#endif
 
 
 Bool
