@@ -498,8 +498,14 @@ wMaximizeWindow(WWindow *wwin, int directions)
     }
 
     wWindowConstrainSize(wwin, &new_width, &new_height);
+    
+    wWindowCropSize(wwin, usableArea.x2-usableArea.x1, 
+		    usableArea.y2-usableArea.y1,
+		    &new_width, &new_height);    
+    
     wWindowConfigure(wwin, new_x, new_y, new_width, new_height);
 
+    
 #ifdef GNOME_STUFF
     wGNOMEUpdateClientStateHint(wwin, False);
 #endif

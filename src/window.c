@@ -1850,6 +1850,9 @@ wWindowConstrainSize(WWindow *wwin, int *nwidth, int *nheight)
 	    maxAX = wwin->normal_hints->max_aspect.x;
 	    maxAY = wwin->normal_hints->max_aspect.y;
 	}
+	
+	baseW = wwin->normal_hints->base_width;
+	baseH = wwin->normal_hints->base_height;
     }
 
     if (width < minW)
@@ -1905,7 +1908,7 @@ wWindowConstrainSize(WWindow *wwin, int *nwidth, int *nheight)
 	width = (((width - minW) / winc) * winc) + minW;
     }
 
-    if (baseW != 0) {
+    if (baseH != 0) {
 	height = (((height - baseH) / hinc) * hinc) + baseH;
     } else {
 	height = (((height - minH) / hinc) * hinc) + minH;
@@ -1916,6 +1919,29 @@ wWindowConstrainSize(WWindow *wwin, int *nwidth, int *nheight)
 	*nwidth = width;
     if (height > 0)
 	*nheight = height;
+}
+
+
+void
+wWindowCropSize(WWindow *wwin, int maxW, int maxH, 
+		int *width, int *height)
+{
+    int baseW = 0, baseH = 0;
+    int winc = 1, hinc = 1;
+
+    if (wwin->normal_hints) {
+	baseW = wwin->normal_hints->base_width;
+	baseH = wwin->normal_hints->base_height;
+	
+	winc = wwin->normal_hints->width_inc;
+	hinc = wwin->normal_hints->height_inc;	
+    }
+
+    if (*width > maxW)
+	*width = maxW - (maxW - baseW) % winc;
+
+    if (*height > maxH)
+	*height = maxH - (maxH - baseH) % hinc;    
 }
 
 

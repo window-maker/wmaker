@@ -352,6 +352,8 @@ void wWindowUnfocus(WWindow *wwin);
 
 void wWindowUpdateName(WWindow *wwin, char *newTitle);
 void wWindowConstrainSize(WWindow *wwin, int *nwidth, int *nheight);
+void wWindowCropSize(WWindow *wwin, int maxw, int maxh,
+		     int *nwidth, int *nheight);
 void wWindowConfigure(WWindow *wwin, int req_x, int req_y, 
 		      int req_width, int req_height);
 
