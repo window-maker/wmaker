@@ -48,7 +48,6 @@
 #include "dialog.h"
 #include "xutil.h"
 #include "xmodifier.h"
-#include "plugin.h"
 
 
 /**** global variables *****/

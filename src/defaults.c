@@ -22,7 +22,6 @@
  */
 
 #include "wconfig.h"
-#include "plugin.h"
 
 #include <stdio.h>
 #include <stdlib.h>
