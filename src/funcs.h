@@ -120,8 +120,6 @@ char *FindImage(char *paths, char *file);
 
 RImage*wGetImageForWindowName(WScreen *scr, char *winstance, char *wclass);
 
-int IsEof(FILE * stream);	/* feof that stats pipes */
-
 void ParseWindowName(WMPropList *value, char **winstance, char **wclass,
                      char *where);
 

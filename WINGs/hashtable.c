@@ -477,24 +477,24 @@ typedef void (*releaseFunc)(const void*);
 
 const WMHashTableCallbacks WMIntHashCallbacks = {
     NULL,
-	NULL,
-	NULL,
-	NULL
+    NULL,
+    NULL,
+    NULL
 };
 
 const WMHashTableCallbacks WMStringHashCallbacks = {
     (hashFunc)hashString,
-	(isEqualFunc)compareStrings,
-	(retainFunc)wstrdup,
-	(releaseFunc)wfree
+    (isEqualFunc)compareStrings,
+    (retainFunc)wstrdup,
+    (releaseFunc)wfree
 };
 
 
 
 const WMHashTableCallbacks WMStringPointerHashCallbacks = {
     (hashFunc)hashString,
-	(isEqualFunc)compareStrings,
-	NULL,
-	NULL
+    (isEqualFunc)compareStrings,
+    NULL,
+    NULL
 };
 

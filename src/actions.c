@@ -1362,42 +1362,53 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
     WWindow *wlist, *next;
     WWindow *focused=NULL;
 
-    if (!wapp) {
+    if (!wapp)
 	return;
-    }
+
     scr = wapp->main_window_desc->screen_ptr;
     wlist = scr->focused_window;
-    if (!wlist) return;
+    if (!wlist)
+        return;
+
     /* goto beginning of list */
     while (wlist->prev)
       wlist = wlist->prev;
-    
+
     while (wlist) {
 	next = wlist->next;
 
 	if (wlist->main_window == wapp->main_window) {
 	    if (wlist->flags.focused)
-	      focused = wlist;
+                focused = wlist;
 	    else if (!focused || !focused->flags.focused)
-	      focused = wlist;
-	    
-	    if (wlist->flags.miniaturized && wlist->icon) {
-                if (bringToCurrentWS || wPreferences.sticky_icons
-		    || wlist->frame->workspace == scr->current_workspace) {
-		    if (!wlist->icon->mapped) {
-			XMapWindow(dpy, wlist->icon->core->window);
-			wlist->icon->mapped = 1;
-		    }
-		    wlist->flags.hidden = 0;
+                focused = wlist;
 
-		    WMPostNotificationName(WMNChangedState, wlist, "hide");
-
-		    if (wlist->frame->workspace != scr->current_workspace)
-			wWindowChangeWorkspace(wlist, scr->current_workspace);
-		}
-		if (miniwindows) {
-		    wDeiconifyWindow(wlist);
-		}
+	    if (wlist->flags.miniaturized) {
+                if (bringToCurrentWS || wPreferences.sticky_icons ||
+                    wlist->frame->workspace == scr->current_workspace) {
+                    if (wlist->icon && !wlist->icon->mapped) {
+                        XMapWindow(dpy, wlist->icon->core->window);
+                        wlist->icon->mapped = 1;
+                    }
+                }
+                if (bringToCurrentWS)
+                    wWindowChangeWorkspace(wlist, scr->current_workspace);
+                wlist->flags.hidden = 0;
+                if (miniwindows &&
+                    wlist->frame->workspace == scr->current_workspace) {
+                    wDeiconifyWindow(wlist);
+                }
+                WMPostNotificationName(WMNChangedState, wlist, "hide");
+            } else if (wlist->flags.shaded) {
+                if (bringToCurrentWS)
+                    wWindowChangeWorkspace(wlist, scr->current_workspace);
+                wlist->flags.hidden = 0;
+                if (miniwindows &&
+                    wlist->frame->workspace == scr->current_workspace) {
+                    wUnshadeWindow(wlist);
+                    wRaiseFrame(wlist->frame->core);
+                }
+                WMPostNotificationName(WMNChangedState, wlist, "hide");
 	    } else if (wlist->flags.hidden) {
 		unhideWindow(wapp->app_icon->icon, wapp->app_icon->x_pos,
 			     wapp->app_icon->y_pos, wlist, 
@@ -1417,10 +1428,12 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
     wapp->flags.skip_next_animation = 0;
     wapp->flags.hidden = 0;
     
-    if (focused)
-	wSetFocusTo(scr, focused);
-    else if (wapp->last_focused && wapp->last_focused->flags.mapped)
-	wSetFocusTo(scr, wapp->last_focused);
+    if (wapp->last_focused && wapp->last_focused->flags.mapped) {
+        wRaiseFrame(wapp->last_focused->frame->core);
+        wSetFocusTo(scr, wapp->last_focused);
+    } else if (focused) {
+        wSetFocusTo(scr, focused);
+    }
     wapp->last_focused = NULL;
     if (wPreferences.auto_arrange_icons) {
         wArrangeIcons(scr, True);
@@ -1678,8 +1691,11 @@ wMakeWindowVisible(WWindow *wwin)
 	WApplication *app;
 
 	app = wApplicationOf(wwin->main_window);
-	if (app)
-	    wUnhideApplication(app, False, False);
+        if (app) {
+            /* trick to get focus to this window */
+            app->last_focused = wwin;
+            wUnhideApplication(app, False, False);
+        }
     } else if (wwin->flags.miniaturized) {
 	wDeiconifyWindow(wwin);
     } else {

@@ -1,4 +1,4 @@
-Changes since version 0.80.1:
+Changes since version 0.80.2:
 .............................
 
 - Some updates to WINGs WMConnection. See WINGs/ChangeLog for details.
@@ -43,6 +43,17 @@ Changes since version 0.80.1:
 - Fixed a problem in the stacking code which could lead to segmentation faults
   (Jeff Teunissen <deek@d2dc.net>)
 - Fixed a crashing bug in the menu code when modal panel are involved.
+- Fixed incorrect focusing of application's windows after an unhide (sometimes
+  the incorrect window got focus instead of the apps's last focused window)
+- Unshade application's shaded windows when Dbl-MiddleClick-ing its appicon.
+  (this is to be consistent with deminiaturizing application's miniwindows
+  which also happens in this case, since shading is a form of miniaturization)
+
+
+Changes since version 0.80.1:
+.............................
+
+- Fixed a buffer overflow when allocating an RImage struct.
 
 
 Changes since version 0.80.0:

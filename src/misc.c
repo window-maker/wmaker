@@ -949,18 +949,6 @@ ExpandOptions(WScreen *scr, char *cmdline)
 }
 
 
-/* feof doesn't seem to work on pipes */
-int
-IsEof(FILE * stream)
-{
-    static struct stat stinfo;
-
-    fstat(fileno(stream), &stinfo);
-    return ((S_ISFIFO(stinfo.st_dev) && stinfo.st_size == 0) || 
-            feof(stream));
-}
-
-
 void
 ParseWindowName(WMPropList *value, char **winstance, char **wclass, char *where)
 {

@@ -1094,7 +1094,7 @@ parseCascade(WScreen *scr, WMenu *menu, FILE *file, char *file_name)
     char params[MAXLINE];
     char *line;
     
-    while (!IsEof(file)) {
+    while (!feof(file)) {
 	int lsize, ok;
 	
 	ok = 0;
@@ -1120,7 +1120,7 @@ parseCascade(WScreen *scr, WMenu *menu, FILE *file, char *file_name)
 	    } else {
 		ok=1;
 	    }
-	} while (!ok && !IsEof(file));
+	} while (!ok && !feof(file));
 	if (ok==2)
 	  continue;
 	
@@ -1214,7 +1214,7 @@ readMenuFile(WScreen *scr, char *file_name)
 	}
     }
     
-    while (!IsEof(file)) {
+    while (!feof(file)) {
 	if (!fgets(linebuf, MAXLINE, file))
 	    break;
 	line = cropline(linebuf);
@@ -1317,7 +1317,7 @@ readMenuPipe(WScreen *scr, char **file_name)
        }
     }
 
-    while (!IsEof(file)) {
+    while (!feof(file)) {
 	if (!fgets(linebuf, MAXLINE, file))
 	    break;
 	line = cropline(linebuf);
