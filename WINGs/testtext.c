@@ -1,3 +1,4 @@
+/* WINGsP.h should NEVER be included from user applications */
 #include <WINGsP.h>
 #include <WINGs.h>
 #include <X11/Xlib.h>
