@@ -67,6 +67,7 @@ libWINGs_a_SOURCES = 	\
 	selection.c \
 	userdefaults.c \
 	wapplication.c \
+	wappresource.c \
 	wballoon.c \
 	wbrowser.c \
 	wbutton.c \

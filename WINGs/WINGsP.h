@@ -48,6 +48,14 @@ extern "C" {
 		event.xclient.message_type=scrPtr->internalMessage;
 
 
+typedef struct W_Application {
+    char *applicationName;
+    int argc;
+    char **argv;
+    char *resourcePath;
+} W_Application;
+
+
 typedef struct W_Font {
     struct W_Screen *screen;
 
