@@ -704,8 +704,8 @@ typedef struct {
 
 
 #define COPYRIGHT_TEXT  \
-     "Copyright \xa9 1997~1999 Alfredo K. Kojima <kojima@windowmaker.org>\n"\
-     "Copyright \xa9 1998,1999 Dan Pascu <dan@windowmaker.org>"
+     "Copyright \xa9 1997~2000 Alfredo K. Kojima <kojima@windowmaker.org>\n"\
+     "Copyright \xa9 1998~2000 Dan Pascu <dan@windowmaker.org>"
 
  
 

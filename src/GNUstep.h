@@ -99,8 +99,6 @@ typedef struct {
 
 /* extra flags */
 #define GSDocumentEditedFlag	(1<<0)
-#define GSWindowWillResizeNotificationsFlag (1<<1)
-#define GSWindowWillMoveNotificationsFlag (1<<2)
 
 #define GSNoApplicationIconFlag	(1<<5)
 

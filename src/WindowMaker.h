@@ -128,8 +128,8 @@ typedef enum {
 #define WCUR_QUESTION	5
 #define WCUR_TEXT	6
 #define WCUR_SELECT	7
-#define WCUR_LAST	8
-
+#define WCUR_ROOT	8
+#define WCUR_LAST    	9
 
 /* geometry displays */
 #define WDIS_NEW	0	       /* new style */
@@ -303,7 +303,7 @@ typedef struct WPreferences {
     char constrain_window_size;	       /* don't let windows get bigger than 
 					* screen */
 
-    char circ_raise;		       /* raise window when Alt-tabbing */
+    char circ_raise;		       /* raise window after Alt-tabbing */
 
     char ignore_focus_click;
 

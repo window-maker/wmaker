@@ -160,7 +160,7 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 
     if (wwin == NULL) {
 	XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, timestamp);
-	if (old_focused) {
+	if (old_focused && !old_focused->flags.is_gnustep) {
 	    wWindowUnfocus(old_focused);
 	}
 	if (oapp) {
@@ -174,7 +174,7 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 	wKWMSendEventMessage(NULL, WKWMFocusWindow);
 #endif
 	return;
-    } else if(old_scr != scr && old_focused) {
+    } else if (old_scr != scr && old_focused && !old_focused->flags.is_gnustep) {
         wWindowUnfocus(old_focused);
     }
 
@@ -237,7 +237,8 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 	}
     }
 
-    wWindowFocus(wwin, focused);
+    if (!wwin->flags.is_gnustep)
+	wWindowFocus(wwin, focused);
 
     if (napp && !wasfocused) {
 #ifdef USER_MENU

@@ -186,6 +186,11 @@ static int setMultiByte();
 
 static int updateUsableArea();
 
+#ifdef DEFINABLE_CURSOR
+extern Cursor wCursor[WCUR_LAST];
+static int getCursor();
+static int setCursor();
+#endif
 
 
 /*
@@ -792,6 +797,31 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.modelock, 	getBool,	NULL
     }
 #endif /* KEEP_XKB_LOCK_STATUS */
+#ifdef DEFINABLE_CURSOR
+    ,{"NormalCursor", "(builtin, left_ptr)",	(void*)WCUR_ROOT,
+          NULL,				getCursor,	setCursor
+    }
+    ,{"MoveCursor", "(builtin, fleur)",		(void*)WCUR_MOVE,
+          NULL,				getCursor,	setCursor
+    }
+    ,{"ResizeCursor", "(builtin, sizing)",	(void*)WCUR_RESIZE,
+          NULL,				getCursor,	setCursor
+    }
+    ,{"WaitCursor", "(builtin, watch)",		(void*)WCUR_WAIT,
+          NULL,				getCursor,	setCursor
+    }
+#if 0
+    ,{"ArrowCursor", "(builtin, top_left_arrow)",	(void*)WCUR_ARROW,
+          NULL,				getCursor,	setCursor
+    }
+    ,{"QuestionCursor", "(builtin, question_arrow)",	(void*)WCUR_QUESTION,
+          NULL,				getCursor,	setCursor
+    }
+    ,{"TextCursor", "(builtin, xterm)",		(void*)WCUR_TEXT,
+          NULL,				getCursor,	setCursor
+    }
+#endif
+#endif /* DEFINABLE_CURSOR */
 };
 
 
@@ -2401,6 +2431,296 @@ getRImages(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 }
 #endif
 
+#ifdef DEFINABLE_CURSOR
+
+# include <X11/cursorfont.h>
+typedef struct 
+{
+   char *name;
+   int id;
+} WCursorLookup;
+
+#define CURSOR_ID_NONE	(XC_num_glyphs)
+
+static WCursorLookup cursor_table[] =
+{
+    { "X_cursor",		XC_X_cursor },
+    { "arrow",			XC_arrow },
+    { "based_arrow_down",	XC_based_arrow_down },
+    { "based_arrow_up",		XC_based_arrow_up },
+    { "boat",			XC_boat },
+    { "bogosity",		XC_bogosity },
+    { "bottom_left_corner",	XC_bottom_left_corner },
+    { "bottom_right_corner",	XC_bottom_right_corner },
+    { "bottom_side",		XC_bottom_side },
+    { "bottom_tee",		XC_bottom_tee },
+    { "box_spiral",		XC_box_spiral },
+    { "center_ptr",		XC_center_ptr },
+    { "circle",			XC_circle },
+    { "clock",			XC_clock },
+    { "coffee_mug",		XC_coffee_mug },
+    { "cross",			XC_cross },
+    { "cross_reverse",		XC_cross_reverse },
+    { "crosshair",		XC_crosshair },
+    { "diamond_cross",		XC_diamond_cross },
+    { "dot",			XC_dot },
+    { "dotbox",			XC_dotbox },
+    { "double_arrow",		XC_double_arrow },
+    { "draft_large",		XC_draft_large },
+    { "draft_small",		XC_draft_small },
+    { "draped_box",		XC_draped_box },
+    { "exchange",		XC_exchange },
+    { "fleur",			XC_fleur },
+    { "gobbler",		XC_gobbler },
+    { "gumby",			XC_gumby },
+    { "hand1",			XC_hand1 },
+    { "hand2",			XC_hand2 },
+    { "heart",			XC_heart },
+    { "icon",			XC_icon },
+    { "iron_cross",		XC_iron_cross },
+    { "left_ptr",		XC_left_ptr },
+    { "left_side",		XC_left_side },
+    { "left_tee",		XC_left_tee },
+    { "leftbutton",		XC_leftbutton },
+    { "ll_angle",		XC_ll_angle },
+    { "lr_angle",		XC_lr_angle },
+    { "man",			XC_man },
+    { "middlebutton",		XC_middlebutton },
+    { "mouse",			XC_mouse },
+    { "pencil",			XC_pencil },
+    { "pirate",			XC_pirate },
+    { "plus",			XC_plus },
+    { "question_arrow",		XC_question_arrow },
+    { "right_ptr",		XC_right_ptr },
+    { "right_side",		XC_right_side },
+    { "right_tee",		XC_right_tee },
+    { "rightbutton",		XC_rightbutton },
+    { "rtl_logo",		XC_rtl_logo },
+    { "sailboat",		XC_sailboat },
+    { "sb_down_arrow",		XC_sb_down_arrow },
+    { "sb_h_double_arrow",	XC_sb_h_double_arrow },
+    { "sb_left_arrow",		XC_sb_left_arrow },
+    { "sb_right_arrow",		XC_sb_right_arrow },
+    { "sb_up_arrow",		XC_sb_up_arrow },
+    { "sb_v_double_arrow",	XC_sb_v_double_arrow },
+    { "shuttle",		XC_shuttle },
+    { "sizing",			XC_sizing },
+    { "spider",			XC_spider },
+    { "spraycan",		XC_spraycan },
+    { "star",			XC_star },
+    { "target",			XC_target },
+    { "tcross",			XC_tcross },
+    { "top_left_arrow",		XC_top_left_arrow },
+    { "top_left_corner",	XC_top_left_corner },
+    { "top_right_corner",	XC_top_right_corner },
+    { "top_side",		XC_top_side },
+    { "top_tee",		XC_top_tee },
+    { "trek",			XC_trek },
+    { "ul_angle",		XC_ul_angle },
+    { "umbrella",		XC_umbrella },
+    { "ur_angle",		XC_ur_angle },
+    { "watch",			XC_watch },
+    { "xterm",			XC_xterm },
+    { NULL,			CURSOR_ID_NONE }
+};
+
+static void check_bitmap_status(int status, char *filename, Pixmap bitmap)
+{
+   switch(status)
+    {
+     case BitmapOpenFailed:
+       wwarning(_("failed to open bitmap file \"%s\""), filename);
+       break;
+     case BitmapFileInvalid:
+       wwarning(_("\"%s\" is not a valid bitmap file"), filename);
+       break;
+     case BitmapNoMemory:
+       wwarning(_("out of memory reading bitmap file \"%s\""), filename);
+       break;
+     case BitmapSuccess:
+       XFreePixmap(dpy, bitmap);
+       break;
+    }
+}
+
+/*
+ * (none)
+ * (builtin, <cursor_name>)
+ * (bitmap, <cursor_bitmap>, <cursor_mask>)
+ */
+static int parse_cursor(WScreen *scr, proplist_t pl, Cursor *cursor)
+{
+   proplist_t elem;
+   char *val;
+   int nelem;
+   int status = 0;
+   
+   nelem = PLGetNumberOfElements(pl);
+   if (nelem < 1)
+    {
+       return(status);
+    }
+   elem = PLGetArrayElement(pl, 0);
+   if (!elem || !PLIsString(elem))
+    {
+       return(status);
+    }
+   val = PLGetString(elem);
+   
+   if (0 == strcasecmp(val, "none")) 
+    {
+       status = 1;
+       *cursor = None;
+    }
+   else if (0 == strcasecmp(val, "builtin")) 
+    {
+       int i;
+       int cursor_id = CURSOR_ID_NONE;
+       
+       if (2 != nelem)
+	{
+	   wwarning(_("bad number of arguments in cursor specification"));
+	   return(status);
+	}
+       elem = PLGetArrayElement(pl, 1);
+       if (!elem || !PLIsString(elem))
+	{
+	   return(status);
+	}
+       val = PLGetString(elem);
+       
+       for (i = 0; NULL != cursor_table[i].name; i++)
+	{
+	   if (0 == strcasecmp(val, cursor_table[i].name))
+	    {
+	       cursor_id = cursor_table[i].id;
+	       break;
+	    }
+	}
+       if (CURSOR_ID_NONE == cursor_id) 
+	{
+	   wwarning(_("unknown builtin cursor name \"%s\""), val);
+	}
+       else
+	{
+	   *cursor = XCreateFontCursor(dpy, cursor_id);
+	   status = 1;
+	}
+    }
+   else if (0 == strcasecmp(val, "bitmap"))
+    {
+       char *bitmap_name;
+       char *mask_name;
+       int bitmap_status;
+       int mask_status;
+       Pixmap bitmap;
+       Pixmap mask;
+       unsigned int w, h;
+       int x, y;
+       XColor fg, bg;
+       
+       if (3 != nelem)
+	{
+	   wwarning(_("bad number of arguments in cursor specification"));
+	   return(status);
+	}
+       elem = PLGetArrayElement(pl, 1);
+       if (!elem || !PLIsString(elem))
+	{
+	   return(status);
+	}
+       val = PLGetString(elem);
+       bitmap_name = FindImage(wPreferences.pixmap_path, val);
+       if (!bitmap_name)
+	{
+	   wwarning(_("could not find cursor bitmap file \"%s\""), val);
+	   return(status);
+	}
+       elem = PLGetArrayElement(pl, 2);
+       if (!elem || !PLIsString(elem))
+	{
+	   free(bitmap_name);
+	   return(status);
+	}
+       val = PLGetString(elem);
+       mask_name = FindImage(wPreferences.pixmap_path, val);
+       if (!mask_name)
+	{
+	   free(bitmap_name);
+	   wwarning(_("could not find cursor bitmap file \"%s\""), val);
+	   return(status);
+	}
+       mask_status = XReadBitmapFile(dpy, scr->w_win, mask_name, &w, &h,
+				     &mask, &x, &y);
+       bitmap_status = XReadBitmapFile(dpy, scr->w_win, bitmap_name, &w, &h,
+				       &bitmap, &x, &y);
+       if ((BitmapSuccess == bitmap_status) &&
+	   (BitmapSuccess == mask_status))
+	{
+	   fg.pixel = scr->black_pixel;
+	   bg.pixel = scr->white_pixel;
+	   XQueryColor(dpy, scr->w_colormap, &fg);
+	   XQueryColor(dpy, scr->w_colormap, &bg);
+	   *cursor = XCreatePixmapCursor(dpy, bitmap, mask, &fg, &bg, x, y);
+	   status = 1;
+	}
+       check_bitmap_status(bitmap_status, bitmap_name, bitmap);
+       check_bitmap_status(mask_status, mask_name, mask);
+       free(bitmap_name);
+       free(mask_name);
+    }
+   return(status);
+}
+
+static int
+getCursor(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
+	  void **ret)
+{
+   static Cursor cursor;
+   int status;
+   int changed = 0;
+   
+again:
+   if (!PLIsArray(value))
+    {
+       wwarning(_("Wrong option format for key \"%s\". Should be %s."),
+		entry->key, "cursor specification");
+       if (!changed)
+	{
+	   value = entry->plvalue;
+	   changed = 1;
+	   wwarning(_("using default \"%s\" instead"), entry->default_value);
+	   goto again;
+	}
+       return(False);
+    }
+   status = parse_cursor(scr, value, &cursor);
+   if (!status)
+    {
+       wwarning(_("Error in cursor specification for key \"%s\""), entry->key);
+       if (!changed)
+	{
+	   value = entry->plvalue;
+	   changed = 1;
+	   wwarning(_("using default \"%s\" instead"), entry->default_value);
+	   goto again;
+	}
+       return(False);
+    }
+   if (ret)
+    {
+       *ret = &cursor;
+    }
+   if (addr)
+    {
+       *(Cursor *)addr = cursor;
+    }
+   return(True);
+}
+#undef CURSOR_ID_NONE
+
+#endif /* DEFINABLE_CURSOR */
+
 
 /* ---------------- value setting functions --------------- */
 static int
@@ -3097,4 +3417,25 @@ setMultiByte(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
     
     return 0;
 }
+
+
+#ifdef DEFINABLE_CURSOR
+static int
+setCursor(WScreen *scr, WDefaultEntry *entry, Cursor *cursor, long index)
+{
+   if (None != wCursor[index])
+    {
+       XFreeCursor(dpy, wCursor[index]);
+    }
+   
+   wCursor[index] = *cursor;
+
+   if ((WCUR_ROOT == index) && (None != *cursor))
+    {
+       XDefineCursor(dpy, scr->root_win, *cursor);
+    }
+
+   return 0;
+}
+#endif /* DEFINABLE_CURSOR*/
 

@@ -1566,6 +1566,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 			  (unsigned *) &junk);
 	} else {
 	    WMMaskEvent(dpy, KeyPressMask | ButtonMotionMask
+			| PointerMotionHintMask
 			| ButtonReleaseMask | ButtonPressMask | ExposureMask,
 			&event);
 	    
@@ -1856,7 +1857,8 @@ wMouseResizeWindow(WWindow *wwin, XEvent *ev)
     else
 	h = 0;
     while (1) {
-	WMMaskEvent(dpy, KeyPressMask | ButtonMotionMask | ButtonReleaseMask
+	WMMaskEvent(dpy, KeyPressMask | ButtonMotionMask 
+		   | ButtonReleaseMask | PointerMotionHintMask
 		   | ButtonPressMask | ExposureMask, &event);
 	if (!checkMouseSamplingRate(&event))
 	    continue;
@@ -1875,6 +1877,8 @@ wMouseResizeWindow(WWindow *wwin, XEvent *ev)
 	    
 	 case MotionNotify:
 	    if (started) {
+		while (XCheckMaskEvent(dpy, ButtonMotionMask, &event)) ;
+		
 		dw = 0;
 		dh = 0;
 		

@@ -2478,7 +2478,8 @@ wWindowResetMouseGrabs(WWindow *wwin)
 			  GrabModeAsync, None, None);
     }
     
-    if (!wwin->flags.focused && !WFLAGP(wwin, no_focusable)) {
+    if (!wwin->flags.focused && !WFLAGP(wwin, no_focusable)
+	&& !wwin->flags.is_gnustep) {
 	/* the passive grabs to focus the window */
 	if (wPreferences.focus_mode == WKF_CLICK)
 	    XGrabButton(dpy, AnyButton, AnyModifier, wwin->client_win,
