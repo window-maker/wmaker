@@ -905,6 +905,8 @@ listCallback(void *self, void *clientData)
         }
         assert(i<bPtr->columnCount);
 
+	bPtr->selectedColumn = i;
+
         /* columns at right must be cleared */
         removeColumn(bPtr, i+1);
         /* open directory */
