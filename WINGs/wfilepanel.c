@@ -12,6 +12,10 @@
 #define PATH_MAX 1024
 #endif
 
+#ifndef FLOPPY_PATH
+#define FLOPPY_PATH "/floppy"
+#endif
+
 typedef struct W_FilePanel {
     WMWindow *win;
     
@@ -28,7 +32,9 @@ typedef struct W_FilePanel {
     
     WMButton *homeButton;
     WMButton *trashcanButton;
+    WMButton *createDirButton;
     WMButton *disketteButton;
+    WMButton *mountButton;
 
     WMView *accessoryView;
 
@@ -56,7 +62,7 @@ typedef struct W_FilePanel {
 #define WP_OPEN         0
 #define WP_SAVE         1
 
-#define PWIDTH		320
+#define PWIDTH		330
 #define PHEIGHT 	360
 
 static void listDirectoryOnColumn(WMFilePanel *panel, int column, char *path);
@@ -68,9 +74,13 @@ static void fillColumn(WMBrowserDelegate *self, WMBrowser *bPtr, int column,
 
 static void deleteFile();
 
+static void createDir();
+
 static void goHome();
 
 static void goFloppy();
+
+static void goMount();
 
 static void buttonClick();
 
@@ -211,6 +221,7 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     WMSetBrowserAction(fPtr->browser, browserClick, fPtr);
     WMSetBrowserDoubleAction(fPtr->browser, browserDClick, fPtr);
     WMMoveWidget(fPtr->browser, 7, 72);
+    WMResizeWidget(fPtr->browser, PWIDTH-14,200);
     WMHangData(fPtr->browser, fPtr);
 
     fPtr->nameLabel = WMCreateLabel(fPtr->win);
@@ -229,8 +240,8 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
 			      fPtr->fileField);
     
     fPtr->okButton = WMCreateCommandButton(fPtr->win);
-    WMMoveWidget(fPtr->okButton, 230, 325);
-    WMResizeWidget(fPtr->okButton, 80, 28);
+    WMMoveWidget(fPtr->okButton, 245, 325);
+    WMResizeWidget(fPtr->okButton, 75, 28);
     WMSetButtonText(fPtr->okButton, "OK");
     WMSetButtonImage(fPtr->okButton, scrPtr->buttonArrow);
     WMSetButtonAltImage(fPtr->okButton, scrPtr->pushedButtonArrow);
@@ -238,36 +249,53 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     WMSetButtonAction(fPtr->okButton, buttonClick, fPtr);
     
     fPtr->cancelButton = WMCreateCommandButton(fPtr->win);
-    WMMoveWidget(fPtr->cancelButton, 140, 325);
-    WMResizeWidget(fPtr->cancelButton, 80, 28);
+    WMMoveWidget(fPtr->cancelButton, 165, 325);
+    WMResizeWidget(fPtr->cancelButton, 75, 28);
     WMSetButtonText(fPtr->cancelButton, "Cancel");
     WMSetButtonAction(fPtr->cancelButton, buttonClick, fPtr);
 
-    fPtr->homeButton = WMCreateCommandButton(fPtr->win);
-    WMMoveWidget(fPtr->homeButton, 55, 325);
-    WMResizeWidget(fPtr->homeButton, 28, 28);
-    WMSetButtonImagePosition(fPtr->homeButton, WIPImageOnly);
-    WMSetButtonImage(fPtr->homeButton, scrPtr->homeIcon);
-    WMSetButtonAltImage(fPtr->homeButton, scrPtr->altHomeIcon);
-    WMSetButtonAction(fPtr->homeButton, goHome, fPtr);
-
     fPtr->trashcanButton = WMCreateCommandButton(fPtr->win);
-    WMMoveWidget(fPtr->trashcanButton, 25, 325);
+    WMMoveWidget(fPtr->trashcanButton, 7, 325);
     WMResizeWidget(fPtr->trashcanButton, 28, 28);
     WMSetButtonImagePosition(fPtr->trashcanButton, WIPImageOnly);
     WMSetButtonImage(fPtr->trashcanButton, scrPtr->trashcanIcon);
     WMSetButtonAltImage(fPtr->trashcanButton, scrPtr->altTrashcanIcon);
     WMSetButtonAction(fPtr->trashcanButton, deleteFile, fPtr);
 
+    fPtr->createDirButton = WMCreateCommandButton(fPtr->win);
+    WMMoveWidget(fPtr->createDirButton, 37, 325);
+    WMResizeWidget(fPtr->createDirButton, 28, 28);
+    WMSetButtonImagePosition(fPtr->createDirButton, WIPImageOnly);
+    WMSetButtonImage(fPtr->createDirButton, scrPtr->createDirIcon);
+    WMSetButtonAltImage(fPtr->createDirButton, scrPtr->altCreateDirIcon);
+    WMSetButtonAction(fPtr->createDirButton, createDir, fPtr);
+
+    fPtr->homeButton = WMCreateCommandButton(fPtr->win);
+    WMMoveWidget(fPtr->homeButton, 67, 325);
+    WMResizeWidget(fPtr->homeButton, 28, 28);
+    WMSetButtonImagePosition(fPtr->homeButton, WIPImageOnly);
+    WMSetButtonImage(fPtr->homeButton, scrPtr->homeIcon);
+    WMSetButtonAltImage(fPtr->homeButton, scrPtr->altHomeIcon);
+    WMSetButtonAction(fPtr->homeButton, goHome, fPtr);
+
     fPtr->disketteButton = WMCreateCommandButton(fPtr->win);
-    WMMoveWidget(fPtr->disketteButton, 85, 325);
+    WMMoveWidget(fPtr->disketteButton, 97, 325);
     WMResizeWidget(fPtr->disketteButton, 28, 28);
     WMSetButtonImagePosition(fPtr->disketteButton, WIPImageOnly);
     WMSetButtonImage(fPtr->disketteButton, scrPtr->disketteIcon);
     WMSetButtonAltImage(fPtr->disketteButton, scrPtr->altDisketteIcon);
     WMSetButtonAction(fPtr->disketteButton, goFloppy, fPtr);
 
-    /*xxxxxxxxxxxx***/
+    /*
+    fPtr->mountButton = WMCreateCommandButton(fPtr->win);
+    WMMoveWidget(fPtr->mountButton, 127, 325);
+    WMResizeWidget(fPtr->mountButton, 28, 28);
+    WMSetButtonImagePosition(fPtr->mountButton, WIPImageOnly);
+    WMSetButtonImage(fPtr->mountButton, scrPtr->mountIcon);
+    WMSetButtonAltImage(fPtr->mountButton, scrPtr->altMountIcon);
+    WMSetButtonAction(fPtr->mountButton, goMount, fPtr);
+    */
+
 
     WMRealizeWidget(fPtr->win);
     WMMapSubwidgets(fPtr->win);
@@ -612,23 +640,161 @@ showError(WMScreen *scr, WMWindow *owner, char *s, char *file)
 
 
 static void
-deleteFile(WMButton *bPre, WMFilePanel *panel)
+createDir(WMButton *bPre, WMFilePanel *panel)
 {
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    char *directory_name;
+    char *directory;
     char *file;
-    char *buffer;
+    char *s;
+    char *err_str;
+    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMInputPanel *_panel;
 
-    file = getCurrentFileName(panel);
-    if (file[strlen(file)-1] == '/') {
-        showError(scr, panel->win, "%s is a directory.", file);
-        free(file);
+    _panel = WMCreateInputPanel(scr, panel->win,
+            "Create Directory", "Enter directory name", "", "OK", "Cancel");
+    scr->modalView = W_VIEW(_panel->win);
+    WMMapWidget(_panel->win);
+    scr->modal = 1;
+    while (!_panel->done || WMScreenPending(scr)) {
+        XEvent event;
+        WMNextEvent(scr->display, &event);
+        WMHandleEvent(&event);
+    }
+    scr->modal = 0;
+
+    if (_panel->result == WAPRDefault)
+        directory_name = WMGetTextFieldText(_panel->text);
+    else {
+        WMDestroyInputPanel(_panel);
         return;
     }
-    buffer = wmalloc(strlen(file)+16);
-    sprintf(buffer,"Delete file %s ?",file);
+
+    WMDestroyInputPanel(_panel);
+
+    directory = getCurrentFileName(panel);
+    {
+        char *s = strrchr(directory,'/');
+        if (s) s[1] = 0;
+    }
+
+    if (directory_name[0] == '/') {
+        directory[0] = 0;
+    } else {
+        while (s = strstr(directory,"//")) {
+            int i;
+            for (i = 2;s[i] == '/';i++);
+            strcpy(s, &s[i-1]);
+        }
+        if ((s = strrchr(directory, '/')) && !s[1]) s[0] = 0;
+    }
+    while (s = strstr(directory_name,"//")) {
+        int i;
+        for (i = 2;s[i] == '/';i++);
+        strcpy(s, &s[i-1]);
+    }
+    if ((s = strrchr(directory_name, '/')) && !s[1]) s[0] = 0;
+
+    file = wmalloc(strlen(directory_name)+strlen(directory)+1);
+    sprintf(file, "%s/%s\0", directory, directory_name);
+    while (s = strstr(file,"//")) {
+        int i;
+        for (i = 2;s[i] == '/';i++);
+        strcpy(s, &s[i-1]);
+    }
+
+    if (mkdir(file,0xfff) != 0) {
+        switch (errno) {
+            case EACCES:
+                showError(scr, panel->win, "Permission denied.", NULL);
+                break;
+            case EEXIST:
+                showError(scr, panel->win, "'%s' already existes.", file);
+                break;
+            case ENOENT:
+                showError(scr, panel->win, "Path does not exist.", NULL);
+        }
+    }
+    else WMSetFilePanelDirectory(panel, file);
+
+    free(directory_name);
+    free(directory);
+    free(file);
+
+}
+
+static void
+deleteFile(WMButton *bPre, WMFilePanel *panel)
+{
+    char *file;
+    char *buffer, *s;
+    char *err_str;
+    struct stat filestat;
+    WMScreen *scr = WMWidgetScreen(panel->win);
+
+    file = getCurrentFileName(panel);
+
+    while (s = strstr(file,"//")) {
+        int i;
+        for (i = 2;s[i] == '/';i++);
+        strcpy(s, &s[i-1]);
+    }
+    if ((s = strrchr(file, '/')) && !s[1]) s[0] = 0;
+
+    if (stat(file,&filestat)) {
+        switch (errno) {
+            case ENOENT:
+                showError(scr, panel->win, "'%s' does not exist.", file);
+                break;
+            case EACCES:
+                showError(scr, panel->win, "Permission denied.", NULL);
+                break;
+            case ENOMEM:
+                showError(scr, panel->win,
+                        "Insufficient memory available.", NULL);
+                break;
+            case EROFS:
+                showError(scr, panel->win,
+                        "'%s' is on a read-only filesystem.", file);
+                break;
+            default:
+                showError(scr, panel->win, "Can not delete '%s'.", file);
+        }
+        free(file);
+        return;
+    } else if (S_ISDIR(filestat.st_mode)) {
+        buffer = wmalloc(strlen(file)+20);
+        sprintf(buffer,"Delete directory %s ?\0",file);
+    } else {
+        buffer = wmalloc(strlen(file)+15);
+        sprintf(buffer,"Delete file %s ?\0",file);
+    }
+
     if (!WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
                 "Warning", buffer, "OK", "Cancel", NULL)) {
-        if (remove(file) != 0) {
+        if (S_ISDIR(filestat.st_mode)) {
+            if (rmdir(file) != 0) {
+                switch (errno) {
+                    case EACCES:
+                        showError(scr, panel->win, "Permission denied.", NULL);
+                        break;
+                    case ENOENT:
+                        showError(scr, panel->win, "'%s' does not exist.", file);
+                        break;
+                    case ENOTEMPTY:
+                        showError(scr, panel->win, "Directory '%s' is not empty.", file);
+                        break;
+                    case EBUSY:
+                        showError(scr, panel->win, "Directory '%s' is busy.", file);
+                        break;
+                    default:
+                        showError(scr, panel->win, "Can not delete '%s'.", file);
+                }
+            } else {
+                char *s = strrchr(file,'/');
+                if (s) s[0] = 0;
+                WMSetFilePanelDirectory(panel, file);
+            }
+        } else if (remove(file) != 0) {
             switch (errno) {
                 case EISDIR:
                     showError(scr, panel->win, "'%s' is a directory.", file);
@@ -641,18 +807,17 @@ deleteFile(WMButton *bPre, WMFilePanel *panel)
                     break;
                 case ENOMEM:
                     showError(scr, panel->win,
-                              "Insufficient memory available.", NULL);
+                            "Insufficient memory available.", NULL);
                     break;
                 case EROFS:
                     showError(scr, panel->win,
-                              "'%s' is on a read-only filesystem.", file);
+                            "'%s' is on a read-only filesystem.", file);
                     break;
                 default:
                     showError(scr, panel->win, "Can not delete '%s'.", file);
             }
-        }
-        else {
-            char *s = strrchr(file, '/');
+        } else {
+            char *s = strrchr(file,'/');
             if (s) s[1] = 0;
             WMSetFilePanelDirectory(panel, file);
         }
@@ -661,23 +826,31 @@ deleteFile(WMButton *bPre, WMFilePanel *panel)
     free(file);
 }
 
+static void
+goMount(WMButton *bPtr, WMFilePanel *panel)
+{
+}
+
 
 static void
 goFloppy(WMButton *bPtr, WMFilePanel *panel)
 {
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    char *file, *err_str;
     struct stat filestat;
+    WMScreen *scr = WMWidgetScreen(panel->win);
 
-    if (stat("/floppy", &filestat)) {
-        showError(scr, panel->win, "An error occured browsing /floppy.", NULL);
+    file = FLOPPY_PATH;
+    if (stat(FLOPPY_PATH,&filestat)) {
+        showError(scr, panel->win, "An error occured browsing '%s'.", file);
         return;
     } else if (!S_ISDIR(filestat.st_mode)) {
-        showError(scr, panel->win, "/floppy is not a directory.", NULL);
+        showError(scr, panel->win, "'%s' is not a directory.", file);
         return;
     }
     
-    WMSetFilePanelDirectory(panel, "/floppy/");
+    WMSetFilePanelDirectory(panel, FLOPPY_PATH);
 }
+
 
 static void
 goHome(WMButton *bPtr, WMFilePanel *panel)
@@ -713,12 +886,18 @@ handleEvents(XEvent *event, void *data)
             WMResizeWidget(pPtr->fileField, newWidth-60-10, 24);
             WMMoveWidget(pPtr->nameLabel, 7, newHeight-(PHEIGHT-282));
             WMMoveWidget(pPtr->fileField, 60, newHeight-(PHEIGHT-278));
-            WMMoveWidget(pPtr->okButton, newWidth-(PWIDTH-230),
-                         newHeight-(PHEIGHT-325));
-            WMMoveWidget(pPtr->cancelButton, newWidth-(PWIDTH-140),
-                         newHeight-(PHEIGHT-325));
-            WMMoveWidget(pPtr->homeButton, 55, newHeight-(PHEIGHT-325));
-            WMMoveWidget(pPtr->trashcanButton, 25, newHeight-(PHEIGHT-325));
+            WMMoveWidget(pPtr->okButton, newWidth-(PWIDTH-245),
+                    newHeight-(PHEIGHT-325));
+            WMMoveWidget(pPtr->cancelButton, newWidth-(PWIDTH-165),
+                    newHeight-(PHEIGHT-325));
+
+            WMMoveWidget(pPtr->trashcanButton, 7, newHeight-(PHEIGHT-325));
+            WMMoveWidget(pPtr->createDirButton, 37, newHeight-(PHEIGHT-325));
+            WMMoveWidget(pPtr->homeButton, 67, newHeight-(PHEIGHT-325));
+            WMMoveWidget(pPtr->disketteButton, 97, newHeight-(PHEIGHT-325));
+            /*
+            WMMoveWidget(pPtr->mountButton, 127, newHeight-(PHEIGHT-325));
+            */
 
 	    newColumnCount = (newWidth - 14) / 140;
 	    WMSetBrowserMaxVisibleColumns(pPtr->browser, newColumnCount);
