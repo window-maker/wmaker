@@ -1,6 +1,5 @@
 - wmaker will not stop managing a screen even if another window manager
   requests that, through the ICCCM 2.0 manager selection stuff
-- the app menu does not update after a style/theme change without restart.
 - stacking code is buggy (or XFree is buggy)
 - after restart focus is losed or switched to another window. May be related
   to the one above.

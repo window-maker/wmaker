@@ -177,9 +177,10 @@ WMSynchronizeUserDefaults(WMUserDefaults *database)
     if (stat(path, &stbuf) >= 0 && stbuf.st_mtime > database->timestamp)
         fileIsNewer = True;
 
-    /*printf("syncing: %s %d %d\n", path, database->dirty, fileIsNewer);*/
-
     if (database->appDomain && (database->dirty || fileIsNewer)) {
+
+        /*fprintf(stderr, "syncing: %s %d %d\n", path, database->dirty, fileIsNewer);*/
+
         PLShallowSynchronize(database->appDomain);
         database->dirty = 0;
         if (stat(path, &stbuf) >= 0)
