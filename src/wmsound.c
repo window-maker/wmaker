@@ -8,16 +8,16 @@
 #include <X11/Xproto.h>
 
 #include "WindowMaker.h"
+#include "funcs.h"
 #include "wmsound.h"
 
 #ifdef WMSOUND
 
-Window soundServer;
-XEvent sound_event;
+
 
 extern WPreferences wPreferences;
-extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
 
+#if 0
 void
 wSoundServerGrab(Window wm_win)
 {
@@ -60,28 +60,29 @@ wSoundServerGrab(Window wm_win)
     }
     return;
 }
-
+#endif
 
 void
 wSoundPlay(long event_sound)
 {
-    if (!soundServer) {
-      wSoundServerGrab(DefaultRootWindow(dpy));
+    static Atom atom = 0;
+    XEvent sound_event;
+
+    if (!atom) {
+	atom = XInternAtom(dpy, "_WINDOWMAKER_EVENT", False);
     }
-    if(soundServer!=None && !wPreferences.no_sound) {
+
+    if(!wPreferences.no_sound) {
+	Window win = wScreenWithNumber(0)->info_window;
+
         sound_event.xclient.type = ClientMessage;
-        sound_event.xclient.message_type = _XA_WINDOWMAKER_WM_FUNCTION;
+        sound_event.xclient.message_type = atom;
         sound_event.xclient.format = 32;
         sound_event.xclient.display = dpy;
-        sound_event.xclient.window = soundServer;
+        sound_event.xclient.window = win;
         sound_event.xclient.data.l[0] = event_sound;
-        if (XSendEvent(dpy, soundServer, False,
-                       NoEventMask, &sound_event)==BadWindow) {
-            soundServer = None;
-            return;
-        } else {
-            XFlush(dpy);
-        }
+        XSendEvent(dpy, win, False, StructureNotifyMask, &sound_event);
+	XFlush(dpy);
     }
 }
 
