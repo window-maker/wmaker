@@ -65,6 +65,7 @@ Changes since version 0.80.2:
 - Fixed Clip's workspace menu mapping to be consistent with the others
 - Fixed bug in wmsetbg that caused scale and maxscale to both do maxscale
   (Alexey Voinov <voins@voins.program.ru>)
+- Fixed bug with scrolling menus introduced by the xinerama patch.
 
 
 Changes since version 0.80.1:

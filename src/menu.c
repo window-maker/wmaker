@@ -785,9 +785,9 @@ paintEntry(WMenu *menu, int index, int selected)
 
     if (entry->cascade>=0) {
         /* draw the cascade indicator */
-        XDrawLine(dpy,win,dim, w-11, y+6, w-6, y+h/2-1);
-        XDrawLine(dpy,win,light, w-11, y+h-8, w-6, y+h/2-1);
-        XDrawLine(dpy,win,dark, w-12, y+6, w-12, y+h-8);
+        XDrawLine(dpy, win, dim,   w-11, y+6,   w-6,  y+h/2-1);
+        XDrawLine(dpy, win, light, w-11, y+h-8, w-6,  y+h/2-1);
+        XDrawLine(dpy, win, dark,  w-12, y+6,   w-12, y+h-8);
     }
 
     /* draw indicator */
@@ -886,19 +886,19 @@ makeVisible(WMenu *menu)
 
 
     if (x1 < rect.pos.x) {
-	new_x = rect.pos.x;
-	move = 1;
+        new_x = rect.pos.x;
+        move = 1;
     } else if (x2 >= rect.pos.x + rect.size.width) {
-	new_x = rect.pos.x + rect.size.width - MENUW(menu) - 1;
-	move = 1;
+        new_x = rect.pos.x + rect.size.width - MENUW(menu) - 1;
+        move = 1;
     }
-    
+
     if (y1 < rect.pos.y) {
-	new_y = rect.pos.y;
-	move = 1;
+        new_y = rect.pos.y;
+        move = 1;
     } else if (y2 >= rect.pos.y + rect.size.height) {
-	new_y = rect.pos.y + rect.size.height - menu->entry_height - 1;
-	move = 1;
+        new_y = rect.pos.y + rect.size.height - menu->entry_height - 1;
+        move = 1;
     }
 
     new_y = new_y - menu->frame->top_width
@@ -947,7 +947,7 @@ keyboardMenu(WMenu *menu)
     int old_pos_y = menu->frame_y;
     int new_x = old_pos_x, new_y = old_pos_y;
     WMRect rect = wGetRectForHead(menu->frame->screen_ptr,
-				  wGetHeadForPointerLocation(menu->frame->screen_ptr));
+                                  wGetHeadForPointerLocation(menu->frame->screen_ptr));
 
     if (menu->flags.editing)
         return False;
@@ -956,12 +956,12 @@ keyboardMenu(WMenu *menu)
     XGrabKeyboard(dpy, menu->frame->core->window, True, GrabModeAsync,
                   GrabModeAsync, CurrentTime);
 
-   
+
     if (menu->frame_y+menu->frame->top_width >= rect.pos.y + rect.size.height)
- 	new_y = rect.pos.y + rect.size.height - menu->frame->top_width;
-    
+        new_y = rect.pos.y + rect.size.height - menu->frame->top_width;
+
     if (menu->frame_x+MENUW(menu) >= rect.pos.x + rect.size.width)
-	new_x = rect.pos.x + rect.size.width - MENUW(menu) - 1;
+        new_x = rect.pos.x + rect.size.width - MENUW(menu) - 1;
 
     move_menus(menu, new_x, new_y);
 
@@ -1137,7 +1137,7 @@ void
 wMenuMapAt(WMenu *menu, int x, int y, int keyboard)
 {
     WMRect rect = wGetRectForHead(menu->frame->screen_ptr,
-				  wGetHeadForPointerLocation(menu->frame->screen_ptr));
+                                  wGetHeadForPointerLocation(menu->frame->screen_ptr));
 
     if (!menu->flags.realized) {
         menu->flags.realized=1;
@@ -1145,12 +1145,12 @@ wMenuMapAt(WMenu *menu, int x, int y, int keyboard)
     }
     if (!menu->flags.mapped) {
         if (wPreferences.wrap_menus) {
-	    if (x<rect.pos.x) x = rect.pos.x;
-	    if (y<rect.pos.y) y = rect.pos.y;
-	    if (x+MENUW(menu) > rect.pos.x + rect.size.width)
-		x = rect.pos.x + rect.size.width - MENUW(menu);
-	    if (y+MENUH(menu) > rect.pos.y + rect.size.height)
-		y = rect.pos.y + rect.size.height - MENUH(menu);
+            if (x<rect.pos.x) x = rect.pos.x;
+            if (y<rect.pos.y) y = rect.pos.y;
+            if (x+MENUW(menu) > rect.pos.x + rect.size.width)
+                x = rect.pos.x + rect.size.width - MENUW(menu);
+            if (y+MENUH(menu) > rect.pos.y + rect.size.height)
+                y = rect.pos.y + rect.size.height - MENUH(menu);
         }
 
         XMoveWindow(dpy, menu->frame->core->window, x, y);
@@ -1624,7 +1624,7 @@ getScrollAmount(WMenu *menu, int *hamount, int *vamount)
     int menuY2 = menu->frame_y + MENUH(menu);
     int xroot, yroot;
     WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
-    
+
 
     *hamount = 0;
     *vamount = 0;
@@ -1632,30 +1632,30 @@ getScrollAmount(WMenu *menu, int *hamount, int *vamount)
     getPointerPosition(scr, &xroot, &yroot);
 
     if (xroot <= (rect.pos.x + 1) && menuX1 < rect.pos.x) {
-	/* scroll to the right */
-	*hamount = WMIN(MENU_SCROLL_STEP, abs(menuX1));
-	
-    } else if (xroot >= (rect.pos.x + rect.size.width - 2) && 
-	       menuX2 > (rect.pos.x + rect.size.width - 1)) {
-	/* scroll to the left */
-	*hamount = WMIN(MENU_SCROLL_STEP, abs(menuX2-rect.pos.x-rect.size.width-1));
-	
-	if (*hamount==0)
-	    *hamount = 1;
-	
-	*hamount = -*hamount;
+        /* scroll to the right */
+        *hamount = WMIN(MENU_SCROLL_STEP, abs(menuX1));
+
+    } else if (xroot >= (rect.pos.x + rect.size.width - 2) &&
+               menuX2 > (rect.pos.x + rect.size.width - 1)) {
+        /* scroll to the left */
+        *hamount = WMIN(MENU_SCROLL_STEP, abs(menuX2-rect.pos.x-rect.size.width-1));
+
+        if (*hamount==0)
+            *hamount = 1;
+
+        *hamount = -*hamount;
     }
-    
+
     if (yroot <= (rect.pos.y + 1) && menuY1 < rect.pos.y) {
-	/* scroll down */
-	*vamount = WMIN(MENU_SCROLL_STEP, abs(menuY1));
-	
-    } else if (yroot >= (rect.pos.y + rect.size.height - 2) && 
-	       menuY2 > (rect.pos.y + rect.size.height - 1)) {
-	/* scroll up */
-	*vamount = WMIN(MENU_SCROLL_STEP, abs(menuY2-rect.pos.y-rect.size.height-2));
-	
-	*vamount = -*vamount;
+        /* scroll down */
+        *vamount = WMIN(MENU_SCROLL_STEP, abs(menuY1));
+
+    } else if (yroot >= (rect.pos.y + rect.size.height - 2) &&
+               menuY2 > (rect.pos.y + rect.size.height - 1)) {
+        /* scroll up */
+        *vamount = WMIN(MENU_SCROLL_STEP, abs(menuY2-rect.pos.y-rect.size.height-2));
+
+        *vamount = -*vamount;
     }
 }
 
@@ -1747,17 +1747,17 @@ isPointNearBoder(WMenu *menu, int x, int y)
     int menuY2 = menu->frame_y + MENUH(menu);
     int flag = 0;
     /* XXX: handle screen joins proper !! */
-    WMRect rect = wGetRectForHead(menu->frame->screen_ptr, 
-				  wGetHeadForPoint(menu->frame->screen_ptr, (WMPoint){ x, y}));
-    
+    WMRect rect = wGetRectForHead(menu->frame->screen_ptr,
+                                  wGetHeadForPoint(menu->frame->screen_ptr, (WMPoint){ x, y}));
+
     if (x >= menuX1 && x <= menuX2 &&
-	(y < rect.pos.y + MENU_SCROLL_BORDER || 
-	 y >= rect.pos.y + rect.size.height + MENU_SCROLL_BORDER))
-	flag = 1;
+        (y < rect.pos.y + MENU_SCROLL_BORDER ||
+         y >= rect.pos.y + rect.size.height - MENU_SCROLL_BORDER))
+        flag = 1;
     else if (y >= menuY1 && y <= menuY2 &&
-	     (x < rect.pos.x + MENU_SCROLL_BORDER ||
-	      x >= rect.pos.x + rect.size.width + MENU_SCROLL_BORDER))
-	flag = 1;
+             (x < rect.pos.x + MENU_SCROLL_BORDER ||
+              x >= rect.pos.x + rect.size.width - MENU_SCROLL_BORDER))
+        flag = 1;
 
     return flag;
 }
@@ -1811,7 +1811,7 @@ wMenuScroll(WMenu *menu, XEvent *event)
 
     while(!done) {
         int x, y, on_border, on_x_edge, on_y_edge, on_title;
-	WMRect rect;
+        WMRect rect;
 
         WMNextEvent(dpy, &ev);
         switch (ev.type) {
@@ -1832,9 +1832,9 @@ wMenuScroll(WMenu *menu, XEvent *event)
                 break;
             }
 
-	    rect = wGetRectForHead(scr, wGetHeadForPoint(scr, (WMPoint){ x, y }));
-	    on_x_edge = x <= rect.pos.x + 1 || x >= rect.pos.x + rect.size.width - 2;
-	    on_y_edge = y <= rect.pos.y + 1 || y >= rect.pos.y + rect.size.height - 2;
+            rect = wGetRectForHead(scr, wGetHeadForPoint(scr, (WMPoint){ x, y }));
+            on_x_edge = x <= rect.pos.x + 1 || x >= rect.pos.x + rect.size.width - 2;
+            on_y_edge = y <= rect.pos.y + 1 || y >= rect.pos.y + rect.size.height - 2;
             on_border = on_x_edge || on_y_edge;
 
             if (!on_border && !jump_back) {
@@ -1956,8 +1956,8 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
      * multiple times
      */
     /*if (menu->flags.inside_handler) {
-        return;
-    }*/
+     return;
+     }*/
     menu->flags.inside_handler = 1;
 
     if (!wPreferences.wrap_menus) {
@@ -2662,16 +2662,16 @@ restoreMenu(WScreen *scr, WMPropList *menu, int which)
     if (pmenu) {
         int width = MENUW(pmenu);
         int height = MENUH(pmenu);
-	WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+        WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
 
         if (lowered) {
             changeMenuLevels(pmenu, True);
         }
 
-	if (x < rect.pos.x - width) x = rect.pos.x;
-	if (x > rect.pos.x + rect.size.width) x = rect.pos.x + rect.size.width - width;
-	if (y < rect.pos.y) y = rect.pos.y;
-	if (y > rect.pos.y + rect.size.height) y = rect.pos.y + rect.size.height - height;
+        if (x < rect.pos.x - width) x = rect.pos.x;
+        if (x > rect.pos.x + rect.size.width) x = rect.pos.x + rect.size.width - width;
+        if (y < rect.pos.y) y = rect.pos.y;
+        if (y > rect.pos.y + rect.size.height) y = rect.pos.y + rect.size.height - height;
 
         wMenuMove(pmenu, x, y, True);
         pmenu->flags.buttoned = 1;
@@ -2704,7 +2704,7 @@ restoreMenuRecurs(WScreen *scr, WMPropList *menus, WMenu *menu, char *path)
         if (!menu->flags.mapped) {
             int width = MENUW(menu);
             int height = MENUH(menu);
-	    WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+            WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
 
             wMenuMapAt(menu, x, y, False);
 
@@ -2721,10 +2721,10 @@ restoreMenuRecurs(WScreen *scr, WMPropList *menus, WMenu *menu, char *path)
                 changeMenuLevels(menu, True);
             }
 
-	    if (x < rect.pos.x - width) x = rect.pos.x;
-	    if (x > rect.pos.x + rect.size.width) x = rect.pos.x + rect.size.width - width;
-	    if (y < rect.pos.y) y = rect.pos.y;
-	    if (y > rect.pos.y + rect.size.height) y = rect.pos.y + rect.size.height - height;
+            if (x < rect.pos.x - width) x = rect.pos.x;
+            if (x > rect.pos.x + rect.size.width) x = rect.pos.x + rect.size.width - width;
+            if (y < rect.pos.y) y = rect.pos.y;
+            if (y > rect.pos.y + rect.size.height) y = rect.pos.y + rect.size.height - height;
 
             wMenuMove(menu, x, y, True);
             menu->flags.buttoned = 1;
