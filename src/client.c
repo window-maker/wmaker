@@ -338,7 +338,7 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 #endif
             }
 	    if (tmp)
-		free(tmp);
+		wfree(tmp);
 	}
 	break;
 	
@@ -356,7 +356,7 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 	    wIconChangeTitle(wwin->icon, new_title);
 	}
 	break;
-	
+
      case XA_WM_COMMAND:
 	if (wwin->main_window!=None) {
 	    WApplication *wapp = wApplicationOf(wwin->main_window);
@@ -364,8 +364,10 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 	    int argc;
 
 	    if (wapp && wapp->app_icon) {
-		if (wapp->app_icon->command!=NULL)
-		    free(wapp->app_icon->command);
+                if (wapp->app_icon->command!=NULL) {
+                    wfree(wapp->app_icon->command);
+                    wapp->app_icon->command = NULL;
+                }
 
 		if (XGetCommand(dpy, wwin->main_window, &argv, &argc)) {
 		    if (argc > 0 && argv != NULL)
@@ -377,7 +379,7 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 	    }
 	}
 	break;
-	
+
      case XA_WM_HINTS:
 	/* WM_HINTS */
 
