@@ -165,6 +165,7 @@ inputHandler(int fd, int mask, void *clientData) /*FOLD00*/
 
     if ((mask & WIWriteMask)) {
         if (cPtr->state == WCInProgress) {
+            Bool failed;
             int	result;
             int	len = sizeof(result);
 
@@ -172,9 +173,11 @@ inputHandler(int fd, int mask, void *clientData) /*FOLD00*/
                            (void*)&result, &len) == 0 && result != 0) {
                 cPtr->state = WCFailed;
                 WCErrorCode = result;
+                failed = True;
                 /* should call wsyserrorwithcode(result, ...) here? */
             } else {
                 cPtr->state = WCConnected;
+                failed = False;
             }
 
             if (cPtr->handler.write) {
@@ -182,10 +185,12 @@ inputHandler(int fd, int mask, void *clientData) /*FOLD00*/
                 cPtr->handler.write = NULL;
             }
 
+            /* if the connection failed it may get destroyed in the delegate */
             if (cPtr->delegate && cPtr->delegate->didInitialize)
                 (*cPtr->delegate->didInitialize)(cPtr->delegate, cPtr);
 
-            if (cPtr->state == WCFailed)
+            /* don't access cPtr since it may have been destroyed by delegate */
+            if (failed)
                 return;
         } else if (cPtr->state == WCConnected) {
             WMFlushConnection(cPtr);
