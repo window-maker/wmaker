@@ -44,7 +44,7 @@ void *valueForCell(WMTableViewDelegate *self, WMTableColumn *column, int row)
 void setValueForCell(WMTableViewDelegate *self, WMTableColumn *column, int row,
 		     void *data)
 {
-    if (WMGetTableColumnId(column) == 1)
+    if ((int)WMGetTableColumnId(column) == 1)
 	col1[row] = data;
     else
 	col2[row] = (int)data;
