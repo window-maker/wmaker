@@ -432,7 +432,9 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
     int width, height;
     int iconsThatFitCount;
     int count;
-  
+    WMRect rect;
+    rect= wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+
     memset(panel, 0, sizeof(WSwitchPanel));
 
     panel->scr= scr;
@@ -449,7 +451,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
     width= ICON_TILE_SIZE*count;
     iconsThatFitCount= count;
 
-    if (width > WMScreenWidth(scr->wmscreen)) {
+    if (width > rect.size.width) {
         iconsThatFitCount = (WMScreenWidth(scr->wmscreen)-SCREEN_BORDER_SPACING)/ICON_TILE_SIZE;
         width= iconsThatFitCount*ICON_TILE_SIZE;
     }

@@ -3538,7 +3538,13 @@ setSwPOptions(WScreen *scr, WDefaultEntry *entry, WMPropList *array, void *foo)
     switch (WMGetPropListItemCount(array))
     {
     case 4:
-        path= FindImage(wPreferences.pixmap_path, WMGetFromPLString(WMGetFromPLArray(array, 1)));
+        if (!WMIsPLString(WMGetFromPLArray(array, 1))) {
+            wwarning(_("Invalid arguments for option \"%s\""),
+                     entry->key);
+            break;
+        } else
+          path= FindImage(wPreferences.pixmap_path, WMGetFromPLString(WMGetFromPLArray(array, 1)));
+
         if (!path) {
             wwarning(_("Could not find image \"%s\" for option \"%s\""), 
                      WMGetFromPLString(WMGetFromPLArray(array, 1)),
@@ -3607,7 +3613,13 @@ setSwPOptions(WScreen *scr, WDefaultEntry *entry, WMPropList *array, void *foo)
         }
 
     case 1:
-        path= FindImage(wPreferences.pixmap_path, WMGetFromPLString(WMGetFromPLArray(array, 0)));
+        if (!WMIsPLString(WMGetFromPLArray(array, 0))) {
+            wwarning(_("Invalid arguments for option \"%s\""),
+                     entry->key);
+            break;
+        } else
+          path= FindImage(wPreferences.pixmap_path, WMGetFromPLString(WMGetFromPLArray(array, 0)));
+
         if (!path) {
             wwarning(_("Could not find image \"%s\" for option \"%s\""), 
                      WMGetFromPLString(WMGetFromPLArray(array, 0)),

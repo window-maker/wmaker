@@ -20,7 +20,6 @@ POTFILES  = \
 	$(top_builddir)/src/icon.c \
 	$(top_builddir)/src/main.c \
 	$(top_builddir)/src/menu.c \
-	$(top_builddir)/src/menureader.c \
 	$(top_builddir)/src/misc.c \
 	$(top_builddir)/src/pixmap.c \
 	$(top_builddir)/src/resources.c \
@@ -30,6 +29,7 @@ POTFILES  = \
 	$(top_builddir)/src/stacking.c \
 	$(top_builddir)/src/startup.c \
 	$(top_builddir)/src/switchmenu.c \
+	$(top_builddir)/src/switchpanel.c \
 	$(top_builddir)/src/texture.c \
 	$(top_builddir)/src/wdefaults.c \
 	$(top_builddir)/src/window.c \

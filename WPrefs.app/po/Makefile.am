@@ -12,7 +12,7 @@ POTFILES  = \
 	$(top_builddir)/WPrefs.app/Configurations.c \
 	$(top_builddir)/WPrefs.app/Expert.c \
 	$(top_builddir)/WPrefs.app/Focus.c \
-	$(top_builddir)/WPrefs.app/Font.c \
+	$(top_builddir)/WPrefs.app/FontSimple.c \
 	$(top_builddir)/WPrefs.app/Icons.c \
 	$(top_builddir)/WPrefs.app/KeyboardSettings.c \
 	$(top_builddir)/WPrefs.app/KeyboardShortcuts.c \
