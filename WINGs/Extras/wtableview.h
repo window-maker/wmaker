@@ -12,12 +12,20 @@ typedef struct W_TableColumn WMTableColumn;
 typedef struct W_TableView WMTableView;
 
 
+extern const char *WMTableViewRowWasSelectedNotification;
+extern const char *WMTableViewRowWasUnselectedNotification;
+
+
 typedef struct WMTableColumnDelegate {
     void *data;
     void (*drawCell)(struct WMTableColumnDelegate *self, WMTableColumn *column,
 		     int row);
-    void (*editCell)(struct WMTableColumnDelegate *self, WMTableColumn *column,
-		     int row, XEvent *event);
+    void (*drawSelectedCell)(struct WMTableColumnDelegate *self,
+			     WMTableColumn *column, int row);
+    void (*beginCellEdit)(struct WMTableColumnDelegate *self, WMTableColumn *column,
+			  int row);
+    void (*endCellEdit)(struct WMTableColumnDelegate *self, WMTableColumn *column,
+			int row);    
 } WMTableColumnDelegate;
 
 

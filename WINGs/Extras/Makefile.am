@@ -4,24 +4,27 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 
 
-include_HEADERS = wtableview.h tabledelegates.h fieldeditor.h
+include_HEADERS = wtableview.h tabledelegates.h 
 
 
 lib_LIBRARIES = libExtraWINGs.a 
 
-
+noinst_PROGRAMS = test
 
 EXTRA_DIST = 
 
 libExtraWINGs_a_SOURCES = 	\
 	wtableview.c \
 	tabledelegates.c \
-	fieldeditor.c \
 	wtableview.h \
-	tabledelegates.h \
-	fieldeditor.h
+	tabledelegates.h 
 
 
 INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/WINGs \
 	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @HEADER_SEARCH_PATH@ -DDEBUG
+
+LDADD= $(top_builddir)/WINGs/libWINGs.a $(top_builddir)/wrlib/libwraster.la \
+        @LIBPL@ 
+
+test_LDADD = wtableview.o tabledelegates.o $(LDADD)
 
