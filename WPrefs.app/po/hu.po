@@ -1,0 +1,1743 @@
+# Hungarian translation of WPrefs
+# Copyright (C) 1998-2000 Free Software Foundation, Inc.
+# Horvath Szabolcs <horvathsz@penguinpowered.com>
+# thanks to magyar@lists.linux.hu.
+#
+
+msgid ""
+msgstr ""
+"Date: 2000-07-28 17:07:33+0200\n"
+"From: Horvath Szabolcs <horvathsz@penguinpowered.com>\n"
+"Content-Type: text/plain; charset=\n"
+"Xgettext-Options: --default-domain=WPrefs --add-comments --keyword=_\n"
+"Files: ../../WPrefs.app/main.c ../../WPrefs.app/WPrefs.c ../../WPrefs.app/Appearance.c ../../WPrefs.app/Configurations.c ../../WPrefs.app/Expert.c ../../WPrefs.app/Focus.c ../../WPrefs.app/Icons.c ../../WPrefs.app/KeyboardSettings.c ../../WPrefs.app/KeyboardShortcuts.c ../../WPrefs.app/Menu.c ../../WPrefs.app/MenuPreferences.c ../../WPrefs.app/MouseSettings.c ../../WPrefs.app/NoMenuAlert.c ../../WPrefs.app/Paths.c ../../WPrefs.app/Preferences.c ../../WPrefs.app/Text.c ../../WPrefs.app/TexturePanel.c ../../WPrefs.app/Themes.c ../../WPrefs.app/WindowHandling.c ../../WPrefs.app/Workspace.c ../../WPrefs.app/double.c ../../WPrefs.app/editmenu.c ../../WPrefs.app/MenuGuru.c ../../WPrefs.app/xmodifier.c\n"
+
+#: ../../WPrefs.app/main.c:74
+msgid "usage: %s [options]\n"
+msgstr "használat: %s [opciók]\n"
+
+#: ../../WPrefs.app/main.c:75
+msgid "options:"
+msgstr "opciók:"
+
+#: ../../WPrefs.app/main.c:76
+msgid " -display <display>\tdisplay to be used"
+msgstr "-display <megjelenítõ>\tmelyik megjelenítõt legyen használva"
+
+#: ../../WPrefs.app/main.c:77
+msgid " --version\t\tprint version number and exit"
+msgstr "--version\t\tkiírja a verziószámot és kilép"
+
+#: ../../WPrefs.app/main.c:78
+msgid " --help\t\tprint this message and exit"
+msgstr "--help\t\tkiírja ezt a szöveget és kilép"
+
+#: ../../WPrefs.app/main.c:137
+msgid "too few arguments for %s"
+msgstr "túl kevés paraméter a következõhöz: %s"
+
+#: ../../WPrefs.app/main.c:159
+msgid "X server does not support locale"
+msgstr "Az X server nem támogatja a fordítások használatát"
+
+#: ../../WPrefs.app/main.c:162
+msgid "cannot set locale modifiers"
+msgstr "a helyi módosításokat nem tudom beállítani"
+
+#: ../../WPrefs.app/main.c:168
+msgid "could not open display %s"
+msgstr "nem tudom a %s megjelenítõt megnyitni"
+
+#: ../../WPrefs.app/main.c:176
+msgid "could not initialize application"
+msgstr "az alkalmazást nem tudom inicializálni"
+
+#: ../../WPrefs.app/WPrefs.c:254
+msgid "Window Maker Preferences"
+msgstr "Window Maker beállítások"
+
+#: ../../WPrefs.app/WPrefs.c:278
+msgid "Revert Page"
+msgstr "Oldalt visszavon"
+
+#: ../../WPrefs.app/WPrefs.c:284
+msgid "Revert All"
+msgstr "Mindent visszavon"
+
+#: ../../WPrefs.app/WPrefs.c:290
+msgid "Save"
+msgstr "Mentés"
+
+#: ../../WPrefs.app/Appearance.c:2227 ../../WPrefs.app/WPrefs.c:296
+msgid "Close"
+msgstr "Bezárás"
+
+#: ../../WPrefs.app/WPrefs.c:303
+msgid "Balloon Help"
+msgstr "Ballon-súgó"
+
+#: ../../WPrefs.app/WPrefs.c:328
+msgid "Window Maker Preferences Utility"
+msgstr "Window Maker beállítások"
+
+#: ../../WPrefs.app/WPrefs.c:335
+msgid "Version %s for Window Maker %s or newer"
+msgstr "%s-es verzió a %s-s vagy újabb WindowMakerhez"
+
+#: ../../WPrefs.app/WPrefs.c:343
+msgid "Starting..."
+msgstr "Indítás..."
+
+#: ../../WPrefs.app/WPrefs.c:349
+msgid ""
+"Programming/Design: Alfredo K. Kojima\n"
+"Artwork: Marco van Hylckama Vlieg\n"
+"More Programming: James Thompson"
+msgstr ""
+"Programozás/Design: Alfredo K. Kojima\n"
+"Grafika: Marco van Hylckama Vlieg\n"
+"Még több programozás: James Thompson"
+
+#: ../../WPrefs.app/WPrefs.c:437
+msgid "could not locate image file %s\n"
+msgstr "a képfájl (%s) helyét nem találom\n"
+
+#: ../../WPrefs.app/Appearance.c:1895 ../../WPrefs.app/Configurations.c:242 ../../WPrefs.app/Configurations.c:254 ../../WPrefs.app/Focus.c:316 ../../WPrefs.app/Focus.c:327 ../../WPrefs.app/MenuPreferences.c:137 ../../WPrefs.app/MenuPreferences.c:148 ../../WPrefs.app/MenuPreferences.c:176 ../../WPrefs.app/MenuPreferences.c:191 ../../WPrefs.app/MouseSettings.c:606 ../../WPrefs.app/MouseSettings.c:617 ../../WPrefs.app/MouseSettings.c:673 ../../WPrefs.app/MouseSettings.c:688 ../../WPrefs.app/MouseSettings.c:704 ../../WPrefs.app/WPrefs.c:460 ../../WPrefs.app/WPrefs.c:477
+msgid "could not load icon file %s"
+msgstr "az ikon fájlt (%s) nem tudom betölteni"
+
+#: ../../WPrefs.app/WPrefs.c:553
+msgid "could not load image file %s:%s"
+msgstr "a képfájlt nem tudom betölteni %s:%s"
+
+#: ../../WPrefs.app/WPrefs.c:572
+msgid "Loading Window Maker configuration files..."
+msgstr "Window Maker konfigurációs fájlok betöltése..."
+
+#: ../../WPrefs.app/WPrefs.c:576
+msgid "Initializing configuration panels..."
+msgstr "Beállító panel inicializálása"
+
+#: ../../WPrefs.app/WPrefs.c:607
+msgid ""
+"WPrefs is free software and is distributed WITHOUT ANY\n"
+"WARRANTY under the terms of the GNU General Public License.\n"
+"The icons in this program are licensed through the\n"
+"OpenContent License."
+msgstr ""
+"A WPrefs egy teljesen szabad szoftver és SEMMILYEN GARANCIA\n"
+"NINCS rá, a GNU General Public License értelmében terjeszhetõ.\n"
+"A programban használt ikonokra az OpenContent licensz\n"
+"vonatkozik."
+
+#: ../../WPrefs.app/WPrefs.c:638 ../../WPrefs.app/WPrefs.c:708
+msgid "Window Maker domain (%s) is corrupted!"
+msgstr "Window Maker domain (%s) megsérült!"
+
+#: ../../WPrefs.app/Menu.c:1384 ../../WPrefs.app/MouseSettings.c:149 ../../WPrefs.app/MouseSettings.c:169 ../../WPrefs.app/Text.c:183 ../../WPrefs.app/TexturePanel.c:608 ../../WPrefs.app/TexturePanel.c:686 ../../WPrefs.app/Themes.c:96 ../../WPrefs.app/WPrefs.c:639 ../../WPrefs.app/WPrefs.c:644 ../../WPrefs.app/WPrefs.c:658 ../../WPrefs.app/WPrefs.c:668 ../../WPrefs.app/WPrefs.c:678 ../../WPrefs.app/WPrefs.c:709 ../../WPrefs.app/WPrefs.c:714
+msgid "Error"
+msgstr "Hiba"
+
+#. WMMapWidget(panel->pathB);
+#: ../../WPrefs.app/Menu.c:1384 ../../WPrefs.app/MenuGuru.c:119 ../../WPrefs.app/MenuGuru.c:126 ../../WPrefs.app/MenuGuru.c:140 ../../WPrefs.app/MouseSettings.c:151 ../../WPrefs.app/MouseSettings.c:171 ../../WPrefs.app/Text.c:183 ../../WPrefs.app/TexturePanel.c:609 ../../WPrefs.app/TexturePanel.c:688 ../../WPrefs.app/TexturePanel.c:1520 ../../WPrefs.app/Themes.c:98 ../../WPrefs.app/WPrefs.c:639 ../../WPrefs.app/WPrefs.c:644 ../../WPrefs.app/WPrefs.c:660 ../../WPrefs.app/WPrefs.c:672 ../../WPrefs.app/WPrefs.c:678 ../../WPrefs.app/WPrefs.c:685 ../../WPrefs.app/WPrefs.c:709 ../../WPrefs.app/WPrefs.c:714
+msgid "OK"
+msgstr "OK"
+
+#: ../../WPrefs.app/WPrefs.c:642
+msgid "Could not load Window Maker domain (%s) from defaults database."
+msgstr "A Window Maker domaint (%s) nem tudom betölteni az alapértelmezett adatbázisból."
+
+#: ../../WPrefs.app/WPrefs.c:655
+msgid "could not extract version information from Window Maker"
+msgstr "nem tudom kideríteni a WindowMaker verziószámát"
+
+#: ../../WPrefs.app/WPrefs.c:656
+msgid "Make sure wmaker is in your search path."
+msgstr "Gyõzödj meg róla, hogy a wmaker benne van-e a keresési útvonalban."
+
+#: ../../WPrefs.app/WPrefs.c:659
+msgid "Could not extract version from Window Maker. Make sure it is correctly installed and is in your PATH environment variable."
+msgstr "Nem tudom kideríteni a WindowMaker verziószámát. Gyõzödj meg róla, hogy jól van-e felinstallálva és benne van-e a keresési útvan (PATH)"
+
+#: ../../WPrefs.app/WPrefs.c:669
+msgid "Could not extract version from Window Maker. Make sure it is correctly installed and the path where it installed is in the PATH environment variable."
+msgstr "Nem tudom kideríteni a WindowMaker verziószámát. Gyõzödj meg róla, hogy jól van-e felinstallálva és a hely, ahova telepítetted, benne van-e a keresési útban (PATH)"
+
+#: ../../WPrefs.app/WPrefs.c:676
+msgid ""
+"WPrefs only supports Window Maker 0.18.0 or newer.\n"
+"The version installed is %i.%i.%i\n"
+msgstr ""
+"A WPrefs csak 0.18.0 vagy magasabb verziószámú WindowMakereket\n"
+"támogat. A jelenlegi verzió: %i.%i.%i\n"
+
+#: ../../WPrefs.app/WPrefs.c:683
+msgid "Window Maker %i.%i.%i, which is installed in your system, is not fully supported by this version of WPrefs."
+msgstr "A jelenleg telepített WindowMakert (%i.%i.%i) nem támogatja teljesen ez a WPrefs verzió."
+
+#: ../../WPrefs.app/WPrefs.c:685
+msgid "Warning"
+msgstr "Figyelmeztetés"
+
+#: ../../WPrefs.app/WPrefs.c:690
+msgid "could not run \"wmaker --global_defaults_path\"."
+msgstr "a \"wmaker -global_defaults_path\" parancsot nem tudom futtatni."
+
+#: ../../WPrefs.app/WPrefs.c:712
+msgid "Could not load global Window Maker domain (%s)."
+msgstr "a globális Window Maker domaint (%s) nem tudom betölteni."
+
+#: ../../WPrefs.app/WPrefs.c:961
+msgid ""
+"bad speed value for option %s\n"
+". Using default Medium"
+msgstr ""
+"Rossz sebesség-érték a %s kulcshoz\n"
+". az alapértelmezett \"középsõt\" használom"
+
+#: ../../WPrefs.app/Appearance.c:1089
+msgid "Select File"
+msgstr "Válassz fájlt"
+
+#: ../../WPrefs.app/Appearance.c:1488
+msgid "Focused Window"
+msgstr "Fókuszált ablak"
+
+#: ../../WPrefs.app/Appearance.c:1492
+msgid "Unfocused Window"
+msgstr "Nem fókuszált ablak"
+
+#: ../../WPrefs.app/Appearance.c:1496
+msgid "Owner of Focused Window"
+msgstr "A fókuszált ablak szülõje"
+
+#: ../../WPrefs.app/Appearance.c:1500 ../../WPrefs.app/Appearance.c:1819
+msgid "Menu Title"
+msgstr "Címsor"
+
+#: ../../WPrefs.app/Appearance.c:1504 ../../WPrefs.app/Appearance.c:1506
+msgid "Normal Item"
+msgstr "Normál"
+
+#: ../../WPrefs.app/Appearance.c:1510
+msgid "Disabled Item"
+msgstr "Letiltott"
+
+#: ../../WPrefs.app/Appearance.c:1519
+msgid "Highlighted"
+msgstr "Kiemelt"
+
+#: ../../WPrefs.app/Appearance.c:1711
+msgid "Texture"
+msgstr "Minta"
+
+#: ../../WPrefs.app/Appearance.c:1720
+msgid "Titlebar of Focused Window"
+msgstr "A fókuszált ablak címsora"
+
+#: ../../WPrefs.app/Appearance.c:1721
+msgid "Titlebar of Unfocused Windows"
+msgstr "A nem fókuszált ablak címsora"
+
+#: ../../WPrefs.app/Appearance.c:1722
+msgid "Titlebar of Focused Window's Owner"
+msgstr "A fókuszált ablak szülõjének címsora"
+
+#: ../../WPrefs.app/Appearance.c:1723
+msgid "Window Resizebar"
+msgstr "Átméretezõsáv"
+
+#: ../../WPrefs.app/Appearance.c:1724
+msgid "Titlebar of Menus"
+msgstr "Menü címsor"
+
+#: ../../WPrefs.app/Appearance.c:1725
+msgid "Menu Items"
+msgstr "Menüpontok"
+
+#: ../../WPrefs.app/Appearance.c:1726
+msgid "Icon Background"
+msgstr "Ikonháttér"
+
+#: ../../WPrefs.app/Appearance.c:1740
+msgid ""
+"Double click in the texture you want to use\n"
+"for the selected item."
+msgstr ""
+"Kattints duplán azon a mintázaton, amit\n"
+"használni szeretnél a kiválasztott típusnál."
+
+#: ../../WPrefs.app/Appearance.c:1754
+msgid "New"
+msgstr "Új"
+
+#: ../../WPrefs.app/Appearance.c:1758
+msgid "Create a new texture."
+msgstr "Új mintázat készítése"
+
+#: ../../WPrefs.app/Appearance.c:1766
+msgid "Extract..."
+msgstr "Kibont"
+
+#: ../../WPrefs.app/Appearance.c:1770
+msgid "Extract texture(s) from a theme or a style file."
+msgstr "Mintázat(ok) kicsomagolása téma vagy stílus fájlból."
+
+#: ../../WPrefs.app/Appearance.c:1780
+msgid "Edit"
+msgstr "Szerkeszt"
+
+#: ../../WPrefs.app/Appearance.c:1783
+msgid "Edit the highlighted texture."
+msgstr "A kiválasztott mintázat szerkesztése"
+
+#: ../../WPrefs.app/Appearance.c:1791 ../../WPrefs.app/TexturePanel.c:1308
+msgid "Delete"
+msgstr "Törlés"
+
+#: ../../WPrefs.app/Appearance.c:1795
+msgid "Delete the highlighted texture."
+msgstr "A kiválasztott mintázat törlése"
+
+#: ../../WPrefs.app/Appearance.c:1808
+msgid "Color"
+msgstr "Szín"
+
+#: ../../WPrefs.app/Appearance.c:1816
+msgid "Focused Window Title"
+msgstr "A fókuszált ablak címsora"
+
+#: ../../WPrefs.app/Appearance.c:1817
+msgid "Unfocused Window Title"
+msgstr "A nem fókuszált ablak címsora"
+
+#: ../../WPrefs.app/Appearance.c:1818
+msgid "Owner of Focused Window Title"
+msgstr "A fókuszált ablak szülõjének címsora"
+
+#: ../../WPrefs.app/Appearance.c:1820
+msgid "Menu Item Text"
+msgstr "Menüpont szöveg"
+
+#: ../../WPrefs.app/Appearance.c:1821
+msgid "Disabled Menu Item Text"
+msgstr "Letiltott menüpont"
+
+#: ../../WPrefs.app/Appearance.c:1822
+msgid "Menu Highlight Color"
+msgstr "Kiválasztott menü színe"
+
+#: ../../WPrefs.app/Appearance.c:1823
+msgid "Highlighted Menu Text Color"
+msgstr "Kiválasztott menü szövegének színe"
+
+#: ../../WPrefs.app/Appearance.c:1860
+msgid "Options"
+msgstr "Beállítások"
+
+#: ../../WPrefs.app/Appearance.c:1867
+msgid "Menu Style"
+msgstr "Menü stílus"
+
+#: ../../WPrefs.app/Appearance.c:1909
+msgid "Title Alignment"
+msgstr "Címsor elrendezés"
+
+#: ../../WPrefs.app/Appearance.c:1916 ../../WPrefs.app/Text.c:292
+msgid "Left"
+msgstr "Balra"
+
+#: ../../WPrefs.app/Appearance.c:1919 ../../WPrefs.app/Text.c:298 ../../WPrefs.app/TexturePanel.c:1509
+msgid "Center"
+msgstr "Középen"
+
+#: ../../WPrefs.app/Appearance.c:1922 ../../WPrefs.app/Text.c:305
+msgid "Right"
+msgstr "Jobbra"
+
+#: ../../WPrefs.app/Appearance.c:2149
+msgid "Appearance Preferences"
+msgstr "Megjelenés beállítása"
+
+#: ../../WPrefs.app/Appearance.c:2151
+msgid ""
+"Background texture configuration for windows,\n"
+"menus and icons."
+msgstr ""
+"Ablakok, menük és ikonok háttérmintázata."
+
+#: ../../WPrefs.app/Appearance.c:2196
+msgid "Extract Texture"
+msgstr "Mintázatok kicsomagolása"
+
+#: ../../WPrefs.app/Appearance.c:2216
+msgid "Textures"
+msgstr "Mintázatok"
+
+#: ../../WPrefs.app/Appearance.c:2232
+msgid "Extract"
+msgstr "Kicsomagol"
+
+#: ../../WPrefs.app/Configurations.c:150 ../../WPrefs.app/Configurations.c:156 ../../WPrefs.app/MouseSettings.c:536 ../../WPrefs.app/WindowHandling.c:319 ../../WPrefs.app/WindowHandling.c:331 ../../WPrefs.app/Workspace.c:73 ../../WPrefs.app/Workspace.c:79
+msgid "could not load icon %s"
+msgstr "a %s ikont nem tudom betölteni"
+
+#: ../../WPrefs.app/Configurations.c:164 ../../WPrefs.app/Workspace.c:87
+msgid "could not process icon %s:"
+msgstr "a %s ikont nem tudom feldolgozni:"
+
+#: ../../WPrefs.app/Configurations.c:189 ../../WPrefs.app/Workspace.c:126
+msgid "could not load image file %s"
+msgstr "a %s képet nem tudom betölteni"
+
+#: ../../WPrefs.app/Configurations.c:203
+msgid "Icon Slide Speed"
+msgstr "Ikon csúszási sebessége"
+
+#: ../../WPrefs.app/Configurations.c:209
+msgid "Shade Animation Speed"
+msgstr "Felhúzó/Leeresztõ animáció sebessége"
+
+#: ../../WPrefs.app/Configurations.c:271
+msgid "Smooth Scaling"
+msgstr "Elmosás mértéke"
+
+#: ../../WPrefs.app/Configurations.c:272
+msgid ""
+"Smooth scaled background images, neutralizing\n"
+"the `pixelization' effect. This will slow\n"
+"down loading of background images considerably."
+msgstr ""
+"Elmosás mérteke a háttérképeknél, a 'pixelezés'\n"
+"effekt mértéke. Ez számottevõen lelassítja\n"
+"a háttérképek betöltésének idejét."
+
+#: ../../WPrefs.app/Configurations.c:313
+msgid "Titlebar Style"
+msgstr "Címsor stílusa"
+
+#: ../../WPrefs.app/Configurations.c:350
+msgid "Animations and Sound"
+msgstr "Animációk és hangok"
+
+#: ../../WPrefs.app/Configurations.c:356
+msgid "Animations"
+msgstr "Animációk"
+
+#: ../../WPrefs.app/Configurations.c:367
+msgid ""
+"Disable/enable animations such as those shown\n"
+"for window miniaturization, shading etc."
+msgstr ""
+"Az animációk ki/be kapcsolása (mint például a\n"
+"lekicsinyítésnél, felhúzásnál)"
+
+#: ../../WPrefs.app/Configurations.c:375
+msgid "Superfluous"
+msgstr "Felesleges"
+
+#: ../../WPrefs.app/Configurations.c:386
+msgid ""
+"Disable/enable `superfluous' features and\n"
+"animations. These include the `ghosting' of the\n"
+"dock when it's being moved to the another side\n"
+"and the explosion animation for undocked icons."
+msgstr ""
+"A teljesen felesleges jellemzõk és animációk\n"
+"ki/bekapcsolása. Pl. a dokkolt ikonok eltûnõ effektje\n"
+"(amikor a másik oldalra mozgatod vagy letörlöd)"
+
+#: ../../WPrefs.app/Configurations.c:396
+msgid "Sounds"
+msgstr "Hangok"
+
+#: ../../WPrefs.app/Configurations.c:407
+msgid ""
+"Disable/enable support for sound effects played\n"
+"for actions like shading and closing a window.\n"
+"You will need a module distributed separately\n"
+"for this. You can get it at:\n"
+"http://www.frontiernet.net/~southgat/wmsound"
+msgstr ""
+"A hang-támogatás ki/be kapcsolása az olyan mûveleteknél,\n"
+"mint például az ablak felhúzása/bezárása.\n"
+"Ehhez szükséges egy külön terjesztett modul, amit\n"
+"a következõ helyrõl tudsz letölteni:\n"
+"http://www.frontier.net/~southgat/wmsound"
+
+#: ../../WPrefs.app/Configurations.c:418
+msgid "Note: sound requires a module distributed separately"
+msgstr "A hanghatásokhoz egy külön terjesztett modulra is szükséged van!"
+
+#: ../../WPrefs.app/Configurations.c:428
+msgid "Dithering colormap for 8bpp"
+msgstr "Színtérkép a 256 színû megjelenítõknél"
+
+#: ../../WPrefs.app/Configurations.c:430
+msgid ""
+"Number of colors to reserve for Window Maker\n"
+"on displays that support only 8bpp (PseudoColor)."
+msgstr ""
+"A WindowMaker által fenntartott színek száma azokon\n"
+"a megjelenítõkön, amik csak 8 bites színmélységet támogatnak."
+
+
+#: ../../WPrefs.app/Configurations.c:437
+msgid "Disable dithering in any visual/depth"
+msgstr "Árnyalás tiltása minden felbontásnál/színmélységnél"
+
+#: ../../WPrefs.app/Configurations.c:458
+msgid "More colors for applications"
+msgstr "Több szín az alkalmazások részére"
+
+#: ../../WPrefs.app/Configurations.c:465
+msgid "More colors for WindowMaker"
+msgstr "Több szín a WindowMaker részére"
+
+#: ../../WPrefs.app/Configurations.c:520
+msgid "Other Configurations"
+msgstr "Egyéb beállítások"
+
+#: ../../WPrefs.app/Configurations.c:522
+msgid ""
+"Animation speeds, titlebar styles, various option\n"
+"toggling and number of colors to reserve for\n"
+"Window Maker in 8bit displays."
+msgstr ""
+"Animáció sebessége, címsor stílusa, más opciók ki/be\n"
+"kapcsolása és a WindowMaker által fenntartott színek\n"
+"száma a 8bites megjelenítõknél"
+
+#: ../../WPrefs.app/Expert.c:74
+msgid "Disable miniwindows (icons for miniaturized windows). For use with KDE/GNOME."
+msgstr "Ikonizált ablakok ikonjainak letiltása. KDE/GNOME-hoz."
+
+#: ../../WPrefs.app/Expert.c:75
+msgid "Do not set non-WindowMaker specific parameters (do not use xset)"
+msgstr "Nem-WindowMaker tulajdonságok beállításának letiltása"
+
+#: ../../WPrefs.app/Expert.c:76
+msgid "Automatically save session when exiting WindowMaker"
+msgstr "A session automatikus mentése kilépéskor"
+
+#: ../../WPrefs.app/Expert.c:77
+msgid "Use SaveUnder in window frames, icons, menus and other objects"
+msgstr "\"SaveUnder\" használata keretekben, menükben és más objektumokban"
+
+#: ../../WPrefs.app/Expert.c:78
+msgid "Disable cycling color highlighting of icons."
+msgstr "A kijelölt ikonok folyamatos színváltásának tiltása"
+
+#: ../../WPrefs.app/Expert.c:110
+msgid "Expert User Preferences"
+msgstr "Haladó beállítások"
+
+#: ../../WPrefs.app/Expert.c:112
+msgid ""
+"Options for people who know what they're doing...\n"
+"Also have some other misc. options."
+msgstr ""
+"Beállítási lehetõségek azoknak, akik tudják mit csinálnak...\n"
+"Itt néhány, más kategóriába be nem illõ tulajdonságot találsz."
+
+#: ../../WPrefs.app/Focus.c:83
+msgid "bad option value %s for option FocusMode. Using default Manual"
+msgstr "rossz érték \"%s\" a FocusMode-nál. Az alapértelmezett manuális módot használom."
+
+#: ../../WPrefs.app/Focus.c:98
+msgid "bad option value %s for option ColormapMode. Using default Auto"
+msgstr "rossz érték \"%s\" a ColorMapMode-nál. Az alapértelmezett automatikus módot használom."
+
+#: ../../WPrefs.app/Focus.c:196
+msgid ""
+"Click on the window to set\n"
+"keyboard input focus."
+msgstr ""
+"Az ablakra kell kattintani, hogy\n"
+"megkapja a fókuszt."
+
+#: ../../WPrefs.app/Focus.c:200
+msgid ""
+"Set keyboard input focus to\n"
+"the window under the mouse pointer,\n"
+"including the root window."
+msgstr ""
+"A fókusz mindig azé az ablaké lesz,\n"
+"ahol épp az egér áll, beleértve a\n"
+"root-window-t is."
+
+#: ../../WPrefs.app/Focus.c:205
+msgid ""
+"Set keyboard input focus to\n"
+"the window under the mouse pointer,\n"
+"except the root window."
+msgstr ""
+"A fókusz mindig azé az ablaké lesz,\n"
+"ahol épp az egér áll. Ezalól a root\n"
+"window kivétel."
+
+#: ../../WPrefs.app/Focus.c:249
+msgid "Input Focus Mode"
+msgstr "Fókusz szerzése"
+
+#: ../../WPrefs.app/Focus.c:254
+msgid "Click window to focus"
+msgstr "Ablakra kattintás"
+
+#: ../../WPrefs.app/Focus.c:255
+msgid "Focus follows mouse"
+msgstr "Fókusz követi az egeret"
+
+#: ../../WPrefs.app/Focus.c:256
+msgid "\"Sloppy\" focus"
+msgstr "\"Sloppy\" fókusz"
+
+#: ../../WPrefs.app/Focus.c:271
+msgid "Install colormap in the window..."
+msgstr "Színtérkép létrehozása abban az ablakban"
+
+#: ../../WPrefs.app/Focus.c:276
+msgid "...that has the input focus."
+msgstr "...ahol a fókusz van."
+
+#: ../../WPrefs.app/Focus.c:281
+msgid "...that is under the mouse pointer."
+msgstr "...amin az egér áll."
+
+#: ../../WPrefs.app/Focus.c:290
+msgid "Automatic Window Raise Delay"
+msgstr "Automatikus ablak-elrakás késleltetés"
+
+#: ../../WPrefs.app/Focus.c:347
+msgid "msec"
+msgstr "ms"
+
+#: ../../WPrefs.app/Focus.c:364
+msgid "Do not let applications receive the click used to focus windows."
+msgstr "Az ablakok nem 'lophatják' el az egérkattintást, amit a fókuszálásra használunk."
+
+#: ../../WPrefs.app/Focus.c:370
+msgid "Automatically focus new windows."
+msgstr "Új ablakok automatikusan kapnak fókuszt"
+
+#: ../../WPrefs.app/Focus.c:391
+msgid "Window Focus Preferences"
+msgstr "Fókusz beállítások"
+
+#: ../../WPrefs.app/Focus.c:393
+msgid ""
+"Keyboard focus switching policy, colormap switching\n"
+"policy for 8bpp displays and other related options."
+msgstr ""
+"Billentyûzet fókuszálódásának szabályai, színtérkép váltás\n"
+"a 8bpp-s megjelenítõkön és egyéb, hasonló opciók."
+
+#: ../../WPrefs.app/Icons.c:182
+msgid "Icon Positioning"
+msgstr "Ikonok helye"
+
+#: ../../WPrefs.app/Icons.c:229
+msgid "Iconification Animation"
+msgstr "Animáció ikonállapotra hozásnál"
+
+#: ../../WPrefs.app/Icons.c:240
+msgid "Shrinking/Zooming"
+msgstr "Zsugorodás/Nagyítás"
+
+#: ../../WPrefs.app/Icons.c:241
+msgid "Spinning/Twisting"
+msgstr "Pörgés/Forgás"
+
+#: ../../WPrefs.app/Icons.c:242
+msgid "3D-flipping"
+msgstr "3D-pattogás"
+
+#: ../../WPrefs.app/Icons.c:243
+msgid "None"
+msgstr "Nincs"
+
+#: ../../WPrefs.app/Icons.c:256
+msgid "Auto-arrange icons"
+msgstr "Ikonok automatikus elrendezése"
+
+#: ../../WPrefs.app/Icons.c:258
+msgid "Keep icons and miniwindows arranged all the time."
+msgstr "Ikonok és mini ablakok mindig el vannak rendezve."
+
+#: ../../WPrefs.app/Icons.c:264
+msgid "Omnipresent miniwindows"
+msgstr "Miniablakok mindenütt láthatóak"
+
+#: ../../WPrefs.app/Icons.c:266
+msgid "Make miniwindows be present in all workspaces."
+msgstr "A miniablakok minden munkafelületen láthatóak"
+
+#: ../../WPrefs.app/Icons.c:275
+msgid "Icon Size"
+msgstr "Ikonméret"
+
+#: ../../WPrefs.app/Icons.c:277
+msgid "The size of the dock/application icon and miniwindows"
+msgstr "A dokkolt/alkalmazás ikonok és a miniablakok mérete"
+
+#: ../../WPrefs.app/Icons.c:347
+msgid "Icon Preferences"
+msgstr "Ikonjellemzõk"
+
+#: ../../WPrefs.app/Icons.c:349
+msgid ""
+"Icon/Miniwindow handling options. Icon positioning\n"
+"area, sizes of icons, miniaturization animation style."
+msgstr ""
+"Ikon/miniablak kezelésének beállítása. Ikonok elhelyezkedése,\n"
+"mérete, lekicsinyítés animációja."
+
+#: ../../WPrefs.app/KeyboardSettings.c:74
+msgid "Initial Key Repeat"
+msgstr "Kezdeti billentyû-ismétlés"
+
+#: ../../WPrefs.app/KeyboardSettings.c:115
+msgid "Key Repeat Rate"
+msgstr "Billentyû-ismétlés sebessége"
+
+#: ../../WPrefs.app/KeyboardSettings.c:155
+msgid "Type here to test"
+msgstr "Itt tesztelheted:"
+
+#: ../../WPrefs.app/KeyboardSettings.c:174
+msgid "Keyboard Preferences"
+msgstr "Billentyûzet beállítások"
+
+#: ../../WPrefs.app/KeyboardSettings.c:176
+msgid "Not done"
+msgstr "Nincs kész"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:185 ../../WPrefs.app/Menu.c:1010 ../../WPrefs.app/MenuGuru.c:263 ../../WPrefs.app/TexturePanel.c:1526
+msgid "Cancel"
+msgstr "Mégsem"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:186
+msgid "Press the desired shortcut key(s) or click Cancel to stop capturing."
+msgstr "Nyomd le a kívánt gyorskombinációt vagy kattints a Mégsem gombra az 'elfogás' leállításához"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:206 ../../WPrefs.app/KeyboardShortcuts.c:446 ../../WPrefs.app/Menu.c:1022 ../../WPrefs.app/Menu.c:1245
+msgid "Capture"
+msgstr "Elfogás"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:207 ../../WPrefs.app/KeyboardShortcuts.c:453
+msgid "Click Capture to interactively define the shortcut key."
+msgstr "Kattints az \"Elfogás\" gombra és állítsd be interaktívan a gyorsbillentyû kombinációt."
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:361
+msgid "Actions"
+msgstr "Mûvelet"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:377
+msgid "Open applications menu"
+msgstr "Alkalmazások menü megnyitása"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:378
+msgid "Open window list menu"
+msgstr "Ablakok menü megnyitása"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:379
+msgid "Open window commands menu"
+msgstr "Ablak-parancsok menü megnyitása"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:380
+msgid "Hide active application"
+msgstr "Aktuális alkalmazás elrejtése"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:381
+msgid "Miniaturize active window"
+msgstr "Aktuális ablak ikonállapotba hozása"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:382
+msgid "Close active window"
+msgstr "Aktuális ablak bezárása"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:383
+msgid "Maximize active window"
+msgstr "Aktuális ablak teljes méretre nagyítása"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:384
+msgid "Maximize active window vertically"
+msgstr "Aktuális ablak fûggölegesen teljes méretûre nagyítása"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:385
+msgid "Raise active window"
+msgstr "Aktuális ablak elõtérbe"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:386
+msgid "Lower active window"
+msgstr "Aktuális ablak háttérbe"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:387
+msgid "Raise/Lower window under mouse pointer"
+msgstr "Egérkurzor alatti ablak elõtérbe/háttérbe"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:388
+msgid "Shade active window"
+msgstr "Aktuális ablak felhúzása"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:389
+msgid "Move/Resize active window"
+msgstr "Aktuális ablak mozgatása/átméretezése"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:390
+msgid "Select active window"
+msgstr "Aktuális ablak kijelölése"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:391
+msgid "Focus next window"
+msgstr "Fókusz a következõ ablakra"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:392
+msgid "Focus previous window"
+msgstr "Fókusz az elõzõ ablakra"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:393
+msgid "Switch to next workspace"
+msgstr "Váltás a következõ munkafelületre"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:394
+msgid "Switch to previous workspace"
+msgstr "Váltás az elõzõ munkafelületre"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:395
+msgid "Switch to next ten workspaces"
+msgstr "Váltás a következõ tíz munkafelületre"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:396
+msgid "Switch to previous ten workspaces"
+msgstr "Váltás az elõzõ tíz munkafelületre"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:397
+msgid "Switch to workspace 1"
+msgstr "Váltás az 1. munkafelületre"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:398
+msgid "Switch to workspace 2"
+msgstr "Váltás a 2. munkafelületre"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:399
+msgid "Switch to workspace 3"
+msgstr "Váltás a 3. munkafelületre"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:400
+msgid "Switch to workspace 4"
+msgstr "Váltás a 4. munkafelületre"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:401
+msgid "Switch to workspace 5"
+msgstr "Váltás az 5. munkafelületre"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:402
+msgid "Switch to workspace 6"
+msgstr "Váltás a 6. munkafelületre"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:403
+msgid "Switch to workspace 7"
+msgstr "Váltás a 7. munkafelületre"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:404
+msgid "Switch to workspace 8"
+msgstr "Váltás a 8. munkafelületre"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:405
+msgid "Switch to workspace 9"
+msgstr "Váltás a 9. munkafelületre"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:406
+msgid "Switch to workspace 10"
+msgstr "Váltás a 10. munkafelületre"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:407
+msgid "Shortcut for window 1"
+msgstr "Gyorsbillentyû az 1. ablakra"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:408
+msgid "Shortcut for window 2"
+msgstr "Gyorsbillentyû a 2. ablakra"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:409
+msgid "Shortcut for window 3"
+msgstr "Gyorsbillentyû a 3. ablakra"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:410
+msgid "Shortcut for window 4"
+msgstr "Gyorsbillentyû a 4. ablakra"
+
+msgid "Shortcut for window 5"
+msgstr "Gyorsbillentyû az 5. ablakra"
+
+msgid "Shortcut for window 6"
+msgstr "Gyorsbillentyû a 6. ablakra"
+
+msgid "Shortcut for window 7"
+msgstr "Gyorsbillentyû a 7. ablakra"
+
+msgid "Shortcut for window 8"
+msgstr "Gyorsbillentyû a 8. ablakra"
+
+msgid "Shortcut for window 9"
+msgstr "Gyorsbillentyû a 9. ablakra"
+
+msgid "Shortcut for window 10"
+msgstr "Gyorsbillentyû a 10. ablakra"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:411
+msgid "Raise Clip"
+msgstr "Kapocs elõtérbe"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:412
+msgid "Lower Clip"
+msgstr "Kapocs háttérbe"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:413
+msgid "Raise/Lower Clip"
+msgstr "Kapocs elõtérbe/háttérbe"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:415
+msgid "Toggle keyboard language"
+msgstr "Billentyûzet-kiosztás váltása"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:429 ../../WPrefs.app/Menu.c:1234
+msgid "Shortcut"
+msgstr "Gyorsbillentyû"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:440
+msgid "Clear"
+msgstr "Törlés"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:501
+msgid "Keyboard Shortcut Preferences"
+msgstr "Gyorsbillentyû-beállítások"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:503
+msgid ""
+"Change the keyboard shortcuts for actions such\n"
+"as changing workspaces and opening menus."
+msgstr ""
+"A billentyû gyorskombinációk megváltoztatása,\n"
+"mint például munkafelület váltása, menük megnyitása, ..."
+
+#: ../../WPrefs.app/Menu.c:422
+msgid "Window Manager"
+msgstr "Ablakkezelõ"
+
+#: ../../WPrefs.app/Menu.c:424
+msgid "Program to Open Files"
+msgstr "Program a fájlok megnyitásához"
+
+#: ../../WPrefs.app/Menu.c:426
+msgid "Command to Execute"
+msgstr "Parancs a végrehajtáshoz"
+
+#: ../../WPrefs.app/Menu.c:428 ../../WPrefs.app/Menu.c:1221
+msgid "Program to Run"
+msgstr "Program a futtatáshoz"
+
+#: ../../WPrefs.app/Menu.c:477 ../../WPrefs.app/Menu.c:478
+msgid "New Command %i"
+msgstr "Új parancs %i"
+
+#: ../../WPrefs.app/Menu.c:485
+msgid "New Submenu"
+msgstr "Új almenü"
+
+#: ../../WPrefs.app/Menu.c:490
+msgid "External Menu"
+msgstr "Külsõ menü"
+
+#: ../../WPrefs.app/Menu.c:497
+msgid "Workspaces"
+msgstr "Munkafelületek"
+
+#: ../../WPrefs.app/Menu.c:1102 ../../WPrefs.app/Menu.c:1117
+msgid "Commands"
+msgstr "Parancsok"
+
+#: ../../WPrefs.app/Menu.c:1103 ../../WPrefs.app/Menu.c:1118
+msgid "Add Command"
+msgstr "Parancs létrehozása"
+
+#: ../../WPrefs.app/Menu.c:1104 ../../WPrefs.app/Menu.c:1119
+msgid "Add Submenu"
+msgstr "Almenü létrehozása"
+
+#: ../../WPrefs.app/Menu.c:1105 ../../WPrefs.app/Menu.c:1120
+msgid "Add External Menu"
+msgstr "Külsõ menü hozzáadása"
+
+#: ../../WPrefs.app/Menu.c:1106 ../../WPrefs.app/Menu.c:1121
+msgid "Add Workspace Menu"
+msgstr "Munkafelület-menü hozzáadása"
+
+#: ../../WPrefs.app/Menu.c:1107 ../../WPrefs.app/Menu.c:1122
+msgid "Remove Item"
+msgstr "Menüpont törlése"
+
+#: ../../WPrefs.app/Menu.c:1108 ../../WPrefs.app/Menu.c:1123
+msgid "Cut Item"
+msgstr "Menüpont kivágása"
+
+#: ../../WPrefs.app/Menu.c:1109 ../../WPrefs.app/Menu.c:1124
+msgid "Copy Item"
+msgstr "Menüpont másolása"
+
+#: ../../WPrefs.app/Menu.c:1110 ../../WPrefs.app/Menu.c:1125
+msgid "Paste Item"
+msgstr "Menüpont beillesztése"
+
+#: ../../WPrefs.app/Menu.c:1156
+msgid "Label"
+msgstr "Címke"
+
+#: ../../WPrefs.app/Menu.c:1169
+msgid "Command"
+msgstr "Parancs"
+
+#: ../../WPrefs.app/Menu.c:1174
+msgid "Run Program"
+msgstr "Program futtatása"
+
+#: ../../WPrefs.app/Menu.c:1175
+msgid "Execute Shell Command"
+msgstr "Héjprogram futtatása"
+
+#: ../../WPrefs.app/Menu.c:1176
+msgid "Arrange Icons"
+msgstr "Ikonok elrendezése"
+
+#: ../../WPrefs.app/Menu.c:1177
+msgid "Hide Others"
+msgstr "Többi elrejtése \"HideOthers\""
+
+#: ../../WPrefs.app/Menu.c:1178
+msgid "Show All Windows"
+msgstr "Minden ablak mutatása"
+
+#: ../../WPrefs.app/Menu.c:1179
+msgid "Exit WindowMaker"
+msgstr "Kilépés a WindowMakerbõl"
+
+#: ../../WPrefs.app/Menu.c:1180
+msgid "Exit X Session"
+msgstr "Kilépés az X Sessionból"
+
+#: ../../WPrefs.app/Menu.c:1181
+msgid "Start Window Manager"
+msgstr "Ablakkezelõ indítása"
+
+#: ../../WPrefs.app/Menu.c:1182
+msgid "Restart WindowMaker"
+msgstr "WindowMaker újraindítása"
+
+#: ../../WPrefs.app/Menu.c:1183
+msgid "Save Session"
+msgstr "Session mentése"
+
+#: ../../WPrefs.app/Menu.c:1184
+msgid "Clear Session"
+msgstr "Session törlése"
+
+#: ../../WPrefs.app/Menu.c:1185
+msgid "Refresh Screen"
+msgstr "Képernyõ frissítése"
+
+#: ../../WPrefs.app/Menu.c:1186
+msgid "Info Panel"
+msgstr "Információs panel"
+
+#: ../../WPrefs.app/Menu.c:1187
+msgid "Legal Panel"
+msgstr "Jogi panel"
+
+#: ../../WPrefs.app/Menu.c:1195
+msgid "Open workspace menu"
+msgstr "Munkafelületek menü megnyitása"
+
+#: ../../WPrefs.app/Menu.c:1202
+msgid "No confirmation panel"
+msgstr "Nincs megerõsítõ panel"
+
+#: ../../WPrefs.app/Menu.c:1208
+msgid "Menu Path/Directory List"
+msgstr "Menü elérési útja"
+
+#: ../../WPrefs.app/Menu.c:1253
+msgid "Ask help to the Guru"
+msgstr "Kérj segítséget a varázslótól"
+
+#. if there is a localized plmenu for the tongue put it's filename here
+#: ../../WPrefs.app/Menu.c:1365 ../../WPrefs.app/Menu.c:1372
+msgid "%s/Library/WindowMaker/plmenu"
+msgstr ""
+
+#: ../../WPrefs.app/Menu.c:1381
+msgid "Could not open default menu from '%s'"
+msgstr "Nem tudom megnyitni az alapértelmezett '%s' menüt"
+
+#: ../../WPrefs.app/Menu.c:1491
+msgid "Applications Menu Definition"
+msgstr "Alkalmazások menü"
+
+#: ../../WPrefs.app/Menu.c:1493
+msgid "Edit the menu for launching applications."
+msgstr "Az indítható alkalmazások menüjének szerkesztése"
+
+#: ../../WPrefs.app/MenuPreferences.c:114
+msgid "Menu Scrolling Speed"
+msgstr "Menügörgetés sebessége"
+
+#: ../../WPrefs.app/MenuPreferences.c:163
+msgid "Submenu Alignment"
+msgstr "Almenü elrendezése"
+
+#: ../../WPrefs.app/MenuPreferences.c:207
+msgid ""
+"Always open submenus inside the screen, instead of scrolling.\n"
+"Note: this can be an annoyance at some circumstances."
+msgstr ""
+"Az almenük mindig a képernyõ területén belül nyílnak meg.\n"
+"Megjegyzés: bizonyos körülmények között bosszúságot okozhat."
+
+#: ../../WPrefs.app/MenuPreferences.c:212
+msgid "Scroll off-screen menus when pointer is moved over them."
+msgstr "Menük bezárása, ha az egérmutató elmozdul róluk"
+
+#: ../../WPrefs.app/MenuPreferences.c:232
+msgid "Menu Preferences"
+msgstr "Menü jellemzõk"
+
+#: ../../WPrefs.app/MenuPreferences.c:234
+msgid ""
+"Menu usability related options. Scrolling speed,\n"
+"alignment of submenus etc."
+msgstr ""
+"Menü használatához tartozó beállítások. Görgetés\n"
+"sebessége, almenük elrendezése..."
+
+#: ../../WPrefs.app/MouseSettings.c:150
+msgid "Invalid mouse acceleration value. Must be a positive real value."
+msgstr "Érvénytelen egérgyorsulási érték. Pozitív valós számot adjál meg."
+
+#: ../../WPrefs.app/MouseSettings.c:170
+msgid "Invalid mouse acceleration threshold value. Must be the number of pixels to travel before accelerating."
+msgstr "Érvénytelen egérgyorsulási küszöbérték. Adj meg akkora számot, amennyit mozgatni kell ahhoz, hogy gyorsuljon."
+
+#: ../../WPrefs.app/MouseSettings.c:229
+msgid "mouse button %s not supported by WPrefs."
+msgstr "Az %s egérgombot nem támogatja a WPrefs."
+
+#: ../../WPrefs.app/MouseSettings.c:265 ../../WPrefs.app/MouseSettings.c:278 ../../WPrefs.app/MouseSettings.c:291
+msgid "bad value %s for option %s"
+msgstr "hibás érték (%s) a \"%s\" opciónál"
+
+#: ../../WPrefs.app/MouseSettings.c:351
+msgid "modifier key %s for option ModifierKey was not recognized. Using %s as default"
+msgstr "a (%s) módosító billentyût (ModifierKey) nem ismerem. Az \"%s\" alapbeállítást használom."
+
+#: ../../WPrefs.app/MouseSettings.c:376
+msgid "could not retrieve keyboard modifier mapping"
+msgstr "Nem tudom visszakeresni a billentyûzet-módosítót"
+
+#: ../../WPrefs.app/MouseSettings.c:523
+msgid "Mouse Speed"
+msgstr "Egér sebessége"
+
+#: ../../WPrefs.app/MouseSettings.c:553
+msgid "Acceler.:"
+msgstr "Gyorsulás:"
+
+#: ../../WPrefs.app/MouseSettings.c:566
+msgid "Threshold:"
+msgstr "Küszöbszint:"
+
+#: ../../WPrefs.app/MouseSettings.c:581
+msgid "Double-Click Delay"
+msgstr "Dupla kattintás késleltetése"
+
+#: ../../WPrefs.app/MouseSettings.c:625
+msgid "Test"
+msgstr "Teszt"
+
+#: ../../WPrefs.app/MouseSettings.c:655
+msgid "Workspace Mouse Actions"
+msgstr "Egérmûveletek a munkafelületen"
+
+#: ../../WPrefs.app/MouseSettings.c:660
+msgid "Disable mouse actions"
+msgstr "Egérmûveletek letiltása"
+
+#: ../../WPrefs.app/MouseSettings.c:713
+msgid "Applications menu"
+msgstr "Alkalmazások menü"
+
+#: ../../WPrefs.app/MouseSettings.c:719
+msgid "Window list menu"
+msgstr "Ablakok menü"
+
+#: ../../WPrefs.app/MouseSettings.c:725
+msgid "Select windows"
+msgstr "Ablak kiválasztása"
+
+#: ../../WPrefs.app/MouseSettings.c:760
+msgid "Mouse Grab Modifier"
+msgstr "Egérmûveletek billentyû-módosítója"
+
+#: ../../WPrefs.app/MouseSettings.c:762
+msgid ""
+"Keyboard modifier to use for actions that\n"
+"involve dragging windows with the mouse,\n"
+"clicking inside the window."
+msgstr ""
+"A billentyû-módosító gombot olyan egérmûveleteknél\n"
+"tudod használni, amikor az ablak területén belülre kattintasz.\n"
+"(pl.: ModifierKey+Bal gomb: ablak mozgatása)"
+
+#: ../../WPrefs.app/MouseSettings.c:796
+msgid "could not create %s"
+msgstr "nem tudom a %s-t létrehozni"
+
+#: ../../WPrefs.app/MouseSettings.c:812
+msgid "could not create temporary file %s"
+msgstr "nem tudom a %s ideiglenes fájlt létrehozni"
+
+#: ../../WPrefs.app/MouseSettings.c:843
+msgid "could not rename file %s to %s\n"
+msgstr "nem tudom a %s fájlt átnevezni a következõvé: %s\n"
+
+#: ../../WPrefs.app/MouseSettings.c:927
+msgid "Mouse Preferences"
+msgstr "Egér jellemzõi"
+
+#: ../../WPrefs.app/MouseSettings.c:929
+msgid ""
+"Mouse speed/acceleration, double click delay,\n"
+"mouse button bindings etc."
+msgstr ""
+"Egér sebessége, dupla kattintás késleltetése,\n"
+"egér gombjainak funkciója, ..."
+
+#: ../../WPrefs.app/NoMenuAlert.c:100
+msgid "Copy Default Menu"
+msgstr "Alapértelmezett menü"
+
+#: ../../WPrefs.app/NoMenuAlert.c:106
+msgid "Keep Current Menu"
+msgstr "Jelenlegi menü megtartása"
+
+#: ../../WPrefs.app/Paths.c:84
+msgid "bad value in option IconPath. Using default path list."
+msgstr "rossz érték az IconPath értékénél. Az alapértelmezett útvonalat használom."
+
+#: ../../WPrefs.app/Paths.c:101
+msgid "bad value in option PixmapPath. Using default path list"
+msgstr "rossz érték a PixmapPath értékénél. Az alapértelmezett útvonalat használom."
+
+#: ../../WPrefs.app/Paths.c:149
+msgid "Select directory"
+msgstr "Válassz könyvtárat"
+
+#: ../../WPrefs.app/Paths.c:281 ../../WPrefs.app/Paths.c:312 ../../WPrefs.app/TexturePanel.c:1302
+msgid "Add"
+msgstr "Hozzáad"
+
+#: ../../WPrefs.app/Paths.c:288 ../../WPrefs.app/Paths.c:319
+msgid "Remove"
+msgstr "Töröl"
+
+#: ../../WPrefs.app/Paths.c:341
+msgid "Search Path Configuration"
+msgstr "Keresési útvonal beállítások"
+
+#: ../../WPrefs.app/Paths.c:343
+msgid ""
+"Search paths to use when looking for pixmaps\n"
+"and icons."
+msgstr "Ikonok és bitképek elérési útja"
+
+#: ../../WPrefs.app/Preferences.c:159
+msgid "Size Display"
+msgstr "Méret megjelenítés"
+
+#: ../../WPrefs.app/Preferences.c:161
+msgid ""
+"The position or style of the window size\n"
+"display that's shown when a window is resized."
+msgstr ""
+"Az ablakméret megjelenésének helye vagy\n"
+"stílusa (akkor jelenik meg, amikor átméretezed)"
+
+#: ../../WPrefs.app/Preferences.c:168 ../../WPrefs.app/Preferences.c:188
+msgid "Corner of screen"
+msgstr "A képernyõ sarka"
+
+#: ../../WPrefs.app/Preferences.c:169 ../../WPrefs.app/Preferences.c:189
+msgid "Center of screen"
+msgstr "A képernyõ közepe"
+
+#: ../../WPrefs.app/Preferences.c:170 ../../WPrefs.app/Preferences.c:190
+msgid "Center of resized window"
+msgstr "Az ablak közepe"
+
+#: ../../WPrefs.app/Preferences.c:171
+msgid "Technical drawing-like"
+msgstr "Méretnyilak alkalmazása"
+
+#: ../../WPrefs.app/Preferences.c:179
+msgid "Position Display"
+msgstr "Helyzet megjelenítés"
+
+#: ../../WPrefs.app/Preferences.c:181
+msgid ""
+"The position or style of the window position\n"
+"display that's shown when a window is moved."
+msgstr ""
+"Az ablakhelyzet megjelenésének helye vagy stílusa\n"
+"(amikor akkor jelenik meg, amikor mozgatod az ablakot)"
+
+#: ../../WPrefs.app/Preferences.c:198
+msgid "Show balloon text for..."
+msgstr "\"Ballon-súgó\" mutatása..."
+
+#: ../../WPrefs.app/Preferences.c:205
+msgid "incomplete window titles"
+msgstr "hiányos ablakok címsorában"
+
+#: ../../WPrefs.app/Preferences.c:206
+msgid "miniwindow titles"
+msgstr "miniablak címsorában"
+
+#: ../../WPrefs.app/Preferences.c:207
+msgid "application/dock icons"
+msgstr "alkalmazás/rögzített ikonon"
+
+#: ../../WPrefs.app/Preferences.c:208
+msgid "internal help"
+msgstr "belsõ súgóban"
+
+#: ../../WPrefs.app/Preferences.c:220
+msgid "Raise window when switching focus with keyboard (CirculateRaise)."
+msgstr "Mindig az aktuális ablak legyen elõtérben."
+
+#: ../../WPrefs.app/Preferences.c:226
+msgid "Keep keyboard language status for each window."
+msgstr "Ablakonként megadható billentyûzetkiosztás."
+
+#: ../../WPrefs.app/Preferences.c:247
+msgid "Miscellaneous Ergonomic Preferences"
+msgstr "Egyéb kényelmi beállítások"
+
+#: ../../WPrefs.app/Preferences.c:248
+msgid ""
+"Various settings like balloon text, geometry\n"
+"displays etc."
+msgstr ""
+"Kényelmi beállítások, úgymint a ballon-súgó,\n"
+"képernyõ pozíció..."
+
+#: ../../WPrefs.app/Text.c:181
+msgid "Invalid font %s."
+msgstr "Érvénytelen betûtípus &s"
+
+#: ../../WPrefs.app/Text.c:258
+msgid "Set Font..."
+msgstr "Betûtípus beállítása"
+
+#: ../../WPrefs.app/Text.c:264
+msgid "Window Title Font"
+msgstr "Címsor betûtípus"
+
+#: ../../WPrefs.app/Text.c:265
+msgid "Menu Title Font"
+msgstr "Menü címsor betûtípusa"
+
+#: ../../WPrefs.app/Text.c:266
+msgid "Menu Item Font"
+msgstr "Menüpont betûtípusa"
+
+#: ../../WPrefs.app/Text.c:267
+msgid "Icon Title Font"
+msgstr "Ikon-szöveg betûtípusa"
+
+#: ../../WPrefs.app/Text.c:268
+msgid "Clip Title Font"
+msgstr "Kapocs-szöveg betûtípusa"
+
+#: ../../WPrefs.app/Text.c:269
+msgid "Geometry Display Font"
+msgstr "Ablak-pozíció betûtípusa"
+
+#: ../../WPrefs.app/Text.c:282
+msgid ""
+"Sample Text\n"
+"abcdefghijklmnopqrstuvxywz\n"
+"ABCDEFGHIJKLMNOPQRSTUVXYWZ\n"
+"0123456789"
+msgstr ""
+"Példa szöveg:\n"
+"abcdefghijklmnopqrstuvxywz\n"
+"ABCDEFGHIJKLMNOPQRSTUVXYWZ\n"
+"0123456789áéíóöõúüûÁÉÍÓÖÕÚÜÛ"
+
+#: ../../WPrefs.app/Text.c:287
+msgid "Alignment"
+msgstr "Elrendezés"
+
+#: ../../WPrefs.app/Text.c:327
+msgid "Text Preferences"
+msgstr "Szövegjellemzõk"
+
+#: ../../WPrefs.app/TexturePanel.c:605
+msgid "Could not load the selected file: "
+msgstr "A kiválasztott fájlt nem tudom betölteni: "
+
+#: ../../WPrefs.app/TexturePanel.c:687
+msgid "The selected file does not contain a supported image."
+msgstr "A kiválasztott fájl nem tartalmaz támogatott képformátumot."
+
+#: ../../WPrefs.app/TexturePanel.c:1246
+msgid "Texture Panel"
+msgstr "Mintázat"
+
+#: ../../WPrefs.app/TexturePanel.c:1254
+msgid "Texture Name"
+msgstr "Mintanév"
+
+#: ../../WPrefs.app/TexturePanel.c:1266
+msgid "Solid Color"
+msgstr "Egyszínû"
+
+#: ../../WPrefs.app/TexturePanel.c:1267
+msgid "Gradient Texture"
+msgstr "Színátmenet-minta"
+
+#: ../../WPrefs.app/TexturePanel.c:1268
+msgid "Simple Gradient Texture"
+msgstr "Egyszerû színátmenet-minta"
+
+#: ../../WPrefs.app/TexturePanel.c:1269
+msgid "Textured Gradient"
+msgstr "Mintázott színátmenet"
+
+#: ../../WPrefs.app/TexturePanel.c:1270
+msgid "Image Texture"
+msgstr "Kép"
+
+#: ../../WPrefs.app/TexturePanel.c:1278
+msgid "Default Color"
+msgstr "Szín"
+
+#: ../../WPrefs.app/TexturePanel.c:1290
+msgid "Gradient Colors"
+msgstr "Átmenet színei"
+
+#: ../../WPrefs.app/TexturePanel.c:1386
+msgid "Direction"
+msgstr "Irány"
+
+#: ../../WPrefs.app/TexturePanel.c:1414
+msgid "Gradient"
+msgstr "Átmenet"
+
+#: ../../WPrefs.app/TexturePanel.c:1432
+msgid "Gradient Opacity"
+msgstr "Színátmenet áttetszõség"
+
+#: ../../WPrefs.app/TexturePanel.c:1475
+msgid "Image"
+msgstr "Kép"
+
+#: ../../WPrefs.app/TexturePanel.c:1495
+msgid "Browse..."
+msgstr "Tallózás..."
+
+#: ../../WPrefs.app/TexturePanel.c:1507
+msgid "Tile"
+msgstr "Csempézett"
+
+#: ../../WPrefs.app/TexturePanel.c:1508
+msgid "Scale"
+msgstr "Skálázott"
+
+#: ../../WPrefs.app/TexturePanel.c:1510
+msgid "Maximize"
+msgstr "Maximált"
+
+#: ../../WPrefs.app/Themes.c:71 ../../WPrefs.app/Themes.c:82
+msgid "Set"
+msgstr "Beállítás"
+
+#: ../../WPrefs.app/Themes.c:132
+msgid "Stop"
+msgstr "Stop"
+
+#: ../../WPrefs.app/Themes.c:143 ../../WPrefs.app/Themes.c:205 ../../WPrefs.app/Themes.c:225
+msgid "Download"
+msgstr "Letöltés"
+
+#: ../../WPrefs.app/Themes.c:173
+msgid "Save Current Theme"
+msgstr "Aktuális téma elmentése"
+
+#: ../../WPrefs.app/Themes.c:182
+msgid "Load"
+msgstr "Betöltés"
+
+#: ../../WPrefs.app/Themes.c:187
+msgid "Install"
+msgstr "Telepítés"
+
+#: ../../WPrefs.app/Themes.c:195
+msgid "Tile of The Day"
+msgstr "A nap csempéje"
+
+#: ../../WPrefs.app/Themes.c:215
+msgid "Bar of The Day"
+msgstr "A nap sávja"
+
+#: ../../WPrefs.app/Themes.c:252
+msgid "Themes"
+msgstr "Témák"
+
+#: ../../WPrefs.app/WindowHandling.c:136
+msgid "bad option value %s in WindowPlacement. Using default value"
+msgstr "rossz érték (%s) a Windowplacement opciónál. Az alapértelmezett értéket használom."
+
+#: ../../WPrefs.app/WindowHandling.c:158
+msgid "invalid data in option WindowPlaceOrigin. Using default (0,0)"
+msgstr "érvénytelen adat a WindowPlaceOrigin beállításánál. A (0,0)-t használom."
+
+#: ../../WPrefs.app/WindowHandling.c:225
+msgid "Window Placement"
+msgstr "Ablak lehelyezése"
+
+#: ../../WPrefs.app/WindowHandling.c:226
+msgid ""
+"How to place windows when they are first put\n"
+"on screen."
+msgstr ""
+"Azt határozza meg, hogy ablak hova kerül a\n"
+"képernyõn, amikor elõször megjelenik."
+
+#: ../../WPrefs.app/WindowHandling.c:232
+msgid "Automatic"
+msgstr "Automatikus"
+
+#: ../../WPrefs.app/WindowHandling.c:233
+msgid "Random"
+msgstr "Véletlenszerû"
+
+#: ../../WPrefs.app/WindowHandling.c:234
+msgid "Manual"
+msgstr "Kézi"
+
+#: ../../WPrefs.app/WindowHandling.c:235
+msgid "Cascade"
+msgstr "Lépcsõzetes"
+
+msgid "Smart"
+msgstr "\"Ügyes\""
+
+#: ../../WPrefs.app/WindowHandling.c:241
+msgid "Placement Origin"
+msgstr "Kezdeti hely"
+
+#: ../../WPrefs.app/WindowHandling.c:301
+msgid "Opaque Move"
+msgstr "Homályos mozgatás"
+
+#: ../../WPrefs.app/WindowHandling.c:302
+msgid ""
+"Whether the window contents should be moved\n"
+"when dragging windows aroung or if only a\n"
+"frame should be displayed.\n"
+msgstr ""
+"Amikor az ablakot mozgatod, az ablak tartalma\n"
+"is mozogjon vele együtt, vagy csak a keret?\n"
+
+#: ../../WPrefs.app/WindowHandling.c:341
+msgid "When maximizing..."
+msgstr "Amikor teljes méretûre állítod..."
+
+#: ../../WPrefs.app/WindowHandling.c:346
+msgid "...do not cover icons"
+msgstr "...ne fedje le az ikonokat"
+
+#: ../../WPrefs.app/WindowHandling.c:352
+msgid "...do not cover dock"
+msgstr "...ne fedje le a dokkokat"
+
+#: ../../WPrefs.app/WindowHandling.c:361
+msgid "Edge Resistance"
+msgstr "Szegélyek vonzása"
+
+#: ../../WPrefs.app/WindowHandling.c:363
+msgid ""
+"Edge resistance will make windows `resist'\n"
+"being moved further for the defined threshold\n"
+"when moved against other windows or the edges\n"
+"of the screen."
+msgstr ""
+"A szegélyek vonzása azt mondja meg, hogy az ablak\n"
+"hogyan viselkedjen (taszítás vagy vonzás) amikor\n"
+"egy másik objektumhoz kerül (másik ablak vagy a\n"
+"képernyõ széle) közel."
+
+#: ../../WPrefs.app/WindowHandling.c:390
+msgid "Open dialogs in same workspace as their owners"
+msgstr "A dialogusablak ugyanazon a munkafelületen jelenik meg, ahol a szülõ"
+
+#: ../../WPrefs.app/WindowHandling.c:417
+msgid "Window Handling Preferences"
+msgstr "Ablakok kezelésének jellemzõi"
+
+#: ../../WPrefs.app/WindowHandling.c:419
+msgid ""
+"Window handling options. Initial placement style\n"
+"edge resistance, opaque move etc."
+msgstr ""
+"Ablakok kezelésének tulajdonságai: kezdõ hely meghatározása,\n"
+"szegély vonzása, homályos mozgatás, stb.."
+
+msgid "Attract"
+msgstr "Vonz"
+
+msgid "Resist"
+msgstr "Taszít"
+
+#: ../../WPrefs.app/Workspace.c:139
+msgid "Workspace Navigation"
+msgstr "Munkafelület-navigálás"
+
+#: ../../WPrefs.app/Workspace.c:163
+msgid "drag windows between workspaces."
+msgstr "az ablakok átvihetõek másik munkafelületre"
+
+#: ../../WPrefs.app/Workspace.c:188
+msgid "switch to first workspace when switching past the last workspace and vice-versa"
+msgstr ""
+"amikor az utolsó munkafelületrõl\n"
+"továbblépsz, újra az elsõ jön"
+
+#: ../../WPrefs.app/Workspace.c:212
+msgid "create a new workspace when switching past the last workspace."
+msgstr ""
+"amikor az utolsó munkafelületrõl\n"
+"továbblépsz, akkor létrejön egy új"
+
+#: ../../WPrefs.app/Workspace.c:220
+msgid "Dock/Clip"
+msgstr "Dokk/Kapocs"
+
+#: ../../WPrefs.app/Workspace.c:239
+msgid ""
+"Disable/enable the application Dock (the\n"
+"vertical icon bar in the side of the screen)."
+msgstr ""
+"A képernyõ oldalán lévõ alkalmazások dokkjának\n"
+"ki/bekapcsolása."
+
+#: ../../WPrefs.app/Workspace.c:259
+msgid ""
+"Disable/enable the Clip (that thing with\n"
+"a paper clip icon)."
+msgstr "A kapocs ki/bekapcsolása (olyan mint az iratkapocs)"
+
+#: ../../WPrefs.app/Workspace.c:296
+msgid "Workspace Preferences"
+msgstr "Munkafelület jellemzõk"
+
+#: ../../WPrefs.app/Workspace.c:298
+msgid ""
+"Workspace navigation features.\n"
+"You can also enable/disable the Dock and Clip here."
+msgstr ""
+"Munkafelület beállítások:\n"
+"A dokkolt ikonok és a kapocs jellemzõit tudod itt ki/bekapcsolni."
+
+#: ../../WPrefs.app/MenuGuru.c:106
+msgid "Menu Guru - Select Type"
+msgstr "Menüvarázsló - Válassz típust"
+
+#: ../../WPrefs.app/MenuGuru.c:111 ../../WPrefs.app/MenuGuru.c:133 ../../WPrefs.app/MenuGuru.c:251
+msgid "Next"
+msgstr "Következõ"
+
+#: ../../WPrefs.app/MenuGuru.c:114
+msgid "Menu Guru - Select Menu File"
+msgstr "Menüvarázsló - Válassz menü fájlt"
+
+#: ../../WPrefs.app/MenuGuru.c:122
+msgid "Menu Guru - Select Pipe Command"
+msgstr "Menüvarázsló - Válassz pipe (csõ) parancsot"
+
+#: ../../WPrefs.app/MenuGuru.c:129
+msgid "Menu Guru - Select Directories"
+msgstr "Menüvarázsló - Válassz könyvtárat"
+
+#: ../../WPrefs.app/MenuGuru.c:136
+msgid "Menu Guru - Select Command"
+msgstr "Menüvarázsló - Válassz parancsot"
+
+#: ../../WPrefs.app/MenuGuru.c:257
+msgid "Back"
+msgstr "Vissza"
+
+#: ../../WPrefs.app/MenuGuru.c:271
+msgid ""
+"This process will help you create a submenu which definition is located in another file or is created dynamically.\n"
+"What do you want to use as the contents of the submenu?"
+msgstr ""
+"Ez az eljárás segít az almenü létrehozásában, ami most egy másik fájlban található vagy dinamikusan lesz létrehozva.\n"
+"Mit szeretnél használni a tartalmának létrehozásához?"
+
+#: ../../WPrefs.app/MenuGuru.c:279
+msgid "A file containing the menu definition in the plain text (non-property list) menu format."
+msgstr "Egy fájlt, ami tartalmazza a menü leírását egyszerû szöveges formában"
+
+#: ../../WPrefs.app/MenuGuru.c:285
+msgid "The menu definition generated by a script/program read through a pipe."
+msgstr "A menü leírását egy script/program hozza létre, és csövön (pipe) keresztül kell beolvasni."
+
+#: ../../WPrefs.app/MenuGuru.c:291
+msgid "The files in one or more directories."
+msgstr "Több fájl (egy vagy több könyvtárban)"
+
+#: ../../WPrefs.app/MenuGuru.c:303
+msgid "Type the path for the menu file:"
+msgstr "Írd be a menü fájl elérési útvonalát:"
+
+#: ../../WPrefs.app/MenuGuru.c:318
+msgid "The menu file must contain a menu in the plain text menu file format. This format is described in the menu files included with WindowMaker, probably at ~/GNUstep/Library/WindowMaker/menu"
+msgstr "A menü fájlnak tartalmaznia kell a menü leírását egyszerû, szöveges formában. A pontos formátumot megtalálod a WindowMakerrel együtt terjesztett menü fájlokban, pl.: ~/GNUstep/Library/WindowMaker/menu"
+
+#: ../../WPrefs.app/MenuGuru.c:328
+msgid "Type the command that will generate the menu definition:"
+msgstr "Írd be a parancsot, amely elkészíti a menü leírását:"
+
+#: ../../WPrefs.app/MenuGuru.c:338
+msgid "The command supplied must generate and output a valid menu definition to stdout. This definition should be in the plain text menu file format, described in the menu files included with WindowMaker, usually at ~/GNUstep/Library/WindowMaker/menu"
+msgstr "A megadott parancsnak helyes szintaxisú menü-leírást kell küldenie a kimenetre. Ennek a leírásnak egyszerû, szöveges formátumúnak kell lennie, amirõl a WindowMakerrel terjesztett menü fájlokban találsz bõvebb leírást (pl.: ~/GNUstep/Library/WindowMaker/menu)"
+
+#: ../../WPrefs.app/MenuGuru.c:350 ../../WPrefs.app/MenuGuru.c:372 ../../WPrefs.app/MenuGuru.c:394
+msgid "Type the path for the directory. You can type more than one path by separating them with spaces."
+msgstr "Írd be a könyvtár elérési útvonalát. Több könyvtárat is beírhatsz; ezeket szóközzel válaszd el egymástól."
+
+#: ../../WPrefs.app/MenuGuru.c:361 ../../WPrefs.app/MenuGuru.c:383 ../../WPrefs.app/MenuGuru.c:405
+msgid "The menu generated will have an item for each file in the directory. The directories can contain program executables or data files (such as jpeg images)."
+msgstr "Az elkészített menünek minden eleme egy fájlt fog jelenti a könyvtárban. A könyvtár tartalmazhat futtatható és adatfájlokat (pl jpg képeket)"
+
+#: ../../WPrefs.app/MenuGuru.c:415
+msgid "If the directory contain data files, type the command used to open these files. Otherwise, leave it in blank."
+msgstr "Ha a könyvtár tartalmaz adatfájlokat, akkor írd be a parancsot, amivel megnyithatóak ezek a fájl (különben hagyd üresen)"
+
+#: ../../WPrefs.app/MenuGuru.c:426
+msgid "Each file in the directory will have an item and they will be opened with the supplied command.For example, if the directory contains image files and the command is \"xv -root\", each file in the directory will have a menu item like \"xv -root imagefile\"."
+msgstr "Minden fájl ebben a könyvtárban egy menüpontot fog jelenti és ezek a fájlok a megadott paranccsal lesznek feldolgozva. Pl.: ha a könyvtár jpeg fájlokat tartalmaz, és a parancs \"xv -root\", akkor minden egyes menüpont így fog kinézni: \"xv -root imagefile\"."
+
+msgid "Disable confirmation panel for the Kill command."
+msgstr "A kilövés parancsot nem kell megerõsíteni."
