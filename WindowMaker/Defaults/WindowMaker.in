@@ -7,6 +7,8 @@
   DisableMiniwindows = NO;
   OpenTransientOnOwnerWorkspace = NO;
   EdgeResistance = 30;
+  WorkspaceBorderSize = 0;
+  WorkspaceBorder = None;
   IconificationStyle = Zoom;
   IconPath = (
     "~/GNUstep/Library/Icons",

@@ -49,6 +49,12 @@ typedef struct _Panel {
     WMButton *modeB;
 #endif /* XKB_MODELOCK */
 
+    WMFrame *borderF;
+    WMSlider *borderS;
+    WMLabel *borderL;
+    WMButton *lrB;
+    WMButton *tbB;
+
 } _Panel;
 
 
@@ -57,10 +63,29 @@ typedef struct _Panel {
 
 
 static void
+borderCallback(WMWidget *w, void *data)
+{
+    _Panel *panel = (_Panel*)data;
+    char buffer[64];
+    int i;
+
+    i = WMGetSliderValue(panel->borderS);
+
+    if (i == 0)
+	WMSetLabelText(panel->borderL, "OFF");
+    else {
+        sprintf(buffer, "%i  pixel%s", i, i>1 ? "s" : "");
+	WMSetLabelText(panel->borderL, buffer);
+    }
+}
+
+
+static void
 showData(_Panel *panel)
 {
     char *str;
-    
+    int x;
+
     str = GetStringForKey("ResizeDisplay");
     if (!str)
 	str = "corner";
@@ -82,7 +107,24 @@ showData(_Panel *panel)
 	WMSetPopUpButtonSelectedItem(panel->posiP, 1);
     else if (strcasecmp(str, "floating")==0)
 	WMSetPopUpButtonSelectedItem(panel->posiP, 2);
-    
+
+    x = GetIntegerForKey("WorkspaceBorderSize");
+    x = x<0 ? 0 : x;
+    x = x>5 ? 5 : x;
+    WMSetSliderValue(panel->borderS, x);
+    borderCallback(NULL, panel);
+
+    str = GetStringForKey("WorkspaceBorder");
+    if (!str)
+        str = "none";
+    if (strcasecmp(str, "LeftRight")==0) {
+        WMSetButtonSelected(panel->lrB, True);
+    } else if (strcasecmp(str, "TopBottom")==0) {
+        WMSetButtonSelected(panel->tbB, True);
+    } else if (strcasecmp(str, "AllDirections")==0) {
+        WMSetButtonSelected(panel->tbB, True);
+        WMSetButtonSelected(panel->lrB, True);
+    }
 
     WMSetButtonSelected(panel->raisB, GetBoolForKey("CirculateRaise"));
 #ifdef XKB_MODELOCK
@@ -100,7 +142,8 @@ static void
 storeData(_Panel *panel)
 {
     char *str;
-    
+    Bool lr, tb;
+
     switch (WMGetPopUpButtonSelectedItem(panel->sizeP)) {
      case 0:
 	str = "corner";
@@ -129,6 +172,19 @@ storeData(_Panel *panel)
 	break;     
     }
     SetStringForKey(str, "MoveDisplay");
+
+    lr = WMGetButtonSelected(panel->lrB);
+    tb = WMGetButtonSelected(panel->tbB);
+    if (lr && tb)
+        str = "AllDirections";
+    else if (lr)
+        str = "LeftRight";
+    else if (tb)
+        str = "TopBottom";
+    else
+        str = "None";
+    SetStringForKey(str, "WorkspaceBorder");
+    SetIntegerForKey(WMGetSliderValue(panel->borderS), "WorkspaceBorderSize");
 
     SetBoolForKey(WMGetButtonSelected(panel->raisB), "CirculateRaise");
 #ifdef XKB_MODELOCK
@@ -211,22 +267,52 @@ createPanel(Panel *p)
 
     /***************** Options ****************/
     panel->optF = WMCreateFrame(panel->frame);
-    WMResizeWidget(panel->optF, 485, 75);
-    WMMoveWidget(panel->optF, 20, 145);
+    WMResizeWidget(panel->optF, 235, 75);
+    WMMoveWidget(panel->optF, 270, 145);
 
     panel->raisB = WMCreateSwitchButton(panel->optF);
-    WMResizeWidget(panel->raisB, 440, 20);
-    WMMoveWidget(panel->raisB, 20, 15);
-    WMSetButtonText(panel->raisB, _("Raise window when switching focus with keyboard (CirculateRaise)."));
+    WMResizeWidget(panel->raisB, 210, 30);
+    WMMoveWidget(panel->raisB, 15, 7);
+    WMSetButtonText(panel->raisB, _("Raise window when switching focus with keyboard."));
 
 #ifdef XKB_MODELOCK
     panel->modeB = WMCreateSwitchButton(panel->optF);
-    WMResizeWidget(panel->modeB, 440, 20);
-    WMMoveWidget(panel->modeB, 20, 40);
-    WMSetButtonText(panel->modeB, _("Keep keyboard language status for each window."));
+    WMResizeWidget(panel->modeB, 210, 30);
+    WMMoveWidget(panel->modeB, 15, 40);
+    WMSetButtonText(panel->modeB, _("Enable keyboard language switch button in window titlebars."));
 #endif
 
     WMMapSubwidgets(panel->optF);
+    
+    /***************** Workspace border ****************/
+    panel->borderF = WMCreateFrame(panel->frame);
+    WMResizeWidget(panel->borderF, 240, 75);
+    WMMoveWidget(panel->borderF, 20, 145);
+    WMSetFrameTitle(panel->borderF, _("Workspace border"));
+    
+    panel->borderS = WMCreateSlider(panel->borderF);
+    WMResizeWidget(panel->borderS, 80, 15);
+    WMMoveWidget(panel->borderS, 20, 20);
+    WMSetSliderMinValue(panel->borderS, 0);
+    WMSetSliderMaxValue(panel->borderS, 5);
+    WMSetSliderAction(panel->borderS, borderCallback, panel);
+
+    panel->borderL = WMCreateLabel(panel->borderF);
+    WMResizeWidget(panel->borderL, 50, 15);
+    WMMoveWidget(panel->borderL, 105, 20);
+
+    panel->lrB = WMCreateSwitchButton(panel->borderF);
+    WMMoveWidget(panel->lrB, 20, 40);
+    WMResizeWidget(panel->lrB, 90, 30);
+    WMSetButtonText(panel->lrB, _("Left/Right"));
+
+    panel->tbB = WMCreateSwitchButton(panel->borderF);
+    WMMoveWidget(panel->tbB, 120, 40);
+    WMResizeWidget(panel->tbB, 90, 30);
+    WMSetButtonText(panel->tbB, _("Top/Bottom"));
+
+
+    WMMapSubwidgets(panel->borderF);
     
     WMRealizeWidget(panel->frame);
     WMMapSubwidgets(panel->frame);

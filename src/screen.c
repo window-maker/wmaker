@@ -987,6 +987,23 @@ wScreenUpdateUsableArea(WScreen *scr)
     }
 #endif
 #endif
+
+    {
+        unsigned size = wPreferences.workspace_border_size;
+        unsigned position = wPreferences.workspace_border_position;
+
+        if (size>0 && position!=WB_NONE) {
+            if (position & WB_LEFTRIGHT) {
+                scr->totalUsableArea.x1 += size;
+                scr->totalUsableArea.x2 -= size;
+            }
+            if (position & WB_TOPBOTTOM) {
+                scr->totalUsableArea.y1 += size;
+                scr->totalUsableArea.y2 -= size;
+            }
+        }
+    }
+
 }
 
 

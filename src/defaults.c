@@ -319,7 +319,16 @@ static WOptionEnumeration seDisplayPositions[] = {
     {"topleft",		WD_TOPLEFT,	0},
     {"topright",	WD_TOPRIGHT, 	0},
     {"bottomleft",	WD_BOTTOMLEFT,	0},
-    {"bottomright",	WD_BOTTOMRIGHT,	0}
+    {"bottomright",	WD_BOTTOMRIGHT,	0},
+    {NULL,		0,		0}
+};
+
+static WOptionEnumeration seWorkspaceBorder[] = {
+    {"None",  		WB_NONE,	0},
+    {"LeftRight",      	WB_LEFTRIGHT,	0},
+    {"TopBottom",      	WB_TOPBOTTOM,  	0},
+    {"AllDirections",  	WB_ALLDIRS,	0},
+    {NULL,		0,		0}
 };
 
 
@@ -422,6 +431,12 @@ WDefaultEntry optionList[] = {
     },
     {"WorkspaceNameDisplayPosition", "center",	seDisplayPositions,
 	  &wPreferences.workspace_name_display_position, getEnum, NULL
+    },
+    {"WorkspaceBorder", "None",			seWorkspaceBorder,
+	  &wPreferences.workspace_border_position, getEnum, updateUsableArea
+    },
+    {"WorkspaceBorderSize", "0",       		NULL,
+	  &wPreferences.workspace_border_size, getInt, updateUsableArea
     },
 #ifdef VIRTUAL_DESKTOP
     {"VirtualEdgeThickness", "1",   NULL,
@@ -2597,7 +2612,8 @@ static WCursorLookup cursor_table[] =
     { NULL,			CURSOR_ID_NONE }
 };
 
-static void check_bitmap_status(int status, char *filename, Pixmap bitmap)
+static void
+check_bitmap_status(int status, char *filename, Pixmap bitmap)
 {
     switch(status) {
      case BitmapOpenFailed:
@@ -2620,7 +2636,8 @@ static void check_bitmap_status(int status, char *filename, Pixmap bitmap)
  * (builtin, <cursor_name>)
  * (bitmap, <cursor_bitmap>, <cursor_mask>)
  */
-static int parse_cursor(WScreen *scr, proplist_t pl, Cursor *cursor)
+static int
+parse_cursor(WScreen *scr, proplist_t pl, Cursor *cursor)
 {
     proplist_t elem;
     char *val;

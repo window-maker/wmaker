@@ -25,6 +25,26 @@ your mouse pointer is located, updating it in real-time.
 tip: maximize it horizontally, make it Omnipresent and Always at Bottom.
 Then leave it in the bottom of the screen.
 
+workspace border
+----------------
+
+2 options (WorkspaceBorder and WorkspaceBorderSize) were added to allow one to
+set a small (0..5 pixels) border for the workspace. This border will not be
+covered by windows when maximizing, allowing one to easily access the clip
+or map a menu using the mouse in the border area, even when there are
+windows maximized in both horizontal and vertical directions.
+WorkspaceBorder can be one of (None, LeftRight, TopBottom, AllDirections)
+while WorkspaceBorderSize is the size in pixles of the border not to be
+covered by windows when maximizing (usually a small amount 0..5 pixles).
+
+Both options can be set using WPrefs.app in the "Miscelaneous Ergonomic
+Preferences" section. WPrefs will always limit WorkspaceBorderSize in the
+(0..5) range.
+
+Note that if "full screen maximization" option is set for a window, that
+window will ignore this border area, maximizing to full screen.
+
+
 --- 0.62.0
 
 

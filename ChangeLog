@@ -2,6 +2,7 @@ Changes since version 0.62.1:
 .............................
 - added blackbox style igradient (interwoven)
 - added wmagnify utility
+- added definable workspace border (0..5 pixels). See NEWS.
 
 Changes since version 0.62.0:
 .............................

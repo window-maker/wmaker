@@ -219,6 +219,13 @@ typedef enum {
 #define WD_BOTTOMRIGHT	7
 
 
+/* workspace border position */
+#define	WB_NONE		0
+#define	WB_LEFTRIGHT	1
+#define	WB_TOPBOTTOM	2
+#define	WB_ALLDIRS     	(WB_LEFTRIGHT|WB_TOPBOTTOM)
+
+
 /* program states */
 #define WSTATE_NORMAL		0
 #define WSTATE_NEED_EXIT	1
@@ -419,6 +426,9 @@ typedef struct WPreferences {
 
     int edge_resistance;
     char attract;
+
+    unsigned int workspace_border_size; /* Size in pixels of the workspace border */
+    char workspace_border_position;     /* Where to leave a workspace border */
 
     struct {
         unsigned int nodock:1;	       /* don't display the dock */
