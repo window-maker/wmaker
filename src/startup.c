@@ -78,8 +78,6 @@ extern const char * const sys_siglist[];
 
 /****** Global Variables ******/
 
-extern char **Arguments;
-
 extern WPreferences wPreferences;
 
 extern WDDomain *WDWindowMaker;
@@ -336,22 +334,15 @@ handleSig(int sig)
         if (crashAction == WMRestart) {
             /* we try to restart Window Maker */
             wwarning(_("trying to restart Window Maker..."));
-            execvp(Arguments[0], Arguments);
-            wwarning(_("we failed to restart Window Maker."));
+            Restart(NULL, False);
             /* fallback to alternate window manager then */
         }
 
     	wwarning(_("trying to start alternate window manager..."));
 
-    	argv[0] = FALLBACK_WINDOWMANAGER;
-    	execvp(FALLBACK_WINDOWMANAGER, argv);
-
-    	argv[0] = "fvwm";
-    	execvp("fvwm", argv);
-
-    	argv[0] = "twm";
-        execvp("twm", argv);
-
+        Restart(FALLBACK_WINDOWMANAGER, False);
+        Restart("fvwm", False);
+        Restart("twm", False);
         wfatal(_("failed to start alternate window manager. Aborting."));
 #else
         wfatal(_("a fatal error has occured, probably due to a bug. "

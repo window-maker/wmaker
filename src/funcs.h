@@ -37,7 +37,7 @@ void RestoreDesktop(WScreen *scr);
 
 void Exit(int status);
 
-void Restart(char *manager);
+void Restart(char *manager, Bool abortOnFailure);
 
 void SetupEnvironment(WScreen *scr);
 

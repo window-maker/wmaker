@@ -75,7 +75,6 @@ typedef struct {
 
 
 static void resizeWindow(WMWidget *, unsigned, unsigned);
-static void moveWindow(WMWidget *, int, int);
 
 struct W_ViewProcedureTable _WindowViewProcedures = {
     NULL,

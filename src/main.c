@@ -58,9 +58,6 @@
 
 Display	*dpy;
 
-char **Arguments;
-int ArgCount;
-
 char *ProgName;
 
 unsigned int ValidModMask = 0xff;
@@ -152,6 +149,10 @@ int wVisualID = -1;
 
 static char *DisplayName = NULL;
 
+static char **Arguments;
+
+static int ArgCount;
+
 extern void EventLoop();
 extern void StartUp();
 
@@ -169,7 +170,7 @@ Exit(int status)
 }
 
 void
-Restart(char *manager)
+Restart(char *manager, Bool abortOnFailure)
 {
     char *prog=NULL;
     char *argv[MAX_RESTART_ARGS];
@@ -191,16 +192,15 @@ Restart(char *manager)
 	XCloseDisplay(dpy);
 	dpy = NULL;
     }
-    if (!prog)
-      execvp(Arguments[0], Arguments);
-    else {
-	execvp(prog, argv);
-	/* fallback */
-	execv(Arguments[0], Arguments);
+    if (!prog) {
+        execvp(Arguments[0], Arguments);
+        wfatal(_("failed to restart Window Maker."));
+    } else {
+        execvp(prog, argv);
+        wsyserror(_("could not exec %s"), prog);
     }
-    wsyserror(_("could not exec window manager"));
-    wfatal(_("Restart failed!!!"));
-    exit(-1);
+    if (abortOnFailure)
+        exit(-1);
 }
 
 
