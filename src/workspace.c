@@ -131,8 +131,8 @@ wWorkspaceNew(WScreen *scr)
 	wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
 #ifdef VIRTUAL_DESKTOP
     wspace->view_x = wspace->view_y = 0;
-    wspace->height = scr->scr_height * 2;
-    wspace->width = scr->scr_width * 2;
+    wspace->height = scr->scr_height;
+    wspace->width = scr->scr_width;
 #endif
 #ifdef GNOME_STUFF
 	wGNOMEUpdateWorkspaceHints(scr);
