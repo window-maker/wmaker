@@ -634,6 +634,11 @@ RCreateContext(Display *dpy, int screen_number, RContextAttributes *attribs)
 	context->attribs->standard_colormap_mode = RUseStdColormap;
     }
 
+    if (!(context->attribs->flags & RC_ScalingFilter)) {
+	context->attribs->flags |= RC_ScalingFilter;
+	context->attribs->scaling_filter = RMitchellFilter;
+    }
+
     /* get configuration from environment variables */
     gatherconfig(context, screen_number);
 #ifndef BENCH
