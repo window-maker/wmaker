@@ -588,7 +588,11 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
         "XdndActionAsk",
         "XdndActionPrivate",
         "_WINGS_DND_MOUSE_OFFSET",
-        "WM_STATE"
+        "WM_STATE",
+        "UTF8_STRING",
+        "_NET_WM_NAME",
+        "_NET_WM_ICON_NAME",
+        "_NET_WM_ICON",
     };
     Atom atoms[sizeof(atomNames)/sizeof(char*)];
     int i;
@@ -901,11 +905,15 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     scrPtr->wmIconDragOffsetAtom = atoms[i++];
 
     scrPtr->wmStateAtom = atoms[i++];
+    
+    scrPtr->utf8String = atoms[i++];
+    scrPtr->netwmName = atoms[i++];
+    scrPtr->netwmIconName = atoms[i++];
+    scrPtr->netwmIcon = atoms[i++];
 
     scrPtr->rootView = W_CreateRootView(scrPtr);
 
     scrPtr->balloon = W_CreateBalloon(scrPtr);
-
 
     W_InitApplication(scrPtr);
 

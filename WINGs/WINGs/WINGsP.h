@@ -305,6 +305,12 @@ typedef struct W_Screen {
     Atom wmIconDragOffsetAtom;
 
     Atom wmStateAtom;		       /* WM_STATE */
+    
+    Atom utf8String;
+
+    Atom netwmName;
+    Atom netwmIconName;
+    Atom netwmIcon;
 
     /* stuff for detecting double-clicks */
     Time lastClickTime;		       /* time of last mousedown event */

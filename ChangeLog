@@ -1,3 +1,8 @@
+Changes since version 0.90.0:
+.............................
+
+- added _NET_WM_NAME, _ICON_NAME and _ICON to WINGs
+
 Changes since version 0.80.2:
 .............................
 

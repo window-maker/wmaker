@@ -199,12 +199,101 @@ WMCreateWindowWithStyle(WMScreen *screen, char *name, int style)
 }
 
 
-void
-WMSetWindowTitle(WMWindow *win, char *title)
+
+static void
+setWindowTitle(WMWindow *win, const char *title)
 {
+    WMScreen *scr= win->view->screen;
     XTextProperty property;
     int result;
 
+    result = XmbTextListToTextProperty(scr->display,
+                                       (char**)&title, 1, XStdICCTextStyle,
+                                       &property);
+    if (result == XNoMemory || result == XLocaleNotSupported) {
+        wwarning("window title conversion error... using STRING encoding");
+        XStoreName(scr->display, win->view->window, title);
+    } else {
+        XSetWMName(scr->display, win->view->window, &property);
+        if (property.value)
+          XFree(property.value);
+    }
+
+    XChangeProperty(scr->display, win->view->window,
+                    scr->netwmName, scr->utf8String, 8,
+                    PropModeReplace, (unsigned char *)title, strlen(title));
+}
+
+
+static void
+setMiniwindowTitle(WMWindow *win, const char *title)
+{
+    WMScreen *scr= win->view->screen;
+    XTextProperty property;
+    int result;
+
+    result = XmbTextListToTextProperty(scr->display,
+                                       (char**)&title, 1, XStdICCTextStyle,
+                                       &property);
+    if (result == XNoMemory || result == XLocaleNotSupported) {
+        wwarning("icon title conversion error..using STRING encoding");
+        XSetIconName(scr->display, win->view->window, title);
+    } else {
+        XSetWMIconName(scr->display, win->view->window, &property);
+        if (property.value)
+          XFree(property.value);
+    }
+    
+    XChangeProperty(scr->display, win->view->window,
+                    scr->netwmIconName, scr->utf8String, 8,
+                    PropModeReplace, (unsigned char *)title, strlen(title));
+}
+
+
+static void
+setMiniwindow(WMWindow *win, RImage *image)
+{
+    WMScreen *scr= win->view->screen;
+    CARD32 *data;
+    int x, y;
+    int o;
+    
+    if (!image)
+      return;
+    
+    data= malloc((image->width * image->height + 2) * sizeof(CARD32));
+    if (!data)
+      return;
+
+    o= 0;
+    data[o++] = image->width;
+    data[o++] = image->height;
+
+    for (y= 0; y < image->height; y++) {
+        for (x= 0; x < image->width; x++) {
+            CARD32 pixel;
+            int offs= (x+y*image->width);
+            
+            if (image->format == RRGBFormat)
+              pixel= image->data[offs*3]<<16 | image->data[offs*3+1]<<8 | image->data[offs*3+2];
+            else
+              pixel= image->data[offs*4]<<16 | image->data[offs*4+1]<<8 | image->data[offs*4+2] | image->data[offs*4+3] << 24;
+
+            data[o++]= pixel;
+        }
+    }
+
+    XChangeProperty(scr->display, win->view->window,
+                    scr->netwmIcon, XA_CARDINAL, 32,
+                    PropModeReplace,
+                    (unsigned char *)data, 
+                    (image->width * image->height + 2) * sizeof(CARD32));
+}
+
+
+void
+WMSetWindowTitle(WMWindow *win, char *title)
+{
     if (win->title!=NULL)
         wfree(win->title);
     if (title!=NULL)
@@ -213,17 +302,7 @@ WMSetWindowTitle(WMWindow *win, char *title)
         win->title = NULL;
 
     if (win->view->flags.realized) {
-        result = XmbTextListToTextProperty (win->view->screen->display,
-                                            &title, 1, XStdICCTextStyle,
-                                            &property);
-        if (result == XNoMemory || result == XLocaleNotSupported) {
-            wwarning("window title conversion error... using STRING encoding");
-            XStoreName(win->view->screen->display, win->view->window, title);
-        } else {
-            XSetWMName(win->view->screen->display, win->view->window, &property);
-            if (property.value)
-                XFree(property.value);
-        }
+        setWindowTitle(win, title);
     }
 }
 
@@ -454,6 +533,9 @@ realizeWindow(WMWindow *win)
         XSetTransientForHint(scr->display, win->view->window,
                              win->owner->view->window);
     }
+    
+    if (win->title)
+      setWindowTitle(win, win->title);
 }
 
 
@@ -564,6 +646,14 @@ WMSetWindowDocumentEdited(WMWindow *win, Bool flag)
 
 
 void
+WMSetWindowMiniwindowImage(WMWindow *win, RImage *image)
+{
+    if (win->view->flags.realized)
+        setMiniwindow(win, image);
+}
+
+
+void
 WMSetWindowMiniwindowPixmap(WMWindow *win, WMPixmap *pixmap)
 {
     if ((win->miniImage && !pixmap) || (!win->miniImage && pixmap)) {
@@ -605,9 +695,6 @@ WMSetWindowMiniwindowPixmap(WMWindow *win, WMPixmap *pixmap)
 void
 WMSetWindowMiniwindowTitle(WMWindow *win, char *title)
 {
-    XTextProperty property;
-    int result;
-
     if ((win->miniTitle && !title) || (!win->miniTitle && title)
         || (title && win->miniTitle && strcoll(title, win->miniTitle)!=0)) {
         if (win->miniTitle)
@@ -619,19 +706,7 @@ WMSetWindowMiniwindowTitle(WMWindow *win, char *title)
             win->miniTitle = NULL;
 
         if (win->view->flags.realized) {
-            result = XmbTextListToTextProperty (win->view->screen->display,
-                                                &title, 1, XStdICCTextStyle,
-                                                &property);
-            if (result == XNoMemory || result == XLocaleNotSupported) {
-                wwarning("icon title conversion error..using STRING encoding");
-                XSetIconName(win->view->screen->display, win->view->window,
-                             title);
-            } else {
-                XSetWMIconName(win->view->screen->display, win->view->window,
-                               &property);
-                if (property.value)
-                    XFree(property.value);
-            }
+            setMiniwindowTitle(win, title);
         }
     }
 }

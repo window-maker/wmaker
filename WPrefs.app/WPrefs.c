@@ -262,7 +262,6 @@ createMainWindow(WMScreen *scr)
     WMSetWindowMaxSize(WPrefs.win, 520, 390);
     WMSetWindowMinSize(WPrefs.win, 520, 390);
     WMSetWindowMiniwindowTitle(WPrefs.win, "Preferences");
-    WMSetWindowMiniwindowPixmap(WPrefs.win, WMGetApplicationIconPixmap(scr));
 
     WPrefs.scrollV = WMCreateScrollView(WPrefs.win);
     WMResizeWidget(WPrefs.scrollV, 500, 87);
@@ -636,8 +635,6 @@ Initialize(WMScreen *scr)
     char **list;
     int i;
     char *path;
-    WMPixmap *icon;
-
 
     list = RSupportedFileFormats();
     for (i=0; list[i]!=NULL; i++) {
@@ -659,12 +656,8 @@ Initialize(WMScreen *scr)
             wwarning(_("could not load image file %s:%s"), path,
                      RMessageForError(RErrorCode));
         } else {
-            icon = WMCreatePixmapFromRImage(scr, tmp, 0);
+            WMSetApplicationIconImage(scr, tmp);
             RReleaseImage(tmp);
-            if (icon) {
-                WMSetApplicationIconPixmap(scr, icon);
-                WMReleasePixmap(icon);
-            }
         }
         wfree(path);
     }
@@ -673,6 +666,9 @@ Initialize(WMScreen *scr)
     createMainWindow(scr);
 
     WMRealizeWidget(WPrefs.win);
+    
+    WMSetWindowMiniwindowImage(WPrefs.win, WMGetApplicationIconImage(scr));
+    
     WMMapWidget(WPrefs.win);
     XFlush(WMScreenDisplay(scr));
     WMSetLabelText(WPrefs.statusL, _("Loading Window Maker configuration files..."));

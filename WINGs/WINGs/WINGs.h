@@ -963,6 +963,8 @@ void WMSetWindowTitle(WMWindow *wPtr, char *title);
 
 void WMSetWindowMiniwindowTitle(WMWindow *win, char *title);
 
+void WMSetWindowMiniwindowImage(WMWindow *win, RImage *image);
+
 void WMSetWindowMiniwindowPixmap(WMWindow *win, WMPixmap *pixmap);
 
 void WMSetWindowCloseAction(WMWindow *win, WMAction *action, void *clientData);

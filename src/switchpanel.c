@@ -317,7 +317,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
         WMColor *color;
         WMFont *boldFont= WMBoldSystemFontOfSize(scr->wmscreen, 12);
         
-        WMSetLabelRelief(panel->label, WRSunken);
+        WMSetLabelRelief(panel->label, WRSimple);
         WMSetLabelFont(panel->label, boldFont);
         color = WMDarkGrayColor(scr->wmscreen);
         WMSetWidgetBackgroundColor(panel->label, color); 

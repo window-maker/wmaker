@@ -72,7 +72,7 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     Bool somethingElse = False;
     XEvent ev;
     WSwitchPanel *swpanel = NULL;
-    KeyCode leftKey, rightKey, homeKey, endKey;
+    KeyCode leftKey, rightKey, homeKey, endKey, shiftLKey, shiftRKey;
 
     if (!wwin)
         return;
@@ -81,6 +81,8 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     rightKey = XKeysymToKeycode(dpy, XK_Right);
     homeKey = XKeysymToKeycode(dpy, XK_Home);
     endKey = XKeysymToKeycode(dpy, XK_End);
+    shiftLKey = XKeysymToKeycode(dpy, XK_Shift_L);
+    shiftRKey = XKeysymToKeycode(dpy, XK_Shift_R);
 
     if (next)
         hasModifier = (wKeyBindings[WKBD_FOCUSNEXT].modifier != 0);
@@ -179,7 +181,7 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
                         }
                     }
                 }
-            } else {
+            } else if (ev.xkey.keycode != shiftLKey && ev.xkey.keycode != shiftRKey) {
 #ifdef DEBUG
                 printf("Got something else\n");
 #endif
