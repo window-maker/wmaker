@@ -40,7 +40,6 @@ WCreateGeometryView(WMScreen *scr)
     WGeometryView *gview;
     char buffer[64];
     static W_Class widgetClass = 0;
-    WMColor *color;
 
     if (!widgetClass) {
         widgetClass = W_RegisterUserWidget();

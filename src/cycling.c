@@ -78,7 +78,7 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     WSwitchPanel *swpanel = NULL;
     KeyCode leftKey, rightKey, homeKey, endKey;
 
-    if (!wwin || wwin->frame->workspace != scr->current_workspace)
+    if (!wwin)
         return;
   
     leftKey = XKeysymToKeycode(dpy, XK_Left);
@@ -117,7 +117,12 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
         }
     }
     else
-      newFocused= wwin;
+    {
+        if (wwin->frame->workspace == scr->current_workspace)
+            newFocused= wwin;
+        else
+            newFocused= NULL;
+    }
 
     while (hasModifier && !done) {
         WMMaskEvent(dpy, KeyPressMask|KeyReleaseMask|ExposureMask|PointerMotionMask, &ev);
