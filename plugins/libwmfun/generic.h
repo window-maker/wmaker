@@ -22,6 +22,9 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.4  2001/01/07 02:59:11  id
+ * remove stuffs
+ *
  * Revision 1.3  2000/12/11 03:10:26  id
  * changes related to plugin system & drawstring
  *
@@ -35,7 +38,6 @@
  * initial revision
  *
  */
-#include "config.h"
 
 #ifndef _GENERIC_H
 #define _GENERIC_H
