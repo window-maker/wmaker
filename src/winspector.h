@@ -76,8 +76,6 @@ typedef struct InspectorPanel {
     WMButton *browseIconBtn;
     
     WMFrame *wsFrm;
-    WMButton *curRb;
-    WMButton *setRb;
     WMPopUpButton *wsP;
     
     /* 5th page. application wide attributes */

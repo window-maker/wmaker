@@ -494,14 +494,16 @@ okEditTexture(void *data)
 
     HideTexturePanel(panel->texturePanel);
 
-    name = GetTexturePanelTextureName(panel->texturePanel);
+    if (titem->current) {
+	name = GetTexturePanelTextureName(panel->texturePanel);
+
+	free(titem->title);
+	titem->title = name;
+    }
 
     prop = GetTexturePanelTexture(panel->texturePanel);
 
     str = PLGetDescription(prop);
-
-    free(titem->title);
-    titem->title = name;
 
     PLRelease(titem->prop);
     titem->prop = prop;

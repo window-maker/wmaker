@@ -461,14 +461,12 @@ saveSettings(WMButton *button, InspectorPanel *panel)
         free(icon_file);
     }
 
-    if (WMGetButtonSelected(panel->curRb) != 0) {
-	value = PLMakeString("");
-	insertAttribute(dict, winDic, AStartWorkspace, value, &different, flags);
-	PLRelease(value);
-    } else if (WMGetButtonSelected(panel->setRb) != 0) {
+    {
 	int i = WMGetPopUpButtonSelectedItem(panel->wsP);
-	
-	if (i < panel->frame->screen_ptr->workspace_count) {
+
+	i--;
+
+	if (i>=0 && i < panel->frame->screen_ptr->workspace_count) {
 	    value = PLMakeString(panel->frame->screen_ptr->workspaces[i]->name);
 	    insertAttribute(dict, winDic, AStartWorkspace, value, &different, flags);
 	    PLRelease(value);
@@ -795,6 +793,8 @@ applySettings(WMButton *button, InspectorPanel *panel)
 }
 
 
+
+
 static void
 revertSettings(WMButton *button, InspectorPanel *panel)
 {
@@ -910,10 +910,9 @@ revertSettings(WMButton *button, InspectorPanel *panel)
     n = wDefaultGetStartWorkspace(wwin->screen_ptr, wm_instance, wm_class);
 
     if (n >= 0 && n < wwin->screen_ptr->workspace_count) {
-	WMPerformButtonClick(panel->setRb);
-	WMSetPopUpButtonSelectedItem(panel->wsP, n);
+	WMSetPopUpButtonSelectedItem(panel->wsP, n+1);
     } else {
-	WMPerformButtonClick(panel->curRb);
+	WMSetPopUpButtonSelectedItem(panel->wsP, 0);
     }
 }
 
@@ -1284,22 +1283,11 @@ createInspectorForWindow(WWindow *wwin)
     WMMoveWidget(panel->wsFrm, 15, 225);
     WMResizeWidget(panel->wsFrm, PWIDTH - (2 * 15), 70);
     WMSetFrameTitle(panel->wsFrm, _("Initial Workspace"));
-    
-    panel->curRb = WMCreateRadioButton(panel->wsFrm);
-    WMMoveWidget(panel->curRb, 10, 15);
-    WMResizeWidget(panel->curRb, frame_width - (2 * 10), 20);
-    WMSetButtonText(panel->curRb, _("Nowhere in particular"));
-
-    
-    panel->setRb = WMCreateRadioButton(panel->wsFrm);
-    WMMoveWidget(panel->setRb, 10, 40);
-    WMResizeWidget(panel->setRb, 25, 20);
-    WMGroupButtons(panel->curRb, panel->setRb);
-    WMSetButtonText(panel->setRb, NULL);
 
     panel->wsP = WMCreatePopUpButton(panel->wsFrm);
-    WMMoveWidget(panel->wsP, 30, 40);
-    WMResizeWidget(panel->wsP, PWIDTH - (2 * 15) - 25 - 10 - (2 * 5), 20);
+    WMMoveWidget(panel->wsP, 20, 30);
+    WMResizeWidget(panel->wsP, PWIDTH - (2 * 15) - (2 * 20), 20);
+    WMAddPopUpButtonItem(panel->wsP, _("Nowhere in particular"));
     for (i = 0; i < wwin->screen_ptr->workspace_count; i++) {
 	WMAddPopUpButtonItem(panel->wsP, scr->workspaces[i]->name);
     }
@@ -1307,12 +1295,9 @@ createInspectorForWindow(WWindow *wwin)
     i = wDefaultGetStartWorkspace(wwin->screen_ptr, wwin->wm_instance,
                                   wwin->wm_class);
     if (i >= 0 && i <= wwin->screen_ptr->workspace_count) {
-	WMSetButtonSelected(panel->curRb, False);
-	WMSetButtonSelected(panel->setRb, True);
 	WMSetPopUpButtonSelectedItem(panel->wsP, i);
     } else {
-	WMSetButtonSelected(panel->curRb, True);
-	WMSetButtonSelected(panel->setRb, False);
+	WMSetPopUpButtonSelectedItem(panel->wsP, 0);
     }
 
     /* application wide attributes */
