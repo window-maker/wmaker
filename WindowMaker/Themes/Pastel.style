@@ -1,10 +1,10 @@
 {
   TitleJustify = left;
+  ClipTitleFont = "-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*";
   WindowTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
   MenuTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
   MenuTextFont = "-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*";
   IconTitleFont = "-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-*-*";
-  ClipTitleFont = "-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*";
   DisplayFont = "-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*";
   HighlightColor = white;
   HighlightTextColor = black;
@@ -13,14 +13,7 @@
   FTitleColor = white;
   PTitleColor = white;
   UTitleColor = "rgb:79/96/cf";
-  FTitleBack = (
-    mhgradient,
-    "rgb:18/2c/70",
-    "rgb:18/2c/70",
-    "rgb:49/69/c7",
-    "rgb:79/a2/d0",
-    "rgb:96/c7/be"
-  );
+  FTitleBack = (mhgradient, "#182c70", "#182c70", "#4969c7", "#79a2d0", "#a4dad0");
   PTitleBack = (hgradient, "rgb:08/18/38", "rgb:28/3c/49");
   UTitleBack = (
     mhgradient,
@@ -41,6 +34,7 @@
     "rgb:79/a2/d0",
     "rgb:96/c7/be"
   );
-  IconBack = (mdgradient, "rgb:18/34/54", "rgb:28/45/69", "rgb:08/24/20");
-  WorkspaceBack = (solid, "rgb:24/3e/6c");
+  IconBack = (mdgradient, "#183454", "#296ed6", "#03110e");
+  IconTitleColor = white;
+  IconTitleBack = "rgb:18/2c/70";
 }
