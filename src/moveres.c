@@ -1118,39 +1118,6 @@ updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
 }
 
 
-#if 0
-typedef struct _looper {
-    WWindow *wwin;
-    int x,y,w,h,ox,oy;
-} _looper;
-
-void
-_keyloop(_looper *lpr){
-    WWindow *wwin = lpr->wwin;
-    WScreen *scr = wwin->screen_ptr;
-    int w = wwin->frame->core->width;
-    int h = wwin->frame->core->height;
-    int src_x = wwin->frame_x;
-    int src_y = wwin->frame_y;
-
-        if (!scr->selected_windows){
-            drawTransparentFrame(wwin, src_x+lpr->ox, src_y+lpr->oy, w, h);
-        }
-        XUngrabServer(dpy);
-        XSync(dpy, False);
-        wusleep(10000);
-        XGrabServer(dpy);
-/*        printf("called\n");*/
-        if (!scr->selected_windows){
-            drawTransparentFrame(wwin, src_x+lpr->ox, src_y+lpr->oy, w, h);
-        }
-        /* reset timer */
-        if(scr->keymove_tick)
-            WMAddTimerHandler(15000,(WMCallback*)_keyloop, lpr);
-}
-
-#endif
-
 #define _KS KEY_CONTROL_WINDOW_WEIGHT
 
 int
@@ -1172,14 +1139,6 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
     KeySym keysym=NoSymbol;
     int moment=0;
     KeyCode shiftl,shiftr,ctrll,ctrlmode;
-
-    /*
-    int timer;
-    _looper looper;
-    looper.wwin=wwin;
-    scr->keymove_tick=1;
-    WMAddTimerHandler(1000,(WMCallback*)_keyloop, &looper);
-    */
 
     shiftl = XKeysymToKeycode(dpy, XK_Shift_L);
     shiftr = XKeysymToKeycode(dpy, XK_Shift_R);
