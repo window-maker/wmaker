@@ -14,6 +14,7 @@ Changes since wmaker 0.64.0:
 - moved timer, dile and input handler definitions and prototypes from
   WINGs.h to WUtil.h because they're not GUI related.
 
+
 changes since wmaker 0.63.1:
 ............................
 - added WMRunModalLoop() and WMBreakModalLoop()
