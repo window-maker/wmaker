@@ -453,6 +453,24 @@ typedef struct WMTextFieldDelegate {
 
 
 
+typedef struct WMTabViewDelegate {
+    void *data;
+
+    void (*didChangeNumberOfItems)(struct WMTabViewDelegate *self,
+				   WMTabView *tabView);
+
+    void (*didSelectItem)(struct WMTabViewDelegate *self, WMTabView *tabView,
+				 WMTabViewItem *item);
+
+    Bool (*shouldSelectItem)(struct WMTabViewDelegate *self, WMTabView *tabView, 
+			     WMTabViewItem *item);
+
+    void (*willSelectItem)(struct WMTabViewDelegate *self, WMTabView *tabView,
+			   WMTabViewItem *item);
+} WMTabViewDelegate;
+
+
+
 /* ....................................................................... */
 
 
@@ -1025,6 +1043,8 @@ void WMCloseColorPanel(WMColorPanel *panel);
 
 void WMSetColorPanelColor(WMColorPanel *panel, WMColor *color);
 
+WMColor *WMGetColorPanelColor(WMColorPanel *panel);
+
 void WMSetColorPanelPickerMode(WMColorPanel *panel, WMColorPanelMode mode);
 
 void WMSetColorPanelAction(WMColorPanel *panel, WMAction2 *action, void *data);
@@ -1143,9 +1163,12 @@ void WMSelectTabViewItem(WMTabView *tPtr, WMTabViewItem *item);
 
 void WMSelectTabViewItemAtIndex(WMTabView *tPtr, int index);
 
+void WMSetTabViewDelegate(WMTabView *tPtr, WMTabViewDelegate *delegate);
 
 
 WMTabViewItem *WMCreateTabViewItemWithIdentifier(int identifier);
+
+int WMGetTabViewItemIdentifier(WMTabViewItem *item);
 
 void WMSetTabViewItemLabel(WMTabViewItem *item, char *label);
 

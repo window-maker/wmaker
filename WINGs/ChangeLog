@@ -27,6 +27,7 @@ changes since wmaker 0.53.0:
 	manually when you change the text.
 
 - added WMTabView
+- added WMGetColorPanelColor(WMColorPanel *panel)
 
 changes since wmaker 0.52.0:
 ............................

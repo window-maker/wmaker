@@ -69,7 +69,6 @@ static WMDragSourceProcs dragProcs = {
 static void
 colorChangedObserver(void *data, WMNotification *notification)
 {
-    /*
     WMColorPanel *panel = (WMColorPanel*)WMGetNotificationObject(notification);
     WMColorWell *cPtr = (WMColorWell*)data;
     WMColor *color;
@@ -79,21 +78,21 @@ colorChangedObserver(void *data, WMNotification *notification)
 
     color = WMGetColorPanelColor(panel);
     
-    WMSetColorWellColor(cPtr, color);*/
-   
+    WMSetColorWellColor(cPtr, color);
+    WMPostNotificationName(WMColorWellDidChangeNotification, cPtr, NULL);
 }
 
 
 static void
 updateColorCallback(void *self, void *data)
 {
-    /*
     WMColorPanel *panel = (WMColorPanel*)self;
     WMColorWell *cPtr = (ColorWell*)data;
     WMColor *color;
 
     color = WMGetColorPanelColor(panel);
-    WMSetColorWellColor(cPtr, color);*/
+    WMSetColorWellColor(cPtr, color);
+    WMPostNotificationName(WMColorWellDidChangeNotification, cPtr, NULL);
 }
 
 

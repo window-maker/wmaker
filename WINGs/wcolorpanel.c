@@ -1288,11 +1288,18 @@ WMSetColorPanelPickerMode(WMColorPanel *panel, WMColorPanelMode mode)
 	WMMapWidget(panel->colorListFrm);
 	WMSetButtonSelected(panel->colorListBtn, True);
     }
-    
-    
+
     panel->mode = mode;
 }
 
+
+WMColor*
+WMGetColorPanelColor(WMColorPanel *panel)
+{
+    return WMGetColorWellColor(panel->colorWell);
+}
+
+	
 void
 WMSetColorPanelColor(WMColorPanel *panel, WMColor *color)
 {

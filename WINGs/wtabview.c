@@ -17,6 +17,8 @@ typedef struct W_TabView {
     WMColor *lightGray;
     WMColor *tabColor;
 
+    WMTabViewDelegate *delegate;
+
     short tabWidth;
     short tabHeight;
 
@@ -128,6 +130,13 @@ WMCreateTabView(WMWidget *parent)
 
 
 void
+WMSetTabViewDelegate(WMTabView *tPtr, WMTabViewDelegate *delegate)
+{
+    tPtr->delegate = delegate;
+}
+
+
+void
 WMAddItemInTabView(WMTabView *tPtr, WMTabViewItem *item)
 {
     WMInsertItemInTabView(tPtr, tPtr->itemCount, item);
@@ -184,6 +193,8 @@ WMInsertItemInTabView(WMTabView *tPtr, int index, WMTabViewItem *item)
     if (index == 0) {
 	W_MapTabViewItem(item);
     }
+    if (tPtr->delegate && tPtr->delegate->didChangeNumberOfItems)
+	(*tPtr->delegate->didChangeNumberOfItems)(tPtr->delegate, tPtr);
 }
 
 
@@ -206,6 +217,8 @@ WMRemoveTabViewItem(WMTabView *tPtr, WMTabViewItem *item)
 	    break;
 	}
     }
+    if (tPtr->delegate && tPtr->delegate->didChangeNumberOfItems)
+	(*tPtr->delegate->didChangeNumberOfItems)(tPtr->delegate, tPtr);
 }
 
 
@@ -318,8 +331,16 @@ WMSelectTabViewItemAtIndex(WMTabView *tPtr, int index)
     else if (index >= tPtr->itemCount)
 	index = tPtr->itemCount - 1;
 
-
     item = tPtr->items[tPtr->selectedItem];
+
+    if (tPtr->delegate && tPtr->delegate->shouldSelectItem)
+	if (!(*tPtr->delegate->shouldSelectItem)(tPtr->delegate, tPtr, 
+						 tPtr->items[index]))
+	    return;
+
+    if (tPtr->delegate && tPtr->delegate->willSelectItem)
+	(*tPtr->delegate->willSelectItem)(tPtr->delegate, tPtr, 
+					  tPtr->items[index]);
 
     W_UnmapTabViewItem(item);
 
@@ -329,6 +350,10 @@ WMSelectTabViewItemAtIndex(WMTabView *tPtr, int index)
     W_MapTabViewItem(item);
 
     tPtr->selectedItem = index;
+
+    if (tPtr->delegate && tPtr->delegate->didSelectItem)
+	(*tPtr->delegate->didSelectItem)(tPtr->delegate, tPtr, 
+					 tPtr->items[index]);
 }
 
 
@@ -598,6 +623,13 @@ WMCreateTabViewItemWithIdentifier(int identifier)
     item->identifier = identifier;
 
     return item;
+}
+
+
+int
+WMGetTabViewItemIdentifier(WMTabViewItem *item)
+{
+    return item->identifier;
 }
 
 
