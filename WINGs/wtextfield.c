@@ -278,9 +278,6 @@ WMInsertTextFieldText(WMTextField *tPtr, char *text, int position)
     }
 
     paintTextField(tPtr);
-
-    NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
-	   (void*)WMInsertTextEvent);
 }
 
 
@@ -312,7 +309,7 @@ deleteTextFieldRange(WMTextField *tPtr, WMRange range)
 
 	decrToFit(tPtr);
     }
-        
+
     paintTextField(tPtr);
 }
 
@@ -321,8 +318,6 @@ void
 WMDeleteTextFieldRange(WMTextField *tPtr, WMRange range)
 {
     deleteTextFieldRange(tPtr, range);
-    NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
-	   (void*)WMDeleteTextEvent);
 }
 
 
@@ -365,9 +360,6 @@ WMSetTextFieldText(WMTextField *tPtr, char *text)
     
     if (tPtr->view->flags.realized)
 	paintTextField(tPtr);
-
-    NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
-	   (void*)WMSetTextEvent);
 }
 
 
@@ -1030,6 +1022,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
                 range.count = 1;
             }
 	    WMDeleteTextFieldRange(tPtr, range);
+	    NOTIFY(tPtr, didChange, WMTextDidChangeNotification, NULL);
 	}
 	break;
 	
@@ -1053,6 +1046,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 		range.count = 1;
             }
 	    WMDeleteTextFieldRange(tPtr, range);
+	    NOTIFY(tPtr, didChange, WMTextDidChangeNotification, NULL);
 	}
 	break;
 
@@ -1074,6 +1068,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
             if (tPtr->prevselection.count)
                 deleteTextFieldRange(tPtr, range);
 	    WMInsertTextFieldText(tPtr, buffer, tPtr->cursorPosition);
+	    NOTIFY(tPtr, didChange, WMTextDidChangeNotification, NULL);
 	} else {
 	    return;
 	}
@@ -1104,7 +1099,7 @@ pointToCursorPosition(TextField *tPtr, int x)
     a = tPtr->viewPosition;
     b = tPtr->viewPosition + tPtr->textLen;
     if (WMWidthOfString(tPtr->font, &(tPtr->text[tPtr->viewPosition]), 
-			tPtr->textLen-tPtr->viewPosition) < x)
+			tPtr->textLen - tPtr->viewPosition) < x)
 	return tPtr->textLen;
 
     while (a < b && b-a>1) {
