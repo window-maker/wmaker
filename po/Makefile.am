@@ -4,7 +4,7 @@ CATALOGS = @MOFILES@
 
 CLEANFILES = $(CATALOGS) WindowMaker.pot
 
-EXTRA_DIST = cs.po de.po es.po fr.po gl.po ja.po ko.po nl.po pt.po se.po it.po \
+EXTRA_DIST = cs.po de.po es.po fr.po gl.po ja.po ko.po nl.po pt.po sv.po it.po \
 	no.po ru.po tr.po fi.po hr.po el.po pl.po ro.po zh_TW.Big5.po\
 	zh_CN.po sk.po da.po bg.po hu.po
 

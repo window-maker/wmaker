@@ -6,6 +6,7 @@ Changes since version 0.63.1:
 - Removed spurious focus disabling for GNUstep applications - but retain
   code that lets GNUstep apps control their window titlebar.
 	(Richard Frith-Macdonald <rfm@gnu.org>)
+- Fixed broken panels.
 
 
 Changes since version 0.63.0:
