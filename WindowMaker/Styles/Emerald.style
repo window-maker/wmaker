@@ -1,10 +1,10 @@
 {
-  ClipTitleFont = "-b&h-lucida-medium-r-normal-*-10-*-*-*-p-*-iso8859-1";
-  WindowTitleFont = "-b&h-lucida-medium-r-normal-*-12-*-*-*-p-*-iso8859-1";
-  MenuTitleFont = "-b&h-lucida-bold-r-normal-*-12-*-*-*-p-*-iso8859-1";
-  MenuTextFont = "-b&h-lucida-medium-r-normal-*-12-*-*-*-p-*-iso8859-1";
-  IconTitleFont = "-b&h-lucida-medium-r-normal-*-10-*-*-*-p-*-iso8859-1";
-  DisplayFont = "-b&h-lucida-medium-r-normal-*-12-*-*-*-p-*-iso8859-1";
+  ClipTitleFont = "Trebuchet MS,Luxi Sans:pixelsize=10";
+  WindowTitleFont = "Trebuchet MS,Luxi Sans:bold:pixelsize=12";
+  MenuTitleFont = "Trebuchet MS,Luxi Sans:bold:pixelsize=12";
+  MenuTextFont = "Trebuchet MS,Luxi Sans:pixelsize=12";
+  IconTitleFont = "Trebuchet MS,Luxi Sans:pixelsize=8";
+  DisplayFont = "Trebuchet MS,Luxi Sans:pixelsize=12";
   HighlightColor = "#595d8e";
   HighlightTextColor = "#71b6d7";
   ClipTitleColor = white;
