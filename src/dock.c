@@ -1305,13 +1305,15 @@ wClipIconPaint(WAppIcon *aicon)
     tx = CLIP_BUTTON_SIZE*ICON_SIZE/64;
 
     WMDrawString(scr->wmscreen, win, gc, scr->clip_title_font, tx,
-		 ty, ws_name, length);
+        	 ty, ws_name, length);
+    /*WMDrawString(scr->wmscreen, win, gc, scr->clip_title_font, 4,
+        	 2, ws_name, length);*/
 
     tx = (ICON_SIZE/2 - WMWidthOfString(scr->clip_title_font, ws_number,
 					nlength))/2;
 
     WMDrawString(scr->wmscreen, win, gc, scr->clip_title_font, tx,
-		 2, ws_number, nlength);
+        	 2, ws_number, nlength);
 
     wfree(ws_name);
 

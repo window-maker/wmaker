@@ -660,7 +660,7 @@ drawTab(TabView *tPtr, Drawable d, int x, int y,
     XDrawLine(dpy, d, white, trap[1].x, trap[1].y, trap[2].x, trap[2].y);
     XDrawLine(dpy, d, white, trap[2].x, trap[2].y, trap[3].x, trap[3].y);
     XDrawLine(dpy, d, white, trap[3].x, trap[3].y, trap[4].x, trap[4].y);
-    XDrawLine(dpy, d, dark, trap[4].x, trap[4].y, trap[5].x, trap[5].y);
+    XDrawLine(dpy, d, dark,  trap[4].x, trap[4].y, trap[5].x, trap[5].y);
     XDrawLine(dpy, d, black, trap[5].x, trap[5].y, trap[6].x, trap[6].y);
     XDrawLine(dpy, d, black, trap[6].x, trap[6].y, trap[7].x, trap[7].y);
 

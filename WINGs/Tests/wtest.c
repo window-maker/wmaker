@@ -337,6 +337,9 @@ testGradientButtons(WMScreen *scr)
     WMSetWindowTitle(win, "Gradiented Button Demo");
     WMResizeWidget(win, 300, 200);
 
+    WMSetWindowCloseAction(win, closeAction, NULL);
+
+
     light.red = 0x90;
     light.green = 0x85;
     light.blue = 0x90;
