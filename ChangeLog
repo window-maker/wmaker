@@ -19,6 +19,8 @@ Changes since version 0.61.1:
 - propagation of -noext for submenus (David Reviejo <dreviejo@arrakis.es>)
 - fixed problem with mouse sampling rate in SGIs
 - optimized frame drawing (Swivel <swivel@gnugeneration.com>)
+- removed broken optimized frame drawing patch
+- added Select Window button in attribute inspector
 
 Changes since version 0.61.0:
 .............................
