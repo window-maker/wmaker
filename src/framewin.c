@@ -992,7 +992,7 @@ wFrameWindowPaint(WFrameWindow *fwin)
             tmp_bg = XCreatePixmap(dpy, fwin->titlebar->window,
                     fwin->titlebar->width, tb,
                     DefaultDepth(dpy, DefaultScreen(dpy)));
-            XFillRectangle(dpy, tmp_bg, (*fwin->title_texture)->solid.normal_gc,
+            XFillRectangle(dpy, tmp_bg, fwin->title_texture[fwin->flags.state]->solid.normal_gc,
                     0, 0, fwin->titlebar->width, tb);
             wDrawBevel(tmp_bg, fwin->titlebar->width,
                     fwin->titlebar->height,
