@@ -815,14 +815,29 @@ handleActionEvents(XEvent *event, void *data)
 	
      case ButtonPress:
 	/* FIXME: change Mod1Mask with something else */
-	handlePush(sPtr, event->xbutton.x, event->xbutton.y,
-		   (event->xbutton.state & Mod1Mask)
-		   ||event->xbutton.button==Button2);
-	/* continue scrolling if pushed on the buttons */
-	if (sPtr->flags.hitPart == WSIncrementLine
-	    || sPtr->flags.hitPart == WSDecrementLine) {
-	    sPtr->timerID = WMAddTimerHandler(AUTOSCROLL_INITIAL_DELAY,
-					      autoScroll, sPtr);
+	if (event->xbutton.button==WINGsConfiguration.mouseWheelUp) {
+	    sPtr->flags.decrDown = 1;
+	    sPtr->flags.hitPart = WSDecrementPage;
+	    if (sPtr->action) {
+		(*sPtr->action)(sPtr, sPtr->clientData);
+	    }
+	}
+	else if (event->xbutton.button==WINGsConfiguration.mouseWheelDown) {
+	    sPtr->flags.incrDown = 1;
+	    sPtr->flags.hitPart = WSIncrementPage;
+	    if (sPtr->action) {
+		(*sPtr->action)(sPtr, sPtr->clientData);
+	    }
+	} else {
+	    handlePush(sPtr, event->xbutton.x, event->xbutton.y,
+			   (event->xbutton.state & Mod1Mask)
+			   ||event->xbutton.button==Button2);
+	    /* continue scrolling if pushed on the buttons */
+	    if (sPtr->flags.hitPart == WSIncrementLine
+		|| sPtr->flags.hitPart == WSDecrementLine) {
+		sPtr->timerID = WMAddTimerHandler(AUTOSCROLL_INITIAL_DELAY,
+						      autoScroll, sPtr);
+	    }
 	}
 	break;
 

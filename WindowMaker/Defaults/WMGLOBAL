@@ -3,4 +3,6 @@
   BoldSystemFont = "-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*";
   MultiByteText = NO;
   DoubleClickTime = 250;
+  MouseWheelUp = Button4;
+  MouseWheelDown = Button5;
 }

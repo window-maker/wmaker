@@ -481,7 +481,28 @@ handleActionEvents(XEvent *event, void *data)
 
     switch (event->type) {
      case ButtonPress:
-	if (getSliderPart(sPtr, event->xbutton.x, event->xbutton.y)==KNOB_PART)
+	if (event->xbutton.button==WINGsConfiguration.mouseWheelUp
+	    &&!sPtr->flags.dragging) {
+	    // Wheel up
+	    if (sPtr->value+1<=sPtr->maxValue) {
+		WMSetSliderValue(sPtr, sPtr->value+1);
+		if (sPtr->flags.continuous && sPtr->action) {
+		    (*sPtr->action)(sPtr, sPtr->clientData);
+		}
+	    }
+	} else if (event->xbutton.button==WINGsConfiguration.mouseWheelDown
+	    &&!sPtr->flags.dragging) {
+	    // Wheel down
+	    if (sPtr->value-1>=sPtr->minValue)
+	    {
+		WMSetSliderValue(sPtr, sPtr->value-1);
+	    	if (sPtr->flags.continuous && sPtr->action) {
+		    (*sPtr->action)(sPtr, sPtr->clientData);
+		}
+	    }
+	}
+	else if (getSliderPart(sPtr, event->xbutton.x, event->xbutton.y)
+	    ==KNOB_PART)
 	    sPtr->flags.dragging = 1;
 	else {
 #ifdef STRICT_NEXT_BEHAVIOUR

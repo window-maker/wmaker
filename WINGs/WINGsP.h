@@ -387,9 +387,11 @@ typedef struct W_EventHandler {
 typedef struct _WINGsConfiguration {
     char *systemFont;
     char *boldSystemFont;
-	int  defaultFontSize;
+    int  defaultFontSize;
     Bool useMultiByte;
     unsigned doubleClickDelay;
+    unsigned mouseWheelUp;
+    unsigned mouseWheelDown;
 } _WINGsConfiguration;
 
 extern _WINGsConfiguration WINGsConfiguration;

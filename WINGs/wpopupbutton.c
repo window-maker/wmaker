@@ -635,6 +635,37 @@ autoScroll(void *data)
 
 
 static void
+wheelScrollUp(PopUpButton *bPtr)
+{
+    int testIndex = bPtr->selectedItemIndex - 1;
+
+    while (testIndex>=0 && !WMGetPopUpButtonItemEnabled(bPtr, testIndex))
+        testIndex--;
+    if (testIndex != -1) {
+	WMSetPopUpButtonSelectedItem(bPtr, testIndex);
+        if (bPtr->action)
+            (*bPtr->action)(bPtr, bPtr->clientData);
+    }
+}
+
+
+static void
+wheelScrollDown(PopUpButton *bPtr)
+{
+    int itemCount = WMGetBagItemCount(bPtr->items);
+    int testIndex = bPtr->selectedItemIndex + 1;
+
+    while (testIndex<itemCount && !WMGetPopUpButtonItemEnabled(bPtr, testIndex))
+	testIndex++;
+    if (testIndex != itemCount) {
+	WMSetPopUpButtonSelectedItem(bPtr, testIndex);
+        if (bPtr->action)
+            (*bPtr->action)(bPtr, bPtr->clientData);
+    }
+}
+
+
+static void
 handleActionEvents(XEvent *event, void *data)
 {
     PopUpButton *bPtr = (PopUpButton*)data;
@@ -699,6 +730,14 @@ handleActionEvents(XEvent *event, void *data)
 	if (!bPtr->flags.enabled)
 	    break;
 
+        if (!bPtr->flags.pullsDown && !bPtr->menuView->flags.mapped) {
+	    if (event->xbutton.button==WINGsConfiguration.mouseWheelDown) {
+                wheelScrollDown(bPtr);
+            } else if (event->xbutton.button==WINGsConfiguration.mouseWheelUp) {
+                wheelScrollUp(bPtr);
+            }
+	    break;
+	}
 	popUpMenu(bPtr);
 	if (!bPtr->flags.pullsDown) {
 	    bPtr->highlightedItem = bPtr->selectedItemIndex;
@@ -714,6 +753,10 @@ handleActionEvents(XEvent *event, void *data)
 	break;
  
      case ButtonRelease:
+	if (event->xbutton.button==WINGsConfiguration.mouseWheelUp ||
+            event->xbutton.button==WINGsConfiguration.mouseWheelDown) {
+            break;
+        }
 	XUngrabPointer(bPtr->view->screen->display, event->xbutton.time);
 	if (!bPtr->flags.pullsDown)
 	    popDownMenu(bPtr);
@@ -725,9 +768,9 @@ handleActionEvents(XEvent *event, void *data)
 
 	if (bPtr->flags.insideMenu && bPtr->highlightedItem>=0) {	
 	    WMMenuItem *item;
-		
+
 	    item = WMGetPopUpButtonMenuItem(bPtr, bPtr->highlightedItem);
-	    
+
             if (WMGetMenuItemEnabled(item)) {
 		int i;
                 WMSetPopUpButtonSelectedItem(bPtr, bPtr->highlightedItem);
