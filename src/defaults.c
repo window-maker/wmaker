@@ -231,7 +231,7 @@ static WOptionEnumeration seColormapModes[] = {
 };
 
 static WOptionEnumeration sePlacements[] = {
-    {"Auto", WPM_SMART, 0}, {"Smart", WPM_SMART, 1},
+    {"Auto", WPM_AUTO, 0}, {"Smart", WPM_SMART, 0},
     {"Cascade", WPM_CASCADE, 0},
     {"Random", WPM_RANDOM, 0},
     {"Manual", WPM_MANUAL, 0},

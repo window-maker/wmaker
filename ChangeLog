@@ -43,6 +43,8 @@ Changes since version 0.60.0:
 - fixed crash when more than 1 dockapp fails to launch on startup
 - added a different dock setup config for each screen size
 - fixed PPosition handling
+- New "Smart placement" mode. 'Smart' is no longer an alias to 'Auto' but
+  a different mode of placing windows. 'Auto' keeps the old behavior.
 
 
 Changes since version 0.53.0:

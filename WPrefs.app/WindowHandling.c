@@ -76,7 +76,8 @@ static char *placements[] = {
     "auto",
 	"random",
 	"manual",
-	"cascade"
+	"cascade",
+        "smart"
 };
 
 
@@ -126,7 +127,7 @@ getPlacement(char *str)
     if (!str)
 	return 0;
 
-    if (strcasecmp(str, "auto")==0 || strcasecmp(str, "smart")==0)
+    if (strcasecmp(str, "auto")==0)
 	return 0;
     else if (strcasecmp(str, "random")==0)
 	return 1;
@@ -134,6 +135,8 @@ getPlacement(char *str)
 	return 2;
     else if (strcasecmp(str, "cascade")==0)
 	return 3;
+    else if (strcasecmp(str, "smart")==0)
+        return 4;
     else
 	wwarning(_("bad option value %s in WindowPlacement. Using default value"),
 		 str);
@@ -241,6 +244,7 @@ createPanel(Panel *p)
     WMAddPopUpButtonItem(panel->placP, _("Random"));
     WMAddPopUpButtonItem(panel->placP, _("Manual"));
     WMAddPopUpButtonItem(panel->placP, _("Cascade"));
+    WMAddPopUpButtonItem(panel->placP, _("Smart"));
     
     panel->porigL = WMCreateLabel(panel->placF);
     WMResizeWidget(panel->porigL, 120, 32);

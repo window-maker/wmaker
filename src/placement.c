@@ -412,6 +412,118 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 }
 
 
+static Bool
+autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
+                unsigned int width, unsigned int height, int tryCount)
+{
+    WScreen *scr = wwin->screen_ptr;
+    int test_x = 0, test_y = Y_ORIGIN(scr);
+    int loc_ok = False, tw,tx,ty,th;
+    int swidth, sx;
+    WWindow *test_window;
+    int extra_height;
+    WArea usableArea = scr->totalUsableArea;
+    
+    if (wwin->frame)
+	extra_height = wwin->frame->top_width + wwin->frame->bottom_width + 2;
+    else
+	extra_height = 24; /* random value */
+
+    swidth = usableArea.x2-usableArea.x1;
+    sx = X_ORIGIN(scr);
+
+    /* this was based on fvwm2's smart placement */
+
+    height += extra_height;
+
+    while (((test_y + height) < (scr->scr_height)) && (!loc_ok)) {
+
+	test_x = sx;
+
+	while (((test_x + width) < swidth) && (!loc_ok)) {
+
+	    loc_ok = True;
+	    test_window = scr->focused_window;
+
+	    while ((test_window != NULL) && (loc_ok == True)) {
+
+		if (test_window->frame->core->stacking->window_level
+		    < WMNormalLevel && tryCount > 0) {
+		    test_window = test_window->next;
+		    continue;
+		}
+#if 0
+                tw = test_window->client.width;
+                if (test_window->flags.shaded)
+                    th = test_window->frame->top_width;
+                else
+                    th = test_window->client.height + extra_height;
+#else
+		tw = test_window->frame->core->width;
+		th = test_window->frame->core->height;
+#endif
+		tx = test_window->frame_x;
+		ty = test_window->frame_y;
+
+		if ((tx < (test_x + width)) && ((tx + tw) > test_x) &&
+		    (ty < (test_y + height)) && ((ty + th) > test_y) &&
+		    (test_window->flags.mapped ||
+		     (test_window->flags.shaded &&
+		      !(test_window->flags.miniaturized ||
+			test_window->flags.hidden)))) {
+
+                    loc_ok = False;
+		}
+		test_window = test_window->next;
+	    }
+
+	    test_window = scr->focused_window;
+
+	    while ((test_window != NULL) && (loc_ok == True))  {
+
+		if (test_window->frame->core->stacking->window_level
+		    < WMNormalLevel && tryCount > 0) {
+		    test_window = test_window->prev;
+		    continue;
+		}
+#if 0
+                tw = test_window->client.width;
+                if (test_window->flags.shaded)
+                    th = test_window->frame->top_width;
+                else
+                    th = test_window->client.height + extra_height;
+#else
+		tw = test_window->frame->core->width;
+		th = test_window->frame->core->height;
+#endif
+		tx = test_window->frame_x;
+		ty = test_window->frame_y;
+
+		if ((tx < (test_x + width)) && ((tx + tw) > test_x) &&
+		    (ty < (test_y + height)) && ((ty + th) > test_y) &&
+		    (test_window->flags.mapped ||
+		     (test_window->flags.shaded &&
+		      !(test_window->flags.miniaturized ||
+			test_window->flags.hidden)))) {
+
+                    loc_ok = False;
+		}
+		test_window = test_window->prev;
+	    }
+	    if (loc_ok == True) {
+		*x_ret = test_x;
+		*y_ret = test_y;
+		break;
+	    }
+	    test_x += PLACETEST_HSTEP;
+	}
+	test_y += PLACETEST_VSTEP;
+    }
+
+    return loc_ok;
+}
+
+
 static void 
 cascadeWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret,
               unsigned int width, unsigned int height, int h)
@@ -452,8 +564,18 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 	smartPlaceWindow(wwin, x_ret, y_ret, width, height);
 	break;
 
+     case WPM_AUTO:
+	if (autoPlaceWindow(wwin, x_ret, y_ret, width, height, 0)) {
+	    break;
+	} else if (autoPlaceWindow(wwin, x_ret, y_ret, width, height, 1)) {
+	    break;
+	}
+	/* there isn't a break here, because if we fail, it should fall
+	   through to cascade placement, as people who want tiling want
+	   automagicness aren't going to want to place their window */
+
      case WPM_CASCADE:
-        if (wPreferences.window_placement == WPM_SMART)
+        if (wPreferences.window_placement == WPM_AUTO)
             scr->cascade_index++;
 
 	cascadeWindow(scr, wwin, x_ret, y_ret, width, height, h);

@@ -1270,9 +1270,9 @@ typedef struct {
 
 
 static int
-myCompare(dir_data *d1, dir_data *d2)
+myCompare(const void *d1, const void *d2)
 {
-    return strcmp(d1->name, d2->name);
+    return strcmp(((dir_data*) d1)->name, ((dir_data*) d2)->name);
 }
 
 
