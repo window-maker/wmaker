@@ -2,7 +2,21 @@ Changes since version 0.62.1:
 .............................
 - added blackbox style igradient (interwoven)
 - added wmagnify utility
+- changed behaviour of control/shift double click on titlebar for maximize
+- updated getstyle to account for extendspace options
+- fixed weird color bug in jpeg loader 
+	(Alban Hertroys <dalroi@wit401310.student.utwente.nl>)
+- improved and simplified fonts configuration for multibyte languages
+	(Tomohiro KUBOTA <kubota@debian.or.jp>)
+- rewrote menu reading code
+- added KDE menu support in rootmenu
+- added support for forced menu refresh in piped menus
+- cleaned ParseCommand() and renamed to TokenizeString()
+- rewrote menu editor in WPrefs
 - added definable workspace border (0..5 pixels). See NEWS.
+- fixed circulateraise on non-windoze cycling mode
+- fixed bug in RCombineAreaWithOpaqueness (Tim Malone <tmalone3@uswest.net>)
+- fixed bug with hangling of WM_COMMAND update in client.c (Andrew M. Langmead <aml@world.std.com>)
 
 Changes since version 0.62.0:
 .............................
