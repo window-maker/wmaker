@@ -63,6 +63,9 @@ extern XContext wWinContext;
 static proplist_t dWorkspaces=NULL;
 static proplist_t dClip, dName;
 
+#ifdef VIRTUAL_DESKTOP
+static BOOL initVDesk=False;
+#endif
 
 static void
 make_keys()
@@ -631,6 +634,102 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 /*   XSync(dpy, False); */
 }
 
+#ifdef VIRTUAL_DESKTOP
+
+void wWorkspaceManageEdge(WScreen *scr) {
+    int i;
+    int vmask;
+    XSetWindowAttributes attribs;
+
+    puts("ok");
+    if (wPreferences.vedge_thickness) {
+        initVDesk=True;
+        for (i = 0;i < scr->workspace_count; i++) {
+            puts("reset workspace");
+            scr->workspaces[i]->x = scr->workspaces[i]->y = 0;
+            wWorkspaceResizeViewPort(scr, i, wPreferences.vedge_width, wPreferences.vedge_height);
+        }
+
+        vmask = CWEventMask|CWOverrideRedirect;
+        attribs.event_mask = (EnterWindowMask | LeaveWindowMask | VisibilityChangeMask);
+        attribs.override_redirect = True;
+        scr->virtual_edge_u =
+            XCreateWindow(dpy, scr->root_win, 0, 0,
+                    scr->scr_width, wPreferences.vedge_thickness, 0,
+                    CopyFromParent, InputOnly, CopyFromParent, vmask, &attribs);
+        scr->virtual_edge_d =
+            XCreateWindow(dpy, scr->root_win, 0, scr->scr_height-wPreferences.vedge_thickness,
+                    scr->scr_width, wPreferences.vedge_thickness, 0,
+                    CopyFromParent, InputOnly, CopyFromParent, vmask, &attribs);
+        scr->virtual_edge_l =
+            XCreateWindow(dpy, scr->root_win, 0, 0,
+                    wPreferences.vedge_thickness, scr->scr_height, 0,
+                    CopyFromParent, InputOnly, CopyFromParent, vmask, &attribs);
+        scr->virtual_edge_r =
+            XCreateWindow(dpy, scr->root_win, scr->scr_width-wPreferences.vedge_thickness, 0,
+                    wPreferences.vedge_thickness, scr->scr_height, 0,
+                    CopyFromParent, InputOnly, CopyFromParent, vmask, &attribs);
+        XMapWindow(dpy, scr->virtual_edge_u);
+        XMapWindow(dpy, scr->virtual_edge_d);
+        XMapWindow(dpy, scr->virtual_edge_l);
+        XMapWindow(dpy, scr->virtual_edge_r);
+        wWorkspaceRaiseEdge(scr);
+    }
+}
+
+void wWorkspaceRaiseEdge(WScreen *scr) {
+    if (wPreferences.vedge_thickness && initVDesk) {
+        XRaiseWindow(dpy, scr->virtual_edge_u);
+        XRaiseWindow(dpy, scr->virtual_edge_d);
+        XRaiseWindow(dpy, scr->virtual_edge_l);
+        XRaiseWindow(dpy, scr->virtual_edge_r);
+    }
+}
+
+void wWorkspaceResizeViewPort(WScreen *scr, int workspace, int width, int height)
+{
+    if (width < scr->scr_width) return;
+    if (height < scr->scr_height) return;
+
+    scr->workspaces[workspace]->width = WMAX(width,scr->scr_width);
+    scr->workspaces[workspace]->height = WMAX(height,scr->scr_height);
+
+}
+
+void wWorkspaceSetViewPort(WScreen *scr, int workspace, int x, int y)
+{
+    int diff_x, diff_y;
+    WWindow *wwin;
+
+    if (x < 0) return;
+    if (y < 0) return;
+    if (x + scr->scr_width > scr->workspaces[workspace]->width) return;
+    if (y + scr->scr_height > scr->workspaces[workspace]->height) return;
+
+    diff_x = scr->workspaces[workspace]->x - x;
+    diff_y = scr->workspaces[workspace]->y - y;
+
+    scr->workspaces[workspace]->x = WMIN(x, scr->workspaces[workspace]->width - scr->scr_width);
+    scr->workspaces[workspace]->y = WMIN(y, scr->workspaces[workspace]->height - scr->scr_height);
+
+    printf("set view %d %d, %d\n",workspace, scr->workspaces[workspace]->x, scr->workspaces[workspace]->y);
+
+    wwin = scr->focused_window;
+    while (wwin) {
+        if (wwin->frame->workspace == workspace) {
+            wWindowMove(wwin, wwin->frame_x + diff_x, wwin->frame_y + diff_y);
+            wWindowSynthConfigureNotify(wwin);
+        }
+        wwin = wwin->prev;
+    }
+}
+
+void wWorkspaceGetViewPosition(WScreen *scr, int workspace, int *x, int *y) {
+    *x = scr->workspaces[workspace]->x;
+    *y = scr->workspaces[workspace]->y;
+}
+
+#endif
 
 static void
 switchWSCommand(WMenu *menu, WMenuEntry *entry)

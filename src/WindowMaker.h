@@ -360,6 +360,14 @@ typedef struct WPreferences {
 
     char ws_advance;                   /* Create new workspace and advance */
 
+#ifdef VIRTUAL_DESKTOP
+    unsigned int vedge_thickness;
+    unsigned int vedge_hscrollspeed;
+    unsigned int vedge_vscrollspeed;
+    unsigned int vedge_height; /* could be change to workspace specific one day */
+    unsigned int vedge_width;
+#endif
+
     char ws_cycle;                     /* Cycle existing workspaces */
 
     char save_session_on_exit;	       /* automatically save session on exit */

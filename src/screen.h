@@ -69,6 +69,13 @@ typedef struct _WScreen {
     int scr_width;		       /* size of the screen */
     int scr_height;
 
+#ifdef VIRTUAL_DESKTOP
+    Window virtual_edge_u;
+    Window virtual_edge_d;
+    Window virtual_edge_l;
+    Window virtual_edge_r;
+#endif
+
     Window root_win;		       /* root window of screen */
     int  depth;			       /* depth of the default visual */
     Colormap colormap;		       /* root colormap */

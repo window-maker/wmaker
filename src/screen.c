@@ -1035,6 +1035,13 @@ wScreenRestoreState(WScreen *scr)
 
     wWorkspaceRestoreState(scr);
 
+#ifdef VIRTUAL_DESKTOP
+        /*
+         *      * create inputonly windows at the border of screen
+         *           */
+        wWorkspaceManageEdge(scr);
+#endif
+
     if (!wPreferences.flags.nodock) {
         state = PLGetDictionaryEntry(scr->session_state, dDock);
         scr->dock = wDockRestoreState(scr, state, WM_DOCK);

@@ -410,6 +410,23 @@ WDefaultEntry optionList[] = {
     {"WorkspaceNameDisplayPosition", "center",	seDisplayPositions,
 	  &wPreferences.workspace_name_display_position, getEnum, NULL
     },
+#ifdef VIRTUAL_DESKTOP
+    {"VirtualEdgeThickness", "1",   NULL,
+        &wPreferences.vedge_thickness, getInt,        NULL
+    },
+    {"VirtualEdgeHorizonScrollSpeed", "1",  NULL,
+        &wPreferences.vedge_hscrollspeed, getInt,     NULL
+    },
+    {"VirtualEdgeVerticalScrollSpeed", "1", NULL,
+        &wPreferences.vedge_vscrollspeed, getInt,     NULL
+    },
+    {"VirtualEdgeWidth", "2000",    NULL,
+        &wPreferences.vedge_width, getInt,        NULL
+    },
+    {"VirtualEdgeHeight", "2000",   NULL,
+        &wPreferences.vedge_height, getInt,       NULL
+    },
+#endif
     {"StickyIcons", "NO",			NULL,
 	  &wPreferences.sticky_icons, getBool, setStickyIcons
     },

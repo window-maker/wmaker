@@ -1612,6 +1612,23 @@ getScrollAmount(WMenu *menu, int *hamount, int *vamount)
     
     getPointerPosition(scr, &xroot, &yroot);
 
+#ifdef VIRTUAL_DESKTOP
+    if (wPreferences.vedge_thickness) {
+        if (xroot <= wPreferences.vedge_thickness + 1 && menuX1 < wPreferences.vedge_thickness) {
+            /* scroll to the right */
+            *hamount = MIN(MENU_SCROLL_STEP, abs(menuX1));
+
+        } else if (xroot >= screenW-2-wPreferences.vedge_thickness && menuX2 > screenW-1-wPreferences.vedge_thickness) {
+            /* scroll to the left */
+            *hamount = MIN(MENU_SCROLL_STEP, abs(menuX2-screenW-1));
+
+            if (*hamount==0)
+                *hamount = 1;
+
+            *hamount = -*hamount;
+        }
+    } else
+#endif
 
     if (xroot <= 1 && menuX1 < 0) {
 	/* scroll to the right */

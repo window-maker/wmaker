@@ -307,6 +307,9 @@ wRaiseFrame(WCoreWindow *frame)
 	    wKWMSendEventMessage(wwin, WKWMRaiseWindow);
     }
 #endif
+#ifdef VIRTUAL_DESKTOP
+    wWorkspaceRaiseEdge(frame->screen_ptr);
+#endif
 }
 
 
