@@ -902,6 +902,7 @@ StartUp(Bool defaultScreenOnly)
 	wwarning(_("could not read domain \"%s\" from defaults database"),
 		 "WMRootMenu");
     }
+    wDefaultsMergeGlobalMenus(WDRootMenu);
 
     WDWindowAttributes = wDefaultsInitDomain("WMWindowAttributes", True);
     if (!WDWindowAttributes->dictionary) {

@@ -247,10 +247,9 @@
 #endif
 
 /* the file of the system wide submenu to be forced into the main menu */
-/* remove the comments if you want it */
-/*
-#define GLOBAL_SUBMENU_FILE PKGDATADIR"/GlobalMenu"
-*/
+#define GLOBAL_PREAMBLE_MENU_FILE "GlobalMenu.pre"
+#define GLOBAL_EPILOGUE_MENU_FILE "GlobalMenu.post"
+
 
 /* pixmap path */
 #define DEF_PIXMAP_PATHS \

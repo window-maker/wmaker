@@ -225,7 +225,7 @@ typedef struct WorkspaceNameData {
 
 
 static void
-hideWorkpaceName(void *data)
+hideWorkspaceName(void *data)
 {
     WScreen *scr = (WScreen*)data;
 
@@ -246,7 +246,7 @@ hideWorkpaceName(void *data)
 	Pixmap pix;
 
 	scr->workspace_name_timer =
-	    WMAddTimerHandler(WORKSPACE_NAME_FADE_DELAY, hideWorkpaceName,
+	    WMAddTimerHandler(WORKSPACE_NAME_FADE_DELAY, hideWorkspaceName,
 			      scr);
 
 	RCombineImagesWithOpaqueness(img, scr->workspace_name_data->text,
@@ -289,7 +289,7 @@ showWorkspaceName(WScreen *scr, int workspace)
 	XFlush(dpy);
     }
     scr->workspace_name_timer = WMAddTimerHandler(WORKSPACE_NAME_DELAY,
-						  hideWorkpaceName, scr);
+						  hideWorkspaceName, scr);
 
     if (scr->workspace_name_data) {
 	RReleaseImage(scr->workspace_name_data->back);
@@ -425,7 +425,7 @@ erro:
 
     scr->workspace_name_timer = WMAddTimerHandler(WORKSPACE_NAME_DELAY +
 						  10*WORKSPACE_NAME_FADE_DELAY,
-						  hideWorkpaceName, scr);
+						  hideWorkspaceName, scr);
 }
 
 

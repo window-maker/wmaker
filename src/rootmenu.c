@@ -1262,6 +1262,7 @@ readMenuFile(WScreen *scr, char *file_name)
     return menu;
 }
 
+
 /************    Menu Configuration From Pipe      *************/
 
 static WMenu*
@@ -1668,7 +1669,7 @@ configureMenu(WScreen *scr, WMPropList *definition)
 	if (!scr->root_menu || stat_buf.st_mtime > scr->root_menu->timestamp
 	    /* if the pointer in WMRootMenu has changed */
 	    || WDRootMenu->timestamp > scr->root_menu->timestamp) {
-	    
+
 	    if (menu_is_default) {
 		wwarning(_("using default menu file \"%s\" as the menu referenced in WMRootMenu could not be found "),
 			 path);
@@ -1699,7 +1700,7 @@ configureMenu(WScreen *scr, WMPropList *definition)
 	return NULL;
     }
     mtitle = WMGetFromPLString(elem);
-    
+
     menu = wMenuCreate(scr, mtitle, False);
     menu->on_destroy = removeShortcutsForMenu;
 
@@ -1776,12 +1777,6 @@ configureMenu(WScreen *scr, WMPropList *definition)
     
     return menu;
 }
-
-
-
-
-
-
 
 
 /*

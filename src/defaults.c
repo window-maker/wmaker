@@ -932,6 +932,78 @@ readGlobalDomain(char *domainName, Bool requireDictionary)
 }
 
 
+
+
+
+#if defined(GLOBAL_PREAMBLE_MENU_FILE) || defined(GLOBAL_EPILOGUE_MENU_FILE)
+static void prependMenu(WMPropList *destarr, WMPropList *array)
+{
+    WMPropList *item;
+    int i;
+
+    for (i=0; i<WMGetPropListItemCount(array); i++) {
+        item = WMGetFromPLArray(array, i);
+        if (item)
+            WMInsertInPLArray(destarr, i+1, item);
+    }
+}
+
+static void appendMenu(WMPropList *destarr, WMPropList *array)
+{
+    WMPropList *item;
+    int i;
+
+    for (i=0; i<WMGetPropListItemCount(array); i++) {
+        item = WMGetFromPLArray(array, i);
+        if (item)
+            WMAddToPLArray(destarr, item);
+    }
+}
+#endif
+
+
+void wDefaultsMergeGlobalMenus(WDDomain *menuDomain)
+{    
+    WMPropList *menu = menuDomain->dictionary;
+    WMPropList *submenu;
+    
+    if (!menu || !WMIsPLArray(menu))
+        return;
+
+#ifdef GLOBAL_PREAMBLE_MENU_FILE
+    submenu = WMReadPropListFromFile(SYSCONFDIR"/WindowMaker/"GLOBAL_PREAMBLE_MENU_FILE);
+
+    if (submenu && !WMIsPLArray(submenu)) {
+        wwarning(_("invalid global menu file %s"),
+                 GLOBAL_PREAMBLE_MENU_FILE);
+        WMReleasePropList(submenu);
+        submenu = NULL;
+    }
+    if (submenu) {
+        prependMenu(menu, submenu);
+        WMReleasePropList(submenu);
+    }
+#endif
+
+#ifdef GLOBAL_EPILOGUE_MENU_FILE
+    submenu = WMReadPropListFromFile(SYSCONFDIR"/WindowMaker/"GLOBAL_EPILOGUE_MENU_FILE);
+
+    if (submenu && !WMIsPLArray(submenu)) {
+        wwarning(_("invalid global menu file %s"),
+                 GLOBAL_EPILOGUE_MENU_FILE);
+        WMReleasePropList(submenu);
+        submenu = NULL;
+    }
+    if (submenu) {
+        appendMenu(menu, submenu);
+        WMReleasePropList(submenu);
+    }
+#endif
+    
+    menuDomain->dictionary = menu;
+}
+
+
 #if 0
 WMPropList*
 wDefaultsInit(int screen_number)
@@ -1068,6 +1140,7 @@ wReadStaticDefaults(WMPropList *dict)
 }
 
 
+
 void
 wDefaultsCheckDomains(void *foo)
 {
@@ -1199,6 +1272,7 @@ wDefaultsCheckDomains(void *foo)
                     WMReleasePropList(WDRootMenu->dictionary);
                 }
                 WDRootMenu->dictionary = dict;
+                wDefaultsMergeGlobalMenus(WDRootMenu);
             }
         } else {
             wwarning(_("could not load domain %s from user defaults database"),

@@ -85,6 +85,7 @@ Changes since version 0.80.2:
   and vlaad)
 - Updated French translations (Antoine Hulin <antoine@origan.fdn.org>)
 - Xinerama support for Solaris
+- Added global menu support (see NEWS)
 
 Changes since version 0.80.1:
 .............................

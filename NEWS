@@ -31,6 +31,29 @@ configuration (read the details in README.antialiasing). Else you may get
 unepleasant results in the look of your screen :P
 
 
+Global Submenus
+---------------
+
+Global menus allow for system wide menus that are added to every users
+application menus. They are located in /usr/etc/WindowMaker/,
+/usr/local/etc/WindowMaker or whatever is your sysconf directory
+for WindowMaker. There are 2 files:
+
+GlobalMenu.pre, which is added to the beginning of the menu and
+GlobalMenu.post, which is added to the end of the menu.
+
+These are to be proplist format menus, for example:
+
+(("Foobar", EXEC, foobar),
+ ("Blabla", EXEC, blabla))
+
+or, in case you want a submenu:
+
+(("Submenu", 
+	("Foobar", EXEC, foobar),
+	("Blabla", EXEC, blabla)))
+
+
 --- 0.80.0
 
 Shading/Unshading windows using mouse wheel on their titlebar
