@@ -1,3 +1,11 @@
+Newly added
+- after a crash, wmaker will forget the hidden state of the apps and just 
+  show their windows minimized. normal restart is unaffected
+- after a crash, wmaker will completely mess the window's saved geometries
+  and maximizing will have weird results. restart is unaffected
+- after a crash/restart the child process keeps accumulating command line
+  options (one for each restart/crash)
+
 - wmaker will not stop managing a screen even if another window manager
   requests that, through the ICCCM 2.0 manager selection stuff
 - stacking code is buggy (or XFree is buggy)
