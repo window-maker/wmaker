@@ -110,7 +110,8 @@ struct W_DraggingInfo {
     /* should be treated as internal data */
     WMView *sourceView;
     WMView *destView;
-
+    WMSize mouseOffset;
+    unsigned finished:1;
 };
     
 
@@ -272,6 +273,8 @@ typedef struct W_Screen {
     Atom xdndActionLink;
     Atom xdndActionAsk;
     Atom xdndActionPrivate;
+    
+    Atom wmIconDragOffsetAtom;
 
     Atom wmStateAtom;		       /* WM_STATE */
 
