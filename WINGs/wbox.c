@@ -31,6 +31,7 @@ typedef struct W_Box {
 #define DEFAULT_HEIGHT		40
 
 
+
 static void destroyBox(Box *bPtr);
 
 static void handleEvents(XEvent *event, void *data);
@@ -185,7 +186,7 @@ WMAddBoxSubview(WMBox *bPtr, WMView *view, Bool expand, Bool fill,
     bPtr->subviews[i].fill = fill;
     bPtr->subviews[i].space = space;
     bPtr->subviews[i].end = 0;
-    
+
     rearrange(bPtr);
 }
 
@@ -210,8 +211,24 @@ WMAddBoxSubviewAtEnd(WMBox *bPtr, WMView *view, Bool expand, Bool fill,
     bPtr->subviews[i].fill = fill;
     bPtr->subviews[i].space = space;
     bPtr->subviews[i].end = 1;
-    
+
     rearrange(bPtr);
+}
+
+
+void
+WMRemoveBoxSubview(WMBox *bPtr, WMView *view)
+{
+    int i;
+    
+    for (i = 0; i < bPtr->subviewCount; i++) {
+	if (bPtr->subviews[i].view == view) {
+	    memmove(&bPtr->subviews[i], &bPtr->subviews[i+1],
+		    (bPtr->subviewCount - i - 1) * sizeof(void*));
+	    bPtr->subviewCount--;
+	    break;
+	}
+    }
 }
 
 
@@ -226,18 +243,21 @@ WMSetBoxHorizontal(WMBox *box, Bool flag)
 void
 WMSetBoxExpandsToParent(WMBox *box)
 {
+    WMSize size = W_VIEW(box)->parent->size;
+
     WMAddNotificationObserver(resizedParent, box,
 			      WMViewSizeDidChangeNotification, 
 			      W_VIEW(box)->parent);
     WMSetViewNotifySizeChanges(W_VIEW(box)->parent, True);
-    WMResizeWidget(box, W_VIEW(box)->parent->size.width,
-		   W_VIEW(box)->parent->size.height);
+
+    WMResizeWidget(box, size.width, size.height);
 }
 
 
 static void
 destroyBox(Box *bPtr)
 {
+    WMRemoveNotificationObserver(bPtr);
     wfree(bPtr);
 }
 
@@ -247,6 +267,7 @@ didResize(struct W_ViewDelegate *delegate, WMView *view)
 {
     rearrange(view->self);
 }
+
 
 static void
 handleEvents(XEvent *event, void *data)
@@ -265,3 +286,4 @@ handleEvents(XEvent *event, void *data)
 	break;
     }
 }
+
