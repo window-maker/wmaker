@@ -716,7 +716,7 @@ if(tb->blank) {tb->text[0] = 'F'; } */
             WMDrawString(scr, tPtr->db, gc, font, 
                 tb->sections[s].x - tPtr->hpos, y, text, len);
 
-            if (tb->underlined) { 
+            if (!tPtr->flags.monoFont && tb->underlined) { 
                 XDrawLine(dpy, tPtr->db, gc,     
                     tb->sections[s].x - tPtr->hpos, 
                     y + font->y + 1,
@@ -785,7 +785,7 @@ if(tb->blank) {tb->text[0] = 'F'; } */
 
                 }
 
-                if (tb->underlined) { 
+                if (!tPtr->flags.monoFont && tb->underlined) { 
                     XDrawLine(dpy, tPtr->db, WMColorGC(tb->color), 
                     tb->sections[0].x - tPtr->hpos,
                     tb->sections[0].y + h - tPtr->vpos,
