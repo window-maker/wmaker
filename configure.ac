@@ -17,7 +17,7 @@ AC_INIT(src/WindowMaker.h)
 
 AM_INIT_AUTOMAKE(WindowMaker, 0.80.1)
 
-AM_PROG_LIBTOOL
+AC_PROG_LIBTOOL
 
 # by Marcelo Magallon <mmagallo@efis.ucr.ac.cr>
 # Turn around -rpath problem with libtool 1.0c
@@ -38,7 +38,7 @@ AM_CONFIG_HEADER(src/config.h)
 
 dnl Checks for host/os name
 dnl =======================
-AC_CANONICAL_HOST
+dnl AC_CANONICAL_HOST -- already done by AC_PROG_LIBTOOL
 
 
 dnl Checks for programs.
