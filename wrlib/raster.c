@@ -386,7 +386,7 @@ RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
     if (height > image->height - dy)
 	height = image->height - dy;
 
-    d = image->data + dy*image->width*dch + dx;
+    d = image->data + (dy*image->width + dx) * dch;
     dwi = (image->width - width)*dch;
 
     c_opaqueness = 255 - opaqueness;
