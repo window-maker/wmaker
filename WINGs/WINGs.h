@@ -193,13 +193,13 @@ enum {
 };
 
 typedef enum {
-	WMGrayModeColorPanel,
- 	WMRGBModeColorPanel,
-	WMCMYKModeColorPanel,
-	WMHSBModeColorPanel,
-	WMCustomPaletteModeColorPanel,
-	WMColorListModeColorPanel,
-	WMWheelModeColorPanel
+	WMGrayModeColorPanel = 1,
+ 	WMRGBModeColorPanel = 2,
+	WMCMYKModeColorPanel = 3,
+	WMHSBModeColorPanel = 4,
+	WMCustomPaletteModeColorPanel = 5,
+	WMColorListModeColorPanel = 6,
+	WMWheelModeColorPanel = 7
 } WMColorPanelMode;
 
 

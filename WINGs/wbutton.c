@@ -411,6 +411,8 @@ void
 WMSetButtonSelected(WMButton *bPtr, int isSelected)
 {
     bPtr->flags.selected = isSelected;
+ 
+    WMPostNotificationName(WMPushedRadioNotification, bPtr, NULL);
     
     if (bPtr->view->flags.realized) {
 	paintButton(bPtr);

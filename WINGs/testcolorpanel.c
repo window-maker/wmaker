@@ -25,6 +25,9 @@ int main(int argc, char **argv)
   WMScreen		*scr;
   WMPixmap		*pixmap;
   WMColorPanel	*panel;
+  WMColor	*startcolor;
+  char		*colorname = NULL;
+  int		i;
 
 #if 0
     XSynchronize(dpy, True);
@@ -40,11 +43,36 @@ int main(int argc, char **argv)
     exit(1);
   }
 
-  scr = WMCreateSimpleApplicationScreen(dpy);
+  for (i = 1; i < argc; i++) {
+      if (strcmp(argv[i], "-h")==0 || strcmp(argv[i], "--help")==0) {
+	  printf("testcolorpanel [-h] [--help] [-c <color>]"
+		 "[--color <color>]\n");
+	  exit(0);
+      }
+      if (strcmp(argv[i], "-c")==0 || strcmp(argv[i], "--color")==0) {
+	  i++;
+	  if (i >= argc) {
+	      printf("%s: missing argument for option '%s'\n",
+		      argv[0], argv[i-1]);
+	      exit(1);
+	  }
+	  colorname = argv[i];
+      }
+  }
 
+  scr = WMCreateSimpleApplicationScreen(dpy);
+	
   pixmap = WMCreatePixmapFromXPMData(scr, GNUSTEP_XPM);
-  WMSetApplicationIconImage(scr, pixmap); WMReleasePixmap(pixmap);
+  WMSetApplicationIconImage(scr, pixmap);
+  WMReleasePixmap(pixmap);
+  
   panel = WMGetColorPanel(scr);
+
+  if (colorname) {
+      startcolor = WMCreateNamedColor(scr, colorname, False);
+      WMSetColorPanelColor(panel, startcolor);
+      WMReleaseColor(startcolor);
+  }
   
   WMShowColorPanel(panel);
 

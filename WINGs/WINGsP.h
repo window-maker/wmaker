@@ -368,6 +368,13 @@ extern _WINGsConfiguration WINGsConfiguration;
 
 #define W_VIEW_REALIZED(view)	(view)->flags.realized
 #define W_VIEW_MAPPED(view)	(view)->flags.mapped
+    
+#define W_VIEW_SCREEN(view)	(view)->screen
+#define W_VIEW_DRAWABLE(view)	(view)->window
+    
+#define W_VIEW_WIDTH(view)	(view)->size.width
+#define W_VIEW_HEIGHT(view)	(view)->size.height
+    
 
 #define W_PIXEL(c)		(c)->color.pixel
 
