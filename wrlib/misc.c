@@ -133,41 +133,43 @@ RMessageForError(int errorCode)
     switch (errorCode) {
      case RERR_NONE:
 	return "no error";
-	break;
+
      case RERR_OPEN:
 	return "could not open file";
-	break;
+
      case RERR_READ:
 	return "error reading from file";
-	break;
+
      case RERR_WRITE:
 	return "error writing to file";
-	break;
+
      case RERR_NOMEMORY:
 	return "out of memory";
-	break;
+
      case RERR_NOCOLOR:
 	return "out of color cells";
-	break;
+
      case RERR_BADIMAGEFILE:
 	return "invalid or corrupted image file";
-	break;
+
      case RERR_BADFORMAT:
 	return "the image format in the file is not supported and can't be loaded";
-	break;
+
      case RERR_BADINDEX:
 	return "image file does not contain requested image index";
-	break;
+
      case RERR_BADVISUALID:
 	return "request for an invalid visual ID";
-	break;
+
+     case RERR_STDCMAPFAIL:
+	return "failed to create standard colormap";
+
      case RERR_XERROR:
 	return "internal X error";
-	break;
+
      default:
      case RERR_INTERNAL:
 	return "internal error";
-	break;
     }
 }
 

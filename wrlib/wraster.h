@@ -39,8 +39,8 @@
 #define RLRASTER_H_
 
 
-/* version of the header for the library: 0.15 */
-#define WRASTER_HEADER_VERSION	15
+/* version of the header for the library: 0.16 */
+#define WRASTER_HEADER_VERSION	16
 
 
 #include <X11/Xlib.h>
@@ -49,6 +49,11 @@
 #ifdef XSHM
 #include <X11/extensions/XShm.h>
 #endif
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 /* RBestMatchRendering or RDitheredRendering */
 #define RC_RenderMode 		(1<<0)
@@ -71,10 +76,24 @@
 /* filter type for smoothed scaling */
 #define RC_ScalingFilter	(1<<6)
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+/* standard colormap usage */
+#define RC_StandardColormap	(1<<7)
 
+    
+    
+
+    
+    
+/* std colormap usage/creation modes */
+enum {
+    RUseStdColormap,		       /* default. fallbacks to RIgnore.. if 
+					there is none defined */
+	RCreateStdColormap,
+	RIgnoreStdColormap
+};
+    
+
+    
 typedef struct RContextAttributes {
     int flags;
     int render_mode;
@@ -85,6 +104,7 @@ typedef struct RContextAttributes {
     VisualID visualid;		       /* visual ID to use */
     int use_shared_memory;	       /* True of False */
     int scaling_filter;
+    int standard_colormap_mode;	       /* what to do with std cma */
 } RContextAttributes;
 
 
@@ -110,7 +130,7 @@ typedef struct RContext {
     
     unsigned long black;
     unsigned long white;
-    
+
     int red_offset;		       /* only used in 24bpp */
     int green_offset;
     int blue_offset;
@@ -252,7 +272,8 @@ enum {
 #define RERR_BADINDEX		8      /* no such image index in file */
 
 #define RERR_BADVISUALID	16     /* invalid visual ID requested for context */
-
+#define RERR_STDCMAPFAIL	17     /* failed to created std colormap */
+    
 #define RERR_XERROR		127    /* internal X error */
 #define RERR_INTERNAL		128    /* should not happen */
 

@@ -57,11 +57,24 @@ Pixmap R_CreateXImageMappedPixmap(RContext *context, RXImage *ximage);
 typedef struct RConversionTable {
     unsigned short table[256];
     unsigned short index;
+
     struct RConversionTable *next;
 } RConversionTable;
 
 
+typedef struct RStdConversionTable {
+    unsigned int table[256];
+
+    unsigned short mult;
+    unsigned short max;
+
+    struct RStdConversionTable *next;
+} RStdConversionTable;
+
+
+
 static RConversionTable *conversionTable = NULL;
+static RStdConversionTable *stdConversionTable = NULL;
 
 
 static unsigned short*
@@ -89,6 +102,38 @@ computeTable(unsigned short mask)
     tmp->index = mask;
     tmp->next = conversionTable;
     conversionTable = tmp;
+    return tmp->table;
+}
+
+
+static unsigned int*
+computeStdTable(unsigned int mult, unsigned int max)
+{
+    RStdConversionTable *tmp = stdConversionTable;
+    unsigned int i;
+
+    while (tmp) {
+        if (tmp->mult == mult && tmp->max == max)
+            break;
+        tmp = tmp->next;
+    }
+
+    if (tmp)
+        return tmp->table;
+
+    tmp = (RStdConversionTable *)malloc(sizeof(RStdConversionTable));
+    if (tmp == NULL)
+        return NULL;
+
+    for (i=0; i<256; i++) {
+        tmp->table[i] = (i*max)/0xff * mult;
+    }
+    tmp->mult = mult;
+    tmp->max = max;
+
+    tmp->next = stdConversionTable;
+    stdConversionTable = tmp;
+
     return tmp->table;
 }
 
@@ -585,6 +630,162 @@ image2PseudoColor(RContext *ctx, RImage *image)
 }
 
 
+/*
+ * For standard colormap
+ */
+static RXImage*
+image2StandardPseudoColor(RContext *ctx, RImage *image)
+{
+    RXImage *ximg;
+    register int x, y, r, g, b;
+    unsigned char *red, *grn, *blu;
+    unsigned long pixel;
+    unsigned char *data;
+    unsigned int *rtable, *gtable, *btable;
+    unsigned int base_pixel = ctx->std_rgb_map->base_pixel;
+    int ofs;
+    /*register unsigned char maxrgb = 0xff;*/
+
+    ximg = RCreateXImage(ctx, ctx->depth, image->width, image->height);
+    if (!ximg) {
+	return NULL;
+    }
+
+    red = image->data[0];
+    grn = image->data[1];
+    blu = image->data[2];
+    
+    data = (unsigned char *)ximg->image->data;
+
+    
+    rtable = computeStdTable(ctx->std_rgb_map->red_mult,
+			     ctx->std_rgb_map->red_max);
+
+    gtable = computeStdTable(ctx->std_rgb_map->green_mult,
+			     ctx->std_rgb_map->green_max);
+
+    btable = computeStdTable(ctx->std_rgb_map->blue_mult,
+			     ctx->std_rgb_map->blue_max);
+
+    if (rtable==NULL || gtable==NULL || btable==NULL) {
+	RErrorCode = RERR_NOMEMORY;
+        RDestroyXImage(ctx, ximg);
+        return NULL;
+    }
+
+
+    if (ctx->attribs->render_mode == RBestMatchRendering) {
+	for (y=0, ofs = 0; y<image->height; y++) {
+	    for (x=0; x<image->width; x++, ofs++) {
+		/* reduce pixel */
+
+		pixel = (rtable[red[ofs]] + gtable[grn[ofs]]
+			 + btable[blu[ofs]] + base_pixel) & 0xffffffff;
+
+                XPutPixel(ximg->image, x, y, pixel);
+	    }
+	}
+    } else {
+	/* dither */
+	short *rerr, *gerr, *berr;
+	short *nrerr, *ngerr, *nberr;
+	short *terr;
+	int rer, ger, ber;
+
+#ifdef DEBUG
+        printf("pseudo color dithering with %d colors per channel\n", cpc);
+#endif
+	rerr = (short*)alloca((image->width+2)*sizeof(short));
+	gerr = (short*)alloca((image->width+2)*sizeof(short));
+	berr = (short*)alloca((image->width+2)*sizeof(short));
+	nrerr = (short*)alloca((image->width+2)*sizeof(short));
+	ngerr = (short*)alloca((image->width+2)*sizeof(short));
+	nberr = (short*)alloca((image->width+2)*sizeof(short));
+	if (!rerr || !gerr || !berr || !nrerr || !ngerr || !nberr) {
+	    RErrorCode = RERR_NOMEMORY;
+	    RDestroyXImage(ctx, ximg);
+	    return NULL;
+	}
+	for (x=0; x<image->width; x++) {
+	    rerr[x] = red[x];
+	    gerr[x] = grn[x];
+	    berr[x] = blu[x];
+	}
+        rerr[x] = gerr[x] = berr[x] = 0;
+	/* convert and dither the image to XImage */
+	for (y=0, ofs=0; y<image->height; y++) {
+	    if (y<image->height-1) {
+		int x1;
+		for (x=0, x1=ofs+image->width; x<image->width; x++, x1++) {
+		    nrerr[x] = red[x1];
+		    ngerr[x] = grn[x1];
+		    nberr[x] = blu[x1];
+		}
+		/* last column */
+		x1--;
+		nrerr[x] = red[x1];
+		ngerr[x] = grn[x1];
+		nberr[x] = blu[x1];
+	    }
+	    for (x=0; x<image->width; x++, ofs++) {
+		/* reduce pixel */
+                if (rerr[x]>0xff) rerr[x]=0xff; else if (rerr[x]<0) rerr[x]=0;
+                if (gerr[x]>0xff) gerr[x]=0xff; else if (gerr[x]<0) gerr[x]=0;
+                if (berr[x]>0xff) berr[x]=0xff; else if (berr[x]<0) berr[x]=0;
+
+                r = rtable[rerr[x]];
+                g = gtable[gerr[x]];
+                b = btable[berr[x]];
+
+		pixel = r + g + b;
+
+                XPutPixel(ximg->image, x, y, pixel+base_pixel);
+
+		/* calc error */
+		rer = rerr[x] - (ctx->colors[pixel].red>>8);
+		ger = gerr[x] - (ctx->colors[pixel].green>>8);
+		ber = berr[x] - (ctx->colors[pixel].blue>>8);
+
+		/* distribute error */
+		rerr[x+1]+=(rer*7)/16;
+		gerr[x+1]+=(ger*7)/16;
+		berr[x+1]+=(ber*7)/16;
+		
+		nrerr[x]+=(rer*5)/16;
+		ngerr[x]+=(ger*5)/16;
+		nberr[x]+=(ber*5)/16;
+
+		if (x>0) {
+		    nrerr[x-1]+=(rer*3)/16;
+		    ngerr[x-1]+=(ger*3)/16;
+		    nberr[x-1]+=(ber*3)/16;
+		}
+
+		nrerr[x+1]+=rer/16;
+		ngerr[x+1]+=ger/16;
+		nberr[x+1]+=ber/16;
+	    }
+	    /* skip to next line */
+	    terr = rerr;
+	    rerr = nrerr;
+	    nrerr = terr;
+
+	    terr = gerr;
+	    gerr = ngerr;
+	    ngerr = terr;
+
+	    terr = berr;
+	    berr = nberr;
+	    nberr = terr;
+	}
+    }
+    ximg->image->data = (char*)data;
+
+    return ximg;
+}
+
+
+
 static RXImage*
 image2GrayScale(RContext *ctx, RImage *image)
 {
@@ -747,11 +948,19 @@ RConvertImage(RContext *context, RImage *image, Pixmap *pixmap)
 	else
 	    ximg = image2TrueColor(context, image);
 
-    } else if (context->vclass == PseudoColor || context->vclass == StaticColor)
+    } else if (context->vclass == PseudoColor 
+	       || context->vclass == StaticColor) {
+
+	if (context->attribs->standard_colormap_mode != RIgnoreStdColormap)
+	    ximg = image2StandardPseudoColor(context, image);
+	else
 	    ximg = image2PseudoColor(context, image);
-    else if (context->vclass == GrayScale || context->vclass == StaticGray)
+
+    } else if (context->vclass == GrayScale || context->vclass == StaticGray) {
+
 	ximg = image2GrayScale(context, image);
-    
+    }
+
     if (!ximg) {
 #ifdef C_ALLOCA
 	alloca(0);
@@ -874,27 +1083,58 @@ RGetClosestXColor(RContext *context, RColor *color, XColor *retColor)
 	retColor->green = color->green << 8;
 	retColor->blue = color->blue << 8;
 	retColor->flags = DoRed|DoGreen|DoBlue;
-	
-    } else if (context->vclass == PseudoColor || context->vclass == StaticColor) {
-	const int cpc=context->attribs->colors_per_channel;
-	const unsigned short rmask = cpc-1; /* different sizes could be used */
-	const unsigned short gmask = rmask; /* for r,g,b */
-	const unsigned short bmask = rmask;
-	unsigned short *rtable, *gtable, *btable;
-	const int cpccpc = cpc*cpc;
-	int index;
 
-	rtable = computeTable(rmask);
-	gtable = computeTable(gmask);
-	btable = computeTable(bmask);
+    } else if (context->vclass == PseudoColor
+	       || context->vclass == StaticColor) {
 
-	if (rtable==NULL || gtable==NULL || btable==NULL) {
-	    RErrorCode = RERR_NOMEMORY;
-	    return False;
+	if (context->attribs->standard_colormap_mode != RIgnoreStdColormap) {
+	    unsigned int *rtable, *gtable, *btable;
+
+	    rtable = computeStdTable(context->std_rgb_map->red_mult,
+				     context->std_rgb_map->red_max);
+
+	    gtable = computeStdTable(context->std_rgb_map->green_mult,
+				     context->std_rgb_map->green_max);
+
+	    btable = computeStdTable(context->std_rgb_map->blue_mult,
+				     context->std_rgb_map->blue_max);
+
+	    if (rtable==NULL || gtable==NULL || btable==NULL) {
+		RErrorCode = RERR_NOMEMORY;
+		return False;
+	    }
+
+	    retColor->pixel = (rtable[color->red] 
+			       + gtable[color->green]
+			       + btable[color->blue] 
+			       + context->std_rgb_map->base_pixel) & 0xffffffff;
+	    retColor->red = color->red<<8;
+	    retColor->green = color->green<<8;
+	    retColor->blue = color->blue<<8;
+	    retColor->flags = DoRed|DoGreen|DoBlue;
+	    
+	} else {
+	    const int cpc=context->attribs->colors_per_channel;
+	    const unsigned short rmask = cpc-1; /* different sizes could be used */
+	    const unsigned short gmask = rmask; /* for r,g,b */
+	    const unsigned short bmask = rmask;
+	    unsigned short *rtable, *gtable, *btable;
+	    const int cpccpc = cpc*cpc;
+	    int index;
+
+	    rtable = computeTable(rmask);
+	    gtable = computeTable(gmask);
+	    btable = computeTable(bmask);
+
+	    if (rtable==NULL || gtable==NULL || btable==NULL) {
+		RErrorCode = RERR_NOMEMORY;
+		return False;
+	    }
+	    index = rtable[color->red]*cpccpc + gtable[color->green]*cpc 
+		+ btable[color->blue];
+	    *retColor = context->colors[index];
 	}
-	index = rtable[color->red]*cpccpc + gtable[color->green]*cpc 
-	    + btable[color->blue];
-	*retColor = context->colors[index];
+
     } else if (context->vclass == GrayScale || context->vclass == StaticGray) {
 
 	const int cpc = context->attribs->colors_per_channel;

@@ -96,7 +96,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 lib_LTLIBRARIES = libwraster.la
 
-libwraster_la_LDFLAGS = -version-info 3:1:2
+libwraster_la_LDFLAGS = -version-info 4:0:3
 
 bin_SCRIPTS = get-wraster-flags
 
@@ -105,7 +105,7 @@ noinst_PROGRAMS = testgrad testdraw view
 EXTRA_DIST = test.png tile.xpm ballot_box.xpm 
 include_HEADERS = wraster.h
 
-libwraster_la_SOURCES =  	raster.c 		draw.c			color.c			load.c 			save.c			gradient.c 		xpixmap.c		convert.c 		context.c 		misc.c 			scale.c			convolve.c		nxpm.c			xpm.c 			xutil.c			ppm.c			png.c 			jpeg.c 			tiff.c			gif.c
+libwraster_la_SOURCES =  	LookupCmap.c		StdCmap.c		StdCmap.h		CrCmap.c		DelCmap.c		CmapAlloc.c		raster.c 		draw.c			color.c			load.c 			save.c			gradient.c 		xpixmap.c		convert.c 		context.c 		misc.c 			scale.c			convolve.c		nxpm.c			xpm.c 			xutil.c			ppm.c			png.c 			jpeg.c 			tiff.c			gif.c
 
 
 INCLUDES = @DFLAGS@ @HEADER_SEARCH_PATH@
@@ -139,10 +139,10 @@ X_CFLAGS = @X_CFLAGS@
 X_LIBS = @X_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 libwraster_la_DEPENDENCIES =  @ALLOCA@
-libwraster_la_OBJECTS =  raster.lo draw.lo color.lo load.lo save.lo \
-gradient.lo xpixmap.lo convert.lo context.lo misc.lo scale.lo \
-convolve.lo nxpm.lo xpm.lo xutil.lo ppm.lo png.lo jpeg.lo tiff.lo \
-gif.lo
+libwraster_la_OBJECTS =  LookupCmap.lo StdCmap.lo CrCmap.lo DelCmap.lo \
+CmapAlloc.lo raster.lo draw.lo color.lo load.lo save.lo gradient.lo \
+xpixmap.lo convert.lo context.lo misc.lo scale.lo convolve.lo nxpm.lo \
+xpm.lo xutil.lo ppm.lo png.lo jpeg.lo tiff.lo gif.lo
 PROGRAMS =  $(noinst_PROGRAMS)
 
 testgrad_OBJECTS =  testgrad.o
@@ -169,7 +169,7 @@ Makefile.in NEWS TODO alloca.c configure.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = tar
+TAR = gtar
 GZIP_ENV = --best
 SOURCES = $(libwraster_la_SOURCES) $(testgrad_SOURCES) $(testdraw_SOURCES) $(view_SOURCES)
 OBJECTS = $(libwraster_la_OBJECTS) $(testgrad_OBJECTS) $(testdraw_OBJECTS) $(view_OBJECTS)
@@ -178,7 +178,7 @@ all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .lo .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps wrlib/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu wrlib/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -343,7 +343,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$d/$$file $(distdir)/$$file; \
+	    cp -pr $$/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \

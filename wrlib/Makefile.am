@@ -4,7 +4,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 lib_LTLIBRARIES = libwraster.la
 
-libwraster_la_LDFLAGS = -version-info 3:1:2
+libwraster_la_LDFLAGS = -version-info 4:0:3
 
 bin_SCRIPTS = get-wraster-flags
 
@@ -14,6 +14,12 @@ EXTRA_DIST = test.png tile.xpm ballot_box.xpm
 include_HEADERS = wraster.h
 
 libwraster_la_SOURCES = 	\
+	LookupCmap.c	\
+	StdCmap.c	\
+	StdCmap.h	\
+	CrCmap.c	\
+	DelCmap.c	\
+	CmapAlloc.c	\
 	raster.c 	\
 	draw.c		\
 	color.c		\

@@ -24,6 +24,8 @@ int main(int argc, char **argv)
     attr.render_mode = RDitheredRendering;
     attr.colors_per_channel = 4;
     ctx = RCreateContext(dpy, DefaultScreen(dpy), &attr);
+    
+    
     if (argc<2) 
 	img = RGetImageFromXPMData(ctx, image_name);
     else
