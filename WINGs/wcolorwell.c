@@ -457,7 +457,7 @@ prepareForDragOperation(WMView *self, WMDraggingInfo *info)
 static Bool
 performDragOperation(WMView *self, WMDraggingInfo *info, WMData *data)
 {
-    char *colorName = WMDataBytes(data);
+    char *colorName = (char*)WMDataBytes(data);
     WMColor *color;
     
     color = WMCreateNamedColor(W_VIEW_SCREEN(self), colorName, True);

@@ -724,8 +724,8 @@ wScreenInit(int screen_number)
 
     
     /* will only be accounted for in PseudoColor */
-    if (wPreferences.create_stdcmap) {
-	rattr.standard_colormap_mode = RCreateStdColorma;
+    if (wPreferences.flags.create_stdcmap) {
+	rattr.standard_colormap_mode = RCreateStdColormap;
     } else {
 	rattr.standard_colormap_mode = RUseStdColormap;
     }
