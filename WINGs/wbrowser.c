@@ -702,7 +702,6 @@ WMSetBrowserHasScroller(WMBrowser *bPtr, int hasScroller)
 }
 
 
-
 char*
 WMSetBrowserPath(WMBrowser *bPtr, char *path)
 {
@@ -779,7 +778,6 @@ WMGetBrowserPath(WMBrowser *bPtr)
 }
 
 
-
 char*
 WMGetBrowserPathToColumn(WMBrowser *bPtr, int column)
 {
@@ -816,6 +814,66 @@ WMGetBrowserPathToColumn(WMBrowser *bPtr, int column)
     }
 
     return path;
+}
+
+
+WMArray*
+WMGetBrowserPaths(WMBrowser *bPtr)
+{
+    int column, i, k, size, selNo;
+    char *path;
+    WMListItem *item, *lastItem;
+    WMArray *paths, *items;
+
+    column = bPtr->usedColumnCount-1;
+
+    if (column < 0) {
+        paths = WMCreateArrayWithDestructor(1, wfree);
+        WMAddToArray(paths, wstrdup(bPtr->pathSeparator));
+        return paths;
+    }
+
+    items = WMGetListSelectedItems(bPtr->columns[column]);
+    selNo = WMGetArrayItemCount(items);
+    paths = WMCreateArrayWithDestructor(selNo, wfree);
+
+    if (selNo <= 1) {
+        WMAddToArray(paths, WMGetBrowserPath(bPtr));
+        return paths;
+    }
+
+    /* calculate size of buffer */
+    size = 0;
+    for (i=0; i<column; i++) {
+	item = WMGetListSelectedItem(bPtr->columns[i]);
+	if (!item)
+	    break;
+	size += strlen(item->text);
+    }
+
+    size += (column+1)*strlen(bPtr->pathSeparator)+1;
+
+    for (k=0; k<selNo; k++) {
+        /* get the path */
+        lastItem = WMGetFromArray(items, k);
+        path = wmalloc(size + (lastItem!=NULL ?  strlen(lastItem->text) : 0));
+        /* ignore first / */
+        *path = 0;
+        for (i=0; i<=column; i++) {
+            strcat(path, bPtr->pathSeparator);
+            if (i == column) {
+                item = lastItem;
+            } else {
+                item = WMGetListSelectedItem(bPtr->columns[i]);
+            }
+            if (!item)
+                break;
+            strcat(path, item->text);
+        }
+        WMAddToArray(paths, path);
+    }
+
+    return paths;
 }
 
 
@@ -966,12 +1024,14 @@ listCallback(void *self, void *clientData)
     WMBrowser *bPtr = (WMBrowser*)clientData;
     WMList *lPtr = (WMList*)self;
     WMListItem *item;
+    int i, selNo;
     static WMListItem *oldItem = NULL;
-    int i;
+    static int oldSelNo = 0;
 
     item = WMGetListSelectedItem(lPtr);
+    selNo = WMGetArrayItemCount(WMGetListSelectedItems(lPtr));
 
-    if (oldItem==NULL || oldItem!=item) {
+    if (oldItem==NULL || oldItem!=item || oldSelNo!=selNo) {
         for (i=0; i<bPtr->columnCount; i++) {
             if (lPtr == bPtr->columns[i])
                 break;
@@ -983,7 +1043,7 @@ listCallback(void *self, void *clientData)
         /* columns at right must be cleared */
         removeColumn(bPtr, i+1);
         /* open directory */
-        if (item && item->isBranch) {
+        if (item && item->isBranch && selNo==1) {
             WMAddBrowserColumn(bPtr);
         }
         if (bPtr->usedColumnCount < bPtr->maxVisibleColumns)
@@ -991,17 +1051,17 @@ listCallback(void *self, void *clientData)
         else
             i = bPtr->usedColumnCount-bPtr->maxVisibleColumns;
         scrollToColumn(bPtr, i, True);
-	if (item && item->isBranch) {
+	if (item && item->isBranch && selNo==1) {
             loadColumn(bPtr, bPtr->usedColumnCount-1);
 	}
     }
-
 
     /* call callback for click */
     if (bPtr->action)
 	(*bPtr->action)(bPtr, bPtr->clientData);
 
     oldItem = item;
+    oldSelNo = selNo;
 }
 
 

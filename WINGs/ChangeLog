@@ -36,6 +36,9 @@ changes since wmaker 0.62.1:
   counterparts, except it should scroll by page_size/3 instead of one full page
 - added WMSetBrowserAllowMultipleSelection(), WMSetBrowserAllowEmptySelection()
   WMBrowserAllowsMultipleSelection() and WMBrowserAllowsEmptySelection()
+- WMBrowser now allows multiple selections.
+- Added WMGetBrowserPaths() to retrieve the paths for browsers that allow
+  multiple selections.
 
 
 changes since wmaker 0.62.0:

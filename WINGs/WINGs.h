@@ -1182,8 +1182,12 @@ char* WMSetBrowserPath(WMBrowser *bPtr, char *path);
 
 /* free the returned string */
 char *WMGetBrowserPath(WMBrowser *bPtr);
+
 /* free the returned string */
 char *WMGetBrowserPathToColumn(WMBrowser *bPtr, int column);
+
+/* free the returned array */
+WMArray* WMGetBrowserPaths(WMBrowser *bPtr);
 
 void WMSetBrowserAction(WMBrowser *bPtr, WMAction *action, void *clientData);
 
