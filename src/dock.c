@@ -352,12 +352,12 @@ paintClipButtons(WAppIcon *clipIcon, Bool lpushed, Bool rpushed)
     }
 #endif /* GRADIENT_CLIP_ARROW */
 
-    p[0].x = p[3].x = ICON_SIZE-6-as;
-    p[0].y = p[3].y = 5;
-    p[1].x = ICON_SIZE-6;
-    p[1].y = 5;
-    p[2].x = ICON_SIZE-6;
-    p[2].y = 5+as;
+    p[0].x = p[3].x = ICON_SIZE-4-as;
+    p[0].y = p[3].y = 6;
+    p[1].x = ICON_SIZE-7;
+    p[1].y = 6;
+    p[2].x = ICON_SIZE-7;
+    p[2].y = 3+as;
     if (rpushed) {
         XFillPolygon(dpy, win, scr->draw_gc, p, 3, Convex, CoordModeOrigin);
         XDrawLines(dpy, win, scr->draw_gc, p, 4, CoordModeOrigin);
@@ -370,12 +370,12 @@ paintClipButtons(WAppIcon *clipIcon, Bool lpushed, Bool rpushed)
         XDrawLines(dpy, win, gc, p,4,CoordModeOrigin);
     }
 
-    p[0].x = p[3].x = 5;
-    p[0].y = p[3].y = ICON_SIZE-6-as;
-    p[1].x = 5;
-    p[1].y = ICON_SIZE-6;
-    p[2].x = 5+as;
-    p[2].y = ICON_SIZE-6;
+    p[0].x = p[3].x = 6;
+    p[0].y = p[3].y = ICON_SIZE-4-as;
+    p[1].x = 6;
+    p[1].y = ICON_SIZE-7;
+    p[2].x = 3+as;
+    p[2].y = ICON_SIZE-7;
     if (lpushed) {
 	XFillPolygon(dpy, win, scr->draw_gc, p, 3, Convex, CoordModeOrigin);
         XDrawLines(dpy, win, scr->draw_gc, p, 4, CoordModeOrigin);
@@ -402,15 +402,17 @@ wClipMakeTile(WScreen *scr, RImage *normalTile)
     RColor dark;
     RColor light;
     int pt, tp;
-    
+    int as;
+
     pt = CLIP_BUTTON_SIZE*wPreferences.icon_size/64;
     tp = wPreferences.icon_size-1 - pt;
+    as = pt - 15;
 
     black.alpha = 255;
     black.red = black.green = black.blue = 0;
     
     dark.alpha = 0;
-    dark.red = dark.green = dark.blue = 80;
+    dark.red = dark.green = dark.blue = 60;
 
     light.alpha = 0;
     light.red = light.green = light.blue = 80;
@@ -422,7 +424,13 @@ wClipMakeTile(WScreen *scr, RImage *normalTile)
     RDrawLine(tile, tp-1, 0, wPreferences.icon_size-1, pt+1, &black);
     ROperateLine(tile, RAddOperation, tp, 2, wPreferences.icon_size-3,
 		 pt, &light);
-    
+
+    RDrawLine(tile, ICON_SIZE - 6 - as, 5, ICON_SIZE - 6, 5, &black);
+    ROperateLine(tile, RSubtractOperation, ICON_SIZE - 6 - as, 5,
+		 ICON_SIZE - 7, 4 + as, &dark);
+    ROperateLine(tile, RAddOperation, ICON_SIZE - 6, 6, ICON_SIZE - 6, 5 + as,
+		 &light);
+
     
     /* bottom left */
     ROperateLine(tile, RAddOperation, 2, tp+2, pt-2,
@@ -430,6 +438,14 @@ wClipMakeTile(WScreen *scr, RImage *normalTile)
     RDrawLine(tile, 0, tp-1, pt+1, wPreferences.icon_size-1, &black);
     ROperateLine(tile, RSubtractOperation, 0, tp-2, pt+1,
 		 wPreferences.icon_size-2, &light);
+
+    ROperateLine(tile, RSubtractOperation, 5, ICON_SIZE - 6 - as, 
+		 4 + as, ICON_SIZE - 7, &dark);
+    RDrawLine(tile, 5, ICON_SIZE - 6 - as, 5, ICON_SIZE - 6, &black);
+    
+    ROperateLine(tile, RAddOperation, 6, ICON_SIZE - 6, 5 + as, ICON_SIZE - 6,
+		 &light);
+
 
     return tile;
 }
