@@ -1,0 +1,86 @@
+%define	name	@PACKAGE@
+%define	version	@VERSION@
+%define	release	1
+%define	serial	2
+
+Summary:	A window manager for the X Window System.
+Name:		%{name}
+Version:	%{version}
+Release:	%{release}
+Serial:		%{serial}
+Copyright:	GPL
+Group:		User Interface/Desktops
+Vendor:		The Window Maker Team
+Url:		http://www.windowmaker.org
+Source:		%{name}-%{version}.tar.gz
+Requires:	wmconfig, libPropList >= 0.9.5
+Obsoletes:	windowmaker, windowmaker-devel, windowmaker-libs, WindowMaker-devel
+Provides:	windowmaker
+BuildRoot:	/var/tmp/%{name}-%{version}
+
+%description
+Window Maker is an X11 window manager which emulates the look
+and feel of the NeXTSTEP (TM) graphical user interface. It is
+relatively fast, feature rich and easy to configure and use. 
+Window Maker is part of the official GNU project, which means that 
+Window Maker can interoperate with other GNU projects, such as
+GNOME.
+
+Window Maker allows users to switch themes 'on the fly,' to place
+favorite applications on either an application dock, similar to
+AfterStep's Wharf or on a workspace dock, a 'clip' which extends
+the application dock's usefulness.
+
+You should install the WindowMaker package if you use Window
+Maker as your window manager or if you'd like to try using it.
+If you do install the WindowMaker package, you may also want
+to install the AfterStep-APPS package, which includes
+applets that will work with both AfterStep and Window Maker
+window managers. 
+
+%prep
+%setup -q
+
+%build
+CFLAGS="$RPM_OPT_FLAGS";
+LINGUAS="@supported_locales@";
+NLSDIR="/usr/share/locale";
+GNUSTEP_LOCAL_ROOT='$(prefix)/X11R6/lib/GNUstep';
+export CFLAGS LINGUAS NLSDIR GNUSTEP_LOCAL_ROOT;
+
+./configure --prefix=/usr --exec-prefix=/usr/X11R6 \
+	--sysconfdir=/etc/X11 \
+	--enable-newstyle --enable-superfluous \
+	--enable-kde --enable-gnome
+make
+
+%install
+if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
+
+cp -f WindowMaker/plmenu WindowMaker/Defaults/WMRootMenu
+make install DESTDIR=$RPM_BUILD_ROOT
+
+strip $RPM_BUILD_ROOT/usr/X11R6/bin/* || :
+strip $RPM_BUILD_ROOT/usr/X11R6/lib/GNUstep/Apps/WPrefs.app/WPrefs
+
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
+
+%clean
+if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
+
+%files
+%defattr(-,root,root)
+%doc AUTHORS BUGFORM BUGS ChangeLog NEWS FAQ* README
+%doc TODO MIRRORS README.*
+%config /etc/X11/WindowMaker
+/usr/X11R6/bin/*
+/usr/X11R6/lib/lib*
+/usr/X11R6/lib/GNUstep/Apps/WPrefs.app
+/usr/include/*
+/usr/share/WindowMaker
+/usr/share/locale/*/LC_MESSAGES/*
+/usr/share/WINGs
+/usr/man/*/*
+
+%changelog
