@@ -3460,13 +3460,13 @@ setMultiByte(WScreen *scr, WDefaultEntry *entry, char *value, void *foo)
 static int
 setCursor(WScreen *scr, WDefaultEntry *entry, Cursor *cursor, long index)
 {
-   if (None != wCursor[index]) {
+   if (wCursor[index] != None) {
        XFreeCursor(dpy, wCursor[index]);
    }
 
    wCursor[index] = *cursor;
 
-   if ((WCUR_ROOT == index) && (None != *cursor)) {
+   if (index==WCUR_ROOT && *cursor!=None) {
        XDefineCursor(dpy, scr->root_win, *cursor);
    }
 

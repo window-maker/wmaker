@@ -699,7 +699,7 @@ wScreenInit(int screen_number)
 	return NULL;
     }
 
-    XDefineCursor(dpy, scr->root_win, wCursor[WCUR_DEFAULT]);
+    XDefineCursor(dpy, scr->root_win, wCursor[WCUR_ROOT]);
 
     /* screen descriptor for raster graphic library */
     rattr.flags = RC_RenderMode | RC_ColorsPerChannel | RC_StandardColormap;

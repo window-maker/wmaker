@@ -128,7 +128,7 @@ typedef enum {
 #endif /* XKB_BUTTON_HINT */
 
 /* cursors */
-#define WCUR_DEFAULT	0
+#define WCUR_DEFAULT    0
 #define WCUR_NORMAL 	0
 #define WCUR_MOVE	1
 #define WCUR_RESIZE	2
