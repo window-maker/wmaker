@@ -388,12 +388,13 @@ typedef struct WMInputPanel {
 
 /* WMRuler: */
 typedef struct {
-    unsigned int *tabs;     /* a growable array of tabstops */
-    unsigned short ntabstops:4; /* how many there are */
-    unsigned short left:15; /* left margin marker */
-    unsigned short right:15;    /* right margin marker */
-    unsigned short first:15;    /* indentation marker for first line only */
-    unsigned short body:15; /* body indentation marker */
+    unsigned short *tabs;       /* a growable array of tabstops */
+    unsigned short ntabstops;   /* how many there are */
+    unsigned short left;        /* left margin marker */
+    unsigned short right;       /* right margin marker */
+    unsigned short first;       /* indentation marker for first line only */
+    unsigned short body;        /* body indentation marker */
+    unsigned short retainCount; 
 } WMRulerMargins;
 /* All indentation and tab markers are _relative_ to the left margin marker */
 
@@ -789,6 +790,8 @@ void WMMapWidget(WMWidget *w);
 
 void WMRaiseWidget(WMWidget *w);
 
+void WMLowerWidget(WMWidget *w);
+
 void WMMoveWidget(WMWidget *w, int x, int y);
 
 void WMResizeWidget(WMWidget *w, unsigned int width, unsigned int height);
@@ -831,6 +834,8 @@ WMWidget *WMWidgetOfView(WMView *view);
 extern char *WMViewSizeDidChangeNotification;
 
 extern char *WMViewRealizedNotification;
+
+extern char *WMFontPanelDidChangeNotification;
 
 
 /* ....................................................................... */
@@ -1386,9 +1391,12 @@ int WMGetSplitViewDividerThickness(WMSplitView *sPtr);
 
 WMRuler *WMCreateRuler (WMWidget *parent);
 
-WMRulerMargins WMGetRulerMargins(WMRuler *rPtr);
+WMRulerMargins *WMGetRulerMargins(WMRuler *rPtr);
 
 void WMSetRulerMargins(WMRuler *rPtr, WMRulerMargins margins);
+
+Bool WMIsMarginEqualToMargin(WMRulerMargins *aMargin,
+    WMRulerMargins *anotherMargin);
 
 int WMGetGrabbedRulerMargin(WMRuler *rPtr);
 
@@ -1464,34 +1472,35 @@ WMBag * WMGetTextStreamIntoBag(WMText *tPtr);
 /* destroy the bag */
 WMBag * WMGetTextSelectedIntoBag(WMText *tPtr);
 
-void *WMCreateTextBlockWithObject(WMWidget *w, char *description,
-    WMColor *color, unsigned short first, unsigned short reserved);
-    
-void *WMCreateTextBlockWithPixmap(WMPixmap *p, char *description, 
-	WMColor *color, unsigned short first, unsigned short reserved);
-
-void *WMCreateTextBlockWithText(char *text, WMFont *font,
-    WMColor *color, unsigned short first, unsigned short length);
-    
-void WMSetTextBlockProperties(void *vtb, unsigned int first,
-    unsigned int kanji, unsigned int underlined, int script,
-	WMRulerMargins margins);
-    
-void WMGetTextBlockProperties(void *vtb, unsigned int *first,
-    unsigned int *kanji, unsigned int *underlined, int *script,
-	WMRulerMargins *margins);
-
 void WMSetTextSelectionColor(WMText *tPtr, WMColor *color);
 
 void WMSetTextSelectionFont(WMText *tPtr, WMFont *font);
 
 void WMSetTextAlignment(WMText *tPtr, WMAlignment alignment);
 
-/* parser related stuff... see how it can be done in testtext.c */
+/* parser related stuff... use only if implementing a new parser */
 
 void WMSetTextParser(WMText *tPtr, WMAction *parser);
 
 void WMSetTextWriter(WMText *tPtr, WMAction *writer);
+
+void *WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w, char *description,
+    WMColor *color, unsigned short first, unsigned short reserved);
+    
+void *WMCreateTextBlockWithPixmap(WMText *tPtr, WMPixmap *p, char *description, 
+	WMColor *color, unsigned short first, unsigned short reserved);
+
+void *WMCreateTextBlockWithText(WMText *tPtr, char *text, WMFont *font,
+    WMColor *color, unsigned short first, unsigned short length);
+    
+void WMSetTextBlockProperties(WMText *tPtr, void *vtb, unsigned int first,
+    unsigned int kanji, unsigned int underlined, int script,
+	WMRulerMargins *margins);
+    
+/* do NOT free the margins */
+void WMGetTextBlockProperties(WMText *tPtr, void *vtb, unsigned int *first,
+    unsigned int *kanji, unsigned int *underlined, int *script,
+	WMRulerMargins *margins);
 
 int WMGetTextInsertType(WMText *tPtr);
 

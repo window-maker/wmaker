@@ -24,12 +24,18 @@
 
 #define DO_BLINK 0
 
+WMFont * WMGetFontPlain(WMScreen *scrPtr, WMFont *font);
+WMFont * WMGetFontBold(WMScreen *scrPtr, WMFont *font);
+WMFont * WMGetFontItalic(WMScreen *scrPtr, WMFont *font);
+WMFont * WMGetFontOfSize(WMScreen *scrPtr, WMFont *font, int size);
+
 /* TODO: 
  *
+ * -  change Bag stuffs to WMArray
  * -  assess danger of destroying widgets whose actions link to other pages
+ * -  integrate WMGetFont* functions into WINGs proper (fontpanel)?
  * -  change cursor shape around pixmaps
  * -  redo blink code to reduce paint event... use pixmap buffer...
- * -  confirm with Alfredo et. all about field marker 0xFA 
  * -  add paragraph support (full) and '\n' code in getStream..
  * -  use currentTextBlock and neighbours for fast paint and layout
  * -  replace copious uses of Refreshtext with appropriate layOut()...
@@ -74,7 +80,6 @@ typedef struct _TextBlock {
     unsigned short used;        /* number of chars in this block */
     unsigned short allocated;   /* size of allocation (in chars) */
     WMColor *color;             /* the color */
- // WMRulerMargins margins;     /* first & body indentations, tabstops, etc... */
 
     Section *sections;          /* the region for layouts (a growable array) */
                                 /* an _array_! of size _nsections_ */
@@ -91,6 +96,7 @@ typedef struct _TextBlock {
     unsigned int selected:1;    /* selected or not */
     unsigned int nsections:8;   /* over how many "lines" a TextBlock wraps */
              int script:8;      /* script in points: negative for subscript */
+    unsigned int marginN:8;     /* which of the margins in the tPtr to use */
     unsigned int RESERVED:9;
 } TextBlock;
 
@@ -115,13 +121,12 @@ typedef struct W_Text {
     unsigned int prevVpos;      /* the previous vertical position */
 
     WMScroller *hS;             /* the horizontal scroller */
-    unsigned short hpos;        /* the current horizontal position */
-    unsigned short prevHpos;    /* the previous horizontal position */
+    unsigned int hpos;          /* the current horizontal position */
+    unsigned int prevHpos;      /* the previous horizontal position */
 
     WMFont *dFont;              /* the default font */
     WMColor *dColor;            /* the default color */
     WMPixmap *dBulletPix;       /* the default pixmap for bullets */
-    WMRulerMargins dmargins;    /* default margins */
 
     GC bgGC;                    /* the background GC to draw with */
     GC fgGC;                    /* the foreground GC to draw with */
@@ -150,6 +155,9 @@ typedef struct W_Text {
     WMAction *parser;
     WMAction *writer;
 
+    WMRulerMargins *margins;      /* an array of margins */
+
+    unsigned int nMargins:8;    /* the total number of margins in use */
     struct {
         unsigned int monoFont:1;    /* whether to ignore formats */
         unsigned int focused:1;     /* whether this instance has input focus */
@@ -166,15 +174,51 @@ typedef struct W_Text {
         unsigned int clickPos:1;     /* clicked before=0 or after=1 a graphic: */
                                      /*    (within counts as after too) */
 
+        unsigned int horizOnDemand:1;/* if a large image should appear*/
+        unsigned int needsRefresh:1; /* in case of Append/Deletes */
         unsigned int ignoreNewLine:1;/* turn it into a ' ' in streams > 1 */
         unsigned int laidOut:1;      /* have the TextBlocks all been laid out */
         unsigned int prepend:1;      /* prepend=1, append=0 (for parsers) */
         WMAlignment alignment:2;     /* the alignment for text */
         WMReliefType relief:3;       /* the relief to display with */
-        unsigned int RESERVED:12;
+        unsigned int RESERVED:2;
     } flags;
 } Text;
 
+
+/*
+ * A hack to speed up caseless_equal.  Thanks to Quincey Koziol for
+ * developing it for the "chimera" folks so I could use it  7 years later ;-)
+ * Constraint: nothing but '\0' may map to 0
+ */
+static unsigned char map_table[256] = {
+0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,
+28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,
+52,53,54,55,56,57,58,59,60,61,62,63,64,97,98,99,100,101,102,103,104,105,
+106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,91,
+92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,
+112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,
+130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,
+148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,
+166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,
+184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,
+202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,
+220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,
+238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255};
+
+#define MAX_TB_PER_LINE 64
+#define MAX_TOKEN_SIZE 255
+#define MAX_TEXT_SIZE 1023
+
+#define TOLOWER(x)  (map_table[(int)x])
+
+#define ISALNUM(x) ( ((x>='0') && (x<='9')) \
+    || ((x>='a') && (x<='z'))  || ((x>='A') && x<='Z'))
+
+#if DO_BLINK
+#define CURSOR_BLINK_ON_DELAY   600
+#define CURSOR_BLINK_OFF_DELAY  400
+#endif
 
 static char *default_bullet[] = {
     "6 6 4 1",
@@ -187,7 +231,58 @@ static char *default_bullet[] = {
     " ...oo",
     "  ooo "};
 
+static void 
+handleEvents(XEvent *event, void *data);
 
+
+static int 
+getMarginNumber(Text *tPtr, WMRulerMargins *margins)
+{
+    unsigned int i=0;
+    
+    for(i=0; i < tPtr->nMargins; i++) {
+
+        if(WMIsMarginEqualToMargin(&tPtr->margins[i], margins))
+            return i;
+    }
+
+    return -1;
+}
+    
+
+
+
+static int 
+newMargin(Text *tPtr, WMRulerMargins *margins)
+{
+    int n;
+
+    if (!margins) { 
+        tPtr->margins[0].retainCount++;
+        return 0;
+    }
+
+    n = getMarginNumber(tPtr, margins);
+
+    if (n == -1) { 
+
+        tPtr->margins = wrealloc(tPtr->margins,
+            (++tPtr->nMargins)*sizeof(WMRulerMargins));
+
+        n = tPtr->nMargins-1;
+        tPtr->margins[n].left = margins->left;
+        tPtr->margins[n].first = margins->first;
+        tPtr->margins[n].body = margins->body;
+        tPtr->margins[n].right = margins->right;
+        //for tabs.
+        tPtr->margins[n].retainCount = 1;
+    } else {
+        tPtr->margins[n].retainCount++;
+    }
+
+    return n;
+}
+        
 static Bool 
 sectionWasSelected(Text *tPtr, TextBlock *tb, XRectangle *rect, int s) 
 {
@@ -319,6 +414,93 @@ if(tb->graphic) { printf("graphic s%d h%d\n", s,tb->sections[s].h);}
 }
             
 static void 
+setSelectionProperty(WMText *tPtr, WMFont *font, WMColor *color)
+{
+    TextBlock *tb;
+    int isFont=False;
+    
+    if((font && color) || (!font && !color))
+        return;
+
+    if(font && !color)
+        isFont = True;
+
+
+    tb = tPtr->firstTextBlock;
+    if (!tb || !tPtr->flags.ownsSelection)
+        return;
+    
+
+    while (tb) {
+        if (tb->selected) { 
+
+            if ( (tb->s_end - tb->s_begin == tb->used) || tb->graphic) { 
+
+                if(isFont) { 
+                    if(!tb->graphic) {
+                        WMReleaseFont(tb->d.font);
+                        tb->d.font = WMRetainFont(font);
+                    }
+                } else {
+                    WMReleaseColor(tb->color);
+                    tb->color = WMRetainColor(color);
+                }
+
+            } else if (tb->s_end <= tb->used) {
+
+                TextBlock *otb = tb;
+                int count=0;
+                TextBlock *ntb = (TextBlock *) 
+                    WMCreateTextBlockWithText(tPtr, 
+                        &(tb->text[tb->s_begin]),
+                        (isFont?font:tb->d.font), 
+                        (isFont?tb->color:color), 
+                        False, (tb->s_end - tb->s_begin));
+          
+                if (ntb) { 
+                    ntb->selected = True;
+                    ntb->s_begin = 0;
+                    ntb->s_end = ntb->used;
+                    WMAppendTextBlock(tPtr, ntb);
+                    count++;
+                }
+
+#if 0
+                if (tb->used > tb->s_end) { 
+                    ntb = (TextBlock *) 
+                        WMCreateTextBlockWithText(tPtr, 
+                            &(tb->text[tb->s_end]),
+                               (isFont?font:tb->d.font), 
+                            (isFont?tb->color:color), 
+                            False, tb->used - tb->s_end);
+
+                    if (ntb) { 
+                        ntb->selected = True;
+                        ntb->s_begin = 0;
+                        ntb->s_end = ntb->used;
+                        WMAppendTextBlock(tPtr, ntb);
+                        count++;
+                    }
+                }
+#endif
+
+                if (count == 1)
+                   tb = otb->next;
+                else if (count == 2)
+                   tb = otb->next->next;
+
+                tb->used = tb->s_end = tb->s_begin;
+            }
+        }
+ 
+        tb = tb->next;
+    }
+
+    WMRefreshText(tPtr, tPtr->vpos, tPtr->hpos);
+}
+
+
+static void 
 removeSelection(Text *tPtr)
 {
     TextBlock *tb = NULL;
@@ -354,7 +536,7 @@ removeSelection(Text *tPtr)
     
 static void 
 paintText(Text *tPtr)
-{
+{   
     TextBlock *tb = tPtr->firstTextBlock;
     WMFont *font;
     GC gc, greyGC;
@@ -369,8 +551,7 @@ paintText(Text *tPtr)
         return;
 
     XFillRectangle(dpy, tPtr->db, tPtr->bgGC, 
-        0, 0, WMWidgetWidth(tPtr), WMWidgetWidth(tPtr));
-        //tPtr->visible.w, tPtr->visible.h);
+       0, 0, tPtr->visible.w, tPtr->visible.h);
 
     tb = tPtr->firstTextBlock;
     if (!tb)
@@ -425,12 +606,14 @@ paintText(Text *tPtr)
             text = &(tb->text[tb->sections[s].begin]);
             y = tb->sections[s].y - tPtr->vpos;
             WMDrawString(scr, tPtr->db, gc, font, 
-                tb->sections[s].x, y, text, len);
+                tb->sections[s].x - tPtr->hpos, y, text, len);
 
             if (tb->underlined) { 
                 XDrawLine(dpy, tPtr->db, gc,     
-                    tb->sections[s].x, y + font->y + 1,
-                    tb->sections[s].x + tb->sections[s].w, y + font->y + 1);
+                    tb->sections[s].x - tPtr->hpos, 
+                    y + font->y + 1,
+                    tb->sections[s].x + tb->sections[s].w - tPtr->hpos,
+                    y + font->y + 1);
             }
                         
         }
@@ -475,15 +658,16 @@ paintText(Text *tPtr)
 
                 if(tb->object) {
                     WMMoveWidget(tb->d.widget, 
-                        tb->sections[0].x, 
+                        tb->sections[0].x - tPtr->hpos, 
                         tb->sections[0].y - tPtr->vpos);
                     h = WMWidgetHeight(tb->d.widget) + 1;
 
                 } else {
                     WMDrawPixmap(tb->d.pixmap, tPtr->db, 
-                        tb->sections[0].x, 
+                        tb->sections[0].x - tPtr->hpos, 
                         tb->sections[0].y - tPtr->vpos);
                     h = tb->d.pixmap->height + 1;
+
                 }
 
                 if (tb->underlined) { 
@@ -509,6 +693,7 @@ _copy_area:
         tPtr->visible.w, tPtr->visible.h, 
         tPtr->visible.x, tPtr->visible.y);
 
+
     W_DrawRelief(scr, win, 0, 0,
         tPtr->view->size.width, tPtr->view->size.height, 
         tPtr->flags.relief);        
@@ -522,9 +707,6 @@ _copy_area:
 
 
 #if DO_BLINK
-
-#define CURSOR_BLINK_ON_DELAY   600
-#define CURSOR_BLINK_OFF_DELAY  400
 
 static void
 blinkCursor(void *data)
@@ -564,6 +746,9 @@ cursorToTextPosition(Text *tPtr, int x, int y)
     TextBlock *tb = NULL;
     int done=False, s, pos, len, _w, _y, dir=1; /* 1 == "down" */
     char *text;
+
+    if(tPtr->flags.needsRefresh)
+        WMRefreshText(tPtr, tPtr->vpos, tPtr->hpos);
 
     y += (tPtr->vpos - tPtr->visible.y);
     if (y<0) 
@@ -661,8 +846,8 @@ _doneV:
     if (tPtr->flags.monoFont && tb->graphic)
         tb = getFirstNonGraphicBlockFor(tb, dir);
     if (tb)  {
-        if ((dir? tb->sections[s].x >= x : tb->sections[s].x < x))
-            goto   _doneH;
+if ((dir? tb->sections[s].x >= x : tb->sections[s].x < x))
+         goto   _doneH;
 
 #if 0
         if(tb->blank) {
@@ -793,15 +978,24 @@ updateScrollers(Text *tPtr)
             WMSetScrollerParameters(tPtr->vS, 0, 1);
             tPtr->vpos = 0;
         } else {   
-            float vmax = (float)(tPtr->docHeight);
+            float hmax = (float)(tPtr->docHeight);
             WMSetScrollerParameters(tPtr->vS,
-                ((float)tPtr->vpos)/(vmax - (float)tPtr->visible.h),
-                (float)tPtr->visible.h/vmax);
+                ((float)tPtr->vpos)/(hmax - (float)tPtr->visible.h),
+                (float)tPtr->visible.h/hmax);
         }       
     } else tPtr->vpos = 0;
     
-    if (tPtr->hS)
-        ;
+    if (tPtr->hS) { 
+        if (tPtr->docWidth < tPtr->visible.w) {
+            WMSetScrollerParameters(tPtr->hS, 0, 1);
+            tPtr->hpos = 0;
+        } else {   
+            float wmax = (float)(tPtr->docWidth);
+            WMSetScrollerParameters(tPtr->hS,
+                ((float)tPtr->hpos)/(wmax - (float)tPtr->visible.w),
+                (float)tPtr->visible.w/wmax);
+        }       
+    } else tPtr->hpos = 0;
 } 
 
 static void
@@ -816,9 +1010,7 @@ scrollersCallBack(WMWidget *w, void *self)
         return;
 
     if (w == tPtr->vS) {
-        float vmax; 
         int height; 
-        vmax = (float)(tPtr->docHeight);
         height = tPtr->visible.h;
 
          which = WMGetScrollerHitPart(tPtr->vS);
@@ -865,9 +1057,9 @@ scrollersCallBack(WMWidget *w, void *self)
             case WSNoPart:
 printf("WSNoPart, WSKnobSlot\n");
 #if 0
-float vmax = (float)(tPtr->docHeight);
-((float)tPtr->vpos)/(vmax - (float)tPtr->visible.h), 
-(float)tPtr->visible.h/vmax;
+float hmax = (float)(tPtr->docHeight);
+((float)tPtr->vpos)/(hmax - (float)tPtr->visible.h), 
+(float)tPtr->visible.h/hmax;
 dimple =where mouse is.
 #endif
             break;
@@ -876,8 +1068,63 @@ dimple =where mouse is.
         tPtr->prevVpos = tPtr->vpos;
     }
         
-    if (w == tPtr->hS)
-        ;
+    if (w == tPtr->hS) {
+        int width = tPtr->visible.w;
+
+        which = WMGetScrollerHitPart(tPtr->hS);
+        switch(which) { 
+            case WSDecrementLine:
+                if (tPtr->hpos > 0) {
+                    if (tPtr->hpos>16) tPtr->hpos-=16;
+                    else tPtr->hpos=0;
+                    scroll=True;
+            }break;
+            case WSIncrementLine: {
+                int limit = tPtr->docWidth - width;
+                if (tPtr->hpos < limit) {
+                    if (tPtr->hpos<limit-16) tPtr->hpos+=16;
+                    else tPtr->hpos=limit;
+                    scroll = True;
+            }}break;
+            case WSDecrementPage:
+                tPtr->hpos -= width;
+
+                if (tPtr->hpos < 0)
+                    tPtr->hpos = 0;
+                dimple = True;
+                scroll = True;
+                printf("dimple needs to jump to mouse location ;-/\n");
+                break;
+            case WSIncrementPage:
+                tPtr->hpos += width;
+                if (tPtr->hpos > (tPtr->docWidth - width))
+                    tPtr->hpos = tPtr->docWidth - width;
+                dimple = True;
+                scroll = True;
+                printf("dimple needs to jump to mouse location ;-/\n");
+            break;
+            
+            
+            case WSKnob:
+                tPtr->hpos = WMGetScrollerValue(tPtr->hS)
+                    * (float)(tPtr->docWidth - width);
+                    scroll = True;
+            break; 
+            
+            case WSKnobSlot:
+            case WSNoPart:
+printf("WSNoPart, WSKnobSlot\n");
+#if 0
+float wmax = (float)(tPtr->docWidth);
+((float)tPtr->vpos)/(wmax - (float)tPtr->visible.w), 
+(float)tPtr->visible.w/wmax;
+dimple =where mouse is.
+#endif
+            break;
+        } 
+        scroll = (tPtr->hpos != tPtr->prevHpos);
+        tPtr->prevHpos = tPtr->hpos;
+    }
     
     if (scroll) {
 /*
@@ -1034,7 +1281,21 @@ mystrchr(char *s, char needle, unsigned short len)
     return NULL;
 }
 
-#define MAX_TB_PER_LINE 64
+static int
+mystrcasecmp(const unsigned char *s1, const unsigned char *s2)
+{
+    if (!*s1 || !*s2)
+        return 0;
+
+    while (*s2 != '\0') {
+        if (TOLOWER (*s1) != TOLOWER (*s2)) /* true if *s1 == 0 ! */
+            return 0;
+        s1++;
+        s2++;
+    }
+    return (*s1=='\0' || !ISALNUM(*s1))?1:0;
+}
+
 
 static void
 layOutDocument(Text *tPtr) 
@@ -1053,6 +1314,8 @@ layOutDocument(Text *tPtr)
 
     if (!(tb = tPtr->firstTextBlock)) 
         return;
+
+    tPtr->docWidth = tPtr->visible.w;
 
     if (0&&tPtr->flags.laidOut) {
         tb = tPtr->currentTextBlock;
@@ -1101,7 +1364,12 @@ printf("2 prev_y %d \n\n", tb->sections[tb->nsections-1]._y);
                 else
                     width = tb->d.pixmap->width;
 
-                if (width > tPtr->visible.w)printf("rescale graphix to fit?\n");
+                if (width > tPtr->docWidth) { //tPtr->visible.w) {
+                    printf("rescale graphix to fit?\n");
+printf("%d %d\n", width, tPtr->visible.w);
+                    tPtr->docWidth = width;//tPtr->visible.w + (width-tPtr->visible.w);
+                }
+
                 lw += width;
                 if (lw >= tPtr->visible.w - x 
                 || nitems >= MAX_TB_PER_LINE) {
@@ -1179,6 +1447,20 @@ printf("2 prev_y %d \n\n", tb->sections[tb->nsections-1]._y);
         tPtr->docHeight = y+10;
         updateScrollers(tPtr);
     }
+
+    if(tPtr->docWidth > tPtr->visible.w && !tPtr->hS) {
+        XEvent event;
+            
+        tPtr->flags.horizOnDemand = True;
+        WMSetTextHasHorizontalScroller((WMText*)tPtr, True);
+        event.type = Expose;
+        handleEvents(&event, (void *)tPtr);
+
+    } else if(tPtr->docWidth <= tPtr->visible.w 
+        && tPtr->hS && tPtr->flags.horizOnDemand ) {
+        tPtr->flags.horizOnDemand = False;
+        WMSetTextHasHorizontalScroller((WMText*)tPtr, False);
+    }
     tPtr->flags.laidOut = True;
         
 }
@@ -1188,8 +1470,8 @@ static void
 textDidResize(W_ViewDelegate *self, WMView *view)
 {   
     Text *tPtr = (Text *)view->self;
-    unsigned short w = WMWidgetWidth(tPtr);
-    unsigned short h = WMWidgetHeight(tPtr);
+    unsigned short w = tPtr->view->size.width;
+    unsigned short h = tPtr->view->size.height;
     unsigned short rh = 0, vw = 0;
 
     if (tPtr->ruler && tPtr->flags.rulerShown) { 
@@ -1215,13 +1497,12 @@ textDidResize(W_ViewDelegate *self, WMView *view)
         }
     }
 
-    tPtr->visible.x = (tPtr->vS)?22:2;
+    tPtr->visible.x = (tPtr->vS)?21:1;
     tPtr->visible.y = (tPtr->ruler && tPtr->flags.rulerShown)?43:3;
-    tPtr->visible.w = tPtr->view->size.width - tPtr->visible.x - 4;
+    tPtr->visible.w = tPtr->view->size.width - tPtr->visible.x - 2;
     tPtr->visible.h = tPtr->view->size.height - tPtr->visible.y;
     tPtr->visible.h -= (tPtr->hS)?20:0;
-
-    tPtr->dmargins = WMGetRulerMargins(tPtr->ruler);
+    tPtr->margins[0].right = tPtr->visible.w;
 
     if (tPtr->view->flags.realized) {
 
@@ -1291,6 +1572,8 @@ deleteTextInteractively(Text *tPtr, KeySym ksym)
     if (!tb)
         return;
 
+    tPtr->flags.needsRefresh = True;
+
     if (tPtr->flags.ownsSelection) {
         removeSelection(tPtr);
         return;
@@ -1299,6 +1582,7 @@ deleteTextInteractively(Text *tPtr, KeySym ksym)
     if (back && tPtr->tpos < 1) {
         if (tb->prior) {
             tb = tb->prior;    
+            tb->first = False;
             tPtr->tpos = tb->used;
             tPtr->currentTextBlock = tb;
             done = 1;
@@ -1345,22 +1629,25 @@ insertTextInteractively(Text *tPtr, char *text, int len)
     }
 
 #if 0
-    if(*text == 'c') {
+if(*text == 'c') {
     WMColor *color = WMCreateNamedColor(W_VIEW_SCREEN(tPtr->view), 
-                                        "Blue", True);
-    WMSetTextSelectionColor(tPtr, color);
-    return;
-    }
+"Blue", True);
+WMSetTextSelectionColor(tPtr, color);
+return;
+}
 #endif
 
     if (len < 1 || !text)
         return;
 
-    if (tPtr->flags.ownsSelection) 
-        removeSelection(tPtr);
 
     if(tPtr->flags.ignoreNewLine && *text == '\n' && len == 1)
         return;
+
+    if (tPtr->flags.ownsSelection) 
+        removeSelection(tPtr);
+
+    tPtr->flags.needsRefresh = True;
 
     if (tPtr->flags.ignoreNewLine) {
         int i;
@@ -1402,14 +1689,15 @@ insertTextInteractively(Text *tPtr, char *text, int len)
             if (tPtr->tpos>0 && tPtr->tpos < tb->used 
                 && !tb->graphic && tb->text) { 
 
-                void *ntb = WMCreateTextBlockWithText(&tb->text[tPtr->tpos],
+                void *ntb = WMCreateTextBlockWithText(
+                    tPtr, &tb->text[tPtr->tpos],
                     tb->d.font, tb->color, True, tb->used - tPtr->tpos);
                 tb->used = tPtr->tpos;
                 WMAppendTextBlock(tPtr, ntb);
                 tPtr->tpos = 0;
             } else if (tPtr->tpos == tb->used || tPtr->tpos == 0) { 
-                void *ntb = WMCreateTextBlockWithText(NULL, 
-                    tb->d.font, tb->color, True, 0);
+                void *ntb = WMCreateTextBlockWithText(tPtr, 
+                    NULL, tb->d.font, tb->color, True, 0);
 
                 if (tPtr->tpos>0)
                     WMAppendTextBlock(tPtr, ntb);
@@ -1589,6 +1877,19 @@ ownershipObserver(void *observerData, WMNotification *notification)
         lostHandler(to->view, XA_PRIMARY, NULL);
 }
 
+static void
+fontChanged(void *observerData, WMNotification *notification)
+{
+    WMText *tPtr = (WMText *) observerData;
+    WMFont *font = (WMFont *)WMGetNotificationClientData(notification);
+printf("fontChanged\n");
+
+    if(!tPtr || !font)
+        return;
+
+    if (tPtr->flags.ownsSelection)
+        WMSetTextSelectionFont(tPtr, font);
+}
 
 static  void
 handleTextKeyPress(Text *tPtr, XEvent *event)
@@ -1605,6 +1906,7 @@ handleTextKeyPress(Text *tPtr, XEvent *event)
     switch(ksym) {
 
         case XK_Right: 
+WMScrollText(tPtr, -14);
         case XK_Left: {
             TextBlock *tb = tPtr->currentTextBlock;
             int x = tPtr->cursor.x + tPtr->visible.x;
@@ -1840,8 +2142,9 @@ handleEvents(XEvent *event, void *data)
 
     switch(event->type) {
         case Expose: 
-            if (event->xexpose.count!=0)
-                break;
+
+          if (event->xexpose.count!=0)
+              break;
 
             if(tPtr->hS) { 
                 if (!(W_VIEW(tPtr->hS))->flags.realized)
@@ -1865,10 +2168,11 @@ handleEvents(XEvent *event, void *data)
                     && tPtr->flags.rulerShown) 
                     WMMapWidget(tPtr->ruler);
             }
+
             if(!tPtr->db) 
                 textDidResize(tPtr->view->delegate, tPtr->view);
 
-            paintText(tPtr);
+             paintText(tPtr);
         break;
 
         case FocusIn: 
@@ -1940,12 +2244,13 @@ insertPlainText(WMText *tPtr, char *text)
     while (start) {
         mark = strchr(start, '\n');
         if (mark) {
-            tb = WMCreateTextBlockWithText(start, tPtr->dFont, 
+            tb = WMCreateTextBlockWithText(tPtr, 
+                start, tPtr->dFont, 
                 tPtr->dColor, True, (int)(mark-start));
             start = mark+1;
         } else {
             if (start && strlen(start)) {
-                tb = WMCreateTextBlockWithText(start, tPtr->dFont,
+                tb = WMCreateTextBlockWithText(tPtr, start, tPtr->dFont,
                     tPtr->dColor, False, strlen(start));
             } else tb = NULL;
             start = mark;
@@ -2170,8 +2475,8 @@ getStreamIntoBag(WMText *tPtr, int sel)
             if(start != fa) {
                 data = WMCreateDataWithBytes((void *)start, (int)(fa - start));
                 WMSetDataFormat(data, 8);
-            	WMPutInBag(bag, (void *) data);
-			}
+                WMPutInBag(bag, (void *) data);
+            }
 
             data = WMCreateDataWithBytes((void *)(fa+2), len);
             WMSetDataFormat(data, 32);
@@ -2261,6 +2566,9 @@ WMCreateText(WMWidget *parent)
     }
 #endif
 
+    WMAddNotificationObserver(fontChanged, tPtr, 
+        "WMFontPanelDidChangeNotification", tPtr);
+
     tPtr->firstTextBlock = NULL;
     tPtr->lastTextBlock = NULL;
     tPtr->currentTextBlock = NULL;
@@ -2288,7 +2596,9 @@ WMCreateText(WMWidget *parent)
         default_bullet);
     tPtr->db = (Pixmap) NULL;
 
-    tPtr->dmargins = WMGetRulerMargins(tPtr->ruler);
+    tPtr->margins = WMGetRulerMargins(NULL);
+    tPtr->margins->right = tPtr->visible.w;
+    tPtr->nMargins = 1;
 
     tPtr->flags.rulerShown = False;
     tPtr->flags.monoFont = False;    
@@ -2302,6 +2612,8 @@ WMCreateText(WMWidget *parent)
     tPtr->flags.frozen  = False;
     tPtr->flags.cursorShown = True;
     tPtr->flags.clickPos = 1;
+    tPtr->flags.horizOnDemand = False;
+    tPtr->flags.needsRefresh = False;
     tPtr->flags.ignoreNewLine = False;
     tPtr->flags.laidOut = False;
     tPtr->flags.prepend = False;
@@ -2326,6 +2638,7 @@ WMPrependTextStream(WMText *tPtr, char *text)
     else
         insertPlainText(tPtr, text);
 
+    tPtr->flags.needsRefresh = True;
 }
 
 
@@ -2344,7 +2657,8 @@ WMAppendTextStream(WMText *tPtr, char *text)
     else
         insertPlainText(tPtr, text);
 
-    
+    tPtr->flags.needsRefresh = True;
+  
 }
 
 
@@ -2374,7 +2688,8 @@ WMGetTextSelectedIntoBag(WMText *tPtr)
 
 
 void *
-WMCreateTextBlockWithObject(WMWidget *w, char *description, WMColor *color, 
+WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w, 
+    char *description, WMColor *color, 
     unsigned short first, unsigned short reserved)
 {
     TextBlock *tb;
@@ -2395,7 +2710,7 @@ WMCreateTextBlockWithObject(WMWidget *w, char *description, WMColor *color,
     tb->blank = False;
     tb->d.widget = w;    
     tb->color = WMRetainColor(color);
-    //&tb->margins = NULL;
+    tb->marginN = newMargin(tPtr, NULL);
     tb->allocated = 0;
     tb->first = first;
     tb->kanji = False;
@@ -2414,7 +2729,8 @@ WMCreateTextBlockWithObject(WMWidget *w, char *description, WMColor *color,
     
 
 void *
-WMCreateTextBlockWithPixmap(WMPixmap *p, char *description, WMColor *color, 
+WMCreateTextBlockWithPixmap(WMText *tPtr, WMPixmap *p, 
+    char *description, WMColor *color, 
     unsigned short first, unsigned short reserved)
 {
     TextBlock *tb;
@@ -2435,7 +2751,7 @@ WMCreateTextBlockWithPixmap(WMPixmap *p, char *description, WMColor *color,
     tb->blank = False;
     tb->d.pixmap = p;    
     tb->color = WMRetainColor(color);
-    //&tb->margins = NULL;
+    tb->marginN = newMargin(tPtr, NULL);
     tb->allocated = 0;
     tb->first = first;
     tb->kanji = False;
@@ -2453,7 +2769,7 @@ WMCreateTextBlockWithPixmap(WMPixmap *p, char *description, WMColor *color,
 }
     
 void *
-WMCreateTextBlockWithText(char *text, WMFont *font, WMColor *color, 
+WMCreateTextBlockWithText(WMText *tPtr, char *text, WMFont *font, WMColor *color, 
     unsigned short first, unsigned short length)
 {
     TextBlock *tb;
@@ -2481,6 +2797,7 @@ WMCreateTextBlockWithText(char *text, WMFont *font, WMColor *color,
 
     tb->d.font = WMRetainFont(font);
     tb->color = WMRetainColor(color);
+    tb->marginN = newMargin(tPtr, NULL);
     tb->first = first;
     tb->kanji = False;
     tb->graphic = False;
@@ -2495,9 +2812,9 @@ WMCreateTextBlockWithText(char *text, WMFont *font, WMColor *color,
 }
 
 void 
-WMSetTextBlockProperties(void *vtb, unsigned int first, 
+WMSetTextBlockProperties(WMText *tPtr, void *vtb, unsigned int first, 
     unsigned int kanji, unsigned int underlined, int script, 
-    WMRulerMargins margins)
+    WMRulerMargins *margins)
 {
     TextBlock *tb = (TextBlock *) vtb;
     if (!tb)
@@ -2507,17 +2824,11 @@ WMSetTextBlockProperties(void *vtb, unsigned int first,
     tb->kanji = kanji;
     tb->underlined = underlined;
     tb->script = script;
-#if 0
-    tb->margins.left = margins.left;
-    tb->margins.first = margins.first;
-    tb->margins.body = margins.body;
-    tb->margins.right = margins.right;
-    for: tb->margins.tabs = margins.tabs;
-#endif
+    tb->marginN = newMargin(tPtr, margins);
 }
     
 void 
-WMGetTextBlockProperties(void *vtb, unsigned int *first, 
+WMGetTextBlockProperties(WMText *tPtr, void *vtb, unsigned int *first, 
     unsigned int *kanji, unsigned int *underlined, int *script, 
     WMRulerMargins *margins)
 {
@@ -2529,16 +2840,7 @@ WMGetTextBlockProperties(void *vtb, unsigned int *first,
     if (kanji) *kanji = tb->kanji;
     if (underlined) *underlined = tb->underlined;
     if (script) *script = tb->script;
-
-#if 0
-    if (margins) { 
-        (*margins).left = tb->margins.left;
-        (*margins).first = tb->margins.first;
-        (*margins).body = tb->margins.body;
-        (*margins).right = tb->margins.right;
-        //for: (*margins).tabs = tb->margins.tabs;
-    }
-#endif
+    if (margins) margins = &tPtr->margins[tb->marginN];
 }
     
 
@@ -2709,7 +3011,7 @@ WMRefreshText(WMText *tPtr, int vpos, int hpos)
     if (!tPtr || vpos<0 || hpos<0)
         return;
 
-    if (tPtr->flags.frozen)
+    if (tPtr->flags.frozen && !tPtr->flags.needsRefresh)
         return;
 
     if(tPtr->flags.monoFont) {
@@ -2736,10 +3038,22 @@ WMRefreshText(WMText *tPtr, int vpos, int hpos)
         }
     }
 
+    if (tPtr->hpos != hpos) {
+        if (hpos < 0 || tPtr->docWidth < tPtr->visible.w) {
+            tPtr->hpos = 0;
+        } else if(tPtr->docWidth - hpos > tPtr->visible.w - tPtr->visible.x) {
+            tPtr->hpos = hpos;
+        } else {
+            tPtr->hpos = tPtr->docWidth - tPtr->visible.w;
+        }
+    }
+
+
     tPtr->flags.laidOut = False;
     layOutDocument(tPtr);
     updateScrollers(tPtr);
     paintText(tPtr);
+    tPtr->flags.needsRefresh = False;
 
 }
 
@@ -2794,8 +3108,9 @@ WMSetTextHasHorizontalScroller(WMText *tPtr, Bool shouldhave)
         tPtr->hS = WMCreateScroller(tPtr); 
         (W_VIEW(tPtr->hS))->attribs.cursor = tPtr->view->screen->defaultCursor;
         (W_VIEW(tPtr->hS))->attribFlags |= CWOverrideRedirect | CWCursor;
-        WMSetScrollerArrowsPosition(tPtr->hS, WSAMaxEnd);
+        WMSetScrollerArrowsPosition(tPtr->hS, WSAMinEnd);
         WMSetScrollerAction(tPtr->hS, scrollersCallBack, tPtr);
+        WMMapWidget(tPtr->hS);
     } else if (!shouldhave && tPtr->hS) {
         WMUnmapWidget(tPtr->hS);
         WMDestroyWidget(tPtr->hS);
@@ -2875,6 +3190,7 @@ WMSetTextHasVerticalScroller(WMText *tPtr, Bool shouldhave)
         (W_VIEW(tPtr->vS))->attribFlags |= CWOverrideRedirect | CWCursor;
         WMSetScrollerArrowsPosition(tPtr->vS, WSAMaxEnd);
         WMSetScrollerAction(tPtr->vS, scrollersCallBack, tPtr);
+        WMMapWidget(tPtr->vS);
     } else if (!shouldhave && tPtr->vS) {
         WMUnmapWidget(tPtr->vS);
         WMDestroyWidget(tPtr->vS);
@@ -2899,7 +3215,7 @@ WMScrollText(WMText *tPtr, int amount)
     
     if (amount < 0) {
         if (tPtr->vpos > 0) {
-            if (tPtr->vpos > amount) tPtr->vpos += amount;
+            if (tPtr->vpos > abs(amount)) tPtr->vpos += amount;
             else tPtr->vpos=0;
             scroll=True;
     } } else {
@@ -3039,86 +3355,23 @@ WMGetTextInsertType(WMText *tPtr)
 void 
 WMSetTextSelectionColor(WMText *tPtr, WMColor *color)
 {
-    TextBlock *tb;
     if (!tPtr || !color)
         return;
-    
-    tb = tPtr->firstTextBlock;
-    if (!tb || !tPtr->flags.ownsSelection)
-        return;
-    
-    while (tb) {
-        if (tb->selected) { 
 
-            if ( (tb->s_end - tb->s_begin == tb->used) || tb->graphic) { 
-                if(tb->color)
-                    WMReleaseColor(tb->color);
-                tb->color = WMRetainColor(color);
-
-            } else if (tb->s_end <= tb->used) {
-
-                TextBlock *otb = tb;
-                int count=0;
-                TextBlock *ntb = (TextBlock *) WMCreateTextBlockWithText(
-                    &(tb->text[tb->s_begin]),
-                    tb->d.font, color, False, (tb->s_end - tb->s_begin));
-          
-                if (ntb) { 
-                    ntb->selected = True;
-                    ntb->s_begin = 0;
-                    ntb->s_end = ntb->used;
-                    WMAppendTextBlock(tPtr, ntb);
-                    count++;
-                }
-
-#if 0
-                if (tb->used > tb->s_end) { 
-                    ntb = (TextBlock *) WMCreateTextBlockWithText(
-                        &(tb->text[tb->s_end]),
-                        tb->d.font, tb->color, False, tb->used - tb->s_end);
-                    if (ntb) { 
-                        ntb->selected = True;
-                        ntb->s_begin = 0;
-                        ntb->s_end = ntb->used;
-                        WMAppendTextBlock(tPtr, ntb);
-                        count++;
-                    }
-                }
-#endif
-
-                if (count == 1)
-                   tb = otb->next;
-                else if (count == 2)
-                   tb = otb->next->next;
-
-                tb->used = tb->s_end = tb->s_begin;
-            }
-        }
- 
-        tb = tb->next;
-    }
-
-    WMRefreshText(tPtr, tPtr->vpos, tPtr->hpos);
+    setSelectionProperty(tPtr, NULL, color);
 }
+
+
 
 void 
 WMSetTextSelectionFont(WMText *tPtr, WMFont *font)
 {
-    TextBlock *tb;
     if (!tPtr || !font)
         return;
     
-    tb = tPtr->firstTextBlock;
-    if (!tb || !tPtr->flags.ownsSelection)
-        return;
-    
-    while (tb) { 
-        if (!tb->graphic)
-            tb->d.font = WMRetainFont(font);
-        tb = tb->next;
-    }
-    WMRefreshText(tPtr, tPtr->vpos, tPtr->hpos);
+    setSelectionProperty(tPtr, font, NULL);
 }
+
 
 void
 WMFreezeText(WMText *tPtr) 
@@ -3157,3 +3410,289 @@ WMFindInTextStream(WMText *tPtr, char *needle)
 }
     
     
+     
+
+#if 0
+typedef struct _currentFormat {
+    WMBag *fonts;
+    WMBag *colors;
+    WMColor *ccolor;
+    WMFont *cfont;
+    WMRulerMargins margins;
+    //WMBag *aligns; // for tables...
+    /* the following are "nested" 
+        i.e.:  <b><b><i></b><b></i>   
+                1  2  1  1   2   0   get it? */
+    short i;
+    short b;
+    short u;
+    short fmargin;
+    short bmargin;
+    short first:1;
+    short type:1;
+    WMAlignment align:2;
+    short ul:3; /* how "nested"... up to 8 levels deep */
+    short comment:1; /* ignore text till --> */
+    short RESERVED:10;
+} CFMT;
+CFMT cfmt;
+
+
+
+#if 0
+getArg(char *t, short type, void *arg)
+{
+    short d=0;
+    while(*(++t) && !d) {
+        if(type==0) {
+            if(*t>='0' && *t<='9') {
+                sscanf(t, "%d", arg);
+                while(*t&& (*t<'0' || *t>'9'))
+                    t++;
+                d=1;
+            }
+        }
+    }
+}
+#endif
+    
+void parseToken(WMText *tPtr, char *token, short tk)
+{
+    short mode=0; /* 0 starts, 1 closes */
+    void *tb= NULL;
+    int prepend = WMGetTextInsertType(tPtr);
+
+    while(*token && isspace(*(token))) token++;
+    if(*token == '/') {
+        token++;
+        mode = 1;
+        while(isspace(*(token))) token++;
+    }
+
+    if(strlen(token)==1) {
+    /* nice and fast for small tokens... no need for too much brain 
+        power here */
+        switch(TOLOWER(*token)) {
+            case 'i': 
+                if(!mode) {
+                    cfmt.cfont = WMGetFontItalic(scr, cfmt.cfont);
+                    WMPutInBag(cfmt.fonts, (void *)cfmt.cfont);
+                } else { /*dun wanna remove the baseFont eh? */
+                    int count = WMGetBagItemCount(cfmt.fonts); 
+                    if(count>1) 
+                        WMDeleteFromBag(cfmt.fonts, count-1);
+                     cfmt.cfont = (WMFont *)WMGetFromBag(cfmt.fonts,
+                        WMGetBagItemCount(cfmt.fonts)-1); 
+                } break;
+            case 'b': 
+                if(!mode) {
+                    cfmt.cfont = WMGetFontBold(scr, cfmt.cfont);
+                    WMPutInBag(cfmt.fonts, (void *)cfmt.cfont);
+                } else { /*dun wanna remove the baseFont eh? */
+                    int count = WMGetBagItemCount(cfmt.fonts); 
+                    if(count>1) 
+                        WMDeleteFromBag(cfmt.fonts, count-1);
+                     cfmt.cfont = (WMFont *)WMGetFromBag(cfmt.fonts,
+                        WMGetBagItemCount(cfmt.fonts)-1); 
+                } break;
+            case 'p': 
+                cfmt.first = True;
+                tb = WMCreateTextBlockWithText(NULL, cfmt.cfont,     
+                    cfmt.ccolor, cfmt.first, 0);
+                WMSetTextBlockProperties(tb, cfmt.first, False, (cfmt.u?1:0), 0, cfmt.margins);
+                //WMAppendTextBlock(tPtr, tb);
+                cfmt.first = False;
+                break;
+            case 'u': cfmt.u = !mode; break;
+        }
+    } else { /* the <HTML> tag is, as far as I'm concerned, useless */
+        if(mystrcasecmp(token, "br")) {
+                cfmt.first = True;
+        }
+        else if(mystrcasecmp(token, "ul")) {
+            if(mode) { 
+                if(cfmt.ul>1) cfmt.ul--;
+            } else cfmt.ul++;
+            if(cfmt.ul) {
+                cfmt.bmargin = cfmt.ul*30;
+                cfmt.fmargin = cfmt.bmargin-10;
+            } else cfmt.fmargin = cfmt.bmargin = 0;
+        } else if(mystrcasecmp(token, "li")) {
+                cfmt.first = True;
+//change margins... create a new margin....
+            //(cfmt.fmargin, cfmt.bmargin, 
+        } else if(mystrcasecmp(token, "align"))
+            ;//printf("align");
+        else if(mystrcasecmp(token, "img"))  {
+            if(!mode) {
+                char *mark=NULL;
+                WMPixmap *pixmap; 
+                token+=3;
+                while(isspace(*(token))) token++;
+                do { 
+                switch(TOLOWER(*token)) {
+                case 's':         
+                if(TOLOWER(*(1+token)) == 'r' && TOLOWER(*(2+token)) == 'c') {
+                mark = strchr(token, '='); 
+                if(mark) {
+                char img[256], *iptr;
+                token = mark+1;
+                if(!token) return;
+                sscanf(token, "%s", img);
+                iptr = img;
+                 if(*img == '\"') { img[strlen(img)-1] = 0; iptr++;}
+                pixmap = WMCreatePixmapFromFile(scr, iptr);
+                if(pixmap) {
+                    tb = WMCreateTextBlockWithPixmap(pixmap, 
+                        iptr, cfmt.ccolor, cfmt.first, 0);
+                    WMSetTextBlockProperties(tb, cfmt.first, 
+                        False, (cfmt.u?1:0), 0, cfmt.margins);
+                    WMAppendTextBlock(tPtr, tb);
+                    cfmt.first = False;
+                }
+                //printf("[%s]\n", iptr);
+                } } break; } } while(*(token++));
+            }     
+        } else if(mystrcasecmp(token, "font")) {
+#if 0
+            if(mode) {
+                 cfmt.cfont = (WMFont *)WMGetFromBag(cfmt.fonts,
+                        WMGetBagItemCount(cfmt.fonts)-1); 
+            } else 
+                    (WMColor *)WMGetFromBag(cfmt.colors, 
+                WMGetBagItemCount(cfmt.colors)-1), 
+#endif    
+        }
+        else if(mystrcasecmp(token, "center")) {
+printf("center\n");
+            if(mode) cfmt.align = WALeft;
+            else cfmt.align = WACenter;
+                cfmt.first = True;
+//change margins...
+        }
+    }
+        
+
+
+
+    //printf("parse token  (%s)[%s]\n", mode?"close":"open", token); 
+#if 0
+    i=0;
+    //while(*token && !isspace(*(token))) token++;
+//printf("A:%d a:%d z%d Z%d\n", '1', 'a', 'Z', 'z');
+    do { 
+        if(!mm) {
+            if(c>=65 &&  c<=122) { major[i++] = c;
+            } else if(c==' ' || c=='='){ major[i] = 0; i=0; mm=1; 
+            printf("\nmajor: [%s]", major);}
+        } else {
+            if(c!=' ') {
+                minor[i++] = c;
+            } else { minor[i] = 0; i=0; printf("  minor: [%s]  ", minor);}
+        }
+    }while((c = *(++token)));
+#endif
+    
+    
+    //printf("parse token  (%s)[%s]\n", mode?"close":"open", token); 
+}
+    
+void HTMLParser(WMWidget *w, void *clientData)
+{
+    static short init=1;  /* have we been here at least once before? */
+    char *stream = (char *) clientData;
+    WMText *tPtr = (WMText *)w;
+    void *tb = NULL;
+    char c;
+    char token[MAX_TOKEN_SIZE+1];
+    char text[MAX_TEXT_SIZE+1];
+    short mode=0;
+    short tk=0, textlen=0;
+    short wasspace=0;
+
+    if(!tPtr || !stream)
+        return;
+
+    cfmt.type = WMGetTextInsertType(tPtr);
+    if(1||init) {
+        cfmt.fonts = WMCreateBag(4); /* there sould always be at least 1 font... */
+        cfmt.cfont = WMGetTextDefaultFont(tPtr);
+        WMPutInBag(cfmt.fonts, (void *)cfmt.cfont);
+        cfmt.colors = WMCreateBag(4);
+        cfmt.ccolor = WMBlackColor(scr);
+        WMPutInBag(cfmt.colors, (void *)cfmt.ccolor);
+        cfmt.i = cfmt.b = cfmt.u = cfmt.ul = 0;
+        cfmt.align = WALeft;
+        cfmt.fmargin = cfmt.bmargin = 0;
+        init = 0;
+    }
+
+#if 0
+    if(strlen(stream) == 1 && stream[0] == '\n') { 
+        /* sometimes if the text entered is a single char AND is a newline, 
+            the user prolly typed it */
+        cfmt.para = (cfmt.actions.createParagraph) (cfmt.fmargin, cfmt.bmargin, 
+            WMWidgetWidth(tPtr)-30, NULL, 0, cfmt.align);
+        (cfmt.actions.insertParagraph) (tPtr, cfmt.para, cfmt.type);
+        return;
+    }   
+#endif
+
+
+/*
+*/
+
+    while( (c=*(stream++))) {
+//printf("%c", c);
+        if(c == '\n' || c =='\t')
+            //c = ' '; //continue;
+            continue;
+        if(c == ' ') {
+            if(wasspace) 
+                continue;
+            wasspace = 1;
+        }else wasspace = 0;
+
+        if(c == '<'  && !mode) { 
+            mode=1;
+            if(textlen>0) { 
+                text[textlen] = 0;
+                tb = WMCreateTextBlockWithText(text, cfmt.cfont,
+                     cfmt.ccolor, cfmt.first, textlen);
+                WMSetTextBlockProperties(tb, cfmt.first, False, (cfmt.u?1:0), 0, cfmt.margins);
+                WMAppendTextBlock(tPtr, tb);
+                cfmt.first = False;
+//printf("%s\n", text);
+            }
+            textlen = 0;
+        } else if(c == '>' && mode) {
+            token[tk] = 0;
+            if(tk>0) parseToken(tPtr, token, tk);
+            mode=0; 
+            tk=0;
+        } else {
+            if(mode) {
+                if(tk < MAX_TOKEN_SIZE) token[tk++] = c;
+            } else if(textlen < MAX_TEXT_SIZE) text[textlen++] = c;
+        }
+    }
+
+    if(tk>0) { token[tk] = 0; parseToken(tPtr, token, tk);}
+    if(textlen>0) {
+        text[textlen] = 0;
+        //printf("%s\n", text);
+        tb = WMCreateTextBlockWithText(text, 
+            (WMFont *)WMGetFromBag(cfmt.fonts, 
+                WMGetBagItemCount(cfmt.fonts)-1), 
+            (WMColor *)WMGetFromBag(cfmt.colors,
+                WMGetBagItemCount(cfmt.colors)-1), 
+            cfmt.first, textlen);
+        WMSetTextBlockProperties(tb, cfmt.first, False, (cfmt.u?1:0), 0, cfmt.margins);
+        WMAppendTextBlock(tPtr, tb);
+        cfmt.first = False;
+    }
+        
+}
+
+#endif
+

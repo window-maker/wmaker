@@ -487,27 +487,46 @@ void WMSetRulerMargins(WMRuler * rPtr, WMRulerMargins margins)
 
 }
 
-
-WMRulerMargins
+WMRulerMargins *
 WMGetRulerMargins(WMRuler * rPtr)
 {
-    WMRulerMargins margins;
+    WMRulerMargins *margins = wmalloc(sizeof(WMRulerMargins));
 
     if (!rPtr) { 
-        margins.first = margins.body = margins.left = 0;
-        margins.right = 100;
+        margins->first = margins->body = margins->left = 0;
+        margins->right = 100;
         return margins;
     }
 
-    margins.left = rPtr->margins.left - rPtr->offset;
-    margins.right = rPtr->margins.right - rPtr->offset;
-    margins.first = rPtr->margins.first - rPtr->offset;
-    margins.body = rPtr->margins.body - rPtr->offset;
+    margins->left = rPtr->margins.left - rPtr->offset;
+    margins->right = rPtr->margins.right - rPtr->offset;
+    margins->first = rPtr->margins.first - rPtr->offset;
+    margins->body = rPtr->margins.body - rPtr->offset;
     /*for */
-    margins.tabs = rPtr->margins.tabs;
+    margins->tabs = rPtr->margins.tabs;
 
-    return rPtr->margins;
 }
+
+Bool
+WMIsMarginEqualToMargin(WMRulerMargins *aMargin, WMRulerMargins *anotherMargin)
+{
+    if(aMargin == anotherMargin)
+        return True;
+    else if(!aMargin || !anotherMargin)
+        return False;
+    if(aMargin->left != anotherMargin->left)
+        return False;
+    if(aMargin->first != anotherMargin->first)
+        return False;
+    if(aMargin->body != anotherMargin->body)
+        return False;
+    if(aMargin->right != anotherMargin->right)
+        return False;
+
+    return True;
+}
+
+
 
 
 void WMSetRulerOffset(WMRuler * rPtr, int pixels)
