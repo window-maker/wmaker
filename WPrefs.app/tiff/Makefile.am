@@ -66,6 +66,7 @@ tiffdata_DATA = \
 	whandling.tiff \
 	windowfocus.tiff \
 	workspace.tiff \
+	workspacename.tiff \
 	xis.tiff 
 
 EXTRA_DIST = $(tiffdata_DATA)

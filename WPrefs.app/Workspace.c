@@ -61,6 +61,7 @@ typedef struct _Panel {
 #define DONT_LINK_FILE	"dontlinkworkspaces"
 #define CYCLE_FILE	"cycleworkspaces"
 #define ADVANCE_FILE	"advancetonewworkspace"
+#define WSNAME_FILE 	"workspacename"
 #define DOCK_FILE	"dock"
 #define CLIP_FILE	"clip"
 
@@ -249,12 +250,11 @@ createPanel(Panel *p)
     WMSetLabelText(panel->posL, 
 		   _("Position of workspace name display"));
     
-#if 0
     panel->posiL = WMCreateLabel(panel->navF);
     WMResizeWidget(panel->posiL, 60, 40);
     WMMoveWidget(panel->posiL, 10, 160);
     WMSetLabelImagePosition(panel->posiL, WIPImageOnly);
-    path = LocateImage(ADVANCE_FILE);
+    path = LocateImage(WSNAME_FILE);
     if (path) {
 	createImages(scr, rc, xis, path, &icon1, NULL);
 	if (icon1) {
@@ -263,7 +263,6 @@ createPanel(Panel *p)
 	}
 	free(path);
     }
-#endif
     
     panel->posP = WMCreatePopUpButton(panel->navF);
     WMResizeWidget(panel->posP, 125, 20);

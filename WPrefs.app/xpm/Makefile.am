@@ -66,6 +66,7 @@ xpmdata_DATA = \
 	whandling.xpm \
 	windowfocus.xpm \
 	workspace.xpm \
+	workspacename.xpm \
 	xis.xpm 
 
 EXTRA_DIST = $(xpmdata_DATA)
