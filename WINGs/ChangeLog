@@ -9,6 +9,7 @@ changes since wmaker 0.63.1:
 - Fixed a mem leak in WMList.
 - Fixed a bug that caused sigsegv for a WMList with more than 32767 items.
 - Added an example of how to create a server type program with WMConnection.
+- added WMOpenScreen()
  
 
 changes since wmaker 0.62.1:

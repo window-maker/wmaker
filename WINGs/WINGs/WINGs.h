@@ -588,6 +588,9 @@ char *WMGetApplicationName();
 /* Try to locate resource file. ext may be NULL */
 char *WMPathForResourceOfType(char *resource, char *ext);
 
+
+WMScreen *WMOpenScreen();
+
 WMScreen *WMCreateScreenWithRContext(Display *display, int screen, 
 				     RContext *context);
 

@@ -189,6 +189,8 @@ typedef struct W_Screen {
     WMHashTable *fontCache;
 
     Bool useMultiByte;
+    
+    unsigned int ignoredModifierMask; /* modifiers to ignore when typing txt */
 
     struct W_Balloon *balloon;
 

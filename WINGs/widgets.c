@@ -3,7 +3,7 @@
 #include "WINGsP.h"
 
 #include <X11/Xutil.h>
-
+#include <X11/keysym.h>
 #include <X11/cursorfont.h>
 
 /********** data ************/
@@ -515,6 +515,20 @@ loadPixmaps(WMScreen *scr)
 }
 
 
+WMScreen*
+WMOpenScreen()
+{
+    Display *dpy = XOpenDisplay("");
+    
+    if (!dpy) {
+	wwarning("WINGs: could not open display %s",
+		 XDisplayName(""));
+	return NULL;
+    }
+    
+    return WMCreateSimpleApplicationScreen(dpy);
+}
+
 
 WMScreen*
 WMCreateSimpleApplicationScreen(Display *display)
@@ -602,6 +616,42 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 
     scrPtr->fontCache = WMCreateHashTable(WMStringPointerHashCallbacks);
 
+    scrPtr->ignoredModifierMask = 0;
+    {
+	int i;
+	XModifierKeymap *modmap;
+	KeyCode nlock, slock;
+	static int mask_table[8] = {
+	    ShiftMask,LockMask,ControlMask,Mod1Mask,
+		Mod2Mask, Mod3Mask, Mod4Mask, Mod5Mask
+	};
+	unsigned int numLockMask, scrollLockMask;
+	
+	nlock = XKeysymToKeycode(display, XK_Num_Lock);
+	slock = XKeysymToKeycode(display, XK_Scroll_Lock);
+	
+	/*
+	 * Find out the masks for the NumLock and ScrollLock modifiers,
+	 * so that we can bind the grabs for when they are enabled too.
+	 */
+	modmap = XGetModifierMapping(display);
+	
+	if (modmap!=NULL && modmap->max_keypermod>0) {
+	    for (i=0; i<8*modmap->max_keypermod; i++) {
+		if (modmap->modifiermap[i]==nlock && nlock!=0)
+		    numLockMask = mask_table[i/modmap->max_keypermod];
+		else if (modmap->modifiermap[i]==slock && slock!=0)
+		    scrollLockMask = mask_table[i/modmap->max_keypermod];
+	    }
+	}
+	
+	if (modmap)
+	    XFreeModifiermap(modmap);
+	
+	
+	scrPtr->ignoredModifierMask = numLockMask|scrollLockMask|LockMask;
+    }
+    
     /* initially allocate some colors */
     WMWhiteColor(scrPtr);
     WMBlackColor(scrPtr);
