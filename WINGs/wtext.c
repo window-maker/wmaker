@@ -27,7 +27,7 @@
 
 
 /* TODO: 
- *
+ * -  FIX: graphix blocks MUST be skipped if monoFont even though they exist!
  * -  FIX wrap... long lines that don't fit are not char wrapped yet.
  * -  check if support for Horizontal Scroll is complete
  * -  FIX html parser:  1. <b>foo</i>  should STILL BE BOLD!
@@ -262,7 +262,7 @@ mystrrstr(char *haystack, char *needle, unsigned short len, char *end)
     if(!haystack || !needle)
         return NULL;
 
-    for (ptr = haystack; ptr > end; ptr--) {
+    for (ptr = haystack-2; ptr > end; ptr--) {
         if (*ptr == *needle && !strncmp(ptr, needle, len))
             return ptr;
     }
@@ -1997,8 +1997,6 @@ handleTextKeyPress(Text *tPtr, XEvent *event)
     switch(ksym) {
 
         case XK_Left: 
-printf("foind %d \n", WMFindInTextStream(tPtr, "ion", 0, 0));
-return;
         if(!(tb = tPtr->currentTextBlock))
             break;
             if(tb->graphic) 
@@ -2015,8 +2013,6 @@ L_imaGFX:       if(tb->prior) {
          break;
 
         case XK_Right:  
-printf("foind %d \n", WMFindInTextStream(tPtr, "ion", 1, 0));
-return;
         if(!(tb = tPtr->currentTextBlock))
             break;
             if(tb->graphic) 
@@ -3695,7 +3691,7 @@ WMFindInTextStream(WMText *tPtr, char *needle, Bool direction,
             pos = tPtr->tpos;
             if(pos+1 < tb->used)
                 pos++;
-pos--;
+
             if(tb->used - pos> 0 && pos > 0) { 
                 char tmp = tb->text[tb->used];
                 tb->text[tb->used] = 0;
@@ -3705,7 +3701,6 @@ pos--;
                 else
  	                mark = mystrrstr(&tb->text[pos], needle, 
                        strlen(needle), tb->text);
-
                 tb->text[tb->used] = tmp;
 
             } else {
@@ -3716,7 +3711,6 @@ pos--;
                 WMFont *font = tPtr->flags.monoFont?tPtr->dFont:tb->d.font;
 
                 tPtr->tpos = (int)(mark - tb->text);
-
                 tPtr->currentTextBlock = tb;
                 updateCursorPosition(tPtr);
                 tPtr->sel.y = tPtr->cursor.y+5;
