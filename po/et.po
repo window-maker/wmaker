@@ -4,16 +4,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Window Maker 0.65.1\n"
-"POT-Creation-Date: 2001-08-06 13:15+0200\n"
-"PO-Revision-Date: 2001-08-06 13:11+0200\n"
+"POT-Creation-Date: 2001-09-05 09:12+0200\n"
+"PO-Revision-Date: 2001-09-05 09:40+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <linux-ee@eenet.ee>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/appicon.c:542 ../src/dialog.c:224 ../src/dock.c:3244
-#: ../src/dockedapp.c:212 ../src/main.c:256 ../src/rootmenu.c:1815
+#: ../src/appicon.c:542 ../src/dialog.c:224 ../src/dock.c:3276
+#: ../src/dockedapp.c:230 ../src/main.c:256 ../src/rootmenu.c:1815
 #: ../src/winspector.c:388 ../src/winspector.c:405
 msgid "Error"
 msgstr "Viga"
@@ -24,8 +24,8 @@ msgstr "Ei õnnestu avada kirjeldatud ikoonifaili"
 
 #: ../src/appicon.c:544 ../src/dialog.c:121 ../src/dialog.c:224
 #: ../src/dialog.c:672 ../src/dialog.c:1735 ../src/dock.c:493
-#: ../src/dock.c:501 ../src/dock.c:525 ../src/dock.c:3245
-#: ../src/dockedapp.c:213 ../src/dockedapp.c:371 ../src/main.c:256
+#: ../src/dock.c:501 ../src/dock.c:525 ../src/dock.c:3277
+#: ../src/dockedapp.c:231 ../src/dockedapp.c:426 ../src/main.c:256
 #: ../src/rootmenu.c:1819 ../src/winspector.c:389 ../src/winspector.c:406
 msgid "OK"
 msgstr "OK"
@@ -52,12 +52,12 @@ msgstr "Jah"
 msgid "No"
 msgstr "Ei"
 
-#: ../src/appicon.c:596 ../src/dock.c:1139 ../src/dock.c:3410
+#: ../src/appicon.c:596 ../src/dock.c:1144 ../src/dock.c:3442
 msgid "Unhide Here"
 msgstr "Too siia töölauale"
 
-#: ../src/appicon.c:597 ../src/appicon.c:623 ../src/dock.c:1141
-#: ../src/dock.c:1143 ../src/dock.c:3422 ../src/winmenu.c:465
+#: ../src/appicon.c:597 ../src/appicon.c:623 ../src/dock.c:1146
+#: ../src/dock.c:1148 ../src/dock.c:3454 ../src/winmenu.c:465
 msgid "Hide"
 msgstr "Peida"
 
@@ -69,12 +69,12 @@ msgstr "Ahenda"
 msgid "Set Icon..."
 msgstr "Vali ikoon..."
 
-#: ../src/appicon.c:600 ../src/dock.c:1147 ../src/rootmenu.c:223
+#: ../src/appicon.c:600 ../src/dock.c:1152 ../src/rootmenu.c:223
 #: ../src/rootmenu.c:237 ../src/winmenu.c:512
 msgid "Kill"
 msgstr "Kõrvalda"
 
-#: ../src/appicon.c:621 ../src/dock.c:3420
+#: ../src/appicon.c:621 ../src/dock.c:3452
 msgid "Unhide"
 msgstr "Too nähtavale"
 
@@ -82,8 +82,8 @@ msgstr "Too nähtavale"
 msgid "Uncollapse"
 msgstr "Tühista ahendamine"
 
-#: ../src/defaults.c:917 ../src/startup.c:890 ../src/startup.c:908
-#: ../src/startup.c:914
+#: ../src/defaults.c:917 ../src/startup.c:889 ../src/startup.c:907
+#: ../src/startup.c:913
 #, c-format
 msgid "could not read domain \"%s\" from defaults database"
 msgstr "ei õnnestu lugeda domeeni \"%s\" vaikeväärtuste andmebaasist"
@@ -297,7 +297,7 @@ msgid "could not render texture for icon background"
 msgstr "tekstuuri renderdamine ikooni taustapildiks ei õnnestu"
 
 #: ../src/dialog.c:121 ../src/dialog.c:679 ../src/dock.c:525
-#: ../src/dockedapp.c:377 ../src/rootmenu.c:185 ../src/rootmenu.c:223
+#: ../src/dockedapp.c:431 ../src/rootmenu.c:185 ../src/rootmenu.c:223
 #: ../src/rootmenu.c:237
 msgid "Cancel"
 msgstr "Tühistan"
@@ -451,7 +451,7 @@ msgstr ""
 msgid "Legal"
 msgstr "Litsentsiinfo"
 
-#: ../src/dialog.c:1658 ../src/startup.c:388
+#: ../src/dialog.c:1658 ../src/startup.c:395
 msgid "cannot open connection for crashing dialog panel. Aborting."
 msgstr "ei õnnestu luua ühendust avariipaneeliga. Annan alla."
 
@@ -532,7 +532,7 @@ msgstr "GNUstep'ist lähemalt"
 msgid "Type the name for workspace %i:"
 msgstr "Sisesta töölaua %i nimi:"
 
-#: ../src/dock.c:214 ../src/dock.c:1103 ../src/dock.c:1106 ../src/dock.c:3328
+#: ../src/dock.c:214 ../src/dock.c:1108 ../src/dock.c:1111 ../src/dock.c:3360
 msgid "Rename Workspace"
 msgstr "Töölaua ümbernimetamine"
 
@@ -568,185 +568,194 @@ msgstr "Töölaua Klamber"
 msgid "All selected icons will be removed!"
 msgstr "Kõik valitud ikoonid eemaldatakse!"
 
-#: ../src/dock.c:575 ../src/dock.c:1118 ../src/dock.c:1120 ../src/dock.c:3364
+#: ../src/dock.c:575 ../src/dock.c:1123 ../src/dock.c:1125 ../src/dock.c:3396
 msgid "Keep Icon"
 msgstr "Hoia ikooni"
 
-#: ../src/dock.c:576 ../src/dock.c:2083 ../src/dock.c:2218
+#: ../src/dock.c:576 ../src/dock.c:2104 ../src/dock.c:2245
 msgid "Type the command used to launch the application"
 msgstr "Tipi korraldus, mida kasutada rakenduse käivitamiseks"
 
-#: ../src/dock.c:927
+#: ../src/dock.c:932
 #, c-format
 msgid "could not launch application %s\n"
 msgstr "ei õnnestu käivitada rakendust %s\n"
 
-#: ../src/dock.c:982
+#: ../src/dock.c:987
 msgid "could not create workspace submenu for Clip menu"
 msgstr "ei õnnestu luua klambrimenüüle töölaua alammenüüd"
 
-#: ../src/dock.c:1040
+#: ../src/dock.c:1045
 msgid "could not create options submenu for Clip menu"
 msgstr "ei õnnestu luua klambrimenüüle valikute alammenüüd"
 
-#: ../src/dock.c:1044 ../src/dock.c:1092
+#: ../src/dock.c:1049 ../src/dock.c:1097
 msgid "Keep on Top"
 msgstr "Hoia esiplaanil"
 
-#: ../src/dock.c:1050
+#: ../src/dock.c:1055
 msgid "Collapsed"
 msgstr "Ahendatud"
 
-#: ../src/dock.c:1056
+#: ../src/dock.c:1061
 msgid "Autocollapse"
 msgstr "Automaatselt ahenev"
 
-#: ../src/dock.c:1062
+#: ../src/dock.c:1067
 msgid "Autoraise"
 msgstr "Automaatselt esile tõusev"
 
-#: ../src/dock.c:1068
+#: ../src/dock.c:1073
 msgid "Autoattract Icons"
 msgstr "Ikoonide automaatne külgehaakimine"
 
-#: ../src/dock.c:1098
+#: ../src/dock.c:1103
 msgid "Clip Options"
 msgstr "Klambri valikud"
 
-#: ../src/dock.c:1108
+#: ../src/dock.c:1113
 msgid "Selected"
 msgstr "Valitud"
 
-#: ../src/dock.c:1113 ../src/dock.c:1116 ../src/dock.c:3355
+#: ../src/dock.c:1118 ../src/dock.c:1121 ../src/dock.c:3387
 msgid "Select All Icons"
 msgstr "Vali kõik ikoonid"
 
-#: ../src/dock.c:1122 ../src/dock.c:1124 ../src/dock.c:3372
+#: ../src/dock.c:1127 ../src/dock.c:1129 ../src/dock.c:3404
 msgid "Move Icon To"
 msgstr "Teisalda ikoon->"
 
-#: ../src/dock.c:1129 ../src/dock.c:1132 ../src/dock.c:3383
+#: ../src/dock.c:1134 ../src/dock.c:1137 ../src/dock.c:3415
 msgid "Remove Icon"
 msgstr "Eemalda ikoon"
 
-#: ../src/dock.c:1134
+#: ../src/dock.c:1139
 msgid "Attract Icons"
 msgstr "Haagi ikoonid külge"
 
-#: ../src/dock.c:1137
+#: ../src/dock.c:1142
 msgid "Launch"
 msgstr "Käivita"
 
-#: ../src/dock.c:1145
+#: ../src/dock.c:1150
 msgid "Settings..."
 msgstr "Määrangud..."
 
-#: ../src/dock.c:1504 ../src/dock.c:1607
+#: ../src/dock.c:1515 ../src/dock.c:1622
 #, c-format
 msgid "bad value in docked icon state info %s"
 msgstr "vigane väärtus dokitud ikooni olekuinfos %s "
 
-#: ../src/dock.c:1615
+#: ../src/dock.c:1630
 #, c-format
 msgid "bad value in docked icon position %i,%i"
 msgstr "vigane väärtus dokitud ikooni asukohal %i,%i"
 
-#: ../src/dock.c:1635
+#: ../src/dock.c:1650
 #, c-format
 msgid "bad value in dock state info:%s"
 msgstr "vigane väärtus doki olekuinfos:%s"
 
-#: ../src/dock.c:1867
+#: ../src/dock.c:1886
 msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
 msgstr ""
 "dokki on salvestatud liiga palju ikoone. Eiran neid, mida ei suuda hallata"
 
 #. icon->forced_dock = 1;
-#: ../src/dock.c:2082 ../src/dock.c:2217
+#: ../src/dock.c:2103 ../src/dock.c:2244
 msgid "Dock Icon"
 msgstr "Dokin ikooni"
 
-#: ../src/dock.c:3237 ../src/dock.c:3241
+#: ../src/dock.c:3267 ../src/dock.c:3270 ../src/dock.c:3273
 #, c-format
 msgid "Could not execute command \"%s\""
 msgstr "Ei õnnestu täita korraldust \"%s\""
 
-#: ../src/dock.c:3334
+#: ../src/dock.c:3366
 msgid "Toggle Omnipresent"
 msgstr "Näita/ära näita kõigil töölaudadel"
 
-#: ../src/dock.c:3339 ../src/winmenu.c:417 ../src/winspector.c:1395
+#: ../src/dock.c:3371 ../src/winmenu.c:417 ../src/winspector.c:1395
 msgid "Omnipresent"
 msgstr "Näita kõigil töölaudadel"
 
-#: ../src/dock.c:3353
+#: ../src/dock.c:3385
 msgid "Unselect All Icons"
 msgstr "Tühista ikoonivalik"
 
-#: ../src/dock.c:3362
+#: ../src/dock.c:3394
 msgid "Keep Icons"
 msgstr "Hoia ikoone"
 
-#: ../src/dock.c:3370
+#: ../src/dock.c:3402
 msgid "Move Icons To"
 msgstr "Teisalda ikoonid->"
 
-#: ../src/dock.c:3381
+#: ../src/dock.c:3413
 msgid "Remove Icons"
 msgstr "Eemalda ikoonid"
 
-#: ../src/dock.c:3412
+#: ../src/dock.c:3444
 msgid "Bring Here"
 msgstr "Too siia"
 
-#: ../src/dockedapp.c:131
+#: ../src/dockedapp.c:149
 #, c-format
 msgid "could not find icon %s, used in a docked application"
 msgstr "ei leia dokitud rakenduses kasutatavat ikooni %s"
 
-#: ../src/dockedapp.c:211
+#: ../src/dockedapp.c:229
 #, c-format
 msgid "Could not open specified icon file: %s"
 msgstr "Ei õnnestu avada määratud ikoonifaili: %s"
 
-#: ../src/dockedapp.c:213
+#: ../src/dockedapp.c:231
 msgid "Ignore"
 msgstr "Eira"
 
-#: ../src/dockedapp.c:306
+#: ../src/dockedapp.c:333
 msgid "Start when Window Maker is started"
 msgstr "Käivita koos Window Maker'iga"
 
-#: ../src/dockedapp.c:313
+#: ../src/dockedapp.c:340
 msgid "Lock (prevent accidental removal)"
 msgstr "Lukustatud (ei saa kogemata kustutada)"
 
-#: ../src/dockedapp.c:319
+#: ../src/dockedapp.c:344
 msgid "Application path and arguments"
 msgstr "Rakenduse tee ja argumendid"
 
-#: ../src/dockedapp.c:330
+#: ../src/dockedapp.c:357
+msgid "Command for middle-click launch"
+msgstr "Korraldus, mis käivitatakse keskmise nupu vajutamisel"
+
+#: ../src/dockedapp.c:371
+#, c-format
+msgid "%s will be replaced with current selection"
+msgstr "%s asendatakse antud valikuga"
+
+#: ../src/dockedapp.c:376
 msgid "Command for files dropped with DND"
 msgstr "Korraldus DND abil saadetud failidele"
 
-#: ../src/dockedapp.c:342
+#: ../src/dockedapp.c:390
 #, c-format
 msgid "%d will be replaced with the file name"
 msgstr "%d asendatakse failinimega"
 
-#: ../src/dockedapp.c:346
+#: ../src/dockedapp.c:394
 msgid "DND support was not compiled in"
 msgstr "DND toetus ei ole sisse kompileeritud"
 
-#: ../src/dockedapp.c:352
+#: ../src/dockedapp.c:399
 msgid "Icon Image"
 msgstr "Ikooni pilt"
 
-#: ../src/dockedapp.c:364 ../src/winspector.c:1533
+#: ../src/dockedapp.c:413 ../src/winspector.c:1533
 msgid "Browse..."
 msgstr "Kuva..."
 
-#: ../src/dockedapp.c:409
+#: ../src/dockedapp.c:466
 msgid "Docked Application Settings"
 msgstr "Dokitud rakenduse määrangud"
 
@@ -872,7 +881,7 @@ msgstr " --version\t\tväljastab versiooninumbri ja lõpetab programmi töö"
 msgid " --help\t\t\tshow this message"
 msgstr " --help\t\t\tnäitab seda teadet"
 
-#: ../src/main.c:456
+#: ../src/main.c:457
 #, c-format
 msgid ""
 "could not find user GNUstep directory (%s).\n"
@@ -881,45 +890,63 @@ msgstr ""
 "ei õnnestu leida kasutaja GNUstep kataloogi (%s).\n"
 "Veendu, et Window Maker on korrektselt paigaldatud ja käivita wmaker.inst"
 
-#: ../src/main.c:477 ../src/main.c:482
+#: ../src/main.c:462
+#, c-format
+msgid "could not find user GNUstep directory (%s)."
+msgstr "ei õnnestu leida kasutaja GNUstep kataloogi (%s)"
+
+#: ../src/main.c:465
+msgid ""
+"There was an error while creating GNUstep directory, please make sure you "
+"have installed Window Maker correctly and run wmaker.inst"
+msgstr ""
+"Viga GNUstep kataloogi loomise käigus. Palun veendu, et Window Maker on "
+"korrektselt paigaldatud ja käivita wmaker.inst"
+
+#: ../src/main.c:468
+#, c-format
+msgid "%s directory created with default configuration."
+msgstr "%s kataloog loodi vaikimisi häälestusega"
+
+#: ../src/main.c:488 ../src/main.c:493
 #, c-format
 msgid "%s:could not execute initialization script"
 msgstr "%s:ei õnnestu käivitada lähtestamisskripti"
 
-#: ../src/main.c:502 ../src/main.c:507
+#: ../src/main.c:513 ../src/main.c:518
 #, c-format
 msgid "%s:could not execute exit script"
 msgstr "%s:ei õnnestu käivitada lõpetamisskripti"
 
-#: ../src/main.c:623 ../src/main.c:631 ../src/main.c:639 ../src/main.c:659
+#: ../src/main.c:634 ../src/main.c:642 ../src/main.c:650 ../src/main.c:670
 #, c-format
 msgid "too few arguments for %s"
 msgstr "liiga vähe argumente %s jaoks"
 
-#: ../src/main.c:643
+#: ../src/main.c:654
 #, c-format
 msgid "bad value for visualid: \"%s\""
 msgstr "vigane visualid väärtus: \"%s\""
 
-#: ../src/main.c:667
+#: ../src/main.c:678
 #, c-format
 msgid "%s: invalid argument '%s'\n"
 msgstr "%s: vigane argument '%s'\n"
 
-#: ../src/main.c:668
+#: ../src/main.c:679
 #, c-format
 msgid "Try '%s --help' for more information\n"
 msgstr "Et saada rohkem informatsiooni, proovi '%s --help'\n"
 
-#: ../src/main.c:699
+#: ../src/main.c:710
 msgid "X server does not support locale"
 msgstr "X server ei toeta lokaliseerimist"
 
-#: ../src/main.c:703
+#: ../src/main.c:714
 msgid "cannot set locale modifiers"
 msgstr ""
 
-#: ../src/main.c:719
+#: ../src/main.c:730
 #, c-format
 msgid "could not open display \"%s\""
 msgstr "ei õnnestu avada kuva \"%s\""
@@ -943,68 +970,68 @@ msgstr "ei õnnestu defineerida %s väärtust cpp jaoks"
 msgid "could not get password entry for UID %i"
 msgstr "ei õnnestu leida UID %i paroolikirjet"
 
-#: ../src/misc.c:127
+#: ../src/misc.c:126
 #, c-format
 msgid "your machine is misconfigured. HOSTNAME is set to %s"
 msgstr "Teie masin on häälestamata. HOSTNAME väärtus on %s"
 
-#: ../src/misc.c:133
+#: ../src/misc.c:132
 #, c-format
 msgid "your machine is misconfigured. HOST is set to %s"
 msgstr "Teie masin on häälestamata. HOST väärtus on %s"
 
-#: ../src/misc.c:632
+#: ../src/misc.c:628
 msgid "Program Arguments"
 msgstr "Programmi argumendid"
 
-#: ../src/misc.c:633
+#: ../src/misc.c:629
 msgid "Enter command arguments:"
 msgstr "Sisesta käsu argumendid:"
 
-#: ../src/misc.c:726
+#: ../src/misc.c:722
 msgid "unable to get dropped data from DND drop"
 msgstr "ei õnnestu vastu võtta DND saadetud andmeid"
 
-#: ../src/misc.c:734
+#: ../src/misc.c:730
 msgid "error getting dropped data from DND drop"
 msgstr "viga DND saadetud andmete vastuvõtmisel"
 
-#: ../src/misc.c:740
+#: ../src/misc.c:736
 msgid "out of memory while getting data from DND drop"
 msgstr "mälu lõppes DND saadetud andmete vastuvõtmisel "
 
-#: ../src/misc.c:785 ../src/misc.c:925
+#: ../src/misc.c:781 ../src/misc.c:921
 #, c-format
 msgid "out of memory during expansion of \"%s\""
 msgstr "mälu lõppes \"%s\" laiendamise käigus"
 
-#: ../src/misc.c:839
+#: ../src/misc.c:835
 msgid "out of memory during expansion of \"%w\""
 msgstr "mälu lõppes \"%w\" laiendamise käigus"
 
-#: ../src/misc.c:857
+#: ../src/misc.c:853
 msgid "out of memory during expansion of \"%W\""
 msgstr "mälu lõppes \"%W\" laiendamise käigus"
 
-#: ../src/misc.c:873
+#: ../src/misc.c:869
 msgid "out of memory during expansion of \"%a\""
 msgstr "mälu lõppes \"%a\" laiendamise käigus"
 
-#: ../src/misc.c:904
+#: ../src/misc.c:900
 #, c-format
 msgid "out of memory during expansion of \"%d\""
 msgstr "mälu lõppes \"%d\" laiendamise käigus"
 
-#: ../src/misc.c:918
+#: ../src/misc.c:914
 msgid "selection not available"
 msgstr "valik ei ole kättesaadav"
 
-#: ../src/misc.c:991 ../src/misc.c:997
+#: ../src/misc.c:987 ../src/misc.c:993
 #, c-format
 msgid "bad window name value in %s state info"
 msgstr "vigane akna nimi %s olekuinfos"
 
-#: ../src/misc.c:1254
+#: ../src/misc.c:1250
 msgid "could not send message to background image helper"
 msgstr "ei õnnestu saata teadet taustapildiprogrammile"
 
@@ -1378,17 +1405,17 @@ msgstr "sain signaali %i (%s) - lõpetan...\n"
 msgid "got signal %i - exiting...\n"
 msgstr "sain signaali %i - lõpetan...\n"
 
-#: ../src/startup.c:322
+#: ../src/startup.c:329
 #, c-format
 msgid "got signal %i (%s)\n"
 msgstr "sain signaali %i (%s)\n"
 
-#: ../src/startup.c:324
+#: ../src/startup.c:331
 #, c-format
 msgid "got signal %i\n"
 msgstr "sain signaali %i\n"
 
-#: ../src/startup.c:335
+#: ../src/startup.c:342
 msgid ""
 "crashed while trying to do some post-crash cleanup. Aborting immediatelly."
 msgstr ""
@@ -1396,19 +1423,19 @@ msgstr ""
 "viivitamatult."
 
 #. we try to restart Window Maker
-#: ../src/startup.c:400
+#: ../src/startup.c:407
 msgid "trying to restart Window Maker..."
 msgstr "proovin taaskäivitada Window Maker'it..."
 
-#: ../src/startup.c:405
+#: ../src/startup.c:412
 msgid "trying to start alternate window manager..."
 msgstr "proovin käivitada alternatiivset aknahaldurit"
 
-#: ../src/startup.c:410
+#: ../src/startup.c:417
 msgid "failed to start alternate window manager. Aborting."
 msgstr "ei õnnestu käivitada alternatiivset aknahaldurit. Annan alla."
 
-#: ../src/startup.c:412
+#: ../src/startup.c:419
 msgid ""
 "a fatal error has occured, probably due to a bug. Please fill the included "
 "BUGFORM and report it."
@@ -1417,27 +1444,27 @@ msgstr ""
 "programmiga kaasa tulnud vearaport (BUGFORM) ja saada see programmi "
 "autoritele."
 
-#: ../src/startup.c:900
+#: ../src/startup.c:899
 #, c-format
 msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
 msgstr ""
 "ikooni suuruseks on määratud %i, kuid see on liiga väike. Kasutan suurust "
 "16\n"
 
-#: ../src/startup.c:928
+#: ../src/startup.c:927
 msgid "XKB is not supported. KbdModeLock is automatically disabled."
 msgstr "Puudub XKB tugi. KbdModeLock on automaatselt keelatud."
 
-#: ../src/startup.c:947
+#: ../src/startup.c:946
 msgid "it seems that there is already a window manager running"
 msgstr "paistab, et mingi aknahaldur juba töötab"
 
-#: ../src/startup.c:953
+#: ../src/startup.c:952
 #, c-format
 msgid "could not manage screen %i"
 msgstr "ei õnnestu hallata ekraani %i"
 
-#: ../src/startup.c:1021
+#: ../src/startup.c:1020
 msgid "could not manage any screen"
 msgstr "ei õnnestu hallata ühtegi ekraani"
 
@@ -1916,23 +1943,23 @@ msgstr ""
 "Ahendab rakenduse teiste\n"
 "ekseplaride ikoonid üheks.\n"
 
-#: ../src/workspace.c:110 ../src/workspace.c:111 ../src/workspace.c:898
+#: ../src/workspace.c:110 ../src/workspace.c:111 ../src/workspace.c:897
 #, c-format
 msgid "Workspace %i"
 msgstr "Töölaud %i"
 
-#: ../src/workspace.c:955
+#: ../src/workspace.c:954
 msgid "Workspaces"
 msgstr "Töölauad"
 
-#: ../src/workspace.c:957
+#: ../src/workspace.c:956
 msgid "could not create Workspace menu"
 msgstr "ei õnnestu luua töölaua menüüd"
 
-#: ../src/workspace.c:964
+#: ../src/workspace.c:963
 msgid "New"
 msgstr "Uus"
 
-#: ../src/workspace.c:965
+#: ../src/workspace.c:964
 msgid "Destroy Last"
 msgstr "Eemalda viimane"
