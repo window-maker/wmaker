@@ -4,7 +4,8 @@ Changes since version 0.61.1:
 - fixed bug with menu editor in WPrefs placing cut/paste-ed entries in wrong
   positions.
 - removed "Keep Attracted Icons" option from Clip's menu. See NEWS.
-
+- fixed bug in Xdnd code to be able to work with QT. (This is QT's bug so
+  it will change again in future)
 
 
 Changes since version 0.61.0:
