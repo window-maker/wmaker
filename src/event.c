@@ -1735,7 +1735,8 @@ handleKeyPress(XEvent *event)
             wSelectWindow(wwin, !wwin->flags.selected);
             XFlush(dpy);
 
-        } else if (WMGetBagItemCount(scr->selected_windows)) {
+        } else if (scr->selected_windows 
+		   && WMGetBagItemCount(scr->selected_windows)) {
 
             if (wwin->flags.selected && scr->selected_windows) {
                 WMBag *selwins = scr->selected_windows;
