@@ -301,11 +301,13 @@ PLATFORM SPECIFIC NOTES:
 INSTALLATION:
 =============
 
-Unpack WindowMaker-data.tar.gz and move the pixmaps directory in it
-to /usr/local/share/pixmaps
+Unpack WindowMaker-extra-<version-number>.tar.gz in /usr/local/share
 
 You can get the file at ftp://ftp.windowmaker.org. This file is optional
-and only have a few icons.
+and only have a few icons, and themes. Look for the latest <version-number>
+available.
+Also there is a WindowMaker-extra.readme to instruct you where that package
+should go.
 
 
 Build Window Maker

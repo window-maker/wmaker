@@ -16,8 +16,13 @@ Themes
 ------
 
 Removed all themes from the source tree, and moved them in a separate package.
-You can download the new package from the same place as this package.
-Look after WindowMaker-themes.tar.gz
+You can download the new package from the same place as this package:
+ftp://ftp.windowmaker.org/pub/beta/srcs/
+Look after WindowMaker-extra-<version-number>.tar.gz
+Also WindowMaker-extra pack include the old WindowMaker-data.tar.gz which only
+contained icons.
+There is also a WindowMaker-extra.readme which will tell you where should this
+extra package untar-ed.
 
 
 Full Screen Maximization
