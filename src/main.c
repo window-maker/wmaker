@@ -431,6 +431,7 @@ print_help()
 
     puts(_(" --locale locale		locale to use"));
 
+    puts(_(" --create-stdcmap	create the standard colormap hint in PseudoColor visuals"));
     puts(_(" --visual-id visualid	visual id of visual to use"));
     puts(_(" --static		do not update or save configurations"));
 #ifdef DEBUG
