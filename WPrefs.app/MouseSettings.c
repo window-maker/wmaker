@@ -215,7 +215,9 @@ getbutton(char *str)
     if (!str)
 	return -2;
 
-    if (strcasecmp(str, "left")==0)
+    if (strcasecmp(str, "none")==0)
+	return 0;
+    else if (strcasecmp(str, "left")==0)
 	return 1;
     else if (strcasecmp(str, "middle")==0)
 	return 2;
