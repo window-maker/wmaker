@@ -163,6 +163,7 @@ Changes since version 0.80.2:
 - moved out font name conversion code from getstyle/setstyle/convertfonts and made it support fontsets
 - Converted all menu and po files to UTF-8
 - Updated de.po (Thomas Otto <3.1415926535897932384626433832@gmx.net>)
+- fixed a crash bug when switching workspaces
 
 Changes since version 0.80.1:
 .............................

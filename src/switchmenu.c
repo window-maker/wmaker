@@ -178,7 +178,7 @@ menuIndexForWindow(WMenu *menu, WWindow *wwin, int old_pos)
 {
     int idx;
 
-    if (menu->entry_no == 0)
+    if (menu->entry_no <= old_pos)
         return -1;
 
 #define WS(i)  ((WWindow*)menu->entries[i]->clientdata)->frame->workspace
@@ -326,11 +326,11 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
                         it = entry->flags.indicator_type;
                         ion = entry->flags.indicator_on;
 
-                        wMenuRemoveItem(switchmenu, i);
-
                         if (!IS_OMNIPRESENT(wwin) && idx < 0) {
                             idx = menuIndexForWindow(switchmenu, wwin, i);
                         }
+
+                        wMenuRemoveItem(switchmenu, i);
 
                         entry = wMenuInsertCallback(switchmenu, idx, t,
                                                     focusWindow, wwin);

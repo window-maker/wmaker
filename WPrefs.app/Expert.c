@@ -51,11 +51,10 @@ showData(_Panel *panel)
     WMSetButtonSelected(panel->swi[1], WMGetUDBoolForKey(udb, "NoXSetStuff"));
     WMSetButtonSelected(panel->swi[2], GetBoolForKey("SaveSessionOnExit"));
     WMSetButtonSelected(panel->swi[3], GetBoolForKey("UseSaveUnders"));
-    WMSetButtonSelected(panel->swi[4], GetBoolForKey("WindozeCycling"));
-    WMSetButtonSelected(panel->swi[5], GetBoolForKey("DontConfirmKill"));
-    WMSetButtonSelected(panel->swi[6], GetBoolForKey("DisableBlinking"));
+    WMSetButtonSelected(panel->swi[4], GetBoolForKey("DontConfirmKill"));
+    WMSetButtonSelected(panel->swi[5], GetBoolForKey("DisableBlinking"));
     //if (WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
-    WMSetButtonSelected(panel->swi[7], GetBoolForKey("AntialiasedText"));
+    WMSetButtonSelected(panel->swi[6], GetBoolForKey("AntialiasedText"));
 }
 
 
@@ -68,7 +67,7 @@ createPanel(Panel *p)
     panel->box = WMCreateBox(panel->parent);
     WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
 
-    for (i=0; i<8; i++) {
+    for (i=0; i<7; i++) {
         panel->swi[i] = WMCreateSwitchButton(panel->box);
         WMResizeWidget(panel->swi[i], FRAME_WIDTH-40, 25);
         WMMoveWidget(panel->swi[i], 20, 20+i*25);
@@ -78,13 +77,12 @@ createPanel(Panel *p)
     WMSetButtonText(panel->swi[1], _("Do not set non-WindowMaker specific parameters (do not use xset)."));
     WMSetButtonText(panel->swi[2], _("Automatically save session when exiting Window Maker."));
     WMSetButtonText(panel->swi[3], _("Use SaveUnder in window frames, icons, menus and other objects."));
-    WMSetButtonText(panel->swi[4], _("Use Windoze style cycling."));
-    WMSetButtonText(panel->swi[5], _("Disable confirmation panel for the Kill command."));
-    WMSetButtonText(panel->swi[6], _("Disable selection animation for selected icons."));
-    WMSetButtonText(panel->swi[7], _("Smooth font edges (needs restart)."));
+    WMSetButtonText(panel->swi[4], _("Disable confirmation panel for the Kill command."));
+    WMSetButtonText(panel->swi[5], _("Disable selection animation for selected icons."));
+    WMSetButtonText(panel->swi[6], _("Smooth font edges (needs restart)."));
 
     //if (!WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
-    WMSetButtonEnabled(panel->swi[7], True);
+    WMSetButtonEnabled(panel->swi[6], True);
 
     WMRealizeWidget(panel->box);
     WMMapSubwidgets(panel->box);
@@ -104,11 +102,10 @@ storeDefaults(_Panel *panel)
 
     SetBoolForKey(WMGetButtonSelected(panel->swi[2]), "SaveSessionOnExit");
     SetBoolForKey(WMGetButtonSelected(panel->swi[3]), "UseSaveUnders");
-    SetBoolForKey(WMGetButtonSelected(panel->swi[4]), "WindozeCycling");
-    SetBoolForKey(WMGetButtonSelected(panel->swi[5]), "DontConfirmKill");
-    SetBoolForKey(WMGetButtonSelected(panel->swi[6]), "DisableBlinking");
+    SetBoolForKey(WMGetButtonSelected(panel->swi[4]), "DontConfirmKill");
+    SetBoolForKey(WMGetButtonSelected(panel->swi[5]), "DisableBlinking");
     //if (WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
-    SetBoolForKey(WMGetButtonSelected(panel->swi[7]), "AntialiasedText");
+    SetBoolForKey(WMGetButtonSelected(panel->swi[6]), "AntialiasedText");
 }
 
 

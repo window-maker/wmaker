@@ -87,7 +87,6 @@ typedef struct _WPrefs {
     WMFrame *banner;
     WMLabel *nameL;
     WMLabel *versionL;
-    WMLabel *creditsL;
     WMLabel *statusL;
 
     Panel *currentPanel;
@@ -323,38 +322,30 @@ createMainWindow(WMScreen *scr)
     WMMoveWidget(WPrefs.banner, FRAME_LEFT, FRAME_TOP);
     WMSetFrameRelief(WPrefs.banner, WRFlat);
 
-    font = WMCreateFont(scr, "Lucida Sans,Comic Sans MS,Times New Roman,serif:bold:pixelsize=24");
+    font = WMCreateFont(scr, "Lucida Sans,Times New Roman,serif:bold:pixelsize=24");
     if (!font)
         font = WMBoldSystemFontOfSize(scr, 24);
     WPrefs.nameL = WMCreateLabel(WPrefs.banner);
     WMSetLabelTextAlignment(WPrefs.nameL, WACenter);
-    WMResizeWidget(WPrefs.nameL, FRAME_WIDTH-20, 30);
-    WMMoveWidget(WPrefs.nameL, 10, 25);
+    WMResizeWidget(WPrefs.nameL, FRAME_WIDTH-20, 60);
+    WMMoveWidget(WPrefs.nameL, 10, 60);
     WMSetLabelFont(WPrefs.nameL, font);
-    WMSetLabelText(WPrefs.nameL, _("Window Maker Preferences Utility"));
+    WMSetLabelText(WPrefs.nameL, _("Window Maker Preferences"));
     WMReleaseFont(font);
 
     WPrefs.versionL = WMCreateLabel(WPrefs.banner);
     WMResizeWidget(WPrefs.versionL, FRAME_WIDTH-20, 20);
-    WMMoveWidget(WPrefs.versionL, 10, 65);
+    WMMoveWidget(WPrefs.versionL, 10, 100);
     WMSetLabelTextAlignment(WPrefs.versionL, WACenter);
-    sprintf(buffer, _("Version %s for Window Maker %s or newer"), WVERSION,
-            WMVERSION);
+    sprintf(buffer, _("Version %s"), VERSION);
     WMSetLabelText(WPrefs.versionL, buffer);
 
     WPrefs.statusL = WMCreateLabel(WPrefs.banner);
     WMResizeWidget(WPrefs.statusL, FRAME_WIDTH-20, 60);
-    WMMoveWidget(WPrefs.statusL, 10, 100);
+    WMMoveWidget(WPrefs.statusL, 10, 150);
     WMSetLabelTextAlignment(WPrefs.statusL, WACenter);
     WMSetLabelText(WPrefs.statusL, _("Starting..."));
 
-    WPrefs.creditsL = WMCreateLabel(WPrefs.banner);
-    WMResizeWidget(WPrefs.creditsL, FRAME_WIDTH-20, 60);
-    WMMoveWidget(WPrefs.creditsL, 10, FRAME_HEIGHT-60);
-    WMSetLabelTextAlignment(WPrefs.creditsL, WACenter);
-    WMSetLabelText(WPrefs.creditsL, _("Programming/Design: Alfredo K. Kojima\n"
-                                      "Artwork: Marco van Hylckama Vlieg, Largo et al\n"
-                                      "More Programming: James Thompson et al"));
 
 
     WMMapSubwidgets(WPrefs.win);
@@ -416,7 +407,6 @@ changeSection(WMWidget *self, void *data)
 
     if (WPrefs.currentPanel == NULL) {
         WMDestroyWidget(WPrefs.nameL);
-        WMDestroyWidget(WPrefs.creditsL);
         WMDestroyWidget(WPrefs.versionL);
         WMDestroyWidget(WPrefs.statusL);
 
@@ -722,9 +712,7 @@ Initialize(WMScreen *scr)
 
     WMRealizeWidget(WPrefs.scrollV);
 
-    WMSetLabelText(WPrefs.statusL,
-                   _("WPrefs is free software and is distributed WITHOUT ANY\n"
-                     "WARRANTY under the terms of the GNU General Public License."));
+    WMSetLabelText(WPrefs.statusL, "");
 }
 
 

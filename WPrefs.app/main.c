@@ -114,7 +114,7 @@ main(int argc, char **argv)
         for (i=1; i<argc; i++) {
             if (strcmp(argv[i], "-version")==0
                 || strcmp(argv[i], "--version")==0) {
-                printf("WPrefs (Window Maker) %s\n", WVERSION);
+                printf("WPrefs (Window Maker) %s\n", VERSION);
                 exit(0);
             } else if (strcmp(argv[i], "-display")==0) {
                 i++;
