@@ -32,7 +32,6 @@ typedef struct W_Data {
     unsigned   retainCount;
     WMFreeDataProc *destructor;
     int	       format;      /* 0, 8, 16 or 32 */
-    unsigned   freeData:1;  /* whether the data should be released */
 } W_Data;
 
 
@@ -57,8 +56,7 @@ WMCreateDataWithCapacity(unsigned capacity) /*FOLD00*/
     aData->length = 0;
     aData->retainCount = 1;
     aData->format = 0;
-    aData->freeData = 1;
-    aData->destructor = NULL;
+    aData->destructor = wfree;
 
     return aData;
 }
@@ -104,7 +102,6 @@ WMCreateDataWithBytesNoCopy(void *bytes, unsigned length, /*FOLD00*/
     aData->growth = length/2 > 0 ? length/2 : 1;
     aData->bytes = bytes;
     aData->retainCount = 1;
-    aData->freeData = 0;
     aData->format = 0;
     aData->destructor = destructor;
 
@@ -142,12 +139,8 @@ WMReleaseData(WMData *aData) /*FOLD00*/
     aData->retainCount--;
     if (aData->retainCount > 0)
         return;
-    if (aData->bytes != NULL) {
-        if (aData->destructor != NULL) {
-            aData->destructor(aData->bytes);
-        } else if (aData->freeData) {
-            wfree(aData->bytes);
-        }
+    if (aData->bytes!=NULL && aData->destructor!=NULL) {
+        aData->destructor(aData->bytes);
     }
     wfree(aData);
 }
@@ -257,8 +250,7 @@ WMGetSubdataWithRange(WMData *aData, WMRange aRange) /*FOLD00*/
 
     buffer = wmalloc(aRange.count);
     WMGetDataBytesWithRange(aData, buffer, aRange);
-    newData = WMCreateDataWithBytesNoCopy(buffer, aRange.count, NULL);
-    newData->freeData = 1;
+    newData = WMCreateDataWithBytesNoCopy(buffer, aRange.count, wfree);
     newData->format = aData->format;
     
     return newData;
