@@ -166,7 +166,7 @@
 		"Search in Manual" SHEXEC MANUAL_SEARCH(%s)
 	"Selection" END
 
-	"Workspace" MENU
+	"Commands" MENU
 		"Hide Others" HIDE_OTHERS
 		"Show All" SHOW_ALL
 		"Arrange Icons" ARRANGE_ICONS
@@ -174,7 +174,7 @@
 		"Lock" EXEC xlock -allowroot -usefirst
 		"Save Session" SAVE_SESSION
 		"Clear Session" CLEAR_SESSION
-	"Workspace" END
+	"Commands" END
 
 	"Appearance" MENU
 		"Themes" OPEN_MENU -noext THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle

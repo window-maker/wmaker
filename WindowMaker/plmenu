@@ -56,7 +56,7 @@
   ("Navigate", EXEC, "netscape %s"),
   ("Search in Manual", EXEC, "MANUAL_SEARCH(%s)")
   ),
- ("Workspace",
+ ("Commands",
   ("Hide Others", HIDE_OTHERS),
   ("Show All", SHOW_ALL),
   ("Arrange Icons", ARRANGE_ICONS),
