@@ -270,7 +270,6 @@ void
 WMClearList(WMList *lPtr)
 {
     int oldSelected = lPtr->selectedItem;
-    int i;
 
     WMEmptyArray(lPtr->items);
 

@@ -1902,16 +1902,15 @@ handleTextKeyPress(Text *tPtr, XEvent *event)
     if (((XKeyEvent *) event)->state & ControlMask)
         control_pressed = True;
     buffer[XLookupString(&event->xkey, buffer, 1, &ksym, NULL)] = 0;
-    
+
     switch(ksym) {
 
         case XK_Right: 
-WMScrollText(tPtr, -14);
+            WMScrollText(tPtr, -14);
         case XK_Left: {
-            TextBlock *tb = tPtr->currentTextBlock;
-            int x = tPtr->cursor.x + tPtr->visible.x;
-            int y = tPtr->visible.y + tPtr->cursor.y + tPtr->cursor.h;
-            int w, pos;
+            //TextBlock *tb = tPtr->currentTextBlock;
+            //int x = tPtr->cursor.x + tPtr->visible.x;
+            //int y = tPtr->visible.y + tPtr->cursor.y + tPtr->cursor.h;
 
 #if 0
             if(!tb)
@@ -1931,7 +1930,7 @@ WMScrollText(tPtr, -14);
                 3 + tPtr->visible.y + tPtr->cursor.y 
                     + tPtr->cursor.h - tPtr->vpos);
             if(x == tPtr->cursor.x + tPtr->visible.x) { 
-printf("same %d %d\n", x, tPtr->cursor.x + tPtr->visible.x);
+                printf("same %d %d\n", x, tPtr->cursor.x + tPtr->visible.x);
                 cursorToTextPosition(tPtr, tPtr->visible.x, 
                 3 + tPtr->visible.y + tPtr->cursor.y + tPtr->cursor.h);
             }

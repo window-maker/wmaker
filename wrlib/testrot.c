@@ -4,6 +4,7 @@
 #include "wraster.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "tile.xpm"
 Display *dpy;
 Window win;

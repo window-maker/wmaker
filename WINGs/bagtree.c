@@ -395,7 +395,7 @@ WMCreateTreeBag(void)
 
 
 WMBag*
-WMCreateTreeBagWithDestructor(void (*destructor)(void*))
+WMCreateTreeBagWithDestructor(WMFreeDataProc *destructor)
 {
     WMBag *bag;
 
@@ -752,7 +752,7 @@ WMMapBag(WMBag *self, void (*function)(void*, void*), void *data)
 
 
 static int
-findInTree(W_Bag *tree, W_Node *node, int (*function)(void*,void*), void *cdata)
+findInTree(W_Bag *tree, W_Node *node, WMMatchDataProc *function, void *cdata)
 {
     int index;
 
@@ -772,7 +772,7 @@ findInTree(W_Bag *tree, W_Node *node, int (*function)(void*,void*), void *cdata)
 
 
 int
-WMFindInBag(WMBag *self, int (*match)(void*,void*), void *cdata)
+WMFindInBag(WMBag *self, WMMatchDataProc *match, void *cdata)
 {
     return findInTree(self, self->root, match, cdata);
 }

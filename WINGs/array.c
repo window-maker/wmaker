@@ -20,17 +20,17 @@
 
 
 typedef struct W_Array {
-    void **items;		      /* the array data */
-    int itemCount;	              /* # of items in array */
-    int allocSize;	              /* allocated size of array */
-    void (*destructor)(void *item);   /* the destructor to free elements */
+    void **items;		 /* the array data */
+    int itemCount;	         /* # of items in array */
+    int allocSize;	         /* allocated size of array */
+    WMFreeDataProc *destructor;  /* the destructor to free elements */
 } W_Array;
 
 
 WMArray*
 WMCreateArray(int initialSize)
 {
-    WMCreateArrayWithDestructor(initialSize, NULL);
+    return WMCreateArrayWithDestructor(initialSize, NULL);
 }
 
 

@@ -1798,7 +1798,7 @@ createPanel(Panel *p)
     WMSetButtonImagePosition(panel->newB, WIPAbove);
     WMSetButtonText(panel->newB, _("New"));
     WMSetButtonAction(panel->newB, newTexture, panel);
-    SetButtonAlphaImage(scr, panel->newB, TNEW_FILE);
+    SetButtonAlphaImage(scr, panel->newB, TNEW_FILE, NULL, NULL);
 
     WMSetBalloonTextForView(_("Create a new texture."),
 			    WMWidgetView(panel->newB));
@@ -1810,7 +1810,7 @@ createPanel(Panel *p)
     WMSetButtonImagePosition(panel->ripB, WIPAbove);
     WMSetButtonText(panel->ripB, _("Extract..."));
     WMSetButtonAction(panel->ripB, extractTexture, panel);
-    SetButtonAlphaImage(scr, panel->ripB, TEXTR_FILE);
+    SetButtonAlphaImage(scr, panel->ripB, TEXTR_FILE, NULL, NULL);
 
     WMSetBalloonTextForView(_("Extract texture(s) from a theme or a style file."),
 			    WMWidgetView(panel->ripB));
@@ -1823,7 +1823,7 @@ createPanel(Panel *p)
     WMSetButtonFont(panel->editB, font);
     WMSetButtonImagePosition(panel->editB, WIPAbove);
     WMSetButtonText(panel->editB, _("Edit"));
-    SetButtonAlphaImage(scr, panel->editB, TEDIT_FILE);
+    SetButtonAlphaImage(scr, panel->editB, TEDIT_FILE, NULL, NULL);
     WMSetButtonAction(panel->editB, editTexture, panel);
     WMSetBalloonTextForView(_("Edit the highlighted texture."),
 			    WMWidgetView(panel->editB));
@@ -1834,7 +1834,7 @@ createPanel(Panel *p)
     WMSetButtonFont(panel->delB, font);
     WMSetButtonImagePosition(panel->delB, WIPAbove);
     WMSetButtonText(panel->delB, _("Delete"));
-    SetButtonAlphaImage(scr, panel->delB, TDEL_FILE);
+    SetButtonAlphaImage(scr, panel->delB, TDEL_FILE, NULL, NULL);
     WMSetButtonEnabled(panel->delB, False);
     WMSetButtonAction(panel->delB, deleteTexture, panel);
     WMSetBalloonTextForView(_("Delete the highlighted texture."),

@@ -335,11 +335,10 @@ error:
 static void
 changeLanguageAction(WMWidget *w, void *data)
 {
-    Panel *panel = (Panel*)data;
+    /*Panel *panel = (Panel*)data;*/
     WMMenuItem *mi;
-    proplist_t pl, font;
-    char buffer[512];
-    
+    proplist_t pl;
+
     mi = WMGetPopUpButtonMenuItem(w, WMGetPopUpButtonSelectedItem(w));
     pl = WMGetMenuItemRepresentedObject(mi);
 

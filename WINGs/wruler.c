@@ -223,8 +223,6 @@ static void drawRulerOnPixmap(Ruler * rPtr)
 
 static void paintRuler(Ruler * rPtr)
 {
-    WMScreen *screen = rPtr->view->screen;
-
     if (!rPtr->drawBuffer || !rPtr->view->flags.realized)
         return;
 
@@ -337,7 +335,6 @@ static void rulerDidResize(W_ViewDelegate * self, WMView * view)
 static void handleEvents(XEvent * event, void *data)
 {
     Ruler *rPtr = (Ruler *) data;
-    Display *dpy = event->xany.display;
 
     switch (event->type) {
       case Expose:
@@ -487,6 +484,7 @@ void WMSetRulerMargins(WMRuler * rPtr, WMRulerMargins margins)
 
 }
 
+
 WMRulerMargins *
 WMGetRulerMargins(WMRuler * rPtr)
 {
@@ -505,7 +503,9 @@ WMGetRulerMargins(WMRuler * rPtr)
     /*for */
     margins->tabs = rPtr->margins.tabs;
 
+    return margins;
 }
+
 
 Bool
 WMIsMarginEqualToMargin(WMRulerMargins *aMargin, WMRulerMargins *anotherMargin)
@@ -541,7 +541,7 @@ void WMSetRulerOffset(WMRuler * rPtr, int pixels)
 int WMGetRulerOffset(WMRuler * rPtr)
 {
     if (!rPtr)
-    return;
+        return 0; /* what value should return if no ruler? -1 or 0? */
     return rPtr->offset;
 }
 

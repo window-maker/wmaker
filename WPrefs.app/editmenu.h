@@ -106,7 +106,7 @@ void WEditMenuHide(WEditMenu *menu);
 
 void WEditMenuUnhide(WEditMenu *menu);
 
-void WEdirMenuShowAt(WEditMenu *menu, int x, int y);
+void WEditMenuShowAt(WEditMenu *menu, int x, int y);
 
 
 #endif

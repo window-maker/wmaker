@@ -32,11 +32,9 @@ changeFontProp(char *fname, char *newprop, int which)
 WMFont *
 WMGetFontPlain(WMScreen *scrPtr, WMFont *font) 
 {
-	WMFont *nfont=NULL;
-	if(!scrPtr|| !font)
-		return NULL;
-	return font;
-	 
+    if(!scrPtr || !font)
+        return NULL;
+    return font;
 }
 
 WMFont *
@@ -72,10 +70,9 @@ WMGetFontItalic(WMScreen *scrPtr, WMFont *font)
 WMFont *
 WMGetFontOfSize(WMScreen *scrPtr, WMFont *font, int size) 
 {
-	WMFont *nfont=NULL;
-	if(!scrPtr || !font || size<1)
-		return NULL;
-	return font;
+    if(!scrPtr || !font || size<1)
+        return NULL;
+    return font;
 }
 
 

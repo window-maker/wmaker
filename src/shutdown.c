@@ -144,33 +144,32 @@ Shutdown(WShutdownMode mode)
 }
 
 
-
-
-static restoreWindows(WMBag *bag, WMBagIterator iter)
+static void
+restoreWindows(WMBag *bag, WMBagIterator iter)
 {
     WCoreWindow *next;
     WCoreWindow *core;
     WWindow *wwin;
-    
+
 
     if (iter == NULL) {
 	core = WMBagFirst(bag, &iter);
     } else {
 	core = WMBagNext(bag, &iter);
     }
-    
+
     if (core == NULL)
 	return;
-    
+
     restoreWindows(bag, iter);
-        
+
     /* go to the end of the list */
     while (core->stacking->under)
 	core = core->stacking->under;
 
     while (core) {
 	next = core->stacking->above;
-            
+
 	if (core->descriptor.parent_type==WCLASS_WINDOW) {
 	    Window window;
 
@@ -182,7 +181,7 @@ static restoreWindows(WMBag *bag, WMBagIterator iter)
 	core = next;
     }
 }
-   
+
 
 /*
  *----------------------------------------------------------------------
