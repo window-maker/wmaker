@@ -1,6 +1,8 @@
 Changes since version 0.64.0:
 .............................
 - fix with gnome hints stuff, related to tasklist/bar
+- ripped off single appicon stuff
+- added better appicon handling of apps of the same type
 
 Changes since version 0.63.1:
 .............................

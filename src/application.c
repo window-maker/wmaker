@@ -500,11 +500,11 @@ wApplicationSetCollapse(WApplication *app, Bool flag)
     WApplication *list = app->main_window_desc->screen_ptr->wapp_list;
     int index = 0;
     WWindow *wwin = app->main_window_desc;
-    
+
     if (WFLAGP(app->main_window_desc, collapse_appicons) == flag)
 	return;
-    
-    
+
+
     while (list) {
 	if (strcmp(wwin->wm_instance,
 		   list->main_window_desc->wm_instance) == 0
@@ -515,7 +515,7 @@ wApplicationSetCollapse(WApplication *app, Bool flag)
 
 	list = list->next;
     }
-    
+
     if (app->app_icon && flag)
 	wAppIconMove(app->app_icon, app->app_icon->x_pos, app->app_icon->y_pos);
 }

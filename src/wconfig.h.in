@@ -111,7 +111,7 @@
  * (in the root window) for switching to the previous workspace
  * and 5 for the next. This will not work if you enable
  * DisableWSMouseActions or compile wmaker with --enable-lite */
-#undef MOUSE_WS_SWITCH
+#define MOUSE_WS_SWITCH
  
 /*
  * Turn on a hack to make mouse and keyboard actions work even if
