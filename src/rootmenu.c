@@ -128,6 +128,7 @@ static Shortcut *shortcutList = NULL;
  *                the resulting menu in current position. The output of
  *                command must be a valid menu description.
  *                The space between '|' and command is optional.
+ *                || will do the same, but will not cache the contents.
  * SAVE_SESSION - saves the current state of the desktop, which include
  *		  all running applications, all their hints (geometry,
  *		  position on screen, workspace they live on, the dock
@@ -679,19 +680,22 @@ constructMenu(WMenu *menu, WMenuEntry *entry)
 		 (char*)entry->clientdata);
 	return;
     }
-    
+
     if (path[0][0]=='|') {
         /* pipe menu */
-	
+
         if (!menu->cascades[entry->cascade] || 
             menu->cascades[entry->cascade]->timestamp == 0) { 
             /* parse pipe */
 
 	    submenu = readMenuPipe(menu->frame->screen_ptr, path);
 
-            /* there's no automatic reloading */
-            if(submenu != NULL)
-                submenu->timestamp = 1;
+            if(submenu != NULL) {
+		if (path[0][1] == '|')
+		    submenu->timestamp = 0;
+		else
+                    submenu->timestamp = 1; /* there's no automatic reloading */
+	    }
         } else { 
             submenu = NULL; 
         }
