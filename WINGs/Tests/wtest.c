@@ -41,14 +41,14 @@ void
 testOpenFilePanel(WMScreen *scr)
 {
     WMOpenPanel *panel;
-    
+
     /* windowCount++; */
-    
+
     /* get the shared Open File panel */
     panel = WMGetOpenPanel(scr);
-    
+
     WMRunModalFilePanelForDirectory(panel, NULL, "/usr/local", NULL, NULL);
-    
+
     /* free the panel to save some memory. Not needed otherwise. */
     WMFreeFilePanel(WMGetOpenPanel(scr));
 }
@@ -58,13 +58,13 @@ void
 testFontPanel(WMScreen *scr)
 {
     WMFontPanel *panel;
-    
+
     /*windowCount++;*/
-    
+
     panel = WMGetFontPanel(scr);
-    
+
     WMShowFontPanel(panel);
-    
+
 /*    WMFreeFontPanel(panel);*/
 }
 
@@ -94,7 +94,7 @@ testFrame(WMScreen *scr)
     };
 
     windowCount++;
-    
+
     win = WMCreateWindow(scr, "testFrame");
     WMSetWindowTitle(win, "Frame");
     WMSetWindowCloseAction(win, closeAction, NULL);
@@ -107,11 +107,11 @@ testFrame(WMScreen *scr)
 	WMSetFrameTitle(frame, titles[i]);
 	WMSetFrameTitlePosition(frame, pos[i]);
     }
-    
+
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
     WMMapWidget(win);
-    
+
 }
 
 
@@ -239,7 +239,7 @@ testButton(WMScreen *scr)
     };
 
     windowCount++;
-    
+
     win = WMCreateWindow(scr, "testButton");
     WMResizeWidget(win, 300, 300);
     WMSetWindowTitle(win, "Buttons");
@@ -271,7 +271,7 @@ testGradientButtons(WMScreen *scr)
     WMColor *color, *altColor;
 
     windowCount++;
-    
+
     /* creates the top-level window */
     win = WMCreateWindow(scr, "testGradientButtons");
     WMSetWindowTitle(win, "Gradiented Button Demo");
@@ -283,11 +283,11 @@ testGradientButtons(WMScreen *scr)
     dark.red = 0x35;
     dark.green = 0x30;
     dark.blue = 0x35;
-    
+
     color = WMCreateRGBColor(scr, 0x5900, 0x5100, 0x5900, True);
     WMSetWidgetBackgroundColor(win, color);
     WMReleaseColor(color);
-    
+
     back = RRenderGradient(60, 24, &dark, &light, RGRD_DIAGONAL);
     RBevelImage(back, RBEV_RAISED2);
     pix1 = WMCreatePixmapFromRImage(scr, back, 0);
@@ -362,16 +362,16 @@ testScrollView(WMScreen *scr)
     int i;
 
     windowCount++;
-    
+
     /* creates the top-level window */
     win = WMCreateWindow(scr, "testScroll");
     WMSetWindowTitle(win, "Scrollable View");
-    
+
     WMSetWindowCloseAction(win, closeAction, NULL);
-    
+
     /* set the window size */
     WMResizeWidget(win, 300, 300);
-    
+
     /* creates a scrollable view inside the top-level window */
     sview = WMCreateScrollView(win);
     WMResizeWidget(sview, 200, 200);
@@ -395,12 +395,12 @@ testScrollView(WMScreen *scr)
     }
     WMMapSubwidgets(f);
     WMMapWidget(f);
-    
+
     WMSetScrollViewContentView(sview, WMWidgetView(f));
-    
+
     /* make the windows of the widgets be actually created */
     WMRealizeWidget(win);
-    
+
     /* Map all child widgets of the top-level be mapped.
      * You must call this for each container widget (like frames),
      * even if they are childs of the top-level window.
@@ -432,7 +432,7 @@ testColorWell(WMScreen *scr)
     WMResizeWidget(well2, 60, 40);
     WMMoveWidget(well2, 200, 100);
     WMSetColorWellColor(well2, WMCreateRGBColor(scr, 0, 0, 0x8888, True));
-    
+
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
     WMMapWidget(win);
@@ -452,7 +452,7 @@ testSlider(WMScreen *scr)
     WMSlider *s;
 
     windowCount++;
-    
+
     win = WMCreateWindow(scr, "testSlider");
     WMResizeWidget(win, 300, 300);
     WMSetWindowTitle(win, "Sliders");
@@ -483,11 +483,11 @@ testTextField(WMScreen *scr)
     WMTextField *field, *field2;
 
     windowCount++;
-    
+
     win = WMCreateWindow(scr, "testTextField");
     WMResizeWidget(win, 400, 300);
 
-    WMSetWindowCloseAction(win, closeAction, NULL);    
+    WMSetWindowCloseAction(win, closeAction, NULL);
 
     field = WMCreateTextField(win);
     WMResizeWidget(field, 200, 20);
@@ -501,48 +501,50 @@ testTextField(WMScreen *scr)
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
     WMMapWidget(win);
-    
+
 }
 
+
+#if 0
 void
 testText(WMScreen *scr)
 {
     WMWindow *win;
     WMText *text;
-	FILE *file = fopen("../README", "r");
+    FILE *file = fopen("../README", "r");
 
     windowCount++;
-    
+
     win = WMCreateWindow(scr, "testText");
     WMResizeWidget(win, 500, 300);
 
-    WMSetWindowCloseAction(win, closeAction, NULL);    
+    WMSetWindowCloseAction(win, closeAction, NULL);
 
     text = WMCreateText(win);
     WMResizeWidget(text, 480, 280);
     WMMoveWidget(text, 10, 10);
     WMSetTextHasVerticalScroller(text, True);
-	WMSetTextEditable(text, False);
+    WMSetTextEditable(text, False);
 
-	if(file) { 
-    	char buf[1024];
+    if(file) {
+        char buf[1024];
 
-		WMFreezeText(text);
-		while(fgets(buf, 1023, file))
-			WMAppendTextStream(text, buf);
-		
-		fclose(file);
-		WMThawText(text);
-		WMRefreshText(text, 0, 0);
-	} else {
-		WMAppendTextStream(text, "<HTML><i>Where's</i> the <b>README</b>?"); 
-	}
+        WMFreezeText(text);
+        while(fgets(buf, 1023, file))
+            WMAppendTextStream(text, buf);
+
+        fclose(file);
+        WMThawText(text);
+        WMRefreshText(text, 0, 0);
+    } else {
+        WMAppendTextStream(text, "<HTML><i>Where's</i> the <b>README</b>?");
+    }
 
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
     WMMapWidget(win);
-    
 }
+#endif
 
 
 void
@@ -552,11 +554,11 @@ testProgressIndicator(WMScreen *scr)
     WMProgressIndicator *pPtr;
 
     windowCount++;
-    
+
     win = WMCreateWindow(scr, "testProgressIndicator");
     WMResizeWidget(win, 292, 32);
 
-    WMSetWindowCloseAction(win, closeAction, NULL);    
+    WMSetWindowCloseAction(win, closeAction, NULL);
 
     pPtr = WMCreateProgressIndicator(win);
     WMMoveWidget(pPtr, 8, 8);
@@ -565,7 +567,7 @@ testProgressIndicator(WMScreen *scr)
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
     WMMapWidget(win);
-    
+
 }
 
 
@@ -576,11 +578,11 @@ testPullDown(WMScreen *scr)
     WMPopUpButton *pop, *pop2;
 
     windowCount++;
-    
+
     win = WMCreateWindow(scr, "pullDown");
     WMResizeWidget(win, 400, 300);
 
-    WMSetWindowCloseAction(win, closeAction, NULL);    
+    WMSetWindowCloseAction(win, closeAction, NULL);
 
     pop = WMCreatePopUpButton(win);
     WMResizeWidget(pop, 100, 20);
@@ -604,7 +606,7 @@ testPullDown(WMScreen *scr)
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
     WMMapWidget(win);
-    
+
 }
 
 
@@ -618,11 +620,11 @@ testTabView(WMScreen *scr)
     WMLabel *label;
 
     windowCount++;
-    
+
     win = WMCreateWindow(scr, "testTabs");
     WMResizeWidget(win, 400, 300);
 
-    WMSetWindowCloseAction(win, closeAction, NULL);    
+    WMSetWindowCloseAction(win, closeAction, NULL);
 
     tabv = WMCreateTabView(win);
     WMMoveWidget(tabv, 50, 50);
@@ -668,7 +670,7 @@ testTabView(WMScreen *scr)
     WMAddItemInTabView(tabv, tab);
     WMSetTabViewItemLabel(tab, "Something");
 
-    
+
     frame = WMCreateFrame(win);
     WMSetFrameRelief(frame, WRFlat);
     label = WMCreateLabel(frame);
@@ -692,11 +694,11 @@ testTabView(WMScreen *scr)
     WMSetLabelText(label, "Label fjweqklrj qwl");
     WMMapWidget(label);
     tab = WMCreateTabViewItemWithIdentifier(0);
-    WMSetTabViewItemView(tab, WMWidgetView(frame));    
+    WMSetTabViewItemView(tab, WMWidgetView(frame));
     WMAddItemInTabView(tabv, tab);
     WMSetTabViewItemLabel(tab, "Weee!");
 
-    
+
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
     WMMapWidget(win);
@@ -724,14 +726,14 @@ splitViewConstrainProc(WMSplitView *sPtr, int indView,
 }
 
 
-static void 
+static void
 resizeSplitView(XEvent *event, void *data)
 {
     WMSplitView *sPtr = (WMSplitView*)data;
 
     if (event->type == ConfigureNotify) {
 	int width = event->xconfigure.width - 10;
-        
+
 	if (width < WMGetSplitViewDividerThickness(sPtr))
 	    width = WMGetSplitViewDividerThickness(sPtr);
 
@@ -747,7 +749,7 @@ appendSubviewButtonAction(WMWidget *self, void *data)
     WMSplitView *sPtr = (WMSplitView*)data;
     char buf[64];
     WMLabel *label = WMCreateLabel(sPtr);
-    
+
     sprintf(buf, "Subview %d", WMGetSplitViewSubviewsCount(sPtr) + 1);
     WMSetLabelText(label, buf);
     WMSetLabelRelief(label, WRSunken);
@@ -761,7 +763,7 @@ removeSubviewButtonAction(WMWidget *self, void *data)
 {
     WMSplitView *sPtr = (WMSplitView*)data;
     int count = WMGetSplitViewSubviewsCount(sPtr);
-    
+
     if (count > 2) {
     	WMView *view = WMGetSplitViewSubviewAt(sPtr, count-1);
 	WMDestroyWidget(WMWidgetOfView(view));
@@ -792,16 +794,16 @@ testSplitView(WMScreen *scr)
     WMButton *button;
 
     windowCount++;
-    
+
     win = WMCreateWindow(scr, "testTabs");
     WMResizeWidget(win, 300, 400);
-    WMSetWindowCloseAction(win, closeAction, NULL);    
+    WMSetWindowCloseAction(win, closeAction, NULL);
 
     frame = WMCreateFrame(win);
     WMSetFrameRelief(frame, WRSunken);
     WMMoveWidget(frame, 5, 5);
     WMResizeWidget(frame, 290, 40);
-    
+
     splitv1 = WMCreateSplitView(win);
     WMMoveWidget(splitv1, 5, 50);
     WMResizeWidget(splitv1, 290, 345);
@@ -814,25 +816,25 @@ testSplitView(WMScreen *scr)
     WMSetButtonAction(button, appendSubviewButtonAction, splitv1);
     WMMoveWidget(button, 10, 8);
     WMMapWidget(button);
-    
+
     button = WMCreateCommandButton(frame);
     WMSetButtonText(button, "-");
     WMSetButtonAction(button, removeSubviewButtonAction, splitv1);
     WMMoveWidget(button, 80, 8);
     WMMapWidget(button);
-    
+
     button = WMCreateCommandButton(frame);
     WMSetButtonText(button, "=");
     WMMoveWidget(button, 150, 8);
     WMSetButtonAction(button, adjustSubviewsButtonAction, splitv1);
     WMMapWidget(button);
-    
+
     button = WMCreateCommandButton(frame);
     WMSetButtonText(button, "#");
     WMMoveWidget(button, 220, 8);
     WMSetButtonAction(button, orientationButtonAction, splitv1);
     WMMapWidget(button);
-    
+
     label = WMCreateLabel(splitv1);
     WMSetLabelText(label, "Subview 1");
     WMSetLabelRelief(label, WRSunken);
@@ -860,7 +862,7 @@ testSplitView(WMScreen *scr)
     WMSetLabelRelief(label, WRSunken);
     WMMapWidget(label);
     WMAddSplitViewSubview(splitv2, WMWidgetView(label));
-        
+
     WMMapWidget(splitv2);
     WMAddSplitViewSubview(splitv1, WMWidgetView(splitv2));
 
@@ -888,10 +890,10 @@ getImage(WMScreen *scr, char *file)
 {
     char buffer[1000];
     WMPixmap *pix;
-    
+
     sprintf(buffer, "../../WindowMaker/Icons/%s", file);
     pix = WMCreatePixmapFromFile(scr, buffer);
-    
+
     return pix;
 }
 
@@ -904,7 +906,7 @@ iconMouseStuff(XEvent *event, void *cdata)
     WMLabel *label = (WMLabel*)cdata;
     DNDStuff *stuff = WMGetHangedData(label);
     WMPoint where;
-    
+
     switch (event->type) {
      case ButtonPress:
 	stuff->x = event->xbutton.x;
@@ -917,12 +919,12 @@ iconMouseStuff(XEvent *event, void *cdata)
      case MotionNotify:
 	if (!stuff->mouseDown)
 	    break;
-	
+
 	if (abs(stuff->x - event->xmotion.x)>4
 	    || abs(stuff->y - event->xmotion.y)>4) {
-	    
+
 	    where = WMGetViewScreenPosition(WMWidgetView(label));
-	    
+
 	    WMDragImageFromView(WMWidgetView(label),
 				WMGetLabelImage(label),
 				NULL, /* XXX */
@@ -939,11 +941,11 @@ static void
 endedDragImage(WMView *self, WMPixmap *image, WMPoint point, Bool deposited)
 {
     DNDStuff *stuff = WMGetHangedData(WMWidgetOfView(self));
-    
+
     if (deposited) {
 	WMDestroyWidget(WMWidgetOfView(self));
     }
-    
+
     stuff->mouseDown = False;
 }
 
@@ -998,21 +1000,21 @@ performDragOperation(WMView *self, WMDraggingInfo *info, WMData *data)
 {
     char *file = (char*)WMDataBytes(data);
     WMPoint pos;
-    
+
     pos = WMGetDraggingInfoImageLocation(info);
- 
+
     if (file!=NULL) {
 	WMLabel *label;
 	WMPoint pos2 = WMGetViewScreenPosition(self);
 
-	
-	label = makeDraggableLabel(WMWidgetOfView(self), file, 
+
+	label = makeDraggableLabel(WMWidgetOfView(self), file,
 				   pos.x-pos2.x, pos.y-pos2.y);
 	WMRealizeWidget(label);
 	WMMapWidget(label);
     }
 
-    
+
     return True;
 }
 
@@ -1043,24 +1045,24 @@ makeDraggableLabel(WMWidget *w, char *file, int x, int y)
     DNDStuff *stuff;
     WMLabel *label;
     WMPixmap *image = getImage(WMWidgetScreen(w), file);
-	
+
     stuff = wmalloc(sizeof(DNDStuff));
     stuff->mouseDown = False;
 
     stuff->filename = wstrdup(file);
-	
+
     label = WMCreateLabel(w);
     WMResizeWidget(label, 48, 48);
     WMMoveWidget(label, x, y);
-	
+
     WMSetViewDragSourceProcs(WMWidgetView(label), &dragSourceProcs);
-	
+
     WMHangData(label, stuff);
-	
+
     WMCreateEventHandler(WMWidgetView(label),
 			 ButtonPressMask|ButtonReleaseMask|ButtonMotionMask,
 			 iconMouseStuff, label);
-	
+
 
     if (image != NULL) {
 	WMSetLabelImagePosition(label, WIPImageOnly);
@@ -1102,31 +1104,31 @@ testDragAndDrop(WMScreen *scr)
 
     WMRegisterViewForDraggedTypes(WMWidgetView(frame), types);
     WMSetViewDragDestinationProcs(WMWidgetView(frame), &dragDestProcs);
-    
+
     dir = opendir("../../WindowMaker/Icons");
     if (!dir) {
 	perror("../../WindowMaker/Icons");
 	return;
     }
-    
+
     for (i = 0, j=0; j < 8; i++) {
 	ent = readdir(dir);
 	if (!ent)
 	    break;
-	
+
 	if (strstr(ent->d_name, ".xpm")==NULL) {
 	    continue;
 	}
 
 	label = makeDraggableLabel(frame, ent->d_name,4+(j/4)*64, 4+(j%4)*64);
-		
+
 	j++;
     }
-    
+
     closedir(dir);
-    
+
     WMMapSubwidgets(frame);
-    
+
     WMMapSubwidgets(win);
     WMRealizeWidget(win);
     WMMapWidget(win);
@@ -1160,25 +1162,25 @@ main(int argc, char **argv)
 {
     WMScreen *scr;
     WMPixmap *pixmap;
-    
-    
+
+
     /* Initialize the application */
     WMInitializeApplication("Test", &argc, argv);
-    
+
     testUD();
-    
+
     /*
      * Open connection to the X display.
      */
     dpy = XOpenDisplay("");
-    
+
     if (!dpy) {
 	puts("could not open display");
 	exit(1);
     }
-    
-    /* This is used to disable buffering of X protocol requests. 
-     * Do NOT use it unless when debugging. It will cause a major 
+
+    /* This is used to disable buffering of X protocol requests.
+     * Do NOT use it unless when debugging. It will cause a major
      * slowdown in your application
      */
 #if 1
@@ -1193,15 +1195,15 @@ main(int argc, char **argv)
      * Loads the logo of the application.
      */
     pixmap = WMCreatePixmapFromFile(scr, "logo.xpm");
-    
+
     /*
      * Makes the logo be used in standard dialog panels.
      */
     WMSetApplicationIconImage(scr, pixmap); WMReleasePixmap(pixmap);
-    
+
     /*
      * Do some test stuff.
-     * 
+     *
      * Put the testSomething() function you want to test here.
      */
 
@@ -1218,12 +1220,12 @@ main(int argc, char **argv)
     testFontPanel(scr);
 
     testScrollView(scr);
-    
+
     testButton(scr);
 
     testFrame(scr);
 
-    
+
     testTabView(scr);
 
 
@@ -1241,7 +1243,7 @@ main(int argc, char **argv)
 #endif
     /*
      * The main event loop.
-     * 
+     *
      */
     WMScreenMainLoop(scr);
 
