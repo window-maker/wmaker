@@ -163,8 +163,8 @@ createPanel(Panel *p)
                             WMWidgetView(panel->sizeF));
 
     panel->sizeP = WMCreatePopUpButton(panel->sizeF);
-    WMResizeWidget(panel->sizeP, 180, 20);
-    WMMoveWidget(panel->sizeP, 32, 24);
+    WMResizeWidget(panel->sizeP, 200, 20);
+    WMMoveWidget(panel->sizeP, 22, 24);
     WMAddPopUpButtonItem(panel->sizeP, _("Corner of screen"));
     WMAddPopUpButtonItem(panel->sizeP, _("Center of screen"));
     WMAddPopUpButtonItem(panel->sizeP, _("Center of resized window"));
@@ -183,8 +183,8 @@ createPanel(Panel *p)
                             WMWidgetView(panel->posiF));
 
     panel->posiP = WMCreatePopUpButton(panel->posiF);
-    WMResizeWidget(panel->posiP, 180, 20);
-    WMMoveWidget(panel->posiP, 32, 24);
+    WMResizeWidget(panel->posiP, 200, 20);
+    WMMoveWidget(panel->posiP, 22, 24);
     WMAddPopUpButtonItem(panel->posiP, _("Corner of screen"));
     WMAddPopUpButtonItem(panel->posiP, _("Center of screen"));
     WMAddPopUpButtonItem(panel->posiP, _("Center of resized window"));

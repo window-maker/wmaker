@@ -341,7 +341,7 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 		free(tmp);
 	}
 	break;
-
+	
      case XA_WM_ICON_NAME:
 #ifdef KWM_HINTS
 	wKWMSendEventMessage(wwin, WKWMChangedClient);
@@ -679,6 +679,13 @@ wClientGetNormalHints(WWindow *wwin, XWindowAttributes *wattribs, Bool geometry,
     }
 
     /* some buggy apps set weird hints.. */
+    if (wwin->normal_hints->min_width <= 0) 
+      wwin->normal_hints->min_width = MIN_WINDOW_SIZE;
+    
+    if (wwin->normal_hints->min_height <= 0)
+      wwin->normal_hints->min_height = MIN_WINDOW_SIZE;
+
+
     if (wwin->normal_hints->max_width < wwin->normal_hints->min_width)
 	wwin->normal_hints->max_width = wwin->normal_hints->min_width;
 
@@ -707,12 +714,6 @@ wClientGetNormalHints(WWindow *wwin, XWindowAttributes *wattribs, Bool geometry,
 	    wwin->normal_hints->max_aspect.y = 1;
     }
     
-    if (wwin->normal_hints->min_width <= 0) 
-      wwin->normal_hints->min_width = MIN_WINDOW_SIZE;
-    
-    if (wwin->normal_hints->min_height <= 0)
-      wwin->normal_hints->min_height = MIN_WINDOW_SIZE;
-
     if (wwin->normal_hints->min_height > wwin->normal_hints->max_height) {
 	wwin->normal_hints->min_height = wwin->normal_hints->max_height;
     }

@@ -1844,8 +1844,11 @@ wWindowConstrainSize(WWindow *wwin, int *nwidth, int *nheight)
 	height = (((height - minH) / hinc) * hinc) + minH;
     }
 
-    *nwidth = width;
-    *nheight = height;
+    /* broken stupid apps may cause preposterous values for these.. */
+    if (width > 0)
+	*nwidth = width;
+    if (height > 0)
+	*nheight = height;
 }
 
 

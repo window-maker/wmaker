@@ -48,6 +48,10 @@ Changes since version 0.61.1:
 - added Jim Knoble <jmknoble@pobox.com>'s cursor thing patch
 - fixed lock of wmaker when clicking on menu multiple times
 - made transients appear near their owner
+- fixed crash bug with broken java implementations (Miguel Covarrubias 
+							<mcovarr@tigr.org>)
+- made Revert on attributes panel apply the reverted changes immediately
+  to avoid inconsistent internal state 
 
 Changes since version 0.61.0:
 .............................

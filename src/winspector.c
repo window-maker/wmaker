@@ -1045,6 +1045,11 @@ revertSettings(WMButton *button, InspectorPanel *panel)
     } else {
 	WMSetPopUpButtonSelectedItem(panel->wsP, 0);
     }
+    
+    /* must auto apply, so that there wno't be internal
+     * inconsistencies between the state in the flags and
+     * the actual state of the window */
+    applySettings(panel->applyBtn, panel);
 }
 
 
