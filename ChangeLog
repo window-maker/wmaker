@@ -44,6 +44,7 @@ Changes since version 0.80.0:
 - Fixed a bug in wdread
 - Fixed bug with windows that have WM_HINTS.take_focus = False. These windows
   will not receive focus at all.
+- Fixed a buffer overflow in winmenu.c
 
 
 Changes since version 0.70.0:
