@@ -413,6 +413,7 @@ wApplicationCreate(WScreen *scr, Window main_window)
 	scr->wapp_list->prev = wapp;
     scr->wapp_list = wapp;
 
+    
 #ifdef WMSOUND
     wSoundPlay(WMSOUND_APPSTART);
 #endif
@@ -436,7 +437,7 @@ wApplicationDestroy(WApplication *wapp)
 
     if (!wapp)
       return;
-    
+  
     wapp->refcount--;
     if (wapp->refcount>0)
       return;

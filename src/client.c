@@ -307,7 +307,7 @@ wClientKill(WWindow *wwin)
  * Side effects:
  * 	Depends on the changed property.
  * 
- * TODO: CLIENT_LEADER, _GNUSTEP_WM_ATTR
+ * TODO: _GNUSTEP_WM_ATTR
  *---------------------------------------------------------------------- 
  */
 void
