@@ -2,7 +2,7 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
---- 0.51.2
+--- 0.52.0
 
 
 Appearance Editing in WPrefs
@@ -21,18 +21,7 @@ ftp://ftp.windowmaker.org/pub/beta/srcs/
 Look after WindowMaker-extra-<version-number>.tar.gz
 Also WindowMaker-extra pack include the old WindowMaker-data.tar.gz which only
 contained icons.
-There is also a WindowMaker-extra.readme which will tell you where should this
-extra package untar-ed.
-
-
-Full Screen Maximization
-------------------------
-
-The FullMaximize window attribute will allow the window to
-be maximized to the full size of the screen (ignoring anything
-like titlebar, resizebar, dock, panels etc). It should be usefull
-for programs that must use the whole screen, like games or things 
-like presentation programs.
+Look for the greatest version number when you download this package.
 
 
 get-wraster-flags script change
@@ -45,6 +34,27 @@ The name change was as follows:
 To allow backward compatibility, with already written software, the old
 --lflags option is still recognized, but you are encouraged to move the the
 new --ldflags.
+
+
+
+--- 0.51.2
+
+
+New Themes
+----------
+
+Added 2 new cool themes (actually I added in 0.51.1, but forgot
+to put it here...) from largo (LeetWM) and BadlandZ (STEP2000).
+
+
+Full Screen Maximization
+------------------------
+
+The FullMaximize window attribute will allow the window to
+be maximized to the full size of the screen (ignoring anything
+like titlebar, resizebar, dock, panels etc). It should be usefull
+for programs that must use the whole screen, like games or things 
+like presentation programs.
 
 
 --- 0.51.1

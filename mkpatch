@@ -340,7 +340,7 @@ cat << 'EOF' |sed -e "s#TMP#$TMP#" -e "s#OTREE#$OTREE#" -e "s#NTREE#$NTREE#" \
 	> $TMP/README
 
 This patch package will upgrade OTREE to NTREE.
-You must unpack it inside the NTREE directory or it will not work.
+You must unpack it inside the OTREE directory or it will not work.
 This patch can only be applied over a clean OTREE distribution.
 To apply, just type (followed by a Return, of course):
 ./runme
