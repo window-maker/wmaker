@@ -1163,7 +1163,7 @@ handleXkbIndicatorStateNotify(XEvent *event)
     for (i=0; i<wScreenCount; i++) {
         scr = wScreenWithNumber(i);
 	wwin = scr->focused_window;
-	if (wwin->flags.focused) {
+	if (wwin && wwin->flags.focused) {
         XkbGetState(dpy,XkbUseCoreKbd,&staterec);
         if (wwin->frame->languagemode != staterec.group) {
             wwin->frame->last_languagemode = wwin->frame->languagemode;
