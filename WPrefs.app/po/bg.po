@@ -1,0 +1,1982 @@
+# Message catalog for WPrefs.app
+# Copyright (C) 2000 Free Software Foundation, Inc.
+# Anton Zinoviev <anton@lml.bas.bg>, 2000.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: WPrefs for WindowMaker 0.61.1\n"
+"POT-Creation-Date: 2000-08-28 20:42+0300\n"
+"PO-Revision-Date: 2000-08-28 21:20+03:00\n"
+"Last-Translator: Anton Zinoviev <anton@lml.bas.bg>\n"
+"Language-Team: Bulgarian <dict@linux.home.bg>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=windows-1251\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../WPrefs.app/main.c:74
+#, c-format
+msgid "usage: %s [options]\n"
+msgstr "използване: %s [параметри]\n"
+
+#: ../../WPrefs.app/main.c:75
+msgid "options:"
+msgstr "параметри:"
+
+#: ../../WPrefs.app/main.c:76
+msgid " -display <display>\tdisplay to be used"
+msgstr " -display <дисплей>\tдисплей да се използва"
+
+#: ../../WPrefs.app/main.c:77
+msgid " --version\t\tprint version number and exit"
+msgstr " --version\t\tизвежда номер на версия и изход"
+
+#: ../../WPrefs.app/main.c:78
+msgid " --help\t\tprint this message and exit"
+msgstr " --help\t\tизвежда тази справка и изход"
+
+#: ../../WPrefs.app/main.c:137
+#, c-format
+msgid "too few arguments for %s"
+msgstr "недостатъчно аргументи за %s"
+
+#: ../../WPrefs.app/main.c:159
+msgid "X server does not support locale"
+msgstr "X-сървърът не поддържа локализация"
+
+#: ../../WPrefs.app/main.c:162
+msgid "cannot set locale modifiers"
+msgstr "не могат да се установят модификаторите на локализацията"
+
+#: ../../WPrefs.app/main.c:168
+#, c-format
+msgid "could not open display %s"
+msgstr "не може да се отвори дисплеят %s"
+
+#: ../../WPrefs.app/main.c:176
+msgid "could not initialize application"
+msgstr "приложението не може да бъде инициализирано"
+
+#: ../../WPrefs.app/WPrefs.c:259
+msgid "Window Maker Preferences"
+msgstr "Предпочитания за Window Maker"
+
+#: ../../WPrefs.app/WPrefs.c:283
+msgid "Revert Page"
+msgstr "Върни страница"
+
+#: ../../WPrefs.app/WPrefs.c:289
+msgid "Revert All"
+msgstr "Върни всички"
+
+#: ../../WPrefs.app/WPrefs.c:295
+msgid "Save"
+msgstr "Запази"
+
+#: ../../WPrefs.app/Appearance.c:2245 ../../WPrefs.app/WPrefs.c:301
+msgid "Close"
+msgstr "Затвори"
+
+#: ../../WPrefs.app/WPrefs.c:308
+msgid "Balloon Help"
+msgstr "Помощ с балони"
+
+#: ../../WPrefs.app/WPrefs.c:333
+msgid "Window Maker Preferences Utility"
+msgstr "Пособие за настройка на Window Maker"
+
+#: ../../WPrefs.app/WPrefs.c:340
+#, c-format
+msgid "Version %s for Window Maker %s or newer"
+msgstr "Версия %s на Window Maker %s или по-нова"
+
+#: ../../WPrefs.app/WPrefs.c:348
+msgid "Starting..."
+msgstr "Стартиране..."
+
+#: ../../WPrefs.app/WPrefs.c:354
+msgid ""
+"Programming/Design: Alfredo K. Kojima\n"
+"Artwork: Marco van Hylckama Vlieg and Largo\n"
+"More Programming: James Thompson"
+msgstr ""
+"Програмист и дизайнер: Алфреду К. Кожима\n"
+"Художник: Марко ван Хилцкама Влийг и Ларго\n"
+"Друг програмист: Джеймс Томпсън"
+
+#: ../../WPrefs.app/WPrefs.c:442
+#, c-format
+msgid "could not locate image file %s\n"
+msgstr "не може да се открие файла с изображение %s\n"
+
+#: ../../WPrefs.app/Appearance.c:1912 ../../WPrefs.app/Configurations.c:242
+#: ../../WPrefs.app/Configurations.c:254 ../../WPrefs.app/Focus.c:316
+#: ../../WPrefs.app/Focus.c:327 ../../WPrefs.app/MenuPreferences.c:137
+#: ../../WPrefs.app/MenuPreferences.c:148
+#: ../../WPrefs.app/MenuPreferences.c:176
+#: ../../WPrefs.app/MenuPreferences.c:191 ../../WPrefs.app/MouseSettings.c:561
+#: ../../WPrefs.app/MouseSettings.c:572 ../../WPrefs.app/WPrefs.c:545
+#: ../../WPrefs.app/WPrefs.c:570
+#, c-format
+msgid "could not load icon file %s"
+msgstr "Не може да се зареди файлът с иконка %s"
+
+#: ../../WPrefs.app/WPrefs.c:657
+#, c-format
+msgid "could not load image file %s:%s"
+msgstr "не може да се зареди файлът с изображение %s:%s"
+
+#: ../../WPrefs.app/WPrefs.c:676
+msgid "Loading Window Maker configuration files..."
+msgstr "Зареждат се конфигурационните файлове на Window Maker..."
+
+#: ../../WPrefs.app/WPrefs.c:680
+msgid "Initializing configuration panels..."
+msgstr "Инициализират се конфигурационните панели..."
+
+#: ../../WPrefs.app/WPrefs.c:713
+msgid ""
+"WPrefs is free software and is distributed WITHOUT ANY\n"
+"WARRANTY under the terms of the GNU General Public License."
+msgstr ""
+"WPrefs е свободен софтуер и се разпространява БЕЗ НИКАКВА\n"
+"ГАРАНЦИЯ според условията на GNU General Public License."
+
+#: ../../WPrefs.app/WPrefs.c:742 ../../WPrefs.app/WPrefs.c:812
+#, c-format
+msgid "Window Maker domain (%s) is corrupted!"
+msgstr "Областта %s на Window Maker е повредена!"
+
+#: ../../WPrefs.app/Font.c:330 ../../WPrefs.app/Menu.c:1401
+#: ../../WPrefs.app/MouseSettings.c:152 ../../WPrefs.app/MouseSettings.c:172
+#: ../../WPrefs.app/TexturePanel.c:608 ../../WPrefs.app/TexturePanel.c:686
+#: ../../WPrefs.app/Themes.c:96 ../../WPrefs.app/WPrefs.c:743
+#: ../../WPrefs.app/WPrefs.c:748 ../../WPrefs.app/WPrefs.c:762
+#: ../../WPrefs.app/WPrefs.c:772 ../../WPrefs.app/WPrefs.c:782
+#: ../../WPrefs.app/WPrefs.c:813 ../../WPrefs.app/WPrefs.c:818
+msgid "Error"
+msgstr "Грешка"
+
+#: ../../WPrefs.app/Font.c:330 ../../WPrefs.app/Menu.c:1401
+#: ../../WPrefs.app/MenuGuru.c:119 ../../WPrefs.app/MenuGuru.c:126
+#: ../../WPrefs.app/MenuGuru.c:140 ../../WPrefs.app/MouseSettings.c:154
+#: ../../WPrefs.app/MouseSettings.c:174 ../../WPrefs.app/TexturePanel.c:609
+#: ../../WPrefs.app/TexturePanel.c:688 ../../WPrefs.app/TexturePanel.c:1522
+#: ../../WPrefs.app/Themes.c:98 ../../WPrefs.app/WPrefs.c:743
+#: ../../WPrefs.app/WPrefs.c:748 ../../WPrefs.app/WPrefs.c:764
+#: ../../WPrefs.app/WPrefs.c:776 ../../WPrefs.app/WPrefs.c:782
+#: ../../WPrefs.app/WPrefs.c:789 ../../WPrefs.app/WPrefs.c:813
+#: ../../WPrefs.app/WPrefs.c:818
+msgid "OK"
+msgstr "OK"
+
+#: ../../WPrefs.app/WPrefs.c:746
+#, c-format
+msgid "Could not load Window Maker domain (%s) from defaults database."
+msgstr ""
+"Не може да се зареди областта %s на Window Maker от базата-данни с "
+"предпочитания."
+
+#: ../../WPrefs.app/WPrefs.c:759
+msgid "could not extract version information from Window Maker"
+msgstr "не може да се извлече информация за версията на Window Maker"
+
+#: ../../WPrefs.app/WPrefs.c:760
+msgid "Make sure wmaker is in your search path."
+msgstr "Убедете се, че wmaker се намира в пътеката за търсене ($PATH)."
+
+#: ../../WPrefs.app/WPrefs.c:763
+msgid ""
+"Could not extract version from Window Maker. Make sure it is correctly "
+"installed and is in your PATH environment variable."
+msgstr ""
+"Не може да се извлече информация за версията на Window Maker. Убедете се,\n"
+"че той е инсталиран правилно и е включен в променливата PATH на обкръжението."
+
+#: ../../WPrefs.app/WPrefs.c:773
+msgid ""
+"Could not extract version from Window Maker. Make sure it is correctly "
+"installed and the path where it installed is in the PATH environment "
+"variable."
+msgstr ""
+"Не може да се извлече информация за версията на Window Maker. Убедете се,\n"
+"че той е инсталиран правилно и че каталогът, в който той е инсталиран, е\n"
+"включен в променливата от обкръжението PATH."
+
+#: ../../WPrefs.app/WPrefs.c:780
+#, c-format
+msgid ""
+"WPrefs only supports Window Maker 0.18.0 or newer.\n"
+"The version installed is %i.%i.%i\n"
+msgstr ""
+"WPrefs поддържа само Window Maker версия 0.18.0 или следваща.\n"
+"Инсталираната версия е %i.%i.%i.\n"
+
+#: ../../WPrefs.app/WPrefs.c:787
+#, c-format
+msgid ""
+"Window Maker %i.%i.%i, which is installed in your system, is not fully "
+"supported by this version of WPrefs."
+msgstr ""
+"Window Maker %i.%i.%i, който е инсталиран във Вашата система, не се\n"
+"поддържа напълно от тази версия на WPrefs."
+
+#: ../../WPrefs.app/WPrefs.c:789
+msgid "Warning"
+msgstr "Внимание!"
+
+#: ../../WPrefs.app/WPrefs.c:794
+msgid "could not run \"wmaker --global_defaults_path\"."
+msgstr "Не може да се стартира \"wmaker --global_defaults_path\"."
+
+#: ../../WPrefs.app/WPrefs.c:816
+#, c-format
+msgid "Could not load global Window Maker domain (%s)."
+msgstr "Не може да се зареди глобална област на Window Maker (%s)."
+
+#: ../../WPrefs.app/WPrefs.c:1065
+#, c-format
+msgid ""
+"bad speed value for option %s\n"
+". Using default Medium"
+msgstr ""
+"неправилна стойност за бързина на ключа %s\n"
+"По подразбиране се използва \"Средна\""
+
+#: ../../WPrefs.app/Appearance.c:1104
+msgid "Select File"
+msgstr "Избор на файл"
+
+#: ../../WPrefs.app/Appearance.c:1506
+msgid "Focused Window"
+msgstr "Фокусиран прозорец"
+
+#: ../../WPrefs.app/Appearance.c:1510
+msgid "Unfocused Window"
+msgstr "Нефокусиран прозорец"
+
+#: ../../WPrefs.app/Appearance.c:1514
+msgid "Owner of Focused Window"
+msgstr "Собственик на нефокусиран"
+
+# Изненада: исползва се на две места, трябва ни "Име на меню", но на
+# едното място не се побира.  
+#: ../../WPrefs.app/Appearance.c:1518 ../../WPrefs.app/Appearance.c:1836
+msgid "Menu Title"
+msgstr "Меню (име)"
+
+#: ../../WPrefs.app/Appearance.c:1522 ../../WPrefs.app/Appearance.c:1524
+msgid "Normal Item"
+msgstr "Нормално"
+
+#: ../../WPrefs.app/Appearance.c:1528
+msgid "Disabled Item"
+msgstr "Забранено"
+
+#: ../../WPrefs.app/Appearance.c:1537
+msgid "Highlighted"
+msgstr "Маркирано"
+
+#: ../../WPrefs.app/Appearance.c:1729
+msgid "Texture"
+msgstr "Текстура"
+
+#: ../../WPrefs.app/Appearance.c:1737
+msgid "Titlebar of Focused Window"
+msgstr "Заглавна ивица на фокусиран"
+
+#: ../../WPrefs.app/Appearance.c:1738
+msgid "Titlebar of Unfocused Windows"
+msgstr "Заглавна ивица на нефокусиран"
+
+# Загл. ив. на собств. на фокусиран
+# Заглавна ивица на собственик на ф.
+#: ../../WPrefs.app/Appearance.c:1739
+msgid "Titlebar of Focused Window's Owner"
+msgstr "Заг. на собственик на фокусиран"
+
+#: ../../WPrefs.app/Appearance.c:1740
+msgid "Window Resizebar"
+msgstr "Ивица за оразмеряване"
+
+#: ../../WPrefs.app/Appearance.c:1741
+msgid "Titlebar of Menus"
+msgstr "Заглавие на меню"
+
+#: ../../WPrefs.app/Appearance.c:1742
+msgid "Menu Items"
+msgstr "Елементи на меню"
+
+#: ../../WPrefs.app/Appearance.c:1743
+msgid "Icon Background"
+msgstr "Фон за иконките"
+
+#: ../../WPrefs.app/Appearance.c:1758
+msgid ""
+"Double click in the texture you want to use\n"
+"for the selected item."
+msgstr ""
+"Щтракнете двукратно по текстурата, която желаете да\n"
+"се използва на маркираното място."
+
+#: ../../WPrefs.app/Appearance.c:1772
+msgid "New"
+msgstr "Нова"
+
+#: ../../WPrefs.app/Appearance.c:1776
+msgid "Create a new texture."
+msgstr "Да се направи нова текстура."
+
+#: ../../WPrefs.app/Appearance.c:1784
+msgid "Extract..."
+msgstr "Извлечи"
+
+#: ../../WPrefs.app/Appearance.c:1788
+msgid "Extract texture(s) from a theme or a style file."
+msgstr ""
+"Извлича текстура(и) от тема\n"
+"или файл със стил."
+
+#: ../../WPrefs.app/Appearance.c:1798
+msgid "Edit"
+msgstr "Редакт."
+
+#: ../../WPrefs.app/Appearance.c:1801
+msgid "Edit the highlighted texture."
+msgstr "Редактиране на маркираната текстура."
+
+#: ../../WPrefs.app/Appearance.c:1809 ../../WPrefs.app/TexturePanel.c:1310
+msgid "Delete"
+msgstr "Изтрий"
+
+#: ../../WPrefs.app/Appearance.c:1813
+msgid "Delete the highlighted texture."
+msgstr "Изтрива маркираната текстура."
+
+#: ../../WPrefs.app/Appearance.c:1826
+msgid "Color"
+msgstr "Цветове"
+
+#: ../../WPrefs.app/Appearance.c:1833
+msgid "Focused Window Title"
+msgstr "Име на фокусиран прозорец"
+
+#: ../../WPrefs.app/Appearance.c:1834
+msgid "Unfocused Window Title"
+msgstr "Име на нефокусиран прозорец"
+
+#: ../../WPrefs.app/Appearance.c:1835
+msgid "Owner of Focused Window Title"
+msgstr "Име на собственик на фокусиран"
+
+#: ../../WPrefs.app/Appearance.c:1837
+msgid "Menu Item Text"
+msgstr "Текст на елемент на меню"
+
+#: ../../WPrefs.app/Appearance.c:1838
+msgid "Disabled Menu Item Text"
+msgstr "Текст на забранен елемент"
+
+#: ../../WPrefs.app/Appearance.c:1839
+msgid "Menu Highlight Color"
+msgstr "Цвят на маркиран елемент"
+
+#: ../../WPrefs.app/Appearance.c:1840
+msgid "Highlighted Menu Text Color"
+msgstr "Цвят на текст на маркиран"
+
+#: ../../WPrefs.app/Appearance.c:1877
+msgid "Options"
+msgstr "Опции"
+
+#: ../../WPrefs.app/Appearance.c:1884
+msgid "Menu Style"
+msgstr "Стил на менютата"
+
+#: ../../WPrefs.app/Appearance.c:1926
+msgid "Title Alignment"
+msgstr "Подравняване"
+
+#: ../../WPrefs.app/Appearance.c:1933
+msgid "Left"
+msgstr "Ляво"
+
+# Няма място за "Центрирано"
+#: ../../WPrefs.app/Appearance.c:1936 ../../WPrefs.app/TexturePanel.c:1511
+#: ../../WPrefs.app/Workspace.c:271
+msgid "Center"
+msgstr "Централно"
+
+#: ../../WPrefs.app/Appearance.c:1939
+msgid "Right"
+msgstr "Дясно"
+
+#: ../../WPrefs.app/Appearance.c:2167
+msgid "Appearance Preferences"
+msgstr "Предпочитания за изгледа"
+
+#: ../../WPrefs.app/Appearance.c:2169
+msgid ""
+"Background texture configuration for windows,\n"
+"menus and icons."
+msgstr ""
+"Настройка на цветове и текстури\n"
+"за прозорците, менютата\n"
+"и иконките."
+
+#: ../../WPrefs.app/Appearance.c:2214
+msgid "Extract Texture"
+msgstr "Извлечи текстура"
+
+#: ../../WPrefs.app/Appearance.c:2234
+msgid "Textures"
+msgstr "Текстури"
+
+#: ../../WPrefs.app/Appearance.c:2250
+msgid "Extract"
+msgstr "Извлечи"
+
+#: ../../WPrefs.app/Configurations.c:150 ../../WPrefs.app/Configurations.c:156
+#: ../../WPrefs.app/MouseSettings.c:491 ../../WPrefs.app/WindowHandling.c:331
+#: ../../WPrefs.app/WindowHandling.c:343 ../../WPrefs.app/Workspace.c:90
+#: ../../WPrefs.app/Workspace.c:101
+#, c-format
+msgid "could not load icon %s"
+msgstr "не може да се зареди файл с изображение %s"
+
+#: ../../WPrefs.app/Configurations.c:164 ../../WPrefs.app/Workspace.c:109
+#, c-format
+msgid "could not process icon %s:"
+msgstr "не може да се обработи иконката %s:"
+
+#: ../../WPrefs.app/Configurations.c:189 ../../WPrefs.app/Workspace.c:164
+#, c-format
+msgid "could not load image file %s"
+msgstr "не може да се зареди файл с изображение %s"
+
+#: ../../WPrefs.app/Configurations.c:203
+msgid "Icon Slide Speed"
+msgstr "Скорост на плъзгане на иконките"
+
+#: ../../WPrefs.app/Configurations.c:209
+msgid "Shade Animation Speed"
+msgstr "Скорост на засенчването"
+
+#: ../../WPrefs.app/Configurations.c:271
+msgid "Smooth Scaling"
+msgstr "Изглаждане"
+
+#: ../../WPrefs.app/Configurations.c:272
+msgid ""
+"Smooth scaled background images, neutralizing\n"
+"the `pixelization' effect. This will slow\n"
+"down loading of background images considerably."
+msgstr ""
+"Гладко мащабиране на изображенията за фон, при\n"
+"което се неутрализира ефекта на \"пикселизация\".\n"
+"При това обаче значително ще се забави\n"
+"зареждането на изображения за фон."
+
+#: ../../WPrefs.app/Configurations.c:313
+msgid "Titlebar Style"
+msgstr "Заглавна ивица"
+
+#: ../../WPrefs.app/Configurations.c:351
+msgid "Animations and Sound"
+msgstr "Анимации и звук"
+
+#: ../../WPrefs.app/Configurations.c:357
+msgid "Animations"
+msgstr "Анимации"
+
+#: ../../WPrefs.app/Configurations.c:368
+msgid ""
+"Disable/enable animations such as those shown\n"
+"for window miniaturization, shading etc."
+msgstr ""
+"Забранява/позволява анимации като например\n"
+"за минимизация на прозорците, засенчване\n"
+"и др."
+
+#: ../../WPrefs.app/Configurations.c:376
+msgid "Superfluous"
+msgstr "Излишни"
+
+#: ../../WPrefs.app/Configurations.c:387
+msgid ""
+"Disable/enable `superfluous' features and\n"
+"animations. These include the `ghosting' of the\n"
+"dock when it's being moved to the another side\n"
+"and the explosion animation for undocked icons."
+msgstr ""
+"Забранява/позволява \"излишните\" възможности и\n"
+"анимации. Това включва \"привиждането\" на дока\n"
+"при преместването му от другата страна, както\n"
+"и анимацията на експлозия за откачените от\n"
+"дока иконки."
+
+#: ../../WPrefs.app/Configurations.c:397
+msgid "Sounds"
+msgstr "Звук"
+
+#: ../../WPrefs.app/Configurations.c:408
+msgid ""
+"Disable/enable support for sound effects played\n"
+"for actions like shading and closing a window.\n"
+"You will need a module distributed separately\n"
+"for this. You can get it at:\n"
+"http://www.frontiernet.net/~southgat/wmsound"
+msgstr ""
+"Забранява/позволява поддръжката на звукови\n"
+"ефектн, проигравани при действия като за-\n"
+"сенчване и затваряне на прозорец. Ще е не-\n"
+"обходим модул, разпространяван отделно.\n"
+"Може да го получите от адрес\n"
+"http://www.frontiernet.net/~southgat/wmsound"
+
+#: ../../WPrefs.app/Configurations.c:419
+msgid "Note: sound requires a module distributed separately"
+msgstr "Забележете, че за звук е необходим модул, разпространяван отделно"
+
+#: ../../WPrefs.app/Configurations.c:429
+msgid "Dithering colormap for 8bpp"
+msgstr ""
+
+#: ../../WPrefs.app/Configurations.c:431
+msgid ""
+"Number of colors to reserve for Window Maker\n"
+"on displays that support only 8bpp (PseudoColor)."
+msgstr ""
+"Брой на цветове, които да се запазят за\n"
+"Window Maker при дисплеи, поддържащи само\n"
+"8 бита/пиксел (т.н. PseudoColor)."
+
+#: ../../WPrefs.app/Configurations.c:438
+msgid "Disable dithering in any visual/depth"
+msgstr ""
+
+#: ../../WPrefs.app/Configurations.c:459
+msgid "More colors for applications"
+msgstr "Повече цветове за прилож."
+
+#: ../../WPrefs.app/Configurations.c:466
+msgid "More colors for WindowMaker"
+msgstr "Повече цветове за WindowMaker"
+
+#: ../../WPrefs.app/Configurations.c:521
+msgid "Other Configurations"
+msgstr "Други настройки"
+
+#: ../../WPrefs.app/Configurations.c:523
+msgid ""
+"Animation speeds, titlebar styles, various option\n"
+"toggling and number of colors to reserve for\n"
+"Window Maker in 8bit displays."
+msgstr ""
+"Скорост на анимациите, стил на заглавните ивици,\n"
+"избор на разни опции и брой цветове за Window\n"
+"Maker при дисплеи с 8 бита/пиксел."
+
+#: ../../WPrefs.app/Expert.c:75
+msgid ""
+"Disable miniwindows (icons for miniaturized windows). For use with KDE/GNOME."
+msgstr "Без минипрозорчета (минимизирани прозорци). Полезно при GNOME/KDE."
+
+#: ../../WPrefs.app/Expert.c:76
+msgid "Do not set non-WindowMaker specific parameters (do not use xset)"
+msgstr "Без неспецифични за WindowMaker параметри (да не се ползва xset)."
+
+#: ../../WPrefs.app/Expert.c:77
+msgid "Automatically save session when exiting WindowMaker"
+msgstr "Автоматично запазване на сеанса при изход от WindowMaker."
+
+#: ../../WPrefs.app/Expert.c:78
+msgid "Use SaveUnder in window frames, icons, menus and other objects"
+msgstr "Атрибут \"SaveUnder\" за рамките на прозорци, за иконки, менюто и др."
+
+#: ../../WPrefs.app/Expert.c:79
+msgid "Disable cycling color highlighting of icons."
+msgstr "Без въртене на пунктир около маркираните иконки."
+
+#: ../../WPrefs.app/Expert.c:80
+msgid "Disable confirmation panel for the Kill command."
+msgstr "Без панел за потвърждение при команда \"Убий\"."
+
+#: ../../WPrefs.app/Expert.c:113
+msgid "Expert User Preferences"
+msgstr "Предпочитания за напреднали потребители"
+
+#: ../../WPrefs.app/Expert.c:115
+msgid ""
+"Options for people who know what they're doing...\n"
+"Also have some other misc. options."
+msgstr ""
+"Опции за хора, които знаят какво правят...\n"
+"Също и разни други опции."
+
+#: ../../WPrefs.app/Focus.c:83
+#, c-format
+msgid "bad option value %s for option FocusMode. Using default Manual"
+msgstr ""
+"неправилна стойност %s на опцията FocusMode. По подразбиране се ползва Manual"
+
+#: ../../WPrefs.app/Focus.c:98
+#, c-format
+msgid "bad option value %s for option ColormapMode. Using default Auto"
+msgstr ""
+"неправилна стойност %s на опцията ColormapMode. По подразбиране се ползва "
+"Auto"
+
+#: ../../WPrefs.app/Focus.c:196
+msgid ""
+"Click on the window to set\n"
+"keyboard input focus."
+msgstr "Щракането по прозореца му предоставя клавиатурния фокус."
+
+#: ../../WPrefs.app/Focus.c:200
+msgid ""
+"Set keyboard input focus to\n"
+"the window under the mouse pointer,\n"
+"including the root window."
+msgstr ""
+"Клавиатурният фокус е за прозореца, върху който е мишката, в това число и "
+"основния прозорец (т.н. root window)."
+
+#: ../../WPrefs.app/Focus.c:205
+msgid ""
+"Set keyboard input focus to\n"
+"the window under the mouse pointer,\n"
+"except the root window."
+msgstr ""
+"Клавиатурният фокус е за про-\n"
+"зореца, върху който е мишката, с изключение на главния прозорец (т.н. root "
+"window)."
+
+#: ../../WPrefs.app/Focus.c:249
+msgid "Input Focus Mode"
+msgstr "Правило за фокусиране"
+
+#: ../../WPrefs.app/Focus.c:254
+msgid "Click window to focus"
+msgstr "Щракни за фокус"
+
+#: ../../WPrefs.app/Focus.c:255
+msgid "Focus follows mouse"
+msgstr "Фокусът следва мишката"
+
+#: ../../WPrefs.app/Focus.c:256
+msgid "\"Sloppy\" focus"
+msgstr "Преливащ (т.н. sloppy) фокус"
+
+#: ../../WPrefs.app/Focus.c:271
+msgid "Install colormap in the window..."
+msgstr "Цветовата палитра е за прозореца,... "
+
+#: ../../WPrefs.app/Focus.c:276
+msgid "...that has the input focus."
+msgstr "... който е фокусиран."
+
+#: ../../WPrefs.app/Focus.c:281
+msgid "...that is under the mouse pointer."
+msgstr "... който е под мишката."
+
+#: ../../WPrefs.app/Focus.c:290
+msgid "Automatic Window Raise Delay"
+msgstr "Забавяне на автоматичното повдигане"
+
+#: ../../WPrefs.app/Focus.c:347
+msgid "msec"
+msgstr "ms"
+
+#: ../../WPrefs.app/Focus.c:364
+msgid "Do not let applications receive the click used to focus windows."
+msgstr ""
+"Приложенията да не получават щтракане, използвано за фокусиране на прозорец."
+
+#: ../../WPrefs.app/Focus.c:370
+msgid "Automatically focus new windows."
+msgstr "Автоматично да се фокусират новите прозорци."
+
+#: ../../WPrefs.app/Focus.c:391
+msgid "Window Focus Preferences"
+msgstr "Предпочитания за фокусирането на прозорците"
+
+#: ../../WPrefs.app/Focus.c:393
+msgid ""
+"Keyboard focus switching policy, colormap switching\n"
+"policy for 8bpp displays and other related options."
+msgstr ""
+"Правило за предаване на клавиатурния фокус,\n"
+"предаване на цветовата палитра при дисплеи\n"
+"с 8 бита/пиксел и други подобни опции."
+
+#: ../../WPrefs.app/Font.c:277
+msgid "Could not locate font information file WPrefs.app/font.data"
+msgstr ""
+
+#: ../../WPrefs.app/Font.c:283
+msgid "Could not read font information file WPrefs.app/font.data"
+msgstr ""
+
+#: ../../WPrefs.app/Font.c:294
+msgid ""
+"Invalid data in font information file WPrefs.app/font.data.\n"
+"Encodings data not found."
+msgstr ""
+
+#: ../../WPrefs.app/Font.c:299
+msgid "- Custom -"
+msgstr ""
+
+#: ../../WPrefs.app/Font.c:377
+msgid "Default Font Sets"
+msgstr "Стандартни шрифтове"
+
+#: ../../WPrefs.app/Font.c:390
+msgid "Font Set"
+msgstr ""
+
+#: ../../WPrefs.app/Font.c:419
+msgid "Add..."
+msgstr "Добави"
+
+#: ../../WPrefs.app/Font.c:424 ../../WPrefs.app/Font.c:439
+msgid "Change..."
+msgstr "Смени..."
+
+#: ../../WPrefs.app/Font.c:429 ../../WPrefs.app/Paths.c:288
+#: ../../WPrefs.app/Paths.c:319
+msgid "Remove"
+msgstr "Премахни"
+
+#: ../../WPrefs.app/Font.c:478
+msgid "Font Preferences"
+msgstr "Предпочитания за шрифтовете"
+
+#: ../../WPrefs.app/Font.c:479
+msgid "Font Configurations for Windows, Menus etc"
+msgstr ""
+"Настройка на шрифтовете за\n"
+"прозорците, менютата и др."
+
+#: ../../WPrefs.app/Icons.c:182
+msgid "Icon Positioning"
+msgstr "Нареждане на иконките"
+
+#: ../../WPrefs.app/Icons.c:229
+msgid "Iconification Animation"
+msgstr "Анимация при иконизиране"
+
+#: ../../WPrefs.app/Icons.c:240
+msgid "Shrinking/Zooming"
+msgstr "Свиване/разширяване"
+
+#: ../../WPrefs.app/Icons.c:241
+msgid "Spinning/Twisting"
+msgstr "Увиване/развиване"
+
+#: ../../WPrefs.app/Icons.c:242
+msgid "3D-flipping"
+msgstr "Тримерно преобръщане"
+
+#: ../../WPrefs.app/Icons.c:243
+msgid "None"
+msgstr "Никаква"
+
+#: ../../WPrefs.app/Icons.c:256
+msgid "Auto-arrange icons"
+msgstr "Автомат. подреждане на иконките"
+
+#: ../../WPrefs.app/Icons.c:258
+msgid "Keep icons and miniwindows arranged all the time."
+msgstr ""
+"Иконките и минипрозорчетата да се поддържат\n"
+"подредени през цялото време."
+
+#: ../../WPrefs.app/Icons.c:264
+msgid "Omnipresent miniwindows"
+msgstr "Вездесъщни минипрозорчета"
+
+#: ../../WPrefs.app/Icons.c:266
+msgid "Make miniwindows be present in all workspaces."
+msgstr ""
+"Минипрозорчетата да присъстват на\n"
+"всички работни места."
+
+#: ../../WPrefs.app/Icons.c:275
+msgid "Icon Size"
+msgstr "Размер на иконките"
+
+#: ../../WPrefs.app/Icons.c:277
+msgid "The size of the dock/application icon and miniwindows"
+msgstr ""
+"Размерът на иконките и минипрозорчетата\n"
+"от дока и на приложенията."
+
+#: ../../WPrefs.app/Icons.c:347
+msgid "Icon Preferences"
+msgstr "Предпочитания за иконките"
+
+#: ../../WPrefs.app/Icons.c:349
+msgid ""
+"Icon/Miniwindow handling options. Icon positioning\n"
+"area, sizes of icons, miniaturization animation style."
+msgstr ""
+"Опции за поддържането на иконките и минипрозорчетата.\n"
+"Място, където да се подреждат иконките, техният\n"
+"размер, вид анимация при минимизиране."
+
+#: ../../WPrefs.app/KeyboardSettings.c:74
+msgid "Initial Key Repeat"
+msgstr ""
+
+#: ../../WPrefs.app/KeyboardSettings.c:115
+msgid "Key Repeat Rate"
+msgstr ""
+
+#: ../../WPrefs.app/KeyboardSettings.c:155
+msgid "Type here to test"
+msgstr ""
+
+#: ../../WPrefs.app/KeyboardSettings.c:174
+msgid "Keyboard Preferences"
+msgstr ""
+
+#: ../../WPrefs.app/KeyboardSettings.c:176
+msgid "Not done"
+msgstr ""
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:185 ../../WPrefs.app/Menu.c:1027
+#: ../../WPrefs.app/MenuGuru.c:263 ../../WPrefs.app/TexturePanel.c:1528
+msgid "Cancel"
+msgstr "Отказ"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:186
+msgid "Press the desired shortcut key(s) or click Cancel to stop capturing."
+msgstr ""
+"Наберете клавишната\n"
+"комбинация или натис-\n"
+"нете \"Отказ\" за да се\n"
+"освободи клавиатурата."
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:206
+#: ../../WPrefs.app/KeyboardShortcuts.c:454 ../../WPrefs.app/Menu.c:1039
+#: ../../WPrefs.app/Menu.c:1262
+msgid "Capture"
+msgstr "Прихвани"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:207
+#: ../../WPrefs.app/KeyboardShortcuts.c:461
+msgid "Click Capture to interactively define the shortcut key."
+msgstr ""
+"Натиснете \"Прихвани\" за да определите диалогово клавишната комбинация."
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:361
+msgid "Actions"
+msgstr "Действия"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:377
+msgid "Open applications menu"
+msgstr "Менюто на приложенията"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:378
+msgid "Open window list menu"
+msgstr "Менюто на списъка с прозорците"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:379
+msgid "Open window commands menu"
+msgstr "Менюто с прозоречните команди"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:380
+msgid "Hide active application"
+msgstr "Скрий активното приложение"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:381
+msgid "Miniaturize active window"
+msgstr "Минимизирай активния прозорец"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:382
+msgid "Close active window"
+msgstr "Затвори активния прозорец"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:383
+msgid "Maximize active window"
+msgstr "Максимизирай активния прозорец"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:384
+msgid "Maximize active window vertically"
+msgstr "Максимизирай вертикално активния"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:385
+msgid "Raise active window"
+msgstr "Вдигни активния прозорец"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:386
+msgid "Lower active window"
+msgstr "Спусни активния прозорец"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:387
+msgid "Raise/Lower window under mouse pointer"
+msgstr "Вдигни/спусни прозореца под мишката"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:388
+msgid "Shade active window"
+msgstr "Засенчи активния прозорец"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:389
+msgid "Move/Resize active window"
+msgstr "Премести/оразмери активния прозорец"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:390
+msgid "Select active window"
+msgstr "Маркирай активния прозорец"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:391
+msgid "Focus next window"
+msgstr "Фокусирай следващия прозорец"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:392
+msgid "Focus previous window"
+msgstr "Фокусирай предходния прозорец"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:393
+msgid "Switch to next workspace"
+msgstr "Премини на следващото работно място"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:394
+msgid "Switch to previous workspace"
+msgstr "Премини на предходното работно място"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:395
+msgid "Switch to next ten workspaces"
+msgstr "Напред през десет работни мвста"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:396
+msgid "Switch to previous ten workspaces"
+msgstr "Назад през десет работни места"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:397
+msgid "Switch to workspace 1"
+msgstr "Премини на работно място 1"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:398
+msgid "Switch to workspace 2"
+msgstr "Премини на работно място 2"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:399
+msgid "Switch to workspace 3"
+msgstr "Премини на работно място 3"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:400
+msgid "Switch to workspace 4"
+msgstr "Премини на работно място 4"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:401
+msgid "Switch to workspace 5"
+msgstr "Премини на работно място 5"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:402
+msgid "Switch to workspace 6"
+msgstr "Премини на работно място 6"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:403
+msgid "Switch to workspace 7"
+msgstr "Премини на работно място 7"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:404
+msgid "Switch to workspace 8"
+msgstr "Премини на работно място 8"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:405
+msgid "Switch to workspace 9"
+msgstr "Премини на работно място 9"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:406
+msgid "Switch to workspace 10"
+msgstr "Премини на работно място 10"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:407
+msgid "Shortcut for window 1"
+msgstr "Бърз клавиш за прозорец 1"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:408
+msgid "Shortcut for window 2"
+msgstr "Бърз клавиш за прозорец 2"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:409
+msgid "Shortcut for window 3"
+msgstr "Бърз клавиш за прозорец 3"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:410
+msgid "Shortcut for window 4"
+msgstr "Бърз клавиш за прозорец 4"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:412
+msgid "Shortcut for window 5"
+msgstr "Бърз клавиш за прозорец 5"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:413
+msgid "Shortcut for window 6"
+msgstr "Бърз клавиш за прозорец 6"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:414
+msgid "Shortcut for window 7"
+msgstr "Бърз клавиш за прозорец 7"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:415
+msgid "Shortcut for window 8"
+msgstr "Бърз клавиш за прозорец 8"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:416
+msgid "Shortcut for window 9"
+msgstr "Бърз клавиш за прозорец 9"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:417
+msgid "Shortcut for window 10"
+msgstr "Бърз клавиш за прозорец 10"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:419
+msgid "Raise Clip"
+msgstr "Повдигни Кламер"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:420
+msgid "Lower Clip"
+msgstr "Спусни Кламер"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:421
+msgid "Raise/Lower Clip"
+msgstr "Повдигни/спусни Кламер"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:423
+msgid "Toggle keyboard language"
+msgstr "Превключвател КИР/ЛАТ"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:437 ../../WPrefs.app/Menu.c:1251
+msgid "Shortcut"
+msgstr "Бърз клавиш"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:448
+msgid "Clear"
+msgstr "Изчисти"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:509
+msgid "Keyboard Shortcut Preferences"
+msgstr "Предпочитания за \"бързи клавиши\""
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:511
+msgid ""
+"Change the keyboard shortcuts for actions such\n"
+"as changing workspaces and opening menus."
+msgstr ""
+"Промяна на \"бързи клавиши\" за действия като\n"
+"смяна на работното пространство и\n"
+"показване на менюта."
+
+#: ../../WPrefs.app/Menu.c:422
+msgid "Window Manager"
+msgstr "Администратор на прозорците"
+
+#: ../../WPrefs.app/Menu.c:424
+msgid "Program to Open Files"
+msgstr "Прог. за отваряне файловете"
+
+#: ../../WPrefs.app/Menu.c:426
+msgid "Command to Execute"
+msgstr "Да се изпълни командата"
+
+#: ../../WPrefs.app/Menu.c:428 ../../WPrefs.app/Menu.c:1238
+msgid "Program to Run"
+msgstr "Да се стартира програмата"
+
+#: ../../WPrefs.app/Menu.c:477 ../../WPrefs.app/Menu.c:478
+#, c-format
+msgid "New Command %i"
+msgstr "Нова команда %i"
+
+#: ../../WPrefs.app/Menu.c:485
+msgid "New Submenu"
+msgstr "Ново подменю"
+
+#: ../../WPrefs.app/Menu.c:490
+msgid "External Menu"
+msgstr "Външно меню"
+
+#: ../../WPrefs.app/Menu.c:497
+msgid "Workspaces"
+msgstr "Работни места"
+
+#: ../../WPrefs.app/Menu.c:1119 ../../WPrefs.app/Menu.c:1134
+msgid "Commands"
+msgstr "Действия"
+
+#: ../../WPrefs.app/Menu.c:1120 ../../WPrefs.app/Menu.c:1135
+msgid "Add Command"
+msgstr "Добави команда"
+
+#: ../../WPrefs.app/Menu.c:1121 ../../WPrefs.app/Menu.c:1136
+msgid "Add Submenu"
+msgstr "Добави подменю"
+
+#: ../../WPrefs.app/Menu.c:1122 ../../WPrefs.app/Menu.c:1137
+msgid "Add External Menu"
+msgstr "Добави външно меню"
+
+#: ../../WPrefs.app/Menu.c:1123 ../../WPrefs.app/Menu.c:1138
+msgid "Add Workspace Menu"
+msgstr "Меню на раб. места"
+
+#: ../../WPrefs.app/Menu.c:1124 ../../WPrefs.app/Menu.c:1139
+msgid "Remove Item"
+msgstr "Махни елемента"
+
+#: ../../WPrefs.app/Menu.c:1125 ../../WPrefs.app/Menu.c:1140
+msgid "Cut Item"
+msgstr "Отрежи елемента"
+
+#: ../../WPrefs.app/Menu.c:1126 ../../WPrefs.app/Menu.c:1141
+msgid "Copy Item"
+msgstr "Копирай елемента"
+
+#: ../../WPrefs.app/Menu.c:1127 ../../WPrefs.app/Menu.c:1142
+msgid "Paste Item"
+msgstr "Вмъкни елемента"
+
+#: ../../WPrefs.app/Menu.c:1173
+msgid "Label"
+msgstr "Етикет"
+
+#: ../../WPrefs.app/Menu.c:1186
+msgid "Command"
+msgstr "Команда"
+
+#: ../../WPrefs.app/Menu.c:1191
+msgid "Run Program"
+msgstr "Програма"
+
+#: ../../WPrefs.app/Menu.c:1192
+msgid "Execute Shell Command"
+msgstr "Команда на обвивката"
+
+#: ../../WPrefs.app/Menu.c:1193
+msgid "Arrange Icons"
+msgstr "Подреди иконките"
+
+#: ../../WPrefs.app/Menu.c:1194
+msgid "Hide Others"
+msgstr "Скрий другите"
+
+#: ../../WPrefs.app/Menu.c:1195
+msgid "Show All Windows"
+msgstr "Покажи всички прозорци"
+
+#: ../../WPrefs.app/Menu.c:1196
+msgid "Exit WindowMaker"
+msgstr "Изход от WindowMaker"
+
+#: ../../WPrefs.app/Menu.c:1197
+msgid "Exit X Session"
+msgstr "Край на X-сеанса"
+
+#: ../../WPrefs.app/Menu.c:1198
+msgid "Start Window Manager"
+msgstr "Стартирай администратор"
+
+#: ../../WPrefs.app/Menu.c:1199
+msgid "Restart WindowMaker"
+msgstr "Рестартирай WindowMaker"
+
+#: ../../WPrefs.app/Menu.c:1200
+msgid "Save Session"
+msgstr "Запази сесията"
+
+#: ../../WPrefs.app/Menu.c:1201
+msgid "Clear Session"
+msgstr "Очисти сесията"
+
+#: ../../WPrefs.app/Menu.c:1202
+msgid "Refresh Screen"
+msgstr "Опресни сесията"
+
+#: ../../WPrefs.app/Menu.c:1203
+msgid "Info Panel"
+msgstr "Информационен панел"
+
+#: ../../WPrefs.app/Menu.c:1204
+msgid "Legal Panel"
+msgstr "Лицензионен панел"
+
+#: ../../WPrefs.app/Menu.c:1212
+msgid "Open workspace menu"
+msgstr "Отвори менюто на работните места"
+
+#: ../../WPrefs.app/Menu.c:1219
+msgid "No confirmation panel"
+msgstr "Без панел за потвърждение"
+
+#: ../../WPrefs.app/Menu.c:1225
+msgid "Menu Path/Directory List"
+msgstr "Списък файлове с менюта"
+
+#: ../../WPrefs.app/Menu.c:1270
+msgid "Ask help to the Guru"
+msgstr "Искам помощ от факира."
+
+#. if there is a localized plmenu for the tongue put it's filename here
+#: ../../WPrefs.app/Menu.c:1382 ../../WPrefs.app/Menu.c:1389
+#, c-format
+msgid "%s/Library/WindowMaker/plmenu"
+msgstr ""
+
+#: ../../WPrefs.app/Menu.c:1398
+#, c-format
+msgid "Could not open default menu from '%s'"
+msgstr "Не може да се отвори подразбиращото се меню от \"%s\""
+
+#: ../../WPrefs.app/Menu.c:1508
+msgid "Applications Menu Definition"
+msgstr "Определяне на менюто с приложения"
+
+#: ../../WPrefs.app/Menu.c:1510
+msgid "Edit the menu for launching applications."
+msgstr ""
+"Редактиране на менюто за\n"
+"стартиране на приложения"
+
+#: ../../WPrefs.app/MenuPreferences.c:114
+msgid "Menu Scrolling Speed"
+msgstr "Скорост за плъзгане на менютата"
+
+#: ../../WPrefs.app/MenuPreferences.c:163
+msgid "Submenu Alignment"
+msgstr "Подравняване на менютата"
+
+#: ../../WPrefs.app/MenuPreferences.c:207
+msgid ""
+"Always open submenus inside the screen, instead of scrolling.\n"
+"Note: this is annoying."
+msgstr ""
+"Подменютата винаги да се изобразяват в рамките на екрана,\n"
+"вместо да се плъзгат.  (Tова е досадно.)"
+
+#: ../../WPrefs.app/MenuPreferences.c:212
+msgid "Scroll off-screen menus when pointer is moved over them."
+msgstr "Плъзгане на менютата извън екрана, когато мишката е върху тях."
+
+#: ../../WPrefs.app/MenuPreferences.c:232
+msgid "Menu Preferences"
+msgstr "Предпочитания за менютата"
+
+#: ../../WPrefs.app/MenuPreferences.c:234
+msgid ""
+"Menu usability related options. Scrolling speed,\n"
+"alignment of submenus etc."
+msgstr ""
+"Опции, касаещи използването на менютата.\n"
+"Скорост на плъзгане, подравняване на \n"
+"подменютата и други подобни."
+
+#: ../../WPrefs.app/MouseSettings.c:153
+msgid "Invalid mouse acceleration value. Must be a positive real value."
+msgstr ""
+"Недопустима стойност за ускорение на мишката.  Трябва да бъде положително "
+"реално число."
+
+#: ../../WPrefs.app/MouseSettings.c:173
+msgid ""
+"Invalid mouse acceleration threshold value. Must be the number of pixels to "
+"travel before accelerating."
+msgstr ""
+"Недопустим начален праг за ускорение на мишката. Трябва да бъде брой "
+"изминати пиксели, преди да започне ускорението."
+
+#: ../../WPrefs.app/MouseSettings.c:269 ../../WPrefs.app/MouseSettings.c:283
+#: ../../WPrefs.app/MouseSettings.c:297
+#, c-format
+msgid "bad value %s for option %s"
+msgstr "неправилна стойност %s за опцията %s"
+
+#: ../../WPrefs.app/MouseSettings.c:358
+#, c-format
+msgid ""
+"modifier key %s for option ModifierKey was not recognized. Using %s as "
+"default"
+msgstr ""
+"клавишът модификатор %s за опцията \"ModifierKey\" е непознат. По "
+"подразбиране се използва %s"
+
+#: ../../WPrefs.app/MouseSettings.c:383
+msgid "could not retrieve keyboard modifier mapping"
+msgstr "не може да се разбере на кои клавиши са модификаторите"
+
+#: ../../WPrefs.app/MouseSettings.c:478
+msgid "Mouse Speed"
+msgstr "Скорост на мишката"
+
+#: ../../WPrefs.app/MouseSettings.c:508
+msgid "Acceler.:"
+msgstr "Ускорение"
+
+#: ../../WPrefs.app/MouseSettings.c:521
+msgid "Threshold:"
+msgstr "Нач. праг"
+
+#: ../../WPrefs.app/MouseSettings.c:536
+msgid "Double-Click Delay"
+msgstr "Продължителност на двойното щтракане"
+
+#: ../../WPrefs.app/MouseSettings.c:580
+msgid "Test"
+msgstr "Проба"
+
+#: ../../WPrefs.app/MouseSettings.c:610
+msgid "Workspace Mouse Actions"
+msgstr "Специални действия на мишката"
+
+#: ../../WPrefs.app/MouseSettings.c:615
+msgid "Disable mouse actions"
+msgstr "Без спец. действия с мишката"
+
+#: ../../WPrefs.app/MouseSettings.c:622
+msgid "Applications menu"
+msgstr "Меню на прилож."
+
+#: ../../WPrefs.app/MouseSettings.c:632
+msgid "Window list menu"
+msgstr "Меню на прозорц."
+
+#: ../../WPrefs.app/MouseSettings.c:643
+msgid "Select windows"
+msgstr "Избор на прозорец"
+
+#: ../../WPrefs.app/MouseSettings.c:661
+msgid "Mouse Grab Modifier"
+msgstr "Модификатор за плен на мишката"
+
+#: ../../WPrefs.app/MouseSettings.c:663
+msgid ""
+"Keyboard modifier to use for actions that\n"
+"involve dragging windows with the mouse,\n"
+"clicking inside the window."
+msgstr ""
+"Кой модификатор да се използва за действия , които\n"
+"изискват влачене на прозорците с мишка или\n"
+"щтракане в рамките на прозореца."
+
+#: ../../WPrefs.app/MouseSettings.c:697
+#, c-format
+msgid "could not create %s"
+msgstr "не може да се направи %s"
+
+#: ../../WPrefs.app/MouseSettings.c:713
+#, c-format
+msgid "could not create temporary file %s"
+msgstr "не може да се направи временен файл %s"
+
+#: ../../WPrefs.app/MouseSettings.c:744
+#, c-format
+msgid "could not rename file %s to %s\n"
+msgstr "не може да се преименува файлът %s на %s\n"
+
+#: ../../WPrefs.app/MouseSettings.c:816
+msgid "Mouse Preferences"
+msgstr "Предпочитания за мишката"
+
+#: ../../WPrefs.app/MouseSettings.c:818
+msgid ""
+"Mouse speed/acceleration, double click delay,\n"
+"mouse button bindings etc."
+msgstr ""
+"Скорост/ускорение на мишката, време на\n"
+"двойното щракане, присвояване на \n"
+"действия на мишката и др."
+
+#: ../../WPrefs.app/NoMenuAlert.c:94
+#, c-format
+msgid ""
+"     The menu that is being used now could not be opened. This either means "
+"that there is a syntax error in it or that the menu is in a format not "
+"supported by WPrefs (WPrefs only supports property list menus).\n"
+"     If you want to keep using the current menu, please read the '%s/%s' "
+"file, press 'Keep Current Menu' and edit it with a text editor.\n"
+"     If you want to use this editor, press 'Copy Default Menu'. It will copy "
+"the default menu and will instruct Window Maker to use it instead of the "
+"current one.\n"
+"     If you want more flexibility, keep using the current one as it allows "
+"you to use C preprocessor (cpp) macros, while being easy to edit. Window "
+"Maker supports both formats."
+msgstr ""
+"    Използваното в момента меню не може да бъде отворено. Това означава, че в него има синтактична грешка или че менюто е във формат, който не се поддържа от WPrefs (WPrefs поддържа само обикновените менюта \"списък от свойства\".)\n"
+"    Ако желаете да запазите използването на текущото меню, моля прочетете файла \"%s/%s\", натиснете бутона <Запази сегашното меню> и го редактирайте с текстов редактор.\n"
+"    Ако желаете да използвате този редактор на менюта, натиснете <Копирай стандартното меню>. Това ще накара Window Maker да използва стандартното меню вместо текущото.\n"
+"    Ако желаети повече гъвкавост, запазете използването на текущото меню, защото то дава възможност да се използва предпроцесорни макроси (като за cpp), а същевременно е лесно за редактиране. Window Maker поддържа и двата формата."
+
+#: ../../WPrefs.app/NoMenuAlert.c:113
+msgid "Copy Default Menu"
+msgstr "Копирай стандартното меню"
+
+#: ../../WPrefs.app/NoMenuAlert.c:119
+msgid "Keep Current Menu"
+msgstr "Запази сегашното меню"
+
+#: ../../WPrefs.app/Paths.c:84
+msgid "bad value in option IconPath. Using default path list"
+msgstr ""
+"недопустима стойност в опцията \"IconPath\". Ползва се подразбиращият се "
+"списък пътеки"
+
+#: ../../WPrefs.app/Paths.c:101
+msgid "bad value in option PixmapPath. Using default path list"
+msgstr ""
+"недопустима стойност за опцията \"PixmapPath. Ползва се подразбиращият се "
+"списък пътеки."
+
+#: ../../WPrefs.app/Paths.c:149
+msgid "Select directory"
+msgstr "Избери директория"
+
+#: ../../WPrefs.app/Paths.c:270
+msgid "Icon Search Paths"
+msgstr "Пътеки за търсене на иконките"
+
+#: ../../WPrefs.app/Paths.c:281 ../../WPrefs.app/Paths.c:312
+#: ../../WPrefs.app/TexturePanel.c:1304
+msgid "Add"
+msgstr "Добави"
+
+#: ../../WPrefs.app/Paths.c:301
+msgid "Pixmap Search Paths"
+msgstr "Пътеки за търсене на картинки"
+
+#: ../../WPrefs.app/Paths.c:341
+msgid "Search Path Configuration"
+msgstr "Настройка на пътеките за търсенe"
+
+#: ../../WPrefs.app/Paths.c:343
+msgid ""
+"Search paths to use when looking for pixmaps\n"
+"and icons."
+msgstr ""
+"Директорни пътеки, в които да се\n"
+"търсят картинки и иконки."
+
+#: ../../WPrefs.app/Preferences.c:159
+msgid "Size Display"
+msgstr "Изобразяване на размера"
+
+#: ../../WPrefs.app/Preferences.c:161
+msgid ""
+"The position or style of the window size\n"
+"display that's shown when a window is resized."
+msgstr ""
+"Положението или стилът на размера на про-\n"
+"зорцеца при променяне на размера му."
+
+#: ../../WPrefs.app/Preferences.c:168 ../../WPrefs.app/Preferences.c:188
+msgid "Corner of screen"
+msgstr "В ъгъла на екрана"
+
+#: ../../WPrefs.app/Preferences.c:169 ../../WPrefs.app/Preferences.c:189
+msgid "Center of screen"
+msgstr "В средата на екрана"
+
+#: ../../WPrefs.app/Preferences.c:170 ../../WPrefs.app/Preferences.c:190
+msgid "Center of resized window"
+msgstr "В средата на прозореца"
+
+#: ../../WPrefs.app/Preferences.c:171
+msgid "Technical drawing-like"
+msgstr "Като в технически чертеж"
+
+#: ../../WPrefs.app/Preferences.c:179
+msgid "Position Display"
+msgstr "Изобразяване на положението"
+
+#: ../../WPrefs.app/Preferences.c:181
+msgid ""
+"The position or style of the window position\n"
+"display that's shown when a window is moved."
+msgstr ""
+"Положението или стилът за изобразяване на\n"
+"положението на прозореця при преместване."
+
+#: ../../WPrefs.app/Preferences.c:198
+msgid "Show balloon text for..."
+msgstr "Да се показва текст в балони за..."
+
+#: ../../WPrefs.app/Preferences.c:205
+msgid "incomplete window titles"
+msgstr "съкратени имена на прозорци"
+
+#: ../../WPrefs.app/Preferences.c:206
+msgid "miniwindow titles"
+msgstr "имена на минипрозорчетата"
+
+#: ../../WPrefs.app/Preferences.c:207
+msgid "application/dock icons"
+msgstr "иконки на дока/приложенията"
+
+#: ../../WPrefs.app/Preferences.c:208
+msgid "internal help"
+msgstr "вътрешна справка"
+
+#: ../../WPrefs.app/Preferences.c:220
+msgid "Raise window when switching focus with keyboard (CirculateRaise)."
+msgstr "Да се повдига прозореца при промяна на фокуса от клавиатурата."
+
+#: ../../WPrefs.app/Preferences.c:226
+msgid "Keep keyboard language status for each window."
+msgstr "Собствено състояние КИР/ЛАТ за всеки прозорец"
+
+#: ../../WPrefs.app/Preferences.c:247
+msgid "Miscellaneous Ergonomic Preferences"
+msgstr "Разни предпочитания относно ергономиката"
+
+#: ../../WPrefs.app/Preferences.c:248
+msgid ""
+"Various settings like balloon text, geometry\n"
+"displays etc."
+msgstr ""
+"Различни настройки като за текст в балони,\n"
+"състояние КИР/ЛАТ и др."
+
+#: ../../WPrefs.app/TexturePanel.c:605
+msgid "Could not load the selected file: "
+msgstr "Не може да се зареди избраният файл: "
+
+#: ../../WPrefs.app/TexturePanel.c:687
+msgid "The selected file does not contain a supported image."
+msgstr "Избраният файл не съдържа поддържано изображение."
+
+#: ../../WPrefs.app/TexturePanel.c:1248
+msgid "Texture Panel"
+msgstr "Панел за текстури"
+
+#: ../../WPrefs.app/TexturePanel.c:1256
+msgid "Texture Name"
+msgstr "Име на текстурата"
+
+#: ../../WPrefs.app/TexturePanel.c:1268
+msgid "Solid Color"
+msgstr "Плътен цвят"
+
+#: ../../WPrefs.app/TexturePanel.c:1269
+msgid "Gradient Texture"
+msgstr "Градиентна текстура"
+
+#: ../../WPrefs.app/TexturePanel.c:1270
+msgid "Simple Gradient Texture"
+msgstr "Проста градиентна текстура"
+
+#: ../../WPrefs.app/TexturePanel.c:1271
+msgid "Textured Gradient"
+msgstr "Текстуриран градиент"
+
+#: ../../WPrefs.app/TexturePanel.c:1272
+msgid "Image Texture"
+msgstr "Текстура за изображение"
+
+#: ../../WPrefs.app/TexturePanel.c:1280
+msgid "Default Color"
+msgstr "Основен цвят"
+
+#: ../../WPrefs.app/TexturePanel.c:1292
+msgid "Gradient Colors"
+msgstr "Цветове на градиента"
+
+#: ../../WPrefs.app/TexturePanel.c:1388
+msgid "Direction"
+msgstr "Посока"
+
+#: ../../WPrefs.app/TexturePanel.c:1416
+msgid "Gradient"
+msgstr "Градиент"
+
+#: ../../WPrefs.app/TexturePanel.c:1434
+msgid "Gradient Opacity"
+msgstr "Прозрачност на градиента"
+
+#: ../../WPrefs.app/TexturePanel.c:1477
+msgid "Image"
+msgstr "Изображение"
+
+#: ../../WPrefs.app/TexturePanel.c:1497
+msgid "Browse..."
+msgstr "Разлисти..."
+
+#: ../../WPrefs.app/TexturePanel.c:1509
+msgid "Tile"
+msgstr "Мозайка"
+
+#: ../../WPrefs.app/TexturePanel.c:1510
+msgid "Scale"
+msgstr "Уголемено"
+
+#: ../../WPrefs.app/TexturePanel.c:1512
+msgid "Maximize"
+msgstr "Максималн."
+
+#: ../../WPrefs.app/Themes.c:71 ../../WPrefs.app/Themes.c:82
+msgid "Set"
+msgstr ""
+
+#: ../../WPrefs.app/Themes.c:132
+msgid "Stop"
+msgstr ""
+
+#: ../../WPrefs.app/Themes.c:143 ../../WPrefs.app/Themes.c:204
+#: ../../WPrefs.app/Themes.c:224
+msgid "Download"
+msgstr ""
+
+#: ../../WPrefs.app/Themes.c:172
+msgid "Save Current Theme"
+msgstr ""
+
+#: ../../WPrefs.app/Themes.c:181
+msgid "Load"
+msgstr ""
+
+#: ../../WPrefs.app/Themes.c:186
+msgid "Install"
+msgstr ""
+
+#: ../../WPrefs.app/Themes.c:194
+msgid "Tile of The Day"
+msgstr ""
+
+#: ../../WPrefs.app/Themes.c:214
+msgid "Bar of The Day"
+msgstr ""
+
+#: ../../WPrefs.app/Themes.c:251
+msgid "Themes"
+msgstr ""
+
+#: ../../WPrefs.app/WindowHandling.c:141
+#, c-format
+msgid "bad option value %s in WindowPlacement. Using default value"
+msgstr ""
+
+#: ../../WPrefs.app/WindowHandling.c:163
+msgid "invalid data in option WindowPlaceOrigin. Using default (0,0)"
+msgstr ""
+
+#: ../../WPrefs.app/WindowHandling.c:236
+msgid "Window Placement"
+msgstr ""
+
+#: ../../WPrefs.app/WindowHandling.c:237
+msgid ""
+"How to place windows when they are first put\n"
+"on screen."
+msgstr ""
+
+#: ../../WPrefs.app/WindowHandling.c:243
+msgid "Automatic"
+msgstr "Автоматично"
+
+#: ../../WPrefs.app/WindowHandling.c:244
+msgid "Random"
+msgstr "Случайно"
+
+#: ../../WPrefs.app/WindowHandling.c:245
+msgid "Manual"
+msgstr "Ръчно"
+
+#: ../../WPrefs.app/WindowHandling.c:246
+msgid "Cascade"
+msgstr "Каскадно"
+
+#: ../../WPrefs.app/WindowHandling.c:247
+msgid "Smart"
+msgstr "Хитро"
+
+#: ../../WPrefs.app/WindowHandling.c:253
+msgid "Placement Origin"
+msgstr "Начално място"
+
+#: ../../WPrefs.app/WindowHandling.c:313
+msgid "Opaque Move"
+msgstr "Цялостно преместване"
+
+#: ../../WPrefs.app/WindowHandling.c:314
+msgid ""
+"Whether the window contents should be moved\n"
+"when dragging windows aroung or if only a\n"
+"frame should be displayed.\n"
+msgstr ""
+"Дали съдържанието на прозореца трябва\n"
+"да се премества при влачене с мишката,\n"
+"или само рамката на прозореца трябва\n"
+"да се изобразява.\n"
+
+#: ../../WPrefs.app/WindowHandling.c:353
+msgid "When maximizing..."
+msgstr "При максимизиране..."
+
+#: ../../WPrefs.app/WindowHandling.c:358
+msgid "...do not cover icons"
+msgstr "...да не се покриват иконките"
+
+#: ../../WPrefs.app/WindowHandling.c:364
+msgid "...do not cover dock"
+msgstr "...да не се покрива докът"
+
+#: ../../WPrefs.app/WindowHandling.c:373
+msgid "Edge Resistance"
+msgstr "Съпротивление по ръбовете"
+
+#: ../../WPrefs.app/WindowHandling.c:375
+msgid ""
+"Edge resistance will make windows `resist'\n"
+"being moved further for the defined threshold\n"
+"when moved against other windows or the edges\n"
+"of the screen."
+msgstr ""
+"\"Съпротивление по ръбовете\" означава прозореца\n"
+"да се съпротивлява до определен праг при\n"
+"застъпване на друг прозорец или напускане\n"
+"на екрана."
+
+#: ../../WPrefs.app/WindowHandling.c:394
+msgid "Resist"
+msgstr ""
+"Съпро-\n"
+"тива"
+
+#: ../../WPrefs.app/WindowHandling.c:399
+msgid "Attract"
+msgstr ""
+"Прив-\n"
+"личане"
+
+#: ../../WPrefs.app/WindowHandling.c:415
+msgid "Open dialogs in same workspace as their owners"
+msgstr "Диалогови прозорци да се отварят на работното място на владеещия."
+
+#: ../../WPrefs.app/WindowHandling.c:442
+msgid "Window Handling Preferences"
+msgstr "Предпочитания за управление на прозорците"
+
+#: ../../WPrefs.app/WindowHandling.c:444
+msgid ""
+"Window handling options. Initial placement style\n"
+"edge resistance, opaque move etc."
+msgstr ""
+"Опции за управление на прозорците. Начин\n"
+"за определяне на началното местоположение,\n"
+"съпротивление по ръбовете, стил на\n"
+"преместване и др."
+
+#: ../../WPrefs.app/Workspace.c:177
+msgid "Workspace Navigation"
+msgstr "Навигация по работните места"
+
+#: ../../WPrefs.app/Workspace.c:184
+msgid "wrap to the first workspace after the last workspace."
+msgstr "да се минава към първото работно място след задминаване на последното"
+
+#: ../../WPrefs.app/Workspace.c:206
+msgid "switch workspaces while dragging windows."
+msgstr ""
+
+#: ../../WPrefs.app/Workspace.c:228
+msgid "automatically create new workspaces."
+msgstr "автоматично да се правят нови работни места."
+
+#: ../../WPrefs.app/Workspace.c:251
+msgid "Position of workspace name display"
+msgstr "Място на името на работното място"
+
+#: ../../WPrefs.app/Workspace.c:270
+msgid "Disable"
+msgstr "Забрани"
+
+#: ../../WPrefs.app/Workspace.c:272
+msgid "Top"
+msgstr ""
+
+#: ../../WPrefs.app/Workspace.c:273
+msgid "Bottom"
+msgstr ""
+
+#: ../../WPrefs.app/Workspace.c:274
+msgid "Top/left"
+msgstr ""
+
+#: ../../WPrefs.app/Workspace.c:275
+msgid "Top/right"
+msgstr ""
+
+#: ../../WPrefs.app/Workspace.c:276
+msgid "Bottom/left"
+msgstr ""
+
+#: ../../WPrefs.app/Workspace.c:277
+msgid "Bottom/right"
+msgstr ""
+
+#: ../../WPrefs.app/Workspace.c:285
+msgid "Dock/Clip"
+msgstr "Док/Кламер"
+
+#: ../../WPrefs.app/Workspace.c:304
+msgid ""
+"Disable/enable the application Dock (the\n"
+"vertical icon bar in the side of the screen)."
+msgstr ""
+"Забранява/разрешава Дока на приложенията\n"
+"(вертикалната ивица с иконки, странично\n"
+"от екрана)."
+
+#: ../../WPrefs.app/Workspace.c:325
+msgid ""
+"Disable/enable the Clip (that thing with\n"
+"a paper clip icon)."
+msgstr ""
+"Забранява/позволява Кламера\n"
+"(нещото, имащо иконка с кламер)."
+
+#: ../../WPrefs.app/Workspace.c:365
+msgid "Workspace Preferences"
+msgstr "Предпочитания за работните места"
+
+#: ../../WPrefs.app/Workspace.c:367
+msgid ""
+"Workspace navigation features.\n"
+"You can also enable/disable the Dock and Clip here."
+msgstr ""
+"Свойства на навигацията през работните места.\n"
+"От тук може да се забрани/ползволи и Докът\n"
+"и Кламерът."
+
+#: ../../WPrefs.app/MenuGuru.c:106
+msgid "Menu Guru - Select Type"
+msgstr "Факир за менюта - какъв вид"
+
+#: ../../WPrefs.app/MenuGuru.c:111 ../../WPrefs.app/MenuGuru.c:133
+#: ../../WPrefs.app/MenuGuru.c:251
+msgid "Next"
+msgstr "По-нататък"
+
+#: ../../WPrefs.app/MenuGuru.c:114
+msgid "Menu Guru - Select Menu File"
+msgstr "Факир за менюта - кой файл меню"
+
+#: ../../WPrefs.app/MenuGuru.c:122
+msgid "Menu Guru - Select Pipe Command"
+msgstr "Факир за менюта - какъв програмен канал"
+
+#: ../../WPrefs.app/MenuGuru.c:129
+msgid "Menu Guru - Select Directories"
+msgstr "Факир за менюта - кои директории"
+
+#: ../../WPrefs.app/MenuGuru.c:136
+msgid "Menu Guru - Select Command"
+msgstr "Факир за менюта - коя команда"
+
+#: ../../WPrefs.app/MenuGuru.c:257
+msgid "Back"
+msgstr "Върни"
+
+#: ../../WPrefs.app/MenuGuru.c:271
+msgid ""
+"This process will help you create a submenu which definition is located in "
+"another file or is created dynamically.\n"
+"What do you want to use as the contents of the submenu?"
+msgstr ""
+"Този процес ще Ви помогне да направите подменю,\n"
+"чиято дефиниция се намира в друг файл или се създава динамично. Възможни "
+"източници на подменюто:"
+
+#: ../../WPrefs.app/MenuGuru.c:279
+msgid ""
+"A file containing the menu definition in the plain text (non-property list) "
+"menu format."
+msgstr "Файл, дефиниращ менюто в формат обикновен текст (не списък свойства)."
+
+#: ../../WPrefs.app/MenuGuru.c:285
+msgid "The menu definition generated by a script/program read through a pipe."
+msgstr "Менюто се генерира от програма и се чете през програмен канал."
+
+#: ../../WPrefs.app/MenuGuru.c:291
+msgid "The files in one or more directories."
+msgstr "Файловете в една или повече директории."
+
+#: ../../WPrefs.app/MenuGuru.c:303
+msgid "Type the path for the menu file:"
+msgstr "Въведете пълното име на файла с меню:"
+
+#: ../../WPrefs.app/MenuGuru.c:318
+msgid ""
+"The menu file must contain a menu in the plain text menu file format. This "
+"format is described in the menu files included with WindowMaker, probably at "
+"~/GNUstep/Library/WindowMaker/menu"
+msgstr ""
+"Файлът с меню трябва да бъде в прост текстов формат. Този формат е описан "
+"във файловете менюта, съпровождащи Window Maker, вероятно в "
+"~/GNUstep/Library/WindowMaker/menu"
+
+#: ../../WPrefs.app/MenuGuru.c:328
+msgid "Type the command that will generate the menu definition:"
+msgstr "Въведете командата, която ще генерира дефиницията на менюто:"
+
+#: ../../WPrefs.app/MenuGuru.c:338
+msgid ""
+"The command supplied must generate and output a valid menu definition to "
+"stdout. This definition should be in the plain text menu file format, "
+"described in the menu files included with WindowMaker, usually at "
+"~/GNUstep/Library/WindowMaker/menu"
+msgstr ""
+"Зададената команда трябва да генерира и изведе валидна дефиниция на меню на "
+"стандартния си изход. Тази дефиниция трябва да бъде в простия текстов "
+"формат, описан във файловете менюта, съпровождащи Window Maker, обикновено в "
+"~/GNUstep/Library/WindowMaker/menu"
+
+#: ../../WPrefs.app/MenuGuru.c:350 ../../WPrefs.app/MenuGuru.c:372
+#: ../../WPrefs.app/MenuGuru.c:394
+msgid ""
+"Type the path for the directory. You can type more than one path by "
+"separating them with spaces."
+msgstr ""
+"Въведете пътя до директорията. Може да въведете повече от един път, ако го "
+"отделите с интервали."
+
+#: ../../WPrefs.app/MenuGuru.c:361 ../../WPrefs.app/MenuGuru.c:383
+#: ../../WPrefs.app/MenuGuru.c:405
+msgid ""
+"The menu generated will have an item for each file in the directory. The "
+"directories can contain program executables or data files (such as jpeg "
+"images)."
+msgstr ""
+"Генерираното меню ще има елемент за всеки от файловете в директорията. "
+"Директориите могат да съдържат изпълними файлове или файлове с данни (напр. "
+".jpeg-файлове)."
+
+#: ../../WPrefs.app/MenuGuru.c:415
+msgid ""
+"If the directory contain data files, type the command used to open these "
+"files. Otherwise, leave it in blank."
+msgstr ""
+"Ако директорията съдържа файлове с данни, въведете командата за отваряне на "
+"тези файлове. В противен случай оставете полето празно."
+
+#: ../../WPrefs.app/MenuGuru.c:426
+msgid ""
+"Each file in the directory will have an item and they will be opened with "
+"the supplied command.For example, if the directory contains image files and "
+"the command is \"xv -root\", each file in the directory will have a menu "
+"item like \"xv -root imagefile\"."
+msgstr ""
+"Всеки файл в директорията ще има елемент в менюто и ще се отваря с "
+"посочената команда. Например ако директорията съдържа файлове с изображения "
+"и командата е \"xv -root\", то всеки файл в директорията ще има елемент в "
+"менюто от вида \"xv -root файл\"."
+
+#~ msgid "drag windows between workspaces."
+#~ msgstr "прозорците да се влачат през работни места"
+
+#~ msgid ""
+#~ "switch to first workspace when switching past the last workspace and "
+#~ "vice-versa"
+#~ msgstr ""
+#~ "да се мине към първото работно място след задминаване на последното и обратно"

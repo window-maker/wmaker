@@ -8,6 +8,7 @@ prefsdata_DATA =\
 	autostart.sh\
 	exitscript.sh\
 	menu\
+	menu.bg\
 	menu.ca\
 	menu.cz\
 	menu.da\
@@ -35,6 +36,7 @@ prefsdata_DATA =\
 	menu.zh_CN\
 	menu.zh_TW.Big5\
 	plmenu\
+	plmenu.bg\
 	plmenu.da\
 	plmenu.de\
 	plmenu.es\

@@ -253,8 +253,8 @@ dnl ==================
 
 dnl List of supported locales
 dnl -------------------------
-supported_locales="cs de es fr gl it ja ko nl no pt ru se tr fi hr el pl ro da zh_TW.Big5 zh_CN sk"
-supported_wprefs_locales="pt hr fr ko ja cs zh_TW.Big5 es zh_CN fi it ru de"
+supported_locales="cs de es fr gl it ja ko nl no pt ru se tr fi hr el pl ro da zh_TW.Big5 zh_CN sk bg"
+supported_wprefs_locales="pt hr fr ko ja cs zh_TW.Big5 es zh_CN fi it ru de bg"
 
 for lang in $LINGUAS; do
 	ok=0
