@@ -311,9 +311,9 @@
 
 #define DEF_FRAME_THICKNESS 1	       /* linewidth of the move/resize frame */
 
-#define DEF_WINDOW_TITLE_EXTEND_SPACE "4"
-#define DEF_MENU_TITLE_EXTEND_SPACE "4"
-#define DEF_MENU_TEXT_EXTEND_SPACE "0"
+#define DEF_WINDOW_TITLE_EXTEND_SPACE	"4"
+#define DEF_MENU_TITLE_EXTEND_SPACE	"4"
+#define DEF_MENU_TEXT_EXTEND_SPACE	"0"
 
 #define DEF_XPM_CLOSENESS	40000 
 
