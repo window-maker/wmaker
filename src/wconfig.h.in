@@ -74,7 +74,9 @@
 /*
  * support for XDND drop in the Dock. Experimental
  */
-#undef XDND
+#ifdef GNOME_STUFF
+#define XDND
+#endif
 
 /*
  * support for Motif window manager (mwm) window hints
@@ -243,10 +245,6 @@
  * at compile time.
  *--------------------------------------------------------------------
  */
-
-#if defined(GNOME_STUFF) && !defined(XDND)
-#define XDND
-#endif
 
 /* list of paths to look for the config files, searched in order 
  * of appearance */
