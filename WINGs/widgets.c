@@ -934,7 +934,7 @@ WMMapWidget(WMWidget *w)
 void
 WMReparentWidget(WMWidget *w, WMWidget *newParent, int x, int y)
 {
-    W_ReparentView(W_VIEW(w), newParent, x, y);
+    W_ReparentView(W_VIEW(w), W_VIEW(newParent), x, y);
 }
 
 

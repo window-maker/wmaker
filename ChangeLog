@@ -45,6 +45,8 @@ Changes since version 0.64.0:
 - The icon image set to be shown in panels ("Logo.WMPanel") will be 
   automatically updated if its entry in WMWindowAttributes changes (without
   a need to restart as until now).
+- Fixed a bug in the icon chooser dialog that made the selected icon look
+  wrong if it had alpha blending.
 
 
 Changes since version 0.63.1:

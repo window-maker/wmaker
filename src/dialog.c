@@ -370,7 +370,7 @@ drawIconProc(WMList *lPtr, int index, Drawable d, char *text,
     WMColor *whitecolor;
     WMSize size;
     WMScreen *wmscr = WMWidgetScreen(panel->win);
-    RColor gray;
+    RColor color;
     int width;
 
     if(!panel->preview) return;
@@ -385,9 +385,14 @@ drawIconProc(WMList *lPtr, int index, Drawable d, char *text,
     sprintf(file, "%s/%s", dirfile, text);
     wfree(dirfile);
 
-    gray.red = 0xae;  gray.green = 0xaa;
-    gray.blue = 0xae; gray.alpha = 0;
-    pixmap = WMCreateBlendedPixmapFromFile(wmscr, file, &gray);
+    if ((state & WLDSSelected) != 0) {
+        color.red = color.green = color.blue = 0xff;
+        color.alpha = 0;
+    } else {
+        color.red = color.blue = 0xae;
+        color.green = 0xaa; color.alpha = 0;
+    }
+    pixmap = WMCreateBlendedPixmapFromFile(wmscr, file, &color);
     wfree(file);
 
     if (!pixmap) {

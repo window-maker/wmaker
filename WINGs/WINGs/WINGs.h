@@ -847,6 +847,8 @@ void WMUnmapSubwidgets(WMWidget *w);
 
 void WMRealizeWidget(WMWidget *w);
 
+void WMReparentWidget(WMWidget *w, WMWidget *newParent, int x, int y);
+
 void WMDestroyWidget(WMWidget *widget);
 
 void WMHangData(WMWidget *widget, void *data);
