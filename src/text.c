@@ -42,9 +42,6 @@
 #endif
 
 
-
-#define TEXT_SHIFT -4  /* Move the text up relative to the bottom of
-                      * the text-box */
 #if 0
 #  define  ENTER(X)  fprintf(stderr,"Entering:  %s()\n", X);
 #  define  LEAVE(X)  fprintf(stderr,"Leaving:   %s()\n", X);
@@ -344,8 +341,7 @@ textRefresh( WTextInput *wtext )
 
   /* Draw the text normally */
   WMDrawString(wtext->core->screen_ptr->wmscreen, wtext->core->window, 
-	       wtext->regGC, wtext->font,
-	       x1, y2+TEXT_SHIFT, ptr, wtext->text.length);
+	       wtext->regGC, wtext->font, x1, y1, ptr, wtext->text.length);
 
   /* Draw the selected text */
   if( wtext->text.startPos != wtext->text.endPos )
@@ -377,7 +373,7 @@ textRefresh( WTextInput *wtext )
     /* Draw the selected text... use invGC so it will be the
      * opposite color as the filled rectangle */
     WMDrawString(wtext->core->screen_ptr->wmscreen, wtext->core->window, 
-		 wtext->invGC, wtext->font, x1, y2+TEXT_SHIFT, ptr, (ep - sp));
+		 wtext->invGC, wtext->font, x1, y1, ptr, (ep - sp));
     }
   
   /* And draw a quick little line for the cursor position */
