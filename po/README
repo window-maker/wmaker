@@ -45,6 +45,8 @@ et.po   Estonian        	Ivar Smolin <okul@trenet.ee>
 ms.po	Malay			Hasbullah Bin Pit (sebol) <sebol@ikhlas.com>
 be.po	Belarusian		Ihar Viarheichyk <iverg@mail.ru>
 ca.po	Catalan			Ernest Adrogué <eadrogue@gmx.net>
+bs.po	Bosnian			Ahmet Mulalic <am@lugzdk.ba>
+
 
 Some translations are based on previous translations by other people.
 The history of translations can be found in the po files.
@@ -79,7 +81,7 @@ message. PLEASE DO NOT TOUCH THE msgid LINES.
 The info pages for gettext has more detailed information on how to
 do translations. 
 
-3 - (maintainer only) put the locale name in configure.in, in the list of
+3 - (maintainer only) put the locale name in configure.ac, in the list of
     supported locales
 
 Then rename the WindowMake.pot file to the language code 

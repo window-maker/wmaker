@@ -4,10 +4,10 @@ CATALOGS = @MOFILES@
 
 CLEANFILES = $(CATALOGS) WindowMaker.pot
 
-# keep this sorted
-EXTRA_DIST = be.po bg.po ca.po cs.po da.po de.po el.po es.po et.po fi.po fr.po \
-	gl.po hr.po hu.po it.po ja.po ko.po ms.po nl.po no.po pl.po pt.po \
-	ro.po ru.po sk.po sv.po tr.po zh_CN.po zh_TW.Big5.po ca.po
+# Please keep this sorted in alphabetic order!
+EXTRA_DIST = be.po bg.po bs.po ca.po cs.po da.po de.po el.po es.po et.po \
+	fi.po fr.po gl.po hr.po hu.po it.po ja.po ko.po ms.po nl.po no.po \
+	pl.po pt.po ro.po ru.po sk.po sv.po tr.po zh_CN.po zh_TW.Big5.po
 
 POTFILES  = \
 	$(top_builddir)/src/appicon.c \
