@@ -11,7 +11,7 @@ alertPanelOnClick(WMWidget *self, void *clientData)
 {
     WMAlertPanel *panel = clientData;
 
-    WMBreakModalLoop(WMWidgetScreen(panel->othBtn));
+    WMBreakModalLoop(WMWidgetScreen(self));
     if (self == panel->defBtn) {
 	panel->result = WAPRDefault;
     } else if (self == panel->othBtn) {
@@ -35,7 +35,7 @@ handleKeyPress(XEvent *event, void *clientData)
 	    WMPerformButtonClick(panel->othBtn ? panel->othBtn : panel->altBtn);
 	} else {
 	    panel->result = WAPRDefault;
-	    WMBreakModalLoop(WMWidgetScreen(panel->othBtn));
+	    WMBreakModalLoop(WMWidgetScreen(panel->win));
 	}
     }
 }
@@ -106,7 +106,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     panel = wmalloc(sizeof(WMAlertPanel));
     memset(panel, 0, sizeof(WMAlertPanel));
 
-        
+
     panel->retKey = XKeysymToKeycode(scrPtr->display, XK_Return);
     panel->escKey = XKeysymToKeycode(scrPtr->display, XK_Escape);
 
@@ -123,12 +123,12 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 	 (scrPtr->rootView->size.height - WMWidgetHeight(panel->win))/2);
 
     WMSetWindowTitle(panel->win, "");
-    
+
     panel->vbox = WMCreateBox(panel->win);
     WMSetBoxExpandsToParent(panel->vbox);
     WMSetBoxHorizontal(panel->vbox, False);
     WMMapWidget(panel->vbox);
-    
+
     hbox = WMCreateBox(panel->vbox);
     WMSetBoxHorizontal(hbox, True);
     WMMapWidget(hbox);
@@ -291,7 +291,7 @@ handleKeyPress2(XEvent *event, void *clientData)
             WMPerformButtonClick(panel->altBtn);
 	} else {
 	    /*           printf("got esc\n");*/
-	    WMBreakModalLoop(WMWidgetScreen(panel->altBtn));
+	    WMBreakModalLoop(WMWidgetScreen(panel->win));
 	    panel->result = WAPRDefault;
 	}
     }
@@ -370,7 +370,7 @@ endedEditingObserver(void *observerData, WMNotification *notification)
 	if (panel->altBtn)
 	    WMPerformButtonClick(panel->altBtn);
 	else {
-	    WMBreakModalLoop(WMWidgetScreen(panel->defBtn));
+	    WMBreakModalLoop(WMWidgetScreen(panel->win));
 	    panel->result = WAPRDefault;
 	}
 	break;
