@@ -84,6 +84,7 @@ static proplist_t AStartHidden;	       /* app */
 static proplist_t ADontSaveSession;    /* app */
 static proplist_t AEmulateAppIcon;
 static proplist_t AFullMaximize;
+static proplist_t ACollapseAppIcons;   /* app */
 #ifdef XKB_BUTTON_HINT
 static proplist_t ANoLanguageButton;
 #endif
@@ -124,6 +125,7 @@ init_wdefaults(WScreen *scr)
     ADontSaveSession = PLMakeString("DontSaveSession");
     AEmulateAppIcon = PLMakeString("EmulateAppIcon");
     AFullMaximize = PLMakeString("FullMaximize");
+    ACollapseAppIcons = PLMakeString("CollapseAppIcons");
 #ifdef XKB_BUTTON_HINT
     ANoLanguageButton = PLMakeString("NoLanguageButton");
 #endif
@@ -278,6 +280,9 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
     value = get_value(dw, dc, dn, da, ANoAppIcon, No, useGlobalDefault);
     APPLY_VAL(value, no_appicon, ANoAppIcon);
 
+    value = get_value(dw, dc, dn, da, ACollapseAppIcons, No, useGlobalDefault);
+    APPLY_VAL(value, collapse_appicons, ACollapseAppIcons);
+    
     value = get_value(dw, dc, dn, da, AKeepOnTop, No, useGlobalDefault);
     APPLY_VAL(value, floating, AKeepOnTop);
 

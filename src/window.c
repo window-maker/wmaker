@@ -1772,7 +1772,7 @@ wWindowUpdateName(WWindow *wwin, char *newTitle)
 	return;
     
     if (app) 
-	instIndex = wApplicationIndexOfInstance(app);
+	instIndex = wApplicationIndexOfGroup(app);
     
     
     wwin->flags.wm_name_changed = 1;

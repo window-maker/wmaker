@@ -96,5 +96,6 @@ void wAppIconMove(WAppIcon *aicon, int x, int y);
 
 WAppIcon *wAppIconNextSibling(WAppIcon *icon);
 
-int wAppIconIndexOfInstance(WAppIcon *icon);
+Bool wAppIconIsFirstInstance(WAppIcon *icon);
+
 #endif

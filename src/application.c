@@ -493,16 +493,50 @@ wApplicationDestroy(WApplication *wapp)
 }
 
 
+
+void 
+wApplicationSetCollapse(WApplication *app, Bool flag)
+{
+    WApplication *list = app->main_window_desc->screen_ptr->wapp_list;
+    int index = 0;
+    WWindow *wwin = app->main_window_desc;
+    
+    if (WFLAGP(app->main_window_desc, collapse_appicons) == flag)
+	return;
+    
+    
+    while (list) {
+	if (strcmp(wwin->wm_instance,
+		   list->main_window_desc->wm_instance) == 0
+	    &&
+	    strcmp(wwin->wm_class,
+		   list->main_window_desc->wm_class) == 0)
+	    WSETUFLAG(list->main_window_desc, collapse_appicons, flag);
+
+	list = list->next;
+    }
+    
+    if (app->app_icon && flag)
+	wAppIconMove(app->app_icon, app->app_icon->x_pos, app->app_icon->y_pos);
+}
+
+
+
+
 /*
  * Returns index number of the app in case there are more than
  * one instance of the same class/name.
  */
 int
-wApplicationIndexOfInstance(WApplication *app)
+wApplicationIndexOfGroup(WApplication *app)
 {
     WApplication *list = app->main_window_desc->screen_ptr->wapp_list;
     int index = 0;
     WWindow *wwin = app->main_window_desc;
+/*
+    if (!WFLAGP(wwin, collapse_appicons))
+	return 0;
+ */
     
     while (list) {
 	if (app == list)
@@ -521,30 +555,5 @@ wApplicationIndexOfInstance(WApplication *app)
     puts("OH SHIT!?!?!? HOW THE FUCK DID WE GET HERE!?!?!?!?!");
     
     return 0;
-}
-
-
-Bool
-wApplicationHasMultiInstances(WApplication *app)
-{
-    WApplication *list = app->main_window_desc->screen_ptr->wapp_list;
-    int index = 0;
-    WWindow *wwin = app->main_window_desc;
-    
-    while (list) {
-	if (strcmp(wwin->wm_instance,
-		   list->main_window_desc->wm_instance) == 0
-	    &&
-	    strcmp(wwin->wm_class,
-		   list->main_window_desc->wm_class) == 0)
-	    index++;
-
-	if (index == 2)
-	    return True;
-	
-	list = list->next;
-    }
-    
-    return False;
 }
 

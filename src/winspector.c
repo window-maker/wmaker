@@ -114,7 +114,7 @@ typedef struct InspectorPanel {
     
     /* 5th page. application wide attributes */
     WMFrame *appFrm;
-    WMButton *appChk[2];
+    WMButton *appChk[3];
 
     unsigned int done:1;
     unsigned int destroyed:1;
@@ -153,6 +153,7 @@ static proplist_t AStartMaximized;
 static proplist_t ADontSaveSession;
 static proplist_t AEmulateAppIcon;
 static proplist_t AFullMaximize;
+static proplist_t ACollapseAppIcons;
 #ifdef XKB_BUTTON_HINT
 static proplist_t ANoLanguageButton;
 #endif
@@ -220,6 +221,7 @@ make_keys()
     ADontSaveSession = PLMakeString("DontSaveSession");
     AEmulateAppIcon = PLMakeString("EmulateAppIcon");
     AFullMaximize = PLMakeString("FullMaximize");
+    ACollapseAppIcons = PLMakeString("CollapseAppIcons");    
 #ifdef XKB_BUTTON_HINT
     ANoLanguageButton = PLMakeString("NoLanguageButton");
 #endif
@@ -658,6 +660,9 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 
 	value = (WMGetButtonSelected(panel->appChk[1])!=0) ? Yes : No;
 	different |= insertAttribute(dict, winDic, ANoAppIcon, value, flags);
+	
+	value = (WMGetButtonSelected(panel->appChk[2])!=0) ? Yes : No;
+	different |= insertAttribute(dict, winDic, ACollapseAppIcons, value, flags);
     } 
 
     PLRemoveDictionaryEntry(dict, key);
@@ -713,6 +718,10 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 	    different |= insertAttribute(dict, appDic, ANoAppIcon,  value, 
 					 flags);
 
+	    value = (WMGetButtonSelected(panel->appChk[2])!=0) ? Yes : No;
+	    different |= insertAttribute(dict, appDic, ACollapseAppIcons,  value, 
+					 flags);
+	    
 	    PLRemoveDictionaryEntry(dict, key);
 	    if (different) {
 		PLInsertDictionaryEntry(dict, key, appDic);
@@ -896,6 +905,9 @@ applySettings(WMButton *button, InspectorPanel *panel)
 
 	WSETUFLAG(wapp->main_window_desc, no_appicon,
 		  WMGetButtonSelected(panel->appChk[1]));
+
+	WSETUFLAG(wapp->main_window_desc, collapse_appicons,
+		  WMGetButtonSelected(panel->appChk[2]));
 	
         if (WFLAGP(wapp->main_window_desc, no_appicon))
             removeAppIconFor(wapp);
@@ -1030,6 +1042,9 @@ revertSettings(WMButton *button, InspectorPanel *panel)
 		break;
 	     case 1:
 		flag = WFLAGP(wapp->main_window_desc, no_appicon);
+		break;
+	     case 2:
+		flag = WFLAGP(wapp->main_window_desc, collapse_appicons);
 		break;
 	    }
 	    WMSetButtonSelected(panel->appChk[i], flag);
@@ -1576,7 +1591,7 @@ createInspectorForWindow(WWindow *wwin, int xpos, int ypos,
 	WMMoveWidget(panel->appFrm, 15, 50);
 	WMResizeWidget(panel->appFrm, frame_width, 240);
 	
-	for (i=0; i < 2; i++) {
+	for (i=0; i < 3; i++) {
 	    char *caption = NULL;
 	    int flag = 0;
 	    char *descr = NULL;
@@ -1594,6 +1609,12 @@ createInspectorForWindow(WWindow *wwin, int xpos, int ypos,
 			  "Note that you won't be able to dock it anymore,\n"
 			  "and any icons that are already docked will stop\n"
 			  "working correctly.");
+		break;
+	     case 2:
+		caption = _("Collapse Application Icons");
+		flag = WFLAGP(wapp->main_window_desc, collapse_appicons);
+		descr = _("Collapse application icons from other instances\n"
+			  "of this application into one.\n");
 		break;
 	    }
 	    panel->appChk[i] = WMCreateSwitchButton(panel->appFrm);

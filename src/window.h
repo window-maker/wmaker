@@ -118,7 +118,9 @@ typedef struct {
 					* is focused */
     unsigned int no_hide_others:1;     /* hide window when doing hideothers */
     unsigned int no_appicon:1;	       /* make app icon */
-    
+
+    unsigned int collapse_appicons:1;  /* collapse icons of the same name */
+
     unsigned int dont_move_off:1;
 
     unsigned int no_focusable:1;

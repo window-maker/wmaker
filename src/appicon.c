@@ -277,20 +277,29 @@ drawCorner(WIcon *icon)
 void
 wAppIconMove(WAppIcon *aicon, int x, int y)
 {
+    WApplication *app;
     WAppIcon *tmp;
     
-    tmp = aicon->icon->core->screen_ptr->app_icon_list;    
+    app = wApplicationOf(aicon->icon->owner->main_window);
+
+    if (!WFLAGP(app->main_window_desc, collapse_appicons)) {	
+	XMoveWindow(dpy, aicon->icon->core->window, x, y);
+	aicon->x_pos = x;
+	aicon->y_pos = y;
+    } else {
+	tmp = aicon->icon->core->screen_ptr->app_icon_list;    
     
-    /* move all icons of the same class/name to the same pos */
-    while (tmp) {
-	if (strcmp(tmp->wm_class, aicon->wm_class) == 0 &&
-	    strcmp(tmp->wm_instance, aicon->wm_instance) == 0 &&
-	    !tmp->docked) {
-	    XMoveWindow(dpy, tmp->icon->core->window, x, y);
-	    tmp->x_pos = x;
-	    tmp->y_pos = y;
+	/* move all icons of the same class/name to the same pos */
+	while (tmp) {
+	    if (strcmp(tmp->wm_class, aicon->wm_class) == 0 &&
+		strcmp(tmp->wm_instance, aicon->wm_instance) == 0 &&
+		!tmp->docked) {
+		XMoveWindow(dpy, tmp->icon->core->window, x, y);
+		tmp->x_pos = x;
+		tmp->y_pos = y;
+	    }
+	    tmp = tmp->next;
 	}
-	tmp = tmp->next;
     }
 }
 
@@ -335,8 +344,15 @@ updateDockNumbers(WScreen *scr)
 
 WAppIcon*
 wAppIconNextSibling(WAppIcon *icon)
-{
+{    
+    WApplication *app;
     WAppIcon *tmp;
+    
+    app = wApplicationOf(icon->icon->owner->main_window);
+
+    if (!WFLAGP(app->main_window_desc, collapse_appicons)) {
+	return NULL;
+    }
     
     tmp = icon->next;
     while (tmp) {
@@ -362,23 +378,26 @@ wAppIconNextSibling(WAppIcon *icon)
 }
 
 
-int
-wAppIconIndexOfInstance(WAppIcon *icon)
+Bool
+wAppIconIsFirstInstance(WAppIcon *icon)
 {
     WAppIcon *list = icon->icon->core->screen_ptr->app_icon_list;
     int index = 0;
+
+    if (!WFLAGP(icon->icon->owner, collapse_appicons))
+	return False;
     
     while (list) {
 	if (icon == list)
-	    return index;
-
+	    return True;
+	
 	if (strcmp(icon->wm_instance,
 		   list->wm_instance) == 0
 	    &&
 	    strcmp(icon->wm_class,
 		   list->wm_class) == 0
 	    && !icon->docked)
-	    index++;
+	    return False;
 
 	list = list->next;
     }
@@ -431,7 +450,7 @@ wAppIconPaint(WAppIcon *aicon)
 #endif /* HIDDENDOT */
 
     if (wapp)
-	index = wApplicationIndexOfInstance(wapp);
+	index = wApplicationIndexOfGroup(wapp);
     else
 	index = 0;
     
@@ -482,6 +501,16 @@ unhideHereCallback(WMenu *menu, WMenuEntry *entry)
     WApplication *wapp = (WApplication*)entry->clientdata;
 
     wUnhideApplication(wapp, False, True);
+}
+
+
+static void
+collapseCallback(WMenu *menu, WMenuEntry *entry)
+{
+    WApplication *wapp = (WApplication*)entry->clientdata;
+    
+    wApplicationSetCollapse(wapp, 
+			    !WFLAGP(wapp->main_window_desc, collapse_appicons));
 }
 
 
@@ -566,6 +595,7 @@ createApplicationMenu(WScreen *scr)
     menu = wMenuCreate(scr, NULL, False);
     wMenuAddCallback(menu, _("Unhide Here"), unhideHereCallback, NULL);
     wMenuAddCallback(menu, _("Hide"), hideCallback, NULL);
+    wMenuAddCallback(menu, _("Collapse"), collapseCallback, NULL);
     wMenuAddCallback(menu, _("Set Icon..."), setIconCallback, NULL);
     wMenuAddCallback(menu, _("Kill"), killCallback, NULL);
 
@@ -593,6 +623,12 @@ openApplicationMenu(WApplication *wapp, int x, int y)
 	menu->entries[1]->text = _("Hide");
     }
 
+    if (WFLAGP(wapp->main_window_desc, collapse_appicons)) {
+	menu->entries[2]->text = _("Uncollapse");
+    } else {
+	menu->entries[2]->text = _("Collapse");
+    }
+    
     menu->flags.realized = 0;
     wMenuRealize(menu);
 
@@ -716,6 +752,15 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
 	wRaiseFrame(icon->core);
 
 
+    if (clickButton == Button2) {
+	WAppIcon *next = wAppIconNextSibling(aicon);
+	    
+	if (next) {
+	    wRaiseFrame(next->icon->core);
+	}
+	return;
+    }
+    
     if (XGrabPointer(dpy, icon->core->window, True, ButtonMotionMask
 		     |ButtonReleaseMask|ButtonPressMask, GrabModeAsync,
 		     GrabModeAsync, None, None, CurrentTime) !=GrabSuccess) {
@@ -738,19 +783,6 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
         XSetWindowBackgroundPixmap(dpy, scr->dock_shadow,
                                    ghost);
         XClearWindow(dpy, scr->dock_shadow);
-    }
-
-    if (clickButton != Button1) {
-	done = True;
-	
-	if (clickButton == Button2) {
-	    WAppIcon *next = wAppIconNextSibling(aicon);
-	    
-	    if (next) {
-		XRaiseWindow(dpy, next->icon->core->window);
-		XFlush(dpy);
-	    }
-	}
     }
     
     while (!done) {
