@@ -1007,25 +1007,33 @@ supported_gfx="$supported_gfx builtin-PPM"
 if test "x$MOFILES" = "x"; then
 	mof=none
 else
-	mof=$MOFILES
+	mof=`echo $MOFILES`
+fi
+
+if test "x$MOFILES" = "x"; then
+	languages=none
+else
+	languages=`echo $MOFILES | sed 's/.mo//g'`
 fi
 
 
 echo
 echo "Window Maker was configured as follows:"
 echo
-echo "Installation path prefix: $prefix"
-echo "Installation path prefix for binaries: $_bindir"
-echo "Installation path for WPrefs.app: $wprefsdir" | sed -e 's|\$(prefix)|'"$prefix|"
-echo "Graphic format libraries: $supported_gfx"
-echo "Antialiased font support for WINGs: $xft"
-echo "Use assembly routines for wrlib: $asm_support"
-echo "Use inline MMX(tm) x86 assembly: $mmx_support"
-dnl echo "Sound support: yes"
-echo "Translated message files to install: $mof"
+echo "Installation path prefix            : $prefix"
+echo "Installation path for binaries      : $_bindir"
+echo "Installation path for WPrefs.app    : $wprefsdir" | sed -e 's|\$(prefix)|'"$prefix|"
+echo "Supported graphic format libraries  : $supported_gfx"
+echo "Antialiased font support for WINGs  : $xft"
+echo "Xinerama extension support          : $xinerama"
+echo "Use assembly routines for wrlib     : $asm_support"
+echo "Use inline MMX(tm) x86 assembly     : $mmx_support"
+echo "Translated message files to install : $mof"
+dnl echo "Supported languages beside English  : $languages"
 if test "x$MOFILES" != "x"; then
-	echo "Installation path of translated messages: $NLSDIR" | sed -e 's|\$(prefix)|'"$prefix|"
+	echo "Installation path for translations  : $NLSDIR" | sed -e 's|\$(prefix)|'"$prefix|"
 fi
+echo
 
 dnl WM_PRINT_REDCRAP_BUG_STATUS
 
