@@ -1,5 +1,4 @@
 Makefile Makefile.in
 testtext testcolorpanel testmywidget wmfile wmquery wtest
 .libs
-.psrc .inslog2 tca.map tca.log
-*.rpt
+.psrc .inslog2 tca.map tca.log pchdir *.rpt

@@ -1,5 +1,4 @@
 Makefile Makefile.in
 get-wings-flags get-wutil-flags
 .libs
-.psrc .inslog2 tca.map tca.log
-*.rpt
+.psrc .inslog2 tca.map tca.log pchdir *.rpt

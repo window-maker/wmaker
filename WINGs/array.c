@@ -274,7 +274,9 @@ WMCountInArray(WMArray *array, void *item)
 void
 WMSortArray(WMArray *array, WMCompareDataProc *comparer)
 {
-    qsort(array->items, array->itemCount, sizeof(void*), comparer);
+    if (array->itemCount > 1) { /* Don't sort empty or single element arrays */
+        qsort(array->items, array->itemCount, sizeof(void*), comparer);
+    }
 }
 
 

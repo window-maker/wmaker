@@ -831,15 +831,17 @@ getSelectedFont(FontPanel *panel, char buffer[], int bufsize)
     size = WMGetTextFieldText(panel->sizT);
 
     snprintf(buffer, bufsize, "-%s-%s-%s-%s-%s-%s-%s-*-*-*-*-*-%s-%s",
-	    family->foundry,
-	    family->name,
-	    face->weight,
-	    face->slant,
-	    face->setWidth,
-	    face->addStyle,
-	    size,
-	    family->registry,
-	    family->encoding);
+             family->foundry,
+             family->name,
+             face->weight,
+             face->slant,
+             face->setWidth,
+             face->addStyle,
+             size,
+             family->registry,
+             family->encoding);
+
+    wfree(size);
 }
 
 

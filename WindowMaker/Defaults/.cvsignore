@@ -1,4 +1,3 @@
 Makefile Makefile.in
 WMState WMWindowAttributes WindowMaker WMRootMenu
-.psrc .inslog2 tca.map tca.log
-*.rpt
+.psrc .inslog2 tca.map tca.log pchdir *.rpt

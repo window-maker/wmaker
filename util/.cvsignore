@@ -2,5 +2,4 @@ Makefile Makefile.in
 wmsetup wmagnify wxcopy wxpaste wdwrite getstyle setstyle seticons geticonset
 wmsetbg wmaker.inst wdread wmchlocale
 .libs
-.psrc .inslog2 tca.map tca.log
-*.rpt
+.psrc .inslog2 tca.map tca.log pchdir *.rpt

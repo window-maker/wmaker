@@ -548,12 +548,15 @@ listDirectoryOnColumn(WMFilePanel *panel, int column, char *path)
     DIR *dir;
     struct stat stat_buf;
     char pbuf[PATH_MAX+16];
+    char *name;
 
     assert(column >= 0);
     assert(path != NULL);
 
     /* put directory name in the title */
-    WMSetBrowserColumnTitle(bPtr, column, get_name_from_path(path));
+    name = get_name_from_path(path);
+    WMSetBrowserColumnTitle(bPtr, column, name);
+    wfree(name);
     
     dir = opendir(path);
     

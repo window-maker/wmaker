@@ -55,6 +55,9 @@ Changes since wmaker 0.80.1:
 - Added WMSetTableViewHasHorizontalScroller()
 - Fixed bug that could cause SIGSEGV by accessing beyond the end of text in
   a WINGs textfield widget.
+- Fixed small memory leak in the font panel code.
+- Fixed call to qsort in WMSortArray.
+- Fixed a memleak in the file panel.
 
 
 Changes since wmaker 0.80.0:
