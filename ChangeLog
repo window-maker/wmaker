@@ -20,6 +20,7 @@ Changes since version 0.62.1:
 - fixed bug with incorrect reading of ppm files (Adam Fedor <fedor@gnu.org>)
 - fixed bug with incorrect window placement using automatic placement, while
   there were shaded windows on other workspaces
+- fixed some buffer overflow issues in WINGs
 
 
 Changes since version 0.62.0:
