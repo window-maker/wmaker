@@ -12,8 +12,7 @@ typedef struct W_TableColumn WMTableColumn;
 typedef struct W_TableView WMTableView;
 
 
-extern const char *WMTableViewRowWasSelectedNotification;
-extern const char *WMTableViewRowWasUnselectedNotification;
+extern const char *WMTableViewSelectionDidChangeNotification;
 
 
 typedef struct WMTableColumnDelegate {
@@ -25,7 +24,7 @@ typedef struct WMTableColumnDelegate {
     void (*beginCellEdit)(struct WMTableColumnDelegate *self, WMTableColumn *column,
 			  int row);
     void (*endCellEdit)(struct WMTableColumnDelegate *self, WMTableColumn *column,
-			int row);    
+			int row);
 } WMTableColumnDelegate;
 
 
@@ -50,6 +49,7 @@ void WMSetTableColumnWidth(WMTableColumn *column, unsigned width);
 void WMSetTableColumnDelegate(WMTableColumn *column, 
 			      WMTableColumnDelegate *delegate);    
 
+
 WMTableView *WMGetTableColumnTableView(WMTableColumn *column);
     
 void WMSetTableColumnId(WMTableColumn *column, void *id);
@@ -70,10 +70,19 @@ void WMAddTableViewColumn(WMTableView *table, WMTableColumn *column);
 
 void WMSetTableViewDelegate(WMTableView *table, WMTableViewDelegate *delegate);
 
+void WMSetTableViewAction(WMTableView *table, WMAction *action, 
+			  void *clientData);    
+
+void *WMGetTableViewClickedColumn(WMTableView *table);
+
+int WMGetTableViewClickedRow(WMTableView *table);
+
 WMView *WMGetTableViewDocumentView(WMTableView *table);
 
 void WMEditTableViewRow(WMTableView *table, int row);
-    
+
+void WMSelectTableViewRow(WMTableView *table, int row);
+
 void *WMTableViewDataForCell(WMTableView *table, WMTableColumn *column, 
 			     int row);
 
@@ -87,6 +96,13 @@ void WMSetTableViewBackgroundColor(WMTableView *table, WMColor *color);
 
 void WMSetTableViewGridColor(WMTableView *table, WMColor *color);
 
+void WMSetTableViewRowHeight(WMTableView *table, int height);    
+    
+void WMReloadTableView(WMTableView *table);    
+    
+void WMNoteTableViewNumberOfRowsChanged(WMTableView *table);
+    
+void WMScrollTableViewRowToVisible(WMTableView *table, int row);    
 #ifdef __cplusplus
 }
 #endif

@@ -10,6 +10,7 @@ typedef struct {
     int space;
     unsigned expand:1;
     unsigned fill:1;
+    unsigned end:1;
 } SubviewItem;
 
 
@@ -82,16 +83,22 @@ rearrange(WMBox *box)
 {
     int i;
     int x, y;
+    int xe, ye;
     int w = 1, h = 1;
     int total;
     int expands = 0;
     
     x = box->borderWidth;
     y = box->borderWidth;
+    
     if (box->horizontal) {
+	ye = box->borderWidth;
+	xe = WMWidgetWidth(box) - box->borderWidth;
 	h = WMWidgetHeight(box) - 2 * box->borderWidth;
 	total = WMWidgetWidth(box) - 2 * box->borderWidth;
     } else {
+	xe = box->borderWidth;
+	ye = WMWidgetHeight(box) - box->borderWidth;	
 	w = WMWidgetWidth(box) - 2 * box->borderWidth;
 	total = WMWidgetHeight(box) - 2 * box->borderWidth;
     }
@@ -118,12 +125,23 @@ rearrange(WMBox *box)
 	    if (box->subviews[i].expand)
 		h += total/expands;
 	}
-	W_MoveView(box->subviews[i].view, x, y);
+	if (!box->subviews[i].end) {
+	    W_MoveView(box->subviews[i].view, x, y);
+	}
 	W_ResizeView(box->subviews[i].view, w, h);
 	if (box->horizontal) {
-	    x += w + box->subviews[i].space;
+	    if (box->subviews[i].end)
+		xe -= w + box->subviews[i].space;
+	    else
+		x += w + box->subviews[i].space;
 	} else {
-	    y += h + box->subviews[i].space;
+	    if (box->subviews[i].end)
+		ye -= h + box->subviews[i].space;
+	    else
+		y += h + box->subviews[i].space;
+	}
+	if (box->subviews[i].end) {
+	    W_MoveView(box->subviews[i].view, xe, ye);
 	}
     }
 }
@@ -156,6 +174,32 @@ WMAddBoxSubview(WMBox *bPtr, WMView *view, Bool expand, Bool fill,
     bPtr->subviews[i].expand = expand;
     bPtr->subviews[i].fill = fill;
     bPtr->subviews[i].space = space;
+    bPtr->subviews[i].end = 0;
+    
+    rearrange(bPtr);
+}
+
+
+
+void
+WMAddBoxSubviewAtEnd(WMBox *bPtr, WMView *view, Bool expand, Bool fill,
+		     int minSize, int maxSize, int space)
+{
+    int i = bPtr->subviewCount;
+    
+    bPtr->subviewCount++;
+    if (!bPtr->subviews)
+	bPtr->subviews = wmalloc(sizeof(SubviewItem));
+    else
+	bPtr->subviews = wrealloc(bPtr->subviews, 
+				  bPtr->subviewCount*sizeof(SubviewItem));
+    bPtr->subviews[i].view = view;
+    bPtr->subviews[i].minSize = minSize;
+    bPtr->subviews[i].maxSize = maxSize;
+    bPtr->subviews[i].expand = expand;
+    bPtr->subviews[i].fill = fill;
+    bPtr->subviews[i].space = space;
+    bPtr->subviews[i].end = 1;
     
     rearrange(bPtr);
 }

@@ -36,7 +36,7 @@ static void paintScrollView(ScrollView *sPtr);
 static void handleEvents(XEvent *event, void *data);
 static void handleViewportEvents(XEvent *event, void *data);
 static void resizeScrollView();
-
+static void updateScrollerProportion();
 
 W_ViewDelegate _ScrollViewViewDelegate = {
     NULL,
@@ -64,21 +64,16 @@ WMCreateScrollView(WMWidget *parent)
 	return NULL;
     }
     sPtr->viewport = W_CreateView(sPtr->view);
-    if (!sPtr->view) {
+    if (!sPtr->viewport) {
 	W_DestroyView(sPtr->view);
 	wfree(sPtr);
 	return NULL;
     }
     sPtr->view->self = sPtr;
-
+    sPtr->viewport->self = sPtr;
+    
     sPtr->view->delegate = &_ScrollViewViewDelegate;
 
-    /* This has a very bad effect when the scrollview is mapped, making it
-     * flicker with each item added to it. It also seems to draw slower.
-     * Why should it be black anyway? -Dan
-     */
-    /*W_SetViewBackgroundColor(sPtr->viewport,
-                             WMBlackColor(WMWidgetScreen(parent)));*/
     sPtr->viewport->flags.mapWhenRealized = 1;
 
     WMCreateEventHandler(sPtr->view, StructureNotifyMask|ExposureMask,
@@ -93,6 +88,45 @@ WMCreateScrollView(WMWidget *parent)
     return sPtr;
 }
 
+
+static void
+applyScrollerValues(WMScrollView *sPtr)
+{
+    int x, y;
+
+    if (sPtr->contentView == NULL)
+	return;
+    
+    if (sPtr->flags.hasHScroller) {
+	float v = WMGetScrollerValue(sPtr->hScroller);
+	int size;
+
+	size = sPtr->contentView->size.width-sPtr->viewport->size.width;
+	
+	x = v * size;
+    } else {
+	x = 0;
+    }
+    
+    if (sPtr->flags.hasVScroller) {
+	float v = WMGetScrollerValue(sPtr->vScroller);
+
+	int size;
+
+	size = sPtr->contentView->size.width-sPtr->viewport->size.width;
+	
+	y = v * size;
+    } else {
+	y = 0;
+    }
+    
+    x = WMAX(0, x);
+    y = WMAX(0, y);
+    
+    W_MoveView(sPtr->contentView, -x, -y);
+    
+    W_RaiseView(sPtr->viewport);
+}
 
 
 static void
@@ -122,7 +156,7 @@ reorganizeInterior(WMScrollView *sPtr)
     }
     
     if (sPtr->flags.hasHScroller) {
-	int h = W_VIEW(sPtr->hScroller)->size.height;
+	int h = 20;
 
 	ch -= h;
 
@@ -144,7 +178,7 @@ reorganizeInterior(WMScrollView *sPtr)
     }
     
     if (sPtr->flags.hasVScroller) {
-	int w = W_VIEW(sPtr->vScroller)->size.width;
+	int w = 20;
 	cw -= w;
 	cx += w;
 	hx += w - 1;
@@ -178,6 +212,8 @@ reorganizeInterior(WMScrollView *sPtr)
 	WMResizeWidget(sPtr->vScroller, 20, vh);
 	WMMoveWidget(sPtr->vScroller, vx, vy);
     }
+    
+    applyScrollerValues(sPtr);
 }
 
 
@@ -185,6 +221,7 @@ static void
 resizeScrollView(W_ViewDelegate *self, WMView *view)
 {
     reorganizeInterior(view->self);
+    updateScrollerProportion(view->self);
 }
 
 
@@ -209,11 +246,11 @@ WMResizeScrollViewContent(WMScrollView *sPtr, unsigned int width,
     }
     
     if (sPtr->flags.hasVScroller) {
-	w -= W_VIEW(sPtr->hScroller)->size.width;
+	width -= W_VIEW(sPtr->hScroller)->size.width;
 	WMResizeWidget(sPtr->vScroller, 20, h);
     }    
     if (sPtr->flags.hasHScroller) {
-	h -= W_VIEW(sPtr->hScroller)->size.height;
+	height -= W_VIEW(sPtr->hScroller)->size.height;
 	WMResizeWidget(sPtr->hScroller, w, 20);
 	WMMoveWidget(sPtr->hScroller, x, h);
     }
@@ -246,12 +283,37 @@ WMRect
 WMGetScrollViewVisibleRect(WMScrollView *sPtr)
 {
     WMRect rect;
-    
-    rect.pos = sPtr->contentView->pos;
+
+    rect.pos.x = -sPtr->contentView->pos.x;
+    rect.pos.y = -sPtr->contentView->pos.y;
     rect.size = sPtr->viewport->size;
-    
+
     return rect;
 }
+
+
+void
+WMScrollViewScrollPoint(WMScrollView *sPtr, WMPoint point)
+{
+    float xsize, ysize;
+    float xpos, ypos;
+    
+    xsize = sPtr->contentView->size.width-sPtr->viewport->size.width;
+    ysize = sPtr->contentView->size.height-sPtr->viewport->size.height;
+    
+    xpos = point.x / xsize;
+    ypos = point.y / ysize;
+
+    if (sPtr->hScroller)
+	WMSetScrollerParameters(sPtr->hScroller, xpos,
+				WMGetScrollerKnobProportion(sPtr->hScroller));
+    if (sPtr->vScroller)
+	WMSetScrollerParameters(sPtr->vScroller, ypos,
+				WMGetScrollerKnobProportion(sPtr->vScroller));
+    
+    W_MoveView(sPtr->contentView, -point.x, -point.y);
+}
+
 
 static void
 doScrolling(WMWidget *self, void *data)
@@ -471,6 +533,7 @@ WMSetScrollViewRelief(WMScrollView *sPtr, WMReliefType type)
     
     
 }
+
 
 
 static void

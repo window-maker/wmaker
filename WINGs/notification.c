@@ -8,7 +8,7 @@
 
 
 typedef struct W_Notification {
-    char *name;
+    const char *name;
     void *object;
     void *clientData;
     int refCount;
@@ -18,7 +18,7 @@ typedef struct W_Notification {
 extern void W_FlushASAPNotificationQueue();
 
 
-char*
+const char*
 WMGetNotificationName(WMNotification *notification)
 {
     return notification->name;
@@ -40,7 +40,7 @@ WMGetNotificationClientData(WMNotification *notification)
 
 
 WMNotification*
-WMCreateNotification(char *name, void *object, void *clientData)
+WMCreateNotification(const char *name, void *object, void *clientData)
 {
     Notification *nPtr;
     
@@ -82,7 +82,7 @@ typedef struct NotificationObserver {
     WMNotificationObserverAction *observerAction;
     void *observer;
 
-    char *name;
+    const char *name;
     void *object;
 
     struct NotificationObserver *prev; /* for tables */
@@ -119,7 +119,7 @@ W_InitNotificationCenter(void)
 
 void
 WMAddNotificationObserver(WMNotificationObserverAction *observerAction,
-			  void *observer, char *name, void *object)
+			  void *observer, const char *name, void *object)
 {
     NotificationObserver *oRec, *rec;
     
@@ -133,7 +133,8 @@ WMAddNotificationObserver(WMNotificationObserverAction *observerAction,
     
     
     /* put this action in the list of actions for this observer */
-    rec = WMHashInsert(notificationCenter->observerTable, observer, oRec);
+    rec = (NotificationObserver*)WMHashInsert(notificationCenter->observerTable,
+					     observer, oRec);
     
     if (rec) {
 	/* if this is not the first action for the observer */
@@ -151,14 +152,16 @@ WMAddNotificationObserver(WMNotificationObserverAction *observerAction,
 	notificationCenter->nilList = oRec;
     } else if (!name) {
 	/* any message coming from object */
-	rec = WMHashInsert(notificationCenter->objectTable, object, oRec);
+	rec = (NotificationObserver*)WMHashInsert(notificationCenter->objectTable,
+						  object, oRec);
 	oRec->next = rec;
 	if (rec) {
 	    rec->prev = oRec;
 	}
     } else {
 	/* name && (object || !object) */
-	rec = WMHashInsert(notificationCenter->nameTable, name, oRec);
+	rec = (NotificationObserver*)WMHashInsert(notificationCenter->nameTable, 
+						  name, oRec);
 	oRec->next = rec;
 	if (rec) {
 	    rec->prev = oRec;
@@ -175,7 +178,8 @@ WMPostNotification(WMNotification *notification)
     WMRetainNotification(notification);
     
     /* tell the observers that want to know about a particular message */
-    orec = WMHashGet(notificationCenter->nameTable, notification->name);
+    orec = (NotificationObserver*)WMHashGet(notificationCenter->nameTable, 
+		    notification->name);
     
     while (orec) {
 	tmp = orec->next;
@@ -192,7 +196,8 @@ WMPostNotification(WMNotification *notification)
     }
 
     /* tell the observers that want to know about an object */
-    orec = WMHashGet(notificationCenter->objectTable, notification->object);
+    orec = (NotificationObserver*)WMHashGet(notificationCenter->objectTable,
+		    notification->object);
     
     while (orec) {
 	tmp = orec->next;
@@ -226,7 +231,8 @@ WMRemoveNotificationObserver(void *observer)
     NotificationObserver *orec, *tmp, *rec;
 
     /* get the list of actions the observer is doing */
-    orec = WMHashGet(notificationCenter->observerTable, observer);
+    orec = (NotificationObserver*)WMHashGet(notificationCenter->observerTable,
+		    observer);
 
     /*
      * FOREACH orec IN actionlist for observer
@@ -244,7 +250,8 @@ WMRemoveNotificationObserver(void *observer)
 		notificationCenter->nilList = orec->next;
 	} else if (!orec->name) {
 	    /* any message coming from object */
-	    rec = WMHashGet(notificationCenter->objectTable, orec->object);
+	    rec = (NotificationObserver*)WMHashGet(notificationCenter->objectTable, 
+			    orec->object);
 	    if (rec==orec) {
 		/* replace table entry */
 		if (orec->next) {
@@ -256,7 +263,8 @@ WMRemoveNotificationObserver(void *observer)
 	    }
 	} else {
 	    /* name && (object || !object) */
-	    rec = WMHashGet(notificationCenter->nameTable, orec->name);
+	    rec = (NotificationObserver*)WMHashGet(notificationCenter->nameTable, 
+			    orec->name);
 	    if (rec==orec) {
 		/* replace table entry */
 		if (orec->next) {
@@ -282,13 +290,13 @@ WMRemoveNotificationObserver(void *observer)
 
 
 void
-WMRemoveNotificationObserverWithName(void *observer, char *name, void *object)
+WMRemoveNotificationObserverWithName(void *observer, const char *name, void *object)
 {
     NotificationObserver *orec, *tmp, *rec;
     NotificationObserver *newList = NULL;
 
     /* get the list of actions the observer is doing */
-    orec = WMHashGet(notificationCenter->observerTable, observer);
+    orec = (NotificationObserver*)WMHashGet(notificationCenter->observerTable, observer);
 
     WMHashRemove(notificationCenter->observerTable, observer);
 
@@ -301,7 +309,7 @@ WMRemoveNotificationObserverWithName(void *observer, char *name, void *object)
 		if (notificationCenter->nilList == orec)
 		    notificationCenter->nilList = orec->next;
 	    } else if (!name) {
-		rec = WMHashGet(notificationCenter->objectTable, orec->object);
+		rec = (NotificationObserver*)WMHashGet(notificationCenter->objectTable, orec->object);
 		if (rec==orec) {
 		    assert(rec->prev==NULL);
 		    /* replace table entry */
@@ -314,7 +322,8 @@ WMRemoveNotificationObserverWithName(void *observer, char *name, void *object)
 		    }
 		}
 	    } else {
-		rec = WMHashGet(notificationCenter->nameTable, orec->name);
+		rec = (NotificationObserver*)WMHashGet(notificationCenter->nameTable, 
+				orec->name);
 		if (rec==orec) {
 		    assert(rec->prev==NULL);
 		    /* replace table entry */
@@ -359,7 +368,7 @@ WMRemoveNotificationObserverWithName(void *observer, char *name, void *object)
 
 
 void
-WMPostNotificationName(char *name, void *object, void *clientData)
+WMPostNotificationName(const char *name, void *object, void *clientData)
 {
     WMNotification *notification;
 

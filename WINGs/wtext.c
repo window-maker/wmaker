@@ -1730,6 +1730,9 @@ y = tPtr->docHeight+ss-sd;
     
     if(items && itemsSize > 0)
         wfree(items);
+    
+    if (W_VIEW_REALIZED(tPtr->view) && W_VIEW_MAPPED(tPtr->view)) 
+	paintText(tPtr);
 }
 
 
@@ -3445,7 +3448,7 @@ WMRemoveTextBlock(WMText *tPtr)
 
     if (!tPtr || !tPtr->firstTextBlock || !tPtr->lastTextBlock
             || !tPtr->currentTextBlock) {
-        printf("cannot remove non existent TextBlock!\b");
+/*        printf("cannot remove non existent TextBlock!\n"); */
         return NULL;
     }
 

@@ -412,11 +412,11 @@ WMSetButtonSelected(WMButton *bPtr, int isSelected)
 {
     bPtr->flags.selected = isSelected;
  
-    WMPostNotificationName(WMPushedRadioNotification, bPtr, NULL);
-    
     if (bPtr->view->flags.realized) {
 	paintButton(bPtr);
-    }
+    }    
+    if (bPtr->groupIndex > 0)
+	WMPostNotificationName(WMPushedRadioNotification, bPtr, NULL);
 }
 
 
@@ -485,15 +485,15 @@ WMPerformButtonClick(WMButton *bPtr)
 	XFlush(WMScreenDisplay(WMWidgetScreen(bPtr)));
 	wusleep(20000);
     }
+     
+    bPtr->flags.pushed = 0;
   
-    if (bPtr->groupIndex>0) {
+    if (bPtr->groupIndex > 0) {
 	WMPostNotificationName(WMPushedRadioNotification, bPtr, NULL);
     }
 
     if (bPtr->action)
 	(*bPtr->action)(bPtr, bPtr->clientData);
-     
-    bPtr->flags.pushed = 0;
     
     if (bPtr->view->flags.mapped)
 	paintButton(bPtr);
@@ -728,17 +728,14 @@ handleActionEvents(XEvent *event, void *data)
 
      case ButtonPress:
 	if (event->xbutton.button == Button1) {
+	    bPtr->flags.prevSelected = bPtr->flags.selected;	    
+	    bPtr->flags.wasPushed = 0;
+	    bPtr->flags.pushed = 1;
 	    if (bPtr->groupIndex>0) {
-		if (!bPtr->flags.selected)
-		    doclick = 1;
-		bPtr->flags.pushed = 1;
 		bPtr->flags.selected = 1;
 		dopaint = 1;
 		break;
 	    }
-	    bPtr->flags.wasPushed = 0;
-	    bPtr->flags.pushed = 1;
-	    bPtr->flags.prevSelected = bPtr->flags.selected;
 	    bPtr->flags.selected = !bPtr->flags.selected;
 	    dopaint = 1;
 	    
@@ -752,7 +749,8 @@ handleActionEvents(XEvent *event, void *data)
      case ButtonRelease:
 	if (event->xbutton.button == Button1) {
 	    if (bPtr->flags.pushed) {
-		if (bPtr->groupIndex==0)
+		if (bPtr->groupIndex==0 || 
+		    bPtr->flags.selected && bPtr->groupIndex > 0)
 		    doclick = 1;
 		dopaint = 1;
 		if (bPtr->flags.springLoaded) {
@@ -772,10 +770,10 @@ handleActionEvents(XEvent *event, void *data)
 	paintButton(bPtr);
     
     if (doclick) {
-	if (bPtr->flags.selected && bPtr->groupIndex>0) {
+	if (bPtr->flags.selected && bPtr->groupIndex > 0) {
 	    WMPostNotificationName(WMPushedRadioNotification, bPtr, NULL);
 	}
-	
+
 	if (bPtr->action)
 	    (*bPtr->action)(bPtr, bPtr->clientData);
     }

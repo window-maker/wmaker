@@ -531,6 +531,9 @@ popUpMenu(PopUpButton *bPtr)
     Window dummyW;
     int x, y;
 
+    if (!bPtr->flags.enabled)
+	return;
+    
     if (!bPtr->menuView->flags.realized) {
 	W_RealizeView(bPtr->menuView);
 	resizeMenu(bPtr);
@@ -552,6 +555,9 @@ popUpMenu(PopUpButton *bPtr)
     XSetWindowBackgroundPixmap(scr->display, bPtr->menuView->window,
 			       makeMenuPixmap(bPtr));
     XClearWindow(scr->display, bPtr->menuView->window);
+    
+    if (W_VIEW_WIDTH(bPtr->menuView) != W_VIEW_WIDTH(bPtr->view))
+	resizeMenu(bPtr);
     
     W_MapView(bPtr->menuView);
     

@@ -1611,6 +1611,8 @@ void WMDestroyTextBlock(WMText *tPtr, void *vtb);
 
 WMTabView *WMCreateTabView(WMWidget *parent);
 
+void WMSetTabViewType(WMTabView *tPtr, WMTabViewType type);
+
 void WMSetTabViewFont(WMTabView *tPtr, WMFont *font);
 
 void WMAddItemInTabView(WMTabView *tPtr, WMTabViewItem *item);
@@ -1664,6 +1666,9 @@ void WMSetBoxBorderWidth(WMBox *box, unsigned width);
 
 void WMAddBoxSubview(WMBox *bPtr, WMView *view, Bool expand, Bool fill,
 		     int minSize, int maxSize, int space);
+
+void WMAddBoxSubviewAtEnd(WMBox *bPtr, WMView *view, Bool expand, Bool fill,
+			  int minSize, int maxSize, int space);
 
 void WMSetBoxHorizontal(WMBox *box, Bool flag);
 

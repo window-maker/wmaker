@@ -746,11 +746,14 @@ WMAddSplitViewSubview(WMSplitView *sPtr, WMView *subview)
 			      WMViewMoveDidChangeNotification,
 			      subview);
 */
-    if (wasMapped)
+    if (wasMapped) {
 	W_MapView(subview);
-    
-    sPtr->flags.adjustOnPaint = 1;
-    paintSplitView(sPtr);
+
+	sPtr->flags.adjustOnPaint = 1;
+	paintSplitView(sPtr);
+    } else {
+    	handleViewResized(sPtr, NULL);	
+    }
 }
 
 
@@ -844,10 +847,11 @@ WMSetSplitViewVertical(WMSplitView *sPtr, Bool flag)
     
     sPtr->flags.vertical = vertical;
     
-    if (sPtr->view->flags.mapped && sPtr->view->flags.realized)
+/*    if (sPtr->view->flags.mapped && sPtr->view->flags.realized)*/
     	handleViewResized(sPtr, NULL);
-    else
+/*    else
     	sPtr->flags.adjustOnPaint = 1;
+ */
 }
 
 

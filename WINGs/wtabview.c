@@ -22,7 +22,6 @@ typedef struct W_TabView {
 
     WMTabViewDelegate *delegate;
 
-    short tabWidth;
     short tabHeight;
 
     struct {
@@ -32,6 +31,8 @@ typedef struct W_TabView {
 
 	unsigned tabbed:1;
 	unsigned dontFitAll:1;
+	unsigned bordered:1;
+	unsigned uniformTabs:1;	
     } flags;
 } TabView;
 
@@ -44,7 +45,7 @@ typedef struct W_TabView {
 #define DEFAULT_HEIGHT	40
 
 #define NORMAL_SIDE_OFFSET 8
-#define BUTTONED_SIDE_OFFSET 20
+#define BUTTONED_SIDE_OFFSET 15
 
 
 static void destroyTabView(TabView *tPtr);	
@@ -61,8 +62,13 @@ static void W_MapTabViewItem(WMTabViewItem *item);
 
 static WMView *W_TabViewItemView(WMTabViewItem *item);
 
-static void recalcTabWidth(TabView *tPtr);
+static int W_TabViewItemTabWidth(WMTabViewItem *item);
 
+static void W_SetTabViewItemTabWidth(WMTabViewItem *item, int width);
+
+
+static void recalcTabWidth(TabView *tPtr);
+static void rearrange(TabView *tPtr);
 
 static void didResize(struct W_ViewDelegate*, WMView*);
 
@@ -74,6 +80,52 @@ static W_ViewDelegate delegate = {
 	NULL
 };
 
+
+static int
+positionOfTab(WMTabView *tabView, int tab)
+{
+    int i;
+    int offs;
+    
+    if (tab < tabView->firstVisible)
+	return -1;
+    
+    if (tab > tabView->firstVisible + tabView->visibleTabs)
+	return -1;
+
+    if (tabView->flags.dontFitAll)
+	offs = BUTTONED_SIDE_OFFSET;
+    else
+	offs = NORMAL_SIDE_OFFSET;
+    
+    for (i = tabView->firstVisible; i < tab; i++)
+	offs += W_TabViewItemTabWidth(tabView->items[i]) - 10;
+    
+    return offs;
+}
+
+
+static int
+countVisibleTabs(TabView *tPtr, int first)
+{
+    int i;
+    int width;
+
+    if (first < 0) {
+	width = W_VIEW_WIDTH(tPtr->view) - 2 * NORMAL_SIDE_OFFSET;
+	first = 0;
+    } else {
+	width = W_VIEW_WIDTH(tPtr->view) - 2 * BUTTONED_SIDE_OFFSET;
+    }
+
+    for (i = first; i < tPtr->itemCount; i++) {
+	width -= W_TabViewItemTabWidth(tPtr->items[i]) - 10;
+	if (width <= 0) {
+	    return i - first;
+	}
+    }
+    return i - first;
+}
 
 
 
@@ -100,21 +152,21 @@ handleEvents(XEvent *event, void *data)
 		WMSelectTabViewItem(tPtr, item);
 	    } else if (tPtr->flags.dontFitAll) {
 		int redraw;
+		int lastVisible = tPtr->firstVisible+tPtr->visibleTabs-1;
+
 		if (event->xbutton.x < BUTTONED_SIDE_OFFSET) {
 		    if (tPtr->firstVisible > 0) {
 			redraw = 1;
 			tPtr->firstVisible--;
 		    }
-		} else if (event->xbutton.x - BUTTONED_SIDE_OFFSET
-			   > tPtr->visibleTabs*(tPtr->tabWidth-10)) {
+		} else if (event->xbutton.x > positionOfTab(tPtr,lastVisible)){
 
-		    if (tPtr->firstVisible + tPtr->visibleTabs
-			< tPtr->itemCount) {
+		    if (lastVisible < tPtr->itemCount-1) {
 			redraw = 1;
 			tPtr->firstVisible++;
 		    }
 		}
-
+		tPtr->visibleTabs = countVisibleTabs(tPtr, tPtr->firstVisible);
 		if (redraw) {
 		    paintTabView(tPtr);
 		}
@@ -153,6 +205,10 @@ WMCreateTabView(WMWidget *parent)
     tPtr->tabColor = WMCreateRGBColor(scr, 0x8420, 0x8420, 0x8420, False);
 
     tPtr->font = WMRetainFont(scr->normalFont);
+    
+    tPtr->flags.type = WTTopTabsBevelBorder;
+    tPtr->flags.bordered = 1;
+    tPtr->flags.uniformTabs = 0;
 
     WMCreateEventHandler(tPtr->view, ExposureMask|StructureNotifyMask
 			 |ButtonPressMask, handleEvents, tPtr);
@@ -217,8 +273,8 @@ WMInsertItemInTabView(WMTabView *tPtr, int index, WMTabViewItem *item)
     }
 
     if (index < tPtr->itemCount) {
-	memmove(&tPtr->items[index + 1], &tPtr->items[index],
-		tPtr->itemCount - index);
+	memmove(tPtr->items + index + 1, tPtr->items + index,
+		(tPtr->itemCount - index) * sizeof(WMTabViewItem*));
     }
 
     tPtr->items[index] = item;
@@ -231,17 +287,28 @@ WMInsertItemInTabView(WMTabView *tPtr, int index, WMTabViewItem *item)
 
     W_UnmapTabViewItem(item);
 
-    W_ReparentView(W_TabViewItemView(item), tPtr->view, 1, 
-		   tPtr->tabHeight + 1);
+    if (tPtr->flags.bordered) {
+	W_ReparentView(W_TabViewItemView(item), tPtr->view, 1,
+		       tPtr->tabHeight + 1);
 
-    W_ResizeView(W_TabViewItemView(item), tPtr->view->size.width - 3,
-		 tPtr->view->size.height - tPtr->tabHeight - 3);
+	W_ResizeView(W_TabViewItemView(item), tPtr->view->size.width - 3,
+		     tPtr->view->size.height - tPtr->tabHeight - 3);
+    } else {
+	W_ReparentView(W_TabViewItemView(item), tPtr->view, 0,
+		       tPtr->tabHeight);
+
+	W_ResizeView(W_TabViewItemView(item), tPtr->view->size.width,
+		     tPtr->view->size.height - tPtr->tabHeight);	
+    }
 
     if (index == 0) {
 	W_MapTabViewItem(item);
     }
     if (tPtr->delegate && tPtr->delegate->didChangeNumberOfItems)
 	(*tPtr->delegate->didChangeNumberOfItems)(tPtr->delegate, tPtr);
+    
+    if (W_VIEW_REALIZED(tPtr->view))
+	paintTabView(tPtr);
 }
 
 
@@ -304,28 +371,29 @@ WMTabViewItemAtPoint(WMTabView *tPtr, int x, int y)
     int first = tPtr->firstVisible;
     
     if (tPtr->flags.dontFitAll) {
-	offset = BUTTONED_SIDE_OFFSET;
-
 	i = tPtr->selectedItem - tPtr->firstVisible;
 	if (i >= 0 && i < tPtr->visibleTabs
-	    && isInside(offset + (tPtr->tabWidth-10)*i, 0, tPtr->tabWidth,
+	    && isInside(positionOfTab(tPtr, tPtr->selectedItem), 0, 
+			W_TabViewItemTabWidth(tPtr->items[tPtr->selectedItem]),
 			tPtr->tabHeight, x, y)) {
 	    return tPtr->items[tPtr->selectedItem];
 	}
     } else {
-	offset = NORMAL_SIDE_OFFSET;
-
 	i = tPtr->selectedItem;
-	if (isInside(offset + (tPtr->tabWidth-10)*i, 0, tPtr->tabWidth,
+	if (isInside(positionOfTab(tPtr, i), 0, 
+		     W_TabViewItemTabWidth(tPtr->items[i]), 
 		     tPtr->tabHeight, x, y)) {
 	    return tPtr->items[i];
 	}
     }
 
-    for (i = 0; i < count; i++) {
-	if (isInside(offset + (tPtr->tabWidth-10)*i, 0, tPtr->tabWidth,
+    for (i = first; i < first + count; i++) {
+	int pos;
+
+	pos = positionOfTab(tPtr, i);
+	if (isInside(pos, 0, W_TabViewItemTabWidth(tPtr->items[i]),
 		     tPtr->tabHeight, x, y)) {
-	    return tPtr->items[i+first];
+	    return tPtr->items[i];
 	}
     }
     return NULL;
@@ -336,6 +404,18 @@ void
 WMSetTabViewType(WMTabView *tPtr, WMTabViewType type)
 {
     tPtr->flags.type = type;
+    
+    if (type != WTTopTabsBevelBorder)
+	tPtr->tabHeight = 0;
+    else
+	tPtr->tabHeight = WMFontHeight(tPtr->font) + 3;
+    
+    if (type == WTNoTabsNoBorder)
+	tPtr->flags.bordered = 0;
+    else
+	tPtr->flags.bordered = 1;
+    
+    rearrange(tPtr);
 }
 
 void
@@ -429,6 +509,7 @@ WMSelectTabViewItemAtIndex(WMTabView *tPtr, int index)
 }
 
 
+
 static void
 recalcTabWidth(TabView *tPtr)
 {
@@ -436,25 +517,52 @@ recalcTabWidth(TabView *tPtr)
     int twidth = W_VIEW(tPtr)->size.width;
     int width;
 
-    tPtr->tabWidth = 0;
-    for (i = 0; i < tPtr->itemCount; i++) {
-	char *str = WMGetTabViewItemLabel(tPtr->items[i]);
+    if (tPtr->flags.uniformTabs) {
+	int tabWidth;
+	
+	tabWidth = 0;
 
-	if (str) {
-	    width = WMWidthOfString(tPtr->font, str, strlen(str));
-	    if (width > tPtr->tabWidth)
-		tPtr->tabWidth = width;
+	for (i = 0; i < tPtr->itemCount; i++) {
+	    char *str = WMGetTabViewItemLabel(tPtr->items[i]);
+	    
+	    if (str) {
+		width = WMWidthOfString(tPtr->font, str, strlen(str));
+		if (width > tabWidth)
+		    tabWidth = width;
+	    }
 	}
-    }
-    tPtr->tabWidth += 30;
-    if ((tPtr->tabWidth + 2) * tPtr->itemCount > twidth - 2*NORMAL_SIDE_OFFSET) {
-	tPtr->flags.dontFitAll = 1;
+	
+	tabWidth = tabWidth + 30;
+	
+	for (i = 0; i < tPtr->itemCount; i++)
+	    W_SetTabViewItemTabWidth(tPtr->items[i], tabWidth);
+	
 	tPtr->firstVisible = 0;
-	tPtr->visibleTabs = (twidth - 2*BUTTONED_SIDE_OFFSET) / (tPtr->tabWidth-10);
+	tPtr->visibleTabs = countVisibleTabs(tPtr, -1);
+	if (tPtr->visibleTabs < tPtr->itemCount)
+	    tPtr->flags.dontFitAll = 1;
+	else
+	    tPtr->flags.dontFitAll = 0;
     } else {
-	tPtr->flags.dontFitAll = 0;
-	tPtr->firstVisible = 0;
-	tPtr->visibleTabs = tPtr->itemCount;
+	for (i = 0; i < tPtr->itemCount; i++) {
+	    char *str = WMGetTabViewItemLabel(tPtr->items[i]);
+	    if (!str)
+		continue;
+
+	    width = WMWidthOfString(tPtr->font, str, strlen(str)) + 30;
+
+	    W_SetTabViewItemTabWidth(tPtr->items[i], width);
+	}
+
+	if (countVisibleTabs(tPtr, -1) < tPtr->itemCount) {
+	    tPtr->flags.dontFitAll = 1;
+	    tPtr->firstVisible = 0;
+	    tPtr->visibleTabs = countVisibleTabs(tPtr, tPtr->firstVisible);
+	} else {
+	    tPtr->flags.dontFitAll = 0;
+	    tPtr->firstVisible = 0;
+	    tPtr->visibleTabs = tPtr->itemCount;
+	}
     }
 }
 
@@ -552,27 +660,27 @@ paintTabView(TabView *tPtr)
     Display *dpy = scr->display;
     GC white = WMColorGC(scr->white);
     int i;
-    WMRect rect;
 
     if (tPtr->flags.type == WTTopTabsBevelBorder) {
 	int count = tPtr->visibleTabs;
 	int first = tPtr->firstVisible;
-	int offs;
 	int moreAtLeft;
 	int moreAtRight;
 	int selectedIsVisible;
+	int tx, ty;
+	int twidth, theight;
+	
+	ty = 2;
+	theight = tPtr->tabHeight;
 	
 	buffer = XCreatePixmap(dpy, W_VIEW(tPtr)->window,
-			       W_VIEW(tPtr)->size.width, tPtr->tabHeight,
+			       W_VIEW(tPtr)->size.width, theight,
 			       W_VIEW(tPtr)->screen->depth);
-
+	
 	XFillRectangle(dpy, buffer, WMColorGC(W_VIEW(tPtr)->backColor),
 		       0, 0, W_VIEW(tPtr)->size.width, tPtr->tabHeight);
 
-	rect.pos.y = 2;
 	if (tPtr->flags.dontFitAll) {
-	    rect.pos.x = 15 + BUTTONED_SIDE_OFFSET;
-	    offs = BUTTONED_SIDE_OFFSET;
 	    moreAtLeft = first > 0;
 	    moreAtRight = (first + count) < tPtr->itemCount;
 	    if (tPtr->selectedItem >= first
@@ -581,44 +689,55 @@ paintTabView(TabView *tPtr)
 	    else
 		selectedIsVisible = 0;
 	} else {
-	    rect.pos.x = 15 + NORMAL_SIDE_OFFSET;
-	    offs = NORMAL_SIDE_OFFSET;
 	    moreAtLeft = 0;
 	    moreAtRight = 0;
 	    selectedIsVisible = 1;
 	}
-	rect.size.width = tPtr->tabWidth;
-	rect.size.height = tPtr->tabHeight;
 
-	for (i = count - (moreAtRight ? 0 : 1);
-	     i >= (moreAtLeft ? -1 : 0); i--) {
-	    if (!selectedIsVisible || i != (tPtr->selectedItem-first)) {
-		drawTab(tPtr, buffer, offs + (rect.size.width-10)*i, 0,
-			rect.size.width, rect.size.height, False);
+	if (moreAtRight) {
+	    drawTab(tPtr, buffer, positionOfTab(tPtr, first+count), 0,
+		    W_VIEW_WIDTH(tPtr->view), theight, False);
+	}	
+	for (i = first + count-1; i >= first; i--) {
+	    if (!selectedIsVisible || i != tPtr->selectedItem) {
+		twidth = W_TabViewItemTabWidth(tPtr->items[i]);
+
+		drawTab(tPtr, buffer, positionOfTab(tPtr, i), 0,
+			twidth, theight, False);
 	    }
+	}
+	if (moreAtLeft) {
+	    drawTab(tPtr, buffer, positionOfTab(tPtr, 0)-2*BUTTONED_SIDE_OFFSET,
+		    0, BUTTONED_SIDE_OFFSET*4, theight, False);
 	}
 	
 	if (selectedIsVisible) {
-	    drawTab(tPtr, buffer, 
-		    offs + (rect.size.width-10) * (tPtr->selectedItem - first),
-		    0, rect.size.width, rect.size.height, True);
+	    int idx = tPtr->selectedItem;
 
-	    XDrawLine(dpy, buffer, white, 0, tPtr->tabHeight - 1,
-		      offs, tPtr->tabHeight - 1);
+	    drawTab(tPtr, buffer, positionOfTab(tPtr, idx),
+		    0, W_TabViewItemTabWidth(tPtr->items[idx]),
+		    theight, True);
+
+	    XDrawLine(dpy, buffer, white, 0, theight - 1,
+		      positionOfTab(tPtr, idx), theight - 1);
 
 	    XDrawLine(dpy, buffer, white, 
-		      offs + 10 + (rect.size.width-10) * count,
-		      tPtr->tabHeight - 1, W_VIEW(tPtr)->size.width - 1,
+		      positionOfTab(tPtr, idx) + W_TabViewItemTabWidth(tPtr->items[idx]),
+		      tPtr->tabHeight - 1, W_VIEW_WIDTH(tPtr->view) - 1,
 		      tPtr->tabHeight - 1);
 	} else {
-	    XDrawLine(dpy, buffer, white, 0, tPtr->tabHeight - 1,
-		      W_VIEW(tPtr)->size.width, tPtr->tabHeight - 1);	    
+	    XDrawLine(dpy, buffer, white, 0, theight - 1,
+		      W_VIEW_WIDTH(tPtr->view), theight - 1);	    
 	}
 
 	for (i = 0; i < count; i++) {
+	    WMRect rect;
+	    
+	    rect.pos.x = 15 + positionOfTab(tPtr, first+i);
+	    rect.pos.y = ty;
+	    rect.size.width = W_TabViewItemTabWidth(tPtr->items[first+i]);
+	    rect.size.height = theight;
 	    W_DrawLabel(tPtr->items[first+i], buffer, rect);
-
-	    rect.pos.x += rect.size.width - 10;
 	}
 
 	if (moreAtLeft) {
@@ -629,17 +748,16 @@ paintTabView(TabView *tPtr)
 	if (moreAtRight) {
 	    int x;
 	    
-	    x = BUTTONED_SIDE_OFFSET - 5 + tPtr->visibleTabs * (tPtr->tabWidth - 10);
-	    
-	    x = x + (W_VIEW(tPtr)->size.width - x)/2;
-	    
+	    x = positionOfTab(tPtr, tPtr->firstVisible + tPtr->visibleTabs);
+
+	    x = x + (W_VIEW_WIDTH(tPtr->view) - x)/2;
 	    paintDot(tPtr, buffer, x + 5, 10);
 	    paintDot(tPtr, buffer, x + 8, 10);
-	    paintDot(tPtr, buffer, x + 11, 10);	    
+	    paintDot(tPtr, buffer, x + 11, 10);
 	}
-
+	
 	XCopyArea(dpy, buffer, W_VIEW(tPtr)->window, scr->copyGC, 0, 0,
-		  W_VIEW(tPtr)->size.width, tPtr->tabHeight, 0, 0);
+		  W_VIEW_WIDTH(tPtr->view), theight, 0, 0);
 
 	XFreePixmap(dpy, buffer);
     }
@@ -671,13 +789,16 @@ rearrange(TabView *tPtr)
 {
     int i;
     int width, height;
+    int bordered = tPtr->flags.bordered;
     
     recalcTabWidth(tPtr);
-    
-    width = tPtr->view->size.width - 3;
-    height = tPtr->view->size.height - tPtr->tabHeight - 3;
+
+    width = tPtr->view->size.width - (bordered ? 3 : 0);
+    height = tPtr->view->size.height - tPtr->tabHeight - (bordered ? 3 : 0);
     
     for (i = 0; i < tPtr->itemCount; i++) {
+	W_MoveView(W_TabViewItemView(tPtr->items[i]), 
+		   1*bordered, tPtr->tabHeight + 1*bordered);
 	W_ResizeView(W_TabViewItemView(tPtr->items[i]), width, height);
     }
     if (W_VIEW_MAPPED(tPtr->view) && W_VIEW_REALIZED(tPtr->view))
@@ -720,6 +841,7 @@ typedef struct W_TabViewItem {
 
     char *label;
 
+    short tabWidth;
     int identifier;
 
     struct {
@@ -778,6 +900,20 @@ W_TabViewItemView(WMTabViewItem *item)
 }
 
 
+static int
+W_TabViewItemTabWidth(WMTabViewItem *item)
+{
+    return item->tabWidth;
+}
+
+
+static void
+W_SetTabViewItemTabWidth(WMTabViewItem *item, int width)
+{
+    item->tabWidth = width;
+}
+
+
 WMTabViewItem*
 WMCreateTabViewItemWithIdentifier(int identifier)
 {
@@ -833,7 +969,10 @@ WMSetTabViewItemLabel(WMTabViewItem *item, char *label)
     if (item->label)
 	wfree(item->label);
 
-    item->label = wstrdup(label);
+    if (label)
+	item->label = wstrdup(label);
+    else
+	item->label = NULL;
 
     if (item->tabView)
 	recalcTabWidth(item->tabView);

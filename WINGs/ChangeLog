@@ -59,6 +59,8 @@ changes since wmaker 0.62.1:
   doesn't add "warning:" in the output message.
 - added WMBox widget
 - added W_SetViewCursor()
+- made Extra widgets library
+- added table widget in Extras library
 - added WMGetConnectionUnsentData() (WMGetConnectionQueuedData() too as an
   alias).
 - added WMSetConnectionCloseOnExec() to specify if the socket associated
@@ -81,6 +83,7 @@ changes since wmaker 0.62.1:
   as a result the shaded windows didn't go away when closed. The non-shaded
   windows were unmapped on close but not destroyed either so they only
   apparently went away, but continued to use memory).
+
 
 
 changes since wmaker 0.62.0:

@@ -665,11 +665,20 @@ handleEvents(XEvent *event, void *clientData)
 	    }
 	}
 	break;
-
+/*
+   // was causing windows to ignore commands like closeWindow
+ * // after the windows is iconized/restored or a workspace change
+ * // if this is really needed, put the MapNotify portion too and
+ * // fix the restack bug in wmaker
      case UnmapNotify:
 	WMUnmapWidget(win);
 	break;
-
+ * 
+     case MapNotify:
+	WMMapWidget(win);
+	break;
+ 
+*/
      case DestroyNotify:
 	destroyWindow(win);
 	break;

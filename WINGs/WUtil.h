@@ -294,18 +294,18 @@ void WMFreeHashTable(WMHashTable *table);
 
 void WMResetHashTable(WMHashTable *table);
 
-void* WMHashGet(WMHashTable *table, const void *key);
+const void* WMHashGet(WMHashTable *table, const void *key);
 
 /* put data in table, replacing already existing data and returning
  * the old value */
-void* WMHashInsert(WMHashTable *table, void *key, void *data);
+const void* WMHashInsert(WMHashTable *table, const void *key, const void *data);
 
 void WMHashRemove(WMHashTable *table, const void *key);
 
 /* warning: do not manipulate the table while using these functions */
 WMHashEnumerator WMEnumerateHashTable(WMHashTable *table);
 
-void* WMNextHashEnumeratorItem(WMHashEnumerator *enumerator);
+const void* WMNextHashEnumeratorItem(WMHashEnumerator *enumerator);
 
 unsigned WMCountHashTable(WMHashTable *table);
 
@@ -571,7 +571,7 @@ unsigned WMGetDataFormat(WMData *aData);
 /*--------------------------------------------------------------------------*/
 
 
-WMNotification* WMCreateNotification(char *name, void *object, void *clientData);
+WMNotification* WMCreateNotification(const char *name, void *object, void *clientData);
 
 void WMReleaseNotification(WMNotification *notification);
 
@@ -581,20 +581,20 @@ void* WMGetNotificationClientData(WMNotification *notification);
 
 void* WMGetNotificationObject(WMNotification *notification);
 
-char* WMGetNotificationName(WMNotification *notification);
+const char* WMGetNotificationName(WMNotification *notification);
 
 
 void WMAddNotificationObserver(WMNotificationObserverAction *observerAction, 
-			       void *observer, char *name, void *object);
+			       void *observer, const char *name, void *object);
 
 void WMPostNotification(WMNotification *notification);
 
 void WMRemoveNotificationObserver(void *observer);
 
-void WMRemoveNotificationObserverWithName(void *observer, char *name, 
+void WMRemoveNotificationObserverWithName(void *observer, const char *name, 
 					  void *object);
 
-void WMPostNotificationName(char *name, void *object, void *clientData);
+void WMPostNotificationName(const char *name, void *object, void *clientData);
 
 WMNotificationQueue* WMGetDefaultNotificationQueue(void);
 

@@ -545,6 +545,8 @@ W_RedisplayView(W_View *view)
     ev.xexpose.window = view->window;
     ev.xexpose.count = 0;
 
+    ev.xexpose.serial = 0;
+
     WMHandleEvent(&ev);
 }
 

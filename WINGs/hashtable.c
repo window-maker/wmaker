@@ -21,8 +21,8 @@
 
 
 typedef struct HashItem {
-    void *key;
-    void *data;
+    const void *key;
+    const void *data;
     
     struct HashItem *next;	       /* collided item list */
 } HashItem;
@@ -186,7 +186,7 @@ WMFreeHashTable(WMHashTable *table)
 
 
 
-void*
+const void*
 WMHashGet(WMHashTable *table, const void *key)
 {
     unsigned h;
@@ -218,8 +218,8 @@ WMHashGet(WMHashTable *table, const void *key)
 
 
 
-void*
-WMHashInsert(WMHashTable *table, void *key, void *data)
+const void*
+WMHashInsert(WMHashTable *table, const void *key, const void *data)
 {
     unsigned h;
     HashItem *item;
@@ -247,7 +247,7 @@ WMHashInsert(WMHashTable *table, void *key, void *data)
     }
     
     if (replacing) {
-	void *old;
+	const void *old;
 
 	old = item->data;
 	item->data = data;
@@ -334,10 +334,10 @@ WMEnumerateHashTable(WMHashTable *table)
 
 
 
-void*
+const void*
 WMNextHashEnumeratorItem(WMHashEnumerator *enumerator)
 {
-    void *data = NULL;
+    const void *data = NULL;
 
     /* this assumes the table doesn't change between 
      * WMEnumerateHashTable() and WMNextHashEnumeratorItem() calls */

@@ -6,8 +6,7 @@
 #include "wtableview.h"
 
 
-const char *WMTableViewRowWasSelectedNotification = "WMTableViewRowWasSelectedNotification";
-const char *WMTableViewRowWasUnselectedNotification = "WMTableViewRowWasUnselectedNotification";
+const char *WMTableViewSelectionDidChangeNotification = "WMTableViewSelectionDidChangeNotification";
 
 
 struct W_TableColumn {
@@ -29,6 +28,10 @@ struct W_TableColumn {
 
 
 static void handleResize(W_ViewDelegate *self, WMView *view);
+
+static void rearrangeHeader(WMTableView *table);
+
+static WMRange rowsInRect(WMTableView *table, WMRect rect);
 
 
 WMTableColumn *WMCreateTableColumn(char *title)
@@ -72,9 +75,9 @@ void WMSetTableColumnWidth(WMTableColumn *column, unsigned width)
 	column->width = WMAX(column->minWidth, width);
     else
 	column->width = WMAX(column->minWidth, WMIN(column->maxWidth, width));
-    
+
     if (column->table) {
-	handleResize(NULL, W_VIEW(column->table));
+	rearrangeHeader(column->table);
     }
 }
 
@@ -143,12 +146,19 @@ struct W_TableView {
 
     WMTableViewDelegate *delegate;
 
+    WMAction *action;
+    void *clientData;
+    
+    void *clickedColumn;
+    int clickedRow;
+    
     int editingRow;
     
     unsigned headerHeight;
     
     unsigned rowHeight;
-    
+
+    unsigned dragging:1;
     unsigned drawsGrid:1;
     unsigned canSelectRow:1;
     unsigned canSelectMultiRows:1;
@@ -188,13 +198,13 @@ static void scrollObserver(void *self, WMNotification *notif)
 	
 	column = WMGetFromArray(table->columns, i);
 	
-	WMMoveWidget(column->titleW, x + rect.pos.x, 0);
+	WMMoveWidget(column->titleW, x - rect.pos.x, 0);
 	
 	if (i > 0) {
 	    WMView *splitter;
 
 	    splitter = WMGetFromArray(table->splitters, i-1);
-	    W_MoveView(splitter, x + rect.pos.x - 1, 0);
+	    W_MoveView(splitter, x - rect.pos.x - 1, 0);
 	}
 	
 	x += W_VIEW_WIDTH(WMWidgetView(column->titleW)) + 1;
@@ -268,6 +278,7 @@ WMTableView *WMCreateTableView(WMWidget *parent)
     WMMoveWidget(table->header, 22, 2);
     WMMapWidget(table->header);
     WMSetFrameRelief(table->header, WRFlat);
+    
     table->corner = WMCreateLabel(table);
     WMResizeWidget(table->corner, 20, table->headerHeight);
     WMMoveWidget(table->corner, 2, 2);
@@ -287,7 +298,8 @@ WMTableView *WMCreateTableView(WMWidget *parent)
 
     table->tableView->flags.dontCompressExpose = 1;
     
-    table->gridColor = WMDarkGrayColor(scr);
+    table->gridColor = WMCreateNamedColor(scr, "#cccccc", False);
+ /*   table->gridColor = WMGrayColor(scr);*/
     
     {
 	XGCValues gcv;
@@ -300,10 +312,13 @@ WMTableView *WMCreateTableView(WMWidget *parent)
     }
     
     table->editingRow = -1;
+    table->clickedRow = -1;
         
     table->drawsGrid = 1;
     table->rowHeight = 16;
 
+    WMSetScrollViewLineScroll(table->scrollView, table->rowHeight);
+    
     table->tableWidth = 1;
     
     table->columns = WMCreateArray(4);
@@ -319,7 +334,8 @@ WMTableView *WMCreateTableView(WMWidget *parent)
     WMCreateEventHandler(table->view, ExposureMask|StructureNotifyMask,
                          handleEvents, table);
 
-    WMCreateEventHandler(table->tableView, ExposureMask|ButtonPressMask,
+    WMCreateEventHandler(table->tableView, ExposureMask|ButtonPressMask|
+			 ButtonReleaseMask|ButtonMotionMask,
                          handleTableEvents, table);
     
     return table;
@@ -379,29 +395,7 @@ void WMAddTableViewColumn(WMTableView *table, WMTableColumn *column)
 	WMAddToArray(table->splitters, splitter);
     }
 
-    count = WMGetArrayItemCount(table->columns);
-    for (i = 0, width = 0; i < count; i++) {
-	WMTableColumn *column = WMGetFromArray(table->columns, i);
-	
-	WMMoveWidget(column->titleW, width, 0);
-	WMResizeWidget(column->titleW, column->width-1, table->headerHeight);
-	
-	if (i > 0) {
-	    WMView *splitter = WMGetFromArray(table->splitters, i-1);
-
-	    W_MoveView(splitter, width-1, 0);
-	}
-	width += column->width;
-    }
-        
-    wassertr(table->delegate && table->delegate->numberOfRows);
-    
-    table->rows = table->delegate->numberOfRows(table->delegate, table);
-
-    W_ResizeView(table->tableView, width+1,
-		 table->rows * table->rowHeight + 1);
-    
-    table->tableWidth = width + 1;
+    rearrangeHeader(table);
 }
 
 
@@ -416,6 +410,26 @@ void WMSetTableViewHeaderHeight(WMTableView *table, unsigned height)
 void WMSetTableViewDelegate(WMTableView *table, WMTableViewDelegate *delegate)
 {
     table->delegate = delegate;
+}
+
+
+void WMSetTableViewAction(WMTableView *table, WMAction *action, void *clientData)
+{
+    table->action = action;
+    
+    table->clientData = clientData;
+}
+
+
+void *WMGetTableViewClickedColumn(WMTableView *table)
+{
+    return table->clickedColumn;
+}
+
+
+int WMGetTableViewClickedRow(WMTableView *table)
+{
+    return table->clickedRow;
 }
 
 
@@ -486,9 +500,44 @@ void WMSetTableViewGridColor(WMTableView *table, WMColor *color)
 {
     WMReleaseColor(table->gridColor);
     table->gridColor = WMRetainColor(color);
-    XSetForeground(WMScreenDisplay(WMWidgetScreen(table)), table->gridGC, WMColorPixel(color));
+    XSetForeground(WMScreenDisplay(WMWidgetScreen(table)), table->gridGC, 
+		   WMColorPixel(color));
 }
 
+
+
+void WMSetTableViewRowHeight(WMTableView *table, int height)
+{
+    table->rowHeight = height;
+    
+    WMRedisplayWidget(table);
+}
+
+
+void WMScrollTableViewRowToVisible(WMTableView *table, int row)
+{
+    WMScroller *scroller;
+    WMRange range;
+    WMRect rect;
+    int newY, tmp;
+    
+    rect = WMGetScrollViewVisibleRect(table->scrollView);
+    range = rowsInRect(table, rect);
+
+    scroller = WMGetScrollViewVerticalScroller(table->scrollView);
+
+    if (row < range.position) {
+	newY = row * table->rowHeight - rect.size.height / 2;
+    } else if (row >= range.position + range.count) {
+	newY = row * table->rowHeight - rect.size.height / 2;
+    } else {
+	return;
+    }
+    tmp = table->rows*table->rowHeight - rect.size.height;
+    newY = WMAX(0, WMIN(newY, tmp));
+    WMScrollViewScrollPoint(table->scrollView, rect.pos.x, newY);
+}
+      
 
 
 static void drawGrid(WMTableView *table, WMRect rect)
@@ -580,9 +629,12 @@ static WMRange rowsInRect(WMTableView *table, WMRect rect)
 {
     WMRange range;
     int rh = table->rowHeight;
+    int dif;
     
-    range.position = WMAX(0, rect.pos.y / rh - 1);
-    range.count = WMAX(1, WMIN(rect.size.height / rh + 3, table->rows));
+    dif = rect.pos.y % rh;
+    
+    range.position = WMAX(0, (rect.pos.y - dif) / rh);
+    range.count = WMAX(1, WMIN((rect.size.height + dif) / rh, table->rows));
 
     return range;
 }
@@ -630,30 +682,14 @@ static void setRowSelected(WMTableView *table, unsigned row, Bool flag)
     int repaint = 0;
 
     
-    if (WMGetArrayItemCount(table->selectedRows) > 0 
-	&& !table->canSelectMultiRows) {
-	int r = (int)WMGetFromArray(table->selectedRows, 0);
-	
-	WMDeleteFromArray(table->selectedRows, 0);
-	
-	drawFullRow(table, r);
-	
-	WMPostNotificationName(WMTableViewRowWasUnselectedNotification,
-			       table, (void*)r);
-    }
-    
     if (WMFindInArray(table->selectedRows, NULL, (void*)row) != WANotFound) {
 	if (!flag) {
 	    WMRemoveFromArray(table->selectedRows, (void*)row);
-	    WMPostNotificationName(WMTableViewRowWasUnselectedNotification,
-				   table, (void*)row);
 	    repaint = 1;
 	}
     } else {
 	if (flag) {
 	    WMAddToArray(table->selectedRows, (void*)row);
-	    WMPostNotificationName(WMTableViewRowWasSelectedNotification,
-				   table, (void*)row);	    
 	    repaint = 1;
 	}
     }
@@ -690,7 +726,7 @@ static void repaintTable(WMTableView *table, int x, int y,
     
     rows = rowsInRect(table, rect);
     for (i = rows.position; 
-	 i < WMIN(rows.position+rows.count, table->rows); 
+	 i < WMIN(rows.position+rows.count + 1, table->rows);
 	 i++) {
 	drawRow(table, i, rect);
     }
@@ -706,9 +742,8 @@ static void stopRowEdit(WMTableView *table, int row)
     for (i = 0; i < WMGetArrayItemCount(table->columns); i++) {
 	column = WMGetFromArray(table->columns, i);
 
-	wassertr(column->delegate && column->delegate->endCellEdit);
-	
-	(*column->delegate->endCellEdit)(column->delegate, column, row);
+	if (column->delegate && column->delegate->endCellEdit)	
+	    (*column->delegate->endCellEdit)(column->delegate, column, row);
     }
 }
 
@@ -727,27 +762,85 @@ void WMEditTableViewRow(WMTableView *table, int row)
     for (i = 0; i < WMGetArrayItemCount(table->columns); i++) {
 	column = WMGetFromArray(table->columns, i);
 
-	wassertr(column->delegate && column->delegate->beginCellEdit);
-	
-	(*column->delegate->beginCellEdit)(column->delegate, column, row);
+	if (column->delegate && column->delegate->beginCellEdit)
+	    (*column->delegate->beginCellEdit)(column->delegate, column, row);
     }
+}
+
+
+void WMSelectTableViewRow(WMTableView *table, int row)
+{
+    if (table->clickedRow >= 0)
+	setRowSelected(table, table->clickedRow, False);
+    setRowSelected(table, row, True);
+    table->clickedRow = row;
+    
+    if (table->action)
+	(*table->action)(table, table->clientData);
+    WMPostNotificationName(WMTableViewSelectionDidChangeNotification,
+			   table, NULL);    
+}
+
+
+void WMReloadTableView(WMTableView *table)
+{
+    WMRect rect = WMGetScrollViewVisibleRect(table->scrollView);
+
+    repaintTable(table, 0, 0, 
+		 W_VIEW_WIDTH(table->tableView), rect.size.height);
+}
+
+
+void WMNoteTableViewNumberOfRowsChanged(WMTableView *table)
+{
+    WMReloadTableView(table);
 }
 
 
 static void handleTableEvents(XEvent *event, void *data)
 {
     WMTableView *table = (WMTableView*)data;
+    int row;
     
     switch (event->type) {
      case ButtonPress:
-	setRowSelected(table, event->xbutton.y/table->rowHeight, True);
+	if (event->xbutton.button == Button1) {
+	    row = event->xbutton.y/table->rowHeight;
+	    if (row != table->clickedRow) {
+		setRowSelected(table, table->clickedRow, False);	    
+		setRowSelected(table, row, True);
+		table->clickedRow = row;	 
+		table->dragging = 1;
+	    }
+	}
+	break;
+	
+     case MotionNotify:
+	if (table->dragging && event->xmotion.y >= 0) {
+	    row = event->xmotion.y/table->rowHeight;
+	    if (table->clickedRow != row && row >= 0) {
+		setRowSelected(table, table->clickedRow, False);
+		setRowSelected(table, row, True);
+		table->clickedRow = row;
+	    }
+	}
+	break;
+	
+     case ButtonRelease:
+	if (event->xbutton.button == Button1) {
+	    if (table->action)
+		(*table->action)(table, table->clientData);
+	    WMPostNotificationName(WMTableViewSelectionDidChangeNotification,
+				   table, NULL);
+	    table->dragging = 0;
+	}
 	break;
 
      case Expose:
 	repaintTable(table, event->xexpose.x, event->xexpose.y,
 		     event->xexpose.width, event->xexpose.height);
 	break;
-    }    
+    }
 }
 
 
@@ -761,6 +854,13 @@ static void handleEvents(XEvent *event, void *data)
 	W_DrawRelief(scr, W_VIEW_DRAWABLE(table->view), 0, 0, 
 		     W_VIEW_WIDTH(table->view), W_VIEW_HEIGHT(table->view),
 		     WRSunken);
+	
+	if (event->xexpose.serial == 0) {
+	    WMRect rect = WMGetScrollViewVisibleRect(table->scrollView);
+	    
+	    repaintTable(table, rect.pos.x, rect.pos.y,
+			 rect.size.width, rect.size.height);
+	}
 	break;
     }
 }
@@ -789,3 +889,34 @@ static void handleResize(W_ViewDelegate *self, WMView *view)
 }
 
 
+static void rearrangeHeader(WMTableView *table)
+{
+    int width;
+    int count;
+    int i;
+    width = 0;
+    
+    count = WMGetArrayItemCount(table->columns);
+    for (i = 0; i < count; i++) {
+	WMTableColumn *column = WMGetFromArray(table->columns, i);
+
+	WMMoveWidget(column->titleW, width, 0);
+	WMResizeWidget(column->titleW, column->width-1, table->headerHeight);
+	
+	if (i > 0) {
+	    WMView *splitter = WMGetFromArray(table->splitters, i-1);
+
+	    W_MoveView(splitter, width-1, 0);
+	}
+	width += column->width;
+    }
+    
+    wassertr(table->delegate && table->delegate->numberOfRows);
+    
+    table->rows = table->delegate->numberOfRows(table->delegate, table);
+
+    W_ResizeView(table->tableView, width+1,
+		 table->rows * table->rowHeight + 1);
+    
+    table->tableWidth = width + 1;    
+}

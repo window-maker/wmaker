@@ -579,7 +579,7 @@ testText(WMScreen *scr)
 {
     WMWindow *win;
     WMText *text;
-    FILE *file = fopen("../README", "r");
+    FILE *file = fopen("wm.html", "r");
 
     windowCount++;
 
@@ -1231,7 +1231,7 @@ main(int argc, char **argv)
 
 
     /* Initialize the application */
-    WMInitializeApplication("Test", &argc, argv);
+    WMInitializeApplication("Test@eqweq_ewq$eqw", &argc, argv);
 
     testUD();
 
@@ -1273,10 +1273,11 @@ main(int argc, char **argv)
      * Put the testSomething() function you want to test here.
      */
 
-    testBox(scr);
 
-#if 0
     testTabView(scr);    
+#if 0
+    testBox(scr);
+    testText(scr);
     testList(scr);
 
     testProgressIndicator(scr);
@@ -1284,7 +1285,6 @@ main(int argc, char **argv)
     testColorWell(scr);
 
     testTextField(scr);
-    testText(scr);
 
     testDragAndDrop(scr);
     testDragAndDrop(scr);

@@ -60,10 +60,10 @@ static WMTableViewDelegate delegate = {
 
 
 
-void selectedRowObserver(void *self, WMNotification *notif)
+void clickedTable(WMWidget *w, void *self)
 {    
-    int row = (int)WMGetNotificationClientData(notif);
- 
+    int row = WMGetTableViewClickedRow((WMTableView*)self);
+
     WMEditTableViewRow(self, row);
 }
 
@@ -98,12 +98,10 @@ main(int argc, char **argv)
     table = WMCreateTableView(win);
     WMResizeWidget(table, 400, 200);
     WMSetTableViewBackgroundColor(table, WMWhiteColor(scr));
-    WMSetTableViewGridColor(table, WMGrayColor(scr));
+//    WMSetTableViewGridColor(table, WMGrayColor(scr));
     WMSetTableViewHeaderHeight(table, 20);
     WMSetTableViewDelegate(table, &delegate);
-    WMAddNotificationObserver(selectedRowObserver, table,
-			      WMTableViewRowWasSelectedNotification,
-			      table);
+    WMSetTableViewAction(table, clickedTable, table);
     
     colDeleg = WTCreateStringEditorDelegate(table);
     
@@ -122,6 +120,15 @@ main(int argc, char **argv)
     WMSetTableColumnDelegate(col, colDeleg);
     WMSetTableColumnId(col, (void*)2);	
 
+    
+    colDeleg = WTCreateBooleanSwitchDelegate(table);
+
+    col = WMCreateTableColumn("Bool");
+    WMSetTableColumnWidth(col, 50);
+    WMAddTableViewColumn(table, col);	
+    WMSetTableColumnDelegate(col, colDeleg);
+    WMSetTableColumnId(col, (void*)2);
+    
 
     WMMapWidget(table);
     WMRealizeWidget(win);
