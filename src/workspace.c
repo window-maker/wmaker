@@ -699,13 +699,33 @@ void wWorkspaceAdjustViewPort(WScreen *scr, int workspace, int view_x, int view_
 {
 
     int diff_x, diff_y;
+    int lay_left, lay_right, lay_top, lay_bottom;
     WWindow *wwin;
+
+    lay_left = lay_top = 0;
+    lay_right = scr->scr_width;
+    lay_bottom = scr->scr_height;
 
     diff_x = scr->workspaces[workspace]->view_x - view_x;
     diff_y = scr->workspaces[workspace]->view_y - view_y;
 
+    if (!diff_x && !diff_y) return;
+
     wwin = scr->focused_window;
     while (wwin) {
+        if (wwin->frame_x < lay_left) { /* record positions */
+            lay_left = wwin->frame_x;
+        } else if (wwin->frame_x + wwin->frame->core->width > lay_right) {
+            lay_right = wwin->frame_x + wwin->frame->core->width;
+        }
+
+        if (wwin->frame_y < lay_top) {
+            lay_top = wwin->frame_y;
+        } else if (wwin->frame_y + wwin->frame->core->height > lay_bottom) {
+            lay_top = wwin->frame_y + wwin->frame->core->height;
+        }
+
+
         if (wwin->frame->workspace == workspace) {
             wWindowMove(wwin, wwin->frame_x + diff_x, wwin->frame_y + diff_y);
             wWindowSynthConfigureNotify(wwin);
@@ -714,19 +734,37 @@ void wWorkspaceAdjustViewPort(WScreen *scr, int workspace, int view_x, int view_
     }
 
     if (scr->workspaces[workspace]->view_x < 0) {
-        scr->workspaces[workspace]->width -= view_x;
-        scr->workspaces[workspace]->view_x = 0;
+	scr->workspaces[workspace]->width -= view_x;
+	scr->workspaces[workspace]->view_x = 0;
     } else if (scr->workspaces[workspace]->view_x > scr->workspaces[workspace]->width - scr->scr_width) {
-        scr->workspaces[workspace]->width = scr->workspaces[workspace]->view_x + scr->scr_width;
+	scr->workspaces[workspace]->width = scr->workspaces[workspace]->view_x + scr->scr_width;
+    }
+    
+    if (scr->workspaces[workspace]->view_x > lay_left) { 
+	/* should do lay_left  + some very big edge here so users can have their own blank area*/
+	scr->workspaces[workspace]->width -= scr->workspaces[workspace]->view_x - lay_left;
+	scr->workspaces[workspace]->view_x = lay_left;
+    }
+    if (scr->workspaces[workspace]->view_x + scr->scr_width > lay_right) {
+	scr->workspaces[workspace]->width -= scr->workspaces[workspace]->view_x + scr->scr_width - lay_right;
     }
 
     if (scr->workspaces[workspace]->view_y < 0) {
-        scr->workspaces[workspace]->height -= view_y;
-        scr->workspaces[workspace]->view_y = 0;
+	scr->workspaces[workspace]->height -= view_y;
+	scr->workspaces[workspace]->view_y = 0;
     } else if (scr->workspaces[workspace]->view_y > scr->workspaces[workspace]->height - scr->scr_height) {
-        scr->workspaces[workspace]->height = scr->workspaces[workspace]->view_y + scr->scr_height;
+	scr->workspaces[workspace]->height = scr->workspaces[workspace]->view_y + scr->scr_height;
     }
 
+    if (scr->workspaces[workspace]->view_y > lay_top) { 
+	/* should do lay_left  + some very big edge here so users can have their own blank area*/
+	scr->workspaces[workspace]->height -= scr->workspaces[workspace]->view_y - lay_top;
+	scr->workspaces[workspace]->view_y = lay_top;
+    }
+    if (scr->workspaces[workspace]->view_y + scr->scr_height > lay_bottom) {
+	scr->workspaces[workspace]->height -= scr->workspaces[workspace]->view_y + scr->scr_height - lay_left;
+    }
+    
     scr->workspaces[workspace]->view_x = WMIN(view_x, scr->workspaces[workspace]->width - scr->scr_width);
     scr->workspaces[workspace]->view_y = WMIN(view_y, scr->workspaces[workspace]->height - scr->scr_height);
 
