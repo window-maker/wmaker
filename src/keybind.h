@@ -67,9 +67,9 @@
 #define WKBD_WINDOW2		35
 #define WKBD_WINDOW3		36
 #define WKBD_WINDOW4		37
+#define WKBD_WINDOW5		38
+#define WKBD_WINDOW6		39
 #ifdef EXTEND_WINDOWSHORTCUT
-# define WKBD_WINDOW5		38
-# define WKBD_WINDOW6		39
 # define WKBD_WINDOW7		40
 # define WKBD_WINDOW8		41
 # define WKBD_WINDOW9		42
@@ -82,10 +82,10 @@
 # endif /* KEEP_XKB_LOCK_STATUS */
 #else /* !EXTEND_WINDOWSHORTCUT */
 # ifdef KEEP_XKB_LOCK_STATUS
-#  define WKBD_TOGGLE             38
-#  define WKBD_LAST               39
+#  define WKBD_TOGGLE             40
+#  define WKBD_LAST               41
 # else
-#  define WKBD_LAST               38
+#  define WKBD_LAST               42
 # endif /* KEEP_XKB_LOCK_STATUS */
 #endif /* !EXTEND_WINDOWSHORTCUT */
 

@@ -16,7 +16,11 @@ Changes since version 0.53.0:
 - fixed bug with FullMaximize attribute
 - GNOME: button events not bound in wmaker are proxyized (to gmc)
 				(Paul Warren <pdw@ferret.lmh.ox.ac.uk>)
-
+- fixed bug with restoration of maximized window after restart with
+  --enable-kde
+- added high-quality filtered rescaling (smoothed rescaling) to wrlib/wmsetbg
+- added SmoothWorkspaceBack
+- fixed crash bug in Paths section of WPrefs
 
 Changes since version 0.52.0:
 .............................

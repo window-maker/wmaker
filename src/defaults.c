@@ -516,6 +516,9 @@ WDefaultEntry optionList[] = {
     {"WorkspaceBack",	"(solid, black)",	NULL,
 	  NULL,				getWSBackground,setWorkspaceBack
     },
+    {"SmoothWorkspaceBack", 	"NO",		NULL,
+	  NULL,				getBool,	NULL
+    },
     {"IconBack",	"(solid, gray)",       	NULL,
 	  NULL,				getTexture,	setIconTile
     },
@@ -2789,7 +2792,10 @@ setWorkspaceSpecificBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 	    if (dup(filedes[0]) < 0) {
 		wsyserror("dup() failed:can't set workspace specific background image");
 	    }
-	    execlp("wmsetbg", "wmsetbg", "-helper", "-d", NULL);
+	    if (wPreferences.smooth_workspace_back)
+		execlp("wmsetbg", "wmsetbg", "-helper", "-S", "-d", NULL);
+	    else
+		execlp("wmsetbg", "wmsetbg", "-helper", "-d", NULL);
 	    wsyserror("could not execute wmsetbg");
 	    exit(1);
 	} else {
@@ -2857,7 +2863,10 @@ setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 	SetupEnvironment(scr);
 	text = PLGetDescription(value);
 	command = wmalloc(strlen(text)+40);
-	sprintf(command, "wmsetbg -d -p '%s' &", text);
+	if (wPreferences.smooth_workspace_back)
+	    sprintf(command, "wmsetbg -d -S -p '%s' &", text);
+	else
+	    sprintf(command, "wmsetbg -d -p '%s' &", text);
 	free(text);
 	system(command);
 	free(command);

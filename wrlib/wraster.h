@@ -68,6 +68,9 @@
 /* use default instead of best visual */
 #define RC_DefaultVisual	(1<<5)
 
+/* filter type for smoothed scaling */
+#define RC_ScalingFilter	(1<<6)
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -81,6 +84,7 @@ typedef struct RContextAttributes {
     float bgamma;		       /* and blue */
     VisualID visualid;		       /* visual ID to use */
     int use_shared_memory;	       /* True of False */
+    int scaling_filter;
 } RContextAttributes;
 
 
@@ -174,6 +178,25 @@ typedef struct RXImage {
 #endif
 } RXImage;
 
+    
+
+/* image display modes */
+enum {
+    RDitheredRendering = 0,
+    RBestMatchRendering = 1
+};
+
+
+/* smoothed scaling filter types */
+enum {
+    RBoxFilter,
+	RTriangleFilter,
+	RBellFilter,
+	RBSplineFilter,
+	RLanczos3Filter,
+	RMitchellFilter
+};
+
 
 /* note that not all operations are supported in all functions */
 enum {
@@ -184,16 +207,6 @@ enum {
 	RSubtractOperation
 };
 
-
-/* image display modes */
-enum {
-    RDitheredRendering = 0,
-    RBestMatchRendering = 1
-};
-
-/* bw compat */
-#define RM_DITHER RDitheredRendering
-#define RM_MATCH  RBestMatchRendering
 
 enum {
     RAbsoluteCoordinates = 0,

@@ -418,6 +418,7 @@ int main(int argc, char **argv)
      */
     testGradientButtons(scr);
 
+    testTextField(scr);
 #if 0
     testOpenFilePanel(scr);
     testFontPanel(scr);
@@ -428,7 +429,6 @@ int main(int argc, char **argv)
     testColorWell(scr);
 
     testSlider(scr);
-    testTextField(scr);
     testPullDown(scr);
 #endif
     /*

@@ -281,6 +281,7 @@ WMSetButtonImage(WMButton *bPtr, WMPixmap *image)
     if (bPtr->dimage) {
 	bPtr->dimage->pixmap = None;
 	WMReleasePixmap(bPtr->dimage);
+	bPtr->dimage = NULL;
     }
 
     if (image) {

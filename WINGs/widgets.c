@@ -305,6 +305,7 @@ static unsigned char STIPPLE_BITS[] = {
 
 
 
+
 extern void W_ReadConfigurations(void);
 
 
@@ -731,6 +732,19 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     scrPtr->defaultCursor = XCreateFontCursor(display, XC_left_ptr);
 
     scrPtr->textCursor = XCreateFontCursor(display, XC_xterm);
+
+    {
+	XColor bla;
+	Pixmap blank;
+	
+	blank = XCreatePixmap(display, scrPtr->stipple, 1, 1, 1);
+	XSetForeground(display, scrPtr->monoGC, 0);
+	XFillRectangle(display, blank, scrPtr->monoGC, 0, 0, 1, 1);
+
+	scrPtr->invisibleCursor = XCreatePixmapCursor(display, blank, blank,
+						      &bla, &bla, 0, 0);
+	XFreePixmap(display, blank);
+    }
 
     scrPtr->internalMessage = XInternAtom(display, "_WINGS_MESSAGE", False);
 

@@ -211,6 +211,8 @@ typedef struct W_Screen {
     
     Cursor textCursor;
 
+    Cursor invisibleCursor;
+
     Atom internalMessage;	       /* for ClientMessage */
     
     Atom attribsAtom;		       /* GNUstepWindowAttributes */

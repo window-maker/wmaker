@@ -4,6 +4,7 @@ NEWS for veteran Window Maker users
 
 --- 0.54.0
 
+
 New Option For setstyle
 -----------------------
 
@@ -23,6 +24,11 @@ New Options
 
 WorkspaceNameDisplayPosition =
 none/center/top/bottom/topleft/topright/bottomleft/bottomright
+
+
+SmoothWorkspaceBack = YES/NO
+
+will enable smoothing of scaled workspace background images.
 
 
 root menu

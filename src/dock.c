@@ -1022,7 +1022,7 @@ makeClipOptionsMenu(WScreen *scr)
 	return NULL;
     }
 
-    entry = wMenuAddCallback(menu, _("Keep on top"),
+    entry = wMenuAddCallback(menu, _("Keep on Top"),
                              toggleLoweredCallback, NULL);
     entry->flags.indicator = 1;
     entry->flags.indicator_on = 1;

@@ -275,6 +275,42 @@ double t;
     return(0.0);
 }
 
+static double (*filterf)() = Mitchell_filter;
+static double fwidth = Mitchell_support;
+
+void
+_wraster_change_filter(int type)
+{
+    switch (type) {
+     case RBoxFilter:
+	filterf = box_filter;
+	fwidth = box_support;
+	break;
+     case RTriangleFilter:
+	filterf = triangle_filter;
+	fwidth = triangle_support;
+	break;
+     case RBellFilter:
+	filterf = bell_filter;
+	fwidth = bell_support;
+	break;
+     case RBSplineFilter:
+	filterf = B_spline_filter;
+	fwidth = B_spline_support;
+	break;
+     case RLanczos3Filter:
+	filterf = Lanczos3_filter;
+	fwidth = Lanczos3_support;
+	break;
+     default:
+     case RMitchellFilter:
+	filterf = Mitchell_support;
+	fwidth = Mitchell_filter;
+	break;
+    }
+}
+
+
 /*
  *	image rescaling routine
  */
@@ -295,14 +331,9 @@ CLIST	*contrib;		/* array of contribution lists */
 #define CLAMP(v,l,h)    ((v)<(l) ? (l) : (v) > (h) ? (h) : v)
 
 
-static double (*filterf)() = Mitchell_filter;
-static double fwidth = Mitchell_support;
-
-
 RImage*
 RSmoothScaleImage(RImage *src, int newWidth, int newHeight)
-{
-    
+{    
     RImage *tmp;		       /* intermediate image */
     double xscale, yscale;	       /* zoom scale factors */
     int i, j, k;		       /* loop variables */

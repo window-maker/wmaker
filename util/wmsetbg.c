@@ -52,7 +52,7 @@
 
 #include <proplist.h>
 
-#define PROG_VERSION	"wmsetbg (Window Maker) 2.1"
+#define PROG_VERSION	"wmsetbg (Window Maker) 2.2"
 
 
 #define WORKSPACE_COUNT (MAX_WORKSPACES+1)
@@ -64,6 +64,10 @@ Window root;
 int scr;
 int scrWidth;
 int scrHeight;
+
+
+Bool smooth = False;
+
 
 Pixmap CurrentPixmap = None;
 char *PixmapPath = NULL;
@@ -408,7 +412,10 @@ parseTexture(RContext *rc, char *text)
 	    {
 		RImage *simage;
 
-		simage = RScaleImage(image, w, h);
+		if (smooth)
+		    simage = RSmoothScaleImage(image, w, h);
+		else
+		    simage = RScaleImage(image, w, h);
 		if (!simage) {
 		    wwarning("could not scale image:%s", 
 			     RMessageForError(RErrorCode));
@@ -1142,6 +1149,7 @@ print_help(char *ProgName)
 P(" -display	 		display to use");
 P(" -d, --dither	 		dither image");
 P(" -m, --match			match  colors");
+P(" -S, --smooth			smooth scaled image");
 P(" -b, --back-color <color>	background color");
 P(" -t, --tile			tile   image");
 P(" -e, --center			center image");
@@ -1257,6 +1265,9 @@ main(int argc, char **argv)
 		   || strcmp(argv[i], "--match")==0) {
 	    render_mode = RM_MATCH;
 	    obey_user++;
+	} else if (strcmp(argv[i], "-S")==0
+		   || strcmp(argv[i], "--smooth")==0) {
+	    smooth = True;
 	} else if (strcmp(argv[i], "-u")==0
 		   || strcmp(argv[i], "--update-wmaker")==0) {
 	    update++;

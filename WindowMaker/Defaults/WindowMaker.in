@@ -1,4 +1,5 @@
 {
+  SmoothWorkspaceBack = YES;
   WindozeCycling = NO;
   PopupSwitchMenu = NO;
   MenuStyle = normal;

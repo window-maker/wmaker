@@ -272,6 +272,7 @@ typedef struct WPreferences {
 
     RImage *button_images;	       /* titlebar button images */
 
+    char smooth_workspace_back;
     char size_display;		       /* display type for resize geometry */
     char move_display;		       /* display type for move geometry */
     char window_placement;	       /* window placement mode */

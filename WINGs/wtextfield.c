@@ -61,6 +61,8 @@ typedef struct W_TextField {
 
 	unsigned int secure:1;	       /* password entry style */
 
+	unsigned int pointerGrabbed:1;
+
 	/**/
 	unsigned int notIllegalMovement:1;
     } flags;
@@ -1111,58 +1113,75 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 
     switch (event->type) {
      case KeyPress:
-        if (tPtr->flags.enabled && tPtr->flags.focused)
+        if (tPtr->flags.enabled && tPtr->flags.focused) {
             handleTextFieldKeyPress(tPtr, event);
-	
+	    XGrabPointer(WMScreenDisplay(W_VIEW(tPtr)->screen),
+			 W_VIEW(tPtr)->window, False, 
+			 PointerMotionMask|ButtonPressMask|ButtonReleaseMask,
+			 GrabModeAsync, GrabModeAsync, None, 
+			 W_VIEW(tPtr)->screen->invisibleCursor,
+			 CurrentTime);
+	    tPtr->flags.pointerGrabbed = 1;
+	}
         break;
 
      case MotionNotify:
+	
+	if (tPtr->flags.pointerGrabbed) {
+	    tPtr->flags.pointerGrabbed = 0;
+	    XUngrabPointer(WMScreenDisplay(W_VIEW(tPtr)->screen), CurrentTime);
+	}
+
         if (tPtr->flags.enabled && (event->xmotion.state & Button1Mask)) {
 
-
-        if (tPtr->viewPosition < tPtr->textLen && event->xmotion.x >
+	    if (tPtr->viewPosition < tPtr->textLen && event->xmotion.x >
                 tPtr->usableWidth) {
-            if (WMWidthOfString(tPtr->font,
-                    &(tPtr->text[tPtr->viewPosition]),
-                    tPtr->cursorPosition-tPtr->viewPosition)
+		if (WMWidthOfString(tPtr->font,
+				    &(tPtr->text[tPtr->viewPosition]),
+				    tPtr->cursorPosition-tPtr->viewPosition)
                     > tPtr->usableWidth) {
-                tPtr->viewPosition++;
-            }
-        }
-    	else if (tPtr->viewPosition > 0 && event->xmotion.x < 0) {
-            paintCursor(tPtr);
-            tPtr->viewPosition--;
-        }
-
-        if (!tPtr->selection.count) {
-            tPtr->selection.position = tPtr->cursorPosition;
-        }
-
-        tPtr->cursorPosition = pointToCursorPosition(tPtr, event->xmotion.x);
-
-        tPtr->selection.count = tPtr->cursorPosition - tPtr->selection.position;
-
-        /*
-        printf("notify %d %d\n",event->xmotion.x,tPtr->usableWidth);
-        */
-
-        paintCursor(tPtr);
-        paintTextField(tPtr);
-
+		    tPtr->viewPosition++;
+		}
+	    } else if (tPtr->viewPosition > 0 && event->xmotion.x < 0) {
+		paintCursor(tPtr);
+		tPtr->viewPosition--;
 	    }
+
+	    if (!tPtr->selection.count) {
+		tPtr->selection.position = tPtr->cursorPosition;
+	    }
+	    
+	    tPtr->cursorPosition = 
+		pointToCursorPosition(tPtr, event->xmotion.x);
+	    
+	    tPtr->selection.count = tPtr->cursorPosition - tPtr->selection.position;
+	    
+	    /*
+	     printf("notify %d %d\n",event->xmotion.x,tPtr->usableWidth);
+	     */
+	    
+	    paintCursor(tPtr);
+	    paintTextField(tPtr);
+
+	}
         if (move) {
-        int count;
-        XSetSelectionOwner(tPtr->view->screen->display,
-                XA_PRIMARY, None, CurrentTime);
-        count = tPtr->selection.count < 0
-            ? tPtr->selection.position + tPtr->selection.count 
-            : tPtr->selection.position;
-        XStoreBuffer(tPtr->view->screen->display,
-                        &tPtr->text[count] , abs(tPtr->selection.count), 0);
+	    int count;
+	    XSetSelectionOwner(tPtr->view->screen->display,
+			       XA_PRIMARY, None, CurrentTime);
+	    count = tPtr->selection.count < 0
+		? tPtr->selection.position + tPtr->selection.count 
+		: tPtr->selection.position;
+	    XStoreBuffer(tPtr->view->screen->display,
+			 &tPtr->text[count] , abs(tPtr->selection.count), 0);
         }
 	break;
 
      case ButtonPress:
+	if (tPtr->flags.pointerGrabbed) {
+	    tPtr->flags.pointerGrabbed = 0;
+	    XUngrabPointer(WMScreenDisplay(W_VIEW(tPtr)->screen), CurrentTime);
+	}
+
         move = 1;
         switch (tPtr->flags.alignment) {
             int textWidth;
@@ -1223,6 +1242,11 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 	break;
 
      case ButtonRelease:
+	if (tPtr->flags.pointerGrabbed) {
+	    tPtr->flags.pointerGrabbed = 0;
+	    XUngrabPointer(WMScreenDisplay(W_VIEW(tPtr)->screen), CurrentTime);
+	}
+
         move = 0;
         break;
     }

@@ -2,7 +2,7 @@
  * 
  *  Raster graphics library
  * 
- *  Copyright (c) 1997 Alfredo K. Kojima
+ *  Copyright (c) 1997, 1998, 1999 Alfredo K. Kojima
  * 
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -34,6 +34,10 @@
 
 #include "wraster.h"
 
+
+extern void _wraster_change_filter(int type);
+
+
 static Bool bestContext(Display *dpy, int screen_number, RContext *context);
 
 static RContextAttributes DEFAULT_CONTEXT_ATTRIBS = {
@@ -44,7 +48,8 @@ static RContextAttributes DEFAULT_CONTEXT_ATTRIBS = {
 	0,
 	0,
 	0,
-	True				   /* use_shared_memory */
+	True,				   /* use_shared_memory */
+	RMitchellFilter
 };
 
 
@@ -409,7 +414,9 @@ RCreateContext(Display *dpy, int screen_number, RContextAttributes *attribs)
 
     /* get configuration from environment variables */
     gatherconfig(context, screen_number);
-    
+
+    _wraster_change_filter(context->attribs->scaling_filter);
+
     if ((context->attribs->flags & RC_VisualID)) {
 	XVisualInfo *vinfo, templ;
 	int nret;
