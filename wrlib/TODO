@@ -2,4 +2,3 @@
 supports PseudoColor and TrueColor in some depths)
 - Gimp's xcf format?
 - add clipping code to RCombineArea()
-- remake and optimize converters

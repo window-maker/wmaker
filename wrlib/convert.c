@@ -29,50 +29,17 @@
 
 #include <assert.h>
 
+
 #ifdef BENCH
 #include "bench.h"
 #endif
 
-#include "wraster.h"
+#include "wrasterP.h"
 
 #ifdef XSHM
 extern Pixmap R_CreateXImageMappedPixmap(RContext *context, RXImage *ximage);
 
 #endif
-
-
-#ifdef ASM_X86
-extern void x86_PseudoColor_32_to_8(unsigned char *image,
-				 unsigned char *ximage, 
-				 char *err, char *nerr,
-				 short *ctable,
-				 int dr, int dg, int db,
-				 unsigned long *pixels,
-				 int cpc, 
-				 int width, int height,
-				 int bytesPerPixel,
-				 int line_offset);
-#endif /* ASM_X86 */
-
-#ifdef ASM_X86_MMX
-
-extern int x86_check_mmx();
-
-extern void x86_mmx_TrueColor_32_to_16(unsigned char *image, 
-				       unsigned short *ximage,
-				       short *err, short *nerr,
-				       short *rtable, short *gtable,
-				       short *btable,
-				       int dr, int dg, int db,
-				       unsigned int roffs,
-				       unsigned int goffs, 
-				       unsigned int boffs, 
-				       int width, int height, 
-				       int line_offset);
-
-
-
-#endif /* ASM_X86_MMX */
 
 
 
@@ -305,39 +272,7 @@ image2TrueColor(RContext *ctx, RImage *image)
 
 #ifdef DEBUG
         puts("true color dither");
-#endif
-
-#ifdef ASM_X86_MMX
-	if (ctx->depth == 16 && image->format == RRGBAFormat
-	    && x86_check_mmx()) {
-	    short *err;
-	    short *nerr;
-
-	    err = malloc(8*(image->width+3));
-	    nerr = malloc(8*(image->width+3));
-	    if (!err || !nerr) {
-		if (nerr)
-		    free(nerr);
-		RErrorCode = RERR_NOMEMORY;
-		RDestroyXImage(ctx, ximg);
-		return NULL;
-	    }
-	    memset(err, 0, 8*(image->width+3));
-	    memset(nerr, 0, 8*(image->width+3));
-
-	    x86_mmx_TrueColor_32_to_16(image->data, 
-				       (unsigned short*)ximg->image->data, 
-				       err+8, nerr+8,
-				       rtable, gtable, btable,
-				       dr, dg, db, 
-				       roffs, goffs, boffs,
-				       image->width, image->height,
-				       ximg->image->bytes_per_line - 2*image->width);
-
-	    free(err);
-	    free(nerr);
-	} else
-#endif /* ASM_X86_MMX */
+#endif	
 	{
 	    char *err;
 	    char *nerr;
@@ -526,20 +461,9 @@ image2PseudoColor(RContext *ctx, RImage *image)
 	memset(err, 0, 4*(image->width+3));
 	memset(nerr, 0, 4*(image->width+3));
 
-/*#ifdef ASM_X86*/
-#if 0
-	x86_PseudoColor_32_to_8(image->data, ximg->image->data,
-			     err+4, nerr+4,
-			     rtable,
-			     dr, dg, db, ctx->pixels, cpc,
-			     image->width, image->height,
-			     channels, 
-			     ximg->image->bytes_per_line - image->width);
-#else
 	convertPseudoColor_to_8(ximg, image, err+4, nerr+4,
 				rtable,	gtable,	btable,
 				dr, dg, db, ctx->pixels, cpc);
-#endif
 
 	free(err);
 	free(nerr);
@@ -843,6 +767,67 @@ image2Bitmap(RContext *ctx, RImage *image, int threshold)
 }
 
 
+#ifdef HAVE_HERMES
+
+static RXImage*
+hermesConvert(RContext *context, RImage *image)
+{
+    HermesFormat source;
+    HermesFormat dest;
+    RXImage *ximage;
+    
+    
+    ximage = RCreateXImage(context, context->depth, 
+			   image->width, image->height);
+    if (!ximage) {
+	return NULL;
+    }
+    
+    if (image->format == RRGBFormat) {
+	source.b = 0x00ffffff;
+	source.g = 0xff00ffff;
+	source.r = 0xffff00ff;
+	source.a = 0x00000000;	
+	source.bits = 24;
+    } else {
+	source.b = 0x00ffffff;
+	source.g = 0xff00ffff;
+	source.r = 0xffff00ff;
+	source.a = 0xff000000;
+	
+	source.bits = 32;
+    }
+
+    source.indexed = 0;
+    source.has_colorkey = 0;    
+
+    dest.r = context->visual->red_mask;
+    dest.g = context->visual->green_mask;
+    dest.b = context->visual->blue_mask;
+    dest.a = 0;
+    dest.bits = context->depth;
+    if (context->vclass == TrueColor)
+	dest.indexed = 0;
+    else
+	dest.indexed = 1;
+    dest.has_colorkey = 0;
+    
+    Hermes_ConverterRequest(context->hermes_data->converter, &source, &dest);
+    
+    Hermes_ConverterPalette(context->hermes_data->converter, 
+			    context->hermes_data->palette, 0);
+    
+    Hermes_ConverterCopy(context->hermes_data->converter,
+			 image->data, 0, 0, image->width, image->height,
+			 image->width * (image->format == RRGBFormat ? 3 : 4),
+			 ximage->image->data, 0, 0, 
+			 image->width, image->height,
+			 ximage->image->bytes_per_line);
+    
+    return ximage;
+}
+#endif /* HAVE_HERMES */
+
 
 int 
 RConvertImage(RContext *context, RImage *image, Pixmap *pixmap)
@@ -856,14 +841,17 @@ RConvertImage(RContext *context, RImage *image, Pixmap *pixmap)
     assert(image!=NULL);
     assert(pixmap!=NULL);
 
-    /* clear error message */    
-    if (context->vclass == TrueColor) {
-
+#ifdef HAVE_HERMES
+    ximg = hermesConvert(context, image);
+#else /* !HAVE_HERMES */    
+    /* clear error message */
+    switch (context->vclass) {
+     case TrueColor:
 	ximg = image2TrueColor(context, image);
-
-    } else if (context->vclass == PseudoColor 
-	       || context->vclass == StaticColor) {
-
+	break;
+	
+     case PseudoColor:
+     case StaticColor:
 #ifdef BENCH
 	cycle_bench(1);
 #endif
@@ -874,11 +862,15 @@ RConvertImage(RContext *context, RImage *image, Pixmap *pixmap)
 #ifdef BENCH
 	cycle_bench(0);
 #endif
-    } else if (context->vclass == GrayScale || context->vclass == StaticGray) {
+	break;
 
+     case GrayScale:
+     case StaticGray:
 	ximg = image2GrayScale(context, image);
-    }
-
+	break;
+    }    
+#endif /* !HAVE_HERMES */
+    
     if (!ximg) {
 	return False;
     }

@@ -45,7 +45,7 @@ main(int argc, char **argv)
 	RDestroyImage(tmp);
     }
      */
-#if 1
+#if 0
     if (argc > 2) {
 	img = RScaleImage(img, img->width*atof(argv[2]), 
 			  img->height*atof(argv[2]));
@@ -77,7 +77,7 @@ main(int argc, char **argv)
 	   
 
     win = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 10, 10, 
-			      400, 400, 0, 0, 0);
+			      img->width, img->height, 0, 0, 0);
     XSetWindowBackgroundPixmap(dpy, win, pix);
     XClearWindow(dpy, win);
     XMapRaised(dpy, win);

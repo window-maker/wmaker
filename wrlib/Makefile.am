@@ -20,6 +20,7 @@ libwraster_la_SOURCES = 	\
 	CrCmap.c	\
 	DelCmap.c	\
 	CmapAlloc.c	\
+	wrasterP.h	\
 	raster.c 	\
 	draw.c		\
 	color.c		\
@@ -28,7 +29,6 @@ libwraster_la_SOURCES = 	\
 	gradient.c 	\
 	xpixmap.c	\
 	convert.c 	\
-	x86_specific.c	\
 	context.c 	\
 	misc.c 		\
 	scale.c		\
@@ -42,18 +42,6 @@ libwraster_la_SOURCES = 	\
 	jpeg.c 		\
 	tiff.c		\
 	gif.c
-
-
-LTCOMPILE2=`echo $(LTCOMPILE) | sed -e s/-fomit-frame-pointer//`
-COMPILE2=`echo $(COMPILE) | sed -e s/-fomit-frame-pointer//`
-
-# cant compile asm stuff with optimizations
-x86_specific.lo: x86_specific.c
-	$(LTCOMPILE2) -O0 -c $<
-
-x86_specific.o: x86_specific.c
-	$(COMPILE2) -O0 -c $<
-
 
 
 
