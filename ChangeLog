@@ -97,6 +97,7 @@ Changes since version 0.80.2:
   (Peter Zijlstra <a.p.zijlstra@chello.nl>)
 - Icon arrangement that takes the new extended xinerama 'strut' into account
   (Peter Zijlstra <a.p.zijlstra@chello.nl>)
+- Fixed the 'KDE omnipresent' bug.
 
 
 Changes since version 0.80.1:

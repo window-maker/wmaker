@@ -629,7 +629,12 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     scrPtr->xftFontSetCache = WMCreateHashTable(WMStringPointerHashCallbacks);
 
 #ifdef XFT
+
+# ifdef XFT2
+    scrPtr->hasXftSupport = 1;
+# else
     scrPtr->hasXftSupport = XftDefaultHasRender(scrPtr->display);
+# endif
 
     scrPtr->xftdraw = XftDrawCreate(scrPtr->display, W_DRAWABLE(scrPtr),
                                     scrPtr->visual, scrPtr->colormap);

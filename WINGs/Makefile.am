@@ -110,7 +110,7 @@ libWUtil_a_SOURCES = 	\
 CPPFLAGS = @CPPFLAGS@ -DLOCALEDIR=\"$(NLSDIR)\"
 
 INCLUDES = -I$(top_srcdir)/WINGs/WINGs -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
-	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @HEADER_SEARCH_PATH@ -DDEBUG
+	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @XFTFLAGS@ @HEADER_SEARCH_PATH@ -DDEBUG
 
 
 wcolorpanel.o: wcolorpanel.c

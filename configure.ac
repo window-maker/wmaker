@@ -232,9 +232,14 @@ if test "$ac_cv_prog_gcc" = yes; then
 fi
 
 
+dnl pkg-config
+dnl ----------
+dnl AC_ARG_VAR(PKGCONFIG, [pkg-config command])
+AC_CHECK_PROG(PKGCONFIG, pkg-config, pkg-config) 
+
 
 dnl gettext
-dnl =======
+dnl -------
 
 
 dnl AM_GNU_GETTEXT
@@ -517,12 +522,28 @@ AC_ARG_ENABLE(xft,
 		xft=$enableval, xft=yes)
 
 if test "$xft" = yes; then
-	AC_CHECK_LIB(Xft, XftDrawCreate, [XFTLIBS="-lXft"
+	if test "x$PKGCONFIG" != x -a "`$PKGCONFIG xft; echo $?`" = 0; then
+		XFTCONFIG="$PKGCONFIG xft"
+		pkgconfig_xft=yes
+	else
+		AC_CHECK_PROG(XFTCONFIG, xft-config, xft-config)
+	fi
+	if test "x$XFTCONFIG" != x; then
+		XFTLIBS=`$XFTCONFIG --libs`
+		XFTFLAGS=`$XFTCONFIG --cflags`
+		AC_MSG_CHECKING([for the Xft2 library])
+		AC_MSG_RESULT([found])
+		AC_DEFINE(XFT2, 1, [define if you have Xft version 2 (set by configure)])
+	else
+		AC_CHECK_LIB(Xft, XftDrawCreate, [XFTLIBS="-lXft" XFTFLAGS=""],
+			xft=no, $XLFLAGS $XLIBS)
+	fi
+	if test "$xft" = yes; then
+		AC_SUBST(XFTFLAGS)
 		AC_SUBST(XFTLIBS)
-		AC_DEFINE(XFT, 1, [define if you want support for antialiased fonts (set by configure)])],
-		xft=no, $XLFLAGS $XLIBS)
+		AC_DEFINE(XFT, 1, [define if you want support for antialiased fonts (set by configure)])
+	fi
 fi
-
 
 dnl XINERAMA support
 dnl ================
