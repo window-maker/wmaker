@@ -280,7 +280,7 @@ chunkSelectionRect(Text *tPtr, Paragraph *para, MyTextItems item,
 
 
     if(type == 1 && item.chunk->type == ctText) {  /* partial coverage */
-        lm = 2+WMGetRulerMargin(tPtr->ruler, WRulerDocLeft);
+        lm = 2+WMGetRulerMargins(tPtr->ruler, WRulerDocLeft);
         /* even I am still confused, so don't ask please */
         if(		(item.x+j+lm >= tPtr->sRect.pos.x &&
                          item.x+j+lm <= tPtr->sRect.pos.x+tPtr->sRect.size.width)
@@ -571,8 +571,8 @@ putParagraphOnPixmap(Text *tPtr, Paragraph *para, Bool draw)
     if(!tPtr->view->flags.realized || !para) return 0;
 
     where.x = 0, where.y =0, nitems = 0;
-    m.left =  WMGetRulerMargin(tPtr->ruler, WRulerDocLeft);
-    m.right = WMGetRulerMargin(tPtr->ruler, WRulerRight) - m.left;
+    m.left =  WMGetRulerMargins(tPtr->ruler, WRulerDocLeft);
+    m.right = WMGetRulerMargins(tPtr->ruler, WRulerRight) - m.left;
     m.first = para->fmargin, m.body = para->bmargin;
 
     if(draw) {
@@ -669,9 +669,9 @@ calcParaExtents(Text *tPtr, Paragraph *para)
         para->bmargin = 0;
         para->rmargin = tPtr->visibleW;
     } else {
-        para->width = WMGetRulerMargin(tPtr->ruler, WRulerRight) -
-            WMIN(para->fmargin, para->bmargin)
-            - WMGetRulerOffset(tPtr->ruler);
+        para->width = WMGetRulerMargins(tPtr->ruler, WRulerRight) -
+            WMIN(para->fmargin, para->bmargin) -
+            WMGetRulerOffset(tPtr->ruler);
     }
 
     if(!para->chunks)
@@ -728,8 +728,8 @@ calcDocExtents(Text *tPtr)
     if(tPtr->monoFont) {
         tPtr->docWidth = tPtr->visibleW;
     } else {
-        tPtr->docWidth = WMGetRulerMargin(tPtr->ruler, WRulerRight) -
-            WMGetRulerMargin(tPtr->ruler, WRulerDocLeft);
+        tPtr->docWidth = WMGetRulerMargins(tPtr->ruler, WRulerRight) -
+            WMGetRulerMargins(tPtr->ruler, WRulerDocLeft);
     }
     tPtr->docHeight = 0;
     para = tPtr->paragraphs;
@@ -2382,7 +2382,7 @@ WMSetTextRulerMargin(WMText *tPtr, char which, short pixels)
 {
     if(!tPtr) return;
     if(tPtr->monoFont) return;
-    WMSetRulerMargin(tPtr->ruler, which, pixels);
+    WMSetRulerMargins(tPtr->ruler, which, pixels);
     WMRefreshText(tPtr, tPtr->vpos, tPtr->hpos);
 }
 
@@ -2392,7 +2392,7 @@ WMGetTextRulerMargin(WMText *tPtr, char which)
     if(!tPtr) return 0;
     if(tPtr->monoFont)
         return 0;
-    return WMGetRulerMargin(tPtr->ruler, which);
+    return WMGetRulerMargins(tPtr->ruler, which);
 }
 
 
