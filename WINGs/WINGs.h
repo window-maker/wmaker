@@ -284,7 +284,8 @@ enum {
     WC_ProgressIndicator = 15,
     WC_MenuView = 16,
     WC_Ruler = 17,
-    WC_Text = 18
+    WC_Text = 18,
+    WC_Box = 19
 };
 
 /* All widgets must start with the following structure
@@ -330,6 +331,7 @@ typedef struct W_SplitView WMSplitView;
 typedef struct W_TabView WMTabView;
 typedef struct W_Ruler WMRuler;
 typedef struct W_Text WMText;
+typedef struct W_Box WMBox;
 
 
 /* not widgets */
@@ -1633,6 +1635,18 @@ void WMSetTabViewItemView(WMTabViewItem *item, WMView *view);
 WMView *WMGetTabViewItemView(WMTabViewItem *item);
 
 void WMDestroyTabViewItem(WMTabViewItem *item);
+
+
+/* ....................................................................... */
+
+WMBox *WMCreateBox(WMWidget *parent);
+
+void WMSetBoxBorderWidth(WMBox *box, unsigned width);
+
+void WMAddBoxSubview(WMBox *bPtr, WMView *view, Bool expand, Bool fill,
+		     int minSize, int maxSize, int space);
+
+void WMSetBoxHorizontal(WMBox *box, Bool flag);
 
 /* ....................................................................... */
 

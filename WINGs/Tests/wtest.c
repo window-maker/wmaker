@@ -115,6 +115,40 @@ testFrame(WMScreen *scr)
 }
 
 
+void
+testBox(WMScreen *scr)
+{
+    WMWindow *win;
+    WMBox *box;
+    WMButton *btn;
+    int i;
+
+    windowCount++;
+
+    win = WMCreateWindow(scr, "testBox");
+    WMSetWindowTitle(win, "Box");
+    WMSetWindowCloseAction(win, closeAction, NULL);
+    WMResizeWidget(win, 400, 300);
+
+    box = WMCreateBox(win);
+    WMMoveWidget(box, 50, 50);
+    WMResizeWidget(box, 300, 200);
+//    WMSetBoxHorizontal(box, True);
+    for (i = 0; i < 4; i++) {
+	btn = WMCreateCommandButton(box);
+	WMSetButtonText(btn, "bla");
+	WMMapWidget(btn);
+	WMAddBoxSubview(box, WMWidgetView(btn), i&1, True, 20, 0, 5);
+    }
+    
+    WMRealizeWidget(win);
+    WMMapSubwidgets(win);
+    WMMapWidget(win);
+
+}
+
+
+
 static void
 singleClick(WMWidget *self, void *data)
 {
@@ -1204,9 +1238,12 @@ main(int argc, char **argv)
      * Put the testSomething() function you want to test here.
      */
 
+    testBox(scr);
+#if 0    
     testList(scr);
 
-#if 0
+    testProgressIndicator(scr);
+
     testColorWell(scr);
 
     testTextField(scr);
@@ -1217,7 +1254,6 @@ main(int argc, char **argv)
     testFontPanel(scr);
 
     testScrollView(scr);
-
     testButton(scr);
 
     testFrame(scr);
@@ -1230,7 +1266,6 @@ main(int argc, char **argv)
     testSplitView(scr);
 
     testGradientButtons(scr);
-    testProgressIndicator(scr);
 
 
     testOpenFilePanel(scr);
