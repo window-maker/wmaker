@@ -40,8 +40,13 @@
 #include "../src/config.h"
 
 #ifdef XINERAMA
-#include <X11/extensions/Xinerama.h>
+# ifdef SOLARIS_XINERAMA /* sucks */
+#  include <X11/extensions/xinerama.h>
+# else
+#  include <X11/extensions/Xinerama.h>
+# endif
 #endif
+
 
 #ifdef HAVE_DLFCN_H
 #include <dlfcn.h>
@@ -53,7 +58,13 @@
 #include <wraster.h>
 
 
-#define PROG_VERSION	"wmsetbg (Window Maker) 2.7"
+typedef struct {
+    WMRect *screens;
+    int count;                 /* screen count, 0 = inactive */
+} WXineramaInfo;
+
+
+#define PROG_VERSION	"wmsetbg (Window Maker) 2.8"
 
 
 #define WORKSPACE_COUNT (MAX_WORKSPACES+1)
@@ -67,10 +78,8 @@ int scrWidth;
 int scrHeight;
 int scrX, scrY;
 
-#ifdef XINERAMA
-XineramaScreenInfo *xine_screens;
-int xine_count;
-#endif
+
+WXineramaInfo xineInfo;
 
 Bool smooth = False;
 
@@ -95,6 +104,54 @@ typedef struct BackgroundTexture {
     int height;
 } BackgroundTexture;
 
+
+
+void
+initXinerama()
+{
+    xineInfo.screens = NULL;
+    xineInfo.count = 0;
+#ifdef XINERAMA
+# ifdef SOLARIS_XINERAMA
+    if (XineramaGetState(dpy, scr)) {
+        XRectangle head[MAXFRAMEBUFFERS];
+        unsigned char hints[MAXFRAMEBUFFERS];
+        int i;
+
+        if (XineramaGetInfo(dpy, scr, head, hints, 
+                            &xineInfo.count)) {
+
+            xineInfo.screens = wmalloc(sizeof(WMRect)*(xineInfo.count+1));
+        
+            for (i=0; i<xineInfo.count; i++) {
+                xineInfo.screens[i].pos.x = head[i].x;
+                xineInfo.screens[i].pos.y = head[i].y;
+                xineInfo.screens[i].size.width = head[i].width;
+                xineInfo.screens[i].size.height = head[i].height;
+            }
+        }
+    }
+# else /* !SOLARIS_XINERAMA */
+    if (XineramaIsActive(dpy)) {
+        XineramaInfo *xine_screens;
+        WXineramaInfo *info = &scr->xine_info;
+        int i;
+        
+        xine_screens = XineramaQueryScreens(dpy, &xineInfo.count);
+
+        xineInfo.screens = wmalloc(sizeof(WMRect)*(xineInfo.count+1));
+        
+        for (i=0; i<xineInfo.count; i++) {
+            xineInfo.screens[i].pos.x = xineInfo.screens[i].x_org;
+            xineInfo.screens[i].pos.y = xineInfo.screens[i].y_org;
+            xineInfo.screens[i].size.width = xineInfo.screens[i].width;
+            xineInfo.screens[i].size.height = xineInfo.screens[i].height;
+        }
+        XFree(xine_screens);
+    }
+# endif /* !SOLARIS_XINERAMA */
+#endif /* XINERAMA */
+}
 
 
 RImage*
@@ -510,12 +567,12 @@ parseTexture(RContext *rc, char *text)
 		texture->height = scrHeight;
 
 #ifdef XINERAMA
-		if (xine_count) {
+		if (xineInfo.count) {
                     int i;
-		    for (i=0; i<xine_count; ++i) {
+		    for (i=0; i<xineInfo.count; ++i) {
                         applyImage(rc, texture, image, type[0],
-                                   xine_screens[i].x_org, xine_screens[i].y_org,
-                                   xine_screens[i].width, xine_screens[i].height);
+                                   xineInfo.screens[i].pos.x, xineInfo.screens[i].pos.y,
+                                   xineInfo.screens[i].size.width, xineInfo.screens[i].size.height);
 		    }
 		} else {
 		    applyImage(rc, texture, image, type[0], 0, 0, scrWidth, scrHeight);
@@ -1451,9 +1508,7 @@ main(int argc, char **argv)
     scrHeight = HeightOfScreen(DefaultScreenOfDisplay(dpy));
     scrX = scrY = 0;
 
-#ifdef XINERAMA
-    xine_screens = XineramaQueryScreens(dpy, &xine_count);
-#endif
+    initXinerama();
 
 
     if (!obey_user && DefaultDepth(dpy, scr) <= 8)

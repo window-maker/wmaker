@@ -534,13 +534,27 @@ AC_ARG_ENABLE(xinerama,
 if test "$xinerama" = yes; then
 	AC_CHECK_LIB(Xinerama, XineramaQueryScreens, 
                 [XLIBS="-lXinerama $XLIBS"
-		AC_DEFINE(XINERAMA, 1, [define if you want support for the XINERAMA extension (set by configure)])
-                xinerama=yes],
-		xinerama=no, $XLFLAGS $XLIBS)
+                xfxine=yes],
+		xfxine=no, $XLFLAGS $XLIBS)
 
 	AC_CHECK_LIB(Xext, XineramaGetInfo,
-                [AC_DEFINE(SOLARIS_XINERAMA, 1, [define if you want support for the XINERAMA extension and are in Solaris (set by configure)])
-                ], [], $XLFLAGS $XLIBS)
+                [sunxine=yes
+                ], sunxine=no, $XLFLAGS $XLIBS)
+
+	if test "$xfxine" = yes; then
+		xine=1
+	fi
+
+	if test "$sunxine" = yes; then
+	    xine=1
+	    AC_DEFINE(SOLARIS_XINERAMA, 1, 
+		[define if you want support for the XINERAMA extension and are in Solaris (set by configure)])
+	fi
+
+	if test "$xine" = 1; then
+	    AC_DEFINE(XINERAMA, 1, 
+		[define if you want support for the XINERAMA extension (set by configure)])
+	fi
 fi
 
 

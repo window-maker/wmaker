@@ -33,7 +33,7 @@
 
 #ifdef XINERAMA
 # ifdef SOLARIS_XINERAMA /* sucks */
-#  define <X11/extensions/xinerama.h>
+#  include <X11/extensions/xinerama.h>
 # else
 #  include <X11/extensions/Xinerama.h>
 # endif
@@ -51,11 +51,11 @@ wInitXinerama(WScreen *scr)
 # ifdef SOLARIS_XINERAMA
     if (XineramaGetState(dpy, scr->screen)) {
         WXineramaInfo *info = &scr->xine_info;
-        XRectangle header[MAXFRAMEBUFFERS];
+        XRectangle head[MAXFRAMEBUFFERS];
         unsigned char hints[MAXFRAMEBUFFERS];
         int i;
 
-        if (XineramaGetInfo(dpy, scr->screen, header, hints, 
+        if (XineramaGetInfo(dpy, scr->screen, head, hints, 
                             &info->count)) {
 
             info->screens = wmalloc(sizeof(WMRect)*(info->count+1));
