@@ -1,0 +1,72 @@
+From: Tomoyasu Kihara ( habu@kmc.gr.jp )
+
+This patch is improvement of keyboard operation.
+
+- reisze/move a window diagonally. (This is very suitable for Roguelike Gamer ;))
+- decide window place/size by not only enter key but space key.
+
+---8<---cut here------8<---cut here------8<---cut here---
+diff -ur WindowMaker-0.70.0/src/moveres.c WindowMaker-0.70.0-yubn/src/moveres.c
+--- WindowMaker-0.70.0/src/moveres.c	Tue Jul 24 18:51:06 2001
++++ WindowMaker-0.70.0-yubn/src/moveres.c	Wed Dec 19 03:20:53 2001
+@@ -1322,6 +1322,7 @@
+                     keysym = XLookupKeysym(&event.xkey, 0);
+                     switch (keysym) {
+                         case XK_Return:
++                        case XK_space:
+                             done=2;
+                             break;
+                         case XK_Escape:
+@@ -1380,6 +1381,50 @@
+                                 moment = RIGHT;
+                             }
+                             else off_x+=kspeed;
++                            break;
++                        case XK_y:
++                            if (ctrlmode) {
++                                if (moment != (UP|LEFT))
++                                    h = wh, w = ww;
++                                h -= kspeed, w -= kspeed;
++                                if (h < 1) h = 1;
++                                if (w < 1) w = 1;
++                                moment = UP|LEFT;
++                            }
++                            else
++                                off_x -= kspeed, off_y -= kspeed;
++                            break;
++                        case XK_u:
++                            if (ctrlmode) {
++                                if (moment != (UP|RIGHT))
++                                    h = wh, w = ww;
++                                h -= kspeed, w += kspeed;
++                                if (h < 1) h = 1;
++                                moment = UP|RIGHT;
++                            }
++                            else
++                                off_x += kspeed, off_y -= kspeed;
++                            break;
++                        case XK_b:
++                            if (ctrlmode) {
++                                if (moment != (DOWN|LEFT))
++                                    h = wh, w = ww;
++                                h += kspeed, w -= kspeed;
++                                if (w < 1) w = 1;
++                                moment = DOWN|LEFT;
++                            }
++                            else
++                                off_x -= kspeed, off_y += kspeed;
++                            break;
++                        case XK_n:
++                            if (ctrlmode) {
++                                if (moment != (DOWN|RIGHT))
++                                    h = wh, w = ww;
++                                h += kspeed, w += kspeed;
++                                moment = DOWN|RIGHT;
++                            }
++                            else
++                                off_x += kspeed, off_y += kspeed;
+                             break;
+                     }
+ 
+
+
