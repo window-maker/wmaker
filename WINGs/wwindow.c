@@ -288,6 +288,8 @@ setMiniwindow(WMWindow *win, RImage *image)
                     PropModeReplace,
                     (unsigned char *)data, 
                     (image->width * image->height + 2) * sizeof(CARD32));
+    
+    free(data);
 }
 
 
