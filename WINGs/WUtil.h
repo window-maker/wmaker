@@ -142,6 +142,9 @@ typedef void (waborthandler)(int);
 waborthandler *wsetabort(waborthandler*);
 
 
+/* don't free the returned string */
+char *wstrerror(int errnum);
+
 void wfatal(const char *msg, ...);
 void wwarning(const char *msg, ...);
 void wsyserror(const char *msg, ...);
@@ -156,6 +159,7 @@ char *wexpandpath(char *path);
 
 /* don't free the returned string */
 char *wgethomedir();
+
 void *wmalloc(size_t size);
 void *wrealloc(void *ptr, size_t newsize);
 void wfree(void *ptr);

@@ -27,29 +27,38 @@
 #include <string.h>
 #include <errno.h>
 
-#if !defined(HAVE_STRERROR) && defined(BSD)
-#define HAVE_STRERROR
-char *
-strerror(int errnum)
-{
-  extern int errno, sys_nerr;
-#ifndef __DECC
-  extern char *sys_errlist[];
-#endif
-  static char buf[] = "Unknown error 12345678901234567890";
-
-  if (errno < sys_nerr)
-    return sys_errlist[errnum];
-
-  sprintf (buf, "Unknown error %d", errnum);
-  return buf;
-}
-#endif
-
-
 extern char *_WINGS_progname;
 
 #define MAXLINE	1024
+
+
+/*********************************************************************
+ * Returns the system error message associated with error code 'errnum'
+ *********************************************************************/
+char*
+wstrerror(int errnum)
+{
+#if defined(HAVE_STRERROR)
+    return strerror(errnum);
+#elif !defined(HAVE_STRERROR) && defined(BSD)
+    extern int errno, sys_nerr;
+#  ifndef __DECC
+    extern char *sys_errlist[];
+#  endif
+    static char buf[] = "Unknown error number 12345678901234567890";
+
+    if (errno < sys_nerr)
+        return sys_errlist[errnum];
+
+    sprintf (buf, "Unknown error number %d", errnum);
+    return buf;
+#else /* no strerror() and no sys_errlist[] */
+    static char buf[] = "Error number 12345678901234567890";
+
+    sprintf(buf, "Error number %d", errnum);
+    return buf;
+#endif
+}
 
 
 /**************************************************************************
@@ -117,24 +126,19 @@ wsyserror(const char *msg, ...)
 {
     va_list args;
     char buf[MAXLINE];
-#ifdef HAVE_STRERROR
     int error=errno;
-#endif
+
     va_start(args, msg);
     vsprintf(buf, msg, args);
     fflush(stdout);
     fputs(_WINGS_progname, stderr);
     fputs(" error: ", stderr);
     strcat(buf, ": ");
-#ifdef HAVE_STRERROR
-    strcat(buf, strerror(error));
+    strcat(buf, wstrerror(error));
     strcat(buf,"\n");
     fputs(buf, stderr);
     fflush(stderr);
     fflush(stdout);
-#else
-    perror(buf);
-#endif
     va_end(args);
 }
 
