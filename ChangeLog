@@ -1,7 +1,6 @@
 - Fixed some more bash specific constructs in wsetfont.
     (Marcelo E. Magallon <marcelo.magallon@bigfoot.com>)
 
-
 Changes since version 0.65.0:
 .............................
 
