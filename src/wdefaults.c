@@ -202,12 +202,15 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
 
 
     if (class && instance) {
-      char *buffer = NULL;
-	  buffer = wmalloc(strlen(class)+strlen(instance)+4);
-      key1 = WMCreatePLString(strcat(strcat(strcpy(buffer,instance),"."),class));
-	  wfree(buffer);
-    } else
-      key1 = NULL;
+        char *buffer;
+
+        buffer = wmalloc(strlen(class)+strlen(instance)+2);
+        sprintf(buffer, "%s.%s", instance, class);
+        key1 = WMCreatePLString(buffer);
+        wfree(buffer);
+    } else {
+        key1 = NULL;
+    }
 
     if (instance)
       key2 = WMCreatePLString(instance);
@@ -342,13 +345,15 @@ get_generic_value(WScreen *scr, char *instance, char *class, WMPropList *option,
     WMPLSetCaseSensitive(True);
 
     if (class && instance) {
-	char *buffer = NULL;
-	buffer = wmalloc(strlen(class)+strlen(instance)+4);
-	key = WMCreatePLString(strcat(strcat(strcpy(buffer,instance),"."),class));
+        char *buffer;
+
+        buffer = wmalloc(strlen(class)+strlen(instance)+2);
+        sprintf(buffer, "%s.%s", instance, class);
+	key = WMCreatePLString(buffer);
+	wfree(buffer);
 
 	dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
 	WMReleasePropList(key);
-	wfree(buffer);
 
 	if (dict) {
 	    value = WMGetFromPLDictionary(dict, option);
@@ -508,7 +513,7 @@ wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file)
     if (instance && class) {
     	char *buffer;
         buffer = wmalloc(strlen(instance) + strlen(class) + 2);
-        strcat(strcat(strcpy(buffer, instance), "."), class);
+        sprintf(buffer, "%s.%s", instance, class);
         key = WMCreatePLString(buffer);
         wfree(buffer);
     } else if (instance) {

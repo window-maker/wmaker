@@ -525,10 +525,10 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     else if (WMGetButtonSelected(panel->clsRb) != 0)
         key = WMCreatePLString(wwin->wm_class);
     else if (WMGetButtonSelected(panel->bothRb) != 0) {
-		char *buffer;
+        char *buffer;
 
-		buffer = wmalloc(strlen(wwin->wm_instance)+strlen(wwin->wm_class)+4);
-        strcat(strcat(strcpy(buffer, wwin->wm_instance), "."), wwin->wm_class);
+        buffer = wmalloc(strlen(wwin->wm_instance)+strlen(wwin->wm_class)+2);
+        sprintf(buffer, "%s.%s", wwin->wm_instance, wwin->wm_class);
         key = WMCreatePLString(buffer);
         wfree(buffer);
     } else if (WMGetButtonSelected(panel->defaultRb) != 0) {
@@ -682,25 +682,22 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 
 	wapp = wApplicationOf(panel->inspected->main_window);
 	if (wapp) {
-	    char *iconFile;
-		char *buffer;
+            char *instance = wapp->main_window_desc->wm_instance;
+            char *class = wapp->main_window_desc->wm_class;
+	    char *iconFile, *buffer;
 
 	    appDic = WMCreatePLDictionary(NULL, NULL, NULL);
 
-	    assert(wapp->main_window_desc->wm_instance!=NULL);
-	    assert(wapp->main_window_desc->wm_class!=NULL);
+	    assert(instance!=NULL);
+	    assert(class!=NULL);
 
-		buffer = wmalloc(strlen(wapp->main_window_desc->wm_instance)
-						 +strlen(wapp->main_window_desc->wm_class)+4);
-	    strcat(strcpy(buffer, wapp->main_window_desc->wm_instance), ".");
-	    strcat(buffer, wapp->main_window_desc->wm_class);
+            buffer = wmalloc(strlen(instance)+strlen(class)+2);
+            sprintf(buffer, "%s.%s", instance, class);
 	    key = WMCreatePLString(buffer);
             wfree(buffer);
 
-	    iconFile = wDefaultGetIconFile(wwin->screen_ptr, 
-					   wapp->main_window_desc->wm_instance,
-					   wapp->main_window_desc->wm_class,
-					   False);
+            iconFile = wDefaultGetIconFile(wwin->screen_ptr,
+                                           instance, class, False);
 
 	    if (iconFile && iconFile[0]!=0) {
 		value = WMCreatePLString(iconFile);
