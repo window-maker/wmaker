@@ -46,14 +46,14 @@ load_graymap(char *file_name, FILE *file, int w, int h, int max, int raw)
 	    int x, y;
 	    char *buf, *ptr;
 	    
-	    buf = malloc(w);
+	    buf = malloc(w+1);
 	    if (!buf) {
 		return NULL;
 	    }
 	    
 	    ptr = image->data;
 	    for (y = 0; y < h; y++) {
-		if (!fgets(buf, w, file)) {
+                if (!fread(buf, w, 1, file)) {
 		    free(buf);
 		    goto short_file;
 		}
