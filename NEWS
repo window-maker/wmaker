@@ -52,6 +52,25 @@ Default configuration for user specific menus installed in
 and ~/GNUstep/Library/WindowMaker/UserMenus.
 
 
+Omnipresent icons in Clip
+-------------------------
+
+Added ability to set icons docked in Clip to be omnipresent on all workspaces.
+To set/reset this flag use the "Settings Panel" for that specific icon (right
+click on docked icon, and select "Settings").
+An icon can be set to omnipresent, only if its position is free in all the
+workspaces, else you will be informed of the problem and asked to fix it first.
+Also when dragging an omnipresent icon around in Clip, all the icons docked in
+all the workspaces are shown while the dragging is done, to let one easily see
+where are free slots in all workspaces.
+
+Now before you load your gun to start a flame war because this is against your
+principles you love so much, please sit down and think that this is a feature,
+which, if you don't use, the old behaviour of the Clip is totally preserved.
+It just adds some extra capabilities to the Clip for people who think that this
+is useful.
+
+
 
 --- 0.53.0
 

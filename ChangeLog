@@ -31,8 +31,10 @@ Changes since version 0.53.0:
 						seb_bauer@bigfoot.com)
 - added GNUstep info panel (still needs beautification..)
 - made the paths selector in WPrefs.app use the open file panel
+- fixed a mem leak in superfluous mode caused by the ghost icon.
+- added possibility to set omnipresent icons in Clip. See NEWS.
 
- 
+
 Changes since version 0.52.0:
 .............................
 

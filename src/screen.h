@@ -62,6 +62,11 @@ typedef struct WReservedArea {
 #endif
 
 
+typedef struct WAppIconChain {
+    struct WAppIcon *aicon;
+    struct WAppIconChain *next;
+} WAppIconChain;
+
 
 /*
  * each WScreen is saved into a context associated with it's root window
@@ -230,6 +235,7 @@ typedef struct _WScreen {
     struct WMenu *clip_options;	       /* Options for Clip */
     struct WMenu *clip_ws_menu;	       /* workspace menu for clip */
     struct WDock *last_dock;
+    WAppIconChain *global_icons;       /* for omnipresent icons chain in clip */
     
     Window clip_balloon;	       /* window for workspace name */
     

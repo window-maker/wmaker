@@ -869,7 +869,7 @@ wWorkspaceRestoreState(WScreen *scr)
 {
     proplist_t parr, pstr, wks_state;
     proplist_t clip_state;
-    int i, wscount;
+    int i, j, wscount;
 
     make_keys();
 
@@ -899,9 +899,24 @@ wWorkspaceRestoreState(WScreen *scr)
             if (scr->workspaces[i]->clip)
                 wDockDestroy(scr->workspaces[i]->clip);
             scr->workspaces[i]->clip = wDockRestoreState(scr, clip_state,
-                                                          WM_CLIP);
+                                                         WM_CLIP);
             if (i>0)
                 wDockHideIcons(scr->workspaces[i]->clip);
+
+            /* We set the global icons here, because scr->workspaces[i]->clip
+             * was not valid in wDockRestoreState().
+             * There we only set icon->omnipresent to know which icons we
+             * need to set here.
+             */
+            for (j=0; j<scr->workspaces[i]->clip->max_icons; j++) {
+                WAppIcon *aicon = scr->workspaces[i]->clip->icon_array[j];
+
+                if (aicon && aicon->omnipresent) {
+                    aicon->omnipresent = 0;
+                    wClipMakeIconOmnipresent(aicon, True);
+                    XMapWindow(dpy, aicon->icon->core->window);
+                }
+            }
         }
 #ifdef KWM_HINTS
 	wKWMUpdateWorkspaceNameHint(scr, i);

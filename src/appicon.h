@@ -76,6 +76,7 @@ typedef struct WAppIcon {
     
     unsigned int gnustep_app:1;	       /* if this is a GNUstep application */
     unsigned int docked:1;
+    unsigned int omnipresent:1;        /* If omnipresent when docked in clip */
     unsigned int attracted:1;	       /* If it was attracted by the clip */
     unsigned int launching:1;
     unsigned int running:1;	       /* application is already running */

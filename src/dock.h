@@ -109,4 +109,10 @@ void wClipUpdateForWorkspaceChange(WScreen *scr, int workspace);
 
 RImage *wClipMakeTile(WScreen *scr, RImage *normalTile);
 
+#define WO_FAILED          0
+#define WO_NOT_APPLICABLE  1
+#define WO_SUCCESS         2
+
+int wClipMakeIconOmnipresent(WAppIcon *aicon, int omnipresent);
+
 #endif
