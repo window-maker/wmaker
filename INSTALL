@@ -7,7 +7,9 @@ SUPPORTED PLATFORMS
 ===================
 (ie: I've heard someone has compiled it on...)
 
-- Intel GNU/Linux Slackware 3.5 (primary platform)
+- Intel GNU/Linux Conectiva 5.9 (beta)
+- Intel GNU/Linux Slackware
+- Intel GNU/Linux Debian
 - Intel GNU/Linux other distributions
 - Sparc GNU/Linux RedHat 5.1
 - PowerPC GNU/MkLinux
@@ -34,11 +36,9 @@ SUPPORTED PLATFORMS
 - SunOS 4.x
 - PowerMac / Power MachTen 4.1.1 over MacOS
 - Amiga 3000 running RedHat Linux 5.1 (Rawhide)
+- IBM S/390 running Linux
 
 Patches to make it work on other platforms are welcome. 
-
-If the latest version doesn't work for you, try 0.19.3, 
-which is known to be pretty stable on many platforms.
 
 
 REQUIREMENTS:
@@ -210,8 +210,45 @@ PLATFORM SPECIFIC NOTES:
 ========================
 
 - DEC/Alpha machines
-	You might need to pass the --disable-shm flag to configure, like
-	./configure --disable-shm
+
+#>>>>>>>>>>>
+From: Anton Ivanov <aivanov@eu.level3.net>
+To: Marcelo E. Magallon <mmagallo@debian.org>
+Subject: Re: Is the WindowMaker package working ok on Alpha?
+
+> Hi,
+> 
+>  I was reading some docs on the WindowMaker tarball, and found this:
+> 
+>  | - DEC/Alpha machines
+>  |         You might need to pass the --disable-shm flag to configure,
+>  |         like ./configure --disable-shm
+> 
+>  is anyone having problems with WindowMaker on Alpha?  Can someone
+>  please test this?  Should the flag be passed when building on Alpha?
+
+Disclaimer: alphas under my command have never run X and are least likely to 
+suddenly start running it anytime soon.
+
+        Alpha used to have some ridiculously low amount of shared memory
+configured. 
+So quite a lot of apps used to barf. Namely - cdrecord, mysql server, etc.
+
+        Check where is yours at the moment and raise it to a more appropriate
+value by either catting to the appropriate /proc entry or changing the
+/usr/src/linux/include/asm/shmparam.h.
+
+        Otherwise the shared memory on alpha should be fully functional and I
+see no reason to disable it. Mine are bumped up to 32 or more on most
+machines.
+
+        And If I recall correctly the comments in that file are actually
+wrong. Value is not bytes, but in machine size word. For alpha *8.
+
+        As I said - I do not run X on them so all #include "stdisclaimer.h"
+apply.
+#<<<<<<<<<<<<
+
 
 - SCO Unix - run configure like
 	CFLAGS="-belf -DANSICPP" ./configure 
@@ -517,7 +554,7 @@ for other languages.
 
 2 - Additionally, if your language uses multi-byte characters, such
 as Japanese or Korean, you must set the MultiByteText option to YES
-in ~/GNUstep/Defaults/WMGLOBAL and ~/GNUstep/Defaults/WindowMaker
+in ~/GNUstep/Defaults/WMGLOBAL 
 
 3 - Configure, build and install Window Maker normally.
 
