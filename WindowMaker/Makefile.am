@@ -37,6 +37,7 @@ prefsdata_DATA =\
 	plmenu.fr\
 	plmenu.hr\
 	plmenu.zh_CN\
+	plmenu.it\
 	wmmacros\
 	xtree.dat
 

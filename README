@@ -120,6 +120,10 @@ way (not that the normal way is difficult, but...).
 
 * TODO: plans for the future
 
+* contrib/ has some contributed patches that are not supported by Window Maker
+  because they conflict with design filosophies of the developers or some 
+  other reason.
+
 * util/ has various utility programs.
 
 * WPrefs.app/ is the configuration program. 

@@ -32,6 +32,7 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <string.h>
+#include <time.h>
 
 #include "WindowMaker.h"
 #include "wcore.h"
@@ -228,6 +229,7 @@ typedef struct WorkspaceNameData {
     int count;
     RImage *back;
     RImage *text;
+    time_t timeout;
 } WorkspaceNameData;
 
 
@@ -237,7 +239,8 @@ hideWorkpaceName(void *data)
 {
     WScreen *scr = (WScreen*)data;
 
-    if (!scr->workspace_name_data || scr->workspace_name_data->count == 0) {
+    if (!scr->workspace_name_data || scr->workspace_name_data->count == 0
+	|| time(NULL) > scr->workspace_name_data->timeout) {
 	XUnmapWindow(dpy, scr->workspace_name);
 
 	if (scr->workspace_name_data) {
@@ -406,7 +409,12 @@ showWorkspaceName(WScreen *scr, int workspace)
 
     data->count = 10;
 
+    /* set a 2 second timeout for the effect */
+    data->timeout = time(NULL) + 1 +
+	(WORKSPACE_NAME_DELAY + WORKSPACE_NAME_FADE_DELAY*data->count)/1000;
+
     scr->workspace_name_data = data;
+
 
     return;
 
@@ -437,9 +445,9 @@ wWorkspaceChange(WScreen *scr, int workspace)
 
     if (workspace != scr->current_workspace) {
         wWorkspaceForceChange(scr, workspace);
-    } else {
+    } /*else {
 	showWorkspaceName(scr, workspace);
-    }
+    }*/
 }
 
 
@@ -494,7 +502,7 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 
     if ((tmp = scr->focused_window)!= NULL) {
 	if (IS_OMNIPRESENT(tmp) || tmp->flags.changing_workspace)
-	    foc = tmp;
+	    foc2 = tmp; /* for gnome stuff.. used to be foc = tmp */
 
 	while (tmp) {
 	    if (tmp->frame->workspace!=workspace && !tmp->flags.selected) {

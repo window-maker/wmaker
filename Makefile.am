@@ -1,6 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = wrlib WINGs src util po WindowMaker wmlib test WPrefs.app doc
+SUBDIRS = wrlib WINGs src util po WindowMaker wmlib test WPrefs.app doc\
+	contrib
 
 EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N MIRRORS COPYING.OPL \
 	Install acconfig.h\

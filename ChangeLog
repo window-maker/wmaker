@@ -23,7 +23,10 @@ Changes since version 0.53.0:
 - fixed crash bug in Paths section of WPrefs
 - optimized image rendering for 15/16 bpp
 - user menus' paths were changed. See NEWS.
-
+- added a timeout for the workspace name fading
+- HP-UX compiler compatibility workarounds (Sebastien Bauer
+						seb_bauer@bigfoot.com)
+- fixed crash with attributes panel
 
 Changes since version 0.52.0:
 .............................

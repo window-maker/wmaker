@@ -28,6 +28,7 @@ typedef struct W_Balloon {
     struct {
 	WMAlignment alignment:2;
 	unsigned enabled:1;
+
 	unsigned noDelay:1;
     } flags;
 } Balloon;

@@ -806,11 +806,11 @@ revertSettings(WMButton *button, InspectorPanel *panel)
     char *wm_class = NULL;
     int workspace, level;
 
-    if (WMGetButtonSelected(panel->instRb) != 0)
+    if (panel->instRb && WMGetButtonSelected(panel->instRb) != 0)
         wm_instance = wwin->wm_instance;
-    else if (WMGetButtonSelected(panel->clsRb) != 0)
+    else if (panel->clsRb && WMGetButtonSelected(panel->clsRb) != 0)
         wm_class = wwin->wm_class;
-    else if (WMGetButtonSelected(panel->bothRb) != 0) {
+    else if (panel->bothRb && WMGetButtonSelected(panel->bothRb) != 0) {
         wm_instance = wwin->wm_instance;
         wm_class = wwin->wm_class;
     }

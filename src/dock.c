@@ -3550,7 +3550,7 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 #endif
     }
 
-    wRaiseFrame(icon->core);
+/*    wRaiseFrame(icon->core);*/
 
     if (!wPreferences.flags.noclip)
         clip = scr->workspaces[scr->current_workspace]->clip;
