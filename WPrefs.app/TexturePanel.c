@@ -926,15 +926,17 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 	WMSetTextFieldText(panel->imageT,
 			   PLGetString(PLGetArrayElement(texture, 1)));
 	
-	if (panel->imageFile)
-	    free(panel->imageFile);
-	panel->imageFile = wfindfileinarray(panel->pathList,
-			    PLGetString(PLGetArrayElement(texture, 1)));
+    if (panel->imageFile)
+        free(panel->imageFile);
+    if (panel->imageFile = wfindfileinarray(panel->pathList,
+                PLGetString(PLGetArrayElement(texture, 1)))) {
 
-	panel->image = RLoadImage(WMScreenRContext(scr), panel->imageFile, 0);
-	updateTGradImage(panel);
-	
-	updateSGradButtons(panel);
+        panel->image = RLoadImage(WMScreenRContext(scr), panel->imageFile, 0);
+        updateTGradImage(panel);
+
+        updateSGradButtons(panel);
+    } else wwarning("could not load file '%s': %s", panel->imageFile,
+		     RMessageForError(RErrorCode));
 
     /*...............................................*/
     } else if (strcasecmp(type, "mhgradient")==0
