@@ -3150,6 +3150,7 @@ WMCreateTextForDocumentType(WMWidget *parent, WMAction *parser, WMAction *writer
     gcv.foreground = W_PIXEL(scr->gray);
     gcv.background = W_PIXEL(scr->darkGray);
     gcv.fill_style = FillStippled;
+    /* why not use scr->stipple here? */
     gcv.stipple = XCreateBitmapFromData(dpy, W_DRAWABLE(scr),
         STIPPLE_BITS, STIPPLE_WIDTH, STIPPLE_HEIGHT);
     tPtr->stippledGC = XCreateGC(dpy, W_DRAWABLE(scr),

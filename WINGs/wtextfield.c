@@ -378,6 +378,15 @@ WMSetTextFieldDelegate(WMTextField *tPtr, WMTextFieldDelegate *delegate)
 }
 
 
+WMTextFieldDelegate*
+WMGetTextFieldDelegate(WMTextField *tPtr)
+{
+    CHECK_CLASS(tPtr, WC_TextField);
+
+    return tPtr->delegate;
+}
+
+
 void
 WMInsertTextFieldText(WMTextField *tPtr, char *text, int position)
 {

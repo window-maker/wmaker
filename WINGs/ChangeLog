@@ -19,6 +19,7 @@ Changes since wmaker 0.80.0:
   WMDefaultSystemFont(WMScreen *scr) and WMDefaultBoldSystemFont(WMScreen *scr)
 - Added WMSetButtonImageDimsWhenDisabled() and WMGetButtonEnabled()
 - Cleaned-up the header files of functions/vars declared but not implemented
+- Added WMGetTextFieldDelegate()
 
 
 Changes since wmaker 0.70.0:

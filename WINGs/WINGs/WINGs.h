@@ -1096,6 +1096,7 @@ void WMSetTextFieldPrevTextField(WMTextField *tPtr, WMTextField *prev);
 
 void WMSetTextFieldDelegate(WMTextField *tPtr, WMTextFieldDelegate *delegate);
 
+WMTextFieldDelegate* WMGetTextFieldDelegate(WMTextField *tPtr);
 
 extern char *WMTextDidChangeNotification;
 extern char *WMTextDidBeginEditingNotification;
