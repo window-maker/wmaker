@@ -65,7 +65,7 @@ WFrameWindow*
 wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y, 
 		   int width, int height, int flags,
 		   WTexture **title_texture, WTexture **resize_texture,
-		   unsigned long *color, GC *gc, WFont **font)
+		   unsigned long *color, GC *gc, WMFont **font)
 {
     WFrameWindow *fwin;
     
@@ -129,7 +129,7 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
 	height = fwin->core->height - fwin->top_width - fwin->bottom_width;
 
     if (flags & WFF_TITLEBAR)
-	theight = (*fwin->font)->height + TITLEBAR_EXTRA_HEIGHT;
+	theight = WMFontHeight(*fwin->font) + TITLEBAR_EXTRA_HEIGHT;
     else
 	theight = 0;
     
@@ -1080,8 +1080,9 @@ wFrameWindowPaint(WFrameWindow *fwin)
 	XSetForeground(dpy, *fwin->title_gc, 
 		       fwin->title_pixel[fwin->flags.state]);
 	
-	WMDrawString(scr->wmscreen, fwin->titlebar->window, *fwin->title_gc,
-		     *fwin->font, x, TITLEBAR_EXTRA_HEIGHT/2, title, titlelen);
+	WMDrawString(fwin->screen_ptr->wmscreen, fwin->titlebar->window, 
+		     *fwin->title_gc, *fwin->font, x, TITLEBAR_EXTRA_HEIGHT/2, 
+		     title, titlelen);
 
 	free(title);
 	
