@@ -107,7 +107,7 @@ fitText(char *text, WMFont *font, int width, int wrap)
     int i, w, beforecrlf, word1, word2;
 
     /* text length before first cr/lf */
-    beforecrlf = strcspn(text, "\n\r");
+    beforecrlf = strcspn(text, "\n");
 
     if (!wrap || beforecrlf==0)
         return beforecrlf;
@@ -180,7 +180,7 @@ fitText(char *text, WMFont *font, int width, int wrap)
                 i = j;
         }
     } else {
-        i = strcspn(text, "\n\r");
+        i = strcspn(text, "\n");
     }
     return i;
 }

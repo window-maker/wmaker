@@ -1,7 +1,3 @@
-
-- Removed --with-appsdir option and replaced it with --with-gnustepdir. Also,
-  default installation path (for non GNUstep users) is now $(prefix)/bin
-
 Changes since version 0.91.0:
 .............................
 - fixed crash with info panel and alt-tabbing
@@ -11,6 +7,9 @@ Changes since version 0.91.0:
 - fixed issues with compiling on Solaris with openwin
 - reduced minimum required version number for the Xft library to 2.1.0
 - fixed some compilation issues with gcc-2.9x
+- Removed --with-appsdir option and replaced it with --with-gnustepdir. Also,
+  default installation path (for non GNUstep users) is now $(prefix)/bin
+- fixed bug with infinite loop in some circumstances in fitText() in WINGs
 
 
 Changes since version 0.90.0:

@@ -834,6 +834,7 @@ AC_ARG_WITH(appspath,
 [  --with-gnustepdir=PATH    specify the directory for GNUstep applications], appspath=$withval )
 
 if test "$appspath$GNUSTEP_LOCAL_ROOT" = ""; then
+    wprefs_base_dir=${prefix}
     wprefs_datadir="${datadir}/WPrefs"
     wprefs_bindir="${bindir}"
 else
@@ -844,9 +845,9 @@ else
 	gnustepdir=`echo $gnustepdir | sed -e 's|^prefix|${prefix}|'`
     fi
 
-    xx=$gnustepdir/Applications
-    wprefs_datadir=$xx/WPrefs.app
-    wprefs_bindir=$xx/WPrefs.app
+    wprefs_base_dir=$gnustepdir/Applications
+    wprefs_datadir=$wprefs_base_dir/WPrefs.app
+    wprefs_bindir=$wprefs_base_dir/WPrefs.app
 fi
 
 AC_SUBST(wprefs_datadir)
@@ -1084,7 +1085,7 @@ echo "Window Maker was configured as follows:"
 echo
 echo "Installation path prefix            : $prefix"
 echo "Installation path for binaries      : $_bindir"
-echo "Installation path for WPrefs.app    : $wprefs_bindir" | sed -e 's|\${exec_prefix}|'"$exec_prefix|"  -e 's|\${prefix}|'"$prefix|"
+echo "Installation path for WPrefs.app    : $wprefs_base_dir" | sed -e 's|\${prefix}|'"$prefix|"
 echo "Supported graphic format libraries  : $supported_gfx"
 echo "Use assembly routines for wrlib     : $asm_support"
 echo "Use inline MMX(tm) x86 assembly     : $mmx_support"
