@@ -60,10 +60,30 @@
 #include "window.h"
 #include "actions.h"
 #include "defaults.h"
-
+#include "xinerama.h"
 
 extern WPreferences wPreferences;
 
+
+static WMPoint getCenter(WScreen *scr, int width, int height)
+{
+    WMPoint pt;
+    
+#ifdef XINERAMA
+    WMRect rect;
+    
+    rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+
+    pt.x = rect.pos.x + (rect.size.width - width)/2;
+    pt.y = rect.pos.y + (rect.size.height - height)/2;
+#else
+    pt.x = (scr->scr_width - width) / 2;
+    pt.y = (scr->scr_height - height) / 2;	
+#endif    
+
+    return pt;
+}
+    
 
 
 int
@@ -74,6 +94,7 @@ wMessageDialog(WScreen *scr, char *title, char *message,
     Window parent;
     WWindow *wwin;
     int result;
+    WMPoint center;
 
     panel = WMCreateAlertPanel(scr->wmscreen, NULL, title, message,
 			       defBtn, altBtn, othBtn);
@@ -82,9 +103,10 @@ wMessageDialog(WScreen *scr, char *title, char *message,
 
     XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
-    wwin = wManageInternalWindow(scr, parent, None, NULL,
-				 (scr->scr_width - 400)/2,
-				 (scr->scr_height - 180)/2, 400, 180);
+    
+    center = getCenter(scr, 400, 180);
+    wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y,
+				 400, 180);
     wwin->client_leader = WMWidgetXID(panel->win);
 
     WMMapWidget(panel->win);
@@ -173,7 +195,7 @@ wInputDialog(WScreen *scr, char *title, char *message, char **text)
     Window parent;
     WMInputPanel *panel;
     char *result;
-
+    WMPoint center;
 
     panel = WMCreateInputPanel(scr->wmscreen, NULL, title, message, *text,
 			       _("OK"), _("Cancel"));
@@ -184,9 +206,9 @@ wInputDialog(WScreen *scr, char *title, char *message, char **text)
 
     XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
-    wwin = wManageInternalWindow(scr, parent, None, NULL,
-				 (scr->scr_width - 320)/2,
-				 (scr->scr_height - 160)/2, 320, 160);
+    center = getCenter(scr, 320, 160);
+    wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y,
+				 320, 160);
 
     wwin->client_leader = WMWidgetXID(panel->win);
 
@@ -753,6 +775,7 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
 	char *tmp;
 	int len = (instance ? strlen(instance) : 0)
 	    + (class ? strlen(class) : 0) + 32;
+	WMPoint center;
 
 	tmp = wmalloc(len);
 
@@ -761,9 +784,10 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
 	else
 	    strcpy(tmp, _("Icon Chooser"));
 
-	wwin = wManageInternalWindow(scr, parent, None, tmp,
-				     (scr->scr_width - 450)/2,
-				     (scr->scr_height - 280)/2, 450, 280);
+	center = getCenter(scr, 450, 280);
+	
+	wwin = wManageInternalWindow(scr, parent, None, tmp, center.x,center.y,
+				     450, 280);
 	wfree(tmp);
     }
 
@@ -1319,7 +1343,7 @@ wShowInfoPanel(WScreen *scr)
     color2.red = 0x50;
     color2.green = 0x50;
     color2.blue = 0x70;
-    logo = renderText(scr->wmscreen, "GNU Window Maker",
+    logo = renderText(scr->wmscreen, "Window Maker",
 		      "-*-utopia-*-r-*-*-25-*", &color1, &color2);
     if (logo) {
 	WMSetLabelImagePosition(panel->name1L, WIPImageOnly);
@@ -1332,7 +1356,7 @@ wShowInfoPanel(WScreen *scr)
 	    WMReleaseFont(font);
 	}
 	WMSetLabelTextAlignment(panel->name1L, WACenter);
-	WMSetLabelText(panel->name1L, "GNU Window Maker");
+	WMSetLabelText(panel->name1L, "Window Maker");
     }
 
     panel->name2L = WMCreateLabel(panel->win);
@@ -1473,9 +1497,13 @@ wShowInfoPanel(WScreen *scr)
 
     WMMapWidget(panel->win);
 
-    wwin = wManageInternalWindow(scr, parent, None, _("Info"),
-				 (scr->scr_width - 382)/2,
-				 (scr->scr_height - 230)/2, 382, 230);
+    {
+	WMPoint center = getCenter(scr, 382, 230);
+	
+	wwin = wManageInternalWindow(scr, parent, None, _("Info"),
+				     center.x, center.y,
+				     382, 230);
+    }
 
     WSETUFLAG(wwin, no_closable, 0);
     WSETUFLAG(wwin, no_close_button, 0);
@@ -1587,9 +1615,13 @@ wShowLegalPanel(WScreen *scr)
 
     XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
-    wwin = wManageInternalWindow(scr, parent, None, _("Legal"),
-				 (scr->scr_width - 420)/2,
-				 (scr->scr_height - 250)/2, 420, 250);
+    {
+	WMPoint center = getCenter(scr, 420, 250);
+	
+	wwin = wManageInternalWindow(scr, parent, None, _("Legal"),
+				     center.x, center.y,
+				     420, 250);
+    }
 
     WSETUFLAG(wwin, no_closable, 0);
     WSETUFLAG(wwin, no_close_button, 0);
@@ -2003,9 +2035,13 @@ wShowGNUstepPanel(WScreen *scr)
 
     XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
-    wwin = wManageInternalWindow(scr, parent, None, _("About GNUstep"),
-				 (scr->scr_width - 325)/2,
-				 (scr->scr_height - 200)/2, 325, 200);
+    {
+	WMPoint center = getCenter(scr, 325, 200);
+	
+	wwin = wManageInternalWindow(scr, parent, None, _("About GNUstep"),
+				     center.x, center.y,
+				     325, 200);
+    }
 
     WSETUFLAG(wwin, no_closable, 0);
     WSETUFLAG(wwin, no_close_button, 0);

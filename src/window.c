@@ -482,13 +482,13 @@ wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 	    wwin->user_flags.emulate_appicon = 0;
             //WSETUFLAG(wwin, emulate_appicon, 0);
     }
-    
-    if (wwin->transient_for!=None 
+
+    if (wwin->transient_for!=None
 	&& wwin->transient_for!=wwin->screen_ptr->root_win)
 	wwin->user_flags.emulate_appicon = 0;
         //WSETUFLAG(wwin, emulate_appicon, 0);
-    
-    if (wwin->user_flags.sunken && wwin->defined_user_flags.sunken 
+
+    if (wwin->user_flags.sunken && wwin->defined_user_flags.sunken
 	&& wwin->user_flags.floating && wwin->defined_user_flags.floating)
 	wwin->user_flags.sunken = 0;
         //WSETUFLAG(wwin, sunken, 0);

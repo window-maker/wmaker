@@ -1284,7 +1284,8 @@ readMenuPipe(WScreen *scr, char **file_name)
 	strcat(flat_file, file_name[i]);
 	strcat(flat_file, " ");
     }
-    filename = flat_file+1;
+    filename = flat_file + (flat_file[1]=='|'?2:1);
+
 
 #ifdef USECPP
     if (!wPreferences.flags.nocpp) {

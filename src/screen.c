@@ -63,6 +63,8 @@
 # include "openlook.h"
 #endif
 
+#include "xinerama.h"
+
 #include <WINGs/WUtil.h>
 
 #include "defaults.h"
@@ -698,6 +700,11 @@ wScreenInit(int screen_number)
 	wfree(scr);
 	return NULL;
     }
+    
+#ifdef XINERAMA
+    wInitXinerama(scr);
+#endif
+    
 
     XDefineCursor(dpy, scr->root_win, wCursor[WCUR_ROOT]);
 

@@ -80,6 +80,8 @@ wmaker_SOURCES = 	\
 	usermenu.h \
 	xdnd.h \
 	xdnd.c \
+	xinerama.h \
+	xinerama.c \
 	xmodifier.h \
 	xmodifier.c \
 	xutil.c \

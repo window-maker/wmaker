@@ -48,6 +48,7 @@
 #include "winspector.h"
 #include "workspace.h"
 #include "wsound.h"
+#include "xinerama.h"
 
 #ifdef GNOME_STUFF
 # include "gnome.h"
@@ -425,13 +426,13 @@ wMaximizeWindow(WWindow *wwin, int directions)
 	&& !(directions & MAX_IGNORE_XINERAMA)) {
 	WScreen *scr = wwin->screen_ptr;
 	WMRect rect;
-	
-	rect = wGetRectForHead(scr, wGetHeadForWindow(wwin));
+
+	rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
 	totalArea.x1 = rect.pos.x;
 	totalArea.y1 = rect.pos.y;
 	totalArea.x2 = totalArea.x1 + rect.size.width;
 	totalArea.y2 = totalArea.y1 + rect.size.height;
-	
+
 	usableArea.x1 = WMAX(totalArea.x1, usableArea.x1);
 	usableArea.y1 = WMAX(totalArea.y1, usableArea.y1);
 	usableArea.x2 = WMIN(totalArea.x2, usableArea.x2);
@@ -490,7 +491,7 @@ wMaximizeWindow(WWindow *wwin, int directions)
     
     wWindowCropSize(wwin, usableArea.x2-usableArea.x1, 
 		    usableArea.y2-usableArea.y1,
-		    &new_width, &new_height);    
+		    &new_width, &new_height);
     
     wWindowConfigure(wwin, new_x, new_y, new_width, new_height);
 

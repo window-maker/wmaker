@@ -50,7 +50,6 @@ typedef struct WReservedArea {
 } WReservedArea;
 
 
-
 typedef struct WAppIconChain {
     struct WAppIcon *aicon;
     struct WAppIconChain *next;
@@ -97,7 +96,7 @@ typedef struct _WScreen {
 #ifdef XINERAMA
     XineramaScreenInfo *xine_screens;
     int xine_count;		       /* 0 means not active */
-    int xine_primary_screen;	       /* main working screen */
+    int xine_primary_head;	       /* main working screen */
 #endif
 
     Window no_focus_win;	       /* window to get focus when nobody
