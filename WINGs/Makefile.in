@@ -107,7 +107,7 @@ lib_LIBRARIES = libWINGs.a libWUtil.a
 
 include_HEADERS = WINGs.h WUtil.h WINGsP.h
 
-noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel
+noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel connect
 
 testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h
 
@@ -134,6 +134,10 @@ testcolorpanel_LDADD = libWINGs.a $(LIBLIST)
 wmquery_SOURCES = wmquery.c 
 
 wmquery_LDADD = libWINGs.a $(LIBLIST)
+
+connect_SOURCES = connect.c
+
+connect_LDADD = libWUtil.a @X_EXTRA_LIBS@ @LIBPL@
 
 EXTRA_DIST = logo.xpm BUGS
 
@@ -194,6 +198,9 @@ testcolorpanel_OBJECTS =  testcolorpanel.o
 testcolorpanel_DEPENDENCIES =  libWINGs.a \
 $(top_builddir)/wrlib/libwraster.la
 testcolorpanel_LDFLAGS = 
+connect_OBJECTS =  connect.o
+connect_DEPENDENCIES =  libWUtil.a
+connect_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -208,8 +215,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-SOURCES = $(libWINGs_a_SOURCES) $(libWUtil_a_SOURCES) $(wtest_SOURCES) $(wmquery_SOURCES) $(wmfile_SOURCES) $(fontl_SOURCES) $(testmywidget_SOURCES) $(testcolorpanel_SOURCES)
-OBJECTS = $(libWINGs_a_OBJECTS) $(libWUtil_a_OBJECTS) $(wtest_OBJECTS) $(wmquery_OBJECTS) $(wmfile_OBJECTS) $(fontl_OBJECTS) $(testmywidget_OBJECTS) $(testcolorpanel_OBJECTS)
+SOURCES = $(libWINGs_a_SOURCES) $(libWUtil_a_SOURCES) $(wtest_SOURCES) $(wmquery_SOURCES) $(wmfile_SOURCES) $(fontl_SOURCES) $(testmywidget_SOURCES) $(testcolorpanel_SOURCES) $(connect_SOURCES)
+OBJECTS = $(libWINGs_a_OBJECTS) $(libWUtil_a_OBJECTS) $(wtest_OBJECTS) $(wmquery_OBJECTS) $(wmfile_OBJECTS) $(fontl_OBJECTS) $(testmywidget_OBJECTS) $(testcolorpanel_OBJECTS) $(connect_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -334,6 +341,10 @@ testmywidget: $(testmywidget_OBJECTS) $(testmywidget_DEPENDENCIES)
 testcolorpanel: $(testcolorpanel_OBJECTS) $(testcolorpanel_DEPENDENCIES)
 	@rm -f testcolorpanel
 	$(LINK) $(testcolorpanel_LDFLAGS) $(testcolorpanel_OBJECTS) $(testcolorpanel_LDADD) $(LIBS)
+
+connect: $(connect_OBJECTS) $(connect_DEPENDENCIES)
+	@rm -f connect
+	$(LINK) $(connect_LDFLAGS) $(connect_OBJECTS) $(connect_LDADD) $(LIBS)
 
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)

@@ -18,7 +18,7 @@ lib_LIBRARIES = libWINGs.a libWUtil.a
 
 include_HEADERS = WINGs.h WUtil.h WINGsP.h
 
-noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel
+noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel connect
 
 testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h
 
@@ -42,10 +42,13 @@ testcolorpanel_SOURCES = testcolorpanel.c
 
 testcolorpanel_LDADD = libWINGs.a $(LIBLIST)
 
-
 wmquery_SOURCES = wmquery.c 
 
 wmquery_LDADD = libWINGs.a $(LIBLIST)
+
+connect_SOURCES = connect.c
+
+connect_LDADD = libWUtil.a @X_EXTRA_LIBS@ @LIBPL@
 
 
 EXTRA_DIST = logo.xpm BUGS

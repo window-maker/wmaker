@@ -169,6 +169,7 @@ inputHandler(int fd, int mask, void *clientData) /*FOLD00*/
                            (void*)&result, &len) == 0 && result != 0) {
                 cPtr->state = WCFailed;
                 WCErrorCode = result;
+                /* should call wsyserrorwithcode(result, ...) here? */
             } else {
                 cPtr->state = WCConnected;
             }
