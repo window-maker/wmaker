@@ -110,6 +110,7 @@ Changes since version 0.80.2:
   (Marcelo E. Magallon <marcelo.magallon@bigfoot.com>)
 - Do not use the disabled clip color for the clip's workspace navigation arrows
   when the clip is collapsed (it made them look like disabled)
+- Fixed the 'focus flicker' problem, seen with GTK2 applications.
 
 
 Changes since version 0.80.1:

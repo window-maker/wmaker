@@ -403,7 +403,10 @@ handleDeadProcess(void *foo)
 static void
 saveTimestamp(XEvent *event)
 {
-    LastTimestamp = CurrentTime;
+    /*
+     * Never save CurrentTime as LastTimestamp because CurrentTime
+     * it's not a real timestamp (it's the 0L constant)
+     */
 
     switch (event->type) {
      case ButtonRelease:
@@ -433,7 +436,7 @@ saveTimestamp(XEvent *event)
      case SelectionNotify:
 	LastTimestamp = event->xselection.time;
 #ifdef XDND
-    wXDNDProcessSelection(event);
+        wXDNDProcessSelection(event);
 #endif
 	break;
     }
