@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.40.0\n"
-"POT-Creation-Date: 1999-06-04 11:53+0900\n"
-"PO-Revision-Date: 1999-06-04 11+56+0900\n"
+"POT-Creation-Date: 1999-09-22 15:04+0900\n"
+"PO-Revision-Date: 1999-09-22 15:04+0900\n"
 "Last-Translator: Byeong-Chan Kim <redhands@linux.sarang.net>\n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -114,10 +114,9 @@ msgstr "이미지 파일 %s를 찾을 수 없음\n"
 #: ../../WPrefs.app/Focus.c:327 ../../WPrefs.app/MenuPreferences.c:137
 #: ../../WPrefs.app/MenuPreferences.c:148
 #: ../../WPrefs.app/MenuPreferences.c:176
-#: ../../WPrefs.app/MenuPreferences.c:191 ../../WPrefs.app/MouseSettings.c:606
-#: ../../WPrefs.app/MouseSettings.c:617 ../../WPrefs.app/MouseSettings.c:673
-#: ../../WPrefs.app/MouseSettings.c:688 ../../WPrefs.app/MouseSettings.c:704
-#: ../../WPrefs.app/WPrefs.c:460 ../../WPrefs.app/WPrefs.c:477
+#: ../../WPrefs.app/MenuPreferences.c:191 ../../WPrefs.app/MouseSettings.c:559
+#: ../../WPrefs.app/MouseSettings.c:570 ../../WPrefs.app/WPrefs.c:460
+#: ../../WPrefs.app/WPrefs.c:477
 #, c-format
 msgid "could not load icon file %s"
 msgstr "아이콘 파일 %s를 읽을 수 없음"
@@ -151,8 +150,8 @@ msgstr ""
 msgid "Window Maker domain (%s) is corrupted!"
 msgstr "윈도우 메이커 도메인(%s)이 깨졌습니다!"
 
-#: ../../WPrefs.app/Menu.c:1384 ../../WPrefs.app/MouseSettings.c:149
-#: ../../WPrefs.app/MouseSettings.c:169 ../../WPrefs.app/Text.c:183
+#: ../../WPrefs.app/Menu.c:1384 ../../WPrefs.app/MouseSettings.c:152
+#: ../../WPrefs.app/MouseSettings.c:172 ../../WPrefs.app/Text.c:183
 #: ../../WPrefs.app/TexturePanel.c:608 ../../WPrefs.app/TexturePanel.c:686
 #: ../../WPrefs.app/Themes.c:96 ../../WPrefs.app/WPrefs.c:639
 #: ../../WPrefs.app/WPrefs.c:644 ../../WPrefs.app/WPrefs.c:658
@@ -163,7 +162,7 @@ msgstr "에러"
 
 #: ../../WPrefs.app/Menu.c:1384 ../../WPrefs.app/MenuGuru.c:119
 #: ../../WPrefs.app/MenuGuru.c:126 ../../WPrefs.app/MenuGuru.c:140
-#: ../../WPrefs.app/MouseSettings.c:151 ../../WPrefs.app/MouseSettings.c:171
+#: ../../WPrefs.app/MouseSettings.c:154 ../../WPrefs.app/MouseSettings.c:174
 #: ../../WPrefs.app/Text.c:183 ../../WPrefs.app/TexturePanel.c:609
 #: ../../WPrefs.app/TexturePanel.c:688 ../../WPrefs.app/TexturePanel.c:1520
 #: ../../WPrefs.app/Themes.c:98 ../../WPrefs.app/WPrefs.c:639
@@ -430,8 +429,8 @@ msgid "Extract"
 msgstr "추출"
 
 #: ../../WPrefs.app/Configurations.c:150 ../../WPrefs.app/Configurations.c:156
-#: ../../WPrefs.app/MouseSettings.c:536 ../../WPrefs.app/WindowHandling.c:319
-#: ../../WPrefs.app/WindowHandling.c:331 ../../WPrefs.app/Workspace.c:73
+#: ../../WPrefs.app/MouseSettings.c:489 ../../WPrefs.app/WindowHandling.c:331
+#: ../../WPrefs.app/WindowHandling.c:343 ../../WPrefs.app/Workspace.c:73
 #: ../../WPrefs.app/Workspace.c:79
 #, c-format
 msgid "could not load icon %s"
@@ -565,32 +564,36 @@ msgstr ""
 "8bpp(256색)을 사용할 때에 윈도우 메이커에게 부여할\n"
 "색상의 수를 설정합니다."
 
-#: ../../WPrefs.app/Expert.c:74
+#: ../../WPrefs.app/Expert.c:75
 msgid ""
 "Disable miniwindows (icons for miniaturized windows). For use with KDE/GNOME."
 msgstr "최소화창(최소화된 창의 아이콘) 사용 않음. KDE/GNOME 사용시."
 
-#: ../../WPrefs.app/Expert.c:75
+#: ../../WPrefs.app/Expert.c:76
 msgid "Do not set non-WindowMaker specific parameters (do not use xset)"
 msgstr "윈도우 메이커의 기능이 아닌 것은 설정하지 않음 (xset을 사용하지 않음)"
 
-#: ../../WPrefs.app/Expert.c:76
+#: ../../WPrefs.app/Expert.c:77
 msgid "Automatically save session when exiting WindowMaker"
 msgstr "윈도우 메이커 종료시 세션 자동 저장"
 
-#: ../../WPrefs.app/Expert.c:77
+#: ../../WPrefs.app/Expert.c:78
 msgid "Use SaveUnder in window frames, icons, menus and other objects"
 msgstr "창 프레임, 아이콘, 메뉴 등에서 SaveUnder 사용함"
 
-#: ../../WPrefs.app/Expert.c:78
+#: ../../WPrefs.app/Expert.c:79
 msgid "Disable cycling color highlighting of icons."
 msgstr "아이콘에 색상 하이라이팅 순환 사용 않음."
 
-#: ../../WPrefs.app/Expert.c:110
+#: ../../WPrefs.app/Expert.c:80
+msgid "Disable confirmation panel for the Kill command."
+msgstr "강제 종료 명령시 확인 패널을 사용치 않음."
+
+#: ../../WPrefs.app/Expert.c:113
 msgid "Expert User Preferences"
 msgstr "고급 사용자용 설정"
 
-#: ../../WPrefs.app/Expert.c:112
+#: ../../WPrefs.app/Expert.c:115
 msgid ""
 "Options for people who know what they're doing...\n"
 "Also have some other misc. options."
@@ -782,13 +785,13 @@ msgid "Press the desired shortcut key(s) or click Cancel to stop capturing."
 msgstr "원하는 단축키를 누르십시오. 취소를 누르면 캡쳐가 중단됩니다."
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:206
-#: ../../WPrefs.app/KeyboardShortcuts.c:446 ../../WPrefs.app/Menu.c:1022
+#: ../../WPrefs.app/KeyboardShortcuts.c:454 ../../WPrefs.app/Menu.c:1022
 #: ../../WPrefs.app/Menu.c:1245
 msgid "Capture"
 msgstr "캡쳐"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:207
-#: ../../WPrefs.app/KeyboardShortcuts.c:453
+#: ../../WPrefs.app/KeyboardShortcuts.c:461
 msgid "Click Capture to interactively define the shortcut key."
 msgstr "캡쳐 버튼을 눌러 단축키를 쉽게 지정할 수 있습니다."
 
@@ -932,35 +935,59 @@ msgstr "3번 창 단축키"
 msgid "Shortcut for window 4"
 msgstr "4번 창 단축키"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:411
+#: ../../WPrefs.app/KeyboardShortcuts.c:412
+msgid "Shortcut for window 5"
+msgstr "5번 창 단축키"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:413
+msgid "Shortcut for window 6"
+msgstr "6번 창 단축키"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:414
+msgid "Shortcut for window 7"
+msgstr "7번 창 단축키"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:415
+msgid "Shortcut for window 8"
+msgstr "8번 창 단축키"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:416
+msgid "Shortcut for window 9"
+msgstr "9번 창 단축키"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:417
+msgid "Shortcut for window 10"
+msgstr "10번 창 단축키"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:419
 msgid "Raise Clip"
 msgstr "클립 올림"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:412
+#: ../../WPrefs.app/KeyboardShortcuts.c:420
 msgid "Lower Clip"
 msgstr "클립 내림"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:413
+#: ../../WPrefs.app/KeyboardShortcuts.c:421
 msgid "Raise/Lower Clip"
 msgstr "클립 올림/내림"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:415
+#: ../../WPrefs.app/KeyboardShortcuts.c:423
 msgid "Toggle keyboard language"
 msgstr "키보드 언어 선택"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:429 ../../WPrefs.app/Menu.c:1234
+#: ../../WPrefs.app/KeyboardShortcuts.c:437 ../../WPrefs.app/Menu.c:1234
 msgid "Shortcut"
 msgstr "단축키"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:440
+#: ../../WPrefs.app/KeyboardShortcuts.c:448
 msgid "Clear"
 msgstr "지움"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:501
+#: ../../WPrefs.app/KeyboardShortcuts.c:509
 msgid "Keyboard Shortcut Preferences"
 msgstr "키보드 단축키 설정"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:503
+#: ../../WPrefs.app/KeyboardShortcuts.c:511
 msgid ""
 "Change the keyboard shortcuts for actions such\n"
 "as changing workspaces and opening menus."
@@ -1168,11 +1195,11 @@ msgstr ""
 "메뉴와 관련된 유용한 옵션들. 스크롤 속도, 하부\n"
 "메뉴의 정렬 방법등을 설정합니다."
 
-#: ../../WPrefs.app/MouseSettings.c:150
+#: ../../WPrefs.app/MouseSettings.c:153
 msgid "Invalid mouse acceleration value. Must be a positive real value."
 msgstr "잘못된 마우스 가속 임계치 값. 가속 전에 움직일 픽셀의 수여야 함."
 
-#: ../../WPrefs.app/MouseSettings.c:170
+#: ../../WPrefs.app/MouseSettings.c:173
 msgid ""
 "Invalid mouse acceleration threshold value. Must be the number of pixels to "
 "travel before accelerating."
@@ -1180,18 +1207,13 @@ msgstr ""
 "잘못된 마우스 가속 임계치 값입니다. 가속 전에 움직일 픽셀의 수가 되어야 "
 "합니다."
 
-#: ../../WPrefs.app/MouseSettings.c:229
-#, c-format
-msgid "mouse button %s not supported by WPrefs."
-msgstr "마우스 버튼 %s 는 WPrefs에서 지원하지 않습니다."
-
-#: ../../WPrefs.app/MouseSettings.c:265 ../../WPrefs.app/MouseSettings.c:278
-#: ../../WPrefs.app/MouseSettings.c:291
+#: ../../WPrefs.app/MouseSettings.c:267 ../../WPrefs.app/MouseSettings.c:281
+#: ../../WPrefs.app/MouseSettings.c:295
 #, c-format
 msgid "bad value %s for option %s"
 msgstr "%s 옵션에 잘못된 값 %s"
 
-#: ../../WPrefs.app/MouseSettings.c:351
+#: ../../WPrefs.app/MouseSettings.c:356
 #, c-format
 msgid ""
 "modifier key %s for option ModifierKey was not recognized. Using %s as "
@@ -1200,55 +1222,55 @@ msgstr ""
 "ModifierKey의 수정자 키 값 %s 를 인식할 수 없습니다. 기본값인 %s를 "
 "사용합니다."
 
-#: ../../WPrefs.app/MouseSettings.c:376
+#: ../../WPrefs.app/MouseSettings.c:381
 msgid "could not retrieve keyboard modifier mapping"
 msgstr "키보드 수정자 매핑을 얻을 수 없습니다"
 
-#: ../../WPrefs.app/MouseSettings.c:523
+#: ../../WPrefs.app/MouseSettings.c:476
 msgid "Mouse Speed"
 msgstr "마우스 속도"
 
-#: ../../WPrefs.app/MouseSettings.c:553
+#: ../../WPrefs.app/MouseSettings.c:506
 msgid "Acceler.:"
 msgstr "가속.:"
 
-#: ../../WPrefs.app/MouseSettings.c:566
+#: ../../WPrefs.app/MouseSettings.c:519
 msgid "Threshold:"
 msgstr "임계치:"
 
-#: ../../WPrefs.app/MouseSettings.c:581
+#: ../../WPrefs.app/MouseSettings.c:534
 msgid "Double-Click Delay"
 msgstr "두번 클릭 지연 시간"
 
-#: ../../WPrefs.app/MouseSettings.c:625
+#: ../../WPrefs.app/MouseSettings.c:578
 msgid "Test"
 msgstr "시험"
 
-#: ../../WPrefs.app/MouseSettings.c:655
+#: ../../WPrefs.app/MouseSettings.c:608
 msgid "Workspace Mouse Actions"
 msgstr "작업공간 마우스 동작"
 
-#: ../../WPrefs.app/MouseSettings.c:660
+#: ../../WPrefs.app/MouseSettings.c:613
 msgid "Disable mouse actions"
 msgstr "마우스 동작 사용 안함"
 
-#: ../../WPrefs.app/MouseSettings.c:713
+#: ../../WPrefs.app/MouseSettings.c:620
 msgid "Applications menu"
 msgstr "애플리케이션 메뉴"
 
-#: ../../WPrefs.app/MouseSettings.c:719
+#: ../../WPrefs.app/MouseSettings.c:630
 msgid "Window list menu"
 msgstr "창 목록 메뉴"
 
-#: ../../WPrefs.app/MouseSettings.c:725
+#: ../../WPrefs.app/MouseSettings.c:641
 msgid "Select windows"
 msgstr "창 선택"
 
-#: ../../WPrefs.app/MouseSettings.c:760
+#: ../../WPrefs.app/MouseSettings.c:659
 msgid "Mouse Grab Modifier"
 msgstr "마우스 잡기 수정자(Modifier)"
 
-#: ../../WPrefs.app/MouseSettings.c:762
+#: ../../WPrefs.app/MouseSettings.c:661
 msgid ""
 "Keyboard modifier to use for actions that\n"
 "involve dragging windows with the mouse,\n"
@@ -1257,26 +1279,26 @@ msgstr ""
 "키보드 수정자(modfier)는 마우스로 창을\n"
 "클릭해서 끌려고 할 때에 사용하게 됩니다."
 
-#: ../../WPrefs.app/MouseSettings.c:796
+#: ../../WPrefs.app/MouseSettings.c:695
 #, c-format
 msgid "could not create %s"
 msgstr "%s를 만들 수 없음"
 
-#: ../../WPrefs.app/MouseSettings.c:812
+#: ../../WPrefs.app/MouseSettings.c:711
 #, c-format
 msgid "could not create temporary file %s"
 msgstr "임시 파일 %s를 만들 수 없음"
 
-#: ../../WPrefs.app/MouseSettings.c:843
+#: ../../WPrefs.app/MouseSettings.c:742
 #, c-format
 msgid "could not rename file %s to %s\n"
 msgstr "%s 파일명을 %s로 바꿀 수 없음\n"
 
-#: ../../WPrefs.app/MouseSettings.c:927
+#: ../../WPrefs.app/MouseSettings.c:814
 msgid "Mouse Preferences"
 msgstr "마우스 설정"
 
-#: ../../WPrefs.app/MouseSettings.c:929
+#: ../../WPrefs.app/MouseSettings.c:816
 msgid ""
 "Mouse speed/acceleration, double click delay,\n"
 "mouse button bindings etc."
@@ -1304,6 +1326,10 @@ msgstr "PixmapPath 에 잘못된 값. 기본 경로 목록 사용"
 msgid "Select directory"
 msgstr "디렉터리 선택"
 
+#: ../../WPrefs.app/Paths.c:270
+msgid "Icon Search Paths"
+msgstr "아이콘을 찾을 경로"
+
 #: ../../WPrefs.app/Paths.c:281 ../../WPrefs.app/Paths.c:312
 #: ../../WPrefs.app/TexturePanel.c:1302
 msgid "Add"
@@ -1312,6 +1338,10 @@ msgstr "추가"
 #: ../../WPrefs.app/Paths.c:288 ../../WPrefs.app/Paths.c:319
 msgid "Remove"
 msgstr "삭제"
+
+#: ../../WPrefs.app/Paths.c:301
+msgid "Pixmap Search Paths"
+msgstr "픽스맵을 찾을 경로"
 
 #: ../../WPrefs.app/Paths.c:341
 msgid "Search Path Configuration"
@@ -1541,50 +1571,50 @@ msgstr "지정"
 msgid "Stop"
 msgstr "중지"
 
-#: ../../WPrefs.app/Themes.c:143 ../../WPrefs.app/Themes.c:205
-#: ../../WPrefs.app/Themes.c:225
+#: ../../WPrefs.app/Themes.c:143 ../../WPrefs.app/Themes.c:204
+#: ../../WPrefs.app/Themes.c:224
 msgid "Download"
 msgstr "다운로드"
 
-#: ../../WPrefs.app/Themes.c:173
+#: ../../WPrefs.app/Themes.c:172
 msgid "Save Current Theme"
 msgstr "현재 테마 저장"
 
-#: ../../WPrefs.app/Themes.c:182
+#: ../../WPrefs.app/Themes.c:181
 msgid "Load"
 msgstr "불러오기"
 
-#: ../../WPrefs.app/Themes.c:187
+#: ../../WPrefs.app/Themes.c:186
 msgid "Install"
 msgstr "설치"
 
-#: ../../WPrefs.app/Themes.c:195
+#: ../../WPrefs.app/Themes.c:194
 msgid "Tile of The Day"
 msgstr "오늘의 타일(Tile)"
 
-#: ../../WPrefs.app/Themes.c:215
+#: ../../WPrefs.app/Themes.c:214
 msgid "Bar of The Day"
 msgstr "오늘의 바(Bar)"
 
-#: ../../WPrefs.app/Themes.c:252
+#: ../../WPrefs.app/Themes.c:251
 msgid "Themes"
 msgstr "테마"
 
-#: ../../WPrefs.app/WindowHandling.c:136
+#: ../../WPrefs.app/WindowHandling.c:141
 #, c-format
 msgid "bad option value %s in WindowPlacement. Using default value"
 msgstr "WindowPlacement에 잘못된 옵션 값 %s입니다. 기본값을 사용합니다"
 
-#: ../../WPrefs.app/WindowHandling.c:158
+#: ../../WPrefs.app/WindowHandling.c:163
 msgid "invalid data in option WindowPlaceOrigin. Using default (0,0)"
 msgstr ""
 "WindowPlaceOrigin 옵션에 잘못된 데이터입니다. 기본값 (0,0)을 사용합니다"
 
-#: ../../WPrefs.app/WindowHandling.c:225
+#: ../../WPrefs.app/WindowHandling.c:236
 msgid "Window Placement"
 msgstr "창 배치"
 
-#: ../../WPrefs.app/WindowHandling.c:226
+#: ../../WPrefs.app/WindowHandling.c:237
 msgid ""
 "How to place windows when they are first put\n"
 "on screen."
@@ -1592,31 +1622,35 @@ msgstr ""
 "스크린에 창을 놓을 때에 어느 곳을 부터 놓을\n"
 "것인지 설정합니다."
 
-#: ../../WPrefs.app/WindowHandling.c:232
+#: ../../WPrefs.app/WindowHandling.c:243
 msgid "Automatic"
 msgstr "자동"
 
-#: ../../WPrefs.app/WindowHandling.c:233
+#: ../../WPrefs.app/WindowHandling.c:244
 msgid "Random"
 msgstr "임의"
 
-#: ../../WPrefs.app/WindowHandling.c:234
+#: ../../WPrefs.app/WindowHandling.c:245
 msgid "Manual"
 msgstr "수동"
 
-#: ../../WPrefs.app/WindowHandling.c:235
+#: ../../WPrefs.app/WindowHandling.c:246
 msgid "Cascade"
 msgstr "계단식"
 
-#: ../../WPrefs.app/WindowHandling.c:241
+#: ../../WPrefs.app/WindowHandling.c:247
+msgid "Smart"
+msgstr "스마트"
+
+#: ../../WPrefs.app/WindowHandling.c:253
 msgid "Placement Origin"
 msgstr "기본 위치"
 
-#: ../../WPrefs.app/WindowHandling.c:301
+#: ../../WPrefs.app/WindowHandling.c:313
 msgid "Opaque Move"
 msgstr "이동시 창 내용 보이기"
 
-#: ../../WPrefs.app/WindowHandling.c:302
+#: ../../WPrefs.app/WindowHandling.c:314
 msgid ""
 "Whether the window contents should be moved\n"
 "when dragging windows aroung or if only a\n"
@@ -1626,23 +1660,23 @@ msgstr ""
 "할 것인지 테두리만을 보여주며 이동을 할 것인지\n"
 "설정합니다.\n"
 
-#: ../../WPrefs.app/WindowHandling.c:341
+#: ../../WPrefs.app/WindowHandling.c:353
 msgid "When maximizing..."
 msgstr "최대화시에는"
 
-#: ../../WPrefs.app/WindowHandling.c:346
+#: ../../WPrefs.app/WindowHandling.c:358
 msgid "...do not cover icons"
 msgstr "아이콘을 덮지 않음"
 
-#: ../../WPrefs.app/WindowHandling.c:352
+#: ../../WPrefs.app/WindowHandling.c:364
 msgid "...do not cover dock"
 msgstr "Dock을 덮지 않음"
 
-#: ../../WPrefs.app/WindowHandling.c:361
+#: ../../WPrefs.app/WindowHandling.c:373
 msgid "Edge Resistance"
 msgstr "가장자리 걸림"
 
-#: ../../WPrefs.app/WindowHandling.c:363
+#: ../../WPrefs.app/WindowHandling.c:375
 msgid ""
 "Edge resistance will make windows `resist'\n"
 "being moved further for the defined threshold\n"
@@ -1653,15 +1687,23 @@ msgstr ""
 "경계나 화면의 가장자리에서 서로 겹쳐지지 않기\n"
 "위해 약간의 걸림 현상을 주는 것입니다."
 
-#: ../../WPrefs.app/WindowHandling.c:390
+#: ../../WPrefs.app/WindowHandling.c:394
+msgid "Resist"
+msgstr "밀기"
+
+#: ../../WPrefs.app/WindowHandling.c:399
+msgid "Attract"
+msgstr "당김"
+
+#: ../../WPrefs.app/WindowHandling.c:415
 msgid "Open dialogs in same workspace as their owners"
 msgstr "소유자와 같은 작업 공간에서 대화창 열기"
 
-#: ../../WPrefs.app/WindowHandling.c:417
+#: ../../WPrefs.app/WindowHandling.c:442
 msgid "Window Handling Preferences"
 msgstr "창 처리 설정"
 
-#: ../../WPrefs.app/WindowHandling.c:419
+#: ../../WPrefs.app/WindowHandling.c:444
 msgid ""
 "Window handling options. Initial placement style\n"
 "edge resistance, opaque move etc."
