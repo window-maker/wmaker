@@ -14,7 +14,7 @@ typedef struct W_List {
     WMArray *items; 	    /* list of WMListItem */
     WMArray *selectedItems; /* list of selected WMListItems */
 
-    short selectedItem;
+    //short selectedItem;
 
     short itemHeight;
 
@@ -115,6 +115,7 @@ WMCreateList(WMWidget *parent)
     lPtr->itemHeight = WMFontHeight(scrPtr->normalFont) + 1;
 
     lPtr->items = WMCreateArrayWithDestructor(4, releaseItem);
+    lPtr->selectedItems = WMCreateArray(4);
 
     /* create the vertical scroller */
     lPtr->vScroller = WMCreateScroller(lPtr);
@@ -128,9 +129,24 @@ WMCreateList(WMWidget *parent)
 
     W_ResizeView(lPtr->view, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
-    lPtr->selectedItem = -1;
+    //lPtr->selectedItem = -1;
 
     return lPtr;
+}
+
+
+void
+WMSetListAllowMultipleSelection(WMList *lPtr, Bool flag)
+{
+    lPtr->flags.allowMultipleSelection = flag ? 1 : 0;
+
+}
+
+
+void
+WMSetListAllowEmptySelection(WMList *lPtr, Bool flag)
+{
+    lPtr->flags.allowEmptySelection = flag ? 1 : 0;
 }
 
 
@@ -173,9 +189,9 @@ WMInsertListItem(WMList *lPtr, int row, char *text)
     item->text = wstrdup(text);
 
 
-    if (lPtr->selectedItem >= row && lPtr->selectedItem >= 0
-        && row >= 0)
-        lPtr->selectedItem++;
+    //if (lPtr->selectedItem >= row && lPtr->selectedItem >= 0
+    //    && row >= 0)
+    //    lPtr->selectedItem++;
 
     row = WMIN(row, WMGetArrayItemCount(lPtr->items));
 
@@ -194,23 +210,31 @@ WMInsertListItem(WMList *lPtr, int row, char *text)
 }
 
 
-void
+int
 WMRemoveListItem(WMList *lPtr, int row)
 {
+    WMLIstItem *item;
     int topItem = lPtr->topItem;
     int selNotify = 0;
 
     CHECK_CLASS(lPtr, WC_List);
 
     if (row < 0 || row >= WMGetArrayItemCount(lPtr->items))
-        return;
+        return 0;
 
-    if (lPtr->selectedItem == row) {
-        lPtr->selectedItem = -1;
+    item = WMGetFromArray(lPtr->items, row);
+    if (item->flags.selected) {
+        WMRemoveFromArray(lPtr->selectedItems, item);
+        //WMUnselectListItem(lPtr, row);
         selNotify = 1;
-    } else if (lPtr->selectedItem > row) {
-        lPtr->selectedItem--;
     }
+
+    //if (lPtr->selectedItem == row) {
+    //    lPtr->selectedItem = -1;
+    //    selNotify = 1;
+    //} else if (lPtr->selectedItem > row) {
+    //    lPtr->selectedItem--;
+    //}
 
     if (row <= lPtr->topItem+lPtr->fullFitLines+lPtr->flags.dontFitAll)
         lPtr->topItem--;
@@ -222,13 +246,15 @@ WMRemoveListItem(WMList *lPtr, int row)
     if (!lPtr->idleID) {
         lPtr->idleID = WMAddIdleHandler((WMCallback*)updateScroller, lPtr);
     }
-    if (lPtr->topItem != topItem)
+    if (lPtr->topItem != topItem) {
         WMPostNotificationName(WMListDidScrollNotification, lPtr, NULL);
-    if (selNotify)
-        WMPostNotificationName(WMListSelectionDidChangeNotification, lPtr,
-                               (void*)((int)lPtr->selectedItem));
-}
+    }
+    if (selNotify) {
+        WMPostNotificationName(WMListSelectionDidChangeNotification, lPtr, NULL);
+    }
 
+    return 1;
+}
 
 
 WMListItem*
@@ -243,7 +269,6 @@ WMGetListItems(WMList *lPtr)
 {
     return lPtr->items;
 }
-
 
 
 void
@@ -269,12 +294,13 @@ WMSetListUserDrawItemHeight(WMList *lPtr, unsigned short height)
 void
 WMClearList(WMList *lPtr)
 {
-    int oldSelected = lPtr->selectedItem;
+    int selNo = WMGetArrayItemCount(lPtr->selectedItems);
 
+    WMEmptyArray(lPtr->selectedItems);
     WMEmptyArray(lPtr->items);
 
     lPtr->topItem = 0;
-    lPtr->selectedItem = -1;
+    //lPtr->selectedItem = -1;
 
     if (!lPtr->idleID) {
         WMDeleteIdleHandler(lPtr->idleID);
@@ -283,9 +309,9 @@ WMClearList(WMList *lPtr)
     if (lPtr->view->flags.realized) {
         updateScroller(lPtr);
     }
-    if (oldSelected != -1)
-        WMPostNotificationName(WMListSelectionDidChangeNotification, lPtr,
-                               (void*)-1);
+    if (selNo > 0) {
+        WMPostNotificationName(WMListSelectionDidChangeNotification, lPtr, NULL);
+    }
 }
 
 
@@ -305,20 +331,26 @@ WMSetListDoubleAction(WMList *lPtr, WMAction *action, void *clientData)
 }
 
 
+WMArray*
+WMGetListSelectedItems(WMList *lPtr)
+{
+    return lPtr->selectedItems;
+}
+
+
 WMListItem*
 WMGetListSelectedItem(WMList *lPtr)
 {
-    if (lPtr->selectedItem < 0)
-        return NULL;
-
-    return WMGetFromArray(lPtr->items, lPtr->selectedItem);
+    return WMGetFromArray(lPtr->selectedItems, 0);
 }
 
 
 int
 WMGetListSelectedItemRow(WMList *lPtr)
 {
-    return lPtr->selectedItem;
+    WMListItem *item = WMGetFromArray(lPtr->selectedItems, 0);
+
+    return (item!=NULL ? WMGetFirstInArray(lPtr->items, item) : WLNotFound);
 }
 
 
@@ -363,10 +395,25 @@ WMGetListNumberOfRows(WMList *lPtr)
     return WMGetArrayItemCount(lPtr->items);
 }
 
+
 int
 WMGetListPosition(WMList *lPtr)
 {
     return lPtr->topItem;
+}
+
+
+Bool
+WMListAllowsMultipleSelection(WMList *lPtr)
+{
+    return lPtr->flags.allowMultipleSelection;
+}
+
+
+Bool
+WMListAllowsEmptySelection(WMList *lPtr)
+{
+    return lPtr->flags.allowEmptySelection;
 }
 
 
@@ -479,11 +526,12 @@ paintItem(List *lPtr, int index)
             (*lPtr->draw)(lPtr, index, view->window, itemPtr->text, flags,
                           &rect);
     } else {
-        if (itemPtr->selected)
+        if (itemPtr->selected) {
             XFillRectangle(scr->display, view->window, WMColorGC(scr->white),
                            x, y, width, height);
-        else
+        } else {
             XClearArea(scr->display, view->window, x, y, width, height, False);
+        }
 
         W_PaintText(view, view->window, scr->normalFont,  x+4, y, width,
                     WALeft, WMColorGC(scr->black), False,
@@ -596,55 +644,45 @@ WMFindRowOfListItemWithTitle(WMList *lPtr, char *title)
 void
 WMSelectListItem(WMList *lPtr, int row)
 {
-    WMListItem *itemPtr;
-    int notify = 0;
+    WMListItem *item, *oldSelected;
 
     if (row >= WMGetArrayItemCount(lPtr->items))
         return;
-
-    /* the check below must be changed when the multiple selection is
-     * implemented. -Dan
-     */
-    if (!lPtr->flags.allowMultipleSelection && row == lPtr->selectedItem)
-        notify = 0;
-    else
-        notify = 1;
-
-    assert(lPtr->selectedItem < WMGetArrayItemCount(lPtr->items));
-
-    if (!lPtr->flags.allowMultipleSelection) {
-        /* unselect previous selected item */
-        if (lPtr->selectedItem >= 0) {
-            itemPtr = WMGetFromArray(lPtr->items, lPtr->selectedItem);
-
-            if (itemPtr->selected) {
-                itemPtr->selected = 0;
-                if (lPtr->view->flags.mapped
-                    && lPtr->selectedItem>=lPtr->topItem
-                    && lPtr->selectedItem<=lPtr->topItem+lPtr->fullFitLines) {
-                    paintItem(lPtr, lPtr->selectedItem);
-                }
-            }
-        }
-    }
-
     if (row < 0) {
+        /* Should row = -1 deselect all or just do nothing ?. Check it. -Dan */
         if (!lPtr->flags.allowMultipleSelection) {
-            lPtr->selectedItem = -1;
-            if (notify)
-                WMPostNotificationName(WMListSelectionDidChangeNotification,
-                                       lPtr, (void*)((int)lPtr->selectedItem));
+            WMUnselectAllListItems(lPtr);
         }
         return;
     }
 
-    /* select item */
-    itemPtr = WMGetFromArray(lPtr->items, row);
+    item = WMGetFromArray(lPtr->items, row);
+    if (item->selected)
+        return;         /* Return if already selected */
 
-    if (lPtr->flags.allowMultipleSelection)
-        itemPtr->selected = !itemPtr->selected;
-    else
-        itemPtr->selected = 1;
+    oldSelected = WMGetFromArray(lPtr->selectedItems, 0);
+
+    /* unselect previous selected item if case */
+    if (!lPtr->flags.allowMultipleSelection && oldSelected) {
+        int oldSelectedRow = WMGetListSelectedItemRow(lPtr);
+
+        // better call WMUnselectAllListItems() here? -Dan
+        oldSelected->selected = 0;
+        WMDeleteFromArray(lPtr->selectedItems, 0);
+        // This is faster and have the same effect in the single selected case
+        // but may leave xxx->selected flags set after a multi->single selected
+        // switch
+        //WMEmptyArray(lPtr->selectedItems);
+
+        if (lPtr->view->flags.mapped && oldSelectedRow>=lPtr->topItem
+            && oldSelectedRow<=lPtr->topItem+lPtr->fullFitLines) {
+            paintItem(lPtr, oldSelectedRow);
+        }
+    }
+
+    /* select item */
+    item->selected = 1;
+    WMAddToArray(lPtr->selectedItems, item);
 
     if (lPtr->view->flags.mapped) {
         paintItem(lPtr, row);
@@ -655,10 +693,9 @@ WMSelectListItem(WMList *lPtr, int row)
                          lPtr->view->size.width, lPtr->view->size.height,
                          WRSunken);
     }
-    lPtr->selectedItem = row;
-    if (notify)
-        WMPostNotificationName(WMListSelectionDidChangeNotification, lPtr,
-                               (void*)((int)lPtr->selectedItem));
+    //lPtr->selectedItem = row;
+
+    WMPostNotificationName(WMListSelectionDidChangeNotification, lPtr, NULL);
 }
 
 
@@ -826,3 +863,5 @@ destroyList(List *lPtr)
 
     wfree(lPtr);
 }
+
+

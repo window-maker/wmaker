@@ -17,7 +17,13 @@ changes since wmaker 0.62.1:
   subdirectories
 - removed WMArrayBag and reorganized WMTreeBag to be WMBag.
 - added WMArray class.
-- added WMSetWindowUserPosition()
+- added WMSetWindowUserPosition().
+- added WMGetListSelectedItems()
+- added WMSetListAllowMultipleSelection(), WMListAllowsMultipleSelection().
+- added WMSetListAllowEmptySelection(), WMListAllowsEmptySelection().
+- WMListSelectionDidChangeNotification passes NULL as the notification 
+  client data (previously passed the selected item row).
+- WMRemoveListItem() returns an int : 1 success, 0 fail (previously was void).
 
 
 changes since wmaker 0.62.0:

@@ -1059,6 +1059,10 @@ void WMSetScrollerArrowsPosition(WMScroller *sPtr,
 
 WMList *WMCreateList(WMWidget *parent);
 
+void WMSetListAllowMultipleSelection(WMList *lPtr, Bool flag);
+
+void WMSetListAllowEmptySelection(WMList *lPtr, Bool flag);
+
 #define WMAddListItem(lPtr, text) WMInsertListItem((lPtr), -1, (text))
 
 WMListItem *WMInsertListItem(WMList *lPtr, int row, char *text);
@@ -1073,8 +1077,7 @@ WMListItem *WMGetListItem(WMList *lPtr, int row);
 
 WMArray *WMGetListItems(WMList *lPtr);
 
-
-void WMRemoveListItem(WMList *lPtr, int row);
+int WMRemoveListItem(WMList *lPtr, int row);
 
 void WMSelectListItem(WMList *lPtr, int row);
 
@@ -1085,7 +1088,16 @@ void WMSetListUserDrawItemHeight(WMList *lPtr, unsigned short height);
 int WMGetListItemHeight(WMList *lPtr);
 
 /* don't free the returned data */
-WMListItem *WMGetListSelectedItem(WMList *lPtr);
+WMArray* WMGetListSelectedItems(WMList *lPtr);
+
+/*
+ * For the following 2 functions, in case WMList allows multiple selection,
+ * the first item in the list of selected items, respective its row number,
+ * will be returned.
+ */
+
+/* don't free the returned data */
+WMListItem* WMGetListSelectedItem(WMList *lPtr);
 
 int WMGetListSelectedItemRow(WMList *lPtr);
 
@@ -1102,6 +1114,11 @@ void WMSetListPosition(WMList *lPtr, int row);
 void WMSetListBottomPosition(WMList *lPtr, int row);
 
 int WMGetListPosition(WMList *lPtr);
+
+Bool WMListAllowsMultipleSelection(WMList *lPtr);
+
+Bool WMListAllowsEmptySelection(WMList *lPtr);
+
 
 extern char *WMListDidScrollNotification;
 extern char *WMListSelectionDidChangeNotification;

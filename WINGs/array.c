@@ -122,7 +122,7 @@ WMAddToArray(WMArray *array, void *item)
 int
 WMInsertInArray(WMArray *array, int index, void *item)
 {
-    wassertrv(index <= array->itemCount, 0);
+    wassertrv(index >= 0 && index <= array->itemCount, 0);
 
     if (array->itemCount >= array->allocSize) {
         array->allocSize += RESIZE_INCREMENT;
@@ -145,7 +145,7 @@ WMReplaceInArray(WMArray *array, int index, void *item)
 {
     void *old;
 
-    wassertrv(index > array->itemCount, 0);
+    wassertrv(index >= 0 && index <= array->itemCount, NULL);
 
     if (index == array->itemCount) {
         WMAddToArray(array, item);
@@ -162,8 +162,7 @@ WMReplaceInArray(WMArray *array, int index, void *item)
 int
 WMDeleteFromArray(WMArray *array, int index)
 {
-    if (index >= array->itemCount)
-        return 0;
+    wassertrv(index >= 0 && index < array->itemCount, 0);
 
     if (array->destructor) {
         array->destructor(array->items[index]);
@@ -198,7 +197,7 @@ WMRemoveFromArray(WMArray *array, void *item)
 void*
 WMGetFromArray(WMArray *array, int index)
 {
-    if (index >= array->itemCount)
+    if (index < 0 || index >= array->itemCount)
         return NULL;
 
     return array->items[index];

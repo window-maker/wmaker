@@ -84,8 +84,8 @@ static void loadColumn(WMBrowser *bPtr, int column);
 
 static void removeColumn(WMBrowser *bPtr, int column);
 
-static char*
-createTruncatedString(WMFont *font, char *text, int *textLen, int width);
+static char* createTruncatedString(WMFont *font, char *text, int *textLen,
+                                   int width);
 
 static void willResizeBrowser(W_ViewDelegate*, WMView*, 
 			      unsigned int*, unsigned int*);
@@ -1030,7 +1030,7 @@ static void
 listSelectionObserver(void *observerData, WMNotification *notification)
 {
     WMBrowser *bPtr = (WMBrowser*)observerData;
-    int column, item = (int)WMGetNotificationClientData(notification);
+    int column;
     WMList *lPtr = (WMList*)WMGetNotificationObject(notification);
 
     for (column = 0; column < bPtr->usedColumnCount; column++)
@@ -1043,7 +1043,7 @@ listSelectionObserver(void *observerData, WMNotification *notification)
 	return;
     }
 
-    if (item < 0)
+    if (WMGetArrayItemCount(WMGetListSelectedItems(lPtr)) == 0)
         column--;
 
     bPtr->selectedColumn = column;
