@@ -49,7 +49,7 @@ RGetPixel(RImage *image, int x, int y, RColor *color)
 
     if (image->format == RRGBAFormat) {
 	ofs = (y*image->width + x) * 4;
-	color->red = image->data[ofs];
+	color->red = image->data[ofs++];
 	color->green = image->data[ofs++];
 	color->blue = image->data[ofs++];
 	color->alpha = image->data[ofs];
@@ -57,7 +57,7 @@ RGetPixel(RImage *image, int x, int y, RColor *color)
 	ofs = (y*image->width + x) * 3;
 	color->red = image->data[ofs++];
 	color->green = image->data[ofs++];
-	color->blue = image->data[ofs++];
+	color->blue = image->data[ofs];
 	/* If the image does not have alpha channel, we consider alpha 255 */
 	color->alpha = 255;
     }
