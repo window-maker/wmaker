@@ -3,8 +3,8 @@
  *
  *  WindowMaker window manager
  * 
- *  Copyright (c) 1998, 1999 Alfredo K. Kojima
- *  Copyright (c) 1998 Dan Pascu
+ *  Copyright (c) 1998-2002 Alfredo K. Kojima
+ *  Copyright (c) 1998-2002 Dan Pascu
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

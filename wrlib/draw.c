@@ -2,8 +2,8 @@
  * 
  *  Raster graphics library
  * 
- *  Copyright (c) 1998 Dan Pascu
- *  Copyright (c) 2000 Alfredo K. Kojima
+ *  Copyright (c) 1998-2002 Dan Pascu
+ *  Copyright (c) 2000-2002 Alfredo K. Kojima
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public

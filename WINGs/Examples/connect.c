@@ -1,7 +1,7 @@
 /*
  *  WINGs connect.c: example how to create a network client using WMConnection
  * 
- *  Copyright (c) 1999-2001 Dan Pascu
+ *  Copyright (c) 1999-2002 Dan Pascu
  * 
  */
 

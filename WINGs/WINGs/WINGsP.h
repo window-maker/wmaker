@@ -8,7 +8,7 @@
 
 #include <WINGs/WINGs.h>
 
-#if WINGS_H_VERSION < 20010117
+#if WINGS_H_VERSION < 20020104
 #error There_is_an_old_WINGs.h_file_somewhere_in_your_system._Please_remove_it.
 #endif
 
@@ -190,6 +190,8 @@ typedef struct W_Screen {
     W_Font *boldFont;
 
     WMHashTable *fontCache;
+
+    WMHashTable *fontSetCache;
 
     Bool useMultiByte;
     

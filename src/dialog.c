@@ -2,8 +2,8 @@
  *
  *  Window Maker window manager
  *
- *  Copyright (c) 1997, 1998 Alfredo K. Kojima
- *  Copyright (c) 1999       Dan Pascu
+ *  Copyright (c) 1997-2002 Alfredo K. Kojima
+ *  Copyright (c) 1998-2002 Dan Pascu
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -861,8 +861,8 @@ typedef struct {
 
 
 #define COPYRIGHT_TEXT  \
-     "Copyright \xa9 1997~2001 Alfredo K. Kojima <kojima@windowmaker.org>\n"\
-     "Copyright \xa9 1998~2001 Dan Pascu <dan@windowmaker.org>"
+     "Copyright \xa9 1997-2002 Alfredo K. Kojima <kojima@windowmaker.org>\n"\
+     "Copyright \xa9 1998-2002 Dan Pascu <dan@windowmaker.org>"
 
 
 
@@ -1364,7 +1364,9 @@ wShowInfoPanel(WScreen *scr)
     /* we want the (c) character in the helvetica font */
     font = WMCreateNormalFont(scr->wmscreen, HELVETICA10_FONT);
     if (font) {
-	WMSetLabelFont(panel->copyrL, font);
+        WMSetLabelFont(panel->copyrL, font);
+        WMReleaseFont(font);
+        font = NULL;
     }
 
     strbuf = NULL;
@@ -1453,9 +1455,11 @@ wShowInfoPanel(WScreen *scr)
     WMResizeWidget(panel->infoL, 350, 75);
     WMMoveWidget(panel->infoL, 15, 115);
     WMSetLabelText(panel->infoL, strbuf);
+    font = WMCreateFont(scr->wmscreen, HELVETICA10_FONT);
     if (font) {
 	WMSetLabelFont(panel->infoL, font);
-	WMReleaseFont(font);
+        WMReleaseFont(font);
+        font = NULL;
     }
     wfree(strbuf);
 

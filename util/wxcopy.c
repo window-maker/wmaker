@@ -1,6 +1,6 @@
 /* wxcopy.c- copy stdin or file into cutbuffer
  *
- *  Copyright (c) 1997-1999 Alfredo K. Kojima
+ *  Copyright (c) 1997-2002 Alfredo K. Kojima
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

@@ -44,7 +44,7 @@ generalize_xlfd (const char *xlfd)
     char *pxlsz  = xlfd_get_element(xlfd, 7);
 
 #define Xstrlen(A) ((A)?strlen(A):0)
-    len = Xstrlen(xlfd)+Xstrlen(weight)+Xstrlen(slant)+Xstrlen(pxlsz)*2+50;
+    len = Xstrlen(xlfd)+Xstrlen(weight)+Xstrlen(slant)+Xstrlen(pxlsz)*2+60;
 #undef Xstrlen
 
     buf = wmalloc(len + 1);
@@ -106,7 +106,7 @@ WMCreateFontSet(WMScreen *scrPtr, char *fontName)
     char *defaultString;
     XFontSetExtents *extents;
 
-    font = WMHashGet(scrPtr->fontCache, fontName);
+    font = WMHashGet(scrPtr->fontSetCache, fontName);
     if (font) {
 	WMRetainFont(font);
 	return font;
@@ -114,7 +114,7 @@ WMCreateFontSet(WMScreen *scrPtr, char *fontName)
 
     font = malloc(sizeof(WMFont));
     if (!font)
-      return NULL;
+        return NULL;
     memset(font, 0, sizeof(WMFont));
 
     font->notFontSet = 0;
@@ -150,7 +150,7 @@ WMCreateFontSet(WMScreen *scrPtr, char *fontName)
 
     font->name = wstrdup(fontName);
 
-    assert(WMHashInsert(scrPtr->fontCache, font->name, font)==NULL);
+    assert(WMHashInsert(scrPtr->fontSetCache, font->name, font)==NULL);
 
     return font;
 }
@@ -193,7 +193,8 @@ WMCreateNormalFont(WMScreen *scrPtr, char *fontName)
     font->font.normal = XLoadQueryFont(display, fname);
     if (!font->font.normal) {
 	wfree(font);
-	return NULL;
+        wfree(fname);
+        return NULL;
     }
 
     font->height = font->font.normal->ascent+font->font.normal->descent;
@@ -245,7 +246,11 @@ WMReleaseFont(WMFont *font)
 	    XFreeFontSet(font->screen->display, font->font.set);
 	}
 	if (font->name) {
-	    WMHashRemove(font->screen->fontCache, font->name);
+            if (font->notFontSet) {
+                WMHashRemove(font->screen->fontCache, font->name);
+            } else {
+                WMHashRemove(font->screen->fontSetCache, font->name);
+            }
 	    wfree(font->name);
 	}
 	wfree(font);

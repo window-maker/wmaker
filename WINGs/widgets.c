@@ -617,8 +617,10 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     scrPtr->rootWin = RootWindow(display, screen);
 
     scrPtr->fontCache = WMCreateHashTable(WMStringPointerHashCallbacks);
-    
-    
+
+    scrPtr->fontSetCache = WMCreateHashTable(WMStringPointerHashCallbacks);
+
+
     /* create input method stuff */
     W_InitIMStuff(scrPtr);
 

@@ -1,8 +1,8 @@
 /* 
  *  Window Maker window manager
  * 
- *  Copyright (c) 1997 Shige Abe and 
- *		       Alfredo K. Kojima
+ *  Copyright (c) 1997      Shige Abe
+ *  Copyright (c) 1997-2002 Alfredo K. Kojima
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

@@ -1,7 +1,7 @@
 /*
  *  WINGs server.c: example how to create a network server using WMConnection
  *
- *  Copyright (c) 2001 Dan Pascu
+ *  Copyright (c) 2001-2002 Dan Pascu
  *
  */
 

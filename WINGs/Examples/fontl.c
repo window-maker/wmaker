@@ -1,7 +1,7 @@
 /*
  * WINGs demo: font lister
  * 
- *  Copyright (c) 1998 Alfredo K. Kojima
+ *  Copyright (c) 1998-2002 Alfredo K. Kojima
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

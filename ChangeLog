@@ -9,6 +9,9 @@ Changes since version 0.80.0:
   multihead systems.
 - Fixed problem with kcalc not having a miniaturize button.
 - Added "Hide Others" to the window menu.
+- Fixed text in info panel for multibyte (Seiichi SATO <ssato@sh.rim.or.jp>)
+- Separated the font caches for normal fonts and fontsets in WINGs (they can
+  have the same names and collide in the cache giving unwanted results)
 
 
 Changes since version 0.70.0:

@@ -2,7 +2,7 @@
  * 
  *  Window Maker window manager
  * 
- *  Copyright (c) 1998 Alfredo K. Kojima
+ *  Copyright (c) 1998-2002 Alfredo K. Kojima
  * 
  *  This code slightly based on fvwm code, 
  *  Copyright (c) Rob Nation and others
