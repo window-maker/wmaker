@@ -27,6 +27,7 @@
     NoMiniaturizeButton = Yes;
     Unfocusable = Yes;
     Omnipresent = Yes;
+    KeepInsideScreen = Yes;
   };
   bookmarks.Netscape = {NoAppIcon = YES;};
   xcalc = {AlwaysUserIcon = Yes;Icon = "HP-16C-48.xpm";};

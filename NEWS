@@ -5,7 +5,7 @@ NEWS for veteran Window Maker users
 --- 0.80.0
 
 Shading/Unshading windows using mouse wheel on their titlebar
----------------------------------------------------------
+-------------------------------------------------------------
 
 In addition to the known methods of shading/unshading a window,  one can now
 do this by using the mouse wheel on the window's titlebar. The mouse events
