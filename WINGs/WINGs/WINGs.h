@@ -1701,6 +1701,8 @@ void WMSetTabViewDelegate(WMTabView *tPtr, WMTabViewDelegate *delegate);
 
 WMTabViewItem* WMCreateTabViewItemWithIdentifier(int identifier);
 
+void WMSetTabViewItemEnabled(WMTabViewItem *tPtr, Bool flag);
+
 int WMGetTabViewItemIdentifier(WMTabViewItem *item);
 
 void WMSetTabViewItemLabel(WMTabViewItem *item, char *label);

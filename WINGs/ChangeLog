@@ -11,6 +11,7 @@ Changes since wmaker 0.80.0:
   about arranging subviews after removing one and a memleak occuring in the
   same case.
 - Fixed WMGetViewScreenPosition() to consider the window decorations.
+- Added ability to enable/disable individual WMTableViewItems.
 
 
 Changes since wmaker 0.70.0:

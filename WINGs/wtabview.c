@@ -38,6 +38,23 @@ typedef struct W_TabView {
 } TabView;
 
 
+typedef struct W_TabViewItem {
+    WMTabView *tabView;
+
+    W_View *view;
+
+    char *label;
+
+    short tabWidth;
+    int identifier;
+
+    struct {
+        unsigned visible:1;
+        unsigned enabled:1;
+    } flags;
+} W_TabViewItem;
+
+
 
 
 
@@ -150,7 +167,10 @@ handleEvents(XEvent *event, void *data)
 	    WMTabViewItem *item = WMTabViewItemAtPoint(tPtr,
 						       event->xbutton.x,
 						       event->xbutton.y);
-	    if (item) {
+            /*if (item && !item->flags.enabled)
+                break;*/
+
+            if (item && item->flags.enabled) {
 		WMSelectTabViewItem(tPtr, item);
 	    } else if (tPtr->flags.dontFitAll) {
 		int redraw = 0;
@@ -256,7 +276,7 @@ WMAddItemInTabView(WMTabView *tPtr, WMTabViewItem *item)
 void
 WMSetTabViewEnabled(WMTabView *tPtr, Bool flag)
 {
-    tPtr->flags.enabled = flag;
+    tPtr->flags.enabled = (flag ? 1 : 0);
     if (W_VIEW_REALIZED(tPtr->view))
 	paintTabView(tPtr);
 }
@@ -749,7 +769,8 @@ paintTabView(TabView *tPtr)
 	    rect.size.width = W_TabViewItemTabWidth(tPtr->items[first+i]);
 	    rect.size.height = theight;
 	    W_DrawLabel(tPtr->items[first+i], buffer, rect, 
-			tPtr->flags.enabled);
+                        tPtr->flags.enabled &&
+                        tPtr->items[first+i]->flags.enabled);
 	}
 
 	if (moreAtLeft) {
@@ -846,22 +867,6 @@ destroyTabView(TabView *tPtr)
 /******************************************************************/
 
 
-typedef struct W_TabViewItem {
-    WMTabView *tabView;
-
-    W_View *view;
-
-    char *label;
-
-    short tabWidth;
-    int identifier;
-
-    struct {
-	unsigned visible:1;
-    } flags;
-} TabViewItem;
-
-
 static void
 W_SetTabViewItemParent(WMTabViewItem *item, WMTabView *parent)
 {
@@ -937,6 +942,8 @@ WMCreateTabViewItemWithIdentifier(int identifier)
 
     item->identifier = identifier;
 
+    item->flags.enabled = 1;
+
     return item;
 }
 
@@ -950,11 +957,22 @@ WMCreateTabViewItem(int identifier, char *label)
     memset(item, 0, sizeof(WMTabViewItem));
 
     item->identifier = identifier;
+
+    item->flags.enabled = 1;
+
     WMSetTabViewItemLabel(item, label);
 
     return item;
 }
 
+
+void
+WMSetTabViewItemEnabled(WMTabViewItem *tPtr, Bool flag)
+{
+    tPtr->flags.enabled = (flag ? 1 : 0);
+    if (tPtr->tabView && W_VIEW_REALIZED(tPtr->tabView->view))
+	paintTabView(tPtr->tabView);
+}
 
 
 int
