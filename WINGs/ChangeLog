@@ -5,6 +5,7 @@ Changes since wmaker 0.80.0:
 - separated the font caches for normal fonts and fontsets in WINGs (they can
   have the same names and collide in the cache giving unwanted results)
 - fixed labels not to display '\n' as a character if multiple '\n' are passed
+  but just skip to the next line.
 
 
 Changes since wmaker 0.70.0:

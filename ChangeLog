@@ -13,6 +13,8 @@ Changes since version 0.80.0:
 - Separated the font caches for normal fonts and fontsets in WINGs (they can
   have the same names and collide in the cache giving unwanted results)
 - Fixed Legal Panel not to display rectangles in place of new lines.
+- Fixed problem with losing focus when changing to an empty workspace and back.
+- Fixed another focus related problem when changing workspaces.
 
 
 Changes since version 0.70.0:

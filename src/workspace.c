@@ -489,8 +489,9 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
     wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
 
     if ((tmp = scr->focused_window)!= NULL) {
-	if ((IS_OMNIPRESENT(tmp) && !WFLAGP(tmp, skip_window_list))
-	    || tmp->flags.changing_workspace) {
+        if ((IS_OMNIPRESENT(tmp) && (tmp->flags.mapped || tmp->flags.shaded)
+             && !WFLAGP(tmp, no_focusable))
+            || tmp->flags.changing_workspace) {
 	    foc = tmp;
 	}
 
@@ -515,7 +516,7 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
                     tmp->icon->mapped = 0;
                 }
 		/* update current workspace of omnipresent windows */
-		if (IS_OMNIPRESENT(tmp)) {
+                if (IS_OMNIPRESENT(tmp)) {
 		    WApplication *wapp = wApplicationOf(tmp->main_window);
 
 		    tmp->frame->workspace = workspace;
@@ -523,7 +524,7 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 		    if (wapp) {
 			wapp->last_workspace = workspace;
 		    }
-		    if (!foc2)
+		    if (!foc2 && (tmp->flags.mapped || tmp->flags.shaded))
 			foc2 = tmp;
 		}
             } else {
@@ -538,7 +539,7 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 			if (!(tmp->flags.mapped || tmp->flags.miniaturized)) {
 			    /* remap windows that are on this workspace */
 			    wWindowMap(tmp);
-			    if (!foc && !WFLAGP(tmp, skip_window_list))
+			    if (!foc && !WFLAGP(tmp, no_focusable))
 				foc = tmp;
 			}
 			/* Also map miniwindow if not omnipresent */
@@ -617,7 +618,8 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 * 2) Make pager.
 */
 
-void wWorkspaceManageEdge(WScreen *scr)
+void
+wWorkspaceManageEdge(WScreen *scr)
 {
     int w;
     int vmask;
@@ -658,7 +660,8 @@ void wWorkspaceManageEdge(WScreen *scr)
     }
 }
 
-void wWorkspaceRaiseEdge(WScreen *scr)
+void
+wWorkspaceRaiseEdge(WScreen *scr)
 {
     puts("raise edge");
     if (wPreferences.vedge_thickness && initVDesk) {
@@ -669,7 +672,8 @@ void wWorkspaceRaiseEdge(WScreen *scr)
     }
 }
 
-void wWorkspaceLowerEdge(WScreen *scr)
+void
+wWorkspaceLowerEdge(WScreen *scr)
 {
     puts("lower edge");
     if (wPreferences.vedge_thickness && initVDesk) {
@@ -680,13 +684,16 @@ void wWorkspaceLowerEdge(WScreen *scr)
     }
 }
 
-void wWorkspaceResizeViewPort(WScreen *scr, int workspace, int width, int height)
+void
+wWorkspaceResizeViewPort(WScreen *scr, int workspace, int width, int height)
 {
     scr->workspaces[workspace]->width = WMAX(width,scr->scr_width);
     scr->workspaces[workspace]->height = WMAX(height,scr->scr_height);
 }
 
-void updateWorkspaceGeometry(WScreen *scr, int workspace, int *view_x, int *view_y) {
+void
+updateWorkspaceGeometry(WScreen *scr, int workspace, int *view_x, int *view_y)
+{
     int most_left, most_right, most_top, most_bottom;
     WWindow *wwin;
 
@@ -727,12 +734,16 @@ void updateWorkspaceGeometry(WScreen *scr, int workspace, int *view_x, int *view
 
 }
 
+
 typedef struct _delay_configure {
     WWindow *wwin;
     int delay_count;
 } _delay_configure;
 
-void _sendConfigureNotify (_delay_configure *delay) {
+
+void
+sendConfigureNotify (_delay_configure *delay)
+{
     WWindow *wwin;
 
     delay->delay_count--;
@@ -743,7 +754,9 @@ void _sendConfigureNotify (_delay_configure *delay) {
     }
 }
 
-Bool wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y)
+
+Bool
+wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y)
 {
     Bool adjust_flag = False;
     int diff_x, diff_y;
@@ -788,18 +801,22 @@ Bool wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y)
     if (1) { /* if delay*/
         delay_configure.delay_count++;
         delay_configure.wwin = scr->focused_window;
-        WMAddTimerHandler(200, (WMCallback *)_sendConfigureNotify, &delay_configure);
+        WMAddTimerHandler(200, (WMCallback *)sendConfigureNotify, &delay_configure);
     }
 
     return adjust_flag;
 }
 
-void wWorkspaceGetViewPosition(WScreen *scr, int workspace, int *view_x, int *view_y) {
+
+void
+wWorkspaceGetViewPosition(WScreen *scr, int workspace, int *view_x, int *view_y)
+{
     if (view_x) *view_x = scr->workspaces[workspace]->view_x;
     if (view_y) *view_y = scr->workspaces[workspace]->view_y;
 }
-
 #endif
+
+
 
 static void
 switchWSCommand(WMenu *menu, WMenuEntry *entry)
