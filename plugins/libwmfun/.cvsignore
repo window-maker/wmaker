@@ -1,0 +1,5 @@
+Makefile Makefile.in
+*.lo *.la
+.libs
+.psrc .inslog2 tca.map tca.log
+*.rpt
