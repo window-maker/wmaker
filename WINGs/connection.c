@@ -174,6 +174,8 @@ sendTimeout(void *cdata)
         clearOutputQueue(cPtr);
         cPtr->state = WCTimedOut;
         cPtr->timeoutState = WCTWhileSending;
+        // should we close it no matter what (after calling the didTimeout
+        // delegate)? -Dan
         if (cPtr->delegate && cPtr->delegate->didTimeout) {
             (*cPtr->delegate->didTimeout)(cPtr->delegate, cPtr);
         } else {
