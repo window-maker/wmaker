@@ -160,7 +160,7 @@ createPanel(Panel *p)
 
     WMSetBalloonTextForView(_("The position or style of the window size\n"
                               "display that's shown when a window is resized."),
-                            WMWidgetView(panel->posiF));
+                            WMWidgetView(panel->sizeF));
 
     panel->sizeP = WMCreatePopUpButton(panel->sizeF);
     WMResizeWidget(panel->sizeP, 180, 20);
