@@ -1,6 +1,8 @@
 Changes since version 0.61.0:
 .............................
 
+- fixed OPEN_MENU
+- fixed crash when moving a shaded window with keyboard
 - fixed problem with window shortcut assignment from the menu
 - fixed problem with fonts in WINGs (Masahide -mac- NODA 
 					<mac@flab.fujitsu.co.jp>)
