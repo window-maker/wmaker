@@ -695,7 +695,11 @@ WMFont * WMConvertFontToPlain(WMScreen *scr, WMFont *font);
 
 WMFont * WMConvertFontToBold(WMScreen *scr, WMFont *font);
 
+WMFont * WMConvertFontToUnbold(WMScreen *scr, WMFont *font);
+
 WMFont * WMConvertFontToItalic(WMScreen *scr, WMFont *font);
+
+WMFont * WMConvertFontToUnitalic(WMScreen *scr, WMFont *font);
 
 WMFont * WMGetFontOfSize(WMScreen *scr, WMFont *font, int size);
 
@@ -1503,6 +1507,8 @@ void WMSetTextUsesMonoFont(WMText *tPtr, Bool mono);
 
 int WMGetTextUsesMonoFont(WMText *tPtr);
 
+void WMSetTextIndentNewLines(WMText *tPtr, Bool indent);
+
 void WMSetTextIgnoresNewline(WMText *tPtr, Bool ignore);
 
 int WMGetTextIgnoresNewline(WMText *tPtr);
@@ -1510,6 +1516,10 @@ int WMGetTextIgnoresNewline(WMText *tPtr);
 void WMSetTextDefaultFont(WMText *tPtr, WMFont *font);
 
 WMFont * WMGetTextDefaultFont(WMText *tPtr);
+
+void WMSetTextDefaultColor(WMText *tPtr, WMColor *color);
+
+WMColor * WMGetTextDefaultColor(WMText *tPtr);
 
 void WMSetTextRelief(WMText *tPtr, WMReliefType relief);
 

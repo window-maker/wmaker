@@ -1855,7 +1855,6 @@ clearText(Text *tPtr)
     tPtr->currentTextBlock = NULL;
     tPtr->lastTextBlock = NULL;
     WMEmptyArray(tPtr->gfxItems);
-    updateScrollers(tPtr);
 }
 
 static void
@@ -1974,8 +1973,8 @@ insertTextInteractively(Text *tPtr, char *text, int len)
 
     tb = tPtr->currentTextBlock;
     if (!tb || tb->graphic) {
+        tPtr->tpos = 0;
         WMAppendTextStream(tPtr, text);
-        tPtr->tpos = tPtr->currentTextBlock->used;
         layOutDocument(tPtr);
         return;
     }
@@ -2992,8 +2991,10 @@ WMPrependTextStream(WMText *tPtr, char *text)
     if(!text) {
         if(tPtr->flags.ownsSelection)
             releaseSelection(tPtr);
-        else
+        else {
             clearText(tPtr);
+            updateScrollers(tPtr);
+        }
         return;
     }
 
@@ -3004,6 +3005,7 @@ WMPrependTextStream(WMText *tPtr, char *text)
         insertPlainText(tPtr, text);
 
     tPtr->flags.needsLayOut = True;
+    tPtr->tpos = 0;
 }
 
 
@@ -3015,8 +3017,10 @@ WMAppendTextStream(WMText *tPtr, char *text)
     if(!text) {
         if(tPtr->flags.ownsSelection)
             releaseSelection(tPtr);
-        else
+        else {
             clearText(tPtr);
+            updateScrollers(tPtr);
+        }
         return;
     }
 
@@ -3027,6 +3031,9 @@ WMAppendTextStream(WMText *tPtr, char *text)
         insertPlainText(tPtr, text);
 
     tPtr->flags.needsLayOut = True;
+    if(tPtr->currentTextBlock)
+        tPtr->tpos = tPtr->currentTextBlock->used;
+
   
 }
 
@@ -3662,7 +3669,29 @@ WMGetTextDefaultFont(WMText *tPtr)
     if (!tPtr)
         return NULL;
     else
-        return tPtr->dFont;
+        return WMRetainFont(tPtr->dFont);
+}
+
+void
+WMSetTextDefaultColor(WMText *tPtr, WMColor *color)
+{
+    if (!tPtr)
+        return;
+        
+    WMReleaseColor(tPtr->dColor);
+    if (color)
+        tPtr->dColor = WMRetainColor(color);
+    else
+        tPtr->dColor = WMBlackColor(tPtr->view->screen);
+}
+
+WMColor *
+WMGetTextDefaultColor(WMText *tPtr)
+{
+    if (!tPtr)
+        return NULL;
+    else
+        return WMRetainColor(tPtr->dColor);
 }
 
 void
