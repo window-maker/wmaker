@@ -154,7 +154,7 @@ WMInsertItemInTabView(WMTabView *tPtr, int index, WMTabViewItem *item)
     if (index > tPtr->itemCount)
 	index = tPtr->itemCount;
 
-    if (index == 0) {
+    if (index == 0 && tPtr->items[0]) {
 	W_UnmapTabViewItem(tPtr->items[0]);
     }
 
