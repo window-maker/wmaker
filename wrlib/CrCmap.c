@@ -123,7 +123,7 @@ Status XmuCreateColormap(dpy, colormap)
 	    }
 	} else {
 	    unsigned int	maxdepth = 0;
-	    XVisualInfo		*v;
+	    XVisualInfo		*v = vinfo;
 
 	    for (i=0; i < n; i++, vinfo++)
 		if (vinfo->depth > maxdepth) {

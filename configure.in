@@ -507,6 +507,20 @@ if test "x$LIBPL" = "x"; then
    exit 1
 fi
 
+WM_CHECK_PROPLIST_VERSION(0.9.5, goodlPL=yes, goodlPL=no)
+
+if test "$goodlPL" = no; then
+   echo
+   echo "ERROR!!! libPropList is an old version. Please consider upgrading"
+   echo "         to at least version 0.9.5. Older versions have bugs that"
+   echo "         may cause Window Maker to crash randomly."
+   echo "         If your libPropList is older than 0.9.2 it will also prevent"
+   echo "         Window Maker from compiling because new functions were"
+   echo "         introduced since that version."
+   echo "         Please read INSTALL to find where you can find libPropList,"
+   echo "         and upgrade it before you proceed."
+   exit 1
+fi
 
 AC_SUBST(LIBPL)
 
@@ -791,7 +805,7 @@ fi
 dnl Enable User Defined Menu thing
 dnl ==================================
 AC_ARG_ENABLE(usermenu,
-[  --enable-usermenu      user defined menus for applications
+[  --enable-usermenu       user defined menus for applications
 ],
 if test "$enableval" = yes; then
 	AC_DEFINE(USER_MENU)

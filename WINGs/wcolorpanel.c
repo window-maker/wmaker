@@ -2171,9 +2171,9 @@ wheelRender(W_ColorPanel *panel)
     
     for (y = 0; y < colorWheelSize+4; y++) {
 	for (x = 0; x < colorWheelSize+4; x++) {
-	    rp = image->data[0] + (ofs << shift);
-	    gp = image->data[1] + (ofs << shift);
-	    bp = image->data[2] + (ofs << shift);
+	    rp = image->data + (ofs << shift);
+	    gp = image->data + (ofs << shift) + 1;
+	    bp = image->data + (ofs << shift) + 2;
 	    
 	    if (wheelInsideColorWheel(panel, ofs)) {
 		*rp = (unsigned char)(panel->wheelMtrx->values[ 
@@ -2931,9 +2931,9 @@ customRenderSpectrum(W_ColorPanel *panel)
 	    
 	    convertCPColor(&cpColor);
 	    
-	    rp = spectrum->data[0] + ofs;
-	    gp = spectrum->data[1] + ofs;
-	    bp = spectrum->data[2] + ofs;
+	    rp = spectrum->data + ofs;
+	    gp = spectrum->data + ofs + 1;
+	    bp = spectrum->data + ofs + 2;
 	    
 	    *rp = (unsigned char)cpColor.rgb.red;
 	    *gp = (unsigned char)cpColor.rgb.green;
@@ -3014,9 +3014,9 @@ customPalettePositionSelection(W_ColorPanel *panel, int x, int y)
     ofs = rint(x * panel->palXRatio) + rint(y * panel->palYRatio) * 
 	panel->customPaletteImg->width;
     
-    panel->color.rgb.red   = panel->customPaletteImg->data[0][ofs];
-    panel->color.rgb.green = panel->customPaletteImg->data[1][ofs];
-    panel->color.rgb.blue  = panel->customPaletteImg->data[2][ofs];
+    panel->color.rgb.red   = panel->customPaletteImg->data[ofs];
+    panel->color.rgb.green = panel->customPaletteImg->data[ofs+1];
+    panel->color.rgb.blue  = panel->customPaletteImg->data[ofs+2];
     panel->color.set = cpRGB;
     
     updateSwatch(panel, panel->color);

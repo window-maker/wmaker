@@ -432,6 +432,8 @@ void WMSynchronizeUserDefaults(WMUserDefaults *database);
 
 void WMSaveUserDefaults(WMUserDefaults *database);
 
+void WMEnableUDPeriodicSynchronization(WMUserDefaults *database, Bool enable);
+
 proplist_t WMGetUDObjectForKey(WMUserDefaults *database, char *defaultName);
 
 void WMSetUDObjectForKey(WMUserDefaults *database, proplist_t object,
@@ -463,6 +465,8 @@ void WMSetUDBoolForKey(WMUserDefaults *database, Bool value,
 proplist_t WMGetUDSearchList(WMUserDefaults *database);
 
 void WMSetUDSearchList(WMUserDefaults *database, proplist_t list);
+
+extern char *WMUserDefaultsDidChangeNotification;
 
 
 /*-------------------------------------------------------------------------*/

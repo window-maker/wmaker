@@ -928,8 +928,8 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 	
     if (panel->imageFile)
         free(panel->imageFile);
-    if (panel->imageFile = wfindfileinarray(panel->pathList,
-                PLGetString(PLGetArrayElement(texture, 1)))) {
+    if ((panel->imageFile = wfindfileinarray(panel->pathList,
+                PLGetString(PLGetArrayElement(texture, 1)))) != NULL) {
 
         panel->image = RLoadImage(WMScreenRContext(scr), panel->imageFile, 0);
         updateTGradImage(panel);

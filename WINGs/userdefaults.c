@@ -3,11 +3,13 @@
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
+#include <unistd.h>
+#include <sys/stat.h>
 
 
 #include "../src/config.h"
 
-#include "WUtil.h"
+#include "WINGs.h"
 
 #include <proplist.h>
 
@@ -22,7 +24,11 @@ typedef struct W_UserDefaults {
 
     char dirty;
 
+    char dontSync;
+
     char *path;                        /* where is db located */
+
+    time_t timestamp;                  /* last modification time */
 
     struct W_UserDefaults *next;
 
@@ -31,13 +37,16 @@ typedef struct W_UserDefaults {
 
 static UserDefaults *sharedUserDefaults = NULL;
 
-static Bool registeredSaveOnExit = False;
+char *WMUserDefaultsDidChangeNotification = "WMUserDefaultsDidChangeNotification";
 
 
 
 extern char *WMGetApplicationName();
 
 #define DEFAULTS_DIR "/Defaults"
+
+#define UD_SYNC_INTERVAL  2000
+
 
 
 char*
@@ -92,14 +101,11 @@ saveDefaultsChanges(void)
 #endif
 {
     /* save the user defaults databases */
-    if (sharedUserDefaults) {
-        UserDefaults *tmp = sharedUserDefaults;
+    UserDefaults *tmp = sharedUserDefaults;
 
-        while (tmp) {
-            if (tmp->appDomain && tmp->dirty)
-                PLShallowSynchronize(tmp->appDomain);
-            tmp = tmp->next;
-        }
+    while (tmp) {
+        WMSynchronizeUserDefaults(tmp);
+        tmp = tmp->next;
     }
 }
 
@@ -108,6 +114,8 @@ saveDefaultsChanges(void)
 static void
 registerSaveOnExit(void)
 {
+    static Bool registeredSaveOnExit = False;
+
     if (!registeredSaveOnExit) {
 #ifndef HAVE_ATEXIT
         on_exit(saveDefaultsChanges, (void*)NULL);
@@ -119,18 +127,96 @@ registerSaveOnExit(void)
 }
 
 
+static void
+synchronizeUserDefaults(void *foo)
+{
+    UserDefaults *database = sharedUserDefaults;
+
+    while (database) {
+        if (!database->dontSync)
+            WMSynchronizeUserDefaults(database);
+        database = database->next;
+    }
+    WMAddTimerHandler(UD_SYNC_INTERVAL, synchronizeUserDefaults, NULL);
+}
+
+
+static void
+addSynchronizeTimerHandler(void)
+{
+    static Bool initialized = False;
+
+    if (!initialized) {
+        WMAddTimerHandler(UD_SYNC_INTERVAL, synchronizeUserDefaults, NULL);
+        initialized = True;
+    }
+}
+
+
+void
+WMEnableUDPeriodicSynchronization(WMUserDefaults *database, Bool enable)
+{
+    database->dontSync = !enable;
+}
+
+
 void
 WMSynchronizeUserDefaults(WMUserDefaults *database)
 {
-    /* TODO: check what it should really do */
-    PLShallowSynchronize(database->appDomain);
+    Bool fileIsNewer = False, release = False;
+    char *path;
+    struct stat stbuf;
+
+    if (!database->path) {
+        path = wdefaultspathfordomain(WMGetApplicationName());
+        release = True;
+    } else {
+        path = database->path;
+    }
+
+    if (stat(path, &stbuf) >= 0 && stbuf.st_mtime > database->timestamp)
+        fileIsNewer = True;
+
+    /*printf("syncing: %s %d %d\n", path, database->dirty, fileIsNewer);*/
+
+    if (database->appDomain && (database->dirty || fileIsNewer)) {
+        PLShallowSynchronize(database->appDomain);
+        database->dirty = 0;
+        if (stat(path, &stbuf) >= 0)
+            database->timestamp = stbuf.st_mtime;
+        if (fileIsNewer) {
+            WMPostNotificationName(WMUserDefaultsDidChangeNotification,
+                                   database, NULL);
+        }
+    }
+
+    if (release)
+        wfree(path);
+
 }
 
 
 void
 WMSaveUserDefaults(WMUserDefaults *database)
 {
-    PLSave(database->appDomain, YES);
+    if (database->appDomain) {
+        struct stat stbuf;
+        char *path;
+        Bool release = False;
+
+        PLSave(database->appDomain, YES);
+        database->dirty = 0;
+        if (!database->path) {
+            path = wdefaultspathfordomain(WMGetApplicationName());
+            release = True;
+        } else {
+            path = database->path;
+        }
+        if (stat(path, &stbuf) >= 0)
+            database->timestamp = stbuf.st_mtime;
+        if (release)
+            wfree(path);
+    }
 }
 
 
@@ -140,6 +226,7 @@ WMGetStandardUserDefaults(void)
     WMUserDefaults *defaults;
     proplist_t domain;
     proplist_t key;
+    struct stat stbuf;
     char *path;
     int i;
 
@@ -171,6 +258,9 @@ WMGetStandardUserDefaults(void)
         path = NULL;
     } else {
         path = wdefaultspathfordomain(PLGetString(key));
+
+        if (stat(path, &stbuf) >= 0)
+            defaults->timestamp = stbuf.st_mtime;
 
         domain = PLGetProplistWithPath(path);
     }
@@ -215,8 +305,7 @@ WMGetStandardUserDefaults(void)
     /* terminate list */
     defaults->searchList[2] = NULL;
 
-    defaults->searchListArray=PLMakeArrayFromElements(NULL,NULL);
-
+    defaults->searchListArray = PLMakeArrayFromElements(NULL,NULL);
 
     i = 0;
     while (defaults->searchList[i]) {
@@ -229,6 +318,7 @@ WMGetStandardUserDefaults(void)
         defaults->next = sharedUserDefaults;
     sharedUserDefaults = defaults;
 
+    addSynchronizeTimerHandler();
     registerSaveOnExit();
 
     return defaults;
@@ -241,6 +331,7 @@ WMGetDefaultsFromPath(char *path)
     WMUserDefaults *defaults;
     proplist_t domain;
     proplist_t key;
+    struct stat stbuf;
     char *name;
     int i;
 
@@ -273,6 +364,9 @@ WMGetDefaultsFromPath(char *path)
     key = PLMakeString(name);
     defaults->searchList[0] = key;
 
+    if (stat(path, &stbuf) >= 0)
+        defaults->timestamp = stbuf.st_mtime;
+
     domain = PLGetProplistWithPath(path);
 
     if (!domain) {
@@ -296,7 +390,7 @@ WMGetDefaultsFromPath(char *path)
     /* terminate list */
     defaults->searchList[1] = NULL;
 
-    defaults->searchListArray=PLMakeArrayFromElements(NULL,NULL);
+    defaults->searchListArray = PLMakeArrayFromElements(NULL,NULL);
 
     i = 0;
     while (defaults->searchList[i]) {
@@ -309,6 +403,7 @@ WMGetDefaultsFromPath(char *path)
         defaults->next = sharedUserDefaults;
     sharedUserDefaults = defaults;
 
+    addSynchronizeTimerHandler();
     registerSaveOnExit();
 
     return defaults;

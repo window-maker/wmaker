@@ -36,6 +36,39 @@ CPPFLAGS="$CPPFLAGS_old"
 ])
 
 
+dnl
+dnl WM_CHECK_PROPLIST_VERSION(MIN_VERSION, [ACTION-IF-FOUND [,ACTION-IF-NOT-FOUND]])
+dnl
+AC_DEFUN(WM_CHECK_PROPLIST_VERSION,
+[
+CPPFLAGS_old="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS $inc_search_path"
+lPL_major_version=`echo $1 | sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
+lPL_minor_version=`echo $1 | sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
+lPL_micro_version=`echo $1 | sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
+AC_MSG_CHECKING([whether libPropList is newer than $1])
+AC_CACHE_VAL(ac_cv_lib_proplist_version_ok,
+[AC_TRY_LINK(
+[/* Test version of libPropList we have */
+#include <proplist.h>
+
+#if !defined(PROPLIST_VERSION) || PROPLIST_VERSION < $lPL_major_version*10000 + $lPL_minor_version*100 + $lPL_micro_version
+#error libPropList on this system is too old. Consider upgrading to at least $1
+#endif
+], [], 
+eval "ac_cv_lib_proplist_version_ok=yes", 
+eval "ac_cv_lib_proplist_version_ok=no")])
+if eval "test \"`echo '$ac_cv_lib_proplist_version_ok'`\" = yes"; then
+  AC_MSG_RESULT(yes)
+  ifelse([$2], , :, [$2])
+else
+  AC_MSG_RESULT(no)
+ifelse([$3], , , [$3
+])dnl
+fi
+CPPFLAGS="$CPPFLAGS_old"
+])
+
 
 dnl
 dnl WM_CHECK_REDCRAP_BUGS(prefix,bindir,libdir)

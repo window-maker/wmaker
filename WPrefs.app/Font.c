@@ -166,9 +166,9 @@ paintPreviewBox(Panel *panel)
     {
 	int h, h2, fh, fh2;
 	int i;
-	const mx = 20;
-	const my = 120;
-	const mw = 100;
+	const int mx = 20;
+	const int my = 120;
+	const int mw = 100;
 
 	
 	fh = WMFontHeight(panel->menuTitleFont);

@@ -368,6 +368,7 @@ RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
     unsigned char *d;
     unsigned char *s;
     int dalpha = HAS_ALPHA(image);
+    int dch = (dalpha ? 4 : 3);
 
     assert(dy <= image->height);
     assert(dx <= image->width);
@@ -382,7 +383,10 @@ RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
 
     if (height > image->height - dy)
 	height = image->height - dy;
-    
+
+    d = image->data + dy*image->width*dch + dx;
+    dwi = (image->width - width)*dch;
+
     c_opaqueness = 255 - opaqueness;
 #define OP opaqueness
     if (!HAS_ALPHA(src)) {
@@ -391,14 +395,6 @@ RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
 	s = src->data + sy*src->width*3;	
 	swi = (src->width - width) * 3;
 	
-	if (dalpha) {
-	    d = image->data + dy*image->width*4 + dx;
-	    dwi = (image->width - width)*4;
-	} else {
-	    d = image->data + dy*image->width*3 + dx;
-	    dwi = (image->width - width)*3;
-	}
-
 	for (y=0; y < height; y++) {
 	    for (x=0; x < width; x++) {
 		*d = (((int)*d *(int)COP) + ((int)*s *(int)OP))/256;
@@ -414,7 +410,10 @@ RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
 	}
 #undef COP
     } else {
-	int tmp;
+        int tmp;
+
+	s = src->data + sy*src->width*4;
+	swi = (src->width - width) * 4;
 	
 	for (y=0; y < height; y++) {
 	    for (x=0; x < width; x++) {

@@ -410,20 +410,16 @@ static void
 dumpRImage(char *path, RImage *image)
 {
     FILE *f;
+    int channels = (image->format == RRGBAFormat ? 4 : 3);
 
     f = fopen(path, "w");
     if (!f) {
 	wsyserror(path);
 	return;
     }
-    fprintf(f, "%02x%02x%1x", image->width, image->height,
-	    image->data[3]!=NULL ? 4 : 3);
+    fprintf(f, "%02x%02x%1x", image->width, image->height, channels);
 
-    fwrite(image->data[0], 1, image->width * image->height, f);
-    fwrite(image->data[1], 1, image->width * image->height, f);
-    fwrite(image->data[2], 1, image->width * image->height, f);
-    if (image->data[3])
-	fwrite(image->data[3], 1, image->width * image->height, f);
+    fwrite(image->data, 1, image->width * image->height * channels, f);
 
     if (fclose(f) < 0) {
 	wsyserror(path);
@@ -585,8 +581,8 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 
 	str = PLGetString(PLGetArrayElement(texture, 1));
 
-	if (path = wfindfileinarray(GetObjectForKey("PixmapPath"), str))
-        timage = RLoadImage(rc, path, 0);
+	if ((path=wfindfileinarray(GetObjectForKey("PixmapPath"), str))!=NULL)
+            timage = RLoadImage(rc, path, 0);
 
 	if (!path || !timage) {
 	    wwarning("could not load file '%s': %s", path,
@@ -645,8 +641,8 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 
 	str = PLGetString(PLGetArrayElement(texture, 1));
 
-	if (path = wfindfileinarray(GetObjectForKey("PixmapPath"), str))
-        timage = RLoadImage(rc, path, 0);
+	if ((path=wfindfileinarray(GetObjectForKey("PixmapPath"), str))!=NULL)
+            timage = RLoadImage(rc, path, 0);
 
 	if (!path || !timage) {
 	    wwarning("could not load file '%s': %s", path ? path : str,
@@ -1327,7 +1323,6 @@ loadRImage(WMScreen *scr, char *path)
     FILE *f;
     RImage *image;
     int w, h, d;
-    int i;
     Pixmap pixmap;
 
     f = fopen(path, "r");
@@ -1337,9 +1332,7 @@ loadRImage(WMScreen *scr, char *path)
     fscanf(f, "%02x%02x%1x", &w, &h, &d);
 
     image = RCreateImage(w, h, d == 4);
-    for (i = 0; i < d; i++) {
-	fread(image->data[i], 1, w*h, f);
-    }
+    fread(image->data, 1, w*h*d, f);
     fclose(f);
 
     RConvertImage(WMScreenRContext(scr), image, &pixmap);
