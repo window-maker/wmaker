@@ -69,7 +69,9 @@ enum {
   WMTitledWindowMask = 1,
   WMClosableWindowMask = 2,
   WMMiniaturizableWindowMask = 4,
-  WMResizableWindowMask = 8
+  WMResizableWindowMask = 8,
+  WMIconWindowMask = 64,
+  WMMiniWindowMask = 128
 };
 #endif /* _WINGS_H_ */
 
