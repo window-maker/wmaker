@@ -61,6 +61,8 @@ play(Display *dpy, int pitch, int delay)
 }
 #endif
 
+
+
 #ifdef DEMATERIALIZE_ICON
 void
 DoKaboom(WScreen *scr, Window win, int x, int y)
@@ -94,8 +96,8 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
 
     for (i=0; i<DEMATERIALIZE_STEPS; i++) {
 	XEvent foo;
-	if (XCheckTypedWindowEvent(dpy, scr->root_win, ButtonPressMask,
-				   &foo)) {
+	if (XCheckTypedEvent(dpy, ButtonPress, &foo)) {
+	    XPutBackEvent(dpy, &foo);
 	    XClearWindow(dpy, scr->root_win);
 	    break;
 	}
@@ -106,6 +108,7 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
 	XCopyArea(dpy, pixmap, scr->root_win, scr->copy_gc, 0, 0, w, h, x, y);
 	XFreePixmap(dpy, pixmap);
 	XFlush(dpy);
+	wusleep(1000);
     }
     XClearArea(dpy, scr->root_win, x, y, w, h, False);
     XFlush(dpy);
@@ -113,7 +116,6 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
     RDestroyImage(icon);
     RDestroyImage(back);
 }
-
 #else /* !DEMATERIALIZE_ICON */
 void
 DoKaboom(WScreen *scr, Window win, int x, int y)

@@ -303,6 +303,7 @@ typedef struct WSavedState {
     int y;
     unsigned int w;
     unsigned int h;
+    unsigned window_shortcuts; /* mask like 1<<shortcut_number */
 } WSavedState;
 
 

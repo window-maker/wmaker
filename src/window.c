@@ -761,6 +761,15 @@ wManageWindow(WScreen *scr, Window window)
 	    wwin->flags.hidden = wstate->hidden;
 	    wwin->flags.miniaturized = wstate->miniaturized;
 	    workspace = wstate->workspace;
+
+	    if (scr->flags.startup && wstate->window_shortcuts >= 0) {
+		int i;
+
+		for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
+		    if (wstate->window_shortcuts & (1<<i))
+			scr->shortcutWindow[i] = wwin;
+		}
+	    }
 	    free(wstate);
 	}
     }
@@ -2051,17 +2060,22 @@ wWindowConfigureBorders(WWindow *wwin)
 void
 wWindowSaveState(WWindow *wwin)
 {
-    CARD32 data[9];
-    
-    memset(data, 0, sizeof(CARD32)*9);
+    CARD32 data[10];
+    int i;
+
+    memset(data, 0, sizeof(CARD32)*10);
     data[0] = wwin->frame->workspace;
     data[1] = wwin->flags.miniaturized;
     data[2] = wwin->flags.shaded;
     data[3] = wwin->flags.hidden;
 
+    for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
+	if (wwin->screen_ptr->shortcutWindow[i] == wwin)
+	    data[9] |= 1<<i;
+    }
     XChangeProperty(dpy, wwin->client_win, _XA_WINDOWMAKER_STATE,
 		    _XA_WINDOWMAKER_STATE, 32, PropModeReplace,
-		    (unsigned char *)data, 9);
+		    (unsigned char *)data, 10);
 }
 
 
@@ -2074,7 +2088,7 @@ getSavedState(Window window, WSavedState **state)
     unsigned long bytes_after_ret;
     CARD32 *data;
     
-    if (XGetWindowProperty(dpy, window, _XA_WINDOWMAKER_STATE, 0, 9,
+    if (XGetWindowProperty(dpy, window, _XA_WINDOWMAKER_STATE, 0, 10,
 			   True, _XA_WINDOWMAKER_STATE,
 			   &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
 			   (unsigned char **)&data)!=Success || !data)
@@ -2092,6 +2106,7 @@ getSavedState(Window window, WSavedState **state)
 	(*state)->y = data[6];
 	(*state)->w = data[7];
 	(*state)->h = data[8];
+	(*state)->window_shortcuts = data[9];
     }
     XFree(data);
     

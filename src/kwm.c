@@ -1284,7 +1284,7 @@ wKWMCheckRootHintChange(WScreen *scr, XPropertyEvent *event)
 
 	processed = False;
 
-	for (i = 0; i < MAX_WORKSPACES; i++) {
+	for (i = 0; i < MAX_WORKSPACES && i < scr->workspace_count; i++) {
 	     if (event->atom == _XA_KWM_DESKTOP_NAME_[i]) {
 		 char *name;
 

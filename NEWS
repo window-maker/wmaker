@@ -64,7 +64,7 @@ Window Maker has become a GNU program (part of the GNU Project).
 Title text drop shadow
 ----------------------
 
-drop shadow option added for titlebar text. The is a compile time 
+drop shadow option added for titlebar text. This is a compile time 
 option which needs to be defined in src/wconfig.h after you run
 configure and before you run make.
 

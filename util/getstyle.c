@@ -460,7 +460,7 @@ makeThemePack(proplist_t style, char *themeName)
 	tmp = wmalloc(strlen(themeDir)+20);
 	sprintf(tmp, "/bin/mkdir %s", themeDir);
 	if (system(tmp)!=0) {
-	    printf("%s: could not create directory %s\n", ProgName, themeDir);
+	    printf("%s: could not create directory %s. Probably there's already a theme with that name in this directory.\n", ProgName, themeDir);
 	    exit(1);
 	}
 	free(tmp);

@@ -453,7 +453,7 @@ wMenuRealize(WMenu *menu)
 	twidth = wTextWidth(scr->menu_title_font->font, menu->frame->title,
 			     strlen(menu->frame->title));
         theight = menu->frame->top_width;
-        twidth += theight + theight/2 + (wPreferences.new_style ? 8 : 0);
+        twidth += theight + (wPreferences.new_style ? 16 : 8);
     } else {
 	twidth = 0;
 	theight = 0;
@@ -467,7 +467,7 @@ wMenuRealize(WMenu *menu)
 
 	/* search widest text */
 	text = menu->entries[i]->text;
-	width = wTextWidth(scr->menu_entry_font->font, text, strlen(text))+12;
+	width = wTextWidth(scr->menu_entry_font->font, text, strlen(text))+10;
 
 	if (menu->entries[i]->flags.indicator) {
 	    width += MENU_INDICATOR_SPACE;
@@ -482,7 +482,7 @@ wMenuRealize(WMenu *menu)
 	    rwidth = wTextWidth(scr->menu_entry_font->font, text,
 				 strlen(text)) + 5;
 	else if (menu->entries[i]->cascade>=0)
-	    rwidth = eheight;
+	    rwidth = 16;
 	else
 	    rwidth = 4;
 
@@ -494,6 +494,7 @@ wMenuRealize(WMenu *menu)
     if (mwidth < twidth)
 	mwidth = twidth;
 
+    
     wCoreConfigure(menu->menu, 0, theight, mwidth, menu->entry_no*eheight -1);
 
     wFrameWindowResize(menu->frame, mwidth, menu->entry_no*eheight-1

@@ -961,7 +961,7 @@ updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
 	/* horizontal movement: check horizontal edge resistances */
 	if (dx < 0) {
 	    /* window is the leftmost window: check against screen edge */
-	    edge = 0;
+	    edge = scr->totalUsableArea.x1;
 
 	    /* check position of nearest window to the left */
 	    if (data->rightIndex > 0) {
@@ -983,7 +983,7 @@ updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
 	    }
 	} else if (dx > 0) {
 	    /* window is the rightmost window: check against screen edge */
-	    edge = scr->scr_width;
+	    edge = scr->totalUsableArea.x2;
 
 	    /* check position of nearest window to the right */
 	    if (data->leftIndex > 0) {
@@ -1009,7 +1009,7 @@ updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
 	/* vertical movement: check vertical edge resistances */
 	if (dy < 0) {
 	    /* window is the topmost window: check against screen edge */
-	    edge = 0;
+	    edge = scr->totalUsableArea.y1;
 
 	    /* check position of nearest window to the top */
 	    if (data->bottomIndex > 0) {
@@ -1031,7 +1031,7 @@ updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
 	    }
 	} else if (dy > 0) {
 	    /* window is the bottommost window: check against screen edge */
-	    edge = scr->scr_height;
+	    edge = scr->totalUsableArea.y2;
 
 	    /* check position of nearest window to the bottom */
 	    if (data->topIndex > 0) {

@@ -18,6 +18,10 @@ Changes since version 0.51.2:
 - added DisableMiniwindows option
 - kde: miniaturize animation will match the taskbar icon (KWM_WIN_ICON_GEOMETRY)
 - miniwindows show the title of the window if there is none set for it
+- fixed crash on kpanel restart
+- remember window shortcuts after restart
+- change edge resistance to account for panels and stuffs
+- narrower menus
 
 Changes since version 0.51.1:
 .............................
