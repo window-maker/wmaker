@@ -56,6 +56,9 @@ Changes since version 0.80.2:
 - Added Catalan translation (Ernest Adrogué <eadrogue@gmx.net>)
 - Fixed a bug with deminiaturizing windows when the application is hidden and
   the miniaturized window is selected from the window list menu
+- Fixed a bug with not showing shaded window frames when the application is
+  hidden and another window belonging to the app is selected in the window
+  list menu
 
 
 Changes since version 0.80.1:
