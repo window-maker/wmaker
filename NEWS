@@ -2,6 +2,21 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+--- 0.63.2
+
+No Polling of Configuration Files
+---------------------------------
+
+Running Window Maker with one of -nopolling or --no-polling command line
+options will make it not to poll every 3 seconds for changes in its
+configuration files (good for laptops to let them spin disks down when idle).
+
+Note:
+For the ones used with Jim Knoble's 'no polling' patch, this is the same,
+except that the need to #define ENABLE_NO_POLLING in wconfig.h was removed
+and the behaviour is always available if you use the command line option.
+
+
 --- 0.63.0
 
 

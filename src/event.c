@@ -219,6 +219,9 @@ DispatchEvent(XEvent *event)
 	Shutdown(WSRestartPreparationMode);
 	/* received SIGHUP */
 	Restart(NULL, True);
+    } else if (WCHECK_STATE(WSTATE_NEED_REREAD)) {
+        WCHANGE_STATE(WSTATE_NORMAL);
+        wDefaultsCheckDomains("bla");
     }
 
     /* for the case that all that is wanted to be dispatched is

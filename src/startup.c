@@ -278,6 +278,22 @@ handleSig(int sig)
 	    WMAddIdleHandler(delayedAction, NULL);
 	}
         return;
+    } else if (sig == SIGUSR2) {
+#ifdef SYS_SIGLIST_DECLARED
+        wwarning(_("got signal %i (%s) - rereading defaults\n"), sig, sys_siglist[sig]);
+#else
+        wwarning(_("got signal %i - rereading defaults\n"), sig);
+#endif
+
+        WCHANGE_STATE(WSTATE_NEED_REREAD);
+        /* setup idle handler, so that this will be handled when
+         * the select() is returned becaused of the signal, even if
+         * there are no X events in the queue */
+        if (!WDelayedActionSet) {
+            WDelayedActionSet = 1;
+            WMAddIdleHandler(delayedAction, NULL);
+	}
+        return;
     } else if (sig == SIGTERM || sig == SIGHUP) {
 #ifdef SYS_SIGLIST_DECLARED
         wwarning(_("got signal %i (%s) - exiting...\n"), sig, sys_siglist[sig]);
@@ -796,6 +812,7 @@ StartUp(Bool defaultScreenOnly)
      * -Dan */
     sig_action.sa_flags = SA_RESTART;
     sigaction(SIGUSR1, &sig_action, NULL);
+    sigaction(SIGUSR2, &sig_action, NULL);
 
     /* ignore dead pipe */
     sig_action.sa_handler = ignoreSig;
@@ -955,7 +972,7 @@ StartUp(Bool defaultScreenOnly)
 	Exit(1);
     }
 
-    if (!wPreferences.flags.noupdates) {
+    if (!wPreferences.flags.nopolling && !wPreferences.flags.noupdates) {
 	/* setup defaults file polling */
 	WMAddTimerHandler(3000, wDefaultsCheckDomains, NULL);
     }

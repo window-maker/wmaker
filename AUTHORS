@@ -102,7 +102,7 @@ EMACS/keypad like cursor movement for WINGs textfield
 Jim Knoble <jmknoble@pobox.com>
 made autoarrange icons a runtime option, SHADOW_RESIZEBAR c-time option,
 no workspace switch to the same workspace, dashed icon selection,
-misclellaneous bug fixes, definable cursors..
+misclellaneous bug fixes, definable cursors, --no-polling command line option.
 
 The JED Text Editor <xjed@windowmaker.org>
 Project maintainer

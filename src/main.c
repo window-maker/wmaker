@@ -433,6 +433,7 @@ print_help()
     puts(_(" --create-stdcmap	create the standard colormap hint in PseudoColor visuals"));
     puts(_(" --visual-id visualid	visual id of visual to use"));
     puts(_(" --static		do not update or save configurations"));
+    puts(_(" --no-polling		do not periodically check for configuration updates"));
 #ifdef DEBUG
     puts(_(" --synchronous		turn on synchronous display mode"));
 #endif
@@ -643,6 +644,10 @@ main(int argc, char **argv)
 		       || strcmp(argv[i], "--static")==0) {
 
 		wPreferences.flags.noupdates = 1;
+            } else if (strcmp(argv[i], "-nopolling")==0
+                       || strcmp(argv[i], "--no-polling")==0) {
+
+		wPreferences.flags.nopolling = 1;
 #ifdef XSMP_ENABLED
 	    } else if (strcmp(argv[i], "-clientid")==0
 		       || strcmp(argv[i], "-restore")==0) {

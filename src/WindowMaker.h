@@ -232,6 +232,7 @@ typedef enum {
 #define WSTATE_EXITING		3
 #define WSTATE_RESTARTING	4
 #define WSTATE_MODAL		5
+#define WSTATE_NEED_REREAD	6
 
 
 #define WCHECK_STATE(state)	(state == WProgramState)
@@ -437,6 +438,7 @@ typedef struct WPreferences {
 	unsigned int noautolaunch:1;   /* don't autolaunch apps */
 	unsigned int norestore:1;      /* don't restore session */
 	unsigned int create_stdcmap:1; /* create std colormap */
+        unsigned int nopolling:1;      /* don't poll for defaults changes */
     } flags;			       /* internal flags */
 } WPreferences;
 

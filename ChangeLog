@@ -10,6 +10,7 @@ Changes since version 0.63.1:
 - Renamed se.po to sv.po
 - New version of wkdemenu.pl (from Malcolm Cowe <malk@bruhaha.co.uk>)
 - new updated Slovak translations (Jan Tomka/judas@hell <tomka@oalevice.sk>)
+- integrated the 'no polling' patch from Jim Knoble <jmknoble@jmknoble.cx>.
 
 
 Changes since version 0.63.0:
