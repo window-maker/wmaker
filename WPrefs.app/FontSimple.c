@@ -162,7 +162,23 @@ static int compare_family(const void *a, const void *b)
 {
     FontFamily *fa= (FontFamily*)a;
     FontFamily *fb= (FontFamily*)b;
-    return strcasecmp(fa->name, fb->name);
+    return strcmp(fa->name, fb->name);
+}
+
+
+static int compare_styles(const void *a, const void *b)
+{
+    FontStyle *sa= (FontStyle*)a;
+    FontStyle *sb= (FontStyle*)b;
+    int compare;
+
+    compare = sa->weight - sb->weight;
+    if (compare != 0)
+        return compare;
+    compare = sa->slant - sb->slant;
+    if (compare != 0)
+        return compare;
+    return (sa->width - sb->width);
 }
 
 
@@ -227,6 +243,12 @@ lookup_available_fonts(_Panel *panel)
         }
         qsort(panel->fonts->families, panel->fonts->familyn, sizeof(FontFamily),
               compare_family);
+
+        for (i=0; i < panel->fonts->familyn; i++)
+        {
+            qsort(panel->fonts->families[i].styles, panel->fonts->families[i].stylen,
+                  sizeof(FontStyle), compare_styles);
+        }
 
         FcFontSetDestroy(fonts);
     }
@@ -447,8 +469,8 @@ selectedOption(WMWidget *w, void *data)
             FcChar8 *name;
             int weight, slant, width;
             double size;
+            int distance, closest, found;
             int i;
-            int found;
 
             FcDefaultSubstitute(pat);
 
@@ -485,43 +507,43 @@ selectedOption(WMWidget *w, void *data)
             if (FcPatternGetDouble(pat, FC_PIXEL_SIZE, 0, &size) != FcResultMatch)
                 size= 10.0;
 
-            found= 0;
-            for (i= 0; i < WMGetListNumberOfRows(panel->styleL); i++)
+            for (i=0, found=0, closest=0; i < WMGetListNumberOfRows(panel->styleL); i++)
             {
                 WMListItem *item= WMGetListItem(panel->styleL, i);
                 FontStyle *style= (FontStyle*)item->clientData;
-                if (style->weight == weight
-                    && style->width == width
-                    && style->slant == slant)
-                {
-                    found= 1;
-                    WMSelectListItem(panel->styleL, i);
-                    WMSetListPosition(panel->styleL, i);
-                    break;
-                }
-            }
-            if (!found)
-                WMSelectListItem(panel->styleL, -1);
 
-            found= 0;
-            {
-                int closest= 100000, index= -1;
-                
-                for (i= 0; i < WMGetListNumberOfRows(panel->sizeL); i++)
-                {
-                    WMListItem *item= WMGetListItem(panel->sizeL, i);
-                    int tmp;
+                distance = ((abs(style->weight - weight) << 16) +
+                            (abs(style->slant - slant)   <<  8) +
+                            (abs(style->width - width)));
 
-                    tmp= atoi(item->text);
-                    if (abs(tmp-size) < abs(tmp-closest))
-                    {
-                        closest= tmp;
-                        index= i;
+                if (i==0 || distance < closest) {
+                    closest = distance;
+                    found = i;
+                    if (distance == 0) {
+                        break; /* perfect match */
                     }
                 }
-                WMSelectListItem(panel->sizeL, index);
-                WMSetListPosition(panel->sizeL, index);
             }
+            WMSelectListItem(panel->styleL, found);
+            WMSetListPosition(panel->styleL, found);
+
+            for (i=0, found=0, closest=0; i < WMGetListNumberOfRows(panel->sizeL); i++)
+            {
+                WMListItem *item= WMGetListItem(panel->sizeL, i);
+                int distance;
+
+                distance = abs(size - atoi(item->text));
+
+                if (i==0 || distance < closest) {
+                    closest= distance;
+                    found= i;
+                    if (distance == 0) {
+                        break; /* perfect match */
+                    }
+                }
+            }
+            WMSelectListItem(panel->sizeL, found);
+            WMSetListPosition(panel->sizeL, found);
             
             selected(NULL, panel);
         }
