@@ -155,6 +155,21 @@ WMSetTabViewDelegate(WMTabView *tPtr, WMTabViewDelegate *delegate)
 }
 
 
+WMTabViewItem*
+WMAddTabViewItemWithView(WMTabView *tPtr, WMView *view, int identifier,
+			 char *label)
+{
+    WMTabViewItem *item;
+    
+    item = WMCreateTabViewItemWithIdentifier(identifier);
+    WMSetTabViewItemView(item, view);
+    WMAddItemInTabView(tPtr, item);
+    WMSetTabViewItemLabel(tPtr, label);
+
+    return item;
+}
+
+
 void
 WMAddItemInTabView(WMTabView *tPtr, WMTabViewItem *item)
 {

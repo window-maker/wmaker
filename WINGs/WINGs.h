@@ -1603,6 +1603,9 @@ void WMInsertItemInTabView(WMTabView *tPtr, int index, WMTabViewItem *item);
 
 void WMRemoveTabViewItem(WMTabView *tPtr, WMTabViewItem *item);
 
+WMTabViewItem *WMAddTabViewItemWithView(WMTabView *tPtr, WMView *view, 
+					int identifier, char *label);
+
 WMTabViewItem *WMTabViewItemAtPoint(WMTabView *tPtr, int x, int y);
 
 void WMSelectFirstTabViewItem(WMTabView *tPtr);
