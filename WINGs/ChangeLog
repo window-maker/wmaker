@@ -266,7 +266,8 @@ changes since wmaker 0.62.1:
   as a result the shaded windows didn't go away when closed. The non-shaded
   windows were unmapped on close but not destroyed either so they only
   apparently went away, but continued to use memory).
-
+- Fixed a bug in the hashtable code which free'd the whole item instead of
+  just the item key in WMResetHashTable() (possible source of SIGSEGVs)
 
 
 changes since wmaker 0.62.0:

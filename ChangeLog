@@ -71,6 +71,8 @@ Changes since version 0.80.2:
 - Fixed small memory leak in WINGs' font panel code.
 - Fixed memory leak in WINGs' file panel code.
 - Updated Bulgarian translations (Anton Zinoviev <zinoviev@debian.org>)
+- Fixed a bug in WINGs' hashtable which free'd the wrong memory in the
+  WMResetHashTable() function (possible source of SIGSEGVs)
 
 
 Changes since version 0.80.1:

@@ -148,7 +148,7 @@ WMResetHashTable(WMHashTable *table)
 	item = table->table[i];
 	while (item) {
 	    tmp = item->next;
-	    RELKEY(table, item);
+	    RELKEY(table, item->key);
 	    wfree(item);
 	    item = tmp;
 	}
