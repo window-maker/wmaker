@@ -366,7 +366,7 @@ WInsertMenuItemWithTitle(WEditMenu *mPtr, char *title, int index)
 	index = mPtr->itemCount;
 
     if (mPtr->itemCount == mPtr->itemsAlloced) {
-	WEditMenuItem *newList;
+	WEditMenuItem **newList;
 
 	newList = wmalloc(sizeof(WEditMenuItem*)*(mPtr->itemsAlloced+10));
 	memset(newList, 0, sizeof(WEditMenuItem*)*(mPtr->itemsAlloced+10));

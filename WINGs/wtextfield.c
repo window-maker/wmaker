@@ -820,7 +820,8 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     switch (ksym) {
      case XK_Tab:
 	if (event->xkey.state & ShiftMask) {
-	    if (tPtr->view->prevFocusChain) {
+            if (tPtr->view->prevFocusChain &&
+                tPtr->view->prevFocusChain->flags.mapped) {
 		W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
 				     tPtr->view->prevFocusChain);
 		tPtr->flags.notIllegalMovement = 1;
@@ -828,7 +829,8 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	    WMPostNotificationName(WMTextDidEndEditingNotification, tPtr,
 				   (void*)WMBacktabTextMovement);
 	} else {
-	    if (tPtr->view->nextFocusChain) {
+            if (tPtr->view->nextFocusChain &&
+                tPtr->view->nextFocusChain->flags.mapped) {
 		W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
 				 tPtr->view->nextFocusChain);
 		tPtr->flags.notIllegalMovement = 1;

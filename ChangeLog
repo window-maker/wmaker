@@ -34,6 +34,7 @@ Changes since version 0.51.0:
 - fixed crash with internal dialogs and multi-heads
 - added standard colormap support to wrlib (taken from libXmu sources)
 - fixed memory leak in attribute panel
+- fixed bug with window that can get focus if both shaded and hidden.
 
 Changes since version 0.50.2:
 .............................

@@ -425,7 +425,7 @@ wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 Bool
 wWindowCanReceiveFocus(WWindow *wwin)
 {
-    if (!wwin->flags.mapped && !wwin->flags.shaded)
+    if (!wwin->flags.mapped && (!wwin->flags.shaded || wwin->flags.hidden))
 	return False;
     if (WFLAGP(wwin, no_focusable) || wwin->flags.miniaturized)
 	return False;

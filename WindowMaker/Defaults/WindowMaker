@@ -48,9 +48,7 @@
   AutoArrangeIcons = NO;
   AdvanceToNewWorkspace = NO;
   CycleWorkspaces = NO;
-#ifdef WEENDOZE_CYCLE
-  WindozeCycling = YES;
-#endif /* WEENDOZE_CYCLE */
+  WindozeCycling = NO;
   ResizeDisplay = line;
   MoveDisplay = floating;
   OpaqueMove = YES;

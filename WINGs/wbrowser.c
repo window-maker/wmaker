@@ -267,7 +267,7 @@ WMSetBrowserColumnTitle(WMBrowser *bPtr, int column, char *title)
     if (bPtr->titles[column])
 	free(bPtr->titles[column]);
 
-    bPtr->titles[column] = wstrdup(title);
+    bPtr->titles[column] = (title!=NULL) ? wstrdup(title) : wstrdup("");
    
     if (COLUMN_IS_VISIBLE(bPtr, column) && bPtr->flags.isTitled) {
 	drawTitleOfColumn(bPtr, column);
@@ -893,27 +893,31 @@ listCallback(void *self, void *clientData)
     int i;
 
     item = WMGetListSelectedItem(lPtr);
-    if (!item || oldItem == item)
-	return;
-
-    for (i=0; i<bPtr->columnCount; i++) {
-	if (lPtr == bPtr->columns[i])
-	    break;
+    if (!item) {
+        oldItem = item;
+        return;
     }
-    assert(i<bPtr->columnCount);
 
-    /* columns at right must be cleared */
-    removeColumn(bPtr, i+1);
-    /* open directory */
-    if (item->isBranch) {
-	WMAddBrowserColumn(bPtr);
-	loadColumn(bPtr, bPtr->usedColumnCount-1);
+    if (oldItem != item) {
+        for (i=0; i<bPtr->columnCount; i++) {
+            if (lPtr == bPtr->columns[i])
+                break;
+        }
+        assert(i<bPtr->columnCount);
+
+        /* columns at right must be cleared */
+        removeColumn(bPtr, i+1);
+        /* open directory */
+        if (item->isBranch) {
+            WMAddBrowserColumn(bPtr);
+            loadColumn(bPtr, bPtr->usedColumnCount-1);
+        }
+        if (bPtr->usedColumnCount < bPtr->maxVisibleColumns)
+            i = 0;
+        else
+            i = bPtr->usedColumnCount-bPtr->maxVisibleColumns;
+        scrollToColumn(bPtr, i, True);
     }
-    if (bPtr->usedColumnCount < bPtr->maxVisibleColumns)
-	i = 0;
-    else
-	i = bPtr->usedColumnCount-bPtr->maxVisibleColumns;
-    scrollToColumn(bPtr, i, True);
 
     /* call callback for click */
     if (bPtr->action)
