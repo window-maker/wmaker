@@ -45,6 +45,8 @@ Changes since wmaker 0.80.1:
 - Added WMGetWidgetBackgroundColor()
 - Code cleanup in wtext.c
 - Fixed a memory leak in wfontpanel.c
+- Added a check that only %d is used in a font specification in WMGLOBAL and at
+  most once for each font in a fontset (eliminates a possible security exploit)
 
 
 Changes since wmaker 0.80.0:

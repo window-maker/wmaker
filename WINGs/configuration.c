@@ -45,6 +45,51 @@ getButtonWithName(const char *name, unsigned defaultButton)
 }
 
 
+static Bool
+missingOrInvalidXLFD(char *xlfd)
+{
+    char *ptr = xlfd;
+    Bool broken = False;
+    int count = 0;
+
+    if (!xlfd)
+        return True;
+
+    while (*ptr) {
+        if (*ptr=='%') {
+            ptr++;
+            if ((*ptr=='d' || *ptr=='i') && count==0) {
+                count++;
+            } else {
+                broken = True;
+                break;
+            }
+        } else if (*ptr==',') {
+            count = 0;
+        }
+        ptr++;
+    }
+
+    if (broken) {
+        if (xlfd == WINGsConfiguration.systemFont) {
+            ptr = "system font";
+        } else if (xlfd == WINGsConfiguration.boldSystemFont) {
+            ptr = "bold system font";
+        } else if (xlfd == WINGsConfiguration.antialiasedSystemFont) {
+            ptr = "antialiased system font";
+        } else if (xlfd == WINGsConfiguration.antialiasedBoldSystemFont) {
+            ptr = "antialiased bold system font";
+        } else {
+            ptr = "Unknown System Font";
+        }
+        wwarning(_("Invalid %s specification: '%s' (only %%d is allowed and "
+                   "at most once for each font in a fontset)."), ptr, xlfd);
+    }
+
+    return broken;
+}
+
+
 void
 W_ReadConfigurations(void)
 {
@@ -133,17 +178,16 @@ W_ReadConfigurations(void)
             WMGetUDIntegerForKey(defaults, "DefaultFontSize");
     }
 
-
-    if (!WINGsConfiguration.systemFont) {
-	WINGsConfiguration.systemFont = SYSTEM_FONT;
+    if (missingOrInvalidXLFD(WINGsConfiguration.systemFont)) {
+        WINGsConfiguration.systemFont = SYSTEM_FONT;
     }
-    if (!WINGsConfiguration.boldSystemFont) {
+    if (missingOrInvalidXLFD(WINGsConfiguration.boldSystemFont)) {
 	WINGsConfiguration.boldSystemFont = BOLD_SYSTEM_FONT;
     }
-    if (!WINGsConfiguration.antialiasedSystemFont) {
+    if (missingOrInvalidXLFD(WINGsConfiguration.antialiasedSystemFont)) {
 	WINGsConfiguration.antialiasedSystemFont = XFTSYSTEM_FONT;
     }
-    if (!WINGsConfiguration.antialiasedBoldSystemFont) {
+    if (missingOrInvalidXLFD(WINGsConfiguration.antialiasedBoldSystemFont)) {
 	WINGsConfiguration.antialiasedBoldSystemFont = XFTBOLD_SYSTEM_FONT;
     }
     if (!WINGsConfiguration.floppyPath) {

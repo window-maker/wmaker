@@ -3,11 +3,11 @@
 SUBDIRS = wrlib WINGs src util po WindowMaker wmlib test WPrefs.app doc\
 	contrib
 
-EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N MIRRORS COPYING.WTFPL \
-	Install INSTALL.pt README.pt FAQ.I18N.cs INSTALL.cs\
-	mkpatch README.KDE README.GNOME WindowMaker.lsm.in\
-	README.definable-cursor \
-	FAQ.I18N.sk INSTALL.sk INSTALL.es INSTALL.fr
+EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N FAQ.I18N.cs FAQ.I18N.sk \
+	Install INSTALL.cs INSTALL.fr INSTALL.es INSTALL.pt INSTALL.sk \
+	README.antialiasing README.definable-cursor README.pt \
+	README.KDE README.GNOME Sample.XftConfig \
+	MIRRORS COPYING.WTFPL mkpatch WindowMaker.lsm.in
 #	libwmfun-0.0.3.tar.gz
 
 WindowMaker.lsm: WindowMaker.lsm.in

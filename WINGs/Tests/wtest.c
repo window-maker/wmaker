@@ -1303,7 +1303,6 @@ main(int argc, char **argv)
      */
 
 
-    testTextField(scr);
     testText(scr);
     testFontPanel(scr);
 
@@ -1324,6 +1323,7 @@ main(int argc, char **argv)
     testSlider(scr);
     testSplitView(scr);
     testTabView(scr);
+    testTextField(scr);
 #endif
     /*
      * The main event loop.

@@ -34,6 +34,11 @@ Changes since version 0.80.1:
 - Fixed sloppy focus bug (Pawel S. Veselov <pv76716@druid.SFBay.Sun.COM>)
 - Applied Xinerama patch (after fixes) from (Peter Zijlstra
   <a.p.zijlstra@chello.nl>)
+- Added switch to enable/disable antialiased fonts in WPrefs's Expert Settings
+  panel. (Temporary until the Font Settings panel in WPrefs is finished).
+- Added a check that only %d is used in a font specification in WMGLOBAL and at
+  most once for each font in a fontset (eliminates a possible security exploit)
+
 
 Changes since version 0.80.0:
 .............................
