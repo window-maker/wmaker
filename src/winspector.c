@@ -1380,7 +1380,7 @@ createInspectorForWindow(WWindow *wwin, int xpos, int ypos,
 	    caption = _("Keep on Top / Floating");
 	    flag = WFLAGP(wwin, floating);
 	    descr = _("Keep the window over other windows, not allowing\n"
-		      "them to covert it.");
+		      "them to cover it.");
 	    break;
 	 case 6:
 	    caption = _("Keep at Bottom / Sunken");
