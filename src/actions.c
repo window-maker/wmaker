@@ -146,7 +146,7 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 
     /*
      * Safeguard: make sure the timestamp is monotonically increasing
-     * (very unlikely that this will ever be used, still a safeguard)
+     * (very unlikely that this will be needed, still a safeguard)
      */
     if (timestamp <= LastFocusChange)
         timestamp = LastFocusChange + 1;
