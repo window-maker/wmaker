@@ -633,8 +633,8 @@ createPanel(Panel *p)
     WMSetFrameTitle(panel->menuF, _("Workspace Mouse Actions"));
 
     panel->disaB = WMCreateSwitchButton(panel->menuF);
-    WMResizeWidget(panel->disaB, 185, 19);
-    WMMoveWidget(panel->disaB, 20, 20);
+    WMResizeWidget(panel->disaB, 205, 18);
+    WMMoveWidget(panel->disaB, 10, 20);
     WMSetButtonText(panel->disaB, _("Disable mouse actions"));
 
     panel->mblL = WMCreateLabel(panel->menuF);

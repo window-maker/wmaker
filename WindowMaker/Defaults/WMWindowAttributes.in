@@ -6,6 +6,13 @@
   WMSoundServer = {Icon = Sound.#extension#;};
   XTerm = {Icon = GNUterm.#extension#;};
   NXTerm = {Icon = GNUterm.#extension#;};
+  ScilabGraphic0.Xscilab = {KeepInsideScreen=YES;};
+  ScilabGraphic1.Xscilab = {KeepInsideScreen=YES;};
+  ScilabGraphic2.Xscilab = {KeepInsideScreen=YES;};
+  ScilabGraphic3.Xscilab = {KeepInsideScreen=YES;};
+  ScilabGraphic4.Xscilab = {KeepInsideScreen=YES;};
+  ScilabGraphic5.Xscilab = {KeepInsideScreen=YES;};
+  ScilabGraphic6.Xscilab = {KeepInsideScreen=YES;};
   xcalc = {AlwaysUserIcon = Yes;Icon = "HP-16C-48.xpm";};
   Netscape = {Icon = Netscape.xpm;};
   Emacs = {Icon = ColorGNU.xpm;};

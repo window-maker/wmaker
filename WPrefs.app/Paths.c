@@ -223,7 +223,8 @@ listClick(WMWidget *w, void *data)
 
 
 static void
-paintItem(WMList *lPtr, Drawable d, char *text, int state, WMRect *rect)
+paintItem(WMList *lPtr, int index, Drawable d, char *text, int state, 
+	  WMRect *rect)
 {
     int width, height, x, y;
     _Panel *panel = (_Panel*)WMGetHangedData(lPtr);

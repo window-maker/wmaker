@@ -29,6 +29,37 @@
 #endif
 
 
+#if (!defined (__GNUC__) || __GNUC__ < 2 || \
+     __GNUC_MINOR__ < (defined (__cplusplus) ? 6 : 4))
+#define __ASSERT_FUNCTION       ((__const char *) 0)
+#else
+#define __ASSERT_FUNCTION       __PRETTY_FUNCTION__
+#endif
+
+
+#ifdef NDEBUG
+
+#define wassertr(expr, val)		((void)0)
+
+#else /* !NDEBUG */
+
+#define wassertr(expr) \
+	if (!(expr)) { \
+		wwarning("%s line %i (%s): assertion %s failed",\
+			__FILE__, __LINE__, __ASSERT_FUNCTION, #expr);\
+		return;\
+	}
+
+#define wassertrv(expr, val) \
+	if (!(expr)) { \
+		wwarning("%s line %i (%s): assertion %s failed",\
+			__FILE__, __LINE__, __ASSERT_FUNCTION, #expr);\
+		return (val);\
+	}
+
+#endif /* !NDEBUG */
+
+
 
 typedef enum {
     WMPostWhenIdle = 1,

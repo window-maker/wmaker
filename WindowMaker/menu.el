@@ -177,9 +177,9 @@
 	"Επιφάνεια" END
 
 	"Εμφάνιση" MENU
-		"Θέματα" OPEN_MENU THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Στυλ" OPEN_MENU STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Ομάδα Εικονιδίων" OPEN_MENU ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Θέματα" OPEN_MENU -noext  THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Στυλ" OPEN_MENU -noext  STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Ομάδα Εικονιδίων" OPEN_MENU -noext  ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Φόντο" MENU
 			"Μονόχρωμο" MENU
                         	"Μαύρο" WS_BACK '(solid, black)'
@@ -195,7 +195,7 @@
 				"Σημαία" WS_BACK '(mdgradient, green, red, white, green)'
 				"Ουράνος" WS_BACK '(vgradient, blue4, white)'
 			"Διαβαθμισμένο" END
-			"Εικόνες" OPEN_MENU BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+			"Εικόνες" OPEN_MENU -noext  BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Φόντο" END
 		"Αποθήκευση Θέματος" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Όνομα Θέματος)"
 		"Αποθήκευση Ομάδας Εικονιδίων" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(Όνομα Ομάδας)"

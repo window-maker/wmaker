@@ -10,6 +10,7 @@ typedef struct ItemList {
     unsigned int disabled:1;
 } ItemList;
 
+
 typedef struct W_PopUpButton {
     W_Class widgetClass;
     WMView *view;
@@ -30,18 +31,28 @@ typedef struct W_PopUpButton {
     
     WMView *menuView;		       /* override redirect popup menu */
 
+    WMHandlerID timer;		       /* for autoscroll */
+
+    /**/
+    int scrollStartY;		       /* for autoscroll */
+    
     struct {
 	unsigned int pullsDown:1;
 
 	unsigned int configured:1;
 	
 	unsigned int insideMenu:1;
+	
+	unsigned int enabled:1;
+
     } flags;
 } PopUpButton;
 
 
 #define MENU_BLINK_DELAY	60000
 #define MENU_BLINK_COUNT	2
+
+#define SCROLL_DELAY		30
 
 
 W_ViewProcedureTable _PopUpButtonViewProcedures = {
@@ -94,6 +105,8 @@ WMCreatePopUpButton(WMWidget *parent)
     WMCreateEventHandler(bPtr->view, ButtonPressMask|ButtonReleaseMask,
 			 handleActionEvents, bPtr);
 
+    bPtr->flags.enabled = 1;
+    
     bPtr->menuView = W_CreateTopView(scr);
     bPtr->menuView->attribs.override_redirect = True;
     bPtr->menuView->attribFlags |= CWOverrideRedirect;
@@ -101,8 +114,8 @@ WMCreatePopUpButton(WMWidget *parent)
     W_ResizeView(bPtr->menuView, bPtr->view->size.width, 1);
 
     WMCreateEventHandler(bPtr->menuView, ButtonPressMask|ButtonReleaseMask
-			 |EnterWindowMask|LeaveWindowMask|ButtonMotionMask,
-			 handleActionEvents, bPtr);
+			 |EnterWindowMask|LeaveWindowMask|ButtonMotionMask
+			 |ExposureMask, handleActionEvents, bPtr);
 
     return bPtr;
 }
@@ -245,6 +258,15 @@ WMRemovePopUpButtonItem(WMPopUpButton *bPtr, int index)
 
 
 void
+WMSetPopUpButtonEnabled(WMPopUpButton *bPtr, Bool flag)
+{
+    bPtr->flags.enabled = flag;
+    if (bPtr->view->flags.mapped)
+	paintPopUpButton(bPtr);
+}
+
+
+void
 WMSetPopUpButtonSelectedItem(WMPopUpButton *bPtr, int index)
 {
     ItemList *itemPtr = bPtr->items;
@@ -380,10 +402,11 @@ paintPopUpButton(PopUpButton *bPtr)
 		 bPtr->view->size.height, WRRaised);
 
     if (caption) {
-	W_PaintText(bPtr->view, pixmap, scr->normalFont,
-		    6, (bPtr->view->size.height-scr->normalFont->height)/2,
-		    bPtr->view->size.width, WALeft, W_GC(scr->black), False,
-		    caption, strlen(caption));
+	W_PaintText(bPtr->view, pixmap, scr->normalFont, 6, 
+		    (bPtr->view->size.height-WMFontHeight(scr->normalFont))/2,
+		    bPtr->view->size.width, WALeft, 
+		    bPtr->flags.enabled ? W_GC(scr->black) : W_GC(scr->darkGray),
+		    False, caption, strlen(caption));
     }
 
     if (bPtr->flags.pullsDown) {
@@ -448,7 +471,7 @@ paintMenuEntry(PopUpButton *bPtr, int index, int highlight)
     itemHeight = bPtr->view->size.height;
     width = bPtr->view->size.width;
     height = itemHeight * bPtr->itemCount;
-    yo = (itemHeight - scr->normalFont->height)/2;
+    yo = (itemHeight - WMFontHeight(scr->normalFont))/2;
 
     if (!highlight) {
 	XClearArea(scr->display, bPtr->menuView->window, 0, index*itemHeight,
@@ -495,7 +518,7 @@ makeMenuPixmap(PopUpButton *bPtr)
     itemHeight = bPtr->view->size.height;
     width = bPtr->view->size.width;
     height = itemHeight * bPtr->itemCount;
-    yo = (itemHeight - scr->normalFont->height)/2;
+    yo = (itemHeight - WMFontHeight(scr->normalFont))/2;
     
     pixmap = XCreatePixmap(scr->display, bPtr->view->window, width, height, 
 			   scr->depth);
@@ -595,17 +618,71 @@ itemIsEnabled(PopUpButton *bPtr, int index)
 {
     ItemList *item = bPtr->items;
      
-    while (index-- > 0)
+    while (index-- > 0 && item)
 	item = item->nextPtr;
 
-    return !item->disabled;
+    return item ? !item->disabled : False;
 }
+
+
+static void
+autoScroll(void *data)
+{
+    PopUpButton *bPtr = (PopUpButton*)data;
+    int scrHeight = WMWidgetScreen(bPtr)->rootView->size.height;
+    int repeat = 0;
+    int dy = 0;
+
+
+    if (bPtr->scrollStartY >= scrHeight-1
+	&& bPtr->menuView->pos.y+bPtr->menuView->size.height >= scrHeight-1) {
+	repeat = 1;
+
+	if (bPtr->menuView->pos.y+bPtr->menuView->size.height-5 
+	    <= scrHeight - 1) {
+	    dy = scrHeight - 1
+		- (bPtr->menuView->pos.y+bPtr->menuView->size.height);
+	} else
+	    dy = -5;
+
+    } else if (bPtr->scrollStartY <= 1 && bPtr->menuView->pos.y < 1) {
+	repeat = 1;
+
+	if (bPtr->menuView->pos.y+5 > 1) 
+	    dy = 1 - bPtr->menuView->pos.y;
+	else
+	    dy = 5;
+    }
+
+    if (repeat) {
+	int oldItem;
+
+	W_MoveView(bPtr->menuView, bPtr->menuView->pos.x, 
+		   bPtr->menuView->pos.y + dy);
+
+	oldItem = bPtr->highlightedItem;
+	bPtr->highlightedItem = (bPtr->scrollStartY - bPtr->menuView->pos.y)
+	    / bPtr->view->size.height;
+
+	if (oldItem!=bPtr->highlightedItem) {
+	    paintMenuEntry(bPtr, oldItem, False);
+	    paintMenuEntry(bPtr, bPtr->highlightedItem,
+			   itemIsEnabled(bPtr, bPtr->highlightedItem));
+	}
+
+	bPtr->timer = WMAddTimerHandler(SCROLL_DELAY, autoScroll, bPtr);
+    } else {
+	bPtr->timer = NULL;
+    }
+}
+
 
 static void
 handleActionEvents(XEvent *event, void *data)
 {
     PopUpButton *bPtr = (PopUpButton*)data;
     int oldItem;
+    int scrHeight = WMWidgetScreen(bPtr)->rootView->size.height;
 
     CHECK_CLASS(data, WC_PopUpButton);
 
@@ -614,6 +691,11 @@ handleActionEvents(XEvent *event, void *data)
     
     switch (event->type) {
 	/* called for menuView */
+     case Expose:
+	paintMenuEntry(bPtr, bPtr->highlightedItem,
+		       itemIsEnabled(bPtr, bPtr->highlightedItem));
+	break;
+
      case LeaveNotify:
 	bPtr->flags.insideMenu = 0;
 	if (bPtr->menuView->flags.mapped)
@@ -624,7 +706,7 @@ handleActionEvents(XEvent *event, void *data)
      case EnterNotify:
 	bPtr->flags.insideMenu = 1;
 	break;
-	
+
      case MotionNotify:
 	if (bPtr->flags.insideMenu) {
 	    oldItem = bPtr->highlightedItem;
@@ -634,11 +716,24 @@ handleActionEvents(XEvent *event, void *data)
 		paintMenuEntry(bPtr, bPtr->highlightedItem, 
 			       itemIsEnabled(bPtr, bPtr->highlightedItem));
 	    }
+
+	    if (event->xmotion.y_root >= scrHeight-1
+		|| event->xmotion.y_root <= 1) {
+		bPtr->scrollStartY = event->xmotion.y_root;
+		if (!bPtr->timer)
+		    autoScroll(bPtr);
+	    } else if (bPtr->timer) {
+		WMDeleteTimerHandler(bPtr->timer);
+		bPtr->timer = NULL;
+	    }
 	}
 	break;
 	
 	/* called for bPtr->view */
      case ButtonPress:
+	if (!bPtr->flags.enabled)
+	    break;
+
 	popUpMenu(bPtr);
 	if (!bPtr->flags.pullsDown) {
 	    bPtr->highlightedItem = bPtr->selectedItemIndex;
@@ -657,6 +752,12 @@ handleActionEvents(XEvent *event, void *data)
 	XUngrabPointer(bPtr->view->screen->display, event->xbutton.time);
 	if (!bPtr->flags.pullsDown)
 	    popDownMenu(bPtr);
+
+	if (bPtr->timer) {
+	    WMDeleteTimerHandler(bPtr->timer);
+	    bPtr->timer = NULL;
+	}
+
 	if (bPtr->flags.insideMenu && bPtr->highlightedItem>=0) {
             if (itemIsEnabled(bPtr, bPtr->highlightedItem)) {
 		int i;
@@ -690,6 +791,10 @@ static void
 destroyPopUpButton(PopUpButton *bPtr)
 {
     ItemList *itemPtr, *tmp;
+
+    if (bPtr->timer) {
+	WMDeleteTimerHandler(bPtr->timer);
+    }
     
     itemPtr = bPtr->items;
     while (itemPtr!=NULL) {

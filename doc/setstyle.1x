@@ -1,16 +1,20 @@
 .\" Hey, Emacs!  This is an -*- nroff -*- source file.
-.TH setstyle 1x "March 1998"
+.TH setstyle 1x "December 1998"
 .SH NAME
-setstyle \- set style related options for Window Maker 
+setstyle \- set style related options for Window Maker or loads a theme
 .SH SYNOPSIS
 .B setstyle
+.I "[-nofonts]"
 .I stylefile
 .SH DESCRIPTION
 .B setstyle
 reads
 .I stylefile
 and writes its contents to the WindowMaker domain, efectively setting
-the Window Maker style.
+the Window Maker style. If the supplied path is a directory, it will
+be treated as a theme pack and it will be loaded appropriately. If the 
+.B \-nofonts
+flag is specified, font related options in the style file will be ignored.
 .SH ENVIRONMENT
 .IP GNUSTEP_USER_ROOT
 specifies the initial path for the Defaults directory. "Defaults/" is

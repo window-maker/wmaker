@@ -7,3 +7,8 @@
 /* package version */
 #undef VERSION 
 
+/* define if you want GNOME stuff support */
+#undef GNOME_STUFF
+
+/* define if you want KDE hint support */
+#undef KWM_HINTS

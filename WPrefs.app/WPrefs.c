@@ -39,8 +39,6 @@ extern Panel *InitFocus(WMScreen *scr, WMWindow *win);
 
 extern Panel *InitPreferences(WMScreen *scr, WMWindow *win);
 
-extern Panel *InitTextureAndColor(WMScreen *scr, WMWindow *win);
-
 extern Panel *InitText(WMScreen *scr, WMWindow *win);
 
 extern Panel *InitConfigurations(WMScreen *scr, WMWindow *win);
@@ -54,6 +52,13 @@ extern Panel *InitExpert(WMScreen *scr, WMWindow *win);
 extern Panel *InitMenuPreferences(WMScreen *scr, WMWindow *win);
 
 extern Panel *InitIcons(WMScreen *scr, WMWindow *win);
+
+extern Panel *InitThemes(WMScreen *scr, WMWindow *win);
+
+extern Panel *InitTextureAndColor(WMScreen *scr, WMWindow *win);
+
+extern Panel *InitAppearance(WMScreen *scr, WMWindow *win);
+
 
 
 #define MAX_SECTIONS 16
@@ -506,15 +511,21 @@ Initialize(WMScreen *scr)
 #endif
     InitKeyboardShortcuts(scr, WPrefs.win);
     InitMouseSettings(scr, WPrefs.win);
+
 #ifdef not_yet_fully_implemented
-    InitTextureAndColor(scr, WPrefs.win);
+    InitAppearance(scr, WPrefs.win);
     InitText(scr, WPrefs.win);
+    InitThemes(scr, WPrefs.win);
 #endif
     InitExpert(scr, WPrefs.win);
 
     WMRealizeWidget(WPrefs.scrollV);
 
-    WMSetLabelText(WPrefs.statusL, "This program is still under development. Backup your ~/GNUstep/Defaults directory, before using it.");
+    WMSetLabelText(WPrefs.statusL, 
+		   "WPrefs is free software and is distributed WITHOUT ANY "
+		   "WARRANTY under the terms of the GNU General Public License."
+		   "Redistribution of the icons in this program separately from the program itself is prohibited.");
+
 }
 
 
@@ -555,7 +566,7 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
     file = popen("wmaker -version", "r");
     if (!file || !fgets(buffer, 1023, file)) {
 	wsyserror(_("could not extract version information from Window Maker"));
-	wfatal(_("Make sure Window Maker is in your search path."));
+	wfatal(_("Make sure wmaker is in your search path."));
 	
 	WMRunAlertPanel(scr, mainw, _("Error"),
 			_("Could not extract version from Window Maker. Make sure it is correctly installed and is in your PATH environment variable."),

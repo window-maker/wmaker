@@ -42,20 +42,27 @@
 #include "workspace.h"
 #include "winspector.h"
 #include "dialog.h"
+#include "stacking.h"
 
 #define MC_MAXIMIZE	0
 #define MC_MINIATURIZE	1
 #define MC_SHADE	2
 #define MC_HIDE		3
-#define MC_SELECT       4
-#define MC_DUMMY_MOVETO	5
-#define MC_PROPERTIES   6
-#define MC_SHORTCUT	7
+#define MC_MOVERESIZE	4
+#define MC_SELECT       5
+#define MC_DUMMY_MOVETO	6
+#define MC_PROPERTIES   7
+#define MC_OPTIONS	8
+#define MC_SHORTCUT	8
 
-#define MC_CLOSE        8
-#define MC_KILL         9
+#define MC_CLOSE        9
+#define MC_KILL         10
 
 
+#define WO_KEEP_ON_TOP		0
+#define WO_KEEP_AT_BOTTOM	1
+#define WO_OMNIPRESENT		2
+#define WO_ENTRIES		3
 
 /**** Global data ***/
 extern Time LastTimestamp;
@@ -65,6 +72,36 @@ extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern WShortKey wKeyBindings[WKBD_LAST];
 
 extern WPreferences wPreferences;
+
+static void updateOptionsMenu(WMenu *menu, WWindow *wwin);
+
+static void
+execWindowOptionCommand(WMenu *menu, WMenuEntry *entry)
+{
+    WWindow *wwin = (WWindow*)entry->clientdata;
+    
+    switch (entry->order) {
+     case WO_KEEP_ON_TOP:
+	if(wwin->frame->core->stacking->window_level!=WMFloatingLevel)
+	    ChangeStackingLevel(wwin->frame->core, WMFloatingLevel);
+	else
+	    ChangeStackingLevel(wwin->frame->core, WMNormalLevel);
+	break;
+
+     case WO_KEEP_AT_BOTTOM:
+	if(wwin->frame->core->stacking->window_level!=WMSunkenLevel)
+	    ChangeStackingLevel(wwin->frame->core, WMSunkenLevel);
+	else
+	    ChangeStackingLevel(wwin->frame->core, WMNormalLevel);
+	break;
+
+     case WO_OMNIPRESENT:
+	wwin->flags.omnipresent^=1;
+	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_WORKSPACE);
+	break;
+    }
+}
+
 
 static void
 execMenuCommand(WMenu *menu, WMenuEntry *entry)
@@ -79,6 +116,7 @@ execMenuCommand(WMenu *menu, WMenuEntry *entry)
 	/* send delete message */
 	wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, LastTimestamp);
 	break;
+
      case MC_KILL:
 	wretain(wwin);
 	if (wPreferences.dont_confirm_kill
@@ -90,38 +128,52 @@ execMenuCommand(WMenu *menu, WMenuEntry *entry)
 	}
 	wrelease(wwin);
 	break;
+
      case MC_MINIATURIZE:
-	if (wwin->protocols.MINIATURIZE_WINDOW) {
-	    wClientSendProtocol(wwin, _XA_GNUSTEP_WM_MINIATURIZE_WINDOW,
-				LastTimestamp);
-	} else {
-	    wIconifyWindow(wwin);
+	if (wwin->flags.miniaturized) {
+	    wDeiconifyWindow(wwin);
+	} else{
+	    if (wwin->protocols.MINIATURIZE_WINDOW) {
+		wClientSendProtocol(wwin, _XA_GNUSTEP_WM_MINIATURIZE_WINDOW,
+				    LastTimestamp);
+	    } else {
+		wIconifyWindow(wwin);
+	    }
 	}
 	break;
+
      case MC_MAXIMIZE:
 	if (wwin->flags.maximized)
 	    wUnmaximizeWindow(wwin);
 	else
 	    wMaximizeWindow(wwin, MAX_VERTICAL|MAX_HORIZONTAL);
 	break;
+
      case MC_SHADE:
 	if (wwin->flags.shaded)
 	    wUnshadeWindow(wwin);
 	else
 	    wShadeWindow(wwin);
 	break;
+
      case MC_SELECT:
         wSelectWindow(wwin, !wwin->flags.selected);
 	break;
+
+     case MC_MOVERESIZE:
+        wKeyboardMoveResizeWindow(wwin);
+	break;
+
      case MC_PROPERTIES:
 	if (wwin->wm_class || wwin->wm_instance)
 	    wShowInspectorForWindow(wwin);
 	break;
-	
+
      case MC_HIDE:
 	wapp = wApplicationOf(wwin->main_window);
 	wHideApplication(wapp);
 	break;
+
     }
 }
 
@@ -141,7 +193,7 @@ makeShortcutCommand(WMenu *menu, WMenuEntry *entry)
 {
     WWindow *wwin = (WWindow*)entry->clientdata;
     
-    wwin->screen_ptr->shortcutWindow[entry->order] = wwin;
+    wwin->screen_ptr->shortcutWindow[entry->order-WO_ENTRIES] = wwin;
     
     wSelectWindow(wwin, !wwin->flags.selected);
     XFlush(dpy);
@@ -194,15 +246,25 @@ updateMakeShortcutMenu(WMenu *menu, WWindow *wwin)
     if (!smenu)
 	return;
     
-    buffer = wmalloc(strlen(_("Shortcut"))+16);
+    buffer = wmalloc(strlen(_("Set Shortcut"))+16);
 
-    for (i=0; i<smenu->entry_no; i++) {
+    for (i=WO_ENTRIES; i<smenu->entry_no; i++) {
 	char *tmp;
-	WWindow *twin = wwin->screen_ptr->shortcutWindow[i];
+	int shortcutNo = i-WO_ENTRIES;
+	WWindow *twin = wwin->screen_ptr->shortcutWindow[shortcutNo];
 	WMenuEntry *entry = smenu->entries[i];
 
-	sprintf(buffer, "%s %s %i", twin ? (twin == wwin ? "+" : "-" ) : " ",
-		_("Shortcut"), i+1);
+	sprintf(buffer, "%s %i", _("Set Shortcut"), shortcutNo+1);
+	
+	if (!twin) {
+	    entry->flags.indicator_on = 0;
+	} else {
+	    entry->flags.indicator_on = 1;
+	    if (twin != wwin)
+		entry->flags.indicator_type = MI_CHECK;
+	    else
+		entry->flags.indicator_type = MI_DIAMOND;
+	}
 
 	if (strcmp(buffer, entry->text)!=0) {
 	    free(entry->text);
@@ -210,7 +272,7 @@ updateMakeShortcutMenu(WMenu *menu, WWindow *wwin)
 	    smenu->flags.realized = 0;
 	}
 
-	kcode = wKeyBindings[WKBD_WINDOW1+i].keycode;
+	kcode = wKeyBindings[WKBD_WINDOW1+shortcutNo].keycode;
 
 	if (kcode) {
 	    if ((tmp = XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0)))
@@ -237,6 +299,30 @@ updateMakeShortcutMenu(WMenu *menu, WWindow *wwin)
 }
 
 
+static void
+updateOptionsMenu(WMenu *menu, WWindow *wwin)
+{    
+    WMenu *smenu = menu->cascades[menu->entries[MC_OPTIONS]->cascade];
+
+    /* keep on top check */
+    smenu->entries[WO_KEEP_ON_TOP]->clientdata = wwin;
+    smenu->entries[WO_KEEP_ON_TOP]->flags.indicator_on = 
+    	(wwin->frame->core->stacking->window_level == WMFloatingLevel)?1:0;
+
+    /* keep at bottom check */
+    smenu->entries[WO_KEEP_AT_BOTTOM]->clientdata = wwin;
+    smenu->entries[WO_KEEP_AT_BOTTOM]->flags.indicator_on =
+    	(wwin->frame->core->stacking->window_level == WMSunkenLevel)?1:0;
+
+    /* omnipresent check */
+    smenu->entries[WO_OMNIPRESENT]->clientdata = wwin;
+    smenu->entries[WO_OMNIPRESENT]->flags.indicator_on = IS_OMNIPRESENT(wwin);
+    
+    smenu->flags.realized = 0;
+    wMenuRealize(smenu);    
+}
+
+
 static WMenu*
 makeWorkspaceMenu(WScreen *scr)
 {
@@ -253,10 +339,40 @@ makeWorkspaceMenu(WScreen *scr)
     return menu;
 }
 
+
 static WMenu*
-makeMakeShortcutMenu(WScreen *scr)
+makeMakeShortcutMenu(WScreen *scr, WMenu *menu)
+{
+    /*
+    WMenu *menu;
+     */
+    int i;
+/*
+    menu = wMenuCreate(scr, NULL, False);
+    if (!menu) {
+	wwarning(_("could not create submenu for window menu"));
+	return NULL;
+    }
+ */
+
+    for (i=0; i<MAX_WINDOW_SHORTCUTS; i++) {
+	WMenuEntry *entry;
+
+	entry = wMenuAddCallback(menu, "", makeShortcutCommand, NULL);
+
+	entry->flags.indicator = 1;
+    }
+
+    return menu;
+}
+
+
+
+static WMenu*
+makeOptionsMenu(WScreen *scr)
 {
     WMenu *menu;
+    WMenuEntry *entry;
 
     menu = wMenuCreate(scr, NULL, False);
     if (!menu) {
@@ -264,13 +380,24 @@ makeMakeShortcutMenu(WScreen *scr)
 	return NULL;
     }
 
-    wMenuAddCallback(menu, "", makeShortcutCommand, NULL);
-    wMenuAddCallback(menu, "", makeShortcutCommand, NULL);
-    wMenuAddCallback(menu, "", makeShortcutCommand, NULL);
-    wMenuAddCallback(menu, "", makeShortcutCommand, NULL);
-    
+    entry = wMenuAddCallback(menu, _("Keep on top"), execWindowOptionCommand, 
+			     NULL);
+    entry->flags.indicator = 1;
+    entry->flags.indicator_type = MI_CHECK;
+
+    entry = wMenuAddCallback(menu, _("Keep at bottom"), execWindowOptionCommand,
+			     NULL);
+    entry->flags.indicator = 1;
+    entry->flags.indicator_type = MI_CHECK;
+
+    entry = wMenuAddCallback(menu, _("Omnipresent"), execWindowOptionCommand, 
+			     NULL);
+    entry->flags.indicator = 1;
+    entry->flags.indicator_type = MI_CHECK;
+
     return menu;
 }
+
 
 static WMenu*
 createWindowMenu(WScreen *scr)
@@ -286,7 +413,7 @@ createWindowMenu(WScreen *scr)
      * entries, you must update the command #defines in the top of
      * this file.
      */
-    entry = wMenuAddCallback(menu, _("(Un)Maximize"), execMenuCommand, NULL);
+    entry = wMenuAddCallback(menu, _("Maximize"), execMenuCommand, NULL);
     if (wKeyBindings[WKBD_MAXIMIZE].keycode!=0) {
 	kcode = wKeyBindings[WKBD_MAXIMIZE].keycode;
 	
@@ -303,7 +430,7 @@ createWindowMenu(WScreen *scr)
 	  entry->rtext = wstrdup(tmp);
     }
     
-    entry = wMenuAddCallback(menu, _("(Un)Shade"), execMenuCommand, NULL);
+    entry = wMenuAddCallback(menu, _("Shade"), execMenuCommand, NULL);
     if (wKeyBindings[WKBD_SHADE].keycode!=0) {
 	kcode = wKeyBindings[WKBD_SHADE].keycode;
 	
@@ -315,6 +442,14 @@ createWindowMenu(WScreen *scr)
     if (wKeyBindings[WKBD_HIDE].keycode!=0) {
 	kcode = wKeyBindings[WKBD_HIDE].keycode;
 	
+	if (kcode && (tmp = XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0))))
+	  entry->rtext = wstrdup(tmp);
+    }
+
+    entry = wMenuAddCallback(menu, _("Resize/Move"), execMenuCommand, NULL);
+    if (wKeyBindings[WKBD_MOVERESIZE].keycode!=0) {
+	kcode = wKeyBindings[WKBD_MOVERESIZE].keycode;
+
 	if (kcode && (tmp = XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0))))
 	  entry->rtext = wstrdup(tmp);
     }
@@ -334,8 +469,14 @@ createWindowMenu(WScreen *scr)
 
     entry = wMenuAddCallback(menu, _("Attributes..."), execMenuCommand, NULL);
 
+    entry = wMenuAddCallback(menu, _("Options"), NULL, NULL);
+    wMenuEntrySetCascade(menu, entry, 
+			 makeMakeShortcutMenu(scr, makeOptionsMenu(scr)));
+
+/*
     entry = wMenuAddCallback(menu, _("Select Shortcut"), NULL, NULL);
     wMenuEntrySetCascade(menu, entry, makeMakeShortcutMenu(scr));
+ */
 
     entry = wMenuAddCallback(menu, _("Close"), execMenuCommand, NULL);
     if (wKeyBindings[WKBD_CLOSE].keycode!=0) {
@@ -367,44 +508,63 @@ CloseWindowMenu(WScreen *scr)
 }
 
 
-void
-OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard)
+
+static void
+updateMenuForWindow(WMenu *menu, WWindow *wwin)
 {
-    WMenu *menu;
     WApplication *wapp = wApplicationOf(wwin->main_window);
     WScreen *scr = wwin->screen_ptr;
     int i;
 
-    wwin->flags.menu_open_for_me = 1;
+    updateOptionsMenu(menu, wwin);
 
-    if (!scr->window_menu) {
-	scr->window_menu = createWindowMenu(scr);
-    } else {
-	updateWorkspaceMenu(scr->workspace_submenu);
-    }
-
-    menu = scr->window_menu;
-    if (menu->flags.mapped) {
-	wMenuUnmap(menu);
-	if (menu->entries[0]->clientdata==wwin) {
-	    return;
-	}
-    }
-    
     updateMakeShortcutMenu(menu, wwin);
 
     wMenuSetEnabled(menu, MC_HIDE, wapp!=NULL 
-		    && !wapp->main_window_desc->window_flags.no_appicon);
+		    && !WFLAGP(wapp->main_window_desc, no_appicon));
     
     wMenuSetEnabled(menu, MC_CLOSE, 
 		    (wwin->protocols.DELETE_WINDOW
-		     && !wwin->window_flags.no_closable));
-    
-    wMenuSetEnabled(menu, MC_MINIATURIZE, !wwin->window_flags.no_miniaturizable);
+		     && !WFLAGP(wwin, no_closable)));
 
-    wMenuSetEnabled(menu, MC_SHADE, !wwin->window_flags.no_shadeable);
+    if (wwin->flags.miniaturized) {
+	static char *text = _("Deminiaturize");
 
-    wMenuSetEnabled(menu, MC_DUMMY_MOVETO, !wwin->window_flags.omnipresent);
+	menu->entries[MC_MINIATURIZE]->text = text;
+    } else {
+	static char *text = _("Miniaturize");
+
+	menu->entries[MC_MINIATURIZE]->text = text;
+    }
+
+    wMenuSetEnabled(menu, MC_MINIATURIZE, !WFLAGP(wwin, no_miniaturizable));
+
+    if (wwin->flags.maximized) {
+	static char *text = _("Unmaximize");
+
+	menu->entries[MC_MAXIMIZE]->text = text;
+    } else {
+	static char *text = _("Maximize");
+
+	menu->entries[MC_MAXIMIZE]->text = text;
+    }
+
+    wMenuSetEnabled(menu, MC_MOVERESIZE, !WFLAGP(wwin, no_resizable));
+
+    if (wwin->flags.shaded) {
+	static char *text = _("Unshade");
+
+	menu->entries[MC_SHADE]->text = text;
+    } else {
+	static char *text = _("Shade");
+
+	menu->entries[MC_SHADE]->text = text;
+    }
+
+    wMenuSetEnabled(menu, MC_SHADE, !WFLAGP(wwin, no_shadeable)
+		    && !wwin->flags.miniaturized);
+
+    wMenuSetEnabled(menu, MC_DUMMY_MOVETO, !IS_OMNIPRESENT(wwin));
     
     if ((wwin->wm_class || wwin->wm_instance) && !wwin->flags.inspector_open) {
 	wMenuSetEnabled(menu, MC_PROPERTIES, True);
@@ -426,8 +586,39 @@ OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard)
 	}
     }
 
-    if (!menu->flags.realized)
-	wMenuRealize(menu);
+    menu->flags.realized = 0;
+    wMenuRealize(menu);    
+}
+
+
+void
+OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard)
+{
+    WMenu *menu;
+    WScreen *scr = wwin->screen_ptr;
+
+    wwin->flags.menu_open_for_me = 1;
+
+    if (!scr->window_menu) {
+	scr->window_menu = createWindowMenu(scr);
+	
+	/* hack to save some memory allocation/deallocation */
+	free(scr->window_menu->entries[MC_MINIATURIZE]->text);
+	free(scr->window_menu->entries[MC_MAXIMIZE]->text);
+	free(scr->window_menu->entries[MC_SHADE]->text);
+    } else {
+	updateWorkspaceMenu(scr->workspace_submenu);
+    }
+
+    menu = scr->window_menu;
+    if (menu->flags.mapped) {
+	wMenuUnmap(menu);
+	if (menu->entries[0]->clientdata==wwin) {
+	    return;
+	}
+    }
+
+    updateMenuForWindow(menu, wwin);
     
     x -= menu->frame->core->width/2;
     if (x + menu->frame->core->width > wwin->frame_x+wwin->frame->core->width)
@@ -438,3 +629,40 @@ OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard)
     if (!wwin->flags.internal_window)
 	wMenuMapAt(menu, x, y, keyboard);
 }
+
+
+#if 0
+void
+OpenMiniwindowMenu(WWindow *wwin, int x, int y)
+{
+    WMenu *menu;
+    WScreen *scr = wwin->screen_ptr;
+
+    wwin->flags.menu_open_for_me = 1;
+
+    if (!scr->window_menu) {
+	scr->window_menu = createWindowMenu(scr);
+	
+	/* hack to save some memory allocation/deallocation */
+	free(scr->window_menu->entries[MC_MINIATURIZE]->text);
+	free(scr->window_menu->entries[MC_MAXIMIZE]->text);
+	free(scr->window_menu->entries[MC_SHADE]->text);	
+    } else {
+	updateWorkspaceMenu(scr->workspace_submenu);
+    }
+
+    menu = scr->window_menu;
+    if (menu->flags.mapped) {
+	wMenuUnmap(menu);
+	if (menu->entries[0]->clientdata==wwin) {
+	    return;
+	}
+    }
+
+    updateMenuForWindow(menu, wwin);
+    
+    x -= menu->frame->core->width/2;
+
+    wMenuMapAt(menu, x, y, False);
+}
+#endif

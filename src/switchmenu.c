@@ -23,6 +23,8 @@
 
 #include "wconfig.h"
 
+#ifndef LITE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -128,6 +130,37 @@ OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard)
     }
 }
 
+
+static int
+menuIndexForWindow(WMenu *menu, WWindow *wwin, int old_pos)
+{
+    int idx;
+
+    if (menu->entry_no == 0)
+	return -1;
+
+#define WS(i)  ((WWindow*)menu->entries[i]->clientdata)->frame->workspace
+    if (old_pos >= 0) {
+	if (WS(old_pos) >= wwin->frame->workspace
+	    && (old_pos == 0 || WS(old_pos-1) <= wwin->frame->workspace)) {
+	    return old_pos;
+	}
+    }
+#undef WS
+
+    for (idx = 0; idx < menu->entry_no; idx++) {
+	WWindow *tw = (WWindow*)menu->entries[idx]->clientdata;
+
+	if (!IS_OMNIPRESENT(tw) 
+	    && tw->frame->workspace > wwin->frame->workspace) {
+	    break;
+	}
+    }
+
+    return idx;
+}
+
+
 /*
  *
  * Update switch menu
@@ -152,29 +185,38 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
      *    2.  When a window is destroyed.
      *
      *    3.  When a window changes it's title.
+     * 	  4.  When a window changes its workspace.
      */
     if (action == ACTION_ADD) {
 	char *t;
-	if (wwin->flags.internal_window 
-	    || wwin->window_flags.skip_window_list)
-	  return;
+	int idx;
+
+	if (wwin->flags.internal_window || WFLAGP(wwin, skip_window_list))
+	    return;
 	    
 	if (wwin->frame->title)
 	  sprintf(title, "%s", wwin->frame->title);
 	else
 	  sprintf(title, "%s", DEF_WINDOW_TITLE);
 	t = ShrinkString(scr->menu_entry_font, title, MAX_WINDOWLIST_WIDTH);
-	entry = wMenuAddCallback(switchmenu, t, focusWindow, wwin);
+
+	if (IS_OMNIPRESENT(wwin))
+	    idx = -1;
+	else {
+	    idx = menuIndexForWindow(switchmenu, wwin, -1);
+	}
+	
+	entry = wMenuInsertCallback(switchmenu, idx, t, focusWindow, wwin);
 	free(t);
 
 	entry->flags.indicator = 1;
 	entry->rtext = wmalloc(MAX_WORKSPACENAME_WIDTH+8);
-	if (wwin->window_flags.omnipresent)
+	if (IS_OMNIPRESENT(wwin))
 	    sprintf(entry->rtext, "[*]");
 	else
 	    sprintf(entry->rtext, "[%s]", 
 		    scr->workspaces[wwin->frame->workspace]->name);
-	
+
 	if (wwin->flags.hidden) {
 	    entry->flags.indicator_type = MI_HIDDEN;
 	    entry->flags.indicator_on = 1;
@@ -216,14 +258,45 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
 		    t = ShrinkString(scr->menu_entry_font, title, 
 				     MAX_WINDOWLIST_WIDTH);
 		    entry->text = t;
-		    /* fall through to update workspace number */
+
+		    wMenuRealize(switchmenu);
+		    checkVisibility = 1;
+		    break;
+
 		 case ACTION_CHANGE_WORKSPACE:
 		    if (entry->rtext) {
-			if (wwin->window_flags.omnipresent)
+			int idx = -1;
+			char *t, *rt;
+			int it, ion;
+			
+			if (IS_OMNIPRESENT(wwin)) {
 			    sprintf(entry->rtext, "[*]");
-			else
+			} else {
 			    sprintf(entry->rtext, "[%s]", 
 				    scr->workspaces[wwin->frame->workspace]->name);
+			}
+
+			rt = entry->rtext;
+			entry->rtext = NULL;
+			t = entry->text;
+			entry->text = NULL;
+			
+			it = entry->flags.indicator_type;
+			ion = entry->flags.indicator_on;
+
+			wMenuRemoveItem(switchmenu, i);
+
+			if (!IS_OMNIPRESENT(wwin) && idx < 0) {
+			    idx = menuIndexForWindow(switchmenu, wwin, i);
+			}
+
+			entry = wMenuInsertCallback(switchmenu, idx, t,
+						    focusWindow, wwin);
+			free(t);
+			entry->rtext = rt;
+			entry->flags.indicator = 1;
+			entry->flags.indicator_type = it;
+			entry->flags.indicator_on = ion;
 		    }
 		    wMenuRealize(switchmenu);
 		    checkVisibility = 1;
@@ -280,8 +353,8 @@ UpdateSwitchMenuWorkspace(WScreen *scr, int workspace)
 	wwin = (WWindow*)menu->entries[i]->clientdata;
 
 	if (wwin->frame->workspace==workspace 
-	    && !wwin->window_flags.omnipresent) {
-	    if (wwin->window_flags.omnipresent)
+	    && !IS_OMNIPRESENT(wwin)) {
+	    if (IS_OMNIPRESENT(wwin))
 		sprintf(menu->entries[i]->rtext, "[*]");
 	    else
 		sprintf(menu->entries[i]->rtext, "[%s]", 
@@ -292,3 +365,6 @@ UpdateSwitchMenuWorkspace(WScreen *scr, int workspace)
     if (!menu->flags.realized)
 	wMenuRealize(menu);
 }
+
+
+#endif /* !LITE */

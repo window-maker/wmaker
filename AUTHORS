@@ -13,7 +13,7 @@ restart, dock bug fixes
 Andrea Arcangeli <arcangeli@mbox.queen.it>
 Fix for cascade window placement
 
-Peter Bentley <peter.bentley@nomura.co.uk>
+Peter Bentley <pete@sorted.org>
 fixed WM_STATE handling bug, fixed some memory leaks, made application menus
 be mapped near the windows for non-click-to-focus modes, timer bug
 
@@ -26,6 +26,9 @@ shaded window indication in window list
 
 Rob Clark <rclark@turing.cs.hmc.edu>
 Text input field, 15bpp support
+
+George Clernon <clernong@tinet.ie>
+bug fix in browser widget
 
 Sylvain CORRE <sylvain.corre@wanadoo.fr>
 bug fix for MkLinux/PPC
@@ -53,8 +56,8 @@ Documentation help, autoconf cleanup
 Mark 'segfault' Guzman <root@lsd.pbx.org>
 Various bugfixes
 
-Ullrich Hafner <hafner@informatik.uni-wuerzburg.de>
-Better detection of gfx libraries
+Ullrich Hafner <hafner@bigfoot.de>
+Better detection of gfx libraries, added IconTitleColor/IconTitleBack
 
 Greg Hayes <sdc@choice.net>
 Twisted miniaturization  animation
@@ -111,7 +114,7 @@ Tim Malone <mrgone@eskimo.com>
 bug fix, jpeg bug fix
 
 MANOME Tomonori <manome@itlb.te.noda.sut.ac.jp>
-I18N bug fixes and japanese locale
+I18N bug fixes and japanese locale, wsetfont script
 
 Brian Alexander Martin <brian@goober.wireless.ucsc.edu>
 PIPE_MENU
@@ -141,7 +144,7 @@ Initial code for clip's collapse feature.
 Ture Pelsson <ture@lysator.liu.se>
 various portability fixes, replaced busy wait with select() in event
 handling code, fixed problem with some misbehaved kids after a fork(),
-some other bug fixes
+some other bug fixes, support for poll() in event handling code
 
 Toby Sargeant <?>
 menu format converter
@@ -154,6 +157,9 @@ REDUCE_APPICON/single-icon
 
 Chong Shang Shan <chongsha@sps.nus.edu.sg>
 flipping iconification animation
+
+Daniel Skarda <0rfelyus@atrey.karlin.mff.cuni.cz>
+SGI "black dialogs" bug fix
 
 Paul D. Smith <psmith@BayNetworks.COM>
 SunOS portability, configure fixes
@@ -182,7 +188,9 @@ dgradient fix
 
 "]d" <mhz@gpf.or.th>
 Window list menu miniaturized/hidden hints, XDE support, XKB lock 
-language status
+language status, WINGs enhancements, bug fixes, window commands menu
+enhancement, window move/resize by keyboard
+
 
 Trae Mc Combs <x@themes.org>
 BlueWaves.jpeg background image in BlueWaves theme.

@@ -25,9 +25,8 @@
 
 #include "GNUstep.h"
 
-#ifdef MWM_HINTS
-# include "motif.h"
-#endif
+unsigned char* PropGetCheckProperty(Window window, Atom hint, Atom type, 
+				    int format, int count, int *retCount);
 
 
 int PropGetNormalHints(Window window, XSizeHints *size_hints, int *pre_iccm);
@@ -39,14 +38,11 @@ void PropWriteGNUstepWMAttr(Window window, GNUstepWMAttributes *attr);
 void PropSetWMakerProtocols(Window root);
 void PropCleanUp(Window root);
 
-#ifdef MWM_HINTS
-int PropGetMotifWMHints(Window window, MWMHints **mwmhints);
-#endif
-
 Window PropGetClientLeader(Window window);
 
 #ifdef R6SM
 char *PropGetClientID(Window window);
 #endif
+
 
 #endif

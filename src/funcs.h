@@ -31,6 +31,8 @@ typedef void (WCallBack)(void *cdata);
 
 typedef void (WDeathHandler)(pid_t pid, unsigned int status, void *cdata);
 
+void Shutdown(WShutdownMode mode);
+
 void RestoreDesktop(WScreen *scr);
 
 void Exit(int status);
@@ -41,7 +43,7 @@ void SetupEnvironment(WScreen *scr);
 
 void DispatchEvent(XEvent *event);
 
-void WipeDesktop(WScreen *scr);
+#ifndef LITE
 
 Bool wRootMenuPerformShortcut(XEvent *event);
 
@@ -51,15 +53,29 @@ void OpenRootMenu(WScreen *scr, int x, int y, int keyboard);
 
 void OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard);
 
+#endif /* !LITE */
+
 void OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard);
+
+void OpenMiniwindowMenu(WWindow *wwin, int x, int y);
 
 void OpenWorkspaceMenu(WScreen *scr, int x, int y);
 
 void CloseWindowMenu(WScreen *scr);
 
+#ifdef LITE
+
+#define UpdateSwitchMenu(a, b, c)
+
+#define UpdateSwitchMenuWorkspace(a, b)
+
+#else /*! LITE */
+
 void UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action);
 
 void UpdateSwitchMenuWorkspace(WScreen *scr, int workspace);
+
+#endif /* !LITE */
 
 WMagicNumber wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata);
 
@@ -84,6 +100,8 @@ char *MakeCPPArgs(char *path);
 
 char *ExpandOptions(WScreen *scr, char *cmdline);
 
+void ExecuteShellCommand(WScreen *scr, char *command);
+
 Bool IsDoubleClick(WScreen *scr, XEvent *event);
 
 WWindow *NextFocusWindow(WScreen *scr);
@@ -93,7 +111,7 @@ void SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y);
 
 char *ShrinkString(WFont *font, char *string, int width);
 
-char *FindImage(char **paths, char *file);
+char *FindImage(char *paths, char *file);
 
 RImage*wGetImageForWindowName(WScreen *scr, char *winstance, char *wclass);
 
@@ -105,6 +123,8 @@ char *FlattenStringList(char **list, int count);
 
 void ParseWindowName(proplist_t value, char **winstance, char **wclass,
                      char *where);
+
+void SendHelperMessage(WScreen *scr, char type, int workspace, char *msg);
 
 char *GetShortcutString(char *text);
 

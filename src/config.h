@@ -66,7 +66,13 @@
 #define PACKAGE "WindowMaker" 
 
 /* package version */
-#define VERSION "0.20.3" 
+#define VERSION "0.50.0" 
+
+/* define if you want GNOME stuff support */
+/* #undef GNOME_STUFF */
+
+/* define if you want KDE hint support */
+/* #undef KWM_HINTS */
 
 /* Define if you have the gethostname function.  */
 #define HAVE_GETHOSTNAME 1
@@ -97,6 +103,9 @@
 
 /* Define if you have the <limits.h> header file.  */
 #define HAVE_LIMITS_H 1
+
+/* Define if you have the <poll.h> header file.  */
+/* #undef HAVE_POLL_H */
 
 /* Define if you have the <sys/ioctl.h> header file.  */
 #define HAVE_SYS_IOCTL_H 1

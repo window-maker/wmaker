@@ -36,6 +36,8 @@ typedef struct W_TextField {
     short usableWidth;
     short offsetWidth;		       /* offset of text from border */
 
+    WMRange selection;
+
 #if 0
     WMHandlerID	timerID;	       /* for cursor blinking */
 #endif
@@ -191,7 +193,7 @@ WMCreateTextField(WMWidget *parent)
     WMSetTextFieldBordered(tPtr, DEFAULT_BORDERED);
     tPtr->flags.alignment = DEFAULT_ALIGNMENT;
     tPtr->offsetWidth = (tPtr->view->size.height
-			 - tPtr->view->screen->normalFont->height)/2;
+			 - WMFontHeight(tPtr->view->screen->normalFont))/2;
 
     WMCreateEventHandler(tPtr->view, EnterWindowMask|LeaveWindowMask
 			 |ButtonPressMask|KeyPressMask|Button1MotionMask,
@@ -307,8 +309,12 @@ WMSetTextFieldText(WMTextField *tPtr, char *text)
 	}
 	strcpy(tPtr->text, text);
     }
+    /*
     if (tPtr->textLen < tPtr->cursorPosition)
 	tPtr->cursorPosition = tPtr->textLen;
+     */
+    tPtr->cursorPosition = 0;
+    tPtr->viewPosition = 0;
     
     if (tPtr->view->flags.realized)
 	paintTextField(tPtr);
@@ -370,7 +376,7 @@ resizeTextField(WMTextField *tPtr, unsigned int width, unsigned int height)
     W_ResizeView(tPtr->view, width, height);
     
     tPtr->offsetWidth = (tPtr->view->size.height
-			 - tPtr->view->screen->normalFont->height)/2;
+			 - WMFontHeight(tPtr->view->screen->normalFont))/2;
     
     tPtr->usableWidth = tPtr->view->size.width - 2*tPtr->offsetWidth;
 }
@@ -477,7 +483,7 @@ paintTextField(TextField *tPtr)
 			     &(tPtr->text[tPtr->viewPosition]),
 			     tPtr->textLen - tPtr->viewPosition);
     
-	th = screen->normalFont->height;
+	th = WMFontHeight(screen->normalFont);
 
 	ty = tPtr->offsetWidth;
 	switch (tPtr->flags.alignment) {

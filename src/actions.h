@@ -31,6 +31,7 @@
 void wSetFocusTo(WScreen *scr, WWindow *wwin);
 
 int wMouseMoveWindow(WWindow *wwin, XEvent *ev);
+int wKeyboardMoveResizeWindow(WWindow *wwin);
 
 void wMouseResizeWindow(WWindow *wwin, XEvent *ev);
 
@@ -40,7 +41,10 @@ void wUnshadeWindow(WWindow *wwin);
 void wIconifyWindow(WWindow *wwin);
 void wDeiconifyWindow(WWindow *wwin);
 
+#ifndef LITE
 void wSelectWindows(WScreen *scr, XEvent *ev);
+#endif
+
 void wSelectWindow(WWindow *wwin, Bool flag);
 void wUnselectWindows(WScreen *scr);
 

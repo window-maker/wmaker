@@ -69,6 +69,9 @@ I18N = @I18N@
 I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
+LD = @LD@
+LIBTOOL = @LIBTOOL@
+LITE = @LITE@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
@@ -94,11 +97,15 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 SUBDIRS = Resources
 
-LIBLIST= -L$(top_builddir)/wrlib -lwraster\
+LIBLIST= $(top_builddir)/wrlib/libwraster.la\
 	 @GFXLFLAGS@ @XLFLAGS@ @GFXLIBS@ @XLIBS@ \
-	-lm -L$(top_builddir)/libPropList -lPropList
+	-lm $(top_builddir)/libPropList/libPropList.la
+
+#lib_LTLIBRARIES = libWINGs.la
 
 lib_LIBRARIES = libWINGs.a
+
+#libWINGs_la_LDFLAGS = -version-info 1:1:0
 
 include_HEADERS = WINGs.h WUtil.h WINGsP.h
 
@@ -106,25 +113,25 @@ noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget
 
 testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h
 
-testmywidget_LDADD = -L. -lWINGs $(LIBLIST)
+testmywidget_LDADD = libWINGs.a $(LIBLIST)
 
 fontl_SOURCES = fontl.c
 
-fontl_LDADD = -L. -lWINGs $(LIBLIST)
+fontl_LDADD = libWINGs.a $(LIBLIST)
 
 wtest_SOURCES = wtest.c
 
-wtest_LDADD = -L. -lWINGs $(LIBLIST)
+wtest_LDADD = libWINGs.a $(LIBLIST)
 
 wtest_DEPENDENCIES = libWINGs.a
 
 wmfile_SOURCES = wmfile.c 
 
-wmfile_LDADD = -L. -lWINGs $(LIBLIST)
+wmfile_LDADD = libWINGs.a $(LIBLIST)
 
 wmquery_SOURCES = wmquery.c 
 
-wmquery_LDADD = -L. -lWINGs $(LIBLIST)
+wmquery_LDADD = libWINGs.a $(LIBLIST)
 
 EXTRA_DIST = logo.xpm 
 
@@ -196,20 +203,26 @@ PROGRAMS =  $(noinst_PROGRAMS)
 wtest_OBJECTS =  wtest.o
 wtest_LDFLAGS = 
 wmquery_OBJECTS =  wmquery.o
-wmquery_DEPENDENCIES = 
+wmquery_DEPENDENCIES =  libWINGs.a $(top_builddir)/wrlib/libwraster.la \
+$(top_builddir)/libPropList/libPropList.la
 wmquery_LDFLAGS = 
 wmfile_OBJECTS =  wmfile.o
-wmfile_DEPENDENCIES = 
+wmfile_DEPENDENCIES =  libWINGs.a $(top_builddir)/wrlib/libwraster.la \
+$(top_builddir)/libPropList/libPropList.la
 wmfile_LDFLAGS = 
 fontl_OBJECTS =  fontl.o
-fontl_DEPENDENCIES = 
+fontl_DEPENDENCIES =  libWINGs.a $(top_builddir)/wrlib/libwraster.la \
+$(top_builddir)/libPropList/libPropList.la
 fontl_LDFLAGS = 
 testmywidget_OBJECTS =  testmywidget.o mywidget.o
-testmywidget_DEPENDENCIES = 
+testmywidget_DEPENDENCIES =  libWINGs.a \
+$(top_builddir)/wrlib/libwraster.la \
+$(top_builddir)/libPropList/libPropList.la
 testmywidget_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
-LINK = $(CC) $(CFLAGS) $(LDFLAGS) -o $@
+LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
+LINK = $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(LDFLAGS) -o $@
 HEADERS =  $(include_HEADERS)
 
 DIST_COMMON =  README ChangeLog Makefile.am Makefile.in TODO
@@ -225,7 +238,7 @@ OBJECTS = $(libWINGs_a_OBJECTS) $(wtest_OBJECTS) $(wmquery_OBJECTS) $(wmfile_OBJ
 all: all-recursive all-am
 
 .SUFFIXES:
-.SUFFIXES: .S .c .o .s
+.SUFFIXES: .S .c .lo .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu WINGs/Makefile
 
@@ -284,6 +297,25 @@ distclean-compile:
 	-rm -f *.tab.c
 
 maintainer-clean-compile:
+
+.c.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+.s.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+.S.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+mostlyclean-libtool:
+	-rm -f *.lo
+
+clean-libtool:
+	-rm -rf .libs _libs
+
+distclean-libtool:
+
+maintainer-clean-libtool:
 
 libWINGs.a: $(libWINGs_a_OBJECTS) $(libWINGs_a_DEPENDENCIES)
 	-rm -f libWINGs.a
@@ -463,18 +495,19 @@ maintainer-clean-generic:
 	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
 	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 mostlyclean-am:  mostlyclean-libLIBRARIES mostlyclean-compile \
-		mostlyclean-noinstPROGRAMS mostlyclean-tags \
-		mostlyclean-generic
+		mostlyclean-libtool mostlyclean-noinstPROGRAMS \
+		mostlyclean-tags mostlyclean-generic
 
-clean-am:  clean-libLIBRARIES clean-compile clean-noinstPROGRAMS \
-		clean-tags clean-generic mostlyclean-am
+clean-am:  clean-libLIBRARIES clean-compile clean-libtool \
+		clean-noinstPROGRAMS clean-tags clean-generic \
+		mostlyclean-am
 
 distclean-am:  distclean-libLIBRARIES distclean-compile \
-		distclean-noinstPROGRAMS distclean-tags \
-		distclean-generic clean-am
+		distclean-libtool distclean-noinstPROGRAMS \
+		distclean-tags distclean-generic clean-am
 
 maintainer-clean-am:  maintainer-clean-libLIBRARIES \
-		maintainer-clean-compile \
+		maintainer-clean-compile maintainer-clean-libtool \
 		maintainer-clean-noinstPROGRAMS maintainer-clean-tags \
 		maintainer-clean-generic distclean-am
 
@@ -484,6 +517,7 @@ clean:  clean-recursive clean-am
 
 distclean:  distclean-recursive distclean-am
 	-rm -f config.status
+	-rm -f libtool
 
 maintainer-clean:  maintainer-clean-recursive maintainer-clean-am
 	@echo "This command is intended for maintainers to use;"
@@ -492,14 +526,15 @@ maintainer-clean:  maintainer-clean-recursive maintainer-clean-am
 .PHONY: mostlyclean-libLIBRARIES distclean-libLIBRARIES \
 clean-libLIBRARIES maintainer-clean-libLIBRARIES uninstall-libLIBRARIES \
 install-libLIBRARIES mostlyclean-compile distclean-compile \
-clean-compile maintainer-clean-compile mostlyclean-noinstPROGRAMS \
-distclean-noinstPROGRAMS clean-noinstPROGRAMS \
-maintainer-clean-noinstPROGRAMS uninstall-includeHEADERS \
-install-includeHEADERS install-data-recursive uninstall-data-recursive \
-install-exec-recursive uninstall-exec-recursive installdirs-recursive \
-uninstalldirs-recursive all-recursive check-recursive \
-installcheck-recursive info-recursive dvi-recursive \
-mostlyclean-recursive distclean-recursive clean-recursive \
+clean-compile maintainer-clean-compile mostlyclean-libtool \
+distclean-libtool clean-libtool maintainer-clean-libtool \
+mostlyclean-noinstPROGRAMS distclean-noinstPROGRAMS \
+clean-noinstPROGRAMS maintainer-clean-noinstPROGRAMS \
+uninstall-includeHEADERS install-includeHEADERS install-data-recursive \
+uninstall-data-recursive install-exec-recursive \
+uninstall-exec-recursive installdirs-recursive uninstalldirs-recursive \
+all-recursive check-recursive installcheck-recursive info-recursive \
+dvi-recursive mostlyclean-recursive distclean-recursive clean-recursive \
 maintainer-clean-recursive tags tags-recursive mostlyclean-tags \
 distclean-tags clean-tags maintainer-clean-tags distdir info dvi \
 installcheck all-am install-exec-am install-data-am uninstall-am \

@@ -69,6 +69,9 @@ I18N = @I18N@
 I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
+LD = @LD@
+LIBTOOL = @LIBTOOL@
+LITE = @LITE@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
@@ -90,16 +93,40 @@ X_LOCALE = @X_LOCALE@
 pixmapdir = @pixmapdir@
 wprefsdir = @wprefsdir@
 
-SUBDIRS = Defaults Styles Themes Icons Pixmaps Backgrounds IconSets 
+SUBDIRS = Backgrounds Defaults IconSets Icons Pixmaps Styles Themes
 
 prefsdatadir = $(pkgdatadir)
 
-prefsdata_DATA = wmmacros README menu plmenu autostart.sh exitscript.sh \
-	menu.cz menu.de menu.fr menu.gl menu.ja menu.ko menu.nl menu.pt  \
-	menu.it menu.no menu.he menu.es menu.ru menu.tr menu.el menu.se \
-	menu.fi menu.hr menu.dk menu.sl
+prefsdata_DATA =\
+	README\
+	README.themes\
+	autostart.sh\
+	exitscript.sh\
+	menu\
+	menu.cz\
+	menu.de\
+	menu.dk\
+	menu.el\
+	menu.es\
+	menu.fi\
+	menu.fr\
+	menu.gl\
+	menu.he\
+	menu.hr\
+	menu.hu\
+	menu.it\
+	menu.ja\
+	menu.ko\
+	menu.nl\
+	menu.no\
+	menu.pt\
+	menu.ru\
+	menu.se\
+	menu.sl\
+	menu.tr
 
-EXTRA_DIST = $(prefsdata_DATA) wmmacros.in plmenu.in plmenu.fr.in plmenu.hr.in
+EXTRA_DIST = $(prefsdata_DATA) mkMakefile wmmacros.in plmenu.in\
+	plmenu.fr.in plmenu.hr.in
 
 CLEANFILES = wmmacros plmenu
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -285,6 +312,7 @@ clean:  clean-recursive clean-am
 
 distclean:  distclean-recursive distclean-am
 	-rm -f config.status
+	-rm -f libtool
 
 maintainer-clean:  maintainer-clean-recursive maintainer-clean-am
 	@echo "This command is intended for maintainers to use;"

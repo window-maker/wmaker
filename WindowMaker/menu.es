@@ -158,9 +158,9 @@
 	"Escritorio" END
 
 	"Apariencia" MENU
-		"Temas" OPEN_MENU THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Estilos" OPEN_MENU STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Juegos de Iconos" OPEN_MENU ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Temas" OPEN_MENU -noext  THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Estilos" OPEN_MENU -noext  STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Juegos de Iconos" OPEN_MENU -noext  ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Fondo" MENU
 			"Sólido" MENU
                         	"Black" WS_BACK '(solid, black)'
@@ -176,7 +176,7 @@
 				"Flag" WS_BACK '(mdgradient, green, red, white, green)'
 				"Sky" WS_BACK '(vgradient, blue4, white)'
 			"Gradiente" END
-			"Imagenes" OPEN_MENU BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+			"Imagenes" OPEN_MENU -noext  BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Fondo" END
 		"Guardar Tema" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
 		"Guardar Juego de Iconos" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"

@@ -17,6 +17,8 @@ WMRetainPixmap(WMPixmap *pixmap)
 void
 WMReleasePixmap(WMPixmap *pixmap)
 {
+    wassertr(pixmap!=NULL);
+
     pixmap->refCount--;
 
     if (pixmap->refCount<1) {
@@ -139,12 +141,17 @@ WMCreatePixmapFromXPMData(WMScreen *scrPtr, char **data)
 Pixmap
 WMGetPixmapXID(WMPixmap *pixmap)
 {
+    wassertrv(pixmap != NULL, None);
+
     return pixmap->pixmap;
 }
+
 
 Pixmap
 WMGetPixmapMaskXID(WMPixmap *pixmap)
 {
+    wassertrv(pixmap != NULL, None);
+
     return pixmap->mask;
 }
 
@@ -152,11 +159,13 @@ WMGetPixmapMaskXID(WMPixmap *pixmap)
 WMSize 
 WMGetPixmapSize(WMPixmap *pixmap)
 {
-    WMSize size;
+    WMSize size = {0,0};
+
+    wassertrv(pixmap != NULL, size);
     
     size.width = pixmap->width;
     size.height = pixmap->height;
-    
+
     return size;
 }
 
@@ -197,9 +206,25 @@ WMGetSystemPixmap(WMScreen *scr, int image)
 	
      case WSIHighlightedArrowDown:
 	return WMRetainPixmap(scr->hiDownArrow);
-	
+
+     case WSICheckMark:
+	return WMRetainPixmap(scr->checkMark);
+
      default:
 	return NULL;
     }
 }
 
+
+
+void
+WMDrawPixmap(WMPixmap *pixmap, Drawable d, int x, int y)
+{
+    WMScreen *scr = pixmap->screen;
+
+    XSetClipMask(scr->display, scr->clipGC, pixmap->mask);
+    XSetClipOrigin(scr->display, scr->clipGC, x, y);
+
+    XCopyArea(scr->display, pixmap->pixmap, d, scr->clipGC, 0, 0, 
+	      pixmap->width, pixmap->height, x, y);
+}

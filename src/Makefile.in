@@ -69,6 +69,9 @@ I18N = @I18N@
 I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
+LD = @LD@
+LIBTOOL = @LIBTOOL@
+LITE = @LITE@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
@@ -127,18 +130,25 @@ wmaker_SOURCES = 	\
 	event.c \
 	framewin.c \
 	framewin.h \
+	gnome.c \
+	gnome.h \
 	funcs.h \
 	icon.c \
 	icon.h \
 	keybind.h \
+	kwm.h \
+	kwm.c \
 	list.c \
 	list.h \
 	main.c \
 	menu.c \
 	menu.h \
 	misc.c \
+	motif.c \
 	motif.h \
 	moveres.c \
+	openlook.c \
+	openlook.h \
 	pixmap.c \
 	pixmap.h \
 	placement.c \
@@ -161,6 +171,8 @@ wmaker_SOURCES = 	\
 	switchmenu.c \
 	texture.c \
 	texture.h \
+	xde.h \
+	xde.c \
 	xmodifier.h \
 	xmodifier.c \
 	xutil.c \
@@ -184,7 +196,7 @@ wmaker_SOURCES = 	\
 
 CPPFLAGS = \
 	@CPPFLAGS@ \
-	@SHAPE@ @I18N@ @X_LOCALE@ \
+	@SHAPE@ @I18N@ @X_LOCALE@ @LITE@ \
 	@DFLAGS@ \
 	-DNLSDIR="\"$(nlsdir)\"" \
 	-DPKGDATADIR="\"$(pkgdatadir)\"" \
@@ -196,9 +208,9 @@ INCLUDES = \
 	-I$(top_srcdir)/WINGs @XCFLAGS@ 
 
 wmaker_LDADD = \
-	-L$(top_builddir)/WINGs -lWINGs\
-	-L$(top_builddir)/wrlib -lwraster\
-	-L$(top_builddir)/libPropList -lPropList\
+	$(top_builddir)/WINGs/libWINGs.a\
+	$(top_builddir)/wrlib/libwraster.la\
+	$(top_builddir)/libPropList/libPropList.la\
 	@GFXLFLAGS@ \
 	@XLFLAGS@ \
 	@GFXLIBS@ \
@@ -220,16 +232,20 @@ X_LIBS = @X_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 wmaker_OBJECTS =  actions.o appicon.o application.o appmenu.o balloon.o \
 client.o colormap.o defaults.o dialog.o dock.o dockedapp.o event.o \
-framewin.o icon.o list.o main.o menu.o misc.o moveres.o pixmap.o \
-placement.o properties.o proplist.o resources.o rootmenu.o screen.o \
-session.o shutdown.o stacking.o startup.o superfluous.o switchmenu.o \
-texture.o xmodifier.o xutil.o wcore.o wdefaults.o window.o winmenu.o \
-winspector.o workspace.o wmsound.o text.o
-wmaker_DEPENDENCIES = 
+framewin.o gnome.o icon.o kwm.o list.o main.o menu.o misc.o motif.o \
+moveres.o openlook.o pixmap.o placement.o properties.o proplist.o \
+resources.o rootmenu.o screen.o session.o shutdown.o stacking.o \
+startup.o superfluous.o switchmenu.o texture.o xde.o xmodifier.o \
+xutil.o wcore.o wdefaults.o window.o winmenu.o winspector.o workspace.o \
+wmsound.o text.o
+wmaker_DEPENDENCIES =  $(top_builddir)/WINGs/libWINGs.a \
+$(top_builddir)/wrlib/libwraster.la \
+$(top_builddir)/libPropList/libPropList.la
 wmaker_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
-LINK = $(CC) $(CFLAGS) $(LDFLAGS) -o $@
+LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
+LINK = $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(LDFLAGS) -o $@
 DIST_COMMON =  Makefile.am Makefile.in config.h.in stamp-h.in \
 wconfig.h.in
 
@@ -244,7 +260,7 @@ OBJECTS = $(wmaker_OBJECTS)
 all: Makefile $(PROGRAMS) config.h
 
 .SUFFIXES:
-.SUFFIXES: .S .c .o .s
+.SUFFIXES: .S .c .lo .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile
 
@@ -290,8 +306,8 @@ install-binPROGRAMS: $(bin_PROGRAMS)
 	$(mkinstalldirs) $(DESTDIR)$(bindir)
 	@list='$(bin_PROGRAMS)'; for p in $$list; do \
 	  if test -f $$p; then \
-	    echo "  $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
-	     $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
+	    echo " $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
+	    $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
 	  else :; fi; \
 	done
 
@@ -319,6 +335,25 @@ distclean-compile:
 	-rm -f *.tab.c
 
 maintainer-clean-compile:
+
+.c.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+.s.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+.S.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+mostlyclean-libtool:
+	-rm -f *.lo
+
+clean-libtool:
+	-rm -rf .libs _libs
+
+distclean-libtool:
+
+maintainer-clean-libtool:
 
 wmaker: $(wmaker_OBJECTS) $(wmaker_DEPENDENCIES)
 	@rm -f wmaker
@@ -397,19 +432,22 @@ maintainer-clean-generic:
 	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
 	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 mostlyclean:  mostlyclean-hdr mostlyclean-binPROGRAMS \
-		mostlyclean-compile mostlyclean-tags \
-		mostlyclean-generic
+		mostlyclean-compile mostlyclean-libtool \
+		mostlyclean-tags mostlyclean-generic
 
-clean:  clean-hdr clean-binPROGRAMS clean-compile clean-tags \
-		clean-generic mostlyclean
+clean:  clean-hdr clean-binPROGRAMS clean-compile clean-libtool \
+		clean-tags clean-generic mostlyclean
 
 distclean:  distclean-hdr distclean-binPROGRAMS distclean-compile \
-		distclean-tags distclean-generic clean
+		distclean-libtool distclean-tags distclean-generic \
+		clean
 	-rm -f config.status
+	-rm -f libtool
 
 maintainer-clean:  maintainer-clean-hdr maintainer-clean-binPROGRAMS \
-		maintainer-clean-compile maintainer-clean-tags \
-		maintainer-clean-generic distclean
+		maintainer-clean-compile maintainer-clean-libtool \
+		maintainer-clean-tags maintainer-clean-generic \
+		distclean
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
@@ -417,10 +455,11 @@ maintainer-clean:  maintainer-clean-hdr maintainer-clean-binPROGRAMS \
 mostlyclean-binPROGRAMS distclean-binPROGRAMS clean-binPROGRAMS \
 maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
 mostlyclean-compile distclean-compile clean-compile \
-maintainer-clean-compile tags mostlyclean-tags distclean-tags \
-clean-tags maintainer-clean-tags distdir info dvi installcheck \
-install-exec install-data install uninstall all installdirs \
-mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-compile mostlyclean-libtool distclean-libtool \
+clean-libtool maintainer-clean-libtool tags mostlyclean-tags \
+distclean-tags clean-tags maintainer-clean-tags distdir info dvi \
+installcheck install-exec install-data install uninstall all \
+installdirs mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 

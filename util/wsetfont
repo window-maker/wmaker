@@ -15,18 +15,20 @@
 #     Nikolaos Papagrigoriou <papanikos@usa.net>
 # Quote bug fix info from:
 #     Luke Kendall <luke@research.canon.com.au>
+# Bug fix info for Korean font section from:
+#     CHOI Junho <junker@jazz.snu.ac.kr>
 
-VERSION="Version 0.4  1998/11/10"
+VERSION="Version 0.5  1998/12/07"
 
 WDWRITE="wdwrite"
-
+PROGRAM=`basename $0`
 
 if test $# != 1; then
     echo
-    echo "$0 - font/language setting utility for Window Maker"
+    echo "$PROGRAM - font/language setting utility for Window Maker"
     echo 
     echo "Usage:                              $VERSION"
-    echo "        $0 <option> "
+    echo "        $PROGRAM <option> "
     cat <<EOF
 -----------------------------------------------------------------------
 [Option]   [Fontset]                    [Font Information]
@@ -34,11 +36,11 @@ if test $# != 1; then
  latin1     helvetica(iso8859-1)
  latin2     helvetica(iso8859-2)          See *Note1.
  greek      helvetica(iso8859-7)          See *Note1.
- japanese   helvetica/-*-fixed(jisx02XX)  Included in X11R6/XFree("fnon" pkg)
+ japanese   helvetica/-*-fixed(jisx02XX)  Included in X11R6/XFree86("fnon" pkg)
  korean     helvetica/-*-kodig(ksc5601)   See *Note1.
- korean2    helvetica/daewoo(ksc5601)     Included in X11R6/XFree("fnon" pkg)
- russian    helvetica(koi8-r)             Included in X11R6/XFree("fcyr" pkg)
- turkish    unknown                       See *Note2
+ korean2    helvetica/daewoo(ksc5601)     Included in X11R6/XFree86("fnon" pkg)
+ russian    helvetica(koi8-r)             Included in X11R6/XFree86("fcyr" pkg)
+ turkish    unknown                       See *Note2.
 -----------------------------------------------------------------------
 Latin1 Languages: Danish/Dutch/English/Finnish/French/Galician/German/
                   Italian/Norwegian/Portuguese/Spanish/Swedish/...
@@ -118,14 +120,14 @@ case $1 in
 	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-14-*,-*-*-medium-r-normal-*-*-*\"
 	;;
    korean)
-	SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*,*-kodig-medium-r-normal--*-%d-*-*-*-*-*-*,*-*-medium-r-normal--*-%d-*-*-*-*-*-*,*-*-*-*-*--%d-*-*-*-*-*-*-*,*\"
-	BoldSystemFont=\"-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*,-*-kodig-bold-r-normal--*-%d-*-*-*-*-*-*,*-*-bold-r-normal--*-%d-*-*-*-*-*-*,*-*-*-*-*--%d-*-*-*-*-*-*-*,*\"
-	WindowTitleFont=\"7x14,-*-kodig-medium-r-normal--14-*-*-*-*-*-*-*,-*-*-medium-r-normal--14-*-*-*-*-*-*-*,-*-*-medium-r-normal--*-*-*-*-*-*-*-*,-*-*-*-r-normal--*-*-*-*-*-*-*-*,-*-*-*-*-*--*-*-*-*-*-*-*-*,*\"
-	MenuTitleFont=\"7x14,-*-kodig-medium-r-normal--14-*-*-*-*-*-*-*,-*-*-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
-	MenuTextFont=\"7x14,-*-kodig-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
-	IconTitleFont=\"7x14,-*-kodig-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
-	ClipTitleFont=\"7x14,-*-kodig-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
-	DisplayFont=\"7x14,-*-kodig-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
+	SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*,-*-kodig-medium-r-normal--%d-*-*-*-*-*-*-*,*-*-medium-r-normal-*-%d-*-*-*-*-*-*-*,*-*-*-*-*--%d-*-*-*-*-*-*-*,*\"
+	BoldSystemFont=\"-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*,-*-kodig-bold-r-normal--%d-*-*-*-*-*-*-*,-*-kodig-medium-r-normal--%d-*-*-*-*-*-*-*,*-*-bold-r-normal-*-%d-*-*-*-*-*-*-*,*-*-*-*-*--%d-*-*-*-*-*-*-*,*\"
+	WindowTitleFont=\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*,-*-kodig-medium-r-normal--12-*-*-*-*-*-*-*,-*-*-medium-r-normal--12-*-*-*-*-*-*-*,-*-*-medium-r-normal--*-*-*-*-*-*-*-*,-*-*-*-r-normal--*-*-*-*-*-*-*-*,-*-*-*-*-*--*-*-*-*-*-*-*-*,*\"
+	MenuTitleFont=\"-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*,-*-kodig-medium-r-normal--14-*-*-*-*-*-*-*,-*-*-medium-r-normal--12-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
+	MenuTextFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*,-*-kodig-medium-r-normal--14-*-*-*-*-*-*-*,*-*-medium-r-normal--12-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
+	IconTitleFont=\"-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-*-*,-*-kodig-medium-r-normal--10-*-*-*-*-*-*-*,*-*-medium-r-normal--10-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
+	ClipTitleFont=\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*,-*-kodig-medium-r-normal--10-*-*-*-*-*-*-*,*-*-medium-r-normal--10-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
+	DisplayFont=\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*,-*-kodig-medium-r-normal--12-*-*-*-*-*-*-*,*-*-medium-r-normal--12-*-*-*-*-*-*-*,*-*-medium-r-normal--*-*-*-*-*-*-*-*,*-*-*-r-normal--*-*-*-*-*-*-*-*,*\"
 	;;
    korean2)
 	SystemFont=\"-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*,-*-medium-r-normal-*-%d-*,-*-medium-r-normal-*\"

@@ -6,7 +6,7 @@
 #include "WINGs.h"
 #include "WUtil.h"
 
-#if WINGS_H_VERSION < 980930
+#if WINGS_H_VERSION < 981220
 #error There_is_an_old_WINGs.h_file_somewhere_in_your_system._Please_remove_it.
 #endif
 
@@ -173,7 +173,9 @@ typedef struct W_Screen {
 
     struct W_Pixmap *pullDownIndicator;
     struct W_Pixmap *popUpIndicator;
-    
+
+    struct W_Pixmap *checkMark;
+
     struct W_Pixmap *homeIcon;
     
     struct W_Pixmap *defaultObjectIcon;
@@ -308,7 +310,8 @@ _WINGsConfiguration WINGsConfiguration;
 
 #define W_FONTID(f)		(f)->font->fid
 
-#define W_DRAWABLE(scr)		(scr)->rootWin
+#define W_DRAWABLE(scr)		(scr)->rcontext->drawable
+
 
 
 W_View *W_GetViewForXWindow(Display *display, Window window);

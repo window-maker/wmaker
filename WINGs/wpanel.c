@@ -113,8 +113,8 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 	largeFont = WMBoldSystemFontOfSize(scrPtr, 24);
 
 	panel->tLbl = WMCreateLabel(panel->win);
-	WMMoveWidget(panel->tLbl, 80, (80 - largeFont->height)/2);
-	WMResizeWidget(panel->tLbl, 400 - 70, largeFont->height+4);
+	WMMoveWidget(panel->tLbl, 80, (80 - WMFontHeight(largeFont))/2);
+	WMResizeWidget(panel->tLbl, 400 - 70, WMFontHeight(largeFont)+4);
 	WMSetLabelText(panel->tLbl, title);
 	WMSetLabelTextAlignment(panel->tLbl, WALeft);
 	WMSetLabelFont(panel->tLbl, largeFont);
@@ -126,7 +126,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     if (msg) {
 	panel->mLbl = WMCreateLabel(panel->win);
 	WMMoveWidget(panel->mLbl, 10, 83);
-	WMResizeWidget(panel->mLbl, 380, scrPtr->normalFont->height*4);
+	WMResizeWidget(panel->mLbl, 380, WMFontHeight(scrPtr->normalFont)*4);
 	WMSetLabelText(panel->mLbl, msg);
 	WMSetLabelTextAlignment(panel->mLbl, WACenter);
     }
@@ -317,7 +317,7 @@ WMCreateInputPanel(WMScreen *scrPtr, WMWindow *owner, char *title, char *msg,
 	
 	panel->tLbl = WMCreateLabel(panel->win);
 	WMMoveWidget(panel->tLbl, 20, 16);
-	WMResizeWidget(panel->tLbl, 320 - 40, largeFont->height+4);
+	WMResizeWidget(panel->tLbl, 320 - 40, WMFontHeight(largeFont)+4);
 	WMSetLabelText(panel->tLbl, title);
 	WMSetLabelTextAlignment(panel->tLbl, WALeft);
 	WMSetLabelFont(panel->tLbl, largeFont);
@@ -329,7 +329,8 @@ WMCreateInputPanel(WMScreen *scrPtr, WMWindow *owner, char *title, char *msg,
     if (msg) {
 	panel->mLbl = WMCreateLabel(panel->win);
 	WMMoveWidget(panel->mLbl, 20, 50);
-	WMResizeWidget(panel->mLbl, 320 - 40,scrPtr->normalFont->height*2);
+	WMResizeWidget(panel->mLbl, 320 - 40, 
+		       WMFontHeight(scrPtr->normalFont)*2);
 	WMSetLabelText(panel->mLbl, msg);
 	WMSetLabelTextAlignment(panel->mLbl, WALeft);
     }

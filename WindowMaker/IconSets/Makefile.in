@@ -69,6 +69,9 @@ I18N = @I18N@
 I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
+LD = @LD@
+LIBTOOL = @LIBTOOL@
+LITE = @LITE@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
@@ -92,11 +95,11 @@ wprefsdir = @wprefsdir@
 
 defsdatadir = $(pkgdatadir)/IconSets
 
-defsdata_DATA = Default
+defsdata_DATA = Default.iconset
 
 EXTRA_DIST = 
 
-CLEANFILES = Default
+CLEANFILES = Default.iconset
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../src/config.h
 CONFIG_CLEAN_FILES = 
@@ -195,6 +198,7 @@ clean:  clean-generic mostlyclean
 
 distclean:  distclean-generic clean
 	-rm -f config.status
+	-rm -f libtool
 
 maintainer-clean:  maintainer-clean-generic distclean
 	@echo "This command is intended for maintainers to use;"
@@ -206,10 +210,10 @@ installdirs mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
-Default: $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes ./Makefile
-	-rm -f Default
-	cp $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes Default
-	chmod 644 Default
+Default.iconset: $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes ./Makefile
+	-rm -f Default.iconset
+	cp $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes Default.iconset
+	chmod 644 Default.iconset
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

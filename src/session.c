@@ -254,7 +254,7 @@ wSessionSaveState(WScreen *scr)
         WApplication *wapp=wApplicationOf(wwin->main_window);
 
         if (wwin->transient_for==None && list_find(wapp_list, wapp)==NULL
-	    && !wwin->window_flags.dont_save_session) {
+	    && !WFLAGP(wwin, dont_save_session)) {
             /* A entry for this application was not yet saved. Save one. */
             if ((win_info = makeWindowState(wwin, wapp))!=NULL) {
                 list = PLAppendArrayElement(list, win_info);
@@ -312,8 +312,6 @@ execCommand(WScreen *scr, char *command, char *host)
         int i;
 
 	SetupEnvironment(scr);
-
-	CloseDescriptors();
 
         args = malloc(sizeof(char*)*(argc+1));
         if (!args)
@@ -384,7 +382,6 @@ getWindowState(WScreen *scr, proplist_t win_state)
 
 
 #define SAME(x, y) (((x) && (y) && !strcmp((x), (y))) || (!(x) && !(y)))
-
 
 void
 wSessionRestoreState(WScreen *scr)
@@ -570,16 +567,144 @@ wSessionRestoreLastWorkspace(WScreen *scr)
  * WM_CLASSS.class
  * WM_WINDOW_ROLE
  * geometry
- * (state array (miniaturized, shaded, etc))
- * workspace
- * wich dock
+ * state = (miniaturized, shaded, etc)
+ * attribute
+ * workspace #
+ * app state = (which dock, hidden)
+ * window shortcut #
  */
+
+static proplist_t
+makeAppState(WWindow *wwin)
+{
+    WApplication *wapp;
+    proplist_t state;
+    WScreen *scr = wwin->screen_ptr;
+        
+    state = PLMakeArrayWithElements(NULL, NULL);
+
+    wapp = wApplicationOf(wwin->main_window);
+    
+    if (wapp) {
+        if (wapp->app_icon && wapp->app_icon->dock) {
+
+	    if (wapp->app_icon->dock == scr->dock) {
+		PLAppendArrayElement(state, PLMakeString("Dock"));
+	    } else {
+		int i;
+
+                for(i=0; i<scr->workspace_count; i++)
+                    if(scr->workspaces[i]->clip == wapp->app_icon->dock)
+                        break;
+
+                assert(i < scr->workspace_count);
+
+                PLAppendArrayElement(state, 
+				     PLMakeString(scr->workspaces[i]->name));
+	    }
+	}
+	
+	PLAppendArrayElement(state, PLMakeString(wapp->hidden ? "1" : "0"));
+    }
+    
+    return state;
+}
+
+
+static proplist_t
+makeAttributeState(WWindow *wwin)
+{
+    unsigned int data1, data2;
+    char buffer[256];
+
+#define W_FLAG(wwin, FLAG)	((wwin)->defined_user_flags.FLAG \
+					? (wwin)->user_flags.FLAG : -1)
+
+    sprintf(buffer, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+	    W_FLAG(no_titlebar),
+	    W_FLAG(no_resizable),
+	    W_FLAG(no_closable),
+	    W_FLAG(no_miniaturizable),
+	    W_FLAG(no_resizebar),
+	    W_FLAG(no_close_button),
+	    W_FLAG(no_miniaturize_button),
+	    /*
+	    W_FLAG(broken_close),
+	    W_FLAG(kill_close),
+	     */
+	    W_FLAG(no_shadeable),
+	    W_FLAG(omnipresent),
+	    W_FLAG(skip_window_list),
+	    W_FLAG(floating),
+	    W_FLAG(sunken),
+	    W_FLAG(no_bind_keys),
+	    W_FLAG(no_bind_mouse),
+	    W_FLAG(no_hide_others),
+	    W_FLAG(no_appicon),
+	    W_FLAG(dont_move_off),
+	    W_FLAG(no_focusable),
+	    W_FLAG(always_user_icon),
+	    W_FLAG(start_miniaturized),
+	    W_FLAG(start_hidden),
+	    W_FLAG(start_maximized),
+	    W_FLAG(dont_save_session),
+	    W_FLAG(emulate_appicon));
+
+    return PLMakeString(buffer);
+}
+
+
 static proplist_t
 makeClientState(WWindow *wwin)
 {
-    proplist_t key;
+    proplist_t state;
+    proplist_t tmp;
+    char *str;
+    char buffer[256];
+    int i;
     
+    state = PLMakeArrayWithElements(NULL, NULL);
+    
+    /* spec */
+    PLAppendArrayElement(state, PLMakeString(wwin->wm_instance));
+    PLAppendArrayElement(state, PLMakeString(wwin->wm_class));
 
+    PLAppendArrayElement(state, PLMakeString(str));
+
+    /* geometry */
+    sprintf(buffer, "%i %i %i %i", wwin->frame_x, wwin->frame_y,
+	    wwin->frame->core->width, wwin->frame->core->height);
+    PLAppendArrayElement(state, PLMakeString(buffer));
+
+    /* state */
+    sprintf(buffer, "%i %i %i", wwin->flags.miniaturized,
+	    wwin->flags.shaded, wwin->flags.maximized);
+    PLAppendArrayElement(state, PLMakeString(buffer));
+
+    /* attributes */
+    PLAppendArrayElement(state, makeAttributeState(wwin));
+
+    /* workspace */
+    sprintf(buffer, "%i", wwin->frame->workspace);
+    PLAppendArrayElement(state, PLMakeString(buffer));
+
+    /* app state (repeated for all windows of the app) */
+    PLAppendArrayElement(state, makeAppState(wwin));
+
+    /* shortcuts */
+    tmp = PLMakeArrayWithElements(NULL, NULL);
+    
+    for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
+
+	if (scr->shortcutWindow[i] == wwin) {
+
+	    sprintf(buffer, "%i", i);
+	    PLAppendArrayElement(tmp, PLMakeString(buffer));
+	}
+    }
+    PLAppendArrayElement(state, tmp);
+
+    return state;
 }
 
 
@@ -647,8 +772,8 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
      * Format:
      *
      * state_file ::= dictionary with version_info ; state
-     * version_info ::= version = 1;
-     * state ::= state = array of screen_info
+     * version_info ::= 'version' = '1';
+     * state ::= 'state' = array of screen_info
      * screen_info ::= array of (screen number, window_info, window_info, ...)
      * window_info ::= 
      */
@@ -680,7 +805,7 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
 	proplist_t statefile;
 	
 	statefile = PLMakeDictionaryFromEntries(PLMakeString("Version"), 
-						PLMakeString("1"),
+						PLMakeString("1.0"),
 
 						PLMakeString("Screens"),
 						state,
@@ -805,10 +930,7 @@ smDieProc(SmcConn smc_conn, SmPointer client_data)
 
     wSessionDisconnectManager();
 
-    RestoreDesktop(NULL);
-
-    ExecExitScript();
-    Exit(0);
+    Shutdown(WSExitMode);
 }
 
 
@@ -910,7 +1032,10 @@ wSessionConnectManager(char **argv, int argc)
 
     /* check for session manager clients */
     iceConn = SmcGetIceConnection(smcConn);
-    
+
+    if (fcntl(IceConnectionNumber(iceConn), F_SETFD, FD_CLOEXEC) < 0) {
+	wsyserror("error setting close-on-exec flag for ICE connection");
+    }
 
     sSMInputHandler = WMAddInputHandler(IceConnectionNumber(iceConn), 
 					WIReadMask, iceMessageProc, iceConn);
@@ -960,12 +1085,6 @@ wSessionConnectManager(char **argv, int argc)
 
 }
 
-void
-_wSessionCloseDescriptors(void)
-{
-    if (sSMCConn)
-	close(IceConnectionNumber(SmcGetIceConnection(smcConn)));
-}
 
 void
 wSessionDisconnectManager(void)

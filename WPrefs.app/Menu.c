@@ -546,15 +546,24 @@ browserClick(WMWidget *w, void *data)
 
     if (isMenu(item)) {
 	updateForItemType(panel, TNothing);
+
+	WMSetPopUpButtonEnabled(panel->cmd2P, True);
 	return;
+    } else {
+	int column = WMGetBrowserSelectedColumn(panel->browser);
+
+	if (column == WMGetBrowserNumberOfColumns(panel->browser)-1
+	    && column > 0)
+	    WMSetPopUpButtonEnabled(panel->cmd2P, True);
+	else
+	    WMSetPopUpButtonEnabled(panel->cmd2P, False);
+
+	if (column==WMGetBrowserFirstVisibleColumn(panel->browser)) {
+	    /* second column is empty, because selected item is not a submenu */
+	    WMSetTextFieldText(panel->tit2T, NULL);
+	}
     }
 
-    if (WMGetBrowserSelectedColumn(panel->browser)==
-	WMGetBrowserFirstVisibleColumn(panel->browser)) {
-	/* second column is empty, because selected item is not a submenu */
-	WMSetTextFieldText(panel->tit2T, NULL);
-    }
-    
     command = getItemCommand(item);
 
     WMSetTextFieldText(panel->shoT, getItemShortcut(item));

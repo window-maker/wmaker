@@ -43,6 +43,9 @@
 #include "stacking.h"
 #include "appicon.h"
 #include "appmenu.h"
+#ifdef KWM_HINTS
+#include "kwm.h"
+#endif
 
 /****** Global Variables ******/
 
@@ -317,10 +320,16 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 	    if (!wFetchName(dpy, wwin->client_win, &tmp)) {
 		/* the hint was removed */
 		tmp = wstrdup(DEF_WINDOW_TITLE);
+#ifdef KWM_HINTS
+		wKWMSendEventMessage(wwin, WKWMChangedClient);
+#endif
 	    }
             if (wFrameWindowChangeTitle(wwin->frame, tmp)) {
                 /* only update the menu if the title has actually changed */
                 UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE);
+#ifdef KWM_HINTS
+		wKWMSendEventMessage(wwin, WKWMChangedClient);
+#endif
             }
 	    if (tmp)
 		free(tmp);
@@ -328,6 +337,9 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 	break;
 
      case XA_WM_ICON_NAME:
+#ifdef KWM_HINTS
+	wKWMSendEventMessage(wwin, WKWMChangedClient);
+#endif
 	if (!wwin->icon) 
 	    break;
 	else {
@@ -486,6 +498,9 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 		if (wapp && wapp->app_icon) {
 		    wIconUpdate(wapp->app_icon->icon);
 		}
+#ifdef KWM_HINTS
+		wKWMSendEventMessage(wwin, WKWMIconChange);
+#endif
 	    }
 
 	    if (wwin->wm_hints->flags & UrgencyHint)
@@ -544,15 +559,15 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 		}
 		wwin->transient_for = new_owner;
 		if (new_owner==None) {
-		    if (wwin->window_flags.no_miniaturizable) {
-			wwin->window_flags.no_miniaturizable = 0;
-			wwin->window_flags.no_miniaturize_button = 0;
+		    if (WFLAGP(wwin, no_miniaturizable)) {
+			WSETUFLAG(wwin, no_miniaturizable, 0);
+			WSETUFLAG(wwin, no_miniaturize_button, 0);
 			if (wwin->frame)
 			    wWindowConfigureBorders(wwin);
 		    }
-		} else if (!wwin->window_flags.no_miniaturizable) {
-		    wwin->window_flags.no_miniaturizable = 1;
-		    wwin->window_flags.no_miniaturize_button = 1;
+		} else if (!WFLAGP(wwin, no_miniaturizable)) {
+		    WSETUFLAG(wwin, no_miniaturizable, 1);
+		    WSETUFLAG(wwin, no_miniaturize_button, 1);
 		    if (wwin->frame)
 			wWindowConfigureBorders(wwin);
 		}
@@ -562,12 +577,11 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 	
      default:
 	if (event->atom==_XA_WM_PROTOCOLS) {
+
 	    PropGetProtocols(wwin->client_win, &wwin->protocols);
-	    if (wwin->protocols.DELETE_WINDOW) {
-		wwin->window_flags.kill_close = 0;
-	    } else {
-		wwin->window_flags.kill_close = 1;		
-	    }
+
+	    WSETUFLAG(wwin, kill_close, !wwin->protocols.DELETE_WINDOW);
+
 	    if (wwin->frame)
 		wWindowUpdateButtonImages(wwin);
 	    
@@ -600,6 +614,12 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 	    wWindowUpdateGNUstepAttr(wwin, attr);
 	    
 	    XFree(attr);
+	} else {
+#ifdef KWM_HINTS
+	    Bool done;
+
+	    done = wKWMCheckClientHintChange(wwin, event);
+#endif /* KWM_HINTS */
 	}
     }
 }
@@ -651,7 +671,14 @@ wClientGetNormalHints(WWindow *wwin, XWindowAttributes *wattribs, Bool geometry,
 	wwin->normal_hints->max_width = wwin->screen_ptr->scr_width*2;
 	wwin->normal_hints->max_height = wwin->screen_ptr->scr_height*2;
     }
-    
+
+    /* some buggy apps set weird hints.. */
+    if (wwin->normal_hints->max_width < wwin->normal_hints->min_width)
+	wwin->normal_hints->max_width = wwin->normal_hints->min_width;
+
+    if (wwin->normal_hints->max_height < wwin->normal_hints->min_height)
+	wwin->normal_hints->max_height = wwin->normal_hints->min_height;
+
     if (!(wwin->normal_hints->flags & PResizeInc)) {
 	wwin->normal_hints->width_inc = 1;
 	wwin->normal_hints->height_inc = 1;
@@ -715,7 +742,8 @@ GetColormapWindows(WWindow *wwin)
     wwin->cmap_window_no = 0;
 
     if (XGetWMColormapWindows(dpy, wwin->client_win, &(wwin->cmap_windows),
-			      &(wwin->cmap_window_no))!=Success) {
+			      &(wwin->cmap_window_no))!=Success
+	|| !wwin->cmap_windows) {
 	wwin->cmap_window_no = 0;
 	wwin->cmap_windows = NULL;
     }

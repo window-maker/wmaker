@@ -2,7 +2,7 @@
   Dock = {
     Applications = (
       {
-        Command = "";
+        Command = "-";
         Name = Logo.WMDock;
         AutoLaunch = No;
         Forced = No;

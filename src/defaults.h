@@ -51,13 +51,15 @@ void wSaveDefaults(WScreen *scr);
 char *wDefaultGetIconFile(WScreen *scr, char *instance, char *class,
 			  Bool noDefault);
 
-RImage*wDefaultGetImage(WScreen *scr, char *winstance, char *wclass);
+RImage *wDefaultGetImage(WScreen *scr, char *winstance, char *wclass);
 
-void wDefaultFillAttributes(WScreen *scr, char *instance, char *class, 
-			    WWindowAttributes *attr, Bool useGlobalDefault);
+void wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
+			    WWindowAttributes *attr, WWindowAttributes *mask,
+			    Bool useGlobalDefault);
 
 int wDefaultGetStartWorkspace(WScreen *scr, char *instance, char *class);
 
 void wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file);
 
 #endif /* WMDEFAULTS_H_ */
+

@@ -30,6 +30,8 @@ typedef struct W_FilePanel {
     
     WMButton *homeButton;
 
+    WMView *accessoryView;
+
     WMTextField *fileField;
     
     char **fileTypes;
@@ -358,6 +360,28 @@ WMGetFilePanelFileName(WMFilePanel *panel)
 }
 
 
+void
+WMSetFilePanelAccessoryView(WMFilePanel *panel, WMView *view)
+{
+    WMView *v;
+
+    panel->accessoryView = view;
+
+    v = WMWidgetView(panel->win);
+
+    W_ReparentView(view, v);
+
+    W_MoveView(view, (v->size.width - v->size.width)/2, 300);
+}
+
+
+WMView*
+WMGetFilePanelAccessoryView(WMFilePanel *panel)
+{
+    return panel->accessoryView;
+}
+
+
 static char*
 get_name_from_path(char *path)
 {
@@ -564,3 +588,5 @@ buttonClick(WMButton *bPtr, WMFilePanel *panel)
 
     panel->flags.done = 1;
 }
+
+

@@ -57,6 +57,30 @@ echo
 echo "Option Selection"
 echo "================"
 
+######################## KDE
+echo
+echo "Do you want KDE support?"
+echo -n <y/n> [n] "
+read kde
+if [ "$kde" = y -o "$kde" = Y ]; then
+	OPTIONS="$OPTIONS --enable-kde"
+	echo "Do you want to disable features that become duplicated with"
+	echo "KDE support (like root menus)?"
+	echo -n <y/n> [n] "
+	read lite
+	if [ "$lite" = y -o "lite" = Y ]; then
+		OPTIONS="$OPTIONS --enable-lite"
+	fi
+fi
+
+######################## GNOME
+echo
+echo "Do you want GNOME support?"
+echo -n <y/n> [n] "
+read gnome
+if [ "$gnome" = y -o "$gnome" = Y ]; then
+	OPTIONS="$OPTIONS --enable-gnome"
+fi
 
 ######################## NLS
 echo

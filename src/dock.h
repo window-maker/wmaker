@@ -44,7 +44,11 @@ typedef struct WDock {
     int type;
 
     WMagicNumber auto_collapse_magic;
+    WMagicNumber auto_raise_magic;
+    WMagicNumber auto_lower_magic;
     unsigned int auto_collapse:1;      /* if clip auto-collapse itself */
+    unsigned int auto_raise_lower:1;   /* if clip should raise/lower when
+                                        * entered/leaved */
     unsigned int on_right_side:1;
     unsigned int collapsed:1;
     unsigned int mapped:1;

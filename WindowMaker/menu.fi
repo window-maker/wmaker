@@ -162,9 +162,9 @@
 	"Työtilat" END
 
 	"Ulkonäkö" MENU
-		"Teemat" OPEN_MENU THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Tyylit" OPEN_MENU STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Kuvakeryhmät" OPEN_MENU ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Teemat" OPEN_MENU -noext  THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Tyylit" OPEN_MENU -noext  STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Kuvakeryhmät" OPEN_MENU -noext  ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Taustat" MENU
 			"Taustaväri" MENU
                         	"Musta" WS_BACK '(solid, black)'
@@ -180,7 +180,7 @@
 				"Lippu" WS_BACK '(mdgradient, green, red, white, green)'
 				"Taivas" WS_BACK '(vgradient, blue4, white)'
 			"Liukuväri" END
-			"Taustakuvat" OPEN_MENU BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+			"Taustakuvat" OPEN_MENU -noext  BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Taustat" END
 		"Talleta teema" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
 		"Talleta kuvakeryhmät" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"

@@ -48,6 +48,7 @@
 #include "framewin.h"
 #include "window.h"
 #include "actions.h"
+#include "defaults.h"
 
 
 extern WPreferences wPreferences;
@@ -322,17 +323,25 @@ listCallback(void *self, void *data)
 static void
 listIconPaths(WMList *lPtr)
 {
-    int i;
-    
-    for (i=0; wPreferences.icon_path[i]!=NULL; i++) {
+    char *paths;
+    char *path;
+
+    paths = wstrdup(wPreferences.icon_path);
+
+    path = strtok(paths, ":");
+
+    do {
 	char *tmp;
-	tmp = wexpandpath(wPreferences.icon_path[i]);
+
+	tmp = wexpandpath(path);
 	/* do not sort, because the order implies the order of
 	 * directories searched */
 	if (access(tmp, X_OK)==0)
-	    WMAddListItem(lPtr, wPreferences.icon_path[i]);
+	    WMAddListItem(lPtr, tmp);
 	free(tmp);
-    }
+    } while ((path=strtok(NULL, ":"))!=NULL);
+
+    free(paths);
 }
 
 
@@ -552,6 +561,14 @@ typedef struct {
     WMLabel *infoL;
 
     WMLabel *copyrL;
+
+#ifdef SILLYNESS
+    WMHandlerID timer;
+    int cycle;
+    RImage *icon;
+    RImage *pic;
+    WMPixmap *oldPix;
+#endif
 } InfoPanel;
 
 
@@ -567,6 +584,20 @@ static InfoPanel *thePanel = NULL;
 static void
 destroyInfoPanel(WCoreWindow *foo, void *data, XEvent *event)
 {
+#ifdef SILLYNESS
+    if (thePanel->timer) {
+	WMDeleteTimerHandler(thePanel->timer);
+    }
+    if (thePanel->oldPix) {
+	WMReleasePixmap(thePanel->oldPix);
+    }
+    if (thePanel->icon) {
+	RDestroyImage(thePanel->icon);
+    }
+    if (thePanel->pic) {
+	RDestroyImage(thePanel->pic);
+    }
+#endif /* SILLYNESS */
     WMUnmapWidget(thePanel);
 
     WMDestroyWidget(thePanel->win);
@@ -574,7 +605,7 @@ destroyInfoPanel(WCoreWindow *foo, void *data, XEvent *event)
     wUnmanageWindow(thePanel->wwin, False);
 
     free(thePanel);
-
+    
     thePanel = NULL;
 }
 
@@ -583,7 +614,6 @@ WMPixmap*
 renderText(WMScreen *scr, char *text, char *font, RColor *from, RColor *to)
 {
     WMPixmap *wpix = NULL;
-    RImage *gradient = NULL;
     Pixmap grad = None;
     Pixmap mask = None;
     RContext *rc = WMScreenRContext(scr);
@@ -598,43 +628,254 @@ renderText(WMScreen *scr, char *text, char *font, RColor *from, RColor *to)
     w = XTextWidth(f, text, strlen(text));
     h = f->ascent+f->descent;
 
-    gradient = RRenderGradient(w, h, from, to, RVerticalGradient);
-    if (!gradient) {
-	wwarning("error doing image processing:%s",
-		RMessageForError(RErrorCode));
-	goto bye;
-    }
-    if (!RConvertImage(rc, gradient, &grad)) {
-	wwarning("error doing image processing:%s",
-		RMessageForError(RErrorCode));
-	goto bye;
-    }
-
     mask = XCreatePixmap(dpy, rc->drawable, w, h, 1);
     gc = XCreateGC(dpy, mask, 0, NULL);
-    XSetForeground(dpy, gc, rc->black);
+    XSetForeground(dpy, gc, 0);
     XSetFont(dpy, gc, f->fid);
     XFillRectangle(dpy, mask, gc, 0, 0, w, h);
 
-    XSetForeground(dpy, gc, rc->white);
+    XSetForeground(dpy, gc, 1);
     XDrawString(dpy, mask, gc, 0, f->ascent, text, strlen(text));
-
     XSetLineAttributes(dpy, gc, 3, LineSolid, CapRound, JoinMiter);
-    
     XDrawLine(dpy, mask, gc, 0, h-2, w, h-2);
-    
+
+    grad = XCreatePixmap(dpy, rc->drawable, w, h, rc->depth);
+    {
+	WMColor *color;
+
+	color = WMBlackColor(scr);
+	XFillRectangle(dpy, grad, WMColorGC(color), 0, 0, w, h);
+	WMReleaseColor(color);
+    }
+
     wpix = WMCreatePixmapFromXPixmaps(scr, grad, mask, w, h, rc->depth);
 
- bye:
     if (gc)
 	XFreeGC(dpy, gc);
     XFreeFont(dpy, f);
-    if (gradient)
-	RDestroyImage(gradient);
 
     return wpix;
 }
 
+#ifdef SILLYNESS
+static void
+logoPushCallback(void *data)
+{
+    InfoPanel *panel = (InfoPanel*)data;
+    char buffer[512];
+    int i;
+
+    if (panel->cycle < 30) {
+	RImage *image;
+	WMPixmap *pix;
+
+	image = RCloneImage(panel->icon);
+	RCombineImagesWithOpaqueness(image, panel->pic, panel->cycle*255/30);
+	pix = WMCreatePixmapFromRImage(panel->scr->wmscreen, image, 128);
+	RDestroyImage(image);
+	WMSetLabelImage(panel->logoL, pix);
+	WMReleasePixmap(pix);
+    }
+
+    i = panel->cycle%150;
+
+    strncpy(buffer, "Sloppy focus is a *?#@", i<22 ? i : 22);
+    if (i >= 22)
+	memset(&buffer[22], ' ', i-22);
+    buffer[i]=0;
+    WMSetLabelText(panel->versionL, buffer);
+
+    panel->timer = WMAddTimerHandler(50, logoPushCallback, panel);
+    panel->cycle++;
+}
+
+
+static void
+handleLogoPush(XEvent *event, void *data)
+{
+    InfoPanel *panel = (InfoPanel*)data;
+    static int broken = 0;
+    static int clicks = 0;
+    static char *pic_data[] = {
+"45 45 57 1",
+" 	c None",
+".	c #000000",
+"X	c #383C00",
+"o	c #515500",
+"O	c #616100",
+"+	c #616900",
+"@	c #696D00",
+"#	c #697100",
+"$	c #495100",
+"%	c #202800",
+"&	c #969600",
+"*	c #CFCF00",
+"=	c #D7DB00",
+"-	c #D7D700",
+";	c #C7CB00",
+":	c #A6AA00",
+">	c #494900",
+",	c #8E8E00",
+"<	c #DFE700",
+"1	c #F7FF00",
+"2	c #FFFF00",
+"3	c #E7EB00",
+"4	c #B6B600",
+"5	c #595900",
+"6	c #717500",
+"7	c #AEB200",
+"8	c #CFD300",
+"9	c #E7EF00",
+"0	c #EFF300",
+"q	c #9EA200",
+"w	c #F7FB00",
+"e	c #F7F700",
+"r	c #BEBE00",
+"t	c #8E9200",
+"y	c #EFF700",
+"u	c #969A00",
+"i	c #414500",
+"p	c #595D00",
+"a	c #E7E700",
+"s	c #C7C700",
+"d	c #797D00",
+"f	c #BEC300",
+"g	c #DFE300",
+"h	c #868600",
+"j	c #EFEF00",
+"k	c #9E9E00",
+"l	c #616500",
+"z	c #DFDF00",
+"x	c #868A00",
+"c	c #969200",
+"v	c #B6BA00",
+"b	c #A6A600",
+"n	c #8E8A00",
+"m	c #717100",
+"M	c #AEAE00",
+"N	c #AEAA00",
+"B	c #868200",
+"               ...............               ",
+"             ....XoO+@##+O$%....             ",
+"           ...%X&*========-;;:o...           ",
+"         ...>.>,<122222222222134@...         ",
+"        ..>5678912222222222222220q%..        ",
+"       ..$.&-w2222222222222222222er>..       ",
+"      ..O.t31222222222222222222222y4>..      ",
+"    ...O5u3222222222222222222222222yri...    ",
+"    ..>p&a22222222222222222222222222wso..    ",
+"   ..ids91222222222222222222222222222wfi..   ",
+"  ..X.7w222222wgs-w2222222213=g0222222<hi..  ",
+"  ..Xuj2222222<@X5=222222229k@l:022222y4i..  ",
+"  .Xdz22222222*X%.s22222222axo%$-222222<c>.. ",
+" ..o7y22222222v...r222222223hX.i82222221si.. ",
+"..io*222222222&...u22222222yt..%*22222220:%. ",
+"..>k02222222227...f222222222v..X=222222229t. ",
+"..dz12222222220ui:y2222222223d%qw222222221g. ",
+".%vw222222222221y2222222222219*y2222222222wd.",
+".X;2222222222222222222222222222222222222222b.",
+".i*2222222222222222222222222222222222222222v.",
+".i*2222222222222222222222222222222222222222;.",
+".i*22222222222222222222222222222222222222228.",
+".>*2222222222222222222222222222222222222222=.",
+".i*22222222222222222222222222222222222222228.",
+".i*2222222222222222222222222222222222222222;.",
+".X*222222222222222222222222222222we12222222r.",
+".Xs12222222w3aw22222222222222222y8s0222222wk.",
+".Xq02222222a,na22222222222222222zm6zwy2222gi.",
+"..>*22222y<:Xcj22222222222222222-o$k;;02228..",
+"..i7y2220rhX.:y22222222222222222jtiXd,a220,..",
+" .X@z222a,do%kj2222222222222222wMX5q;gw228%..",
+" ..58222wagsh6ry222222222222221;>Of0w222y:...",
+" ...:e2222218mdz22222222222222a&$vw222220@...",
+" ...O-122222y:.u02222222222229q$uj222221r... ",
+"  ..%&a1222223&573w2222222219NOxz122221z>... ",
+"   ...t3222221-l$nr8ay1222yzbo,=12222w-5...  ",
+"    ..X:022222w-k+>o,7s**s7xOn=12221<f5...   ",
+"     ..o:9222221j8:&Bl>>>>ihv<12221=dX...    ",
+"      ..Xb9122222109g-****;<y22221zn%...     ",
+"       ..X&801222222222222222222w-h....      ",
+"        ...o:=022222222222222221=lX...       ",
+"          ..X@:;3w2222222222210fO...         ",
+"           ...XX&v8<30000003-N@...           ",
+"             .....XmnbN:q&Bo....             ",
+"                 ............                "};
+
+    clicks++;
+    if (!panel->timer && !broken && clicks > 2) {
+	char *file;
+	char *path;
+
+	clicks = 0;
+	if (!panel->icon) {
+	    file = wDefaultGetIconFile(panel->scr, "Logo", "WMPanel", False);
+	    if (!file) {
+		broken = 1;
+		return;
+	    }
+    
+	    path = FindImage(wPreferences.icon_path, file);
+	    if (!path) {
+		broken = 1;
+		return;
+	    }
+
+	    panel->icon = RLoadImage(panel->scr->rcontext, path, 0);
+	    free(path);
+	    if (!panel->icon) {
+		broken = 1;
+		return;
+	    }
+	}
+	if (!panel->pic) {
+	    panel->pic = RGetImageFromXPMData(panel->scr->rcontext, pic_data);
+	    if (!panel->pic || panel->icon->width!=panel->pic->width
+		|| panel->icon->height!=panel->pic->height) {
+		broken = 1;
+		RDestroyImage(panel->icon);
+		panel->icon = NULL;
+		if (panel->pic) {
+		    RDestroyImage(panel->pic);
+		    panel->pic = NULL;
+		}
+		return;
+	    }
+
+	    {
+		RColor color;
+		color.red = 0xae;
+		color.green = 0xaa;
+		color.blue = 0xae;
+		color.alpha = 255;
+		RCombineImageWithColor(panel->icon, &color);
+		RCombineImageWithColor(panel->pic, &color);
+	    }
+	}
+	panel->timer = WMAddTimerHandler(50, logoPushCallback, panel);
+	panel->cycle = 0;
+	panel->oldPix = WMRetainPixmap(WMGetLabelImage(panel->logoL));
+    } else if (panel->timer) {
+	char version[20];
+
+	clicks = 0;
+	WMSetLabelImage(panel->logoL, panel->oldPix);
+	WMReleasePixmap(panel->oldPix);
+	panel->oldPix = NULL;
+	
+	WMDeleteTimerHandler(panel->timer);
+	panel->timer = NULL;
+
+	sprintf(version, "Version %s", VERSION);
+	WMSetLabelText(panel->versionL, version);
+    }
+
+    {
+	XEvent ev;
+	while (XCheckTypedWindowEvent(dpy, WMWidgetXID(panel->versionL), 
+				      ButtonPress, &ev));
+    }
+}
+#endif /* SILLYNESS */
 
 void
 wShowInfoPanel(WScreen *scr)
@@ -666,6 +907,7 @@ wShowInfoPanel(WScreen *scr)
     }
     
     panel = wmalloc(sizeof(InfoPanel));
+    memset(panel, 0, sizeof(InfoPanel));
 
     panel->scr = scr;
 
@@ -680,6 +922,10 @@ wShowInfoPanel(WScreen *scr)
 	WMMoveWidget(panel->logoL, 30, 20);
 	WMSetLabelImagePosition(panel->logoL, WIPImageOnly);
 	WMSetLabelImage(panel->logoL, logo);
+#ifdef SILLYNESS
+	WMCreateEventHandler(WMWidgetView(panel->logoL), ButtonPressMask,
+			     handleLogoPush, panel);
+#endif
     }
 
     panel->name1L = WMCreateLabel(panel->win);
@@ -690,7 +936,7 @@ wShowInfoPanel(WScreen *scr)
     color1.blue = 0;
     color2.red = 0x50;
     color2.green = 0x50;
-    color2.blue = 0x60;
+    color2.blue = 0x70;
     logo = renderText(scr->wmscreen, "    Window Maker    ",
 		      "-*-times-bold-r-*-*-24-*", &color1, &color2);
     if (logo) {
@@ -720,11 +966,11 @@ wShowInfoPanel(WScreen *scr)
     
     sprintf(version, "Version %s", VERSION);
     panel->versionL = WMCreateLabel(panel->win);
-    WMResizeWidget(panel->versionL, 150, 16);
-    WMMoveWidget(panel->versionL, 190, 95);
+    WMResizeWidget(panel->versionL, 310, 16);
+    WMMoveWidget(panel->versionL, 30, 95);
     WMSetLabelTextAlignment(panel->versionL, WARight);
     WMSetLabelText(panel->versionL, version);
-    
+    WMSetLabelWraps(panel->versionL, False);
 
     panel->copyrL = WMCreateLabel(panel->win);
     WMResizeWidget(panel->copyrL, 340, 40);
@@ -763,11 +1009,42 @@ wShowInfoPanel(WScreen *scr)
 	strcat(buffer, strl[i]);
 	strcat(buffer, " ");
     }
-#ifdef WMSOUND
-    strcat(buffer, "\nSound support compiled in");
-#else
-    strcat(buffer, "\nSound support not available");
+
+    strcat(buffer, "\nAdditional Support For: ");
+    {
+	char *list[8];
+	char buf[80];
+	int j = 0;
+
+#ifdef MWM_HINTS
+	list[j++] = "MWM";
 #endif
+#ifdef KWM_HINTS
+	list[j++] = "KDE";
+#endif
+#ifdef GNOME_STUFF
+	list[j++] = "GNOME";
+#endif
+#ifdef OLWM_HINTS
+	list[j++] = "OLWM";
+#endif
+#ifdef WMSOUND
+	list[j++] = "Sound";
+#endif
+
+	buf[0] = 0;
+	for (i = 0; i < j; i++) {
+	    if (i > 0) {
+		if (i == j - 1)
+		    strcat(buf, " and ");
+		else
+		    strcat(buf, ", ");
+	    }
+	    strcat(buf, list[i]);
+	}
+	strcat(buffer, buf);
+    }
+
 
     panel->infoL = WMCreateLabel(panel->win);
     WMResizeWidget(panel->infoL, 350, 75);
@@ -792,8 +1069,8 @@ wShowInfoPanel(WScreen *scr)
 				 (scr->scr_width - 382)/2,
 				 (scr->scr_height - 230)/2, 382, 230);
 
-    wwin->window_flags.no_closable = 0;
-    wwin->window_flags.no_close_button = 0;
+    WSETUFLAG(wwin, no_closable, 0);
+    WSETUFLAG(wwin, no_close_button, 0);
     wWindowUpdateButtonImages(wwin);
     wFrameWindowShowButton(wwin->frame, WFF_RIGHT_BUTTON);
     wwin->frame->on_click_right = destroyInfoPanel;
@@ -895,8 +1172,8 @@ wShowLegalPanel(WScreen *scr)
 				 (scr->scr_width - 420)/2,
 				 (scr->scr_height - 250)/2, 420, 250);
 
-    wwin->window_flags.no_closable = 0;
-    wwin->window_flags.no_close_button = 0;
+    WSETUFLAG(wwin, no_closable, 0);
+    WSETUFLAG(wwin, no_close_button, 0);
     wWindowUpdateButtonImages(wwin);
     wFrameWindowShowButton(wwin->frame, WFF_RIGHT_BUTTON);
     wwin->frame->on_click_right = destroyLegalPanel;

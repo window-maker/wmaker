@@ -82,7 +82,7 @@ paintFrame(Frame *fPtr)
     int fy, fh;
 
     if (fPtr->caption!=NULL)
-	th = scrPtr->normalFont->height;
+	th = WMFontHeight(scrPtr->normalFont);
     else {
 	th = 0;
     }

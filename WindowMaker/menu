@@ -65,15 +65,17 @@
  *	// Opens one or more directories and construct menu with all
  *	// subdirectories and readable files in them sorted alphabetically,
  *	// preceding each of them with command.
- *	OPEN_MENU /some/dir [/some/other/dir ...] WITH command -options
- *
+ *	OPEN_MENU [options] /some/dir [/some/other/dir ...] WITH command -options
+ *		Options:
+ * 			-noext 	strip whatever is after the last dot in the
+ *				file name
  *
  * <Parameters> is the program to execute.
  *
  * ** Options for command line in EXEC:
  * %s - substitute with current selection
- * %a(message) - opens a input box with the message and do substitution with
- *		what you typed
+ * %a(title[,prompt]) - opens a input box with the specified title and the
+ *			optional prompt	and do substitution with what you typed
  * %w - substitute with XID for the current focused window
  *
  * You can override special characters (as % and ") with the \ character:
@@ -92,7 +94,7 @@
  *		// some X11 apps in different directories
  *	"X11 apps" OPEN_MENU /usr/X11/bin ~/bin/X11
  *		// set some background images
- *	"Background" OPEN_MENU ~/images /usr/share/images WITH wmsetbg -u -t
+ *	"Background" OPEN_MENU -noext ~/images /usr/share/images WITH wmsetbg -u -t
  *		// inserts the style.menu in this entry
  *	"Style" OPEN_MENU style.menu
  * "Test" END
@@ -123,8 +125,8 @@
 		"OffiX Files" EXEC files
 		"LyX" EXEC lyx
 		"Netscape" EXEC netscape 
-  		"Ghostview" EXEC ghostview %a(Enter file to view)
-		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Enter PDF to view)
+  		"Ghostview" EXEC ghostview %a(GhostView,Enter file to view)
+		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobar,Enter PDF to view)
   		"TkDesk" EXEC tkdesk
 	"Applications" END
 	"Editors" MENU
@@ -169,9 +171,9 @@
 	"Workspace" END
 
 	"Appearance" MENU
-		"Themes" OPEN_MENU THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Styles" OPEN_MENU STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Icon Sets" OPEN_MENU ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Themes" OPEN_MENU -noext THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Styles" OPEN_MENU -noext STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Icon Sets" OPEN_MENU -noext ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Background" MENU
 			"Solid" MENU
                         	"Black" WS_BACK '(solid, black)'
@@ -193,10 +195,10 @@
     				"Grey Shades" WS_BACK '(vgradient, "#636380", "#131318")'
     				"Wine Shades" WS_BACK '(vgradient, "#600040", "#180010")'
 			"Gradient" END
-			"Images" OPEN_MENU BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+			"Images" OPEN_MENU -noext BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Background" END
-		"Save Theme" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
-		"Save IconSet" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
+		"Save Theme" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Theme name,Enter file name:)"
+		"Save IconSet" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name,Enter file name:)"
 	"Appearance" END
 
 	"Exit"	MENU

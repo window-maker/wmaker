@@ -74,6 +74,11 @@
  */
 #undef XDE_DND
 
+/*
+ * support for Motif window manager (mwm) window hints
+ */
+#define MWM_HINTS
+
 
 /*
  * Undefine BALLOON_TEXT if you don't want balloons for showing extra
@@ -102,13 +107,10 @@
 #define FALLBACK_WINDOWMANAGER "blackbox"
 
 
-/* Define if you want MWM hint support (and consequently GNOME). */
-#define MWM_HINTS
-
-
 /* Define if you have a 5 button mouse and want to use button 4
  * (in the root window) for switching to the previous workspace
- * and 5 for the next */
+ * and 5 for the next. This will not work if you enable
+ * DisableWSMouseActions or compile wmaker with --enable-lite */
 #undef MOUSE_WS_SWITCH
  
 /*
@@ -129,6 +131,16 @@
 
 
 /*
+ * define EXTEND_WINDOWSHORTCUT if you have a great memory and want 10
+ * window shortcuts instead of 4. You will also need to define the
+ * same thing in WPrefs.app/WPrefs.h to get the corresponding entries
+ * in WPrefs.
+ */
+#undef EXTEND_WINDOWSHORTCUT
+
+
+
+/*
  * define OPTIMIZE_SHAPE if you want the shape setting code to be optimized
  * for applications that change their shape frequently (like xdaliclock
  * -shape), removing flickering. If wmaker and your display are on
@@ -144,6 +156,15 @@
  */
 #undef CONFIGURE_WINDOW_WHILE_MOVING
 
+
+/*
+ * disable/enable workspace indicator in the dock
+ */
+
+#undef WS_INDICATOR 
+
+
+#define SILLYNESS
 
 /*
  *..........................................................................
@@ -205,6 +226,11 @@
 
 #define DEFAULTS_DIR "Defaults"
 
+/* the file of the system wide submenu to be forced into the main menu */
+/* remove the comments if you want it */
+/*
+#define GLOBAL_SUBMENU_FILE PKGDATADIR"/GlobalMenu"
+*/
 
 /* pixmap path */
 #define DEF_PIXMAP_PATHS \
@@ -248,6 +274,12 @@
 #define DEF_APPMENU_X		10
 #define DEF_APPMENU_Y		10
 
+/* number of window shortcuts */
+#ifdef EXTEND_WINDOWSHORTCUT
+# define MAX_WINDOW_SHORTCUTS 10
+#else
+# define MAX_WINDOW_SHORTCUTS 4
+#endif
 
 /* Window level where icons reside */
 #define NORMAL_ICON_LEVEL WMNormalLevel
@@ -284,7 +316,7 @@
 #define BALLOON_DELAY	1000
 
 /* delay for menu item selection hysteresis */
-#define MENU_SELECT_DELAY 300
+#define MENU_SELECT_DELAY 200
 
 /* animation speed constants */
 
@@ -372,6 +404,13 @@
 /* Delay (in ms) after which the clip will autocollapse when leaved */
 #define AUTO_COLLAPSE_DELAY     1000
 
+/* Delay (in ms) after which the clip will be lowered when leaved */
+#define AUTO_LOWER_DELAY        1000
+
+/* Delay (in ms) after which the clip will be raised when entered.
+ * Set this to zero if you want instant raise. */
+#define AUTO_RAISE_DELAY        650
+
 
 /* Max. number of icons the clip can have */
 #define CLIP_MAX_ICONS		32
@@ -382,7 +421,8 @@
 
 #define CURSOR_BLINK_RATE	300
 
-#define MOVE_THRESHOLD	3 /* how many pixels to move before dragging windows */
+#define MOVE_THRESHOLD	5 /* how many pixels to move before dragging windows
+			   * and other objects */
 
 #define HRESIZE_THRESHOLD	3
 
@@ -400,12 +440,8 @@
 /* don't put titles in miniwindows */
 #undef NO_MINIWINDOW_TITLES
 
-/*
- * disable/enable workspace indicator in the dock
- */
 
-#undef WS_INDICATOR 
-
+#define FRAME_BORDER_COLOR "black"
 
 /*
  *----------------------------------------------------------------------
@@ -417,8 +453,6 @@
 
 
 #define WM_PI 3.14159265358979323846
-
-#define FRAME_BORDER_COLOR "black"
 
 #define FRAME_BORDER_WIDTH 1	       /* width of window border for frames */
 
@@ -442,7 +476,12 @@
 #define MAX_ICON_WIDTH	60	       /* size of the icon pixmap */
 #define MAX_ICON_HEIGHT 48
 
-#define MAX_WORKSPACES  100
+/* KDE may have problems with more than 32 workspaces */
+#ifdef KWM_HINTS
+# define MAX_WORKSPACES 32
+#else
+# define MAX_WORKSPACES  100
+#endif
 
 #define MAX_MENU_TEXT_LENGTH 512
 

@@ -30,9 +30,6 @@
 #include "WindowMaker.h"
 #include "window.h"
 #include "GNUstep.h"
-#ifdef MWM_HINTS
-#  include "motif.h"
-#endif
 
 
 /* atoms */
@@ -94,6 +91,7 @@ PropGetWMClass(Window window, char **wm_class, char **wm_instance)
     return True;
 }
 
+
 void
 PropGetProtocols(Window window, WProtocols *prots)
 {
@@ -118,22 +116,50 @@ PropGetProtocols(Window window, WProtocols *prots)
 }
 
 
-int
-PropGetGNUstepWMAttr(Window window, GNUstepWMAttributes **attr)
+unsigned char*
+PropGetCheckProperty(Window window, Atom hint, Atom type, int format,
+		     int count, int *retCount)
 {
     Atom type_ret;
     int fmt_ret;
     unsigned long nitems_ret;
     unsigned long bytes_after_ret;
-    unsigned long *data;
+    unsigned char *data;
+    int tmp;
+    
+    if (count <= 0)
+	tmp = 0xffffff;
 
-    if (XGetWindowProperty(dpy, window, _XA_GNUSTEP_WM_ATTR, 0, 9,
-			   False, _XA_GNUSTEP_WM_ATTR,
+    if (XGetWindowProperty(dpy, window, hint, 0, tmp, False, type,
 			   &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
 			   (unsigned char **)&data)!=Success || !data)
-      return False;
-    if (type_ret!=_XA_GNUSTEP_WM_ATTR || !data || fmt_ret!=32)
-      return False;
+	return NULL;
+
+    if ((type!=AnyPropertyType && type!=type_ret)
+	|| (count > 0 && nitems_ret != count)
+	|| (format != 0 && format != fmt_ret)) {
+	XFree(data);
+	return NULL;
+    }
+
+    if (retCount)
+	*retCount = nitems_ret;
+
+    return data;
+}
+
+
+int
+PropGetGNUstepWMAttr(Window window, GNUstepWMAttributes **attr)
+{
+    unsigned long *data;
+
+    data = (unsigned long*)PropGetCheckProperty(window, _XA_GNUSTEP_WM_ATTR,
+						_XA_GNUSTEP_WM_ATTR, 32, 9,
+						NULL);
+    
+    if (!data)
+	return False;
     
     *attr = malloc(sizeof(GNUstepWMAttributes));
     if (!*attr) {
@@ -156,49 +182,6 @@ PropGetGNUstepWMAttr(Window window, GNUstepWMAttributes **attr)
 }
 
 
- 
- 
-#ifdef MWM_HINTS
-int
-PropGetMotifWMHints(Window window, MWMHints **mwmhints)
-{
-    Atom type_ret;
-    int fmt_ret;
-    unsigned long nitems_ret;
-    unsigned long bytes_after_ret;
-    unsigned long *data;
-    
-    if (XGetWindowProperty(dpy, window, _XA_MOTIF_WM_HINTS, 0,
-			   PROP_MWM_HINTS_ELEMENTS,
-			   False, _XA_MOTIF_WM_HINTS,
-			   &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
-			   (unsigned char **)&data)!=Success)
-      return 0;
-    
-    if (type_ret!=_XA_MOTIF_WM_HINTS || fmt_ret!=32 
-	|| nitems_ret!=PROP_MWM_HINTS_ELEMENTS || !data)
-	return 0;
-    
-    *mwmhints = malloc(sizeof(MWMHints));
-    if (!*mwmhints) {
-	XFree(data);
-	return 0;
-    }
-
-    (*mwmhints)->flags = data[0];
-    (*mwmhints)->functions = data[1];
-    (*mwmhints)->decorations = data[2];
-    (*mwmhints)->inputMode = data[3];
-
-    XFree(data);
-
-    if (type_ret==_XA_MOTIF_WM_HINTS)
-      return 1;
-    else 
-      return 0;
-}
-#endif /* MWM_HINTS */
-
 
 void
 PropSetWMakerProtocols(Window root)
@@ -217,27 +200,19 @@ PropSetWMakerProtocols(Window root)
 Window
 PropGetClientLeader(Window window)
 {
-    Atom type_ret;
-    int fmt_ret;
-    unsigned long nitems_ret;
-    unsigned long bytes_after_ret;
     Window *win;
     Window leader;
 
-    if (XGetWindowProperty(dpy, window, _XA_WM_CLIENT_LEADER, 0, 1,
-			   False, AnyPropertyType,
-			   &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
-			   (unsigned char**)&win)!=Success || !win)
-      return None;
+    win = (Window*)PropGetCheckProperty(window, _XA_WM_CLIENT_LEADER,
+					XA_WINDOW, 32, 1, NULL);
+
+    if (!win)
+	return None;
 
     leader = (Window)*win;
     XFree(win);
 
-    if (type_ret == XA_WINDOW && fmt_ret == 32 && nitems_ret == 1 
-	&& bytes_after_ret == 0)
-	return leader;
-    else
-	return None;
+    return leader;
 }
 
 
@@ -319,4 +294,10 @@ PropCleanUp(Window root)
     XDeleteProperty(dpy, root, _XA_WINDOWMAKER_WM_PROTOCOLS);
     
     XDeleteProperty(dpy, root, XA_WM_ICON_SIZE);
+
+#ifdef KWM_HINTS
+    XDeleteProperty(dpy, root, XInternAtom(dpy, "KWM_RUNNING", False));
+#endif
 }
+
+

@@ -281,11 +281,29 @@ static char *PULLDOWN_INDICATOR[] = {
 #define PULLDOWN_INDICATOR_HEIGHT 	7
 
 
+#define CHECK_MARK_WIDTH 	8
+#define CHECK_MARK_HEIGHT 	10
+
+static char *CHECK_MARK[] = {
+"======== ",
+"======= #",
+"====== #%",
+"===== #%=",
+" #== #%==",
+" #% #%===",
+" % #%====",
+"  #%=====",
+" #%======",
+"#%======="};
+
+
 #define STIPPLE_WIDTH 8
 #define STIPPLE_HEIGHT 8
 static unsigned char STIPPLE_BITS[] = {
    0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa};
 
+
+extern void W_ReadConfigurations(void);
 
 
 extern W_ViewProcedureTable _WindowViewProcedures;
@@ -489,6 +507,8 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 	
 	initProcedureTable();
 
+	W_ReadConfigurations();
+
 	assert(W_ApplicationInitialized());
     }
     
@@ -567,6 +587,16 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 
     scrPtr->boldFont = WMBoldSystemFontOfSize(scrPtr, 12);
 
+    if (!scrPtr->boldFont)
+	scrPtr->boldFont = scrPtr->normalFont;
+
+    if (!scrPtr->normalFont) {
+	wwarning("could not load any fonts. Make sure your font installation"
+		 "and locale settings are correct.");
+
+	return NULL;
+    }
+
     scrPtr->checkButtonImageOn = makePixmap(scrPtr, CHECK_BUTTON_ON,
 					    CHECK_BUTTON_ON_WIDTH,
 					    CHECK_BUTTON_ON_HEIGHT, False);
@@ -636,6 +666,11 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     scrPtr->pullDownIndicator = makePixmap(scrPtr, PULLDOWN_INDICATOR,
 					   PULLDOWN_INDICATOR_WIDTH,
 					   PULLDOWN_INDICATOR_HEIGHT, True);
+
+    scrPtr->checkMark = makePixmap(scrPtr, CHECK_MARK,
+				   CHECK_MARK_WIDTH,
+				   CHECK_MARK_HEIGHT, True);
+
     loadPixmaps(scrPtr);
 
     scrPtr->defaultCursor = XCreateFontCursor(display, XC_left_ptr);

@@ -64,7 +64,6 @@ makeMainWindow(WScreen *scr, Window window)
     WWindow *wwin;
     XWindowAttributes attr;
 
-    
     if (!XGetWindowAttributes(dpy, window, &attr)) {
 	return NULL;
     }
@@ -80,8 +79,9 @@ makeMainWindow(WScreen *scr, Window window)
  */
     PropGetWMClass(window, &wwin->wm_class, &wwin->wm_instance);
 
+
     wDefaultFillAttributes(scr, wwin->wm_instance, wwin->wm_class,
-			   &wwin->window_flags, True);
+			   &wwin->user_flags, &wwin->defined_user_flags, True);
     
     XSelectInput(dpy, window, attr.your_event_mask | PropertyChangeMask
 		 | StructureNotifyMask );
@@ -296,20 +296,21 @@ wApplicationCreate(WScreen *scr, Window main_window)
     /*
      * Set application wide attributes from the leader.
      */
-    wapp->flags.hidden = wapp->main_window_desc->window_flags.start_hidden;
+    wapp->flags.hidden = WFLAGP(wapp->main_window_desc, start_hidden);
     
-    wapp->flags.emulated = wapp->main_window_desc->window_flags.emulate_appicon;
+    wapp->flags.emulated = WFLAGP(wapp->main_window_desc, emulate_appicon);
 
     /* application descriptor */
     XSaveContext(dpy, main_window, wAppWinContext, (XPointer)wapp);
 
-    if (!wapp->main_window_desc->window_flags.no_appicon) {
+    if (!WFLAGP(wapp->main_window_desc, no_appicon)) {
         wapp->app_icon = NULL;
         if (scr->last_dock)
             wapp->app_icon = findDockIconFor(scr->last_dock, main_window);
         /* check main dock if we did not find it in last dock */
-        if (!wapp->app_icon && scr->dock)
+        if (!wapp->app_icon && scr->dock) {
 	    wapp->app_icon = findDockIconFor(scr->dock, main_window);
+	}
         /* finally check clips */
         if (!wapp->app_icon) {
             int i;

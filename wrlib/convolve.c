@@ -49,8 +49,8 @@ char *alloca ();
  *----------------------------------------------------------------------
  * RBlurImage--
  * 	Apply 3x3 1 1 1 low pass, convolution mask to image.
- *                1 1 1
- *                1 1 1 /9
+ *                1 2 1
+ *                1 1 1 /10
  *----------------------------------------------------------------------
  */
 int
@@ -61,8 +61,8 @@ RBlurImage(RImage *image)
     unsigned char *r, *g, *b, *a;
     unsigned char *pr=NULL, *pg=NULL, *pb=NULL, *pa=NULL;
 
-#define MASK(c,pc,p)   ((*c + *(c-1) + *(c+1) + pc[p] + pc[p-1] + pc[p+1] \
-			+ *(c+w) + *(c+w-1) + *(c+w+1))/9)
+#define MASK(c,pc,p)   ((*c+ *c + *(c-1) + *(c+1) + pc[p] + pc[p-1] + pc[p+1] \
+			+ *(c+w) + *(c+w-1) + *(c+w+1))/10)
     
     pr = (unsigned char*)alloca(image->width*sizeof(char));
     if (!pr)
@@ -136,10 +136,6 @@ RBlurImage(RImage *image)
 #endif
     return False;
 }
-
-
-
-
 
 
 #if 0

@@ -1,3 +1,20 @@
+changes since wmaker 0.20.3:
+............................
+
+- added WMSetSliderImage(), WMSetSliderKnobThickness()
+- added WMGetListItemHeight()
+- added WMListDidScrollNotification
+- added WSetColorWellBordered()
+- added hacky color dragging in colorwell
+- added poll() support in WMNextEvent. WARNING: the stuff needed for
+  WMAddInputHandler() is not yet implemented for the poll stuff
+- added WMSetFilePanelAccessoryView(), WMGetFilePanelAccessoryView()
+- added WMSetPopUpButtonEnabled()
+- added WMGetLabelImage()
+- autoscroll for popup button menus
+- added WMDrawPixmap()
+- WARNING: changed parameter list for WMListDrawProc
+
 changes since wmaker 0.20.2:
 ............................
 

@@ -69,6 +69,9 @@ I18N = @I18N@
 I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
+LD = @LD@
+LIBTOOL = @LIBTOOL@
+LITE = @LITE@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
@@ -102,6 +105,7 @@ POTFILES  = \
 	$(top_builddir)/WPrefs/Configurations.c \
 	$(top_builddir)/WPrefs/Expert.c \
 	$(top_builddir)/WPrefs/Focus.c \
+	$(top_builddir)/WPrefs/Icons.c \
 	$(top_builddir)/WPrefs/KeyboardSettings.c \
 	$(top_builddir)/WPrefs/KeyboardShortcuts.c \
 	$(top_builddir)/WPrefs/Menu.c \
@@ -112,6 +116,7 @@ POTFILES  = \
 	$(top_builddir)/WPrefs/Preferences.c \
 	$(top_builddir)/WPrefs/Text.c \
 	$(top_builddir)/WPrefs/TextureAndColor.c \
+	$(top_builddir)/WPrefs/Themes.c \
 	$(top_builddir)/WPrefs/WPrefs.c \
 	$(top_builddir)/WPrefs/WindowHandling.c \
 	$(top_builddir)/WPrefs/Workspace.c \
@@ -196,6 +201,7 @@ clean:  clean-generic mostlyclean
 
 distclean:  distclean-generic clean
 	-rm -f config.status
+	-rm -f libtool
 
 maintainer-clean:  maintainer-clean-generic distclean
 	@echo "This command is intended for maintainers to use;"

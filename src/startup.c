@@ -42,9 +42,6 @@
 
 #include "WindowMaker.h"
 #include "GNUstep.h"
-#ifdef MWM_HINTS
-# include "motif.h"
-#endif
 #include "texture.h"
 #include "screen.h"
 #include "window.h"
@@ -62,6 +59,10 @@
 
 #ifdef WMSOUND
 #include "wmsound.h"
+#endif
+
+#ifdef KWM_HINTS
+#include "kwm.h"
 #endif
 
 #if 0
@@ -154,10 +155,6 @@ static void manageAllWindows();
 
 extern void NotifyDeadProcess(pid_t pid, unsigned char status);
 
-#ifdef R6SM
-extern void _wSessionCloseDescriptors();
-#endif
-
 
 static int 
 catchXError(Display *dpy, XErrorEvent *error)
@@ -209,6 +206,7 @@ static int
 handleXIO(Display *dpy)
 {
     Exit(0);
+    return 0;
 }
 
 
@@ -289,14 +287,22 @@ handleSig(int sig)
     wfatal(_("got signal %i\n"), sig);
 #endif
 
-    if (sig==SIGSEGV || sig==SIGFPE || sig==SIGBUS || sig==SIGILL) {
+    if (sig==SIGSEGV || sig==SIGFPE || sig==SIGBUS || sig==SIGILL
+	|| sig==SIGABRT) {
 	if (already_crashed) {
 	    wfatal(_("crashed while trying to do some post-crash cleanup. Aborting immediatelly."));
+#ifndef NO_EMERGENCY_AUTORESTART
+	    exit(1);
+#else
 	    abort();
+#endif
 	}
 	already_crashed = 1;
 
 	dumpcore = 1;
+
+	wfatal(_("a fatal error has occured, probably due to a bug. "
+		 "Please fill the included BUGFORM and report it."));
 
 #ifndef NO_EMERGENCY_AUTORESTART
     	/* restart another window manager so that the X session doesn't
@@ -386,7 +392,7 @@ getOffendingModifiers()
     int i;
     XModifierKeymap *modmap;
     KeyCode nlock, slock;
-    static mask_table[8] = {
+    static int mask_table[8] = {
 	ShiftMask,LockMask,ControlMask,Mod1Mask,
 	    Mod2Mask, Mod3Mask, Mod4Mask, Mod5Mask
     };
@@ -562,16 +568,6 @@ wScreenForWindow(Window window)
 }
 
 
-void
-CloseDescriptors()
-{
-    if (dpy)
-	close(ConnectionNumber(dpy));
-#ifdef R6SM
-    _wSessionCloseDescriptors();
-#endif
-}
-
 
 /*
  *----------------------------------------------------------
@@ -621,9 +617,6 @@ StartUp(Bool defaultScreenOnly)
     _XA_WM_COLORMAP_NOTIFY = XInternAtom(dpy, "WM_COLORMAP_NOTIFY", False);
 
     _XA_GNUSTEP_WM_ATTR = XInternAtom(dpy, GNUSTEP_WM_ATTR_NAME, False);
-#ifdef MWM_HINTS
-    _XA_MOTIF_WM_HINTS = XInternAtom(dpy, "_MOTIF_WM_HINTS", False);
-#endif
 
     _XA_WINDOWMAKER_MENU = XInternAtom(dpy, "_WINDOWMAKER_MENU", False);
     _XA_WINDOWMAKER_STATE = XInternAtom(dpy, "_WINDOWMAKER_STATE", False);
@@ -675,6 +668,9 @@ StartUp(Bool defaultScreenOnly)
     sigaction(SIGSEGV, &sig_action, NULL);
     sigaction(SIGBUS, &sig_action, NULL);
     sigaction(SIGFPE, &sig_action, NULL);
+#ifndef NO_EMERGENCY_AUTORESTART
+    sigaction(SIGABRT, &sig_action, NULL);
+#endif
 
     /* Here we set SA_RESTART for safety, because SIGHUP may not be handled
      * immediately.
@@ -814,6 +810,10 @@ StartUp(Bool defaultScreenOnly)
 	} else {
 	    wSessionRestoreLastWorkspace(wScreen[j]);
 	}
+
+#ifdef KWM_HINTS
+	wKWMSetInitializedHint(wScreen[j]);
+#endif
     }
     
     if (wScreenCount == 0) {
@@ -914,6 +914,10 @@ manageAllWindows(WScreen *scr)
 	if (children[i]==None) 
 	  continue;
 
+#ifdef KWM_HINTS
+	wKWMCheckModule(scr, children[i]);
+#endif
+
 	XGetWindowAttributes(dpy, children[i], &wattribs);
 
 	state = getState(children[i]);
@@ -978,6 +982,7 @@ manageAllWindows(WScreen *scr)
     XFree(children);
     scr->flags.startup = 0;
     scr->flags.startup2 = 1;
+
     while (XPending(dpy)) {
 	XEvent ev;
 	WMNextEvent(dpy, &ev);

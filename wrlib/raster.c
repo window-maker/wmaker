@@ -41,7 +41,7 @@ RCreateImage(unsigned width, unsigned height, int alpha)
 {
     RImage *image=NULL;
     int i;
-
+    
     assert(width>0 && height>0);
 
     image = malloc(sizeof(RImage));

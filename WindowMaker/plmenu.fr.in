@@ -65,9 +65,9 @@
    ("Effacer la session", CLEAR_SESSION)
   ),
  ("Apparence",
-   ("Thèmes", OPEN_MENU, "#pkgdatadir#/Themes ~/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
-   ("Styles", OPEN_MENU, "#pkgdatadir#/Styles ~/GNUstep/Library/WindowMaker/Styles WITH setstyle"),
-   ("Jeu d'icônes", OPEN_MENU, "#pkgdatadir#/IconSets ~/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
+   ("Thèmes", OPEN_MENU, "-noext #pkgdatadir#/Themes ~/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
+   ("Styles", OPEN_MENU, "-noext #pkgdatadir#/Styles ~/GNUstep/Library/WindowMaker/Styles WITH setstyle"),
+   ("Jeu d'icônes", OPEN_MENU, "-noext #pkgdatadir#/IconSets ~/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
    ("Fond d'écran",
      ("Unifié",
        ("Noir", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, black)'"),
@@ -81,7 +81,7 @@
        ("Drapeau", EXEC, "wdwrite WindowMaker WorkspaceBack '(mdgradient, green, red, white, green)'"),
        ("Ciel", EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, blue4, white)'")
       ),
-     ("Images", OPEN_MENU, "#pkgdatadir#/Backgrounds ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
+     ("Images", OPEN_MENU, "-noext #pkgdatadir#/Backgrounds ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
       ),
    ("Sauver le thème", EXEC, "getstyle -t ~/GNUstep/Library/WindowMaker/Themes /\"%a(Theme name)\""),
    ("Sauver le jeu d'icônes", EXEC, "geticonset ~/GNUstep/Library/WindowMaker/IconSets /\"%a(IconSet name)\"")

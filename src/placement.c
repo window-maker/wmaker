@@ -41,8 +41,11 @@
 extern WPreferences wPreferences;
 
 
-#define X_ORIGIN     wPreferences.window_place_origin.x
-#define Y_ORIGIN     wPreferences.window_place_origin.y
+#define X_ORIGIN(scr) WMAX((scr)->totalUsableArea.x1,\
+				wPreferences.window_place_origin.x)
+
+#define Y_ORIGIN(scr) WMAX((scr)->totalUsableArea.y1,\
+				wPreferences.window_place_origin.y)
 
 
 /*
@@ -74,7 +77,7 @@ iconPosition(WCoreWindow *wcore, int sx1, int sy1, int sx2, int sy2,
 	ok = 1;
     } else if (wcore->descriptor.parent_type == WCLASS_MINIWINDOW &&
 	       (((WIcon*)parent)->owner->frame->workspace==workspace
-		|| ((WIcon*)parent)->owner->window_flags.omnipresent
+		|| IS_OMNIPRESENT(((WIcon*)parent)->owner)
 		|| wPreferences.sticky_icons)
 	       && !((WIcon*)parent)->owner->flags.hidden) {
 
@@ -237,84 +240,89 @@ PlaceIcon(WScreen *scr, int *x_ret, int *y_ret)
 
 
 
-static int
+static Bool
 smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
-                 unsigned int width, unsigned int height)
+                 unsigned int width, unsigned int height, int tryCount)
 {
     WScreen *scr = wwin->screen_ptr;
-    int test_x = 0, test_y = Y_ORIGIN;
+    int test_x = 0, test_y = Y_ORIGIN(scr);
     int loc_ok = False, tw,tx,ty,th;
     int swidth, sx;
     WWindow *test_window;
     int extra_height;
+    WArea usableArea = scr->totalUsableArea;
 
     if (wwin->frame)
 	extra_height = wwin->frame->top_width + wwin->frame->bottom_width + 2;
     else
 	extra_height = 24; /* random value */
-    
-    swidth = scr->scr_width;
-    sx = X_ORIGIN;
-    if (scr->dock && !scr->dock->lowered) {
-        if (scr->dock->on_right_side)
-            swidth -= wPreferences.icon_size + DOCK_EXTRA_SPACE;
-        else if (X_ORIGIN < wPreferences.icon_size + DOCK_EXTRA_SPACE)
-            sx += wPreferences.icon_size + DOCK_EXTRA_SPACE - X_ORIGIN;
-    }
+
+    swidth = usableArea.x2-usableArea.x1;
+    sx = X_ORIGIN(scr);
 
     /* this was based on fvwm2's smart placement */
 
     height += extra_height;
 
     while (((test_y + height) < (scr->scr_height)) && (!loc_ok)) {
-	
+
 	test_x = sx;
-	
+
 	while (((test_x + width) < swidth) && (!loc_ok)) {
-	    
+
 	    loc_ok = True;
 	    test_window = scr->focused_window;
-            
-	    while ((test_window != (WWindow *) 0) && (loc_ok == True)) {
-		
+
+	    while ((test_window != NULL) && (loc_ok == True)) {
+
+		if (test_window->frame->core->stacking->window_level
+		    < WMNormalLevel && tryCount > 0) {
+		    test_window = test_window->next;
+		    continue;
+		}
                 tw = test_window->client.width;
                 if (test_window->flags.shaded)
                     th = test_window->frame->top_width;
                 else
-                    th = test_window->client.height+extra_height;
+                    th = test_window->client.height + extra_height;
 		tx = test_window->frame_x;
 		ty = test_window->frame_y;
-                
-		if((tx<(test_x+width))&&((tx + tw) > test_x)&&
-		   (ty<(test_y+height))&&((ty + th)>test_y)&&
-                   (test_window->flags.mapped ||
-                    (test_window->flags.shaded &&
-                     !(test_window->flags.miniaturized ||
-                       test_window->flags.hidden)))) {
+
+		if ((tx < (test_x + width)) && ((tx + tw) > test_x) &&
+		    (ty < (test_y + height)) && ((ty + th) > test_y) &&
+		    (test_window->flags.mapped ||
+		     (test_window->flags.shaded &&
+		      !(test_window->flags.miniaturized ||
+			test_window->flags.hidden)))) {
 
                     loc_ok = False;
 		}
 		test_window = test_window->next;
 	    }
-	    
+
 	    test_window = scr->focused_window;
-	    
-	    while ((test_window != (WWindow *) 0) && (loc_ok == True))  {
-		
+
+	    while ((test_window != NULL) && (loc_ok == True))  {
+
+		if (test_window->frame->core->stacking->window_level
+		    < WMNormalLevel && tryCount > 0) {
+		    test_window = test_window->prev;
+		    continue;
+		}
                 tw = test_window->client.width;
                 if (test_window->flags.shaded)
                     th = test_window->frame->top_width;
                 else
-                    th = test_window->client.height+extra_height;
+                    th = test_window->client.height + extra_height;
 		tx = test_window->frame_x;
 		ty = test_window->frame_y;
-		
-		if((tx<(test_x+width))&&((tx + tw) > test_x)&&
-		   (ty<(test_y+height))&&((ty + th)>test_y)&&
-                   (test_window->flags.mapped ||
-                    (test_window->flags.shaded &&
-                     !(test_window->flags.miniaturized ||
-                       test_window->flags.hidden)))) {
+
+		if ((tx < (test_x + width)) && ((tx + tw) > test_x) &&
+		    (ty < (test_y + height)) && ((ty + th) > test_y) &&
+		    (test_window->flags.mapped ||
+		     (test_window->flags.shaded &&
+		      !(test_window->flags.miniaturized ||
+			test_window->flags.hidden)))) {
 
                     loc_ok = False;
 		}
@@ -338,31 +346,21 @@ cascadeWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret,
               unsigned int width, unsigned int height, int h)
 {
     unsigned int extra_height;
-    unsigned int scr_width;
-    int xoffset = 0;
-
-    scr_width = scr->scr_width;
-    if (scr->dock && !scr->dock->lowered) {
-	if (scr->dock->on_right_side) {
-	    scr_width -= wPreferences.icon_size;
-	} else {
-	    xoffset = wPreferences.icon_size;
-	}
-    }
+    WArea usableArea = scr->totalUsableArea;
 
     if (wwin->frame)
 	extra_height = wwin->frame->top_width + wwin->frame->bottom_width;
     else
 	extra_height = 24; /* random value */
     
-    *x_ret = h * scr->cascade_index + X_ORIGIN;
-    *y_ret = h * scr->cascade_index + Y_ORIGIN;
+    *x_ret = h * scr->cascade_index + X_ORIGIN(scr);
+    *y_ret = h * scr->cascade_index + Y_ORIGIN(scr);
     height += extra_height;
-    
-    if (width + *x_ret > scr_width || height + *y_ret > scr->scr_height) {
+
+    if (width + *x_ret > usableArea.x2 || height + *y_ret > usableArea.y2) {
 	scr->cascade_index = 0;
-	*x_ret = h*scr->cascade_index + X_ORIGIN;
-	*y_ret = h*scr->cascade_index + Y_ORIGIN;
+	*x_ret = X_ORIGIN(scr);
+	*y_ret = Y_ORIGIN(scr);
     }
 }
 
@@ -380,8 +378,11 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 	break;
 
      case WPM_SMART:
-	if (smartPlaceWindow(wwin, x_ret, y_ret, width, height))
-	  break;
+	if (smartPlaceWindow(wwin, x_ret, y_ret, width, height, 0)) {
+	    break;
+	} else if (smartPlaceWindow(wwin, x_ret, y_ret, width, height, 1)) {
+	    break;
+	}
 	/* there isn't a break here, because if we fail, it should fall
 	   through to cascade placement, as people who want tiling want
 	   automagicness aren't going to want to place their window */
@@ -394,45 +395,26 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 
         if (wPreferences.window_placement == WPM_CASCADE)
             scr->cascade_index++;
-
-        if (scr->dock && !scr->dock->lowered) {
-            int x2;
-
-            x2 = *x_ret + width;
-            if (scr->dock->on_right_side
-                && x2 > scr->scr_width - wPreferences.icon_size -
-                        DOCK_EXTRA_SPACE)
-                *x_ret = scr->scr_width - width
-                         - wPreferences.icon_size - DOCK_EXTRA_SPACE;
-            else if (!scr->dock->on_right_side &&
-                     X_ORIGIN < wPreferences.icon_size + DOCK_EXTRA_SPACE)
-                *x_ret += wPreferences.icon_size + DOCK_EXTRA_SPACE - X_ORIGIN;
-        }
 	break;
 
      case WPM_RANDOM:
 	{
-	    int w, h;
-	    
-	    w = (scr->scr_width - width);
-	    h = (scr->scr_height - height);
+	    int w, h, extra_height;
+	    WArea usableArea = scr->totalUsableArea;
+
+            if (wwin->frame)
+                extra_height = wwin->frame->top_width + wwin->frame->bottom_width + 2;
+            else
+                extra_height = 24; /* random value */
+
+	    //w = ((usableArea.x2-usableArea.x1) - width);
+	    //h = ((usableArea.y2-usableArea.y1) - height - extra_height);
+	    w = ((usableArea.x2-X_ORIGIN(scr)) - width);
+	    h = ((usableArea.y2-Y_ORIGIN(scr)) - height - extra_height);
 	    if (w<1) w = 1;
 	    if (h<1) h = 1;
-	    *x_ret = rand()%w;
-	    *y_ret = rand()%h;
-	    if (scr->dock && !scr->dock->lowered) {
-		int x2;
-		    
-		x2 = *x_ret + width;
-		if (scr->dock->on_right_side 
-                    && x2 > scr->scr_width - wPreferences.icon_size -
-                            DOCK_EXTRA_SPACE)
-                    *x_ret = scr->scr_width - width
-                             - wPreferences.icon_size - DOCK_EXTRA_SPACE;
-		else if (!scr->dock->on_right_side 
-			 && *x_ret < wPreferences.icon_size)
-		    *x_ret = wPreferences.icon_size + DOCK_EXTRA_SPACE;
-	    }
+	    *x_ret = X_ORIGIN(scr) + rand()%w;
+	    *y_ret = Y_ORIGIN(scr) + rand()%h;
 	}
 	break;
 
@@ -444,15 +426,15 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 #endif
     }
     
-    if (*x_ret < 0)
-	*x_ret = 0;
-    else if (*x_ret + width > scr->scr_width)
+    if (*x_ret + width > scr->scr_width)
 	*x_ret = scr->scr_width - width;
-    
-    if (*y_ret < 0)
-	*y_ret = 0;
-    else if (*y_ret + height > scr->scr_height)
+    if (*x_ret < 0)
+        *x_ret = 0;
+
+    if (*y_ret + height > scr->scr_height)
 	*y_ret = scr->scr_height - height;
+    if (*y_ret < 0)
+        *y_ret = 0;
 }
 
 

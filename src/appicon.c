@@ -546,10 +546,10 @@ createApplicationMenu(WScreen *scr)
     
     menu = wMenuCreate(scr, NULL, False);
     wMenuAddCallback(menu, _("Unhide Here"), unhideHereCallback, NULL);
-    wMenuAddCallback(menu, _("(Un)Hide"), hideCallback, NULL);
+    wMenuAddCallback(menu, _("Hide"), hideCallback, NULL);
     wMenuAddCallback(menu, _("Set Icon..."), setIconCallback, NULL);
     wMenuAddCallback(menu, _("Kill"), killCallback, NULL);
-    
+
     return menu;
 }
 
@@ -563,12 +563,20 @@ openApplicationMenu(WApplication *wapp, int x, int y)
     
     if (!scr->icon_menu) {
 	scr->icon_menu = createApplicationMenu(scr);
+	free(scr->window_menu->entries[1]->text);
     }
 
     menu = scr->icon_menu;
-    if (!menu->flags.realized)
-	wMenuRealize(menu);
-    
+
+    if (wapp->flags.hidden) {
+	menu->entries[1]->text = _("Unhide");
+    } else {
+	menu->entries[1]->text = _("Hide");
+    }
+
+    menu->flags.realized = 0;
+    wMenuRealize(menu);
+
     x -= menu->frame->core->width/2;
     if (x + menu->frame->core->width > scr->scr_width)
 	x = scr->scr_width - menu->frame->core->width;
@@ -741,6 +749,9 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
                         wDockShowIcons(scr->dock);
                     }
 
+                    if (scr->dock->auto_raise_lower)
+                        wDockRaise(scr->dock);
+
                     scr->last_dock = scr->dock;
 
 		    XMoveWindow(dpy, scr->dock_shadow, shad_x, shad_y);
@@ -777,6 +788,9 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
                         workspace->clip->collapsed = 0;
                         wDockShowIcons(workspace->clip);
                     }
+
+                    if (workspace->clip->auto_raise_lower)
+                        wDockRaise(workspace->clip);
 
                     scr->last_dock = workspace->clip;
 
@@ -825,6 +839,10 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
                 if (scr->last_dock->auto_collapse) {
                     collapsed = 0;
                 }
+                if (workspace->clip &&
+                    workspace->clip != scr->last_dock &&
+                    workspace->clip->auto_raise_lower)
+                    wDockLower(workspace->clip);
 
 		if (!docked) {
 		    /* If icon could not be docked, slide it back to the old
@@ -836,6 +854,8 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
 		XMoveWindow(dpy, icon->core->window, x, y);
 		aicon->x_pos = x;
 		aicon->y_pos = y;
+                if (workspace->clip && workspace->clip->auto_raise_lower)
+                    wDockLower(workspace->clip);
             }
 	    if (collapsed) {
 		scr->last_dock->collapsed = 1;

@@ -72,8 +72,8 @@ static void setupScroller(WMBrowser *bPtr);
 
 static void scrollToColumn(WMBrowser *bPtr, int column);
 
-static void paintItem(WMList *lPtr, Drawable d, char *text, int state, 
-		      WMRect *rect);
+static void paintItem(WMList *lPtr, int index, Drawable d, char *text, 
+		      int state, WMRect *rect);
 
 static void loadColumn(WMBrowser *bPtr, int column);
 
@@ -189,7 +189,7 @@ drawTitleOfColumn(WMBrowser *bPtr, int column)
 
     if (column < bPtr->usedColumnCount && bPtr->titles[column])
 	W_PaintText(bPtr->view, bPtr->view->window, scr->boldFont, x, 
-		    (bPtr->titleHeight-scr->boldFont->height)/2,
+		    (bPtr->titleHeight-WMFontHeight(scr->boldFont))/2,
 		    bPtr->columnSize.width, WACenter, W_GC(scr->white),
 		    False, bPtr->titles[column], strlen(bPtr->titles[column]));
 }
@@ -248,6 +248,23 @@ removeColumn(WMBrowser *bPtr, int column)
 
     if (column < bPtr->maxVisibleColumns) {
 	int tmp;
+#if 1
+	int limit;
+
+	if(bPtr->usedColumnCount < bPtr->maxVisibleColumns)
+	    limit = bPtr->usedColumnCount;
+	else
+	    limit = bPtr->maxVisibleColumns;
+
+	for (i=column; i < limit; i++) {
+	    if (bPtr->titles[i])
+		free(bPtr->titles[i]);
+	    bPtr->titles[i] = NULL;
+	    
+	    WMClearList(bPtr->columns[i]);
+	    bPtr->usedColumnCount--;
+	}
+#else
 	for (i=column; i < bPtr->maxVisibleColumns; i++) {
 	    if (bPtr->titles[i])
 		free(bPtr->titles[i]);
@@ -267,6 +284,7 @@ removeColumn(WMBrowser *bPtr, int column)
 	    bPtr->columnCount--;
 	    bPtr->usedColumnCount--;
 	}
+#endif
     } else {
 	int tmp = bPtr->columnCount;
 	for (i=column; i < tmp; i++) {
@@ -443,7 +461,8 @@ resizeBrowser(WMWidget *w, unsigned int width, unsigned int height)
 
 
 static void
-paintItem(WMList *lPtr, Drawable d, char *text, int state, WMRect *rect)
+paintItem(WMList *lPtr, int index, Drawable d, char *text, int state, 
+	  WMRect *rect)
 {
     WMView *view = W_VIEW(lPtr);
     W_Screen *scr = view->screen;

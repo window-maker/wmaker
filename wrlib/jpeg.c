@@ -137,13 +137,6 @@ RLoadJPEG(RContext *context, char *file_name, int index)
 	goto bye;
     }
 
-    image = RCreateImage(cinfo.image_width, cinfo.image_height, False);
-    if (!image) {
-	RErrorCode = RERR_NOMEMORY;
-	goto bye;
-    }
-
-    
     if(cinfo.jpeg_color_space==JCS_GRAYSCALE) {
        cinfo.out_color_space=JCS_GRAYSCALE;
     } else
@@ -175,9 +168,9 @@ RLoadJPEG(RContext *context, char *file_name, int index)
 	    }
 	}
     }
-    /*
+
     jpeg_finish_decompress(&cinfo);
-*/
+
   bye:
     jpeg_destroy_decompress(&cinfo);
 

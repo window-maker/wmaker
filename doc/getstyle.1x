@@ -1,21 +1,40 @@
 .\" Hey, Emacs!  This is an -*- nroff -*- source file.
-.TH getstyle 1x "March 1998"
+.TH getstyle 1x "December 1998"
 .SH NAME
-getstyle \- dumps the current Window Maker style related configuration
+getstyle \- dumps the current Window Maker style related configuration or
+creates a theme pack.
 .SH SYNOPSIS
 .B getstyle
-[style file]
+[[-t] [style file]]
+[-p theme name]
 .SH DESCRIPTION
 .B getstyle
-reads the WindowMaker domain, and dumps the following keys and its
-values to stdout or
-.I style file
-: IconBack, WorkspaceBack, IconBack, TitleJustify, WindowTitleFont,
-MenuTitleFont, MenuTextFont, IconTitleFont, ClipTitleFont, DisplayFont,
-HighlightColor, HighlightTextColor, ClipTitleColor, CClipTitleColor,
-FTitleColor, PTitleColor, UTitleColor, FTitleBack, PTitleBack, UTitleBack,
-MenuTitleColor, MenuTextColor, MenuDisabledColor, MenuTitleBack and
-MenuTextBack.
+can either dump the current Window Maker style related configuration
+information to a file/stdout or create a self-contained theme pack. A theme
+pack is a directory that contains everything that is needed by a
+redistributable theme, includig the style information and pixmaps used by it.
+
+Note that style information stored in the global configuration of the
+system is not read.
+
+.SH OPTIONS
+.TP
+.B \-t
+dumps theme related information too, which is the root background texture.
+This option is always enabled when the \-p option is used.
+.TP
+.B \-p
+creates a theme pack in the directory named by the theme name appended
+with the .themed suffix.
+
+Options that are stored in the style file are: IconBack, WorkspaceBack,
+IconBack, TitleJustify, WindowTitleFont, MenuTitleFont, MenuTextFont,
+IconTitleFont, DisplayFont, HighlightColor, HighlightTextColor,
+IconTitleColor, CClipTitleColor, IconBackColor, FTitleColor, PTitleColor,
+UTitleColor, FTitleBack, PTitleBack, UTitleBack, MenuTitleColor,
+MenuTextColor, MenuDisabledColor, MenuTitleBack and MenuTextBack.
+
+
 .SH ENVIRONMENT
 .IP GNUSTEP_USER_ROOT
 specifies the initial path for the Defaults directory. "Defaults/" is

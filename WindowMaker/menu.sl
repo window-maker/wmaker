@@ -170,9 +170,9 @@
 	"Delovni prostor" END
 
 	"Izgled" MENU
-		"Teme" OPEN_MENU THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Stili" OPEN_MENU STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Zbirke ikon" OPEN_MENU ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Teme" OPEN_MENU -noext THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Stili" OPEN_MENU -noext STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Zbirke ikon" OPEN_MENU -noext ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Odzadje" MENU
 			"Barva" MENU
                         	"Èrna" WS_BACK '(solid, black)'
@@ -188,7 +188,7 @@
 				"Zastava" WS_BACK '(mdgradient, green, red, white, green)'
 				"Nebo" WS_BACK '(vgradient, blue4, white)'
 			"Preliv" END
-			"Slike" OPEN_MENU BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+			"Slike" OPEN_MENU -noext BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Odzadje" END
 		"Shrani temo" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
 		"Shrani zbirko ikon" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"

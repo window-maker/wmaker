@@ -355,7 +355,7 @@ createPanel(Panel *p)
     panel->ignB = WMCreateSwitchButton(panel->optF);
     WMResizeWidget(panel->ignB, 210, 50);
     WMMoveWidget(panel->ignB, 15, 10);
-    WMSetButtonText(panel->ignB, _("Do not let aplications receive the "\
+    WMSetButtonText(panel->ignB, _("Do not let applications receive the "\
 				"click used to focus windows."));
 
     panel->newB = WMCreateSwitchButton(panel->optF);

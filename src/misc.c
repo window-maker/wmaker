@@ -206,8 +206,7 @@ NextFocusWindow(WScreen *scr)
     d = 0xffffffff;
     while (tmp) {
         if (wWindowCanReceiveFocus(tmp) 
-	    && (!tmp->window_flags.skip_window_list
-		|| tmp->flags.internal_window)) {
+	    && (!WFLAGP(tmp, skip_window_list)|| tmp->flags.internal_window)) {
 	    if (min->client_win > tmp->client_win)
 	      min = tmp;
 	    if (tmp->client_win > wwin->client_win
@@ -239,8 +238,7 @@ PrevFocusWindow(WScreen *scr)
     d = 0xffffffff;
     while (tmp) {
 	if (wWindowCanReceiveFocus(tmp) &&
-            (!tmp->window_flags.skip_window_list
-	     || tmp->flags.internal_window)) {
+            (!WFLAGP(tmp, skip_window_list) || tmp->flags.internal_window)) {
 	    if (max->client_win < tmp->client_win)
 	      max = tmp;
 	    if (tmp->client_win < wwin->client_win
@@ -276,7 +274,7 @@ isBelow(WWindow *win1, WWindow *win2)
 	tmp = tmp->stacking->under;
     }
     
-    for (i=win1->frame->window_level-1; i>=0; i--) {
+    for (i=win1->frame->core->stacking->window_level-1; i>=0; i--) {
 	tmp = win1->screen_ptr->stacking_list[i];
 	while (tmp) {
 	    if (tmp == win2->frame->core)
@@ -564,19 +562,20 @@ ShrinkString(WFont *font, char *string, int width)
 
 
 char*
-FindImage(char **paths, char *file)
+FindImage(char *paths, char *file)
 {
     char *tmp, *path;
-    
+
     tmp = strrchr(file, ':');
     if (tmp) {
 	*tmp = 0;
-	path = wfindfileinlist(paths, file);
+	path = wfindfile(paths, file);
 	*tmp = ':';
     }
     if (!tmp || !path) {
-	path = wfindfileinlist(paths, file);
+	path = wfindfile(paths, file);
     }
+
     return path;
 }
 
@@ -604,7 +603,8 @@ FlattenStringList(char **list, int count)
     *flat_string = 0;
     for (i=0; i<count; i++) {
 	if (list[i]!=NULL && list[i][0]!=0) {
-            strcat(flat_string, " ");
+	    if (i>0)
+		strcat(flat_string, " ");
             wspace = strpbrk(list[i], " \t");
             if (wspace)
                 strcat(flat_string, "\"");
@@ -780,31 +780,82 @@ static char*
 getuserinput(WScreen *scr, char *line, int *ptr)
 {
     char *ret;
-    char *tmp;
-    int i;
-    char buffer[256];
-    
-    if (line[*ptr]!='(') {
-	tmp = _("Program Arguments");
-    } else {
-	i = 0;
-	while (line[*ptr]!=0 && line[*ptr]!=')') {
-	    (*ptr)++;
-	    if (line[*ptr]!='\\') {
-		buffer[i++] = line[*ptr];
-	    } else {
-		(*ptr)++;
-		if (line[*ptr]==0)
-		    break;
-	    }
-	}
-	if (i>0)
-	    buffer[i-1] = 0;
-	tmp = (char*)buffer;
-    }
+    char *title;
+    char *prompt;
+    int i, j, k, state;
+    char tbuffer[256], pbuffer[256];
 
+    title = _("Program Arguments");
+    prompt = _("Enter command arguments:");
     ret = NULL;
-    if (!wInputDialog(scr, tmp, _("Enter command arguments:"), &ret))
+
+#define _STARTING 0
+#define _TITLE 1
+#define _PROMPT 2
+#define _DONE 3
+
+    state = _STARTING;
+    j = 0;
+    for (i = 0; line[i]==0 && state!=_DONE; i++) {
+	switch (state) {
+	 case _STARTING:
+	    if (line[i]=='(') {
+		state = _TITLE;
+	    } else {
+		state = _DONE;
+	    }
+	    break;
+
+	 case _TITLE:
+	    if (j <= 0 && line[i]==',') {
+
+		j = 0;
+		if (i > 1) {
+		    strncpy(tbuffer, &line[1], WMIN(i, 255));
+		    tbuffer[WMIN(i, 255)] = 0;
+		    title = (char*)tbuffer;
+		}
+		k = i+1;
+		state = _PROMPT;
+
+	    } else if (j <= 0 && line[i]==')') {
+
+		if (i > 1) {
+		    strncpy(tbuffer, &line[1], WMIN(i, 255));
+		    tbuffer[WMIN(i, 255)] = 0;
+		    title = (char*)tbuffer;
+		}
+		state = _DONE;
+
+	    } else if (line[i]=='(') 
+		    j++;
+	    else if (line[i]==')')
+		j--;
+
+	    break;
+
+	 case _PROMPT:
+	    if (line[i]==')' && j==0) {
+
+		if (i-k > 1) {
+		    strncpy(pbuffer, &line[k], WMIN(i-k, 255));
+		    pbuffer[WMIN(i-k, 255)] = 0;
+		    title = (char*)pbuffer;
+		}
+		state = _DONE;
+	    } else if (line[i]=='(')
+		    j++;
+	    else if (line[i]==')')
+		j--;
+	    break;
+	}
+    }
+#undef _STARTING
+#undef _TITLE
+#undef _PROMPT
+#undef _DONE
+
+    if (!wInputDialog(scr, title, prompt, &ret))
 	return NULL;
     else
 	return ret;
@@ -1300,5 +1351,75 @@ UnescapeWM_CLASS(char *str, char **name, char **class)
     if (!*class) {
 	free(*class);
 	*class = NULL;
+    }
+}
+
+
+
+void
+SendHelperMessage(WScreen *scr, char type, int workspace, char *msg)
+{
+    unsigned char *buffer;
+    int len;
+    int i;
+    char buf[16];
+
+    if (!scr->flags.backimage_helper_launched) {
+	return;
+    }
+    
+    len = (msg ? strlen(msg) : 0) + (workspace >=0 ? 4 : 0) + 1 ;
+    buffer = wmalloc(len+5);
+    sprintf(buf, "%4i", len);
+    memcpy(buffer, buf, 4);
+    buffer[4] = type;
+    i = 5;
+    if (workspace >= 0) {
+	sprintf(buf, "%4i", workspace);
+	memcpy(&buffer[i], buf, 4);
+	i += 4;
+	buffer[i] = 0;
+    }
+    if (msg)
+	strcpy(&buffer[i], msg);
+
+    if (write(scr->helper_fd, buffer, len+4) < 0) {
+	wsyserror(_("could not send message to background image helper"));
+    }
+    free(buffer);
+}
+
+
+void
+ExecuteShellCommand(WScreen *scr, char *command)
+{
+    static char *shell = NULL;
+    pid_t pid;
+
+    /*
+     * This have a problem: if the shell is tcsh (not sure about others)
+     * and ~/.tcshrc have /bin/stty erase ^H somewhere on it, the shell
+     * will block and the command will not be executed.
+    if (!shell) {
+	shell = getenv("SHELL");
+	if (!shell)
+	    shell = "/bin/sh";
+    }
+     */
+    shell = "/bin/sh";
+
+    pid = fork();
+    if (pid==0) {
+
+	SetupEnvironment(scr);
+
+#ifdef HAVE_SETPGID
+	setpgid(0, 0);
+#endif
+	execl(shell, shell, "-c", command, NULL);
+	wsyserror("could not execute %s -c %s", shell, command);
+	Exit(-1);
+    } else if (pid < 0) {
+	wsyserror("cannot fork a new process");
     }
 }

@@ -39,8 +39,8 @@
 #define RLRASTER_H_
 
 
-/* version of the header for the library: 0.10 */
-#define WRASTER_HEADER_VERSION	10
+/* version of the header for the library: 0.11 */
+#define WRASTER_HEADER_VERSION	11
 
 #ifdef HAVE_ALLOCA_H
 #include <alloca.h>
@@ -110,8 +110,12 @@ typedef struct RContext {
     int red_offset;		       /* only used in 24bpp */
     int green_offset;
     int blue_offset;
-    
+
     /* only used for pseudocolor and grayscale */
+
+    XStandardColormap *std_rgb_map;    /* standard RGB colormap */
+    XStandardColormap *std_gray_map;   /* standard grayscale colormap */
+    
     int ncolors;		       /* total number of colors we can use */
     XColor *colors;		       /* internal colormap */
 
@@ -358,6 +362,8 @@ RImage *RRenderGradient(unsigned width, unsigned height, RColor *from,
 RImage *RRenderMultiGradient(unsigned width, unsigned height, RColor **colors, 
 			     int style);
 
+
+
 /*
  * Convertion into X Pixmaps
  */
@@ -382,6 +388,7 @@ void RPutXImage(RContext *context, Drawable d, GC gc, RXImage *ximage,
 /* do not free the returned string! */
 const char *RMessageForError(int errorCode);
 
+int RBlurImage(RImage *image);
 
 /****** Global Variables *******/
 

@@ -415,7 +415,7 @@ typedef struct XPMColor {
     unsigned char red;
     unsigned char green;
     unsigned char blue;
-    char text[12];
+    int index;
     struct XPMColor *next;
 } XPMColor;
 
@@ -482,23 +482,35 @@ addcolor(XPMColor **list, unsigned r, unsigned g, unsigned b, int *colors)
 }
 
 
+static char*
+index2str(char *buffer, int index, int colorCount)
+{
+    int i;
+
+    for (i=0; i<colorCount/64+1; i++) {
+	buffer[i] = I2CHAR(index&63);
+	index >>= 5;
+    }
+    buffer[i] = 0;
+    
+    return buffer;
+}
+
+
 static void
 outputcolormap(FILE *file, XPMColor *colormap, int colorCount)
 {
     int j;
     int i,index;
+    char buf[128];
 
     if (!colormap)
 	return;
 
     for (index=0; colormap!=NULL; colormap=colormap->next,index++) {
-	j = index;
-	for (i=0; i<colorCount/64+1; i++) {
-	    colormap->text[i] = I2CHAR(j&63);
-	    j >>= 5;
-	}
-	colormap->text[i] = 0;
-	fprintf(file, "\"%s c #%02x%02x%02x\",\n", colormap->text, colormap->red,
+	colormap->index = index;
+	fprintf(file, "\"%s c #%02x%02x%02x\",\n", 
+		index2str(buf, index, colorCount), colormap->red,
 		colormap->green, colormap->blue);
     }
 }
@@ -531,6 +543,7 @@ RSaveXPM(RImage *image, char *filename)
     int ok = 0;
     unsigned char *r, *g, *b, *a;
     char transp[16];
+    char buf[128];
 
     file = fopen(filename, "w+");
     if (!file) {
@@ -564,7 +577,6 @@ RSaveXPM(RImage *image, char *filename)
     fprintf(file, "\"%i %i %i %i\",\n", image->width, image->height, 
 	    colorCount, colorCount/64+1);
 
-
     /* write colormap data */
     if (image->data[3]) {
 	for (i=0; i<colorCount/64+1; i++)
@@ -582,6 +594,7 @@ RSaveXPM(RImage *image, char *filename)
     b = image->data[2];
     a = image->data[3];
 
+
     /* write data */
     for (y = 0; y < image->height; y++) {
 
@@ -592,7 +605,7 @@ RSaveXPM(RImage *image, char *filename)
 	    if (!a || *a++>127) {
 		tmpc = lookfor(colormap, (unsigned)*r<<16|(unsigned)*g<<8|(unsigned)*b);
 
-		fprintf(file, tmpc->text);
+		fprintf(file, index2str(buf, tmpc->index, colorCount));
 	    } else {
 		fprintf(file, transp);
 	    }

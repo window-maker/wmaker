@@ -1,5 +1,11 @@
 {
   TitleJustify = left;
+  WindowTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
+  MenuTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
+  MenuTextFont = "-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*";
+  IconTitleFont = "-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-*-*";
+  ClipTitleFont = "-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*";
+  DisplayFont = "-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*";
   HighlightColor = white;
   HighlightTextColor = black;
   ClipTitleColor = "rgb:79/96/cf";
@@ -42,4 +48,5 @@
     "rgb:96/d7/e7"
   );
   IconBack = (mdgradient, "rgb:18/34/54", "rgb:28/45/69", "rgb:08/24/20");
+  WorkspaceBack = (spixmap, SeaNight.jpeg, black);
 }

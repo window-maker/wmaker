@@ -48,17 +48,28 @@
 #include "workspace.h"
 #include "session.h"
 #include "balloon.h"
+#ifdef KWM_HINTS
+#include "kwm.h"
+#endif
+#ifdef GNOME_STUFF
+#include "gnome.h"
+#endif
 
 #include <proplist.h>
 
 #include "defaults.h"
 
 
+#ifdef LITE
+#define EVENT_MASK (LeaveWindowMask|EnterWindowMask|PropertyChangeMask\
+		|SubstructureNotifyMask|PointerMotionMask \
+		|SubstructureRedirectMask|KeyPressMask|KeyReleaseMask)
+#else
 #define EVENT_MASK (LeaveWindowMask|EnterWindowMask|PropertyChangeMask\
 		|SubstructureNotifyMask|PointerMotionMask \
 		|SubstructureRedirectMask|ButtonPressMask|ButtonReleaseMask\
 		|KeyPressMask|KeyReleaseMask)
-
+#endif
 
 /**** Global variables ****/
 
@@ -559,13 +570,20 @@ wScreenInit(int screen_number)
     scr->scr_width = WidthOfScreen(ScreenOfDisplay(dpy, screen_number));
     scr->scr_height = HeightOfScreen(ScreenOfDisplay(dpy, screen_number));
 
+    scr->usableArea.x2 = scr->scr_width;
+    scr->usableArea.y2 = scr->scr_height;
+    scr->totalUsableArea.x2 = scr->scr_width;
+    scr->totalUsableArea.y2 = scr->scr_height;
+
     CantManageScreen = 0;
     oldHandler = XSetErrorHandler((XErrorHandler)alreadyRunningError);
 
     event_mask = EVENT_MASK;
 
-    if (wPreferences.disable_root_mouse)
+    if (wPreferences.disable_root_mouse) {
 	event_mask &= ~(ButtonPressMask|ButtonReleaseMask);
+    }
+    
     XSelectInput(dpy, scr->root_win, event_mask);
 
     XSync(dpy, False);
@@ -619,8 +637,14 @@ wScreenInit(int screen_number)
     scr->white_pixel = scr->rcontext->white;    
 
     /* create screen descriptor for WINGs */
-    scr->wmscreen = WMCreateScreenWithRContext(dpy, screen_number, 
+    scr->wmscreen = WMCreateScreenWithRContext(dpy, screen_number,
 					       scr->rcontext);
+
+    if (!scr->wmscreen) {
+	wfatal(_("could not do initialization of WINGs widget set"));
+
+	return NULL;
+    }
 
     color = WMGrayColor(scr->wmscreen);
     scr->light_pixel = WMColorPixel(color);
@@ -643,10 +667,18 @@ wScreenInit(int screen_number)
     /* read defaults for this screen */
     wReadDefaults(scr, WDWindowMaker->dictionary);
 
+    createInternalWindows(scr);
+
+#ifdef KWM_HINTS
+    wKWMInitStuff(scr);
+#endif
+
+#ifdef GNOME_STUFF
+    wGNOMEInitStuff(scr);
+#endif
+
     /* create initial workspace */
     wWorkspaceNew(scr);
-
-    createInternalWindows(scr);
 
     /* create shared pixmaps */
     createPixmaps(scr);
@@ -668,11 +700,134 @@ wScreenInit(int screen_number)
     wBalloonInitialize(scr);
 #endif
 
+    wScreenUpdateUsableArea(scr);
+
+#ifndef LITE
     /* kluge to load menu configurations at startup */
     OpenRootMenu(scr, -10000, -10000, False);
     wMenuUnmap(scr->root_menu);
+#endif
 
     return scr;
+}
+
+
+void
+wScreenUpdateUsableArea(WScreen *scr)
+{
+#ifdef GNOME_STUFF
+    WReservedArea *area;
+#endif
+
+    scr->totalUsableArea = scr->usableArea;
+
+
+    if (scr->dock && (!scr->dock->lowered 
+		      || wPreferences.no_window_over_dock)) {
+
+	int offset = wPreferences.icon_size + DOCK_EXTRA_SPACE;
+
+	if (scr->dock->on_right_side) {
+	    scr->totalUsableArea.x2 = WMIN(scr->totalUsableArea.x2,
+					  scr->scr_width - offset);
+	} else {
+	    scr->totalUsableArea.x1 = WMAX(scr->totalUsableArea.x1, offset);
+	}
+    }
+    
+    if (wPreferences.no_window_over_icons) {
+	if (wPreferences.icon_yard & IY_VERT) {
+
+	    if (!(wPreferences.icon_yard & IY_RIGHT)) {
+		scr->totalUsableArea.x1 += wPreferences.icon_size;
+	    } else {
+		scr->totalUsableArea.x2 -= wPreferences.icon_size;
+	    }
+	} else {
+
+	    if (wPreferences.icon_yard & IY_TOP) {
+		scr->totalUsableArea.y1 += wPreferences.icon_size;
+	    } else {
+		scr->totalUsableArea.y2 -= wPreferences.icon_size;
+	    }
+	}
+    }
+
+#ifdef KWM_HINTS
+    {
+	WArea area;
+
+	if (wKWMGetUsableArea(scr, &area)) {
+	    scr->totalUsableArea.x1 = WMAX(scr->totalUsableArea.x1, area.x1);
+	    scr->totalUsableArea.y1 = WMAX(scr->totalUsableArea.y1, area.y1);
+	    scr->totalUsableArea.x2 = WMIN(scr->totalUsableArea.x2, area.x2);
+	    scr->totalUsableArea.y2 = WMIN(scr->totalUsableArea.y2, area.y2);
+	}
+    }
+#endif
+
+#ifdef GNOME_STUFF
+    area = scr->reservedAreas;    
+
+    while (area) {
+	int th, bh;
+	int lw, rw;
+	int w, h;
+
+	w = area->area.x2 - area->area.x1;
+	h = area->area.y2 - area->area.y1;
+
+	th = area->area.y1;
+	bh = scr->scr_height - area->area.y2;
+	lw = area->area.x1;
+	rw = scr->scr_width - area->area.x2;
+
+	if (WMIN(th, bh) < WMIN(lw, rw)) {
+	    /* horizontal */
+	    if (th < bh) {
+		/* on top */
+		if (scr->totalUsableArea.y1 < area->area.y2)
+		    scr->totalUsableArea.y1 = area->area.y2;
+	    } else {
+		/* on bottom */
+		if (scr->totalUsableArea.y2 > area->area.y1)
+		    scr->totalUsableArea.y2 = area->area.y1;
+	    }
+	} else {
+	    /* vertical */
+	    if (lw < rw) {
+		/* on left */
+		if (scr->totalUsableArea.x1 < area->area.x2)
+		    scr->totalUsableArea.x1 = area->area.x2;
+	    } else {
+		/* on right */
+		if (scr->totalUsableArea.x2 > area->area.x1)
+		    scr->totalUsableArea.x2 = area->area.x1;
+	    }
+	}
+
+	area = area->next;
+    }
+#endif /* GNOME_STUFF */
+
+    if (scr->totalUsableArea.x2 - scr->totalUsableArea.x1 < scr->scr_width/2) {
+	scr->totalUsableArea.x2 = scr->usableArea.x2;
+	scr->totalUsableArea.x1 = scr->usableArea.x1;
+    }
+    if (scr->totalUsableArea.y2 - scr->totalUsableArea.y1 < scr->scr_height/2) {
+	scr->totalUsableArea.y2 = scr->usableArea.y2;
+	scr->totalUsableArea.y1 = scr->usableArea.y1;
+    }
+
+#ifdef KWM_HINTS
+    {
+	int i;
+
+	for (i = 0; i < scr->workspace_count; i++) {
+	    wKWMSetUsableAreaHint(scr, i);
+	}
+    }
+#endif
 }
 
 
@@ -713,6 +868,7 @@ wScreenRestoreState(WScreen *scr)
         scr->dock = wDockRestoreState(scr, state, WM_DOCK);
     }
 
+    wScreenUpdateUsableArea(scr);
 }
 
 
@@ -838,3 +994,5 @@ wScreenBringInside(WScreen *scr, int *x, int *y, int width, int height)
 
     return moved;
 }
+
+

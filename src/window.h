@@ -26,9 +26,6 @@
 
 #include "wconfig.h"
 #include "GNUstep.h"
-#ifdef MWM_HINTS
-# include "motif.h"
-#endif
 #include "texture.h"
 #include "menu.h"
 #include "application.h"
@@ -67,10 +64,27 @@ typedef enum {
  * that the value that will be used will be that of the leader foo.bar.
  * The attributes inspector must always save application wide options
  * in the name of the leader window, not the child.
+ * 
  */
 /*
  * All flags must have their default values = 0
+ * 
+ * New flag scheme:
+ * 
+ * user_flags, defined_flags
+ * client_flags
+ * 
+ * if defined window_flag then window_flag else client_flag
+ * 
  */
+
+#define WFLAGP(wwin, FLAG)	((wwin)->defined_user_flags.FLAG \
+					? (wwin)->user_flags.FLAG \
+					: (wwin)->client_flags.FLAG)
+
+#define WSETUFLAG(wwin, FLAG, VAL)	(wwin)->user_flags.FLAG = (VAL),\
+					(wwin)->defined_user_flags.FLAG = 1
+
 typedef struct {
     /* OpenStep */
     unsigned int no_titlebar:1;	       /* draw titlebar? */
@@ -107,17 +121,20 @@ typedef struct {
     
     unsigned int always_user_icon:1;   /* ignore client IconPixmap or
 					* IconWindow */
-    
+
     unsigned int start_miniaturized:1;
     unsigned int start_hidden:1;
+    unsigned int start_maximized:1;
     unsigned int dont_save_session:1;  /* do not save app's state in session */
-    
+
     /*
      * emulate_app_icon must be automatically disabled for apps that can
      * generate their own appicons and for apps that have no_appicon=1
      */
     unsigned int emulate_appicon:1;
 } WWindowAttributes;
+
+
 
 /*
  * Window manager protocols that both the client as we understand.
@@ -144,7 +161,11 @@ typedef struct WWindow {
     struct WWindow *next;
 
     WScreen *screen_ptr;	       /* pointer to the screen structure */
-    WWindowAttributes window_flags;    /* window attribute flags */
+    WWindowAttributes user_flags;      /* window attribute flags set by user */
+    WWindowAttributes defined_user_flags;/* mask for user_flags */
+    WWindowAttributes client_flags;    /* window attribute flags set by app
+					* initialized with global defaults */
+
     struct InspectorPanel *inspector;  /*  pointer to attribute editor panel */
 
     struct WFrameWindow *frame;	       /* the frame window */
@@ -203,6 +224,7 @@ typedef struct WWindow {
 	unsigned int hidden:1;
 	unsigned int shaded:1;
 	unsigned int maximized:2;
+	unsigned int omnipresent:1;
 
 	unsigned int semi_focused:1;
 	/* window type flags */
@@ -210,7 +232,7 @@ typedef struct WWindow {
 #ifdef SHAPE
 	unsigned int shaped:1;
 #endif
-	
+
 	/* info flags */
 	unsigned int buttons_dont_fit:1;
 	unsigned int rebuild_texture:1;/* the window was resized and 
@@ -228,13 +250,27 @@ typedef struct WWindow {
         unsigned int inspector_open:1; /* attrib inspector is already open */
 	
 	unsigned int destroyed:1;      /* window was already destroyed */
-	
+
 	unsigned int menu_open_for_me:1;   /* window commands menu */
+
+#ifdef KWM_HINTS
+	unsigned int kwm_hidden_for_modules:1;
+#endif
+#ifdef OLWM_HINTS
+	unsigned int olwm_push_pin:1;      /* emulate pushpin behaviour */
+	unsigned int olwm_limit_menu:1;
+#endif
     } flags;		/* state of the window */
 
     struct WIcon *icon;		       /* icon info for the window */
     int icon_x, icon_y;		       /* position of the icon */
 } WWindow;
+
+
+#define IS_OMNIPRESENT(w) ((w)->flags.omnipresent ^ WFLAGP(w, omnipresent))
+
+#define WINDOW_LEVEL(w) ((w)->frame->core->stacking->window_level)
+
 
 
 /*
@@ -309,7 +345,7 @@ WWindow *wManageInternalWindow(WScreen *scr, Window window, Window owner,
 			       char *title, int x, int y, 
 			       int width, int height);
 
-void wWindowCheckAttributeSanity(WWindow *wwin, WWindowAttributes *flags);
+void wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace);
 
 void wWindowUpdateGNUstepAttr(WWindow *wwin, GNUstepWMAttributes *attr);
 
@@ -326,5 +362,6 @@ WMagicNumber wWindowGetSavedState(Window win);
 
 void wWindowDeleteSavedState(WMagicNumber id);
 
+Bool wWindowObscuresWindow(WWindow *wwin, WWindow *obscured);
 
 #endif

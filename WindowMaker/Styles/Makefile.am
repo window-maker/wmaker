@@ -1,33 +1,33 @@
-defsdatadir = $(pkgdatadir)/Styles
 
-defsdata_DATA = \
-	Autumn\
-	Black\
-	Blue\
-	BlueAluminum\
-	BlueDawn\
-	BlueishGreen\
-	Brown\
-	Chumbo\
-	Copper\
-	DarkBlue\
-	DarkRed\
-	Fire\
-	Food\
-	Golden\
-	Green\
-	GreyBlue\
-	Gtk\
-	LightBlue\
-	Pastel\
-	Pink\
-	Pumpkin\
-	Purple\
-	Red\
-	RednBlue\
-	ShinyBrown\
-	Summer\
-	Traditional\
-	VioletBlue
+prefsdatadir = $(pkgdatadir)/Styles
 
-EXTRA_DIST = $(defsdata_DATA) 
+prefsdata_DATA =\
+	Autumn.style\
+	Black.style\
+	BlackTexture.style\
+	Blue.style\
+	BlueDawn.style\
+	BlueishGreen.style\
+	Brown.style\
+	Chumbo.style\
+	Copper.style\
+	DarkBlue.style\
+	DarkRed.style\
+	Fire.style\
+	Food.style\
+	Golden.style\
+	Green.style\
+	GreyBlue.style\
+	Gtk.style\
+	LightBlue.style\
+	Pastel.style\
+	Purple.style\
+	Red.style\
+	RednBlue.style\
+	Summer.style\
+	Traditional.style\
+	VioletBlue.style
+
+EXTRA_DIST = $(prefsdata_DATA)
+
+

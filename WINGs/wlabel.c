@@ -99,6 +99,13 @@ WMSetLabelImage(WMLabel *lPtr, WMPixmap *image)
 }
 
 
+WMPixmap*
+WMGetLabelImage(WMLabel *lPtr)
+{
+    return lPtr->image;
+}
+
+
 void
 WMSetLabelImagePosition(WMLabel *lPtr, WMImagePosition position)
 {

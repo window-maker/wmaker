@@ -101,11 +101,6 @@ Atom _XA_GNUSTEP_WM_ATTR;
 Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 Atom _XA_GNUSTEP_WM_RESIZEBAR;
 
-#ifdef MWM_HINTS
-/* MWM support */
-Atom _XA_MOTIF_WM_HINTS;
-#endif
-
 Atom _XA_WINDOWMAKER_MENU;
 Atom _XA_WINDOWMAKER_WM_PROTOCOLS;
 Atom _XA_WINDOWMAKER_STATE;
@@ -298,8 +293,6 @@ execInitScript()
     file = wfindfile(DEF_CONFIG_PATHS, DEF_INIT_SCRIPT);
     if (file) {
 	if (fork()==0) {
-	    CloseDescriptors();
-
 	    execl("/bin/sh", "/bin/sh", "-c", file, NULL);
 	    wsyserror(_("%s:could not execute initialization script"), file);
 	    exit(1);
@@ -317,8 +310,6 @@ ExecExitScript()
     file = wfindfile(DEF_CONFIG_PATHS, DEF_EXIT_SCRIPT);
     if (file) {
 	if (fork()==0) {
-	    CloseDescriptors();
-
 	    execl("/bin/sh", "/bin/sh", "-c", file, NULL);
 	    wsyserror(_("%s:could not execute exit script"), file);
 	    exit(1);
@@ -471,6 +462,11 @@ main(int argc, char **argv)
     dpy = XOpenDisplay(DisplayName);
     if (dpy == NULL) {
 	wfatal(_("could not open display \"%s\""), XDisplayName(DisplayName));
+	exit(1);
+    }
+
+    if (fcntl(ConnectionNumber(dpy), F_SETFD, FD_CLOEXEC) < 0) {
+	wsyserror("error setting close-on-exec flag for X connection");
 	exit(1);
     }
 

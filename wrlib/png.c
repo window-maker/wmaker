@@ -47,10 +47,6 @@ char *alloca ();
 
 #include <png.h>
 
-#if PNG_LIBPNG_VER < 96
-#error libpng_must_be_more_at_least_0_96
-#endif
-
 #include "wraster.h"
 
 
@@ -158,7 +154,10 @@ RLoadPNG(RContext *context, char *file, int index)
 	if (sgamma==0)
 	    sgamma = 1;
     } else {
+	/*
 	sgamma = 2.0;
+	 */
+	sgamma = 1.0;
     }
     
     if (png_get_gAMA(png, pinfo, &gamma))

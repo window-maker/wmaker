@@ -57,7 +57,7 @@ allocatePseudoColor(RContext *ctx)
     int i, ncolors, r, g, b;
     int retries;
     int cpc = ctx->attribs->colors_per_channel;
-
+    
     ncolors = cpc * cpc * cpc;
     
     if ( ncolors > (1<<ctx->depth) ) {
@@ -337,6 +337,7 @@ getColormap(RContext *context, int screen_number)
 			 &cmaps, &ncmaps, XA_RGB_DEFAULT_MAP)) { 
 	for (i=0; i<ncmaps; ++i) {
 	    if (cmaps[i].visualid == context->visual->visualid) {
+		puts("ACHOU");
 		cmap = cmaps[i].colormap;
 		break;
 	    }
@@ -531,7 +532,8 @@ bestContext(Display *dpy, int screen_number, RContext *context)
 	    else if (vinfo[i].depth>24 && best<0) best = i;
 	}
     }
-    
+
+#if 0
     if (best == -1) {   /* look for a DirectColor, 24-bit or more (pref 24) */
 	rvinfo.class = DirectColor;
 	if (vinfo) XFree((char *) vinfo);
@@ -543,6 +545,7 @@ bestContext(Display *dpy, int screen_number, RContext *context)
 	    }
 	}
     }
+#endif
     if (best > -1) {
 	context->visual = vinfo[best].visual;
 	context->depth = vinfo[best].depth;

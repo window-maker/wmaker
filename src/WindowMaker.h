@@ -62,9 +62,10 @@ enum {
 	WMFloatingLevel = 3,
 	WMDockLevel = 4,
 	WMSubmenuLevel = 5,
-	WMMainMenuLevel = 6
+	WMMainMenuLevel = 6,
+	WMOuterSpaceLevel = 7
 };
-#define MAX_WINDOW_LEVELS 7
+#define MAX_WINDOW_LEVELS 8
 
 /*
  * WObjDescriptor will be used by the event dispatcher to
@@ -91,6 +92,15 @@ typedef struct WObjDescriptor {
     WClassType parent_type;	       /* type code of the parent */
     void *parent;		       /* parent object (WWindow or WMenu) */
 } WObjDescriptor;
+
+
+/* shutdown modes */
+typedef enum {
+    WSExitMode,
+	WSLogoutMode,
+	WSKillMode,
+	WSRestartPreparationMode
+} WShutdownMode;
 
 
 /* internal buttons */
@@ -186,15 +196,19 @@ typedef struct WObjDescriptor {
 #define WSTATE_RESTARTING	4
 
 
+typedef struct {
+    int x1, y1;
+    int x2, y2;
+} WArea;
+
 typedef struct WCoord {
     int x, y;
 } WCoord;
 
-
 typedef struct WPreferences {
-    char **pixmap_path;		       /* NULL terminated array of */
+    char *pixmap_path;		       /* : separate list of */
 				       /* paths to find pixmaps */
-    char **icon_path;		       /* NULL terminated array of */
+    char *icon_path;		       /* : separated list of */
 				       /* paths to find icons */
 
     char size_display;		       /* display type for resize geometry */
@@ -248,7 +262,7 @@ typedef struct WPreferences {
     
     char iconification_style;          /* position to place icons */
     
-    char disable_root_mouse;	       /* disable mouse actions in root window */
+    char disable_root_mouse;	       /* disable button events in root window */
     
     char auto_focus;		       /* focus window when it's mapped */
     

@@ -161,9 +161,9 @@
 	"הדובע בחרמ" END
 
 	"הארמ" MENU
-		"Themes" OPEN_MENU THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"תונונגס" OPEN_MENU STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"םינוקייא טס" OPEN_MENU ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Themes" OPEN_MENU -noext  THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"תונונגס" OPEN_MENU -noext STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"םינוקייא טס" OPEN_MENU -noext ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"עקר" MENU
 			"Solid" MENU
                         	"רוחש" WS_BACK '(solid, black)'
@@ -179,7 +179,7 @@
 				"Flag" WS_BACK '(vdgradient, blue, white, blue)'
 				"Sky" WS_BACK '(vgradient, blue4, white)'
 			"Gradient" END
-			"Images" OPEN_MENU BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+			"Images" OPEN_MENU -noext  BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"עקר" END
 		"Save Theme" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
 		"Save IconSet" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"

@@ -2,7 +2,9 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 
-lib_LIBRARIES = libwraster.a
+lib_LTLIBRARIES = libwraster.la
+
+libwraster_la_LDFLAGS = -version-info 1:1:0
 
 noinst_PROGRAMS = test testgrad testdraw view 
 
@@ -10,7 +12,7 @@ EXTRA_DIST = test.png tile.xpm ballot_box.xpm ballot_box.tiff
 
 include_HEADERS = wraster.h
 
-libwraster_a_SOURCES = 	\
+libwraster_la_SOURCES = 	\
 	raster.c 	\
 	draw.c		\
 	color.c		\
@@ -35,7 +37,7 @@ libwraster_a_SOURCES = 	\
 
 INCLUDES = @DFLAGS@ @XCFLAGS@ @GFXFLAGS@ @XSHM@
 
-LIBLIST = -L. -lwraster @GFXLFLAGS@ @XLFLAGS@ @GFXLIBS@ @XLIBS@ -lm
+LIBLIST = libwraster.la @GFXLFLAGS@ @XLFLAGS@ @GFXLIBS@ @XLIBS@ -lm
 
 view_SOURCES= view.c
 
@@ -54,6 +56,6 @@ testdraw_SOURCES = testdraw.c
 testdraw_LDADD = $(LIBLIST)
 
 
-libwraster_a_LIBADD = @ALLOCA@
+libwraster_la_LIBADD = @ALLOCA@
 
 

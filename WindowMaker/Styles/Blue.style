@@ -10,4 +10,6 @@ UTitleBack = (hgradient, "rgb:90/90/90", "rgb:c0/c0/c0");
 PTitleBack = (hgradient, "rgb:50/50/50", "rgb:80/80/80");
 MenuTitleBack = (hgradient, "rgb:20/20/70", "rgb:00/00/20");
 MenuTextBack = (hgradient, "rgb:c0/c0/c0", "rgb:90/90/90");
+IconTitleBack = "#101040";
+IconTitleColor = white;
 }

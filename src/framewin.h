@@ -39,8 +39,6 @@
 
 typedef struct WFrameWindow {
     WScreen *screen_ptr;	       /* pointer to the screen structure */
-    short window_level;
-    short workspace;		       /* workspace that the window occupies */
     
     WCoreWindow *core;
     
@@ -48,9 +46,13 @@ typedef struct WFrameWindow {
     WCoreWindow *left_button;	       /* miniaturize button */
     WCoreWindow *right_button;	       /* close button */
 
+    short workspace;		       /* workspace that the window occupies */
+
     short top_width;
     short bottom_width;
-    
+
+    short resizebar_corner_width;
+
     WCoreWindow *resizebar;	       /* bottom resizebar */
 
     Pixmap title_back[3];	       /* focused, unfocused, pfocused */
@@ -65,8 +67,6 @@ typedef struct WFrameWindow {
     unsigned long *title_pixel;
     GC *title_gc;
     WFont **font;
-
-    short resizebar_corner_width;
 
     char *title;		       /* window name (title) */
 
@@ -127,9 +127,9 @@ void wFrameWindowChangeState(WFrameWindow *fwin, int state);
 
 void wFrameWindowPaint(WFrameWindow *fwin);
 
-void wFrameWindowResize(WFrameWindow *fwin, int width, int height);
+void wFrameWindowConfigure(WFrameWindow *fwin, int x, int y, int width, int height);
 
-void wFrameWindowResizeInternal(WFrameWindow *fwin, int iwidth, int iheight);
+void wFrameWindowResize(WFrameWindow *fwin, int width, int height);
 
 void wFrameWindowShowButton(WFrameWindow *fwin, int flags);
 

@@ -22,6 +22,8 @@
 #include "wconfig.h"
 
 #include <stdlib.h>
+#include <signal.h>
+#include <unistd.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -33,11 +35,105 @@
 #include "funcs.h"
 #include "properties.h"
 #include "winspector.h"
-
+#ifdef KWM_HINTS
+#include "kwm.h"
+#endif
 
 extern Atom _XA_WM_DELETE_WINDOW;
 extern Time LastTimestamp;
 extern int wScreenCount;
+
+
+static void wipeDesktop(WScreen *scr);
+
+
+/*
+ *----------------------------------------------------------------------
+ * Shutdown-
+ * 	Exits the window manager cleanly. If mode is WSLogoutMode,
+ * the whole X session will be closed, by killing all clients if
+ * no session manager is running or by asking a shutdown to
+ * it if its present.
+ * 
+ *----------------------------------------------------------------------
+ */
+void
+Shutdown(WShutdownMode mode)
+{
+    int i;
+
+    switch (mode) {
+     case WSExitMode:
+	for (i=0; i<wScreenCount; i++) {
+	    WScreen *scr;
+
+	    scr = wScreenWithNumber(i);
+	    if (scr) {
+		if (scr->helper_pid)
+		    kill(scr->helper_pid, SIGKILL);
+		
+#ifdef KWM_HINTS
+		wKWMShutdown(scr);
+#endif
+		wScreenSaveState(scr);
+
+		RestoreDesktop(scr);
+	    }
+	}
+
+	ExecExitScript();
+	Exit(0);
+	break;
+
+     case WSLogoutMode:
+#ifdef R6SM
+	wSessionRequestShutdown();
+	break;
+#else
+	/* fall through */
+#endif
+     case WSKillMode:
+	for (i=0; i<wScreenCount; i++) {
+	    WScreen *scr;
+		
+	    scr = wScreenWithNumber(i);
+	    if (scr) {
+		if (scr->helper_pid)
+		    kill(scr->helper_pid, SIGKILL);
+#ifdef KWM_HINTS
+		wKWMShutdown(scr);
+#endif
+		wScreenSaveState(scr);
+
+		wipeDesktop(scr);
+	    }
+	}
+	ExecExitScript();
+	Exit(0);
+	break;
+
+     case WSRestartPreparationMode:
+	for (i=0; i<wScreenCount; i++) {
+	    WScreen *scr;
+
+	    scr = wScreenWithNumber(i);
+	    if (scr) {
+		if (scr->helper_pid)
+		    kill(scr->helper_pid, SIGKILL);
+#ifdef KWM_HINTS
+		wKWMShutdown(scr);
+#endif
+		wScreenSaveState(scr);
+
+		RestoreDesktop(scr);
+	    }
+	}
+	break;
+    }
+}
+
+
+
 
 /*
  *----------------------------------------------------------------------
@@ -56,18 +152,11 @@ RestoreDesktop(WScreen *scr)
 {
     int i;
 
-    if (!scr) {
-	int j;
-	for (j=0; j<wScreenCount; j++) {
-	    WScreen *scr;
-	    scr = wScreenWithNumber(j);
-	    if (scr) {
-		RestoreDesktop(scr);
-	    }
-	}
-	return;
+    if (scr->helper_pid) {
+	kill(scr->helper_pid, SIGTERM);
+	scr->helper_pid = 0;
     }
-    
+
     XGrabServer(dpy);
     wDestroyInspectorPanels();
 
@@ -106,7 +195,7 @@ RestoreDesktop(WScreen *scr)
 
 /*
  *----------------------------------------------------------------------
- * WipeDesktop--
+ * wipeDesktop--
  * 	Kills all windows in a screen. Send DeleteWindow to all windows
  * that support it and KillClient on all windows that don't.
  * 
@@ -116,22 +205,10 @@ RestoreDesktop(WScreen *scr)
  * TODO: change to XQueryTree()
  *---------------------------------------------------------------------- 
  */
-void
-WipeDesktop(WScreen *scr)
+static void
+wipeDesktop(WScreen *scr)
 {
     WWindow *wwin;
-
-    if (!scr) {
-	int j;
-	for (j=0; j<wScreenCount; j++) {
-	    WScreen *scr;
-	    scr = wScreenWithNumber(j);
-	    if (scr) {
-		WipeDesktop(scr);
-	    }
-	}
-	return;
-    }
 
     wwin = scr->focused_window;
     while (wwin) {

@@ -4,6 +4,8 @@
 
 #include "WINGsP.h"
 
+char *WMListDidScrollNotification = "WMListDidScrollNotification";
+
 
 typedef struct W_List {
     W_Class widgetClass;
@@ -99,7 +101,7 @@ WMCreateList(WMWidget *parent)
 			 |EnterWindowMask|LeaveWindowMask|ButtonMotionMask,
 			 handleActionEvents, lPtr);
 
-    lPtr->itemHeight = scrPtr->normalFont->height + 1;
+    lPtr->itemHeight = WMFontHeight(scrPtr->normalFont) + 1;
         
     /* create the vertical scroller */
     lPtr->vScroller = WMCreateScroller(lPtr);
@@ -224,6 +226,7 @@ WMRemoveListItem(WMList *lPtr, int row)
 {
     WMListItem *llist;
     WMListItem *tmp;
+    int topItem = lPtr->topItem;
 
     CHECK_CLASS(lPtr, WC_List);
     
@@ -266,6 +269,8 @@ WMRemoveListItem(WMList *lPtr, int row)
     if (!lPtr->idleID) {
 	lPtr->idleID = WMAddIdleHandler((WMCallback*)updateScroller, lPtr);
     }
+    if (lPtr->topItem != topItem)
+    	WMPostNotificationName(WMListDidScrollNotification, lPtr, NULL);
 }
 
 
@@ -370,6 +375,13 @@ WMGetListSelectedItemRow(WMList *lPtr)
 }
 
 
+int
+WMGetListItemHeight(WMList *lPtr)
+{    
+    return lPtr->itemHeight;
+}
+
+
 void
 WMSetListPosition(WMList *lPtr, int row)
 {
@@ -417,6 +429,7 @@ vScrollCallBack(WMWidget *scroller, void *self)
     WMList *lPtr = (WMList*)self;
     WMScroller *sPtr = (WMScroller*)scroller;
     int height;
+    int topItem = lPtr->topItem;
     
     height = lPtr->view->size.height - 4;
 
@@ -476,6 +489,9 @@ vScrollCallBack(WMWidget *scroller, void *self)
 	/* do nothing */
 	break;
     }
+
+    if (lPtr->topItem != topItem)
+	WMPostNotificationName(WMListDidScrollNotification, lPtr, NULL);
 }
 
 
@@ -516,8 +532,8 @@ paintItem(List *lPtr, int index)
 	    flags |= WLDSIsBranch;
 
 	if (lPtr->draw)
-	    (*lPtr->draw)(lPtr, view->window, itemPtr->text, flags, &rect);
-
+	    (*lPtr->draw)(lPtr, index, view->window, itemPtr->text, flags, 
+			  &rect);
     } else {
 	if (itemPtr->selected)
 	    XFillRectangle(scr->display, view->window, W_GC(scr->white), x, y,
@@ -706,6 +722,7 @@ handleActionEvents(XEvent *event, void *data)
 {
     List *lPtr = (List*)data;
     int tmp;
+    int topItem = lPtr->topItem;
 
     CHECK_CLASS(data, WC_List);
 
@@ -713,14 +730,11 @@ handleActionEvents(XEvent *event, void *data)
      case ButtonRelease:
 	lPtr->flags.buttonPressed = 0;
 	tmp = getItemIndexAt(lPtr, event->xbutton.y);
+
 	if (tmp == lPtr->selectedItem && tmp >= 0) {
-	    if (WMIsDoubleClick(event)) {
-		if (lPtr->doubleAction)
-		    (*lPtr->doubleAction)(lPtr, lPtr->doubleClientData);
-	    } else {
-		if (lPtr->action)
-		    (*lPtr->action)(lPtr, lPtr->clientData);
-	    }
+
+	    if (lPtr->action)
+		(*lPtr->action)(lPtr, lPtr->clientData);
 	}
 	break;
 
@@ -728,7 +742,7 @@ handleActionEvents(XEvent *event, void *data)
 	lPtr->flags.buttonPressed = lPtr->flags.buttonWasPressed;
 	lPtr->flags.buttonWasPressed = 0;
 	break;
-	
+
      case LeaveNotify:
 	lPtr->flags.buttonWasPressed = lPtr->flags.buttonPressed;
 	lPtr->flags.buttonPressed = 0;
@@ -743,6 +757,11 @@ handleActionEvents(XEvent *event, void *data)
 		lPtr->selectedItem = tmp;
 	    }
 	    lPtr->flags.buttonPressed = 1;
+
+	    if (WMIsDoubleClick(event)) {
+		if (lPtr->doubleAction)
+		    (*lPtr->doubleAction)(lPtr, lPtr->doubleClientData);
+	    }
 	}
 	break;
 	
@@ -756,6 +775,8 @@ handleActionEvents(XEvent *event, void *data)
 	}
 	break;
     }
+    if (lPtr->topItem != topItem)
+    	WMPostNotificationName(WMListDidScrollNotification, lPtr, NULL);
 }
 
 

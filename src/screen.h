@@ -43,17 +43,6 @@ typedef struct WFont {
     short y;
 } WFont;
 
-#ifdef EXPERIMENTAL
-typedef struct {
-    Pixmap pixmap;		       /* None means use pixel */
-    WMPixel pixel;
-    proplist_t spec;		       /* retained */
-    pid_t pid;			       /* If !=0, process ID of wmsetbg that
-					* is rendering the pixmap for this
-					* texture. Set to 0 when finishes */
-} WWorkspaceTexture;
-#endif /* EXPERIMENTAL */
-
 
 #define WTB_LEFT	0
 #define WTB_RIGHT	1
@@ -62,6 +51,16 @@ typedef struct {
 #define WTB_UNFOCUSED	2
 #define WTB_PFOCUSED	4
 #define WTB_MENU	6
+
+#ifdef GNOME_STUFF
+/* an area of the screen reserved by some window */
+typedef struct WReservedArea {
+    WArea area;
+    Window window;
+    struct WReservedArea *next;
+} WReservedArea;
+#endif
+
 
 
 /*
@@ -113,15 +112,23 @@ typedef struct _WScreen {
 /*    int window_level_count[MAX_WINDOW_LEVELS];*/
     int window_count;		       /* number of windows in window_list */
 
-#ifdef EXPERIMENTAL
-    WWorkspaceTexture *defaultTexture;
-    WWorkspaceTexture **wspaceTextures;
-    int wspaceTextureCount;
-#endif /* EXPERIMENTAL */
-
     int workspace_count;	       /* number of workspaces */
+
     struct WWorkspace **workspaces;    /* workspace array */
+
     int current_workspace;	       /* current workspace number */
+
+
+#ifdef GNOME_STUFF
+    WReservedArea *reservedAreas;      /* used to build totalUsableArea */
+#endif
+
+    WArea usableArea;		       /* area of the workspace where
+					* we can put windows on, as defined
+					* by other clients (not us) */
+    WArea totalUsableArea;	       /* same as above, but including
+					* the dock and other stuff */
+    
 
     WMPixel black_pixel;
     WMPixel white_pixel;
@@ -190,9 +197,11 @@ typedef struct _WScreen {
     struct WPixmap *menu_shade_indicator;  /* for shaded window */
     int app_menu_x, app_menu_y;	       /* position for application menus */
 
+#ifndef LITE
     struct WMenu *root_menu;	       /* root window menu */
-    struct WMenu *workspace_menu;      /* workspace operation */
     struct WMenu *switch_menu;	       /* window list menu */
+#endif
+    struct WMenu *workspace_menu;      /* workspace operation */
     struct WMenu *window_menu;	       /* window command menu */
     struct WMenu *icon_menu;	       /* icon/appicon menu */
     struct WMenu *workspace_submenu;   /* workspace list for window_menu */
@@ -213,6 +222,7 @@ typedef struct _WScreen {
 					* window resize, move etc. */
     unsigned int geometry_display_width;
     unsigned int geometry_display_height;
+    int keymove_tick;
     
     struct RContext *rcontext;
     
@@ -246,12 +256,19 @@ typedef struct _WScreen {
 					* raised */
     
     /* for window shortcuts */
-    struct WWindow *shortcutWindow[4];
+    struct WWindow *shortcutWindow[MAX_WINDOW_SHORTCUTS];
 
 #ifdef XDE_DND
     char *xdestring;
 #endif
-    
+
+#ifdef KWM_HINTS
+    Window kwm_dock;
+#endif
+
+    int helper_fd;
+    pid_t helper_pid;
+
     struct {
 	unsigned int startup:1;	       /* during window manager startup */
 	unsigned int regenerate_icon_textures:1;
@@ -262,8 +279,13 @@ typedef struct _WScreen {
 	unsigned int supports_tiff:1;
 	unsigned int clip_balloon_mapped:1;
 	unsigned int next_click_is_not_double:1;
+	unsigned int backimage_helper_launched:1;
 	/* some client has issued a WM_COLORMAP_NOTIFY */
 	unsigned int colormap_stuff_blocked:1;
+#ifdef KWM_HINTS
+	unsigned int kwm_syncing_name:1;
+	unsigned int kwm_syncing_count:1;
+#endif
     } flags;
 } WScreen;
 
@@ -294,5 +316,9 @@ int wScreenBringInside(WScreen *scr, int *x, int *y, int width, int height);
 WScreen *wScreenWithNumber(int i);
 WScreen *wScreenForRootWindow(Window window);   /* window must be valid */
 WScreen *wScreenForWindow(Window window);   /* slower than above functions */
+
+void wScreenFinish(WScreen *scr);
+
+void wScreenUpdateUsableArea(WScreen *scr);
 
 #endif

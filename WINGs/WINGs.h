@@ -6,7 +6,7 @@
 #include <wraster.h>
 #include <X11/Xlib.h>
 
-#define WINGS_H_VERSION  980930
+#define WINGS_H_VERSION  981220
 
 
 
@@ -188,7 +188,7 @@ enum {
 #define WSIHighlightedArrowUp		9
 #define WSIArrowDown			10
 #define WSIHighlightedArrowDown		11
-
+#define WSICheckMark			12
 
 enum {
     WLDSSelected = (1 << 16),
@@ -352,8 +352,8 @@ typedef void WMCallback(void *data);
 /* delegate method like stuff */
 typedef void WMFreeDataProc(void *data);
 
-typedef void WMListDrawProc(WMList *lPtr, Drawable d, char *text, int state,
-			    WMRect *rect);
+typedef void WMListDrawProc(WMList *lPtr, int index, Drawable d, char *text,
+			    int state, WMRect *rect);
 
 /*
 typedef void WMSplitViewResizeSubviewsProc(WMSplitView *sPtr,
@@ -492,6 +492,8 @@ WMPixmap *WMCreatePixmapFromFile(WMScreen *scrPtr, char *fileName);
 
 WMPixmap *WMCreateBlendedPixmapFromFile(WMScreen *scrPtr, char *fileName,
 					RColor *color);
+
+void WMDrawPixmap(WMPixmap *pixmap, Drawable d, int x, int y);
 
 Pixmap WMGetPixmapXID(WMPixmap *pixmap);
 
@@ -694,6 +696,8 @@ void WMSetLabelWraps(WMLabel *lPtr, Bool flag);
 
 void WMSetLabelImage(WMLabel *lPtr, WMPixmap *image);
 
+WMPixmap *WMGetLabelImage(WMLabel *lPtr);
+
 void WMSetLabelImagePosition(WMLabel *lPtr, WMImagePosition position);
 	
 void WMSetLabelTextAlignment(WMLabel *lPtr, WMAlignment alignment);
@@ -738,6 +742,7 @@ void WMSetTextFieldEnabled(WMTextField *tPtr, Bool flag);
 void WMSetTextFieldSecure(WMTextField *tPtr, Bool flag);
 
 
+extern char *WMListDidScrollNotification;
 extern char *WMTextDidChangeNotification;
 extern char *WMTextDidBeginEditingNotification;
 extern char *WMTextDidEndEditingNotification;
@@ -782,6 +787,8 @@ void WMSetListUserDrawProc(WMList *lPtr, WMListDrawProc *proc);
 
 void WMSetListUserDrawItemHeight(WMList *lPtr, unsigned short height);
 
+int WMGetListItemHeight(WMList *lPtr);
+
 /* don't free the returned data */
 WMListItem *WMGetListSelectedItem(WMList *lPtr);
 
@@ -800,6 +807,8 @@ void WMSetListPosition(WMList *lPtr, int row);
 void WMSetListBottomPosition(WMList *lPtr, int row);
 
 int WMGetListPosition(WMList *lPtr);
+
+extern char *WMListDidScrollNotification;
 
 /* ....................................................................... */
 
@@ -876,6 +885,8 @@ char *WMGetPopUpButtonItem(WMPopUpButton *bPtr, int index);
 
 int WMGetPopUpButtonNumberOfItems(WMPopUpButton *bPtr);
 
+void WMSetPopUpButtonEnabled(WMPopUpButton *bPtr, Bool flag);
+
 /* ....................................................................... */
 
 WMColorWell *WMCreateColorWell(WMWidget *parent);
@@ -883,6 +894,8 @@ WMColorWell *WMCreateColorWell(WMWidget *parent);
 void WMSetColorWellColor(WMColorWell *cPtr, WMColor *color);
 
 WMColor *WMGetColorWellColor(WMColorWell *cPtr);
+
+void WSetColorWellBordered(WMColorWell *cPtr, Bool flag);
 
 /* ...................................................................... */
 
@@ -928,6 +941,10 @@ void WMSetSliderValue(WMSlider *slider, int value);
 void WMSetSliderContinuous(WMSlider *slider, Bool flag);
 
 void WMSetSliderAction(WMSlider *slider, WMAction *action, void *data);
+
+void WMSetSliderKnobThickness(WMSlider *sPtr, int thickness);
+
+void WMSetSliderImage(WMSlider *sPtr, WMPixmap *pixmap);
 
 /* ....................................................................... */
 
@@ -994,6 +1011,11 @@ int WMRunModalOpenPanelForDirectory(WMFilePanel *panel, WMWindow *owner,
 
 int WMRunModalSavePanelForDirectory(WMFilePanel *panel, WMWindow *owner, 
 				    char *path, char *name);
+
+void WMSetFilePanelAccessoryView(WMFilePanel *panel, WMView *view);
+
+WMView *WMGetFilePanelAccessoryView(WMFilePanel *panel);
+
 
 /* ...................................................................... */
 

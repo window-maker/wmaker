@@ -145,7 +145,7 @@ wTextureDestroy(WScreen *scr, WTexture *texture)
     /* 
      * some stupid servers don't like white or black being freed...
      */
-#define CANFREE(c) (c!=scr->black_pixel && c!=scr->white_pixel)
+#define CANFREE(c) (c!=scr->black_pixel && c!=scr->white_pixel && c!=0)
     switch (texture->any.type) {
      case WTEX_SOLID:
 	XFreeGC(dpy, texture->solid.light_gc);
@@ -171,6 +171,12 @@ wTextureDestroy(WScreen *scr, WTexture *texture)
 	}
 	free(texture->mgradient.colors);
 	break;
+
+     case WTEX_THGRADIENT:
+     case WTEX_TVGRADIENT:
+     case WTEX_TDGRADIENT:	
+	RDestroyImage(texture->tgradient.pixmap);
+	break;
     }
     if (CANFREE(texture->any.color.pixel))
       colors[count++] = texture->any.color.pixel;
@@ -179,6 +185,7 @@ wTextureDestroy(WScreen *scr, WTexture *texture)
 	
 	/* ignore error from buggy servers that don't know how
 	 * to do reference counting for colors. */
+	XSync(dpy,0);
 	oldhandler = XSetErrorHandler(dummyErrorHandler);
 	XFreeColors(dpy, scr->colormap, colors, count, 0);
 	XSync(dpy,0);
@@ -192,7 +199,7 @@ wTextureDestroy(WScreen *scr, WTexture *texture)
 
 
 WTexGradient*
-wTextureMakeGradient(WScreen *scr, int style, XColor *from, XColor *to)
+wTextureMakeGradient(WScreen *scr, int style, RColor *from, RColor *to)
 {
     WTexGradient *texture;
     XGCValues gcv;
@@ -206,9 +213,9 @@ wTextureMakeGradient(WScreen *scr, int style, XColor *from, XColor *to)
     texture->color1 = *from;
     texture->color2 = *to;
 
-    texture->normal.red = (from->red + to->red)/2;
-    texture->normal.green = (from->green + to->green)/2;
-    texture->normal.blue = (from->blue + to->blue)/2;
+    texture->normal.red = (from->red + to->red)<<7;
+    texture->normal.green = (from->green + to->green)<<7;
+    texture->normal.blue = (from->blue + to->blue)<<7;
 
     XAllocColor(dpy, scr->w_colormap, &texture->normal);
     gcv.background = gcv.foreground = texture->normal.pixel;
@@ -296,11 +303,62 @@ wTextureMakePixmap(WScreen *scr, int style, char *pixmap_file, XColor *color)
 }
 
 
+
+WTexTGradient*
+wTextureMakeTGradient(WScreen *scr, int style, RColor *from, RColor *to,
+		      char *pixmap_file, int opacity)
+{
+    WTexTGradient *texture;
+    XGCValues gcv;
+    RImage *image;
+    char *file;
+
+    file = FindImage(wPreferences.pixmap_path, pixmap_file);
+    if (!file) {
+        wwarning(_("image file \"%s\" used as texture could not be found."),
+                 pixmap_file);
+	return NULL;
+    }
+    image = RLoadImage(scr->rcontext, file, 0);
+    if (!image) {
+	wwarning(_("could not load texture pixmap \"%s\":%s"), file,
+		 RMessageForError(RErrorCode));
+	free(file);
+	return NULL;
+    }
+    free(file);
+
+    texture = wmalloc(sizeof(WTexture));
+    memset(texture, 0, sizeof(WTexture));
+    texture->type = style;
+    
+    texture->opacity = opacity;
+
+    texture->color1 = *from;
+    texture->color2 = *to;
+
+    texture->normal.red = (from->red + to->red)<<7;
+    texture->normal.green = (from->green + to->green)<<7;
+    texture->normal.blue = (from->blue + to->blue)<<7;
+
+    XAllocColor(dpy, scr->w_colormap, &texture->normal);
+    gcv.background = gcv.foreground = texture->normal.pixel;
+    gcv.graphics_exposures = False;
+    texture->normal_gc = XCreateGC(dpy, scr->w_win, GCForeground|GCBackground
+				   |GCGraphicsExposures, &gcv);
+
+    texture->pixmap = image;
+
+    return texture;
+}
+
+
+
 RImage*
 wTextureRenderImage(WTexture *texture, int width, int height, int relief)
 {
     RImage *image;
-    RColor color1, color2;
+    RColor color1;
     int d;
     int subtype;
     
@@ -342,14 +400,9 @@ wTextureRenderImage(WTexture *texture, int width, int height, int relief)
      case WTEX_DGRADIENT:
 	subtype = RGRD_DIAGONAL;
      render_gradient:
-	color1.red = texture->gradient.color1.red >> 8;
-	color1.green = texture->gradient.color1.green >> 8;
-	color1.blue = texture->gradient.color1.blue >> 8;
-	color2.red = texture->gradient.color2.red >> 8;
-	color2.green = texture->gradient.color2.green >> 8;
-	color2.blue = texture->gradient.color2.blue >> 8;
 
-	image = RRenderGradient(width, height, &color1, &color2, subtype);
+	image = RRenderGradient(width, height, &texture->gradient.color1, 
+				&texture->gradient.color2, subtype);
 	break;
 	
      case WTEX_MHGRADIENT:
@@ -367,10 +420,43 @@ wTextureRenderImage(WTexture *texture, int width, int height, int relief)
 				     &(texture->mgradient.colors[1]),
 				     subtype);
 	break;
-	
+
+     case WTEX_THGRADIENT:
+	subtype = RGRD_HORIZONTAL;
+	goto render_tgradient;
+
+     case WTEX_TVGRADIENT:
+	subtype = RGRD_VERTICAL;
+	goto render_tgradient;
+
+     case WTEX_TDGRADIENT:
+	subtype = RGRD_DIAGONAL;
+     render_tgradient:
+	{
+	    RImage *grad;
+
+	    image = RMakeTiledImage(texture->tgradient.pixmap, width, height);
+	    if (!image)
+		break;
+
+	    grad = RRenderGradient(width, height, &texture->tgradient.color1,
+				   &texture->tgradient.color2, subtype);
+	    if (!grad) {
+		RDestroyImage(image);
+		image = NULL;
+		break;
+	    }
+
+	    RCombineImagesWithOpaqueness(image, grad,
+					 texture->tgradient.opacity);
+	    RDestroyImage(grad);
+	}
+	break;
+
      default:
 	puts("ERROR in wTextureRenderImage()");
 	image = NULL;
+	break;
     }
 
     if (!image) {

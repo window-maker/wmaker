@@ -34,6 +34,9 @@
 #include "actions.h"
 #include "properties.h"
 #include "stacking.h"
+#ifdef KWM_HINTS
+#include "kwm.h"
+#endif
 
 /*** Global Variables ***/
 extern XContext wStackContext;
@@ -162,7 +165,7 @@ CommitStacking(WScreen *scr)
  * 	Changes the stacking order of frame.
  *----------------------------------------------------------------------
  */
-static void
+void
 moveFrameToUnder(WCoreWindow *under, WCoreWindow *frame)
 {
     Window wins[2];
@@ -200,8 +203,8 @@ wRaiseFrame(WCoreWindow *frame)
 
     /* insert on top of other windows */
     while (wlist)
-      wlist = wlist->stacking->above;
-    
+	wlist = wlist->stacking->above;
+
     /* window is inserted before the point found */
     if (wlist==NULL) {
 	/* top most window (last on the list) */
@@ -262,7 +265,7 @@ wRaiseFrame(WCoreWindow *frame)
 		/* can't optimize */
 		above = frame->screen_ptr->stacking_list[i];
 		while (above->stacking->under)
-		  above = above->stacking->under;
+		    above = above->stacking->under;
 		break;
 	    }
 	}
@@ -274,6 +277,14 @@ wRaiseFrame(WCoreWindow *frame)
     } else {
 	moveFrameToUnder(frame->stacking->above, frame);
     }
+#ifdef KWM_HINTS
+    {
+	WWindow *wwin = wWindowFor(frame->window);
+
+	if (wwin)
+	    wKWMSendEventMessage(wwin, WKWMRaiseWindow);
+    }
+#endif
 }
 
 void
@@ -362,6 +373,14 @@ wLowerFrame(WCoreWindow *frame)
     } else {
 	moveFrameToUnder(frame->stacking->above, frame);
     }
+#ifdef KWM_HINTS
+    {
+	WWindow *wwin = wWindowFor(frame->window);
+
+	if (wwin)
+	    wKWMSendEventMessage(wwin, WKWMLowerWindow);
+    }
+#endif
 }
 
 
@@ -500,7 +519,7 @@ MoveInStackListAbove(WCoreWindow *next, WCoreWindow *frame)
 /*
  *----------------------------------------------------------------------
  * MoveInStackListUnder--
- * 	Moves the frame under "prev".
+ * 	Moves the frame to under "prev".
  * 
  * Returns:
  * 	None

@@ -2,8 +2,6 @@
 - during startup, transient windows should be miniaturized with their owners
   not in their own icons
 - stacking code is buggy (or XFree is buggy)
-- WINGs has problems in some platforms (SGI, Sun etc.) Anyone on these
-systems want to fix it?
 - save session doesnt work on some platforms (Alpha and Sparc)
 - texture pixmaps are being incorrectly freed somewhere. Either
 fix bug (to support broken MetroX servers) or remove all useless references

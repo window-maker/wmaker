@@ -162,9 +162,9 @@
 	"Arbeidsområder" END
 	"Utseende" MENU
 
-		"Temaer" OPEN_MENU THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Stiler" OPEN_MENU STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Ikon set" OPEN_MENU ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Temaer" OPEN_MENU -noext THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Stiler" OPEN_MENU -noext STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Ikon set" OPEN_MENU -noext ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Bakgrunn" MENU
 			"Ensfarget" MENU
                         	"Svart" WS_BACK '(solid, black)'
@@ -178,7 +178,7 @@
 				"Flagg"  WS_BACK '(mgradient, green, red, white, green)'
 				"Himmel" WS_BACK '(vgradient, blue4, white)'
 			"Overganger" END
-		"Bilder" OPEN_MENU BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/BackGrounds WITH wmsetbg -u -t
+		"Bilder" OPEN_MENU -noext BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/BackGrounds WITH wmsetbg -u -t
 		"Bakgrunn" END
 		"Lagre Tema" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
 		"Lagre Ikonsett" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"

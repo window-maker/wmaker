@@ -189,12 +189,12 @@ wfindfile(char *paths, char *file)
 	return NULL;
     
     if (*file=='/' || *file=='~' || *file=='$' || !paths) {
-	if (access(file, R_OK)<0) {
+	if (access(file, F_OK)<0) {
 	    fullpath = wexpandpath(file);
 	    if (!fullpath)
 		return NULL;
 	    
-	    if (access(fullpath, R_OK)<0) {
+	    if (access(fullpath, F_OK)<0) {
 		free(fullpath);
 		return NULL;
 	    } else {
@@ -219,7 +219,7 @@ wfindfile(char *paths, char *file)
 	fullpath = wexpandpath(path);
 	free(path);
 	if (fullpath) {
-	    if (access(fullpath, R_OK)==0) {
+	    if (access(fullpath, F_OK)==0) {
 		return fullpath;
 	    }
 	    free(fullpath);
@@ -243,12 +243,12 @@ wfindfileinlist(char **path_list, char *file)
 	return NULL;
     
     if (*file=='/' || *file=='~' || !path_list) {
-	if (access(file, R_OK)<0) {
+	if (access(file, F_OK)<0) {
 	    fullpath = wexpandpath(file);
 	    if (!fullpath)
 		return NULL;
 	    
-	    if (access(fullpath, R_OK)<0) {
+	    if (access(fullpath, F_OK)<0) {
 		free(fullpath);
 		return NULL;
 	    } else {
@@ -271,8 +271,8 @@ wfindfileinlist(char **path_list, char *file)
 	fullpath = wexpandpath(path);
 	free(path);
 	if (fullpath) {
-	    /* check if file is readable */
-	    if (access(fullpath, R_OK)==0) {
+	    /* check if file exists */
+	    if (access(fullpath, F_OK)==0) {
 		return fullpath;
 	    }
 	    free(fullpath);

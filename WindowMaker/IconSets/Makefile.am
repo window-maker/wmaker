@@ -1,15 +1,15 @@
 
 defsdatadir = $(pkgdatadir)/IconSets
 
-defsdata_DATA = Default
+defsdata_DATA = Default.iconset
 
 EXTRA_DIST = 
 
-CLEANFILES = Default
+CLEANFILES = Default.iconset
 
-Default: $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes ./Makefile
-	-rm -f Default
-	cp $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes Default
-	chmod 644 Default
+Default.iconset: $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes ./Makefile
+	-rm -f Default.iconset
+	cp $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes Default.iconset
+	chmod 644 Default.iconset
 
 

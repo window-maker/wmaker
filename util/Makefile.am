@@ -13,7 +13,7 @@ INCLUDES = @DFLAGS@ -I$(top_srcdir)/wrlib -I$(top_srcdir)/libPropList\
 	 @XCFLAGS@ @GFXFLAGS@ 
 
 # X_EXTRA_LIBS is for libproplist in systems that need -lsocket 
-liblist= -L$(top_builddir)/libPropList -lPropList @X_EXTRA_LIBS@ 
+liblist= $(top_builddir)/libPropList/libPropList.la @X_EXTRA_LIBS@ 
 
 
 wdwrite_LDADD = $(liblist)
@@ -30,8 +30,9 @@ seticons_LDADD= $(liblist)
 
 geticonset_LDADD= $(liblist)
 
-wmsetbg_LDADD = -L$(top_builddir)/libPropList -lPropList \
-	-L$(top_builddir)/wrlib -lwraster \
+wmsetbg_LDADD = $(top_builddir)/libPropList/libPropList.la \
+	$(top_builddir)/wrlib/libwraster.la \
+	$(top_builddir)/WINGs/libWINGs.a \
 	@GFXLFLAGS@ @XLFLAGS@ @GFXLIBS@ @XLIBS@ -lm 
 
 getstyle_SOURCES = getstyle.c
@@ -57,6 +58,7 @@ wmaker.inst: $(srcdir)/wmaker.inst.in ./Makefile
 	sed -e "s:#pkgdatadir#:$(pkgdatadir):" \
 		-e "s/#version#/$(VERSION)/" \
 		-e "s:#bindir#:$(bindir):" \
+		-e "s:#LITE#:@LITE@:" \
 			$(srcdir)/wmaker.inst.in >wmaker.inst
 
 	chmod 755 wmaker.inst

@@ -24,12 +24,28 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <proplist.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include <string.h>
 
 #include "../src/wconfig.h"
 
+
+char *FontOptions[] = {
+    "IconTitleFont",
+	"ClipTitleFont",
+	"DisplayFont",
+	"MenuTextFont",
+	"MenuTitleFont",
+	NULL
+};
+
+
+
 char *ProgName;
+int ignoreFonts = 0;
+
 
 char*
 defaultsPathForDomain(char *domain)
@@ -64,21 +80,196 @@ defaultsPathForDomain(char *domain)
 }
 
 
+void
+hackPaths(proplist_t style, char *prefix)
+{
+    proplist_t keys;
+    proplist_t key;
+    proplist_t value;
+    int i;
+
+
+    keys = PLGetAllDictionaryKeys(style);
+
+    for (i = 0; i < PLGetNumberOfElements(keys); i++) {
+	key = PLGetArrayElement(keys, i);
+
+	value = PLGetDictionaryEntry(style, key);
+	if (value && PLIsArray(value) && PLGetNumberOfElements(value) > 2) {
+	    proplist_t type;
+	    char *t;
+	    
+	    type = PLGetArrayElement(value, 0);
+	    t = PLGetString(type);
+	    if (t && (strcasecmp(t, "tpixmap")==0
+		      || strcasecmp(t, "spixmap")==0
+		      || strcasecmp(t, "cpixmap")==0
+		      || strcasecmp(t, "tvgradient")==0
+		      || strcasecmp(t, "thgradient")==0		
+		      || strcasecmp(t, "tdgradient")==0)) {
+		proplist_t file;
+		char buffer[4018];
+		
+		file = PLGetArrayElement(value, 1);
+		sprintf(buffer, "%s/%s", prefix, PLGetString(file));
+		PLRemoveArrayElement(value, 1);
+		PLInsertArrayElement(value, PLMakeString(buffer), 1);
+	    }
+	}
+    }
+    
+}
+
+
+
+/*
+ * since some of the options introduce incompatibilities, we will need
+ * to do a kluge here or the themes ppl will get real annoying.
+ * So, treat for the absence of the following options:
+ * IconTitleColor
+ * IconTitleBack
+ */
+void
+hackStyle(proplist_t style)
+{
+    proplist_t keys;
+    proplist_t tmp;
+    int i;
+    int foundIconTitle = 0;
+
+    keys = PLGetAllDictionaryKeys(style);
+
+    for (i = 0; i < PLGetNumberOfElements(keys); i++) {
+	char *str;
+
+	tmp = PLGetArrayElement(keys, i);
+	str = PLGetString(tmp);
+	if (str) {
+	    int j, found;
+
+	    for (j = 0, found = 0; FontOptions[j]!=NULL; j++) {
+		if (strcasecmp(str, FontOptions[j])==0) {
+		    PLRemoveDictionaryEntry(style, tmp);
+		    found = 1;
+		    break;
+		}
+	    } 
+	    if (found)
+		continue;
+
+	    if (strcasecmp(str, "IconTitleColor")==0
+		|| strcasecmp(str, "IconTitleBack")==0) {
+		foundIconTitle = 1;
+	    }
+	}
+    }
+
+    if (!foundIconTitle) {
+	/* set the default values */
+	tmp = PLGetDictionaryEntry(style, PLMakeString("FTitleColor"));
+	if (tmp) {
+	    PLInsertDictionaryEntry(style, PLMakeString("IconTitleColor"),
+				    tmp);
+	}
+
+	tmp = PLGetDictionaryEntry(style, PLMakeString("FTitleBack"));
+	if (tmp) {
+	    proplist_t type;
+	    proplist_t value;
+	    char *str;
+	    
+	    type = PLGetArrayElement(tmp, 0);
+	    if (!type)
+		return;
+
+	    value = NULL;
+	    
+	    str = PLGetString(type);
+	    if (strcasecmp(str, "solid")==0) {
+		value = PLGetArrayElement(tmp, 1);
+	    } else if (strcasecmp(str, "dgradient")==0
+		       || strcasecmp(str, "hgradient")==0
+		       || strcasecmp(str, "vgradient")==0) {
+		proplist_t c1, c2;
+		int r1, g1, b1, r2, g2, b2;
+		char buffer[32];
+
+		c1 = PLGetArrayElement(tmp, 1);
+		c2 = PLGetArrayElement(tmp, 2);
+		if (sscanf(PLGetString(c1), "#%2x%2x%2x", &r1, &g1, &b1)==3
+		    && sscanf(PLGetString(c2), "#%2x%2x%2x", &r2, &g2, &b2)==3) {
+		    sprintf(buffer, "#%2x%2x%2x", (r1+r2)/2, (g1+g2)/2,
+			    (b1+b2)/2);
+		    value = PLMakeString(buffer);
+		} else {
+		    value = c1;
+		}
+	    } else if (strcasecmp(str, "mdgradient")==0
+		       || strcasecmp(str, "mhgradient")==0
+		       || strcasecmp(str, "mvgradient")==0) {
+
+		value = PLGetArrayElement(tmp, 1);
+
+	    } else if (strcasecmp(str, "tpixmap")==0
+		       || strcasecmp(str, "cpixmap")==0
+		       || strcasecmp(str, "spixmap")==0) {
+
+		value = PLGetArrayElement(tmp, 2);
+	    }
+
+	    if (value) {
+		PLInsertDictionaryEntry(style, PLMakeString("IconTitleBack"),
+					value);
+	    }
+	}
+    }
+}
+
+
+BOOL
+StringCompareHook(proplist_t pl1, proplist_t pl2)
+{
+    char *str1, *str2;
+
+    str1 = PLGetString(pl1);
+    str2 = PLGetString(pl2);
+
+    if (strcasecmp(str1, str2)==0)
+      return YES;
+    else
+      return NO;
+}
+
+
+
+
 int 
 main(int argc, char **argv)
 {
     proplist_t prop, style;
     char *path;
+    struct stat statbuf;
 
     ProgName = argv[0];
     
-    if (argc!=2) {
-	printf("Syntax:\n%s <style file>\n", argv[0]);
+    if (argc<2) {
+	printf("Syntax:\n%s [-nofonts] <style file>\n", argv[0]);
 	exit(1);
     }
+
+    if (argc == 3) {
+	if (strcmp(argv[1], "-nofonts")==0) {
+	    ignoreFonts = 1;
+	} else {
+	    printf("Syntax:\n%s <style file> [-nofonts]\n", argv[0]);
+	    exit(1);	    
+	}
+    }
+
+    PLSetStringCmpHook(StringCompareHook);
     
     path = defaultsPathForDomain("WindowMaker");
-    
+
     prop = PLGetProplistWithPath(path);
     if (!prop) {
 	printf("%s:could not load WindowMaker configuration file \"%s\".\n", 
@@ -86,11 +277,60 @@ main(int argc, char **argv)
 	exit(1);
     }
 
-    style = PLGetProplistWithPath(argv[1]);
-    if (!style) {
-	printf("%s:could not load style file \"%s\".\n", ProgName, argv[1]);
+    if (stat(argv[argc-1], &statbuf) < 0) {
+	perror(argv[argc-1]);
 	exit(1);
     }
+
+    if (S_ISDIR(statbuf.st_mode)) {
+	char buffer[4018];
+	char *prefix;
+
+	if (*argv[argc-1] != '/') {
+	    if (!getcwd(buffer, 4000)) {
+		printf("%s: complete path for %s is too long\n", ProgName,
+		       argv[argc-1]);
+		exit(1);
+	    }
+	    if (strlen(buffer) + strlen(argv[argc-1]) > 4000) {
+		printf("%s: complete path for %s is too long\n", ProgName,
+		       argv[argc-1]);
+		exit(1);
+	    }
+	    strcat(buffer, "/");
+	} else {
+	    buffer[0] = 0;
+	}
+	strcat(buffer, argv[argc-1]);
+
+	prefix = malloc(strlen(buffer)+10);
+	if (!prefix) {
+	    printf("%s: out of memory\n", ProgName);
+	    exit(1);
+	}
+	strcpy(prefix, buffer);
+
+	strcat(buffer, "/style");
+	
+	style = PLGetProplistWithPath(buffer);
+	if (!style) {
+	    printf("%s:could not load style file \"%s\".\n", ProgName, 
+		   buffer);
+	    exit(1);
+	}
+
+	hackPaths(style, prefix);
+	free(prefix);
+    } else {
+	style = PLGetProplistWithPath(argv[argc-1]);
+	if (!style) {
+	    printf("%s:could not load style file \"%s\".\n", ProgName, 
+		   argv[argc-1]);
+	    exit(1);
+	}
+    }
+
+    hackStyle(style);
 
     PLMergeDictionaries(prop, style);
     

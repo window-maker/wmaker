@@ -32,7 +32,7 @@ typedef struct WWorkspace {
 
 void wWorkspaceMake(WScreen *scr, int count);
 int wWorkspaceNew(WScreen *scr);
-void wWorkspaceDeleteLast(WScreen *scr);
+Bool wWorkspaceDelete(WScreen *scr, int workspace);
 void wWorkspaceChange(WScreen *scr, int workspace);
 void wWorkspaceForceChange(WScreen *scr, int workspace);
 
@@ -46,5 +46,7 @@ void wWorkspaceSaveState(WScreen *scr, proplist_t old_state);
 void wWorkspaceRestoreState(WScreen *scr);
 
 void wWorkspaceRename(WScreen *scr, int workspace, char *name);
+
+void wWorkspaceRelativeChange(WScreen *scr, int amount);
 
 #endif

@@ -19,7 +19,6 @@ void main(int argc, char **argv)
 	puts("cant open display");
 	exit(1);
     }
-
     attr.flags = RC_RenderMode | RC_ColorsPerChannel;
     attr.render_mode = RM_DITHER;
     attr.colors_per_channel = 4;

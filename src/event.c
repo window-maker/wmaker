@@ -35,8 +35,7 @@
 #include <X11/extensions/shape.h>
 #endif
 #ifdef XDE_DND
-#include <X11/Xatom.h>
-#include <gdk/gdk.h>
+#include "xde.h"
 #endif
 
 #ifdef KEEP_XKB_LOCK_STATUS     
@@ -57,7 +56,12 @@
 #include "framewin.h"
 #include "properties.h"
 #include "balloon.h"
-
+#ifdef GNOME_STUFF
+# include "gnome.h"
+#endif
+#ifdef KWM_HINTS
+# include "kwm.h"
+#endif
 
 /******** Global Variables **********/
 extern XContext wWinContext;
@@ -82,14 +86,6 @@ extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
 
 #ifdef OFFIX_DND
 extern Atom _XA_DND_PROTOCOL;
-#endif
-#ifdef XDE_DND
-extern Atom _XA_XDE_REQUEST;
-extern Atom _XA_XDE_ENTER;
-extern Atom _XA_XDE_LEAVE;
-extern Atom _XA_XDE_DATA_AVAILABLE;
-extern Atom _XDE_FILETYPE;
-extern Atom _XDE_URLTYPE;
 #endif
 
 
@@ -204,41 +200,23 @@ wDeleteDeathHandler(WMagicNumber id)
 void
 DispatchEvent(XEvent *event)
 {
-    int i;
-
     if (deathHandler)
 	handleDeadProcess(NULL);
     
     if (WProgramState==WSTATE_NEED_EXIT) {
 	WProgramState = WSTATE_EXITING;
-
+	/* received SIGTERM */
 	/* 
 	 * WMHandleEvent() can't be called from anything
 	 * executed inside here, or we can get in a infinite
 	 * recursive loop.
 	 */
-	for (i=0; i<wScreenCount; i++) {
-	    WScreen *scr;
-	    scr = wScreenWithNumber(i);
-	    if (scr) {
-		wScreenSaveState(scr);
-	    }
-	}
-	RestoreDesktop(NULL);
-	ExecExitScript();
-	/* received SIGTERM */
-	Exit(0);
+	Shutdown(WSExitMode);
+
     } else if (WProgramState == WSTATE_NEED_RESTART) {
 	WProgramState = WSTATE_RESTARTING;
 
-	for (i=0; i<wScreenCount; i++) {
-	    WScreen *scr;
-	    scr = wScreenWithNumber(i);
-	    if (scr) {
-		wScreenSaveState(scr);
-	    }
-	}
-	RestoreDesktop(NULL);
+	Shutdown(WSRestartPreparationMode);
 	/* received SIGHUP */
 	Restart(NULL);
     }
@@ -267,7 +245,7 @@ DispatchEvent(XEvent *event)
 	break;
 
      case DestroyNotify:
-	handleDestroyNotify(event->xdestroywindow.window);
+	handleDestroyNotify(event);
 	break;
 	
      case MapNotify:
@@ -464,6 +442,7 @@ handleExtensions(XEvent *event)
 #endif	
 }
 
+
 static void 
 handleMapRequest(XEvent *ev)
 {
@@ -477,6 +456,9 @@ handleMapRequest(XEvent *ev)
 
     if ((wwin=wWindowFor(window))) {
 	/* deiconify window */
+	if (wwin->flags.maximized) {
+	    wMaximizeWindow(wwin, wwin->flags.maximized);
+	}
 	if (wwin->flags.shaded)
 	    wUnshadeWindow(wwin);
 	if (wwin->flags.miniaturized) {
@@ -513,6 +495,7 @@ handleMapRequest(XEvent *ev)
 	else
 	  wDockTrackWindowLaunch(scr->last_dock, window);
     }
+
 
     if (wwin) {
 	int state;
@@ -558,10 +541,12 @@ handleMapRequest(XEvent *ev)
 
 
 static void
-handleDestroyNotify(Window window)
+handleDestroyNotify(XEvent *event)
 {
     WWindow *wwin;
     WApplication *app;
+    Window window = event->xdestroywindow.window;
+
 #ifdef DEBUG
     puts("got destroy notify");
 #endif	    
@@ -585,6 +570,10 @@ handleDestroyNotify(Window window)
 	}
 	wApplicationDestroy(app);
     }
+    
+#ifdef KWM_HINTS
+    wKWMCheckDestroy(&event->xdestroywindow);
+#endif
 }
 
 
@@ -629,6 +618,7 @@ handleButtonPress(XEvent *event)
     wBalloonHide(scr);
 #endif
 
+#ifndef LITE
     if (event->xbutton.window==scr->root_win) {
 	if (event->xbutton.button==wPreferences.menu_button) {
 	    OpenRootMenu(scr, event->xbutton.x_root,
@@ -641,7 +631,6 @@ handleButtonPress(XEvent *event)
 		  event->xbutton.window = scr->root_menu->frame->core->window;
 	    }
 	} else if (event->xbutton.button==wPreferences.windowl_button) {
-	    
 	    OpenSwitchMenu(scr, event->xbutton.x_root,
 			   event->xbutton.y_root, False);
 	    if (scr->switch_menu) {
@@ -651,24 +640,23 @@ handleButtonPress(XEvent *event)
 		  event->xbutton.window = scr->switch_menu->frame->core->window;
 	    }
 	} else if (event->xbutton.button==wPreferences.select_button) {
-	    
+
 	    wUnselectWindows(scr);
 	    wSelectWindows(scr, event);
 	}
 #ifdef MOUSE_WS_SWITCH
 	else if (event->xbutton.button==Button4) {
 
-	    if (scr->current_workspace > 0)
-		wWorkspaceChange(scr, scr->current_workspace-1);
+	    wWorkspaceRelativeChange(scr, -1);
 
 	} else if (event->xbutton.button==Button5) {
 
-	    if (scr->current_workspace < scr->workspace_count-1)
-		wWorkspaceChange(scr, scr->current_workspace+1);
-
+	    wWorkspaceRelativeChange(scr, 1);
+	    
 	}
 #endif /* MOUSE_WS_SWITCH */
     }
+#endif /* !LITE */
 
     if (XFindContext(dpy, event->xbutton.subwindow, wWinContext,
 		     (XPointer *)&desc)==XCNOENT) {
@@ -820,6 +808,7 @@ handlePropertyNotify(XEvent *event)
     Window jr;
     int ji;
     unsigned int ju;
+    WScreen *scr;
 
 #ifdef DEBUG
     puts("got property notify");
@@ -834,6 +823,13 @@ handlePropertyNotify(XEvent *event)
     wapp = wApplicationOf(event->xproperty.window);
     if (wapp) {
 	wClientCheckProperty(wapp->main_window_desc, &event->xproperty);
+    }
+    
+    scr = wScreenForRootWindow(event->xproperty.window);
+    if (scr) {
+#ifdef KWM_HINTS
+	wKWMCheckRootHintChange(scr, &event->xproperty);
+#endif
     }
 }
 
@@ -899,83 +895,17 @@ handleClientMessage(XEvent *event)
 		}
 	    }
 	}
+#ifdef GNOME_STUFF
+    } else if (wGNOMEProcessClientMessage(&event->xclient)) {
+	/* do nothing */
+#endif /* GNOME_STUFF */
+#ifdef KWM_HINTS
+    } else if (wKWMProcessClientMessage(&event->xclient)) {
+	/* do nothing */
+#endif /* KWM_HINTS */
 #ifdef XDE_DND
-    } else if (event->xclient.message_type==_XA_XDE_DATA_AVAILABLE) {
-	GdkEvent gdkev;
-	WScreen *scr = wScreenForWindow(event->xclient.window);
-	Atom tmpatom;
-	int datalenght;
-	long tmplong;
-	char * tmpstr, * runstr, * freestr, * tofreestr;
-	    printf("x\n");
-	gdkev.dropdataavailable.u.allflags = event->xclient.data.l[1];
-	gdkev.dropdataavailable.timestamp = event->xclient.data.l[4];
-
-	if(gdkev.dropdataavailable.u.flags.isdrop){
-		gdkev.dropdataavailable.type = GDK_DROP_DATA_AVAIL;
-		gdkev.dropdataavailable.requestor = event->xclient.data.l[0];
-		XGetWindowProperty(dpy,gdkev.dropdataavailable.requestor,
-				event->xclient.data.l[2],
-				0, LONG_MAX -1,
-				0, XA_PRIMARY, &tmpatom,
-				&datalenght,
-				&gdkev.dropdataavailable.data_numbytes,
-				&tmplong,
-				&tmpstr);
-		datalenght=gdkev.dropdataavailable.data_numbytes-1;
-		tofreestr=tmpstr;
-		runstr=NULL;
-                for(;datalenght>0;datalenght-=(strlen(tmpstr)+1),tmpstr=&tmpstr[strlen(tmpstr)+1]){
-		freestr=runstr;runstr=wstrappend(runstr,tmpstr);free(freestr);
-		freestr=runstr;runstr=wstrappend(runstr," ");free(freestr);
-		}
-                free(tofreestr);
-		scr->xdestring=runstr;
-		/* no need to redirect ? */
-	        wDockReceiveDNDDrop(scr,event);
-		free(runstr);
-		scr->xdestring=NULL;
-	}
-
-    } else if (event->xclient.message_type==_XA_XDE_LEAVE) {
-	    printf("leave\n");
-    } else if (event->xclient.message_type==_XA_XDE_ENTER) {
-	GdkEvent gdkev;
-	XEvent replyev;
-
-	gdkev.dropenter.u.allflags=event->xclient.data.l[1];
-	printf("from win %x\n",event->xclient.data.l[0]);
-	printf("to win %x\n",event->xclient.window);
-        printf("enter %x\n",event->xclient.data.l[1]);
-        printf("v %x ",event->xclient.data.l[2]);
-        printf("%x ",event->xclient.data.l[3]);
-        printf("%x\n",event->xclient.data.l[4]);
-
-	if(event->xclient.data.l[2]==_XDE_FILETYPE ||
-	   event->xclient.data.l[3]==_XDE_FILETYPE ||
-	   event->xclient.data.l[4]==_XDE_FILETYPE ||
-	   event->xclient.data.l[2]==_XDE_URLTYPE ||
-	   event->xclient.data.l[3]==_XDE_URLTYPE ||
-	   event->xclient.data.l[4]==_XDE_URLTYPE)
-        if(gdkev.dropenter.u.flags.sendreply){
-		/*reply*/
-            replyev.xclient.type = ClientMessage;
-            replyev.xclient.window = event->xclient.data.l[0];
-            replyev.xclient.format = 32;
-            replyev.xclient.message_type = _XA_XDE_REQUEST;
-            replyev.xclient.data.l[0] = event->xclient.window;
-
-            gdkev.dragrequest.u.allflags = 0;
-            gdkev.dragrequest.u.flags.protocol_version = 0;
-            gdkev.dragrequest.u.flags.willaccept = 1;
-            gdkev.dragrequest.u.flags.delete_data = 0;
-
-            replyev.xclient.data.l[1] = gdkev.dragrequest.u.allflags;
-            replyev.xclient.data.l[2] = replyev.xclient.data.l[3] = 0;
-            replyev.xclient.data.l[4] = event->xclient.data.l[2];
-            XSendEvent(dpy, replyev.xclient.window, 0, NoEventMask, &replyev);
-            XSync(dpy, 0);
-        }
+    } else if (wXDEProcessClientMessage(&event->xclient)) {
+	/* do nothing */
 #endif /* XDE_DND */
 #ifdef OFFIX_DND
     } else if (event->xclient.message_type==_XA_DND_PROTOCOL) {
@@ -1090,7 +1020,7 @@ handleEnterNotify(XEvent *event)
 		WMDeleteTimerHandler(scr->autoRaiseTimer);
 	    scr->autoRaiseTimer = NULL;
 	    
-	    if (wPreferences.raise_delay && !wwin->window_flags.no_focusable) {
+	    if (wPreferences.raise_delay && !WFLAGP(wwin, no_focusable)) {
 		scr->autoRaiseWindow = wwin->frame->core->window;
 		scr->autoRaiseTimer
 		    = WMAddTimerHandler(wPreferences.raise_delay,
@@ -1321,7 +1251,14 @@ handleKeyPress(XEvent *event)
     }
     
     if (command < 0) {
+#ifdef LITE
+	{ 
+#if 0
+	}
+#endif
+#else
 	if (!wRootMenuPerformShortcut(event)) {
+#endif
 	    static int dontLoop = 0;
 	    
 	    if (dontLoop > 10) {
@@ -1346,27 +1283,29 @@ handleKeyPress(XEvent *event)
 #define ISFOCUSED(w) ((w) && (w)->flags.focused)
 
     switch (command) {
+#ifndef LITE
      case WKBD_ROOTMENU:
 	OpenRootMenu(scr, event->xkey.x_root, event->xkey.y_root, True);
 	break;
+     case WKBD_WINDOWLIST:
+	OpenSwitchMenu(scr, event->xkey.x_root, event->xkey.y_root, True);
+	break;
+#endif /* !LITE */
      case WKBD_WINDOWMENU:
 	if (ISMAPPED(wwin) && ISFOCUSED(wwin))
 	    OpenWindowMenu(wwin, wwin->frame_x, 
 			   wwin->frame_y+wwin->frame->top_width, True);
 	break;
-     case WKBD_WINDOWLIST:
-	OpenSwitchMenu(scr, event->xkey.x_root, event->xkey.y_root, True);
-	break;
      case WKBD_MINIATURIZE:
-	if (ISMAPPED(wwin) && ISFOCUSED(wwin)) {
+	if (ISMAPPED(wwin) && ISFOCUSED(wwin) 
+	    && !WFLAGP(wwin, no_miniaturizable)) {
 	    CloseWindowMenu(scr);
 	    
 	    if (wwin->protocols.MINIATURIZE_WINDOW)
 	      	wClientSendProtocol(wwin, _XA_GNUSTEP_WM_MINIATURIZE_WINDOW,
 				    event->xbutton.time);
 	    else {
-		if (!wwin->window_flags.no_miniaturizable)
-		    wIconifyWindow(wwin);
+		wIconifyWindow(wwin);
 	    }
 	}
 	break;
@@ -1375,14 +1314,13 @@ handleKeyPress(XEvent *event)
 	    WApplication *wapp = wApplicationOf(wwin->main_window);
 	    CloseWindowMenu(scr);
 	    
-	    if (wapp && !wapp->main_window_desc->window_flags.no_appicon) {
+	    if (wapp && !WFLAGP(wapp->main_window_desc, no_appicon)) {
 		wHideApplication(wapp);
 	    }
 	}
 	break;
      case WKBD_MAXIMIZE:
-	if (ISMAPPED(wwin) && ISFOCUSED(wwin) 
-	    && !wwin->window_flags.no_resizable) {
+	if (ISMAPPED(wwin) && ISFOCUSED(wwin) && !WFLAGP(wwin, no_resizable)) {
 	    CloseWindowMenu(scr);
 	    
 	    if (wwin->flags.maximized) {
@@ -1393,8 +1331,7 @@ handleKeyPress(XEvent *event)
 	}
 	break;
      case WKBD_VMAXIMIZE:
-	if (ISMAPPED(wwin) && ISFOCUSED(wwin)
-	    && !wwin->window_flags.no_resizable) {
+	if (ISMAPPED(wwin) && ISFOCUSED(wwin) && !WFLAGP(wwin, no_resizable)) {
 	    CloseWindowMenu(scr);
 	    
 	    if (wwin->flags.maximized) {
@@ -1427,17 +1364,22 @@ handleKeyPress(XEvent *event)
 	    wRaiseLowerFrame(wwin->frame->core);
 	break;
      case WKBD_SHADE:
-	if (ISMAPPED(wwin) && ISFOCUSED(wwin)
-	    && !wwin->window_flags.no_shadeable) {
+	if (ISMAPPED(wwin) && ISFOCUSED(wwin) && !WFLAGP(wwin, no_shadeable)) {
 	    if (wwin->flags.shaded)
 		wUnshadeWindow(wwin);
 	    else
 		wShadeWindow(wwin);
 	}
 	break;
+     case WKBD_MOVERESIZE:
+	if (ISMAPPED(wwin) && ISFOCUSED(wwin)) {
+	    CloseWindowMenu(scr);
+	    
+	    wKeyboardMoveResizeWindow(wwin);
+	}
+	break;
      case WKBD_CLOSE:
-	if (ISMAPPED(wwin) && ISFOCUSED(wwin)
-	    && !wwin->window_flags.no_closable) {
+	if (ISMAPPED(wwin) && ISFOCUSED(wwin) && !WFLAGP(wwin, no_closable)) {
 	    CloseWindowMenu(scr);
 	    if (wwin->protocols.DELETE_WINDOW)
 	      wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW,
@@ -1490,26 +1432,23 @@ handleKeyPress(XEvent *event)
     GOTOWORKS(10);
 #undef GOTOWORKS
      case WKBD_NEXTWORKSPACE:
-	if (scr->current_workspace < scr->workspace_count-1)
-            wWorkspaceChange(scr, scr->current_workspace+1);
-        else if (scr->current_workspace == scr->workspace_count-1) {
-            if (wPreferences.ws_advance &&
-                scr->current_workspace < MAX_WORKSPACES-1)
-                wWorkspaceChange(scr, scr->current_workspace+1);
-            else if (wPreferences.ws_cycle)
-                wWorkspaceChange(scr, 0);
-        }
+	wWorkspaceRelativeChange(scr, 1);
 	break;
      case WKBD_PREVWORKSPACE:
-	if (scr->current_workspace > 0)
-	    wWorkspaceChange(scr, scr->current_workspace-1);
-        else if (scr->current_workspace==0 && wPreferences.ws_cycle)
-            wWorkspaceChange(scr, scr->workspace_count-1);
+	wWorkspaceRelativeChange(scr, -1);
 	break;
      case WKBD_WINDOW1:
      case WKBD_WINDOW2:
      case WKBD_WINDOW3:
      case WKBD_WINDOW4:
+#ifdef EXTEND_WINDOWSHORTCUT
+     case WKBD_WINDOW5:
+     case WKBD_WINDOW6:
+     case WKBD_WINDOW7:
+     case WKBD_WINDOW8:
+     case WKBD_WINDOW9:
+     case WKBD_WINDOW10:
+#endif
         if (scr->shortcutWindow[command-WKBD_WINDOW1]) {
             wMakeWindowVisible(scr->shortcutWindow[command-WKBD_WINDOW1]);
         } else if (wwin && ISMAPPED(wwin) && ISFOCUSED(wwin)) {

@@ -69,6 +69,9 @@ I18N = @I18N@
 I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
+LD = @LD@
+LIBTOOL = @LIBTOOL@
+LITE = @LITE@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
@@ -92,7 +95,7 @@ wprefsdir = @wprefsdir@
 
 defsdatadir = $(pkgdatadir)/Backgrounds
 
-defsdata_DATA = BlueImage.jpeg SeaNight.jpeg BlueWaves.jpeg
+defsdata_DATA = BlueImage.jpeg 
 
 EXTRA_DIST = $(defsdata_DATA)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -193,6 +196,7 @@ clean:  clean-generic mostlyclean
 
 distclean:  distclean-generic clean
 	-rm -f config.status
+	-rm -f libtool
 
 maintainer-clean:  maintainer-clean-generic distclean
 	@echo "This command is intended for maintainers to use;"

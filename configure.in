@@ -10,13 +10,9 @@ dnl
 
 AC_INIT(src/WindowMaker.h)
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.20.3)
+AM_INIT_AUTOMAKE(WindowMaker, 0.50.0)
 
-
-dnl Shared Library Versions
-
-#WINGS_VER=0.0.1
-#WRASTER_VER=0.0.1
+AM_PROG_LIBTOOL
 
 
 dnl configure/build bundled libraries
@@ -37,7 +33,7 @@ dnl ===================
 AC_ISC_POSIX
 AC_PROG_CC
 AC_PROG_MAKE_SET
-AC_PROG_RANLIB
+#AC_PROG_RANLIB
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_GCC_TRADITIONAL
@@ -209,23 +205,45 @@ if test "x$NLSDIR" = "x"; then
 	fi
 fi
 
-dnl Put it back once we have some real gnome support...
-dnl
-dnl AC_ARG_WITH(gnome, 
-dnl	[  --enable-gnome            enable support for GNOME extensions ],
-dnl	[enable_gnome=$withval], [enable_gnome=yes])
-dnl if test "$enable_gnome" = yes; then
-dnl 	GNOME="#define GNOME"
-dnl else
-dnl	GNOME="#undef GNOME"
-dnl fi
-dnl AC_SUBST(GNOME)
 
 AC_SUBST(I18N)
 AC_SUBST(INTLIBS)
 AC_SUBST(NLSDIR)
 AC_SUBST(MOFILES)
 AC_SUBST(WPMOFILES)
+
+
+
+dnl Support for various hint things
+dnl ===============================
+
+
+AC_ARG_ENABLE(gnome,
+  [  --enable-gnome           enable stuff needed for GNOME ],
+  [if test x$enableval = xyes; then
+    AC_DEFINE(GNOME_STUFF)
+    gnome_on=yes
+  fi])
+
+
+AC_ARG_ENABLE(kde,
+  [  --enable-kde             enable support for KDE window manager (kwm) hints ],
+  [if test x$enableval = xyes; then
+    AC_DEFINE(KWM_HINTS)
+    kde_on=yes
+  fi])
+
+
+dnl
+dnl Disable some stuff that are duplicated in kde
+dnl ---------------------------------------------
+LITE=
+AC_ARG_ENABLE(lite,
+  [  --enable-lite             disable stuff duplicated in KDE/GNOME ],
+  [if test x$enableval = xyes; then
+	LITE=-DLITE
+  fi])
+AC_SUBST(LITE)
 
 
 dnl ===========================================
@@ -353,21 +371,16 @@ dnl ===============================================
 dnl 		End of stuff that uses X
 dnl ===============================================
 
-dnl test for zlib
-dnl =============
-
-AC_CHECK_LIB(z, gzread, zlib=yes, zlib=no, $GFX_INC_PATH $GFXLFLAGS $XLFLAGS)
-
 
 dnl PNG Support
 dnl ===========
 png=yes
 AC_ARG_ENABLE(png, 
 [  --disable-png	  	  disable PNG support through libpng],
-	png=$enableval, png=yes)
+	png=$enableval, png=yes, png=no)
 
 
-if test "$png" = yes -a "$zlib" = yes ; then
+if test "$png" = yes ; then
     AC_CHECK_LIB(png, png_get_valid, my_libok=yes, my_libok=no,
 		$GFX_INC_PATH $GFXLFLAGS $XLFLAGS -lz -lm)
 
@@ -387,7 +400,7 @@ dnl ============
 jpeg=yes
 AC_ARG_ENABLE(jpeg,
 [  --disable-jpeg	  disable JPEG support through libjpeg],
-	jpeg=$enableval, jpeg=yes)
+	jpeg=$enableval, jpeg=yes, jpeg=no)
 
 if test "$jpeg" = yes; then
 	AC_CHECK_LIB(jpeg, jpeg_destroy_compress, my_libok=yes, my_libok=no,
@@ -398,7 +411,7 @@ if test "$jpeg" = yes; then
 	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH $XCFLAGS"
 	AC_TRY_CPP(jpeglib.h,
 		[GFXLIBS="$GFXLIBS -ljpeg" GFXFLAGS="$GFXFLAGS -DUSE_JPEG"
-		supported_gfx="$supported_gfx JPEG"], )
+		supported_gfx="$supported_gfx JPEG"], jpeg_not_found=yes)
 	CPPFLAGS=$my_old_cppflags
     fi
 fi
@@ -409,10 +422,10 @@ dnl ============
 dnl
 dnl giflib uses dangerous function naming... (namespace clashing)
 dnl
-jpeg=yes
+gif=yes
 AC_ARG_ENABLE(gif,
 [  --disable-gif           disable GIF support through libgif or libungif],
-	gif=$enableval, gif=yes)
+	gif=$enableval, gif=yes, gif=no)
 
 if test "$gif" = yes; then
 	retry=no
@@ -446,7 +459,7 @@ dnl TIFF Support
 dnl ============
 AC_ARG_ENABLE(tiff, 
 [  --disable-tiff	  disable use of TIFF images through libtiff],
-	tif=$enableval, tif=yes)
+	tif=$enableval, tif=yes, tif=no)
 
 #
 # TIFF can optionally have JPEG and/or zlib support. Must find out
@@ -468,11 +481,9 @@ dnl Retry with zlib
 dnl
     unset ac_cv_lib_tiff_TIFFGetVersion
     if test "$my_libok" = no; then
-    	if test "$zlib" = "yes"; then
-    	    AC_CHECK_LIB(tiff, TIFFGetVersion,
+    	AC_CHECK_LIB(tiff, TIFFGetVersion,
 	    	[my_libok=yes my_libname="-ltiff -lz"], my_libok=no,
 		[$GFX_INC_PATH $GFXLFLAGS $XLFLAGS $XLIBS $GFXLIBS -lz -lm])
-	fi
     fi
     
     if test "$my_libok" = no; then
@@ -580,6 +591,7 @@ wprefsdir=$with_appspath/WPrefs.app
 AC_SUBST(wprefsdir)
 
 
+
 dnl Enable single appicon per wm instance+class combo -cls
 dnl =====================================================
 AC_ARG_ENABLE(single-icon,
@@ -594,11 +606,13 @@ fi,
 )	
 AC_SUBST(REDUCE_APPICONS)
 
+
 dnl Checks for header files.
 dnl =======================
 dnl AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h sys/time.h sys/types.h libintl.h sys/select.h)
+AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h sys/time.h sys/types.h\
+		libintl.h sys/select.h poll.h)
 
 
 
@@ -709,10 +723,12 @@ dnl AC_SUBST(DOCTYPES)
 AC_OUTPUT(Makefile po/Makefile util/Makefile test/Makefile wmlib/Makefile \
 	WINGs/Makefile WINGs/Resources/Makefile src/Makefile src/wconfig.h \
 	wrlib/Makefile doc/Makefile WindowMaker/Makefile \
-	WindowMaker/Defaults/Makefile WindowMaker/Styles/Makefile \
-	WindowMaker/Themes/Makefile WindowMaker/Backgrounds/Makefile \
-	WindowMaker/Pixmaps/Makefile WindowMaker/Icons/Makefile \
-	WindowMaker/IconSets/Makefile \
+	WindowMaker/Backgrounds/Makefile WindowMaker/Defaults/Makefile \
+	WindowMaker/IconSets/Makefile WindowMaker/Icons/Makefile \
+	WindowMaker/Pixmaps/Makefile WindowMaker/Styles/Makefile \
+	WindowMaker/Themes/Makefile \
+	WindowMaker/Themes/Night.themed/Makefile \
+	WindowMaker/Themes/Checker.themed/Makefile \
 	WPrefs.app/Makefile WPrefs.app/tiff/Makefile WPrefs.app/xpm/Makefile \
 	WPrefs.app/po/Makefile )
 
@@ -725,7 +741,7 @@ dnl
 
 echo "WFLAGS=\"$LIBPL_INC_PATH -I$prefix/include\"" > WINGs-flags
 echo "WLIBS=\"-L$exec_prefix/lib -lWINGs -lwraster $LIBPL_LIBS $GFXLIBS -lm\""\
-	 >> WINGs-flags
+	| sed -e 's|\$(prefix)|'"$prefix|" >> WINGs-flags
 
 
 dnl
@@ -750,7 +766,22 @@ echo "Graphic format libraries: $supported_gfx"
 echo "Sound support: $sound"
 echo "Translated message files to install: $mof"
 if test "x$MOFILES" != "x"; then
-	echo "Installation path of translated messages: $NLSDIR"
+	echo "Installation path of translated messages: $NLSDIR" | sed -e 's|\$(prefix)|'"$prefix|"
+fi
+if test x$kde_on != x; then
+	echo "KDE support enabled"
+fi
+if test x$LITE != x; then
+	echo "Duplicated stuff with KDE will be removed"
+fi 
+if test x$gnome_on != x; then
+	echo "GNOME support enabled"
+fi
+
+if test "$jpeg_not_found" = yes; then
+echo "JPEG support will not be included because the JPEG library is"
+echo "not installed correctly or was not found. Background images"
+echo "from themes will not display as they usually are JPEG files."
 fi
 
 

@@ -1,0 +1,155 @@
+/*
+ * WindowMaker Fomenu konfiguracioja
+ *
+ * Szintakszis:
+ *
+ * <Title> [SHORTCUT <Shortcut>] <Command> <Parameters>
+ *
+ * <Title> egy szoveg, amelyet cimkent kell hasznalni. Ha tartalmaz space-t,
+ * akkor idezojelbe ("... ...") kell tenni.	
+ * 
+ * <Command> az itt kovetkezo utasitasok valamelyike: 
+ *	MENU - kezdi a/az (al)menudefiniciot
+ *	END  - befejezi a/az (al)menudefiniciot
+ *	WORKSPACE_MENU - a munkafelulet kezelesehez almenuket illeszt be
+ *	EXEC <program> - egy kulso programot indit el
+ *	EXIT - kilepes az ablakmanagerbol
+ *	RESTART [<window manager>] - ujrainditja a WindowMaker-t vagy elindit
+ *                                   egy ablakmanagert
+ *	REFRESH - a kepernyo tartalmat frissiti
+ *	ARRANGE_ICONS - a munkafelulet ikonjait ujrarendezi
+ *	SHUTDOWN - minden alkalmazast bezar
+ *	SHOW_ALL - minden alkalmazast visszahoz a munkafeluletre
+ *	HIDE_OTHERS - a munkafeluleten (a pillanatnyilag aktiv kivetelevel)
+ *		      minden ablakot elrejt
+ *
+ * <Parameters> a vegrehajthato program
+ *
+ * ** EXEC parancssor leirasa
+ * %s - a megadott helyre beszurja a kijelolt szoveget. Ha nincs szoveg 
+ *      kijelolve, a parancs torlodik.
+ * %a(message) - megnyit egy beviteli mezot a megadott szoveggel
+ * %w - a megadott helyre beilleszti az aktualis ablak ID-jet. Ha nincs semmi 
+ *      kijelolve, akkor nem illeszt be semmit.
+ *
+ * A % illetve " jeleket hatastalanitani lehet a \ jellel.
+ * Peldaul: xterm -T "\"Hello World\""
+ *
+ * Minden MENU utasitashoz kell egy END utasitasnak tartoznia.
+ *
+ * Peldaul:
+ *
+ * "Test" MENU
+ *	"XTerm" EXEC xterm
+ *	"XView apps" OPEN_MENU "/usr/openwin/bin"
+ *	"X11 apps" OPEN_MENU /usr/X11/bin ~/bin/X11
+ *	"Background" OPEN_MENU ~/images /usr/share/images WITH wmsetbg -u -t
+ *	"Style" OPEN_MENU style.menu
+ * "Test" END
+ */
+
+#include "wmmacros"
+
+"Alkalmazasok" MENU
+	"Informacio" MENU
+		"Informacios..." INFO_PANEL
+		"Jogi..." LEGAL_PANEL
+		"Rendszer konzol" EXEC xconsole
+		"Rendszer kihasznaltsag" EXEC xosview || xload
+		"Process lista" EXEC xterm -e top
+		"Manual bongeszo" EXEC xman
+	"Informacio" END
+	"XTerminal" EXEC xterm -sb 
+	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
+	"Munkafeluletek" WORKSPACE_MENU
+	"Alkalmazasok" MENU
+		"Grafikai" MENU
+			"Gimp" EXEC gimp >/dev/null
+			"XV" EXEC xv
+			"XPaint" EXEC xpaint
+			"XFig" EXEC xfig
+		"Grafikai" END
+		"X File Manager" EXEC xfm
+		"OffiX Files" EXEC files
+		"LyX" EXEC lyx
+		"Netscape" EXEC netscape 
+  		"Ghostview" EXEC ghostview %a(Enter file to view)
+		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Enter PDF to view)
+  		"TkDesk" EXEC tkdesk
+	"Alkalmazasok" END
+	"Szerkesztok" MENU
+		"XFte" EXEC xfte
+		"XEmacs" EXEC xemacs || emacs
+		"XJed" EXEC xjed 
+		"NEdit" EXEC nedit
+		"Xedit" EXEC xedit
+		"VI" EXEC xterm -e vi
+	"Szerkesztok" END
+	"Egyeb" MENU
+		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xplaycd" EXEC xplaycd
+		"Xmixer" EXEC xmixer
+	"Egyeb" END
+	"Kellekek" MENU
+		"Szamologep" EXEC xcalc
+		"Ablak jellemzok" EXEC xprop | xmessage -center -title 'xprop' -file -
+		"Betutipus" EXEC xfontsel
+		"Terminal emulacio" EXEC xminicom
+		"Nagyito" EXEC xmag
+		"Colormap" EXEC xcmap
+		"XKill" EXEC xkill
+		"Ora" EXEC asclock -shape
+		"Vagolap" EXEC xclipboard
+	"Kellekek" END
+
+	"Valogatas" MENU
+		"Masolas" EXEC echo '%s' | wxcopy
+		"Level iras" EXEC xterm -name mail -T "Pine" -e pine %s
+		"Navigator" EXEC netscape %s
+		"Kereses a Manualban" EXEC MANUAL_SEARCH(%s)
+	"Valogatas" END
+
+	"Munkafelulet" MENU
+		"Elrejtes" HIDE_OTHERS
+		"Mindent mutat" SHOW_ALL
+		"Ikonok elrendezese" ARRANGE_ICONS
+		"Frissites" REFRESH
+		"Zarolas" EXEC xlock -allowroot -usefirst
+		"Session jellemzok mentese" SAVE_SESSION
+		"Session jellemzok torlese" CLEAR_SESSION
+	"Munkafelulet" END
+
+	"Megjelenites" MENU
+		"Temak" OPEN_MENU -noext THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Stilusok" OPEN_MENU -noext STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Ikon beallitasok" OPEN_MENU -noext ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Hatter" MENU
+			"Szolid" MENU
+                        	"Fekete" WS_BACK '(solid, black)'
+                        	"Kek"  WS_BACK '(solid, "#505075")'
+				"Indigo" WS_BACK '(solid, "#243e6c")'
+				"Sotetkek" WS_BACK '(solid, "#180090")'
+                        	"Lila" WS_BACK '(solid, "#554466")'
+                        	"Buza"  WS_BACK '(solid, "wheat4")'
+                        	"Sotetszurke"  WS_BACK '(solid, "#333340")'
+                        	"Voros" WS_BACK '(solid, "#400020")'
+			"Szolid" END
+			"Gradiens" MENU
+				"Halvany" WS_BACK '(mdgradient, green, red, white, green)'
+				"Egkek" WS_BACK '(vgradient, blue4, white)'
+			"Gradiens" END
+			"Kepek" OPEN_MENU -noext BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+		"Hatter" END
+		"Temak mentese" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
+		"Ikonbeallitasok mentese" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
+	"Megjelenites" END
+
+	"Kilepes"	MENU
+		"Ujrainditas" RESTART
+		"AfterStep inditasa" RESTART afterstep
+		"Kilepes..."  EXIT
+		"Kilepes a sessionbol..." SHUTDOWN
+	"Kilepes" END
+"Alkalmazasok" END
+
+

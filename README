@@ -1,15 +1,23 @@
 
+
+
 		       Window Maker X11 Window Manager
 
 	  	   	   <http://windowmaker.org>
 		 	 <ftp://ftp.windowmaker.org>
 
+				     by
 
 		      	     Alfredo K. Kojima 
 
 			 	 Dan Pascu
 
 		       	      Matthew Hawkins
+
+
+			       Web/FTP Master
+
+			       Phillip Smith
 
 
 
@@ -41,6 +49,20 @@ appearance borrowed from NEXTSTEP(tm).
 Window Maker was designed keeping integration with GNUstep in mind and is the
 "official" window manager for it. Read more about GNUstep further on this
 file.
+
+\begin{marketing babble}
+Window Maker is also KDE and GNOME compliant, which means you can use
+it as the window manager of these desktop environments and even fully
+replace kwm with wmaker if you use KDE. In that case, you would benefit
+from the best of both worlds, being able to take advantage of the usability
+and unique features of Window Maker, while still having access to KDE
+features such as the panel, pager and tight integration with all KDE 
+applications. I've known of many cases where people keep switching KDE
+and Window Maker depending on their mood or needs of the day, but now
+you don't need that anymore :)
+As GNOME components become more available, the same can be said about it. 
+Window Maker can be considered a fully compliant GNOME window manager.
+\end{marketing babble}
 
 Window Maker was previously called WindowMaker.
 
@@ -148,15 +170,18 @@ graphical (and non-graphical) applications; providing among other things,
 base system libraries, a high-level GUI application framework that uses a
 Display PostScript(tm)-like imaging model (DGS), objects for accessing
 relational databases, distributed objects and a graphical development
-environment, with a interface builder, a project management system and other
-tools.
+environment, with tools like interface modeller, a project management system
+(project center) and other tools.
 
-GNUstep will be used to create a user environment, with everything needed for
-a complete graphical user interface, such as a file viewer, text editors and
-other applications. Note that the user environment (or "desktop environment")
-is only a small part of the whole GNUstep project.
+The GNUstep development system will be used to create a user environment,
+with everything needed for a complete graphical user interface, such as a
+file viewer, text editors and other applications. Note that the user
+environment (or "desktop environment") is only a small part of the whole
+GNUstep project and therefore it does not "compete" with other projects like
+KDE or GNOME, simply because they are completely different things.
 
 For more information on the GNUstep project, visit: http://www.gnustep.org
+and http://gnustep.current.nu
 
 
 Running multiple instances of Window Maker
@@ -316,11 +341,12 @@ Musicware
 =========
 
 If you use Window Maker and *really* like it, please consider making my day
-by sending me a music CD (or a MiniDisc) of your favorite band, singer,
-instrumentist, composer or whatever :^). I like listening to music and would
-love to get new CDs, especially from other parts of the world. I like almost
-any kind of music, from Ozzy Osbourne to Bach (mas não pagode e sertanejo
-pelamordideus :), so I will be happy to receive just about anything.
+by sending me a music CD (or a MiniDisc or even a MP3 CDR) of your favorite
+band, singer, instrumentist, composer or whatever :^). I like listening to
+music and would love to get new CDs, especially from other parts of the
+world. I like almost any kind of music, from Ozzy Osbourne to Bach (mas não
+pagode e sertanejo pelamordideus :), so I will be happy to receive just about
+anything.
 
 Snail mail address:
 

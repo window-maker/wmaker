@@ -72,7 +72,7 @@ W_DrawRelief(W_Screen *scr, Drawable d, int x, int y, unsigned int width,
 
     XDrawLine(dpy, d, bgc, x+width-1, y, x+width-1, y+height-1);
     if (height > 2 && relief!=WRPushed) {
-	XDrawLine(dpy, d, dgc, x+width-2, y+2, x+width-2, y+height-3);
+	XDrawLine(dpy, d, dgc, x+width-2, y+1, x+width-2, y+height-2);
     }
 }
 
@@ -116,12 +116,13 @@ W_GetTextHeight(WMFont *font, char *text, int width, int wrap)
     int count;
     int length = strlen(text);
     int h;
+    int fheight = WMFontHeight(font);
 
     h = 0;
     while (length > 0) {
 	count = fitText(ptr, font, width, wrap);
 
-	h += font->height;
+	h += fheight;
 
 	if (isspace(ptr[count]))
 	    count++;
@@ -142,6 +143,7 @@ W_PaintText(W_View *view, Drawable d, WMFont *font,  int x, int y,
     int line_width;
     int line_x;
     int count;
+    int fheight = WMFontHeight(font);
 
     while (length > 0) {
 	count = fitText(ptr, font, width, wrap);
@@ -156,7 +158,7 @@ W_PaintText(W_View *view, Drawable d, WMFont *font,  int x, int y,
 
 	WMDrawString(view->screen, d, gc, font, line_x, y, ptr, count);
 
-	y += font->height;
+	y += fheight;
 
 	if (isspace(ptr[count]))
 	    count++;

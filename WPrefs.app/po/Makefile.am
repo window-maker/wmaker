@@ -10,6 +10,7 @@ POTFILES  = \
 	$(top_builddir)/WPrefs/Configurations.c \
 	$(top_builddir)/WPrefs/Expert.c \
 	$(top_builddir)/WPrefs/Focus.c \
+	$(top_builddir)/WPrefs/Icons.c \
 	$(top_builddir)/WPrefs/KeyboardSettings.c \
 	$(top_builddir)/WPrefs/KeyboardShortcuts.c \
 	$(top_builddir)/WPrefs/Menu.c \
@@ -20,6 +21,7 @@ POTFILES  = \
 	$(top_builddir)/WPrefs/Preferences.c \
 	$(top_builddir)/WPrefs/Text.c \
 	$(top_builddir)/WPrefs/TextureAndColor.c \
+	$(top_builddir)/WPrefs/Themes.c \
 	$(top_builddir)/WPrefs/WPrefs.c \
 	$(top_builddir)/WPrefs/WindowHandling.c \
 	$(top_builddir)/WPrefs/Workspace.c \

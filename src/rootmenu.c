@@ -22,6 +22,8 @@
 
 #include "wconfig.h"
 
+#ifndef LITE
+
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -59,7 +61,7 @@ extern char *Locale;
 
 extern WDDomain *WDRootMenu;
 
-extern wCursor[WCUR_LAST];
+extern Cursor wCursor[WCUR_LAST];
 
 extern Time LastTimestamp;
 
@@ -152,19 +154,6 @@ static void
 execCommand(WMenu *menu, WMenuEntry *entry)
 {
     char *cmdline;
-    static char *shell = NULL;
-
-    /*
-     * This have a problem: if the shell is tcsh (not sure about others)
-     * and ~/.tcshrc have /bin/stty erase ^H somewhere on it, the shell
-     * will block and the command will not be executed.
-    if (!shell) {
-	shell = getenv("SHELL");
-	if (!shell)
-	    shell = "/bin/sh";
-    }
-     */
-    shell = "/bin/sh";
 
     cmdline = ExpandOptions(menu->frame->screen_ptr, (char*)entry->clientdata);
 
@@ -174,26 +163,7 @@ execCommand(WMenu *menu, WMenuEntry *entry)
     XSync(dpy, 0);
 
     if (cmdline) {
-        /* We should not use ParseCommand() here, because it does not handle
-         * correctly '~/' expansion and '>' redirection.
-         * While we can do '~/' expansion ourselves, we can do nothing about
-         * '>' redirection.
-         * So we better let /bin/sh to do that for us. Dan.
-	 * Ok. -Alfredo
-         */
-        if (fork()==0) {
-
-	    SetupEnvironment(menu->frame->screen_ptr);
-
-	    CloseDescriptors();
-
-#ifdef HAVE_SETPGID
-            setpgid(0, 0);
-#endif
-            execl(shell, shell, "-c", cmdline, NULL);
-	    wsyserror("could not exec %s -c %s\n", shell, cmdline);
-            Exit(-1);
-        }
+	ExecuteShellCommand(menu->frame->screen_ptr, cmdline);
 	free(cmdline);
     }
     XUngrabPointer(dpy, CurrentTime);
@@ -215,22 +185,10 @@ exitCommand(WMenu *menu, WMenuEntry *entry)
 	|| wMessageDialog(menu->frame->screen_ptr, _("Exit"),
 			  _("Exit window manager?"), 
 			  _("Exit"), _("Cancel"), NULL)==WAPRDefault) {
-	int i;
 #ifdef DEBUG
 	printf("Exiting WindowMaker.\n");
 #endif
-	for (i=0; i<wScreenCount; i++) {
-	    WScreen *scr;
-
-	    scr = wScreenWithNumber(i);
-	    if (scr)
-		wScreenSaveState(scr);
-	}
-
-	RestoreDesktop(NULL);
-	
-	ExecExitScript();
-	Exit(0);
+	Shutdown(WSExitMode);
     }
     inside = 0;
 }
@@ -241,7 +199,6 @@ shutdownCommand(WMenu *menu, WMenuEntry *entry)
 {
     static int inside = 0;
     int result;
-    int i;
 
     /* prevent reentrant calls */
     if (inside)
@@ -288,21 +245,11 @@ shutdownCommand(WMenu *menu, WMenuEntry *entry)
     if (result!=R_CANCEL) {
 #ifdef R6SM
 	if (result == R_CLOSE) {
-	    wSessionRequestShutdown();
+	    Shutdown(WSLogoutMode);
 	} else 
 #endif /* R6SM */
 	{
-	    for (i=0; i<wScreenCount; i++) {
-		WScreen *scr;
-		
-		scr = wScreenWithNumber(i);
-		if (scr)
-		    wScreenSaveState(scr);
-	    }
-	    WipeDesktop(NULL);
-	    
-	    ExecExitScript();
-	    Exit(0);
+	    Shutdown(WSKillMode);
 	}
     }
 #undef R_CLOSE
@@ -315,16 +262,7 @@ shutdownCommand(WMenu *menu, WMenuEntry *entry)
 static void
 restartCommand(WMenu *menu, WMenuEntry *entry)
 {
-    int i;
-    
-    for (i=0; i<wScreenCount; i++) {
-	WScreen *scr;
-	
-	scr = wScreenWithNumber(i);
-	if (scr)
-	    wScreenSaveState(scr);
-    }
-    RestoreDesktop(NULL);
+    Shutdown(WSRestartPreparationMode);
     Restart((char*)entry->clientdata);
 }
 
@@ -457,7 +395,7 @@ rebindKeygrabs(WScreen *scr)
     while (wwin!=NULL) {
 	XUngrabKey(dpy, AnyKey, AnyModifier, wwin->frame->core->window);
 
-	if (!wwin->window_flags.no_bind_keys) {
+	if (!WFLAGP(wwin, no_bind_keys)) {
 	    wWindowSetKeyGrabs(wwin);
 	}
 	wwin = wwin->prev;
@@ -509,8 +447,7 @@ addShortcut(char *file, char *shortcutDefinition, WMenu *menu,
 	*k = 0;
 	mod = wXModifierFromKey(b);
 	if (mod<0) {
-	    wwarning(_("%s:invalid key modifier \"%s\""), file,
-		     shortcutDefinition);
+	    wwarning(_("%s:invalid key modifier \"%s\""), file, b);
 	    free(ptr);
 	    return False;
 	}
@@ -692,7 +629,13 @@ constructMenu(WMenu *menu, WMenuEntry *entry)
         i=0;
         while(path[i] != NULL) {
 	    char *tmp;
+	    Bool statted = False;
 
+	    if (strcmp(path[i], "-noext")==0) {
+		i++;
+		continue;
+	    }
+	    
 	    tmp = wexpandpath(path[i]);
 	    free(path[i]);
 	    path[i] = tmp;
@@ -709,12 +652,14 @@ constructMenu(WMenu *menu, WMenuEntry *entry)
                     if (i>2) {
                         lpath[strlen(lpath)-(i-2)]=0;
                         if (stat(lpath, &stat_buf)==0) {
+			    statted = True;
                             free(path[i]);
                             path[i] = lpath;
                             lpath = NULL;
                         }
                     }
                 } else {
+		    statted = True;
                     free(path[i]);
                     path[i] = lpath;
                     lpath = NULL;
@@ -726,7 +671,7 @@ constructMenu(WMenu *menu, WMenuEntry *entry)
                 lpath = NULL;
             }
 
-            if (stat(path[i], &stat_buf)==0) {
+            if (statted || stat(path[i], &stat_buf)==0) {
                 if (last < stat_buf.st_mtime)
                     last = stat_buf.st_mtime;
                 if (first<0)
@@ -740,7 +685,7 @@ constructMenu(WMenu *menu, WMenuEntry *entry)
         }
 
         if (first < 0) {
-            wsyserror(_("%s:could not stat menu :%s"), "OPEN_MENU",
+            wsyserror(_("%s:could not stat menu:%s"), "OPEN_MENU",
                       (char*)entry->clientdata);
             goto finish;
         }
@@ -751,7 +696,7 @@ constructMenu(WMenu *menu, WMenuEntry *entry)
 	    if (S_ISDIR(stat_buf.st_mode)) {
 		/* menu directory */
 		submenu = readMenuDirectory(menu->frame->screen_ptr,
-                                            entry->text, &path[first], cmd);
+                                            entry->text, path, cmd);
 		if (submenu)
 		    submenu->timestamp = last;
 	    } else if (S_ISREG(stat_buf.st_mode)) {
@@ -801,7 +746,7 @@ addWorkspaceMenu(WScreen *scr, WMenu *menu, char *title)
 	
 	wsmenu = wWorkspaceMenuMake(scr, True);
 	scr->workspace_menu = wsmenu;
-	entry=wMenuAddCallback(menu, title, NULL, NULL);
+	entry = wMenuAddCallback(menu, title, NULL, NULL);
 	wMenuEntrySetCascade(menu, entry, wsmenu);
 	
 	wWorkspaceMenuUpdate(scr, wsmenu);
@@ -1302,6 +1247,25 @@ myCompare(dir_data *d1, dir_data *d2)
 
 
 /************  Menu Configuration From Directory   *************/
+
+static Bool
+isFilePackage(char *file)
+{
+    int l;
+
+    /* check if the extension indicates this file is a 
+     * file package. For now, only recognize .themed */
+
+    l = strlen(file);
+
+    if (l > 7 && strcmp(&(file[l-7]), ".themed")==0) {
+	return True;
+    } else {
+	return False;
+    }
+}
+
+
 static WMenu*
 readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
 {
@@ -1313,9 +1277,16 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
     LinkedList *dirs = NULL, *files = NULL;
     int length, i, have_space=0;
     dir_data *data;
+    int stripExtension = 0;
 
     i=0;
     while (path[i]!=NULL) {
+	if (strcmp(path[i], "-noext")==0) {
+	    stripExtension = 1;
+	    i++;
+	    continue;
+	}
+
         dir = opendir(path[i]);
         if (!dir) {
             i++;
@@ -1346,31 +1317,35 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
                 wsyserror(_("%s:could not stat file \"%s\" in menu directory"),
                           path[i], dentry->d_name);
             } else {
-                data = (dir_data*) wmalloc(sizeof(dir_data));
-                data->name = wstrdup(dentry->d_name);
-                data->index = i;
-                if (S_ISDIR(stat_buf.st_mode)) {
+		Bool isFilePack = False;
+
+		data = NULL;
+                if (S_ISDIR(stat_buf.st_mode)
+		    && !(isFilePack = isFilePackage(dentry->d_name))) {
+
                     /* access always returns success for user root */
                     if (access(buffer, X_OK)==0) {
                         /* Directory is accesible. Add to directory list */
+
+			data = (dir_data*) wmalloc(sizeof(dir_data));
+			data->name = wstrdup(dentry->d_name);
+			data->index = i;
+
                         list_insert_sorted(data, &dirs, (int(*)())myCompare);
-                        data = NULL;
                     }
-                } else if (S_ISREG(stat_buf.st_mode)) {
+                } else if (S_ISREG(stat_buf.st_mode) || isFilePack) {
                     /* Hack because access always returns X_OK success for user root */
 #define S_IXANY (S_IXUSR | S_IXGRP | S_IXOTH)
                     if ((command!=NULL && access(buffer, R_OK)==0) ||
                         (command==NULL && access(buffer, X_OK)==0 &&
                          (stat_buf.st_mode & S_IXANY))) {
+
+			data = (dir_data*) wmalloc(sizeof(dir_data));
+			data->name = wstrdup(dentry->d_name);
+			data->index = i;
+
                         list_insert_sorted(data, &files, (int(*)())myCompare);
-                        data = NULL;
                     }
-                }
-                if (data!=NULL) {
-                    if (data->name)
-                        free(data->name);
-                    free(data);
-                    data = NULL;
                 }
             }
             free(buffer);
@@ -1467,6 +1442,11 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
         if (have_space)
             strcat(buffer, "\"");
 
+	if (stripExtension) {
+	    char *ptr = strrchr(f->name, '.');
+	    if (ptr && ptr!=f->name)
+		*ptr = 0;
+	}
         addMenuEntry(menu, f->name, NULL, "EXEC", buffer, path[f->index]);
 
         free(buffer);
@@ -1491,6 +1471,8 @@ makeDefaultMenu(WScreen *scr)
     
     menu = wMenuCreate(scr, _("Commands"), True);
     wMenuAddCallback(menu, "XTerm", execCommand, "xterm");
+    wMenuAddCallback(menu, "rxvt", execCommand, "rxvt");
+    wMenuAddCallback(menu, _("Restart"), restartCommand, NULL);
     wMenuAddCallback(menu, _("Exit..."), exitCommand, NULL);
     return menu;
 }
@@ -1615,9 +1597,30 @@ configureMenu(WScreen *scr, proplist_t definition)
     menu = wMenuCreate(scr, mtitle, False);
     menu->on_destroy = removeShortcutsForMenu;
 
+#ifdef GLOBAL_SUBMENU_FILE
+    {
+	WMenu *submenu;
+	WMenuEntry *mentry;
+
+	submenu = readMenuFile(scr, GLOBAL_SUBMENU_FILE);
+
+	if (submenu) {
+	    mentry = wMenuAddCallback(menu, submenu->frame->title, NULL, NULL);
+	    wMenuEntrySetCascade(menu, mentry, submenu);
+	}
+    }
+#endif
+
     for (i=1; i<count; i++) {
 	elem = PLGetArrayElement(definition, i);
-
+#if 0
+	if (PLIsString(elem)) {
+	    char *file;
+	    
+	    file = PLGetString(elem);
+	    
+	}
+#endif	
 	if (!PLIsArray(elem) || PLGetNumberOfElements(elem) < 2)
 	    goto error;
 	
@@ -1766,3 +1769,4 @@ OpenRootMenu(WScreen *scr, int x, int y, int keyboard)
 	rebindKeygrabs(scr);
 }
 
+#endif /* !LITE */

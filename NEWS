@@ -2,6 +2,155 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+--- 0.50.0
+
+
+KDE and GNOME
+-------------
+
+Added full support for GNOME and KWM hints. 
+Read the INSTALL file to see how enable them.
+
+Everything in the so called GNOME window manager bla bla bla pseudo-spec is
+implemented.
+
+As for KDE stuff, it implements 90% of everything kwm does, adds some
+Window Maker specific extensions to it and still uses half of the memory
+kwm does, which should be enough to let you dump kwm ;) For details on what
+exactly is implemented, see comments in src/kwm.c Read the README.KDE file 
+for more information.
+
+
+WARNING: Some KDE hints are badly designed, so doing things like using
+kpanel's desktop switcher/pager and Window Maker's internal workspace
+management functions to create, destroy and rename workspaces at the same 
+time might cause unknown effects. To be on the safe side, only
+use either of them to manage workspaces. Switching workspaces is hopefully,
+safe, so you can switch workspaces from wherever you want.
+
+
+
+Workspace Specific Background Images
+------------------------------------
+
+Use the WorkspaceSpecificBack to set background images for specific
+workspaces. The WorkspaceBack is used as the default background image.
+
+Example:
+
+WorkspaceSpecificBack = ((solid, red), (cpixmap, ship.jpg, gray), (), 
+				(dgradient, red, blue))
+
+This will set the background image of workspace 1 to (solid, 0),
+2 to ship.jpg and 4 to a gradient. Workspace 3 and other workspaces
+will have the image defined by WorkspaceBack.
+
+Note that this uses quite some memory...
+
+
+setstyle/getstyle
+-----------------
+
+setstyle now accepts the -nofonts flag, which will load the style
+file ignoring all font related options.
+
+Example:
+
+setstyle -nofonts Blabla.style
+
+
+getstyle can be used to create theme packs. See the usage in the
+WindowMaker/README.themes file.
+
+
+
+New Texture Type
+----------------
+
+Textured gradients will tile a texture pixmap and combine it with a gradient, 
+using an arbitrary opaqueness. 
+
+Syntax is (thgradient, <file>, <opaqueness>, <color1>, <color2>)
+	  (tvgradient, <file>, <opaqueness>, <color1>, <color2>)
+	  (tdgradient, <file>, <opaqueness>, <color1>, <color2>)
+where:
+<color1> and <color2> are the colors for the gradient,
+<file> is the texture file and
+<opaqueness> is the opaqueness to merge the texture witht the gradient,
+ranging from 0 to 255.
+
+Example:
+
+(thgradient, "BlueImage.jpeg", 120, white, black)
+
+The BlackTexture style and Checker theme are examples.
+
+Hints:
+
+You can use any type of pixmap file for this, but small (like 64x32)
+grayscale pixmap files should get the best results (fast and low memory
+usage). You can use color pixmaps, but it is harder to get the desired effect
+with them.
+
+Be warned that this texture type is the slowest.
+
+
+
+New Options
+-----------
+
+IconTitleBack and IconTitleColor control the color of the
+miniwindow title. Both of them are colors.
+
+Example:
+IconTitleColor=white;
+IconTitleBack=black;
+
+
+Since this introduces an incompatibility in themes and getting flamed by the
+themes ppl isn't the most pleasant thing ("Whaddafuk you're thinking!? You
+just broke 500 themes!!!" ;) the setstyle command was hacked so that it will
+make old themes work as before, by trying to automatically set the above
+options. Note that in some cases it will not have exactly the same results as
+before.
+
+
+StartMaximized window attribute. Will maximize the window when it
+is mapped.
+
+
+AutoRaiseLower option for the Clip. This allows automatic Raise/Lower of the
+Clip icons when the mouse pointer enter/leave the Clip. To avoid unwanted
+raising/lowering there is a time threshold before raising/lowering.
+The thresholds can be changed in wconfig.h by changing one or both of
+AUTO_LOWER_DELAY and AUTO_RAISE_DELAY (expressed in miliseconds).
+For example if you set AUTO_RAISE_DELAY to 0, then the Clip will be raised as
+soon as the mouse pointer enters it's area. Setting AUTO_RAISE_DELAY to a very
+big value, will make the Clip to practically do not auto raise unless clicked,
+but to be automatically lowered after AUTO_LOWER_DELAY (ms) when leaved.
+
+
+New ThemePack Format
+--------------------
+
+Starting with this version, a new format of themes is being supported.
+Before you open pine and start composing your flame, rest assured that
+the old format is still supported. The new format is documented
+in the WindowMaker/README.themes file.
+
+
+Root Menu 
+---------
+
+The -noext option for OPEN_MENU will strip whatever is after the last .
+in file names that appear on the opened directory. So,
+
+OPEN_MENU ~/bg WITH xv -root -quit
+
+will create a menu with all the images in ~/bg without the extension.
+
+
+
 --- 0.20.3
 
 

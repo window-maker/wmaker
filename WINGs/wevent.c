@@ -11,6 +11,11 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#ifdef HAVE_POLL_H
+#include <poll.h>
+#endif
+
+
 #ifdef HAVE_SYS_SELECT_H
 # include <sys/select.h>
 #endif
@@ -708,9 +713,93 @@ WMIsDoubleClick(XEvent *event)
 Bool
 W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 {
-#ifndef HAVE_SELECT
-#error This_system_does_not_have_select(2)_and_is_not_supported
+#if defined(HAVE_POLL) && defined(HAVE_POLL_H) && !defined(HAVE_SELECT)
+    struct pollfd *fds;
+    InputHandler *handler;
+    int count, timeout, nfds, k, retval;
+
+    for (nfds = 1, handler = inputHandler; 
+         handler != 0; handler = handler->next) nfds++;
+    
+    fds = wmalloc(nfds * sizeof(struct pollfd));
+    fds[0].fd = ConnectionNumber(dpy);
+    fds[0].events = POLLIN;
+
+    for (k = 1, handler = inputHandler; 
+         handler; 
+         handler = handler->next, k++) {
+        fds[k].fd = handler->fd;
+        fds[k].events = 0;
+	if (handler->mask & WIReadMask)
+            fds[k].events |= POLLIN;
+
+	if (handler->mask & WIWriteMask)
+            fds[k].events |= POLLOUT;
+
+#if 0 /* FIXME */
+	if (handler->mask & WIExceptMask)
+	    FD_SET(handler->fd, &eset);
 #endif
+    }
+
+    /*
+     * Setup the select() timeout to the estimated time until the
+     * next timer expires.
+     */
+    if (timerPending()) {
+        struct timeval tv;
+	delayUntilNextTimerEvent(&tv);
+        timeout = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+    } else {
+        timeout = -1;
+    }
+
+    if (xeventmask==0) {
+	if (XPending(dpy))      
+	    return True;
+    } else {
+	XEvent ev;
+	if (XCheckMaskEvent(dpy, xeventmask, &ev)) {
+	    XPutBackEvent(dpy, &ev);
+	    return True;
+	}
+    }
+    
+    count = poll(fds, nfds, timeout);
+
+    if (count > 0) {
+	handler = inputHandler;
+        k = 1;
+	while (handler) {
+	    int mask;
+
+	    mask = 0;
+
+	    if (fds[k].revents & (POLLIN|POLLRDNORM|POLLRDBAND|POLLPRI))
+		mask |= WIReadMask;
+	    
+	    if (fds[k].revents & (POLLOUT | POLLWRBAND))
+		mask |= WIWriteMask;
+	    
+	    if (fds[k].revents & (POLLHUP | POLLNVAL | POLLERR))
+		mask |= WIExceptMask;
+	    
+	    if (mask!=0 && handler->callback) {
+		(*handler->callback)(handler->fd, mask, 
+				     handler->clientData);
+	    }
+
+	    handler = handler->next;
+            k++;
+	}
+    }
+
+    retval = fds[0].revents & (POLLIN|POLLRDNORM|POLLRDBAND|POLLPRI);
+    free(fds);
+    
+    return retval;
+#else /* not HAVE_POLL */
+#ifdef HAVE_SELECT
     struct timeval timeout;
     struct timeval *timeoutPtr;
     fd_set rset, wset, eset;
@@ -764,7 +853,7 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 	    return True;
 	}
     }
-    /* TODO: port to poll() */
+    
     count = select(1 + maxfd, &rset, &wset, &eset, timeoutPtr);
 
     if (count > 0) {
@@ -794,9 +883,11 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
     }
     
     return FD_ISSET(ConnectionNumber(dpy), &rset);
+#else /* not HAVE_SELECT, not HAVE_POLL */
+Neither select nor poll. You lose.
+#endif /* HAVE_SELECT */
+#endif /* HAVE_POLL */
 }
-
-
 
 void
 WMNextEvent(Display *dpy, XEvent *event)

@@ -69,6 +69,9 @@ I18N = @I18N@
 I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
+LD = @LD@
+LIBTOOL = @LIBTOOL@
+LITE = @LITE@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
@@ -110,6 +113,7 @@ WPrefs_SOURCES = \
 	main.c \
 	WPrefs.c \
 	WPrefs.h \
+	Appearance.c \
 	Configurations.c \
 	Expert.c \
 	Focus.c \
@@ -125,6 +129,7 @@ WPrefs_SOURCES = \
 	TextureAndColor.c \
 	TexturePanel.c \
 	TexturePanel.h \
+	Themes.c \
 	WindowHandling.c \
 	Workspace.c \
 	double.c \
@@ -147,8 +152,8 @@ WPrefs_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
 
 WPrefs_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a\
-	$(top_builddir)/wrlib/libwraster.a \
-        $(top_builddir)/libPropList/libPropList.a \
+	$(top_builddir)/wrlib/libwraster.la \
+        $(top_builddir)/libPropList/libPropList.la \
 	@GFXLFLAGS@ \
 	@XLFLAGS@ \
 	@GFXLIBS@ \
@@ -168,15 +173,16 @@ LIBS = @LIBS@
 X_CFLAGS = @X_CFLAGS@
 X_LIBS = @X_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
-WPrefs_OBJECTS =  main.o WPrefs.o Configurations.o Expert.o Focus.o \
-Icons.o KeyboardSettings.o KeyboardShortcuts.o Menu.o MenuPreferences.o \
-MouseSettings.o Paths.o Preferences.o Text.o TextureAndColor.o \
-TexturePanel.o WindowHandling.o Workspace.o double.o MenuGuru.o \
-xmodifier.o
+WPrefs_OBJECTS =  main.o WPrefs.o Appearance.o Configurations.o Expert.o \
+Focus.o Icons.o KeyboardSettings.o KeyboardShortcuts.o Menu.o \
+MenuPreferences.o MouseSettings.o Paths.o Preferences.o Text.o \
+TextureAndColor.o TexturePanel.o Themes.o WindowHandling.o Workspace.o \
+double.o MenuGuru.o xmodifier.o
 WPrefs_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
-LINK = $(CC) $(CFLAGS) $(LDFLAGS) -o $@
+LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
+LINK = $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(LDFLAGS) -o $@
 DATA =  $(wpdata_DATA)
 
 DIST_COMMON =  README Makefile.am Makefile.in
@@ -192,7 +198,7 @@ OBJECTS = $(WPrefs_OBJECTS)
 all: all-recursive all-am
 
 .SUFFIXES:
-.SUFFIXES: .S .c .o .s
+.SUFFIXES: .S .c .lo .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu WPrefs.app/Makefile
 
@@ -215,8 +221,8 @@ install-wpexecbinPROGRAMS: $(wpexecbin_PROGRAMS)
 	$(mkinstalldirs) $(DESTDIR)$(wpexecbindir)
 	@list='$(wpexecbin_PROGRAMS)'; for p in $$list; do \
 	  if test -f $$p; then \
-	    echo "  $(INSTALL_PROGRAM) $$p $(DESTDIR)$(wpexecbindir)/`echo $$p|sed '$(transform)'`"; \
-	     $(INSTALL_PROGRAM) $$p $(DESTDIR)$(wpexecbindir)/`echo $$p|sed '$(transform)'`; \
+	    echo " $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(wpexecbindir)/`echo $$p|sed '$(transform)'`"; \
+	    $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(wpexecbindir)/`echo $$p|sed '$(transform)'`; \
 	  else :; fi; \
 	done
 
@@ -244,6 +250,25 @@ distclean-compile:
 	-rm -f *.tab.c
 
 maintainer-clean-compile:
+
+.c.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+.s.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+.S.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+mostlyclean-libtool:
+	-rm -f *.lo
+
+clean-libtool:
+	-rm -rf .libs _libs
+
+distclean-libtool:
+
+maintainer-clean-libtool:
 
 WPrefs: $(WPrefs_OBJECTS) $(WPrefs_DEPENDENCIES)
 	@rm -f WPrefs
@@ -397,17 +422,20 @@ maintainer-clean-generic:
 	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
 	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 mostlyclean-am:  mostlyclean-wpexecbinPROGRAMS mostlyclean-compile \
-		mostlyclean-tags mostlyclean-generic
+		mostlyclean-libtool mostlyclean-tags \
+		mostlyclean-generic
 
-clean-am:  clean-wpexecbinPROGRAMS clean-compile clean-tags \
-		clean-generic mostlyclean-am
+clean-am:  clean-wpexecbinPROGRAMS clean-compile clean-libtool \
+		clean-tags clean-generic mostlyclean-am
 
 distclean-am:  distclean-wpexecbinPROGRAMS distclean-compile \
-		distclean-tags distclean-generic clean-am
+		distclean-libtool distclean-tags distclean-generic \
+		clean-am
 
 maintainer-clean-am:  maintainer-clean-wpexecbinPROGRAMS \
-		maintainer-clean-compile maintainer-clean-tags \
-		maintainer-clean-generic distclean-am
+		maintainer-clean-compile maintainer-clean-libtool \
+		maintainer-clean-tags maintainer-clean-generic \
+		distclean-am
 
 mostlyclean:  mostlyclean-recursive mostlyclean-am
 
@@ -415,6 +443,7 @@ clean:  clean-recursive clean-am
 
 distclean:  distclean-recursive distclean-am
 	-rm -f config.status
+	-rm -f libtool
 
 maintainer-clean:  maintainer-clean-recursive maintainer-clean-am
 	@echo "This command is intended for maintainers to use;"
@@ -424,11 +453,13 @@ maintainer-clean:  maintainer-clean-recursive maintainer-clean-am
 clean-wpexecbinPROGRAMS maintainer-clean-wpexecbinPROGRAMS \
 uninstall-wpexecbinPROGRAMS install-wpexecbinPROGRAMS \
 mostlyclean-compile distclean-compile clean-compile \
-maintainer-clean-compile uninstall-wpdataDATA install-wpdataDATA \
-install-data-recursive uninstall-data-recursive install-exec-recursive \
-uninstall-exec-recursive installdirs-recursive uninstalldirs-recursive \
-all-recursive check-recursive installcheck-recursive info-recursive \
-dvi-recursive mostlyclean-recursive distclean-recursive clean-recursive \
+maintainer-clean-compile mostlyclean-libtool distclean-libtool \
+clean-libtool maintainer-clean-libtool uninstall-wpdataDATA \
+install-wpdataDATA install-data-recursive uninstall-data-recursive \
+install-exec-recursive uninstall-exec-recursive installdirs-recursive \
+uninstalldirs-recursive all-recursive check-recursive \
+installcheck-recursive info-recursive dvi-recursive \
+mostlyclean-recursive distclean-recursive clean-recursive \
 maintainer-clean-recursive tags tags-recursive mostlyclean-tags \
 distclean-tags clean-tags maintainer-clean-tags distdir info dvi \
 installcheck all-am install-exec-am install-data-am uninstall-am \

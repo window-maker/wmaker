@@ -65,9 +65,9 @@
   ("Clear Saved Session", CLEAR_SESSION)
   ),
  ("Appearance",
-  ("Themes", OPEN_MENU, "#pkgdatadir#/Themes ~/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
-  ("Styles", OPEN_MENU, "#pkgdatadir#/Styles ~/GNUstep/Library/WindowMaker/Styles WITH setstyle"),
-  ("Icon Sets", OPEN_MENU, "#pkgdatadir#/IconSets ~/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
+  ("Themes", OPEN_MENU, "-noext #pkgdatadir#/Themes ~/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
+  ("Styles", OPEN_MENU, "-noext #pkgdatadir#/Styles ~/GNUstep/Library/WindowMaker/Styles WITH setstyle"),
+  ("Icon Sets", OPEN_MENU, "-noext #pkgdatadir#/IconSets ~/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
   ("Background",
    ("Solid",
     ("Black", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, black)'"),
@@ -89,7 +89,7 @@
     ("Grey Shades",   EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#636380\", \"#131318\")'"),
     ("Wine Shades",   EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#600040\", \"#180010\")'")
     ),
-   ("Images", OPEN_MENU, "#pkgdatadir#/Backgrounds ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
+   ("Images", OPEN_MENU, "-noext #pkgdatadir#/Backgrounds ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
    ),   
   ("Save Theme", EXEC, "getstyle -t ~/GNUstep/Library/WindowMaker/Themes/\"%a(Theme name)\""),
   ("Save IconSet", EXEC, "geticonset ~/GNUstep/Library/WindowMaker/IconSets/\"%a(IconSet name)\"")

@@ -214,9 +214,9 @@ insertEntry(WMenu *menu, WMenuEntry *entry, int index)
 {
     int i;
     
-    for (i=menu->entry_no; i>index; i--) {
+    for (i = menu->entry_no-1; i >= index; i--) {
 	menu->entries[i]->order++;
-	menu->entries[i+1]=menu->entries[i];
+	menu->entries[i+1] = menu->entries[i];
     }
     menu->entries[index] = entry;
 }
@@ -496,24 +496,19 @@ wMenuRealize(WMenu *menu)
 
     wCoreConfigure(menu->menu, 0, theight, mwidth, menu->entry_no*eheight -1);
 
-    wFrameWindowResizeInternal(menu->frame, mwidth, menu->entry_no*eheight -1);
+    wFrameWindowResize(menu->frame, mwidth, menu->entry_no*eheight-1
+		       + menu->frame->top_width + menu->frame->bottom_width);
 
 
     /* setup background texture */
-    switch (scr->menu_item_texture->any.type) {
-     case WTEX_DGRADIENT:
-     case WTEX_VGRADIENT:
-     case WTEX_HGRADIENT:
-     case WTEX_MHGRADIENT:
-     case WTEX_MVGRADIENT:
-     case WTEX_MDGRADIENT:
-     case WTEX_PIXMAP:
+    if (scr->menu_item_texture->any.type != WTEX_SOLID) {
 	if (!menu->flags.brother) {
 	    FREE_PIXMAP(menu->menu_texture_data);
 
 	    wTextureRender(scr, scr->menu_item_texture,
 			   &menu->menu_texture_data, menu->menu->width,
 			   menu->entry_height, WREL_MENUENTRY);
+
 	    XSetWindowBackgroundPixmap(dpy, menu->menu->window,
 				       menu->menu_texture_data);
 	    XClearWindow(dpy, menu->menu->window);
@@ -522,9 +517,7 @@ wMenuRealize(WMenu *menu)
 				       menu->menu_texture_data);
 	    XClearWindow(dpy, menu->brother->menu->window);
 	}
-	break;
-	
-     default:
+    } else {
 	XSetWindowBackground(dpy, menu->menu->window,
 			     scr->menu_item_texture->any.color.pixel);
 	XClearWindow(dpy, menu->menu->window);
@@ -782,7 +775,7 @@ makeVisible(WMenu *menu)
 	new_x = scr->scr_width - MENUW(menu) - 1;
 	move = 1;
     }
-    
+
     if (y1 < 0) {
 	new_y = 0;
 	move = 1;
@@ -790,11 +783,10 @@ makeVisible(WMenu *menu)
 	new_y = scr->scr_height - menu->entry_height - 1;
 	move = 1;
     }
-    
+
     new_y = new_y - menu->frame->top_width
 	- menu->selected_entry*menu->entry_height;
     move_menus(menu, new_x, new_y);
-
 }
 
 
@@ -1531,7 +1523,7 @@ getScrollAmount(WMenu *menu, int *hamount, int *vamount)
         
     } else if (yroot >= screenH-2 && menuY2 > screenH-1) {
 	/* scroll up */
-	*vamount = MIN(MENU_SCROLL_STEP, abs(menuY2-screenH-1));
+	*vamount = MIN(MENU_SCROLL_STEP, abs(menuY2-screenH-2));
         
 	*vamount = -*vamount;
     }
@@ -1862,10 +1854,13 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
     prevy = bev->y_root;
     while (!done) {
 	int x, y;
+
+	XAllowEvents(dpy, SyncPointer, CurrentTime);
+
 	WMMaskEvent(dpy, ExposureMask|ButtonMotionMask|ButtonReleaseMask
 		    |ButtonPressMask, &ev);
 	switch (ev.type) {
-	 case MotionNotify:	    
+	 case MotionNotify:
             smenu = findMenu(scr, &x, &y);
 
 	    if (smenu == NULL) {
@@ -2156,15 +2151,16 @@ menuTitleMouseDown(WCoreWindow *sender, void *data, XEvent *event)
     int x=menu->frame_x, y=menu->frame_y;
     int dx=event->xbutton.x_root, dy=event->xbutton.y_root;
     int i, lower;
-    
+    Bool started;
+
 #ifdef DEBUG
     printf("Moving menu\n");
 #endif
-    
+
     /* can't touch the menu copy */
     if (menu->flags.brother)
 	return;
-    
+
     if (event->xbutton.button != Button1 && event->xbutton.button != Button2)
       return;
     if (XGrabPointer(dpy, menu->frame->titlebar->window, False, 
@@ -2176,6 +2172,7 @@ menuTitleMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 #endif
 	return;
     }
+
     if (event->xbutton.state & MOD_MASK) {
 	wLowerFrame(menu->frame->core);
 	lower = 1;
@@ -2184,10 +2181,11 @@ menuTitleMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 	lower = 0;
     }
     tmp = menu;
-    
+
     /* lower/raise all submenus */
     while (1) {
-	if (tmp->selected_entry>=0 && tmp->cascades) {
+	if (tmp->selected_entry>=0 && tmp->cascades
+	    && tmp->entries[tmp->selected_entry]->cascade>=0) {
 	    tmp = tmp->cascades[tmp->entries[tmp->selected_entry]->cascade];
 	    if (!tmp || !tmp->flags.mapped)
 	      break;
@@ -2199,6 +2197,7 @@ menuTitleMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 	    break;
 	}
     }
+
     /* tear off the menu if it's a root menu or a cascade 
      application menu */
     if (!menu->flags.buttoned && !menu->flags.brother 
@@ -2218,17 +2217,24 @@ menuTitleMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 	    }
 	}
     }
-    
+
+    started = False;
     while(1) {
 	WMMaskEvent(dpy, ButtonMotionMask|ButtonReleaseMask|ButtonPressMask
 		    |ExposureMask, &ev);
 	switch (ev.type) {
 	 case MotionNotify:
-	    x += ev.xmotion.x_root - dx;
-	    y += ev.xmotion.y_root - dy;
-	    dx = ev.xmotion.x_root;
-	    dy = ev.xmotion.y_root;
-	    wMenuMove(menu, x, y, True);
+	    if (started) {
+		x += ev.xmotion.x_root - dx;
+		y += ev.xmotion.y_root - dy;
+		dx = ev.xmotion.x_root;
+		dy = ev.xmotion.y_root;
+		wMenuMove(menu, x, y, True);
+	    } else {
+		if (abs(ev.xmotion.x_root - dx) > MOVE_THRESHOLD
+		    || abs(ev.xmotion.y_root - dy) > MOVE_THRESHOLD)
+		    started = True;
+	    }
 	    break;
 
 	 case ButtonPress:
@@ -2242,9 +2248,10 @@ menuTitleMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 #endif
 	    XUngrabPointer(dpy, CurrentTime);
 	    return;
-	    
+
 	 default:
 	    WMHandleEvent(&ev);
+	    break;
 	}
     }
 }
@@ -2291,6 +2298,7 @@ wMenuSaveState(WScreen *scr)
 
     menus = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
 
+#ifndef LITE
     if (scr->root_menu && scr->root_menu->flags.buttoned) {
         sprintf(buffer, "%i,%i", scr->root_menu->frame_x,
                                  scr->root_menu->frame_y);
@@ -2312,7 +2320,7 @@ wMenuSaveState(WScreen *scr)
         PLRelease(value);
         save_menus = 1;
     }
-    
+#endif /* !LITE */
     if (scr->workspace_menu && scr->workspace_menu->flags.buttoned) {
         sprintf(buffer, "%i,%i", scr->workspace_menu->frame_x,
                                  scr->workspace_menu->frame_y);
@@ -2353,15 +2361,16 @@ restoreMenu(WScreen *scr, proplist_t menu, int which)
     if (sscanf(PLGetString(menu), "%i,%i", &x, &y)!=2)
         COMPLAIN("Position");
 
+#ifndef LITE
     if (which & WSS_ROOTMENU) {
         OpenRootMenu(scr, x, y, False);
         pmenu = scr->root_menu;
-    }
-    else if (which & WSS_SWITCHMENU) {
+    } else if (which & WSS_SWITCHMENU) {
         OpenSwitchMenu(scr, x, y, False);
         pmenu = scr->switch_menu;
-    }
-    else if (which & WSS_WSMENU) {
+    } else
+#endif /* !LITE */
+	if (which & WSS_WSMENU) {
         OpenWorkspaceMenu(scr, x, y);
         pmenu = scr->workspace_menu;
         if (pmenu->parent) {
@@ -2428,11 +2437,12 @@ OpenWorkspaceMenu(WScreen *scr, int x, int y)
     WMenu *menu, *parent;
     WMenuEntry *entry;
 
+#ifndef LITE
     if (!scr->root_menu) {
         OpenRootMenu(scr, scr->scr_width*2, 0, False);
         wMenuUnmap(scr->root_menu);
     }
-
+#endif
     menu = scr->workspace_menu;
     if (menu) {
         if (menu->flags.mapped) {

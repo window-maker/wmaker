@@ -41,6 +41,12 @@
 #include "actions.h"
 #include "workspace.h"
 #include "appicon.h"
+#ifdef GNOME_STUFF
+#include "gnome.h"
+#endif
+#ifdef KWM_HINTS
+#include "kwm.h"
+#endif
 
 #include <proplist.h>
 
@@ -85,17 +91,26 @@ wWorkspaceNew(WScreen *scr)
 	scr->workspace_count++;
 
 	wspace = wmalloc(sizeof(WWorkspace));
+	wspace->name = NULL;
 
-        wspace->name = wmalloc(strlen(_("Workspace %i"))+8);
-        sprintf(wspace->name, _("Workspace %i"), scr->workspace_count);
+#ifdef KWM_HINTS
+	if (scr->flags.kwm_syncing_count) {
+	    wspace->name = wKWMGetWorkspaceName(scr, scr->workspace_count-1);
+	}
+#endif
+	if (!wspace->name) {
+	    wspace->name = wmalloc(strlen(_("Workspace %i"))+8);
+	    sprintf(wspace->name, _("Workspace %i"), scr->workspace_count);
+	}
+
+
         if (!wPreferences.flags.noclip) {
             wspace->clip = wDockCreate(scr, WM_CLIP);
 	} else
             wspace->clip = NULL;
 
-	
 	list = wmalloc(sizeof(WWorkspace*)*scr->workspace_count);
-	
+
 	for (i=0; i<scr->workspace_count-1; i++) {
 	    list[i] = scr->workspaces[i];
 	}
@@ -105,7 +120,18 @@ wWorkspaceNew(WScreen *scr)
 
 	wWorkspaceMenuUpdate(scr, scr->workspace_menu);
 	wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
-	
+#ifdef GNOME_STUFF
+	wGNOMEUpdateWorkspaceHints(scr);
+#endif
+#ifdef KWM_HINTS
+	if (!scr->flags.kwm_syncing_count) {
+	    wKWMUpdateWorkspaceCountHint(scr);
+	    wKWMUpdateWorkspaceNameHint(scr, scr->workspace_count-1);
+	}
+	wKWMSetUsableAreaHint(scr, scr->workspace_count-1);
+#endif
+	XFlush(dpy);
+
 	return scr->workspace_count-1;
     }
     return -1;
@@ -113,24 +139,25 @@ wWorkspaceNew(WScreen *scr)
 
 
 
-void
+Bool
 wWorkspaceDelete(WScreen *scr, int workspace)
 {
     WWindow *tmp;
     WWorkspace **list;
     int i, j;
 
+
     if (workspace<=0)
-	return;
+	return False;
 
     /* verify if workspace is in use by some window */
     tmp = scr->focused_window;
     while (tmp) {
-	if (tmp->frame->workspace==workspace)
-	    return;
+	if (!IS_OMNIPRESENT(tmp) && tmp->frame->workspace==workspace)
+	    return False;
 	tmp = tmp->prev;
     }
-    
+
     if (!wPreferences.flags.noclip) {
         wDockDestroy(scr->workspaces[workspace]->clip);
         scr->workspaces[workspace]->clip = NULL;
@@ -176,6 +203,18 @@ wWorkspaceDelete(WScreen *scr, int workspace)
             wMenuRemoveItem(menu, --i);
 	wMenuRealize(menu);
     }
+
+#ifdef GNOME_STUFF
+    wGNOMEUpdateWorkspaceHints(scr);
+#endif
+#ifdef KWM_HINTS
+    wKWMUpdateWorkspaceCountHint(scr);
+#endif
+
+    if (scr->current_workspace >= scr->workspace_count)
+	wWorkspaceChange(scr, scr->workspace_count-1);
+
+    return True;
 }
 
 
@@ -191,42 +230,43 @@ wWorkspaceChange(WScreen *scr, int workspace)
     }
 }
 
+
+void
+wWorkspaceRelativeChange(WScreen *scr, int amount)
+{
+    int w;
+
+    w = scr->current_workspace + amount;
+
+    if (amount < 0) {
+
+	if (w >= 0)
+	    wWorkspaceChange(scr, w);
+	else if (wPreferences.ws_cycle)
+	    wWorkspaceChange(scr, scr->workspace_count + w);
+
+    } else if (amount > 0) {
+
+	if (w < scr->workspace_count)
+	    wWorkspaceChange(scr, w);
+	else if (wPreferences.ws_advance)
+	    wWorkspaceChange(scr, WMAX(w, MAX_WORKSPACES-1));
+	else if (wPreferences.ws_cycle)
+	    wWorkspaceChange(scr, w % scr->workspace_count);
+    }
+}
+
+
+
 void
 wWorkspaceForceChange(WScreen *scr, int workspace)
 {
     WWindow *tmp, *foc=NULL;
-#ifdef EXPERIMENTAL
-    WWorkspaceTexture *wsback;
-#endif
     
     if (workspace >= MAX_WORKSPACES || workspace < 0)
 	return;
 
-#ifdef EXPERIMENTAL
-    /* update the background for the workspace */
-    if (workspace < scr->wspaceTextureCount
-	&& scr->wspaceTextures[workspace]) {
-	wsback = scr->wspaceTextures[workspace];
-    } else {
-	/* check if the previous workspace used the default background */
-	if (scr->current_workspace < 0
-	    || scr->current_workspace >= scr->wspaceTextureCount
-	    || scr->wspaceTextures[scr->current_workspace]==NULL) {
-	    wsback = NULL;
-	} else {
-	    wsback = scr->defaultTexure;
-	}
-    }
-    if (wsback) {
-	if (wsback->pixmap!=None) {
-	    XSetWindowBackgroundPixmap(dpy, scr->root_win, wsback->pixmap);
-	} else {
-	    XSetWindowBackground(dpy, scr->root_win, wsback->solid);
-	}
-	XClearWindow(dpy, scr->root_win);
-	XFlush(dpy);
-    }
-#endif /* EXPERIMENTAL */
+    SendHelperMessage(scr, 'C', workspace+1, NULL);
 
     if (workspace > scr->workspace_count-1) {
 	wWorkspaceMake(scr, workspace - scr->workspace_count + 1);
@@ -245,14 +285,14 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 	    if (tmp->frame->workspace!=workspace && !tmp->flags.selected) {
 		/* unmap windows not on this workspace */
 		if ((tmp->flags.mapped||tmp->flags.shaded)
-		    && !tmp->window_flags.omnipresent
+		    && !IS_OMNIPRESENT(tmp)
 		    && !tmp->flags.changing_workspace) {
 		    XUnmapWindow(dpy, tmp->frame->core->window);
 		    tmp->flags.mapped = 0;
 		}
                 /* also unmap miniwindows not on this workspace */
-                if (tmp->flags.miniaturized &&
-                    !tmp->window_flags.omnipresent && tmp->icon) {
+                if (tmp->flags.miniaturized && !IS_OMNIPRESENT(tmp) 
+		    && tmp->icon) {
                     if (!wPreferences.sticky_icons) {
                         XUnmapWindow(dpy, tmp->icon->core->window);
 			tmp->icon->mapped = 0;
@@ -263,7 +303,7 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 		    }
                 }
 		/* update current workspace of omnipresent windows */
-		if (tmp->window_flags.omnipresent) {		    
+		if (IS_OMNIPRESENT(tmp)) {
 		    WApplication *wapp = wApplicationOf(tmp->main_window);
 
 		    tmp->frame->workspace = workspace;
@@ -292,7 +332,7 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 			/* Also map miniwindow if not omnipresent */
 			if (!wPreferences.sticky_icons &&
 			    tmp->flags.miniaturized &&
-			    !tmp->window_flags.omnipresent && tmp->icon) {
+			    !IS_OMNIPRESENT(tmp) && tmp->icon) {
 			    tmp->icon->mapped = 1;
 			    XMapWindow(dpy, tmp->icon->core->window);
 			}
@@ -337,7 +377,8 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
     if (scr->dock)
         wAppIconPaint(scr->dock->icon_array[0]);
     if (scr->clip_icon) {
-        if (scr->workspaces[workspace]->clip->auto_collapse) {
+        if (scr->workspaces[workspace]->clip->auto_collapse ||
+            scr->workspaces[workspace]->clip->auto_raise_lower) {
             /* to handle enter notify. This will also */
             XUnmapWindow(dpy, scr->clip_icon->icon->core->window);
             XMapWindow(dpy, scr->clip_icon->icon->core->window);
@@ -345,6 +386,14 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
             wClipIconPaint(scr->clip_icon);
         }
     }
+
+#ifdef GNOME_STUFF
+    wGNOMEUpdateCurrentWorkspaceHint(scr);
+#endif
+#ifdef KWM_HINTS
+    wKWMUpdateCurrentWorkspaceHint(scr);
+#endif
+    XFlush(dpy);
 }
 
 
@@ -444,9 +493,18 @@ wWorkspaceRename(WScreen *scr, int workspace, char *name)
 	    wMenuRealize(scr->workspace_menu);
 	}
     }
+
     UpdateSwitchMenuWorkspace(scr, workspace);
+
     if (scr->clip_icon)
         wClipIconPaint(scr->clip_icon);
+    
+#ifdef GNOME_STUFF
+    wGNOMEUpdateWorkspaceNamesHint(scr);
+#endif
+#ifdef KWM_HINTS
+    wKWMUpdateWorkspaceNameHint(scr, workspace);
+#endif
 }
 
 
@@ -613,7 +671,13 @@ wWorkspaceRestoreState(WScreen *scr)
             if (i>0)
                 wDockHideIcons(scr->workspaces[i]->clip);
         }
+#ifdef KWM_HINTS
+	wKWMUpdateWorkspaceNameHint(scr, i);
+#endif
     }
+#ifdef GNOME_STUFF
+    wGNOMEUpdateWorkspaceNamesHint(scr);
+#endif
 }
 
 

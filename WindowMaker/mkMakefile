@@ -1,0 +1,80 @@
+#!/bin/sh
+
+#
+# Creates a Makefile.am file containing all the stuff to install 
+# wmaker data
+#
+
+
+
+
+DIRS="Backgrounds Defaults IconSets Icons Pixmaps Styles Themes"
+
+FILE=Makefile.am
+
+spit() {
+	echo -n "$*" >> $FILE
+}
+
+spitln() {
+	echo "$*" >> $FILE
+}
+
+
+
+rm -f $FILE
+
+
+
+
+spitln SUBDIRS = $DIRS
+spitln
+spitln prefsdatadir = '$(pkgdatadir)'
+spitln
+
+
+EXCEPT="Makefile.am Makefile.in Makefile mkMakefile $FILE"
+
+spit prefsdata_DATA =
+
+for f in `ls -1|grep -v .in|grep -v \~`; do
+	ok=1
+	for i in $EXCEPT; do
+		if test "$i" = "$f"; then
+			ok=0	
+			break
+		fi
+	done
+	if [ -f $f -a $ok = 1 ]; then
+		spitln \\
+		spit "	$f"
+	fi
+done
+
+
+spitln
+spitln
+
+spitln EXTRA_DIST = '$(prefsdata_DATA)' mkMakefile wmmacros.in plmenu.in\\
+spitln "	plmenu.fr.in plmenu.hr.in"
+spitln
+spitln CLEANFILES = wmmacros plmenu
+spitln
+cat << 'FIM' >> $FILE
+wmmacros: $(srcdir)/wmmacros.in ./Makefile
+	-rm -f wmmacros
+
+	sed -e "s:#pkgdatadir#:$(pkgdatadir):" -e "s://:/:" \
+		$(srcdir)/wmmacros.in > wmmacros; \
+	chmod 644 wmmacros
+
+plmenu: $(srcdir)/plmenu.in ./Makefile
+	-rm -f plmenu
+
+	sed -e "s:#pkgdatadir#:$(pkgdatadir):" -e "s://:/:" \
+		$(srcdir)/plmenu.in > plmenu; \
+	chmod 644 plmenu
+
+FIM
+
+

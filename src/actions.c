@@ -19,7 +19,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
  *  USA.
  */
+
+#define HACK
+
 #include "wconfig.h"
+
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -45,6 +49,13 @@
 #include "winspector.h"
 #include "list.h"
 #include "workspace.h"
+
+#ifdef GNOME_STUFF
+# include "gnome.h"
+#endif
+#ifdef KWM_HINTS
+# include "kwm.h"
+#endif
 
 #ifdef WMSOUND
 #include "wmsound.h"
@@ -129,9 +140,11 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
     int wasfocused;
 
     LastFocusChange = timestamp;
-    
+
+#ifndef HACK
     if (ignoreTimestamp)
-      timestamp=CurrentTime;
+#endif
+      timestamp = CurrentTime;
 
     if (focused)
       oapp = wApplicationOf(focused->main_window);
@@ -147,6 +160,10 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 	    wApplicationDeactivate(oapp);
 #endif
 	}
+#ifdef KWM_HINTS
+	wKWMUpdateActiveWindowHint(scr);
+	wKWMSendEventMessage(NULL, WKWMFocusWindow);
+#endif
 	return;
     }
     wasfocused = wwin->flags.focused;
@@ -156,7 +173,7 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
     if (napp) 
 	napp->last_workspace = wwin->screen_ptr->current_workspace;
     
-    if (wwin->window_flags.no_focusable)
+    if (WFLAGP(wwin, no_focusable))
 	return;
 
     if (wwin->flags.mapped) {
@@ -241,6 +258,10 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 	wApplicationActivate(napp);
 #endif
     }
+#ifdef KWM_HINTS
+    wKWMUpdateActiveWindowHint(scr);
+    wKWMSendEventMessage(wwin, WKWMFocusWindow);
+#endif
     XFlush(dpy);
 }
 
@@ -303,10 +324,22 @@ wShadeWindow(WWindow  *wwin)
     /* for the client it's just like iconification */
     wFrameWindowResize(wwin->frame, wwin->frame->core->width,
 		       wwin->frame->top_width-1);
+    
+    wwin->client.y = wwin->frame_y - wwin->client.height 
+	+ wwin->frame->top_width;
+    wWindowSynthConfigureNotify(wwin);
+
     /*
     wClientSetState(wwin, IconicState, None);
      */
 
+#ifdef GNOME_STUFF
+    wGNOMEUpdateClientStateHint(wwin, False);
+#endif
+#ifdef KWM_HINTS
+    wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
+    wKWMSendEventMessage(wwin, WKWMChangedClient);
+#endif
     /* update window list to reflect shaded state */
     UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
 
@@ -368,11 +401,14 @@ wUnshadeWindow(WWindow  *wwin)
     }
 #endif /* ANIMATIONS */
 
-
     wwin->flags.skip_next_animation = 0;
     wFrameWindowResize(wwin->frame, wwin->frame->core->width, 
 		       wwin->frame->top_width + wwin->client.height
 		       + wwin->frame->bottom_width);
+
+    wwin->client.y = wwin->frame_y + wwin->frame->top_width;
+    wWindowSynthConfigureNotify(wwin);
+    
     /*
     wClientSetState(wwin, NormalState, None);
      */
@@ -381,8 +417,17 @@ wUnshadeWindow(WWindow  *wwin)
     if (wwin->flags.focused)
       wSetFocusTo(wwin->screen_ptr, wwin);
 
+#ifdef GNOME_STUFF
+    wGNOMEUpdateClientStateHint(wwin, False);
+#endif
+#ifdef KWM_HINTS
+    wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
+    wKWMSendEventMessage(wwin, WKWMChangedClient);
+#endif
+
     /* update window list to reflect unshaded state */
     UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
+
 }
 
 
@@ -390,6 +435,7 @@ void
 wMaximizeWindow(WWindow *wwin, int directions)
 {
     int new_width, new_height, new_x, new_y;
+    WArea usableArea = wwin->screen_ptr->totalUsableArea;
 
     if (wwin->flags.shaded) {
 	wwin->flags.skip_next_animation = 1;
@@ -400,50 +446,46 @@ wMaximizeWindow(WWindow *wwin, int directions)
     wwin->old_geometry.height = wwin->client.height;
     wwin->old_geometry.x = wwin->frame_x;
     wwin->old_geometry.y = wwin->frame_y;
+
+#ifdef KWM_HINTS
+    wKWMUpdateClientGeometryRestore(wwin);
+#endif
+
     if (directions & MAX_HORIZONTAL) {
-	new_width = wwin->screen_ptr->scr_width-FRAME_BORDER_WIDTH*2;
-	
-	new_x = 0;
-	if ((wPreferences.icon_yard & IY_VERT) 
-	    && wPreferences.no_window_over_icons) {
 
-	    new_width -= wPreferences.icon_size;
-	    if (!(wPreferences.icon_yard & IY_RIGHT))
-		new_x += wPreferences.icon_size;
-	}
+	new_width = (usableArea.x2-usableArea.x1)-FRAME_BORDER_WIDTH*2;	
+	new_x = usableArea.x1;
 
-	if (wwin->screen_ptr->dock 
-	    && (!wwin->screen_ptr->dock->lowered
-		|| wPreferences.no_window_over_dock)) {
-
-	    new_width -= wPreferences.icon_size + DOCK_EXTRA_SPACE;
-	    if (!wwin->screen_ptr->dock->on_right_side) 
-		new_x += wPreferences.icon_size + DOCK_EXTRA_SPACE;
-	}
     } else {
+
 	new_x = wwin->frame_x;
 	new_width = wwin->frame->core->width;
+
     }
 
     if (directions & MAX_VERTICAL) {
-	new_height = wwin->screen_ptr->scr_height-FRAME_BORDER_WIDTH*2;
-	new_y = 0;	
-	if (!(wPreferences.icon_yard & IY_VERT)
-	    && wPreferences.no_window_over_icons) {
 
-	    new_height -= wPreferences.icon_size;
-	    
-	    if (wPreferences.icon_yard & IY_TOP)
-		new_y += wPreferences.icon_size;
-	}
+	new_height = (usableArea.y2-usableArea.y1)-FRAME_BORDER_WIDTH*2;
+	new_y = usableArea.y1;
+
     } else {
+
 	new_y = wwin->frame_y;
 	new_height = wwin->frame->core->height;
+
     }
     new_height -= wwin->frame->top_width+wwin->frame->bottom_width;
 
     wWindowConstrainSize(wwin, &new_width, &new_height);
     wWindowConfigure(wwin, new_x, new_y, new_width, new_height);
+
+#ifdef GNOME_STUFF
+    wGNOMEUpdateClientStateHint(wwin, False);
+#endif
+#ifdef KWM_HINTS
+    wKWMUpdateClientStateHint(wwin, KWMMaximizedFlag);
+    wKWMSendEventMessage(wwin, WKWMChangedClient);
+#endif
 
 #ifdef WMSOUND
     wSoundPlay(WMSOUND_MAXIMIZE);
@@ -456,6 +498,9 @@ wUnmaximizeWindow(WWindow *wwin)
 {
     int restore_x, restore_y;
 
+    if (!wwin->flags.maximized)
+	return;
+    
     if (wwin->flags.shaded) {
 	wwin->flags.skip_next_animation = 1;
 	wUnshadeWindow(wwin);
@@ -467,6 +512,14 @@ wUnmaximizeWindow(WWindow *wwin)
     wwin->flags.maximized = 0;
     wWindowConfigure(wwin, restore_x, restore_y,
 		     wwin->old_geometry.width, wwin->old_geometry.height);
+
+#ifdef GNOME_STUFF
+    wGNOMEUpdateClientStateHint(wwin, False);
+#endif
+#ifdef KWM_HINTS
+    wKWMUpdateClientStateHint(wwin, KWMMaximizedFlag);
+    wKWMSendEventMessage(wwin, WKWMChangedClient);
+#endif
 
 #ifdef WMSOUND
     wSoundPlay(WMSOUND_UNMAXIMIZE);
@@ -737,7 +790,14 @@ unmapTransientsFor(WWindow *wwin)
 	    XUnmapWindow(dpy, tmp->frame->core->window);
 	    if (!tmp->flags.shaded)
 		wClientSetState(tmp, IconicState, None);
+#ifdef KWM_HINTS
+	    wKWMUpdateClientStateHint(tmp, KWMIconifiedFlag);
+	    wKWMSendEventMessage(tmp, WKWMRemoveWindow);
+	    tmp->flags.kwm_hidden_for_modules = 1;
+#endif
+
 	    UpdateSwitchMenu(wwin->screen_ptr, tmp, ACTION_CHANGE_STATE);
+
 	}
 	tmp = tmp->prev;
     }
@@ -765,7 +825,16 @@ mapTransientsFor(WWindow *wwin)
  	    tmp->flags.semi_focused = 0;
 	    if (!tmp->flags.shaded)
 		wClientSetState(tmp, NormalState, None);
+#ifdef KWM_HINTS
+	    wKWMUpdateClientStateHint(tmp, KWMIconifiedFlag);
+	    if (tmp->flags.kwm_hidden_for_modules) {
+		wKWMSendEventMessage(tmp, WKWMAddWindow);
+		tmp->flags.kwm_hidden_for_modules = 0;
+	    }
+#endif
+
 	    UpdateSwitchMenu(wwin->screen_ptr, tmp, ACTION_CHANGE_STATE);
+
 	}
 	tmp = tmp->prev;
     }
@@ -897,7 +966,8 @@ wIconifyWindow(WWindow *wwin)
     
     wwin->flags.skip_next_animation = 0;
     if (wwin->screen_ptr->current_workspace==wwin->frame->workspace ||
-        wwin->window_flags.omnipresent || wPreferences.sticky_icons)
+	IS_OMNIPRESENT(wwin) || wPreferences.sticky_icons)
+
         XMapWindow(dpy, wwin->icon->core->window);
     AddToStackList(wwin->icon->core);
 
@@ -913,7 +983,7 @@ wIconifyWindow(WWindow *wwin)
 	    
 	    tmp = wwin->prev;
 	    while (tmp) {
-		if (!tmp->window_flags.no_focusable
+		if (!WFLAGP(tmp, no_focusable)
 		    && !(tmp->flags.hidden||tmp->flags.miniaturized))
 		    break;
 		tmp = tmp->prev;
@@ -941,9 +1011,16 @@ wIconifyWindow(WWindow *wwin)
     if (wwin->flags.selected)
         wIconSelect(wwin->icon);
 
+#ifdef GNOME_STUFF
+    wGNOMEUpdateClientStateHint(wwin, False);
+#endif
+#ifdef KWM_HINTS
+    wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
+    wKWMSendEventMessage(wwin, WKWMChangedClient);
+#endif
+
     UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
 
-    
 }
 
 
@@ -1024,8 +1101,15 @@ wDeiconifyWindow(WWindow  *wwin)
         wArrangeIcons(wwin->screen_ptr, True);
     }
 
-    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
+#ifdef GNOME_STUFF
+    wGNOMEUpdateClientStateHint(wwin, False);
+#endif
+#ifdef KWM_HINTS
+    wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
+    wKWMSendEventMessage(wwin, WKWMChangedClient);
+#endif
 
+    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
 }
 
 
@@ -1040,7 +1124,12 @@ hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate)
 	XUnmapWindow(dpy, wwin->icon->core->window);
 	wwin->flags.hidden = 1;
 	wwin->icon->mapped = 0;
+#ifdef GNOME_STUFF
+	wGNOMEUpdateClientStateHint(wwin, False);
+#endif
+
 	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
+
 	return;
     }
 
@@ -1088,7 +1177,12 @@ hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate)
 #endif
     wwin->flags.skip_next_animation = 0;
 
+#ifdef GNOME_STUFF
+    wGNOMEUpdateClientStateHint(wwin, False);
+#endif
+
     UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
+
 }
 
 
@@ -1118,7 +1212,7 @@ wHideOtherApplications(WWindow *awin)
             && !(wwin->flags.miniaturized||wwin->flags.hidden)
             && !wwin->flags.internal_window
             && (!wwin->flags.inspector_open || wwin->inspector->frame!=awin)
-	    && !wwin->window_flags.no_hide_others) {
+	    && !WFLAGP(wwin, no_hide_others)) {
 	    
 #ifdef REDUCE_APPICONS
 	    match = 0;
@@ -1133,8 +1227,8 @@ wHideOtherApplications(WWindow *awin)
 	    }
 #endif
 
-	    if (wwin->main_window==None || wwin->window_flags.no_appicon) {
-		if (!wwin->window_flags.no_miniaturizable) {
+	    if (wwin->main_window==None || WFLAGP(wwin, no_appicon)) {
+		if (!WFLAGP(wwin, no_miniaturizable)) {
 		    wwin->flags.skip_next_animation = 1;
 		    wIconifyWindow(wwin);
 		}
@@ -1149,7 +1243,7 @@ wHideOtherApplications(WWindow *awin)
 		    tapp->flags.skip_next_animation = 1;
 		    wHideApplication(tapp);
 		} else {
-		    if (!wwin->window_flags.no_miniaturizable) {
+		    if (!WFLAGP(wwin, no_miniaturizable)) {
 		    	wwin->flags.skip_next_animation = 1;
 		   	 wIconifyWindow(wwin);
 		    }
@@ -1250,7 +1344,7 @@ wHideApplication(WApplication *wapp)
 	if (wPreferences.focus_mode==WKF_CLICK) {
 	    wlist = scr->focused_window;
 	    while (wlist) {
-		if (!wlist->window_flags.no_focusable && !wlist->flags.hidden
+		if (!WFLAGP(wlist, no_focusable) && !wlist->flags.hidden
 		    && (wlist->flags.mapped || wlist->flags.shaded))
 		  break;
 		wlist = wlist->prev;
@@ -1309,7 +1403,12 @@ unhideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate,
         wClientSetState(pwin, NormalState, None);
     }
 
+#ifdef GNOME_STUFF
+    wGNOMEUpdateClientStateHint(wwin, False);
+#endif
+
     UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
+
 }
 
 
@@ -1378,7 +1477,9 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
 			wlist->icon->mapped = 1;
 		    }
 		    wlist->flags.hidden = 0;
+
 		    UpdateSwitchMenu(scr, wlist, ACTION_CHANGE_STATE);
+
 		    if (wlist->frame->workspace != scr->current_workspace)
 			wWindowChangeWorkspace(wlist, scr->current_workspace);
 		}
@@ -1426,7 +1527,7 @@ wShowAllWindows(WScreen *scr)
     while (wwin) {
         if (!wwin->flags.internal_window &&
             (scr->current_workspace == wwin->frame->workspace
-	    || wwin->window_flags.omnipresent)) {
+	    || IS_OMNIPRESENT(wwin))) {
 	    if (wwin->flags.miniaturized) {
 		wwin->flags.skip_next_animation = 1;
 		wDeiconifyWindow(wwin);
@@ -1569,8 +1670,7 @@ wArrangeIcons(WScreen *scr, Bool arrangeAll)
     while (wwin) { 
         if (wwin->icon && wwin->flags.miniaturized && !wwin->flags.hidden &&
             (wwin->frame->workspace==scr->current_workspace ||
-             wwin->window_flags.omnipresent ||
-             wPreferences.sticky_icons)) {
+             IS_OMNIPRESENT(wwin) || wPreferences.sticky_icons)) {
 	    
 	    if (arrangeAll || !wwin->flags.icon_moved) {
 		if (wwin->icon_x != X || wwin->icon_y != Y) {

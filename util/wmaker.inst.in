@@ -145,17 +145,14 @@ fi
 if [ ! -d "$GSDIR/Library/WindowMaker/Styles" ]; then
 	echo "Creating style library $GSDIR/Library/WindowMaker/Styles"
 	make_dir $GSDIR/Library/WindowMaker/Styles
-else
-	echo "Styles directory already exists. Skipping..."
 fi
 
 
 if [ ! -d "$GSDIR/Library/WindowMaker/Themes" ]; then
 	echo "Creating theme library $GSDIR/Library/WindowMaker/Themes"
 	make_dir  $GSDIR/Library/WindowMaker/Themes
-else
-	echo "Themes directory already exists. Skipping..."
 fi
+
 
 
 if [ ! -d "$GSDIR/Library/WindowMaker/Backgrounds" ]; then
@@ -198,9 +195,7 @@ else
 fi
 
 
-echo "Copying default menu configuration files..."
-FILES=`(cd $GLOBALDIR;ls -1 menu* plmenu wmmacros)`
-all=""
+if test -z #LITE# ; then
 for i in $FILES; do
 	if [ -f "$GSDIR/Library/WindowMaker/$i" ]; then
 		echo "The file \"$i\" already exists in $GSDIR/Library/WindowMaker"
@@ -218,7 +213,7 @@ for i in $FILES; do
 		copy $GLOBALDIR/$i $GSDIR/Library/WindowMaker/$i
 	fi
 done
-
+fi
 
 cp $GLOBALDIR/README $GSDIR/Library/WindowMaker 
 cp -i $GLOBALDIR/autostart.sh $GSDIR/Library/WindowMaker/autostart
@@ -234,14 +229,22 @@ show_end_message() {
 echo
 echo "Installation Finished"
 echo
-echo "There are menus in 2 different file formats. The plain text format and"
-echo "the property list format. The plain text format is more flexible, but"
-echo "the menu in the property list format can be edited graphically. The"
-echo "menu that will be used by default is the plain text. Read"
-echo "$GSDIR/Library/WindowMaker/README for information on how to change it."
-
+if test -z #LITE# ; then
+ echo "There are menus in 2 different file formats. The plain text format and"
+ echo "the property list format. The plain text format is more flexible, but"
+ echo "the menu in the property list format can be edited graphically. The"
+ echo "menu that will be used by default is the plain text. Read"
+ echo "$GSDIR/Library/WindowMaker/README for information on how to change it."
+else
+ echo "Your copy of Window Maker is configured especially for KDE."
+ echo "Window Maker application menus are not available."
+fi
 }
 
+if test -z `grep wmaker ~/.xinitrc`; then
+	show_end_message
+	exit 0
+fi
 
 trap "show_end_message;exit" 2
 

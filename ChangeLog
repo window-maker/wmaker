@@ -1,3 +1,45 @@
+Changes since version 0.20.3:
+.............................
+
+- window list is ordered by workspace
+- preliminary grid move mode
+- fixed prob with docked apps with the same name switching places (like wmmon
+  and wmmon -s)
+- wrapping of workspace switching for 5button mice
+- added restart in fallback menu
+- fixed buglet in modifier error reporting
+- extra options in window command menu
+- changed select() used in wevent.c to poll()
+- fixed bug in SGI boxes (black dialogs)
+- added IconTitleBack, IconTitleColor
+- made error checking stricter
+- fixed crash when saving application supplied icons that have many colors
+- added move threshold to menus
+- added textured gradient textures
+- added -nofont flag for setstyle
+- added -p flag and theme pack support for getstyle
+- fixed crash bug when clicking on menu title opened with kbd
+- fixed bug that caused incorrect saving of icon configuration (the -name bug)
+- scale pixmap texture for workspaceback type will maintain aspect ratio
+- fixed memory leak in jpeg loader
+- started XStandardColormap support
+- added StartMaximized window flag
+- fixed bug of mixed up Unfocusable and StartMiniaturized flags
+- yet another try to switch to shared libraries
+- workspace specific background images
+- stack new windows to under focused window if autofocus is off (disabled)
+- added kde support
+- implemented the "GNOME Window Manager Compliance" stuff
+- window move/resize by keyboard
+- rewrote window attribute code to make it cleaner
+- added --enable-lite configure option
+- added support to change prompt in %a() for root menu
+- rewrote exit code
+- added KeepInsideScreen=YES; for scilab in default WMWindowAttributes
+- added an option to the Clip, to allow automatic Raise/Lower when the mouse
+  cursor enter/leave the Clip.
+
+
 Changes since version 0.20.2:
 .............................
 

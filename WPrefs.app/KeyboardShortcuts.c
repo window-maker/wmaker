@@ -45,7 +45,11 @@ typedef struct _Panel {
     WMButton *defB;
 
     WMLabel *instructionsL;
-    
+
+    WMColor *white;
+    WMColor *black;
+    WMFont *font;
+
     /**/
     char capturing;
     char **shortcuts;
@@ -71,6 +75,7 @@ static char *keyOptions[] = {
 	"LowerKey",
 	"RaiseLowerKey",
 	"ShadeKey",
+	"MoveResizeKey",
 	"SelectKey",
 	"FocusNextKey",
 	"FocusPrevKey",
@@ -92,6 +97,14 @@ static char *keyOptions[] = {
 	"WindowShortcut2Key",
 	"WindowShortcut3Key",
 	"WindowShortcut4Key",
+#ifdef EXTEND_WINDOWSHORTCUT
+	"WindowShortcut5Key",
+	"WindowShortcut6Key",
+	"WindowShortcut7Key",
+	"WindowShortcut8Key",
+	"WindowShortcut9Key",
+	"WindowShortcut10Key",
+#endif
 	"ClipRaiseKey",
 	"ClipLowerKey",
 #ifndef XKB_MODELOCK
@@ -180,6 +193,8 @@ captureClick(WMWidget *w, void *data)
 		if (panel->shortcuts[row])
 		    free(panel->shortcuts[row]);
 		panel->shortcuts[row] = shortcut;
+
+		WMRedisplayWidget(panel->actLs);
 	    } else {
 		free(shortcut);
 	    }
@@ -205,6 +220,7 @@ clearShortcut(WMWidget *w, void *data)
 	if (panel->shortcuts[row])
 	    free(panel->shortcuts[row]);
 	panel->shortcuts[row]=NULL;
+	WMRedisplayWidget(panel->actLs);
     }
 }
 
@@ -226,6 +242,7 @@ typedKeys(void *observerData, WMNotification *notification)
 	free(panel->shortcuts[row]);
 	panel->shortcuts[row] = NULL;
     }
+    WMRedisplayWidget(panel->actLs);
 }
 
 
@@ -281,6 +298,40 @@ showData(_Panel *panel)
 	    panel->shortcuts[i] = NULL;
 	}	    
     }
+    WMRedisplayWidget(panel->actLs);
+}
+
+
+static void
+paintItem(WMList *lPtr, int index, Drawable d, char *text, int state,
+	  WMRect *rect)
+{
+    int width, height, x, y;
+    _Panel *panel = (_Panel*)WMGetHangedData(lPtr);
+    WMScreen *scr = WMWidgetScreen(lPtr);
+    Display *dpy = WMScreenDisplay(scr);
+
+    width = rect->size.width;
+    height = rect->size.height;
+    x = rect->pos.x;
+    y = rect->pos.y;
+
+    if (state & WLDSSelected)
+	XFillRectangle(dpy, d, WMColorGC(panel->white), x, y, width, 
+		       height);
+    else 
+	XClearArea(dpy, d, x, y, width, height, False);
+
+    if (panel->shortcuts[index]) {
+	WMPixmap *pix = WMGetSystemPixmap(scr, WSICheckMark);
+	WMSize size = WMGetPixmapSize(pix);
+	
+	WMDrawPixmap(pix, d, x+(20-size.width)/2, (height-size.height)/2+y);
+	WMReleasePixmap(pix);
+    }
+
+    WMDrawString(scr, d, WMColorGC(panel->black), panel->font, x+20, y,
+		 text, strlen(text));
 }
 
 
@@ -318,6 +369,8 @@ createPanel(Panel *p)
     panel->actLs = WMCreateList(panel->frame);
     WMResizeWidget(panel->actLs, 280, 190);
     WMMoveWidget(panel->actLs, 20, 32);
+    WMSetListUserDrawProc(panel->actLs, paintItem);
+    WMHangData(panel->actLs, panel);
     
     WMAddListItem(panel->actLs, _("Open applications menu"));
     WMAddListItem(panel->actLs, _("Open window list menu"));
@@ -332,6 +385,7 @@ createPanel(Panel *p)
     WMAddListItem(panel->actLs, _("Raise/Lower window under mouse pointer"));
     WMAddListItem(panel->actLs, _("Shade active window"));
     WMAddListItem(panel->actLs, _("Select active window"));
+    WMAddListItem(panel->actLs, _("Move/Resize active window"));
     WMAddListItem(panel->actLs, _("Focus next window"));
     WMAddListItem(panel->actLs, _("Focus previous window"));
     WMAddListItem(panel->actLs, _("Switch to next workspace"));
@@ -448,7 +502,11 @@ InitKeyboardShortcuts(WMScreen *scr, WMWindow *win)
     
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;
-    
+
+    panel->white = WMWhiteColor(scr);
+    panel->black = WMBlackColor(scr);
+    panel->font = WMSystemFontOfSize(scr, 12);
+
     AddSection(panel, ICON_FILE);
     
     return panel;

@@ -21,11 +21,27 @@
 
 #include "WPrefs.h"
 
+
+#include <assert.h>
+
 #include <X11/Xlocale.h>
 
+#include <sys/wait.h>
+#include <unistd.h>
 
 extern void Initialize(WMScreen *scr);
 
+#define MAX_DEATHS	64
+
+struct {
+    pid_t pid;
+    void *data;
+    void (*handler)(void*);
+} DeadHandlers[MAX_DEATHS];
+
+
+static pid_t DeadChildren[MAX_DEATHS];
+static int DeadChildrenCount = 0;
 
 
 void
@@ -60,6 +76,38 @@ print_help(char *progname)
 }
 
 
+
+static RETSIGTYPE
+handleDeadChild(int sig)
+{
+    pid_t pid;
+    int status;
+    
+    pid = waitpid(-1, &status, WNOHANG);
+    if (pid > 0) {
+	DeadChildren[DeadChildrenCount++] = pid;
+    }
+}
+
+
+void
+AddDeadChildHandler(pid_t pid, void (*handler)(void*), void *data)
+{
+    int i;
+
+    for (i = 0; i < MAX_DEATHS; i++) {
+	if (DeadHandlers[i].pid == 0) {
+	    DeadHandlers[i].pid = pid;
+	    DeadHandlers[i].handler = handler;
+	    DeadHandlers[i].data = data;
+	    break;
+	}
+    }
+    assert(i!=MAX_DEATHS);
+}
+
+
+
 int 
 main(int argc, char **argv)
 {
@@ -69,6 +117,8 @@ main(int argc, char **argv)
     int i;
     char *display_name="";
 
+    memset(DeadHandlers, 0, sizeof(DeadHandlers));
+    
     WMInitializeApplication("WPrefs", &argc, argv);
     
     if (argc>1) {
@@ -128,8 +178,20 @@ main(int argc, char **argv)
 
     while (1) {
 	XEvent event;
-	
+
 	WMNextEvent(dpy, &event);
+
+	while (DeadChildrenCount-- > 0) {
+	    int i;
+	    
+	    for (i=0; i<MAX_DEATHS; i++) {
+		if (DeadChildren[i] == DeadHandlers[i].pid) {
+		    (*DeadHandlers[i].handler)(DeadHandlers[i].data);
+		    DeadHandlers[i].pid = 0;
+		}
+	    }
+	}
+
 	WMHandleEvent(&event);
     }
 }

@@ -12,7 +12,8 @@ geticonset- outputs the current set of icon assignments. Good for making
 
 setstyle- load style settings from a style file and setup WindowMaker
 
-getstyle - gets current style settings and save into a file
+getstyle - gets current style settings and save into a file or create
+	a theme pack.
 
 seticons- merges icon definitions into WMWindowAttributes file
 

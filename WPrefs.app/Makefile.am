@@ -18,6 +18,7 @@ WPrefs_SOURCES = \
 	main.c \
 	WPrefs.c \
 	WPrefs.h \
+	Appearance.c \
 	Configurations.c \
 	Expert.c \
 	Focus.c \
@@ -33,6 +34,7 @@ WPrefs_SOURCES = \
 	TextureAndColor.c \
 	TexturePanel.c \
 	TexturePanel.h \
+	Themes.c \
 	WindowHandling.c \
 	Workspace.c \
 	double.c \
@@ -56,8 +58,8 @@ WPrefs_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
 
 WPrefs_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a\
-	$(top_builddir)/wrlib/libwraster.a \
-        $(top_builddir)/libPropList/libPropList.a \
+	$(top_builddir)/wrlib/libwraster.la \
+        $(top_builddir)/libPropList/libPropList.la \
 	@GFXLFLAGS@ \
 	@XLFLAGS@ \
 	@GFXLIBS@ \

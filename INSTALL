@@ -7,12 +7,13 @@ SUPPORTED PLATFORMS
 ===================
 (ie: I've heard someone has compiled it on...)
 
-- Intel/Linux RedHat 4.2 (primary platform)
+- Intel/Linux Slackware 3.5 (primary platform)
 - Intel/Linux other distributions
 - Sparc/Linux RedHat 5.1
 - PowerPC/MkLinux
 - Alpha/Linux RedHat 5.1
 - FreeBSD
+- NetBSD
 - Solaris 2.5.1, 2.5.2
 - Solaris 2.6.0
 - Solaris 2.7beta
@@ -21,14 +22,18 @@ SUPPORTED PLATFORMS
 - OSF/1
 - HP-UX
 - AIX 4.1.4 / IBM PowerPC
+- AIX 4.3.2 / IBM PowerPC
 - AIX 5.3
 - DEC Alpha/Digital UNIX 4.x
 - XFree86 / OS/2
 - Corel NetWinder
 - SunOS 4.x
-- MacOS / MachTen 4.1.1
+- PowerMac / Power MachTen 4.1.1 over MacOS
 
-Patches to make it work on other platforms are welcome.
+Patches to make it work on other platforms are welcome. 
+
+If the latest version doesn't work for you, try 0.19.3, 
+which is known to be pretty stable on many platforms.
 
 
 REQUIREMENTS:
@@ -72,8 +77,7 @@ OPTIONAL:
 These libraries are not required to make Window Maker work, but they
 are supported in case you want to use them. Version numbers are those
 that I have (and therefore, guraranteed to work), but other versions
-might work too. Tell me if you made wmaker work with some library
-with a version older than the stated here.
+might work too. 
 
 
 - libXPM 4.7 or newer
@@ -118,6 +122,37 @@ support compiled in.
 
 To get a list of other options, run ./configure --help
 
+--enable-kanji	support to display Kanji characters, Korean, Chinese 
+		and other languagues that require special characters.
+
+--enable-single-icon  enables the collapsing of all appicons of the
+	 WM_CLASS+WM_INSTANCE into a single one. This feature is not 
+	supported at all by the developers. If you have some trouble with it,
+	contact it's author: Christopher Seawood <cls@seawood.org>
+
+--disable-shm 	disable use of the MIT shared memory extension. This will
+	slow down texture generation a little bit, but in some cases
+	it seems to be necessary due to a bug that manifests as messed
+	icons and textures.
+
+--disable-motif disable support for mwm hints
+
+--enable-gnome enable support for stuff needed by GNOME 
+	(GNOME compliant bla bla bla)
+
+--enable-kde enable support for kde/kwm hints
+
+--enable-lite remove things that are already supported in desktop
+		environments, like KDE and GNOME. Disabled things
+		are: window list, root applications menu,
+		multiple window selection. Note that you will not
+		be able to exit Window Maker from itself anymore;
+		you will have to use kill with the SIGTERM signal
+		or exit it from KDE.
+
+--enable-modelock  XKB language status lock support. If you don't know 
+	what it is you probably don't need it.
+
 --enable-sound	enable support of sound effects module
 
 --disable-xpm   disables use of the XPM library even if it is available on
@@ -135,20 +170,7 @@ To get a list of other options, run ./configure --help
 
 --enable-debug	adds extra debugging information. Do not use it
 	unless you're debugging Window Maker.
-	
---enable-kanji	support to display Kanji characters, Korean, Chinese 
-		and other languagues that require special characters.
 
---enable-single-icon  enables the collapsing of all appicons of the
-	 WM_CLASS+WM_INSTANCE into a single one. This feature is not 
-	supported at all by the developers. If you have some trouble with it,
-	contact it's author: Christopher Seawood <cls@seawood.org>
-
---disable-shm 	disable use of the MIT shared memory extension. This will
-	slow down texture generation.
-	
---enable-modelock  XKB language status lock support. If you don't know 
-	what it is you probably don't need it.
 
 
 PLATFORM SPECIFIC NOTES:
@@ -163,6 +185,11 @@ PLATFORM SPECIFIC NOTES:
 	cause problems when parsing the config files.
 	You also might need to use the --with-gfx-libs and --with-gfx-incs
 	to supply the directory where libtiff is located.
+
+	If you have a Ultra Creator 3D or some other machine with high-end
+	graphics, be sure to start the X server with the default visual
+	set to 24bpp or you might experience problems with mangled colors.
+	This is a bug and will be fixed.
 
 - RedHat Linux
 	Make sure you don't have the LANG and LINGUAS environment variables
@@ -424,9 +451,9 @@ menu
 configure the fonts appropriately. Read the manual page for XCreateFontSet
 to have more details about it. You must change the ~/G/D/WindowMaker file
 for fonts used in titlebars, menus and other things. For fonts used in
-dialog windows, change ~/G/D/WMGLOBAL. Note that at the moment you can only
-supply a single font in WMGLOBAL. The %d in the font names must not be
-removed.
+dialog windows, change ~/G/D/WMGLOBAL. The %d in the font names must not be
+removed. You can also use the supplied wsetfont script for the task.
+Read the script itself for instructions.
 
 For example, you can specify the following in ~/G/D/WindowMaker:
 

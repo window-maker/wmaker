@@ -78,6 +78,7 @@ static proplist_t AKeepInsideScreen;
 static proplist_t AUnfocusable;
 static proplist_t AAlwaysUserIcon;
 static proplist_t AStartMiniaturized;
+static proplist_t AStartMaximized;
 static proplist_t AStartHidden;	       /* app */
 static proplist_t ADontSaveSession;    /* app */
 static proplist_t AEmulateAppIcon;
@@ -113,6 +114,7 @@ init_wdefaults(WScreen *scr)
     AAlwaysUserIcon = PLMakeString("AlwaysUserIcon");
     AStartMiniaturized = PLMakeString("StartMiniaturized");
     AStartHidden = PLMakeString("StartHidden");
+    AStartMaximized = PLMakeString("StartMaximized");
     ADontSaveSession = PLMakeString("DontSaveSession");
     AEmulateAppIcon = PLMakeString("EmulateAppIcon");
 
@@ -167,9 +169,22 @@ get_value(proplist_t dict_win, proplist_t dict_class, proplist_t dict_name,
 }
 
 
+/*
+ *----------------------------------------------------------------------
+ * wDefaultFillAttributes--
+ * 	Retrieves attributes for the specified instance/class and
+ * fills attr with it. Values that are actually defined are also
+ * set in mask. If useGlobalDefault is True, the default for
+ * all windows ("*") will be used for when no values are found
+ * for that instance/class. 
+ * 
+ *----------------------------------------------------------------------
+ */
 void
 wDefaultFillAttributes(WScreen *scr, char *instance, char *class, 
-		       WWindowAttributes *attr, Bool useGlobalDefault)
+		       WWindowAttributes *attr,
+		       WWindowAttributes *mask,
+		       Bool useGlobalDefault)
 {
     proplist_t value;
     proplist_t key1, key2, key3;
@@ -181,12 +196,12 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
       key1 = PLMakeString(strcat(strcat(strcpy(buffer,instance),"."),class));
     else
       key1 = NULL;
-    
+
     if (instance)
       key2 = PLMakeString(instance);
     else
       key2 = NULL;
-    
+
     if (class)
       key3 = PLMakeString(class);
     else
@@ -219,82 +234,70 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
     if (key3)
       PLRelease(key3);
 
+#define APPLY_VAL(value, flag, attrib)	\
+	if (value) {attr->flag = getBool(attrib, value); \
+			if (mask) mask->flag = 1;}
+
     /* get the data */        
     value = get_value(dw, dc, dn, da, ANoTitlebar, No, useGlobalDefault);
-    if (value)
-	attr->no_titlebar = getBool(ANoTitlebar, value);
+    APPLY_VAL(value, no_titlebar, ANoTitlebar);
         
     value = get_value(dw, dc, dn, da, ANoResizebar, No, useGlobalDefault);
-    if (value)
-	attr->no_resizebar = getBool(ANoResizebar, value);
+    APPLY_VAL(value, no_resizebar, ANoResizebar);
 
     value = get_value(dw, dc, dn, da, ANoMiniaturizeButton, No, useGlobalDefault);
-    if (value)
-	attr->no_miniaturize_button = getBool(ANoMiniaturizeButton, value);
+    APPLY_VAL(value, no_miniaturize_button, ANoMiniaturizeButton);
     
     value = get_value(dw, dc, dn, da, ANoCloseButton, No, useGlobalDefault);
-    if (value)
-	attr->no_close_button = getBool(ANoCloseButton, value);
+    APPLY_VAL(value, no_close_button, ANoCloseButton);
 
     value = get_value(dw, dc, dn, da, ANoHideOthers, No, useGlobalDefault);
-    if (value)
-	attr->no_hide_others = getBool(ANoHideOthers, value);
+    APPLY_VAL(value, no_hide_others, ANoHideOthers);
     
     value = get_value(dw, dc, dn, da, ANoMouseBindings, No, useGlobalDefault);
-    if (value)
-	attr->no_bind_mouse = getBool(ANoMouseBindings, value);
+    APPLY_VAL(value, no_bind_mouse, ANoMouseBindings);
     
     value = get_value(dw, dc, dn, da, ANoKeyBindings, No, useGlobalDefault);
-    if (value)
-	attr->no_bind_keys = getBool(ANoKeyBindings, value);
+    APPLY_VAL(value, no_bind_keys, ANoKeyBindings);
     
     value = get_value(dw, dc, dn, da, ANoAppIcon, No, useGlobalDefault);
-    if (value)
-	attr->no_appicon = getBool(ANoAppIcon, value);
+    APPLY_VAL(value, no_appicon, ANoAppIcon);
 
     value = get_value(dw, dc, dn, da, AKeepOnTop, No, useGlobalDefault);
-    if (value)
-	attr->floating = getBool(AKeepOnTop, value);
+    APPLY_VAL(value, floating, AKeepOnTop);
 
     value = get_value(dw, dc, dn, da, AKeepOnBottom, No, useGlobalDefault);
-    if (value)
-	attr->floating = getBool(AKeepOnBottom, value);
+    APPLY_VAL(value, sunken, AKeepOnBottom);
 
     value = get_value(dw, dc, dn, da, AOmnipresent, No, useGlobalDefault);
-    if (value)
-	attr->omnipresent = getBool(AOmnipresent, value);
+    APPLY_VAL(value, omnipresent, AOmnipresent);
 
     value = get_value(dw, dc, dn, da, ASkipWindowList, No, useGlobalDefault);
-    if (value)
-	attr->skip_window_list = getBool(ASkipWindowList, value);
+    APPLY_VAL(value, skip_window_list, ASkipWindowList);
     
     value = get_value(dw, dc, dn, da, AKeepInsideScreen, No, useGlobalDefault);
-    if (value)
-	attr->dont_move_off = getBool(AKeepInsideScreen, value);
+    APPLY_VAL(value, dont_move_off, AKeepInsideScreen);
 
     value = get_value(dw, dc, dn, da, AUnfocusable, No, useGlobalDefault);
-    if (value)
-	attr->no_focusable = getBool(AUnfocusable, value);
+    APPLY_VAL(value, no_focusable, AUnfocusable);
 
     value = get_value(dw, dc, dn, da, AAlwaysUserIcon, No, useGlobalDefault);
-    if (value)
-	attr->always_user_icon = getBool(AAlwaysUserIcon, value);
+    APPLY_VAL(value, always_user_icon, AAlwaysUserIcon);
 
     value = get_value(dw, dc, dn, da, AStartMiniaturized, No, useGlobalDefault);
-    if (value)
-	attr->start_miniaturized = getBool(AStartMiniaturized, value);
+    APPLY_VAL(value, start_miniaturized, AStartMiniaturized);
     
     value = get_value(dw, dc, dn, da, AStartHidden, No, useGlobalDefault);
-    if (value)
-	attr->start_hidden = getBool(AStartHidden, value);
+    APPLY_VAL(value, start_hidden, AStartHidden);
+
+    value = get_value(dw, dc, dn, da, AStartMaximized, No, useGlobalDefault);
+    APPLY_VAL(value, start_maximized, AStartMaximized);
 
     value = get_value(dw, dc, dn, da, ADontSaveSession, No, useGlobalDefault);
-    if (value)
-	attr->dont_save_session = getBool(ADontSaveSession, value);
+    APPLY_VAL(value, dont_save_session, ADontSaveSession);
 
     value = get_value(dw, dc, dn, da, AEmulateAppIcon, No, useGlobalDefault);
-    if (value)
-	attr->emulate_appicon = getBool(AEmulateAppIcon, value);
+    APPLY_VAL(value, emulate_appicon, AEmulateAppIcon);
 
     /* clean up */
     PLSetStringCmpHook(StringCompareHook);
@@ -483,18 +486,6 @@ wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file)
         buffer = wmalloc(strlen(instance) + strlen(class) + 2);
         strcat(strcat(strcpy(buffer, instance), "."), class);
         key = PLMakeString(buffer);
-        if (PLGetDictionaryEntry(dict, key)==NULL) {
-            PLRelease(key);
-            key = PLMakeString(instance);
-            if (PLGetDictionaryEntry(dict, key)==NULL) {
-                PLRelease(key);
-                key = PLMakeString(class);
-                if (PLGetDictionaryEntry(dict, key)==NULL) {
-                    PLRelease(key);
-                    key = PLMakeString(buffer);
-                }
-            }
-        }
         free(buffer);
     } else if (instance) {
         key = PLMakeString(instance);
@@ -517,15 +508,14 @@ wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file)
             same = 1;
     }
 
-    if((attr = PLGetDictionaryEntry(dict, key)) != NULL) {
+    if ((attr = PLGetDictionaryEntry(dict, key)) != NULL) {
         if (PLIsDictionary(attr)) {
             if (icon_value!=NULL && !same)
                 PLMergeDictionaries(attr, icon_value);
             else
                 PLRemoveDictionaryEntry(attr, AIcon);
         }
-    }
-    else if (icon_value!=NULL && !same) {
+    } else if (icon_value!=NULL && !same) {
         PLInsertDictionaryEntry(dict, key, icon_value);
     }
     if (!wPreferences.flags.noupdates)

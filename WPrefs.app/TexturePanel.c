@@ -114,7 +114,7 @@ char *WMGetColorWellRGBString(WMColorWell *cPtr) {
  */
 static void buttonCallback(WMWidget *self, void *data);
 static void renderTextureButtons (_TexturePanel *panel);
-static void paintListItem(WMList *lPtr, Drawable d, char *text, int state, WMRect *rect);
+static void paintListItem(WMList *lPtr, int index, Drawable d, char *text, int state, WMRect *rect);
 static void notificationObserver(void *self, WMNotification *notif);
 
 static void
@@ -139,7 +139,7 @@ notificationObserver(void *self, WMNotification *notif)
 
 
 static void
-paintListItem(WMList *lPtr, Drawable d, char *text, int state, WMRect *rect)
+paintListItem(WMList *lPtr, int index, Drawable d, char *text, int state, WMRect *rect)
 {
     WMScreen *scr;
     int width, height, x, y;

@@ -5,12 +5,16 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUBDIRS = Resources
 
 
-LIBLIST= -L$(top_builddir)/wrlib -lwraster\
+LIBLIST= $(top_builddir)/wrlib/libwraster.la\
 	 @GFXLFLAGS@ @XLFLAGS@ @GFXLIBS@ @XLIBS@ \
-	-lm -L$(top_builddir)/libPropList -lPropList
+	-lm $(top_builddir)/libPropList/libPropList.la
 
+
+#lib_LTLIBRARIES = libWINGs.la
 
 lib_LIBRARIES = libWINGs.a
+
+#libWINGs_la_LDFLAGS = -version-info 1:1:0
 
 include_HEADERS = WINGs.h WUtil.h WINGsP.h
 
@@ -18,26 +22,26 @@ noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget
 
 testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h
 
-testmywidget_LDADD = -L. -lWINGs $(LIBLIST)
+testmywidget_LDADD = libWINGs.a $(LIBLIST)
 
 fontl_SOURCES = fontl.c
 
-fontl_LDADD = -L. -lWINGs $(LIBLIST)
+fontl_LDADD = libWINGs.a $(LIBLIST)
 
 wtest_SOURCES = wtest.c
 
-wtest_LDADD = -L. -lWINGs $(LIBLIST)
+wtest_LDADD = libWINGs.a $(LIBLIST)
 
 wtest_DEPENDENCIES = libWINGs.a
 
 wmfile_SOURCES = wmfile.c 
 
-wmfile_LDADD = -L. -lWINGs $(LIBLIST)
+wmfile_LDADD = libWINGs.a $(LIBLIST)
 
 
 wmquery_SOURCES = wmquery.c 
 
-wmquery_LDADD = -L. -lWINGs $(LIBLIST)
+wmquery_LDADD = libWINGs.a $(LIBLIST)
 
 
 EXTRA_DIST = logo.xpm 

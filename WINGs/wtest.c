@@ -273,40 +273,17 @@ testSlider(WMScreen *scr)
     s = WMCreateSlider(win);
     WMResizeWidget(s, 16, 100);
     WMMoveWidget(s, 100, 100);
+    WMSetSliderKnobThickness(s, 8);
 
     s = WMCreateSlider(win);
     WMResizeWidget(s, 100, 16);
     WMMoveWidget(s, 100, 10);
+    WMSetSliderKnobThickness(s, 8);
 
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
     WMMapWidget(win);
 }
-
-#if 0
-void
-testText(WMScreen *scr)
-{
-    WMWindow *win;
-    WMSimpleText *text;
-
-    windowCount++;
-    
-    win = WMCreateWindow(scr, "testText");
-    WMResizeWidget(win, 300, 300);
-    WMSetWindowTitle(win, "Text");
-
-    WMSetWindowCloseAction(win, closeAction, NULL);
-
-    text = WMCreateSimpleText(win);
-    WMResizeWidget(text, 280, 280);
-    WMMoveWidget(text, 10, 10);
-
-    WMRealizeWidget(win);
-    WMMapSubwidgets(win);
-    WMMapWidget(win);
-}
-#endif
 
 void
 testTextField(WMScreen *scr)
@@ -424,13 +401,15 @@ int main(int argc, char **argv)
      * 
      * Put the testSomething() function you want to test here.
      */
-#if 1
+#if 0
     testOpenFilePanel(scr);
     testFontPanel(scr);
     testList(scr);
     testGradientButtons(scr);
     testScrollView(scr);
+#endif
     testColorWell(scr);
+#if 1
     testSlider(scr);
     testTextField(scr);
     testPullDown(scr);

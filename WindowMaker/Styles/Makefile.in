@@ -69,6 +69,9 @@ I18N = @I18N@
 I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
+LD = @LD@
+LIBTOOL = @LIBTOOL@
+LITE = @LITE@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
@@ -90,43 +93,40 @@ X_LOCALE = @X_LOCALE@
 pixmapdir = @pixmapdir@
 wprefsdir = @wprefsdir@
 
-defsdatadir = $(pkgdatadir)/Styles
+prefsdatadir = $(pkgdatadir)/Styles
 
-defsdata_DATA = \
-	Autumn\
-	Black\
-	Blue\
-	BlueAluminum\
-	BlueDawn\
-	BlueishGreen\
-	Brown\
-	Chumbo\
-	Copper\
-	DarkBlue\
-	DarkRed\
-	Fire\
-	Food\
-	Golden\
-	Green\
-	GreyBlue\
-	Gtk\
-	LightBlue\
-	Pastel\
-	Pink\
-	Pumpkin\
-	Purple\
-	Red\
-	RednBlue\
-	ShinyBrown\
-	Summer\
-	Traditional\
-	VioletBlue
+prefsdata_DATA =\
+	Autumn.style\
+	Black.style\
+	BlackTexture.style\
+	Blue.style\
+	BlueDawn.style\
+	BlueishGreen.style\
+	Brown.style\
+	Chumbo.style\
+	Copper.style\
+	DarkBlue.style\
+	DarkRed.style\
+	Fire.style\
+	Food.style\
+	Golden.style\
+	Green.style\
+	GreyBlue.style\
+	Gtk.style\
+	LightBlue.style\
+	Pastel.style\
+	Purple.style\
+	Red.style\
+	RednBlue.style\
+	Summer.style\
+	Traditional.style\
+	VioletBlue.style
 
-EXTRA_DIST = $(defsdata_DATA) 
+EXTRA_DIST = $(prefsdata_DATA)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../src/config.h
 CONFIG_CLEAN_FILES = 
-DATA =  $(defsdata_DATA)
+DATA =  $(prefsdata_DATA)
 
 DIST_COMMON =  Makefile.am Makefile.in
 
@@ -146,23 +146,23 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 
-install-defsdataDATA: $(defsdata_DATA)
+install-prefsdataDATA: $(prefsdata_DATA)
 	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(defsdatadir)
-	@list='$(defsdata_DATA)'; for p in $$list; do \
+	$(mkinstalldirs) $(DESTDIR)$(prefsdatadir)
+	@list='$(prefsdata_DATA)'; for p in $$list; do \
 	  if test -f $(srcdir)/$$p; then \
-	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(defsdatadir)/$$p"; \
-	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(defsdatadir)/$$p; \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(prefsdatadir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(prefsdatadir)/$$p; \
 	  else if test -f $$p; then \
-	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(defsdatadir)/$$p"; \
-	    $(INSTALL_DATA) $$p $(DESTDIR)$(defsdatadir)/$$p; \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(prefsdatadir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(prefsdatadir)/$$p; \
 	  fi; fi; \
 	done
 
-uninstall-defsdataDATA:
+uninstall-prefsdataDATA:
 	@$(NORMAL_UNINSTALL)
-	list='$(defsdata_DATA)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(defsdatadir)/$$p; \
+	list='$(prefsdata_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(prefsdatadir)/$$p; \
 	done
 tags: TAGS
 TAGS:
@@ -187,18 +187,18 @@ installcheck:
 install-exec: 
 	@$(NORMAL_INSTALL)
 
-install-data: install-defsdataDATA
+install-data: install-prefsdataDATA
 	@$(NORMAL_INSTALL)
 
 install: install-exec install-data all
 	@:
 
-uninstall: uninstall-defsdataDATA
+uninstall: uninstall-prefsdataDATA
 
 install-strip:
 	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' INSTALL_SCRIPT='$(INSTALL_PROGRAM)' install
 installdirs:
-	$(mkinstalldirs)  $(DATADIR)$(defsdatadir)
+	$(mkinstalldirs)  $(DATADIR)$(prefsdatadir)
 
 
 mostlyclean-generic:
@@ -221,12 +221,13 @@ clean:  clean-generic mostlyclean
 
 distclean:  distclean-generic clean
 	-rm -f config.status
+	-rm -f libtool
 
 maintainer-clean:  maintainer-clean-generic distclean
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
-.PHONY: uninstall-defsdataDATA install-defsdataDATA tags distdir info \
+.PHONY: uninstall-prefsdataDATA install-prefsdataDATA tags distdir info \
 dvi installcheck install-exec install-data install uninstall all \
 installdirs mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean

@@ -35,18 +35,25 @@ wmaker_SOURCES = 	\
 	event.c \
 	framewin.c \
 	framewin.h \
+	gnome.c \
+	gnome.h \
 	funcs.h \
 	icon.c \
 	icon.h \
 	keybind.h \
+	kwm.h \
+	kwm.c \
 	list.c \
 	list.h \
 	main.c \
 	menu.c \
 	menu.h \
 	misc.c \
+	motif.c \
 	motif.h \
 	moveres.c \
+	openlook.c \
+	openlook.h \
 	pixmap.c \
 	pixmap.h \
 	placement.c \
@@ -69,6 +76,8 @@ wmaker_SOURCES = 	\
 	switchmenu.c \
 	texture.c \
 	texture.h \
+	xde.h \
+	xde.c \
 	xmodifier.h \
 	xmodifier.c \
 	xutil.c \
@@ -93,7 +102,7 @@ wmaker_SOURCES = 	\
 
 CPPFLAGS = \
 	@CPPFLAGS@ \
-	@SHAPE@ @I18N@ @X_LOCALE@ \
+	@SHAPE@ @I18N@ @X_LOCALE@ @LITE@ \
 	@DFLAGS@ \
 	-DNLSDIR="\"$(nlsdir)\"" \
 	-DPKGDATADIR="\"$(pkgdatadir)\"" \
@@ -107,9 +116,9 @@ INCLUDES = \
 
 
 wmaker_LDADD = \
-	-L$(top_builddir)/WINGs -lWINGs\
-	-L$(top_builddir)/wrlib -lwraster\
-	-L$(top_builddir)/libPropList -lPropList\
+	$(top_builddir)/WINGs/libWINGs.a\
+	$(top_builddir)/wrlib/libwraster.la\
+	$(top_builddir)/libPropList/libPropList.la\
 	@GFXLFLAGS@ \
 	@XLFLAGS@ \
 	@GFXLIBS@ \

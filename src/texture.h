@@ -44,19 +44,14 @@
 #define WTEX_MVGRADIENT	((1<<6)|WREL_BORDER_MASK)
 #define WTEX_MDGRADIENT	((1<<7)|WREL_BORDER_MASK)
 #define WTEX_PIXMAP	(1<<8)
+#define WTEX_THGRADIENT	((1<<9)|WREL_BORDER_MASK)
+#define WTEX_TVGRADIENT	((1<<10)|WREL_BORDER_MASK)
+#define WTEX_TDGRADIENT	((1<<11)|WREL_BORDER_MASK)
 
 /* pixmap subtypes */
 #define WTP_TILE	2
 #define WTP_SCALE	4
 #define WTP_CENTER	6
-
-/*
- * (solid <color>)
- * (hgradient <color> <color>)
- * (vgradient <color> <color>)
- * (dgradient <color> <color>)
- * (pixmap <file> <mode>)
- */
 
 
 typedef struct {
@@ -89,8 +84,8 @@ typedef struct WTexGradient {
     XColor normal;
     GC normal_gc;
 
-    XColor color1;
-    XColor color2;
+    RColor color1;
+    RColor color2;
 } WTexGradient;
 
 
@@ -113,16 +108,17 @@ typedef struct WTexPixmap {
     struct RImage *pixmap;
 } WTexPixmap;
 
-typedef struct WTexCompose {
+typedef struct WTexTGradient {
     short type;
     char subtype;
     XColor normal;
     GC normal_gc;
 
-    union WTexture *back;
-    union WTexture *fore;
+    RColor color1;
+    RColor color2;
+    struct RImage *pixmap;
     int opacity;
-} WTexCompose;
+} WTexTGradient;
 
 typedef union WTexture {
     WTexAny any;    
@@ -130,13 +126,14 @@ typedef union WTexture {
     WTexGradient gradient;
     WTexMGradient mgradient;
     WTexPixmap pixmap;
-    WTexCompose compose;
+    WTexTGradient tgradient;
 } WTexture;
 
 
 WTexSolid *wTextureMakeSolid(WScreen*, XColor*);
-WTexGradient *wTextureMakeGradient(WScreen*, int, XColor*, XColor*);
+WTexGradient *wTextureMakeGradient(WScreen*, int, RColor*, RColor*);
 WTexMGradient *wTextureMakeMGradient(WScreen*, int, RColor**);
+WTexTGradient *wTextureMakeTGradient(WScreen*, int, RColor*, RColor*, char *, int);
 WTexPixmap *wTextureMakePixmap(WScreen *scr, int style, char *pixmap_file, 
 			       XColor *color);
 void wTextureDestroy(WScreen*, WTexture*);

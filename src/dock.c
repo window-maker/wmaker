@@ -111,6 +111,8 @@ static proplist_t dAutoAttractIcons, dKeepAttracted;
 
 static proplist_t dPosition, dApplications, dLowered, dCollapsed, dAutoCollapse;
 
+static proplist_t dAutoRaiseLower;
+
 static void dockIconPaint(WAppIcon *btn);
 
 static void iconMouseDown(WObjDescriptor *desc, XEvent *event);
@@ -125,8 +127,6 @@ static void toggleLowered(WDock *dock);
 
 static void toggleCollapsed(WDock *dock);
 
-static void toggleAutoCollapse(WDock *dock);
-
 static void clipIconExpose(WObjDescriptor *desc, XEvent *event);
 
 static void clipLeave(WDock *dock);
@@ -139,6 +139,9 @@ static void clipEnterNotify(WObjDescriptor *desc, XEvent *event);
 static void clipLeaveNotify(WObjDescriptor *desc, XEvent *event);
 static void clipAutoCollapse(void *cdata);
 static void launchDockedApplication(WAppIcon *btn);
+
+static void clipAutoLower(void *cdata);
+static void clipAutoRaise(void *cdata);
 
 static void showClipBalloon(WDock *dock, int workspace);
 
@@ -183,6 +186,7 @@ make_keys()
     dLowered = PLMakeString("Lowered");
     dCollapsed = PLMakeString("Collapsed");
     dAutoCollapse = PLMakeString("AutoCollapse");
+    dAutoRaiseLower = PLMakeString("AutoRaiseLower");
     dAutoAttractIcons = PLMakeString("AutoAttractIcons");
     dKeepAttracted = PLMakeString("KeepAttracted");
     
@@ -659,11 +663,34 @@ toggleCollapsedCallback(WMenu *menu, WMenuEntry *entry)
 static void
 toggleAutoCollapseCallback(WMenu *menu, WMenuEntry *entry)
 {
+    WDock *dock;
     assert(entry->clientdata!=NULL);
 
-    toggleAutoCollapse(entry->clientdata);
+    dock = (WDock*) entry->clientdata;
+
+    dock->auto_collapse = !dock->auto_collapse;
+    if (dock->auto_collapse_magic) {
+        WMDeleteTimerHandler(dock->auto_collapse_magic);
+        dock->auto_collapse_magic = NULL;
+    }
 
     entry->flags.indicator_on = ((WDock*)entry->clientdata)->auto_collapse;
+
+    wMenuPaint(menu);
+}
+
+
+static void
+toggleAutoRaiseLowerCallback(WMenu *menu, WMenuEntry *entry)
+{
+    WDock *dock;
+    assert(entry->clientdata!=NULL);
+
+    dock = (WDock*) entry->clientdata;
+
+    dock->auto_raise_lower = !dock->auto_raise_lower;
+
+    entry->flags.indicator_on = ((WDock*)entry->clientdata)->auto_raise_lower;
 
     wMenuPaint(menu);
 }
@@ -805,8 +832,8 @@ launchDockedApplication(WAppIcon *btn)
 	if (btn->wm_instance || btn->wm_class) {
 	    WWindowAttributes attr;
 	    memset(&attr, 0, sizeof(WWindowAttributes));
-	    wDefaultFillAttributes(scr, btn->wm_instance, btn->wm_class, &attr,
-				   True);
+	    wDefaultFillAttributes(scr, btn->wm_instance, btn->wm_class, 
+				   &attr, NULL, True);
 
 	    if (!attr.no_appicon && !btn->buggy_app)
 		btn->launching = 1;
@@ -917,6 +944,11 @@ updateClipOptionsMenu(WMenu *menu, WDock *dock)
     entry->flags.indicator_on = dock->auto_collapse;
     entry->clientdata = dock;
 
+    /* auto-raise/lower */
+    entry = menu->entries[++index];
+    entry->flags.indicator_on = dock->auto_raise_lower;
+    entry->clientdata = dock;
+
     /* attract icons */
     entry = menu->entries[++index];
     entry->flags.indicator_on = dock->attract_icons;
@@ -958,6 +990,12 @@ makeClipOptionsMenu(WScreen *scr)
 
     entry = wMenuAddCallback(menu, _("AutoCollapse"),
                              toggleAutoCollapseCallback, NULL);
+    entry->flags.indicator = 1;
+    entry->flags.indicator_on = 1;
+    entry->flags.indicator_type = MI_CHECK;
+
+    entry = wMenuAddCallback(menu, _("AutoRaiseLower"),
+                             toggleAutoRaiseLowerCallback, NULL);
     entry->flags.indicator = 1;
     entry->flags.indicator_on = 1;
     entry->flags.indicator_type = MI_CHECK;
@@ -1074,6 +1112,9 @@ wDockCreate(WScreen *scr, int type)
     dock->collapsed = 0;
     dock->auto_collapse = 0;
     dock->auto_collapse_magic = NULL;
+    dock->auto_raise_lower = 0;
+    dock->auto_lower_magic = NULL;
+    dock->auto_raise_magic = NULL;
     dock->attract_icons = 0;
     dock->keep_attracted = 0;
     dock->lowered = 1;
@@ -1288,6 +1329,9 @@ dockSaveState(WDock *dock)
 
         value = (dock->auto_collapse ? dYes : dNo);
 	PLInsertDictionaryEntry(dock_state, dAutoCollapse, value);
+
+        value = (dock->auto_raise_lower ? dYes : dNo);
+	PLInsertDictionaryEntry(dock_state, dAutoRaiseLower, value);
 
         value = (dock->attract_icons ? dYes : dNo);
         PLInsertDictionaryEntry(dock_state, dAutoAttractIcons, value);
@@ -1626,6 +1670,21 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
     }
     
     
+    /* restore auto-raise/lower state */
+    
+    value = PLGetDictionaryEntry(dock_state, dAutoRaiseLower);
+    
+    if (value) {
+        if (!PLIsString(value))
+            COMPLAIN("AutoRaiseLower");
+        else { 
+	    if (strcasecmp(PLGetString(value), "YES")==0) {
+                dock->auto_raise_lower = 1;
+	    }
+        }
+    }
+    
+    
     /* restore attract icons state */
     
     dock->attract_icons = 0;
@@ -1656,10 +1715,10 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
                 dock->keep_attracted = 1;
         }
     }
-    
-    
+
+
     /* application list */
-    
+
     apps = PLGetDictionaryEntry(dock_state, dApplications);
     
     if (!apps) {
@@ -1732,11 +1791,11 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
             scr->clip_icon = dock->icon_array[0];
         wAppIconDestroy(old_top);
     }
-    
+
 finish:
     if (dock_state)
         PLRelease(dock_state);
-    
+
     return dock;
 }
 
@@ -1867,7 +1926,7 @@ wDockReceiveDNDDrop(WScreen *scr, XEvent *event)
 	    memset(&attr, 0, sizeof(WWindowAttributes));
             wDefaultFillAttributes(btn->icon->core->screen_ptr,
                                    btn->wm_instance,
-                                   btn->wm_class, &attr, True);
+                                   btn->wm_class, &attr, NULL, True);
 
             if (!attr.no_appicon)
                 btn->launching = 1;
@@ -2107,7 +2166,7 @@ moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y)
 	}
     }
     
-    if (src->auto_collapse)
+    if (src->auto_collapse || src->auto_raise_lower)
         clipLeave(src);
 
     icon->yindex = y;
@@ -2124,6 +2183,7 @@ moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y)
     
     return True;
 }
+
 
 void
 wDockDetach(WDock *dock, WAppIcon *icon)
@@ -2190,7 +2250,7 @@ wDockDetach(WDock *dock, WAppIcon *icon)
 	    wArrangeIcons(dock->screen_ptr, True);
 	}
     }
-    if (dock->auto_collapse)
+    if (dock->auto_collapse || dock->auto_raise_lower)
         clipLeave(dock);
 }
 
@@ -2638,6 +2698,8 @@ swapDock(WDock *dock)
 	    XMoveWindow(dpy, btn->icon->core->window, btn->x_pos, btn->y_pos);
 	}
     }
+
+    wScreenUpdateUsableArea(scr);
 }
 
 
@@ -2675,8 +2737,6 @@ execCommand(WAppIcon *btn, char *command, WSavedState *state)
 	int i;
 	
 	SetupEnvironment(scr);
-
-	CloseDescriptors();
 
 #ifdef HAVE_SETPGID
         setpgid(0, 0);
@@ -2846,22 +2906,39 @@ wDockTrackWindowLaunch(WDock *dock, Window window)
 #endif
     char *wm_class, *wm_instance;
     int i;
+    Bool firstPass = True;
+    Bool found = False;
+    char *command = NULL;
+    
+    {
+	int argc;
+	char **argv;
 
+	if (XGetCommand(dpy, window, &argv, &argc)) {
+	    if (argc > 0 && argv != NULL)
+		command = FlattenStringList(argv,argc);
+	    if (argv) {
+		XFreeStringList(argv);
+	    }
+	}
+    }
 
     if (!PropGetWMClass(window, &wm_class, &wm_instance) ||
 	(!wm_class && !wm_instance))
 	return;
 
+retry:    
     for (i=0; i<dock->max_icons; i++) {
 	icon = dock->icon_array[i];
 	if (!icon)
 	    continue;
 
-	/* kluge. If this does not exist, some windows attach themselves
-	 * to more than one icon. Find out why */
+	/* app is already attached to icon */
 	if (icon->main_window == window) {
+	    found = True;
 	    break;
 	}
+
 	if ((icon->wm_instance || icon->wm_class)
 	    && (icon->launching
 		|| (dock->screen_ptr->flags.startup && !icon->running))) {
@@ -2872,6 +2949,9 @@ wDockTrackWindowLaunch(WDock *dock, Window window)
 	    }
 	    if (icon->wm_class && wm_class && 
 		strcmp(icon->wm_class, wm_class)!=0) {
+		continue;
+	    }
+	    if (firstPass && command && strcmp(icon->command, command)!=0) {
 		continue;
 	    }
 
@@ -2888,6 +2968,7 @@ wDockTrackWindowLaunch(WDock *dock, Window window)
 		}
 		if (!icon->forced_dock)
 		    icon->main_window = window;
+
 #ifdef REDUCE_APPICONS
 		tapplist = wmalloc(sizeof(WAppIconAppList));
 		memset(tapplist, 0, sizeof(WAppIconAppList));
@@ -2899,11 +2980,20 @@ wDockTrackWindowLaunch(WDock *dock, Window window)
 		icon->num_apps++;
 #endif
 	    }
+	    found = True;
 	    wDockFinishLaunch(dock, icon);
 	    break;
 	}
     }
-    
+
+    if (firstPass && !found) {
+	firstPass = False;
+	goto retry;
+    }
+
+    if (command)
+	free(command);
+
     if (wm_class)
 	XFree(wm_class);
     if (wm_instance)
@@ -2921,7 +3011,9 @@ wClipUpdateForWorkspaceChange(WScreen *scr, int workspace)
             WDock *old_clip = scr->workspaces[scr->current_workspace]->clip;
 
             wDockHideIcons(old_clip);
-	    if (old_clip->auto_collapse && !old_clip->collapsed)
+            if (old_clip->auto_raise_lower)
+                wDockLower(old_clip);
+            if (old_clip->auto_collapse && !old_clip->collapsed)
                 old_clip->collapsed = 1;
             wDockShowIcons(scr->workspaces[workspace]->clip);
         }
@@ -2993,6 +3085,9 @@ toggleLowered(WDock *dock)
 	if (dock->lowered)
 	    wLowerFrame(tmp->icon->core);
     }
+
+    if (dock->type == WM_DOCK)
+	wScreenUpdateUsableArea(dock->screen_ptr);
 }
 
 
@@ -3006,17 +3101,6 @@ toggleCollapsed(WDock *dock)
     else {
         dock->collapsed = 1;
         wDockHideIcons(dock);
-    }
-}
-
-
-static void
-toggleAutoCollapse(WDock *dock)
-{
-    dock->auto_collapse = !dock->auto_collapse;
-    if (dock->auto_collapse_magic) {
-        WMDeleteTimerHandler(dock->auto_collapse_magic);
-        dock->auto_collapse_magic = NULL;
     }
 }
 
@@ -3373,7 +3457,7 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
     WScreen *scr = dock->screen_ptr;
     Window wins[2];
     WIcon *icon = aicon->icon;
-    WDock *dock2 = NULL, *last_dock = dock;
+    WDock *dock2 = NULL, *last_dock = dock, *clip = NULL;
     int ondock, grabbed = 0, change_dock = 0, collapsed = 0;
     XEvent ev;
     int x = aicon->x_pos, y = aicon->y_pos;
@@ -3398,8 +3482,11 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 
     wRaiseFrame(icon->core);
 
+    if (!wPreferences.flags.noclip)
+        clip = scr->workspaces[scr->current_workspace]->clip;
+
     if (dock == scr->dock && !wPreferences.flags.noclip)
-        dock2 = scr->workspaces[scr->current_workspace]->clip;
+        dock2 = clip;
     else if (dock != scr->dock && !wPreferences.flags.nodock)
         dock2 = scr->dock;
 
@@ -3418,7 +3505,7 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 	XClearWindow(dpy, scr->dock_shadow);
     }
     XMapWindow(dpy, scr->dock_shadow);
-    
+
     ondock = 1;
 
 
@@ -3457,6 +3544,8 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
                     dock->collapsed = 0;
                     wDockShowIcons(dock);
                 }
+                if (dock->auto_raise_lower)
+                    wDockRaise(dock);
                 last_dock = dock;
             }
             else if (dock2) {		
@@ -3472,6 +3561,8 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
                         dock2->collapsed = 0;
                         wDockShowIcons(dock2);
                     }
+                    if (dock2->auto_raise_lower)
+                        wDockRaise(dock2);
                     last_dock = dock2;
                 }
             }
@@ -3520,9 +3611,11 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 	    if (ondock) {
 		SlideWindow(icon->core->window, x, y, shad_x, shad_y);
                 XUnmapWindow(dpy, scr->dock_shadow);
-                if (!change_dock)
+                if (!change_dock) {
                     reattachIcon(dock, aicon, ix, iy);
-                else {
+                    if (clip && dock!=clip && clip->auto_raise_lower)
+                        wDockLower(clip);
+                } else {
                     docked = moveIconBetweenDocks(dock, dock2, aicon, ix, iy);
 		    if (!docked) {
 			/* Slide it back if dock rejected it */
@@ -3547,6 +3640,8 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 			DoKaboom(scr,aicon->icon->core->window, x, y);
 		    }
                 }
+                if (clip && clip->auto_raise_lower)
+                    wDockLower(clip);
 		wDockDetach(dock, aicon);
             }
             if (collapsed) {
@@ -3763,7 +3858,7 @@ showClipBalloon(WDock *dock, int workspace)
     wDrawString(scr->clip_balloon, scr->clip_title_font, scr->clip_title_gc,
 		0, scr->clip_title_font->y, text, strlen(text));
 }
-    
+
 
 static void
 clipEnterNotify(WObjDescriptor *desc, XEvent *event)
@@ -3780,6 +3875,16 @@ clipEnterNotify(WObjDescriptor *desc, XEvent *event)
     if (!dock || dock->type!=WM_CLIP)
         return;
 
+    if (dock->auto_lower_magic) {
+        WMDeleteTimerHandler(dock->auto_lower_magic);
+        dock->auto_lower_magic = NULL;
+    }
+    if (dock->auto_raise_lower) {
+        dock->auto_raise_magic = WMAddTimerHandler(AUTO_RAISE_DELAY,
+                                                   clipAutoRaise,
+                                                   (void *)dock);
+    }
+
     if (btn->xindex == 0 && btn->yindex == 0)
 	showClipBalloon(dock, dock->screen_ptr->current_workspace);
     else {
@@ -3788,33 +3893,44 @@ clipEnterNotify(WObjDescriptor *desc, XEvent *event)
 	    dock->screen_ptr->flags.clip_balloon_mapped = 0;
 	}
     }
-    if (!dock->auto_collapse)
-	return;
+    if (dock->auto_collapse) {
+        if (dock->auto_collapse_magic) {
+            WMDeleteTimerHandler(dock->auto_collapse_magic);
+            dock->auto_collapse_magic = NULL;
+        }
 
-    if (dock->auto_collapse_magic) {
-        WMDeleteTimerHandler(dock->auto_collapse_magic);
-        dock->auto_collapse_magic = NULL;
+        if (dock->collapsed)
+            toggleCollapsed(dock);
     }
-
-    if (dock->collapsed)
-        toggleCollapsed(dock);
 }
 
 
 static void
 clipLeave(WDock *dock)
 {
-    if (!dock || dock->type!=WM_CLIP || !dock->auto_collapse)
+    if (!dock || dock->type!=WM_CLIP)
 	return;
-    
-    if (dock->auto_collapse_magic) {
-        WMDeleteTimerHandler(dock->auto_collapse_magic);
-        dock->auto_collapse_magic = NULL;
+
+    if (dock->auto_raise_magic) {
+        WMDeleteTimerHandler(dock->auto_raise_magic);
+        dock->auto_raise_magic = NULL;
     }
-    if (!dock->collapsed) {
-        dock->auto_collapse_magic = WMAddTimerHandler(AUTO_COLLAPSE_DELAY,
-                                                     clipAutoCollapse,
-                                                     (void *)dock);
+    if (dock->auto_raise_lower) {
+        dock->auto_lower_magic = WMAddTimerHandler(AUTO_LOWER_DELAY,
+                                                   clipAutoLower,
+                                                   (void *)dock);
+    }
+
+    if (dock->auto_collapse) {
+        if (dock->auto_collapse_magic) {
+            WMDeleteTimerHandler(dock->auto_collapse_magic);
+            dock->auto_collapse_magic = NULL;
+        }
+        if (!dock->collapsed) {
+            dock->auto_collapse_magic = WMAddTimerHandler(AUTO_COLLAPSE_DELAY,
+                                                          clipAutoCollapse,
+                                                          (void *)dock);
+        }
     }
 }
 
@@ -3845,5 +3961,35 @@ clipAutoCollapse(void *cdata)
         toggleCollapsed(dock);
     }
     dock->auto_collapse_magic = NULL;
+}
+
+
+static void
+clipAutoLower(void *cdata)
+{
+    WDock *dock = (WDock *)cdata;
+
+    if (dock->type!=WM_CLIP)
+        return;
+
+    if (dock->auto_raise_lower)
+        wDockLower(dock);
+
+    dock->auto_lower_magic = NULL;
+}
+
+
+static void
+clipAutoRaise(void *cdata)
+{
+    WDock *dock = (WDock *)cdata;
+
+    if (dock->type!=WM_CLIP)
+        return;
+
+    if (dock->auto_raise_lower)
+        wDockRaise(dock);
+
+    dock->auto_raise_magic = NULL;
 }
 

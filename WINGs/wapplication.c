@@ -23,8 +23,6 @@
 
 
 
-extern void W_ReadConfigurations(void);
-
 extern void W_InitNotificationCenter(void);
 
 
@@ -72,9 +70,6 @@ WMInitializeApplication(char *applicationName, int *argc, char **argv)
     
     /* initialize notification center */
     W_InitNotificationCenter();
-    
-    /* read general configuration data for WINGs */
-    W_ReadConfigurations();
 }
 
 

@@ -564,7 +564,7 @@ wIconUpdate(WIcon *icon)
     icon->pixmap = None;
     
     
-    if (wwin && wwin->window_flags.always_user_icon)
+    if (wwin && WFLAGP(wwin, always_user_icon))
 	goto user_icon;
     
     /* use client specified icon window */
@@ -754,9 +754,9 @@ wIconPaint(WIcon *icon)
         wIconUpdate(icon);
         return;
     }
-    
+
     XClearWindow(dpy, icon->core->window);
-    
+
     /* draw the icon title */
     if (icon->show_title && icon->icon_name!=NULL) {
 	int l;
@@ -831,8 +831,22 @@ miniwindowMouseDown(WObjDescriptor *desc, XEvent *event)
             wIconSelect(icon);
             wSelectWindow(icon->owner, !wwin->flags.selected);
         }
-    }
+    } 
+#if 0
+    else if (event->xbutton.button==Button3) {
+	WObjDescriptor *desc;
 
+	OpenMiniwindowMenu(wwin, event->xbutton.x_root, 
+			   event->xbutton.y_root);
+
+	/* allow drag select of menu */
+	desc = &wwin->screen_ptr->window_menu->menu->descriptor;
+	event->xbutton.send_event = True;
+	(*desc->handle_mousedown)(desc, event);
+
+	return;
+    }
+#endif
     if (XGrabPointer(dpy, icon->core->window, False, ButtonMotionMask
 		     |ButtonReleaseMask|ButtonPressMask, GrabModeAsync,
 		     GrabModeAsync, None, None, CurrentTime) !=GrabSuccess) {

@@ -18,9 +18,12 @@ typedef struct W_Slider {
     int value;
 
     Pixmap knobPixmap;
+    WMPixmap *backPixmap;
 
     WMAction *action;
     void *clientData;
+
+    int knobThickness;
 
     struct {
 	unsigned int continuous:1;
@@ -32,8 +35,6 @@ typedef struct W_Slider {
 } Slider;
 
 
-
-#define SLIDER_LENGTH	20
 
 
 static void resizeSlider();
@@ -54,6 +55,7 @@ static void realizeSlider(Slider *sPtr);
 static void handleEvents(XEvent *event, void *data);
 static void handleActionEvents(XEvent *event, void *data);
 
+static void makeKnobPixmap(Slider *sPtr);
 
 static void
 realizeObserver(void *self, WMNotification *not)
@@ -93,7 +95,9 @@ WMCreateSlider(WMWidget *parent)
     sPtr->minValue = 0;
     sPtr->maxValue = 100;
     sPtr->value = 50;
-    
+
+    sPtr->knobThickness = 20;
+
     sPtr->flags.continuous = 1;
     
     WMAddNotificationObserver(realizeObserver, sPtr, 
@@ -102,6 +106,36 @@ WMCreateSlider(WMWidget *parent)
     return sPtr;
 }
 
+
+void
+WMSetSliderImage(WMSlider *sPtr, WMPixmap *pixmap)
+{
+    if (sPtr->backPixmap)
+	WMReleasePixmap(sPtr->backPixmap);
+
+    sPtr->backPixmap = WMRetainPixmap(pixmap);
+    
+    if (sPtr->view->flags.mapped) {
+	paintSlider(sPtr);
+    }
+}
+
+
+void
+WMSetSliderKnobThickness(WMSlider *sPtr, int thickness)
+{
+    assert(thickness > 0);
+
+    sPtr->knobThickness = thickness;
+
+    if (sPtr->knobPixmap) {
+	makeKnobPixmap(sPtr);
+    }
+
+    if (sPtr->view->flags.mapped) {
+	paintSlider(sPtr);
+    }
+}
 
 
 int
@@ -204,16 +238,18 @@ makeKnobPixmap(Slider *sPtr)
     
     if (sPtr->flags.vertical) {
 	w = sPtr->view->size.width-2;
-	h = SLIDER_LENGTH;
+	h = sPtr->knobThickness;
     } else {
-	w = SLIDER_LENGTH;
+	w = sPtr->knobThickness;
 	h = sPtr->view->size.height-2;
     }
     
     pix = XCreatePixmap(scr->display, sPtr->view->window, w, h, scr->depth);
     XFillRectangle(scr->display, pix, W_GC(scr->gray), 0, 0, w, h);
 
-    if (sPtr->flags.vertical) {
+    if (sPtr->knobThickness < 10) {
+	W_DrawRelief(scr, pix, 0, 0, w, h, WRRaised);
+    } else if (sPtr->flags.vertical) {
 	XDrawLine(scr->display, pix, W_GC(scr->white), 0, 0, 0, h-3);
 	XDrawLine(scr->display, pix, W_GC(scr->white), 1, 0, 1, h-3);
 	XDrawLine(scr->display, pix, W_GC(scr->darkGray), w-2, 1, w-2, h/2-2);
@@ -222,8 +258,9 @@ makeKnobPixmap(Slider *sPtr)
 	XDrawLine(scr->display, pix, W_GC(scr->white), 0, 0, w-2, 0);
 	XDrawLine(scr->display, pix, W_GC(scr->darkGray), 1, h/2-2, w-3, h/2-2);
 	XDrawLine(scr->display, pix, W_GC(scr->white), 0, h/2-1, w-3, h/2-1);
+	
 	XDrawLine(scr->display, pix, W_GC(scr->black), w-1, 0, w-1, h-2);
-
+	
 	XDrawLine(scr->display, pix, W_GC(scr->darkGray), 0, h-3, w-2, h-3);
 	XDrawLine(scr->display, pix, W_GC(scr->black), 0, h-2, w-1, h-2);
 	XDrawLine(scr->display, pix, W_GC(scr->darkGray), 0, h-1, w-1,h-1);
@@ -231,16 +268,19 @@ makeKnobPixmap(Slider *sPtr)
 	XDrawLine(scr->display, pix, W_GC(scr->white), 0, 0, w-3, 0);
 	
 	XDrawLine(scr->display, pix, W_GC(scr->white), 0, 0, 0, h-2);
+
 	XDrawLine(scr->display, pix, W_GC(scr->white), 1, 0, 1, h-3);
 	XDrawLine(scr->display, pix, W_GC(scr->darkGray), w/2-2, 1, w/2-2, h-3);
 	XDrawLine(scr->display, pix, W_GC(scr->white), w/2-1, 0, w/2-1, h-3);
+
 	XDrawLine(scr->display, pix, W_GC(scr->darkGray), w-3, 0, w-3, h-2);
 	XDrawLine(scr->display, pix, W_GC(scr->black), w-2, 0, w-2, h-2);
 	XDrawLine(scr->display, pix, W_GC(scr->darkGray), w-1, 0, w-1, h-1);
-	
+
 	XDrawLine(scr->display, pix, W_GC(scr->black), 1, h-1, w/2+1, h-1);
 	XDrawLine(scr->display, pix, W_GC(scr->darkGray), 1, h-2, w/2-2, h-2);
 	XDrawLine(scr->display, pix, W_GC(scr->darkGray), w/2, h-2, w-3,h-2);
+
 	XDrawLine(scr->display, pix, W_GC(scr->black), 0, h-1, w-2, h-1);
     }
     
@@ -305,20 +345,30 @@ paintSlider(Slider *sPtr)
 
     buffer = XCreatePixmap(scr->display, sPtr->view->window, 
 			   size.width, size.height, scr->depth);
-    XFillRectangle(scr->display, buffer, lgc, 0, 0, size.width, size.height);
-    XFillRectangle(scr->display, buffer, scr->stippleGC, 0, 0, size.width, 
-		   size.height);
+
+    if (sPtr->backPixmap) {
+	WMSize size = WMGetPixmapSize(sPtr->backPixmap);
+
+	XCopyArea(scr->display, WMGetPixmapXID(sPtr->backPixmap), 
+		  buffer, scr->copyGC, 0, 0, size.width, size.height, 1, 1);
+    } else {
+	XFillRectangle(scr->display, buffer, lgc, 0, 0, size.width, 
+		       size.height);
+	XFillRectangle(scr->display, buffer, scr->stippleGC, 0, 0, size.width, 
+		       size.height);
+    }
     
     if (sPtr->flags.vertical) {
-	pos = (size.height-2-SLIDER_LENGTH)*(POSV-MINV)/(MAXV-MINV)+1;
+	pos = (size.height-2-sPtr->knobThickness)*(POSV-MINV)/(MAXV-MINV)+1;
 	/* draw knob */
 	XCopyArea(scr->display, sPtr->knobPixmap, buffer,
-		  scr->copyGC, 0, 0, size.width-2, SLIDER_LENGTH, 1, pos);
+		  scr->copyGC, 0, 0, size.width-2, sPtr->knobThickness, 
+		  1, pos);
     } else {
-	pos = (size.width-2-SLIDER_LENGTH)*(POSV-MINV)/(MAXV-MINV)+1;
+	pos = (size.width-2-sPtr->knobThickness)*(POSV-MINV)/(MAXV-MINV)+1;
 	/* draw knob */
 	XCopyArea(scr->display, sPtr->knobPixmap, buffer, 
-		  scr->copyGC, 0, 0, SLIDER_LENGTH, size.height, pos, 1);
+		  scr->copyGC, 0, 0, sPtr->knobThickness, size.height, pos, 1);
     }
 
     XDrawLine(scr->display, buffer, bgc, 0, 0, 0, size.height-1);
@@ -373,18 +423,18 @@ getSliderPart(Slider *sPtr, int x, int y)
 
     if (sPtr->flags.vertical) {
 	p = y;
-	pos = (size.height-2-SLIDER_LENGTH)*(POSV-MINV)/(MAXV-MINV);
+	pos = (size.height-2-sPtr->knobThickness)*(POSV-MINV)/(MAXV-MINV);
 	if (p < pos)
 	    return INCR_PART;
-	if (p > pos + SLIDER_LENGTH)
+	if (p > pos + sPtr->knobThickness)
 	    return DECR_PART;
 	return KNOB_PART;
     } else {
 	p = x;
-	pos = (size.width-2-SLIDER_LENGTH)*(POSV-MINV)/(MAXV-MINV);
+	pos = (size.width-2-sPtr->knobThickness)*(POSV-MINV)/(MAXV-MINV);
 	if (p < pos)
 	    return DECR_PART;
-	if (p > pos + SLIDER_LENGTH)
+	if (p > pos + sPtr->knobThickness)
 	    return INCR_PART;
 	return KNOB_PART;
     }
@@ -396,11 +446,13 @@ valueForMousePoint(Slider *sPtr, int x, int y)
 {
     WMSize size = sPtr->view->size;
     int f;
-    
+
     if (sPtr->flags.vertical) {
-	f = (y-SLIDER_LENGTH/2)*(MAXV-MINV)/((int)size.height-2-SLIDER_LENGTH);
+	f = (y-sPtr->knobThickness/2)*(MAXV-MINV)
+	    / ((int)size.height-2-sPtr->knobThickness);
     } else {
-	f = (x-SLIDER_LENGTH/2)*(MAXV-MINV)/((int)size.width-2-SLIDER_LENGTH);
+	f = (x-sPtr->knobThickness/2)*(MAXV-MINV)
+	    / ((int)size.width-2-sPtr->knobThickness);
     }
 
     f += sPtr->minValue;
@@ -408,6 +460,7 @@ valueForMousePoint(Slider *sPtr, int x, int y)
 	f = sPtr->minValue;
     else if (f > sPtr->maxValue)
 	f = sPtr->maxValue;
+
     return f;
 }
 
@@ -427,13 +480,13 @@ handleActionEvents(XEvent *event, void *data)
 	else {
 #ifdef STRICT_NEXT_BEHAVIOUR
 	    sPtr->flags.dragging = 1;
-	    
+
 	    sPtr->value = valueForMousePoint(sPtr, event->xmotion.x,
 					     event->xmotion.y);
 	    paintSlider(sPtr);
 #else
 	    int tmp;
-	    
+
 	    tmp = valueForMousePoint(sPtr, event->xmotion.x, event->xmotion.y);
 	    if (tmp < sPtr->value)
 		tmp = sPtr->value-1;
@@ -447,14 +500,14 @@ handleActionEvents(XEvent *event, void *data)
 	    }
 	}
 	break;
-	
+
      case ButtonRelease:
 	if (!sPtr->flags.continuous && sPtr->flags.dragging && sPtr->action) {
 	    (*sPtr->action)(sPtr, sPtr->clientData);
 	}
 	sPtr->flags.dragging = 0;
 	break;
-	
+
      case MotionNotify:
 	if (sPtr->flags.dragging) {
 	    sPtr->value = valueForMousePoint(sPtr, event->xmotion.x,
@@ -476,7 +529,10 @@ destroySlider(Slider *sPtr)
 {
     if (sPtr->knobPixmap)
 	XFreePixmap(sPtr->view->screen->display, sPtr->knobPixmap);
-   
+
+    if (sPtr->backPixmap)
+	WMReleasePixmap(sPtr->backPixmap);
+
     free(sPtr);
 }
 

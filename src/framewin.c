@@ -70,7 +70,6 @@ wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y,
     memset(fwin, 0, sizeof(WFrameWindow));
     
     fwin->screen_ptr = scr;
-    fwin->window_level = wlevel;
 
     fwin->flags.single_texture = (flags & WFF_SINGLE_STATE) ? 1 : 0;
     
@@ -287,7 +286,7 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
     
     if (height + fwin->top_width + fwin->bottom_width != fwin->core->height) {
 	wFrameWindowResize(fwin, width,
-			   height + fwin->top_width + fwin->bottom_width);
+			      height + fwin->top_width + fwin->bottom_width);
     }
     
     /* setup object descriptors */
@@ -475,53 +474,13 @@ renderTexture(WScreen *scr, WTexture *texture, int width, int height,
 {
     RImage *img;
     RImage *limg, *rimg, *mimg;
-    RColor color1, color2;
-    int i, x, w;
+    int x, w;
     
     *title = None;
     *lbutton = None;
     *rbutton = None;
-    
-    switch (texture->any.type) {
-     case WTEX_DGRADIENT:
-     case WTEX_VGRADIENT:
-     case WTEX_HGRADIENT:
-     case WTEX_MHGRADIENT:
-     case WTEX_MVGRADIENT:
-     case WTEX_MDGRADIENT:
-	if (texture->any.type==WTEX_DGRADIENT
-	    || texture->any.type==WTEX_MDGRADIENT)
-	    i = RGRD_DIAGONAL;
-	else if (texture->any.type==WTEX_HGRADIENT 
-		 || texture->any.type==WTEX_MHGRADIENT)
-	    i = RGRD_HORIZONTAL;
-	else
-	    i = RGRD_VERTICAL;
-	
-	if (texture->any.type==WTEX_MHGRADIENT
-	    || texture->any.type==WTEX_MDGRADIENT
-	    || texture->any.type==WTEX_MVGRADIENT)
-	    img = RRenderMultiGradient(width, height,
-				       &(texture->mgradient.colors[1]), i);
-	else {
-	    color1.red = texture->gradient.color1.red >> 8;
-	    color1.green = texture->gradient.color1.green >> 8;
-	    color1.blue = texture->gradient.color1.blue >> 8;
-	    color2.red = texture->gradient.color2.red >> 8;
-	    color2.green = texture->gradient.color2.green >> 8;
-	    color2.blue = texture->gradient.color2.blue >> 8;	    
-	    img = RRenderGradient(width, height, &color1, &color2, i);
-        }
-        break;
-	
-     case WTEX_PIXMAP:
-        img = wTextureRenderImage(texture, width, height, WREL_FLAT);
-        break;
-	
-     default:
-        img = NULL;
-    }
-    
+
+    img = wTextureRenderImage(texture, width, height, WREL_FLAT);
     if (!img) {
         wwarning(_("could not render gradient: %s"), RMessageForError(RErrorCode));
         return;
@@ -722,8 +681,7 @@ wFrameWindowPaint(WFrameWindow *fwin)
 		   WREL_RAISED);
     }
     
-    if (fwin->resizebar
-	&& !fwin->flags.repaint_only_titlebar) {
+    if (fwin->resizebar	&& !fwin->flags.repaint_only_titlebar) {
 	Window win;
 	int w, h;
 	int cw;
@@ -756,8 +714,7 @@ wFrameWindowPaint(WFrameWindow *fwin)
     }
     
     
-    if (fwin->title && fwin->titlebar
-	&& !fwin->flags.repaint_only_resizebar) {
+    if (fwin->title && fwin->titlebar && !fwin->flags.repaint_only_resizebar) {
 	int x, w;
 	int lofs = 6, rofs = 6;
 	int titlelen;
@@ -813,13 +770,18 @@ wFrameWindowPaint(WFrameWindow *fwin)
 }
 
 
-void 
-wFrameWindowResize(WFrameWindow *fwin, int width, int height)
+static void
+reconfigure(WFrameWindow *fwin, int x, int y, int width, int height,
+	    Bool dontMove)
 {
     int k = (wPreferences.new_style ? 4 : 3);
     int resizedHorizontally = 0;
     
-    XResizeWindow(dpy, fwin->core->window, width, height);
+    if (dontMove)
+	XResizeWindow(dpy, fwin->core->window, width, height);
+    else
+	XMoveResizeWindow(dpy, fwin->core->window, x, y, width, height);
+
     /*
      if (fwin->core->height != height && fwin->resizebar)
      XMoveWindow(dpy, fwin->resizebar->window, 0,
@@ -895,12 +857,16 @@ wFrameWindowResize(WFrameWindow *fwin, int width, int height)
     }
 }
 
+void 
+wFrameWindowConfigure(WFrameWindow *fwin, int x, int y, int width, int height)
+{
+    reconfigure(fwin, x, y, width, height, False);
+}
 
 void
-wFrameWindowResizeInternal(WFrameWindow *fwin, int iwidth, int iheight)
+wFrameWindowResize(WFrameWindow *fwin, int width, int height)
 {
-    wFrameWindowResize(fwin, iwidth,
-		       iheight + fwin->top_width + fwin->bottom_width);
+    reconfigure(fwin, 0, 0, width, height, True);
 }
 
 

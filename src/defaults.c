@@ -31,6 +31,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <limits.h>
+#include <signal.h>
 
 #ifndef PATH_MAX
 #define PATH_MAX DEFAULT_PATH_MAX
@@ -117,6 +118,7 @@ static int getPathList();
 static int getEnum();
 static int getTexture();
 static int getWSBackground();
+static int getWSSpecificBackground();
 static int getFont();
 static int getColor();
 static int getKeybind();
@@ -136,12 +138,15 @@ static int setWinTitleFont();
 static int setMenuTitleFont();
 static int setMenuTextFont();
 static int setIconTitleFont();
+static int setIconTitleColor();
+static int setIconTitleBack();
 static int setDisplayFont();
 static int setWTitleColor();
 static int setFTitleBack();
 static int setPTitleBack();
 static int setUTitleBack();
 static int setWorkspaceBack();
+static int setWorkspaceSpecificBack();
 static int setMenuTitleColor();
 static int setMenuTextColor();
 static int setMenuDisabledColor();
@@ -155,6 +160,8 @@ static int setIconPosition();
 
 static int setClipTitleFont();
 static int setClipTitleColor();
+
+static int updateUsableArea();
 
 
 
@@ -393,13 +400,13 @@ WDefaultEntry optionList[] = {
 	  &wPreferences.auto_arrange_icons, getBool,	NULL
     },
     {"NoWindowOverDock", "NO",			NULL,
-	  &wPreferences.no_window_over_dock, getBool,	NULL
+	  &wPreferences.no_window_over_dock, getBool,   updateUsableArea
     },
     {"NoWindowOverIcons", "NO",			NULL,
-	  &wPreferences.no_window_over_icons, getBool,  NULL
+	  &wPreferences.no_window_over_icons, getBool,  updateUsableArea
     },
     {"WindowPlaceOrigin", "(0, 0)",		NULL,
-	  &wPreferences.window_place_origin, getCoord,	NULL
+	  &wPreferences.window_place_origin, getCoord,  NULL
     },
     {"ResizeDisplay",	"corner",	       	seGeomDisplays,
 	  &wPreferences.size_display,	getEnum,	NULL
@@ -426,6 +433,12 @@ WDefaultEntry optionList[] = {
     {"WidgetColor",	"(solid, gray)",	NULL,
 	  NULL,				getTexture,	setWidgetColor,
     },
+    {"WorkspaceSpecificBack","()",	NULL,
+	  NULL,		getWSSpecificBackground, setWorkspaceSpecificBack
+    },
+	/* WorkspaceBack must come after WorkspaceSpecificBack or
+	 * WorkspaceBack wont know WorkspaceSpecificBack was also
+	 * specified and 2 copies of wmsetbg will be launched */
     {"WorkspaceBack",	"(solid, black)",	NULL,
 	  NULL,				getWSBackground,setWorkspaceBack
     },
@@ -498,14 +511,22 @@ WDefaultEntry optionList[] = {
     {"MenuTextBack",	"(solid, gray)",       	NULL,
 	  NULL,				getTexture,	setMenuTextBack
     },
+    {"IconTitleColor",	"white",       		NULL,
+	  NULL,				getColor,	setIconTitleColor
+    },
+    {"IconTitleBack",	"black",       		NULL,
+	  NULL,				getColor,	setIconTitleBack
+    },
 
 	/* keybindings */
+#ifndef LITE
     {"RootMenuKey",	"None",			(void*)WKBD_ROOTMENU,
 	  NULL,				getKeybind,	setKeyGrab
     },
     {"WindowListKey",	"None",			(void*)WKBD_WINDOWLIST,
 	  NULL,				getKeybind,	setKeyGrab
     },
+#endif /* LITE */
     {"WindowMenuKey",	"None",		       	(void*)WKBD_WINDOWMENU,
 	  NULL,				getKeybind,	setKeyGrab
     },
@@ -522,6 +543,9 @@ WDefaultEntry optionList[] = {
 	  NULL,				getKeybind,	setKeyGrab
     },
     {"HideKey", "None",	       			(void*)WKBD_HIDE,
+	  NULL,				getKeybind,	setKeyGrab
+    },
+    {"MoveResizeKey", "None",	       		(void*)WKBD_MOVERESIZE,
 	  NULL,				getKeybind,	setKeyGrab
     },
     {"CloseKey", "None",       			(void*)WKBD_CLOSE,
@@ -608,6 +632,27 @@ WDefaultEntry optionList[] = {
     {"WindowShortcut4Key","None",		(void*)WKBD_WINDOW4,
 	    NULL, 			getKeybind,	setKeyGrab
     },
+#ifdef EXTEND_WINDOWSHORTCUT
+    {"WindowShortcut5Key","None",		(void*)WKBD_WINDOW5,
+	    NULL, 			getKeybind,	setKeyGrab
+    },
+    {"WindowShortcut6Key","None",		(void*)WKBD_WINDOW6,
+	    NULL, 			getKeybind,	setKeyGrab
+    },
+    {"WindowShortcut7Key","None",		(void*)WKBD_WINDOW7,
+	    NULL, 			getKeybind,	setKeyGrab
+    },
+    {"WindowShortcut8Key","None",		(void*)WKBD_WINDOW8,
+	    NULL, 			getKeybind,	setKeyGrab
+    },
+    {"WindowShortcut9Key","None",		(void*)WKBD_WINDOW9,
+	    NULL, 			getKeybind,	setKeyGrab
+    },
+    {"WindowShortcut10Key","None",		(void*)WKBD_WINDOW10,
+	    NULL, 			getKeybind,	setKeyGrab
+    },
+#endif /* EXTEND_WINDOWSHORTCUT */
+
 #ifdef KEEP_XKB_LOCK_STATUS
     {"ToggleKbdModeKey", "None",                      (void*)WKBD_TOGGLE,
 	    NULL,                       getKeybind,     setKeyGrab
@@ -914,7 +959,7 @@ wDefaultsCheckDomains(void *foo)
 	WDWindowAttributes->timestamp = stbuf.st_mtime;
     }
 
-
+#ifndef LITE
     if (stat(WDRootMenu->path, &stbuf)>=0
 	&& WDRootMenu->timestamp < stbuf.st_mtime) {
 	dict = ReadProplistFromFile(WDRootMenu->path);
@@ -939,6 +984,7 @@ wDefaultsCheckDomains(void *foo)
 	}
 	WDRootMenu->timestamp = stbuf.st_mtime;
     }
+#endif /* !LITE */
 
     WMAddTimerHandler(DEFAULTS_CHECK_INTERVAL, wDefaultsCheckDomains, foo);
 }
@@ -959,16 +1005,19 @@ static void
 refreshMenus(WScreen *scr, int flags)
 {
     WMenu *menu;
-    
+
+#ifndef LITE
     menu = scr->root_menu;
-    if (menu)
-	wMenuRefresh(!menu->flags.brother ? menu : menu->brother, flags);
-    
-    menu = scr->workspace_menu;
     if (menu)
 	wMenuRefresh(!menu->flags.brother ? menu : menu->brother, flags);
 
     menu = scr->switch_menu;
+    if (menu)
+	wMenuRefresh(!menu->flags.brother ? menu : menu->brother, flags);
+
+#endif /* !LITE */
+
+    menu = scr->workspace_menu;
     if (menu)
 	wMenuRefresh(!menu->flags.brother ? menu : menu->brother, flags);
 
@@ -1122,29 +1171,6 @@ wReadDefaults(WScreen *scr, proplist_t new_dict)
         if (needs_refresh & REFRESH_ICON_TILE)
             refreshAppIcons(scr, needs_refresh);
 
-#ifdef EXPERIMENTAL
-	if (needs_refresh & REFRESH_WORKSPACE_BACK) {
-	    WWorkspaceTexture *wsback;
-	    
-	    /* update the background for the workspace */
-	    if (scr->current_workspace < scr->wspaceTextureCount
-		&& scr->wspaceTextures[scr->current_workspace]) {
-		wsback = scr->wspaceTextures[scr->current_workspace];
-	    } else {
-		wsback = scr->defaultTexure;
-	    }
-	    if (wsback) {
-		if (wsback->pixmap!=None) {
-		    XSetWindowBackgroundPixmap(dpy, scr->root_win, 
-					       wsback->pixmap);
-		} else {
-		    XSetWindowBackground(dpy, scr->root_win, wsback->solid);
-		}
-		XClearWindow(dpy, scr->root_win);
-		XFlush(dpy);
-	    }
-	}
-#endif /* !EXPERIMENTAL */
         wRefreshDesktop(scr);
     }
 }
@@ -1453,10 +1479,11 @@ getString(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
 
 static int 
 getPathList(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
-	      void **ret)
+	    void **ret)
 {
-    static char **data;
-    int i, count;
+    static char *data;
+    int i, count, len;
+    char *ptr;
     proplist_t d;
     int changed=0;
 
@@ -1472,7 +1499,7 @@ again:
         }
 	return False; 
     }
-    
+
     i = 0;
     count = PLGetNumberOfElements(value);
     if (count < 1) {
@@ -1484,25 +1511,35 @@ again:
         }
         return False;
     }
-    
-    data = wmalloc(sizeof(char*)*(count+1));
+
+    len = 0;
+    for (i=0; i<count; i++) {
+	d = PLGetArrayElement(value, i);
+	if (!d || !PLIsString(d)) {
+	    count = i;
+	    break;
+	}
+	len += strlen(PLGetString(d))+1;
+    }
+
+    ptr = data = wmalloc(len+1);
+
     for (i=0; i<count; i++) {
 	d = PLGetArrayElement(value, i);
 	if (!d || !PLIsString(d)) {
 	    break;
 	}
-	data[i] = wstrdup(PLGetString(d));
+	strcpy(ptr, PLGetString(d));
+	ptr += strlen(PLGetString(d));
+	*ptr = ':';
+	ptr++;
     }
-    data[i]=NULL;
-    
-    if (*(char***)addr!=NULL) {
-	char **tmp = *(char***)addr;
-	for (i=0; tmp[i]!=NULL; i++) {
-	    free(tmp[i]);
-	}
-	free(tmp);
+    ptr--; *(ptr--) = 0;
+
+    if (*(char**)addr!=NULL) {
+	free(*(char**)addr);
     }
-    *(char***)addr = data;
+    *(char**)addr = data;
 
     return True;
 }
@@ -1540,6 +1577,9 @@ getEnum(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
  * (tpixmap <file> <color>)
  * (spixmap <file> <color>)
  * (cpixmap <file> <color>)
+ * (thgradient <file> <opaqueness> <color> <color>)
+ * (tvgradient <file> <opaqueness> <color> <color>)
+ * (tdgradient <file> <opaqueness> <color> <color>)
  */
 
 static WTexture*
@@ -1583,7 +1623,8 @@ parse_texture(WScreen *scr, proplist_t pl)
     } else if (strcasecmp(val, "dgradient")==0
 	       || strcasecmp(val, "vgradient")==0
 	       || strcasecmp(val, "hgradient")==0) {
-	XColor color1, color2;
+	RColor color1, color2;
+	XColor xcolor;
 	int type;
 
 	if (nelem != 3) {
@@ -1605,10 +1646,14 @@ parse_texture(WScreen *scr, proplist_t pl)
 	  return NULL;
 	val = PLGetString(elem);
 
-	if (!XParseColor(dpy, scr->colormap, val, &color1)) {
+	if (!XParseColor(dpy, scr->colormap, val, &xcolor)) {
 	    wwarning(_("\"%s\" is not a valid color name"), val);
 	    return NULL;
 	}
+	color1.alpha = 255;
+	color1.red = xcolor.red >> 8;
+	color1.green = xcolor.green >> 8;
+	color1.blue = xcolor.blue >> 8;
 	
 	/* get to color */
 	elem = PLGetArrayElement(pl, 2);
@@ -1617,11 +1662,15 @@ parse_texture(WScreen *scr, proplist_t pl)
 	}
 	val = PLGetString(elem);
 
-	if (!XParseColor(dpy, scr->colormap, val, &color2)) {
+	if (!XParseColor(dpy, scr->colormap, val, &xcolor)) {
 	    wwarning(_("\"%s\" is not a valid color name"), val);
 	    return NULL;
 	}
-	
+	color2.alpha = 255;
+	color2.red = xcolor.red >> 8;
+	color2.green = xcolor.green >> 8;
+	color2.blue = xcolor.blue >> 8;
+
 	texture = (WTexture*)wTextureMakeGradient(scr, type, &color1, &color2);
 	
     } else if (strcasecmp(val, "mhgradient")==0
@@ -1711,8 +1760,79 @@ parse_texture(WScreen *scr, proplist_t pl)
 	val = PLGetString(elem);
 
 	texture = (WTexture*)wTextureMakePixmap(scr, type, val, &color);
+    } else if (strcasecmp(val, "thgradient")==0
+	       || strcasecmp(val, "tvgradient")==0
+	       || strcasecmp(val, "tdgradient")==0) {
+	RColor color1, color2;
+	XColor xcolor;
+	int opacity;
+	int style;
 
+	if (val[1]=='h' || val[1]=='H')
+	    style = WTEX_THGRADIENT;
+	else if (val[1]=='v' || val[1]=='V')
+	    style = WTEX_TVGRADIENT;
+	else
+	    style = WTEX_TDGRADIENT;
+
+	if (nelem != 5) {
+	    wwarning(_("bad number of arguments in textured gradient specification"));
+	    return NULL;
+	}
+	
+	/* get from color */
+	elem = PLGetArrayElement(pl, 3);
+	if (!elem || !PLIsString(elem)) 
+	  return NULL;
+	val = PLGetString(elem);
+
+	if (!XParseColor(dpy, scr->colormap, val, &xcolor)) {
+	    wwarning(_("\"%s\" is not a valid color name"), val);
+	    return NULL;
+	}
+	color1.alpha = 255;
+	color1.red = xcolor.red >> 8;
+	color1.green = xcolor.green >> 8;
+	color1.blue = xcolor.blue >> 8;
+
+	/* get to color */
+	elem = PLGetArrayElement(pl, 4);
+	if (!elem || !PLIsString(elem)) {
+	    return NULL;
+	}
+	val = PLGetString(elem);
+
+	if (!XParseColor(dpy, scr->colormap, val, &xcolor)) {
+	    wwarning(_("\"%s\" is not a valid color name"), val);
+	    return NULL;
+	}
+	color2.alpha = 255;
+	color2.red = xcolor.red >> 8;
+	color2.green = xcolor.green >> 8;
+	color2.blue = xcolor.blue >> 8;
+
+	/* get opacity */
+	elem = PLGetArrayElement(pl, 2);
+	if (!elem || !PLIsString(elem))
+	    opacity = 128;
+	else
+	    val = PLGetString(elem);
+	
+	if (!val || (opacity = atoi(val)) < 0 || opacity > 255) {
+	    wwarning(_("bad opacity value for tgradient texture \"%s\". Should be [0..255]"), val);
+	    opacity = 128;
+	}
+
+	/* get file name */
+	elem = PLGetArrayElement(pl, 1);
+	if (!elem || !PLIsString(elem))
+	  return NULL;
+	val = PLGetString(elem);
+
+	texture = (WTexture*)wTextureMakeTGradient(scr, style, &color1, &color2,
+						   val, opacity);
     } else {
+	wwarning(_("invalid texture type %s"), val);
 	return NULL;
     }
     return texture;
@@ -1781,24 +1901,19 @@ again:
 
 
 
-#ifdef EXPERIMENTAL
-static int 
+static int
 getWSBackground(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 		void *addr, void **ret)
 {
     proplist_t elem;
+    int changed = 0;
     char *val;
     int nelem;
-    static WTexture *texture=NULL;
-    int changed=0;
-    char *file = NULL;
 
 again:
-    entry->extra_data = NULL;
-
     if (!PLIsArray(value)) {
 	wwarning(_("Wrong option format for key \"%s\". Should be %s."),
-                 "WorkspaceBack", "Texture");
+                 "WorkspaceBack", "Texture or None");
         if (changed==0) {
             value = entry->plvalue;
             changed = 1;
@@ -1807,6 +1922,8 @@ again:
         }
         return False;
     }
+
+    /* only do basic error checking and verify for None texture */
 
     nelem = PLGetNumberOfElements(value);
     if (nelem < 1) {
@@ -1822,7 +1939,7 @@ again:
 
     elem = PLGetArrayElement(value, 0);
     if (!elem || !PLIsString(elem)) {
-        wwarning(_("Wrong type for workspace background. Should be Texture."));
+        wwarning(_("Wrong type for workspace background. Should be a texture type."));
         if (changed==0) {
             value = entry->plvalue;
             changed = 1;
@@ -1834,142 +1951,26 @@ again:
     val = PLGetString(elem);
 
     if (strcasecmp(val, "None")==0)
-        return False;
+        return True;
 
-    if (strcasecmp(val, "spixmap")!=0 && strcasecmp(val, "tpixmap")!=0
-	&& strcasecmp(val, "cpixmap")!=0) {
-        texture = parse_texture(scr, value);
-    } else {
-        /* spixmap || tpixmap || cpixmap */
-        XColor color;
-	int style;
+    *ret = PLRetain(value);
 
-        if (nelem != 3) {
-            wwarning(_("Too few elements in array for key \"WorkspaceBack\"."));
-            if (changed==0) {
-                value = entry->plvalue;
-                changed = 1;
-                wwarning(_("using default \"%s\" instead"), entry->default_value);
-                goto again;
-            }
-            return False;
-        }
-	
-	switch (val[0]) {
-	 case 's':
-	 case 'S':
-	    style = WTP_SCALE;
-	    break;
-	 case 'C':
-	 case 'c':
-	    style = WTP_CENTER;
-	    break;
-	 default:
-	    style = WTP_TILE;
-	    break;
-	}
-
-	/* get color */
-	elem = PLGetArrayElement(value, 2);
-	if (!elem || !PLIsString(elem)) {
-            wwarning(_("Cannot get color entry for key \"WorkspaceBack\"."));
-            if (changed==0) {
-                value = entry->plvalue;
-                changed = 1;
-                wwarning(_("using default \"%s\" instead"), entry->default_value);
-                goto again;
-            }
-	    return False;
-	}
-	val = PLGetString(elem);
-
-	if (!XParseColor(dpy, scr->colormap, val, &color)) {
-            wwarning(_("key \"WorkspaceBack\" has invalid color \"%s\""),
-                     val);
-            if (changed==0) {
-                value = entry->plvalue;
-                changed = 1;
-                wwarning(_("using default \"%s\" instead"), entry->default_value);
-                goto again;
-            }
-	    return False;
-	}
-	
-	/* file name */
-	elem = PLGetArrayElement(value, 1);
-        if (!elem || !PLIsString(elem)) {
-            wwarning(_("Cannot get file entry for key \"WorkspaceBack\"."));
-            if (changed==0) {
-                value = entry->plvalue;
-                changed = 1;
-                wwarning(_("using default \"%s\" instead"), entry->default_value);
-                goto again;
-            }
-            return False;
-        }
-
-        val = PLGetString(elem);
-        file = FindImage(wPreferences.pixmap_path, val);
-        if (!file) {
-            wwarning(_("could not find background image \"%s\""), val);
-            /*return False;*/
-        }
-	
-	/* create a dummy texture.
-	 * use free() to free this texture.
-	 */
-	texture = wmalloc(sizeof(WTexture));
-	memset(texture, 0, sizeof(WTexture));
-	texture->type = WTEX_PIXMAP;
-	texture->subtype = style;
-	texture->normal = color;
-    }
-
-    if (!texture) {
-	if (file)
-	    free(file);
-        wwarning(_("Error in texture specification for key \"WorkspaceBack\""));
-        if (changed==0) {
-            value = entry->plvalue;
-            changed = 1;
-            wwarning(_("using default \"%s\" instead"), entry->default_value);
-            goto again;
-        }
-        return False;
-    }
-
-    if (ret)
-        *ret = &texture;
-
-    if (addr)
-        *(WTexture**)addr = texture;
-    
-    /* we use the extra_data field to pass the filename string
-     * to the background setting function. We can't pass it with
-     * WTexture because it holds a RImage, not a file name.
-     * It also would be dirtier to cast the RImage to char* to make it
-     * hold the file name. The extra_data must be freed by the
-     * setting function.
-     */
-    entry->extra_data = file;
-    
     return True;
 }
-#else /* !EXPERIMENTAL */
-static int 
-getWSBackground(WScreen *scr, WDefaultEntry *entry, proplist_t value,
-              void *addr, void **ret)
+
+
+static int
+getWSSpecificBackground(WScreen *scr, WDefaultEntry *entry, proplist_t value,
+			void *addr, void **ret)
 {
     proplist_t elem;
-    char *val;
     int nelem;
-    static WTexture *texture=NULL;
-    int changed=0;
+    int changed = 0;
 
 again:
     if (!PLIsArray(value)) {
 	wwarning(_("Wrong option format for key \"%s\". Should be %s."),
-                 "WorkspaceBack", "Texture");
+                 "WorkspaceSpecificBack", "an array of textures");
         if (changed==0) {
             value = entry->plvalue;
             changed = 1;
@@ -1978,153 +1979,28 @@ again:
         }
         return False;
     }
+
+    /* only do basic error checking and verify for None texture */
 
     nelem = PLGetNumberOfElements(value);
-    if (nelem < 1) {
-        wwarning(_("Too few elements in array for key \"WorkspaceBack\"."));
-        if (changed==0) {
-            value = entry->plvalue;
-            changed = 1;
-            wwarning(_("using default \"%s\" instead"), entry->default_value);
-            goto again;
-        }
-        return False;
+    if (nelem < 0) {
+	*ret = PLRetain(value);
+
+        return True;
     }
 
-    elem = PLGetArrayElement(value, 0);
-    if (!elem || !PLIsString(elem)) {
-        wwarning(_("Wrong type for workspace background. Should be Texture."));
-        if (changed==0) {
-            value = entry->plvalue;
-            changed = 1;
-            wwarning(_("using default \"%s\" instead"), entry->default_value);
-            goto again;
-        }
-        return False;
-    }
-    val = PLGetString(elem);
-
-    if (strcasecmp(val, "None")==0)
-        return False;
-
-    if (strcasecmp(val, "spixmap")!=0 && strcasecmp(val, "tpixmap")!=0
-	&& strcasecmp(val, "cpixmap")!=0) {
-        texture = parse_texture(scr, value);
-    }
-    else {
-        /* spixmap || tpixmap || cpixmap */
-        XColor color;
-        char *file, cpc[30], *style = "-s";
-        char *program = "wmsetbg";
-        char *back;
-
-        if (nelem != 3) {
-            wwarning(_("Too few elements in array for key \"WorkspaceBack\"."));
-            if (changed==0) {
-                value = entry->plvalue;
-                changed = 1;
-                wwarning(_("using default \"%s\" instead"), entry->default_value);
-                goto again;
-            }
-            return False;
-        }
-
-        if (val[0] == 't' || val[0] == 'T')
-            style = "-t";
-	else if (val[0] == 'c' || val[0] == 'C')
-            style = "-e";
-
-        sprintf(cpc, "%i", wPreferences.cmap_size);
-
-	/* get color */
-	elem = PLGetArrayElement(value, 2);
-	if (!elem || !PLIsString(elem)) {
-            wwarning(_("Cannot get color entry for key \"WorkspaceBack\"."));
-            if (changed==0) {
-                value = entry->plvalue;
-                changed = 1;
-                wwarning(_("using default \"%s\" instead"), entry->default_value);
-                goto again;
-            }
-	    return False;
+    while (nelem--) {
+	elem = PLGetArrayElement(value, nelem);
+	if (!elem || !PLIsArray(elem)) {
+	    wwarning(_("Wrong type for background of workspace %i. Should be a texture."),
+		     nelem);
 	}
-	val = PLGetString(elem);
-
-	if (!XParseColor(dpy, scr->colormap, val, &color)) {
-            wwarning(_("key \"WorkspaceBack\" has invalid color \"%s\""),
-                     val);
-            if (changed==0) {
-                value = entry->plvalue;
-                changed = 1;
-                wwarning(_("using default \"%s\" instead"), entry->default_value);
-                goto again;
-            }
-	    return False;
-	}
-
-        back = wstrdup(val);
-
-	/* file name */
-	elem = PLGetArrayElement(value, 1);
-        if (!elem || !PLIsString(elem)) {
-            wwarning(_("Cannot get file entry for key \"WorkspaceBack\"."));
-            if (changed==0) {
-                value = entry->plvalue;
-                changed = 1;
-                wwarning(_("using default \"%s\" instead"), entry->default_value);
-                goto again;
-            }
-            return False;
-        }
-
-        val = PLGetString(elem);
-
-        file = FindImage(wPreferences.pixmap_path, val);
-        if (file) {
-            if (fork()==0) {
-		SetupEnvironment(scr);
-		
-		CloseDescriptors();
-		
-                execlp(program, program, style, "-c", cpc, "-b", back, file, NULL);
-                wwarning(_("could not run \"%s\""), program);
-                exit(-1);
-            }
-            free(file);
-        } else {
-            wwarning(_("could not find background image \"%s\""), val);
-        }
-
-        free(back);
-
-        /* This is to let WindowMaker put a color in the background
-         * until the pixmap is loaded, if the image is big and loads slow.
-         * It assumes that the color will be set before the image is set
-         * by the child. Is this true for very small images?
-         */
-	texture = (WTexture*)wTextureMakeSolid(scr, &color);
     }
 
-    if (!texture) {
-        wwarning(_("Error in texture specification for key \"WorkspaceBack\""));
-        if (changed==0) {
-            value = entry->plvalue;
-            changed = 1;
-            wwarning(_("using default \"%s\" instead"), entry->default_value);
-            goto again;
-        }
-        return False;
-    }
-
-    if (ret)
-        *ret = &texture;
-
-    if (addr)
-        *(WTexture**)addr = texture;
+    *ret = PLRetain(value);
 
     return True;
 }
-#endif /* !EXPERIMENTAL */
 
 
 static int 
@@ -2140,8 +2016,8 @@ getFont(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
     
     font = wLoadFont(val);
     if (!font) {
-	wwarning(_("could not load any usable font"));
-	return False;
+	wfatal(_("could not load any usable font!!!"));
+	exit(1);
     }
 
     if (ret)
@@ -2229,7 +2105,7 @@ getKeybind(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
 	*k = 0;
 	mod = wXModifierFromKey(b);
 	if (mod<0) {
-	    wwarning(_("%s:invalid key modifier \"%s\""), entry->key, val);
+	    wwarning(_("%s:invalid key modifier \"%s\""), entry->key, b);
 	    return False;
 	}
 	shortcut.modifier |= mod;
@@ -2362,7 +2238,7 @@ setIconTile(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
 	RDestroyImage(scr->icon_tile);
 	XFreePixmap(dpy, scr->icon_tile_pixmap);
     }
-    
+
     scr->icon_tile = img;
 
     if (!wPreferences.flags.noclip) {
@@ -2371,9 +2247,9 @@ setIconTile(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
 	}
 	scr->clip_tile = wClipMakeTile(scr, img);
     }
-    
+
     scr->icon_tile_pixmap = pixmap;
-    
+
     if (scr->def_icon_pixmap) {
         XFreePixmap(dpy, scr->def_icon_pixmap);
         scr->def_icon_pixmap = None;
@@ -2382,7 +2258,7 @@ setIconTile(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
         XFreePixmap(dpy, scr->def_ticon_pixmap);
         scr->def_ticon_pixmap = None;
     }
-    
+
     if (scr->icon_back_texture) {
 	wTextureDestroy(scr, (WTexture*)scr->icon_back_texture);
     }
@@ -2396,7 +2272,7 @@ setIconTile(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
      * Free the texture as nobody else will use it, nor refer to it.
      */
     if (!entry->addr)
-      wTextureDestroy(scr, *texture);
+	wTextureDestroy(scr, *texture);
 
     return (reset ? REFRESH_ICON_TILE : 0);
 }
@@ -2570,9 +2446,7 @@ setWTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
     
     scr->window_title_pixel[index] = color->pixel;
 
-    if (index == WS_FOCUSED)
-	XSetForeground(dpy, scr->icon_title_gc, color->pixel);
-    else if (index == WS_UNFOCUSED)
+    if (index == WS_UNFOCUSED)
 	XSetForeground(dpy, scr->info_text_gc, color->pixel);
     
     return REFRESH_FORE_COLOR;
@@ -2653,264 +2527,141 @@ setMenuDisabledColor(WScreen *scr, WDefaultEntry *entry, XColor *color, void *fo
 #undef gcm
 }
 
+static int 
+setIconTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, void *foo)
+{
+    XSetForeground(dpy, scr->icon_title_gc, color->pixel); 
+    
+    return REFRESH_FORE_COLOR;
+}
+
+static int 
+setIconTitleBack(WScreen *scr, WDefaultEntry *entry, XColor *color, void *foo)
+{
+    if (scr->icon_title_texture) {
+	wTextureDestroy(scr, (WTexture*)scr->icon_title_texture);
+    }
+    XQueryColor (dpy, scr->colormap, color);
+    scr->icon_title_texture = wTextureMakeSolid(scr, color);
+    
+    return REFRESH_WINDOW_TEXTURES;
+}
 
 
-/*
- * Implementation of workspace specific backgrounds.
- * 
- * WorkspaceBack is used as the default background.
- * WorkspaceSpecificBack supplies an array with the textures for
- * other workspaces.
- * WorkspaceSpecificBack = (ws1texture, ws2texture, "", ws4texture);
- * "" means that workspace3 should use the default texture.
- * 
- * struct WWorkspaceTexture {
- *   Pixmap pixmap;		       // the pixmap for non-solid textures.
- * 					//None means the texture is solid
- *   WPixel color;		       // color for solid texture
- *   proplist_t texture;	       // for checking updates
- * };
- *
- * 
- * All textures are rendered by wmsetbg. When it exits with status 0
- * it outputs the pixmap ID.
- * wmaker will monitor the fd and when it becomes available it reads the 
- * pixmap ID and uses it in the texture. The data read from the fd
- * is the pixmap ID and the pid of the wmsetbg process, separated by
- * a space (the pid is to allow paralel wmsetbg processes).
- * 
- * The workspace background cant be set if the pid field of the
- * texture is 0. Otherwise, the texture is still being rendered
- * and cant be set.
- * 
- * If the workspace background is changed before wmsetbg finishes
- * the rendering, wmsetbg must be killed.
- * 
- * Optimizations:
- * Workspace specific textures are generated only when switching to
- * that workspace, unless #define SLOW_CONFIGURATION_UPDATE.
- * 
- * -readme
- */
-#ifdef EXPERIMENTAL
 static void
 trackDeadProcess(pid_t pid, unsigned char status, WScreen *scr)
 {
-    WWorkspaceTexture *wsback;
-    int setBackground = 0;
-    
-    /* find out to which wsback, this process belongs to */
-    
-    wsback->pid = 0;
-    if (status != 123) {
-	/* something went wrong during rendering */
-	XFreePixmap(dpy, wsback->pixmap);
-	wsback->pixmap = None;
-	wwarning(_("background texture rendering was unsuccessfull"));
-    }
+    close(scr->helper_fd);
+    scr->helper_fd = 0;
+    scr->helper_pid = 0;
+    scr->flags.backimage_helper_launched = 0;
+}    
 
-    if (setBackground) {
-    }
-}
 
-WWorkspaceTexture*
-makeWorkspaceTexture(WScreen *scr, WTexture *texture, char *file, char *option)
+static int
+setWorkspaceSpecificBack(WScreen *scr, WDefaultEntry *entry, proplist_t value, 
+			 void *bar)
 {
-    WWorkspaceTexture *wsback;
-    
-    wsback = wmalloc(sizeof(WWorkspaceTexture));
-    wsback->pid = 0;
+    int i;
+    proplist_t val;
+    char *str;
 
-    wsback->solid = (*texture)->any.color.pixel;
+    if (scr->flags.backimage_helper_launched) {
+	if (PLGetNumberOfElements(value)==0) {
+	    kill(scr->helper_pid, SIGTERM);
+	    close(scr->helper_fd);
+	    scr->helper_fd = 0;
+	    scr->flags.backimage_helper_launched = 0;
+	    
+	    PLRelease(value);
+	    return 0;
+	}
+    } else {
+	pid_t pid;
+	int filedes[2];
 
-    if (texture->any.type==WTEX_SOLID) {
-	wsback->pixmap = None;
-    } else if (texture->any.type == WTEX_PIXMAP) {
-	Pixmap pixmap;
-	if (texture->pixmap.subtype == WTP_TILE) {
-	    RImage *image;
+	if (PLGetNumberOfElements(value) == 0)
+	    return 0;
+	
+	if (pipe(filedes) < 0) {
+	    wsyserror("pipe() failed:can't set workspace specific background image");
+	    
+	    PLRelease(value);
+	    return 0;
+	}
 
-	    /* render ourseves */
-	    image = RLoadImage(scr->rcontext, file, 0);
-	    if (!image) {
-		wwarning(_("could not load image %s for option %s:%s\n"),
-			 file, option, RErrorString);
-		wsback->pixmap = None;
-	    } else {
+	pid = fork();
+	if (pid < 0) {
+	    wsyserror("fork() failed:can't set workspace specific background image");
+	} else if (pid == 0) {
+	    SetupEnvironment(scr);
+
+	    close(0);
+	    if (dup(filedes[0]) < 0) {
+		wsyserror("dup() failed:can't set workspace specific background image");
 	    }
+	    execlp("wmsetbg", "wmsetbg", "-helper", "-d", NULL);
+	    wsyserror("could not execute wmsetbg");
+	    exit(1);
 	} else {
-	    /* create a empty pixmap... */
-	    pid_t pid;
-	    int style = texture->pixmap.subtype;
+	    scr->helper_fd = filedes[1];
+	    scr->helper_pid = pid;
+	    scr->flags.backimage_helper_launched = 1;
 
-	    pixmap = XCreatePixmap(dpy, scr->root_win, scr->scr_width,
-				   scr->scr_height, scr->depth);
-	    
-	    /* ...and let wmsetbg render it */
-	    pid = fork();
-	    if (pid < 0) {
-		wsyserror(_("could not spawn texture rendering subprocess for option"));
-	    } else if (pid == 0) {
-		char *colorn, *pix;
-		
-		SetupEnvironment(scr);
-		
-		CloseDescriptors();
+	    wAddDeathHandler(pid, (WDeathHandler*)trackDeadProcess, scr);
 
-		colorn = wmalloc(32);
-		sprintf(colorn, "\"#%2x%2x%2x\"",
-			texture->any.color.red,
-			texture->any.color.green,
-			texture->any.color.blue);
-		pix = wmalloc(32);
-		sprintf(pix, "%x", pixmap);
-		execlp("wmsetbg", "wmsetbg", (style==WTP_SCALE ? "-s":"-e"),
-		       "-b", colorn, "-x", pix, file);
-		exit(1);
-	    }
-	    wsback->pixmap = pixmap;
-	    /* must add a death handler to detect when wmsetbg has
-	     * exited (with exit status 123) and refresh the background.
-	     */
-	    wsback->pid = pid;
+	    SendHelperMessage(scr, 'P', -1, wPreferences.pixmap_path);
 	}
-    } else {
-	int w, h;
-	Pixmap pixmap;
-
-	switch (texture->any.type) {
-	 case WTEX_HGRADIENT:
-	 case WTEX_MHGRADIENT:
-	    w = scr->scr_width;
-	    h = 8;
-	    break;
-	    
-	 case WTEX_VGRADIENT:
-	 case WTEX_MVGRADIENT:
-	    w = 8;
-	    h = scr->scr_height;
-	    break;
-	    
-	 case WTEX_DGRADIENT:
-         case WTEX_MDGRADIENT:
-            w = scr->scr_width;
-	    h = scr->scr_height;
-	    break;
-            
-	 default:
-	    return NULL;
-	}
-	
-	img = wTextureRenderImage(texture, w, h, WREL_FLAT);
-	if (!img) {
-	    wwarning(_("could not render texture for workspace background"));
-	    free(wsback);
-	    return NULL;
-	}
-	RConvertImage(scr->rcontext, img, &pixmap);
-	RDestroyImage(img);
-	wsback->pixmap = pixmap;
     }
 
-    return wsback;
+    for (i = 0; i < PLGetNumberOfElements(value); i++) {
+	val = PLGetArrayElement(value, i);
+	if (val && PLIsArray(val) && PLGetNumberOfElements(val)>0) {
+	    str = PLGetDescription(val);
+
+	    SendHelperMessage(scr, 'S', i+1, str);
+
+	    free(str);
+	} else {
+	    SendHelperMessage(scr, 'U', i+1, NULL);
+	}
+    }
+    sleep(1);
+
+    PLRelease(value);
+    return 0;
 }
 
 
 static int
-setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, WTexture **texture, 
-		 char *file)
+setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, proplist_t value, 
+		 void *bar)
 {
-    Pixmap pixmap;
-    RImage *img;
-    
-    if (scr->defaultTexture) {
-	if (scr->defaultTexture->pixmap)
-	    XFreePixmap(dpy, scr->defaultTexture->pixmap);
-	free(scr->defaultTexture);
-    }
-	
-    if (!*texture) {
-	scr->defaultTexture = NULL;
-	if (file)
-	    free(file);
-	return 0;
-    }
+    if (scr->flags.backimage_helper_launched) {
+	char *str;
 
-    scr->defaultTexture = makeWorkspaceTexture(scr, *texture, file);
-
-    if (!entry->addr)
-	wTextureDestroy(scr, *texture);
-
-    /* free the file name that was passed from the getWSBackground()
-     * function and placed in entry->extra_data */
-    if (file)
-	free(file);
-    entry->extra_data = NULL;
-
-    return REFRESH_WORKSPACE_BACK;
-}
-#else /* !EXPERIMENTAL */
-static int
-setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, WTexture **texture, 
-		 void *foo)
-{
-    Pixmap pixmap;
-    RImage *img;
-    
-
-    if ((*texture)->any.type==WTEX_SOLID) {
-	XSetWindowBackground(dpy, scr->root_win, (*texture)->solid.normal.pixel);
-	XClearWindow(dpy, scr->root_win);
+	/* set the default workspace background to this one */
+	str = PLGetDescription(value);
+	if (str) {
+	    SendHelperMessage(scr, 'S', 0, str);
+	    free(str);
+	}
     } else {
-	int w, h;
-	
-	switch ((*texture)->any.type) {
-	 case WTEX_HGRADIENT:
-	 case WTEX_MHGRADIENT:
-	    w = scr->scr_width;
-	    h = 8;
-	    break;
-	    
-	 case WTEX_VGRADIENT:
-	 case WTEX_MVGRADIENT:
-	    w = 8;
-	    h = scr->scr_height;
-	    break;
-	    
-	 case WTEX_DGRADIENT:
-         case WTEX_MDGRADIENT:
-            w = scr->scr_width;
-	    h = scr->scr_height;
-	    break;
-            
-	 default:
-	    if (!entry->addr)
-		wTextureDestroy(scr, *texture);
-	    return 0;
-	}
-	
-	img = wTextureRenderImage(*texture, w, h, WREL_FLAT);
-	if (!img) {
-	    wwarning(_("could not render texture for workspace background"));
-	    if (!entry->addr)
-		wTextureDestroy(scr, *texture);
-	    return 0;
-	}
-	RConvertImage(scr->rcontext, img, &pixmap);
-	RDestroyImage(img);
-	XSetWindowBackgroundPixmap(dpy, scr->root_win, pixmap);
-	XClearWindow(dpy, scr->root_win);
-    }
+	char *command;
+	char *text;
 
-    /*
-     * Free the texture as nobody else will use it, nor refer to it.
-     */
-    if (!entry->addr)
-      wTextureDestroy(scr, *texture);
+	text = PLGetDescription(value);
+	command = wmalloc(strlen(text)+40);
+	sprintf(command, "wmsetbg -d -p '%s' &", text);
+	free(text);
+	system(command);
+	free(command);
+    }
+    PLRelease(value);
 
     return 0;
 }
-#endif /* !EXPERIMENTAL */
+
 
 static int 
 setWidgetColor(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
@@ -2932,12 +2683,6 @@ setFTitleBack(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
     }
     scr->window_title_texture[WS_FOCUSED] = *texture;
 
-    if (scr->icon_title_texture) {
-	wTextureDestroy(scr, (WTexture*)scr->icon_title_texture);
-    }
-    scr->icon_title_texture 
-      = wTextureMakeSolid(scr, &scr->window_title_texture[WS_FOCUSED]->any.color);
-    
     return REFRESH_WINDOW_TEXTURES;
 }
 
@@ -3015,7 +2760,7 @@ setKeyGrab(WScreen *scr, WDefaultEntry *entry, WShortKey *shortcut, long index)
     while (wwin!=NULL) {
 	XUngrabKey(dpy, AnyKey, AnyModifier, wwin->frame->core->window);
 
-	if (!wwin->window_flags.no_bind_keys) {
+	if (!WFLAGP(wwin, no_bind_keys)) {
 	    wWindowSetKeyGrabs(wwin);
 	}
 	wwin = wwin->prev;
@@ -3029,6 +2774,15 @@ static int
 setIconPosition(WScreen *scr, WDefaultEntry *entry, void *bar, void *foo)
 {
     wArrangeIcons(scr, True);
+
+    return 0;
+}
+
+
+static int
+updateUsableArea(WScreen *scr, WDefaultEntry *entry, void *bar, void *foo)
+{
+    wScreenUpdateUsableArea(scr);
 
     return 0;
 }

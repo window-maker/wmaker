@@ -66,8 +66,8 @@
  *	// subdiretórios e arquivos legíveis neles em ordem alfabética,
  *	// usando o comando para executar cada arquivo.
  *
- *	OPEN_MENU /algum/dir [/algum/outro/dir ...] WITH comando -opções
- *
+ *	OPEN_MENU [-noext] /algum/dir [/algum/outro/dir ...] WITH comando -opções
+ *		
  *
  * <Parâmetros> é o programa a ser executado.
  *
@@ -171,9 +171,9 @@
 	"Área de Trabalho" END
 
 	"Aparência" MENU
-		"Temas" OPEN_MENU THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Estilos" OPEN_MENU STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Conjunto de Ícones" OPEN_MENU ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Temas" OPEN_MENU -noext THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Estilos" OPEN_MENU -noext STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Conjunto de Ícones" OPEN_MENU -noext ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Papéis de Parede" MENU
 			"Sólido" MENU
                         	"Preto" WS_BACK '(solid, black)'
@@ -189,7 +189,7 @@
 				"Bandeira" WS_BACK '(mdgradient, green, green, yellow)'
 				"Céu" WS_BACK '(vgradient, blue4, white)'
 			"Degradé" END
-			"Imagens" OPEN_MENU BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+			"Imagens" OPEN_MENU -noext BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Papéis de Parede" END
 		"Salvar Tema" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Nome do Tema)"
 		"Salvar Configuração de Ícones" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(Nome do Conjunto de Ícones)"

@@ -144,8 +144,9 @@ createView(W_Screen *screen, W_View *parent)
 	view->attribFlags = CWEventMask|CWBitGravity;
 	view->attribs = defAtts;
 
-	view->attribFlags |= CWBackPixel|CWColormap;
+	view->attribFlags |= CWBackPixel|CWColormap|CWBorderPixel;
 	view->attribs.background_pixel = W_PIXEL(screen->gray);
+	view->attribs.border_pixel = W_PIXEL(screen->black);
 	view->attribs.colormap = screen->colormap;
 
 	adoptChildView(parent, view);

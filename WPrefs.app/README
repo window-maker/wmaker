@@ -33,6 +33,17 @@ the contents of the ~/GNUstep/Defaults directory before using it.
 
 
 
+License
+-------
+
+    Like Window Maker, WPrefs is distributed with through the General Public
+License (as stated in the file COPYING). As an exception, the icons and
+original graphical artwork included with WPrefs has the additional
+restriction that they must not be redistributed without the rest of the
+Window Maker distribution. In other words, you can use and distribute the
+WPrefs icons freely, as long as they are distributed for use with Window
+Maker (ripping the icons and putting them in your program is prohibited).
+
 
 Notes
 -----

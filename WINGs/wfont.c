@@ -91,7 +91,7 @@ WMCreateFontInDefaultEncoding(WMScreen *scrPtr, char *fontName)
 WMFont*
 WMRetainFont(WMFont *font)
 {
-    assert(font!=NULL);
+    wassertrv(font!=NULL, NULL);
 
     font->refCount++;
 
@@ -102,7 +102,8 @@ WMRetainFont(WMFont *font)
 void 
 WMReleaseFont(WMFont *font)
 {
-    assert(font!=NULL);
+    wassertr(font!=NULL);
+
     font->refCount--;
     if (font->refCount < 1) {
 	if (font->notFontSet)
@@ -118,8 +119,8 @@ WMReleaseFont(WMFont *font)
 unsigned int
 WMFontHeight(WMFont *font)
 {
-    assert(font!=NULL);
-    
+    wassertrv(font!=NULL, 0);
+
     return font->height;
 }
 
@@ -179,6 +180,8 @@ WMBoldSystemFontOfSize(WMScreen *scrPtr, int size)
 XFontSet
 WMGetFontFontSet(WMFont *font)
 {
+    wassertrv(font!=NULL, NULL);
+
     if (font->notFontSet)
 	return NULL;
     else
@@ -189,8 +192,8 @@ WMGetFontFontSet(WMFont *font)
 int
 WMWidthOfString(WMFont *font, char *text, int length)
 {
-    assert(font!=NULL);
-    assert(text!=NULL);
+    wassertrv(font!=NULL, 0);
+    wassertrv(text!=NULL, 0);
     
     if (font->notFontSet)
 	return XTextWidth(font->font.normal, text, length);
@@ -210,6 +213,8 @@ void
 WMDrawString(WMScreen *scr, Drawable d, GC gc, WMFont *font, int x, int y,
 	     char *text, int length)
 {
+    wassertr(font!=NULL);
+
     if (font->notFontSet) {
 	XSetFont(scr->display, gc, font->font.normal->fid);
 	XDrawString(scr->display, d, gc, x, y + font->y, text, length);
@@ -224,6 +229,8 @@ void
 WMDrawImageString(WMScreen *scr, Drawable d, GC gc, WMFont *font, int x, int y,
 		  char *text, int length)
 {
+    wassertr(font != NULL);
+
     if (font->notFontSet) {
 	XSetFont(scr->display, gc, font->font.normal->fid);
 	XDrawImageString(scr->display, d, gc, x, y + font->y, text, length);

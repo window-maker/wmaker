@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <signal.h>
 
 #include <X11/Xlib.h>
 
@@ -36,8 +37,12 @@
 #include <WINGs.h>
 #include <WUtil.h>
 
+/** some config options **/
+#undef EXTEND_WINDOWSHORTCUT
 
-#define WVERSION	"0.8"
+/****/
+
+#define WVERSION	"0.9"
 #define WMVERSION	"0.20.x"
 
 
@@ -61,6 +66,7 @@ typedef struct PanelRec {
     
     CallbackRec callbacks;
 } PanelRec;
+
 
 
 void AddSection(Panel *panel, char *iconFile);
@@ -92,6 +98,11 @@ void SetStringForKey(char *value, char *defaultName);
 void SetBoolForKey(Bool value, char *defaultName);
 
 void SetSpeedForKey(int speed, char *defaultName);
+
+
+
+void AddDeadChildHandler(pid_t pid, void (*handler)(void*), void *data);
+
 
 #define FRAME_TOP	105
 #define FRAME_LEFT	-2

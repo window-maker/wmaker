@@ -19,6 +19,8 @@
  *  USA.
  */
 
+
+
 /* anywhere */
 #define WKBD_ROOTMENU		0
 #define WKBD_WINDOWMENU		1
@@ -33,17 +35,17 @@
 #define WKBD_CLIPLOWER		8
 #define WKBD_CLIPRAISE		9
 #define WKBD_CLIPRAISELOWER	10
-/* window, menu */
+/* window */
 #define WKBD_RAISE		11
 #define WKBD_LOWER		12
 #define WKBD_RAISELOWER		13
-/* window */
-#define WKBD_SHADE		14
+#define WKBD_MOVERESIZE		14
+#define WKBD_SHADE		15
 /* window, menu */
-#define WKBD_CLOSE		15
+#define WKBD_CLOSE		16
 /* window */
-#define WKBD_FOCUSNEXT		16
-#define WKBD_FOCUSPREV		17
+#define WKBD_FOCUSNEXT		17
+#define WKBD_FOCUSPREV		18
 
 #define WKBD_WORKSPACE1		20
 #define WKBD_WORKSPACE2		21
@@ -65,14 +67,27 @@
 #define WKBD_WINDOW2		35
 #define WKBD_WINDOW3		36
 #define WKBD_WINDOW4		37
-
-#ifdef KEEP_XKB_LOCK_STATUS
-# define WKBD_TOGGLE             38
-# define WKBD_LAST               39
-#else
-# define WKBD_LAST               38
-#endif /* KEEP_XKB_LOCK_STATUS */
-
+#ifdef EXTEND_WINDOWSHORTCUT
+# define WKBD_WINDOW5		38
+# define WKBD_WINDOW6		39
+# define WKBD_WINDOW7		40
+# define WKBD_WINDOW8		41
+# define WKBD_WINDOW9		42
+# define WKBD_WINDOW10		43
+# ifdef KEEP_XKB_LOCK_STATUS
+#  define WKBD_TOGGLE             44
+#  define WKBD_LAST               45
+# else
+#  define WKBD_LAST               44
+# endif /* KEEP_XKB_LOCK_STATUS */
+#else /* !EXTEND_WINDOWSHORTCUT */
+# ifdef KEEP_XKB_LOCK_STATUS
+#  define WKBD_TOGGLE             38
+#  define WKBD_LAST               39
+# else
+#  define WKBD_LAST               38
+# endif /* KEEP_XKB_LOCK_STATUS */
+#endif /* !EXTEND_WINDOWSHORTCUT */
 
 
 typedef struct WShortKey {
