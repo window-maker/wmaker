@@ -7,7 +7,7 @@
 #include <WUtil.h>
 #include <X11/Xlib.h>
 
-#define WINGS_H_VERSION  991003
+#define WINGS_H_VERSION  20000402
 
 
 #ifdef __cplusplus
@@ -170,7 +170,7 @@ typedef enum {
 	WTNoTabsBevelBorder,
 	WTNoTabsLineBorder,
 	WTNoTabsNoBorder
-} WMTabViewTypes;
+} WMTabViewType;
 
 
 /* text movement types */
@@ -191,6 +191,18 @@ enum {
     WMInsertTextEvent,
     WMDeleteTextEvent
 };
+
+
+/* drag operations */
+typedef enum {
+    WDOperationNone,
+    WDOperationCopy,
+    WDOperationMove,
+    WDOperationLink,
+    WDOperationAsk,
+    WDOperationPrivate
+} WMDragOperationType;
+
 
 typedef enum {
 	WMGrayModeColorPanel = 1,
@@ -392,8 +404,6 @@ typedef void WMCallback(void *data);
 
 
 /* delegate method like stuff */
-typedef void WMFreeDataProc(void *data);
-
 typedef void WMListDrawProc(WMList *lPtr, int index, Drawable d, char *text,
 			    int state, WMRect *rect);
 
@@ -407,15 +417,6 @@ typedef void WMSplitViewConstrainProc(WMSplitView *sPtr, int dividerIndex,
 				      int *minSize, int *maxSize);
 
 typedef WMWidget *WMMatrixCreateCellProc(WMMatrix *mPtr);
-
-
-typedef Bool WMConvertSelectionProc(WMWidget *w, Atom selection, Atom target,
-				    Atom *type, void **value, unsigned *length,
-				    int *format);
-
-typedef void WMLoseSelectionProc(WMWidget *w, Atom selection);
-
-typedef void WMSelectionDoneProc(WMWidget *w, Atom selection, Atom target);
 
 
 
@@ -474,6 +475,22 @@ typedef struct WMTabViewDelegate {
 
 
 
+
+typedef void WMSelectionCallback(WMView *view, Atom selection, Atom target,
+				 Time timestamp, void *cdata, WMData *data);
+
+
+typedef struct WMSelectionProcs {
+    WMData* (*convertSelection)(WMView *view, Atom selection, Atom target,
+				void *cdata, Atom *type);
+    void (*selectionLost)(WMView *view, Atom selection, void *cdata);
+    void (*selectionDone)(WMView *view, Atom selection, Atom target,
+			  void *cdata);
+} WMSelectionProcs;
+
+
+
+
 typedef struct W_DraggingInfo WMDraggingInfo;
 
 
@@ -482,7 +499,7 @@ typedef struct W_DragSourceProcs {
     void (*beganDragImage)(WMView *self, WMPixmap *image, WMPoint point);
     void (*endedDragImage)(WMView *self, WMPixmap *image, WMPoint point,
 			   Bool deposited);
-    WMData* (*fetchDragData)(WMView *self, char *type, Bool local);
+    WMData* (*fetchDragData)(WMView *self, char *type);
 /*    Bool (*ignoreModifierKeysWhileDragging)(WMView *view);*/
 } WMDragSourceProcs;
 
@@ -492,8 +509,9 @@ typedef struct W_DragDestinationProcs {
     unsigned (*draggingEntered)(WMView *self, WMDraggingInfo *info);
     unsigned (*draggingUpdated)(WMView *self, WMDraggingInfo *info);
     void (*draggingExited)(WMView *self, WMDraggingInfo *info);
-    Bool (*prepareForDragOperation)(WMView *self, WMDraggingInfo *info);
-    Bool (*performDragOperation)(WMView *self, WMDraggingInfo *info);
+    char *(*prepareForDragOperation)(WMView *self, WMDraggingInfo *info);
+    Bool (*performDragOperation)(WMView *self, WMDraggingInfo *info,
+				 WMData *data);
     void (*concludeDragOperation)(WMView *self, WMDraggingInfo *info);
 } WMDragDestinationProcs;
 
@@ -581,12 +599,16 @@ WMHandlerID WMAddInputHandler(int fd, int condition, WMInputProc *proc,
 
 void WMDeleteInputHandler(WMHandlerID handlerID);
 
-Bool WMCreateSelectionHandler(WMWidget *w, Atom selection, Time timestamp,
-                              WMConvertSelectionProc *convProc,
-                              WMLoseSelectionProc *loseProc,
-                              WMSelectionDoneProc *doneProc);
 
-void WMDeleteSelectionHandler(WMWidget *widget, Atom selection);
+
+Bool WMCreateSelectionHandler(WMView *view, Atom selection, Time timestamp,
+			      WMSelectionProcs *procs, void *cdata);
+
+void WMDeleteSelectionHandler(WMView *view, Atom selection, Time timestamp);
+
+Bool WMRequestSelection(WMView *view, Atom selection, Atom target, 
+			Time timestamp, WMSelectionCallback *callback,
+			void *cdata);
 
 
 /* ....................................................................... */

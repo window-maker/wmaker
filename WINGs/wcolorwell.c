@@ -46,18 +46,42 @@ static void willResizeColorWell();
 
 W_ViewDelegate _ColorWellViewDelegate = {
     NULL,
-	NULL,
-	NULL,
-	NULL,
-	willResizeColorWell
+    NULL,
+    NULL,
+    NULL,
+    willResizeColorWell
 };
 
 
-#if 0
-static WMDragSourceProcs dragProcs = {
-    
+static unsigned draggingSourceOperation(WMView *self, Bool local);
+
+static WMData* fetchDragData(WMView *self, char *type);
+
+static WMDragSourceProcs _DragSourceProcs = {
+    draggingSourceOperation,
+    NULL,
+    NULL,
+    fetchDragData
 };
-#endif
+
+
+static unsigned draggingEntered(WMView *self, WMDraggingInfo *info);
+static unsigned draggingUpdated(WMView *self, WMDraggingInfo *info);
+static void draggingExited(WMView *self, WMDraggingInfo *info);
+static char *prepareForDragOperation(WMView *self, WMDraggingInfo *info);
+static Bool performDragOperation(WMView *self, WMDraggingInfo *info, 
+				 WMData *data);
+static void concludeDragOperation(WMView *self, WMDraggingInfo *info);
+
+static WMDragDestinationProcs _DragDestinationProcs = {
+    draggingEntered,
+    draggingUpdated,
+    draggingExited,
+    prepareForDragOperation,
+    performDragOperation,
+    concludeDragOperation
+};
+
 
 #define DEFAULT_WIDTH		60
 #define DEFAULT_HEIGHT		30
@@ -168,7 +192,16 @@ WMCreateColorWell(WMWidget *parent)
 
     WMAddNotificationObserver(colorChangedObserver, cPtr,
 			      WMColorPanelColorChangedNotification, NULL);
+    
+    WMSetViewDragSourceProcs(cPtr->view, &_DragSourceProcs);
+    WMSetViewDragDestinationProcs(cPtr->view, &_DragDestinationProcs);
 
+    {
+	char *types[2] = {"application/X-color", NULL};
+	
+	WMRegisterViewForDraggedTypes(cPtr->view, types);
+    }
+    
     return cPtr;
 }
 
@@ -276,6 +309,27 @@ handleEvents(XEvent *event, void *data)
 }
 
 
+static unsigned 
+draggingSourceOperation(WMView *self, Bool local)
+{
+    return WDOperationCopy;
+}
+
+
+static WMData* 
+fetchDragData(WMView *self, char *type)
+{
+    char *color = WMGetColorRGBDescription(((WMColorWell*)self->self)->color);
+    WMData *data;
+    
+    data = WMCreateDataWithBytes(color, strlen(color)+1);
+    
+    free(color);
+    
+    return data;
+}
+
+
 static WMPixmap*
 makeDragPixmap(WMColorWell *cPtr)
 {
@@ -289,221 +343,6 @@ makeDragPixmap(WMColorWell *cPtr)
     XDrawRectangle(scr->display, pix, WMColorGC(scr->black), 0, 0, 15, 15);
     
     return WMCreatePixmapFromXPixmaps(scr, pix, None, 16, 16, scr->depth);
-}
-
-
-static void
-slideView(WMView *view, int srcX, int srcY, int dstX, int dstY)
-{
-    double x, y, dx, dy;
-    int i;
-
-    srcX -= 8;
-    srcY -= 8;
-    dstX -= 8;
-    dstY -= 8;
-    
-    x = srcX;
-    y = srcY;
-    
-    dx = (double)(dstX-srcX)/20.0;
-    dy = (double)(dstY-srcY)/20.0;
-
-    for (i = 0; i < 20; i++) {
-	W_MoveView(view, x, y);
-	XFlush(view->screen->display);
-	
-	x += dx;
-	y += dy;
-    }
-}
-
-
-
-static Window
-findChildInWindow(Display *dpy, Window toplevel, int x, int y)
-{
-    Window foo, bar;
-    Window *children;
-    unsigned nchildren;
-    int i;
-    
-    if (!XQueryTree(dpy, toplevel, &foo, &bar,
-		    &children, &nchildren) || children == NULL) {
-	return None;
-    }
-
-    /* first window that contains the point is the one */
-    for (i = nchildren-1; i >= 0; i--) {
-	XWindowAttributes attr;
-
-	if (XGetWindowAttributes(dpy, children[i], &attr)
-	    && attr.map_state == IsViewable
-	    && x >= attr.x && y >= attr.y
-	    && x < attr.x + attr.width && y < attr.y + attr.height) {
-	    Window child;
-	    
-	    child = findChildInWindow(dpy, children[i], 
-				      x - attr.x, y - attr.y);
-
-	    XFree(children);
-
-	    if (!child)
-		return toplevel;
-	    else
-		return child;
-	}
-    }
-
-    XFree(children);
-    return None;
-}
-
-
-static Window
-findWindowUnderDragPointer(WMScreen *scr, int x, int y, Window iconWindow)
-{
-    Window foo, bar;
-    Window *children;
-    unsigned nchildren;
-    int i;
-
-    if (!XQueryTree(scr->display, scr->rootWin, &foo, &bar,
-		    &children, &nchildren) || children == NULL) {
-	return None;
-    }
-    
-    /* try to find the window below the iconWindow by traversing
-     * the whole window list */
-    
-    /* first find the position of the iconWindow */
-    for (i = nchildren-1; i >= 0; i--) {
-	if (children[i] == iconWindow) {
-	    i--;
-	    break;
-	}
-    }
-    if (i <= 0) {
-	XFree(children);
-	return scr->rootWin;
-    }
-
-    /* first window that contains the point is the one */
-    for (; i >= 0; i--) {
-	XWindowAttributes attr;
-	Window child;
-
-	if (XGetWindowAttributes(scr->display, children[i], &attr)
-	    && attr.map_state == IsViewable
-	    && x >= attr.x && y >= attr.y
-	    && x < attr.x + attr.width && y < attr.y + attr.height
-	    && (child = findChildInWindow(scr->display, children[i],
-					  x - attr.x, y - attr.y))) {
-	    XFree(children);
-	    return child;
-	}
-    }
-
-    XFree(children);
-    return None;
-}
-
-
-
-static void
-dragColor(ColorWell *cPtr, XEvent *event, WMPixmap *image)
-{
-    WMView *dragView;
-    WMScreen *scr = cPtr->view->screen;
-    Display *dpy = scr->display;
-    XColor black = {0, 0,0,0, DoRed|DoGreen|DoBlue};
-    XColor green = {0x0045b045, 0x4500,0xb000,0x4500, DoRed|DoGreen|DoBlue};
-    XColor back = {0, 0xffff,0xffff,0xffff, DoRed|DoGreen|DoBlue};
-    Bool done = False;
-    WMColorWell *activeWell = NULL;
-
-    dragView = W_CreateTopView(scr);
-
-    W_ResizeView(dragView, 16, 16);
-    dragView->attribFlags |= CWOverrideRedirect | CWSaveUnder;
-    dragView->attribs.event_mask = StructureNotifyMask;
-    dragView->attribs.override_redirect = True;
-    dragView->attribs.save_under = True;
-
-    W_MoveView(dragView, event->xmotion.x_root-8, event->xmotion.y_root-8);
-
-    W_RealizeView(dragView);
-
-    W_MapView(dragView);
-
-    XSetWindowBackgroundPixmap(dpy, dragView->window, WMGetPixmapXID(image));
-    XClearWindow(dpy, dragView->window);
-    
-
-    XGrabPointer(dpy, scr->rootWin, True,
-		 ButtonMotionMask|ButtonReleaseMask,
-		 GrabModeSync, GrabModeAsync, 
-		 scr->rootWin, scr->defaultCursor, CurrentTime);
-
-    while (!done) {
-	XEvent ev;
-	WMView *view;
-	Window win;
-
-	XAllowEvents(dpy, SyncPointer, CurrentTime);
-	WMNextEvent(dpy, &ev);
-
-	switch (ev.type) {
-	 case ButtonRelease:
-	    if (activeWell != NULL) {
-		WMSetColorWellColor(activeWell, cPtr->color);
-		WMPostNotificationName(WMColorWellDidChangeNotification,
-				       activeWell, NULL);
-	    } else {
-		slideView(dragView, ev.xbutton.x_root, ev.xbutton.y_root,
-			  event->xmotion.x_root, event->xmotion.y_root);
-	    }
-	    
-	    done = True;
-	    break;
-
-	 case MotionNotify:
-	    while (XCheckTypedEvent(dpy, MotionNotify, &ev)) ;
-	    
-	    W_MoveView(dragView, ev.xmotion.x_root-8, ev.xmotion.y_root-8);
-
-	    win = findWindowUnderDragPointer(scr, ev.xmotion.x_root,
-					     ev.xmotion.y_root,
-					     dragView->window);
-
-	    if (win != None && win != scr->rootWin) {
-		view = W_GetViewForXWindow(dpy, win);
-	    } else {
-		view = NULL;
-	    }
-
-	    if (view && view->self && W_CLASS(view->self) == WC_ColorWell
-		&& view->self != activeWell && view->self != cPtr) {
-		
-		activeWell = view->self;
-		XRecolorCursor(dpy, scr->defaultCursor, &green, &back);
-
-	    } else if (!view || view->self != activeWell) {
-
-		XRecolorCursor(dpy, scr->defaultCursor, &black, &back);
-		activeWell = NULL;
-	    }
-	    break;
-
-	 default:
-	    WMHandleEvent(&ev);
-	    break;
-	}
-    }
-    XUngrabPointer(dpy, CurrentTime);
-    XRecolorCursor(dpy, scr->defaultCursor, &black, &back);
-
-    W_DestroyView(dragView);
 }
 
 
@@ -526,17 +365,17 @@ handleDragEvents(XEvent *event, void *data)
 		|| abs(cPtr->ipoint.y - event->xmotion.y) > 4) {
 		WMSize offs;
 		WMPixmap *pixmap;
+		char *types[2] = {"application/X-color", NULL};
 
 		offs.width = 2;
 		offs.height = 2;
 		pixmap = makeDragPixmap(cPtr);
 
-		/*
-		WMDragImageFromView(cPtr->view, pixmap, cPtr->view->pos,
-				   offs, event, True);
-		 * */
-		
-		dragColor(cPtr, event, pixmap);
+		WMDragImageFromView(cPtr->view, pixmap, types,
+				    wmkpoint(event->xmotion.x_root,
+					     event->xmotion.y_root),
+				    offs, event, True);
+				   
 		
 		WMReleasePixmap(pixmap);
 	    }
@@ -585,3 +424,53 @@ destroyColorWell(ColorWell *cPtr)
     wfree(cPtr);
 }
 
+
+
+static unsigned
+draggingEntered(WMView *self, WMDraggingInfo *info)
+{
+    return WDOperationCopy;
+}
+
+
+static unsigned
+draggingUpdated(WMView *self, WMDraggingInfo *info)
+{
+    return WDOperationCopy;
+}
+
+
+static void
+draggingExited(WMView *self, WMDraggingInfo *info)
+{
+
+}
+
+
+static char*
+prepareForDragOperation(WMView *self, WMDraggingInfo *info)
+{
+    return "application/X-color";
+}
+
+
+static Bool
+performDragOperation(WMView *self, WMDraggingInfo *info, WMData *data)
+{
+    char *colorName = WMDataBytes(data);
+    WMColor *color;
+    
+    color = WMCreateNamedColor(W_VIEW_SCREEN(self), colorName, True);
+    
+    WMSetColorWellColor(self->self, color);
+    
+    WMReleaseColor(color);
+    
+    return True;
+}
+
+
+static void
+concludeDragOperation(WMView *self, WMDraggingInfo *info)
+{
+}

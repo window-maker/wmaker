@@ -411,6 +411,10 @@ destroyView(W_View *view)
 
     if (view->dragDestinationProcs)
 	wfree(view->dragDestinationProcs);
+    
+    if (scr->dragInfo.destView == view) {
+	scr->dragInfo.destView = NULL;
+    }
 #endif
     wfree(view);
 }

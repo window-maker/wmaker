@@ -58,14 +58,6 @@ W_SetXdndAwareProperty(WMScreen *scr, WMView *view, Atom *types, int typeCount)
 
 
 
-
-WMData*
-WMGetDroppedData(WMView *view, WMDraggingInfo *info)
-{
-    return NULL;
-}
-
-
 void
 WMRegisterViewForDraggedTypes(WMView *view, char *acceptedTypes[])
 {
@@ -100,6 +92,38 @@ WMUnregisterViewDraggedTypes(WMView *view)
 
 /***********************************************************************/
 
+
+static unsigned defDraggingEntered(WMView *self, WMDraggingInfo *info)
+{
+    return WDOperationNone;
+}
+
+static unsigned defDraggingUpdated(WMView *self, WMDraggingInfo *info)
+{
+    return WDOperationNone;
+}
+
+static void defDraggingExited(WMView *self, WMDraggingInfo *info)
+{
+}
+
+static char* defPrepareForDragOperation(WMView *self, WMDraggingInfo *info)
+{
+    return NULL;
+}
+
+static Bool defPerformDragOperation(WMView *self, WMDraggingInfo *info,
+				    WMData *data)
+{
+    return False;
+}
+
+static void defConcludeDragOperation(WMView *self, WMDraggingInfo *info)
+{
+}
+
+
+
 void
 WMSetViewDragDestinationProcs(WMView *view, WMDragDestinationProcs *procs)
 {
@@ -110,6 +134,27 @@ WMSetViewDragDestinationProcs(WMView *view, WMDragDestinationProcs *procs)
     *view->dragDestinationProcs = *procs;
     
     /*XXX fill in non-implemented stuffs */
+    if (procs->draggingEntered == NULL) {
+	view->dragDestinationProcs->draggingEntered = defDraggingEntered;
+    }
+    if (procs->draggingUpdated == NULL) {
+	view->dragDestinationProcs->draggingUpdated = defDraggingUpdated;
+    }
+    if (procs->draggingExited == NULL) {
+	view->dragDestinationProcs->draggingExited = defDraggingExited;
+    }
+    if (procs->prepareForDragOperation == NULL) {
+	view->dragDestinationProcs->prepareForDragOperation =
+	    defPrepareForDragOperation;
+    }
+    if (procs->performDragOperation == NULL) {
+	view->dragDestinationProcs->performDragOperation = 
+	    defPerformDragOperation;
+    }
+    if (procs->concludeDragOperation == NULL) {
+	view->dragDestinationProcs->concludeDragOperation =
+	    defConcludeDragOperation;
+    }
 }
 
 

@@ -117,6 +117,10 @@ typedef struct W_Host WMHost;
 typedef struct W_Connection WMConnection;
 
 
+    
+typedef void WMFreeDataProc(void *data);
+
+    
 
 typedef struct {
     int position;
@@ -438,6 +442,10 @@ WMData* WMCreateDataWithBytes(void *bytes, unsigned length);
 
 WMData* WMCreateDataWithBytesNoCopy(void *bytes, unsigned length);
 
+
+WMData* WMCreateDataWithBytesAndDestructor(void *bytes, unsigned length,
+					   WMFreeDataProc *destructor);
+    
 WMData* WMCreateDataWithData(WMData *aData);
 
 WMData* WMRetainData(WMData *aData);
@@ -469,8 +477,6 @@ WMData* WMGetSubdataWithRange(WMData *aData, WMRange aRange);
 Bool WMIsDataEqualToData(WMData *aData, WMData *anotherData);
 
 unsigned WMGetDataLength(WMData *aData);
-
-unsigned WMGetDataHash(WMData *aData);
 
 /* Adding data */
 

@@ -28,7 +28,7 @@ typedef struct W_TabView {
     struct {
 	WMReliefType relief:4;
 	WMTitlePosition titlePosition:4;
-	WMTabViewTypes type:2;
+	WMTabViewType type:2;
 
 	unsigned tabbed:1;
 	unsigned dontFitAll:1;

@@ -64,6 +64,11 @@ typedef struct W_TextField {
 	unsigned int secure:1;	       /* password entry style */
 
 	unsigned int pointerGrabbed:1;
+	
+	unsigned int ownsSelection:1;
+	
+	unsigned int waitingSelection:1; /* requested selection, but
+					  * didnt get yet */
 
 	/**/
 	unsigned int notIllegalMovement:1;
@@ -112,6 +117,20 @@ struct W_ViewDelegate _TextFieldViewDelegate = {
 	NULL,
 	didResizeTextField,
 	NULL,
+	NULL
+};
+
+
+
+static void lostHandler(WMView *view, Atom selection, void *cdata);
+
+static WMData *requestHandler(WMView *view, Atom selection, Atom target,
+			      void *cdata, Atom *type);
+
+
+static WMSelectionProcs selectionHandler = {
+    requestHandler,
+	lostHandler,
 	NULL
 };
 
@@ -210,73 +229,73 @@ decrToFit(TextField *tPtr)
 #undef TEXT_WIDTH
 #undef TEXT_WIDTH2
 
-static Bool
-requestHandler(WMWidget *w, Atom selection, Atom target, Atom *type,
-	       void **value, unsigned *length, int *format) 
+
+
+static WMData*
+requestHandler(WMView *view, Atom selection, Atom target, void *cdata, 
+	       Atom *type)
 {
-    TextField *tPtr = w;
+    TextField *tPtr = view->self;
     int count;
     Display *dpy = tPtr->view->screen->display;
     Atom _TARGETS;
-    char *text;
-    text = XGetAtomName(tPtr->view->screen->display,target);
-    XFree(text);
-    text = XGetAtomName(tPtr->view->screen->display,selection);
-    XFree(text);
+    Atom TEXT = XInternAtom(dpy, "TEXT", False);
+    Atom COMPOUND_TEXT = XInternAtom(dpy, "COMPOUND_TEXT", False);
+    WMData *data;
 
-    *format = 32;
-    *length = 0;
-    *value = NULL;
     count = tPtr->selection.count < 0
         ? tPtr->selection.position + tPtr->selection.count
         : tPtr->selection.position;
 
-    if (target == XA_STRING ||
-            target == XInternAtom(dpy, "TEXT", False) ||
-            target == XInternAtom(dpy, "COMPOUND_TEXT", False)) {
-        *value = wstrdup(&(tPtr->text[count]));
-        *length = abs(tPtr->selection.count);
-        *format = 8;
+    if (target == XA_STRING || target == TEXT || target == COMPOUND_TEXT) {
+	
+	data = WMCreateDataWithBytes(&(tPtr->text[count]), 
+				      abs(tPtr->selection.count));
+	WMSetDataFormat(data, 8);
         *type = target;
-        return True;
+	
+        return data;
     }
     
     _TARGETS = XInternAtom(dpy, "TARGETS", False);
     if (target == _TARGETS) {
-        int *ptr;
+        Atom *ptr;
 
-        *length = 4;
-        ptr = *value = (char *) wmalloc(4 * sizeof(Atom));
+        ptr = wmalloc(4 * sizeof(Atom));
         ptr[0] = _TARGETS;
         ptr[1] = XA_STRING;
-        ptr[2] = XInternAtom(dpy, "TEXT", False);
-        ptr[3] = XInternAtom(dpy, "COMPOUND_TEXT", False);
+        ptr[2] = TEXT;
+        ptr[3] = COMPOUND_TEXT;
+	
+	data = WMCreateDataWithBytes(ptr, 4*4);
+	WMSetDataFormat(data, 32);
+	
         *type = target;
-        return True;
+        return data;
     }
-    /*
-    *target = XA_PRIMARY;
-    */
-    return False;
+
+    return NULL;
 
 }
 
 
 static void
-lostHandler(WMWidget *w, Atom selection)
+lostHandler(WMView *view, Atom selection, void *cdata)
 {
-    TextField *tPtr = (WMTextField*)w;
+    TextField *tPtr = (WMTextField*)view->self;
 
+    tPtr->flags.ownsSelection = 0;
     tPtr->selection.count = 0;
     paintTextField(tPtr);
 }
+
 
 static void
 _notification(void *observerData, WMNotification *notification)
 {
     WMTextField *to = (WMTextField*)observerData;
     WMTextField *tw = (WMTextField*)WMGetNotificationClientData(notification);
-    if (to != tw) lostHandler(to, 0);
+    if (to != tw) lostHandler(to->view, XA_PRIMARY, NULL);
 }
 
 WMTextField*
@@ -327,8 +346,6 @@ WMCreateTextField(WMWidget *parent)
 			 |ButtonReleaseMask|ButtonPressMask|KeyPressMask|Button1MotionMask,
 			 handleTextFieldActionEvents, tPtr);
     
-    WMCreateSelectionHandler(tPtr, XA_PRIMARY, CurrentTime, requestHandler,
-             lostHandler, NULL);
     WMAddNotificationObserver(_notification, tPtr, "_lostOwnership", tPtr);
 
 
@@ -1185,20 +1202,17 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 
     if (!cancelSelection) {
     	if (tPtr->selection.count != tPtr->cursorPosition - tPtr->selection.position) {
-	    WMNotification *notif;
 	    
             tPtr->selection.count = tPtr->cursorPosition - tPtr->selection.position;
 
-            XSetSelectionOwner(tPtr->view->screen->display,
-                    	       XA_PRIMARY, tPtr->view->window,
-			       event->xbutton.time);
-            notif = WMCreateNotification("_lostOwnership", NULL, tPtr);
-            WMPostNotification(notif);
-            WMReleaseNotification(notif);
+	    WMPostNotificationName("_lostOwnership", NULL, tPtr);
 
             refresh = 1;
         }
     } else {
+	
+	lostHandler(tPtr->view, XA_PRIMARY, NULL);
+	
     	if (tPtr->selection.count) {
     	    tPtr->selection.count = 0;
             refresh = 1;
@@ -1264,21 +1278,56 @@ pointToCursorPosition(TextField *tPtr, int x)
 }
 
 
+
+static void 
+pasteText(WMView *view, Atom selection, Atom target, Time timestamp, 
+	  void *cdata, WMData *data)
+{
+    TextField *tPtr = (TextField*)view->self;
+    char *str;
+    
+    tPtr->flags.waitingSelection = 0;
+
+    if (data != NULL) {
+	str = (char*)WMDataBytes(data);
+
+	WMInsertTextFieldText(tPtr, str, tPtr->cursorPosition);
+	NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
+	       (void*)WMInsertTextEvent);
+    } else {
+	int n;
+	
+	str = XFetchBuffer(tPtr->view->screen->display, &n, 0);
+		
+	if (str != NULL) {
+	    str[n] = 0;
+	    WMInsertTextFieldText(tPtr, str, tPtr->cursorPosition);
+	    XFree(str);
+	    NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
+		   (void*)WMInsertTextEvent);
+	}
+    }
+}
+
+
 static void
 handleTextFieldActionEvents(XEvent *event, void *data)
 {
     TextField *tPtr = (TextField*)data;
     static int move = 0;
     static Time lastButtonReleasedEvent = 0;
+    Display *dpy = event->xany.display;
     
     CHECK_CLASS(data, WC_TextField);
 
     switch (event->type) {
      case KeyPress:
+	if (tPtr->flags.waitingSelection) {
+	    return;
+	}
         if (tPtr->flags.enabled && tPtr->flags.focused) {
             handleTextFieldKeyPress(tPtr, event);
-	    XGrabPointer(WMScreenDisplay(W_VIEW(tPtr)->screen),
-			 W_VIEW(tPtr)->window, False, 
+	    XGrabPointer(dpy, W_VIEW(tPtr)->window, False, 
 			 PointerMotionMask|ButtonPressMask|ButtonReleaseMask,
 			 GrabModeAsync, GrabModeAsync, None, 
 			 W_VIEW(tPtr)->screen->invisibleCursor,
@@ -1291,7 +1340,10 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 	
 	if (tPtr->flags.pointerGrabbed) {
 	    tPtr->flags.pointerGrabbed = 0;
-	    XUngrabPointer(WMScreenDisplay(W_VIEW(tPtr)->screen), CurrentTime);
+	    XUngrabPointer(dpy, CurrentTime);
+	}
+	if (tPtr->flags.waitingSelection) {
+	    return;
 	}
 
         if (tPtr->flags.enabled && (event->xmotion.state & Button1Mask)) {
@@ -1309,40 +1361,35 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 		tPtr->viewPosition--;
 	    }
 
-	    /*if (!tPtr->selection.count) {
-		tPtr->selection.position = tPtr->cursorPosition;
-	    }*/
-	    
 	    tPtr->cursorPosition = 
 		pointToCursorPosition(tPtr, event->xmotion.x);
 	    
 	    tPtr->selection.count = tPtr->cursorPosition - tPtr->selection.position;
-	    /*printf("(%d,%d)\n", tPtr->selection.position, tPtr->selection.count);*/
 	    
-	    /*
-	     printf("notify %d %d\n",event->xmotion.x,tPtr->usableWidth);
-	     */
+	    if (tPtr->selection.count != 0) {
+		if (!tPtr->flags.ownsSelection) {
+		    WMCreateSelectionHandler(tPtr->view,
+					     XA_PRIMARY,
+					     event->xbutton.time,
+					     &selectionHandler, NULL);
+		    tPtr->flags.ownsSelection = 1;
+		}
+	    }
 	    
 	    paintCursor(tPtr);
 	    paintTextField(tPtr);
 
 	}
-        if (move) {
-            XSetSelectionOwner(tPtr->view->screen->display,
-                       XA_PRIMARY, tPtr->view->window,  event->xmotion.time);
-            {
-                WMNotification *notif = WMCreateNotification("_lostOwnership",
-                        NULL,tPtr);
-                WMPostNotification(notif);
-                WMReleaseNotification(notif);
-            }
-        }
 	break;
 
      case ButtonPress:
 	if (tPtr->flags.pointerGrabbed) {
 	    tPtr->flags.pointerGrabbed = 0;
-	    XUngrabPointer(WMScreenDisplay(W_VIEW(tPtr)->screen), CurrentTime);
+	    XUngrabPointer(dpy, CurrentTime);
+	    break;
+	}
+	
+	if (tPtr->flags.waitingSelection) {
 	    break;
 	}
 
@@ -1353,26 +1400,18 @@ handleTextFieldActionEvents(XEvent *event, void *data)
             textWidth = WMWidthOfString(tPtr->font, tPtr->text, tPtr->textLen);
             if (tPtr->flags.enabled && !tPtr->flags.focused) {
                 WMSetFocusToWidget(tPtr);
+		
             } else if (tPtr->flags.focused) {
 		tPtr->selection.position = tPtr->cursorPosition;
                 tPtr->selection.count = 0;
             }
-            if(textWidth < tPtr->usableWidth){
+            if(textWidth < tPtr->usableWidth) {
                 tPtr->cursorPosition = pointToCursorPosition(tPtr, 
 				     event->xbutton.x - tPtr->usableWidth
                                      + textWidth);
-            }
-            else tPtr->cursorPosition = pointToCursorPosition(tPtr, 
+            } else tPtr->cursorPosition = pointToCursorPosition(tPtr,
                                      event->xbutton.x);
-            /*
-            tPtr->cursorPosition = pointToCursorPosition(tPtr, 
-                                     event->xbutton.x);
-                tPtr->cursorPosition += tPtr->usableWidth - textWidth;
-            }
 
-            tPtr->cursorPosition = pointToCursorPosition(tPtr, 
-                                     event->xbutton.x);
-                                     */
             paintTextField(tPtr);
             break;
         
@@ -1382,7 +1421,8 @@ handleTextFieldActionEvents(XEvent *event, void *data)
                 tPtr->cursorPosition = pointToCursorPosition(tPtr, 
                                      event->xbutton.x);
                 paintTextField(tPtr);
-            } else if (tPtr->flags.focused) {
+            } else if (tPtr->flags.focused 
+		       && event->xbutton.button == Button1) {
                 tPtr->cursorPosition = pointToCursorPosition(tPtr, 
                                      event->xbutton.x);
 		tPtr->selection.position = tPtr->cursorPosition;
@@ -1391,51 +1431,71 @@ handleTextFieldActionEvents(XEvent *event, void *data)
             }
             if (event->xbutton.button == Button2 && tPtr->flags.enabled) {
                 char *text;
+		int n;
 
-                text = W_GetTextSelection(tPtr->view->screen, XA_PRIMARY);
-                
-                if (!text) {
-                    text = W_GetTextSelection(tPtr->view->screen,
-                              tPtr->view->screen->clipboardAtom);
-                }
-                if (!text) {
-		    text = W_GetTextSelection(tPtr->view->screen, 
-					      XA_CUT_BUFFER0);
-                }
-                if (text) {
-		    WMInsertTextFieldText(tPtr, text, tPtr->cursorPosition);
-		    XFree(text);
-                    NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
-                           (void*)WMInsertTextEvent);
-                }
+		if (!WMRequestSelection(tPtr->view, XA_PRIMARY, XA_STRING, 
+					event->xbutton.time,
+					pasteText, NULL)) {
+		    text = XFetchBuffer(tPtr->view->screen->display, &n, 0);
+		
+		    if (text) {
+			text[n] = 0;
+			WMInsertTextFieldText(tPtr, text, tPtr->cursorPosition);
+			XFree(text);
+			NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
+			       (void*)WMInsertTextEvent);
+		    }
+		} else {
+		    tPtr->flags.waitingSelection = 1;
+		}
             }
             break;
+	 default:
+	    break;
         }
 	break;
 
-	case ButtonRelease:
-	    if (tPtr->flags.pointerGrabbed) {
-	    	tPtr->flags.pointerGrabbed = 0;
-	    	XUngrabPointer(WMScreenDisplay(W_VIEW(tPtr)->screen), CurrentTime);
-	    }
+     case ButtonRelease:
+	if (tPtr->flags.pointerGrabbed) {
+	    tPtr->flags.pointerGrabbed = 0;
+	    XUngrabPointer(dpy, CurrentTime);
+	}
+	if (tPtr->flags.waitingSelection) {
+	    break;
+	}
+	
+	if (tPtr->selection.count != 0) {
+	    int start, count;
+	    XRotateBuffers(dpy, 1);
+	    
+	    count = abs(tPtr->selection.count);
+	    if (tPtr->selection.count < 0)
+		start = tPtr->selection.position - count;
+	    else
+		start = tPtr->selection.position;
+	    
+	    XStoreBuffer(dpy, &tPtr->text[start], count, 0);
+	}
 
-            move = 0;
+	move = 0;
 		
-	    if (event->xbutton.time - lastButtonReleasedEvent
-	    	<= WINGsConfiguration.doubleClickDelay) {
-	    	tPtr->selection.position = 0;
-	    	tPtr->selection.count = tPtr->textLen;
-	    	paintTextField(tPtr);
-            	XSetSelectionOwner(tPtr->view->screen->display,
-                       XA_PRIMARY, tPtr->view->window,  event->xbutton.time);
-            	{
-            	    WMNotification *notif = WMCreateNotification("_lostOwnership",
-                        NULL,tPtr);
-                    WMPostNotification(notif);
-                    WMReleaseNotification(notif);
-            	}
+	if (event->xbutton.time - lastButtonReleasedEvent
+	    <= WINGsConfiguration.doubleClickDelay) {
+	    tPtr->selection.position = 0;
+	    tPtr->selection.count = tPtr->textLen;
+	    paintTextField(tPtr);
+	    
+	    if (!tPtr->flags.ownsSelection) {
+		WMCreateSelectionHandler(tPtr->view,
+					 XA_PRIMARY,
+					 event->xbutton.time,
+					 &selectionHandler, NULL);
+		tPtr->flags.ownsSelection = 1;
 	    }
-	    lastButtonReleasedEvent = event->xbutton.time;
+	    
+	    WMPostNotificationName("_lostOwnership", NULL, tPtr);
+	}
+	lastButtonReleasedEvent = event->xbutton.time;
 		
         break;
     }
@@ -1451,7 +1511,7 @@ destroyTextField(TextField *tPtr)
 #endif
 
     WMReleaseFont(tPtr->font);
-    WMDeleteSelectionHandler(tPtr, XA_PRIMARY);
+    WMDeleteSelectionHandler(tPtr->view, XA_PRIMARY, CurrentTime);
     WMRemoveNotificationObserver(tPtr);
 
     if (tPtr->text)

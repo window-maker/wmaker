@@ -8,7 +8,7 @@
 
 #include "WINGs.h"
 
-#if WINGS_H_VERSION < 991003
+#if WINGS_H_VERSION < 20000402
 #error There_is_an_old_WINGs.h_file_somewhere_in_your_system._Please_remove_it.
 #endif
 
@@ -104,10 +104,11 @@ struct W_DraggingInfo {
     Time timestamp;
 
     int protocolVersion;
-    
+
+    /* should be treated as internal data */
+    WMView *sourceView;
     WMView *destView;
 
-    /* only valid if in the same app.. should be treated as internal data */
 };
     
 
@@ -155,6 +156,7 @@ typedef struct W_Screen {
 
     Pixmap stipple;
 
+    struct W_View *dragSourceView;
     struct W_DraggingInfo dragInfo;
     
     /* colors */
@@ -262,7 +264,13 @@ typedef struct W_Screen {
     Atom xdndFinishedAtom;
     Atom xdndTypeListAtom;
     Atom xdndStatusAtom;
-    
+
+    Atom xdndActionCopy;
+    Atom xdndActionMove;
+    Atom xdndActionLink;
+    Atom xdndActionAsk;
+    Atom xdndActionPrivate;
+
     Atom wmStateAtom;		       /* WM_STATE */
 
     /* stuff for detecting double-clicks */
@@ -484,8 +492,6 @@ W_Class W_RegisterUserWidget(void);
 void W_RedisplayView(WMView *view);
 
 Bool W_ApplicationInitialized(void);
-
-char *W_GetTextSelection(WMScreen *scr, Atom selection);
 
 void W_HandleSelectionEvent(XEvent *event);
 

@@ -559,10 +559,16 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 	    "XdndDrop",
 	    "XdndFinished",
 	    "XdndTypeList",
+	    "XdndActionCopy",
+	    "XdndActionMove",
+	    "XdndActionLink",
+	    "XdndActionAsk",
+	    "XdndActionPrivate",
 	    "XdndStatus",
 	    "WM_STATE"
     };
     Atom atoms[sizeof(atomNames)/sizeof(char*)];
+    int i = 0;
 
     if (!initialized) {
 
@@ -766,26 +772,33 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 	}
     }
 #endif
-    
-    scrPtr->attribsAtom = atoms[0];
-    
-    scrPtr->deleteWindowAtom = atoms[1];
 
-    scrPtr->protocolsAtom = atoms[2];
+    i = 0;
+    scrPtr->attribsAtom = atoms[i++];
+
+    scrPtr->deleteWindowAtom = atoms[i++];
+
+    scrPtr->protocolsAtom = atoms[i++];
     
-    scrPtr->clipboardAtom = atoms[3];
+    scrPtr->clipboardAtom = atoms[i++];
 
-    scrPtr->xdndAwareAtom = atoms[4];
-    scrPtr->xdndSelectionAtom = atoms[5];
-    scrPtr->xdndEnterAtom = atoms[6];
-    scrPtr->xdndLeaveAtom = atoms[7];
-    scrPtr->xdndPositionAtom = atoms[8];
-    scrPtr->xdndDropAtom = atoms[9];
-    scrPtr->xdndFinishedAtom = atoms[10];
-    scrPtr->xdndTypeListAtom = atoms[11];
-    scrPtr->xdndStatusAtom = atoms[12];
+    scrPtr->xdndAwareAtom = atoms[i++];
+    scrPtr->xdndSelectionAtom = atoms[i++];
+    scrPtr->xdndEnterAtom = atoms[i++];
+    scrPtr->xdndLeaveAtom = atoms[i++];
+    scrPtr->xdndPositionAtom = atoms[i++];
+    scrPtr->xdndDropAtom = atoms[i++];
+    scrPtr->xdndFinishedAtom = atoms[i++];
+    scrPtr->xdndTypeListAtom = atoms[i++];
+    scrPtr->xdndStatusAtom = atoms[i++];
 
-    scrPtr->wmStateAtom = atoms[13];
+    scrPtr->xdndActionCopy = atoms[i++];
+    scrPtr->xdndActionMove = atoms[i++];
+    scrPtr->xdndActionLink = atoms[i++];
+    scrPtr->xdndActionAsk = atoms[i++];
+    scrPtr->xdndActionPrivate = atoms[i++];
+
+    scrPtr->wmStateAtom = atoms[i++];
 	
     scrPtr->rootView = W_CreateRootView(scrPtr);
 
