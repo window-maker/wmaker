@@ -65,12 +65,6 @@
  * set by configure */
 #undef NLSDIR
 
-/* package name */
-#undef PACKAGE 
-
-/* package version */
-#undef VERSION 
-
 /* define if you want GNOME stuff support */
 #undef GNOME_STUFF
 
@@ -183,3 +177,10 @@
 
 /* Define if you have the <sys/types.h> header file.  */
 #undef HAVE_SYS_TYPES_H
+
+/* Name of package */
+#undef PACKAGE
+
+/* Version number of package */
+#undef VERSION
+

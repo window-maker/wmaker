@@ -43,6 +43,7 @@ typedef struct W_FilePanel {
 	unsigned int filtered:1;
 	unsigned int canChooseFiles:1;
 	unsigned int canChooseDirectories:1;
+	unsigned int autoCompletion:1;
 	unsigned int showAllFiles:1;
 	unsigned int canFreeFileTypes:1;
 	unsigned int fileMustExist:1;
@@ -64,8 +65,10 @@ static void buttonClick();
 
 static char *getCurrentFileName(WMFilePanel *panel);
 
+
+
 static int
-closestListItem(WMList *list, char *text)
+closestListItem(WMList *list, char *text, Bool exact)
 {
     WMListItem *item = WMGetListItem(list, 0);
     int i = 0;
@@ -75,7 +78,9 @@ closestListItem(WMList *list, char *text)
 	return -1;
 
     while (item) {
-	if (strlen(item->text) >= len && strncmp(item->text, text, len)==0) {
+        if (strlen(item->text) >= len &&
+            ((exact && strcmp(item->text, text)==0) ||
+             (!exact && strncmp(item->text, text, len)==0))) {
 	    return i;
 	}
 	item = item->nextPtr;
@@ -89,20 +94,59 @@ static void
 textChangedObserver(void *observerData, WMNotification *notification)
 {
     W_FilePanel *panel = (W_FilePanel*)observerData;
-    char *text;
+    char *text, *text1;
     WMList *list;
     int col = WMGetBrowserNumberOfColumns(panel->browser) - 1;
-    int i;
+    int i, j, textEvent = (int)WMGetNotificationClientData(notification);
 
     list = WMGetBrowserListInColumn(panel->browser, col);
     if (!list)
 	return;
     text = WMGetTextFieldText(panel->fileField);
 
-    i = closestListItem(list, text);
+    if (panel->flags.autoCompletion && textEvent!=WMDeleteTextEvent)
+        i = closestListItem(list, text, False);
+    else
+        i = closestListItem(list, text, True);
+
     WMSelectListItem(list, i);
-    if (i>=0)
-	WMSetListPosition(list, i);
+    if (i>=0) {
+        WMListItem *item = WMGetListItem(list, i);
+        int textLen = strlen(text), itemTextLen = strlen(item->text);
+
+        WMSetListPosition(list, i);
+
+        if (panel->flags.autoCompletion) {
+            /* Be careful with the '<' condition below. Changing it can drop
+             * you into an endless loop. We call here, inside a function
+             * called from a notification observer, to a function that
+             * generates notification events. So make sure we do not call it
+             * recursively for ever.
+             * '<' means we only update text field if it is really not yet
+             * complete. -Dan
+             */
+            if (textLen < itemTextLen && textEvent!=WMDeleteTextEvent) {
+                WMRange range;
+
+                WMInsertTextFieldText(panel->fileField, &item->text[textLen],
+                                      textLen);
+                WMSetTextFieldCursorPosition(panel->fileField, itemTextLen);
+                range.position = textLen;
+                range.count = itemTextLen - textLen;
+                WMSelectTextFieldRange(panel->fileField, range);
+            }
+
+            text1 = WMGetTextFieldText(panel->fileField);
+            j = closestListItem(list, text1, True);
+            if (i != j) {
+                WMSelectListItem(list, j);
+                if (j>=0) {
+                    WMSetListPosition(list, j);
+                }
+            }
+            free(text1);
+        }
+    }
 
     free(text);
 }
@@ -204,6 +248,7 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     
     fPtr->flags.canChooseFiles = 1;
     fPtr->flags.canChooseDirectories = 1;
+    fPtr->flags.autoCompletion = 1;
 
     return fPtr;
 }
@@ -345,15 +390,22 @@ WMSetFilePanelDirectory(WMFilePanel *panel, char *path)
 
 			
 void
-WMSetFilePanelCanChooseDirectories(WMFilePanel *panel, int flag)
+WMSetFilePanelCanChooseDirectories(WMFilePanel *panel, Bool flag)
 {
     panel->flags.canChooseDirectories = flag;
 }
 
 void
-WMSetFilePanelCanChooseFiles(WMFilePanel *panel, int flag)
+WMSetFilePanelCanChooseFiles(WMFilePanel *panel, Bool flag)
 {
     panel->flags.canChooseFiles = flag;
+}
+
+
+void
+WMSetFilePanelAutoCompletion(WMFilePanel *panel, Bool flag)
+{
+    panel->flags.autoCompletion = flag;
 }
 
 
@@ -554,15 +606,21 @@ validOpenFile(WMFilePanel *panel)
     WMListItem *item;
     int col;
 
-    col = WMGetBrowserSelectedColumn(panel->browser);
+    /*col = WMGetBrowserSelectedColumn(panel->browser);*/
+    col = WMGetBrowserNumberOfColumns(panel->browser) - 1;
     item = WMGetBrowserSelectedItemInColumn(panel->browser, col);
     if (item) {
 	if (item->isBranch && !panel->flags.canChooseDirectories)
 	    return False;
 	else if (!item->isBranch && !panel->flags.canChooseFiles)
-	    return False;
+            return False;
+        else
+            return True;
     }
-    return True;
+    if (!panel->flags.canChooseDirectories)
+        return False;
+    else
+        return True;
 }
 
 

@@ -5,9 +5,31 @@ NEWS for veteran Window Maker users
 
 --- 0.51.0
 
+Window Maker has become a GNU program (part of the GNU Project).
+
+libPropList
+-----------
+
+WARNING!!! libPropList was removed from the Window Maker distribution
+and is being distributed separately. If you dont have it installed yet,
+get it from ftp.windowmaker.org/pub/libs and install before building
+Window Maker.
+
+
+signal handling change
+----------------------
 SIGHUP will exit wmaker instead of restarting it!!! This is because
 GNOME expects the window manager to exit instead of restarting...
 Complaints should go to gnome people. SIGUSR1 will restart wmaker now.
+
+
+script change
+-------------
+WINGs-flags was removed, and replaced by get-wraster-flags.
+Please remove WINGs-flags from your system, since it was obsoloted by
+get-wraster-flags.
+Continuing to use WINGs-flags can lead to hazardous effects, since is no
+longer updated.
 
 
 docklib

@@ -20,6 +20,8 @@
  *  USA.
  */
 
+#define PROG_VERSION "seticons (Window Maker) 0.1"
+
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -64,6 +66,17 @@ defaultsPathForDomain(char *domain)
 }
 
 
+void
+print_help()
+{
+    printf("Usage: %s [OPTIONS] FILE\n", ProgName);
+    puts("Reads icon configuration from FILE and updates Window Maker.");
+    puts("");
+    puts("  --help	display this help and exit");
+    puts("  --version	output version information and exit");
+}
+
+
 int 
 main(int argc, char **argv)
 {
@@ -71,13 +84,32 @@ main(int argc, char **argv)
     proplist_t all_windows, iconset;
     proplist_t keylist;
     int i;
-    char *path;
+    char *path = NULL;
 
     ProgName = argv[0];
-    
-    if (argc!=2) {
-	printf("Syntax:\n%s <iconset file>\n", argv[0]);
-	exit(1);
+
+
+    if (argc < 2) {
+	printf("%s: missing argument\n", ProgName);
+	printf("Try '%s --help' for more information\n", ProgName);
+    }
+
+    for (i = 1; i < argc; i++) {
+	if (strcmp(argv[i], "-h")==0
+	    || strcmp(argv[i], "--help")==0) {
+	    print_help();
+	    exit(0);
+	} else if (strcmp(argv[i], "--version")==0) {
+	    puts(PROG_VERSION);
+	    exit(0);
+	} else {
+	    if (path) {
+		printf("%s: invalid argument '%s'\n", ProgName, argv[i]);
+		printf("Try '%s --help' for more information\n", ProgName);
+		exit(1);
+	    }
+	    path = argv[i];
+	}
     }
     
     path = defaultsPathForDomain("WMWindowAttributes");

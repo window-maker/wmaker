@@ -9,6 +9,9 @@ changes since wmaker 0.50.2:
 - fixed bug in WMCloseWindow()
 - added textfield selection patch
 - added color panel code
+- added auto name completion for the file panel
+- added function to select text range, and to set cursor position in text
+  fields programatically
 
 changes since wmaker 0.20.3:
 ............................

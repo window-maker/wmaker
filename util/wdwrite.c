@@ -20,6 +20,8 @@
  *  USA.
  */
 
+#define PROG_VERSION	"wdwrite (Window Maker) 0.2"
+
 
 /*
  * WindowMaker defaults DB writer
@@ -69,7 +71,10 @@ void wAbort()
 
 void help()
 {
-    printf("Syntax:\n%s <domain> <option> <value>\n", ProgName);
+    printf("Syntax:\n%s [OPTIONS] <domain> <option> <value>\n", ProgName);
+    puts("");
+    puts("  --help		display this help message");
+    puts("  --version		output version information and exit");
     exit(1);
 }
 
@@ -79,11 +84,24 @@ int main(int argc, char **argv)
     char path[256];
     proplist_t dom, key, value, dict;
     char *gsdir;
+    int i;
     
     ProgName = argv[0];
 
+    for (i = 1; i < argc; i++) {
+	if (strcmp("--help", argv[i])==0) {
+	    help();
+	    exit(0);
+	} else if (strcmp("--version", argv[i])==0) {
+	    puts(PROG_VERSION);
+	    exit(0);
+	}
+    }
+
     if (argc<4) {
-	help();
+	printf("%s: invalid argument format\n", ProgName);
+	printf("Try '%s --help' for more information\n", ProgName);
+	exit(1);
     }
     
     dom = PLMakeString(argv[1]);

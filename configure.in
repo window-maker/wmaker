@@ -358,6 +358,35 @@ dnl ===================================
 #AC_SUBST(XSMPLIBS)
 #
 
+
+dnl Check for libPropList
+dnl =====================
+
+lPL=""
+LIBPL=""
+AC_CHECK_LIB(PropList, PLGetString, lPL=yes, lPL=no, $XLFLAGS $XLIBS)
+
+if test "$lPL" = yes; then
+    my_old_cppflags=$CPPFLAGS
+    CPPFLAGS="$CPPFLAGS $XCFLAGS"
+    AC_CHECK_HEADER(proplist.h, LIBPL="-lPropList", LIBPL="")
+    CPPFLAGS=$my_old_cppflags
+fi
+
+if test "x$LIBPL" = "x"; then
+   echo
+   echo "ERROR!!! libPropList is not installed, or could not be found."
+   echo "         Window Maker requires libPropList to build."
+   echo "         Please read INSTALL to find where you can find libPropList,"
+   echo "         and install it first."
+   echo
+   exit 1
+fi
+
+
+AC_SUBST(LIBPL)
+
+
 dnl ==============================================
 dnl         Graphic Format Libraries
 dnl ==============================================
@@ -750,6 +779,7 @@ if test "x$MOFILES" = "x"; then
 else
 	mof=$MOFILES
 fi
+
 
 echo
 echo "Window Maker was configured as follows:"

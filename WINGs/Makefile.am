@@ -7,7 +7,7 @@ SUBDIRS = Resources
 
 LIBLIST= $(top_builddir)/wrlib/libwraster.la\
 	 @GFXLFLAGS@ @XLFLAGS@ @GFXLIBS@ @XLIBS@ \
-	-lm $(top_builddir)/libPropList/libPropList.la
+	-lm @LIBPL@
 
 
 #lib_LTLIBRARIES = libWINGs.la
@@ -96,5 +96,5 @@ libWINGs_a_SOURCES = 	\
 
 INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
 	-DRESOURCE_PATH=\"$(datadir)/WINGs\" $(GFXFLAGS) -DDEBUG \
-	-I$(top_srcdir)/libPropList @XCFLAGS@
+	@XCFLAGS@
 

@@ -76,7 +76,11 @@ wdefaultspathfordomain(char *domain)
 
 
 static void
+#ifndef HAVE_ATEXIT
+saveDefaultsChanges(int foo, void *bar)
+#else
 saveDefaultsChanges(void)
+#endif
 {
     if (sharedUserDefaults && sharedUserDefaults->dirty) {
 	PLSave(sharedUserDefaults->appDomain, YES);
@@ -172,7 +176,7 @@ WMGetStandardUserDefaults(void)
 
 
 #ifndef HAVE_ATEXIT
-	on_exit(saveDefaultsChanges,0);
+	on_exit(saveDefaultsChanges, (void*)NULL);
 #else
 	atexit(saveDefaultsChanges);
 #endif

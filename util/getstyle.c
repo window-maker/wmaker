@@ -21,6 +21,10 @@
  */
 
 
+#define PROG_VERSION "getstyle (Window Maker) 0.2"
+
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <proplist.h>
@@ -84,7 +88,7 @@ static char *theme_options[] = {
 
 char *ProgName;
 
-char *PixmapPath = NULL;
+proplist_t PixmapPath = NULL;
 
 char *ThemePath = NULL;
 
@@ -92,11 +96,13 @@ char *ThemePath = NULL;
 void
 print_help()
 {
-    printf("usage: %s [-options] [<style file>]\n", ProgName);
-    puts("options:");
-    puts(" -h	print help");
-    puts(" -t	get theme options too");
-    puts(" -p	produce a theme pack");
+    printf("Usage: %s [OPTIONS] [FILE]\n", ProgName);
+    puts("Retrieves style/theme configuration and output to FILE or to stdout");
+    puts("");
+    puts("  -t, --theme-options	output theme related options when producing a style file");
+    puts("  -p, --pack		produce output as a theme pack");
+    puts("  --help		display this help and exit");
+    puts("  --version		output version information and exit");
 }
 
 
@@ -514,16 +520,21 @@ main(int argc, char **argv)
 
     if (argc>1) {
 	for (i=1; i<argc; i++) {
-	    if (strcmp(argv[i], "-p")==0) {
+	    if (strcmp(argv[i], "-p")==0
+		|| strcmp(argv[i], "--pack")==0) {
 		make_pack = 1;
 		theme_too = 1;
-	    } else if (strcmp(argv[i], "-t")==0) {
+	    } else if (strcmp(argv[i], "-t")==0
+		       || strcmp(argv[i], "--theme-options")==0) {
                 theme_too++;
-            } else if (argv[i][0] != '-') {
+	    } else if (strcmp(argv[i], "--help")==0) {
+		print_help();
+		exit(0);
+	    } else if (strcmp(argv[i], "--version")==0) {
+		puts(PROG_VERSION);
+		exit(0);
+	    } else {
                 style_file = argv[i];
-            } else {
-                print_help();
-                exit(1);
             }
         }
     }
@@ -567,7 +578,7 @@ main(int argc, char **argv)
 
     val = PLGetDictionaryEntry(prop, PLMakeString("PixmapPath"));
     if (val)
-    	PixmapPath = PLGetString(val);
+    	PixmapPath = val;
 
     if (theme_too) {
         for (i=0; theme_options[i]!=NULL; i++) {

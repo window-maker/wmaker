@@ -251,12 +251,13 @@ WMInsertTextFieldText(WMTextField *tPtr, char *text, int position)
     
     paintTextField(tPtr);
 
-    WMPostNotificationName(WMTextDidChangeNotification, tPtr, NULL);
+    WMPostNotificationName(WMTextDidChangeNotification, tPtr,
+                           (void*)WMInsertTextEvent);
 }
 
 
-void
-WMDeleteTextFieldRange(WMTextField *tPtr, WMRange range)
+static void
+deleteTextFieldRange(WMTextField *tPtr, WMRange range)
 {    
     CHECK_CLASS(tPtr, WC_TextField);
 
@@ -285,8 +286,15 @@ WMDeleteTextFieldRange(WMTextField *tPtr, WMRange range)
     }
         
     paintTextField(tPtr);
+}
 
-    WMPostNotificationName(WMTextDidChangeNotification, tPtr, NULL);
+
+void
+WMDeleteTextFieldRange(WMTextField *tPtr, WMRange range)
+{
+    deleteTextFieldRange(tPtr, range);
+    WMPostNotificationName(WMTextDidChangeNotification, tPtr,
+                           (void*)WMDeleteTextEvent);
 }
 
 
@@ -303,6 +311,14 @@ WMGetTextFieldText(WMTextField *tPtr)
 void
 WMSetTextFieldText(WMTextField *tPtr, char *text)
 {
+    /* We do not set text if it's the same. This will also help
+     * to avoid some infinite loops if this function is called from
+     * a function called by a notification observer. -Dan
+     */
+    if ((text && strcmp(tPtr->text, text) == 0) ||
+        (!text && tPtr->textLen == 0))
+        return;
+
     if (text==NULL) {
 	tPtr->text[0] = 0;
 	tPtr->textLen = 0;
@@ -319,13 +335,15 @@ WMSetTextFieldText(WMTextField *tPtr, char *text)
     if (tPtr->textLen < tPtr->cursorPosition)
 	tPtr->cursorPosition = tPtr->textLen;
      */
-    tPtr->cursorPosition = 0;
+    tPtr->cursorPosition = tPtr->textLen;
     tPtr->viewPosition = 0;
+    tPtr->selection.count = 0;
     
     if (tPtr->view->flags.realized)
 	paintTextField(tPtr);
 
-    WMPostNotificationName(WMTextDidChangeNotification, tPtr, NULL);
+    WMPostNotificationName(WMTextDidChangeNotification, tPtr,
+                           (void*)WMSetTextEvent);
 }
 
 
@@ -374,6 +392,48 @@ WMSetTextFieldEnabled(WMTextField *tPtr, Bool flag)
     
     if (tPtr->view->flags.realized) {
 	paintTextField(tPtr);
+    }
+}
+
+
+void
+WMSelectTextFieldRange(WMTextField *tPtr, WMRange range)
+{
+    if (tPtr->flags.enabled) {
+        if (range.position < 0) {
+            range.count += range.position;
+            range.count = (range.count < 0) ? 0 : range.count;
+            range.position = 0;
+        } else if (range.position > tPtr->textLen) {
+            range.position = tPtr->textLen;
+            range.count = 0;
+        }
+
+        if (range.position + range.count > tPtr->textLen)
+            range.count = tPtr->textLen - range.position;
+
+        tPtr->prevselection = tPtr->selection; /* check if this is needed */
+
+        tPtr->selection = range;
+
+        if (tPtr->view->flags.realized) {
+            paintTextField(tPtr);
+        }
+    }
+}
+
+
+void
+WMSetTextFieldCursorPosition(WMTextField *tPtr, unsigned int position)
+{
+    if (tPtr->flags.enabled) {
+        if (position > tPtr->textLen)
+            position = tPtr->textLen;
+
+        tPtr->cursorPosition = position;
+        if (tPtr->view->flags.realized) {
+            paintTextField(tPtr);
+        }
     }
 }
 
@@ -655,10 +715,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     KeySym ksym;
     int count, refresh = 0;
     int control_pressed = 0;
-    int changed;
     WMScreen *scr = tPtr->view->screen;
-
-    changed = 0;
 
     if (((XKeyEvent *) event)->state & WM_EMACSKEYMASK) {
 	control_pressed = 1;
@@ -667,7 +724,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     count = XLookupString(&event->xkey, buffer, 63, &ksym, NULL);
     buffer[count] = '\0';
 
-    if (!event->xkey.state & ShiftMask) {
+    if (!(event->xkey.state & ShiftMask)) {
         if (tPtr->selection.count)
             refresh = 1;
         tPtr->prevselection = tPtr->selection;
@@ -675,6 +732,14 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
         tPtr->selection.count = 0;
     }
 
+    /* Be careful in any case in this switch statement, never to call
+     * to more than 2 functions at the same time, that can generate text
+     * change notifications. Only one text change notification should be sent
+     * in any case. Else hazardous things can happen.
+     * Maybe we need a better solution than the function wrapper to inform
+     * functions that change text in text fields, if they need to send a
+     * change notification or not. -Dan
+     */
     switch (ksym) {
      case XK_Tab:
 	if (event->xkey.state & ShiftMask) {
@@ -805,7 +870,6 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
      case XK_BackSpace:
 	if (tPtr->cursorPosition > 0) {
             WMRange range;
-            changed = 1;
             if (tPtr->prevselection.count) {
                 range.position = tPtr->prevselection.count < 0 
 		    ? tPtr->prevselection.position + tPtr->prevselection.count 
@@ -828,7 +892,6 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
      case XK_Delete:
 	if (tPtr->cursorPosition < tPtr->textLen || tPtr->prevselection.count) {
             WMRange range;
-            changed = 1;
             if (tPtr->prevselection.count) {
                 range.position = tPtr->prevselection.count < 0 
 		    ? tPtr->prevselection.position + tPtr->prevselection.count
@@ -847,7 +910,6 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
      default:
 	if (count > 0 && !iscntrl(buffer[0])) {
 	    WMRange range;
-	    changed = 1;
 	    if (tPtr->prevselection.count) {
                 range.position = tPtr->prevselection.count < 0 
 		    ? tPtr->prevselection.position + tPtr->prevselection.count
@@ -859,7 +921,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 		range.count = 1;
             }
             if (tPtr->prevselection.count)
-                WMDeleteTextFieldRange(tPtr, range);
+                deleteTextFieldRange(tPtr, range);
 	    WMInsertTextFieldText(tPtr, buffer, tPtr->cursorPosition);
 	} else {
 	    return;
@@ -875,10 +937,6 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     tPtr->prevselection.count = 0;
     if (refresh) {
 	paintTextField(tPtr);
-    }
-    
-    if (changed) {
-	WMPostNotificationName(WMTextDidChangeNotification, tPtr, NULL);
     }
 }
 

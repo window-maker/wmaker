@@ -49,14 +49,14 @@ CPPFLAGS = \
 INCLUDES = \
 	-I$(top_srcdir)/wrlib \
 	-I$(top_srcdir)/WINGs \
-	-I$(top_srcdir)/libPropList @XCFLAGS@ 
+	@XCFLAGS@ 
 
 WPrefs_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
 
 WPrefs_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a\
 	$(top_builddir)/wrlib/libwraster.la \
-        $(top_builddir)/libPropList/libPropList.la \
+	@LIBPL@ \
 	@GFXLFLAGS@ \
 	@XLFLAGS@ \
 	@GFXLIBS@ \

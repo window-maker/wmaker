@@ -1,7 +1,9 @@
 
 
 
-		       Window Maker X11 Window Manager
+		               GNU Window Maker 
+			      X11 Window Manager
+                      
 
 	  	   	   <http://windowmaker.org>
 		 	 <ftp://ftp.windowmaker.org>
@@ -47,13 +49,13 @@ supposed to be relatively fast and small, feature rich, easy to configure and
 easy to use, with a simple and elegant appearance borrowed from NEXTSTEP(tm).
 
 Window Maker was designed keeping integration with GNUstep in mind and is the
-"official" window manager for it. Read more about GNUstep further on this
-file.
+"official" window manager for it. It is also, the window manager for the
+GNU Project. Read more about GNUstep further on this file.
 
 Hints (information given by applications to integrate well with the window 
 manager) for Motif(tm), OPEN LOOK(tm), KDE and GNOME are also supported. 
 So you can replace any of the window managers for these environments
-with Window Maker while keeping most, if not all, of the window manager
+with Window Maker while keeping most, if not all, of the native window manager
 functionality.
 
 Window Maker was previously called WindowMaker.

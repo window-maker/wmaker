@@ -972,8 +972,9 @@ wAbort()
 void
 print_help(char *ProgName)
 {
-    printf("usage: %s [options] image\n", ProgName);
-    puts("options:");
+    printf("Usage: %s [options] [image]\n", ProgName);
+    puts("Sets the workspace background to the specified image or a texture and optionally update Window Maker configuration");
+    puts("");
 #define P(m) puts(m)
 P(" -display	 		display to use");
 P(" -d, --dither	 		dither image");
@@ -1154,15 +1155,21 @@ main(int argc, char **argv)
 	    printf(PROG_VERSION);
 	    exit(0);
 
+	} else if (strcmp(argv[i], "--help")==0) {
+	    print_help(argv[0]);
+	    exit(0);
 	} else if (argv[i][0] != '-') {
 	    image_name = argv[i];
 	} else {
-	    print_help(argv[0]);
+	    printf("%s: invalid argument '%s'\n", argv[0], argv[i]);
+	    printf("Try '%s --help' for more information\n", argv[0]);
 	    exit(1);
 	}
     }
     if (!image_name && !texture) {
-	printf("%s: you must specify a image file name\n", argv[0]);
+	printf("%s: you must specify a image file name or a texture\n", 
+	       argv[0]);
+	printf("Try '%s --help' for more information\n", argv[0]);
 	exit(1);
     }
 

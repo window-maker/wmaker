@@ -17,6 +17,8 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#define PROG_VERSION "wxpaste (Window Maker) 0.3"
+
 #include "../src/config.h"
 
 #include <stdio.h>
@@ -39,12 +41,15 @@
 void
 help(char *progn)
 {
-    fprintf(stderr,
-	    "usage: %s [options]\n"
-	    "	-display display-name\n"
-	    "	-cutbuffer number\n"
-	    "	-selection [selection-name]\n"
-	    , progn);
+    printf("Usage: %s [OPTIONS] [FILE]\n", progn);
+    puts("Copies data from X selection or cutbuffer to FILE or stdout.");
+    puts("");
+    puts("  -display display		display to use");
+    puts("  --cutbuffer number		cutbuffer number to get data from");
+    puts("  --selection [selection]	reads data from named selection instead of\n"
+	 "				cutbuffer");
+    puts("  --help			display this help and exit");
+    puts("  --version			output version information and exit");
 }
 
 
@@ -165,10 +170,14 @@ main(int argc, char **argv)
 
     for (i=1; i<argc; i++) {
 	if (argv[i][0]=='-') {
-	    if (argv[i][1]=='h') {
+	    if (argv[i][1]=='h' || strcmp(argv[i], "--help")==0) {
 		help(argv[0]);
 		exit(0);
-	    } else if (strcmp(argv[i],"-selection")==0) {
+	    } else if (strcmp(argv[i], "--version")==0) {
+		puts(PROG_VERSION);
+		exit(0);
+	    } else if (strcmp(argv[i],"-selection")==0
+		       || strcmp(argv[i],"--selection")==0) {
 		if (i<argc-1) {
 		    selection_name = argv[++i];
 		} else {
@@ -181,7 +190,8 @@ main(int argc, char **argv)
 		    help(argv[0]);
 		    exit(0);
 		}
-	    } else if (strcmp(argv[i],"-cutbuffer")==0) {
+	    } else if (strcmp(argv[i],"-cutbuffer")==0
+		       || strcmp(argv[i],"--cutbuffer")==0) {
 		if (i<argc-1) {
 		    i++;
 		    if (sscanf(argv[i],"%i", &buffer)!=1) {
@@ -191,16 +201,21 @@ main(int argc, char **argv)
 		    }
 		    if (buffer<0 || buffer > 7) {
 			fprintf(stderr, "%s: invalid buffer number %i\n",
-			    argv[0], buffer);
+				argv[0], buffer);
 			exit(1);
 		    }
 		} else {
-		    help(argv[0]);
+		    fprintf(stderr, "%s: invalid argument '%s'\n", argv[0], 
+			    argv[i]);
+		    fprintf(stderr, "Try '%s --help' for more information.\n", 
+			    argv[0]);
 		    exit(1);
 		}
 	    }
 	} else {
-	    help(argv[0]);
+	    fprintf(stderr, "%s: invalid argument '%s'\n", argv[0], argv[i]);
+	    fprintf(stderr, "Try '%s --help' for more information.\n", 
+		    argv[0]);
 	    exit(1);
 	}
     }

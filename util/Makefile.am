@@ -9,11 +9,10 @@ bin_SCRIPTS = wmaker.inst wm-oldmenu2new wsetfont
 
 EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new wsetfont directjpeg.c
 
-INCLUDES = @DFLAGS@ -I$(top_srcdir)/wrlib \
-	 -I$(top_srcdir)/libPropList @XCFLAGS@ @GFXFLAGS@
+INCLUDES = @DFLAGS@ -I$(top_srcdir)/wrlib @XCFLAGS@ @GFXFLAGS@
 
 # X_EXTRA_LIBS is for libproplist in systems that need -lsocket 
-liblist= $(top_builddir)/libPropList/libPropList.la @X_EXTRA_LIBS@ 
+liblist= @XLFLAGS@ @LIBPL@ @X_EXTRA_LIBS@ 
 
 
 wdwrite_LDADD = $(liblist)
@@ -33,7 +32,7 @@ geticonset_LDADD= $(liblist)
 wmsetbg_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a \
 	$(top_builddir)/wrlib/libwraster.la \
-	$(top_builddir)/libPropList/libPropList.la \
+	@LIBPL@ \
 	@GFXLFLAGS@ @XLFLAGS@ @GFXLIBS@ @XLIBS@ -lm 
 
 getstyle_SOURCES = getstyle.c

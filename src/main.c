@@ -251,8 +251,10 @@ wAbort(Bool dumpCore)
 void
 print_help()
 {
-    printf(_("usage: %s [options]\n"), ProgName);
-    puts(_("options:"));
+    printf(_("Usage: %s [options]\n"), ProgName);
+    puts(_("The Window Maker window manager for the X window system"));
+    puts("");
+    puts(_(" -display host:dpy	display to use"));
 #ifdef USECPP
     puts(_(" --no-cpp 		disable preprocessing of configuration files"));
 #endif
@@ -262,7 +264,6 @@ print_help()
     puts(_(" --locale locale		locale to use"));
     */
     puts(_(" --visual-id visualid	visual id of visual to use"));
-    puts(_(" -display host:dpy	display to use"));
     puts(_(" --static		do not update or save configurations"));
     puts(_(" --version		print version and exit"));
     puts(_(" --help			show this message"));
@@ -410,8 +411,9 @@ main(int argc, char **argv)
 		}
 #endif
 	    } else {
-		print_help();
-		exit(0);
+		printf(_("%s: invalid argument '%s'"), argv[0]);
+		printf(_("Try '%s --help' for more information"), argv[0]);
+		exit(1);
 	    }
 	}
     }

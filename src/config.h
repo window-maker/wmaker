@@ -66,12 +66,6 @@
  * set by configure */
 #define NLSDIR "/usr/local/lib/locale"
 
-/* package name */
-#define PACKAGE "WindowMaker" 
-
-/* package version */
-#define VERSION "0.51.0" 
-
 /* define if you want GNOME stuff support */
 /* #undef GNOME_STUFF */
 
@@ -159,7 +153,7 @@
 #define HAVE_STRERROR 1
 
 /* Define if you have the strncasecmp function.  */
-#define HAVE_STRNCASECMP 1
+/* #undef HAVE_STRNCASECMP */
 
 /* Define if you have the <fcntl.h> header file.  */
 #define HAVE_FCNTL_H 1
@@ -184,3 +178,10 @@
 
 /* Define if you have the <sys/types.h> header file.  */
 #define HAVE_SYS_TYPES_H 1
+
+/* Name of package */
+#define PACKAGE "WindowMaker"
+
+/* Version number of package */
+#define VERSION "0.51.0"
+

@@ -175,6 +175,14 @@ enum {
 	WMDownTextMovement
 };
 
+/* text field special events */
+enum {
+    WMSetTextEvent,
+    WMInsertTextEvent,
+    WMDeleteTextEvent
+};
+
+
 typedef enum {
 	WMGrayModeColorPanel,
  	WMRGBModeColorPanel,
@@ -764,6 +772,10 @@ void WMSetTextFieldEnabled(WMTextField *tPtr, Bool flag);
 
 void WMSetTextFieldSecure(WMTextField *tPtr, Bool flag);
 
+void WMSelectTextFieldRange(WMTextField *tPtr, WMRange range);
+
+void WMSetTextFieldCursorPosition(WMTextField *tPtr, unsigned int position);
+
 
 extern char *WMListDidScrollNotification;
 extern char *WMTextDidChangeNotification;
@@ -1032,9 +1044,11 @@ WMOpenPanel *WMGetOpenPanel(WMScreen *scrPtr);
 
 WMSavePanel *WMGetSavePanel(WMScreen *scrPtr);
 
-void WMSetFilePanelCanChooseDirectories(WMFilePanel *panel, int flag);
+void WMSetFilePanelCanChooseDirectories(WMFilePanel *panel, Bool flag);
 
-void WMSetFilePanelCanChooseFiles(WMFilePanel *panel, int flag);
+void WMSetFilePanelCanChooseFiles(WMFilePanel *panel, Bool flag);
+
+void WMSetFilePanelAutoCompletion(WMFilePanel *panel, Bool flag);
 
 void WMSetFilePanelDirectory(WMFilePanel *panel, char *path);
 

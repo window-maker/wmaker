@@ -21,6 +21,8 @@
  */
 
 
+#define PROG_VERSION "setstyle (Window Maker) 0.2"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <proplist.h>
@@ -246,32 +248,57 @@ StringCompareHook(proplist_t pl1, proplist_t pl2)
 
 
 
+void
+print_help()
+{
+    printf("Usage: %s [OPTIONS] FILE\n", ProgName);
+    puts("Reads style/theme configuration from FILE and updates Window Maker.");
+    puts("");
+    puts("  --no-fonts	ignore font related options");
+    puts("  --help	display this help and exit");
+    puts("  --version	output version information and exit");
+}
+
+
 
 int 
 main(int argc, char **argv)
 {
     proplist_t prop, style;
     char *path;
+    char *file = NULL;
     struct stat statbuf;
+    int i;
 
     ProgName = argv[0];
     
     if (argc<2) {
-	printf("Syntax:\n%s [-nofonts] <style file>\n", argv[0]);
+	printf("%s: missing argument\n", ProgName);
+	printf("Try '%s --help' for more information\n", ProgName);
 	exit(1);
     }
 
-    if (argc == 3) {
-	if (strcmp(argv[1], "-nofonts")==0) {
+    for (i = 1; i < argc; i++) {
+	if (strcmp("--no-fonts", argv[i])==0) {
 	    ignoreFonts = 1;
+	} else if (strcmp("--version", argv[i])==0) {
+	    puts(PROG_VERSION);
+	    exit(0);
+	} else if (strcmp("--help", argv[i])==0) {
+	    print_help();
+	    exit(0);
 	} else {
-	    printf("Syntax:\n%s <style file> [-nofonts]\n", argv[0]);
-	    exit(1);	    
+	    if (file) {
+		printf("%s: invalid argument '%s'\n", ProgName, argv[i]);
+		printf("Try '%s --help' for more information\n", ProgName);
+		exit(1);
+	    }
+	    file = argv[i];
 	}
     }
 
     PLSetStringCmpHook(StringCompareHook);
-    
+
     path = defaultsPathForDomain("WindowMaker");
 
     prop = PLGetProplistWithPath(path);
@@ -281,8 +308,8 @@ main(int argc, char **argv)
 	exit(1);
     }
 
-    if (stat(argv[argc-1], &statbuf) < 0) {
-	perror(argv[argc-1]);
+    if (stat(file, &statbuf) < 0) {
+	perror(file);
 	exit(1);
     }
 
@@ -293,19 +320,19 @@ main(int argc, char **argv)
 	if (*argv[argc-1] != '/') {
 	    if (!getcwd(buffer, 4000)) {
 		printf("%s: complete path for %s is too long\n", ProgName,
-		       argv[argc-1]);
+		       file);
 		exit(1);
 	    }
-	    if (strlen(buffer) + strlen(argv[argc-1]) > 4000) {
+	    if (strlen(buffer) + strlen(file) > 4000) {
 		printf("%s: complete path for %s is too long\n", ProgName,
-		       argv[argc-1]);
+		       file);
 		exit(1);
 	    }
 	    strcat(buffer, "/");
 	} else {
 	    buffer[0] = 0;
 	}
-	strcat(buffer, argv[argc-1]);
+	strcat(buffer, file);
 
 	prefix = malloc(strlen(buffer)+10);
 	if (!prefix) {
@@ -326,10 +353,9 @@ main(int argc, char **argv)
 	hackPaths(style, prefix);
 	free(prefix);
     } else {
-	style = PLGetProplistWithPath(argv[argc-1]);
+	style = PLGetProplistWithPath(file);
 	if (!style) {
-	    printf("%s:could not load style file \"%s\".\n", ProgName, 
-		   argv[argc-1]);
+	    printf("%s:could not load style file \"%s\".\n", ProgName, file);
 	    exit(1);
 	}
     }

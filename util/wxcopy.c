@@ -1,6 +1,6 @@
 /* wxcopy.c- copy stdin or file into cutbuffer
  * 
- *  Copyright (c) 1997 Alfredo K. Kojima
+ *  Copyright (c) 1997-1999 Alfredo K. Kojima
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,6 +17,9 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#define PROG_VERSION "wxcopy 0.3"
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,16 +35,15 @@
 void
 help(char *progn)
 {
-    fprintf
-    (
-     stderr,
-     "usage: %s [options] [filename]\n"
-     "	-display display\n"
-     "	-cutbuffer number\n"
-     "	-nolimit\n"
-     "	-clearselection\n",
-     progn
-    );
+    printf("Usage: %s [OPTIONS] [FILE]\n", progn);
+    puts("Copies data from FILE or stdin into X cut buffer.");
+    puts("");
+    puts("  -display <display>		display to use");
+    puts("  --cutbuffer <number>		cutbuffer number to put data");
+    puts("  --no-limit			do not limit size of input data");
+    puts("  --clear-selection		clears the current PRIMARY selection");
+    puts("  --help			display this help and exit");
+    puts("  --version			output version information and exit");
 }
 
 static int
@@ -50,6 +52,7 @@ errorHandler(Display *dpy, XErrorEvent *err)
     /* ignore all errors */
     return 0;
 }
+
 
 int
 main(int argc, char **argv)
@@ -68,14 +71,18 @@ main(int argc, char **argv)
 
     for (i=1; i<argc; i++) {
 	if (argv[i][0]=='-') {
-	    if (argv[i][1]=='h') {
+	    if (strcmp(argv[i], "--help")==0) {
 		help(argv[0]);
 		exit(0);
-	    } else if (strcmp(argv[i],"-cutbuffer")==0) {
+	    } else if (strcmp(argv[i], "--version")==0) {
+		puts(PROG_VERSION);
+		exit(0);
+	    } else if (strcmp(argv[i],"-cutbuffer")==0
+		       || strcmp(argv[i],"--cutbuffer")==0) {
 		if (i<argc-1) {
 		    i++;
 		    if (sscanf(argv[i],"%i", &buffer)!=1) {
-			fprintf(stderr, "%s: could not convert \"%s\" to int\n", 
+			fprintf(stderr, "%s: could not convert '%s' to int\n", 
 			       argv[0], argv[i]);
 			exit(1);
 		    }
@@ -85,22 +92,27 @@ main(int argc, char **argv)
 			exit(1);
 		    }
 		} else {
-		    help(argv[0]);
+		    printf("%s: missing argument for '%s'\n", argv[0], argv[i]);
+		    printf("Try '%s --help' for more information\n", argv[0]);
 		    exit(1);
 		}
 	    } else if (strcmp(argv[i], "-display")==0) {
 		if (i < argc-1) {
 		    display_name = argv[++i];
 		} else {
-		    help(argv[0]);
+		    printf("%s: missing argument for '%s'\n", argv[0], argv[i]);
+		    printf("Try '%s --help' for more information\n", argv[0]);
 		    exit(1);
 		}
-	    } else if (strcmp(argv[i],"-clearselection")==0) {
+	    } else if (strcmp(argv[i],"-clearselection")==0
+		       || strcmp(argv[i],"--clear-selection")==0) {
 		clear_selection = 1;
-	    } else if (strcmp(argv[i],"-nolimit")==0) {
+	    } else if (strcmp(argv[i],"-nolimit")==0
+		       || strcmp(argv[i],"--no-limit")==0) {
 		limit_check = 0;
 	    } else {
-		help(argv[0]);
+		printf("%s: invalid argument '%s'\n", argv[0], argv[i]);
+		printf("Try '%s --help' for more information\n", argv[0]);
 		exit(1);
 	    }
 	} else {

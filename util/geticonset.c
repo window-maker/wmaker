@@ -1,8 +1,8 @@
 /* geticonset.c - outputs icon configuration from WindowMaker to stdout
  *
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
- *  Copyright (c) 1997, 1998 Alfredo K. Kojima
+ *  Copyright (c) 1997, 1998, 1999 Alfredo K. Kojima
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
  *  USA.
  */
 
+#define PROG_VERSION "geticonset (Window Maker) 0.1"
+
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -27,7 +29,6 @@
 #include <string.h>
 
 #include "../src/wconfig.h"
-
 
 
 
@@ -65,6 +66,16 @@ defaultsPathForDomain(char *domain)
     return tmp;
 }
 
+void
+print_help()
+{
+    printf("Usage: %s [OPTIONS] [FILE]\n", ProgName);
+    puts("Retrieves program icon configuration and output to FILE or to stdout");
+    puts("");
+    puts("  --help	display this help and exit");
+    puts("  --version	output version information and exit");
+}
+
 
 int 
 main(int argc, char **argv)
@@ -75,12 +86,18 @@ main(int argc, char **argv)
     char *path;
     int i;
 
-    
+
     ProgName = argv[0];
-    
-    if (argc>2 || (argc==2 && strcmp(argv[1], "-h")==0)) {
-	printf("Syntax:\n%s [<iconset file>]\n", argv[0]);
-	exit(1);
+
+    for (i = 1; i < argc; i++) {
+	if (strcmp(argv[i], "-h")==0
+	    || strcmp(argv[i], "--help")==0) {
+	    print_help();
+	    exit(0);
+	} else if (strcmp(argv[i], "--version")==0) {
+	    puts(PROG_VERSION);
+	    exit(0);
+	}
     }
     
     path = defaultsPathForDomain("WMWindowAttributes");

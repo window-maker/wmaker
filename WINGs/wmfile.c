@@ -86,7 +86,9 @@ int main(int argc, char **argv)
   pixmap = WMCreatePixmapFromXPMData(scr, GNUSTEP_XPM);
   WMSetApplicationIconImage(scr, pixmap); WMReleasePixmap(pixmap);
   panel = WMGetOpenPanel(scr);
-  
+
+  /*WMSetFilePanelAutoCompletion(panel, False);*/
+
  /* The 3rd argument for this function is the initial name of the file,
   * not the name of the window, although it's not implemented yet */
   if (WMRunModalOpenPanelForDirectory(panel, NULL, initial, /*title*/ NULL, NULL) == True)
