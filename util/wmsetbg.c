@@ -51,7 +51,7 @@
 
 #include <proplist.h>
 
-#define PROG_VERSION	"wmsetbg (Window Maker) 2.5"
+#define PROG_VERSION	"wmsetbg (Window Maker) 2.6"
 
 
 #define WORKSPACE_COUNT (MAX_WORKSPACES+1)
@@ -1145,6 +1145,42 @@ getPixmapPath(char *domain)
 }
 
 
+char*
+getFullPixmapPath(char *file)
+{
+    char *tmp;
+
+    if (!PixmapPath || !(tmp = wfindfile(PixmapPath, file))) {
+	char *path = malloc(1024);
+	int bsize = 512;
+	
+	if (!path)
+	    return file;
+	
+	while (!getcwd(path, bsize)) {
+	    free(path);
+	    bsize += 64;
+	    path = malloc(bsize);
+	    if (!path)
+		return file;
+	}
+
+	tmp = wstrappend(path, "/");
+	free(path);
+	path = wstrappend(tmp, file);
+	free(tmp);
+
+	return path;
+    }
+    
+    /* the file is in the PixmapPath */
+    free(tmp);
+
+    return file;
+}
+
+
+
 void
 wAbort()
 {
@@ -1414,7 +1450,10 @@ main(int argc, char **argv)
 	char buffer[4098];
 
 	if (!texture) {
-	    sprintf(buffer, "(%s, \"%s\", %s)", style, image_name, back_color);
+	    char *image_path = getFullPixmapPath(image_name);
+	    
+	    sprintf(buffer, "(%s, \"%s\", %s)", style, image_path, back_color);
+	    free(image_path);
 	    texture = (char*)buffer;
 	}
 

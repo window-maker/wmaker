@@ -38,6 +38,16 @@ Changes since version 0.61.1:
 - made Apply button work on window inspector for windows with no WM_CLASS
 - changed sound server code to be more efficient
 - fixed crash with broken apps that set mask size != pixmap size in icons
+- made wmsetbg accept relative paths for images that are not in PixmapPath
+- fixed windoze cycling
+- replaced XSync with XFlush in wUnshadeWindow()
+- added GNUstep window recognition through WM_CLASS->class == GNUstep
+- made window focusing not change titlebar color of GNUstep windows
+- disabled passive mouse grabbing in client area of GNUstep window
+  when they are unfocused
+- added Jim Knoble <jmknoble@pobox.com>'s cursor thing patch
+- fixed lock of wmaker when clicking on menu multiple times
+- made transients appear near their owner
 
 Changes since version 0.61.0:
 .............................
@@ -51,6 +61,8 @@ Changes since version 0.61.0:
 - fixed multihead bugs (Morten Bøgeskov" <mb@dbc.dk>)
 - fixed crashing bug when saving session information.
 - fixed crashing bug related to onmipresent icons in Clip
+- added _WINDOWMAKER_ICON_TILE and _WINDOWMAKER_ICON_SIZE hint in
+  the noticeboard window
 
 
 Changes since version 0.60.0:

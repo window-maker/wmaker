@@ -1,6 +1,6 @@
 {
   Logo.WMDock = {Icon = GNUstepGlow.#extension#;};
-  Logo.WMPanel = {Icon = GNUstepGlow.#extension#;};
+  Logo.WMPanel = {Icon = GNUstepGlow.xpm};
   Logo.WMClip = {Icon = clip.#extension#;};
   Dockit = {Icon = GNUstepGlow.#extension#;};
   DockApp = {NoAppIcon = NO;};

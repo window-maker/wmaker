@@ -1,5 +1,5 @@
-
-selection to get icon background
+remake wrlib rule to not compile with -fomit-frame-pointer and stuff
+if its added to CFLAGS
 
 Do ASAP:
 ========

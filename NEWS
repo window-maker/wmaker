@@ -14,6 +14,12 @@ and without MMX(tm)). Depending on the bit depth/color mode and CPU model,
 performance increases can go up to 150%
 
 
+Weendoze Window Cycling (alt-tab)
+---------------------------------
+
+Window cycling was changed to weendoze style. 
+
+
 NoBorder Window Attribute
 --------------------------
 

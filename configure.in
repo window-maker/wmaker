@@ -310,6 +310,7 @@ AC_SUBST(INTLIBS)
 AC_SUBST(NLSDIR)
 AC_SUBST(MOFILES)
 AC_SUBST(WPMOFILES)
+AC_SUBST(supported_locales)
 
 
 
@@ -862,7 +863,7 @@ AC_OUTPUT(Makefile po/Makefile util/Makefile test/Makefile wmlib/Makefile \
 	WindowMaker/Pixmaps/Makefile WindowMaker/Styles/Makefile \
 	WindowMaker/Themes/Makefile \
 	WPrefs.app/Makefile WPrefs.app/tiff/Makefile WPrefs.app/xpm/Makefile \
-	WPrefs.app/po/Makefile )
+	WPrefs.app/po/Makefile contrib/WindowMaker.spec )
 
 
 
