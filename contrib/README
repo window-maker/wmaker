@@ -7,7 +7,7 @@ wmaker developers for any problems with them.
 
 allows single click in dock
 
-for version: 0.80.2
+for version: 0.80.2+
 
 author:
 Sebastien Bauer <seb_bauer@bigfoot.com>
@@ -18,6 +18,9 @@ Daniel Richard G. <skunk@graphics.lcs.mit.edu>
 
 updated for Window Maker 0.80.2 by:
 Martial Daumas <martial@nasgaia.org>
+
+update for 0.80.2+ by:
+steve lion <steve.lion@verizon.net> and vlaad
 
 
 *** workspace_flip.patch

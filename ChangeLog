@@ -81,6 +81,8 @@ Changes since version 0.80.2:
 - Added support for generating pkgconfig files for WINGS, wmlib and wrlib.
   ("Marcelo E. Magallon" <mmagallo@debian.org>)
 - Support for multiline balloons (Vitaly Ovtchinnikov <ov@rbcmail.ru>)
+- Updated single-click contrib patch (steve lion <steve.lion@verizon.net>
+  and vlaad)
 
 
 Changes since version 0.80.1:
