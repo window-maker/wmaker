@@ -338,18 +338,28 @@ wAppIconNextSibling(WAppIcon *icon)
 {
     WAppIcon *tmp;
     
-    tmp = icon->icon->core->screen_ptr->app_icon_list;
+    tmp = icon->next;
     while (tmp) {
-	if (icon != tmp && strcmp(tmp->wm_class, icon->wm_class) == 0
+	if (strcmp(tmp->wm_class, icon->wm_class) == 0
 	    && strcmp(tmp->wm_instance, icon->wm_instance) == 0
 	    && !tmp->docked) {
 	    return tmp;
 	}
 	tmp = tmp->next;
     }
+    
+    tmp = icon->icon->core->screen_ptr->app_icon_list;
+    while (tmp && tmp != icon) {
+	if (strcmp(tmp->wm_class, icon->wm_class) == 0
+	    && strcmp(tmp->wm_instance, icon->wm_instance) == 0
+	    && !tmp->docked) {
+	    return tmp;
+	}
+	tmp = tmp->next;
+    }
+    
     return NULL;
 }
-
 
 
 int
@@ -667,7 +677,7 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
     if (aicon->editing || WCHECK_STATE(WSTATE_MODAL))
 	return;
 
-    if (IsDoubleClick(scr, event)) {
+    if (event->xbutton.button == Button1 && IsDoubleClick(scr, event)) {
 	iconDblClick(desc, event);
 	return;
     }
@@ -730,6 +740,19 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
         XClearWindow(dpy, scr->dock_shadow);
     }
 
+    if (clickButton != Button1) {
+	done = True;
+	
+	if (clickButton == Button2) {
+	    WAppIcon *next = wAppIconNextSibling(aicon);
+	    
+	    if (next) {
+		XRaiseWindow(dpy, next->icon->core->window);
+		XFlush(dpy);
+	    }
+	}
+    }
+    
     while (!done) {
 	WMMaskEvent(dpy, PointerMotionMask|ButtonReleaseMask|ButtonPressMask
 		    |ButtonMotionMask|ExposureMask, &ev);
