@@ -1,0 +1,517 @@
+# WindowMaker japanese message file
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1997-06-02 03:44+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Japanese \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#: ../appmenu.c:114
+msgid "appmenu:could not create menu"
+msgstr ""
+
+#: ../appmenu.c:145
+msgid "appmenu:could not create menu entry"
+msgstr ""
+
+#: ../dock.c:167
+#, c-format
+msgid "could not open file \"%s\" to save Dock state"
+msgstr ""
+
+#: ../dock.c:667
+#, c-format
+msgid "Could not execute program \"%s\""
+msgstr "プログラム \"%s\" を実行できません"
+
+#: ../dock.c:669 ../rootmenu.c:635
+msgid "Error"
+msgstr "エラー"
+
+#: ../event.c:230
+msgid "stack overflow: too many dead processes"
+msgstr ""
+
+#: ../image.c:65 ../image.c:494
+#, c-format
+msgid "can't load pixmap file \"%s\". Size too weird"
+msgstr ""
+
+#: ../image.c:83 ../image.c:746 ../image.c:768
+msgid "virtual memory exhausted during pixmap load. Not fatal..."
+msgstr ""
+
+#: ../image.c:100 ../image.c:510
+msgid "virtual memory exhausted. Continuing..."
+msgstr ""
+
+#: ../image.c:183 ../image.c:889 ../pixmap.c:261
+#, c-format
+msgid "could not load XPM file \"%s\""
+msgstr ""
+
+#: ../image.c:186
+#, c-format
+msgid "cannot load \"%s\": XPM format not supported"
+msgstr ""
+
+#: ../image.c:191
+#, c-format
+msgid "can't convert XBM file \"%s\" to internal format"
+msgstr ""
+
+#: ../image.c:196 ../pixmap.c:275
+#, c-format
+msgid "can't identify image file \"%s\""
+msgstr ""
+
+#: ../image.c:200 ../pixmap.c:279
+#, c-format
+msgid "unknown image format in \"%s\""
+msgstr ""
+
+#: ../image.c:556 ../image.c:562 ../image.c:581
+msgid "virtual memory exhausted during XPM load."
+msgstr ""
+
+#: ../image.c:712 ../image.c:855
+#, c-format
+msgid "could not convert image \"%s\" to internal format"
+msgstr ""
+
+#: ../image.c:901
+#, c-format
+msgid "can't load \"%s\": unknown image format"
+msgstr ""
+
+#: ../main.c:144
+msgid "Restart failed!!!"
+msgstr ""
+
+#: ../main.c:159
+#, c-format
+msgid "%s aborted.\n"
+msgstr ""
+
+#: ../main.c:167
+#, c-format
+msgid "usage: %s [-options]\n"
+msgstr ""
+
+#: ../main.c:168
+msgid "options:"
+msgstr ""
+
+#: ../main.c:170
+msgid " -nocpp \t\tdisable preprocessing of configuration files"
+msgstr ""
+
+#: ../main.c:173
+msgid " -nodock\t\tdo not open the application Dock"
+msgstr ""
+
+#: ../main.c:175
+msgid " -display host:dpy\tdisplay to use"
+msgstr ""
+
+#: ../main.c:176
+msgid " -version\t\tprint version and exit"
+msgstr ""
+
+#: ../main.c:227
+#, c-format
+msgid "cannot set locale %s"
+msgstr ""
+
+#: ../main.c:228
+msgid "falling back to C locale"
+msgstr ""
+
+#: ../main.c:239
+msgid "X server does not support locale"
+msgstr ""
+
+#: ../main.c:242
+msgid "cannot set locale modifiers"
+msgstr ""
+
+#: ../main.c:254
+#, c-format
+msgid "could not open display %s"
+msgstr ""
+
+#: ../menu.c:231
+msgid "wrealloc() failed while trying to add menu item"
+msgstr ""
+
+#: ../misc.c:50
+#, c-format
+msgid "could not define value for %s for cpp"
+msgstr ""
+
+#: ../misc.c:80
+#, c-format
+msgid "could not get password entry for UID %i"
+msgstr ""
+
+#: ../pixmap.c:211
+#, c-format
+msgid "could not load mask bitmap file \"%s\". Won't use mask"
+msgstr ""
+
+#: ../pixmap.c:264
+#, c-format
+msgid "cannot load \"%s\": XPM support not compiled in"
+msgstr ""
+
+#: ../pixmap.c:271
+#, c-format
+msgid "could not load XBM file \"%s\""
+msgstr ""
+
+#: ../raster.c:183
+msgid "invalid dither colormap size specification.disabling"
+msgstr ""
+
+#: ../raster.c:193
+msgid "Could not build PseudoColor color table\n"
+msgstr ""
+
+#: ../resource.c:294 ../resource.c:356 ../resource.c:365 ../resource.c:494
+#: ../resource.c:518 ../resource.c:527 ../resource.c:552
+#, c-format
+msgid "%s: syntax error in line \"%s\""
+msgstr ""
+
+#: ../resource.c:306
+#, c-format
+msgid "%s: invalid window attribute specification in \"%s\""
+msgstr ""
+
+#: ../resource.c:333
+#, c-format
+msgid "%s: unknown attribute in line \"%s\""
+msgstr ""
+
+#: ../resource.c:413 ../resource.c:422 ../resource.c:434
+#, c-format
+msgid "%s:invalid kbd shortcut specification \"%s\""
+msgstr ""
+
+#: ../resource.c:474
+#, c-format
+msgid "%s: expected section identifier but got %s"
+msgstr ""
+
+#: ../resource.c:507
+#, c-format
+msgid "%s: unknown option in line \"%s\""
+msgstr ""
+
+#: ../resource.c:556
+#, c-format
+msgid "%s: invalid colormap size in line \"%s\""
+msgstr ""
+
+#: ../resource.c:576
+#, c-format
+msgid ""
+"%s: invalid geometry display type \"%s\". Shouldbe center, corner, floating "
+"or line"
+msgstr ""
+
+#: ../resource.c:598
+#, c-format
+msgid "%s: invalid focus mode \"%s.\" Should be manual, auto or semiauto"
+msgstr ""
+
+#: ../resource.c:616
+#, c-format
+msgid ""
+"%s: invalid window placement mode \"%s\". Should be auto, cascade or manual"
+msgstr ""
+
+#: ../resource.c:636
+#, c-format
+msgid ""
+"%s: invalid texture type \"%s\" Should be solid, dgradient, vgradient or "
+"hgradient"
+msgstr ""
+
+#: ../resource.c:663
+#, c-format
+msgid "%s: invalid gradient spec. \"%s\""
+msgstr ""
+
+#: ../resource.c:682
+#, c-format
+msgid "%s: invalid coordinate \"%s\""
+msgstr ""
+
+#: ../resource.c:698
+#, c-format
+msgid "%s: invalid justification type \"%s\". Should be left, center or right"
+msgstr ""
+
+#: ../resource.c:728
+msgid "could not make arguments for preference file preprocessor"
+msgstr ""
+
+#: ../resource.c:734
+msgid "could not open preference file preprocessor"
+msgstr ""
+
+#: ../resource.c:741
+#, c-format
+msgid "could not open configuration file: \"%s\""
+msgstr ""
+
+#: ../resource.c:789
+#, c-format
+msgid "could not find default icon \"%s\""
+msgstr ""
+
+#: ../resource.c:795
+#, c-format
+msgid "could not find a preference file (%s) in \"%s\""
+msgstr ""
+
+#: ../resource.c:803
+#, c-format
+msgid "could not find icon background \"%s\""
+msgstr ""
+
+#: ../rootmenu.c:106
+msgid "Exit"
+msgstr "終了"
+
+#: ../rootmenu.c:107
+msgid "Exit window manager?"
+msgstr "ウィンドウマネージャを終了しますか?"
+
+#: ../rootmenu.c:126
+msgid "Close X session"
+msgstr "X セッションの終了"
+
+#: ../rootmenu.c:127
+msgid ""
+"Close Window System session?\n"
+"(all applications will be closed)"
+msgstr ""
+"ウィンドウシステムのセッションを終了しますか?\n"
+"(全てのアプリケーションを終了します)"
+
+#: ../rootmenu.c:215 ../rootmenu.c:312 ../rootmenu.c:494
+#, c-format
+msgid "Switch to %i"
+msgstr ""
+
+#: ../rootmenu.c:281
+msgid "out of memory to store menu commands. Nuking it."
+msgstr ""
+
+#: ../rootmenu.c:301
+msgid "Workspaces"
+msgstr ""
+
+#: ../rootmenu.c:303
+msgid "could not create Workspace menu"
+msgstr ""
+
+#: ../rootmenu.c:306
+msgid "New"
+msgstr ""
+
+#: ../rootmenu.c:307
+msgid "Destroy Last"
+msgstr ""
+
+#: ../rootmenu.c:348
+#, c-format
+msgid "missing command in menu config: %s"
+msgstr ""
+
+#: ../rootmenu.c:388
+msgid "menu can only have one WORKSPACE_MENU"
+msgstr ""
+
+#: ../rootmenu.c:404
+#, c-format
+msgid "unknown command \"%s\" in menu config."
+msgstr ""
+
+#: ../rootmenu.c:408
+msgid "syntax error in menu config. END declaration missing"
+msgstr ""
+
+#: ../rootmenu.c:433
+#, c-format
+msgid "syntax error in menu config. %s"
+msgstr ""
+
+#: ../rootmenu.c:441
+msgid "no title given for the root menu"
+msgstr ""
+
+#: ../rootmenu.c:453
+msgid "Commands"
+msgstr ""
+
+#: ../rootmenu.c:454
+msgid "Exit..."
+msgstr ""
+
+#: ../rootmenu.c:562
+#, c-format
+msgid "could not stat menu configuration file \"%s\""
+msgstr ""
+
+#: ../rootmenu.c:567
+msgid "no read permision to menu configuration file"
+msgstr ""
+
+#: ../rootmenu.c:584
+msgid "could not make arguments for menu file preprocessor"
+msgstr ""
+
+#: ../rootmenu.c:592
+msgid "could not open menu configuration preprocessor"
+msgstr ""
+
+#: ../rootmenu.c:602
+#, c-format
+msgid "couldn't open menu configuration file \"%s\""
+msgstr ""
+
+#: ../rootmenu.c:636
+msgid ""
+"Could not read menu configuration\n"
+"(see console log for details)"
+msgstr ""
+"メニューの設定を読むことができません\n"
+"(詳細はコンソールのログを参照してください)"
+
+#: ../screen.c:83
+msgid "it seems that there already is a window manager running"
+msgstr ""
+
+#: ../screen.c:234 ../screen.c:344
+#, c-format
+msgid "could not parse color %s"
+msgstr ""
+
+#: ../screen.c:289
+msgid "The following character sets are missing:"
+msgstr ""
+
+#: ../screen.c:293
+#, c-format
+msgid "The string \"%s\" will be used in place"
+msgstr ""
+
+#: ../screen.c:295
+msgid "of any characters from those sets."
+msgstr ""
+
+#: ../screen.c:298
+#, c-format
+msgid "could not create font set %s. Using fixed"
+msgstr ""
+
+#: ../screen.c:305
+msgid "could not load any usable font set"
+msgstr ""
+
+#: ../screen.c:315
+#, c-format
+msgid "could not load font %s. Using fixed"
+msgstr ""
+
+#: ../screen.c:318
+msgid "could not load any usable font"
+msgstr ""
+
+#: ../screen.c:439
+#, c-format
+msgid "Gradient texture not supported for your display (PseudoColor %ibpp)"
+msgstr ""
+
+#: ../screen.c:442
+msgid "You must enable dithering to be able to use gradients with this display"
+msgstr ""
+
+#: ../screen.c:456
+msgid "Gradient texture available only for PseudoColor and TrueColor displays"
+msgstr ""
+
+#: ../screen.c:478
+msgid "could not allocate texture"
+msgstr ""
+
+#: ../screen.c:1058
+msgid "colormap size value(s) too large"
+msgstr ""
+
+#: ../stacking.c:89 ../stacking.c:148
+msgid "could not get window list!!"
+msgstr ""
+
+#: ../stacking.c:226
+msgid "Internal inconsistency! window_count incorrect."
+msgstr ""
+
+#: ../startup.c:137
+#, c-format
+msgid "internal X error: %s\n"
+msgstr ""
+
+#: ../startup.c:152
+#, c-format
+msgid "got signal %i (%s)\n"
+msgstr ""
+
+#: ../startup.c:154
+#, c-format
+msgid "got signal %i\n"
+msgstr ""
+
+#: ../switchmenu.c:109
+msgid "Windows"
+msgstr ""
+
+#: ../texture.c:317 ../texture.c:327
+msgid "unsupported visual/depth for gradients"
+msgstr ""
+
+#: ../winmenu.c:119
+msgid "(Un)Maximize"
+msgstr ""
+
+#: ../winmenu.c:126
+msgid "Miniaturize"
+msgstr ""
+
+#: ../winmenu.c:133
+msgid "(Un)Shade"
+msgstr ""
+
+#: ../winmenu.c:140
+msgid "Hide"
+msgstr ""
+
+#: ../winmenu.c:146
+msgid "Hide Others"
+msgstr ""
+
+#: ../winmenu.c:148
+msgid "Close"
+msgstr ""
+
+#: ../winmenu.c:155
+msgid "Kill"
+msgstr ""

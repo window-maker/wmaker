@@ -1,0 +1,1117 @@
+msgid ""
+msgstr ""
+"Date: 1998-09-02 18:12:14+0200\n"
+"From: Piotr Dembiñski <hector@kki.net.pl>\n"
+"Language-Team: Pollish \n"
+"Content-Type: text/plain; charset=iso8859-2\n"
+"Xgettext-Options: --default-domain=WindowMaker --add-comments --keyword=_\n"
+"Files: ../src/appicon.c ../src/defaults.c ../src/dialog.c ../src/dock.c ../src/dockedapp.c ../src/event.c ../src/framewin.c ../src/icon.c ../src/main.c ../src/menu.c ../src/misc.c ../src/pixmap.c ../src/proplist.c ../src/resources.c ../src/rootmenu.c ../src/screen.c ../src/session.c ../src/stacking.c ../src/startup.c ../src/switchmenu.c ../src/texture.c ../src/wdefaults.c ../src/window.c ../src/winmenu.c ../src/winspector.c ../src/workspace.c ../src/xutil.c\n"
+
+#: ../src/appicon.c:500 ../src/dialog.c:262 ../src/dialog.c:318 ../src/dock.c:2977 ../src/dockedapp.c:206 ../src/rootmenu.c:164 ../src/winspector.c:276 ../src/winspector.c:289
+msgid "Error"
+msgstr "B³±d"
+
+#: ../src/appicon.c:501
+msgid "Could not open specified icon file"
+msgstr "Nie mo¿na otworzyæ pliku z ikon±"
+
+#: ../src/appicon.c:522 ../src/dock.c:263 ../src/winmenu.c:85
+msgid "Kill Application"
+msgstr "Zabij Aplikacjê"
+
+#: ../src/appicon.c:523 ../src/dock.c:264 ../src/winmenu.c:86
+msgid ""
+"This will kill the application.\n"
+"Any unsaved changes will be lost.\n"
+"Please confirm."
+msgstr ""
+"To zabije aplikacjê.\n"
+"Wszystkie nie zachowane zmiany zostan± stracone.\n"
+"Proszê potwierdziæ."
+
+#: ../src/appicon.c:538 ../src/dock.c:1017
+msgid "Unhide Here"
+msgstr "Odkryj Tutaj"
+
+#: ../src/appicon.c:539 ../src/dock.c:1019
+msgid "(Un)Hide"
+msgstr "(Nie)Ukryj"
+
+#: ../src/appicon.c:540
+msgid "Set Icon..."
+msgstr "Ustaw Ikonê..."
+
+#: ../src/appicon.c:541 ../src/dock.c:1023 ../src/winmenu.c:260
+msgid "Kill"
+msgstr "Zabij"
+
+#: ../src/defaults.c:577 ../src/screen.c:535 ../src/screen.c:643 ../src/screen.c:649
+msgid "could not read domain \"%s\" from defaults database"
+msgstr "nie mo¿na odczytaæ domeny \"%s\" z bazy danych"
+
+#: ../src/defaults.c:623 ../src/defaults.c:745 ../src/defaults.c:780 ../src/defaults.c:806
+msgid "Domain %s (%s) of defaults database is corrupted!"
+msgstr "Domena %s (%s) w bazie danych jest zniszczona!"
+
+#: ../src/defaults.c:628 ../src/defaults.c:762 ../src/defaults.c:789 ../src/defaults.c:814
+msgid "could not load domain %s from user defaults database"
+msgstr "nie mo¿na za³adowaæ domeny %s z bazy danych u¿ytkownika"
+
+#: ../src/defaults.c:639 ../src/defaults.c:730
+msgid "Domain %s (%s) of global defaults database is corrupted!"
+msgstr "Domena %s (%s) w globalnej bazie danych jest zniszczona!"
+
+#: ../src/defaults.c:656 ../src/defaults.c:735
+msgid "could not load domain %s from global defaults database"
+msgstr "nie mo¿na za³adowaæ domeny %s z globalnej bazy danych"
+
+#: ../src/defaults.c:1102
+msgid "can't convert \"%s\" to boolean for key \"%s\""
+msgstr "nie mo¿na zmieniæ \"%s\" na warto¶æ logiczn± dla klucza \"%s\""
+
+#: ../src/defaults.c:1107 ../src/defaults.c:1141 ../src/defaults.c:1173 ../src/defaults.c:1186 ../src/defaults.c:1201 ../src/defaults.c:1216 ../src/defaults.c:1287 ../src/defaults.c:1299 ../src/defaults.c:1358 ../src/defaults.c:1402 ../src/defaults.c:1444 ../src/defaults.c:1490 ../src/defaults.c:1536 ../src/defaults.c:1759 ../src/defaults.c:1773 ../src/defaults.c:1806 ../src/defaults.c:1818 ../src/defaults.c:1830 ../src/defaults.c:1854 ../src/defaults.c:1872 ../src/defaults.c:1885 ../src/defaults.c:1898 ../src/defaults.c:1935 ../src/defaults.c:1973 ../src/defaults.c:2037 ../src/defaults.c:2188
+msgid "using default \"%s\" instead"
+msgstr "u¿ywam domy¶lnego \"%s\""
+
+#: ../src/defaults.c:1138
+msgid "can't convert \"%s\" to integer for key \"%s\""
+msgstr "nie mo¿na zmieniæ \"%s\" na liczbê ca³kowit± dla klucza \"%s\""
+
+#: ../src/defaults.c:1168 ../src/defaults.c:1282 ../src/defaults.c:1754 ../src/defaults.c:1801 ../src/wdefaults.c:541 ../src/wdefaults.c:577
+msgid "Wrong option format for key \"%s\". Should be %s."
+msgstr "Niew³a¶ciwy format opcji dla klucza \"%s\". Powinno byæ %s."
+
+#: ../src/defaults.c:1181
+msgid "Incorrect number of elements in array for key \"%s\"."
+msgstr "Niew³a¶ciwa liczba elementów w tablicy dla klucza \"%s\"."
+
+#: ../src/defaults.c:1196
+msgid "Wrong value for key \"%s\". Should be Coordinate."
+msgstr "Niew³a¶ciwa warto¶æ dla klucza \"%s\". Powinna byæ Wspó³rzêdna."
+
+#: ../src/defaults.c:1211
+msgid "can't convert array to integers for \"%s\"."
+msgstr "nie mo¿na zamieniæ tablicy na liczby ca³kowite dla \"%s\"."
+
+#: ../src/defaults.c:1350
+msgid "Invalid focus mode \"%s\". Should be Manual, Auto or Sloppy."
+msgstr "Niew³a¶ciwy tryb aktywizacji \"%s\". Powinno byæ: Manual, Auto lub Sloopy."
+
+#: ../src/defaults.c:1353
+msgid "Invalid colormap focus mode \"%s\". Should be Manual or Auto."
+msgstr "Niew³a¶ciwy tryb aktywizacji mapy kolorów \"%s\". Powinno byæ: Manual lub Auto."
+
+#: ../src/defaults.c:1396
+msgid "Invalid window placement mode \"%s\". Should be Auto, Cascade, Random or Manual."
+msgstr "Niew³a¶ciwy tryb umieszczania okna \"%s\". Powinno byæ: Auto, Cascade, Random lub Manual."
+
+#: ../src/defaults.c:1438
+msgid "Invalid geometry display type \"%s\". Should be Center, Corner, Floating or Line."
+msgstr "Niew³a¶ciwy typ geometrii obrazu \"%s\". Powinno byæ: Center, Corner, Floating lub Line."
+
+#: ../src/defaults.c:1485
+msgid "Invalid speed \"%s\". Should be UltraFast, Fast, Medium, Slow or UltraSlow."
+msgstr "Niew³a¶ciwa szybko¶æ \"%s\". Powinno byæ: UltraFast, Fast, Medium, Slow lub UltraSlow."
+
+#: ../src/defaults.c:1530
+msgid "Invalid mouse button \"%s\". Should be Left, Middle, Right or Button1 through Button5"
+msgstr "Niew³a¶ciwy przycisk myszy \"%s\". Powinno byæ: Left, Middle, Right lub Button1 do Button5"
+
+#: ../src/defaults.c:1599 ../src/defaults.c:1630 ../src/defaults.c:1642 ../src/defaults.c:1684 ../src/defaults.c:1721
+msgid "\"%s\" is not a valid color name"
+msgstr "\"%s\" nie jest w³a¶ciw± nazw± koloru"
+
+#: ../src/defaults.c:1611
+msgid "bad number of arguments in gradient specification"
+msgstr "niew³a¶ciwa liczba argumentów w okre¶leniu gradientu"
+
+#: ../src/defaults.c:1657
+msgid "too few arguments in multicolor gradient specification"
+msgstr "zbyt ma³o argumentów w okre¶leniu wielokolorowego gradientu"
+
+#: ../src/defaults.c:1768
+msgid "Error in texture specification for key \"%s\""
+msgstr "B³±d w okre¶leniu tekstury dla klucza \"%s\""
+
+#: ../src/defaults.c:1814 ../src/defaults.c:1850
+msgid "Too few elements in array for key \"WorkspaceBack\"."
+msgstr "Zbyt ma³o elementów w tablicy dla klucza \"WorkspaceBack\"."
+
+#: ../src/defaults.c:1826
+msgid "Wrong type for workspace background. Should be Texture."
+msgstr "Niew³a¶ciwy typ t³a pulpitu. Powinna byæ Tekstura."
+
+#: ../src/defaults.c:1868
+msgid "Cannot get color entry for key \"WorkspaceBack\"."
+msgstr "Nie mo¿na wzi±æ koloru dla klucza \"WorkspaceBack\"."
+
+#: ../src/defaults.c:1880
+msgid "key \"WorkspaceBack\" has invalid color \"%s\""
+msgstr "klucz \"WorkspaceBack\" ma niew³a¶ciwy kolor \"%s\""
+
+#: ../src/defaults.c:1894
+msgid "Cannot get file entry for key \"WorkspaceBack\"."
+msgstr "Nie mo¿na wzi±æ pliku dla klucza \"WorkspaceBack\"."
+
+#: ../src/defaults.c:1912
+msgid "could not run \"%s\""
+msgstr "nie mo¿na uruchomiæ \"%s\""
+
+#: ../src/defaults.c:1918
+msgid "could not find background image \"%s\""
+msgstr "nie mo¿na znale¼æ obrazka na t³o \"%s\""
+
+#: ../src/defaults.c:1931
+msgid "Error in texture specification for key \"WorkspaceBack\""
+msgstr "B³±d w okre¶leniu tekstury dla klucza \"WorkspaceBack\""
+
+#: ../src/defaults.c:1968
+msgid "Invalid justification type \"%s\". Should be Left, Center or Right"
+msgstr "Niew³a¶ciwy typ wyrównywania \"%s\". Powinno byæ: Left, Center lub Right"
+
+#: ../src/defaults.c:2002
+msgid "could not load any usable font"
+msgstr "nie mo¿na za³adowaæ ¿adnego fontu"
+
+#: ../src/defaults.c:2032
+msgid "could not get color for key \"%s\""
+msgstr "nie mo¿na wzi±æ koloru dla klucza \"%s\""
+
+#: ../src/defaults.c:2091 ../src/rootmenu.c:435
+msgid "%s:invalid key modifier \"%s\""
+msgstr "%s:niew³a¶ciwy modyfikator klucza \"%s\""
+
+#: ../src/defaults.c:2103
+msgid "%s:invalid kbd shortcut specification \"%s\""
+msgstr "%s:niew³a¶ciwe okre¶lenie skrótu klawiaturowego \"%s\""
+
+#: ../src/defaults.c:2110
+msgid "%s:invalid key in shortcut \"%s\""
+msgstr "%s:niew³a¶ciwy klawisz w skrócie \"%s\""
+
+#: ../src/defaults.c:2136
+msgid "%s: modifier key %s is not valid"
+msgstr "%s: klawisz zmiany %s nie jest w³a¶ciwy"
+
+#: ../src/defaults.c:2182
+msgid "Invalid icon Position \"%s\". Should be one of blv, blh, brv, brh, tlv, tlh, trv, trh"
+msgstr "Niew³a¶ciwa Pozycja ikony \"%s\". Powinno byæ: blv, blh, brv, brh, tlv, tlh, trv, trh "
+
+#: ../src/defaults.c:2264
+msgid "could not render texture for icon background"
+msgstr "nie mo¿na pokazaæ tekstury dla t³a ikony"
+
+#: ../src/defaults.c:2609
+msgid "could not render texture for workspace background"
+msgstr "nie mo¿na pokazaæ tekstury dla t³a pulpitu"
+
+#: ../src/dialog.c:67 ../src/dialog.c:79 ../src/dialog.c:162 ../src/dialog.c:498 ../src/dockedapp.c:349
+msgid "OK"
+msgstr "OK"
+
+#: ../src/dialog.c:67 ../src/dialog.c:72 ../src/dialog.c:162 ../src/dialog.c:505 ../src/dockedapp.c:355
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: ../src/dialog.c:72 ../src/rootmenu.c:206
+msgid "Exit"
+msgstr "Zakoñcz"
+
+#: ../src/dialog.c:84
+msgid "Yes"
+msgstr "Tak"
+
+#: ../src/dialog.c:84
+msgid "No"
+msgstr "Nie"
+
+#: ../src/dialog.c:257
+msgid "Could not open directory "
+msgstr "Nie mo¿na otworzyæ katalogu "
+
+#: ../src/dialog.c:313
+msgid "Could not load image file "
+msgstr "Nie mo¿na za³adowaæ pliku z obrazkiem "
+
+#: ../src/dialog.c:442
+msgid "Directories"
+msgstr "Katalogi"
+
+#: ../src/dialog.c:451
+msgid "Icons"
+msgstr "Ikony"
+
+#: ../src/dialog.c:488
+msgid "File Name:"
+msgstr "Nazwa Pliku:"
+
+#: ../src/dialog.c:511
+msgid "Choose File"
+msgstr "Wybierz Plik"
+
+#: ../src/dialog.c:521
+msgid "Icon Chooser"
+msgstr "Katalog Ikon"
+
+#: ../src/dock.c:207
+msgid "Type the name for workspace %i:"
+msgstr "Wpisz nazwê dla pulpitu %i:"
+
+#: ../src/dock.c:208 ../src/dock.c:996
+msgid "Rename Workspace"
+msgstr "Zmieñ Nazwê Pulpitu"
+
+#: ../src/dock.c:408
+msgid "Workspace Clip"
+msgstr "Spinacz Pulpitu"
+
+#: ../src/dock.c:409
+msgid "All selected icons will be removed!"
+msgstr "Wszystkie zaznaczone ikony zostan± usuniête!"
+
+#: ../src/dock.c:458
+msgid "Keep Icon"
+msgstr "Trzymaj Ikonê"
+
+#: ../src/dock.c:459 ../src/dock.c:1911 ../src/dock.c:2027
+msgid "Type the command used to launch the application"
+msgstr "Wpisz polecenie u¿ywane do odpalenia aplikacji"
+
+#: ../src/dock.c:820
+msgid "could not launch application %s\n"
+msgstr "nie mo¿na odpaliæ aplikacji %s\n"
+
+#: ../src/dock.c:875
+msgid "could not create workspace submenu for Clip menu"
+msgstr "nie mo¿na stworzyæ podmenu pulpitu dla menu Spinacza"
+
+#: ../src/dock.c:933
+msgid "could not create options submenu for Clip menu"
+msgstr "nie mo¿na stworzyæ podmenu opcji dla menu Spinacza"
+
+#: ../src/dock.c:937
+msgid "Floating Clip"
+msgstr "Lataj±cy Spinacz"
+
+#: ../src/dock.c:943
+msgid "Collapsed"
+msgstr "Zwiniêty"
+
+#: ../src/dock.c:949
+msgid "AutoCollapse"
+msgstr "AutoZwiniêty"
+
+#: ../src/dock.c:955
+msgid "AutoAttract Icons"
+msgstr "Automatyczne Wy³apywanie Ikon"
+
+#: ../src/dock.c:961
+msgid "Keep Attracted Icons"
+msgstr "Trzymaj Wy³apane Ikony"
+
+#: ../src/dock.c:985
+msgid "Floating Dock"
+msgstr "P³ywaj±cy Dok"
+
+#: ../src/dock.c:991
+msgid "Clip Options"
+msgstr "Opcje Spinacza"
+
+#: ../src/dock.c:998
+msgid "(Un)Select Icon"
+msgstr "(Od)Zaznacz Ikonê"
+
+#: ../src/dock.c:1000
+msgid "(Un)Select All Icons"
+msgstr "(Od)Zaznacz Wszystkie Ikony"
+
+#: ../src/dock.c:1003
+msgid "Keep Icon(s)"
+msgstr "Trzymaj Ikonê(y)"
+
+#: ../src/dock.c:1005
+msgid "Move Icon(s) To"
+msgstr "Przenie¶ Ikonê(y) Do"
+
+#: ../src/dock.c:1010
+msgid "Remove Icon(s)"
+msgstr "Usuñ Ikonê(y)"
+
+#: ../src/dock.c:1012
+msgid "Attract Icons"
+msgstr "Wy³ap Ikony"
+
+#: ../src/dock.c:1015
+msgid "Launch"
+msgstr "Odpal"
+
+#: ../src/dock.c:1021
+msgid "Settings..."
+msgstr "Ustawienia..."
+
+#: ../src/dock.c:1405 ../src/dock.c:1419 ../src/dock.c:1433 ../src/dock.c:1443
+msgid "bad value in docked icon state info %s"
+msgstr "z³a warto¶æ w informacji o stanie zadokowanej ikony %s"
+
+#: ../src/dock.c:1451
+msgid "bad value in docked icon position %i,%i"
+msgstr "z³a warto¶æ w pozycji zadokowanej ikony %i,%i"
+
+#: ../src/dock.c:1680
+msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
+msgstr "zbyt wiele ikon trzymanych w Doku. Ignorujê te, które siê nie mieszcz±"
+
+#. icon->forced_dock = 1;
+#: ../src/dock.c:1910 ../src/dock.c:2026
+msgid "Dock Icon"
+msgstr "Ikona Doku"
+
+#: ../src/dock.c:2970 ../src/dock.c:2974
+msgid "Could not execute command \"%s\""
+msgstr "Nie mo¿na wykonaæ polecenia \"%s\""
+
+#: ../src/dockedapp.c:128
+msgid "could not find icon %s, used in a docked application"
+msgstr "nie mo¿na znale¼æ ikony %s, u¿ywanej w zadokowanej aplikacji"
+
+#: ../src/dockedapp.c:205
+msgid "Could not open specified icon file:%s"
+msgstr "Nie mo¿na otworzyæ okre¶lonego pliku z ikon±:%s"
+
+#: ../src/dockedapp.c:290
+msgid "Start when WindowMaker is started"
+msgstr "Wystartowaæ podczas startu WindowMakera"
+
+#: ../src/dockedapp.c:297
+msgid "Application path and arguments"
+msgstr "¦cie¿ka do aplikacji i argumenty"
+
+#: ../src/dockedapp.c:308
+msgid "Command for files dropped with DND"
+msgstr "Polecenie dla plików upuszczonych z DND"
+
+#: ../src/dockedapp.c:320
+msgid "%d will be replaced with the file name"
+msgstr "%d zostanie zast±pione nazw± pliku"
+
+#: ../src/dockedapp.c:324
+msgid "DND support was not compiled in"
+msgstr "nie wkompilowano wspomagania DND"
+
+#: ../src/dockedapp.c:330
+msgid "Icon Image"
+msgstr "Obrazek Ikony"
+
+#: ../src/dockedapp.c:342 ../src/winspector.c:1158
+msgid "Browse..."
+msgstr "Przegl±daj..."
+
+#: ../src/dockedapp.c:387
+msgid "Docked Application Settings"
+msgstr "Ustawienia Zadokowanej Aplikacji"
+
+#: ../src/event.c:465
+msgid "stack overflow: too many dead processes"
+msgstr "przepe³nienie stosu: zbyt wiele martwych procesów"
+
+#: ../src/framewin.c:526
+msgid "could not render gradient: %s"
+msgstr "nie mo¿na pokazaæ gradientu: %s"
+
+#: ../src/framewin.c:542 ../src/framewin.c:557 ../src/framewin.c:568 ../src/framewin.c:575 ../src/framewin.c:582 ../src/icon.c:294 ../src/texture.c:496
+msgid "error rendering image:%s"
+msgstr "b³±d podczas pokazywania obrazka:%s"
+
+#: ../src/icon.c:180 ../src/wdefaults.c:399
+msgid "error loading image file \"%s\""
+msgstr "b³±d podczas ³adowania pliku z obrazkiem \"%s\""
+
+#: ../src/icon.c:612
+msgid "could not find default icon \"%s\""
+msgstr "nie mo¿na znale¼æ domy¶lnej ikony \"%s\""
+
+#: ../src/icon.c:618
+msgid "could not load default icon \"%s\":%s"
+msgstr "nie mo¿na za³adowaæ domy¶lnej ikony \"%s\":%s"
+
+#: ../src/main.c:169
+msgid "Restart failed!!!"
+msgstr "Restart siê nie powiód³!!!"
+
+#: ../src/main.c:185
+msgid "%s aborted.\n"
+msgstr "%s zaniechany.\n"
+
+#: ../src/main.c:196
+msgid "usage: %s [-options]\n"
+msgstr "sk³adnia: %s [-options]\n"
+
+#: ../src/main.c:197
+msgid "options:"
+msgstr "opcje:"
+
+#: ../src/main.c:199
+msgid " -nocpp \t\tdisable preprocessing of configuration files"
+msgstr " -nocpp \t\twy³±cz przetwarzanie plików konfiguracyjnych"
+
+#: ../src/main.c:201
+msgid " -nodock\t\tdo not open the application Dock"
+msgstr " -nodock\t\tbez Doku z aplikacjami"
+
+#: ../src/main.c:202
+msgid " -noclip\t\tdo not open the workspace Clip"
+msgstr " -noclip\t\tbez Spinacza na pulpicie"
+
+#.
+#. puts(_(" -locale locale		locale to use"));
+#.
+#: ../src/main.c:206
+msgid " -visualid visualid\tvisual id of visual to use"
+msgstr " -visualid visualid\tidentyfikator u¿ywanej palety"
+
+#: ../src/main.c:207
+msgid " -display host:dpy\tdisplay to use"
+msgstr " -display host:dpy\tu¿ywany panel graficzny"
+
+#: ../src/main.c:208
+msgid " -version\t\tprint version and exit"
+msgstr " -version\t\twy¶wietl informacjê o wersji i zakoñcz"
+
+#: ../src/main.c:220
+msgid ""
+"could not find user GNUstep directory.\n"
+"Make sure you have installed WindowMaker correctly and run wmaker.inst"
+msgstr ""
+"nie mo¿na znale¼æ katalogu GNUstep.\n"
+"Upewnij siê czy zainstalowa³e¶ WindowMakera poprawnie i wykonaj wmaker.inst"
+
+#: ../src/main.c:241
+msgid "%s:could not execute initialization script"
+msgstr "#s:nie mo¿na wykonaæ skryptu inicjalizacji"
+
+#: ../src/main.c:298 ../src/main.c:305 ../src/main.c:312
+msgid "too few arguments for %s"
+msgstr "zbyt ma³o argumentów dla %s"
+
+#: ../src/main.c:316
+msgid "bad value for visualid: \"%s\""
+msgstr "z³a warto¶æ id palety: \"%s\""
+
+#: ../src/main.c:359
+msgid "X server does not support locale"
+msgstr "Serwer X nie wspiera locale"
+
+#: ../src/main.c:362
+msgid "cannot set locale modifiers"
+msgstr "nie mo¿na ustawiæ modyfikatorów locale"
+
+#: ../src/main.c:376
+msgid "could not open display \"%s\""
+msgstr "nie mo¿na otworzyæ panelu graficznego \"%s\""
+
+#: ../src/menu.c:285
+msgid "wrealloc() failed while trying to add menu item"
+msgstr "wykonanie wrealloc() nie powiod³o siê podczas próby dodania pozycji menu"
+
+#: ../src/misc.c:70
+msgid "could not define value for %s for cpp"
+msgstr "nie mo¿na zdefiniowaæ warto¶ci %s dla cpp"
+
+#: ../src/misc.c:100
+msgid "could not get password entry for UID %i"
+msgstr "nie mo¿na znale¼æ has³a dla UID %i"
+
+#: ../src/misc.c:124
+msgid "your machine is misconfigured. HOSTNAME is set to %s"
+msgstr "twój komputer jest ¼le skonfigurowany. HOSTNAME jest ustawiony na %s"
+
+#: ../src/misc.c:130
+msgid "your machine is misconfigured. HOST is set to %s"
+msgstr "twój komputer jest ¼le skonfigurowany. HOST jest ustawiony na %s"
+
+#: ../src/misc.c:735
+msgid "selection timed-out"
+msgstr "zaznaczenie straci³o wa¿no¶æ"
+
+#: ../src/misc.c:749
+msgid "Program Arguments"
+msgstr "Argumenty Programu"
+
+#: ../src/misc.c:768
+msgid "Enter command arguments:"
+msgstr "Wprowad¼ argumenty programu:"
+
+#: ../src/misc.c:789
+msgid "unable to get dropped data from DND drop"
+msgstr "nie mo¿na wzi±æ upuszczonych danych protoko³u DND"
+
+#: ../src/misc.c:797
+msgid "error getting dropped data from DND drop"
+msgstr "b³±d podczas brania upuszczonych danych protoko³u DND"
+
+#: ../src/misc.c:803
+msgid "out of memory while getting data from DND drop"
+msgstr "wyczerpano pamiêæ podczas brania danych protoko³u DND"
+
+#: ../src/misc.c:847 ../src/misc.c:966
+msgid "out of memory during expansion of \"%s\""
+msgstr "wyczerpano pamiêæ podczas rozwijania \"%s\""
+
+#: ../src/misc.c:901
+msgid "out of memory during expansion of \"%w\""
+msgstr "wyczerpano pamiêæ podczas rozwijania \"%w\""
+
+#: ../src/misc.c:920
+msgid "out of memory during expansion of \"%a\""
+msgstr "wyczerpano pamiêæ podczas rozwijania \"%a\""
+
+#: ../src/misc.c:942
+msgid "out of memory during expansion of \"%d\""
+msgstr "wyczerpano pamiêæ podczas rozwijania \"%d\""
+
+#: ../src/misc.c:954
+msgid "selection not available"
+msgstr "zaznaczenie niedostêpne"
+
+#: ../src/misc.c:1032 ../src/misc.c:1038
+msgid "bad window name value in %s state info"
+msgstr "z³a warto¶æ nazwy okna w polu %s informacji stanu"
+
+#: ../src/pixmap.c:235
+msgid "could not load mask bitmap file \"%s\". Won't use mask"
+msgstr "nie mo¿na za³adowaæ bitmapy z mask± \"%s\". Maska nie zostanie u¿yta"
+
+#: ../src/proplist.c:180
+msgid "unterminated string"
+msgstr "nie zakoñczony ³añcuch"
+
+#: ../src/proplist.c:247
+msgid "unterminated array"
+msgstr "nie zakoñczona tablica"
+
+#: ../src/proplist.c:256
+msgid "missing , in array or unterminated array"
+msgstr "brakuj±cy, w tablicy lub nie zakoñczonej tablicy"
+
+#: ../src/proplist.c:267
+msgid "could not get array element"
+msgstr "nie mo¿na wzi±æ elementu tablicy"
+
+#: ../src/proplist.c:297
+msgid "unterminated dictionary"
+msgstr "nie zakoñczony s³ownik"
+
+#: ../src/proplist.c:315
+msgid "missing dictionary key"
+msgstr "brakuj±cy klucz s³ownika"
+
+#: ../src/proplist.c:317
+msgid "missing dictionary entry key or unterminated dictionary"
+msgstr "brakuj±cy wpis s³ownika lub nie zakoñczony s³ownik"
+
+#: ../src/proplist.c:323
+msgid "error parsing dictionary key"
+msgstr "b³±d podczas przetwarzania klucza s³ownika"
+
+#: ../src/proplist.c:332
+msgid "missing = in dictionary entry"
+msgstr "brakuj±cy znak = we wpisie s³ownika"
+
+#: ../src/proplist.c:351
+msgid "missing ; in dictionary entry"
+msgstr "brakuj±cy znak ; we wpisie s³ownika"
+
+#: ../src/proplist.c:432
+msgid "was expecting a string, dictionary, data or array."
+msgstr "oczekiwano ³añcucha, s³ownika, danych lub tablicy."
+
+#: ../src/proplist.c:434
+msgid "Comments are not allowed inside WindowMaker owned domain files."
+msgstr "Komentarze nie s± dozwolone we w³asnych plikach domenowych WindowMakera."
+
+#: ../src/proplist.c:453
+msgid "could not open domain file %s"
+msgstr "nie mo¿na otworzyæ pliku domeny %s"
+
+#: ../src/proplist.c:466
+msgid "extra data after end of file"
+msgstr "nadmiarowe dane poza koñcem pliku"
+
+#: ../src/resources.c:71
+msgid "The following character sets are missing in %s:"
+msgstr "Brakuje nastêpuj±cych zbiorów znaków w %s:"
+
+#: ../src/resources.c:76
+msgid "The string \"%s\" will be used in place"
+msgstr "£añcuch \"%s\" zostanie u¿yty w miejscu"
+
+#: ../src/resources.c:78
+msgid "of any characters from those sets."
+msgstr "dowolnego znaku z tych zbiorów."
+
+#: ../src/resources.c:81
+msgid "could not create font set %s. Trying fixed"
+msgstr "nie mo¿na stworzyæ zbioru czcionek %s. Próbujê fixed"
+
+#: ../src/resources.c:98
+msgid "could not load font %s. Trying fixed"
+msgstr "nie mo¿na za³adowaæ czcionki %s. Próbujê fixed"
+
+#: ../src/resources.c:136
+msgid "could not parse color \"%s\""
+msgstr "nie mo¿na przetworzyæ koloru \"%s\""
+
+#: ../src/resources.c:140
+msgid "could not allocate color \"%s\""
+msgstr "nie mo¿na zaalokowaæ koloru \"%s\""
+
+#: ../src/rootmenu.c:162
+msgid "Program \"%s\" not found or cannot be executed."
+msgstr "Nie znaleziono lub nie mo¿na wykonaæ programu \"%s\"."
+
+#: ../src/rootmenu.c:207
+msgid "Exit window manager?"
+msgstr "Czy opu¶ciæ mened¿era okien?"
+
+#: ../src/rootmenu.c:227
+msgid "Close X session"
+msgstr "Zamknij sesjê X"
+
+#: ../src/rootmenu.c:228
+msgid ""
+"Close Window System session?\n"
+"(all applications will be closed)"
+msgstr ""
+"Czy zamkn±æ sesjê X Window System?\n"
+"(wszystkie aplikacje zostan± zamkniête)"
+
+#: ../src/rootmenu.c:230
+msgid "Exiting...\n"
+msgstr "Koniec...\n"
+
+#: ../src/rootmenu.c:449
+msgid "%s:invalid kbd shortcut specification \"%s\" for entry %s"
+msgstr "%s:niew³a¶ciwe okre¶lenie skrótu klawiaturowego \"%s\" dla pozycji %s"
+
+#: ../src/rootmenu.c:457
+msgid "%s:invalid key in shortcut \"%s\" for entry %s"
+msgstr "%s:niew³a¶ciwy klawisz w skrócie \"%s\" dla pozycji %s"
+
+#: ../src/rootmenu.c:510
+msgid "%s: unmatched '\"' in menu file"
+msgstr "%s: nie zakoñczone '\"' w pliku menu"
+
+#: ../src/rootmenu.c:559
+msgid "%s: missing command"
+msgstr "%s: brakuj±ce polecenie"
+
+#: ../src/rootmenu.c:592
+msgid "invalid OPEN_MENU specification: %s"
+msgstr "niew³a¶ciwe okre¶lenie OPEN_MENU: %s"
+
+#: ../src/rootmenu.c:657
+msgid "%s:could not stat menu"
+msgstr "%s:niezrozumia³e menu"
+
+#: ../src/rootmenu.c:665
+msgid "%s:could not stat menu :%s"
+msgstr "%s:niezrozumia³e menu :%s"
+
+#: ../src/rootmenu.c:683
+msgid "too many parameters in OPEN_MENU: %s"
+msgstr "zbyt wiele parametrów w OPEN_MENU: %s"
+
+#: ../src/rootmenu.c:719
+msgid "There are more than one WORKSPACE_MENU commands in the applications menu. Only one is allowed."
+msgstr "Jest wiêcej ni¿ jedno polecenie WORKSPACE_MENU w menu aplikacji. Tylko jedno jest dozwolone."
+
+#: ../src/rootmenu.c:748 ../src/rootmenu.c:766
+msgid "%s:missing parameter for menu command \"%s\""
+msgstr "%s:brakuj±cy parametr w poleceniu menu \"%s\""
+
+#: ../src/rootmenu.c:829
+msgid "%s:unknown command \"%s\" in menu config."
+msgstr "%s:nieznane polecenie \"%s\" w ustawieniach menu."
+
+#: ../src/rootmenu.c:837
+msgid "%s:can't add shortcut for entry \"%s\""
+msgstr "%s:nie mo¿na dodaæ skrótu do pozycji \"%s\""
+
+#: ../src/rootmenu.c:974
+msgid "%s:maximal line size exceeded in menu config: %s"
+msgstr "%s:przekroczono maksymaln± dopuszczaln± d³ugo¶æ linii w ustawieniach menu: %s"
+
+#: ../src/rootmenu.c:996 ../src/rootmenu.c:1088 ../src/rootmenu.c:1189
+msgid "%s:missing command in menu config: %s"
+msgstr "%s:brakujêce polecenie e ustawieniach menu: %s"
+
+#: ../src/rootmenu.c:1026
+msgid "%s:syntax error in menu file:END declaration missing"
+msgstr "%s:b³±d sk³adniowy w pliku menu:brak deklaracji END"
+
+#: ../src/rootmenu.c:1055 ../src/rootmenu.c:1154
+msgid "could not make arguments for menu file preprocessor"
+msgstr "nie mo¿na stworzyæ argumentów do programu przetwarzaj±cego menu"
+
+#: ../src/rootmenu.c:1061 ../src/rootmenu.c:1161
+msgid "%s:could not open/preprocess menu file"
+msgstr "%s:nie mo¿na otworzyæ/przetworzyæ pliku menu"
+
+#: ../src/rootmenu.c:1073 ../src/rootmenu.c:1174
+msgid "%s:could not open menu file"
+msgstr "%s:nie mo¿na otworzyæ pliku menu"
+
+#: ../src/rootmenu.c:1100
+msgid "%s:invalid menu file. MENU command is missing"
+msgstr "%s:niew³a¶ciwy plik menu. Brak polecenia MENU"
+
+#: ../src/rootmenu.c:1109
+msgid "error reading preprocessed menu data"
+msgstr "b³±d podczas czytania przetworzonego menu"
+
+#: ../src/rootmenu.c:1201
+msgid "%s:no title given for the root menu"
+msgstr "%s:g³ówne menu nie ma tytu³u"
+
+#: ../src/rootmenu.c:1255 ../src/rootmenu.c:1318 ../src/rootmenu.c:1362
+msgid "out of memory while constructing directory menu %s"
+msgstr "wyczerpano pamiêæ podczas tworzenia menu katalogu %s"
+
+#: ../src/rootmenu.c:1265
+msgid "%s:could not stat file \"%s\" in menu directory"
+msgstr "%s:nie mo¿na znale¼æ pliku \"%s\" w katalogu menu"
+
+#: ../src/rootmenu.c:1411
+msgid "Commands"
+msgstr "Polecenia"
+
+#: ../src/rootmenu.c:1413
+msgid "Exit..."
+msgstr "Koniec..."
+
+#: ../src/rootmenu.c:1477
+msgid "%s:could not find menu file \"%s\""
+msgstr "%s:nie mo¿na znale¼æ pliku menu \"%s\""
+
+#: ../src/rootmenu.c:1484
+msgid "%s:could not access menu \"%s\""
+msgstr "%s:brak dostêpu do menu \"%s\""
+
+#: ../src/rootmenu.c:1510 ../src/rootmenu.c:1565
+msgid "%s:format error in root menu configuration \"%s\""
+msgstr "%s:b³±d formatowania w ustawieniach menu g³ównego \"%s\""
+
+#: ../src/screen.c:111
+msgid "it seems that there already is a window manager running"
+msgstr "wygl±da na to ¿e ju¿ dzia³a jaki¶ mened¿er okien"
+
+#: ../src/screen.c:394
+msgid "could not load logo image for panels"
+msgstr "nie mo¿na za³adowaæ obrazka z logo dla paneli"
+
+#: ../src/screen.c:397
+msgid "error making logo image for panel:%s"
+msgstr "b³±d podczas tworzenia obrazka logo dla panelu:%s"
+
+#: ../src/screen.c:544
+msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
+msgstr "rozmiar ikony jest ustawiony na %i, lecz jest zbyt ma³y. U¿yto 16\n"
+
+#: ../src/screen.c:587
+msgid "could not initialize graphics library context: %s"
+msgstr "nie mo¿na zainicjalizowaæ graficznego kontekstu biblioteki: %s"
+
+#: ../src/session.c:113 ../src/wdefaults.c:559 ../src/winspector.c:335
+msgid "can't convert \"%s\" to boolean"
+msgstr "nie mo¿na zamieniæ \"%s\" na warto¶æ logiczn±"
+
+#: ../src/stacking.c:88
+msgid "could not get window list!!"
+msgstr "nie mo¿na wzi±æ listy okien!!"
+
+#: ../src/startup.c:163
+msgid "internal X error: %s\n"
+msgstr "wewnêtrzny b³±d X: %s\n"
+
+#: ../src/startup.c:225
+msgid "got signal %i (%s) - restarting\n"
+msgstr "z³apano wygna³ %i (%s) - ponowne uruchamianie\n"
+
+#: ../src/startup.c:227
+msgid "got signal %i - restarting\n"
+msgstr "z³apano sygna³ %i - ponowne uruchamianie\n"
+
+#: ../src/startup.c:240
+msgid "%s: Received signal SIGTERM. Exiting..."
+msgstr "%s: Otrzymano sygna³ SIGTERM. Koñczenie..."
+
+#: ../src/startup.c:251
+msgid "got signal %i (%s)\n"
+msgstr "z³apano sygna³ %i (%s)\n"
+
+#: ../src/startup.c:253
+msgid "got signal %i\n"
+msgstr "z³apano sygna³ %i\n"
+
+#: ../src/startup.c:258
+msgid "crashed while trying to do some post-crash cleanup. Aborting immediatelly."
+msgstr "za³amanie podczas próby uporz±dkowania po za³amaniu. Wyj¶cie awaryjne."
+
+#: ../src/startup.c:267
+msgid "trying to start alternative window manager..."
+msgstr "próbujê wystartowaæ alternatywny mened¿er okien..."
+
+#: ../src/switchmenu.c:124
+msgid "Windows"
+msgstr "Okna"
+
+#: ../src/texture.c:260
+msgid "image file \"%s\" used as texture could not be found."
+msgstr "nie mo¿na znale¼æ pliku z obrazkiem \"%s\" u¿ywanym jako tekstura."
+
+#: ../src/texture.c:266
+msgid "could not load texture pixmap \"%s\":%s"
+msgstr "nie mo¿na za³adowaæ pixmapy z tekstur± \"%s\":%s"
+
+#: ../src/texture.c:362 ../src/texture.c:492
+msgid "could not render texture: %s"
+msgstr "nie mo¿na pokazaæ tekstury: %s"
+
+#: ../src/wdefaults.c:393
+msgid "could not find icon file \"%s\""
+msgstr "nie mo¿na znale¼æ pliku z ikon± \"%s\""
+
+#: ../src/window.c:1931 ../src/window.c:2070
+msgid ""
+"the NumLock, ScrollLock or similar key seems to be turned on.\n"
+"Turn it off or some mouse actions and keyboard shortcuts will not work."
+msgstr ""
+"wygl±da na to, ¿e klawisze NumLock, ScrollLock lub podobne s± w³±czone.\n"
+"Wy³±cz je lub niektóre akcje myszki i klawiatury nie zadzia³aj±."
+
+#: ../src/winmenu.c:182
+msgid "could not create workspace submenu for window menu"
+msgstr "nie mo¿na stworzyæ podmenu pulpitu dla menu okna"
+
+#: ../src/winmenu.c:204
+msgid "(Un)Maximize"
+msgstr "(Nie)Powiêksz"
+
+#: ../src/winmenu.c:212
+msgid "Miniaturize"
+msgstr "Pomniejsz"
+
+#: ../src/winmenu.c:221
+msgid "(Un)Shade"
+msgstr "(Ro)Zwiñ"
+
+#: ../src/winmenu.c:229
+msgid "Hide"
+msgstr "Ukryj"
+
+#: ../src/winmenu.c:236
+msgid "Hide Others"
+msgstr "Ukryj Inne"
+
+#: ../src/winmenu.c:238
+msgid "Select"
+msgstr "Zaznacz"
+
+#: ../src/winmenu.c:246
+msgid "Move To"
+msgstr "Przenie¶ Do"
+
+#: ../src/winmenu.c:251
+msgid "Attributes..."
+msgstr "Atrybuty..."
+
+#: ../src/winmenu.c:253
+msgid "Close"
+msgstr "Zamknij"
+
+#: ../src/winspector.c:274
+msgid "Could not find icon \"%s\" specified for this window"
+msgstr "Nie mo¿na znale¼æ ikony \"%s\" ustawionej dla tego okna"
+
+#: ../src/winspector.c:287
+msgid "Could not open specified icon \"%s\":%s"
+msgstr "Nie mo¿na otworzyæ okre¶lonej ikony \"%s\":%s"
+
+#: ../src/winspector.c:958
+msgid "Save"
+msgstr "Zachowaj"
+
+#: ../src/winspector.c:964
+msgid "Apply"
+msgstr "Zastosuj"
+
+#: ../src/winspector.c:970
+msgid "Revert"
+msgstr "Odwróæ"
+
+#. *** window spec ***
+#: ../src/winspector.c:979 ../src/winspector.c:987
+msgid "Window Specification"
+msgstr "Okre¶lenie Okna"
+
+#: ../src/winspector.c:980
+msgid "Window Attributes"
+msgstr "Atrybuty Okna"
+
+#: ../src/winspector.c:981
+msgid "Advanced Options"
+msgstr "Opcje Zaawansowane"
+
+#: ../src/winspector.c:982
+msgid "Icon and Initial Workspace"
+msgstr "Ikona i Pocz±tkowy Pulpit"
+
+#: ../src/winspector.c:983
+msgid "Application Specific"
+msgstr "W³a¶ciwe dla Aplikacji"
+
+#: ../src/winspector.c:995
+msgid "Defaults for all windows"
+msgstr "Domy¶lne dla wszystkich okien"
+
+#: ../src/winspector.c:1031
+msgid ""
+"The configuration will apply to all\n"
+"windows that have their WM_CLASS property set to the above selected\n"
+"name, when saved."
+msgstr ""
+"Po zachowaniu, konfiguracja zostanie zastosowana do wszystkich\n"
+"okien które maj± w³a¶ciwo¶æ WM_CLASS odpowiedni± do zaznaczonej powy¿ej\n"
+"nazwy."
+
+#: ../src/winspector.c:1038
+msgid "Attributes"
+msgstr "Atrybuty"
+
+#: ../src/winspector.c:1048
+msgid "Disable titlebar"
+msgstr "Wy³±cz pasek tytu³owy"
+
+#: ../src/winspector.c:1052
+msgid "Disable resizebar"
+msgstr "Wy³±cz pasek zmiany rozmiaru"
+
+#: ../src/winspector.c:1056
+msgid "Disable close button"
+msgstr "Wy³±cz przycisk zamkniêcia"
+
+#: ../src/winspector.c:1060
+msgid "Disable miniaturize button"
+msgstr "Wy³±cz przycisk pomniejszenia"
+
+#: ../src/winspector.c:1064
+msgid "Keep on top"
+msgstr "Trzymaj na wierzchu"
+
+#: ../src/winspector.c:1068
+msgid "Omnipresent"
+msgstr "Zawsze widoczny"
+
+#: ../src/winspector.c:1072
+msgid "Start Miniaturized"
+msgstr "Wystartuj Pomniejszony"
+
+#: ../src/winspector.c:1076
+msgid "Skip window list"
+msgstr "Przeskocz w li¶cie okien"
+
+#: ../src/winspector.c:1090
+msgid "Advanced"
+msgstr "Zaawansowane"
+
+#: ../src/winspector.c:1100
+msgid "Ignore HideOthers"
+msgstr "Zignoruj UkryjInne"
+
+#: ../src/winspector.c:1104
+msgid "Don't bind keyboard shortcuts"
+msgstr "Nie stosuj skrótów klawiaturowych"
+
+#: ../src/winspector.c:1108
+msgid "Don't bind mouse clicks"
+msgstr "Nie stosuj klikniêæ mysz±"
+
+#: ../src/winspector.c:1112
+msgid "Keep inside screen"
+msgstr "Trzymaj wewn±trz ekranu"
+
+#: ../src/winspector.c:1116
+msgid "Don't let it take focus"
+msgstr "Nie pozwól byæ aktywnym oknem"
+
+#: ../src/winspector.c:1120
+msgid "Don't Save Session"
+msgstr "Nie Zachowuj Sesji"
+
+#: ../src/winspector.c:1124
+msgid "Emulate Application Icon"
+msgstr "Emuluj Ikonê Aplikacji"
+
+#: ../src/winspector.c:1139
+msgid "Enable the \"Don't bind...\" options to allow the application to receive all mouse or keyboard events."
+msgstr "W³±cz wszystkie opcje typu \"Nie stosuj...\" by pozwoliæ aplikacji na odbiór wszystkich zdarzeñ od myszy i klawiatury."
+
+#: ../src/winspector.c:1146
+msgid "Miniwindow Image"
+msgstr "Obrazek Miniokna"
+
+#: ../src/winspector.c:1164
+msgid "Update"
+msgstr "Odnów"
+
+#: ../src/winspector.c:1169
+msgid "Icon file name:"
+msgstr "Nazwa pliku z ikon±:"
+
+#: ../src/winspector.c:1179
+msgid "Ignore client supplied icon"
+msgstr "Ignoruj ikonê dostarczon± przez klienta"
+
+#: ../src/winspector.c:1185
+msgid "Initial Workspace"
+msgstr "Pocz±tkowy Pulpit"
+
+#: ../src/winspector.c:1191
+msgid "Nowhere in particular"
+msgstr "Nigdzie w szczególno¶ci"
+
+#: ../src/winspector.c:1222
+msgid "Application Wide"
+msgstr "W Ca³ej Aplikacji"
+
+#: ../src/winspector.c:1232
+msgid "Start Hidden"
+msgstr "Wystartuj Ukryty"
+
+#: ../src/winspector.c:1236
+msgid "No application icon"
+msgstr "Brak ikony aplikacji"
+
+#: ../src/workspace.c:89 ../src/workspace.c:90 ../src/workspace.c:390
+msgid "Workspace %i"
+msgstr "Pulpit %i"
+
+#: ../src/workspace.c:439
+msgid "Workspaces"
+msgstr "Pulpity"
+
+#: ../src/workspace.c:441
+msgid "could not create Workspace menu"
+msgstr "nie mo¿na stworzyæ menu Pulpitu"
+
+#: ../src/workspace.c:448
+msgid "New"
+msgstr "Nowy"
+
+#: ../src/workspace.c:449
+msgid "Destroy Last"
+msgstr "Zniszcz Ostatni"
+
+#: ../src/xutil.c:220
+msgid "invalid data in selection"
+msgstr "niew³a¶ciwe dane w zaznaczeniu"

@@ -1,0 +1,191 @@
+/*
+ * WindowMaker için ana menü tanýmlasý
+ *
+ * Yazým kuralý:
+ *
+ * <Baþlýk> [SHORTCUT <Kýsayol>] <Komut> <Parametreler>
+ *
+ * <Baþlýk> herhangi bitr yazýyý içerebilir, boþul içeriyorsa " içinde 
+ * 	yazýlmalý
+ * 
+ * SHORTCUT sözkonusu giriþ için kýsayol tuþu tanýmlamak için kullanýlýr
+ * <Kýsayol>, ~/GNUstep/Defaults/WindowMaker olduðu gibi tanýmlanabilir.
+ *
+ * MENU veya OPEN_MENU için kýsayol tanýmlayamazsýnýz.
+ * 
+ * <Komut> aþaðýdakilerden birisidir
+ *	MENU - (Alt)Menü tanýmýný baþlatýr.
+ *	OPEN_MENU - Menüyü, bir dosya veya dizinden oluþturur
+ *	END  - Alt)Menü tanýmýný bitirir
+ *	WORKSPACE_MENU - Çalýþma alanlarý için altmenüyü ekler
+ *	EXEC <program> - programý çalýþtýrýr
+ *	EXIT - pencere denetçisinden çýkar.
+ *	RESTART [<pencere denetçisi>] - Belirtilen pencere denetçisini
+ *				        yeniden baþlatýr.
+ *	REFRESH - ekraný tazeler
+ *	ARRANGE_ICONS - Ekrandaki simgeleri düzenler
+ *	SHUTDOWN - tüm uygulamalrý kapatýr ve sistemden çýkar
+ *	SHOW_ALL - Tüm pencereleri saklý hallerinden çýkarýr
+ *	HIDE_OTHERS - içinde bulunulan dýþýndaki tüm pencereleri saklar
+ *	SAVE_SESSION - mevcut uygulamalarý ve pencere konumlarýný saklar, 
+ *		       yeniden baþladýðýnda bu konumlarý korumaya çalýþýr.
+ *	CLEAR_SESSION - son saklanan bilgileri siler. 
+ *
+ * OPEN_MENU yazým kurallarý:
+ *   1. Dosyadan
+ *	// dosya.menu isimli geçerli dosya tanýmý içeren dosyayý alýp 
+ *	// belirtilen konuma ekler
+ *	OPEN_MENU dosya.menu
+ *
+ *   2. Komut sonucundan 
+ *	// "komut"u çalýþtýrý ve çýktýsýný möenü olarak kullanýr. 
+ *	// Komutun çýktýsý geçerli bir menü tanýmý vermeli
+ *	OPEN_MENU | komut
+ *  
+ *   3. Dizinden
+ *	// Bir veya daha fazla dizin içinde yer alan çalýþtýrýlabilir
+ *	// dosyalarý alfabetik olarak sýralayarak menü oluþturur
+ *	OPEN_MENU /bir/dizin [/bir/baþka/dizin ...]
+ *
+ *   4. Dizinden komutla
+ *	// Dizin seçeneði gibi, ancak dizindeki dosyalarý "komut" 
+ *	// ile çalýþtýrýr
+ *
+ *	OPEN_MENU /bir/dizin [/bir/baþka/dizin ...] WITH komut -seçenekler
+ *
+ *
+ * <Parametreler> çalýþtýrýlacak yazýlýmýn parametreleri
+ *
+ * ** EXEC komut satýrý seçenekleri:
+ * %s - mevcut seçimi koyar.
+ * %a(mesaj) - bir mesaj baþlýðý ile bir kutucuk açarak yazýlan bilgileri 
+ *             komuta parametre olarak gönderir
+ * %w - seçili pencerenin XID'sini verir.
+ *
+ * Özel karakterleri (% ve " gibi) \ yardýmý ile kullanabilirsiniz:
+ * örnek: xterm -T "\"Hello World\""
+ *
+ * \n gibi komutlarý da kullanabilirsiniz.
+ *
+ * Her MENU tanýmý bir END tanýmý içermelidir.
+ *
+ * Örnek:
+ *
+ * "Test" MENU
+ *	"XTerm" EXEC xterm
+ *		//  /usr/openwin/bin'in içeriði ile bir menü yaratýr
+ *	"XView apps" OPEN_MENU "/usr/openwin/bin"
+ *		// deðiþik dizinlerde yer alan uygulamalrla bir menü yaratýr
+ *	"X11 apps" OPEN_MENU /usr/X11/bin ~/bin/X11
+ *		// bazý arkaplan görüntülerini ekler
+ *	"Background" OPEN_MENU ~/images /usr/share/images WITH wmsetbg -u -t
+ *		// style.menu menüsünü ekler.
+ *	"Style" OPEN_MENU style.menu
+ * "Test" END
+ */
+
+#include "wmmacros"
+
+"Ana Menü" MENU
+	"Bilgi" MENU
+		"Copyright..." EXEC xmessage -center -font variable -title \
+	'WindowMaker 'WM_VERSION -file $HOME/GNUstep/Library/WindowMaker/Copyright
+		"Sistem Konsolu" EXEC xconsole
+		"Sistem Yükü" EXEC xosview || xload
+		"Süreç Dökümü" EXEC xterm -e top
+		"Kýlavuz Tarayýcýsý" EXEC xman
+	"Bilgi" END
+	"XTerm" EXEC xterm -sb 
+	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
+	"Çalýþma Alanlarý" WORKSPACE_MENU
+	"Uygulamalar" MENU
+		"Görüntü" MENU
+			"Gimp" EXEC gimp >/dev/null
+			"XV" EXEC xv
+			"XPaint" EXEC xpaint
+			"XFig" EXEC xfig
+		"Graphics" END
+		"X File Manager" EXEC xfm
+		"OffiX Files" EXEC files
+		"LyX" EXEC lyx
+		"Netscape" EXEC netscape 
+  		"Ghostview" EXEC ghostview %a(PS dosyasýný girin)
+		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(PDF dosyasýný girin)
+  		"TkDesk" EXEC tkdesk
+	"Uygulamalar" END
+	"Düzenleyiciler" MENU
+		"XFte" EXEC xfte
+		"XEmacs" EXEC xemacs || emacs
+		"XJed" EXEC xjed 
+		"NEdit" EXEC nedit
+		"Xedit" EXEC xedit
+		"VI" EXEC xterm -e vi
+	"Düzenleyiciler" END
+	"Çeþitli" MENU
+		"Xmcd" EXEC xmcd 2> /dev/null
+		"Xplaycd" EXEC xplaycd
+		"Xmixer" EXEC xmixer
+	"Çeþitli" END
+	"Yardýmcýlar" MENU
+		"Hesap Makinasý" EXEC xcalc
+		"Pencere Özellikleri" EXEC xprop | xmessage -center -title 'xprop' -file -
+		"Yazý tipi Tarayýcýsý" EXEC xfontsel
+		"Terminal Öykümcüsü" EXEC xminicom
+		"Büyüteç" EXEC xmag
+		"Renk Tablosu" EXEC xcmap
+		"XKill" EXEC xkill
+		"ASClock" EXEC asclock -shape
+		"Clipboard" EXEC xclipboard
+	"Yardýmcýlar" END
+
+	"Seçim" MENU
+		"Kopyala" EXEC echo '%s' | wxcopy
+		"Mail ile gönder" EXEC xterm -name mail -T "Pine" -e pine %s
+		"Að'da tara" EXEC netscape %s
+		"Kýlavuzda ara" EXEC MANUAL_SEARCH(%s)
+	"Seçim" END
+
+	"Çalýþma Alaný" MENU
+		"Diðerlerini Sakla" HIDE_OTHERS
+		"Hepsini Göster" SHOW_ALL
+		"Simgeleri Dðzenle" ARRANGE_ICONS
+		"Tazele" REFRESH
+		"Kilitle" EXEC xlock -allowroot -usefirst
+		"Oturumu Sakla" SAVE_SESSION
+		"Saklanmýþ Oturumu Sil" CLEAR_SESSION
+	"Çalýþma Alaný" END
+
+	"Görünüm" MENU
+		"Temalar" OPEN_MENU THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Tarzlar" OPEN_MENU STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Simge Kümeleri" OPEN_MENU ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Arkaplan" MENU
+			"Düz Renk" MENU
+                        	"Black" WS_BACK '(solid, black)'
+                        	"Blue"  WS_BACK '(solid, "#505075")'
+				"Indigo" WS_BACK '(solid, "#243e6c")'
+				"Deep Blue" WS_BACK '(solid, "#180090")'
+                        	"Purple" WS_BACK '(solid, "#554466")'
+                        	"Wheat"  WS_BACK '(solid, "wheat4")'
+                        	"Dark Gray"  WS_BACK '(solid, "#333340")'
+                        	"Wine" WS_BACK '(solid, "#400020")'
+			"Düz Renk" END
+			"Renk Geçiþi" MENU
+				"Flag" WS_BACK '(mdgradient, green, red, white, green)'
+				"Sky" WS_BACK '(vgradient, blue4, white)'
+			"Renk Geçiþi" END
+			"Görüntüler" OPEN_MENU BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+		"Arkaplan" END
+		"Tema Sakla" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
+		"Simge Kümesi Sakla" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
+	"Görünüm" END
+
+	"Çýkýþ"	MENU
+		"Yeniden Baþlat" RESTART
+		"AfterStep Baþlat" RESTART afterstep
+		"Çýkýþ..."  EXIT
+		"Oturumu Kapat..." SHUTDOWN
+	"Çýkýþ" END
+"Ana Menü" END
+
+

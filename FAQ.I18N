@@ -1,0 +1,51 @@
+
+If I18N support does not work for you, check these:
+
+	- the LANG environment variable is set to your locale, and 
+	  the locale is supported by your OS's locale or X's locale
+	  emulation. you can display all supported locales by 
+	  executing "locale -a" command if it available. and you
+	  can check if your locale is supported by X's locale emulation.
+	  See "/usr/X11R6/lib/X11/locale/locale.alias"
+
+	- if your OS doesn't support any locale or if your OS doesn't 
+ 	  support a locale for your language, you can use X Window System's
+	  locale emulation feature instead of OS's locale. To use this
+	  feature, add this option to the configure, "--with-x-locale".
+	  if your OS is commercial one, such as Solaris,IRIX,AIX,...,
+	  you perhaps don't have to use X's locale emulation.
+	  But if your OS is Linux or NetBSD or .. , it's possible
+	  your locale is not supported so far. then use "--with-x-locale".
+
+	  Note: to use X's locale emulation, your Xlib has to be
+	        compiled so that the locale emulation is enabled.
+	        Linux RedHat5.0's default Xlib is not compiled 
+		like that. (RH4.x are ok). Recompiled Xlib for
+		RH5.0 where you can use locale emulation is available
+		here:
+		ftp://ftp.linux.or.jp/pub/RPM/glibc
+
+	- if you'd like to display multibyte characters, wmaker have to
+	  be compiled with multibyte character support. Add this option
+	  to the configure, "--enable-kanji".
+
+	- the fonts you're using support your locale. if your font
+	  setting on $HOME/GNUstep/Defaults/WindowMaker is like..
+
+	  WindowTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
+	  MenuTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
+	  ......................................................
+
+	  then you can't display non iso8859-x charcters by helvetica. 
+	  so quick way to display various languages' font is to change
+	  all the font settings into:
+	  
+		"-*-*-medium-r-normal-*-14-*-*-*-*-*-*-*"
+
+	  and also you need to change font settings in style files in
+	  the "$HOME/Library/WindowMaker/Style" directory.
+
+	- the LC_CTYPE environment variable is unset or it has the correct
+          value. If you don't know what is the correct value, unset it.
+
+

@@ -1,0 +1,32 @@
+{
+  Logo.WMDock = {Icon = GNUstep3D.tiff;};
+  Logo.WMPanel = {Icon = GNUstep3D.tiff;};
+  Logo.WMClip = {Icon = clip.tiff;};
+  Dockit = {Icon = GNUstep3D.tiff;};
+  WMSoundServer = {Icon = Sound.tiff;};
+  XTerm = {Icon = GNUterm.tiff;};
+  NXTerm = {Icon = GNUterm.tiff;};
+  xcalc = {AlwaysUserIcon = Yes;Icon = "HP-16C-48.xpm";};
+  Netscape = {Icon = Netscape.xpm;};
+  Emacs = {Icon = ColorGNU.xpm;};
+  Ghostview = {Icon = Ghost.xpm;};
+  AcroRead = {AlwaysUserIcon = Yes;Icon = PDF.xpm;};
+  Gimp = {AlwaysUserIcon = Yes;Icon = paint.xpm;};
+  xv = {AlwaysUserIcon = Yes;Icon = xv.xpm;};
+  lyX.XForm = {AlwaysUserIcon = Yes;Icon = WordEditor.xpm;};
+  XPaint = {AlwaysUserIcon = Yes;Icon = Paint.xpm;};
+  Fig = {AlwaysUserIcon = Yes;Icon = Draw.xpm;};
+  XLess = {AlwaysUserIcon = YES;Icon = Reference.xpm;};
+  manualBrowser.Xman = {AlwaysUserIcon = Yes;Icon = Book.xpm;};
+  Xman = {AlwaysUserIcon = Yes;Icon = Bookshelf.xpm;};
+  Stepman = {Icon = Bookshelf.xpm;};
+  Xmag = {Icon = inspect.xpm;};
+  Xmessage = {Icon = Reference.xpm;};
+  XConsole = {Icon = inspect.xpm;Omnipresent = Yes;};
+  Fte = {Icon = Clipboard.xpm;};
+  xjed = {Icon = Clipboard.xpm;};
+  xedit = {Icon = Pencils.24.xpm;};
+  xmcd = {Icon = Radio.xpm;};
+  xplaycd = {Icon = Radio.xpm;};
+  "*" = {Icon = defaultAppIcon.tiff;};
+}

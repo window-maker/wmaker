@@ -1,0 +1,50 @@
+
+Do ASAP:
+========
+- fix bestvisual selection code. Broken.
+- add a dialog to let user choose if we should restart, restart twm or continue crashing on crash. Do not forget to check if wmaker is already fully running.
+- fix stacking. buggy again
++ ICCCM compliant stuff: find what is missing
+- WM_COLORMAP_NOTIFY clientmessage
+- fix RemakeStackList() to account for transient windows
+- change CommitStacking() on AddToStackingList() to more optimized thing
+- differential update of appmenu
+- make unhide app map windows in the same stacking order they were before
+hiding
+
+Need to do:
+===========
+- rewrite all redundant stuff to use WINGs
+- resizebartexture option
+- add function to directly make a thumbnail of an image, using the
+  functionality provided by the image libraries to load a minimal
+  amount of data.
+- clickonclientarearaisewindow
+- edge resistance (with timer)
+- save client supplied icons in ~/GNUstep/.AppInfo/ClientIcons/ and
+  use them by default
+- GNUstepWMAttributes update in propertynotify
++ investigate memory leaks 
+- make Docked apps with WM_CLIENT_MACHINE be launched from respective
+	machines (also put a marking showing it's remote launched)
+- handle change of CLIENT_LEADER property
+- rewrite defaults/wdefaults stuff to use WINGs UD stuff. Search list:
+  ~/G/D/WindowMaker /u/l/s/W/D/WindowMaker built-in-defaults
+- remake internal string processing to use wc?
+- -statefile cmd arg to specify path for WMState file (multiple instance
+	support)
+
+Maybe some day:
+===============
+- virtual desktop
+- optimize for size
+- make dithering in 8bpp better
+
+Never: (so, dont even bother to ask)
+======
+- different themes for each workspace. Unless you give us a SGI/Power Onyx
+with 2 CPUs ;). Different workspacebacks for each workspace is being
+considered, but don't hold your breath.
+- anything that requires the mouse pointer to be jumped by WindowMaker to
+somewhere. This is *terrible* behaviour. And it's not just IMO.
+

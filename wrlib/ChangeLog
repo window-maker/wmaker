@@ -1,0 +1,7 @@
+- added RMakeCenteredImage()
+
+- Added code to draw pixels and lines. Both writing absolute values, or
+  offseting existing pixels with delta values are supported.
+- Remade the beveling code to be simpler, using the RAlterLine() functions.
+- Fixed some pixels in the bevels.
+- Changed RAlter* functions to more generic ROperate*

@@ -1,0 +1,20 @@
+{
+FTitleColor = "white";
+PTitleColor = "white";
+UTitleColor = "black";
+MenuTitleColor = "white";
+MenuDisabledColor = "gray40";
+MenuTextColor = "black";
+MenuTextBack = (solid, "rgb:aa/aa/aa");
+FTitleBack = (solid, black);
+UTitleBack = (solid, "rgb:aa/aa/aa");
+PTitleBack = (solid, gray40);
+MenuTitleBack = (solid, black);
+MenuTextBack = (solid, "rgb:aa/aa/aa");
+HighlightColor = white;
+HighlightTextColor = black;
+TitleJustify = center;
+ClipTitleColor = white;
+CClipTitleColor = gray20;
+IconBack = (dgradient, "rgb:a6/a6/b6", "rgb:51/55/61");
+}

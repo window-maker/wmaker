@@ -1,0 +1,102 @@
+Translated Message Catalog Files
+================================
+
+File	Language	Note	Current Maintainer
+------------------------------------------------------------------------------
+ja.po	Japanese	1	ABE Shige <sabe@ibm.net>
+				MANOME Tomonori <manome@itlb.te.noda.sut.ac.jp> 
+pt.po	Portuguese		Alfredo K. Kojima <kojima@inf.ufrgs.br>
+de.po	German			Carsten Schaar 
+					<nhadcasc@fs-maphy.uni-hannover.de>
+es.po	Spanish			Raul Benito Garcia <raul@fi.upm.es>
+ko.po	Korean		1,2	Byeong-Chan, Kim <redhands@linux.sarang.net>
+se.po	Swedish			John Forgoil <forgoil@rsn.hk-r.se>
+cs.po	Czech		3	David ©auer <xsauer@hwlab.felk.cvut.cz>
+no.po	Norwegian		Marcus Ramberg <draven@mo.himolde.no>
+nl.po	Dutch			Roeland Mertens <roeland@zeus.rug.ac.be>
+gl.po	Galician		Xose Vazquez <xose@arrakis.es>
+fr.po	French			Bastien NOCERA <hadess@writeme.com>
+				Jean-Francois BIGNOLLES <bignolle@grif.fr>
+it.po	Italian			Roberto Checozzo <croberto@aerre.it>
+ru.po	Russian			Alexey Vyskubov <alexey@alv.stud.pu.ru>
+  				Michael Sobolev <mss@transas.com>
+tr.po	Turkish  	        F. Kagan Gurkaynak <kgf@wpi.edu>
+fi.po	Finnish			Ville Hautamaki <villeh@cs.joensuu.fi>
+				Ramin Miraftabi <ramin@cs.joensuu.fi>
+hr.po	Croatian	3	Toni Bilic <tbilic@efos.hr>
+el.po	Greek			Nikolaos Papagrigoriou <papanikos@usa.net>
+pl.po	Pollish			Piotr Dembiñski <hector@kki.net.pl>
+ro.po	Romanian		Andrei Vuta <gigi_man@manag.pub.ro>
+
+
+Some translations are based on previous translations by other people.
+The history of translations can be found in the po files.
+
+Notes
+-----
+1. Multibyte character support must be enabled in WindowMaker. 
+
+2. WindowMaker must also be started from a terminal program that can
+display the messages in that language, like xterm that supports Korean
+characters.
+
+3. Uses iso8859-2 character set.
+
+
+
+If you want to translate WindowMaker messages to some other language:
+1 - type make WindowMaker.pot 
+2 - translate WindowMaker.pot like:
+
+msgid "%s aborted.\n"
+msgstr "%s abortado.\n"
+
+where msgid is the original message and msgstr is the translated
+message. PLEASE DO NOT TOUCH THE msgid LINES.
+
+The info pages for gettext has more detailed information on how to
+do translations. 
+
+3 - (maintainer only) put the locale name in configure.in, in the list of
+    supported locales
+
+Then rename the WindowMake.pot file to the language code 
+with a .po extension, reconfigure WindowMaker and run
+make install.
+
+To update an already translated message file use the tupdate command. As in:
+tupdate WindowMaker.pot pt.po > pt.po.new
+
+
+Notes: 
+- if you think an error message is too obscure just ask me about it.
+- you don't need to translate every single word. Some words/expressions are
+	easier to understand in the original English form than in our 
+	native languages. 
+- some strings used in dialog panels and other GUI parts are limited by
+the size of the widget. Unfortunately, the only way to verify that is by 
+trial and error. 
+- you can use characters other than standard ASCII, if needed. Keep in mind 
+that if error messages that are output to stdout (instead of in a GUI dialog)
+is translated using some character set different than ASCII, it will require
+that the terminal from where wmaker is launched be able to display such 
+characters. For example, if you translate _all_ messages to greek, you'll 
+need to run wmaker from a xterm that can display greek.
+- if you update a translation of someone else, please contact the current
+maintainer, so that we don't have duplicate work. Also put a "history" log in
+the top of the file, like:
+#
+#  Portuguese Message Catalog
+#
+#  Version	Maintainer
+#  Original	Joe Shmoe
+#  0.17.5	Joao da Silva
+#
+
+You may also want to translate the menu definition file.
+Send me the translated files to me, so that I can include them
+in the next distribution.
+
+--
+Alfredo Kojima <kojima@inf.ufrgs.br>
+

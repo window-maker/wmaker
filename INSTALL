@@ -1,0 +1,455 @@
+
+Installation Instructions for WindowMaker
+
+
+
+SUPPORTED PLATFORMS
+===================
+(ie: I've heard someone has compiled it on...)
+
+- Intel/Linux RedHat 4.2 (primary platform)
+- Intel/Linux other distributions
+- Sparc/Linux RedHat 5.1
+- PowerPC/MkLinux
+- Alpha/Linux RedHat 5.1
+- FreeBSD
+- Solaris 2.5.1, 2.5.2
+- Solaris 2.6.0
+- Solaris 2.7beta
+- SCO Unix
+- SGI Irix
+- OSF/1
+- HP-UX
+- AIX 4.1.4 / IBM PowerPC
+- DEC Alpha/Digital UNIX 4.x
+- XFree86 / OS/2
+
+Patches to make it work on other platforms are welcome.
+
+
+REQUIREMENTS:
+=============
+
+The following software is required to use WindowMaker
+
+- X11R6.x	
+	WindowMaker can be compiled in older versions of X, like X11R5
+	(Solaris) or X11R4 (OpenWindows) but it will not work 100% correctly.
+	In such servers there will not be application icons and you'll have
+	trouble using the dock.
+
+
+If you will build WindowMaker, make sure you have gcc and the X header files
+installed. Specially for newbie Linux users: you must install all X development
+packages and the gcc suite. Otherwise you won't be able to build any X program,
+including WindowMaker.
+
+
+OPTIONAL:
+=========
+
+These libraries are not required to make WindowMaker work, but they
+are supported in case you want to use them. Version numbers are those
+that I have (and therefore, guraranteed to work), but other versions
+might work too. Tell me if you made wmaker work with some library
+with a version older than the stated here.
+
+
+- libXPM 4.7 
+	Older versions may not work!!! 
+	Available at ftp://sunsite.unc.edu/pub/Linux/libs/X/
+
+	There is builtin support for XPM files, but it will not
+	load images in some uncommon encodings.
+
+- libpng 0.96 or newer and zlib     
+	For PNG image support.
+
+- libtiff 3.4 or newer
+	For TIFF image support.
+	You can get it at ftp://ftp.sgi.com/graphics/tiff
+
+- libjpeg 6.0.1
+	For JPEG image support
+
+- libgif 2.2 or libungif
+	For GIF image support	
+
+- GNU xgettext
+	If you want to use translated messages, you will need GNU gettext.
+	Other versions of gettext are not compatible and will not work.
+	Get the GNU version from ftp://prep.ai.mit.edu
+
+Most of these can be get from ftp.uu.net/pub/graphics
+
+
+CONFIGURE OPTIONS:
+==================
+
+These options can be passed to the configure script to enable/disable
+some WindowMaker features. Example:
+
+./configure --enable-kanji
+
+will configure WindowMaker with kanji characters support compiled in.
+
+
+--disable-xpm   disables use of the XPM library even if it is available on
+	your system. 
+
+--disable-png	disables use of PNG library
+
+--disable-tiff 	disable use of TIFF library
+
+--disable-gif 	disable use of GIF library
+
+--disable-jpeg 	disable use of JPEG library
+
+--disable-shape  disables shaped windows (for oclock, xeyes etc.)
+
+--enable-debug	adds extra debugging information. Do not use it
+	unless you're debugging WindowMaker.
+	
+--enable-kanji	support to display Kanji characters, Korean, Chinese 
+		and other languagues that require special characters.
+
+--enable-single-icon  enables the collapsing of all appicons of the
+	 WM_CLASS+WM_INSTANCE into a single one. This feature is not 
+	supported at all by the developers. If you have some trouble with it,
+	contact it's author: Christopher Seawood <cls@seawood.org>
+
+
+PLATFORM SPECIFIC NOTES:
+========================
+- SCO Unix - run configure like
+	CFLAGS="-belf -DANSICPP" ./configure 
+
+- SunOS, Solaris 
+	If you have gcc installed, after running configure, edit
+	src/config.h and change the #define CPP_PATH line to
+	#define CPP_PATH "gcc -E -x c"
+	Sun's cpp lacks some features needed by WindowMaker and it can
+	cause problems when parsing the config files.
+
+- RedHat Linux
+	Make sure you don't have the LANG and LINGUAS environment variables
+	set to en_RN. Also, make sure you have /usr/local/bin in your
+	PATH environment variable, as for some mysterious reason the folks
+	at RedHat did not include it in the default configuration files
+	in RH 5.{0,1}.
+
+- PowerPC MkLinux
+	You will need to have the latest version of Xpmac. Older versions
+	seem to have bugs that cause the system to hang.
+
+- Debian Linux
+	If you want JPEG and TIFF support, make sure you have libtiff-dev 
+	and libjpeg-dev	installed.
+	
+- MetroX (unknown version)
+	MetroX has a bug that corrupts pixmaps that are set as window
+	backgrounds. If you use MetroX and has weird problems with
+	textures, do not use textures in titlebars. Or use a different
+	X server.
+
+
+INSTALLATION:
+=============
+
+Unpack WindowMaker-data.tar.gz and move the pixmaps directory in it
+to /usr/local/share/pixmaps
+
+You can get the file at ftp://ftp.windowmaker.org. This file is not strictly
+necessary, but contains some additional nice icons and other things.
+
+
+autoconf and automake
+---------------------
+
+autoconf and automake are not required, but if you have them installed,
+make sure you have autoconf 2.12 and automake 1.3 or newer. If you have
+an older version, disable them by temporarily renaming them to something 
+else or uninstalling them from your system. 
+
+
+Build libPropList
+-----------------
+
+Note: You only need to build libPropList if you don't have it installed 
+in your system.
+
+libPropList is included with the distribution, so you don't
+need to download it anywhere (some people have asked me this...)
+But if you already have libPropList installed on you system you
+can skip this step, since configure will detect that and use the
+installed version first if available.
+
+To build libPropList, simply type the following at the shell prompt:
+
+	gunzip -c libPropList.tar.gz | tar xf -
+	cd libPropList
+	./configure
+	make
+
+then, login as root and type:
+	
+	make install
+
+
+Build WindowMaker
+-----------------
+	If this is the first time you're building WindowMaker, you can
+simply type:
+
+	./configure
+	make
+
+then, login as root and type:
+
+	make install
+
+or if you want to strip the binaries from debugging symbols and make them
+smaller, you can instead type:
+
+	make install-strip
+
+This will build and install WindowMaker with default parameters.
+
+If you want to customize some compile-time options, you can do the
+following. 
+
+	1. (optional) Look at the CONFIGURE OPTIONS section above for the 
+	options available. Also run:
+ 
+	./configure --help
+
+	to get a complete listing of other options that are available.
+
+	Note that the WPrefs.app installation path is configured
+	in a different way. Look at WPrefs/README for information.
+
+	2. Run configure with the options you want. For example, if you
+	want to use the --enable-kanji option, type:
+
+	./configure --enable-kanji
+
+	3. (optional) Edit src/wconfig.h with your favorite text editor 
+	and browse through it for some options you might want to change.
+
+	4. Compile WindowMaker. Just type:
+
+	make
+
+	5. Login as root (if you can't do that, read the "I don't have the 
+	root password :-(" section) and install WindowMaker in your system. 
+	Again, type:
+		su root
+		make install
+
+User specific configuration
+---------------------------
+
+These instructions do not need to be followed when upgrading WindowMaker
+from an older version, unless stated differently in the NEWS file.
+
+Every user on your system that wishes to run WindowMaker must do the
+following:
+
+	1. Install WindowMaker configuration files in your home directory.
+Type:
+	wmaker.inst
+
+	wmaker.inst will install WindowMaker configuration files and will
+setup X to automatically launch WindowMaker at startup.
+
+	That's it! The configuration file where you can edit your preferences
+is $HOME/GNUstep/Defaults/WindowMaker. 
+	The $HOME/GNUstep/Defaults/WMWindowAttributes file is where you assign
+icons to applications and edit some other attributes for windows. This can
+be also edited from the "Attributes Panel". To access it, click the titlebar
+of the window with the Right mouse button and select "Attributes...".
+
+	The $HOME/GNUstep/Library/WindowMaker/menu file is the definition of 
+the root menu. Edit it according to the applications you have installed.
+
+Read the User Guide for a more in depth explanation of WindowMaker.
+The User Guide is avaiable at http://windowmaker.org
+
+You might want to take a look at the FAQ too.
+
+
+I don't have the root password :(
+---------------------------------
+
+If you can't get superuser privileges (can't be root) you can install
+wmaker in your own home directory. For that, supply the --prefix option
+when running configure in step 2 of building WindowMaker . Example:
+
+./configure --prefix=/home/jshmoe
+
+If you use national language support, you must also supply the --with-nlsdir
+option, as:
+
+./configure --prefix=/home/jshmoe --with-nlsdir=/home/jshmoe/lib/locale
+
+Then make /home/jshmoe/bin be included in your search path and run 
+bin/wmaker.inst
+
+
+UPGRADING
+=========
+
+If you are upgrading from an older version of WindowMaker:
+
+	1. Configure and build WindowMaker as always
+	2. Install WindowMaker (but do not run wmaker.inst)
+	3. Read the NEWS file and update your configuration files, 
+	   if necessary.
+
+TROUBLESHOOTING
+===============
+
+When you have some trouble during configuration (while running configure),
+like not being able to use a graphic format library you think you have
+installed, look at the config.log file for clues of the problem.
+
+
+== When I try to start X after installing wmaker, I get this:
+exec: wmaker: not found
+
+You probably are using a brain-damaged distribution. Add /usr/local/bin
+into your path environment variable (editing .cshrc or .profile)
+
+== Error during build of libPropList
+
+make: *** No rule to make target `libPropList.a.c', needed by 
+`libPropList.a.o'.  Stop.
+
+Make sure the autoconf and automake versions you have installed are at
+least:
+autoconf 2.12
+automake 1.3
+
+If you are using the RPM's that come with RedHat 4.x, don't use them.
+It is broken. Uninstall the RPM and reinstall a fresh package from
+
+You can get them from ftp://prep.ai.mit.edu or any mirror.
+
+== configure doesn't detect libtiff, or other graphic libraries.
+
+Delete config.cache, then rerun configure adding the following options to
+configure (among the other options you use):
+--with-gfx-libs="-L/usr/local/lib"
+--with-gfx-incs="-I/usr/local/include -I/usr/local/include/tiff"
+Put the paths where your graphic libs and their corresponding header files are
+located. You can put multiple paths in any of these options, as the example
+of --with-gfx-incs shows. Just put a space between them.
+
+
+== configure doesn't detect libXpm. 
+
+* Check if you have a symbolic link from libXpm.so.4.9 to libXpm.so
+
+
+== Segmentation fault on startup
+
+* Check if the version of libXPM you have is at least 4.7
+
+* Check if you have an updated version of ~/GNUstep/Defaults/WindowMaker
+
+If you're not sure, try renaming ~/GNUstep to ~/GNUtmp and then run wmaker.inst
+
+== "...: your machine is misconfigured. gethostname() returned (none)"
+
+* the hostname of your machine is set to something invalid, that starts
+	with a parenthesis. Do a man hostname for info about how to set it.
+
+
+== The root menu contains only 2 entries. ("XTerm" and "Exit...")
+
+* WindowMaker is not finding cpp (the C preprocessor). If your cpp is
+not located in /lib/cpp, edit src/config.h and correct the path in
+CPP_PATH.
+
+
+LOCALES/INTERNATIONALIZATION
+============================
+
+WindowMaker has national language support. 
+To enable national language support, you must compile
+WindowMaker with some additional parameters. 
+
+0 - You must have the GNU gettext package installed. It can be
+obtained at ftp://prep.ai.mit.edu/pub/gnu/gettext-nnn.tar.gz
+
+Steps 1 to 3 can be skipped if you use the Install script.
+
+1 - You have to select the languages you want to support. Set the
+LINGUAS to the list of locales you want. English is always
+suported. Example:
+
+setenv LINGUAS "pt ja de"
+in csh
+
+or
+
+export LINGUAS;LINGUAS="pt ja de"
+in sh
+
+The list of supported locales can be found in po/README.
+English is the default language.
+
+Read po/README if you wish to translate and maintain locale files 
+for other languages.
+
+2 - Additionally, if your language uses multi-byte characters, such
+as Japanese or Korean, you must supply the --enable-kanji flag to configure.
+
+3 - Configure, build and install WindowMaker normally.
+
+4 - To select a particular locale at runtime you must set the LANG
+environment variable to the locale you want. For example, if you want to set
+the portuguese locale, you must run
+
+setenv LANG pt
+
+in csh or
+
+export LANG; LANG=pt
+
+in Bourne sh and similars
+
+Note: If you have the LC_CTYPE environment variable set, you must
+unset it before running wmaker.
+
+For menu definition files, WindowMaker searches for them in the
+following order (for brazilian portuguese, in this case):
+
+menu.pt_BR
+menu.pt
+menu
+
+
+5 - If you chose a language that uses multi-byte characters, you must
+configure the fonts appropriately. Read the manual page for XCreateFontSet
+to have more details about it. You must change the ~/G/D/WindowMaker file
+for fonts used in titlebars, menus and other things. For fonts used in
+dialog windows, change ~/G/D/WMGLOBAL. Note that at the moment you can only
+supply a single font in WMGLOBAL. The %d in the font names must not be
+removed.
+
+For example, you can specify the following in ~/G/D/WindowMaker:
+
+WindowTitleFont = "-*-helvetica-bold-r-normal-*-12-*,-*-*-medium-r-normal-*-14-*";
+MenuTitleFont = "-*-helvetica-bold-r-normal-*-12-*,-*-*-medium-r-normal-*-14-*";
+MenuTextFont = "-*-helvetica-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-14-*";
+IconTitleFont = "-*-helvetica-medium-r-normal-*-8-*,-*-*-medium-r-normal-*-12-*";
+ClipTitleFont = "-*-helvetica-bold-r-normal-*-10-*,-*-*-medium-r-normal-*-12-*";
+DisplayFont = "-*-helvetica-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-12-*";
+
+and in ~/G/D/WMGLOBAL:
+
+SystemFont = "-*-*-medium-r-normal-*-%d-*-*-*-*-*-*-*";
+BoldSystemFont = "-*-*-medium-r-normal-*-%d-*-*-*-*-*-*-*";
+
+

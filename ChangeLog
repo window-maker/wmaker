@@ -1,0 +1,1224 @@
+Changes since version 0.20.0:
+.............................
+
+- fixed cpixmap to use the specified color for background around the image.
+- fixed compiling problem in wrlib.
+- fixed bug with bad shortcut names in menus.
+- fixed some compiling compatibilities.
+- added a new theme, named BlueWaves.
+
+
+Changes since version 0.19.3:
+.............................
+
+- fixed crash when closing windows in autoraise
+- fixed a memory leak 
+- fixed a crash when closing Lotus Notes
+- rewrote colormap code
+- incomplete multihead support
+- optimized wrlib dithering code
+- new superfluous animation
+- fixed cpixmap bug
+- fixed sound bugs
+- fixed miniaturization bug
+- added script to be called when wmaker exits
+- fixed GNUSTEP_WM_ATTR writing/reading
+- added quick and dirty selection pasting in text fields
+- fixed animation to be displayed again when unhiding an application.
+- made the miniaturize animation a runtime option. See NEWS.
+- fixed bug with reassigning keyboard shortcuts after they are changed.
+- added edge resistance. See NEWS.
+- fixed bug with long names when renaming workspaces.
+- fixed clip's balloon to not overlap the clip's buttons.
+- fixed bad update of clip's workspace menu after workspace name change.
+- fixed bug with cpixmap in wmsetbg.
+- fixed a memory allocation problem in wrlib.
+- AIX bug compatibility in XmbTextEntents()
+- fixed jpeg loading bug
+
+
+Changes since version 0.19.2:
+.............................
+
+- fixed visual problem when mapping internal panels
+- better looking bevels for solid textures
+- centered pixmap texture (cpixmap)
+- added compile-time selectable animations for miniaturization
+- fixed bug with moveto workspace, omnipresent and miniaturize
+- fixed doubleclick bug
+- added GIF file support (through libgif)
+- implemented close color allocation in WINGs
+- fixed bug with visuals different than default
+- finished balloons
+
+Changes since version 0.19.1:
+.............................
+
+- clip balloon under the clip
+- fixed setting of DISPLAY env var from wmaker.
+- fixed bug of passing focus to shaded window in other workspace
+- changed ballon font from titlebar font to displayfont
+- update menu when menu file path is changed in WMRootMenu
+- fixed OPEN_MENU stuff in WPrefs
+- fixed bug with mdgradient
+- fixed maximize with NoWindowOverIcons
+- fixed bug with kbd focus change
+- fixed race in autoraise
+- fixed bug in menu section of WPrefs
+- fixed problem with modifier keys
+
+
+Changes since version 0.19.0:
+.............................
+
+- fixed bug in balloon titles
+- fixed stupid bug in workspace renaming from menu
+- fixed bug with iconsize != 64
+- fixed forgotten menu saving in WPrefs
+- fixed various bugs in WPrefs
+- fixed kbd menu traversal bug
+- fixed bug with multiple depth supporting servers
+- fixed disappearing outer border of shaped windows
+- kluged bug with shaped window resize
+- fixed bug in WPrefs for systems without TIFF
+- fixed bug with Info/Legal panel closure
+- fixed Clip's look.
+
+Changes since version 0.18.1:
+.............................
+
+- added shade indicator for window list
+- fixed small problem in menu autoscrolling
+- fixed bug when reading a corrupted defaults file
+- visual depths different than the default works now
+- fixed problem with non-ascii characters in localized dialogs
+- workspace rename from clip menu
+- fixed memory leak in internal proplist parser
+- fixed infinite loop when parsing mgradient with bad color name
+- fixed bug with paths containing ~ in iconchooser
+- cleaned up double-click code
+- balloon help
+- fixed bug with launching of ForcedDock apps
+- fixed cosmetic bug with miniwindows and titlebar
+- fixed bug with applications that steal input focus
+- EmulateAppIcon window attribute
+- Revert in attribs panel will not apply the changes
+- fixed bug with focus being left in old workspace after switching to an empty
+workspace.
+- finished clip remakeup
+- more generic and faster icon placement algorithm
+- icon yard
+- fixed wxcopy bugs
+
+
+Changes since version 0.18.0:
+.............................
+
+- fixed cosmetic bug in beveling of pixmap/gradient textures
+- fixed bug in titlebar mouse bindings
+- fixed some bugs in proplist menu
+- fixed bug in window list menu indicator
+- fixed a very old bug related to unwanted button grabs in non-click-to-focus
+- fixed bug when opening settings panel for appicon with invalid icon file
+- winspector appicon related bug fix
+
+Changes since version 0.17.5:
+.............................
+
+- fixed handling of signals when the X event queue is empty
+- fixed blank window titles 
+- made current workspace entry be disabled in Move To window menu command, and
+  in the Clip's Move To submenu.
+- fixed menu width calculation
+- fixed bug with buttonpress/release events
+- fixed problem with WMRootMenu with a ~ in the path
+- fixed bug caused that caused the clip to not function properly,
+  unless a workspace switch was made
+- added a hack to make everything work even if NumLock or ScrollLock is on
+- added a little more verbosity to error messages
+- fixed kluged workspace menu in clip
+- removed workspace menu mapped through the microbutton in the clip. 
+- remade clip button layout to be more usable
+- fixed bug with keepontop and apps with Motif hints (x11amp)
+- changed menu border drawing
+- fixed bug in clip free slot finder code
+- fixed infinite reproduction of OPEN_MENU submenus bug
+- added support for future extension to dock totally broken apps (wharf-like
+  dumb launching)
+- changed icon of close button when app doesn't understand WM_DELETE_WINDOW
+- removed SwapMenuButton and added 3 finer grained equivalent options
+- better docked application settings panel
+- fixed positioning problem with attributes panel
+- removed WorkspaceChangeDelay and cleaned up related stuff
+- removed AClipColor and IClipColor
+- added SelectKey back
+- removed install -d from po/Makefile
+- i18n support in WINGs (dialog panels)
+- rewrote menu scrolling code (possibly fixed related crashing bug)
+- fixed crash with icons bigger than the tile
+- fixed bug in attributes editor to apply changes to dont bind {keys, mouse}
+- fixed bug in unhide that unhided all windows in the same workspace
+- moved noappicon to Application Specific options.
+- fixed revert for StartHidden
+- changed style in default WindowMaker domain file
+- fixed bug in hash table
+- fixed bug with transients for leaders that don't have their leader hint
+  set to themselves
+- changed all window_flags to have default values of 0 (closable -> no_closable)
+- fixed bug with workspace change of hidden miniwindows
+- added descriptive icons in window list
+- fixed bug of having to keep mouse over window to edit textfields
+  of wmaker panels
+- extended menu shortcuts to proplist menus
+- changed proplist menu format: removed redundant array for submenus
+- made arrangement of icons when workspace is switched to not arrange moved
+  icons
+- fixed bug in focusfollowmouse that made windows under the currently
+  focused window that close, to not get the focus
+- if the app is a .app, it will try to find it's icon in the .app
+  directory and save it in the WMWindowAttributes, so that the dock can use it.
+- drag docklets that select for mouse events to with Alt+drag
+
+Changes since version 0.17.4:
+.............................
+
+- fixed bug titlebar when closing transient of unfocusable window
+- fixed crashing bug with attributes editor when saving
+
+Changes since version 0.17.3:
+.............................
+
+- added Info panel
+- fixed crashing bug in libproplist
+- do not crash anymore if config files are bad
+- better handling of libjpeg errors
+- changed method to select icons
+- fixed bug in dock panel
+- fixed bug in Remove Icon in clip
+- fixed serious memory leak in wrlib
+- fixed bug that allowed addition of more than 1 WORKSPACE_MENU
+- rewrote proplist parser by hand. Seems to work with no crashes, but I'm
+  sure someone will crash it...
+- fixed invisible text in geometry display when unfocused titlebar is black
+- fixed bug with rootmenu that caused twin menus to be left mapped
+- added DontConfirmKill option to remove confirmation panel for Kill
+- fixed bug with hide of app with wmaker menu
+- changed all NSsomething internal flags for the GNUstep attributes to 
+  WMsomething
+
+Changes since version 0.17.2:
+.............................
+
+- fixed bug in attributes panel with Disable Resizebar
+- fixed save in attribs panel with windows other than the client leader
+- bug in  attribs panel with Revert that made it save attributes with the 
+  wrong name
+- fixed (by kluging) bugs related to destroying dialog panels in a bad order
+- fixed various bug with hide in empty screens
+- fixed various potential races in miniaturize/shade code
+- added Keep Icon command in clip
+- made remove selected icons to remove current icon
+- changed clientdata of clip to the clicked icon instead of the clip.
+- renamed collect icons, made clip icons have a more uniform behaviour, added
+  keep icon command.
+- fixed docking of apps that dont have WM_COMMAND and when the user clicks
+  Cancel in the command input dialog.
+- fixed bugs in moving commandless icons between dock/clip or workspaces
+- fixed bug hiding miniaturized windows
+- fixed bug when reloading rootmenu with more than one shortcut
+- fixed bug that launched shortcut entries without modifier together with
+  modified shortcuts
+- even algorithm to find free slot in clip
+
+Changes since version 0.17.1:
+.............................
+
+- Makefile.am fixes
+- removed libtoolized libPropList
+- fixed cascade placement
+
+Changes since version 0.17.0:
+.............................
+
+- updated Makefile of the po directory
+- removed useless strdup() in proplist.l
+- fixed problem with systems that dont have PATH_MAX in <limits.h>
+
+Changes since version 0.16.1:
+.............................
+
+- removed the Select key binding.
+- changed Normal speed type to Medium and added UltraFast.
+- Shift-dbl-click on appicon brings the app to current workspace.
+- replaced menu based configuration of docked apps with a panel.
+- added Unhide Here command for appicon menus
+- partially corrected bug in icon selection code in window inspector. Was not
+  working correctly for multiwindow apps with appicon.
+- added command menu for appicons
+- removed global variables from winmenu.c
+- fixed some memory leaks and removed redundant code in icon choosing code
+- made Kill in dock menu to unconditionally XKillClient() the app. Sending
+  WM_DELETE_WINDOW would not close the app if the app had multiple windows
+- added confirmation dialogs for Kill in appicon menus
+- made ClipMaxIcons to be compile time settable
+- renamed NoSound to DisableSound
+- changed NoAutowrap to DontLinkWorkspaces
+- fixed bug that prevented windows moved to other workspaces break Unhide
+- fixed bug that made titlebar buttons disappear when font sizes were changed
+  in NewStyle
+- changed Hide command binding in miniaturize button from Alt-Click to
+  Control-Click
+- changed decoration window attributes to affect only decorations and their
+  names
+- fixed MWM_HINTS support, removed MWMHints from WWindow
+- removed Right button constrain window resize to horizontal only. It breaks
+  Alt-Right button resizes through the client area of window.
+- fixed menu flicker problem when changing textures
+- fixed bug miniaturizing shaded transient windows
+- added shortcuts for menus
+- remade titlebar bevel drawing
+- fixed all known cosmetic bugs in titlebars and menu
+- better algorithm to find free slot in clip
+- user attributes have priority over program attributes
+- removed LeftHanded and wLeftBtn/wRightBtn stuff
+- added DisableWSMouseActions
+- added SwapMenuButton
+- renamed all NoSomething option names to DisableSomething, except NoWindow*
+- removed ConstrainWindowSize
+- fixed focus bug when changing workspaces in sloppy focus
+- Changed the look of temporary attracted icons in Clip.
+- Better detecting of graphic libraries.
+- Made the menu scrolling with mouse button pressed to be smooth and clean.
+- fixed a bug that left empty frames if a window was withdrawn on a different
+  workspace
+- removed iconification animations for windows not in the current workspace
+- readded shm support in wrlib
+- merged libwwm.a with WINGs
+- major cleanup of library function names.
+- detect "lapses of memory" that cause forgetting to build libPropList and
+  build it automatically.
+
+
+Changes since version 0.16.0:
+.............................
+
+- Fixed bug with applications set to start hidden.
+- Fixed buggy getSpeed() that caused crash on some systems.
+- Miscellaneous bug fixes.
+- The resizebar cornewr handle is correctly rescaled when resizing.
+- OPEN_MENU will read again menus from files.
+- Right drag in corner handle of resizebar restrict resize to only horizontal.
+- Corrected typo with default fonts used in WINGs.
+- Implemented superfluous stuff as a runtime option. Is Superfluous = Yes/No;
+- Disabling dock and/or clip can be done now from WindowMaker domain too.
+- Selecting new style buttons is now done at run time. See NEWS.
+- Fixed docked appicons to switch to last workspace the app was on when
+  unhiding (like not docked appicons do).
+- Moved wNextEvent() and timer events stuff to WINGs.
+- Added autoscroll for scrollers in WINGs.
+- Optimized WMList and WMBrowser in WINGs.
+- Button2 on clip opens workspace menu
+- Changed cycling colors of selected icons. 
+- Made icon chooser display a better rendering of alpha-channeled icons.
+- Sorted list/browser entries.
+- Fixed bug in timer code that was causing some timer events to be lost.
+- New Pastel theme.
+- Attracted icons in Clip will have a shadowed look if they are to be removed
+  when closed.
+
+Changes since version 0.15.1:
+.............................
+
+- Modified how the wNextEvent() works, so it will go to sleep when there is
+  nothing to do. This changed the busy 5ms checking WindowMaker main loop,
+  with one that is active only when there are X events or timer events.
+- Changed WorkspaceTiedMiniWindows option name to StickyIcons.
+- Fixed some bugs with the miniwindows being sticky to workspace.
+- WorkspaceBack now accepts the key None. WorkspaceBack = (None); will not set
+  any workspace back.
+- Changed the fix for restoring window stacking order after restart and
+  fixed window stacking order on exit.
+- OPEN_MENU command now expands paths with environment variables ($HOME) and
+  tildes (~user)
+- automatic restart of another window manager on SIGSEGV, SIGFPE, SIGBUS
+- removed HorizontalResizeThreshold option. To restrict resize to only
+  horizontal use Shift-drag in the corner handle.
+- Added option to allow vertical maximizing not to overlap the minimized
+  windows. It is NoWindowOverIcons = Yes/No;
+- Applications written with XForms library will get an app-icon now.
+- Included the MWM hints for GNOME support. There is also a configure option
+  --with-gnome=yes/no.
+- The dialog to enter the docked icon command is no longer called, if icons
+  are collected/attracted and the "Keep Attracted Icons" is not set.
+- fixed start workspace in Attributes inspector. Current Workspace is the
+  workspace the user is when the app is started.
+- clicking on the appicon switches to the workspace where the app was last
+  focused before unhiding
+- fixed problem with aspect ratio setting (gr_osview etc.)
+- changed some extensions in the default config/data files and removed 
+  Sound.{xpm,tif} because it seem to be copyrighted.
+- added icon selection panel
+- changed selection indication of icons. Removed SClipColor option
+- simplified animation speed options (IconSlideDelay, IconDelayStep, 
+  MenuScrollDelay, MenuScrollStep etc. etc) to IconSlideSpeed etc.
+- removed Start miniaturized/hidden items from Dock/Clip and added them
+  as attributes
+- fixed Save in Attributes Panel. It should apply the changes before saving
+- changed format of geometry information in WMState
+- added DontSaveSession window attribute
+- changed name of NextMenuBehaviour option to WrapMenus
+- turned graphics_exposures off for all GCs created
+- Fixed the big memory leak problem for oldstyle buttons in title bars.
+- Solved problem with undefined ($RM) on Solaris, and maybe *BSD.
+- Fixed how icon extension is set in WMWindowAttributes to be portable.
+- Fixed buggy behavior when dragging a window from first workspace to next.
+- Implemented selecting of miniwindows.
+- Split the Clip menu to be smaller.
+- Modified how selected app-icons/miniwindows are marked.
+- Included patch for single appicon per instance.class pair.
+- StartWorkspace was changed to take precedence over the workspace in which
+  application was started from Clip.
+- Applications launched from dock will no longer start on the workspace they
+  were launched, but the one the user is in, when the window is mapping.
+- Miscellaneous bug fixes.
+
+
+
+Changes since version 0.15.0:
+.............................
+
+- Fixed bug that kept an appicon selected after detaching.
+- Fixed bug that crashed WindowMaker if starting an application with.
+  NoAppIcon = Yes; while AutoArrangeIcons = True;
+- Fixed the installed .xinitrc file.
+- Fixed some ANSI C incompatibilities.
+- Applications with omnipresent flag set will be mapped on the current
+  workspace, no matter from which Workspace Dock they were started from.
+- mkmenu no longer gets installed, since is no longer needed.
+- Fixed a problem for systems which do bad things for free(NULL);
+- Attracted icons in Clip will not be saved in WMState if
+  "Keep Attracted Icons" is not set.
+- Fixed code in defaults.c to use default hard coded values, if a syntax error
+  is encountered when parsing the default domain WindowMaker database.
+  This avoids a crashing bug if an image for spixmap or tpixmap is not found.
+- Fixed some missing parameter in a call to wWarning() in texture.c which could
+  have caused hazardous (even crash) behavior if the pixmap image for texture
+  was not found.
+- Fixed code in session handling, to save only one entry for applications with
+  multiple windows opened on screen.
+- Implemented option to allow miniwindows to be workspace specific. It is named
+  WorkspaceTiedMiniWindows = Yes/No; It is set in WindowMaker domain. Read NEWS
+- Fixed bug with incorrect height restoral of window when unshading requested
+  from client.
+- Fixed problem with solid IconBack.
+- Fixed problem with hardcoded /usr/local. The value given to configure with
+  --prefix=/some/path is now used.
+- Implemented some workaround to avoid crashing of applications that expect
+  WM_STATE hint set before the window is mapped.
+- Changed how the bevel for the menu title is drawn for solid color titlebars.
+  They now look nicer, and more consistent with the rest.
+- Implemented a new animation method when blowing the detached icons. See NEWS.
+- Fixed some places in code where hardcoded values (8) were used instead of
+  TITLEBAR_EXTRA_HEIGHT.
+- Implemented a marking for the HorizontalResizeThreshold option. It will mark
+  the corresponding number of pixels on the resizebar corner if the option
+  is greater than 0.
+- Changed WindowPlaceOrigin format from string to array. It should now be:
+  WindowPlaceOrigin = (64, 64); Default is (0, 0).
+- The geometry window is now constrained to be always visible on screen, if
+  the geometry is set to be displayed Floating.
+- The geometry window size is decided based on the font size. Also the geometry
+  window is correctly updated if the font size is changed while running.
+- Deleted unnecessary redrawing code in moveres.c.
+- Many fixes to moveres.c.
+- Put all the keys from defaults.c in WindowMaker domain database. 
+- Fixed a crashing bug when workspace names were as long (or longer) as
+  MAX_WORKSPACENAME_WIDTH (16 characters). In this case a right click on a
+  window title caused WindowMaker to crash.
+- Included support for detecting if system requires to include libxpg4, which
+  is needed by some FreeBSD systems, when using --enable-kanji.
+- Some fixes to configure.in and some Makefile.am files to allow the use of
+  VPATH feature of 'make', which will let the source and build directories to
+  be separate.
+- Changed the application launching code, so it put fork()-ed processes in
+  process groups of their own, to avoid locking of entire session, due to a
+  badly configure launching child. Only for systems which have setpgrp().
+  This is autodetected by configure, and used if available, else it will revert
+  to old behavior.
+- Added the AutoCollapse feature to clip. This (when set) will allow the clip
+  to stay collapsed, and show when moving the mouse over it. When the mouse
+  leaves it, it will collapse back after a delay. Read NEWS.
+
+
+
+Changes since version 0.14.1:
+.............................
+
+- Fixed icon tiles and icon titles to update correctly after changes in the
+  configuration, without restarting.
+- Added code to deal with different visuals in wrlib. See NEWS.
+- Many things fixed in wrlib.
+- Fixed bug that crashed WindowMaker when the background image was no found.
+- Fixed crashing bug in wRemoveTimerInstance().
+- Changed name of fiend to Clip. It can also be refered like "Workspace dock".
+  This means all references should be changed in all configuration files, and
+  the command line options.
+- Fixed crashing bug when moving icon between dock and full Clip.
+- Fixed bug in wrlib (RCreateImage), that could crash WindowMaker if trying
+  to create an image with not enough virtual memory.
+- Changed code for diagonal rendering in wrlib, to be faster.
+- Implemented multi-diagonal gradients.
+- Fixed problem when shading a window without titlebar.
+- Fixed code in rootmenu.c to substitute ~/ with user's homedir in OPEN_MENU.
+- Implemented sorting feature for OPEN_MENU. Now files in directories are
+  sorted alphabetically, with directories first.
+- Some small fixes to the code in generic/list.c
+- Fixed jpeg and png loading in wrlib to be faster.
+- Renamed Style directory to Styles.
+- Striped the .style extension from the style file names. This is to let them
+  better be handled by OPEN_MENU.
+- Changed Appereance submenu to include Theme support.
+- Fixed bug when updating clip's main icon.
+- Improved version of wmsetbg. See NEWS for new options.
+- Small gradient testing program in wrlib/testgrad.c
+- Fixed problem with zombie wmsetbg.
+- Integrated dockit in WindowMaker. dockit now gets installed with WindowMaker.
+- Implemented runtime option to allow user to select the origin from where
+  windows are placed on screen with auto and cascade placement modes.
+  Default is WindowPlaceOrigin = "0, 0"; See NEWS.
+- New behavior of OPEN_MENU. See NEWS.
+- Fixed applications autolaunched from Clip, to be mapped on the same workspace
+  as the Clip they were autolaunched from.
+- A default WMState is now installed with WindowMaker, containing only the top
+  most dock icon configured to run dockit.
+- Install will automatically detect if you have TIFF, PNG or XPM support
+  compiled in WindowMaker (in this order), and update WMWindowAttributes
+  accordingly with icon file extensions.
+- Directory structure under .../GNUstep/Library/WindowMaker changed to easily
+  support themes.
+- Syntax of WMState was slightly modified. See NEWS.
+- Fixed WindowMaker when using -nodock and/or -noclip command line options
+  to preserve the state of old dock and/or clip in WMState.
+- Fixed some mem leaks.
+- Fixed crashing bug in window.c.
+- Fixed bug that allowed a shaded window on other workspace to get focus.
+- New options in dock/clip menu. They allow one to start the app either
+  miniaturized or hidden. See NEWS.
+- Applications launched from dock/clip now will be mapped on the workspace
+  they were started from, even if meanwhile user change workspaces.
+- Implemented SAVE_SESSION, and CLEAR_SESSION commands for the root menu.
+  They are intended to save (or clear) a shapshot a the current session state.
+  Read NEWS for details.
+- Added SaveSessionOnExit = Yes/No; option in WindowMaker, to allow autosaving
+  the state of the workspace on exit, and its restoral on next session.
+  Defaults to No. See also NEWS.
+- Converted menu scrolling parameters to run time. They are (with default):
+  MenuScrollDelay = 10; and MenuScrollStep = 5;
+- getstyle now accepts -t to get theme options too. Without -t getstyle will
+  only get options for style (without WorkspaceBack and IconBack).
+- Added option in clip menu to allow moving of an icon to another workspace.
+- Fixed clip to remember the drop command over sessions.
+- Added option to clip menu to attract application icons from bottom of screen
+  when they are launched, and attach them to the clip. Also there is a flag to
+  allow the attracted icons to be kept in clip or destroyed when the
+  application is closed. See NEWS.
+- Added option to dock/clip menu to allow one to set the icon image.
+- Fixed bug that not updated the default icon pixmap after the icon background
+  changed.
+- Added posibility to (un)select icons in clip with Shift Left click, or
+  using the clip menu. Read NEWS.
+- New option for color to mark selected icons. SClipColor = color;
+- Added option to clip to remove selected icons. Read NEWS.
+- Move between clips now applies to all selected icons, or if none selected,
+  to the one the mouse was pressed on. See NEWS.
+- Fixed OPEN_MENU to accept names with spaces in them when used for opening
+  directories. "foo bar" files or subdirectories are now correctly proccessed.
+- Fixed crashing bug when hiding/showing all windows with inspector panel open.
+- Fixed bug that raised unfocusable windows, (if RaiseDelay>0 and Sloppy or
+  Auto focus mode was used) when the mouse pointer got over them. Unfocusable
+  windows can still be raised, if selected from the window switch menu, or
+  with click on title-bar. Meta click on titlebar will lower them.
+- Fixes in moveres.c to allow a smoother draw of frames while moving and
+  resizing windows.
+- Fixed a problem when resizing with Meta+RightClick.
+- Fixed a bug that freezed WindowMaker when dragging a window from one
+  workspace to other, with OpaqueMove = No;
+- WindowMaker now uses the values set for MoveToNewWorkspace and
+  CycleWorkspaces when dragging windows from one workspace to other, making
+  this more consistent with the behaviour of Clip and Next/PrevWorkspaceKeys.
+- Fixed problem with the geometry window not showing up, showing in the
+  wrong place or with the wrong numbers in some cases.
+- Put all transparent drawing code into a single function, to ensure
+  consistency.
+- Fixed really ugly crashing bug, when editing workspace names with
+  Control-LeftClick on the workspace menu name, for workspaces above 10.
+- WindowMaker now reads domains from /usr/local/share/WindowMaker/Defaults
+  and merge them with the user domain files. This way new options, or global
+  settings are available for old users, without reinstalling these files for
+  every user. See NEWS for details.
+- Basic icons needed to run WindowMaker are now part of the main package.
+  They are icons for dock, clip, defaultAppIcon, sound server and for xterm.
+  All the rest needed for apps that can be started from menu, and have entries
+  in WMWindowAttributes, are in WindowMaker-data.tar.gz which can be found on
+  http://windowmaker.org/ or ftp://ftp.windowmaker.org/pub/contrib/icons
+- Changed the SlideWindow() function to better adapt to slow machines. Also
+  the animation constants are now run time. They are IconSlideDelay = 0;
+  IconSlideStep = 5; and IconSlideSlowDown = 50; See NEWS for a more in depth
+  description of how it works, and what all these options mean.
+- Changed behavior of AutoArrangeIcons to avoid unnecessarily shuffling of
+  icons.
+- Changing icons in WMWindowAttributes domain, now automatically reflect on
+  screen, without the need of restarting WindowMaker.
+- Added sound support in WindowMaker. Sound can now be enabled at compile
+  time using --enable-sound option to configure. Also there is a runtime
+  option named NoSound = Yes/No; See NEWS for details, as sound support is not
+  yet fully functional.
+- Some animation constants are now runtime configurable. Please read NEWS file
+  for a complete list of all the new entries in WindowMaker domain database.
+- Added option to clip menu to collect all icons on the screen that are not
+  already docked.
+
+
+
+
+
+Changes since version 0.14.0:
+.............................
+
+- Fixed stacking problem with main fiend icon.
+- Fixed bug that made fiend's rewind button to not work on IRIX and PPC.
+- Removed "Default" button in panel 4 of the attribute editor and replaced
+  with "Browse", to avoid confusion about it. But please note that Browse
+  does not work yet.
+- Solved a bug in attribute editor that incorrectly create the appicon for
+  an application. This could made WindowMaker to crash in certain conditions.
+- Fixed bug that gived focus to shaded&hidden windows.
+- Added keys to Raise/Lower the fiend. Read NEWS.
+- Added posibility to move app-icons between dock and fiend.
+- Fixed bug in winmenu.c, that caused incorrect menu item disabling in window
+  menu, making the attribute editor inaccessible in certain cases.
+- Fiend enhancements. Read NEWS.
+- Added options for advancing to new workspace, and cycling through existing
+  workspaces. Read NEWS.
+- Made the delay between changing workspaces with the fiend a runtime option.
+- Fixed bug that caused crash in certain condition when using Sloppy focus.
+- Fixed getstyle to include new options in WindowMaker configuration file.
+- Changed the default color for active fiend buttons and updated it in
+  WindowMaker configuration file. You should update this, since the old active
+  color was too close to the inactive color.
+- Made the fiend middle button have Active/Inactive color, corresponding
+  to its normal/collapsed state.
+- Fixed a small mem-leak when destroying a workspace.
+- Fixed a bug in superfluous.c related to swapping dock position.
+- Fixed resize frame to show the window size numbers. Also fixed the numbers
+  shown in that frame to reflect the real window size. Nicer arrows too.
+- Added posibility to send only a synthetic ConfigureNotify event, at the end
+  of window moving, instead of every movement, to increase performance.
+- Fixed a bug in docking code, to allow strings with spaces in command name be
+  properly quoted.
+- Changed the included asclock.tgz to better adapt to 8 bit displays.
+- Fixed window title updating after changes made with the attribute editor,
+  when not using NEWSTYLE.
+- Made spixmap and tpixmap to work. See NEWS.
+- Theme support now available. See NEWS.
+- Fixed bug when loading missing domains that caused WindowMaker to crash.
+- Fixed typo in domain loading to count for global files if user files are
+  not available.
+- Fixed bug in Attribute Editor, that crashed WindowMaker when restarting
+  or exiting, while an Attribute Editor panel is open.
+- Put clip.tif, clip.png, clip.xpm, clip2.tif, clip2.xpm, Cone.xpm and
+  Penguin.xpm in WindowMaker-data_tar.gz. These are icons intended for fiend.
+  It can be found on ftp://ftp.windowmaker.org/pub/wmaker/contrib/icons
+
+
+
+Changes since version 0.13.1:
+.............................
+
+- put back libPropList tarball in archive. This will not count for people
+  with already installed libPropList, since configure will first look for
+  the installed version. Read the INSTALL file for details.
+- made a clean-up to let WindowMaker compile with DOCK undefined.
+- working fiend clone. Read the NEWS file for details.
+- fixed bug that caused crash when using FocusNext or FocusPrevious keys
+  with no opened window.
+- some small bug fixes.
+- Added handler for SIGHUP. <kill -1 wmaker_pid> will cause wmaker to restart.
+
+Changes since version 0.13.0:
+.............................
+
+- Enhanced Attribute Editor. It will allow you to set options that apply
+  to all windows. Also some new features. Read NEWS file.
+- Fixed bug in Attribute Editor that caused crash when icon was not found.
+- Fixed bug that crashed WindowMaker when some transient windows closed
+  and the Attribute Editor remained open.
+- Fixed sloppy focus to correctly transfer the focus to the root window
+  when there is no window open, or no window under the pointer.
+- Fixed sloppy focus to correctly focus the window under pointer after a
+  restart or workspace change.
+- Fixed shift dbl-click on titlebar to not select the window.
+- libPropList is no more part of distribution. You need to have it installed
+  or else you need to download it and compile. See INSTALL file.
+- Added Manome Tomonori's patch to fix kanji supprot. This added a new
+  option to configure: --with-x-locale. See INSTALL and FAQ for more info.
+- Fix for clean compile under Irix.
+- Fixed autoarrange icons to do autoarrange after the dbl-click on app-icon.
+  This way the appicon will not slip to the bottom left corner at the first
+  touch, but let you first unhide the window.
+- Fixed icon box position when dock on the left side. Now dock will not cover
+  the app-icons.
+- Fixed typo in application.c that inverted instance and class, thus making
+  instance.class options saved in WMWindowAttributes unavailable.
+- Added option SelectKey in WindowMaker config file, that lets one bind a
+  key to select/unselect the focused window. Also the same option added
+  to the window menu. SelectKey = "some_key_bind";
+- Changed stream->_fileno to fileno(stream) in isEof() in misc.c for
+  portability.
+- Fixed window to not place themselves under dock if dock on the left side
+  and auto/cascade mode is used.
+- Fixed auto/cascade window placement to not place a new window over a
+  shadowed window.
+- Fixed bug in wdefaults.c that do not correctly initialized all bits
+  in WWindowAttributes structure to 1.
+
+Changes since version 0.12.3:
+.............................
+
+- Attribute editor is working.
+- Now menus positions are remembered between sesions if they are sticky
+  when WindowMaker exits/restarts.
+- Fixed menu behaviour when using lousy Windoze behaviour, not to select
+  the item under mouse pointer if the launching click is shorter than
+  the default double-click time.
+- fixed window menu (Move to), to correctly update after a workspace delete.
+- fixed stacking order after restart.
+- fixed FocusPrevious/Next keybindings to skip windows with skip_window_list
+  enabled.
+- added horizontal restricted resizing, if modifier key (Shift) is used to
+  drag the corner handle of resizebar.
+- minor fixes in WINGs related to the return of some function and string
+  update for NULL strings. Also a new function for getting the state of a
+  button.
+- fixed some bugs that crashed WindowMaker because of NULL pointers.
+- fixed a crasing bug in the window stacking code.
+- fixed Hide item in window menu to be disabled for windows that do not have
+  an application icon, or have set "NoAppIcon = YES".
+- fixed problems with hiding applications without application icon.
+- put back the patches that lost between 0.12.0 and 0.12.3
+- changed autoarrange icons from a compile-time to a runtime option.
+  Use AutoArrangeIcons = YES/NO; in 'WindowMaker' options file. Default is NO.
+- added compile time option for shading the resizebar. Default is no shade,
+  which is default Openstep/NextStep4.0 look.
+- added pipe menus. '"Name" OPEN_MENU | script_that_constructs_menu'
+  See the NEWS file.
+- added configurable horizontal resize threshold.
+
+Changes since version 0.12.2:
+.............................
+
+- fixed typos and a bug that could cause a crash on machines where
+  sizeof(int) was different from sizeof(pointer).
+- this is mainly intended for clarifying the confusion about patches that
+  was done in the last releases.
+
+Changes since version 0.12.1:
+.............................
+
+- fixed stupid, stupid typographical error that caused menus to segfault when
+  NexMenuBehaviour / ScrollableMenus were set to YES (which is/was default)
+- changed configure so you can specify the location of graphics libraries and
+  their header files (useful for building on different architectures)
+- fixed window focus problem
+
+Changes since version 0.12.0:
+.............................
+
+- now maintained by Matthew Hawkins <matt@mail.goldweb.com.au> while our 
+  esteemed friend Alfredo is away.  Have a great holiday in Japan, mate!
+- fixed __DuMmY install problems
+- made NextMenuBehaviour and ScrollableMenus run-time configuration options
+  instead of compile-time options
+
+Changes since version 0.11.1:
+.............................
+
+- added Launch command in dock menu
+- fixed manual window placement
+- fixed problem during installation in po/ directory
+- changed Command format for dock state 
+- added OffiX DND support for the dock
+- added Move To submenu in window commands menu
+- right click on root window does not deselect windows (to allow workspace
+ 	switch through menu)
+- various 8bpp Colormap related glitches fixed
+- fixed keyboard bindings when all windows are closed
+- OPEN_MENU in unreadable directory fix
+- changed PixmapPath format from : separated paths to array of paths
+- multi color horizontal and vertical gradient
+- fixed crash in unhide application with transient windows
+- OPEN_MENU with optional command
+
+Changes since version 0.11.0:
+.............................
+
+- fixed bug with menus that caused wmaker to crash 
+- brought program parameter dialog box back
+- fixed autoplacement
+- changed window matching precedence for WMWindowAttributes (complete, just
+instance, just class, global)
+- event compression while moving windows for slow videos and ultra-high
+mouse sampling rates
+- fixed private colormap change in 8bpp
+- fixed titlebar redraw on unshade
+- renamed atom _GNUSTEP_WM_MINIATURIZE_WINDOW to  _WINDOWMAKER_WM_MINIATURIZE_WINDOW
+- fixed a bug with focusing windows in AutoFocus=NO;
+
+Changes since version 0.10.2:
+.............................
+
+- fixed autoraise
+- fixed menu weirdness
+- many features brought back
+- fixed maximize bug
+- added a widget set and new dialog panels
+- fixed titlebar update after font change
+- renamed back _WINDOWMAKER_COMMAND to _WINDOWMAKER_WM_FUNCTION 
+- fixed bug with miniaturization of bad behaved apps (vtcl)
+
+Changes since version 0.10.1:
+.............................
+
+- fixed bug with "invisible" menus
+- added AutoFocus option
+- support for pixmap files for dock tile
+- fixed focusmode
+- tile pixmap for icons
+
+Changes since version 0.10.0:
+.............................
+
+- fixed bug with input focus in sloppy focus mode
+- implemented pixmap mask creation in wrlib
+- root window pixmap option
+- added ppm support in wrlib
+- fixed portability stuff in libPropList
+- merged wmsound and bug fix patches
+- fixed dock icon border width
+- readded focusable option
+- autostart apps on startup
+- added jpeg support in wrlib
+- fixed bug with menus that did not end with a newline
+- RaiseLower now acts on the window under the pointer, as in olwm
+- fixed docked icon move
+- option for left handed ppl (swap left button with right button)
+- generalized titlebar and window frame stuff for windows and menus
+- changed event handling
+- single piece titlebar gradients
+- option and escape expansion for dock commands
+- save workspace state
+- initial workspace window option
+- corrected order of window names for dock state file (was class.instance,
+	is instance.class now)
+
+Changes since version 0.9.0:
+............................
+
+- option to make maximize and window placement account for the Dock
+- fixed modifier binding
+- new menu configuration: OPEN_MENU. Get menu data from file, directory or
+pipe
+- removed rename_ws menu command
+- fixed IgnoreFocusClick
+- more apps can be docked (ghostview et. al)
+- fixed diagonal/horizontal resize detection to be like in NS
+- simplified titlebar button code: removed possibility to add more buttons
+- fixed window gravity handling (xclock -geometry 100x100-0-0) 
+- removed shadeable window attribute, added DontMoveOff
+- window resize with Meta-Click3 on window
+- fixed bug that caused keyboard locks if a invalid key was used in a shortcut
+
+Changes since version 0.6.3:
+............................
+
+- moved to automake
+- changed preference directory from gnustep to GNUstep
+- added tiff support
+- changed preferences to be dynamically modifiable
+- several memory leaks fixed
+- changed meta-dblclick in dock button to start app to control-dblclick
+- fixed bug with unhide app and window list menu
+- miniaturized windows are now hidden when hiding an app
+- fixed bug in random window placement
+- renamed _GNUSTEP_WM_FUNCTION to _WINDOWMAKER_COMMAND
+- close stdin from forked processes, so that they don't block wmaker
+- fixed crash when closing a selected window
+- fixed timer event stuff to be more robust
+- rewrote dialog boxes with Athena
+- removed focusable window option
+- savews now puts -geometry as the first argument of the command line
+- new superfluous stuff: better ghost image/shadow for dock
+- changed handling of menus that fall outside of screen to be like in NS
+- icon caching
+- resize with button2 don't raise window
+- option to change menu highlight color
+- lower miniwindow when miniaturize
+- option for setting icon size
+- keyboard traversal of menus
+- all dock state information saved across sessions
+- must hold Alt to undock running app
+- added focused window indicator in window list
+- CirculateRaise option
+- ModifierKey option
+- fixed duplicated menu bug
+
+Changes since version 0.6.2:
+............................
+
+- fixed problem with window command menu (click3 on titlebar)
+- fixed appmenus that were not unmapped when focus switched from the app
+- fixed bug with exit dialog when NEWSTYLE is defined
+- miniaturized menus are not mapped when activating an app
+
+Changes since version 0.6.1:
+............................
+
+- dynamic update of WM_COMMAND hint
+- fixed crash bug with dock and application icons
+- fixed bug with application defined menus
+- selecting a window through the window list, brings windows that fall
+outside the visible area back
+- fixed bug with multiple window moving
+- various platform specific bug fixes
+- removed grab icon application icons
+
+Changes since version 0.6.0:
+............................
+
+- --enable-shape is the default now
+- fixed group leader change for windows that are already mapped
+- NEWSTYLE button images have the same color as the title text
+- fixed noappicon bugs related to dock
+- fixed starticonic hint (-iconic)
+- broke menu code so that it will not work as OpenStep says. ie: submenus
+	are not mapped below the mainmenu. If you want it to be like before,
+	undefine SINGLE_MENULEVEL in src/wconfig.h
+- switch to next window (alt+tab) raises the window
+- fixed window title handling for titles that don't fit on the window
+- drag select for window command menu
+- gamma correction for 8bpp
+- fixed bug in full docks
+- workspace switching by window drag
+- added patches for smart and random placement
+- added dgradient fix patch
+- workspace state restoration after restart
+- added PNG support to wrlib
+- changed RLoadImage() support in wrlib
+- set DISPLAY environment variable to what was passed with -display option
+- added animations preference option
+- fixed winitrc
+- restore main menu, workspace menu and window list menu after restart
+- changed gethostname() with getenv("HOSTNAME") || getenv("HOST") to setup cpp
+- fixed bug with program defined titlebar button image in NEWSTYLE
+- added kluge for buggy MetroX servers (look at wconfig.h)
+- ignore CapsLock when handling windows
+- ability to drag windows between workspaces
+- ability to drag icons with a icon window
+- fixed bug with arrange icons for appicons without any window mapped
+- display window's workspace in window list menu
+- if a sticked menu is opened again, a new instance of the menu is created
+
+Changes since version 0.5.1:
+............................
+
+- fixed bug that crashed wmaker on HPs
+- fixed bug that crashed wmaker with the window list
+- fixed bug with window focus after window miniturization
+- fixed bug that made wmaker crash when it didn't figure a docked app
+has quit. (probably the same problem with XFMail and others)
+- documented ColormapFollowsMouse option
+- workspace renaming through current selection
+- autolaunch indicator
+- dbl-click3 will not start app anymore
+- better handling of long text
+- limited windowlist menu width
+- fixed arrange icons
+- changed geometry display to account for base size if it's not in 
+the technical drawing style
+- meta-dbl-click on appicon does hide others 
+- changed RaiseOnFocus option with RaiseDelay
+- dbl-click on root window or open submenu entry brings the root menu 
+to the cursor.
+- removed AllowMenuLowering option and made menu ontopness work like on dock
+- changed meta-click on dock with meta-dbl-click, to change ontopness 
+- moved gradient and image code to a library. 
+- added support for icons with alpha channel
+- simplified dithering setup
+- many clean ups 
+- not-so-good looking gradients for 8bpp
+- changed application menu stuff 
+- started wmaker client library. Try out test/test.c
+
+
+Changes since version 0.5.0:
+............................
+
+- startup stuff has changed!!! Instead of placing ~/.workspace_state in
+your .xinitrc, you must now call ~/gnustep/Library/WindowMaker/winitrc
+from there. Don't forget to update your menu files!!! Read the INSTALL file.
+
+- persistent root background colors (read the above item)
+- Spanish, Korean, Czech, Swedish and Dutch locales
+- menu commands can use the current selection as parameter
+	(read the menu config file)
+- fixed bug in dock icons with 3 dots on some platforms
+- opaque window move
+- skipwindowlist option
+- better miniaturize animation
+- new silly animation(s) if --enable-superfluous is configured
+- button3 on miniaturize button hides the app
+- fixed bug on multi-window move
+- keyboard bindings ignores capslock state (but not NumLock, ScrollLock etc.)
+- fixed focus in unhide under sloppy focus mode
+
+Changes since version 0.4.3:
+............................
+
+- dock remembers ontop state
+- OnTopTransients works correctly now
+- removed startWithdrawn option
+- added option to put text over icons (iconText)
+- fixed slippery window move
+- fixed another bug with NEWSTYLE
+- fixed problem with large app_options files
+- more i18n stuff. japanese, german and portuguese locale support.
+
+Changes since version 0.4.2:
+............................
+
+- fixed black icon bug
+- fixed icon specification for dock
+- fixed docking on left side dock
+- fixed bug in window command menu
+- fixed bug in narrow windows with NEWSTYLE enabled
+- fixed Hide Others crash 
+- I18N fixes
+- hopefully stable again
+
+Changes since version 0.4.1:
+............................
+
+- fixed some crash on startup bugs
+- fixed bug that made excessive use of colors in PseudoColor
+- (re)binding of application icons to Dock icons on (re)start
+- startWithdrawn window attribute
+- finished window list menu (button2)
+- implemented GSClientResizebar, GSMenuWindow, GSIconWindow,
+GSFullKeyboardEvents
+- implemented WINDOWMAKER_COMMAND ClientMessage handler
+- OffiX DND support in icons (for Trash)
+- portability fix for SunOS 4.x
+- fixed hide for windows with .noAppIcon: true
+- remember if window was hidden on restart
+- remember workspace on restart
+- do not auto-launch apps that are already running
+- asclock (and other docked apps) do not die on restart
+- forced application docking for undockable apps. See utils/dockapp
+- raiseOnFocus option for focus-follow-mouse mode
+- window command menu
+- fixed NEWSTYLE titlebars and converted menu titlebar button too
+
+Changes since version 0.4.0:
+............................
+
+- fixed bug in I18N support
+- fixed bug that caused crash when patched xv was ran
+- cosmetic fix for transparent icon images
+- tell about apps that couldn't be launched
+- auto-launch in dock
+- patch for asclock to work on dock
+- raise/lower dock
+- fixed bug in workspace change when there are no windows
+- allow screen side change for dock
+
+Changes since version 0.3.2:
+............................
+
+- application icons (not mini-windows) like I think how it is on NEXTSTEP(tm)
+- fixed "slippery" icon movement
+- added a Dock (not for GNUstep, as it will have it's own)
+
+Changes since version 0.3.1:
+............................
+
+- fixed bug that caused window frames to be left after window closure
+- submenus are opened to the left/right if it is too close to the right/left 
+edge (not perfect, but better than before)
+- remember window state (shade) on restart
+- fixed resize bug
+- FreeBSD portability fixes
+- fixed bug in workspace menu with more than 9 workspaces
+- removed _GNUSTEP_WM_RESIZE_WINDOW, _GNUSTEP_WM_RESIZED_WINDOW protocols
+- fixed bug that caused crash when closing miniaturized apps
+- fixed little bug in resize
+- changed default shortcuts to be closer to NEXTSTEP(tm) (raise/lower window)
+
+Changes since version 0.3.0:
+............................
+
+- added diagonal gradients
+- ignoreHideOthers window flag
+- optimized/fixed window raising and lowering
+- fixed menu handling: don't need to click on the menu after 
+it's opened to select items, just drag the pointer
+- _GNUSTEP_WM_RESIZE_WINDOW, _GNUSTEP_WM_RESIZED_WINDOW protocols
+- application specified titlebar button pixmaps
+- transient owners get a different titlebar color when the focus
+is in the transient (e.g, in NeXTese: mainWindow is highlighted correctly when
+the keyWindow is a panel)
+- when transient is closed, it's owner always get the focus
+- fixed XGrabButton/BadAccess bug
+- fixed window_count error (this time I'm 90% sure)
+- fixed focusNextWindow through Alt-Tab bug with non-focusable windows
+- fixed resize in windows without a titlebar
+- fixed bug with PAspect XSizeHint
+
+
+Changes since version 0.2.2:
+............................
+
+- fixed problem that made multiple applications be launched
+with accidental dbl-clicks on the root menu.
+- _GNUSTEP_WM_MINIATURIZE_WINDOW protocol
+- added hideOtherApplications command (meta-dbl-click3 on titlebar)
+- new SHOW_ALL (windows) menu command
+- new HIDE_OTHERS (windows) menu command
+- changed icon/window title to show only end part of text if it doesn't fit
+- remade application group code (more stable)
+- undid stacking code change from 0.2.0
+- fixed bug that caused hangs (not sure)
+- fixed bug that caused window_count error and associated crashes 
+- remade application defined menus
+- vertical gradient
+- I18N support 
+- fixed multiple window selection bug with windows in other workspaces
+- changed workspace numbering
+- fixed problem with series of X errors when a window is destroyed
+- fixed cosmetic bug in gradient bevels
+- added UseSaveUnders option (problem with Netscape redrawing)
+
+Changes since version 0.2.1:
+............................
+
+- fixed segfault on startup
+- changed source tree
+
+Changes since version 0.2.0:
+............................
+
+- fixed various miscelaneous bugs
+- fixed icon pixmap update code
+- fixed bugs related to focus-follows-mouse mode (workspace switching,
+keyboard focus after unshading etc)
+- changed some options in preferences
+- changed window stacking order code
+- fixed icon handling
+- added option to display the root menu on startup
+- shaded windows are unshaded on restart, instead of getting iconified
+- fixed {ResizeDisplay,MoveDisplay}=corner
+- fixed problem with icon windows during restart
+- works OK from XDM
+
+Changes since version 0.1.3:
+............................
+
+- fixed color freeing bug
+- fixed bug that allowed a window to keep the input focus when
+you focus a shaded window
+- fixed bug that allowed on top window to be lowered
+- disappearing xconsole and other initial-state==IconicState windows fixed
+- menus open always inside screen area
+- open submenus are moved with their parents 
+- keyboard support
+- faster menu drawing
+- hide for applications that use window_group hint fixed (LyX et al)
+- dynamic font setup (just a test)
+
+
+Changes since version 0.1.2:
+............................
+
+- worked around problems when freeing colors under some buggy X servers
+- vertical gradients
+- floatingmenu option
+
+Changes since version 0.1.1:
+............................
+
+- fixed list.c to compile in non-debug mode
+- sticked root menus cannot be unmapped clicking button3 (workspace
+unreachable problem)
+
+
+Changes since version 0.1.0:
+............................
+
+- texture structure changed
+- application menu prototype (not finished)
+- arrange icons command
+- menu window levels  (menus are kept on top of other windows)
+- crash-on-alt-move-in-borderless-windows fixed
+- lot's of other bugs killed
+- delete last workspace command
+- titlebar text justification
+- start iconic hint is honored now
+- font setting in preferences
+- color setting in preferences
+- window dragging only occurs after 4 pixels of movement
+- restart command
+
+Changes since version 0.0.4:
+............................
+
+- changed configuration file syntax (just a little bit)
+- removed box class
+- finished multiple window move
+- changed window list order from focus order to stacking order
+- implemented OpenStep window levels and OnTop windows
+- added refresh command to menu
+- added shutdown command to menu
+- make default menu when menu config can't be parsed
+- finally added window focusing when clicking on client window area
+- added visual clue to menu item invocation
+- shaped window support
+- in-memory size got bigger than AfterStep
+- various client window state transition bug fixes
+- icon placement
+- added multiple workspaces (no Pager yet)
+- added option for submenu alignment in relation to their parents
+- rewrote preference parser
+- added focus-follows-mouse and sloppy-focus
+- added cpp preprocessing
+- zombie process bug fixed
+- interactive and dumb (cascade) window placement
+- floating transient windows 
+- disable mapped submenu entry on parent
+- added colormap handling stolen from fvwm (temporary)
+
+
+Changes since version 0.0.3:
+............................
+
+- hide application implemented (just for apps that have the window_group 
+field of WMHints set or the WM_CLIENT_LEADER property set, 
+apparently most Xt based apps)
+- fixed a crashing bug caused by icons 
+- internal change on button pixmap structure and other places
+- handling of property changes on mapped windows
+- fixed bug in event handling (MapRequest)
+- added support for systems without libXpm
+- added configure script, although it's still almost useless.
+- remade icon painting
+- icon background pixmap
+- internal icon pixmap dithering
+

@@ -1,0 +1,221 @@
+/*
+ * Windowmaker를 위한 루트 메뉴 정의 
+ *
+ * 사용법: 
+ *
+ * <Title> <Command> <Parameters>
+ *
+ * <Title> 은 타이틀로 사용되는 문자열이다. 만일 문자열 가운데 공백이 존재
+ *         한다면 반드시 따옴표 "로 묶어야 한다.
+ * 	has spaces
+ *
+ * <Command> 사용가능한 명령어들
+ *	MENU - starts (sub)menu definition
+ *	MENU - (부)메뉴 정의를 시작한다.
+ *	OPEN_MENU - 파일이나 파이프 혹은 디렉토리 내용으로 부터 메뉴를 열고
+ *                  명령어를 실행한다.
+ *	END  - (부)메뉴 정의를 마친다. 
+ *	WORKSPACE_MENU - 워크스페이스 조작에 관한 서브메뉴를 추가한다.
+ *	EXEC <program> - 외부 프로그램을 실행한다. 
+ *	EXIT - 윈도우 매니저를 종료시킨다. 
+ *	RESTART [<window manager>] - Windowmaker를 다시시작하거나 다른 윈도우
+ *                      매니저를 실행시킨다.
+ *	REFRESH - 화면을 다시 그린다.
+ *	ARRANGE_ICONS - 워크스페이스의 아이콘들을 정맣한다.
+ *	SHUTDOWN - kills all clients (and close the X window session)
+ *	SHUTDOWN - 모든 클라이언트를 종료시키고 (X 윈도우 세션을 닫는다)
+ *	SHOW_ALL - 워크스페이스의 모든 윈도우를 숨긴다.
+ *	HIDE_OTHERS - 현재 활성화된 윈도우(혹은 가장 마지막에 포커스를 가진
+ *                    윈도우)를 제외한 모든 윈도우를 숨긴다.
+ *	SAVE_SESSION - 데스크탑의 현재 상태를 저장한다. 이때 저장되는 것은
+                       실행중인 모든 프로그램 그리고 그것들의 정보들(geometry,
+ *                     화면상의 위치, 워크스페이스 번호, 그것들이 실행된 dock
+ *                     이나 클립 그리고 프로그램이 아이콘화되었는지 shade 형태
+ *                     인지 혹은 숨겨졌는지의 여부이다. 또한 사용자가 현재
+ *                     작업중인 워크스페이스도 저장된다. 이 모든 정보들은 
+ *                     또다른 SAVE_SESSION이나 CLEAR_SEEION이 사용되기 전까지 
+ *                     매번 윈도우메이커가 실행될 때마다 복원된다. 만일 
+ *                     SaveSession OnExit = Yes; 로 설정되어 있으면 매번 윈도우
+ *                     메이커가 종료될 때마다 자동적으로 세션의 내용을 저장하고
+ *                     SAVE_SESSION 이나 CLEAR_SESSOIN 값은 무시된다. 
+ *	CLEAR_SESSION - 이미 정장된 세션을 지운다. 이것은 SaveSessionOnExit가 
+ *                      참인 경우에 효과를 미치지 않는다. 
+ *
+ * OPEN_MENU syntax:
+ * OPEN_MENU 문법:
+ *   1. 파일 메뉴 다루기
+ *	// 올바른 메뉴 파일을 포함한 file.menu를 열고 현재 위치에 삽입한다.
+ *	OPEN_MENU file.menu
+ *   2. Pipe menu 다루기.
+ *      // 명령어를 열고 메뉴를 구성하는데 표준 출력으로 사용한다.
+ *      // 명령어의 출력은 반드시 올바른 메뉴 기술자(descriptor)여야 한다.
+ *      // '|' 와 명령어사이의 공백은 사용자의 선택사항이다.
+ *	OPEN_MENU | command
+ *   3. Directory 다루기.
+ *      // 하나 혹은 그 이상의 디렉토리를 열고 그 안의 모든 부디렉토리와
+ *      // 실행 파일들을 알파벳 순으로 정렬한 메뉴를 구성한다.
+ *	OPEN_MENU /some/dir [/some/other/dir ...]
+ *   4. Directory handling with command.
+ *      // 하나 혹은 그 이상의 디렉토리를 열고 모든 부디렉토리와 읽기 가능한
+ *      // 파일들을 알파벳순으로 정렬된 형태로 메뉴를 만들되, 그 앞에
+ *      // 지정된 명령어와 결합시킨다.
+ *	OPEN_MENU /some/dir [/some/other/dir ...] WITH command -options
+ *
+ *
+ * <Parameters> 는 실행할 프로그램이다. 
+ *
+ * ** EXEC의 명령어 라인에 대한 옵션: 
+ * %s - 현재 선택된 내용으로 바꾼다.
+ * %a(메시지) - 입력 상자를 열고 사용자가 입력한 것으로 메시지를 바꾼다.
+ * %w - 현재 활성화된 윈도우의 XID를 대체한다.
+ *
+ * 사용자는 %나 "와 같은 특수 문자를 \ 문자로 override할 수 있다.
+ * 예: hanterm -T "\"Hello World\""
+ *
+ * 또한 \n과 같은 character escapes도 사용할 수 있다.
+ *
+ * 각각의 MENU 문은 반드시 END와 쌍을 이루어야 한다.
+ *
+ * 예제: 
+ *
+ * "Test" MENU
+ *	"XTerm" EXEC xterm
+ *		// /usr/openwin/bin 디렉토리의 내용으로 서브 메뉴를 만든다.
+ *	"XView apps" OPEN_MENU "/usr/openwin/bin"
+ *		// 다른 디렉토리에 있는 몇개의 X11 프로그램들
+ *	"X11 apps" OPEN_MENU /usr/X11/bin ~/bin/X11
+ *		// 바탕화면으로 사용할 그림을 지정한다.
+ *	"Background" OPEN_MENU ~/images /usr/share/images WITH wmsetbg -u -t
+ *		// 현재 항목에 style.menu를 삽입한다.
+ *	"Style" OPEN_MENU style.menu
+ * "Test" END
+ */
+
+#include "wmmacros"
+
+
+"윈도우메이커" MENU
+	"정    보" MENU
+		"Info Panel..." INFO_PANEL
+		"Legal" LEGAL_PANEL
+		"시스템 로드" EXEC xosview || xload
+		"프로세서 보기" EXEC xterm -e top
+		"맨 페이지 보기" EXEC xman
+	"정    보" END
+//	"XTerm" EXEC xterm -sb || color-xterm -sb || xterm -sb
+	"한    텀" EXEC hanterm -sb -sl 3000 -fg WHITE -bg black -hfn -kaist-iyagi-bold-r-normal--16-120-100-100-c-160-ksc5601.1987-0
+	"풀 그 림" MENU
+		"터미널" MENU
+			"뉴스그룹" EXEC hanterm -sb -sl 3000 -e slrn
+			"큰 한텀" EXEC hanterm
+			"작은 한텀" EXEC hanterm -fg white -bg black -sb -sl 3000 -geometry 80x7
+			"xterm" EXEC xterm -sb -sl 3000 
+		"터미널" END
+		"PC 통신" MENU
+			"나우누리" EXEC hanterm -sb -sl 3000 -fg WHITE -bg black -e ztelnet nownuri.net
+			"하이텔" EXEC hanterm -sb -sl 3000 -fg WHITE -bg black -e ztelnet home.hitel.net
+			"천리안" EXEC hanterm -sb -sl 3000 -fg WHITE -bg black -e ztelnet chollian.dacom.co.kr
+			"유니텔" EXEC hanterm -sb -sl 3000 -fg WHITE -bg black -e ztelnet uniwin.unitel.co.kr
+		"PC 통신" END
+		"그래픽 툴" MENU
+			"Gimp" EXEC gimp
+			"XV" EXEC xv
+			"XPaint" EXEC xpaint
+			"XFig" EXEC xfig
+		"그래픽 툴" END
+		"가  우" EXEC gau 
+                "LynX" EXEC hanterm -sb -sl 3000 -e lynx
+		"모질라" EXEC netscape 
+  		"포스트스크립트" EXEC gv %a(gv) || ghostview %a(Enter file to view)
+		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobat)
+  		"TkDesk" EXEC tkdesk
+                "X File Manager" EXEC xfm
+                "OffiX Files" EXEC files
+	"풀 그 림" END
+	"문서편집" MENU
+		"vi" EXEC hanterm -sb -sl 3000 -fg white -bg black -e vi
+		"XEmacs" EXEC xemacs || emacs
+		"한글/X" EXEC hwpx 
+		"NEdit" EXEC nedit
+		"Xedit" EXEC xedit
+	"문서 편집" END
+	"잡동사니" MENU
+		"xplaycd" EXEC xplaycd
+		"Xmixer" EXEC xmixer
+	"잡동사니" END
+	"유틸리티" MENU
+		"계산기" EXEC xcalc
+		"글꼴 선택" EXEC xfontsel
+		"돋보기" EXEC xmag
+		"Colormap" EXEC xcmap
+		"어플 종료시키기" EXEC xkill
+		"클립보드" EXEC xclipboard
+		"윈도우 속성" EXEC xprop | xmessage -center -title 'xprop' -file -
+	"유틸리티" END
+
+	"Selection" MENU
+		"복사하기" EXEC echo '%s' | wxcopy
+		"메일 보내기" EXEC hanterm -name mail -T "Pine" -e pine %s
+	        "Navigate" EXEC netscape -noraise -remote \
+			'openURL(%s,new-window)' || netscape %s
+		"메뉴얼에서 찾기" EXEC MANUAL_SEARCH(%s)
+	"Selection" END
+	"가상화면" WORKSPACE_MENU
+	"작업공간" MENU
+		"다른 것들 숨기기" HIDE_OTHERS
+		"모두 보이기" SHOW_ALL
+		"아이콘 정렬" ARRANGE_ICONS
+		"다시 그리기" REFRESH
+		"화면 잠금" EXEC xlock -allowroot -usefirst
+		"세션 저장하기" SAVE_SESSION
+		"저장된 세션 지우기" CLEAR_SESSION
+	"작업공간" END
+
+	"Appearance" MENU
+		"테마" OPEN_MENU THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"스타일" OPEN_MENU STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"아이콘 세트" OPEN_MENU ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"배경화면" MENU
+			"Solid" MENU
+                        	"검은색" WS_BACK '(solid, black)'
+                        	"파란색"  WS_BACK '(solid, "#505075")'
+				"Indigo" WS_BACK '(solid, "#243e6c")'
+				"Deep Blue" WS_BACK '(solid, "#180090")'
+                        	"자주빛" WS_BACK '(solid, "#554466")'
+                        	"Wheat"  WS_BACK '(solid, "wheat4")'
+                        	"Dark Gray"  WS_BACK '(solid, "#333340")'
+                        	"Wine" WS_BACK '(solid, "#400020")'
+			"Solid" END
+			"Gradient" MENU
+				"Flag" WS_BACK '(mdgradient, green, red, white, green)'
+				"Sky" WS_BACK '(vgradient, blue4, white)'
+			"Gradient" END
+			"Images" OPEN_MENU BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+		"배경화면" END
+		"테마 저장" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
+		"아이콘세트 저장" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
+		"설정 파일 수정" MENU
+			"menu.ko" EXEC hanterm -e vi ~/GNUstep/Library/WindowMaker/menu.ko
+			"WindowMaker" EXEC hanterm -e vi ~/GNUstep/Defaults/WindowMaker
+			"WMWindowAttributes" EXEC hanterm -e vi ~/GNUstep/Defaults/WMWindowAttributes
+		"환경 설정" END
+	"Appearance" END
+
+	"종    료"	MENU
+		"재시동" RESTART
+		"AfterStep 실행하기" RESTART afterstep
+		"나가기..."  EXIT
+		"세션 끝내기..." SHUTDOWN
+	"종    료" END
+"Applications" END
+
+
+	
+#if (UID==0)	// root only stuff
+	"시스템" MENU
+		// the RedHat control panel program
+		"RH ControlPanel" EXEC control-panel
+	"시스템" END
+#endif
+"윈도우메이커" END
+

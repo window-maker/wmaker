@@ -1,0 +1,16 @@
+{
+  HighlightColor = white;
+  HighlightTextColor = black;
+
+FTitleColor = "white";
+PTitleColor = "white";
+UTitleColor = "gray";
+MenuTitleColor = "white";
+MenuDisabledColor = "gray60";
+MenuTextColor = "white";
+FTitleBack = (hgradient, "rgb:79/a2/cf", "rgb:20/34/41");
+UTitleBack = (hgradient, "rgb:59/6d/8e", "rgb:00/00/00");
+PTitleBack = (hgradient, "rgb:70/82/af", "rgb:00/00/00");
+MenuTitleBack = (hgradient, "rgb:79/a2/cf", "rgb:20/34/41");
+MenuTextBack = (hgradient, "rgb:59/6d/8e", "rgb:00/00/00");
+}

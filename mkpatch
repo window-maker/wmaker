@@ -1,0 +1,384 @@
+#!/bin/sh
+#
+# mkpatch 1.1
+#
+#	Creates a more-or-less self-contained patch package.
+#
+#  Copyright (c) Alfredo K. Kojima
+#
+#
+#  Syntax: mkpatch old_tree new_tree patch_name
+#
+#  If a file named mkp.stuff is found in the current directory, it
+# will be used to extract special handling cases. Each directive must
+# be placed in a line of the file and the arguments must be separated
+# by a single space. The currently supported directives are:
+#
+# DONTDIFF <file_path>
+#	Do not use diff in the specified file, replacing the file instead.
+#	The path must exclude the top directory and the path must be
+#	valid from both trees.
+# 	It will handle special cases of files that diff thinks are text 
+#	files, but actually are not, like XPM files created by stupid, 
+#	brain damaged, moron XV.
+#
+# Example mkp.stuff file:
+# DONTDIFF icons/somthing.xpm
+# DONTDIFF icons/smthingelse.xpm
+#
+#
+# The resulting patch pack will be relatively big (if compared to things
+# produced by xdelta and others), but it will be self-contained and
+# hopefully smaller than the whole source tree.
+#
+# You MUST run mkpatch from a directory above old_tree and new_tree.
+# Example:
+# If newTree and oldTree are located in /tmp
+# cd /tmp
+# mkpatch oldTree newTree old_to_new 
+#
+# File names cannot contain the character # or spaces
+#
+
+
+if test ! $# = 3 ; then
+	echo "$0:read the script for the syntax."
+	exit 1
+fi
+
+
+
+istext() {
+	a=`file $1|grep text`
+	if test "x$a" = "x"; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+
+put_header() {
+	cat << 'EOF' |sed -e "s#TMP#$TMP#" -e "s#OTREE#$OTREE#"\
+		-e "s#NTREE#$NTREE#" > $1
+#!/bin/sh
+#
+# Patch package to upgrade OTREE to NTREE
+#
+EOF
+	if [ $# -gt 1 ]; then
+		echo $2 >> $1
+	fi
+	echo "unalias rm" >> $1
+
+}
+
+##########################
+
+check_removed_files() {
+
+	files=`grep "Only in $OTREE" $TMP/tdiff|sed -e "s#Only in $OTREE##" -e "s#: #/#" -e "s#//#/#"`
+
+	put_header $TMP/delfiles "# Remove obsolete files"
+#..................
+	cat << EOF >> $TMP/delfiles
+echo "Files that are not needed anymore will be removed now."
+echo "Do you wish to proceed? <y/n> [y]"
+read foo
+if [ "$foo" = "n" ]; then
+	exit 0
+fi
+
+EOF
+#...................
+
+	echo "Obsoleted Files:"
+	for i in $files; do
+		echo $OTREE/$i
+		echo "echo \"Removing ../$i\"" >> $TMP/delfiles
+		if [ -d $OTREE/$i ]; then
+			echo "rm -rf ../$i" >> $TMP/delfiles
+		else
+			echo "rm ../$i" >> $TMP/delfiles
+		fi
+	done
+	
+	chmod +x $TMP/delfiles
+}
+
+
+#########################
+
+check_new_files() {
+	files=`grep "Only in $NTREE" $TMP/tdiff|sed -e "s#Only in $NTREE#../#" -e "s#: #/#" -e "s#//#/#"`
+
+	put_header $TMP/newfiles "# Copy new files"
+	echo "# Table of internal file names to real file names" >> $TMP/newfiles
+
+	index=0
+	dindex=0
+	mkdir $TMP/files
+	echo "New Files:"
+	for i in $files; do
+		name=`basename $i`
+		src=`echo $i|sed -e "s#..#$NTREE#"`
+		file=`echo $i|sed -e "s#../##"`
+		echo $src
+		if [ -d $src ]; then
+			dst="dir$dindex"
+
+			(dir=`pwd`;cd $NTREE;tar cf $dir/$TMP/files/$dst.tar $file)
+
+			echo "$dst=\"$file\"" >> $TMP/newfiles
+			dindex=`expr $dindex + 1`
+		else
+			dst="file$index"
+			cp $src $TMP/files/$dst
+			echo "$dst=\"$file\"" >> $TMP/newfiles
+			index=`expr $index + 1`
+		fi
+	done
+	echo "filecount=$index" >> $TMP/newfiles
+	echo "dircount=$dindex" >> $TMP/newfiles
+#..........
+	cat << 'EOF' |sed -e "s#TMP#$TMP#" -e "s#OTREE#$OTREE#"\
+		-e "s#NTREE#$NTREE#" >> $TMP/newfiles
+
+
+#create new directories
+index=0
+mkdir tmpdir
+while [ $index -lt $dircount ]; do
+	fname="dir$index"
+	eval origname=$"$fname"
+	echo "Recreating directory ../$origname"
+	(cd tmpdir; tar xf ../files/$fname.tar)
+	mv tmpdir/`basename $origname` ../$origname
+	index=`expr $index + 1`
+done
+rmdir tmpdir
+
+#copy files
+index=0
+while [ $index -lt $filecount ]; do
+	fname="file$index"
+	eval origname=$"$fname"
+	echo "Copying file ../$origname"
+	cp files/$fname ../$origname
+	index=`expr $index + 1`
+done
+
+EOF
+#..........
+	
+	chmod +x $TMP/newfiles
+}
+
+#####################
+
+check_binary_changes() {
+	files=`grep "Binary files" $TMP/bindiff|cut -d\  -f5`
+	files=`echo $files`
+	
+	put_header $TMP/updbinfiles "# Replace changed binary files"
+	echo "# Table of internal file names to real file names" >> $TMP/updbinfiles
+
+	for i in $no_diff; do
+		files="$files $NTREE/$i"
+	done
+	index=0
+	echo "Binary files changed:"
+	for i in $files; do
+		fname="changed$index"
+		oname=`echo $i|sed -e "s#$NTREE##" -e "s#^/##"`
+		cp $i $TMP/files/$fname
+		echo $i
+		echo "$fname=\"$oname\"" >> $TMP/updbinfiles
+		index=`expr $index + 1`	
+	done
+	echo "filecount=$index" >> $TMP/updbinfiles
+
+#..........
+	cat << 'EOF' |sed -e "s#TMP#$TMP#" -e "s#OTREE#$OTREE#"\
+		-e "s#NTREE#$NTREE#" >> $TMP/updbinfiles
+
+index=0
+while [ $index -lt $filecount ]; do
+	fname="changed$index"
+	eval origname=$"$fname"
+	echo "Replacing file ../$origname"
+	rm ../$origname
+	cp files/$fname ../$origname
+	index=`expr $index + 1`
+done
+
+EOF
+#..........
+	chmod +x $TMP/updbinfiles
+}
+
+
+#####################
+check_text_changes() {
+	echo "diff'ing trees..."
+	diff -rq $OTREE $NTREE > $TMP/tdiff
+	tmp=`egrep "^Files" $TMP/tdiff|cut -d\  -f2|sed -e "s#$OTREE/##"`
+	
+	files=""
+	# remove excluded files
+	for i in $tmp; do
+		ok=1
+		for j in $no_diff; do
+		    if test "$i" = "$j"; then
+			ok=0
+			break
+		    fi
+		done
+		if [ $ok = 1 ]; then
+			files="$files $i"
+		fi
+	done
+	
+	touch $TMP/diff
+	touch $TMP/bindiff
+	# diff remaining files
+	for f in $files; do
+		diff -rc $OTREE/$f $NTREE/$f >> $TMP/tmp
+		foo=`egrep "^Binary" $TMP/tmp`
+		if test "x$foo" = "x"; then
+			cat $TMP/tmp >> $TMP/diff
+		else
+			cat $TMP/tmp >> $TMP/bindiff
+		fi
+		rm -f $TMP/tmp
+	done
+}
+
+################# main
+
+stripslash() {
+	echo $1|sed -e 's#/$##'
+}
+
+OTREE=`stripslash $1`
+NTREE=`stripslash $2`
+OUTPUT=$3
+
+TMP=$OUTPUT.patchd
+
+rm -fr $TMP
+mkdir $TMP
+
+
+if [ -f mkp.stuff ]; then
+	echo "Using mkp.stuff file..."
+
+	no_diff=`grep DONTDIFF mkp.stuff|cut -d\  -f2`
+	no_diff=`echo $no_diff`
+fi
+
+
+
+#....................
+cat << 'EOF' |sed -e "s#TMP#$TMP#" -e "s#OTREE#$OTREE#" -e "s#NTREE#$NTREE#" \
+	> $TMP/runme
+#!/bin/sh
+#
+# Patch package to upgrade OTREE to NTREE
+#
+# Automatically generated by mkpatch
+#
+# Move the TMP directory to inside NTREE
+# and run this script.
+#
+
+TARGET_TREE=OTREE
+
+savedir=`pwd`
+cd ..
+dir=`pwd`
+dir=`basename $dir`
+cd $savedir
+
+if test ! "$dir" = "$TARGET_TREE"; then
+	echo "You must move the \"TMP\" directory to inside the "
+	echo "\"$TARGET_TREE\" directory before running this script."
+	exit 1
+fi
+
+echo "################################"
+echo "Removing Obsolete Files"
+echo "################################"
+./delfiles
+echo
+echo "################################"
+echo "Copying New Files"
+echo "################################"
+./newfiles
+echo
+echo "################################"
+echo "Replacing modified binary files"
+echo "################################"
+./updbinfiles
+echo
+echo "################################"
+echo "Patching modified text files"
+echo "################################"
+cd ..
+patch -p1 -s < $savedir/diff
+
+echo "Patching finished."
+
+EOF
+#....................
+cat << 'EOF' |sed -e "s#TMP#$TMP#" -e "s#OTREE#$OTREE#" -e "s#NTREE#$NTREE#" \
+	> $TMP/README
+
+This patch package will upgrade OTREE to NTREE.
+You must unpack it inside the NTREE directory or it will not work.
+This patch can only be applied over a clean OTREE distribution.
+To apply, just type (followed by a Return, of course):
+./runme
+
+EOF
+#....................
+
+#....................
+cat << 'EOF' > $TMP/cleanup
+#!/bin/sh
+#
+# Remove .orig files
+#
+find .. -name \*.orig -exec rm {} \;
+EOF
+chmod +x $TMP/cleanup
+#....................
+
+
+# this must be the first function called 
+check_text_changes
+
+check_removed_files
+
+check_new_files
+
+check_binary_changes
+
+rm -f $TMP/tdiff
+rm -f $TMP/bindiff
+
+chmod +x $TMP/runme
+
+echo "Do you want to add something to the README file? <y/n> [n]"
+read foo
+if [ "$foo" = "y" ]; then
+	vi $TMP/README
+fi
+
+rm -f $OUTPUT.tar.gz
+
+tar czf $OUTPUT.tar.gz $TMP
+
+rm -fr $TMP
+
+echo "Patch pack $OUTPUT.tar.gz successfully created."

@@ -1,0 +1,194 @@
+
+		WindowMaker X11 Window Manager
+
+	  	   <http://windowmaker.org>
+		 <ftp://ftp.windowmaker.org>
+
+
+		      Alfredo K. Kojima 
+		   <kojima@windowmaker.org>
+
+			  Dan Pascu
+		    <dan@windowmaker.org>
+
+		       Matthew Hawkins
+		    <matt@windowmaker.org>
+
+Description
+===========
+
+WindowMaker is a window manager designed to emulate the look and feel of
+part of the NEXTSTEP(tm) GUI. It's supposed to be relatively fast and small,
+feature rich, easy to configure and easy to use, with a simple and elegant
+appearance borrowed from NEXTSTEP(tm).
+
+
+User Guide
+==========
+
+The WindowMaker User's Guide can be downloaded from the official ftp
+or web sites.
+It can also be viewed in HTML format in:
+http://people.delphi.com/crc3419/WMUserGuide/index.htm
+
+
+Directories & Files
+===================
+
+o INSTALL contains installation instructions and some troubleshooting tips.
+
+o Install is a script for configuring and compiling WindowMaker in a easy
+way.
+
+o ChangeLog contains the changes since the last version
+
+o BUGS contains a list of the currently known bugs
+
+o FAQ is a list of frequently asked questions. Read it. I won't answer 
+questions answered in it.
+
+o NEWS is a list of user visible changes since the last version. Read it if
+you are upgrading.
+
+o wmlib/ contains the library necessary to write applications that use
+WindowMaker specific features, like application defined menus. This library
+will be merged into WINGs in the future.
+
+o WINGs/ contain the WINGs (WINGs Is Not GNUstep) tiny widget library. It is
+used by wmaker, but can be used by standalone programs as well.
+
+o test/ contains a simple test program that shows some of the things that can
+be done with WindowMaker and wmlib
+
+o wrlib/ contains the library used to do image manipulation (loading,
+dithering etc.) in WindowMaker. It can be used in other applications.
+
+o util/ contains various utility programs.
+
+o WPrefs/ contains the source code for the WindowMaker Preferences utility.
+Read the WPrefs/README file before using it.
+
+o Configuration options can be found in the ~/GNUstep/Defaults/* files
+(after installation). The menus can be configured in
+~/GNUstep/Library/WindowMaker/menu
+
+o The default configuration files for the system are installed by default in
+/usr/local/share/WindowMaker, along with some other data files.
+
+o src/wconfig.h contains various compile time options you can change to
+select some options/features and things like the path for configuration
+directory.
+
+o BUGFORM is a form you should fill to send a bugreport. Please use the
+form. It makes things easier to me and ensures that you give me a reasonable
+amount of information. This form should be sent to developers@windowmaker.org
+
+
+Mailing List
+============
+
+There is a mailing list for discussing WindowMaker at
+wmaker@linuxcenter.com To subscribe to it, send a message containing:
+	subscribe 
+in the subject and the body of the message to wmaker-request@linuxcenter.com
+
+If you have some problem installing or using wmaker, it would be advisable
+to ask in the mailing list, as the probability of at least one of the 500+
+users there having the same problem as you (and solving it) is bigger than
+the three of us. The developers are subscribed to the mailing list, so we
+will read your post anyway (no need for cc:). For bug reports, fill
+the BUGFORM and send it to developers@windowmaker.org  You can also use
+the bug tracker page at http://windowmaker.org/cgi-bin/bugs
+
+Important note: when asking for help (in the mailing list or to the 
+developerts, directly) always send information about the system you are
+using. You can use the system information section at the end of BUGFORM
+as a guideline. Another thing: please don't send HTML mail. You will
+be risking having your mail deleted before being read. Not everybody
+uses a browser to read email, wich makes your message an annoyance.
+There should be an option in your mail app to disable it.
+
+
+
+Running multiple instances of WindowMaker
+=========================================
+
+It is not a good idea to run more than one instance of WindowMaker
+from the same user (so that wmaker will use the same configuration
+files) at the same time. You might get unexpected behaviour when WindowMaker
+updates it's configuration files.
+
+
+Sound support
+=============
+
+Sound is supported for Linux and FreeBSD systems with the use of a
+separately distributed module. You can download it at:
+http://www.frontiernet.net/~southgat/wmsound
+
+Note that you must compile WindowMaker with the --enable-sound configure
+flag and set the DisableSound option to NO.
+
+
+Performance Tuning
+==================
+
+If you want to diminish WindowMaker's memory usage and improve performance,
+while keeping a nice appearance and good functionality, follow the items
+bellow:
+
+- use solid textures for everything, mainly titlebars and menus. If you
+  want a nice looking desktop, use the Traditional style.
+- turn NewStyle and Superfluous off
+- turn on DisableAnimations
+- do not bind many shortcuts in the menu and keep only the essential items
+  in the menu
+- turn on DisableClip
+- edit wconfig.h and disable the NUMLOCK_HACK and the features you
+  don't use anyway (keep in mind that some of the #defines might not
+  work, as they are not fully supported). Make sure to always keep
+  NumLock and ScrollLock turned off.
+- strip down the default IconPath and PixmapPath entries to contain only 
+  the paths that you really have in your system. 
+- do not use large images in the root background
+- remove support for image formats you don't use
+
+
+Copyrights
+==========
+
+WindowMaker is copyrighted by Alfredo K. Kojima and is licensed through the
+GNU General Public License. Read the COPYING file for the complete license.
+
+NeXT, OpenStep and NEXTSTEP are a trademarks of NeXT Computer, Inc.
+
+
+Authors
+=======
+
+The AUTHORS file contains a list of the people who have contributed to the
+project. The name of people who have helped with localization (translation)
+can be found in po/README and WindowMaker/README
+
+If you have any comments, fixes and bug reports (filled BUGFORMs) send them
+to kojima@windowmaker.org
+
+
+Musicware
+=========
+
+If you use WindowMaker and *really* like it, please consider making my day
+by sending me a music CD (or a MiniDisc) of your favorite band, singer,
+instrumentist, composer or whatever :^). I like listening to music and would
+love to get new CDs, especially from other parts of the world. I like almost
+any kind of music, from Ozzy Osbourne to Bach (mas não pagode e sertanejo
+pelamordideus :), so I will be happy to receive just about anything.
+
+Snail mail address:
+
+Alfredo Kengi Kojima
+Rua Firmino O. Bimbi, 255/25B
+Porto Alegre - RS
+CEP 91751-330
+Brazil
+

@@ -1,0 +1,134 @@
+.\" Hey, Emacs!  This is an -*- nroff -*- source file.
+.TH WindowMaker 1x "August 1998"
+.SH NAME
+wmaker \- X11 window manager with a NEXTSTEP look
+.SH SYNOPSIS
+.B wmaker
+.I "[-options]"
+.SH "DESCRIPTION"
+WindowMaker is a X11 window manager with a NEXTSTEP look. It tries to
+emulate NeXT's look as much as possible, but it deviates from it as
+necessary.
+.SH "OPTIONS"
+.TP
+.B \-nocpp
+disable preprocessing of configuration files
+.TP
+.B \-nodock
+do not show the application Dock
+.TP
+.B \-noclip
+do not show the workspace Clip
+.TP
+.B \-display host:display.screen
+specify display to use.
+On multiheaded machines, WindowMaker will automatically manage all screens.
+If you want WindowMaker to manage only a specific screen, you must supply
+the screen number you want to have managed with the 
+.B \-display
+command line argument. For example, if you want WindowMaker to manage only
+screen 1, start it as:
+.B wmaker -display :0.1
+.TP
+.B \-version
+display version number and exit
+.TP
+.B \-visualid
+specify the ID of the visual to use. See
+.BR xdpyinfo (1x)
+for a list of visuals available in your display.
+.PP
+.SH FILES
+.TP
+.B ~/GNUstep/Defaults/WindowMaker
+general WindowMaker defaults.
+.TP
+.B ~/GNUstep/Defaults/WMState
+information about the Dock and Clip. DON'T edit this while running
+WindowMaker. It will be overwritten.
+.TP
+.B ~/GNUstep/Defaults/WMRootMenu
+Contains the name of the file to read the root menu from.
+.TP
+.B ~/GNUstep/Defaults/WMWindowAttributes
+Attributes for different application classes and instances. Use the
+Attribute Editor (right drag the application's title bar, select
+Attributes) instead of modifying this file directly. There are just a
+few options not available using the Attributes Editor.
+.TP
+.B /etc/GNUstep/Defaults/
+All the above-mentioned files are READ from here if not found except
+for WMState, which is COPIED from here. No matter where they are read
+from, if it's necesary to write configuration changes back into this
+files, user's files will be written to.
+.TP
+.B ~/GNUstep/Library/WindowMaker/autostart
+This script is automatically executed when WindowMaker is started.
+.TP
+.B ~/GNUstep/Library/WindowMaker/
+The menu file indicated in WMRootMenu is looked for here...
+.TP
+.B /etc/X11/WindowMaker/
+and here, in that order.
+.TP
+.B ~/GNUstep/Library/WindowMaker/Pixmaps/
+WindowMaker looks for pixmaps here
+.TP
+.B ~/GNUstep/Library/WindowMaker/Backgrounds/
+WindowMaker looks for backgrounds here
+.TP
+.B ~/GNUstep/Library/WindowMaker/Styles/
+WindowMaker looks for style files here (not true... it looks like it
+does, but you have to specify the full path anyway, it's just a place
+to keep things nicely ordered)
+.TP
+.B ~/GNUstep/Library/WindowMaker/Themes/
+WindowMaker looks for theme files here (ibid)
+.TP
+.B /usr/share/WindowMaker/Pixmaps/
+System wide pixmaps are located here...
+.TP
+.B /usr/share/WindowMaker/Pixmaps/
+and here.
+.TP
+.B /usr/share/WindowMaker/Styles/
+System wide styles are here
+.TP
+.B /usr/share/WindowMaker/Themes/
+Guess... ;-)
+.SH ENVIRONMENT
+.IP GNUSTEP_USER_ROOT
+specifies the initial path for the Defaults directory. "Defaults/" is
+appended to this variable to determine the actual location of the
+databases. If the varialbe is not set, it defaults to "~/GNUstep"
+.IP GNUSTEP_LOCAL_ROOT
+specifies the location of the system-wide \fBlocal\fP GNUstep
+directory (this is useful, for example, in those cases where the
+system-wide location is really a network wide location). If this
+variable is empty, GNUSTEP_SYSTEM_ROOT is looked for.
+.IP GNUSTEP_SYSTEM_ROOT
+specifies the location of the system-wide GNUstep directory. If this
+variable is empty, it defaults to /etc/GNUstep
+.SH SEE ALSO
+The WindowMaker User Guide
+.PP
+The WindowMaker FAQ
+.PP
+.BR X (1x),
+.BR convertstyle (1),
+.BR wdwrite (1x),
+.BR wxcopy (1x),
+.BR geticonset (1x),
+.BR seticons (1x),
+.BR wmaker (1x),
+.BR wxpaste (1x),
+.BR getstyle (1x),
+.BR setstyle (1x),
+.BR wmsetbg (1x)
+.SH AUTHOR
+WindowMaker was written by Alfredo K. Kojima <kojima@windowmaker.org>
+with help from many contributors.
+.PP
+This manual page was written by Marcelo E. Magallon, <mmagallo@debian.org>.
+
+

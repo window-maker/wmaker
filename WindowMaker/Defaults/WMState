@@ -1,0 +1,52 @@
+{
+  Dock = {
+    Applications = (
+      {
+        Command = dockit;
+        Name = dockit.Dockit;
+        AutoLaunch = No;
+        Forced = No;
+        Position = "0,0";
+        DropCommand = "wmsetbg -u -t %d";
+      },
+      {
+	Command = xterm;
+	Name = xterm.XTerm;
+	AutoLaunch = No;
+	Forced = No;
+	Position = "0,1";
+      },
+      {
+	Command = "/usr/local/GNUstep/Apps/WPrefs.app/WPrefs";
+	Name = groupLeader.WPrefs;
+	AutoLaunch = No;
+	Forced = No;
+	Position = "0,2";
+      }
+    );
+    Position = "-64,0";
+    Lowered = Yes;
+  };
+  Clip = {
+    Command = "-";
+    Name = Logo.WMClip;
+    AutoLaunch = No;
+    StartHidden = No;
+    StartMiniaturized = No;
+    Forced = No;
+    Position = "0,0";
+    DropCommand = "wmsetbg -u -t %d";
+  };
+  Workspaces = (
+    {
+      Name = "Main";
+      Clip = {
+        Applications = ();
+        Lowered = Yes;
+        Collapsed = No;
+        AutoAttractIcons = No;
+        KeepAttracted = No;
+      };
+    }
+  );
+}

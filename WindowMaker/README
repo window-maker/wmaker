@@ -1,0 +1,48 @@
+
+
+The file named menu is the menu in the plain text file format. The files
+named menu.?? (?? are 2 characters, such as pt) are translations of the
+same menu. Plain text menus are preprocessed using cpp (the C Pre-Processor),
+so you can use cpp macros in it.
+
+The plmenu file is the same menu, but in the property list format.
+This menu can be edited with WPrefs.app, but since WPrefs.app does not
+support XIM, it will not allow you to make menus in languages such as
+Japanese.
+
+To use the menu in the property list format (plmenu), just replace the
+~/GNUstep/Defaults/WMRootMenu with it. To use the plain text menu,
+place the path for the menu in ~/GNUstep/Defaults/WMRootMenu, enclosed
+in double quotes ("). Ex: "~/GNUstep/Library/WindowMaker/menu"
+
+Instructions for editing the plain text menus can be found in the menu
+file itself, kindly translated to your tongue for your convenience, by
+the translation contributors. 
+
+
+Localized menu file translators:
+--------------------------------
+
+File    Language        Maintainer
+------------------------------------------------------------------------------
+menu.ja Japanese        MANOME Tomonori <manome@itlb.te.noda.sut.ac.jp> 
+				ABE Shige <sabe@ibm.net>
+menu.pt Portuguese      Alfredo K. Kojima <kojima@inf.ufrgs.br>
+menu.de	German		Carsten Schaar <nhadcasc@fs-maphy.uni-hannover.de>
+menu.nl	Dutch		Roeland Mertens <roeland@zeus.rug.ac.be>
+menu.cz	Czech		David ©auer <xsauer@hwlab.felk.cvut.cz>
+menu.ko	Korean		Chae-Yong Chong <cychong@metro.telecom.samsung.co.kr>
+menu.gl	Galician	Xose Vazquez <xose@arrakis.es>
+menu.fr French		ObiTuarY <obituary@freshmeat.net>
+menu.it Italian		Roberto Checozzo <croberto@aerre.it>
+menu.ru Russian		August S.Sigov <freedomain@actor.ru>
+menu.es Spanish		Rodrigo Hornos Prados <tnetrhp@ctv.es>
+menu.he	Hebrew		Please send me your name/email if you wrote this
+			We unfortunately lost that info :(
+menu.tr Turkish         F. Kagan Gurkaynak <kgf@wpi.edu>
+menu.fi Finnish		Ville Hautamaki <villeh@photon.joensuu.fi>
+menu.se Swdish		Andreas Persenius <andreas@alfaskop.net>
+menu.hr	Croatian	Toni Bilic <tbilic@efos.hr>
+menu.el Greek		Nikolaos Papagrigoriou <papanikos@usa.net>
+menu.dk Danish		John M. Lockard <jlockard@math.lsa.umich.edu>
+			Jacob Sparre Andersen <sparre@cats.nbi.dk>

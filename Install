@@ -1,0 +1,210 @@
+#!/bin/sh
+#
+# WindowMaker configuration and compilation script.
+#
+# Copyright (c) 1997, 1998 Alfredo K. Kojima
+#
+
+export LINGUAS;LINGUAS=""
+if test "$NLSDIR" = ""; then
+export NLSDIR;NLSDIR="/usr/lib/locale"
+fi
+
+OPTIONS=""
+PREFIX="/usr/local"
+
+perai() {
+	echo "Type <Return> to continue"
+	read nada
+}
+
+
+echo
+echo "========================"
+echo "WindowMaker Installation"
+echo "========================"
+echo
+echo "NOTE: If the installation procedure fails, read the INSTALL file and do"
+echo "the installation manually."
+perai
+
+if test "$USER" != "root"; then
+	echo "Warning: you must run this script as the root user."
+	perai
+	echo
+	echo "Be sure to specify an installation path where you have"
+	echo "write persmission."
+	echo
+fi
+
+
+echo
+echo "Option Selection"
+echo "================"
+
+######################## Sound
+
+echo
+echo "Do you want sound support? Note that you need a module distributed"
+echo "separately to make it work. You can get it at:"
+echo "http://www.frontiernet.net/~southgat/wmsound"
+echo -n "<y/n> [y] "
+read SFX
+
+if [ "x$SFX" = "x" -o "$SFX" = "y" -o "$SFX" = "Y" ]; then
+	OPTIONS="$OPTIONS --enable-sound"
+fi
+
+######################## NLS
+echo
+echo "Do you want National Language Support?"
+echo -n "<y/n> [n] "
+read NLS
+
+if [ "$NLS" = "y" -o "$NLS" = "Y" ]; then
+	NLS="Y"
+	echo "The supported locales are:"
+	ling=` (cd po; /bin/ls *.po) `
+	ALL_LINGUAS=""
+	for l in $ling; do
+		lname=`(cd po; grep Language-Team $l|cut -f 2 -d: |cut -f 2 -d\ )`
+		lname=`echo $lname`
+		lcode=`basename $l .po`
+		ALL_LINGUAS="$ALL_LINGUAS $lcode"
+		echo "$lcode $lname"
+	done
+	echo "Type in the locales you want  [$ALL_LINGUAS]"
+	read foo
+	if test "x$foo" = "x"; then
+		LINGUAS=$ALL_LINGUAS
+	else
+		LINGUAS="$foo"
+	fi
+	echo "Selected locales are: $LINGUAS"
+
+	MB=""
+	for i in $LINGUAS; do
+		ok=0
+		for b in $ALL_LINGUAS; do
+			if test "$b" = "$i"; then
+				ok=1
+				break
+			fi
+		done
+		if test "$ok" = "0"; then
+			echo
+			echo "$i is not a supported locale"
+			perai
+			continue
+		fi
+
+		if [ "$MB" = "" -a "$i" = "ja" -o "$i" = "kr" ]; then
+			echo
+			echo "A language you selected needs multi-byte character support"
+			echo "Do you want to enable it?"
+			echo -n "<y/n> [n] "
+			read MB
+			if [ "$MB" = "y" -o "$MB" = "Y" ]; then
+				OPTIONS="$OPTIONS --enable-kanji"
+			fi
+		fi
+	done
+	echo
+	echo "Where do you want to put the message files? [$NLSDIR]"
+	echo -n "? "
+	read foo
+	if test "x$foo" != "x"; then
+		NLSDIR=$foo
+	fi
+fi
+##################### Installation path
+
+done=0
+while [ $done = 0 ]; do
+    echo
+    echo "Where do you want to install WindowMaker? [$PREFIX]"
+    echo "Don't change it if you don't know what you're doing."
+    echo "(The default path will install WindowMaker in "
+    echo "$PREFIX/bin, $PREFIX/lib etc.)"
+    echo -n "? "
+    read foo
+
+	if test "x$foo" != "x"; then
+	    if [ "$foo" = "y" -o "$foo" = "n" ]; then
+	    echo
+	    echo "Hmm... I don't think you really want to install WindowMaker into \"$foo\""
+	    echo
+	else
+	    done=1	
+	    PREFIX=$foo
+	fi
+    else
+    	done=1
+    fi
+    echo
+    echo "$PREFIX/bin must be in the PATH environment variable of all users who use WindowMaker"
+    perai
+done
+
+OPTIONS="$OPTIONS --prefix=$PREFIX"
+
+
+######################  Build libPropList
+
+if [ ! -d libPropList ]; then
+	gzip -d -c libPropList.tar.gz | tar xf -
+fi
+
+echo "-----------------------"
+echo "Building libPropList..."
+echo "-----------------------"
+cd libPropList
+if [ ! -f config.status ]; then
+	./configure
+fi
+make
+cd ..
+
+if [ ! -f libPropList/libPropList.a ]; then
+	echo "Build of libPropList was not successfull. "
+	exit
+fi
+
+
+#####################  Configure
+echo "--------------------------"
+echo "Configuring WindowMaker..."
+echo "--------------------------"
+if [ `uname -s` = "SCO_SV" ]; then
+	echo "CFLAGS=\"$CFLAGS -belf -DANSICPP\" ./configure $OPTIONS"
+	CFLAGS="$CFLAGS -belf -DANSICPP" ./configure $OPTIONS
+else
+	echo "CFLAGS=\"$CFLAGS $GCCFLAGS\" ./configure $OPTIONS"
+	CFLAGS="$CFLAGS $GCCFLAGS" ./configure $OPTIONS
+fi
+
+
+#################### Compile
+echo "------------------------"
+echo "Compiling WindowMaker..."
+echo "------------------------"
+(cd src; make clean)
+make
+
+echo "-------------------------"
+echo "Installing WindowMaker..."
+echo "-------------------------"
+
+make install
+
+echo 
+echo "Installation Finished!"
+echo
+echo "Now, each user that wishes to use WindowMaker must run the wmaker.inst"
+echo "script that was just installed."
+
+
+if test "$NLS" = "Y"; then
+	echo "Don't forget to set the LANG environment variable to your locale"
+fi
+

@@ -1,0 +1,16 @@
+{
+  TitleJustify = center;
+  HighlightColor = lightgoldenrod1;
+  HighlightTextColor = black;
+  FTitleColor = white;
+  PTitleColor = gray;
+  UTitleColor = white;
+  FTitleBack = (hgradient, darkturquoise, "rgb:00/41/42");
+  PTitleBack = (hgradient, deepskyblue2, deepskyblue4);
+  UTitleBack = (hgradient, deepskyblue4, black);
+  MenuTitleColor = white;
+  MenuTextColor = black;
+  MenuDisabledColor = gray30;
+  MenuTitleBack = (hgradient, deepskyblue4, black);
+  MenuTextBack = (hgradient, darkturquoise, "rgb:00/41/42");
+}

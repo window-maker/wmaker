@@ -1,0 +1,16 @@
+{
+  HighlightColor = white;
+  HighlightTextColor = black;
+  TitleJustify = center;
+  FTitleColor = "rgb:83/83/56";
+  PTitleColor = white;
+  UTitleColor = white;
+  FTitleBack = (hgradient, "rgb:ff/ff/87", "rgb:c7/c7/69");
+  PTitleBack = (hgradient, seagreen2, seagreen4);
+  UTitleBack = (hgradient, "rgb:b5/b5/ef", "rgb:73/73/99");
+  MenuTitleColor = "rgb:83/83/56";
+  MenuTextColor = white;
+  MenuDisabledColor = gray30;
+  MenuTitleBack = (hgradient, "rgb:ff/ff/87", "rgb:c7/c7/69");
+  MenuTextBack = (hgradient, "rgb:b5/b5/ef", "rgb:73/73/99");
+}

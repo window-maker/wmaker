@@ -1,0 +1,14 @@
+{
+HighlightColor = blue;
+HighlightTextColor = white;
+FTitleColor = white;
+PTitleColor = black;
+UTitleColor = darkblue;
+FTitleBack = (solid, darkblue);
+PTitleBack = (solid, "rgb:d5/d6/d5");
+UTitleBack = (solid, "rgb:d5/d6/d5");
+MenuTitleBack = (solid, darkblue);
+MenuTextBack = (solid, "rgb:d5/d6/d5");
+MenuTextColor = black;
+MenuTitleColor = white;
+}

@@ -1,0 +1,16 @@
+{
+  TitleJustify = center;
+  FTitleColor = white;
+  PTitleColor = gray;
+  UTitleColor = white;
+  FTitleBack = (dgradient, black, mediumorchid4);
+  PTitleBack = (dgradient, mediumorchid4, dodgerblue3);
+  UTitleBack = (dgradient, black, dodgerblue4);
+  MenuTitleColor = white;
+  MenuTextColor = white;
+  MenuDisabledColor = gray60;
+  MenuTitleBack = (dgradient, black, mediumorchid4);
+  MenuTextBack = (dgradient, black, dodgerblue4);
+  HighlightColor = white;
+  HighlightTextColor = black;
+}

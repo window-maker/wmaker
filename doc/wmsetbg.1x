@@ -1,0 +1,50 @@
+.\" Hey, Emacs!  This is an -*- nroff -*- source file.
+.TH wmsetbg 1x "March 1998"
+.SH NAME
+wmsetbg \- sets the background on the X11 display
+.SH SYNOPSIS
+.B wmsetbg
+[-t|-s] [-d|-m] [-u] [-D domain] [-c cpc]
+.I image
+.SH DESCRIPTION
+.B wmsetbg
+reads the specified
+.I image
+(XPM, PNG, jpeg, Tiff, raw PPM) and puts it on the root window. It can either
+scale the image or tile it to make it fit the root window. WindowMaker
+uses this command internally to set the root window image on start up. It can be used on the command line, but it
+.B won't
+write the information to the WindowMaker defaults' database.
+.SH OPTIONS
+.TP
+.B \-t
+tiles the specified
+.I image
+.TP
+.B \-s
+scales the specified
+.I image
+(default)
+.TP
+.B \-d
+dithers colors
+.TP
+.B \-m
+matches colors
+.TP
+.B \-u
+updates the WindowMaker defaults database
+.TP
+.B \-d
+updates the specifed
+.I domain
+database
+.TP
+.B \-c
+colors per channel to use
+.SH SEE ALSO
+.BR wmaker (1x)
+.SH AUTHOR
+This man page was written by Marcelo Magallon <mmagallo@debian.org>.
+.PP
+WindowMaker was written by Alfredo K. Kojima <kojima@windowmaker.org>.

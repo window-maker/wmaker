@@ -1,0 +1,181 @@
+/* jpeg.c - load JPEG image from file
+ * 
+ *  Raster graphics library
+ * 
+ *  Copyright (c) 1997 Alfredo K. Kojima
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Library General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *  
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU Library General Public
+ *  License along with this library; if not, write to the Free
+ *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+#include <config.h>
+
+
+
+
+
+#ifdef USE_JPEG
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+#include <jpeglib.h>
+
+#include "wraster.h"
+
+/*
+ * <setjmp.h> is used for the optional error recovery mechanism shown in
+ * the second part of the example.
+ */
+
+#include <setjmp.h>
+
+/*
+ * ERROR HANDLING:
+ *
+ * The JPEG library's standard error handler (jerror.c) is divided into
+ * several "methods" which you can override individually.  This lets you
+ * adjust the behavior without duplicating a lot of code, which you might
+ * have to update with each future release.
+ *
+ * Our example here shows how to override the "error_exit" method so that
+ * control is returned to the library's caller when a fatal error occurs,
+ * rather than calling exit() as the standard error_exit method does.
+ *
+ * We use C's setjmp/longjmp facility to return control.  This means that the
+ * routine which calls the JPEG library must first execute a setjmp() call to
+ * establish the return point.  We want the replacement error_exit to do a
+ * longjmp().  But we need to make the setjmp buffer accessible to the
+ * error_exit routine.  To do this, we make a private extension of the
+ * standard JPEG error handler object.  (If we were using C++, we'd say we
+ * were making a subclass of the regular error handler.)
+ *
+ * Here's the extended error handler struct:
+ */
+
+struct my_error_mgr {
+  struct jpeg_error_mgr pub;	/* "public" fields */
+
+  jmp_buf setjmp_buffer;	/* for return to caller */
+};
+
+typedef struct my_error_mgr * my_error_ptr;
+
+/*
+ * Here's the routine that will replace the standard error_exit method:
+ */
+
+void
+my_error_exit (j_common_ptr cinfo)
+{
+  /* cinfo->err really points to a my_error_mgr struct, so coerce pointer */
+  my_error_ptr myerr = (my_error_ptr) cinfo->err;
+
+  /* Always display the message. */
+  /* We could postpone this until after returning, if we chose. */
+  (*cinfo->err->output_message) (cinfo);
+
+  /* Return control to the setjmp point */
+  longjmp(myerr->setjmp_buffer, 1);
+}
+
+
+RImage*
+RLoadJPEG(RContext *context, char *file_name, int index)
+{
+    RImage *image = NULL;
+    struct jpeg_decompress_struct cinfo;
+    int i, j;
+    unsigned char *r, *g, *b;
+    JSAMPROW buffer[1];
+    FILE *file;
+    /* We use our private extension JPEG error handler.
+     * Note that this struct must live as long as the main JPEG parameter
+     * struct, to avoid dangling-pointer problems.
+     */
+    struct my_error_mgr jerr;
+
+    file = fopen(file_name, "r");
+    if (!file) {
+	sprintf(RErrorString, "could not open JPEG file \"%s\"", file_name);
+	return NULL;
+    }
+
+    RErrorString[0] = 0;
+
+    cinfo.err = jpeg_std_error(&jerr.pub);
+    jerr.pub.error_exit = my_error_exit;
+    /* Establish the setjmp return context for my_error_exit to use. */
+    if (setjmp(jerr.setjmp_buffer)) {
+       /* If we get here, the JPEG code has signaled an error.
+	* We need to clean up the JPEG object, close the input file, and return.
+	*/
+       jpeg_destroy_decompress(&cinfo);
+       fclose(file);
+       return NULL;
+    }
+
+    jpeg_create_decompress(&cinfo);
+
+    jpeg_stdio_src(&cinfo, file);
+  
+    jpeg_read_header(&cinfo, TRUE);
+
+    buffer[0] = (JSAMPROW)malloc(cinfo.image_width*cinfo.num_components);
+    if (!buffer[0]) {
+	sprintf(RErrorString, "out of memory");
+	goto bye;
+    }
+
+    image = RCreateImage(cinfo.image_width, cinfo.image_height, False);
+    if (!image) {
+	sprintf(RErrorString, "out of memory");
+	goto bye;
+    }
+
+    cinfo.out_color_space = JCS_RGB;
+    cinfo.quantize_colors = FALSE;
+    cinfo.do_fancy_upsampling = FALSE;
+    cinfo.do_block_smoothing = FALSE;
+
+    jpeg_start_decompress(&cinfo);
+
+    r = image->data[0];
+    g = image->data[1];
+    b = image->data[2];
+
+    while (cinfo.output_scanline < cinfo.image_height) {
+        jpeg_read_scanlines(&cinfo, buffer, 1);
+	for (i=0,j=0; i<cinfo.image_width; i++) {
+	    *(r++) = buffer[0][j++];
+	    *(g++) = buffer[0][j++];
+	    *(b++) = buffer[0][j++];
+	}
+    }
+/*
+    jpeg_finish_decompress(&cinfo);
+*/
+  bye:
+    jpeg_destroy_decompress(&cinfo);
+
+    fclose(file);
+
+    if (buffer[0])
+	free(buffer[0]);  
+
+    return image;
+}
+
+#endif /* USE_JPEG */

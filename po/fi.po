@@ -1,0 +1,1024 @@
+# Finnish translation 
+# Copyright (C) 1998 Free Software Foundation, Inc.
+# Ramin Miraftabi <ramin@cs.joensuu.fi>, 
+# Ville Hautamäki <villeh@cs.joensuu.fi>, 1998.
+# 0.17.5
+#, fuzzy
+msgid ""
+msgstr ""
+"Date: 1998-07-27 10:09:09+0300\n"
+"From: Ramin Miraftabi <ramin@cs.joensuu.fi>\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Language-Team: Finnish \n"
+"Xgettext-Options: --default-domain=WindowMaker --add-comments --keyword=_\n"
+"Files: ../src/appicon.c ../src/defaults.c ../src/dialog.c ../src/dock.c ../src/event.c ../src/framewin.c ../src/icon.c ../src/main.c ../src/menu.c ../src/misc.c ../src/pixmap.c ../src/resources.c ../src/rootmenu.c ../src/screen.c ../src/session.c ../src/stacking.c ../src/startup.c ../src/switchmenu.c ../src/texture.c ../src/wdefaults.c ../src/winmenu.c ../src/winspector.c ../src/workspace.c ../src/xutil.c\n"
+
+#: ../src/appicon.c:542 ../src/dialog.c:273 ../src/dialog.c:329 ../src/dock.c:262 ../src/dock.c:3116 ../src/rootmenu.c:164 ../src/winspector.c:269 ../src/winspector.c:277
+msgid "Error"
+msgstr "Virhe"
+
+#: ../src/appicon.c:543 ../src/dock.c:263 ../src/winspector.c:278
+msgid "Could not open specified icon file"
+msgstr "Ei voinut avata kuvaketiedostoa"
+
+#: ../src/appicon.c:564 ../src/dock.c:515 ../src/winmenu.c:85
+msgid "Kill Application"
+msgstr "Tapa sovellus"
+
+#: ../src/appicon.c:565 ../src/dock.c:516 ../src/winmenu.c:86
+msgid ""
+"This will kill the application.\n"
+"Any unsaved changes will be lost.\n"
+"Please confirm."
+msgstr ""
+"Tämä tappaa ohjelman.\n"
+"Kaikki tallettamattomat muutokset katoavat.\n"
+"Varmista."
+
+#: ../src/appicon.c:580 ../src/dock.c:1147
+msgid "Unhide Here"
+msgstr "Palauta"
+
+#: ../src/appicon.c:581 ../src/dock.c:1145
+msgid "(Un)Hide"
+msgstr "Piilota/Palauta"
+
+#: ../src/appicon.c:582
+msgid "Set Icon..."
+msgstr "Määrittele kuvake..."
+
+#: ../src/appicon.c:583 ../src/dock.c:1149 ../src/winmenu.c:248
+msgid "Kill"
+msgstr "Tapa"
+
+#: ../src/defaults.c:565 ../src/screen.c:487 ../src/screen.c:567 ../src/screen.c:573
+msgid "could not read domain \"%s\" from defaults database"
+msgstr ""
+
+#: ../src/defaults.c:658 ../src/defaults.c:755 ../src/defaults.c:777 ../src/defaults.c:800
+msgid "Domain %s (%s) of defaults database is corrupted!"
+msgstr "ei voi muuntaa arvoa \"%s\" boolean arvoon millekkään avaimelle \"%s\""
+
+#: ../src/defaults.c:663 ../src/defaults.c:764 ../src/defaults.c:786 ../src/defaults.c:808
+msgid "could not load domain %s from user defaults database"
+msgstr "ei voinut ladata arvoa %s käyttäjän alkuasetustietokannasta"
+
+#: ../src/defaults.c:674
+msgid "Domain %s (%s) of global defaults database is corrupted!"
+msgstr "arvo %s (%s) :n alkuasetustietokanssasta on korruptoitunut!"
+
+#: ../src/defaults.c:691
+msgid "could not load domain %s from global defaults database"
+msgstr ""
+
+#: ../src/defaults.c:1090
+msgid "can't convert \"%s\" to boolean for key \"%s\""
+msgstr "ei voi muuntaa \"%s\" boolean arvoon millekkään avaimelle \"%s\""
+
+#: ../src/defaults.c:1095 ../src/defaults.c:1128 ../src/defaults.c:1160 ../src/defaults.c:1173 ../src/defaults.c:1188 ../src/defaults.c:1203 ../src/defaults.c:1274 ../src/defaults.c:1286 ../src/defaults.c:1345 ../src/defaults.c:1389 ../src/defaults.c:1431 ../src/defaults.c:1477 ../src/defaults.c:1696 ../src/defaults.c:1710 ../src/defaults.c:1743 ../src/defaults.c:1755 ../src/defaults.c:1767 ../src/defaults.c:1791 ../src/defaults.c:1809 ../src/defaults.c:1822 ../src/defaults.c:1835 ../src/defaults.c:1870 ../src/defaults.c:1908 ../src/defaults.c:1972
+msgid "using default \"%s\" instead"
+msgstr "käyttää alkuarvoa \"%s\" sijasta"
+
+#: ../src/defaults.c:1125
+msgid "can't convert \"%s\" to integer for key \"%s\""
+msgstr "ei voi muuntaa \"%s\" kokonaislukua millekkään avaimelle \"%s\""
+
+#: ../src/defaults.c:1155 ../src/defaults.c:1269 ../src/defaults.c:1691 ../src/defaults.c:1738 ../src/wdefaults.c:537 ../src/wdefaults.c:573
+msgid "Wrong option format for key \"%s\". Should be %s."
+msgstr "Väärä muoto avaimella \"%s\". Pitäisi olla %s."
+
+#: ../src/defaults.c:1168
+msgid "Incorrect number of elements in array for key \"%s\"."
+msgstr "Väärä lukumäärä osia taulukossa avaimella \"%s\"."
+
+#: ../src/defaults.c:1183
+msgid "Wrong value for key \"%s\". Should be Coordinate."
+msgstr "Väärä arvo avaimella \"%s\". Pitäisi olla koordinaatti"
+
+#: ../src/defaults.c:1198
+msgid "can't convert array to integers for \"%s\"."
+msgstr "ei voi muuntaa taulukkoa kokonaisluvuksi \"%s\":lle."
+
+#: ../src/defaults.c:1337
+msgid "Invalid focus mode \"%s\". Should be Manual, Auto or Sloppy."
+msgstr "Väärä focusmoodi \"%s\". Pitäisi olla Manual, Auto tai Sloppy"
+
+#: ../src/defaults.c:1340
+msgid "Invalid colormap focus mode \"%s\". Should be Manual or Auto."
+msgstr "Väärä colormap focusmoodi \"%s\". Pitäisi olla Manual tai Auto."
+
+#: ../src/defaults.c:1383
+msgid "Invalid window placement mode \"%s\". Should be Auto, Cascade, Random or Manual."
+msgstr "Väärä ikkunan sijoitusmoodi \"%s\". Pitäisi olla Auto, Cascade, Randomtai "
+"Manual."
+
+#: ../src/defaults.c:1425
+msgid "Invalid geometry display type \"%s\". Should be Center, Corner, Floating or Line."
+msgstr "Väärä geometria näyttötyyppi \"%s\". Pitäisi olla Center, Corner, Floating tai "
+"Line."
+
+#: ../src/defaults.c:1472
+msgid "Invalid speed \"%s\". Should be UltraFast, Fast, Medium, Slow or UltraSlow."
+msgstr "Väärä nopeus \"%s\". Pitäisi olla UltraFast, Fast, Medium, Slow tai UltraSlow."
+
+#: ../src/defaults.c:1538 ../src/defaults.c:1569 ../src/defaults.c:1581 ../src/defaults.c:1622 ../src/defaults.c:1658
+msgid "\"%s\" is not a valid color name"
+msgstr "\"%s\" ei ole kelvollinen värin nimi"
+
+#: ../src/defaults.c:1550
+msgid "bad number of arguments in gradient specification"
+msgstr "virheellinen määrä argumentteja liukuvärjäyksen määrittelyssä"
+
+#: ../src/defaults.c:1596
+msgid "too few arguments in multicolor gradient specification"
+msgstr "liian vähän argumentteja monivärisen liukuvärjäyksen määrittelyssä"
+
+#: ../src/defaults.c:1705
+msgid "Error in texture specification for key \"%s\""
+msgstr "Virhe tekstuurin määrittelyssä avaimalla \"%s\""
+
+#: ../src/defaults.c:1751 ../src/defaults.c:1787
+msgid "Too few elements in array for key \"WorkspaceBack\"."
+msgstr "Liian vähän elementtejä taulokossa avaimella \"WorkspaceBack\"."
+
+#: ../src/defaults.c:1763
+msgid "Wrong type for workspace background. Should be Texture."
+msgstr "Väärän tyyppinen työtila taustakuva. Pitäisi olla tekstuuri."
+
+#: ../src/defaults.c:1805
+msgid "Cannot get color entry for key \"WorkspaceBack\"."
+msgstr "Ei ole värimääritystä avaimelle \"WorkspaceBack\"."
+
+#: ../src/defaults.c:1817
+msgid "key \"WorkspaceBack\" has invalid color \"%s\""
+msgstr "avaimella \"WorkspaceBack\" on väärä väri \"%s\""
+
+#: ../src/defaults.c:1831
+msgid "Cannot get file entry for key \"WorkspaceBack\"."
+msgstr "Ei ole tiedostoa avaimelle \"WorkspaceBack\"."
+
+#: ../src/defaults.c:1847
+msgid "could not run \"%s\""
+msgstr "ei voi käynnistää \"%s\""
+
+#: ../src/defaults.c:1853
+msgid "could not find background image \"%s\""
+msgstr "en löydä taustakuvaa \"%s\""
+
+#: ../src/defaults.c:1866
+msgid "Error in texture specification for key \"WorkspaceBack\""
+msgstr "Virhe tekstuurin määrittelyssä avaimelle \"WorkspaceBack\""
+
+#: ../src/defaults.c:1903
+msgid "Invalid justification type \"%s\". Should be Left, Center or Right"
+msgstr "Väärä tasaustyyppi \"%s\". Pitäisi olla Vasen, Keskitetty tai Oikea"
+
+#: ../src/defaults.c:1937
+msgid "could not load any usable font"
+msgstr "ei voinut ladata yhtään käyttökelpoista kirjasinlajia"
+
+#: ../src/defaults.c:1967
+msgid "could not get color for key \"%s\""
+msgstr "en löytänyt avainta \"%s\" vastaavaa väriä"
+
+#: ../src/defaults.c:2026
+msgid "invalid key modifier \"%s\""
+msgstr "väärä avaimen muunnin \"%s\""
+
+#: ../src/defaults.c:2038
+msgid "invalid kbd shortcut specification \"%s\""
+msgstr "väärä näppäin oikopolku määrittely \"%s\""
+
+#: ../src/defaults.c:2044
+msgid "invalid key in shortcut \"%s\""
+msgstr "väärä avain näppäin oikopolussa \"%s\""
+
+#: ../src/defaults.c:2138
+msgid "could not render texture for icon background"
+msgstr "ei voi piirtää tekstuuria kuvakkeen taustalle"
+
+#: ../src/defaults.c:2486
+msgid "could not render texture for workspace background"
+msgstr "ei voi piirtää tekstuuria taustakuvaksi"
+
+#: ../src/dialog.c:81 ../src/dialog.c:93 ../src/dialog.c:176 ../src/dialog.c:505 ../src/dock.c:379
+msgid "OK"
+msgstr "OK"
+
+#: ../src/dialog.c:81 ../src/dialog.c:86 ../src/dialog.c:176 ../src/dialog.c:512 ../src/dock.c:385
+msgid "Cancel"
+msgstr "Peru"
+
+#: ../src/dialog.c:86 ../src/rootmenu.c:205
+msgid "Exit"
+msgstr "Poistu"
+
+#: ../src/dialog.c:98
+msgid "Yes"
+msgstr "Kyllä"
+
+#: ../src/dialog.c:98
+msgid "No"
+msgstr "Ei"
+
+#: ../src/dialog.c:268
+msgid "Could not open directory "
+msgstr "Ei voi avata hakemistoa "
+
+#: ../src/dialog.c:324
+msgid "Could not load image file "
+msgstr "Ei voi avata kuvatiedostoa "
+
+#: ../src/dialog.c:449
+msgid "Directories"
+msgstr "Hakemistot"
+
+#: ../src/dialog.c:458
+msgid "Icons"
+msgstr "Kuvakkeet"
+
+#: ../src/dialog.c:495
+msgid "File Name:"
+msgstr "Tiedoston nimi:"
+
+#: ../src/dialog.c:518
+msgid "Choose File"
+msgstr "Valitse tiedosto"
+
+#: ../src/dialog.c:528
+msgid "Icon Chooser"
+msgstr "Kuvakkeen valitsin"
+
+#: ../src/dock.c:320
+msgid "Command Arguments"
+msgstr "Ohjelman käynnistysparametrit"
+
+#: ../src/dock.c:331
+msgid "Command for files dropped by DND"
+msgstr "Komento tiedostoille, jotka pudotettiin DND:llä"
+
+#: ../src/dock.c:343
+msgid "%d will be replaced with the file name"
+msgstr "%d korvataan tiedoston nimellä"
+
+#: ../src/dock.c:347
+msgid "DND support was not compiled in"
+msgstr "tukea DND:lle ei käännetty mukaan"
+
+#: ../src/dock.c:353
+msgid "Icon"
+msgstr "Kuvake"
+
+#: ../src/dock.c:365 ../src/winspector.c:1153
+msgid "Browse..."
+msgstr "Selaa..."
+
+#: ../src/dock.c:373
+msgid "Launch this application automatically"
+msgstr "Käynnistä tämä ohjelma automaattisesti"
+
+#: ../src/dock.c:399
+msgid "Docked Application Settings"
+msgstr "Docatun ohjelman asetukset"
+
+#: ../src/dock.c:560
+msgid "Workspace Clip"
+msgstr "Työtilan Clip"
+
+#: ../src/dock.c:561
+msgid "All selected icons will be removed!"
+msgstr "Kaikki valitut kuvakkeet poistetaan"
+
+#: ../src/dock.c:610
+msgid "Keep Icon"
+msgstr "Pidä kuvake"
+
+#: ../src/dock.c:611 ../src/dock.c:2083 ../src/dock.c:2199
+msgid "Type the command used to launch the application"
+msgstr "Kirjoita komento, jolla ohjelma käynnistetään"
+
+#: ../src/dock.c:1005
+msgid "could not create workspace submenu for Clip menu"
+msgstr "Ei voinut luoda työtila alimenua Clip:lle"
+
+#: ../src/dock.c:1063
+msgid "could not create options submenu for Clip menu"
+msgstr "ei voinut luoda asetukset alimenua Clip:lle"
+
+#: ../src/dock.c:1065
+msgid "Floating Clip"
+msgstr "Leijuva Clip"
+
+#: ../src/dock.c:1071
+msgid "Collapsed"
+msgstr "Häivytä"
+
+#: ../src/dock.c:1077
+msgid "AutoCollapse"
+msgstr "AutoHäivytä"
+
+#: ../src/dock.c:1083
+msgid "AutoAttract Icons"
+msgstr "Kerää kuvakkeet automaattisesti"
+
+#: ../src/dock.c:1089
+msgid "Keep Attracted Icons"
+msgstr "Pidä kerätyt kuvakkeet"
+
+#: ../src/dock.c:1113
+msgid "Floating Dock"
+msgstr "Leijuva Dock"
+
+#: ../src/dock.c:1119
+msgid "Clip Options"
+msgstr "Clip:in asetukset"
+
+#: ../src/dock.c:1124
+msgid "(Un)Select Icon"
+msgstr "(ei)Valitse kuvake"
+
+#: ../src/dock.c:1126
+msgid "(Un)Select All Icons"
+msgstr "(ei)valitse kaikki kuvakkeet"
+
+#: ../src/dock.c:1129
+msgid "Keep Icon(s)"
+msgstr "Pidä kuvakkeet"
+
+#: ../src/dock.c:1131
+msgid "Move Icon(s) To"
+msgstr "Siirrä kuvakkeet ..."
+
+#: ../src/dock.c:1136
+msgid "Remove Icon(s)"
+msgstr "Poista kuvakkeet"
+
+#: ../src/dock.c:1138
+msgid "Attract Icons"
+msgstr "Kerää kuvakkeet"
+
+#: ../src/dock.c:1141
+msgid "Launch"
+msgstr "Käynnistä"
+
+#: ../src/dock.c:1143
+msgid "Settings..."
+msgstr "Asetukset..."
+
+#: ../src/dock.c:1593 ../src/dock.c:1607 ../src/dock.c:1616
+msgid "bad value in docked icon state info %s"
+msgstr "virheellinen arvo dokatulla kuvakkeen tilalla %s "
+
+#: ../src/dock.c:1624
+msgid "bad value in docked icon position %i,%i"
+msgstr "virheellinen arvo dokatun kuvakkeen paikkassa %i,%i"
+
+#: ../src/dock.c:1853
+msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
+msgstr "on liian monta kuvaketta säilöttynä dokkiin. Unohdan ne jotka eivät mahdu"
+
+#: ../src/dock.c:2082 ../src/dock.c:2198
+msgid "Dock Icon"
+msgstr "Dokkaa kuvake"
+
+#: ../src/dock.c:3109 ../src/dock.c:3113
+msgid "Could not execute command \"%s\""
+msgstr "Ei voi ajaa komentoa \"%s\""
+
+#: ../src/event.c:429
+msgid "stack overflow: too many dead processes"
+msgstr "pinon ylivuoto: liian monta kuollutta prosessia"
+
+#: ../src/framewin.c:515
+msgid "could not render gradient: %s"
+msgstr "ei voi piirtää liukuvärjäystä: %s"
+
+#: ../src/framewin.c:531 ../src/framewin.c:546 ../src/framewin.c:557 ../src/framewin.c:564 ../src/framewin.c:571 ../src/icon.c:282 ../src/texture.c:503
+msgid "error rendering image:%s"
+msgstr "virhe piirtäessä kuvaa: %s"
+
+#: ../src/icon.c:545
+msgid "could not find default icon \"%s\""
+msgstr "ei voi löytää oletusarvokuvaketta \"%s\""
+
+#: ../src/icon.c:552
+msgid "could not load default icon \"%s\""
+msgstr "ei voi ladata oletusarvokuvaketta \"%s\""
+
+#: ../src/main.c:163
+msgid "Restart failed!!!"
+msgstr "Uudelleen käynnistys epäonnistui!!!"
+
+#: ../src/main.c:178
+msgid "%s aborted.\n"
+msgstr "%s lopettu.\n"
+
+#: ../src/main.c:189
+msgid "usage: %s [-options]\n"
+msgstr "käyttö: %s [-asetuket]\n"
+
+#: ../src/main.c:190
+msgid "options:"
+msgstr "asetukset:"
+
+#: ../src/main.c:192
+msgid " -nocpp \t\tdisable preprocessing of configuration files"
+msgstr " -nocpp \t\tota pois käytöstä konfiguraatiotiedostojen esikäsittely"
+
+#: ../src/main.c:194
+msgid " -nodock\t\tdo not open the application Dock"
+msgstr " -nodock\t\tälä avaa dokkia"
+
+#: ../src/main.c:195
+msgid " -noclip\t\tdo not open the workspace Clip"
+msgstr " -noclip\t\tälä avaa clippiä"
+
+#.
+#. puts(_(" -locale locale		locale to use"));
+#.
+#: ../src/main.c:199
+msgid " -visualid visualid\tvisual id of visual to use"
+msgstr " -visualid visualid\tkäytettävän visualin id"
+
+#: ../src/main.c:200
+msgid " -display host:dpy\tdisplay to use"
+msgstr " -display käytettävä host:dpy\tdisplay"
+
+#: ../src/main.c:201
+msgid " -version\t\tprint version and exit"
+msgstr " -version\t\ttulosta versio ja poistu"
+
+#: ../src/main.c:216
+msgid "could not determine home directory"
+msgstr "ei voi määritellä kotihakemistoa"
+
+#: ../src/main.c:226
+msgid ""
+"could not find user GNUstep directory.\n"
+"Make sure you have installed WindowMaker correctly and run wmaker.inst"
+msgstr ""
+"ei voi määritellä käyttäjän GNUstep hakemistoa.\n"
+"Tarkista, että olet asentanut WindowMaker:in oikein ja että olet ajanut wmaker.inst:in"
+
+#: ../src/main.c:246
+msgid "%s:could not execute initialization script"
+msgstr "%s:ei voi ajaa käynnistys skriptaa"
+
+#: ../src/main.c:298 ../src/main.c:305 ../src/main.c:312
+msgid "too few arguments for %s"
+msgstr "liian vähän argumentteja %s:lle"
+
+#: ../src/main.c:316
+msgid "bad value for visualid: \"%s\""
+msgstr "väärä arvo visualidlle: \"%s\""
+
+#: ../src/main.c:361
+msgid "X server does not support locale"
+msgstr "X server ei tue ympäristöä"
+
+#: ../src/main.c:364
+msgid "cannot set locale modifiers"
+msgstr "ei voi asettaa ympäristön muuntimia"
+
+#: ../src/main.c:378
+msgid "could not open display \"%s\""
+msgstr "ei voi avata näyttöä \"%s\""
+
+#: ../src/menu.c:281
+msgid "wrealloc() failed while trying to add menu item"
+msgstr "wrealloc() epäonnistui yrittäessään lisätä valikon kohdan"
+
+#: ../src/misc.c:70
+msgid "could not define value for %s for cpp"
+msgstr "ei voinut määrittää arvoa %s cpp:lle"
+
+#: ../src/misc.c:100
+msgid "could not get password entry for UID %i"
+msgstr "ei saanut salasanaa käyttäjälle %i"
+
+#: ../src/misc.c:124
+msgid "your machine is misconfigured. HOSTNAME is set to %s"
+msgstr "koneesi on konfiguroity väärin. HOSTNAME on asetettu %s:ksi"
+
+#: ../src/misc.c:130
+msgid "your machine is misconfigured. HOST is set to %s"
+msgstr "koneesi on konfiguroity väärin. HOST on asetettu %s:ksi"
+
+#: ../src/misc.c:701
+msgid "selection timed-out"
+msgstr "valinta poistettu käyttämättömänä"
+
+#: ../src/misc.c:715
+msgid "Program Arguments"
+msgstr "Ohjelman parametrit"
+
+#: ../src/misc.c:734
+msgid "Enter command arguments:"
+msgstr "Syötä komentoriviparametrit:"
+
+#: ../src/misc.c:755
+msgid "unable to get dropped data from DND drop"
+msgstr "ei saa pudotettua dataa DND pudotuksesta"
+
+#: ../src/misc.c:763
+msgid "error getting dropped data from DND drop"
+msgstr "virhe pudotetun datan vastaanotossa DND pudotukselta"
+
+#: ../src/misc.c:769
+msgid "out of memory while getting data from DND drop"
+msgstr "muisti loppui DND pudotuksen dataa vastaanotettaessa"
+
+#: ../src/misc.c:813 ../src/misc.c:932
+msgid "out of memory during expansion of \"%s\""
+msgstr "muisti loppui %s:ää laajennettaessa"
+
+#: ../src/misc.c:867
+msgid "out of memory during expansion of \"%w\""
+msgstr "muisti loppui %w:ää laajennettaessa"
+
+#: ../src/misc.c:886
+msgid "out of memory during expansion of \"%a\""
+msgstr "muisti loppui %a:ää laajennettaessa"
+
+#: ../src/misc.c:908
+msgid "out of memory during expansion of \"%d\""
+msgstr "muisti loppui %d:ää laajennettaessa"
+
+#: ../src/misc.c:920
+msgid "selection not available"
+msgstr "valintaa ei ole saatavilla"
+
+#: ../src/misc.c:998 ../src/misc.c:1004
+msgid "bad window name value in %s state info"
+msgstr "epäkelpo ikkunan nimi %s tilatiedoissa"
+
+#: ../src/pixmap.c:235
+msgid "could not load mask bitmap file \"%s\". Won't use mask"
+msgstr "ei voinut ladata naamio-bittiakarttaa \"%a\". Naamiota ei käytetä"
+
+#: ../src/resources.c:71
+msgid "The following character sets are missing:"
+msgstr "Seuraavat merkistöt puuttuvat"
+
+#: ../src/resources.c:75
+msgid "The string \"%s\" will be used in place"
+msgstr "Merkkijonoa \"%s\" käytetään"
+
+#: ../src/resources.c:77
+msgid "of any characters from those sets."
+msgstr "merkistöistä puuttuvien merkkien sijaan."
+
+#: ../src/resources.c:80
+msgid "could not create font set %s. Trying fixed"
+msgstr "ei voinut luoda kirjasinlajia %s. Kokeillaan fixed:iä"
+
+#: ../src/resources.c:97
+msgid "could not load font %s. Trying fixed"
+msgstr "ei voinut avata kirjasinlajia %s. Kokeillaan fixed:iä"
+
+#: ../src/resources.c:135
+msgid "could not parse color \"%s\""
+msgstr "ei voinut käsitellä väriä \"%s\""
+
+#: ../src/resources.c:139
+msgid "could not allocate color \"%s\""
+msgstr "ei voinut varata väriä \"%s\""
+
+#: ../src/rootmenu.c:162
+msgid "Program \"%s\" not found or cannot be executed."
+msgstr "Ohjelmaa \"%s\" ei löytynyt tai sitä ei voitu ajaa."
+
+#: ../src/rootmenu.c:206
+msgid "Exit window manager?"
+msgstr "Poistutaanko ikkunointijärjestelmästä?"
+
+#: ../src/rootmenu.c:226
+msgid "Close X session"
+msgstr "Sulje X yhteys"
+
+#: ../src/rootmenu.c:227
+msgid ""
+"Close Window System session?\n"
+"(all applications will be closed)"
+msgstr ""
+"Suljetaanko ikkunointijärjestelmän istunnosta?\n"
+"(kaikki sovellukset suljetaan)"
+
+#: ../src/rootmenu.c:229
+msgid "Exiting...\n"
+msgstr "Poistutaan...\n"
+
+#: ../src/rootmenu.c:428
+msgid "%s:invalid key modifier \"%s\""
+msgstr "%s: epäkelpo näppäin \"%s\""
+
+#: ../src/rootmenu.c:442
+msgid "%s:invalid kbd shortcut specification \"%s\""
+msgstr "%s: epäkelpo näppäin oikopolun määritys \"%s\""
+
+#: ../src/rootmenu.c:450
+msgid "%s:invalid key in shortcut \"%s\""
+msgstr "%s: epäkelpo näppäin oikopolussa \"%s\""
+
+#: ../src/rootmenu.c:503
+msgid "%s: unmatched '\"' in menu file"
+msgstr "%s: paria merkille '\"' ei löydy valikkotiedostosta"
+
+#: ../src/rootmenu.c:552
+msgid "%s: missing command"
+msgstr "%s: puuttuva komento"
+
+#: ../src/rootmenu.c:585
+msgid "invalid OPEN_MENU specification: %s"
+msgstr "epäkelpo OPEN_MENU määritys: %s"
+
+#: ../src/rootmenu.c:650
+msgid "%s:could not stat menu"
+msgstr "%s: valikolta ei saatu stat-tietoja"
+
+#: ../src/rootmenu.c:658
+msgid "%s:could not stat menu :%s"
+msgstr "%s: valikolta %s ei saatu stat-tietoja"
+
+#: ../src/rootmenu.c:676
+msgid "too many parameters in OPEN_MENU: %s"
+msgstr "liian monta parametria OPEN_MENUssa: %s"
+
+#: ../src/rootmenu.c:712
+msgid "There are more than one WORKSPACE_MENU commands in the applications menu. Only one is allowed."
+msgstr "Sovellukset valikossa on enemmän kuin yksi WORKSPACE_MENU määritys. Vain yksi on sallittu."
+
+#: ../src/rootmenu.c:741 ../src/rootmenu.c:764
+msgid "%s:missing parameter for menu command \"%s\""
+msgstr "%s: puuttuva parametri valikkokomennolla \"%s\""
+
+#: ../src/rootmenu.c:827
+msgid "%s:unknown command \"%s\" in menu config."
+msgstr "%s: tuntematon komento \"%s\" valikon määrityksessä."
+
+#: ../src/rootmenu.c:835
+msgid "%s:can't add shortcut for entry \"%s\""
+msgstr "%s: ei voi lisätä oikopolkua kohdalle \"%s\""
+
+#: ../src/rootmenu.c:971
+msgid "%s:maximal line size exceeded in menu config: %s"
+msgstr "%s: rivin pituus ylittää suurimman sallitun valikon määrityksessä: %s"
+
+#: ../src/rootmenu.c:993 ../src/rootmenu.c:1085 ../src/rootmenu.c:1185
+msgid "%s:missing command in menu config: %s"
+msgstr "%s: komento puuttuu valikon määrityksessä: %s"
+
+#: ../src/rootmenu.c:1023
+msgid "%s:syntax error in menu file:END declaration missing"
+msgstr "%s: valikon määrityksen syntaksissa virhe: END määre puuttuu"
+
+#: ../src/rootmenu.c:1052 ../src/rootmenu.c:1150
+msgid "could not make arguments for menu file preprocessor"
+msgstr "ei voinut tehdä parametreja valikkotiedoston esikäsittelijälle"
+
+#: ../src/rootmenu.c:1058 ../src/rootmenu.c:1157
+msgid "%s:could not open/preprocess menu file"
+msgstr "%s: ei voinut avata/esikäsitellä valikkotiedostoa"
+
+#: ../src/rootmenu.c:1070 ../src/rootmenu.c:1170
+msgid "%s:could not open menu file"
+msgstr "%s: ei voinut avata valikkotiedostoa"
+
+#: ../src/rootmenu.c:1097
+msgid "%s:invalid menu file"
+msgstr "%s: epäkelpo valikkotiedosto"
+
+#: ../src/rootmenu.c:1105
+msgid "error reading preprocessed menu data"
+msgstr "virhe luettaessa esikäsiteltyä valikkodataa"
+
+#: ../src/rootmenu.c:1197
+msgid "%s:no title given for the root menu"
+msgstr "%s: juurivalikolle ei ole annettu nimeä"
+
+#: ../src/rootmenu.c:1251 ../src/rootmenu.c:1314 ../src/rootmenu.c:1358
+msgid "out of memory while constructing directory menu %s"
+msgstr "muisti loppui luotaessa hakemistovalikkoa %s"
+
+#: ../src/rootmenu.c:1261
+msgid "%s:could not stat file \"%s\" in menu directory"
+msgstr "%s: tiedostolta \"%s\" ei saatu stat-tietoja valikkohakemistossa"
+
+#: ../src/rootmenu.c:1407
+msgid "Commands"
+msgstr "Komennot"
+
+#: ../src/rootmenu.c:1409
+msgid "Exit..."
+msgstr "Poistu..."
+
+#: ../src/rootmenu.c:1465
+msgid "%s:could not find menu file \"%s\""
+msgstr "%s: valikkotiedostoa \"%s\" ei löytynyt"
+
+#: ../src/rootmenu.c:1472
+msgid "%s:could not access menu \"%s\""
+msgstr "%s: valikkoa \"%s\" ei voitu käsitellä"
+
+#: ../src/rootmenu.c:1498 ../src/rootmenu.c:1545
+msgid "%s:format error in root menu configuration \"%s\""
+msgstr "%s: muotoiluvirhe juurivalikon määrityksessä \"%s\""
+
+#: ../src/screen.c:110
+msgid "it seems that there already is a window manager running"
+msgstr "jokin ikkunointijärjestelmä näyttäisi olevan käynnissä"
+
+#: ../src/screen.c:364
+msgid "could not load logo image for panels"
+msgstr "panelien logo-kuvaa ei voitu ladata"
+
+#: ../src/screen.c:367
+msgid "error making logo image for panel:%s"
+msgstr "virhe panelin %s logon luonnissa"
+
+#: ../src/screen.c:532
+msgid "could not initialize graphics library context: %s"
+msgstr "graafisen kirjaston kontekstia %s ei voitu alustaa"
+
+#: ../src/session.c:113 ../src/wdefaults.c:555 ../src/winspector.c:322
+msgid "can't convert \"%s\" to boolean"
+msgstr "\"%s\":ää ei voida muuttaa totuusarvoksi (boolean)"
+
+#: ../src/stacking.c:88
+msgid "could not get window list!!"
+msgstr "ikkunaluetteloa ei saatu"
+
+#: ../src/startup.c:149
+msgid "internal X error: %s\n"
+msgstr "sisäinen X virhe: %s\n"
+
+#: ../src/startup.c:189
+msgid "got signal %i (%s) - restarting\n"
+msgstr "vastaanotettu signaali %i (%s) - käynnistetään uudelleen\n"
+
+#: ../src/startup.c:191
+msgid "got signal %i - restarting\n"
+msgstr "vastaanotettu signaali %i - käynnistetään uudelleen\n"
+
+#: ../src/startup.c:198
+msgid "%s: Received signal SIGTERM. Exiting..."
+msgstr "%s: vastaanotettu signaali SIGTERM. Poistutaan..."
+
+#: ../src/startup.c:207
+msgid "got signal %i (%s)\n"
+msgstr "vastaanotettu signaali %i (%s)\n"
+
+#: ../src/startup.c:209
+msgid "got signal %i\n"
+msgstr "vastaanotettu signaali %i\n"
+
+#. restart another window manager so that the X session doesn't
+#. * go to space
+#: ../src/startup.c:218
+msgid "trying to start alternative window manager..."
+msgstr "yritetään käynnistää vaihtoehtoista ikkunointijärjestelmää..."
+
+#: ../src/switchmenu.c:124
+msgid "Windows"
+msgstr "Ikkunat"
+
+#: ../src/texture.c:260
+msgid "image file \"%s\" used as texture could not be found."
+msgstr "tekstuurina käytettyä kuvatiedostoa \"%s\" ei löydy."
+
+#: ../src/texture.c:266
+msgid "could not load texture pixmap \"%s\":%s"
+msgstr "tekstuuri pikselikarttaa \"%s\" ei löydy: %s"
+
+#: ../src/texture.c:362 ../src/texture.c:499
+msgid "could not render texture: %s"
+msgstr "tekstuuria %s ei voida renderoida"
+
+#: ../src/wdefaults.c:387
+msgid "could not find icon file \"%s\""
+msgstr "kuvaketiedostoa \"%s\" ei löytynyt"
+
+#: ../src/winmenu.c:182
+msgid "could not create workspace submenu for window menu"
+msgstr "ei voitu luoda työtilojen alivalikkoa ikkunavalikolle"
+
+#: ../src/winmenu.c:204
+msgid "(Un)Maximize"
+msgstr "Suurenna/Pienennä"
+
+#: ../src/winmenu.c:205
+msgid "Miniaturize"
+msgstr "Minimoi"
+
+#: ../src/winmenu.c:214
+msgid "(Un)Shade"
+msgstr "(Vain) Otsikkopalkki"
+
+#: ../src/winmenu.c:222
+msgid "Hide"
+msgstr "Piilota"
+
+#: ../src/winmenu.c:230
+msgid "Hide Others"
+msgstr "Piilota muut"
+
+#: ../src/winmenu.c:232
+msgid "Select"
+msgstr "Valitse"
+
+#: ../src/winmenu.c:234
+msgid "Move To"
+msgstr "Siirrä"
+
+#: ../src/winmenu.c:239
+msgid "Attributes..."
+msgstr "Ominaisuudet"
+
+#: ../src/winmenu.c:241
+msgid "Close"
+msgstr "Sulje"
+
+#: ../src/winspector.c:270
+msgid "Could not find specified icon file"
+msgstr "Valittua kuvaketiedostoa ei löytynyt"
+
+#: ../src/winspector.c:926
+msgid "not enough memory to open window inspector panel"
+msgstr "ei riittävästi muistia ikkunan tarkkailija panelin avaamiseksi"
+
+#: ../src/winspector.c:953
+msgid "Save"
+msgstr "Tallenna"
+
+#: ../src/winspector.c:959
+msgid "Apply"
+msgstr "Toteuta"
+
+#: ../src/winspector.c:965
+msgid "Revert"
+msgstr "Palaa"
+
+#: ../src/winspector.c:974 ../src/winspector.c:982
+msgid "Window Specification"
+msgstr "Ikkunan määritykset"
+
+#: ../src/winspector.c:975
+msgid "Window Attributes"
+msgstr "Ikkunan ominaisuudet"
+
+#: ../src/winspector.c:976
+msgid "Advanced Options"
+msgstr "Tarkemmat määritykset"
+
+#: ../src/winspector.c:977
+msgid "Icon and Initial Workspace"
+msgstr "Kuvake ja alustava työtila"
+
+#: ../src/winspector.c:978
+msgid "Application Specific"
+msgstr "Sovelluskohtaiset"
+
+#: ../src/winspector.c:990
+msgid "Defaults for all windows"
+msgstr "Oletusarvot kaikille ikkunoille"
+
+#: ../src/winspector.c:1026
+msgid ""
+"The configuration will apply to all\n"
+"windows that have their WM_CLASS property set to the above selected\n"
+"name, when saved."
+msgstr ""
+"Määritys vaikuttaa kaikkiin ikkunoihin joiden\n"
+"WM_CLASS ominaisuus on asetettu yllä valituksi nimeksi\n"
+"tallennuksen jälkeen."
+
+#. *** attributes ***
+#: ../src/winspector.c:1033
+msgid "Attributes"
+msgstr "Ominaisuudet"
+
+#: ../src/winspector.c:1043
+msgid "Disable titlebar"
+msgstr "Älä käytä otsikkopalkkia"
+
+#: ../src/winspector.c:1047
+msgid "Disable resizebar"
+msgstr "Älä käytä kokopalkkia"
+
+#: ../src/winspector.c:1051
+msgid "Disable close button"
+msgstr "Älä käytä sulje-nappia"
+
+#: ../src/winspector.c:1055
+msgid "Disable miniaturize button"
+msgstr "Älä käytä pienennä-nappia"
+
+#: ../src/winspector.c:1059
+msgid "Keep on top"
+msgstr "Pidä päällä"
+
+#: ../src/winspector.c:1063
+msgid "Omnipresent"
+msgstr "Näkyvissä kaikkialla"
+
+#: ../src/winspector.c:1067
+msgid "Start Miniaturized"
+msgstr "Käynnistä pienennettynä"
+
+#: ../src/winspector.c:1071
+msgid "Skip window list"
+msgstr "Älä näytä ikkunaluettelossa"
+
+#: ../src/winspector.c:1085
+msgid "Advanced"
+msgstr "Tarkemmat määritykset"
+
+#: ../src/winspector.c:1095
+msgid "Ignore HideOthers"
+msgstr "Älä huomio PiilotaMuut-komentoa"
+
+#: ../src/winspector.c:1099
+msgid "Don't bind keyboard shortcuts"
+msgstr "Älä sido näppäimistön oikopolkuja"
+
+#: ../src/winspector.c:1103
+msgid "Don't bind mouse clicks"
+msgstr "Älä sido hiiren näpäytyksiä"
+
+#: ../src/winspector.c:1107
+msgid "Keep inside screen"
+msgstr "Pidä näytön sisäpuolella"
+
+#: ../src/winspector.c:1111
+msgid "No application icon"
+msgstr "Ei sovelluskuvaketta"
+
+#: ../src/winspector.c:1115
+msgid "Don't let it take focus"
+msgstr "Älä anna fokusta"
+
+#: ../src/winspector.c:1119
+msgid "Don't Save Session"
+msgstr "Älä tallenna istuntoa"
+
+#: ../src/winspector.c:1134
+msgid "Enable the \"Don't bind...\" options to allow the application to receive all mouse or keyboard events."
+msgstr "Käytä kaikkia \"Älä sido...\" vaihtoehtoja antaaksesi sovellukselle kaikki näppäimistön ja hiiren tapahtumat"
+
+#: ../src/winspector.c:1141
+msgid "Miniwindow Image"
+msgstr "Kuvake"
+
+#: ../src/winspector.c:1159
+msgid "Update"
+msgstr "Päivitä"
+
+#: ../src/winspector.c:1164
+msgid "Icon file name:"
+msgstr "Kuvakkeen tiedostonimi:"
+
+#: ../src/winspector.c:1174
+msgid "Ignore client supplied icon"
+msgstr "Älä käytä sovelluksen antamaa kuvaketta"
+
+#: ../src/winspector.c:1180
+msgid "Initial Workspace"
+msgstr "Työtila käynnistettäessä"
+
+#: ../src/winspector.c:1186
+msgid "Nowhere in particular"
+msgstr "Ei mikään erityinen"
+
+#: ../src/winspector.c:1217
+msgid "Application Wide"
+msgstr "Sovelluskohtainen"
+
+#: ../src/winspector.c:1227
+msgid "Start Hidden"
+msgstr "Käynnistä piilotettuna"
+
+#: ../src/workspace.c:89 ../src/workspace.c:90 ../src/workspace.c:426
+msgid "Workspace %i"
+msgstr "Työtila %i"
+
+#: ../src/workspace.c:450
+msgid "Workspaces"
+msgstr "Työtilat"
+
+#: ../src/workspace.c:452
+msgid "could not create Workspace menu"
+msgstr "ei voinut luoda Työtila-valikkoa"
+
+#: ../src/workspace.c:459
+msgid "New"
+msgstr "Uusi"
+
+#: ../src/workspace.c:460
+msgid "Destroy Last"
+msgstr "Tuhoa viimeinen"
+
+#: ../src/xutil.c:220
+msgid "invalid data in selection"
+msgstr "epäkelpo data valinnassa"
+
+

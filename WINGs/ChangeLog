@@ -1,0 +1,96 @@
+changes since wmaker 0.20.0:
+............................
+
+- changed WMGetFilePanelFile() with WMGetFilePanelFileName()
+- made SavePanel
+
+changes since wmaker 0.19.3:
+............................
+
+- added WMCreatePanelForWindow()
+- added extra parent parameter for filepanel, alertpanel and inputpanel
+- WMCloseWindow()
+- WMChangePanelOwner()
+- added WMAddInputHandler()
+- change range related function arguments (WMTextField) to use WMRange
+
+changes since wmaker 0.19.1:
+............................
+
+- added wstrappend()
+- fixed bug when changing selected radio button by hand
+
+changes since wmaker 0.18.1:
+............................
+
+- removed textHeight arg from W_PaintImageAndText
+- added WMCreateWindowWithStyle()
+- added WMSetWindowBaseSize() and ResizeIncrements()
+- added WMSetWindowLeve()
+- added WMSetWindowDocumentEdited()
+- added WMSetScrollViewLineScroll(), WMSetScrollViewPageScroll()
+- added WMSetWindowMiniwindowTitle()
+- added WMSetWindowMiniwindowImage()
+
+changes since wmaker 0.18.0:
+............................
+
+- added functions to get RGB components and "#rrggbb" string from WMColor.
+- added function to create color from a name
+- fixed bug that caused blocking until some new event arrives, even
+  when there already were events in the queue
+  (like having to move the pointer over window to force the window to be
+  painted)
+
+changes since wmaker 0.17.5:
+............................
+
+I don't remember everything, but here it goes:
+
+- fixed some bugs in text field
+- added a incomplete implementation of split view (not yet usable)
+- added a slider
+- changed the filepanel stuff. Each application can have only 1 file panel.
+The same panel will be reused every time you call for it, unless you free it.
+- changed semantics of WMCreateFont() so that it returns NULL if the requested
+  font can't be loaded
+- removed WMAddDestroyCallback() 
+- fixed bug in WMRemovePopUpButtonItem()
+- added function for user specified item height in WMList
+- added WMSetPopUpButtonText(). It will set the default text in the button
+  when no options are selected
+- fixed bug in remove/add item in already mapped popupbuttons. Note: it is
+  not good practice to change the contents of a popup button when it's
+  already visible and the user has probably interacted with it.
+- fixed behaviour of "radio buttons"
+- WMInitializeApplication() must be the first function to be called in the
+  program
+- removed applicationName, argc and argv arguments from the WMCreateScree...
+  functions
+- WMReleaseColor(scr,color) changed to WMReleaseColor(color)
+- WMPaintColorRectangle() changed to WMPaintColorSwatch()
+- added various functions in font and color handling
+- added WMSetButtonFont()
+- changed WMCreateCommandButton() so that the buttons it creates will change
+	their label when pushed
+- added WMGetSystemPixmap(WMScreen *scr, int image)
+- added partial I18N support
+- added libPropList requirement and some related utility functions
+- added a interface to prooplist, so that it works as a user defaults db
+- added WMWidthOfString() (removed WMFontWidthOfString())
+- added WMDrawString()
+- added WMSetTextFieldSecure(WMTextField *tPtr, Bool flag)
+- WMGetListItem() will dup the returned string
+- removed need for ProgName being defined
+- rewrote hashtable stuff and made it available for outside use
+- added notification functions, with view resize notification
+- added WMSetWindowMinSize() and MaxSize()
+- text editing notification
+- added WMSetListPosition() etc.
+- added WMInsertBrowserItem()
+- the above 2 functions return WMListItem*, instead of Bool
+- rewrote browser
+- WMGetListItem() will return WMListItem*
+- removed WMGetListItems() and WMSetListItems()
+- fixed focus stuff for multi-window apps
+- changed all WMList function names that contained index to row

@@ -1,0 +1,298 @@
+#!/bin/sh
+# Only run the following line once \
+exec wish -f $0 $@
+
+##########################################
+#Copyright 1998 Kenneth W. Persinger Jr. #
+#       Written for WindowMaker	         #
+##########################################
+
+
+# You can add the full path for Xprop here.
+set xprop xprop
+
+###############################
+# DO NOT EDIT BELOW THIS LINE #
+###############################
+global xprop;
+global instance;set instance "" 
+global class;set class ""
+global command; set command ""
+global Version;set Version "V1.3"
+
+
+    global Version
+    global instance
+    global class
+    global command
+    wm withdraw .
+    wm group . .
+
+    toplevel .dockit -class Dockit
+    wm group .dockit .dockit
+    wm command .dockit "$argv0 $argv"
+    wm iconname .dockit "Dockit   ${Version}"
+    wm protocol .dockit WM_DELETE_WINDOW {exit} 
+    wm focusmodel .dockit passive
+    wm title .dockit "Dockit ${Version}"
+    wm geometry .dockit 309x157+440+412
+    wm maxsize .dockit 1265 994
+    wm minsize .dockit 1 1
+    wm overrideredirect .dockit 0
+    wm resizable .dockit 0 0
+    wm deiconify .dockit
+
+    label .dockit.msgbar \
+        -anchor nw -borderwidth 1 -justify left -relief raised \
+        -text "" 
+    label .dockit.instlbl \
+        -borderwidth 1 -relief raised -text Instance 
+    label .dockit.cllbl \
+        -borderwidth 1 -relief raised -text Class 
+    label .dockit.comlbl \
+        -borderwidth 1 -relief raised -text Command 
+    entry .dockit.instent -textvariable instance
+    entry .dockit.clent -textvariable class
+    entry .dockit.coment -textvariable command
+    button .dockit.create \
+        -padx 9 -pady 3 -text {Create Icon} -command {docreate} 
+    button .dockit.exit \
+        -padx 9 -pady 3 -text Quit -command exit
+    button .dockit.grab \
+        -padx 9 -pady 3 -text Grab -command {dograb}
+    button .dockit.help \
+        -padx 9 -pady 3 -text Help -command {dohelp}
+    ###################
+    # SETTING GEOMETRY
+    ###################
+    place .dockit.msgbar \
+        -x 5 -y 120 -width 296 -height 33 -anchor nw -bordermode ignore 
+    place .dockit.instlbl \
+        -x 5 -y 5 -width 76 -height 23 -anchor nw -bordermode ignore 
+    place .dockit.cllbl \
+        -x 5 -y 30 -width 76 -height 23 -anchor nw -bordermode ignore 
+    place .dockit.comlbl \
+        -x 5 -y 55 -width 76 -height 23 -anchor nw -bordermode ignore 
+    place .dockit.instent \
+        -x 85 -y 5 -width 216 -height 22 -anchor nw -bordermode ignore 
+    place .dockit.clent \
+        -x 85 -y 30 -width 216 -height 22 -anchor nw -bordermode ignore 
+    place .dockit.coment \
+        -x 85 -y 55 -width 216 -height 22 -anchor nw -bordermode ignore 
+    place .dockit.create \
+        -x 5 -y 80 -width 77 -height 36 -anchor nw -bordermode ignore 
+    place .dockit.exit \
+        -x 230 -y 80 -width 72 -height 36 -anchor nw -bordermode ignore 
+    place .dockit.grab \
+        -x 80 -y 80 -width 77 -height 36 -anchor nw -bordermode ignore 
+    place .dockit.help \
+        -x 155 -y 80 -width 77 -height 36 -anchor nw -bordermode ignore 
+############
+# Bindings #
+############
+    bind all <Leave> {message ""}
+    bind .dockit.instlbl <Enter> {message "Instance name goes here.
+(the 1st string of WM_CLASS)"}
+    bind .dockit.instent <Enter> {message "Instance name goes here.
+(the 1st string of WM_CLASS)"}
+    bind .dockit.cllbl <Enter> {message "Class name goes here.
+(the 2nd string of WM_CLASS)"}
+    bind .dockit.clent <Enter> {message "Class name goes here.
+(the 2nd string of WM_CLASS)"}
+    bind .dockit.comlbl <Enter> {message "The command to execute goes here.
+(all of WM_COMMAND)"}
+    bind .dockit.coment <Enter> {message "The command to execute goes here.
+(all of WM_COMMAND)"}
+    bind .dockit.create <Enter> {message "Create you custom AppIcon."}
+    bind .dockit.exit <Enter> {message "Exit Dockit!"}
+    bind .dockit.help <Enter> {message "Help with creating AppIcons,
+and for these commands."}
+    bind .dockit.grab <Enter> {message "Grab AppInfo from a running App."} 
+
+
+###################
+#   Actual Code   #
+###################
+
+proc message {message} {
+    .dockit.msgbar configure -text $message
+}
+
+proc docreate {} {
+    global Version
+    global instance
+    global class
+    global command
+
+    if {$command == ""} {
+        tk_dialog .error "DockIt ${Version}: ERROR" \
+ 	"You must supply a command line. Otherwise your icon would do nothing!" \
+ 	"" "" "Doh!"
+    } else {
+	set insttmp $instance
+	set classtmp $class
+	set commandtmp $command
+
+    if {$insttmp == ""} { set insttmp "dockit" }
+    if {$classtmp == ""} { set classtmp "DockedApp" }
+
+    toplevel .$insttmp -class $classtmp
+    wm command .$insttmp "$commandtmp"
+    wm group .$insttmp .$insttmp
+    label .$insttmp.l1 -text "
+Great! Your new App-Icon should be finished now.
+once you have dragged it to the Dock, Click Finish.
+If your Icon doesn't Dock, or does not appear,
+Try again. If problems persist, see Dockit's Help."
+    button .$insttmp.b1 -text "Finish" -command "destroy .$insttmp"
+    pack .$insttmp.l1
+    pack .$insttmp.b1
+    wm title .$insttmp "Dockit ${Version}: Confirmation"
+ }
+}
+
+proc dohelp {} {
+     global Version
+
+set HLPTXT { Dockit V1.2
+
+General Info:
+
+        Dockit is a tool designed to provide the ability to Dock
+        poorly coded programs within WindowMaker.
+
+        This is not a 100% accurate solution. It was not designed to be.
+        It will however, generate a dockable icon 99% of the time.
+        for that other 1%, you will need to edit by hand.
+
+Troubleshooting:
+
+Error: 'window name starts with an upper-case letter':
+
+        This is a limitation of Tcl/Tk.
+        window/pathnames cannot start with an uppercase letter.
+        This behavior is most noticable in Netscape's Navigator.
+        It's instance is 'Navigator'
+        A work-around to this limitation, is to double-define your App
+        settings. (ex:'navigator', and 'Navigator')
+ 
+
+Error: couldn't execute "xprop": no such file or directory
+
+        This means that /usr/X11R6/bin (or its equivilent) 
+        is not defined in your path.
+        You must add this to your path.
+
+
+
+AppIcon does not appear as it should:
+
+        This could happen for a number of reasons.
+        A: You have NoAppIcon defined for that particular App.
+        B: One word: El Ni~no
+
+
+
+App Closes, but Dots do not appear/ Cannot remove Icon from the Dock:
+
+        This is the result of a VERY poorly coded App.
+        As far as WIndowMaker can tell, the program is still running.
+        The only real fix for this, is CTRL + ALT + BACKSPACE
+
+}
+
+
+   toplevel .userhelp -class Dockit
+    wm group .userhelp .dockit
+    wm iconname .userhelp "Dockit HELP"
+    wm focusmodel .userhelp passive
+    wm geometry .userhelp 456x635
+    wm maxsize .userhelp 1265 1265
+    wm minsize .userhelp 1 1
+    wm overrideredirect .userhelp 0
+    wm resizable .userhelp 1 1
+    wm deiconify .userhelp
+    wm title .userhelp "Dockit ${Version}: HELP"
+    label .userhelp.text \
+        -anchor nw -justify left -borderwidth 1 \
+        -text $HLPTXT 
+    place .userhelp.text \
+        -x 0 -y 0 -anchor nw -bordermode ignore 
+
+
+
+}
+proc dograb {} {
+   global xprop
+   global class
+   global instance
+   global command
+
+   catch "open ~/GNUstep/.AppInfo/xprop1 w+" m1
+   exec ${xprop} >@ $m1
+   seek $m1 0
+   set tmpmsg [read $m1]
+   set tmpmsg [split $tmpmsg \n]
+   close $m1
+   #Make sure we are the leader
+   foreach junk $tmpmsg {
+      if {[string match "WM_TRANSIENT_FOR(WINDOW): window id \# *" $junk]} {
+         dograb+ [lindex $junk 4] NNNN
+         return 1
+      } elseif {[string match "*window id # of group leader: *" $junk]} {
+       dograb+ [lindex $junk 6] NNNN
+	return 1
+      }
+   }
+
+   set tclass [lindex $tmpmsg [lsearch -glob $tmpmsg *WM_CLASS*]]
+   set tclass [split $tclass ,]
+   set class [string trim [lindex $tclass 1] \ \"]
+   set instance [string tolower \
+   [string trim [lindex [lindex $tclass 0] 2] \ \"]]
+   set tcom [lindex $tmpmsg [lsearch -glob $tmpmsg *WM_COMMAND*]]
+   set tcom [split [lindex $tcom 2] \,]
+   set tcom [split [join $tcom] \"]
+   set command [join [join $tcom]]
+}
+
+
+proc dograb+ {winid sourcewin} {
+   global xprop
+   global class
+   global instance
+   global command
+
+   catch "open ~/GNUstep/.AppInfo/xprop1 w+" m1
+   exec ${xprop} -id $winid >@ $m1
+   seek $m1 0
+   set tmpmsg [read $m1]
+   set tmpmsg [split $tmpmsg \n]
+
+   # Make sure we arent hitting a Loop, where we show ourself as
+   # The group leader.
+   if { ![string match $sourcewin $winid]} {
+    
+    # recurse to the toplevel leader.
+    foreach junk $tmpmsg {
+      if {[string match "WM_TRANSIENT_FOR(WINDOW): window id # *" $junk]} {
+         dograb+ [lindex $junk 4] $winid
+         return 1
+      } elseif {[string match "*window id # of group leader: *" $junk]} {
+       dograb+ [lindex $junk 6] $winid
+	return 1
+      }
+    }
+   }
+
+   set tclass [lindex $tmpmsg [lsearch -glob $tmpmsg *WM_CLASS*]]
+   set tclass [split $tclass ,]
+   set class [string trim [lindex $tclass 1] \ \"]
+   set instance [string tolower \
+   [string trim [lindex [lindex $tclass 0] 2] \ \"]]
+   set tcom [lindex $tmpmsg [lsearch -glob $tmpmsg *WM_COMMAND*]]
+   set tcom [split [lindex $tcom 2] \,]
+   set tcom [split [join $tcom] \"]
+   set command [join [join $tcom]]
+   close $m1
+}

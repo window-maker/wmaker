@@ -1,0 +1,473 @@
+msgid ""
+msgstr ""
+"Date: 1997-06-02 18:29:09-0300\n"
+"From:  Roeland Mertens <roeland@zeus.rug.ac.be>\n"
+"Language-Team: Dutch \n"
+"Content-Type: text/plain; charset=\n"
+"Xgettext-Options: --default-domain=WindowMaker --add-comments --keyword=_\n"
+"Files: ../main.c ../event.c ../window.c ../startup.c ../shutdown.c ../wcore.c ../properties.c ../texture.c ../actions.c ../menu.c ../client.c ../pixmap.c ../image.c ../gradient.c ../button.c ../screen.c ../icon.c ../rootmenu.c ../dialog.c ../resource.c ../moveres.c ../application.c ../colormap.c ../raster.c ../placement.c ../misc.c ../appmenu.c ../keybind.c ../stacking.c ../appicon.c ../switchmenu.c ../dock.c ../winmenu.c ../generic/error.c\n" 
+
+#: ../main.c:147
+msgid "Restart failed!!!"
+msgstr "Herstarten gefaald!!!"
+
+#: ../main.c:162
+msgid "%s aborted.\n"
+msgstr "%s afgebroken.\n"
+
+#: ../main.c:170
+msgid "usage: %s [-options]\n"
+msgstr "gebruik: %s [-opties]\n"
+
+#: ../main.c:171
+msgid "options:"
+msgstr "opties"
+
+#: ../main.c:173
+msgid " -nocpp \t\tdisable preprocessing of configuration files"
+msgstr " -nocpp \t\tafzetten voorverwerking van de configuratie bestanden"
+
+#: ../main.c:176
+msgid " -nodock\t\tdo not open the application Dock"
+msgstr " -nodock\t\tOpen de applicatie Dock niet!"
+
+#: ../main.c:178
+msgid " -locale locale\t\tlocale to use"
+msgstr " -locale locale\t\tlocale te gebruiken"
+
+#: ../main.c:179
+msgid " -display host:dpy\tdisplay to use"
+msgstr " -display host:dpy\tscherm te gebruiken"
+
+#: ../main.c:180
+msgid " -version\t\tprint version and exit"
+msgstr " -version\t\tversie afdrukken en afsluiten"
+
+#: ../main.c:234
+msgid "cannot set locale %s"
+msgstr "kan locale %s niet instellen"
+
+#: ../main.c:235
+msgid "falling back to C locale"
+msgstr "teruggrijpen naar C locale"
+
+#: ../main.c:263
+msgid "X server does not support locale"
+msgstr "X server ondersteunt geen locale"
+
+#: ../main.c:266
+msgid "cannot set locale modifiers"
+msgstr "kan locale niet instellen"
+
+#: ../main.c:276
+msgid "could not open display %s"
+msgstr "kan scherm %s niet openen"
+
+#: ../event.c:230
+msgid "stack overflow: too many dead processes"
+msgstr "stapel overflow: te veel dode processen"
+
+#: ../startup.c:137
+msgid "internal X error: %s\n"
+msgstr "interne X fout: %s\n"
+
+#: ../startup.c:152
+msgid "got signal %i (%s)\n"
+msgstr "kreeg signaal %i (%s)\n"
+
+#: ../startup.c:154
+msgid "got signal %i\n"
+msgstr "kreeg signaal %i\n"
+
+#: ../texture.c:317 ../texture.c:327
+msgid "unsupported visual/depth for gradients"
+msgstr "niet ondersteund scherm/diepte voor gradienten"
+
+#: ../menu.c:231
+msgid "wrealloc() failed while trying to add menu item"
+msgstr "wrealloc() gefaald tijdens toevoegen menukeuze"
+
+#: ../pixmap.c:211
+msgid "could not load mask bitmap file \"%s\". Won't use mask"
+msgstr "kon mask bitmap bestand niet laden \"%s\".Zal mask niet gebruiken"
+
+#: ../image.c:183 ../image.c:889 ../pixmap.c:261
+msgid "could not load XPM file \"%s\""
+msgstr "kon XPM bestand niet laden \"%s\""
+
+#: ../pixmap.c:264
+msgid "cannot load \"%s\": XPM support not compiled in"
+msgstr "kon \"%s\" niet laden : XPM ondersteuning niet ingecompileerd"
+
+#: ../pixmap.c:271
+msgid "could not load XBM file \"%s\""
+msgstr "kon XBM bestand niet laden \"%s\""
+
+#: ../image.c:196 ../pixmap.c:275
+msgid "can't identify image file \"%s\""
+msgstr "kon image bestand niet identificeren \"%s\""
+
+#: ../image.c:200 ../pixmap.c:279
+msgid "unknown image format in \"%s\""
+msgstr "onbekend image formaat in \"%s\""
+
+#: ../image.c:65 ../image.c:494
+msgid "can't load pixmap file \"%s\". Size too weird"
+msgstr "kon pixmap bestand \"%s\" niet laden. Grootte te raar"
+
+#: ../image.c:83 ../image.c:746 ../image.c:768
+msgid "virtual memory exhausted during pixmap load. Not fatal..."
+msgstr "virtueel geheugen uitgeput tijdens laden pixmap.Niet fataal..."
+
+#: ../image.c:100 ../image.c:510
+msgid "virtual memory exhausted. Continuing..."
+msgstr "virtueel geheugen uitgeput. Voortdoen..."
+
+#: ../image.c:186
+msgid "cannot load \"%s\": XPM format not supported"
+msgstr "kan \"%s\" niet laden: XPM formaat niet ondersteund"
+
+#. XPM
+#: ../image.c:191
+msgid "can't convert XBM file \"%s\" to internal format"
+msgstr "kan XBM bestand \"%s\" niet converteren naar intern formaat"
+
+#: ../image.c:556 ../image.c:562 ../image.c:581
+msgid "virtual memory exhausted during XPM load."
+msgstr "virtueel geheugen uitgeput tijdens laden XPM"
+
+#: ../image.c:712 ../image.c:855
+msgid "could not convert image \"%s\" to internal format"
+msgstr "kon image \"%s\" niet converteren naar intern formaat"
+
+#: ../image.c:901
+msgid "can't load \"%s\": unknown image format"
+msgstr "kon \"%s\" niet laden : onbekend image formaat"
+
+#: ../screen.c:83
+msgid "it seems that there already is a window manager running"
+msgstr "waarschijnelijk draait er al een window manager"
+
+#: ../screen.c:234 ../screen.c:344
+msgid "could not parse color %s"
+msgstr "kon kleur %s niet parsen"
+
+#: ../screen.c:289
+msgid "The following character sets are missing:"
+msgstr "De volgende karaktersets ontbreken"
+
+#: ../screen.c:293
+msgid "The string \"%s\" will be used in place"
+msgstr "De string \"%s\" zal gebruikt in plaats"
+
+#: ../screen.c:295
+msgid "of any characters from those sets."
+msgstr "van enige karakters van die sets"
+
+#: ../screen.c:298
+msgid "could not create font set %s. Using fixed"
+msgstr "kon font set %s niet aanmaken. Fixed wordt gebruikt"
+
+#: ../screen.c:305
+msgid "could not load any usable font set"
+msgstr "kon geen bruikbare font set laden"
+
+#: ../screen.c:315
+msgid "could not load font %s. Using fixed"
+msgstr "kon font %s niet laden.Fixed wordt gebruikt"
+
+#: ../screen.c:318
+msgid "could not load any usable font"
+msgstr "kon geen bruikbare font laden"
+
+#: ../screen.c:439
+msgid "Gradient texture not supported for your display (PseudoColor %ibpp)"
+msgstr "Gradiente texturen niet ondersteund voor uw scherm (Pseudokleur %ibpp)"
+
+#: ../screen.c:442
+msgid "You must enable dithering to be able to use gradients with this display"
+msgstr "U moet dithering aanzetten om gradienten te kunnen gebruiken met dit scherm"
+
+#: ../screen.c:456
+msgid "Gradient texture available only for PseudoColor and TrueColor displays"
+msgstr "Gradienten enkel beschikbaar voor Pseudokleur en Truecolor schermen"
+
+#: ../screen.c:478
+msgid "could not allocate texture"
+msgstr "kon textuur niet toewijzen"
+
+#: ../screen.c:1058
+msgid "colormap size value(s) too large"
+msgstr "maat kleurenmap waarden te groot"
+
+#: ../dialog.c:208 ../rootmenu.c:108
+msgid "Exit"
+msgstr "Stoppen"
+
+#: ../rootmenu.c:109
+msgid "Exit window manager?"
+msgstr "Stoppen window manager?"
+
+#: ../rootmenu.c:128
+msgid "Close X session"
+msgstr "Stoppen X sessie"
+
+#: ../rootmenu.c:129
+msgid ""
+"Close Window System session?\n"
+"(all applications will be closed)"
+msgstr ""
+"Afsluiten Window system sessie?\n"
+"(alle applicaties zullen afgesloten worden)"
+
+#: ../rootmenu.c:217 ../rootmenu.c:314 ../rootmenu.c:496
+msgid "Switch to %i"
+msgstr "Overspringen naar %i"
+
+#: ../rootmenu.c:283
+msgid "out of memory to store menu commands. Nuking it."
+msgstr "geheugen te kort om menu commando's op te slaan.Nuke het"
+
+#: ../rootmenu.c:303
+msgid "Workspaces"
+msgstr "Werkplaats"
+
+#: ../rootmenu.c:305
+msgid "could not create Workspace menu"
+msgstr "kon Werkplaats menu niet aanmaken"
+
+#: ../rootmenu.c:308
+msgid "New"
+msgstr "Nieuw"
+
+#: ../rootmenu.c:309
+msgid "Destroy Last"
+msgstr "Vernietig Laatste"
+
+#: ../rootmenu.c:350
+msgid "missing command in menu config: %s"
+msgstr "commando in menu configuratie ontbreekt : %s"
+
+#: ../rootmenu.c:390
+msgid "menu can only have one WORKSPACE_MENU"
+msgstr "menu kan maar een WORKSPACE_MENU hebben"
+
+#: ../rootmenu.c:406
+msgid "unknown command \"%s\" in menu config."
+msgstr "onbekend commando \"%s\" in menu configuratie"
+
+#: ../rootmenu.c:410
+msgid "syntax error in menu config. END declaration missing"
+msgstr "syntax fout in menu configurate. END declaratie ontbreekt"
+
+#: ../rootmenu.c:435
+msgid "syntax error in menu config. %s"
+msgstr "syntax fout in menu configuratie. %s"
+
+#: ../rootmenu.c:443
+msgid "no title given for the root menu"
+msgstr "geen title gegeven voor basis menu"
+
+#: ../rootmenu.c:455
+msgid "Commands"
+msgstr "Commando's"
+
+#: ../rootmenu.c:456
+msgid "Exit..."
+msgstr "Afsluiten"
+
+#: ../rootmenu.c:573
+msgid "could not stat menu configuration file \"%s\""
+msgstr "kon menu configuratie bestand \"%s\" niet statten"
+
+#: ../rootmenu.c:578
+msgid "no read permision to menu configuration file"
+msgstr "geen lees permissie voor menu configuratie bestand"
+
+#: ../rootmenu.c:595
+msgid "could not make arguments for menu file preprocessor"
+msgstr "kon geen argumenten voor de menu bestand voorverwerker maken"
+
+#: ../rootmenu.c:603
+msgid "could not open menu configuration preprocessor"
+msgstr "kon de menu configuratie voorverwerker niet starten"
+
+#: ../rootmenu.c:613
+msgid "couldn't open menu configuration file \"%s\""
+msgstr "kon het menu configuratie bestand niet openen \"%s\""
+
+#: ../dock.c:689 ../rootmenu.c:646
+msgid "Error"
+msgstr "Fout"
+
+#: ../rootmenu.c:647
+msgid ""
+"Could not read menu configuration\n"
+"(see console log for details)"
+msgstr ""
+"Kon menu configuratie niet lezen\n"
+"(zie console log for details)"
+
+#: ../dialog.c:196
+msgid "OK "
+msgstr "OK"
+
+#: ../dialog.c:210
+msgid "Cancel"
+msgstr ""
+
+#: ../resource.c:297 ../resource.c:359 ../resource.c:368 ../resource.c:497 ../resource.c:521 ../resource.c:530 ../resource.c:555
+msgid "%s: syntax error in line \"%s\""
+msgstr "%s: syntax fout op lijn \"%s\""
+
+#: ../resource.c:309
+msgid "%s: invalid window attribute specification in \"%s\""
+msgstr "%s: ongeldig window attribuut specificate in \"%s\""
+
+#: ../resource.c:336
+msgid "%s: unknown attribute in line \"%s\""
+msgstr "%s: onbekend attribuut op lijn \"%s\""
+
+#: ../resource.c:416 ../resource.c:425 ../resource.c:437
+msgid "%s:invalid kbd shortcut specification \"%s\""
+msgstr "%s:ongeldig toestenbord snelkoppeling specificatie \"%s\""
+
+#: ../resource.c:477
+msgid "%s: expected section identifier but got %s"
+msgstr "%s: verwachtte sectie identificator maar kreeg %s"
+
+#: ../resource.c:510
+msgid "%s: unknown option in line \"%s\""
+msgstr "%s: onbekende optie op lijn \"%s\""
+
+#: ../resource.c:559
+msgid "%s: invalid colormap size in line \"%s\""
+msgstr "%s: ongeldige kleurenmap grootte op lijn \"%s\""
+
+#: ../resource.c:579
+msgid "%s: invalid geometry display type \"%s\". Shouldbe center, corner, floating or line"
+msgstr "%s: ongeldige geometrie scherm type \"%s\". Zou center, corner, floating of line moeten zijn"
+
+#: ../resource.c:601
+msgid "%s: invalid focus mode \"%s.\" Should be manual, auto or semiauto"
+msgstr "%s: ongeldig focus mode \"%s.\" Zou manual, auto of semiauto moeten zijn"
+
+#: ../resource.c:619
+msgid "%s: invalid window placement mode \"%s\". Should be auto, cascade or manual"
+msgstr "%s: ongeldig window plaatsingsmode \"%s\". Zou auto, cascade of manueel moeten zijn"
+
+#: ../resource.c:639
+msgid "%s: invalid texture type \"%s\" Should be solid, dgradient, vgradient or hgradient"
+msgstr "%s: ongeldig textuur type \"%s\" Zou solid, dgradient, vgradient of hgradient moeten zijn"
+
+#: ../resource.c:666
+msgid "%s: invalid gradient spec. \"%s\""
+msgstr "%s: ongeldig gradient spec. \"%s\""
+
+#: ../resource.c:685
+msgid "%s: invalid coordinate \"%s\""
+msgstr "%s: ongeldige coordinaat \"%s\""
+
+#: ../resource.c:701
+msgid "%s: invalid justification type \"%s\". Should be left, center or right"
+msgstr "%s: ongeldig uitlijningstype \"%s\". Zou left, center of right moeten zijn"
+
+#: ../resource.c:731
+msgid "could not make arguments for preference file preprocessor"
+msgstr "kon geen argumenten maken voor de voorkeursbestand voorverwerker"
+
+#: ../resource.c:737
+msgid "could not open preference file preprocessor"
+msgstr "kon voorkeursbestand voorverwerker niet openen"
+
+#: ../resource.c:744
+msgid "could not open configuration file: \"%s\""
+msgstr "kon configuratie bestand: \"%s\" niet openen"
+
+#: ../resource.c:791
+msgid "could not find default icon \"%s\""
+msgstr "kon standaard icoon \"%s\" niet vinden"
+
+#: ../resource.c:797
+msgid "could not find a preference file (%s) in \"%s\""
+msgstr "kon voorkeursbestand (%s) niet vinden in \"%s\""
+
+#: ../resource.c:805
+msgid "could not find icon background \"%s\""
+msgstr "kon icoon achtergrond \"%s\" niet vinden"
+
+#: ../raster.c:183
+msgid "invalid dither colormap size specification.disabling"
+msgstr "ongeldig dither kleurenmap grootte specificatie.Uitgeschakeld"
+
+#: ../raster.c:193
+msgid "Could not build PseudoColor color table\n"
+msgstr "Kon pseudokleur kleurentafel niet aanmaken\n"
+
+#: ../misc.c:50
+msgid "could not define value for %s for cpp"
+msgstr "kon geen waarde voor %s definieeren voor cpp"
+
+#: ../misc.c:80
+msgid "could not get password entry for UID %i"
+msgstr "kon geen paswoord vermelding vinden voor UID %i"
+
+#: ../appmenu.c:114
+msgid "appmenu:could not create menu"
+msgstr "appmenu: kon menu niet aanmaken"
+
+#: ../appmenu.c:145
+msgid "appmenu:could not create menu entry"
+msgstr "appmenu: kon menukeuze niet aanmaken"
+
+#: ../stacking.c:89 ../stacking.c:148
+msgid "could not get window list!!"
+msgstr "kon geen windowlijst krijgen!!"
+
+#: ../switchmenu.c:109
+msgid "Windows"
+msgstr "Windows"
+
+#: ../dock.c:171
+msgid "could not open file \"%s\" to save Dock state"
+msgstr "kon bestand \"%s\" niet openen om de Dock status op te slaan"
+
+#: ../dock.c:687
+msgid "Could not execute program \"%s\""
+msgstr "Kon program \"%s\" niet uitvoeren"
+
+#: ../winmenu.c:119
+msgid "(Un)Maximize"
+msgstr "(Niet)Maximale grootte"
+
+#: ../winmenu.c:126
+msgid "Miniaturize"
+msgstr "Verkleinen"
+
+#: ../winmenu.c:133
+msgid "(Un)Shade"
+msgstr "(Geen)Shaduw"
+
+#: ../winmenu.c:140
+msgid "Hide"
+msgstr "Verstoppen"
+
+#: ../winmenu.c:146
+msgid "Hide Others"
+msgstr "Andere verstoppen"
+
+#: ../winmenu.c:149
+msgid "Close"
+msgstr "Sluiten"
+
+#: ../winmenu.c:156
+msgid "Kill"
+msgstr "Afmaken"
+
+#: ../generic/error.c:46
+msgid " fatal error: "
+msgstr " fatale fout: "
+
+#: ../generic/error.c:72
+msgid " warning: "
+msgstr " waarschuwing: "

@@ -1,0 +1,11 @@
+
+Instructions for translating po files can be found in the po/README directory
+in the top of the WindowMaker source tree.
+
+File	Language		Current Maintainer
+------------------------------------------------------------------------------
+pt.po	Portuguese		Alfredo K. Kojima <kojima@inf.ufrgs.br>
+hr.po	Croatian		Toni Biliæ <tbilic@oliver.efos.hr>
+fr.po	French			Bastien NOCERA <hadess@writeme.com>
+ko.po	Korean			Byeong-Chan, Kim <redhands@linux.sarang.net>
+cs.po	Czech		3	David ©auer <xsauer@hwlab.felk.cvut.cz>

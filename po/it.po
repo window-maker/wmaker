@@ -1,0 +1,475 @@
+# Italian message file for WindowMaker
+#
+msgid ""
+msgstr ""
+"Date: 1997-06-02 13:43:55-0300\n"
+"From: CheccozzoRoberto\n"
+"Language-Team: Italian \n"
+"Content-Type: text/plain; charset=\n"
+"Xgettext-Options: --default-domain=WindowMaker --add-comments --keyword=_\n"
+"Files: ../main.c ../event.c ../window.c ../startup.c ../shutdown.c ../wcore.c ../properties.c ../texture.c ../actions.c ../menu.c ../client.c ../pixmap.c ../image.c ../gradient.c ../button.c ../screen.c ../icon.c ../rootmenu.c ../dialog.c ../resource.c ../moveres.c ../application.c ../colormap.c ../raster.c ../placement.c ../misc.c ../appmenu.c ../keybind.c ../stacking.c ../appicon.c ../switchmenu.c ../dock.c ../winmenu.c\n"
+
+#: ../main.c:147
+msgid "Restart failed!!!"
+msgstr "Inizializzazione fallita!!!"
+
+#: ../main.c:162
+msgid "%s aborted.\n"
+msgstr "%s fallito.\n"
+
+#: ../main.c:170
+msgid "usage: %s [-options]\n"
+msgstr "utilizzo: %s [-opzioni]\n"
+
+#: ../main.c:171
+msgid "options:"
+msgstr "opzioni:"
+
+#: ../main.c:173
+msgid " -nocpp \t\tdisable preprocessing of configuration files"
+msgstr " -nocpp \t\tdisattiva il preprocessamento dell'archivio di configurazione"
+
+#: ../main.c:176
+msgid " -nodock\t\tdo not open the application Dock"
+msgstr " -nodock\t\tnono usare l'applicazione Dock"
+
+#: ../main.c:178
+msgid " -locale locale\t\tlocale to use"
+msgstr ""
+
+#: ../main.c:179
+msgid " -display host:dpy\tdisplay to use"
+msgstr " -display host:dpy\tdisplay da usare"
+
+#: ../main.c:180
+msgid " -version\t\tprint version and exit"
+msgstr " -version\t\tmostra la versione e esce"
+
+#: ../main.c:234
+msgid "cannot set locale %s"
+msgstr ""
+
+#: ../main.c:235
+msgid "falling back to C locale"
+msgstr ""
+
+#: ../main.c:263
+msgid "X server does not support locale"
+msgstr " Il server X non suporta locale"
+
+#: ../main.c:266
+msgid "cannot set locale modifiers"
+msgstr ""
+
+#: ../main.c:276
+msgid "could not open display %s"
+msgstr "il display \"%s\" non puo' essere aperto"
+
+#: ../event.c:230
+msgid "stack overflow: too many dead processes"
+msgstr "stack troppo pieno: troppi processi morti"
+
+#: ../startup.c:137
+msgid "internal X error: %s\n"
+msgstr "errore interno di X: %s\n"
+
+#: ../startup.c:152
+msgid "got signal %i (%s)\n"
+msgstr ""
+
+#: ../startup.c:154
+msgid "got signal %i\n"
+msgstr ""
+
+#: ../texture.c:317 ../texture.c:327
+msgid "unsupported visual/depth for gradients"
+msgstr "visual/depth non supportata per gradients"
+
+#: ../menu.c:231
+msgid "wrealloc() failed while trying to add menu item"
+msgstr ""
+
+#: ../pixmap.c:211
+msgid "could not load mask bitmap file \"%s\". Won't use mask"
+msgstr "l'archivio bitmap \"%s\" non puo' essere aperto."
+
+#: ../image.c:183 ../image.c:889 ../pixmap.c:261
+msgid "could not load XPM file \"%s\""
+msgstr "l'arquivo XPM \"%s\" non puo' essere aperto."
+
+#: ../pixmap.c:264
+msgid "cannot load \"%s\": XPM support not compiled in"
+msgstr "\"%s\" non puo' essere caricato: supporto per XPM non compilato"
+
+#: ../pixmap.c:271
+msgid "could not load XBM file \"%s\""
+msgstr "l'archivio XBM \"%s\" non puo' essere caricato"
+
+#: ../image.c:196 ../pixmap.c:275
+msgid "can't identify image file \"%s\""
+msgstr "l'archivio grafico \"%s\" non puo' essere identificato"
+
+#: ../image.c:200 ../pixmap.c:279
+msgid "unknown image format in \"%s\""
+msgstr "formato grafico non riconosciuto in \"%s\""
+
+#: ../image.c:65 ../image.c:494
+msgid "can't load pixmap file \"%s\". Size too weird"
+msgstr "l'archivio pixmap \"%s\" non puo' essere caricato. Dimensioni troppo strane"
+
+#: ../image.c:83 ../image.c:746 ../image.c:768
+msgid "virtual memory exhausted during pixmap load. Not fatal..."
+msgstr "memoria esaurita durante il caricamento del pixmap. Non fatale..."
+
+#: ../image.c:100 ../image.c:510
+msgid "virtual memory exhausted. Continuing..."
+msgstr "memoria virtuale esaurita. Continuando..."
+
+#: ../image.c:186
+msgid "cannot load \"%s\": XPM format not supported"
+msgstr "\"%s\" non puo' essere caricato: supporto per XPM non compilato"
+
+#. XPM
+#: ../image.c:191
+msgid "can't convert XBM file \"%s\" to internal format"
+msgstr "errore durante conversione di XBM \"%s\" per formato interno"
+
+#: ../image.c:556 ../image.c:562 ../image.c:581
+msgid "virtual memory exhausted during XPM load."
+msgstr "memoria terminata durante caricamento XPM."
+
+#: ../image.c:712 ../image.c:855
+msgid "could not convert image \"%s\" to internal format"
+msgstr "errore durante conversione da immagine \"%s\" per formato interno"
+
+#: ../image.c:901
+msgid "can't load \"%s\": unknown image format"
+msgstr "\"%s\" non puo' essere caricato: formato di immagine non supportato"
+
+#: ../screen.c:83
+msgid "it seems that there already is a window manager running"
+msgstr "sembra che un'altro gestore di finestre sia in esecuzione"
+
+#: ../screen.c:234 ../screen.c:344
+msgid "could not parse color %s"
+msgstr "non e' possibile decodificare il colore %s"
+
+#: ../screen.c:289
+msgid "The following character sets are missing:"
+msgstr ""
+
+#: ../screen.c:293
+msgid "The string \"%s\" will be used in place"
+msgstr ""
+
+#: ../screen.c:295
+msgid "of any characters from those sets."
+msgstr ""
+
+#: ../screen.c:298
+msgid "could not create font set %s. Using fixed"
+msgstr ""
+
+#: ../screen.c:305
+msgid "could not load any usable font set"
+msgstr ""
+
+#: ../screen.c:315
+msgid "could not load font %s. Using fixed"
+msgstr "non e' possibile caricare il font %s. Uso fixed"
+
+#: ../screen.c:318
+msgid "could not load any usable font"
+msgstr "non e' possibile caricare alcun font"
+
+#: ../screen.c:439
+msgid "Gradient texture not supported for your display (PseudoColor %ibpp)"
+msgstr "Textura di gradiente non supportata per il suo display (PseudoColor %ibpp)"
+
+#: ../screen.c:442
+msgid "You must enable dithering to be able to use gradients with this display"
+msgstr "E' necessarioabilitare il dithering per usare gradienti con il suo monitor"
+
+#: ../screen.c:456
+msgid "Gradient texture available only for PseudoColor and TrueColor displays"
+msgstr "Textura di gradients disponibile solamente per PseudoColor e TrueColor"
+
+#: ../screen.c:478
+msgid "could not allocate texture"
+msgstr "textura non puo' essere allocata"
+
+#: ../screen.c:1058
+msgid "colormap size value(s) too large"
+msgstr "valori per dimensione della mappa colori troppo grande"
+
+#: ../dialog.c:208 ../rootmenu.c:108
+msgid "Exit"
+msgstr "Uscire"
+
+#: ../rootmenu.c:109
+msgid "Exit window manager?"
+msgstr "Uscire dal gestore di finestre?"
+
+#: ../rootmenu.c:128
+msgid "Close X session"
+msgstr "Chiudere la sessione X"
+
+#: ../rootmenu.c:129
+msgid ""
+"Close Window System session?\n"
+"(all applications will be closed)"
+msgstr ""
+"Chiudere la sessione del gestore di finestre?\n"
+"(tutti gli applicativi saranno chiusi)"
+
+#: ../rootmenu.c:217 ../rootmenu.c:314 ../rootmenu.c:496
+msgid "Switch to %i"
+msgstr "Spostarsi a %i"
+
+#: ../rootmenu.c:283
+msgid "out of memory to store menu commands. Nuking it."
+msgstr "fine memoria per comandi menu. Dimentico..."
+
+#: ../rootmenu.c:303
+msgid "Workspace"
+msgstr ""
+
+#: ../rootmenu.c:305
+msgid "could not create Workspace menu"
+msgstr "non e' stato possibile creare il menu Workspace"
+
+#: ../rootmenu.c:308
+msgid "New"
+msgstr "Nuovo"
+
+#: ../rootmenu.c:309
+msgid "Destroy Last"
+msgstr "Distruggere Último"
+
+#: ../rootmenu.c:350
+msgid "missing command in menu config: %s"
+msgstr "manca comando nella configurazione del menu: %s"
+
+#: ../rootmenu.c:390
+msgid "menu can only have one WORKSPACE_MENU"
+msgstr "e' permesso un solo WORKSPACE_MENU nel menu"
+
+#: ../rootmenu.c:406
+msgid "unknown command \"%s\" in menu config."
+msgstr "comando invalido \"%s\" nella configurazione del menu."
+
+#: ../rootmenu.c:410
+msgid "syntax error in menu config. END declaration missing"
+msgstr "errore di sintassi nella configurazione del menu. manca un END"
+
+#: ../rootmenu.c:435
+msgid "syntax error in menu config. %s"
+msgstr "errore di sintassi nella configurazione del menu: %s"
+
+#: ../rootmenu.c:443
+msgid "no title given for the root menu"
+msgstr "manca il titolo per il menu di aplicazioni"
+
+#: ../rootmenu.c:455
+msgid "Commands"
+msgstr "Comandi"
+
+#: ../rootmenu.c:456
+msgid "Exit..."
+msgstr "Uscire..."
+
+#: ../rootmenu.c:573
+msgid "could not stat menu configuration file \"%s\""
+msgstr "errore di acesso all'archivio di menu \"%s\""
+
+#: ../rootmenu.c:578
+msgid "no read permision to menu configuration file"
+msgstr "non ho permesso di lettura all'archivio di configurazione del menu"
+
+#: ../rootmenu.c:595
+msgid "could not make arguments for menu file preprocessor"
+msgstr "non e' stato possibile creare parametri per il preprocessore per menu"
+
+#: ../rootmenu.c:603
+msgid "could not open menu configuration preprocessor"
+msgstr "il preprocessore per menu non puo' essere aperto"
+
+#: ../rootmenu.c:613
+msgid "couldn't open menu configuration file \"%s\""
+msgstr "archivio di menu \"%s\" non puo' essere aperto"
+
+#: ../dock.c:689 ../rootmenu.c:646
+msgid "Error"
+msgstr "Errore"
+
+#: ../rootmenu.c:647
+msgid ""
+"Could not read menu configuration\n"
+"(see console log for details)"
+msgstr ""
+"Configurazione di menu non puo' essere letta\n"
+"(vedere il log nella console per i dettagli)"
+
+#: ../dialog.c:196
+msgid "OK "
+msgstr ""
+
+#: ../dialog.c:210
+msgid "Cancel"
+msgstr "Cancellare"
+
+#: ../resource.c:297 ../resource.c:359 ../resource.c:368 ../resource.c:497 ../resource.c:521 ../resource.c:530 ../resource.c:555
+msgid "%s: syntax error in line \"%s\""
+msgstr "%s: errore di sintassi in linea \"%s\""
+
+#: ../resource.c:309
+msgid "%s: invalid window attribute specification in \"%s\""
+msgstr "%s: specificazione attributo finestra invalido in \"%s\""
+
+#: ../resource.c:336
+msgid "%s: unknown attribute in line \"%s\""
+msgstr "%s: attributo invalido in linea \"%s\""
+
+#: ../resource.c:416 ../resource.c:425 ../resource.c:437
+msgid "%s:invalid kbd shortcut specification \"%s\""
+msgstr "%s:especificazione di scorciatoia di tastiera invalido \"%s\""
+
+#: ../resource.c:477
+msgid "%s: expected section identifier but got %s"
+msgstr "%s: %s dovrebbe essere un identificatore di sezione"
+
+#: ../resource.c:510
+msgid "%s: unknown option in line \"%s\""
+msgstr "%s: opzione invalida in linea \"%s\""
+
+#: ../resource.c:559
+msgid "%s: invalid colormap size in line \"%s\""
+msgstr "%s: dimensioni mappa colori invalida in linea \"%s\""
+
+#: ../resource.c:579
+msgid "%s: invalid geometry display type \"%s\". Shouldbe center, corner, floating or line"
+msgstr "%s: tipo di geometria su monitor invalido \"%s\". Valori permessi: center, corner, floating o line"
+
+#: ../resource.c:601
+msgid "%s: invalid focus mode \"%s.\" Should be manual, auto or semiauto"
+msgstr "%s: modo di fuoco tastiera invalido \"%s.\" Valori permessi: manual, auto o semiauto"
+
+#: ../resource.c:619
+msgid "%s: invalid window placement mode \"%s\". Should be auto, cascade or manual"
+msgstr "%s: modo di layout di finestra invalido \"%s\". Valori permessi: auto, cascade o manual"
+
+#: ../resource.c:639
+msgid "%s: invalid texture type \"%s\" Should be solid, dgradient, vgradient or hgradient"
+msgstr "%s: tipo di textura invalido \"%s\" Valori permessi: solid, dgradient, vgradient o hgradient"
+
+#: ../resource.c:666
+msgid "%s: invalid gradient spec. \"%s\""
+msgstr "%s: specificazione di gradiente invalido \"%s\""
+
+#: ../resource.c:685
+msgid "%s: invalid coordinate \"%s\""
+msgstr "%s: coordinate invalide \"%s\""
+
+#: ../resource.c:701
+msgid "%s: invalid justification type \"%s\". Should be left, center or right"
+msgstr "%s: tipo di giustificazione invalido \"%s\". Valori permessi: left, center o right"
+
+#: ../resource.c:731
+msgid "could not make arguments for preference file preprocessor"
+msgstr "non e' stato possibile creare parametri per il preprocessatore di arch.preferences"
+
+#: ../resource.c:737
+msgid "could not open preference file preprocessor"
+msgstr "non e' stato possibile aprire il preprocessatore di arch.preferences"
+
+#: ../resource.c:744
+msgid "could not open configuration file: \"%s\""
+msgstr "non e' stato possibile aprire l'archivio di configurazione: \"%s\""
+
+#: ../resource.c:791
+msgid "could not find default icon \"%s\""
+msgstr "non e' possibile trovare l'icona di default \"%s\" "
+
+#: ../resource.c:797
+msgid "could not find a preference file (%s) in \"%s\""
+msgstr "archivio di configurazione (%s) non trovato in \"%s\""
+
+#: ../resource.c:805
+msgid "could not find icon background \"%s\""
+msgstr "non e' possibile trovare lo sfondo di icone \"%s\" "
+
+#: ../raster.c:183
+msgid "invalid dither colormap size specification.disabling"
+msgstr "specifica di dimensione per mappa colori per dither invalido. Disattivato."
+
+#: ../raster.c:193
+msgid "Could not build PseudoColor color table\n"
+msgstr "Non e' stato possibile creare tabella colori PseudoColor\n"
+
+#: ../misc.c:50
+msgid "could not define value for %s for cpp"
+msgstr ""
+
+#: ../misc.c:80
+msgid "could not get password entry for UID %i"
+msgstr ""
+
+#: ../appmenu.c:114
+msgid "appmenu:could not create menu"
+msgstr ""
+
+#: ../appmenu.c:145
+msgid "appmenu:could not create menu entry"
+msgstr ""
+
+#: ../stacking.c:89 ../stacking.c:148
+msgid "could not get window list!!"
+msgstr ""
+
+#: ../switchmenu.c:109
+msgid "Windows"
+msgstr "Finestra"
+
+#: ../dock.c:171
+msgid "could not open file \"%s\" to save Dock state"
+msgstr "e' impossibile aprire l'archivio \"%s\" per salvare lo stato di Dock"
+
+#: ../dock.c:687
+msgid "Could not execute program \"%s\""
+msgstr "Non e' possibile eseguire il programa \"%s\" "
+
+#: ../winmenu.c:119
+msgid "(Un)Maximize"
+msgstr "(De)Massimizare"
+
+#: ../winmenu.c:126
+msgid "Miniaturize"
+msgstr "Miniaturizzare"
+
+#: ../winmenu.c:133
+msgid "(Un)Shade"
+msgstr "(Dis)Coprire??"
+
+#: ../winmenu.c:140
+msgid "Hide"
+msgstr "Nascondere"
+
+#: ../winmenu.c:146
+msgid "Hide Others"
+msgstr "Nascondere le altre"
+
+#: ../winmenu.c:149
+msgid "Close"
+msgstr "Chiudere"
+
+#: ../winmenu.c:156
+msgid "Kill"
+msgstr "Ammazzare"
+
+#: ../generic/error.c:46
+msgid " fatal error: "
+msgstr " errore fatale: "
+
+#: ../generic/error.c:72
+msgid " warning: "
+msgstr " problema: "

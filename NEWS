@@ -1,0 +1,1385 @@
+
+NEWS for veteran WindowMaker users
+----------------------------------
+
+--- 0.20.0
+
+Multihead support. wmaker will now manage all screens that are attached to the
+display. 
+------------------------------------------------------------------------------
+
+It does so from a single process (instead of spawning a new process for each
+screen, like fvwm does). This keeps memory usage a lot lower than fvwm.
+
+State files have a suffix .n, where n is the number of the screen.
+
+Since I don't have a real multiheaded machine, it probably has bugs.
+
+Superfluous
+-----------
+
+Yet another useless superfluous animation. Find out what exactly it is
+by yourself :)
+
+
+exitscript
+----------
+
+~/G/L/W/exitscript will be called automatically when wmaker is exited.
+
+New runtime options
+-------------------
+
+1. Miniaturization animation is now selectable by a runtime option
+Add a line with
+
+IconificationStyle = <style>;
+
+to your WindowMaker configuration file.
+<style> can be one of: Zoom, Twist, Flip or None
+Case doesn't matter, and default is Zoom.
+
+
+2. Edge resistance.
+This can be controlled by setting:
+
+EdgeResistance = xxx;
+
+in your WindowMaker configuration file.
+xxx is an integer greater than 0 and represents the number of pixels of edge
+resistance. Setting it to 0 (default) will disable this feature.
+
+New theme
+---------
+
+A new theme named Night, is available in this distribution.
+
+
+--- 0.19.3
+
+GIF support was added. You will need libgif 2.2 to use it.
+
+cpixmap added. Syntax is the same as tpixmap or spixmap
+
+
+--- 0.19.2
+
+getstyle will include IconBack info in Style files.
+
+--- 0.19.0
+
+libPropList was updated. If you have it installed, you must upgrade or
+WPrefs will crash because of bugs in libPropList.
+
+New options
+-----------
+
+Balloons!
+---------
+
+WindowTitleBalloons = YES;
+will enable balloons for window titles that are not fully visible.
+
+MiniwindowTitleBalloons = YES;
+will enable balloons for miniwindow titles.
+
+AppIconBalloons = YES;
+for application icons (docked or not)
+
+
+IconPosition
+------------
+
+IconPosition (the position of the icons) is specified as:
+
+IconPosition = c1c2c3;
+
+where:
+
+c1 can be t or b (meaning top or bottom)
+c2 can be l or r (meaning left or right)
+c3 can be v or h (meaning vertical or horizontal)
+
+case is insensitive.
+
+For example, 
+IconPosition = blh;
+
+is the old iconPosition position.
+
+IconPosition = trv;
+
+will place the icons over the Dock.
+
+New window attribute
+--------------------
+
+EmulateAppIcon = YES; will make the window have an application icon.
+Only use this option for fully specified windows (like rxvt.Rxvt).
+NEVER use in generic window specifications (like * or rxvt).
+You must restart the application for the attribute to take effect.
+
+
+WPrefs.app
+----------
+
+Read WPrefs/README
+
+
+--- 0.18.1
+
+Boolean balues have changed!!! YES, Y and any non-zero integer will
+mean TRUE and anything else (including True) will mean FALSE. This
+is to conform to the OpenStep values used for booleans and
+not cause headaches later, when GNUstep apps also starts using
+defaults and users will try using True wich won't get recognized.
+
+
+--- 0.18.0
+
+Clip
+----
+
+Clip button layout was changed. IT IS TEMPORARY AND THE DEFINITIVE LOOK
+WILL BE DIFFERENT!!!
+
+
+libPropList
+-----------
+
+More bugs were fixed in it. Upgrade the library if you have an older version
+installed, with the one included.
+
+
+Property list menus
+-------------------
+
+Format for property list menus has changed! The redundant array for
+submenus was removed, so a menu that looked like:
+
+( Applications,
+  ("Xterm", EXEC, "xterm"),
+  ( 
+    (Paint,
+  	("Gimp", EXEC, "gimp"),
+	("XV", EXEC, "xv")
+    )
+  )
+)
+
+must be changed to:
+
+( Applications,
+  ("Xterm", EXEC, "xterm"),
+  (Paint,
+  	("Gimp", EXEC, "gimp"),
+	("XV", EXEC, "xv")
+  )
+)
+
+
+
+Misc
+----
+
+NUMLOCK_HACK is back. This time it works and is enabled by default.
+If you think you don't need it and promise me that you won't send 
+"bug" reports saying that shortcuts stop working after a while, you can
+disable it ;) It will save some memory and CPU.
+
+
+Configuration
+-------------
+
+Removed the SwapMenuButton option and added 3 finer grained options:
+
+SelectWindowsMouseButton
+WindowListMouseButton
+ApplicationMenuMouseButton
+
+Values that can be used are Left, Middle, Right and Button1 through Button5
+Left is equivalent to Button1, Middle to Button2 and Right to Button3
+
+
+Removed the WorkspaceChangeDelay option and corresponding action.
+Removed AClipColor and IClipColor
+
+
+Added the SelectKey back
+
+
+Changed default binding of Window commands menu from F10 to Control+Escape
+
+--- 0.17.4
+
+Misc
+-----
+
+libPropList has changed! Upgrade it before compiling wmaker.
+
+Hopefully the bugs that caused wmaker to crash if an error is found
+in the config files is fixed. If you do crash wmaker with a bad
+file, please try to find out the smallest possible portion of the file
+that still crashes wmaker and send it to me.
+
+
+New Options
+-----------
+
+PixmapPath was split to PixmapPath and IconPath. PixmapPath is the path
+for the pixmaps used as textures and IconPath is for the icons. 
+Don't forget to add IconPath to your current configuration file.
+
+There's also a new library in ~/GNUstep/Library/Icons. You should place
+your icons there, since icons are not a WindowMaker specific resource.
+
+
+DontConfirmKill=YES; will disable the confirmation panel for Kill
+
+
+--- 0.17.3
+
+Interface Changes
+-----------------
+
+Unhide Here in the appicon menu was changed to be the first entry.
+This way you can unhide the appicon with a single click without
+even moving the pointer.
+
+
+Clip Commands
+-------------
+
+The collect icons commands was renamed to attract icons and
+the attract icons options was renamed to Auto attract icons.
+
+The Remove Selected Icons was renamed to Remove Icon(s). It will
+act as before if some icon is selected and will remove the clicked
+icon (without confirmation) if it is not.
+
+Added a Keep Icon(s) command that will keep the selected icons if
+any is selected and the current one if none.
+
+The Move To command was renamed to Move Icon(s) To.
+
+
+--- 0.17.0
+
+If you have libPropList installed, you might want to reinstall it,
+replacing with the included libPropList. It has a small bug fix.
+
+Misc. Changes
+-------------
+
+Removed --with-gnome and made MWM_HINTS defined by default.
+This means that "GNOME support" will work with no additional
+flags passed to configure. 
+
+Added support for KDE, by adding a DisableWorkspaceMouseActions option.
+Set it to YES and run krootwm to be able to use everything in kfm.
+
+
+Shortcuts for Root Menu
+-----------------------
+
+There is now a new SHORTCUT optional keyword for the menus.
+For example, you can bind Control-F1 to xterm with:
+
+"XTerm" SHORTCUT Control+F1 EXEC xterm
+
+or F2 to ARRANGE_ICONS with:
+
+"Arrange Icons" SHORTCUT F2 ARRANGE_ICONS
+
+
+All commands allowed in the menu file accept the keyword, except for
+MENU and OPEN_MENU
+
+
+Interface Changes
+-----------------
+
+** Configuration of docked applications is now done in a panel instead of
+in the menu. 
+
+** Added a command menu for application icons
+
+** Shift double-click on the application icon will unhide the app
+in the current workspace.
+
+
+Option Changes
+--------------
+
+NotMiniaturizable option changed to NoMiniaturizeButton
+NotClosable option changed to NoCloseButton
+
+
+Speed options values are now UltraFast, Fast, Medium, Slow or UltraSlow
+				              ^^^^^^
+
+Removed the Select keyboard binding. You can access it in the window
+commands menu.
+
+Removed the ClipMaxIcons option and made it a compile time option.
+
+Removed the ConstrainWindowSize option
+
+Renamed NoSound to DisableSound
+
+Renamed NoAutowrap to DontLinkWorkspaces
+
+Renamed NoDithering to DisableDithering
+
+Renamed NoAnimations to DisableAnimations
+
+Removed the LeftHanded option and added a SwapMenuButton option.
+SwapMenuButton will make the rubberband selection in the root window
+be bound to the right button and the root menu to the left button.
+
+
+New way to display temporary icons
+----------------------------------
+
+The icons that are attracted by Clip, but will not be kept after the
+application close, are now using a different color for shading, unlike previous
+version that always used white. This will improve look for very different color
+combinations, and allow the user to control the look of the shaded icon.
+The color used for shading the icons is computed as follows:
+
+First a color is computed depending on the IconBack type:
+ - for solid the color is the solid color itself.
+ - for simple gradients the color is (from_color + to_color)/2.
+ - for multiple gradients, the color is the first color in list.
+ - for pixmaps, the color is the solid color specified for that pixmap.
+
+Then the color is made lighter by multiplying each red/green/blue filed with
+1.7 and limiting each field to 0xff in case they exceed this value.
+Then this new color will be used by superposing it with the icon we want to
+shade, using a proper alpha value.
+
+To control the color for shading is simple:
+
+- In case of multi gradients you just need to put the first color, as the color
+you like. WindowMaker do not use the first color in the list to directly build
+the gradient, but only when it needs a solid color for something (like in this
+case).
+
+- For pixmaps, put the needed color as the solid color the syntax for pixmaps
+require. This color is also not used when displaying normal icons, just when
+solid colors are needed (like this case).
+
+- For solid color, or simple gradients, in case the color it uses after
+computing is not good enough, you can always convert the solid or simple
+gradient to a multi gradient with the same look, and use that one. In this
+case is simple, just put the needed color as first color in list.
+
+Please note that this will not slow down WindowMaker, because the IconBack is
+read only once at startup, and then only if it is changed. After reading it WM
+will construct the image of the tile, and use the image instead of recomputing
+the gradient every time.
+
+Here are 2 examples of converting solid or simple gradient to a same looking
+multi gradient:
+
+IconBack = (solid, Blue);
+will become
+IconBack = (mhgradient , LightBlue, Blue, Blue);
+using LightBlue as color for shading.
+
+IconBack = (dgradient, "#284569", "#082420");
+will become
+IconBack = (mdgradient, "#183454", "#284569", "#082420");
+looking the same, but using #183454 for shading.
+
+
+New Sound Server Location
+-------------------------
+
+The sound server new URL is http://www.frontiernet.net/~southgat/wmsound
+Also it seems to be running on FreeBSD too (with little changes maybe).
+
+
+--- 0.16.1
+
+WINGs
+-----
+
+The path for the WINGs resource files was changed. If you don't
+do make install, you must move /usr/local/share/WindowMaker/Resources to
+/usr/local/share/WINGs
+
+
+New Options
+-----------
+
+The following new options are available:
+NewStyle = Yes/No; (static) Replaces --enable-newstyle
+DisableDock = Yes/No; (static) Same as -nodock command line option.
+DisableClip = Yes/No; (static) Same as -noclip.
+Superfluous = Yes/No; (dynamic) Replaces --enable-superfluous.
+
+NOTES.
+- The static options are only read at startup. Changing them, needs to restart,
+  so they will be accounted.
+- DisableDock and DisableClip have lower precedence than -nodock -noclip
+  command line options. If both option/command line option are given, then the
+  command line option will be accounted.
+
+
+Start Hidden option
+-------------------
+
+The start hidden option was fixed, and made to be an application wide option.
+It will apply to every window the application owns. Also its place in the
+Attribute Inspector panel, changed accordingly, to reflect this.
+The start miniaturized is however still applying to particular windows of an
+application, unless the option is set for the class.
+Start miniaturized, will override start hidden if both set.
+
+IMPORTANT NOTE.
+Because of the way Netscape Communicator is implemented, it is NOT possible
+to set the start hidden or miniatirized flags for it. This is because Netscape
+chooses to send a second map event to the window it maps. This makes the
+window to receive a second map request and to be unhidden or maximized back,
+immediately after it was hidden or miniaturized by WindowMaker at startup.
+
+
+
+--- 0.16.0
+
+Misc. Changes
+-------------
+
+The NextMenuBehaviour option was renamed to WrapMenus
+The WorkspaceTiedMiniwindows option was renamed to StickyIcons
+
+The .tif files were renamed to .tiff
+
+
+Selecting Mini Windows
+----------------------
+
+Now miniaturized windows can be selected as well as normal windows.
+You can do this by Shift-Click-ing them. They will be marked, and will follow
+you through workspaces like normal selected windows do.
+Miniaturizing a window will no longer deselect the window, but will place the
+icon and mark it as selected.
+The only difference between miniaturized and normal window selection is that
+for the moment the rubber-band selecting method works only for normal windows.
+
+
+Icon Selection Panel in Attributes Editor
+-----------------------------------------
+
+Now, selecting icons is as easy as clicking in the file name in a list.
+
+
+Simplified Options
+------------------
+
+IconSlideStep, IconSlideSlowDown and IconSlideDelay were merged to 
+IconSlideSpeed
+
+MenuScrollStep and MenuScrollDelay were merged to MenuScrollSpeed
+
+ShadeStep and ShadeDelay were merged to ShadeSpeed
+
+
+Valid values for them are: Fast, Normal, Slow or UltraSlow
+
+If you want to fine tune the values, they can be changed in wconfig.h
+Send me your set of values with an indication of how fast is your hardware,
+so that I can make the default values more adequate.
+
+
+New Window Attributes
+---------------------
+
+Added StartMiniaturized and StartHidden as window attributes and
+removed the previous implementation. Also removed the dock menu entries.
+They are now settable in the Attributes Panel.
+
+Also added DontSaveSession attribute. This way, you won't end up with multiple
+unwanted copies of the same app after the previous session is restored.
+I start X with a xterm in .xinitrc instead of wmaker, wich will cause the
+xterm restored by wmaker be duplicate. Just add -name something to the
+xterm started form .xinitrc and mark DontSaveSession=YES for that window.
+
+
+
+User Specifiable Visual IDs
+---------------------------
+
+wmaker now supports different visuals than the default one. It isn't of much
+use for most people, but can be usefull for lucky SGI users who want it
+to use TrueColor instead of the default PseudoColor.
+
+wmaker -visualid VISUAL_ID
+
+where VISUAL_ID is the hex code for the visual you want.
+
+Note: I don't have an SGI box and haven't tested it...
+
+
+
+Starting Workspace
+------------------
+
+The starting workspace is identified in the following order:
+1. If the app is omnipresent will be mapped on the current workspace.
+2. Else if the application have a StartWorkspace option set as attribute
+   then this one will be used.
+3. Else, if the application was started from Clip, the workspace on which
+   the Clip from where it was started is used.
+4. Else the current workspace is used.
+
+Restoring saved sessions will always use the saved workspace, no matter
+what other options are, except onmipresent.
+
+
+
+--- 0.15.1
+
+Workspace specific mini windows
+-------------------------------
+
+The minimized windows can be workspace specific, being more consistent with
+the rest. This is because minimized window represents just another state of a
+window (like normal or shaded), which all are workspace specific.
+This (or the old "present anywhere") behavior can be set using an option in
+the WindowMaker database: WorkspaceTiedMiniWindows = Yes/No;
+
+New way to animate the blowing icons
+------------------------------------
+
+There is now a compile time option that allows one to set how the icons are
+animated when detaching from dock/clip in superfluous mode.
+By default the classic "Falling pieces" animation is used.
+If SPREAD_ICON is #define-ed in wconfig.h, then a "Spread in four directions"
+animation is used instead. Take a look at the section where this is described
+in src/wconfig.h
+By default there is #undef SPREAD_ICON to select "Falling pieces" animation.
+
+Auto Colapse for Clip
+---------------------
+
+The clip now supports an option named "Auto Collapse" which can be set from
+the clip main menu. When set, clip will stay collapsed, and will show itself
+when the mouse moves over it. While the mouse is over it, or over any of the
+icons attached to the clip, the clip will stay uncollapsed, letting you to
+access the attached icons. This is not true for applications like asclock, or
+applets of that kind, because the icon window do not belongs to WindowMaker,
+but to the application itself. For such icons you must keep the mouse over the
+icon groundplate, else it will collapse back. But usually these type of icons
+will not stay in a collapsed clip, since one needs to see what they show.
+When the clip is leaved it will collapse back after a delay of 1 second, unless
+the mouse is moved back to the clip area. The delay can be set modifying
+AUTO_COLLAPSE_DELAY in wconfig.h. Default is 1000 (ms) which means 1 second.
+
+
+
+
+--- 0.15.0
+
+Changed name from Fiend to Clip
+-----------------------------------
+
+All occurrences of word Fiend with or without capital F were replaced with
+the corresponding Clip (same capital).
+This affects all configuration files under ~/GNUstep that contain this word.
+It can be refered as "Workspace Dock" too.
+
+
+New option in Clip menu, and extended Clip behavior
+---------------------------------------------------
+
+The following new items are available in the dock menu:
+
+1. Attract Icons
+2. Keep Attracted Icons
+3. Collect Icons
+4. (Un)select All Icons
+5. Remove Selected Icons
+6. Move To
+7. Start miniaturized    (also available for regular dock)
+8. Start hidden          (also available for regular dock)
+9. Selected
+10. Set icon...          (also available for regular dock)
+
+
+Here is what they do:
+
+1. "Attract Icons" will let the Clip to attract and attach any new appicon that
+   is created when an application starts. It will not do this if the Clip is
+   full. If the Clip is Collapsed then the appicon will be hidden after it is
+   attached.
+2. "Keep Attracted Icons" will tell the Clip to keep the attracted appicons,
+   after the application is closed. Without this the appicons will vanish,
+   leaving the Clip in the original state. If you move an appicon that was
+   attracted from Clip to regular Dock, it will be kept when closed, no matter
+   what "Keep Attracted Icons" is set to in Clip.
+3. "Collect Icons" will collect all appicons that are not yet attached to Dock
+   or Clip, and attach them to the current workspace Clip. The value of
+   "Keep Attracted Icons" will apply when applications close. If Clip is
+   collapsed, the appicons will be hidden.
+4. "(Un)select All Icons" will select all icons in the clip if none is
+   selected, or it will deselect all selected ones. The selected icons are
+   marked using a small triangle in the bottom right corner of the appicon.
+   The color of the mark is set using SClipColor in WindowMaker domain
+   database.
+5. "Remove Selected Icons" will remove from Clip all selected icons. The ones
+   that still run, will be detached, all the others will vanish.
+6. "Move To" will transfer all selected icons to another workspace and attach
+   them to the Clip in that workspace. If none is selected, only the one the
+   mouse was pressed on will be moved.
+7. "Start miniaturized" will launch (or autolaunch if set) the application in
+   a miniaturized state.
+8. "Start hidden" will launch (or autolaunch if set) the application in a
+   hidden state. Note that only one of the two can be set at a time.
+9. "Selected" can be used to toggle the selected state of the appicon
+   individually. The same can be achieved using Shift-LeftClick on the appicon.
+   In fact the intended way of toggling the selected state is by using
+   the Shift-LeftClick on icon. The menu entry is just another way to do the
+   same.
+10. "Set icon..." will allow one to set the image for the appicon. The image
+   will be updated without restart, and also all appicons in the same
+   instance.class as the one we set for, will be updated.
+
+So a simple way of avoiding the screen to be filled up with appicons is to set
+the "Attract Icons" in the Clip. Also the "Keep Attracted Icons" can be set to
+No, so the attracted icons will be deleted when application exits, thus leaving
+the Clip clean. If also one to not want to see the appicons that keep filling
+the Clip, he can set the Clip to be Collapsed.
+
+Getting rid of unneeded icons in Clip is as simple as selecting them
+individually using Shift-LeftClick, and then using the "Remove selected Icons"
+entry in menu.
+
+
+Support for different visuals.
+------------------------------
+
+WindowMaker is now able to support any visual, except DirectColor, in any
+depth from 1bpp to 32bpp.
+
+One can start the X server with different visuals, by passing the X server the
+right option. For XFree 3.3.x is -cc <id>.
+WindowMaker is not yet able to choose a different visual from the Default one
+on a given screen, but can use any default visual it finds, except the direct
+color visual.
+For example starting X like (for XFree 3.3.x, and if the driver for the
+card supports this. Read the man page for your X server):
+startx -- -bpp 8 -cc 0 will give you the StaticGray visual.
+startx -- -bpp 8 -cc 1 will give the GrayScale visual
+and so on.
+
+Wrlib code is now generic, and will support any visual except DirectColor in
+any depth. Programs written with wrlib can work on different visuals from
+the default visual for a given screen.
+Behavior in different visuals can be tested using the testgrad program in
+wrlib subdirectory in distribution.
+testgrad -h will show the usage.
+
+Multidiagonal gradients are also implemented now in wrlib, and a new algorithm
+is used to speed up the generation of diagonal gradients.
+
+
+New arrangement of the directory structure under ~/GNUstep/
+---------------------------------------------------------------
+
+To better adapt to theme support the directory structure changed under
+~/GNUstep/Library/WindowMaker
+
+1. Style directory moved to Styles.
+2. Added the following directories: Backgrounds, IconSets, Pixmaps, Sounds and
+   Themes.
+3. The .style files no longer get copied in the user's Styles directory.
+   Instead they are read from the global /usr/local/share/WindowMaker/Styles
+   directory.
+
+Under ~/GNUstep/Defaults the following changes occurred:
+
+1. A default WMState is installed by wmaker.inst.
+   It contains the dockit program assigned to the top icon of the dock, and
+   the wmsetbg program assigned for the drop command on both dock's and clip's
+   main icon.
+   Double clicking the dock's main icon will bring up dockit that will let you
+   dock any application that do not have an application icon.
+   Dropping an image on dock's or clip's main icon, from an Offix DND aware
+   application, will put the image on the background tiled, and will update
+   WindowMaker domain database file.
+2. Syntax of WMState changed a little. The old position will not be restored
+   when you will first start the new version, but after that it will be
+   normally remembered. This is because now the main clip icons is only saved
+   once, not for every workspace.
+   You should replace Fiend with Clip in any place where it appears, if you
+   want to keep the old WMState file, else it will not work.
+3. At compile time, it will detect if you have support for tif, and will
+   install a WMWindowAttributes with corresponding image name extension
+   (.tif or .xpm). This is true only for pixmaps that come with the source
+   distribution and get installed under /usr/local/share/WindowMaker/Pixmaps
+
+The menu file changed a lot. Old menu file will *not* work with new theme
+support, so please upgrade.
+
+
+New behavior of OPEN_MENU command
+---------------------------------
+
+The OPEN_MENU command now supports the following syntax:
+1. File menu handling.
+   // opens file.menu which must contain a valid menu file and inserts
+   // it in current position
+   OPEN_MENU file.menu
+2. Pipe menu handling.
+   // opens command and uses it's stdout to construct menu.
+   // Command's output must be a valid menu description.
+   OPEN_MENU | command
+3. Directory handling.
+   // Opens one or more directories and construct a menu with all
+   // the subdirectories and executable files in them sorted alphabetically.
+   OPEN_MENU /some/dir [/some/other/dir ...]
+4. Directory handling with command.
+   // Opens one or more directories and construct menu with all
+   // subdirectories and readable files in them sorted alphabetically,
+   // preceding each of them with command.
+   // WITH is a required keyword!!!
+   OPEN_MENU /some/dir [/some/other/dir ...] WITH command -options
+
+Please note that because of the 'WITH' keyword old menu files no longer work
+for the OPEN_MENU with a command.
+
+
+Theme support
+-------------
+
+Theme support is now as easy as untar-ing a tarball in the right place.
+Because of the way OPEN_MENU works, they can be installed on a global
+shareable basis, or for personal user use.
+Themes installed under ~/GNUstep will be available only for a user, but
+if if they are installed under /usr/local/share/WindowMaker they will be seen
+by all users. This is also true for style files, background images, pixmaps,
+etc that get installed under /usr/local/share/WindowMaker.
+Themes can be saved or loaded using the Appereance menu.
+
+Also support for different IconSets is available. You can save or load a new
+IconSet using the Appereance menu.
+
+Setting background images is now as simple as putting the images in the right
+place (~/GNUstep/Library/WindowMaker/Backgrounds or
+/usr/local/share/WindowMaker/Backgrounds, or any other place in your
+PixmapPath). Then use the Appereance menu. They will be instantly available
+since they are opened by a OPEN_MENU command. Also the image do not need to
+have a .jpg or any other extension. It will be recognized anyhow.
+As an example please see the OpenStep theme supplied with WindowMaker.
+The OpenStep image is a jpeg file without extension.
+
+Please keep in mind that anything under /usr/local/share/WindowMaker will be
+available for all users.
+
+
+New options for wmsetbg and getstyle
+------------------------------------
+
+wmsetbg now accepts the following options:
+usage: wmsetbg [-options] image
+options:
+ -d             dither image
+ -m             match  colors
+ -t             tile   image
+ -s             scale  image (default)
+ -u             update WindowMaker domain database
+ -D <domain>    update <domain> database
+ -c <cpc>       colors per channel to use
+
+By default, it will try to guess if dithering is needed or not and proceed
+accordingly.
+Using -d or -m will force it to dither or match colors.
+
+Dithering for more than 15bpp is generally not needed, and will only result
+in a slower processing.
+Don't use dithering except when needed, because it is slower. Else rely on
+wmsetbg which will detect if dithering is needed and use it.
+
+-u will update the WorkspaceBack in the default database domain file in
+   ~/GNUstep/Defaults/WindowMaker, and let WindowMaker refresh the screen.
+   Please note that this option only works under WindowMaker, and will have no
+   effect under other window managers, since it rely on WindowMaker to update
+   the image after it reads the updated defaults database.
+
+-D <domain> is same as above, but will update the domain <domain> instead of
+   the default WindowMaker domain.
+
+-c <cpc> will set the color per channel to use. Only needed for PseudoColor
+   visuals. WindowMaker will automatically pass the value read from the
+   WindowMaker domain database.
+
+
+getstyle now have the -t option, that instructs it to read all options
+related to theme. Without -t getstyle will read only style options that
+means it will not read WorkspaceBack and IconBack.
+Use -t when you want to make a theme and need all theme options to be saved.
+Else it will extract just a style file.
+
+
+Session management support
+--------------------------
+
+Two new commands are available for use in menus:
+
+SAVE_SESSION and CLEAR_SESSION.
+
+SAVE_SESSION:
+will take a snapshot of all running applications, and their current hints
+(shaded, hidden, minimized, geometry and workspace they are on),
+and save it inside the WMState file. Also the current workspace we are on is
+saved. The applications that are running and were started from dock or clip are
+marked, so they will be attached to the corresponding dock/clip when restored.
+This state is restored every next session, until a new one is saved or
+CLEAR_SESSION is used.
+
+CLEAR_SESSION:
+will clear any previous saved session.
+
+There is also a run time option named SaveSessionOnExit = Yes/No; that allows
+one to automatically save the state of desktop when leaving WindowMaker.
+This way next session, the state of the desktop before last exit is restored.
+
+Please note that if this option is set to Yes, than any manual saving of the
+state, or any clearing of the state will be overridden when exiting
+WindowMaker.
+
+These options are available under the "Workspace" menu.
+
+
+User WindowMaker configuration files are now merged with global ones
+--------------------------------------------------------------------
+
+When starts WindowMaker will look for database domain files under
+$GNUSTEP_USER_ROOT/Defaults or ~/GNUstep/Deafults to be read. (In this order).
+
+If they are not available then it will scan for them in
+$GNUSTEP_LOCAL_ROOT/Defaults, $GNUSTEP_SYSTEM_ROOT/Defaults or
+/usr/local/GNUstep/Defaults (in this order).
+
+Even if the file was found or not, it will always load the corresponding domain
+file under /usr/local/share/WindowMaker/Defaults.
+
+Then if the user file was found it will merge it over the global file, else
+the global file will be used.
+
+This way any settings that are set by the system administrator in the shared
+file will be available for users that do not have them in their config files.
+Any option the user have in his config file will override the one in the
+shared domain file.
+
+So any new runtime options that appear in WindowMaker domain, do not need to
+be set in all user files, except the ones the user wants a different behavior
+from the default set for all users in the shared file.
+
+Also it is possible for the user to not have any personal domain databases, and
+the global shared ones will be used, but it still needs to have the directory
+structure, so WMState gets written on session exit.
+So all it needs to have is ~/GNUstep/Defaults directory available.
+
+
+New behavior of the Slide Icons
+-------------------------------
+
+Animation constants are now runtime.
+They are:
+IconSlideDelay = 0;
+IconSlideStep = 5;
+IconSlideSlowDown = 50;
+
+To better adapt both slow and fast machines the behavior of sliding icons
+changed in the following manner:
+
+Old one was to keep moving the icon with a constant step (default 5 pixels)
+until it reached the destination.
+
+Now it will use a new parameter named IconSlideSlowDown to speed up or slow
+down the moving.
+
+Instead of moving it with a constant step it will use IconSlideSlowDown to
+divide the distance to the destination, and use this value as the first step.
+Then is will compute the remaining distance and will again use
+IconSlideSlowDown to divide it and get the new step. And so on.
+When the step to move becomes smaller than IconSlideStep, IconSlideStep will
+be used further until the destination is reached.
+
+This way a nice deceleration effect is achieved, since while the icon
+approaches destination, it will use smaller steps, gibing the illusion that
+the icons is moving slower.
+
+IconSlideDelay will give the pause between steps, and is expressed in ms.
+
+Giving large values to IconSlideSlowDown (>1024 for 1024x768 screen) will
+result in the old "constant step advance" behavior, since the computed step
+will always be smaller than IconSlideStep, and the last will be used instead.
+
+Making IconSlideSlowDown = 0 or 1, will result in an instant jump to the
+destination without any animation.
+
+
+Attribute editor
+----------------
+
+Because the icon images on screen automatically update after any change in
+WMWindowAttributes domain file, the use of both Save and Apply buttons is no
+longer needed. If one wants to just apply the setting to the current window
+only, he will only use the Apply button.
+If he wants them saved for all applications in the same instance and/or class
+the using the Save button will write them to disk, and automatically
+WindowMaker will update all the icons that need to be updated on screen.
+
+
+Sound support
+-------------
+
+Some basic sound support is now part of WindowMaker. The sound server is not
+yet part of WindowMaker distribution, so you need to download it separately.
+This is because is linux specific, and need some changes before it can be
+included.
+Until them if you have a linux system and want to use sound, use the
+wmsound-0.5 available at http://www.geocities.com/SiliconValley/Bay/7874
+Download that package, and only build the sound server there.
+DO NO APPLY ANY PATCHES FROM THERE!, because they are already applied.
+Just build the sound and copy the executable in /usr/local/bin
+Follow the rest of the install steps described there, except the patch-ing
+procedure.
+
+To enable sound for WindowMaker pass --enable-sound to configure.
+
+Also use NoSound = Yes/No; to enable/disable sound at runtime without killing
+the sound server.
+
+If you cannot set the sound to work yet, then is not for you.
+Wait until the sound server will be fixed and will be part of WindowMaker.
+
+
+New entries in WindowMaker domain database
+------------------------------------------
+
+The following entries have been added to the runtime options:
+
+  SaveSessionOnExit = No;
+
+will autosave (or not) the session state on exit.
+
+  WindowPlaceOrigin = "64, 64";
+
+will offset all windows in auto or cascade placement mode with the value
+(in pixels) before placing them on screen. First is horizontal direction and
+second is vertical.
+This do not apply to windows that request a specific position on screen.
+This is useful if you want your Clip on the top left corner to not be
+overlapped by mapping windows.
+It will let it to have a row and a column of docked appicons near the screen
+edge, that will not be overlapped by windows.
+If you set it to "128, 128" it will have 2 rows and 2 columns not overlapped.
+
+
+  NoSound = No;
+
+Enable/disable sound at runtime without the need of killing the sound server.
+
+
+  MenuScrollDelay = 10;
+  MenuScrollStep = 5;
+
+Constants for the menu scrolling animation.
+
+  IconSlideDelay = 0;
+  IconSlideStep = 5;
+  IconSlideSlowDown = 50;
+
+Constants for the icons sliding on screen. Explained above.
+
+  ShadeDelay = 0;
+  ShadeSteps = 15;
+
+Animation parameters for shading a window. How many steps it will take, and the
+delay between steps in ms.
+
+  DoubleClickTime = 250;
+
+The time for the double click to be considered so. Expressed in ms.
+
+  SClipColor = "#6f8ae2";
+
+Color for selected icons in Clip.
+
+All delays are expressed in ms.
+
+
+
+--- 0.14.1
+
+
+*** Enhanced fiend clone.
+
+Here are the new fiend features:
+1. Keys for raising/lowering the fiend, and their default values:
+   FiendLowerKey = None;
+   FiendRaiseKey = None;
+   FiendRaiseLowerKey = None;
+
+   All reside in WindowMaker configuration file.
+
+2. Added posibility to launch the workspace menu with button1 click on the
+   idle indicator of fiend, or with button3 click on workspace name on the
+   fiend.
+
+3. Added Control-button1-click on fiend's idle indicator, to create a new
+   workspace and move to it. Same action as New item in Workspace menu.
+
+4. Fiend's idle indicator do have a color that reflects its normal/collapsed
+   state.
+
+5. The delay between changing workspaces from fiend is now a runtime option:
+
+   WorkspaceChangeDelay = 700;
+
+   in WindowMaker configuration file.
+
+6. Application icons can be moved between dock and fiend now.
+
+7. The way workspaces are changed is controlled now by two runtime options:
+
+   AdvanceToNewWorkspace=Yes/No;
+   CycleWorkspaces=Yes/No;
+
+   Both apply to either fiend navigating buttons or to next/prev worksapace
+   keybindings. Both default to No, and are in WindowMaker configuration file.
+
+8. Also added posibility to advance to new workspace, no matter what value
+   AdvanceToNewWorkspace have, with Control-button1-click on "next workspace"
+   fiend button.
+
+
+*** Theme support ***
+
+Spixmap and tpixmap now work. Their syntax is:
+
+SomeStyleOption = (spixmap, file, color);
+SomeStyleOption = (tpixmap, file, color);
+
+- spixmap means scaled pixmap, so the image in the file will be scaled to
+adapt to the destination's size.
+- tpixmap means tiled pixmap, and the image from file will be tiled in the
+destination.
+
+file is searched in the PixmapPath, but can be a full path name.
+
+Color is used depending on which Style option is applied.
+For example in case of titlebars, color is used for miniwindows titles color.
+You are not restricted in selecting that color, but is better to put one
+that matches the overall color of the image.
+
+Currently they apply to all the options that accept (solid, color), or any
+type of gradient.
+This means they also apply to WorkspaceBack and IconBack, which allows theme
+support with the simple use of the setstyle and getstyle utilities.
+There is no need for an extra theme manager, just to include the needed
+options in the style files.
+
+In case of WorkspaceBack, color is used to be set in the background until
+the image gets loaded and displayed. This is to avoid the stippled screen
+the X server shows, in case the image is big and loads slow.
+There is a small utility in the util directory, named wmsetbg which is
+used to set the background image. This is needed for windowmaker not to
+freeze while loading and scaling the image.
+Currently it is hardcoded in windowmaker to use wmsetbg to set the background
+image, and is better to use it since is smaller that other image manipulation
+programs, and it is compiled with support for same image types as windowmaker.
+Since it comes and is installed with WindowMaker, there will be no need to
+download and use an external app, which also may not have support for the same
+image types as windowmaker.
+
+
+
+--- 0.14.0
+
+*** Fiend clone.
+
+The fiend clone is a dock extender, that lets you dock more than the default
+10-12 icons in the dock. It actually lets you dock how many icons you like,
+with a current default of 25 per workspace. The fiend have different docked
+icons on every workspace. Also the fiend main icon shows you the workspace
+you're on and lets you navigate through the workspaces with the small green
+buttons on the low right corner.
+To save screen space the fiend can be collapsed to the main icon either
+from the fiend menu (available with right click on the fiend icons), or
+with a double left click on the main fiend icon, which is a toggle for
+the collapsed/uncollapsed state.
+Collapsed state is marked by a different title color.
+Pressing on the small buttons on the low right corner, the workspaces are
+changed in increments of 1 to the left or right, but keeping the button
+pressed over them will continuously advance through workspaces until the
+mouse is moved away from the buttons or the button is released.
+The delay between workspace changes is set by FIEND_WKS_CHANGE_DELAY in
+src/wconfig.h, and defaults to 700 ms.
+Unlike the dock, fiend can hold icons in any directions, and can be placed
+in any position on screen.
+
+When an icons is to be docked, but the position can be either in the dock
+or in the fiend, the dock will be used first, and the icon will be docked
+there.
+
+Here are the new runtime options introduced by the fiend:
+Files are located in ~/GNUstep/Defaults/
+
+In WMWindowAttributes:
+       "Logo.WMFiend" = {Icon = "Cone.xpm";};  - icon for the fiend
+
+In Windowmaker:
+	FiendMaxIcons = 25;           - the max number of icons in fiend per
+        				workspace
+	FiendTitleFont = "-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*";
+				      - the font used to show the current
+                                        workspace
+	FiendTitleColor = black;      - color for the uncollapsed fiend title
+	CFiendTitleColor = "#616161"; - color for the collapsed fiend title
+	AFiendColor = "#00ba70";      - color for the workspace changing
+        				buttons, when active
+	IFiendColor = "#008000";      - color for the workspace changing
+        				buttons, when idle
+
+For the ones who don't want to use fiend, there is a option to wmaker named
+-nofiend that can be feed to the command line when starting wmaker.
+(This is the equivalent for -nodock, but removes fiend clone).
+
+The syntax of WMState file have changed, but you don't have to worry because
+WindowMaker will know to read the old format and will save it and further
+will use the new one. You do not need to change your file, for the new version
+to work.
+
+
+--- 0.13.1
+
+*** Enhanced Attribute editor.
+
+Now you can save defaults for all windows.
+Please note that only Icon, KeepInsideScree, and sometimes NoAppIcon
+can be useful in a normal environment. But others may have other opinion ;)
+If you set AlwaysUserIcon default for all windows, note that apps like
+asclock, wmload, wmmail, wmrack, will show that icon instead of their
+window.
+
+Now Attribute editor also counts for defaults saved for all windows,
+(not only the default "No" for all options hardcoded in WindowMaker),
+when saving options for some instance.class specification. This is to
+save disk space by saving only the options that differs from global defaults
+(either defaults for all windows or the hardcoded valued in WindowMaker).
+
+Attribute Editor now updates on the fly the appicon image or creates/deletes
+the appicon if you set that options in the Inspector panel and Apply them.
+Modifying Icon file, NoAppIcon or AlwaysUserIcon and Applying them will
+result in the image update for the app-icon.
+
+Note that if you apply but not save these options, the miniwindow image will
+not be updated. This is because app-icon is always on screen so it can be
+updated, but miniwindow image is read from the defaults database and from disk
+every time you minimize the window and is destroyed when you restore.
+
+
+--- 0.13.0
+
+*** Atribute editor is working ;).
+
+How it works is quite obvious.
+Anyway, here is a short description.
+
+Save   - only save the configuration in defaults database and updates
+         WMWindowAttributes
+Apply  - only applies the values to the current window
+Revert - reverts the values from the defaults database
+
+Note that Save and Revert count for the window specification
+(instance & class), that are selected, and save/use the values for/from
+that.
+
+ The Update button will show the icon who's name was typed in the textfield
+If the textfield is empty, will try to use the default icon.
+Also saving with and empty textfield for icon, uses the default icon.
+
+ The Default button will use the icon in the textfield as default icon
+and save that value in WMWindowAttributes (Note that in this case is no
+need to press the Save button!). Also if the textfield is empty it will
+try to use the old default icon, if available.
+
+*** Now menus are saved between sessions, or over a restart.
+
+ Just stick them to the desktop, and you will find them over sessions
+until you close them.
+ Please note that only the root_menu, the window switch_menu and the
+workspaces_menu can be saved this way.
+
+*** Changed the lousy Windoze menu behaviour.
+
+This applies to 'NextMenuBehaviour = NO;'
+
+ Now the items are no more automatically selected if you launch the menu
+and the mouse is over some item, if you use a short click to launch the
+menu (shorter than the default DBL click time).
+ If you use a longer click or keep the mouse pressed, the item under mouse
+will be selected after that delay, and launched when you will release the
+mouse button.
+ If the click was short, a second one is needed to launch the item.
+
+*** Autoarrange icons is now a runtime option
+
+Use
+AutoArrangeIcons = YES/NO;
+in 'WindowMaker'.
+
+*** Added configurable horizontal resize threshold
+
+Use
+  HorizontalResizeThreshold = <n>;
+
+This will make the n pixels at the exterior side of the corner handle
+of the resize bar to restrict to horizontal only resize.
+Also you can use Shift-click&drag anywhere on the corner handle to
+restrict the resize only to horizontal.
+Note that the Shift-click&drag does not depend of the configured threshold
+and works completely independent.
+
+*** New option for OPEN_MENU (pipe from command)
+
+OPEN_MENU | /foo/bar/script
+
+will make a menu that is dinamically constructed by /foo/bar/script
+
+
+--- 0.12.0
+
+*** New option for OPEN_MENU
+
+OPEN_MENU /foo/bar/pics xv -root -quit
+
+will make a menu with all files in /foo/bar/pics and precede them
+with EXEC xv -root -quit
+
+thus, making a menu with entries like:
+
+
+"marble.gif" EXEC xv -root -quit marble.gif
+"water.jpg" EXEC xv -root -quit water.jpg
+...
+
+
+*** Multicolor gradients
+
+(mhgradient, colorX, color1, color2, color3, ..., colorn)
+(mvgradient, colorX, color1, color2, color3, ..., colorn)
+
+You can put any number of colors >= 2. 
+
+colorX is a special color that is used as the solid color of the
+texture when wmaker needs a solid color (like in miniwindow title and
+resizebar)
+
+*** PixmapPath format changed
+
+What used to be
+
+PixmapPath = "/usr/local/share/pixmaps:~/foobar";
+
+must now be
+
+PixmapPath = ("/usr/local/share/pixmaps", "~/foobar");
+
+
+*** Added OffiX DND in dock
+
+Use the "Set drop arguments..." command in the menu and put a %d
+where the dropped object string should be substituted, like:
+
+xedit %d
+
+*** Escape thingies for menu and dock commands:
+
+%w - substitute with current selected X window ID
+%s - substitute with current selection
+%d - substitute with last dropped object
+%a(some text) - opens a input box with "some text" as a title. Then,
+the text typed will be substituted there
+
+\r, \n - substitute with corresponding characters
+
+
+*** The WMState file format has changed a little.
+The Command field for the dock application list is now a normal string,
+instead of a list. So, remove the parentheses and the commas for the command
+and join all the parts. Example:
+
+if it used to be
+
+Command = ( xterm," -geometry", "+10+10" );
+
+then make it
+
+Command = "xterm -geometry +10+10";
+
+
+--- 0.10.2
+
+AutoFocus = NO; disables automatic focusing of windows
+when they are first mapped
+
+
+--- 0.10.1
+
+titlebar gradients are in a single piece now
+
+the WMDock file was merged into the WMState file. You can insert this
+file in WMState and set it's key to Dock. For example, if your WMDock
+contains:
+
+{
+	Applications = { {Command = (); }};
+	Position = "-64,0";
+	Lowered = NO;
+}
+
+and WMState contains:
+
+{
+	Workspaces = ( "Workspace 1" );
+}
+
+then you can merge both and have:
+
+{
+	Workspaces = ( "Workspace 1" );
+	Dock = {
+        	Applications = { {Command = (); }};
+        	Position = "-64,0";
+       	 	Lowered = NO;
+	};
+}
+
+
+
+The configuration format has changed!! Forget everything about the old
+format.
+
+dockapp was removed and the old version will not work anymore. 
+
+the dialogs require tcl/tk. they will be rewritten in plain C
+
+
+These are some tips for people upgrading from older versions and don't want
+too many unused files around. There is no problem if you decide to keep 
+them for a while.
+
+	you can  rm -r ~/gnustep if you don't want anything from there
+
+	remove the files in /usr/local/share/WindowMaker before installation
+
+	the /usr/local/share/pixmaps directory can be removed
+
+

@@ -1,0 +1,439 @@
+# Makefile.in generated automatically by automake 1.3 from Makefile.am
+
+# Copyright (C) 1994, 1995, 1996, 1997, 1998 Free Software Foundation, Inc.
+# This Makefile.in is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+
+SHELL = /bin/sh
+
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+libdir = @libdir@
+infodir = @infodir@
+mandir = @mandir@
+includedir = @includedir@
+oldincludedir = /usr/include
+
+DISTDIR =
+
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
+
+top_builddir = ..
+
+ACLOCAL = @ACLOCAL@
+AUTOCONF = @AUTOCONF@
+AUTOMAKE = @AUTOMAKE@
+AUTOHEADER = @AUTOHEADER@
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+transform = @program_transform_name@
+
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
+host_alias = @host_alias@
+host_triplet = @host@
+CC = @CC@
+CPP_PATH = @CPP_PATH@
+DFLAGS = @DFLAGS@
+GFXFLAGS = @GFXFLAGS@
+GFXLIBS = @GFXLIBS@
+I18N = @I18N@
+I18N_MB = @I18N_MB@
+ICONEXT = @ICONEXT@
+INTLIBS = @INTLIBS@
+LIBPL_INC_PATH = @LIBPL_INC_PATH@
+LIBPL_LIBS = @LIBPL_LIBS@
+LN_S = @LN_S@
+MAKEINFO = @MAKEINFO@
+MOFILES = @MOFILES@
+NLSDIR = @NLSDIR@
+PACKAGE = @PACKAGE@
+RANLIB = @RANLIB@
+REDUCE_APPICONS = @REDUCE_APPICONS@
+SHAPE = @SHAPE@
+SOUND = @SOUND@
+VERSION = @VERSION@
+WPMOFILES = @WPMOFILES@
+XCFLAGS = @XCFLAGS@
+XGETTEXT = @XGETTEXT@
+XLFLAGS = @XLFLAGS@
+XLIBS = @XLIBS@
+XSHM = @XSHM@
+X_EXTRA_LIBS = @X_EXTRA_LIBS@
+X_LOCALE = @X_LOCALE@
+pixmapdir = @pixmapdir@
+wprefsdir = @wprefsdir@
+
+SUBDIRS = xpm tiff po
+
+nlsdir = @NLSDIR@
+
+AUTOMAKE_OPTIONS = no-dependencies
+
+wpexecbindir = @wprefsdir@
+
+wpexecbin_PROGRAMS = WPrefs 
+
+wpdatadir = @wprefsdir@
+
+wpdata_DATA = WPrefs.tiff WPrefs.xpm
+
+EXTRA_DIST = $(wpdata_DATA)
+
+WPrefs_SOURCES = \
+	main.c \
+	WPrefs.c \
+	WPrefs.h \
+	Configurations.c \
+	Expert.c \
+	Focus.c \
+	Icons.c \
+	KeyboardSettings.c \
+	KeyboardShortcuts.c \
+	Menu.c \
+	MenuPreferences.c \
+	MouseSettings.c \
+	Paths.c \
+	Preferences.c \
+	Text.c \
+	TextureAndColor.c \
+	WindowHandling.c \
+	Workspace.c \
+	double.c \
+	double.h \
+	MenuGuru.c \
+	xmodifier.c
+
+CPPFLAGS = \
+	@CPPFLAGS@ \
+	@SHAPE@ @I18N@ @X_LOCALE@ \
+	-DNLSDIR="\"$(nlsdir)\"" 
+
+INCLUDES = \
+	-I$(top_srcdir)/wrlib \
+	-I$(top_srcdir)/WINGs \
+	@XCFLAGS@ \
+	@LIBPL_INC_PATH@ 
+
+WPrefs_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
+
+WPrefs_LDADD = \
+	-L$(top_builddir)/WINGs -lWINGs\
+	-L$(top_builddir)/wrlib -lwraster \
+	@LIBPL_LIBS@ \
+	@XLFLAGS@ \
+	@GFXLIBS@ \
+	@XLIBS@ \
+	@X_EXTRA_LIBS@ \
+	@INTLIBS@ \
+	-lm 
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = ../src/config.h
+CONFIG_CLEAN_FILES = 
+PROGRAMS =  $(wpexecbin_PROGRAMS)
+
+
+DEFS = @DEFS@ -I. -I$(srcdir) -I../src
+LDFLAGS = @LDFLAGS@
+LIBS = @LIBS@
+X_CFLAGS = @X_CFLAGS@
+X_LIBS = @X_LIBS@
+X_PRE_LIBS = @X_PRE_LIBS@
+WPrefs_OBJECTS =  main.o WPrefs.o Configurations.o Expert.o Focus.o \
+Icons.o KeyboardSettings.o KeyboardShortcuts.o Menu.o MenuPreferences.o \
+MouseSettings.o Paths.o Preferences.o Text.o TextureAndColor.o \
+WindowHandling.o Workspace.o double.o MenuGuru.o xmodifier.o
+WPrefs_LDFLAGS = 
+CFLAGS = @CFLAGS@
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
+LINK = $(CC) $(CFLAGS) $(LDFLAGS) -o $@
+DATA =  $(wpdata_DATA)
+
+DIST_COMMON =  README Makefile.am Makefile.in
+
+
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
+
+TAR = tar
+GZIP = --best
+SOURCES = $(WPrefs_SOURCES)
+OBJECTS = $(WPrefs_OBJECTS)
+
+all: all-recursive all-am
+
+.SUFFIXES:
+.SUFFIXES: .S .c .o .s
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4)
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu WPrefs.app/Makefile
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+
+mostlyclean-wpexecbinPROGRAMS:
+
+clean-wpexecbinPROGRAMS:
+	-test -z "$(wpexecbin_PROGRAMS)" || rm -f $(wpexecbin_PROGRAMS)
+
+distclean-wpexecbinPROGRAMS:
+
+maintainer-clean-wpexecbinPROGRAMS:
+
+install-wpexecbinPROGRAMS: $(wpexecbin_PROGRAMS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(wpexecbindir)
+	@list='$(wpexecbin_PROGRAMS)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    echo "  $(INSTALL_PROGRAM) $$p $(DESTDIR)$(wpexecbindir)/`echo $$p|sed '$(transform)'`"; \
+	     $(INSTALL_PROGRAM) $$p $(DESTDIR)$(wpexecbindir)/`echo $$p|sed '$(transform)'`; \
+	  else :; fi; \
+	done
+
+uninstall-wpexecbinPROGRAMS:
+	@$(NORMAL_UNINSTALL)
+	list='$(wpexecbin_PROGRAMS)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(wpexecbindir)/`echo $$p|sed '$(transform)'`; \
+	done
+
+.c.o:
+	$(COMPILE) -c $<
+
+.s.o:
+	$(COMPILE) -c $<
+
+.S.o:
+	$(COMPILE) -c $<
+
+mostlyclean-compile:
+	-rm -f *.o core *.core
+
+clean-compile:
+
+distclean-compile:
+	-rm -f *.tab.c
+
+maintainer-clean-compile:
+
+WPrefs: $(WPrefs_OBJECTS) $(WPrefs_DEPENDENCIES)
+	@rm -f WPrefs
+	$(LINK) $(WPrefs_LDFLAGS) $(WPrefs_OBJECTS) $(WPrefs_LDADD) $(LIBS)
+
+install-wpdataDATA: $(wpdata_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(wpdatadir)
+	@list='$(wpdata_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(wpdatadir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(wpdatadir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(wpdatadir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(wpdatadir)/$$p; \
+	  fi; fi; \
+	done
+
+uninstall-wpdataDATA:
+	@$(NORMAL_UNINSTALL)
+	list='$(wpdata_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(wpdatadir)/$$p; \
+	done
+
+# This directory's subdirectories are mostly independent; you can cd
+# into them and run `make' without going through this Makefile.
+# To change the values of `make' variables: instead of editing Makefiles,
+# (1) if the variable is set in `config.status', edit `config.status'
+#     (which will cause the Makefiles to be regenerated when you run `make');
+# (2) otherwise, pass the desired values on the `make' command line.
+
+@SET_MAKE@
+
+all-recursive install-data-recursive install-exec-recursive \
+installdirs-recursive install-recursive uninstall-recursive  \
+check-recursive installcheck-recursive info-recursive dvi-recursive:
+	@set fnord $(MAKEFLAGS); amf=$$2; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  target=`echo $@ | sed s/-recursive//`; \
+	  echo "Making $$target in $$subdir"; \
+	  (cd $$subdir && $(MAKE) $$target) \
+	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
+	done && test -z "$$fail"
+
+mostlyclean-recursive clean-recursive distclean-recursive \
+maintainer-clean-recursive:
+	@set fnord $(MAKEFLAGS); amf=$$2; \
+	rev=''; list='$(SUBDIRS)'; for subdir in $$list; do \
+	  rev="$$subdir $$rev"; \
+	done; \
+	for subdir in $$rev; do \
+	  target=`echo $@ | sed s/-recursive//`; \
+	  echo "Making $$target in $$subdir"; \
+	  (cd $$subdir && $(MAKE) $$target) \
+	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
+	done && test -z "$$fail"
+tags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  (cd $$subdir && $(MAKE) tags); \
+	done
+
+tags: TAGS
+
+ID: $(HEADERS) $(SOURCES) $(LISP)
+	here=`pwd` && cd $(srcdir) \
+	  && mkid -f$$here/ID $(SOURCES) $(HEADERS) $(LISP)
+
+TAGS: tags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
+	tags=; \
+	here=`pwd`; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test -f $$subdir/TAGS && tags="$$tags -i $$here/$$subdir/TAGS"; \
+	done; \
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
+
+mostlyclean-tags:
+
+clean-tags:
+
+distclean-tags:
+	-rm -f TAGS ID
+
+maintainer-clean-tags:
+
+distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+
+subdir = WPrefs.app
+
+distdir: $(DISTFILES)
+	@for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  test -f $(distdir)/$$file \
+	  || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	  || cp -p $$d/$$file $(distdir)/$$file; \
+	done
+	for subdir in $(SUBDIRS); do \
+	  test -d $(distdir)/$$subdir \
+	  || mkdir $(distdir)/$$subdir \
+	  || exit 1; \
+	  chmod 777 $(distdir)/$$subdir; \
+	  (cd $$subdir && $(MAKE) top_distdir=../$(top_distdir) distdir=../$(distdir)/$$subdir distdir) \
+	    || exit 1; \
+	done
+info: info-recursive
+dvi: dvi-recursive
+check: all-am
+	$(MAKE) check-recursive
+installcheck: installcheck-recursive
+all-am: Makefile $(PROGRAMS) $(DATA)
+
+install-exec-am: install-wpexecbinPROGRAMS
+
+install-data-am: install-wpdataDATA
+
+uninstall-am: uninstall-wpexecbinPROGRAMS uninstall-wpdataDATA
+
+install-exec: install-exec-recursive install-exec-am
+	@$(NORMAL_INSTALL)
+
+install-data: install-data-recursive install-data-am
+	@$(NORMAL_INSTALL)
+
+install: install-recursive install-exec-am install-data-am
+	@:
+
+uninstall: uninstall-recursive uninstall-am
+
+install-strip:
+	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' INSTALL_SCRIPT='$(INSTALL_PROGRAM)' install
+installdirs: installdirs-recursive
+	$(mkinstalldirs)  $(DATADIR)$(wpexecbindir) $(DATADIR)$(wpdatadir)
+
+
+mostlyclean-generic:
+	-test -z "$(MOSTLYCLEANFILES)" || rm -f $(MOSTLYCLEANFILES)
+
+clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+
+distclean-generic:
+	-rm -f Makefile $(DISTCLEANFILES)
+	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
+
+maintainer-clean-generic:
+	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+mostlyclean-am:  mostlyclean-wpexecbinPROGRAMS mostlyclean-compile \
+		mostlyclean-tags mostlyclean-generic
+
+clean-am:  clean-wpexecbinPROGRAMS clean-compile clean-tags \
+		clean-generic mostlyclean-am
+
+distclean-am:  distclean-wpexecbinPROGRAMS distclean-compile \
+		distclean-tags distclean-generic clean-am
+
+maintainer-clean-am:  maintainer-clean-wpexecbinPROGRAMS \
+		maintainer-clean-compile maintainer-clean-tags \
+		maintainer-clean-generic distclean-am
+
+mostlyclean:  mostlyclean-recursive mostlyclean-am
+
+clean:  clean-recursive clean-am
+
+distclean:  distclean-recursive distclean-am
+	-rm -f config.status
+
+maintainer-clean:  maintainer-clean-recursive maintainer-clean-am
+	@echo "This command is intended for maintainers to use;"
+	@echo "it deletes files that may require special tools to rebuild."
+
+.PHONY: mostlyclean-wpexecbinPROGRAMS distclean-wpexecbinPROGRAMS \
+clean-wpexecbinPROGRAMS maintainer-clean-wpexecbinPROGRAMS \
+uninstall-wpexecbinPROGRAMS install-wpexecbinPROGRAMS \
+mostlyclean-compile distclean-compile clean-compile \
+maintainer-clean-compile uninstall-wpdataDATA install-wpdataDATA \
+install-data-recursive uninstall-data-recursive install-exec-recursive \
+uninstall-exec-recursive installdirs-recursive uninstalldirs-recursive \
+all-recursive check-recursive installcheck-recursive info-recursive \
+dvi-recursive mostlyclean-recursive distclean-recursive clean-recursive \
+maintainer-clean-recursive tags tags-recursive mostlyclean-tags \
+distclean-tags clean-tags maintainer-clean-tags distdir info dvi \
+installcheck all-am install-exec-am install-data-am uninstall-am \
+install-exec install-data install uninstall all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+
+
+# Tell versions [3.59,3.63) of GNU make to not export all variables.
+# Otherwise a system limit (for SysV at least) may be exceeded.
+.NOEXPORT:
