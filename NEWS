@@ -61,7 +61,8 @@ Others
 ------
 
 - added DONT_SCALE_ICONS compile time option
-
+- added --dont-restore cmd line option. When passed to wmaker, it
+  wont restore the state saved previously.
 
 --- 0.61.1
 

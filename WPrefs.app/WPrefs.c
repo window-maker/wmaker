@@ -711,9 +711,7 @@ Initialize(WMScreen *scr)
 
     WMSetLabelText(WPrefs.statusL, 
 		   _("WPrefs is free software and is distributed WITHOUT ANY\n"
-		   "WARRANTY under the terms of the GNU General Public License.\n"
-		   "The icons in this program are licensed through the\n"
-		   "OpenContent License."));
+	   "WARRANTY under the terms of the GNU General Public License."));
 }
 
 

@@ -308,27 +308,10 @@ find a bug that crashes Window Maker, please send a backtrace with your
 bug report.
 
 To make a usefull backtrace, you need a core file with debugging
-information produced by Window Maker when it crashes. The default
-for Window Maker is to restart another window manager when it crashes,
-so you will not get a core file. You need to edit the src/wconfig.h
-file *after* running configure and change the line that looks like:
-
-#undef NO_EMERGENCY_AUTORESTART
-
-to:
-
-#define NO_EMERGENCY_AUTORESTART
-
-Then, in the src directory type:
-make clean
-make CFLAGS=-g
-make install
-
-and wait for Window Maker to be installed.
-
-Once having Window Maker installed, start X and reproduce the bug so
-that Window Maker crashes. When it does crash, go to the directory
-where you compiled wmaker and type the following from your shell:
+information produced by Window Maker when it crashes. It should 
+have been installed without stripping too. If you
+get the dialog window telling you that wmaker crashed and asks you
+what to do, tell it to "Abort and leave a core file".
 
 script
 cd src
@@ -348,8 +331,8 @@ Window Maker is copyrighted by Alfredo K. Kojima and is licensed through the
 GNU General Public License. Read the COPYING file for the complete license.
 
 The icons that are distributed with this program and were made by Marco van
-Hylckama Vlieg, are licensed through the OpenContent License. Read the 
-COPYING.OPL file for the complete license.
+Hylckama Vlieg, are licensed through the GNU General Public License. Read the 
+COPYING file for the complete license.
 
 The icons listed in COPYING.WTFPL and are distributed in this 
 program and were made by Banlu Kemiyatorn (]d), are licensed through the

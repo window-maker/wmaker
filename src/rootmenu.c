@@ -644,7 +644,7 @@ constructMenu(WMenu *menu, WMenuEntry *entry)
     time_t last=0;
     
     separateCommand((char*)entry->clientdata, &path, &cmd);
-    if (!path || *path==NULL || **path==0) {
+    if (path == NULL || *path==NULL || **path==0) {
 	wwarning(_("invalid OPEN_MENU specification: %s"),
 		 (char*)entry->clientdata);
 	return;

@@ -533,7 +533,7 @@ removeIconsCallback(WMenu *menu, WMenuEntry *entry)
     WAppIcon *aicon;
     WMBag *selectedIcons;
     int keepit;
-    int i;
+    WMBagIterator it;
 
     assert(clickedIcon!=NULL);
 
@@ -556,8 +556,7 @@ removeIconsCallback(WMenu *menu, WMenuEntry *entry)
 	WMPutInBag(selectedIcons, clickedIcon);
     }
 
-    for (i = 0; i < WMGetBagItemCount(selectedIcons); i++) {
-        aicon = WMGetFromBag(selectedIcons, i);
+    WM_ITERATE_BAG(selectedIcons, aicon, it) {
         keepit = aicon->running && wApplicationOf(aicon->main_window);
         wDockDetach(dock, aicon);
         if (keepit) {
@@ -582,7 +581,7 @@ keepIconsCallback(WMenu *menu, WMenuEntry *entry)
     WDock *dock;
     WAppIcon *aicon;
     WMBag *selectedIcons;
-    int i;
+    WMBagIterator it;
 
     assert(clickedIcon!=NULL);
     dock = clickedIcon->dock;
@@ -617,8 +616,7 @@ keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 	WMPutInBag(selectedIcons, clickedIcon);
     }
 
-    for (i = 0; i < WMGetBagItemCount(selectedIcons); i++) {
-        aicon = WMGetFromBag(selectedIcons, i);
+    WM_ITERATE_BAG(selectedIcons, aicon, it) {
 	if (aicon->icon->selected)
             wIconSelect(aicon->icon);
         if (aicon && aicon->attracted && aicon->command) {

@@ -1711,7 +1711,6 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 		
 		/* discard all enter/leave events that happened until
 		 * the time the button was released */
-		/*
 		while (XCheckTypedEvent(dpy, EnterNotify, &e)) {
 		    if (e.xcrossing.time > event.xbutton.time) {
 			XPutBackEvent(dpy, &e);
@@ -1723,7 +1722,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 			XPutBackEvent(dpy, &e);
 			break;
 		    }
-		}*/
+		}
 
 		if (!scr->selected_windows) {
 		    /* get rid of the geometry window */

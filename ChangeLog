@@ -55,7 +55,9 @@ Changes since version 0.61.1:
 - color dragging works correctly now
 - arbitrary stacking levels
 - save window shortcuts in state
-
+- changed license of Marco's icons to GPL
+- added --dont-restore cmd line option to not restore previous state
+- fixed focus bug when moving wmaker panel windows in focus-follow mouse
 
 Changes since version 0.61.0:
 .............................

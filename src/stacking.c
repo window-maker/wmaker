@@ -45,10 +45,6 @@ extern XContext wStackContext;
 extern WPreferences wPreferences;
 
 
-
-
-
-
 /*
  *---------------------------------------------------------------------- 
  * RemakeStackList--
@@ -103,12 +99,12 @@ RemakeStackList(WScreen *scr)
 	}
 #endif
 	scr->window_count = c;
-    }
+    }    
     
     CommitStacking(scr);
-    
-    
 }
+
+
 
 /*
  *----------------------------------------------------------------------
@@ -185,113 +181,74 @@ moveFrameToUnder(WCoreWindow *under, WCoreWindow *frame)
 /*
  *----------------------------------------------------------------------
  * wRaiseFrame--
- * 	Raises a frame taking the window level and the on_top flag
- * into account. 
+ * 	Raises a frame taking the window level into account. 
  * 
  * Returns:
  * 	None
  * 
  * Side effects:
- * 	Window stacking order and window list is changed.
+ * 	Window stacking order and stacking list are changed.
  * 
  *---------------------------------------------------------------------- 
  */
 void 
 wRaiseFrame(WCoreWindow *frame)
 {
-    WCoreWindow *wlist = frame, *wlist_above;
+    WCoreWindow *wlist = frame;
     int level = frame->stacking->window_level;
     WScreen *scr = frame->screen_ptr;
 
     /* already on top */
     if (frame->stacking->above == NULL) {
 	return;
-    }    
-
-    /* insert on top of other windows */
-
-    while (wlist) {
-	if (wlist == (wlist_above = wlist->stacking->above)) {
-	    wwarning("You just found a bug in wmaker. Please try to figure what type of raising/lowering operations you did with which applications and report. Please give complete information about how to reproduce it.");
-	    break;
-	} else {
-	    wlist=wlist_above;
-	}
     }
 
-    /* window is inserted before the point found */
-    if (wlist==NULL) {
-	/* top most window (last on the list) */
-	if (frame->stacking->under)
-	    frame->stacking->under->stacking->above = frame->stacking->above;
-	if (frame->stacking->above)
-	    frame->stacking->above->stacking->under = frame->stacking->under;
+    /* insert it on top of other windows on the same level */
+    if (frame->stacking->under)
+	frame->stacking->under->stacking->above = frame->stacking->above;
+    if (frame->stacking->above)
+	frame->stacking->above->stacking->under = frame->stacking->under;
 	
-	frame->stacking->above = NULL;
-	frame->stacking->under = WMGetFromBag(scr->stacking_list, level);
-	frame->stacking->under->stacking->above = frame;
-	WMSetInBag(scr->stacking_list, level, frame);
+    frame->stacking->above = NULL;
+    frame->stacking->under = WMGetFromBag(scr->stacking_list, level);
+    frame->stacking->under->stacking->above = frame;
+    WMSetInBag(scr->stacking_list, level, frame);
 
-    } else if (frame!=wlist) {
-	if (frame->stacking->under)
-	    frame->stacking->under->stacking->above = frame->stacking->above;
-	if (frame->stacking->above)
-	    frame->stacking->above->stacking->under = frame->stacking->under;
-	
-	frame->stacking->above = wlist;
-	frame->stacking->under = wlist->stacking->under;
-	if (wlist->stacking->under)
-	    wlist->stacking->under->stacking->above = frame;
-	wlist->stacking->under = frame;
-    }
-#ifdef removed
-    if (wPreferences.on_top_transients)
-#endif
-    {
-	/* raise transients under us from bottom to top 
-	 * so that the order is kept */
-  again:
-	wlist = frame->stacking->under;
-	while (wlist && wlist->stacking->under)
-	  wlist = wlist->stacking->under;
-	while (wlist && wlist!=frame) {
-	    if (wlist->stacking->child_of == frame) {
-		wRaiseFrame(wlist);
-		goto again;
-	    }
-	    wlist = wlist->stacking->above;
+    /* raise transients under us from bottom to top 
+     * so that the order is kept */
+again:
+    wlist = frame->stacking->under;
+    while (wlist && wlist->stacking->under)
+	wlist = wlist->stacking->under;
+    while (wlist && wlist!=frame) {
+	if (wlist->stacking->child_of == frame) {
+	    wRaiseFrame(wlist);
+	    goto again;
 	}
-# if 0
-	again:
-	wlist = frame->stacking->under;
-	while (wlist) {
-	    if (wlist->stacking->child_of == frame) {
-		/* transient for us */
-		wRaiseFrame(wlist);
-		goto again; /* need this or we'll get in a loop */
-	    } 
-	    wlist = wlist->stacking->under;
-	}
-#endif
+	wlist = wlist->stacking->above;
     }
+
     /* try to optimize things a little */
     if (frame->stacking->above == NULL) {
-	WCoreWindow *above;
 	WMBagIterator iter;
+	WCoreWindow *above = WMBagLast(scr->stacking_list, &iter);
+	int i, last = above->stacking->window_level;
 
-	for (above = WMBagIteratorAtIndex(scr->stacking_list, level+1, &iter);
-	     iter != NULL;
-	     above = WMBagNext(scr->stacking_list, &iter)) {
+	/* find the 1st level above us which has windows in it */
+	for (i = level+1, above = NULL; i <= last; i++) {
+	    above = WMGetFromBag(scr->stacking_list, i);
+	    if (above != NULL)
+		break;
+	}
 
-	    /* can't optimize */
+	if (above != frame && above != NULL) {
 	    while (above->stacking->under)
 		above = above->stacking->under;
-	    break;
-	}
-	if (above == NULL) {
-	    XRaiseWindow(dpy, frame->window);
-	} else {
 	    moveFrameToUnder(above, frame);
+	} else {
+	    /* no window above us */
+	    above = NULL;
+	    XRaiseWindow(dpy, frame->window);
 	}
     } else {
 	moveFrameToUnder(frame->stacking->above, frame);
@@ -349,24 +306,17 @@ void
 wLowerFrame(WCoreWindow *frame)
 {
     WScreen *scr = frame->screen_ptr;
-    WCoreWindow *prev, *wlist=frame;
+    WCoreWindow *wlist=frame;
     int level = frame->stacking->window_level;
 
     /* already in bottom */
     if (wlist->stacking->under == NULL) {
 	return;
     }
-#ifdef removed
-    if (wPreferences.on_top_transients &&
-	wlist->stacking->under==wlist->stacking->child_of) {
+    /* cant lower transient below below its owner */
+    if (wlist->stacking->under == wlist->stacking->child_of) {
 	return;
     }
-#else
-    if (wlist->stacking->under==wlist->stacking->child_of) {
-	return;
-    }
-#endif
-    prev = wlist;
     /* remove from the list */
     if (WMGetFromBag(scr->stacking_list, level) == frame) {
 	/* it was the top window */
@@ -381,9 +331,6 @@ wLowerFrame(WCoreWindow *frame)
     wlist = WMGetFromBag(scr->stacking_list, level);
 
     /* look for place to put this window */
-#ifdef removed
-    if (wPreferences.on_top_transients)
-#endif
     {
 	WCoreWindow *owner = frame->stacking->child_of;
 	
@@ -392,18 +339,11 @@ wLowerFrame(WCoreWindow *frame)
 		/* if this is a transient, it should not be placed under 
 		 * it's owner */
 		if (owner == wlist->stacking->under)
-		  break;
+		    break;
 		wlist = wlist->stacking->under;
 	    }
 	}
     } 
-#ifdef removed
-    else {
-	while (wlist->stacking->under) {
-	    wlist = wlist->stacking->under;
-	}
-    }
-#endif
     /* insert under the place found */
     frame->stacking->above = wlist;
     frame->stacking->under = wlist->stacking->under;
@@ -411,24 +351,25 @@ wLowerFrame(WCoreWindow *frame)
 	wlist->stacking->under->stacking->above = frame;
     wlist->stacking->under = frame;
 
-    /* try to optimize things a little */
     if (frame->stacking->above == NULL) {
-	WCoreWindow *above = NULL;
 	WMBagIterator iter;
-	
-	for (above = WMBagIteratorAtIndex(scr->stacking_list, level-1, &iter);
-	     iter != NULL;
-	     above = WMBagPrevious(scr->stacking_list, &iter)) {
-	
-	    /* can't optimize */
+	WCoreWindow *above = WMBagLast(scr->stacking_list, &iter);
+	int i, last = above->stacking->window_level;
+
+	/* find the 1st level above us which has windows in it */
+	for (i = level+1, above = NULL; i <= last; i++) {
+	    above = WMGetFromBag(scr->stacking_list, i);
+	    if (above != NULL)
+		break;
+	}
+
+	if (above != frame && above != NULL) {
 	    while (above->stacking->under)
 		above = above->stacking->under;
-	    break;
-	}
-	if (!above) {
-	    XLowerWindow(dpy, frame->window);
-	} else {
 	    moveFrameToUnder(above, frame);
+	} else {
+	    /* no window below us */
+	    XLowerWindow(dpy, frame->window);
 	}
     } else {
 	moveFrameToUnder(frame->stacking->above, frame);
@@ -461,58 +402,50 @@ wLowerFrame(WCoreWindow *frame)
 void
 AddToStackList(WCoreWindow *frame)
 {
-    WCoreWindow *prev, *tmpw, *wlist;
+    WCoreWindow *curtop, *wlist;
     int index = frame->stacking->window_level;
     WScreen *scr = frame->screen_ptr;
-
+    WCoreWindow *trans = NULL;
+    
     frame->screen_ptr->window_count++;
     XSaveContext(dpy, frame->window, wStackContext, (XPointer)frame);
-    tmpw = WMGetFromBag(scr->stacking_list, index);
+    curtop = WMGetFromBag(scr->stacking_list, index);
 
-    if (!tmpw) {
+    /* first window in this level */
+    if (curtop == NULL) {
 	WMSetInBag(scr->stacking_list, index, frame);
 	frame->stacking->above = NULL;
 	frame->stacking->under = NULL;
 	CommitStacking(scr);
 	return;
     }
-    prev = tmpw;
+
     /* check if this is a transient owner */
-#ifdef removed
-    if (wPreferences.on_top_transients)
-#endif
-    {
-	WCoreWindow *trans = NULL;
-	  
-	wlist = WMGetFromBag(scr->stacking_list, index);
-	while (wlist) {
-	    if (wlist->stacking->child_of == frame)
-	      trans = wlist;
-	    wlist = wlist->stacking->under;
-	}
-	
-	frame->stacking->above = trans;
-	if (trans) {
-	    frame->stacking->under = trans->stacking->under;
-	    if (trans->stacking->under) {
-		trans->stacking->under->stacking->above = frame;
-	    }
-	    trans->stacking->under = frame;
-	} else {
-	    frame->stacking->under = tmpw;
-	    tmpw->stacking->above = frame;
-	    WMSetInBag(scr->stacking_list, index, frame);	    
-	}
+    wlist = curtop;
+    while (wlist) {
+	if (wlist->stacking->child_of == frame)
+	    trans = wlist;
+	wlist = wlist->stacking->under;
     }
-#ifdef removed
-    else {
-	/* put on top of the stacking list */
-	frame->stacking->above = NULL;
-	frame->stacking->under = tmpw;
-	tmpw->stacking->above = frame;
+    /* trans will hold the transient in the lowest position
+     * in stacking list */
+	
+    frame->stacking->above = trans;
+    if (trans != NULL) {
+	/* window is owner of a transient.. put it below
+	 * the lowest transient */
+	frame->stacking->under = trans->stacking->under;
+	if (trans->stacking->under) {
+	    trans->stacking->under->stacking->above = frame;
+	}
+	trans->stacking->under = frame;
+    } else {
+	/* window is not owner of transients.. just put it in the
+	 * top of other windows */
+	frame->stacking->under = curtop;
+	curtop->stacking->above = frame;
 	WMSetInBag(scr->stacking_list, index, frame);
     }
-#endif
     CommitStacking(scr);
         
 }
@@ -657,6 +590,7 @@ void
 ChangeStackingLevel(WCoreWindow *frame, int new_level)
 {
     int old_level;
+
     if (frame->stacking->window_level == new_level)
       return;
     old_level = frame->stacking->window_level;

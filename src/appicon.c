@@ -460,40 +460,40 @@ wAppIconReduceAppCount(WApplication *wapp)
     /* If given a main window, check the applist
      * and remove the if it exists
      */
-	applist = wapp->app_icon->applist;
-	while (applist != NULL) {
-	        if (applist->wapp == wapp) {
-		    /* If this app owns the appicon, change the appicon's
-		     * owner to the next app in the list or NULL
-		     */
-	    if (wapp->app_icon->icon->owner == applist->wapp->main_window_desc)
-{
-			if (applist->next) {
-			    wapp->app_icon->icon->owner = applist->next->wapp->main_window_desc;
-			} else if (applist->prev) {
-			    wapp->app_icon->icon->owner = applist->prev->wapp->main_window_desc;
-			} else {
-			    wapp->app_icon->icon->owner = NULL;
-			}
-		    }
-		    if (applist->prev)
-			applist->prev->next = applist->next;
+    applist = wapp->app_icon->applist;
+    while (applist != NULL) {
+	if (applist->wapp == wapp) {
+	    /* If this app owns the appicon, change the appicon's
+	     * owner to the next app in the list or NULL
+	     */
+	    if (wapp->app_icon->icon->owner 
+		== applist->wapp->main_window_desc) {
+		if (applist->next) {
+		    wapp->app_icon->icon->owner = applist->next->wapp->main_window_desc;
+		} else if (applist->prev) {
+		    wapp->app_icon->icon->owner = applist->prev->wapp->main_window_desc;
+		} else {
+		    wapp->app_icon->icon->owner = NULL;
+		}
+	    }
+	    if (applist->prev)
+		applist->prev->next = applist->next;
 
-		    if (applist->next)
-			applist->next->prev = applist->prev;
+	    if (applist->next)
+		applist->next->prev = applist->prev;
 
 	    if (applist == wapp->app_icon->applist)
-		    	wapp->app_icon->applist = applist->next;
+		wapp->app_icon->applist = applist->next;
+	    
+	    free(applist);
 
-		    free(applist);
+	    if (wapp->app_icon->applist != NULL)
+		wapp->app_icon->main_window = wapp->app_icon->applist->wapp->main_window;
 
-		    if (wapp->app_icon->applist != NULL)
-		    	wapp->app_icon->main_window = wapp->app_icon->applist->wapp->main_window;
-
-		    return (--wapp->app_icon->num_apps);
-	    	}
-	    applist = applist->next;
+	    return (--wapp->app_icon->num_apps);
 	}
+	applist = applist->next;
+    }
     return (--wapp->app_icon->num_apps);
 }
 #endif
