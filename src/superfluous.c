@@ -130,7 +130,6 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
 
     while (XCheckTypedEvent(dpy, MotionNotify, &event)) {
     }
-	XPutBackEvent(dpy, &event);
     XFlush(dpy);
 
     XUngrabServer(dpy);
