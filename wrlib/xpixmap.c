@@ -163,7 +163,7 @@ RCreateImageFromDrawable(RContext *context, Drawable drawable, Pixmap mask)
     
     if (!XGetGeometry(context->dpy, drawable, &baz, &foo, &foo, 
 		      &w, &h, &bar, &bar)) {
-	printf("wrlib:invalid window or pixmap passed to RCreateImageFromPixmap\n");
+	printf("wrlib: invalid window or pixmap passed to RCreateImageFromPixmap\n");
 	return NULL;
     }
     pimg = XGetImage(context->dpy, drawable, 0, 0, w, h, AllPlanes, 

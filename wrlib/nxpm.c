@@ -181,14 +181,9 @@ RGetImageFromXPMData(RContext *context, char **data)
 		*b = color_table[2][k];
 		if (a) {
 		    *a = color_table[3][k];
-		    r += 4;
-		    g += 4;
-		    b += 4;
-		    a += 4;
+		    r += 4; g += 4; b += 4; a += 4;
 		} else {
-		    r += 3;
-		    g += 3;
-		    b += 3;
+		    r += 3; g += 3; b += 3;
 		}
 	    }
 	} else {
@@ -208,14 +203,9 @@ RGetImageFromXPMData(RContext *context, char **data)
 		*b = color_table[2][k];
 		if (a) {
 		    *a = color_table[3][k];
-		    r += 4;
-		    g += 4;
-		    b += 4;
-		    a += 4;
+		    r += 4; g += 4; b += 4; a += 4;
 		} else {
-		    r += 3;
-		    g += 3;
-		    b += 3;
+		    r += 3; g += 3; b += 3;
 		}
 	    }
 	}
@@ -379,11 +369,15 @@ RLoadXPM(RContext *context, char *file, int index)
 		if (k==ccount)
 		    k = 0;
 		
-		*(r++) = color_table[0][k];
-		*(g++) = color_table[1][k];
-		*(b++) = color_table[2][k];
-		if (a)
-		    *(a++) = color_table[3][k];
+		*r = color_table[0][k];
+		*g = color_table[1][k];
+		*b = color_table[2][k];
+                if (a) {
+                    *a = color_table[3][k];
+                    r += 4; g += 4; b += 4; a += 4;
+                } else {
+                    r += 3; g += 3; b += 3;
+                }
 	    }
 	} else {
 	    for (j=1; j<=w*2; j++) {
@@ -398,11 +392,15 @@ RLoadXPM(RContext *context, char *file, int index)
 		    k = 0;
 		}
 	
-		*(r++) = color_table[0][k];
-		*(g++) = color_table[1][k];
-		*(b++) = color_table[2][k];
-		if (a)
-		    *(a++) = color_table[3][k];
+		*r = color_table[0][k];
+		*g = color_table[1][k];
+		*b = color_table[2][k];
+                if (a) {
+                    *a = color_table[3][k];
+                    r += 4; g += 4; b += 4; a += 4;
+                } else {
+                    r += 3; g += 3; b += 3;
+                }
 	    }
 	}
     }
@@ -594,11 +592,16 @@ RSaveXPM(RImage *image, char *filename)
 	colorCount = 1;
     for (y = 0; y < image->height; y++) {
 	for (x = 0; x < image->width; x++) {
-	    if (!a || *a++>127)
+            if (!a || *a>127) {
 		if (!addcolor(&colormap, *r, *g, *b, &colorCount)) {
 		    goto uhoh;
-		}
-	    r++; g++; b++;
+                }
+            }
+            if (a) {
+                r += 4; g += 4; b += 4; a += 4;
+            } else {
+                r += 3; g += 3; b += 3;
+            }
 	}
     }
 
@@ -611,7 +614,7 @@ RSaveXPM(RImage *image, char *filename)
 	    colorCount, charsPerPixel);
 
     /* write colormap data */
-    if (image->data[3]) {
+    if (a) {
 	for (i=0; i<charsPerPixel; i++)
 	    transp[i] = ' ';
 	transp[i] = 0;
@@ -638,7 +641,7 @@ RSaveXPM(RImage *image, char *filename)
 
 	for (x = 0; x < image->width; x++) {
 
-	    if (!a || *a++>127) {
+	    if (!a || *a>127) {
 		tmpc = lookfor(colormap, (unsigned)*r<<16|(unsigned)*g<<8|(unsigned)*b);
 
 		fprintf(file, index2str(buf, tmpc->index, charsPerPixel));
@@ -646,7 +649,11 @@ RSaveXPM(RImage *image, char *filename)
 		fprintf(file, transp);
 	    }
 
-	    r++; g++; b++;
+            if (a) {
+                r += 4; g += 4; b += 4; a += 4;
+            } else {
+                r += 3; g += 3; b += 3;
+            }
 	}
 
 	if (y < image->height-1)

@@ -54,11 +54,8 @@ RCreateImage(unsigned width, unsigned height, int alpha)
     memset(image, 0, sizeof(RImage));
     image->width = width;
     image->height = height;
-    if (alpha) {
-	image->format = RRGBAFormat;
-    } else {
-	image->format = RRGBFormat;
-    }
+    image->format = alpha ? RRGBAFormat : RRGBFormat;
+
     /* the +4 is to give extra bytes at the end of the buffer,
      * so that we can optimize image conversion for MMX(tm).. see convert.c
      */
@@ -183,24 +180,18 @@ RCombineImages(RImage *image, RImage *src)
 	    for (i=0; i<image->height*image->width; i++) {
 		alpha = *(s+3);
 		calpha = 255 - alpha;
-		*d = (((int)*d * calpha) + ((int)*s * alpha))/256;
-		d++; s++;
-		*d = (((int)*d * calpha) + ((int)*s * alpha))/256;
-		d++; s++;
-		*d = (((int)*d * calpha) + ((int)*s * alpha))/256;
-		d++; s++;
+		*d = (((int)*d * calpha) + ((int)*s * alpha))/256; d++; s++;
+		*d = (((int)*d * calpha) + ((int)*s * alpha))/256; d++; s++;
+		*d = (((int)*d * calpha) + ((int)*s * alpha))/256; d++; s++;
 		s++;
 	    }
 	} else {
 	    for (i=0; i<image->height*image->width; i++) {
 		alpha = *(s+3);
 		calpha = 255 - alpha;
-		*d = (((int)*d * calpha) + ((int)*s * alpha))/256;
-		d++; s++;
-		*d = (((int)*d * calpha) + ((int)*s * alpha))/256;
-		d++; s++;
-		*d = (((int)*d * calpha) + ((int)*s * alpha))/256;
-		d++; s++;
+		*d = (((int)*d * calpha) + ((int)*s * alpha))/256; d++; s++;
+		*d = (((int)*d * calpha) + ((int)*s * alpha))/256; d++; s++;
+		*d = (((int)*d * calpha) + ((int)*s * alpha))/256; d++; s++;
 		*d++ |= *s++;
 	    }
 	}
@@ -225,59 +216,50 @@ RCombineImagesWithOpaqueness(RImage *image, RImage *src, int opaqueness)
     s = src->data;
 
     c_opaqueness = 255 - opaqueness;
+
 #define OP opaqueness
+#define COP c_opaqueness
+
     if (!HAS_ALPHA(src)) {
 	int dalpha = HAS_ALPHA(image);
-#define COP c_opaqueness
 	for (i=0; i < image->width*image->height; i++) {
-	    *d = (((int)*d *(int)COP) + ((int)*s *(int)OP))/256;
-	    d++; s++;
-	    *d = (((int)*d *(int)COP) + ((int)*s *(int)OP))/256;
-	    d++; s++;
-	    *d = (((int)*d *(int)COP) + ((int)*s *(int)OP))/256;
-	    d++; s++;
+	    *d = (((int)*d *(int)COP) + ((int)*s *(int)OP))/256; d++; s++;
+	    *d = (((int)*d *(int)COP) + ((int)*s *(int)OP))/256; d++; s++;
+	    *d = (((int)*d *(int)COP) + ((int)*s *(int)OP))/256; d++; s++;
 	    if (dalpha) {
 		d++;
 	    }
 	}
-#undef COP
     } else {
 	int tmp;
 
 	if (!HAS_ALPHA(image)) {
 	    for (i=0; i<image->width*image->height; i++) {
 		tmp = (*(s+3) * opaqueness)/256;
-		*d = (((int)*d * (255-tmp)) + ((int)*s * tmp))/256;
-		d++; s++;
-		*d = (((int)*d * (255-tmp)) + ((int)*s * tmp))/256;
-		d++; s++;
-		*d = (((int)*d * (255-tmp)) + ((int)*s * tmp))/256;
-		d++; s++;
+		*d = (((int)*d * (255-tmp)) + ((int)*s * tmp))/256; d++; s++;
+		*d = (((int)*d * (255-tmp)) + ((int)*s * tmp))/256; d++; s++;
+		*d = (((int)*d * (255-tmp)) + ((int)*s * tmp))/256; d++; s++;
 		s++;
 	    }
 	} else {
 	    for (i=0; i<image->width*image->height; i++) {
 		tmp = (*(s+3) * opaqueness)/256;
-		*d = (((int)*d * (255-tmp)) + ((int)*s * tmp))/256;
-		d++; s++;
-		*d = (((int)*d * (255-tmp)) + ((int)*s * tmp))/256;
-		d++; s++;
-		*d = (((int)*d * (255-tmp)) + ((int)*s * tmp))/256;
-		d++; s++;
+		*d = (((int)*d * (255-tmp)) + ((int)*s * tmp))/256; d++; s++;
+		*d = (((int)*d * (255-tmp)) + ((int)*s * tmp))/256; d++; s++;
+		*d = (((int)*d * (255-tmp)) + ((int)*s * tmp))/256; d++; s++;
 		*d |= tmp;
 		d++; s++;
 	    }
 	}
     }
 #undef OP
+#undef COP
 }
 
 int
-calculateCombineArea(RImage *des, RImage *src,
-        int *sx, int *sy,
-        int *swidth, int *sheight,
-        int *dx, int *dy) {
-
+calculateCombineArea(RImage *des, RImage *src, int *sx, int *sy,
+                     int *swidth, int *sheight, int *dx, int *dy)
+{
     if (*dx < 0) {
         *sx = -*dx;
         *swidth = *swidth + *dx;
@@ -363,12 +345,9 @@ RCombineArea(RImage *image, RImage *src, int sx, int sy, unsigned width,
 	    for (x=0; x < width; x++) {
 		alpha = *(s+3);
 		calpha = 255 - alpha;
-		*d = (((int)*d * calpha) + ((int)*s * alpha))/256;
-		s++; d++;
-		*d = (((int)*d * calpha) + ((int)*s * alpha))/256;
-		s++; d++;
-		*d = (((int)*d * calpha) + ((int)*s * alpha))/256;
-		s++; d++;
+		*d = (((int)*d * calpha) + ((int)*s * alpha))/256; s++; d++;
+		*d = (((int)*d * calpha) + ((int)*s * alpha))/256; s++; d++;
+		*d = (((int)*d * calpha) + ((int)*s * alpha))/256; s++; d++;
 		s++;
 		if (dalpha)
 		    d++;
@@ -387,8 +366,7 @@ RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
 {
     int x, y, dwi, swi;
     int c_opaqueness;
-    unsigned char *d;
-    unsigned char *s;
+    unsigned char *s, *d;
     int dalpha = HAS_ALPHA(image);
     int dch = (dalpha ? 4 : 3);
 
@@ -399,27 +377,25 @@ RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
     dwi = (image->width - width)*dch;
 
     c_opaqueness = 255 - opaqueness;
+
 #define OP opaqueness
-    if (!HAS_ALPHA(src)) {
 #define COP c_opaqueness
+
+    if (!HAS_ALPHA(src)) {
 
 	s = src->data + sy*src->width*3;	
 	swi = (src->width - width) * 3;
 	
 	for (y=0; y < height; y++) {
 	    for (x=0; x < width; x++) {
-		*d = (((int)*d *(int)COP) + ((int)*s *(int)OP))/256;
-		s++; d++;
-		*d = (((int)*d *(int)COP) + ((int)*s *(int)OP))/256;
-		s++; d++;
-		*d = (((int)*d *(int)COP) + ((int)*s *(int)OP))/256;
-		s++; d++;
+		*d = (((int)*d *(int)COP) + ((int)*s *(int)OP))/256; s++; d++;
+		*d = (((int)*d *(int)COP) + ((int)*s *(int)OP))/256; s++; d++;
+		*d = (((int)*d *(int)COP) + ((int)*s *(int)OP))/256; s++; d++;
 		if (dalpha)
 		    d++;
 	    }
 	    d += dwi; s += swi;
 	}
-#undef COP
     } else {
         int tmp;
 
@@ -428,13 +404,10 @@ RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
 	
 	for (y=0; y < height; y++) {
 	    for (x=0; x < width; x++) {
-	        tmp= (*(s+3) * opaqueness)/256;
-		*d = (((int)*d *(int)(255-tmp)) + ((int)*s *(int)tmp))/256;
-		d++; s++;
-		*d = (((int)*d *(int)(255-tmp)) + ((int)*s *(int)tmp))/256;
-		d++; s++;
-		*d = (((int)*d *(int)(255-tmp)) + ((int)*s *(int)tmp))/256;
-		d++; s++;
+	        tmp = (*(s+3) * opaqueness)/256;
+		*d = (((int)*d * (255-tmp)) + ((int)*s * tmp))/256; d++; s++;
+		*d = (((int)*d * (255-tmp)) + ((int)*s * tmp))/256; d++; s++;
+		*d = (((int)*d * (255-tmp)) + ((int)*s * tmp))/256; d++; s++;
 		s++;
 		if (dalpha)
 		    d++;
@@ -443,6 +416,7 @@ RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
 	}
     }
 #undef OP
+#undef COP
 }			
 
 
@@ -469,12 +443,9 @@ RCombineImageWithColor(RImage *image, RColor *color)
 	alpha = *(d+3);
 	nalpha = 255 - alpha;
 
-	*d = (((int)*d * alpha) + (r * nalpha))/256;
-	d++;
-	*d = (((int)*d * alpha) + (g * nalpha))/256;
-	d++;
-	*d = (((int)*d * alpha) + (b * nalpha))/256;
-	d++;
+	*d = (((int)*d * alpha) + (r * nalpha))/256; d++;
+	*d = (((int)*d * alpha) + (g * nalpha))/256; d++;
+	*d = (((int)*d * alpha) + (b * nalpha))/256; d++;
 	d++;
     }
 }

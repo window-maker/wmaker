@@ -18,6 +18,12 @@
  *  License along with this library; if not, write to the Free
  *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+
+/* Problems:
+ *   1. Using Grayscale visual with Dithering crashes wmaker
+ *   2. Ghost dock/appicon is wrong in Pseudocolor, Staticgray, Grayscale
+ */
+
 #include <config.h>
 
 
@@ -41,6 +47,8 @@ extern Pixmap R_CreateXImageMappedPixmap(RContext *context, RXImage *ximage);
 
 #endif
 
+
+#define HAS_ALPHA(I)	((I)->format == RRGBAFormat)
 
 
 typedef struct RConversionTable {
@@ -254,16 +262,26 @@ image2TrueColor(RContext *ctx, RImage *image)
 #ifdef DEBUG
         puts("true color match");
 #endif
-	for (y=0, ofs=0; y < image->height; y++) {
-	    for (x=0; x < image->width; x++, ofs+=channels-3) {
-		/* reduce pixel */
-                r = rtable[ptr[ofs++]];
-                g = gtable[ptr[ofs++]];
-                b = btable[ptr[ofs++]];
-                pixel = (r<<roffs) | (g<<goffs) | (b<<boffs);
-		XPutPixel(ximg->image, x, y, pixel);
-	    }
-	}
+        if (rmask==0xff && gmask==0xff && bmask==0xff) {
+            for (y=0; y < image->height; y++) {
+                for (x=0; x < image->width; x++, ptr+=channels) {
+                    /* reduce pixel */
+                    pixel = (*(ptr)<<roffs) | (*(ptr+1)<<goffs) | (*(ptr+2)<<boffs);
+                    XPutPixel(ximg->image, x, y, pixel);
+                }
+            }
+        } else {
+            for (y=0, ofs=0; y < image->height; y++) {
+                for (x=0; x < image->width; x++, ofs+=channels-3) {
+                    /* reduce pixel */
+                    r = rtable[ptr[ofs++]];
+                    g = gtable[ptr[ofs++]];
+                    b = btable[ptr[ofs++]];
+                    pixel = (r<<roffs) | (g<<goffs) | (b<<boffs);
+                    XPutPixel(ximg->image, x, y, pixel);
+                }
+            }
+        }
     } else {
         /* dither */
 	const int dr=0xff/rmask;
@@ -427,7 +445,7 @@ image2PseudoColor(RContext *ctx, RImage *image)
         printf("pseudo color match with %d colors per channel\n", cpc);
 #endif
 	for (y=0; y<image->height; y++) {
-	    for (x=0; x<image->width; x++, ptr+=channels-1) {
+	    for (x=0; x<image->width; x++, ptr+=channels-3) {
 		/* reduce pixel */
                 r = rtable[*ptr++];
                 g = gtable[*ptr++];
@@ -783,29 +801,41 @@ hermesConvert(RContext *context, RImage *image)
 	return NULL;
     }
     
-    if (image->format == RRGBFormat) {
-	source.b = 0x00ffffff;
-	source.g = 0xff00ffff;
-	source.r = 0xffff00ff;
-	source.a = 0x00000000;	
-	source.bits = 24;
+    if (HAS_ALPHA(image)) {
+        if (ximage->image->byte_order==LSBFirst) {
+            source.r = 0x000000ff;
+            source.g = 0x0000ff00;
+            source.b = 0x00ff0000;
+            source.a = 0xff000000;
+        } else {
+            source.r = 0xff000000;
+            source.g = 0x00ff0000;
+            source.b = 0x0000ff00;
+            source.a = 0x000000ff;
+        }
+        source.bits = 32;
     } else {
-	source.b = 0x00ffffff;
-	source.g = 0xff00ffff;
-	source.r = 0xffff00ff;
-	source.a = 0xff000000;
-	
-	source.bits = 32;
+        if (ximage->image->byte_order==LSBFirst) {
+            source.r = 0x0000ff;
+            source.g = 0x00ff00;
+            source.b = 0xff0000;
+        } else {
+            source.r = 0xff0000;
+            source.g = 0x00ff00;
+            source.b = 0x0000ff;
+        }
+        source.a = 0x000000;
+        source.bits = 24;
     }
 
     source.indexed = 0;
-    source.has_colorkey = 0;    
+    source.has_colorkey = 0;
 
     dest.r = context->visual->red_mask;
     dest.g = context->visual->green_mask;
     dest.b = context->visual->blue_mask;
     dest.a = 0;
-    dest.bits = context->depth;
+    dest.bits = ximage->image->bits_per_pixel;
     if (context->vclass == TrueColor)
 	dest.indexed = 0;
     else

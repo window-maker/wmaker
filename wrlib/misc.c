@@ -91,31 +91,31 @@ RBevelImage(RImage *image, int bevel_type)
 void
 RFillImage(RImage *image, RColor *color)
 {
+    unsigned char *d = image->data;
+    unsigned lineSize;
+    int i;
+
     if (image->format == RRGBAFormat) {
-	    unsigned char *d = image->data;
-	    int i;
-
-	    for (i = 0; i < image->width; i++) {
-		*d++ = color->red;
-		*d++ = color->green;
-		*d++ = color->blue;
-		*d++ = color->alpha;
-	    }
-	    for (i = 1; i < image->height; i++, d += image->width*4) {
-		memcpy(d, image->data, image->width*4);
-	    }
+        for (i = 0; i < image->width; i++) {
+            *d++ = color->red;
+            *d++ = color->green;
+            *d++ = color->blue;
+            *d++ = color->alpha;
+        }
+        lineSize = image->width*4;
+        for (i = 1; i < image->height; i++, d+=lineSize) {
+            memcpy(d, image->data, lineSize);
+        }
     } else {
-	    unsigned char *d = image->data;
-	    int i;
-
-	    for (i = 0; i < image->width; i++) {
-		*d++ = color->red;
-		*d++ = color->green;
-		*d++ = color->blue;
-	    }
-	    for (i = 1; i < image->height; i++, d += image->width*3) {
-		memcpy(d, image->data, image->width*3);
-	    }
+        for (i = 0; i < image->width; i++) {
+            *d++ = color->red;
+            *d++ = color->green;
+            *d++ = color->blue;
+        }
+        lineSize = image->width*3;
+        for (i = 1; i < image->height; i++, d+=lineSize) {
+            memcpy(d, image->data, lineSize);
+        }
     }
 }
 
@@ -123,40 +123,36 @@ RFillImage(RImage *image, RColor *color)
 void
 RClearImage(RImage *image, RColor *color)
 {
-    if (color->alpha==255) {
-	if (image->format == RRGBAFormat) {
-	    unsigned char *d = image->data;
-	    int i;
+    unsigned char *d = image->data;
+    unsigned lineSize;
+    int i;
 
-	    for (i = 0; i < image->width; i++) {
-		*d++ = color->red;
-		*d++ = color->green;
-		*d++ = color->blue;
-		*d++ = 0xff;
-	    }
-	    for (i = 1; i < image->height; i++, d += image->width*4) {
-		memcpy(d, image->data, image->width*4);
-	    }
+    if (color->alpha==255) {
+        if (image->format == RRGBAFormat) {
+            for (i = 0; i < image->width; i++) {
+                *d++ = color->red;
+                *d++ = color->green;
+                *d++ = color->blue;
+                *d++ = 0xff;
+            }
+            lineSize = image->width*4;
+            for (i = 1; i < image->height; i++, d+=lineSize) {
+                memcpy(d, image->data, lineSize);
+            }
 	} else {
-	    unsigned char *d = image->data;
-	    int i;
-	    
 	    for (i = 0; i < image->width; i++) {
 		*d++ = color->red;
 		*d++ = color->green;
 		*d++ = color->blue;
 	    }
-	    for (i = 1; i < image->height; i++, d += image->width*3) {
-		memcpy(d, image->data, image->width*3);
+            lineSize = image->width*3;
+            for (i = 1; i < image->height; i++, d+=lineSize) {
+		memcpy(d, image->data, lineSize);
 	    }
 	}
     } else {
 	int bytes = image->width*image->height;
-	int i;
-	unsigned char *d;
 	int alpha, nalpha, r, g, b;
-
-	d = image->data;
 
 	alpha = color->alpha;
 	r = color->red * alpha;
@@ -165,12 +161,9 @@ RClearImage(RImage *image, RColor *color)
 	nalpha = 255 - alpha;
 
 	for (i=0; i<bytes; i++) {
-	    *d = (((int)*d * nalpha) + r)/256;
-	    d++;
-	    *d = (((int)*d * nalpha) + g)/256;
-	    d++;
-	    *d = (((int)*d * nalpha) + b)/256;
-	    d++;
+	    *d = (((int)*d * nalpha) + r)/256; d++;
+	    *d = (((int)*d * nalpha) + g)/256; d++;
+	    *d = (((int)*d * nalpha) + b)/256; d++;
 	    if (image->format == RRGBAFormat) {
 		d++;
 	    }

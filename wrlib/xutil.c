@@ -120,7 +120,7 @@ RCreateXImage(RContext *context, int depth, unsigned width, unsigned height)
 				   IPC_CREAT|0777);
 	if (rximg->info.shmid < 0) {
 	    context->attribs->use_shared_memory = 0;
-	    perror("wrlib:could not allocate shared memory segment");
+	    perror("wrlib: could not allocate shared memory segment");
 	    XDestroyImage(rximg->image);
 	    goto retry_without_shm;
 	}
@@ -129,8 +129,8 @@ RCreateXImage(RContext *context, int depth, unsigned width, unsigned height)
 	if (rximg->info.shmaddr == (void*)-1) {
 	    context->attribs->use_shared_memory = 0;
 	    if (shmctl(rximg->info.shmid, IPC_RMID, 0) < 0)
-		perror("wrlib:shmctl");
-	    perror("wrlib:could not allocate shared memory");
+		perror("wrlib: shmctl");
+	    perror("wrlib: could not allocate shared memory");
 	    XDestroyImage(rximg->image);
 	    goto retry_without_shm;
 	}
@@ -149,9 +149,9 @@ RCreateXImage(RContext *context, int depth, unsigned width, unsigned height)
 	    context->attribs->use_shared_memory = 0;
 	    XDestroyImage(rximg->image);
 	    if (shmdt(rximg->info.shmaddr) < 0)
-		perror("wrlib:shmdt");
+		perror("wrlib: shmdt");
 	    if (shmctl(rximg->info.shmid, IPC_RMID, 0) < 0)
-		perror("wrlib:shmctl");
+		perror("wrlib: shmctl");
 /*	    printf("wrlib:error attaching shared memory segment to XImage\n");
  */
 	    goto retry_without_shm;
@@ -174,9 +174,9 @@ RDestroyXImage(RContext *context, RXImage *rximage)
 	XShmDetach(context->dpy, &rximage->info);
 	XDestroyImage(rximage->image);
 	if (shmdt(rximage->info.shmaddr) < 0)
-	    perror("wrlib:shmdt");
+	    perror("wrlib: shmdt");
 	if (shmctl(rximage->info.shmid, IPC_RMID, 0) < 0)
-	    perror("wrlib:shmctl");
+	    perror("wrlib: shmctl");
     } else {
 	XDestroyImage(rximage->image);
     }

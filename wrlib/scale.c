@@ -412,6 +412,7 @@ CLIST	*contrib;		/* array of contribution lists */
 #define CLAMP(v,l,h)    ((v)<(l) ? (l) : (v) > (h) ? (h) : v)
 
 
+/* return of calloc is not checked if NULL in the function below! */
 RImage*
 RSmoothScaleImage(RImage *src, unsigned new_width, unsigned new_height)
 {    

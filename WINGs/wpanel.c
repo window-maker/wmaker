@@ -486,7 +486,7 @@ WMCreateInputPanel(WMScreen *scrPtr, WMWindow *owner, char *title, char *msg,
 static void
 handleKeyPress3(XEvent *event, void *clientData)
 {
-    WMGenericPanel *panel = (WMAlertPanel*)clientData;
+    WMGenericPanel *panel = (WMGenericPanel*)clientData;
     KeySym ksym;
     
     XLookupString(&event->xkey, NULL, 0, &ksym, NULL);

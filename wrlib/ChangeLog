@@ -1,3 +1,8 @@
+- Fixed crashing for Pseudocolor visuals with BestMatchRendering
+- Small speed improvement for 24 and 32 bpp, if internal converter is used
+- Small speed improvement for generating gradients.
+- Fixed RSaveXPM() to output correct xpm images.
+
 - fixed code dependant on the order of evaluation. code like
   *ptr++ = *ptr++ = *ptr++ = color;
   is wrong, because there is no guarantee that ptr will be incremented

@@ -116,6 +116,7 @@ renderHGradient(unsigned width, unsigned height, int r0, int g0, int b0,
 {    
     int i;
     unsigned long r, g, b, dr, dg, db;
+    unsigned lineSize = width*3;
     RImage *image;
     unsigned char *ptr;
 
@@ -144,7 +145,7 @@ renderHGradient(unsigned width, unsigned height, int r0, int g0, int b0,
 
     /* copy the first line to the other lines */
     for (i=1; i<height; i++) {
-	memcpy(&(image->data[i*width*3]), image->data, width*3);
+	memcpy(&(image->data[i*lineSize]), image->data, lineSize);
     }
     return image;
 }
@@ -280,6 +281,7 @@ renderMHGradient(unsigned width, unsigned height, RColor **colors, int count)
 {
     int i, j, k;
     unsigned long r, g, b, dr, dg, db;
+    unsigned lineSize = width*3;
     RImage *image;
     unsigned char *ptr;
     unsigned width2;
@@ -333,7 +335,7 @@ renderMHGradient(unsigned width, unsigned height, RColor **colors, int count)
     
     /* copy the first line to the other lines */
     for (i=1; i<height; i++) {
-	memcpy(&(image->data[i*width*3]), image->data, width*3);
+	memcpy(&(image->data[i*lineSize]), image->data, lineSize);
     }
     return image;
 }
@@ -346,6 +348,7 @@ renderMVGradient(unsigned width, unsigned height, RColor **colors, int count)
 {
     int i, j, k;
     unsigned long r, g, b, dr, dg, db;
+    unsigned lineSize = width*3;
     RImage *image;
     unsigned char *ptr, *tmp;
     unsigned height2;
@@ -426,8 +429,8 @@ renderMVGradient(unsigned width, unsigned height, RColor **colors, int count)
         }
 
         for (j=k+1; j<height; j++) {
-            memcpy(ptr, tmp, width*3);
-            ptr += width*3;
+            memcpy(ptr, tmp, lineSize);
+            ptr += lineSize;
         }
     }
     
