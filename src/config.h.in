@@ -109,6 +109,10 @@
  * set by configure */
 #undef SHAPE
 
+/* define if you want support for the XINERAMA extension
+ * set by configure */
+#undef XINERAMA
+
 /* define if you want support for X window's X_LOCALE
  * set by configure */
 #undef X_LOCALE

@@ -33,6 +33,11 @@ Changes since version 0.61.1:
   defaults.c
 - fixed colormap_window crash bug (appears when launching some apps from dock,
   or removing apps from gnome panel etc)
+- added DONT_SCALE_ICONS #define
+- added --no-autolaunch patch (John Bafford <dshadow@zort.net>)
+- made Apply button work on window inspector for windows with no WM_CLASS
+- changed sound server code to be more efficient
+- fixed crash with broken apps that set mask size != pixmap size in icons
 
 Changes since version 0.61.0:
 .............................

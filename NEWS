@@ -2,7 +2,16 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
---- 0.61.2
+--- 0.62.0
+
+
+Optimizations!!
+---------------
+
+Code for converting wrlib images into X Pixmaps was optimized in many ways,
+both in the original C code and in assembly for Pentium(tm) processors (with
+and without MMX(tm)). Depending on the bit depth/color mode and CPU model,
+performance increases can go up to 150%
 
 
 NoBorder Window Attribute
@@ -40,6 +49,12 @@ Removed DisplayFont Option
 
 The font for the geometry size will be controlled by the default
 WINGs font (SystemFont in WMGLOBAL) now.
+
+
+Others
+------
+
+- added DONT_SCALE_ICONS compile time option
 
 
 --- 0.61.1

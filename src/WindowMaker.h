@@ -423,6 +423,7 @@ typedef struct WPreferences {
         unsigned int noclip:1;        /* don't display the clip */
 	unsigned int nocpp:1;	       /* don't use cpp */
 	unsigned int noupdates:1;      /* don't require ~/GNUstep (-static) */
+	unsigned int noautolaunch:1;   /* don't autolaunch apps */
     } flags;			       /* internal flags */
 } WPreferences;
 

@@ -399,7 +399,7 @@ wIconValidateIconSize(WScreen *scr, RImage *icon)
     
     if (!icon)
 	return NULL;
-
+#ifndef DONT_SCALE_ICONS
     if (wPreferences.icon_size != 64) {
 	w = wPreferences.icon_size * icon->width / 64;
 	h = wPreferences.icon_size * icon->height / 64;
@@ -408,6 +408,7 @@ wIconValidateIconSize(WScreen *scr, RImage *icon)
 	RDestroyImage(icon);
 	icon = tmp;
     }
+#endif
 #if 0
     if (icon->width > wPreferences.icon_size
         || icon->height > wPreferences.icon_size) {

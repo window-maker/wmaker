@@ -325,12 +325,12 @@ static WOptionEnumeration seDisplayPositions[] = {
  * created after these defaults are read
  */
 WDefaultEntry staticOptionList[] = {    
-    
-    {"DisableDithering",	"NO",			NULL,
-	&wPreferences.no_dithering,	getBool,	NULL
-    },
+
     {"ColormapSize",	"4",			NULL,
 	&wPreferences.cmap_size,	getInt,		NULL
+    },
+    {"DisableDithering",	"NO",			NULL,
+	&wPreferences.no_dithering,	getBool,	NULL
     },
     /* static by laziness */
     {"IconSize",	"64",			NULL,

@@ -469,14 +469,13 @@ wMaximizeWindow(WWindow *wwin, int directions)
 
 	new_height = (usableArea.y2-usableArea.y1)-FRAME_BORDER_WIDTH*2;
 	new_y = usableArea.y1;
-	if (WFLAGP(wwin, full_maximize))
-	    new_y -= wwin->frame->top_width;
-
+	if (WFLAGP(wwin, full_maximize)) {
+	    new_y -= wwin->frame->top_width - 1;
+	    new_height += wwin->frame->bottom_width - 3;
+	}
     } else {
-
 	new_y = wwin->frame_y;
 	new_height = wwin->frame->core->height;
-
     }
 
     if (!WFLAGP(wwin, full_maximize)) {

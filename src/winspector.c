@@ -1102,7 +1102,8 @@ selectSpecification(WMWidget *bPtr, void *data)
     char *str;
     WWindow *wwin = panel->inspected;
 
-    if (bPtr == panel->defaultRb) {
+
+    if (bPtr == panel->defaultRb && (wwin->wm_instance || wwin->wm_class)) {
 	WMSetButtonEnabled(panel->applyBtn, False);
     } else {
 	WMSetButtonEnabled(panel->applyBtn, True);
@@ -1302,9 +1303,6 @@ createInspectorForWindow(WWindow *wwin, int xpos, int ypos,
 
 	WMSetButtonAction(panel->clsRb, selectSpecification, panel);
     }
-
-    if (selectedBtn)
-        WMSetButtonSelected(selectedBtn, True);
 
     
     panel->selWinB = WMCreateCommandButton(panel->specFrm);

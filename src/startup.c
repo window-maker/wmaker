@@ -626,6 +626,26 @@ wScreenForWindow(Window window)
 }
 
 
+static char *atomNames[] = {
+    "WM_STATE", 
+    "WM_CHANGE_STATE", 
+    "WM_PROTOCOLS", 
+    "WM_TAKE_FOCUS", 
+    "WM_DELETE_WINDOW", 
+    "WM_SAVE_YOURSELF", 
+    "WM_CLIENT_LEADER", 
+    "WM_COLORMAP_WINDOWS", 
+    "WM_COLORMAP_NOTIFY", 
+    GNUSTEP_WM_ATTR_NAME, 
+    "_WINDOWMAKER_MENU", 
+    "_WINDOWMAKER_STATE", 
+    "_WINDOWMAKER_WM_PROTOCOLS", 
+    GNUSTEP_WM_MINIATURIZE_WINDOW,
+    "_WINDOWMAKER_WM_FUNCTION",
+    "_WINDOWMAKER_NOTICEBOARD",
+    "_WINDOWMAKER_COMMAND"
+};
+
 
 /*
  *----------------------------------------------------------
@@ -643,6 +663,7 @@ StartUp(Bool defaultScreenOnly)
     WWorkspaceState *ws_state;
     struct sigaction sig_action;
     int j, max;
+    Atom atom[sizeof(atomNames)/sizeof(char*)];
 
     /*
      * Ignore CapsLock in modifiers
@@ -664,34 +685,34 @@ StartUp(Bool defaultScreenOnly)
 
 /*    _XA_VERSION = XInternAtom(dpy, "VERSION", False);*/
 
-    _XA_WM_STATE = XInternAtom(dpy, "WM_STATE", False);
-    _XA_WM_CHANGE_STATE = XInternAtom(dpy, "WM_CHANGE_STATE", False);
-    _XA_WM_PROTOCOLS = XInternAtom(dpy, "WM_PROTOCOLS", False);
-    _XA_WM_TAKE_FOCUS = XInternAtom(dpy, "WM_TAKE_FOCUS", False);
-    _XA_WM_DELETE_WINDOW = XInternAtom(dpy, "WM_DELETE_WINDOW", False);
-    _XA_WM_SAVE_YOURSELF = XInternAtom(dpy, "WM_SAVE_YOURSELF", False);    
-    _XA_WM_CLIENT_LEADER = XInternAtom(dpy, "WM_CLIENT_LEADER", False);
-    _XA_WM_COLORMAP_WINDOWS = XInternAtom(dpy, "WM_COLORMAP_WINDOWS", False);
-    _XA_WM_COLORMAP_NOTIFY = XInternAtom(dpy, "WM_COLORMAP_NOTIFY", False);
-
-    _XA_GNUSTEP_WM_ATTR = XInternAtom(dpy, GNUSTEP_WM_ATTR_NAME, False);
-
-    _XA_WINDOWMAKER_MENU = XInternAtom(dpy, "_WINDOWMAKER_MENU", False);
-    _XA_WINDOWMAKER_STATE = XInternAtom(dpy, "_WINDOWMAKER_STATE", False);
-
-    _XA_WINDOWMAKER_WM_PROTOCOLS =
-	XInternAtom(dpy, "_WINDOWMAKER_WM_PROTOCOLS", False);
-
-    _XA_GNUSTEP_WM_MINIATURIZE_WINDOW = 
-	XInternAtom(dpy, GNUSTEP_WM_MINIATURIZE_WINDOW, False);
+    XInternAtoms(dpy, atomNames, sizeof(atomNames)/sizeof(char*),
+		 False, atom);
     
-    _XA_WINDOWMAKER_WM_FUNCTION = XInternAtom(dpy, "_WINDOWMAKER_WM_FUNCTION",
-					      False);
+    _XA_WM_STATE = atom[0];
+    _XA_WM_CHANGE_STATE = atom[1];
+    _XA_WM_PROTOCOLS = atom[2];
+    _XA_WM_TAKE_FOCUS = atom[3];
+    _XA_WM_DELETE_WINDOW = atom[4];
+    _XA_WM_SAVE_YOURSELF = atom[5];
+    _XA_WM_CLIENT_LEADER = atom[6];
+    _XA_WM_COLORMAP_WINDOWS = atom[7];
+    _XA_WM_COLORMAP_NOTIFY = atom[8];
 
-    _XA_WINDOWMAKER_NOTICEBOARD = XInternAtom(dpy, "_WINDOWMAKER_NOTICEBOARD",
-					      False);
+    _XA_GNUSTEP_WM_ATTR = atom[9];
+
+    _XA_WINDOWMAKER_MENU = atom[10];
+    _XA_WINDOWMAKER_STATE = atom[11];
+
+    _XA_WINDOWMAKER_WM_PROTOCOLS = atom[12];
+
+    _XA_GNUSTEP_WM_MINIATURIZE_WINDOW = atom[13];
     
-    _XA_WINDOWMAKER_COMMAND = XInternAtom(dpy, "_WINDOWMAKER_COMMAND", False);
+    _XA_WINDOWMAKER_WM_FUNCTION = atom[14];
+
+    _XA_WINDOWMAKER_NOTICEBOARD = atom[15];
+    
+    _XA_WINDOWMAKER_COMMAND = atom[16];
+
 
 #ifdef OFFIX_DND
     _XA_DND_SELECTION = XInternAtom(dpy, "DndSelection", False);
@@ -857,7 +878,8 @@ StartUp(Bool defaultScreenOnly)
 	if (ws_state == NULL)
 	    wSessionRestoreState(wScreen[j]);
 	
-	
+if(!wPreferences.flags.noautolaunch)
+{
 	/* auto-launch apps */
 	if (!wPreferences.flags.nodock && wScreen[j]->dock) {
 	    wScreen[j]->last_dock = wScreen[j]->dock;
@@ -873,6 +895,7 @@ StartUp(Bool defaultScreenOnly)
 		}
 	    }
 	}
+}
 
 	/* go to workspace where we were before restart */
 	if (ws_state) { 

@@ -1092,7 +1092,7 @@ static void
 handleLeaveNotify(XEvent *event)
 {
     WObjDescriptor *desc = NULL;
-    
+
     if (XFindContext(dpy, event->xcrossing.window, wWinContext, 
 		     (XPointer *)&desc)!=XCNOENT) {
         if(desc->handle_leavenotify)

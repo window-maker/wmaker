@@ -178,15 +178,19 @@
 #undef IGNORE_PPOSITION
 
 
+/*
+ * Do not scale application icon and miniwindow icon images.
+ */
+#undef DONT_SCALE_ICONS
+
+
+
+
+
+
 #define SILLYNESS
 
 
-/*
- * Define if you're experiencing crashes when launching programs.
- * This will disable some important but not essential code.
- * Use it until we figure what's wrong.
- */
-#undef NO_CRASHES
 
 
 

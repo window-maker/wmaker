@@ -421,6 +421,7 @@ print_help()
 #endif
     puts(_(" --no-dock		do not open the application Dock"));
     puts(_(" --no-clip		do not open the workspace Clip"));
+    puts(_(" --no-autolaunch	do not autolaunch applications"));
 
     puts(_(" --locale locale		locale to use"));
 
@@ -548,18 +549,14 @@ main(int argc, char **argv)
 #ifdef DEBUG
     Bool doSync = False;
 #endif
+    setlocale(LC_ALL, "");
 
     wsetabort(wAbort);
 
     /* for telling WPrefs what's the name of the wmaker binary being ran */
-    {
-/*	char *tmp;
 
-	tmp = getFullPath(argv[0]);*/
-	str = wstrappend("WMAKER_BIN_NAME=", argv[0]);
-/*	free(tmp);*/
-	putenv(str);
-    }
+    str = wstrappend("WMAKER_BIN_NAME=", argv[0]);
+    putenv(str);
 
     ArgCount = argc;
     Arguments = argv;
@@ -586,7 +583,10 @@ main(int argc, char **argv)
 		wPreferences.flags.nocpp=1;
 	    } else
 #endif
-	    if (strcmp(argv[i], "-nodock")==0
+	    if (strcmp(argv[i], "-no-autolaunch")==0
+		|| strcmp(argv[i], "--no-autolaunch")==0) {
+			wPreferences.flags.noautolaunch = 1;
+	    } else if (strcmp(argv[i], "-nodock")==0
 		|| strcmp(argv[i], "--no-dock")==0) {
 		wPreferences.flags.nodock=1;
 	    } else if (strcmp(argv[i], "-noclip")==0
@@ -658,28 +658,16 @@ main(int argc, char **argv)
 	check_defaults();
     }
 
-#if 0
-    tmp = getenv("LANG");
-    if (tmp) {
-    	if (setlocale(LC_ALL,"") == NULL) {
-	    wwarning("cannot set locale %s", tmp);
-	    wwarning("falling back to C locale");
-	    setlocale(LC_ALL,"C");
-	    Locale = NULL;
-	} else {
-	    if (strcmp(tmp, "C")==0 || strcmp(tmp, "POSIX")==0)
-	      Locale = NULL;
-	    else
-	      Locale = tmp;
-	}
-    } else {
-	Locale = NULL;
+
+    if (!Locale) {
+	Locale = getenv("LC_ALL");
     }
-#endif
     if (!Locale) {
     	Locale = getenv("LANG");
     }
-    setlocale(LC_ALL, Locale);
+
+    setlocale(LC_ALL, "");
+
     if (!Locale || strcmp(Locale, "C")==0 || strcmp(Locale, "POSIX")==0) 
       Locale = NULL;
 #ifdef I18N
@@ -692,6 +680,7 @@ main(int argc, char **argv)
     if (!XSupportsLocale()) {
 	wwarning(_("X server does not support locale"));
     }
+
     if (XSetLocaleModifiers("") == NULL) {
  	wwarning(_("cannot set locale modifiers"));
     }
@@ -705,7 +694,6 @@ main(int argc, char **argv)
 	if (ptr)
 	    *ptr = 0;
     }
-
 
     /* open display */
     dpy = XOpenDisplay(DisplayName);
