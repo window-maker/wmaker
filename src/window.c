@@ -51,6 +51,7 @@
 #include "stacking.h"
 #include "defaults.h"
 #include "workspace.h"
+#include "list.h"
 
 #ifdef MWM_HINTS
 # include "motif.h"
@@ -208,9 +209,15 @@ wWindowDestroy(WWindow *wwin)
     wwin->flags.destroyed = 1;
 
     for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
-	if (wwin->screen_ptr->shortcutWindow[i] == wwin) {
-	    wwin->screen_ptr->shortcutWindow[i] = NULL;
-	}
+        wwin->screen_ptr->shortcutSelectedWindows[i] = list_remove_elem(wwin->screen_ptr->shortcutSelectedWindows[i], wwin);
+        if (wwin->screen_ptr->shortcutWindow[i] == wwin) {
+            if (wwin->screen_ptr->shortcutSelectedWindows[i]) {
+                LinkedList *list = wwin->screen_ptr->shortcutSelectedWindows[i];
+                wwin->screen_ptr->shortcutWindow[i] = 
+                    list->head;
+            }
+            else wwin->screen_ptr->shortcutWindow[i] = NULL;
+        }
     }
 
     if (wwin->normal_hints)

@@ -56,6 +56,7 @@
 #include "framewin.h"
 #include "properties.h"
 #include "balloon.h"
+#include "list.h"
 #ifdef GNOME_STUFF
 # include "gnome.h"
 #endif
@@ -1672,16 +1673,54 @@ handleKeyPress(XEvent *event)
      case WKBD_WINDOW9:
      case WKBD_WINDOW10:
 #endif
-        if (scr->shortcutWindow[command-WKBD_WINDOW1]) {
+        if ( scr->shortcutSelectedWindows[command-WKBD_WINDOW1]) {
+            LinkedList *list = scr->shortcutSelectedWindows[command-WKBD_WINDOW1];
+            int cw;
+
+            wUnselectWindows(scr);
+            if (scr->shortcutWindow[command-WKBD_WINDOW1])
+                wMakeWindowVisible(scr->shortcutWindow[command-WKBD_WINDOW1]);
+            cw = scr->current_workspace;
+            while (list) {
+                wWindowChangeWorkspace(list->head, cw);
+                wMakeWindowVisible(list->head);
+                wSelectWindow(list->head, True);
+                list = list->tail;
+            }
+        } else if (scr->shortcutWindow[command-WKBD_WINDOW1]) {
             wMakeWindowVisible(scr->shortcutWindow[command-WKBD_WINDOW1]);
         } else if (wwin && ISMAPPED(wwin) && ISFOCUSED(wwin)) {
             scr->shortcutWindow[command-WKBD_WINDOW1] = wwin;
-	    wSelectWindow(wwin, !wwin->flags.selected);
-	    XFlush(dpy);
-	    wusleep(3000);
-	    wSelectWindow(wwin, !wwin->flags.selected);
-	    XFlush(dpy);
+            if (wwin->flags.selected /* && scr->selected_windows */ ) {
+                LinkedList *sl;
+
+                sl = scr->selected_windows;
+                list_free(scr->shortcutSelectedWindows[command-WKBD_WINDOW1]);
+
+                while (sl) {
+                    scr->shortcutSelectedWindows[command-WKBD_WINDOW1] = list_cons(sl->head,scr->shortcutSelectedWindows[command-WKBD_WINDOW1]);
+                    sl = sl->tail;
+                }
+            }
+            wSelectWindow(wwin, !wwin->flags.selected);
+            XFlush(dpy);
+            wusleep(3000);
+            wSelectWindow(wwin, !wwin->flags.selected);
+            XFlush(dpy);
+        } else if (scr->selected_windows) {
+            if (wwin->flags.selected /* && scr->selected_windows */ ) {
+                LinkedList *sl;
+
+                sl = scr->selected_windows;
+                list_free(scr->shortcutSelectedWindows[command-WKBD_WINDOW1]);
+
+                while (sl) {
+                    scr->shortcutSelectedWindows[command-WKBD_WINDOW1] = list_cons(sl->head,scr->shortcutSelectedWindows[command-WKBD_WINDOW1]);
+                    sl = sl->tail;
+                }
+            }
         }
+
         break;
      case WKBD_NEXTWSLAYER:
      case WKBD_PREVWSLAYER:
