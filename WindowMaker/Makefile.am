@@ -9,7 +9,6 @@ prefsdata_DATA =\
 	exitscript.sh\
 	menu\
 	menu.ca\
-	menu.cn\
 	menu.cz\
 	menu.da\
 	menu.de\
@@ -31,12 +30,13 @@ prefsdata_DATA =\
 	menu.se\
 	menu.sl\
 	menu.tr\
+	menu.zh_CN\
 	menu.zh_TW.Big5\
 	plmenu\
-	plmenu.cn\
 	plmenu.dk\
 	plmenu.fr\
 	plmenu.hr\
+	plmenu.zh_CN\
 	wmmacros\
 	xtree.dat
 
