@@ -36,6 +36,7 @@ typedef struct W_EditMenuItem {
     struct W_EditMenu *parent;
 
     char *label;
+    WMPixmap *pixmap;		       /* pixmap to show at left */
 
     void *data;
     WMCallback *destroyData;
@@ -167,7 +168,6 @@ char *WGetEditMenuItemTitle(WEditMenuItem *item)
     return item->label;
 }
 
-
 void *WGetEditMenuItemData(WEditMenuItem *item)
 {
     return item->data;
@@ -182,6 +182,12 @@ void WSetEditMenuItemData(WEditMenuItem *item, void *data,
 }
 
 
+void WSetEditMenuItemImage(WEditMenuItem *item, WMPixmap *pixmap)
+{
+    if (item->pixmap)
+	WMReleasePixmap(item->pixmap);
+    item->pixmap = WMRetainPixmap(pixmap);
+}
 
 
 static void
@@ -196,7 +202,7 @@ paintEditMenuItem(WEditMenuItem *iPtr)
 
     if (!iPtr->view->flags.realized)
 	return;
-    
+
     color = scr->black;
     if (iPtr->flags.isTitle && !iPtr->flags.isHighlighted) {
 	color = scr->white;
@@ -210,7 +216,12 @@ paintEditMenuItem(WEditMenuItem *iPtr)
     WMDrawString(scr, win, WMColorGC(color), font, 5, 3, iPtr->label,
 		 strlen(iPtr->label));
     
-    if (iPtr->submenu) {
+    if (iPtr->pixmap) {
+	WMSize size = WMGetPixmapSize(iPtr->pixmap);
+	
+	WMDrawPixmap(iPtr->pixmap, win, w - size.width - 5,
+		     (h - size.height)/2);
+    } else if (iPtr->submenu) {
 	/* draw the cascade indicator */
 	XDrawLine(scr->display,win,WMColorGC(scr->darkGray), 
 		  w-11, 6, w-6, h/2-1);
@@ -304,6 +315,7 @@ static void editItemLabel(WEditMenuItem *item);
 static void stopEditItem(WEditMenu *menu, Bool apply);
 
 
+static void unmapMenu(WEditMenu *menu);
 static void deselectItem(WEditMenu *menu);
 
 
@@ -505,6 +517,15 @@ WInsertMenuItemWithTitle(WEditMenu *mPtr, int index, char *title)
 }
 
 
+WEditMenuItem*
+WGetEditMenuItem(WEditMenu *mPtr, int index)
+{
+    if (index >= WMGetBagItemCount(mPtr->items))
+	return NULL;
+    else
+	return WMGetFromBag(mPtr->items, index + (mPtr->flags.isTitled ? 1 : 0));
+}
+
 
 WEditMenuItem*
 WAddMenuItemWithTitle(WEditMenu *mPtr, char *title)
@@ -525,6 +546,18 @@ WSetEditMenuTitle(WEditMenu *mPtr, char *title)
     free(item->label);
     item->label = wstrdup(title);
     updateMenuContents(mPtr);
+}
+
+
+
+char*
+WGetEditMenuTitle(WEditMenu *mPtr)
+{
+    WEditMenuItem *item;
+
+    item = WMGetFromBag(mPtr->items, 0);
+
+    return item->label;
 }
 
 
@@ -650,7 +683,7 @@ closeMenuAction(WMWidget *w, void *data)
     WMAddIdleHandler(WMDestroyWidget, menu->closeB);
     menu->closeB = NULL;
 
-    WMUnmapWidget(menu);
+    unmapMenu(menu);
 }
 
 
@@ -727,6 +760,9 @@ updateMenuContents(WEditMenu *mPtr)
 	newH = WMIN(newH, mPtr->maxSize.height);
 
     W_ResizeView(mPtr->view, newW, newH+1);
+
+    if (mPtr->closeB)
+	WMMoveWidget(mPtr->closeB, newW - 20, 3);
 
     newW -= 2*offs;
     
@@ -869,6 +905,12 @@ stopEditItem(WEditMenu *menu, Bool apply)
 	menu->selectedItem->label = wstrdup(text);
 
 	updateMenuContents(menu);
+
+	if (menu->delegate && menu->delegate->itemEdited) {
+	    (*menu->delegate->itemEdited)(menu->delegate, menu,
+					  menu->selectedItem);
+	}
+
     } 
     WMUnmapWidget(menu->tfield);
     menu->flags.isEditing = 0;
@@ -1194,6 +1236,20 @@ duplicateMenu(WEditMenu *menu)
 }
 
 
+
+static WEditMenuItem*
+duplicateItem(WEditMenuItem *item)
+{
+    WEditMenuItem *nitem;
+    
+    nitem = WCreateEditMenuItem(item->parent, item->label, False);
+    if (item->pixmap)
+	nitem->pixmap = WMRetainPixmap(item->pixmap);
+
+    return nitem;
+}
+
+
 static void
 dragItem(WEditMenu *menu, WEditMenuItem *item)
 {
@@ -1237,7 +1293,7 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
     W_RealizeView(dview);
     
     if (menu->flags.isFactory) {
-	dritem = WCreateEditMenuItem(menu, item->label, False);
+	dritem = duplicateItem(item);
 
 	W_ReparentView(dritem->view, dview, 0, 0);
 	WMResizeWidget(dritem, oldSize.width, oldSize.height);
@@ -1298,12 +1354,12 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
 	Bool rem = True;
 	
 	if (!menu->flags.isFactory) {
-	    WMUnmapWidget(dritem);
+	    W_UnmapView(dview);
 	    if (menu->delegate && menu->delegate->shouldRemoveItem) {
 		rem = (*menu->delegate->shouldRemoveItem)(menu->delegate,
 							  menu, item);
 	    }
-	    WMMapWidget(dritem);
+	    W_MapView(dview);
 	}
 
 	if (!rem || menu->flags.isFactory) {
@@ -1319,7 +1375,8 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
     } else {
 	WRemoveEditMenuItem(menu, dritem);
 
-	if (menu->delegate && menu->delegate->itemCloned) {
+	if (menu->delegate && menu->delegate->itemCloned
+	    && menu->flags.isFactory) {
 	    (*menu->delegate->itemCloned)(menu->delegate, menu,
 					  item, dritem);
 	}

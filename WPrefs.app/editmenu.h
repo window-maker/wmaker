@@ -30,6 +30,8 @@ typedef struct WEditMenuDelegate {
 
     void (*itemCloned)(struct WEditMenuDelegate*, WEditMenu*,
 		       WEditMenuItem*, WEditMenuItem *);
+    void (*itemEdited)(struct WEditMenuDelegate*, WEditMenu*,
+		       WEditMenuItem*);
     void (*itemSelected)(struct WEditMenuDelegate*, WEditMenu*,
 			 WEditMenuItem*);
     void (*itemDeselected)(struct WEditMenuDelegate*, WEditMenu*,
@@ -52,6 +54,8 @@ void *WGetEditMenuItemData(WEditMenuItem *item);
 void WSetEditMenuItemData(WEditMenuItem *item, void *data, 
 			   WMCallback *destroyer);
 
+void WSetEditMenuItemImage(WEditMenuItem *item, WMPixmap *pixmap);
+
 WEditMenu *WCreateEditMenu(WMScreen *scr, char *title);
 
 WEditMenu *WCreateEditMenuPad(WMWidget *parent);
@@ -63,7 +67,11 @@ WEditMenuItem *WInsertMenuItemWithTitle(WEditMenu *mPtr, int index,
 
 WEditMenuItem *WAddMenuItemWithTitle(WEditMenu *mPtr, char *title);
 
+WEditMenuItem *WGetEditMenuItem(WEditMenu *mPtr, int index);
+
 void WSetEditMenuTitle(WEditMenu *mPtr, char *title);
+
+char *WGetEditMenuTitle(WEditMenu *mPtr);
 
 void WSetEditMenuAcceptsDrop(WEditMenu *mPtr, Bool flag);
 
