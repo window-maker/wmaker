@@ -8,6 +8,8 @@ Changes since version 0.63.0:
 - fixed bug in built-in xpm support (Alessandro Strada <a.strada@libero.it>)
 - removed plugin support
 - fixed a crash bug in WPrefs menu editor
+- added es and pt potfiles from conectiva/eliphas
+- added updated galician potfile (Jesus Bravo Alvarez <jba@pobox.com>)
 
 Changes since version 0.62.1:
 .............................
