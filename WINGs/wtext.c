@@ -61,7 +61,7 @@ typedef struct _TextBlock {
 	struct _TextBlock *next;	/* next text block in linked list */
 	struct _TextBlock *prior;	/* prior text block in linked list */
 
-	char *text;					/* pointer to 8- or 16-bit text */
+	char *text;					/* pointer to text (could be kanji) */
 								/* or to the object's description */
 	union {
 		WMFont *font;			/* the font */
@@ -166,7 +166,7 @@ typedef struct W_Text {
 		unsigned int clickPos:1;	/* clicked before=0 or after=1 a graphic: */
 									/* within counts as after too */
 
-		unsigned int ignoreNewLine:1;/* turn it into a ' ' when typed */
+		unsigned int ignoreNewLine:1;/* turn it into a ' ' in streams > 1 */
 		unsigned int laidOut:1;		/* have the TextBlocks all been laid out */
 		unsigned int prepend:1; 	/* prepend=1, append=0 (for parsers) */
 		WMAlignment alignment:2;	/* the alignment for text */
@@ -439,7 +439,6 @@ cursorToTextPosition(Text *tPtr, int x, int y)
 	int done=False, s, pos, len, _w, _y, dir=1; /* 1 == "down" */
 	char *text;
 
-printf("%d %d\n",x,y);
 	y += (tPtr->vpos - tPtr->visible.y);
 	if (y<0) 
 		y = 0;
@@ -507,8 +506,8 @@ dir = 1;
 		s = (dir? 0 : tb->nsections-1);
 		while (!done && (dir? (s<tb->nsections) : (s>=0) )) {
 
-			if ( y >= tb->sections[s]._y 
-				&& y <= tb->sections[s]._y + tb->sections[s].h) { 
+			if ( (dir?  (y <= tb->sections[s]._y + tb->sections[s].h) :
+					( y >= tb->sections[s]._y ) ) ) {
 					done = True;
 				} else {
 					dir? s++ : s--;
@@ -765,7 +764,7 @@ dimple =where mouse is.
 					tPtr->view->size.width-24, tPtr->view->size.height-4, True);
 		 	}
 */
-		if (which == WSDecrementLine || which == WSIncrementLine)
+		if (dimple || which == WSDecrementLine || which == WSIncrementLine)
 			updateScrollers(tPtr);
 		paintText(tPtr);
 	}
@@ -1443,14 +1442,15 @@ handleTextKeyPress(Text *tPtr, XEvent *event)
     buffer[XLookupString(&event->xkey, buffer, 1, &ksym, NULL)] = 0;
     
     switch(ksym) {
+
 		case XK_Right: 
-		case XK_Left:
-		case XK_Down:
-		case XK_Up:  {
+		case XK_Left: {
 			TextBlock *tb = tPtr->currentTextBlock;
 			int x = tPtr->cursor.x + tPtr->visible.x;
+			int y = tPtr->visible.y + tPtr->cursor.y + tPtr->cursor.h;
 			int w, pos;
 
+#if 0
 			if(!tb)
 				break;
 			if(tb->graphic) {
@@ -1465,14 +1465,28 @@ handleTextKeyPress(Text *tPtr, XEvent *event)
 			}
 
 			cursorToTextPosition(tPtr, w + tPtr->cursor.x + tPtr->visible.x, 
-				tPtr->visible.y + tPtr->cursor.y + tPtr->cursor.h);
+				3 + tPtr->visible.y + tPtr->cursor.y 
+					+ tPtr->cursor.h - tPtr->vpos);
 			if(x == tPtr->cursor.x + tPtr->visible.x) { 
 printf("same %d %d\n", x, tPtr->cursor.x + tPtr->visible.x);
 				cursorToTextPosition(tPtr, tPtr->visible.x, 
 				3 + tPtr->visible.y + tPtr->cursor.y + tPtr->cursor.h);
 			}
 			paintText(tPtr);		
+#endif
 		}
+		break;
+
+		case XK_Down:
+			cursorToTextPosition(tPtr, tPtr->cursor.x + tPtr->visible.x, 
+				tPtr->clicked.y + tPtr->cursor.h - tPtr->vpos);
+			paintText(tPtr);		
+			break;
+
+		case XK_Up:  
+			cursorToTextPosition(tPtr, tPtr->cursor.x + tPtr->visible.x, 
+				tPtr->visible.y + tPtr->cursor.y - tPtr->vpos - 3);
+			paintText(tPtr);		
 		break;
 
 		case XK_BackSpace:

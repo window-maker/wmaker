@@ -1391,8 +1391,6 @@ int WMGetSplitViewDividerThickness(WMSplitView *sPtr);
 
 WMRuler *WMCreateRuler (WMWidget *parent);
 
-void WMShowRulerTabs(WMRuler *rPtr, Bool Show);
-
 WMRulerMargins WMGetRulerMargins(WMRuler *rPtr);
 
 void WMSetRulerMargins(WMRuler *rPtr, WMRulerMargins margins);
@@ -1419,9 +1417,9 @@ void WMFreezeText(WMText *tPtr);
 
 void WMThawText(WMText *tPtr);
 
-Bool WMScrollText(WMText *tPtr, int amount);
+int WMScrollText(WMText *tPtr, int amount);
 
-Bool WMPageText(WMText *tPtr, Bool direction);
+int WMPageText(WMText *tPtr, Bool direction);
 
 void WMSetTextHasHorizontalScroller(WMText *tPtr, Bool shouldhave);
 
@@ -1430,6 +1428,8 @@ void WMSetTextHasVerticalScroller(WMText *tPtr, Bool shouldhave);
 void WMSetTextHasRuler(WMText *tPtr, Bool shouldhave);
 
 void WMShowTextRuler(WMText *tPtr, Bool show);
+
+int WMGetTextRulerShown(WMText *tPtr);
 
 void WMSetTextEditable(WMText *tPtr, Bool editable);
 
@@ -1472,6 +1472,9 @@ WMBag * WMGetTextSelectedObjects(WMText *tPtr);
 void *WMCreateTextBlockWithObject(WMWidget *w, char *description,
     WMColor *color, unsigned short first, unsigned short reserved);
     
+void *WMCreateTextBlockWithPixmap(WMPixmap *p, char *description, 
+	WMColor *color, unsigned short first, unsigned short reserved);
+
 void *WMCreateTextBlockWithText(char *text, WMFont *font,
     WMColor *color, unsigned short first, unsigned short length);
     

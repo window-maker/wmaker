@@ -65,7 +65,7 @@ mystrcasecmp(const unsigned char *s1, const unsigned char *s2)
 {
 	if (!*s1 || !*s2) return 0;
 	while (*s2 != '\0') {
-		if (TOLOWER (*s1) != TOLOWER (*s2)) /* true if *s1 == 0 ! */
+		if (TOLOWER (*s1) != TOLOWER (*s2)) 
 			return 0;
 		s1++;
 		s2++;
@@ -133,6 +133,7 @@ void parseToken(WMText *tPtr, char *token, short tk)
 	/* nice and fast for small tokens... no need for too much brain 
 		power here */
 		switch(TOLOWER(*token)) {
+
 			case 'i': 
 				if(!mode) {
 					cfmt.cfont = WMGetFontItalic(scr, cfmt.cfont);
@@ -144,6 +145,7 @@ void parseToken(WMText *tPtr, char *token, short tk)
 			 		cfmt.cfont = (WMFont *)WMGetFromBag(cfmt.fonts,
 						WMGetBagItemCount(cfmt.fonts)-1); 
 				} break;
+
 			case 'b': 
 				if(!mode) {
 					cfmt.cfont = WMGetFontBold(scr, cfmt.cfont);
@@ -193,7 +195,7 @@ void parseToken(WMText *tPtr, char *token, short tk)
 				switch(TOLOWER(*token)) {
 				case 's': 		
 				if(TOLOWER(*(1+token)) == 'r' && TOLOWER(*(2+token)) == 'c') {
-				mark = strchr(token, '='); 
+				mark = (char *)strchr(token, '='); 
 				if(mark) {
 				char img[256], *iptr;
 				token = mark+1;
@@ -289,34 +291,22 @@ void HTMLParser(WMWidget *w, void *clientData)
 		init = 0;
 	}
 
-#if 0
-	if(strlen(stream) == 1 && stream[0] == '\n') { 
-		/* sometimes if the text entered is a single char AND is a newline, 
-			the user prolly typed it */
-		cfmt.para = (cfmt.actions.createParagraph) (cfmt.fmargin, cfmt.bmargin, 
-			WMWidgetWidth(tPtr)-30, NULL, 0, cfmt.align);
-		(cfmt.actions.insertParagraph) (tPtr, cfmt.para, cfmt.type);
-		return;
-	}   
-#endif
-
-
-/*
-*/
 
 	while( (c=*(stream++))) {
-//printf("%c", c);
 		if(c == '\n' || c =='\t')
 			//c = ' '; //continue;
 			continue;
+
 		if(c == ' ') {
 			if(wasspace) 
 				continue;
 			wasspace = 1;
-		}else wasspace = 0;
+		} else 
+			wasspace = 0;
 
 		if(c == '<'  && !mode) { 
-			mode=1;
+			mode = 1;
+
 			if(textlen>0) { 
 				text[textlen] = 0;
 				tb = WMCreateTextBlockWithText(text, cfmt.cfont,
@@ -324,7 +314,6 @@ void HTMLParser(WMWidget *w, void *clientData)
 				WMSetTextBlockProperties(tb, cfmt.first, False, (cfmt.u?1:0), 0, 0);
 				WMAppendTextBlock(tPtr, tb);
 				cfmt.first = False;
-//printf("%s\n", text);
 			}
 			textlen = 0;
 		} else if(c == '>' && mode) {
