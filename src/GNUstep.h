@@ -54,14 +54,29 @@ enum {
 };
 
 #ifndef _WINGS_H_
-/* window stacking level */
+/*
+ * Window levels are taken from GNUstep (gui/AppKit/NSWindow.h)
+ * NSDesktopWindowLevel intended to be the level at which things
+ * on the desktop sit ... so you should be able
+ * to put a desktop background just below it.
+ *
+ * Applications are actually permitted to use any value in the
+ * range INT_MIN+1 to INT_MAX
+ */
 enum {
-  WMNormalWindowLevel   = 0,
-  WMFloatingWindowLevel  = 3,
-  WMDockWindowLevel   = 5,
-  WMSubmenuWindowLevel  = 10,
-  WMMainMenuWindowLevel  = 20
+  WMDesktopWindowLevel = -1000, /* GNUstep addition     */
+  WMNormalWindowLevel = 0,
+  WMFloatingWindowLevel = 3,
+  WMSubmenuWindowLevel = 3,
+  WMTornOffMenuWindowLevel = 3,
+  WMMainMenuWindowLevel = 20,
+  WMDockWindowLevel = 21,       /* Deprecated - use NSStatusWindowLevel */
+  WMStatusWindowLevel = 21,
+  WMModalPanelWindowLevel = 100,
+  WMPopUpMenuWindowLevel = 101,
+  WMScreenSaverWindowLevel = 1000
 };
+
 
 /* window attributes */
 enum {

@@ -396,26 +396,12 @@ wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 
 	if (wwin->wm_gnustep_attr->flags & GSWindowLevelAttr) {
 
-	    switch (wwin->wm_gnustep_attr->window_level) {
-	     case WMNormalWindowLevel:
-		*level = WMNormalLevel;
-		break;
-	     case WMFloatingWindowLevel:
-		*level = WMFloatingLevel;
-		break;
-	     case WMDockWindowLevel:
-		*level = WMDockLevel;
-		break;
-	     case WMSubmenuWindowLevel:
-		*level = WMSubmenuLevel;
-		break;
-	     case WMMainMenuWindowLevel:
-		*level = WMMainMenuLevel;
-		break;
-	     default:
-		*level = WMNormalLevel;
-		break;
-	    }
+	    *level = wwin->wm_gnustep_attr->window_level;
+	    /*
+	     * INT_MIN is the only illegal window level.
+	     */
+	    if (*level == INT_MIN)
+		*level = INT_MIN + 1;
 	} else {
 	    /* setup defaults */
 	    *level = WMNormalLevel;

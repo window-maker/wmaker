@@ -13,6 +13,8 @@ Changes since version 0.63.1:
 - integrated the 'no polling' patch from Jim Knoble <jmknoble@jmknoble.cx>.
 - new wsetfont script (Anton Zinoviev <zinoviev@debian.org>)
 - lots of i18n fixes (Jan Tomka/judas@hell <tomka@oalevice.sk>)
+- window levels changed to match GNUstep <rfm@gnu.org> ...  src/GNUstep.h
+  src/WindowMaker.h src/window.c wmlib/WMaker.h WINGs/WINGs/WINGs.h
 
 
 Changes since version 0.63.0:

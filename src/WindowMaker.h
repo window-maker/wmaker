@@ -25,6 +25,7 @@
 #include "wconfig.h"
 
 #include <assert.h>
+#include <limits.h>
 
 #include <WINGs/WINGs.h>
 
@@ -53,16 +54,26 @@ typedef enum {
 } WClassType;
 
 
-/* generic window levels (a superset of the N*XTSTEP ones) */
+/*
+ * generic window levels (a superset of the N*XTSTEP ones)
+ * Applications should use levels between WMDesktopLevel and
+ * WMScreensaverLevel anything boyond that range is allowed,
+ * but discouraged.
+ */
 enum {
-    WMDesktopLevel = 0,
-	WMSunkenLevel = 1,
-	WMNormalLevel = 2,
+	WMBackLevel = INT_MIN+1,	/* Very lowest level */
+	WMDesktopLevel = -1000,		/* Lowest level of normal use */
+	WMSunkenLevel = -1,
+	WMNormalLevel = 0,
 	WMFloatingLevel = 3,
-	WMDockLevel = 4,
-	WMSubmenuLevel = 5,
-	WMMainMenuLevel = 6,
-	WMOuterSpaceLevel = 7
+	WMDockLevel = 5,
+	WMSubmenuLevel = 6,
+	WMMainMenuLevel = 20,
+	WMStatusLevel = 21,
+	WMModalLevel = 100,
+	WMPopUpLevel = 101,
+	WMScreensaverLevel = 1000,
+	WMOuterSpaceLevel = INT_MAX
 };
 
 /*

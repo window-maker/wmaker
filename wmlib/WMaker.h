@@ -69,20 +69,39 @@ typedef struct {
 
 
 #if !defined(_NSWindow_h_) && !defined(_GNUstep_H_GUITypes)
+/*
+ * Window levels are taken from GNUstep (gui/AppKit/NSWindow.h)
+ * NSDesktopWindowLevel intended to be the level at which things
+ * on the desktop sit ... so you should be able
+ * to put a desktop background just below it.
+ *
+ * Applications are actually permitted to use any value in the
+ * range INT_MIN+1 to INT_MAX
+ */
 enum {
-  NSNormalWindowLevel   = 0,
-  NSFloatingWindowLevel  = 3,
-  NSDockWindowLevel   = 5,
-  NSSubmenuWindowLevel  = 10,
-  NSMainMenuWindowLevel  = 20
+  WMDesktopWindowLevel = -1000, /* GNUstep addition     */
+  WMNormalWindowLevel = 0,
+  WMFloatingWindowLevel = 3,
+  WMSubmenuWindowLevel = 3,
+  WMTornOffMenuWindowLevel = 3,
+  WMMainMenuWindowLevel = 20,
+  WMDockWindowLevel = 21,       /* Deprecated - use NSStatusWindowLevel */
+  WMStatusWindowLevel = 21,
+  WMModalPanelWindowLevel = 100,
+  WMPopUpMenuWindowLevel = 101,
+  WMScreenSaverWindowLevel = 1000
 };
 
+
+/* window attributes */
 enum {
-  NSBorderlessWindowMask = 0,
-  NSTitledWindowMask = 1,
-  NSClosableWindowMask = 2,
-  NSMiniaturizableWindowMask = 4,
-  NSResizableWindowMask = 8
+  WMBorderlessWindowMask = 0,
+  WMTitledWindowMask = 1,
+  WMClosableWindowMask = 2,
+  WMMiniaturizableWindowMask = 4,
+  WMResizableWindowMask = 8,
+  WMIconWindowMask = 64,
+  WMMiniWindowMask = 128
 };
 #endif
 
