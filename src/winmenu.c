@@ -388,7 +388,6 @@ makeMakeShortcutMenu(WScreen *scr, WMenu *menu)
 
     for (i=0; i<MAX_WINDOW_SHORTCUTS; i++) {
 	WMenuEntry *entry;
-
 	entry = wMenuAddCallback(menu, "", makeShortcutCommand, NULL);
 
 	entry->flags.indicator = 1;

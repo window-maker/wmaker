@@ -599,6 +599,7 @@ handleButtonPress(XEvent *event)
 {
     WObjDescriptor *desc;
     WScreen *scr;
+    
 #ifdef DEBUG
     L("got button press");
 #endif
@@ -668,12 +669,12 @@ handleButtonPress(XEvent *event)
 	    XAllowEvents(dpy, AsyncPointer, CurrentTime);
 	}
      
-	if (wPreferences.focus_mode == WKF_CLICK) {
+/*	if (wPreferences.focus_mode == WKF_CLICK) {*/
 	    if (wPreferences.ignore_focus_click) {
 		XAllowEvents(dpy, AsyncPointer, CurrentTime);
 	    }
 	    XAllowEvents(dpy, ReplayPointer, CurrentTime);
-	}
+/*	}*/
 	XSync(dpy, 0);
     } else if (desc->parent_type == WCLASS_APPICON
 	       || desc->parent_type == WCLASS_MINIWINDOW

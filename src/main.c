@@ -79,7 +79,7 @@ WShortKey wKeyBindings[WKBD_LAST];
 /* defaults domains */
 WDDomain *WDWindowMaker = NULL;
 WDDomain *WDWindowAttributes = NULL;
-
+WDDomain *WDRootMenu = NULL;
 
 /* XContexts */
 XContext wWinContext;

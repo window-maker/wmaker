@@ -525,11 +525,7 @@
 
 
 /* number of window shortcuts */
-#ifdef EXTEND_WINDOWSHORTCUT
-# define MAX_WINDOW_SHORTCUTS 10
-#else
-# define MAX_WINDOW_SHORTCUTS 4
-#endif
+#define MAX_WINDOW_SHORTCUTS 10
 
 
 #define WM_PI 3.14159265358979323846

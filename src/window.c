@@ -1452,7 +1452,7 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
     }
 
     if (wwin->flags.is_gnustep == 0)
-      wFrameWindowChangeState(wwin->frame, WS_UNFOCUSED);
+	wFrameWindowChangeState(wwin->frame, WS_UNFOCUSED);
 
 /*    if (wPreferences.auto_focus)*/
 	wSetFocusTo(scr, wwin);
@@ -2562,7 +2562,7 @@ wWindowResetMouseGrabs(WWindow *wwin)
     if (!wwin->flags.focused && !WFLAGP(wwin, no_focusable)
 	&& !wwin->flags.is_gnustep) {
 	/* the passive grabs to focus the window */
-	if (wPreferences.focus_mode == WKF_CLICK)
+/*	if (wPreferences.focus_mode == WKF_CLICK) */
 	    XGrabButton(dpy, AnyButton, AnyModifier, wwin->client_win,
 			True, ButtonPressMask, GrabModeSync, GrabModeAsync,
 			None, None);
@@ -2856,8 +2856,8 @@ frameMouseDown(WObjDescriptor *desc, XEvent *event)
     
     CloseWindowMenu(wwin->screen_ptr);
 
-    if (wPreferences.focus_mode==WKF_CLICK
-	&& !(event->xbutton.state&ControlMask)
+    if (/*wPreferences.focus_mode==WKF_CLICK
+	&&*/ !(event->xbutton.state&ControlMask)
 	&& !WFLAGP(wwin, no_focusable)) {
 	wSetFocusTo(wwin->screen_ptr, wwin);
     }
