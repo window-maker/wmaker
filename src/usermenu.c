@@ -83,19 +83,21 @@ notifyClient(WMenu *menu, WMenuEntry *entry)
         event.xkey.type = KeyPress;
         event.xkey.display = dpy;
         event.xkey.window = window;
-        event.xkey.subwindow = 0x0;
+        event.xkey.root = DefaultRootWindow(dpy);
+        event.xkey.subwindow = (Window)None;
         event.xkey.x = 0x0;
         event.xkey.y = 0x0;
         event.xkey.x_root = 0x0;
         event.xkey.y_root = 0x0;
         event.xkey.keycode = data->key[i].keycode;
         event.xkey.state = data->key[i].modifier;
-        event.xkey.same_screen = YES;
-        XSendEvent(dpy, window, False, NoEventMask, &event);
-        XFlush(dpy);
-        event.xkey.type = KeyRelease;
-        XSendEvent(dpy, window, False, NoEventMask, &event);
-        XFlush(dpy);
+        event.xkey.same_screen = True;
+        event.xkey.time = CurrentTime;
+        if (XSendEvent(dpy, window, False, KeyPressMask, &event)) {
+            event.xkey.type = KeyRelease;
+            event.xkey.time = CurrentTime;
+            XSendEvent(dpy, window, True, KeyReleaseMask, &event);
+        }
     }
 }
 
