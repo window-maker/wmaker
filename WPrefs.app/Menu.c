@@ -1678,6 +1678,8 @@ processData(char *title, ItemData *data)
 	break;
 	
      case PipeInfo:
+	if (!data->param.pipe.command)
+	    return NULL;
 	PLAppendArrayElement(item, pomenu);
 	s1 = wstrconcat("| ", data->param.pipe.command);
 	PLAppendArrayElement(item, PLMakeString(s1));
@@ -1685,11 +1687,16 @@ processData(char *title, ItemData *data)
 	break;
 	
      case ExternalInfo:
+	if (!data->param.external.path)
+	    return NULL;
 	PLAppendArrayElement(item, pomenu);
 	PLAppendArrayElement(item, PLMakeString(data->param.external.path));
 	break;
 	
      case DirectoryInfo:
+	if (!data->param.directory.directory
+	    || !data->param.directory.command)
+	    return NULL;
 	{
 	    int l;
 	    char *tmp;
