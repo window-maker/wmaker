@@ -13,7 +13,7 @@ include_HEADERS = WINGs.h WUtil.h WINGsP.h
 bin_SCRIPTS = get-wings-flags get-wutil-flags
 
 noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel\
-	connect puzzle # testtext
+	connect puzzle testtext
 
 lib_LIBRARIES = libWINGs.a libWUtil.a
 
@@ -26,6 +26,8 @@ LDADD= libWINGs.a $(top_builddir)/wrlib/libwraster.la\
 testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h 
 
 wtest_DEPENDENCIES = libWINGs.a
+
+testtext_DEPENDENCIES = libWINGs.a
 
 connect_LDADD = libWUtil.a @LIBRARY_SEARCH_PATH@ @NETLIBS@ @LIBPL@
 
