@@ -2,7 +2,7 @@
   SystemFont = "-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*";
   BoldSystemFont = "-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*";
   FloppyPath = "/floppy";
-  MultiByteText = NO;
+  MultiByteText = AUTO;
   DoubleClickTime = 250;
   MouseWheelUp = Button4;
   MouseWheelDown = Button5;
