@@ -1,3 +1,5 @@
+- fixed a bug in RCombineAreaWithOpaqueness() (Brad <lists@anomie.yi.org>)       
+
 - Added retain/release mechanism to RImage by adding RRetainImage() and
   RReleaseImage(). RDestroyImage() is an alias to RReleaseImage() now, but
   will be removed in a future release because it no longer fits with the

@@ -412,7 +412,7 @@ RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
 
     if (!HAS_ALPHA(src)) {
 
-	s = src->data + sy*src->width*3;	
+	s = src->data + (sy*src->width + sx)*3;
 	swi = (src->width - width) * 3;
 	
 	for (y=0; y < height; y++) {
@@ -428,7 +428,7 @@ RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
     } else {
         int tmp;
 
-	s = src->data + sy*src->width*4;
+	s = src->data + (sy*src->width + sx)*4;
 	swi = (src->width - width) * 4;
 	
 	for (y=0; y < height; y++) {

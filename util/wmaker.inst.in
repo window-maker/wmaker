@@ -66,7 +66,11 @@ copy() {
 		sed -e "s|~/GNUstep|$GSDIR|g" $source > $target
 	elif [ "$file" = "WMRootMenu" ]; then
 		if [ "$LOCALE" ]; then
-            	    if [ -f $GLOBALDIR/plmenu.${LOCALE%_*} ]; then
+            	    if [ -f $GLOBALDIR/plmenu.$LOCALE ]; then
+                	source=$GLOBALDIR/plmenu.$LOCALE
+            	    elif [ -f $GLOBALDIR/plmenu.${LOCALE%.*} ]; then
+                	source=$GLOBALDIR/plmenu.${LOCALE%.*}
+            	    elif [ -f $GLOBALDIR/plmenu.${LOCALE%_*} ]; then
                 	source=$GLOBALDIR/plmenu.${LOCALE%_*}
 		    elif [ -f $GLOBALDIR/menu.${LOCALE%_*} ]; then
 			source=$GLOBALDIR/menu.${LOCALE%_*}

@@ -102,6 +102,6 @@
   ("启动 BlackBox", RESTART, blackbox),
   ("启动 kwm", RESTART, kwm),
   ("启动 IceWM", RESTART, icewm),
-  ("退出...", EXIT),
+  ("退出...", EXIT)
  )
 )

@@ -7,6 +7,8 @@ Changes since version 0.65.1:
 - fixed crash with broken apps that set null WM_CLASS
 - replaced I18N_MB with I18N in one place in src/wconfig.h.in
 - fixed default clip title font in WindowMaker.in
+- fixed some locale related problems (Yukihiro Nakai <ynakai@redhat.com>)
+- fixed a bug in RCombineAreaWithOpaqueness() (Brad <lists@anomie.yi.org>)
 
 Changes since version 0.65.0:
 .............................
