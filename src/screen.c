@@ -859,12 +859,19 @@ wScreenInit(int screen_number)
 }
 
 
+
+static WArea subtractRectangle(WArea area, WArea rect)
+{
+    WArea result = area;
+    
+    
+}
+
+
 void
 wScreenUpdateUsableArea(WScreen *scr)
 {
-#ifdef GNOME_STUFF
     WReservedArea *area;
-#endif
 
     scr->totalUsableArea = scr->usableArea;
 

@@ -41,14 +41,14 @@
 #define WTB_PFOCUSED	4
 #define WTB_MENU 6
 
-#ifdef GNOME_STUFF
+
 /* an area of the screen reserved by some window */
 typedef struct WReservedArea {
     WArea area;
     Window window;
     struct WReservedArea *next;
 } WReservedArea;
-#endif
+
 
 
 typedef struct WAppIconChain {
@@ -131,9 +131,7 @@ typedef struct _WScreen {
     int current_workspace;	       /* current workspace number */
 
 
-#ifdef GNOME_STUFF
     WReservedArea *reservedAreas;      /* used to build totalUsableArea */
-#endif
 
     WArea usableArea;		       /* area of the workspace where
 					* we can put windows on, as defined
@@ -299,6 +297,10 @@ typedef struct _WScreen {
 
 #ifdef KWM_HINTS
     Window kwm_dock;
+#endif
+    
+#ifdef NET_HINTS
+    struct NetData *netdata;
 #endif
 
     int helper_fd;

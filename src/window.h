@@ -290,6 +290,11 @@ typedef struct WWindow {
 	unsigned int olwm_push_pin_out:1;/* emulate pushpin behaviour */
 	unsigned int olwm_limit_menu:1;
 #endif
+#ifdef NET_HINTS
+	unsigned int net_state_from_client:1; /* state hint was set by client */
+	unsigned int net_skip_taskbar:1;
+	unsigned int net_skip_pager:1;
+#endif
     } flags;		/* state of the window */
 
     struct WIcon *icon;		       /* icon info for the window */

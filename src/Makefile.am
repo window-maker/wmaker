@@ -95,6 +95,8 @@ wmaker_SOURCES = 	\
 	winmenu.c \
 	winspector.h \
 	winspector.c \
+	wmspec.c \
+	wmspec.h \
 	workspace.c \
 	workspace.h \
 	wsound.c \

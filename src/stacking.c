@@ -572,6 +572,8 @@ RemoveFromStackList(WCoreWindow *frame)
 		   frame->stacking->under);
 
     frame->screen_ptr->window_count--;
+
+    WMPostNotificationName(WMNResetStacking, frame->screen_ptr, NULL);
 }
 
 
