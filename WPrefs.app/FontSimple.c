@@ -661,7 +661,7 @@ createPanel(Panel *p)
 
     // family
     panel->familyL = WMCreateList(vbox);
-    WMAddBoxSubview(vbox, WMWidgetView(panel->familyL), True, True, 0, 0, 4);
+    WMAddBoxSubview(vbox, WMWidgetView(panel->familyL), True, True, 0, 0, 0);
     if (panel->fonts)
     {
         WMListItem *item;
