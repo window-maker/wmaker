@@ -4,6 +4,7 @@ Changes since version 0.91.0:
 - updated Japanese translations (Takeo Hashimoto <HashimotoTakeo@mac.com>)
 - allow disable of switch panel when SwitchPanelImages=None
 - added X Input Methods support in WINGs
+- fixed issue with compiling on Solaris with openwin
 
 
 Changes since version 0.90.0:

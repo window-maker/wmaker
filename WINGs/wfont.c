@@ -1,16 +1,16 @@
 
-#include "wconfig.h"
-
-#include <X11/Xft/Xft.h>
-#include <fontconfig/fontconfig.h>
-
 #include <stdlib.h>
+
+#include "wconfig.h"
 
 #include "WINGsP.h"
 
 #include <wraster.h>
 #include <assert.h>
 #include <X11/Xlocale.h>
+
+#include <X11/Xft/Xft.h>
+#include <fontconfig/fontconfig.h>
 
 
 #define DEFAULT_FONT "sans serif:pixelsize=12"

@@ -41,6 +41,7 @@ AC_MSG_CHECKING([whether libXft is at least version $1])
 AC_CACHE_VAL(ac_cv_lib_xft_version_ok,
 [AC_TRY_LINK(
 [/* Test version of libXft we have */
+#include <X11/Xlib.h>
 #include <X11/Xft/Xft.h>
 
 #if !defined(XFT_VERSION) || XFT_VERSION < $xft_major_version*10000 + $xft_minor_version*100 + $xft_micro_version

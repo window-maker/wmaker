@@ -7,7 +7,7 @@
 #include <WINGs/WUtil.h>
 #include <X11/Xlib.h>
 
-#define WINGS_H_VERSION  20040406
+#define WINGS_H_VERSION  20041030
 
 
 #ifdef __cplusplus
