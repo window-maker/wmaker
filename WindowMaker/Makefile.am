@@ -8,6 +8,7 @@ prefsdata_DATA =\
 	autostart.sh\
 	exitscript.sh\
 	menu\
+	menu.ca\
 	menu.cz\
 	menu.de\
 	menu.dk\

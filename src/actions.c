@@ -108,7 +108,7 @@ processEvents(int event_count)
      * the animation.
      */
     ignoreTimestamp=1;
-    while (event_count--) {
+    while (XPending(dpy) && event_count--) {
 	WMNextEvent(dpy, &event);
 	WMHandleEvent(&event);
     }
