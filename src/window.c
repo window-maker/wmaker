@@ -1187,11 +1187,6 @@ wManageWindow(WScreen *scr, Window window)
     /* If the window must be withdrawed, then do it now.
      * Must do some optimization, 'though */
     if (withdraw) {
-#ifdef USER_MENU
-    WApplication *app=NULL;
-    app = wApplicationOf(wwin->main_window);
-    if (app) wAppMenuUnmap(app->menu);
-#endif /* USER_MENU */
 	wwin->flags.mapped = 0;
 	wClientSetState(wwin, WithdrawnState, None);
 	wUnmanageWindow(wwin, True, False);
@@ -1436,13 +1431,6 @@ wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 	if (wwin->next)
 	  wwin->next->prev = wwin->prev;
 	else {
-#ifdef USER_MENU
-        if (scr->focused_window) {
-            WApplication *app=NULL;
-            app = wApplicationOf(scr->focused_window->main_window);
-            if (app) wAppMenuUnmap(app->menu);
-        }
-#endif /* USER_MENU */
 	    scr->focused_window = wwin->prev;
 	    scr->focused_window->next = NULL;
 	}
