@@ -176,11 +176,14 @@ W_PaintText(W_View *view, Drawable d, WMFont *font,  int x, int y,
 
 	WMDrawString(view->screen, d, gc, font, line_x, y, ptr, count);
 
-	y += fheight;
+        if (wrap && ptr[count]!='\n')
+            y += fheight;
 
-	if (isspace(ptr[count]))
-	    count++;
-	
+        while (ptr[count] && ptr[count]=='\n') {
+            y += fheight;
+            count++;
+        }
+
 	ptr += count;
 	length -= count;
     }

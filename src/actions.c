@@ -178,8 +178,10 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
     napp = wApplicationOf(wwin->main_window);
 
     /* remember last workspace where the app has been */
-    if (napp) 
-	napp->last_workspace = wwin->screen_ptr->current_workspace;
+    if (napp)  {
+        /*napp->last_workspace = wwin->screen_ptr->current_workspace;*/
+        napp->last_workspace = wwin->frame->workspace;
+    }
 
     if (wwin->flags.mapped && !WFLAGP(wwin, no_focusable)) {
 	/* install colormap if colormap mode is lock mode */

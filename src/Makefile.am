@@ -4,7 +4,7 @@ BUILT_SOURCES = wconfig.h
 
 bin_PROGRAMS = wmaker
 
-EXTRA_DIST = wmnotify.c wmnotdef.h wmnotify.h
+EXTRA_DIST = 
 
 
 wmaker_SOURCES = 	\
