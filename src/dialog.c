@@ -184,7 +184,10 @@ typedef struct IconPanel {
     
     WMList *dirList;
     WMList *iconList;
+    WMFont *normalfont;
     
+    WMButton *previewButton;
+
     WMLabel *iconView;
     
     WMLabel *fileLabel;
@@ -197,6 +200,7 @@ typedef struct IconPanel {
 #endif
     short done;
     short result;
+    short preview;
 } IconPanel;
 
 
@@ -208,6 +212,9 @@ listPixmaps(WScreen *scr, WMList *lPtr, char *path)
     DIR *dir;
     char pbuf[PATH_MAX+16];
     char *apath;
+    IconPanel *panel = WMGetHangedData(lPtr);
+
+    panel->preview = False;
     
     apath = wexpandpath(path);
     dir = opendir(apath);
@@ -249,6 +256,7 @@ listPixmaps(WScreen *scr, WMList *lPtr, char *path)
 
     closedir(dir);
     free(apath);
+    panel->preview = True;
 }
 
 
@@ -344,6 +352,66 @@ listIconPaths(WMList *lPtr)
 }
 
 
+void drawIconProc(WMList *lPtr, int index, Drawable d, char *text,
+                        int state, WMRect *rect) {
+    IconPanel *panel = WMGetHangedData(lPtr);
+    GC gc = panel->scr->draw_gc;
+    GC copygc = panel->scr->copy_gc;
+    char *buffer, *dirfile, *iconfile;
+    WMPixmap *pixmap;
+    WMColor *blackcolor;
+    WMColor *whitecolor;
+    WMSize size;
+    WMScreen *wmscr=WMWidgetScreen(panel->win);
+    int width;
+
+    if(!panel->preview) return;
+
+    width = rect->size.width;
+
+    blackcolor = WMBlackColor(wmscr);
+    whitecolor = WMWhiteColor(wmscr);
+
+    dirfile = WMGetListSelectedItem(panel->dirList)->text;
+    buffer = wmalloc(strlen(dirfile)+strlen(text)+4);
+    sprintf(buffer,"%s/%s" ,dirfile,text);
+		
+    pixmap = WMCreatePixmapFromFile(WMWidgetScreen(panel->win), buffer);
+    free(buffer);
+    if (!pixmap) {
+        WMRemoveListItem(lPtr, index);
+        return;
+    }
+
+    XClearArea(dpy, d, rect->pos.x,rect->pos.y, width, 64, False);
+    XSetClipMask(dpy, gc, None);
+    XDrawRectangle(dpy, d, WMColorGC(whitecolor), rect->pos.x + 5,rect->pos.y +5, width - 10, 54);
+    if (state&WLDSSelected) {
+        XFillRectangle(dpy, d, WMColorGC(whitecolor), rect->pos.x + 5,rect->pos.y +5, width - 10, 54);
+    }
+
+
+    XSetClipMask(dpy, copygc, WMGetPixmapMaskXID(pixmap));
+    XSetClipOrigin(dpy, copygc, rect->pos.x, rect->pos.y);
+    size = WMGetPixmapSize(pixmap);
+    XCopyArea(dpy, WMGetPixmapXID(pixmap), d, copygc, 0, 0,
+             size.width>100?100:size.width, size.height>64?64:size.height, rect->pos.x,rect->pos.y);
+
+    {
+        int i,j;
+        for(i=-1;i<2;i++)
+        for(j=-1;j<2;j++)
+            WMDrawString(wmscr, d, WMColorGC(whitecolor), panel->normalfont , rect->pos.x+i+7, rect->pos.y+62+j-WMFontHeight(panel->normalfont), text, strlen(text));
+    }
+    WMDrawString(wmscr, d, WMColorGC(blackcolor), panel->normalfont , rect->pos.x+7, rect->pos.y+62-WMFontHeight(panel->normalfont), text, strlen(text));
+
+	WMReleasePixmap(pixmap);
+    /* I hope it is better to do not use cache / on my box it is fast nuff */
+    XFlush(dpy);
+
+    WMReleaseColor(blackcolor);
+    WMReleaseColor(whitecolor);
+}
 
 static void
 buttonCallback(void *self, void *clientData)
@@ -358,6 +426,14 @@ buttonCallback(void *self, void *clientData)
     } else if (bPtr==panel->cancelButton) {
 	panel->done = True;
 	panel->result = False;
+    } else if (bPtr==panel->previewButton) {
+        /**** Previewer ****/
+        WMSetButtonEnabled(bPtr, False);
+        WMSetListUserDrawItemHeight(panel->iconList, 64);
+        WMSetListUserDrawProc(panel->iconList, drawIconProc);
+        WMRedisplayWidget(panel->iconList);
+        /* for draw proc to access screen/gc */
+        /*** end preview ***/
     }
 #if 0
     else if (bPtr==panel->chooseButton) {
@@ -396,6 +472,7 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
     WMResizeWidget(panel->win, 450, 280);
     
     boldFont = WMBoldSystemFontOfSize(scr->wmscreen, 12);
+    panel->normalfont = WMSystemFontOfSize(WMWidgetScreen(panel->win), 12);
     
     panel->dirLabel = WMCreateLabel(panel->win);
     WMResizeWidget(panel->dirLabel, 200, 20);
@@ -436,10 +513,18 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
     WMResizeWidget(panel->iconList, 140, 170);
     WMMoveWidget(panel->iconList, 215, 30); 
     WMSetListAction(panel->iconList, listCallback, panel);
-   
+
+    WMHangData(panel->iconList,panel);
+
+    panel->previewButton = WMCreateCommandButton(panel->win);
+    WMResizeWidget(panel->previewButton, 75, 26);
+    WMMoveWidget(panel->previewButton, 365, 130);
+    WMSetButtonText(panel->previewButton, _("Preview"));
+    WMSetButtonAction(panel->previewButton, buttonCallback, panel);
+
     panel->iconView = WMCreateLabel(panel->win);
     WMResizeWidget(panel->iconView, 75, 75);
-    WMMoveWidget(panel->iconView, 365, 60);
+    WMMoveWidget(panel->iconView, 365, 40);
     WMSetLabelImagePosition(panel->iconView, WIPOverlaps);
     WMSetLabelRelief(panel->iconView, WRSunken);
     WMSetLabelTextAlignment(panel->iconView, WACenter);
@@ -483,7 +568,7 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
     {
 	char *tmp;
 
-	tmp = malloc((instance ? strlen(instance) : 0)
+	tmp = wmalloc((instance ? strlen(instance) : 0)
 		     + (class ? strlen(class) : 0) + 32);
 
 	if (tmp && (instance || class))
@@ -535,6 +620,8 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
     } else {
 	*file = NULL;
     }
+
+    WMReleaseFont(panel->normalfont);
 
     WMUnmapWidget(panel->win);
 
