@@ -290,7 +290,27 @@ killCallback(WMenu *menu, WMenuEntry *entry)
 
     icon->editing = 0;
 
-    WCHANGE_STATE(WSTATE_NORMAL);}
+    WCHANGE_STATE(WSTATE_NORMAL);
+}
+
+
+/* TODO: replace this function with a member of the dock struct */
+static int
+numberOfSelectedIcons(WDock *dock)
+{
+    WAppIcon *aicon;
+    int i, n;
+
+    n = 0;
+    for (i=1; i<dock->max_icons; i++) {
+        aicon = dock->icon_array[i];
+        if (aicon && aicon->icon->selected) {
+            n++;
+        }
+    }
+
+    return n;
+}
 
 
 static LinkedList*
@@ -1091,19 +1111,30 @@ dockMenuCreate(WScreen *scr, int type)
 
         wMenuAddCallback(menu, _("Rename Workspace"), renameCallback, NULL);
 
-        wMenuAddCallback(menu, _("(Un)Select Icon"), selectCallback, NULL);
+        entry = wMenuAddCallback(menu, _("Select Icon"), selectCallback, NULL);
+        free(entry->text);
+        entry->text = _("Select Icon");
 
-        wMenuAddCallback(menu, _("(Un)Select All Icons"), selectIconsCallback,
-			 NULL);
+        entry = wMenuAddCallback(menu, _("Select All Icons"),
+                                 selectIconsCallback, NULL);
+        free(entry->text);
+        entry->text = _("Select All Icons");
 
-        wMenuAddCallback(menu, _("Keep Icon(s)"), keepIconsCallback, NULL);
+        entry = wMenuAddCallback(menu, _("Keep Icon"), keepIconsCallback, NULL);
+        free(entry->text);
+        entry->text = _("Keep Icon");
 
-        entry = wMenuAddCallback(menu, _("Move Icon(s) To"), NULL, NULL);
+        entry = wMenuAddCallback(menu, _("Move Icon To"), NULL, NULL);
+        free(entry->text);
+        entry->text = _("Move Icon To");
         scr->clip_submenu = makeWorkspaceMenu(scr);
         if (scr->clip_submenu)
             wMenuEntrySetCascade(menu, entry, scr->clip_submenu);
 
-        wMenuAddCallback(menu, _("Remove Icon(s)"), removeIconsCallback, NULL);
+        entry = wMenuAddCallback(menu, _("Remove Icon"), removeIconsCallback,
+                                 NULL);
+        free(entry->text);
+        entry->text = _("Remove Icon");
 
         wMenuAddCallback(menu, _("Attract Icons"), colectIconsCallback, NULL);
     }
@@ -3276,6 +3307,7 @@ openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
     WApplication *wapp = NULL;
     int index = 0;
     int x_pos;
+    int n_selected;
     int appIsRunning = aicon->running && aicon->icon && aicon->icon->owner;
 
     if (dock->type == WM_DOCK) {
@@ -3292,29 +3324,51 @@ openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
 	entry = dock->menu->entries[++index];
 	entry->clientdata = dock;
 
-	/* select icon */
+	/* select/unselect icon */
 	entry = dock->menu->entries[++index];
-	entry->clientdata = aicon;
+        entry->clientdata = aicon;
+        if (aicon->icon->selected)
+            entry->text = _("Unselect Icon");
+        else
+            entry->text = _("Select Icon");
 	wMenuSetEnabled(dock->menu, index, aicon!=scr->clip_icon);
 
-	/* (un)select all icons */
+        n_selected = numberOfSelectedIcons(dock);
+	/* select/unselect all icons */
 	entry = dock->menu->entries[++index];
-	entry->clientdata = aicon;
+        entry->clientdata = aicon;
+        if (n_selected > 0)
+            entry->text = _("Unselect All Icons");
+        else
+            entry->text = _("Select All Icons");
 	wMenuSetEnabled(dock->menu, index, dock->icon_count > 1);
 
 	/* keep icon(s) */
 	entry = dock->menu->entries[++index];
-	entry->clientdata = aicon;
+        entry->clientdata = aicon;
+        if (n_selected > 1)
+            entry->text = _("Keep Icons");
+        else
+            entry->text = _("Keep Icon");
 	wMenuSetEnabled(dock->menu, index, dock->icon_count > 1);
 
 	/* this is the workspace submenu part */
+        entry = dock->menu->entries[++index];
+        if (n_selected > 1)
+            entry->text = _("Move Icons To");
+        else
+            entry->text = _("Move Icon To");
 	if (scr->clip_submenu)
 	    updateWorkspaceMenu(scr->clip_submenu, aicon);
-        wMenuSetEnabled(dock->menu, ++index, !aicon->omnipresent);
+        wMenuSetEnabled(dock->menu, index, !aicon->omnipresent);
 
 	/* remove icon(s) */
 	entry = dock->menu->entries[++index];
 	entry->clientdata = aicon;
+        if (n_selected > 1)
+            entry->text = _("Remove Icons");
+        else
+            entry->text = _("Remove Icon");
 	wMenuSetEnabled(dock->menu, index, dock->icon_count > 1);
 
 	/* attract icon(s) */
