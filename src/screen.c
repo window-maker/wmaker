@@ -715,6 +715,9 @@ wScreenInit(int screen_number)
     XSelectInput(dpy, scr->root_win, event_mask);
 
 #ifdef KEEP_XKB_LOCK_STATUS     
+    /* Only GroupLock doesn't work correctly in my system since right-alt
+     * can change mode while holding it too - ]d
+     */
     if (wXkbSupported) {
         XkbSelectEvents(dpy,XkbUseCoreKbd,
                 XkbStateNotifyMask,

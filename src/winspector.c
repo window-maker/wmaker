@@ -589,9 +589,9 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 	    assert(wapp->main_window_desc->wm_class!=NULL);
 
 		buffer = wmalloc(strlen(wapp->main_window_desc->wm_instance)
-						 +strlen(wwin->wm_class)+4);
+						 +strlen(wapp->main_window_desc->wm_class)+4);
 	    strcat(strcpy(buffer, wapp->main_window_desc->wm_instance), ".");
-	    strcat(buffer, wwin->wm_class);
+	    strcat(buffer, wapp->main_window_desc->wm_class);
 	    key = PLMakeString(buffer);
 		free(buffer);
 
