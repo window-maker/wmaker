@@ -76,7 +76,7 @@ wfatal(const char *msg, ...)
 
     va_start(args, msg);
 
-    vsprintf(buf, msg, args);
+    vsnprintf(buf, MAXLINE-3, msg, args);
     strcat(buf,"\n");
     fflush(stdout);
     fputs(_WINGS_progname, stderr);
@@ -103,7 +103,7 @@ wwarning(const char *msg, ...)
     
     va_start(args, msg);
     
-    vsprintf(buf, msg, args);
+    vsnprintf(buf, MAXLINE-3, msg, args);
     strcat(buf,"\n");
     fflush(stdout);
     fputs(_WINGS_progname, stderr);
@@ -130,14 +130,14 @@ wsyserror(const char *msg, ...)
     int error=errno;
 
     va_start(args, msg);
-    vsprintf(buf, msg, args);
+    vsnprintf(buf, MAXLINE-3, msg, args);
     fflush(stdout);
     fputs(_WINGS_progname, stderr);
     fputs(" error: ", stderr);
-    strcat(buf, ": ");
-    strcat(buf, wstrerror(error));
-    strcat(buf,"\n");
     fputs(buf, stderr);
+    fputs(": ", stderr);
+    fputs(wstrerror(error), stderr);
+    fputs("\n", stderr);
     fflush(stderr);
     fflush(stdout);
     va_end(args);
@@ -159,14 +159,14 @@ wsyserrorwithcode(int error, const char *msg, ...)
     char buf[MAXLINE];
 
     va_start(args, msg);
-    vsprintf(buf, msg, args);
+    vsnprintf(buf, MAXLINE-3, msg, args);
     fflush(stdout);
     fputs(_WINGS_progname, stderr);
     fputs(" error: ", stderr);
-    strcat(buf, ": ");
-    strcat(buf, wstrerror(error));
-    strcat(buf,"\n");
     fputs(buf, stderr);
+    fputs(": ", stderr);
+    fputs(wstrerror(error), stderr);
+    fputs("\n", stderr);
     fflush(stderr);
     fflush(stdout);
     va_end(args);
