@@ -3622,11 +3622,16 @@ WMSetTextUsesMonoFont(WMText *tPtr, Bool mono)
 {
     if (!tPtr)
         return;
-    if (mono && tPtr->flags.rulerShown)
-        WMShowTextRuler(tPtr, False);
+
+    if (mono) { 
+        if(tPtr->flags.rulerShown)
+            WMShowTextRuler(tPtr, False);
+        if(tPtr->flags.alignment != WALeft)
+            tPtr->flags.alignment = WALeft;
+    }
 
     tPtr->flags.monoFont = mono;
-    WMThawText(tPtr);
+    textDidResize(tPtr->view->delegate, tPtr->view);
 }
 
 Bool
@@ -3665,7 +3670,10 @@ WMSetTextAlignment(WMText *tPtr, WMAlignment alignment)
 {
     if (!tPtr) 
         return;
-    tPtr->flags.alignment = alignment;
+    if(tPtr->flags.monoFont)
+        tPtr->flags.alignment = WALeft;
+    else
+        tPtr->flags.alignment = alignment;
     WMThawText(tPtr);
 }
 
