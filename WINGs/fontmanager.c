@@ -30,7 +30,7 @@ changeFontProp(char *fname, char *newprop, int which)
 
 
 WMFont *
-WMGetFontPlain(WMScreen *scr, WMFont *font) 
+WMConvertFontToPlain(WMScreen *scr, WMFont *font) 
 {
     if(!scr || !font)
         return font;
@@ -39,7 +39,7 @@ WMGetFontPlain(WMScreen *scr, WMFont *font)
 }
 
 WMFont *
-WMGetFontBold(WMScreen *scr, WMFont *font) 
+WMConvertFontToBold(WMScreen *scr, WMFont *font) 
 {
 	WMFont *newfont=NULL;
 	char fname[256];
@@ -58,7 +58,7 @@ WMGetFontBold(WMScreen *scr, WMFont *font)
 }
 
 WMFont *
-WMGetFontItalic(WMScreen *scr, WMFont *font) 
+WMConvertFontToItalic(WMScreen *scr, WMFont *font) 
 {
 	WMFont *newfont=NULL;
 	char fname[256];

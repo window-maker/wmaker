@@ -698,9 +698,9 @@ WMFont *WMBoldSystemFontOfSize(WMScreen *scrPtr, int size);
 
 XFontSet WMGetFontFontSet(WMFont *font);
 
-WMFont * WMGetFontPlain(WMScreen *scr, WMFont *font);
-WMFont * WMGetFontBold(WMScreen *scr, WMFont *font);
-WMFont * WMGetFontItalic(WMScreen *scr, WMFont *font);
+WMFont * WMConvertFontToPlain(WMScreen *scr, WMFont *font);
+WMFont * WMConvertFontTobold(WMScreen *scr, WMFont *font);
+WMFont * WMConvertFontToItalic(WMScreen *scr, WMFont *font);
 WMFont * WMGetFontOfSize(WMScreen *scr, WMFont *font, int size);
 
 /* ....................................................................... */
@@ -1507,7 +1507,7 @@ char * WMGetTextSelected(WMText *tPtr);
 WMArray * WMGetTextStreamIntoArray(WMText *tPtr);
 
 /* destroy the array */
-WMArray* WMGetTextSelectedIntoArray(WMText *tPtr);
+WMArray* WMGetTextSelectedObjects(WMText *tPtr);
 
 void WMSetTextSelectionColor(WMText *tPtr, WMColor *color);
 
