@@ -1,11 +1,3 @@
-To do before next release:
---------------------------
-- check whether window states are being saved/restored properly via netwm
-  on restart/crash-restart (grep for XXX/TODO)
-
-
-=====================================================================
-
 remake wrlib rule to not compile with -fomit-frame-pointer and stuff
 if its added to CFLAGS
 
@@ -17,6 +9,8 @@ Do ASAP:
 - finish session stuff
 - remove colors_per_channel stuff from wmaker after?
 + finish the ability to browse for files/dirs in the WPrefs menu editor
+- check whether window states are being saved/restored properly via netwm
+  on restart/crash-restart (grep for XXX/TODO)
 
 Need to do:
 ===========
