@@ -60,7 +60,7 @@
 
 /* For Solaris */
 #ifndef INADDR_NONE
-# define INADDR_NONE  (-1)
+# define INADDR_NONE           -1
 #endif
 
 /* Stuff for setting the sockets into non-blocking mode. */
