@@ -134,11 +134,11 @@ static void changeImage(WSwitchPanel *panel, int index, int selected)
   WMPixmap *pixmap= NULL;
   WMLabel *label = WMGetFromArray(panel->icons, index);
   RImage *image= WMGetFromArray(panel->images, index);
-  WMScreen *wscr = WMWidgetScreen(label);
 
-  if (image) {
+  if (image && label) {
     RColor bgColor;
     RImage *back;
+      WMScreen *wscr= WMWidgetScreen(label);
 
     if (selected) {
       back= RCloneImage(panel->tile);
@@ -161,7 +161,7 @@ static void changeImage(WSwitchPanel *panel, int index, int selected)
     }
   }
 
-  if (pixmap) {
+  if (pixmap && label) {
     WMSetLabelImage(label, pixmap);
     WMSetLabelImagePosition(label, WIPImageOnly);
     WMReleasePixmap(pixmap);
