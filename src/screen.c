@@ -1028,8 +1028,6 @@ wScreenRestoreState(WScreen *scr)
     scr->session_state = WMReadPropListFromFile(path);
     wfree(path);
     if (!scr->session_state && wScreenCount>1) {
-	/*char buf[16];
-	snprintf(buf, sizeof(buf), "WMState.%i", scr->screen);*/
 	path = wdefaultspathfordomain("WMState");
 	scr->session_state = WMReadPropListFromFile(path);
 	wfree(path);
@@ -1049,7 +1047,7 @@ wScreenRestoreState(WScreen *scr)
         wWorkspaceManageEdge(scr);
 #endif
 
-    if (!wPreferences.flags.nodock) {
+    if (!wPreferences.flags.nodock && scr->session_state) {
         state = WMGetFromPLDictionary(scr->session_state, dDock);
         scr->dock = wDockRestoreState(scr, state, WM_DOCK);
     }

@@ -420,8 +420,6 @@ wRootMenuPerformShortcut(XEvent *event)
     Shortcut *ptr;
     int modifiers;
     int done = 0;
-    Window dummy;
-    int foo;
 
     /* ignore CapsLock */
     modifiers = event->xkey.state & ValidModMask;
