@@ -121,7 +121,6 @@ typedef struct W_Array WMArray;
 typedef struct W_Bag WMBag;
 typedef struct W_Data WMData;
 typedef struct W_TreeNode WMTreeNode;
-typedef struct W_TreeNode WMTree;
 typedef struct W_HashTable WMDictionary;
 typedef struct W_HashTable WMHashTable;
 typedef struct W_UserDefaults WMUserDefaults;

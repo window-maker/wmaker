@@ -6,6 +6,7 @@ changes since wmaker 0.63.1:
 - moved WINGs headers in a WINGs subdirectory when installed.
   use #include <WINGs/header_file_name> in your application from now on.
   Also updated get-{wings|wutil}-flags.
+- Fixed a mem leak in WMList.
 
 
 changes since wmaker 0.62.1:

@@ -1217,7 +1217,11 @@ destroyList(List *lPtr)
         WMDeleteTimerHandler(lPtr->selectID);
     lPtr->selectID = NULL;
 
-    WMFreeArray(lPtr->items);
+    if (lPtr->selectedItems)
+        WMFreeArray(lPtr->selectedItems);
+
+    if (lPtr->items)
+        WMFreeArray(lPtr->items);
 
     wfree(lPtr);
 }
