@@ -178,7 +178,7 @@ testList(WMScreen *scr)
     WMSetLabelText(mtitle, "Multiple selection list");
 
     list = WMCreateList(win);
-    //WMSetListAllowEmptySelection(list, True);
+    WMSetListAllowEmptySelection(list, True);
     WMMoveWidget(list, 10, 40);
     for (i=0; i<50; i++) {
 	sprintf(text, "Item %i", i);
@@ -186,7 +186,7 @@ testList(WMScreen *scr)
     }
     mlist = WMCreateList(win);
     WMSetListAllowMultipleSelection(mlist, True);
-    //WMSetListAllowEmptySelection(mlist, True);
+    WMSetListAllowEmptySelection(mlist, True);
     WMMoveWidget(mlist, 210, 40);
     for (i=0; i<135; i++) {
 	sprintf(text, "Item %i", i);
@@ -529,6 +529,17 @@ testText(WMScreen *scr)
     if(file) {
         char buf[1024];
 
+<<<<<<< wtest.c
+		WMFreezeText(text);
+		while(fgets(buf, 1023, file))
+			WMAppendTextStream(text, buf);
+		
+		fclose(file);
+		WMThawText(text);
+	} else {
+		WMAppendTextStream(text, "<HTML><i>Where's</i> the <b>README</b>?"); 
+	}
+=======
         WMFreezeText(text);
         while(fgets(buf, 1023, file))
             WMAppendTextStream(text, buf);
@@ -539,6 +550,7 @@ testText(WMScreen *scr)
     } else {
         WMAppendTextStream(text, "<HTML><i>Where's</i> the <b>README</b>?");
     }
+>>>>>>> 1.12
 
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
