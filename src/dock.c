@@ -2417,6 +2417,11 @@ wDockDetach(WDock *dock, WAppIcon *icon)
 	DestroyDockAppSettingsPanel(icon->panel);
     }
 
+    /* This must be called before icon->dock is set to NULL.
+     * Don't move it. -Dan
+     */
+    wClipMakeIconOmnipresent(icon, False);
+
     icon->docked = 0;
     icon->dock = NULL;
     icon->attracted = 0;
@@ -2424,11 +2429,6 @@ wDockDetach(WDock *dock, WAppIcon *icon)
 	icon->icon->shadowed = 0;
 	icon->icon->force_paint = 1;
     }
-
-    /* This must be called before dock->icon_array[index] is set to NULL.
-     * Don't move it. -Dan
-     */
-    wClipMakeIconOmnipresent(icon, False);
 
     /* deselect the icon */
     if (icon->icon->selected)
@@ -4441,8 +4441,10 @@ wClipMakeIconOmnipresent(WAppIcon *aicon, int omnipresent)
     WAppIconChain *new_entry, *tmp, *tmp1;
     int status = WO_SUCCESS;
 
-    if (aicon->dock == scr->dock || aicon == scr->clip_icon)
+    if ((!wPreferences.flags.nodock && aicon->dock == scr->dock) ||
+        aicon == scr->clip_icon) {
         return WO_NOT_APPLICABLE;
+    }
 
     if (aicon->omnipresent == omnipresent)
         return WO_SUCCESS;
@@ -4452,16 +4454,8 @@ wClipMakeIconOmnipresent(WAppIcon *aicon, int omnipresent)
             aicon->omnipresent = 1;
             new_entry = wmalloc(sizeof(WAppIconChain));
             new_entry->aicon = aicon;
-            new_entry->next = NULL;
-            if (!scr->global_icons) {
-                scr->global_icons = new_entry;
-            } else {
-                tmp = scr->global_icons;
-                while (tmp->next)
-                    tmp = tmp->next;
-
-                tmp->next = new_entry;
-            }
+            new_entry->next = scr->global_icons;
+            scr->global_icons = new_entry;
             scr->global_icon_count++;
         } else {
             aicon->omnipresent = 0;

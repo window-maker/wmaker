@@ -402,7 +402,8 @@ wAppIconPaint(WAppIcon *aicon)
 
 
 # ifdef WS_INDICATOR
-    if (aicon->docked && scr->dock && aicon->yindex==0)
+    if (aicon->docked && scr->dock && scr->dock==aicon->dock &&
+        aicon->yindex==0)
 	updateDockNumbers(scr);
 # endif
     if (scr->dock_dots && aicon->docked && !aicon->running

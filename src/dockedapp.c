@@ -244,21 +244,6 @@ panelBtnCallback(WMWidget *self, void *data)
 	updateDNDCommand(panel->editedIcon, text);
 #endif
 
-#ifdef dan_remove_later
-        omnipresent = WMGetButtonSelected(panel->omnipresentBtn);
-        if (wClipMakeIconOmnipresent(panel->editedIcon, omnipresent) ==
-            WO_FAILED) {
-            wMessageDialog(panel->wwin->screen_ptr, _("Error"),
-                           _("Sorry, icon cannot be made omnipresent. "
-                             "Please make sure that no other icon is "
-                             "docked in the same position on the other "
-                             "workspaces, and the Clip is not full in "
-                             "some workspace, then try again."),
-                           _("OK"), NULL, NULL);
-            return;
-        }
-#endif
-
 	panel->editedIcon->auto_launch =
 	    WMGetButtonSelected(panel->autoLaunchBtn);
     }
