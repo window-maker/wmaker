@@ -3,6 +3,9 @@ Changes since version 0.63.1:
 - fixed messup in get-{wings,wutil,wraster}-flags
 - fixed #wmdatadir# substitution in wmaker.inst 
 	(Seiichi SATO <sato@cvs-net.co.jp>)
+- Removed spurious focus disabling for GNUstep applications - but retain
+  code that lets GNUstep apps control their window titlebar.
+	(Richard Frith-Macdonald <rfm@gnu.org>)
 
 
 Changes since version 0.63.0:
