@@ -1108,12 +1108,13 @@ wManageWindow(WScreen *scr, Window window)
                 /* if the window was set to hidden because it was hidden
                  * in a previous incarnation and that state was restored */
                 app->flags.hidden = 1;
-            }
-
-            if (app->flags.hidden) {
-                /*wwin->flags.hidden = 1;*/
-                wUnhideApplication(app, False, False);
-                raise = True;
+            } else if (app->flags.hidden) {
+                if (WFLAGP(app->main_window_desc, start_hidden)) {
+                    wwin->flags.hidden = 1;
+                } else {
+                    wUnhideApplication(app, False, False);
+                    raise = True;
+                }
             }
         }
     }
