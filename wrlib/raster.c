@@ -372,11 +372,11 @@ RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
     int dalpha = HAS_ALPHA(image);
     int dch = (dalpha ? 4 : 3);
 
-    assert(dy <= image->height);
-    assert(dx <= image->width);
+    assert(dy < image->height);
+    assert(dx < image->width);
 
-    assert(sy <= height);
-    assert(sx <= width);
+    assert(sy + height <= src->height);
+    assert(sx + width <= src->width);
 
 
     /* clip */
