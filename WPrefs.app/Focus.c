@@ -35,8 +35,7 @@ typedef struct _Panel {
     WMWidget *parent;
     
     WMFrame *kfocF;
-    WMPopUpButton *kfocP;
-    WMLabel *kfocL;
+    WMButton *kfocB[2];
     
     WMFrame *cfocF;
     WMButton *autB;
@@ -74,17 +73,15 @@ showData(_Panel *panel)
     if (!str)
 	str = "manual";
     if (strcasecmp(str, "manual")==0 || strcasecmp(str, "clicktofocus")==0)
-	WMSetPopUpButtonSelectedItem(panel->kfocP, 0);
-    else if (strcasecmp(str, "auto")==0 || strcasecmp(str, "focusfollowsmouse")==0)
-	WMSetPopUpButtonSelectedItem(panel->kfocP, 1);
-    else if (strcasecmp(str, "semiauto")==0 || strcasecmp(str, "sloppy")==0)
-	WMSetPopUpButtonSelectedItem(panel->kfocP, 2);
+	WMSetButtonSelected(panel->kfocB[0], 1);
+    else if (strcasecmp(str, "auto")==0 || strcasecmp(str, "semiauto")==0 
+	     || strcasecmp(str, "sloppy")==0)
+	WMSetButtonSelected(panel->kfocB[1], 1);
     else {
 	wwarning(_("bad option value %s for option FocusMode. Using default Manual"),
 		 str);
-	WMSetPopUpButtonSelectedItem(panel->kfocP, 0);
+	WMSetButtonSelected(panel->kfocB[0], 1);
     }
-    changeFocusMode(panel->kfocP, panel);
 
     /**/
     str = GetStringForKey("ColormapMode");
@@ -137,17 +134,11 @@ storeData(_Panel *panel)
     char *str;
     int i;
 
-    switch (WMGetPopUpButtonSelectedItem(panel->kfocP)) {
-     case 1:
-	str = "auto";
-	break;
-     case 2:
+    if (WMGetButtonSelected(panel->kfocB[1]))
 	str = "sloppy";
-	break;
-     default:
+    else
 	str = "manual";
-	break;
-    }
+    
     SetStringForKey(str, "FocusMode");
 
     if (WMGetButtonSelected(panel->manB)) {
@@ -182,30 +173,6 @@ pushDelayButton(WMWidget *w, void *data)
 	WMSetTextFieldText(panel->raisT, "350");
     } else if (w == panel->raisB[4]) {
 	WMSetTextFieldText(panel->raisT, "800");
-    }
-}
-
-
-static void
-changeFocusMode(WMWidget *w, void *data)
-{
-    _Panel *panel = (_Panel*)data;
-
-    switch (WMGetPopUpButtonSelectedItem(w)) {
-     case 0:
-	WMSetLabelText(panel->kfocL, _("Click on the window to set\n"\
-			"keyboard input focus."));
-	break;
-     case 1:
-	WMSetLabelText(panel->kfocL, _("Set keyboard input focus to\n"\
-			"the window under the mouse pointer,\n"\
-			"including the root window."));
-	break;
-     case 2:
-	WMSetLabelText(panel->kfocL, _("Set keyboard input focus to\n"\
-			"the window under the mouse pointer,\n"\
-			"except the root window."));
-	break;
     }
 }
 
@@ -246,21 +213,28 @@ createPanel(Panel *p)
     WMResizeWidget(panel->kfocF, 240, 130);
     WMMoveWidget(panel->kfocF, 15, 15);
     WMSetFrameTitle(panel->kfocF, _("Input Focus Mode"));
-    
-    panel->kfocP = WMCreatePopUpButton(panel->kfocF);
-    WMResizeWidget(panel->kfocP, 210, 20);
-    WMMoveWidget(panel->kfocP, 15, 30);
-    WMAddPopUpButtonItem(panel->kfocP, _("Click window to focus"));
-    WMAddPopUpButtonItem(panel->kfocP, _("Focus follows mouse"));
-    WMAddPopUpButtonItem(panel->kfocP, _("\"Sloppy\" focus"));
-    WMSetPopUpButtonAction(panel->kfocP, changeFocusMode, panel);
 
-    panel->kfocL = WMCreateLabel(panel->kfocF);
-    WMResizeWidget(panel->kfocL, 211, 68);
-    WMMoveWidget(panel->kfocL, 15, 55);
-    WMSetLabelTextAlignment(panel->kfocL, WACenter);
-    
-    WMMapSubwidgets(panel->kfocF);
+    {
+	WMBox *box = WMCreateBox(panel->kfocF);
+	WMSetViewExpandsToParent(WMWidgetView(box), 10, 15, 10, 10);
+	WMSetBoxHorizontal(box, False);
+	
+	panel->kfocB[0] = WMCreateRadioButton(box);
+	WMSetButtonText(panel->kfocB[0], _("Manual:  Click on the window to set "\
+			"keyboard input focus"));
+	WMAddBoxSubview(box, WMWidgetView(panel->kfocB[0]), True, True,
+			20, 0, 0);
+
+	panel->kfocB[1] = WMCreateRadioButton(box);
+	WMGroupButtons(panel->kfocB[0], panel->kfocB[1]);
+	WMSetButtonText(panel->kfocB[1], _("Auto:  Set keyboard input focus to "\
+			"the window under the mouse pointer"));
+	WMAddBoxSubview(box, WMWidgetView(panel->kfocB[1]), True, True,
+			20, 0, 0);
+
+	WMMapSubwidgets(box);
+	WMMapWidget(box);
+    }
     
     /***************** Colormap Installation Mode ****************/
     

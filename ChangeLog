@@ -1,3 +1,5 @@
+- removed FocusFollowMouse from wmaker and WPrefs
+
 Changes since version 0.64.0:
 .............................
 - fix with gnome hints stuff, related to tasklist/bar

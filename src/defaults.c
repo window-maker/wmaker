@@ -225,7 +225,7 @@ static int setCursor();
 
 static WOptionEnumeration seFocusModes[] = {
     {"Manual", WKF_CLICK, 0}, {"ClickToFocus", WKF_CLICK, 1},
-    {"Sloppy", WKF_SLOPPY, 0}, {"SemiAuto", WKF_SLOPPY, 1},
+    {"Sloppy", WKF_SLOPPY, 0}, {"SemiAuto", WKF_SLOPPY, 1}, {"Auto", WKF_SLOPPY, 1},
     {NULL, 0, 0}
 };
 

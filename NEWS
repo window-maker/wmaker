@@ -2,6 +2,10 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+
+Removed FocusFollowMouse option, only SloppyFocus present now.
+
+
 --- 0.65.0
 
 Single AppIcon
