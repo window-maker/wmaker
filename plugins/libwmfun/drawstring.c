@@ -1,13 +1,14 @@
 #include <proplist.h>
 #include <WINGs.h>
 #include <WINGsP.h>
+#ifdef USE_FREETYPE
 #include <freetype/freetype.h>
+#endif
 
 #include "generic.h"
 #define MAX_GLYPHS 256
 
 #define _debug(f...) {fprintf(stderr, "debug: ");fprintf(stderr, ##f);fflush(stderr);}
-#define _showerr(f...) {fprintf(stderr, ##f);fflush(stderr);}
 
 /* #define _debug(s) printf(s);*/
 
@@ -16,10 +17,11 @@ static Display *ds_dpy = 0;
 static Colormap ds_cmap;
 static RContext *rc = 0;
 
+RColor black_color = {0, 0, 0, 0};
+
+#ifdef USE_FREETYPE
 FT_Library ft_library;
 static int inst_ft_library = 0;
-
-RColor black_color = {0, 0, 0, 0};
 
 typedef struct __FreeTypeRImage{
     RImage *image;
@@ -36,6 +38,7 @@ typedef struct __FreeTypeData{
     /* will use this when we have frame window plugin */
     /* char *last_titlestr; */
 } WMFreeTypeData;
+#endif /* USE_FREETYPE */
 
 int getColor (const char *string, Colormap cmap, XColor *xcolor) {
 	if (!XParseColor (ds_dpy, cmap, string, xcolor)) {
@@ -137,6 +140,8 @@ drawPlainString (proplist_t pl, Drawable d,
 
     XFreePixmap(ds_dpy, drawbuffer);
 }
+
+#ifdef USE_FREETYPE
 
 WMFreeTypeRImage *renderChar(FT_Face face, FT_ULong char_index, RColor *color) {
     FT_GlyphSlot slot;
@@ -328,10 +333,7 @@ drawFreeTypeString (proplist_t pl, Drawable d,
     }
 }
  
-/* flicker!, using buffer should fix.
- * parsing color is slow, pl is faster,
- * should cache color -- ]d */
-
+#endif /* USE_FREETYPE */
 
 /* core */
 
@@ -348,8 +350,10 @@ initDrawString (proplist_t pl, void **init_data) {
     _debug("invoke initDrawString: %s\n", PLGetString(PLGetArrayElement(pl, 2)));
     if (strcmp(PLGetString(PLGetArrayElement(pl, 2)), "drawPlainString") == 0) 
         initDrawPlainString((Display *)init_data[0], (Colormap)init_data[1]);
+#ifdef USE_FREETYPE
     else if (strcmp(PLGetString(PLGetArrayElement(pl, 2)), "drawFreeTypeString") == 0) 
         initDrawFreeTypeString(pl, init_data);
+#endif
     _debug("finish initDrawString\n");
 }
 
