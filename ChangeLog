@@ -112,7 +112,7 @@ Changes since version 0.80.2:
   when the clip is collapsed (it made them look like disabled)
 - Fixed the 'focus flicker' problem, seen with GTK2 applications.
 - Fixed bug with incorrect un-escaping if there is a dot in wm_class.
-
+- Updated Catalan translations (Ernest Adrogue <eadrogue@gmx.net>)
 
 Changes since version 0.80.1:
 .............................
