@@ -96,6 +96,9 @@ typedef struct _Panel {
     WMButton *sclearB;
 
     WMList *icommandL;
+
+    WMFrame *paramF;
+    WMTextField *paramT;
     
     Bool dontAsk; 		       /* whether to comfirm submenu remove */
     Bool dontSave;
@@ -217,13 +220,28 @@ stripClicked(WMWidget *w, void *data)
 
 
 static void
+icommandLClicked(WMWidget *w, void *data)
+{
+    _Panel *panel = (_Panel*)data;
+
+    switch (WMGetListSelectedItemRow(w)) {
+     case 6:
+	WMMapWidget(panel->paramF);
+	break;
+     default:
+	WMUnmapWidget(panel->paramF);
+	break;
+    }
+}
+
+
+static void
 createPanel(_Panel *p)
 {
     _Panel *panel = (_Panel*)p;
     WMScreen *scr = WMWidgetScreen(panel->win);
     WMColor *black = WMBlackColor(scr);
     WMColor *white = WMWhiteColor(scr);
-    WMColor *dark = WMDarkGrayColor(scr);
     WMColor *gray = WMGrayColor(scr);
     WMFont *bold = WMBoldSystemFontOfSize(scr, 12);
     WMFont *font = WMSystemFontOfSize(scr, 12);
@@ -510,18 +528,11 @@ createPanel(_Panel *p)
 
     /* internal command */
 
-    label = WMCreateLabel(panel->optionsF);
-    WMResizeWidget(label, width, 20);
-    WMMoveWidget(label, 10, 20);
-    WMSetWidgetBackgroundColor(label, dark);
-    WMSetLabelText(label, _("Commands"));
-    WMSetLabelTextColor(label, white);
-    WMSetLabelFont(label, bold);
-    WMSetLabelRelief(label, WRSunken);
-
     panel->icommandL = WMCreateList(panel->optionsF);
     WMResizeWidget(panel->icommandL, width, 80);
-    WMMoveWidget(panel->icommandL, 10, 43);
+    WMMoveWidget(panel->icommandL, 10, 20);
+    
+    WMSetListAction(panel->icommandL, icommandLClicked, panel);
 
     WMAddNotificationObserver(dataChanged, panel,
 			      WMListSelectionDidChangeNotification,
@@ -542,12 +553,22 @@ createPanel(_Panel *p)
     WMInsertListItem(panel->icommandL, 10, _("Open Info Panel"));
     WMInsertListItem(panel->icommandL, 11, _("Open Copyright Panel"));
 
+    
+    panel->paramF = WMCreateFrame(panel->optionsF);
+    WMResizeWidget(panel->paramF, width, 50);
+    WMMoveWidget(panel->paramF, 10, 105);
+    WMSetFrameTitle(panel->paramF, _("Window Manager to Start"));
+    
+    panel->paramT = WMCreateTextField(panel->paramF);
+    WMResizeWidget(panel->paramT, width - 20, 20);
+    WMMoveWidget(panel->paramT, 10, 20);
+    
+    WMMapSubwidgets(panel->paramF);
 
     WMRealizeWidget(panel->frame);
     WMMapSubwidgets(panel->frame);
     WMMapWidget(panel->frame);
 
-    
     
     
     panel->sections[ExecInfo][0] = panel->commandF;
@@ -762,7 +783,7 @@ updateFrameTitle(_Panel *panel, char *title, InfoType type)
 	 case ExecInfo:
 	    tmp = wstrappend(title, _(": Execute Program"));
 	    break;
-	    
+
 	 case CommandInfo:
 	    tmp = wstrappend(title, _(": Perform Internal Command"));
 	    break;
@@ -852,6 +873,13 @@ updateMenuItem(_Panel *panel, WEditMenuItem *item, WMWidget *changedWidget)
 	if (changedWidget == panel->icommandL) {
 	    data->param.command.command = 
 		WMGetListSelectedItemRow(panel->icommandL);
+
+	    switch (data->param.command.command) {
+	     case 6:
+		data->param.command.parameter = 
+		    WMGetTextFieldText(panel->paramT);
+		break;
+	    }
 	}
 	if (changedWidget == panel->shortT) {
 	    REPLACE(data->param.command.shortcut,
@@ -1030,6 +1058,15 @@ menuItemSelected(WEditMenuDelegate *delegate, WEditMenu *menu,
 	    WMSetListPosition(panel->icommandL,
 			      data->param.command.command - 2);
 	    WMSetTextFieldText(panel->shortT, data->param.command.shortcut);
+	    
+	    switch (data->param.command.command) {
+	     case 6:
+		WMSetTextFieldText(panel->paramT, 
+				   data->param.command.parameter);
+		break;
+	    }
+
+	    icommandLClicked(panel->icommandL, panel);
 	    break;
 
 	 case PipeInfo:

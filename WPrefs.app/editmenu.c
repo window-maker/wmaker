@@ -404,6 +404,8 @@ itemSelectObserver(void *self, WMNotification *notif)
 
     if (menu->selectedItem && !menu->selectedItem->submenu) {
 	deselectItem(menu);
+	if (menu->flags.isEditing)
+	    stopEditItem(menu, False);
     }
 }
 
@@ -1201,6 +1203,8 @@ dragMenu(WEditMenu *menu)
 	    break;
 
 	 case MotionNotify:
+	    while (XCheckMaskEvent(scr->display, ButtonMotionMask, &ev)) ;
+
 	    WMMoveWidget(menu, ev.xmotion.x_root - dx,
 			 ev.xmotion.y_root - dy);
 	    break;
@@ -1320,6 +1324,8 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
 
 	switch (ev.type) {
 	 case MotionNotify:
+	    while (XCheckMaskEvent(dpy, ButtonMotionMask, &ev)) ;
+
 	    XQueryPointer(dpy, win, &blaw, &blaw, &blai, &blai, &x, &y, &blau);
 
 	    dmenu = findMenuInWindow(dpy, win, x, y);
