@@ -56,11 +56,13 @@
 #endif
 
 /* Stuff for setting the sockets into non-blocking mode. */
-#ifdef	__POSIX_SOURCE
+/*#ifdef	__POSIX_SOURCE
 # define NONBLOCK_OPT           O_NONBLOCK
 #else
 # define NONBLOCK_OPT           FNDELAY
-#endif
+#endif*/
+
+#define NONBLOCK_OPT            O_NONBLOCK
 
 
 #define NETBUF_SIZE             4096
