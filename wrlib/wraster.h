@@ -50,7 +50,7 @@
 #include <X11/extensions/XShm.h>
 #endif
 
-/* RM_MATCH or RM_DITHER */
+/* RBestMatchRendering or RDitheredRendering */
 #define RC_RenderMode 		(1<<0)
 
 /* number of colors per channel for colormap in PseudoColor mode */

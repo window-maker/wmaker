@@ -1218,7 +1218,7 @@ main(int argc, char **argv)
     char *back_color = "gray20";
     char *image_name = NULL;
     char *domain = "WindowMaker";
-    int update=0, cpc=4, render_mode=RM_DITHER, obey_user=0;
+    int update=0, cpc=4, render_mode=RDitheredRendering, obey_user=0;
     char *texture = NULL;
     int workspace = -1;
     
@@ -1259,11 +1259,11 @@ main(int argc, char **argv)
 	    style = "mpixmap";	    
 	} else if (strcmp(argv[i], "-d")==0
 		   || strcmp(argv[i], "--dither")==0) {
-	    render_mode = RM_DITHER;
+	    render_mode = RDitheredRendering;
 	    obey_user++;
 	} else if (strcmp(argv[i], "-m")==0
 		   || strcmp(argv[i], "--match")==0) {
-	    render_mode = RM_MATCH;
+	    render_mode = RBestMatchRendering;
 	    obey_user++;
 	} else if (strcmp(argv[i], "-S")==0
 		   || strcmp(argv[i], "--smooth")==0) {
@@ -1362,7 +1362,7 @@ main(int argc, char **argv)
     scrHeight = HeightOfScreen(DefaultScreenOfDisplay(dpy));
 
     if (!obey_user && DefaultDepth(dpy, scr) <= 8)
-        render_mode = RM_DITHER;
+        render_mode = RDitheredRendering;
 
     rattr.flags = RC_RenderMode | RC_ColorsPerChannel | RC_DefaultVisual;
     rattr.render_mode = render_mode;

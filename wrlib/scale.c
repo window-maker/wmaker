@@ -29,7 +29,7 @@
 #include <math.h>
 
 #ifndef PI
-#define PI 	3.131592
+#define PI 	3.141592
 #endif
 
 #include <assert.h>
