@@ -333,6 +333,12 @@ WMTabViewItemAtPoint(WMTabView *tPtr, int x, int y)
 
 
 void
+WMSetTabViewType(WMTabView *tPtr, WMTabViewType type)
+{
+    tPtr->flags.type = type;
+}
+
+void
 WMSelectFirstTabViewItem(WMTabView *tPtr)
 {
     WMSelectTabViewItemAtIndex(tPtr, 0);
@@ -386,8 +392,9 @@ WMSelectTabViewItemAtIndex(WMTabView *tPtr, int index)
 {
     WMTabViewItem *item;
 
-    if (index == tPtr->selectedItem)
+    if (index == tPtr->selectedItem) {
 	return;
+    }
 
     if (index < 0)
 	index = 0;
@@ -417,6 +424,8 @@ WMSelectTabViewItemAtIndex(WMTabView *tPtr, int index)
     if (tPtr->delegate && tPtr->delegate->didSelectItem)
 	(*tPtr->delegate->didSelectItem)(tPtr->delegate, tPtr, 
 					 tPtr->items[index]);
+    
+    paintTabView(tPtr);
 }
 
 
@@ -756,6 +765,7 @@ W_MapTabViewItem(WMTabViewItem *item)
     wassertr(item->view);
 
     W_MapView(item->view);
+    W_RaiseView(item->view);
 
     item->flags.visible = 1;
 }
