@@ -2155,7 +2155,7 @@ wheelRender(W_ColorPanel *panel)
     W_Screen		*scr = WMWidgetScreen(panel->win);
     int			x,y;
     RImage		*image;
-    unsigned char	*rp, *gp, *bp;
+    unsigned char	*ptr;
     RColor		gray;
     unsigned long	ofs = 0;
     unsigned char	shift = getShift(sizeof(unsigned char));
@@ -2166,27 +2166,25 @@ wheelRender(W_ColorPanel *panel)
 	return;
     }
    
+    ptr = image->data;
+    
     /* TODO Make this transparent istead of gray */
-    gray.red = gray.green = gray.blue = 0xaa;
+    gray.red = gray.blue = 0xae; gray.green = 0xaa;
     
     for (y = 0; y < colorWheelSize+4; y++) {
 	for (x = 0; x < colorWheelSize+4; x++) {
-	    rp = image->data + (ofs << shift);
-	    gp = image->data + (ofs << shift) + 1;
-	    bp = image->data + (ofs << shift) + 2;
-	    
 	    if (wheelInsideColorWheel(panel, ofs)) {
-		*rp = (unsigned char)(panel->wheelMtrx->values[ 
+		*(ptr++) = (unsigned char)(panel->wheelMtrx->values[
 			panel->wheelMtrx->data[0][ofs] ]);
-		*gp = (unsigned char)(panel->wheelMtrx->values[ 
+		*(ptr++) = (unsigned char)(panel->wheelMtrx->values[
 			panel->wheelMtrx->data[1][ofs] ]);
-		*bp = (unsigned char)(panel->wheelMtrx->values[
+		*(ptr++) = (unsigned char)(panel->wheelMtrx->values[
 			panel->wheelMtrx->data[2][ofs] ]);
 	    }
 	    else {
-		*rp = (unsigned char)(gray.red);
-		*gp = (unsigned char)(gray.green);
-		*bp = (unsigned char)(gray.blue);
+		*(ptr++) = (unsigned char)(gray.red);
+		*(ptr++) = (unsigned char)(gray.green);
+		*(ptr++) = (unsigned char)(gray.blue);
 	    }
 	    ofs++;
 	}
@@ -2914,35 +2912,30 @@ customRenderSpectrum(W_ColorPanel *panel)
 {
     RImage		*spectrum;
     int			x,y;
-    unsigned long	ofs;
-    unsigned char	*rp, *gp, *bp;
+    unsigned char	*ptr;
     CPColor		cpColor;
     
-    spectrum = RCreateImage(SPECTRUM_WIDTH, SPECTRUM_HEIGHT, 0);
+    spectrum = RCreateImage(SPECTRUM_WIDTH, SPECTRUM_HEIGHT, False);
     
-    for (y=0; y<360; y++) {
+    ptr = spectrum->data;
+    
+    for (y = 0; y < SPECTRUM_HEIGHT; y++) {
 	cpColor.hsv.hue = y;
 	cpColor.hsv.saturation = 0;
 	cpColor.hsv.value = 255;
 	cpColor.set = cpHSV;
 
-	for (x=0; x<511; x++) {
-	    ofs = (y * 511) + x;
-	    
+	for (x = 0; x < SPECTRUM_WIDTH; x++) {
 	    convertCPColor(&cpColor);
 	    
-	    rp = spectrum->data + ofs;
-	    gp = spectrum->data + ofs + 1;
-	    bp = spectrum->data + ofs + 2;
+	    *(ptr++) = (unsigned char)cpColor.rgb.red;
+	    *(ptr++) = (unsigned char)cpColor.rgb.green;
+	    *(ptr++) = (unsigned char)cpColor.rgb.blue;
 	    
-	    *rp = (unsigned char)cpColor.rgb.red;
-	    *gp = (unsigned char)cpColor.rgb.green;
-	    *bp = (unsigned char)cpColor.rgb.blue;
-	    
-	    if (x<255)
+	    if (x < (SPECTRUM_WIDTH/2))
 		cpColor.hsv.saturation++;
 	    
-	    if (x>255)
+	    if (x > (SPECTRUM_WIDTH/2))
 		cpColor.hsv.value--;
 	}
     }
@@ -2965,7 +2958,6 @@ customSetPalette(W_ColorPanel *panel)
     
     image = XCreatePixmap(scr->display, W_DRAWABLE(scr), customPaletteWidth, 
 			  customPaletteHeight, scr->depth);
-    
     scaledImg = RScaleImage(panel->customPaletteImg, customPaletteWidth, 
 			    customPaletteHeight);
     RConvertImage(scr->rcontext, scaledImg, &image);
@@ -3012,7 +3004,7 @@ customPalettePositionSelection(W_ColorPanel *panel, int x, int y)
     panel->paly = y;
     
     ofs = rint(x * panel->palXRatio) + rint(y * panel->palYRatio) * 
-	panel->customPaletteImg->width;
+	panel->customPaletteImg->width * 3;
     
     panel->color.rgb.red   = panel->customPaletteImg->data[ofs];
     panel->color.rgb.green = panel->customPaletteImg->data[ofs+1];

@@ -119,7 +119,7 @@ RGetSubImage(RImage *image, int x, int y, unsigned width, unsigned height)
     total_line_size = image->width * (HAS_ALPHA(image) ? 4 : 3);
     line_size = width * (HAS_ALPHA(image) ? 4 : 3);
 
-    ofs = x*(HAS_ALPHA(image) ? 4 : 3);
+    ofs = x*(HAS_ALPHA(image) ? 4 : 3) + y*total_line_size;;
 
     for (i=0; i<height; i++) {
 	memcpy(&new_image->data[i*line_size], 
@@ -500,11 +500,11 @@ RMakeTiledImage(RImage *tile, unsigned width, unsigned height)
                 w = (width - x < tile->width) ? width - x : tile->width;
 
 		if (has_alpha) {
-		    w *= 3;
-		    memcpy(d, s+tx*3, w);
-		} else {
 		    w *= 4;
 		    memcpy(d, s+tx*4, w);
+		} else {
+		    w *= 3;
+		    memcpy(d, s+tx*3, w);
 		}
                 d += w;
             }
