@@ -1,5 +1,6 @@
 Changes since version 0.91.0:
 .............................
+
 - fixed crash with info panel and alt-tabbing
 - updated Japanese translations (Takeo Hashimoto <HashimotoTakeo@mac.com>)
 - allow disable of switch panel when SwitchPanelImages=None
@@ -11,7 +12,9 @@ Changes since version 0.91.0:
   default installation path (for non GNUstep users) is now $(prefix)/bin
 - fixed bug with infinite loop in some circumstances in fitText() in WINGs
 - fixed to allow parallel builds on SMP systems using make -j
+- updated Italian translation (Marco Colombo <m.colombo@ed.ac.uk>)
 - applied .AppInfo --> Library path rename patch (Alex Perez <aperez@student.santarosa.edu>)
+
 
 Changes since version 0.90.0:
 .............................
