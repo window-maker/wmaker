@@ -28,6 +28,9 @@ xpmdata_DATA = \
 	moreanim.xpm \
 	mousesettings.xpm \
 	mousespeed.xpm \
+	msty1.xpm \
+	msty2.xpm \
+	msty3.xpm \
 	newstyle.xpm \
 	nonopaque.xpm \
 	oldstyle.xpm \

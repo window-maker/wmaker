@@ -190,6 +190,7 @@ createPanel(Panel *p)
 	} else {
 	    wwarning(_("could not load icon file %s"), path);
 	}
+	free(path);
     }
     WMGroupButtons(panel->alinB, panel->aliyB);
     

@@ -66,6 +66,12 @@ typedef struct _Panel {
     /* text color */
     WMFrame *colF;
 
+    /* options */
+    WMFrame *optF;
+
+    WMFrame *mstyF;
+    WMButton *mstyB[3];
+
     /* */
 
     int textureIndex[8];
@@ -81,7 +87,9 @@ typedef struct _Panel {
     WMPixmap *hand;
 
     int oldsection;
-    
+
+    char menuStyle;
+
     Pixmap preview;
 
     char *fprefix;
@@ -115,6 +123,9 @@ static void OpenExtractPanelFor(_Panel *panel, char *path);
 #define TEDIT_FILE	"tedit"
 #define TEXTR_FILE 	"textr"
 
+#define MSTYLE1_FILE	"msty1"
+#define MSTYLE2_FILE	"msty2"
+#define MSTYLE3_FILE	"msty3"
 
 
 /* XPM */
@@ -243,6 +254,10 @@ static char * hand_xpm[] = {
 #define TEXPREV_HEIGHT	24
 
 
+#define MSTYLE_NORMAL	0
+#define MSTYLE_SINGLE	1
+#define MSTYLE_FLAT	2
+
 
 
 
@@ -343,7 +358,7 @@ drawMenuBevel(RImage *img)
 {
     RColor light, dark, mid;
     int i;
-    int iheight = img->height / 3;
+    int iheight = img->height / 4;
     
     light.alpha = 0;
     light.red = light.green = light.blue = 80;
@@ -361,8 +376,8 @@ drawMenuBevel(RImage *img)
 	RDrawLine(img, 0, i*iheight-1,
 		  img->width-1, i*iheight-1, &dark);
 	
-	ROperateLine(img, RAddOperation, 0, i*iheight, 
-		     img->width-1, i*iheight, &light);
+	ROperateLine(img, RAddOperation, 1, i*iheight, 
+		     img->width-2, i*iheight, &light);
     }
 }
 
@@ -372,7 +387,7 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	      char *path, int border)
 {
     char *type;
-    RImage *image;
+    RImage *image = NULL;
     Pixmap pixmap;
     RContext *rc = WMScreenRContext(scr);
     char *str;
@@ -381,14 +396,13 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 
     type = PLGetString(PLGetArrayElement(texture, 0));
 
-    image = RCreateImage(width, height, False);
-
     if (strcasecmp(type, "solid")==0) {
 
 	str = PLGetString(PLGetArrayElement(texture, 1));
 
 	str2rcolor(rc, str, &rcolor);
 
+	image = RCreateImage(width, height, False);
 	RClearImage(image, &rcolor);
     } else if (strcasecmp(&type[1], "gradient")==0) {
 	int style;
@@ -546,6 +560,7 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	    drawResizebarBevel(image);
 	} else if (border == MENU_BEVEL) {
 	    drawMenuBevel(image);
+	    RBevelImage(image, RBEV_RAISED2);
 	}
     } else if (border) {
 	RBevelImage(image, border);
@@ -564,28 +579,27 @@ renderMenu(_Panel *panel, proplist_t texture, int width, int iheight)
     WMScreen *scr = WMWidgetScreen(panel->win);
     Display *dpy = WMScreenDisplay(scr);
     Pixmap pix, tmp;
-    char *str;
     GC gc = XCreateGC(dpy, WMWidgetXID(panel->win), 0, NULL);
+    int i;
 
-    
-    str = GetStringForKey("MenuStyle");
-    if (!str || strcasecmp(str, "normal")==0) {
-	int i;
-
+    switch (panel->menuStyle) {
+     case MSTYLE_NORMAL:
 	tmp = renderTexture(scr, texture, width, iheight, NULL, RBEV_RAISED2);
-
+	    
 	pix = XCreatePixmap(dpy, tmp, width, iheight*4, WMScreenDepth(scr));
 	for (i = 0; i < 4; i++) {
 	    XCopyArea(dpy, tmp, pix, gc, 0, 0, width, iheight,
 		      0, iheight*i);
 	}
 	XFreePixmap(dpy, tmp);
-    } else if (strcasecmp(str, "flat")==0) {
-	pix = renderTexture(scr, texture, width, iheight*4, NULL, RBEV_RAISED2);
-    } else {
+	break;
+     case MSTYLE_SINGLE:
 	pix = renderTexture(scr, texture, width, iheight*4, NULL, MENU_BEVEL);
+	break;
+     case MSTYLE_FLAT:
+	pix = renderTexture(scr, texture, width, iheight*4, NULL, RBEV_RAISED2);
+	break;
     }
-
     XFreeGC(dpy, gc);
 
     return pix;
@@ -1195,13 +1209,33 @@ fillTextureList(WMList *lPtr)
 
 
 static void
+menuStyleCallback(WMWidget *self, void *data)
+{
+    _Panel *panel = (_Panel*)data;
+
+    if (self == panel->mstyB[0]) {
+	panel->menuStyle = MSTYLE_NORMAL;
+	updatePreviewBox(panel, MITEM);
+
+    } else if (self == panel->mstyB[1]) {
+	panel->menuStyle = MSTYLE_SINGLE;
+	updatePreviewBox(panel, MITEM);
+
+    } else if (self == panel->mstyB[2]) {
+	panel->menuStyle = MSTYLE_FLAT;
+	updatePreviewBox(panel, MITEM);
+    }
+}
+
+
+static void
 createPanel(Panel *p)
 {
     _Panel *panel = (_Panel*)p;
     WMFont *font;
     WMScreen *scr = WMWidgetScreen(panel->win);
     WMTabViewItem *item;
-
+    int i;
     char *tmp;
     Bool ok = True;
     
@@ -1361,7 +1395,60 @@ createPanel(Panel *p)
 
     WMAddItemInTabView(panel->tabv, item);
 
-    
+
+    /*** options ***/
+    panel->optF = WMCreateFrame(panel->frame);
+    WMSetFrameRelief(panel->optF, WRFlat);
+
+    item = WMCreateTabViewItemWithIdentifier(2);
+    WMSetTabViewItemView(item, WMWidgetView(panel->optF));
+    WMSetTabViewItemLabel(item, _("Options"));
+
+    WMAddItemInTabView(panel->tabv, item);
+
+    panel->mstyF = WMCreateFrame(panel->optF);
+    WMResizeWidget(panel->mstyF, 215, 85);
+    WMMoveWidget(panel->mstyF, 15, 10);
+    WMSetFrameTitle(panel->mstyF, _("Menu Style"));
+
+    for (i = 0; i < 3; i++) {
+	WMPixmap *icon;
+	char *path;
+
+	panel->mstyB[i] = WMCreateButton(panel->mstyF, WBTOnOff);
+	WMResizeWidget(panel->mstyB[i], 54, 54);
+	WMMoveWidget(panel->mstyB[i], 15 + i*65, 20);
+	WMSetButtonImagePosition(panel->mstyB[i], WIPImageOnly);
+	WMSetButtonAction(panel->mstyB[i], menuStyleCallback, panel);
+	switch (i) {
+	 case 0:
+	    path = LocateImage(MSTYLE1_FILE);
+	    break;
+	 case 1:
+	    path = LocateImage(MSTYLE2_FILE);
+	    break;
+	 case 2:
+	    path = LocateImage(MSTYLE3_FILE);
+	    break;
+	}
+	if (path) {
+	    icon = WMCreatePixmapFromFile(scr, path);
+	    if (icon) {
+		WMSetButtonImage(panel->mstyB[i], icon);
+		WMReleasePixmap(icon);
+	    } else {
+		wwarning(_("could not load icon file %s"), path);
+	    }
+	    free(path);
+	}
+    }
+    WMGroupButtons(panel->mstyB[0], panel->mstyB[1]);
+    WMGroupButtons(panel->mstyB[0], panel->mstyB[2]);
+
+    WMMapSubwidgets(panel->mstyF);
+
+    WMMapSubwidgets(panel->optF);
+
     /**/
 
     WMRealizeWidget(panel->frame);
@@ -1416,6 +1503,16 @@ static void
 showData(_Panel *panel)
 {
     int i = 0;
+    char *str;
+
+    str = GetStringForKey("MenuStyle");
+    if (str && strcasecmp(str, "flat")==0) {
+	panel->menuStyle = MSTYLE_FLAT;
+    } else if (str && strcasecmp(str, "singletexture")==0) {
+	panel->menuStyle = MSTYLE_SINGLE;
+    } else {
+	panel->menuStyle = MSTYLE_NORMAL;
+    }
 
     setupTextureFor(panel->texLs, "FTitleBack", "(solid, black)", 
 		    "[Focused]", i);
@@ -1487,6 +1584,19 @@ storeData(_Panel *panel)
     item = WMGetListItem(panel->texLs, panel->textureIndex[6]);
     titem = (TextureListItem*)item->clientData;
     SetObjectForKey(titem->prop, "IconBack");
+
+    switch (panel->menuStyle) {
+     case MSTYLE_SINGLE:
+	SetStringForKey("singletexture", "MenuStyle");
+	break;
+     case MSTYLE_FLAT:
+	SetStringForKey("flat", "MenuStyle");
+	break;
+     default:
+     case MSTYLE_NORMAL:
+	SetStringForKey("normal", "MenuStyle");
+	break;
+    }
 }
 
 

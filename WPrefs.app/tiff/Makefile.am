@@ -28,6 +28,9 @@ tiffdata_DATA = \
 	moreanim.tiff \
 	mousesettings.tiff \
 	mousespeed.tiff \
+	msty1.tiff \
+	msty2.tiff \
+	msty3.tiff \
 	newstyle.tiff \
 	nonopaque.tiff \
 	oldstyle.tiff \
