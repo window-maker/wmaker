@@ -36,6 +36,7 @@ prefsdata_DATA =\
 	plmenu\
 	plmenu.da\
 	plmenu.de\
+	plmenu.es\
 	plmenu.fi\
 	plmenu.fr\
 	plmenu.hr\
