@@ -594,6 +594,10 @@ wTextureRenderImage(WTexture *texture, int width, int height,
 	wwarning(_("could not render texture: %s"), RMessageForError(RErrorCode));
 
 	image = RCreateImage(width, height, False);
+	if (image == NULL) {
+	    wwarning(_("could not allocate image buffer"));
+	    return NULL;
+	}
        
 	gray.red = 190;
 	gray.green = 190;
