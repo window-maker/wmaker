@@ -1,7 +1,7 @@
 
 
 /*
- * This event handling stuff was based on Tk.
+ * This event handling stuff was inspired on Tk.
  */
 
 #include "WINGsP.h"

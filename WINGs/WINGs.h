@@ -792,6 +792,8 @@ void WMUnmapWidget(WMWidget *w);
 
 void WMMapWidget(WMWidget *w);
 
+void WMRaiseWidget(WMWidget *w);
+
 void WMMoveWidget(WMWidget *w, int x, int y);
 
 void WMResizeWidget(WMWidget *w, unsigned int width, unsigned int height);

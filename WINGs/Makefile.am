@@ -85,6 +85,7 @@ libWINGs_a_SOURCES = 	\
 	hashtable.c \
 	host.c \
 	memory.c \
+	string.c \
 	usleep.c
 
 
@@ -105,6 +106,7 @@ libWUtil_a_SOURCES = 	\
 	findfile.c \
 	hashtable.c \
 	memory.c \
+	string.c \
 	usleep.c
 
 

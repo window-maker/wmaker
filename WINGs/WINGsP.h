@@ -298,7 +298,7 @@ typedef struct W_ViewDelegate {
 
     void (*willMove)(struct W_ViewDelegate*, WMView*, int*, int*);
 
-    void (*willResize)(struct W_ViewDelegate*, WMView*, 
+    void (*willResize)(struct W_ViewDelegate*, WMView*,
 		       unsigned int*, unsigned int*);
 } W_ViewDelegate;
 

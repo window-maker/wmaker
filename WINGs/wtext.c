@@ -18,6 +18,12 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+/* README README README README README README README
+ * Nwanua: dont use // style comments please!
+ * It doesnt work in lots of compilers out there :/
+ * -Alfredo
+ * README README README README README README README
+ */
 
 #include "WINGsP.h"
 #include <X11/keysym.h>

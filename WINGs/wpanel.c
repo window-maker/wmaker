@@ -52,6 +52,27 @@ WMRunAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     panel = WMCreateAlertPanel(scrPtr, owner, title, msg, defaultButton,
 			       alternateButton, otherButton);
 
+    {
+	int px, py;
+	WMView *view = WMWidgetView(panel->win);
+	
+	if (owner) {
+	    WMView *oview = WMWidgetView(owner);
+	    WMPoint pt = WMGetViewScreenPosition(oview);
+
+	    px = (W_VIEW_WIDTH(oview)-W_VIEW_WIDTH(view))/2;
+	    py = (W_VIEW_HEIGHT(oview)-W_VIEW_HEIGHT(view))/2;
+	    
+	    px += pt.x;
+	    py += pt.y;
+	} else {
+	    px = (W_VIEW_WIDTH(scrPtr->rootView)-W_VIEW_WIDTH(view))/2;
+	    py = (W_VIEW_HEIGHT(scrPtr->rootView)-W_VIEW_HEIGHT(view))/2;
+	}
+	WMSetWindowInitialPosition(panel->win, px, py);
+    }
+			       
+    
     scrPtr->modalView = W_VIEW(panel->win);
     WMMapWidget(panel->win);
 
@@ -155,9 +176,9 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 
     /* create buttons */
     if (otherButton) 
-	ow = WMWidthOfString(scrPtr->normalFont, otherButton, 
+	ow = WMWidthOfString(scrPtr->normalFont, otherButton,
 			     strlen(otherButton));
-    
+
     if (alternateButton)
 	aw = WMWidthOfString(scrPtr->normalFont, alternateButton, 
 			     strlen(alternateButton));
@@ -166,43 +187,56 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 	dw = WMWidthOfString(scrPtr->normalFont, defaultButton,
 			     strlen(defaultButton));
     
-    w = dw + (scrPtr->buttonArrow ? scrPtr->buttonArrow->width : 0);
-    if (aw > w)
-	w = aw;
-    if (ow > w)
-	w = ow;
+    dw = dw + (scrPtr->buttonArrow ? scrPtr->buttonArrow->width : 0);
+    
+    aw += 30;
+    ow += 30;
+    dw += 30;
+    
+    w = WMAX(dw, WMAX(aw, ow));
+    if ((w+10)*3 < 400) {
+	aw = w;
+	ow = w;
+	dw = w;
+    } else {
+	int t;
 
-    w += 30;
+	t = 400 - 40 - aw - ow - dw;
+	aw += t/3;
+	ow += t/3;
+	dw += t/3;
+    }
+
     x = 400;
 
     if (defaultButton) {
-	x -= w + 10;
+	x -= dw + 10;
 	
 	panel->defBtn = WMCreateCommandButton(panel->win);
 	WMSetButtonAction(panel->defBtn, alertPanelOnClick, panel);
 	WMMoveWidget(panel->defBtn, x, 144);
-	WMResizeWidget(panel->defBtn, w, 24);
+	WMResizeWidget(panel->defBtn, dw, 24);
 	WMSetButtonText(panel->defBtn, defaultButton);
 	WMSetButtonImage(panel->defBtn, scrPtr->buttonArrow);
 	WMSetButtonAltImage(panel->defBtn, scrPtr->pushedButtonArrow);
 	WMSetButtonImagePosition(panel->defBtn, WIPRight);
     }
     if (alternateButton) {
-	x -= w + 10;
+	x -= aw + 10;
 
 	panel->altBtn = WMCreateCommandButton(panel->win);
 	WMMoveWidget(panel->altBtn, x, 144);
-	WMResizeWidget(panel->altBtn, w, 24);
+	WMResizeWidget(panel->altBtn, aw, 24);
 	WMSetButtonAction(panel->altBtn, alertPanelOnClick, panel);
 	WMSetButtonText(panel->altBtn, alternateButton);
     }
     if (otherButton) {
-	x -= w + 10;
+	x -= ow + 10;
 	
 	panel->othBtn = WMCreateCommandButton(panel->win);
 	WMSetButtonAction(panel->othBtn, alertPanelOnClick, panel);
 	WMMoveWidget(panel->othBtn, x, 144);
-	WMResizeWidget(panel->othBtn, w, 24);
+	WMResizeWidget(panel->othBtn, ow, 24);
 	WMSetButtonText(panel->othBtn, otherButton);	
     }
 
@@ -266,6 +300,27 @@ WMRunInputPanel(WMScreen *scrPtr, WMWindow *owner, char *title,
 
     panel = WMCreateInputPanel(scrPtr, owner, title, msg, defaultText, 
 			       okButton, cancelButton);
+
+
+    {
+	int px, py;
+	WMView *view = WMWidgetView(panel->win);
+	
+	if (owner) {
+	    WMView *oview = WMWidgetView(owner);
+	    WMPoint pt = WMGetViewScreenPosition(oview);
+
+	    px = (W_VIEW_WIDTH(oview)-W_VIEW_WIDTH(view))/2;
+	    py = (W_VIEW_HEIGHT(oview)-W_VIEW_HEIGHT(view))/2;
+	    
+	    px += pt.x;
+	    py += pt.y;
+	} else {
+	    px = (W_VIEW_WIDTH(scrPtr->rootView)-W_VIEW_WIDTH(view))/2;
+	    py = (W_VIEW_HEIGHT(scrPtr->rootView)-W_VIEW_HEIGHT(view))/2;
+	}
+	WMSetWindowInitialPosition(panel->win, px, py);
+    }
 
     WMMapWidget(panel->win);
 

@@ -692,6 +692,7 @@ WMSetViewNotifySizeChanges(WMView *view, Bool flag)
     view->flags.notifySizeChanged = flag;
 }
 
+
 Window
 WMViewXID(WMView *view)
 {

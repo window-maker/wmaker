@@ -10,6 +10,7 @@ changes since wmaker 0.62.1:
 - added WMReparentWidget()
 - added WMCreateTabViewItem()
 - added W_CreateUnmanagedTopView()
+- added wtokenize()
 
 changes since wmaker 0.62.0:
 ............................

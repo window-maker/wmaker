@@ -478,6 +478,7 @@ WMSetWindowInitialPosition(WMWindow *win, int x, int y)
 
 
 
+
 void
 WMSetWindowMinSize(WMWindow *win, unsigned width, unsigned height)
 {
