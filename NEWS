@@ -2,7 +2,7 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
---- 0.70.1
+--- 0.80.0
 
 Shading/Unshading windows using mouse wheel on their titlebar
 ---------------------------------------------------------
@@ -21,6 +21,68 @@ the button that corresponds to the mouse wheel direction.
 
 Practically speaking, this means that you have to move the mouse wheel up
 or down quickly, like when you want to quickly scroll over something big.
+
+
+Shared application icons
+------------------------
+
+Real application icon sharing was implemented in place of the collapse
+appicon thing. With this applications of the same instance.class will
+have a single shared application icon and hiding will hide all windows
+of the aplications attached to that appicon as if there is a single
+application. This feature is enabled by default for all applications in
+the global WMWindowAttributes defaults domain using:
+
+"*" = {SharedAppIcon = Yes;};
+
+If you're not satisfied with this or want the old behaviour back you
+can revert this (either in the global domain for all users or in your
+personal WMWindowAttibutes domain) using SharedAppIcon = No; for "*"
+It can also be enabled/disabled for individual applications as needed.
+
+Setting this option can be done using the window's inspector panel in the
+"Application Specific" section. You can set/unset it for all applications by
+using the "Defaults for all windows" in the "Window Specification" section
+
+Basically using this can have 2 major scenarios:
+1. Leave it on by default, but disable it for the few specific
+   applications that do not behave well with it. (default)
+2. Leave it off by default, and enable it for all applications for
+   which you want it enabled.
+
+At this point all applications we tested work ok, some of them even
+work better with this feature turned on: for example xmms and Corel's
+WorkPerfect8 now only have 1 appicon (they used to have 2 without this
+feature).
+
+This feature is turned off by default for the following applications
+because it's incompatible with them:
+1. all GNUstep applications
+2. applications with an application menu (wterm, Aileron, etc)
+
+As a side note: wterm can use the shared appicon feature as long as it
+doesn't use the appmenu (will do this by default). If you start it
+using the appmenu (wterm -wm) it will disable the shared appicon
+feature because apps with appmenus are incompatible with this feature.
+
+If an application is a GNUstep application or if it has an appmenu, it's
+detected automatically and the shared appicon is disabled automatically
+without any user intervention or need to configure anything.
+
+
+Dock/Clip stealing appicons
+---------------------------
+
+This feature is different form the Clip's "Autoattract Icons" feature
+as it won't attach any new icon to the dock/clip.
+What it does, is when you start an application by other means than
+dock/clip, like for example using the main menu or a terminal, it will
+search the dock/clips for the presence of an appicon for that
+application, that is not already running at that moment and will attach
+the started application to that appicon in the dock/clip if available,
+making it look like the dock/clip just stole the appicon for the started
+application. There is an animation for this to offer visual feedback
+that this happened.
 
 
 

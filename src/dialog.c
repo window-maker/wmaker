@@ -961,28 +961,50 @@ logoPushCallback(void *data)
     static int oldi = 0;
     int len;
     static int jingobeu[] = {
-	329, 150, -1, 100, 329, 150, -1, 100, 329, 300, -1, 250,
-	    329, 150, -1, 100, 329, 150, -1, 100,  329, 300, -1, 250,
-	    329, 150, 392, 150, 261, 150, 293, 150, 329, 400, -1, 400, 0
+        329, 150, -1, 100, 329, 150, -1, 100, 329, 300, -1, 250,
+        329, 150, -1, 100, 329, 150, -1, 100,  329, 300, -1, 250,
+        329, 150, 392, 150, 261, 150, 293, 150, 329, 400, -1, 400, 0
     };
     static int c = 0;
 
     if (panel->x) {
-	XKeyboardControl kc;
+        XKeyboardControl kc;
+        XKeyboardState ksave;
+        unsigned long mask = KBBellPitch|KBBellDuration|KBBellPercent;
+
+        XGetKeyboardControl(dpy, &ksave);
 
 	if (panel->x > 0) {
-	    if(jingobeu[panel->x-1]==0){panel->x=-1;}else if(jingobeu[panel->x
--1]<0){panel->x++;c=jingobeu[panel->x-1]/50;panel->x++;}else if(c==0){
-    kc.bell_pitch=jingobeu[panel->x-1];panel->x++;kc.bell_percent=50;c=
-	jingobeu[panel->x-1]/50;kc.bell_duration=jingobeu[panel->x-1];panel->x++;
-XChangeKeyboardControl(dpy,KBBellPitch|KBBellDuration|KBBellPercent,&kc);
-    XBell(dpy,50);XFlush(dpy);}else{c--;}}
+            if(jingobeu[panel->x-1]==0) {
+                panel->x=-1;
+            } else if (jingobeu[panel->x-1]<0) {
+                panel->x++;
+                c=jingobeu[panel->x-1]/50;
+                panel->x++;
+            } else if (c==0) {
+                kc.bell_percent=50;
+                kc.bell_pitch=jingobeu[panel->x-1];
+                panel->x++;
+                kc.bell_duration=jingobeu[panel->x-1];
+                c=jingobeu[panel->x-1]/50;
+                panel->x++;
+                XChangeKeyboardControl(dpy, mask, &kc);
+                XBell(dpy, 50);
+                XFlush(dpy);
+            } else {
+                c--;
+            }
+        }
 	if (!(panel->cycle % 4)) {
 	    WMPixmap *p;
 
 	    p = DoXThing(panel->wwin);
 	    WMSetLabelImage(panel->logoL, p);
-	}
+        }
+        kc.bell_pitch = ksave.bell_pitch;
+        kc.bell_percent = ksave.bell_percent;
+        kc.bell_duration = ksave.bell_duration;
+        XChangeKeyboardControl(dpy, mask, &kc);
     } else if (panel->cycle < 30) {
 	RImage *image;
         WMPixmap *pix;
@@ -1470,7 +1492,7 @@ wShowInfoPanel(WScreen *scr)
 	panel->timer = WMAddTimerHandler(100, logoPushCallback, panel);
 	panel->cycle = 0;
 	panel->x = 1;
-	panel->str = _("Merry X'mas!");
+	panel->str = _("Merry Christmas!");
 	panel->oldPix = WMRetainPixmap(WMGetLabelImage(panel->logoL));
     }
 #endif
