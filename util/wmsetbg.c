@@ -51,7 +51,7 @@
 
 #include <proplist.h>
 
-#define PROG_VERSION	"wmsetbg (Window Maker) 2.6"
+#define PROG_VERSION	"wmsetbg (Window Maker) 2.7"
 
 
 #define WORKSPACE_COUNT (MAX_WORKSPACES+1)
@@ -1444,7 +1444,7 @@ main(int argc, char **argv)
 
     if (helperMode) {
 	/* lower priority, so that it wont use all the CPU */
-	nice(1000);
+	nice(15);
 
 	helperLoop(rc);
     } else {

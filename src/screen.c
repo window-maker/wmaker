@@ -939,7 +939,7 @@ wScreenUpdateUsableArea(WScreen *scr)
 	lw = area->area.x1;
 	rw = scr->scr_width - area->area.x2;
 
-	if (WMIN(th, bh) < WMIN(lw, rw)) {
+	if (WMIN(th, bh) <= WMIN(lw, rw)) {
 	    /* horizontal */
 	    if (th < bh) {
 		/* on top */
