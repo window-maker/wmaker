@@ -133,6 +133,11 @@ RLoadJPEG(RContext *context, char *file_name, int index)
   
     jpeg_read_header(&cinfo, TRUE);
 
+    if (cinfo.image_width < 1 || cinfo.image_height < 1) {
+	RErrorCode = RERR_BADIMAGEFILE;
+	goto bye;
+    }
+
     bptr = buffer[0] = (JSAMPROW)malloc(cinfo.image_width*cinfo.num_components);
     if (!buffer[0]) {
 	RErrorCode = RERR_NOMEMORY;

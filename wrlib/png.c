@@ -112,6 +112,15 @@ RLoadPNG(RContext *context, char *file, int index)
     png_get_IHDR(png, pinfo, &width, &height, &depth, &color_type,
 		 &junk, &junk, &junk);
 
+
+    /* sanity check */
+    if (width < 1 || height < 1) {
+	fclose(f);
+	png_destroy_read_struct(&png, &pinfo, &einfo);
+	RErrorCode = RERR_BADIMAGEFILE;
+	return NULL;
+    }
+
     
     /* check for an alpha channel */
     if (png_get_valid(png, pinfo, PNG_INFO_tRNS))

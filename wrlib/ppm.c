@@ -154,7 +154,7 @@ RLoadPPM(RContext *context, char *file_name, int index)
     }
     
     /* get size */
-    if (sscanf(buffer, "%i %i", &w, &h)!=2)
+    if (sscanf(buffer, "%i %i", &w, &h)!=2 || w < 1 || h < 1)
 	goto bad_file;
     
 

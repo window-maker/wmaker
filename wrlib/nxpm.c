@@ -86,7 +86,7 @@ RGetImageFromXPMData(RContext *context, char **data)
     int w, h, ccount, csize;
 
     if (sscanf(data[line++], "%i %i %i %i", &w, &h, &ccount, &csize)!=4
-	|| w <= 0 || h <= 0 || ccount <= 0 || csize <= 0)
+	|| w <= 1 || h <= 1 || ccount <= 0 || csize <= 0)
 	goto bad_format;
     
     if (csize!=1 && csize!=2) 
