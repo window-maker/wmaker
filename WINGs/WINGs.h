@@ -1475,6 +1475,8 @@ void WMSetRulerReleaseAction(WMRuler *rPtr, WMAction *action, void *clientData);
 WMText *WMCreateTextForDocumentType(WMWidget *parent, 
 	WMAction *parser, WMAction *writer);
 
+void WMSetTextDelegate(WMText *tPtr, WMTextDelegate *delegate);
+
 void WMFreezeText(WMText *tPtr); 
 
 void WMThawText(WMText *tPtr);

@@ -1840,13 +1840,10 @@ reqBlockSize(unsigned short requested)
 
 
 static void
-clearText(Text *tPtr, int destroy)
+clearText(Text *tPtr)
 {
     tPtr->vpos = tPtr->hpos = 0;
     tPtr->docHeight = tPtr->docWidth = 0;
-
-    if(!destroy)
-        updateScrollers(tPtr);
 
     if (!tPtr->firstTextBlock) 
         return;
@@ -1858,6 +1855,7 @@ clearText(Text *tPtr, int destroy)
     tPtr->currentTextBlock = NULL;
     tPtr->lastTextBlock = NULL;
     WMEmptyArray(tPtr->gfxItems);
+    updateScrollers(tPtr);
 }
 
 static void
@@ -2533,7 +2531,7 @@ handleEvents(XEvent *event, void *data)
 
 
         case DestroyNotify:
-            clearText(tPtr, True);
+            clearText(tPtr);
             if(tPtr->hS)
                 WMDestroyWidget(tPtr->hS);
             if(tPtr->vS)
@@ -2995,7 +2993,7 @@ WMPrependTextStream(WMText *tPtr, char *text)
         if(tPtr->flags.ownsSelection)
             releaseSelection(tPtr);
         else
-            clearText(tPtr, False);
+            clearText(tPtr);
         return;
     }
 
@@ -3018,7 +3016,7 @@ WMAppendTextStream(WMText *tPtr, char *text)
         if(tPtr->flags.ownsSelection)
             releaseSelection(tPtr);
         else
-            clearText(tPtr, False);
+            clearText(tPtr);
         return;
     }
 
