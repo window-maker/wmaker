@@ -2852,8 +2852,11 @@ windowLanguageClick(WCoreWindow *sender, void *data, XEvent *event)
     tl = wwin->frame->languagemode;
     wwin->frame->languagemode = wwin->frame->last_languagemode;
     wwin->frame->last_languagemode = tl;
-    wFrameWindowPaint(fwin);
     wSetFocusTo(scr, wwin);
+    wwin->frame->languagebutton_image = 
+        wwin->frame->screen_ptr->b_pixmaps[WBUT_XKBGROUP1 + 
+        wwin->frame->languagemode];
+    wFrameWindowUpdateLanguageButton(wwin->frame);
     if (event->xbutton.button == Button3)
 	return;
     wRaiseFrame(fwin->core);

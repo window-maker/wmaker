@@ -1260,6 +1260,16 @@ wFrameWindowUpdatePushButton(WFrameWindow *fwin, Bool pushed)
 #endif /* OLWM_HINTS */
 
 
+#ifdef XKB_BUTTON_HINT
+void
+wFrameWindowUpdateLanguageButton(WFrameWindow *fwin)
+{
+    paintButton(fwin->language_button, fwin->title_texture[fwin->flags.state],
+		fwin->title_pixel[fwin->flags.state],
+		fwin->languagebutton_image, True);
+}
+#endif /* XKB_BUTTON_HINT */
+
 
 /*********************************************************************/
 
@@ -1421,21 +1431,19 @@ handleButtonExpose(WObjDescriptor *desc, XEvent *event)
 
 #ifdef XKB_BUTTON_HINT
     if (button == fwin->language_button) {
-
         if (wPreferences.modelock){
             paintButton(button, fwin->title_texture[fwin->flags.state],
-                fwin->title_pixel[fwin->flags.state],
-                fwin->languagebutton_image, False);
+                    fwin->title_pixel[fwin->flags.state],
+                    fwin->languagebutton_image, False);
         }
     } else 
 #endif
-
     if (button == fwin->left_button) {
-	paintButton(button, fwin->title_texture[fwin->flags.state],
-		    fwin->title_pixel[fwin->flags.state],
-		    fwin->lbutton_image, False);
+        paintButton(button, fwin->title_texture[fwin->flags.state],
+                fwin->title_pixel[fwin->flags.state],
+                fwin->lbutton_image, False);
     } else {
-	Bool pushed = False;
+        Bool pushed = False;
 
 #ifdef OLWM_HINTS
 	if (fwin->flags.right_button_pushed_in)

@@ -180,4 +180,8 @@ int wFrameWindowChangeTitle(WFrameWindow *fwin, char *new_title);
 void wFrameWindowUpdatePushButton(WFrameWindow *fwin, Bool pushed);
 #endif
 
+#ifdef XKB_BUTTON_HINT
+void wFrameWindowUpdateLanguageButton(WFrameWindow *fwin);
+#endif
+
 #endif

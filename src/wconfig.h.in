@@ -244,6 +244,10 @@
  *--------------------------------------------------------------------
  */
 
+#if defined(GNOME_STUFF) && !defined(XDND)
+#define XDND
+#endif
+
 /* list of paths to look for the config files, searched in order 
  * of appearance */
 #define DEF_CONFIG_PATHS \
@@ -596,7 +600,8 @@
  * in def_pixmaps.h and default icon is now for Thai language only.
  * More icons are welcome.
  */
-#undef XKB_BUTTON_HINT
+#define XKB_BUTTON_HINT
+#undef LANGUAGE_TH
 #endif
 
 #ifndef DEMATERIALIZE_ICON
