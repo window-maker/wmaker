@@ -38,14 +38,16 @@ Changes since version 0.53.0:
 - fixed crash when moving internal window with kbd
 - fixed compilation problem on IRIX machines (Neil Muller
 						<neil@octane.sun.ac.za>)
-- made images with a transparent color used a background use the default color
-  (Nicolas <NV04@wanadoo.fr>)
 - replace xde support drop on dock with xdnd.
 - added an (internal use) environment variable for telling WPrefs whats's
   the name of the wmaker binary being ran.
 - more elegant text entries in Clip's menu, regarding single/multiple
   selected icons.
-
+- fixed cosmetic bug in geom. dpy window for 8bpp
+- removed --enable-kanji and added MultiByteText option
+- rewrote font code to use WINGs
+- made autoraise only work for the active window
+- fixed compilation problem with OpenWindows and other non-X11R6 systems..
 
 Changes since version 0.52.0:
 .............................

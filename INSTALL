@@ -129,10 +129,9 @@ CONFIGURE OPTIONS:
 These options can be passed to the configure script to enable/disable
 some Window Maker features. Example:
 
-./configure --enable-kanji
+./configure --enable-kde --enable-gnome
 
-will configure Window Maker with kanji (and other multi-byte) characters
-support compiled in.
+will configure Window Maker with KDE and GNOME supported compiled in.
 
 
 To get a list of other options, run ./configure --help
@@ -146,10 +145,6 @@ To get a list of other options, run ./configure --help
 	specify additional paths for header files to be searched.
 	The -I flag must precede each paths, like:
 	--with-incs-from="-I/opt/headers -I/usr/local/include"
-
---enable-kanji
-	support to display Kanji characters, Korean, Chinese and other
-	languagues that require special characters.
 
 --enable-single-icon
 	enables the collapsing of all appicons of the WM_CLASS+WM_INSTANCE
@@ -342,9 +337,9 @@ following.
 	to get a complete listing of other options that are available.
 
 	2. Run configure with the options you want. For example, if you
-	want to use the --enable-kanji option, type:
+	want to use the --enable-kde option, type:
 
-	./configure --enable-kanji
+	./configure --enable-kde
 
 	3. (optional) Edit src/wconfig.h with your favorite text editor 
 	and browse through it for some options you might want to change.
@@ -522,7 +517,8 @@ Read po/README if you wish to translate and maintain locale files
 for other languages.
 
 2 - Additionally, if your language uses multi-byte characters, such
-as Japanese or Korean, you must supply the --enable-kanji flag to configure.
+as Japanese or Korean, you must set the MultiByteText option to YES
+in ~/GNUstep/Defaults/WMGLOBAL and ~/GNUstep/Defaults/WindowMaker
 
 3 - Configure, build and install Window Maker normally.
 
@@ -573,3 +569,6 @@ BoldSystemFont = "-*-*-medium-r-normal-*-%d-*-*-*-*-*-*-*";
 
 The above 2 fonts are only used by applications that use WINGs (WindowMaker
 and WPrefs.app)
+
+The wsetfont script that's supplied will allow you to change the font
+settings in a easier way. Take a look in the script for details on usage.

@@ -246,20 +246,13 @@ done
 
 dnl Kanji Characters support
 dnl ========================
-I18n=no
-AC_ARG_ENABLE(kanji,
-[  --enable-kanji	  multibyte character support (kanji, Korean etc.)],,
-		enable_kanji=no)
 
-if test "$enable_kanji" = yes; then
-	case $host_os in
+case $host_os in
 	freebsd*)
 		AC_CHECK_LIB(xpg4, setlocale, [LIBS="$LIBS -lxpg4"]);;
 	*)
-		;;
-	esac
-        AC_DEFINE(I18N_MB)
-fi
+	;;
+esac
 
 
 
@@ -334,6 +327,8 @@ dnl ===========================================
 
 AC_PATH_XTRA
 
+X_LIBRARY_PATH=$x_library
+
 XCFLAGS="$X_CFLAGS"
 
 XLFLAGS="$X_LIBS"
@@ -343,6 +338,10 @@ XLIBS="-lX11 $X_EXTRA_LIBS"
 
 lib_search_path="$lib_search_path $XLFLAGS"
 inc_search_path="$inc_search_path $XCFLAGS"
+
+
+AC_SUBST(X_LIBRARY_PATH)
+
 
 
 dnl Decide which locale function to use, setlocale() or _Xsetlocale()

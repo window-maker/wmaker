@@ -38,6 +38,17 @@ will load the theme, but keep the titlebar background related options as
 before.
 
 
+MultiByte Text Support Changes
+------------------------------
+
+The --enable-kanji configure option is not needed anymore and was removed.
+To enable support for multibyte text, you must:
+- set the LANG environment variable to the appropriate value
+- change the font configurations to contain font sets in the appropriate
+  encodings in both ~/G/D/WindowMaker and ~/G/D/WMGLOBAL (for WPrefs)
+- set the MultiByteText option to YES in both of the above files
+
+
 New Options
 -----------
 
