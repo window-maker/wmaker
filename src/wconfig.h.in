@@ -299,28 +299,28 @@
 /* Zoom animation */
 #define MINIATURIZE_ANIMATION_FRAMES_Z   5
 #define MINIATURIZE_ANIMATION_STEPS_Z    12
-#define MINIATURIZE_ANIMATION_DELAY_Z    500
+#define MINIATURIZE_ANIMATION_DELAY_Z    10000
 /* Twist animation */
 #define MINIATURIZE_ANIMATION_FRAMES_T   12
 #define MINIATURIZE_ANIMATION_STEPS_T    16
-#define MINIATURIZE_ANIMATION_DELAY_T    1000
+#define MINIATURIZE_ANIMATION_DELAY_T    20000
 #define MINIATURIZE_ANIMATION_TWIST_T    0.5
 /* Flip animation */
 #define MINIATURIZE_ANIMATION_FRAMES_F   12
 #define MINIATURIZE_ANIMATION_STEPS_F    16
-#define MINIATURIZE_ANIMATION_DELAY_F    1000
+#define MINIATURIZE_ANIMATION_DELAY_F    20000
 #define MINIATURIZE_ANIMATION_TWIST_F    0.5
 
 
 #define HIDE_ANIMATION_STEPS (MINIATURIZE_ANIMATION_STEPS*2/3)
 
-/* delay before balloon is showed */
-#define BALLOON_DELAY	1000
+/* delay before balloon is shown (ms) */
+#define BALLOON_DELAY	        1000
 
-/* delay for menu item selection hysteresis */
-#define MENU_SELECT_DELAY 200
+/* delay for menu item selection hysteresis (ms) */
+#define MENU_SELECT_DELAY       200
 
-/* delay for jumpback of scrolled menus */
+/* delay for jumpback of scrolled menus (ms) */
 #define MENU_JUMP_BACK_DELAY 	400
 
 /* *** animation speed constants *** */

@@ -7,6 +7,8 @@ Changes since version 0.90.0:
 - enhanced alt-tab panel, added theming ability
 - fixed issues with broken crash dialog
 - removed obsoleted options from wconfig.h
+- changed animation delay constants to fix issues with 2.6.x linux kernels
+  (patch provided by Eric Piel <Eric.Piel@lifl.fr>)
 
 
 Changes since version 0.80.2:
