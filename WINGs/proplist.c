@@ -1031,6 +1031,91 @@ WMCreatePLDictionary(WMPropList *key, WMPropList *value, ...)
 }
 
 
+WMPropList*
+WMRetainPropList(WMPropList *plist)
+{
+    WMPropList *key, *value;
+    WMHashEnumerator e;
+    int i;
+
+    plist->retainCount++;
+
+    switch(plist->type) {
+    case WPLString:
+    case WPLData:
+        break;
+    case WPLArray:
+        for (i=0; i<WMGetArrayItemCount(plist->d.array); i++) {
+            WMRetainPropList(WMGetFromArray(plist->d.array, i));
+        }
+        break;
+    case WPLDictionary:
+        e = WMEnumerateHashTable(plist->d.dict);
+        while (WMNextHashEnumeratorItemAndKey(&e, (void**)&value, (void**)&key)) {
+            WMRetainPropList(key);
+            WMRetainPropList(value);
+        }
+        break;
+    default:
+        wwarning(_("Used proplist functions on non-WMPropLists objects"));
+        wassertrv(False, NULL);
+        break;
+    }
+
+    return plist;
+}
+
+
+void
+WMReleasePropList(WMPropList *plist)
+{
+    WMPropList *key, *value;
+    WMHashEnumerator e;
+    int i;
+
+    plist->retainCount--;
+
+    switch(plist->type) {
+    case WPLString:
+        if (plist->retainCount < 1) {
+            wfree(plist->d.string);
+            wfree(plist);
+        }
+        break;
+    case WPLData:
+        if (plist->retainCount < 1) {
+            WMReleaseData(plist->d.data);
+            wfree(plist);
+        }
+        break;
+    case WPLArray:
+        for (i=0; i<WMGetArrayItemCount(plist->d.array); i++) {
+            WMReleasePropList(WMGetFromArray(plist->d.array, i));
+        }
+        if (plist->retainCount < 1) {
+            WMFreeArray(plist->d.array);
+            wfree(plist);
+        }
+        break;
+    case WPLDictionary:
+        e = WMEnumerateHashTable(plist->d.dict);
+        while (WMNextHashEnumeratorItemAndKey(&e, (void**)&value, (void**)&key)) {
+            WMReleasePropList(key);
+            WMReleasePropList(value);
+        }
+        if (plist->retainCount < 1) {
+            WMFreeHashTable(plist->d.dict);
+            wfree(plist);
+        }
+        break;
+    default:
+        wwarning(_("Used proplist functions on non-WMPropLists objects"));
+        wassertr(False);
+        break;
+    }
+}
+
+
 void
 WMInsertInPLArray(WMPropList *plist, int index, WMPropList *item)
 {
@@ -1129,88 +1214,24 @@ WMMergePLDictionaries(WMPropList *dest, WMPropList *source)
 }
 
 
-WMPropList*
-WMRetainPropList(WMPropList *plist)
+int
+WMGetPropListItemCount(WMPropList *plist)
 {
-    WMPropList *key, *value;
-    WMHashEnumerator e;
-    int i;
-
-    plist->retainCount++;
-
     switch(plist->type) {
     case WPLString:
     case WPLData:
-        break;
+        return 0; /* should this be 1 instead? */
     case WPLArray:
-        for (i=0; i<WMGetArrayItemCount(plist->d.array); i++) {
-            WMRetainPropList(WMGetFromArray(plist->d.array, i));
-        }
-        break;
+        return WMGetArrayItemCount(plist->d.array);
     case WPLDictionary:
-        e = WMEnumerateHashTable(plist->d.dict);
-        while (WMNextHashEnumeratorItemAndKey(&e, (void**)&value, (void**)&key)) {
-            WMRetainPropList(key);
-            WMRetainPropList(value);
-        }
-        break;
+        return (int)WMCountHashTable(plist->d.dict);
     default:
         wwarning(_("Used proplist functions on non-WMPropLists objects"));
-        wassertrv(False, NULL);
+        wassertrv(False, 0);
         break;
     }
 
-    return plist;
-}
-
-
-void
-WMReleasePropList(WMPropList *plist)
-{
-    WMPropList *key, *value;
-    WMHashEnumerator e;
-    int i;
-
-    plist->retainCount--;
-
-    switch(plist->type) {
-    case WPLString:
-        if (plist->retainCount < 1) {
-            wfree(plist->d.string);
-            wfree(plist);
-        }
-        break;
-    case WPLData:
-        if (plist->retainCount < 1) {
-            WMReleaseData(plist->d.data);
-            wfree(plist);
-        }
-        break;
-    case WPLArray:
-        for (i=0; i<WMGetArrayItemCount(plist->d.array); i++) {
-            WMReleasePropList(WMGetFromArray(plist->d.array, i));
-        }
-        if (plist->retainCount < 1) {
-            WMFreeArray(plist->d.array);
-            wfree(plist);
-        }
-        break;
-    case WPLDictionary:
-        e = WMEnumerateHashTable(plist->d.dict);
-        while (WMNextHashEnumeratorItemAndKey(&e, (void**)&value, (void**)&key)) {
-            WMReleasePropList(key);
-            WMReleasePropList(value);
-        }
-        if (plist->retainCount < 1) {
-            WMFreeHashTable(plist->d.dict);
-            wfree(plist);
-        }
-        break;
-    default:
-        wwarning(_("Used proplist functions on non-WMPropLists objects"));
-        wassertr(False);
-        break;
-    }
+    return 0;
 }
 
 
@@ -1290,27 +1311,6 @@ WMIsPropListEqualTo(WMPropList *plist, WMPropList *other)
     }
 
     return False;
-}
-
-
-int
-WMGetPropListItemCount(WMPropList *plist)
-{
-    switch(plist->type) {
-    case WPLString:
-    case WPLData:
-        return 0; /* should this be 1 instead? */
-    case WPLArray:
-        return WMGetArrayItemCount(plist->d.array);
-    case WPLDictionary:
-        return (int)WMCountHashTable(plist->d.dict);
-    default:
-        wwarning(_("Used proplist functions on non-WMPropLists objects"));
-        wassertrv(False, 0);
-        break;
-    }
-
-    return 0;
 }
 
 
@@ -1482,13 +1482,6 @@ WMDeepCopyPropList(WMPropList *plist)
 }
 
 
-char*
-WMGetPropListDescription(WMPropList *plist, Bool indented)
-{
-    return (indented ? indentedDescription(plist, 0) : description(plist));
-}
-
-
 WMPropList*
 WMCreatePropListFromDescription(char *desc)
 {
@@ -1517,6 +1510,13 @@ WMCreatePropListFromDescription(char *desc)
     wfree(pldata);
 
     return plist;
+}
+
+
+char*
+WMGetPropListDescription(WMPropList *plist, Bool indented)
+{
+    return (indented ? indentedDescription(plist, 0) : description(plist));
 }
 
 

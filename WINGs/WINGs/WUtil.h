@@ -757,6 +757,10 @@ WMPropList* WMCreatePLArray(WMPropList *elem, ...);
 
 WMPropList* WMCreatePLDictionary(WMPropList *key, WMPropList *value, ...);
 
+WMPropList* WMRetainPropList(WMPropList *plist);
+
+void WMReleasePropList(WMPropList *plist);
+
 void WMInsertInPLArray(WMPropList *plist, int index, WMPropList *item);
 
 void WMAddToPLArray(WMPropList *plist, WMPropList *item);
@@ -771,9 +775,7 @@ void WMRemoveFromPLDictionary(WMPropList *plist, WMPropList *key);
 
 WMPropList* WMMergePLDictionaries(WMPropList *dest, WMPropList *source);
 
-WMPropList* WMRetainPropList(WMPropList *plist);
-
-void WMReleasePropList(WMPropList *plist);
+int WMGetPropListItemCount(WMPropList *plist);
 
 Bool WMIsPLString(WMPropList *plist);
 
@@ -784,8 +786,6 @@ Bool WMIsPLArray(WMPropList *plist);
 Bool WMIsPLDictionary(WMPropList *plist);
 
 Bool WMIsPropListEqualTo(WMPropList *plist, WMPropList *other);
-
-int WMGetPropListItemCount(WMPropList *plist);
 
 char* WMGetFromPLString(WMPropList *plist);
 
@@ -805,9 +805,9 @@ WMPropList* WMShallowCopyPropList(WMPropList *plist);
 
 WMPropList* WMDeepCopyPropList(WMPropList *plist);
 
-char* WMGetPropListDescription(WMPropList *plist, Bool indented);
-
 WMPropList* WMCreatePropListFromDescription(char *desc);
+
+char* WMGetPropListDescription(WMPropList *plist, Bool indented);
 
 WMPropList* WMReadPropListFromFile(char *file);
 
