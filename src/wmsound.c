@@ -37,15 +37,21 @@ wSoundServerGrab(Window wm_win)
 	    }
 	    
 	    XGetClassHint (dpy, lstChildren[indexCount], retHint);
-	    if (retHint->res_class) {
-		if (strcmp("WMSoundServer", retHint->res_class) == 0) {
-		    soundServer = lstChildren[indexCount];
-		    XFree(lstChildren);
-		    if(retHint) {
-			XFree(retHint);
-		    }
-		    return;
-		}
+
+            if (retHint->res_class) {
+                if (strcmp("WMSoundServer", retHint->res_class)==0 ||
+                    /*strcmp("WSoundServer", retHint->res_class)==0 ||*/
+                    (retHint->res_name &&
+                     strcmp("wsoundserver", retHint->res_name)==0 &&
+                     strcmp("DockApp", retHint->res_class)==0)) {
+
+                    soundServer = lstChildren[indexCount];
+                    XFree(lstChildren);
+                    if(retHint) {
+                        XFree(retHint);
+                    }
+                    return;
+                }
 	    }
 	    XFree(retHint);
 	    retHint = 0;

@@ -3,6 +3,7 @@
  *  Raster graphics library
  *
  *  Copyright (c) 1997-2000 Alfredo K. Kojima
+ *  Copyright (c) 1998-2000 Dan Pascu
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -249,7 +250,7 @@ renderDGradient(unsigned width, unsigned height, int r0, int g0, int b0,
         return NULL;
     }
 
-    a = (((width - 1)<<16) / ((height - 1)<<16)) * 3;
+    a = (((width - 1)<<16) / (height - 1)) * 3;
 
     width *= 3;
     /* copy the first line to the other lines with corresponding offset */

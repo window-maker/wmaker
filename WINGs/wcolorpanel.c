@@ -2160,7 +2160,7 @@ wheelRender(W_ColorPanel *panel)
     unsigned long	ofs = 0;
     unsigned char	shift = getShift(sizeof(unsigned char));
     
-    image = RCreateImage(colorWheelSize+4, colorWheelSize+4, False);
+    image = RCreateImage(colorWheelSize+4, colorWheelSize+4, True);
     if (!image) {
 	wwarning(NO_MEMORY_ERR);
 	return;
@@ -2180,11 +2180,13 @@ wheelRender(W_ColorPanel *panel)
 			panel->wheelMtrx->data[1][ofs] ]);
 		*(ptr++) = (unsigned char)(panel->wheelMtrx->values[
 			panel->wheelMtrx->data[2][ofs] ]);
+		*(ptr++) = 0;
 	    }
 	    else {
 		*(ptr++) = (unsigned char)(gray.red);
 		*(ptr++) = (unsigned char)(gray.green);
 		*(ptr++) = (unsigned char)(gray.blue);
+		*(ptr++) = 255;
 	    }
 	    ofs++;
 	}
@@ -3003,8 +3005,8 @@ customPalettePositionSelection(W_ColorPanel *panel, int x, int y)
     panel->palx = x;
     panel->paly = y;
     
-    ofs = rint(x * panel->palXRatio) + rint(y * panel->palYRatio) * 
-	panel->customPaletteImg->width * 3;
+    ofs = (rint(x * panel->palXRatio) + rint(y * panel->palYRatio) * 
+	panel->customPaletteImg->width) * 3;
     
     panel->color.rgb.red   = panel->customPaletteImg->data[ofs];
     panel->color.rgb.green = panel->customPaletteImg->data[ofs+1];
