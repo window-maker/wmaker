@@ -339,6 +339,79 @@ WMCreateAntialiasedFont(WMScreen *scrPtr, char *fontName)
 
 
 WMFont*
+WMCreateAntialiasedFontSet(WMScreen *scrPtr, char *fontName)
+{
+#ifdef XFT
+    WMFont *font;
+    Display *display = scrPtr->display;
+    char *fname, *ptr;
+
+    if (!scrPtr->hasXftSupport)
+        return NULL;
+
+    fontName = xlfdFromFontName(fontName, True);
+
+    // use the second in list if available, instead of first?
+    if ((ptr = strchr(fontName, ','))) {
+        fname = wmalloc(ptr - fontName + 1);
+	strncpy(fname, fontName, ptr - fontName);
+	fname[ptr - fontName] = 0;
+    } else {
+	fname = wstrdup(fontName);
+    }
+
+    wfree(fontName);
+
+    font = WMHashGet(scrPtr->xftFontSetCache, fname);
+    if (font) {
+	WMRetainFont(font);
+	wfree(fname);
+	return font;
+    }
+
+    font = wmalloc(sizeof(WMFont));
+    memset(font, 0, sizeof(WMFont));
+
+    font->notFontSet = 0;
+    font->antialiased = 1;
+
+    font->screen = scrPtr;
+
+#if 0
+    /* // Xft sux. Loading a font that doesn't exist will load the default
+     * defined in XftConfig without any warning or error */
+    font->font.normal = XLoadQueryFont(display, fname);
+    if (!font->font.normal) {
+        wfree(font);
+        wfree(fname);
+        return NULL;
+    }
+    XFreeFont(display, font->font.normal);
+#endif
+
+    font->font.xft = XftFontOpenXlfd(display, scrPtr->screen, fname);
+    if (!font->font.xft) {
+        wfree(font);
+        wfree(fname);
+        return NULL;
+    }
+    font->height = font->font.xft->ascent+font->font.xft->descent;
+    font->y = font->font.xft->ascent;
+
+    font->refCount = 1;
+
+    font->name = fname;
+
+    assert(WMHashInsert(scrPtr->xftFontSetCache, font->name, font)==NULL);
+
+    return font;
+#else
+    return NULL;
+#endif
+}
+
+
+WMFont*
 WMCreateFont(WMScreen *scrPtr, char *fontName)
 {
     return WMCreateFontWithFlags(scrPtr, fontName, WFDefaultFont);
@@ -363,12 +436,13 @@ WMCreateFontWithFlags(WMScreen *scrPtr, char *fontName, WMFontFlags flags)
         antialiased = False;
     }
 
-    /* Multibyte with antialiasing is not implemented. To avoid problems,
-     * if both multiByte and antialiasing are enabled, ignore antialiasing
-     * and return a FontSet.
-     */
-    if (multiByte) {
-	font = WMCreateFontSet(scrPtr, fontName);
+    if (antialiased && multiByte) {
+        font = WMCreateAntialiasedFontSet(scrPtr, fontName);
+        /* If we cannot create an antialiased font set and antialiasing is
+         * not explicitly requested in flags, fallback to standard font sets */
+        if (!font && (flags & WFAntialiased)==0) {
+            font = WMCreateFontSet(scrPtr, fontName);
+        }
     } else if (antialiased) {
         font = WMCreateAntialiasedFont(scrPtr, fontName);
         /* If we cannot create an antialiased font and antialiasing is
@@ -376,6 +450,8 @@ WMCreateFontWithFlags(WMScreen *scrPtr, char *fontName, WMFontFlags flags)
         if (!font && (flags & WFAntialiased)==0) {
             font = WMCreateNormalFont(scrPtr, fontName);
         }
+    } else if (multiByte) {
+	font = WMCreateFontSet(scrPtr, fontName);
     } else {
         font = WMCreateNormalFont(scrPtr, fontName);
     }
@@ -402,21 +478,22 @@ WMReleaseFont(WMFont *font)
 
     font->refCount--;
     if (font->refCount < 1) {
-        if (font->notFontSet) {
-            if (font->antialiased) {
+        if (font->antialiased) {
 #ifdef XFT
-                XftFontClose(font->screen->display, font->font.xft);
+            XftFontClose(font->screen->display, font->font.xft);
 #else
-                assert(False);
+            assert(False);
 #endif
-            } else {
-                XFreeFont(font->screen->display, font->font.normal);
-            }
+        } else if (font->notFontSet) {
+            XFreeFont(font->screen->display, font->font.normal);
         } else {
-	    XFreeFontSet(font->screen->display, font->font.set);
-	}
+            XFreeFontSet(font->screen->display, font->font.set);
+        }
+
         if (font->name) {
-            if (font->antialiased) {
+            if (font->antialiased && !font->notFontSet) {
+                WMHashRemove(font->screen->xftFontSetCache, font->name);
+            } else if (font->antialiased) {
                 WMHashRemove(font->screen->xftFontCache, font->name);
             } else if (font->notFontSet) {
                 WMHashRemove(font->screen->fontCache, font->name);
@@ -490,20 +567,32 @@ makeSystemFontOfSize(WMScreen *scrPtr, int size, Bool bold)
     }
 #undef WConf
 
-    if (scrPtr->useMultiByte) {
-        font = WMCreateFontSet(scrPtr, fontSpec);
+    if (scrPtr->antialiasedText && scrPtr->useMultiByte) {
+        font = WMCreateAntialiasedFontSet(scrPtr, xftFontSpec);
     } else if (scrPtr->antialiasedText) {
         font = WMCreateAntialiasedFont(scrPtr, xftFontSpec);
+    } else if (scrPtr->useMultiByte) {
+        font = WMCreateFontSet(scrPtr, fontSpec);
     } else {
         font = WMCreateNormalFont(scrPtr, fontSpec);
     }
 
     if (!font) {
-        if (scrPtr->useMultiByte) {
-            wwarning(_("could not load font set %s. Trying fixed."), fontSpec);
-            font = WMCreateFontSet(scrPtr, "fixed");
+        if (scrPtr->antialiasedText && scrPtr->useMultiByte) {
+            // is arial a good fallback for multibyte?
+            wwarning(_("could not load font %s. Trying arial."), xftFontSpec);
+            if (bold) {
+                font = WMCreateAntialiasedFontSet(scrPtr, "-*-arial-bold-r-normal-*-12-*-*-*-*-*-*-*");
+            } else {
+                font = WMCreateAntialiasedFontSet(scrPtr, "-*-arial-medium-r-normal-*-12-*-*-*-*-*-*-*");
+            }
             if (!font) {
-                font = WMCreateFontSet(scrPtr, "-*-fixed-medium-r-normal-*-14-*-*-*-*-*-*-*");
+                wwarning(_("could not load antialiased font set. Reverting to standard font sets."));
+                font = WMCreateFontSet(scrPtr, fontSpec);
+                if (!font) {
+                    wwarning(_("could not load FontSet %s. Trying fixed."), fontSpec);
+                    font = WMCreateFontSet(scrPtr, "fixed");
+                }
             }
         } else if (scrPtr->antialiasedText) {
             wwarning(_("could not load font %s. Trying arial."), xftFontSpec);
@@ -519,6 +608,12 @@ makeSystemFontOfSize(WMScreen *scrPtr, int size, Bool bold)
                     wwarning(_("could not load font %s. Trying fixed."), fontSpec);
                     font = WMCreateNormalFont(scrPtr, "fixed");
                 }
+            }
+        } else if (scrPtr->useMultiByte) {
+            wwarning(_("could not load font set %s. Trying fixed."), fontSpec);
+            font = WMCreateFontSet(scrPtr, "fixed");
+            if (!font) {
+                font = WMCreateFontSet(scrPtr, "-*-fixed-medium-r-normal-*-14-*-*-*-*-*-*-*");
             }
         } else {
             wwarning(_("could not load font %s. Trying fixed."), fontSpec);
@@ -557,10 +652,10 @@ WMGetFontFontSet(WMFont *font)
 {
     wassertrv(font!=NULL, NULL);
 
-    if (font->notFontSet)
-	return NULL;
-    else
-	return font->font.set;
+    if (!font->notFontSet && !font->antialiased)
+        return font->font.set;
+
+    return NULL;
 }
 
 
@@ -570,27 +665,49 @@ WMWidthOfString(WMFont *font, char *text, int length)
     wassertrv(font!=NULL, 0);
     wassertrv(text!=NULL, 0);
 
-    if (font->notFontSet) {
-        if (font->antialiased) {
+    if (font->antialiased) {
 #ifdef XFT
-            XGlyphInfo extents;
+        XGlyphInfo extents;
 
+        if (!font->notFontSet) {
+            wchar_t *wtext;
+            char *mtext;
+
+            /* Use mtext instead of text, because mbstrtowcs() alters it */
+            mtext = text;
+            wtext = (wchar_t *)wmalloc(4*length+4);
+            // pass a real ps instead of NULL below? for multithread safety as
+            // from manual
+            if (mbsrtowcs(wtext, &mtext, length, NULL)==length) {
+                XftTextExtents32(font->screen->display, font->font.xft,
+                                 (XftChar32 *)wtext, length, &extents);
+            } else {
+                // - should rather say that conversion to widechar failed?
+                // - use mtext instead of text so that the position of the
+                //   invalid sequence is shown?
+                wwarning(_("Invalid multibyte sequence: '%s'\n"), text);
+                XftTextExtents8(font->screen->display, font->font.xft,
+                                (XftChar8 *)text, length, &extents);
+            }
+            wfree(wtext);
+        } else {
             XftTextExtents8(font->screen->display, font->font.xft,
                             (XftChar8 *)text, length, &extents);
-            return extents.xOff; /* don't ask :P */
-#else
-            assert(False);
-#endif
-        } else {
-            return XTextWidth(font->font.normal, text, length);
         }
+
+        return extents.xOff; /* don't ask :P */
+#else
+        wassertrv(False, 0);
+#endif
+    } else if (font->notFontSet) {
+        return XTextWidth(font->font.normal, text, length);
     } else {
-	XRectangle rect;
-	XRectangle AIXsucks;
-	
-	XmbTextExtents(font->font.set, text, length, &AIXsucks, &rect);
-	
-	return rect.width;
+        XRectangle rect;
+        XRectangle AIXsucks;
+
+        XmbTextExtents(font->font.set, text, length, &AIXsucks, &rect);
+
+        return rect.width;
     }
 }
 
@@ -602,30 +719,49 @@ WMDrawString(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
 {
     wassertr(font!=NULL);
 
-    if (font->notFontSet) {
-        if (font->antialiased) {
+    if (font->antialiased) {
 #ifdef XFT
-            XftColor xftcolor;
+        XftColor xftcolor;
 
-            xftcolor.color.red = color->color.red;
-            xftcolor.color.green = color->color.green;
-            xftcolor.color.blue = color->color.blue;
-            xftcolor.color.alpha = color->alpha;;
-            xftcolor.pixel = W_PIXEL(color);
+        xftcolor.color.red = color->color.red;
+        xftcolor.color.green = color->color.green;
+        xftcolor.color.blue = color->color.blue;
+        xftcolor.color.alpha = color->alpha;;
+        xftcolor.pixel = W_PIXEL(color);
 
-            XftDrawChange(scr->xftdraw, d);
+        XftDrawChange(scr->xftdraw, d);
 
-            XftDrawString8(scr->xftdraw, &xftcolor, font->font.xft,
-                           x, y + font->y, text, length);
-#else
-            assert(False);
-#endif
+        if (!font->notFontSet) {
+            wchar_t *wtext;
+            char *mtext;
+
+            /* Use mtext instead of text, because mbstrtowcs() alters it */
+            mtext = text;
+            wtext = (wchar_t *)wmalloc(4*length+4);
+            if (mbsrtowcs(wtext, &mtext, length, NULL)==length) {
+                XftDrawString32(scr->xftdraw, &xftcolor, font->font.xft,
+                                x, y + font->y, (XftChar32*)wtext, length);
+            } else {
+                // - should rather say that conversion to widechar failed?
+                // - use mtext instead of text so that the position of the
+                //   invalid sequence is shown?
+                wwarning(_("Invalid multibyte sequence: '%s'\n"), text);
+                XftDrawString8(scr->xftdraw, &xftcolor, font->font.xft,
+                               x, y + font->y, (XftChar8*)text, length);
+            }
+            wfree(wtext);
         } else {
-            XSetFont(scr->display, scr->drawStringGC, font->font.normal->fid);
-            XSetForeground(scr->display, scr->drawStringGC, W_PIXEL(color));
-            XDrawString(scr->display, d, scr->drawStringGC, x, y + font->y,
-                        text, length);
+            XftDrawString8(scr->xftdraw, &xftcolor, font->font.xft,
+                           x, y + font->y, (XftChar8*)text, length);
         }
+#else
+        wassertr(False);
+#endif
+    } else if (font->notFontSet) {
+        XSetFont(scr->display, scr->drawStringGC, font->font.normal->fid);
+        XSetForeground(scr->display, scr->drawStringGC, W_PIXEL(color));
+        XDrawString(scr->display, d, scr->drawStringGC, x, y + font->y,
+                    text, length);
     } else {
         XSetForeground(scr->display, scr->drawStringGC, W_PIXEL(color));
         XmbDrawString(scr->display, d, font->font.set, scr->drawStringGC,
@@ -638,44 +774,63 @@ void
 WMDrawImageString(WMScreen *scr, Drawable d, WMColor *color, WMColor *background,
                   WMFont *font, int x, int y, char *text, int length)
 {
-    wassertr(font != NULL);
+    wassertr(font!=NULL);
 
-    if (font->notFontSet) {
-        if (font->antialiased) {
+    if (font->antialiased) {
 #ifdef XFT
-            XftColor textColor;
-            XftColor bgColor;
+        XftColor textColor;
+        XftColor bgColor;
 
-            textColor.color.red = color->color.red;
-            textColor.color.green = color->color.green;
-            textColor.color.blue = color->color.blue;
-            textColor.color.alpha = color->alpha;;
-            textColor.pixel = W_PIXEL(color);
+        textColor.color.red = color->color.red;
+        textColor.color.green = color->color.green;
+        textColor.color.blue = color->color.blue;
+        textColor.color.alpha = color->alpha;;
+        textColor.pixel = W_PIXEL(color);
 
-            bgColor.color.red = background->color.red;
-            bgColor.color.green = background->color.green;
-            bgColor.color.blue = background->color.blue;
-            bgColor.color.alpha = background->alpha;;
-            bgColor.pixel = W_PIXEL(background);
+        bgColor.color.red = background->color.red;
+        bgColor.color.green = background->color.green;
+        bgColor.color.blue = background->color.blue;
+        bgColor.color.alpha = background->alpha;;
+        bgColor.pixel = W_PIXEL(background);
 
 
-            XftDrawChange(scr->xftdraw, d);
+        XftDrawChange(scr->xftdraw, d);
 
-            XftDrawRect(scr->xftdraw, &bgColor, x, y,
-                        WMWidthOfString(font, text, length), font->height);
+        XftDrawRect(scr->xftdraw, &bgColor, x, y,
+                    WMWidthOfString(font, text, length), font->height);
 
-            XftDrawString8(scr->xftdraw, &textColor, font->font.xft,
-                           x, y + font->y, text, length);
-#else
-            assert(False);
-#endif
+        if (!font->notFontSet) {
+            wchar_t *wtext;
+            char *mtext;
+
+            /* Use mtext instead of text, because mbstrtowcs() alters it */
+            mtext = text;
+            wtext = (wchar_t *)wmalloc(4*length+4);
+            if (mbsrtowcs(wtext, &mtext, length, NULL)==length) {
+                XftDrawString32(scr->xftdraw, &textColor, font->font.xft,
+                                x, y + font->y, (XftChar32*)wtext, length);
+            } else {
+                // - should rather say that conversion to widechar failed?
+                // - use mtext instead of text so that the position of the
+                //   invalid sequence is shown?
+                wwarning(_("Invalid multibyte sequence: '%s'\n"), text);
+                XftDrawString8(scr->xftdraw, &textColor, font->font.xft,
+                               x, y + font->y, (XftChar8*)text, length);
+            }
+            wfree(wtext);
         } else {
-            XSetForeground(scr->display, scr->drawImStringGC, W_PIXEL(color));
-            XSetBackground(scr->display, scr->drawImStringGC, W_PIXEL(background));
-            XSetFont(scr->display, scr->drawImStringGC, font->font.normal->fid);
-            XDrawImageString(scr->display, d, scr->drawImStringGC,
-                             x, y + font->y, text, length);
+            XftDrawString8(scr->xftdraw, &textColor, font->font.xft,
+                           x, y + font->y, (XftChar8*)text, length);
         }
+#else
+        wassertr(False);
+#endif
+    } else if (font->notFontSet) {
+        XSetForeground(scr->display, scr->drawImStringGC, W_PIXEL(color));
+        XSetBackground(scr->display, scr->drawImStringGC, W_PIXEL(background));
+        XSetFont(scr->display, scr->drawImStringGC, font->font.normal->fid);
+        XDrawImageString(scr->display, d, scr->drawImStringGC,
+                         x, y + font->y, text, length);
     } else {
         XSetForeground(scr->display, scr->drawImStringGC, W_PIXEL(color));
         XSetBackground(scr->display, scr->drawImStringGC, W_PIXEL(background));

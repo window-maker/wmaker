@@ -29,6 +29,13 @@ Changes since wmaker 0.80.1:
 - You can now pass "SystemFont", "BoldSystemFont", "SystemFont-##" or
   "BoldSystemFont-##", with ## being the font size to any font creating
   function to create a font with the (bold) system font font specification.
+- Added WMCreateAntialiasedFontSet() (like WMCreateAntialiasedFont() but for
+  languages with multibyte text). Note however that these specific font
+  creating functions (as well as WMCreateNormalFont() and WMCreateFontSet())
+  are not meant to be called directly except in very special cases.
+  The more generic WMCreateFont() or WMCreateFontWithFlags() should be used.
+- Multibyte languages can now render antialiased text too (only tested on
+  russian since this is the only multibyte language I can test).
 
 
 Changes since wmaker 0.80.0:

@@ -92,6 +92,7 @@ W_ReadConfigurations(void)
 		if (locale != NULL 
 		    && (strncmp(locale, "ja", 2) == 0
 			|| strncmp(locale, "zh", 2) == 0
+			|| strncmp(locale, "ru", 2) == 0
 			|| strncmp(locale, "ko", 2) == 0)) {
 
 		    WINGsConfiguration.useMultiByte = True;

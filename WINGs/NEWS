@@ -129,8 +129,9 @@ fonts with transparency will be compiled into WINGs.
 You need at least Xfree86 version 4.0.x for this but at least 4.1.x is
 recommended.
 
-For Xft support there is a new function to create a font that will render
-using antialiasing and transparency: WMCreateAntialiasedFont().
+For Xft support there are 2 new functions to create a font that will render
+using antialiasing and transparency: WMCreateAntialiasedFont() and
+WMCreateAntialiasedFontSet(). Later is for multibyte languages.
 Passing such a font to WMDrawString() or WMDrawImageString() will result
 in antialiased text displayed on screen. Modifying the alpha value for the
 WMColor passed to WMDrawString() or WMDrawImageString() will result in text

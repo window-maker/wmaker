@@ -726,11 +726,13 @@ Bool WMIsAntialiasingEnabled(WMScreen *scrPtr);
 
 /* ....................................................................... */
 
-WMFont* WMCreateFontSet(WMScreen *scrPtr, char *fontName);
-
 WMFont* WMCreateNormalFont(WMScreen *scrPtr, char *fontName);
 
+WMFont* WMCreateFontSet(WMScreen *scrPtr, char *fontName);
+
 WMFont* WMCreateAntialiasedFont(WMScreen *scrPtr, char *fontName);
+
+WMFont* WMCreateAntialiasedFontSet(WMScreen *scrPtr, char *fontName);
 
 WMFont* WMCreateFont(WMScreen *scrPtr, char *fontName);
 
