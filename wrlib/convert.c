@@ -801,19 +801,14 @@ hermesConvert(RContext *context, RImage *image)
 	return NULL;
     }
     
-    if (HAS_ALPHA(image)) {
-        source.r = 0xff000000;
-        source.g = 0x00ff0000;
-        source.b = 0x0000ff00;
-        source.a = 0x000000ff;
-        source.bits = 32;
-    } else {
-        source.r = 0xff0000;
-        source.g = 0x00ff00;
-        source.b = 0x0000ff;
-        source.a = 0x000000;
-        source.bits = 24;
-    }
+    /* The masks look weird for images with alpha. but they work this way
+     * wth does hermes do internally?
+     */
+    source.r = 0xff0000;
+    source.g = 0x00ff00;
+    source.b = 0x0000ff;
+    source.a = 0x000000;
+    source.bits = (HAS_ALPHA(image) ? 32 : 24);
     source.indexed = 0;
     source.has_colorkey = 0;
 
