@@ -118,14 +118,13 @@ int MonitorLoop(int argc, char **argv)
             exit(1);
         }
 
-        if ((exited=waitpid(-1, &status, 0)) < 0)
-        {
-            wsyserror(_("Error during monitoring of Window Maker process."));
-            break;
-        }
-
-        if (exited != pid)
-            continue;
+        do {
+            if ((exited=waitpid(-1, &status, 0)) < 0)
+            {
+                wsyserror(_("Error during monitoring of Window Maker process."));
+                break;
+            }
+        } while (exited != pid);
 
         child_argv[argc]= "--for-real-";
         
