@@ -1214,6 +1214,7 @@ Bool WMBrowserAllowsMultipleSelection(WMBrowser *bPtr);
 
 Bool WMBrowserAllowsEmptySelection(WMBrowser *bPtr);
 
+void WMSetBrowserHasScroller(WMBrowser *bPtr, int hasScroller);
 
 /* ....................................................................... */
 
@@ -1484,6 +1485,8 @@ WMText *WMCreateTextForDocumentType(WMWidget *parent,
 void WMSetTextDelegate(WMText *tPtr, WMTextDelegate *delegate);
 
 void WMFreezeText(WMText *tPtr); 
+
+#define WMRefreshText(tPtr) WMThawText((tPtr)) 
 
 void WMThawText(WMText *tPtr);
 
