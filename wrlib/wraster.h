@@ -347,6 +347,9 @@ void RCombineImages(RImage *image, RImage *src);
 void RCombineArea(RImage *image, RImage *src, int sx, int sy, unsigned width,
                   unsigned height, int dx, int dy);
 
+void RCopyArea(RImage *image, RImage *src, int sx, int sy, unsigned width,
+               unsigned height, int dx, int dy);
+
 void RCombineImagesWithOpaqueness(RImage *image, RImage *src, int opaqueness);
 
 void RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,

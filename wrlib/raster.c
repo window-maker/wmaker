@@ -385,6 +385,78 @@ RCombineArea(RImage *image, RImage *src, int sx, int sy, unsigned width,
 
 
 void
+RCopyArea(RImage *image, RImage *src, int sx, int sy, unsigned width,
+          unsigned height, int dx, int dy)
+{
+    int x, y, dwi, swi;
+    unsigned char *d;
+    unsigned char *s;
+
+    if(!calculateCombineArea(image, src, &sx, &sy, &width, &height, &dx, &dy))
+        return;
+
+    if (!HAS_ALPHA(src)) {
+        if (!HAS_ALPHA(image)) {
+            swi = src->width * 3;
+            dwi = image->width * 3;
+
+            s = src->data + (sy*(int)src->width + sx) * 3;
+            d = image->data + (dy*(int)image->width + dx) * 3;
+
+            for (y=0; y < height; y++) {
+                memcpy(d, s, width*3);
+                d += dwi;
+                s += swi;
+            }
+        } else {
+            swi = (src->width - width) * 3;
+            dwi = (image->width - width) * 4;
+
+            s = src->data + (sy*(int)src->width + sx) * 3;
+            d = image->data + (dy*(int)image->width + dx) * 4;
+
+            for (y=0; y < height; y++) {
+                for (x=0; x < width; x++) {
+                    *d++ = *s++;
+                    *d++ = *s++;
+                    *d++ = *s++;
+                    d++;
+                }
+                d += dwi;
+                s += swi;
+            }
+        }
+    } else {
+        int dalpha = HAS_ALPHA(image);
+
+        swi = src->width * 4;
+        s = src->data + (sy*(int)src->width + sx) * 4;
+        if (dalpha) {
+            dwi = image->width * 4;
+            d = image->data + (dy*(int)image->width + dx) * 4;
+        } else {
+            dwi = image->width * 3;
+            d = image->data + (dy*(int)image->width + dx) * 3;
+        }
+
+        if (dalpha) {
+            for (y=0; y < height; y++) {
+                memcpy(d, s, width*4);
+                d += dwi;
+                s += swi;
+            }
+        } else {
+            for (y=0; y < height; y++) {
+                memcpy(d, s, width*3);
+                d += dwi;
+                s += swi;
+            }
+        }
+    }
+}
+
+
+void
 RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
                            unsigned width, unsigned height, int dx, int dy,
                            int opaqueness)
