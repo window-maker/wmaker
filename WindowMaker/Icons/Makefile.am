@@ -10,8 +10,8 @@ defsdata_DATA = \
 	GNUstepGlow.tiff\
 	GNUterm.tiff\
 	Terminal.tiff\
-	Terminal2.tiff\
-	Terminal3.tiff\
+	TerminalGNUstep.tiff\
+	TerminalLinux.tiff\
 	clip.tiff\
 	clip2.tiff\
 	defaultAppIcon.tiff\
@@ -37,8 +37,8 @@ defsdata_DATA = \
 	GNUstepGlow.xpm\
 	GNUterm.xpm\
 	Terminal.xpm\
-	Terminal2.xpm\
-	Terminal3.xpm\
+	TerminalGNUstep.xpm\
+	TerminalLinux.xpm\
 	clip.xpm\
 	clip2.xpm\
 	defaultAppIcon.xpm\
