@@ -49,6 +49,23 @@ int main(int argc, char **argv)
 	img = RScaleImage(img, img->width*atof(argv[2]), 
 			  img->height*atof(argv[2]));
     }
+    
+    {
+	RImage *tmp = RCreateImage(200, 200, True);
+	RColor col = {0,0,255,255};
+	
+	if (img->format == RRGBAFormat)
+	    puts("aklpha");
+	else
+	    puts("no alpha");
+	
+	RClearImage(tmp, &col);
+	
+	RCombineArea(tmp, img, 0, 0, 20, 20, 10, 10);
+	img = tmp;
+    }
+
+    
     if (!RConvertImage(ctx, img, &pix)) {
 	puts(RMessageForError(RErrorCode));
 	exit(1);
@@ -59,8 +76,7 @@ int main(int argc, char **argv)
 	   
 
     win = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 10, 10, 
-			      img->width,
-			      img->height, 0, 0, 0);
+			      400, 400, 0, 0, 0);
     XSetWindowBackgroundPixmap(dpy, win, pix);
     XClearWindow(dpy, win);
     XMapRaised(dpy, win);

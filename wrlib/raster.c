@@ -331,12 +331,12 @@ RCombineArea(RImage *image, RImage *src, int sx, int sy, unsigned width,
 
 	swi = (src->width - width) * 4;
 	s = src->data + (sy*(int)src->width + sx) * 4;
-	if (!HAS_ALPHA(image)) {
-	    dwi = (image->width - width) * 3;
-	    d = image->data + (dy*(int)image->width + dx) * 3;
-	} else {
+	if (dalpha) {
 	    dwi = (image->width - width) * 4;
 	    d = image->data + (dy*(int)image->width + dx) * 4;
+	} else {
+	    dwi = (image->width - width) * 3;
+	    d = image->data + (dy*(int)image->width + dx) * 3;
 	}
 
 	for (y=0; y < height; y++) {

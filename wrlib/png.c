@@ -154,9 +154,8 @@ RLoadPNG(RContext *context, char *file, int index)
 	if (sgamma==0)
 	    sgamma = 1;
     } else {
-	/* no, this is correct. Old gimp versions are broken and save wrong
-	 * data. Upgrade gimp. */
-	sgamma = 2.0;
+	/* blah */
+	sgamma = 2.2;
     }
     
     if (png_get_gAMA(png, pinfo, &gamma))

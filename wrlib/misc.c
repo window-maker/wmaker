@@ -91,6 +91,33 @@ RBevelImage(RImage *image, int bevel_type)
 void
 RClearImage(RImage *image, RColor *color)
 {
+    if (image->format == RRGBAFormat) {
+	    unsigned char *d = image->data;
+	    int i;
+
+	    for (i = 0; i < image->width; i++) {
+		*d++ = color->red;
+		*d++ = color->green;
+		*d++ = color->blue;
+		*d++ = color->alpha;
+	    }
+	    for (i = 1; i < image->height; i++, d += image->width*4) {
+		memcpy(d, image->data, image->width*4);
+	    }
+    } else {
+	    unsigned char *d = image->data;
+	    int i;
+
+	    for (i = 0; i < image->width; i++) {
+		*d++ = color->red;
+		*d++ = color->green;
+		*d++ = color->blue;
+	    }
+	    for (i = 1; i < image->height; i++, d += image->width*3) {
+		memcpy(d, image->data, image->width*3);
+	    }
+    }
+#if 0
     if (color->alpha==255) {
 	if (image->format == RRGBAFormat) {
 	    unsigned char *d = image->data;
@@ -144,6 +171,7 @@ RClearImage(RImage *image, RColor *color)
 	    }
 	}
     }
+#endif
 }
 
 const char*
