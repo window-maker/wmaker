@@ -525,7 +525,8 @@ image2PseudoColor(RContext *ctx, RImage *image)
 	memset(err, 0, 4*(image->width+3));
 	memset(nerr, 0, 4*(image->width+3));
 
-#ifdef ASM_X86
+/*#ifdef ASM_X86*/
+#if 0
 	x86_PseudoColor_32_to_8(image->data, ximg->image->data,
 			     err+4, nerr+4,
 			     rtable,
