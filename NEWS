@@ -51,18 +51,21 @@ will abort and leave the core file.
 Application User Menu
 ---------------------
 
-Applications with application icon can have menu which defined by user.
-This menu will send fake keyboard event to applications' windows so
-applications must response the short cut key that was sent by user menu.
-To Enable this feature, you have to put
-#define USER_MENU
-in wconfig.h and place menu files in directory ~GNUstep/Defaults/UserMenus.
-(or /usr/local/etc/WindowMaker/UserMenus for global setting)
-Menu is in PropList format and the filename is in format
-<instance name>.<class name>.menu or application's main window.
-(for example, menu for xcalc is xcalc.XCalc.menu)
+Applications with an appicon can have a user defined menu.
 
-Example syntax
+This menu will emulate keyboard events, and will be sent to the applications'
+window(s), thus the application must accept key combinations (CTRL+N for
+instance).
+
+To enable this feature, #define USER_MENU in src/wconfig.h and place menu
+files in ~/GNUstep/Defaults/UserMenus (/usr/local/etc/WindowMaker/UserMenus
+globally).
+
+The user menu is in PropList format and the filename is in:
+<instance name>.<class name>.menu or application's main window.
+(Example: the menu for xcalc would be - xcalc.XCalc.menu)
+
+Example user menu syntax:
 
 (
   "Calculator",
