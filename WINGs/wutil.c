@@ -443,15 +443,15 @@ handleInputEvents(Bool waitForInput)
 	    mask = 0;
 
             if ((handler->mask & WIReadMask) &&
-                fds[k].revents & (POLLIN|POLLRDNORM|POLLRDBAND|POLLPRI))
+                (fds[k].revents & (POLLIN|POLLRDNORM|POLLRDBAND|POLLPRI)))
                 mask |= WIReadMask;
 
             if ((handler->mask & WIWriteMask) &&
-                fds[k].revents & (POLLOUT | POLLWRBAND))
+                (fds[k].revents & (POLLOUT | POLLWRBAND)))
                 mask |= WIWriteMask;
 
             if ((handler->mask & WIExceptMask) &&
-                fds[k].revents & (POLLHUP | POLLNVAL | POLLERR))
+                (fds[k].revents & (POLLHUP | POLLNVAL | POLLERR)))
                 mask |= WIExceptMask;
 
             next = handler->next;
