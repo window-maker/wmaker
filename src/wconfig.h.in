@@ -161,13 +161,6 @@
 
 
 /*
- * define USER_MENU if you want user specified menus for sending
- * commands to applications. Kinda experimental..
- */
-#undef USER_MENU
-
-
-/*
  * define HIDDENDOT if you want a dot to be shown in the application icon
  * of applications that are hidden.
  */
@@ -229,8 +222,6 @@
  */
 #undef GRADIENT_CLIP_ARROWS
 
-
-#define TEXTURE_PLUGIN
 
 /*
  *--------------------------------------------------------------------

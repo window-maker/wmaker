@@ -502,7 +502,10 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 
     if ((tmp = scr->focused_window)!= NULL) {
 	if (IS_OMNIPRESENT(tmp) || tmp->flags.changing_workspace)
-	    foc2 = tmp; /* for gnome stuff.. used to be foc = tmp */
+	    foc = tmp;
+		  /* foc2 = tmp; will fix annoyance with gnome panel
+		   * but will create annoyance for every other application 
+		   */
 
 	while (tmp) {
 	    if (tmp->frame->workspace!=workspace && !tmp->flags.selected) {

@@ -302,8 +302,11 @@ static void
 execInitScript()
 {
     char *file;
-    
-    file = wfindfile(DEF_CONFIG_PATHS, DEF_INIT_SCRIPT);
+    char *paths = wstrappend(wusergnusteppath(), ":"DEF_CONFIG_PATHS);
+
+    file = wfindfile(paths, DEF_INIT_SCRIPT);
+    free(paths);
+
     if (file) {
 	if (system(file) != 0) {
 	    wsyserror(_("%s:could not execute initialization script"), file);
@@ -324,8 +327,11 @@ void
 ExecExitScript()
 {
     char *file;
-    
-    file = wfindfile(DEF_CONFIG_PATHS, DEF_EXIT_SCRIPT);
+    char *paths = wstrappend(wusergnusteppath(), ":"DEF_CONFIG_PATHS);
+
+    file = wfindfile(paths, DEF_EXIT_SCRIPT);
+    free(paths);
+
     if (file) {
 	if (system(file) != 0) {
 	    wsyserror(_("%s:could not execute exit script"), file);

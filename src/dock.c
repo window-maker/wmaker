@@ -3551,7 +3551,7 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 #endif
     }
 
-    if (event->xbutton.state & MOD_MASK)
+    if (!(event->xbutton.state & MOD_MASK))
 	wRaiseFrame(icon->core);
 
     if (!wPreferences.flags.noclip)

@@ -390,14 +390,16 @@ wAppIconPaint(WAppIcon *aicon)
     {
         WApplication *wapp;
 	wapp = wApplicationOf(aicon->main_window);
-	if(wapp)
-	if(wapp->flags.hidden){
-	XSetClipMask(dpy, scr->copy_gc, scr->dock_dots->mask);
-	XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
-	XCopyArea(dpy, scr->dock_dots->image, aicon->icon->core->window, 
-		  scr->copy_gc, 0, 0, 7,
-		  scr->dock_dots->height, 0, 0);
-        }
+	if (wapp) {
+	    if (wapp->flags.hidden) {
+		XSetClipMask(dpy, scr->copy_gc, scr->dock_dots->mask);
+		XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
+		XCopyArea(dpy, scr->dock_dots->image, 
+			  aicon->icon->core->window, 
+			  scr->copy_gc, 0, 0, 7,
+			  scr->dock_dots->height, 0, 0);
+	    }
+	}
     }
 #endif /* HIDDENDOT */
 

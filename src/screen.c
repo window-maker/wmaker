@@ -448,11 +448,7 @@ createPixmaps(WScreen *scr)
 	RDestroyImage(image);
     }
 
-#ifdef HIDDENDOT
-    if (!wPreferences.flags.nodock || !wPreferences.flags.noclip) {
-	    scr->dock_dots = make3Dots(scr);
-    }
-#endif
+    scr->dock_dots = make3Dots(scr);
 
 #ifndef NEWSTUFF
     /* titlebar button pixmaps */
@@ -778,8 +774,6 @@ wScreenInit(int screen_number)
 	wGetColor(scr, FRAME_BORDER_COLOR, &xcol);
 	scr->frame_border_pixel = xcol.pixel;
     }
-
-    scr->workspace_name_font = wLoadFont(DEF_WORKSPACE_NAME_FONT);
 
     /* create GCs with default values */
     allocGCs(scr);

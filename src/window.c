@@ -1137,8 +1137,8 @@ wManageWindow(WScreen *scr, Window window)
 
     if (!wwin->flags.miniaturized && workspace == scr->current_workspace
 	&& !wwin->flags.hidden) {
-	if ((transientOwner && transientOwner->flags.focused)
-	    || wPreferences.auto_focus)
+	if (((transientOwner && transientOwner->flags.focused)
+	     || wPreferences.auto_focus) && !WFLAGP(wwin, no_focusable))
 	    wSetFocusTo(scr, wwin);
     }
     wWindowResetMouseGrabs(wwin);

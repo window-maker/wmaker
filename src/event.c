@@ -1687,9 +1687,12 @@ handleKeyPress(XEvent *event)
                 wSelectWindow(list->head, True);
                 list = list->tail;
             }
-        } else if (scr->shortcutWindow[command-WKBD_WINDOW1]) {
+        } else if (scr->shortcutWindow[command-WKBD_WINDOW1]){
+
             wMakeWindowVisible(scr->shortcutWindow[command-WKBD_WINDOW1]);
+
         } else if (wwin && ISMAPPED(wwin) && ISFOCUSED(wwin)) {
+
             scr->shortcutWindow[command-WKBD_WINDOW1] = wwin;
             if (wwin->flags.selected /* && scr->selected_windows */ ) {
                 LinkedList *sl;
@@ -1707,7 +1710,9 @@ handleKeyPress(XEvent *event)
             wusleep(3000);
             wSelectWindow(wwin, !wwin->flags.selected);
             XFlush(dpy);
+
         } else if (scr->selected_windows) {
+
             if (wwin->flags.selected /* && scr->selected_windows */ ) {
                 LinkedList *sl;
 

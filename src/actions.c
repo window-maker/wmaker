@@ -2,7 +2,7 @@
  * 
  *  Window Maker window manager
  * 
- *  Copyright (c) 1997, 1998 Alfredo K. Kojima
+ *  Copyright (c) 1997, 1998, 1999 Alfredo K. Kojima
  *  Copyright (c) 1998       Dan Pascu
  * 
  *  This program is free software; you can redistribute it and/or modify
@@ -1797,7 +1797,8 @@ wMakeWindowVisible(WWindow *wwin)
     } else if (wwin->flags.miniaturized) {
 	wDeiconifyWindow(wwin);
     } else {
-	wSetFocusTo(wwin->screen_ptr, wwin);
+	if (!WFLAGP(wwin, no_focusable))
+	    wSetFocusTo(wwin->screen_ptr, wwin);
 	wRaiseFrame(wwin->frame->core);
     }
 }
