@@ -333,7 +333,7 @@ createMainWindow(WMScreen *scr)
 
     WPrefs.versionL = WMCreateLabel(WPrefs.banner);
     WMResizeWidget(WPrefs.versionL, FRAME_WIDTH-20, 20);
-    WMMoveWidget(WPrefs.versionL, 10, 100);
+    WMMoveWidget(WPrefs.versionL, 10, 120);
     WMSetLabelTextAlignment(WPrefs.versionL, WACenter);
     sprintf(buffer, _("Version %s"), VERSION);
     WMSetLabelText(WPrefs.versionL, buffer);

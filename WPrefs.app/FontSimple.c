@@ -65,7 +65,7 @@ typedef struct _Panel {
     WMList *sizeL;
     
     WMTextField *sampleT;
-
+    
     FontList   *fonts;
 } _Panel;
 
@@ -617,37 +617,44 @@ createPanel(Panel *p)
     lookup_available_fonts(panel);
 
     panel->box = WMCreateBox(panel->parent);
-    WMSetViewExpandsToParent(WMWidgetView(panel->box), 5, 8, 5, 8);
+    WMSetViewExpandsToParent(WMWidgetView(panel->box), 5, 2, 5, 5);
     WMSetBoxHorizontal(panel->box, False);
     WMSetBoxBorderWidth(panel->box, 8);
     WMMapWidget(panel->box);
 
     hbox = WMCreateBox(panel->box);
     WMSetBoxHorizontal(hbox, True);
-    WMAddBoxSubview(panel->box, WMWidgetView(hbox), False, True, 22, 22, 8);
+    WMAddBoxSubview(panel->box, WMWidgetView(hbox), False, True, 40, 22, 8);
 
-    label = WMCreateLabel(hbox);
-    WMAddBoxSubview(hbox, WMWidgetView(label), False, True, 150, 0, 10);
-    WMSetLabelText(label, _("Choose Font For"));
-    WMSetLabelTextAlignment(label, WARight);
-
-    panel->optionP = WMCreatePopUpButton(hbox);
-    WMAddBoxSubview(hbox, WMWidgetView(panel->optionP), False, True, 200, 0, 10);
+    vbox= WMCreateBox(hbox);
+    WMAddBoxSubview(hbox, WMWidgetView(vbox), False, True, 130, 0, 10);
+    WMSetBoxHorizontal(vbox, False);
+    panel->optionP = WMCreatePopUpButton(vbox);
+    WMAddBoxSubviewAtEnd(vbox, WMWidgetView(panel->optionP), False, True, 24, 0, 8);
     for (i= 0; fontOptions[i].option; i++)
     {
       WMAddPopUpButtonItem(panel->optionP, _(fontOptions[i].label));
     }
     WMSetPopUpButtonAction(panel->optionP, selectedOption, panel);
 
-    hbox = WMCreateBox(panel->box);
-    WMSetBoxHorizontal(hbox, True);
-    WMAddBoxSubview(panel->box, WMWidgetView(hbox), False, True, 100, 0, 2);
+    label = WMCreateLabel(hbox);
+    WMSetLabelText(label, _("Sample Text"));
+    WMSetLabelTextAlignment(label, WARight);
+    WMAddBoxSubview(hbox, WMWidgetView(label), False, True, 80, 0, 2);
+
+    panel->sampleT= WMCreateTextField(hbox);
+    WMSetViewExpandsToParent(WMWidgetView(panel->sampleT), 10, 18, 10, 10);
+    WMSetTextFieldText(panel->sampleT, SAMPLE_TEXT);
+    WMAddBoxSubview(hbox, WMWidgetView(panel->sampleT), True, True, 60, 0, 0);
 
     
+    hbox = WMCreateBox(panel->box);
+    WMSetBoxHorizontal(hbox, True);
+    WMAddBoxSubview(panel->box, WMWidgetView(hbox), True, True, 100, 0, 2);
     
     vbox = WMCreateBox(hbox);
     WMSetBoxHorizontal(vbox, False);
-    WMAddBoxSubview(hbox, WMWidgetView(vbox), False, True, 240, 20, 2);
+    WMAddBoxSubview(hbox, WMWidgetView(vbox), False, True, 240, 20, 4);
 
     label = createListLabel(scr, vbox, _("Family"));
     WMAddBoxSubview(vbox, WMWidgetView(label), False, True, 20, 0, 2);
@@ -669,52 +676,43 @@ createPanel(Panel *p)
 
     WMSetListAction(panel->familyL, selectedFamily, panel);
 
-    
     vbox = WMCreateBox(hbox);
     WMSetBoxHorizontal(vbox, False);
-    WMAddBoxSubview(hbox, WMWidgetView(vbox), True, True, 60, 0, 2);
-
-    label = createListLabel(scr, vbox, _("Style"));
-    WMAddBoxSubview(vbox, WMWidgetView(label), False, True, 20, 0, 2);
-
-    panel->styleL = WMCreateList(vbox);
-    WMAddBoxSubview(vbox, WMWidgetView(panel->styleL), True, True, 0, 0, 0);
-    WMSetListAction(panel->styleL, selected, panel);
-    
-
-
-    vbox = WMCreateBox(hbox);
-    WMSetBoxHorizontal(vbox, False);
-    WMAddBoxSubview(hbox, WMWidgetView(vbox), False, True, 70, 0, 0);
-
-    label = createListLabel(scr, vbox, _("Size"));
-    WMAddBoxSubview(vbox, WMWidgetView(label), False, True, 20, 0, 2);
-
-    // size
-    panel->sizeL = WMCreateList(vbox);
-    WMAddBoxSubview(vbox, WMWidgetView(panel->sizeL), True, True, 0, 0, 0);
-    for (i= 0; standardSizes[i]; i++)
-    {
-        WMAddListItem(panel->sizeL, standardSizes[i]);
-    }
-    WMSetListAction(panel->sizeL, selected, panel);
+    WMAddBoxSubview(hbox, WMWidgetView(vbox), True, True, 10, 0, 0);
 
     {
-        WMFrame *frame= WMCreateFrame(panel->box);
-        WMSetFrameTitle(frame, _("Sample"));
+        WMBox *box = WMCreateBox(vbox);
+        WMSetBoxHorizontal(box, True);
+        WMAddBoxSubview(vbox, WMWidgetView(box), False, True, 20, 0, 2);
 
-        WMAddBoxSubview(panel->box, WMWidgetView(frame), True, True, 50, 0, 0);
-        
-        panel->sampleT= WMCreateTextField(frame);
-        WMSetViewExpandsToParent(WMWidgetView(panel->sampleT), 10, 18, 10, 10);
-        WMSetTextFieldText(panel->sampleT, SAMPLE_TEXT);
+        label = createListLabel(scr, box, _("Style"));
+        WMAddBoxSubview(box, WMWidgetView(label), True, True, 20, 0, 4);
+
+        label = createListLabel(scr, box, _("Size"));
+        WMAddBoxSubview(box, WMWidgetView(label), False, True, 60, 0, 0);
+
+        box = WMCreateBox(vbox);
+        WMSetBoxHorizontal(box, True);
+        WMAddBoxSubview(vbox, WMWidgetView(box), True, True, 20, 0, 4);
+
+        panel->styleL = WMCreateList(box);
+        WMAddBoxSubview(box, WMWidgetView(panel->styleL), True, True, 0, 0, 4);
+        WMSetListAction(panel->styleL, selected, panel);
+
+        panel->sizeL = WMCreateList(box);
+        WMAddBoxSubview(box, WMWidgetView(panel->sizeL), False, True, 60, 0, 0);
+        for (i= 0; standardSizes[i]; i++)
+        {
+            WMAddListItem(panel->sizeL, standardSizes[i]);
+        }
+        WMSetListAction(panel->sizeL, selected, panel);
     }
     
-    
+
     WMMapSubwidgets(panel->box);
     WMMapWidget(panel->box);
     WMRealizeWidget(panel->box);
-    
+
     showData(panel);
 }
 
