@@ -107,7 +107,7 @@ libwraster_la_SOURCES =  	raster.c 		draw.c			color.c			load.c 			save.c			gradi
 
 INCLUDES = @DFLAGS@ @HEADER_SEARCH_PATH@
 
-LIBLIST = libwraster.la @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ -lm
+LIBLIST = $(top_builddir)/wrlib/libwraster.la @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ -lm
 
 view_SOURCES = view.c
 
@@ -143,13 +143,13 @@ gif.lo
 PROGRAMS =  $(noinst_PROGRAMS)
 
 testgrad_OBJECTS =  testgrad.o
-testgrad_DEPENDENCIES =  libwraster.la
+testgrad_DEPENDENCIES =  $(top_builddir)/wrlib/libwraster.la
 testgrad_LDFLAGS = 
 testdraw_OBJECTS =  testdraw.o
-testdraw_DEPENDENCIES =  libwraster.la
+testdraw_DEPENDENCIES =  $(top_builddir)/wrlib/libwraster.la
 testdraw_LDFLAGS = 
 view_OBJECTS =  view.o
-view_DEPENDENCIES =  libwraster.la
+view_DEPENDENCIES =  $(top_builddir)/wrlib/libwraster.la
 view_LDFLAGS = 
 SCRIPTS =  $(bin_SCRIPTS)
 
