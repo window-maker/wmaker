@@ -38,7 +38,7 @@ typedef struct {
 } Section;
 
 
-/* a TextBlock is a doubly-linked list of TextBlocks containing:
+/* a TextBlock is a node in a doubly-linked list of TextBlocks containing:
     o text for the block, color and font
     o or a pointer to the pixmap
     o OR a pointer to the widget and the (text) description for its graphic
@@ -560,7 +560,8 @@ getFirstNonGraphicBlockFor(TextBlock *tb, short dir)
     }
   
     if(!tb)
-       tb = hold;
+       return NULL;
+
     return tb;
 }
         
@@ -571,6 +572,9 @@ TextBlock *tb)
 {
     if (tPtr->flags.monoFont && tb->graphic) {
         tb = getFirstNonGraphicBlockFor(tb, *dir);
+        if(!tb)
+            return 0;
+
         if (tb->graphic) {
             tPtr->currentTextBlock = 
                 (dir? tPtr->lastTextBlock : tPtr->firstTextBlock);
@@ -1059,8 +1063,18 @@ cursorToTextPosition(Text *tPtr, int x, int y)
 _doneV:
     /* we have the line, which TextBlock on that line is it? */
     pos = (dir?0:tb->sections[s].begin);
-    if (tPtr->flags.monoFont && tb->graphic)
-        tb = getFirstNonGraphicBlockFor(tb, dir);
+    if (tPtr->flags.monoFont && tb->graphic) {
+        TextBlock *hold = tb;
+        tb = getFirstNonGraphicBlockFor(hold, dir);
+
+        if(!tb) {
+            tPtr->tpos = 0;
+            tb = hold;
+            s = 0;
+            goto _doNothing;
+        }
+    }
+        
 
     if(tb->blank) 
         _w = 0;
@@ -1156,6 +1170,7 @@ _doneH:
         tPtr->tpos = (pos<tb->used)? pos : tb->used;
     }
         
+_doNothing:
     if (!tb)
         printf("...for this app will surely crash :-)\n");
 
@@ -3714,6 +3729,26 @@ WMSetTextSelectionColor(WMText *tPtr, WMColor *color)
     setSelectionProperty(tPtr, NULL, color, -1);
 }
 
+WMColor *
+WMGetTextSelectionColor(WMText *tPtr)
+{
+    TextBlock *tb;
+
+    if (!tPtr)
+        return NULL;
+
+    tb = tPtr->currentTextBlock;
+
+    if (!tb || !tPtr->flags.ownsSelection)
+        return NULL;
+
+    if(!tb->selected)
+        return NULL;
+
+    return tb->color;
+}
+
+            
 void 
 WMSetTextSelectionFont(WMText *tPtr, WMFont *font)
 {
@@ -3723,6 +3758,31 @@ WMSetTextSelectionFont(WMText *tPtr, WMFont *font)
     setSelectionProperty(tPtr, font, NULL, -1) ;
 }
 
+WMFont *
+WMGetTextSelectionFont(WMText *tPtr)
+{
+    TextBlock *tb;
+
+    if (!tPtr)
+        return NULL;
+
+    tb = tPtr->currentTextBlock;
+
+    if (!tb || !tPtr->flags.ownsSelection)
+        return NULL;
+
+    if(!tb->selected)
+        return NULL;
+
+    if(tb->graphic) {
+        tb = getFirstNonGraphicBlockFor(tb, 1);
+        if(!tb)
+            return NULL;
+    }
+    return (tb->selected ? tb->d.font : NULL);
+}
+
+            
 void 
 WMSetTextSelectionUnderlined(WMText *tPtr, int underlined)
 {
@@ -3733,6 +3793,24 @@ WMSetTextSelectionUnderlined(WMText *tPtr, int underlined)
 }
 
 
+int 
+WMGetTextSelectionUnderlined(WMText *tPtr)
+{
+    TextBlock *tb;
+
+    if (!tPtr)
+        return 0;
+
+    tb = tPtr->currentTextBlock;
+
+    if (!tb || !tPtr->flags.ownsSelection)
+        return 0;
+
+    if(!tb->selected)
+        return 0;
+
+    return tb->underlined;
+}
 
 
 void

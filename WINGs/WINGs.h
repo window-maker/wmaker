@@ -1547,7 +1547,15 @@ WMArray* WMGetTextSelectedObjects(WMText *tPtr);
 
 void WMSetTextSelectionColor(WMText *tPtr, WMColor *color);
 
+WMColor *WMGetTextSelectionColor(WMText *tPtr);
+
 void WMSetTextSelectionFont(WMText *tPtr, WMFont *font);
+
+WMFont *WMGetTextSelectionFont(WMText *tPtr);
+
+void WMSetTextSelectionUnderlined(WMText *tPtr, int underlined);
+
+int WMGetTextSelectionUnderlined(WMText *tPtr);
 
 void WMSetTextAlignment(WMText *tPtr, WMAlignment alignment);
 
