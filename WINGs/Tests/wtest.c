@@ -395,7 +395,6 @@ testSlider(WMScreen *scr)
     WMMapWidget(win);
 }
 
-
 void
 testTextField(WMScreen *scr)
 {
@@ -404,7 +403,7 @@ testTextField(WMScreen *scr)
 
     windowCount++;
     
-    win = WMCreateWindow(scr, "testText");
+    win = WMCreateWindow(scr, "testTextField");
     WMResizeWidget(win, 400, 300);
 
     WMSetWindowCloseAction(win, closeAction, NULL);    
@@ -417,6 +416,46 @@ testTextField(WMScreen *scr)
     WMResizeWidget(field2, 200, 20);
     WMMoveWidget(field2, 20, 50);
     WMSetTextFieldAlignment(field2, WARight);
+
+    WMRealizeWidget(win);
+    WMMapSubwidgets(win);
+    WMMapWidget(win);
+    
+}
+
+void
+testText(WMScreen *scr)
+{
+    WMWindow *win;
+    WMText *text;
+	FILE *file = fopen("../README", "r");
+
+    windowCount++;
+    
+    win = WMCreateWindow(scr, "testText");
+    WMResizeWidget(win, 500, 300);
+
+    WMSetWindowCloseAction(win, closeAction, NULL);    
+
+    text = WMCreateText(win);
+    WMResizeWidget(text, 480, 280);
+    WMMoveWidget(text, 10, 10);
+    WMSetTextHasVerticalScroller(text, True);
+	WMSetTextEditable(text, False);
+
+	if(file) { 
+    	char buf[1024];
+
+		WMFreezeText(text);
+		while(fgets(buf, 1023, file))
+			WMAppendTextStream(text, buf);
+		
+		fclose(file);
+		WMThawText(text);
+		WMRefreshText(text, 0, 0);
+	} else {
+		WMAppendTextStream(text, "<HTML><i>Where's</i> the <b>README</b>?"); 
+	}
 
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
@@ -1075,14 +1114,17 @@ int main(int argc, char **argv)
      * 
      * Put the testSomething() function you want to test here.
      */
+
     testColorWell(scr);
-    
+
+#if 0
+    testTextField(scr);
+    testText(scr);
 
     testDragAndDrop(scr);
     testDragAndDrop(scr);
     testFontPanel(scr);
 
-#if 0
     testScrollView(scr);
     
     testButton(scr);
@@ -1099,7 +1141,6 @@ int main(int argc, char **argv)
     testGradientButtons(scr);
     testProgressIndicator(scr);
 
-    testTextField(scr);
 
     testOpenFilePanel(scr);
     testList(scr);
