@@ -376,7 +376,7 @@ wApplicationCreate(WScreen *scr, Window main_window)
 
         if (clip && clip->attract_icons && wDockFindFreeSlot(clip, &x, &y)) {
             wapp->app_icon->attracted = 1;
-            if (!clip->keep_attracted && !wapp->app_icon->icon->shadowed) {
+            if (!wapp->app_icon->icon->shadowed) {
                 wapp->app_icon->icon->shadowed = 1;
                 wapp->app_icon->icon->force_paint = 1;
                 /* We don't do an wAppIconPaint() here because it's in
@@ -462,9 +462,7 @@ wApplicationDestroy(WApplication *wapp)
     XDeleteContext(dpy, wapp->main_window, wAppWinContext);
     wAppMenuDestroy(wapp->menu);
     if (wapp->app_icon) {
-        if (wapp->app_icon->docked
-            && (!wapp->app_icon->attracted || 
-		wapp->app_icon->dock->keep_attracted)) {
+        if (wapp->app_icon->docked && !wapp->app_icon->attracted) {
 #ifdef REDUCE_APPICONS
 	    if (napps == 0) {
 #endif

@@ -102,7 +102,7 @@ static proplist_t dDropCommand=NULL;
 #endif
 static proplist_t dAutoLaunch, dName, dForced, dBuggyApplication, dYes, dNo;
 static proplist_t dHost, dDock, dClip;
-static proplist_t dAutoAttractIcons, dKeepAttracted;
+static proplist_t dAutoAttractIcons;
 
 static proplist_t dPosition, dApplications, dLowered, dCollapsed, dAutoCollapse;
 
@@ -184,7 +184,6 @@ make_keys()
     dAutoCollapse = PLMakeString("AutoCollapse");
     dAutoRaiseLower = PLMakeString("AutoRaiseLower");
     dAutoAttractIcons = PLMakeString("AutoAttractIcons");
-    dKeepAttracted = PLMakeString("KeepAttracted");
 
     dOmnipresent = PLMakeString("Omnipresent");
 
@@ -653,6 +652,7 @@ toggleAutoAttractCallback(WMenu *menu, WMenuEntry *entry)
 }
 
 
+#if 0
 static void
 toggleKeepCallback(WMenu *menu, WMenuEntry *entry)
 {
@@ -682,6 +682,7 @@ toggleKeepCallback(WMenu *menu, WMenuEntry *entry)
 
     wMenuPaint(menu);
 }
+#endif
 
 
 static void
@@ -727,7 +728,7 @@ colectIconsCallback(WMenu *menu, WMenuEntry *entry)
 #endif /* ANIMATIONS */
             }
             aicon->attracted = 1;
-	    if (!clip->keep_attracted && !aicon->icon->shadowed) {
+	    if (!aicon->icon->shadowed) {
                 aicon->icon->shadowed = 1;
                 aicon->icon->force_paint = 1;
                 /* We don't do an wAppIconPaint() here because it's in
@@ -1079,11 +1080,6 @@ updateClipOptionsMenu(WMenu *menu, WDock *dock)
     entry->flags.indicator_on = dock->attract_icons;
     entry->clientdata = dock;
 
-    /* keep attracted icons */
-    entry = menu->entries[++index];
-    entry->flags.indicator_on = dock->keep_attracted;
-    entry->clientdata = dock;
-
     menu->flags.realized = 0;
     wMenuRealize(menu);
 }
@@ -1127,12 +1123,6 @@ makeClipOptionsMenu(WScreen *scr)
 
     entry = wMenuAddCallback(menu, _("AutoAttract Icons"),
                              toggleAutoAttractCallback, NULL);
-    entry->flags.indicator = 1;
-    entry->flags.indicator_on = 1;
-    entry->flags.indicator_type = MI_CHECK;
-
-    entry = wMenuAddCallback(menu, _("Keep Attracted Icons"),
-                             toggleKeepCallback, NULL);
     entry->flags.indicator = 1;
     entry->flags.indicator_on = 1;
     entry->flags.indicator_type = MI_CHECK;
@@ -1258,7 +1248,6 @@ wDockCreate(WScreen *scr, int type)
     dock->auto_lower_magic = NULL;
     dock->auto_raise_magic = NULL;
     dock->attract_icons = 0;
-    dock->keep_attracted = 0;
     dock->lowered = 1;
     dock->icon_array[0] = btn;
     wRaiseFrame(btn->icon->core);
@@ -1449,7 +1438,7 @@ dockSaveState(WDock *dock)
     for (i=(dock->type==WM_DOCK ? 0 : 1); i<dock->max_icons; i++) {
         WAppIcon *btn = dock->icon_array[i];
 
-        if (!btn || (btn->attracted && !dock->keep_attracted))
+        if (!btn || btn->attracted)
             continue;
 
         if ((icon_info = make_icon_state(dock->icon_array[i]))) {
@@ -1492,9 +1481,6 @@ dockSaveState(WDock *dock)
 
         value = (dock->attract_icons ? dYes : dNo);
         PLInsertDictionaryEntry(dock_state, dAutoAttractIcons, value);
-
-        value = (dock->keep_attracted ? dYes : dNo);
-        PLInsertDictionaryEntry(dock_state, dKeepAttracted, value);
     }
 
     return dock_state;
@@ -1894,22 +1880,6 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
     }
 
 
-    /* restore keep attracted icons state */
-
-    dock->keep_attracted = 0;
-
-    value = PLGetDictionaryEntry(dock_state, dKeepAttracted);
-
-    if (value) {
-        if (!PLIsString(value))
-            COMPLAIN("KeepAttracted");
-        else {
-            if (strcasecmp(PLGetString(value), "YES")==0)
-                dock->keep_attracted = 1;
-        }
-    }
-
-
     /* application list */
     
     {
@@ -2185,7 +2155,7 @@ wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 	    char *command=NULL;
 
 /*	    icon->forced_dock = 1;*/
-            if (!icon->attracted || dock->type!=WM_CLIP || dock->keep_attracted) {
+            if (dock->type!=WM_CLIP || !icon->attracted) {
 		icon->editing = 1;
                 if (wInputDialog(dock->screen_ptr, _("Dock Icon"),
                                  _("Type the command used to launch the application"),
@@ -2376,11 +2346,10 @@ moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y)
         icon->icon->core->descriptor.handle_leavenotify = clipLeaveNotify;
     }
 
-    /* set it to be kept when moving to dock, or to a clip that keep the
-     * attracted icons.
+    /* set it to be kept when moving to dock.
      * Unless the icon does not have a command set
      */
-    if (icon->command && (dest->type==WM_DOCK || dest->keep_attracted)) {
+    if (icon->command && dest->type==WM_DOCK) {
 	icon->attracted = 0;
 	if (icon->icon->shadowed) {
 	    icon->icon->shadowed = 0;

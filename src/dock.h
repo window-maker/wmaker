@@ -56,7 +56,6 @@ typedef struct WDock {
     unsigned int mapped:1;
     unsigned int lowered:1;
     unsigned int attract_icons:1;      /* If clip should attract app-icons */
-    unsigned int keep_attracted:1;     /* if keep them when application exits*/
 
     unsigned int lclip_button_pushed:1;
     unsigned int rclip_button_pushed:1;

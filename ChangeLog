@@ -1,8 +1,10 @@
-Changes since version 0.61.0:
+Changes since version 0.61.1:
 .............................
 
 - fixed bug with menu editor in WPrefs placing cut/paste-ed entries in wrong
   positions.
+- removed "Keep Attracted Icons" option from Clip's menu. See NEWS.
+
 
 
 Changes since version 0.61.0:

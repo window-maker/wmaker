@@ -653,7 +653,7 @@ makeAppIconFor(WApplication *wapp)
 
         if (clip && clip->attract_icons && wDockFindFreeSlot(clip, &x, &y)) {
             wapp->app_icon->attracted = 1;
-	    if (!clip->keep_attracted && !wapp->app_icon->icon->shadowed) {
+	    if (!wapp->app_icon->icon->shadowed) {
 		wapp->app_icon->icon->shadowed = 1;
 		wapp->app_icon->icon->force_paint = 1;
 	    }
@@ -677,8 +677,7 @@ removeAppIconFor(WApplication *wapp)
     if (!wapp->app_icon)
         return;
 
-    if (wapp->app_icon->docked && 
-	(!wapp->app_icon->attracted || wapp->app_icon->dock->keep_attracted)) {
+    if (wapp->app_icon->docked && !wapp->app_icon->attracted) {
         wapp->app_icon->running = 0;
         /* since we keep it, we don't care if it was attracted or not */
         wapp->app_icon->attracted = 0;

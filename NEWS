@@ -2,6 +2,30 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+--- 0.61.2
+
+Removed "Keep Attracted Icons" option from Clip's menu
+------------------------------------------------------
+
+Since this option brought more confusion than usefulness among users, and
+since it was usable only in a very limited context, being able to fill up
+the Clip very easily, it was removed.
+An alternative way of gaining the same functionality is to use the "Keep icon"
+entry in the Clip's main menu. Or select multiple icons before calling that
+entry, to make it apply to more than one icon.
+
+Note: "Keep icon", as the obsoleted "Keep Attracted Icons" had nothing to do
+      with holding icons in Clip, while the application is running. Once they
+      are attracted, they are kept until the application close. Using
+      "Keep icon", will only assure that the icon will be kept, even after the
+      application is closed.
+
+Please don't ask for this option back. It's error prone, and very unintuitive.
+Considering it's very restrictive usability, and it's very ambiguous topic, it
+does not need a special entry in the Clip's menu, taking in count that there
+are already better alternative ways of gaining the same functionality.
+
+
 --- 0.61.1
 
 New libPropList
