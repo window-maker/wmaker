@@ -236,6 +236,17 @@ WMSetScrollViewPageScroll(WMScrollView *sPtr, int amount)
 }
 
 
+WMRect 
+WMGetScrollViewVisibleRect(WMScrollView *sPtr)
+{
+    WMRect rect;
+    
+    rect.pos = sPtr->contentView->pos;
+    rect.size = sPtr->viewport->size;
+    
+    return rect;
+}
+
 static void
 doScrolling(WMWidget *self, void *data)
 {
@@ -522,7 +533,7 @@ handleEvents(XEvent *event, void *data)
 static void
 destroyScrollView(ScrollView *sPtr)
 {
-    
+    puts("destroyScrollView not implemented");
    
     wfree(sPtr);
 }

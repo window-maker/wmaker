@@ -17,7 +17,7 @@ changes since wmaker 0.62.1:
   subdirectories
 - removed WMArrayBag and reorganized WMTreeBag to be WMBag.
 - added WMArray class.
-- added WMSetWindowUserPosition().
+- added WMSetWindowUserPosition()
 - added WMGetListSelectedItems()
 - added WMSetListAllowMultipleSelection(), WMListAllowsMultipleSelection().
 - added WMSetListAllowEmptySelection(), WMListAllowsEmptySelection().
@@ -40,6 +40,8 @@ changes since wmaker 0.62.1:
 - Added WMGetBrowserPaths() to retrieve the paths for browsers that allow
   multiple selections.
 - WMDestroyWidget() now calls WMUnmapWidget() first
+- added WMScrollerDidScrollNotification to scroller
+- added WMGetScrollViewVisibleRect()
 
 
 changes since wmaker 0.62.0:

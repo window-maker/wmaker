@@ -14,6 +14,10 @@
 #define AUTOSCROLL_DELAY 		40
 
 
+char *WMScrollerDidScrollNotification = "WMScrollerDidScrollNotification";
+
+
+
 typedef struct W_Scroller {
     W_Class widgetClass;
     W_View *view;
@@ -672,6 +676,8 @@ handlePush(Scroller *sPtr, int pushX, int pushY, int alternate)
     
     if (doAction && sPtr->action) {
 	(*sPtr->action)(sPtr, sPtr->clientData);
+	
+	WMPostNotificationName(WMScrollerDidScrollNotification, sPtr, NULL);
     }
 }
 
@@ -751,6 +757,8 @@ handleMotion(Scroller *sPtr, int mouseX, int mouseY)
 	WMSetScrollerParameters(sPtr, newFloatValue, sPtr->knobProportion);
 	if (sPtr->action) {
 	    (*sPtr->action)(sPtr, sPtr->clientData);
+	    WMPostNotificationName(WMScrollerDidScrollNotification, sPtr, 
+				   NULL);	    
 	}
     } else {
 	int part;
@@ -780,6 +788,7 @@ autoScroll(void *clientData)
     
     if (sPtr->action) {
 	(*sPtr->action)(sPtr, sPtr->clientData);
+	WMPostNotificationName(WMScrollerDidScrollNotification, sPtr, NULL);
     }
     sPtr->timerID= WMAddTimerHandler(AUTOSCROLL_DELAY, autoScroll, clientData);
 }
@@ -825,6 +834,8 @@ handleActionEvents(XEvent *event, void *data)
             }
 	    if (sPtr->action) {
 		(*sPtr->action)(sPtr, sPtr->clientData);
+		WMPostNotificationName(WMScrollerDidScrollNotification, sPtr, 
+				       NULL);
 	    }
 	}
 	else if (event->xbutton.button==WINGsConfiguration.mouseWheelDown) {
@@ -837,6 +848,8 @@ handleActionEvents(XEvent *event, void *data)
             }
 	    if (sPtr->action) {
 		(*sPtr->action)(sPtr, sPtr->clientData);
+		WMPostNotificationName(WMScrollerDidScrollNotification, sPtr, 
+				       NULL);
 	    }
 	} else {
 	    handlePush(sPtr, event->xbutton.x, event->xbutton.y,
@@ -855,6 +868,8 @@ handleActionEvents(XEvent *event, void *data)
 	if (sPtr->flags.draggingKnob) {
 	    if (sPtr->action) {
 		(*sPtr->action)(sPtr, sPtr->clientData);
+		WMPostNotificationName(WMScrollerDidScrollNotification, sPtr, 
+				       NULL);
 	    }
 	}
 	if (sPtr->timerID) {

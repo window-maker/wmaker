@@ -1068,6 +1068,8 @@ void WMSetScrollerAction(WMScroller *sPtr, WMAction *action, void *clientData);
 void WMSetScrollerArrowsPosition(WMScroller *sPtr, 
 				 WMScrollArrowPosition position);
 
+extern char *WMScrollerDidScrollNotification;
+
 /* ....................................................................... */
 
 WMList *WMCreateList(WMWidget *parent);
@@ -1383,6 +1385,8 @@ void WMSetScrollViewContentView(WMScrollView *sPtr, WMView *view);
 void WMSetScrollViewRelief(WMScrollView *sPtr, WMReliefType type);
 
 void WMSetScrollViewContentView(WMScrollView *sPtr, WMView *view);
+
+WMRect WMGetScrollViewVisibleRect(WMScrollView *sPtr);
 
 WMScroller *WMGetScrollViewHorizontalScroller(WMScrollView *sPtr);
 

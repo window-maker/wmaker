@@ -1219,6 +1219,7 @@ main(int argc, char **argv)
 
     testScrollView(scr);
     
+#if 0
     testButton(scr);
 
     testFrame(scr);
