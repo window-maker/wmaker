@@ -37,5 +37,5 @@
   IconBack = (mdgradient, "#183454", "#296ed6", "#03110e");
   IconTitleColor = white;
   IconTitleBack = "rgb:18/2c/70";
-  WorkspaceBack = (solid, "rgb:24/3e/6c");
+  WorkspaceBack = (solid, "rgb:22/44/77");
 }
