@@ -27,7 +27,9 @@ Need to do:
   ~/G/D/WindowMaker /u/l/s/W/D/WindowMaker built-in-defaults
 - remake internal string processing to use wchar? unicode?
 - add new file for stuff like default commands and dnd commands for
-docked apps, balloons for the dock etc
+  docked apps, balloons for the dock etc
+- fix the #define MIN(a,b) stuff. defined in too many places, and maybe
+  replace with WMIN(a,b).
 
 Maybe some day:
 ===============
