@@ -171,7 +171,7 @@ typedef struct _WScreen {
 
     union WTexture *menu_title_texture[3];/* menu titlebar texture (tex, -, -) */
     union WTexture *window_title_texture[3];  /* win textures (foc, unfoc, pfoc) */
-    struct WTexSolid *resizebar_texture[3];/* window resizebar texture (tex, -, -) */
+    union WTexture *resizebar_texture[3];/* window resizebar texture (tex, -, -) */
 
     union WTexture *menu_item_texture; /* menu item texture */
 

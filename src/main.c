@@ -297,11 +297,16 @@ execInitScript()
     
     file = wfindfile(DEF_CONFIG_PATHS, DEF_INIT_SCRIPT);
     if (file) {
+	if (system(file) != 0) {
+	    wsyserror(_("%s:could not execute initialization script"), file);
+	}
+#if 0
 	if (fork()==0) {
 	    execl("/bin/sh", "/bin/sh", "-c",file, NULL);
 	    wsyserror(_("%s:could not execute initialization script"), file);
 	    exit(1);
 	}
+#endif
 	free(file);
     }
 }
@@ -314,11 +319,16 @@ ExecExitScript()
     
     file = wfindfile(DEF_CONFIG_PATHS, DEF_EXIT_SCRIPT);
     if (file) {
+	if (system(file) != 0) {
+	    wsyserror(_("%s:could not execute exit script"), file);
+	}
+#if 0
 	if (fork()==0) {
 	    execl("/bin/sh", "/bin/sh", "-c", file, NULL);
 	    wsyserror(_("%s:could not execute exit script"), file);
 	    exit(1);
 	}
+#endif
 	free(file);
     }
 }

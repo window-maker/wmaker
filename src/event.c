@@ -1330,7 +1330,7 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     WScreen *scr = wScreenForRootWindow(event->xkey.root);
     Bool done = False;
     Bool openedSwitchMenu = False;
-	WWindow *newFocused;
+    WWindow *newFocused;
     WWindow *oldFocused;
     int modifiers;
     XModifierKeymap *keymap;
@@ -1355,15 +1355,15 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 
     wWindowFocus(newFocused, scr->focused_window);
     oldFocused = newFocused;
-	if (wPreferences.circ_raise)
+    if (wPreferences.circ_raise)
     	wRaiseFrame(newFocused->frame->core);
 
     if (wPreferences.popup_switchmenu && 
-		(!scr->switch_menu || !scr->switch_menu->flags.mapped))
-	{
-		OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);
-		openedSwitchMenu = True;
-	}
+	(!scr->switch_menu || !scr->switch_menu->flags.mapped)) {
+
+	OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);
+	openedSwitchMenu = True;
+    }
 	
     while (!done) {
 	XEvent ev;
@@ -1386,8 +1386,8 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 	    newFocused = nextToFocusAfter(newFocused);
 	    wWindowFocus(newFocused, oldFocused);
 	    oldFocused = newFocused;
-		if (wPreferences.circ_raise)
-                                wRaiseFrame(newFocused->frame->core);
+	    if (wPreferences.circ_raise)
+		wRaiseFrame(newFocused->frame->core);
 	    UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
 
 	} else if (ev.type == KeyPress
@@ -1398,8 +1398,8 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 	    newFocused = nextToFocusBefore(newFocused);
 	    wWindowFocus(newFocused, oldFocused);
 	    oldFocused = newFocused;
-		if (wPreferences.circ_raise)
-                                wRaiseFrame(newFocused->frame->core);
+	    if (wPreferences.circ_raise)
+		wRaiseFrame(newFocused->frame->core);
 	    UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
 	}
 	if (ev.type == KeyRelease) {

@@ -1,12 +1,12 @@
 
+selection to get icon background
+
 Do ASAP:
 ========
-- exitscript 
 - fix bestvisual selection code. Broken.
 - fix RemakeStackList() to account for transient windows
 - blink border of clients with UrgencyHint set between red and black
 - finish session stuff
-- fix scroller to not jump while dragging knob
 - add multiline support for balloons
 - move/add balloon to WINGs
 - finish XStandardColormap stuff in wrlib

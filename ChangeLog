@@ -16,6 +16,8 @@ Changes since version 0.52.0:
 - applied WMSound patch from "Quinn, Anthony" <Anthony.Quinn@usa.xerox.com>
 - fixed focus bug with unfocusable window (I swear I had fixed that before...)
 - applied windoze cycle patch from  Paul Warren <pdw@ferret.lmh.ox.ac.uk>
+- changed initscript and exitscript execution from fork()/exec() to system()
+- added ResizebarBack and added appropriate backwards compat. hacks in setstyle
 
 Changes since version 0.51.2:
 .............................

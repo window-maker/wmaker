@@ -51,6 +51,7 @@ char *FontOptions[] = {
 char *ProgName;
 int ignoreFonts = 0;
 
+Display *dpy;
 
 char*
 defaultsPathForDomain(char *domain)
@@ -127,6 +128,69 @@ hackPaths(proplist_t style, char *prefix)
 }
 
 
+static proplist_t
+getColor(proplist_t texture)
+{
+    proplist_t value, type;
+    char *str;
+
+    type = PLGetArrayElement(texture, 0);
+    if (!type)
+	return NULL;
+
+    value = NULL;
+
+    str = PLGetString(type);
+    if (strcasecmp(str, "solid")==0) {
+	value = PLGetArrayElement(texture, 1);
+    } else if (strcasecmp(str, "dgradient")==0
+	       || strcasecmp(str, "hgradient")==0
+	       || strcasecmp(str, "vgradient")==0) {
+	proplist_t c1, c2;
+	int r1, g1, b1, r2, g2, b2;
+	char buffer[32];
+
+	c1 = PLGetArrayElement(texture, 1);
+	c2 = PLGetArrayElement(texture, 2);
+	if (!dpy) {
+	    if (sscanf(PLGetString(c1), "#%2x%2x%2x", &r1, &g1, &b1)==3
+		&& sscanf(PLGetString(c2), "#%2x%2x%2x", &r2, &g2, &b2)==3) {
+		sprintf(buffer, "#%2x%2x%2x", (r1+r2)/2, (g1+g2)/2,
+			(b1+b2)/2);
+		value = PLMakeString(buffer);
+	    } else {
+		value = c1;
+	    }
+	} else {
+	    XColor color1;
+	    XColor color2;
+	    
+	    XParseColor(dpy, DefaultColormap(dpy, DefaultScreen(dpy)), 
+			PLGetString(c1), &color1);
+	    XParseColor(dpy, DefaultColormap(dpy, DefaultScreen(dpy)),
+			PLGetString(c1), &color2);
+	    
+	    sprintf(buffer, "#%4x%4x%4x", (color1.red+color2.red)/2, 
+		    (color1.green+color2.green)/2,
+		    (color1.blue+color2.blue)/2);
+	    value = PLMakeString(buffer);	    
+	}
+    } else if (strcasecmp(str, "mdgradient")==0
+	       || strcasecmp(str, "mhgradient")==0
+	       || strcasecmp(str, "mvgradient")==0) {
+	
+	value = PLGetArrayElement(texture, 1);
+
+    } else if (strcasecmp(str, "tpixmap")==0
+	       || strcasecmp(str, "cpixmap")==0
+	       || strcasecmp(str, "spixmap")==0) {
+	
+	value = PLGetArrayElement(texture, 2);
+    }
+
+    return value;
+}
+
 
 /*
  * since some of the options introduce incompatibilities, we will need
@@ -142,6 +206,7 @@ hackStyle(proplist_t style)
     proplist_t tmp;
     int i;
     int foundIconTitle = 0;
+    int foundResizebarBack = 0;
 
     keys = PLGetAllDictionaryKeys(style);
 
@@ -168,6 +233,8 @@ hackStyle(proplist_t style)
 	    if (strcasecmp(str, "IconTitleColor")==0
 		|| strcasecmp(str, "IconTitleBack")==0) {
 		foundIconTitle = 1;
+	    } else if (strcasecmp(str, "ResizebarBack")==0) {
+		foundResizebarBack = 1;
 	    }
 	}
     }
@@ -182,48 +249,9 @@ hackStyle(proplist_t style)
 
 	tmp = PLGetDictionaryEntry(style, PLMakeString("FTitleBack"));
 	if (tmp) {
-	    proplist_t type;
 	    proplist_t value;
-	    char *str;
-	    
-	    type = PLGetArrayElement(tmp, 0);
-	    if (!type)
-		return;
 
-	    value = NULL;
-	    
-	    str = PLGetString(type);
-	    if (strcasecmp(str, "solid")==0) {
-		value = PLGetArrayElement(tmp, 1);
-	    } else if (strcasecmp(str, "dgradient")==0
-		       || strcasecmp(str, "hgradient")==0
-		       || strcasecmp(str, "vgradient")==0) {
-		proplist_t c1, c2;
-		int r1, g1, b1, r2, g2, b2;
-		char buffer[32];
-
-		c1 = PLGetArrayElement(tmp, 1);
-		c2 = PLGetArrayElement(tmp, 2);
-		if (sscanf(PLGetString(c1), "#%2x%2x%2x", &r1, &g1, &b1)==3
-		    && sscanf(PLGetString(c2), "#%2x%2x%2x", &r2, &g2, &b2)==3) {
-		    sprintf(buffer, "#%2x%2x%2x", (r1+r2)/2, (g1+g2)/2,
-			    (b1+b2)/2);
-		    value = PLMakeString(buffer);
-		} else {
-		    value = c1;
-		}
-	    } else if (strcasecmp(str, "mdgradient")==0
-		       || strcasecmp(str, "mhgradient")==0
-		       || strcasecmp(str, "mvgradient")==0) {
-
-		value = PLGetArrayElement(tmp, 1);
-
-	    } else if (strcasecmp(str, "tpixmap")==0
-		       || strcasecmp(str, "cpixmap")==0
-		       || strcasecmp(str, "spixmap")==0) {
-
-		value = PLGetArrayElement(tmp, 2);
-	    }
+	    value = getColor(tmp);
 
 	    if (value) {
 		PLInsertDictionaryEntry(style, PLMakeString("IconTitleBack"),
@@ -232,9 +260,29 @@ hackStyle(proplist_t style)
 	}
     }
 
-    if (!PLGetDictionaryEntry(style, PLMakeString("AlternativeMenuStyle"))) {
-	PLInsertDictionaryEntry(style, PLMakeString("AlternativeMenuStyle"),
-				PLMakeString("NO"));
+    if (!foundResizebarBack) {
+	/* set the default values */
+	tmp = PLGetDictionaryEntry(style, PLMakeString("UTitleBack"));
+	if (tmp) {
+	    proplist_t value;
+
+	    value = getColor(tmp);
+
+	    if (value) {
+		proplist_t t;
+		
+		t = PLMakeArrayFromElements(PLMakeString("solid"), value, 
+					    NULL);
+		PLInsertDictionaryEntry(style, PLMakeString("ResizebarBack"),
+					t);
+	    }
+	}
+    }
+
+
+    if (!PLGetDictionaryEntry(style, PLMakeString("MenuStyle"))) {
+	PLInsertDictionaryEntry(style, PLMakeString("MenuStyle"),
+				PLMakeString("normal"));
     }
 }
 
@@ -276,6 +324,8 @@ main(int argc, char **argv)
     char *file = NULL;
     struct stat statbuf;
     int i;
+
+    dpy = XOpenDisplay("");
 
     ProgName = argv[0];
     
@@ -380,10 +430,8 @@ main(int argc, char **argv)
 
     PLSave(prop, YES);
     {
-	Display *dpy;
 	XEvent ev;
 	
-	dpy = XOpenDisplay("");
 	if (dpy) {
 	    int i;
 	    char *msg = "Reconfigure";

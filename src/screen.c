@@ -484,8 +484,8 @@ createInternalWindows(WScreen *scr)
     attribs.override_redirect = True;    
     attribs.cursor = wCursor[WCUR_DEFAULT];
     attribs.background_pixmap = None;
-    if (scr->resizebar_texture[0])
-	attribs.background_pixel = scr->resizebar_texture[0]->normal.pixel;
+    if (scr->widget_texture)
+	attribs.background_pixel = scr->widget_texture->normal.pixel;
     else
 	attribs.background_pixel = scr->light_pixel;
     vmask |= CWColormap;

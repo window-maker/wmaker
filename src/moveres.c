@@ -140,8 +140,8 @@ showPosition(WWindow *wwin, int x, int y)
 		   False);
 	sprintf(num, "%+i  %-+i", x, y);
 	fw = wTextWidth(scr->info_text_font->font, num, strlen(num));
-	
-	XSetForeground(dpy, gc, scr->window_title_pixel[WS_UNFOCUSED]);
+
+	XSetForeground(dpy, gc, scr->black_pixel);
 	
 	fh = scr->info_text_font->height;
 	wDrawString(scr->geometry_display, scr->info_text_font, gc, 
@@ -149,8 +149,8 @@ showPosition(WWindow *wwin, int x, int y)
 		    (scr->geometry_display_height-fh)/2 + scr->info_text_font->y,
 		    num, strlen(num));
 	wDrawBevel(scr->geometry_display, scr->geometry_display_width+1,
-		   scr->geometry_display_height+1, scr->resizebar_texture[0],
-		   WREL_RAISED);
+		   scr->geometry_display_height+1, 
+		   scr->widget_texture, WREL_RAISED);
     }
 }
 
@@ -342,10 +342,9 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 		(by - ty - wwin->normal_hints->base_height)
 		/ wwin->normal_hints->height_inc);
 	fw = wTextWidth(scr->info_text_font->font, num, strlen(num));
-	
-	XSetForeground(dpy, scr->info_text_gc,
-		       scr->window_title_pixel[WS_UNFOCUSED]);
-	
+
+	XSetForeground(dpy, scr->info_text_gc, scr->black_pixel);
+
 	/* Display the height. */
 	wDrawString(scr->geometry_display, scr->info_text_font,
 		    scr->info_text_gc,
@@ -353,8 +352,8 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 		    (scr->geometry_display_height-fh)/2 +scr->info_text_font->y,
 		    num, strlen(num));
 	wDrawBevel(scr->geometry_display, scr->geometry_display_width+1,
-		   scr->geometry_display_height+1, scr->resizebar_texture[0],
-		   WREL_RAISED);
+		   scr->geometry_display_height+1,
+		   scr->widget_texture, WREL_RAISED);
     }
 }
 

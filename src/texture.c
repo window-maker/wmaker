@@ -44,10 +44,6 @@
 extern WPreferences wPreferences;
 
 
-static Pixmap renderTexture(WScreen *scr, int width, int height,
-			     WTexture *texture, int rel);
-
-
 static void bevelImage(RImage *image, int relief);
 
 

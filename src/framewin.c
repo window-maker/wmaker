@@ -486,7 +486,7 @@ renderTexture(WScreen *scr, WTexture *texture, int width, int height,
 
     img = wTextureRenderImage(texture, width, height, WREL_FLAT);
     if (!img) {
-        wwarning(_("could not render gradient: %s"), RMessageForError(RErrorCode));
+        wwarning(_("could not render texture: %s"), RMessageForError(RErrorCode));
         return;
     }
     
@@ -551,6 +551,49 @@ renderTexture(WScreen *scr, WTexture *texture, int width, int height,
 
 
 static void
+renderResizebarTexture(WScreen *scr, WTexture *texture, int width, int height,
+		       int cwidth, Pixmap *pmap)
+{
+    RImage *img;
+    RColor light;
+    RColor dark;
+
+    *pmap = None;
+
+    img = wTextureRenderImage(texture, width, height, WREL_FLAT);
+    if (!img) {
+        wwarning(_("could not render texture: %s"),
+		 RMessageForError(RErrorCode));
+        return;
+    }
+
+    light.alpha = 0;
+    light.red = light.green = light.blue = 80;
+
+    dark.alpha = 0;
+    dark.red = dark.green = dark.blue = 40;
+
+    ROperateLine(img, RSubtractOperation, 0, 0, width-1, 0, &dark);
+    ROperateLine(img, RAddOperation, 0, 1, width-1, 1, &light);
+
+    ROperateLine(img, RSubtractOperation, cwidth, 2, cwidth, height, &dark);
+    ROperateLine(img, RAddOperation, cwidth+1, 2, cwidth+1, height, &light);
+
+    ROperateLine(img, RSubtractOperation, width-cwidth-2, 2, width-cwidth-2,
+		 height, &dark);
+    ROperateLine(img, RAddOperation, width-cwidth-1, 2, width-cwidth-1, 
+		 height, &light);
+
+    if (!RConvertImage(scr->rcontext, img, pmap)) {
+	wwarning(_("error rendering image: %s"), RMessageForError(RErrorCode));
+    }
+
+    RDestroyImage(img);
+}
+
+
+
+static void
 updateTexture(WFrameWindow *fwin)
 {
     int i;
@@ -593,12 +636,6 @@ updateTexture(WFrameWindow *fwin)
 	    handleButtonExpose(&fwin->right_button->descriptor, NULL);
 	}
     }
-    
-    if (fwin->resizebar) {
-	XSetWindowBackground(dpy, fwin->resizebar->window, 
-			     fwin->resizebar_texture[0]->solid.normal.pixel);
-	XClearWindow(dpy, fwin->resizebar->window);
-    }
 }
 
 
@@ -624,14 +661,14 @@ remakeTexture(WFrameWindow *fwin, int state)
 		&& !fwin->flags.lbutton_dont_fit;
 	    right = fwin->right_button && !fwin->flags.hide_right_button
 		&& !fwin->flags.rbutton_dont_fit;
-	    
+
 	    width = fwin->core->width+1;
-	    
+
 	    renderTexture(fwin->screen_ptr, fwin->title_texture[state],
 			  width, fwin->titlebar->height,
 			  fwin->titlebar->height, fwin->titlebar->height,
 			  left, right, &pmap, &lpmap, &rpmap);
-	    
+
 	    fwin->title_back[state] = pmap;
 	    if (wPreferences.new_style) {
 		fwin->lbutton_back[state] = lpmap;
@@ -639,13 +676,39 @@ remakeTexture(WFrameWindow *fwin, int state)
 	    }
 	}
     }
+    if (fwin->resizebar_texture && fwin->resizebar_texture[0] 
+	&& fwin->resizebar && state == 0) {
+
+	FREE_PIXMAP(fwin->resizebar_back[0]);
+
+	if (fwin->resizebar_texture[0]->any.type!=WTEX_SOLID) {
+
+	    renderResizebarTexture(fwin->screen_ptr,
+				   fwin->resizebar_texture[0],
+				   fwin->resizebar->width,
+				   fwin->resizebar->height,
+				   fwin->resizebar_corner_width,
+				   &pmap);
+
+	    fwin->resizebar_back[0] = pmap;
+	}
+	
+	/* this part should be in updateTexture() */
+	if (fwin->resizebar_texture[0]->any.type!=WTEX_SOLID) {
+	    XSetWindowBackgroundPixmap(dpy, fwin->resizebar->window,
+				       fwin->resizebar_back[0]);
+	} else {
+	    XSetWindowBackground(dpy, fwin->resizebar->window,
+				 fwin->resizebar_texture[0]->solid.normal.pixel);
+	}
+	XClearWindow(dpy, fwin->resizebar->window);
+    }
 }
 
 
 void
 wFrameWindowPaint(WFrameWindow *fwin)
 {
-
     if (fwin->flags.is_client_window_frame)
 	fwin->flags.justification = wPreferences.title_justification;
 
@@ -685,7 +748,8 @@ wFrameWindowPaint(WFrameWindow *fwin)
 		   WREL_RAISED);
     }
     
-    if (fwin->resizebar	&& !fwin->flags.repaint_only_titlebar) {
+    if (fwin->resizebar	&& !fwin->flags.repaint_only_titlebar
+	&& fwin->resizebar_texture[0]->any.type == WTEX_SOLID) {
 	Window win;
 	int w, h;
 	int cw;

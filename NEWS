@@ -2,10 +2,12 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
---- 0.53.0
+--- 0.52.1
 
-New Option
-----------
+New Options
+-----------
+
+** MenuStyle
 
 MenuStyle=<style>; will change the menu texture style.
 
@@ -17,6 +19,18 @@ singleTexture: for a single texture that spans the whole menu, with bevels
 in each item
 
 flat: singleTexture without the bevels
+
+
+** ResizebarBack
+
+ResizebarBack=<texture>;
+
+where <texture> is any of the textures you normally use in titlebars and
+other places.
+
+If the style file/theme does not contain a ResizebarBack option, setstyle
+will automatically hack it so that wmaker will make the theme work like 
+before.
 
 
 --- 0.52.0

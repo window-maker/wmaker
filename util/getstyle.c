@@ -59,7 +59,8 @@ static char *options[] = {
     "UTitleColor",	
     "FTitleBack",	
     "PTitleBack",	
-    "UTitleBack",	
+    "UTitleBack",
+    "ResizebarBack",
     "MenuTitleColor",	
     "MenuTextColor",	
     "MenuDisabledColor", 
@@ -68,7 +69,7 @@ static char *options[] = {
     "IconBack",	
     "IconTitleColor",
     "IconTitleBack",
-    "AlternativeMenuStyle",
+    "MenuStyle",
 #ifdef TITLE_TEXT_SHADOW
     "Shadow",
     "FShadowColor",    

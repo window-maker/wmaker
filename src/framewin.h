@@ -58,6 +58,7 @@ typedef struct WFrameWindow {
     WCoreWindow *resizebar;	       /* bottom resizebar */
 
     Pixmap title_back[3];	       /* focused, unfocused, pfocused */
+    Pixmap resizebar_back[3];	       /* any, None, None */
     Pixmap lbutton_back[3];
     Pixmap rbutton_back[3];
 

@@ -154,6 +154,7 @@ static int setWTitleColor();
 static int setFTitleBack();
 static int setPTitleBack();
 static int setUTitleBack();
+static int setResizebarBack();
 static int setWorkspaceBack();
 static int setWorkspaceSpecificBack();
 static int setMenuTitleColor();
@@ -549,6 +550,9 @@ WDefaultEntry optionList[] = {
     },
     {"UTitleBack",	"(solid, gray)",	NULL,
 	  NULL,				getTexture,	setUTitleBack
+    },
+    {"ResizebarBack",	"(solid, gray)",	NULL,
+	  NULL,				getTexture,	setResizebarBack
     },
     {"MenuTitleColor",	"white",       		NULL,
 	  NULL,				getColor,	setMenuTitleColor
@@ -1152,7 +1156,7 @@ wReadDefaults(WScreen *scr, proplist_t new_dict)
 	foo = 0;
         if (needs_refresh & REFRESH_WINDOW_FONT) {
 	    foo |= WFontSettings;
-	} 
+	}
 	if (needs_refresh & REFRESH_WINDOW_TEXTURES) {
 	    foo |= WTextureSettings;
 	}
@@ -1162,7 +1166,7 @@ wReadDefaults(WScreen *scr, proplist_t new_dict)
 	if (foo)
 	    WMPostNotificationName(WNWindowAppearanceSettingsChanged, NULL,
 				   (void*)foo);
-	
+
 	if (!(needs_refresh & REFRESH_ICON_TILE)) {
 	    foo = 0;
 	    if (needs_refresh & REFRESH_ICON_FONT) {
@@ -2815,6 +2819,10 @@ setWidgetColor(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo
     }
     scr->widget_texture = *(WTexSolid**)texture;
 
+    if (scr->geometry_display != None)
+    	XSetWindowBackground(dpy, scr->geometry_display, 
+			     scr->widget_texture->normal.pixel);
+
     return 0;
 }
 
@@ -2850,17 +2858,19 @@ setUTitleBack(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
 	wTextureDestroy(scr, scr->window_title_texture[WS_UNFOCUSED]);
     }
     scr->window_title_texture[WS_UNFOCUSED] = *texture;
-    
+
+    return REFRESH_WINDOW_TEXTURES;
+}
+
+
+static int 
+setResizebarBack(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
+{
     if (scr->resizebar_texture[0]) {
-	wTextureDestroy(scr, (WTexture*)scr->resizebar_texture[0]);
+	wTextureDestroy(scr, scr->resizebar_texture[0]);
     }
-    scr->resizebar_texture[0]
-      = wTextureMakeSolid(scr, &scr->window_title_texture[WS_UNFOCUSED]->any.color);
-    
-    if (scr->geometry_display != None)
-    	XSetWindowBackground(dpy, scr->geometry_display, 
-			 scr->resizebar_texture[0]->normal.pixel);
-			 
+    scr->resizebar_texture[0] = *texture;
+
     return REFRESH_WINDOW_TEXTURES;
 }
 

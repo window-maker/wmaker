@@ -886,7 +886,7 @@ wManageWindow(WScreen *scr, Window window)
     wwin->frame = wFrameWindowCreate(scr, window_level, 
 				     x, y, width, height, foo,
 				     scr->window_title_texture,
-				     (WTexture**)scr->resizebar_texture,
+				     scr->resizebar_texture,
 				     scr->window_title_pixel, 
 				     &scr->window_title_gc, 
 				     &scr->title_font);
@@ -1237,7 +1237,7 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
 				     wwin->frame_x, wwin->frame_y,
 				     width, height, foo,
 				     scr->window_title_texture,
-				     (WTexture**)scr->resizebar_texture,
+				     scr->resizebar_texture,
 				     scr->window_title_pixel, 
 				     &scr->window_title_gc, 
 				     &scr->title_font);
