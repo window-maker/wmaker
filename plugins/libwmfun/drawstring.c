@@ -272,30 +272,24 @@ logicalCombineArea(RImage *bg, RImage *image,
         int _dx, int _dy,
         int opaquueness) {
 
-    if (_dx >= bg->width) {
-        return;
-    } else if (_dx + image->width > bg->width) {
-        _sw = bg->width - _dx;
-    }
-    if (_dx + image->width < 0) {
-        return;
-    } else if (_dx < 0) {
+    if (_dx < 0) {
         _sx = -_dx;
-        _sw = image->width + _dx;
+        _sw = _sw + _dx;
         _dx = 0;
     }
 
-    if (_dy >= bg->height) {
-        return;
-    } else if (_dy + image->height > bg->height) {
-        _sh = bg->height - _dy;
+    if (_dx + _sw > bg->width) {
+        _sw = bg->width - _dx;
     }
-    if (_dy + image->height < 0) {
-        return;
-    } else if (_dy < 0) {
+
+    if (_dy < 0) {
         _sy = -_dy;
-        _sh = image->height + _dy;
+        _sh = _sh + _dy;
         _dy = 0;
+    }
+
+    if (_dy + _sh > bg->height) {
+        _sh = bg->height - _dy;
     }
 
     if (_sh > 0 && _sw > 0) {
@@ -319,9 +313,7 @@ drawFreeTypeString (proplist_t pl, Drawable d,
     int length = strlen(text);
     Pixmap pixmap;
     GC gc;
-    /*
     int xwidth, xheight, dummy;
-    */
     Window wdummy;
 
     /*pixmap = XCreatePixmap(ds_dpy, d, width, height, DefaultDepth(ds_dpy, DefaultScreen(ds_dpy)));*/
@@ -329,15 +321,15 @@ drawFreeTypeString (proplist_t pl, Drawable d,
     data = ((void **)func_data[2])[2];
     pixmap = (Pixmap)func_data[3];
     /* create temp for drawing */
-    /*
-    XGetGeometry(ds_dpy, d, &wdummy, &dummy, &dummy, &xwidth, &xheight, &dummy, &dummy);
-    pixmap = XCreatePixmap(ds_dpy, d, xwidth, xheight, DefaultDepth(ds_dpy, DefaultScreen(ds_dpy)));
-    XCopyArea(ds_dpy, d, pixmap, gc, 0, 0, xwidth, xheight, 0, 0);
-    */
-    rimg = RCreateImageFromDrawable(rc, pixmap, None);
-    /*
-    XFreePixmap(ds_dpy, pixmap);
-    */
+    if (!pixmap) {
+        XGetGeometry(ds_dpy, d, &wdummy, &dummy, &dummy, &xwidth, &xheight, &dummy, &dummy);
+        pixmap = XCreatePixmap(ds_dpy, d, xwidth, xheight, DefaultDepth(ds_dpy, DefaultScreen(ds_dpy)));
+        XCopyArea(ds_dpy, d, pixmap, gc, 0, 0, xwidth, xheight, 0, 0);
+        rimg = RCreateImageFromDrawable(rc, pixmap, None);
+        XFreePixmap(ds_dpy, pixmap);
+    } else {
+        rimg = RCreateImageFromDrawable(rc, pixmap, None);
+    }
 
     if (rimg) {
         for (i = 0, j = 3; i < strlen(text); i++) {
@@ -347,18 +339,17 @@ drawFreeTypeString (proplist_t pl, Drawable d,
             }
             if (data->glyphs_array[text[i]])
             if (data->glyphs_array[text[i]]->image) {
-                int _sx, _dx, _sy, _dy, _sw, _sh;
+                int _dx, _dy, _sw, _sh;
 
-                _sx = 0; _sy = 0;
                 _dx = j + data->glyphs_array[text[i]]->left;
                 _dy = rimg->height - data->glyphs_array[text[i]]->top ;
                 _sw = data->glyphs_array[text[i]]->image->width;
                 _sh = data->glyphs_array[text[i]]->image->height;
 
                 logicalCombineArea(rimg, data->glyphs_shadow_array[text[i]]->image,
-                        _sx, _sy, _sw, _sh, _dx-2, _dy-2, 100);
+                        0, 0, _sw, _sh, _dx-2, _dy-2, 100);
                 logicalCombineArea(rimg, data->glyphs_array[text[i]]->image,
-                        _sx, _sy, _sw, _sh, _dx-3, _dy-3, 0);
+                        0, 0, _sw, _sh, _dx-3, _dy-3, 0);
 
                 j += data->glyphs_array[text[i]]->advance_x >> 6;
             }
