@@ -633,13 +633,11 @@ handleButtonPress(XEvent *event)
 	    wUnselectWindows(scr);
 	    wSelectWindows(scr, event);
 	}
-#ifdef MOUSE_WS_SWITCH
 	else if (event->xbutton.button==Button5) {
 	    wWorkspaceRelativeChange(scr, -1);
 	} else if (event->xbutton.button==Button4) {
 	    wWorkspaceRelativeChange(scr, 1);
 	}
-#endif /* MOUSE_WS_SWITCH */
 #ifdef GNOME_STUFF
 	else if (wGNOMEProxyizeButtonEvent(scr, event))
 	    return;

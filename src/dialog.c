@@ -1065,7 +1065,12 @@ handleLogoPush(XEvent *event, void *data)
 	    "F'ck Canada!!!!",
 	    "F'ck Bastard Imperialists!!!",
 	    "Hi! My name is bobby...",
-	    "AHH! The neurotic monkeys are after me!"
+	    "AHH! The neurotic monkeys are after me!",
+	    "WHAT YOU SAY??",
+	    "WE GET SIGNAL",
+	    "SOMEBODY SET UP US THE BOMB",
+	    "ALL YOUR BASE ARE BELONG TO US!"
+
     };
 
 

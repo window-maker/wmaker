@@ -106,13 +106,6 @@
  */
 #define FALLBACK_WINDOWMANAGER "blackbox"
 
-
-/* Define if you have a 5 button mouse and want to use button 4
- * (in the root window) for switching to the previous workspace
- * and 5 for the next. This will not work if you enable
- * DisableWSMouseActions or compile wmaker with --enable-lite */
-#define MOUSE_WS_SWITCH
- 
 /*
  * Turn on a hack to make mouse and keyboard actions work even if
  * the NumLock or ScrollLock modifiers are turned on. They might
