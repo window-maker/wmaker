@@ -213,12 +213,6 @@
  */
 #undef GRADIENT_CLIP_ARROWS
 
-/*
- * define DEFINABLE_CURSOR if you want WindowMaker's default cursor
- * to be user-definable instead of using a hard-coded left_ptr.
- */
-#undef DEFINABLE_CURSOR
-
 
 #undef NO_WINDOW_ENUMERATOR
 

@@ -49,21 +49,21 @@ char *FontOptions[] = {
 };
 
 char *CursorOptions[] = {
-    "NormalCursor"
-    ,"ArrowCursor"
-    ,"MoveCursor"
-    ,"ResizeCursor"
-    ,"TopLeftResizeCursor"
-    ,"TopRightResizeCursor"
-    ,"BottomLeftResizeCursor"
-    ,"BottomRightResizeCursor"
-    ,"VerticalResizeCursor"
-    ,"HorizontalResizeCursor"
-    ,"WaitCursor"
-    ,"QuestionCursor"
-    ,"TextCursor"
-    ,"SelectCursor"
-    ,NULL
+    "NormalCursor",
+    "ArrowCursor",
+    "MoveCursor",
+    "ResizeCursor",
+    "TopLeftResizeCursor",
+    "TopRightResizeCursor",
+    "BottomLeftResizeCursor",
+    "BottomRightResizeCursor",
+    "VerticalResizeCursor",
+    "HorizontalResizeCursor",
+    "WaitCursor",
+    "QuestionCursor",
+    "TextCursor",
+    "SelectCursor",
+    NULL
 };
 
 
@@ -379,20 +379,16 @@ print_help()
     printf("Usage: %s [OPTIONS] FILE\n", ProgName);
     puts("Reads style/theme configuration from FILE and updates Window Maker.");
     puts("");
-    puts("  --no-fonts		ignore font related options");
-    /* Why these stupid tabs?  They're misleading to the programmer,
-     * and they don't do any better than aligning via spaces:  If you
-     * have a proportional font, all bets are off anyway.  Sheesh.
-     */
-    puts("  --no-cursors		ignore cursor related options");
-    puts("  --ignore <option>	ignore changes in the specified option");
-    puts("  --help		display this help and exit");
+    puts("  --no-fonts          ignore font related options");
+    puts("  --no-cursors        ignore cursor related options");
+    puts("  --ignore <option>   ignore changes in the specified option");
+    puts("  --help              display this help and exit");
     /*
-    puts("  --format <format>	specifies the format of the theme to be converted");
+    puts("  --format <format>   specifies the format of the theme to be converted");
      */
-    puts("  --version		output version information and exit");
-    puts("");
-    puts("Supported formats: blackbox");
+    puts("  --version           output version information and exit");
+    /*puts("");
+    puts("Supported formats: blackbox");*/
 }
 
 

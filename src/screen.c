@@ -697,9 +697,7 @@ wScreenInit(int screen_number)
 	return NULL;
     }
 
-#ifndef DEFINABLE_CURSOR
     XDefineCursor(dpy, scr->root_win, wCursor[WCUR_DEFAULT]);
-#endif
 
     /* screen descriptor for raster graphic library */
     rattr.flags = RC_RenderMode | RC_ColorsPerChannel | RC_StandardColormap;

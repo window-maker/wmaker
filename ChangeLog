@@ -18,8 +18,10 @@ Changes since version 0.70.0:
   saving dock/clip/session information on exit.
 - Added an internal strcasecmp() to WINGs (only on systems where's not present)
 - Deminiaturizing a window that is also shaded, will perform an unshade too.
-  (Note that this only applies to deminiaturizing shaded windows.
-   Unhiding an application will keep the shaded/unshaded state of windows.)
+  (Note that this only applies to deminiaturizing shaded windows. Unhiding 
+  an application will keep the shaded/unshaded state of windows.)
+- Removed compile time option for definable cursors and made them available by
+  default.
 
 
 Changes since version 0.65.1:

@@ -1,43 +1,16 @@
-# README.definable-cursor: How to use definable-cursor patch for Window Maker
-# created 1999-Apr-24 14:53 jmk
-# autodate: 2001-Sep-05 22:40
 
-+------------------------------------------+
-| Definable Mouse Cursors for Window Maker |
-+------------------------------------------+
 
-The definable-cursor patch for Window Maker
-<http://www.windowmaker.org/> allows user-definable mouse cursors; the
+Definable Mouse Cursors for Window Maker
+----------------------------------------
+
+The definable-cursor feature allows user-definable mouse cursors; the
 cursors can either be the built-in ones from the X11 cursor font, or
 they can be bitmap (XBM) files.  User-definable cursors can be useful
 for theme-builders, lefthanders, and the visually impaired.
 
-This README describes how to enable user-definable cursors in Window
-Maker as well as how to use them.
 
-+----------------------------+
-| Enabling Definable Cursors |
-+----------------------------+
-
-If you want to enable definable mouse cursors in Window Maker, you must
-do so before you configure and build Window Maker.  Here's how:
-
-  (1) Edit src/wconfig.h.in and change the following line:
-  
-        #undef DEFINABLE_CURSOR
-
-      to:
-      
-        #define DEFINABLE_CURSOR
-
-  (2) Configure and build Window Maker as you normally would:
-  
-        ./configure
-	make
-
-+---------------------------+
-| Defining Your Own Cursors |
-+---------------------------+
+Defining Your Own Cursors
+-------------------------
 
 A cursor specification takes one of the following forms in the
 ~/GNUstep/Defaults/WindowMaker file:
@@ -84,23 +57,22 @@ Maker used them in the past, but doesn't use them anymore):
 
     ResizeCursor            = (builtin, sizing);
 
-+----------------------------------------------+
-| Using Cursors with 'getstyle' and 'setstyle' |
-+----------------------------------------------+
 
-The 'getstyle' and 'setstyle' style- and theme-management utilities
-can handle user-definable cursors.  By default, 'getstyle' ignores
-cursor definitions; using 'getstyle -t' to get theme-related settings
-will also include any cursors you've defined in the resulting
-stylefile.
+Using Cursors with 'getstyle' and 'setstyle'
+--------------------------------------------
 
-However, by default, 'setstyle' does *not* ignore cursor settings.  If
+The 'getstyle' and 'setstyle' style/theme-management utilities can
+handle user-definable cursors.  By default, 'getstyle' ignores cursor
+definitions; using 'getstyle -t' to get theme-related settings will
+also include any cursors you've defined in the resulting stylefile.
+
+However, by default, 'setstyle' does NOT ignore cursor settings.  If
 you wish to set a style or theme without installing cursor settings,
 you can use 'setstyle --no-cursors' to ignore the cursor definitions.
 
-+--------------+
-| Random Notes |
-+--------------+
+
+Random Notes
+------------
 
 Most X11 cursors are 16x16 bitmaps.  Many X servers can actually handle
 larger cursors, though.  To check, use:

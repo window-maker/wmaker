@@ -176,11 +176,9 @@ static int setMultiByte();
 #endif
 static int updateUsableArea();
 
-#ifdef DEFINABLE_CURSOR
 extern Cursor wCursor[WCUR_LAST];
 static int getCursor();
 static int setCursor();
-#endif
 
 
 /*
@@ -803,7 +801,7 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.modelock, 	getBool,	NULL
     }
 #endif /* KEEP_XKB_LOCK_STATUS */
-#ifdef DEFINABLE_CURSOR
+
     ,{"NormalCursor", "(builtin, left_ptr)",	(void*)WCUR_ROOT,
           NULL,				getCursor,	setCursor
     },
@@ -852,7 +850,6 @@ WDefaultEntry optionList[] = {
     {"SelectCursor", "(builtin, cross)",	(void*)WCUR_SELECT,
           NULL,				getCursor,	setCursor
     }
-#endif /* DEFINABLE_CURSOR */
 };
 
 
@@ -2472,8 +2469,6 @@ getRImages(WScreen *scr, WDefaultEntry *entry, WMPropList *value,
 }
 #endif
 
-#ifdef DEFINABLE_CURSOR
-
 # include <X11/cursorfont.h>
 typedef struct 
 {
@@ -2735,8 +2730,6 @@ again:
     return(True);
 }
 #undef CURSOR_ID_NONE
-
-#endif /* DEFINABLE_CURSOR */
 
 
 /* ---------------- value setting functions --------------- */
@@ -3435,28 +3428,26 @@ setMultiByte(WScreen *scr, WDefaultEntry *entry, char *value, void *foo)
     extern _WINGsConfiguration WINGsConfiguration;
 
     WINGsConfiguration.useMultiByte = *value;
-    
+
     return 0;
 }
 #endif
 
-#ifdef DEFINABLE_CURSOR
+
 static int
 setCursor(WScreen *scr, WDefaultEntry *entry, Cursor *cursor, long index)
 {
-   if (None != wCursor[index])
-    {
+   if (None != wCursor[index]) {
        XFreeCursor(dpy, wCursor[index]);
-    }
-   
+   }
+
    wCursor[index] = *cursor;
 
-   if ((WCUR_ROOT == index) && (None != *cursor))
-    {
+   if ((WCUR_ROOT == index) && (None != *cursor)) {
        XDefineCursor(dpy, scr->root_win, *cursor);
-    }
+   }
 
    return 0;
 }
-#endif /* DEFINABLE_CURSOR*/
+
 
