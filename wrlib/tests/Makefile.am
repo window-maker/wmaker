@@ -5,7 +5,6 @@ AUTOMAKE_OPTIONS = no-dependencies
 noinst_PROGRAMS = testdraw testgrad testrot view
 
 EXTRA_DIST = test.png tile.xpm ballot_box.xpm 
-include_HEADERS = $(top_builddir)/wrlib/wraster.h
 
 INCLUDES = $(DFLAGS) @HEADER_SEARCH_PATH@
 
