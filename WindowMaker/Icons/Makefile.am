@@ -12,6 +12,7 @@ defsdata_DATA = \
 	GNUterm.tiff\
 	GreenWilber.png\
 	ICQ.png\
+	Jabber.png\
 	Mozilla.png\
 	Netscape.png\
 	Pen.png\
