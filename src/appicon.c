@@ -377,7 +377,7 @@ updateDockNumbers(WScreen *scr)
     length = strlen(ws_numbers);
     
     XClearArea(dpy, dicon->icon->core->window, 2, 2, 50,
-	       scr->icon_title_font->y+1, False);
+	       WMFontHeight(scr->icon_title_font)+1, False);
     
     XSetForeground(dpy, numbers_gc, scr->black_pixel);
     WMDrawString(scr->wmscreen, dicon->icon->core->window, numbers_gc,

@@ -102,35 +102,32 @@ appearanceObserver(void *self, WMNotification *notif)
     int flags = (int)WMGetNotificationClientData(notif);
 
     if (!menu->flags.realized)
-        return;
-
+	return;
+    
     if (WMGetNotificationName(notif) == WNMenuAppearanceSettingsChanged) {
-        if (flags & WFontSettings) {
-            menu->flags.realized = 0;
-            wMenuRealize(menu);
-        }
-        if (flags & WTextureSettings) {
-            if (!menu->flags.brother)
-                updateTexture(menu);
-        }
-        if (flags & (WTextureSettings|WColorSettings)) {
-            wMenuPaint(menu);
-        }
+	if (flags & WFontSettings) {
+	    menu->flags.realized = 0;
+	    wMenuRealize(menu);
+	}
+	if (flags & WTextureSettings) {
+	    if (!menu->flags.brother)
+		updateTexture(menu);
+	}
+	if (flags & (WTextureSettings|WColorSettings)) {
+	    wMenuPaint(menu);
+	}
     } else if (menu->flags.titled) {
 
-        if (flags & WFontSettings) {
-            menu->flags.realized = 0;
-            wMenuRealize(menu);
-        }
-        if (flags & WTextureSettings) {
-            menu->frame->flags.need_texture_remake = 1;
-        }
-        if (flags & (WColorSettings|WTextureSettings)) {
-#ifdef DRAWSTRING_PLUGIN
-            XClearWindow(dpy, menu->frame->titlebar->window);
-#endif
-            wFrameWindowPaint(menu->frame);
-        }
+	if (flags & WFontSettings) {
+	    menu->flags.realized = 0;
+	    wMenuRealize(menu);
+	}
+	if (flags & WTextureSettings) {
+	    menu->frame->flags.need_texture_remake = 1;
+	}
+	if (flags & (WColorSettings|WTextureSettings)) {
+	    wFrameWindowPaint(menu->frame);
+	}
     }
 }
 
@@ -174,13 +171,13 @@ wMenuCreate(WScreen *screen, char *title, int main_menu)
     menu->frame =
 	wFrameWindowCreate(screen, tmp, 8, 2, 1, 1, flags,
 			   screen->menu_title_texture, NULL,
-			   screen->menu_title_pixel,
+                           screen->menu_title_pixel,
 #ifdef DRAWSTRING_PLUGIN
-               W_STRING_MTITLE,
+			   W_STRING_MTITLE,
 #endif
-               &screen->menu_title_gc, 
-			   &screen->menu_title_font);
-
+			   &screen->menu_title_gc,
+                           &screen->menu_title_font);
+			   
     menu->frame->core->descriptor.parent = menu;
     menu->frame->core->descriptor.parent_type = WCLASS_MENU;
     menu->frame->core->descriptor.handle_mousedown = menuMouseDown;
@@ -289,7 +286,7 @@ wMenuInsertCallback(WMenu *menu, int index, char *text,
 
 #ifdef DEBUG
     if (!menu) {
-	printf("Passed NULL as menu parameter to wMenuAddCallback() \n");
+	dprintf("Passed NULL as menu parameter to wMenuAddCallback() \n");
 	return NULL;
     }    
 #endif
@@ -302,7 +299,7 @@ wMenuInsertCallback(WMenu *menu, int index, char *text,
     if (menu->entry_no >= menu->alloced_entries) {
 	void *tmp;
 #ifdef DEBUG
-	puts("doing wrealloc()");
+	dputs("doing wrealloc()");
 #endif	
 	tmp = wrealloc(menu->entries,
 		       sizeof(WMenuEntry)*(menu->alloced_entries+5));
@@ -1782,7 +1779,7 @@ wMenuScroll(WMenu *menu, XEvent *event)
     XEvent ev;
 
 #ifdef DEBUG
-    puts("Entering menu Scroll");
+    dputs("Entering menu Scroll");
 #endif
     
     if (omenu->jump_back)
@@ -1808,7 +1805,12 @@ wMenuScroll(WMenu *menu, XEvent *event)
         WMNextEvent(dpy, &ev);
         switch (ev.type) {
 	 case EnterNotify:
+/*
+	this um causes a nasty crash ugly ugh i dont see *why* we do this,
+	everything seems fine without it. ( swivel )
             WMHandleEvent(&ev);
+*/
+		break;
 	 case MotionNotify:
             x = (ev.type==MotionNotify) ? ev.xmotion.x_root : ev.xcrossing.x_root;
             y = (ev.type==MotionNotify) ? ev.xmotion.y_root : ev.xcrossing.y_root;
@@ -1888,7 +1890,7 @@ wMenuScroll(WMenu *menu, XEvent *event)
 
 
 #ifdef DEBUG
-    puts("Leaving menu Scroll");
+    dputs("Leaving menu Scroll");
 #endif
 }
 
@@ -2233,14 +2235,15 @@ wMenuMove(WMenu *menu, int x, int y, int submenus)
 	
 	if (i>=0 && menu->cascades) {
 	    submenu = menu->cascades[i];
-	    if (submenu->flags.mapped && !submenu->flags.buttoned)
-	      if (wPreferences.align_menus) {
-		  wMenuMove(submenu, x + MENUW(menu), y, submenus);
-	      } else {
-		  wMenuMove(submenu, x+ MENUW(menu),
-			    y + submenu->entry_height*menu->selected_entry,
-			    submenus);
-	      }
+	    if (submenu->flags.mapped && !submenu->flags.buttoned) {
+		if (wPreferences.align_menus) {
+		    wMenuMove(submenu, x + MENUW(menu), y, submenus);
+		} else {
+		    wMenuMove(submenu, x+ MENUW(menu),
+			      y + submenu->entry_height*menu->selected_entry,
+			      submenus);
+		}
+	    }
 	}
     }
     if (submenus<0 && menu->parent!=NULL && menu->parent->flags.mapped &&
@@ -2311,7 +2314,7 @@ menuTitleMouseDown(WCoreWindow *sender, void *data, XEvent *event)
     Bool started;
 
 #ifdef DEBUG
-    printf("Moving menu\n");
+    dprintf("Moving menu\n");
 #endif
 
     /* can't touch the menu copy */
@@ -2398,7 +2401,7 @@ menuTitleMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 	    if (ev.xbutton.button != event->xbutton.button)
 		break;
 #ifdef DEBUG
-	    printf("End menu move\n");
+	    dprintf("End menu move\n");
 #endif
 	    XUngrabPointer(dpy, CurrentTime);
 	    return;

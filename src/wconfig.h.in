@@ -134,12 +134,9 @@
 
 
 /*
- * define EXTEND_WINDOWSHORTCUT if you have a great memory and want 10
- * window shortcuts instead of 4. You will also need to define the
- * same thing in WPrefs.app/WPrefs.h to get the corresponding entries
- * in WPrefs.
+ * define EXTEND_WINDOWSHORTCUT if you want 10 window shortcuts instead of 4. 
  */
-#undef EXTEND_WINDOWSHORTCUT
+#define EXTEND_WINDOWSHORTCUT
 
 
 
@@ -300,6 +297,7 @@
 #define DEF_ICON_TITLE_FONT "\"-*-*-medium-r-normal--10-*\""
 #define DEF_CLIP_TITLE_FONT "\"-*-*-medium-r-normal--10-*\""
 #define DEF_INFO_TEXT_FONT "\"-*-*-medium-r-normal--14-*\""
+#define DEF_ADDITONAL_FONT "-*-*-medium-r-normal--12-*"
 
 #define DEF_WORKSPACE_NAME_FONT "\"-*-*-medium-r-normal--24-*\""
 #else /* !I18N_MB */

@@ -256,6 +256,7 @@ static WOptionEnumeration seSpeeds[] = {
 };
 
 static WOptionEnumeration seMouseButtons[] = {
+    {"None", -1, 0},
     {"Left", Button1, 0}, {"Button1", Button1, 1},
     {"Middle", Button2, 0}, {"Button2", Button2, 1},
     {"Right", Button3, 0}, {"Button3", Button3, 1},
@@ -898,7 +899,7 @@ wDefaultsInitDomain(char *domain, Bool requireDictionary)
     }
 
     /* global system dictionary */
-    sprintf(path, "%s/%s", SYSCONFDIR, domain);
+    sprintf(path, "%s/WindowMaker/%s", SYSCONFDIR, domain);
     if (stat(path, &stbuf)>=0) {
         shared_dict = ReadProplistFromFile(path);
         if (shared_dict) {
@@ -922,8 +923,8 @@ wDefaultsInitDomain(char *domain, Bool requireDictionary)
 		}
             }
         } else {
-	    wwarning(_("could not load domain %s from global defaults database"),
-		     domain);
+	    wwarning(_("could not load domain %s from global defaults database (%s)"),
+		     domain, path);
 	}
     }
 
@@ -1108,6 +1109,7 @@ wReadDefaults(WScreen *scr, proplist_t new_dict)
     proplist_t plvalue, old_value;
     WDefaultEntry *entry;
     int i, must_update;
+    int update_workspace_back = 0;	       /* kluge :/ */
     int needs_refresh;
     void *tdata;
     proplist_t old_dict = (WDWindowMaker->dictionary!=new_dict 
@@ -1146,16 +1148,33 @@ wReadDefaults(WScreen *scr, proplist_t new_dict)
 	} else if (!PLIsEqual(plvalue, old_value)) {	    
 	    /* value has changed */
 	} else {
-	    /* value was not changed since last time */
-	    continue;
+	    
+	    if (strcmp(entry->key, "WorkspaceBack") == 0
+		&& update_workspace_back
+		&& scr->flags.backimage_helper_launched) {
+	    } else {
+		/* value was not changed since last time */
+		continue;
+	    }
 	}
 	
 	if (plvalue) {
 #ifdef DEBUG
-	    printf("Updating %s to %s\n", entry->key, PLGetDescription(plvalue));
+	    printf("Updating %s to %s\n", entry->key, 
+		   PLGetDescription(plvalue));
 #endif
 	    /* convert data */
 	    if ((*entry->convert)(scr, entry, plvalue, entry->addr, &tdata)) {
+		/*
+		 * If the WorkspaceSpecificBack data has been changed
+		 * so that the helper will be launched now, we must be
+		 * sure to send the default background texture config
+		 * to the helper.
+		 */
+		if (strcmp(entry->key, "WorkspaceSpecificBack") == 0
+		    && !scr->flags.backimage_helper_launched) {
+		    update_workspace_back = 1;
+		}
 		if (entry->update) {
 		    needs_refresh |= 
 			(*entry->update)(scr, entry, tdata, entry->extra_data);
@@ -2014,7 +2033,7 @@ getTextRenderer(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 {
     proplist_t elem;
     char *val, *lib, *func, **argv;
-    int argc, i, changed;
+    int argc, changed;
 
     if (strcmp(entry->key, "FTitleColor")==0) {
         wPluginDestroyFunction(scr->drawstring_func[changed = W_STRING_FTITLE]);
@@ -2057,6 +2076,8 @@ getTextRenderer(WScreen *scr, WDefaultEntry *entry, proplist_t value,
     } else if (PLIsString(value)) {
         return getColor(scr, entry, value, addr, ret);
     }
+    
+    return False;
 }
 #endif /* DRAWSTRING_PLUGIN */
 
@@ -2841,6 +2862,7 @@ setWorkspaceSpecificBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 
 	    SendHelperMessage(scr, 'P', -1, wPreferences.pixmap_path);
 	}
+	
     }
 
     for (i = 0; i < PLGetNumberOfElements(value); i++) {

@@ -79,7 +79,7 @@ void wDockShowIcons(WDock *dock);
 void wDockLower(WDock *dock);
 void wDockRaise(WDock *dock);
 void wDockRaiseLower(WDock *dock);
-void wDockSaveState(WScreen *scr);
+void wDockSaveState(WScreen *scr, proplist_t old_state);
 
 Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y);
 Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,

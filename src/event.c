@@ -56,7 +56,7 @@
 #include "framewin.h"
 #include "properties.h"
 #include "balloon.h"
-#include "list.h"
+
 #ifdef GNOME_STUFF
 # include "gnome.h"
 #endif
@@ -149,11 +149,10 @@ static int deadProcessPtr=0;
 typedef struct DeathHandler {
     WDeathHandler	*callback;
     pid_t 		pid;
-    struct DeathHandler *next;
     void 		*client_data;
 } DeathHandler;
 
-static DeathHandler *deathHandler=NULL;
+static WMBag *deathHandlers=NULL;
 
 
 
@@ -165,14 +164,15 @@ wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata)
     handler = malloc(sizeof(DeathHandler));
     if (!handler)
       return 0;
-    
+
     handler->pid = pid;
     handler->callback = callback;
     handler->client_data = cdata;
-    
-    handler->next = deathHandler;
-        
-    deathHandler = handler;
+
+    if (!deathHandlers)
+	deathHandlers = WMCreateBag(8);
+
+    WMPutInBag(deathHandlers, handler);
 
     return handler;
 }
@@ -182,34 +182,23 @@ wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata)
 void 
 wDeleteDeathHandler(WMagicNumber id)
 {
-    DeathHandler *tmp, *handler=(DeathHandler*)id;
+    DeathHandler *handler=(DeathHandler*)id;
 
-    if (!handler || !deathHandler)
+    if (!handler || !deathHandlers)
       return;
 
-    tmp = deathHandler;
-    if (tmp==handler) {
-	deathHandler = handler->next;
-	free(handler);
-    } else {
-	while (tmp->next) {
-	    if (tmp->next==handler) {
-		tmp->next=handler->next;
-		free(handler);
-		break;
-	    }
-	    tmp = tmp->next;
-	}
-    }
+    WMRemoveFromBag(deathHandlers, handler);
+
+    free(handler);
 }
 
 
 void
 DispatchEvent(XEvent *event)
 {
-    if (deathHandler)
+    if (deathHandlers)
 	handleDeadProcess(NULL);
-    
+
     if (WCHECK_STATE(WSTATE_NEED_EXIT)) {
 	WCHANGE_STATE(WSTATE_EXITING);
 	/* received SIGTERM */
@@ -232,8 +221,8 @@ DispatchEvent(XEvent *event)
      * the stuff above */
     if (!event)
 	return;
-    
-    saveTimestamp(event);    
+
+    saveTimestamp(event);
     switch (event->type) {
      case MapRequest:
 	handleMapRequest(event);
@@ -379,7 +368,7 @@ handleDeadProcess(void *foo)
 	wWindowDeleteSavedStatesForPID(deadProcesses[i].pid);
     }
 
-    if (!deathHandler) {
+    if (!deathHandlers) {
 	deadProcessPtr=0;
 	return;
     }
@@ -388,11 +377,10 @@ handleDeadProcess(void *foo)
     while (deadProcessPtr>0) {
 	deadProcessPtr--;
 
-	tmp = deathHandler;
-	while (tmp) {
-	    DeathHandler *t;
-	    
-	    t = tmp->next;
+	for (i = WMGetBagItemCount(deathHandlers)-1; i >= 0; i--) {
+	    tmp = WMGetFromBag(deathHandlers, i);
+	    if (!tmp)
+		continue;
 
 	    if (tmp->pid == deadProcesses[deadProcessPtr].pid) {
 		(*tmp->callback)(tmp->pid, 
@@ -400,7 +388,6 @@ handleDeadProcess(void *foo)
 				 tmp->client_data);
 		wDeleteDeathHandler(tmp);
 	    }
-	    tmp = t;
 	}
     }
 }
@@ -474,7 +461,7 @@ handleMapRequest(XEvent *ev)
     Window window = ev->xmaprequest.window;
 
 #ifdef DEBUG
-    printf("got map request for %x\n", (unsigned)window);
+    dprintf("got map request for %x\n", (unsigned)window);
 #endif
 
     if ((wwin = wWindowFor(window))) {
@@ -553,7 +540,7 @@ handleDestroyNotify(XEvent *event)
     Window window = event->xdestroywindow.window;
 
 #ifdef DEBUG
-    puts("got destroy notify");
+    dputs("got destroy notify");
 #endif	    
 
     wwin = wWindowFor(window);
@@ -590,7 +577,7 @@ handleExpose(XEvent *event)
     XEvent ev;
 
 #ifdef DEBUG    
-    puts("got expose");
+    dputs("got expose");
 #endif
 
     while (XCheckTypedWindowEvent(dpy, event->xexpose.window, Expose, &ev));
@@ -614,7 +601,7 @@ handleButtonPress(XEvent *event)
     WScreen *scr;
 
 #ifdef DEBUG    
-    puts("got button press");
+    dputs("got button press");
 #endif
 
     scr = wScreenForRootWindow(event->xbutton.root);
@@ -721,7 +708,7 @@ handleMapNotify(XEvent *event)
     WWindow *wwin;
 
 #ifdef DEBUG
-    puts("got map");
+    dputs("got map");
 #endif
 
     wwin = wWindowFor(event->xmap.event);
@@ -746,7 +733,7 @@ handleUnmapNotify(XEvent *event)
     Bool withdraw = False;
 
 #ifdef DEBUG
-    puts("got unmap");
+    dputs("got unmap");
 #endif
 
     /* only process windows with StructureNotify selected 
@@ -800,7 +787,7 @@ handleConfigureRequest(XEvent *event)
     WWindow *wwin;
 
 #ifdef DEBUG
-    puts("got configure request");
+    dputs("got configure request");
 #endif
     if (!(wwin=wWindowFor(event->xconfigurerequest.window))) {
 	/*
@@ -824,7 +811,7 @@ handlePropertyNotify(XEvent *event)
     WScreen *scr;
 
 #ifdef DEBUG
-    puts("got property notify");
+    dputs("got property notify");
 #endif
     if ((wwin=wWindowFor(event->xproperty.window))) {
 	if (!XGetGeometry(dpy, wwin->client_win, &jr, &ji, &ji,
@@ -854,7 +841,7 @@ handleClientMessage(XEvent *event)
     WObjDescriptor *desc;
     
 #ifdef DEBUG
-    puts("got client message");
+    dputs("got client message");
 #endif
     /* handle transition from Normal to Iconic state */
     if (event->xclient.message_type == _XA_WM_CHANGE_STATE
@@ -983,6 +970,7 @@ raiseWindow(WScreen *scr)
 static void 
 handleEnterNotify(XEvent *event)
 {
+    WMenu *menu;
     WWindow *wwin;
     WObjDescriptor *desc = NULL;
     XEvent ev;
@@ -990,7 +978,7 @@ handleEnterNotify(XEvent *event)
 
 
 #ifdef DEBUG
-    puts("got enter notify");
+    dputs("got enter notify");
 #endif
 
     if (XCheckTypedWindowEvent(dpy, event->xcrossing.window, LeaveNotify,
@@ -1002,6 +990,28 @@ handleEnterNotify(XEvent *event)
 	    return;
 	}
     }
+
+/* start my fix scrolled menus */
+    if (wPreferences.scrollable_menus) {
+        if (scr->flags.jump_back_pending ||
+            event->xcrossing.x_root <= 1 ||
+            event->xcrossing.x_root >= (scr->scr_width - 2) ||
+            event->xcrossing.y_root <= 1 ||
+            event->xcrossing.y_root >= (scr->scr_height - 2)) {
+
+#ifdef DEBUG
+            debug_puts("pointer at screen edge in EnterNotify event, fear");
+#endif
+
+           menu = wMenuUnderPointer(scr);
+           if (menu!=NULL) {
+              	wMenuScroll(menu, event);
+		return;
+	   }
+        }
+    }
+/* end fix scrolled menus */
+
 
     if (XFindContext(dpy, event->xcrossing.window, wWinContext,
                      (XPointer *)&desc)!=XCNOENT) {
@@ -1120,7 +1130,7 @@ handleShapeNotify(XEvent *event)
     XEvent ev;
 
 #ifdef DEBUG
-    puts("got shape notify");
+    dputs("got shape notify");
 #endif
 
     while (XCheckTypedWindowEvent(dpy, shev->window, event->type, &ev)) {
@@ -1274,6 +1284,7 @@ windowUnderPointer(WScreen *scr)
     return NULL;
 }
 
+
 #ifdef WEENDOZE_CYCLE
 
 static WWindow*
@@ -1335,6 +1346,8 @@ nextToFocusBefore(WWindow *wwin)
     return wwin;
 }
 
+
+
 static void
 doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 {
@@ -1349,7 +1362,7 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     if (!wwin)
 	return;
 
-/*    puts("IN");*/
+/*    dputs("IN");*/
     keymap = XGetModifierMapping(dpy);
 
     
@@ -1385,7 +1398,7 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 	    WMHandleEvent(&ev);
 	    continue;
 	}
-/*puts("EV");*/
+/*dputs("EV");*/
 	/* ignore CapsLock */
 	modifiers = ev.xkey.state & ValidModMask;
 
@@ -1426,7 +1439,7 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 	    }
 	}
     }
-/*puts("OUT");*/
+/*dputs("OUT");*/
     XFree(keymap);
 
     XUngrabKeyboard(dpy, CurrentTime);
@@ -1449,7 +1462,7 @@ handleKeyPress(XEvent *event)
     WWindow *wwin = scr->focused_window;
     int i;
     int modifiers;
-    int command=-1;
+    int command=-1, index;
 #ifdef KEEP_XKB_LOCK_STATUS   
     XkbStateRec staterec;     
 #endif /*KEEP_XKB_LOCK_STATUS*/
@@ -1684,36 +1697,44 @@ handleKeyPress(XEvent *event)
      case WKBD_WINDOW9:
      case WKBD_WINDOW10:
 #endif
-        if ( scr->shortcutSelectedWindows[command-WKBD_WINDOW1]) {
-            LinkedList *list = scr->shortcutSelectedWindows[command-WKBD_WINDOW1];
+
+#define INITBAG(bag)  if (bag) WMEmptyBag(bag); else bag = WMCreateBag(4)
+
+	index = command-WKBD_WINDOW1;
+	
+        if (scr->shortcutSelectedWindows[index]) {
+            WMBag *list = scr->shortcutSelectedWindows[index];
             int cw;
+	    int i;
 
             wUnselectWindows(scr);
-            if (scr->shortcutWindow[command-WKBD_WINDOW1])
-                wMakeWindowVisible(scr->shortcutWindow[command-WKBD_WINDOW1]);
+            if (scr->shortcutWindow[index])
+                wMakeWindowVisible(scr->shortcutWindow[index]);
             cw = scr->current_workspace;
-            while (list) {
-                wWindowChangeWorkspace(list->head, cw);
-                wMakeWindowVisible(list->head);
-                wSelectWindow(list->head, True);
-                list = list->tail;
+            for (i = 0; i < WMGetBagItemCount(list); i++) {
+		WWindow *wwin = WMGetFromBag(list, i);
+                wWindowChangeWorkspace(wwin, cw);
+                wMakeWindowVisible(wwin);
+                wSelectWindow(wwin, True);
             }
-        } else if (scr->shortcutWindow[command-WKBD_WINDOW1]){
+        } else if (scr->shortcutWindow[index]){
 
-            wMakeWindowVisible(scr->shortcutWindow[command-WKBD_WINDOW1]);
+            wMakeWindowVisible(scr->shortcutWindow[index]);
 
         } else if (wwin && ISMAPPED(wwin) && ISFOCUSED(wwin)) {
 
-            scr->shortcutWindow[command-WKBD_WINDOW1] = wwin;
-            if (wwin->flags.selected /* && scr->selected_windows */ ) {
-                LinkedList *sl;
+            scr->shortcutWindow[index] = wwin;
+            if (wwin->flags.selected && scr->selected_windows) {
+                WMBag *bag;
+		int i;
 
-                sl = scr->selected_windows;
-                list_free(scr->shortcutSelectedWindows[command-WKBD_WINDOW1]);
+                bag = scr->selected_windows;
+		INITBAG(scr->shortcutSelectedWindows[index]);
 
-                while (sl) {
-                    scr->shortcutSelectedWindows[command-WKBD_WINDOW1] = list_cons(sl->head,scr->shortcutSelectedWindows[command-WKBD_WINDOW1]);
-                    sl = sl->tail;
+		for (i = 0; i < WMGetBagItemCount(bag); i++) {
+		    WWindow *tmp = WMGetFromBag(bag, i);
+		    
+                    WMPutInBag(scr->shortcutSelectedWindows[index], tmp);
                 }
             }
             wSelectWindow(wwin, !wwin->flags.selected);
@@ -1722,20 +1743,23 @@ handleKeyPress(XEvent *event)
             wSelectWindow(wwin, !wwin->flags.selected);
             XFlush(dpy);
 
-        } else if (scr->selected_windows) {
+        } else if (WMGetBagItemCount(scr->selected_windows)) {
 
-            if (wwin->flags.selected /* && scr->selected_windows */ ) {
-                LinkedList *sl;
+            if (wwin->flags.selected && scr->selected_windows) {
+                WMBag *bag;
+		int i;
 
-                sl = scr->selected_windows;
-                list_free(scr->shortcutSelectedWindows[command-WKBD_WINDOW1]);
+                bag = scr->selected_windows;
+                INITBAG(scr->shortcutSelectedWindows[index]);
 
-                while (sl) {
-                    scr->shortcutSelectedWindows[command-WKBD_WINDOW1] = list_cons(sl->head,scr->shortcutSelectedWindows[command-WKBD_WINDOW1]);
-                    sl = sl->tail;
+		for (i = 0; i < WMGetBagItemCount(bag); i++) {
+		    WWindow *tmp = WMGetFromBag(bag, i);
+
+                    WMPutInBag(scr->shortcutSelectedWindows[index],  tmp);
                 }
             }
         }
+#undef INITBAG
 
         break;
      case WKBD_NEXTWSLAYER:
@@ -1805,7 +1829,7 @@ handleMotionNotify(XEvent *event)
             event->xmotion.y_root >= (scr->scr_height - 2)) {
 
 #ifdef DEBUG
-            puts("pointer at screen edge");
+            dputs("pointer at screen edge");
 #endif
 
             menu = wMenuUnderPointer(scr);

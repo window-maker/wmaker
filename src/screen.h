@@ -92,7 +92,7 @@ typedef struct _WScreen {
 					* traverse the entire window list
 					*/
     
-    struct LinkedList *selected_windows;
+    WMBag *selected_windows;
 
     struct WAppIcon *app_icon_list;    /* list of all app-icons on screen */
 
@@ -282,7 +282,7 @@ typedef struct _WScreen {
 
     /* for window shortcuts */
     struct WWindow *shortcutWindow[MAX_WINDOW_SHORTCUTS];
-    struct LinkedList *shortcutSelectedWindows[MAX_WINDOW_SHORTCUTS];
+    WMBag *shortcutSelectedWindows[MAX_WINDOW_SHORTCUTS];
 
 #ifdef XDND
     char *xdestring;

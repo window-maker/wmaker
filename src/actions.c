@@ -46,7 +46,6 @@
 #include "dock.h"
 #include "appmenu.h"
 #include "winspector.h"
-#include "list.h"
 #include "workspace.h"
 
 #ifdef GNOME_STUFF
@@ -1766,15 +1765,20 @@ void
 wSelectWindow(WWindow *wwin, Bool flag)
 {
     WScreen *scr = wwin->screen_ptr;
+    
     if (flag) {
 	wwin->flags.selected = 1;
 	XSetWindowBorder(dpy, wwin->frame->core->window, scr->white_pixel);
-	scr->selected_windows = list_cons(wwin, scr->selected_windows);
+	if (!scr->selected_windows)
+	    scr->selected_windows = WMCreateBag(4);
+	WMPutInBag(scr->selected_windows, wwin);
     } else {
 	wwin->flags.selected = 0;
 	XSetWindowBorder(dpy, wwin->frame->core->window, 
 			 scr->frame_border_pixel);
-	scr->selected_windows = list_remove_elem(scr->selected_windows, wwin);
+	if (scr->selected_windows) {
+	    WMRemoveFromBag(scr->selected_windows, wwin);
+	}
     }
 }
 

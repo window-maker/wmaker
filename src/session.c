@@ -91,7 +91,6 @@
 
 #include "dock.h"
 
-#include "list.h"
 
 #include <proplist.h>
 
@@ -281,7 +280,7 @@ wSessionSaveState(WScreen *scr)
     WWindow *wwin = scr->focused_window;
     proplist_t win_info, wks;
     proplist_t list=NULL;
-    LinkedList *wapp_list=NULL;
+    WMBag *wapp_list=NULL;
 
 
     make_keys();
@@ -297,7 +296,7 @@ wSessionSaveState(WScreen *scr)
     while (wwin) {
         WApplication *wapp=wApplicationOf(wwin->main_window);
 
-        if (wwin->transient_for==None && list_find(wapp_list, wapp)==NULL
+        if (wwin->transient_for==None && WMGetFirstInBag(wapp_list, wapp)<0
 	    && !WFLAGP(wwin, dont_save_session)) {
             /* A entry for this application was not yet saved. Save one. */
             if ((win_info = makeWindowState(wwin, wapp))!=NULL) {
@@ -308,7 +307,7 @@ wSessionSaveState(WScreen *scr)
                  * application list, so no multiple entries for the same
                  * application are saved.
                  */
-                wapp_list = list_cons(wapp, wapp_list);
+		WMPutInBag(wapp_list, wapp);
             }
         }
         wwin = wwin->prev;
@@ -321,7 +320,7 @@ wSessionSaveState(WScreen *scr)
     PLInsertDictionaryEntry(scr->session_state, sWorkspace, wks);
     PLRelease(wks);
 
-    list_free(wapp_list);
+    WMFreeBag(wapp_list);
 }
 
 

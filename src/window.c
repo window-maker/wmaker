@@ -51,7 +51,7 @@
 #include "stacking.h"
 #include "defaults.h"
 #include "workspace.h"
-#include "list.h"
+
 
 #ifdef MWM_HINTS
 # include "motif.h"
@@ -212,15 +212,14 @@ wWindowDestroy(WWindow *wwin)
     wwin->flags.destroyed = 1;
 
     for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
-        wwin->screen_ptr->shortcutSelectedWindows[i] = list_remove_elem(wwin->screen_ptr->shortcutSelectedWindows[i], wwin);
-        if (wwin->screen_ptr->shortcutWindow[i] == wwin) {
-            if (wwin->screen_ptr->shortcutSelectedWindows[i]) {
-                LinkedList *list = wwin->screen_ptr->shortcutSelectedWindows[i];
-                wwin->screen_ptr->shortcutWindow[i] = 
-                    list->head;
-            }
-            else wwin->screen_ptr->shortcutWindow[i] = NULL;
-        }
+	if (wwin->screen_ptr->shortcutSelectedWindows[i]) {
+	    WMRemoveFromBag(wwin->screen_ptr->shortcutSelectedWindows[i], wwin);
+
+	    if (!WMGetBagItemCount(wwin->screen_ptr->shortcutSelectedWindows[i])) {
+		WMFreeBag(wwin->screen_ptr->shortcutSelectedWindows[i]);
+		wwin->screen_ptr->shortcutSelectedWindows[i] = NULL;
+	    }
+	}
     }
 
     if (wwin->normal_hints)
@@ -1469,28 +1468,40 @@ wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 	    scr->focused_window->next = NULL;
 	}
 
-	/* if in click to focus mode and the window
-	 * was a transient, focus the owner window  
-	 */
-	tmp = NULL;
 	if (wPreferences.focus_mode==WKF_CLICK) {
-	    tmp = wWindowFor(wwin->transient_for);
-	    if (tmp && (!tmp->flags.mapped || WFLAGP(tmp, no_focusable))) {
-		tmp = NULL;
-	    }
-	}
-	/* otherwise, focus the next one in the focus list */
-	if (!tmp) {
-	    tmp = scr->focused_window;
-	    while (tmp) {
-		if (!WFLAGP(tmp, no_focusable)
-		    && (tmp->flags.mapped || tmp->flags.shaded))
-		    break;
-		tmp = tmp->prev;
-	    }
-	}
-	if (wPreferences.focus_mode==WKF_CLICK) {
-	    newFocusedWindow = tmp;
+
+           /* if in click to focus mode and the window
+            * was a transient, focus the owner window  
+            */
+           tmp = NULL;
+           if (wPreferences.focus_mode==WKF_CLICK) {
+               tmp = wWindowFor(wwin->transient_for);
+               if (tmp && (!tmp->flags.mapped || WFLAGP(tmp, no_focusable))) {
+                   tmp = NULL;
+               }
+           }
+           /* otherwise, focus the next one in the focus list */
+           if (!tmp) {
+              tmp = scr->focused_window;
+              while (tmp) {               /* look for one in the window list first */
+                 if (!WFLAGP(tmp, no_focusable) && !WFLAGP(tmp, skip_window_list)
+                     && (tmp->flags.mapped || tmp->flags.shaded))
+                     break;
+                 tmp = tmp->prev;
+              }
+              if (!tmp) {                 /* if unsuccessful, choose any focusable window */
+                 tmp = scr->focused_window;
+                 while (tmp) {
+                    if (!WFLAGP(tmp, no_focusable)
+                         && (tmp->flags.mapped || tmp->flags.shaded))
+                         break;
+                    tmp = tmp->prev;
+                 }
+              }
+           }
+
+	   newFocusedWindow = tmp;
+
 	} else if (wPreferences.focus_mode==WKF_SLOPPY
 		   || wPreferences.focus_mode==WKF_POINTER) {
             unsigned int mask;
@@ -1794,8 +1805,10 @@ wWindowChangeWorkspace(WWindow *wwin, int workspace)
 		wapp->last_workspace = workspace;
 	    }
 	    if (wwin->flags.miniaturized) {
-		XUnmapWindow(dpy, wwin->icon->core->window);
-		wwin->icon->mapped = 0;
+		if (wwin->icon) {
+		    XUnmapWindow(dpy, wwin->icon->core->window);
+		    wwin->icon->mapped = 0;
+		}
 	    } else {
 		unmap = 1;
 		wSetFocusTo(scr, NULL);
@@ -1804,8 +1817,10 @@ wWindowChangeWorkspace(WWindow *wwin, int workspace)
     } else {
 	/* brought to current workspace. Map window */
 	if (wwin->flags.miniaturized && !wPreferences.sticky_icons) {
-	    XMapWindow(dpy, wwin->icon->core->window);
-	    wwin->icon->mapped = 1;
+	    if (wwin->icon) {
+		XMapWindow(dpy, wwin->icon->core->window);
+		wwin->icon->mapped = 1;
+	    }
 	} else if (!wwin->flags.mapped && 
 	    !(wwin->flags.miniaturized || wwin->flags.hidden)) {
 	    wWindowMap(wwin);
@@ -1990,37 +2005,36 @@ int req_x, req_y;		       /* new position of the frame */
 #endif
 }
 
-
-void 
+void
 wWindowUpdateButtonImages(WWindow *wwin)
 {
     WScreen *scr = wwin->screen_ptr;
     Pixmap pixmap, mask;
     WFrameWindow *fwin = wwin->frame;
-    
+
     if (WFLAGP(wwin, no_titlebar))
 	return;
 
     /* miniaturize button */
-    
+
     if (!WFLAGP(wwin, no_miniaturize_button)) {
 	if (wwin->wm_gnustep_attr
 	    && wwin->wm_gnustep_attr->flags & GSMiniaturizePixmapAttr) {
 	    pixmap = wwin->wm_gnustep_attr->miniaturize_pixmap;
-	      
+	
 	    if (wwin->wm_gnustep_attr->flags&GSMiniaturizeMaskAttr) {
 		mask = wwin->wm_gnustep_attr->miniaturize_mask;
 	    } else {
 		mask = None;
 	    }
 
-	    if (fwin->lbutton_image 
+	    if (fwin->lbutton_image
 		&& (fwin->lbutton_image->image != pixmap
 		    || fwin->lbutton_image->mask != mask)) {
 		wPixmapDestroy(fwin->lbutton_image);
 		fwin->lbutton_image = NULL;
 	    }
-	    
+	
 	    if (!fwin->lbutton_image) {
 		fwin->lbutton_image = wPixmapCreate(scr, pixmap, mask);
 		fwin->lbutton_image->client_owned = 1;
@@ -2033,55 +2047,64 @@ wWindowUpdateButtonImages(WWindow *wwin)
 	    fwin->lbutton_image = scr->b_pixmaps[WBUT_ICONIFY];
 	}
     }
-    
+
 #ifdef XKB_BUTTON_HINT
     if (!WFLAGP(wwin, no_language_button)) {
-	    if (fwin->languagebutton_image && !fwin->languagebutton_image->shared) {
+	    if (fwin->languagebutton_image &&  
+		!fwin->languagebutton_image->shared) {
 		wPixmapDestroy(fwin->languagebutton_image);
 	    }
-	    fwin->languagebutton_image = scr->b_pixmaps[WBUT_XKBGROUP1 + fwin->languagemode];
+	fwin->languagebutton_image = 
+	    scr->b_pixmaps[WBUT_XKBGROUP1 + fwin->languagemode];
     }
 #endif
-    
+
     /* close button */
 
-    if (!WFLAGP(wwin, no_close_button)) {
-	if (wwin->wm_gnustep_attr
-	    && wwin->wm_gnustep_attr->flags&GSClosePixmapAttr) {
-	    pixmap = wwin->wm_gnustep_attr->close_pixmap;
-	    
-	    if (wwin->wm_gnustep_attr->flags&GSCloseMaskAttr) {
-		mask = wwin->wm_gnustep_attr->close_mask;
-	    } else {
-		mask = None;
-	    }
+/* redefine WFLAGP to MGFLAGP to allow broken close operation */
+#define MGFLAGP(wwin, FLAG)	(wwin)->client_flags.FLAG
 
-	    if (fwin->rbutton_image
-		&& (fwin->rbutton_image->image != pixmap
-		    || fwin->rbutton_image->mask != mask)) {
-		wPixmapDestroy(fwin->rbutton_image);
-		fwin->rbutton_image = NULL;
-	    }
-	    
-	    if (!fwin->rbutton_image) {
-		fwin->rbutton_image = wPixmapCreate(scr, pixmap, mask);
-		fwin->rbutton_image->client_owned = 1;
-		fwin->rbutton_image->client_owned_mask = 1;
-	    }
+    if (!WFLAGP(wwin, no_close_button)) {
+        if (wwin->wm_gnustep_attr 
+	    && wwin->wm_gnustep_attr->flags & GSClosePixmapAttr) {
+            pixmap = wwin->wm_gnustep_attr->close_pixmap;
+	
+            if (wwin->wm_gnustep_attr->flags&GSCloseMaskAttr)
+                 mask = wwin->wm_gnustep_attr->close_mask;
+            else
+                 mask = None;
+
+           if (fwin->rbutton_image && (fwin->rbutton_image->image != pixmap
+				       || fwin->rbutton_image->mask != mask)) {
+	       wPixmapDestroy(fwin->rbutton_image);
+	       fwin->rbutton_image = NULL;
+	   }
+			
+           if (!fwin->rbutton_image) {
+               fwin->rbutton_image = wPixmapCreate(scr, pixmap, mask);
+               fwin->rbutton_image->client_owned = 1;
+               fwin->rbutton_image->client_owned_mask = 1;
+	   }
+
 	} else if (WFLAGP(wwin, kill_close)) {
-	    if (fwin->rbutton_image && !fwin->rbutton_image->shared) {
+
+	    if (fwin->rbutton_image && !fwin->rbutton_image->shared)
 		wPixmapDestroy(fwin->rbutton_image);
-	    }
+
 	    fwin->rbutton_image = scr->b_pixmaps[WBUT_KILL];
-	} else if (WFLAGP(wwin, broken_close)) {
-	    if (fwin->rbutton_image && !fwin->rbutton_image->shared) {
+	    
+	} else if (MGFLAGP(wwin, broken_close)) {
+
+	    if (fwin->rbutton_image && !fwin->rbutton_image->shared) 
 		wPixmapDestroy(fwin->rbutton_image);
-	    }
+
 	    fwin->rbutton_image = scr->b_pixmaps[WBUT_BROKENCLOSE];
+
 	} else {
-	    if (fwin->rbutton_image && !fwin->rbutton_image->shared) {
+
+	    if (fwin->rbutton_image && !fwin->rbutton_image->shared) 
 		wPixmapDestroy(fwin->rbutton_image);
-	    }
+
 	    fwin->rbutton_image = scr->b_pixmaps[WBUT_CLOSE];
 	}
     }
@@ -2422,17 +2445,13 @@ wWindowResetMouseGrabs(WWindow *wwin)
 void
 wWindowUpdateGNUstepAttr(WWindow *wwin, GNUstepWMAttributes *attr)
 {
-    
-    if (attr->flags & GSExtraFlagsAttr) {
-	if (WFLAGP(wwin, broken_close) != 
-	    (attr->extra_flags & GSDocumentEditedFlag)) {
-
-	    wwin->client_flags.broken_close = !WFLAGP(wwin, broken_close);
-
-	    wWindowUpdateButtonImages(wwin);
-	}
-    }
-    
+   if (attr->flags & GSExtraFlagsAttr) {
+       if (MGFLAGP(wwin, broken_close) != 
+	   (attr->extra_flags & GSDocumentEditedFlag)) {
+	   wwin->client_flags.broken_close = !MGFLAGP(wwin, broken_close);
+	   wWindowUpdateButtonImages(wwin);
+       }
+   }
 }
 
 

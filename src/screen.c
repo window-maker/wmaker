@@ -681,7 +681,7 @@ wScreenInit(int screen_number)
 
     scr = wmalloc(sizeof(WScreen));
     memset(scr, 0, sizeof(WScreen));
-
+    
     /* initialize globals */
     scr->screen = screen_number;
     scr->root_win = RootWindow(dpy, screen_number);
@@ -853,11 +853,6 @@ wScreenInit(int screen_number)
 
     wScreenUpdateUsableArea(scr);
 
-#ifndef LITE
-    /* kluge to load menu configurations at startup */
-    OpenRootMenu(scr, -10000, -10000, False);
-    wMenuUnmap(scr->root_menu);
-#endif
 
     return scr;
 }
@@ -990,6 +985,12 @@ wScreenRestoreState(WScreen *scr)
     proplist_t state;
     char *path;
 
+    
+#ifndef LITE
+    OpenRootMenu(scr, -10000, -10000, False);
+    wMenuUnmap(scr->root_menu);
+#endif
+
     make_keys();
 
     if (wScreenCount == 1)
@@ -1068,7 +1069,7 @@ wScreenSaveState(WScreen *scr)
 
     /* save dock state to file */
     if (!wPreferences.flags.nodock) {
-        wDockSaveState(scr);
+        wDockSaveState(scr, old_state);
     } else {
         if ((foo = PLGetDictionaryEntry(old_state, dDock))!=NULL) {
             PLInsertDictionaryEntry(scr->session_state, dDock, foo);

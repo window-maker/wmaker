@@ -26,6 +26,8 @@
 
 #include "plugin.h"
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <stdarg.h>
 
 #ifdef TEXTURE_PLUGIN
@@ -37,18 +39,20 @@
 #include <proplist.h>
 
 
-void** wPluginPackInitData(int members, ...) {
+void** 
+wPluginPackInitData(int members, ...) 
+{
     void **p;
     va_list vp;
     int i;
     p = wmalloc(sizeof(void *) * (members + 1));
-    bzero(p, sizeof(void *) * (members + 1));
+    memset(p, 0, sizeof(void *) * (members + 1));
     va_start(vp, members);
     for(i=0;i<members;i++) {
         p[i] = va_arg(vp, void *);
-        printf(" %d > %d\n",i,p[i]);
+        printf(" %d > %d\n",i,(int)p[i]);
     }
-        printf(" s> %s\n",p[2]);
+    printf(" s> %s\n",(char*)p[2]);
     va_end(vp);
     return p;
 }
@@ -56,12 +60,13 @@ void** wPluginPackInitData(int members, ...) {
 WFunction *
 wPluginCreateFunction(int type, char *library_name,
         char *init_proc_name, char *proc_name, char *free_data_proc_name,
-        proplist_t pl_arg, void *init_data) {
+        proplist_t pl_arg, void *init_data) 
+{
     WFunction *function;
     _DL_InitDataProc *initProc;
 
     function = wmalloc(sizeof(WFunction));
-    bzero(function, sizeof(WFunction));
+    memset(function, 0, sizeof(WFunction));
 
     function->handle = dlopen(library_name, RTLD_LAZY);
     if (!function->handle) {
@@ -108,8 +113,11 @@ wPluginCreateFunction(int type, char *library_name,
 }
 
 void
-wPluginDestroyFunction(WFunction *function) {
-    if (!function) return;
+wPluginDestroyFunction(WFunction *function) 
+{
+    if (!function) 
+	return;
+
     if (function->data) {
         if (function->freeData) {
             function->freeData(&function->data);

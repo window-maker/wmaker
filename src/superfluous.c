@@ -455,6 +455,9 @@ DoWindowBirth(WWindow *wwin)
 
 
 
+
+
+
 #ifdef SILLYNESS
 static WMPixmap *data[12];
 
@@ -582,6 +585,9 @@ InitGhostWindowMove(WWindow *wwin)
 {
     _GhostWindowData *gdata;
     WScreen *scr = wwin->screen_ptr;
+    unsigned short *ptr;
+    unsigned short mask;
+    int i;
 
     gdata = wmalloc(sizeof(_GhostWindowData));
 
@@ -594,22 +600,57 @@ InitGhostWindowMove(WWindow *wwin)
     gdata->boxX = wwin->frame_x;
     gdata->boxY = wwin->frame_y;
 
-    gdata->window = 
+    gdata->window =
 	XCreateSimpleWindow(dpy, scr->root_win, wwin->frame_x, wwin->frame_y,
 			    gdata->width, gdata->height, 0, 0, 0);
 
-    gdata->winImage =
-	RGetXImage(scr->rcontext, wwin->frame->core->window, 0, 0,
-		   scr->frame->core->width, scr->frame->core->height);
+    gdata->winImage = RGetXImage(scr->rcontext, wwin->frame->core->window, 
+				 0, 0, gdata->width, gdata->height);
 
-    gdata->backImage =
-	RCreateXImage(scr->rcontext, scr->w_depth,
-		      scr->frame->core->width, scr->frame->core->height);
+    gdata->backImage = RCreateXImage(scr->rcontext, scr->w_depth, 
+				     gdata->width, gdata->height);
 
     memcpy(gdata->backImage->image->data, gdata->winImage->image->data,
-	   gdata->winImage->image->bytes_per_line * scr->frame->core->height);
+	   gdata->winImage->image->bytes_per_line * gdata->height);
+
+    gdata->image = RCreateXImage(scr->rcontext, scr->w_depth,
+				 gdata->width, gdata->height);
+
+    ptr = (unsigned short*)gdata->winImage->image->data;
+
+    mask = 0x7b00|0x3d0|0x1e;
+
+    for (i = 0;
+	 i < gdata->winImage->image->bytes_per_line * gdata->height;
+	 i++, ptr++) {
+
+	*ptr &= mask;
+    }
 
     return gdata;
+}
+
+
+static void
+mergeGhostWindow(_GhostWindowData *gdata)
+{
+    register unsigned short *ptrw, *ptrb, *ptr;
+    int count;
+    int i;
+
+    ptr = (unsigned short*)gdata->image->image->data;
+    ptrw = (unsigned short*)gdata->winImage->image->data;
+    ptrb = (unsigned short*)gdata->backImage->image->data;
+
+    count = gdata->winImage->image->bytes_per_line * gdata->height;
+
+    while (count--) {
+	*ptr = (*ptrw + *ptrb) >> 1;
+
+	ptr++;
+	ptrw++;
+	ptrb++;
+    }
 }
 
 
@@ -617,8 +658,137 @@ void
 UpdateGhostWindowMove(void *data, int x, int y)
 {
     _GhostWindowData *gdata = (_GhostWindowData*)data;
+    WScreen *scr = gdata->scr;
 
-    
+    /* no intersection of new background with current */
+    if (x + gdata->width <= gdata->boxX 
+	|| x >= gdata->boxX + gdata->width
+	|| y + gdata->height <= gdata->boxY
+	|| y >= gdata->boxY + gdata->height) {
+	int i;
+
+	RDestroyXImage(gdata->backImage);
+
+	gdata->backImage = RGetXImage(scr->rcontext, scr->root_win, x, y,
+				      gdata->width, gdata->height);
+
+	ptr = (unsigned short*)gdata->backImage->image->data;
+
+	mask = 0x7b00|0x3d0|0x1e;
+
+	for (i = 0;
+	     i < gdata->winImage->image->bytes_per_line * gdata->height;
+	     i++, ptr++) {
+
+	    *ptr &= mask;
+	}
+    } else {
+	int hx, hw, hy, hh;
+	int vx, vw, vy, vh;
+	int i, j;
+	unsigned char *backP = gdata->backImage->image->data;
+	unsigned char *winP = gdata->winImage->image->data;
+	int backLineLen = gdata->backImage->image->bytes_per_line;
+	int winLineLen = gdata->winImage->image->bytes_per_line;
+
+	/* 1st move the area of the current backImage that overlaps
+	 * the new backImage to it's new position */
+
+	if (x < gdata->boxX) {
+	    vx = x + gdata->width;
+	    vw = gdata->width - vx;
+	} else if (x > gdata->boxX) {
+	    vw = gdata->boxX + gdata->width - x;
+	    vx = gdata->boxX - vw;
+	} else {
+	    vx = 0;
+	    vw = gdata->width;
+	}
+
+	if (y < gdata->boxY) {
+	    vy = y + gdata->height;
+	    vh = gdata->height - vy;
+	} else if (y > gdata->boxY) {
+	    vh = gdata->boxY + gdata->height - y;
+	    vy = gdata->boxY - vh;
+	} else {
+	    vy = 0;
+	    vh = gdata->height;
+	}
+
+	if (y < gdata->boxY) {
+	    int dy = vy - gdata->boxY;
+
+	    if (x < gdata->boxX) {
+		for (i = vh - 1; i >= 0; i--) {
+		    memmove(&backP[(i + dy) * backLineLen + 2 * vx],
+			    &backP[i * backLineLen], 2 * vw);
+		}
+	    } else /* if (x > gdata->boxX) */ {
+		for (i = vh - 1; i >= 0; i--) {
+		    memmove(&backP[(i + dy) * backLineLen],
+			    &backP[i * backLineLen + 2 * vx], 2 * vw);
+		}
+	    }
+	} else /*if (y > gdata->boxY) */ {
+	    int dy = gdata->boxY - vy;
+
+	    if (x < gdata->boxX) {
+		for (i = 0; i < vh - 1; i++) {
+		    memmove(&backP[i * backLineLen + 2 * vx], 
+			    &backP[(i + dy) * backLineLen], 2 * vw);
+		}
+	    } else /*if (x > gdata->boxX) */ {
+		for (i = 0; i < vh - 1; i++) {
+		    memmove(&backP[i * backLineLen], 
+			    &backP[(i + dy) * backLineLen + 2 * vx], 2 * vw);
+		}
+	    }
+	}
+
+	/* 2nd grab the background image from the screen and copy to the
+	 * buffer. also maskout the lsb of rgb in each pixel of grabbed data */
+
+	if (y < gdata->boxY) {
+	    vy = y;
+	    vh = gdata->boxY - vy;
+
+	    hy = y + vh;
+	    hh = gdata->height - vh;
+	} else if (y > gdata->boxY) {
+	    vy = gdata->boxY + gdata->height;
+	    vh = vy - (y + gdata->height);
+
+	    hy = y;
+	    hh = y - gdata->boxY;
+	} else {
+	    vy = vh = 0;
+
+	    hy = y;
+	    hh = gdata->height;
+	}
+
+	if (x < gdata->boxX) {
+	    hx = x;
+	    hw = gdata->boxX - hx;
+	} else if (x > gdata->boxX) {
+	    hx = gdata->boxX + gdata->width;
+	    hw = hx - (x + gdata->width);
+	} else {
+	    hx = hw = 0;
+
+	    vx = x;
+	    vw = gdata->width;
+	}
+
+	/* 1st the top/bottom part */
+
+	
+
+	/* 2nd the left/right part */
+    }
+
+    mergeGhostWindow(gdata);
 }
 
 

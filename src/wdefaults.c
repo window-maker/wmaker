@@ -197,12 +197,14 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
     proplist_t value;
     proplist_t key1, key2, key3;
     proplist_t dw, dc, dn, da;
-    char buffer[256];
 
 
-    if (class && instance)
+    if (class && instance) {
+      char *buffer = NULL;
+	  buffer = wmalloc(strlen(class)+strlen(instance)+4);
       key1 = PLMakeString(strcat(strcat(strcpy(buffer,instance),"."),class));
-    else
+	  free(buffer);
+    } else
       key1 = NULL;
 
     if (instance)
@@ -326,17 +328,19 @@ get_generic_value(WScreen *scr, char *instance, char *class, proplist_t option,
 		  Bool noDefault)
 {
     proplist_t value, key, dict;
-    char buffer[256];
     
     value = NULL;
 
     PLSetStringCmpHook(NULL);
 
     if (class && instance) {
+	char *buffer = NULL;
+	buffer = wmalloc(strlen(class)+strlen(instance)+4);
 	key = PLMakeString(strcat(strcat(strcpy(buffer,instance),"."),class));
-	
+
 	dict = PLGetDictionaryEntry(WDWindowAttributes->dictionary, key);
 	PLRelease(key);
+	free(buffer);
 
 	if (dict) {
 	    value = PLGetDictionaryEntry(dict, option);
@@ -348,7 +352,6 @@ get_generic_value(WScreen *scr, char *instance, char *class, proplist_t option,
 	
 	dict = PLGetDictionaryEntry(WDWindowAttributes->dictionary, key);
 	PLRelease(key);
-
 	if (dict) {
 	    value = PLGetDictionaryEntry(dict, option);
 	}
@@ -481,7 +484,6 @@ wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file)
     WDDomain *db = WDWindowAttributes;
     proplist_t icon_value=NULL, value, attr, key, def_win, def_icon=NULL;
     proplist_t dict = db->dictionary;
-    char *buffer;
     int same = 0;
 
     if (!dict) {
@@ -499,6 +501,7 @@ wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file)
     PLSetStringCmpHook(NULL);
 
     if (instance && class) {
+    	char *buffer;
         buffer = wmalloc(strlen(instance) + strlen(class) + 2);
         strcat(strcat(strcpy(buffer, instance), "."), class);
         key = PLMakeString(buffer);

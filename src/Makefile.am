@@ -43,8 +43,6 @@ wmaker_SOURCES = 	\
 	keybind.h \
 	kwm.h \
 	kwm.c \
-	list.c \
-	list.h \
 	main.c \
 	menu.c \
 	menu.h \

@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdarg.h>
 #include <pwd.h>
 #include <math.h>
 #include <time.h>
@@ -48,7 +49,6 @@
 #include "xutil.h"
 #include "xmodifier.h"
 
-#include "list.h"
 
 /**** global variables *****/
 
@@ -682,26 +682,26 @@ next_token(char *word, char **next)
 void
 ParseCommand(char *command, char ***argv, int *argc)
 {
-    LinkedList *list = NULL;
+    WMBag *bag = WMCreateBag(4);
     char *token, *line;
-    int count, i;
+    int count, j;
 
     line = command;
     do {
 	token = next_token(line, &line);
-	if (token) {	    
-	    list = list_cons(token, list);
+	if (token) {
+	    WMPutInBag(bag, token);
 	}
     } while (token!=NULL && line!=NULL);
 
-    count = list_length(list);
+    count = WMGetBagItemCount(bag);
     *argv = wmalloc(sizeof(char*)*count);
-    i = count;
-    while (list!=NULL) {
-	(*argv)[--i] = list->head;
-	list_remove_head(&list);
+    for (j = 0; j < count; j++) {
+	(*argv)[j] = WMGetFromBag(bag, j);
     }
     *argc = count;
+
+    WMFreeBag(bag);
 }
 
 #if 0
@@ -1387,6 +1387,34 @@ SendHelperMessage(WScreen *scr, char type, int workspace, char *msg)
 }
 
 
+
+typedef struct {
+    WScreen *scr;
+    char *command;
+} _tuple;
+
+
+static void
+shellCommandHandler(pid_t pid, unsigned char status, _tuple *data)
+{
+    if (status == 127) {
+	char *buffer;
+
+	buffer = wstrappend(_("Could not execute command: "), data->command);
+
+	wMessageDialog(data->scr, _("Error"), buffer, _("OK"), NULL, NULL);
+	free(buffer);
+    } else if (status != 127) {
+	/*
+	printf("%s: %i\n", data->command, status);
+	 */
+    }
+
+    free(data->command);
+    free(data);
+}
+
+
 void
 ExecuteShellCommand(WScreen *scr, char *command)
 {
@@ -1406,6 +1434,7 @@ ExecuteShellCommand(WScreen *scr, char *command)
     shell = "/bin/sh";
 
     pid = fork();
+    
     if (pid==0) {
 
 	SetupEnvironment(scr);
@@ -1418,5 +1447,35 @@ ExecuteShellCommand(WScreen *scr, char *command)
 	Exit(-1);
     } else if (pid < 0) {
 	wsyserror("cannot fork a new process");
+    } else {
+	_tuple *data = wmalloc(sizeof(_tuple));
+	
+	data->scr = scr;
+	data->command = wstrdup(command);
+
+	wAddDeathHandler(pid, (WDeathHandler*)shellCommandHandler, data);
     }
 }
+
+
+
+
+
+void dprintf(char *format, ...)
+{
+    va_list	args;
+
+    va_start(args, format);
+    vprintf(format, args);
+    fflush(stdout);
+    va_end(args);
+}
+
+
+
+void dputs(char *text)
+{
+    puts(text);
+    fflush(stdout);
+}
+

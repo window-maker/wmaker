@@ -262,9 +262,9 @@ print_help()
 #endif
     puts(_(" --no-dock		do not open the application Dock"));
     puts(_(" --no-clip		do not open the workspace Clip"));
-    /*
+
     puts(_(" --locale locale		locale to use"));
-    */
+
     puts(_(" --visual-id visualid	visual id of visual to use"));
     puts(_(" --static		do not update or save configurations"));
 #ifdef DEBUG
@@ -342,7 +342,43 @@ ExecExitScript()
     }
 }
 
+#if 0
+char*
+getFullPath(char *path)
+{
+    char buffer[1024];
+    char *tmp;
+    char *basep = (char*)buffer;
 
+    if (*path != '/' && getcwd(buffer, 1023)) {
+
+	for (;;) {
+	    if (strncmp(path, "../", 3)==0) {
+		path += 3;
+		basep = strchr(basep, '/');
+		if (!basep || *path==0)
+		    break;
+	    }
+	}
+	if (*path == '/' || strncmp(path, "./",2)==0) {
+	    tmp = 
+	}
+
+	/*
+	 * path
+	 * ./path
+	 * ../path
+	 * ../../path
+	 */
+	
+
+    } else {
+	return wstrappend(path);
+    }
+
+    return tmp;
+}
+#endif
 
 int
 main(int argc, char **argv)
@@ -358,8 +394,14 @@ main(int argc, char **argv)
     wsetabort(wAbort);
 
     /* for telling WPrefs what's the name of the wmaker binary being ran */
-    str = wstrappend("WMAKER_BIN_NAME=", argv[0]);
-    putenv(str);
+    {
+/*	char *tmp;
+
+	tmp = getFullPath(argv[0]);*/
+	str = wstrappend("WMAKER_BIN_NAME=", argv[0]);
+/*	free(tmp);*/
+	putenv(str);
+    }
 
     ArgCount = argc;
     Arguments = argv;
@@ -397,7 +439,7 @@ main(int argc, char **argv)
 		printf("Window Maker %s\n", VERSION);
 		exit(0);
 	    } else if (strcmp(argv[i], "--global_defaults_path")==0) {
-		puts(SYSCONFDIR);
+		printf("%s/WindowMaker\n", SYSCONFDIR);
 		exit(0);
 #ifdef DEBUG
             } else if (strcmp(argv[i], "--synchronous")==0) {

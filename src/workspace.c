@@ -498,11 +498,14 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
     wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
 
     if ((tmp = scr->focused_window)!= NULL) {
-	if (IS_OMNIPRESENT(tmp) || tmp->flags.changing_workspace)
+	if ((IS_OMNIPRESENT(tmp) && !WFLAGP(tmp, skip_window_list))
+	    || tmp->flags.changing_workspace) {
 	    foc = tmp;
-		  /* foc2 = tmp; will fix annoyance with gnome panel
-		   * but will create annoyance for every other application 
-		   */
+	}
+ 
+	/* foc2 = tmp; will fix annoyance with gnome panel
+	 * but will create annoyance for every other application 
+	 */
 
 	while (tmp) {
 	    if (tmp->frame->workspace!=workspace && !tmp->flags.selected) {
@@ -552,7 +555,7 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 			if (!(tmp->flags.mapped || tmp->flags.miniaturized)) {
 			    /* remap windows that are on this workspace */
 			    wWindowMap(tmp);
-			    if (!foc)
+			    if (!foc && !WFLAGP(tmp, skip_window_list))
 				foc = tmp;
 			}
 			/* Also map miniwindow if not omnipresent */
@@ -880,7 +883,7 @@ wWorkspaceRestoreState(WScreen *scr)
 	return;
     
     wscount = scr->workspace_count;
-    for (i=0; i < PLGetNumberOfElements(parr); i++) {
+    for (i=0; i < WMIN(PLGetNumberOfElements(parr), MAX_WORKSPACES); i++) {
         wks_state = PLGetArrayElement(parr, i);
         if (PLIsDictionary(wks_state))
             pstr = PLGetDictionaryEntry(wks_state, dName);

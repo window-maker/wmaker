@@ -158,4 +158,12 @@ void ExecExitScript();
 Bool wFetchName(Display *dpy, Window win, char **winname);
 Bool wGetIconName(Display *dpy, Window win, char **iconname);
 
+
+
+/* debugging stuff */
+
+void dprintf(char *, ...);
+void dputs(char *);
+
+
 #endif

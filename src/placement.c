@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <limits.h>
 
 #include "WindowMaker.h"
 #include "wcore.h"
@@ -39,7 +40,6 @@
 #include "appicon.h"
 #include "dock.h"
 
-#include "list.h"
 
 extern WPreferences wPreferences;
 
@@ -252,115 +252,163 @@ PlaceIcon(WScreen *scr, int *x_ret, int *y_ret)
 }
 
 
-static Bool
+/*
+ * This function calculates the length of the intersection of two
+ * line sections. (Hey, is that english?)
+ */
+static int
+calcIntersectionLength(int p1, int l1, int p2, int l2)
+{
+    int isect;
+    int tmp;
+    
+    if (p1 > p2) {
+        tmp = p1;
+        p1 = p2;
+        p2 = tmp;
+        tmp = l1;
+        l1 = l2;
+        l2 = tmp;
+    }
+
+    if (p1 + l1 < p2)
+        isect = 0;
+    else if (p2 + l2 < p1 + l1)
+        isect = l2;
+    else
+        isect = p1 + l1 - p2;
+        
+    return isect;
+}
+
+
+/*
+ * This function calculates the area of the intersection of two rectangles.
+ */
+static int
+calcIntersectionArea(int x1, int y1, int w1, int h1,
+                                int x2, int y2, int w2, int h2)
+{
+    return calcIntersectionLength(x1, w1, x2, w2)
+           * calcIntersectionLength(y1, h1, y2, h2);
+}
+
+
+static int
+calcSumOfCoveredAreas(WWindow *wwin, int x, int y, int w, int h)
+{
+    int sum_isect = 0;
+    WWindow *test_window;
+    int tw,tx,ty,th;
+       
+    test_window = wwin->screen_ptr->focused_window;
+    for(;test_window != NULL && test_window->prev != NULL;)
+         test_window = test_window->prev;
+       
+    for(; test_window != NULL; test_window = test_window->next) {
+        if (test_window->frame->core->stacking->window_level
+            < WMNormalLevel) {
+            continue;
+        }
+
+#if 0
+        tw = test_window->client.width;
+        if (test_window->flags.shaded)
+            th = test_window->frame->top_width;
+        else
+            th = test_window->client.height + extra_height;
+#else
+        tw = test_window->frame->core->width;
+        th = test_window->frame->core->height;
+#endif
+        tx = test_window->frame_x;
+        ty = test_window->frame_y;
+
+        if (test_window->flags.mapped ||
+            (test_window->flags.shaded &&
+             !(test_window->flags.miniaturized ||
+               test_window->flags.hidden))) {
+            sum_isect += calcIntersectionArea(tx, ty, tw, th, x, y, w, h);
+        }
+    }
+    
+    return sum_isect;
+}
+
+
+static void
 smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
-                 unsigned int width, unsigned int height, int tryCount)
+                 unsigned int width, unsigned int height)
 {
     WScreen *scr = wwin->screen_ptr;
     int test_x = 0, test_y = Y_ORIGIN(scr);
-    int loc_ok = False, tw,tx,ty,th;
-    int swidth, sx;
-    WWindow *test_window;
+    int from_x, to_x, from_y, to_y;
+    int sx;
+    int min_isect, min_isect_x, min_isect_y;
+    int sum_isect;
     int extra_height;
     WArea usableArea = scr->totalUsableArea;
-    
-    if (wwin->frame)
-	extra_height = wwin->frame->top_width + wwin->frame->bottom_width + 2;
-    else
-	extra_height = 24; /* random value */
 
-    swidth = usableArea.x2-usableArea.x1;
+    if (wwin->frame)
+	extra_height = wwin->frame->top_width + wwin->frame->bottom_width;
+    else
+        extra_height = 24; /* random value */
+
     sx = X_ORIGIN(scr);
 
-    /* this was based on fvwm2's smart placement */
-
+    min_isect = INT_MAX;
+    min_isect_x = sx;
+    min_isect_y = test_y;
+    
     height += extra_height;
 
-    while (((test_y + height) < (scr->scr_height)) && (!loc_ok)) {
+    while (((test_y + height) < usableArea.y2)) {
 
 	test_x = sx;
 
-	while (((test_x + width) < swidth) && (!loc_ok)) {
+	while ((test_x + width) < usableArea.x2) {
 
-	    loc_ok = True;
-	    test_window = scr->focused_window;
+            sum_isect = calcSumOfCoveredAreas(wwin, test_x, test_y,
+                                              width, height);
 
-	    while ((test_window != NULL) && (loc_ok == True)) {
-
-		if (test_window->frame->core->stacking->window_level
-		    < WMNormalLevel && tryCount > 0) {
-		    test_window = test_window->next;
-		    continue;
-		}
-#if 0
-                tw = test_window->client.width;
-                if (test_window->flags.shaded)
-                    th = test_window->frame->top_width;
-                else
-                    th = test_window->client.height + extra_height;
-#else
-		tw = test_window->frame->core->width;
-		th = test_window->frame->core->height;
-#endif
-		tx = test_window->frame_x;
-		ty = test_window->frame_y;
-
-		if ((tx < (test_x + width)) && ((tx + tw) > test_x) &&
-		    (ty < (test_y + height)) && ((ty + th) > test_y) &&
-		    (test_window->flags.mapped ||
-		     (test_window->flags.shaded &&
-		      !(test_window->flags.miniaturized ||
-			test_window->flags.hidden)))) {
-
-                    loc_ok = False;
-		}
-		test_window = test_window->next;
+	    if ( sum_isect < min_isect ) {
+	        min_isect = sum_isect;
+	        min_isect_x = test_x;
+	        min_isect_y = test_y;
 	    }
-
-	    test_window = scr->focused_window;
-
-	    while ((test_window != NULL) && (loc_ok == True))  {
-
-		if (test_window->frame->core->stacking->window_level
-		    < WMNormalLevel && tryCount > 0) {
-		    test_window = test_window->prev;
-		    continue;
-		}
-#if 0
-                tw = test_window->client.width;
-                if (test_window->flags.shaded)
-                    th = test_window->frame->top_width;
-                else
-                    th = test_window->client.height + extra_height;
-#else
-		tw = test_window->frame->core->width;
-		th = test_window->frame->core->height;
-#endif
-		tx = test_window->frame_x;
-		ty = test_window->frame_y;
-
-		if ((tx < (test_x + width)) && ((tx + tw) > test_x) &&
-		    (ty < (test_y + height)) && ((ty + th) > test_y) &&
-		    (test_window->flags.mapped ||
-		     (test_window->flags.shaded &&
-		      !(test_window->flags.miniaturized ||
-			test_window->flags.hidden)))) {
-
-                    loc_ok = False;
-		}
-		test_window = test_window->prev;
-	    }
-	    if (loc_ok == True) {
-		*x_ret = test_x;
-		*y_ret = test_y;
-		break;
-	    }
+	    
 	    test_x += PLACETEST_HSTEP;
 	}
 	test_y += PLACETEST_VSTEP;
     }
 
-    return loc_ok;
+    from_x = min_isect_x - PLACETEST_HSTEP + 1;
+    from_x = WMAX(from_x, X_ORIGIN(scr));
+    to_x = min_isect_x + PLACETEST_HSTEP;
+    if (to_x + width > usableArea.x2)
+        to_x = usableArea.x2 - width;
+
+    from_y = min_isect_y - PLACETEST_VSTEP + 1;
+    from_y = WMAX(from_y, Y_ORIGIN(scr));
+    to_y = min_isect_y + PLACETEST_VSTEP;
+    if (to_y + height > usableArea.y2)
+        to_y = usableArea.y2 - height;
+
+    for (test_x = from_x; test_x < to_x; test_x++) {
+        for (test_y = from_y; test_y < to_y; test_y++) {
+            sum_isect = calcSumOfCoveredAreas(wwin, test_x, test_y,
+                                              width, height);
+
+	    if ( sum_isect < min_isect ) {
+	        min_isect = sum_isect;
+	        min_isect_x = test_x;
+	        min_isect_y = test_y;
+	    }
+        }
+    }
+
+    *x_ret = min_isect_x;
+    *y_ret = min_isect_y;
 }
 
 
@@ -401,14 +449,8 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 	break;
 
      case WPM_SMART:
-	if (smartPlaceWindow(wwin, x_ret, y_ret, width, height, 0)) {
-	    break;
-	} else if (smartPlaceWindow(wwin, x_ret, y_ret, width, height, 1)) {
-	    break;
-	}
-	/* there isn't a break here, because if we fail, it should fall
-	   through to cascade placement, as people who want tiling want
-	   automagicness aren't going to want to place their window */
+	smartPlaceWindow(wwin, x_ret, y_ret, width, height);
+	break;
 
      case WPM_CASCADE:
         if (wPreferences.window_placement == WPM_SMART)

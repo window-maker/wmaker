@@ -55,7 +55,6 @@
 #include "xmodifier.h"
 #include <proplist.h>
 
-#include "list.h"
 
 
 extern char *Locale;
@@ -603,7 +602,7 @@ static void
 separateCommand(char *line, char ***file, char **command)
 {
     char *token, *tmp = line;
-    LinkedList *list = NULL;
+    WMBag *bag = WMCreateBag(4);
     int count, i;
 
     *file = NULL;
@@ -618,20 +617,21 @@ separateCommand(char *line, char ***file, char **command)
                     wwarning(_("%s: missing command"), line);
                 break;
             }
-            list = list_cons(token, list);
+	    WMPutInBag(bag, token);
         }
     } while (token!=NULL && tmp!=NULL);
 
-    count = list_length(list);
+    count = WMGetBagItemCount(bag);
     if (count>0) {
+	int j;
         *file = wmalloc(sizeof(char*)*(count+1));
         i = count;
         (*file)[count] = NULL;
-        while (list!=NULL) {
-            (*file)[--i] = list->head;
-            list_remove_head(&list);
+	for (j = 0; j < count; j++) {
+            (*file)[--i] = WMGetFromBag(bag, j);
         }
     }
+    WMFreeBag(bag);
 }
 
 
@@ -1304,11 +1304,15 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
     struct stat stat_buf;
     WMenu *menu=NULL;
     char *buffer;
-    LinkedList *dirs = NULL, *files = NULL;
+    WMBag *dirs = NULL, *files = NULL;
     int length, i, have_space=0;
     dir_data *data;
     int stripExtension = 0;
 
+    
+    dirs = WMCreateBag(16);
+    files = WMCreateBag(16);
+    
     i=0;
     while (path[i]!=NULL) {
 	if (strcmp(path[i], "-noext")==0) {
@@ -1361,7 +1365,7 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
 			data->name = wstrdup(dentry->d_name);
 			data->index = i;
 
-                        list_insert_sorted(data, &dirs, (int(*)())myCompare);
+			WMPutInBag(dirs, data);
                     }
                 } else if (S_ISREG(stat_buf.st_mode) || isFilePack) {
                     /* Hack because access always returns X_OK success for user root */
@@ -1374,7 +1378,7 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
 			data->name = wstrdup(dentry->d_name);
 			data->index = i;
 
-                        list_insert_sorted(data, &files, (int(*)())myCompare);
+			WMPutInBag(files, data);
                     }
                 }
             }
@@ -1384,17 +1388,23 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
         closedir(dir);
         i++;
     }
-
-    if (!dirs && !files)
+    
+    if (!WMGetBagItemCount(dirs) && !WMGetBagItemCount(files)) {
+	WMFreeBag(dirs);
+	WMFreeBag(files);
         return NULL;
+    }
+
+    WMSortBag(dirs, myCompare);
+    WMSortBag(files, myCompare);
 
     menu = wMenuCreate(scr, title, False);
     menu->on_destroy = removeShortcutsForMenu;
-    
-    while (dirs != NULL) {
+
+    for (i = 0; i < WMGetBagItemCount(dirs); i++) {
         /* New directory. Use same OPEN_MENU command that was used
          * for the current directory. */
-        dir_data *d = (dir_data*)dirs->head;
+        dir_data *d = (dir_data*)WMGetFromBag(dirs, i);
 
         length = strlen(path[d->index])+strlen(d->name)+6;
         if (command)
@@ -1427,17 +1437,14 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
         addMenuEntry(menu, d->name, NULL, "OPEN_MENU", buffer, path[d->index]);
 
         free(buffer);
-        if (dirs->head) {
-            if (d->name)
-                free(d->name);
-            free(dirs->head);
-        }
-        list_remove_head(&dirs);
+	if (d->name)
+	    free(d->name);
+	free(d);
     }
 
-    while (files != NULL) {
+    for (i = 0; i < WMGetBagItemCount(files); i++) {
         /* executable: add as entry */
-        dir_data *f = (dir_data*) files->head;;
+        dir_data *f = (dir_data*)WMGetFromBag(files, i);
 
         length = strlen(path[f->index])+strlen(f->name)+6;
         if (command)
@@ -1480,13 +1487,13 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
         addMenuEntry(menu, f->name, NULL, "SHEXEC", buffer, path[f->index]);
 
         free(buffer);
-        if (files->head) {
-            if (f->name)
-                free(f->name);
-            free(files->head);
-        }
-        list_remove_head(&files);
+	if (f->name)
+	    free(f->name);
+	free(f);
     }
+    
+    WMFreeBag(files);
+    WMFreeBag(dirs);
 
     return menu;
 }

@@ -54,7 +54,6 @@
 #include "framewin.h"
 #include "superfluous.h"
 
-#include "list.h"
 
 #include <proplist.h>
 
@@ -313,17 +312,17 @@ numberOfSelectedIcons(WDock *dock)
 }
 
 
-static LinkedList*
+static WMBag*
 getSelected(WDock *dock)
 {
-    LinkedList *ret=NULL;
+    WMBag *ret = WMCreateBag(8);
     WAppIcon *btn;
     int i;
 
     for (i=1; i<dock->max_icons; i++) {
         btn = dock->icon_array[i];
         if (btn && btn->icon->selected) {
-            ret = list_cons(btn, ret);
+	    WMPutInBag(ret, btn);
         }
     }
 
@@ -482,8 +481,9 @@ omnipresentCallback(WMenu *menu, WMenuEntry *entry)
     WAppIcon *clickedIcon = entry->clientdata;
     WAppIcon *aicon;
     WDock *dock;
-    LinkedList *selectedIcons;
+    WMBag *selectedIcons;
     int failed;
+    int i;
 
     assert(entry->clientdata!=NULL);
 
@@ -491,18 +491,19 @@ omnipresentCallback(WMenu *menu, WMenuEntry *entry)
 
     selectedIcons = getSelected(dock);
 
-    if (!selectedIcons)
-        selectedIcons = list_cons(clickedIcon, NULL);
+    if (!WMGetBagItemCount(selectedIcons))
+        WMPutInBag(selectedIcons, clickedIcon);
 
     failed = 0;
-    while (selectedIcons) {
-        aicon = selectedIcons->head;
+    for (i = 0; i < WMGetBagItemCount(selectedIcons); i++) {
+        aicon = WMGetFromBag(selectedIcons, i);
+
         if (wClipMakeIconOmnipresent(aicon, !aicon->omnipresent) == WO_FAILED)
             failed++;
         else if (aicon->icon->selected)
             wIconSelect(aicon->icon);
-        list_remove_head(&selectedIcons);
     }
+    WMFreeBag(selectedIcons);
 
     if (failed > 1) {
         wMessageDialog(dock->screen_ptr, _("Warning"),
@@ -530,8 +531,9 @@ removeIconsCallback(WMenu *menu, WMenuEntry *entry)
     WAppIcon *clickedIcon = (WAppIcon*)entry->clientdata;
     WDock *dock;
     WAppIcon *aicon;
-    LinkedList *selectedIcons;
+    WMBag *selectedIcons;
     int keepit;
+    int i;
 
     assert(clickedIcon!=NULL);
 
@@ -539,20 +541,23 @@ removeIconsCallback(WMenu *menu, WMenuEntry *entry)
 
     selectedIcons = getSelected(dock);
 
-    if (selectedIcons) {
+    if (WMGetBagItemCount(selectedIcons)) {
 	if (wMessageDialog(dock->screen_ptr, _("Workspace Clip"),
 			   _("All selected icons will be removed!"),
 			   _("OK"), _("Cancel"), NULL)!=WAPRDefault) {
+	    WMFreeBag(selectedIcons);
 	    return;
 	}
     } else {
-	if (clickedIcon->xindex==0 && clickedIcon->yindex==0)
+	if (clickedIcon->xindex==0 && clickedIcon->yindex==0) {
+	    WMFreeBag(selectedIcons);
 	    return;
-	selectedIcons = list_cons(clickedIcon, NULL);
+	}
+	WMPutInBag(selectedIcons, clickedIcon);
     }
 
-    while (selectedIcons) {
-        aicon = selectedIcons->head;
+    for (i = 0; i < WMGetBagItemCount(selectedIcons); i++) {
+        aicon = WMGetFromBag(selectedIcons, i);
         keepit = aicon->running && wApplicationOf(aicon->main_window);
         wDockDetach(dock, aicon);
         if (keepit) {
@@ -562,8 +567,8 @@ removeIconsCallback(WMenu *menu, WMenuEntry *entry)
             if (!dock->mapped || dock->collapsed)
                 XMapWindow(dpy, aicon->icon->core->window);
         }
-        list_remove_head(&selectedIcons);
     }
+    WMFreeBag(selectedIcons);
 
     if (wPreferences.auto_arrange_icons)
         wArrangeIcons(dock->screen_ptr, True);
@@ -576,16 +581,18 @@ keepIconsCallback(WMenu *menu, WMenuEntry *entry)
     WAppIcon *clickedIcon = (WAppIcon*)entry->clientdata;
     WDock *dock;
     WAppIcon *aicon;
-    LinkedList *selectedIcons;
+    WMBag *selectedIcons;
+    int i;
 
     assert(clickedIcon!=NULL);
     dock = clickedIcon->dock;
 
     selectedIcons = getSelected(dock);
 
-    if (!selectedIcons && clickedIcon!=dock->screen_ptr->clip_icon) {
+    if (!WMGetBagItemCount(selectedIcons) 
+	&& clickedIcon!=dock->screen_ptr->clip_icon) {
 	char *command = NULL;
-
+	
 	if (!clickedIcon->command && !clickedIcon->editing) {
 	    clickedIcon->editing = 1;
 	    if (wInputDialog(dock->screen_ptr, _("Keep Icon"),
@@ -602,15 +609,16 @@ keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 		clickedIcon->editing = 0;
 		if (command)
 		    free(command);
+		WMFreeBag(selectedIcons);
 		return;
 	    }
 	}
 
-	selectedIcons = list_cons(clickedIcon, NULL);
+	WMPutInBag(selectedIcons, clickedIcon);
     }
 
-    while (selectedIcons) {
-        aicon = selectedIcons->head;
+    for (i = 0; i < WMGetBagItemCount(selectedIcons); i++) {
+        aicon = WMGetFromBag(selectedIcons, i);
 	if (aicon->icon->selected)
             wIconSelect(aicon->icon);
         if (aicon && aicon->attracted && aicon->command) {
@@ -621,8 +629,8 @@ keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 		wAppIconPaint(aicon);
 	    }
         }
-        list_remove_head(&selectedIcons);
     }
+    WMFreeBag(selectedIcons);
 }
 
 
@@ -740,7 +748,7 @@ selectIconsCallback(WMenu *menu, WMenuEntry *entry)
 {
     WAppIcon *clickedIcon = (WAppIcon*)entry->clientdata;
     WDock *dock;
-    LinkedList *selectedIcons;
+    WMBag *selectedIcons;
     WAppIcon *btn;
     int i;
 
@@ -749,7 +757,7 @@ selectIconsCallback(WMenu *menu, WMenuEntry *entry)
 
     selectedIcons = getSelected(dock);
 
-    if (!selectedIcons) {
+    if (!WMGetBagItemCount(selectedIcons)) {
         for (i=1; i<dock->max_icons; i++) {
             btn = dock->icon_array[i];
             if (btn && !btn->icon->selected) {
@@ -757,12 +765,12 @@ selectIconsCallback(WMenu *menu, WMenuEntry *entry)
             }
         }
     } else {
-        while(selectedIcons) {
-            btn = selectedIcons->head;
+        for (i = 0; i < WMGetBagItemCount(selectedIcons); i++) {
+            btn = WMGetFromBag(selectedIcons, i);
 	    wIconSelect(btn->icon);
-            list_remove_head(&selectedIcons);
         }
     }
+    WMFreeBag(selectedIcons);
 
     wMenuPaint(menu);
 }
@@ -906,7 +914,7 @@ switchWSCommand(WMenu *menu, WMenuEntry *entry)
     WAppIcon *btn, *icon = (WAppIcon*) entry->clientdata;
     WScreen *scr = icon->icon->core->screen_ptr;
     WDock *src, *dest;
-    LinkedList *selectedIcons;
+    WMBag *selectedIcons;
     int x, y;
 
     if (entry->order == scr->current_workspace)
@@ -916,14 +924,14 @@ switchWSCommand(WMenu *menu, WMenuEntry *entry)
 
     selectedIcons = getSelected(src);
 
-    if (selectedIcons) {
-        while(selectedIcons) {
-            btn = selectedIcons->head;
+    if (WMGetBagItemCount(selectedIcons)) {
+	int i;
+	for (i = 0; i < WMGetBagItemCount(selectedIcons); i++) {
+            btn = WMGetFromBag(selectedIcons, i);
             if (wDockFindFreeSlot(dest, &x, &y)) {
                 moveIconBetweenDocks(src, dest, btn, x, y);
                 XUnmapWindow(dpy, btn->icon->core->window);
             }
-            list_remove_head(&selectedIcons);
         }
     } else if (icon != scr->clip_icon) {
         if (wDockFindFreeSlot(dest, &x, &y)) {
@@ -931,6 +939,7 @@ switchWSCommand(WMenu *menu, WMenuEntry *entry)
             XUnmapWindow(dpy, icon->icon->core->window);
         }
     }
+    WMFreeBag(selectedIcons);
 }
 
 
@@ -1432,7 +1441,7 @@ dockSaveState(WDock *dock)
     int i;
     proplist_t icon_info;
     proplist_t list=NULL, dock_state=NULL;
-    proplist_t value;
+    proplist_t value, key;
     char buffer[256];
 
     list = PLMakeArrayFromElements(NULL);
@@ -1448,18 +1457,25 @@ dockSaveState(WDock *dock)
             PLRelease(icon_info);
         }
     }
-
-    dock_state = PLMakeDictionaryFromEntries(dApplications, list, NULL);
-
-    PLRelease(list);
+    
+    dock_state = PLMakeDictionaryFromEntries(dApplications, list, 
+					     NULL);
 
     if (dock->type == WM_DOCK) {
+	sprintf(buffer, "Applications%i", dock->screen_ptr->scr_height);
+	key = PLMakeString(buffer);
+	PLInsertDictionaryEntry(dock_state, key, list);
+	PLRelease(key);
+
+	
         sprintf(buffer, "%i,%i", (dock->on_right_side ? -ICON_SIZE : 0),
                                   dock->y_pos);
         value = PLMakeString(buffer);
         PLInsertDictionaryEntry(dock_state, dPosition, value);
         PLRelease(value);
     }
+    PLRelease(list);
+
 
     value = (dock->lowered ? dYes : dNo);
     PLInsertDictionaryEntry(dock_state, dLowered, value);
@@ -1486,11 +1502,35 @@ dockSaveState(WDock *dock)
 
 
 void
-wDockSaveState(WScreen *scr)
+wDockSaveState(WScreen *scr, proplist_t old_state)
 {
     proplist_t dock_state;
+    proplist_t keys;
 
     dock_state = dockSaveState(scr->dock);
+
+    /*
+     * Copy saved states of docks with different sizes.
+     */
+    if (old_state) {
+	int i;
+	proplist_t tmp;
+
+	keys = PLGetAllDictionaryKeys(old_state);
+	for (i = 0; i < PLGetNumberOfElements(keys); i++) {
+	    tmp = PLGetArrayElement(keys, i);
+
+	    if (strncasecmp(PLGetString(tmp), "applications", 12) == 0
+		&& !PLGetDictionaryEntry(dock_state, tmp)) {
+
+		PLInsertDictionaryEntry(dock_state,
+					tmp, 
+					PLGetDictionaryEntry(old_state, tmp));
+	    }
+	}
+	PLRelease(keys);
+    }
+    
 
     PLInsertDictionaryEntry(scr->session_state, dDock, dock_state);
 
@@ -1871,8 +1911,29 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
 
 
     /* application list */
+    
+    {
+	proplist_t tmp;
+	char buffer[64];
+	
+	/*
+	 * When saving, it saves the dock state in
+	 * Applications and Applicationsnnn
+	 * 
+	 * When loading, it will first try Applicationsnnn.
+	 * If it does not exist, use Applications as default.
+	 */
+	
+	sprintf(buffer, "Applications%i", scr->scr_height);
 
-    apps = PLGetDictionaryEntry(dock_state, dApplications);
+	tmp = PLMakeString(buffer);
+	apps = PLGetDictionaryEntry(dock_state, tmp);
+	PLRelease(tmp);
+
+	if (!apps) {
+	    apps = PLGetDictionaryEntry(dock_state, dApplications);
+	}
+    }
 
     if (!apps) {
         goto finish;

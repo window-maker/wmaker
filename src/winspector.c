@@ -371,12 +371,13 @@ getBool(proplist_t value)
  */
 
 
-static void
+static int
 insertAttribute(proplist_t dict, proplist_t window, proplist_t attr,
-                proplist_t value, int *modified, int flags)
+                proplist_t value, int flags)
 {
     proplist_t def_win, def_value=NULL;
     int update = 0;
+    int modified = 0;
 
     if (!(flags & UPDATE_DEFAULTS) && dict) {
         if ((def_win = PLGetDictionaryEntry(dict, AnyWindow)) != NULL) {
@@ -398,8 +399,10 @@ insertAttribute(proplist_t dict, proplist_t window, proplist_t attr,
 
     if (update) {
         PLInsertDictionaryEntry(window, attr, value);
-        *modified = 1;
+        modified = 1;
     }
+
+    return modified;
 }
 
 
@@ -410,7 +413,7 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     WDDomain *db = WDWindowAttributes;
     proplist_t dict = db->dictionary;
     proplist_t winDic, value, key;
-    char buffer[256], *icon_file;
+    char *icon_file;
     int flags = 0;
     int different = 0;
 
@@ -422,14 +425,16 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     else if (WMGetButtonSelected(panel->clsRb) != 0)
         key = PLMakeString(wwin->wm_class);
     else if (WMGetButtonSelected(panel->bothRb) != 0) {
+		char *buffer;
+
+		buffer = wmalloc(strlen(wwin->wm_instance)+strlen(wwin->wm_class)+4);
         strcat(strcat(strcpy(buffer, wwin->wm_instance), "."), wwin->wm_class);
         key = PLMakeString(buffer);
-    }
-    else if (WMGetButtonSelected(panel->defaultRb) != 0) {
+		free(buffer);
+    } else if (WMGetButtonSelected(panel->defaultRb) != 0) {
         key = PLRetain(AnyWindow);
         flags = UPDATE_DEFAULTS;
-    }
-    else
+    } else
         key = NULL;
 
     if (!key)
@@ -462,7 +467,7 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     if (icon_file) {
         if (icon_file[0] != 0) {
             value = PLMakeString(icon_file);
-            insertAttribute(dict, winDic, AIcon, value, &different, flags);
+            different |= insertAttribute(dict, winDic, AIcon, value, flags);
             PLRelease(value);
         }
         free(icon_file);
@@ -475,7 +480,8 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 
 	if (i>=0 && i < panel->frame->screen_ptr->workspace_count) {
 	    value = PLMakeString(panel->frame->screen_ptr->workspaces[i]->name);
-	    insertAttribute(dict, winDic, AStartWorkspace, value, &different, flags);
+	    different |= insertAttribute(dict, winDic, AStartWorkspace, value, 
+					 flags);
 	    PLRelease(value);
         }
     }
@@ -483,66 +489,66 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     flags |= IS_BOOLEAN;
 
     value = (WMGetButtonSelected(panel->alwChk)!=0) ? Yes : No;
-    insertAttribute(dict, winDic, AAlwaysUserIcon,    value, &different, flags);
+    different |= insertAttribute(dict, winDic, AAlwaysUserIcon, value, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[0])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, ANoTitlebar,        value, &different, flags);
+    different |= insertAttribute(dict, winDic, ANoTitlebar,     value, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[1])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, ANoResizebar,       value, &different, flags);
+    different |= insertAttribute(dict, winDic, ANoResizebar,     value, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[2])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, ANoCloseButton,       value, &different, flags);
+    different |= insertAttribute(dict, winDic, ANoCloseButton,   value, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[3])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, ANoMiniaturizeButton, value, &different, flags);
+    different |= insertAttribute(dict, winDic, ANoMiniaturizeButton, value, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[4])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, AKeepOnTop,         value, &different, flags);
+    different |= insertAttribute(dict, winDic, AKeepOnTop,       value, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[5])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, AKeepOnBottom,         value, &different, flags);
+    different |= insertAttribute(dict, winDic, AKeepOnBottom,    value, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[6])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, AOmnipresent,       value, &different, flags);
+    different |= insertAttribute(dict, winDic, AOmnipresent,     value, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[7])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, AStartMiniaturized, value, &different, flags);
+    different |= insertAttribute(dict, winDic, AStartMiniaturized, value, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[8])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, AStartMaximized,    value, &different, flags);
+    different |= insertAttribute(dict, winDic, AStartMaximized,  value, flags);
 
     value = (WMGetButtonSelected(panel->attrChk[9])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, ASkipWindowList,    value, &different, flags);
+    different |= insertAttribute(dict, winDic, ASkipWindowList,  value, flags);
 
 
     value = (WMGetButtonSelected(panel->moreChk[0])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, ANoHideOthers,      value, &different, flags);
+    different |= insertAttribute(dict, winDic, ANoHideOthers,    value, flags);
 
     value = (WMGetButtonSelected(panel->moreChk[1])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, ANoKeyBindings,     value, &different, flags);
+    different |= insertAttribute(dict, winDic, ANoKeyBindings,   value, flags);
 
     value = (WMGetButtonSelected(panel->moreChk[2])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, ANoMouseBindings,   value, &different, flags);
+    different |= insertAttribute(dict, winDic, ANoMouseBindings, value, flags);
 
     value = (WMGetButtonSelected(panel->moreChk[3])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, AKeepInsideScreen,  value, &different, flags);
+    different |= insertAttribute(dict, winDic, AKeepInsideScreen,value, flags);
 
     value = (WMGetButtonSelected(panel->moreChk[4])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, AUnfocusable, value, &different, flags);
+    different |= insertAttribute(dict, winDic, AUnfocusable, value, flags);
 
     value = (WMGetButtonSelected(panel->moreChk[5])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, ADontSaveSession,   value, &different, flags);
+    different |= insertAttribute(dict, winDic, ADontSaveSession, value, flags);
 
     value = (WMGetButtonSelected(panel->moreChk[6])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, AEmulateAppIcon,   value, &different, flags);
+    different |= insertAttribute(dict, winDic, AEmulateAppIcon,  value, flags);
 
     value = (WMGetButtonSelected(panel->moreChk[7])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, AFullMaximize,   value, &different, flags);
+    different |= insertAttribute(dict, winDic, AFullMaximize, value, flags);
 
 #ifdef XKB_BUTTON_HINT
     value = (WMGetButtonSelected(panel->moreChk[8])!=0) ? Yes : No;
-    insertAttribute(dict, winDic, ANoLanguageButton,  value, &different, flags);
+    different |= insertAttribute(dict, winDic, ANoLanguageButton, value, flags);
 #endif
 
     /* application wide settings for when */
@@ -550,10 +556,10 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     if (panel->inspected->main_window == panel->inspected->client_win) {
 	
 	value = (WMGetButtonSelected(panel->appChk[0])!=0) ? Yes : No;
-	insertAttribute(dict, winDic, AStartHidden, value, &different, flags);
+	different |= insertAttribute(dict, winDic, AStartHidden, value, flags);
 
 	value = (WMGetButtonSelected(panel->appChk[1])!=0) ? Yes : No;
-	insertAttribute(dict, winDic, ANoAppIcon, value, &different, flags);
+	different |= insertAttribute(dict, winDic, ANoAppIcon, value, flags);
     } 
 
     PLRemoveDictionaryEntry(dict, key);
@@ -575,15 +581,19 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 	wapp = wApplicationOf(panel->inspected->main_window);
 	if (wapp) {
 	    char *iconFile;
+		char *buffer;
 
 	    appDic = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
 
 	    assert(wapp->main_window_desc->wm_instance!=NULL);
 	    assert(wapp->main_window_desc->wm_class!=NULL);
 
+		buffer = wmalloc(strlen(wapp->main_window_desc->wm_instance)
+						 +strlen(wwin->wm_class)+4);
 	    strcat(strcpy(buffer, wapp->main_window_desc->wm_instance), ".");
 	    strcat(buffer, wwin->wm_class);
 	    key = PLMakeString(buffer);
+		free(buffer);
 
 	    iconFile = wDefaultGetIconFile(wwin->screen_ptr, 
 					   wapp->main_window_desc->wm_instance,
@@ -592,16 +602,18 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 
 	    if (iconFile && iconFile[0]!=0) {
 		value = PLMakeString(iconFile);
-		insertAttribute(dict, appDic, AIcon, value, &different, 
-				flags&~IS_BOOLEAN);
+		different |= insertAttribute(dict, appDic, AIcon, value,
+					     flags&~IS_BOOLEAN);
 		PLRelease(value);
 	    }
 		
 	    value = (WMGetButtonSelected(panel->appChk[0])!=0) ? Yes : No;
-	    insertAttribute(dict, appDic, AStartHidden,  value, &different, flags);
+	    different |= insertAttribute(dict, appDic, AStartHidden,  value, 
+					 flags);
 
 	    value = (WMGetButtonSelected(panel->appChk[1])!=0) ? Yes : No;
-	    insertAttribute(dict, appDic, ANoAppIcon,  value, &different, flags);
+	    different |= insertAttribute(dict, appDic, ANoAppIcon,  value, 
+					 flags);
 
 	    PLRemoveDictionaryEntry(dict, key);
 	    if (different) {
@@ -1099,6 +1111,7 @@ createInspectorForWindow(WWindow *wwin)
 
         tmp = wstrappend(wwin->wm_instance, ".");
         str = wstrappend(tmp, wwin->wm_class);
+
 	panel->bothRb = WMCreateRadioButton(panel->specFrm);
 	WMMoveWidget(panel->bothRb, 10, 18);
 	WMResizeWidget(panel->bothRb, frame_width - (2 * 10), 20);
@@ -1506,6 +1519,8 @@ createInspectorForWindow(WWindow *wwin)
 
     if (!selectedBtn)
 	selectedBtn = panel->defaultRb;
+
+    WMSetButtonSelected(selectedBtn, True);
 
     selectSpecification(selectedBtn, panel);
 

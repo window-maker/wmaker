@@ -44,7 +44,7 @@
 #include "dialog.h"
 #include "stacking.h"
 #include "icon.h"
-#include "list.h"
+
 
 #define MC_MAXIMIZE	0
 #define MC_MINIATURIZE	1
@@ -199,16 +199,23 @@ makeShortcutCommand(WMenu *menu, WMenuEntry *entry)
     WScreen *scr = wwin->screen_ptr;
     
     scr->shortcutWindow[entry->order-WO_ENTRIES] = wwin;
-    list_free(scr->shortcutSelectedWindows[entry->order-WO_ENTRIES]);
-    scr->shortcutSelectedWindows[entry->order-WO_ENTRIES] = NULL;
-    if (wwin->flags.selected /* && scr->selected_windows */ ) {
-        LinkedList *sl;
 
-        sl = scr->selected_windows;
+    if (scr->shortcutSelectedWindows[entry->order-WO_ENTRIES])
+	WMFreeBag(scr->shortcutSelectedWindows[entry->order-WO_ENTRIES]);
 
-        while (sl) {
-            scr->shortcutSelectedWindows[entry->order-WO_ENTRIES] = list_cons(sl->head,scr->shortcutSelectedWindows[entry->order-WO_ENTRIES]);
-            sl = sl->tail;
+    if (wwin->flags.selected && scr->selected_windows) {
+        WMBag *bag;
+	int i;
+	
+	scr->shortcutSelectedWindows[entry->order-WO_ENTRIES] = WMCreateBag(4);
+
+        bag = scr->selected_windows;
+
+        for (i = 0; i < WMGetBagItemCount(bag); i++) {
+	    WWindow *tmp = WMGetFromBag(bag, i);
+	    
+	    WMPutInBag(scr->shortcutSelectedWindows[entry->order-WO_ENTRIES],
+		       tmp);
         }
     }
     else {
@@ -273,16 +280,17 @@ updateMakeShortcutMenu(WMenu *menu, WWindow *wwin)
 	int shortcutNo = i-WO_ENTRIES;
 	WWindow *twin = wwin->screen_ptr->shortcutWindow[shortcutNo];
 	WMenuEntry *entry = smenu->entries[i];
+	WMBag *shortSelWindows = wwin->screen_ptr->shortcutSelectedWindows[shortcutNo];
 
 	sprintf(buffer, "%s %i", _("Set Shortcut"), shortcutNo+1);
 	
-	if (!twin && !wwin->screen_ptr->shortcutSelectedWindows[shortcutNo]) {
+	if (!twin && !shortSelWindows) {
 	    entry->flags.indicator_on = 0;
 	} else {
 	    entry->flags.indicator_on = 1;
 	    if (twin == wwin)
 		entry->flags.indicator_type = MI_DIAMOND;
-        else if (list_find(wwin->screen_ptr->shortcutSelectedWindows[shortcutNo], wwin))
+	    else if (shortSelWindows && WMCountInBag(shortSelWindows, wwin))
 		entry->flags.indicator_type = MI_HIDDEN;
 	    else
 		entry->flags.indicator_type = MI_CHECK;
