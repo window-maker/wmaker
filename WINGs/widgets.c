@@ -426,6 +426,22 @@ loadPixmaps(WMScreen *scr)
     scr->altHomeIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
     RDestroyImage(tmp);
 
+    /* trash can */
+    tmp = RGetSubImage(image, 105, 0, 24, 24);
+    RCombineImageWithColor(tmp, &white);
+    scr->trashcanIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
+    RDestroyImage(tmp);
+    tmp = RGetSubImage(image, 105, 0, 24, 24);
+    RCombineImageWithColor(tmp, &white);
+    scr->altTrashcanIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
+    RDestroyImage(tmp);
+
+
+    tmp = RGetSubImage(image, 0, 0, 24, 24);
+    RCombineImageWithColor(tmp, &white);
+    scr->altHomeIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
+    RDestroyImage(tmp);
+
     /* Magnifying Glass Icon for ColorPanel */
     tmp = RGetSubImage(image, 24, 0, 40, 32);
     RCombineImageWithColor(tmp, &gray);

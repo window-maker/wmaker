@@ -26,6 +26,7 @@ typedef struct W_FilePanel {
     WMButton *cancelButton;
     
     WMButton *homeButton;
+    WMButton *trashcanButton;
 
     WMView *accessoryView;
 
@@ -62,6 +63,8 @@ static void browserDClick();
 
 static void fillColumn(WMBrowserDelegate *self, WMBrowser *bPtr, int column,
 		       WMList *list);
+
+static void deleteFile();
 
 static void goHome();
 
@@ -243,6 +246,16 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     WMSetButtonImage(fPtr->homeButton, scrPtr->homeIcon);
     WMSetButtonAltImage(fPtr->homeButton, scrPtr->altHomeIcon);
     WMSetButtonAction(fPtr->homeButton, goHome, fPtr);
+
+    fPtr->trashcanButton = WMCreateCommandButton(fPtr->win);
+    WMMoveWidget(fPtr->trashcanButton, 25, 325);
+    WMResizeWidget(fPtr->trashcanButton, 28, 28);
+    WMSetButtonImagePosition(fPtr->trashcanButton, WIPImageOnly);
+    WMSetButtonImage(fPtr->trashcanButton, scrPtr->trashcanIcon);
+    WMSetButtonAltImage(fPtr->trashcanButton, scrPtr->altTrashcanIcon);
+
+    WMSetButtonAction(fPtr->trashcanButton, deleteFile, fPtr);
+    /*xxxxxxxxxxxx***/
 
     WMRealizeWidget(fPtr->win);
     WMMapSubwidgets(fPtr->win);
@@ -569,6 +582,63 @@ browserClick(WMBrowser *bPtr, WMFilePanel *panel)
     }
 }
 
+#define ERROR_PANEL(s)  err_str = wmalloc(strlen(file)+strlen(s)); \
+                        sprintf(err_str, s, file);  \
+                        WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win, \
+                                "Error", err_str, "OK", NULL, NULL);
+
+static void
+deleteFile(WMButton *bPre, WMFilePanel *panel)
+{
+    char *file;
+    char *buffer;
+    char *err_str;
+
+    WMFilePanel *deletePanel;
+
+    file = getCurrentFileName(panel);
+    if (file[strlen(file)-1] == '/') {
+        ERROR_PANEL("%s is a directory.");
+        free(err_str);
+        free(file);
+        return;
+    }
+    buffer = wmalloc(strlen(file)+15);
+    sprintf(buffer,"Delete file %s ?\x0",file);
+    if (!WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
+                "Warning", buffer, "OK", "Cancel", NULL)) {
+        int rem_stat;
+        if (rem_stat = remove(file)) {
+            switch (errno) {
+                case EISDIR:
+                    ERROR_PANEL("%s is a directory.");
+                    break;
+                case ENOENT:
+                    ERROR_PANEL("%s does not exist.");
+                    break;
+                case EACCES:
+                    ERROR_PANEL("Has no right to access %s.");
+                    break;
+                case ENOMEM:
+                    ERROR_PANEL("Insufficient kernel memory was available.");
+                    break;
+                case EROFS:
+                    ERROR_PANEL("%s refers to a file on a read-only filesystem.");
+                    break;
+                default:
+                    ERROR_PANEL("Can not delete %s.");
+            }
+            free(err_str);
+        }
+        else {
+            char *s = strrchr(file,'/');
+            if (s) s[1] = 0;
+            WMSetFilePanelDirectory(panel, file);
+        }
+    }
+    free(buffer);
+    free(file);
+}
 
 static void
 goHome(WMButton *bPtr, WMFilePanel *panel)
@@ -609,6 +679,7 @@ handleEvents(XEvent *event, void *data)
             WMMoveWidget(pPtr->cancelButton, newWidth-(PWIDTH-140),
                          newHeight-(PHEIGHT-325));
             WMMoveWidget(pPtr->homeButton, 55, newHeight-(PHEIGHT-325));
+            WMMoveWidget(pPtr->trashcanButton, 25, newHeight-(PHEIGHT-325));
 
 	    newColumnCount = (newWidth - 14) / 140;
 	    WMSetBrowserMaxVisibleColumns(pPtr->browser, newColumnCount);

@@ -196,6 +196,9 @@ typedef struct W_Screen {
     struct W_Pixmap *homeIcon;
     struct W_Pixmap *altHomeIcon;
 
+    struct W_Pixmap *trashcanIcon;
+    struct W_Pixmap *altTrashcanIcon;
+
     struct W_Pixmap *magnifyIcon;
 /*    struct W_Pixmap *altMagnifyIcon;*/
     struct W_Pixmap *wheelIcon;
