@@ -1717,7 +1717,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 			break;
 		    } 
 		}
-		while (!XCheckTypedEvent(dpy, LeaveNotify, &e)) {
+		while (XCheckTypedEvent(dpy, LeaveNotify, &e)) {
 		    if (e.xcrossing.time > event.xbutton.time) {
 			XPutBackEvent(dpy, &e);
 			break;
