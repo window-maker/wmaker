@@ -218,7 +218,7 @@ DIST_COMMON =  README ChangeLog Makefile.am Makefile.in TODO
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP_ENV = --best
 SOURCES = $(libWINGs_a_SOURCES) $(libWUtil_a_SOURCES) $(wtest_SOURCES) $(wmquery_SOURCES) $(wmfile_SOURCES) $(fontl_SOURCES) $(testmywidget_SOURCES) $(testcolorpanel_SOURCES) $(connect_SOURCES)
 OBJECTS = $(libWINGs_a_OBJECTS) $(libWUtil_a_OBJECTS) $(wtest_OBJECTS) $(wmquery_OBJECTS) $(wmfile_OBJECTS) $(fontl_OBJECTS) $(testmywidget_OBJECTS) $(testcolorpanel_OBJECTS) $(connect_OBJECTS)
@@ -227,7 +227,7 @@ all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .lo .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu WINGs/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps WINGs/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -482,7 +482,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$/$$file $(distdir)/$$file; \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \

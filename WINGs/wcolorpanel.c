@@ -18,8 +18,8 @@
 /* TODO:
  * 	-	Look at further optimization of colorWheel matrix calculation.
  * 		It appears to be rather symmetric in angles of 60 degrees,
- * 		while it is optimized in angles of 120 degrees.
- * 	-	Custom color-lists and custom colors in custom colo-lists.
+ * 		while it is optimized in angles of 90 degrees.
+ * 	-	Custom color-lists and custom colors in custom color-lists.
  * 	-	Stored colors
  * 	-	Resizing
  */
@@ -2196,10 +2196,9 @@ wheelRender(W_ColorPanel *panel)
     if (panel->wheelImg)
 	XFreePixmap(scr->display, panel->wheelImg);
     
-    panel->wheelImg = XCreatePixmap(scr->display, W_DRAWABLE(scr),
-	    colorWheelSize+4, colorWheelSize+4, scr->depth);
     RConvertImage(scr->rcontext, image, &panel->wheelImg);
-    
+    RDestroyImage(image);
+
     /* Check if backimage exists. If it doesn't, allocate and fill it */
     if (!panel->selectionBackImg) {
 	panel->selectionBackImg = XCreatePixmap(scr->display,
@@ -2208,8 +2207,6 @@ wheelRender(W_ColorPanel *panel)
 		scr->copyGC, panel->colx -2, panel->coly -2, 4, 4, 0, 0); 
 	/* -2 is hot spot correction */
     }
-    
-    RDestroyImage(image);
 }
 
 
