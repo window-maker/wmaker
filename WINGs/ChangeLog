@@ -29,6 +29,9 @@ changes since wmaker 0.62.1:
   will scroll by 1/3 of the WMList height. Using Control as a modifier will
   scroll line by line, while using Shift as a modifier will scroll page
   by page.
+- better behavior of WMScroller regarding mouse wheel events. Control modifier
+  will scroll line by line, while Shift modifier will scroll page by page.
+
 
 changes since wmaker 0.62.0:
 ............................

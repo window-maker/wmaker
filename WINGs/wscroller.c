@@ -816,15 +816,21 @@ handleActionEvents(XEvent *event, void *data)
      case ButtonPress:
 	/* FIXME: change Mod1Mask with something else */
 	if (event->xbutton.button==WINGsConfiguration.mouseWheelUp) {
-	    sPtr->flags.decrDown = 1;
-	    sPtr->flags.hitPart = WSDecrementPage;
+            if (event->xbutton.state & ControlMask) {
+                sPtr->flags.hitPart = WSDecrementLine;
+            } else {
+                sPtr->flags.hitPart = WSDecrementPage;
+            }
 	    if (sPtr->action) {
 		(*sPtr->action)(sPtr, sPtr->clientData);
 	    }
 	}
 	else if (event->xbutton.button==WINGsConfiguration.mouseWheelDown) {
-	    sPtr->flags.incrDown = 1;
-	    sPtr->flags.hitPart = WSIncrementPage;
+            if (event->xbutton.state & ControlMask) {
+                sPtr->flags.hitPart = WSIncrementLine;
+            } else {
+                sPtr->flags.hitPart = WSIncrementPage;
+            }
 	    if (sPtr->action) {
 		(*sPtr->action)(sPtr, sPtr->clientData);
 	    }
