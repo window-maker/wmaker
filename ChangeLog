@@ -13,6 +13,9 @@ Changes since version 0.70.0:
 - Fixed WPrefs crash when clicking on the menu editor to keep the current menu
   (Alexey Voinov <voins@voins.program.ru>)
 - Added patch to fix some gnome issues (Les Schaffer <schaffer@optonline.net>)
+- SIGTERM is now handled and saves the internal state before exiting (like
+  SIGHUP and SIGINT already do). Now a "kill wmaker_pid" will exit cleanly
+  saving dock/clip/session information on exit.
 
 
 Changes since version 0.65.1:

@@ -279,7 +279,7 @@ handleExitSig(int sig)
          * the select() is returned becaused of the signal, even if
          * there are no X events in the queue */
         WDelayedActionSet++;
-    } else if (sig == SIGINT || sig == SIGHUP) {
+    } else if (sig==SIGTERM || sig==SIGINT || sig==SIGHUP) {
 #ifdef SYS_SIGLIST_DECLARED
         wwarning(_("got signal %i (%s) - exiting...\n"), sig, sys_siglist[sig]);
 #else
@@ -842,12 +842,11 @@ StartUp(Bool defaultScreenOnly)
     sig_action.sa_handler = handleExitSig;
     
     /* Here we set SA_RESTART for safety, because SIGUSR1 may not be handled
-     * immediately.
-     * -Dan */
+     * immediately. -Dan */
     sig_action.sa_flags = SA_RESTART;
-/*    sigaction(SIGTERM, &sig_action, NULL);*/
-    sigaction(SIGINT, &sig_action, NULL);    
-    sigaction(SIGHUP, &sig_action, NULL);    
+    sigaction(SIGTERM, &sig_action, NULL);
+    sigaction(SIGINT, &sig_action, NULL);
+    sigaction(SIGHUP, &sig_action, NULL);
     sigaction(SIGUSR1, &sig_action, NULL);
     sigaction(SIGUSR2, &sig_action, NULL);
 
