@@ -191,10 +191,11 @@ enum RImageFormat {
  * internal 24bit+alpha image representation
  */
 typedef struct RImage {
-    unsigned char *data;	       /* image data RGBA or RGB */
+    unsigned char *data;       /* image data RGBA or RGB */
     int width, height;	       /* size of the image */
     enum RImageFormat format;
-    RColor background;		       /* background color */
+    RColor background;	       /* background color */
+    int refCount;
 } RImage;
 
 
@@ -322,7 +323,18 @@ RImage *RCreateImageFromDrawable(RContext *context, Drawable drawable,
 
 RImage *RLoadImage(RContext *context, char *file, int index);
 
+RImage* RRetainImage(RImage *image);
 
+void RReleaseImage(RImage *image);
+
+/* Obsoleted function. Use RReleaseImage() instead. This was kept only to
+ * allow a smoother transition and to avoid breaking existing programs, but
+ * it will be removed in a future release. Right now is just an alias to
+ * RReleaseImage(). Do _NOT_ use RDestroyImage() anymore in your programs.
+ * Being an alias to RReleaseImage() this function no longer actually
+ * destroys the image, unless the image is no longer retained in some other
+ * place.
+ */
 void RDestroyImage(RImage *image);
 
 RImage *RGetImageFromXPMData(RContext *context, char **xpmData);

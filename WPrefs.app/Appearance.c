@@ -618,12 +618,12 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	    grad = RRenderGradient(width, height, &rcolor, &rcolor2, style);
 
 	    image = RMakeTiledImage(timage, width, height);
-	    RDestroyImage(timage);
+	    RReleaseImage(timage);
 
 	    i = atoi(PLGetString(PLGetArrayElement(texture, 2)));
 	
 	    RCombineImagesWithOpaqueness(image, grad, i);
-	    RDestroyImage(grad);
+	    RReleaseImage(grad);
 	}
     } else if (strcasecmp(&type[2], "gradient")==0 && toupper(type[0])=='M') {
 	int style;
@@ -681,18 +681,18 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	    switch (toupper(type[0])) {
 	     case 'T':
 		image = RMakeTiledImage(timage, width, height);
-		RDestroyImage(timage);
+		RReleaseImage(timage);
 		timage = image;
 		break;
 	     case 'C':
 		image = RMakeCenteredImage(timage, width, height, &color);
-		RDestroyImage(timage);
+		RReleaseImage(timage);
 		timage = image;
 		break;
 	     case 'S':
 	     case 'M':
 		image = RScaleImage(timage, width, height);
-		RDestroyImage(timage);
+		RReleaseImage(timage);
 		timage = image;
 		break;
 	    }
@@ -720,7 +720,7 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
     }
 
     RConvertImage(rc, image, &pixmap);
-    RDestroyImage(image);
+    RReleaseImage(image);
 
     return pixmap;
 }
@@ -1363,7 +1363,7 @@ loadRImage(WMScreen *scr, char *path)
     fclose(f);
 
     RConvertImage(WMScreenRContext(scr), image, &pixmap);
-    RDestroyImage(image);
+    RReleaseImage(image);
 
     return pixmap;
 }

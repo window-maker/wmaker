@@ -393,14 +393,14 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
     y = aicon->y_pos;
     if (y < 0)
 	y = 0;
-    else if (y + PWIDTH > scr->scr_height)
+    else if (y + PHEIGHT > scr->scr_height)
 	y = scr->scr_height - PHEIGHT - 30;
 
     if (aicon->dock && aicon->dock->type == WM_DOCK) {
 	if (aicon->dock->on_right_side)
 	    x = scr->scr_width/2;
 	else
-	    x = scr->scr_width/2 - PWIDTH;
+	    x = scr->scr_width/2 - PWIDTH - 2;
     } else {
 	x = (scr->scr_width - PWIDTH)/2;
     }

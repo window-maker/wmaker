@@ -1122,8 +1122,24 @@ wDefaultsCheckDomains(void *foo)
 		WDWindowAttributes->dictionary = dict;
 		for (i=0; i<wScreenCount; i++) {
 		    scr = wScreenWithNumber(i);
-		    if (scr)
-			wDefaultUpdateIcons(scr);
+                    if (scr) {
+                        RImage *image;
+
+                        wDefaultUpdateIcons(scr);
+
+                        /* Update the panel image if changed */
+                        /* Don't worry. If the image is the same these
+                         * functions will have no performance impact. */
+                        image = wDefaultGetImage(scr, "Logo", "WMPanel");
+
+                        if (!image) {
+                            wwarning(_("could not load logo image for panels: %s"),
+                                     RMessageForError(RErrorCode));
+                        } else {
+                            WMSetApplicationIconImage(scr->wmscreen, image);
+                            RReleaseImage(image);
+                        }
+                    }
 		}
 	    }
 	} else {
@@ -2431,7 +2447,7 @@ getRImages(WScreen *scr, WDefaultEntry *entry, proplist_t value,
     }
 
     if (*(RImage**)addr) {
-	RDestroyImage(*(RImage**)addr);
+	RReleaseImage(*(RImage**)addr);
     }
     if (addr)
 	*(RImage**)addr = image;
@@ -2787,7 +2803,7 @@ setIconTile(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
     
     if (scr->icon_tile) {
 	reset = 1;
-	RDestroyImage(scr->icon_tile);
+	RReleaseImage(scr->icon_tile);
 	XFreePixmap(dpy, scr->icon_tile_pixmap);
     }
 
@@ -2800,7 +2816,7 @@ setIconTile(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
 
     if (!wPreferences.flags.noclip) {
 	if (scr->clip_tile) {
-	    RDestroyImage(scr->clip_tile);
+	    RReleaseImage(scr->clip_tile);
 	}
 	scr->clip_tile = wClipMakeTile(scr, img);
     }
@@ -2969,7 +2985,7 @@ setClipTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
 
 	image = RRenderGradient(as+1, as+1, &color1, &color2, RDiagonalGradient);
 	RConvertImage(scr->rcontext, image, &scr->clip_arrow_gradient);
-	RDestroyImage(image);
+	RReleaseImage(image);
     }
 #endif /* GRADIENT_CLIP_ARROW */
 

@@ -136,7 +136,8 @@ typedef struct W_Screen {
 
     W_FocusInfo *focusInfo;
 
-    struct W_Pixmap *applicationIcon;
+    RImage *applicationIconImage;      /* image (can have alpha channel) */
+    struct W_Pixmap *applicationIconPixmap; /* pixmap - no alpha channel */
     Window applicationIconWindow;
 
     struct W_Window *windowList;       /* list of windows in the app */

@@ -1,3 +1,9 @@
+- Added retain/release mechanism to RImage by adding RRetainImage() and
+  RReleaseImage(). RDestroyImage() is an alias to RReleaseImage() now, but
+  will be removed in a future release because it no longer fits with the
+  semantics. Will be kept for a while to allow a smoother transition.
+  More about in NEWS
+
 - Fixed crashing for Pseudocolor visuals with BestMatchRendering
 - Small speed improvement for 24 and 32 bpp, if internal converter is used
 - Small speed improvement for generating gradients.

@@ -261,7 +261,7 @@ createMainWindow(WMScreen *scr)
     WMSetWindowMaxSize(WPrefs.win, 520, 390);
     WMSetWindowMinSize(WPrefs.win, 520, 390);
     WMSetWindowMiniwindowTitle(WPrefs.win, "Preferences");
-    WMSetWindowMiniwindowImage(WPrefs.win, WMGetApplicationIconImage(scr));
+    WMSetWindowMiniwindowPixmap(WPrefs.win, WMGetApplicationIconPixmap(scr));
     
     WPrefs.scrollV = WMCreateScrollView(WPrefs.win);
     WMResizeWidget(WPrefs.scrollV, 500, 87);
@@ -670,9 +670,9 @@ Initialize(WMScreen *scr)
 		     RMessageForError(RErrorCode));
 	} else {
 	    icon = WMCreatePixmapFromRImage(scr, tmp, 0);
-	    RDestroyImage(tmp);
+	    RReleaseImage(tmp);
 	    if (icon) {
-	        WMSetApplicationIconImage(scr, icon);
+	        WMSetApplicationIconPixmap(scr, icon);
 	        WMReleasePixmap(icon);
 	    }
 	}

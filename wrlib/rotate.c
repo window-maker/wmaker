@@ -37,7 +37,8 @@
 static RImage *rotateImage(RImage *image, float angle);
 
 
-RImage *RRotateImage(RImage *image, float angle)
+RImage*
+RRotateImage(RImage *image, float angle)
 {
     RImage *img;
     int nwidth, nheight;
@@ -207,8 +208,9 @@ RImage *RRotateImage(RImage *image, float angle)
  */
 
 
-static void copyLine(int x1, int y1, int x2, int y2, int nwidth, int format,
-		     unsigned char *dst, unsigned char **src)
+static void
+copyLine(int x1, int y1, int x2, int y2, int nwidth, int format,
+         unsigned char *dst, unsigned char **src)
 {
     unsigned char *s = *src;
     int dx, dy;
@@ -283,7 +285,8 @@ static void copyLine(int x1, int y1, int x2, int y2, int nwidth, int format,
 }
 
 
-static RImage *rotateImage(RImage *image, float angle)
+static RImage*
+rotateImage(RImage *image, float angle)
 {
     RImage *img;
     int nwidth, nheight;

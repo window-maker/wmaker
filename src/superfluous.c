@@ -107,7 +107,7 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
     back = RCreateImageFromXImage(scr->rcontext, ximage, NULL);
     XDestroyImage(ximage);
     if (!back) {
-        RDestroyImage(icon);
+        RReleaseImage(icon);
         return;
     }
 
@@ -134,8 +134,8 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
 
     XUngrabServer(dpy);
     XFreeGC(dpy, gc);
-    RDestroyImage(icon);
-    RDestroyImage(back);
+    RReleaseImage(icon);
+    RReleaseImage(back);
 }
 #endif /* DEMATERIALIZE_ICON */
 
@@ -346,7 +346,7 @@ MakeGhostDock(WDock *dock, int sx, int dx, int y)
                           AllPlanes, ZPixmap);
 
             if (!img){
-                RDestroyImage(back);
+                RReleaseImage(back);
                 return None;
             }
             img->red_mask = red_mask;
@@ -356,20 +356,20 @@ MakeGhostDock(WDock *dock, int sx, int dx, int y)
             dock_image = RCreateImageFromXImage(scr->rcontext, img, NULL);
             XDestroyImage(img);
             if (!dock_image) {
-                RDestroyImage(back);
+                RReleaseImage(back);
                 return None;
             }
             RCombineAreaWithOpaqueness(back, dock_image, 0, 0,
                                        wPreferences.icon_size, n,
                                        0, j, 30 * 256 / 100);
-            RDestroyImage(dock_image);
+            RReleaseImage(dock_image);
         }
     }
 
 
     RConvertImage(scr->rcontext, back, &pixmap);
     
-    RDestroyImage(back);
+    RReleaseImage(back);
     
     return pixmap;
 }
@@ -398,7 +398,7 @@ MakeGhostIcon(WScreen *scr, Drawable drawable)
     RClearImage(back, &color);
     RConvertImage(scr->rcontext, back, &pixmap);
     
-    RDestroyImage(back);
+    RReleaseImage(back);
     
     return pixmap;
 }
@@ -487,7 +487,7 @@ loadData(WScreen *scr)
 	    goto error;
 	}
     }
-    RDestroyImage(image);
+    RReleaseImage(image);
 
     fclose(f);
 
@@ -499,7 +499,7 @@ loadData(WScreen *scr)
     return True;
 
 error:
-    RDestroyImage(image);
+    RReleaseImage(image);
 
     fclose(f);
 

@@ -357,12 +357,12 @@ testGradientButtons(WMScreen *scr)
     back = RRenderGradient(60, 24, &dark, &light, RGRD_DIAGONAL);
     RBevelImage(back, RBEV_RAISED2);
     pix1 = WMCreatePixmapFromRImage(scr, back, 0);
-    RDestroyImage(back);
+    RReleaseImage(back);
 
     back = RRenderGradient(60, 24, &dark, &light, RGRD_DIAGONAL);
     RBevelImage(back, RBEV_SUNKEN);
     pix2 = WMCreatePixmapFromRImage(scr, back, 0);
-    RDestroyImage(back);
+    RReleaseImage(back);
 
     color = WMWhiteColor(scr);
     altColor = WMCreateNamedColor(scr, "red", True);
@@ -1283,7 +1283,7 @@ main(int argc, char **argv)
     /*
      * Makes the logo be used in standard dialog panels.
      */
-    WMSetApplicationIconImage(scr, pixmap); WMReleasePixmap(pixmap);
+    WMSetApplicationIconPixmap(scr, pixmap); WMReleasePixmap(pixmap);
 
     /*
      * Do some test stuff.

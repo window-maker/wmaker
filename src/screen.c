@@ -402,9 +402,7 @@ static void
 createPixmaps(WScreen *scr)
 {
     WPixmap *pix;
-    WMPixmap *wmpix;
     RImage *image;
-    Pixmap p, m;
 
     /* load pixmaps */
     pix = wPixmapCreateFromXBMData(scr, (char*)MENU_RADIO_INDICATOR_XBM_DATA,
@@ -413,7 +411,7 @@ createPixmaps(WScreen *scr)
 				   MENU_RADIO_INDICATOR_XBM_SIZE,
 				   scr->black_pixel, scr->white_pixel);
     if (pix!=NULL)
-      pix->shared = 1;
+        pix->shared = 1;
     scr->menu_radio_indicator = pix;
 
 
@@ -423,7 +421,7 @@ createPixmaps(WScreen *scr)
 				   MENU_CHECK_INDICATOR_XBM_SIZE,
 				   scr->black_pixel, scr->white_pixel);
     if (pix!=NULL)
-      pix->shared = 1;
+        pix->shared = 1;
     scr->menu_check_indicator = pix;
 
     pix = wPixmapCreateFromXBMData(scr, (char*)MENU_MINI_INDICATOR_XBM_DATA,
@@ -432,25 +430,25 @@ createPixmaps(WScreen *scr)
 				   MENU_MINI_INDICATOR_XBM_SIZE,
 				   scr->black_pixel, scr->white_pixel);
     if (pix!=NULL)
-      pix->shared = 1;
+        pix->shared = 1;
     scr->menu_mini_indicator = pix;
 
     pix = wPixmapCreateFromXBMData(scr, (char*)MENU_HIDE_INDICATOR_XBM_DATA,
-				   (char*)MENU_HIDE_INDICATOR_XBM_DATA,
-				   MENU_HIDE_INDICATOR_XBM_SIZE,
-				   MENU_HIDE_INDICATOR_XBM_SIZE,
-				   scr->black_pixel, scr->white_pixel);
+                                   (char*)MENU_HIDE_INDICATOR_XBM_DATA,
+                                   MENU_HIDE_INDICATOR_XBM_SIZE,
+                                   MENU_HIDE_INDICATOR_XBM_SIZE,
+                                   scr->black_pixel, scr->white_pixel);
     if (pix!=NULL)
-      pix->shared = 1;
+        pix->shared = 1;
     scr->menu_hide_indicator = pix;
 
     pix = wPixmapCreateFromXBMData(scr, (char*)MENU_SHADE_INDICATOR_XBM_DATA,
-                                  (char*)MENU_SHADE_INDICATOR_XBM_DATA,
-                                  MENU_SHADE_INDICATOR_XBM_SIZE,
-                                  MENU_SHADE_INDICATOR_XBM_SIZE,
-                                  scr->black_pixel, scr->white_pixel);
+                                   (char*)MENU_SHADE_INDICATOR_XBM_DATA,
+                                   MENU_SHADE_INDICATOR_XBM_SIZE,
+                                   MENU_SHADE_INDICATOR_XBM_SIZE,
+                                   scr->black_pixel, scr->white_pixel);
     if (pix!=NULL)
-      pix->shared = 1;
+        pix->shared = 1;
     scr->menu_shade_indicator = pix;
 
 
@@ -460,16 +458,8 @@ createPixmaps(WScreen *scr)
 	wwarning(_("could not load logo image for panels: %s"),
 		 RMessageForError(RErrorCode));
     } else {
-	if (!RConvertImageMask(scr->rcontext, image, &p, &m, 128)) {
-	    wwarning(_("error making logo image for panel:%s"), RMessageForError(RErrorCode));
-	} else {
-	    wmpix = WMCreatePixmapFromXPixmaps(scr->wmscreen, p, m,
-					       image->width, image->height, 
-					       scr->depth);
-	    WMSetApplicationIconImage(scr->wmscreen, wmpix); 
-	    WMReleasePixmap(wmpix);
-	}
-	RDestroyImage(image);
+        WMSetApplicationIconImage(scr->wmscreen, image);
+	RReleaseImage(image);
     }
 
     scr->dock_dots = make3Dots(scr);

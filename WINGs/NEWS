@@ -1,0 +1,77 @@
+
+*** Sat Apr 21 09:12:09 EEST 2001 -Dan
+
+API change
+----------
+
+To allow a correct display of icon images with alpha blending in panels and
+other places where a WINGs based application may use them the following
+changes took place:
+
+1. The following functions were renamed:
+   - WMSetApplicationIconImage()  --> WMSetApplicationIconPixmap()
+   - WMGetApplicationIconImage()  --> WMGetApplicationIconPixmap()
+   - WMSetWindowMiniwindowImage() --> WMSetWindowMiniwindowPixmap()
+2. The following functions were added:
+   - WMSetApplicationIconImage(WMScreen *scr, RImage *image)
+   - RImage* WMGetApplicationIconImage(WMScreen *scr)
+   - WMPixmap* WMGetApplicationIconBlendedPixmap(WMScreen *scr, RColor *color)
+
+As you can see the old functions that operated on WMPixmap images (which are
+basically X Pixmaps that lack alpha information) were renamed to ...Pixmap()
+to make them more suggestive about what they do and to make room for the
+new functions that operate on RImages (that hold alpha information).
+
+Since the corresponding WMGet... functions only retrieve the stored
+image/pixmap from the application, I'll outline how the WMSet...
+functions operate:
+
+All WM...IconPixmap() functions operate on WMPixmaps
+All WM...IconImage() functions operate on RImages
+
+
+- WMSetApplicationIconImage() will set the RImage to be used in panels
+    and will also convert the RImage to a WMPixmap with a threshold of 128
+    and will use that pixmap for the appicon image. If that doesn't satisfy
+    you, you can make a call to WMSetApplicationIconPixmap() on your own to
+    set whatever WMPixmap you see fit for the appicon. 
+
+- WMSetApplicationIconPixmap() will set the WMPixmap to be used for the
+    appicon and for the panels 
+
+
+If you use only one of the above functions, the corresponding image/pixmap
+will be used everywhere where needed (panels and appicon), but the pixmap
+version will not be able to handle alpha blending correctly.
+
+If you use both WMSetApplicationIconImage() and WMSetApplicationIconPixmap()
+then the RImage will have priority in panels, and the WMPixmap will only be
+used for the appicon. This allows you to better control what icon is
+displayed in the appicon, in case the default conversion of the RImage to a
+pixmap with a threshold of 128 is not good enough, or in case you want a
+different icon to be shown in the appicon than in panels.
+
+
+Also this new function was added:
+
+- WMGetApplicationIconBlendedPixmap() will use the RImage set with
+    WMSetApplicationIconImage() if available and will blend it with the color
+    you passed. This will make the image show well on a background of that
+    color. If the RImage was not set it will return NULL. You need to call
+    WMReleasePixmap() on it after you finish with it. Passing a NULL pointer
+    instead of a color will make the RImage be blended with the default color
+    of the WINGs widgets: '#aeaaae' making it suitable to be assigned to any
+    WINGs widget.
+
+
+To make your existing code work as before all you need to do is to rename
+the following functions:
+
+   - WMSetApplicationIconImage()  --> WMSetApplicationIconPixmap()
+   - WMGetApplicationIconImage()  --> WMGetApplicationIconPixmap()
+   - WMSetWindowMiniwindowImage() --> WMSetWindowMiniwindowPixmap()
+
+But if you want to take advantage of the new abilities to show alpha
+blended images you need to start using the new functions.
+
+

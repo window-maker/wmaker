@@ -103,8 +103,9 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     WMAlertPanel *panel;
     int dw=0, aw=0, ow=0, w;
     WMBox *hbox;
-    
-    
+    WMPixmap *icon;
+
+
     panel = wmalloc(sizeof(WMAlertPanel));
     memset(panel, 0, sizeof(WMAlertPanel));
 
@@ -137,9 +138,12 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     WMSetLabelImagePosition(panel->iLbl, WIPImageOnly);
     WMMapWidget(panel->iLbl);
     WMAddBoxSubview(hbox, WMWidgetView(panel->iLbl), False, True, 64, 0, 10);
-
-    if (scrPtr->applicationIcon) {
-	WMSetLabelImage(panel->iLbl, scrPtr->applicationIcon);
+    icon = WMGetApplicationIconBlendedPixmap(scrPtr, (RColor*)NULL);
+    if (icon) {
+        WMSetLabelImage(panel->iLbl, icon);
+        WMReleasePixmap(icon);
+    } else {
+	WMSetLabelImage(panel->iLbl, scrPtr->applicationIconPixmap);
     }
 
     if (title) {
@@ -521,8 +525,9 @@ WMCreateGenericPanel(WMScreen *scrPtr, WMWindow *owner,
     WMGenericPanel *panel;
     int dw=0, aw=0, w;
     WMBox *hbox;
-    
-    
+    WMPixmap *icon;
+
+
     panel = wmalloc(sizeof(WMGenericPanel));
     memset(panel, 0, sizeof(WMGenericPanel));
 
@@ -555,9 +560,12 @@ WMCreateGenericPanel(WMScreen *scrPtr, WMWindow *owner,
     WMSetLabelImagePosition(panel->iLbl, WIPImageOnly);
     WMMapWidget(panel->iLbl);
     WMAddBoxSubview(hbox, WMWidgetView(panel->iLbl), False, True, 64, 0, 10);
-
-    if (scrPtr->applicationIcon) {
-	WMSetLabelImage(panel->iLbl, scrPtr->applicationIcon);
+    icon = WMGetApplicationIconBlendedPixmap(scrPtr, (RColor*)NULL);
+    if (icon) {
+        WMSetLabelImage(panel->iLbl, icon);
+        WMReleasePixmap(icon);
+    } else {
+        WMSetLabelImage(panel->iLbl, scrPtr->applicationIconPixmap);
     }
 
     if (title) {

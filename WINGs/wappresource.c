@@ -27,16 +27,16 @@ extern struct W_Application WMApplication;
 
 void
 WMSetApplicationIconWindow(WMScreen *scr, Window window)
-{    
+{
     scr->applicationIconWindow = window;
-    
+
     if (scr->groupLeader) {
 	XWMHints *hints;
 
 	hints = XGetWMHints(scr->display, scr->groupLeader);
 	hints->flags |= IconWindowHint;
 	hints->icon_window = window;
-    
+
 	XSetWMHints(scr->display, scr->groupLeader, hints);
 	XFree(hints);
     }
@@ -44,21 +44,52 @@ WMSetApplicationIconWindow(WMScreen *scr, Window window)
 
 
 void
-WMSetApplicationIconImage(WMScreen *scr, WMPixmap *icon)
-{    
-    if (scr->applicationIcon)
-	WMReleasePixmap(scr->applicationIcon);
-    
-    scr->applicationIcon = WMRetainPixmap(icon);
-    
+WMSetApplicationIconImage(WMScreen *scr, RImage *image)
+{
+    WMPixmap *icon;
+
+    if (scr->applicationIconImage == image)
+        return;
+
+    if (scr->applicationIconImage)
+	RReleaseImage(scr->applicationIconImage);
+
+    scr->applicationIconImage = RRetainImage(image);
+
+    /* TODO: check whether we should set the pixmap only if there's none yet */
+    if (image!=NULL && (icon=WMCreatePixmapFromRImage(scr, image, 128))!=NULL) {
+        WMSetApplicationIconPixmap(scr, icon);
+        WMReleasePixmap(icon);
+    }
+}
+
+
+RImage*
+WMGetApplicationIconImage(WMScreen *scr)
+{
+    return scr->applicationIconImage;
+}
+
+
+void
+WMSetApplicationIconPixmap(WMScreen *scr, WMPixmap *icon)
+{
+    if (scr->applicationIconPixmap == icon)
+        return;
+
+    if (scr->applicationIconPixmap)
+	WMReleasePixmap(scr->applicationIconPixmap);
+
+    scr->applicationIconPixmap = WMRetainPixmap(icon);
+
     if (scr->groupLeader) {
 	XWMHints *hints;
 
 	hints = XGetWMHints(scr->display, scr->groupLeader);
 	hints->flags |= IconPixmapHint|IconMaskHint;
-	hints->icon_pixmap = icon->pixmap;
-	hints->icon_mask = icon->mask;
-    
+        hints->icon_pixmap = (icon!=NULL ? icon->pixmap : None);
+        hints->icon_mask = (icon!=NULL ? icon->mask : None);
+
 	XSetWMHints(scr->display, scr->groupLeader, hints);
 	XFree(hints);
     }
@@ -66,9 +97,35 @@ WMSetApplicationIconImage(WMScreen *scr, WMPixmap *icon)
 
 
 WMPixmap*
-WMGetApplicationIconImage(WMScreen *scr)
+WMGetApplicationIconPixmap(WMScreen *scr)
 {
-    return scr->applicationIcon;
+    return scr->applicationIconPixmap;
+}
+
+
+WMPixmap*
+WMGetApplicationIconBlendedPixmap(WMScreen *scr, RColor *color)
+{
+    WMPixmap *pix;
+
+    if (scr->applicationIconImage) {
+        RColor gray;
+
+        gray.red = 0xae;
+        gray.green = 0xaa;
+        gray.blue = 0xae;
+        gray.alpha = 0;
+
+        if (!color)
+            color = &gray;
+
+        pix = WMCreateBlendedPixmapFromRImage(scr, scr->applicationIconImage,
+                                              color);
+    } else {
+        pix = NULL;
+    }
+
+    return pix;
 }
 
 
@@ -104,12 +161,17 @@ W_InitApplication(WMScreen *scr)
 	hints->flags = WindowGroupHint;
 	hints->window_group = leader;
 
-	if (scr->applicationIcon) {
-	    hints->flags |= IconPixmapHint;
-	    hints->icon_pixmap = scr->applicationIcon->pixmap;
-	    if (scr->applicationIcon->mask) {
+        /* This code will never actually be reached, because to have
+         * scr->applicationIconPixmap set we need to have a screen first,
+         * but this function is called in the screen creation process.
+         * -Dan
+         */
+	if (scr->applicationIconPixmap) {
+            hints->flags |= IconPixmapHint;
+	    hints->icon_pixmap = scr->applicationIconPixmap->pixmap;
+	    if (scr->applicationIconPixmap->mask) {
 		hints->flags |= IconMaskHint;
-		hints->icon_mask = scr->applicationIcon->mask;
+		hints->icon_mask = scr->applicationIconPixmap->mask;
 	    }
 	}
 	

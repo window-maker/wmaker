@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 	    puts(RMessageForError(RErrorCode));
 	    exit(1);
 	}
-	RDestroyImage(tmp);
+	RReleaseImage(tmp);
 	   	   
 	XSetWindowBackgroundPixmap(dpy, win, pix);
 	XFreePixmap(dpy, pix);

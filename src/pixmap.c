@@ -65,7 +65,7 @@ wPixmapCreateFromXPMData(WScreen *scr, char **data)
     pix->height = image->height;
     pix->depth = scr->w_depth;
     
-    RDestroyImage(image);
+    RReleaseImage(image);
     
     return pix;
 }

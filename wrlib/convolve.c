@@ -250,7 +250,7 @@ REdgeDetectImage(RImage *image)
 	image2->data[1] = g;
 	b = image->data[2];
 	image2->data[2] = b;
-	RDestroyImage(image2);
+	RReleaseImage(image2);
     }
 
 #undef MASK

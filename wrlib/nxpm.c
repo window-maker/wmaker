@@ -223,7 +223,7 @@ RGetImageFromXPMData(RContext *context, char **data)
     alloca(0);
 #endif
     if (image)
-	RDestroyImage(image);
+	RReleaseImage(image);
     return NULL;
 }
 
@@ -418,7 +418,7 @@ RLoadXPM(RContext *context, char *file, int index)
     alloca(0);
 #endif
     if (image)
-	RDestroyImage(image);
+	RReleaseImage(image);
     return NULL;
     
   bad_file:
@@ -428,7 +428,7 @@ RLoadXPM(RContext *context, char *file, int index)
     alloca(0);
 #endif
     if (image)
-	RDestroyImage(image);
+	RReleaseImage(image);
     return NULL;
 }
 

@@ -256,7 +256,7 @@ renderDGradient(unsigned width, unsigned height, int r0, int g0, int b0,
 
     tmp = renderHGradient(2*width-1, 1, r0, g0, b0, rf, gf, bf);
     if (!tmp) {
-        RDestroyImage(image);
+        RReleaseImage(image);
         return NULL;
     }
 
@@ -271,7 +271,7 @@ renderDGradient(unsigned width, unsigned height, int r0, int g0, int b0,
         offset += a;
     }
 
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     return image;
 }
 
@@ -472,7 +472,7 @@ renderMDGradient(unsigned width, unsigned height, RColor **colors, int count)
 			      colors[1]->blue<<8);
 
     if (!tmp) {
-        RDestroyImage(image);
+        RReleaseImage(image);
         return NULL;
     }
     ptr = tmp->data;
@@ -485,16 +485,17 @@ renderMDGradient(unsigned width, unsigned height, RColor **colors, int count)
 	memcpy(&(image->data[j]), &ptr[3*(int)offset], width);
         offset += a;
     }
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     return image;
 }
 
 
 
 
-RImage *RRenderInterwovenGradient(unsigned width, unsigned height,
-				  RColor colors1[2], int thickness1,
-				  RColor colors2[2], int thickness2)
+RImage*
+RRenderInterwovenGradient(unsigned width, unsigned height,
+                          RColor colors1[2], int thickness1,
+                          RColor colors2[2], int thickness2)
 {
     int i, j, k, l, ll;
     unsigned long r1, g1, b1, dr1, dg1, db1;

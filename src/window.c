@@ -431,7 +431,7 @@ wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 #endif /* OLWM_HINTS */
 
         /* window levels are between INT_MIN+1 and INT_MAX, so if we still
-         * have INT_MIN that means that no window level was requested. --Dan
+         * have INT_MIN that means that no window level was requested. -Dan
          */
 	if (tmp_level == INT_MIN) {
 	    if (WFLAGP(wwin, floating))

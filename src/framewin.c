@@ -673,7 +673,7 @@ renderTexture(WScreen *scr, WTexture *texture, int width, int height,
 	    }
 	    x += limg->width;
 	    w -= limg->width;
-	    RDestroyImage(limg);
+	    RReleaseImage(limg);
 	}
 
 #ifdef XKB_BUTTON_HINT
@@ -684,7 +684,7 @@ renderTexture(WScreen *scr, WTexture *texture, int width, int height,
 	    }
 	    x += timg->width;
 	    w -= timg->width;
-	    RDestroyImage(timg);
+	    RReleaseImage(timg);
     }
 #endif
 	
@@ -699,7 +699,7 @@ renderTexture(WScreen *scr, WTexture *texture, int width, int height,
 		wwarning(_("error rendering image:%s"), RMessageForError(RErrorCode));
 	    }
 	    w -= rimg->width;
-	    RDestroyImage(rimg);
+	    RReleaseImage(rimg);
 	}
 	
 	if (w!=width) {
@@ -709,7 +709,7 @@ renderTexture(WScreen *scr, WTexture *texture, int width, int height,
 	    if (!RConvertImage(scr->rcontext, mimg, title)) {
 		wwarning(_("error rendering image:%s"), RMessageForError(RErrorCode));
 	    }
-	    RDestroyImage(mimg);
+	    RReleaseImage(mimg);
 	} else {
 	    RBevelImage(img, RBEV_RAISED2);
 	    
@@ -725,7 +725,7 @@ renderTexture(WScreen *scr, WTexture *texture, int width, int height,
 	}
     }
 
-    RDestroyImage(img);
+    RReleaseImage(img);
 }
 
 
@@ -777,7 +777,7 @@ renderResizebarTexture(WScreen *scr, WTexture *texture, int width, int height,
 	wwarning(_("error rendering image: %s"), RMessageForError(RErrorCode));
     }
 
-    RDestroyImage(img);
+    RReleaseImage(img);
 }
 
 

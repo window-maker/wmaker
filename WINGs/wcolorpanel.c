@@ -604,7 +604,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     
     image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
     pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-    RDestroyImage(image);
+    RReleaseImage(image);
    
     if (pixmap)
     W_PaintText(W_VIEW(panel->grayBrightnessS), pixmap->pixmap, 
@@ -680,7 +680,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     
     image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
     pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-    RDestroyImage(image);
+    RReleaseImage(image);
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->rgbRedS), pixmap->pixmap, panel->font12,
@@ -713,7 +713,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     
     image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
     pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-    RDestroyImage(image);
+    RReleaseImage(image);
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->rgbGreenS), pixmap->pixmap, panel->font12,
@@ -747,7 +747,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     
     image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
     pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-    RDestroyImage(image);
+    RReleaseImage(image);
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->rgbBlueS), pixmap->pixmap, panel->font12,
@@ -807,7 +807,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     
     image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
     pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-    RDestroyImage(image);
+    RReleaseImage(image);
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->cmykCyanS), pixmap->pixmap, panel->font12,
@@ -841,7 +841,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     
     image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
     pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-    RDestroyImage(image);
+    RReleaseImage(image);
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->cmykMagentaS), pixmap->pixmap, panel->font12,
@@ -875,7 +875,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     
     image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
     pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-    RDestroyImage(image);
+    RReleaseImage(image);
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->cmykYellowS), pixmap->pixmap, panel->font12,
@@ -910,7 +910,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     
     image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
     pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-    RDestroyImage(image);
+    RReleaseImage(image);
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->cmykBlackS), pixmap->pixmap, panel->font12,
@@ -1175,7 +1175,7 @@ WMFreeColorPanel(WMColorPanel *panel)
 	XFreePixmap(scr->display, panel->selectionImg);
     if (panel->selectionBackImg)
 	XFreePixmap(scr->display, panel->selectionBackImg);
-	RDestroyImage(panel->customPaletteImg);
+	RReleaseImage(panel->customPaletteImg);
     
     /* structs */
     if (panel->lastBrowseDir)
@@ -2202,7 +2202,7 @@ wheelRender(W_ColorPanel *panel)
 	XFreePixmap(scr->display, panel->wheelImg);
     
     RConvertImage(scr->rcontext, image, &panel->wheelImg);
-    RDestroyImage(image);
+    RReleaseImage(image);
     
     /* Check if backimage exists. If it doesn't, allocate and fill it */
     if (!panel->selectionBackImg) {
@@ -2477,7 +2477,7 @@ wheelUpdateBrightnessGradient(W_ColorPanel *panel, CPColor topColor)
     sliderImg = RRenderGradient(16, 153, &(topColor.rgb), &to, RGRD_VERTICAL);
     sliderPxmp = WMCreatePixmapFromRImage(WMWidgetScreen(panel->win), 
 					  sliderImg, 0);
-    RDestroyImage(sliderImg);
+    RReleaseImage(sliderImg);
     WMSetSliderImage(panel->wheelBrightnessS, sliderPxmp);
     WMReleasePixmap(sliderPxmp);
 }
@@ -2823,7 +2823,7 @@ hsbUpdateBrightnessGradient(W_ColorPanel *panel)
     
     sliderImg = RRenderGradient(141, 16, &from, &(to.rgb), RGRD_HORIZONTAL);
     sliderPxmp = WMCreatePixmapFromRImage(scr, sliderImg, 0);
-    RDestroyImage(sliderImg);
+    RReleaseImage(sliderImg);
 
     if (sliderPxmp)
     W_PaintText(W_VIEW(panel->hsbBrightnessS), sliderPxmp->pixmap, 
@@ -2858,7 +2858,7 @@ hsbUpdateSaturationGradient(W_ColorPanel *panel)
     sliderImg = RRenderGradient(141, 16, &(from.rgb), &(to.rgb),
 	    RGRD_HORIZONTAL);
     sliderPxmp = WMCreatePixmapFromRImage(scr, sliderImg, 0);
-    RDestroyImage(sliderImg);
+    RReleaseImage(sliderImg);
 
     if (sliderPxmp)
 	W_PaintText(W_VIEW(panel->hsbSaturationS), sliderPxmp->pixmap, 
@@ -2894,7 +2894,7 @@ hsbUpdateHueGradient(W_ColorPanel *panel)
     
     sliderImg = RRenderMultiGradient(141, 16, colors, RGRD_HORIZONTAL);
     sliderPxmp = WMCreatePixmapFromRImage(scr, sliderImg, 0);
-    RDestroyImage(sliderImg);
+    RReleaseImage(sliderImg);
 
     if (sliderPxmp)
 	W_PaintText(W_VIEW(panel->hsbHueS), sliderPxmp->pixmap, 
@@ -2948,7 +2948,7 @@ customRenderSpectrum(W_ColorPanel *panel)
 	}
     }
     if (panel->customPaletteImg)	{
-	RDestroyImage(panel->customPaletteImg);
+	RReleaseImage(panel->customPaletteImg);
 	panel->customPaletteImg = NULL;
     }
     panel->customPaletteImg = spectrum;
@@ -2969,7 +2969,7 @@ customSetPalette(W_ColorPanel *panel)
     scaledImg = RScaleImage(panel->customPaletteImg, customPaletteWidth, 
 			    customPaletteHeight);
     RConvertImage(scr->rcontext, scaledImg, &image);
-    RDestroyImage(scaledImg);
+    RReleaseImage(scaledImg);
     
     XCopyArea(scr->display, image, panel->customPaletteContentView->window, 
 	      scr->copyGC, 0, 0, customPaletteWidth, customPaletteHeight, 0, 0);
@@ -3195,7 +3195,7 @@ customPaletteMenuNewFromFile(W_ColorPanel *panel)
 	    tmpImg = RLoadImage(scr->rcontext, filepath, 0);
 	    if (tmpImg) {
 		if (panel->customPaletteImg)
-		    RDestroyImage(panel->customPaletteImg);
+		    RReleaseImage(panel->customPaletteImg);
 		panel->customPaletteImg = tmpImg;
 		
 		customSetPalette(panel);
@@ -3399,7 +3399,7 @@ customPaletteHistoryCallback(WMWidget *w, void *data)
 	tmp = RLoadImage(scr->rcontext,  filename, 0);
 	if (tmp) {
 	    if (panel->customPaletteImg) {
-		RDestroyImage(panel->customPaletteImg);
+		RReleaseImage(panel->customPaletteImg);
 		panel->customPaletteImg = NULL;
 	    }
 	    panel->customPaletteImg = tmp;

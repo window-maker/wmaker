@@ -101,7 +101,7 @@ RLoadPNG(RContext *context, char *file, int index)
 	fclose(f);
 	png_destroy_read_struct(&png, &pinfo, &einfo);
 	if (image)
-	  RDestroyImage(image);
+	  RReleaseImage(image);
 	return NULL;
     }
     
@@ -177,7 +177,7 @@ RLoadPNG(RContext *context, char *file, int index)
     if (!png_rows) {
 	RErrorCode = RERR_NOMEMORY;
 	fclose(f);
-	RDestroyImage(image);
+	RReleaseImage(image);
 	png_destroy_read_struct(&png, &pinfo, &einfo);
 #ifdef C_ALLOCA
 	alloca(0);
@@ -189,7 +189,7 @@ RLoadPNG(RContext *context, char *file, int index)
 	if (!png_rows[y]) {
 	    RErrorCode = RERR_NOMEMORY;
 	    fclose(f);
-	    RDestroyImage(image);
+	    RReleaseImage(image);
 	    png_destroy_read_struct(&png, &pinfo, &einfo);
 #ifdef C_ALLOCA
 	    alloca(0);

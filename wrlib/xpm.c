@@ -87,7 +87,7 @@ RGetImageFromXPMData(RContext *context, char **xpmData)
 		if (color_table[i])
 		  free(color_table[i]);
 	    }
-	    RDestroyImage(image);
+	    RReleaseImage(image);
 	    RErrorCode = RERR_NOMEMORY;
 	    XpmFreeXpmImage(&xpm);
 	    return NULL;
@@ -210,7 +210,7 @@ RLoadXPM(RContext *context, char *file, int index)
 		if (color_table[i])
 		  free(color_table[i]);
 	    }
-	    RDestroyImage(image);
+	    RReleaseImage(image);
 	    RErrorCode = RERR_NOMEMORY;
 	    XpmFreeXpmImage(&xpm);
 	    return NULL;

@@ -42,7 +42,7 @@ main(int argc, char **argv)
 	
 	img = RSmoothScaleImage(tmp, tmp->width*atol(argv[2]), 
 				tmp->height*atol(argv[2]));
-	RDestroyImage(tmp);
+	RReleaseImage(tmp);
     }
      */
 #if 0

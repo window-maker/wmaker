@@ -162,7 +162,7 @@ wTextureDestroy(WScreen *scr, WTexture *texture)
 	break;
 
      case WTEX_PIXMAP:
-	RDestroyImage(texture->pixmap.pixmap);
+	RReleaseImage(texture->pixmap.pixmap);
 	break;
 	
      case WTEX_MHGRADIENT:
@@ -177,7 +177,7 @@ wTextureDestroy(WScreen *scr, WTexture *texture)
      case WTEX_THGRADIENT:
      case WTEX_TVGRADIENT:
      case WTEX_TDGRADIENT:	
-	RDestroyImage(texture->tgradient.pixmap);
+	RReleaseImage(texture->tgradient.pixmap);
 	break;
 
 #ifdef TEXTURE_PLUGIN
@@ -556,14 +556,14 @@ wTextureRenderImage(WTexture *texture, int width, int height,
 	    grad = RRenderGradient(width, height, &texture->tgradient.color1,
 				   &texture->tgradient.color2, subtype);
 	    if (!grad) {
-		RDestroyImage(image);
+		RReleaseImage(image);
 		image = NULL;
 		break;
 	    }
 
 	    RCombineImagesWithOpaqueness(image, grad,
 					 texture->tgradient.opacity);
-	    RDestroyImage(grad);
+	    RReleaseImage(grad);
 	}
 	break;
 

@@ -617,7 +617,7 @@ RSmoothScaleImage(RImage *src, unsigned new_width, unsigned new_height)
     }
     free(contrib);
 
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     
     return dst;
 }

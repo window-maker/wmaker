@@ -235,13 +235,13 @@ parseTexture(RContext *rc, char *text)
 	if (!RConvertImage(rc, image, &pixmap)) {
 	    wwarning("could not convert texture:%s", 
 		     RMessageForError(RErrorCode));
-	    RDestroyImage(image);
+	    RReleaseImage(image);
 	    goto error;
 	}
 
 	texture->width = image->width;
 	texture->height = image->height;
-	RDestroyImage(image);
+	RReleaseImage(image);
 
 	texture->pixmap = pixmap;
     } else if (strcasecmp(type, "mvgradient")==0
@@ -332,13 +332,13 @@ parseTexture(RContext *rc, char *text)
 	if (!RConvertImage(rc, image, &pixmap)) {
 	    wwarning("could not convert texture:%s", 
 		     RMessageForError(RErrorCode));
-	    RDestroyImage(image);
+	    RReleaseImage(image);
 	    goto error;
 	}
 
 	texture->width = image->width;
 	texture->height = image->height;
-	RDestroyImage(image);
+	RReleaseImage(image);
 
 	texture->pixmap = pixmap;
     } else if (strcasecmp(type, "cpixmap")==0
@@ -372,7 +372,7 @@ parseTexture(RContext *rc, char *text)
 
 	if (!XParseColor(dpy, DefaultColormap(dpy, scr), tmp, &color)) {
 	    wwarning("could not parse color %s in texture %s\n", tmp, text);
-	    RDestroyImage(image);
+	    RReleaseImage(image);
 	    goto error;
 	}
 	if (!XAllocColor(dpy, DefaultColormap(dpy, scr), &color)) {
@@ -397,11 +397,11 @@ parseTexture(RContext *rc, char *text)
 	    if (!pixmap && !RConvertImage(rc, image, &pixmap)) {
 		wwarning("could not convert texture:%s", 
 			 RMessageForError(RErrorCode));
-		RDestroyImage(image);
+		RReleaseImage(image);
 		goto error;
 	    }
 	    if (image)
-		RDestroyImage(image);
+		RReleaseImage(image);
 	    break;
 	 case 'S':
 	 case 'M':
@@ -427,10 +427,10 @@ parseTexture(RContext *rc, char *text)
 		if (!simage) {
 		    wwarning("could not scale image:%s", 
 			     RMessageForError(RErrorCode));
-		    RDestroyImage(image);
+		    RReleaseImage(image);
 		    goto error;
 		}
-		RDestroyImage(image);
+		RReleaseImage(image);
 		image = simage;
 	    }
 	    iwidth = image->width;
@@ -444,7 +444,7 @@ parseTexture(RContext *rc, char *text)
 		if (!pixmap && !RConvertImage(rc, image, &pixmap)) {
 		    wwarning("could not convert texture:%s", 
 			     RMessageForError(RErrorCode));
-		    RDestroyImage(image);
+		    RReleaseImage(image);
 		    goto error;
 		}
 
@@ -483,7 +483,7 @@ parseTexture(RContext *rc, char *text)
 		    pixmap = cpixmap;
 		}
 		if (image)
-		    RDestroyImage(image);
+		    RReleaseImage(image);
 
 		texture->width = scrWidth;
 		texture->height = scrHeight;
@@ -564,8 +564,8 @@ parseTexture(RContext *rc, char *text)
 	if (!gradient) {
 	    wwarning("could not render texture:%s",
 		     RMessageForError(RErrorCode));
-            RDestroyImage(gradient);
-            RDestroyImage(image);
+            RReleaseImage(gradient);
+            RReleaseImage(image);
 	    goto error;
 	}
 
@@ -573,25 +573,25 @@ parseTexture(RContext *rc, char *text)
 	if (!tiled) {
 	    wwarning("could not render texture:%s",
 		     RMessageForError(RErrorCode));
-	    RDestroyImage(gradient);
-	    RDestroyImage(image);
+	    RReleaseImage(gradient);
+	    RReleaseImage(image);
 	    goto error;
 	}
-	RDestroyImage(image);
+	RReleaseImage(image);
 
 	RCombineImagesWithOpaqueness(tiled, gradient, opaq);
-	RDestroyImage(gradient);
+	RReleaseImage(gradient);
 
 	if (!RConvertImage(rc, tiled, &pixmap)) {
 	    wwarning("could not convert texture:%s", 
 		     RMessageForError(RErrorCode));
-	    RDestroyImage(tiled);
+	    RReleaseImage(tiled);
 	    goto error;
 	}
 	texture->width = tiled->width;
 	texture->height = tiled->height;
 
-	RDestroyImage(tiled);
+	RReleaseImage(tiled);
 
 	texture->pixmap = pixmap;	
     } else if (strcasecmp(type, "function")==0) {
@@ -665,7 +665,7 @@ function_cleanup:
 	    dlclose(handle);
 	}
 	if (image) {
-            RDestroyImage(image);
+            RReleaseImage(image);
 	}
 	if (!success) {
 	    goto error;

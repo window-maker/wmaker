@@ -419,85 +419,85 @@ loadPixmaps(WMScreen *scr)
     tmp = RGetSubImage(image, 0, 0, 24, 24);
     RCombineImageWithColor(tmp, &gray);
     scr->homeIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     /* make it have a white background */
     tmp = RGetSubImage(image, 0, 0, 24, 24);
     RCombineImageWithColor(tmp, &white);
     scr->altHomeIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
 
     /* trash can */
     tmp = RGetSubImage(image, 104, 0, 24, 24);
     RCombineImageWithColor(tmp, &white);
     scr->trashcanIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     tmp = RGetSubImage(image, 104, 0, 24, 24);
     RCombineImageWithColor(tmp, &white);
     scr->altTrashcanIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     /* create dir */
     tmp = RGetSubImage(image, 104, 24, 24, 24);
     RCombineImageWithColor(tmp, &white);
     scr->createDirIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     tmp = RGetSubImage(image, 104, 24, 24, 24);
     RCombineImageWithColor(tmp, &white);
     scr->altCreateDirIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     /* diskettes */
     tmp = RGetSubImage(image, 24, 80, 24, 24);
     RCombineImageWithColor(tmp, &white);
     scr->disketteIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     tmp = RGetSubImage(image, 24, 80, 24, 24);
     RCombineImageWithColor(tmp, &white);
     scr->altDisketteIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     /* unmount */
     tmp = RGetSubImage(image, 0, 80, 24, 24);
     RCombineImageWithColor(tmp, &white);
     scr->unmountIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     tmp = RGetSubImage(image, 0, 80, 24, 24);
     RCombineImageWithColor(tmp, &white);
     scr->altUnmountIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
 
     /* Magnifying Glass Icon for ColorPanel */
     tmp = RGetSubImage(image, 24, 0, 40, 32);
     RCombineImageWithColor(tmp, &gray);
     scr->magnifyIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     /* ColorWheel Icon for ColorPanel */
     tmp = RGetSubImage(image, 0, 25, 24, 24);
     scr->wheelIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     /* GrayScale Icon for ColorPanel */
     tmp = RGetSubImage(image, 65, 0, 40, 24);
     scr->grayIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     /* RGB Icon for ColorPanel */
     tmp = RGetSubImage(image, 25, 33, 40, 24);
     scr->rgbIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     /* CMYK Icon for ColorPanel */
     tmp = RGetSubImage(image, 65, 25, 40, 24);
     scr->cmykIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     /* HSB Icon for ColorPanel */
     tmp = RGetSubImage(image, 0, 57, 40, 24);
     scr->hsbIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     /* CustomColorPalette Icon for ColorPanel */
     tmp = RGetSubImage(image, 81, 57, 40, 24);
     scr->customPaletteIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     /* ColorList Icon for ColorPanel */
     tmp = RGetSubImage(image, 41, 57, 40, 24);
     scr->colorListIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
-    RDestroyImage(tmp);
+    RReleaseImage(tmp);
     
-    RDestroyImage(image);
+    RReleaseImage(image);
 
 #if 0
     scr->defaultObjectIcon =

@@ -563,7 +563,7 @@ WMSetWindowDocumentEdited(WMWindow *win, Bool flag)
 
 
 void
-WMSetWindowMiniwindowImage(WMWindow *win, WMPixmap *pixmap)
+WMSetWindowMiniwindowPixmap(WMWindow *win, WMPixmap *pixmap)
 {
     if ((win->miniImage && !pixmap) || (!win->miniImage && pixmap)) {
 	if (win->miniImage)

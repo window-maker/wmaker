@@ -36,10 +36,7 @@ WMCreatePixmap(WMScreen *scrPtr, int width, int height, int depth, Bool masked)
 {
     WMPixmap *pixPtr;
 
-    pixPtr = malloc(sizeof(WMPixmap));
-    if (!pixPtr) {
-	return NULL;
-    }
+    pixPtr = wmalloc(sizeof(WMPixmap));
     pixPtr->screen = scrPtr;
     pixPtr->width = width;
     pixPtr->height = height;
@@ -65,10 +62,7 @@ WMCreatePixmapFromXPixmaps(WMScreen *scrPtr, Pixmap pixmap, Pixmap mask,
 {
     WMPixmap *pixPtr;
 
-    pixPtr = malloc(sizeof(WMPixmap));
-    if (!pixPtr) {
-	return NULL;
-    }
+    pixPtr = wmalloc(sizeof(WMPixmap));
     pixPtr->screen = scrPtr;
     pixPtr->pixmap = pixmap;
     pixPtr->mask = mask;
@@ -79,8 +73,6 @@ WMCreatePixmapFromXPixmaps(WMScreen *scrPtr, Pixmap pixmap, Pixmap mask,
     
     return pixPtr;
 }
-
-
 
 
 WMPixmap*
@@ -95,7 +87,7 @@ WMCreatePixmapFromFile(WMScreen *scrPtr, char *fileName)
 
     pixPtr = WMCreatePixmapFromRImage(scrPtr, image, 127);
 
-    RDestroyImage(image);
+    RReleaseImage(image);
     
     return pixPtr;
 }
@@ -112,10 +104,7 @@ WMCreatePixmapFromRImage(WMScreen *scrPtr, RImage *image, int threshold)
 	return NULL;
     }
     
-    pixPtr = malloc(sizeof(WMPixmap));
-    if (!pixPtr) {
-	return NULL;
-    }
+    pixPtr = wmalloc(sizeof(WMPixmap));
     pixPtr->screen = scrPtr;
     pixPtr->pixmap = pixmap;
     pixPtr->mask = mask;
@@ -135,9 +124,12 @@ WMCreateBlendedPixmapFromRImage(WMScreen *scrPtr, RImage *image, RColor *color)
     RImage *copy;
 
     copy = RCloneImage(image);
+    if (!copy)
+        return NULL;
+
     RCombineImageWithColor(copy, color);
     pixPtr = WMCreatePixmapFromRImage(scrPtr, copy, 0);
-    RDestroyImage(copy);
+    RReleaseImage(copy);
 
     return pixPtr;
 }
@@ -158,7 +150,7 @@ WMCreateBlendedPixmapFromFile(WMScreen *scrPtr, char *fileName, RColor *color)
 
     pixPtr = WMCreatePixmapFromRImage(scrPtr, image, 0);
     
-    RDestroyImage(image);
+    RReleaseImage(image);
     
     return pixPtr;
 }
@@ -176,7 +168,7 @@ WMCreatePixmapFromXPMData(WMScreen *scrPtr, char **data)
     
     pixPtr = WMCreatePixmapFromRImage(scrPtr, image, 127);
 
-    RDestroyImage(image);
+    RReleaseImage(image);
     
     return pixPtr;
 }

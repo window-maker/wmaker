@@ -184,7 +184,7 @@ RLoadImage(RContext *context, char *file, int index)
 		} else {
 		    free(RImageCache[i].file);
 		    RImageCache[i].file = NULL;
-		    RDestroyImage(RImageCache[i].image);
+		    RReleaseImage(RImageCache[i].image);
 		}
 	    }
 	}
@@ -264,7 +264,7 @@ RLoadImage(RContext *context, char *file, int index)
 	/* if no slot available, dump least recently used one */
 	if (!done) {
 	    free(RImageCache[oldest_idx].file);
-	    RDestroyImage(RImageCache[oldest_idx].image);
+	    RReleaseImage(RImageCache[oldest_idx].image);
 	    RImageCache[oldest_idx].file = malloc(strlen(file)+1);
 	    strcpy(RImageCache[oldest_idx].file, file);
 	    RImageCache[oldest_idx].image = RCloneImage(image);

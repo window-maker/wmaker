@@ -209,7 +209,7 @@ giferr:
     }    
 bye:
     if (image)
-	RDestroyImage(image);
+	RReleaseImage(image);
     image = NULL;
 did_not_get_any_errors:
 

@@ -55,6 +55,7 @@ RCreateImage(unsigned width, unsigned height, int alpha)
     image->width = width;
     image->height = height;
     image->format = alpha ? RRGBAFormat : RRGBFormat;
+    image->refCount = 1;
 
     /* the +4 is to give extra bytes at the end of the buffer,
      * so that we can optimize image conversion for MMX(tm).. see convert.c
@@ -69,6 +70,44 @@ RCreateImage(unsigned width, unsigned height, int alpha)
     return image;
 }
 
+
+RImage*
+RRetainImage(RImage *image)
+{
+    if (image)
+        image->refCount++;
+
+    return image;
+}
+
+
+void 
+RReleaseImage(RImage *image)
+{
+    assert(image!=NULL);
+
+    image->refCount--;
+
+    if (image->refCount < 1) {
+        free(image->data);
+        free(image);
+    }
+}
+
+
+/* Obsoleted function. Use RReleaseImage() instead. This was kept only to
+ * allow a smoother transition and to avoid breaking existing programs, but
+ * it will be removed in a future release. Right now is just an alias to
+ * RReleaseImage(). Do _NOT_ use RDestroyImage() anymore in your programs.
+ * Being an alias to RReleaseImage() this function no longer actually
+ * destroys the image, unless the image is no longer retained in some other
+ * place.
+ */
+void 
+RDestroyImage(RImage *image)
+{
+    RReleaseImage(image);
+}
 
 
 RImage*
@@ -123,16 +162,6 @@ RGetSubImage(RImage *image, int x, int y, unsigned width, unsigned height)
 	       &image->data[i*total_line_size+ofs], line_size);
     }
     return new_image;
-}
-
-
-void 
-RDestroyImage(RImage *image)
-{
-    assert(image!=NULL);
-
-    free(image->data);
-    free(image);
 }
 
 

@@ -279,7 +279,7 @@ wIconDestroy(WIcon *icon)
         wfree(icon->file);
 
     if (icon->image!=NULL)
-	RDestroyImage(icon->image);
+	RReleaseImage(icon->image);
 
     wCoreDestroy(icon->core);
     wfree(icon);
@@ -349,7 +349,7 @@ makeIcon(WScreen *scr, RImage *icon, int titled, int shadowed, int tileType)
     if (!RConvertImage(scr->rcontext, tile, &pixmap)) {
 	wwarning(_("error rendering image:%s"), RMessageForError(RErrorCode));
     }
-    RDestroyImage(tile);
+    RReleaseImage(tile);
 
     if (titled)
       drawIconTitle(scr, pixmap, theight);
@@ -383,7 +383,7 @@ wIconChangeImage(WIcon *icon, RImage *new_image)
     assert(icon != NULL);
     
     if (icon->image)
-        RDestroyImage(icon->image);
+        RReleaseImage(icon->image);
 
     icon->image = wIconValidateIconSize(icon->core->screen_ptr, new_image);
 
@@ -405,7 +405,7 @@ wIconValidateIconSize(WScreen *scr, RImage *icon)
 	h = wPreferences.icon_size * icon->height / 64;
 
 	tmp = RScaleImage(icon, w, h);
-	RDestroyImage(icon);
+	RReleaseImage(icon);
 	icon = tmp;
     }
 #endif
@@ -420,7 +420,7 @@ wIconValidateIconSize(WScreen *scr, RImage *icon)
 	    w = h*icon->width/icon->height;
 	}
 	tmp = RScaleImage(icon, w, h);
-	RDestroyImage(icon);
+	RReleaseImage(icon);
 	icon = tmp;
     }
 #endif
@@ -547,7 +547,7 @@ wIconStore(WIcon *icon)
 	wfree(path);
 	path = NULL;
     }
-    RDestroyImage(image);
+    RReleaseImage(image);
 
     return path;
 }
@@ -780,7 +780,7 @@ wIconUpdate(WIcon *icon)
                   scr->def_ticon_pixmap = makeIcon(scr, image, True, False,
 						   icon->tile_type);
 		  if (image)
-		      RDestroyImage(image);
+		      RReleaseImage(image);
               }
 
               if (icon->show_title) {

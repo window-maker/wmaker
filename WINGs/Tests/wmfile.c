@@ -102,7 +102,7 @@ int main(int argc, char **argv)
 
 	
     pixmap = WMCreatePixmapFromXPMData(scr, GNUSTEP_XPM);
-    WMSetApplicationIconImage(scr, pixmap);
+    WMSetApplicationIconPixmap(scr, pixmap);
     WMReleasePixmap(pixmap);
     if (panelType == SAVE_PANEL_TYPE) {
     	sPanel = WMGetSavePanel(scr);

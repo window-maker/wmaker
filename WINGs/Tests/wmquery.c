@@ -88,8 +88,8 @@ int main(int argc, char **argv)
   scr = WMCreateSimpleApplicationScreen(dpy);
 
   pixmap = WMCreatePixmapFromXPMData(scr, GNUSTEP_XPM);
-    
-  WMSetApplicationIconImage(scr, pixmap); WMReleasePixmap(pixmap);
+
+  WMSetApplicationIconPixmap(scr, pixmap); WMReleasePixmap(pixmap);
 
   if ((result = WMRunInputPanel(scr, NULL, title, prompt, initial, "OK", "Cancel")) != NULL)
     printf("%s\n", result);

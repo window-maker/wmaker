@@ -253,8 +253,8 @@ hideWorkpaceName(void *data)
 	XUnmapWindow(dpy, scr->workspace_name);
 
 	if (scr->workspace_name_data) {
-	    RDestroyImage(scr->workspace_name_data->back);
-	    RDestroyImage(scr->workspace_name_data->text);
+	    RReleaseImage(scr->workspace_name_data->back);
+	    RReleaseImage(scr->workspace_name_data->text);
 	    wfree(scr->workspace_name_data);
 
 	    scr->workspace_name_data = NULL;
@@ -273,7 +273,7 @@ hideWorkpaceName(void *data)
 
 	RConvertImage(scr->rcontext, img, &pix);
 
-	RDestroyImage(img);
+	RReleaseImage(img);
 
 	XSetWindowBackgroundPixmap(dpy, scr->workspace_name, pix);
 	XClearWindow(dpy, scr->workspace_name);
@@ -311,8 +311,8 @@ showWorkspaceName(WScreen *scr, int workspace)
 						  hideWorkpaceName, scr);
 
     if (scr->workspace_name_data) {
-	RDestroyImage(scr->workspace_name_data->back);
-	RDestroyImage(scr->workspace_name_data->text);
+	RReleaseImage(scr->workspace_name_data->back);
+	RReleaseImage(scr->workspace_name_data->text);
 	wfree(scr->workspace_name_data);
     }
 
@@ -428,9 +428,9 @@ erro:
 	WMDeleteTimerHandler(scr->workspace_name_timer);
 
     if (data->text)
-	RDestroyImage(data->text);
+	RReleaseImage(data->text);
     if (data->back)
-	RDestroyImage(data->back);
+	RReleaseImage(data->back);
     wfree(data);
 
     scr->workspace_name_data = NULL;

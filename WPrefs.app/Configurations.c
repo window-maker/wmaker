@@ -163,7 +163,7 @@ createImages(WMScreen *scr, RContext *rc, RImage *xis, char *file,
 	if (!(*icon2 = WMCreatePixmapFromRImage(scr, icon, 127)))
 	    wwarning(_("could not process icon %s:"), file, RMessageForError(RErrorCode));
     }
-    RDestroyImage(icon);
+    RReleaseImage(icon);
     wfree(path);
 }
 
@@ -287,7 +287,7 @@ createPanel(Panel *p)
 	
 	scaled = RScaleImage(image, 61, 61);
 	icon = WMCreatePixmapFromRImage(scr, scaled, 128);
-	RDestroyImage(scaled);
+	RReleaseImage(scaled);
 	if (icon) {
 	    WMSetButtonImage(panel->smoB, icon);
 	    WMReleasePixmap(icon);
@@ -295,13 +295,13 @@ createPanel(Panel *p)
 
 	scaled = RSmoothScaleImage(image, 61, 61);
 	icon = WMCreatePixmapFromRImage(scr, scaled, 128);
-	RDestroyImage(scaled);
+	RReleaseImage(scaled);
 	if (icon) {
 	    WMSetButtonAltImage(panel->smoB, icon);
 	    WMReleasePixmap(icon);
 	}
 
-	RDestroyImage(image);
+	RReleaseImage(image);
     }
 
     WMMapSubwidgets(panel->smoF);
@@ -471,7 +471,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->box);
     
     if (xis)
-	RDestroyImage(xis);
+	RReleaseImage(xis);
     WMReleaseFont(font);
     
     showData(panel);

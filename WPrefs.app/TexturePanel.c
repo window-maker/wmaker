@@ -173,21 +173,21 @@ updateGradButtons(TexturePanel *panel)
 	image = RRenderMultiGradient(80, 30, colors, RHorizontalGradient);
 	pixmap = WMCreatePixmapFromRImage(WMWidgetScreen(panel->gcolL),
 					  image, 128);
-	RDestroyImage(image);
+	RReleaseImage(image);
 	WMSetButtonImage(panel->dirhB, pixmap);
 	WMReleasePixmap(pixmap);
 
 	image = RRenderMultiGradient(80, 30, colors, RVerticalGradient);
 	pixmap = WMCreatePixmapFromRImage(WMWidgetScreen(panel->gcolL),
 					  image, 128);
-	RDestroyImage(image);
+	RReleaseImage(image);
 	WMSetButtonImage(panel->dirvB, pixmap);
 	WMReleasePixmap(pixmap);
 
 	image = RRenderMultiGradient(80, 30, colors, RDiagonalGradient);
 	pixmap = WMCreatePixmapFromRImage(WMWidgetScreen(panel->gcolL),
 					  image, 128);
-	RDestroyImage(image);
+	RReleaseImage(image);
 	WMSetButtonImage(panel->dirdB, pixmap);
 	WMReleasePixmap(pixmap);
 
@@ -238,14 +238,14 @@ updateTGradImage(TexturePanel *panel)
 
     RCombineImagesWithOpaqueness(image, gradient,
 				 WMGetSliderValue(panel->topaS));
-    RDestroyImage(gradient);
+    RReleaseImage(gradient);
     pixmap = WMCreatePixmapFromRImage(WMWidgetScreen(panel->win),
 				      image, 128);
 
     WMSetLabelImage(panel->imageL, pixmap);
     WMReleasePixmap(pixmap);
     WMResizeWidget(panel->imageL, image->width, image->height);
-    RDestroyImage(image);
+    RReleaseImage(image);
 }
 
 
@@ -271,21 +271,21 @@ updateSGradButtons(TexturePanel *panel)
     image = RRenderGradient(80, 30, &from, &to, RHorizontalGradient);
     pixmap = WMCreatePixmapFromRImage(WMWidgetScreen(panel->gcolL),
 				      image, 128);
-    RDestroyImage(image);
+    RReleaseImage(image);
     WMSetButtonImage(panel->dirhB, pixmap);
     WMReleasePixmap(pixmap);
     
     image = RRenderGradient(80, 30, &from, &to, RVerticalGradient);
     pixmap = WMCreatePixmapFromRImage(WMWidgetScreen(panel->gcolL),
 				      image, 128);
-    RDestroyImage(image);
+    RReleaseImage(image);
     WMSetButtonImage(panel->dirvB, pixmap);
     WMReleasePixmap(pixmap);
     
     image = RRenderGradient(80, 30, &from, &to, RDiagonalGradient);
     pixmap = WMCreatePixmapFromRImage(WMWidgetScreen(panel->gcolL),
 				      image, 128);
-    RDestroyImage(image);
+    RReleaseImage(image);
     WMSetButtonImage(panel->dirdB, pixmap);
     WMReleasePixmap(pixmap);
 }
@@ -316,7 +316,7 @@ updateSVSlider(WMSlider *sPtr, Bool saturation, WMFont *font, RHSVColor *hsv)
     }
     image = RRenderGradient(130, 16, &from, &to, RHorizontalGradient);
     pixmap = WMCreatePixmapFromRImage(scr, image, 128);
-    RDestroyImage(image);
+    RReleaseImage(image);
 
     if (hsv->value < 128 || !saturation) {
 	WMColor *col = WMWhiteColor(scr);
@@ -358,7 +358,7 @@ updateHueSlider(WMSlider *sPtr, WMFont *font, RHSVColor *hsv)
 
     image = RRenderMultiGradient(130, 16, colors, RGRD_HORIZONTAL);
     pixmap = WMCreatePixmapFromRImage(scr, image, 128);
-    RDestroyImage(image);
+    RReleaseImage(image);
 
     if (hsv->value < 128) {
 	WMColor *col = WMWhiteColor(scr);
@@ -442,7 +442,7 @@ sliderChangeCallback(WMWidget *w, void *data)
     image = RRenderMultiGradient(30, i*WMGetListItemHeight(panel->gcolL), 
 				 colors, RVerticalGradient);
     RConvertImage(WMScreenRContext(scr), image, &panel->gimage);
-    RDestroyImage(image);
+    RReleaseImage(image);
 
     wfree(colors);
 
@@ -616,7 +616,7 @@ updateImage(TexturePanel *panel, char *path)
 	WMSetButtonEnabled(panel->okB, True);
 
 	if (panel->image)
-	    RDestroyImage(panel->image);
+	    RReleaseImage(panel->image);
 	panel->image = image;
     } else {
 	image = panel->image;

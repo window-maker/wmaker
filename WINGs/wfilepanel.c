@@ -179,7 +179,8 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
 {
     WMFilePanel *fPtr;
     WMFont *largeFont;
-    
+    WMPixmap *icon;
+
     fPtr = wmalloc(sizeof(WMFilePanel));
     memset(fPtr, 0, sizeof(WMFilePanel));
 
@@ -197,7 +198,13 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     WMResizeWidget(fPtr->iconLabel, 64, 64);
     WMMoveWidget(fPtr->iconLabel, 0, 0);
     WMSetLabelImagePosition(fPtr->iconLabel, WIPImageOnly);
-    WMSetLabelImage(fPtr->iconLabel, scrPtr->applicationIcon);
+    icon = WMGetApplicationIconBlendedPixmap(scrPtr, (RColor*)NULL);
+    if (icon) {
+        WMSetLabelImage(fPtr->iconLabel, icon);
+        WMReleasePixmap(icon);
+    } else {
+        WMSetLabelImage(fPtr->iconLabel, scrPtr->applicationIconPixmap);
+    }
     
     fPtr->titleLabel = WMCreateLabel(fPtr->win);
     WMResizeWidget(fPtr->titleLabel, PWIDTH-64, 64);

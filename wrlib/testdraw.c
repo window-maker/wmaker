@@ -67,7 +67,7 @@ testDraw()
 	exit(1);
     }
     RCombineArea(img, icon, 0, 0, icon->width, icon->height, 8, 8);
-    RDestroyImage(icon);
+    RReleaseImage(icon);
     tmp = img;
     RConvertImage(ctx, img, &pix);
     XCopyArea(dpy, pix, back, ctx->copy_gc, 0, 0, 64, 64, 64, 0);
@@ -88,7 +88,7 @@ testDraw()
     RConvertImage(ctx, img, &pix);
     XCopyArea(dpy, pix, back, ctx->copy_gc, 0, 0, 64, 64, 0, 64);
 
-    RDestroyImage(img);
+    RReleaseImage(img);
     img = RCloneImage(tile);
 
     /* Alter random pixels in image with the same amount for r/g/b */
@@ -103,7 +103,7 @@ testDraw()
     RConvertImage(ctx, img, &pix);
     XCopyArea(dpy, pix, back, ctx->copy_gc, 0, 0, 64, 64, 64, 64);
 
-    RDestroyImage(img);
+    RReleaseImage(img);
     img = RCloneImage(tile);
 
     /* Draw lines in all directions to test different slopes */
@@ -133,7 +133,7 @@ testDraw()
     RConvertImage(ctx, img, &pix);
     XCopyArea(dpy, pix, back, ctx->copy_gc, 0, 0, 64, 64, 0, 128);
 
-    RDestroyImage(img);
+    RReleaseImage(img);
     img = RCloneImage(tile);
 
     /* Alter lines in all directions (test different slopes) */
@@ -144,7 +144,7 @@ testDraw()
     RConvertImage(ctx, img, &pix);
     XCopyArea(dpy, pix, back, ctx->copy_gc, 0, 0, 64, 64, 64, 128);
 
-    RDestroyImage(img);
+    RReleaseImage(img);
 
     /* Create a bevel around the icon, and save it for a later use */
     img = tmp;
@@ -156,7 +156,7 @@ testDraw()
     cdelta.alpha = 0;
     ROperateLine(img, RSubtractOperation, 8, 56, 56, 56, &cdelta);
     ROperateLine(img, RSubtractOperation, 56, 8, 56, 55, &cdelta);
-    RDestroyImage(tile);
+    RReleaseImage(tile);
     tmp = RCloneImage(img);
 
     /* Draw some solid lines over the icon */
@@ -177,7 +177,7 @@ testDraw()
     RConvertImage(ctx, img, &pix);
     XCopyArea(dpy, pix, back, ctx->copy_gc, 0, 0, 64, 64, 0, 192);
 
-    RDestroyImage(img);
+    RReleaseImage(img);
 
     /* Restore the image with the icon, and alter some lines */
     img = tmp;
@@ -247,7 +247,7 @@ testBevel()
     RClearImage(img, &color);
     RConvertImage(ctx, img, &pix);
     XCopyArea(dpy, pix, back, ctx->copy_gc, 0, 0, 140, 140, 0, 0);
-    RDestroyImage(img);
+    RReleaseImage(img);
 
     tile = RRenderGradient(64, 64, &from, &to, RGRD_DIAGONAL);
 
@@ -255,25 +255,25 @@ testBevel()
     RBevelImage(img, RBEV_SUNKEN);
     RConvertImage(ctx, img, &pix);
     XCopyArea(dpy, pix, back, ctx->copy_gc, 0, 0, 64, 64, 3, 3);
-    RDestroyImage(img);
+    RReleaseImage(img);
 
     img = RCloneImage(tile);
     RBevelImage(img, RBEV_RAISED);
     RConvertImage(ctx, img, &pix);
     XCopyArea(dpy, pix, back, ctx->copy_gc, 0, 0, 64, 64, 73, 3);
-    RDestroyImage(img);
+    RReleaseImage(img);
 
     img = RCloneImage(tile);
     RBevelImage(img, RBEV_RAISED2);
     RConvertImage(ctx, img, &pix);
     XCopyArea(dpy, pix, back, ctx->copy_gc, 0, 0, 64, 64, 3, 73);
-    RDestroyImage(img);
+    RReleaseImage(img);
 
     img = RCloneImage(tile);
     RBevelImage(img, RBEV_RAISED3);
     RConvertImage(ctx, img, &pix);
     XCopyArea(dpy, pix, back, ctx->copy_gc, 0, 0, 64, 64, 73, 73);
-    RDestroyImage(img);
+    RReleaseImage(img);
 
     XSetWindowBackgroundPixmap(dpy, win, back);
     XMapRaised(dpy, win);
@@ -306,7 +306,7 @@ void testScale()
     
     scaled = RScaleImage(image, 140, 140);
 
-    RDestroyImage(image);
+    RReleaseImage(image);
     RConvertImage(ctx, scaled, &pix);
     XSetWindowBackgroundPixmap(dpy, win, pix);
     XMapRaised(dpy, win);
@@ -345,7 +345,7 @@ void testRotate()
     
     rotated = RRotateImage(image, 90.0);
 
-    RDestroyImage(image);
+    RReleaseImage(image);
     RConvertImage(ctx, rotated, &pix);
     XSetWindowBackgroundPixmap(dpy, win, pix);
     XMapRaised(dpy, win);
@@ -478,7 +478,7 @@ drawClip()
     
     RConvertImage(ctx, img, &pix);
     XCopyArea(dpy, pix, back, ctx->copy_gc, 0, 0, 64, 64, 0, 0);
-    RDestroyImage(img);
+    RReleaseImage(img);
 
     XSetWindowBackgroundPixmap(dpy, win, back);
     XMapRaised(dpy, win);
@@ -576,7 +576,7 @@ benchmark()
     }
     printf("Average: %f, %f, %f\n", d1/5, d2/5, d3/5);
 
-    RDestroyImage(img);
+    RReleaseImage(img);
 }
 
 

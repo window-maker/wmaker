@@ -29,6 +29,23 @@ Changes since wmaker 0.64.0:
   performance a bit.
 - replaced some recursive code with iterative code in selection.c
 - added WMCreateBlendedPixmapFromRImage()
+- Small API change:
+  1. Renamed WMSetApplicationIconImage(), WMGetApplicationIconImage() and
+     WMSetWindowMiniwindowImage() to respectively WMSetApplicationIconPixmap(),
+     WMGetApplicationIconPixmap() and WMSetWindowMiniwindowPixmap()
+     They operate on a WMPixmap which is practically an X Pixmap with no alpha
+     channel information and the new name is more suggestive and also leaves
+     room for the new functions added for operating on images with alpha info.
+  2. Added WMSetApplicationIconImage() and WMGetApplicationIconImage() which
+     operate on an RImage and store alpha information too.
+  3. Added WMGetApplicationIconBlendedPixmap() which will take the image with
+     alpha set by WMSetApplicationIconImage() and will blend it with a color.
+     If color is NULL it will blend using the default panel color (#aeaaae)
+  All these changes will allow WINGs to handle images with alpha blending
+  correctly in panels and wherever else needed. More about in NEWS.
+- updated panels to use the newly available RImages if present and fallback
+  to old WMPixmaps if not, to properly show alpha blended images.
+- replaced some still left malloc's with wmalloc's.
 
 
 changes since wmaker 0.63.1:

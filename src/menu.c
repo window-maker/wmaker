@@ -484,7 +484,7 @@ renderTexture(WMenu *menu)
     if (!RConvertImage(scr->rcontext, img, &pix)) {
 	wwarning(_("error rendering image:%s"), RMessageForError(RErrorCode));
     }
-    RDestroyImage(img);
+    RReleaseImage(img);
 
     return pix;
 }

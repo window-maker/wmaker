@@ -110,7 +110,7 @@ createImages(WMScreen *scr, RContext *rc, RImage *xis, char *file,
 	    *icon2 = NULL;
 	}
     }
-    RDestroyImage(icon);
+    RReleaseImage(icon);
 }
 
 
@@ -328,7 +328,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->dockF);
 
     if (xis)
-	RDestroyImage(xis);
+	RReleaseImage(xis);
     
     WMRealizeWidget(panel->box);
     WMMapSubwidgets(panel->box);

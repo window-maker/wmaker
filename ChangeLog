@@ -32,6 +32,19 @@ Changes since version 0.64.0:
 - Added a hint that Window Maker crashed, to allow windows to be placed
   in their correct previous positions after a crash situation and also to
   preserve their state before the crash (minimized, shaded, hidden, ...)
+- Fixed wrong mapping position of the "Docked Applications Panel" for some
+  icons.
+- Smoother animation for the smiley =)
+- Added retain/release mechanism for RImages. RDestroyImage() has become
+  obsolete. More about this can be found in wrlib/Changelog and wrlib/NEWS.
+- Small API change in WINGs to allow images with alpha blending set as the
+  application icons be shown correctly. More about this in WINGs/Changelog 
+  and WINGs/NEWS.
+- Made images with alpha blending be shown correctly in the panels and the
+  icon chooser.
+- The icon image set to be shown in panels ("Logo.WMPanel") will be 
+  automatically updated if its entry in WMWindowAttributes changes (without
+  a need to restart as until now).
 
 
 Changes since version 0.63.1:

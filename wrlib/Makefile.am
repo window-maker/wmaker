@@ -4,7 +4,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 lib_LTLIBRARIES = libwraster.la
 
-libwraster_la_LDFLAGS = -version-info 3:0:1
+libwraster_la_LDFLAGS = -version-info 4:0:2
 
 bin_SCRIPTS = get-wraster-flags
 

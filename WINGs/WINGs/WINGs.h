@@ -467,7 +467,7 @@ typedef void WMSplitViewResizeSubviewsProc(WMSplitView *sPtr,
 typedef void WMSplitViewConstrainProc(WMSplitView *sPtr, int dividerIndex,
 				      int *minSize, int *maxSize);
 
-typedef WMWidget *WMMatrixCreateCellProc(WMMatrix *mPtr);
+typedef WMWidget* WMMatrixCreateCellProc(WMMatrix *mPtr);
 
 
 
@@ -595,20 +595,20 @@ void WMInitializeApplication(char *applicationName, int *argc, char **argv);
 void WMSetResourcePath(char *path);
 
 /* don't free the returned string */
-char *WMGetApplicationName();
+char* WMGetApplicationName();
 
 /* Try to locate resource file. ext may be NULL */
-char *WMPathForResourceOfType(char *resource, char *ext);
+char* WMPathForResourceOfType(char *resource, char *ext);
 
 
-WMScreen *WMOpenScreen(const char *display);
+WMScreen* WMOpenScreen(const char *display);
 
-WMScreen *WMCreateScreenWithRContext(Display *display, int screen, 
+WMScreen* WMCreateScreenWithRContext(Display *display, int screen,
 				     RContext *context);
 
-WMScreen *WMCreateScreen(Display *display, int screen);
+WMScreen* WMCreateScreen(Display *display, int screen);
 
-WMScreen *WMCreateSimpleApplicationScreen(Display *display);
+WMScreen* WMCreateSimpleApplicationScreen(Display *display);
 
 void WMScreenMainLoop(WMScreen *scr);
 
@@ -616,23 +616,30 @@ void WMBreakModalLoop(WMScreen *scr);
 
 void WMRunModalLoop(WMScreen *scr, WMView *view);
 
-RContext *WMScreenRContext(WMScreen *scr);
+RContext* WMScreenRContext(WMScreen *scr);
 
-Display *WMScreenDisplay(WMScreen *scr);
+Display* WMScreenDisplay(WMScreen *scr);
 
 int WMScreenDepth(WMScreen *scr);
 
 
 
-void WMSetApplicationIconImage(WMScreen *app, WMPixmap *icon);
+void WMSetApplicationIconImage(WMScreen *app, RImage *image);
 
-WMPixmap *WMGetApplicationIconImage(WMScreen *app);
+RImage* WMGetApplicationIconImage(WMScreen *app);
+
+void WMSetApplicationIconPixmap(WMScreen *app, WMPixmap *icon);
+
+WMPixmap* WMGetApplicationIconPixmap(WMScreen *app);
+
+/* If color==NULL it will use the default color for panels: ae/aa/ae */
+WMPixmap* WMGetApplicationIconBlendedPixmap(WMScreen *scr, RColor *color);
 
 void WMSetApplicationIconWindow(WMScreen *scr, Window window);
 
 void WMSetFocusToWidget(WMWidget *widget);
 
-WMEventHook *WMHookEventHandler(WMEventHook *handler);
+WMEventHook* WMHookEventHandler(WMEventHook *handler);
 
 int WMHandleEvent(XEvent *event);
 
@@ -682,22 +689,22 @@ WMPoint WMGetDraggingInfoImageLocation(WMDraggingInfo *info);
 
 /* ....................................................................... */
 
-WMFont *WMCreateFontSet(WMScreen *scrPtr, char *fontName);
+WMFont* WMCreateFontSet(WMScreen *scrPtr, char *fontName);
 
-WMFont *WMCreateNormalFont(WMScreen *scrPtr, char *fontName);
+WMFont* WMCreateNormalFont(WMScreen *scrPtr, char *fontName);
 
-WMFont *WMCreateFont(WMScreen *scrPtr, char *fontName);
+WMFont* WMCreateFont(WMScreen *scrPtr, char *fontName);
 
-WMFont *WMRetainFont(WMFont *font);
+WMFont* WMRetainFont(WMFont *font);
 
 void WMReleaseFont(WMFont *font);
 
 unsigned int WMFontHeight(WMFont *font);
 
 /*
-WMFont *WMUserFontOfSize(WMScreen *scrPtr, int size);
+WMFont* WMUserFontOfSize(WMScreen *scrPtr, int size);
 
-WMFont *WMUserFixedPitchFontOfSize(WMScreen *scrPtr, int size);
+WMFont* WMUserFixedPitchFontOfSize(WMScreen *scrPtr, int size);
 */
 
 
@@ -705,50 +712,50 @@ void WMSetWidgetDefaultFont(WMScreen *scr, WMFont *font);
 
 void WMSetWidgetDefaultBoldFont(WMScreen *scr, WMFont *font);
 
-WMFont *WMSystemFontOfSize(WMScreen *scrPtr, int size);
+WMFont* WMSystemFontOfSize(WMScreen *scrPtr, int size);
 
-WMFont *WMBoldSystemFontOfSize(WMScreen *scrPtr, int size);
+WMFont* WMBoldSystemFontOfSize(WMScreen *scrPtr, int size);
 
 XFontSet WMGetFontFontSet(WMFont *font);
 
-WMFont *WMNormalizeFont(WMScreen *scr, WMFont *font);
+WMFont* WMNormalizeFont(WMScreen *scr, WMFont *font);
 
-WMFont *WMStrengthenFont(WMScreen *scr, WMFont *font);
+WMFont* WMStrengthenFont(WMScreen *scr, WMFont *font);
 
-WMFont *WMUnstrengthenFont(WMScreen *scr, WMFont *font);
+WMFont* WMUnstrengthenFont(WMScreen *scr, WMFont *font);
 
-WMFont *WMEmphasizeFont(WMScreen *scr, WMFont *font);
+WMFont* WMEmphasizeFont(WMScreen *scr, WMFont *font);
 
-WMFont *WMUnemphasizeFont(WMScreen *scr, WMFont *font);
+WMFont* WMUnemphasizeFont(WMScreen *scr, WMFont *font);
 
-WMFont *WMGetFontOfSize(WMScreen *scr, WMFont *font, int size);
+WMFont* WMGetFontOfSize(WMScreen *scr, WMFont *font, int size);
 
 /* ....................................................................... */
 
-WMPixmap *WMRetainPixmap(WMPixmap *pixmap);
+WMPixmap* WMRetainPixmap(WMPixmap *pixmap);
 
 void WMReleasePixmap(WMPixmap *pixmap);
 
-WMPixmap *WMCreatePixmap(WMScreen *scrPtr, int width, int height, int depth,
+WMPixmap* WMCreatePixmap(WMScreen *scrPtr, int width, int height, int depth,
 			 Bool masked);
 
-WMPixmap *WMCreatePixmapFromXPixmaps(WMScreen *scrPtr, Pixmap pixmap, 
+WMPixmap* WMCreatePixmapFromXPixmaps(WMScreen *scrPtr, Pixmap pixmap,
 				     Pixmap mask, int width, int height,
 				     int depth);
 
-WMPixmap *WMCreatePixmapFromRImage(WMScreen *scrPtr, RImage *image, 
+WMPixmap* WMCreatePixmapFromRImage(WMScreen *scrPtr, RImage *image,
 				   int threshold);
 
-WMPixmap *WMCreatePixmapFromXPMData(WMScreen *scrPtr, char **data);
+WMPixmap* WMCreatePixmapFromXPMData(WMScreen *scrPtr, char **data);
 
 WMSize WMGetPixmapSize(WMPixmap *pixmap);
 
-WMPixmap *WMCreatePixmapFromFile(WMScreen *scrPtr, char *fileName);
+WMPixmap* WMCreatePixmapFromFile(WMScreen *scrPtr, char *fileName);
 
 WMPixmap* WMCreateBlendedPixmapFromRImage(WMScreen *scrPtr, RImage *image,
                                           RColor *color);
 
-WMPixmap *WMCreateBlendedPixmapFromFile(WMScreen *scrPtr, char *fileName,
+WMPixmap* WMCreateBlendedPixmapFromFile(WMScreen *scrPtr, char *fileName,
 					RColor *color);
 
 void WMDrawPixmap(WMPixmap *pixmap, Drawable d, int x, int y);
@@ -757,18 +764,18 @@ Pixmap WMGetPixmapXID(WMPixmap *pixmap);
 
 Pixmap WMGetPixmapMaskXID(WMPixmap *pixmap);
 
-WMPixmap *WMGetSystemPixmap(WMScreen *scr, int image);
+WMPixmap* WMGetSystemPixmap(WMScreen *scr, int image);
 
 /* ....................................................................... */
 
 
-WMColor *WMDarkGrayColor(WMScreen *scr);
+WMColor* WMDarkGrayColor(WMScreen *scr);
 
-WMColor *WMGrayColor(WMScreen *scr);
+WMColor* WMGrayColor(WMScreen *scr);
 
-WMColor *WMBlackColor(WMScreen *scr);
+WMColor* WMBlackColor(WMScreen *scr);
 
-WMColor *WMWhiteColor(WMScreen *scr);
+WMColor* WMWhiteColor(WMScreen *scr);
 
 void WMSetColorInGC(WMColor *color, GC gc);
 
@@ -781,13 +788,13 @@ void WMPaintColorSwatch(WMColor *color, Drawable d, int x, int y,
 
 void WMReleaseColor(WMColor *color);
 
-WMColor *WMRetainColor(WMColor *color);
+WMColor* WMRetainColor(WMColor *color);
 
-WMColor *WMCreateRGBColor(WMScreen *scr, unsigned short red, 
+WMColor* WMCreateRGBColor(WMScreen *scr, unsigned short red,
 			  unsigned short green, unsigned short blue,
 			  Bool exact);
 
-WMColor *WMCreateNamedColor(WMScreen *scr, char *name, Bool exact);
+WMColor* WMCreateNamedColor(WMScreen *scr, char *name, Bool exact);
 
 unsigned short WMRedComponentOfColor(WMColor *color);
 
@@ -795,7 +802,7 @@ unsigned short WMGreenComponentOfColor(WMColor *color);
 
 unsigned short WMBlueComponentOfColor(WMColor *color);
 
-char *WMGetColorRGBDescription(WMColor *color);
+char* WMGetColorRGBDescription(WMColor *color);
 
 /* ....................................................................... */
 
@@ -812,7 +819,7 @@ int WMWidthOfString(WMFont *font, char *text, int length);
 
 /* ....................................................................... */
 
-WMScreen *WMWidgetScreen(WMWidget *w);
+WMScreen* WMWidgetScreen(WMWidget *w);
 
 unsigned int WMScreenWidth(WMScreen *scr);
 
@@ -844,7 +851,7 @@ void WMDestroyWidget(WMWidget *widget);
 
 void WMHangData(WMWidget *widget, void *data);
 
-void *WMGetHangedData(WMWidget *widget);
+void* WMGetHangedData(WMWidget *widget);
 
 unsigned int WMWidgetWidth(WMWidget *w);
 
@@ -867,7 +874,7 @@ WMPoint WMGetViewPosition(WMView *view);
 
 WMPoint WMGetViewScreenPosition(WMView *view);
 
-WMWidget *WMWidgetOfView(WMView *view);
+WMWidget* WMWidgetOfView(WMView *view);
 
 void WMSetViewNextResponder(WMView *view, WMView *responder);
 
@@ -898,14 +905,14 @@ void WMSetBalloonEnabled(WMScreen *scr, Bool flag);
 
 /* ....................................................................... */
 
-WMWindow *WMCreateWindow(WMScreen *screen, char *name);
+WMWindow* WMCreateWindow(WMScreen *screen, char *name);
 
-WMWindow *WMCreateWindowWithStyle(WMScreen *screen, char *name, int style);
+WMWindow* WMCreateWindowWithStyle(WMScreen *screen, char *name, int style);
 
-WMWindow *WMCreatePanelWithStyleForWindow(WMWindow *owner, char *name, 
+WMWindow* WMCreatePanelWithStyleForWindow(WMWindow *owner, char *name,
 					  int style);
 
-WMWindow *WMCreatePanelForWindow(WMWindow *owner, char *name);
+WMWindow* WMCreatePanelForWindow(WMWindow *owner, char *name);
 
 void WMChangePanelOwner(WMWindow *win, WMWindow *newOwner);
 
@@ -913,7 +920,7 @@ void WMSetWindowTitle(WMWindow *wPtr, char *title);
 
 void WMSetWindowMiniwindowTitle(WMWindow *win, char *title);
 
-void WMSetWindowMiniwindowImage(WMWindow *win, WMPixmap *pixmap);
+void WMSetWindowMiniwindowPixmap(WMWindow *win, WMPixmap *pixmap);
 
 void WMSetWindowCloseAction(WMWindow *win, WMAction *action, void *clientData);
 
@@ -954,9 +961,9 @@ void WMSetButtonAction(WMButton *bPtr, WMAction *action, void *clientData);
 #define WMCreateSwitchButton(parent) \
 	WMCreateButton((parent), WBTSwitch)
 
-WMButton *WMCreateButton(WMWidget *parent, WMButtonType type);
+WMButton* WMCreateButton(WMWidget *parent, WMButtonType type);
 
-WMButton *WMCreateCustomButton(WMWidget *parent, int behaviourMask);
+WMButton* WMCreateCustomButton(WMWidget *parent, int behaviourMask);
 
 void WMSetButtonImageDefault(WMButton *bPtr);
 
@@ -1002,15 +1009,15 @@ void WMSetButtonPeriodicDelay(WMButton *bPtr, float delay, float interval);
 
 /* ....................................................................... */
 
-WMLabel *WMCreateLabel(WMWidget *parent);
+WMLabel* WMCreateLabel(WMWidget *parent);
 
 void WMSetLabelWraps(WMLabel *lPtr, Bool flag);
 
 void WMSetLabelImage(WMLabel *lPtr, WMPixmap *image);
 
-WMPixmap *WMGetLabelImage(WMLabel *lPtr);
+WMPixmap* WMGetLabelImage(WMLabel *lPtr);
 
-char *WMGetLabelText(WMLabel *lPtr);
+char* WMGetLabelText(WMLabel *lPtr);
 
 void WMSetLabelImagePosition(WMLabel *lPtr, WMImagePosition position);
 
@@ -1028,7 +1035,7 @@ void WMSetLabelTextColor(WMLabel *lPtr, WMColor *color);
 
 /* ....................................................................... */
 
-WMFrame *WMCreateFrame(WMWidget *parent);
+WMFrame* WMCreateFrame(WMWidget *parent);
 
 void WMSetFrameTitlePosition(WMFrame *fPtr, WMTitlePosition position);
 
@@ -1038,14 +1045,14 @@ void WMSetFrameTitle(WMFrame *fPtr, char *title);
 
 /* ....................................................................... */
 
-WMTextField *WMCreateTextField(WMWidget *parent);
+WMTextField* WMCreateTextField(WMWidget *parent);
 
 void WMInsertTextFieldText(WMTextField *tPtr, char *text, int position);
 
 void WMDeleteTextFieldRange(WMTextField *tPtr, WMRange range);
 
 /* you can free the returned string */
-char *WMGetTextFieldText(WMTextField *tPtr);
+char* WMGetTextFieldText(WMTextField *tPtr);
 
 void WMSetTextFieldText(WMTextField *tPtr, char *text);
 
@@ -1053,7 +1060,7 @@ void WMSetTextFieldAlignment(WMTextField *tPtr, WMAlignment alignment);
 
 void WMSetTextFieldFont(WMTextField *tPtr, WMFont *font);
 
-WMFont *WMGetTextFieldFont(WMTextField *tPtr);
+WMFont* WMGetTextFieldFont(WMTextField *tPtr);
 
 void WMSetTextFieldBordered(WMTextField *tPtr, Bool bordered);
 
@@ -1082,7 +1089,7 @@ extern char *WMTextDidEndEditingNotification;
 
 /* ....................................................................... */
 
-WMScroller *WMCreateScroller(WMWidget *parent);
+WMScroller* WMCreateScroller(WMWidget *parent);
 
 void WMSetScrollerParameters(WMScroller *sPtr, float floatValue, 
 			     float knobProportion);
@@ -1102,7 +1109,7 @@ extern char *WMScrollerDidScrollNotification;
 
 /* ....................................................................... */
 
-WMList *WMCreateList(WMWidget *parent);
+WMList* WMCreateList(WMWidget *parent);
 
 void WMSetListAllowMultipleSelection(WMList *lPtr, Bool flag);
 
@@ -1110,7 +1117,7 @@ void WMSetListAllowEmptySelection(WMList *lPtr, Bool flag);
 
 #define WMAddListItem(lPtr, text) WMInsertListItem((lPtr), -1, (text))
 
-WMListItem *WMInsertListItem(WMList *lPtr, int row, char *text);
+WMListItem* WMInsertListItem(WMList *lPtr, int row, char *text);
 
 void WMSortListItems(WMList *lPtr);
 
@@ -1118,9 +1125,9 @@ void WMSortListItemsWithComparer(WMList *lPtr, WMCompareDataProc *func);
 
 int WMFindRowOfListItemWithTitle(WMList *lPtr, char *title);
 
-WMListItem *WMGetListItem(WMList *lPtr, int row);
+WMListItem* WMGetListItem(WMList *lPtr, int row);
 
-WMArray *WMGetListItems(WMList *lPtr);
+WMArray* WMGetListItems(WMList *lPtr);
 
 void WMRemoveListItem(WMList *lPtr, int row);
 
@@ -1182,7 +1189,7 @@ extern char *WMListSelectionDidChangeNotification;
 
 /* ....................................................................... */
 
-WMBrowser *WMCreateBrowser(WMWidget *parent);
+WMBrowser* WMCreateBrowser(WMWidget *parent);
 
 void WMSetBrowserAllowMultipleSelection(WMBrowser *bPtr, Bool flag);
 
@@ -1202,7 +1209,7 @@ void WMSetBrowserMaxVisibleColumns(WMBrowser *bPtr, int columns);
 
 void WMSetBrowserColumnTitle(WMBrowser *bPtr, int column, char *title);
 
-WMListItem *WMInsertBrowserItem(WMBrowser *bPtr, int column, int row, char *text, Bool isBranch);
+WMListItem* WMInsertBrowserItem(WMBrowser *bPtr, int column, int row, char *text, Bool isBranch);
 
 void WMSortBrowserColumn(WMBrowser *bPtr, int column);
 
@@ -1213,10 +1220,10 @@ void WMSortBrowserColumnWithComparer(WMBrowser *bPtr, int column,
 char* WMSetBrowserPath(WMBrowser *bPtr, char *path);
 
 /* free the returned string */
-char *WMGetBrowserPath(WMBrowser *bPtr);
+char* WMGetBrowserPath(WMBrowser *bPtr);
 
 /* free the returned string */
-char *WMGetBrowserPathToColumn(WMBrowser *bPtr, int column);
+char* WMGetBrowserPathToColumn(WMBrowser *bPtr, int column);
 
 /* free the returned array */
 WMArray* WMGetBrowserPaths(WMBrowser *bPtr);
@@ -1226,7 +1233,7 @@ void WMSetBrowserAction(WMBrowser *bPtr, WMAction *action, void *clientData);
 void WMSetBrowserDoubleAction(WMBrowser *bPtr, WMAction *action, 
 			      void *clientData);
 
-WMListItem *WMGetBrowserSelectedItemInColumn(WMBrowser *bPtr, int column);
+WMListItem* WMGetBrowserSelectedItemInColumn(WMBrowser *bPtr, int column);
 
 int WMGetBrowserFirstVisibleColumn(WMBrowser *bPtr);
 
@@ -1238,7 +1245,7 @@ int WMGetBrowserNumberOfColumns(WMBrowser *bPtr);
 
 int WMGetBrowserMaxVisibleColumns(WMBrowser *bPtr);
 
-WMList *WMGetBrowserListInColumn(WMBrowser *bPtr, int column);
+WMList* WMGetBrowserListInColumn(WMBrowser *bPtr, int column);
 
 void WMSetBrowserDelegate(WMBrowser *bPtr, WMBrowserDelegate *delegate);
 
@@ -1253,7 +1260,7 @@ void WMSetBrowserHasScroller(WMBrowser *bPtr, int hasScroller);
 
 Bool WMMenuItemIsSeparator(WMMenuItem *item);
 
-WMMenuItem *WMCreateMenuItem(void);
+WMMenuItem* WMCreateMenuItem(void);
 
 void WMDestroyMenuItem(WMMenuItem *item);
 
@@ -1261,7 +1268,7 @@ Bool WMGetMenuItemEnabled(WMMenuItem *item);
 
 void WMSetMenuItemEnabled(WMMenuItem *item, Bool flag);
 
-char *WMGetMenuItemShortcut(WMMenuItem *item);
+char* WMGetMenuItemShortcut(WMMenuItem *item);
 
 unsigned WMGetMenuItemShortcutModifierMask(WMMenuItem *item);
 
@@ -1269,19 +1276,19 @@ void WMSetMenuItemShortcut(WMMenuItem *item, char *shortcut);
 
 void WMSetMenuItemShortcutModifierMask(WMMenuItem *item, unsigned mask);
 
-void *WMGetMenuItemRepresentedObject(WMMenuItem *item);
+void* WMGetMenuItemRepresentedObject(WMMenuItem *item);
 
 void WMSetMenuItemRepresentedObject(WMMenuItem *item, void *object);
 
 void WMSetMenuItemAction(WMMenuItem *item, WMAction *action, void *data);
 
-WMAction *WMGetMenuItemAction(WMMenuItem *item);
+WMAction* WMGetMenuItemAction(WMMenuItem *item);
 
-void *WMGetMenuItemData(WMMenuItem *item);
+void* WMGetMenuItemData(WMMenuItem *item);
 
 void WMSetMenuItemTitle(WMMenuItem *item, char *title);
 
-char *WMGetMenuItemTitle(WMMenuItem *item);
+char* WMGetMenuItemTitle(WMMenuItem *item);
 
 void WMSetMenuItemState(WMMenuItem *item, int state);
 
@@ -1289,40 +1296,40 @@ int WMGetMenuItemState(WMMenuItem *item);
 
 void WMSetMenuItemPixmap(WMMenuItem *item, WMPixmap *pixmap);
 
-WMPixmap *WMGetMenuItemPixmap(WMMenuItem *item);
+WMPixmap* WMGetMenuItemPixmap(WMMenuItem *item);
 
 void WMSetMenuItemOnStatePixmap(WMMenuItem *item, WMPixmap *pixmap);
 
-WMPixmap *WMGetMenuItemOnStatePixmap(WMMenuItem *item);
+WMPixmap* WMGetMenuItemOnStatePixmap(WMMenuItem *item);
 
 void WMSetMenuItemOffStatePixmap(WMMenuItem *item, WMPixmap *pixmap);
 
-WMPixmap *WMGetMenuItemOffStatePixmap(WMMenuItem *item);
+WMPixmap* WMGetMenuItemOffStatePixmap(WMMenuItem *item);
 
 void WMSetMenuItemMixedStatePixmap(WMMenuItem *item, WMPixmap *pixmap);
 
-WMPixmap *WMGetMenuItemMixedStatePixmap(WMMenuItem *item);
+WMPixmap* WMGetMenuItemMixedStatePixmap(WMMenuItem *item);
 
 /*void WMSetMenuItemSubmenu(WMMenuItem *item, WMMenu *submenu);
  
 
-WMMenu *WMGetMenuItemSubmenu(WMMenuItem *item);
+WMMenu* WMGetMenuItemSubmenu(WMMenuItem *item);
 
 Bool WMGetMenuItemHasSubmenu(WMMenuItem *item);
  */
 
 /* ....................................................................... */
 
-WMPopUpButton *WMCreatePopUpButton(WMWidget *parent);
+WMPopUpButton* WMCreatePopUpButton(WMWidget *parent);
 
 void WMSetPopUpButtonAction(WMPopUpButton *sPtr, WMAction *action, 
 			    void *clientData);
 
 void WMSetPopUpButtonPullsDown(WMPopUpButton *bPtr, Bool flag);
 
-WMMenuItem *WMAddPopUpButtonItem(WMPopUpButton *bPtr, char *title);
+WMMenuItem* WMAddPopUpButtonItem(WMPopUpButton *bPtr, char *title);
 
-WMMenuItem *WMInsertPopUpButtonItem(WMPopUpButton *bPtr, int index, 
+WMMenuItem* WMInsertPopUpButtonItem(WMPopUpButton *bPtr, int index,
 				    char *title);
 
 void WMRemovePopUpButtonItem(WMPopUpButton *bPtr, int index);
@@ -1338,9 +1345,9 @@ int WMGetPopUpButtonSelectedItem(WMPopUpButton *bPtr);
 void WMSetPopUpButtonText(WMPopUpButton *bPtr, char *text);
 
 /* don't free the returned data */
-char *WMGetPopUpButtonItem(WMPopUpButton *bPtr, int index);
+char* WMGetPopUpButtonItem(WMPopUpButton *bPtr, int index);
 
-WMMenuItem *WMGetPopUpButtonMenuItem(WMPopUpButton *bPtr, int index);
+WMMenuItem* WMGetPopUpButtonMenuItem(WMPopUpButton *bPtr, int index);
 
 
 int WMGetPopUpButtonNumberOfItems(WMPopUpButton *bPtr);
@@ -1351,7 +1358,7 @@ Bool WMGetPopUpButtonEnabled(WMPopUpButton *bPtr);
 
 /* ....................................................................... */
 
-WMProgressIndicator *WMCreateProgressIndicator(WMWidget *parent);
+WMProgressIndicator* WMCreateProgressIndicator(WMWidget *parent);
 
 void WMSetProgressIndicatorMinValue(WMProgressIndicator *progressindicator, int value);
 
@@ -1368,7 +1375,7 @@ int WMGetProgressIndicatorValue(WMProgressIndicator *progressindicator);
 
 /* ....................................................................... */
 
-WMColorPanel *WMGetColorPanel(WMScreen *scrPtr);
+WMColorPanel* WMGetColorPanel(WMScreen *scrPtr);
 
 void WMFreeColorPanel(WMColorPanel *panel);
 
@@ -1378,7 +1385,7 @@ void WMCloseColorPanel(WMColorPanel *panel);
 
 void WMSetColorPanelColor(WMColorPanel *panel, WMColor *color);
 
-WMColor *WMGetColorPanelColor(WMColorPanel *panel);
+WMColor* WMGetColorPanelColor(WMColorPanel *panel);
 
 void WMSetColorPanelPickerMode(WMColorPanel *panel, WMColorPanelMode mode);
 
@@ -1388,11 +1395,11 @@ extern char *WMColorPanelColorChangedNotification;
 
 /* ....................................................................... */
 
-WMColorWell *WMCreateColorWell(WMWidget *parent);
+WMColorWell* WMCreateColorWell(WMWidget *parent);
 
 void WMSetColorWellColor(WMColorWell *cPtr, WMColor *color);
 
-WMColor *WMGetColorWellColor(WMColorWell *cPtr);
+WMColor* WMGetColorWellColor(WMColorWell *cPtr);
 
 void WSetColorWellBordered(WMColorWell *cPtr, Bool flag);
 
@@ -1402,7 +1409,7 @@ extern char *WMColorWellDidChangeNotification;
 
 /* ...................................................................... */
 
-WMScrollView *WMCreateScrollView(WMWidget *parent);
+WMScrollView* WMCreateScrollView(WMWidget *parent);
 
 void WMResizeScrollViewContent(WMScrollView *sPtr, unsigned int width,
 			       unsigned int height);
@@ -1419,9 +1426,9 @@ void WMSetScrollViewContentView(WMScrollView *sPtr, WMView *view);
 
 WMRect WMGetScrollViewVisibleRect(WMScrollView *sPtr);
 
-WMScroller *WMGetScrollViewHorizontalScroller(WMScrollView *sPtr);
+WMScroller* WMGetScrollViewHorizontalScroller(WMScrollView *sPtr);
 
-WMScroller *WMGetScrollViewVerticalScroller(WMScrollView *sPtr);
+WMScroller* WMGetScrollViewVerticalScroller(WMScrollView *sPtr);
 
 void WMSetScrollViewLineScroll(WMScrollView *sPtr, int amount);
 
@@ -1429,7 +1436,7 @@ void WMSetScrollViewPageScroll(WMScrollView *sPtr, int amount);
 
 /* ....................................................................... */
 
-WMSlider *WMCreateSlider(WMWidget *parent);
+WMSlider* WMCreateSlider(WMWidget *parent);
 
 int WMGetSliderMinValue(WMSlider *slider);
 
@@ -1454,13 +1461,15 @@ void WMSetSliderImage(WMSlider *sPtr, WMPixmap *pixmap);
 /* ....................................................................... */
 
 
-WMSplitView *WMCreateSplitView(WMWidget *parent);
+WMSplitView* WMCreateSplitView(WMWidget *parent);
+
 Bool WMGetSplitViewVertical(WMSplitView *sPtr);
+
 void WMSetSplitViewVertical(WMSplitView *sPtr, Bool flag);
 
 int WMGetSplitViewSubviewsCount(WMSplitView *sPtr); /* ??? remove ??? */
 
-WMView *WMGetSplitViewSubviewAt(WMSplitView *sPtr, int index);
+WMView* WMGetSplitViewSubviewAt(WMSplitView *sPtr, int index);
 
 /* remove the first subview == view */
 void WMRemoveSplitViewSubview(WMSplitView *sPtr, WMView *view);
@@ -1484,14 +1493,13 @@ int WMGetSplitViewDividerThickness(WMSplitView *sPtr);
 
 /* ...................................................................... */
 
-WMRuler *WMCreateRuler (WMWidget *parent);
+WMRuler* WMCreateRuler (WMWidget *parent);
 
-WMRulerMargins *WMGetRulerMargins(WMRuler *rPtr);
+WMRulerMargins* WMGetRulerMargins(WMRuler *rPtr);
 
 void WMSetRulerMargins(WMRuler *rPtr, WMRulerMargins margins);
 
-Bool WMIsMarginEqualToMargin(WMRulerMargins *aMargin,
-    WMRulerMargins *anotherMargin);
+Bool WMIsMarginEqualToMargin(WMRulerMargins *aMargin, WMRulerMargins *anotherMargin);
 
 int WMGetGrabbedRulerMargin(WMRuler *rPtr);
 
@@ -1511,8 +1519,8 @@ void WMSetRulerReleaseAction(WMRuler *rPtr, WMAction *action, void *clientData);
 #define WMCreateText(parent) WMCreateTextForDocumentType \
     ((parent), (NULL), (NULL))
 
-WMText *WMCreateTextForDocumentType(WMWidget *parent, 
-	WMAction *parser, WMAction *writer);
+WMText* WMCreateTextForDocumentType(WMWidget *parent, WMAction *parser,
+                                    WMAction *writer);
 
 void WMSetTextDelegate(WMText *tPtr, WMTextDelegate *delegate);
 
@@ -1552,11 +1560,11 @@ int WMGetTextIgnoresNewline(WMText *tPtr);
 
 void WMSetTextDefaultFont(WMText *tPtr, WMFont *font);
 
-WMFont * WMGetTextDefaultFont(WMText *tPtr);
+WMFont* WMGetTextDefaultFont(WMText *tPtr);
 
 void WMSetTextDefaultColor(WMText *tPtr, WMColor *color);
 
-WMColor * WMGetTextDefaultColor(WMText *tPtr);
+WMColor* WMGetTextDefaultColor(WMText *tPtr);
 
 void WMSetTextRelief(WMText *tPtr, WMReliefType relief);
 
@@ -1574,24 +1582,24 @@ void WMAppendTextStream(WMText *tPtr, char *text);
     ((tPtr), (NULL))
 
 /* free the text */
-char * WMGetTextStream(WMText *tPtr);
+char* WMGetTextStream(WMText *tPtr);
 
 /* free the text */
-char * WMGetTextSelectedStream(WMText *tPtr);
+char* WMGetTextSelectedStream(WMText *tPtr);
 
 /* destroy the array */
-WMArray * WMGetTextObjects(WMText *tPtr);
+WMArray* WMGetTextObjects(WMText *tPtr);
 
 /* destroy the array */
 WMArray* WMGetTextSelectedObjects(WMText *tPtr);
 
 void WMSetTextSelectionColor(WMText *tPtr, WMColor *color);
 
-WMColor *WMGetTextSelectionColor(WMText *tPtr);
+WMColor* WMGetTextSelectionColor(WMText *tPtr);
 
 void WMSetTextSelectionFont(WMText *tPtr, WMFont *font);
 
-WMFont *WMGetTextSelectionFont(WMText *tPtr);
+WMFont* WMGetTextSelectionFont(WMText *tPtr);
 
 void WMSetTextSelectionUnderlined(WMText *tPtr, int underlined);
 
@@ -1600,30 +1608,33 @@ int WMGetTextSelectionUnderlined(WMText *tPtr);
 void WMSetTextAlignment(WMText *tPtr, WMAlignment alignment);
 
 Bool WMFindInTextStream(WMText *tPtr, char *needle, Bool direction,
-    Bool caseSensitive);
+                        Bool caseSensitive);
 
 Bool WMReplaceTextSelection(WMText *tPtr, char *replacement);
 
 
 /* parser related stuff... use only if implementing a new parser */
 
-void *WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w, char *description,
-    WMColor *color, unsigned short first, unsigned short extraInfo);
-    
-void *WMCreateTextBlockWithPixmap(WMText *tPtr, WMPixmap *p, char *description, 
-	WMColor *color, unsigned short first, unsigned short extraInfo);
+void* WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w, char *description,
+                                  WMColor *color, unsigned short first,
+                                  unsigned short extraInfo);
 
-void *WMCreateTextBlockWithText(WMText *tPtr, char *text, WMFont *font,
-    WMColor *color, unsigned short first, unsigned short length);
-    
+void* WMCreateTextBlockWithPixmap(WMText *tPtr, WMPixmap *p, char *description,
+                                  WMColor *color, unsigned short first,
+                                  unsigned short extraInfo);
+
+void* WMCreateTextBlockWithText(WMText *tPtr, char *text, WMFont *font,
+                                WMColor *color, unsigned short first,
+                                unsigned short length);
+
 void WMSetTextBlockProperties(WMText *tPtr, void *vtb, unsigned int first,
-    unsigned int kanji, unsigned int underlined, int script,
-	WMRulerMargins *margins);
-    
+                              unsigned int kanji, unsigned int underlined,
+                              int script, WMRulerMargins *margins);
+
 /* do NOT free the margins */
 void WMGetTextBlockProperties(WMText *tPtr, void *vtb, unsigned int *first,
-    unsigned int *kanji, unsigned int *underlined, int *script,
-	WMRulerMargins *margins);
+                              unsigned int *kanji, unsigned int *underlined,
+                              int *script, WMRulerMargins *margins);
 
 int WMGetTextInsertType(WMText *tPtr);
 
@@ -1637,14 +1648,14 @@ void WMPrependTextBlock(WMText *tPtr, void *vtb);
 
 void WMAppendTextBlock(WMText *tPtr, void *vtb);
 
-void *WMRemoveTextBlock(WMText *tPtr);
+void* WMRemoveTextBlock(WMText *tPtr);
 
 void WMDestroyTextBlock(WMText *tPtr, void *vtb);
 
 /* ....................................................................... */
 
 
-WMTabView *WMCreateTabView(WMWidget *parent);
+WMTabView* WMCreateTabView(WMWidget *parent);
 
 void WMSetTabViewType(WMTabView *tPtr, WMTabViewType type);
 
@@ -1658,10 +1669,10 @@ void WMInsertItemInTabView(WMTabView *tPtr, int index, WMTabViewItem *item);
 
 void WMRemoveTabViewItem(WMTabView *tPtr, WMTabViewItem *item);
 
-WMTabViewItem *WMAddTabViewItemWithView(WMTabView *tPtr, WMView *view, 
+WMTabViewItem* WMAddTabViewItemWithView(WMTabView *tPtr, WMView *view,
 					int identifier, char *label);
 
-WMTabViewItem *WMTabViewItemAtPoint(WMTabView *tPtr, int x, int y);
+WMTabViewItem* WMTabViewItemAtPoint(WMTabView *tPtr, int x, int y);
 
 void WMSelectFirstTabViewItem(WMTabView *tPtr);
 
@@ -1671,7 +1682,7 @@ void WMSelectNextTabViewItem(WMTabView *tPtr);
 
 void WMSelectPreviousTabViewItem(WMTabView *tPtr);
 
-WMTabViewItem *WMGetSelectedTabViewItem(WMTabView *tPtr);
+WMTabViewItem* WMGetSelectedTabViewItem(WMTabView *tPtr);
 
 void WMSelectTabViewItem(WMTabView *tPtr, WMTabViewItem *item);
 
@@ -1680,24 +1691,24 @@ void WMSelectTabViewItemAtIndex(WMTabView *tPtr, int index);
 void WMSetTabViewDelegate(WMTabView *tPtr, WMTabViewDelegate *delegate);
 
 
-WMTabViewItem *WMCreateTabViewItemWithIdentifier(int identifier);
+WMTabViewItem* WMCreateTabViewItemWithIdentifier(int identifier);
 
 int WMGetTabViewItemIdentifier(WMTabViewItem *item);
 
 void WMSetTabViewItemLabel(WMTabViewItem *item, char *label);
 
-char *WMGetTabViewItemLabel(WMTabViewItem *item);
+char* WMGetTabViewItemLabel(WMTabViewItem *item);
 
 void WMSetTabViewItemView(WMTabViewItem *item, WMView *view);
 
-WMView *WMGetTabViewItemView(WMTabViewItem *item);
+WMView* WMGetTabViewItemView(WMTabViewItem *item);
 
 void WMDestroyTabViewItem(WMTabViewItem *item);
 
 
 /* ....................................................................... */
 
-WMBox *WMCreateBox(WMWidget *parent);
+WMBox* WMCreateBox(WMWidget *parent);
 
 void WMSetBoxBorderWidth(WMBox *box, unsigned width);
 
@@ -1718,19 +1729,19 @@ int WMRunAlertPanel(WMScreen *app, WMWindow *owner, char *title, char *msg,
 		    char *otherButton);
 
 /* you can free the returned string */
-char *WMRunInputPanel(WMScreen *app, WMWindow *owner, char *title, char *msg,
+char* WMRunInputPanel(WMScreen *app, WMWindow *owner, char *title, char *msg,
 		      char *defaultText, char *okButton, char *cancelButton);
 
-WMAlertPanel *WMCreateAlertPanel(WMScreen *app, WMWindow *owner, char *title,
+WMAlertPanel* WMCreateAlertPanel(WMScreen *app, WMWindow *owner, char *title,
 				 char *msg, char *defaultButton, 
 				 char *alternateButton, char *otherButton);
 
-WMInputPanel *WMCreateInputPanel(WMScreen *app, WMWindow *owner, char *title,
+WMInputPanel* WMCreateInputPanel(WMScreen *app, WMWindow *owner, char *title,
 				 char *msg, char *defaultText, char *okButton, 
 				 char *cancelButton);
 
 
-WMGenericPanel *WMCreateGenericPanel(WMScreen *scrPtr, WMWindow *owner,
+WMGenericPanel* WMCreateGenericPanel(WMScreen *scrPtr, WMWindow *owner,
 				     char *title, char *defaultButton,
 				     char *alternateButton);
 
@@ -1743,9 +1754,9 @@ void WMDestroyGenericPanel(WMGenericPanel *panel);
 /* ....................................................................... */
 
 /* only 1 instance per WMScreen */
-WMOpenPanel *WMGetOpenPanel(WMScreen *scrPtr);
+WMOpenPanel* WMGetOpenPanel(WMScreen *scrPtr);
 
-WMSavePanel *WMGetSavePanel(WMScreen *scrPtr);
+WMSavePanel* WMGetSavePanel(WMScreen *scrPtr);
 
 void WMSetFilePanelCanChooseDirectories(WMFilePanel *panel, Bool flag);
 
@@ -1756,7 +1767,7 @@ void WMSetFilePanelAutoCompletion(WMFilePanel *panel, Bool flag);
 void WMSetFilePanelDirectory(WMFilePanel *panel, char *path);
 
 /* you can free the returned string */
-char *WMGetFilePanelFileName(WMFilePanel *panel);
+char* WMGetFilePanelFileName(WMFilePanel *panel);
 
 void WMFreeFilePanel(WMFilePanel *panel);
 
@@ -1765,13 +1776,13 @@ int WMRunModalFilePanelForDirectory(WMFilePanel *panel, WMWindow *owner,
 
 void WMSetFilePanelAccessoryView(WMFilePanel *panel, WMView *view);
 
-WMView *WMGetFilePanelAccessoryView(WMFilePanel *panel);
+WMView* WMGetFilePanelAccessoryView(WMFilePanel *panel);
 
 
 /* ...................................................................... */
 
 /* only 1 instance per WMScreen */
-WMFontPanel *WMGetFontPanel(WMScreen *scr);
+WMFontPanel* WMGetFontPanel(WMScreen *scr);
 
 void WMShowFontPanel(WMFontPanel *panel);
 
@@ -1780,9 +1791,9 @@ void WMHideFontPanel(WMFontPanel *panel);
 void WMSetFontPanelFont(WMFontPanel *panel, WMFont *font);
 
 /* you can free the returned string */
-char *WMGetFontPanelFontName(WMFontPanel *panel);
+char* WMGetFontPanelFontName(WMFontPanel *panel);
 
-WMFont *WMGetFontPanelFont(WMFontPanel *panel);
+WMFont* WMGetFontPanelFont(WMFontPanel *panel);
 
 #ifdef __cplusplus
 }

@@ -364,12 +364,13 @@ drawIconProc(WMList *lPtr, int index, Drawable d, char *text,
     IconPanel *panel = WMGetHangedData(lPtr);
     GC gc = panel->scr->draw_gc;
     GC copygc = panel->scr->copy_gc;
-    char *buffer, *dirfile;
+    char *file, *dirfile;
     WMPixmap *pixmap;
     WMColor *blackcolor;
     WMColor *whitecolor;
     WMSize size;
-    WMScreen *wmscr=WMWidgetScreen(panel->win);
+    WMScreen *wmscr = WMWidgetScreen(panel->win);
+    RColor gray;
     int width;
 
     if(!panel->preview) return;
@@ -380,12 +381,15 @@ drawIconProc(WMList *lPtr, int index, Drawable d, char *text,
     whitecolor = WMWhiteColor(wmscr);
 
     dirfile = wexpandpath(WMGetListSelectedItem(panel->dirList)->text);
-    buffer = wmalloc(strlen(dirfile)+strlen(text)+4);
-    sprintf(buffer, "%s/%s", dirfile, text);
+    file = wmalloc(strlen(dirfile)+strlen(text)+4);
+    sprintf(file, "%s/%s", dirfile, text);
     wfree(dirfile);
 
-    pixmap = WMCreatePixmapFromFile(WMWidgetScreen(panel->win), buffer);
-    wfree(buffer);
+    gray.red = 0xae;  gray.green = 0xaa;
+    gray.blue = 0xae; gray.alpha = 0;
+    pixmap = WMCreateBlendedPixmapFromFile(wmscr, file, &gray);
+    wfree(file);
+
     if (!pixmap) {
         WMRemoveListItem(lPtr, index);
         return;
@@ -812,10 +816,10 @@ destroyInfoPanel(WCoreWindow *foo, void *data, XEvent *event)
         WMReleaseFont(thePanel->oldFont);
     }
     if (thePanel->icon) {
-	RDestroyImage(thePanel->icon);
+	RReleaseImage(thePanel->icon);
     }
     if (thePanel->pic) {
-	RDestroyImage(thePanel->pic);
+	RReleaseImage(thePanel->pic);
     }
 #endif /* SILLYNESS */
     WMUnmapWidget(thePanel);
@@ -915,12 +919,16 @@ XChangeKeyboardControl(dpy,KBBellPitch|KBBellDuration|KBBellPercent,&kc);
 	}
     } else if (panel->cycle < 30) {
 	RImage *image;
-	WMPixmap *pix;
+        WMPixmap *pix;
+        RColor gray;
+
+        gray.red = 0xae;  gray.green = 0xaa;
+        gray.blue = 0xae; gray.alpha = 0;
 
         image = RScaleImage(panel->icon, panel->pic->width, panel->pic->height);
 	RCombineImagesWithOpaqueness(image, panel->pic, panel->cycle*255/30);
-	pix = WMCreatePixmapFromRImage(panel->scr->wmscreen, image, 128);
-	RDestroyImage(image);
+	pix = WMCreateBlendedPixmapFromRImage(panel->scr->wmscreen, image, &gray);
+	RReleaseImage(image);
 	WMSetLabelImage(panel->logoL, pix);
 	WMReleasePixmap(pix);
     }
@@ -1080,52 +1088,31 @@ handleLogoPush(XEvent *event, void *data)
 	       
     if (!panel->timer && !broken && clicks > 0) {
         WMFont *font;
-        char *file;
-	char *path;
 
 	panel->x = 0;
 	clicks = 0;
 	if (!panel->icon) {
-	    file = wDefaultGetIconFile(panel->scr, "Logo", "WMPanel", False);
-	    if (!file) {
-		broken = 1;
-		return;
-	    }
-    
-	    path = FindImage(wPreferences.icon_path, file);
-	    if (!path) {
-		broken = 1;
-		return;
-	    }
-
-	    panel->icon = RLoadImage(panel->scr->rcontext, path, 0);
-	    wfree(path);
+            panel->icon = WMGetApplicationIconImage(panel->scr->wmscreen);
 	    if (!panel->icon) {
 		broken = 1;
 		return;
-	    }
+            } else {
+		RColor color;
+
+                color.red = 0xae;  color.green = 0xaa;
+                color.blue = 0xae; color.alpha = 0;
+
+                panel->icon = RCloneImage(panel->icon);
+		RCombineImageWithColor(panel->icon, &color);
+            }
 	}
 	if (!panel->pic) {
 	    panel->pic = RGetImageFromXPMData(panel->scr->rcontext, pic_data);
 	    if (!panel->pic) {
 		broken = 1;
-		RDestroyImage(panel->icon);
+		RReleaseImage(panel->icon);
 		panel->icon = NULL;
-		if (panel->pic) {
-		    RDestroyImage(panel->pic);
-		    panel->pic = NULL;
-		}
 		return;
-	    }
-
-	    {
-		RColor color;
-		color.red = 0xae;
-		color.green = 0xaa;
-		color.blue = 0xae;
-		color.alpha = 255;
-		RCombineImageWithColor(panel->icon, &color);
-		RCombineImageWithColor(panel->pic, &color);
 	    }
 	}
 
@@ -1215,7 +1202,10 @@ wShowInfoPanel(WScreen *scr)
     panel->win = WMCreateWindow(scr->wmscreen, "info");
     WMResizeWidget(panel->win, 382, 230);
     
-    logo = WMGetApplicationIconImage(scr->wmscreen);
+    logo = WMGetApplicationIconBlendedPixmap(scr->wmscreen, (RColor*)NULL);
+    if (!logo) {
+        logo = WMRetainPixmap(WMGetApplicationIconPixmap(scr->wmscreen));
+    }
     if (logo) {
 	size = WMGetPixmapSize(logo);
 	panel->logoL = WMCreateLabel(panel->win);
@@ -1227,6 +1217,7 @@ wShowInfoPanel(WScreen *scr)
 	WMCreateEventHandler(WMWidgetView(panel->logoL), ButtonPressMask,
 			     handleLogoPush, panel);
 #endif
+        WMReleasePixmap(logo);
     }
 
     panel->name1L = WMCreateLabel(panel->win);
@@ -1605,13 +1596,12 @@ getWindowMakerIconImage(WMScreen *scr)
         path = FindImage(wPreferences.icon_path, PLGetString(value));
 
         if (path) {
-            RImage *image;
+            RColor gray;
 
-            image = RLoadImage(WMScreenRContext(scr), path, 0);
-            if (image) {
-                pix = WMCreatePixmapFromRImage(scr, image, 0);
-                RDestroyImage(image);
-            }
+            gray.red = 0xae;  gray.green = 0xaa;
+            gray.blue = 0xae; gray.alpha = 0;
+
+            pix = WMCreateBlendedPixmapFromFile(scr, path, &gray);
             wfree(path);
         }
     }
