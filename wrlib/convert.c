@@ -696,6 +696,37 @@ RConvertImageMask(RContext *context, RImage *image, Pixmap *pixmap,
 }
 
 
+
+int 
+RSmoothScaleBorderConvertImage(RContext *context, RImage *image,
+			       int newWidth, int newHeight, int borderType,
+			       Pixmap *pixmap)
+{
+    return False;
+}
+
+
+
+
+int 
+RScaleBorderConvertImage(RContext *context, RImage *image,
+			 int newWidth, int newHeight, int borderType,
+			 Pixmap *pixmap)
+{
+    return False;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 Bool
 RGetClosestXColor(RContext *context, RColor *color, XColor *retColor)
 {

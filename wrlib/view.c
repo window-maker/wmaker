@@ -25,33 +25,29 @@ int main(int argc, char **argv)
     if (argc<2) 
 	img = RGetImageFromXPMData(ctx, image_name);
     else
-	img = RLoadImage(ctx, argv[1], argc>2 ? atol(argv[2]) : 0);
+	img = RLoadImage(ctx, argv[1], 0);
 
     if (!img) {
 	puts(RMessageForError(RErrorCode));
 	exit(1);
     }
+    if (argc > 2) {
+	RImage *tmp = img;
+	
+	img = RSmoothScaleImage(tmp, tmp->width*atol(argv[2]), 
+				tmp->height*atol(argv[2]));
+	RDestroyImage(tmp);
+    }
     if (!RConvertImage(ctx, img, &pix)) {
 	puts(RMessageForError(RErrorCode));
 	exit(1);
     }
-
     win = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 10, 10, img->width,
 			      img->height, 0, 0, 0);
-    XSelectInput(dpy, win, ExposureMask);
+    RDestroyImage(img);
+    XSetWindowBackgroundPixmap(dpy, win, pix);
+    XClearWindow(dpy, win);
     XMapRaised(dpy, win);
-    XSync(dpy, False); 
-    XCopyArea(dpy, pix, win, ctx->copy_gc, 0, 0, img->width, img->height, 
-	      0, 0);
-
-    XSync(dpy, False); 
-    while (1) {
-	XEvent ev;
-	XNextEvent(dpy, &ev);
-	if (ev.type==Expose)
-    	XCopyArea(dpy, pix, win, ctx->copy_gc, 0, 0, img->width, img->height, 
-	      0, 0);
-    }
     XFlush(dpy);
 
     getchar();

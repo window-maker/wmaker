@@ -39,8 +39,8 @@
 #define RLRASTER_H_
 
 
-/* version of the header for the library: 0.14 */
-#define WRASTER_HEADER_VERSION	14
+/* version of the header for the library: 0.15 */
+#define WRASTER_HEADER_VERSION	15
 
 
 #include <X11/Xlib.h>
@@ -203,6 +203,7 @@ enum {
 
 enum {
     RSunkenBevel	= -1,
+    RNoBevel		= 0,
     RRaisedBevel	= 1    
 };
 /* bw compat */
@@ -308,6 +309,8 @@ void RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
 
 RImage *RScaleImage(RImage *image, unsigned new_width, unsigned new_height);
 
+RImage *RSmoothScaleImage(RImage *src, int newWidth, int newHeight);
+    
 RImage *RMakeTiledImage(RImage *tile, unsigned width, unsigned height);
 
 RImage* RMakeCenteredImage(RImage *image, unsigned width, unsigned height,
