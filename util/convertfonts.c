@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <locale.h>
 #include <WINGs/WUtil.h>
 
 #include "../src/wconfig.h"

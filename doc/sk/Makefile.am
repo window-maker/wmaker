@@ -9,7 +9,6 @@ man_MANS = \
 	getstyle.1x \
 	wdwrite.1x \
 	wmsetbg.1x \
-	wsetfont.1x \
 	seticons.1x \
 	wmaker.1x \
 	wxcopy.1x
