@@ -168,7 +168,6 @@ RDestroyXImage(RContext *context, RXImage *rximage)
 {
 #ifndef XSHM
     XDestroyImage(rximage->image);
-    free(rximage);
 #else /* XSHM */
     if (rximage->is_shared) {
 	XSync(context->dpy, False);
@@ -182,6 +181,7 @@ RDestroyXImage(RContext *context, RXImage *rximage)
 	XDestroyImage(rximage->image);
     }
 #endif
+    free(rximage);
 }
 
 
