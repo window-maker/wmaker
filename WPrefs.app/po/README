@@ -2,6 +2,8 @@
 Instructions for translating po files can be found in the po/README directory
 in the top of the WindowMaker source tree.
 
+All files are now in UTF-8
+
 File	Language		Current Maintainer
 ------------------------------------------------------------------------------
 pt.po	Portuguese		Eliphas Levy Theodoro <eliphas@conectiva.com.br>

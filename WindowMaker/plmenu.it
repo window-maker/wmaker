@@ -39,9 +39,9 @@
   ("Xplaycd", EXEC, "xplaycd"),
   ("Xmixer", EXEC, "xmixer")
   ),
- ("Utilit‡",
+ ("Utilit√†",
   ("Calcolatrice", EXEC, "xcalc"),
-  ("Propriet‡ finestra", EXEC, "xprop | xmessage -center -title 'xprop' -file -"),
+  ("Propriet√† finestra", EXEC, "xprop | xmessage -center -title 'xprop' -file -"),
   ("Selezione Font", EXEC, "xfontsel"),
   ("Emulatore di terminale", EXEC, "xminicom"),
   ("Lente", EXEC, "xmag"),

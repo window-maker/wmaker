@@ -1,21 +1,21 @@
 # Catalan messages for WindowMaker WPrefs.app.
-# Copyright (C) 2002 Ernest AdroguÈ <eadrogue@gmx.net>.
+# Copyright (C) 2002 Ernest Adrogu√© <eadrogue@gmx.net>.
 # This file is distributed under the terms of the GNU General Public License.
 #
 # Version history:
 # 	WP-ver		author		email			date
-# 	0.45		Ernest AdroguÈ	eadrogue@gmx.net	04 Dec 2002
-# 	CVS-20030914	Ernest AdroguÈ	eadrogue@gmx.net	15 Set 2003
+# 	0.45		Ernest Adrogu√©	eadrogue@gmx.net	04 Dec 2002
+# 	CVS-20030914	Ernest Adrogu√©	eadrogue@gmx.net	15 Set 2003
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: wprefs 0.45\n"
 "POT-Creation-Date: 2003-09-16 22:59+0200\n"
 "PO-Revision-Date: 2003-09-16 23:15+0200\n"
-"Last-Translator: Ernest AdroguÈ <eadrogue@gmx.net>\n"
+"Last-Translator: Ernest Adrogu√© <eadrogue@gmx.net>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../../WPrefs.app/Appearance.c:1154
@@ -37,11 +37,11 @@ msgstr "Amo de la finestra enfocada"
 #: ../../WPrefs.app/Appearance.c:1570 ../../WPrefs.app/Appearance.c:1893
 #: ../../WPrefs.app/Font.c:408
 msgid "Menu Title"
-msgstr "TÌtol de men˙"
+msgstr "T√≠tol de men√∫"
 
 #: ../../WPrefs.app/Appearance.c:1575 ../../WPrefs.app/Appearance.c:1578
 msgid "Normal Item"
-msgstr "Õtem normal"
+msgstr "√çtem normal"
 
 #: ../../WPrefs.app/Appearance.c:1583
 msgid "Disabled Item"
@@ -57,15 +57,15 @@ msgstr "Textura"
 
 #: ../../WPrefs.app/Appearance.c:1794
 msgid "Titlebar of Focused Window"
-msgstr "Barra de tÌtol enfocada"
+msgstr "Barra de t√≠tol enfocada"
 
 #: ../../WPrefs.app/Appearance.c:1795
 msgid "Titlebar of Unfocused Windows"
-msgstr "Barra de tÌtol no enfocada"
+msgstr "Barra de t√≠tol no enfocada"
 
 #: ../../WPrefs.app/Appearance.c:1796
 msgid "Titlebar of Focused Window's Owner"
-msgstr "Barra de tÌtol semienfocada"
+msgstr "Barra de t√≠tol semienfocada"
 
 #: ../../WPrefs.app/Appearance.c:1797
 msgid "Window Resizebar"
@@ -73,11 +73,11 @@ msgstr "Barra inferior"
 
 #: ../../WPrefs.app/Appearance.c:1798
 msgid "Titlebar of Menus"
-msgstr "Barra de tÌtol de men˙"
+msgstr "Barra de t√≠tol de men√∫"
 
 #: ../../WPrefs.app/Appearance.c:1799
 msgid "Menu Items"
-msgstr "Õtems de men˙"
+msgstr "√çtems de men√∫"
 
 #: ../../WPrefs.app/Appearance.c:1800
 msgid "Icon Background"
@@ -106,7 +106,7 @@ msgstr "Extreu..."
 #: ../../WPrefs.app/Appearance.c:1845
 msgid "Extract texture(s) from a theme or a style file."
 msgstr ""
-"Extreu una textura (o v‡ries)\n"
+"Extreu una textura (o v√†ries)\n"
 "d'un fitxer de tema o estil."
 
 #: ../../WPrefs.app/Appearance.c:1855
@@ -131,31 +131,31 @@ msgstr "Color"
 
 #: ../../WPrefs.app/Appearance.c:1890
 msgid "Focused Window Title"
-msgstr "TÌtol de la finestra enfocada"
+msgstr "T√≠tol de la finestra enfocada"
 
 #: ../../WPrefs.app/Appearance.c:1891
 msgid "Unfocused Window Title"
-msgstr "TÌtol de finestra desenfocada"
+msgstr "T√≠tol de finestra desenfocada"
 
 #: ../../WPrefs.app/Appearance.c:1892
 msgid "Owner of Focused Window Title"
-msgstr "TÌtol de l'amo de la finestra enfocada"
+msgstr "T√≠tol de l'amo de la finestra enfocada"
 
 #: ../../WPrefs.app/Appearance.c:1894
 msgid "Menu Item Text"
-msgstr "Text d'Ìtem de men˙"
+msgstr "Text d'√≠tem de men√∫"
 
 #: ../../WPrefs.app/Appearance.c:1895
 msgid "Disabled Menu Item Text"
-msgstr "Text d'Ìtem de men˙ deshabilitat"
+msgstr "Text d'√≠tem de men√∫ deshabilitat"
 
 #: ../../WPrefs.app/Appearance.c:1896
 msgid "Menu Highlight Color"
-msgstr "Color d'Ìtem de men˙ seleccionat"
+msgstr "Color d'√≠tem de men√∫ seleccionat"
 
 #: ../../WPrefs.app/Appearance.c:1897
 msgid "Highlighted Menu Text Color"
-msgstr "Color de text d'Ìtem seleccionat"
+msgstr "Color de text d'√≠tem seleccionat"
 
 #: ../../WPrefs.app/Appearance.c:1936
 msgid "Background"
@@ -163,7 +163,7 @@ msgstr "Fons"
 
 #: ../../WPrefs.app/Appearance.c:1948 ../../WPrefs.app/TexturePanel.c:1504
 msgid "Browse..."
-msgstr "VÈs a..."
+msgstr "V√©s a..."
 
 #: ../../WPrefs.app/Appearance.c:1961
 msgid "Options"
@@ -171,7 +171,7 @@ msgstr "Opcions"
 
 #: ../../WPrefs.app/Appearance.c:1968
 msgid "Menu Style"
-msgstr "Estil dels men˙s"
+msgstr "Estil dels men√∫s"
 
 #: ../../WPrefs.app/Appearance.c:1996 ../../WPrefs.app/Configurations.c:242
 #: ../../WPrefs.app/Configurations.c:254 ../../WPrefs.app/Focus.c:288
@@ -187,7 +187,7 @@ msgstr "no s'ha pogut carregar el fitxer d'icona %s"
 
 #: ../../WPrefs.app/Appearance.c:2010
 msgid "Title Alignment"
-msgstr "AlineaciÛ del tÌtol"
+msgstr "Alineaci√≥ del t√≠tol"
 
 #: ../../WPrefs.app/Appearance.c:2017
 msgid "Left"
@@ -205,15 +205,15 @@ msgstr "Dreta"
 
 #: ../../WPrefs.app/Appearance.c:2247
 msgid "Appearance Preferences"
-msgstr "PreferËncies d'aparenÁa"
+msgstr "Prefer√®ncies d'aparen√ßa"
 
 #: ../../WPrefs.app/Appearance.c:2249
 msgid ""
 "Background texture configuration for windows,\n"
 "menus and icons."
 msgstr ""
-"ConfiguraciÛ de les textures de fons\n"
-"per a finestres, men˙s i icones."
+"Configuraci√≥ de les textures de fons\n"
+"per a finestres, men√∫s i icones."
 
 #: ../../WPrefs.app/Appearance.c:2294
 msgid "Extract Texture"
@@ -255,7 +255,7 @@ msgstr "Velocitat de lliscament de les icones"
 
 #: ../../WPrefs.app/Configurations.c:209
 msgid "Shade Animation Speed"
-msgstr "Velocitat de l'animaciÛ d'ombrejat"
+msgstr "Velocitat de l'animaci√≥ d'ombrejat"
 
 #: ../../WPrefs.app/Configurations.c:271
 msgid "Smooth Scaling"
@@ -268,8 +268,8 @@ msgid ""
 "down loading of background images considerably."
 msgstr ""
 "Escala les imatges de fons amb suavitat, eliminant\n"
-"l'efecte de \"pixelitzaciÛ\". AixÚ fa augmentar el temps\n"
-"de c‡rrega de les imatges considerablement."
+"l'efecte de \"pixelitzaci√≥\". Aix√≤ fa augmentar el temps\n"
+"de c√†rrega de les imatges considerablement."
 
 #: ../../WPrefs.app/Configurations.c:313
 msgid "Titlebar Style"
@@ -304,8 +304,8 @@ msgid ""
 "the explosion animation when undocking icons."
 msgstr ""
 "Habilita o deshabilita les funcions i animacions\n"
-"supËrflues, com per exemple l'imatge \"fantasme\" del\n"
-"Moll quan es canvia de lloc, o l'efecte d'explosiÛ\n"
+"sup√®rflues, com per exemple l'imatge \"fantasme\" del\n"
+"Moll quan es canvia de lloc, o l'efecte d'explosi√≥\n"
 "quan es desancora una icona."
 
 #: ../../WPrefs.app/Configurations.c:397
@@ -322,8 +322,8 @@ msgid ""
 msgstr ""
 "Habilita o deshabilita els efectes de so que se\n"
 "senten, per exemple, quan s'ombreja o es tanca una\n"
-"finestra. Per habilitar aquesta funciÛ necessiteu\n"
-"un mÚdul que es distribueix per separat i que podeu\n"
+"finestra. Per habilitar aquesta funci√≥ necessiteu\n"
+"un m√≤dul que es distribueix per separat i que podeu\n"
 "trobar a: http://shadowmere.student.utwente.nl/"
 
 #: ../../WPrefs.app/Configurations.c:419
@@ -331,7 +331,7 @@ msgid ""
 "Note: sound requires a module distributed\n"
 "separately"
 msgstr ""
-"Nota: els efectes de so requereixen un mÚdul que\n"
+"Nota: els efectes de so requereixen un m√≤dul que\n"
 "es distribueix per separat"
 
 #: ../../WPrefs.app/Configurations.c:429
@@ -344,7 +344,7 @@ msgid ""
 "on displays that support only 8bpp (PseudoColor)."
 msgstr ""
 "Nombre de colors que es reserva Window Maker en\n"
-"pantalles que nomÈs suporten 8bpp (PseudoColor)."
+"pantalles que nom√©s suporten 8bpp (PseudoColor)."
 
 #: ../../WPrefs.app/Configurations.c:438
 msgid "Disable dithering in any visual/depth"
@@ -355,7 +355,7 @@ msgid ""
 "More colors for\n"
 "applications"
 msgstr ""
-"MÈs colors per\n"
+"M√©s colors per\n"
 "les aplicacions"
 
 #: ../../WPrefs.app/Configurations.c:466
@@ -363,7 +363,7 @@ msgid ""
 "More colors for\n"
 "Window Maker"
 msgstr ""
-"MÈs colors per\n"
+"M√©s colors per\n"
 "Window Maker"
 
 #: ../../WPrefs.app/Configurations.c:521
@@ -376,69 +376,69 @@ msgid ""
 "toggling and number of colors to reserve for\n"
 "Window Maker on 8bit displays."
 msgstr ""
-"Velocitat de les animacions, estils de la barra de tÌtol,\n"
+"Velocitat de les animacions, estils de la barra de t√≠tol,\n"
 "diverses opcions generals i el nombre de colors que es\n"
 "reserva Window Maker en pantalles de 8 bits."
 
 #: ../../WPrefs.app/Expert.c:77
 msgid ""
 "Disable miniwindows (icons for miniaturized windows). For use with KDE/GNOME."
-msgstr "Deshabilitar les minifinestres (per a l'˙s amb KDE o GNOME)."
+msgstr "Deshabilitar les minifinestres (per a l'√∫s amb KDE o GNOME)."
 
 #: ../../WPrefs.app/Expert.c:78
 msgid "Do not set non-WindowMaker specific parameters (do not use xset)."
-msgstr "No usar par‡metres no especÌfics de Window Maker (no usar xset)."
+msgstr "No usar par√†metres no espec√≠fics de Window Maker (no usar xset)."
 
 #: ../../WPrefs.app/Expert.c:79
 msgid "Automatically save session when exiting Window Maker."
-msgstr "Desar la sessiÛ autom‡ticament en sortir de Window Maker."
+msgstr "Desar la sessi√≥ autom√†ticament en sortir de Window Maker."
 
 #: ../../WPrefs.app/Expert.c:80
 msgid "Use SaveUnder in window frames, icons, menus and other objects."
 msgstr ""
-"Usar la funciÛ SaveUnder en marcs de finestres, icones, men˙s i altres "
+"Usar la funci√≥ SaveUnder en marcs de finestres, icones, men√∫s i altres "
 "objectes."
 
 #: ../../WPrefs.app/Expert.c:81
 msgid "Use Windoze style cycling."
-msgstr "Usar l'estil de rotaciÛ de finestres de MS Windows."
+msgstr "Usar l'estil de rotaci√≥ de finestres de MS Windows."
 
 #: ../../WPrefs.app/Expert.c:82
 msgid "Disable confirmation panel for the Kill command."
-msgstr "No demanar confirmaciÛ per l'ordre \"Finalitzar\"."
+msgstr "No demanar confirmaci√≥ per l'ordre \"Finalitzar\"."
 
 #: ../../WPrefs.app/Expert.c:83
 msgid "Disable selection animation for selected icons."
-msgstr "Deshabilitar l'animaciÛ de selecciÛ per les icones seleccionades."
+msgstr "Deshabilitar l'animaci√≥ de selecci√≥ per les icones seleccionades."
 
 #: ../../WPrefs.app/Expert.c:84
 msgid "Smooth font edges (needs restart)."
-msgstr "Habilitar l'allisat de fonts (Ès necessari reiniciar)."
+msgstr "Habilitar l'allisat de fonts (√©s necessari reiniciar)."
 
 #: ../../WPrefs.app/Expert.c:123
 msgid "Expert User Preferences"
-msgstr "PreferËncies per a usuaris experimentats"
+msgstr "Prefer√®ncies per a usuaris experimentats"
 
 #: ../../WPrefs.app/Expert.c:125
 msgid ""
 "Options for people who know what they're doing...\n"
 "Also have some other misc. options."
 msgstr ""
-"Opcions de configuraciÛ per a usuaris experts.\n"
-"I tambÈs algunes altres opcions diverses."
+"Opcions de configuraci√≥ per a usuaris experts.\n"
+"I tamb√©s algunes altres opcions diverses."
 
 #: ../../WPrefs.app/Focus.c:80
 #, c-format
 msgid "bad option value %s for option FocusMode. Using default Manual"
 msgstr ""
-"el valor %s de l'opciÛ FocusModu no Ès v‡lid. S'usa el valor per omissiÛ "
+"el valor %s de l'opci√≥ FocusModu no √©s v√†lid. S'usa el valor per omissi√≥ "
 "\"Manual\""
 
 #: ../../WPrefs.app/Focus.c:94
 #, c-format
 msgid "bad option value %s for option ColormapMode. Using default Auto"
 msgstr ""
-"el valor %s de l'opciÛ ColormapMode no Ès v‡lid. S'usa el valor per omissiÛ "
+"el valor %s de l'opci√≥ ColormapMode no √©s v√†lid. S'usa el valor per omissi√≥ "
 "\"Auto\""
 
 #: ../../WPrefs.app/Focus.c:214
@@ -451,23 +451,23 @@ msgstr "Manual:  Fer clic sobre la finestra per tal d'enfocar-la"
 
 #: ../../WPrefs.app/Focus.c:229
 msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
-msgstr "Auto:  Enfoca la finestra que es troba sota el punter del ratolÌ"
+msgstr "Auto:  Enfoca la finestra que es troba sota el punter del ratol√≠"
 
 #: ../../WPrefs.app/Focus.c:243
 msgid "Install colormap in the window..."
-msgstr "Instal∑lar el mapa de color a la finestra..."
+msgstr "Instal¬∑lar el mapa de color a la finestra..."
 
 #: ../../WPrefs.app/Focus.c:248
 msgid "...that has the input focus."
-msgstr "...que est‡ enfocada."
+msgstr "...que est√† enfocada."
 
 #: ../../WPrefs.app/Focus.c:253
 msgid "...that is under the mouse pointer."
-msgstr "...que est‡ sota el punter del ratolÌ."
+msgstr "...que est√† sota el punter del ratol√≠."
 
 #: ../../WPrefs.app/Focus.c:262
 msgid "Automatic Window Raise Delay"
-msgstr "ElevaciÛ autom‡tica de la finestra"
+msgstr "Elevaci√≥ autom√†tica de la finestra"
 
 #: ../../WPrefs.app/Focus.c:319 ../../WPrefs.app/MouseSettings.c:601
 msgid "msec"
@@ -487,23 +487,23 @@ msgid ""
 "windows."
 msgstr ""
 "Enfocar les finestres noves\n"
-"autom‡ticament."
+"autom√†ticament."
 
 #: ../../WPrefs.app/Focus.c:363
 msgid "Window Focus Preferences"
-msgstr "PreferËncies d'enfocament de les finestres"
+msgstr "Prefer√®ncies d'enfocament de les finestres"
 
 #: ../../WPrefs.app/Focus.c:365
 msgid ""
 "Keyboard focus switching policy, colormap switching\n"
 "policy for 8bpp displays and other related options."
 msgstr ""
-"Mode d'alternanÁa d'enfocament de finestres, mapes de\n"
+"Mode d'alternan√ßa d'enfocament de finestres, mapes de\n"
 "color (per pantalles de 8bpp) i opcions relacionades."
 
 #: ../../WPrefs.app/Font.c:400 ../../WPrefs.app/Font.c:1872
 msgid "Window Title Font"
-msgstr "Font pel tÌtol de finestra"
+msgstr "Font pel t√≠tol de finestra"
 
 #: ../../WPrefs.app/Font.c:404
 msgid "Display"
@@ -511,15 +511,15 @@ msgstr "Pantalla"
 
 #: ../../WPrefs.app/Font.c:412
 msgid "Menu Item"
-msgstr "Õtem de men˙"
+msgstr "√çtem de men√∫"
 
 #: ../../WPrefs.app/Font.c:418
 msgid "Clip title"
-msgstr "TÌtol del Clip"
+msgstr "T√≠tol del Clip"
 
 #: ../../WPrefs.app/Font.c:422
 msgid "Icon Title"
-msgstr "TÌtol de les icones"
+msgstr "T√≠tol de les icones"
 
 #: ../../WPrefs.app/Font.c:726
 msgid "error capturing \"original\" tile image"
@@ -528,12 +528,12 @@ msgstr "error quan es capturava l'imatge \"original\" de l'icona"
 #: ../../WPrefs.app/Font.c:1130
 msgid "Could not locate font information file WPrefs.app/font.data"
 msgstr ""
-"No s'ha trobat el fitxer d'informaciÛ de tipus de lletra WPrefs.app/font.data"
+"No s'ha trobat el fitxer d'informaci√≥ de tipus de lletra WPrefs.app/font.data"
 
 #: ../../WPrefs.app/Font.c:1136
 msgid "Could not read font information file WPrefs.app/font.data"
 msgstr ""
-"No s'ha pogut llegir el fitxer d'informaciÛ de tipus de lletra WPrefs.app/"
+"No s'ha pogut llegir el fitxer d'informaci√≥ de tipus de lletra WPrefs.app/"
 "font.data"
 
 #: ../../WPrefs.app/Font.c:1147
@@ -541,8 +541,8 @@ msgid ""
 "Invalid data in font information file WPrefs.app/font.data.\n"
 "Encodings data not found."
 msgstr ""
-"Les dades del fitxer d'informaciÛ de tipus de lletra WPrefs.app/font.data\n"
-"no sÛn v‡lides. No s'han trobat les dades de codificaciÛ."
+"Les dades del fitxer d'informaci√≥ de tipus de lletra WPrefs.app/font.data\n"
+"no s√≥n v√†lides. No s'han trobat les dades de codificaci√≥."
 
 #: ../../WPrefs.app/Font.c:1152
 msgid "Current"
@@ -573,15 +573,15 @@ msgstr "D'acord"
 #: ../../WPrefs.app/Font.c:1307 ../../WPrefs.app/Menu.c:1627
 #: ../../WPrefs.app/WPrefs.c:808
 msgid "Warning"
-msgstr "AtenciÛ"
+msgstr "Atenci√≥"
 
 #: ../../WPrefs.app/Font.c:1503 ../../WPrefs.app/Menu.c:1404
 msgid "Yes"
-msgstr "SÌ"
+msgstr "S√≠"
 
 #: ../../WPrefs.app/Font.c:1507
 msgid "Auto"
-msgstr "Autom‡tic"
+msgstr "Autom√†tic"
 
 #: ../../WPrefs.app/Font.c:1873
 msgid "Large Display Font"
@@ -589,19 +589,19 @@ msgstr "Visor gran de font"
 
 #: ../../WPrefs.app/Font.c:1874
 msgid "Menu Title Font"
-msgstr "Font pel tÌtol de men˙"
+msgstr "Font pel t√≠tol de men√∫"
 
 #: ../../WPrefs.app/Font.c:1875
 msgid "Menu Item Font"
-msgstr "Font pels Ìtems de men˙"
+msgstr "Font pels √≠tems de men√∫"
 
 #: ../../WPrefs.app/Font.c:1876
 msgid "Clip Title Font"
-msgstr "Font pel tÌtol del Clip"
+msgstr "Font pel t√≠tol del Clip"
 
 #: ../../WPrefs.app/Font.c:1877
 msgid "Icon Title Font"
-msgstr "Font pel tÌtol de les icones"
+msgstr "Font pel t√≠tol de les icones"
 
 #: ../../WPrefs.app/Font.c:1887
 msgid "MultiByte"
@@ -609,7 +609,7 @@ msgstr "Multi-octet"
 
 #: ../../WPrefs.app/Font.c:1901
 msgid "Default Font Encodings"
-msgstr "Conjunt de car‡cters per omissiÛ"
+msgstr "Conjunt de car√†cters per omissi√≥"
 
 #: ../../WPrefs.app/Font.c:1917
 msgid "Smooth Fonts"
@@ -642,23 +642,23 @@ msgstr "Elimina"
 
 #: ../../WPrefs.app/Font.c:2095
 msgid "Font Preferences"
-msgstr "PreferËncies de tipus de lletres"
+msgstr "Prefer√®ncies de tipus de lletres"
 
 #: ../../WPrefs.app/Font.c:2096
 msgid "Font Configurations for Windows, Menus etc"
-msgstr "ConfiguraciÛ dels tipus de lletra per finestres, men˙s, et cetera."
+msgstr "Configuraci√≥ dels tipus de lletra per finestres, men√∫s, et cetera."
 
 #: ../../WPrefs.app/Icons.c:180
 msgid "Icon Positioning"
-msgstr "PosiciÛ de les icones"
+msgstr "Posici√≥ de les icones"
 
 #: ../../WPrefs.app/Icons.c:227
 msgid "Iconification Animation"
-msgstr "AnimaciÛ d'iconificaciÛ"
+msgstr "Animaci√≥ d'iconificaci√≥"
 
 #: ../../WPrefs.app/Icons.c:238
 msgid "Shrinking/Zooming"
-msgstr "ReducciÛ/AmpliaciÛ"
+msgstr "Reducci√≥/Ampliaci√≥"
 
 #: ../../WPrefs.app/Icons.c:239
 msgid "Spinning/Twisting"
@@ -675,11 +675,11 @@ msgstr "Cap"
 
 #: ../../WPrefs.app/Icons.c:254
 msgid "Auto-arrange icons"
-msgstr "Arranjar les icones autom‡ticament"
+msgstr "Arranjar les icones autom√†ticament"
 
 #: ../../WPrefs.app/Icons.c:256
 msgid "Keep icons and miniwindows arranged all the time."
-msgstr "MantÈ les icones i minifestres arranjades en tot moment."
+msgstr "Mant√© les icones i minifestres arranjades en tot moment."
 
 #: ../../WPrefs.app/Icons.c:262
 msgid "Omnipresent miniwindows"
@@ -687,7 +687,7 @@ msgstr "Minifinestres omnipresents"
 
 #: ../../WPrefs.app/Icons.c:264
 msgid "Make miniwindows be present in all workspaces."
-msgstr "Fa les minifinestres presents a totes les ‡rees de treball."
+msgstr "Fa les minifinestres presents a totes les √†rees de treball."
 
 #: ../../WPrefs.app/Icons.c:273
 msgid "Icon Size"
@@ -695,50 +695,50 @@ msgstr "Mida de les icones"
 
 #: ../../WPrefs.app/Icons.c:275
 msgid "The size of the dock/application icon and miniwindows"
-msgstr "Mida del moll, icones d'aplicaciÛ i minifinestres"
+msgstr "Mida del moll, icones d'aplicaci√≥ i minifinestres"
 
 #: ../../WPrefs.app/Icons.c:345
 msgid "Icon Preferences"
-msgstr "PreferËncies d'icones"
+msgstr "Prefer√®ncies d'icones"
 
 #: ../../WPrefs.app/Icons.c:347
 msgid ""
 "Icon/Miniwindow handling options. Icon positioning\n"
 "area, sizes of icons, miniaturization animation style."
 msgstr ""
-"Opcions d'icones i minifinestres. PosiciÛ, mides\n"
-"i estil de les animacions de miniaturitzaciÛ."
+"Opcions d'icones i minifinestres. Posici√≥, mides\n"
+"i estil de les animacions de miniaturitzaci√≥."
 
 #: ../../WPrefs.app/KeyboardSettings.c:73
 msgid "Initial Key Repeat"
-msgstr "RepeticiÛ inicial de tecla"
+msgstr "Repetici√≥ inicial de tecla"
 
 #: ../../WPrefs.app/KeyboardSettings.c:114
 msgid "Key Repeat Rate"
-msgstr "Taxa de repeticiÛ"
+msgstr "Taxa de repetici√≥"
 
 #: ../../WPrefs.app/KeyboardSettings.c:154
 msgid "Type here to test"
-msgstr "Teclejeu aquÌ per provar-ho"
+msgstr "Teclejeu aqu√≠ per provar-ho"
 
 #: ../../WPrefs.app/KeyboardSettings.c:173
 msgid "Keyboard Preferences"
-msgstr "PreferËncies del teclat"
+msgstr "Prefer√®ncies del teclat"
 
 #: ../../WPrefs.app/KeyboardSettings.c:175
 msgid "Not done"
-msgstr "En preparaciÛ"
+msgstr "En preparaci√≥"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:307 ../../WPrefs.app/Menu.c:360
 #: ../../WPrefs.app/TexturePanel.c:1535 ../../WPrefs.app/imagebrowser.c:100
 msgid "Cancel"
-msgstr "Cancel∑la"
+msgstr "Cancel¬∑la"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:308
 msgid "Press the desired shortcut key(s) or click Cancel to stop capturing."
 msgstr ""
-"Premeu la tecla o tecles que volgueu vincular i desprÈs feu clic sobre "
-"Cancel∑la."
+"Premeu la tecla o tecles que volgueu vincular i despr√©s feu clic sobre "
+"Cancel¬∑la."
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:328
 #: ../../WPrefs.app/KeyboardShortcuts.c:575 ../../WPrefs.app/Menu.c:371
@@ -757,7 +757,7 @@ msgstr "Accions"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:497
 msgid "Open applications menu"
-msgstr "Obrir el men˙ d'aplicacions"
+msgstr "Obrir el men√∫ d'aplicacions"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:498
 msgid "Open window list menu"
@@ -765,11 +765,11 @@ msgstr "Obrir la llista de finestres"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:499
 msgid "Open window commands menu"
-msgstr "Obrir el men˙ d'ordres de finestra"
+msgstr "Obrir el men√∫ d'ordres de finestra"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:500
 msgid "Hide active application"
-msgstr "Amagar l'aplicaciÛ activa"
+msgstr "Amagar l'aplicaci√≥ activa"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:501
 msgid "Hide other applications"
@@ -777,7 +777,7 @@ msgstr "Amagar les altres aplicacions"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:502
 msgid "Miniaturize active window"
-msgstr "Miniaturitzar l'aplicaciÛ activa"
+msgstr "Miniaturitzar l'aplicaci√≥ activa"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:503
 msgid "Close active window"
@@ -805,7 +805,7 @@ msgstr "Abaixar la finestra activa"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:509
 msgid "Raise/Lower window under mouse pointer"
-msgstr "Elevar/Abaixar la finestra sota el punter del ratolÌ"
+msgstr "Elevar/Abaixar la finestra sota el punter del ratol√≠"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:510
 msgid "Shade active window"
@@ -821,67 +821,67 @@ msgstr "Seleccionar la finestra activa"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:513
 msgid "Focus next window"
-msgstr "Enfocar la seg¸ent finestra"
+msgstr "Enfocar la seg√ºent finestra"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:514
 msgid "Focus previous window"
-msgstr "Enfocar la finestra prËvia"
+msgstr "Enfocar la finestra pr√®via"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:515
 msgid "Switch to next workspace"
-msgstr "Anar a l'‡rea de treball seg¸ent"
+msgstr "Anar a l'√†rea de treball seg√ºent"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:516
 msgid "Switch to previous workspace"
-msgstr "Anar a l'‡rea de treball prËvia"
+msgstr "Anar a l'√†rea de treball pr√®via"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:517
 msgid "Switch to next ten workspaces"
-msgstr "Saltar les deu ‡rees de treball seg¸ents"
+msgstr "Saltar les deu √†rees de treball seg√ºents"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:518
 msgid "Switch to previous ten workspaces"
-msgstr "Saltar les deu ‡rees de treball prËvies"
+msgstr "Saltar les deu √†rees de treball pr√®vies"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:519
 msgid "Switch to workspace 1"
-msgstr "Canviar a l'‡rea de treball 1"
+msgstr "Canviar a l'√†rea de treball 1"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:520
 msgid "Switch to workspace 2"
-msgstr "Canviar a l'‡rea de treball 2"
+msgstr "Canviar a l'√†rea de treball 2"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:521
 msgid "Switch to workspace 3"
-msgstr "Canviar a l'‡rea de treball 3"
+msgstr "Canviar a l'√†rea de treball 3"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:522
 msgid "Switch to workspace 4"
-msgstr "Canviar a l'‡rea de treball 4"
+msgstr "Canviar a l'√†rea de treball 4"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:523
 msgid "Switch to workspace 5"
-msgstr "Canviar a l'‡rea de treball 5"
+msgstr "Canviar a l'√†rea de treball 5"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:524
 msgid "Switch to workspace 6"
-msgstr "Canviar a l'‡rea de treball 6"
+msgstr "Canviar a l'√†rea de treball 6"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:525
 msgid "Switch to workspace 7"
-msgstr "Canviar a l'‡rea de treball 7"
+msgstr "Canviar a l'√†rea de treball 7"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:526
 msgid "Switch to workspace 8"
-msgstr "Canviar a l'‡rea de treball 8"
+msgstr "Canviar a l'√†rea de treball 8"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:527
 msgid "Switch to workspace 9"
-msgstr "Canviar a l'‡rea de treball 9"
+msgstr "Canviar a l'√†rea de treball 9"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:528
 msgid "Switch to workspace 10"
-msgstr "Canviar a l'‡rea de treball 10"
+msgstr "Canviar a l'√†rea de treball 10"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:529
 msgid "Shortcut for window 1"
@@ -925,7 +925,7 @@ msgstr "Drecera a la finestra 10"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:539
 msgid "Switch to Next Screen/Monitor"
-msgstr "Canviar a la seg¸ent pantalla/monitor"
+msgstr "Canviar a la seg√ºent pantalla/monitor"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:540
 msgid "Raise Clip"
@@ -953,7 +953,7 @@ msgstr "Oblida"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:631
 msgid "Keyboard Shortcut Preferences"
-msgstr "PreferËncies de vincles de tecla"
+msgstr "Prefer√®ncies de vincles de tecla"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:633
 msgid ""
@@ -961,8 +961,8 @@ msgid ""
 "as changing workspaces and opening menus."
 msgstr ""
 "Permet establir o canviar vincles de tecla per\n"
-"accions tals com canviar d'‡rea de treball o\n"
-"obrir men˙s."
+"accions tals com canviar d'√†rea de treball o\n"
+"obrir men√∫s."
 
 #: ../../WPrefs.app/Menu.c:278
 msgid "Select Program"
@@ -978,7 +978,7 @@ msgstr "Ordres d'exemple"
 
 #: ../../WPrefs.app/Menu.c:512
 msgid "Sample Submenus"
-msgstr "Submen˙s d'exemple"
+msgstr "Submen√∫s d'exemple"
 
 #: ../../WPrefs.app/Menu.c:526
 msgid "Run Program"
@@ -990,15 +990,15 @@ msgstr "Ordre interna"
 
 #: ../../WPrefs.app/Menu.c:528
 msgid "Submenu"
-msgstr "Submen˙"
+msgstr "Submen√∫"
 
 #: ../../WPrefs.app/Menu.c:529
 msgid "External Submenu"
-msgstr "Submen˙ extern"
+msgstr "Submen√∫ extern"
 
 #: ../../WPrefs.app/Menu.c:530
 msgid "Generated Submenu"
-msgstr "Submen˙ generat"
+msgstr "Submen√∫ generat"
 
 #: ../../WPrefs.app/Menu.c:531
 msgid "Directory Contents"
@@ -1006,7 +1006,7 @@ msgstr "Contingut d'un directori"
 
 #: ../../WPrefs.app/Menu.c:532
 msgid "Workspace Menu"
-msgstr "Men˙ d'‡rea"
+msgstr "Men√∫ d'√†rea"
 
 #: ../../WPrefs.app/Menu.c:533 ../../WPrefs.app/MouseSettings.c:840
 msgid "Window List Menu"
@@ -1066,15 +1066,15 @@ msgstr "Sortir de Window Maker"
 
 #: ../../WPrefs.app/Menu.c:608
 msgid "Debian Menu"
-msgstr "Men˙ de Debian"
+msgstr "Men√∫ de Debian"
 
 #: ../../WPrefs.app/Menu.c:611
 msgid "RedHat Menu"
-msgstr "Men˙ de RedHat"
+msgstr "Men√∫ de RedHat"
 
 #: ../../WPrefs.app/Menu.c:614
 msgid "Menu Conectiva"
-msgstr "Men˙ de Conectiva"
+msgstr "Men√∫ de Conectiva"
 
 #: ../../WPrefs.app/Menu.c:617 ../../WPrefs.app/Themes.c:250
 msgid "Themes"
@@ -1090,7 +1090,7 @@ msgstr "Imatge de fons (repetida)"
 
 #: ../../WPrefs.app/Menu.c:632
 msgid "Assorted XTerms"
-msgstr "V‡ries XTerms"
+msgstr "V√†ries XTerms"
 
 #: ../../WPrefs.app/Menu.c:634
 msgid "XTerm Yellow on Blue"
@@ -1130,7 +1130,7 @@ msgstr "Programa a executar"
 
 #: ../../WPrefs.app/Menu.c:687
 msgid "Browse"
-msgstr "VÈs a..."
+msgstr "V√©s a..."
 
 #: ../../WPrefs.app/Menu.c:698
 msgid "Run the program inside a Xterm"
@@ -1138,7 +1138,7 @@ msgstr "Executa en una XTerm"
 
 #: ../../WPrefs.app/Menu.c:708
 msgid "Path for Menu"
-msgstr "UbicaciÛ del men˙"
+msgstr "Ubicaci√≥ del men√∫"
 
 #: ../../WPrefs.app/Menu.c:721
 msgid ""
@@ -1149,9 +1149,9 @@ msgid ""
 "or\n"
 "/usr/X11R6/bin ~/xbin"
 msgstr ""
-"Entreu l'ubicaciÛ d'un fitxer que contingui el men˙, o\n"
+"Entreu l'ubicaci√≥ d'un fitxer que contingui el men√∫, o\n"
 "una llista de directoris amb els programes que voleu\n"
-"que apareguin al men˙. Per exemple:\n"
+"que apareguin al men√∫. Per exemple:\n"
 "~/GNUstep/Library/WindowMaker/menu, o\n"
 "/usr/X11R6/bin ~/xbin"
 
@@ -1164,15 +1164,15 @@ msgid ""
 "Enter a command that outputs a menu\n"
 "definition to stdout when invoked."
 msgstr ""
-"Entreu una ordre que generi una definiciÛ\n"
-"de men˙ a l'eixida est‡ndard quan s'invoca."
+"Entreu una ordre que generi una definici√≥\n"
+"de men√∫ a l'eixida est√†ndard quan s'invoca."
 
 #: ../../WPrefs.app/Menu.c:758
 msgid ""
 "Cache menu contents after opening for\n"
 "the first time"
 msgstr ""
-"Fer una cÚpia \"cache\" del men˙ quan\n"
+"Fer una c√≤pia \"cache\" del men√∫ quan\n"
 "s'obra per primera vegada"
 
 #: ../../WPrefs.app/Menu.c:769
@@ -1213,7 +1213,7 @@ msgstr "Mostrar totes les finestres"
 
 #: ../../WPrefs.app/Menu.c:858
 msgid "Exit X Session"
-msgstr "Sortir de la sessiÛ X"
+msgstr "Sortir de la sessi√≥ X"
 
 #: ../../WPrefs.app/Menu.c:859
 msgid "Restart Window Maker"
@@ -1225,11 +1225,11 @@ msgstr "Iniciar un altre gestor de finestres :("
 
 #: ../../WPrefs.app/Menu.c:862
 msgid "Save Current Session"
-msgstr "Desar la sessiÛ actual"
+msgstr "Desar la sessi√≥ actual"
 
 #: ../../WPrefs.app/Menu.c:863
 msgid "Clear Saved Session"
-msgstr "Oblidar la sessiÛ desada"
+msgstr "Oblidar la sessi√≥ desada"
 
 #: ../../WPrefs.app/Menu.c:864
 msgid "Refresh Screen"
@@ -1237,11 +1237,11 @@ msgstr "Refrescar la pantalla"
 
 #: ../../WPrefs.app/Menu.c:865
 msgid "Open Info Panel"
-msgstr "Obrir el panell d'informaciÛ"
+msgstr "Obrir el panell d'informaci√≥"
 
 #: ../../WPrefs.app/Menu.c:866
 msgid "Open Copyright Panel"
-msgstr "Obrir l'informaciÛ del copyright"
+msgstr "Obrir l'informaci√≥ del copyright"
 
 #: ../../WPrefs.app/Menu.c:872
 msgid "Window Manager to Start"
@@ -1264,17 +1264,17 @@ msgid ""
 msgstr ""
 "Instruccions:\n"
 "\n"
-"- afegiu Ìtems movent-los des de l'esquerra al men˙\n"
-"- moveu els Ìtems fora del men˙ per eliminar-los\n"
-"- canvieu la posiciÛ d'un Ìtem movent-lo dins del men˙\n"
-"- copieu un Ìtem movent-lo prement la tecla Control\n"
-"- feu doble clic en un Ìtem per canviar-li la etiqueta\n"
-"- feu clic en un Ìtem per canviar-ne les propietats"
+"- afegiu √≠tems movent-los des de l'esquerra al men√∫\n"
+"- moveu els √≠tems fora del men√∫ per eliminar-los\n"
+"- canvieu la posici√≥ d'un √≠tem movent-lo dins del men√∫\n"
+"- copieu un √≠tem movent-lo prement la tecla Control\n"
+"- feu doble clic en un √≠tem per canviar-li la etiqueta\n"
+"- feu clic en un √≠tem per canviar-ne les propietats"
 
 #: ../../WPrefs.app/Menu.c:1120
 #, c-format
 msgid "unknown command '%s' in menu"
-msgstr "ordre '%s' desconeguda en el men˙"
+msgstr "ordre '%s' desconeguda en el men√∫"
 
 #: ../../WPrefs.app/Menu.c:1152
 msgid ": Execute Program"
@@ -1286,11 +1286,11 @@ msgstr ": Ordre interna"
 
 #: ../../WPrefs.app/Menu.c:1160
 msgid ": Open a Submenu"
-msgstr ": Obrir submen˙"
+msgstr ": Obrir submen√∫"
 
 #: ../../WPrefs.app/Menu.c:1164
 msgid ": Program Generated Submenu"
-msgstr ": Submen˙ generat per un programa"
+msgstr ": Submen√∫ generat per un programa"
 
 #: ../../WPrefs.app/Menu.c:1168
 msgid ": Directory Contents Menu"
@@ -1298,7 +1298,7 @@ msgstr ": Contingut d'un directori"
 
 #: ../../WPrefs.app/Menu.c:1172
 msgid ": Open Workspaces Submenu"
-msgstr ": Obrir men˙ d'‡rea de treball"
+msgstr ": Obrir men√∫ d'√†rea de treball"
 
 #: ../../WPrefs.app/Menu.c:1176
 msgid ": Open Window List Submenu"
@@ -1306,16 +1306,16 @@ msgstr ": Obrir llista de finestres"
 
 #: ../../WPrefs.app/Menu.c:1401
 msgid "Remove Submenu"
-msgstr "Eliminar submen˙"
+msgstr "Eliminar submen√∫"
 
 #: ../../WPrefs.app/Menu.c:1402
 msgid ""
 "Removing this item will destroy all items inside\n"
 "the submenu. Do you really want to do that?"
 msgstr ""
-"Eliminant aquest element tambÈ eliminareu tots els\n"
-"elements que es trobin dins del submen˙.\n"
-"Esteu segurs que voleu fer aixÚ?"
+"Eliminant aquest element tamb√© eliminareu tots els\n"
+"elements que es trobin dins del submen√∫.\n"
+"Esteu segurs que voleu fer aix√≤?"
 
 #: ../../WPrefs.app/Menu.c:1404
 msgid "No"
@@ -1323,7 +1323,7 @@ msgstr "No"
 
 #: ../../WPrefs.app/Menu.c:1405
 msgid "Yes, don't ask again."
-msgstr "SÌ, no preguntis mÈs."
+msgstr "S√≠, no preguntis m√©s."
 
 #. if there is a localized plmenu for the tongue put it's filename here
 #: ../../WPrefs.app/Menu.c:1573 ../../WPrefs.app/Menu.c:1580
@@ -1334,7 +1334,7 @@ msgstr "%s/Library/WindowMaker/plmenu"
 #: ../../WPrefs.app/Menu.c:1589
 #, c-format
 msgid "Could not open default menu from '%s'"
-msgstr "No s'ha pogut obrir el men˙ per omissiÛ de '%s'"
+msgstr "No s'ha pogut obrir el men√∫ per omissi√≥ de '%s'"
 
 #: ../../WPrefs.app/Menu.c:1628
 msgid ""
@@ -1342,12 +1342,12 @@ msgid ""
 "by this tool. Do you want to discard the current menu\n"
 "to use this tool?"
 msgstr ""
-"Aquesta eina no suporta el format de men˙ usat\n"
-"actualment. Voleu descartar el men˙ actual?"
+"Aquesta eina no suporta el format de men√∫ usat\n"
+"actualment. Voleu descartar el men√∫ actual?"
 
 #: ../../WPrefs.app/Menu.c:1631
 msgid "Yes, Discard and Update"
-msgstr "SÌ, descarta i actualitza"
+msgstr "S√≠, descarta i actualitza"
 
 #: ../../WPrefs.app/Menu.c:1632
 msgid "No, Keep Current Menu"
@@ -1355,47 +1355,47 @@ msgstr "No, deixa el que hi ha ara"
 
 #: ../../WPrefs.app/Menu.c:1895
 msgid "Applications Menu Definition"
-msgstr "DefiniciÛ del men˙ d'aplicacions"
+msgstr "Definici√≥ del men√∫ d'aplicacions"
 
 #: ../../WPrefs.app/Menu.c:1897
 msgid "Edit the menu for launching applications."
-msgstr "Edita el men˙ per executar aplicacions."
+msgstr "Edita el men√∫ per executar aplicacions."
 
 #: ../../WPrefs.app/MenuPreferences.c:111
 msgid "Menu Scrolling Speed"
-msgstr "Velocitat de desplaÁament dels men˙s"
+msgstr "Velocitat de despla√ßament dels men√∫s"
 
 #: ../../WPrefs.app/MenuPreferences.c:160
 msgid "Submenu Alignment"
-msgstr "AlineaciÛ dels submen˙s"
+msgstr "Alineaci√≥ dels submen√∫s"
 
 #: ../../WPrefs.app/MenuPreferences.c:204
 msgid ""
 "Always open submenus inside the screen, instead of scrolling.\n"
 "Note: this is annoying."
-msgstr "Obrir sempre els submen˙s dins la pantalla, en lloc de desplaÁar-los."
+msgstr "Obrir sempre els submen√∫s dins la pantalla, en lloc de despla√ßar-los."
 
 #: ../../WPrefs.app/MenuPreferences.c:209
 msgid "Scroll off-screen menus when pointer is moved over them."
 msgstr ""
-"DesplaÁar els men˙s que no caben a la pantalla amb el punter del ratolÌ."
+"Despla√ßar els men√∫s que no caben a la pantalla amb el punter del ratol√≠."
 
 #: ../../WPrefs.app/MenuPreferences.c:229
 msgid "Menu Preferences"
-msgstr "PreferËncies de men˙s"
+msgstr "Prefer√®ncies de men√∫s"
 
 #: ../../WPrefs.app/MenuPreferences.c:231
 msgid ""
 "Menu usability related options. Scrolling speed,\n"
 "alignment of submenus etc."
 msgstr ""
-"Opcions relacionades amb l'˙s de men˙s. Velocitat\n"
-"de desplaÁament, alineaciÛ dels submen˙s, etc."
+"Opcions relacionades amb l'√∫s de men√∫s. Velocitat\n"
+"de despla√ßament, alineaci√≥ dels submen√∫s, etc."
 
 #: ../../WPrefs.app/MouseSettings.c:141
 msgid "Invalid mouse acceleration value. Must be a positive real value."
 msgstr ""
-"El valor d'acceleraciÛ del ratolÌ no Ès v‡lid. Ha de ser un nombre real "
+"El valor d'acceleraci√≥ del ratol√≠ no √©s v√†lid. Ha de ser un nombre real "
 "positiu."
 
 #: ../../WPrefs.app/MouseSettings.c:161
@@ -1403,14 +1403,14 @@ msgid ""
 "Invalid mouse acceleration threshold value. Must be the number of pixels to "
 "travel before accelerating."
 msgstr ""
-"El valor del llindar d'acceleraciÛ del ratolÌ no Ès v‡lid. Ha de ser el "
-"nombre de pÌxels que es recorren abans de comenÁar a accelerar."
+"El valor del llindar d'acceleraci√≥ del ratol√≠ no √©s v√†lid. Ha de ser el "
+"nombre de p√≠xels que es recorren abans de comen√ßar a accelerar."
 
 #: ../../WPrefs.app/MouseSettings.c:262 ../../WPrefs.app/MouseSettings.c:274
 #: ../../WPrefs.app/MouseSettings.c:286 ../../WPrefs.app/MouseSettings.c:298
 #, c-format
 msgid "bad value %s for option %s"
-msgstr "el valor %s de l'opciÛ %s no Ès v‡lid"
+msgstr "el valor %s de l'opci√≥ %s no √©s v√†lid"
 
 #: ../../WPrefs.app/MouseSettings.c:357
 #, c-format
@@ -1418,16 +1418,16 @@ msgid ""
 "modifier key %s for option ModifierKey was not recognized. Using %s as "
 "default"
 msgstr ""
-"la tecla de modificaciÛ %s en l'opciÛ ModifierKey Ès desconeguda. S'usa el "
-"valor per omissiÛ %s."
+"la tecla de modificaci√≥ %s en l'opci√≥ ModifierKey √©s desconeguda. S'usa el "
+"valor per omissi√≥ %s."
 
 #: ../../WPrefs.app/MouseSettings.c:382
 msgid "could not retrieve keyboard modifier mapping"
-msgstr "no s'han pogut obtenir els codis de la tecla de modificaciÛ"
+msgstr "no s'han pogut obtenir els codis de la tecla de modificaci√≥"
 
 #: ../../WPrefs.app/MouseSettings.c:477
 msgid "Mouse Speed"
-msgstr "Velocitat del ratolÌ"
+msgstr "Velocitat del ratol√≠"
 
 #: ../../WPrefs.app/MouseSettings.c:507
 msgid "Acceler.:"
@@ -1447,23 +1447,23 @@ msgstr "Prova"
 
 #: ../../WPrefs.app/MouseSettings.c:609
 msgid "Workspace Mouse Actions"
-msgstr "Accions del ratolÌ a l'‡rea de treball"
+msgstr "Accions del ratol√≠ a l'√†rea de treball"
 
 #: ../../WPrefs.app/MouseSettings.c:614
 msgid "Disable mouse actions"
-msgstr "Deshabilita els vincles de men˙"
+msgstr "Deshabilita els vincles de men√∫"
 
 #: ../../WPrefs.app/MouseSettings.c:620
 msgid "Left Button"
-msgstr "BotÛ esquerra"
+msgstr "Bot√≥ esquerra"
 
 #: ../../WPrefs.app/MouseSettings.c:630
 msgid "Middle Button"
-msgstr "BotÛ del mig"
+msgstr "Bot√≥ del mig"
 
 #: ../../WPrefs.app/MouseSettings.c:640
 msgid "Right Button"
-msgstr "BotÛ dret"
+msgstr "Bot√≥ dret"
 
 #: ../../WPrefs.app/MouseSettings.c:650
 msgid "Mouse Wheel"
@@ -1471,7 +1471,7 @@ msgstr "Roda"
 
 #: ../../WPrefs.app/MouseSettings.c:672
 msgid "Mouse Grab Modifier"
-msgstr "Tecla de modificaciÛ"
+msgstr "Tecla de modificaci√≥"
 
 #: ../../WPrefs.app/MouseSettings.c:674
 msgid ""
@@ -1480,8 +1480,8 @@ msgid ""
 "clicking inside the window."
 msgstr ""
 "La tecla modificadora a usar per les accions\n"
-"que impliquin arrossegar finestres amb el ratolÌ,\n"
-"clicant dins de la finestra en q¸estiÛ."
+"que impliquin arrossegar finestres amb el ratol√≠,\n"
+"clicant dins de la finestra en q√ºesti√≥."
 
 #: ../../WPrefs.app/MouseSettings.c:708
 #, c-format
@@ -1532,7 +1532,7 @@ msgstr "Mod5"
 
 #: ../../WPrefs.app/MouseSettings.c:839
 msgid "Applications Menu"
-msgstr "Men˙ d'aplicacions"
+msgstr "Men√∫ d'aplicacions"
 
 #: ../../WPrefs.app/MouseSettings.c:841
 msgid "Select Windows"
@@ -1540,29 +1540,29 @@ msgstr "Selecciona"
 
 #: ../../WPrefs.app/MouseSettings.c:844
 msgid "Switch Workspaces"
-msgstr "Canvia d'‡rea"
+msgstr "Canvia d'√†rea"
 
 #: ../../WPrefs.app/MouseSettings.c:849
 msgid "Mouse Preferences"
-msgstr "PreferËncies del ratolÌ"
+msgstr "Prefer√®ncies del ratol√≠"
 
 #: ../../WPrefs.app/MouseSettings.c:851
 msgid ""
 "Mouse speed/acceleration, double click delay,\n"
 "mouse button bindings etc."
 msgstr ""
-"Volocitat i acceleraciÛ del ratolÌ, retard\n"
+"Volocitat i acceleraci√≥ del ratol√≠, retard\n"
 "de doble clic, vincles dels botons, etc."
 
 #: ../../WPrefs.app/Paths.c:85
 msgid "bad value in option IconPath. Using default path list"
 msgstr ""
-"valor incorrecte a l'opciÛ IconPath. S'usa la llista de camins per omissiÛ"
+"valor incorrecte a l'opci√≥ IconPath. S'usa la llista de camins per omissi√≥"
 
 #: ../../WPrefs.app/Paths.c:102
 msgid "bad value in option PixmapPath. Using default path list"
 msgstr ""
-"valor incorrecte a l'opciÛ PixmapPath. S'usa la llista de camins per omissiÛ"
+"valor incorrecte a l'opci√≥ PixmapPath. S'usa la llista de camins per omissi√≥"
 
 #: ../../WPrefs.app/Paths.c:150
 msgid "Select directory"
@@ -1570,7 +1570,7 @@ msgstr "Trieu un directori"
 
 #: ../../WPrefs.app/Paths.c:266
 msgid "Icon Search Paths"
-msgstr "UbicaciÛ de les icones"
+msgstr "Ubicaci√≥ de les icones"
 
 #: ../../WPrefs.app/Paths.c:277 ../../WPrefs.app/Paths.c:308
 #: ../../WPrefs.app/TexturePanel.c:1312
@@ -1579,11 +1579,11 @@ msgstr "Afegeix"
 
 #: ../../WPrefs.app/Paths.c:297
 msgid "Pixmap Search Paths"
-msgstr "UbicaciÛ dels fitxers d'imatge"
+msgstr "Ubicaci√≥ dels fitxers d'imatge"
 
 #: ../../WPrefs.app/Paths.c:337
 msgid "Search Path Configuration"
-msgstr "ConfiguraciÛ dels camins de recerca"
+msgstr "Configuraci√≥ dels camins de recerca"
 
 #: ../../WPrefs.app/Paths.c:339
 msgid ""
@@ -1593,23 +1593,23 @@ msgstr "Ubicacions on buscar icones i mapes de bits."
 
 #: ../../WPrefs.app/Preferences.c:75
 msgid "OFF"
-msgstr "0 pÌxels"
+msgstr "0 p√≠xels"
 
 #: ../../WPrefs.app/Preferences.c:77
 msgid "1 pixel"
-msgstr "1 pÌxel"
+msgstr "1 p√≠xel"
 
 #. 2-4
 #: ../../WPrefs.app/Preferences.c:80
 #, c-format
 msgid "%i pixels"
-msgstr "%i pÌxels"
+msgstr "%i p√≠xels"
 
 #. >4
 #: ../../WPrefs.app/Preferences.c:83
 #, c-format
 msgid "%i pixels "
-msgstr "%i pÌxels "
+msgstr "%i p√≠xels "
 
 #: ../../WPrefs.app/Preferences.c:229
 msgid "Size Display"
@@ -1620,7 +1620,7 @@ msgid ""
 "The position or style of the window size\n"
 "display that's shown when a window is resized."
 msgstr ""
-"La posiciÛ o estil del visor de mida que\n"
+"La posici√≥ o estil del visor de mida que\n"
 "apareix quan una finestra es redimensiona."
 
 #: ../../WPrefs.app/Preferences.c:238 ../../WPrefs.app/Preferences.c:259
@@ -1637,7 +1637,7 @@ msgstr "Centre de la finestra"
 
 #: ../../WPrefs.app/Preferences.c:241
 msgid "Technical drawing-like"
-msgstr "Estil dibuix tËcnic"
+msgstr "Estil dibuix t√®cnic"
 
 #: ../../WPrefs.app/Preferences.c:242 ../../WPrefs.app/Preferences.c:262
 msgid "Disabled"
@@ -1645,14 +1645,14 @@ msgstr "Deshabilitat"
 
 #: ../../WPrefs.app/Preferences.c:250
 msgid "Position Display"
-msgstr "Visor de posiciÛ"
+msgstr "Visor de posici√≥"
 
 #: ../../WPrefs.app/Preferences.c:252
 msgid ""
 "The position or style of the window position\n"
 "display that's shown when a window is moved."
 msgstr ""
-"La posiciÛ o estil del visor de posiciÛ\n"
+"La posici√≥ o estil del visor de posici√≥\n"
 "que apareix quan es mou una finestra."
 
 #: ../../WPrefs.app/Preferences.c:270
@@ -1661,15 +1661,15 @@ msgstr "Mostrar text flotant per..."
 
 #: ../../WPrefs.app/Preferences.c:277
 msgid "incomplete window titles"
-msgstr "tÌtols incomplets de finestres"
+msgstr "t√≠tols incomplets de finestres"
 
 #: ../../WPrefs.app/Preferences.c:278
 msgid "miniwindow titles"
-msgstr "tÌtols de minifinestres"
+msgstr "t√≠tols de minifinestres"
 
 #: ../../WPrefs.app/Preferences.c:279
 msgid "application/dock icons"
-msgstr "icones ancorades o d'aplicaciÛ"
+msgstr "icones ancorades o d'aplicaci√≥"
 
 #: ../../WPrefs.app/Preferences.c:280
 msgid "internal help"
@@ -1681,19 +1681,19 @@ msgid ""
 "focus with keyboard."
 msgstr ""
 "Elevar la finestra enfocada amb\n"
-"el teclat autom‡ticament."
+"el teclat autom√†ticament."
 
 #: ../../WPrefs.app/Preferences.c:298
 msgid ""
 "Enable keyboard language\n"
 "switch button in window titlebars."
 msgstr ""
-"Mostrar el botÛ de canvi de\n"
+"Mostrar el bot√≥ de canvi de\n"
 "llenguatge a les finestres."
 
 #: ../../WPrefs.app/Preferences.c:307
 msgid "Workspace border"
-msgstr "Marc de l'‡rea de treball"
+msgstr "Marc de l'√†rea de treball"
 
 #: ../../WPrefs.app/Preferences.c:323
 msgid "Left/Right"
@@ -1705,7 +1705,7 @@ msgstr "Dalt/Baix"
 
 #: ../../WPrefs.app/Preferences.c:349
 msgid "Miscellaneous Ergonomic Preferences"
-msgstr "PreferËncies ergonÚmiques diverses"
+msgstr "Prefer√®ncies ergon√≤miques diverses"
 
 #: ../../WPrefs.app/Preferences.c:350
 msgid ""
@@ -1717,7 +1717,7 @@ msgstr ""
 
 #: ../../WPrefs.app/TexturePanel.c:323
 msgid "Saturation"
-msgstr "SaturaciÛ"
+msgstr "Saturaci√≥"
 
 #: ../../WPrefs.app/TexturePanel.c:325
 msgid "Brightness"
@@ -1725,7 +1725,7 @@ msgstr "Claror"
 
 #: ../../WPrefs.app/TexturePanel.c:373 ../../WPrefs.app/TexturePanel.c:380
 msgid "Hue"
-msgstr "MatÌs"
+msgstr "Mat√≠s"
 
 #: ../../WPrefs.app/TexturePanel.c:612
 msgid "Could not load the selected file: "
@@ -1737,7 +1737,7 @@ msgstr "Obrir imatge"
 
 #: ../../WPrefs.app/TexturePanel.c:696
 msgid "The selected file does not contain a supported image."
-msgstr "El fitxer seleccionat no contÈ cap tipus d'imatge suportat."
+msgstr "El fitxer seleccionat no cont√© cap tipus d'imatge suportat."
 
 #: ../../WPrefs.app/TexturePanel.c:947
 #, c-format
@@ -1759,7 +1759,7 @@ msgstr "Nom de la textura"
 
 #: ../../WPrefs.app/TexturePanel.c:1276
 msgid "Solid Color"
-msgstr "Color sÚlid"
+msgstr "Color s√≤lid"
 
 #: ../../WPrefs.app/TexturePanel.c:1277
 msgid "Gradient Texture"
@@ -1779,7 +1779,7 @@ msgstr "Imatge"
 
 #: ../../WPrefs.app/TexturePanel.c:1288
 msgid "Default Color"
-msgstr "Color per omissiÛ"
+msgstr "Color per omissi√≥"
 
 #: ../../WPrefs.app/TexturePanel.c:1300
 msgid "Gradient Colors"
@@ -1787,7 +1787,7 @@ msgstr "Colors del gradient"
 
 #: ../../WPrefs.app/TexturePanel.c:1396
 msgid "Direction"
-msgstr "DirecciÛ"
+msgstr "Direcci√≥"
 
 #: ../../WPrefs.app/TexturePanel.c:1424
 msgid "Gradient"
@@ -1836,7 +1836,7 @@ msgstr "Carrega"
 
 #: ../../WPrefs.app/Themes.c:185
 msgid "Install"
-msgstr "Instal∑la"
+msgstr "Instal¬∑la"
 
 #: ../../WPrefs.app/Themes.c:193
 msgid "Tile of The Day"
@@ -1848,11 +1848,11 @@ msgstr "Barra del dia"
 
 #: ../../WPrefs.app/WPrefs.c:260
 msgid "Window Maker Preferences"
-msgstr "PreferËncies de Window Maker"
+msgstr "Prefer√®ncies de Window Maker"
 
 #: ../../WPrefs.app/WPrefs.c:284
 msgid "Revert Page"
-msgstr "Tornar p‡gina"
+msgstr "Tornar p√†gina"
 
 #: ../../WPrefs.app/WPrefs.c:290
 msgid "Revert All"
@@ -1868,12 +1868,12 @@ msgstr "Ajuda flotant"
 
 #: ../../WPrefs.app/WPrefs.c:334
 msgid "Window Maker Preferences Utility"
-msgstr "Utilitat de preferËncies de Window Maker"
+msgstr "Utilitat de prefer√®ncies de Window Maker"
 
 #: ../../WPrefs.app/WPrefs.c:341
 #, c-format
 msgid "Version %s for Window Maker %s or newer"
-msgstr "VersiÛ %s per a Window Maker %s o posterior"
+msgstr "Versi√≥ %s per a Window Maker %s o posterior"
 
 #: ../../WPrefs.app/WPrefs.c:349
 msgid "Starting..."
@@ -1885,9 +1885,9 @@ msgid ""
 "Artwork: Marco van Hylckama Vlieg, Largo et al\n"
 "More Programming: James Thompson et al"
 msgstr ""
-"ProgramaciÛ i disseny: Alfredo K. Kojima\n"
+"Programaci√≥ i disseny: Alfredo K. Kojima\n"
 "Art: Marco van Hylckama Vlieg, Largo et al\n"
-"MÈs programaciÛ: James Thompson et al"
+"M√©s programaci√≥: James Thompson et al"
 
 #: ../../WPrefs.app/WPrefs.c:455
 #, c-format
@@ -1901,47 +1901,47 @@ msgstr "no s'ha pogut carregar el fitxer d'imatge %s:%s"
 
 #: ../../WPrefs.app/WPrefs.c:689
 msgid "Loading Window Maker configuration files..."
-msgstr "S'estan carregant els fitxers de configuraciÛ de Window Maker..."
+msgstr "S'estan carregant els fitxers de configuraci√≥ de Window Maker..."
 
 #: ../../WPrefs.app/WPrefs.c:693
 msgid "Initializing configuration panels..."
-msgstr "S'estan inicialitzant els panells de configuraciÛ..."
+msgstr "S'estan inicialitzant els panells de configuraci√≥..."
 
 #: ../../WPrefs.app/WPrefs.c:728
 msgid ""
 "WPrefs is free software and is distributed WITHOUT ANY\n"
 "WARRANTY under the terms of the GNU General Public License."
 msgstr ""
-"WPrefs Ès programari lliure i es distribueix sense CAP MENA\n"
+"WPrefs √©s programari lliure i es distribueix sense CAP MENA\n"
 "DE GARANTIA sota els termes de la GNU General Public License."
 
 #: ../../WPrefs.app/WPrefs.c:758 ../../WPrefs.app/WPrefs.c:838
 #, c-format
 msgid "Window Maker domain (%s) is corrupted!"
-msgstr "Domini de Window Maker (%s) malmËs!"
+msgstr "Domini de Window Maker (%s) malm√®s!"
 
 #: ../../WPrefs.app/WPrefs.c:762
 #, c-format
 msgid "Could not load Window Maker domain (%s) from defaults database."
 msgstr ""
 "No s'ha pogut carregar el domini de Window Maker (%s) de la base de dades "
-"per omissiÛ."
+"per omissi√≥."
 
 #: ../../WPrefs.app/WPrefs.c:778
 msgid "could not extract version information from Window Maker"
-msgstr "no s'ha pogut obtenir informaciÛ sobre la versiÛ de Window Maker"
+msgstr "no s'ha pogut obtenir informaci√≥ sobre la versi√≥ de Window Maker"
 
 #: ../../WPrefs.app/WPrefs.c:779
 msgid "Make sure wmaker is in your search path."
-msgstr "Assegureu-vos que wmaker es troba en el camÌ de recerca."
+msgstr "Assegureu-vos que wmaker es troba en el cam√≠ de recerca."
 
 #: ../../WPrefs.app/WPrefs.c:782
 msgid ""
 "Could not extract version from Window Maker. Make sure it is correctly "
 "installed and is in your PATH environment variable."
 msgstr ""
-"No s'ha pogut obtenir la versiÛ de Window Maker. Assegureu-vos que est‡ "
-"instal∑lat correctament i que es troba en el PATH."
+"No s'ha pogut obtenir la versi√≥ de Window Maker. Assegureu-vos que est√† "
+"instal¬∑lat correctament i que es troba en el PATH."
 
 #: ../../WPrefs.app/WPrefs.c:792
 msgid ""
@@ -1949,8 +1949,8 @@ msgid ""
 "installed and the path where it installed is in the PATH environment "
 "variable."
 msgstr ""
-"No s'ha pogut obtenir la versiÛ de Window Maker. Assegureu-vos que est‡ "
-"instal∑lat correctament i que el lloc on est‡ instal∑lat es troba en la "
+"No s'ha pogut obtenir la versi√≥ de Window Maker. Assegureu-vos que est√† "
+"instal¬∑lat correctament i que el lloc on est√† instal¬∑lat es troba en la "
 "variable d'entorn PATH."
 
 #: ../../WPrefs.app/WPrefs.c:799
@@ -1959,8 +1959,8 @@ msgid ""
 "WPrefs only supports Window Maker 0.18.0 or newer.\n"
 "The version installed is %i.%i.%i\n"
 msgstr ""
-"WPrefs nomÈs suporta Window Maker 0.18.0 o posterior.\n"
-"La versiÛ instal∑lada Ès %i.%i.%i\n"
+"WPrefs nom√©s suporta Window Maker 0.18.0 o posterior.\n"
+"La versi√≥ instal¬∑lada √©s %i.%i.%i\n"
 
 #: ../../WPrefs.app/WPrefs.c:806
 #, c-format
@@ -1968,8 +1968,8 @@ msgid ""
 "Window Maker %i.%i.%i, which is installed in your system, is not fully "
 "supported by this version of WPrefs."
 msgstr ""
-"Window Maker %i.%i.%i, que est‡ instal∑lat en el sistema, no est‡ suportat "
-"totalment per aquesta versiÛ de WPrefs."
+"Window Maker %i.%i.%i, que est√† instal¬∑lat en el sistema, no est√† suportat "
+"totalment per aquesta versi√≥ de WPrefs."
 
 #: ../../WPrefs.app/WPrefs.c:819
 #, c-format
@@ -1987,23 +1987,23 @@ msgid ""
 "bad speed value for option %s\n"
 ". Using default Medium"
 msgstr ""
-"valor de velocitat incorrecte a l'opciÛ %s.\n"
-"S'usa el valor per omissiÛ \"Medium\""
+"valor de velocitat incorrecte a l'opci√≥ %s.\n"
+"S'usa el valor per omissi√≥ \"Medium\""
 
 #: ../../WPrefs.app/WindowHandling.c:141
 #, c-format
 msgid "bad option value %s in WindowPlacement. Using default value"
 msgstr ""
-"valor %s incorrecte a l'opciÛ WindowPlacement. S'usa el valor per omissiÛ"
+"valor %s incorrecte a l'opci√≥ WindowPlacement. S'usa el valor per omissi√≥"
 
 #: ../../WPrefs.app/WindowHandling.c:163
 msgid "invalid data in option WindowPlaceOrigin. Using default (0,0)"
 msgstr ""
-"dada no v‡lida a l'opciÛ WindowPlaceOrigin. S'usa el valor per omissiÛ (0,0)"
+"dada no v√†lida a l'opci√≥ WindowPlaceOrigin. S'usa el valor per omissi√≥ (0,0)"
 
 #: ../../WPrefs.app/WindowHandling.c:243
 msgid "Window Placement"
-msgstr "UbicaciÛ de les finestres"
+msgstr "Ubicaci√≥ de les finestres"
 
 #: ../../WPrefs.app/WindowHandling.c:244
 msgid ""
@@ -2015,7 +2015,7 @@ msgstr ""
 
 #: ../../WPrefs.app/WindowHandling.c:250
 msgid "Automatic"
-msgstr "Autom‡tic"
+msgstr "Autom√†tic"
 
 #: ../../WPrefs.app/WindowHandling.c:251
 msgid "Random"
@@ -2031,11 +2031,11 @@ msgstr "En cascada"
 
 #: ../../WPrefs.app/WindowHandling.c:254
 msgid "Smart"
-msgstr "Intel∑ligent"
+msgstr "Intel¬∑ligent"
 
 #: ../../WPrefs.app/WindowHandling.c:260
 msgid "Placement Origin"
-msgstr "UbicaciÛ original"
+msgstr "Ubicaci√≥ original"
 
 #: ../../WPrefs.app/WindowHandling.c:321
 msgid "Opaque Move"
@@ -2048,7 +2048,7 @@ msgid ""
 "frame should be displayed.\n"
 msgstr ""
 "Si s'ha de moure o no el contingut d'una finestra\n"
-"quan Ès arrossegada o nomÈs es mostra un marc.\n"
+"quan √©s arrossegada o nom√©s es mostra un marc.\n"
 
 #: ../../WPrefs.app/WindowHandling.c:361
 msgid "When maximizing..."
@@ -2064,7 +2064,7 @@ msgstr "..no cobrir el moll"
 
 #: ../../WPrefs.app/WindowHandling.c:381
 msgid "Edge Resistance"
-msgstr "ResistËncia dels marges"
+msgstr "Resist√®ncia dels marges"
 
 #: ../../WPrefs.app/WindowHandling.c:383
 msgid ""
@@ -2073,7 +2073,7 @@ msgid ""
 "when moved against other windows or the edges\n"
 "of the screen."
 msgstr ""
-"La resistËncia dels marges Ès el factor amb que\n"
+"La resist√®ncia dels marges √©s el factor amb que\n"
 "una finestra es \"resisteix\" a ser moguda fora de\n"
 "la pantalla, o contra altres finestres."
 
@@ -2090,47 +2090,47 @@ msgid ""
 "Open dialogs in same workspace\n"
 "as their owners"
 msgstr ""
-"Obrir els quadres de di‡leg a la mateixa\n"
-"‡rea de treball que els seus propietaris."
+"Obrir els quadres de di√†leg a la mateixa\n"
+"√†rea de treball que els seus propietaris."
 
 #: ../../WPrefs.app/WindowHandling.c:450
 msgid "Window Handling Preferences"
-msgstr "PreferËncies d'administraciÛ de finestres"
+msgstr "Prefer√®ncies d'administraci√≥ de finestres"
 
 #: ../../WPrefs.app/WindowHandling.c:452
 msgid ""
 "Window handling options. Initial placement style\n"
 "edge resistance, opaque move etc."
 msgstr ""
-"Opcions d'administraciÛ de finestres. Estil de\n"
-"posicionament inicial, resistËncia a ser mogudes\n"
+"Opcions d'administraci√≥ de finestres. Estil de\n"
+"posicionament inicial, resist√®ncia a ser mogudes\n"
 "fora dels marges, moviment opac, et cetera."
 
 #: ../../WPrefs.app/Workspace.c:176
 msgid "Workspace Navigation"
-msgstr "NavegaciÛ entre ‡rees de treball"
+msgstr "Navegaci√≥ entre √†rees de treball"
 
 #: ../../WPrefs.app/Workspace.c:183
 msgid ""
 "wrap to the first workspace after the\n"
 "last workspace."
-msgstr "tornar a la primera ‡rea desprÈs de l'˙ltima"
+msgstr "tornar a la primera √†rea despr√©s de l'√∫ltima"
 
 #: ../../WPrefs.app/Workspace.c:205
 msgid "switch workspaces while dragging windows."
-msgstr "passar a l'‡rea del costat en arrossegar finestres fora dels marges"
+msgstr "passar a l'√†rea del costat en arrossegar finestres fora dels marges"
 
 #: ../../WPrefs.app/Workspace.c:227
 msgid "automatically create new workspaces."
-msgstr "crear noves ‡rees de treball autom‡ticament"
+msgstr "crear noves √†rees de treball autom√†ticament"
 
 #: ../../WPrefs.app/Workspace.c:250
 msgid ""
 "Position of workspace\n"
 "name display"
 msgstr ""
-"PosiciÛ del nom de\n"
-"l'‡rea de treball"
+"Posici√≥ del nom de\n"
+"l'√†rea de treball"
 
 #: ../../WPrefs.app/Workspace.c:269
 msgid "Disable"
@@ -2179,19 +2179,19 @@ msgid ""
 "a paper clip icon)."
 msgstr ""
 "Habilita o deshabilita el Clip (aquesta cosa\n"
-"que tÈ una icona amb una imatge d'un clip)."
+"que t√© una icona amb una imatge d'un clip)."
 
 #: ../../WPrefs.app/Workspace.c:364
 msgid "Workspace Preferences"
-msgstr "PreferËncies d'‡rea de treball"
+msgstr "Prefer√®ncies d'√†rea de treball"
 
 #: ../../WPrefs.app/Workspace.c:366
 msgid ""
 "Workspace navigation features.\n"
 "You can also enable/disable the Dock and Clip here."
 msgstr ""
-"Funcions de navegaciÛ entre ‡rees de treball. TambÈ podeu\n"
-"habilitar o deshabilitar tant el Moll com el Clip aquÌ."
+"Funcions de navegaci√≥ entre √†rees de treball. Tamb√© podeu\n"
+"habilitar o deshabilitar tant el Moll com el Clip aqu√≠."
 
 #: ../../WPrefs.app/imagebrowser.c:95
 msgid "View"
@@ -2212,7 +2212,7 @@ msgstr " -display <display>\tpantalla a utilitzar"
 
 #: ../../WPrefs.app/main.c:62
 msgid " --version\t\tprint version number and exit"
-msgstr " --version\t\tmostra la versiÛ i surt"
+msgstr " --version\t\tmostra la versi√≥ i surt"
 
 #: ../../WPrefs.app/main.c:63
 msgid " --help\t\tprint this message and exit"
@@ -2238,7 +2238,7 @@ msgstr "no s'ha pogut obrir la pantalla %s"
 
 #: ../../WPrefs.app/main.c:161
 msgid "could not initialize application"
-msgstr "no s'ha pogut inicialitzar l'aplicaciÛ"
+msgstr "no s'ha pogut inicialitzar l'aplicaci√≥"
 
 #~ msgid "- Custom -"
 #~ msgstr "- Personalitzat -"

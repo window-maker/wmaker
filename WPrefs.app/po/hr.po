@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: WindowMaker 0.80.2\n"
 "POT-Creation-Date: 1998-08-24 14:36:41-0300\n"
 "PO-Revision-Date: 1998-08-24 14:36:41-0300\n"
-"Last-Translator: Toni BiliÊ tbilic@oliver.efos.hr \n"
+"Last-Translator: Toni Biliƒá tbilic@oliver.efos.hr \n"
 "Language-Team: Croatian \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../../WPrefs/Configurations.c:142 ../../WPrefs/Configurations.c:148 ../../WPrefs/MouseSettings.c:510 ../../WPrefs/WindowHandling.c:270 ../../WPrefs/WindowHandling.c:282 ../../WPrefs/Workspace.c:71 ../../WPrefs/Workspace.c:77
 msgid "could not load icon %s"
-msgstr "ne mogu uËitati ikonu %s"
+msgstr "ne mogu uƒçitati ikonu %s"
 
 #: ../../WPrefs/Configurations.c:156 ../../WPrefs/Workspace.c:85
 msgid "could not process icon %s:"
@@ -23,7 +23,7 @@ msgstr "ne mogu procesirati ikonu %s"
 
 #: ../../WPrefs/Configurations.c:181 ../../WPrefs/Workspace.c:124
 msgid "could not load image file %s"
-msgstr "ne mogu uËitati image datoteku %s"
+msgstr "ne mogu uƒçitati image datoteku %s"
 
 #: ../../WPrefs/Configurations.c:195
 msgid "Icon Slide Speed"
@@ -35,7 +35,7 @@ msgstr "Brzina Shade animacije"
 
 #: ../../WPrefs/Configurations.c:234 ../../WPrefs/Configurations.c:246 ../../WPrefs/Focus.c:310 ../../WPrefs/Focus.c:321 ../../WPrefs/MenuPreferences.c:135 ../../WPrefs/MenuPreferences.c:146 ../../WPrefs/MenuPreferences.c:174 ../../WPrefs/MenuPreferences.c:189 ../../WPrefs/MouseSettings.c:538 ../../WPrefs/MouseSettings.c:549 ../../WPrefs/MouseSettings.c:604 ../../WPrefs/MouseSettings.c:615 ../../WPrefs/MouseSettings.c:651 ../../WPrefs/MouseSettings.c:666 ../../WPrefs/MouseSettings.c:682 ../../WPrefs/WPrefs.c:398 ../../WPrefs/WPrefs.c:416
 msgid "could not load icon file %s"
-msgstr "ne mogu uËitati ikonu %s"
+msgstr "ne mogu uƒçitati ikonu %s"
 
 #: ../../WPrefs/Configurations.c:262
 msgid "Titlebar Style"
@@ -67,15 +67,15 @@ msgstr "Dithering colormap for 8bpp"
 
 #: ../../WPrefs/Configurations.c:369
 msgid "Disable dithering in any visual/depth"
-msgstr "OnemoguÊi dithering za bilo koji visual/dubinu"
+msgstr "Onemoguƒái dithering za bilo koji visual/dubinu"
 
 #: ../../WPrefs/Configurations.c:390
 msgid "More colors for applications"
-msgstr "Joπ boja za aplikacije"
+msgstr "Jo≈° boja za aplikacije"
 
 #: ../../WPrefs/Configurations.c:397
 msgid "More colors for WindowMaker"
-msgstr "Joπ boja za WindowMaker"
+msgstr "Jo≈° boja za WindowMaker"
 
 #: ../../WPrefs/Configurations.c:450
 msgid "Other Configurations"
@@ -95,11 +95,11 @@ msgstr "Koristi SaveUnder u okvirima prozora, ikona, izbornika i drugih objekata
 
 #: ../../WPrefs/Expert.c:73
 msgid "Disable cycling color highlighting of icons."
-msgstr "OnemuguÊi cycling color highlighting of icons."
+msgstr "Onemuguƒái cycling color highlighting of icons."
 
 #: ../../WPrefs/Expert.c:103
 msgid "Expert User Preferences"
-msgstr "StruËne postavke"
+msgstr "Struƒçne postavke"
 
 #: ../../WPrefs/Focus.c:79
 msgid "bad option value %s for option FocusMode. Using default Manual"
@@ -124,8 +124,8 @@ msgid ""
 "including the root window."
 msgstr ""
 "Postavljanje fokusa na prozor\n"
-"ispod pokazivaËa miπa,\n"
-"ukljuËujuÊi i root prozor."
+"ispod pokazivaƒça mi≈°a,\n"
+"ukljuƒçujuƒái i root prozor."
 
 #: ../../WPrefs/Focus.c:199
 msgid ""
@@ -134,11 +134,11 @@ msgid ""
 "except the root window."
 msgstr ""
 "Postavljanje fokusa na prozor ispod\n"
-"pokazivaËa miπa, osim root prozora."
+"pokazivaƒça mi≈°a, osim root prozora."
 
 #: ../../WPrefs/Focus.c:243
 msgid "Input Focus Mode"
-msgstr "NaËin fokusiranja"
+msgstr "Naƒçin fokusiranja"
 
 #: ../../WPrefs/Focus.c:248
 msgid "Click window to focus"
@@ -146,7 +146,7 @@ msgstr "Klikni prozor za fokus"
 
 #: ../../WPrefs/Focus.c:249
 msgid "Focus follows mouse"
-msgstr "Fokus prati miπa"
+msgstr "Fokus prati mi≈°a"
 
 #: ../../WPrefs/Focus.c:250
 msgid "\"Sloppy\" focus"
@@ -158,15 +158,15 @@ msgstr "Instaliraj colormap u prozor..."
 
 #: ../../WPrefs/Focus.c:270
 msgid "...that has the input focus."
-msgstr "πto ima fokus."
+msgstr "≈°to ima fokus."
 
 #: ../../WPrefs/Focus.c:275
 msgid "...that is under the mouse pointer."
-msgstr "πto je ispod kursora"
+msgstr "≈°to je ispod kursora"
 
 #: ../../WPrefs/Focus.c:284
 msgid "Automatic Window Raise Delay"
-msgstr "Automatsko zadræavanje podizanja prozora"
+msgstr "Automatsko zadr≈æavanje podizanja prozora"
 
 #: ../../WPrefs/Focus.c:341
 msgid "msec"
@@ -186,11 +186,11 @@ msgstr "Postavke fokusiranja prozora"
 
 #: ../../WPrefs/KeyboardSettings.c:72
 msgid "Initial Key Repeat"
-msgstr "Prvotno ponavljanje kljuËa"
+msgstr "Prvotno ponavljanje kljuƒça"
 
 #: ../../WPrefs/KeyboardSettings.c:113
 msgid "Key Repeat Rate"
-msgstr "Razmak izmeu ponavljanja kljuËa"
+msgstr "Razmak izmeƒëu ponavljanja kljuƒça"
 
 #: ../../WPrefs/KeyboardSettings.c:153
 msgid "Type here to test"
@@ -202,11 +202,11 @@ msgstr "Postavke tastature"
 
 #: ../../WPrefs/KeyboardShortcuts.c:170 ../../WPrefs/Menu.c:923 ../../WPrefs/Menu.c:1290 ../../WPrefs/MenuGuru.c:263
 msgid "Cancel"
-msgstr "Otkaæi"
+msgstr "Otka≈æi"
 
 #: ../../WPrefs/KeyboardShortcuts.c:171
 msgid "Press the desired shortcut key(s) or click Cancel to stop capturing."
-msgstr "Pritisnite æeljenu kraticu ili kliknite Otkaæi za prekid hvatanja."
+msgstr "Pritisnite ≈æeljenu kraticu ili kliknite Otka≈æi za prekid hvatanja."
 
 #: ../../WPrefs/KeyboardShortcuts.c:189 ../../WPrefs/KeyboardShortcuts.c:390 ../../WPrefs/Menu.c:935 ../../WPrefs/Menu.c:1157
 msgid "Capture"
@@ -262,7 +262,7 @@ msgstr "Spusti aktivni prozor"
 
 #: ../../WPrefs/KeyboardShortcuts.c:332
 msgid "Raise/Lower window under mouse pointer"
-msgstr "Podigni/Spusti prozor ispod pokazivaËa miπa"
+msgstr "Podigni/Spusti prozor ispod pokazivaƒça mi≈°a"
 
 #: ../../WPrefs/KeyboardShortcuts.c:333
 msgid "Shade active window"
@@ -274,7 +274,7 @@ msgstr "Selektiraj aktivni prozor"
 
 #: ../../WPrefs/KeyboardShortcuts.c:335
 msgid "Focus next window"
-msgstr "Fokusiraj sljedeÊi prozor"
+msgstr "Fokusiraj sljedeƒái prozor"
 
 #: ../../WPrefs/KeyboardShortcuts.c:336
 msgid "Focus previous window"
@@ -282,7 +282,7 @@ msgstr "Fokusiraj prethodni prozor"
 
 #: ../../WPrefs/KeyboardShortcuts.c:337
 msgid "Switch to next workspace"
-msgstr "Prebacivanje na sljedeÊi radni prostor"
+msgstr "Prebacivanje na sljedeƒái radni prostor"
 
 #: ../../WPrefs/KeyboardShortcuts.c:338
 msgid "Switch to previous workspace"
@@ -290,7 +290,7 @@ msgstr "Prebacivanje na prethodni radni prostor"
 
 #: ../../WPrefs/KeyboardShortcuts.c:339
 msgid "Switch to next ten workspaces"
-msgstr "Prebacivanje na sljedeÊih 10 radnih prostora"
+msgstr "Prebacivanje na sljedeƒáih 10 radnih prostora"
 
 #: ../../WPrefs/KeyboardShortcuts.c:340
 msgid "Switch to previous ten workspaces"
@@ -374,7 +374,7 @@ msgstr "Kratica"
 
 #: ../../WPrefs/KeyboardShortcuts.c:384
 msgid "Clear"
-msgstr "OËisti"
+msgstr "Oƒçisti"
 
 #: ../../WPrefs/KeyboardShortcuts.c:445
 msgid "Keyboard Shortcut Preferences"
@@ -466,15 +466,15 @@ msgstr "Sakriti ostale"
 
 #: ../../WPrefs/Menu.c:1090
 msgid "Show All Windows"
-msgstr "Pokaæi sve prozore"
+msgstr "Poka≈æi sve prozore"
 
 #: ../../WPrefs/Menu.c:1091
 msgid "Exit WindowMaker"
-msgstr "IzaÊi iz Window Maker-a"
+msgstr "Izaƒái iz Window Maker-a"
 
 #: ../../WPrefs/Menu.c:1092
 msgid "Exit X Session"
-msgstr "IzaÊi is X sessiona"
+msgstr "Izaƒái is X sessiona"
 
 #: ../../WPrefs/Menu.c:1093
 msgid "Start window manager"
@@ -490,11 +490,11 @@ msgstr "Snimiti session"
 
 #: ../../WPrefs/Menu.c:1096
 msgid "Clear Session"
-msgstr "OËistiti session"
+msgstr "Oƒçistiti session"
 
 #: ../../WPrefs/Menu.c:1097
 msgid "Refresh Screen"
-msgstr "Osvjeæiti ekran"
+msgstr "Osvje≈æiti ekran"
 
 #: ../../WPrefs/Menu.c:1098
 msgid "Info Panel"
@@ -518,15 +518,15 @@ msgstr "Menu lista Staza/Direktorij"
 
 #: ../../WPrefs/Menu.c:1165
 msgid "Ask help to the Guru"
-msgstr "Traæi pomoÊ od Gurua"
+msgstr "Tra≈æi pomoƒá od Gurua"
 
 #: ../../WPrefs/Menu.c:1285
 msgid ""
 "The format of the current menu in ~/G/D/WMRootMenu is not supported by WPrefs. A new menu will be created.\n"
 "You can also replace ~/G/D/WMRootMenu with ~/G/L/W/plmenu to get the default menu."
 msgstr ""
-"Format trenutnog izbornika u ~/G/D/WMRootMenu nije podræan od WPrefs-a. Napravit Êu novi izbornik.\n"
-"Moæete zamjeniti ~/G/D/WMRootMenu da ~/G/L/W/plmenu da dobijete poËetni izbornik."
+"Format trenutnog izbornika u ~/G/D/WMRootMenu nije podr≈æan od WPrefs-a. Napravit ƒáu novi izbornik.\n"
+"Mo≈æete zamjeniti ~/G/D/WMRootMenu da ~/G/L/W/plmenu da dobijete poƒçetni izbornik."
 
 #: ../../WPrefs/Menu.c:1290 ../../WPrefs/Menu.c:1295 ../../WPrefs/WPrefs.c:585
 msgid "Warning"
@@ -539,7 +539,7 @@ msgstr "U redu"
 
 #: ../../WPrefs/Menu.c:1295
 msgid "Any changes made in this section will not be saved"
-msgstr "Promjene uËinjene u ovom dijelu neÊe biti snimljene"
+msgstr "Promjene uƒçinjene u ovom dijelu neƒáe biti snimljene"
 
 #: ../../WPrefs/Menu.c:1360
 msgid "Applications Menu Definition"
@@ -551,7 +551,7 @@ msgstr "Izbornik guru - odabrati tip"
 
 #: ../../WPrefs/MenuGuru.c:111 ../../WPrefs/MenuGuru.c:133 ../../WPrefs/MenuGuru.c:251
 msgid "Next"
-msgstr "SljedeÊi"
+msgstr "Sljedeƒái"
 
 #: ../../WPrefs/MenuGuru.c:114
 msgid "Menu Guru - Select Menu File"
@@ -578,52 +578,52 @@ msgid ""
 "This process will help you create a submenu which definition is located in another file or is created dynamically.\n"
 "What do you want to use as the contents of the submenu?"
 msgstr ""
-"Ovaj postupak Êe vam pomoÊi u kreiranju podizbornika Ëija se definicija nalazi u drugoj datoteci ili se stvara dinamiËki.\n"
-"©to æelite koristiti kao sadræaj podizbornika?"
+"Ovaj postupak ƒáe vam pomoƒái u kreiranju podizbornika ƒçija se definicija nalazi u drugoj datoteci ili se stvara dinamiƒçki.\n"
+"≈†to ≈æelite koristiti kao sadr≈æaj podizbornika?"
 
 #: ../../WPrefs/MenuGuru.c:279
 msgid "A file containing the menu definition in the plain text (non-property list) menu format."
-msgstr "Datoteka koja sadræi definiciju izbornika u Ëistom tekst formatu."
+msgstr "Datoteka koja sadr≈æi definiciju izbornika u ƒçistom tekst formatu."
 
 #: ../../WPrefs/MenuGuru.c:285
 msgid "The menu definition generated by a script/program read through a pipe."
-msgstr "Definicja izbornika generirana pomoÊu skripte/programa proËitanog kroz pipe."
+msgstr "Definicja izbornika generirana pomoƒáu skripte/programa proƒçitanog kroz pipe."
 
 #: ../../WPrefs/MenuGuru.c:291
 msgid "The files in one or more directories."
-msgstr "Datoteke u jednom ili viπe direktorija."
+msgstr "Datoteke u jednom ili vi≈°e direktorija."
 
 #: ../../WPrefs/MenuGuru.c:303
 msgid "Type the path for the menu file:"
-msgstr "Upiπi stazu za izbornik datoteku:"
+msgstr "Upi≈°i stazu za izbornik datoteku:"
 
 #: ../../WPrefs/MenuGuru.c:318
 msgid "The menu file must contain a menu in the plain text menu file format. This format is described in the menu files included with WindowMaker, probably at ~/GNUstep/Library/WindowMaker/menu"
-msgstr "Menu datoteka mora sadræavati izbornik u Ëistom tekst formatu. Ovaj format je opisan u menu datotekama u distribuciji, vjerojatno u ~/GNUstep/Library/WindowMaker/menu"
+msgstr "Menu datoteka mora sadr≈æavati izbornik u ƒçistom tekst formatu. Ovaj format je opisan u menu datotekama u distribuciji, vjerojatno u ~/GNUstep/Library/WindowMaker/menu"
 
 #: ../../WPrefs/MenuGuru.c:328
 msgid "Type the command that will generate the menu definition:"
-msgstr "Upiπi naredbu koja Êe generirati definiciju izbornika:"
+msgstr "Upi≈°i naredbu koja ƒáe generirati definiciju izbornika:"
 
 #: ../../WPrefs/MenuGuru.c:338
 msgid "The command supplied must generate and output a valid menu definition to stdout. This definition should be in the plain text menu file format, described in the menu files included with WindowMaker, usually at ~/GNUstep/Library/WindowMaker/menu"
-msgstr "Navedana naredba mora stvoriti i ispisati vaæeÊu definiciju izbornika na stdout. Ova definicija mora biti u formatu opisanom u ~/GNUstep/Library/WindowMaker/menu"
+msgstr "Navedana naredba mora stvoriti i ispisati va≈æeƒáu definiciju izbornika na stdout. Ova definicija mora biti u formatu opisanom u ~/GNUstep/Library/WindowMaker/menu"
 
 #: ../../WPrefs/MenuGuru.c:350 ../../WPrefs/MenuGuru.c:372 ../../WPrefs/MenuGuru.c:394
 msgid "Type the path for the directory. You can type more than one path by separating them with spaces."
-msgstr "Upiπite stazu za direktorij. Moæete upisati viπe od jedne staze odvajajuÊi ih razmacima."
+msgstr "Upi≈°ite stazu za direktorij. Mo≈æete upisati vi≈°e od jedne staze odvajajuƒái ih razmacima."
 
 #: ../../WPrefs/MenuGuru.c:361 ../../WPrefs/MenuGuru.c:383 ../../WPrefs/MenuGuru.c:405
 msgid "The menu generated will have an item for each file in the directory. The directories can contain program executables or data files (such as jpeg images)."
-msgstr "Generirani izbornik Êe imati stavku za svaku datoteku u direktoriju. Direktoriji mogu sadræavati izvrπne programe ili podatke (kao jpeg slike)."
+msgstr "Generirani izbornik ƒáe imati stavku za svaku datoteku u direktoriju. Direktoriji mogu sadr≈æavati izvr≈°ne programe ili podatke (kao jpeg slike)."
 
 #: ../../WPrefs/MenuGuru.c:415
 msgid "If the directory contain data files, type the command used to open these files. Otherwise, leave it in blank."
-msgstr "Ako direktorij sadræi podatkovne datoteke, upiπite naredbu koriπtenu za otvaranje tih datoteka, ili ostavit prazno."
+msgstr "Ako direktorij sadr≈æi podatkovne datoteke, upi≈°ite naredbu kori≈°tenu za otvaranje tih datoteka, ili ostavit prazno."
 
 #: ../../WPrefs/MenuGuru.c:426
 msgid "Each file in the directory will have an item and they will be opened with the supplied command.For example, if the directory contains image files and the command is \"xv -root\", each file in the directory will have a menu item like \"xv -root imagefile\"."
-msgstr "Svaka datoteka u direktoriju Êe imati stavku i bit Êe otvorene sa navedenom naredbom. Na primjer ako direktorij sadræi image datoteke i naredba je \"xv -root\", svaka datoteka u direktoriju Êe imati stavku \"xv -root image_datoteka\"."
+msgstr "Svaka datoteka u direktoriju ƒáe imati stavku i bit ƒáe otvorene sa navedenom naredbom. Na primjer ako direktorij sadr≈æi image datoteke i naredba je \"xv -root\", svaka datoteka u direktoriju ƒáe imati stavku \"xv -root image_datoteka\"."
 
 #: ../../WPrefs/MenuPreferences.c:112
 msgid "Menu Scrolling Speed"
@@ -639,11 +639,11 @@ msgid ""
 "Note: this can be an annoyance at some circumstances."
 msgstr ""
 "Uvijek otvori podizbornik unutar ekrana umjesto pomicanja.\n"
-"Upozorenje: ovo zna biti vrlo frustrirajuÊe u nekim okolnostima."
+"Upozorenje: ovo zna biti vrlo frustrirajuƒáe u nekim okolnostima."
 
 #: ../../WPrefs/MenuPreferences.c:209
 msgid "Scroll off-screen menus when pointer is moved over them."
-msgstr "Izbornike izvan ekrana pomakni unutra kada se pokazivaË miËe iznad njih"
+msgstr "Izbornike izvan ekrana pomakni unutra kada se pokazivaƒç miƒçe iznad njih"
 
 #: ../../WPrefs/MenuPreferences.c:229
 msgid "Menu Preferences"
@@ -651,15 +651,15 @@ msgstr "Postavke izbornika"
 
 #: ../../WPrefs/MouseSettings.c:154 ../../WPrefs/Text.c:181 ../../WPrefs/WPrefs.c:546 ../../WPrefs/WPrefs.c:551 ../../WPrefs/WPrefs.c:560 ../../WPrefs/WPrefs.c:570 ../../WPrefs/WPrefs.c:578 ../../WPrefs/WPrefs.c:602 ../../WPrefs/WPrefs.c:607
 msgid "Error"
-msgstr "Greπka"
+msgstr "Gre≈°ka"
 
 #: ../../WPrefs/MouseSettings.c:155
 msgid "Invalid mouse acceleration threshold value. Must be the number of pixels to travel before accelerating."
-msgstr "Kriva vrijednost ubrzavanja miπa. Mora biti broj pixela putovanja prije ubrzavanja."
+msgstr "Kriva vrijednost ubrzavanja mi≈°a. Mora biti broj pixela putovanja prije ubrzavanja."
 
 #: ../../WPrefs/MouseSettings.c:209
 msgid "mouse button %s not supported by WPrefs."
-msgstr "tipka miπe %s nije podræana od WPrefs-a."
+msgstr "tipka mi≈°e %s nije podr≈æana od WPrefs-a."
 
 #: ../../WPrefs/MouseSettings.c:243 ../../WPrefs/MouseSettings.c:254 ../../WPrefs/MouseSettings.c:265
 msgid "bad value %s for option %s"
@@ -667,15 +667,15 @@ msgstr "kriva vrijednost %s za opciju %s"
 
 #: ../../WPrefs/MouseSettings.c:325
 msgid "modifier key %s for option ModifierKey was not recognized. Using %s as default"
-msgstr "modifier kljuË %s za opciju ModifierKey nije prepoznat. Koristim %s."
+msgstr "modifier kljuƒç %s za opciju ModifierKey nije prepoznat. Koristim %s."
 
 #: ../../WPrefs/MouseSettings.c:350
 msgid "could not retrieve keyboard modifier mapping"
-msgstr "ne mogu povuÊi keyboard modifier mapping"
+msgstr "ne mogu povuƒái keyboard modifier mapping"
 
 #: ../../WPrefs/MouseSettings.c:497
 msgid "Mouse Speed"
-msgstr "Brzina miπa"
+msgstr "Brzina mi≈°a"
 
 #: ../../WPrefs/MouseSettings.c:564
 msgid "Threshold:"
@@ -683,7 +683,7 @@ msgstr "Prag:"
 
 #: ../../WPrefs/MouseSettings.c:579
 msgid "Double-Click Delay"
-msgstr "Razmak izmeu dvostrukog klika"
+msgstr "Razmak izmeƒëu dvostrukog klika"
 
 #: ../../WPrefs/MouseSettings.c:623
 msgid "Test"
@@ -691,11 +691,11 @@ msgstr "Test"
 
 #: ../../WPrefs/MouseSettings.c:633
 msgid "Workspace Mouse Actions"
-msgstr "Akcije miπa na radnom prostoru"
+msgstr "Akcije mi≈°a na radnom prostoru"
 
 #: ../../WPrefs/MouseSettings.c:638
 msgid "Disable mouse actions"
-msgstr "OnemoguÊi akcije miπa"
+msgstr "Onemoguƒái akcije mi≈°a"
 
 #: ../../WPrefs/MouseSettings.c:691
 msgid "Applications menu"
@@ -711,7 +711,7 @@ msgstr "Odaberi prozore"
 
 #: ../../WPrefs/MouseSettings.c:738
 msgid "Mouse Grab Modifier"
-msgstr "Modifier za \"hvatanje\" prozora miπom"
+msgstr "Modifier za \"hvatanje\" prozora mi≈°om"
 
 #: ../../WPrefs/MouseSettings.c:772
 msgid "could not create %s"
@@ -727,15 +727,15 @@ msgstr "ne mogu preimenovati datoteku %s u %s\n"
 
 #: ../../WPrefs/MouseSettings.c:896
 msgid "Mouse Preferences"
-msgstr "Postavke miπa"
+msgstr "Postavke mi≈°a"
 
 #: ../../WPrefs/Paths.c:82
 msgid "bad value in option IconPath. Using default path list"
-msgstr "kriva vrijednost IconPath opciji. Koristim poËetnu listu staza"
+msgstr "kriva vrijednost IconPath opciji. Koristim poƒçetnu listu staza"
 
 #: ../../WPrefs/Paths.c:99
 msgid "bad value in option PixmapPath. Using default path list"
-msgstr "kriva vrijednost u PixmapPath opciji. Koristim poËetnu listu staza"
+msgstr "kriva vrijednost u PixmapPath opciji. Koristim poƒçetnu listu staza"
 
 #: ../../WPrefs/Paths.c:301
 msgid "Icon Search Paths"
@@ -747,7 +747,7 @@ msgstr "Dodaj"
 
 #: ../../WPrefs/Paths.c:320 ../../WPrefs/Paths.c:356
 msgid "Remove"
-msgstr "Obriπi"
+msgstr "Obri≈°i"
 
 #: ../../WPrefs/Paths.c:337
 msgid "Pixmap Search Paths"
@@ -759,7 +759,7 @@ msgstr "Konfiguracija staza"
 
 #: ../../WPrefs/Preferences.c:151
 msgid "Size Display"
-msgstr "Prikaz veliËine"
+msgstr "Prikaz veliƒçine"
 
 #: ../../WPrefs/Preferences.c:156 ../../WPrefs/Preferences.c:172
 msgid "Corner of screen"
@@ -767,15 +767,15 @@ msgstr "Kut ekrana"
 
 #: ../../WPrefs/Preferences.c:157 ../../WPrefs/Preferences.c:173
 msgid "Center of screen"
-msgstr "Srediπte ekrana"
+msgstr "Sredi≈°te ekrana"
 
 #: ../../WPrefs/Preferences.c:158 ../../WPrefs/Preferences.c:174
 msgid "Center of resized window"
-msgstr "Srediπte prozora"
+msgstr "Sredi≈°te prozora"
 
 #: ../../WPrefs/Preferences.c:159
 msgid "Technical drawing-like"
-msgstr "Poput tehniËkog crtanja"
+msgstr "Poput tehniƒçkog crtanja"
 
 #: ../../WPrefs/Preferences.c:167
 msgid "Position Display"
@@ -783,7 +783,7 @@ msgstr "Prikaz pozicije"
 
 #: ../../WPrefs/Preferences.c:182
 msgid "Show balloon text for..."
-msgstr "Pokaæi tekst u balonu za..."
+msgstr "Poka≈æi tekst u balonu za..."
 
 #: ../../WPrefs/Preferences.c:189
 msgid "incomplete window titles"
@@ -803,7 +803,7 @@ msgstr "Podigni prozor pri mjenjanju fokusa tastaturom."
 
 #: ../../WPrefs/Preferences.c:210
 msgid "Keep keyboard language status for each window."
-msgstr "Zadræi raspored tastature za svaki prozor"
+msgstr "Zadr≈æi raspored tastature za svaki prozor"
 
 #: ../../WPrefs/Preferences.c:231
 msgid "Miscellaneous Ergonomic Preferences"
@@ -931,7 +931,7 @@ msgstr "Normalni tekst"
 
 #: ../../WPrefs/TextureAndColor.c:529
 msgid "Disabled Text"
-msgstr "OnemoguÊeni tekst"
+msgstr "Onemoguƒáeni tekst"
 
 #: ../../WPrefs/TextureAndColor.c:538
 msgid "Selected Items"
@@ -967,7 +967,7 @@ msgstr "Normalan"
 
 #: ../../WPrefs/TextureAndColor.c:631
 msgid "Collapsed"
-msgstr "Sruπen"
+msgstr "Sru≈°en"
 
 #: ../../WPrefs/TextureAndColor.c:643
 msgid "Icon Background"
@@ -1003,7 +1003,7 @@ msgstr "Verzija %s za Window Maker %s"
 
 #: ../../WPrefs/WPrefs.c:269
 msgid "Starting..."
-msgstr "PokreÊem..."
+msgstr "Pokreƒáem..."
 
 #: ../../WPrefs/WPrefs.c:275
 msgid ""
@@ -1014,11 +1014,11 @@ msgstr ""
 
 #: ../../WPrefs/WPrefs.c:363
 msgid "could not locate image file %s\n"
-msgstr "ne mogu naÊi image daoteku %s\n"
+msgstr "ne mogu naƒái image daoteku %s\n"
 
 #: ../../WPrefs/WPrefs.c:488
 msgid "Loading Window Maker configuration files..."
-msgstr "UËitavam konfiguracijske datoteke..."
+msgstr "Uƒçitavam konfiguracijske datoteke..."
 
 #: ../../WPrefs/WPrefs.c:492
 msgid "Initializing configuration panels..."
@@ -1026,19 +1026,19 @@ msgstr "Inicijaliziram konfiguracijske panele..."
 
 #: ../../WPrefs/WPrefs.c:545 ../../WPrefs/WPrefs.c:601
 msgid "Window Maker domain (%s) is corrupted!"
-msgstr "Window Maker domena (%s) je oπteÊena!"
+msgstr "Window Maker domena (%s) je o≈°teƒáena!"
 
 #: ../../WPrefs/WPrefs.c:549
 msgid "Could not load Window Maker domain (%s) from defaults database."
-msgstr "Ne mogu uËitati Window Maker domenu (%s) iz baze postavki."
+msgstr "Ne mogu uƒçitati Window Maker domenu (%s) iz baze postavki."
 
 #: ../../WPrefs/WPrefs.c:557
 msgid "could not extract version information from Window Maker"
-msgstr "ne mogu naÊi informaciju o verziji Window Maker-a"
+msgstr "ne mogu naƒái informaciju o verziji Window Maker-a"
 
 #: ../../WPrefs/WPrefs.c:558
 msgid "Make sure Window Maker is in your search path."
-msgstr "Provjerite da li je Window Maker u vaπem PATH-u."
+msgstr "Provjerite da li je Window Maker u va≈°em PATH-u."
 
 #: ../../WPrefs/WPrefs.c:561
 msgid "Could not extract version from Window Maker. Make sure it is correctly installed and is in your PATH environment variable."
@@ -1053,12 +1053,12 @@ msgid ""
 "WPrefs only supports Window Maker 0.18.0 or newer.\n"
 "The version installed is %i.%i.%i\n"
 msgstr ""
-"WPrefs podræava Window Maker 0.18.0 ili noviji.\n"
+"WPrefs podr≈æava Window Maker 0.18.0 ili noviji.\n"
 "Instalirana verzija je %i.%i.%i\n"
 
 #: ../../WPrefs/WPrefs.c:583
 msgid "Window Maker %i.%i.%i, which is installed in your system, is not fully supported by this version of WPrefs."
-msgstr "Window Maker %i.%i.%i, koji je instaliran, nije potpuno podræan ovom verzijom WPrefs-a."
+msgstr "Window Maker %i.%i.%i, koji je instaliran, nije potpuno podr≈æan ovom verzijom WPrefs-a."
 
 #: ../../WPrefs/WPrefs.c:590
 msgid "could not run \"wmaker -global_defaults_path\"."
@@ -1066,7 +1066,7 @@ msgstr "ne mogu pokrenuti \"wmaker -global_defaults_path\"."
 
 #: ../../WPrefs/WPrefs.c:605
 msgid "Could not load global Window Maker domain (%s)."
-msgstr "Ne mogu uËitati Window Maker globalnu domenu (%s)."
+msgstr "Ne mogu uƒçitati Window Maker globalnu domenu (%s)."
 
 #: ../../WPrefs/WPrefs.c:851
 msgid ""
@@ -1078,15 +1078,15 @@ msgstr ""
 
 #: ../../WPrefs/WindowHandling.c:107
 msgid "bad option value %s in WindowPlacement. Using default value"
-msgstr "kriva vrijednost opcije %s za WindowPlacement. Koristim poËetnu vrijednost"
+msgstr "kriva vrijednost opcije %s za WindowPlacement. Koristim poƒçetnu vrijednost"
 
 #: ../../WPrefs/WindowHandling.c:129
 msgid "invalid data in option WindowPlaceOrigin. Using default (0,0)"
-msgstr "krivi podaci u opciji WindowPlaceOrigin. Koristim poËetno (0,0)"
+msgstr "krivi podaci u opciji WindowPlaceOrigin. Koristim poƒçetno (0,0)"
 
 #: ../../WPrefs/WindowHandling.c:188
 msgid "Window Placement"
-msgstr "Poloæaj prozora"
+msgstr "Polo≈æaj prozora"
 
 #: ../../WPrefs/WindowHandling.c:193
 msgid "Automatic"
@@ -1094,11 +1094,11 @@ msgstr "Automatski"
 
 #: ../../WPrefs/WindowHandling.c:194
 msgid "Random"
-msgstr "SluËajno"
+msgstr "Sluƒçajno"
 
 #: ../../WPrefs/WindowHandling.c:195
 msgid "Manual"
-msgstr "RuËno"
+msgstr "Ruƒçno"
 
 #: ../../WPrefs/WindowHandling.c:196
 msgid "Cascade"
@@ -1106,7 +1106,7 @@ msgstr "Cascade"
 
 #: ../../WPrefs/WindowHandling.c:202
 msgid "Placement Origin"
-msgstr "PoËetni poloæaj"
+msgstr "Poƒçetni polo≈æaj"
 
 #: ../../WPrefs/WindowHandling.c:256
 msgid "Opaque Move"
@@ -1134,15 +1134,15 @@ msgstr "Navigacija radnim prostorima"
 
 #: ../../WPrefs/Workspace.c:161
 msgid "drag windows between workspaces."
-msgstr "povlaËenje prozora izmeu radnih prostora."
+msgstr "povlaƒçenje prozora izmeƒëu radnih prostora."
 
 #: ../../WPrefs/Workspace.c:186
 msgid "switch to first workspace when switching past the last workspace and vice-versa"
-msgstr "prebacivanje na prvi radni prostor pri prelaæenju sa zadnjeg i obrnuto."
+msgstr "prebacivanje na prvi radni prostor pri prela≈æenju sa zadnjeg i obrnuto."
 
 #: ../../WPrefs/Workspace.c:210
 msgid "create a new workspace when switching past the last workspace."
-msgstr "stvaranje novog radnog prostora pri prelaæenju sa zadnjeg."
+msgstr "stvaranje novog radnog prostora pri prela≈æenju sa zadnjeg."
 
 #: ../../WPrefs/Workspace.c:218
 msgid "Dock/Clip"
@@ -1162,11 +1162,11 @@ msgstr "opcije:"
 
 #: ../../WPrefs/main.c:58
 msgid " -display <display>\tdisplay to be used"
-msgstr " -display <disply>\tdisplay za koriπtenje"
+msgstr " -display <disply>\tdisplay za kori≈°tenje"
 
 #: ../../WPrefs/main.c:59
 msgid " -version\t\tprint version number and exit"
-msgstr " -version\t\tispiπi verziju u izai"
+msgstr " -version\t\tispi≈°i verziju u izaƒëi"
 
 #: ../../WPrefs/main.c:82
 msgid "too few arguments for %s"
@@ -1174,7 +1174,7 @@ msgstr "premalo argumenata za %s"
 
 #: ../../WPrefs/main.c:104
 msgid "X server does not support locale"
-msgstr "X server ne podræava locale"
+msgstr "X server ne podr≈æava locale"
 
 #: ../../WPrefs/main.c:107
 msgid "cannot set locale modifiers"
@@ -1188,16 +1188,16 @@ msgstr "ne mogu otvoriti display %s"
 msgid "could not initialize application"
 msgstr "ne mogu inicijalizirati aplikaciju"
 # msgid "could not extract version information from WindowMaker"
-# msgstr "ne mogu izvuËi informaciju o verziji WindowMaker-a"
+# msgstr "ne mogu izvuƒçi informaciju o verziji WindowMaker-a"
 # 
 # msgid "Could not load WindowMaker domain (%s) from defaults database."
-# msgstr "Ne mogu uËitati WindowMaker domenu (%s) iz poËetne baze."
+# msgstr "Ne mogu uƒçitati WindowMaker domenu (%s) iz poƒçetne baze."
 # 
 # msgid "Version %s for WindowMaker %s"
 # msgstr "Verzija %s za WindowMaker %s"
 # 
 # msgid "Could not extract version from WindowMaker. Make sure it is correctly installed."
-# msgstr "Ne mogu izvuËi verziju WindowMakera. Provjerite da je ispravno instaliran."
+# msgstr "Ne mogu izvuƒçi verziju WindowMakera. Provjerite da je ispravno instaliran."
 # 
 # msgid ""
 # "Programming/Design: Alfredo K. Kojima\n"
@@ -1207,19 +1207,19 @@ msgstr "ne mogu inicijalizirati aplikaciju"
 # "Artwork: Marco van Hylckama Vlieg"
 # 
 # msgid "WindowMaker domain (%s) is corrupted!"
-# msgstr "WindowMaker domena (%s) je oπteÊena!"
+# msgstr "WindowMaker domena (%s) je o≈°teƒáena!"
 # 
 # msgid "Raise window when switching focus with keyboard."
-# msgstr "PodiÊi prozor pri mjenjanju fokusa tastaturom."
+# msgstr "Podiƒái prozor pri mjenjanju fokusa tastaturom."
 # 
 # msgid "WindowMaker %i.%i.%i, which is installed in your system, is not fully supported by this version of WPrefs."
-# msgstr "WindowMaker %i.%i.%i, koji je instaliran na vaπem sistemu, nije potpuno podræan ovom verzijom WPrefs-a."
+# msgstr "WindowMaker %i.%i.%i, koji je instaliran na va≈°em sistemu, nije potpuno podr≈æan ovom verzijom WPrefs-a."
 # 
 # msgid "WindowMaker Preferences"
 # msgstr "Postavke WindowMaker-a"
 # 
 # msgid "Make sure WindowMaker is in your search path."
-# msgstr "Provjerite da je WindowMaker u vaπoj search stazi."
+# msgstr "Provjerite da je WindowMaker u va≈°oj search stazi."
 # 
 # msgid "...do not resize over dock"
 # msgstr "ne pokrivati dock"
@@ -1228,20 +1228,20 @@ msgstr "ne mogu inicijalizirati aplikaciju"
 # "WPrefs only supports WindowMaker 0.18.0 or newer.\n"
 # "The version installed is %i.%i.%i\n"
 # msgstr ""
-# "WPrefs podræava samo WindowMaker 0.18.0 ili noviji.\n"
+# "WPrefs podr≈æava samo WindowMaker 0.18.0 ili noviji.\n"
 # "Instalirana je verzija %i.%i.%i\n"
 # 
 # msgid "Could not load global WindowMaker domain (%s)."
-# msgstr "Ne mogu uËitati globlanu WindowMaker domenu (%s)."
+# msgstr "Ne mogu uƒçitati globlanu WindowMaker domenu (%s)."
 # 
 # msgid "Loading WindowMaker configuration files..."
-# msgstr "UËitavam WindowMaker konfiguracijske datoteke..."
+# msgstr "Uƒçitavam WindowMaker konfiguracijske datoteke..."
 # 
 # msgid "Aplications Menu Definition"
 # msgstr "Definiranje izbornika Aplikacije"
 # 
 # msgid "The command supplied must generate and output a valid menu definition to stdout. This definition should be in the plain text menu file format, described in the menu files included with WindowMaker, probably at ~/GNUstep/Library/WindowMaker/menu"
-# msgstr "Ponuena naredba mora generirati i ispisati vaæeÊu definicuju izbornika na stdout. Ova bi definicja trebala biti u Ëistom tekst menu formatu koji je opisan u menu datotekama iz distribucije, vjerojatno u ~/GNUstep/Library/WindowMaker/menu"
+# msgstr "Ponuƒëena naredba mora generirati i ispisati va≈æeƒáu definicuju izbornika na stdout. Ova bi definicja trebala biti u ƒçistom tekst menu formatu koji je opisan u menu datotekama iz distribucije, vjerojatno u ~/GNUstep/Library/WindowMaker/menu"
 # 
 # msgid ""
 # "bad speed value for option %s.\n"
@@ -1251,13 +1251,13 @@ msgstr "ne mogu inicijalizirati aplikaciju"
 # "Koristm Medium"
 # 
 # msgid "The format of the current menu file (%s) is not supported by WPrefs. A new menu will be created."
-# msgstr "Format trenutne datoteke izbornika (%s) nije podræan od strane WPrefs-a. Kreirat Êu novi izbornik."
+# msgstr "Format trenutne datoteke izbornika (%s) nije podr≈æan od strane WPrefs-a. Kreirat ƒáu novi izbornik."
 # 
 # msgid "Omnipresent miniwindows"
 # msgstr "SvugdjePrisutni mini prozori"
 # 
 # msgid "Error extracting version from WindowMaker. Make sure it is correctly installed."
-# msgstr "Greπka pri izvlaËenju verzije WindowMakera. Provjerite da je ispravno instaliran."
+# msgstr "Gre≈°ka pri izvlaƒçenju verzije WindowMakera. Provjerite da je ispravno instaliran."
 # 
 # msgid "Auto-arrange icons"
 # msgstr "Auto-pospremanje ikona"
@@ -1269,11 +1269,11 @@ msgstr "ne mogu inicijalizirati aplikaciju"
 # msgstr "Koristi SnimiIspod u ikonama, izbornicima i drugim objektima"
 # 
 # msgid "Type the path for the directory. You can type more than one path by separating them with spaces." 
-# msgstr "Upiπite stazu za direktorij. Moæete upisati viπe od jedne staze odvajajuÊi ih razmacima."
+# msgstr "Upi≈°ite stazu za direktorij. Mo≈æete upisati vi≈°e od jedne staze odvajajuƒái ih razmacima."
 # 
 # msgid "invalid data in option WindowPlacementOrigin. Using default (0,0)"
 # msgstr "krivi podaci u opciji WindowPlacementOrigin. Koristim (0,0)"
 # 
 # msgid "Icon Size"
-# msgstr "VeliËina ikone"
+# msgstr "Veliƒçina ikone"
 # 

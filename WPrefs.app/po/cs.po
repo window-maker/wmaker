@@ -2,22 +2,22 @@
 # Copyright (C) 1998 Free Software Foundation, Inc.
 # David Sauer <xsauer@fel.cvut.cz>, 1998.
 # Lukas Tinkl <caybro@seznam.cz>, 1999.
-# Jiøí Hnídek <jiri.hnidek@vslib.cz>, 2001.
+# JiÅ™Ã­ HnÃ­dek <jiri.hnidek@vslib.cz>, 2001.
 # WPrefs for WindowMaker 0.70.0
-# Èt pro  3 20:38:36 CET 1998 David Sauer
-# Pá dub 23 09:14:20 CEST 1999 David ©auer
-# St èec 14 10:30:00 CEST 1999 Luká¹ Tinkl
-# Ne øíj 14 21:07:53 CEST 2001 Jiøí Hnídek
+# ÄŒt pro  3 20:38:36 CET 1998 David Sauer
+# PÃ¡ dub 23 09:14:20 CEST 1999 David Å auer
+# St Äec 14 10:30:00 CEST 1999 LukÃ¡Å¡ Tinkl
+# Ne Å™Ã­j 14 21:07:53 CEST 2001 JiÅ™Ã­ HnÃ­dek
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: WPrefs for WindowMaker 0.70.0\n"
 "POT-Creation-Date: 2001-10-14 20:30+0200\n"
 "PO-Revision-Date: 2001-10-14 21:07+0000\n"
-"Last-Translator: Jiøí Hnídek <jiri.hnidek@vslib.cz>\n"
+"Last-Translator: JiÅ™Ã­ HnÃ­dek <jiri.hnidek@vslib.cz>\n"
 "Language-Team: czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: unknown\n"
 
 #: ../Appearance.c:1131
@@ -26,15 +26,15 @@ msgstr "Vyberte soubor"
 
 #: ../Appearance.c:1533
 msgid "Focused Window"
-msgstr "Zamìøené okno"
+msgstr "ZamÄ›Å™enÃ© okno"
 
 #: ../Appearance.c:1537
 msgid "Unfocused Window"
-msgstr "Nezamìøené okno"
+msgstr "NezamÄ›Å™enÃ© okno"
 
 #: ../Appearance.c:1541
 msgid "Owner of Focused Window"
-msgstr "Vlastník zamìøeného okna"
+msgstr "VlastnÃ­k zamÄ›Å™enÃ©ho okna"
 
 #: ../Appearance.c:1545 ../Appearance.c:1862
 msgid "Menu Title"
@@ -42,15 +42,15 @@ msgstr "Titulek menu"
 
 #: ../Appearance.c:1549 ../Appearance.c:1551
 msgid "Normal Item"
-msgstr "Normální"
+msgstr "NormÃ¡lnÃ­"
 
 #: ../Appearance.c:1555
 msgid "Disabled Item"
-msgstr "Nepøístupná"
+msgstr "NepÅ™Ã­stupnÃ¡"
 
 #: ../Appearance.c:1564
 msgid "Highlighted"
-msgstr "Vysvícená"
+msgstr "VysvÃ­cenÃ¡"
 
 #: ../Appearance.c:1755
 msgid "Texture"
@@ -58,19 +58,19 @@ msgstr "Textura"
 
 #: ../Appearance.c:1763
 msgid "Titlebar of Focused Window"
-msgstr "Titulek zamìøeného okna"
+msgstr "Titulek zamÄ›Å™enÃ©ho okna"
 
 #: ../Appearance.c:1764
 msgid "Titlebar of Unfocused Windows"
-msgstr "Titulek nezamìøeného okna"
+msgstr "Titulek nezamÄ›Å™enÃ©ho okna"
 
 #: ../Appearance.c:1765
 msgid "Titlebar of Focused Window's Owner"
-msgstr "Titulek zamìøeného vlastníka okna"
+msgstr "Titulek zamÄ›Å™enÃ©ho vlastnÃ­ka okna"
 
 #: ../Appearance.c:1766
 msgid "Window Resizebar"
-msgstr "Zvìt¹ovací rámeèek okna"
+msgstr "ZvÄ›tÅ¡ovacÃ­ rÃ¡meÄek okna"
 
 #: ../Appearance.c:1767
 msgid "Titlebar of Menus"
@@ -78,35 +78,35 @@ msgstr "Titulek menu"
 
 #: ../Appearance.c:1768
 msgid "Menu Items"
-msgstr "Polo¾ky menu"
+msgstr "PoloÅ¾ky menu"
 
 #: ../Appearance.c:1769
 msgid "Icon Background"
-msgstr "Pozadí ikon"
+msgstr "PozadÃ­ ikon"
 
 #: ../Appearance.c:1784
 msgid ""
 "Double click in the texture you want to use\n"
 "for the selected item."
 msgstr ""
-"Dvojkliknìte na texturu, kterou chcete pou¾ít\n"
-"pro vybranou polo¾ku."
+"DvojkliknÄ›te na texturu, kterou chcete pouÅ¾Ã­t\n"
+"pro vybranou poloÅ¾ku."
 
 #: ../Appearance.c:1798
 msgid "New"
-msgstr "Nová"
+msgstr "NovÃ¡"
 
 #: ../Appearance.c:1802
 msgid "Create a new texture."
-msgstr "Vytvoøit novou texturu."
+msgstr "VytvoÅ™it novou texturu."
 
 #: ../Appearance.c:1810
 msgid "Extract..."
-msgstr "Pøevzít..."
+msgstr "PÅ™evzÃ­t..."
 
 #: ../Appearance.c:1814
 msgid "Extract texture(s) from a theme or a style file."
-msgstr "Pøevzít texturu(y) ze souboru témat nebo stylù."
+msgstr "PÅ™evzÃ­t texturu(y) ze souboru tÃ©mat nebo stylÅ¯."
 
 #: ../Appearance.c:1824
 msgid "Edit"
@@ -130,35 +130,35 @@ msgstr "Barva"
 
 #: ../Appearance.c:1859
 msgid "Focused Window Title"
-msgstr "Titulek zamìøeného okna"
+msgstr "Titulek zamÄ›Å™enÃ©ho okna"
 
 #: ../Appearance.c:1860
 msgid "Unfocused Window Title"
-msgstr "Titulek nezamìøeného okna"
+msgstr "Titulek nezamÄ›Å™enÃ©ho okna"
 
 #: ../Appearance.c:1861
 msgid "Owner of Focused Window Title"
-msgstr "Titulek vlastníka zamìøeného okna"
+msgstr "Titulek vlastnÃ­ka zamÄ›Å™enÃ©ho okna"
 
 #: ../Appearance.c:1863
 msgid "Menu Item Text"
-msgstr "Text polo¾ky menu"
+msgstr "Text poloÅ¾ky menu"
 
 #: ../Appearance.c:1864
 msgid "Disabled Menu Item Text"
-msgstr "Text nepøístupné polo¾ky menu"
+msgstr "Text nepÅ™Ã­stupnÃ© poloÅ¾ky menu"
 
 #: ../Appearance.c:1865
 msgid "Menu Highlight Color"
-msgstr "Barva pro vysvícení menu"
+msgstr "Barva pro vysvÃ­cenÃ­ menu"
 
 #: ../Appearance.c:1866
 msgid "Highlighted Menu Text Color"
-msgstr "Barva textu vybraného menu"
+msgstr "Barva textu vybranÃ©ho menu"
 
 #: ../Appearance.c:1905
 msgid "Background"
-msgstr "Pozadí"
+msgstr "PozadÃ­"
 
 #: ../Appearance.c:1917 ../TexturePanel.c:1503
 msgid "Browse..."
@@ -179,11 +179,11 @@ msgstr "Styl menu"
 #: ../WPrefs.c:583
 #, c-format
 msgid "could not load icon file %s"
-msgstr "nelze naèíst soubor s ikonou %s"
+msgstr "nelze naÄÃ­st soubor s ikonou %s"
 
 #: ../Appearance.c:1979
 msgid "Title Alignment"
-msgstr "Zarovnání titulku"
+msgstr "ZarovnÃ¡nÃ­ titulku"
 
 #: ../Appearance.c:1986
 msgid "Left"
@@ -191,7 +191,7 @@ msgstr "Vlevo"
 
 #: ../Appearance.c:1989 ../TexturePanel.c:1517 ../Workspace.c:270
 msgid "Center"
-msgstr "Uprostøed"
+msgstr "UprostÅ™ed"
 
 #: ../Appearance.c:1992
 msgid "Right"
@@ -199,19 +199,19 @@ msgstr "Vpravo"
 
 #: ../Appearance.c:2216
 msgid "Appearance Preferences"
-msgstr "Nastavení vzhledu"
+msgstr "NastavenÃ­ vzhledu"
 
 #: ../Appearance.c:2218
 msgid ""
 "Background texture configuration for windows,\n"
 "menus and icons."
 msgstr ""
-"Nastavení textury na pozadí pro okna, menu a\n"
+"NastavenÃ­ textury na pozadÃ­ pro okna, menu a\n"
 "ikony."
 
 #: ../Appearance.c:2263
 msgid "Extract Texture"
-msgstr "Vyjmutí textury"
+msgstr "VyjmutÃ­ textury"
 
 #: ../Appearance.c:2283
 msgid "Textures"
@@ -219,18 +219,18 @@ msgstr "Textury"
 
 #: ../Appearance.c:2294 ../WPrefs.c:302
 msgid "Close"
-msgstr "Uzavøít"
+msgstr "UzavÅ™Ã­t"
 
 #: ../Appearance.c:2299
 msgid "Extract"
-msgstr "Pøevzít"
+msgstr "PÅ™evzÃ­t"
 
 #: ../Configurations.c:150 ../Configurations.c:156 ../MouseSettings.c:490
 #: ../WindowHandling.c:339 ../WindowHandling.c:351 ../Workspace.c:90
 #: ../Workspace.c:101
 #, c-format
 msgid "could not load icon %s"
-msgstr "nelze naèíst ikonu %s"
+msgstr "nelze naÄÃ­st ikonu %s"
 
 #: ../Configurations.c:164 ../Workspace.c:109
 #, c-format
@@ -240,19 +240,19 @@ msgstr "nelze zpracovat ikonu %s:"
 #: ../Configurations.c:189 ../Workspace.c:164
 #, c-format
 msgid "could not load image file %s"
-msgstr "ze souboru %s nelze naèíst obrázek"
+msgstr "ze souboru %s nelze naÄÃ­st obrÃ¡zek"
 
 #: ../Configurations.c:203
 msgid "Icon Slide Speed"
-msgstr "Rychlost klouzání ikony"
+msgstr "Rychlost klouzÃ¡nÃ­ ikony"
 
 #: ../Configurations.c:209
 msgid "Shade Animation Speed"
-msgstr "Rychlost zmìny okna na titulek"
+msgstr "Rychlost zmÄ›ny okna na titulek"
 
 #: ../Configurations.c:271
 msgid "Smooth Scaling"
-msgstr "Jemné pøechody"
+msgstr "JemnÃ© pÅ™echody"
 
 #: ../Configurations.c:272
 msgid ""
@@ -260,9 +260,9 @@ msgid ""
 "the `pixelization' effect. This will slow\n"
 "down loading of background images considerably."
 msgstr ""
-"Obrázky na pozadí budou 'hlad¹í' a zmizí tak\n"
-"efekt 'pixelizace'. Nahrávání obrázkù se v¹ak\n"
-"znaènì zpomalí."
+"ObrÃ¡zky na pozadÃ­ budou 'hladÅ¡Ã­' a zmizÃ­ tak\n"
+"efekt 'pixelizace'. NahrÃ¡vÃ¡nÃ­ obrÃ¡zkÅ¯ se vÅ¡ak\n"
+"znaÄnÄ› zpomalÃ­."
 
 #: ../Configurations.c:313
 msgid "Titlebar Style"
@@ -281,8 +281,8 @@ msgid ""
 "Disable/enable animations such as those shown\n"
 "for window miniaturization, shading etc."
 msgstr ""
-"Zapnout/Vypnout animace jako napø.\n"
-"minimalizace okna, srolování atd."
+"Zapnout/Vypnout animace jako napÅ™.\n"
+"minimalizace okna, srolovÃ¡nÃ­ atd."
 
 #: ../Configurations.c:376
 msgid "Superfluous"
@@ -295,9 +295,9 @@ msgid ""
 "dock when it's being moved to another side and\n"
 "the explosion animation when undocking icons."
 msgstr ""
-"Zapnout/Vypnout extra animace jako napø.\n"
-"poloprùhlednost doku pøi pøesouvání na\n"
-"druhou stranu nebo efekt exploze pro odkotvené\n"
+"Zapnout/Vypnout extra animace jako napÅ™.\n"
+"poloprÅ¯hlednost doku pÅ™i pÅ™esouvÃ¡nÃ­ na\n"
+"druhou stranu nebo efekt exploze pro odkotvenÃ©\n"
 "ikony."
 
 #: ../Configurations.c:397
@@ -312,17 +312,17 @@ msgid ""
 "for this. You can get it at:\n"
 "http://shadowmere.student.utwente.nl/"
 msgstr ""
-"Zapnout/Vypnout podporu zvuku, pøehrávanıch\n"
-"napø. bìhem zarolování nebo zavírání okna.\n"
-"K tomu ale budete potøebovat modul, kterı\n"
-"je distribuován oddìlenì. Mù¾ete ho získat na:\n"
+"Zapnout/Vypnout podporu zvuku, pÅ™ehrÃ¡vanÃ½ch\n"
+"napÅ™. bÄ›hem zarolovÃ¡nÃ­ nebo zavÃ­rÃ¡nÃ­ okna.\n"
+"K tomu ale budete potÅ™ebovat modul, kterÃ½\n"
+"je distribuovÃ¡n oddÄ›lenÄ›. MÅ¯Å¾ete ho zÃ­skat na:\n"
 "http://shadowmere.student.utwente.nl"
 
 #: ../Configurations.c:419
 msgid ""
 "Note: sound requires a module distributed\n"
 "separately"
-msgstr "Poznámka: zvuk vy¾aduje samostatnı modul"
+msgstr "PoznÃ¡mka: zvuk vyÅ¾aduje samostatnÃ½ modul"
 
 #: ../Configurations.c:429
 msgid "Dithering colormap for 8bpp"
@@ -333,18 +333,18 @@ msgid ""
 "Number of colors to reserve for Window Maker\n"
 "on displays that support only 8bpp (PseudoColor)."
 msgstr ""
-"Poèet barev, které je tøeba rezervovat pro Window Maker\n"
-"pro obrazovky, které podporují pouze 8bpp (PseudoBarvy)."
+"PoÄet barev, kterÃ© je tÅ™eba rezervovat pro Window Maker\n"
+"pro obrazovky, kterÃ© podporujÃ­ pouze 8bpp (PseudoBarvy)."
 
 #: ../Configurations.c:438
 msgid "Disable dithering in any visual/depth"
-msgstr "Zakázat jakékoli ditherování"
+msgstr "ZakÃ¡zat jakÃ©koli ditherovÃ¡nÃ­"
 
 #: ../Configurations.c:459
 msgid ""
 "More colors for\n"
 "applications"
-msgstr "Barvy aplikacím"
+msgstr "Barvy aplikacÃ­m"
 
 #: ../Configurations.c:466
 msgid ""
@@ -356,7 +356,7 @@ msgstr ""
 
 #: ../Configurations.c:521
 msgid "Other Configurations"
-msgstr "Dal¹í konfigurace"
+msgstr "DalÅ¡Ã­ konfigurace"
 
 #: ../Configurations.c:523
 msgid ""
@@ -364,92 +364,92 @@ msgid ""
 "toggling and number of colors to reserve for\n"
 "Window Maker on 8bit displays."
 msgstr ""
-"Rychlost animace, styly titulku, rùzná nastavení\n"
-"a poèet barev, kterı je tøeba rezervovat pro \n"
-"Window Maker na 8bitovıch obrazovkách."
+"Rychlost animace, styly titulku, rÅ¯znÃ¡ nastavenÃ­\n"
+"a poÄet barev, kterÃ½ je tÅ™eba rezervovat pro \n"
+"Window Maker na 8bitovÃ½ch obrazovkÃ¡ch."
 
 #: ../Expert.c:75
 msgid ""
 "Disable miniwindows (icons for miniaturized windows). For use with KDE/GNOME."
 msgstr ""
-"Zakázat miniokna (ikony pro miniaturizovaná okna). Pou¾itelné pro KDE/GNOME."
+"ZakÃ¡zat miniokna (ikony pro miniaturizovanÃ¡ okna). PouÅ¾itelnÃ© pro KDE/GNOME."
 
 #: ../Expert.c:76
 msgid "Do not set non-WindowMaker specific parameters (do not use xset)."
-msgstr "Nenastavovat parametry mimo WindowMaker (nepou¾ívat xset)"
+msgstr "Nenastavovat parametry mimo WindowMaker (nepouÅ¾Ã­vat xset)"
 
 #: ../Expert.c:77
 msgid "Automatically save session when exiting Window Maker."
-msgstr "Pøi ukonèení Window Makeru automaticky ulo¾it sezení"
+msgstr "PÅ™i ukonÄenÃ­ Window Makeru automaticky uloÅ¾it sezenÃ­"
 
 #: ../Expert.c:78
 msgid "Use SaveUnder in window frames, icons, menus and other objects."
-msgstr "Pou¾ívat SaveUnder pøi vykreslení rámeèkù, menu, ikon apod."
+msgstr "PouÅ¾Ã­vat SaveUnder pÅ™i vykreslenÃ­ rÃ¡meÄkÅ¯, menu, ikon apod."
 
 #: ../Expert.c:79
 msgid "Use Windoze style cycling."
-msgstr "Pou¾ívat Windousoidní styl opakování pøepínání oken."
+msgstr "PouÅ¾Ã­vat WindousoidnÃ­ styl opakovÃ¡nÃ­ pÅ™epÃ­nÃ¡nÃ­ oken."
 
 #: ../Expert.c:80
 msgid "Disable confirmation panel for the Kill command."
-msgstr "Zakázat potvrzovací panel po zabití aplikace."
+msgstr "ZakÃ¡zat potvrzovacÃ­ panel po zabitÃ­ aplikace."
 
 #: ../Expert.c:81
 msgid "Disable selection animation for selected icons."
-msgstr "Zakázat animace pro vybrané ikony."
+msgstr "ZakÃ¡zat animace pro vybranÃ© ikony."
 
 #: ../Expert.c:115
 msgid "Expert User Preferences"
-msgstr "Nastavení pro experty"
+msgstr "NastavenÃ­ pro experty"
 
 #: ../Expert.c:117
 msgid ""
 "Options for people who know what they're doing...\n"
 "Also have some other misc. options."
 msgstr ""
-"Nastavení pro lidi, kteøí vìdí, co dìlají...\n"
-"A rùzná dal¹í nastavení."
+"NastavenÃ­ pro lidi, kteÅ™Ã­ vÄ›dÃ­, co dÄ›lajÃ­...\n"
+"A rÅ¯znÃ¡ dalÅ¡Ã­ nastavenÃ­."
 
 #: ../Focus.c:80
 #, c-format
 msgid "bad option value %s for option FocusMode. Using default Manual"
-msgstr "chybná hodnota %s pro FocusMode. Pou¾ívám Manual"
+msgstr "chybnÃ¡ hodnota %s pro FocusMode. PouÅ¾Ã­vÃ¡m Manual"
 
 #: ../Focus.c:94
 #, c-format
 msgid "bad option value %s for option ColormapMode. Using default Auto"
-msgstr "chybná hodnota %s pro ColormapMode. Pou¾ívám standardní Auto"
+msgstr "chybnÃ¡ hodnota %s pro ColormapMode. PouÅ¾Ã­vÃ¡m standardnÃ­ Auto"
 
 #: ../Focus.c:214
 msgid "Input Focus Mode"
-msgstr "Zpùsob zamìøení okna"
+msgstr "ZpÅ¯sob zamÄ›Å™enÃ­ okna"
 
 #: ../Focus.c:222
 msgid "Manual:  Click on the window to set keyboard input focus"
-msgstr "Ruènì: «uk my¹i zamìøí okno."
+msgstr "RuÄnÄ›: Å¤uk myÅ¡i zamÄ›Å™Ã­ okno."
 
 #: ../Focus.c:229
 msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
 msgstr ""
-"Automaticky: Nastaví zamìøení\n"
+"Automaticky: NastavÃ­ zamÄ›Å™enÃ­\n"
 "vstupu na okno pod ukazatelem\n"
-"my¹i." 
+"myÅ¡i." 
 
 #: ../Focus.c:243
 msgid "Install colormap in the window..."
-msgstr "Nastavit mapu barev v oknì,"
+msgstr "Nastavit mapu barev v oknÄ›,"
 
 #: ../Focus.c:248
 msgid "...that has the input focus."
-msgstr "které má zamìøení."
+msgstr "kterÃ© mÃ¡ zamÄ›Å™enÃ­."
 
 #: ../Focus.c:253
 msgid "...that is under the mouse pointer."
-msgstr "které je pod my¹í."
+msgstr "kterÃ© je pod myÅ¡Ã­."
 
 #: ../Focus.c:262
 msgid "Automatic Window Raise Delay"
-msgstr "Prodleva pøi vyzdvihnutí oken"
+msgstr "Prodleva pÅ™i vyzdvihnutÃ­ oken"
 
 #: ../Focus.c:319 ../MouseSettings.c:601
 msgid "msec"
@@ -460,44 +460,44 @@ msgid ""
 "Do not let applications receive\n"
 "the click used to focus windows."
 msgstr ""
-"Nenechat aplikaci pøijmout »uk\n"
-"my¹i k zamìøení oken."
+"Nenechat aplikaci pÅ™ijmout Å¥uk\n"
+"myÅ¡i k zamÄ›Å™enÃ­ oken."
 
 #: ../Focus.c:342
 msgid ""
 "Automatically focus new\n"
 "windows."
 msgstr ""
-"Automaticky zamìøit\n"
-"nová okna."
+"Automaticky zamÄ›Å™it\n"
+"novÃ¡ okna."
 
 #: ../Focus.c:363
 msgid "Window Focus Preferences"
-msgstr "Nastavení zamìøení oken"
+msgstr "NastavenÃ­ zamÄ›Å™enÃ­ oken"
 
 #: ../Focus.c:365
 msgid ""
 "Keyboard focus switching policy, colormap switching\n"
 "policy for 8bpp displays and other related options."
 msgstr ""
-"Styl zamìøení z klávesnice, styl pøepínání\n"
+"Styl zamÄ›Å™enÃ­ z klÃ¡vesnice, styl pÅ™epÃ­nÃ¡nÃ­\n"
 "mapy barev pro 8bpp obrazovky apod."
 
 #: ../Font.c:276
 msgid "Could not locate font information file WPrefs.app/font.data"
-msgstr "Nemohu najít soubor s informacemi o fontech WPrefs.app/font.data"
+msgstr "Nemohu najÃ­t soubor s informacemi o fontech WPrefs.app/font.data"
 
 #: ../Font.c:282
 msgid "Could not read font information file WPrefs.app/font.data"
-msgstr "Nemohu naèíst soubor s informacemi o fontech WPrefs.app/font.data"
+msgstr "Nemohu naÄÃ­st soubor s informacemi o fontech WPrefs.app/font.data"
 
 #: ../Font.c:293
 msgid ""
 "Invalid data in font information file WPrefs.app/font.data.\n"
 "Encodings data not found."
 msgstr ""
-"Chybná data v souboru s informacemi o fontech WPrefs.app/font.data.\n"
-"Zakódovaná data nebyla nalezena."
+"ChybnÃ¡ data v souboru s informacemi o fontech WPrefs.app/font.data.\n"
+"ZakÃ³dovanÃ¡ data nebyla nalezena."
 
 #: ../Font.c:298
 msgid "- Custom -"
@@ -520,19 +520,19 @@ msgstr "OK"
 
 #: ../Font.c:376
 msgid "Default Font Sets"
-msgstr "Standardní nastavení fontù"
+msgstr "StandardnÃ­ nastavenÃ­ fontÅ¯"
 
 #: ../Font.c:389
 msgid "Font Set"
-msgstr "Sada fontù"
+msgstr "Sada fontÅ¯"
 
 #: ../Font.c:418
 msgid "Add..."
-msgstr "Pøidat..."
+msgstr "PÅ™idat..."
 
 #: ../Font.c:423 ../Font.c:438
 msgid "Change..."
-msgstr "Zmìnit..."
+msgstr "ZmÄ›nit..."
 
 #: ../Font.c:428 ../Paths.c:288 ../Paths.c:319
 msgid "Remove"
@@ -540,17 +540,17 @@ msgstr "Odstranit"
 
 #: ../Font.c:477
 msgid "Font Preferences"
-msgstr "Nastavení ikon"
+msgstr "NastavenÃ­ ikon"
 
 #: ../Font.c:478
 msgid "Font Configurations for Windows, Menus etc"
 msgstr ""
-"Nastavení textury na pozadí pro okna, menu a\n"
+"NastavenÃ­ textury na pozadÃ­ pro okna, menu a\n"
 "ikony."
 
 #: ../Icons.c:180
 msgid "Icon Positioning"
-msgstr "Umís»ování minimalizovanıch aplikací"
+msgstr "UmÃ­sÅ¥ovÃ¡nÃ­ minimalizovanÃ½ch aplikacÃ­"
 
 #: ../Icons.c:227
 msgid "Iconification Animation"
@@ -558,11 +558,11 @@ msgstr "Animace ikonifikace"
 
 #: ../Icons.c:238
 msgid "Shrinking/Zooming"
-msgstr "Zmen¹ení/Zvìt¹ení"
+msgstr "ZmenÅ¡enÃ­/ZvÄ›tÅ¡enÃ­"
 
 #: ../Icons.c:239
 msgid "Spinning/Twisting"
-msgstr "Víøení/Kroucení"
+msgstr "VÃ­Å™enÃ­/KroucenÃ­"
 
 #: ../Icons.c:240
 msgid "3D-flipping"
@@ -570,7 +570,7 @@ msgstr "3D salta"
 
 #: ../Icons.c:241 ../MouseSettings.c:838 ../MouseSettings.c:843
 msgid "None"
-msgstr "®ádná"
+msgstr "Å½Ã¡dnÃ¡"
 
 #: ../Icons.c:254
 msgid "Auto-arrange icons"
@@ -578,15 +578,15 @@ msgstr "Automaticky rovnat ikony"
 
 #: ../Icons.c:256
 msgid "Keep icons and miniwindows arranged all the time."
-msgstr "V¾dy udr¾ovat ikony a miniokna uspoøádaná."
+msgstr "VÅ¾dy udrÅ¾ovat ikony a miniokna uspoÅ™Ã¡danÃ¡."
 
 #: ../Icons.c:262
 msgid "Omnipresent miniwindows"
-msgstr "Miniokna na v¹ech plochách"
+msgstr "Miniokna na vÅ¡ech plochÃ¡ch"
 
 #: ../Icons.c:264
 msgid "Make miniwindows be present in all workspaces."
-msgstr "Povolit oknùm pøítomnost na v¹ech plochách."
+msgstr "Povolit oknÅ¯m pÅ™Ã­tomnost na vÅ¡ech plochÃ¡ch."
 
 #: ../Icons.c:273
 msgid "Icon Size"
@@ -594,27 +594,27 @@ msgstr "Velikost ikony"
 
 #: ../Icons.c:275
 msgid "The size of the dock/application icon and miniwindows"
-msgstr "Velikost dokované aplikace a minioken"
+msgstr "Velikost dokovanÃ© aplikace a minioken"
 
 #: ../Icons.c:345
 msgid "Icon Preferences"
-msgstr "Nastavení ikon"
+msgstr "NastavenÃ­ ikon"
 
 #: ../Icons.c:347
 msgid ""
 "Icon/Miniwindow handling options. Icon positioning\n"
 "area, sizes of icons, miniaturization animation style."
 msgstr ""
-"Zpùsob zacházení s ikonami. Umís»ování\n"
+"ZpÅ¯sob zachÃ¡zenÃ­ s ikonami. UmÃ­sÅ¥ovÃ¡nÃ­\n"
 "ikon, velikost ikon, animace pro miniaturizaci."
 
 #: ../KeyboardSettings.c:73
 msgid "Initial Key Repeat"
-msgstr "Zaèít opakovat po ..."
+msgstr "ZaÄÃ­t opakovat po ..."
 
 #: ../KeyboardSettings.c:114
 msgid "Key Repeat Rate"
-msgstr "Rychlost opakování kláves"
+msgstr "Rychlost opakovÃ¡nÃ­ klÃ¡ves"
 
 #: ../KeyboardSettings.c:154
 msgid "Type here to test"
@@ -622,29 +622,29 @@ msgstr "Zkuste zde"
 
 #: ../KeyboardSettings.c:173
 msgid "Keyboard Preferences"
-msgstr "Nastavení klávesnice"
+msgstr "NastavenÃ­ klÃ¡vesnice"
 
 #: ../KeyboardSettings.c:175
 msgid "Not done"
-msgstr "Je¹tì ne..."
+msgstr "JeÅ¡tÄ› ne..."
 
 #: ../KeyboardShortcuts.c:186 ../Menu.c:327 ../TexturePanel.c:1534
 #: ../imagebrowser.c:100
 msgid "Cancel"
-msgstr "Zru¹it"
+msgstr "ZruÅ¡it"
 
 #: ../KeyboardShortcuts.c:187
 msgid "Press the desired shortcut key(s) or click Cancel to stop capturing."
-msgstr "Stisknìte po¾adované klávesy nebo pou¾ijete \"Zru¹it\"."
+msgstr "StisknÄ›te poÅ¾adovanÃ© klÃ¡vesy nebo pouÅ¾ijete \"ZruÅ¡it\"."
 
 #: ../KeyboardShortcuts.c:207 ../KeyboardShortcuts.c:456 ../Menu.c:338
 #: ../Menu.c:782
 msgid "Capture"
-msgstr "Snímat"
+msgstr "SnÃ­mat"
 
 #: ../KeyboardShortcuts.c:208 ../KeyboardShortcuts.c:464
 msgid "Click Capture to interactively define the shortcut key."
-msgstr "Pou¾ijte \"Snímat\" k definici klávesy."
+msgstr "PouÅ¾ijte \"SnÃ­mat\" k definici klÃ¡vesy."
 
 #: ../KeyboardShortcuts.c:363
 msgid "Actions"
@@ -652,19 +652,19 @@ msgstr "Akce"
 
 #: ../KeyboardShortcuts.c:379
 msgid "Open applications menu"
-msgstr "Otevøít menu aplikací"
+msgstr "OtevÅ™Ã­t menu aplikacÃ­"
 
 #: ../KeyboardShortcuts.c:380
 msgid "Open window list menu"
-msgstr "Otevøít menu s okny"
+msgstr "OtevÅ™Ã­t menu s okny"
 
 #: ../KeyboardShortcuts.c:381
 msgid "Open window commands menu"
-msgstr "Otevøít menu s pøikazy pro okno"
+msgstr "OtevÅ™Ã­t menu s pÅ™ikazy pro okno"
 
 #: ../KeyboardShortcuts.c:382
 msgid "Hide active application"
-msgstr "Skrıt aplikaci"
+msgstr "SkrÃ½t aplikaci"
 
 #: ../KeyboardShortcuts.c:383
 msgid "Miniaturize active window"
@@ -672,7 +672,7 @@ msgstr "Miniaturizace"
 
 #: ../KeyboardShortcuts.c:384
 msgid "Close active window"
-msgstr "Uzavøít okno"
+msgstr "UzavÅ™Ã­t okno"
 
 #: ../KeyboardShortcuts.c:385
 msgid "Maximize active window"
@@ -680,23 +680,23 @@ msgstr "Maximalizace okna"
 
 #: ../KeyboardShortcuts.c:386
 msgid "Maximize active window vertically"
-msgstr "Vertikální maximalizace"
+msgstr "VertikÃ¡lnÃ­ maximalizace"
 
 #: ../KeyboardShortcuts.c:387
 msgid "Maximize active window horizontally"
-msgstr "Horizontální maximalizace"
+msgstr "HorizontÃ¡lnÃ­ maximalizace"
 
 #: ../KeyboardShortcuts.c:388
 msgid "Raise active window"
-msgstr "Aktivní okno vı¹e"
+msgstr "AktivnÃ­ okno vÃ½Å¡e"
 
 #: ../KeyboardShortcuts.c:389
 msgid "Lower active window"
-msgstr "Aktivní okno ní¾e"
+msgstr "AktivnÃ­ okno nÃ­Å¾e"
 
 #: ../KeyboardShortcuts.c:390
 msgid "Raise/Lower window under mouse pointer"
-msgstr "Okno pod ukazatelem my¹i vı¹e/ní¾e"
+msgstr "Okno pod ukazatelem myÅ¡i vÃ½Å¡e/nÃ­Å¾e"
 
 #: ../KeyboardShortcuts.c:391
 msgid "Shade active window"
@@ -704,7 +704,7 @@ msgstr "Z okna jen titulek"
 
 #: ../KeyboardShortcuts.c:392
 msgid "Move/Resize active window"
-msgstr "Pøesunout/zvìt¹it aktivní okno"
+msgstr "PÅ™esunout/zvÄ›tÅ¡it aktivnÃ­ okno"
 
 #: ../KeyboardShortcuts.c:393
 msgid "Select active window"
@@ -712,67 +712,67 @@ msgstr "Vybrat okno"
 
 #: ../KeyboardShortcuts.c:394
 msgid "Focus next window"
-msgstr "Zamìøit dal¹í okno"
+msgstr "ZamÄ›Å™it dalÅ¡Ã­ okno"
 
 #: ../KeyboardShortcuts.c:395
 msgid "Focus previous window"
-msgstr "Zamìøit pøedchozí okno"
+msgstr "ZamÄ›Å™it pÅ™edchozÃ­ okno"
 
 #: ../KeyboardShortcuts.c:396
 msgid "Switch to next workspace"
-msgstr "Pøepnout na dal¹í plocha"
+msgstr "PÅ™epnout na dalÅ¡Ã­ plocha"
 
 #: ../KeyboardShortcuts.c:397
 msgid "Switch to previous workspace"
-msgstr "Pøepnout na pøedchozí plochu"
+msgstr "PÅ™epnout na pÅ™edchozÃ­ plochu"
 
 #: ../KeyboardShortcuts.c:398
 msgid "Switch to next ten workspaces"
-msgstr "Pøepnout na dal¹ích 10 ploch"
+msgstr "PÅ™epnout na dalÅ¡Ã­ch 10 ploch"
 
 #: ../KeyboardShortcuts.c:399
 msgid "Switch to previous ten workspaces"
-msgstr "Pøepnout na pøedchozích 10 ploch"
+msgstr "PÅ™epnout na pÅ™edchozÃ­ch 10 ploch"
 
 #: ../KeyboardShortcuts.c:400
 msgid "Switch to workspace 1"
-msgstr "Pøepnout na plochu 1"
+msgstr "PÅ™epnout na plochu 1"
 
 #: ../KeyboardShortcuts.c:401
 msgid "Switch to workspace 2"
-msgstr "Pøepnout na plochu 2"
+msgstr "PÅ™epnout na plochu 2"
 
 #: ../KeyboardShortcuts.c:402
 msgid "Switch to workspace 3"
-msgstr "Pøepnout na plochu 3"
+msgstr "PÅ™epnout na plochu 3"
 
 #: ../KeyboardShortcuts.c:403
 msgid "Switch to workspace 4"
-msgstr "Pøepnout na plochu 4"
+msgstr "PÅ™epnout na plochu 4"
 
 #: ../KeyboardShortcuts.c:404
 msgid "Switch to workspace 5"
-msgstr "Pøepnout na plochu 5"
+msgstr "PÅ™epnout na plochu 5"
 
 #: ../KeyboardShortcuts.c:405
 msgid "Switch to workspace 6"
-msgstr "Pøepnout na plochu 6"
+msgstr "PÅ™epnout na plochu 6"
 
 #: ../KeyboardShortcuts.c:406
 msgid "Switch to workspace 7"
-msgstr "Pøepnout na plochu 7"
+msgstr "PÅ™epnout na plochu 7"
 
 #: ../KeyboardShortcuts.c:407
 msgid "Switch to workspace 8"
-msgstr "Pøepnout na plochu 8"
+msgstr "PÅ™epnout na plochu 8"
 
 #: ../KeyboardShortcuts.c:408
 msgid "Switch to workspace 9"
-msgstr "Pøepnout na plochu 9"
+msgstr "PÅ™epnout na plochu 9"
 
 #: ../KeyboardShortcuts.c:409
 msgid "Switch to workspace 10"
-msgstr "Pøepnout na plochu 10"
+msgstr "PÅ™epnout na plochu 10"
 
 #: ../KeyboardShortcuts.c:410
 msgid "Shortcut for window 1"
@@ -816,23 +816,23 @@ msgstr "Zkratka pro okno 10"
 
 #: ../KeyboardShortcuts.c:420
 msgid "Switch to Next Screen/Monitor"
-msgstr "Pøepnout na dal¹ích 10 ploch"
+msgstr "PÅ™epnout na dalÅ¡Ã­ch 10 ploch"
 
 #: ../KeyboardShortcuts.c:421
 msgid "Raise Clip"
-msgstr "Sponku vı¹e"
+msgstr "Sponku vÃ½Å¡e"
 
 #: ../KeyboardShortcuts.c:422
 msgid "Lower Clip"
-msgstr "Sponku ní¾e"
+msgstr "Sponku nÃ­Å¾e"
 
 #: ../KeyboardShortcuts.c:423
 msgid "Raise/Lower Clip"
-msgstr "Sponku vı¹e/ní¾e"
+msgstr "Sponku vÃ½Å¡e/nÃ­Å¾e"
 
 #: ../KeyboardShortcuts.c:425
 msgid "Toggle keyboard language"
-msgstr "Zmìnit jazyk klávesnice"
+msgstr "ZmÄ›nit jazyk klÃ¡vesnice"
 
 #: ../KeyboardShortcuts.c:439
 msgid "Shortcut"
@@ -844,27 +844,27 @@ msgstr "Vymazat"
 
 #: ../KeyboardShortcuts.c:512
 msgid "Keyboard Shortcut Preferences"
-msgstr "Nastavení klávesovıch zkratek"
+msgstr "NastavenÃ­ klÃ¡vesovÃ½ch zkratek"
 
 #: ../KeyboardShortcuts.c:514
 msgid ""
 "Change the keyboard shortcuts for actions such\n"
 "as changing workspaces and opening menus."
 msgstr ""
-"Zmìnit klávesové zkratky pro akce jako\n"
-"zmìna plochy a otevírání menu."
+"ZmÄ›nit klÃ¡vesovÃ© zkratky pro akce jako\n"
+"zmÄ›na plochy a otevÃ­rÃ¡nÃ­ menu."
 
 #: ../Menu.c:477
 msgid "New Items"
-msgstr "Nová Polo¾ka"
+msgstr "NovÃ¡ PoloÅ¾ka"
 
 #: ../Menu.c:478
 msgid "Sample Commands"
-msgstr "Pøíklad Pøíkazu"
+msgstr "PÅ™Ã­klad PÅ™Ã­kazu"
 
 #: ../Menu.c:479
 msgid "Sample Submenus"
-msgstr "Pøíklad Submenu"
+msgstr "PÅ™Ã­klad Submenu"
 
 #: ../Menu.c:493
 msgid "Run Program"
@@ -872,7 +872,7 @@ msgstr "Spustiti program"
 
 #: ../Menu.c:494
 msgid "Internal Command"
-msgstr "Vnitøní pøíkaz"
+msgstr "VnitÅ™nÃ­ pÅ™Ã­kaz"
 
 #: ../Menu.c:495
 msgid "Submenu"
@@ -880,19 +880,19 @@ msgstr ""
 
 #: ../Menu.c:496
 msgid "External Submenu"
-msgstr "Vnìj¹í Submenu"
+msgstr "VnÄ›jÅ¡Ã­ Submenu"
 
 #: ../Menu.c:497
 msgid "Generated Submenu"
-msgstr "Generované Submenu"
+msgstr "GenerovanÃ© Submenu"
 
 #: ../Menu.c:498
 msgid "Directory Contents"
-msgstr "Obasah adresáøe"
+msgstr "Obasah adresÃ¡Å™e"
 
 #: ../Menu.c:499
 msgid "Workspace Menu"
-msgstr "Pracovní plocha"
+msgstr "PracovnÃ­ plocha"
 
 #: ../Menu.c:500 ../MouseSettings.c:840
 msgid "Window List Menu"
@@ -944,7 +944,7 @@ msgstr ""
 
 #: ../Menu.c:552 ../Menu.c:809
 msgid "Exit Window Maker"
-msgstr "Ukonèí Window maker"
+msgstr "UkonÄÃ­ Window maker"
 
 #: ../Menu.c:575
 msgid "Debian Menu"
@@ -960,59 +960,59 @@ msgstr ""
 
 #: ../Menu.c:584 ../Themes.c:250
 msgid "Themes"
-msgstr "Témata"
+msgstr "TÃ©mata"
 
 #: ../Menu.c:589
 msgid "Bg Images (scale)"
-msgstr "Pozadí (uprostøed)"
+msgstr "PozadÃ­ (uprostÅ™ed)"
 
 #: ../Menu.c:594
 msgid "Bg Images (tile)"
-msgstr "Pozadí (dla¾dice)"
+msgstr "PozadÃ­ (dlaÅ¾dice)"
 
 #: ../Menu.c:599
 msgid "Assorted XTerms"
-msgstr "Rùzné Xtermy"
+msgstr "RÅ¯znÃ© Xtermy"
 
 #: ../Menu.c:601
 msgid "XTerm Yellow on Blue"
-msgstr "Xterm ¾lutá na modré"
+msgstr "Xterm Å¾lutÃ¡ na modrÃ©"
 
 #: ../Menu.c:604
 msgid "XTerm White on Black"
-msgstr "Xterm bílá na èerné"
+msgstr "Xterm bÃ­lÃ¡ na ÄernÃ©"
 
 #: ../Menu.c:607
 msgid "XTerm Black on White"
-msgstr "Xterm èerná na bílé"
+msgstr "Xterm ÄernÃ¡ na bÃ­lÃ©"
 
 #: ../Menu.c:610
 msgid "XTerm Black on Beige"
-msgstr "Xterm øerná na ¾luté"
+msgstr "Xterm Å™ernÃ¡ na Å¾lutÃ©"
 
 #: ../Menu.c:613
 msgid "XTerm White on Green"
-msgstr "Xterm Bílá na zelené"
+msgstr "Xterm BÃ­lÃ¡ na zelenÃ©"
 
 #: ../Menu.c:616
 msgid "XTerm White on Olive"
-msgstr "Xterm bílá na olivové"
+msgstr "Xterm bÃ­lÃ¡ na olivovÃ©"
 
 #: ../Menu.c:619
 msgid "XTerm Blue on Blue"
-msgstr "Xterm modrá na tmavìmodré"
+msgstr "Xterm modrÃ¡ na tmavÄ›modrÃ©"
 
 #: ../Menu.c:622
 msgid "XTerm BIG FONTS"
-msgstr "Xterm VELKÉ FONTY"
+msgstr "Xterm VELKÃ‰ FONTY"
 
 #: ../Menu.c:644
 msgid "Program to Run"
-msgstr "Program ke spu¹tìní"
+msgstr "Program ke spuÅ¡tÄ›nÃ­"
 
 #: ../Menu.c:658
 msgid "Run the program inside a Xterm"
-msgstr "Spustit program uvnitø Xtermu"
+msgstr "Spustit program uvnitÅ™ Xtermu"
 
 #: ../Menu.c:668
 msgid "Path for Menu"
@@ -1027,64 +1027,64 @@ msgid ""
 "or\n"
 "/usr/X11R6/bin ~/xbin"
 msgstr ""
-"Vlo¾ cestu pro soubor obsahující menu\n"
-"nebo seznam adresáøù s programy, které\n"
-"chete zobrazit v menu. Pø:\n"
+"VloÅ¾ cestu pro soubor obsahujÃ­cÃ­ menu\n"
+"nebo seznam adresÃ¡Å™Å¯ s programy, kterÃ©\n"
+"chete zobrazit v menu. PÅ™:\n"
 "~/GNUstep/Library/WindowMaker/menu\n"
 "nebo\n"
 "/usr/X11R6/bin ~/xbin"
 
 #: ../Menu.c:696
 msgid "Command"
-msgstr "Pøíkaz"
+msgstr "PÅ™Ã­kaz"
 
 #: ../Menu.c:710
 msgid ""
 "Enter a command that outputs a menu\n"
 "definition to stdout when invoked."
 msgstr ""
-"Vlo¾ pøíkaz, kterı vytvoøí obsah\n"
-"menu s funkèními polo¾kami."
+"VloÅ¾ pÅ™Ã­kaz, kterÃ½ vytvoÅ™Ã­ obsah\n"
+"menu s funkÄnÃ­mi poloÅ¾kami."
 
 #: ../Menu.c:721
 msgid "Command to Open Files"
-msgstr "Pøíkaz k otevøení souboru"
+msgstr "PÅ™Ã­kaz k otevÅ™enÃ­ souboru"
 
 #: ../Menu.c:735
 msgid ""
 "Enter the command you want to use to open the\n"
 "files in the directories listed below."
 msgstr ""
-"Vlo¾ pøíkaz, kterı chcete pou¾ít k otevøení\n"
-"souborù v ní¾e zobrazenıch adresáøích."
+"VloÅ¾ pÅ™Ã­kaz, kterÃ½ chcete pouÅ¾Ã­t k otevÅ™enÃ­\n"
+"souborÅ¯ v nÃ­Å¾e zobrazenÃ½ch adresÃ¡Å™Ã­ch."
 
 #: ../Menu.c:744
 msgid "Directories with Files"
-msgstr "Adresáøe se soubory"
+msgstr "AdresÃ¡Å™e se soubory"
 
 #: ../Menu.c:757
 msgid "Strip extensions from file names"
-msgstr "Vynech pøípony souborù"
+msgstr "Vynech pÅ™Ã­pony souborÅ¯"
 
 #: ../Menu.c:769
 msgid "Keyboard Shortcut"
-msgstr "Klávesové zkratky"
+msgstr "KlÃ¡vesovÃ© zkratky"
 
 #: ../Menu.c:805
 msgid "Arrange Icons"
-msgstr "Uspoøádat ikony"
+msgstr "UspoÅ™Ã¡dat ikony"
 
 #: ../Menu.c:806
 msgid "Hide All Windows Except For The Focused One"
-msgstr "Skryj v¹echny okna kromì zamìøeného"
+msgstr "Skryj vÅ¡echny okna kromÄ› zamÄ›Å™enÃ©ho"
 
 #: ../Menu.c:807
 msgid "Show All Windows"
-msgstr "Zobraz v¹echny okna"
+msgstr "Zobraz vÅ¡echny okna"
 
 #: ../Menu.c:810
 msgid "Exit X Session"
-msgstr "Ukonèi sezení"
+msgstr "UkonÄi sezenÃ­"
 
 #: ../Menu.c:811
 msgid "Restart Window Maker"
@@ -1092,15 +1092,15 @@ msgstr "Restartuj Window Maker"
 
 #: ../Menu.c:812
 msgid "Start Another Window Manager   : ("
-msgstr "Zapni jinı okení mana¾er :-("
+msgstr "Zapni jinÃ½ okenÃ­ manaÅ¾er :-("
 
 #: ../Menu.c:814
 msgid "Save Current Session"
-msgstr "Ulo¾ aktuální sezení"
+msgstr "UloÅ¾ aktuÃ¡lnÃ­ sezenÃ­"
 
 #: ../Menu.c:815
 msgid "Clear Saved Session"
-msgstr "Vuèisti ulo¾ené sezení"
+msgstr "VuÄisti uloÅ¾enÃ© sezenÃ­"
 
 #: ../Menu.c:816
 msgid "Refresh Screen"
@@ -1108,19 +1108,19 @@ msgstr "Obnov obrazovku"
 
 #: ../Menu.c:817
 msgid "Open Info Panel"
-msgstr "Otevøi informaèní panel"
+msgstr "OtevÅ™i informaÄnÃ­ panel"
 
 #: ../Menu.c:818
 msgid "Open Copyright Panel"
-msgstr "Otevøi Copyright panel"
+msgstr "OtevÅ™i Copyright panel"
 
 #: ../Menu.c:824
 msgid "Window Manager to Start"
-msgstr "Pøíkaz jiného okeního mana¾er"
+msgstr "PÅ™Ã­kaz jinÃ©ho okenÃ­ho manaÅ¾er"
 
 #: ../Menu.c:840
 msgid "Do not confirm action."
-msgstr "Bez potvrzení akce"
+msgstr "Bez potvrzenÃ­ akce"
 
 #: ../Menu.c:850
 msgid ""
@@ -1135,17 +1135,17 @@ msgid ""
 msgstr ""
 "Instrukce:\n"
 "\n"
-" - pøetáhni polo¾ku z leva na panel k pøidání nové polo¾ky\n"
-" - odtstraò polo¾ku pøeta¾ením z menu zpìt na aplikaci\n"
-" - pøetáhni polo¾ku v menu ke zmìnì její pozice\n"
-" - kopíruj polo¾ku pomocí zmáèknutého Controlu\n"
-" - zmìò jméno polo¾ky dvojklikem\n"
-" - klikni na polo¾ku ke zmìnì souvisejícíh informací"
+" - pÅ™etÃ¡hni poloÅ¾ku z leva na panel k pÅ™idÃ¡nÃ­ novÃ© poloÅ¾ky\n"
+" - odtstraÅˆ poloÅ¾ku pÅ™etaÅ¾enÃ­m z menu zpÄ›t na aplikaci\n"
+" - pÅ™etÃ¡hni poloÅ¾ku v menu ke zmÄ›nÄ› jejÃ­ pozice\n"
+" - kopÃ­ruj poloÅ¾ku pomocÃ­ zmÃ¡ÄknutÃ©ho Controlu\n"
+" - zmÄ›Åˆ jmÃ©no poloÅ¾ky dvojklikem\n"
+" - klikni na poloÅ¾ku ke zmÄ›nÄ› souvisejÃ­cÃ­h informacÃ­"
 
 #: ../Menu.c:1067
 #, c-format
 msgid "unknown command '%s' in menu"
-msgstr "neznámı pøíkaz '%s' v menu"
+msgstr "neznÃ¡mÃ½ pÅ™Ã­kaz '%s' v menu"
 
 #: ../Menu.c:1099
 msgid ": Execute Program"
@@ -1153,39 +1153,39 @@ msgstr ": Spustit program"
 
 #: ../Menu.c:1103
 msgid ": Perform Internal Command"
-msgstr ": Vytvoø vnitøní pøíkaz"
+msgstr ": VytvoÅ™ vnitÅ™nÃ­ pÅ™Ã­kaz"
 
 #: ../Menu.c:1107
 msgid ": Open a Submenu"
-msgstr ": Otevøi submenu"
+msgstr ": OtevÅ™i submenu"
 
 #: ../Menu.c:1111
 msgid ": Program Generated Submenu"
-msgstr ": Programem generované submenu"
+msgstr ": Programem generovanÃ© submenu"
 
 #: ../Menu.c:1115
 msgid ": Directory Contents Menu"
-msgstr ": Obsah adresáøe"
+msgstr ": Obsah adresÃ¡Å™e"
 
 #: ../Menu.c:1119
 msgid ": Open Workspaces Submenu"
-msgstr ": Pracovní plocha"
+msgstr ": PracovnÃ­ plocha"
 
 #: ../Menu.c:1123
 msgid ": Open Window List Submenu"
-msgstr ": Otevøít menu s okny"
+msgstr ": OtevÅ™Ã­t menu s okny"
 
 #: ../Menu.c:1343
 msgid "Remove Submenu"
-msgstr "Odstraò submenu"
+msgstr "OdstraÅˆ submenu"
 
 #: ../Menu.c:1344
 msgid ""
 "Removing this item will destroy all items inside\n"
 "the submenu. Do you really want to do that?"
 msgstr ""
-"Odstranìním této polo¾ky ztratíte v¹echny polo¾ky uvnitø\n"
-"submenu. Skuteènì ji chcete smazat?"
+"OdstranÄ›nÃ­m tÃ©to poloÅ¾ky ztratÃ­te vÅ¡echny poloÅ¾ky uvnitÅ™\n"
+"submenu. SkuteÄnÄ› ji chcete smazat?"
 
 #: ../Menu.c:1346
 msgid "Yes"
@@ -1197,7 +1197,7 @@ msgstr "Ne"
 
 #: ../Menu.c:1347
 msgid "Yes, don't ask again."
-msgstr "Ano, neptejte se víc."
+msgstr "Ano, neptejte se vÃ­c."
 
 #: ../Menu.c:1514 ../Menu.c:1521
 #, c-format
@@ -1207,11 +1207,11 @@ msgstr ""
 #: ../Menu.c:1530
 #, c-format
 msgid "Could not open default menu from '%s'"
-msgstr "Nemohu otevøít standardní menu z '%s'"
+msgstr "Nemohu otevÅ™Ã­t standardnÃ­ menu z '%s'"
 
 #: ../Menu.c:1568 ../WPrefs.c:807
 msgid "Warning"
-msgstr "Varování"
+msgstr "VarovÃ¡nÃ­"
 
 #: ../Menu.c:1569
 msgid ""
@@ -1219,75 +1219,75 @@ msgid ""
 "by this tool. Do you want to discard the current menu\n"
 "to use this tool?"
 msgstr ""
-"Formát soubor menu není u¾ podporován touto verzí\n"
-"programu. Pøejete si ho vyøadit a nahradit novım\n"
-"pu¾itelnım tímto programem?"
+"FormÃ¡t soubor menu nenÃ­ uÅ¾ podporovÃ¡n touto verzÃ­\n"
+"programu. PÅ™ejete si ho vyÅ™adit a nahradit novÃ½m\n"
+"puÅ¾itelnÃ½m tÃ­mto programem?"
 
 #: ../Menu.c:1572
 msgid "Yes, Discard and Update"
-msgstr "Ano, Vyøadit a aktualizovat"
+msgstr "Ano, VyÅ™adit a aktualizovat"
 
 #: ../Menu.c:1573
 msgid "No, Keep Current Menu"
-msgstr "Ne, zachovat stávající"
+msgstr "Ne, zachovat stÃ¡vajÃ­cÃ­"
 
 #: ../Menu.c:1831
 msgid "Applications Menu Definition"
-msgstr "Nastavení aplikaèního menu"
+msgstr "NastavenÃ­ aplikaÄnÃ­ho menu"
 
 #: ../Menu.c:1833
 msgid "Edit the menu for launching applications."
-msgstr "Upravit menu ke spoustìní aplikací"
+msgstr "Upravit menu ke spoustÄ›nÃ­ aplikacÃ­"
 
 #: ../MenuPreferences.c:111
 msgid "Menu Scrolling Speed"
-msgstr "Rychlost rolování menu"
+msgstr "Rychlost rolovÃ¡nÃ­ menu"
 
 #: ../MenuPreferences.c:160
 msgid "Submenu Alignment"
-msgstr "Zarovnání submenu"
+msgstr "ZarovnÃ¡nÃ­ submenu"
 
 #: ../MenuPreferences.c:204
 msgid ""
 "Always open submenus inside the screen, instead of scrolling.\n"
 "Note: this is annoying."
 msgstr ""
-"Menu otevøít v¾dy na plo¹e obrazovky (neposouvat).\n"
-"Poznámka: nìkdy mù¾e zpùsobit problémy."
+"Menu otevÅ™Ã­t vÅ¾dy na ploÅ¡e obrazovky (neposouvat).\n"
+"PoznÃ¡mka: nÄ›kdy mÅ¯Å¾e zpÅ¯sobit problÃ©my."
 
 #: ../MenuPreferences.c:209
 msgid "Scroll off-screen menus when pointer is moved over them."
-msgstr "Posouvat menu pøi pohybu ukazatele nad tímto menu."
+msgstr "Posouvat menu pÅ™i pohybu ukazatele nad tÃ­mto menu."
 
 #: ../MenuPreferences.c:229
 msgid "Menu Preferences"
-msgstr "Nastavení menu"
+msgstr "NastavenÃ­ menu"
 
 #: ../MenuPreferences.c:231
 msgid ""
 "Menu usability related options. Scrolling speed,\n"
 "alignment of submenus etc."
 msgstr ""
-"Nastavení aplikaèního menu. Rychlost\n"
-"rolování, zpùsob zarovnání submenu atd."
+"NastavenÃ­ aplikaÄnÃ­ho menu. Rychlost\n"
+"rolovÃ¡nÃ­, zpÅ¯sob zarovnÃ¡nÃ­ submenu atd."
 
 #: ../MouseSettings.c:141
 msgid "Invalid mouse acceleration value. Must be a positive real value."
-msgstr "Chybná hodnota pro zrychlení my¹i. Musí bıt kladné reálné èíslo."
+msgstr "ChybnÃ¡ hodnota pro zrychlenÃ­ myÅ¡i. MusÃ­ bÃ½t kladnÃ© reÃ¡lnÃ© ÄÃ­slo."
 
 #: ../MouseSettings.c:161
 msgid ""
 "Invalid mouse acceleration threshold value. Must be the number of pixels to "
 "travel before accelerating."
 msgstr ""
-"Chybná hodnota pro práh zrychlení my¹i. Zadejte èíslo oznaèující poèet "
-"pixelù pøed akcelarecí."
+"ChybnÃ¡ hodnota pro prÃ¡h zrychlenÃ­ myÅ¡i. Zadejte ÄÃ­slo oznaÄujÃ­cÃ­ poÄet "
+"pixelÅ¯ pÅ™ed akcelarecÃ­."
 
 #: ../MouseSettings.c:262 ../MouseSettings.c:274 ../MouseSettings.c:286
 #: ../MouseSettings.c:298
 #, c-format
 msgid "bad value %s for option %s"
-msgstr "chybná hodnota %s pro volbu %s"
+msgstr "chybnÃ¡ hodnota %s pro volbu %s"
 
 #: ../MouseSettings.c:357
 #, c-format
@@ -1295,15 +1295,15 @@ msgid ""
 "modifier key %s for option ModifierKey was not recognized. Using %s as "
 "default"
 msgstr ""
-"modifikátor klávesy %s pro volbu \"ModifierKey\" není znám. Pou¾ívám %s."
+"modifikÃ¡tor klÃ¡vesy %s pro volbu \"ModifierKey\" nenÃ­ znÃ¡m. PouÅ¾Ã­vÃ¡m %s."
 
 #: ../MouseSettings.c:382
 msgid "could not retrieve keyboard modifier mapping"
-msgstr "nelze pøevzít mapování modifikátorù kláves"
+msgstr "nelze pÅ™evzÃ­t mapovÃ¡nÃ­ modifikÃ¡torÅ¯ klÃ¡ves"
 
 #: ../MouseSettings.c:477
 msgid "Mouse Speed"
-msgstr "Rychlost my¹i"
+msgstr "Rychlost myÅ¡i"
 
 #: ../MouseSettings.c:507
 msgid "Acceler.:"
@@ -1323,31 +1323,31 @@ msgstr "Test"
 
 #: ../MouseSettings.c:609
 msgid "Workspace Mouse Actions"
-msgstr "Akce my¹i na plo¹e"
+msgstr "Akce myÅ¡i na ploÅ¡e"
 
 #: ../MouseSettings.c:614
 msgid "Disable mouse actions"
-msgstr "Zaka¾ akce my¹i"
+msgstr "ZakaÅ¾ akce myÅ¡i"
 
 #: ../MouseSettings.c:620
 msgid "Left Button"
-msgstr "Levé tlaèítko"
+msgstr "LevÃ© tlaÄÃ­tko"
 
 #: ../MouseSettings.c:630
 msgid "Middle Button"
-msgstr "Prostøední tl."
+msgstr "ProstÅ™ednÃ­ tl."
 
 #: ../MouseSettings.c:640
 msgid "Right Button"
-msgstr "Pravé tlaèítko"
+msgstr "PravÃ© tlaÄÃ­tko"
 
 #: ../MouseSettings.c:650
 msgid "Mouse Wheel"
-msgstr "Koleèko my¹i"
+msgstr "KoleÄko myÅ¡i"
 
 #: ../MouseSettings.c:672
 msgid "Mouse Grab Modifier"
-msgstr "Modifikátor pro my¹"
+msgstr "ModifikÃ¡tor pro myÅ¡"
 
 #: ../MouseSettings.c:674
 msgid ""
@@ -1355,24 +1355,24 @@ msgid ""
 "involve dragging windows with the mouse,\n"
 "clicking inside the window."
 msgstr ""
-"Modifikátor klávesnice, kterı bude pou¾it\n"
-"pro táhnutí okna my¹i, kliknete-li\n"
-"uvnitø okna."
+"ModifikÃ¡tor klÃ¡vesnice, kterÃ½ bude pouÅ¾it\n"
+"pro tÃ¡hnutÃ­ okna myÅ¡i, kliknete-li\n"
+"uvnitÅ™ okna."
 
 #: ../MouseSettings.c:708
 #, c-format
 msgid "could not create %s"
-msgstr "nelze vytvoøit \"%s\""
+msgstr "nelze vytvoÅ™it \"%s\""
 
 #: ../MouseSettings.c:724
 #, c-format
 msgid "could not create temporary file %s"
-msgstr "nelze vytvoøit doèasnı soubor %s"
+msgstr "nelze vytvoÅ™it doÄasnÃ½ soubor %s"
 
 #: ../MouseSettings.c:756
 #, c-format
 msgid "could not rename file %s to %s\n"
-msgstr "soubor %s nelze pøejmenovat na %s\n"
+msgstr "soubor %s nelze pÅ™ejmenovat na %s\n"
 
 #: ../MouseSettings.c:829
 msgid "Shift"
@@ -1408,7 +1408,7 @@ msgstr ""
 
 #: ../MouseSettings.c:839
 msgid "Applications Menu"
-msgstr "Aplikaèní menu"
+msgstr "AplikaÄnÃ­ menu"
 
 #: ../MouseSettings.c:841
 msgid "Select Windows"
@@ -1416,59 +1416,59 @@ msgstr "Vybrat okna"
 
 #: ../MouseSettings.c:844
 msgid "Switch Workspaces"
-msgstr "Pøepínat plochy"
+msgstr "PÅ™epÃ­nat plochy"
 
 #: ../MouseSettings.c:849
 msgid "Mouse Preferences"
-msgstr "Nastavení my¹i"
+msgstr "NastavenÃ­ myÅ¡i"
 
 #: ../MouseSettings.c:851
 msgid ""
 "Mouse speed/acceleration, double click delay,\n"
 "mouse button bindings etc."
 msgstr ""
-"Rychlost/Zrychlení my¹i, prodleva pøi dvojkliku,\n"
-"vazby tlaèítek my¹i atd."
+"Rychlost/ZrychlenÃ­ myÅ¡i, prodleva pÅ™i dvojkliku,\n"
+"vazby tlaÄÃ­tek myÅ¡i atd."
 
 #: ../Paths.c:84
 msgid "bad value in option IconPath. Using default path list"
-msgstr "ve volbì IconPath je nesprávná hodnota. Pou¾ívám standardní nastavení"
+msgstr "ve volbÄ› IconPath je nesprÃ¡vnÃ¡ hodnota. PouÅ¾Ã­vÃ¡m standardnÃ­ nastavenÃ­"
 
 #: ../Paths.c:101
 msgid "bad value in option PixmapPath. Using default path list"
-msgstr "ve volbì PixmapPath je chybná hodnota. Pou¾ívám standard."
+msgstr "ve volbÄ› PixmapPath je chybnÃ¡ hodnota. PouÅ¾Ã­vÃ¡m standard."
 
 #: ../Paths.c:149
 msgid "Select directory"
-msgstr "Vyberte adresáø"
+msgstr "Vyberte adresÃ¡Å™"
 
 #: ../Paths.c:270
 msgid "Icon Search Paths"
-msgstr "Adresáøe s ikonami"
+msgstr "AdresÃ¡Å™e s ikonami"
 
 #: ../Paths.c:281 ../Paths.c:312 ../TexturePanel.c:1310
 msgid "Add"
-msgstr "Pøidat"
+msgstr "PÅ™idat"
 
 #: ../Paths.c:301
 msgid "Pixmap Search Paths"
-msgstr "Adresáøe s obrázky"
+msgstr "AdresÃ¡Å™e s obrÃ¡zky"
 
 #: ../Paths.c:341
 msgid "Search Path Configuration"
-msgstr "Konfigurace prohledávanıch cest"
+msgstr "Konfigurace prohledÃ¡vanÃ½ch cest"
 
 #: ../Paths.c:343
 msgid ""
 "Search paths to use when looking for pixmaps\n"
 "and icons."
 msgstr ""
-"Pøi vyhledávání obrázkù a ikon prohledávat\n"
-"tyto adresáøe."
+"PÅ™i vyhledÃ¡vÃ¡nÃ­ obrÃ¡zkÅ¯ a ikon prohledÃ¡vat\n"
+"tyto adresÃ¡Å™e."
 
 #: ../Preferences.c:75
 msgid "OFF"
-msgstr "Vypnuté"
+msgstr "VypnutÃ©"
 
 #: ../Preferences.c:77
 msgid "1 pixel"
@@ -1482,17 +1482,17 @@ msgstr "%i pixely"
 #: ../Preferences.c:83
 #, c-format
 msgid "%i pixels "
-msgstr "%i pixelù"
+msgstr "%i pixelÅ¯"
 
 #: ../Preferences.c:229
 msgid "Size Display"
-msgstr "Zobrazení velikosti"
+msgstr "ZobrazenÃ­ velikosti"
 
 #: ../Preferences.c:231
 msgid ""
 "The position or style of the window size\n"
 "display that's shown when a window is resized."
-msgstr "Pozice a styl okna, které mìní velikost."
+msgstr "Pozice a styl okna, kterÃ© mÄ›nÃ­ velikost."
 
 #: ../Preferences.c:238 ../Preferences.c:259
 msgid "Corner of screen"
@@ -1500,37 +1500,37 @@ msgstr "Roh obrazovky"
 
 #: ../Preferences.c:239 ../Preferences.c:260
 msgid "Center of screen"
-msgstr "Støed obrazovky"
+msgstr "StÅ™ed obrazovky"
 
 #: ../Preferences.c:240 ../Preferences.c:261
 msgid "Center of resized window"
-msgstr "Støed okna"
+msgstr "StÅ™ed okna"
 
 #: ../Preferences.c:241
 msgid "Technical drawing-like"
-msgstr "Jako kóty vıkresù"
+msgstr "Jako kÃ³ty vÃ½kresÅ¯"
 
 #: ../Preferences.c:242 ../Preferences.c:262
 msgid "Disabled"
-msgstr "Vypnuté"
+msgstr "VypnutÃ©"
 
 #: ../Preferences.c:250
 msgid "Position Display"
-msgstr "Zobrazení pozice"
+msgstr "ZobrazenÃ­ pozice"
 
 #: ../Preferences.c:252
 msgid ""
 "The position or style of the window position\n"
 "display that's shown when a window is moved."
-msgstr "Pozice a styl okna, které je pøesouváno."
+msgstr "Pozice a styl okna, kterÃ© je pÅ™esouvÃ¡no."
 
 #: ../Preferences.c:270
 msgid "Show balloon text for..."
-msgstr "Bublinová nápovìda pro..."
+msgstr "BublinovÃ¡ nÃ¡povÄ›da pro..."
 
 #: ../Preferences.c:277
 msgid "incomplete window titles"
-msgstr "nekompletní titulky oken"
+msgstr "nekompletnÃ­ titulky oken"
 
 #: ../Preferences.c:278
 msgid "miniwindow titles"
@@ -1538,49 +1538,49 @@ msgstr "titulky minioken"
 
 #: ../Preferences.c:279
 msgid "application/dock icons"
-msgstr "aplikaèní/ukotvené ikony"
+msgstr "aplikaÄnÃ­/ukotvenÃ© ikony"
 
 #: ../Preferences.c:280
 msgid "internal help"
-msgstr "interní nápovìdu"
+msgstr "internÃ­ nÃ¡povÄ›du"
 
 #: ../Preferences.c:292
 msgid ""
 "Raise window when switching\n"
 "focus with keyboard."
 msgstr ""
-"Pøi zmìnì zamìøení pøes\n"
-" klávesnici zdvihnout okno."
+"PÅ™i zmÄ›nÄ› zamÄ›Å™enÃ­ pÅ™es\n"
+" klÃ¡vesnici zdvihnout okno."
 
 #: ../Preferences.c:298
 msgid ""
 "Enable keyboard language\n"
 "switch button in window titlebars."
-msgstr "Pro ka¾dé okno pamatovat nastavení klávesnice."
+msgstr "Pro kaÅ¾dÃ© okno pamatovat nastavenÃ­ klÃ¡vesnice."
 
 #: ../Preferences.c:307
 msgid "Workspace border"
-msgstr "Okraje pracovní plochy"
+msgstr "Okraje pracovnÃ­ plochy"
 
 #: ../Preferences.c:323
 msgid "Left/Right"
-msgstr "Levé/Pravé"
+msgstr "LevÃ©/PravÃ©"
 
 #: ../Preferences.c:328
 msgid "Top/Bottom"
-msgstr "Horní/Dolní"
+msgstr "HornÃ­/DolnÃ­"
 
 #: ../Preferences.c:349
 msgid "Miscellaneous Ergonomic Preferences"
-msgstr "Rùzná nastavení ergonomie"
+msgstr "RÅ¯znÃ¡ nastavenÃ­ ergonomie"
 
 #: ../Preferences.c:350
 msgid ""
 "Various settings like balloon text, geometry\n"
 "displays etc."
 msgstr ""
-"Bublinová nápovìda, zobrazení geometrie,\n"
-"oken, okraje pracovní plochy atd."
+"BublinovÃ¡ nÃ¡povÄ›da, zobrazenÃ­ geometrie,\n"
+"oken, okraje pracovnÃ­ plochy atd."
 
 #: ../TexturePanel.c:323
 msgid "Saturation"
@@ -1588,33 +1588,33 @@ msgstr "Sytost"
 
 #: ../TexturePanel.c:325
 msgid "Brightness"
-msgstr "Svìtlost"
+msgstr "SvÄ›tlost"
 
 #: ../TexturePanel.c:373 ../TexturePanel.c:380
 msgid "Hue"
-msgstr "Odstín"
+msgstr "OdstÃ­n"
 
 #: ../TexturePanel.c:610
 msgid "Could not load the selected file: "
-msgstr "Nelze naèíst vybranı soubor: "
+msgstr "Nelze naÄÃ­st vybranÃ½ soubor: "
 
 #: ../TexturePanel.c:664
 msgid "Open Image"
-msgstr "Otevøít obrázek"
+msgstr "OtevÅ™Ã­t obrÃ¡zek"
 
 #: ../TexturePanel.c:694
 msgid "The selected file does not contain a supported image."
-msgstr "Vybranı soubor neobsahuje podporovanı typ obrázku."
+msgstr "VybranÃ½ soubor neobsahuje podporovanÃ½ typ obrÃ¡zku."
 
 #: ../TexturePanel.c:945
 #, c-format
 msgid "could not load file '%s': %s"
-msgstr "nelze naèíst soubor ' %s': %s"
+msgstr "nelze naÄÃ­st soubor ' %s': %s"
 
 #: ../TexturePanel.c:1064
 #, c-format
 msgid "error creating texture %s"
-msgstr "chyba pøi vytváøení textury %s"
+msgstr "chyba pÅ™i vytvÃ¡Å™enÃ­ textury %s"
 
 #: ../TexturePanel.c:1254
 msgid "Texture Panel"
@@ -1622,7 +1622,7 @@ msgstr "Panel textur"
 
 #: ../TexturePanel.c:1262
 msgid "Texture Name"
-msgstr "Jméno textury"
+msgstr "JmÃ©no textury"
 
 #: ../TexturePanel.c:1274
 msgid "Solid Color"
@@ -1634,47 +1634,47 @@ msgstr "Gradient textury"
 
 #: ../TexturePanel.c:1276
 msgid "Simple Gradient Texture"
-msgstr "Obyèejná textura s pøechodem"
+msgstr "ObyÄejnÃ¡ textura s pÅ™echodem"
 
 #: ../TexturePanel.c:1277
 msgid "Textured Gradient"
-msgstr "Texturovanı pøechod"
+msgstr "TexturovanÃ½ pÅ™echod"
 
 #: ../TexturePanel.c:1278
 msgid "Image Texture"
-msgstr "Obrázek textury"
+msgstr "ObrÃ¡zek textury"
 
 #: ../TexturePanel.c:1286
 msgid "Default Color"
-msgstr "Standardní barva"
+msgstr "StandardnÃ­ barva"
 
 #: ../TexturePanel.c:1298
 msgid "Gradient Colors"
-msgstr "Barvy pøechodu"
+msgstr "Barvy pÅ™echodu"
 
 #: ../TexturePanel.c:1394
 msgid "Direction"
-msgstr "Smìr"
+msgstr "SmÄ›r"
 
 #: ../TexturePanel.c:1422
 msgid "Gradient"
-msgstr "Pøechod"
+msgstr "PÅ™echod"
 
 #: ../TexturePanel.c:1440
 msgid "Gradient Opacity"
-msgstr "Neprùhlednost pøechodu"
+msgstr "NeprÅ¯hlednost pÅ™echodu"
 
 #: ../TexturePanel.c:1483
 msgid "Image"
-msgstr "Obrázek"
+msgstr "ObrÃ¡zek"
 
 #: ../TexturePanel.c:1515
 msgid "Tile"
-msgstr "Dla¾dice"
+msgstr "DlaÅ¾dice"
 
 #: ../TexturePanel.c:1516
 msgid "Scale"
-msgstr "Zvìt¹it"
+msgstr "ZvÄ›tÅ¡it"
 
 #: ../TexturePanel.c:1518
 msgid "Maximize"
@@ -1694,11 +1694,11 @@ msgstr "Downloadovat"
 
 #: ../Themes.c:171
 msgid "Save Current Theme"
-msgstr "Ulo¾it aktuální téma"
+msgstr "UloÅ¾it aktuÃ¡lnÃ­ tÃ©ma"
 
 #: ../Themes.c:180
 msgid "Load"
-msgstr "Naèíst"
+msgstr "NaÄÃ­st"
 
 #: ../Themes.c:185
 msgid "Install"
@@ -1706,7 +1706,7 @@ msgstr "Instalovat"
 
 #: ../Themes.c:193
 msgid "Tile of The Day"
-msgstr "Obrázek dne"
+msgstr "ObrÃ¡zek dne"
 
 #: ../Themes.c:213
 msgid "Bar of The Day"
@@ -1714,32 +1714,32 @@ msgstr "Titulek dne"
 
 #: ../WPrefs.c:260
 msgid "Window Maker Preferences"
-msgstr "Nastavení Window Makeru"
+msgstr "NastavenÃ­ Window Makeru"
 
 #: ../WPrefs.c:284
 msgid "Revert Page"
-msgstr "Stránku zpìt"
+msgstr "StrÃ¡nku zpÄ›t"
 
 #: ../WPrefs.c:290
 msgid "Revert All"
-msgstr "V¹e zpìt"
+msgstr "VÅ¡e zpÄ›t"
 
 #: ../WPrefs.c:296
 msgid "Save"
-msgstr "Ulo¾it"
+msgstr "UloÅ¾it"
 
 #: ../WPrefs.c:309
 msgid "Balloon Help"
-msgstr "Balónová nápovìda"
+msgstr "BalÃ³novÃ¡ nÃ¡povÄ›da"
 
 #: ../WPrefs.c:334
 msgid "Window Maker Preferences Utility"
-msgstr "Konfiguraèní program Window Makeru"
+msgstr "KonfiguraÄnÃ­ program Window Makeru"
 
 #: ../WPrefs.c:341
 #, c-format
 msgid "Version %s for Window Maker %s or newer"
-msgstr "Verze %s pro Window Maker %s nebo novìj¹í"
+msgstr "Verze %s pro Window Maker %s nebo novÄ›jÅ¡Ã­"
 
 #: ../WPrefs.c:349
 msgid "Starting..."
@@ -1751,62 +1751,62 @@ msgid ""
 "Artwork: Marco van Hylckama Vlieg, Largo et al\n"
 "More Programming: James Thompson et al"
 msgstr ""
-"Programoval/Návrh: Alfredo K. Kojima\n"
-"Pøedloha: Marco van Hylckama Vlieg\n"
+"Programoval/NÃ¡vrh: Alfredo K. Kojima\n"
+"PÅ™edloha: Marco van Hylckama Vlieg\n"
 "Spolupracoval: James Thompson\n"
-"Do èe¹tiny pøelo¾il: Jiøí Hnídek (jiri.hnidek@vslib.cz)"
+"Do ÄeÅ¡tiny pÅ™eloÅ¾il: JiÅ™Ã­ HnÃ­dek (jiri.hnidek@vslib.cz)"
 
 #: ../WPrefs.c:455
 #, c-format
 msgid "could not locate image file %s\n"
-msgstr "nelze najít soubor %s s obrázkem\n"
+msgstr "nelze najÃ­t soubor %s s obrÃ¡zkem\n"
 
 #: ../WPrefs.c:670
 #, c-format
 msgid "could not load image file %s:%s"
-msgstr "nelze naèíst soubor s obrázkem %s:%s"
+msgstr "nelze naÄÃ­st soubor s obrÃ¡zkem %s:%s"
 
 #: ../WPrefs.c:689
 msgid "Loading Window Maker configuration files..."
-msgstr "Konfiguraèní soubory Window Makeru se naèítají..."
+msgstr "KonfiguraÄnÃ­ soubory Window Makeru se naÄÃ­tajÃ­..."
 
 #: ../WPrefs.c:693
 msgid "Initializing configuration panels..."
-msgstr "Inicializace konfiguraèních panelù..."
+msgstr "Inicializace konfiguraÄnÃ­ch panelÅ¯..."
 
 #: ../WPrefs.c:727
 msgid ""
 "WPrefs is free software and is distributed WITHOUT ANY\n"
 "WARRANTY under the terms of the GNU General Public License."
 msgstr ""
-"Program WPrefs je volnì ¹iøitelnı software, kterı je distribuován \n"
-"BEZ JAKÉKOLI ZÁRUKY pod GNU licencí."
+"Program WPrefs je volnÄ› Å¡iÅ™itelnÃ½ software, kterÃ½ je distribuovÃ¡n \n"
+"BEZ JAKÃ‰KOLI ZÃRUKY pod GNU licencÃ­."
 
 #: ../WPrefs.c:757 ../WPrefs.c:837
 #, c-format
 msgid "Window Maker domain (%s) is corrupted!"
-msgstr "Doména Window Makeru (%s) je po¹kozena!"
+msgstr "DomÃ©na Window Makeru (%s) je poÅ¡kozena!"
 
 #: ../WPrefs.c:761
 #, c-format
 msgid "Could not load Window Maker domain (%s) from defaults database."
-msgstr "z databáze standardù nelze naèíst doménu Window Makeru (%s)."
+msgstr "z databÃ¡ze standardÅ¯ nelze naÄÃ­st domÃ©nu Window Makeru (%s)."
 
 #: ../WPrefs.c:777
 msgid "could not extract version information from Window Maker"
-msgstr "od Window Makeru nelze získat èíslo verze"
+msgstr "od Window Makeru nelze zÃ­skat ÄÃ­slo verze"
 
 #: ../WPrefs.c:778
 msgid "Make sure wmaker is in your search path."
-msgstr "Zajistìte, aby byl Window Maker v prohledávané cestì."
+msgstr "ZajistÄ›te, aby byl Window Maker v prohledÃ¡vanÃ© cestÄ›."
 
 #: ../WPrefs.c:781
 msgid ""
 "Could not extract version from Window Maker. Make sure it is correctly "
 "installed and is in your PATH environment variable."
 msgstr ""
-"Od Window Makeru nelze získat èíslo verze. Zjistìte, je-li správnì "
-"instalován a je v prohledávanıch adresáøích."
+"Od Window Makeru nelze zÃ­skat ÄÃ­slo verze. ZjistÄ›te, je-li sprÃ¡vnÄ› "
+"instalovÃ¡n a je v prohledÃ¡vanÃ½ch adresÃ¡Å™Ã­ch."
 
 #: ../WPrefs.c:791
 msgid ""
@@ -1814,8 +1814,8 @@ msgid ""
 "installed and the path where it installed is in the PATH environment "
 "variable."
 msgstr ""
-"Od Window Makeru nelze získat èíslo verze. Zjistìte, je-li správnì "
-"instalován a je v prohledávanıch adresáøích."
+"Od Window Makeru nelze zÃ­skat ÄÃ­slo verze. ZjistÄ›te, je-li sprÃ¡vnÄ› "
+"instalovÃ¡n a je v prohledÃ¡vanÃ½ch adresÃ¡Å™Ã­ch."
 
 #: ../WPrefs.c:798
 #, c-format
@@ -1823,8 +1823,8 @@ msgid ""
 "WPrefs only supports Window Maker 0.18.0 or newer.\n"
 "The version installed is %i.%i.%i\n"
 msgstr ""
-"Program WPrefs podporuje Window Maker 0.18.0 a vy¹¹í.\n"
-"Instalovaná verze je %i.%i.%i\n"
+"Program WPrefs podporuje Window Maker 0.18.0 a vyÅ¡Å¡Ã­.\n"
+"InstalovanÃ¡ verze je %i.%i.%i\n"
 
 #: ../WPrefs.c:805
 #, c-format
@@ -1832,18 +1832,18 @@ msgid ""
 "Window Maker %i.%i.%i, which is installed in your system, is not fully "
 "supported by this version of WPrefs."
 msgstr ""
-"Instalovanı Window Maker %i.%i.%i není plnì touto verzí programu WPrefs "
-"podporován."
+"InstalovanÃ½ Window Maker %i.%i.%i nenÃ­ plnÄ› touto verzÃ­ programu WPrefs "
+"podporovÃ¡n."
 
 #: ../WPrefs.c:818
 #, c-format
 msgid "could not run \"%s --global_defaults_path\"."
-msgstr "nelze provést \"%s --global_defaults_path\""
+msgstr "nelze provÃ©st \"%s --global_defaults_path\""
 
 #: ../WPrefs.c:841
 #, c-format
 msgid "Could not load global Window Maker domain (%s)."
-msgstr "Nelze naèíst globální doménu pro Window Maker (%s)."
+msgstr "Nelze naÄÃ­st globÃ¡lnÃ­ domÃ©nu pro Window Maker (%s)."
 
 #: ../WPrefs.c:1090
 #, c-format
@@ -1851,53 +1851,53 @@ msgid ""
 "bad speed value for option %s\n"
 ". Using default Medium"
 msgstr ""
-"pro volbu %s je chybnì urèená\n"
-"rychlost. Pou¾ita 'Medium'"
+"pro volbu %s je chybnÄ› urÄenÃ¡\n"
+"rychlost. PouÅ¾ita 'Medium'"
 
 #: ../WindowHandling.c:141
 #, c-format
 msgid "bad option value %s in WindowPlacement. Using default value"
-msgstr "chybná hodnota volby %s ve WindowPlacement. Pou¾ívám standardní"
+msgstr "chybnÃ¡ hodnota volby %s ve WindowPlacement. PouÅ¾Ã­vÃ¡m standardnÃ­"
 
 #: ../WindowHandling.c:163
 msgid "invalid data in option WindowPlaceOrigin. Using default (0,0)"
-msgstr "chybná data pro WindowPlaceOrigin. Pou¾ívám (0,0)"
+msgstr "chybnÃ¡ data pro WindowPlaceOrigin. PouÅ¾Ã­vÃ¡m (0,0)"
 
 #: ../WindowHandling.c:243
 msgid "Window Placement"
-msgstr "Umís»ování oken"
+msgstr "UmÃ­sÅ¥ovÃ¡nÃ­ oken"
 
 #: ../WindowHandling.c:244
 msgid ""
 "How to place windows when they are first put\n"
 "on screen."
 msgstr ""
-"Jak umís»ovat okna, kdy¾ jsou poprvé zobrazena\n"
+"Jak umÃ­sÅ¥ovat okna, kdyÅ¾ jsou poprvÃ© zobrazena\n"
 "na obrazovce."
 
 #: ../WindowHandling.c:250
 msgid "Automatic"
-msgstr "Automatické"
+msgstr "AutomatickÃ©"
 
 #: ../WindowHandling.c:251
 msgid "Random"
-msgstr "Náhodné"
+msgstr "NÃ¡hodnÃ©"
 
 #: ../WindowHandling.c:252
 msgid "Manual"
-msgstr "Ruèní"
+msgstr "RuÄnÃ­"
 
 #: ../WindowHandling.c:253
 msgid "Cascade"
-msgstr "Kaskádové"
+msgstr "KaskÃ¡dovÃ©"
 
 #: ../WindowHandling.c:254
 msgid "Smart"
-msgstr "Chytré"
+msgstr "ChytrÃ©"
 
 #: ../WindowHandling.c:260
 msgid "Placement Origin"
-msgstr "Poèáteèní poloha"
+msgstr "PoÄÃ¡teÄnÃ­ poloha"
 
 #: ../WindowHandling.c:321
 msgid "Opaque Move"
@@ -1909,20 +1909,20 @@ msgid ""
 "when dragging windows aroung or if only a\n"
 "frame should be displayed.\n"
 msgstr ""
-"Zda se má zobrazovat obsah oken pøi pøesouvání\n"
-"okna nebo má bıt zobrazen pouze rám okna.\n"
+"Zda se mÃ¡ zobrazovat obsah oken pÅ™i pÅ™esouvÃ¡nÃ­\n"
+"okna nebo mÃ¡ bÃ½t zobrazen pouze rÃ¡m okna.\n"
 
 #: ../WindowHandling.c:361
 msgid "When maximizing..."
-msgstr "Pøi maximalizaci..."
+msgstr "PÅ™i maximalizaci..."
 
 #: ../WindowHandling.c:366
 msgid "...do not cover icons"
-msgstr "...nezakrıvat ikony"
+msgstr "...nezakrÃ½vat ikony"
 
 #: ../WindowHandling.c:372
 msgid "...do not cover dock"
-msgstr "...nezakrıvat dok"
+msgstr "...nezakrÃ½vat dok"
 
 #: ../WindowHandling.c:381
 msgid "Edge Resistance"
@@ -1935,8 +1935,8 @@ msgid ""
 "when moved against other windows or the edges\n"
 "of the screen."
 msgstr ""
-"'Odolnost hran' zajistí, ¾e se okna 'budou bránit'\n"
-"pøi pøesunu dál pøes ostatní okna nebo hrany obrazovky."
+"'Odolnost hran' zajistÃ­, Å¾e se okna 'budou brÃ¡nit'\n"
+"pÅ™i pÅ™esunu dÃ¡l pÅ™es ostatnÃ­ okna nebo hrany obrazovky."
 
 #: ../WindowHandling.c:402
 msgid "Resist"
@@ -1951,58 +1951,58 @@ msgid ""
 "Open dialogs in same workspace\n"
 "as their owners"
 msgstr ""
-"Otevøít dialogy na stejné plo¹e\n"
-"jako je vlastník"
+"OtevÅ™Ã­t dialogy na stejnÃ© ploÅ¡e\n"
+"jako je vlastnÃ­k"
 
 #: ../WindowHandling.c:450
 msgid "Window Handling Preferences"
-msgstr "Nastavení práce s okny"
+msgstr "NastavenÃ­ prÃ¡ce s okny"
 
 #: ../WindowHandling.c:452
 msgid ""
 "Window handling options. Initial placement style\n"
 "edge resistance, opaque move etc."
 msgstr ""
-"Zacházení s okny. Zpùsob poèáteèního umís»ování,\n"
-"odolnost hran proti pøesunu mimo obrazovku atd."
+"ZachÃ¡zenÃ­ s okny. ZpÅ¯sob poÄÃ¡teÄnÃ­ho umÃ­sÅ¥ovÃ¡nÃ­,\n"
+"odolnost hran proti pÅ™esunu mimo obrazovku atd."
 
 #: ../Workspace.c:176
 msgid "Workspace Navigation"
-msgstr "Orientace v plochách"
+msgstr "Orientace v plochÃ¡ch"
 
 #: ../Workspace.c:183
 msgid ""
 "wrap to the first workspace after the\n"
 "last workspace."
 msgstr ""
-"Za poslední pracovní plochou pøepnout\n"
-"na první a opaènì."
+"Za poslednÃ­ pracovnÃ­ plochou pÅ™epnout\n"
+"na prvnÃ­ a opaÄnÄ›."
 
 #: ../Workspace.c:205
 msgid "switch workspaces while dragging windows."
 msgstr ""
-"Automaticky se pøepnout na dal¹í plochu\n"
-"pøi pøeta¾ení aplikace pøes hranu plochy."
+"Automaticky se pÅ™epnout na dalÅ¡Ã­ plochu\n"
+"pÅ™i pÅ™etaÅ¾enÃ­ aplikace pÅ™es hranu plochy."
 
 #: ../Workspace.c:227
 msgid "automatically create new workspaces."
-msgstr "Automaticky vytváøet nové pracovní plochy."
+msgstr "Automaticky vytvÃ¡Å™et novÃ© pracovnÃ­ plochy."
 
 #: ../Workspace.c:250
 msgid ""
 "Position of workspace\n"
 "name display"
 msgstr ""
-"Pozice názvu indikátoru\n"
-" pracovní plochy:"
+"Pozice nÃ¡zvu indikÃ¡toru\n"
+" pracovnÃ­ plochy:"
 
 #: ../Workspace.c:269
 msgid "Disable"
-msgstr "®ádná"
+msgstr "Å½Ã¡dnÃ¡"
 
 #: ../Workspace.c:271
 msgid "Top"
-msgstr "Nahoøe"
+msgstr "NahoÅ™e"
 
 #: ../Workspace.c:272
 msgid "Bottom"
@@ -2010,11 +2010,11 @@ msgstr "Dole"
 
 #: ../Workspace.c:273
 msgid "Top/Left"
-msgstr "Nahoøe vlevo"
+msgstr "NahoÅ™e vlevo"
 
 #: ../Workspace.c:274
 msgid "Top/Right"
-msgstr "Nahoøe vpravo"
+msgstr "NahoÅ™e vpravo"
 
 #: ../Workspace.c:275
 msgid "Bottom/Left"
@@ -2033,37 +2033,37 @@ msgid ""
 "Disable/enable the application Dock (the\n"
 "vertical icon bar in the side of the screen)."
 msgstr ""
-"Vypnout/Zapnout aplikaèní Dok (ta svislá\n"
-"posuvná li¹ta s ikonami na boku obrazovky)."
+"Vypnout/Zapnout aplikaÄnÃ­ Dok (ta svislÃ¡\n"
+"posuvnÃ¡ liÅ¡ta s ikonami na boku obrazovky)."
 
 #: ../Workspace.c:324
 msgid ""
 "Disable/enable the Clip (that thing with\n"
 "a paper clip icon)."
 msgstr ""
-"Zapnout/Vypnout Sponku (ta vìc, která \n"
-"má na sobì sponku na papír)."
+"Zapnout/Vypnout Sponku (ta vÄ›c, kterÃ¡ \n"
+"mÃ¡ na sobÄ› sponku na papÃ­r)."
 
 #: ../Workspace.c:364
 msgid "Workspace Preferences"
-msgstr "Nastavení pracovní plochy"
+msgstr "NastavenÃ­ pracovnÃ­ plochy"
 
 #: ../Workspace.c:366
 msgid ""
 "Workspace navigation features.\n"
 "You can also enable/disable the Dock and Clip here."
 msgstr ""
-"Nastavení práce s virtuálnímy obrazovkami,\n"
-"zapnutí/vypnoutí Doku nebo Sponky."
+"NastavenÃ­ prÃ¡ce s virtuÃ¡lnÃ­my obrazovkami,\n"
+"zapnutÃ­/vypnoutÃ­ Doku nebo Sponky."
 
 #: ../imagebrowser.c:95
 msgid "View"
-msgstr "Pøehled"
+msgstr "PÅ™ehled"
 
 #: ../main.c:59
 #, c-format
 msgid "usage: %s [options]\n"
-msgstr "pou¾ití: %s [volby]\n"
+msgstr "pouÅ¾itÃ­: %s [volby]\n"
 
 #: ../main.c:60
 msgid "options:"
@@ -2071,7 +2071,7 @@ msgstr "volby:"
 
 #: ../main.c:61
 msgid " -display <display>\tdisplay to be used"
-msgstr " -display <display>\tkterı display pou¾ít"
+msgstr " -display <display>\tkterÃ½ display pouÅ¾Ã­t"
 
 #: ../main.c:62
 msgid " --version\t\tprint version number and exit"
@@ -2079,25 +2079,25 @@ msgstr " --version\t\tzobraz verzi a konec"
 
 #: ../main.c:63
 msgid " --help\t\tprint this message and exit"
-msgstr " --help\t\tzobraz nápovìdu a konec"
+msgstr " --help\t\tzobraz nÃ¡povÄ›du a konec"
 
 #: ../main.c:122
 #, c-format
 msgid "too few arguments for %s"
-msgstr "nedostatek argumentù pro %s"
+msgstr "nedostatek argumentÅ¯ pro %s"
 
 #: ../main.c:144
 msgid "X server does not support locale"
-msgstr "X server nepodporuje nastavení místních zvyklostí"
+msgstr "X server nepodporuje nastavenÃ­ mÃ­stnÃ­ch zvyklostÃ­"
 
 #: ../main.c:147
 msgid "cannot set locale modifiers"
-msgstr "nelze nastavit modifikátory místních zvyklostí"
+msgstr "nelze nastavit modifikÃ¡tory mÃ­stnÃ­ch zvyklostÃ­"
 
 #: ../main.c:153
 #, c-format
 msgid "could not open display %s"
-msgstr "nelze otevøít displej %s"
+msgstr "nelze otevÅ™Ã­t displej %s"
 
 #: ../main.c:161
 msgid "could not initialize application"

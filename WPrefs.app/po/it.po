@@ -11,7 +11,7 @@ msgstr ""
 "PO-Revision-Date: 2001-05-21\n"
 "Last-Translator: Michele Campeotto <micampe@f2s.com\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: unknown\n"
 
 #: ../../WPrefs.app/main.c:74
@@ -83,7 +83,7 @@ msgstr "Mostra suggerimenti"
 
 #: ../../WPrefs.app/WPrefs.c:333
 msgid "Window Maker Preferences Utility"
-msgstr "Utilità di Configurazione di Window Maker"
+msgstr "UtilitÃ  di Configurazione di Window Maker"
 
 #: ../../WPrefs.app/WPrefs.c:340
 #, c-format
@@ -139,13 +139,13 @@ msgid ""
 "WPrefs is free software and is distributed WITHOUT ANY\n"
 "WARRANTY under the terms of the GNU General Public License."
 msgstr ""
-"WPrefs è software libero ed è distribuito SENZA NESSUNA\n"
+"WPrefs Ã¨ software libero ed Ã¨ distribuito SENZA NESSUNA\n"
 "GARANZIA nei termini della GNU General Public License."
 
 #: ../../WPrefs.app/WPrefs.c:755 ../../WPrefs.app/WPrefs.c:835
 #, c-format
 msgid "Window Maker domain (%s) is corrupted!"
-msgstr "Il dominio di Window Maker (%s) è rovinato!"
+msgstr "Il dominio di Window Maker (%s) Ã¨ rovinato!"
 
 #: ../../WPrefs.app/Font.c:330 ../../WPrefs.app/Menu.c:1533
 #: ../../WPrefs.app/MouseSettings.c:140 ../../WPrefs.app/MouseSettings.c:160
@@ -209,7 +209,7 @@ msgid ""
 "The version installed is %i.%i.%i\n"
 msgstr ""
 "WPrefs supporta solo Window Maker 0.18.0 o successivo.\n"
-"La versione installata è %i.%i.%i\n"
+"La versione installata Ã¨ %i.%i.%i\n"
 
 #: ../../WPrefs.app/WPrefs.c:804
 #, c-format
@@ -217,7 +217,7 @@ msgid ""
 "Window Maker %i.%i.%i, which is installed in your system, is not fully "
 "supported by this version of WPrefs."
 msgstr ""
-"Window Maker %i.%i.%i, che è installato in questo sistema, non è "
+"Window Maker %i.%i.%i, che Ã¨ installato in questo sistema, non Ã¨ "
 "completamente supportato da questa versione di WPrefs."
 
 #: ../../WPrefs.app/Menu.c:1568 ../../WPrefs.app/WPrefs.c:806
@@ -240,7 +240,7 @@ msgid ""
 "bad speed value for option %s\n"
 ". Using default Medium"
 msgstr ""
-"Valore di velocità errato per l'opzione %s\n"
+"Valore di velocitÃ  errato per l'opzione %s\n"
 "Uso Medium"
 
 #: ../../WPrefs.app/Appearance.c:1131
@@ -297,11 +297,11 @@ msgstr "Barra di ridimensionamento"
 
 #: ../../WPrefs.app/Appearance.c:1767
 msgid "Titlebar of Menus"
-msgstr "Titolo dei menù"
+msgstr "Titolo dei menÃ¹"
 
 #: ../../WPrefs.app/Appearance.c:1768
 msgid "Menu Items"
-msgstr "Voci dei menù"
+msgstr "Voci dei menÃ¹"
 
 #: ../../WPrefs.app/Appearance.c:1769
 msgid "Icon Background"
@@ -456,11 +456,11 @@ msgstr "Impossibile caricare il file immagine %s"
 
 #: ../../WPrefs.app/Configurations.c:203
 msgid "Icon Slide Speed"
-msgstr "Velocità di scorrimento delle icone"
+msgstr "VelocitÃ  di scorrimento delle icone"
 
 #: ../../WPrefs.app/Configurations.c:209
 msgid "Shade Animation Speed"
-msgstr "Velocità dell'arrotolamento"
+msgstr "VelocitÃ  dell'arrotolamento"
 
 #: ../../WPrefs.app/Configurations.c:271
 msgid "Smooth Scaling"
@@ -473,7 +473,7 @@ msgid ""
 "down loading of background images considerably."
 msgstr ""
 "Immagini di sfondo levigate: neutralizza\n"
-"l'effetto 'scalettatura'. Questo rallenterà\n"
+"l'effetto 'scalettatura'. Questo rallenterÃ \n"
 "considerevolmente il caricamento delle\n"
 "immagini di sfondo."
 
@@ -526,8 +526,8 @@ msgid ""
 "http://shadowmere.student.utwente.nl/"
 msgstr ""
 "Attiva/disattiva gli effetti sonori associati\n"
-"agli eventi del gestore di finestre. Sarà \n"
-"necessario un modulo separato che è possibile\n"
+"agli eventi del gestore di finestre. SarÃ  \n"
+"necessario un modulo separato che Ã¨ possibile\n"
 "trovare all'indirizzo:\n"
 "http://shadowmere.student.utwente.nl/"
 
@@ -560,7 +560,7 @@ msgid ""
 "More colors for\n"
 "applications"
 msgstr ""
-"Più colori per\n"
+"PiÃ¹ colori per\n"
 "le applicazioni"
 
 #: ../../WPrefs.app/Configurations.c:466
@@ -568,7 +568,7 @@ msgid ""
 "More colors for\n"
 "Window Maker"
 msgstr ""
-"Più colori per\n"
+"PiÃ¹ colori per\n"
 "WindowMaker"
 
 #: ../../WPrefs.app/Configurations.c:521
@@ -581,8 +581,8 @@ msgid ""
 "toggling and number of colors to reserve for\n"
 "Window Maker on 8bit displays."
 msgstr ""
-"Velocità delle animazioni, stili della barra del tiolo,\n"
-"opzioni per la modalità a 8 bit di colore e altre opzioni\n"
+"VelocitÃ  delle animazioni, stili della barra del tiolo,\n"
+"opzioni per la modalitÃ  a 8 bit di colore e altre opzioni\n"
 "per l'aspetto di Window Maker."
 
 #: ../../WPrefs.app/Expert.c:75
@@ -668,7 +668,7 @@ msgstr ""
 
 #: ../../WPrefs.app/Focus.c:248
 msgid "Input Focus Mode"
-msgstr "Modalità di focus"
+msgstr "ModalitÃ  di focus"
 
 #: ../../WPrefs.app/Focus.c:253
 msgid "Click window to focus"
@@ -692,7 +692,7 @@ msgstr "...che ha il focus."
 
 #: ../../WPrefs.app/Focus.c:280
 msgid "...that is under the mouse pointer."
-msgstr "...che è sotto al puntatore."
+msgstr "...che Ã¨ sotto al puntatore."
 
 #: ../../WPrefs.app/Focus.c:289
 msgid "Automatic Window Raise Delay"
@@ -727,7 +727,7 @@ msgid ""
 "Keyboard focus switching policy, colormap switching\n"
 "policy for 8bpp displays and other related options."
 msgstr ""
-"Modalità di cambio del focus, cambio della mappa dei\n"
+"ModalitÃ  di cambio del focus, cambio della mappa dei\n"
 "colori e altre opzioni correlate."
 
 #: ../../WPrefs.app/Font.c:277
@@ -1262,8 +1262,8 @@ msgid ""
 "/usr/X11R6/bin ~/xbin"
 msgstr ""
 "Scrivere il percorso di un file contenente un\n"
-"menù o una lista di directory con i programmi\n"
-"che si vogliono nel menù. Ad esempio:\n"
+"menÃ¹ o una lista di directory con i programmi\n"
+"che si vogliono nel menÃ¹. Ad esempio:\n"
 "~/GNUstep/Library/WindowMaker/menu.it\n"
 "oppure\n"
 "/usr/X11R6/bin ~/xbin"
@@ -1278,7 +1278,7 @@ msgid ""
 "definition to stdout when invoked."
 msgstr ""
 "Scrivere un comando che produca una\n"
-"definizione di menù su stdout quando\n"
+"definizione di menÃ¹ su stdout quando\n"
 "invocato."
 
 #: ../../WPrefs.app/Menu.c:721
@@ -1370,9 +1370,9 @@ msgid ""
 msgstr ""
 "Istruzioni:\n"
 "\n"
-" - per aggiungere elementi, trascinarli sul menù\n"
-" - per eliminarli elementi, trascinarli fuori dal menù\n"
-" - per spostare elementi, trascinarli nel menù\n"
+" - per aggiungere elementi, trascinarli sul menÃ¹\n"
+" - per eliminarli elementi, trascinarli fuori dal menÃ¹\n"
+" - per spostare elementi, trascinarli nel menÃ¹\n"
 " - per copiare elementi, trascinarli premendo Control\n"
 " - doppio click su un elemento per cambiare l'etichetta\n"
 " - click su un elemento per modificare le informazioni"
@@ -1380,7 +1380,7 @@ msgstr ""
 #: ../../WPrefs.app/Menu.c:1067
 #, c-format
 msgid "unknown command '%s' in menu"
-msgstr "comando `%s' sconosciuto nel menù"
+msgstr "comando `%s' sconosciuto nel menÃ¹"
 
 #: ../../WPrefs.app/Menu.c:1099
 msgid ": Execute Program"
@@ -1419,12 +1419,12 @@ msgid ""
 "Removing this item will destroy all items inside\n"
 "the submenu. Do you really want to do that?"
 msgstr ""
-"Eliminare questo elemento distruggerà tutti gli\n"
+"Eliminare questo elemento distruggerÃ  tutti gli\n"
 "elementi che contiene. Si vuole farlo veramente?"
 
 #: ../../WPrefs.app/Menu.c:1346
 msgid "Yes"
-msgstr "Sì"
+msgstr "SÃ¬"
 
 #: ../../WPrefs.app/Menu.c:1346
 msgid "No"
@@ -1432,7 +1432,7 @@ msgstr "No"
 
 #: ../../WPrefs.app/Menu.c:1347
 msgid "Yes, don't ask again."
-msgstr "Sì, non chiederlo più."
+msgstr "SÃ¬, non chiederlo piÃ¹."
 
 #. if there is a localized plmenu for the tongue put it's filename here
 #: ../../WPrefs.app/Menu.c:1514 ../../WPrefs.app/Menu.c:1521
@@ -1451,13 +1451,13 @@ msgid ""
 "by this tool. Do you want to discard the current menu\n"
 "to use this tool?"
 msgstr ""
-"Il formato del menu correntemente in uso non è supportato\n"
-"da questo programma. Si vuole scartare il menù corrente\n"
+"Il formato del menu correntemente in uso non Ã¨ supportato\n"
+"da questo programma. Si vuole scartare il menÃ¹ corrente\n"
 "per poter usare questo programma?"
 
 #: ../../WPrefs.app/Menu.c:1572
 msgid "Yes, Discard and Update"
-msgstr "Sì, scarta e aggiorna"
+msgstr "SÃ¬, scarta e aggiorna"
 
 #: ../../WPrefs.app/Menu.c:1573
 msgid "No, Keep Current Menu"
@@ -1473,7 +1473,7 @@ msgstr "Modifica il menu per lanciare le applicazioni."
 
 #: ../../WPrefs.app/MenuPreferences.c:112
 msgid "Menu Scrolling Speed"
-msgstr "Velocità di scorrimento del menu"
+msgstr "VelocitÃ  di scorrimento del menu"
 
 #: ../../WPrefs.app/MenuPreferences.c:161
 msgid "Submenu Alignment"
@@ -1500,7 +1500,7 @@ msgid ""
 "Menu usability related options. Scrolling speed,\n"
 "alignment of submenus etc."
 msgstr ""
-"Opzioni sull'uso del menu. Velocità di scrolling,\n"
+"Opzioni sull'uso del menu. VelocitÃ  di scrolling,\n"
 "allineamento dei sottomenu, ecc."
 
 #: ../../WPrefs.app/MouseSettings.c:141
@@ -1529,7 +1529,7 @@ msgid ""
 "modifier key %s for option ModifierKey was not recognized. Using %s as "
 "default"
 msgstr ""
-"Il tasto modificatore %s per l'opzione ModifierKey non è stato riconosciuto. "
+"Il tasto modificatore %s per l'opzione ModifierKey non Ã¨ stato riconosciuto. "
 "Uso `%s'."
 
 #: ../../WPrefs.app/MouseSettings.c:382
@@ -1538,7 +1538,7 @@ msgstr "Impossibile leggere la mappa dei modificatori della tastiera."
 
 #: ../../WPrefs.app/MouseSettings.c:477
 msgid "Mouse Speed"
-msgstr "Velocità del mouse"
+msgstr "VelocitÃ  del mouse"
 
 #: ../../WPrefs.app/MouseSettings.c:507
 msgid "Acceler.:"
@@ -1662,7 +1662,7 @@ msgid ""
 "Mouse speed/acceleration, double click delay,\n"
 "mouse button bindings etc."
 msgstr ""
-"Velocità e accelerazione del mouse, ritardo\n"
+"VelocitÃ  e accelerazione del mouse, ritardo\n"
 "del doppio click, funzioni dei tasti, ecc."
 
 #: ../../WPrefs.app/Paths.c:84
@@ -2024,7 +2024,7 @@ msgid ""
 "when moved against other windows or the edges\n"
 "of the screen."
 msgstr ""
-"La resistenza dei bordi fa sì che la finestra\n"
+"La resistenza dei bordi fa sÃ¬ che la finestra\n"
 "`resista' allo spostamento fino al superamento\n"
 "della soglia impostata quando viene avvicinata\n"
 "ad altre finestre o ai bordi dello schermo."

@@ -108,15 +108,15 @@
 	"Tietoja" MENU
 		"Tietoja..." INFO_PANEL
 		"Laillista" LEGAL_PANEL
-		"J‰rjestelm‰konsoli" EXEC xconsole
-		"J‰rjestelm‰n rasitus" SHEXEC xosview || xload
+		"J√§rjestelm√§konsoli" EXEC xconsole
+		"J√§rjestelm√§n rasitus" SHEXEC xosview || xload
 		"Prosessiluettelo" EXEC xterm -e top
 		"Ohjeselain" EXEC xman
 	"Tietoja" END
-	"K‰ynnist‰..." SHEXEC %a(K‰ynnist‰,Kirjoita suoritettava komento:)
+	"K√§ynnist√§..." SHEXEC %a(K√§ynnist√§,Kirjoita suoritettava komento:)
 	"XTerm" EXEC xterm -sb 
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
-	"Tyˆtilat" WORKSPACE_MENU
+	"Ty√∂tilat" WORKSPACE_MENU
 	"Sovellukset" MENU
 		"Grafiikka" MENU
 			"Gimp" SHEXEC gimp >/dev/null
@@ -128,8 +128,8 @@
 		"OffiX Tiedostot" EXEC files
 		"LyX" EXEC lyx
 		"Netscape" EXEC netscape 
-  		"Ghostview" EXEC ghostview %a(GhostView,Kirjoita n‰ytett‰v‰n tiedoston nimi:)
-		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobat,Kirjoita n‰ytett‰v‰n PDF-tiedoston nimi)
+  		"Ghostview" EXEC ghostview %a(GhostView,Kirjoita n√§ytett√§v√§n tiedoston nimi:)
+		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobat,Kirjoita n√§ytett√§v√§n PDF-tiedoston nimi)
   		"TkDesk" EXEC tkdesk
 	"Sovellukset" END
 	"Editorit" MENU
@@ -149,67 +149,67 @@
 		"Laskin" EXEC xcalc
 		"Ikkunan ominaisuudet" SHEXEC xprop | xmessage -center -title 'xprop' -file -
 		"Kirjasinlajivalitsin" EXEC xfontsel
-		"P‰‰te" EXEC xminicom
+		"P√§√§te" EXEC xminicom
 		"Suurennuslasi" EXEC xmag
-		"V‰rikartta" EXEC xcmap
+		"V√§rikartta" EXEC xcmap
 		"XKill" EXEC xkill
-		"Leikepˆyt‰" EXEC xclipboard
+		"Leikep√∂yt√§" EXEC xclipboard
 	"Apuohjelmat" END
 
 	"Valinta" MENU
 		"Kopioi" SHEXEC echo '%s' | wxcopy
-		"L‰het‰ s‰hkˆpostina" EXEC xterm -name mail -T "Pine" -e pine %s
+		"L√§het√§ s√§hk√∂postina" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Selaa selaimella" EXEC netscape %s
 		"Etsi ohjeista" SHEXEC MANUAL_SEARCH(%s)
 	"Valinta" END
 
-	"Tyˆtila" MENU
+	"Ty√∂tila" MENU
 		"Piilota muut" HIDE_OTHERS
-		"N‰yt‰ kaikki ikkunat" SHOW_ALL
-		"J‰rjest‰ kuvakkeet" ARRANGE_ICONS
-		"Virkist‰ ruutu" REFRESH
-		"Lukitse n‰yttˆ" EXEC xlock -allowroot -usefirst
+		"N√§yt√§ kaikki ikkunat" SHOW_ALL
+		"J√§rjest√§ kuvakkeet" ARRANGE_ICONS
+		"Virkist√§ ruutu" REFRESH
+		"Lukitse n√§ytt√∂" EXEC xlock -allowroot -usefirst
 		"Tallenna istunto" SAVE_SESSION
-		"Tyhjenn‰ istunto" CLEAR_SESSION
-	"Tyˆtila" END
+		"Tyhjenn√§ istunto" CLEAR_SESSION
+	"Ty√∂tila" END
 
-	"Ulkon‰kˆ" MENU
+	"Ulkon√§k√∂" MENU
 		"Teemat" OPEN_MENU -noext THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
 		"Tyylit" OPEN_MENU -noext STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
 		"Kuvakkeet" OPEN_MENU -noext ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Taustat" MENU
-			"Yksiv‰rinen" MENU
+			"Yksiv√§rinen" MENU
                         	"Musta" WS_BACK '(solid, black)'
                         	"Sininen"  WS_BACK '(solid, "#505075")'
 				"Indigo" WS_BACK '(solid, "#243e6c")'
 				"Tummansininen" WS_BACK '(solid, "#224477")'
                         	"Violetti" WS_BACK '(solid, "#554466")'
-                        	"Kellert‰v‰"  WS_BACK '(solid, "wheat4")'
+                        	"Kellert√§v√§"  WS_BACK '(solid, "wheat4")'
                         	"Tummanharmaa"  WS_BACK '(solid, "#333340")'
                         	"Viininpunainen" WS_BACK '(solid, "#400020")'
-			"Yksiv‰rinen" END
-			"Liukuv‰ri" MENU
+			"Yksiv√§rinen" END
+			"Liukuv√§ri" MENU
 				"Auringonlasku" WS_BACK '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'
 				"Taivas" WS_BACK '(vgradient, blue4, white)'
-    				"Sinisen s‰vyj‰" WS_BACK '(vgradient, "#7080a5", "#101020")'
-				"Indigon s‰vyj‰" WS_BACK '(vgradient, "#746ebc", "#242e4c")'
-			    	"Violetin s‰vyj‰" WS_BACK '(vgradient, "#654c66", "#151426")'
-    				"Kellert‰v‰n s‰vyj‰" WS_BACK '(vgradient, "#a09060", "#302010")'
-    				"Harmaan s‰vyj‰" WS_BACK '(vgradient, "#636380", "#131318")'
-    				"Viininpunaisen s‰vyj‰" WS_BACK '(vgradient, "#600040", "#180010")'
-			"Liukuv‰ri" END
+    				"Sinisen s√§vyj√§" WS_BACK '(vgradient, "#7080a5", "#101020")'
+				"Indigon s√§vyj√§" WS_BACK '(vgradient, "#746ebc", "#242e4c")'
+			    	"Violetin s√§vyj√§" WS_BACK '(vgradient, "#654c66", "#151426")'
+    				"Kellert√§v√§n s√§vyj√§" WS_BACK '(vgradient, "#a09060", "#302010")'
+    				"Harmaan s√§vyj√§" WS_BACK '(vgradient, "#636380", "#131318")'
+    				"Viininpunaisen s√§vyj√§" WS_BACK '(vgradient, "#600040", "#180010")'
+			"Liukuv√§ri" END
 			"Kuvat" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Taustat" END
 		"Tallenna teema" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Teeman nimi,Kirjoita teematiedoston nimi:)"
 		"Tallenna kuvakkeet" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(Kuvakesetin nimi,Kirjoita tiedostonnimi:)"
 		"Asetukset" EXEC /usr/local/GNUstep/Apps/WPrefs.app/WPrefs
-	"Ulkon‰kˆ" END
+	"Ulkon√§k√∂" END
 
 	"Lopeta"	MENU
-		"K‰ynnist‰ WM uudelleen" RESTART
-		"K‰ynnist‰ BlackBox" RESTART blackbox
-		"K‰ynnist‰ kwm" RESTART kwm
-		"K‰ynnist‰ IceWM" RESTART icewm
+		"K√§ynnist√§ WM uudelleen" RESTART
+		"K√§ynnist√§ BlackBox" RESTART blackbox
+		"K√§ynnist√§ kwm" RESTART kwm
+		"K√§ynnist√§ IceWM" RESTART icewm
 		"Lopeta"  EXIT
 	"Lopeta" END
 "Sovellukset" END

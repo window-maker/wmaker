@@ -98,9 +98,9 @@
                 "Info Panel..." INFO_PANEL
                 "Legal..." LEGAL_PANEL
                 "Sistemska konzola" EXEC xconsole
-                "OptereÊenje sistema" SHEXEC xosview || xload
+                "Optereƒáenje sistema" SHEXEC xosview || xload
                 "Lista procesa" EXEC xterm -e top
-                "PretraæivaË manuala" EXEC xman
+                "Pretra≈æivaƒç manuala" EXEC xman
 	"Informacije" END
 	"XTerm u boji" EXEC nxterm -sb 
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
@@ -134,33 +134,33 @@
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
 	"Razno" END
-	"PomoÊni programi" MENU
+	"Pomoƒáni programi" MENU
 		"Kalkulator" EXEC xcalc
 		"Informacije o prozoru" SHEXEC xprop | xmessage -center -title 'xprop' -file -
-		"BiraË fontova" EXEC xfontsel
+		"Biraƒç fontova" EXEC xfontsel
 		"Emulator Terminala" EXEC xminicom
-		"PoveÊalo" EXEC xmag
+		"Poveƒáalo" EXEC xmag
 		"Colormap" EXEC xcmap
 		"XKill" EXEC xkill
 		"ASClock" EXEC asclock -shape
 		"Clipboard" EXEC xclipboard
-	"PomoÊni programi" END
+	"Pomoƒáni programi" END
 
 	"Odabir" MENU
 		"Kopiraj" SHEXEC echo '%s' | wxcopy
-		"Poπalji e-poπtu" EXEC xterm -name mail -T "Pine" -e pine %s
+		"Po≈°alji e-po≈°tu" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Otvori web-stranicu" EXEC netscape %s
-		"Potraæi u manualu" SHEXEC MANUAL_SEARCH(%s)
+		"Potra≈æi u manualu" SHEXEC MANUAL_SEARCH(%s)
 	"Odabir" END
 
 	"Radni prostor" MENU
 		"Sakrij ostale" HIDE_OTHERS
-		"Pokaæi sve" SHOW_ALL
+		"Poka≈æi sve" SHOW_ALL
 		"Pospremi ikone" ARRANGE_ICONS
-		"Osvjeæi" REFRESH
-		"ZakljuËaj" EXEC xlock -allowroot -usefirst
+		"Osvje≈æi" REFRESH
+		"Zakljuƒçaj" EXEC xlock -allowroot -usefirst
 		"Snimi session" SAVE_SESSION
-		"Obriπi snimljeni session" CLEAR_SESSION
+		"Obri≈°i snimljeni session" CLEAR_SESSION
 	"Radni prostor" END
 
 	"Izgled" MENU
@@ -173,7 +173,7 @@
                         	"Plava"  WS_BACK '(solid, "#505075")'
 				"Indigo" WS_BACK '(solid, "#243e6c")'
 				"Tamno plava" WS_BACK '(solid, "#224477")'
-                        	"LjubiËasta" WS_BACK '(solid, "#554466")'
+                        	"Ljubiƒçasta" WS_BACK '(solid, "#554466")'
                         	"Krem"  WS_BACK '(solid, "wheat4")'
                         	"Tamno siva"  WS_BACK '(solid, "#333340")'
                         	"Vinska" WS_BACK '(solid, "#400020")'

@@ -1,44 +1,44 @@
 // Text bellow is in czech, encoding ISO8829-2.
 //
-// Definice hlavního menu pro WindowMaker
+// Definice hlavnÃ­ho menu pro WindowMaker
 //
 // Syntaxe:
 //
-// <Titulek> <Pøíkaz> <Parametry>
+// <Titulek> <PÅ™Ã­kaz> <Parametry>
 //
-// <Titulek> je jakıkoli øetìz znakù. Pokud obsahuje mezery musí bıt
-// 	uzavøen do uvozovek (")
+// <Titulek> je jakÃ½koli Å™etÄ›z znakÅ¯. Pokud obsahuje mezery musÃ­ bÃ½t
+// 	uzavÅ™en do uvozovek (")
 //
-// <Pøíkaz> mù¾e bıt jeden z následujících: 
-//	MENU - definice nové (sub)menu
-//	END  - konec definice nového menu
+// <PÅ™Ã­kaz> mÅ¯Å¾e bÃ½t jeden z nÃ¡sledujÃ­cÃ­ch: 
+//	MENU - definice novÃ© (sub)menu
+//	END  - konec definice novÃ©ho menu
 //	EXEC <program> - provede se program
-//	EXIT - ukonèí se WindowMaker
-//	RESTART [<window manager>] - restart WM nebo jiného správce oken
-//	REFRESH - obnoví okna na pracovní plo¹e
-//	ARRANGE_ICONS - srovná ikony
-//	SHUTDOWN - ukonèí v¹echny klienty i X server
-//	WORKSPACE_MENU - pøidá menu pro práci s pracovními plochami
-//	SHOW_ALL - obnoví v¹echna skrytá okna
-//	HIDE_OTHERS - skryje v¹echna okna (mimo zamìøeného, nebo toho, které
-//                    bylo naposledy zamìøeno)
+//	EXIT - ukonÄÃ­ se WindowMaker
+//	RESTART [<window manager>] - restart WM nebo jinÃ©ho sprÃ¡vce oken
+//	REFRESH - obnovÃ­ okna na pracovnÃ­ ploÅ¡e
+//	ARRANGE_ICONS - srovnÃ¡ ikony
+//	SHUTDOWN - ukonÄÃ­ vÅ¡echny klienty i X server
+//	WORKSPACE_MENU - pÅ™idÃ¡ menu pro prÃ¡ci s pracovnÃ­mi plochami
+//	SHOW_ALL - obnovÃ­ vÅ¡echna skrytÃ¡ okna
+//	HIDE_OTHERS - skryje vÅ¡echna okna (mimo zamÄ›Å™enÃ©ho, nebo toho, kterÃ©
+//                    bylo naposledy zamÄ›Å™eno)
 //
-// <Parameters> je program, kterı bude proveden.
+// <Parameters> je program, kterÃ½ bude proveden.
 // 
-// Ka¾dı pøíkaz MENU musí mít odpovídající END. 
-// následující text je èesky, kódován ISO8859-2.
+// KaÅ¾dÃ½ pÅ™Ã­kaz MENU musÃ­ mÃ­t odpovÃ­dajÃ­cÃ­ END. 
+// nÃ¡sledujÃ­cÃ­ text je Äesky, kÃ³dovÃ¡n ISO8859-2.
 #include <wmmacros>
 
-"Hlavní menu" MENU
-	"Správce oken" MENU	
+"HlavnÃ­ menu" MENU
+	"SprÃ¡vce oken" MENU	
 		"Editace menu" SHEXEC xterm -T 'Editace menu' -e joe $HOME/GNUstep/Library/WindowMaker/menu
-	"Správce oken" END
+	"SprÃ¡vce oken" END
 	"Info" MENU
 		"Info Panel..." INFO_PANEL
 		"Legal" LEGAL_PANEL	
 //		"Xosview" EXEC xosview
 		"Top"	EXEC xterm -e top
-		"Manuál" EXEC xman
+		"ManuÃ¡l" EXEC xman
 		"Info" EXEC xterm -T 'info' -e info
 		"Xwininfo" EXEC windebug|xless
 		"Xwinevent" EXEC xwinev
@@ -46,28 +46,28 @@
 	"XTerm" EXEC xterm -sb
 //	"XJed"	EXEC xjed
         "Midnight commander"  EXEC xterm -name 'mc' -e mc -cm
-	"Pracovní plochy" WORKSPACE_MENU
+	"PracovnÃ­ plochy" WORKSPACE_MENU
 	"Aplikace" MENU
-		"Grafické" MENU
+		"GrafickÃ©" MENU
 			"Gimp" EXEC gimp
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
 			"Gnuplot" EXEC xterm -T "GNU plot" -e gnuplot
-		"Grafické" END
-		"Vìdecké" MENU
+		"GrafickÃ©" END
+		"VÄ›deckÃ©" MENU
 			"Astro" EXEC xephem
 			"MuPAD" EXEC xmupad -bg grey -geometry 590x385
-		"Vìdecké" END
-		"Vıvojové" MENU
+		"VÄ›deckÃ©" END
+		"VÃ½vojovÃ©" MENU
 			"X Gnu debbuger" EXEC xxgdb
 			"Emacs" EXEC emacs
 			"Resource editor" EXEC editres
-		"Vıvojové" END
+		"VÃ½vojovÃ©" END
                 "Hry" MENU
-	    		"Bludi¹»ì"      EXEC maze
+	    		"BludiÅ¡Å¥Ä›"      EXEC maze
 //              	"Karty "        EXEC spider
-			"©achy "        EXEC xboard
+			"Å achy "        EXEC xboard
 			"Xeyes"         EXEC xeyes -geometry 51x23
 			"Xlogo"         EXEC xlogo
 			"Brouci"        EXEC xroach
@@ -80,7 +80,7 @@
 			"Civilization"   EXEC civ
 		"Hry" END
 //		"X File Manager" EXEC xfm
-		"Správce souborù" EXEC files
+		"SprÃ¡vce souborÅ¯" EXEC files
 //		"LyX" EXEC lyx
 		"Netscape" EXEC netscape
   		"Ghostview" EXEC ghostview
@@ -96,48 +96,48 @@
 //		"VI" EXEC xterm -e vi
 		"Joe" EXEC xterm -T 'Joe' -e joe
 	"Editory" END
-	"Rùzné" MENU
+	"RÅ¯znÃ©" MENU
 //		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
-	"Rùzné" END
-	"Pomùcky" MENU
-		"Ko¹" EXEC trash
+	"RÅ¯znÃ©" END
+	"PomÅ¯cky" MENU
+		"KoÅ¡" EXEC trash
 		"Hodiny" EXEC xclock
-		"Kalkulátor" EXEC xcalc
-		"Vıbìr fontu" EXEC xfontsel
+		"KalkulÃ¡tor" EXEC xcalc
+		"VÃ½bÄ›r fontu" EXEC xfontsel
 		"Lupa" EXEC xmag
 		"Mapa barev" EXEC xcolormap
 		"XKill" EXEC xkill
 		"AfterstepClock" EXEC asclock -position +671+-1
-	"Pomùcky" END
-	"Pracovní plocha" MENU
+	"PomÅ¯cky" END
+	"PracovnÃ­ plocha" MENU
 		"Barva" MENU
 			"-" EXEC CLEARROOT
-			"Èerná" WS_BACK '(solid, black)'
-			"Modrá" WS_BACK '(solid, "#505075")'
-			"Purpurová" WS_BACK '(solid, "#554466")'
-			"©edozelená" WS_BACK '(solid, "#554466")'
-			"Tmavì ¹edá" WS_BACK '(solid, "#333340")'
-			"Vínová"  WS_BACK '(solid, "#400020")'
+			"ÄŒernÃ¡" WS_BACK '(solid, black)'
+			"ModrÃ¡" WS_BACK '(solid, "#505075")'
+			"PurpurovÃ¡" WS_BACK '(solid, "#554466")'
+			"Å edozelenÃ¡" WS_BACK '(solid, "#554466")'
+			"TmavÄ› Å¡edÃ¡" WS_BACK '(solid, "#333340")'
+			"VÃ­novÃ¡"  WS_BACK '(solid, "#400020")'
 		"Barva" END
 #if (DEPTH>=8)
 // Setup some gradient schemes for newbies and lazy people
 // You must RESTART after selecting the gradient.
 #include <gradients.menu>
 #endif
-		"Skryj ostatní" HIDE_OTHERS
-		"Uka¾ v¹echny" SHOW_ALL
+		"Skryj ostatnÃ­" HIDE_OTHERS
+		"UkaÅ¾ vÅ¡echny" SHOW_ALL
 		"Srovnej ikony" ARRANGE_ICONS
 		"Obnov" REFRESH
-		"Zámek" EXEC xlock -allowroot -usefirst
-		"Ulo¾ vzhled" EXEC SAVE_WORKSPACE
-	"Pracovní plocha" END
+		"ZÃ¡mek" EXEC xlock -allowroot -usefirst
+		"UloÅ¾ vzhled" EXEC SAVE_WORKSPACE
+	"PracovnÃ­ plocha" END
 	"Konec"	MENU
-// 'Restartovat' není opravdu pøíli¹ èeské slovo, najde nìkdo lep¹í ?
+// 'Restartovat' nenÃ­ opravdu pÅ™Ã­liÅ¡ ÄeskÃ© slovo, najde nÄ›kdo lepÅ¡Ã­ ?
 		"Restartovat" RESTART
 //		"Start AfterStep" RESTART afterstep
-		"Ukonèit..."  EXIT
-//		"Ukonèit sezení..." SHUTDOWN
+		"UkonÄit..."  EXIT
+//		"UkonÄit sezenÃ­..." SHUTDOWN
 	"Konec" END
-"Hlavní menu" END
+"HlavnÃ­ menu" END

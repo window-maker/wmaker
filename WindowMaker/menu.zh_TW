@@ -102,80 +102,80 @@
 
 #include "wmmacros"
 
-"À³¥Îµ{¦¡" MENU
-	"¸ê°T" MENU
-		"¸ê°T­±ªO..." INFO_PANEL
-		"ªk«ß..." LEGAL_PANEL
-		"¨t²Î¥D±±¥x" EXEC xconsole
-		"¨t²Î­t¸ü" SHEXEC xosview || xload
-		"¦æµ{²M³æ" EXEC xterm -e top
-		"¤â¥UÂsÄı¾¹" EXEC xman
-	"¸ê°T" END
-	"°õ¦æ..." EXEC %a (°õ¦æ¡A¿é¤J°õ¦æªº©R¥O¡G)
-	"²×ºİ¾÷" EXEC crxvt -thin -ls -T ²×ºİ¾÷ -n ²×ºİ¾÷
-	"¤u§@°Ï" WORKSPACE_MENU
-	"À³¥Îµ{¦¡" MENU
-		"¼v¹³³B²z" MENU
+"æ‡‰ç”¨ç¨‹å¼" MENU
+	"è³‡è¨Š" MENU
+		"è³‡è¨Šé¢æ¿..." INFO_PANEL
+		"æ³•å¾‹..." LEGAL_PANEL
+		"ç³»çµ±ä¸»æ§å°" EXEC xconsole
+		"ç³»çµ±è² è¼‰" SHEXEC xosview || xload
+		"è¡Œç¨‹æ¸…å–®" EXEC xterm -e top
+		"æ‰‹å†Šç€è¦½å™¨" EXEC xman
+	"è³‡è¨Š" END
+	"åŸ·è¡Œ..." EXEC %a (åŸ·è¡Œï¼Œè¼¸å…¥åŸ·è¡Œçš„å‘½ä»¤ï¼š)
+	"çµ‚ç«¯æ©Ÿ" EXEC crxvt -thin -ls -T çµ‚ç«¯æ©Ÿ -n çµ‚ç«¯æ©Ÿ
+	"å·¥ä½œå€" WORKSPACE_MENU
+	"æ‡‰ç”¨ç¨‹å¼" MENU
+		"å½±åƒè™•ç†" MENU
 			"Gimp" SHEXEC gimp >/dev/null
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
-		"¼v¹³³B²z" END
-		"X ÀÉ®×ºŞ²z­û" EXEC xfm
+		"å½±åƒè™•ç†" END
+		"X æª”æ¡ˆç®¡ç†å“¡" EXEC xfm
 		"OffiX Files" EXEC files
 		"LyX" EXEC lyx
 		"Netscape" EXEC netscape 
-  		"Ghostview" EXEC ghostview %a(GhostView,¿é¤J­nÀËµøªºÀÉ®×)
-		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(¿é¤J­nÀËµøªº PDF)
+  		"Ghostview" EXEC ghostview %a(GhostView,è¼¸å…¥è¦æª¢è¦–çš„æª”æ¡ˆ)
+		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(è¼¸å…¥è¦æª¢è¦–çš„ PDF)
   		"TkDesk" EXEC tkdesk
-	"À³¥Îµ{¦¡" END
-	"½s¿è¾¹" MENU
+	"æ‡‰ç”¨ç¨‹å¼" END
+	"ç·¨è¼¯å™¨" MENU
 		"XFte" EXEC xfte
 		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed 
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
-	"½s¿è¾¹" END
-	"Âø¶µ" MENU
+	"ç·¨è¼¯å™¨" END
+	"é›œé …" MENU
 		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
-	"Âø¶µ" END
-	"¤½¥Îµ{¦¡" MENU
-		"­pºâ¾÷" EXEC xcalc
+	"é›œé …" END
+	"å…¬ç”¨ç¨‹å¼" MENU
+		"è¨ˆç®—æ©Ÿ" EXEC xcalc
 		"Window Properties" SHEXEC xprop | xmessage -center -title 'xprop' -file -
 		"Font Chooser" EXEC xfontsel
-		"²×ºİ¾÷¼ÒÀÀ¾¹" EXEC xminicom
+		"çµ‚ç«¯æ©Ÿæ¨¡æ“¬å™¨" EXEC xminicom
 		"Magnify" EXEC xmag
 		"Colormap" EXEC xcmap
 		"XKill" EXEC xkill
 		"Clipboard" EXEC xclipboard
-	"¤½¥Îµ{¦¡" END
+	"å…¬ç”¨ç¨‹å¼" END
 
-	"¿ï¨ú" MENU
-		"½Æ»s" SHEXEC echo '%s' | wxcopy
-		"¶l±H¦Ü" EXEC xterm -name mail -T "Pine" -e pine %s
+	"é¸å–" MENU
+		"è¤‡è£½" SHEXEC echo '%s' | wxcopy
+		"éƒµå¯„è‡³" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Navigate" EXEC netscape %s
-		"¦b¤â¥U¤¤·j´M" SHEXEC MANUAL_SEARCH(%s)
-	"¿ï¨ú" END
+		"åœ¨æ‰‹å†Šä¸­æœå°‹" SHEXEC MANUAL_SEARCH(%s)
+	"é¸å–" END
 
-	"¤u§@°Ï" MENU
-		"ÁôÂÃ¨ä¥L" HIDE_OTHERS
-		"¥ş³¡Åã¥Ü" SHOW_ALL
-		"±Æ¦C¹Ï¥Ü" ARRANGE_ICONS
-		"§ó·sµe­±" REFRESH
-		"Âê©w" EXEC xlock -allowroot -usefirst
-		"Àx¦s¶¥¬qª¬ºA" SAVE_SESSION
-		"²M°£¶¥¬qª¬ºA" CLEAR_SESSION
-	"¤u§@°Ï" END
+	"å·¥ä½œå€" MENU
+		"éš±è—å…¶ä»–" HIDE_OTHERS
+		"å…¨éƒ¨é¡¯ç¤º" SHOW_ALL
+		"æ’åˆ—åœ–ç¤º" ARRANGE_ICONS
+		"æ›´æ–°ç•«é¢" REFRESH
+		"é–å®š" EXEC xlock -allowroot -usefirst
+		"å„²å­˜éšæ®µç‹€æ…‹" SAVE_SESSION
+		"æ¸…é™¤éšæ®µç‹€æ…‹" CLEAR_SESSION
+	"å·¥ä½œå€" END
 
-	"¥~Æ[" MENU
-		"¥DÃD" OPEN_MENU THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"­·®æ" OPEN_MENU STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"¹Ï¥Ü¶°" OPEN_MENU ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
-		"­I´º" MENU
-			"¹êÅé¦â" MENU
+	"å¤–è§€" MENU
+		"ä¸»é¡Œ" OPEN_MENU THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"é¢¨æ ¼" OPEN_MENU STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"åœ–ç¤ºé›†" OPEN_MENU ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"èƒŒæ™¯" MENU
+			"å¯¦é«”è‰²" MENU
                         	"Black" WS_BACK '(solid, black)'
                         	"Blue"  WS_BACK '(solid, "#505075")'
 				"Indigo" WS_BACK '(solid, "#243e6c")'
@@ -184,8 +184,8 @@
                         	"Wheat"  WS_BACK '(solid, "wheat4")'
                         	"Dark Gray"  WS_BACK '(solid, "#333340")'
                         	"Wine" WS_BACK '(solid, "#400020")'
-			"¹êÅé¦â" END
-			"º¥¼h¦â" MENU
+			"å¯¦é«”è‰²" END
+			"æ¼¸å±¤è‰²" MENU
 				"Sunset" WS_BACK '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'
 				"Sky" WS_BACK '(vgradient, blue4, white)'
     				"Blue Shades" WS_BACK '(vgradient, "#7080a5", "#101020")'
@@ -194,20 +194,20 @@
     				"Wheat Shades" WS_BACK '(vgradient, "#a09060", "#302010")'
     				"Grey Shades" WS_BACK '(vgradient, "#636380", "#131318")'
     				"Wine Shades" WS_BACK '(vgradient, "#600040", "#180010")'
-			"º¥¼h¦â" END
-			"¹Ï¤ù" OPEN_MENU BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
-		"­I´º" END
-		"Àx¦s¥DÃD" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(¥DÃD¦WºÙ)"
-		"Àx¦s¹Ï¥Ü¶°" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(¹Ï¥Ü¶°¦WºÙ)"
-		"°¾¦n³]©w¤½¥Îµ{¦¡" EXEC /usr/local/GNUstep/Apps/WPrefs.app/WPrefs
-	"¥~Æ[" END
+			"æ¼¸å±¤è‰²" END
+			"åœ–ç‰‡" OPEN_MENU BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+		"èƒŒæ™¯" END
+		"å„²å­˜ä¸»é¡Œ" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(ä¸»é¡Œåç¨±)"
+		"å„²å­˜åœ–ç¤ºé›†" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(åœ–ç¤ºé›†åç¨±)"
+		"åå¥½è¨­å®šå…¬ç”¨ç¨‹å¼" EXEC /usr/local/GNUstep/Apps/WPrefs.app/WPrefs
+	"å¤–è§€" END
 
-	"Â÷¶}"	MENU
-		"­«·s±Ò°Ê" RESTART
-		"±Ò°Ê BlackBox" RESTART blackbox
-		"±Ò°Ê kwm" RESTART kwm
-		"±Ò°Ê IceWM" RESTART icewm
-		"Â÷¶}..."  EXIT
-	"Â÷¶}" END
-"À³¥Îµ{¦¡" END
+	"é›¢é–‹"	MENU
+		"é‡æ–°å•Ÿå‹•" RESTART
+		"å•Ÿå‹• BlackBox" RESTART blackbox
+		"å•Ÿå‹• kwm" RESTART kwm
+		"å•Ÿå‹• IceWM" RESTART icewm
+		"é›¢é–‹..."  EXIT
+	"é›¢é–‹" END
+"æ‡‰ç”¨ç¨‹å¼" END
 

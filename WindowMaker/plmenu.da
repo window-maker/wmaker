@@ -21,7 +21,7 @@
                 "xman"
                 )
         ),
-	("Kør...", SHEXEC, "%a(Kør,Indtast kommando der skal udføres:)"),
+	("KÃ¸r...", SHEXEC, "%a(KÃ¸r,Indtast kommando der skal udfÃ¸res:)"),
         (
         "XTerm",
         EXEC,
@@ -55,7 +55,7 @@
                         )
                 ),
                 (
-                "X-filhåndtering",
+                "X-filhÃ¥ndtering",
                 EXEC,
                 "xfm"
                 ),
@@ -134,7 +134,7 @@
                 )
         ),
         (
-        "Tilbehør",
+        "TilbehÃ¸r",
                 (
                 "Lommeregner",
                 EXEC,
@@ -142,7 +142,7 @@
                 ),
                 ("Vinduesegenskaber", SHEXEC, "xprop | xmessage -center -title 'xprop' -file -"),
                 (
-                "Vælg skrifttype",
+                "VÃ¦lg skrifttype",
                 EXEC,
                 "xfontsel"
                 ),
@@ -152,7 +152,7 @@
                 "xminicom"
                 ),
                 (
-                "Forstørrelsesglas",
+                "ForstÃ¸rrelsesglas",
                 EXEC,
                 "xmag"
                 ),
@@ -179,7 +179,7 @@
         ),
         (
         "Markering",
-                ("Kopiér", SHEXEC, "echo '%s' | wxcopy"),
+                ("KopiÃ©r", SHEXEC, "echo '%s' | wxcopy"),
                 (
                 "Send e-post til",
                 EXEC,
@@ -190,16 +190,16 @@
                 EXEC,
                 "netscape %s"
                 ),
-                ("Søg i manual", EXEC, "MANUAL_SEARCH(%s)")
+                ("SÃ¸g i manual", EXEC, "MANUAL_SEARCH(%s)")
         ),
         (
         "Arbejdsbord",
                 ("Skjul andre", HIDE_OTHERS),
                 ("Vis alle", SHOW_ALL),
-                ("Arrangér ikoner", ARRANGE_ICONS),
-                ("Genindlæs", REFRESH),
+                ("ArrangÃ©r ikoner", ARRANGE_ICONS),
+                ("GenindlÃ¦s", REFRESH),
                 (
-                "Lås",
+                "LÃ¥s",
                 EXEC,
                 "xlock -allowroot -usefirst"
                 ),
@@ -219,7 +219,7 @@
                 "-noext /usr/local/share/WindowMaker/Styles  $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle"
                 ),
                 (
-                "Ikonsæt",
+                "IkonsÃ¦t",
                 OPEN_MENU,
                 "-noext /usr/local/share/WindowMaker/IconSets  $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons"
                 ),
@@ -233,7 +233,7 @@
                                 "wdwrite WindowMaker WorkspaceBack  '(solid, black)'"
                                 ),
                                 (
-                                "Blå",
+                                "BlÃ¥",
                                 EXEC,
                                 "wdwrite WindowMaker WorkspaceBack  '(solid, \"#505075\")'"
                                 ),
@@ -243,7 +243,7 @@
                                 "wdwrite WindowMaker WorkspaceBack  '(solid, \"#243e6c\")'"
                                 ),
                                 (
-                                "Mørkeblå",
+                                "MÃ¸rkeblÃ¥",
                                 EXEC,
                                 "wdwrite WindowMaker WorkspaceBack  '(solid, \"#224477\")'"
                                 ),
@@ -258,7 +258,7 @@
                                 "wdwrite WindowMaker WorkspaceBack  '(solid, \"wheat4\")'"
                                 ),
                                 (
-                                "Mørkegrå",
+                                "MÃ¸rkegrÃ¥",
                                 EXEC,
                                 "wdwrite WindowMaker WorkspaceBack  '(solid, \"#333340\")'"
                                 ),
@@ -281,7 +281,7 @@
 				"wdwrite WindowMaker WorkspaceBack  '(vgradient, blue4, white)'"
 				),
     				(
-    				"Blå Skygger",
+    				"BlÃ¥ Skygger",
     				EXEC,
     				"wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#7080a5\", \"#101020\")'"
     				),
@@ -301,7 +301,7 @@
     				"wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#a09060\", \"#302010\")'"
     				),
     				(
-    				"Grå Skygger",
+    				"GrÃ¥ Skygger",
     				EXEC,
     				"wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#636380\", \"#131318\")'"
     				),
@@ -323,7 +323,7 @@
                         )
                 ),
                 ("Gem Tema", SHEXEC, "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/\"%a(Tema navn,Indtast navn:)"),
-                ("Gem Ikonsæt", SHEXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(Ikonsæt navn,Indtast navn:)")
+                ("Gem IkonsÃ¦t", SHEXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(IkonsÃ¦t navn,Indtast navn:)")
         ),
         (
         "Afslut",

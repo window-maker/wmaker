@@ -5,12 +5,12 @@
 		("Tietoja...", INFO_PANEL),
 		("Laillista", LEGAL_PANEL),
 		(
-		"J‰rjestelm‰konsoli",
+		"J√§rjestelm√§konsoli",
 		EXEC,
 		"xconsole"
 		),
 		(
-		"J‰rjestelm‰n rasitus",
+		"J√§rjestelm√§n rasitus",
 		EXEC,
 		"xosview || xload"
 		),
@@ -26,9 +26,9 @@
 		)
 	),
 	(
-	"K‰ynnist‰...",
+	"K√§ynnist√§...",
 	EXEC,
-	"%a(K‰ynnist‰,Kirjoita suoritettava komento:)"
+	"%a(K√§ynnist√§,Kirjoita suoritettava komento:)"
 	),
 	(
 	"XTerm",
@@ -40,7 +40,7 @@
 	EXEC,
 	"rxvt -bg black -fg white -fn fixed"
 	),
-	("Tyˆtilat", WORKSPACE_MENU),
+	("Ty√∂tilat", WORKSPACE_MENU),
 	(
 	"Sovellukset",
 		(
@@ -89,12 +89,12 @@
   		(
   		"Ghostview",
   		EXEC,
-  		"ghostview %a(GhostView,Kirjoita n‰ytett‰v‰n tiedoston nimi:)"
+  		"ghostview %a(GhostView,Kirjoita n√§ytett√§v√§n tiedoston nimi:)"
   		),
 		(
 		"Acrobat",
 		EXEC,
-		"/usr/local/Acrobat3/bin/acroread %a(Acrobat,Kirjoita n‰ytett‰v‰n PDF-tiedoston nimi)"
+		"/usr/local/Acrobat3/bin/acroread %a(Acrobat,Kirjoita n√§ytett√§v√§n PDF-tiedoston nimi)"
 		),
   		(
   		"TkDesk",
@@ -171,7 +171,7 @@
 		"xfontsel"
 		),
 		(
-		"P‰‰te",
+		"P√§√§te",
 		EXEC,
 		"xminicom"
 		),
@@ -181,7 +181,7 @@
 		"xmag"
 		),
 		(
-		"V‰rikartta",
+		"V√§rikartta",
 		EXEC,
 		"xcmap"
 		),
@@ -191,7 +191,7 @@
 		"xkill"
 		),
 		(
-		"Leikepˆyt‰",
+		"Leikep√∂yt√§",
 		EXEC,
 		"xclipboard"
 		)
@@ -204,7 +204,7 @@
 		"echo '%s' | wxcopy"
 		),
 		(
-		"L‰het‰ s‰hkˆpostina",
+		"L√§het√§ s√§hk√∂postina",
 		EXEC,
 		"xterm -name mail -T \"Pine\" -e pine %s"
 		),
@@ -220,21 +220,21 @@
 		)
 	),
 	(
-	"Tyˆtila",
+	"Ty√∂tila",
 		("Piilota muut", HIDE_OTHERS),
-		("N‰yt‰ kaikki ikkunat", SHOW_ALL),
-		("J‰rjest‰ kuvakkeet", ARRANGE_ICONS),
-		("Virkist‰ ruutu", REFRESH),
+		("N√§yt√§ kaikki ikkunat", SHOW_ALL),
+		("J√§rjest√§ kuvakkeet", ARRANGE_ICONS),
+		("Virkist√§ ruutu", REFRESH),
 		(
-		"Lukitse n‰yttˆ",
+		"Lukitse n√§ytt√∂",
 		EXEC,
 		"xlock -allowroot -usefirst"
 		),
 		("Tallenna istunto", SAVE_SESSION),
-		("Tyhjenn‰ istunto", CLEAR_SESSION)
+		("Tyhjenn√§ istunto", CLEAR_SESSION)
 	),
 	(
-	"Ulkon‰kˆ",
+	"Ulkon√§k√∂",
 		(
 		"Teemat",
 		OPEN_MENU,
@@ -253,7 +253,7 @@
 		(
 		"Taustat",
 			(
-			"Yksiv‰rinen",
+			"Yksiv√§rinen",
                         	(
                         	"Musta",
                         	EXEC,
@@ -280,7 +280,7 @@
                         	"wdwrite WindowMaker WorkspaceBack  '(solid, \"#554466\")'"
                         	),
                         	(
-                        	"Kellert‰v‰",
+                        	"Kellert√§v√§",
                         	EXEC,
                         	"wdwrite WindowMaker WorkspaceBack  '(solid, \"wheat4\")'"
                         	),
@@ -296,7 +296,7 @@
                         	)
 			),
 			(
-			"Liukuv‰ri",
+			"Liukuv√§ri",
 				(
 				"Auringonlasku",
 				EXEC,
@@ -308,32 +308,32 @@
 				"wdwrite WindowMaker WorkspaceBack  '(vgradient, blue4, white)'"
 				),
     				(
-    				"Sinisen s‰vyj‰",
+    				"Sinisen s√§vyj√§",
     				EXEC,
     				"wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#7080a5\", \"#101020\")'"
     				),
 				(
-				"Indigon s‰vyj‰",
+				"Indigon s√§vyj√§",
 				EXEC,
 				"wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#746ebc\", \"#242e4c\")'"
 				),
 			    	(
-			    	"Violetin s‰vuj‰",
+			    	"Violetin s√§vuj√§",
 			    	EXEC,
 			    	"wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#654c66\", \"#151426\")'"
 			    	),
     				(
-    				"Kellert‰v‰n s‰vyj‰",
+    				"Kellert√§v√§n s√§vyj√§",
     				EXEC,
     				"wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#a09060\", \"#302010\")'"
     				),
     				(
-    				"Harmaan s‰vyj‰",
+    				"Harmaan s√§vyj√§",
     				EXEC,
     				"wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#636380\", \"#131318\")'"
     				),
     				(
-    				"Viininpunaisen s‰vyj‰",
+    				"Viininpunaisen s√§vyj√§",
     				EXEC,
     				"wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#600040\", \"#180010\")'"
     				)
@@ -362,10 +362,10 @@
 	),
 	(
 	"Lopeta",
-		("K‰ynnist‰ WM uudelleen", RESTART),
-		("K‰ynnist‰ BlackBox", RESTART, blackbox),
-		("K‰ynnist‰ kwm", RESTART, kwm),
-		("K‰ynnist‰ IceWM", RESTART, icewm),
+		("K√§ynnist√§ WM uudelleen", RESTART),
+		("K√§ynnist√§ BlackBox", RESTART, blackbox),
+		("K√§ynnist√§ kwm", RESTART, kwm),
+		("K√§ynnist√§ IceWM", RESTART, icewm),
 		("Lopeta", EXIT)
 	)
 )

@@ -1,21 +1,21 @@
 ("WindowMaker",
 	("Informacja",
 		("Informacja o WMaker...", INFO_PANEL),
-		("Legalno¶æ...",           LEGAL_PANEL),
+		("LegalnoÅ›Ä‡...",           LEGAL_PANEL),
 		("Konsola Systemu",        EXEC, "xconsole"),
-		("Obci±¿enie Systemu",     EXEC, "xosview || xload"),
-		("Lista Procesów",         EXEC, "xterm -T 'Lista Procesów' -e top"),
-		("Przegl±darka Manuali",   EXEC, "xman")
+		("ObciÄ…Å¼enie Systemu",     EXEC, "xosview || xload"),
+		("Lista ProcesÃ³w",         EXEC, "xterm -T 'Lista ProcesÃ³w' -e top"),
+		("PrzeglÄ…darka Manuali",   EXEC, "xman")
 	),
 	
 	("Konfiguracja",	
 		("Edycja menu",       EXEC, "xterm -T 'Edycja menu' -e vi $HOME/GNUstep/Library/WindowMaker/menu"),
-		("Ustawienie fontów", EXEC, "xterm -T 'Ustawienie fontów' -e vi $HOME/GNUstep/Defaults/WMGLOBAL"),
+		("Ustawienie fontÃ³w", EXEC, "xterm -T 'Ustawienie fontÃ³w' -e vi $HOME/GNUstep/Defaults/WMGLOBAL"),
 		("Konfiguracja",      EXEC, "xterm -T 'Konfiguracja' -e vi $HOME/GNUstep/Defaults/WindowMaker")
 	),
 	
 	("Uruchom...", EXEC, "%a(Uruchom,Wpisz komende do uruchomienia:)"),
-	("Terminal",   EXEC, "xterm -T 'Mój ulubiony terminal' -sb"),
+	("Terminal",   EXEC, "xterm -T 'MÃ³j ulubiony terminal' -sb"),
 	("Edytor",     EXEC, "xterm -T 'Moj ulubiony edytor' -e vi %a(Edytor,Podaj plik do edycji:)"),
 	("Pulpity",    WORKSPACE_MENU),
 	
@@ -45,7 +45,7 @@
 	),
 	
 	("Internet",
-		("Przegl±darki",
+		("PrzeglÄ…darki",
 			("Netscape", EXEC, "netscape"), 
 			("Arena",    EXEC, "arena"),
 			("Lynx",     EXEC, "xterm -e lynx %a(Lynx,Podaj URL:)")
@@ -77,7 +77,7 @@
 		("VI",      EXEC, "xterm -e vi")
 	),
 	
-	("D¼wiêk",
+	("DÅºwiÄ™k",
 		("Xmcd",    EXEC, "xmcd 2> /dev/null"),
 		("Xplaycd", EXEC, "xplaycd"),
 		("Xmixer",  EXEC, "xmixer")
@@ -100,13 +100,13 @@
     	("XBill",     EXEC, "xbill")
     ),
 	
-	("U¿ytki",
+	("UÅ¼ytki",
 		("Kalkulator",          EXEC, "xcalc"),
 		("Zegarek",             EXEC, "xclock"),
 		("Opcje Okna",          EXEC, "xprop | xmessage -center -title 'xprop' -file -"),
-		("Przegl±darka Fontów", EXEC, "xfontsel"),
-		("Szk³o Powiêkszaj±ce", EXEC, "xmag"),
-		("Mapa Kolorów",        EXEC, "xcmap"),
+		("PrzeglÄ…darka FontÃ³w", EXEC, "xfontsel"),
+		("SzkÅ‚o PowiÄ™kszajÄ…ce", EXEC, "xmag"),
+		("Mapa KolorÃ³w",        EXEC, "xcmap"),
 		("XKill",               EXEC, "xkill"),
 		("Clipboard",           EXEC, "xclipboard")
 	),
@@ -116,37 +116,37 @@
 		("Poczta do ...",          EXEC, "xterm -name mail -T 'Pine' -e pine %s"),
 		("Serfuj do ...",          EXEC, "netscape %s"),
 		("Pobierz Manual ...",     EXEC, "MANUAL_SEARCH(%s)"),
-		("Po³±cz siê z ...",       EXEC, "telnet %s"),
+		("PoÅ‚Ä…cz siÄ™ z ...",       EXEC, "telnet %s"),
 		("Pobierz plik z FTP ...", EXEC, "ftp %s")
 	),
 
 	("Ekran",
-		("Ukryj Pozosta³e",         HIDE_OTHERS),
-		("Poka¿ wszystko",          SHOW_ALL),
-		("Uporz±dkowanie icon",     ARRANGE_ICONS),
-		("Odswie¿",                 REFRESH),
+		("Ukryj PozostaÅ‚e",         HIDE_OTHERS),
+		("PokaÅ¼ wszystko",          SHOW_ALL),
+		("UporzÄ…dkowanie icon",     ARRANGE_ICONS),
+		("OdswieÅ¼",                 REFRESH),
 		("Zablokuj",                EXEC, "xlock -allowroot -usefirst"),
 		("Zachowaj Sesje",          SAVE_SESSION),
-		("Wyczy¶æ zachowan± sesje", CLEAR_SESSION)
+		("WyczyÅ›Ä‡ zachowanÄ… sesje", CLEAR_SESSION)
 	),
 
-	("Wygl±d",
+	("WyglÄ…d",
 		("Tematy",          OPEN_MENU, "-noext #wmdatadir#/Themes $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
 		("Style",           OPEN_MENU, "-noext #wmdatadir#/Styles $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle"),
 		("Ustawienia ikon", OPEN_MENU, "-noext #wmdatadir#/IconSets $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
-		("T³o",
+		("TÅ‚o",
 			("Jednolite",
                	("Czarny",            EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, black)'"),
                	("Niebieski",         EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, '#505075')'"),
 				("Indigo",            EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, '#243e6c')'"),
-				("G³êboko Niebieski", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, '#224477')'"),
+				("GÅ‚Ä™boko Niebieski", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, '#224477')'"),
                	("Fioletowy",         EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, '#554466')'"),
                	("Pszeniczny",        EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, 'wheat4')'"),
                	("Ciemno Szary",      EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, '#333340')'"),
                	("Winny",             EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, '#400020')'")
 			),
 			("Cieniowane",
-				("Zachód S³oñca",         EXEC, "wdwrite WindowMaker WorkspaceBack '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'"),
+				("ZachÃ³d SÅ‚oÅ„ca",         EXEC, "wdwrite WindowMaker WorkspaceBack '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'"),
 				("Niebo",                 EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, blue4, white)'"),
     			("Cieniowany Niebieski",  EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, '#7080a5', '#101020')'"),
 				("Cieniowane Indigo",     EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, '#746ebc', '#242e4c')'"),
@@ -157,16 +157,16 @@
 			),
 			("Obrazki", OPEN_MENU, "-noext #wmdatadir#/Backgrounds $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t)")
 		),
-		("Zaoamiêtanie Tematu",        EXEC, "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/'%a(Nazwa tematu,Wpisz nazwe pliku:)'"),
-		("Zapamiêtanie Ustawieñ Ikon", EXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/'%a(Ustawienia ikon,Wpisz nazwe pliku:)'")
+		("ZaoamiÄ™tanie Tematu",        EXEC, "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/'%a(Nazwa tematu,Wpisz nazwe pliku:)'"),
+		("ZapamiÄ™tanie UstawieÅ„ Ikon", EXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/'%a(Ustawienia ikon,Wpisz nazwe pliku:)'")
 	),
 
-	("Wyj¶cie",
-		("Prze³adowanie",    RESTART),
+	("WyjÅ›cie",
+		("PrzeÅ‚adowanie",    RESTART),
 		("Start BlackBox",   RESTART, blackbox),
 		("Start kwm",        RESTART, kwm),
 		("Start IceWM",      RESTART, icewm),
-		("Wyj¶cie...",       EXIT),
+		("WyjÅ›cie...",       EXIT),
 		("Zabicie sesji...", SHUTDOWN)
 	)
 )

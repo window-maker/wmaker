@@ -1,18 +1,18 @@
 # Catalan messages for WINGs.
-# Copyright (C) 2003 Ernest AdroguÈ <eadrogue@gmx.net>.
+# Copyright (C) 2003 Ernest Adrogu√© <eadrogue@gmx.net>.
 # This file is distributed under the terms of the GNU General Public License.
 #
 # Version history:
 # 	WM-ver		author		email			date
-# 	0.80.2		Ernest AdroguÈ	eadrogue@gmx.net	23 Feb 2003
-# 	CVS-20030914	Ernest AdroguÈ	eadrogue@gmx.net	15 Set 2003
+# 	0.80.2		Ernest Adrogu√©	eadrogue@gmx.net	23 Feb 2003
+# 	CVS-20030914	Ernest Adrogu√©	eadrogue@gmx.net	15 Set 2003
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: WINGs 0.80.2\n"
 "POT-Creation-Date: 2003-09-16 22:59+0200\n"
 "PO-Revision-Date: 2003-09-16 23:16+0200\n"
-"Last-Translator: Ernest AdroguÈ <eadrogue@gmx.net>\n"
+"Last-Translator: Ernest Adrogu√© <eadrogue@gmx.net>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -21,7 +21,7 @@ msgstr ""
 #: ../../WINGs/connection.c:467 ../../WINGs/connection.c:532
 #: ../../WINGs/connection.c:575
 msgid "Bad address-service-protocol combination"
-msgstr "CombinaciÛ adreÁa-servei-protocol incorrecta"
+msgstr "Combinaci√≥ adre√ßa-servei-protocol incorrecta"
 
 #: ../../WINGs/error.c:54
 #, c-format
@@ -35,7 +35,7 @@ msgstr "Error %d"
 
 #: ../../WINGs/error.c:110
 msgid " warning: "
-msgstr ": atenciÛ: "
+msgstr ": atenci√≥: "
 
 #: ../../WINGs/error.c:137
 msgid " fatal error: "
@@ -48,27 +48,27 @@ msgstr ": error: "
 #: ../../WINGs/findfile.c:48
 #, c-format
 msgid "could not get password entry for UID %i"
-msgstr "no s'ha pogut obtenir l'informaciÛ de compte de l'UID %i"
+msgstr "no s'ha pogut obtenir l'informaci√≥ de compte de l'UID %i"
 
 #: ../../WINGs/findfile.c:66
 #, c-format
 msgid "could not get password entry for user %s"
-msgstr "no s'ha pogut obtenir l'informaciÛ de compte de l'usuari %s"
+msgstr "no s'ha pogut obtenir l'informaci√≥ de compte de l'usuari %s"
 
 #: ../../WINGs/host.c:114
 msgid "Cannot get current host name"
 msgstr "No s'ha pogut obtenir el nom de host actual"
 
-# falten coses per traduÔr en el codi font. eac
+# falten coses per tradu√Ør en el codi font. eac
 #: ../../WINGs/proplist.c:91
 #, c-format
 msgid "syntax error in %s %s, line %i: %s"
-msgstr "error de sintaxi a %s %s, lÌnia %i: %s"
+msgstr "error de sintaxi a %s %s, l√≠nia %i: %s"
 
 #: ../../WINGs/proplist.c:150
 msgid "Only string or data is supported for a proplist dictionary key"
 msgstr ""
-"Una entrada PropList de diccionari nomÈs pot contenir dades o una cadena"
+"Una entrada PropList de diccionari nom√©s pot contenir dades o una cadena"
 
 #: ../../WINGs/proplist.c:184 ../../WINGs/proplist.c:236
 #: ../../WINGs/proplist.c:394 ../../WINGs/proplist.c:474
@@ -116,7 +116,7 @@ msgstr "falta una entrada PropList de diccionari"
 
 #: ../../WINGs/proplist.c:795
 msgid "missing PropList dictionary entry key or unterminated dictionary"
-msgstr "falta una entrada PropList de diccionari o bÈ est‡ incompleta"
+msgstr "falta una entrada PropList de diccionari o b√© est√† incompleta"
 
 #: ../../WINGs/proplist.c:803
 msgid "error parsing PropList dictionary key"
@@ -148,7 +148,7 @@ msgstr "No es permeten comentaris en els fitxers de domini de WindowMaker."
 
 #: ../../WINGs/proplist.c:1563 ../../WINGs/proplist.c:1630
 msgid "extra data after end of property list"
-msgstr "sobren dades desprÈs de la llista de propietats"
+msgstr "sobren dades despr√©s de la llista de propietats"
 
 #: ../../WINGs/proplist.c:1606
 #, c-format
@@ -234,7 +234,7 @@ msgstr "Claror"
 #: ../../WINGs/wcolorpanel.c:2867 ../../WINGs/wcolorpanel.c:2903
 #: ../../WINGs/wcolorpanel.c:3745
 msgid "Color Panel: Could not allocate memory"
-msgstr "Panell de color: No s'ha pogut assignar memÚria"
+msgstr "Panell de color: No s'ha pogut assignar mem√≤ria"
 
 #: ../../WINGs/wcolorpanel.c:685 ../../WINGs/wcolorpanel.c:686
 msgid "Red"
@@ -320,7 +320,7 @@ msgid ""
 "Color Panel: Could not create directory %s needed to store configurations"
 msgstr ""
 "Panell de color: No s'ha pogut crear el directori \"%s\" necessari per desar "
-"la configuraciÛ"
+"la configuraci√≥"
 
 #. Delete the file, it doesn't belong here
 #: ../../WINGs/wcolorpanel.c:1242 ../../WINGs/wcolorpanel.c:3212
@@ -330,7 +330,7 @@ msgstr "Error de fitxer"
 
 #: ../../WINGs/wcolorpanel.c:1243
 msgid "Could not create ColorPanel configuration directory"
-msgstr "No s'ha pogut crear el directori de configuraciÛ del Panell de color"
+msgstr "No s'ha pogut crear el directori de configuraci√≥ del Panell de color"
 
 #: ../../WINGs/wcolorpanel.c:1244 ../../WINGs/wcolorpanel.c:3213
 #: ../../WINGs/wcolorpanel.c:3218 ../../WINGs/wcolorpanel.c:3245
@@ -348,24 +348,24 @@ msgstr "Panell de color: No s'ha trobat el fitxer"
 #: ../../WINGs/wcolorpanel.c:1491 ../../WINGs/wcolorpanel.c:1556
 #: ../../WINGs/wcolorpanel.c:1620
 msgid "Color Panel: X failed request"
-msgstr "Panell de color: peticiÛ X fallida"
+msgstr "Panell de color: petici√≥ X fallida"
 
 #: ../../WINGs/wcolorpanel.c:2865
 msgid "Saturation"
-msgstr "SaturaciÛ"
+msgstr "Saturaci√≥"
 
 #: ../../WINGs/wcolorpanel.c:2901
 msgid "Hue"
-msgstr "MatÌs"
+msgstr "Mat√≠s"
 
-# Ès el tÌtol d'un quadre de di‡leg. eac
+# √©s el t√≠tol d'un quadre de di√†leg. eac
 #: ../../WINGs/wcolorpanel.c:3151
 msgid "Open Palette"
 msgstr "Obrir paleta"
 
 #: ../../WINGs/wcolorpanel.c:3213
 msgid "Invalid file format !"
-msgstr "El format del fitxer no Ès v‡lid !"
+msgstr "El format del fitxer no √©s v√†lid !"
 
 #: ../../WINGs/wcolorpanel.c:3215
 #, c-format
@@ -374,7 +374,7 @@ msgstr "no s'ha pogut eliminar el fitxer \"%s\""
 
 #: ../../WINGs/wcolorpanel.c:3217
 msgid "Couldn't remove file from Configuration Directory !"
-msgstr "No s'ha pogut eliminar el fitxer del directori de configuraciÛ !"
+msgstr "No s'ha pogut eliminar el fitxer del directori de configuraci√≥ !"
 
 #: ../../WINGs/wcolorpanel.c:3244
 msgid "Rename"
@@ -387,12 +387,12 @@ msgstr "Reanomena la paleta com a:"
 #: ../../WINGs/wcolorpanel.c:3245 ../../WINGs/wfilepanel.c:259
 #: ../../WINGs/wfilepanel.c:662 ../../WINGs/wfilepanel.c:763
 msgid "Cancel"
-msgstr "Cancel∑la"
+msgstr "Cancel¬∑la"
 
 #. Careful, this palette exists already
 #: ../../WINGs/wcolorpanel.c:3261 ../../WINGs/wfilepanel.c:763
 msgid "Warning"
-msgstr "AtenciÛ"
+msgstr "Atenci√≥"
 
 #: ../../WINGs/wcolorpanel.c:3262
 msgid ""
@@ -410,7 +410,7 @@ msgstr "No"
 
 #: ../../WINGs/wcolorpanel.c:3262 ../../WINGs/wcolorpanel.c:3326
 msgid "Yes"
-msgstr "SÌ"
+msgstr "S√≠"
 
 #: ../../WINGs/wcolorpanel.c:3294
 #, c-format
@@ -419,7 +419,7 @@ msgstr "No s'ha pogut reanomenar la paleta %s com a %s\n"
 
 #: ../../WINGs/wcolorpanel.c:3320
 msgid "This will permanently remove the palette "
-msgstr "AixÚ eliminar‡ la paleta per sempre "
+msgstr "Aix√≤ eliminar√† la paleta per sempre "
 
 #: ../../WINGs/wcolorpanel.c:3323
 msgid ""
@@ -482,7 +482,7 @@ msgstr "WINGs: no s'ha pogut determinar l'estat de %s\n"
 msgid "Error"
 msgstr "Error"
 
-# Ès el nom d'un quadre de di‡leg. eac
+# √©s el nom d'un quadre de di√†leg. eac
 #: ../../WINGs/wfilepanel.c:661
 msgid "Create Directory"
 msgstr "Crear directori"
@@ -494,16 +494,16 @@ msgstr "Entreu el nom del directori"
 #: ../../WINGs/wfilepanel.c:698 ../../WINGs/wfilepanel.c:737
 #: ../../WINGs/wfilepanel.c:768 ../../WINGs/wfilepanel.c:796
 msgid "Permission denied."
-msgstr "PermÌs denegat."
+msgstr "Perm√≠s denegat."
 
 #: ../../WINGs/wfilepanel.c:701
 #, c-format
 msgid "'%s' already exists."
-msgstr "\"%s\" existia prËviament."
+msgstr "\"%s\" existia pr√®viament."
 
 #: ../../WINGs/wfilepanel.c:704
 msgid "Path does not exist."
-msgstr "L'ubicaciÛ no existeix."
+msgstr "L'ubicaci√≥ no existeix."
 
 #: ../../WINGs/wfilepanel.c:734 ../../WINGs/wfilepanel.c:793
 #, c-format
@@ -512,12 +512,12 @@ msgstr "\"%s\" no existeix."
 
 #: ../../WINGs/wfilepanel.c:741 ../../WINGs/wfilepanel.c:800
 msgid "Insufficient memory available."
-msgstr "No hi ha prou memÚria disponible."
+msgstr "No hi ha prou mem√≤ria disponible."
 
 #: ../../WINGs/wfilepanel.c:745 ../../WINGs/wfilepanel.c:804
 #, c-format
 msgid "'%s' is on a read-only filesystem."
-msgstr "\"%s\" es troba en un sistema de fitxers de nomÈs lectura."
+msgstr "\"%s\" es troba en un sistema de fitxers de nom√©s lectura."
 
 #: ../../WINGs/wfilepanel.c:748 ../../WINGs/wfilepanel.c:780
 #: ../../WINGs/wfilepanel.c:807
@@ -543,7 +543,7 @@ msgstr "El directori \"%s\" no existeix."
 #: ../../WINGs/wfilepanel.c:774
 #, c-format
 msgid "Directory '%s' is not empty."
-msgstr "El directori \"%s\" no est‡ buit."
+msgstr "El directori \"%s\" no est√† buit."
 
 #: ../../WINGs/wfilepanel.c:777
 #, c-format
@@ -553,17 +553,17 @@ msgstr "El directori \"%s\" es troba ocupat."
 #: ../../WINGs/wfilepanel.c:790
 #, c-format
 msgid "'%s' is a directory."
-msgstr "\"%s\" Ès un directori."
+msgstr "\"%s\" √©s un directori."
 
 #: ../../WINGs/wfilepanel.c:832
 #, c-format
 msgid "An error occured browsing '%s'."
-msgstr "S'ha produÔt un error mentre s'explorava \"%s\"."
+msgstr "S'ha produ√Øt un error mentre s'explorava \"%s\"."
 
 #: ../../WINGs/wfilepanel.c:836
 #, c-format
 msgid "'%s' is not a directory."
-msgstr "\"%s\" no Ès un directori."
+msgstr "\"%s\" no √©s un directori."
 
 #: ../../WINGs/wfilepanel.c:973
 msgid "File does not exist."
@@ -581,34 +581,34 @@ msgid ""
 "Conversion to widechar failed (possible invalid multibyte sequence): '%s':"
 "(pos %d)\n"
 msgstr ""
-"Ha fallat la conversiÛ a car‡cter estËs (possible seq¸Ëncia no v‡lida): '%"
+"Ha fallat la conversi√≥ a car√†cter est√®s (possible seq√º√®ncia no v√†lida): '%"
 "s': (pos %d)\n"
 
 #. // remove warning later. or maybe not
 #: ../../WINGs/wfont.c:591 ../../WINGs/wfont.c:1568
 #, c-format
 msgid "Invalid font specification: '%s'\n"
-msgstr "EspecificaciÛ de font no v‡lida: \"%s\"\n"
+msgstr "Especificaci√≥ de font no v√†lida: \"%s\"\n"
 
 #: ../../WINGs/wfont.c:770 ../../WINGs/wfont.c:780
 #, c-format
 msgid "Invalid size specification '%s' in %s. Using default %d\n"
 msgstr ""
-"La mida \"%s\" especificada a %s no Ès v‡lida. S'usa el valor per omissiÛ %"
+"La mida \"%s\" especificada a %s no √©s v√†lida. S'usa el valor per omissi√≥ %"
 "d\n"
 
 #: ../../WINGs/wfont.c:824
 #, c-format
 msgid "the following character sets are missing in %s:"
-msgstr "els seg¸ents conjunts de car‡cters falten a %s:"
+msgstr "els seg√ºents conjunts de car√†cters falten a %s:"
 
 #: ../../WINGs/wfont.c:830
 #, c-format
 msgid ""
 "the string \"%s\" will be used in place of any characters from those sets."
 msgstr ""
-"la cadena \"%s\" s'usar‡ en lloc dels car‡cters d'aquests conjunts de "
-"car‡cters."
+"la cadena \"%s\" s'usar√† en lloc dels car√†cters d'aquests conjunts de "
+"car√†cters."
 
 #. is arial a good fallback for multibyte?
 #: ../../WINGs/wfont.c:1232 ../../WINGs/wfont.c:1247
@@ -619,7 +619,7 @@ msgstr "no s'ha pogut carregar el tipus de lletra %s. Provant amb \"arial\"."
 #: ../../WINGs/wfont.c:1239
 msgid "could not load antialiased font set. Reverting to standard font sets."
 msgstr ""
-"no s'ha pogut carregar el conjunt de fonts amb allisat. S'usar‡ l'est‡ndard."
+"no s'ha pogut carregar el conjunt de fonts amb allisat. S'usar√† l'est√†ndard."
 
 #: ../../WINGs/wfont.c:1242
 #, c-format
@@ -647,7 +647,7 @@ msgstr "no s'ha pogut carregar el tipus de lletra \"fixed\" !"
 #: ../../WINGs/wfont.c:1520
 #, c-format
 msgid "font description %s is too large."
-msgstr "la descripciÛ de tipus de lletra %s Ès massa gran."
+msgstr "la descripci√≥ de tipus de lletra %s √©s massa gran."
 
 #: ../../WINGs/wfontpanel.c:235
 msgid "Test!!!"
@@ -681,8 +681,8 @@ msgstr "No s'ha pogut obtenir la llista de tipus de lletra"
 #, c-format
 msgid "font name %s is longer than 256, which is invalid."
 msgstr ""
-"el nom de tipus de lletra %s ocupa mÈs de 256 car‡cters, per tant no Ès "
-"v‡lid."
+"el nom de tipus de lletra %s ocupa m√©s de 256 car√†cters, per tant no √©s "
+"v√†lid."
 
 #: ../../WINGs/wfontpanel.c:913
 msgid "Roman"
@@ -690,7 +690,7 @@ msgstr "Romana"
 
 #: ../../WINGs/wfontpanel.c:916
 msgid "Italic"
-msgstr "It‡lica"
+msgstr "It√†lica"
 
 #: ../../WINGs/wfontpanel.c:918
 msgid "Oblique"
@@ -698,7 +698,7 @@ msgstr "Obliqua"
 
 #: ../../WINGs/wfontpanel.c:920
 msgid "Rev Italic"
-msgstr "It‡lica inv"
+msgstr "It√†lica inv"
 
 #: ../../WINGs/wfontpanel.c:922
 msgid "Rev Oblique"
@@ -718,7 +718,7 @@ msgid ""
 "could not load any fonts. Make sure your font installation and locale "
 "settings are correct."
 msgstr ""
-"no s'ha pogut carregar cap font. Assegureu-vos que heu instal∑lat i "
+"no s'ha pogut carregar cap font. Assegureu-vos que heu instal¬∑lat i "
 "configurat correctament les fonts i el local."
 
 #: ../../WINGs/wruler.c:192
@@ -730,7 +730,7 @@ msgstr "0   polzades"
 #~ "doesn't have the required capabilities (missing RENDER extension). "
 #~ "Disabling text antialiasing."
 #~ msgstr ""
-#~ "L'allisat de text est‡ habilitat a la configuraciÛ perÚ el servidor X no\n"
-#~ "tÈ la capacitat necess‡ria (falta l'extensiÛ RENDER) de manera que "
+#~ "L'allisat de text est√† habilitat a la configuraci√≥ per√≤ el servidor X no\n"
+#~ "t√© la capacitat necess√†ria (falta l'extensi√≥ RENDER) de manera que "
 #~ "l'allisat\n"
-#~ "de text es deshabilitar‡."
+#~ "de text es deshabilitar√†."

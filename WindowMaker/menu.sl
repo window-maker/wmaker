@@ -108,7 +108,7 @@
 		"Sistemska konzola" EXEC xconsole
 		"Obremenitev sistema" SHEXEC xosview || xload
 		"Seznam procesov" EXEC xterm -e top
-		"PomoË (Iskalec man strani)" EXEC xman
+		"Pomoƒç (Iskalec man strani)" EXEC xman
 	"Informacije" END
 	"XTerm" EXEC xterm -sb 
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
@@ -150,24 +150,24 @@
 		"Barvna lestvica" EXEC xcmap
 		"XKill" EXEC xkill
 		"ASClock" EXEC asclock -shape
-		"OdlagaliπËe (clipboard)" EXEC xclipboard
+		"Odlagali≈°ƒçe (clipboard)" EXEC xclipboard
 	"Uporabni programi" END
 
 	"Izbira" MENU
 		"Kopiraj" SHEXEC echo '%s' | wxcopy
-		"Poπlji po poπti" EXEC xterm -name mail -T "Pine" -e pine %s
+		"Po≈°lji po po≈°ti" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Odpri WEB stran" EXEC netscape %s
-		"PoiπËi v navodilih" EXEC MANUAL_SEARCH(%s)
+		"Poi≈°ƒçi v navodilih" EXEC MANUAL_SEARCH(%s)
 	"Izbira" END
 
 	"Delovni prostor" MENU
 		"Skrij druge" HIDE_OTHERS
-		"Pokaæi vse" SHOW_ALL
+		"Poka≈æi vse" SHOW_ALL
 		"Poravnaj ikone" ARRANGE_ICONS
 		"Obnovi" REFRESH
 		"Zakleni" EXEC xlock -allowroot -usefirst
 		"Shrani session" SAVE_SESSION
-		"Izbriπi shranjen session" CLEAR_SESSION
+		"Izbri≈°i shranjen session" CLEAR_SESSION
 	"Delovni prostor" END
 
 	"Izgled" MENU
@@ -176,14 +176,14 @@
 		"Zbirke ikon" OPEN_MENU -noext ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Odzadje" MENU
 			"Barva" MENU
-                        	"»rna" WS_BACK '(solid, black)'
+                        	"ƒårna" WS_BACK '(solid, black)'
                         	"Modra"  WS_BACK '(solid, "#505075")'
 				"Indigo" WS_BACK '(solid, "#243e6c")'
 				"Temno modra" WS_BACK '(solid, "#224477")'
-                        	"VioliËna" WS_BACK '(solid, "#554466")'
-                        	"PπeniËna"  WS_BACK '(solid, "wheat4")'
+                        	"Violiƒçna" WS_BACK '(solid, "#554466")'
+                        	"P≈°eniƒçna"  WS_BACK '(solid, "wheat4")'
                         	"Temno siva"  WS_BACK '(solid, "#333340")'
-                        	"Vinsko rdeËa" WS_BACK '(solid, "#400020")'
+                        	"Vinsko rdeƒça" WS_BACK '(solid, "#400020")'
 			"Barva" END
 			"Preliv" MENU
 				"Zastava" WS_BACK '(mdgradient, green, red, white, green)'
@@ -196,8 +196,8 @@
 	"Izgled" END
 
 	"Izhod"	MENU
-		"Ponovno zaæeni" RESTART
-		"Poæeni AfterStep" RESTART afterstep
+		"Ponovno za≈æeni" RESTART
+		"Po≈æeni AfterStep" RESTART afterstep
 		"Izhod..."  EXIT
 		"Izhod iz session..." SHUTDOWN
 	"Izhod" END

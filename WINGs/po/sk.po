@@ -26,12 +26,12 @@ msgstr ""
 #: ../../WINGs/connection.c:467 ../../WINGs/connection.c:532
 #: ../../WINGs/connection.c:575
 msgid "Bad address-service-protocol combination"
-msgstr "Nespr·vna kombin·cia adresa-sluæba-protokol"
+msgstr "Nespr√°vna kombin√°cia adresa-slu≈æba-protokol"
 
 #: ../../WINGs/error.c:54
 #, c-format
 msgid "Unknown error %d"
-msgstr "Nezm·na chyba %d"
+msgstr "Nezm√°na chyba %d"
 
 #: ../../WINGs/error.c:59
 #, c-format
@@ -44,7 +44,7 @@ msgstr " varovanie: "
 
 #: ../../WINGs/error.c:137
 msgid " fatal error: "
-msgstr " fat·lna chyba: "
+msgstr " fat√°lna chyba: "
 
 #: ../../WINGs/error.c:163 ../../WINGs/error.c:192
 msgid " error: "
@@ -53,16 +53,16 @@ msgstr " chyba: "
 #: ../../WINGs/findfile.c:48
 #, c-format
 msgid "could not get password entry for UID %i"
-msgstr "nemoæno zistiª inform·cie o UID %i"
+msgstr "nemo≈æno zisti≈• inform√°cie o UID %i"
 
 #: ../../WINGs/findfile.c:66
 #, c-format
 msgid "could not get password entry for user %s"
-msgstr "nemoæno zistiª inform·cie o uæÌvateµovi %s"
+msgstr "nemo≈æno zisti≈• inform√°cie o u≈æ√≠vateƒæovi %s"
 
 #: ../../WINGs/host.c:114
 msgid "Cannot get current host name"
-msgstr "Nemoæno zistiª aktu·lne meno poËÌtaËa"
+msgstr "Nemo≈æno zisti≈• aktu√°lne meno poƒç√≠taƒça"
 
 #: ../../WINGs/proplist.c:91
 #, c-format
@@ -71,7 +71,7 @@ msgstr "chyba syntaxe v %s %s, riadok %i: %s"
 
 #: ../../WINGs/proplist.c:150
 msgid "Only string or data is supported for a proplist dictionary key"
-msgstr "Pre kµ˙Ë slovnÌka proplist je podporovan˝ len reªazec alebo d·ta"
+msgstr "Pre kƒæ√∫ƒç slovn√≠ka proplist je podporovan√Ω len re≈•azec alebo d√°ta"
 
 #: ../../WINGs/proplist.c:184 ../../WINGs/proplist.c:236
 #: ../../WINGs/proplist.c:394 ../../WINGs/proplist.c:474
@@ -79,89 +79,89 @@ msgstr "Pre kµ˙Ë slovnÌka proplist je podporovan˝ len reªazec alebo d·ta"
 #: ../../WINGs/proplist.c:1293 ../../WINGs/proplist.c:1372
 #: ../../WINGs/proplist.c:1493 ../../WINGs/proplist.c:1540
 msgid "Used proplist functions on non-WMPropLists objects"
-msgstr "Pouæit· proplist funkcia na in˝ch ako WMPropLists objektoch"
+msgstr "Pou≈æit√° proplist funkcia na in√Ωch ako WMPropLists objektoch"
 
 #: ../../WINGs/proplist.c:630
 msgid "unterminated PropList string"
-msgstr "neukonËen˝ PropList reªazec"
+msgstr "neukonƒçen√Ω PropList re≈•azec"
 
 #: ../../WINGs/proplist.c:670
 msgid "unterminated PropList data"
-msgstr "neukonËenÈ PropList d·ta"
+msgstr "neukonƒçen√© PropList d√°ta"
 
 #: ../../WINGs/proplist.c:678
 msgid "unterminated PropList data (missing hexdigit)"
-msgstr "neukonËenÈ PropList d·ta (ch˝baj˙ca hex ËÌslica)"
+msgstr "neukonƒçen√© PropList d√°ta (ch√Ωbaj√∫ca hex ƒç√≠slica)"
 
 #: ../../WINGs/proplist.c:690 ../../WINGs/proplist.c:695
 msgid "non hexdigit character in PropList data"
-msgstr "v PropList d·tach je znak, ktor˝ nie je hex ËÌslicou"
+msgstr "v PropList d√°tach je znak, ktor√Ω nie je hex ƒç√≠slicou"
 
 #: ../../WINGs/proplist.c:729
 msgid "unterminated PropList array"
-msgstr "neukonËenÈ PropList pole"
+msgstr "neukonƒçen√© PropList pole"
 
 #: ../../WINGs/proplist.c:737
 msgid "missing or unterminated PropList array"
-msgstr "ch˝baj˙ce alebo neukonËenÈ PropList pole"
+msgstr "ch√Ωbaj√∫ce alebo neukonƒçen√© PropList pole"
 
 #: ../../WINGs/proplist.c:747
 msgid "could not get PropList array element"
-msgstr "nemoæno zistiª prvok PropList poµa"
+msgstr "nemo≈æno zisti≈• prvok PropList poƒæa"
 
 #: ../../WINGs/proplist.c:776
 msgid "unterminated PropList dictionary"
-msgstr "neukonËen˝ PropList slovnÌk"
+msgstr "neukonƒçen√Ω PropList slovn√≠k"
 
 #: ../../WINGs/proplist.c:793
 msgid "missing PropList dictionary key"
-msgstr "ch˝baj˙ci kµ˙Ë PropList slovnÌka"
+msgstr "ch√Ωbaj√∫ci kƒæ√∫ƒç PropList slovn√≠ka"
 
 #: ../../WINGs/proplist.c:795
 msgid "missing PropList dictionary entry key or unterminated dictionary"
-msgstr "ch˝baj˙ci kµ˙Ë poloæky PropList slovnÌka alebo neukonËen˝ slovnÌk"
+msgstr "ch√Ωbaj√∫ci kƒæ√∫ƒç polo≈æky PropList slovn√≠ka alebo neukonƒçen√Ω slovn√≠k"
 
 #: ../../WINGs/proplist.c:803
 msgid "error parsing PropList dictionary key"
-msgstr "chyba pri parsovanÌ kµ˙Ëa PropList slovnÌka"
+msgstr "chyba pri parsovan√≠ kƒæ√∫ƒça PropList slovn√≠ka"
 
 #: ../../WINGs/proplist.c:811
 msgid "missing = in PropList dictionary entry"
-msgstr "ch˝baj˙ce = v poloæke PropList slovnÌka"
+msgstr "ch√Ωbaj√∫ce = v polo≈æke PropList slovn√≠ka"
 
 #: ../../WINGs/proplist.c:819
 msgid "error parsing PropList dictionary entry value"
-msgstr "chyba pri parsovanÌ hodnoty poloæky PropList slovnÌka"
+msgstr "chyba pri parsovan√≠ hodnoty polo≈æky PropList slovn√≠ka"
 
 #: ../../WINGs/proplist.c:827
 msgid "missing ; in PropList dictionary entry"
-msgstr "ch˝baj˙ca ; v poloæke PropList slovnÌka"
+msgstr "ch√Ωbaj√∫ca ; v polo≈æke PropList slovn√≠ka"
 
 #: ../../WINGs/proplist.c:888
 msgid ""
 "was expecting a string, data, array or dictionary. If it's a string, try "
 "enclosing it with \"."
 msgstr ""
-"oËak·van˝ bol reªazec, d·ta, pole alebo slovnÌk. Ak je to reªazec, sk˙ste ho "
-"uzavrieª medzi \"."
+"oƒçak√°van√Ω bol re≈•azec, d√°ta, pole alebo slovn√≠k. Ak je to re≈•azec, sk√∫ste ho "
+"uzavrie≈• medzi \"."
 
 #: ../../WINGs/proplist.c:892
 msgid "Comments are not allowed inside WindowMaker owned domain files."
-msgstr "Koment·re v domÈnov˝ch s˙boroch Window Makera nie s˙ povolenÈ."
+msgstr "Koment√°re v dom√©nov√Ωch s√∫boroch Window Makera nie s√∫ povolen√©."
 
 #: ../../WINGs/proplist.c:1563 ../../WINGs/proplist.c:1630
 msgid "extra data after end of property list"
-msgstr "prebytoËnÈ d·ta na konci property listu"
+msgstr "prebytoƒçn√© d√°ta na konci property listu"
 
 #: ../../WINGs/proplist.c:1606
 #, c-format
 msgid "could not get size for file '%s'"
-msgstr "nemoæno zistiª veµkosª s˙boru '%s'"
+msgstr "nemo≈æno zisti≈• veƒækos≈• s√∫boru '%s'"
 
 #: ../../WINGs/proplist.c:1619
 #, c-format
 msgid "error reading from file '%s'"
-msgstr "chyba pri ËÌtanÌ zo s˙boru '%s'"
+msgstr "chyba pri ƒç√≠tan√≠ zo s√∫boru '%s'"
 
 #: ../../WINGs/proplist.c:1671
 #, c-format
@@ -176,12 +176,12 @@ msgstr "chyba mktemp(%s)"
 #: ../../WINGs/proplist.c:1693
 #, c-format
 msgid "open (%s) failed"
-msgstr "chyba pri otv·ranÌ (%s)"
+msgstr "chyba pri otv√°ran√≠ (%s)"
 
 #: ../../WINGs/proplist.c:1700
 #, c-format
 msgid "writing to file: %s failed"
-msgstr "chyba pri z·pise do s˙boru: %s"
+msgstr "chyba pri z√°pise do s√∫boru: %s"
 
 #: ../../WINGs/proplist.c:1708
 #, c-format
@@ -197,13 +197,13 @@ msgstr "chyba rename ('%s' na '%s')"
 #: ../../WINGs/userdefaults.c:188 ../../WINGs/userdefaults.c:204
 #, c-format
 msgid "cannot read domain from file '%s' when syncing"
-msgstr "nemoæno ËÌtaª domÈnu zo s˙boru '%s' pri synchroniz·cii"
+msgstr "nemo≈æno ƒç√≠ta≈• dom√©nu zo s√∫boru '%s' pri synchroniz√°cii"
 
 #: ../../WINGs/wcolor.c:224 ../../WINGs/wcolor.c:236 ../../WINGs/wcolor.c:275
 #: ../../WINGs/wcolor.c:316
 #, c-format
 msgid "could not allocate %s color"
-msgstr "nemoæno alokovaª %s farbu"
+msgstr "nemo≈æno alokova≈• %s farbu"
 
 #: ../../WINGs/wcolor.c:224
 msgid "white"
@@ -211,15 +211,15 @@ msgstr "bielu"
 
 #: ../../WINGs/wcolor.c:236
 msgid "black"
-msgstr "Ëiernu"
+msgstr "ƒçiernu"
 
 #: ../../WINGs/wcolor.c:275
 msgid "gray"
-msgstr "πed˙"
+msgstr "≈°ed√∫"
 
 #: ../../WINGs/wcolor.c:316
 msgid "dark gray"
-msgstr "tmavoπed˙"
+msgstr "tmavo≈°ed√∫"
 
 #: ../../WINGs/wcolorpanel.c:420
 msgid "Colors"
@@ -227,7 +227,7 @@ msgstr "Farby"
 
 #: ../../WINGs/wcolorpanel.c:610 ../../WINGs/wcolorpanel.c:2829
 msgid "Brightness"
-msgstr "Svetlosª"
+msgstr "Svetlos≈•"
 
 #: ../../WINGs/wcolorpanel.c:612 ../../WINGs/wcolorpanel.c:688
 #: ../../WINGs/wcolorpanel.c:721 ../../WINGs/wcolorpanel.c:755
@@ -237,35 +237,35 @@ msgstr "Svetlosª"
 #: ../../WINGs/wcolorpanel.c:2867 ../../WINGs/wcolorpanel.c:2903
 #: ../../WINGs/wcolorpanel.c:3745
 msgid "Color Panel: Could not allocate memory"
-msgstr "Panel farieb: Nemoæno alokovaª pam‰ª"
+msgstr "Panel farieb: Nemo≈æno alokova≈• pam√§≈•"
 
 #: ../../WINGs/wcolorpanel.c:685 ../../WINGs/wcolorpanel.c:686
 msgid "Red"
-msgstr "»erven·"
+msgstr "ƒåerven√°"
 
 #: ../../WINGs/wcolorpanel.c:718 ../../WINGs/wcolorpanel.c:719
 msgid "Green"
-msgstr "Zelen·"
+msgstr "Zelen√°"
 
 #: ../../WINGs/wcolorpanel.c:752 ../../WINGs/wcolorpanel.c:753
 msgid "Blue"
-msgstr "Modr·"
+msgstr "Modr√°"
 
 #: ../../WINGs/wcolorpanel.c:812 ../../WINGs/wcolorpanel.c:813
 msgid "Cyan"
-msgstr "Az˙rov·"
+msgstr "Az√∫rov√°"
 
 #: ../../WINGs/wcolorpanel.c:846 ../../WINGs/wcolorpanel.c:847
 msgid "Magenta"
-msgstr "Purpurov·"
+msgstr "Purpurov√°"
 
 #: ../../WINGs/wcolorpanel.c:880 ../../WINGs/wcolorpanel.c:881
 msgid "Yellow"
-msgstr "Ælt·"
+msgstr "≈Ωlt√°"
 
 #: ../../WINGs/wcolorpanel.c:915 ../../WINGs/wcolorpanel.c:916
 msgid "Black"
-msgstr "»ierna"
+msgstr "ƒåierna"
 
 #: ../../WINGs/wcolorpanel.c:996
 msgid "Spectrum"
@@ -277,25 +277,25 @@ msgstr "Paleta"
 
 #: ../../WINGs/wcolorpanel.c:1032
 msgid "New from File..."
-msgstr "Nov· zo s˙boru..."
+msgstr "Nov√° zo s√∫boru..."
 
 #: ../../WINGs/wcolorpanel.c:1033 ../../WINGs/wcolorpanel.c:1081
 #: ../../WINGs/wcolorpanel.c:1098
 msgid "Rename..."
-msgstr "Premenovaª..."
+msgstr "Premenova≈•..."
 
 #: ../../WINGs/wcolorpanel.c:1034 ../../WINGs/wcolorpanel.c:1082
 #: ../../WINGs/wcolorpanel.c:1099 ../../WINGs/wcolorpanel.c:3326
 msgid "Remove"
-msgstr "Odstr·niª"
+msgstr "Odstr√°ni≈•"
 
 #: ../../WINGs/wcolorpanel.c:1035
 msgid "Copy"
-msgstr "KopÌrovaª"
+msgstr "Kop√≠rova≈•"
 
 #: ../../WINGs/wcolorpanel.c:1036
 msgid "New from Clipboard"
-msgstr "Nov· z n·stenky"
+msgstr "Nov√° z n√°stenky"
 
 #: ../../WINGs/wcolorpanel.c:1057
 msgid "X11-Colors"
@@ -307,7 +307,7 @@ msgstr "Farba"
 
 #: ../../WINGs/wcolorpanel.c:1080
 msgid "Add..."
-msgstr "Pridaª..."
+msgstr "Prida≈•..."
 
 #: ../../WINGs/wcolorpanel.c:1090
 msgid "List"
@@ -315,24 +315,24 @@ msgstr "Zoznam"
 
 #: ../../WINGs/wcolorpanel.c:1097
 msgid "New..."
-msgstr "Nov˝..."
+msgstr "Nov√Ω..."
 
 #: ../../WINGs/wcolorpanel.c:1236
 #, c-format
 msgid ""
 "Color Panel: Could not create directory %s needed to store configurations"
 msgstr ""
-"Panel farieb: Nemoæno vytvoriª adres·r %s potrebn˝ na uloæenie nastavenÌ"
+"Panel farieb: Nemo≈æno vytvori≈• adres√°r %s potrebn√Ω na ulo≈æenie nastaven√≠"
 
 #. Delete the file, it doesn't belong here
 #: ../../WINGs/wcolorpanel.c:1242 ../../WINGs/wcolorpanel.c:3212
 #: ../../WINGs/wcolorpanel.c:3216
 msgid "File Error"
-msgstr "Chyba s˙boru"
+msgstr "Chyba s√∫boru"
 
 #: ../../WINGs/wcolorpanel.c:1243
 msgid "Could not create ColorPanel configuration directory"
-msgstr "Nemoæno vytvoriª konfiguraËn˝ adres·r panelu farieb"
+msgstr "Nemo≈æno vytvori≈• konfiguraƒçn√Ω adres√°r panelu farieb"
 
 #: ../../WINGs/wcolorpanel.c:1244 ../../WINGs/wcolorpanel.c:3213
 #: ../../WINGs/wcolorpanel.c:3218 ../../WINGs/wcolorpanel.c:3245
@@ -345,50 +345,50 @@ msgstr "OK"
 #: ../../WINGs/wcolorpanel.c:1250 ../../WINGs/wcolorpanel.c:1286
 #: ../../WINGs/wcolorpanel.c:1304
 msgid "Color Panel: Could not find file"
-msgstr "Panel farieb: Nemoæno n·jsª s˙bor"
+msgstr "Panel farieb: Nemo≈æno n√°js≈• s√∫bor"
 
 #: ../../WINGs/wcolorpanel.c:1491 ../../WINGs/wcolorpanel.c:1556
 #: ../../WINGs/wcolorpanel.c:1620
 msgid "Color Panel: X failed request"
-msgstr "Panel farieb: chyba poæiadavky X"
+msgstr "Panel farieb: chyba po≈æiadavky X"
 
 #: ../../WINGs/wcolorpanel.c:2865
 msgid "Saturation"
-msgstr "Satur·cia"
+msgstr "Satur√°cia"
 
 #: ../../WINGs/wcolorpanel.c:2901
 msgid "Hue"
-msgstr "OdtieÚ"
+msgstr "Odtie≈à"
 
 #: ../../WINGs/wcolorpanel.c:3151
 msgid "Open Palette"
-msgstr "Otvoriª paletu"
+msgstr "Otvori≈• paletu"
 
 #: ../../WINGs/wcolorpanel.c:3213
 msgid "Invalid file format !"
-msgstr "Nespr·vny s˙borov˝ form·t!"
+msgstr "Nespr√°vny s√∫borov√Ω form√°t!"
 
 #: ../../WINGs/wcolorpanel.c:3215
 #, c-format
 msgid "can't remove file %s"
-msgstr "namoæno odstr·niª s˙bor %s"
+msgstr "namo≈æno odstr√°ni≈• s√∫bor %s"
 
 #: ../../WINGs/wcolorpanel.c:3217
 msgid "Couldn't remove file from Configuration Directory !"
-msgstr "Nemoæno odstr·niª s˙bor z konfiguraËnÈho adres·ra!"
+msgstr "Nemo≈æno odstr√°ni≈• s√∫bor z konfiguraƒçn√©ho adres√°ra!"
 
 #: ../../WINGs/wcolorpanel.c:3244
 msgid "Rename"
-msgstr "Premenovaª"
+msgstr "Premenova≈•"
 
 #: ../../WINGs/wcolorpanel.c:3244
 msgid "Rename palette to:"
-msgstr "Premenovaª paletu:"
+msgstr "Premenova≈• paletu:"
 
 #: ../../WINGs/wcolorpanel.c:3245 ../../WINGs/wfilepanel.c:259
 #: ../../WINGs/wfilepanel.c:662 ../../WINGs/wfilepanel.c:763
 msgid "Cancel"
-msgstr "Zruπiª"
+msgstr "Zru≈°i≈•"
 
 #. Careful, this palette exists already
 #: ../../WINGs/wcolorpanel.c:3261 ../../WINGs/wfilepanel.c:763
@@ -401,9 +401,9 @@ msgid ""
 "\n"
 "Overwrite ?"
 msgstr ""
-"Paleta uæ existuje!\n"
+"Paleta u≈æ existuje!\n"
 "\n"
-"PrepÌsaª?"
+"Prep√≠sa≈•?"
 
 #: ../../WINGs/wcolorpanel.c:3262 ../../WINGs/wcolorpanel.c:3326
 msgid "No"
@@ -411,16 +411,16 @@ msgstr "Nie"
 
 #: ../../WINGs/wcolorpanel.c:3262 ../../WINGs/wcolorpanel.c:3326
 msgid "Yes"
-msgstr "¡no"
+msgstr "√Åno"
 
 #: ../../WINGs/wcolorpanel.c:3294
 #, c-format
 msgid "Couldn't rename palette %s to %s\n"
-msgstr "Nemoæno premenovaª paletu %s na %s\n"
+msgstr "Nemo≈æno premenova≈• paletu %s na %s\n"
 
 #: ../../WINGs/wcolorpanel.c:3320
 msgid "This will permanently remove the palette "
-msgstr "Paleta bude natrvalo zmazan·"
+msgstr "Paleta bude natrvalo zmazan√°"
 
 #: ../../WINGs/wcolorpanel.c:3323
 msgid ""
@@ -430,31 +430,31 @@ msgid ""
 msgstr ""
 ".\n"
 "\n"
-"Ste si ist˝, æe chcete odstr·niª t˙to paletu?"
+"Ste si ist√Ω, ≈æe chcete odstr√°ni≈• t√∫to paletu?"
 
 #: ../../WINGs/wcolorpanel.c:3348
 #, c-format
 msgid "Couldn't remove palette %s\n"
-msgstr "Nemoæno odstr·niª paletu %s\n"
+msgstr "Nemo≈æno odstr√°ni≈• paletu %s\n"
 
 #: ../../WINGs/wcolorpanel.c:3647
 #, c-format
 msgid "Could not open %s"
-msgstr "Nemoæno otvoriª %s"
+msgstr "Nemo≈æno otvori≈• %s"
 
 #: ../../WINGs/wcolorpanel.c:3654
 #, c-format
 msgid "Could not create %s"
-msgstr "Nemoæno vytvoriª %s"
+msgstr "Nemo≈æno vytvori≈• %s"
 
 #: ../../WINGs/wcolorpanel.c:3665
 #, c-format
 msgid "Write error on file %s"
-msgstr "Chyba z·pisu do s˙boru %s"
+msgstr "Chyba z√°pisu do s√∫boru %s"
 
 #: ../../WINGs/wcolorpanel.c:3710
 msgid "Color Panel: Color unspecified"
-msgstr "Panel farieb: Neπpecifikovan· farba"
+msgstr "Panel farieb: Ne≈°pecifikovan√° farba"
 
 #: ../../WINGs/wfilepanel.c:235
 msgid "Name:"
@@ -462,21 +462,21 @@ msgstr "Meno:"
 
 #: ../../WINGs/wfilepanel.c:332 ../../WINGs/wfilepanel.c:396
 msgid "Open"
-msgstr "Otvoriª"
+msgstr "Otvori≈•"
 
 #: ../../WINGs/wfilepanel.c:350 ../../WINGs/wfilepanel.c:402
 msgid "Save"
-msgstr "Uloæiª"
+msgstr "Ulo≈æi≈•"
 
 #: ../../WINGs/wfilepanel.c:565
 #, c-format
 msgid "WINGs: could not open directory %s\n"
-msgstr "WINGs: nemoæno otvoriª adres·r %s\n"
+msgstr "WINGs: nemo≈æno otvori≈• adres√°r %s\n"
 
 #: ../../WINGs/wfilepanel.c:583
 #, c-format
 msgid "WINGs: could not stat %s\n"
-msgstr "WINGs: nemoæno zistiª inform·cie o %s\n"
+msgstr "WINGs: nemo≈æno zisti≈• inform√°cie o %s\n"
 
 #: ../../WINGs/wfilepanel.c:650 ../../WINGs/wfilepanel.c:973
 #: ../../WINGs/wfontpanel.c:750
@@ -485,21 +485,21 @@ msgstr "Chyba"
 
 #: ../../WINGs/wfilepanel.c:661
 msgid "Create Directory"
-msgstr "Vytvoriª adres·r"
+msgstr "Vytvori≈• adres√°r"
 
 #: ../../WINGs/wfilepanel.c:662
 msgid "Enter directory name"
-msgstr "Meno adres·ra"
+msgstr "Meno adres√°ra"
 
 #: ../../WINGs/wfilepanel.c:698 ../../WINGs/wfilepanel.c:737
 #: ../../WINGs/wfilepanel.c:768 ../../WINGs/wfilepanel.c:796
 msgid "Permission denied."
-msgstr "PrÌstup zamietnut˝."
+msgstr "Pr√≠stup zamietnut√Ω."
 
 #: ../../WINGs/wfilepanel.c:701
 #, c-format
 msgid "'%s' already exists."
-msgstr "'%s' uæ existuje"
+msgstr "'%s' u≈æ existuje"
 
 #: ../../WINGs/wfilepanel.c:704
 msgid "Path does not exist."
@@ -512,67 +512,67 @@ msgstr "'%s' neexistuje."
 
 #: ../../WINGs/wfilepanel.c:741 ../../WINGs/wfilepanel.c:800
 msgid "Insufficient memory available."
-msgstr "Nedostatok pam‰ti."
+msgstr "Nedostatok pam√§ti."
 
 #: ../../WINGs/wfilepanel.c:745 ../../WINGs/wfilepanel.c:804
 #, c-format
 msgid "'%s' is on a read-only filesystem."
-msgstr "'%s' je na s˙borovom systÈme len pre ËÌtanie."
+msgstr "'%s' je na s√∫borovom syst√©me len pre ƒç√≠tanie."
 
 #: ../../WINGs/wfilepanel.c:748 ../../WINGs/wfilepanel.c:780
 #: ../../WINGs/wfilepanel.c:807
 #, c-format
 msgid "Can not delete '%s'."
-msgstr "Nemoæno odstr·niª '%s'."
+msgstr "Nemo≈æno odstr√°ni≈• '%s'."
 
 #: ../../WINGs/wfilepanel.c:755
 #, c-format
 msgid "Delete directory %s ?"
-msgstr "Odstr·niª adres·r %s?"
+msgstr "Odstr√°ni≈• adres√°r %s?"
 
 #: ../../WINGs/wfilepanel.c:759
 #, c-format
 msgid "Delete file %s ?"
-msgstr "Odstr·niª s˙bor %s?"
+msgstr "Odstr√°ni≈• s√∫bor %s?"
 
 #: ../../WINGs/wfilepanel.c:771
 #, c-format
 msgid "Directory '%s' does not exist."
-msgstr "Adres·r '%s' neexistuje."
+msgstr "Adres√°r '%s' neexistuje."
 
 #: ../../WINGs/wfilepanel.c:774
 #, c-format
 msgid "Directory '%s' is not empty."
-msgstr "Adres·r '%s' nie je pr·zdny."
+msgstr "Adres√°r '%s' nie je pr√°zdny."
 
 #: ../../WINGs/wfilepanel.c:777
 #, c-format
 msgid "Directory '%s' is busy."
-msgstr "Adres·r '%s' je pouæÌvan˝."
+msgstr "Adres√°r '%s' je pou≈æ√≠van√Ω."
 
 #: ../../WINGs/wfilepanel.c:790
 #, c-format
 msgid "'%s' is a directory."
-msgstr "'%s' je adres·r."
+msgstr "'%s' je adres√°r."
 
 #: ../../WINGs/wfilepanel.c:832
 #, c-format
 msgid "An error occured browsing '%s'."
-msgstr "Pri prehliadanÌ '%s' nastala chyba."
+msgstr "Pri prehliadan√≠ '%s' nastala chyba."
 
 #: ../../WINGs/wfilepanel.c:836
 #, c-format
 msgid "'%s' is not a directory."
-msgstr "'%s' nie je adres·r."
+msgstr "'%s' nie je adres√°r."
 
 #: ../../WINGs/wfilepanel.c:973
 msgid "File does not exist."
-msgstr "S˙bor neexistuje."
+msgstr "S√∫bor neexistuje."
 
 #: ../../WINGs/wfont.c:324 ../../WINGs/wfont.c:344
 #, c-format
 msgid "could not load font %s."
-msgstr "nemoæno naËÌtaª font %s."
+msgstr "nemo≈æno naƒç√≠ta≈• font %s."
 
 #: ../../WINGs/wfont.c:375 ../../WINGs/wfont.c:420 ../../WINGs/wfont.c:475
 #: ../../WINGs/wfont.c:1337 ../../WINGs/wfont.c:1398 ../../WINGs/wfont.c:1469
@@ -581,72 +581,72 @@ msgid ""
 "Conversion to widechar failed (possible invalid multibyte sequence): '%s':"
 "(pos %d)\n"
 msgstr ""
-"Konverzia do widechar zlyhala (moæno nespr·vna multibyte sekvencia): '%s':"
+"Konverzia do widechar zlyhala (mo≈æno nespr√°vna multibyte sekvencia): '%s':"
 "(pos %d)\n"
 
 #. // remove warning later. or maybe not
 #: ../../WINGs/wfont.c:591 ../../WINGs/wfont.c:1568
 #, c-format
 msgid "Invalid font specification: '%s'\n"
-msgstr "Chybn· πpecifik·cia fontu: '%s'\n"
+msgstr "Chybn√° ≈°pecifik√°cia fontu: '%s'\n"
 
 #: ../../WINGs/wfont.c:770 ../../WINGs/wfont.c:780
 #, c-format
 msgid "Invalid size specification '%s' in %s. Using default %d\n"
-msgstr "Chybn· πpecifik·cia veµkosti '%s' v %s. Pouæije sa implicitn· %d\n"
+msgstr "Chybn√° ≈°pecifik√°cia veƒækosti '%s' v %s. Pou≈æije sa implicitn√° %d\n"
 
 #: ../../WINGs/wfont.c:824
 #, c-format
 msgid "the following character sets are missing in %s:"
-msgstr "nasleduj˙ce sady znakov ch˝baj˙ v %s:"
+msgstr "nasleduj√∫ce sady znakov ch√Ωbaj√∫ v %s:"
 
 #: ../../WINGs/wfont.c:830
 #, c-format
 msgid ""
 "the string \"%s\" will be used in place of any characters from those sets."
-msgstr "reªazec \"%s\" bude pouæit˝ namiesto znakov z t˝chto s·d."
+msgstr "re≈•azec \"%s\" bude pou≈æit√Ω namiesto znakov z t√Ωchto s√°d."
 
 #. is arial a good fallback for multibyte?
 #: ../../WINGs/wfont.c:1232 ../../WINGs/wfont.c:1247
 #, c-format
 msgid "could not load font %s. Trying arial."
-msgstr "nemoæno naËÌtaª font %s. Sk˙πa sa naËÌtaª arial."
+msgstr "nemo≈æno naƒç√≠ta≈• font %s. Sk√∫≈°a sa naƒç√≠ta≈• arial."
 
 #: ../../WINGs/wfont.c:1239
 msgid "could not load antialiased font set. Reverting to standard font sets."
-msgstr "nemoæno naËÌtaª antialiasovan˙ sadu fontov. Sp‰ª k πtandardnej sade fontov."
+msgstr "nemo≈æno naƒç√≠ta≈• antialiasovan√∫ sadu fontov. Sp√§≈• k ≈°tandardnej sade fontov."
 
 #: ../../WINGs/wfont.c:1242
 #, c-format
 msgid "could not load FontSet %s. Trying fixed."
-msgstr "nemoæno naËÌtaª sadu fontov %s. Sk˙πa sa naËÌtaª fixed."
+msgstr "nemo≈æno naƒç√≠ta≈• sadu fontov %s. Sk√∫≈°a sa naƒç√≠ta≈• fixed."
 
 #: ../../WINGs/wfont.c:1254
 msgid "could not load antialiased fonts. Reverting to normal fonts."
-msgstr "nemoæno zaviesª antialiasovan˝ font. N·vrat k norm·lnemu fontu."
+msgstr "nemo≈æno zavies≈• antialiasovan√Ω font. N√°vrat k norm√°lnemu fontu."
 
 #: ../../WINGs/wfont.c:1257 ../../WINGs/wfont.c:1268
 #, c-format
 msgid "could not load font %s. Trying fixed."
-msgstr "nemoæno naËÌtaª font %s. Sk˙πa sa naËÌtaª fixed."
+msgstr "nemo≈æno naƒç√≠ta≈• font %s. Sk√∫≈°a sa naƒç√≠ta≈• fixed."
 
 #: ../../WINGs/wfont.c:1262
 #, c-format
 msgid "could not load font set %s. Trying fixed."
-msgstr "nemoæno naËÌtaª font %s. Sk˙πa sa naËÌtaª fixed."
+msgstr "nemo≈æno naƒç√≠ta≈• font %s. Sk√∫≈°a sa naƒç√≠ta≈• fixed."
 
 #: ../../WINGs/wfont.c:1272
 msgid "could not load fixed font!"
-msgstr "nemoæno naËÌtaª font fixed!"
+msgstr "nemo≈æno naƒç√≠ta≈• font fixed!"
 
 #: ../../WINGs/wfont.c:1520
 #, c-format
 msgid "font description %s is too large."
-msgstr "popis fontu %s je prÌliπ veµk˝."
+msgstr "popis fontu %s je pr√≠li≈° veƒæk√Ω."
 
 #: ../../WINGs/wfontpanel.c:235
 msgid "Test!!!"
-msgstr "Sk˙πka!!!"
+msgstr "Sk√∫≈°ka!!!"
 
 #: ../../WINGs/wfontpanel.c:241
 msgid "Family"
@@ -654,11 +654,11 @@ msgstr "Rodina"
 
 #: ../../WINGs/wfontpanel.c:252
 msgid "Typeface"
-msgstr "Vzhµad"
+msgstr "Vzhƒæad"
 
 #: ../../WINGs/wfontpanel.c:263
 msgid "Size"
-msgstr "Veµkosª"
+msgstr "Veƒækos≈•"
 
 #: ../../WINGs/wfontpanel.c:282
 msgid "Set"
@@ -666,16 +666,16 @@ msgstr "Sada"
 
 #: ../../WINGs/wfontpanel.c:288
 msgid "Revert"
-msgstr "Obr·tiª"
+msgstr "Obr√°ti≈•"
 
 #: ../../WINGs/wfontpanel.c:751
 msgid "Could not retrieve font list"
-msgstr "Nemoæno obdræaª zoznam fontov"
+msgstr "Nemo≈æno obdr≈æa≈• zoznam fontov"
 
 #: ../../WINGs/wfontpanel.c:765
 #, c-format
 msgid "font name %s is longer than 256, which is invalid."
-msgstr "meno fontu %s je dlhπie ako 256, Ëo je nespr·vne."
+msgstr "meno fontu %s je dlh≈°ie ako 256, ƒço je nespr√°vne."
 
 #: ../../WINGs/wfontpanel.c:913
 msgid "Roman"
@@ -683,36 +683,36 @@ msgstr "roman"
 
 #: ../../WINGs/wfontpanel.c:916
 msgid "Italic"
-msgstr "kurzÌva"
+msgstr "kurz√≠va"
 
 #: ../../WINGs/wfontpanel.c:918
 msgid "Oblique"
-msgstr "πikmÈ"
+msgstr "≈°ikm√©"
 
 #: ../../WINGs/wfontpanel.c:920
 msgid "Rev Italic"
-msgstr "obr. kurzÌva"
+msgstr "obr. kurz√≠va"
 
 #: ../../WINGs/wfontpanel.c:922
 msgid "Rev Oblique"
-msgstr "obr. πikmÈ"
+msgstr "obr. ≈°ikm√©"
 
 #: ../../WINGs/wfontpanel.c:928
 msgid "Normal"
-msgstr "norm·lne"
+msgstr "norm√°lne"
 
 #: ../../WINGs/widgets.c:419
 #, c-format
 msgid "WINGs: could not load widget images file: %s"
-msgstr "WINGs: nemoæno naËÌtaª s˙bor s obr·zkami pre widgety: %s"
+msgstr "WINGs: nemo≈æno naƒç√≠ta≈• s√∫bor s obr√°zkami pre widgety: %s"
 
 #: ../../WINGs/widgets.c:772
 msgid ""
 "could not load any fonts. Make sure your font installation and locale "
 "settings are correct."
 msgstr ""
-"nemoæno naËÌtaª æiadny font. UbezpeËte sa, æe inπtal·cia fontov a miestne "
-"nastavenia s˙ v poriadku."
+"nemo≈æno naƒç√≠ta≈• ≈æiadny font. Ubezpeƒçte sa, ≈æe in≈°tal√°cia fontov a miestne "
+"nastavenia s√∫ v poriadku."
 
 #: ../../WINGs/wruler.c:192
 msgid "0   inches"

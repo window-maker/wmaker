@@ -1,5 +1,5 @@
 #
-# Mensagens do WPrefs.app traduzidas p/ PortuguÍs 
+# Mensagens do WPrefs.app traduzidas p/ Portugu√™s 
 #
 # Update History:
 # Alfredo K. Kojima
@@ -13,7 +13,7 @@ msgstr ""
 "Last-Translator: Eliphas Levy Theodoro <eliphas@conectiva.com.br>\n"
 "Language-Team: Portuguese \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Date: 1998-08-24 03:51:26-0300\n"
 "From: Eliphas Levy Theodoro <eliphas@conectiva.com.br>\n"
@@ -30,11 +30,11 @@ msgstr ""
 #: ../../WPrefs.app/main.c:74
 #, c-format
 msgid "usage: %s [options]\n"
-msgstr "uso: %s [opÁıes]\n"
+msgstr "uso: %s [op√ß√µes]\n"
 
 #: ../../WPrefs.app/main.c:75
 msgid "options:"
-msgstr "opÁıes:"
+msgstr "op√ß√µes:"
 
 #: ../../WPrefs.app/main.c:76
 msgid " -display <display>\tdisplay to be used"
@@ -42,11 +42,11 @@ msgstr "  -display <display>\tdisplay a ser usado"
 
 #: ../../WPrefs.app/main.c:77
 msgid " --version\t\tprint version number and exit"
-msgstr " -version\t\tmostra a vers„o e sai"
+msgstr " -version\t\tmostra a vers√£o e sai"
 
 #: ../../WPrefs.app/main.c:78
 msgid " --help\t\tprint this message and exit"
-msgstr " -version\t\tmostra a vers„o e sai"
+msgstr " -version\t\tmostra a vers√£o e sai"
 
 #: ../../WPrefs.app/main.c:137
 #, c-format
@@ -55,28 +55,28 @@ msgstr "falta de argumentos para %s"
 
 #: ../../WPrefs.app/main.c:159
 msgid "X server does not support locale"
-msgstr "Servidor X n„o suporta locales"
+msgstr "Servidor X n√£o suporta locales"
 
 #: ../../WPrefs.app/main.c:162
 msgid "cannot set locale modifiers"
-msgstr "ImpossÌvel configurar modificadores de locale"
+msgstr "Imposs√≠vel configurar modificadores de locale"
 
 #: ../../WPrefs.app/main.c:168
 #, c-format
 msgid "could not open display %s"
-msgstr "display %s n„o pÙde ser aberto"
+msgstr "display %s n√£o p√¥de ser aberto"
 
 #: ../../WPrefs.app/main.c:176
 msgid "could not initialize application"
-msgstr "impossÌvel inicializar aplicaÁ„o"
+msgstr "imposs√≠vel inicializar aplica√ß√£o"
 
 #: ../../WPrefs.app/WPrefs.c:259
 msgid "Window Maker Preferences"
-msgstr "PreferÍncias do WindowMaker"
+msgstr "Prefer√™ncias do WindowMaker"
 
 #: ../../WPrefs.app/WPrefs.c:283
 msgid "Revert Page"
-msgstr "Reverter P·gina"
+msgstr "Reverter P√°gina"
 
 #: ../../WPrefs.app/WPrefs.c:289
 msgid "Revert All"
@@ -92,16 +92,16 @@ msgstr "Fechar"
 
 #: ../../WPrefs.app/WPrefs.c:308
 msgid "Balloon Help"
-msgstr "Ajuda em balıes"
+msgstr "Ajuda em bal√µes"
 
 #: ../../WPrefs.app/WPrefs.c:333
 msgid "Window Maker Preferences Utility"
-msgstr "PreferÍncias do WindowMaker"
+msgstr "Prefer√™ncias do WindowMaker"
 
 #: ../../WPrefs.app/WPrefs.c:340
 #, c-format
 msgid "Version %s for Window Maker %s or newer"
-msgstr "Vers„o %s para WindowMaker %s ou superior"
+msgstr "Vers√£o %s para WindowMaker %s ou superior"
 
 #: ../../WPrefs.app/WPrefs.c:348
 msgid "Starting..."
@@ -113,14 +113,14 @@ msgid ""
 "Artwork: Marco van Hylckama Vlieg and Largo\n"
 "More Programming: James Thompson"
 msgstr ""
-"ProgramaÁ„o/Projeto: Alfredo K. Kojima\n"
+"Programa√ß√£o/Projeto: Alfredo K. Kojima\n"
 "Arte: Marco van Hylckama Vlieg e Largo\n"
-"Mais programaÁ„o: James Thompson"
+"Mais programa√ß√£o: James Thompson"
 
 #: ../../WPrefs.app/WPrefs.c:442
 #, c-format
 msgid "could not locate image file %s\n"
-msgstr "arquivo de imagem %s n„o encontrado\n"
+msgstr "arquivo de imagem %s n√£o encontrado\n"
 
 #: ../../WPrefs.app/Appearance.c:1912 ../../WPrefs.app/Configurations.c:242
 #: ../../WPrefs.app/Configurations.c:254 ../../WPrefs.app/Focus.c:316
@@ -132,33 +132,33 @@ msgstr "arquivo de imagem %s n„o encontrado\n"
 #: ../../WPrefs.app/WPrefs.c:570
 #, c-format
 msgid "could not load icon file %s"
-msgstr "arquivo de Ìcone %s n„o pÙde ser carregado"
+msgstr "arquivo de √≠cone %s n√£o p√¥de ser carregado"
 
 #: ../../WPrefs.app/WPrefs.c:657
 #, c-format
 msgid "could not load image file %s:%s"
-msgstr "arquivo de imagem %s n„o pÙde ser carregado:%s"
+msgstr "arquivo de imagem %s n√£o p√¥de ser carregado:%s"
 
 #: ../../WPrefs.app/WPrefs.c:676
 msgid "Loading Window Maker configuration files..."
-msgstr "Carregando arquivos de configuraÁ„o do WindowMaker..."
+msgstr "Carregando arquivos de configura√ß√£o do WindowMaker..."
 
 #: ../../WPrefs.app/WPrefs.c:680
 msgid "Initializing configuration panels..."
-msgstr "Inicializando painÈis de configuraÁ„o..."
+msgstr "Inicializando pain√©is de configura√ß√£o..."
 
 #: ../../WPrefs.app/WPrefs.c:713
 msgid ""
 "WPrefs is free software and is distributed WITHOUT ANY\n"
 "WARRANTY under the terms of the GNU General Public License."
 msgstr ""
-"O WPrefs È software livre e distribuÌdo SEM NENHUMA\n"
+"O WPrefs √© software livre e distribu√≠do SEM NENHUMA\n"
 "GARANTIA pelos termos da GNU General Public License."
 
 #: ../../WPrefs.app/WPrefs.c:742 ../../WPrefs.app/WPrefs.c:812
 #, c-format
 msgid "Window Maker domain (%s) is corrupted!"
-msgstr "DomÌnio WindowMaker (%s) corrompido!"
+msgstr "Dom√≠nio WindowMaker (%s) corrompido!"
 
 #: ../../WPrefs.app/Font.c:330 ../../WPrefs.app/Menu.c:1401
 #: ../../WPrefs.app/MouseSettings.c:152 ../../WPrefs.app/MouseSettings.c:172
@@ -186,23 +186,23 @@ msgstr "OK"
 #: ../../WPrefs.app/WPrefs.c:746
 #, c-format
 msgid "Could not load Window Maker domain (%s) from defaults database."
-msgstr "DomÌnio WindowMaker (%s) n„o pÙde ser carregado do BD de defaults."
+msgstr "Dom√≠nio WindowMaker (%s) n√£o p√¥de ser carregado do BD de defaults."
 
 #: ../../WPrefs.app/WPrefs.c:759
 msgid "could not extract version information from Window Maker"
-msgstr "erro extraindo vers„o do WindowMaker"
+msgstr "erro extraindo vers√£o do WindowMaker"
 
 #: ../../WPrefs.app/WPrefs.c:760
 msgid "Make sure wmaker is in your search path."
-msgstr "Certifique-se que o WindowMaker est· no seu PATH."
+msgstr "Certifique-se que o WindowMaker est√° no seu PATH."
 
 #: ../../WPrefs.app/WPrefs.c:763
 msgid ""
 "Could not extract version from Window Maker. Make sure it is correctly "
 "installed and is in your PATH environment variable."
 msgstr ""
-"Erro extraindo vers„o do WindowMaker. Certifique-se que ele est· instalado "
-"corretamente e est· em seu PATH."
+"Erro extraindo vers√£o do WindowMaker. Certifique-se que ele est√° instalado "
+"corretamente e est√° em seu PATH."
 
 #: ../../WPrefs.app/WPrefs.c:773
 msgid ""
@@ -210,8 +210,8 @@ msgid ""
 "installed and the path where it installed is in the PATH environment "
 "variable."
 msgstr ""
-"Erro extraindo vers„o do WindowMaker. Certifique-se que ele est· instalado "
-"corretamente e est· em seu PATH."
+"Erro extraindo vers√£o do WindowMaker. Certifique-se que ele est√° instalado "
+"corretamente e est√° em seu PATH."
 
 #: ../../WPrefs.app/WPrefs.c:780
 #, c-format
@@ -219,8 +219,8 @@ msgid ""
 "WPrefs only supports Window Maker 0.18.0 or newer.\n"
 "The version installed is %i.%i.%i\n"
 msgstr ""
-"WPrefs sÛ suporta WindowMaker 0.18.0 or mais recente.\n"
-"A vers„o instalada È %i.%i.%i\n"
+"WPrefs s√≥ suporta WindowMaker 0.18.0 or mais recente.\n"
+"A vers√£o instalada √© %i.%i.%i\n"
 
 #: ../../WPrefs.app/WPrefs.c:787
 #, c-format
@@ -228,8 +228,8 @@ msgid ""
 "Window Maker %i.%i.%i, which is installed in your system, is not fully "
 "supported by this version of WPrefs."
 msgstr ""
-"O WindowMaker %i.%i.%i, que est· instalado em seu sistema, n„o È totalmente "
-"suportado por esta vers„o do WPrefs."
+"O WindowMaker %i.%i.%i, que est√° instalado em seu sistema, n√£o √© totalmente "
+"suportado por esta vers√£o do WPrefs."
 
 #: ../../WPrefs.app/WPrefs.c:789
 msgid "Warning"
@@ -237,12 +237,12 @@ msgstr "Aviso"
 
 #: ../../WPrefs.app/WPrefs.c:794
 msgid "could not run \"wmaker --global_defaults_path\"."
-msgstr "n„o foi possÌvel executar \"wmaker --global_defaults_path\"."
+msgstr "n√£o foi poss√≠vel executar \"wmaker --global_defaults_path\"."
 
 #: ../../WPrefs.app/WPrefs.c:816
 #, c-format
 msgid "Could not load global Window Maker domain (%s)."
-msgstr "DomÌnio WindowMaker global (%s) n„o pÙde ser carregado."
+msgstr "Dom√≠nio WindowMaker global (%s) n√£o p√¥de ser carregado."
 
 #: ../../WPrefs.app/WPrefs.c:1065
 #, c-format
@@ -250,8 +250,8 @@ msgid ""
 "bad speed value for option %s\n"
 ". Using default Medium"
 msgstr ""
-"valor de velocidade inv·lido para opÁ„o %s\n"
-"Usando padr„o Medium"
+"valor de velocidade inv√°lido para op√ß√£o %s\n"
+"Usando padr√£o Medium"
 
 #: ../../WPrefs.app/Appearance.c:1104
 msgid "Select File"
@@ -271,15 +271,15 @@ msgstr "Dono da janela ativa"
 
 #: ../../WPrefs.app/Appearance.c:1518 ../../WPrefs.app/Appearance.c:1836
 msgid "Menu Title"
-msgstr "TÌtulo de Menu"
+msgstr "T√≠tulo de Menu"
 
 #: ../../WPrefs.app/Appearance.c:1522 ../../WPrefs.app/Appearance.c:1524
 msgid "Normal Item"
-msgstr "Õtem Normal"
+msgstr "√çtem Normal"
 
 #: ../../WPrefs.app/Appearance.c:1528
 msgid "Disabled Item"
-msgstr "Õtem Desabilitado"
+msgstr "√çtem Desabilitado"
 
 #: ../../WPrefs.app/Appearance.c:1537
 msgid "Highlighted"
@@ -291,15 +291,15 @@ msgstr "Textura"
 
 #: ../../WPrefs.app/Appearance.c:1737
 msgid "Titlebar of Focused Window"
-msgstr "Barra de TÌtulo da Janela Ativa"
+msgstr "Barra de T√≠tulo da Janela Ativa"
 
 #: ../../WPrefs.app/Appearance.c:1738
 msgid "Titlebar of Unfocused Windows"
-msgstr "Barra de TÌtulo das Janelas Inativas"
+msgstr "Barra de T√≠tulo das Janelas Inativas"
 
 #: ../../WPrefs.app/Appearance.c:1739
 msgid "Titlebar of Focused Window's Owner"
-msgstr "Barra de TÌtulo do dono da Janela Ativa"
+msgstr "Barra de T√≠tulo do dono da Janela Ativa"
 
 #: ../../WPrefs.app/Appearance.c:1740
 msgid "Window Resizebar"
@@ -307,7 +307,7 @@ msgstr "Barra de tamanho"
 
 #: ../../WPrefs.app/Appearance.c:1741
 msgid "Titlebar of Menus"
-msgstr "Barra de TÌtulo dos Menus"
+msgstr "Barra de T√≠tulo dos Menus"
 
 #: ../../WPrefs.app/Appearance.c:1742
 msgid "Menu Items"
@@ -315,14 +315,14 @@ msgstr "Itens de Menu"
 
 #: ../../WPrefs.app/Appearance.c:1743
 msgid "Icon Background"
-msgstr "Fundo de Õcone"
+msgstr "Fundo de √çcone"
 
 #: ../../WPrefs.app/Appearance.c:1758
 msgid ""
 "Double click in the texture you want to use\n"
 "for the selected item."
 msgstr ""
-"DÍ um duplo clique na textura que vocÍ deseja\n"
+"D√™ um duplo clique na textura que voc√™ deseja\n"
 "usar para o item selecionado."
 
 #: ../../WPrefs.app/Appearance.c:1772
@@ -363,15 +363,15 @@ msgstr "Cor"
 
 #: ../../WPrefs.app/Appearance.c:1833
 msgid "Focused Window Title"
-msgstr "TÌtulo da Janela Ativa"
+msgstr "T√≠tulo da Janela Ativa"
 
 #: ../../WPrefs.app/Appearance.c:1834
 msgid "Unfocused Window Title"
-msgstr "TÌtulo da Janela Inativa"
+msgstr "T√≠tulo da Janela Inativa"
 
 #: ../../WPrefs.app/Appearance.c:1835
 msgid "Owner of Focused Window Title"
-msgstr "TÌtulo do dono da Janela Ativa"
+msgstr "T√≠tulo do dono da Janela Ativa"
 
 #: ../../WPrefs.app/Appearance.c:1837
 msgid "Menu Item Text"
@@ -383,7 +383,7 @@ msgstr "Texto de item desabilitado"
 
 #: ../../WPrefs.app/Appearance.c:1839
 msgid "Menu Highlight Color"
-msgstr "Cor de seleÁ„o do Menu"
+msgstr "Cor de sele√ß√£o do Menu"
 
 #: ../../WPrefs.app/Appearance.c:1840
 msgid "Highlighted Menu Text Color"
@@ -391,7 +391,7 @@ msgstr "Cor de Texto selecionado"
 
 #: ../../WPrefs.app/Appearance.c:1877
 msgid "Options"
-msgstr "OpÁıes:"
+msgstr "Op√ß√µes:"
 
 #: ../../WPrefs.app/Appearance.c:1884
 msgid "Menu Style"
@@ -399,7 +399,7 @@ msgstr "Estilo do Menu"
 
 #: ../../WPrefs.app/Appearance.c:1926
 msgid "Title Alignment"
-msgstr "Alinhamento do TÌtulo"
+msgstr "Alinhamento do T√≠tulo"
 
 #: ../../WPrefs.app/Appearance.c:1933
 msgid "Left"
@@ -416,15 +416,15 @@ msgstr "Direita"
 
 #: ../../WPrefs.app/Appearance.c:2167
 msgid "Appearance Preferences"
-msgstr "PreferÍncias de AparÍncia"
+msgstr "Prefer√™ncias de Apar√™ncia"
 
 #: ../../WPrefs.app/Appearance.c:2169
 msgid ""
 "Background texture configuration for windows,\n"
 "menus and icons."
 msgstr ""
-"ConfiguraÁ„o da textura de fundo para as janelas,\n"
-"menus e Ìcones."
+"Configura√ß√£o da textura de fundo para as janelas,\n"
+"menus e √≠cones."
 
 #: ../../WPrefs.app/Appearance.c:2214
 msgid "Extract Texture"
@@ -444,25 +444,25 @@ msgstr "Extrair"
 #: ../../WPrefs.app/Workspace.c:101
 #, c-format
 msgid "could not load icon %s"
-msgstr "Ìcone %s n„o pÙde ser carregado"
+msgstr "√≠cone %s n√£o p√¥de ser carregado"
 
 #: ../../WPrefs.app/Configurations.c:164 ../../WPrefs.app/Workspace.c:109
 #, c-format
 msgid "could not process icon %s:"
-msgstr "Ìcone %s n„o pÙde ser processado:"
+msgstr "√≠cone %s n√£o p√¥de ser processado:"
 
 #: ../../WPrefs.app/Configurations.c:189 ../../WPrefs.app/Workspace.c:164
 #, c-format
 msgid "could not load image file %s"
-msgstr "arquivo de imagem %s n„o pÙde ser carregado"
+msgstr "arquivo de imagem %s n√£o p√¥de ser carregado"
 
 #: ../../WPrefs.app/Configurations.c:203
 msgid "Icon Slide Speed"
-msgstr "Velocidade dos Õcones "
+msgstr "Velocidade dos √çcones "
 
 #: ../../WPrefs.app/Configurations.c:209
 msgid "Shade Animation Speed"
-msgstr "Velocidade da AnimaÁ„o do Shade"
+msgstr "Velocidade da Anima√ß√£o do Shade"
 
 #: ../../WPrefs.app/Configurations.c:271
 msgid "Smooth Scaling"
@@ -475,28 +475,28 @@ msgid ""
 "down loading of background images considerably."
 msgstr ""
 "Suaviza imagens escalonadas, neutralizando\n"
-"o efeito `pixelizaÁ„o'. Isto ir· aumentar o\n"
+"o efeito `pixeliza√ß√£o'. Isto ir√° aumentar o\n"
 "tempo de carga das imagens de fundo consideravelmente."
 
 #: ../../WPrefs.app/Configurations.c:313
 msgid "Titlebar Style"
-msgstr "Estilo da Barra de TÌtulo"
+msgstr "Estilo da Barra de T√≠tulo"
 
 #: ../../WPrefs.app/Configurations.c:351
 msgid "Animations and Sound"
-msgstr "Som e AnimaÁıes"
+msgstr "Som e Anima√ß√µes"
 
 #: ../../WPrefs.app/Configurations.c:357
 msgid "Animations"
-msgstr "AnimaÁıes"
+msgstr "Anima√ß√µes"
 
 #: ../../WPrefs.app/Configurations.c:368
 msgid ""
 "Disable/enable animations such as those shown\n"
 "for window miniaturization, shading etc."
 msgstr ""
-"Liga/Desliga animaÁıes como miniaturizaÁ„o,\n"
-"maximizaÁ„o, etc."
+"Liga/Desliga anima√ß√µes como miniaturiza√ß√£o,\n"
+"maximiza√ß√£o, etc."
 
 #: ../../WPrefs.app/Configurations.c:376
 msgid "Superfluous"
@@ -509,10 +509,10 @@ msgid ""
 "dock when it's being moved to the another side\n"
 "and the explosion animation for undocked icons."
 msgstr ""
-"Liga/Desliga caracterÌsticas `supÈrfluas' e\n"
-"animaÁıes. Isto inclui o `ghosting' do dock\n"
-"quando est· sendo movido para o outro lado\n"
-"e a explos„o para Ìcones retirados do dock."
+"Liga/Desliga caracter√≠sticas `sup√©rfluas' e\n"
+"anima√ß√µes. Isto inclui o `ghosting' do dock\n"
+"quando est√° sendo movido para o outro lado\n"
+"e a explos√£o para √≠cones retirados do dock."
 
 #: ../../WPrefs.app/Configurations.c:397
 msgid "Sounds"
@@ -526,16 +526,16 @@ msgid ""
 "for this. You can get it at:\n"
 "http://www.frontiernet.net/~southgat/wmsound"
 msgstr ""
-"Liga/desliga suporte para efeitos de som em aÁıes\n"
+"Liga/desliga suporte para efeitos de som em a√ß√µes\n"
 "como sombreamento e fechar janelas.\n"
-"VocÍ ir· precisar de um mÛdulo distribuÌdo separadamente\n"
-"para isso. VocÍ pode peg·-lo em:\n"
+"Voc√™ ir√° precisar de um m√≥dulo distribu√≠do separadamente\n"
+"para isso. Voc√™ pode peg√°-lo em:\n"
 "http://www.frontiernet.net/~southgat/wmsound"
 
 #: ../../WPrefs.app/Configurations.c:419
 msgid "Note: sound requires a module distributed separately"
 msgstr ""
-"Nota: È necess·rio um mÛdulo distribuÌdo separadamante para se ter sons"
+"Nota: √© necess√°rio um m√≥dulo distribu√≠do separadamante para se ter sons"
 
 #: ../../WPrefs.app/Configurations.c:429
 msgid "Dithering colormap for 8bpp"
@@ -546,7 +546,7 @@ msgid ""
 "Number of colors to reserve for Window Maker\n"
 "on displays that support only 8bpp (PseudoColor)."
 msgstr ""
-"N˙mero de cores que o Window Maker reservar·\n"
+"N√∫mero de cores que o Window Maker reservar√°\n"
 "em displays que suportam somente 8bpp (PseudoColor)."
 
 #: ../../WPrefs.app/Configurations.c:438
@@ -555,7 +555,7 @@ msgstr "Desabilitar dithering"
 
 #: ../../WPrefs.app/Configurations.c:459
 msgid "More colors for applications"
-msgstr "Mais cores para applicaÁıes"
+msgstr "Mais cores para applica√ß√µes"
 
 #: ../../WPrefs.app/Configurations.c:466
 msgid "More colors for WindowMaker"
@@ -563,7 +563,7 @@ msgstr "Mais cores para o WindowMaker"
 
 #: ../../WPrefs.app/Configurations.c:521
 msgid "Other Configurations"
-msgstr "Outras ConfiguraÁıes"
+msgstr "Outras Configura√ß√µes"
 
 #: ../../WPrefs.app/Configurations.c:523
 msgid ""
@@ -571,57 +571,57 @@ msgid ""
 "toggling and number of colors to reserve for\n"
 "Window Maker in 8bit displays."
 msgstr ""
-"Velocidade das animaÁıes, estilos de barras de tÌtulo,\n"
-"v·rias opÁıes e n˙mero de cores para reservar\n"
+"Velocidade das anima√ß√µes, estilos de barras de t√≠tulo,\n"
+"v√°rias op√ß√µes e n√∫mero de cores para reservar\n"
 "para o WindowMaker em displays 8 bits."
 
 #: ../../WPrefs.app/Expert.c:75
 msgid ""
 "Disable miniwindows (icons for miniaturized windows). For use with KDE/GNOME."
-msgstr "Desabilita minijanelas (Ìcones para janelas minimizadas)."
+msgstr "Desabilita minijanelas (√≠cones para janelas minimizadas)."
 
 #: ../../WPrefs.app/Expert.c:76
 msgid "Do not set non-WindowMaker specific parameters (do not use xset)"
 msgstr ""
-"N„o configurar par‚metros n„o pertencentes ao WindowMaker (n„o usar xset)"
+"N√£o configurar par√¢metros n√£o pertencentes ao WindowMaker (n√£o usar xset)"
 
 #: ../../WPrefs.app/Expert.c:77
 msgid "Automatically save session when exiting WindowMaker"
-msgstr "Salvar sess„o automaticamente ao sair do WindowMaker"
+msgstr "Salvar sess√£o automaticamente ao sair do WindowMaker"
 
 #: ../../WPrefs.app/Expert.c:78
 msgid "Use SaveUnder in window frames, icons, menus and other objects"
-msgstr "Usar SaveUnder nos Ìcones, menus e outros objetos"
+msgstr "Usar SaveUnder nos √≠cones, menus e outros objetos"
 
 #: ../../WPrefs.app/Expert.c:79
 msgid "Disable cycling color highlighting of icons."
-msgstr "Desabilitar ciclagem de cores nos Ìcones."
+msgstr "Desabilitar ciclagem de cores nos √≠cones."
 
 #: ../../WPrefs.app/Expert.c:80
 msgid "Disable confirmation panel for the Kill command."
-msgstr "Desabilitar confirmaÁ„o para o comando Terminar."
+msgstr "Desabilitar confirma√ß√£o para o comando Terminar."
 
 #: ../../WPrefs.app/Expert.c:113
 msgid "Expert User Preferences"
-msgstr "PreferÍncias para Usu·rios AvanÁados"
+msgstr "Prefer√™ncias para Usu√°rios Avan√ßados"
 
 #: ../../WPrefs.app/Expert.c:115
 msgid ""
 "Options for people who know what they're doing...\n"
 "Also have some other misc. options."
 msgstr ""
-"OpÁıes para pessoas que sabem o que est„o fazendo...\n"
-"H· tambÈm outras opÁıes diversas."
+"Op√ß√µes para pessoas que sabem o que est√£o fazendo...\n"
+"H√° tamb√©m outras op√ß√µes diversas."
 
 #: ../../WPrefs.app/Focus.c:83
 #, c-format
 msgid "bad option value %s for option FocusMode. Using default Manual"
-msgstr "valor %s inv·lido para opÁ„o FocusMode. Usando default Manual"
+msgstr "valor %s inv√°lido para op√ß√£o FocusMode. Usando default Manual"
 
 #: ../../WPrefs.app/Focus.c:98
 #, c-format
 msgid "bad option value %s for option ColormapMode. Using default Auto"
-msgstr "valor %s inv·lido para opÁ„o ColormapMode. Usando default Auto"
+msgstr "valor %s inv√°lido para op√ß√£o ColormapMode. Usando default Auto"
 
 #: ../../WPrefs.app/Focus.c:196
 msgid ""
@@ -677,7 +677,7 @@ msgstr "...que tem o foco do teclado."
 
 #: ../../WPrefs.app/Focus.c:281
 msgid "...that is under the mouse pointer."
-msgstr "...que est· sob o cursor do mouse."
+msgstr "...que est√° sob o cursor do mouse."
 
 #: ../../WPrefs.app/Focus.c:290
 msgid "Automatic Window Raise Delay"
@@ -689,7 +689,7 @@ msgstr "mseg"
 
 #: ../../WPrefs.app/Focus.c:364
 msgid "Do not let applications receive the click used to focus windows."
-msgstr "N„o deixar aplicaÁ„o receber o clique usado para focar janelas."
+msgstr "N√£o deixar aplica√ß√£o receber o clique usado para focar janelas."
 
 #: ../../WPrefs.app/Focus.c:370
 msgid "Automatically focus new windows."
@@ -697,34 +697,34 @@ msgstr "Focar janelas novas automaticamente."
 
 #: ../../WPrefs.app/Focus.c:391
 msgid "Window Focus Preferences"
-msgstr "PreferÍncias sobre Foco de Janela"
+msgstr "Prefer√™ncias sobre Foco de Janela"
 
 #: ../../WPrefs.app/Focus.c:393
 msgid ""
 "Keyboard focus switching policy, colormap switching\n"
 "policy for 8bpp displays and other related options."
 msgstr ""
-"PolÌtica de mudanÁa de foco de teclado, mapa de cores\n"
-"para displays de 8bpp e outras opÁıes relacionadas."
+"Pol√≠tica de mudan√ßa de foco de teclado, mapa de cores\n"
+"para displays de 8bpp e outras op√ß√µes relacionadas."
 
 #: ../../WPrefs.app/Font.c:277
 msgid "Could not locate font information file WPrefs.app/font.data"
 msgstr ""
-"N„o foi possÌvel encontrar arquivo de informaÁ„o de fonte "
+"N√£o foi poss√≠vel encontrar arquivo de informa√ß√£o de fonte "
 "WPrefs.app/font.data"
 
 #: ../../WPrefs.app/Font.c:283
 msgid "Could not read font information file WPrefs.app/font.data"
 msgstr ""
-"N„o foi possÌvel ler arquivo de informaÁ„o de fonte WPrefs.app/font.data"
+"N√£o foi poss√≠vel ler arquivo de informa√ß√£o de fonte WPrefs.app/font.data"
 
 #: ../../WPrefs.app/Font.c:294
 msgid ""
 "Invalid data in font information file WPrefs.app/font.data.\n"
 "Encodings data not found."
 msgstr ""
-"Dados inv·lidos no arquivo de informaÁ„o de fonte WPrefs.app/font.data.\n"
-"Dados de codificaÁ„o n„o encontrados."
+"Dados inv√°lidos no arquivo de informa√ß√£o de fonte WPrefs.app/font.data.\n"
+"Dados de codifica√ß√£o n√£o encontrados."
 
 #: ../../WPrefs.app/Font.c:299
 msgid "- Custom -"
@@ -732,7 +732,7 @@ msgstr "- Customizar -"
 
 #: ../../WPrefs.app/Font.c:377
 msgid "Default Font Sets"
-msgstr "Estilos de Fonte Padr„o"
+msgstr "Estilos de Fonte Padr√£o"
 
 #: ../../WPrefs.app/Font.c:390
 msgid "Font Set"
@@ -753,19 +753,19 @@ msgstr "Remover"
 
 #: ../../WPrefs.app/Font.c:478
 msgid "Font Preferences"
-msgstr "PreferÍncias de Fonte"
+msgstr "Prefer√™ncias de Fonte"
 
 #: ../../WPrefs.app/Font.c:479
 msgid "Font Configurations for Windows, Menus etc"
-msgstr "ConfiguraÁ„o das fontes para as Janelas, Menus etc"
+msgstr "Configura√ß√£o das fontes para as Janelas, Menus etc"
 
 #: ../../WPrefs.app/Icons.c:182
 msgid "Icon Positioning"
-msgstr "Posicionamento de Ìcones"
+msgstr "Posicionamento de √≠cones"
 
 #: ../../WPrefs.app/Icons.c:229
 msgid "Iconification Animation"
-msgstr "AnimaÁ„o de Ìcones"
+msgstr "Anima√ß√£o de √≠cones"
 
 #: ../../WPrefs.app/Icons.c:240
 msgid "Shrinking/Zooming"
@@ -785,11 +785,11 @@ msgstr "Nenhum"
 
 #: ../../WPrefs.app/Icons.c:256
 msgid "Auto-arrange icons"
-msgstr "Auto-alinhar Ìcones"
+msgstr "Auto-alinhar √≠cones"
 
 #: ../../WPrefs.app/Icons.c:258
 msgid "Keep icons and miniwindows arranged all the time."
-msgstr "MantÈm Ìcones e minijanelas alinhados todo o tempo."
+msgstr "Mant√©m √≠cones e minijanelas alinhados todo o tempo."
 
 #: ../../WPrefs.app/Icons.c:264
 msgid "Omnipresent miniwindows"
@@ -797,35 +797,35 @@ msgstr "Minijanelas onipresentes"
 
 #: ../../WPrefs.app/Icons.c:266
 msgid "Make miniwindows be present in all workspaces."
-msgstr "FaÁa as minijanelas presentes em todas as ·reas de trabalho."
+msgstr "Fa√ßa as minijanelas presentes em todas as √°reas de trabalho."
 
 #: ../../WPrefs.app/Icons.c:275
 msgid "Icon Size"
-msgstr "Tamanho do Õcone"
+msgstr "Tamanho do √çcone"
 
 #: ../../WPrefs.app/Icons.c:277
 msgid "The size of the dock/application icon and miniwindows"
-msgstr "O tamanho do dock, Ìcones de aplicaÁ„o e minijanelas"
+msgstr "O tamanho do dock, √≠cones de aplica√ß√£o e minijanelas"
 
 #: ../../WPrefs.app/Icons.c:347
 msgid "Icon Preferences"
-msgstr "PreferÍncias de Ìcones"
+msgstr "Prefer√™ncias de √≠cones"
 
 #: ../../WPrefs.app/Icons.c:349
 msgid ""
 "Icon/Miniwindow handling options. Icon positioning\n"
 "area, sizes of icons, miniaturization animation style."
 msgstr ""
-"OpÁıes de manuseio de Ìcones e minijanelas. ¡rea de\n"
-"posicionamento, tamanho dos Ìcones, estilo de animaÁ„o."
+"Op√ß√µes de manuseio de √≠cones e minijanelas. √Årea de\n"
+"posicionamento, tamanho dos √≠cones, estilo de anima√ß√£o."
 
 #: ../../WPrefs.app/KeyboardSettings.c:74
 msgid "Initial Key Repeat"
-msgstr "RepetiÁ„o de teclas"
+msgstr "Repeti√ß√£o de teclas"
 
 #: ../../WPrefs.app/KeyboardSettings.c:115
 msgid "Key Repeat Rate"
-msgstr "Taxa de repetiÁ„o do teclado"
+msgstr "Taxa de repeti√ß√£o do teclado"
 
 #: ../../WPrefs.app/KeyboardSettings.c:155
 msgid "Type here to test"
@@ -833,11 +833,11 @@ msgstr "Tecle aqui para testar"
 
 #: ../../WPrefs.app/KeyboardSettings.c:174
 msgid "Keyboard Preferences"
-msgstr "PreferÍncias de teclado"
+msgstr "Prefer√™ncias de teclado"
 
 #: ../../WPrefs.app/KeyboardSettings.c:176
 msgid "Not done"
-msgstr "N„o pronto"
+msgstr "N√£o pronto"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:185 ../../WPrefs.app/Menu.c:1027
 #: ../../WPrefs.app/MenuGuru.c:263 ../../WPrefs.app/TexturePanel.c:1528
@@ -863,11 +863,11 @@ msgstr "Clique Capturar para definir a(s) tecla(s) de atalho interativamente."
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:361
 msgid "Actions"
-msgstr "AÁıes"
+msgstr "A√ß√µes"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:377
 msgid "Open applications menu"
-msgstr "Abrir menu de aplicaÁıes"
+msgstr "Abrir menu de aplica√ß√µes"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:378
 msgid "Open window list menu"
@@ -879,7 +879,7 @@ msgstr "Abrir menu de comandos para janelas"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:380
 msgid "Hide active application"
-msgstr "Esconder (hide) aplicaÁ„o ativa"
+msgstr "Esconder (hide) aplica√ß√£o ativa"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:381
 msgid "Miniaturize active window"
@@ -923,7 +923,7 @@ msgstr "Selectionar janela ativa"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:391
 msgid "Focus next window"
-msgstr "Focar/ativar prÛxima janela"
+msgstr "Focar/ativar pr√≥xima janela"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:392
 msgid "Focus previous window"
@@ -931,59 +931,59 @@ msgstr "Focar/ativar janela anterior"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:393
 msgid "Switch to next workspace"
-msgstr "Ir para prÛxima ·rea de trabalho"
+msgstr "Ir para pr√≥xima √°rea de trabalho"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:394
 msgid "Switch to previous workspace"
-msgstr "Ir para ·rea de trabalho anterior"
+msgstr "Ir para √°rea de trabalho anterior"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:395
 msgid "Switch to next ten workspaces"
-msgstr "Ir para as prÛximas 10 ·reas de trabalho"
+msgstr "Ir para as pr√≥ximas 10 √°reas de trabalho"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:396
 msgid "Switch to previous ten workspaces"
-msgstr "Ir para as 10 ·reas de trabalho anteriores"
+msgstr "Ir para as 10 √°reas de trabalho anteriores"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:397
 msgid "Switch to workspace 1"
-msgstr "Ir para ·rea de trabalho 1"
+msgstr "Ir para √°rea de trabalho 1"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:398
 msgid "Switch to workspace 2"
-msgstr "Ir para ·rea de trabalho 2"
+msgstr "Ir para √°rea de trabalho 2"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:399
 msgid "Switch to workspace 3"
-msgstr "Ir para ·rea de trabalho 3"
+msgstr "Ir para √°rea de trabalho 3"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:400
 msgid "Switch to workspace 4"
-msgstr "Ir para ·rea de trabalho 4"
+msgstr "Ir para √°rea de trabalho 4"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:401
 msgid "Switch to workspace 5"
-msgstr "Ir para ·rea de trabalho 5"
+msgstr "Ir para √°rea de trabalho 5"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:402
 msgid "Switch to workspace 6"
-msgstr "Ir para ·rea de trabalho 6"
+msgstr "Ir para √°rea de trabalho 6"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:403
 msgid "Switch to workspace 7"
-msgstr "Ir para ·rea de trabalho 7"
+msgstr "Ir para √°rea de trabalho 7"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:404
 msgid "Switch to workspace 8"
-msgstr "Ir para ·rea de trabalho 8"
+msgstr "Ir para √°rea de trabalho 8"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:405
 msgid "Switch to workspace 9"
-msgstr "Ir para ·rea de trabalho 9"
+msgstr "Ir para √°rea de trabalho 9"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:406
 msgid "Switch to workspace 10"
-msgstr "Ir para ·rea de trabalho 10"
+msgstr "Ir para √°rea de trabalho 10"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:407
 msgid "Shortcut for window 1"
@@ -1051,15 +1051,15 @@ msgstr "Limpar"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:509
 msgid "Keyboard Shortcut Preferences"
-msgstr "PreferÍncias de Teclas de Atalho"
+msgstr "Prefer√™ncias de Teclas de Atalho"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:511
 msgid ""
 "Change the keyboard shortcuts for actions such\n"
 "as changing workspaces and opening menus."
 msgstr ""
-"Muda as teclas de atalho para aÁıes como mudanÁa\n"
-"de ·reas de trabalho e abrir menus."
+"Muda as teclas de atalho para a√ß√µes como mudan√ßa\n"
+"de √°reas de trabalho e abrir menus."
 
 #: ../../WPrefs.app/Menu.c:422
 msgid "Window Manager"
@@ -1092,7 +1092,7 @@ msgstr "Menu Externo"
 
 #: ../../WPrefs.app/Menu.c:497
 msgid "Workspaces"
-msgstr "¡reas de Trabalho"
+msgstr "√Åreas de Trabalho"
 
 #: ../../WPrefs.app/Menu.c:1119 ../../WPrefs.app/Menu.c:1134
 msgid "Commands"
@@ -1112,7 +1112,7 @@ msgstr "Menu Externo"
 
 #: ../../WPrefs.app/Menu.c:1123 ../../WPrefs.app/Menu.c:1138
 msgid "Add Workspace Menu"
-msgstr "Menu de ¡reas de Trab."
+msgstr "Menu de √Åreas de Trab."
 
 #: ../../WPrefs.app/Menu.c:1124 ../../WPrefs.app/Menu.c:1139
 msgid "Remove Item"
@@ -1132,7 +1132,7 @@ msgstr "Colar Item"
 
 #: ../../WPrefs.app/Menu.c:1173
 msgid "Label"
-msgstr "TÌtulo"
+msgstr "T√≠tulo"
 
 #: ../../WPrefs.app/Menu.c:1186
 msgid "Command"
@@ -1148,7 +1148,7 @@ msgstr "Executa um comando do shell"
 
 #: ../../WPrefs.app/Menu.c:1193
 msgid "Arrange Icons"
-msgstr "Alinhar Õcones"
+msgstr "Alinhar √çcones"
 
 #: ../../WPrefs.app/Menu.c:1194
 msgid "Hide Others"
@@ -1164,7 +1164,7 @@ msgstr "Sair do WindowMaker"
 
 #: ../../WPrefs.app/Menu.c:1197
 msgid "Exit X Session"
-msgstr "Sair da Sess„o do X"
+msgstr "Sair da Sess√£o do X"
 
 #: ../../WPrefs.app/Menu.c:1198
 msgid "Start Window Manager"
@@ -1176,11 +1176,11 @@ msgstr "Reiniciar WindowMaker"
 
 #: ../../WPrefs.app/Menu.c:1200
 msgid "Save Session"
-msgstr "Salvar Sess„o"
+msgstr "Salvar Sess√£o"
 
 #: ../../WPrefs.app/Menu.c:1201
 msgid "Clear Session"
-msgstr "Limpar Sess„o"
+msgstr "Limpar Sess√£o"
 
 #: ../../WPrefs.app/Menu.c:1202
 msgid "Refresh Screen"
@@ -1188,7 +1188,7 @@ msgstr "Refresh da Tela"
 
 #: ../../WPrefs.app/Menu.c:1203
 msgid "Info Panel"
-msgstr "Janela de InformaÁıes"
+msgstr "Janela de Informa√ß√µes"
 
 #: ../../WPrefs.app/Menu.c:1204
 msgid "Legal Panel"
@@ -1196,11 +1196,11 @@ msgstr "Janela de Inform.Legais"
 
 #: ../../WPrefs.app/Menu.c:1212
 msgid "Open workspace menu"
-msgstr "Abrir menu de ·reas de trabalho"
+msgstr "Abrir menu de √°reas de trabalho"
 
 #: ../../WPrefs.app/Menu.c:1219
 msgid "No confirmation panel"
-msgstr "Sem janela de confirmaÁ„o"
+msgstr "Sem janela de confirma√ß√£o"
 
 #: ../../WPrefs.app/Menu.c:1225
 msgid "Menu Path/Directory List"
@@ -1219,15 +1219,15 @@ msgstr "%s/Library/WindowMaker/plmenu.pt"
 #: ../../WPrefs.app/Menu.c:1398
 #, c-format
 msgid "Could not open default menu from '%s'"
-msgstr "Menu padr„o %s n„o pÙde ser aberto"
+msgstr "Menu padr√£o %s n√£o p√¥de ser aberto"
 
 #: ../../WPrefs.app/Menu.c:1508
 msgid "Applications Menu Definition"
-msgstr "DefiniÁ„o do Menu de AplicaÁıes"
+msgstr "Defini√ß√£o do Menu de Aplica√ß√µes"
 
 #: ../../WPrefs.app/Menu.c:1510
 msgid "Edit the menu for launching applications."
-msgstr "Edita o menu para a execuÁ„o de aplicaÁıes."
+msgstr "Edita o menu para a execu√ß√£o de aplica√ß√µes."
 
 #: ../../WPrefs.app/MenuPreferences.c:114
 msgid "Menu Scrolling Speed"
@@ -1242,8 +1242,8 @@ msgid ""
 "Always open submenus inside the screen, instead of scrolling.\n"
 "Note: this is annoying."
 msgstr ""
-"Sempre abrir submenus dentro da tela, ao invÈs de rolar.\n"
-"Nota: isso È um aborrecimento."
+"Sempre abrir submenus dentro da tela, ao inv√©s de rolar.\n"
+"Nota: isso √© um aborrecimento."
 
 #: ../../WPrefs.app/MenuPreferences.c:212
 msgid "Scroll off-screen menus when pointer is moved over them."
@@ -1251,33 +1251,33 @@ msgstr "Rolar menus para dentro da tela quando o mouse estiver sobre eles."
 
 #: ../../WPrefs.app/MenuPreferences.c:232
 msgid "Menu Preferences"
-msgstr "PreferÍncias de Menu"
+msgstr "Prefer√™ncias de Menu"
 
 #: ../../WPrefs.app/MenuPreferences.c:234
 msgid ""
 "Menu usability related options. Scrolling speed,\n"
 "alignment of submenus etc."
 msgstr ""
-"OpÁıes de uso de menu. Velocidade de rolagem,\n"
+"Op√ß√µes de uso de menu. Velocidade de rolagem,\n"
 "alinhamento de submenus, etc."
 
 #: ../../WPrefs.app/MouseSettings.c:153
 msgid "Invalid mouse acceleration value. Must be a positive real value."
-msgstr "Valor de aceleraÁ„o inv·lido. Deve ser um valor positivo real."
+msgstr "Valor de acelera√ß√£o inv√°lido. Deve ser um valor positivo real."
 
 #: ../../WPrefs.app/MouseSettings.c:173
 msgid ""
 "Invalid mouse acceleration threshold value. Must be the number of pixels to "
 "travel before accelerating."
 msgstr ""
-"Valor de dist‚ncia inv·lida. Deve ser o n˙mero de pixels a percorrer antes "
+"Valor de dist√¢ncia inv√°lida. Deve ser o n√∫mero de pixels a percorrer antes "
 "de acelerar o mouse."
 
 #: ../../WPrefs.app/MouseSettings.c:269 ../../WPrefs.app/MouseSettings.c:283
 #: ../../WPrefs.app/MouseSettings.c:297
 #, c-format
 msgid "bad value %s for option %s"
-msgstr "valor %s n„o È v·lido para opÁ„o %s"
+msgstr "valor %s n√£o √© v√°lido para op√ß√£o %s"
 
 #: ../../WPrefs.app/MouseSettings.c:358
 #, c-format
@@ -1285,12 +1285,12 @@ msgid ""
 "modifier key %s for option ModifierKey was not recognized. Using %s as "
 "default"
 msgstr ""
-"tecla modificadora %s da opÁ„o ModifierKey n„o foi reconhecida. Usando "
+"tecla modificadora %s da op√ß√£o ModifierKey n√£o foi reconhecida. Usando "
 "default %s"
 
 #: ../../WPrefs.app/MouseSettings.c:383
 msgid "could not retrieve keyboard modifier mapping"
-msgstr "o mapa de modificadores de teclado n„o pÙde ser determinado"
+msgstr "o mapa de modificadores de teclado n√£o p√¥de ser determinado"
 
 #: ../../WPrefs.app/MouseSettings.c:478
 msgid "Mouse Speed"
@@ -1302,7 +1302,7 @@ msgstr "Aceler.:"
 
 #: ../../WPrefs.app/MouseSettings.c:521
 msgid "Threshold:"
-msgstr "Dist‚ncia:"
+msgstr "Dist√¢ncia:"
 
 #: ../../WPrefs.app/MouseSettings.c:536
 msgid "Double-Click Delay"
@@ -1314,15 +1314,15 @@ msgstr "Teste"
 
 #: ../../WPrefs.app/MouseSettings.c:610
 msgid "Workspace Mouse Actions"
-msgstr "AÁıes de Mouse na ¡rea de Trabalho"
+msgstr "A√ß√µes de Mouse na √Årea de Trabalho"
 
 #: ../../WPrefs.app/MouseSettings.c:615
 msgid "Disable mouse actions"
-msgstr "Desabilitar aÁıes de mouse"
+msgstr "Desabilitar a√ß√µes de mouse"
 
 #: ../../WPrefs.app/MouseSettings.c:622
 msgid "Applications menu"
-msgstr "Menu de AplicaÁıes"
+msgstr "Menu de Aplica√ß√µes"
 
 #: ../../WPrefs.app/MouseSettings.c:632
 msgid "Window list menu"
@@ -1342,35 +1342,35 @@ msgid ""
 "involve dragging windows with the mouse,\n"
 "clicking inside the window."
 msgstr ""
-"Modificador de teclado para uso em aÁıes\n"
+"Modificador de teclado para uso em a√ß√µes\n"
 "que involvem arrasto de janelas com o mouse,\n"
 "clicando dentro da janela."
 
 #: ../../WPrefs.app/MouseSettings.c:697
 #, c-format
 msgid "could not create %s"
-msgstr "%s n„o pÙde ser criado"
+msgstr "%s n√£o p√¥de ser criado"
 
 #: ../../WPrefs.app/MouseSettings.c:713
 #, c-format
 msgid "could not create temporary file %s"
-msgstr "arquivo tempor·rio %s n„o pÙde ser criado"
+msgstr "arquivo tempor√°rio %s n√£o p√¥de ser criado"
 
 #: ../../WPrefs.app/MouseSettings.c:744
 #, c-format
 msgid "could not rename file %s to %s\n"
-msgstr "arquivo %s n„o pÙde ser renomeado para %s\n"
+msgstr "arquivo %s n√£o p√¥de ser renomeado para %s\n"
 
 #: ../../WPrefs.app/MouseSettings.c:816
 msgid "Mouse Preferences"
-msgstr "PreferÍncias de Mouse"
+msgstr "Prefer√™ncias de Mouse"
 
 #: ../../WPrefs.app/MouseSettings.c:818
 msgid ""
 "Mouse speed/acceleration, double click delay,\n"
 "mouse button bindings etc."
 msgstr ""
-"Velocidade de aceleraÁ„o do mouse, velocidade\n"
+"Velocidade de acelera√ß√£o do mouse, velocidade\n"
 "do duplo clique, atalhos nas teclas do mouse etc."
 
 #: ../../WPrefs.app/NoMenuAlert.c:94
@@ -1388,14 +1388,14 @@ msgid ""
 "you to use C preprocessor (cpp) macros, while being easy to edit. Window "
 "Maker supports both formats."
 msgstr ""
-"     O menu que est· sendo usado agora n„o pode ser aberto. Isso significa tambÈm que h· um erro de sintaxe nele ou que o menu est· em um formato n„o suportado pelo WPrefs (o WPrefs suporta apenas a lista de menus propriet·ria).\n"
+"     O menu que est√° sendo usado agora n√£o pode ser aberto. Isso significa tamb√©m que h√° um erro de sintaxe nele ou que o menu est√° em um formato n√£o suportado pelo WPrefs (o WPrefs suporta apenas a lista de menus propriet√°ria).\n"
 "     Se quiser continuar usando o menu atual, ler o arquivo '%s/%s', pressione 'Manter menu atual' e o edite como um editor de textos.\n"
-"     Se quiser usar um editor, pressione 'Copiar menu padr„o'. Isso copiar· o menu padr„o e instruir· o Window Maker a us·-lo em vez do atual.\n"
-"     Se quiser mais flexibilidade, continue a usar o menu atual porque ele permite o uso de macros de prÈ-processador C (cpp), alÈm de ser f·cil de se editar. O Window Maker suporta ambos os formatos."
+"     Se quiser usar um editor, pressione 'Copiar menu padr√£o'. Isso copiar√° o menu padr√£o e instruir√° o Window Maker a us√°-lo em vez do atual.\n"
+"     Se quiser mais flexibilidade, continue a usar o menu atual porque ele permite o uso de macros de pr√©-processador C (cpp), al√©m de ser f√°cil de se editar. O Window Maker suporta ambos os formatos."
 
 #: ../../WPrefs.app/NoMenuAlert.c:113
 msgid "Copy Default Menu"
-msgstr "Copiar menu padr„o"
+msgstr "Copiar menu padr√£o"
 
 #: ../../WPrefs.app/NoMenuAlert.c:119
 msgid "Keep Current Menu"
@@ -1403,19 +1403,19 @@ msgstr "Manter menu atual"
 
 #: ../../WPrefs.app/Paths.c:84
 msgid "bad value in option IconPath. Using default path list"
-msgstr "valor inv·lido em IconPath. Usando valor default"
+msgstr "valor inv√°lido em IconPath. Usando valor default"
 
 #: ../../WPrefs.app/Paths.c:101
 msgid "bad value in option PixmapPath. Using default path list"
-msgstr "valor inv·lido em PixmapPath. Usando valor default"
+msgstr "valor inv√°lido em PixmapPath. Usando valor default"
 
 #: ../../WPrefs.app/Paths.c:149
 msgid "Select directory"
-msgstr "Selecionar DiretÛrio"
+msgstr "Selecionar Diret√≥rio"
 
 #: ../../WPrefs.app/Paths.c:270
 msgid "Icon Search Paths"
-msgstr "Caminhos de Procura de Õcones"
+msgstr "Caminhos de Procura de √çcones"
 
 #: ../../WPrefs.app/Paths.c:281 ../../WPrefs.app/Paths.c:312
 #: ../../WPrefs.app/TexturePanel.c:1304
@@ -1428,7 +1428,7 @@ msgstr "Caminho de Procura de Imagens"
 
 #: ../../WPrefs.app/Paths.c:341
 msgid "Search Path Configuration"
-msgstr "ConfiguraÁ„o de DiretÛrios de Procura"
+msgstr "Configura√ß√£o de Diret√≥rios de Procura"
 
 #: ../../WPrefs.app/Paths.c:343
 msgid ""
@@ -1436,7 +1436,7 @@ msgid ""
 "and icons."
 msgstr ""
 "Caminhos de procura quando abrir pixmaps e\n"
-"Ìcones."
+"√≠cones."
 
 #: ../../WPrefs.app/Preferences.c:159
 msgid "Size Display"
@@ -1447,7 +1447,7 @@ msgid ""
 "The position or style of the window size\n"
 "display that's shown when a window is resized."
 msgstr ""
-"A posiÁ„o ou estilo da janela sendo\n"
+"A posi√ß√£o ou estilo da janela sendo\n"
 "redimensionada."
 
 #: ../../WPrefs.app/Preferences.c:168 ../../WPrefs.app/Preferences.c:188
@@ -1464,35 +1464,35 @@ msgstr "Meio da janela"
 
 #: ../../WPrefs.app/Preferences.c:171
 msgid "Technical drawing-like"
-msgstr "Desenho TÈcnico"
+msgstr "Desenho T√©cnico"
 
 #: ../../WPrefs.app/Preferences.c:179
 msgid "Position Display"
-msgstr "Display de PosiÁ„o"
+msgstr "Display de Posi√ß√£o"
 
 #: ../../WPrefs.app/Preferences.c:181
 msgid ""
 "The position or style of the window position\n"
 "display that's shown when a window is moved."
 msgstr ""
-"A posiÁ„o ou estilo do mostrador de posiÁ„o\n"
+"A posi√ß√£o ou estilo do mostrador de posi√ß√£o\n"
 "da janela quando ela estiver sendo movida."
 
 #: ../../WPrefs.app/Preferences.c:198
 msgid "Show balloon text for..."
-msgstr "Mostrar texto em bal„o para..."
+msgstr "Mostrar texto em bal√£o para..."
 
 #: ../../WPrefs.app/Preferences.c:205
 msgid "incomplete window titles"
-msgstr "tÌtulos de janela incompletos"
+msgstr "t√≠tulos de janela incompletos"
 
 #: ../../WPrefs.app/Preferences.c:206
 msgid "miniwindow titles"
-msgstr "tÌtulo de minijanelas"
+msgstr "t√≠tulo de minijanelas"
 
 #: ../../WPrefs.app/Preferences.c:207
 msgid "application/dock icons"
-msgstr "Ìcones de aplicaÁ„o/dock"
+msgstr "√≠cones de aplica√ß√£o/dock"
 
 #: ../../WPrefs.app/Preferences.c:208
 msgid "internal help"
@@ -1508,23 +1508,23 @@ msgstr "Manter mapa de teclado para cada janela."
 
 #: ../../WPrefs.app/Preferences.c:247
 msgid "Miscellaneous Ergonomic Preferences"
-msgstr "PreferÍncias ErgonÙmicas Diversas"
+msgstr "Prefer√™ncias Ergon√¥micas Diversas"
 
 #: ../../WPrefs.app/Preferences.c:248
 msgid ""
 "Various settings like balloon text, geometry\n"
 "displays etc."
 msgstr ""
-"V·rias opÁıes como texto em balıes, geometria,\n"
+"V√°rias op√ß√µes como texto em bal√µes, geometria,\n"
 "etc."
 
 #: ../../WPrefs.app/TexturePanel.c:605
 msgid "Could not load the selected file: "
-msgstr "N„o foi possÌvel carregar o arquivo selecionado: "
+msgstr "N√£o foi poss√≠vel carregar o arquivo selecionado: "
 
 #: ../../WPrefs.app/TexturePanel.c:687
 msgid "The selected file does not contain a supported image."
-msgstr "O arquivo selecionado n„o contÈm uma imagem suportada."
+msgstr "O arquivo selecionado n√£o cont√©m uma imagem suportada."
 
 #: ../../WPrefs.app/TexturePanel.c:1248
 msgid "Texture Panel"
@@ -1536,7 +1536,7 @@ msgstr "Nome da textura"
 
 #: ../../WPrefs.app/TexturePanel.c:1268
 msgid "Solid Color"
-msgstr "Cor sÛlida"
+msgstr "Cor s√≥lida"
 
 #: ../../WPrefs.app/TexturePanel.c:1269
 msgid "Gradient Texture"
@@ -1556,7 +1556,7 @@ msgstr "Imagem de textura"
 
 #: ../../WPrefs.app/TexturePanel.c:1280
 msgid "Default Color"
-msgstr "Cor padr„o"
+msgstr "Cor padr√£o"
 
 #: ../../WPrefs.app/TexturePanel.c:1292
 msgid "Gradient Colors"
@@ -1564,7 +1564,7 @@ msgstr "Cores gradientes"
 
 #: ../../WPrefs.app/TexturePanel.c:1388
 msgid "Direction"
-msgstr "DireÁ„o"
+msgstr "Dire√ß√£o"
 
 #: ../../WPrefs.app/TexturePanel.c:1416
 msgid "Gradient"
@@ -1625,7 +1625,7 @@ msgstr "Azulejo do Dia"
 
 #: ../../WPrefs.app/Themes.c:214
 msgid "Bar of The Day"
-msgstr "Barra de tÌtulo do dia"
+msgstr "Barra de t√≠tulo do dia"
 
 #: ../../WPrefs.app/Themes.c:251
 msgid "Themes"
@@ -1634,31 +1634,31 @@ msgstr "Temas"
 #: ../../WPrefs.app/WindowHandling.c:141
 #, c-format
 msgid "bad option value %s in WindowPlacement. Using default value"
-msgstr "%s n„o È valor de WindowPlacement. Usando valor default"
+msgstr "%s n√£o √© valor de WindowPlacement. Usando valor default"
 
 #: ../../WPrefs.app/WindowHandling.c:163
 msgid "invalid data in option WindowPlaceOrigin. Using default (0,0)"
-msgstr "Dado inv·lido na opÁ„o WindowPlaceOrigin. Usando padr„o (0,0)"
+msgstr "Dado inv√°lido na op√ß√£o WindowPlaceOrigin. Usando padr√£o (0,0)"
 
 #: ../../WPrefs.app/WindowHandling.c:236
 msgid "Window Placement"
-msgstr "ColocaÁ„o de Janelas"
+msgstr "Coloca√ß√£o de Janelas"
 
 #: ../../WPrefs.app/WindowHandling.c:237
 msgid ""
 "How to place windows when they are first put\n"
 "on screen."
 msgstr ""
-"Como colocar janelas quando da primeira execuÁ„o\n"
+"Como colocar janelas quando da primeira execu√ß√£o\n"
 "na tela."
 
 #: ../../WPrefs.app/WindowHandling.c:243
 msgid "Automatic"
-msgstr "Autom·tico"
+msgstr "Autom√°tico"
 
 #: ../../WPrefs.app/WindowHandling.c:244
 msgid "Random"
-msgstr "RandÙmico"
+msgstr "Rand√¥mico"
 
 #: ../../WPrefs.app/WindowHandling.c:245
 msgid "Manual"
@@ -1674,7 +1674,7 @@ msgstr "Inteligente"
 
 #: ../../WPrefs.app/WindowHandling.c:253
 msgid "Placement Origin"
-msgstr "Origem da ColocaÁ„o"
+msgstr "Origem da Coloca√ß√£o"
 
 #: ../../WPrefs.app/WindowHandling.c:313
 msgid "Opaque Move"
@@ -1686,7 +1686,7 @@ msgid ""
 "when dragging windows aroung or if only a\n"
 "frame should be displayed.\n"
 msgstr ""
-"Se o conte˙do da janela deve ser movido\n"
+"Se o conte√∫do da janela deve ser movido\n"
 "quando arrastada a janela ou somente um\n"
 "quadro deve ser mostrado.\n"
 
@@ -1696,11 +1696,11 @@ msgstr "Ao maximizar..."
 
 #: ../../WPrefs.app/WindowHandling.c:358
 msgid "...do not cover icons"
-msgstr "...n„o sobrepor Ìcones"
+msgstr "...n√£o sobrepor √≠cones"
 
 #: ../../WPrefs.app/WindowHandling.c:364
 msgid "...do not cover dock"
-msgstr "...n„o sobrepor o dock"
+msgstr "...n√£o sobrepor o dock"
 
 #: ../../WPrefs.app/WindowHandling.c:373
 msgid "Edge Resistance"
@@ -1713,13 +1713,13 @@ msgid ""
 "when moved against other windows or the edges\n"
 "of the screen."
 msgstr ""
-"A borda resistente far· com que as janelas\n"
+"A borda resistente far√° com que as janelas\n"
 "`resistam' a ser movidas acima de outras\n"
 "ou nas bordas da tela."
 
 #: ../../WPrefs.app/WindowHandling.c:394
 msgid "Resist"
-msgstr "ResistÍncia"
+msgstr "Resist√™ncia"
 
 #: ../../WPrefs.app/WindowHandling.c:399
 msgid "Attract"
@@ -1727,39 +1727,39 @@ msgstr "Atrair"
 
 #: ../../WPrefs.app/WindowHandling.c:415
 msgid "Open dialogs in same workspace as their owners"
-msgstr "Abrir di·logos na mesma ·rea de trabalho que seus donos"
+msgstr "Abrir di√°logos na mesma √°rea de trabalho que seus donos"
 
 #: ../../WPrefs.app/WindowHandling.c:442
 msgid "Window Handling Preferences"
-msgstr "PreferÍncias de ManipulaÁ„o de Janelas"
+msgstr "Prefer√™ncias de Manipula√ß√£o de Janelas"
 
 #: ../../WPrefs.app/WindowHandling.c:444
 msgid ""
 "Window handling options. Initial placement style\n"
 "edge resistance, opaque move etc."
 msgstr ""
-"OpÁıes de manuseio de janelas. Posicionamento\n"
+"Op√ß√µes de manuseio de janelas. Posicionamento\n"
 "inicial, borda resistente, movimento opaco, etc."
 
 #: ../../WPrefs.app/Workspace.c:177
 msgid "Workspace Navigation"
-msgstr "NavegaÁ„o de ¡reas de Trabalho"
+msgstr "Navega√ß√£o de √Åreas de Trabalho"
 
 #: ../../WPrefs.app/Workspace.c:184
 msgid "wrap to the first workspace after the last workspace."
-msgstr "ir para a primeira ·rea de trabalho quando passar a ˙ltima."
+msgstr "ir para a primeira √°rea de trabalho quando passar a √∫ltima."
 
 #: ../../WPrefs.app/Workspace.c:206
 msgid "switch workspaces while dragging windows."
-msgstr "mover janelas entre ·reas de trabalho."
+msgstr "mover janelas entre √°reas de trabalho."
 
 #: ../../WPrefs.app/Workspace.c:228
 msgid "automatically create new workspaces."
-msgstr "criar ·reas de trabalho novas automaticamente."
+msgstr "criar √°reas de trabalho novas automaticamente."
 
 #: ../../WPrefs.app/Workspace.c:251
 msgid "Position of workspace name display"
-msgstr "PosiÁ„o do nome da ·rea de trabalho"
+msgstr "Posi√ß√£o do nome da √°rea de trabalho"
 
 #: ../../WPrefs.app/Workspace.c:270
 msgid "Disable"
@@ -1798,7 +1798,7 @@ msgid ""
 "Disable/enable the application Dock (the\n"
 "vertical icon bar in the side of the screen)."
 msgstr ""
-"Liga/Desliga o Dock (a barra de Ìcones vertical\n"
+"Liga/Desliga o Dock (a barra de √≠cones vertical\n"
 "no lado da tela)."
 
 #: ../../WPrefs.app/Workspace.c:325
@@ -1807,19 +1807,19 @@ msgid ""
 "a paper clip icon)."
 msgstr ""
 "Liga/Desliga o Clip (aquela coisa com um\n"
-"Ìcone de clip de papel)."
+"√≠cone de clip de papel)."
 
 #: ../../WPrefs.app/Workspace.c:365
 msgid "Workspace Preferences"
-msgstr "PreferÍncias da ¡rea de Trabalho"
+msgstr "Prefer√™ncias da √Årea de Trabalho"
 
 #: ../../WPrefs.app/Workspace.c:367
 msgid ""
 "Workspace navigation features.\n"
 "You can also enable/disable the Dock and Clip here."
 msgstr ""
-"Aspectos de navegaÁ„o de ¡reas de trabalho.\n"
-"Aqui vocÍ pode tambÈm ativar/desativar o Dock e o Clip."
+"Aspectos de navega√ß√£o de √Åreas de trabalho.\n"
+"Aqui voc√™ pode tamb√©m ativar/desativar o Dock e o Clip."
 
 #: ../../WPrefs.app/MenuGuru.c:106
 msgid "Menu Guru - Select Type"
@@ -1828,7 +1828,7 @@ msgstr "Guru de Menu - Tipo"
 #: ../../WPrefs.app/MenuGuru.c:111 ../../WPrefs.app/MenuGuru.c:133
 #: ../../WPrefs.app/MenuGuru.c:251
 msgid "Next"
-msgstr "PrÛximo"
+msgstr "Pr√≥ximo"
 
 #: ../../WPrefs.app/MenuGuru.c:114
 msgid "Menu Guru - Select Menu File"
@@ -1840,7 +1840,7 @@ msgstr "Guru de Menu - Comando Para Pipe"
 
 #: ../../WPrefs.app/MenuGuru.c:129
 msgid "Menu Guru - Select Directories"
-msgstr "Guru de Menu - DiretÛrios"
+msgstr "Guru de Menu - Diret√≥rios"
 
 #: ../../WPrefs.app/MenuGuru.c:136
 msgid "Menu Guru - Select Command"
@@ -1856,25 +1856,25 @@ msgid ""
 "another file or is created dynamically.\n"
 "What do you want to use as the contents of the submenu?"
 msgstr ""
-"Este processo ir· ajud·-lo a criar um submenu cuja definiÁ„o È criada "
+"Este processo ir√° ajud√°-lo a criar um submenu cuja defini√ß√£o √© criada "
 "dinamicamente ou localizada em um outro arquivo.\n"
-"O que deseja usar como o conte˙do do submenu?"
+"O que deseja usar como o conte√∫do do submenu?"
 
 #: ../../WPrefs.app/MenuGuru.c:279
 msgid ""
 "A file containing the menu definition in the plain text (non-property list) "
 "menu format."
 msgstr ""
-"Um arquivo contendo a definiÁ„o do menu em formato de texto puro (n„o È "
+"Um arquivo contendo a defini√ß√£o do menu em formato de texto puro (n√£o √© "
 "property list)."
 
 #: ../../WPrefs.app/MenuGuru.c:285
 msgid "The menu definition generated by a script/program read through a pipe."
-msgstr "A definiÁ„o de um menu gerado por um script/programa lido por um pipe."
+msgstr "A defini√ß√£o de um menu gerado por um script/programa lido por um pipe."
 
 #: ../../WPrefs.app/MenuGuru.c:291
 msgid "The files in one or more directories."
-msgstr "Os arquivos em um ou mais diretÛrios."
+msgstr "Os arquivos em um ou mais diret√≥rios."
 
 #: ../../WPrefs.app/MenuGuru.c:303
 msgid "Type the path for the menu file:"
@@ -1886,13 +1886,13 @@ msgid ""
 "format is described in the menu files included with WindowMaker, probably at "
 "~/GNUstep/Library/WindowMaker/menu"
 msgstr ""
-"O arquivo de menu deve conter um menu em formato texto puro. Esse formato È "
-"descrito no menu incluÌdo no WindowMaker, provavelmente em "
+"O arquivo de menu deve conter um menu em formato texto puro. Esse formato √© "
+"descrito no menu inclu√≠do no WindowMaker, provavelmente em "
 "~/GNUstep/Library/WindowMaker/menu."
 
 #: ../../WPrefs.app/MenuGuru.c:328
 msgid "Type the command that will generate the menu definition:"
-msgstr "Digite o comando que ir· gerar a definiÁ„o do menu:"
+msgstr "Digite o comando que ir√° gerar a defini√ß√£o do menu:"
 
 #: ../../WPrefs.app/MenuGuru.c:338
 msgid ""
@@ -1901,8 +1901,8 @@ msgid ""
 "described in the menu files included with WindowMaker, usually at "
 "~/GNUstep/Library/WindowMaker/menu"
 msgstr ""
-"O comando dever· gerar uma definiÁ„o de menu v·lida e mand·-lo para o "
-"stdout. Esta definiÁ„o deve estar no formato descrito em "
+"O comando dever√° gerar uma defini√ß√£o de menu v√°lida e mand√°-lo para o "
+"stdout. Esta defini√ß√£o deve estar no formato descrito em "
 "~/GNUstep/Library/WindowMaker/menu"
 
 #: ../../WPrefs.app/MenuGuru.c:350 ../../WPrefs.app/MenuGuru.c:372
@@ -1911,8 +1911,8 @@ msgid ""
 "Type the path for the directory. You can type more than one path by "
 "separating them with spaces."
 msgstr ""
-"Digite o caminho para o diretÛrio. VocÍ pode digitar mais de um caminho, "
-"separando-os com um espaÁo."
+"Digite o caminho para o diret√≥rio. Voc√™ pode digitar mais de um caminho, "
+"separando-os com um espa√ßo."
 
 #: ../../WPrefs.app/MenuGuru.c:361 ../../WPrefs.app/MenuGuru.c:383
 #: ../../WPrefs.app/MenuGuru.c:405
@@ -1921,7 +1921,7 @@ msgid ""
 "directories can contain program executables or data files (such as jpeg "
 "images)."
 msgstr ""
-"O menu gerado ter· um item para cada arquivo no diretÛrio. Os diretÛrios "
+"O menu gerado ter√° um item para cada arquivo no diret√≥rio. Os diret√≥rios "
 "podem conter programas ou arquivos de dados (como imagens jpeg, por exemplo)"
 
 #: ../../WPrefs.app/MenuGuru.c:415
@@ -1929,8 +1929,8 @@ msgid ""
 "If the directory contain data files, type the command used to open these "
 "files. Otherwise, leave it in blank."
 msgstr ""
-"Se o diretÛrio contÈm arquivos de dados, digite o comando que deve ser usado "
-"para abri-los. Sen„o, deixe em branco."
+"Se o diret√≥rio cont√©m arquivos de dados, digite o comando que deve ser usado "
+"para abri-los. Sen√£o, deixe em branco."
 
 #: ../../WPrefs.app/MenuGuru.c:426
 msgid ""
@@ -1939,32 +1939,32 @@ msgid ""
 "the command is \"xv -root\", each file in the directory will have a menu "
 "item like \"xv -root imagefile\"."
 msgstr ""
-"Cada arquivo no diretÛrio ter· um item que executar· o programa com o "
-"arquivo como par‚metro."
+"Cada arquivo no diret√≥rio ter√° um item que executar√° o programa com o "
+"arquivo como par√¢metro."
 
 #~ msgid "mouse button %s not supported by WPrefs."
-#~ msgstr "bot„o de mouse %s n„o È suportado pelo WPrefs."
+#~ msgstr "bot√£o de mouse %s n√£o √© suportado pelo WPrefs."
 
 #~ msgid "Invalid font %s."
-#~ msgstr "Fonte inv·lida %s."
+#~ msgstr "Fonte inv√°lida %s."
 
 #~ msgid "Set Font..."
 #~ msgstr "Mudar Fonte..."
 
 #~ msgid "Window Title Font"
-#~ msgstr "Fonte de TÌtulo de Janela"
+#~ msgstr "Fonte de T√≠tulo de Janela"
 
 #~ msgid "Menu Title Font"
-#~ msgstr "Fonte de TÌtulo de Menu"
+#~ msgstr "Fonte de T√≠tulo de Menu"
 
 #~ msgid "Menu Item Font"
 #~ msgstr "Fonte de Item de Menu"
 
 #~ msgid "Icon Title Font"
-#~ msgstr "Fonte de TÌtulo de Õcone"
+#~ msgstr "Fonte de T√≠tulo de √çcone"
 
 #~ msgid "Clip Title Font"
-#~ msgstr "Fonte do TÌtulo do Clip"
+#~ msgstr "Fonte do T√≠tulo do Clip"
 
 #~ msgid "Geometry Display Font"
 #~ msgstr "Fonte do display de tam/pos"
@@ -1978,20 +1978,20 @@ msgstr ""
 #~ "Texto de Teste\n"
 #~ "abcdefghijklmnopqrstuvxywz\n"
 #~ "ABCDEFGHIJKLMNOPQRSTUVXYWZ\n"
-#~ "·ÈÌÛ˙¡…Õ”⁄‚ÍÓÙ˚„ı\n"
+#~ "√°√©√≠√≥√∫√Å√â√ç√ì√ö√¢√™√Æ√¥√ª√£√µ\n"
 #~ "0123456789"
 
 #~ msgid "Alignment"
 #~ msgstr "Alinhamento"
 
 #~ msgid "Text Preferences"
-#~ msgstr "PreferÍncias Texto"
+#~ msgstr "Prefer√™ncias Texto"
 
 #~ msgid "drag windows between workspaces."
-#~ msgstr "Mover janelas pelas ·reas de trabalho."
+#~ msgstr "Mover janelas pelas √°reas de trabalho."
 
 #~ msgid ""
 #~ "switch to first workspace when switching past the last workspace and "
 #~ "vice-versa"
 #~ msgstr ""
-#~ "Ir para a primeira ·rea de trabalho quando passar da ˙ltima evice-versa"
+#~ "Ir para a primeira √°rea de trabalho quando passar da √∫ltima evice-versa"

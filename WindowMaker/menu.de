@@ -1,39 +1,39 @@
 //
-// Hauptmenükonfiguration für WindowMaker
+// HauptmenÃ¼konfiguration fÃ¼r WindowMaker
 //
 // Syntax:
 //
 // <Title> <Command> <Parameters>
 //
 // <Title> ist ein Text, der als Titel benutzt werden soll. Falls er
-//	Leerzeichen enthält, muss er von " umgeben sein.
+//	Leerzeichen enthÃ¤lt, muss er von " umgeben sein.
 //
-// <Command> eine der folgenden gültigen Anweisungen: 
-//	MENU - beginnt (Unter)menüdefinition
-//	END  - beendet (Unter)menüdefinition
-//	EXEC <program> - führt ein externes Programm aus
+// <Command> eine der folgenden gÃ¼ltigen Anweisungen: 
+//	MENU - beginnt (Unter)menÃ¼definition
+//	END  - beendet (Unter)menÃ¼definition
+//	EXEC <program> - fÃ¼hrt ein externes Programm aus
 //	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
 //	EXIT - beendet den Fenstermanager
 //	RESTART [<window manager>] - startet WindowMaker neu oder
 //			startet einen anderen Fenstermanager.
 //	REFRESH - Zeichnet den Bildschirminhalt neu.
-//	ARRANGE_ICONS - Ordnet die Icons auf der Arbeitsfläche neu an.
+//	ARRANGE_ICONS - Ordnet die Icons auf der ArbeitsflÃ¤che neu an.
 //	SHUTDOWN - Beendet die X Sitzung und alle Anwendungen
-//	WORKSPACE_MENU - fügt Untermenü für Arbeitsflächenverwaltung ein
-//	SHOW_ALL - Bringt alle Fenster zurück auf Arbeitsfläche
+//	WORKSPACE_MENU - fÃ¼gt UntermenÃ¼ fÃ¼r ArbeitsflÃ¤chenverwaltung ein
+//	SHOW_ALL - Bringt alle Fenster zurÃ¼ck auf ArbeitsflÃ¤che
 //	HIDE_OTHERS - Versteckt (mit Ausnahme des aktiven) alle Fenster auf
-//		 der Arbeitsfläche
+//		 der ArbeitsflÃ¤che
 //
-// <Parameters> ist das auszuführende Programm
+// <Parameters> ist das auszufÃ¼hrende Programm
 //
-// Besonderheiten für die EXEC Kommandozeile
+// Besonderheiten fÃ¼r die EXEC Kommandozeile
 // %s - An dieser Stelle den aktuell markierten Text einsetzen. Ist kein Text
 //      markiert, wird das Kommando abgebrochen
 // %w - An dieser Stelle die ID des aktuellen Fensters einsetzen. Ist kein
 //      Fenster aktiv, so wird nicht eingesetzt.
 //
 // Die Bedeutung der ausgezeichneten Zeichen (% bzw. ") kann mit dem \ Zeichen
-// außer Kraft gesetzt werden. z.B.: xterm -T "\"Hello World\""
+// auÃŸer Kraft gesetzt werden. z.B.: xterm -T "\"Hello World\""
 //
 // Jede MENU Anweisung muss eine passende END Anweisung besitzen.
 // Siehe dieses Beispiel:
@@ -45,12 +45,12 @@
 		"Info Panel..." INFO_PANEL
 		"Legal" LEGAL_PANEL
   		"Systemauslastung" SHEXEC xosview || xload
-              	"Prozeßtabelle" EXEC xterm -e top
+              	"ProzeÃŸtabelle" EXEC xterm -e top
 		"Anleitungen" EXEC xman
 	"Info" END
 	"XTerm" SHEXEC xterm -sb || color-xterm -sb || xterm -sb
 	"XJed"	EXEC xjed
-	"Arbeitsfläche" WORKSPACE_MENU
+	"ArbeitsflÃ¤che" WORKSPACE_MENU
 	"Anwendungen" MENU
 		"Grafik" MENU
 			"Gimp" EXEC gimp
@@ -109,8 +109,8 @@
 			"Wein" WS_BACK '(solid, "#400020")'
 		"Hintergrund" END
 #if (DEPTH>=8)
-// Einbinden einiger Farbverläufe für Anfänger und Faulpelze.
-// Nach dem Ändern muß 'RESTART' ausgeführt werden
+// Einbinden einiger FarbverlÃ¤ufe fÃ¼r AnfÃ¤nger und Faulpelze.
+// Nach dem Ã„ndern muÃŸ 'RESTART' ausgefÃ¼hrt werden
 #include <gradients.menu>
 #endif
 		"Arbeitsplatz sichern" EXEC SAVE_WORKSPACE
