@@ -319,7 +319,7 @@ WMAppendData(WMData *aData, WMData *anotherData) /*FOLD00*/
 void
 WMReplaceDataBytesInRange(WMData *aData, WMRange aRange, void *bytes) /*FOLD00*/
 {
-	unsigned char *dataBytes = (unsigned char *)aData->bytes;
+    unsigned char *dataBytes = (unsigned char *)aData->bytes;
 
     wassertr(aRange.position < aData->length);
     wassertr(aRange.count <= aData->length-aRange.position);
@@ -331,7 +331,7 @@ WMReplaceDataBytesInRange(WMData *aData, WMRange aRange, void *bytes) /*FOLD00*/
 void
 WMResetDataBytesInRange(WMData *aData, WMRange aRange) /*FOLD00*/
 {
-	unsigned char *dataBytes = (unsigned char *)aData->bytes;
+    unsigned char *dataBytes = (unsigned char *)aData->bytes;
 
     wassertr(aRange.position < aData->length);
     wassertr(aRange.count <= aData->length-aRange.position);

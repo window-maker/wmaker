@@ -358,6 +358,8 @@ WMBag *WMCreateTreeBagWithDestructor(void (*destructor)(void*));
     
 #define WMCreateBag(size) WMCreateTreeBag()
 
+#define WMCreateBagWithDestructor(size, d) WMCreateTreeBagWithDestructor(d)
+
 #define WMGetBagItemCount(bag) bag->func.getItemCount(bag)
 
 #define WMAppendBag(bag, other) bag->func.appendBag(bag, other)
