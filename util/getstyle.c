@@ -102,7 +102,20 @@ static char *theme_options[] = {
 };
 
 
+/* table of style related fonts */
 
+static char *font_styles[] = {
+    "ClipTitleFont",
+    "WindowTitleFont",	
+    "MenuTitleFont",	
+    "MenuTextFont",	
+    "IconTitleFont",
+    "DisplayFont",
+    "LargeDisplayFont",
+    NULL
+};
+
+char *default_font = "sans:pixelsize=12";
 
 char *ProgName;
 
@@ -403,8 +416,93 @@ wfindfileinarray(WMPropList *paths, char *file)
     return NULL;
 }
 
+char*
+capitalize(char *element)
+{
+    unsigned int first = 1;
+    char *p;
+    char *b;
+    b = element;
+    for (p = b; *p != 0; p++)
+    {
+	if (isalpha(*p) && first) {
+	    first = 0;
+	    *p = toupper(*p);
+	}
+	else if (*p == '-' || *p == ' ') {
+	    first = 1;
+	}
+    }
+    return b;
+}
 
+char*
+getElementFromXLFD(const char *xlfd, int index)
+{
+    const char *p = xlfd;
+    while (*p != 0) {
+	if (*p == '-' && --index == 0) {
+	    const char *end = strchr(p + 1, '-');
+	    char *buf;
+	    size_t len;
+	    if (end == 0) end = p + strlen(p);
+	    len = end - (p + 1);
+	    buf = wmalloc(len);
+	    memcpy(buf, p + 1, len);
+	    buf[len] = 0;
+	    return buf;
+	}
+	p++;
+    }
+    return "*";
+}
 
+char*
+xlfdToFc(char *xlfd)
+{
+    char *Fcname = NULL;
+
+    char *family = getElementFromXLFD(xlfd, 2);
+    char *size = getElementFromXLFD(xlfd, 7);
+    char *weight = getElementFromXLFD(xlfd, 3);
+    char *slant = getElementFromXLFD(xlfd, 4);
+
+    if (strcmp(family, "*") != 0) {
+	Fcname = wstrconcat(Fcname, capitalize(family));
+    }
+    if (strcmp(size, "*") != 0) {
+	Fcname = wstrconcat(Fcname, ":pixelsize=");
+	Fcname = wstrconcat(Fcname, size);
+    }
+    if (strcmp(weight, "*") != 0) {
+	Fcname = wstrconcat(Fcname, ":style=");
+	Fcname = wstrconcat(Fcname, capitalize(weight));
+    }
+    if (strcmp(slant, "*") != 0) {
+	if (strcmp(slant, "i") == 0) {
+	    Fcname = wstrconcat(Fcname, ":slant=");
+	    Fcname = wstrconcat(Fcname, "Italic");
+	} else if (strcmp(slant, "o") == 0) {
+	    Fcname = wstrconcat(Fcname, ":slant=");
+	    Fcname = wstrconcat(Fcname, "Oblique");
+	} else if (strcmp(slant, "ri") == 0) {
+	    Fcname = wstrconcat(Fcname, ":slant=");
+	    Fcname = wstrconcat(Fcname, "Rev Italic");
+	} else if (strcmp(slant, "ro") == 0) {
+	    Fcname = wstrconcat(Fcname, ":slant=");
+	    Fcname = wstrconcat(Fcname, "Rev Oblique");
+	}
+    }
+    if (!Fcname)
+	Fcname = wstrdup(default_font);
+
+    wfree(family);
+    wfree(size);
+    wfree(weight);
+    wfree(slant);
+
+    return Fcname;
+}
 
 void
 copyFile(char *dir, char *file)
@@ -606,11 +704,35 @@ main(int argc, char **argv)
 
 
     for (i=0; options[i]!=NULL; i++) {
-        key = WMCreatePLString(options[i]);
+	key = WMCreatePLString(options[i]);
 
-        val = WMGetFromPLDictionary(prop, key);
-        if (val)
-            WMPutInPLDictionary(style, key, val);
+	val = WMGetFromPLDictionary(prop, key);
+	if (val) {
+	int j;
+	char *str = WMGetFromPLString(key);
+	for (j = 0; font_styles[j]!=NULL; j++) {
+	    if (strcasecmp(str, font_styles[j]) == 0) {
+		char *oldfont;
+		oldfont = WMGetFromPLString(val);
+		if (oldfont[0] == '-') { 
+		    if (!strchr(oldfont, ','))
+		    {
+			char *newfont;
+			newfont = xlfdToFc(oldfont);
+			val = WMCreatePLString(newfont);                     
+			break; 
+		    } else {
+			wwarning("fontsets are not supported. replaced with default %s", default_font);            
+			val = WMCreatePLString(default_font);
+			break;
+		    }
+		} else {
+		    break;
+		}
+	    }
+	}
+	WMPutInPLDictionary(style, key, val);
+	}
     }
 
     val = WMGetFromPLDictionary(prop, WMCreatePLString("PixmapPath"));
