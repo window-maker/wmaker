@@ -762,7 +762,7 @@ WMGetSplitViewSubviewAt(WMSplitView *sPtr, int index)
 {
     CHECK_CLASS(sPtr, WC_SplitView);
 
-    if (index > 0 && index < _GetSubviewsCount())
+    if (index >= 0 && index < _GetSubviewsCount())
     	return (_GetSubviewAt(index));
     else
     	return (NULL);
@@ -798,7 +798,7 @@ WMRemoveSplitViewSubviewAt(WMSplitView *sPtr, int index)
 
     CHECK_CLASS(sPtr, WC_SplitView);
 
-    if (index > 0 && index < _GetSubviewsCount()) {
+    if (index >= 0 && index < _GetSubviewsCount()) {
     	p = _GetPSubviewStructAt(index);
     	wfree(p);
     	WMDeleteFromBag(sPtr->subviewsBag, index);
