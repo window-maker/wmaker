@@ -78,6 +78,10 @@ extern const char * const sys_siglist[];
 # define SA_RESTART 0
 #endif
 
+/* Just in case, for weirdo systems */
+#ifndef SA_NODEFER
+# define SA_NODEFER 0
+#endif
 
 /****** Global Variables ******/
 
@@ -337,12 +341,12 @@ handleSig(int sig)
 
         if (crashAction == WMRestart) {
             /* we try to restart Window Maker */
-            wwarning(_("trying to restart Window Maker..."));
+            wmessage(_("trying to restart Window Maker..."));
             Restart(NULL, False);
             /* fallback to alternate window manager then */
         }
 
-    	wwarning(_("trying to start alternate window manager..."));
+    	wmessage(_("trying to start alternate window manager..."));
 
         Restart(FALLBACK_WINDOWMANAGER, False);
         Restart("fvwm", False);
@@ -377,8 +381,35 @@ buryChild(int foo)
     int status;
     
     /* R.I.P. */
-    pid = waitpid(-1, &status, WNOHANG);
-    if (pid>0) {
+    /* SIGCHLD's are blocked while we are in this signal handler, and if 2 or
+     * more kids exit while we handle the exit of one child in this handler
+     * (ie, about at the same time), we will miss the SIGCHLD signals the
+     * other kids will send and will be left with zombies. Using a while loop
+     * tries to avoid this (or at least minimize the probability), by calling
+     * waitpid until there are no more exited kids that respond.
+     * I think there is still a small probability that a a SIGCHLD signal can
+     * arrive after we finished the while loop, but before we return.
+     * Passing SA_NODEFER to the SIGCHLD handler doesn't seem to help at all,
+     * though tha man page sais that using this flag should allow receival of
+     * other SIGCHLD signals while processing one. Why is this? -Dan
+     *
+     * There seem to be SA_NOCLDWAIT, but I'm not sure its available on all
+     * platforms, and its possible that even if it will prevent zombie
+     * generation, it may also prevent us from receiving the exit status
+     * of our kids (I'm not sure, because the man page doesn't state this
+     * clearly). -Dan
+     *
+     * Maybe the best way would be to forget about SA_NODEFER and do it the
+     * old way: unblock SIGCHLD immediately after we entered this handler,
+     * then call waitpid in a while loop to get the exit status of all kids
+     * that exited while SIGCHLD was blocked and we missed the signal.
+     * This way there is no way we can miss any kid, because the while loop
+     * takes care of signals that were missed before we reenabled SIGCHLD
+     * and after enabling the signal, we we start getting them even if we
+     * are in the signal handler itself. Only need to check if it doesn't
+     * have any problem with reentrancy, but I don't think so. -Dan
+     */
+    while ((pid = waitpid(-1, &status, WNOHANG)) > 0) {
 	NotifyDeadProcess(pid, WEXITSTATUS(status));
 	/* 
 	 * Make sure that the kid will be buried even if there are
@@ -793,8 +824,9 @@ StartUp(Bool defaultScreenOnly)
     sigaction(SIGPIPE, &sig_action, NULL);
 
     /* handle dead children */
+    /* Using SA_NODEFER doesn't seem to have any effect. Why? -Dan */
     sig_action.sa_handler = buryChild;
-    sig_action.sa_flags = SA_NOCLDSTOP|SA_RESTART;
+    sig_action.sa_flags = SA_NODEFER|SA_NOCLDSTOP|SA_RESTART;
     sigaction(SIGCHLD, &sig_action, NULL);
 
     /* Now we unblock all signals, that may have been blocked by the parent
