@@ -38,7 +38,7 @@ typedef struct TimerHandler {
     struct timeval	when;		       /* when to call the callback */
     void 		*clientData;
     struct TimerHandler *next;
-    Bool                permanent;
+    int                 nextDelay;             /* 0 if it's one-shot */
 } TimerHandler;
 
 
@@ -174,7 +174,7 @@ WMAddTimerHandler(int milliseconds, WMCallback *callback, void *cdata)
     addmillisecs(&handler->when, milliseconds);
     handler->callback = callback;
     handler->clientData = cdata;
-    handler->permanent = False;
+    handler->nextDelay = 0;
     
     enqueueTimerHandler(handler);
 
@@ -188,7 +188,7 @@ WMAddEternalTimerHandler(int milliseconds, WMCallback *callback, void *cdata)
     TimerHandler *handler = WMAddTimerHandler(milliseconds, callback, cdata);
 
     if (handler != NULL)
-	handler->permanent = True;
+	handler->nextDelay = milliseconds;
     
     return handler;
 }
@@ -205,7 +205,7 @@ WMDeleteTimerWithClientData(void *cdata)
     
     tmp = timerHandler;
     if (tmp->clientData==cdata) {
-	tmp->permanent = False;
+	tmp->nextDelay = 0;
 	if (!IS_ZERO(tmp->when)) {
 	    timerHandler = tmp->next;
 	    wfree(tmp);
@@ -214,7 +214,7 @@ WMDeleteTimerWithClientData(void *cdata)
         while (tmp->next) {
             if (tmp->next->clientData==cdata) {
                 handler = tmp->next;
-		handler->permanent = False;		
+		handler->nextDelay = 0;		
 		if (IS_ZERO(handler->when))
 		    break;
                 tmp->next = handler->next;
@@ -238,7 +238,7 @@ WMDeleteTimerHandler(WMHandlerID handlerID)
 
     tmp = timerHandler;
     
-    handler->permanent = False;
+    handler->nextDelay = 0;
     
     if (IS_ZERO(handler->when))
 	return;
@@ -400,9 +400,9 @@ checkTimerHandlers()
 	handler = timerHandler;
 	timerHandler = timerHandler->next;	
 
-	if (handler->permanent) {
+	if (handler->nextDelay > 0) {
 	    rightNow(&handler->when);
-	    addmillisecs(&handler->when, milliseconds);
+	    addmillisecs(&handler->when, handler->nextDelay);
 	    enqueueTimerHandler(handler);
 	} else {
 	    wfree(handler);
