@@ -515,8 +515,6 @@
 
 #define MAX_RESTART_ARGS	16
 
-#define MAX_COMMAND_SIZE	1024
-
 #define MAX_DEAD_PROCESSES	128
 
 

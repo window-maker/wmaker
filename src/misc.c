@@ -1215,10 +1215,12 @@ StrConcatDot(char *a, char *b)
 }
 
 
+#define MAX_CMD_SIZE 4096
+
 Bool
 GetCommandForPid(int pid, char ***argv, int *argc)
 {
-    char buf[1024];
+    static char buf[MAX_CMD_SIZE];
     FILE *fPtr;
     int count, i, j;
     Bool ok= False;
@@ -1226,9 +1228,9 @@ GetCommandForPid(int pid, char ***argv, int *argc)
     sprintf(buf, "/proc/%d/cmdline", pid);
     fPtr = fopen(buf, "r");
     if (fPtr) {
-        count = read(fileno(fPtr), buf, 1024);
+        count = read(fileno(fPtr), buf, MAX_CMD_SIZE);
         if (count > 0) {
-            buf[count] = 0;
+            buf[count-1] = 0;
             for (i=0, *argc=0; i<count; i++) {
                 if (buf[i] == 0) {
                     (*argc)++;
@@ -1245,6 +1247,9 @@ GetCommandForPid(int pid, char ***argv, int *argc)
                       continue;
                     if (i < count-1) {
                         (*argv)[j++] = &buf[i+1];
+                    }
+                    if (j == *argc) {
+                        break;
                     }
                 }
                 ok= True;
