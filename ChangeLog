@@ -19,6 +19,7 @@ Changes since version 0.65.1:
 - fixed bug in positioning of window list menu when opened by kbd
 - internal code clean-up with notifications for window state change and other
   stuff
+- added snprintf implementation for systems that don't have this function
 - removed the libPropList dependancy by adding property list handling
   code to WINGs. This code is not only better integrated with the other
   WINGs data structures, but it's also more robust. Also a backward

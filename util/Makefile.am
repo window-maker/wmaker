@@ -9,7 +9,7 @@ bin_SCRIPTS = wmaker.inst wm-oldmenu2new wsetfont wmchlocale wkdemenu.pl\
 	wcopy wpaste
 
 EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new wsetfont directjpeg.c \
-		wkdemenu.pl wmchlocale.in
+		wkdemenu.pl wmchlocale.in wcopy wpaste
 
 INCLUDES = $(DFLAGS) -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib \
 	@HEADER_SEARCH_PATH@ \
