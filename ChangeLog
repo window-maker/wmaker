@@ -6,6 +6,8 @@ Changes since version 0.61.1:
 - removed "Keep Attracted Icons" option from Clip's menu. See NEWS.
 - fixed bug in Xdnd code to be able to work with QT. (This is QT's bug so
   it will change again in future)
+- fixed crashing bug in WPrefs.app's Appearance section.
+- fixed sorting of names in icon chooser, and file browser.
 
 
 Changes since version 0.61.0:
