@@ -493,96 +493,13 @@ parseTexture(RContext *rc, char *text)
 	    }
 	    if (image)
 		RReleaseImage(image);
+            
+            texture->pixmap = pixmap;
+            texture->color = color;
 	    break;
 	 case 'S':
 	 case 'M':
-#if 0
-	    if (toupper(type[0])=='S') {
-		w = scrWidth;
-		h = scrHeight;
-	    } else {
-		if (iwidth*scrHeight > iheight*scrWidth) {
-		    w = scrWidth;
-		    h = (scrWidth*iheight)/iwidth;
-		} else {
-		    h = scrHeight;
-		    w = (scrHeight*iwidth)/iheight;
-		}
-	    }
-	    if (w != image->width || h != image->height) {
-		RImage *simage;
-
-		if (smooth)
-		    simage = RSmoothScaleImage(image, w, h);
-		else
-		    simage = RScaleImage(image, w, h);
-		if (!simage) {
-		    wwarning("could not scale image:%s", 
-			     RMessageForError(RErrorCode));
-		    RReleaseImage(image);
-		    goto error;
-		}
-		RReleaseImage(image);
-		image = simage;
-	    }
-	    iwidth = image->width;
-	    iheight = image->height;
-
-	    /* fall through */
-	 case 'C':
-	    {
-		Pixmap cpixmap;
-
-		if (!pixmap && !RConvertImage(rc, image, &pixmap)) {
-		    wwarning("could not convert texture:%s", 
-			     RMessageForError(RErrorCode));
-		    RReleaseImage(image);
-		    goto error;
-		}
-
-		if (iwidth != scrWidth || iheight != scrHeight) {
-		    int x, y, sx, sy, w, h;
-
-		    cpixmap = XCreatePixmap(dpy, root, scrWidth, scrHeight,
-					    DefaultDepth(dpy, scr));
-
-		    XSetForeground(dpy, DefaultGC(dpy, scr), color.pixel);
-		    XFillRectangle(dpy, cpixmap, DefaultGC(dpy, scr),
-				   0, 0, scrWidth, scrHeight);
-
-		    if (iheight < scrHeight) {
-			h = iheight;
-			y = (scrHeight - h)/2;
-			sy = 0;
-		    } else {
-			sy = (iheight - scrHeight)/2;
-			y = 0;
-			h = scrHeight;
-		    }
-		    if (iwidth < scrWidth) {
-			w = iwidth;
-			x = (scrWidth - w)/2;
-			sx = 0;
-		    } else {
-			sx = (iwidth - scrWidth)/2;
-			x = 0;
-			w = scrWidth;
-		    }
-
-		    XCopyArea(dpy, pixmap, cpixmap, DefaultGC(dpy, scr),
-			      sx, sy, w, h, x, y);
-		    XFreePixmap(dpy, pixmap);
-		    pixmap = cpixmap;
-		}
-		if (image)
-		    RReleaseImage(image);
-
-		texture->width = scrWidth;
-		texture->height = scrHeight;
-	    }
-	    break;
-#else
-	case 'C':
+         case 'C':
 	    {
 		Pixmap tpixmap = XCreatePixmap( dpy, root, scrWidth, scrHeight, DefaultDepth(dpy, scr));
 		XFillRectangle(dpy, tpixmap, DefaultGC(dpy, scr), 0, 0, scrWidth, scrHeight);
@@ -603,19 +520,13 @@ parseTexture(RContext *rc, char *text)
 		} else {
 		    applyImage(rc, texture, image, type[0], 0, 0, scrWidth, scrHeight);
                 }
-#else
+#else /* !XINERAMA */
                 applyImage(rc, texture, image, type[0], 0, 0, scrWidth, scrHeight);
-#endif
+#endif /* !XINERAMA */
 		RReleaseImage(image);
 	    }
 	    break;
-#endif
 	}
-
-#if 0
-	texture->pixmap = pixmap;
-	texture->color = color;
-#endif
     } else if (strcasecmp(type, "thgradient")==0
 	       || strcasecmp(type, "tvgradient")==0
 	       || strcasecmp(type, "tdgradient")==0) {
@@ -898,7 +809,7 @@ duplicatePixmap(Pixmap pixmap, int width, int height)
 {
     Display *tmpDpy;
     Pixmap copyP;
-
+    
     /* must open a new display or the RetainPermanent will
      * leave stuff allocated in RContext unallocated after exit */
     tmpDpy = XOpenDisplay(display);
@@ -1528,7 +1439,7 @@ main(int argc, char **argv)
 	wfatal("could not open display");
 	exit(1);
     }
-#if 0
+#if 1
     XSynchronize(dpy, 1);
 #endif
 
