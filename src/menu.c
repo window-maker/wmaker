@@ -31,8 +31,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <ctype.h>
+#if 0
 #include <nana.h>
-
+#endif
 #include "WindowMaker.h"
 #include "wcore.h"
 #include "framewin.h"
