@@ -200,7 +200,7 @@ enum {
 	WRulerRight,
 	WRulerBoth,
 	WRulerDocLeft
-} WMRulerMargins;
+} WRulerMargins;
 
 
 /* Insert type for WMText */
