@@ -137,7 +137,7 @@ xlfdToFc(char *xlfd)
 	Fcname = wstrconcat(Fcname, size);
     }
     if (strcmp(weight, "*") != 0) {
-	Fcname = wstrconcat(Fcname, ":style=");
+	Fcname = wstrconcat(Fcname, ":weight=");
 	Fcname = wstrconcat(Fcname, capitalize(weight));
     }
     if (strcmp(slant, "*") != 0) {
