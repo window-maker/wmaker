@@ -2,7 +2,7 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 
-SUBDIRS = . Documentation Resources Examples Tests
+SUBDIRS = . Documentation Resources Examples Extras Tests
 
 
 

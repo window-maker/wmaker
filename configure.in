@@ -15,7 +15,7 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.62.2)
+AM_INIT_AUTOMAKE(WindowMaker, 0.63.0)
 
 AM_PROG_LIBTOOL
 
@@ -174,7 +174,9 @@ dnl ============================================
 dnl GCC/as with MMX support
 dnl --------------------
 
-if test "$ac_cv_prog_gcc" = yes; then
+# until we fix it, leave it disabled
+#if test "$ac_cv_prog_gcc" = yes; then
+if [ 0 -eq 1 ]; then
     x86=0
     changequote(,)dnl
     case "$host_cpu" in
@@ -182,6 +184,10 @@ if test "$ac_cv_prog_gcc" = yes; then
 	;;
     esac
     changequote([,])dnl
+
+    if $host_os != "linux"; then
+	x86=0
+    fi
 
     if test $x86 = 1; then
         AC_DEFINE(ASM_X86)
@@ -851,9 +857,9 @@ dnl AC_SUBST(DOCTYPES)
 
 AC_OUTPUT(Makefile po/Makefile util/Makefile test/Makefile wmlib/Makefile \
 	WINGs/Makefile WINGs/Documentation/Makefile WINGs/Examples/Makefile \
-	WINGs/Resources/Makefile WINGs/Tests/Makefile wrlib/Makefile \
-	src/Makefile src/wconfig.h doc/Makefile contrib/Makefile \
-	WindowMaker/Makefile WindowMaker/Backgrounds/Makefile \
+	WINGs/Resources/Makefile WINGs/Tests/Makefile WINGs/Extras/Makefile \
+	wrlib/Makefile src/Makefile src/wconfig.h doc/Makefile \
+	contrib/Makefile WindowMaker/Makefile WindowMaker/Backgrounds/Makefile \
 	WindowMaker/Defaults/Makefile WindowMaker/IconSets/Makefile \
 	WindowMaker/Icons/Makefile WindowMaker/Pixmaps/Makefile \
 	WindowMaker/Styles/Makefile WindowMaker/Themes/Makefile \
