@@ -35,6 +35,8 @@ Changes since version 0.53.0:
 - fixed a mem leak in superfluous mode caused by the ghost icon.
 - added possibility to set omnipresent icons in Clip. See NEWS.
 - replace xde support drop on dock with xdnd.
+- more elegant text entries in Clip's menu, regarding single/multiple
+  selected icons.
 
 
 Changes since version 0.52.0:

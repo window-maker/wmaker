@@ -28,6 +28,9 @@ changes since wmaker 0.53.0:
 
 - added WMTabView
 - added WMGetColorPanelColor(WMColorPanel *panel)
+- made WMGetUDStringForKey() to only return a reference to the string, not a
+  wstrdup()'ed copy. DO NOT FREE IT ANYMORE!
+
 
 changes since wmaker 0.52.0:
 ............................

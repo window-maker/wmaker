@@ -369,7 +369,7 @@ WMGetUDStringForKey(WMUserDefaults *database, char *defaultName)
     if (!PLIsString(val))
 	return NULL;
 
-    return wstrdup(PLGetString(val));
+    return PLGetString(val);
 }
 
 
