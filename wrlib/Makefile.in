@@ -164,7 +164,7 @@ Makefile.in NEWS TODO alloca.c configure.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP_ENV = --best
 SOURCES = $(libwraster_la_SOURCES) $(testgrad_SOURCES) $(testdraw_SOURCES) $(view_SOURCES)
 OBJECTS = $(libwraster_la_OBJECTS) $(testgrad_OBJECTS) $(testdraw_OBJECTS) $(view_OBJECTS)
