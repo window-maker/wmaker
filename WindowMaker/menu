@@ -137,7 +137,8 @@
 	"Applications" END
 	"Editors" MENU
 		"XFte" EXEC xfte
-		"XEmacs" SHEXEC xemacs || emacs
+		"XEmacs" EXEC xemacs
+		"Emacs" EXEC emacs
 		"XJed" EXEC xjed 
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
