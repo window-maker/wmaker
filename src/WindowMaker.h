@@ -210,6 +210,34 @@ typedef enum {
 		 WProgramState = (nstate)
 
 
+/* notifications */
+
+#ifdef MAINFILE
+#define NOTIFICATION(n) char *WN##n = #n
+#else
+#define NOTIFICATION(n) extern char *WN##n
+#endif
+
+NOTIFICATION(WindowAppearanceSettingsChanged);
+
+NOTIFICATION(IconAppearanceSettingsChanged);
+
+NOTIFICATION(IconTileSettingsChanged);
+
+NOTIFICATION(MenuAppearanceSettingsChanged);
+
+NOTIFICATION(MenuTitleAppearanceSettingsChanged);
+
+
+/* appearance settings clientdata flags */
+enum {
+    WFontSettings = 1 << 0,
+	WTextureSettings = 1 << 1,
+	WColorSettings = 1 << 2
+};
+
+
+
 typedef struct {
     int x1, y1;
     int x2, y2;
@@ -285,7 +313,9 @@ typedef struct WPreferences {
     char disable_root_mouse;	       /* disable button events in root window */
     
     char auto_focus;		       /* focus window when it's mapped */
-    
+
+    char alt_menu_style;
+
     char *icon_back_file;	       /* background image for icons */
 
     WCoord *root_menu_pos;	       /* initial position of the root menu*/

@@ -57,6 +57,43 @@ static void miniwindowMouseDown(WObjDescriptor *desc, XEvent *event);
 static void miniwindowDblClick(WObjDescriptor *desc, XEvent *event);
 
 
+/****** Notification Observers ******/
+
+static void
+appearanceObserver(void *self, WMNotification *notif)
+{
+    WIcon *icon = (WIcon*)self;
+    int flags = (int)WMGetNotificationClientData(notif);
+
+    if (flags & WTextureSettings) {
+	icon->force_paint = 1;
+    }
+    if (flags & WFontSettings) {
+	icon->force_paint = 1;
+    }
+    /*
+    if (flags & WColorSettings) {
+    }
+     */
+    XClearArea(dpy, icon->core->window, 0, 0, 1, 1, True);
+/*    wIconPaint(icon);*/
+}
+
+
+static void
+tileObserver(void *self, WMNotification *notif)
+{
+    WIcon *icon = (WIcon*)self;
+
+    icon->force_paint = 1;
+    XClearArea(dpy, icon->core->window, 0, 0, 1, 1, True);
+/*    wIconPaint(icon);*/
+}
+
+/************************************/
+
+
+
 INLINE static void
 getSize(Drawable d, unsigned int *w, unsigned int *h, unsigned int *dep)
 {
@@ -138,7 +175,11 @@ wIconCreate(WWindow *wwin)
     wIconUpdate(icon);
     
     XFlush(dpy);
-    
+
+    WMAddNotificationObserver(appearanceObserver, icon, 
+			      WNIconAppearanceSettingsChanged, icon);
+    WMAddNotificationObserver(tileObserver, icon, 
+			      WNIconTileSettingsChanged, icon);
     return icon;
 }
 
@@ -191,6 +232,9 @@ wIconCreateWithIconFile(WScreen *scr, char *iconfile, int tile)
     
     wIconUpdate(icon);
 
+    WMAddNotificationObserver(tileObserver, icon, 
+			      WNIconTileSettingsChanged, icon);
+
     return icon;
 }
 
@@ -201,6 +245,8 @@ wIconDestroy(WIcon *icon)
 {
     WCoreWindow *core = icon->core;
     WScreen *scr = core->screen_ptr;
+
+    WMRemoveNotificationObserver(icon);
 
     if (icon->handlerID)
 	WMDeleteTimerHandler(icon->handlerID);

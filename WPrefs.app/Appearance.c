@@ -419,7 +419,6 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	}
     } else if (strcasecmp(&type[1], "pixmap")==0) {
 	RImage *timage;
-	int w, h;
 	char *path;
 	RColor color;
 

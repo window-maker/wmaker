@@ -83,6 +83,7 @@ extern Atom _XA_WM_CHANGE_STATE;
 extern Atom _XA_WM_DELETE_WINDOW;
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
+extern Atom _XA_WINDOWMAKER_COMMAND;
 
 #ifdef OFFIX_DND
 extern Atom _XA_DND_PROTOCOL;
@@ -867,6 +868,10 @@ handleClientMessage(XEvent *event)
 	} else {		       /* stopping */
 	    wColormapAllowClientInstallation(scr, False);
 	}
+    } else if (event->xclient.message_type == _XA_WINDOWMAKER_COMMAND) {
+
+	wDefaultsCheckDomains("bla");
+
     } else if (event->xclient.message_type == _XA_WINDOWMAKER_WM_FUNCTION) {
 	WApplication *wapp;
 	int done=0;
@@ -1715,7 +1720,6 @@ handleMotionNotify(XEvent *event)
 {
     WMenu *menu;
     WScreen *scr = wScreenForRootWindow(event->xmotion.root);
-    WWindow *wwin;
 
     if (wPreferences.scrollable_menus) {
         if (event->xmotion.x_root <= 1 ||

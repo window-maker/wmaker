@@ -20,11 +20,11 @@ wdwrite_LDADD = $(liblist)
 
 wxcopy_LDADD = @XLFLAGS@ @XLIBS@ 
 
-wxpaste_LDADD = @XLFLAGS@ @XLIBS@ 
+wxpaste_LDADD = @XLFLAGS@ @XLIBS@
 
 getstyle_LDADD = $(liblist)
 
-setstyle_LDADD = $(liblist)
+setstyle_LDADD = @XLFLAGS@ @XLIBS@ $(liblist)
 
 seticons_LDADD= $(liblist)
 

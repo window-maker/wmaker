@@ -120,15 +120,6 @@ fi
 #
 # Check for symbolic links
 #
-AC_MSG_CHECKING(for /usr/X11 symbolic link)
-rh_missing_usr_x11=no
-if test -d "/usr/X11"; then
-AC_MSG_RESULT(found)
-else
-AC_MSG_RESULT(uh oh)
-rh_missing_usr_x11=yes
-mins_found=yes
-fi
 AC_MSG_CHECKING(for /usr/include/X11 symbolic link)
 rh_missing_usr_include_x11=no
 if test -d "/usr/include/X11"; then

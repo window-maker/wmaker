@@ -265,10 +265,9 @@ PLATFORM SPECIFIC NOTES:
 	installing a new version of it by hand (compiling yourself), uninstall
 	the package from RedHat before.
 
-	* make a symbolic link from /usr/X11 to /usr/X11R6
-	(type ln -s /usr/X11R6 /usr/X11 ) and make sure you have a symbolic
-	link from /usr/include/X11 to /usr/X11R6/include/X11 (if not,
-	type ln -s /usr/X11R6/include/X11 /usr/include/X11 )
+	* make sure you have a symbolic link from /usr/include/X11 to
+	/usr/X11R6/include/X11 (if not, type ln -s /usr/X11R6/include/X11
+	/usr/include/X11 )
 
 	* make sure you have /lib/cpp pointing to the cpp program
 

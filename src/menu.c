@@ -81,11 +81,50 @@ static void menuTitleMouseDown(WCoreWindow *sender, void *data, XEvent *event);
 
 static void menuCloseClick(WCoreWindow *sender, void *data, XEvent *event);
 
+static void updateTexture(WMenu *menu);
 
 
 static void selectEntry(WMenu *menu, int entry_no);
 static void closeCascade(WMenu *menu);
 
+
+/****** Notification Observers ******/
+
+static void
+appearanceObserver(void *self, WMNotification *notif)
+{
+    WMenu *menu = (WMenu*)self;
+    int flags = (int)WMGetNotificationClientData(notif);
+
+    if (!menu->flags.realized)
+	return;
+    
+    if (WMGetNotificationName(notif) == WNMenuAppearanceSettingsChanged) {
+	if (flags & WFontSettings) {
+	    menu->flags.realized = 0;
+	    wMenuRealize(menu);
+	}
+	if (flags & WTextureSettings) {
+	    updateTexture(menu);
+	}
+	if (flags & (WTextureSettings|WColorSettings)) {
+	    wMenuPaint(menu);
+	}
+    } else if (menu->flags.titled) {
+
+	if (flags & WFontSettings) {
+	    menu->flags.realized = 0;
+	    wMenuRealize(menu);
+	}
+	if (flags & WTextureSettings) {
+	    menu->frame->flags.need_texture_remake = 1;
+	}
+	if (flags & (WColorSettings|WTextureSettings))
+	    wFrameWindowPaint(menu->frame);
+    }
+}
+
+/************************************/
 
 
 /*
@@ -140,10 +179,7 @@ wMenuCreate(WScreen *screen, char *title, int main_menu)
 
     menu->frame->flags.justification = WTJ_LEFT;
 
-#ifndef NEWSTUFF
-    /* XXX */
     menu->frame->rbutton_image = screen->b_pixmaps[WBUT_CLOSE];
-#endif
 
     menu->entry_no = 0;
     menu->alloced_entries = 0;
@@ -187,8 +223,13 @@ wMenuCreate(WScreen *screen, char *title, int main_menu)
 	brother = 0;
 	menu->brother->flags.brother = 1;
 	menu->brother->brother = menu;
+
+	WMAddNotificationObserver(appearanceObserver, menu,
+				  WNMenuTitleAppearanceSettingsChanged, menu);
+
+	WMAddNotificationObserver(appearanceObserver, menu,
+				  WNMenuAppearanceSettingsChanged, menu);
     }
-    
 
     return menu;
 }
@@ -222,38 +263,6 @@ insertEntry(WMenu *menu, WMenuEntry *entry, int index)
 	menu->entries[i+1] = menu->entries[i];
     }
     menu->entries[index] = entry;
-}
-
-
-void
-wMenuRefresh(WMenu *menu, int flags)
-{
-    int i;
-    
-    if (flags & MR_TEXT_BACK) {
-	menu->frame->flags.need_texture_remake = 1;
-    }
-    
-    if (flags & (MR_RESIZED|MR_TITLE_TEXT)) {
-	menu->flags.realized = 0;
-    }
-
-    wMenuRealize(menu);
-
-    if (menu->flags.titled)
-	wFrameWindowPaint(menu->frame);
-    
-    if (!menu->flags.brother) {
-	if (menu->brother)
-	    wMenuRefresh(menu->brother, flags);
-
-	for (i=0; i < menu->cascade_no; i++) {
-	    if (!menu->cascades[i]->flags.brother)
-		wMenuRefresh(menu->cascades[i], flags);
-	    else
-		wMenuRefresh(menu->cascades[i]->brother, flags);
-	}
-    }
 }
 
 
@@ -429,6 +438,41 @@ wMenuRemoveItem(WMenu *menu, int index)
 }
 
 
+static void
+updateTexture(WMenu *menu)
+{
+    WScreen *scr = menu->menu->screen_ptr;
+
+    /* setup background texture */
+    if (scr->menu_item_texture->any.type != WTEX_SOLID) {
+	if (!menu->flags.brother) {
+	    FREE_PIXMAP(menu->menu_texture_data);
+
+	    if (wPreferences.alt_menu_style) {
+		wTextureRender(scr, scr->menu_item_texture,
+			       &menu->menu_texture_data, menu->menu->width,
+			       menu->menu->height, WREL_MENUENTRY);
+	    } else {
+		wTextureRender(scr, scr->menu_item_texture,
+			       &menu->menu_texture_data, menu->menu->width,
+			       menu->entry_height, WREL_MENUENTRY);
+	    }
+
+	    XSetWindowBackgroundPixmap(dpy, menu->menu->window,
+				       menu->menu_texture_data);
+	    XClearWindow(dpy, menu->menu->window);
+
+	    XSetWindowBackgroundPixmap(dpy, menu->brother->menu->window,
+				       menu->menu_texture_data);
+	    XClearWindow(dpy, menu->brother->menu->window);
+	}
+    } else {
+	XSetWindowBackground(dpy, menu->menu->window,
+			     scr->menu_item_texture->any.color.pixel);
+	XClearWindow(dpy, menu->menu->window);
+    }
+}
+
 
 void 
 wMenuRealize(WMenu *menu)
@@ -504,28 +548,7 @@ wMenuRealize(WMenu *menu)
 		       + menu->frame->top_width + menu->frame->bottom_width);
 
 
-    /* setup background texture */
-    if (scr->menu_item_texture->any.type != WTEX_SOLID) {
-	if (!menu->flags.brother) {
-	    FREE_PIXMAP(menu->menu_texture_data);
-
-	    wTextureRender(scr, scr->menu_item_texture,
-			   &menu->menu_texture_data, menu->menu->width,
-			   menu->entry_height, WREL_MENUENTRY);
-
-	    XSetWindowBackgroundPixmap(dpy, menu->menu->window,
-				       menu->menu_texture_data);
-	    XClearWindow(dpy, menu->menu->window);
-
-	    XSetWindowBackgroundPixmap(dpy, menu->brother->menu->window,
-				       menu->menu_texture_data);
-	    XClearWindow(dpy, menu->brother->menu->window);
-	}
-    } else {
-	XSetWindowBackground(dpy, menu->menu->window,
-			     scr->menu_item_texture->any.color.pixel);
-	XClearWindow(dpy, menu->menu->window);
-    }
+    updateTexture(menu);
 
     menu->flags.realized = 1;
 
@@ -541,6 +564,8 @@ wMenuDestroy(WMenu *menu, int recurse)
 {
     int i;
 
+    WMRemoveNotificationObserver(menu);
+    
     /* remove any pending timers */
     if (menu->timer)
 	WMDeleteTimerHandler(menu->timer);
@@ -740,6 +765,7 @@ paintEntry(WMenu *menu, int index, int selected)
 		    strlen(entry->rtext));
     }
 }
+
 
 static void
 move_menus(WMenu *menu, int x, int y)

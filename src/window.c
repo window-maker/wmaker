@@ -129,9 +129,29 @@ static void titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event);
 static void resizebarMouseDown(WCoreWindow *sender, void *data, XEvent *event);
 
 
+/****** Notification Observers ******/
 
+static void
+appearanceObserver(void *self, WMNotification *notif)
+{
+    WWindow *wwin = (WWindow*)self;
+    int flags = (int)WMGetNotificationClientData(notif);
 
+    if (!wwin->frame || !wwin->frame->titlebar)
+	return;
 
+    if (flags & WFontSettings) {
+	wWindowConfigureBorders(wwin);
+    }
+    if (flags & WTextureSettings) {
+	wwin->frame->flags.need_texture_remake = 1;
+    }
+    if (flags & (WTextureSettings | WColorSettings)) {
+	wFrameWindowPaint(wwin->frame);
+    }
+}
+
+/************************************/
 
 WWindow*
 wWindowFor(Window window)
@@ -151,6 +171,7 @@ wWindowFor(Window window)
 	if (frame->flags.is_client_window_frame)
 	    return frame->child;
     }
+
     return NULL;
 }
 
@@ -169,6 +190,7 @@ wWindowCreate()
     wwin->client_descriptor.parent = wwin;
     wwin->client_descriptor.self = wwin;
     wwin->client_descriptor.parent_type = WCLASS_WINDOW;
+
     return wwin;
 }
 
@@ -178,6 +200,8 @@ wWindowDestroy(WWindow *wwin)
 {
     int i;
 
+    WMRemoveNotificationObserver(wwin);
+    
     wwin->flags.destroyed = 1;
 
     for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
@@ -1136,6 +1160,15 @@ wManageWindow(WScreen *scr, Window window)
 #endif
 
     /*
+     *------------------------------------------------------------
+     * Setup Notification Observers
+     *------------------------------------------------------------
+     */
+    WMAddNotificationObserver(appearanceObserver, wwin,
+			      WNWindowAppearanceSettingsChanged, wwin);
+
+    
+    /*
      *--------------------------------------------------
      * 
      *  Cleanup temporary stuff
@@ -1170,6 +1203,9 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
     int foo;
 
     wwin = wWindowCreate();
+
+    WMAddNotificationObserver(appearanceObserver, wwin,
+			      WNWindowAppearanceSettingsChanged, wwin);
 
     wwin->flags.internal_window = 1;
 

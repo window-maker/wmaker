@@ -119,6 +119,7 @@ extern Atom _XA_WINDOWMAKER_WM_PROTOCOLS;
 extern Atom _XA_WINDOWMAKER_STATE;
 extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
 extern Atom _XA_WINDOWMAKER_NOTICEBOARD;
+extern Atom _XA_WINDOWMAKER_COMMAND;
 
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 
@@ -664,6 +665,8 @@ StartUp(Bool defaultScreenOnly)
 
     _XA_WINDOWMAKER_NOTICEBOARD = XInternAtom(dpy, "_WINDOWMAKER_NOTICEBOARD",
 					      False);
+    
+    _XA_WINDOWMAKER_COMMAND = XInternAtom(dpy, "_WINDOWMAKER_COMMAND", False);
 
 #ifdef OFFIX_DND
     _XA_DND_SELECTION = XInternAtom(dpy, "DndSelection", False);

@@ -101,6 +101,5 @@
   ("Start kwm", RESTART, kwm),
   ("Start IceWM", RESTART, icewm),
   ("Exit...", EXIT),
-  ("Kill session...", SHUTDOWN)
  )
 )

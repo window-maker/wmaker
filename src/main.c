@@ -39,6 +39,8 @@
  */
 #include <X11/Xlocale.h>
 
+#define MAINFILE
+
 #include "WindowMaker.h"
 #include "window.h"
 #include "funcs.h"
@@ -106,6 +108,7 @@ Atom _XA_WINDOWMAKER_STATE;
 
 Atom _XA_WINDOWMAKER_WM_FUNCTION;
 Atom _XA_WINDOWMAKER_NOTICEBOARD;
+Atom _XA_WINDOWMAKER_COMMAND;
 
 #ifdef OFFIX_DND
 Atom _XA_DND_PROTOCOL;

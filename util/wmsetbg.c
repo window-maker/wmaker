@@ -206,12 +206,12 @@ parseTexture(RContext *rc, char *text)
 	 case 'H':
 	    gtype = RHorizontalGradient;
 	    iwidth = scrWidth;
-	    iheight = 1;
+	    iheight = 8;
 	    break;
 	 case 'V':
 	 case 'v':
 	    gtype = RVerticalGradient;
-	    iwidth = 1;
+	    iwidth = 8;
 	    iheight = scrHeight;
 	    break;
 	 default:
@@ -299,12 +299,12 @@ parseTexture(RContext *rc, char *text)
 	 case 'H':
 	    gtype = RHorizontalGradient;
 	    iwidth = scrWidth;
-	    iheight = 1;
+	    iheight = 8;
 	    break;
 	 case 'V':
 	 case 'v':
 	    gtype = RVerticalGradient;
-	    iwidth = 1;
+	    iwidth = 8;
 	    iheight = scrHeight;
 	    break;
 	 default:

@@ -1,4 +1,5 @@
 {
+  AlternativeMenuStyle = NO;
   DisableMiniwindows = NO;
   OpenTransientOnOwnerWorkspace = NO;
   EdgeResistance = 30;

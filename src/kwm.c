@@ -1636,5 +1636,123 @@ wKWMSendEventMessage(WWindow *wwin, WKWMEventMessage message)
     sendToModules(wwin ? wwin->screen_ptr : NULL, msg, wwin, 0);
 }
 
+#if 0
+static void
+connectKFM(WScreen *scr)
+{
+    char *pidf;
+    char buffer[128];
+    char *ptr;
+    FILE *f;
+    
+    pidf = wstrappend(whomedir(), "/.kde/share/apps/kfm/pid");
+    strcpy(buffer, getenv("DISPLAY"));
+
+    ptr = strchr(buffer, ':');
+    if (ptr)
+	*ptr = '_';
+
+    ptr = strrchr(buffer, '.');
+    if (ptr)
+	*ptr = 0;
+    {
+	char b[32];
+	
+	sprintf(b, ".%i", scr->screen);
+	strcat(buffer, b);
+    }
+    ptr = pidf;
+    pidf = wstrappend(ptr, buffer);
+    free(ptr);
+
+    /* pid file */
+    f = fopen(pidf, "r");
+    
+    char buffer[ 1024 ];
+    buffer[0] = 0;
+    fgets( buffer, 1023, f );
+    int pid = atoi( buffer );
+    if ( pid <= 0 )
+    {
+	warning("ERROR: Invalid PID");
+	fclose( f );
+	return;
+    }
+
+    // Is the PID ok ?
+    if ( kill( pid, 0 ) != 0 )
+    {
+	// Did we already try to start a new kfm ?
+	if ( flag == 0 && allowRestart )
+	{
+	    flag = 1;
+	    // Try to start a new kfm
+	    system( "kfm -d &" );
+	    sleep( 10 );
+	    fclose( f );
+	    init();
+	    return;
+	}
+
+	warning("ERROR: KFM crashed");
+	fclose( f );
+	return;
+    }
+
+    // Read the socket's name
+    buffer[0] = 0;
+    fscanf(f, "%s", buffer); 
+    fclose( f );
+    char * slot = strdup( buffer );
+    if ( slot == (void *) 0 )
+    {
+	warning("ERROR: Invalid Slot");
+	return;
+    }
+    
+    // Connect to KFM
+    ipc = new KfmIpc( slot );
+    free(slot);
+
+    connect( ipc, SIGNAL( finished() ), this, SLOT( slotFinished() ) );
+    connect( ipc, SIGNAL( error( int, const char* ) ),
+	     this, SLOT( slotError( int, const char* ) ) );
+    connect( ipc, SIGNAL( dirEntry( const char*, const char*, const char*, const char*, const char*, int ) ),
+	     this, SLOT( slotDirEntry( const char*, const char*, const char*, const char*, const char*, int ) ) );
+
+    // Read the password
+    QString fn = KApplication::localkdedir() + "/share/apps/kfm/magic";
+    f = fopen( fn.data(), "rb" );
+    if ( f == 0L )
+    {
+	QString ErrorMessage;
+	ksprintf(&ErrorMessage, i18n("You dont have the file %s\n"
+				    "Could not do Authorization"), fn.data());
+	
+	QMessageBox::message( i18n("KFM Error"), ErrorMessage );
+	return;
+    }
+    char *p = fgets( buffer, 1023, f );
+    fclose( f );
+    if ( p == 0L )
+    {
+	QString ErrorMessage;
+	ksprintf(&ErrorMessage, i18n("The file %s is corrupted\n"
+				    "Could not do Authorization"), fn.data());
+	QMessageBox::message( i18n("KFM Error"), ErrorMessage );
+	return;
+    }
+
+    ipc->auth( buffer );
+    
+    ok = TRUE;
+}
+
+void
+wKWMSendRootSelection(WScreen *scr, int x, int y, int w, int h, Bool control)
+{
+    
+}
+#endif
 
 #endif /* KWM_HINTS */

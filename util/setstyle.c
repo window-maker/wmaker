@@ -21,13 +21,15 @@
  */
 
 
-#define PROG_VERSION "setstyle (Window Maker) 0.2"
+#define PROG_VERSION "setstyle (Window Maker) 0.3"
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <proplist.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
+#include <X11/Xlib.h>
 
 #include <string.h>
 
@@ -229,6 +231,11 @@ hackStyle(proplist_t style)
 	    }
 	}
     }
+
+    if (!PLGetDictionaryEntry(style, PLMakeString("AlternativeMenuStyle"))) {
+	PLInsertDictionaryEntry(style, PLMakeString("AlternativeMenuStyle"),
+				PLMakeString("NO"));
+    }
 }
 
 
@@ -370,8 +377,33 @@ main(int argc, char **argv)
     hackStyle(style);
 
     PLMergeDictionaries(prop, style);
-    
+
     PLSave(prop, YES);
+    {
+	Display *dpy;
+	XEvent ev;
+	
+	dpy = XOpenDisplay("");
+	if (dpy) {
+	    int i;
+	    char *msg = "Reconfigure";
+
+	    memset(&ev, 0, sizeof(XEvent));
+	    
+	    ev.xclient.type = ClientMessage;
+	    ev.xclient.message_type = XInternAtom(dpy, "_WINDOWMAKER_COMMAND",
+						  False);
+	    ev.xclient.window = DefaultRootWindow(dpy);
+	    ev.xclient.format = 8;
+
+	    for (i = 0; i <= strlen(msg); i++) {
+		ev.xclient.data.b[i] = msg[i];
+	    }
+	    XSendEvent(dpy, DefaultRootWindow(dpy), False, 
+		       SubstructureRedirectMask, &ev);
+	    XFlush(dpy);
+	}
+    }
 
     exit(0);
 }

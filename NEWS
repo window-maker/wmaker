@@ -2,6 +2,14 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+--- 0.52.1
+
+New Option
+----------
+
+AlternativeMenuStyle=YES; will make textures in menus to be unsegmented. 
+
+
 --- 0.52.0
 
 

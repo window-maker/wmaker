@@ -1530,6 +1530,10 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 		if (!warped && !wPreferences.no_autowrap) {
 		    int oldWorkspace = scr->current_workspace;
 
+		    drawFrames(wwin, scr->selected_windows, 
+			       moveData.realX - wwin->frame_x,
+			       moveData.realY - wwin->frame_y);
+
 		    if (checkWorkspaceChange(wwin, &moveData, opaqueMove)) {
 			if (scr->current_workspace != oldWorkspace
 			    && wPreferences.edge_resistance > 0
@@ -1538,6 +1542,9 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 			warped = 1;
 		    }
 
+		    drawFrames(wwin, scr->selected_windows,
+			       moveData.realX - wwin->frame_x,
+			       moveData.realY - wwin->frame_y);
 		} else {
 		    warped = 0;
 		}

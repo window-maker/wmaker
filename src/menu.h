@@ -24,11 +24,6 @@
 
 #include "wcore.h"
 
-#define MR_RESIZED 	1
-#define MR_TITLE_BACK	2
-#define MR_TEXT_BACK	4
-#define MR_TITLE_TEXT	8
-
 #define MI_DIAMOND	0
 #define MI_CHECK	1
 #define MI_MINIWINDOW	2
@@ -102,7 +97,6 @@ typedef struct WMenu {
 } WMenu;
 
 
-void wMenuRefresh(WMenu *menu, int flags);
 void wMenuPaint(WMenu *menu);
 void wMenuDestroy(WMenu *menu, int recurse);
 void wMenuRealize(WMenu *menu);

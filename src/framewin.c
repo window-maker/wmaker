@@ -803,6 +803,11 @@ wFrameWindowPaint(WFrameWindow *fwin)
 		    titlelen);
 
 	free(title);
+	
+	if (fwin->left_button)
+	    handleButtonExpose(&fwin->left_button->descriptor, NULL);
+	if (fwin->right_button)
+	    handleButtonExpose(&fwin->right_button->descriptor, NULL);
     }
 }
 

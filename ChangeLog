@@ -3,6 +3,10 @@ Changes since version 0.52.0:
 
 - patched wmsetbg to work with dynamically loadable texture renderer code
 - added libwmfun to distribution (forgot to do so in 0.52.0)
+- added alternative menu style option
+- changed configuration updating to use notifications
+- fixed window move through workspaces in nonopaquemove
+- added message to immediately reread configuration data
 
 
 Changes since version 0.51.2:

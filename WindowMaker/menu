@@ -209,7 +209,6 @@
 		"Start kwm" RESTART kwm
 		"Start IceWM" RESTART icewm
 		"Exit..."  EXIT
-		"Kill session..." SHUTDOWN
 	"Exit" END
 "Applications" END
 

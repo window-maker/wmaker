@@ -21,7 +21,7 @@
  */
 
 
-#define PROG_VERSION "getstyle (Window Maker) 0.2"
+#define PROG_VERSION "getstyle (Window Maker) 0.3"
 
 
 
@@ -68,6 +68,7 @@ static char *options[] = {
     "IconBack",	
     "IconTitleColor",
     "IconTitleBack",
+    "AlternativeMenuStyle",
 #ifdef TITLE_TEXT_SHADOW
     "Shadow",
     "FShadowColor",    

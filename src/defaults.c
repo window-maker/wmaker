@@ -170,9 +170,8 @@ static int setIconPosition();
 static int setClipTitleFont();
 static int setClipTitleColor();
 
-#ifdef NEWSTUFF
-static int setButtonImages();
-#endif
+static int setNothing();
+
 
 static int updateUsableArea();
 
@@ -187,6 +186,28 @@ static int updateUsableArea();
 /* WARNING: sum of length of all value strings must not exceed
  * this value */
 #define TOTAL_VALUES_LENGTH	80
+
+
+
+
+#define REFRESH_WINDOW_TEXTURES	(1<<0)
+#define REFRESH_MENU_TEXTURE	(1<<1)
+#define REFRESH_MENU_FONT	(1<<2)
+#define REFRESH_MENU_COLOR	(1<<3)
+#define REFRESH_MENU_TITLE_TEXTURE	(1<<4)
+#define REFRESH_MENU_TITLE_FONT	(1<<5)
+#define REFRESH_MENU_TITLE_COLOR	(1<<6)
+#define REFRESH_WINDOW_TITLE_COLOR (1<<7)
+#define REFRESH_WINDOW_FONT	(1<<8)
+#define REFRESH_FORE_COLOR	(1<<9)
+#define REFRESH_ICON_TILE	(1<<10)
+#define REFRESH_ICON_FONT	(1<<11)
+#define REFRESH_WORKSPACE_BACK	(1<<12)
+
+#define REFRESH_BUTTON_IMAGES   (1<<13)
+
+#define REFRESH_ICON_TITLE_COLOR (1<<14)
+#define REFRESH_ICON_TITLE_BACK (1<<15)
 
 
 
@@ -309,7 +330,7 @@ WDefaultEntry staticOptionList[] = {
     },
     {"DisableMiniwindows", "NO",		NULL,
 	&wPreferences.disable_miniwindows, getBool,	NULL
-    }
+    },
 };
 
 
@@ -446,23 +467,20 @@ WDefaultEntry optionList[] = {
 	   &wPreferences.dont_blink,	getBool,	NULL
     },
 #ifdef WEENDOZE_CYCLE
-    {"WindozeCycling","NO", NULL,
+    {"WindozeCycling","NO", 			NULL,
 	    &wPreferences.windoze_cycling,	getBool, NULL
     },
-    {"PopupSwitchMenu","YES",NULL, 
+    {"PopupSwitchMenu","YES",			NULL, 
 	    &wPreferences.popup_switchmenu,	getBool, NULL
     },
 #endif /* WEENDOZE_CYCLE */
       /* style options */
-#ifdef NEWSTUFF
-    {"WindowButtonImages", DEF_BUTTON_IMAGES, 	NULL,
-	  &wPreferences.button_images,	getRImage,	setButtonImages
+    {"AlternativeMenuStyle", "NO",  		(void*)REFRESH_MENU_TEXTURE,
+	&wPreferences.alt_menu_style, getBool, 	setNothing
     },
-#else
     {"WidgetColor",	"(solid, gray)",	NULL,
 	  NULL,				getTexture,	setWidgetColor,
     },
-#endif
     {"WorkspaceSpecificBack","()",	NULL,
 	  NULL,		getWSSpecificBackground, setWorkspaceSpecificBack
     },
@@ -479,7 +497,7 @@ WDefaultEntry optionList[] = {
 	  &wPreferences.title_justification, getEnum,	setJustify
     },
     {"WindowTitleFont",	DEF_TITLE_FONT,	       	NULL,
-	  NULL,				getFont,	setWinTitleFont
+	  NULL,				getFont,	setWinTitleFont,
     },
     {"MenuTitleFont",	DEF_MENU_TITLE_FONT,	NULL,
 	  NULL,				getFont,	setMenuTitleFont
@@ -907,6 +925,7 @@ wReadStaticDefaults(proplist_t dict)
     }
 }
 
+
 void
 wDefaultsCheckDomains(void *foo)
 {
@@ -1032,103 +1051,8 @@ wDefaultsCheckDomains(void *foo)
     }
 #endif /* !LITE */
 
-    WMAddTimerHandler(DEFAULTS_CHECK_INTERVAL, wDefaultsCheckDomains, foo);
-}
-
-
-
-#define REFRESH_WINDOW_TEXTURES	(1<<0)
-#define REFRESH_MENU_TEXTURES	(1<<1)
-#define REFRESH_WINDOW_FONT	(1<<2)
-#define REFRESH_MENU_TITLE_FONT	(1<<3)
-#define REFRESH_MENU_FONT	(1<<4)
-#define REFRESH_FORE_COLOR	(1<<5)
-#define REFRESH_ICON_TILE	(1<<6)
-#define REFRESH_ICON_FONT	(1<<7)
-#define REFRESH_WORKSPACE_BACK	(1<<8)
-
-#define REFRESH_BUTTON_IMAGES   (1<<9)
-
-static void 
-refreshMenus(WScreen *scr, int flags)
-{
-    WMenu *menu;
-
-#ifndef LITE
-    menu = scr->root_menu;
-    if (menu)
-	wMenuRefresh(!menu->flags.brother ? menu : menu->brother, flags);
-
-    menu = scr->switch_menu;
-    if (menu)
-	wMenuRefresh(!menu->flags.brother ? menu : menu->brother, flags);
-
-#endif /* !LITE */
-
-    menu = scr->workspace_menu;
-    if (menu)
-	wMenuRefresh(!menu->flags.brother ? menu : menu->brother, flags);
-
-    menu = scr->window_menu;
-    if (menu)
-	wMenuRefresh(!menu->flags.brother ? menu : menu->brother, flags);
-
-    menu = scr->icon_menu;
-    if (menu)
-	wMenuRefresh(!menu->flags.brother ? menu : menu->brother, flags);
-
-    if (scr->dock) {
-	menu = scr->dock->menu;
-	if (menu)
-	    wMenuRefresh(!menu->flags.brother ? menu : menu->brother, flags);
-    }
-    menu = scr->clip_menu;
-    if (menu)
-        wMenuRefresh(!menu->flags.brother ? menu : menu->brother, flags);
-    
-    menu = scr->clip_submenu;
-    if (menu)
-        wMenuRefresh(!menu->flags.brother ? menu : menu->brother, flags);
-    
-    menu = scr->clip_options;
-    if (menu)
-        wMenuRefresh(!menu->flags.brother ? menu : menu->brother, flags);
-}
-
-
-static void
-refreshAppIcons(WScreen *scr, int flags)
-{
-    WAppIcon *aicon = scr->app_icon_list;
-
-    while (aicon) {
-        if (aicon->icon) {
-            aicon->icon->force_paint = 1;
-        }
-        aicon = aicon->next;
-    }
-}
-
-
-static void
-refreshWindows(WScreen *scr, int flags)
-{
-    WWindow *wwin;
-
-    wwin = scr->focused_window;
-    while (wwin) {
-        if (flags & REFRESH_WINDOW_FONT) {
-            wWindowConfigureBorders(wwin);
-        }
-        if ((flags & (REFRESH_ICON_TILE|REFRESH_WINDOW_TEXTURES)) &&
-            wwin->flags.miniaturized && wwin->icon) {
-            wwin->icon->force_paint = 1;
-        }
-        if (flags & REFRESH_WINDOW_TEXTURES) {
-            wwin->frame->flags.need_texture_remake = 1;
-        }
-        wwin = wwin->prev;
-    }
+    if (!foo)
+	WMAddTimerHandler(DEFAULTS_CHECK_INTERVAL, wDefaultsCheckDomains, foo);
 }
 
 
@@ -1194,59 +1118,62 @@ wReadDefaults(WScreen *scr, proplist_t new_dict)
 	}
     }
 
-    if (needs_refresh!=0) {
+    if (needs_refresh!=0 && !scr->flags.startup) {
 	int foo;
 
 	foo = 0;
-	if (needs_refresh & REFRESH_MENU_TEXTURES)
-	    foo |= MR_TEXT_BACK;
-	if (needs_refresh & REFRESH_MENU_FONT)
-	    foo |= MR_RESIZED;
+	if (needs_refresh & REFRESH_MENU_TITLE_TEXTURE)
+	    foo |= WTextureSettings;
 	if (needs_refresh & REFRESH_MENU_TITLE_FONT)
-	    foo |= MR_TITLE_TEXT;
-
+	    foo |= WFontSettings;
+	if (needs_refresh & REFRESH_MENU_TITLE_COLOR)
+	    foo |= WColorSettings;
         if (foo)
-            refreshMenus(scr, foo);
+	    WMPostNotificationName(WNMenuTitleAppearanceSettingsChanged, NULL,
+				   (void*)foo);
 
-        if (needs_refresh & (REFRESH_WINDOW_TEXTURES|REFRESH_WINDOW_FONT|
-                             REFRESH_ICON_TILE))
-            refreshWindows(scr, needs_refresh);
+	foo = 0;
+	if (needs_refresh & REFRESH_MENU_TEXTURE)
+	    foo |= WTextureSettings;
+	if (needs_refresh & REFRESH_MENU_FONT)
+	    foo |= WFontSettings;
+	if (needs_refresh & REFRESH_MENU_COLOR)
+	    foo |= WColorSettings;
+        if (foo)
+	    WMPostNotificationName(WNMenuAppearanceSettingsChanged, NULL,
+				   (void*)foo);
 
-        if (needs_refresh & REFRESH_ICON_TILE)
-            refreshAppIcons(scr, needs_refresh);
-
-#ifdef NEWSTUFF
-	if ((needs_refresh & REFRESH_BUTTON_IMAGES)
-	    && wPreferences.button_images) {
-
-	    int w, h;
-	    RImage *image = wPreferences.button_images;
-	    RImage *tmp;
-	    int theight;
-
-	    w = wPreferences.button_images->width / 2;
-	    h = wPreferences.button_images->height / PRED_BPIXMAPS;
-
-	    theight = scr->title_font->height + TITLEBAR_EXTRA_HEIGHT - 3;
-
-	    for (i = 0; i < PRED_BPIXMAPS; i++) {
-		tmp = RGetSubImage(image, 0, i * h, w, h);
-		if (scr->button_images[0][i])
-		    RDestroyImage(scr->button_images[0][i]);
-
-		scr->button_images[0][i] = RScaleImage(tmp, theight, theight);
-		RDestroyImage(tmp);
-
-		tmp = RGetSubImage(image, w, i * h, image->width - w, h);
-		if (scr->button_images[1][i])
-		    RDestroyImage(scr->button_images[1][i]);
-
-		scr->button_images[1][i] = RScaleImage(tmp, theight, theight);
-		RDestroyImage(tmp);
-	    }
+	foo = 0;
+        if (needs_refresh & REFRESH_WINDOW_FONT) {
+	    foo |= WFontSettings;
+	} 
+	if (needs_refresh & REFRESH_WINDOW_TEXTURES) {
+	    foo |= WTextureSettings;
 	}
-#endif /* NEWSTUFF */
-        wRefreshDesktop(scr);
+	if (needs_refresh & REFRESH_WINDOW_TITLE_COLOR) {
+	    foo |= WColorSettings;
+	}
+	if (foo)
+	    WMPostNotificationName(WNWindowAppearanceSettingsChanged, NULL,
+				   (void*)foo);
+	
+	if (!(needs_refresh & REFRESH_ICON_TILE)) {
+	    foo = 0;
+	    if (needs_refresh & REFRESH_ICON_FONT) {
+		foo |= WFontSettings;
+	    }
+	    if (needs_refresh & REFRESH_ICON_TITLE_COLOR) {
+		foo |= WTextureSettings;
+	    }
+	    if (needs_refresh & REFRESH_ICON_TITLE_BACK) {
+		foo |= WTextureSettings;
+	    }
+	    if (foo)
+		WMPostNotificationName(WNIconAppearanceSettingsChanged, NULL,
+				       (void*)foo);
+	}
+        if (needs_refresh & REFRESH_ICON_TILE)
+	    WMPostNotificationName(WNIconTileSettingsChanged, NULL,  NULL);
     }
 }
 
@@ -2623,7 +2550,7 @@ setWTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
     if (index == WS_UNFOCUSED)
 	XSetForeground(dpy, scr->info_text_gc, color->pixel);
     
-    return REFRESH_FORE_COLOR;
+    return REFRESH_WINDOW_TITLE_COLOR;
 }
 
 
@@ -2655,7 +2582,7 @@ setMenuTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
 #endif /* !TITLE_TEXT_SHADOW */
     XSetForeground(dpy, scr->menu_title_gc, color->pixel);
     
-    return REFRESH_FORE_COLOR;
+    return REFRESH_MENU_TITLE_COLOR;
 }
 
 
@@ -2685,7 +2612,7 @@ setMenuTextColor(WScreen *scr, WDefaultEntry *entry, XColor *color, void *foo)
     }
     XChangeGC(dpy, scr->disabled_menu_entry_gc, gcm, &gcv);
     
-    return REFRESH_FORE_COLOR;
+    return REFRESH_MENU_COLOR;
 #undef gcm
 }
 
@@ -2722,8 +2649,9 @@ setIconTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, void *foo)
 {
     XSetForeground(dpy, scr->icon_title_gc, color->pixel); 
     
-    return REFRESH_FORE_COLOR;
+    return REFRESH_ICON_TITLE_COLOR;
 }
+
 
 static int 
 setIconTitleBack(WScreen *scr, WDefaultEntry *entry, XColor *color, void *foo)
@@ -2734,7 +2662,7 @@ setIconTitleBack(WScreen *scr, WDefaultEntry *entry, XColor *color, void *foo)
     XQueryColor (dpy, scr->w_colormap, color);
     scr->icon_title_texture = wTextureMakeSolid(scr, color);
     
-    return REFRESH_WINDOW_TEXTURES;
+    return REFRESH_ICON_TITLE_BACK;
 }
 
 
@@ -2939,7 +2867,7 @@ setMenuTitleBack(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *f
     }
     scr->menu_title_texture[0] = *texture;
 
-    return REFRESH_MENU_TEXTURES;
+    return REFRESH_MENU_TITLE_TEXTURE;
 }
 
 
@@ -2955,7 +2883,7 @@ setMenuTextBack(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *fo
     scr->menu_item_auxtexture 
       = wTextureMakeSolid(scr, &scr->menu_item_texture->any.color);
     
-    return REFRESH_MENU_TEXTURES;
+    return REFRESH_MENU_TEXTURE;
 }
 
 
@@ -2998,13 +2926,20 @@ updateUsableArea(WScreen *scr, WDefaultEntry *entry, void *bar, void *foo)
 }
 
 
+static int
+setNothing(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
+{
+    return (int)entry->extra_data;
+}
 
+
+/*
 static int
 setButtonImages(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
 {
     return REFRESH_BUTTON_IMAGES;
 }
-
+*/
 
 /*
  * Very ugly kluge.

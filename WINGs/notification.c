@@ -181,7 +181,8 @@ WMPostNotification(WMNotification *notification)
     while (orec) {
 	tmp = orec->next;
 	
-	if (!orec->object || orec->object == notification->object) {
+	if (!orec->object || !notification->object 
+            || orec->object == notification->object) {
 	    /* tell the observer */
 	    if (orec->observerAction) {
 		(*orec->observerAction)(orec->observer, notification);
