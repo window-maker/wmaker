@@ -896,7 +896,8 @@ handleClientMessage(XEvent *event)
 	switch (event->xclient.data.l[0]) {
 	 case GSWindowLevelAttr:
 	   {
-	     int level = (int)event->xclient.data.l[0];
+	     int level = (int)event->xclient.data.l[1];
+
 	     if (WINDOW_LEVEL(wwin) != level) {
 	       ChangeStackingLevel(wwin->frame->core, level);
 	     }
