@@ -3,6 +3,7 @@
 
 
 #include "WINGsP.h"
+#include "WUtil.h"
 
 #include <strings.h>
 
@@ -69,6 +70,10 @@ static char *scalableFontSizes[] = {
 
 
 static void arrangeLowerFrame(FontPanel *panel);
+
+static void familyClick(WMWidget *, void *);
+static void typefaceClick(WMWidget *, void *);
+static void sizeClick(WMWidget *, void *);
 
 
 static void listFamilies(WMScreen *scr, WMFontPanel *panel);
@@ -195,6 +200,7 @@ WMGetFontPanel(WMScreen *scr)
     WMSetLabelTextAlignment(panel->famL, WACenter);
     
     panel->famLs = WMCreateList(panel->lowerF);
+    WMSetListAction(panel->famLs, familyClick, panel);
 
     panel->typL = WMCreateLabel(panel->lowerF);
     WMSetWidgetBackgroundColor(panel->typL, dark);
@@ -205,6 +211,7 @@ WMGetFontPanel(WMScreen *scr)
     WMSetLabelTextAlignment(panel->typL, WACenter);    
 
     panel->typLs = WMCreateList(panel->lowerF);
+    WMSetListAction(panel->typLs, typefaceClick, panel);
 
     panel->sizL = WMCreateLabel(panel->lowerF);
     WMSetWidgetBackgroundColor(panel->sizL, dark);
@@ -217,6 +224,7 @@ WMGetFontPanel(WMScreen *scr)
     panel->sizT = WMCreateTextField(panel->lowerF);
 
     panel->sizLs = WMCreateList(panel->lowerF);
+    WMSetListAction(panel->sizLs, sizeClick, panel);
 
     WMReleaseFont(font);
     WMReleaseColor(white);
@@ -304,6 +312,7 @@ WMShowFontPanel(WMFontPanel *panel)
 {
     WMMapWidget(panel->win);
 }
+
 
 void
 WMHideFontPanel(WMFontPanel *panel)
@@ -461,10 +470,10 @@ typedef struct {
     char *setWidth;
     char *addStyle;
     
-    char showWeight; /* not Medium */
-    char showSlant; /* not R */
     char showSetWidth; /* when duplicated */
     char showAddStyle; /* when duplicated */
+    
+    WMBag *sizes;
 } Typeface;
 
 
@@ -485,7 +494,43 @@ typedef struct {
 static void
 addTypefaceToFamily(Family *family, char fontFields[NUM_FIELDS][256])
 {
+    Typeface *face;
+    int i;
+
+    if (family->typefaces) {
+	for (i = 0; i < WMGetBagItemCount(family->typefaces); i++) {
+	    int size;
+	    
+	    face = WMGetFromBag(family->typefaces, i);
+	    
+	    if (strcmp(face->weight, fontFields[WEIGHT]) != 0) {
+		continue;
+	    }
+	    if (strcmp(face->slant, fontFields[SLANT]) != 0) {
+		continue;
+	    }
+
+	    size = atoi(fontFields[POINT_SIZE]);
+	    WMPutInBag(face->sizes, (void*)size);
+	
+	    return;
+	}
+    } else {
+	family->typefaces = WMCreateBag(4);
+    }
+
+    face = wmalloc(sizeof(Typeface));
+    memset(face, 0, sizeof(Typeface));
+
+    face->weight = wstrdup(fontFields[WEIGHT]);
+    face->slant = wstrdup(fontFields[SLANT]);
+    face->setWidth = wstrdup(fontFields[SETWIDTH]);
+    face->addStyle = wstrdup(fontFields[ADD_STYLE]);
+
+    face->sizes = WMCreateBag(4);
+    WMPutInBag(face->sizes, (void*)atoi(fontFields[POINT_SIZE]));
     
+    WMPutInBag(family->typefaces, face);
 }
 
 
@@ -586,6 +631,8 @@ addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
 	fam->foundry = wstrdup(fontFields[FOUNDRY]);
 	fam->registry = wstrdup(fontFields[REGISTRY]);
 	fam->encoding = wstrdup(fontFields[ENCODING]);
+	fam->showFoundry = 1;
+	fam->showRegistry = 1;
 
 	addTypefaceToFamily(fam, fontFields);
 
@@ -621,7 +668,9 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
     int i;
     WMHashTable *families = WMCreateHashTable(WMStringHashCallbacks);
     char fields[NUM_FIELDS][256];
-
+    WMHashEnumerator enumer;
+    WMBag *bag;
+    
     fontList = XListFonts(scr->display, ALL_FONTS_MASK, MAX_FONTS_TO_RETRIEVE, 
                           &count);
     if (!fontList) {
@@ -632,7 +681,7 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
 
     for (i = 0; i < count; i++) {
 	int fname_len;
-	
+
 	if (!isXLFD(fontList[i], &fname_len)) {
 	    *fontList[i] = '\0';
 	    continue;
@@ -649,8 +698,89 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
 	}
 	addFontToFamily(families, fields);
     }
+
+    enumer = WMEnumerateHashTable(families);
+    
+    while ((bag = WMNextHashEnumeratorItem(&enumer))) {
+	int i;
+	Family *fam;
+	char buffer[256];
+	WMListItem *item;
+
+	for (i = 0; i < WMGetBagItemCount(bag); i++) {
+	    fam = WMGetFromBag(bag, i);
+	    
+	    strcpy(buffer, fam->name);
+
+	    if (fam->showFoundry) {
+		strcat(buffer, " ");
+		strcat(buffer, fam->foundry);
+		strcat(buffer, " ");
+	    }
+	    if (fam->showRegistry) {
+		strcat(buffer, " (");
+		strcat(buffer, fam->registry);
+		strcat(buffer, "-");
+		strcat(buffer, fam->encoding);
+		strcat(buffer, ")");
+	    }
+	    item = WMAddSortedListItem(panel->famLs, buffer);
+	    
+	    item->clientData = fam;
+	}
+	WMFreeBag(bag);
+    }
+    
+    WMFreeHashTable(families);
 }
 
+
+
+static void 
+familyClick(WMWidget *w, void *data)
+{
+    WMList *lPtr = (WMList*)w;
+    WMListItem *item;
+    Family *family;
+    FontPanel *panel = (FontPanel*)data;
+    Typeface *face;
+    int i;
+
+    item = WMGetListSelectedItem(lPtr);
+    family = (Family*)item->clientData;
+
+    WMClearList(panel->typLs);
+    
+
+    for (i = 0; i < WMGetBagItemCount(family->typefaces); i++) {
+	char buffer[256];
+	
+	face = WMGetFromBag(family->typefaces, i);
+	
+	strcpy(buffer, face->weight);
+	strcat(buffer, " ");
+	strcat(buffer, face->slant);
+	
+	WMAddListItem(panel->typLs, buffer);
+    }
+    
+}
+
+
+static void 
+typefaceClick(WMWidget *w, void *data)
+{
+    WMList *lPtr = (WMList*)w;
+    FontPanel *panel = (FontPanel*)data;
+}
+
+
+static void 
+sizeClick(WMWidget *w, void *data)
+{
+    WMList *lPtr = (WMList*)w;
+    FontPanel *panel = (FontPanel*)data;
+}
 
 
 #endif

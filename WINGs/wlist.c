@@ -163,7 +163,11 @@ WMAddSortedListItem(WMList *lPtr, char *text)
 	    tmp->nextPtr = item;
 	}
     }
-    
+
+    if (index < lPtr->fullFitLines+lPtr->flags.dontFitAll-lPtr->topItem) {
+	paintList(lPtr);
+    }
+
     lPtr->itemCount++;
     
     if (lPtr->selectedItem >= index)
@@ -214,6 +218,10 @@ WMInsertListItem(WMList *lPtr, int row, char *text)
 
 	item->nextPtr = tmp->nextPtr;
 	tmp->nextPtr = item;
+    }
+
+    if (row < lPtr->fullFitLines+lPtr->flags.dontFitAll-lPtr->topItem) {
+	paintList(lPtr);
     }
 
     lPtr->itemCount++;
