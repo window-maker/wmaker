@@ -82,5 +82,3 @@
 /* define if you want user defined menus for applications */
 #undef USER_MENU
 
-/* define if you have inet_aton */
-#undef HAVE_INET_ATON
