@@ -92,7 +92,10 @@ libWINGs_a_SOURCES = 	\
 	error.c \
 	findfile.c \
 	bag.c \
+	connection.c \
+	data.c \
 	hashtable.c \
+	host.c \
 	memory.c \
 	usleep.c
 
@@ -101,6 +104,9 @@ libWUtil_a_SOURCES = 	\
 	WINGs.h \
 	WINGsP.h \
 	bag.c \
+	connection.c \
+	data.c \
+	host.c \
 	international.c \
 	notification.c \
 	userdefaults.c \

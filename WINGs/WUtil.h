@@ -5,7 +5,6 @@
 
 #include <sys/types.h>
 
-
 /* SunOS 4.x Blargh.... */
 #ifndef NULL
 #define NULL ((void*)0)
@@ -91,12 +90,34 @@ typedef enum {
 } WMNotificationCoalescing;
 
 
+/* The possible states for connections */
+typedef enum {
+    WCNotConnected=0,
+    WCListening,
+    WCInProgress,
+    WCFailed,
+    WCConnected,
+    WCDied,
+    WCClosed
+} WMConnectionState;
+
+
 
 typedef struct W_Bag WMBag; /* equivalent to a linked list or array */
+typedef struct W_Data WMData;
 typedef struct W_HashTable WMHashTable;
 typedef struct W_UserDefaults WMUserDefaults;
 typedef struct W_Notification WMNotification;
 typedef struct W_NotificationQueue WMNotificationQueue;
+typedef struct W_Host WMHost;
+typedef struct W_Connection WMConnection;
+
+
+
+typedef struct {
+    int position;
+    int count;
+} WMRange;
 
 
 
@@ -119,7 +140,7 @@ typedef struct {
     void	(*releaseKey)(const void *);    
 } WMHashTableCallbacks;
 
-    
+
 
 #if 0
 typedef struct {
@@ -128,7 +149,24 @@ typedef struct {
 } WMSEscapes;
 #endif
 
-    
+
+/* The connection callbacks */
+typedef struct ConnectionDelegate {
+    void *data;
+
+    void (*didCatchException)(struct ConnectionDelegate *self,
+                              WMConnection *cPtr);
+
+    void (*didDie)(struct ConnectionDelegate *self, WMConnection *cPtr);
+
+    void (*didInitialize)(struct ConnectionDelegate *self, WMConnection *cPtr);
+
+    void (*didReceiveInput)(struct ConnectionDelegate *self, WMConnection *cPtr);
+
+    void (*didTimeout)(struct ConnectionDelegate *self, WMConnection *cPtr);
+
+} ConnectionDelegate;
+
 
 typedef void WMNotificationObserverAction(void *observerData, 
 					  WMNotification *notification);
@@ -273,7 +311,73 @@ void WMFreeBag(WMBag *bag);
 
 WMBag *WMMapBag(WMBag *bag, void* (*function)(void*));
     
-/*......................................................................*/
+/*-------------------------------------------------------------------------*/
+
+/* WMData handling */
+
+/* Creating/destroying data */
+
+WMData* WMCreateDataWithCapacity(unsigned capacity);
+
+WMData* WMCreateDataWithLength(unsigned length);
+
+WMData* WMCreateDataWithBytes(void *bytes, unsigned length);
+
+WMData* WMCreateDataWithBytesNoCopy(void *bytes, unsigned length);
+
+WMData* WMCreateDataWithData(WMData *aData);
+
+WMData* WMRetainData(WMData *aData);
+
+void WMReleaseData(WMData *aData);
+
+/* Adjusting capacity */
+
+void WMSetDataCapacity(WMData *aData, unsigned capacity);
+
+void WMSetDataLength(WMData *aData, unsigned length);
+
+void WMIncreaseDataLengthBy(WMData *aData, unsigned extraLength);
+
+/* Accessing data */
+
+const void* WMDataBytes(WMData *aData);
+
+void WMGetDataBytes(WMData *aData, void *buffer);
+
+void WMGetDataBytesWithLength(WMData *aData, void *buffer, unsigned length);
+
+void WMGetDataBytesWithRange(WMData *aData, void *buffer, WMRange aRange);
+
+WMData* WMGetSubdataWithRange(WMData *aData, WMRange aRange);
+
+/* Testing data */
+
+Bool WMIsDataEqualToData(WMData *aData, WMData *anotherData);
+
+unsigned WMGetDataLength(WMData *aData);
+
+unsigned WMGetDataHash(WMData *aData);
+
+/* Adding data */
+
+void WMAppendDataBytes(WMData *aData, void *bytes, unsigned length);
+
+void WMAppendData(WMData *aData, WMData *anotherData);
+
+/* Modifying data */
+
+void WMReplaceDataBytesInRange(WMData *aData, WMRange aRange, void *bytes);
+
+void WMResetDataBytesInRange(WMData *aData, WMRange aRange);
+
+void WMSetData(WMData *aData, WMData *anotherData);
+
+/* Storing data */
+
+
+/*--------------------------------------------------------------------------*/
+
 
 WMNotification *WMCreateNotification(char *name, void *object, void *clientData);
 
@@ -359,6 +463,122 @@ void WMSetUDBoolForKey(WMUserDefaults *database, Bool value,
 proplist_t WMGetUDSearchList(WMUserDefaults *database);
 
 void WMSetUDSearchList(WMUserDefaults *database, proplist_t list);
+
+
+/*-------------------------------------------------------------------------*/
+
+/* WMHost: host handling */
+
+WMHost* WMGetCurrentHost();
+
+WMHost* WMGetHostWithName(char* name);
+
+WMHost* WMGetHostWithAddress(char* address);
+
+WMHost* WMRetainHost(WMHost *hPtr);
+
+void WMReleaseHost(WMHost *hPtr);
+
+/*
+ * Host cache management
+ * If enabled, only one object representing each host will be created, and
+ * a shared instance will be returned by all methods that return a host.
+ * Enabled by default.
+ */
+void WMSetHostCacheEnabled(Bool flag);
+
+Bool WMIsHostCacheEnabled();
+
+void WMFlushHostCache();
+
+/*
+ * Compare hosts: Hosts are equal if they share at least one address
+ */
+Bool WMIsHostEqualToHost(WMHost* hPtr, WMHost* anotherHost);
+
+/*
+ * Host names.
+ * WMGetHostName() will return first name (official) if a host has several.
+ * WMGetHostNames() will return a R/O WMBag with all the names of the host.
+ */
+char* WMGetHostName(WMHost* hPtr);
+
+/* The returned bag is R/O. Do not modify it, and do not free it! */
+WMBag* WMGetHostNames(WMHost* hPtr);
+
+/*
+ * Host addresses.
+ * Addresses are represented as "Dotted Decimal" strings, e.g. "192.42.172.1"
+ * WMGetHostAddress() will return an arbitrary address if a host has several.
+ * WMGetHostAddresses() will return a R/O WMBag with all addresses of the host.
+ */
+char* WMGetHostAddress(WMHost* hPtr);
+
+/* The returned bag is R/O. Do not modify it, and do not free it! */
+WMBag* WMGetHostAddresses(WMHost* hPtr);
+
+
+/*-------------------------------------------------------------------------*/
+
+/* WMConnection functions */
+
+WMConnection* WMCreateConnectionAsServerAtAddress(char *host, char *service,
+                                                  char *protocol);
+
+WMConnection* WMCreateConnectionToAddress(char *host, char *service,
+                                          char *protocol);
+
+WMConnection* WMCreateConnectionToAddressAndNotify(char *host, char *service,
+                                                   char *protocol);
+
+void WMCloseConnection(WMConnection *cPtr);
+
+void WMDestroyConnection(WMConnection *cPtr);
+
+WMConnection* WMAcceptConnection(WMConnection *listener);
+
+/* Release the returned data! */
+WMData* WMGetConnectionAvailableData(WMConnection *cPtr);
+
+int WMSendConnectionData(WMConnection *cPtr, WMData *data);
+
+Bool WMEnqueueConnectionData(WMConnection *cPtr, WMData *data);
+
+#define WMFlushConnection(cPtr)  WMSendConnectionData((cPtr), NULL)
+
+void WMSetConnectionDelegate(WMConnection *cPtr, ConnectionDelegate *delegate);
+
+/* Connection info */
+
+char* WMGetConnectionAddress(WMConnection *cPtr);
+
+char* WMGetConnectionService(WMConnection *cPtr);
+
+char* WMGetConnectionProtocol(WMConnection *cPtr);
+
+void WMSetConnectionNonBlocking(WMConnection *cPtr, Bool flag);
+
+void* WMGetConnectionClientData(WMConnection *cPtr);
+
+void WMSetConnectionClientData(WMConnection *cPtr, void *data);
+
+unsigned int WMGetConnectionFlags(WMConnection *cPtr);
+
+void WMSetConnectionFlags(WMConnection *cPtr, unsigned int flags);
+
+int WMGetConnectionSocket(WMConnection *cPtr);
+
+WMConnectionState WMGetConnectionState(WMConnection *cPtr);
+
+void WMSetConnectionSendTimeout(WMConnection *cPtr, unsigned int timeout);
+
+
+/* Global variables */
+
+extern int WCErrorCode;
+
+
+/*-------------------------------------------------------------------------*/
 
 
 

@@ -36,11 +36,8 @@ typedef struct {
     WMSize size;
 } WMRect;
 
-typedef struct {
-    int position;
-    int count;
-} WMRange;
 
+/* WMRange was moved in WUtil.h */
 
 #define ClientMessageMask	(1L<<30)
 

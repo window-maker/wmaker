@@ -36,6 +36,7 @@ changes since wmaker 0.61.1:
 - added wstrerror(int errnum) to return the string associated with errnum.
 - new wsyserrorwithcode(int error, const char* fmt, ...), similar to 
   wsyserror(), but printing the message for the specified error code.
+- added 3 new classes: WMData, WMHost and WMConnection
 
 changes since wmaker 0.61.0:
 ............................
