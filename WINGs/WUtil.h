@@ -333,11 +333,7 @@ extern const WMHashTableCallbacks WMStringPointerHashCallbacks;
  * 	aren't in the end
  * Element indexes with large difference will cause large holes
  */
-#if 0
-WMBag* WMCreateArrayBag(int initialSize);
-WMBag* WMCreateArrayBagWithDestructor(int initialSize, 
-				      void (*destructor)(void*));
-#endif
+
 /*
  * Tree bags use a red-black tree for storage.
  * Item indexes may be any integer number.
@@ -415,7 +411,6 @@ void* WMBagPrevious(WMBag *self, WMBagIterator *ptr);
 void* WMBagIteratorAtIndex(WMBag *self, int index, WMBagIterator *ptr);
 
 int WMBagIndexForIterator(WMBag *bag, WMBagIterator ptr);
-
 
 
 #define WM_ITERATE_BAG(bag, var, i) \

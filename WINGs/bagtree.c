@@ -30,31 +30,6 @@ typedef struct W_Bag {
 } W_Bag;
 
 
-#if 0
-static int getItemCount(WMBag *self);
-static int appendBag(WMBag *self, WMBag *bag);
-static int putInBag(WMBag *self, void *item);
-static int insertInBag(WMBag *self, int index, void *item);
-static int removeFromBag(WMBag *bag, void *item);
-static int eraseFromBag(WMBag *bag, int index);
-static int deleteFromBag(WMBag *bag, int index);
-static void *getFromBag(WMBag *bag, int index);
-static int countInBag(WMBag *bag, void *item);
-static int firstInBag(WMBag *bag, void *item);
-static void *replaceInBag(WMBag *bag, int index, void *item);
-static int sortBag(WMBag *bag, int (*comparer)(const void*, const void*));
-static void emptyBag(WMBag *bag);
-static void freeBag(WMBag *bag);
-static void mapBag(WMBag *bag, void (*function)(void*, void*), void *data);
-static int findInBag(WMBag *bag, int (*match)(void*,void*), void *data);
-static void *first(WMBag *bag, WMBagIterator *ptr);
-static void *last(WMBag *bag, WMBagIterator *ptr);
-static void *next(WMBag *bag, WMBagIterator *ptr);
-static void *previous(WMBag *bag, WMBagIterator *ptr);
-static void *iteratorAtIndex(WMBag *bag, int index, WMBagIterator *ptr);
-static int indexForIterator(WMBag *bag, WMBagIterator ptr);
-#endif
-
 
 #define IS_LEFT(node) (node == node->parent->left)
 #define IS_RIGHT(node) (node == node->parent->right)
@@ -382,7 +357,8 @@ treeFind(W_Node *root, W_Node *nil, void *data)
 #if 0
 static char buf[512];
 
-static void printNodes(W_Node *node, W_Node *nil, int depth)
+static void
+printNodes(W_Node *node, W_Node *nil, int depth)
 {
     if (node == nil) {
         return;
@@ -401,7 +377,8 @@ static void printNodes(W_Node *node, W_Node *nil, int depth)
 }
 
 
-void PrintTree(WMBag *bag)
+void
+PrintTree(WMBag *bag)
 {
     W_TreeBag *tree = (W_TreeBag*)bag->data;
 
@@ -409,8 +386,6 @@ void PrintTree(WMBag *bag)
 }
 #endif
 
-
-//#define SELF ((W_TreeBag*)self->data)
 
 WMBag*
 WMCreateTreeBag(void)
@@ -462,13 +437,11 @@ WMAppendBag(WMBag *self, WMBag *bag)
     return 1;
 }
 
-//extern WMBag *bla;
 
 int
 WMPutInBag(WMBag *self, void *item)
 {
     W_Node *ptr;
-
 
     ptr = wmalloc(sizeof(W_Node));
 
