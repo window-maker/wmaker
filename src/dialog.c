@@ -1090,8 +1090,7 @@ handleLogoPush(XEvent *event, void *data)
         "WE GET SIGNAL",
         "SOMEBODY SET UP US THE BOMB",
         "ALL YOUR BASE ARE BELONG TO US!",
-        "Oh My God!!! Larry is back!",
-        "Hey! What happened with these messages?!?"
+        "Oh My God!!! Larry is back!"
     };
 
 

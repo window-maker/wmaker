@@ -36,9 +36,27 @@ typedef struct W_PropList {
 } W_PropList;
 
 
+typedef struct PLData {
+    char *ptr;
+    int pos;
+    char *filename;
+    int lineNumber;
+} PLData;
+
+
+typedef struct StringBuffer {
+    char *str;
+    int size;
+} StringBuffer;
 
 
 static unsigned hashPropList(WMPropList *plist);
+static WMPropList* getPLString(PLData *pldata);
+static WMPropList* getPLQString(PLData *pldata);
+static WMPropList* getPLData(PLData *pldata);
+static WMPropList* getPLArray(PLData *pldata);
+static WMPropList* getPLDictionary(PLData *pldata);
+static WMPropList* getPropList(PLData *pldata);
 
 
 
@@ -57,6 +75,41 @@ static const WMHashTableCallbacks WMPropListHashCallbacks = {
 
 
 static Bool caseSensitive = True;
+
+
+
+#define BUFFERSIZE           8192
+#define BUFFERSIZE_INCREMENT 1024
+
+
+#if 0
+# define DPUT(s) puts(s)
+#else
+# define DPUT(s)
+#endif
+
+#define COMPLAIN(pld, msg) wwarning(_("syntax error in %s %s, line %i: %s"),\
+    (pld)->filename ? "file" : "PropList",\
+    (pld)->filename ? (pld)->filename : "description",\
+    (pld)->lineNumber, msg)
+
+#define ISSTRINGABLE(c) (isalnum(c) || (c)=='.' || (c)=='_' || (c)=='/' \
+    || (c)=='+')
+
+#define CHECK_BUFFER_SIZE(buf, ptr) \
+    if ((ptr) >= (buf).size-1) {\
+      (buf).size += BUFFERSIZE_INCREMENT;\
+      (buf).str = wrealloc((buf).str, (buf).size);\
+    }
+
+
+#define inrange(ch, min, max) ((ch)>=(min) && (ch)<=(max))
+#define noquote(ch) (inrange(ch, 'a', 'z') || inrange(ch, 'A', 'Z') || inrange(ch, '0', '9') || ((ch)=='_') || ((ch)=='.') || ((ch)=='$'))
+#define charesc(ch) (inrange(ch, 0x07, 0x0c) || ((ch)=='"') || ((ch)=='\\'))
+#define numesc(ch) (((ch)<=0x06) || inrange(ch, 0x0d, 0x1f) || ((ch)>0x7e))
+#define ishexdigit(ch) (inrange(ch, 'a', 'f') || inrange(ch, 'A', 'F') || inrange(ch, '0', '9'))
+#define char2num(ch) (inrange(ch,'0','9') ? ((ch)-'0') : (inrange(ch,'a','f') ? ((ch)-0x57) : ((ch)-0x37)))
+#define num2char(num) ((num) < 0xa ? ((num)+'0') : ((num)+0x57))
 
 
 
@@ -187,8 +240,6 @@ releasePropListByCount(WMPropList *plist, int count)
 }
 
 
-#define num2char(num) ((num) < 0xa ? ((num)+'0') : ((num)+0x57))
-
 static char*
 dataDescription(WMPropList *plist)
 {
@@ -232,11 +283,6 @@ stringDescription(WMPropList *plist)
     }
 
     /* FIXME: make this work with unichars. */
-
-#define inrange(ch, min, max) ((ch)>=(min) && (ch)<=(max))
-#define noquote(ch) (inrange(ch, 'a', 'z') || inrange(ch, 'A', 'Z') || inrange(ch, '0', '9') || ((ch)=='_') || ((ch)=='.') || ((ch)=='$'))
-#define charesc(ch) (inrange(ch, 0x07, 0x0c) || ((ch)=='"') || ((ch)=='\\'))
-#define numesc(ch) (((ch)<=0x06) || inrange(ch, 0x0d, 0x1f) || ((ch)>0x7e))
 
     quote = 0;
     sPtr = (char*) str;
@@ -420,6 +466,423 @@ indentedDescription(WMPropList *plist, int level)
     }
 
     return retstr;
+}
+
+
+static INLINE int
+getChar(PLData *pldata)
+{
+    int c;
+
+    c = pldata->ptr[pldata->pos];
+    if (c==0) {
+        return 0;
+    }
+
+    pldata->pos++;
+
+    if (c == '\n')
+        pldata->lineNumber++;
+
+    return c;
+}
+
+
+static INLINE int
+getNonSpaceChar(PLData *pldata)
+{
+    int c;
+
+    while (1) {
+        c = pldata->ptr[pldata->pos];
+        if (c==0) {
+            break;
+        }
+        pldata->pos++;
+        if (c == '\n') {
+            pldata->lineNumber++;
+        } else if (!isspace(c)) {
+            break;
+        }
+    }
+
+    return c;
+}
+
+
+static char*
+unescapestr(char *src)
+{
+    char *dest = wmalloc(strlen(src)+1);
+    char *sPtr, *dPtr;
+    char ch;
+
+
+    for (sPtr=src, dPtr=dest; *sPtr;  sPtr++, dPtr++) {
+        if(*sPtr != '\\') {
+            *dPtr = *sPtr;
+        } else {
+            ch = *(++sPtr);
+            if((ch>='0') && (ch<='3')) {
+                /* assume next 2 chars are octal too */
+                *dPtr = ((ch & 07) << 6);
+                *dPtr |= ((*(++sPtr)&07)<<3);
+                *dPtr |= *(++sPtr)&07;
+            } else {
+                switch(ch) {
+                case 'a' : *dPtr = '\a'; break;
+                case 'b' : *dPtr = '\b'; break;
+                case 't' : *dPtr = '\t'; break;
+                case 'r' : *dPtr = '\r'; break;
+                case 'n' : *dPtr = '\n'; break;
+                case 'v' : *dPtr = '\v'; break;
+                case 'f' : *dPtr = '\f'; break;
+                default  : *dPtr = *sPtr;
+                }
+            }
+        }
+    }
+
+    *dPtr = 0;
+
+    return dest;
+}
+
+
+static WMPropList*
+getPLString(PLData *pldata)
+{
+    WMPropList *plist;
+    StringBuffer sBuf;
+    int ptr = 0;
+    int c;
+
+    sBuf.str = wmalloc(BUFFERSIZE);
+    sBuf.size = BUFFERSIZE;
+
+    while (1) {
+        c = getChar(pldata);
+        if (ISSTRINGABLE(c)) {
+            CHECK_BUFFER_SIZE(sBuf, ptr);
+            sBuf.str[ptr++] = c;
+        } else {
+            if (c != 0) {
+                pldata->pos--;
+            }
+            break;
+        }
+    }
+
+    sBuf.str[ptr] = 0;
+
+    if (ptr == 0) {
+        plist = NULL;
+    } else {
+        char *tmp = unescapestr(sBuf.str);
+        plist = WMPLCreateString(tmp);
+        wfree(tmp);
+    }
+
+    wfree(sBuf.str);
+
+    return plist;
+}
+
+
+static WMPropList*
+getPLQString(PLData *pldata)
+{
+    WMPropList *plist;
+    int ptr = 0, escaping = 0, ok = 1;
+    int c;
+    StringBuffer sBuf;
+
+    sBuf.str = wmalloc(BUFFERSIZE);
+    sBuf.size = BUFFERSIZE;
+
+    while (1) {
+        c = getChar(pldata);
+        if (!escaping) {
+            if (c == '\\') {
+                escaping = 1;
+                continue;
+            } else if (c == '"') {
+                break;
+            }
+        } else {
+            CHECK_BUFFER_SIZE(sBuf, ptr);
+            sBuf.str[ptr++] = '\\';
+            escaping = 0;
+        }
+
+        if (c == 0) {
+            COMPLAIN(pldata, _("unterminated PropList string"));
+            ok = 0;
+            break;
+        } else {
+            CHECK_BUFFER_SIZE(sBuf, ptr);
+            sBuf.str[ptr++] = c;
+        }
+    }
+
+    sBuf.str[ptr] = 0;
+
+    if (!ok) {
+        plist = NULL;
+    } else {
+        char *tmp = unescapestr(sBuf.str);
+        plist = WMPLCreateString(tmp);
+        wfree(tmp);
+    }
+
+    wfree(sBuf.str);
+
+    return plist;
+}
+
+
+static WMPropList*
+getPLData(PLData *pldata)
+{
+    int ok = 1;
+    int len = 0;
+    int c1, c2;
+    unsigned char buf[BUFFERSIZE], byte;
+    WMPropList *plist;
+    WMData *data;
+
+    data = WMCreateDataWithCapacity(0);
+
+    while (1) {
+        c1 = getNonSpaceChar(pldata);
+        if (c1 == 0) {
+            COMPLAIN(pldata, _("unterminated PropList data"));
+            ok = 0;
+            break;
+        } else if (c1=='>') {
+            break;
+        } else if (ishexdigit(c1)) {
+            c2 = getNonSpaceChar(pldata);
+            if (c2==0 || c2=='>') {
+                COMPLAIN(pldata, _("unterminated PropList data (missing hexdigit)"));
+                ok = 0;
+                break;
+            } else if (ishexdigit(c2)) {
+                byte = char2num(c1) << 4;
+                byte |= char2num(c2);
+                buf[len++] = byte;
+                if (len == sizeof(buf)) {
+                    WMAppendDataBytes(data, buf, len);
+                    len = 0;
+                }
+            } else {
+                COMPLAIN(pldata, _("non hexdigit character in PropList data"));
+                ok = 0;
+                break;
+            }
+        }
+    }
+
+    if (!ok) {
+        WMReleaseData(data);
+        return NULL;
+    }
+
+    if (len > 0)
+        WMAppendDataBytes(data, buf, len);
+
+    plist = WMPLCreateData(data);
+    WMReleaseData(data);
+
+    return plist;
+}
+
+
+static WMPropList*
+getPLArray(PLData *pldata)
+{
+    Bool first = True;
+    int ok=1;
+    int c;
+    WMPropList *array, *obj;
+
+    array = WMPLCreateArray(NULL);
+
+    while (1) {
+        c = getNonSpaceChar(pldata);
+        if (c == 0) {
+            COMPLAIN(pldata, _("unterminated PropList array"));
+            ok = 0;
+            break;
+        } else if (c == ')') {
+            break;
+        } else if (c == ',') {
+            /* continue normally */
+        } else if (!first) {
+            COMPLAIN(pldata, _("missing , or unterminated PropList array"));
+            ok = 0;
+            break;
+        } else {
+            pldata->pos--;
+        }
+        first = False;
+
+        obj = getPropList(pldata);
+        if (!obj) {
+            COMPLAIN(pldata, _("could not get PropList array element"));
+            ok = 0;
+            break;
+        }
+        WMPLAddToArray(array, obj);
+        WMPLRelease(obj);
+    }
+
+    if (!ok) {
+        WMPLRelease(array);
+        array = NULL;
+    }
+
+    return array;
+}
+
+
+static WMPropList*
+getPLDictionary(PLData *pldata)
+{
+    int ok = 1;
+    int c;
+    WMPropList *dict, *key, *value;
+
+    dict = WMPLCreateDictionary(NULL, NULL);
+
+    while (1) {
+        c = getNonSpaceChar(pldata);
+        if (c==0) {
+            COMPLAIN(pldata, _("unterminated PropList dictionary"));
+            ok = 0;
+            break;
+        } else if (c=='}') {
+            break;
+        }
+
+        DPUT("getting PropList dictionary key");
+        if (c == '<') {
+            key = getPLData(pldata);
+        } else if (c == '"') {
+            key = getPLQString(pldata);
+        } else if (ISSTRINGABLE(c)) {
+            pldata->pos--;
+            key = getPLString(pldata);
+        } else {
+            if (c == '=') {
+                COMPLAIN(pldata, _("missing PropList dictionary key"));
+            } else {
+                COMPLAIN(pldata, _("missing PropList dictionary entry key "
+                                   "or unterminated dictionary"));
+            }
+            ok = 0;
+            break;
+        }
+
+        if (!key) {
+            COMPLAIN(pldata, _("error parsing PropList dictionary key"));
+            ok = 0;
+            break;
+        }
+
+        c = getNonSpaceChar(pldata);
+        if (c != '=') {
+            WMPLRelease(key);
+            COMPLAIN(pldata, _("missing = in PropList dictionary entry"));
+            ok = 0;
+            break;
+        }
+
+        DPUT("getting PropList dictionary entry value for key");
+        value = getPropList(pldata);
+        if (!value) {
+            COMPLAIN(pldata, _("error parsing PropList dictionary entry value"));
+            WMPLRelease(key);
+            ok = 0;
+            break;
+        }
+
+        c = getNonSpaceChar(pldata);
+        if (c != ';') {
+            COMPLAIN(pldata, _("missing ; in PropList dictionary entry"));
+            WMPLRelease(key);
+            WMPLRelease(value);
+            ok = 0;
+            break;
+        }
+
+        WMPLPutInDictionary(dict, key, value);
+        WMPLRelease(key);
+        WMPLRelease(value);
+    }
+
+    if (!ok) {
+        WMPLRelease(dict);
+        dict = NULL;
+    }
+
+    return dict;
+}
+
+
+static WMPropList*
+getPropList(PLData *pldata)
+{
+    WMPropList *plist;
+    int c;
+
+    c = getNonSpaceChar(pldata);
+
+    switch(c) {
+    case 0:
+        DPUT("End of PropList");
+        plist = NULL;
+        break;
+
+    case '{':
+        DPUT("Getting PropList dictionary");
+        plist = getPLDictionary(pldata);
+        break;
+
+    case '(':
+        DPUT("Getting PropList srrsy");
+        plist = getPLArray(pldata);
+        break;
+
+    case '<':
+        DPUT("Getting PropList data");
+        plist = getPLData(pldata);
+        break;
+
+    case '"':
+        DPUT("Getting PropList quoted string");
+        plist = getPLQString(pldata);
+        break;
+
+    default:
+        if (ISSTRINGABLE(c)) {
+            DPUT("Getting PropList string");
+            pldata->pos--;
+            plist = getPLString(pldata);
+        } else {
+            COMPLAIN(pldata, _("was expecting a string, data, array or "
+                               "dictionary. If it's a string, try enclosing "
+                               "it with \"."));
+            if (c=='#' || c=='/') {
+                wwarning(_("Comments are not allowed inside WindowMaker owned"
+                           " domain files."));
+            }
+            plist = NULL;
+        }
+        break;
+    }
+
+    return plist;
 }
 
 
@@ -940,7 +1403,7 @@ Bool
 WMPLWriteToFile(WMPropList *plist, char *path, Bool atomically)
 {
     char *thePath=NULL;
-    char *description;
+    char *desc;
     FILE *theFile;
 
     if (atomically) {
@@ -981,15 +1444,15 @@ WMPLWriteToFile(WMPropList *plist, char *path, Bool atomically)
         goto failure;
     }
 
-    description = indentedDescription(plist, 0);
+    desc = indentedDescription(plist, 0);
 
-    if (fprintf(theFile, "%s\n", description) != strlen(description)+1) {
+    if (fprintf(theFile, "%s\n", desc) != strlen(desc)+1) {
         wsyserror(_("writing to file: %s failed"), thePath);
-        wfree(description);
+        wfree(desc);
         goto failure;
     }
 
-    wfree(description);
+    wfree(desc);
 
     if (fclose(theFile) != 0) {
         wsyserror(_("fclose (%s) failed"), thePath);
@@ -1110,5 +1573,94 @@ WMPLDuplicate(WMPropList *plist)
 }
 
 
+WMPropList*
+WMPLGetWithDescription(char *desc)
+{
+    WMPropList *plist = NULL;
+    PLData *pldata;
+
+    pldata = (PLData*) wmalloc(sizeof(PLData));
+    memset(pldata, 0, sizeof(PLData));
+    pldata->ptr = desc;
+    pldata->lineNumber = 1;
+
+    plist = getPropList(pldata);
+
+    if (getNonSpaceChar(pldata)!=0 && plist) {
+        COMPLAIN(pldata, _("extra data after end of property list"));
+        /*
+         * We can't just ignore garbage after the end of the description
+         * (especially if the description was read from a file), because
+         * the "garbage" can be the real data and the real garbage is in
+         * fact in the beginning of the file (which is now inside plist)
+         */
+        WMPLRelease(plist);
+        plist = NULL;
+    }
+
+    wfree(pldata);
+
+    return plist;
+}
+
+
+WMPropList*
+WMPLReadFromFile(char *file)
+{
+    WMPropList *plist = NULL;
+    PLData *pldata;
+    FILE *f;
+    struct stat stbuf;
+    size_t length;
+
+    f = fopen(file, "r");
+    if (!f) {
+        wsyserror(_("could not open domain file %s for reading"), file);
+        return NULL;
+    }
+
+    if (stat(file, &stbuf)==0) {
+        length = (size_t) stbuf.st_size;
+    } else {
+        wsyserror(_("could not get size for domain file %s"), file);
+        fclose(f);
+        return NULL;
+    }
+
+    pldata = (PLData*) wmalloc(sizeof(PLData));
+    memset(pldata, 0, sizeof(PLData));
+    pldata->ptr = (char*) wmalloc(length+1);
+    pldata->filename = file;
+    pldata->lineNumber = 1;
+
+    if (fread(pldata->ptr, length, 1, f) != 1) {
+        wsyserror(_("error reading from file %s"), file);
+        plist = NULL;
+        goto cleanup;
+    }
+
+    pldata->ptr[length] = 0;
+
+    plist = getPropList(pldata);
+
+    if (getNonSpaceChar(pldata)!=0 && plist) {
+        COMPLAIN(pldata, _("extra data after end of property list"));
+        /*
+         * We can't just ignore garbage after the end of the description
+         * (especially if the description was read from a file), because
+         * the "garbage" can be the real data and the real garbage is in
+         * fact in the beginning of the file (which is now inside plist)
+         */
+        WMPLRelease(plist);
+        plist = NULL;
+    }
+
+cleanup:
+    wfree(pldata->ptr);
+    wfree(pldata);
+    fclose(f);
+
+    return plist;
+}
 
 

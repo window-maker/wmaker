@@ -809,6 +809,10 @@ WMPropList* WMPLShallowCopy(WMPropList *plist);
 
 WMPropList* WMPLDuplicate(WMPropList *plist);
 
+WMPropList* WMPLGetWithDescription(char *desc);
+
+WMPropList* WMPLReadFromFile(char *file);
+
 /*......................................................................*/
 
 WMUserDefaults* WMGetStandardUserDefaults(void);
