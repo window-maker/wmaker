@@ -184,7 +184,7 @@ if test "$ac_cv_prog_gcc" = yes; then
     esac
     changequote([,])dnl
 
-    if $host_os != "linux"; then
+    if  test "$host_os" != "linux" -a "$host_os" != "linux-gnu" ; then
 	x86=0
     fi
 
@@ -864,6 +864,7 @@ AC_OUTPUT(Makefile po/Makefile util/Makefile test/Makefile wmlib/Makefile \
 	WindowMaker/Styles/Makefile WindowMaker/Themes/Makefile \
 	WPrefs.app/Makefile WPrefs.app/tiff/Makefile WPrefs.app/xpm/Makefile \
 	WPrefs.app/po/Makefile contrib/WindowMaker.spec )
+#	plugins/Makefile plugins/libwmfun/Makefile)
 
 
 

@@ -186,7 +186,7 @@ WMFreeHashTable(WMHashTable *table)
 
 
 
-const void*
+void*
 WMHashGet(WMHashTable *table, const void *key)
 {
     unsigned h;
@@ -211,14 +211,14 @@ WMHashGet(WMHashTable *table, const void *key)
 	}
     }
     if (item)
-	return item->data;
+	return (void*)item->data;
     else
 	return NULL;
 }
 
 
 
-const void*
+void*
 WMHashInsert(WMHashTable *table, const void *key, const void *data)
 {
     unsigned h;
@@ -254,7 +254,7 @@ WMHashInsert(WMHashTable *table, const void *key, const void *data)
 	RELKEY(table, item->key);
 	item->key = DUPKEY(table, key);
 
-	return old;
+	return (void*)old;
     } else {
 	HashItem *nitem;
 
@@ -334,7 +334,7 @@ WMEnumerateHashTable(WMHashTable *table)
 
 
 
-const void*
+void*
 WMNextHashEnumeratorItem(WMHashEnumerator *enumerator)
 {
     const void *data = NULL;
@@ -357,7 +357,7 @@ WMNextHashEnumeratorItem(WMHashEnumerator *enumerator)
 	enumerator->nextItem = ((HashItem*)enumerator->nextItem)->next;
     }
     
-    return data;
+    return (void*)data;
 }
 
 

@@ -294,18 +294,18 @@ void WMFreeHashTable(WMHashTable *table);
 
 void WMResetHashTable(WMHashTable *table);
 
-const void* WMHashGet(WMHashTable *table, const void *key);
+void* WMHashGet(WMHashTable *table, const void *key);
 
 /* put data in table, replacing already existing data and returning
  * the old value */
-const void* WMHashInsert(WMHashTable *table, const void *key, const void *data);
+void* WMHashInsert(WMHashTable *table, const void *key, const void *data);
 
 void WMHashRemove(WMHashTable *table, const void *key);
 
 /* warning: do not manipulate the table while using these functions */
 WMHashEnumerator WMEnumerateHashTable(WMHashTable *table);
 
-const void* WMNextHashEnumeratorItem(WMHashEnumerator *enumerator);
+void* WMNextHashEnumeratorItem(WMHashEnumerator *enumerator);
 
 unsigned WMCountHashTable(WMHashTable *table);
 
