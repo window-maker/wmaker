@@ -597,9 +597,6 @@
  * More icons are welcome.
  */
 #undef XKB_BUTTON_HINT
-#undef XKB_TITLE_HINT
-#define XKB_ON "[TH]"
-#define XKB_OFF "[EN]"
 #endif
 
 #ifndef DEMATERIALIZE_ICON
