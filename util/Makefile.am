@@ -35,7 +35,7 @@ wmsetbg_LDADD = \
 	$(top_builddir)/wrlib/libwraster.la \
 	@LIBRARY_SEARCH_PATH@ \
 	@LIBPL@ \
-	@GFXLIBS@ @XLIBS@ -lm
+	@GFXLIBS@ @XLIBS@ @DLLIBS@ -lm
 
 getstyle_SOURCES = getstyle.c
 

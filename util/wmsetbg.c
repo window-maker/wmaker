@@ -38,6 +38,12 @@
 #include <sys/types.h>
 #include <ctype.h>
 
+#include "../src/config.h"
+
+#ifdef HAVE_DLFCN_H
+#include <dlfcn.h>
+#endif
+
 #include "../src/wconfig.h"
 
 #include "../WINGs/WINGs.h"
@@ -118,15 +124,14 @@ parseTexture(RContext *rc, char *text)
     char *tmp;
     char *type;
 
-#define GETSTR(val, str, i) \
+#define GETSTRORGOTO(val, str, i, label) \
 		val = PLGetArrayElement(texarray, i);\
 		if (!PLIsString(val)) {\
 			wwarning("could not parse texture %s", text);\
-			goto error;\
+			goto label;\
 		}\
 		str = PLGetString(val)
 
-    
     texarray = PLGetProplistWithDescription(text);
     if (!texarray || !PLIsArray(texarray) 
 	|| (count = PLGetNumberOfElements(texarray)) < 2) {
@@ -140,7 +145,7 @@ parseTexture(RContext *rc, char *text)
     texture = wmalloc(sizeof(BackgroundTexture));
     memset(texture, 0, sizeof(BackgroundTexture));
 
-    GETSTR(val, type, 0);
+    GETSTRORGOTO(val, type, 0, error);
 
     if (strcasecmp(type, "solid")==0) {
 	XColor color;
@@ -148,7 +153,7 @@ parseTexture(RContext *rc, char *text)
 
 	texture->solid = 1;
 	
-	GETSTR(val, tmp, 1);
+	GETSTRORGOTO(val, tmp, 1, error);
 
 	if (!XParseColor(dpy, DefaultColormap(dpy, scr), tmp, &color)) {
 	    wwarning("could not parse color %s in texture %s", tmp, text);
@@ -174,7 +179,7 @@ parseTexture(RContext *rc, char *text)
 	int gtype;
 	int iwidth, iheight;
 
-	GETSTR(val, tmp, 1);
+	GETSTRORGOTO(val, tmp, 1, error);
 
 	if (!XParseColor(dpy, DefaultColormap(dpy, scr), tmp, &color)) {
 	    wwarning("could not parse color %s in texture %s", tmp, text);
@@ -185,7 +190,7 @@ parseTexture(RContext *rc, char *text)
 	color1.green = color.green >> 8;
 	color1.blue = color.blue >> 8;
 
-	GETSTR(val, tmp, 2);
+	GETSTRORGOTO(val, tmp, 2, error);
 
 	if (!XParseColor(dpy, DefaultColormap(dpy, scr), tmp, &color)) {
 	    wwarning("could not parse color %s in texture %s", tmp, text);
@@ -343,7 +348,7 @@ parseTexture(RContext *rc, char *text)
 	int w, h;
 	int iwidth, iheight;
 
-	GETSTR(val, tmp, 1);
+	GETSTRORGOTO(val, tmp, 1, error);
 /*
 	if (toupper(type[0]) == 'T' || toupper(type[0]) == 'C')
 	    pixmap = LoadJPEG(rc, tmp, &iwidth, &iheight);
@@ -358,7 +363,7 @@ parseTexture(RContext *rc, char *text)
 	    iheight = image->height;
 	}
 
-	GETSTR(val, tmp, 2);
+	GETSTRORGOTO(val, tmp, 2, error);
 
 	if (!XParseColor(dpy, DefaultColormap(dpy, scr), tmp, &color)) {
 	    wwarning("could not parse color %s in texture %s\n", tmp, text);
@@ -486,13 +491,13 @@ parseTexture(RContext *rc, char *text)
 	int gtype;
 	int twidth, theight;
 
-	GETSTR(val, file, 1);
+	GETSTRORGOTO(val, file, 1, error);
 
-	GETSTR(val, tmp, 2);
+	GETSTRORGOTO(val, tmp, 2, error);
 
 	opaq = atoi(tmp);
 
-	GETSTR(val, tmp, 3);
+	GETSTRORGOTO(val, tmp, 3, error);
 
 	if (!XParseColor(dpy, DefaultColormap(dpy, scr), tmp, &color)) {
 	    wwarning("could not parse color %s in texture %s", tmp, text);
@@ -503,7 +508,7 @@ parseTexture(RContext *rc, char *text)
 	color1.green = color.green >> 8;
 	color1.blue = color.blue >> 8;
 
-	GETSTR(val, tmp, 4);
+	GETSTRORGOTO(val, tmp, 4, error);
 
 	if (!XParseColor(dpy, DefaultColormap(dpy, scr), tmp, &color)) {
 	    wwarning("could not parse color %s in texture %s", tmp, text);
@@ -573,6 +578,86 @@ parseTexture(RContext *rc, char *text)
 	RDestroyImage(tiled);
 
 	texture->pixmap = pixmap;	
+    } else if (strcasecmp(type, "function")==0) {
+#ifdef HAVE_DLFCN_H
+	void (*initFunc) (Display*, Colormap);
+	RImage* (*mainFunc) (int, char**, int, int, int);
+	Pixmap pixmap;
+	RImage *image = 0;
+	int success = 0;
+	char *lib, *func, **argv = 0;
+	void *handle = 0;
+	int i, argc;
+
+        if (count < 3)
+	    goto function_cleanup;
+
+	/* get the library name */
+	GETSTRORGOTO(val, lib, 1, function_cleanup);
+
+	/* get the function name */
+	GETSTRORGOTO(val, func, 2, function_cleanup);
+
+	argc = count - 2;
+	argv = (char**)wmalloc(argc * sizeof(char*));
+
+	/* get the parameters */
+	argv[0] = func;
+	for (i=0; i<argc-1; i++) {
+	    GETSTRORGOTO(val, tmp, 3+i, function_cleanup);
+	    argv[i+1] = wstrdup(tmp);
+	}
+
+	handle = dlopen(lib, RTLD_LAZY);
+	if (!handle) {
+            wwarning(_("could not find library %s"), lib);
+	    goto function_cleanup;
+	}
+
+	initFunc = dlsym(handle, "initWindowMaker");
+        if (!initFunc) {
+	    wwarning(_("could not initialize library %s"), lib);
+	    goto function_cleanup;
+        }
+        initFunc(dpy, DefaultColormap(dpy, scr));
+
+        mainFunc = dlsym(handle, func);
+        if (!mainFunc) {
+            wwarning(_("could not find function %s::%s"), lib, func);
+	    goto function_cleanup;
+        }
+        image = mainFunc(argc, argv, scrWidth, scrHeight, 0);
+
+        if (!RConvertImage(rc, image, &pixmap)) {
+	    wwarning("could not convert texture:%s", 
+	        RMessageForError(RErrorCode));
+	    goto function_cleanup;
+	}
+	texture->width = scrWidth;
+        texture->height = scrHeight;
+	texture->pixmap = pixmap;	
+        success = 1;
+
+function_cleanup:
+        if (argv) {
+	    int i;
+	    for (i=0; i<argc; i++) {
+	        free(argv[i]);
+	    }
+	}
+	if (handle) {
+	    dlclose(handle);
+	}
+	if (image) {
+            RDestroyImage(image);
+	}
+	if (!success) {
+	    goto error;
+	}
+#else
+	wwarning("function textures not supported");
+	goto error;
+#endif
     } else {
 	wwarning("invalid texture type %s", text);
 	goto error;

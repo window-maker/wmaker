@@ -1,3 +1,10 @@
+Changes since version 0.52.0:
+.............................
+
+- patched wmsetbg to work with dynamically loadable texture renderer code
+- added libwmfun to distribution (forgot to do so in 0.52.0)
+
+
 Changes since version 0.51.2:
 .............................
 
@@ -14,7 +21,8 @@ Changes since version 0.51.2:
 - enhancements to the modelock patch (id@windowmaker.org)
 - show kbd mode for modelock  (id@windowmaker.org)
 - enhanced positioning of transient windows
-- added dynamically loadable texture renderer code (from ?)
+- added dynamically loadable texture renderer code
+  from Tobias Gloth <gloth@online.de>
 - added DisableMiniwindows option
 - kde: miniaturize animation will match the taskbar icon (KWM_WIN_ICON_GEOMETRY)
 - miniwindows show the title of the window if there is none set for it
