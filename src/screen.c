@@ -448,7 +448,11 @@ createPixmaps(WScreen *scr)
 	RDestroyImage(image);
     }
 
-	scr->dock_dots = make3Dots(scr);
+#ifdef HIDDENDOT
+    if (!wPreferences.flags.nodock || !wPreferences.flags.noclip) {
+	    scr->dock_dots = make3Dots(scr);
+    }
+#endif
 
 #ifndef NEWSTUFF
     /* titlebar button pixmaps */
