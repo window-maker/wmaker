@@ -10,6 +10,13 @@
 #include <string.h>
 
 
+
+/* XXX TODO */
+char *WMFontPanelFontChangedNotification = "WMFontPanelFontChangedNotification";
+
+
+
+
 typedef struct W_FontPanel {
     WMWindow *win;
 
@@ -26,6 +33,9 @@ typedef struct W_FontPanel {
     WMLabel *sizL;
     WMTextField *sizT;
     WMList *sizLs;
+
+    WMAction2 *action;
+    void *data;
 
     WMButton *revertB;
     WMButton *setB;
@@ -150,6 +160,26 @@ closeWindow(WMWidget *w, void *data)
 
 
 
+
+static void
+setClickedAction(WMWidget *w, void *data)
+{
+    FontPanel *panel = (FontPanel*)data;
+    
+    if (panel->action)
+	(*panel->action)(panel, panel->data);
+}
+
+
+static void
+revertClickedAction(WMWidget *w, void *data)
+{
+    FontPanel *panel = (FontPanel*)data;
+    /* XXX TODO */
+}
+
+
+
 WMFontPanel*
 WMGetFontPanel(WMScreen *scr)
 {
@@ -250,11 +280,14 @@ WMGetFontPanel(WMScreen *scr)
     WMResizeWidget(panel->setB, 70, 24);
     WMMoveWidget(panel->setB, 240, DEF_HEIGHT - (BUTTON_SPACE_HEIGHT-5));
     WMSetButtonText(panel->setB, _("Set"));
+    WMSetButtonAction(panel->setB, setClickedAction, panel);
 
     panel->revertB = WMCreateCommandButton(panel->win);
     WMResizeWidget(panel->revertB, 70, 24);
     WMMoveWidget(panel->revertB, 80, DEF_HEIGHT - (BUTTON_SPACE_HEIGHT-5));
     WMSetButtonText(panel->revertB, _("Revert"));
+    WMSetButtonAction(panel->revertB, revertClickedAction, panel);
+
 
     WMRealizeWidget(panel->win);
 
@@ -347,6 +380,17 @@ WMGetFontPanelFontName(WMFontPanel *panel)
 
     return wstrdup(name);
 }
+
+
+
+void 
+WMSetFontPanelAction(WMFontPanel *panel, WMAction2 *action, void *data)
+{
+    panel->action = action;
+    panel->actionData = data;
+}
+
+
 
 
 
