@@ -79,7 +79,7 @@ wMessageDialog(WScreen *scr, char *title, char *message,
 			       defBtn, altBtn, othBtn);    
 
     parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 400, 180, 0, 0, 0);
-    
+
     XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
     wwin = wManageInternalWindow(scr, parent, None, NULL, 
@@ -88,15 +88,10 @@ wMessageDialog(WScreen *scr, char *title, char *message,
     wwin->client_leader = WMWidgetXID(panel->win);
 
     WMMapWidget(panel->win);
-    
+
     wWindowMap(wwin);
 
-    while (!panel->done) {
-	XEvent event;
-	
-	WMNextEvent(dpy, &event);
-	WMHandleEvent(&event);
-    }
+    WMRunModalLoop(WMWidgetScreen(panel->win), WMWidgetView(panel->win));
 
     result = panel->result;
 
@@ -121,7 +116,7 @@ wInputDialog(WScreen *scr, char *title, char *message, char **text)
     WMInputPanel *panel;
     char *result;
 
-    
+
     panel = WMCreateInputPanel(scr->wmscreen, NULL, title, message, *text,
 			       _("OK"), _("Cancel"));
 
@@ -138,16 +133,11 @@ wInputDialog(WScreen *scr, char *title, char *message, char **text)
     wwin->client_leader = WMWidgetXID(panel->win);
 
     WMMapWidget(panel->win);
-    
+
     wWindowMap(wwin);
-    
-    while (!panel->done) {
-	XEvent event;
-	
-	WMNextEvent(dpy, &event);
-	WMHandleEvent(&event);
-    }
-    
+
+    WMRunModalLoop(WMWidgetScreen(panel->win), WMWidgetView(panel->win));
+
     if (panel->result == WAPRDefault)
 	result = WMGetTextFieldText(panel->text);
     else
