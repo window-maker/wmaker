@@ -56,7 +56,7 @@ main(int argc, char **argv)
 	RColor col = {0,0,255,255};
 	
 	if (img->format == RRGBAFormat)
-	    puts("aklpha");
+	    puts("alpha");
 	else
 	    puts("no alpha");
 	
