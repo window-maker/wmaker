@@ -39,6 +39,7 @@ prefsdata_DATA =\
 	plmenu.fr\
 	plmenu.hr\
 	plmenu.it\
+	plmenu.ko\
 	plmenu.pl\
 	plmenu.zh_CN\
 	wmmacros\
