@@ -641,7 +641,7 @@ createPanel(Panel *p)
 
     // family
     panel->familyL = WMCreateList(vbox);
-    WMAddBoxSubview(vbox, WMWidgetView(panel->familyL), True, True, 0, 0, 4);
+    WMAddBoxSubview(vbox, WMWidgetView(panel->familyL), True, True, 0, 0, 0);
     if (panel->fonts)
     {
         WMListItem *item;
@@ -665,17 +665,17 @@ createPanel(Panel *p)
     WMAddBoxSubview(vbox, WMWidgetView(label), False, True, 20, 0, 2);
 
     panel->styleL = WMCreateList(vbox);
-    WMAddBoxSubview(vbox, WMWidgetView(panel->styleL), True, True, 0, 0, 4);
+    WMAddBoxSubview(vbox, WMWidgetView(panel->styleL), True, True, 0, 0, 0);
     WMSetListAction(panel->styleL, selected, panel);
     
 
 
     vbox = WMCreateBox(hbox);
     WMSetBoxHorizontal(vbox, False);
-    WMAddBoxSubview(hbox, WMWidgetView(vbox), False, True, 70, 0, 2);
+    WMAddBoxSubview(hbox, WMWidgetView(vbox), False, True, 70, 0, 0);
 
     label = createListLabel(scr, vbox, _("Size"));
-    WMAddBoxSubview(vbox, WMWidgetView(label), False, True, 20, 0, 0);
+    WMAddBoxSubview(vbox, WMWidgetView(label), False, True, 20, 0, 2);
 
     // size
     panel->sizeL = WMCreateList(vbox);
