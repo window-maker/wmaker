@@ -3520,10 +3520,16 @@ openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
 	wMenuRealize(dock->menu);
 
     if (dock->type == WM_CLIP) {
-	x_pos = event->xbutton.x_root+2;
+        /*x_pos = event->xbutton.x_root+2;*/
+        x_pos = event->xbutton.x_root - dock->menu->frame->core->width/2 - 1;
+        if (x_pos < 0) {
+            x_pos = 0;
+        } else if (x_pos + dock->menu->frame->core->width > scr->scr_width-2) {
+            x_pos = scr->scr_width - dock->menu->frame->core->width - 4;
+        }
     } else {
 	x_pos = dock->on_right_side ?
-	    scr->scr_width - dock->menu->frame->core->width - 2 : 0;
+	    scr->scr_width - dock->menu->frame->core->width - 3 : 0;
     }
 
     wMenuMapAt(dock->menu, x_pos, event->xbutton.y_root+2, False);

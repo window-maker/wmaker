@@ -3,7 +3,9 @@ Changes since version 0.80.1:
 
 - Some updates to WINGs WMConnection. See WINGs/ChangeLog for details.
 - Fixed empty window list menu, if the window list menu was launched through
-  the root menu ("Marc-Christian Petersen" <m.c.p@wolk-project.de>)
+  the root menu (sent by "Marc-Christian Petersen" <m.c.p@wolk-project.de>)
+- Fixed dock's menu mapping position when dock is on the right side.
+- Map clip's menu so that it never gets out of screen on the left or the right.
 
 
 Changes since version 0.80.0:
