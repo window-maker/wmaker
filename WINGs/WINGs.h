@@ -1059,8 +1059,7 @@ WMListItem *WMInsertListItem(WMList *lPtr, int row, char *text);
 
 void WMSortListItems(WMList *lPtr);
 
-void WMSortListItemsWithComparer(WMList *lPtr, 
-				 int (f)(const void*, const void*));
+void WMSortListItemsWithComparer(WMList *lPtr, WMCompareDataProc *func);
 
 int WMFindRowOfListItemWithTitle(WMList *lPtr, char *title);
 
@@ -1123,7 +1122,7 @@ WMListItem *WMInsertBrowserItem(WMBrowser *bPtr, int column, int row, char *text
 void WMSortBrowserColumn(WMBrowser *bPtr, int column);
 
 void WMSortBrowserColumnWithComparer(WMBrowser *bPtr, int column,
-				     int (f)(const void*, const void*));
+                                     WMCompareDataProc *func);
 
 /* Don't free the returned string. */
 char* WMSetBrowserPath(WMBrowser *bPtr, char *path);

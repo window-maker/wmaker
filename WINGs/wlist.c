@@ -152,9 +152,9 @@ WMSortListItems(WMList *lPtr)
 
 
 void
-WMSortListItemsWithComparer(WMList *lPtr, int (f)(const void*, const void*))
+WMSortListItemsWithComparer(WMList *lPtr, WMCompareDataProc *func)
 {
-    WMSortArray(lPtr->items, f);
+    WMSortArray(lPtr->items, func);
 
     paintList(lPtr);
 }

@@ -442,9 +442,9 @@ WMSortBrowserColumn(WMBrowser *bPtr, int column)
 
 void
 WMSortBrowserColumnWithComparer(WMBrowser *bPtr, int column,
-				int (f)(const void*, const void*))
+                                WMCompareDataProc *func)
 {
-    WMSortListItemsWithComparer(bPtr->columns[column], f);
+    WMSortListItemsWithComparer(bPtr->columns[column], func);
 }
 
 
