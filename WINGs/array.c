@@ -159,20 +159,6 @@ WMReplaceInArray(WMArray *array, unsigned index, void *item)
 }
 
 
-static void
-deleteFromArray(WMArray *array, unsigned index)
-{
-    /*wassertr(index < array->itemCount);*/
-
-    if (index < array->itemCount-1) {
-        memmove(array->items+index, array->items+index+1,
-                sizeof(void*)*(array->itemCount-index-1));
-    }
-
-    array->itemCount--;
-}
-
-
 int
 WMDeleteFromArray(WMArray *array, unsigned index)
 {
@@ -183,7 +169,12 @@ WMDeleteFromArray(WMArray *array, unsigned index)
         array->destructor(array->items[index]);
     }
 
-    deleteFromArray(array, index);
+    if (index < array->itemCount-1) {
+        memmove(array->items+index, array->items+index+1,
+                sizeof(void*)*(array->itemCount-index-1));
+    }
+
+    array->itemCount--;
 
     return 1;
 }
@@ -217,11 +208,9 @@ WMGetFromArray(WMArray *array, unsigned index)
 void*
 WMPopFromArray(WMArray *array)
 {
-    void *last = array->items[array->itemCount-1];
+    array->itemCount--;
 
-    deleteFromArray(array, array->itemCount-1);
-
-    return last;
+    return array->items[array->itemCount];
 }
 
 
