@@ -135,7 +135,6 @@ void
 WMSetListAllowMultipleSelection(WMList *lPtr, Bool flag)
 {
     lPtr->flags.allowMultipleSelection = flag ? 1 : 0;
-
 }
 
 
@@ -651,7 +650,11 @@ WMSelectListItem(WMList *lPtr, int row)
 
     if (!lPtr->flags.allowMultipleSelection) {
         /* unselect previous selected items */
+        int foo = lPtr->flags.allowEmptySelection;
+
+        lPtr->flags.allowEmptySelection = 1;
         WMUnselectAllListItems(lPtr);
+        lPtr->flags.allowEmptySelection = foo;
     }
 
     /* select item */
@@ -839,21 +842,19 @@ WMSelectAllListItems(WMList *lPtr)
 void
 WMUnselectAllListItems(WMList *lPtr)
 {
-    int i;//, keep;
-    WMListItem *item;//, *keepItem;
+    int i, keep;
+    WMListItem *item, *keepItem;
 
-    // FIXME: check for allowEmptySelection
+    keep = lPtr->flags.allowEmptySelection ? 0 : 1;
 
-    //keep = lPtr->flags.allowEmptySelection ? 0 : 1;
+    if (WMGetArrayItemCount(lPtr->selectedItems) == keep)
+        return;
 
-    //if (WMGetArrayItemCount(lPtr->selectedItems) == keep)
-    //    return 1; /* Nothing selected so return */
-
-    //keepItem = (keep==1 ? WMGetFromArray(lPtr->selectedItems, 0) : NULL);
+    keepItem = (keep==1 ? WMGetFromArray(lPtr->selectedItems, 0) : NULL);
 
     for (i=0; i<WMGetArrayItemCount(lPtr->items); i++) {
         item = WMGetFromArray(lPtr->items, i);
-        if (item->selected) {
+        if (item!=keepItem && item->selected) {
             item->selected = 0;
             if (lPtr->view->flags.mapped && i>=lPtr->topItem
                 && i<=lPtr->topItem+lPtr->fullFitLines) {
@@ -863,6 +864,9 @@ WMUnselectAllListItems(WMList *lPtr)
     }
 
     WMEmptyArray(lPtr->selectedItems);
+    if (keepItem!=NULL)
+        WMAddToArray(lPtr->selectedItems, keepItem);
+
     WMPostNotificationName(WMListSelectionDidChangeNotification, lPtr, NULL);
 }
 
@@ -878,6 +882,19 @@ getItemIndexAt(List *lPtr, int clickY)
         return -1;
 
     return index;
+}
+
+
+static void
+toggleItemSelection(WMList *lPtr, int index)
+{
+    WMListItem *item = WMGetFromArray(lPtr->items, index);
+
+    if (item && item->selected) {
+        WMUnselectListItem(lPtr, index);
+    } else {
+        WMSelectListItem(lPtr, index);
+    }
 }
 
 
@@ -955,18 +972,17 @@ handleActionEvents(XEvent *event, void *data)
                     (*lPtr->doubleAction)(lPtr, lPtr->doubleClientData);
             } else {
                 if (!lPtr->flags.allowMultipleSelection) {
-                    WMSelectListItem(lPtr, tmp);
+                    if (event->xbutton.state & ControlMask) {
+                        toggleItemSelection(lPtr, tmp);
+                    } else {
+                        WMSelectListItem(lPtr, tmp);
+                    }
                 } else {
                     WMRange range;
-                    WMListItem *item, *lastSel;
+                    WMListItem *lastSel;
 
                     if (event->xbutton.state & ControlMask) {
-                        item = WMGetFromArray(lPtr->items, tmp);
-                        if (item && item->selected) {
-                            WMUnselectListItem(lPtr, tmp);
-                        } else {
-                            WMSelectListItem(lPtr, tmp);
-                        }
+                        toggleItemSelection(lPtr, tmp);
                     } else if (event->xbutton.state & ShiftMask) {
                         if (WMGetArrayItemCount(lPtr->selectedItems) == 0) {
                             WMSelectListItem(lPtr, tmp);

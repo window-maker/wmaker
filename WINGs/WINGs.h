@@ -1152,6 +1152,10 @@ extern char *WMListSelectionDidChangeNotification;
 
 WMBrowser *WMCreateBrowser(WMWidget *parent);
 
+void WMSetBrowserAllowMultipleSelection(WMBrowser *bPtr, Bool flag);
+
+void WMSetBrowserAllowEmptySelection(WMBrowser *bPtr, Bool flag);
+
 void WMSetBrowserPathSeparator(WMBrowser *bPtr, char *separator);
 
 void WMSetBrowserTitled(WMBrowser *bPtr, Bool flag);
@@ -1176,9 +1180,9 @@ void WMSortBrowserColumnWithComparer(WMBrowser *bPtr, int column,
 /* Don't free the returned string. */
 char* WMSetBrowserPath(WMBrowser *bPtr, char *path);
 
-/* you can free the returned string */
+/* free the returned string */
 char *WMGetBrowserPath(WMBrowser *bPtr);
-/* you can free the returned string */
+/* free the returned string */
 char *WMGetBrowserPathToColumn(WMBrowser *bPtr, int column);
 
 void WMSetBrowserAction(WMBrowser *bPtr, WMAction *action, void *clientData);
@@ -1201,6 +1205,11 @@ int WMGetBrowserMaxVisibleColumns(WMBrowser *bPtr);
 WMList *WMGetBrowserListInColumn(WMBrowser *bPtr, int column);
 
 void WMSetBrowserDelegate(WMBrowser *bPtr, WMBrowserDelegate *delegate);
+
+Bool WMBrowserAllowsMultipleSelection(WMBrowser *bPtr);
+
+Bool WMBrowserAllowsEmptySelection(WMBrowser *bPtr);
+
 
 /* ....................................................................... */
 

@@ -1,7 +1,10 @@
 - move paint to idle handlers
-- finish the multiple selection code for lists (check for
-  allowEmptySelection and add handlers for scrolling while drag-selecting).
+- finish the multiple selection code for lists (check for add handlers for 
+  scrolling while drag-selecting).
 - check whether WMDestroyWidget() should first call WMUnmapWidget().
+- check if its useful to add some WMBrowserSelectionDidChangeNotification
+  (actually a pass-through for WMListSelectionDidChangeNotification).
+  Or a delegate to be called when the list selection change.
 
 
 - optimize color allocation for repeated colors

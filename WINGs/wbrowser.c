@@ -41,7 +41,8 @@ typedef struct W_Browser {
 
     struct {
 	unsigned int isTitled:1;
-	unsigned int allowMultipleSelection:1;
+        unsigned int allowMultipleSelection:1;
+        unsigned int allowEmptySelection:1;
 	unsigned int hasScroller:1;
 
 	/* */
@@ -147,6 +148,30 @@ WMCreateBrowser(WMWidget *parent)
     bPtr->selectedColumn = -1;
 
     return bPtr;
+}
+
+
+void
+WMSetBrowserAllowMultipleSelection(WMBrowser *bPtr, Bool flag)
+{
+    int i;
+
+    bPtr->flags.allowMultipleSelection = flag ? 1 : 0;
+    for (i=0; i<bPtr->columnCount; i++) {
+	WMSetListAllowMultipleSelection(bPtr->columns[i], flag);
+    }
+}
+
+
+void
+WMSetBrowserAllowEmptySelection(WMBrowser *bPtr, Bool flag)
+{
+    int i;
+
+    bPtr->flags.allowEmptySelection = flag ? 1 : 0;
+    for (i=0; i<bPtr->columnCount; i++) {
+	WMSetListAllowEmptySelection(bPtr->columns[i], flag);
+    }
 }
 
 
@@ -794,6 +819,20 @@ WMGetBrowserPathToColumn(WMBrowser *bPtr, int column)
 }
 
 
+Bool
+WMBrowserAllowsMultipleSelection(WMBrowser *bPtr)
+{
+    return bPtr->flags.allowMultipleSelection;
+}
+
+
+Bool
+WMBrowserAllowsEmptySelection(WMBrowser *bPtr)
+{
+    return bPtr->flags.allowEmptySelection;
+}
+
+
 static void
 loadColumn(WMBrowser *bPtr, int column)
 {
@@ -931,12 +970,8 @@ listCallback(void *self, void *clientData)
     int i;
 
     item = WMGetListSelectedItem(lPtr);
-    if (!item) {
-        oldItem = item;
-        return;
-    }
 
-    if (oldItem != item) {
+    if (oldItem==NULL || oldItem!=item) {
         for (i=0; i<bPtr->columnCount; i++) {
             if (lPtr == bPtr->columns[i])
                 break;
@@ -948,7 +983,7 @@ listCallback(void *self, void *clientData)
         /* columns at right must be cleared */
         removeColumn(bPtr, i+1);
         /* open directory */
-        if (item->isBranch) {
+        if (item && item->isBranch) {
             WMAddBrowserColumn(bPtr);
         }
         if (bPtr->usedColumnCount < bPtr->maxVisibleColumns)
@@ -956,7 +991,7 @@ listCallback(void *self, void *clientData)
         else
             i = bPtr->usedColumnCount-bPtr->maxVisibleColumns;
         scrollToColumn(bPtr, i, True);
-	if (item->isBranch) {
+	if (item && item->isBranch) {
             loadColumn(bPtr, bPtr->usedColumnCount-1);
 	}
     }
@@ -1090,6 +1125,8 @@ WMAddBrowserColumn(WMBrowser *bPtr)
     bPtr->titles[index] = NULL;
 
     list = WMCreateList(bPtr);
+    WMSetListAllowMultipleSelection(list, bPtr->flags.allowMultipleSelection);
+    WMSetListAllowEmptySelection(list, bPtr->flags.allowEmptySelection);
     WMSetListAction(list, listCallback, bPtr);
     WMSetListDoubleAction(list, listDoubleCallback, bPtr);
     WMSetListUserDrawProc(list, paintItem);

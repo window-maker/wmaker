@@ -214,6 +214,7 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     WMSetFrameRelief(fPtr->line, WRGroove);
 
     fPtr->browser = WMCreateBrowser(fPtr->win);
+    WMSetBrowserAllowEmptySelection(fPtr->browser, True);
     WMSetBrowserDelegate(fPtr->browser, &browserDelegate);
     WMSetBrowserAction(fPtr->browser, browserClick, fPtr);
     WMSetBrowserDoubleAction(fPtr->browser, browserDClick, fPtr);
