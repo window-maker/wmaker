@@ -1087,7 +1087,7 @@ wScreenSaveState(WScreen *scr)
     free(str);
     PLSetFilename(scr->session_state, path);
     if (!PLSave(scr->session_state, YES)) {
-	wwarning(_("could not save session state in %s"), PLGetString(path));
+	wsyserror(_("could not save session state in %s"), PLGetString(path));
     }
     PLRelease(path);
     PLRelease(old_state);

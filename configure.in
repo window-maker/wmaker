@@ -723,6 +723,16 @@ if test "$enableval" = yes; then
 fi
 )
 
+dnl Enable User Defined Menu thing
+==================================
+AC_ARG_ENABLE(usermenu,
+[  --enable-usermenu      user defined menus for applications
+],
+if test "$enableval" = yes; then
+	AC_DEFINE(USER_MENU)
+fi
+)
+
 
 dnl
 dnl Nicolai:  Program tests for Documentation Section

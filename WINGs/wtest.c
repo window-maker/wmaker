@@ -300,6 +300,7 @@ testSlider(WMScreen *scr)
     WMMapWidget(win);
 }
 
+
 void
 testTextField(WMScreen *scr)
 {
@@ -369,13 +370,67 @@ testPullDown(WMScreen *scr)
 
 
 
+void
+testTabView(WMScreen *scr)
+{
+    WMWindow *win;
+    WMTabView *tabv;
+    WMTabViewItem *tab;
+    WMFrame *frame;
+    WMLabel *label;
+
+    windowCount++;
+    
+    win = WMCreateWindow(scr, "testTabs");
+    WMResizeWidget(win, 400, 300);
+
+    WMSetWindowCloseAction(win, closeAction, NULL);    
+
+    tabv = WMCreateTabView(win);
+    WMMoveWidget(tabv, 50, 50);
+    WMResizeWidget(tabv, 300, 200);
+
+    frame = WMCreateFrame(win);
+    WMSetFrameRelief(frame, WRFlat);
+    label = WMCreateLabel(frame);
+    WMResizeWidget(label, 100, 100);
+    WMSetLabelText(label, "Label 1");
+    WMMapWidget(label);
+
+
+    tab = WMCreateTabViewItemWithIdentifier(0);
+    WMSetTabViewItemView(tab, WMWidgetView(frame));
+    WMAddItemInTabView(tabv, tab);
+    WMSetTabViewItemLabel(tab, "Instances");
+
+
+    frame = WMCreateFrame(win);
+    WMSetFrameRelief(frame, WRFlat);
+    label = WMCreateLabel(frame);
+    WMResizeWidget(label, 100, 100);
+    WMMoveWidget(label, 40, 40);
+    WMSetLabelText(label, "Label 2");
+    WMMapWidget(label);
+
+    tab = WMCreateTabViewItemWithIdentifier(0);
+    WMSetTabViewItemView(tab, WMWidgetView(frame));
+    WMAddItemInTabView(tabv, tab);
+    WMSetTabViewItemLabel(tab, "Classes");
+
+    WMRealizeWidget(win);
+    WMMapSubwidgets(win);
+    WMMapWidget(win);
+}
+
+
+
 #include "WUtil.h"
 
 int main(int argc, char **argv)
 {
     WMScreen *scr;
-    WMPixmap *pixmap;    
-    
+    WMPixmap *pixmap;
+
     /* Initialize the application */
     WMInitializeApplication("Test", &argc, argv);
     
@@ -416,10 +471,14 @@ int main(int argc, char **argv)
      * 
      * Put the testSomething() function you want to test here.
      */
-    testGradientButtons(scr);
 
     testTextField(scr);
+
+    testTabView(scr);
+
 #if 0
+    testGradientButtons(scr);
+
     testOpenFilePanel(scr);
     testFontPanel(scr);
     testList(scr);

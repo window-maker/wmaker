@@ -5,6 +5,13 @@ NEWS for veteran Window Maker users
 --- 0.54.0
 
 
+User Menu
+---------
+
+The user menu is now a compile time option disabled by default. 
+Supply --enable-usermenu to configure to enable it.
+
+
 root menu INCOMPATIBLE changes
 ------------------------------
 

@@ -127,6 +127,8 @@ createView(W_Screen *screen, W_View *parent)
 	view->attribs.border_pixel = W_PIXEL(screen->black);
 	view->attribs.colormap = screen->colormap;
 
+	view->backColor = WMRetainColor(screen->gray);
+
 	adoptChildView(parent, view);
     }
 
@@ -492,6 +494,10 @@ W_RedisplayView(W_View *view)
 void
 W_SetViewBackgroundColor(W_View *view, WMColor *color)
 {
+    if (view->backColor)
+	WMReleaseColor(view->backColor);
+    view->backColor = WMRetainColor(color);
+
     view->attribFlags |= CWBackPixel;
     view->attribs.background_pixel = color->color.pixel;
     if (view->flags.realized) {

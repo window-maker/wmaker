@@ -160,11 +160,19 @@ typedef enum {
 
 /* matrix types */
 typedef enum {
-    WMMRadioMode,
-	WMMHighlightMode,
-	WMMListMode,
-	WMMTrackMode
+    WMRadioMode,
+	WMHighlightMode,
+	WMListMode,
+	WMTrackMode
 } WMMatrixTypes;
+
+
+typedef enum {
+    WTTopTabsBevelBorder,
+	WTNoTabsBevelBorder,
+	WTNoTabsLineBorder,
+	WTNoTabsNoBorder
+} WMTabViewTypes;
 
 
 /* text movement types */
@@ -255,7 +263,8 @@ enum {
     WC_ColorWell = 10,
     WC_Slider = 11,
     WC_Matrix = 12,		       /* not ready */
-    WC_SplitView = 13
+    WC_SplitView = 13,
+    WC_TabView = 14
 };
 
 /* All widgets must start with the following structure
@@ -297,8 +306,12 @@ typedef struct W_ColorWell WMColorWell;
 typedef struct W_Slider WMSlider;
 typedef struct W_Matrix WMMatrix;      /* not ready */
 typedef struct W_SplitView WMSplitView;
+typedef struct W_TabView WMTabView;
 
 /* not widgets */
+typedef struct W_TabViewItem WMTabViewItem;
+
+
 typedef struct W_FilePanel WMFilePanel;
 typedef WMFilePanel WMOpenPanel;
 typedef WMFilePanel WMSavePanel;
@@ -392,9 +405,6 @@ typedef void WMSplitViewConstrainProc(WMSplitView *sPtr, int dividerIndex,
 typedef WMWidget *WMMatrixCreateCellProc(WMMatrix *mPtr);
 
 
-typedef void WMBrowserFillColumnProc(WMBrowser *bPtr, int column);
-
-
 typedef Bool WMConvertSelectionProc(WMWidget *w, Atom selection, Atom target,
 				    Atom *type, void **value, unsigned *length,
 				    int *format);
@@ -402,6 +412,45 @@ typedef Bool WMConvertSelectionProc(WMWidget *w, Atom selection, Atom target,
 typedef void WMLoseSelectionProc(WMWidget *w, Atom selection);
 
 typedef void WMSelectionDoneProc(WMWidget *w, Atom selection, Atom target);
+
+
+
+
+typedef struct WMBrowserDelegate {
+    void *data;
+
+    void (*createRowsForColumn)(struct WMBrowserDelegate *self,
+				WMBrowser *sender, int column, WMList *list);
+
+    char* (*titleOfColumn)(struct WMBrowserDelegate *self, WMBrowser *sender,
+			   int column);
+
+    void (*didScroll)(struct WMBrowserDelegate *self, WMBrowser *sender);
+
+    void (*willScroll)(struct WMBrowserDelegate *self, WMBrowser *sender);
+} WMBrowserDelegate;
+
+
+typedef struct WMTextFieldDelegate {
+    void *data;
+
+    void (*didBeginEditing)(struct WMTextFieldDelegate *self,
+			    WMNotification *notif);
+
+    void (*didChange)(struct WMTextFieldDelegate *self, 
+		      WMNotification *notif);
+
+    void (*didEndEditing)(struct WMTextFieldDelegate *self,
+			  WMNotification *notif);
+
+    Bool (*shouldBeginEditing)(struct WMTextFieldDelegate *self,
+			       WMTextField *tPtr);
+
+    Bool (*shouldEndEditing)(struct WMTextFieldDelegate *self,
+			     WMTextField *tPtr);
+} WMTextFieldDelegate;
+
+
 
 /* ....................................................................... */
 
@@ -736,6 +785,8 @@ void WMSetButtonBordered(WMButton *bPtr, int isBordered);
 
 void WMSetButtonEnabled(WMButton *bPtr, Bool flag);
 
+void WMSetButtonImageDimsWhenDisabled(WMButton *bPtr, Bool flag);
+
 void WMSetButtonTag(WMButton *bPtr, int tag);
 
 void WMGroupButtons(WMButton *bPtr, WMButton *newMember);
@@ -910,8 +961,6 @@ char *WMGetBrowserPath(WMBrowser *bPtr);
 /* you can free the returned string */
 char *WMGetBrowserPathToColumn(WMBrowser *bPtr, int column);
 
-void WMSetBrowserFillColumnProc(WMBrowser *bPtr,WMBrowserFillColumnProc *proc);
-
 void WMSetBrowserAction(WMBrowser *bPtr, WMAction *action, void *clientData);
 
 void WMSetBrowserDoubleAction(WMBrowser *bPtr, WMAction *action, 
@@ -931,7 +980,7 @@ int WMGetBrowserMaxVisibleColumns(WMBrowser *bPtr);
 
 WMList *WMGetBrowserListInColumn(WMBrowser *bPtr, int column);
 
-extern char *WMBrowserDidScrollNotification;
+void WMSetBrowserDelegate(WMBrowser *bPtr, WMBrowserDelegate *delegate);
 
 /* ....................................................................... */
 
@@ -1065,6 +1114,47 @@ void WMSetSplitViewResizeSubviewsProc(WMSplitView *sPtr,
 
 int WMGetSplitViewDividerThickness(WMSplitView *sPtr);
 
+
+/* ....................................................................... */
+
+
+WMTabView *WMCreateTabView(WMWidget *parent);
+
+void WMAddItemInTabView(WMTabView *tPtr, WMTabViewItem *item);
+
+void WMInsertItemInTabView(WMTabView *tPtr, int index, WMTabViewItem *item);
+
+void WMRemoveTabViewItem(WMTabView *tPtr, WMTabViewItem *item);
+
+WMTabViewItem *WMTabViewItemAtPoint(WMTabView *tPtr, int x, int y);
+
+void WMSelectFirstTabViewItem(WMTabView *tPtr);
+
+void WMSelectLastTabViewItem(WMTabView *tPtr);
+
+void WMSelectNextTabViewItem(WMTabView *tPtr);
+
+void WMSelectPreviousTabViewItem(WMTabView *tPtr);
+
+WMTabViewItem *WMGetSelectedTabViewItem(WMTabView *tPtr);
+
+void WMSelectTabViewItem(WMTabView *tPtr, WMTabViewItem *item);
+
+void WMSelectTabViewItemAtIndex(WMTabView *tPtr, int index);
+
+
+
+WMTabViewItem *WMCreateTabViewItemWithIdentifier(int identifier);
+
+void WMSetTabViewItemLabel(WMTabViewItem *item, char *label);
+
+char *WMGetTabViewItemLabel(WMTabViewItem *item);
+
+void WMSetTabViewItemView(WMTabViewItem *item, WMView *view);
+
+WMView *WMGetTabViewItemView(WMTabViewItem *item);
+
+void WMDestroyTabViewItem(WMTabViewItem *item);
 
 /* ....................................................................... */
 

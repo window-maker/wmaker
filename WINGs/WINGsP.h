@@ -262,6 +262,9 @@ typedef struct W_View {
     XSetWindowAttributes attribs;
     
     void *hangedData;		       /* data holder for user program */
+
+    WMColor *backColor;
+
 #if 0
     struct W_DragSourceProcs *dragSourceProcs;
     struct W_DragDestinationProcs *dragDestinationProcs;

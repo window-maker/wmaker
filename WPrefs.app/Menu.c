@@ -134,6 +134,18 @@ enum {
 
 static void showData(_Panel *panel);
 
+static void fillBrowser(WMBrowserDelegate *self, WMBrowser *bPtr, int column,
+		       WMList *list);
+
+static void scrolledBrowser(WMBrowserDelegate *self, WMBrowser *sender);
+
+static WMBrowserDelegate browserDelegate = {
+    NULL, /* data */
+	fillBrowser, /* createRowsForColumn */
+	NULL, /* titleOfColumn */
+	scrolledBrowser, /* didScroll */
+	NULL  /* willScroll */
+};
 
 
 static Bool
@@ -674,7 +686,7 @@ browserClick(WMWidget *w, void *data)
 
 
 static void
-fillBrowserColumn(WMBrowser *bPtr, int column)
+fillBrowser(WMBrowserDelegate *self, WMBrowser *bPtr, int column, WMList *list)
 {
     _Panel *panel = (_Panel*)WMGetHangedData(bPtr);
     proplist_t menuItem;
@@ -1010,13 +1022,13 @@ captureClick(WMWidget *w, void *data)
 
 
 static void
-scrolledBrowser(void *observerData, WMNotification *notification)
+scrolledBrowser(WMBrowserDelegate *self, WMBrowser *sender)
 {
-    _Panel *panel = (_Panel*)observerData;
+    _Panel *panel = (_Panel*)self->data;
     int column;
     proplist_t item;
 
-    column = WMGetBrowserFirstVisibleColumn(panel->browser);
+    column = WMGetBrowserFirstVisibleColumn(sender);
 
     item = getSubmenuInColumn(panel, column);
     WMSetTextFieldText(panel->tit1T, getItemTitle(item));
@@ -1122,12 +1134,11 @@ createPanel(_Panel *p)
     WMSetBrowserTitled(panel->browser, False);
     WMResizeWidget(panel->browser, 295, 160);
     WMMoveWidget(panel->browser, 15, 65);
-    WMSetBrowserFillColumnProc(panel->browser, fillBrowserColumn);
+    WMSetBrowserDelegate(panel->browser, &browserDelegate);
     WMHangData(panel->browser, panel);
     WMSetBrowserPathSeparator(panel->browser, "\r");
     WMSetBrowserAction(panel->browser, browserClick, panel);
-    WMAddNotificationObserver(scrolledBrowser, panel, 
-			      WMBrowserDidScrollNotification, panel->browser);
+
     /**/
 
     panel->labF = WMCreateFrame(panel->frame);

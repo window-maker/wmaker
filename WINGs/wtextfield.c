@@ -13,6 +13,27 @@
 #define CURSOR_BLINK_OFF_DELAY	300
 
 
+typedef struct WMTextFieldDelegate {
+    void *data;
+
+    void (*didBeginEditing)(struct WMTextFieldDelegate *self,
+			    WMNotification *notif);
+
+    void (*didChange)(struct WMTextFieldDelegate *self, 
+		      WMNotification *notif);
+
+    void (*didEndEditing)(struct WMTextFieldDelegate *self,
+			  WMNotification *notif);
+
+    Bool (*shouldBeginEditing)(struct WMTextFieldDelegate *self,
+			       WMTextField *tPtr);
+
+    Bool (*shouldEndEditing)(struct WMTextFieldDelegate *self,
+			     WMTextField *tPtr);
+} WMTextFieldDelegate;
+
+
+
 char *WMTextDidChangeNotification = "WMTextDidChangeNotification";
 char *WMTextDidBeginEditingNotification = "WMTextDidBeginEditingNotification";
 char *WMTextDidEndEditingNotification = "WMTextDidEndEditingNotification";
@@ -43,6 +64,8 @@ typedef struct W_TextField {
 
     WMFont *font;
 
+    WMTextFieldDelegate *delegate;
+
 #if 0
     WMHandlerID	timerID;	       /* for cursor blinking */
 #endif
@@ -67,6 +90,13 @@ typedef struct W_TextField {
 	unsigned int notIllegalMovement:1;
     } flags;
 } TextField;
+
+
+#define NOTIFY(T,C,N,A)	{ WMNotification *notif = WMCreateNotification(N,T,A);\
+			if ((T)->delegate && (T)->delegate->C)\
+				(*(T)->delegate->C)((T)->delegate,notif);\
+			WMPostNotification(notif);\
+			WMReleaseNotification(notif);}
 
 
 #define MIN_TEXT_BUFFER		2
@@ -219,6 +249,13 @@ WMCreateTextField(WMWidget *parent)
 
 
 void
+WMSetTextFieldDelegate(WMTextField *tPtr, WMTextFieldDelegate *delegate)
+{
+    tPtr->delegate = delegate;
+}
+
+
+void
 WMInsertTextFieldText(WMTextField *tPtr, char *text, int position)
 {
     int len;
@@ -248,9 +285,9 @@ WMInsertTextFieldText(WMTextField *tPtr, char *text, int position)
 	/* insert text at position */ 
 	memmv(&(tPtr->text[position+len]), &(tPtr->text[position]),
                 tPtr->textLen-position+1);
-	
+
 	memcpy(&(tPtr->text[position]), text, len);
-	
+
 	tPtr->textLen += len;
 	if (position >= tPtr->cursorPosition) {
 	    tPtr->cursorPosition += len;
@@ -259,11 +296,11 @@ WMInsertTextFieldText(WMTextField *tPtr, char *text, int position)
 	    incrToFit(tPtr);
 	}
     }
-    
+
     paintTextField(tPtr);
 
-    WMPostNotificationName(WMTextDidChangeNotification, tPtr,
-                           (void*)WMInsertTextEvent);
+    NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
+	   (void*)WMInsertTextEvent);
 }
 
 
@@ -304,8 +341,8 @@ void
 WMDeleteTextFieldRange(WMTextField *tPtr, WMRange range)
 {
     deleteTextFieldRange(tPtr, range);
-    WMPostNotificationName(WMTextDidChangeNotification, tPtr,
-                           (void*)WMDeleteTextEvent);
+    NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
+	   (void*)WMDeleteTextEvent);
 }
 
 
@@ -349,8 +386,8 @@ WMSetTextFieldText(WMTextField *tPtr, char *text)
     if (tPtr->view->flags.realized)
 	paintTextField(tPtr);
 
-    WMPostNotificationName(WMTextDidChangeNotification, tPtr,
-                           (void*)WMSetTextEvent);
+    NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
+	   (void*)WMSetTextEvent);
 }
 
 
@@ -361,6 +398,7 @@ WMSetTextFieldFont(WMTextField *tPtr, WMFont *font)
     WMReleaseFont(tPtr->font);
     tPtr->font = WMRetainFont(font);
 }
+
 
 void
 WMSetTextFieldAlignment(WMTextField *tPtr, WMAlignment alignment)
@@ -679,12 +717,12 @@ paintTextField(TextField *tPtr)
 
 	ty = tPtr->offsetWidth;
 	switch (tPtr->flags.alignment) {
-     case WALeft:
+	 case WALeft:
 	    tx = tPtr->offsetWidth + 1;
 	    if (tw < tPtr->usableWidth)
-        XFillRectangle(screen->display, drawbuffer,
-                WMColorGC(screen->white),
-                bd+tw,bd, totalWidth-tw,view->size.height-2*bd);
+		XFillRectangle(screen->display, drawbuffer,
+			       WMColorGC(screen->white),
+			       bd+tw,bd, totalWidth-tw,view->size.height-2*bd);
 	    break;
 	
 	 case WACenter:	    
@@ -742,8 +780,8 @@ paintTextField(TextField *tPtr)
             WMSetColorInGC(screen->black, screen->textFieldGC);
     } else {
             XFillRectangle(screen->display, drawbuffer,
-            WMColorGC(screen->white),
-            bd,bd, totalWidth,view->size.height-2*bd);
+			   WMColorGC(screen->white),
+			   bd,bd, totalWidth,view->size.height-2*bd);
     }
 
     /* draw relief */
@@ -754,8 +792,8 @@ paintTextField(TextField *tPtr)
     if (tPtr->flags.secure)
         free(text);
     XCopyArea(screen->display, drawbuffer, view->window,
-            screen->copyGC, 0,0, view->size.width,
-            view->size.height,0,0);
+	      screen->copyGC, 0,0, view->size.width,
+	      view->size.height,0,0);
     XFreePixmap(screen->display, drawbuffer);
 
     /* draw cursor */
@@ -805,11 +843,11 @@ handleEvents(XEvent *event, void *data)
 #endif
 	paintTextField(tPtr);
 
-	WMPostNotificationName(WMTextDidBeginEditingNotification, tPtr, NULL);
+	NOTIFY(tPtr, didBeginEditing, WMTextDidBeginEditingNotification, NULL);
 
 	tPtr->flags.notIllegalMovement = 0;
 	break;
-	
+
      case FocusOut:
 	tPtr->flags.focused = 0;
 #if 0
@@ -820,8 +858,8 @@ handleEvents(XEvent *event, void *data)
 
 	paintTextField(tPtr);
 	if (!tPtr->flags.notIllegalMovement) {
-	    WMPostNotificationName(WMTextDidEndEditingNotification, tPtr,
-				   (void*)WMIllegalTextMovement);
+	    NOTIFY(tPtr, didEndEditing, WMTextDidEndEditingNotification,
+		   (void*)WMIllegalTextMovement);
 	}
 	break;
 
@@ -878,22 +916,22 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 				     tPtr->view->prevFocusChain);
 		tPtr->flags.notIllegalMovement = 1;
 	    }
-	    WMPostNotificationName(WMTextDidEndEditingNotification, tPtr,
-				   (void*)WMBacktabTextMovement);
+	    NOTIFY(tPtr, didEndEditing, WMTextDidEndEditingNotification,
+		   (void*)WMBacktabTextMovement);
 	} else {
 	    if (tPtr->view->nextFocusChain) {
 		W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
-				 tPtr->view->nextFocusChain);
+				     tPtr->view->nextFocusChain);
 		tPtr->flags.notIllegalMovement = 1;
 	    }
-	    WMPostNotificationName(WMTextDidEndEditingNotification,
-				   tPtr, (void*)WMTabTextMovement);
+	    NOTIFY(tPtr, didEndEditing, WMTextDidEndEditingNotification,
+		   (void*)WMTabTextMovement);
 	}
 	break;
-	
+
      case XK_Return:
-	WMPostNotificationName(WMTextDidEndEditingNotification, tPtr, 
-			       (void*)WMReturnTextMovement);
+	NOTIFY(tPtr, didEndEditing, WMTextDidEndEditingNotification,
+	       (void*)WMReturnTextMovement);
 	break;
 
      case WM_EMACSKEY_LEFT:
@@ -1196,7 +1234,7 @@ handleTextFieldActionEvents(XEvent *event, void *data)
             }
             if(textWidth < tPtr->usableWidth){
                 tPtr->cursorPosition = pointToCursorPosition(tPtr, 
-                                     event->xbutton.x - tPtr->usableWidth
+				     event->xbutton.x - tPtr->usableWidth
                                      + textWidth);
             }
             else tPtr->cursorPosition = pointToCursorPosition(tPtr, 
@@ -1231,12 +1269,13 @@ handleTextFieldActionEvents(XEvent *event, void *data)
                 text = W_GetTextSelection(tPtr->view->screen,
                               tPtr->view->screen->clipboardAtom);
                 if (!text) {
-                text = W_GetTextSelection(tPtr->view->screen, XA_CUT_BUFFER0);
+		    text = W_GetTextSelection(tPtr->view->screen, 
+					      XA_CUT_BUFFER0);
                 }
                 if (text) {
-                WMInsertTextFieldText(tPtr, text, tPtr->cursorPosition);
-                XFree(text);
-                WMPostNotificationName(WMTextDidChangeNotification, tPtr, NULL);
+		    WMInsertTextFieldText(tPtr, text, tPtr->cursorPosition);
+		    XFree(text);
+		    NOTIFY(tPtr, didChange, WMTextDidChangeNotification, NULL);
                 }
             }
             break;

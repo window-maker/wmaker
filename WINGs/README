@@ -58,6 +58,7 @@ Widgets provided by WINGs:
 - scrollable view
 - color well
 - split view (only 2 subviews)
+- tabbed view
 
 - input box
 - file panel
@@ -86,7 +87,6 @@ Wish list: (I don't have the know-how or time to do them)
 - matrix (like NSMatrix)
 - splitviews with more than 2 subviews
 - font manager (like NSFontManager)
-- finish file panel, open/save
 - finish other wigets
 - optimize list scrolling (XCopyArea() the area that's already drawn)
 - InterfaceMaker?

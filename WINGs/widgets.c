@@ -323,6 +323,7 @@ extern W_ViewProcedureTable _ColorWellViewProcedures;
 extern W_ViewProcedureTable _ScrollViewViewProcedures;
 extern W_ViewProcedureTable _SliderViewProcedures;
 extern W_ViewProcedureTable _SplitViewViewProcedures;
+extern W_ViewProcedureTable _TabViewViewProcedures;
 
 /*
  * All widget classes defined must have an entry here.
@@ -353,6 +354,7 @@ initProcedureTable()
     procedureTables[WC_ScrollView] = &_ScrollViewViewProcedures;
     procedureTables[WC_Slider] = &_SliderViewProcedures;
     procedureTables[WC_SplitView] = &_SplitViewViewProcedures;
+    procedureTables[WC_TabView] = &_TabViewViewProcedures;
 }
 
 

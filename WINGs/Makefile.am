@@ -89,6 +89,7 @@ libWINGs_a_SOURCES = 	\
 	wscrollview.c \
 	wslider.c \
 	wsplitview.c \
+	wtabview.c \
 	wtextfield.c \
 	wwindow.c \
 	wview.c \

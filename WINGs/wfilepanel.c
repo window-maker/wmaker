@@ -63,7 +63,8 @@ static void listDirectoryOnColumn(WMFilePanel *panel, int column, char *path);
 static void browserClick();
 static void browserDClick();
 
-static void fillColumn(WMBrowser *bPtr, int column);
+static void fillColumn(WMBrowserDelegate *self, WMBrowser *bPtr, int column,
+		       WMList *list);
 
 static void goHome();
 
@@ -72,6 +73,16 @@ static void buttonClick();
 static char *getCurrentFileName(WMFilePanel *panel);
 
 static void handleEvents(XEvent *event, void *data);
+
+
+
+static WMBrowserDelegate browserDelegate = {
+    NULL, /* data */
+	fillColumn, /* createRowsForColumn */
+	NULL, /* titleOfColumn */
+	NULL, /* didScroll */
+	NULL  /* willScroll */
+};
 
 
 static int
@@ -198,7 +209,7 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     WMSetFrameRelief(fPtr->line, WRGroove);
 
     fPtr->browser = WMCreateBrowser(fPtr->win);
-    WMSetBrowserFillColumnProc(fPtr->browser, fillColumn);
+    WMSetBrowserDelegate(fPtr->browser, &browserDelegate);
     WMSetBrowserAction(fPtr->browser, browserClick, fPtr);
     WMSetBrowserDoubleAction(fPtr->browser, browserDClick, fPtr);
     WMMoveWidget(fPtr->browser, 7, 72);
@@ -531,7 +542,7 @@ listDirectoryOnColumn(WMFilePanel *panel, int column, char *path)
 
 
 static void
-fillColumn(WMBrowser *bPtr, int column)
+fillColumn(WMBrowserDelegate *self, WMBrowser *bPtr, int column, WMList *list)
 {
     char *path;
     WMFilePanel *panel;

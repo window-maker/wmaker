@@ -51,15 +51,21 @@ typedef struct _Panel {
 
     WMPopUpButton *secP;
 
+    WMTabView *tabv;
+
     /* texture list */
-    WMLabel *texL;
+    WMFrame *texF;
     WMList *texLs;
-    WMLabel *texsL;
 
     WMButton *newB;
     WMButton *editB;
     WMButton *ripB;
     WMButton *delB;
+
+    /* text color */
+    WMFrame *colF;
+
+    /* */
 
     int textureIndex[8];
 
@@ -605,11 +611,11 @@ updatePreviewBox(_Panel *panel, int elements)
 	WMColor *color;
 
 	panel->preview = XCreatePixmap(dpy, WMWidgetXID(panel->win),
-				       260-4, 165-4, WMScreenDepth(scr));
+				       240-4, 165-4, WMScreenDepth(scr));
 
 	color = WMGrayColor(scr);
 	XFillRectangle(dpy, panel->preview, WMColorGC(color),
-		       0, 0, 260-4, 165-4);
+		       0, 0, 240-4, 165-4);
 	WMReleaseColor(color);
 
 	refresh = -1;
@@ -619,7 +625,7 @@ updatePreviewBox(_Panel *panel, int elements)
 	item = WMGetListItem(panel->texLs, panel->textureIndex[0]);
 	titem = (TextureListItem*)item->clientData;
 
-	pix = renderTexture(scr, titem->prop, 210, 20, NULL, RBEV_RAISED2);
+	pix = renderTexture(scr, titem->prop, 190, 20, NULL, RBEV_RAISED2);
 
 	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 5);
 
@@ -629,7 +635,7 @@ updatePreviewBox(_Panel *panel, int elements)
 	item = WMGetListItem(panel->texLs, panel->textureIndex[1]);
 	titem = (TextureListItem*)item->clientData;
 
-	pix = renderTexture(scr, titem->prop, 210, 20, NULL, RBEV_RAISED2);
+	pix = renderTexture(scr, titem->prop, 190, 20, NULL, RBEV_RAISED2);
 
 	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 30);
 
@@ -639,7 +645,7 @@ updatePreviewBox(_Panel *panel, int elements)
 	item = WMGetListItem(panel->texLs, panel->textureIndex[2]);
 	titem = (TextureListItem*)item->clientData;
 
-	pix = renderTexture(scr, titem->prop, 210, 20, NULL, RBEV_RAISED2);
+	pix = renderTexture(scr, titem->prop, 190, 20, NULL, RBEV_RAISED2);
 
 	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 55);
 
@@ -649,7 +655,7 @@ updatePreviewBox(_Panel *panel, int elements)
 	item = WMGetListItem(panel->texLs, panel->textureIndex[3]);
 	titem = (TextureListItem*)item->clientData;
 
-	pix = renderTexture(scr, titem->prop, 210, 9, NULL, RESIZEBAR_BEVEL);
+	pix = renderTexture(scr, titem->prop, 190, 9, NULL, RESIZEBAR_BEVEL);
 
 	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 80);
 
@@ -659,9 +665,9 @@ updatePreviewBox(_Panel *panel, int elements)
 	item = WMGetListItem(panel->texLs, panel->textureIndex[4]);
 	titem = (TextureListItem*)item->clientData;
 
-	pix = renderTexture(scr, titem->prop, 100, 20, NULL, RBEV_RAISED2);
+	pix = renderTexture(scr, titem->prop, 90, 20, NULL, RBEV_RAISED2);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 20, 30, 95);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 90, 20, 30, 95);
 
 	XFreePixmap(dpy, pix);
     }
@@ -669,15 +675,15 @@ updatePreviewBox(_Panel *panel, int elements)
 	item = WMGetListItem(panel->texLs, panel->textureIndex[5]);
 	titem = (TextureListItem*)item->clientData;
 
-	pix = renderMenu(panel, titem->prop, 100, 18);
+	pix = renderMenu(panel, titem->prop, 90, 18);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 18*3, 30, 115);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 90, 18*3, 30, 115);
 
 	XFreePixmap(dpy, pix);
     }
     if (elements & (MITEM|MTITLE)) {
 	XDrawLine(dpy, panel->preview, gc, 29, 95, 29, 115+36+20);
-	XDrawLine(dpy, panel->preview, gc, 29, 94, 129, 94);
+	XDrawLine(dpy, panel->preview, gc, 29, 94, 119, 94);
     }
 
     if (elements & ICON) {
@@ -687,7 +693,7 @@ updatePreviewBox(_Panel *panel, int elements)
 	pix = renderTexture(scr, titem->prop, 64, 64, NULL, 
 			    titem->ispixmap ? 0 : RBEV_RAISED3);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 64, 64, 170, 95);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 64, 64, 155, 95);
 
 	XFreePixmap(dpy, pix);
     }
@@ -696,7 +702,7 @@ updatePreviewBox(_Panel *panel, int elements)
     if (refresh < 0) {
 	WMPixmap *p;
 	p = WMCreatePixmapFromXPixmaps(scr, panel->preview, None,
-				       260-4, 165-4, WMScreenDepth(scr));
+				       240-4, 165-4, WMScreenDepth(scr));
 
 	WMSetLabelImage(panel->prevL, p);
 	WMReleasePixmap(p);
@@ -945,7 +951,6 @@ changePage(WMWidget *w, void *data)
     int section;
     WMListItem *item;
     TextureListItem *titem;
-    char *str;
     WMScreen *scr = WMWidgetScreen(w);
     RContext *rc = WMScreenRContext(scr);
     static WMPoint positions[] = {
@@ -955,7 +960,7 @@ changePage(WMWidget *w, void *data)
 	{5, 80},
 	{5, 95},
 	{5, 130},
-	{145, 110}
+	{130, 110}
     };
 
     section = WMGetPopUpButtonSelectedItem(panel->secP);
@@ -967,11 +972,6 @@ changePage(WMWidget *w, void *data)
     item = WMGetListItem(panel->texLs, panel->textureIndex[section]);
 
     titem = (TextureListItem*)item->clientData;
-
-    str = wmalloc(strlen(titem->title) + strlen(titem->texture) + 4);
-    sprintf(str, "%s: %s", titem->title, titem->texture);
-    WMSetLabelText(panel->texsL, str);
-    free(str);
 
     {
 	WMColor *color;
@@ -997,13 +997,13 @@ previewClick(XEvent *event, void *clientData)
     _Panel *panel = (_Panel*)clientData;
     int i;
     static WMRect parts[] = {
-	{{30, 5},{210, 20}},
-	{{30,30},{210,20}},
-	{{30,55},{210,20}},
-	{{30,80},{210,9}},
-	{{30,95},{100,20}},
-	{{30,115},{100,60}},
-	{{170,90},{64,64}}
+	{{30, 5},{190, 20}},
+	{{30,30},{190,20}},
+	{{30,55},{190,20}},
+	{{30,80},{190,9}},
+	{{30,95},{90,20}},
+	{{30,115},{90,60}},
+	{{155,90},{64,64}}
     };
 
     for (i = 0; i < 7; i++) {
@@ -1050,7 +1050,6 @@ textureDoubleClick(WMWidget *w, void *data)
     int i, section;
     WMListItem *item;
     TextureListItem *titem;
-    char *str;
 
     /* unselect old texture */
     section = WMGetPopUpButtonSelectedItem(panel->secP);
@@ -1071,11 +1070,6 @@ textureDoubleClick(WMWidget *w, void *data)
     panel->textureIndex[section] = i;
 
     WMRedisplayWidget(panel->texLs);
-
-    str = wmalloc(strlen(titem->title) + strlen(titem->texture) + 4);
-    sprintf(str, "%s: %s", titem->title, titem->texture);
-    WMSetLabelText(panel->texsL, str);
-    free(str);
 
     updatePreviewBox(panel, 1<<section);
 }
@@ -1205,9 +1199,9 @@ static void
 createPanel(Panel *p)
 {
     _Panel *panel = (_Panel*)p;
-    WMColor *color;
     WMFont *font;
     WMScreen *scr = WMWidgetScreen(panel->win);
+    WMTabViewItem *item;
 
     char *tmp;
     Bool ok = True;
@@ -1245,7 +1239,7 @@ createPanel(Panel *p)
 
     /* preview box */
     panel->prevL = WMCreateLabel(panel->frame);
-    WMResizeWidget(panel->prevL, 260, 165);
+    WMResizeWidget(panel->prevL, 240, 165);
     WMMoveWidget(panel->prevL, 15, 10);
     WMSetLabelRelief(panel->prevL, WRSunken);
     WMSetLabelImagePosition(panel->prevL, WIPImageOnly);
@@ -1255,7 +1249,7 @@ createPanel(Panel *p)
     
 
     panel->secP = WMCreatePopUpButton(panel->frame);
-    WMResizeWidget(panel->secP, 260, 20);
+    WMResizeWidget(panel->secP, 240, 20);
     WMMoveWidget(panel->secP, 15, 180);
     WMSetPopUpButtonSelectedItem(panel->secP, 0);
     WMAddPopUpButtonItem(panel->secP, _("Titlebar of Focused Window"));
@@ -1269,34 +1263,27 @@ createPanel(Panel *p)
  */
     WMSetPopUpButtonAction(panel->secP, changePage, panel);
 
-    
-    panel->texsL = WMCreateLabel(panel->frame);
-    WMResizeWidget(panel->texsL, 260, 20);
-    WMMoveWidget(panel->texsL, 15, 205);
-    WMSetLabelWraps(panel->texsL, False);
 
-    /* texture list */
-    font = WMBoldSystemFontOfSize(scr, 12);
+    /* tabview */
 
-    panel->texL = WMCreateLabel(panel->frame);
-    WMResizeWidget(panel->texL, 225, 18);
-    WMMoveWidget(panel->texL, 285, 10);
-    WMSetLabelFont(panel->texL, font);
-    WMSetLabelText(panel->texL, _("Textures"));
-    WMSetLabelRelief(panel->texL, WRSunken);
-    WMSetLabelTextAlignment(panel->texL, WACenter);
-    color = WMDarkGrayColor(scr);
-    WMSetWidgetBackgroundColor(panel->texL, color);
-    WMReleaseColor(color);
-    color = WMWhiteColor(scr);
-    WMSetLabelTextColor(panel->texL, color);
-    WMReleaseColor(color);
+    panel->tabv = WMCreateTabView(panel->frame);
+    WMResizeWidget(panel->tabv, 245, FRAME_HEIGHT - 20);
+    WMMoveWidget(panel->tabv, 265, 10);
 
-    WMReleaseFont(font);
+    /*** texture list ***/
 
-    panel->texLs = WMCreateList(panel->frame);
-    WMResizeWidget(panel->texLs, 225, 144);
-    WMMoveWidget(panel->texLs, 285, 30);
+    panel->texF = WMCreateFrame(panel->frame);
+    WMSetFrameRelief(panel->texF, WRFlat);
+
+    item = WMCreateTabViewItemWithIdentifier(0);
+    WMSetTabViewItemView(item, WMWidgetView(panel->texF));
+    WMSetTabViewItemLabel(item, _("Texture"));
+
+    WMAddItemInTabView(panel->tabv, item);
+
+    panel->texLs = WMCreateList(panel->texF);
+    WMResizeWidget(panel->texLs, 232, 130);
+    WMMoveWidget(panel->texLs, 5, 5);
     WMSetListUserDrawItemHeight(panel->texLs, 35);
     WMSetListUserDrawProc(panel->texLs, paintListItem);
     WMHangData(panel->texLs, panel);
@@ -1312,9 +1299,9 @@ createPanel(Panel *p)
     font = WMSystemFontOfSize(scr, 10);
 
 
-    panel->newB = WMCreateCommandButton(panel->frame);
-    WMResizeWidget(panel->newB, 56, 48);
-    WMMoveWidget(panel->newB, 285, 180);
+    panel->newB = WMCreateCommandButton(panel->texF);
+    WMResizeWidget(panel->newB, 57, 48);
+    WMMoveWidget(panel->newB, 5, 142);
     WMSetButtonFont(panel->newB, font);
     WMSetButtonImagePosition(panel->newB, WIPAbove);
     WMSetButtonText(panel->newB, _("New"));
@@ -1324,9 +1311,9 @@ createPanel(Panel *p)
     WMSetBalloonTextForView(_("Create a new texture."),
 			    WMWidgetView(panel->newB));
 
-    panel->ripB = WMCreateCommandButton(panel->frame);
-    WMResizeWidget(panel->ripB, 56, 48);
-    WMMoveWidget(panel->ripB, 341, 180);
+    panel->ripB = WMCreateCommandButton(panel->texF);
+    WMResizeWidget(panel->ripB, 57, 48);
+    WMMoveWidget(panel->ripB, 63, 142);
     WMSetButtonFont(panel->ripB, font);
     WMSetButtonImagePosition(panel->ripB, WIPAbove);
     WMSetButtonText(panel->ripB, _("Extract..."));
@@ -1338,9 +1325,9 @@ createPanel(Panel *p)
 
     WMSetButtonEnabled(panel->ripB, False);
 
-    panel->editB = WMCreateCommandButton(panel->frame);
-    WMResizeWidget(panel->editB, 56, 48);
-    WMMoveWidget(panel->editB, 397, 180);
+    panel->editB = WMCreateCommandButton(panel->texF);
+    WMResizeWidget(panel->editB, 57, 48);
+    WMMoveWidget(panel->editB, 121, 142);
     WMSetButtonFont(panel->editB, font);
     WMSetButtonImagePosition(panel->editB, WIPAbove);
     WMSetButtonText(panel->editB, _("Edit"));
@@ -1349,9 +1336,9 @@ createPanel(Panel *p)
     WMSetBalloonTextForView(_("Edit the highlighted texture."),
 			    WMWidgetView(panel->editB));
 
-    panel->delB = WMCreateCommandButton(panel->frame);
-    WMResizeWidget(panel->delB, 56, 48);
-    WMMoveWidget(panel->delB, 453, 180);
+    panel->delB = WMCreateCommandButton(panel->texF);
+    WMResizeWidget(panel->delB, 57, 48);
+    WMMoveWidget(panel->delB, 179, 142);
     WMSetButtonFont(panel->delB, font);
     WMSetButtonImagePosition(panel->delB, WIPAbove);
     WMSetButtonText(panel->delB, _("Delete"));
@@ -1363,6 +1350,19 @@ createPanel(Panel *p)
 
     WMReleaseFont(font);
 
+    WMMapSubwidgets(panel->texF);
+
+    /*** colors ***/
+    panel->colF = WMCreateFrame(panel->frame);
+    WMSetFrameRelief(panel->colF, WRFlat);
+
+    item = WMCreateTabViewItemWithIdentifier(1);
+    WMSetTabViewItemView(item, WMWidgetView(panel->colF));
+    WMSetTabViewItemLabel(item, _("Color"));
+
+    WMAddItemInTabView(panel->tabv, item);
+
+    
     /**/
 
     WMRealizeWidget(panel->frame);

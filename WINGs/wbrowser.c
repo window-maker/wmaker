@@ -6,8 +6,6 @@
 #include <math.h> /* for : double rint (double) */
 
 
-char *WMBrowserDidScrollNotification = "WMBrowserDidScrollNotification";
-
 
 typedef struct W_Browser {
     W_Class widgetClass;
@@ -35,7 +33,7 @@ typedef struct W_Browser {
     void *doubleClientData;
     WMAction *doubleAction;
 
-    WMBrowserFillColumnProc *fillColumn;
+    WMBrowserDelegate *delegate;
     
     WMScroller *scroller;
 
@@ -265,23 +263,6 @@ drawTitleOfColumn(WMBrowser *bPtr, int column)
 }
 
 
-void
-WMSetBrowserColumnTitle(WMBrowser *bPtr, int column, char *title)
-{
-    assert(column >= 0);
-    assert(column < bPtr->usedColumnCount);
-
-    if (bPtr->titles[column])
-	free(bPtr->titles[column]);
-
-    bPtr->titles[column] = wstrdup(title);
-   
-    if (COLUMN_IS_VISIBLE(bPtr, column) && bPtr->flags.isTitled) {
-	drawTitleOfColumn(bPtr, column);
-    }
-}
-
-
 WMList*
 WMGetBrowserListInColumn(WMBrowser *bPtr, int column)
 {
@@ -293,9 +274,9 @@ WMGetBrowserListInColumn(WMBrowser *bPtr, int column)
 
 
 void 
-WMSetBrowserFillColumnProc(WMBrowser *bPtr, WMBrowserFillColumnProc *proc)
+WMSetBrowserDelegate(WMBrowser *bPtr, WMBrowserDelegate *delegate)
 {
-    bPtr->fillColumn = proc;
+    bPtr->delegate = delegate;
 }
 
 
@@ -387,6 +368,23 @@ WMGetBrowserSelectedRowInColumn(WMBrowser *bPtr, int column)
 	return -1;
     }
 } 
+
+
+void
+WMSetBrowserColumnTitle(WMBrowser *bPtr, int column, char *title)
+{
+    assert(column >= 0);
+    assert(column < bPtr->usedColumnCount);
+
+    if (bPtr->titles[column])
+	free(bPtr->titles[column]);
+
+    bPtr->titles[column] = wstrdup(title);
+   
+    if (COLUMN_IS_VISIBLE(bPtr, column) && bPtr->flags.isTitled) {
+	drawTitleOfColumn(bPtr, column);
+    }
+}
 
 
 void
@@ -750,6 +748,7 @@ WMGetBrowserPath(WMBrowser *bPtr)
 }
 
 
+
 char*
 WMGetBrowserPathToColumn(WMBrowser *bPtr, int column)
 {
@@ -792,11 +791,24 @@ WMGetBrowserPathToColumn(WMBrowser *bPtr, int column)
 static void
 loadColumn(WMBrowser *bPtr, int column)
 {
-    assert(bPtr->fillColumn);
-    
+    assert(bPtr->delegate);
+    assert(bPtr->delegate->createRowsForColumn);
+
     bPtr->flags.loadingColumn = 1;
-    (*bPtr->fillColumn)(bPtr, column);
+    (*bPtr->delegate->createRowsForColumn)(bPtr->delegate, bPtr, column,
+					   bPtr->columns[column]);
     bPtr->flags.loadingColumn = 0;
+
+    if (bPtr->delegate->titleOfColumn) {
+	char *title;
+
+	title = (*bPtr->delegate->titleOfColumn)(bPtr->delegate, bPtr, column);
+
+	if (bPtr->titles[column])
+	    free(bPtr->titles[column]);
+
+	bPtr->titles[column] = title;
+    }
 }
 
 
@@ -850,11 +862,16 @@ scrollToColumn(WMBrowser *bPtr, int column, Bool updateScroller)
     int notify = 0;
 
     
-    if (column != bPtr->firstVisibleColumn)
+    if (column != bPtr->firstVisibleColumn) {
 	notify = 1;
+    }
 
     if (column < 0)
 	column = 0;
+
+    if (notify && bPtr->delegate && bPtr->delegate->willScroll) {
+	(*bPtr->delegate->willScroll)(bPtr->delegate, bPtr);
+    }
 
     x = 0;
     bPtr->firstVisibleColumn = column;
@@ -888,8 +905,9 @@ scrollToColumn(WMBrowser *bPtr, int column, Bool updateScroller)
     if (bPtr->view->flags.mapped)
 	paintBrowser(bPtr);
 
-    if (notify)
-	WMPostNotificationName(WMBrowserDidScrollNotification, bPtr, NULL);
+    if (notify && bPtr->delegate && bPtr->delegate->didScroll) {
+	(*bPtr->delegate->didScroll)(bPtr->delegate, bPtr);
+    }
 }
 
 
@@ -1007,7 +1025,7 @@ listSelectionObserver(void *observerData, WMNotification *notification)
     int column, item = (int)WMGetNotificationClientData(notification);
     WMList *lPtr = (WMList*)WMGetNotificationObject(notification);
 
-    for (column=0; column<bPtr->usedColumnCount; column++)
+    for (column = 0; column < bPtr->usedColumnCount; column++)
         if (bPtr->columns[column] == lPtr)
             break;
 
@@ -1095,7 +1113,7 @@ destroyBrowser(WMBrowser *bPtr)
 {
     int i;
 
-    for (i=0; i<bPtr->columnCount; i++) {
+    for (i = 0; i < bPtr->columnCount; i++) {
 	if (bPtr->titles[i])
 	    free(bPtr->titles[i]);
     }

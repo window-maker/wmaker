@@ -3,6 +3,24 @@ changes since wmaker 0.53.0:
 
 - added balloon help
 - fixed a bug with setting initial path in browsers.
+- added WMSetButtonImageDimsWhenDisabled()
+- changed simple callback/notifications to delegate-like stuff. Affected
+  widgets are:
+  	WMBrowser
+	- WMSetBrowserFillProc() was replaced with WMSetBrowserDelegate
+	- WMBrowserDidScrollNotification was replaced with a delegate callback
+
+	WMTextField (not completed yet)
+	The notifications will still work, but using the delegate is preferable
+
+  How to convert old code to delegate callbacks:
+  	Create a variable (static or dynamic) of the type of the delegate for
+	the widget type. Replace the notification observers with the
+	equivalent delegate callbacks. Put pointers to the callbacks
+	in the delegate variable. 
+	Take a look in wfilepanel.c to see how it is used there.
+
+- added WMTabView
 
 changes since wmaker 0.52.0:
 ............................

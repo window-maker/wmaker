@@ -81,3 +81,6 @@
 
 /* whether XKB language MODELOCK should be enabled */
 #undef XKB_MODELOCK
+
+/* define if you want user defined menus for applications */
+#undef USER_MENU

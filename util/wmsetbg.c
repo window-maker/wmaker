@@ -999,10 +999,9 @@ updateDomain(char *domain, char *key, char *texture)
 {
     char *program = "wdwrite";
 
-    if (smooth)
-	system("wdwrite SmoothWorkspaceBack YES");
-    else
-	system("wdwrite SmoothWorkspaceBack NO");
+    system(wstrappend("wdwrite ", 
+		      wstrappend(domain, smooth ? " SmoothWorkspaceBack YES"
+				 : " SmoothWorkspaceBack NO")));
 
     execlp(program, program, domain, key, texture, NULL);
     wwarning("warning could not run \"%s\"", program);
