@@ -2,7 +2,8 @@ Makefile Makefile.in
 aclocal.m4
 configure config.log config.cache config.guess config.status config.sub
 libtool ltconfig ltmain.sh
+autom4te.cache
 .psrc .inslog2 tca.map tca.log
 *.rpt
-update update-autoconf
+update
 WindowMaker*.tar.gz
