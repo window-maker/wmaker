@@ -532,17 +532,17 @@ paintItem(WMList *lPtr, int index, Drawable d, char *text, int state,
 	XClearArea(scr->display, d, x, y, width, height, False);
 
     if (text) {
-	/* Avoid overlaping... */
+        /* Avoid overlaping... */
+        WMFont *font = (state & WLDSIsBranch) ? scr->boldFont : scr->normalFont;
 	int textLen = strlen(text);
 	int widthC = (state & WLDSIsBranch) ? width-20 : width-8;
-	if (WMWidthOfString(scr->normalFont, text, textLen) > widthC) {
-	    char *textBuf = createTruncatedString(scr->normalFont,
-		                                  text, &textLen, widthC);
-            W_PaintText(view, d, scr->normalFont,  x+4, y, widthC,
+	if (WMWidthOfString(font, text, textLen) > widthC) {
+	    char *textBuf = createTruncatedString(font, text, &textLen, widthC);
+            W_PaintText(view, d, font,  x+4, y, widthC,
 		    	WALeft, WMColorGC(scr->black), False, textBuf, textLen);
 	    wfree(textBuf);
 	} else {
-      	    W_PaintText(view, d, scr->normalFont,  x+4, y, widthC,
+      	    W_PaintText(view, d, font,  x+4, y, widthC,
 		    	WALeft, WMColorGC(scr->black), False, text, textLen);
 	}
     }
