@@ -19,6 +19,7 @@ Changes since version 0.64.0:
 - Fixed problem with GNOME apps that have windows which need to stay on the
   desktop level.
 - Fixed incorrect parsing of display and screen number from $DISPLAY.
+- Organized the inspector panel a bit better.
 
 
 Changes since version 0.63.1:
