@@ -1,7 +1,7 @@
 /*
  *  WINGs WMHost function library
  *
- *  Copyright (c) 1999 Dan Pascu
+ *  Copyright (c) 1999-2000 Dan Pascu
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +28,12 @@
 #include <arpa/inet.h>
 
 #include "WUtil.h"
+
+
+/* Tell stupid Solaris what's going on */
+#ifndef INADDR_NONE
+#define INADDR_NONE  (-1)
+#endif
 
 
 typedef struct W_Host {
