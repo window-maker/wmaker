@@ -329,9 +329,9 @@ static void handleEvents(XEvent * event, void *data)
 	      if (verifyMarkerMove(rPtr, event->xmotion.x)) {
 		  GC gc = WMColorGC(WMDarkGrayColor(rPtr->view->screen));
 
-		  paintRuler(rPtr);
 		  if (rPtr->moveAction)
 		      (rPtr->moveAction) (rPtr, rPtr->clientData);
+		  paintRuler(rPtr);
 		  XSetLineAttributes(rPtr->view->screen->display, gc, 1,
 				     LineSolid, CapNotLast, JoinMiter);
 		  XDrawLine(rPtr->pview->screen->display,

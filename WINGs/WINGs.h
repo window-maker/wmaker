@@ -1431,9 +1431,17 @@ void WMSetTextHasRuler(WMText *tPtr, Bool shouldhave);
 
 void WMShowTextRuler(WMText *tPtr, Bool show);
 
-void WMSetTextUseMonoFont(WMText *tPtr, Bool mono);
+void WMSetTextEditable(WMText *tPtr, Bool editable);
+
+int WMGetTextEditable(WMText *tPtr);
+
+void WMSetTextUsesMonoFont(WMText *tPtr, Bool mono);
 
 int WMGetTextUsesMonoFont(WMText *tPtr);
+
+void WMSetTextIgnoresNewline(WMText *tPtr, Bool ignore);
+
+int WMGetTextIgnoresNewline(WMText *tPtr);
 
 void WMSetTextDefaultFont(WMText *tPtr, WMFont *font);
 
@@ -1449,7 +1457,17 @@ void WMPrependTextStream(WMText *tPtr, char *text);
 
 void WMAppendTextStream(WMText *tPtr, char *text);
 
-WMData * WMGetTextSelected(WMText *tPtr);
+/* free the returned text */
+char * WMGetTextStream(WMText *tPtr);
+
+/* destroy the bag */
+WMBag * WMGetTextStreamObjects(WMText *tPtr);
+
+/* free the returned text */
+char * WMGetTextSelected(WMText *tPtr);
+
+/* destroy the bag */
+WMBag * WMGetTextSelectedObjects(WMText *tPtr);
 
 void *WMCreateTextBlockWithObject(WMWidget *w, char *description,
     WMColor *color, unsigned short first, unsigned short reserved);
@@ -1465,6 +1483,11 @@ void WMGetTextBlockProperties(void *vtb, unsigned int *first,
     unsigned int *kanji, unsigned int *underlined, int *script,
     unsigned int *marginN);
     
+void WMSetTextSelectionColor(WMText *tPtr, WMColor *color);
+
+void WMSetTextSelectionFont(WMText *tPtr, WMFont *font);
+
+void WMSetTextAlignment(WMText *tPtr, WMAlignment alignment);
 
 /* parser related stuff... see how it can be done in testtext.c */
 

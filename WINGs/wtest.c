@@ -1075,13 +1075,14 @@ int main(int argc, char **argv)
      * 
      * Put the testSomething() function you want to test here.
      */
-    testTabView(scr);
+    testColorWell(scr);
     
+
+    testDragAndDrop(scr);
+    testDragAndDrop(scr);
+    testFontPanel(scr);
+
 #if 0    
-
-    testDragAndDrop(scr);
-    testDragAndDrop(scr);
-
     testScrollView(scr);
     
     testButton(scr);
@@ -1089,10 +1090,9 @@ int main(int argc, char **argv)
     testFrame(scr);
 
     
-    testColorWell(scr);
+    testTabView(scr);
 
 
-    testFontPanel(scr);
 
     testSplitView(scr);
 
