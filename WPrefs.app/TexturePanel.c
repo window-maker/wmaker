@@ -778,7 +778,7 @@ ShowTexturePanel(TexturePanel *panel)
     Display *dpy = WMScreenDisplay(WMWidgetScreen(panel->win));
     Screen *scr = DefaultScreenOfDisplay(dpy);
 
-    WMSetWindowUPosition(panel->win, 
+    WMSetWindowInitialPosition(panel->win,
 			 (WidthOfScreen(scr)-WMWidgetWidth(panel->win))/2,
 			 (HeightOfScreen(scr)-WMWidgetHeight(panel->win))/2);
     WMMapWidget(panel->win);

@@ -398,7 +398,7 @@ WMRunModalFilePanelForDirectory(WMFilePanel *panel, WMWindow *owner,
         break;
     }
 
-    WMSetWindowUPosition(panel->win, 
+    WMSetWindowInitialPosition(panel->win,
 		 (scr->rootView->size.width - WMWidgetWidth(panel->win))/2,
 		 (scr->rootView->size.height - WMWidgetHeight(panel->win))/2);
     WMSetLabelText(panel->titleLabel, name);

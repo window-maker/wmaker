@@ -761,9 +761,9 @@ void WMSetWindowMiniwindowImage(WMWindow *win, WMPixmap *pixmap);
 
 void WMSetWindowCloseAction(WMWindow *win, WMAction *action, void *clientData);
 
-void WMSetWindowUPosition(WMWindow *win, int x, int y);
+void WMSetWindowInitialPosition(WMWindow *win, int x, int y);
 
-void WMSetWindowUSize(WMWindow *win, unsigned width, unsigned height);
+void WMSetWindowInitialSize(WMWindow *win, unsigned width, unsigned height);
 
 void WMSetWindowMaxSize(WMWindow *win, unsigned width, unsigned height);
 

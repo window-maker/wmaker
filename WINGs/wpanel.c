@@ -95,7 +95,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 	panel->win = WMCreateWindowWithStyle(scrPtr, "alertPanel",
 					     WMTitledWindowMask);
 
-    WMSetWindowUPosition(panel->win, 
+    WMSetWindowInitialPosition(panel->win,
 	 (scrPtr->rootView->size.width - WMWidgetWidth(panel->win))/2,
 	 (scrPtr->rootView->size.height - WMWidgetHeight(panel->win))/2);
     WMSetWindowTitle(panel->win, "");

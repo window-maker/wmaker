@@ -447,7 +447,7 @@ realizeWindow(WMWindow *win)
 
 
 void
-WMSetWindowUPosition(WMWindow *win, int x, int y)
+WMSetWindowInitialPosition(WMWindow *win, int x, int y)
 {
     win->flags.upos_set = 1;
     win->upos.x = x;
@@ -459,7 +459,7 @@ WMSetWindowUPosition(WMWindow *win, int x, int y)
 
 
 void
-WMSetWindowUSize(WMWindow *win, unsigned width, unsigned height)
+WMSetWindowInitialSize(WMWindow *win, unsigned width, unsigned height)
 {
     win->usize.width = width;
     win->usize.height = height;

@@ -50,6 +50,9 @@ changes since wmaker 0.60.0:
         		  void *clientData);
 	WMDeleteInputHandler(WMHandlerID handlerID);
 - added progress indicator widget
+- Changed WMSetWindowUPosition() and WMSetWindowUSize() to
+  WMSetWindowInitialPosition() and WMSetWindowInitialSize() respectively,
+  for better naming conventions.
 
 
 changes since wmaker 0.53.0:
