@@ -1806,9 +1806,8 @@ W_ViewDelegate _TextViewDelegate =
     NULL,
 };
 
-/* nice, divisble-by-16 blocks */
-#define reqBlockSize(requested)  (requested + 16 - (requested%16))
-
+#define TEXT_BUFFER_INCR 8
+#define reqBlockSize(requested)  (requested + TEXT_BUFFER_INCR)
 
 static void
 clearText(Text *tPtr)
@@ -1838,7 +1837,6 @@ deleteTextInteractively(Text *tPtr, KeySym ksym)
     Bool wasFirst = 0;
 
     if (!tPtr->flags.editable) {
-        XBell(tPtr->view->screen->display, 0);
         return;
     }
 
@@ -1919,7 +1917,6 @@ insertTextInteractively(Text *tPtr, char *text, int len)
     char *newline = NULL;
 
     if (!tPtr->flags.editable) {
-        XBell(tPtr->view->screen->display, 0);
         return;
     }
 
@@ -1993,6 +1990,7 @@ insertTextInteractively(Text *tPtr, char *text, int len)
     } else { 
         if (tb->used + len >= tb->allocated) {
             tb->allocated = reqBlockSize(tb->used+len);
+printf("realloced %d... %d\n", tb->allocated, tb->used+len);
             tb->text = wrealloc(tb->text, tb->allocated);
         }
         
@@ -2222,14 +2220,17 @@ printf("fontChanged\n");
 static  void
 handleTextKeyPress(Text *tPtr, XEvent *event)
 {
-    char buffer[2];
+    char buffer[64];
     KeySym ksym;
     int control_pressed = False;
     TextBlock *tb = NULL;
 
     if (((XKeyEvent *) event)->state & ControlMask)
         control_pressed = True;
-    buffer[XLookupString(&event->xkey, buffer, 1, &ksym, NULL)] = 0;
+    buffer[XLookupString(&event->xkey, buffer, 63, &ksym, NULL)] = 0;
+    if(!*buffer) 
+        return;
+
     
     switch(ksym) {
 
@@ -2298,10 +2299,10 @@ R_imaGFX:      if(tb->next) {
         break;
 
         case XK_Return:
-            buffer[0] = '\n';
+            *buffer = '\n';
         default:
-        if (buffer[0] != 0 && !control_pressed) {
-            insertTextInteractively(tPtr, buffer, 1);
+        if (*buffer != 0 && !control_pressed) {
+            insertTextInteractively(tPtr, buffer, strlen(buffer));
             updateCursorPosition(tPtr);
             paintText(tPtr);
 
@@ -2310,10 +2311,10 @@ R_imaGFX:      if(tb->next) {
             WMShowTextRuler(tPtr, i);
             tPtr->flags.rulerShown = i;
          }   
-        else if (control_pressed && buffer[0] == '') 
+        else if (control_pressed && *buffer == '') 
             XBell(tPtr->view->screen->display, 0);
-	else
-	    WMRelayToNextResponder(tPtr->view, event);
+    else    
+        WMRelayToNextResponder(tPtr->view, event);
     }
 
     if (!control_pressed && tPtr->flags.ownsSelection) 
