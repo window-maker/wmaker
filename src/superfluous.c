@@ -86,39 +86,36 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
     icon = RCreateImageFromDrawable(scr->rcontext, win, None);
     if (!icon)
 	return;
-
-    XGrabServer(dpy);
-    XUnmapWindow(dpy, win);
-    XSync(dpy, False);
-
-    ximage = XGetImage(dpy, scr->root_win, x, y, w, h, AllPlanes, ZPixmap);
-    back = RCreateImageFromXImage(scr->rcontext, ximage, NULL);
-    XDestroyImage(ximage);
-    if (!back) {
-	RDestroyImage(icon);
-	return;
-    }
-
+    
     gcv.foreground = scr->white_pixel;
     gcv.background = scr->black_pixel;
     gcv.graphics_exposures = False;
     gcv.subwindow_mode = IncludeInferiors;
     gc = XCreateGC(dpy, scr->w_win, GCForeground|GCBackground|GCSubwindowMode
-		   |GCGraphicsExposures, &gcv);
+                  |GCGraphicsExposures, &gcv);
 
-	/*
-    XSetClipMask(dpy, scr->copy_gc, None);
-	*/
+
+    XGrabServer(dpy);
+    RConvertImage(scr->rcontext, icon, &pixmap);
+    XUnmapWindow(dpy, win);
+
+    ximage = XGetImage(dpy, scr->root_win, x, y, w, h, AllPlanes, ZPixmap);
+    XCopyArea(dpy, pixmap, scr->root_win, gc, 0, 0, w, h, x, y);
+    XFreePixmap(dpy,pixmap);
+
+    back = RCreateImageFromXImage(scr->rcontext, ximage, NULL);
+    XDestroyImage(ximage);
+    if (!back) {
+        RDestroyImage(icon);
+        return;
+    }
+
 
     for (i=0,run=0; i<DEMATERIALIZE_STEPS; i++) {
 	XEvent foo;
 	if (!run && XCheckTypedEvent(dpy, ButtonPress, &foo)) {
 	    run=1;
 	    XPutBackEvent(dpy, &foo);
-	    /*
-	     XClearWindow(dpy, scr->root_win);
-	     break;
-	     */
 	}
 	image = RCloneImage(back);
 	RCombineImagesWithOpaqueness(image, icon, 
@@ -129,9 +126,6 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
 	XFlush(dpy);
 	if(!run) wusleep(1000);
     }
-	/*
-    XClearArea(dpy, scr->root_win, x, y, w, h, False);
-	*/
     XFlush(dpy);
 
     XUngrabServer(dpy);
