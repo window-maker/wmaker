@@ -408,7 +408,7 @@ wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 	}
     } else {
 	int tmp_workspace = -1;
-	int tmp_level = -1;
+	int tmp_level = INT_MIN; /* INT_MIN is never used by the window levels */
 	Bool check;
 	
 	check = False;
@@ -430,7 +430,10 @@ wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 	wOLWMCheckClientHints(wwin);
 #endif /* OLWM_HINTS */
 
-	if (tmp_level < 0) {
+        /* window levels are between INT_MIN+1 and INT_MAX, so if we still
+         * have INT_MIN that means that no window level was requested. --Dan
+         */
+	if (tmp_level == INT_MIN) {
 	    if (WFLAGP(wwin, floating))
 		*level = WMFloatingLevel;
 	    else if (WFLAGP(wwin, sunken))

@@ -731,7 +731,7 @@ main(int argc, char **argv)
     else
 	str = NULL;
 
-    if (str && sscanf(str, "%i.%i", &d, &s)==2)
+    if (str && sscanf(str, ":%i.%i", &d, &s)==2)
 	multiHead = False;
 
     DisplayName = XDisplayName(DisplayName);

@@ -16,6 +16,9 @@ Changes since version 0.64.0:
 - fixed a memleak in the dialog panels.
 - made "Keep on Top" in the dock/clip menu a checked menu entry. It's _much_
   easier to work with it this way.
+- Fixed problem with GNOME apps that have windows which need to stay on the
+  desktop level.
+- Fixed incorrect parsing of display and screen number from $DISPLAY.
 
 
 Changes since version 0.63.1:
