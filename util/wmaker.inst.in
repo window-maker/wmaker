@@ -65,13 +65,15 @@ copy() {
 	elif [ "$file" = "WMRootMenu" ]; then
 		if [ "$LOCALE" ]; then
             	    if [ -f $GLOBALDIR/plmenu.${LOCALE%_*} ]; then
-                	cp $GLOBALDIR/plmenu.${LOCALE%_*} $GSDIR/Defaults/WMRootMenu
+                	source=$GLOBALDIR/plmenu.${LOCALE%_*}
 		    else
-			cp $GLOBALDIR/plmenu $GSDIR/Defaults/WMRootMenu
+			source=$GLOBALDIR/plmenu 
             	    fi
         	else
-            	    cp $GLOBALDIR/plmenu $GSDIR/Defaults/WMRootMenu
+            	    source=$GLOBALDIR/plmenu
         	fi
+		sed -e "s:#wmdatadir#:$GLOBALDIR:g" \
+			$source > $GSDIR/Defaults/WMRootMenu
 	else
 		if test "x$GNUSTEP_USER_ROOT" = "x"; then
 			sed -e "s:#wmdatadir#:$GLOBALDIR:g" \
