@@ -181,7 +181,7 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
     WMenu *switchmenu = scr->switch_menu;
     WMenuEntry *entry;
     char title[MAX_MENU_TEXT_LENGTH+6];
-    int len = MAX_MENU_TEXT_LENGTH+6;
+    int len = sizeof(title);
     int i;
     int checkVisibility = 0;
 

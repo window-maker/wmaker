@@ -57,6 +57,7 @@ libWINGs_a_SOURCES = 	\
 	wfont.c \
 	wfontpanel.c \
 	widgets.c \
+	winputmethod.c \
 	wlabel.c \
 	wlist.c \
 	wmenuitem.c \

@@ -413,7 +413,6 @@ wApplicationCreate(WScreen *scr, Window main_window)
         if (!tmp)
 	    extractClientIcon(wapp->app_icon);
     }
-
     /* set the application instance index */
     {
         WApplication *list = scr->wapp_list;
@@ -424,14 +423,16 @@ wApplicationCreate(WScreen *scr, Window main_window)
     if (!WFLAGP(wwin, collapse_appicons))
 	return 0;
  */
+#define Xstreql(a, b) ((a) == (b) || (a && b && strcmp(a, b)==0))
+
 
 	/* look for a free index # */
 	while (list) {
-	    if (strcmp(wwin->wm_instance,
-		       list->main_window_desc->wm_instance) == 0
+	    if (Xstreql(wwin->wm_instance,
+		       list->main_window_desc->wm_instance) 
 		&&
-		strcmp(wwin->wm_class,
-		       list->main_window_desc->wm_class) == 0) {
+		Xstreql(wwin->wm_class,
+		       list->main_window_desc->wm_class)) {
 		
 		if (list->index == index) {
 		    index++;

@@ -336,7 +336,7 @@ getLocalizedMenuFile(char *menu)
     if (!Locale)
 	return NULL;
 
-    len = strlen(menu)+32;
+    len = strlen(menu)+strlen(Locale)+8;
     buffer = wmalloc(len);
 
     /* try menu.locale_name */

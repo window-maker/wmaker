@@ -132,6 +132,8 @@ typedef struct W_Screen {
     
     RContext *rcontext;
 
+    struct W_IMContext *imctx;
+    
     /* application related */
 
     W_FocusInfo *focusInfo;

@@ -206,6 +206,8 @@
  */
 #undef WINDOW_BIRTH_ZOOM
 
+#define WINDOW_BIRTH_ZOOM2
+
 /*
  * whether arrow drawing in clip buttons should be gradiented
  */

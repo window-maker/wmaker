@@ -446,11 +446,34 @@ DoWindowBirth(WWindow *wwin)
     XFlush(dpy);
 }
 #else
+#ifdef WINDOW_BIRTH_ZOOM2
+extern void animateResize();
+
+void DoWindowBirth(WWindow *wwin)
+{
+    /* dummy stub */
+
+    int center_x, center_y;
+    int width = wwin->frame->core->width;
+    int height = wwin->frame->core->height;
+    int w = WMIN(width, 20);
+    int h = WMIN(height, 20);
+    WScreen *scr = wwin->screen_ptr;
+
+    center_x = wwin->frame_x + (width - w) / 2;
+    center_y = wwin->frame_y + (height - h) / 2;
+
+    animateResize(scr, center_x, center_y, 1, 1,
+		  wwin->frame_x , wwin->frame_y, width, height,
+		  0);
+}
+#else
 void
 DoWindowBirth(WWindow *wwin)
 {
     /* dummy stub */
 }
+#endif
 #endif
 
 

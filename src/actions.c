@@ -740,7 +740,7 @@ animateResizeZoom(WScreen *scr, int x, int y, int w, int h,
 #undef FRAMES
 
 
-static void 
+void
 animateResize(WScreen *scr, int x, int y, int w, int h, 
 	      int fx, int fy, int fw, int fh, int hiding)
 {

@@ -3,7 +3,7 @@ This directory contains some patches contributed by ppl. Do NOT mail the
 wmaker developers for any problems with them.
 
 
-single_click.diff
+*** single_click.diff
 
 allows single click in dock
 
@@ -16,3 +16,12 @@ John Morrissey <jwm@horde.net>
 updated for Window Maker 0.65.0 by:
 Daniel Richard G. <skunk@graphics.lcs.mit.edu>
 
+
+
+*** workspace_flip.patch
+
+Allows flipping across workspaces by putting the
+mouse in the side of the workspace.
+
+author:
+Martin Sarfy <xsarfy@informatics.muni.cz>

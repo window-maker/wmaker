@@ -37,6 +37,7 @@ SUPPORTED PLATFORMS
 - PowerMac / Power MachTen 4.1.1 over MacOS
 - Amiga 3000 running RedHat Linux 5.1 (Rawhide)
 - IBM S/390 running Linux
+- IBM S/390 running Conectiva Linux (experimental)
 - iBook running Darwin
 - Windows NT with Cygwin/XFree86
 - Sony PlayStation2 running Linux

@@ -1714,3 +1714,4 @@ msgstr "Tuhoa viimeinen"
 #: ../src/xutil.c:228
 msgid "invalid data in selection"
 msgstr "virheellistä tietoa valinnassa"
+

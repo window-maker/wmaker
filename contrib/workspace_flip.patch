@@ -1,0 +1,126 @@
+diff -Naur WindowMaker-0.65.0/src/WindowMaker.h wmaker-workspaceflip/src/WindowMaker.h
+--- WindowMaker-0.65.0/src/WindowMaker.h	Sat Apr 28 01:41:21 2001
++++ wmaker-workspaceflip/src/WindowMaker.h	Sun Aug 12 12:51:14 2001
+@@ -397,6 +397,8 @@
+ 
+     int raise_delay;		       /* delay for autoraise. 0 is disabled */
+ 
++    int workspace_flip_delay;	       /* delay for workspace flipping, 0 is disabled */
++    
+     int cmap_size;		       /* size of dithering colormap in colors
+ 					* per channel */
+ 
+diff -Naur WindowMaker-0.65.0/src/defaults.c wmaker-workspaceflip/src/defaults.c
+--- WindowMaker-0.65.0/src/defaults.c	Fri May 11 00:16:49 2001
++++ wmaker-workspaceflip/src/defaults.c	Sun Aug 12 12:51:14 2001
+@@ -420,6 +420,9 @@
+     {"RaiseDelay",	"0",			NULL,
+ 	  &wPreferences.raise_delay,	getInt,		NULL
+     },
++    {"WorkspaceFlipDelay",	"0",	NULL,
++	  &wPreferences.workspace_flip_delay,	getInt,		NULL
++    },
+     {"WindozeCycling",  "YES",			NULL,
+ 	  &wPreferences.windows_cycling,getBool,	NULL
+     },
+diff -Naur WindowMaker-0.65.0/src/event.c wmaker-workspaceflip/src/event.c
+--- WindowMaker-0.65.0/src/event.c	Sat Apr 28 01:41:21 2001
++++ wmaker-workspaceflip/src/event.c	Sun Aug 12 12:51:14 2001
+@@ -1676,12 +1676,53 @@
+     }
+ }
+ 
++#define DEL_TIMER(timer) { \
++	WMDeleteTimerHandler(timer); \
++	timer = NULL; \
++}
++
++
++
++static void 
++flipRightWorkspace(void* data) 
++{
++	WScreen *scr = (WScreen*)data;
++	int x,y,tmp,last_workspace = scr->current_workspace;
++	Window tmpw;
++
++	DEL_TIMER(scr->workspace_flip_right_timer);
++
++	XQueryPointer(dpy,scr->root_win,&tmpw,&tmpw,&x,&y,&tmp,&tmp,&tmp);
++	if(x != scr->scr_width-1) return;
++	
++	wWorkspaceRelativeChange(scr, 1);
++	if(last_workspace != scr->current_workspace) 
++		XWarpPointer(dpy,None,scr->root_win,0,0,0,0,1,y);
++}
++
++static void 
++flipLeftWorkspace(void* data) 
++{
++	WScreen *scr = (WScreen*)data;
++	int x,y,tmp,last_workspace = scr->current_workspace;
++	Window tmpw;
++
++	DEL_TIMER(scr->workspace_flip_left_timer);
++	
++	XQueryPointer(dpy,scr->root_win,&tmpw,&tmpw,&x,&y,&tmp,&tmp,&tmp);
++	if(x != 0) return;
++
++	wWorkspaceRelativeChange(scr, -1);
++	if(last_workspace != scr->current_workspace)
++		XWarpPointer(dpy,None,scr->root_win,0,0,0,0,scr->scr_width-2,y);
++}
+ 
+ static void 
+ handleMotionNotify(XEvent *event)
+ {
+     WMenu *menu;
+     WScreen *scr = wScreenForRootWindow(event->xmotion.root);
++	int left,right;
+ 
+     if (wPreferences.scrollable_menus) {
+         if (scr->flags.jump_back_pending ||
+@@ -1697,6 +1738,29 @@
+                 wMenuScroll(menu, event);
+         }
+     }
++
++	/* workspace flipping */
++	if(!wPreferences.workspace_flip_delay) return;
++
++	left  = (event->xmotion.x_root == 0);
++	right = (event->xmotion.x_root == scr->scr_width-1);
++
++	if(right && !scr->workspace_flip_right_timer) 
++		scr->workspace_flip_right_timer = 
++			WMAddTimerHandler(wPreferences.workspace_flip_delay,
++							  flipRightWorkspace,scr);
++
++	if(left && !scr->workspace_flip_left_timer) 
++		scr->workspace_flip_left_timer = 
++			WMAddTimerHandler(wPreferences.workspace_flip_delay,
++							  flipLeftWorkspace,scr);
++
++	if(!right && scr->workspace_flip_right_timer) 
++		DEL_TIMER(scr->workspace_flip_right_timer);
++
++	if(!left && scr->workspace_flip_left_timer) 
++		DEL_TIMER(scr->workspace_flip_left_timer);
++
+ #if 0
+     if (event->xmotion.subwindow == None)
+ 	return;
+diff -Naur WindowMaker-0.65.0/src/screen.h wmaker-workspaceflip/src/screen.h
+--- WindowMaker-0.65.0/src/screen.h	Sun Apr 15 03:23:01 2001
++++ wmaker-workspaceflip/src/screen.h	Sun Aug 12 12:51:14 2001
+@@ -273,6 +273,10 @@
+     Window last_click_window;
+     int last_click_button;
+     
++	/* for workspace flipping when mouse hits edge */
++	WMHandlerID *workspace_flip_left_timer;
++	WMHandlerID *workspace_flip_right_timer;
++	
+     /* balloon help data */
+     struct _WBalloon *balloon;
+ 

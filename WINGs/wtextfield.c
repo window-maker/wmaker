@@ -1259,7 +1259,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     normal_key:
      default:
 	if (!controled) {
-	    if (count > 0 && isprint(buffer[0])) {
+	    if (count > 0 && !iscntrl(buffer[0])) {
 		if (tPtr->selection.count)
 		    WMDeleteTextFieldRange(tPtr, tPtr->selection);
 		WMInsertTextFieldText(tPtr, buffer, tPtr->cursorPosition);

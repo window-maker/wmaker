@@ -1,5 +1,10 @@
+Changes since version 0.65.1:
+.............................
+
+- fixed crash when saving empty menu item in WPrefs
 - Fixed some more bash specific constructs in wsetfont.
     (Marcelo E. Magallon <marcelo.magallon@bigfoot.com>)
+- fixed crash with broken apps that set null WM_CLASS
 
 Changes since version 0.65.0:
 .............................
@@ -26,6 +31,7 @@ Changes since version 0.65.0:
    Robert Marshall <robert@chezmarshall.freeserve.co.uk>)
 - Replaced almost all sprintf() calls with snprintf()
 - fixed crash when removing menu entry for Window List or Workspace submenu
+- added WINDOW_BIRTH_ZOOM2 (Éric Tremblay <delt@razorback.yi.org>)
 
 Changes since version 0.64.0:
 .............................

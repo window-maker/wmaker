@@ -944,7 +944,7 @@ static void setRowSelected(WMTableView *table, unsigned row, Bool flag)
 	}
     }
     if (repaint && row < table->rows) {
-	//drawFullRow(table, row);
+	/*drawFullRow(table, row);*/
 	repaintTable(table);
     }
 }
