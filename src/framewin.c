@@ -253,7 +253,7 @@ wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags)
 	    }
         
 #ifdef XKB_BUTTON_HINT
-	    if (flags & WFF_XKB_BUTTON) {
+	    if (flags & WFF_LANGUAGE_BUTTON) {
             fwin->flags.language_button = 1;
             if (wPreferences.new_style) {
                 fwin->language_button = wCoreCreate(fwin->core,
@@ -545,7 +545,7 @@ wFrameWindowHideButton(WFrameWindow *fwin, int flags)
     }
     
 #ifdef XKB_BUTTON_HINT
-    if ((flags & WFF_XKB_BUTTON) && fwin->language_button) {
+    if ((flags & WFF_LANGUAGE_BUTTON) && fwin->language_button) {
 	XUnmapWindow(dpy, fwin->language_button->window);
     fwin->flags.hide_language_button = 1;
     }
@@ -580,7 +580,7 @@ wFrameWindowShowButton(WFrameWindow *fwin, int flags)
     }
 
 #ifdef XKB_BUTTON_HINT
-    if ((flags & WFF_XKB_BUTTON) && fwin->language_button
+    if ((flags & WFF_LANGUAGE_BUTTON) && fwin->language_button
 	&& fwin->flags.hide_language_button) {
 	
 	if (!fwin->flags.languagebutton_dont_fit)

@@ -97,6 +97,11 @@ extern Bool wShapeSupported;
 extern int wShapeEventBase;
 #endif
 
+#ifdef KEEP_XKB_LOCK_STATUS
+extern Bool wXkbSupported;
+extern int wXkbEventBase;
+#endif
+
 /* contexts */
 extern XContext wWinContext;
 extern XContext wAppWinContext;
@@ -792,6 +797,14 @@ StartUp(Bool defaultScreenOnly)
 #ifdef SHAPE
     /* ignore j */
     wShapeSupported = XShapeQueryExtension(dpy, &wShapeEventBase, &j);
+#endif
+    
+#ifdef KEEP_XKB_LOCK_STATUS
+    wXkbSupported = XkbQueryExtension(dpy, NULL, &wXkbEventBase, NULL, NULL, NULL);
+    if(wPreferences.modelock && !wXkbSupported) {
+        wwarning(_("XKB is not supported. KbdModeLock is automatically disabled."));
+        wPreferences.modelock = 0;
+    }
 #endif
 
     if (defaultScreenOnly) {

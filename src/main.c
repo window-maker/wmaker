@@ -127,6 +127,10 @@ Bool wShapeSupported;
 int wShapeEventBase;
 #endif
 
+#ifdef KEEP_XKB_LOCK_STATUS
+Bool wXkbSupported;
+int wXkbEventBase;
+#endif
 
 /* special flags */
 char WProgramState = WSTATE_NORMAL;

@@ -1143,7 +1143,7 @@ wShowInfoPanel(WScreen *scr)
     WSETUFLAG(wwin, no_closable, 0);
     WSETUFLAG(wwin, no_close_button, 0);
 #ifdef XKB_BUTTON_HINT
-    wFrameWindowHideButton(wwin->frame, WFF_XKB_BUTTON);
+    wFrameWindowHideButton(wwin->frame, WFF_LANGUAGE_BUTTON);
 #endif
     wWindowUpdateButtonImages(wwin);
     wFrameWindowShowButton(wwin->frame, WFF_RIGHT_BUTTON);
@@ -1262,7 +1262,7 @@ wShowLegalPanel(WScreen *scr)
     wWindowUpdateButtonImages(wwin);
     wFrameWindowShowButton(wwin->frame, WFF_RIGHT_BUTTON);
 #ifdef XKB_BUTTON_HINT
-    wFrameWindowHideButton(wwin->frame, WFF_XKB_BUTTON);
+    wFrameWindowHideButton(wwin->frame, WFF_LANGUAGE_BUTTON);
 #endif
     wwin->frame->on_click_right = destroyLegalPanel;
     
@@ -1682,7 +1682,7 @@ wShowGNUstepPanel(WScreen *scr)
     wWindowUpdateButtonImages(wwin);
     wFrameWindowShowButton(wwin->frame, WFF_RIGHT_BUTTON);
 #ifdef XKB_BUTTON_HINT
-    wFrameWindowHideButton(wwin->frame, WFF_XKB_BUTTON);
+    wFrameWindowHideButton(wwin->frame, WFF_LANGUAGE_BUTTON);
 #endif
     wwin->frame->on_click_right = destroyGNUstepPanel;
     

@@ -893,7 +893,7 @@ wManageWindow(WScreen *scr, Window window)
     foo = WFF_LEFT_BUTTON | WFF_RIGHT_BUTTON;
 #ifdef XKB_BUTTON_HINT
     if (wPreferences.modelock)
-        foo |= WFF_XKB_BUTTON;
+        foo |= WFF_LANGUAGE_BUTTON;
 #endif
     if (!WFLAGP(wwin, no_titlebar))
 	foo |= WFF_TITLEBAR;
@@ -920,6 +920,10 @@ wManageWindow(WScreen *scr, Window window)
 	foo |= WFF_RIGHT_BUTTON;
     if (WFLAGP(wwin, no_miniaturize_button))
 	foo |= WFF_LEFT_BUTTON;
+#ifdef XKB_BUTTON_HINT
+    if (WFLAGP(wwin, no_language_button) || WFLAGP(wwin, no_focusable))
+    foo |= WFF_LANGUAGE_BUTTON;
+#endif
     if (foo!=0)
 	wFrameWindowHideButton(wwin->frame, foo);
 
@@ -1254,7 +1258,7 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
     foo = WFF_RIGHT_BUTTON;
     foo |= WFF_TITLEBAR;
 #ifdef XKB_BUTTON_HINT
-    foo |= WFF_XKB_BUTTON;
+    foo |= WFF_LANGUAGE_BUTTON;
 #endif
 
     wwin->frame = wFrameWindowCreate(scr, WMFloatingLevel,

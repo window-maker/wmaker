@@ -450,10 +450,8 @@ saveTimestamp(XEvent *event)
 static void
 handleExtensions(XEvent *event)
 {
-#ifdef KEEP_XKB_LOCK_STATUS   
     XkbEvent *xkbevent;
     xkbevent = (XkbEvent *)event;
-#endif /*KEEP_XKB_LOCK_STATUS*/
 #ifdef SHAPE
     if (wShapeSupported && event->type == (wShapeEventBase+ShapeNotify)) {
 	handleShapeNotify(event);

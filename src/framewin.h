@@ -37,7 +37,7 @@
 #define WFF_BORDER	(1<<4)
 #define WFF_SINGLE_STATE (1<<5)
 #ifdef XKB_BUTTON_HINT
-#define WFF_XKB_BUTTON	(1<<6)
+#define WFF_LANGUAGE_BUTTON	(1<<6)
 #endif
 
 
