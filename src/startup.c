@@ -58,6 +58,7 @@
 #include "defaults.h"
 #include "properties.h"
 #include "dialog.h"
+#include "wmspec.h"
 #ifdef XDND
 #include "xdnd.h"
 #endif

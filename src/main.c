@@ -582,13 +582,32 @@ getFullPath(char *path)
 #endif
 
 
-
 int
 main(int argc, char **argv)
 {
-    int i;
-    int i_am_the_monitor= 1;
-    
+    int i_am_the_monitor, i, len;
+    char *str, *alt;
+
+    /* setup common stuff for the monitor and wmaker itself */
+    WMInitializeApplication("WindowMaker", &argc, argv);
+
+    memset(&wPreferences, 0, sizeof(WPreferences));
+
+    wPreferences.fallbackWMs = WMCreateArray(8);
+    alt = getenv("WINDOWMAKER_ALT_WM");
+    if (alt != NULL)
+        WMAddToArray(wPreferences.fallbackWMs, wstrdup(alt));
+
+    WMAddToArray(wPreferences.fallbackWMs, wstrdup("blackbox"));
+    WMAddToArray(wPreferences.fallbackWMs, wstrdup("metacity"));
+    WMAddToArray(wPreferences.fallbackWMs, wstrdup("fvwm"));
+    WMAddToArray(wPreferences.fallbackWMs, wstrdup("twm"));
+    WMAddToArray(wPreferences.fallbackWMs, NULL);
+    WMAddToArray(wPreferences.fallbackWMs, wstrdup("rxvt"));
+    WMAddToArray(wPreferences.fallbackWMs, wstrdup("xterm"));
+
+    i_am_the_monitor= 1;
+
     for (i= 1; i < argc; i++)
     {
         if (strncmp(argv[i], "--for-real", strlen("--for-real"))==0)
@@ -596,8 +615,23 @@ main(int argc, char **argv)
             i_am_the_monitor= 0;
             break;
         }
+        else if (strcmp(argv[i], "-display")==0 || strcmp(argv[i], "--display")==0)
+        {
+            i++;
+            if (i>=argc) {
+                wwarning(_("too few arguments for %s"), argv[i-1]);
+                exit(0);
+            }
+            DisplayName = argv[i];
+        }
     }
-    
+
+    DisplayName = XDisplayName(DisplayName);
+    len = strlen(DisplayName)+64;
+    str = wmalloc(len);
+    snprintf(str, len, "DISPLAY=%s", DisplayName);
+    putenv(str);
+
     if (i_am_the_monitor)
       return MonitorLoop(argc, argv);
     else
@@ -605,11 +639,11 @@ main(int argc, char **argv)
 }
 
 
-static int 
+static int
 real_main(int argc, char **argv)
 {
     int i, restart=0;
-    char *str, *alt;
+    char *str;
     int d, s;
     int flag;
 #ifdef DEBUG
@@ -635,9 +669,6 @@ real_main(int argc, char **argv)
     Arguments[argc-1]= "--for-real=";
     Arguments[argc]= NULL;
 
-    WMInitializeApplication("WindowMaker", &argc, argv);
-
-
     ProgName = strrchr(argv[0],'/');
     if (!ProgName)
         ProgName = argv[0];
@@ -646,21 +677,6 @@ real_main(int argc, char **argv)
 
 
     restart = 0;
-
-    memset(&wPreferences, 0, sizeof(WPreferences));
-
-    wPreferences.fallbackWMs = WMCreateArray(8);
-    alt = getenv("WINDOWMAKER_ALT_WM");
-    if (alt != NULL)
-        WMAddToArray(wPreferences.fallbackWMs, wstrdup(alt));
-
-    WMAddToArray(wPreferences.fallbackWMs, wstrdup(FALLBACK_WINDOWMANAGER));
-    WMAddToArray(wPreferences.fallbackWMs, wstrdup("metacity"));
-    WMAddToArray(wPreferences.fallbackWMs, wstrdup("fvwm"));
-    WMAddToArray(wPreferences.fallbackWMs, wstrdup("twm"));
-    WMAddToArray(wPreferences.fallbackWMs, NULL);
-    WMAddToArray(wPreferences.fallbackWMs, wstrdup("rxvt"));
-    WMAddToArray(wPreferences.fallbackWMs, wstrdup("xterm"));
 
     if (argc>1) {
         for (i=1; i<argc; i++) {

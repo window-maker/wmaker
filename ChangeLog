@@ -5,6 +5,9 @@ Changes since version 0.90.0:
 - new WPrefs icon (thanks to Largo)
 - replaced VirtualEdgeThickness option, with EnableVirtualDesktop (boolean)
 - enhanced alt-tab panel, added theming ability
+- fixed issues with broken crash dialog
+- removed obsoleted options from wconfig.h
+
 
 Changes since version 0.80.2:
 .............................

@@ -91,18 +91,6 @@
 
 
 /*
- * Define NO_EMERGENCY_AUTORESTART if you don't want another window manager
- * automatically started when WindowMaker crashes. The X session will die
- * in some cases if wmaker crashes and autorestart is disabled.
- */
-#undef NO_EMERGENCY_AUTORESTART
-
-/*
- * The window manager that is autorestarted
- */
-#define FALLBACK_WINDOWMANAGER "blackbox"
-
-/*
  * Turn on a hack to make mouse and keyboard actions work even if
  * the NumLock or ScrollLock modifiers are turned on. They might
  * inflict a performance/memory penalty.
@@ -269,12 +257,12 @@
 #define DEF_FRAME_COLOR   "white"
 
 
-#define DEF_TITLE_FONT "\"Trebuchet MS,Luxi Sans:bold:pixelsize=11\""
-#define DEF_MENU_TITLE_FONT "\"Trebuchet MS,Luxi Sans:bold:pixelsize=11\""
-#define DEF_MENU_ENTRY_FONT "\"Trebuchet MS,Luxi Sans:pixelsize=11\""
-#define DEF_ICON_TITLE_FONT "\"Arial,Luxi Sans:pixelsize=8\""
+#define DEF_TITLE_FONT "\"Trebuchet MS,Luxi Sans:bold:pixelsize=12\""
+#define DEF_MENU_TITLE_FONT "\"Trebuchet MS,Luxi Sans:bold:pixelsize=12\""
+#define DEF_MENU_ENTRY_FONT "\"Trebuchet MS,Luxi Sans:pixelsize=12\""
+#define DEF_ICON_TITLE_FONT "\"Arial,Luxi Sans:pixelsize=9\""
 #define DEF_CLIP_TITLE_FONT "\"Verdana:bold:pixelsize=10\""
-#define DEF_INFO_TEXT_FONT "\"Trebuchet MS,Luxi Sans:pixelsize=11\""
+#define DEF_INFO_TEXT_FONT "\"Trebuchet MS,Luxi Sans:pixelsize=12\""
 
 #define DEF_WORKSPACE_NAME_FONT "\"Trebuchet MS,Luxi Sans:pixelsize=24\""
 

@@ -561,7 +561,7 @@ keyPressHandler(XEvent *event, void *data)
     KeySym ksym;
     int iidx;
     int didx;
-    int item;
+    int item = 0;
     WMList *list = NULL;
 
     if (event->type == KeyRelease)
@@ -862,8 +862,8 @@ typedef struct {
 
 
 #define COPYRIGHT_TEXT  \
-    "Copyright \xc2\xa9 1997-2004 Alfredo K. Kojima <kojima@windowmaker.org>\n"\
-    "Copyright \xc2\xa9 1998-2004 Dan Pascu <dan@windowmaker.org>"
+    "Copyright \xc2\xa9 1997-2004 Alfredo K. Kojima\n"\
+    "Copyright \xc2\xa9 1998-2004 Dan Pascu"
 
 
 
@@ -1647,12 +1647,16 @@ setCrashAction(void *self, void *clientData)
 }
 
 
+/* Make this read the logo from a compiled in pixmap -Dan */
 static WMPixmap*
 getWindowMakerIconImage(WMScreen *scr)
 {
     WMPropList *dict, *key, *option, *value=NULL;
     WMPixmap *pix=NULL;
     char *path;
+
+    if (!WDWindowAttributes || !WDWindowAttributes->dictionary)
+        return NULL;
 
     WMPLSetCaseSensitive(True);
 
@@ -1732,10 +1736,10 @@ wShowCrashingDialogPanel(int whatSig)
     }
 
     panel->nameL = WMCreateLabel(panel->win);
-    WMResizeWidget(panel->nameL, 190, 18);
-    WMMoveWidget(panel->nameL, 80, 35);
+    WMResizeWidget(panel->nameL, 200, 30);
+    WMMoveWidget(panel->nameL, 80, 25);
     WMSetLabelTextAlignment(panel->nameL, WALeft);
-    font = WMBoldSystemFontOfSize(scr, 18);
+    font = WMBoldSystemFontOfSize(scr, 24);
     WMSetLabelFont(panel->nameL, font);
     WMReleaseFont(font);
     WMSetLabelText(panel->nameL, _("Fatal error"));

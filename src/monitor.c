@@ -53,7 +53,7 @@ int showCrashDialog(int sig)
 {
     int crashAction;
     
-    dpy = XOpenDisplay("");
+    dpy = XOpenDisplay(NULL);
     if (dpy) {
 /* XXX TODO make sure that window states are saved and restored via netwm */
 
@@ -66,7 +66,7 @@ int showCrashDialog(int sig)
         crashAction = WMAbort;
     }
     
-    if (crashAction == WMRestart)
+    if (crashAction == WMStartAlternate)
     {
         int i;
 
@@ -145,8 +145,9 @@ int MonitorLoop(int argc, char **argv)
              * the crash panel and ask the user what to do */
             if (time(NULL) - last_start < 3)
             {
-                if (showCrashDialog(WTERMSIG(status)) == 0)
-                  return 1;
+                if (showCrashDialog(WTERMSIG(status)) == 0) {
+                    return 1;
+                }
             }
             wwarning(_("Window Maker exited due to a crash (signal %i) and will be restarted."),
                      WTERMSIG(status));
