@@ -89,3 +89,6 @@
 /* define if you want Hermes support */
 #undef HAVE_HERMES
 
+/* define if you have vsnprintf with C99 semantics */
+#undef HAVE_C99_VSNPRINTF
+

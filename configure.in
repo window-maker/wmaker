@@ -105,7 +105,7 @@ AC_CHECK_FUNCS(gethostname select poll strerror strcasecmp strncasecmp setpgid a
 
 dnl ripped from samba
 dnl 
-C_CACHE_CHECK([for C99 vsnprintf],_cv_HAVE_C99_VSNPRINTF,[
+AC_CACHE_CHECK([for C99 vsnprintf],_cv_HAVE_C99_VSNPRINTF,[
 AC_TRY_RUN([
 #include <sys/types.h>
 #include <stdarg.h>
