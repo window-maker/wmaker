@@ -467,6 +467,26 @@ testTabView(WMScreen *scr)
     WMSetTabViewItemLabel(tab, "Something");
 
     
+    frame = WMCreateFrame(win);
+    WMSetFrameRelief(frame, WRFlat);
+    label = WMCreateLabel(frame);
+    WMResizeWidget(label, 100, 100);
+    WMMoveWidget(label, 160, 40);
+    WMSetLabelText(label, "Label 4");
+    WMMapWidget(label);
+
+    tab = WMCreateTabViewItemWithIdentifier(0);
+    WMSetTabViewItemView(tab, WMWidgetView(frame));
+    WMAddItemInTabView(tabv, tab);
+    WMSetTabViewItemLabel(tab, "Bla!");
+
+
+    tab = WMCreateTabViewItemWithIdentifier(0);
+    WMSetTabViewItemView(tab, WMWidgetView(frame));
+    WMAddItemInTabView(tabv, tab);
+    WMSetTabViewItemLabel(tab, "Weee!");
+
+    
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
     WMMapWidget(win);
@@ -690,16 +710,17 @@ int main(int argc, char **argv)
      * Put the testSomething() function you want to test here.
      */
 
+    testTabView(scr);
+
+#if 0
+    testFontPanel(scr);
 
     testSplitView(scr);
-    testFontPanel(scr);
-    testGradientButtons(scr);
-#if 1
 
+    testGradientButtons(scr);
     testProgressIndicator(scr);
     testColorWell(scr);
 
-    testTabView(scr);
     testTextField(scr);
 
     testOpenFilePanel(scr);

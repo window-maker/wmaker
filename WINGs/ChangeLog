@@ -38,6 +38,7 @@ changes since wmaker 0.61.1:
   wsyserror(), but printing the message for the specified error code.
 - added 3 new classes: WMData, WMHost and WMConnection
 - fixed a big memory leak in the color panel code (from Pascal Hofstee).
+- added scrolling to tabview
 
 changes since wmaker 0.61.0:
 ............................

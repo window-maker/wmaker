@@ -8,9 +8,12 @@ typedef struct W_TabView {
 
     struct W_TabViewItem **items;
     int itemCount;
-    int maxItems;	       /* size of items array */
+    int maxItems;	       /* size of items array, can be increased */
 
     int selectedItem;
+    int firstVisible;
+    
+    int visibleTabs;
 
     WMFont *font;
 
@@ -28,7 +31,10 @@ typedef struct W_TabView {
 	WMTabViewTypes type:2;
 
 	unsigned tabbed:1;
-	unsigned allowsTruncatedLabels:1;
+	unsigned dontFitAll:1;
+	
+	unsigned leftDown:1; // scrolling button state
+	unsigned rightDown:1;
     } flags;
 } TabView;
 
@@ -36,6 +42,9 @@ typedef struct W_TabView {
 
 #define DEFAULT_WIDTH	40
 #define DEFAULT_HEIGHT	40
+
+#define NORMAL_SIDE_OFFSET 8
+#define BUTTONED_SIDE_OFFSET 20
 
 
 static void destroyTabView(TabView *tPtr);	
@@ -71,11 +80,31 @@ handleEvents(XEvent *event, void *data)
 
      case ButtonPress:
 	{
-	    WMTabViewItem *item = WMTabViewItemAtPoint(tPtr, 
+	    WMTabViewItem *item = WMTabViewItemAtPoint(tPtr,
 						       event->xbutton.x,
 						       event->xbutton.y);
 	    if (item) {
 		WMSelectTabViewItem(tPtr, item);
+	    } else if (tPtr->flags.dontFitAll) {
+		int redraw;
+		if (event->xbutton.x < BUTTONED_SIDE_OFFSET) {
+		    if (tPtr->firstVisible > 0) {
+			redraw = 1;
+			tPtr->firstVisible--;
+		    }
+		} else if (event->xbutton.x - BUTTONED_SIDE_OFFSET
+			   > tPtr->visibleTabs*(tPtr->tabWidth-10)) {
+
+		    if (tPtr->firstVisible + tPtr->visibleTabs
+			< tPtr->itemCount) {
+			redraw = 1;
+			tPtr->firstVisible++;
+		    }
+		}
+
+		if (redraw) {
+		    paintTabView(tPtr);
+		}
 	    }
 	}
 	break;
@@ -241,17 +270,33 @@ WMTabViewItem*
 WMTabViewItemAtPoint(WMTabView *tPtr, int x, int y)
 {
     int i;
+    int offset;
+    int count = tPtr->visibleTabs;
+    int first = tPtr->firstVisible;
+    
+    if (tPtr->flags.dontFitAll) {
+	offset = BUTTONED_SIDE_OFFSET;
 
-    i = tPtr->selectedItem;
-    if (isInside(8 + (tPtr->tabWidth-10)*i, 0, tPtr->tabWidth,
-		 tPtr->tabHeight, x, y)) {
-	return tPtr->items[i];
-    }
+	i = tPtr->selectedItem - tPtr->firstVisible;
+	if (i >= 0 && i < tPtr->visibleTabs
+	    && isInside(offset + (tPtr->tabWidth-10)*i, 0, tPtr->tabWidth,
+			tPtr->tabHeight, x, y)) {
+	    return tPtr->items[tPtr->selectedItem];
+	}
+    } else {
+	offset = NORMAL_SIDE_OFFSET;
 
-    for (i = 0; i < tPtr->itemCount; i++) {
-	if (isInside(8 + (tPtr->tabWidth-10)*i, 0, tPtr->tabWidth,
+	i = tPtr->selectedItem;
+	if (isInside(offset + (tPtr->tabWidth-10)*i, 0, tPtr->tabWidth,
 		     tPtr->tabHeight, x, y)) {
 	    return tPtr->items[i];
+	}
+    }
+
+    for (i = 0; i < count; i++) {
+	if (isInside(offset + (tPtr->tabWidth-10)*i, 0, tPtr->tabWidth,
+		     tPtr->tabHeight, x, y)) {
+	    return tPtr->items[i+first];
 	}
     }
     return NULL;
@@ -364,9 +409,15 @@ recalcTabWidth(TabView *tPtr)
 	}
     }
     tPtr->tabWidth += 30;
-    if (tPtr->tabWidth > twidth - 10 * tPtr->itemCount
-	&& tPtr->tabWidth < twidth - 16)
-	tPtr->tabWidth = (twidth - 16) / tPtr->itemCount;
+    if ((tPtr->tabWidth + 2) * tPtr->itemCount > twidth - 2*NORMAL_SIDE_OFFSET) {
+	tPtr->flags.dontFitAll = 1;
+	tPtr->firstVisible = 0;
+	tPtr->visibleTabs = (twidth - 2*BUTTONED_SIDE_OFFSET) / (tPtr->tabWidth-10);
+    } else {
+	tPtr->flags.dontFitAll = 0;
+	tPtr->firstVisible = 0;
+	tPtr->visibleTabs = tPtr->itemCount;
+    }
 }
 
 
@@ -442,6 +493,20 @@ drawTab(TabView *tPtr, Drawable d, int x, int y,
 
 
 static void
+paintDot(TabView *tPtr, Drawable d, int x, int y)
+{
+    WMScreen *scr = W_VIEW(tPtr)->screen;
+    Display *dpy = scr->display;
+    GC white = WMColorGC(scr->white);
+    GC black = WMColorGC(scr->black);
+
+    XFillRectangle(dpy, d, black, x, y, 2, 2);
+    XDrawPoint(dpy, d, white, x, y);
+}
+
+
+
+static void
 paintTabView(TabView *tPtr)
 {
     Pixmap buffer;
@@ -452,6 +517,13 @@ paintTabView(TabView *tPtr)
     WMRect rect;
 
     if (tPtr->flags.type == WTTopTabsBevelBorder) {
+	int count = tPtr->visibleTabs;
+	int first = tPtr->firstVisible;
+	int offs;
+	int moreAtLeft;
+	int moreAtRight;
+	int selectedIsVisible;
+	
 	buffer = XCreatePixmap(dpy, W_VIEW(tPtr)->window,
 			       W_VIEW(tPtr)->size.width, tPtr->tabHeight,
 			       W_VIEW(tPtr)->screen->depth);
@@ -459,33 +531,73 @@ paintTabView(TabView *tPtr)
 	XFillRectangle(dpy, buffer, WMColorGC(W_VIEW(tPtr)->backColor),
 		       0, 0, W_VIEW(tPtr)->size.width, tPtr->tabHeight);
 
-	rect.pos.x = 8 + 15;
 	rect.pos.y = 2;
+	if (tPtr->flags.dontFitAll) {
+	    rect.pos.x = 15 + BUTTONED_SIDE_OFFSET;
+	    offs = BUTTONED_SIDE_OFFSET;
+	    moreAtLeft = first > 0;
+	    moreAtRight = (first + count) < tPtr->itemCount;
+	    if (tPtr->selectedItem >= first
+		&& tPtr->selectedItem < first + count)
+		selectedIsVisible = 1;
+	    else
+		selectedIsVisible = 0;
+	} else {
+	    rect.pos.x = 15 + NORMAL_SIDE_OFFSET;
+	    offs = NORMAL_SIDE_OFFSET;
+	    moreAtLeft = 0;
+	    moreAtRight = 0;
+	    selectedIsVisible = 1;
+	}
 	rect.size.width = tPtr->tabWidth;
 	rect.size.height = tPtr->tabHeight;
 
-	for (i = tPtr->itemCount - 1; i >= 0; i--) {
-	    if (i != tPtr->selectedItem) {
-		drawTab(tPtr, buffer, 8 + (rect.size.width-10)*i, 0,
+	for (i = count - (moreAtRight ? 0 : 1);
+	     i >= (moreAtLeft ? -1 : 0); i--) {
+	    if (!selectedIsVisible || i != (tPtr->selectedItem-first)) {
+		drawTab(tPtr, buffer, offs + (rect.size.width-10)*i, 0,
 			rect.size.width, rect.size.height, False);
 	    }
 	}
-	drawTab(tPtr, buffer, 8 + (rect.size.width-10) * tPtr->selectedItem,
-		0, rect.size.width, rect.size.height, True);
+	
+	if (selectedIsVisible) {
+	    drawTab(tPtr, buffer, 
+		    offs + (rect.size.width-10) * (tPtr->selectedItem - first),
+		    0, rect.size.width, rect.size.height, True);
 
-	XDrawLine(dpy, buffer, white, 0, tPtr->tabHeight - 1,
-		  8, tPtr->tabHeight - 1);
+	    XDrawLine(dpy, buffer, white, 0, tPtr->tabHeight - 1,
+		      offs, tPtr->tabHeight - 1);
 
-	XDrawLine(dpy, buffer, white, 
-		  8 + 10 + (rect.size.width-10) * tPtr->itemCount,
-		  tPtr->tabHeight - 1, W_VIEW(tPtr)->size.width - 1,
-		  tPtr->tabHeight - 1);
+	    XDrawLine(dpy, buffer, white, 
+		      offs + 10 + (rect.size.width-10) * count,
+		      tPtr->tabHeight - 1, W_VIEW(tPtr)->size.width - 1,
+		      tPtr->tabHeight - 1);
+	} else {
+	    XDrawLine(dpy, buffer, white, 0, tPtr->tabHeight - 1,
+		      W_VIEW(tPtr)->size.width, tPtr->tabHeight - 1);	    
+	}
 
-
-	for (i = 0; i < tPtr->itemCount; i++) {
-	    W_DrawLabel(tPtr->items[i], buffer, rect);
+	for (i = 0; i < count; i++) {
+	    W_DrawLabel(tPtr->items[first+i], buffer, rect);
 
 	    rect.pos.x += rect.size.width - 10;
+	}
+
+	if (moreAtLeft) {
+	    paintDot(tPtr, buffer, 4, 10);
+	    paintDot(tPtr, buffer, 7, 10);
+	    paintDot(tPtr, buffer, 10, 10);
+	}
+	if (moreAtRight) {
+	    int x;
+	    
+	    x = BUTTONED_SIDE_OFFSET - 5 + tPtr->visibleTabs * (tPtr->tabWidth - 10);
+	    
+	    x = x + (W_VIEW(tPtr)->size.width - x)/2;
+	    
+	    paintDot(tPtr, buffer, x + 5, 10);
+	    paintDot(tPtr, buffer, x + 8, 10);
+	    paintDot(tPtr, buffer, x + 11, 10);	    
 	}
 
 	XCopyArea(dpy, buffer, W_VIEW(tPtr)->window, scr->copyGC, 0, 0,
