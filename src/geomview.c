@@ -9,7 +9,8 @@ typedef struct W_GeometryView {
     W_Class widgetClass;
     WMView *view;
     
-    GC gc;
+    WMColor *black;
+    WMColor *gray;
     WMFont *font;
     
     WMSize textSize;
@@ -67,20 +68,8 @@ WCreateGeometryView(WMScreen *scr)
 	return NULL;
     }
 
-    {
-	WMColor *black = WMBlackColor(scr);
-	WMColor *gray = WMGrayColor(scr);
-	XGCValues gcv;
-	
-	gcv.foreground = WMColorPixel(black);
-	gcv.background = WMColorPixel(gray);
-	
-	gview->gc = XCreateGC(WMScreenDisplay(scr), W_DRAWABLE(scr),
-			      GCForeground|GCBackground, &gcv);
-
-	WMReleaseColor(black);
-	WMReleaseColor(gray);
-    }
+    gview->black = WMBlackColor(scr);
+    gview->gray = WMGrayColor(scr);
 
     WMCreateEventHandler(gview->view, ExposureMask, handleEvents, gview);
 
@@ -136,7 +125,7 @@ paint(WGeometryView *gview)
 
     WMDrawImageString(W_VIEW_SCREEN(gview->view),
 		      W_VIEW_DRAWABLE(gview->view),
-		      gview->gc, gview->font,
+		      gview->black, gview->gray, gview->font,
 		      (W_VIEW_WIDTH(gview->view)-gview->textSize.width)/2,
 		      (W_VIEW_HEIGHT(gview->view)-gview->textSize.height)/2,
 		      buffer, strlen(buffer));

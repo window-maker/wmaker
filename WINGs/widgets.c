@@ -727,7 +727,6 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     scrPtr->clipGC = XCreateGC(display, W_DRAWABLE(scrPtr), GCFunction
 			       |GCGraphicsExposures, &gcv);
 
-    
     stipple = XCreateBitmapFromData(display, W_DRAWABLE(scrPtr), 
 				    STIPPLE_BITS, STIPPLE_WIDTH, STIPPLE_HEIGHT);
     gcv.foreground = W_PIXEL(scrPtr->darkGray);
@@ -738,10 +737,10 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 				  GCForeground|GCBackground|GCStipple
 				  |GCFillStyle|GCGraphicsExposures, &gcv);
 
-    gcv.foreground = W_PIXEL(scrPtr->black);
-    gcv.background = W_PIXEL(scrPtr->white);
-    scrPtr->textFieldGC = XCreateGC(display, W_DRAWABLE(scrPtr),
-				    GCForeground|GCBackground, &gcv);
+    scrPtr->drawStringGC   = XCreateGC(display, W_DRAWABLE(scrPtr),
+                                       GCGraphicsExposures, &gcv);
+    scrPtr->drawImStringGC = XCreateGC(display, W_DRAWABLE(scrPtr),
+                                       GCGraphicsExposures, &gcv);
 
     /* we need a 1bpp drawable for the monoGC, so borrow this one */
     scrPtr->monoGC = XCreateGC(display, stipple, 0, NULL);

@@ -375,9 +375,6 @@ allocGCs(WScreen *scr)
     gcv.graphics_exposures = False;
     scr->window_title_gc = XCreateGC(dpy, scr->w_win,GCGraphicsExposures,&gcv);
 
-    /* icon title GC */
-    scr->icon_title_gc = XCreateGC(dpy, scr->w_win, GCGraphicsExposures, &gcv);
-
     /* clip title GC */
     scr->clip_title_gc = XCreateGC(dpy, scr->w_win, GCGraphicsExposures, &gcv);
 

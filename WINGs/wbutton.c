@@ -612,9 +612,9 @@ paintButton(Button *bPtr)
     char *caption;
     WMPixmap *image;
     WMColor *textColor;
-    GC gc;
+    WMColor *backColor;
 
-    gc = NULL;
+    backColor = NULL;
     caption = bPtr->caption;
 
     if (bPtr->flags.enabled) {
@@ -637,7 +637,7 @@ paintButton(Button *bPtr)
 
     if (bPtr->flags.selected) {
         if (bPtr->flags.stateLight) {
-            gc = WMColorGC(scrPtr->white);
+            backColor = scrPtr->white;
             textColor = scrPtr->black;
         }
 
@@ -662,7 +662,7 @@ paintButton(Button *bPtr)
 	    offset = 1;
 	}
         if (bPtr->flags.pushLight) {
-            gc = WMColorGC(scrPtr->white);
+            backColor = scrPtr->white;
             textColor = scrPtr->black;
         }
 
@@ -676,10 +676,10 @@ paintButton(Button *bPtr)
 	}
     }
 
-    W_PaintTextAndImage(bPtr->view, True, WMColorGC(textColor),
+    W_PaintTextAndImage(bPtr->view, True, textColor,
 			(bPtr->font!=NULL ? bPtr->font : scrPtr->normalFont),
 			relief, caption, bPtr->flags.alignment, image, 
-			bPtr->flags.imagePosition, gc, offset);
+			bPtr->flags.imagePosition, backColor, offset);
 }
 
 

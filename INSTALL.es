@@ -78,9 +78,9 @@ Lo siguiente se necesita para compilar Window Maker:
 	instaladas, asegúrese de tener TODO lo siguiente con estas versiones
 	 exactas:
 	 	
-		autoconf 2.13
+		autoconf 2.54
 		automake 1.4
-		libtool 1.3
+		libtool 1.4.2
 	
 	Si tiene una versión distinta, desactívelas temporalemte renombrándolas
 	a otras cosa o desinstalándolas desde su sistema. Si no desarrolla
@@ -121,11 +121,6 @@ Estas bibliotecas no son necesarias para hacer que Window Maker funcione,
 - libgif 2.2 o libungif
 	Para soporte de imagen GIF.
 	ftp://prtr-13.ucsc.edu/pub/libungif/
-
-- libHermes 1.3.2 o más actual
-	Para conversión a pixel más rápida en la biblioteca wraster.
-	(se usa solo en algunas conversiones - para visuales Color Verdadero)
-	http://www.clanlib.org/hermes/
 
 - GNU xgettext
 	Si quiere usar mensajes traducidos, necesitará GNU gettext.

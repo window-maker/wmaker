@@ -712,10 +712,11 @@ Initialize(WMScreen *scr)
     InitMouseSettings(scr, WPrefs.banner);
 
     InitAppearance(scr, WPrefs.banner);
-    
+
 #ifdef akk
     InitFont(scr, WPrefs.banner);
 #endif
+
 #ifdef not_yet_fully_implemented
     InitThemes(scr, WPrefs.banner);
 #endif

@@ -164,9 +164,9 @@ typedef struct _WScreen {
     /* foreground colors */
     WMPixel window_title_pixel[3];     /* window titlebar text (foc, unfoc, pfoc)*/
     WMPixel menu_title_pixel[3];       /* menu titlebar text */
-    WMPixel clip_title_pixel[2];       /* clip title text */
-    WMPixel mtext_pixel;	        /* menu item text */
-    WMPixel dtext_pixel;	        /* disabled menu item text */
+    WMColor *clip_title_color[2];      /* clip title text */
+    WMPixel mtext_pixel;	       /* menu item text */
+    WMPixel dtext_pixel;	       /* disabled menu item text */
     WMPixel line_pixel;
     WMPixel frame_border_pixel;	       /* frame border */
 
@@ -188,7 +188,7 @@ typedef struct _WScreen {
     GC window_title_gc;		       /* window title text GC */
     GC menu_title_gc;		       /* menu titles */
     
-    GC icon_title_gc;		       /* icon title background */
+    WMColor *icon_title_color;	       /* icon title color */
     GC clip_title_gc;		       /* clip title */
     GC menu_entry_gc;		       /* menu entries */
     GC select_menu_gc;		       /* selected menu entries */

@@ -200,11 +200,9 @@ paintItem(WMList *lPtr, int index, Drawable d, char *text, int state,
 	XClearArea(dpy, d, x, y, width, height, False);
 
     if (state & 1) {
-	WMDrawString(scr, d, WMColorGC(panel->red), panel->font, x+4, y, 
-		     text, strlen(text));
+	WMDrawString(scr, d, panel->red, panel->font, x+4, y, text, strlen(text));
     } else {
-	WMDrawString(scr, d, WMColorGC(panel->black), panel->font, x+4, y, 
-		     text, strlen(text));
+	WMDrawString(scr, d, panel->black, panel->font, x+4, y, text, strlen(text));
     }
 }
 

@@ -32,6 +32,8 @@
 
 #include <wraster.h>
 
+#include <WINGs/WINGsP.h>
+
 #include "WindowMaker.h"
 #include "GNUstep.h"
 #include "texture.h"
@@ -65,8 +67,7 @@ WFrameWindow*
 wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y, 
 		   int width, int height, int *clearance, int flags,
 		   WTexture **title_texture, WTexture **resize_texture,
-		   unsigned long *color,
-           GC *gc, WMFont **font)
+		   unsigned long *color, WMFont **font)
 {
     WFrameWindow *fwin;
     
@@ -81,7 +82,6 @@ wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y,
     fwin->resizebar_texture = resize_texture;
     fwin->title_pixel = color;
     fwin->title_clearance = clearance;
-    fwin->title_gc = gc;
     fwin->font = font;
 #ifdef KEEP_XKB_LOCK_STATUS
     fwin->languagemode = XkbGroup1Index;
@@ -1049,7 +1049,9 @@ wFrameWindowPaint(WFrameWindow *fwin)
 #endif
 
 	if (fwin->title) {
-	    char *title;
+            char *title;
+            WMColor *color;
+            WMPixel pixel;
 	    
 	    title = ShrinkString(*fwin->font, fwin->title,
 				 fwin->titlebar->width - lofs - rofs);
@@ -1073,12 +1075,15 @@ wFrameWindowPaint(WFrameWindow *fwin)
 		break;
 	    }
 	    
-	    XSetForeground(dpy, *fwin->title_gc, 
-			   fwin->title_pixel[fwin->flags.state]);
-	    
-	    WMDrawString(scr->wmscreen, fwin->titlebar->window, 
-			 *fwin->title_gc, *fwin->font, x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE, 
-			 title, titlelen);
+            color = WMBlackColor(scr->wmscreen);
+            /* ugly hack */
+            pixel = color->color.pixel;
+            color->color.pixel = fwin->title_pixel[fwin->flags.state];
+            WMDrawString(scr->wmscreen, fwin->titlebar->window, color,
+                         *fwin->font, x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE,
+                         title, titlelen);
+            color->color.pixel = pixel;
+            WMReleaseColor(color);
 	    
 	    wfree(title);
 	}

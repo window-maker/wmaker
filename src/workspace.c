@@ -50,7 +50,7 @@
 #include "kwm.h"
 #endif
 
-#include <WINGs/WUtil.h>
+#include <WINGs/WINGsP.h>
 
 
 extern WPreferences wPreferences;
@@ -275,6 +275,7 @@ showWorkspaceName(WScreen *scr, int workspace)
     WorkspaceNameData *data;
     RXImage *ximg;
     Pixmap text, mask;
+    WMColor *color;
     int w, h;
     int px, py;
     char *name = scr->workspaces[workspace]->name;
@@ -348,17 +349,30 @@ showWorkspaceName(WScreen *scr, int workspace)
     XFillRectangle(dpy, mask, scr->mono_gc, 0, 0, w+4, h+4);
 
     XSetForeground(dpy, scr->mono_gc, 1);
+
+    color = WMWhiteColor(scr->wmscreen);
+
     for (x = 0; x <= 4; x++) {
+        GC saveGC = scr->wmscreen->drawStringGC;
+        WMPixel pixel = color->color.pixel;
+
+        /* ugly hack */
+        color->color.pixel = 1;
+        scr->wmscreen->drawStringGC = scr->mono_gc;
+
 	for (y = 0; y <= 4; y++) {
-	    WMDrawString(scr->wmscreen, mask, scr->mono_gc,
+	    WMDrawString(scr->wmscreen, mask, color,
 			 scr->workspace_name_font, x, y, name, len);
-	}
+        }
+
+        scr->wmscreen->drawStringGC = saveGC;
+        color->color.pixel = pixel;
     }
 
-    XSetForeground(dpy, scr->draw_gc, scr->white_pixel);
-    WMDrawString(scr->wmscreen, text, scr->draw_gc, scr->workspace_name_font,
+    WMDrawString(scr->wmscreen, text, color, scr->workspace_name_font,
 		 2, 2, scr->workspaces[workspace]->name,
-		 strlen(scr->workspaces[workspace]->name));
+                 strlen(scr->workspaces[workspace]->name));
+    WMReleaseColor(color);
 #ifdef SHAPE
     XShapeCombineMask(dpy, scr->workspace_name, ShapeBounding, 0, 0, mask,
 		      ShapeSet);

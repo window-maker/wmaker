@@ -56,7 +56,7 @@
 #include "wsound.h"
 
 
-#include <WINGs/WUtil.h>
+#include <WINGs/WINGsP.h>
 
 
 
@@ -353,9 +353,17 @@ paintClipButtons(WAppIcon *clipIcon, Bool lpushed, Bool rpushed)
     int tp = ICON_SIZE - pt;
     int as = pt - 15; /* 15 = 5+5+5 */
     GC gc = scr->clip_title_gc;
+    WMColor *color;
 #ifdef GRADIENT_CLIP_ARROW
     Bool collapsed = clipIcon->dock->collapsed;
 #endif
+
+    if (!clipIcon->dock->collapsed)
+        color = scr->clip_title_color[CLIP_NORMAL];
+    else
+        color = scr->clip_title_color[CLIP_COLLAPSED];
+
+    XSetForeground(dpy, gc, WMColorPixel(color));
 
     if (rpushed) {
 	p[0].x = tp+1;
@@ -1279,7 +1287,7 @@ wClipIconPaint(WAppIcon *aicon)
 {
     WScreen *scr = aicon->icon->core->screen_ptr;
     WWorkspace *workspace = scr->workspaces[scr->current_workspace];
-    GC gc;
+    WMColor *color;
     Window win = aicon->icon->core->window;
     int length, nlength;
     char *ws_name, ws_number[10];
@@ -1293,26 +1301,24 @@ wClipIconPaint(WAppIcon *aicon)
     snprintf(ws_number, sizeof(ws_number), "%i", scr->current_workspace + 1);
     nlength = strlen(ws_number);
 
-    gc = scr->clip_title_gc;
-
     if (!workspace->clip->collapsed)
-        XSetForeground(dpy, gc, scr->clip_title_pixel[CLIP_NORMAL]);
+        color = scr->clip_title_color[CLIP_NORMAL];
     else
-        XSetForeground(dpy, gc, scr->clip_title_pixel[CLIP_COLLAPSED]);
+        color = scr->clip_title_color[CLIP_COLLAPSED];
 
     ty = ICON_SIZE - WMFontHeight(scr->clip_title_font) - 3;
 
     tx = CLIP_BUTTON_SIZE*ICON_SIZE/64;
 
-    WMDrawString(scr->wmscreen, win, gc, scr->clip_title_font, tx,
+    WMDrawString(scr->wmscreen, win, color, scr->clip_title_font, tx,
         	 ty, ws_name, length);
-    /*WMDrawString(scr->wmscreen, win, gc, scr->clip_title_font, 4,
+    /*WMDrawString(scr->wmscreen, win, color, scr->clip_title_font, 4,
         	 2, ws_name, length);*/
 
     tx = (ICON_SIZE/2 - WMWidthOfString(scr->clip_title_font, ws_number,
 					nlength))/2;
 
-    WMDrawString(scr->wmscreen, win, gc, scr->clip_title_font, tx,
+    WMDrawString(scr->wmscreen, win, color, scr->clip_title_font, tx,
         	 2, ws_number, nlength);
 
     wfree(ws_name);
@@ -4213,11 +4219,10 @@ showClipBalloon(WDock *dock, int workspace)
 	XRestackWindows(dpy, stack, 2);
     }
     XMoveWindow(dpy, scr->clip_balloon, x, y);
-    XSetForeground(dpy, scr->clip_title_gc,
-		   scr->clip_title_pixel[CLIP_NORMAL]);
     XClearWindow(dpy, scr->clip_balloon);
-    WMDrawString(scr->wmscreen, scr->clip_balloon, scr->clip_title_gc,
-		 scr->clip_title_font, 0, 0, text, strlen(text));
+    WMDrawString(scr->wmscreen, scr->clip_balloon,
+                 scr->clip_title_color[CLIP_NORMAL], scr->clip_title_font,
+                 0, 0, text, strlen(text));
 }
 
 

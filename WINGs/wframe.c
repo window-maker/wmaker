@@ -193,9 +193,8 @@ paintFrame(Frame *fPtr)
     }
 
     if (drawTitle) {
-	WMDrawString(scrPtr, view->window, WMColorGC(scrPtr->black),
-		     scrPtr->normalFont, tx, ty, fPtr->caption,
-		     strlen(fPtr->caption));
+        WMDrawString(scrPtr, view->window, scrPtr->black, scrPtr->normalFont,
+                     tx, ty, fPtr->caption, strlen(fPtr->caption));
     }
 }
 

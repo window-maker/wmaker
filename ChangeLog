@@ -9,8 +9,13 @@ Changes since version 0.80.1:
 - Patch to add binary mode on opening files (needed for Windows with Cygwin)
   (sent by luke <luke@posh.optushome.com.au>)
 - Updated French translations (Antoine Hulin <antoine@origan.fdn.org>)
-- removed Hermes lib dependency in wrlib
-- put back asm/MMX code in wrlib
+- Removed Hermes lib dependency in wrlib
+- Put back asm/MMX code in wrlib
+- Updated Russian locale files ("Andrew W. Nosenko" <awn@bcs.zp.ua>)
+- API change in WINGs for WMDraw*String(). Details in WINGs/Changelog
+- Removed obsoleted acconfig.h and implemented its functionality using
+  AC_DEFINE and AC_DEFINE_UNQUOTED as autoconf 2.5x recommends.
+  This will definitely enforce the need to use autoconf 2.5x
 
 
 Changes since version 0.80.0:

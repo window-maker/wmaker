@@ -280,13 +280,13 @@ drawTitleOfColumn(WMBrowser *bPtr, int column)
 						   &titleLen, widthC);
 	    W_PaintText(bPtr->view, bPtr->view->window, scr->boldFont, x,
 			(bPtr->titleHeight-WMFontHeight(scr->boldFont))/2,
-			bPtr->columnSize.width, WACenter, WMColorGC(scr->white),
+			bPtr->columnSize.width, WACenter, scr->white,
 			False, titleBuf, titleLen);
 	    wfree (titleBuf);
 	} else {
 	    W_PaintText(bPtr->view, bPtr->view->window, scr->boldFont, x,
 			(bPtr->titleHeight-WMFontHeight(scr->boldFont))/2,
-			bPtr->columnSize.width, WACenter, WMColorGC(scr->white),
+			bPtr->columnSize.width, WACenter, scr->white,
 			False, bPtr->titles[column], titleLen);
 	}
     }
@@ -566,11 +566,11 @@ paintItem(WMList *lPtr, int index, Drawable d, char *text, int state,
 	if (WMWidthOfString(font, text, textLen) > widthC) {
 	    char *textBuf = createTruncatedString(font, text, &textLen, widthC);
             W_PaintText(view, d, font,  x+4, y, widthC,
-		    	WALeft, WMColorGC(scr->black), False, textBuf, textLen);
+		    	WALeft, scr->black, False, textBuf, textLen);
 	    wfree(textBuf);
 	} else {
       	    W_PaintText(view, d, font,  x+4, y, widthC,
-		    	WALeft, WMColorGC(scr->black), False, text, textLen);
+		    	WALeft, scr->black, False, text, textLen);
 	}
     }
 

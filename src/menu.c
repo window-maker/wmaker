@@ -43,6 +43,8 @@
 #include "stacking.h"
 #include "text.h"
 
+#include <WINGs/WINGsP.h>
+
 
 /****** Global Variables ******/
 
@@ -174,7 +176,6 @@ wMenuCreate(WScreen *screen, char *title, int main_menu)
 	wFrameWindowCreate(screen, tmp, 8, 2, 1, 1, &wPreferences.menu_title_clearance, flags,
 			   screen->menu_title_texture, NULL,
                            screen->menu_title_pixel,
-			   &screen->menu_title_gc,
                            &screen->menu_title_font);
 			   
     menu->frame->core->descriptor.parent = menu;
@@ -724,7 +725,9 @@ paintEntry(WMenu *menu, int index, int selected)
 {
     int x, y, w, h, tw;
     int type;
-    GC light, dim, dark, textGC;
+    GC light, dim, dark, textGC, saveGC;
+    WMColor *color;
+    WMPixel pixel, savePixel;
     WScreen *scr=menu->frame->screen_ptr;
     Window win = menu->menu->window;
     WMenuEntry *entry=menu->entries[index];
@@ -765,24 +768,36 @@ paintEntry(WMenu *menu, int index, int selected)
 	}
     }
 
+    /* very ugly hack */
+    saveGC = scr->wmscreen->drawStringGC;
+    color = WMBlackColor(scr->wmscreen);
+    savePixel = color->color.pixel;
+
     if (selected) {
 	textGC = scr->select_menu_gc;
 	if (entry->flags.enabled) 
-	    XSetForeground(dpy, textGC, scr->select_text_pixel);
+            pixel = scr->select_text_pixel;
 	else
-	    XSetForeground(dpy, textGC, scr->dtext_pixel);
+            pixel = scr->dtext_pixel;
     } else if (!entry->flags.enabled) {
-	textGC = scr->disabled_menu_entry_gc;
-    } else { 
-	textGC = scr->menu_entry_gc;
+        textGC = scr->disabled_menu_entry_gc;
+        pixel = scr->dtext_pixel;
+    } else {
+        textGC = scr->menu_entry_gc;
+        pixel = scr->mtext_pixel;
     }
     /* draw text */    
     x = 5;
     if (entry->flags.indicator)
 	x += MENU_INDICATOR_SPACE + 2;
 
-    WMDrawString(scr->wmscreen, win, textGC, scr->menu_entry_font, 
+    /* this is nasty */
+    scr->wmscreen->drawStringGC = textGC;
+    color->color.pixel = pixel;
+    WMDrawString(scr->wmscreen, win, color, scr->menu_entry_font,
 		 x, 3 + y + wPreferences.menu_text_clearance, entry->text, strlen(entry->text));
+    color->color.pixel = savePixel;
+    scr->wmscreen->drawStringGC = saveGC;
 
     if (entry->cascade>=0) {
 	/* draw the cascade indicator */
@@ -844,12 +859,18 @@ paintEntry(WMenu *menu, int index, int selected)
     /* draw right text */
     
     if (entry->rtext && entry->cascade<0) {
+        tw = WMWidthOfString(scr->menu_entry_font, entry->rtext,
+                             strlen(entry->rtext));
 
-	tw = WMWidthOfString(scr->menu_entry_font, entry->rtext,
-			     strlen(entry->rtext));
-    WMDrawString(scr->wmscreen, win, textGC, scr->menu_entry_font, w-6-tw, 
-            y + 3 + wPreferences.menu_text_clearance, entry->rtext, strlen(entry->rtext));
+        /* this is nasty */
+        scr->wmscreen->drawStringGC = textGC;
+        color->color.pixel = pixel;
+        WMDrawString(scr->wmscreen, win, color, scr->menu_entry_font, w-6-tw,
+                     y + 3 + wPreferences.menu_text_clearance, entry->rtext, strlen(entry->rtext));
+        color->color.pixel = savePixel;
+        scr->wmscreen->drawStringGC = saveGC;
     }
+    WMReleaseColor(color);
 }
 
 

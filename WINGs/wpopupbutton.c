@@ -333,7 +333,7 @@ paintPopUpButton(PopUpButton *bPtr)
 	W_PaintText(bPtr->view, pixmap, scr->normalFont, 6, 
 		    (bPtr->view->size.height-WMFontHeight(scr->normalFont))/2,
 		    bPtr->view->size.width, WALeft, 
-		    bPtr->flags.enabled ? WMColorGC(scr->black) : WMColorGC(scr->darkGray),
+		    bPtr->flags.enabled ? scr->black : scr->darkGray,
 		    False, caption, strlen(caption));
     }
 
@@ -421,7 +421,7 @@ paintMenuEntry(PopUpButton *bPtr, int index, int highlight)
 		 width, itemHeight, WRRaised);
 
     W_PaintText(bPtr->menuView, bPtr->menuView->window, scr->normalFont,  6, 
-		index*itemHeight + yo, width, WALeft, WMColorGC(scr->black), 
+		index*itemHeight + yo, width, WALeft, scr->black,
 		False, title, strlen(title));
 
     if (!bPtr->flags.pullsDown && index == bPtr->selectedItemIndex) {
@@ -457,7 +457,7 @@ makeMenuPixmap(PopUpButton *bPtr)
 
     i = 0;
     WM_ITERATE_ARRAY(bPtr->items, item, iter) {
-	GC gc;
+	WMColor *color;
 	char *text;
 
 	text = WMGetMenuItemTitle(item);
@@ -466,12 +466,12 @@ makeMenuPixmap(PopUpButton *bPtr)
 		     WRRaised);
 
         if (!WMGetMenuItemEnabled(item))
-	    gc = WMColorGC(scr->darkGray);
+	    color = scr->darkGray;
 	else
-	    gc = WMColorGC(scr->black);
+	    color = scr->black;
 
 	W_PaintText(bPtr->menuView, pixmap, scr->normalFont,  6, 
-		    i*itemHeight + yo, width, WALeft, gc, False,
+		    i*itemHeight + yo, width, WALeft, color, False,
 		    text, strlen(text));
 	
 	if (!bPtr->flags.pullsDown && i == bPtr->selectedItemIndex) {

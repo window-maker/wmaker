@@ -15,7 +15,7 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.80.2)
+AM_INIT_AUTOMAKE(WindowMaker, 0.81.0)
 
 AC_PROG_LIBTOOL
 
@@ -127,7 +127,7 @@ main() { foo("hello"); }
 ],
 _cv_HAVE_C99_VSNPRINTF=yes,_cv_HAVE_C99_VSNPRINTF=no,_cv_HAVE_C99_VSNPRINTF=cross)])
 if test x"$_cv_HAVE_C99_VSNPRINTF" = x"yes"; then
-    AC_DEFINE(HAVE_C99_VSNPRINTF)
+    AC_DEFINE(HAVE_C99_VSNPRINTF, 1, [define if you have vsnprintf with C99 semantics (set by configure)])
 fi
 
 dnl Loading of dynamic libraries at runtime
@@ -169,7 +169,7 @@ if test "$CPP_PATH" = "/usr/ccs/lib/cpp" -o "$CPP_PATH" = "notfound" ; then
 	fi
     fi
 fi
-AC_DEFINE_UNQUOTED(CPP_PATH, "$CPP_PATH")
+AC_DEFINE_UNQUOTED(CPP_PATH, "$CPP_PATH", [define to the path to cpp])
 
 
 
@@ -215,7 +215,7 @@ if test "$ac_cv_prog_gcc" = yes; then
     fi
 
     if test $x86 = 1; then
-       AC_DEFINE(ASM_X86)
+       AC_DEFINE(ASM_X86, 1, [define if processor is x86 (normally detected by configure)])
        asm_support=yes
 
        AC_CACHE_CHECK(whether gcc supports MMX(tm) inline asm,
@@ -225,7 +225,7 @@ if test "$ac_cv_prog_gcc" = yes; then
                       ac_cv_c_inline_mmx=no)])
 
        if test "x$ac_cv_c_inline_mmx" = xyes; then
-          AC_DEFINE(ASM_X86_MMX)
+          AC_DEFINE(ASM_X86_MMX, 1, [define if processor is x86 with MMX(tm) support (normally autodetected by configure)])
           mmx_support=yes
        fi
     fi
@@ -258,7 +258,7 @@ fi
 
 if test "$LINGUAS" != ""; then
     if test "$XGETTEXT" != "" -a "$HAVEGETTEXT" != ""; then
-        AC_DEFINE(I18N)
+        AC_DEFINE(I18N, 1, [Internationalization (I18N) support (set by configure)])
         PO=""
 #       if test "$LINGUAS" = ""; then
 #   	    ling=` (cd src/po; /bin/ls *.po) `
@@ -371,7 +371,7 @@ dnl ===============================
 AC_ARG_ENABLE(gnome,
   [  --enable-gnome	  enable stuff needed for GNOME ],
   [if test x$enableval = xyes; then
-    AC_DEFINE(GNOME_STUFF)
+    AC_DEFINE(GNOME_STUFF, 1, [define if you want GNOME stuff support])
     gnome_on=yes
   fi])
 
@@ -379,7 +379,7 @@ AC_ARG_ENABLE(gnome,
 AC_ARG_ENABLE(kde,
   [  --enable-kde		  enable support for KDE window manager (kwm) hints ],
   [if test x$enableval = xyes; then
-    AC_DEFINE(KWM_HINTS)
+    AC_DEFINE(KWM_HINTS, 1, [define if you want KDE hint support])
     kde_on=yes
   fi])
 
@@ -387,7 +387,7 @@ AC_ARG_ENABLE(kde,
 AC_ARG_ENABLE(openlook,
   [  --enable-openlook	  enable support for OPEN LOOK(tm) (olwm) hints ],
   [if test x$enableval = xyes; then
-    AC_DEFINE(OLWM_HINTS)
+    AC_DEFINE(OLWM_HINTS, 1, [define if you want OPEN LOOK(tm) hint support])
     openlook_on=yes
   fi])
 
@@ -399,7 +399,7 @@ AC_ARG_ENABLE(lite,
   [  --enable-lite		  disable some stuff (dont use it) ],
   [if test x$enableval = xyes; then
         LITE=yes
-	AC_DEFINE(LITE)
+	AC_DEFINE(LITE, 1, [define if you want the 'lite' version])
         AC_SUBST(LITE)
   fi])
 
@@ -417,7 +417,7 @@ AC_CHECK_FUNC(connect,,
 AC_CHECK_FUNC(gethostbyname,,
 	AC_CHECK_LIB(nsl, gethostbyname, NETLIBS="$NETLIBS -lnsl"))
 
-AC_CHECK_FUNC(inet_aton, AC_DEFINE(HAVE_INET_ATON),
+AC_CHECK_FUNC(inet_aton, AC_DEFINE(HAVE_INET_ATON, 1, [define if you have then inet_aton function (set by configure)]),
      for lib in resolv socket inet bsd; do
 	AC_CHECK_LIB($lib, inet_aton, [AC_DEFINE(HAVE_INET_ATON)
 	             NETLIBS="$NETLIBS -l$lib"; break],, $NETLIBS)
@@ -464,24 +464,30 @@ AC_ARG_ENABLE(locale,
 		use_locale=no)
 
 if test "$use_locale" = yes; then
-  AC_CHECK_LIB(X11, _Xsetlocale, AC_DEFINE(X_LOCALE),, $XLFLAGS $XLIBS)
+	AC_CHECK_LIB(X11, _Xsetlocale,
+		AC_DEFINE(X_LOCALE, 1, [define if you want support for X window's X_LOCALE (set by configure)]),,
+		$XLFLAGS $XLIBS)
 fi
 
 
 dnl Check whether XInternAtoms() exist
 dnl ==================================
-AC_CHECK_LIB(X11, XInternAtoms, AC_DEFINE(HAVE_XINTERNATOMS),,$XLFLAGS $XLIBS)
+AC_CHECK_LIB(X11, XInternAtoms, 
+             AC_DEFINE(HAVE_XINTERNATOMS, 1, [define if your X server has XInternAtoms() (set by configure)]),,
+             $XLFLAGS $XLIBS)
 
 dnl Check whether XConvertCase() exist
 dnl ==================================
-AC_CHECK_LIB(X11, XConvertCase, AC_DEFINE(HAVE_XCONVERTCASE),,$XLFLAGS $XLIBS)
+AC_CHECK_LIB(X11, XConvertCase, 
+             AC_DEFINE(HAVE_XCONVERTCASE, 1, [define if your X server has XConvertCase() (set by configure)]),,
+             $XLFLAGS $XLIBS)
 
 
 dnl XKB keyboard language status
 dnl ============================
 AC_ARG_ENABLE(modelock,
 [  --enable-modelock	  XKB keyboard language status support],
-		AC_DEFINE(XKB_MODELOCK))
+		AC_DEFINE(XKB_MODELOCK, 1, [whether XKB language MODELOCK should be enabled]))
 
 
 
@@ -497,7 +503,8 @@ added_xext=no
 if test "$shape" = yes; then
 	AC_CHECK_LIB(Xext, XShapeSelectInput, [XLIBS="-lXext $XLIBS"
 		added_xext=yes
-                AC_DEFINE(SHAPE)], shape=no, $XLFLAGS $XLIBS)
+		AC_DEFINE(SHAPE, 1, [define if you want support for shaped windows (set by configure)])], 
+		shape=no, $XLFLAGS $XLIBS)
 fi
 
 
@@ -510,7 +517,8 @@ xinerama=no
 
 if test "$xinerama" = yes; then
 	AC_CHECK_LIB(Xinerama, XineramaQueryScreens, [XLIBS="-lXinerama $XLIBS"
-                AC_DEFINE(XINERAMA)], xinerama=no, $XLFLAGS $XLIBS)
+		AC_DEFINE(XINERAMA, 1, [define if you want support for the XINERAMA extension (set by configure)])],
+		xinerama=no, $XLFLAGS $XLIBS)
 fi
 
 
@@ -533,7 +541,7 @@ if test "$shm" = yes; then
 		if test "$added_xext" = no; then
 			XLIBS="-lXext $XLIBS"
 		fi
-                AC_DEFINE(XSHM)
+                AC_DEFINE(XSHM, 1, [define if X's shared memory extension is available (set by configure)])
 	fi
 fi
 
@@ -571,7 +579,7 @@ if test "$xpm" = yes; then
 	if test "x$ac_cv_header_X11_xpm_h" = xyes; then
 		GFXLIBS="$GFXLIBS -lXpm"
 		supported_gfx="XPM"
-		AC_DEFINE(USE_XPM)
+		AC_DEFINE(USE_XPM, 1, [define if XPM libraries are available (set by configure)])
 	else
 		supported_gfx="builtin-XPM"
 	fi
@@ -608,7 +616,7 @@ if test "$png" = yes ; then
 	if test "x$ac_cv_header_png_h" = xyes; then
 	    GFXLIBS="$GFXLIBS -lpng -lz" 
 	    supported_gfx="$supported_gfx PNG"
-            AC_DEFINE(USE_PNG)
+            AC_DEFINE(USE_PNG, 1, [define if PNG libraries are available (set by configure)])
 	fi
     fi
 fi
@@ -633,7 +641,7 @@ if test "$jpeg" = yes; then
 	if test "x$ac_cv_header_jpeglib_h" = xyes; then
 	    GFXLIBS="$GFXLIBS -ljpeg"
 	    supported_gfx="$supported_gfx JPEG"
-            AC_DEFINE(USE_JPEG)
+            AC_DEFINE(USE_JPEG, 1, [define if JPEG libraries are available (set by configure)])
 	fi
     fi
 fi
@@ -667,7 +675,7 @@ dnl
 	if test "x$ac_cv_header_gif_lib_h" = xyes; then
 	    GFXLIBS="$GFXLIBS $my_libname"
 	    supported_gfx="$supported_gfx GIF"
-            AC_DEFINE(USE_GIF)
+            AC_DEFINE(USE_GIF, 1, [define if GIF libraries are available (set by configure)])
 	fi
     fi
 fi
@@ -721,7 +729,7 @@ dnl
 	    GFXLIBS="$my_libname $GFXLIBS"
 	    ICONEXT="tiff"
             supported_gfx="$supported_gfx TIFF"
-            AC_DEFINE(USE_TIFF)	    
+            AC_DEFINE(USE_TIFF, 1, [define if TIFF libraries are available (set by configure)])	    
 	fi
     fi
 fi
@@ -759,13 +767,13 @@ else
 	pixmapdir=`eval echo ${datadir}/pixmaps`
 fi
 
-AC_DEFINE_UNQUOTED(PIXMAPDIR, "$pixmapdir")
+AC_DEFINE_UNQUOTED(PIXMAPDIR, "$pixmapdir", [define an extra path for pixmaps (set by configure)])
 
 pkgdatadir=`eval echo $datadir`
-AC_DEFINE_UNQUOTED(PKGDATADIR, "$pkgdatadir/WindowMaker")
+AC_DEFINE_UNQUOTED(PKGDATADIR, "$pkgdatadir/WindowMaker", [where shared data is stored (defined by configure)])
 
 _sysconfdir=`eval echo $sysconfdir`
-AC_DEFINE_UNQUOTED(SYSCONFDIR, "$_sysconfdir")
+AC_DEFINE_UNQUOTED(SYSCONFDIR, "$_sysconfdir", [where the configuration is stored (defined by configure)])
 
 
 dnl Support for GNUSTEP_LOCAL_ROOT, for WPrefs.app
@@ -798,7 +806,7 @@ AC_ARG_ENABLE(usermenu,
 [  --enable-usermenu       user defined menus for applications
 ],
 if test "$enableval" = yes; then
-	AC_DEFINE(USER_MENU)
+	AC_DEFINE(USER_MENU, 1, [define if you want user defined menus for applications])
 fi
 )
 

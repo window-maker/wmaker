@@ -816,8 +816,9 @@ paintTextField(TextField *tPtr)
     int totalWidth;
     char *text;
     Pixmap drawbuffer;
+    WMColor *color;
 
-    
+
     if (!view->flags.realized || !view->flags.mapped)
 	return;
 
@@ -877,12 +878,10 @@ paintTextField(TextField *tPtr)
 	    break;
 	}
 
-        if (!tPtr->flags.enabled)
-            WMSetColorInGC(screen->darkGray, screen->textFieldGC);
+        color = tPtr->flags.enabled ? screen->black : screen->darkGray;
 
-        WMDrawImageString(screen, drawbuffer, screen->textFieldGC,
-                          tPtr->font, tx, ty,
-                          &(text[tPtr->viewPosition]),
+        WMDrawImageString(screen, drawbuffer, color, screen->white,
+                          tPtr->font, tx, ty, &(text[tPtr->viewPosition]),
                           tPtr->textLen - tPtr->viewPosition);
 
         if (tPtr->selection.count) {
@@ -897,27 +896,15 @@ paintTextField(TextField *tPtr)
                 count = tPtr->viewPosition;
             }
 
-
             rx = tPtr->offsetWidth + 1 + WMWidthOfString(tPtr->font,text,count)
                 - WMWidthOfString(tPtr->font,text,tPtr->viewPosition);
 
-            XSetBackground(screen->display, screen->textFieldGC,
-                    screen->gray->color.pixel);
-
-            WMDrawImageString(screen, drawbuffer, screen->textFieldGC,
-                    tPtr->font, rx, ty, &(text[count]),
-                    count2);
-
-            XSetBackground(screen->display, screen->textFieldGC,
-                    screen->white->color.pixel);
+            WMDrawImageString(screen, drawbuffer, color, screen->gray,
+                              tPtr->font, rx, ty, &(text[count]), count2);
         }
-
-        if (!tPtr->flags.enabled)
-            WMSetColorInGC(screen->black, screen->textFieldGC);
     } else {
-            XFillRectangle(screen->display, drawbuffer,
-			   WMColorGC(screen->white),
-			   bd,bd, totalWidth,view->size.height-2*bd);
+        XFillRectangle(screen->display, drawbuffer, WMColorGC(screen->white),
+                       bd, bd, totalWidth,view->size.height-2*bd);
     }
 
     /* draw relief */

@@ -474,24 +474,20 @@ wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
      */
     if (wwin->user_flags.no_appicon && wwin->defined_user_flags.no_appicon)
 	wwin->user_flags.emulate_appicon = 0;
-        /*//WSETUFLAG(wwin, emulate_appicon, 0);*/
 
     if (wwin->main_window!=None) {
 	WApplication *wapp = wApplicationOf(wwin->main_window);
 	if (wapp && !wapp->flags.emulated)
 	    wwin->user_flags.emulate_appicon = 0;
-            /*//WSETUFLAG(wwin, emulate_appicon, 0);*/
     }
 
     if (wwin->transient_for!=None
 	&& wwin->transient_for!=wwin->screen_ptr->root_win)
 	wwin->user_flags.emulate_appicon = 0;
-        /*//WSETUFLAG(wwin, emulate_appicon, 0);*/
 
     if (wwin->user_flags.sunken && wwin->defined_user_flags.sunken
 	&& wwin->user_flags.floating && wwin->defined_user_flags.floating)
 	wwin->user_flags.sunken = 0;
-        /*//WSETUFLAG(wwin, sunken, 0);*/
 
     WSETUFLAG(wwin, no_shadeable, WFLAGP(wwin, no_titlebar));
     
@@ -1159,7 +1155,6 @@ wManageWindow(WScreen *scr, Window window)
 				     scr->window_title_texture,
 				     scr->resizebar_texture,
 				     scr->window_title_pixel, 
-				     &scr->window_title_gc, 
 				     &scr->title_font);
 
     wwin->frame->flags.is_client_window_frame = 1;
@@ -1519,7 +1514,6 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
 				     scr->window_title_texture,
 				     scr->resizebar_texture,
 				     scr->window_title_pixel, 
-				     &scr->window_title_gc, 
 				     &scr->title_font);
     
     XSaveContext(dpy, window, wWinContext, (XPointer)&wwin->client_descriptor);

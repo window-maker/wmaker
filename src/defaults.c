@@ -51,6 +51,7 @@
 
 #include <wraster.h>
 
+#include <WINGs/WINGsP.h>
 
 #include "WindowMaker.h"
 #include "wcore.h"
@@ -2989,11 +2990,11 @@ setHightlightText(WScreen *scr, WDefaultEntry *entry, XColor *color, void *foo)
 static int
 setClipTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
 {
-    if (scr->clip_title_pixel[index]!=scr->white_pixel &&
-	scr->clip_title_pixel[index]!=scr->black_pixel) {
-	wFreeColor(scr, scr->clip_title_pixel[index]);
-    }
-    scr->clip_title_pixel[index] = color->pixel;
+    if (scr->clip_title_color[index])
+        WMReleaseColor(scr->clip_title_color[index]);
+    scr->clip_title_color[index] = WMCreateRGBColor(scr->wmscreen, color->red,
+                                                    color->green, color->blue,
+                                                    True);
 
 #ifdef GRADIENT_CLIP_ARROW
     if (index == CLIP_NORMAL) {
@@ -3115,7 +3116,11 @@ setMenuDisabledColor(WScreen *scr, WDefaultEntry *entry, XColor *color, void *fo
 static int 
 setIconTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, void *foo)
 {
-    XSetForeground(dpy, scr->icon_title_gc, color->pixel); 
+    if (scr->icon_title_color)
+        WMReleaseColor(scr->icon_title_color);
+    scr->icon_title_color = WMCreateRGBColor(scr->wmscreen, color->red,
+                                             color->green, color->blue,
+                                             True);
     
     return REFRESH_ICON_TITLE_COLOR;
 }

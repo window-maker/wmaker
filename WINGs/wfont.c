@@ -387,33 +387,38 @@ WMWidthOfString(WMFont *font, char *text, int length)
 
 
 void
-WMDrawString(WMScreen *scr, Drawable d, GC gc, WMFont *font, int x, int y,
-	     char *text, int length)
+WMDrawString(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
+             int x, int y, char *text, int length)
 {
     wassertr(font!=NULL);
 
+    XSetForeground(scr->display, scr->drawStringGC, W_PIXEL(color));
     if (font->notFontSet) {
-	XSetFont(scr->display, gc, font->font.normal->fid);
-	XDrawString(scr->display, d, gc, x, y + font->y, text, length);
+	XSetFont(scr->display, scr->drawStringGC, font->font.normal->fid);
+        XDrawString(scr->display, d, scr->drawStringGC, x, y + font->y, text,
+                    length);
     } else {
-	XmbDrawString(scr->display, d, font->font.set, gc, x, y + font->y,
-		      text, length);
+        XmbDrawString(scr->display, d, font->font.set, scr->drawStringGC,
+                      x, y + font->y, text, length);
     }
 }
 
 
 void
-WMDrawImageString(WMScreen *scr, Drawable d, GC gc, WMFont *font, int x, int y,
-		  char *text, int length)
+WMDrawImageString(WMScreen *scr, Drawable d, WMColor *color, WMColor *background,
+                  WMFont *font, int x, int y, char *text, int length)
 {
     wassertr(font != NULL);
 
+    XSetForeground(scr->display, scr->drawImStringGC, W_PIXEL(color));
+    XSetBackground(scr->display, scr->drawImStringGC, W_PIXEL(background));
     if (font->notFontSet) {
-	XSetFont(scr->display, gc, font->font.normal->fid);
-	XDrawImageString(scr->display, d, gc, x, y + font->y, text, length);
+	XSetFont(scr->display, scr->drawImStringGC, font->font.normal->fid);
+        XDrawImageString(scr->display, d, scr->drawImStringGC, x, y + font->y,
+                         text, length);
     } else {
-	XmbDrawImageString(scr->display, d, font->font.set, gc, x, y + font->y,
-			   text, length);
+        XmbDrawImageString(scr->display, d, font->font.set, scr->drawImStringGC,
+                           x, y + font->y, text, length);
     }
 }
 

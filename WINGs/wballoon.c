@@ -424,7 +424,7 @@ showText(Balloon *bPtr, int x, int y, int h, int w, char *text)
 
     W_PaintText(bPtr->view, pixmap, font, 8, ty + (height - textHeight)/2,
 		width, bPtr->flags.alignment,
-		WMColorGC(bPtr->textColor ? bPtr->textColor : scr->black),
+		bPtr->textColor ? bPtr->textColor : scr->black,
 		False, text, strlen(text));
 
     XSetWindowBackgroundPixmap(dpy, bPtr->view->window, pixmap);

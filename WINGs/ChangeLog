@@ -4,6 +4,13 @@ Changes since wmaker 0.80.1:
 - added WMSetConnectionShutdownOnClose()
 - added an extra member to the ConnectionDelegate: canResumeSending
   see NEWS for details.
+- WMDrawString() and WMDrawImageString() now take WMColor instead of GC as
+  arguments. WMDrawImageString() receives 2 colors (text & background).
+  This is to allow easy extension for Xft/Xrender and hide X low level details
+- Added alpha channel to WMColor. 2 new functions also:
+  WMCreateRGBAColor() and WMSetColorAlpha()
+- Miscelaneous code cleanups in wtext.c
+
 
 Changes since wmaker 0.80.0:
 ............................

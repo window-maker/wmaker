@@ -323,9 +323,10 @@ wTextDestroy( WTextInput *wtext )
 \********************************************************************/
 static void
 textRefresh( WTextInput *wtext )
-  {
+{
   int  x1,x2,y1,y2;
   char *ptr = wtext->text.txt;
+  WMColor *black, *white;
   
   /* x1,y1 is the upper left corner of the text box */
   x1 = wtext->xOffset;
@@ -339,9 +340,11 @@ textRefresh( WTextInput *wtext )
   XFillRectangle( dpy, wtext->core->window, wtext->invGC,
                 x1, y1, x2-x1, y2-y1 );
 
+  black = WMBlackColor(wtext->core->screen_ptr->wmscreen);
+  white = WMWhiteColor(wtext->core->screen_ptr->wmscreen);
   /* Draw the text normally */
-  WMDrawString(wtext->core->screen_ptr->wmscreen, wtext->core->window, 
-	       wtext->regGC, wtext->font, x1, y1, ptr, wtext->text.length);
+  WMDrawImageString(wtext->core->screen_ptr->wmscreen, wtext->core->window,
+                    black, white, wtext->font, x1, y1, ptr, wtext->text.length);
 
   /* Draw the selected text */
   if( wtext->text.startPos != wtext->text.endPos )
@@ -372,10 +375,13 @@ textRefresh( WTextInput *wtext )
     
     /* Draw the selected text... use invGC so it will be the
      * opposite color as the filled rectangle */
-    WMDrawString(wtext->core->screen_ptr->wmscreen, wtext->core->window, 
-		 wtext->invGC, wtext->font, x1, y1, ptr, (ep - sp));
+    WMDrawImageString(wtext->core->screen_ptr->wmscreen, wtext->core->window,
+                      white, black, wtext->font, x1, y1, ptr, (ep - sp));
     }
-  
+
+  WMReleaseColor(white);
+  WMReleaseColor(black);
+
   /* And draw a quick little line for the cursor position */
   x1 = WMWidthOfString( wtext->font, wtext->text.txt, wtext->text.endPos )
        + wtext->xOffset;

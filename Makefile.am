@@ -4,8 +4,7 @@ SUBDIRS = wrlib WINGs src util po WindowMaker wmlib test WPrefs.app doc\
 	contrib
 
 EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N MIRRORS COPYING.WTFPL \
-	Install acconfig.h INSTALL.pt README.pt\
-	FAQ.I18N.cs INSTALL.cs\
+	Install INSTALL.pt README.pt FAQ.I18N.cs INSTALL.cs\
 	mkpatch README.KDE README.GNOME WindowMaker.lsm.in\
 	README.definable-cursor \
 	FAQ.I18N.sk INSTALL.sk INSTALL.es INSTALL.fr

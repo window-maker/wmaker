@@ -994,6 +994,9 @@ RConvertImage(RContext *context, RImage *image, Pixmap *pixmap)
 }
 
 
+/* make the gc permanent (create with context creation).
+ * GC creation is very expensive. altering its properties is not. -Dan
+ */
 int 
 RConvertImageMask(RContext *context, RImage *image, Pixmap *pixmap, 
 		  Pixmap *mask, int threshold)
@@ -1141,4 +1144,5 @@ RGetClosestXColor(RContext *context, RColor *color, XColor *retColor)
 
     return True;
 }
+
 

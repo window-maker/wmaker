@@ -289,14 +289,11 @@ updateDockNumbers(WScreen *scr)
 {
     int length;
     char *ws_numbers;
-    GC numbers_gc;
-    XGCValues my_gc_values;
-    unsigned long my_v_mask = (GCForeground);
     WAppIcon *dicon = scr->dock->icon_array[0];
-    
-    my_gc_values.foreground = scr->white_pixel;
-    numbers_gc = XCreateGC(dpy, dicon->icon->core->window,
-			   my_v_mask, &my_gc_values);
+    WMColor *black, *white;
+
+    black = WMBlackColor(scr->wmscreen);
+    white = WMWhiteColor(scr->wmscreen);
 
     ws_numbers = wmalloc(20);
     snprintf(ws_numbers, 20, "%i [ %i ]", scr->current_workspace+1,
@@ -306,15 +303,14 @@ updateDockNumbers(WScreen *scr)
     XClearArea(dpy, dicon->icon->core->window, 2, 2, 50,
 	       WMFontHeight(scr->icon_title_font)+1, False);
     
-    XSetForeground(dpy, numbers_gc, scr->black_pixel);
-    WMDrawString(scr->wmscreen, dicon->icon->core->window, numbers_gc,
+    WMDrawString(scr->wmscreen, dicon->icon->core->window, black,
 		 scr->icon_title_font, 4, 3, ws_numbers, length);
 
-    XSetForeground(dpy, numbers_gc, scr->white_pixel);
-    WMDrawString(scr->wmscreen, dicon->icon->core->window, numbers_gc,
+    WMDrawString(scr->wmscreen, dicon->icon->core->window, white,
 		 scr->icon_title_font, 3, 2, ws_numbers, length);
 
-    XFreeGC(dpy, numbers_gc);
+    WMReleaseColor(black);
+    WMReleaseColor(white);
     wfree(ws_numbers);
 }
 #endif /* WS_INDICATOR */

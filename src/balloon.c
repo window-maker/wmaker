@@ -34,6 +34,8 @@
 
 #include <wraster.h>
 
+#include <WINGs/WINGsP.h>
+
 #include "WindowMaker.h"
 #include "screen.h"
 #include "texture.h"
@@ -170,6 +172,7 @@ showText(WScreen *scr, int x, int y, int h, int w, char *text)
     Pixmap pixmap;
     Pixmap mask;
     WMFont *font = scr->info_text_font;
+    WMColor *color;
     int side = 0;
     int ty;
     int bx, by;
@@ -209,11 +212,13 @@ showText(WScreen *scr, int x, int y, int h, int w, char *text)
     }
     pixmap = makePixmap(scr, width, height, side, &mask);
 
-    XSetForeground(dpy, scr->info_text_gc, scr->black_pixel);
+    color = WMBlackColor(scr->wmscreen);
 
-    WMDrawString(scr->wmscreen, pixmap, scr->info_text_gc, font, 8,
+    WMDrawString(scr->wmscreen, pixmap, color, font, 8,
 		 ty + (height - WMFontHeight(font))/2,
 		 text, strlen(text));
+
+    WMReleaseColor(color);
 
     XSetWindowBackgroundPixmap(dpy, scr->balloon->window, pixmap);
     scr->balloon->contents = pixmap;
@@ -224,7 +229,8 @@ showText(WScreen *scr, int x, int y, int h, int w, char *text)
     XFreePixmap(dpy, mask);
     XMoveWindow(dpy, scr->balloon->window, bx, by);
     XMapRaised(dpy, scr->balloon->window);
-    
+
+
     scr->balloon->mapped = 1;
 }
 #else /* !SHAPED_BALLOON */
@@ -235,6 +241,8 @@ showText(WScreen *scr, int x, int y, int h, int w, char *text)
     int height;
     Pixmap pixmap;
     WMFont *font = scr->info_text_font;
+    WMColor *color;
+    WMPixel pixel;
 
     if (scr->balloon->contents)
 	XFreePixmap(dpy, scr->balloon->contents);
@@ -264,10 +272,13 @@ showText(WScreen *scr, int x, int y, int h, int w, char *text)
     pixmap = XCreatePixmap(dpy, scr->root_win, width, height, scr->w_depth);
     XFillRectangle(dpy, pixmap, scr->draw_gc, 0, 0, width, height);
 
-    XSetForeground(dpy, scr->info_text_gc, scr->window_title_pixel[0]);
-
-    WMDrawString(scr->wmscreen, pixmap, scr->info_text_gc, font, 
-		 4, 2, text, strlen(text));
+    /* ugly hack */
+    color = WMBlackColor(scr->wmscreen);
+    pixel = color->color.pixel;
+    color->color.pixel = scr->window_title_pixel[0];
+    WMDrawString(scr->wmscreen, pixmap, color, font, 4, 2, text, strlen(text));
+    color->color.pixel = pixel;
+    WMReleaseColor(color);
 
     XResizeWindow(dpy, scr->balloon->window, width, height);
     XMoveWindow(dpy, scr->balloon->window, x, y);

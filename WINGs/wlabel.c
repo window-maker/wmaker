@@ -205,14 +205,9 @@ static void
 paintLabel(Label *lPtr)
 {
     W_Screen *scrPtr = lPtr->view->screen;
-    GC gc;
-    
-    if (lPtr->textColor)
-	gc = WMColorGC(lPtr->textColor);
-    else
-	gc = WMColorGC(scrPtr->black);
 
-    W_PaintTextAndImage(lPtr->view, !lPtr->flags.noWrap, gc,
+    W_PaintTextAndImage(lPtr->view, !lPtr->flags.noWrap,
+                        lPtr->textColor ? lPtr->textColor : scrPtr->black,
 			(lPtr->font!=NULL ? lPtr->font : scrPtr->normalFont),
 			lPtr->flags.relief, lPtr->caption,
 			lPtr->flags.alignment, lPtr->image, 

@@ -16,8 +16,9 @@ static unsigned char DARK_STIPPLE_BITS[] = {
    0x0a, 0x04, 0x0a, 0x01};
 
 
-static WMColor *createRGBColor(WMScreen *scr, unsigned short red,
-			       unsigned short green, unsigned short blue);
+static WMColor *createRGBAColor(WMScreen *scr, unsigned short red,
+                                unsigned short green, unsigned short blue,
+                                unsigned short alpha);
 
 /*
  * TODO: make the color creation code return the same WMColor for the
@@ -28,7 +29,7 @@ static WMColor *createRGBColor(WMScreen *scr, unsigned short red,
 
 static WMColor*
 findCloseColor(WMScreen *scr, unsigned short red, unsigned short green, 
-	       unsigned short blue)
+	       unsigned short blue, unsigned short alpha)
 {
     WMColor *color;
     XColor xcolor;
@@ -37,6 +38,7 @@ findCloseColor(WMScreen *scr, unsigned short red, unsigned short green,
     rcolor.red = red>>8;
     rcolor.green = green>>8;
     rcolor.blue = blue>>8;
+    rcolor.alpha = alpha>>8;
 
     if (!RGetClosestXColor(scr->rcontext, &rcolor, &xcolor))
 	return NULL;
@@ -49,6 +51,7 @@ findCloseColor(WMScreen *scr, unsigned short red, unsigned short green,
     color->screen = scr;
     color->refCount = 1;
     color->color = xcolor;
+    color->alpha = alpha;
     color->flags.exact = 1;
     color->gc = NULL;
 
@@ -58,8 +61,8 @@ findCloseColor(WMScreen *scr, unsigned short red, unsigned short green,
 
 
 static WMColor*
-createRGBColor(WMScreen *scr, unsigned short red, unsigned short green, 
-	       unsigned short blue)
+createRGBAColor(WMScreen *scr, unsigned short red, unsigned short green,
+                unsigned short blue, unsigned short alpha)
 {
     WMColor *color;
     XColor xcolor;
@@ -76,6 +79,7 @@ createRGBColor(WMScreen *scr, unsigned short red, unsigned short green,
     color->screen = scr;
     color->refCount = 1;
     color->color = xcolor;
+    color->alpha = alpha;
     color->flags.exact = 1;
     color->gc = NULL;
 
@@ -83,15 +87,30 @@ createRGBColor(WMScreen *scr, unsigned short red, unsigned short green,
 }
 
 
-
 WMColor*
 WMCreateRGBColor(WMScreen *scr, unsigned short red, unsigned short green, 
 		 unsigned short blue, Bool exact)
 {
     WMColor *color = NULL;
+
+    if (!exact || !(color=createRGBAColor(scr, red, green, blue, 0xffff))) {
+	color = findCloseColor(scr, red, green, blue, 0xffff);
+    }
+    if (!color)
+	color = WMBlackColor(scr);
+
+    return color;
+}
+
+
+WMColor*
+WMCreateRGBAColor(WMScreen *scr, unsigned short red, unsigned short green,
+                  unsigned short blue, unsigned short alpha, Bool exact)
+{
+    WMColor *color = NULL;
     
-    if (!exact || !(color=createRGBColor(scr, red, green, blue))) {
-	color = findCloseColor(scr, red, green, blue);
+    if (!exact || !(color=createRGBAColor(scr, red, green, blue, alpha))) {
+	color = findCloseColor(scr, red, green, blue, alpha);
     }
     if (!color)
 	color = WMBlackColor(scr);
@@ -112,9 +131,9 @@ WMCreateNamedColor(WMScreen *scr, char *name, Bool exact)
     if (scr->visual->class == TrueColor)
 	exact = True;
 
-    if (!exact || !(color=createRGBColor(scr, xcolor.red, xcolor.green, 
-					 xcolor.blue))) {
-	color = findCloseColor(scr, xcolor.red, xcolor.green, xcolor.blue);
+    if (!exact || !(color=createRGBAColor(scr, xcolor.red, xcolor.green,
+                                          xcolor.blue, 0xffff))) {
+	color = findCloseColor(scr, xcolor.red, xcolor.green, xcolor.blue, 0xffff);
     }
     return color;
 }
@@ -144,6 +163,13 @@ WMReleaseColor(WMColor *color)
 	    XFreeGC(color->screen->display, color->gc);
 	wfree(color);
     }
+}
+
+
+void
+WMSetColorAlpha(WMColor *color, unsigned short alpha)
+{
+    color->alpha = alpha;
 }
 
 
@@ -201,7 +227,6 @@ WMWhiteColor(WMScreen *scr)
 }
 
 
-
 WMColor*
 WMBlackColor(WMScreen *scr)
 {
@@ -231,7 +256,7 @@ WMGrayColor(WMScreen *scr)
 					LIGHT_STIPPLE_BITS, LIGHT_STIPPLE_WIDTH,
 					LIGHT_STIPPLE_HEIGHT);
 
-	    color = createRGBColor(scr, 0xffff, 0xffff, 0xffff);
+	    color = createRGBAColor(scr, 0xffff, 0xffff, 0xffff, 0xffff);
 
 	    gcv.foreground = white->color.pixel;
 	    gcv.background = black->color.pixel;
@@ -261,7 +286,7 @@ WMDarkGrayColor(WMScreen *scr)
 {
     if (!scr->darkGray) {
 	WMColor *color;
-	
+
 	if (scr->depth == 1) {
 	    Pixmap stipple;
 	    WMColor *white = WMWhiteColor(scr);
@@ -271,8 +296,8 @@ WMDarkGrayColor(WMScreen *scr)
 	    stipple = XCreateBitmapFromData(scr->display, W_DRAWABLE(scr), 
 					  DARK_STIPPLE_BITS, DARK_STIPPLE_WIDTH,
 					  DARK_STIPPLE_HEIGHT);
-	
-	    color = createRGBColor(scr, 0, 0, 0);
+
+	    color = createRGBAColor(scr, 0, 0, 0, 0xffff);
 
 	    gcv.foreground = white->color.pixel;
 	    gcv.background = black->color.pixel;
@@ -327,3 +352,5 @@ WMGetColorRGBDescription(WMColor *color)
     
     return str;
 }
+
+

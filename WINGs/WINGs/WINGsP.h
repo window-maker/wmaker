@@ -75,6 +75,7 @@ typedef struct W_Color {
     struct W_Screen *screen;
 
     XColor color;
+    unsigned short alpha;
     short refCount;
     GC gc;
     struct {
@@ -183,7 +184,9 @@ typedef struct W_Screen {
 
     GC ixorGC;			       /* IncludeInferiors XOR */
 
-    GC textFieldGC;
+    GC drawStringGC;                   /* for WMDrawString() */
+
+    GC drawImStringGC;                 /* for WMDrawImageString() */
 
     W_Font *normalFont;
 
@@ -488,13 +491,13 @@ void W_DrawReliefWithGC(W_Screen *scr, Drawable d, int x, int y,
 
 void W_CallDestroyHandlers(W_View *view);
 
-void W_PaintTextAndImage(W_View *view, int wrap, GC textGC, W_Font *font,
-			 WMReliefType relief, char *text,
+void W_PaintTextAndImage(W_View *view, int wrap, WMColor *textColor,
+                         W_Font *font, WMReliefType relief, char *text,
 			 WMAlignment alignment, W_Pixmap *image, 
-			 WMImagePosition position, GC backGC, int ofs);
+			 WMImagePosition position, WMColor *backColor, int ofs);
 
 void W_PaintText(W_View *view, Drawable d, WMFont *font,  int x, int y,
-		 int width, WMAlignment alignment, GC gc,
+		 int width, WMAlignment alignment, WMColor *color,
 		 int wrap, char *text, int length);
 
 int W_GetTextHeight(WMFont *font, char *text, int width, int wrap);

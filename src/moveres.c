@@ -42,6 +42,8 @@
 
 #include "geomview.h"
 
+#include <WINGs/WINGsP.h>
+
 
 #ifdef KWM_HINTS
 #include "kwm.h"
@@ -210,11 +212,13 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 {
     WScreen *scr = wwin->screen_ptr;
     Window root = scr->root_win;
-    GC gc = scr->line_gc;
+    GC gc = scr->line_gc, saveGC;
     int ty, by, my, x, y, mx, s;
     char num[16];
     XSegment segment[4];
     int fw, fh;
+    WMColor *color;
+    WMPixel pixel;
 
     ty = y1 + wwin->frame->top_width;
     by = y2 - wwin->frame->bottom_width;
@@ -275,10 +279,21 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 	fw = WMWidthOfString(scr->info_text_font, num, strlen(num));
 	
 	/* XSetForeground(dpy, gc, scr->window_title_pixel[WS_UNFOCUSED]); */
-	
-	/* Display the height. */
-	WMDrawString(scr->wmscreen, root, gc, scr->info_text_font, 
-		      x - s + 3 - fw/2, my - fh/2 + 1, num, strlen(num));
+
+        color = WMBlackColor(scr->wmscreen);
+        saveGC = scr->wmscreen->drawStringGC;
+        pixel = color->color.pixel;
+
+        /* Display the height. */
+
+        /* ugly hack */
+        color->color.pixel = scr->line_pixel;
+        scr->wmscreen->drawStringGC = gc;
+	WMDrawString(scr->wmscreen, root, color, scr->info_text_font,
+                     x - s + 3 - fw/2, my - fh/2 + 1, num, strlen(num));
+        scr->wmscreen->drawStringGC = saveGC;
+        color->color.pixel = pixel;
+
 	XSetForeground(dpy, gc, scr->line_pixel);
 	/* horizontal geometry */
 	if (y1 < 15) {
@@ -332,8 +347,14 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 	/* XSetForeground(dpy, gc, scr->window_title_pixel[WS_UNFOCUSED]); */
 	
 	/* Display the width. */
-	WMDrawString(scr->wmscreen, root, gc, scr->info_text_font,
+        /* ugly hack */
+        color->color.pixel = scr->line_pixel;
+        scr->wmscreen->drawStringGC = gc;
+	WMDrawString(scr->wmscreen, root, color, scr->info_text_font,
 		     mx - fw/2 + 1, y - s - fh/2 + 1, num, strlen(num));
+        scr->wmscreen->drawStringGC = saveGC;
+        color->color.pixel = pixel;
+        WMReleaseColor(color);
     } else {
 	WSetGeometryViewShownSize(scr->gview,
 				  (x2 - x1 - wwin->normal_hints->base_width)

@@ -219,9 +219,8 @@ paintEditMenuItem(WEditMenuItem *iPtr)
 
     W_DrawRelief(scr, win, 0, 0, w+1, h, WRRaised);
 
-    WMDrawString(scr, win, WMColorGC(color), font, 5, 3, iPtr->label,
-		 strlen(iPtr->label));
-    
+    WMDrawString(scr, win, color, font, 5, 3, iPtr->label, strlen(iPtr->label));
+
     if (iPtr->pixmap) {
 	WMSize size = WMGetPixmapSize(iPtr->pixmap);
 	

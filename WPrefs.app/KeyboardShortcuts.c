@@ -453,8 +453,7 @@ paintItem(WMList *lPtr, int index, Drawable d, char *text, int state,
 	WMReleasePixmap(pix);
     }
 
-    WMDrawString(scr, d, WMColorGC(panel->black), panel->font, x+20, y,
-		 text, strlen(text));
+    WMDrawString(scr, d, panel->black, panel->font, x+20, y, text, strlen(text));
 }
 
 

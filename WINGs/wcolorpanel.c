@@ -605,7 +605,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
    
     if (pixmap)
     W_PaintText(W_VIEW(panel->grayBrightnessS), pixmap->pixmap, 
-		panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->white), 
+		panel->font12, 2, 0, 100, WALeft, scrPtr->white,
 		False, _("Brightness"), strlen(_("Brightness")));
     else
 	wwarning(_("Color Panel: Could not allocate memory"));
@@ -681,8 +681,8 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->rgbRedS), pixmap->pixmap, panel->font12,
-		2, 0, 100, WALeft, WMColorGC(scrPtr->white), False, _("Red"),
-		strlen(_("Red")));
+                    2, 0, 100, WALeft, scrPtr->white, False, _("Red"),
+                    strlen(_("Red")));
     else
 	wwarning(_("Color Panel: Could not allocate memory"));
 
@@ -714,8 +714,8 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->rgbGreenS), pixmap->pixmap, panel->font12,
-		2, 0, 100, WALeft, WMColorGC(scrPtr->white), False, _("Green"),
-		strlen(_("Green")));
+                    2, 0, 100, WALeft, scrPtr->white, False, _("Green"),
+                    strlen(_("Green")));
     else
 	wwarning(_("Color Panel: Could not allocate memory"));
     
@@ -748,8 +748,8 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->rgbBlueS), pixmap->pixmap, panel->font12,
-		2, 0, 100, WALeft, WMColorGC(scrPtr->white), False, _("Blue"), 
-		strlen(_("Blue")));
+                    2, 0, 100, WALeft, scrPtr->white, False, _("Blue"),
+                    strlen(_("Blue")));
     else
 	wwarning(_("Color Panel: Could not allocate memory"));
     
@@ -808,8 +808,8 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->cmykCyanS), pixmap->pixmap, panel->font12,
-		2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, _("Cyan"), 
-		strlen(_("Cyan")));
+                    2, 0, 100, WALeft, scrPtr->black, False, _("Cyan"),
+                    strlen(_("Cyan")));
     else
 	wwarning(_("Color Panel: Could not allocate memory"));
     
@@ -842,8 +842,8 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->cmykMagentaS), pixmap->pixmap, panel->font12,
-		2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, _("Magenta"), 
-		strlen(_("Magenta")));
+                    2, 0, 100, WALeft, scrPtr->black, False, _("Magenta"),
+                    strlen(_("Magenta")));
     else
 	wwarning(_("Color Panel: Could not allocate memory"));
 
@@ -876,8 +876,8 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->cmykYellowS), pixmap->pixmap, panel->font12,
-		2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, _("Yellow"), 
-		strlen(_("Yellow")));
+                    2, 0, 100, WALeft, scrPtr->black, False, _("Yellow"),
+                    strlen(_("Yellow")));
     else
 	wwarning(_("Color Panel: Could not allocate memory"));
     
@@ -911,8 +911,8 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 
     if (pixmap)
 	W_PaintText(W_VIEW(panel->cmykBlackS), pixmap->pixmap, panel->font12,
-		2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, _("Black"), 
-		strlen(_("Black")));
+                    2, 0, 100, WALeft, scrPtr->black, False, _("Black"),
+                    strlen(_("Black")));
     else
 	wwarning(_("Color Panel: Could not allocate memory"));
 
@@ -2824,7 +2824,7 @@ hsbUpdateBrightnessGradient(W_ColorPanel *panel)
 
     if (sliderPxmp)
     W_PaintText(W_VIEW(panel->hsbBrightnessS), sliderPxmp->pixmap, 
-		panel->font12, 2, 0, 100, WALeft, WMColorGC(scr->white),
+		panel->font12, 2, 0, 100, WALeft, scr->white,
 		False, _("Brightness"), strlen(_("Brightness")));
     else
 	wwarning(_("Color Panel: Could not allocate memory"));
@@ -2859,8 +2859,8 @@ hsbUpdateSaturationGradient(W_ColorPanel *panel)
 
     if (sliderPxmp)
 	W_PaintText(W_VIEW(panel->hsbSaturationS), sliderPxmp->pixmap, 
-	    panel->font12, 2, 0, 100, WALeft, 
-	    WMColorGC(from.hsv.value < 128 ? scr->white : scr->black), False, 
+                    panel->font12, 2, 0, 100, WALeft,
+                    from.hsv.value < 128 ? scr->white : scr->black, False,
 		    _("Saturation"), strlen(_("Saturation")));
     else
 	wwarning(_("Color Panel: Could not allocate memory"));
@@ -2895,8 +2895,8 @@ hsbUpdateHueGradient(W_ColorPanel *panel)
 
     if (sliderPxmp)
 	W_PaintText(W_VIEW(panel->hsbHueS), sliderPxmp->pixmap, 
-	    panel->font12, 2, 0, 100, WALeft, 
-	    WMColorGC(hsvcolor.value < 128 ? scr->white : scr->black), False, 
+                    panel->font12, 2, 0, 100, WALeft,
+                    hsvcolor.value < 128 ? scr->white : scr->black, False,
 		    _("Hue"), strlen(_("Hue")));
     else
 	wwarning(_("Color Panel: Could not allocate memory"));
@@ -3427,8 +3427,6 @@ colorListPaintItem(WMList *lPtr, int index, Drawable d, char *text,
     WMScreen		*scr = WMWidgetScreen(lPtr);
     Display		*dpy = WMScreenDisplay(scr);
     W_ColorPanel	*panel = WMGetHangedData(lPtr);
-    WMColor		*white = WMWhiteColor(scr);
-    WMColor		*black = WMBlackColor(scr);
     WMColor		*fillColor;
     
     width = rect->size.width;
@@ -3437,7 +3435,7 @@ colorListPaintItem(WMList *lPtr, int index, Drawable d, char *text,
     y = rect->pos.y;
     
     if (state & WLDSSelected)
-	WMPaintColorSwatch(white, d, x +15, y, width -15, height);
+	WMPaintColorSwatch(scr->white, d, x +15, y, width -15, height);
     else
 	XClearArea(dpy, d, x +15, y, width -15, height, False);
     
@@ -3448,11 +3446,7 @@ colorListPaintItem(WMList *lPtr, int index, Drawable d, char *text,
     WMPaintColorSwatch(fillColor, d, x, y, 15, 15);
     WMReleaseColor(fillColor);
     
-    WMDrawString(scr, d, WMColorGC(black), panel->font12, x+18, y, text, 
-		 strlen(text));
-    
-    WMReleaseColor(white);
-    WMReleaseColor(black);
+    WMDrawString(scr, d, scr->black, panel->font12, x+18, y, text, strlen(text));
 }
 
 

@@ -530,7 +530,7 @@ paintItem(List *lPtr, int index)
         }
 
         W_PaintText(view, view->window, scr->normalFont,  x+4, y, width,
-                    WALeft, WMColorGC(scr->black), False,
+                    WALeft, scr->black, False,
                     itemPtr->text, strlen(itemPtr->text));
     }
 

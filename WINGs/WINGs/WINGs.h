@@ -804,7 +804,13 @@ WMColor* WMCreateRGBColor(WMScreen *scr, unsigned short red,
 			  unsigned short green, unsigned short blue,
 			  Bool exact);
 
+WMColor* WMCreateRGBAColor(WMScreen *scr, unsigned short red,
+                           unsigned short green, unsigned short blue,
+                           unsigned short alpha, Bool exact);
+
 WMColor* WMCreateNamedColor(WMScreen *scr, char *name, Bool exact);
+
+void WMSetColorAlpha(WMColor *color, unsigned short alpha);
 
 unsigned short WMRedComponentOfColor(WMColor *color);
 
@@ -817,11 +823,12 @@ char* WMGetColorRGBDescription(WMColor *color);
 /* ....................................................................... */
 
 
-void WMDrawString(WMScreen *scr, Drawable d, GC gc, WMFont *font, int x, 
-		  int y, char *text, int length);
+void WMDrawString(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
+                  int x, int y, char *text, int length);
 
-void WMDrawImageString(WMScreen *scr, Drawable d, GC gc, WMFont *font, int x, 
-		       int y, char *text, int length);
+void WMDrawImageString(WMScreen *scr, Drawable d, WMColor *color,
+                       WMColor *background, WMFont *font, int x, int y,
+                       char *text, int length);
 
 int WMWidthOfString(WMFont *font, char *text, int length);
 

@@ -882,7 +882,7 @@ W_DrawLabel(WMTabViewItem *item, Drawable d, WMRect rect, Bool enabled)
     if (!item->label)
 	return;
 
-    WMDrawString(scr, d, WMColorGC(enabled ? scr->black : scr->darkGray),
+    WMDrawString(scr, d, enabled ? scr->black : scr->darkGray,
 		 item->tabView->font, rect.pos.x, rect.pos.y, 
 		 item->label, strlen(item->label));
 }

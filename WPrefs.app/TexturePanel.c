@@ -327,13 +327,13 @@ updateSVSlider(WMSlider *sPtr, Bool saturation, WMFont *font, RHSVColor *hsv)
     if (hsv->value < 128 || !saturation) {
 	WMColor *col = WMWhiteColor(scr);
 	
-	WMDrawString(scr, WMGetPixmapXID(pixmap), WMColorGC(col), font, 2,
+	WMDrawString(scr, WMGetPixmapXID(pixmap), col, font, 2,
 		     (16 - WMFontHeight(font))/2 - 1, buffer, strlen(buffer));
 	WMReleaseColor(col);
     } else {
 	WMColor *col = WMBlackColor(scr);
 
-	WMDrawString(scr, WMGetPixmapXID(pixmap), WMColorGC(col), font, 2,
+	WMDrawString(scr, WMGetPixmapXID(pixmap), col, font, 2,
 		     (16 - WMFontHeight(font))/2 - 1, buffer, strlen(buffer));
 	WMReleaseColor(col);
     }
@@ -368,14 +368,14 @@ updateHueSlider(WMSlider *sPtr, WMFont *font, RHSVColor *hsv)
     if (hsv->value < 128) {
 	WMColor *col = WMWhiteColor(scr);
 
-	WMDrawString(scr, WMGetPixmapXID(pixmap), WMColorGC(col), font, 2,
+	WMDrawString(scr, WMGetPixmapXID(pixmap), col, font, 2,
 		     (16 - WMFontHeight(font))/2 - 1,
 		     		_("Hue"), strlen(_("Hue")));
 	WMReleaseColor(col);
     } else {
 	WMColor *col = WMBlackColor(scr);
 
-	WMDrawString(scr, WMGetPixmapXID(pixmap), WMColorGC(col), font, 2,
+	WMDrawString(scr, WMGetPixmapXID(pixmap), col, font, 2,
 		     (16 - WMFontHeight(font))/2 - 1,
 		     		_("Hue"), strlen(_("Hue")));
 	WMReleaseColor(col);
@@ -489,8 +489,8 @@ paintGradListItem(WMList *lPtr, int index, Drawable d, char *text, int state,
 	XCopyArea(WMScreenDisplay(scr), panel->gimage, d, WMColorGC(white),
 		  0, height*index, 30, height, x + 5, y);
     }
-    WMDrawString(scr, d, WMColorGC(black), panel->listFont, 
-		 x + 40, y + 1, text, strlen(text));
+    WMDrawString(scr, d, black, panel->listFont, x + 40, y + 1,
+                 text, strlen(text));
 
     WMReleaseColor(white);
     WMReleaseColor(black);
@@ -1333,7 +1333,7 @@ CreateTexturePanel(WMWindow *keyWindow)
 		       WMColorGC(color), 0, 0, 130, 16);
 	WMReleaseColor(color);
 	color = WMWhiteColor(color);
-	WMDrawString(scr, WMGetPixmapXID(pixmap), WMColorGC(color),
+	WMDrawString(scr, WMGetPixmapXID(pixmap), color,
 		     panel->listFont, 2, 
 		     (16 - WMFontHeight(panel->listFont))/2 - 1,
 		     "Brightness", 10);
@@ -1357,7 +1357,7 @@ CreateTexturePanel(WMWindow *keyWindow)
 		       WMColorGC(color), 0, 0, 130, 16);
 	WMReleaseColor(color);
 	color = WMWhiteColor(scr);
-	WMDrawString(scr, WMGetPixmapXID(pixmap), WMColorGC(color), 
+	WMDrawString(scr, WMGetPixmapXID(pixmap), color,
 		     panel->listFont, 2,
 		     (16 - WMFontHeight(panel->listFont))/2 - 1,
 		     "Contrast", 8);
@@ -1463,9 +1463,8 @@ CreateTexturePanel(WMWindow *keyWindow)
 	WMReleaseColor(color);
 
 	color = WMWhiteColor(scr);
-	WMDrawString(scr, p, WMColorGC(color), panel->listFont,
-		     2, 1, "0%", 2);
-	WMDrawString(scr, p, WMColorGC(color), panel->listFont,
+	WMDrawString(scr, p, color, panel->listFont, 2, 1, "0%", 2);
+	WMDrawString(scr, p, color, panel->listFont,
 		     153 - WMWidthOfString(panel->listFont, "100%", 4), 1,
 		     "100%", 4);
 	WMReleaseColor(color);

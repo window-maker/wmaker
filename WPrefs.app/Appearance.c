@@ -1329,11 +1329,11 @@ paintListItem(WMList *lPtr, int index, Drawable d, char *text, int state,
     else if (titem->selectedFor)
 	WMDrawPixmap(panel->offLed, d, x + TEXPREV_WIDTH + 10, y + 6);
 
-    WMDrawString(scr, d, WMColorGC(black), panel->boldFont,
+    WMDrawString(scr, d, black, panel->boldFont,
 		 x + TEXPREV_WIDTH + 22, y + 2, titem->title, 
 		 strlen(titem->title));
 
-    WMDrawString(scr, d, WMColorGC(black), panel->smallFont,
+    WMDrawString(scr, d, black, panel->smallFont,
 		 x + TEXPREV_WIDTH + 14, y + 18, titem->texture, 
 		 strlen(titem->texture));
 
@@ -1512,8 +1512,8 @@ paintText(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
 	x += (w - WMWidthOfString(font, text, l))/2;
 	break;
     }
-    WMDrawString(scr, d, WMColorGC(color), font, x,
-		 y + (h - WMFontHeight(font))/2, text, l);
+    WMDrawString(scr, d, color, font, x, y + (h - WMFontHeight(font))/2,
+                 text, l);
 }
 
 

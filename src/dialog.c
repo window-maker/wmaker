@@ -521,12 +521,11 @@ drawIconProc(WMList *lPtr, int index, Drawable d, char *text,
 
         for(i=-1;i<2;i++)
 	    for(j=-1;j<2;j++)
-		WMDrawString(wmscr, d, WMColorGC(whitecolor),
-			     panel->normalfont, ofx+i, ofy+j,
-			     text, tlen);
+                WMDrawString(wmscr, d, whitecolor, panel->normalfont,
+                             ofx+i, ofy+j, text, tlen);
 
-	WMDrawString(wmscr, d, WMColorGC(blackcolor), panel->normalfont,
-		     ofx, ofy, text, tlen);
+        WMDrawString(wmscr, d, blackcolor, panel->normalfont, ofx, ofy,
+                     text, tlen);
     }
 
     WMReleasePixmap(pixmap);

@@ -812,7 +812,6 @@ void
 wIconPaint(WIcon *icon)
 {
     WScreen *scr=icon->core->screen_ptr;
-    GC gc = scr->icon_title_gc;
     int x;
     char *tmp;
 
@@ -838,7 +837,7 @@ wIconPaint(WIcon *icon)
 	else
 	  x = (icon->core->width - w)/2;
 
-	WMDrawString(scr->wmscreen, icon->core->window, gc,
+	WMDrawString(scr->wmscreen, icon->core->window, scr->icon_title_color,
 		     scr->icon_title_font, x, 1, tmp, l);
 	wfree(tmp);
     }

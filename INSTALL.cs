@@ -64,9 +64,9 @@ Následující software je potøebný ke zkompilování Window Makeru:
         Tyto nástroje NEJSOU POTØEBA, ale kdy¾ máte jeden nebo dva nebo
         v¹echny tøi nainstalované, tak se UJISTÌTE, ¾e máte pøesnì
         následující VERZE:
-                autoconf 2.13
+                autoconf 2.54
                 automake 1.4
-                libtool 1.3
+                libtool 1.4.2
         Máte-li odli¹nou verzi, tak ji doèasnì pøejmenujte, nebo ji rovnou
         odinstalujte z va¹eho systému. Pokud nebudete programovat, tak ji
         stejnì nebudete potøebovat, tak¾e ji mù¾ete bezpeènì odinstalovat.
@@ -105,11 +105,6 @@ garantuje, ¾e budou fungovat. Ostatní verze by mìli fungovat také.
 - libgif 2.2 nebo libungif
         Pro podporu GIF obrázkù
         Dostupné na ftp://prtr-13.ucsc.edu/pub/libungif/
-
-- libHermes 1.3.2 nebo novìj¹í
-        Pro rychlej¹í konverzi obrázkù (pou¾ívá knihovna wraster)
-        Pou¾ívá se pouze v nìkterých konverzích - pro TrueColor zobrazení
-        http://www.clanlib.org/hermes/
 
 -GNU xgettxt
         Kdy¾ chcete pou¾ívat èe¹tinu nebo jiné jazyky kromì angliètiny,

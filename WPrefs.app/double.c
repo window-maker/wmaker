@@ -113,7 +113,7 @@ paintDoubleTest(_DoubleTest *dPtr)
 	y = (dPtr->view->size.height-scr->normalFont->height)/2;
 	W_PaintText(dPtr->view, dPtr->view->window, scr->normalFont,  
 		    dPtr->on, dPtr->on+y, dPtr->view->size.width, WACenter, 
-		    WMColorGC(scr->black), False, dPtr->text, strlen(dPtr->text));
+		    scr->black, False, dPtr->text, strlen(dPtr->text));
     }
 }
 

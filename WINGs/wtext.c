@@ -106,8 +106,9 @@ typedef struct W_Text {
     WMColor *dColor;            /* the default color */
     WMPixmap *dBulletPix;       /* the default pixmap for bullets */
 
-    GC bgGC;                    /* the background GC to draw with */
-    GC fgGC;                    /* the foreground GC to draw with */
+    WMColor *fgColor;           /* The current foreground color */
+    WMColor *bgColor;           /* The background color */
+
     GC stippledGC;              /* the GC to overlay selected graphics with */
     Pixmap db;                  /* the buffer on which to draw */
     WMPixmap *bgPixmap;         /* the background pixmap */
@@ -645,10 +646,9 @@ TextBlock *tb)
 
 static void 
 paintText(Text *tPtr)
-{   
+{
     TextBlock *tb;
     WMFont *font;
-    GC gc, greyGC;
     char *text;
     int len, y, c, s, done=False, prev_y=-23, dir /* 1 = down */;
     WMScreen *scr = tPtr->view->screen;
@@ -660,8 +660,8 @@ paintText(Text *tPtr)
         return;
 
 
-    XFillRectangle(dpy, tPtr->db, tPtr->bgGC, 
-       0, 0, tPtr->visible.w, tPtr->visible.h);
+    XFillRectangle(dpy, tPtr->db, WMColorGC(tPtr->bgColor), 0, 0,
+                   tPtr->visible.w, tPtr->visible.h);
 
     if (tPtr->bgPixmap) {
         WMDrawPixmap(tPtr->bgPixmap, tPtr->db, 
@@ -673,12 +673,6 @@ paintText(Text *tPtr)
         if (! (tb = tPtr->firstTextBlock)) {
             goto _copy_area;
         }
-    }
-        
-    if (tPtr->flags.ownsSelection) {
-        color = WMGrayColor(scr);
-        greyGC = WMColorGC(color);
-        WMReleaseColor(color);
     }
 
     done = False;
@@ -721,8 +715,6 @@ _getSibling:
 
     /* first, place all text that can be viewed */
     while (!done && tb) {
-
-
         if (tb->graphic) {
             tb = tb->next;
             continue;
@@ -742,10 +734,10 @@ _getSibling:
 
             if (tPtr->flags.monoFont) {
                 font = tPtr->dFont;
-                gc = tPtr->fgGC;
+                color = tPtr->fgColor;
             } else {
                 font = tb->d.font;
-                gc = WMColorGC(tb->color);
+                color = tb->color;
             }
 
             if (tPtr->flags.ownsSelection) {
@@ -753,7 +745,7 @@ _getSibling:
 
                 if ( sectionWasSelected(tPtr, tb, &rect, s)) {
                     tb->selected = True;
-                    XFillRectangle(dpy, tPtr->db, greyGC, 
+                    XFillRectangle(dpy, tPtr->db, WMColorGC(scr->gray),
                         rect.x, rect.y, rect.width, rect.height);
                 }
             }
@@ -763,23 +755,20 @@ _getSibling:
             len = tb->sections[s].end - tb->sections[s].begin;
             text = &(tb->text[tb->sections[s].begin]);
             y = tb->sections[s].y - tPtr->vpos;
-            WMDrawString(scr, tPtr->db, gc, font, 
-                tb->sections[s].x - tPtr->hpos, y, text, len);
+            WMDrawString(scr, tPtr->db, color, font,
+                         tb->sections[s].x - tPtr->hpos, y, text, len);
 
             if (!tPtr->flags.monoFont && tb->underlined) { 
-                XDrawLine(dpy, tPtr->db, gc,     
-                    tb->sections[s].x - tPtr->hpos, 
-                    y + font->y + 1,
-                    tb->sections[s].x + tb->sections[s].w - tPtr->hpos,
-                    y + font->y + 1);
+                XDrawLine(dpy, tPtr->db, WMColorGC(color),
+                          tb->sections[s].x - tPtr->hpos,
+                          y + font->y + 1,
+                          tb->sections[s].x + tb->sections[s].w - tPtr->hpos,
+                          y + font->y + 1);
             }
-                        
         }
-
         tb = (!done? tb->next : NULL);
-
     }
-            
+
     /* now , show all graphic items that can be viewed */
     c = WMGetArrayItemCount(tPtr->gfxItems);
     if (c > 0 && !tPtr->flags.monoFont) {
@@ -855,22 +844,22 @@ _copy_area:
     if (tPtr->flags.editable && tPtr->flags.cursorShown 
         && tPtr->cursor.x != -23 && tPtr->flags.focused) { 
         int y = tPtr->cursor.y - tPtr->vpos;
-        XDrawLine(dpy, tPtr->db, tPtr->fgGC,
-            tPtr->cursor.x, y,
-            tPtr->cursor.x, y + tPtr->cursor.h);
+        XDrawLine(dpy, tPtr->db, WMColorGC(tPtr->fgColor),
+                  tPtr->cursor.x, y,
+                  tPtr->cursor.x, y + tPtr->cursor.h);
     }
 
-    XCopyArea(dpy, tPtr->db, win, tPtr->bgGC, 0, 0,
-        tPtr->visible.w, tPtr->visible.h, 
-        tPtr->visible.x, tPtr->visible.y);
+    XCopyArea(dpy, tPtr->db, win, WMColorGC(tPtr->bgColor), 0, 0,
+              tPtr->visible.w, tPtr->visible.h,
+              tPtr->visible.x, tPtr->visible.y);
 
     W_DrawRelief(scr, win, 0, 0,
         tPtr->view->size.width, tPtr->view->size.height, 
         tPtr->flags.relief);        
 
     if (tPtr->ruler && tPtr->flags.rulerShown)
-        XDrawLine(dpy, win, tPtr->fgGC, 
-            2, 42, tPtr->view->size.width-4, 42);
+        XDrawLine(dpy, win, WMColorGC(tPtr->fgColor),
+                  2, 42, tPtr->view->size.width-4, 42);
 
 }
 
@@ -3138,30 +3127,27 @@ WMCreateTextForDocumentType(WMWidget *parent, WMAction *parser, WMAction *writer
     tPtr->view->attribFlags |= CWOverrideRedirect | CWCursor;
     W_ResizeView(tPtr->view, 250, 200);
 
-    tPtr->dColor = WMWhiteColor(scr);
-    tPtr->bgGC = WMColorGC(tPtr->dColor);
-    W_SetViewBackgroundColor(tPtr->view, tPtr->dColor);
-    WMReleaseColor(tPtr->dColor);
-
     tPtr->dColor = WMBlackColor(scr);
-    tPtr->fgGC = WMColorGC(tPtr->dColor);
+    tPtr->fgColor = WMBlackColor(scr);
+    tPtr->bgColor = WMWhiteColor(scr);
+    W_SetViewBackgroundColor(tPtr->view, tPtr->bgColor);
 
     gcv.graphics_exposures = False;
     gcv.foreground = W_PIXEL(scr->gray);
     gcv.background = W_PIXEL(scr->darkGray);
     gcv.fill_style = FillStippled;
     /* why not use scr->stipple here? */
-    gcv.stipple = XCreateBitmapFromData(dpy, W_DRAWABLE(scr),
-        STIPPLE_BITS, STIPPLE_WIDTH, STIPPLE_HEIGHT);
+    gcv.stipple = XCreateBitmapFromData(dpy, W_DRAWABLE(scr), STIPPLE_BITS,
+                                        STIPPLE_WIDTH, STIPPLE_HEIGHT);
     tPtr->stippledGC = XCreateGC(dpy, W_DRAWABLE(scr),
-        GCForeground|GCBackground|GCStipple
-        |GCFillStyle|GCGraphicsExposures, &gcv);
-                  
+                                 GCForeground|GCBackground|GCStipple
+                                 |GCFillStyle|GCGraphicsExposures, &gcv);
+
     tPtr->ruler = NULL;
     tPtr->vS = NULL;
     tPtr->hS = NULL;
 
-    tPtr->dFont = WMRetainFont(WMSystemFontOfSize(scr, 12));
+    tPtr->dFont = WMSystemFontOfSize(scr, 12);
 
     tPtr->view->delegate = &_TextViewDelegate;
 
@@ -3668,8 +3654,8 @@ WMDestroyTextBlock(WMText *tPtr, void *vtb)
             /* 5 months later... destroy it 10 seconds after now which should
              * be enough time for the widget's action to be completed... :-) */
             /* This is a bad assumption. Just destroy the widget here.
-            // if the caller needs it, it can protect it with W_RetainView()
-            //WMAddTimerHandler(10000, destroyWidget, (void *)tb->d.widget);*/
+             * if the caller needs it, it can protect it with W_RetainView()
+             * WMAddTimerHandler(10000, destroyWidget, (void *)tb->d.widget);*/
             WMDestroyWidget(tb->d.widget);
         } else {
             WMReleasePixmap(tb->d.pixmap);
@@ -3693,13 +3679,8 @@ WMSetTextForegroundColor(WMText *tPtr, WMColor *color)
     if (!tPtr)
         return;
 
-    if (color) 
-        tPtr->fgGC = WMColorGC(color);
-    else {
-        WMColor *color = WMBlackColor(tPtr->view->screen);
-        tPtr->fgGC = WMColorGC(color);
-        WMReleaseColor(color);
-    }
+    WMReleaseColor(tPtr->fgColor);
+    tPtr->fgColor = WMRetainColor(color ? color : tPtr->view->screen->black);
 
     paintText(tPtr);
 }
@@ -3710,14 +3691,9 @@ WMSetTextBackgroundColor(WMText *tPtr, WMColor *color)
     if (!tPtr)
         return;
 
-    if (color) {
-        tPtr->bgGC = WMColorGC(color);
-        W_SetViewBackgroundColor(tPtr->view, color);
-    } else {
-        tPtr->bgGC = WMColorGC(WMWhiteColor(tPtr->view->screen));
-        W_SetViewBackgroundColor(tPtr->view, 
-            WMWhiteColor(tPtr->view->screen));
-    }
+    WMReleaseColor(tPtr->bgColor);
+    tPtr->bgColor = WMRetainColor(color ? color : tPtr->view->screen->white);
+    W_SetViewBackgroundColor(tPtr->view, tPtr->bgColor);
 
     paintText(tPtr);
 }

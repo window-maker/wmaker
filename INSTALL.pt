@@ -68,9 +68,9 @@ Para compilar o Window Maker você precisará do seguinte:
 - autoconf, automake and libtool
 	Estes pacotes não são necessários, mas se você tiver um ou mais deles instalados,
 	verifique se todos eles são das seguintes versões:
-		autoconf 2.13
+		autoconf 2.54
 		automake 1.4
-		libtool 1.3
+		libtool 1.4.2
 	Se você possui uma versão diferente, desative-os mudando os nomes dos arquivos
 	para outra coisa ou removendo-os do seu sistema. Se você não desenvolve
 	software você não precisa deles, logo, você pode desinstalá-los com segurança.

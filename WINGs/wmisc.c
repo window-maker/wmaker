@@ -154,7 +154,7 @@ W_GetTextHeight(WMFont *font, char *text, int width, int wrap)
 
 void
 W_PaintText(W_View *view, Drawable d, WMFont *font,  int x, int y,
-	    int width, WMAlignment alignment, GC gc,
+	    int width, WMAlignment alignment, WMColor *color,
 	    int wrap, char *text, int length)
 {
     char *ptr = text;
@@ -174,7 +174,7 @@ W_PaintText(W_View *view, Drawable d, WMFont *font,  int x, int y,
 	else
 	    line_x = x + (width - line_width) / 2;
 
-	WMDrawString(view->screen, d, gc, font, line_x, y, ptr, count);
+	WMDrawString(view->screen, d, color, font, line_x, y, ptr, count);
 
         if (wrap && ptr[count]!='\n')
             y += fheight;
@@ -191,10 +191,10 @@ W_PaintText(W_View *view, Drawable d, WMFont *font,  int x, int y,
 
 
 void
-W_PaintTextAndImage(W_View *view, int wrap, GC textGC, W_Font *font,
+W_PaintTextAndImage(W_View *view, int wrap, WMColor *textColor, W_Font *font,
 		    WMReliefType relief, char *text,
 		    WMAlignment alignment,  W_Pixmap *image,
-		    WMImagePosition position, GC backGC, int ofs)
+		    WMImagePosition position, WMColor *backColor, int ofs)
 {
     W_Screen *screen = view->screen;
     int ix, iy;
@@ -209,15 +209,15 @@ W_PaintTextAndImage(W_View *view, int wrap, GC textGC, W_Font *font,
     
     /* background */
 #ifndef DOUBLE_BUFFER
-    if (backGC) {
-	XFillRectangle(screen->display, d, backGC,
+    if (backColor) {
+	XFillRectangle(screen->display, d, WMColorGC(backColor),
 		       0, 0, view->size.width, view->size.height);
     } else {
 	XClearWindow(screen->display, d);
     }
 #else
-    if (backGC)
-	XFillRectangle(screen->display, d, backGC, 0, 0,
+    if (backColor)
+	XFillRectangle(screen->display, d, WMColorGC(backColor), 0, 0,
 		       view->size.width, view->size.height);
     else {
 	XSetForeground(screen->display, screen->copyGC, 
@@ -303,7 +303,7 @@ W_PaintTextAndImage(W_View *view, int wrap, GC textGC, W_Font *font,
 	
 	textHeight = W_GetTextHeight(font, text, w-8, wrap);
 	W_PaintText(view, d, font, x+ofs+4, y+ofs + (h-textHeight)/2, w-8,
-		    alignment, textGC, wrap, text, strlen(text));
+		    alignment, textColor, wrap, text, strlen(text));
     }
     
     

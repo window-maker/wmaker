@@ -85,26 +85,30 @@ static WMPropList *DefaultDisplayFont = NULL;
 
 
 static void
-drawMenuItem(WMScreen *scr, Display *dpy, Drawable d, 
-	     int x, int y, int w, int h, 
-	     GC light, GC dark, GC black, GC white,
-	     WMFont *font, int fh, char *text)
+drawMenuItem(Panel *panel, int x, int y, int w, int h, char *text)
 {
-    XFillRectangle(dpy, d, light, x, y, w, h);
-    
-    XDrawLine(dpy, d, black, x, y, x, y+h);
-    XDrawLine(dpy, d, black, x+w, y, x+w, y+h);
-    
-    XDrawLine(dpy, d, white, x+1, y, x+1, y+h-1);
-    XDrawLine(dpy, d, white, x+1, y, x+w-1, y);
-    
-    XDrawLine(dpy, d, dark, x+w-1, y+1, x+w-1, y+h-3);
-    XDrawLine(dpy, d, dark, x+1, y+h-2, x+w-1, y+h-2);
-    
-    XDrawLine(dpy, d, black, x, y+h-1, x+w, y+h-1);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
+    Display *dpy = WMScreenDisplay(scr);
+    GC black = WMColorGC(panel->black);
+    GC white = WMColorGC(panel->white);
+    GC dark = WMColorGC(panel->dark);
+    int fh = WMFontHeight(panel->menuItemFont);
 
-    WMDrawString(scr, d, black, font, x + 5, y+(h-fh)/2, 
-		 text, strlen(text));
+    XFillRectangle(dpy, panel->preview, WMColorGC(panel->light), x, y, w, h);
+
+    XDrawLine(dpy, panel->preview, black, x, y, x, y+h);
+    XDrawLine(dpy, panel->preview, black, x+w, y, x+w, y+h);
+
+    XDrawLine(dpy, panel->preview, white, x+1, y, x+1, y+h-1);
+    XDrawLine(dpy, panel->preview, white, x+1, y, x+w-1, y);
+
+    XDrawLine(dpy, panel->preview, dark, x+w-1, y+1, x+w-1, y+h-3);
+    XDrawLine(dpy, panel->preview, dark, x+1, y+h-2, x+w-1, y+h-2);
+
+    XDrawLine(dpy, panel->preview, black, x, y+h-1, x+w, y+h-1);
+
+    WMDrawString(scr, panel->preview, panel->black, panel->menuItemFont,
+                 x + 5, y+(h-fh)/2, text, strlen(text));
 }
 
 
@@ -156,7 +160,7 @@ paintPreviewBox(Panel *panel)
 	XDrawLine(dpy, panel->preview, dark,
 		  220, 20, 220, 20+h);
 	
-	WMDrawString(scr, panel->preview, white, panel->windowTitleFont,
+	WMDrawString(scr, panel->preview, panel->white, panel->windowTitleFont,
 		     20+(200-WMWidthOfString(panel->windowTitleFont, "Window Titlebar", 15))/2,
 		     20+(h-fh)/2, "Window Titlebar", 15);
     }
@@ -186,7 +190,7 @@ paintPreviewBox(Panel *panel)
 	XDrawLine(dpy, panel->preview, dark,
 		  mx+mw, my, mx+mw, my+h);
 
-	WMDrawString(scr, panel->preview, white, panel->menuTitleFont,
+	WMDrawString(scr, panel->preview, panel->white, panel->menuTitleFont,
 		     mx+5, my+(h-fh)/2, "Menu Title", 10);
 	
 	fh2 = WMFontHeight(panel->menuItemFont);
@@ -194,11 +198,7 @@ paintPreviewBox(Panel *panel)
 	
 	/* menu items */
 	for (i = 0; i < 4; i++) {
-	    drawMenuItem(scr, dpy, panel->preview,
-			 mx-1, my+2+h+i*h2, mw+2, h2,
-			 light, dark, black, white, 
-			 panel->menuItemFont, fh2,
-			 "Menu Item");
+	    drawMenuItem(panel, mx-1, my+2+h+i*h2, mw+2, h2, "Menu Item");
 	}
     }
 

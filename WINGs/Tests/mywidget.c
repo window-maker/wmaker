@@ -150,7 +150,7 @@ paintMyWidget(_MyWidget *mPtr)
 	color = WMWhiteColor(scr);
 	
 	W_PaintText(mPtr->view, mPtr->view->window, scr->normalFont,  0, 0,
-		    mPtr->view->size.width, WACenter, WMColorGC(color),
+		    mPtr->view->size.width, WACenter, color,
 		    False, mPtr->text, strlen(mPtr->text));
 	
 	WMReleaseColor(color);

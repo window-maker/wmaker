@@ -560,10 +560,10 @@ W_SetViewBackgroundColor(W_View *view, WMColor *color)
     view->backColor = WMRetainColor(color);
 
     view->attribFlags |= CWBackPixel;
-    view->attribs.background_pixel = color->color.pixel;
+    view->attribs.background_pixel = W_PIXEL(color);
     if (view->flags.realized) {
 	XSetWindowBackground(view->screen->display, view->window, 
-			     color->color.pixel);
+			     W_PIXEL(color));
 	XClearWindow(view->screen->display, view->window);
     }
 }
