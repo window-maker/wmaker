@@ -13,7 +13,7 @@ include_HEADERS = WINGs.h WUtil.h WINGsP.h
 bin_SCRIPTS = get-wings-flags get-wutil-flags
 
 noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel\
-	connect puzzle testtext
+	connect puzzle # testtext
 
 lib_LIBRARIES = libWINGs.a libWUtil.a
 
