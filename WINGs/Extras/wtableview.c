@@ -26,7 +26,6 @@ struct W_TableColumn {
 };
 
 
-
 static void handleResize(W_ViewDelegate *self, WMView *view);
 
 static void rearrangeHeader(WMTableView *table);
@@ -168,6 +167,9 @@ struct W_TableView {
     unsigned canSelectRow:1;
     unsigned canSelectMultiRows:1;
     unsigned canDeselectRow:1;
+
+    unsigned int hasVScroller:1;
+    unsigned int hasHScroller:1;
 };
 
 static W_Class tableClass = 0;
@@ -183,6 +185,7 @@ static W_ViewDelegate viewDelegate = {
 
 
 
+static void reorganizeInterior(WMTableView *table);
 
 
 static void handleEvents(XEvent *event, void *data);
@@ -216,11 +219,21 @@ static WMRect getVisibleRect(WMTableView *table)
     WMSize size = getTotalSize(table);
     WMRect rect;
     
-    rect.size.height = size.height * WMGetScrollerKnobProportion(table->vscroll);
-    rect.size.width = size.width * WMGetScrollerKnobProportion(table->hscroll);
-
-    rect.pos.x = (size.width - rect.size.width) * WMGetScrollerValue(table->hscroll);
-    rect.pos.y = (size.height - rect.size.height) * WMGetScrollerValue(table->vscroll);
+    if (table->vscroll) {
+        rect.size.height = size.height * WMGetScrollerKnobProportion(table->vscroll);
+        rect.pos.y = (size.height - rect.size.height) * WMGetScrollerValue(table->vscroll);
+    } else {
+        rect.size.height = size.height;
+        rect.pos.y = 0;
+    }
+    
+    if (table->hscroll) {
+        rect.size.width = size.width * WMGetScrollerKnobProportion(table->hscroll);
+        rect.pos.x = (size.width - rect.size.width) * WMGetScrollerValue(table->hscroll);
+    } else {
+        rect.size.width = size.width;
+        rect.pos.x = 0;
+    }
 
     return rect;
 }
@@ -232,28 +245,30 @@ static void scrollToPoint(WMTableView *table, int x, int y)
     int i;
     float value, prop;
     
-    if (size.width > W_VIEW_WIDTH(table->tableView)) {
-	prop = (float)W_VIEW_WIDTH(table->tableView) / (float)size.width;
-	value = (float)x / (float)(size.width - W_VIEW_WIDTH(table->tableView));
-    } else {
-	prop = 1.0;
-	value = 0.0;
-    }
-    WMSetScrollerParameters(table->hscroll, value, prop);
-
-    
-    if (size.height > W_VIEW_HEIGHT(table->tableView)) {
-	prop = (float)W_VIEW_HEIGHT(table->tableView) / (float)size.height;
-	value = (float)y / (float)(size.height - W_VIEW_HEIGHT(table->tableView));
-    } else {
-	prop = 1.0;
-	value = 0.0;
+    if (table->hscroll) {
+        if (size.width > W_VIEW_WIDTH(table->tableView)) {
+            prop = (float)W_VIEW_WIDTH(table->tableView) / (float)size.width;
+            value = (float)x / (float)(size.width - W_VIEW_WIDTH(table->tableView));
+        } else {
+            prop = 1.0;
+            value = 0.0;
+        }
+        WMSetScrollerParameters(table->hscroll, value, prop);
     }
 
-    WMSetScrollerParameters(table->vscroll, value, prop);
-    
-    
-    
+    if (table->vscroll) {
+        if (size.height > W_VIEW_HEIGHT(table->tableView)) {
+            prop = (float)W_VIEW_HEIGHT(table->tableView) / (float)size.height;
+            value = (float)y / (float)(size.height - W_VIEW_HEIGHT(table->tableView));
+        } else {
+            prop = 1.0;
+            value = 0.0;
+        }
+
+        WMSetScrollerParameters(table->vscroll, value, prop);
+    }
+
+
     if (table->editingRow >= 0) {
 	for (i = 0; i < WMGetArrayItemCount(table->columns); i++) {
 	    WMTableColumn *column;
@@ -277,34 +292,37 @@ static void adjustScrollers(WMTableView *table)
     float prop, value;
     float oprop, ovalue;
 
-    if (size.width <= vsize.width) {
-	value = 0.0;
-	prop = 1.0;
-    } else {
-	oprop = WMGetScrollerKnobProportion(table->hscroll);
-	if (oprop == 0.0)
-	    oprop = 1.0;
-	ovalue = WMGetScrollerValue(table->hscroll);
-
-	prop = (float)vsize.width/(float)size.width;
-	value = prop*ovalue / oprop;
+    if (table->hscroll) {
+        if (size.width <= vsize.width) {
+            value = 0.0;
+            prop = 1.0;
+        } else {
+            oprop = WMGetScrollerKnobProportion(table->hscroll);
+            if (oprop == 0.0)
+                oprop = 1.0;
+            ovalue = WMGetScrollerValue(table->hscroll);
+            
+            prop = (float)vsize.width/(float)size.width;
+            value = prop*ovalue / oprop;
+        }
+        WMSetScrollerParameters(table->hscroll, value, prop);
     }
-    WMSetScrollerParameters(table->hscroll, value, prop);
 
-    if (size.height <= vsize.height) {
-	value = 0.0;
-	prop = 1.0;
-    } else {
-	oprop = WMGetScrollerKnobProportion(table->vscroll);
-	oprop = WMGetScrollerKnobProportion(table->hscroll);
-	if (oprop == 0.0)
-	    oprop = 1.0;	
-	ovalue = WMGetScrollerValue(table->vscroll);
-
-	prop = (float)vsize.height/(float)size.height;	
-	value = prop*ovalue / oprop;	
+    if (table->vscroll) {
+        if (size.height <= vsize.height) {
+            value = 0.0;
+            prop = 1.0;
+        } else {
+            oprop = WMGetScrollerKnobProportion(table->vscroll);
+            if (oprop == 0.0)
+                oprop = 1.0;	
+            ovalue = WMGetScrollerValue(table->vscroll);
+            
+            prop = (float)vsize.height/(float)size.height;	
+            value = prop*ovalue / oprop;	
+        }
+        WMSetScrollerParameters(table->vscroll, value, prop);
     }
-    WMSetScrollerParameters(table->vscroll, value, prop);
 }
 
 
@@ -499,13 +517,16 @@ WMTableView *WMCreateTableView(WMWidget *parent)
     WMMoveWidget(table->hscroll, 1, 2+table->headerHeight);
     WMMapWidget(table->hscroll);
 
+    table->hasHScroller = 1;
+
     table->vscroll = WMCreateScroller(table);
     WMSetScrollerArrowsPosition(table->vscroll, WSAMaxEnd);
     WMSetScrollerAction(table->vscroll, doScroll, table);
     WMMoveWidget(table->vscroll, 1, 2+table->headerHeight);
     WMMapWidget(table->vscroll);
-    
-    
+
+    table->hasVScroller = 1;
+
     table->header = WMCreateFrame(table);
     WMMoveWidget(table->header, 22, 2);
     WMMapWidget(table->header);
@@ -732,6 +753,76 @@ void *WMGetTableViewDataSource(WMTableView *table)
     return table->dataSource;
 }
 
+
+
+void WMSetTableViewHasHorizontalScroller(WMTableView *tPtr, Bool flag)
+{
+    if (flag) {
+	if (tPtr->hasHScroller)
+	    return;
+	tPtr->hasHScroller = 1;
+	
+	tPtr->hscroll = WMCreateScroller(tPtr);
+	WMSetScrollerAction(tPtr->hscroll, doScroll, tPtr);
+	WMSetScrollerArrowsPosition(tPtr->hscroll, WSAMaxEnd);
+	/* make it a horiz. scroller */
+	WMResizeWidget(tPtr->hscroll, 1, 2);
+
+	if (W_VIEW_REALIZED(tPtr->view)) {
+	    WMRealizeWidget(tPtr->hscroll);
+	}
+
+	reorganizeInterior(tPtr);
+
+	WMMapWidget(tPtr->hscroll);
+    } else {
+	if (!tPtr->hasHScroller)
+	    return;
+	tPtr->hasHScroller = 0;
+	
+	WMUnmapWidget(tPtr->hscroll);
+	WMDestroyWidget(tPtr->hscroll);
+	tPtr->hscroll = NULL;
+
+	reorganizeInterior(tPtr);
+    }
+}
+
+#if 0
+/* not supported by now */
+void WMSetTableViewHasVerticalScroller(WMTableView *tPtr, Bool flag)
+{
+    if (flag) {
+	if (tPtr->hasVScroller)
+	    return;
+	tPtr->hasVScroller = 1;
+	
+	tPtr->vscroll = WMCreateScroller(tPtr);
+	WMSetScrollerAction(tPtr->vscroll, doScroll, tPtr);
+	WMSetScrollerArrowsPosition(tPtr->vscroll, WSAMaxEnd);
+	/* make it a vert. scroller */
+	WMResizeWidget(tPtr->vscroll, 1, 2);
+
+	if (W_VIEW_REALIZED(tPtr->view)) {
+	    WMRealizeWidget(tPtr->vscroll);
+	}
+
+	reorganizeInterior(tPtr);
+	
+	WMMapWidget(tPtr->vscroll);
+    } else {
+	if (!tPtr->hasVScroller)
+	    return;
+	tPtr->hasVScroller = 0;
+	
+	WMUnmapWidget(tPtr->vscroll);
+	WMDestroyWidget(tPtr->vscroll);
+	tPtr->vscroll = NULL;
+
+	reorganizeInterior(tPtr);
+    }
+}
+#endif
 
 void WMSetTableViewBackgroundColor(WMTableView *table, WMColor *color)
 {
@@ -1161,11 +1252,23 @@ static void handleEvents(XEvent *event, void *data)
 
 static void handleResize(W_ViewDelegate *self, WMView *view)
 {
+    reorganizeInterior(view->self);
+}
+
+
+static void reorganizeInterior(WMTableView *table)
+{
     int width;
     int height;
-    WMTableView *table = view->self;
     WMSize size = getTotalSize(table);
+    WMView *view = table->view;
     int vw, vh;
+    int hsThickness, vsThickness;
+
+    if (table->vscroll)
+        vsThickness = WMWidgetWidth(table->vscroll);
+    if (table->hscroll)
+        hsThickness = WMWidgetHeight(table->hscroll);
 
     width = W_VIEW_WIDTH(view) - 2;
     height = W_VIEW_HEIGHT(view) - 3;
@@ -1177,25 +1280,28 @@ static void handleResize(W_ViewDelegate *self, WMView *view)
 
     WMMoveWidget(table->vscroll, 1, table->headerHeight + 1);
     WMResizeWidget(table->vscroll, 20, height + 1);
-    
-    WMMoveWidget(table->hscroll, 20, W_VIEW_HEIGHT(view) - 20 - 1);
-    WMResizeWidget(table->hscroll, width-20+1, 20);
-    
+
+    if (table->hscroll) {
+        WMMoveWidget(table->hscroll, vsThickness, W_VIEW_HEIGHT(view) - hsThickness - 1);
+        WMResizeWidget(table->hscroll, width-(vsThickness+1), hsThickness);
+    }
+
     if (table->header)
-	WMResizeWidget(table->header, width - 21, table->headerHeight);
+	WMResizeWidget(table->header, width-(vsThickness+1), table->headerHeight);
     
     if (table->viewBuffer) {
 	WMReleasePixmap(table->viewBuffer);
 	table->viewBuffer = NULL;
     }
 
-    width -= 20;
-    height -= 20;
+    width -= vsThickness;
+    height -= hsThickness;
+
 
     vw = WMIN(size.width, width);
     vh = WMIN(size.height, height);
 
-    W_MoveView(table->tableView, 21, 1+table->headerHeight+1);
+    W_MoveView(table->tableView, vsThickness+1, 1+table->headerHeight+1);
     W_ResizeView(table->tableView, WMAX(vw, 1), WMAX(vh, 1)+1);
     
     adjustScrollers(table);

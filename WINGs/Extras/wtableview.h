@@ -108,7 +108,11 @@ void WMReloadTableView(WMTableView *table);
     
 void WMNoteTableViewNumberOfRowsChanged(WMTableView *table);
     
-void WMScrollTableViewRowToVisible(WMTableView *table, int row);    
+void WMScrollTableViewRowToVisible(WMTableView *table, int row);
+    
+void WMSetTableViewHasHorizontalScroller(WMTableView *tPtr, Bool flag);
+
+
 #ifdef __cplusplus
 }
 #endif

@@ -94,6 +94,7 @@ main(int argc, char **argv)
     WMMapWidget(win);
     
     table = WMCreateTableView(win);
+    WMSetTableViewHasHorizontalScroller(table, 0);
     WMSetViewExpandsToParent(WMWidgetView(table), 10, 10, 10, 10);
     WMSetTableViewBackgroundColor(table, WMWhiteColor(scr));
     /*WMSetTableViewGridColor(table, WMGrayColor(scr));*/

@@ -52,6 +52,7 @@ Changes since wmaker 0.80.1:
 - Added wstrndup()
 - Added WMGetFontName()
 - Added fontpanel callback
+- Added WMSetTableViewHasHorizontalScroller()
 
 
 Changes since wmaker 0.80.0:
