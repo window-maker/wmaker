@@ -175,6 +175,65 @@ decrToFit(TextField *tPtr)
 #undef TEXT_WIDTH
 #undef TEXT_WIDTH2
 
+static Bool
+requestHandler(WMWidget *w, Atom selection, Atom target, Atom *type,
+        void **value, unsigned *length, int *format) {
+    TextField *tPtr = w;
+    int count,count2;
+    Display *dpy = tPtr->view->screen->display;
+    Atom _TARGETS;
+    char *text;
+    text = XGetAtomName(tPtr->view->screen->display,target);
+    XFree(text);
+    text = XGetAtomName(tPtr->view->screen->display,selection);
+    XFree(text);
+
+    *format = 32;
+    *length = 0;
+    *value = NULL;
+    count = tPtr->selection.count < 0
+        ? tPtr->selection.position + tPtr->selection.count
+        : tPtr->selection.position;
+
+    if (target == XA_STRING ||
+            target == XInternAtom(dpy, "TEXT", False) ||
+            target == XInternAtom(dpy, "COMPOUND_TEXT", False)) {
+        *value = wstrdup(&(tPtr->text[count]));
+        *length = abs(tPtr->selection.count);
+        *format = 8;
+        *type = target;
+        return True;
+    }
+    
+    _TARGETS = XInternAtom(dpy, "TARGETS", False);
+    if (target == _TARGETS) {
+        int *ptr;
+
+        *length = 4;
+        ptr = *value = (char *) wmalloc(4 * sizeof(Atom));
+        ptr[0] = _TARGETS;
+        ptr[1] = XA_STRING;
+        ptr[2] = XInternAtom(dpy, "TEXT", False);
+        ptr[4] = XInternAtom(dpy, "COMPOUND_TEXT", False);
+        *type = target;
+        return True;
+    }
+    /*
+    *target = XA_PRIMARY;
+    */
+    return False;
+
+}
+
+
+static void
+lostHandler(WMWidget *w, Atom selection)
+{
+    TextField *tPtr;
+    tPtr->selection.count = 0;
+    paintTextField(tPtr);
+}
+
 
 WMTextField*
 WMCreateTextField(WMWidget *parent)
@@ -221,6 +280,10 @@ WMCreateTextField(WMWidget *parent)
     WMCreateEventHandler(tPtr->view, EnterWindowMask|LeaveWindowMask
 			 |ButtonReleaseMask|ButtonPressMask|KeyPressMask|Button1MotionMask,
 			 handleTextFieldActionEvents, tPtr);
+    
+    WMCreateSelectionHandler(tPtr, XA_PRIMARY, CurrentTime, requestHandler,
+             lostHandler, NULL);
+
 
     tPtr->flags.cursorOn = 1;
 
@@ -1175,14 +1238,8 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 
 	}
         if (move) {
-	    int count;
-	    XSetSelectionOwner(tPtr->view->screen->display,
-			       XA_PRIMARY, None, CurrentTime);
-	    count = tPtr->selection.count < 0
-		? tPtr->selection.position + tPtr->selection.count 
-		: tPtr->selection.position;
-	    XStoreBuffer(tPtr->view->screen->display,
-			 &tPtr->text[count] , abs(tPtr->selection.count), 0);
+            XSetSelectionOwner(tPtr->view->screen->display,
+                       XA_PRIMARY, tPtr->view->window, CurrentTime);
         }
 	break;
 
@@ -1237,8 +1294,12 @@ handleTextFieldActionEvents(XEvent *event, void *data)
             if (event->xbutton.button == Button2 && tPtr->flags.enabled) {
                 char *text;
 
+                text = W_GetTextSelection(tPtr->view->screen, XA_PRIMARY);
+                
+                if (!text) {
                 text = W_GetTextSelection(tPtr->view->screen,
                               tPtr->view->screen->clipboardAtom);
+                }
                 if (!text) {
 		    text = W_GetTextSelection(tPtr->view->screen, 
 					      XA_CUT_BUFFER0);
