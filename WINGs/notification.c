@@ -217,8 +217,6 @@ WMPostNotification(WMNotification *notification)
     }
 
     WMReleaseNotification(notification);
-
-    W_FlushASAPNotificationQueue();
 }
 
 
@@ -491,7 +489,8 @@ WMEnqueueCoalesceNotification(WMNotificationQueue *queue,
     switch (postingStyle) {
      case WMPostNow:
 	WMPostNotification(notification);
-	break;
+        WMReleaseNotification(notification);
+        break;
 
      case WMPostASAP:
 	WMPutInBag(queue->asapQueue, notification);
@@ -514,7 +513,8 @@ W_FlushASAPNotificationQueue()
 	    WMNotification *tmp = WMGetFromBag(queue->asapQueue, 0);
 
 	    WMPostNotification(tmp);
-	    WMDeleteFromBag(queue->asapQueue, 0);
+            WMReleaseNotification(tmp);
+            WMDeleteFromBag(queue->asapQueue, 0);
 	}
 
 	queue = queue->next;
@@ -532,6 +532,7 @@ W_FlushIdleNotificationQueue()
 	    WMNotification *tmp = WMGetFromBag(queue->idleQueue, 0);
 
 	    WMPostNotification(tmp);
+            WMReleaseNotification(tmp);
 	    WMDeleteFromBag(queue->idleQueue, 0);
 	}
 

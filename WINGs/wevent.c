@@ -327,7 +327,9 @@ checkIdleHandlers()
     IdleHandler *handler, *tmp;
 
     if (!idleHandler) {
-	return False;
+        W_FlushIdleNotificationQueue();
+        /* make sure an observer in queue didn't added an idle handler */
+        return (idleHandler!=NULL);
     }
     
     handler = idleHandler;
@@ -343,8 +345,11 @@ checkIdleHandlers()
 	
 	handler = tmp;
     }
-    
-    return True;
+
+    W_FlushIdleNotificationQueue();
+
+    /* this is not necesarrily False, because one handler can re-add itself */
+    return (idleHandler!=NULL);
 }
 
 
@@ -922,9 +927,6 @@ WMNextEvent(Display *dpy, XEvent *event)
 	/* Do idle stuff */
 	/* Do idle and timer stuff while there are no timer or X events */
 	while (!XPending(dpy) && checkIdleHandlers()) {
-
-	    W_FlushIdleNotificationQueue();
-	    
 	    /* dispatch timer events */
 	    if (timerPending())
 		checkTimerHandlers();
@@ -959,9 +961,6 @@ WMMaskEvent(Display *dpy, long mask, XEvent *event)
     while (!XCheckMaskEvent(dpy, mask, event)) {
 	/* Do idle stuff while there are no timer or X events */
 	while (checkIdleHandlers()) {
-	    
-	    W_FlushIdleNotificationQueue();
-	    
 	    if (XCheckMaskEvent(dpy, mask, event))
 		return;
 	}
@@ -1007,9 +1006,6 @@ WMMaskEvent(Display *dpy, long mask, XEvent *event)
     while (!XCheckMaskEvent(dpy, mask, event)) {
 	/* Do idle stuff while there are no timer or X events */
 	while (checkIdleHandlers()) {
-
-	    W_FlushIdleNotificationQueue();
-	    
 	    if (XCheckMaskEvent(dpy, mask, event))
 		return;
 	}

@@ -67,8 +67,6 @@ static InputHandler *inputHandler=NULL;
 
 #define timerPending()	(timerHandler)
 
-#define idlePending()	(idleHandler)
-
 
 static void
 rightNow(struct timeval *tv) {
@@ -274,14 +272,15 @@ WMDeleteInputHandler(WMHandlerID handlerID)
 }
 
 
-static void
+static Bool
 checkIdleHandlers()
 {
     IdleHandler *handler, *tmp;
 
     if (!idleHandler) {
 	W_FlushIdleNotificationQueue();
-	return;
+        /* make sure an observer in queue didn't added an idle handler */
+        return (idleHandler!=NULL);
     }
 
     handler = idleHandler;
@@ -297,7 +296,11 @@ checkIdleHandlers()
 
 	handler = tmp;
     }
+
     W_FlushIdleNotificationQueue();
+
+    /* this is not necesarrily False, because one handler can re-add itself */
+    return (idleHandler!=NULL);
 }
 
 
@@ -563,16 +566,13 @@ WHandleEvents()
      */
     if (inputHandler) {
         /* Do idle and timer stuff while there are no input events */
-        while (idlePending() && inputHandler && !handleInputEvents(False)) {
-            if (idlePending())
-                checkIdleHandlers();
+        while (checkIdleHandlers() && inputHandler && !handleInputEvents(False)) {
             /* dispatch timer events */
             if (timerPending())
                 checkTimerHandlers();
         }
     } else {
-        if (idlePending())
-            checkIdleHandlers();
+        checkIdleHandlers();
         /* dispatch timer events */
         if (timerPending())
             checkTimerHandlers();
