@@ -97,7 +97,7 @@ saveDefaultsChanges(void)
 
         while (tmp) {
             if (tmp->appDomain && tmp->dirty)
-                PLSave(tmp->appDomain, YES);
+                PLShallowSynchronize(tmp->appDomain);
             tmp = tmp->next;
         }
     }
@@ -123,7 +123,7 @@ void
 WMSynchronizeUserDefaults(WMUserDefaults *database)
 {
     /* TODO: check what it should really do */
-    PLSave(database->appDomain, YES);
+    PLShallowSynchronize(database->appDomain);
 }
 
 
