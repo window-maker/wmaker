@@ -104,22 +104,16 @@ textChangedObserver(void *observerData, WMNotification *notification)
     char *text;
     WMList *list;
     int col = WMGetBrowserNumberOfColumns(panel->browser) - 1;
-    int i, textEvent = (int)WMGetNotificationClientData(notification);
-    static int running = 0;
-
-    if (running)
-        return;
-
-    running = 1;
+    int i, textEvent;
 
     if (panel->flags.ignoreTextChangeNotification)
 	return;
 
-    list = WMGetBrowserListInColumn(panel->browser, col);
-    if (!list)
+    if (!(list = WMGetBrowserListInColumn(panel->browser, col)))
 	return;
 
     text = WMGetTextFieldText(panel->fileField);
+    textEvent = (int)WMGetNotificationClientData(notification);
 
     if (panel->flags.autoCompletion && textEvent!=WMDeleteTextEvent)
         i = closestListItem(list, text, False);
@@ -132,14 +126,16 @@ textChangedObserver(void *observerData, WMNotification *notification)
         int textLen = strlen(text), itemTextLen = strlen(item->text);
         int visibleItems = WMWidgetHeight(list)/WMGetListItemHeight(list);
 	
-        if (textEvent!=WMSetTextEvent || textLen<itemTextLen)
-            WMSetListPosition(list, i - visibleItems/2);
+        WMSetListPosition(list, i - visibleItems/2);
 	
-        if (textEvent!=WMDeleteTextEvent && textLen<itemTextLen) {
+        if (textEvent!=WMDeleteTextEvent) {
             WMRange range;
-	    
+
+            panel->flags.ignoreTextChangeNotification = 1;
 	    WMInsertTextFieldText(panel->fileField, &item->text[textLen],
-				  textLen);
+                                  textLen);
+            panel->flags.ignoreTextChangeNotification = 0;
+
 	    WMSetTextFieldCursorPosition(panel->fileField, itemTextLen);
 	    range.position = textLen;
 	    range.count = itemTextLen - textLen;
@@ -148,7 +144,6 @@ textChangedObserver(void *observerData, WMNotification *notification)
     }
 
     free(text);
-    running = 0;
 }
 
 

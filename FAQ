@@ -1,7 +1,7 @@
 
 WindowMaker FAQ
 ====================================================================
-Last modified: Thursday November 26 12:50PM EST 1998 
+Last modified: Wednesday March 10 01:05AM EET 1999 
 
 the latest info can be found at
 http://www.dpo.uab.edu/~grapeape/wmfaq.html or
@@ -156,13 +156,16 @@ crash.
 
 
 1.3 Where are the mailing list archives? 
-----------------------------------
-UPDATE: Ed has moved to Utah to work for Caldera, so the list has
-moved. The new address is
-http://www.caldera.com/linuxcenter/forums/wmaker.html 
+----------------------------------------
+Phillip Smith from Netplex, our wonderful provider of windowmaker.org, has set
+up some new lists from the domain.  Please read the information on the web
+pages at http://www.windowmaker.org/lists.html for information on how to
+subscribe, the posting guidelines, and how to access the web archives.
 
-We are currently archiveless after the move. Hopefully this will change in the
-near future. 
+Many thanks to Ed Orcutt who hosted the original lists from his own machine
+for many years and Caldera who graciously allowed Ed to continue hosting
+from them when he moved to his new position with them.  Ed provided a very
+valuable service for many years and we are sad to see him go.
 
 
 1.4 Where is more documentation on configuring Window Maker? 
@@ -231,7 +234,7 @@ Installation:
 -=-=-=-=-=-=-
 
 2.1 Where can I get proplist.h? 
-----------------------------------
+-------------------------------
 My first hint would be to look through the documentation a little more
 closely. libPropList.tar.gz is located in the root of the Window Maker
 distribution source tree. Untar libproplist, compile and install it so that the it
@@ -240,14 +243,18 @@ will be available to compile Window Maker.
 
 2.2 Why do no icons show up after installing Window Maker >= 0.15.x 
     when I've followed all the directions? 
-----------------------------------
-According to Dan Pascu should not happen because Window Maker
+-------------------------------------------------------------------
+Under normal circumstances, this should not happen because Window Maker
 should detect if libtiff is going to be compiled in and then it will make the
-default theme based around .xpm instead of .tif. 
+default theme use .tiff or .xpm icons, depending if TIFF support is compiled
+in or not.
 
 As of Window Maker version 0.15.0, the default setup includes .tiff icons
-which require you to have compiled Window Maker with libtiff support. For
-some help on compiling with libtiff, at the libtiff section of this FAQ. 
+which require you to have compiled Window Maker with libtiff support, if you
+want them to be used. If you are happy with the .xpm icons, then you don't
+need libtiff. Window Maker will detect that TIFF support is not available and
+use .xpm icons instead. For some help on compiling with libtiff, look at the
+libtiff section of this FAQ. 
 
 
 2.3 How do I get libtiff to work? 
@@ -380,7 +387,8 @@ mouse.
 
 2.9 How do I get Window Maker working with xdm in Redhat 5.[01]? 
 ----------------------------------
-After running wmaker.inst and letting it write to .xinitrc, cp .xinitrc .xsession
+After running wmaker.inst and letting it write to .xinitrc,
+cp .xinitrc .xsession
 and make sure that /usr/local/bin is in your $PATH for the Xserver. You can
 make sure of this by including a statement like 
 
@@ -417,19 +425,19 @@ of this question.
 2.10 Do I need to rerun wmaker.inst with every new version of
      Window Maker? 
 ----------------------------------
-Dan Pascu reveals the answer: 
+There is no need to do this. You can do it, but keep in mind, that all your
+preferences will be lost, overwritten by the defaults. You can update the
+files and add the changes yourself if you need to, but else in most cases is
+sufficient to rely on WPrefs and it will update for you the new missing
+options if they differ from the default ones.
 
-When the user will need to run wmaker.inst again in a new release of
-wmaker, we will write that down in the NEWS file.
-(as I've done in 0.15.0). 
-
-The way domain files are read beginning from 0.15.0 makes this
-redundant. The user config files are merged with the global ones in
+The way domain files are read beginning from 0.15.0 makes the need for update
+almost redundant. The user config files are merged with the global ones in
 /usr/local/share/WindowMaker/Defaults.
-So even if new options are added, they will reflect in the user configuration. 
-
+So even if new options are added, they will be reflected in the user
+configuration. 
 Only if user wishes to change the default behavior, he needs to add that
-option to the config file. 
+option to the config file.
 
 
 2.11 When I install Window Maker, I've used wmaker.inst correctly
@@ -604,17 +612,15 @@ windowmaker, exit windowmaker with the "exit session" option.
 
 3.2 What is the difference between the 'Exit' and 'Exit Session' Options? 
 ----------------------------------
-Another Answer from Dan Pascu: 
-
-"'Exit' exits wmaker, but leaves the other apps running, and if wmaker was
-not the last app launched in the .xinitrc the X server is not closed, until the
-last app started by .xinitrc is closed.
-'Exit session' will exit wmaker, but also will close all running apps, thus the
-X server will be closed." 
+'Exit' exits wmaker, but leaves the other apps running, and if wmaker was
+not the last app launched in the .xinitrc the X server is not closed, until
+the last app started by .xinitrc is closed.
+'Exit session' will exit wmaker, but also will close all running apps, thus
+the X server will be closed, and your session will end.
 
 
 3.3 How do I "dock" AppIcons on the Clip? 
-----------------------------------
+-----------------------------------------
 Just drag icons near it like you would for the dock. If you are having a
 problem docking icons, you should try moving the Clip away from the dock. 
 
@@ -1239,17 +1245,15 @@ Programming:
 
 6.1 How do I get a normal X application to produce an appicon? 
 ----------------------------------
-Another insightful answer from who else but Dan Pascu. 
-
-"You must define the WM_CLASS (XSetClassHint()) and the
+ You must define the WM_CLASS (XSetClassHint()) and the
 CLIENT_LEADER or XWMHints.window_group properties, which are
-automatically set by most applications that use Xt (Motif, Athena ...), but if
-you use plain Xlib you must set them by hand. 
+automatically set by most applications that use Xt (Motif, Athena ...),
+but if you use plain Xlib you must set them by hand. 
 
 Also you must make a call to XSetCommand(dpy, leader, argv, argc); 
 
 Take a look at Window Maker-0.1x.x/test/test.c that is an example for
-writing such an app (which also have an app menu)." 
+writing such an app (which also have an app menu).
 
 
 6.2 How do I get my tcl/tk application to produce an appicon? 
@@ -1368,8 +1372,7 @@ the files manually. Or download the whole distribution.
 7.5 Will you add GNOME support?
 ----------------------------------
 
-Yes. But don't ask me when.
-
+Support for GNOME hints is included since 0.50.0.
 
 -=-=-=-=-
 Themes:

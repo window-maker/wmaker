@@ -1,6 +1,7 @@
 Changes since version 0.51.1:
 .............................
 
+- fixed bug with window that can get focus if both shaded and hidden.
 - maximize for full screen
 - fixed problem with frame drawing in non-opaque 
 - fixed installation path prob [jmknoble@pobox.com]
