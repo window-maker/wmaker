@@ -1088,6 +1088,7 @@ wFrameWindowPaint(WFrameWindow *fwin)
                 *fwin->title_gc,
                 *fwin->font,
                 scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->data,
+                fwin->title_back[fwin->flags.state],
                 "extendable");
         scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->proc.drawString(
                 scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->arg,
