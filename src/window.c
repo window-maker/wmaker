@@ -656,7 +656,7 @@ wManageWindow(WScreen *scr, Window window)
 
     /* get hints from GNUstep app */
     if (wwin->wm_class != 0 && strcmp(wwin->wm_class, "GNUstep") == 0) {
-	wwin->flags.is_gnustep = 1;
+	/*wwin->flags.is_gnustep = 1;*/
     }
     if (!PropGetGNUstepWMAttr(window, &wwin->wm_gnustep_attr)) {
 	wwin->wm_gnustep_attr = NULL;
