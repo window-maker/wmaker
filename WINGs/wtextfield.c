@@ -115,24 +115,24 @@ static void didResizeTextField();
 
 struct W_ViewDelegate _TextFieldViewDelegate = {
     NULL,
-	NULL,
-	didResizeTextField,
-	NULL,
-	NULL
+    NULL,
+    didResizeTextField,
+    NULL,
+    NULL
 };
 
 
 
-static void lostHandler(WMView *view, Atom selection, void *cdata);
+static void lostSelection(WMView *view, Atom selection, void *cdata);
 
 static WMData *requestHandler(WMView *view, Atom selection, Atom target,
-			      void *cdata, Atom *type);
+                              void *cdata, Atom *type);
 
 
 static WMSelectionProcs selectionHandler = {
     requestHandler,
-	lostHandler,
-	NULL
+    lostSelection,
+    NULL
 };
 
 
@@ -234,7 +234,7 @@ decrToFit(TextField *tPtr)
 
 static WMData*
 requestHandler(WMView *view, Atom selection, Atom target, void *cdata, 
-	       Atom *type)
+               Atom *type)
 {
     TextField *tPtr = view->self;
     int count;
@@ -281,23 +281,32 @@ requestHandler(WMView *view, Atom selection, Atom target, void *cdata,
 
 
 static void
-lostHandler(WMView *view, Atom selection, void *cdata)
+lostSelection(WMView *view, Atom selection, void *cdata)
 {
     TextField *tPtr = (WMTextField*)view->self;
 
-    //WMDeleteSelectionHandler(view, XA_PRIMARY, CurrentTime);
-    tPtr->flags.ownsSelection = 0;
-    tPtr->selection.count = 0;
-    paintTextField(tPtr);
+    if (tPtr->flags.ownsSelection) {
+        WMDeleteSelectionHandler(view, selection, CurrentTime);
+        tPtr->flags.ownsSelection = 0;
+    }
+    if (tPtr->selection.count != 0) {
+        tPtr->selection.count = 0;
+        paintTextField(tPtr);
+    }
 }
 
 
 static void
-_notification(void *observerData, WMNotification *notification)
+selectionNotification(void *observerData, WMNotification *notification)
 {
-    WMTextField *to = (WMTextField*)observerData;
-    WMTextField *tw = (WMTextField*)WMGetNotificationClientData(notification);
-    if (to != tw) lostHandler(to->view, XA_PRIMARY, NULL);
+    WMView *observerView = (WMView*)observerData;
+    WMView *newOwnerView = (WMView*)WMGetNotificationClientData(notification);
+
+    if (observerView != newOwnerView) {
+        //if (tPtr->flags.ownsSelection)
+        //    WMDeleteSelectionHandler(observerView, XA_PRIMARY, CurrentTime);
+        lostSelection(observerView, XA_PRIMARY, NULL);
+    }
 }
 
 
@@ -348,8 +357,10 @@ WMCreateTextField(WMWidget *parent)
     WMCreateEventHandler(tPtr->view, EnterWindowMask|LeaveWindowMask
 			 |ButtonReleaseMask|ButtonPressMask|KeyPressMask|Button1MotionMask,
 			 handleTextFieldActionEvents, tPtr);
-    
-    WMAddNotificationObserver(_notification, tPtr, "_lostOwnership", tPtr);
+
+    WMAddNotificationObserver(selectionNotification, tPtr->view,
+                              WMSelectionOwnerDidChangeNotification,
+                              (void*)XA_PRIMARY);
 
 
     tPtr->flags.cursorOn = 1;
@@ -1279,7 +1290,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 
     /* Do not allow text selection in secure text fields */
     if (cancelSelection || tPtr->flags.secure) {
-        lostHandler(tPtr->view, XA_PRIMARY, NULL);
+        lostSelection(tPtr->view, XA_PRIMARY, NULL);
 
         if (tPtr->selection.count) {
             tPtr->selection.count = 0;
@@ -1290,8 +1301,6 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
         if (tPtr->selection.count != tPtr->cursorPosition - tPtr->selection.position) {
 
             tPtr->selection.count = tPtr->cursorPosition - tPtr->selection.position;
-
-            WMPostNotificationName("_lostOwnership", NULL, tPtr);
 
             refresh = 1;
         }
@@ -1535,7 +1544,7 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 	    break;
 	}
 	
-	if (tPtr->selection.count != 0) {
+	if (!tPtr->flags.secure && tPtr->selection.count!=0) {
 	    int start, count;
 	    XRotateBuffers(dpy, 1);
 	    
@@ -1558,23 +1567,19 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 	    paintTextField(tPtr);
 	    
 	    if (!tPtr->flags.ownsSelection) {
-		WMCreateSelectionHandler(tPtr->view,
-					 XA_PRIMARY,
-					 event->xbutton.time,
-					 &selectionHandler, NULL);
-		tPtr->flags.ownsSelection = 1;
-                //puts("lost ownership");
-                WMPostNotificationName("_lostOwnership", NULL, tPtr);
+                tPtr->flags.ownsSelection =
+                    WMCreateSelectionHandler(tPtr->view,
+                                             XA_PRIMARY,
+                                             event->xbutton.time,
+                                             &selectionHandler, NULL);
             }
 	} else if (!tPtr->flags.secure && tPtr->selection.count!=0 &&
                    !tPtr->flags.ownsSelection) {
-            WMCreateSelectionHandler(tPtr->view,
-                                     XA_PRIMARY,
-                                     event->xbutton.time,
-                                     &selectionHandler, NULL);
-            tPtr->flags.ownsSelection = 1;
-            //puts("lost ownership");
-            WMPostNotificationName("_lostOwnership", NULL, tPtr);
+            tPtr->flags.ownsSelection =
+                WMCreateSelectionHandler(tPtr->view,
+                                         XA_PRIMARY,
+                                         event->xbutton.time,
+                                         &selectionHandler, NULL);
         }
 
 	lastButtonReleasedEvent = event->xbutton.time;
@@ -1593,6 +1598,7 @@ destroyTextField(TextField *tPtr)
 #endif
 
     WMReleaseFont(tPtr->font);
+    // use lostSelection() instead of WMDeleteSelectionHandler aici?
     WMDeleteSelectionHandler(tPtr->view, XA_PRIMARY, CurrentTime);
     WMRemoveNotificationObserver(tPtr);
 

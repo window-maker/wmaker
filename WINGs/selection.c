@@ -9,6 +9,9 @@
 #define MAX_PROPERTY_SIZE 8*1024
 
 
+char *WMSelectionOwnerDidChangeNotification = "WMSelectionOwnerDidChange";
+
+
 typedef struct SelectionHandler {
     WMView *view;
     Atom selection;
@@ -59,7 +62,7 @@ WMDeleteSelectionHandler(WMView *view, Atom selection, Time timestamp)
     if (!selHandlers)
         return;
 
-    //printf("deleting selection handler for %d\n", win);
+    printf("deleting selection handler for %d", win);
 
     WM_ITERATE_ARRAY(selHandlers, handler, iter) {
 	if (handler->view == view
@@ -68,13 +71,16 @@ WMDeleteSelectionHandler(WMView *view, Atom selection, Time timestamp)
 
 	    if (handler->flags.done_pending) {
 		handler->flags.delete_pending = 1;
-		return;
+                puts(": postponed because still pending");
+                return;
 	    }
-            //puts("found & removed");
+            printf(": found & removed");
             WMRemoveFromArray(selHandlers, handler);
 	    break;
         }
     }
+
+    printf("\n");
 
     XGrabServer(dpy);
     if (XGetSelectionOwner(dpy, selection) == win) {
@@ -343,7 +349,18 @@ handleNotifyEvent(XEvent *event)
 void
 W_HandleSelectionEvent(XEvent *event)
 {
-    //printf("%d received %d\n", event->xany.window, event->type);
+    printf("%d received selection ", event->xany.window);
+    switch(event->type) {
+    case SelectionNotify:
+        puts("notify"); break;
+    case SelectionRequest:
+        puts("request"); break;
+    case SelectionClear:
+        puts("clear"); break;
+    default:
+        puts("unknown"); break;
+    }
+
     if (event->type == SelectionNotify) {
 	handleNotifyEvent(event);
     } else {
@@ -366,10 +383,12 @@ WMCreateSelectionHandler(WMView *view, Atom selection, Time timestamp,
         return False;
     }
 
-    //printf("created selection handler for %d\n", W_VIEW_DRAWABLE(view));
-    handler = malloc(sizeof(SelectionHandler));
-    if (handler == NULL)
-	return False;
+    WMPostNotificationName(WMSelectionOwnerDidChangeNotification,
+                           (void*)selection, (void*)view);
+
+    printf("created selection handler for %d\n", W_VIEW_DRAWABLE(view));
+
+    handler = wmalloc(sizeof(SelectionHandler));
 
     handler->view = view;
     handler->selection = selection;
@@ -381,9 +400,9 @@ WMCreateSelectionHandler(WMView *view, Atom selection, Time timestamp,
     if (selHandlers == NULL) {
 	selHandlers = WMCreateArrayWithDestructor(4, wfree);
     }
-    
+
     WMAddToArray(selHandlers, handler);
-    
+
     return True;
 }
 

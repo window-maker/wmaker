@@ -661,6 +661,9 @@ void WMNextEvent(Display *dpy, XEvent *event);
 void WMMaskEvent(Display *dpy, long mask, XEvent *event);
 
 
+/* ....................................................................... */
+
+
 Bool WMCreateSelectionHandler(WMView *view, Atom selection, Time timestamp,
 			      WMSelectionProcs *procs, void *cdata);
 
@@ -670,6 +673,8 @@ Bool WMRequestSelection(WMView *view, Atom selection, Atom target,
 			Time timestamp, WMSelectionCallback *callback,
 			void *cdata);
 
+
+extern char *WMSelectionOwnerDidChangeNotification;
 
 /* ....................................................................... */
 
