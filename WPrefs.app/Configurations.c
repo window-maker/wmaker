@@ -386,8 +386,8 @@ createPanel(Panel *p)
     }
     WMSetBalloonTextForView(_("Disable/enable `superfluous' features and\n"
 			      "animations. These include the `ghosting' of the\n"
-			      "dock when it's being moved to the another side\n"
-			      "and the explosion animation for undocked icons."),
+			      "dock when it's being moved to another side and\n"
+			      "the explosion animation when undocking icons."),
 			    WMWidgetView(panel->supB));
     
     panel->sfxB = WMCreateButton(panel->animF, WBTToggle);
@@ -409,7 +409,7 @@ createPanel(Panel *p)
 			      "for actions like shading and closing a window.\n"
 			      "You will need a module distributed separately\n"
 			      "for this. You can get it at:\n"
-			      "http://www.frontiernet.net/~southgat/wmsound"),
+			      "http://shadowmere.student.utwente.nl/"),
 			    WMWidgetView(panel->sfxB));
     
     panel->noteL = WMCreateLabel(panel->animF);
@@ -463,7 +463,7 @@ createPanel(Panel *p)
     WMMoveWidget(panel->dith2L, 180, 50);
     WMSetLabelTextAlignment(panel->dith2L, WACenter);
     WMSetLabelFont(panel->dith2L, font);
-    WMSetLabelText(panel->dith2L, _("More colors for\nWindowMaker"));
+    WMSetLabelText(panel->dith2L, _("More colors for\nWindow Maker"));
 
     WMMapSubwidgets(panel->dithF);
     
@@ -522,7 +522,7 @@ InitConfigurations(WMScreen *scr, WMWindow *win)
 
     panel->description = _("Animation speeds, titlebar styles, various option\n"
 			   "toggling and number of colors to reserve for\n"
-			   "Window Maker in 8bit displays.");
+			   "Window Maker on 8bit displays.");
 
     panel->win = win;
 

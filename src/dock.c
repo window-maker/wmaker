@@ -53,7 +53,7 @@
 #include "workspace.h"
 #include "framewin.h"
 #include "superfluous.h"
-#include "wmsound.h"
+#include "wsound.h"
 
 
 #include <proplist.h>
@@ -3937,18 +3937,18 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 			if (aicon->icon->selected)
 			    wIconSelect(aicon->icon);
 
-#ifdef WMSOUND
-			wSoundPlay(WMSOUND_KABOOM);
+#ifdef WSOUND
+			wSoundPlay(WSOUND_KABOOM);
 #endif
 			DoKaboom(scr,aicon->icon->core->window, x, y);
-#ifdef WMSOUND
+#ifdef WSOUND
 		    } else {
-			    wSoundPlay(WMSOUND_UNDOCK);
+			    wSoundPlay(WSOUND_UNDOCK);
 #endif
 		    }
-#ifdef WMSOUND
+#ifdef WSOUND
 		} else {
-			wSoundPlay(WMSOUND_UNDOCK);
+			wSoundPlay(WSOUND_UNDOCK);
 #endif
                 }
                 if (clip && clip->auto_raise_lower)

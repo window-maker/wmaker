@@ -1220,7 +1220,7 @@ wShowInfoPanel(WScreen *scr)
 #ifdef OLWM_HINTS
 	list[j++] = "OLWM";
 #endif
-#ifdef WMSOUND
+#ifdef WSOUND
 	list[j++] = "Sound";
 #endif
 

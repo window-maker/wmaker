@@ -1921,7 +1921,7 @@ createPanel(Panel *p)
     
     
     WMMapSubwidgets(panel->bgF);
-#endif
+#endif /* unfinished */
     /*** options ***/
     panel->optF = WMCreateFrame(panel->frame);
     WMSetFrameRelief(panel->optF, WRFlat);

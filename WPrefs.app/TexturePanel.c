@@ -38,7 +38,6 @@
 
 #include "TexturePanel.h"
 
-
 #define MAX_SECTION_PARTS 5
 
 typedef struct _TexturePanel {

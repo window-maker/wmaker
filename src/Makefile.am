@@ -98,8 +98,8 @@ wmaker_SOURCES = 	\
 	winspector.c \
 	workspace.c \
 	workspace.h \
-	wmsound.c \
-	wmsound.h \
+	wsound.c \
+	wsound.h \
 	text.c \
 	text.h 
 

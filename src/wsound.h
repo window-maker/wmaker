@@ -1,5 +1,5 @@
 /*
- *  WMSound Server
+ *  Window Maker Sound Server
  * 
  *  Copyright (c) 1997 Anthony P. Quinn
  * 
@@ -19,34 +19,25 @@
  *  USA.
  */
 
-#ifndef WMSOUND_H_
-#define WMSOUND_H_
+#ifndef WSOUND_H_
+#define WSOUND_H_
 
-#define WMSOUND_SHADE       1001
-#define WMSOUND_UNSHADE     1002
-#define WMSOUND_MAXIMIZE    1003
-#define WMSOUND_UNMAXIMIZE  1004
-#define WMSOUND_ICONIFY     1005
-#define WMSOUND_DEICONIFY   1006
-#define WMSOUND_HIDE        1007
-#define WMSOUND_UNHIDE      1008
-#define WMSOUND_APPSTART    1009
-#define WMSOUND_APPEXIT     1010
-#define WMSOUND_DOCK        1011
-#define WMSOUND_UNDOCK      1012
-#define WMSOUND_KABOOM      1013
-
-#if 0
-/* don't delete this */
-extern WWindow *wSoundServer;
-extern Atom WSStartup, WSShade, WSUnshade, WSShutdown;
-extern Atom WSMaximize, WSUnmaximize, WSIconify, WSUniconify, WSAppStart;
-extern Atom WSHide, WSUnhide, WSAppExit, WSDock, WSUnDock, WSKaboom;
-extern WApplication *wSoundApp;
-#endif
+#define WSOUND_SHADE       1001
+#define WSOUND_UNSHADE     1002
+#define WSOUND_MAXIMIZE    1003
+#define WSOUND_UNMAXIMIZE  1004
+#define WSOUND_ICONIFY     1005
+#define WSOUND_DEICONIFY   1006
+#define WSOUND_HIDE        1007
+#define WSOUND_UNHIDE      1008
+#define WSOUND_APPSTART    1009
+#define WSOUND_APPEXIT     1010
+#define WSOUND_DOCK        1011
+#define WSOUND_UNDOCK      1012
+#define WSOUND_KABOOM      1013
 
 
 void wSoundPlay(long event_sound);
 void wSoundServerGrab(Window wm_win);
 
-#endif /*WMSOUND_H_*/
+#endif /*WSOUND_H_*/

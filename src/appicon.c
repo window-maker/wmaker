@@ -47,7 +47,7 @@
 #ifdef XDND
 #include "xdnd.h"
 #endif
-#include "wmsound.h"
+#include "wsound.h"
 #include "WINGsP.h"
 
 
@@ -900,8 +900,8 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
 				aicon->y_pos);
 		}
 
-#ifdef WMSOUND
-		wSoundPlay(WMSOUND_DOCK);
+#ifdef WSOUND
+		wSoundPlay(WSOUND_DOCK);
 #endif
             } else {
 		XMoveWindow(dpy, icon->core->window, x, y);

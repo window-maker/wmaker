@@ -55,8 +55,8 @@
 # include "kwm.h"
 #endif
 
-#ifdef WMSOUND
-#include "wmsound.h"
+#ifdef WSOUND
+#include "wsound.h"
 #endif
 
 
@@ -273,8 +273,8 @@ wShadeWindow(WWindow  *wwin)
 
     XLowerWindow(dpy, wwin->client_win);    
 
-#ifdef WMSOUND
-    wSoundPlay(WMSOUND_SHADE);
+#ifdef WSOUND
+    wSoundPlay(WSOUND_SHADE);
 #endif
 
 #ifdef ANIMATIONS
@@ -360,8 +360,8 @@ wUnshadeWindow(WWindow  *wwin)
     wwin->flags.mapped = 1;
     XMapWindow(dpy, wwin->client_win);
 
-#ifdef WMSOUND
-    wSoundPlay(WMSOUND_UNSHADE);
+#ifdef WSOUND
+    wSoundPlay(WSOUND_UNSHADE);
 #endif
 
 #ifdef ANIMATIONS
@@ -515,8 +515,8 @@ wMaximizeWindow(WWindow *wwin, int directions)
     wKWMSendEventMessage(wwin, WKWMChangedClient);
 #endif
 
-#ifdef WMSOUND
-    wSoundPlay(WMSOUND_MAXIMIZE);
+#ifdef WSOUND
+    wSoundPlay(WSOUND_MAXIMIZE);
 #endif
 }
 
@@ -549,8 +549,8 @@ wUnmaximizeWindow(WWindow *wwin)
     wKWMSendEventMessage(wwin, WKWMChangedClient);
 #endif
 
-#ifdef WMSOUND
-    wSoundPlay(WMSOUND_UNMAXIMIZE);
+#ifdef WSOUND
+    wSoundPlay(WSOUND_UNMAXIMIZE);
 #endif
 }
 
@@ -970,8 +970,8 @@ wIconifyWindow(WWindow *wwin)
     unmapTransientsFor(wwin);
 
     if (present) {
-#ifdef WMSOUND
-	wSoundPlay(WMSOUND_ICONIFY);
+#ifdef WSOUND
+	wSoundPlay(WSOUND_ICONIFY);
 #endif
 
 	XUngrabPointer(dpy, CurrentTime);
@@ -1124,8 +1124,8 @@ wDeiconifyWindow(WWindow  *wwin)
 	XUnmapWindow(dpy, wwin->icon->core->window);
     }
 
-#ifdef WMSOUND
-    wSoundPlay(WMSOUND_DEICONIFY);
+#ifdef WSOUND
+    wSoundPlay(WSOUND_DEICONIFY);
 #endif
 
     /* if the window is in another workspace, do it silently */
@@ -1242,8 +1242,8 @@ hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate)
 
     wClientSetState(wwin, IconicState, icon->icon_win);
     flushExpose();
-#ifdef WMSOUND
-    wSoundPlay(WMSOUND_HIDE);
+#ifdef WSOUND
+    wSoundPlay(WSOUND_HIDE);
 #endif
 #ifdef ANIMATIONS
     if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations &&
@@ -1457,8 +1457,8 @@ unhideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate,
     wwin->flags.hidden=0;
     wwin->flags.mapped=1;
     
-#ifdef WMSOUND
-    wSoundPlay(WMSOUND_UNHIDE);
+#ifdef WSOUND
+    wSoundPlay(WSOUND_UNHIDE);
 #endif
 #ifdef ANIMATIONS
     if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations 

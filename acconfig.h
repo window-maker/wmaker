@@ -55,7 +55,7 @@
 #undef I18N
 
 /* define if you want sound support */
-#undef WMSOUND
+#undef WSOUND
 
 /* define if you want the 'lite' version */
 #undef LITE

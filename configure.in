@@ -758,7 +758,7 @@ AC_ARG_ENABLE(sound,
 [  --disable-sound	  disable sound support ],
 		sound=$enableval, sound=yes)
 if test "$sound" = yes; then	
-        AC_DEFINE(WMSOUND)
+        AC_DEFINE(WSOUND)
 fi
 
 

@@ -46,8 +46,8 @@
 
 #include "dock.h"
 
-#ifdef WMSOUND
-#include "wmsound.h"
+#ifdef WSOUND
+#include "wsound.h"
 #endif
 
 
@@ -414,8 +414,8 @@ wApplicationCreate(WScreen *scr, Window main_window)
     scr->wapp_list = wapp;
 
     
-#ifdef WMSOUND
-    wSoundPlay(WMSOUND_APPSTART);
+#ifdef WSOUND
+    wSoundPlay(WSOUND_APPSTART);
 #endif
 
 #ifdef DEBUG
@@ -517,8 +517,8 @@ wApplicationDestroy(WApplication *wapp)
         wArrangeIcons(scr, True);
     }
 
-#ifdef WMSOUND
-    wSoundPlay(WMSOUND_APPEXIT);
+#ifdef WSOUND
+    wSoundPlay(WSOUND_APPEXIT);
 #endif
 }
 

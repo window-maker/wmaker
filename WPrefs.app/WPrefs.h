@@ -45,7 +45,6 @@
 #define WVERSION	"0.43"
 #define WMVERSION	"0.62.x"
 
-
 extern char *NOptionValueChanged;
 
 typedef struct _Panel Panel;
