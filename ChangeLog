@@ -7,6 +7,7 @@ Changes since version 0.63.1:
   code that lets GNUstep apps control their window titlebar.
 	(Richard Frith-Macdonald <rfm@gnu.org>)
 - Fixed broken panels.
+- Renamed se.po to sv.po
 
 
 Changes since version 0.63.0:
