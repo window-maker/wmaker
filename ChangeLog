@@ -29,6 +29,10 @@ Changes since version 0.52.0:
 - fixed crash with InfoPanel in multihead dpy
 - Fixed bug in WPrefs that added a new line at the end of autostart script
   at every save, growing it indefinitely.
+- fixed a memory leak in wrlib (Wolfram Gloger <wmglo@dent.med.uni-muenchen.de>)
+- fixed crash during forced shutdown of X (Wolfram Gloger
+					   <wmglo@dent.med.uni-muenchen.de>)
+
 
 Changes since version 0.51.2:
 .............................

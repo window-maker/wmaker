@@ -203,7 +203,7 @@ catchXError(Display *dpy, XErrorEvent *error)
  *---------------------------------------------------------------------- 
  */
 static int
-handleXIO(Display *dpy)
+handleXIO(Display *xio_dpy)
 {
     dpy = NULL;
     Exit(0);
