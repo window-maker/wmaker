@@ -90,7 +90,7 @@ int showCrashDialog(int sig)
 
 int MonitorLoop(int argc, char **argv)
 {
-    pid_t pid;
+    pid_t pid, exited;
     char **child_argv= wmalloc(sizeof(char*)*(argc+2));
     int i, status;
     time_t last_start;
@@ -105,7 +105,7 @@ int MonitorLoop(int argc, char **argv)
         last_start= time(NULL);
 
         /* Start Window Maker */
-        pid= fork();
+        pid = fork();
         if (pid == 0)
         {
             execvp(child_argv[0], child_argv);
@@ -118,11 +118,14 @@ int MonitorLoop(int argc, char **argv)
             exit(1);
         }
 
-        if (waitpid(pid, &status, 0) < 0)
+        if ((exited=waitpid(-1, &status, 0)) < 0)
         {
             wsyserror(_("Error during monitoring of Window Maker process."));
             break;
         }
+
+        if (exited != pid)
+            continue;
 
         child_argv[argc]= "--for-real-";
 
