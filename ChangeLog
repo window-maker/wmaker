@@ -9,6 +9,7 @@ Changes since version 0.90.0:
 - removed obsoleted options from wconfig.h
 - changed animation delay constants to fix issues with 2.6.x linux kernels
   (patch provided by Eric Piel <Eric.Piel@lifl.fr>)
+- fixed several broken po files
 
 
 Changes since version 0.80.2:
