@@ -125,7 +125,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     WMSetWindowTitle(panel->win, "");
 
     panel->vbox = WMCreateBox(panel->win);
-    WMSetBoxExpandsToParent(panel->vbox);
+    WMSetBoxExpandsToParent(panel->vbox, 0, 0, 0, 0);
     WMSetBoxHorizontal(panel->vbox, False);
     WMMapWidget(panel->vbox);
 

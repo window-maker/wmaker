@@ -649,7 +649,7 @@ static void drawRow(WMTableView *table, int row, WMRect clipRect)
     int i;
     WMRange cols = columnsInRect(table, clipRect);
     WMTableColumn *column;
-       
+
     for (i = cols.position; i < cols.position+cols.count; i++) {
 	column = WMGetFromArray(table->columns, i);
 
@@ -718,10 +718,13 @@ static void repaintTable(WMTableView *table, int x, int y,
 		     table->rows * table->rowHeight + 1);   
     }
     
+
+    if (x >= table->tableWidth-1)
+	return;
     
     rect.pos = wmkpoint(x,y);
     rect.size = wmksize(width, height);
-
+    
     if (table->drawsGrid) {
 	drawGrid(table, rect);
     }
@@ -793,6 +796,9 @@ void WMReloadTableView(WMTableView *table)
 {
     WMRect rect = WMGetScrollViewVisibleRect(table->scrollView);
 
+    if (table->editingRow >= 0)
+	stopRowEdit(table, table->editingRow);
+    
     /* when this is called, nothing in the table can be assumed to be
      * like the last time we accessed it (ie, rows might have disappeared) */
 
