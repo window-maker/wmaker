@@ -4,3 +4,4 @@ configure config.log config.cache config.guess config.status config.sub
 libtool ltconfig ltmain.sh
 .psrc .inslog2 tca.map tca.log
 *.rpt
+update-autoconf
