@@ -5,7 +5,8 @@ nlsdir = $(NLSDIR)
 CLEANFILES = $(CATALOGS)
 
 EXTRA_DIST = pt.po hr.po fr.po ko.po cs.po ja.po zh_TW.Big5.po es.po\
-		zh_CN.po fi.po it.po ru.po de.po hu.po bg.po sk.po
+		zh_CN.po fi.po it.po ru.po de.po hu.po bg.po sk.po\
+		et.po
 
 POTFILES  = \
 	$(top_builddir)/WPrefs.app/Appearance.c \
