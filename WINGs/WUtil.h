@@ -334,6 +334,8 @@ WMArray* WMCreateArrayWithDestructor(int initialSize, WMFreeDataProc *destructor
 
 WMArray* WMCreateArrayWithArray(WMArray *array);
 
+#define WMDuplicateArray(array) WMCreateArrayWithArray(array)
+
 void WMEmptyArray(WMArray *array);
 
 void WMFreeArray(WMArray *array);
