@@ -1041,6 +1041,7 @@ RConvertImageMask(RContext *context, RImage *image, Pixmap *pixmap,
     RPutXImage(context, *mask, gc, ximg, 0, 0, 0, 0,
 	       image->width, image->height);
     RDestroyXImage(context, ximg);
+    XFreeGC(context->dpy, gc);
 
     return True;
 }

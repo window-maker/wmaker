@@ -1243,7 +1243,7 @@ UpdateDomainFile(WDDomain *domain)
 {
     struct stat stbuf;
     char path[PATH_MAX];
-    WMPropList *shared_dict=NULL, *dict;
+    WMPropList *shared_dict, *dict;
     Bool result, freeDict = False;
 
     dict = domain->dictionary;
@@ -1253,10 +1253,13 @@ UpdateDomainFile(WDDomain *domain)
                  SYSCONFDIR, domain->domain_name);
         if (stat(path, &stbuf) >= 0) {
             shared_dict = WMReadPropListFromFile(path);
-            if (shared_dict && WMIsPLDictionary(shared_dict)) {
-                freeDict = True;
-                dict = WMDeepCopyPropList(domain->dictionary);
-                WMSubtractPLDictionaries(dict, shared_dict, True);
+            if (shared_dict) {
+                if (WMIsPLDictionary(shared_dict)) {
+                    freeDict = True;
+                    dict = WMDeepCopyPropList(domain->dictionary);
+                    WMSubtractPLDictionaries(dict, shared_dict, True);
+                }
+                WMReleasePropList(shared_dict);
             }
         }
     }

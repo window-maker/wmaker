@@ -245,12 +245,14 @@ SetupEnvironment(WScreen *scr)
 	    *ptr = 0;
     	snprintf(buf, sizeof(buf), ".%i", scr->screen);
     	strcat(tmp, buf);
-    	putenv(tmp);
+        putenv(tmp);
+        wfree(tmp);
     }
     tmp = wmalloc(60);
     snprintf(tmp, 60, "WRASTER_COLOR_RESOLUTION%i=%i", scr->screen, 
 		scr->rcontext->attribs->colors_per_channel);
     putenv(tmp);
+    wfree(tmp);
 }
 
 
@@ -595,6 +597,7 @@ main(int argc, char **argv)
 
     str = wstrconcat("WMAKER_BIN_NAME=", argv[0]);
     putenv(str);
+    wfree(str);
 
     ArgCount = argc;
     Arguments = argv;
@@ -782,6 +785,7 @@ main(int argc, char **argv)
 	snprintf(str, len, "DISPLAY=%s", DisplayName);
     }
     putenv(str);
+    wfree(str);
 
 #ifdef DEBUG
     if (doSync)
