@@ -25,6 +25,13 @@
 
 #include <unistd.h>
 #include <errno.h>
+#include <ctype.h>
+#include <time.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <unistd.h>
+
 
 
 
@@ -79,6 +86,7 @@ typedef struct {
 
     char selectedFor;
     unsigned current:1;
+    unsigned ispixmap:1;
 } TextureListItem;
 
 
@@ -199,13 +207,13 @@ static void
 dumpRImage(char *path, RImage *image)
 {
     FILE *f;
-    
+
     f = fopen(path, "w");
     if (!f) {
 	wsyserror(path);
 	return;
     }
-    fprintf(f, "%02x%02x%1x", image->width, image->height, 
+    fprintf(f, "%02x%02x%1x", image->width, image->height,
 	    image->data[3]!=NULL ? 4 : 3);
 
     fwrite(image->data[0], 1, image->width * image->height, f);
@@ -217,6 +225,22 @@ dumpRImage(char *path, RImage *image)
     if (fclose(f) < 0) {
 	wsyserror(path);
     }
+}
+
+
+
+static int
+isPixmap(proplist_t prop)
+{
+    proplist_t p;
+    char *s;
+    
+    p = PLGetArrayElement(prop, 0);
+    s = PLGetString(p);
+    if (strcasecmp(&s[1], "pixmap")==0)
+	return 1;
+    else
+	return 0;
 }
 
 
@@ -255,6 +279,7 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	 case 'H':
 	    style = RHorizontalGradient;
 	    break;
+	 default:
 	 case 'D':
 	    style = RDiagonalGradient;
 	    break;
@@ -264,9 +289,53 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	str2rcolor(rc, str, &rcolor);
 	str = PLGetString(PLGetArrayElement(texture, 2));
 	str2rcolor(rc, str, &rcolor2);
-	
+
 	image = RRenderGradient(width, height, &rcolor, &rcolor2, style);
-    } else if (strcasecmp(&type[2], "gradient")==0) {
+    } else if (strcasecmp(&type[2], "gradient")==0 && toupper(type[0])=='T') {
+	int style;
+	RColor rcolor2;
+	int i;
+	RImage *grad, *timage;
+	char *path;
+
+	switch (toupper(type[1])) {
+	 case 'V':
+	    style = RVerticalGradient;
+	    break;
+	 case 'H':
+	    style = RHorizontalGradient;
+	    break;
+	 default:
+	 case 'D':
+	    style = RDiagonalGradient;
+	    break;
+	}
+
+	str = PLGetString(PLGetArrayElement(texture, 3));
+	str2rcolor(rc, str, &rcolor);
+	str = PLGetString(PLGetArrayElement(texture, 4));
+	str2rcolor(rc, str, &rcolor2);
+
+	str = PLGetString(PLGetArrayElement(texture, 1));
+
+	path = wfindfileinarray(GetObjectForKey("PixmapPath"), str);
+	timage = RLoadImage(rc, path, 0);
+
+	if (!timage) {
+	    wwarning("could not load file '%s': %s", path,
+		     RMessageForError(RErrorCode));
+	} else {	
+	    grad = RRenderGradient(width, height, &rcolor, &rcolor2, style);
+
+	    image = RMakeTiledImage(timage, width, height);
+	    RDestroyImage(timage);
+
+	    i = atoi(PLGetString(PLGetArrayElement(texture, 2)));
+	
+	    RCombineImagesWithOpaqueness(image, grad, i);
+	    RDestroyImage(grad);
+	}
+    } else if (strcasecmp(&type[2], "gradient")==0 && toupper(type[0])=='M') {
 	int style;
 	RColor **colors;
 	int i, j;
@@ -278,6 +347,7 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	 case 'H':
 	    style = RHorizontalGradient;
 	    break;
+	 default:
 	 case 'D':
 	    style = RDiagonalGradient;
 	    break;
@@ -302,39 +372,48 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	    free(colors);
 	}
     } else if (strcasecmp(&type[1], "pixmap")==0) {
-	int style;
 	RImage *timage;
 	int w, h;
 	char *path;
+	RColor color;
 
 	str = PLGetString(PLGetArrayElement(texture, 1));
 
 	path = wfindfileinarray(GetObjectForKey("PixmapPath"), str);
 	timage = RLoadImage(rc, path, 0);
-	free(path);
-	
-	if (toupper(type[0]) == 'T') {
-	    if (timage->width < TEXPREV_WIDTH 
-		|| timage->height < TEXPREV_HEIGHT) {
-		image = RMakeTiledImage(timage, TEXPREV_WIDTH, TEXPREV_HEIGHT);
+
+	if (!timage) {
+	    wwarning("could not load file '%s': %s", path,
+		     RMessageForError(RErrorCode));
+	} else {
+	    str = PLGetString(PLGetArrayElement(texture, 2));
+	    str2rcolor(rc, str, &color);
+
+	    switch (toupper(type[0])) {
+	     case 'T':
+		image = RMakeTiledImage(timage, width, height);
 		RDestroyImage(timage);
 		timage = image;
-	    }
-	} else if (timage) {
-	    w = timage->width;
-	    h = timage->height;
-	
-	    if (w - TEXPREV_WIDTH > h - TEXPREV_HEIGHT) {
-		h = (w * TEXPREV_HEIGHT)/TEXPREV_WIDTH;
-	    } else {
-		w = (h * TEXPREV_WIDTH)/TEXPREV_HEIGHT;
+		break;
+	     case 'C':
+		image = RMakeCenteredImage(timage, width, height, &color);
+		RDestroyImage(timage);
+		timage = image;
+		break;
+	     case 'S':
+	     case 'M':
+		image = RScaleImage(timage, width, height);
+		RDestroyImage(timage);
+		timage = image;
+		break;
 	    }
 
-	    image = RScaleImage(timage, w, h);
-	    RDestroyImage(timage);
-	    timage = image;
 	}
+	free(path);
     }
+
+    if (!image)
+	return None;
 
     if (path) {
 	dumpRImage(path, image);
@@ -372,48 +451,48 @@ updatePreviewBox(_Panel *panel, int elements)
 	WMColor *color;
 
 	panel->preview = XCreatePixmap(dpy, WMWidgetXID(panel->win),
-				       220-4, 185-4, WMScreenDepth(scr));
+				       260-4, 165-4, WMScreenDepth(scr));
 
 	color = WMGrayColor(scr);
 	XFillRectangle(dpy, panel->preview, WMColorGC(color),
-		       0, 0, 220-4, 185-4);
+		       0, 0, 260-4, 165-4);
 	WMReleaseColor(color);
 
 	refresh = -1;
     }
 
     if (elements & FTITLE) {
-	item = WMGetListItem(panel->texLs, 0);
+	item = WMGetListItem(panel->texLs, panel->textureIndex[0]);
 	titem = (TextureListItem*)item->clientData;
 
-	pix = renderTexture(scr, titem->prop, 180, 20, NULL, RBEV_RAISED2);
+	pix = renderTexture(scr, titem->prop, 220, 20, NULL, RBEV_RAISED2);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 180, 20, 5, 10);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 220, 20, 5, 10);
 
 	XFreePixmap(dpy, pix);
     }
     if (elements & UTITLE) {
-	item = WMGetListItem(panel->texLs, 1);
+	item = WMGetListItem(panel->texLs, panel->textureIndex[1]);
 	titem = (TextureListItem*)item->clientData;
 
-	pix = renderTexture(scr, titem->prop, 180, 20, NULL, RBEV_RAISED2);
+	pix = renderTexture(scr, titem->prop, 220, 20, NULL, RBEV_RAISED2);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 180, 20, 10, 35);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 220, 20, 15, 35);
 
 	XFreePixmap(dpy, pix);
     }
     if (elements & OTITLE) {
-	item = WMGetListItem(panel->texLs, 2);
+	item = WMGetListItem(panel->texLs, panel->textureIndex[2]);
 	titem = (TextureListItem*)item->clientData;
 
-	pix = renderTexture(scr, titem->prop, 180, 20, NULL, RBEV_RAISED2);
+	pix = renderTexture(scr, titem->prop, 220, 20, NULL, RBEV_RAISED2);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 180, 20, 15, 60);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 220, 20, 25, 60);
 
 	XFreePixmap(dpy, pix);
     }
     if (elements & MTITLE) {
-	item = WMGetListItem(panel->texLs, 3);
+	item = WMGetListItem(panel->texLs, panel->textureIndex[3]);
 	titem = (TextureListItem*)item->clientData;
 
 	pix = renderTexture(scr, titem->prop, 100, 20, NULL, RBEV_RAISED2);
@@ -423,24 +502,30 @@ updatePreviewBox(_Panel *panel, int elements)
 	XFreePixmap(dpy, pix);
     }
     if (elements & MITEM) {
-	item = WMGetListItem(panel->texLs, 4);
+	item = WMGetListItem(panel->texLs, panel->textureIndex[4]);
 	titem = (TextureListItem*)item->clientData;
 
 	pix = renderTexture(scr, titem->prop, 100, 18, NULL, RBEV_RAISED2);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 20, 20, 115);
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 20, 20, 115+18);
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 20, 20, 115+36);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 18, 20, 115);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 18, 20, 115 + 18);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 18, 20, 115 + 36);
 
 	XFreePixmap(dpy, pix);
     }
+    if (elements & (MITEM|MTITLE)) {
+	XDrawLine(dpy, panel->preview, gc, 19, 95, 19, 115+36+20);
+	XDrawLine(dpy, panel->preview, gc, 19, 94, 119, 94);
+    }
+
     if (elements & ICON) {
-	item = WMGetListItem(panel->texLs, 5);
+	item = WMGetListItem(panel->texLs, panel->textureIndex[5]);
 	titem = (TextureListItem*)item->clientData;
 
-	pix = renderTexture(scr, titem->prop, 64, 64, NULL, RBEV_RAISED3);
+	pix = renderTexture(scr, titem->prop, 64, 64, NULL, 
+			    titem->ispixmap ? 0 : RBEV_RAISED3);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 64, 64, 130, 100);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 64, 64, 150, 90);
 
 	XFreePixmap(dpy, pix);
     }
@@ -449,7 +534,7 @@ updatePreviewBox(_Panel *panel, int elements)
     if (refresh < 0) {
 	WMPixmap *p;
 	p = WMCreatePixmapFromXPixmaps(scr, panel->preview, None,
-				       220-4, 185-4, WMScreenDepth(scr));
+				       260-4, 165-4, WMScreenDepth(scr));
 
 	WMSetLabelImage(panel->prevL, p);
 	WMReleasePixmap(p);
@@ -475,23 +560,19 @@ cancelNewTexture(void *data)
 
 
 static char*
-makeFileName(char *prefix, char *name)
+makeFileName(char *prefix)
 {
-    char *fname, *str;
-    int i;
+    char *fname;
 
-    str = wstrappend(prefix, name);
-    fname = wstrdup(str);
+    fname = wstrdup(prefix);
 
-    i = 1;
     while (access(fname, F_OK)==0) {
-	char buf[16];
+	char buf[30];
 
 	free(fname);
-	sprintf(buf, "%i", i++);
-	fname = wstrappend(str, buf);
+	sprintf(buf, "%08lx.cache", time(NULL));
+	fname = wstrappend(prefix, buf);
     }
-    free(str);
 
     return fname;
 }
@@ -526,7 +607,9 @@ okNewTexture(void *data)
     titem->texture = str;
     titem->selectedFor = 0;
 
-    titem->path = makeFileName(panel->fprefix, name);
+    titem->ispixmap = isPixmap(prop);
+
+    titem->path = makeFileName(panel->fprefix);
     titem->preview = renderTexture(scr, prop, TEXPREV_WIDTH, TEXPREV_HEIGHT,
 				   titem->path, 0);
 
@@ -535,7 +618,6 @@ okNewTexture(void *data)
 
     WMSetListPosition(panel->texLs, WMGetListNumberOfRows(panel->texLs));
 }
-
 
 
 static void
@@ -567,12 +649,14 @@ okEditTexture(void *data)
     PLRelease(titem->prop);
     titem->prop = prop;
 
+    titem->ispixmap = isPixmap(prop);
+
     free(titem->texture);
     titem->texture = str;
 
     XFreePixmap(WMScreenDisplay(WMWidgetScreen(panel->texLs)), titem->preview);
     titem->preview = renderTexture(WMWidgetScreen(panel->texLs), titem->prop,
-				   TEXPREV_WIDTH, TEXPREV_HEIGHT, 
+				   TEXPREV_WIDTH, TEXPREV_HEIGHT,
 				   titem->path, 0);
 
     WMRedisplayWidget(panel->texLs);
@@ -593,13 +677,14 @@ editTexture(WMWidget *w, void *data)
     item = WMGetListItem(panel->texLs, WMGetListSelectedItemRow(panel->texLs));
     titem = (TextureListItem*)item->clientData;
 
+    SetTexturePanelPixmapPath(panel->texturePanel,
+			      GetObjectForKey("PixmapPath"));
+
     SetTexturePanelTexture(panel->texturePanel, titem->title, titem->prop);
 
     SetTexturePanelCancelAction(panel->texturePanel, cancelNewTexture, panel);
     SetTexturePanelOkAction(panel->texturePanel, okEditTexture, panel);
 
-    SetTexturePanelPixmapPath(panel->texturePanel,
-			      GetObjectForKey("PixmapPath"));
     ShowTexturePanel(panel->texturePanel);
 }
 
@@ -610,14 +695,15 @@ newTexture(WMWidget *w, void *data)
 {
     _Panel *panel = (_Panel*)data;
 
+    SetTexturePanelPixmapPath(panel->texturePanel,
+			      GetObjectForKey("PixmapPath"));
+
     SetTexturePanelTexture(panel->texturePanel, "New Texture", NULL);
 
     SetTexturePanelCancelAction(panel->texturePanel, cancelNewTexture, panel);
 
     SetTexturePanelOkAction(panel->texturePanel, okNewTexture, panel);
 
-    SetTexturePanelPixmapPath(panel->texturePanel,
-			      GetObjectForKey("PixmapPath"));
     ShowTexturePanel(panel->texturePanel);
 }
 
@@ -681,7 +767,6 @@ extractTexture(WMWidget *w, void *data)
 					_("Select File"), NULL)) {
 	path = WMGetFilePanelFileName(opanel);
 
-	puts(path);
 	OpenExtractPanelFor(panel, path);
 
 	free(path);
@@ -775,6 +860,8 @@ textureDoubleClick(WMWidget *w, void *data)
     sprintf(str, "%s: %s", titem->title, titem->texture);
     WMSetLabelText(panel->texsL, str);
     free(str);
+
+    updatePreviewBox(panel, 1<<section);
 }
 
 
@@ -887,7 +974,6 @@ fillTextureList(WMList *lPtr)
 	titem->selectedFor = 0;
 	titem->path = wstrdup(PLGetString(PLGetArrayElement(texture, 2)));
 
-	puts(titem->path);
 	titem->preview = loadRImage(scr, titem->path);
 	if (!titem->preview) {
 	    titem->preview = renderTexture(scr, titem->prop, TEXPREV_WIDTH, 
@@ -944,6 +1030,7 @@ createPanel(Panel *p)
     panel->prevL = WMCreateLabel(panel->frame);
     WMResizeWidget(panel->prevL, 260, 165);
     WMMoveWidget(panel->prevL, 15, 10);
+    WMSetLabelRelief(panel->prevL, WRSunken);
     WMSetLabelImagePosition(panel->prevL, WIPImageOnly);
 
     panel->secP = WMCreatePopUpButton(panel->frame);
@@ -1078,6 +1165,8 @@ setupTextureFor(WMList *list, char *key, char *defValue, char *title,
     titem->texture = PLGetDescription((proplist_t)titem->prop);
     titem->current = 1;
     titem->selectedFor = 1<<index;
+    
+    titem->ispixmap = isPixmap(titem->prop);
 
     titem->preview = renderTexture(WMWidgetScreen(list), titem->prop,
 				   TEXPREV_WIDTH, TEXPREV_HEIGHT, NULL, 0);
@@ -1129,6 +1218,38 @@ showData(_Panel *panel)
 static void
 storeData(_Panel *panel)
 {
+    TextureListItem *titem;
+    WMListItem *item;
+
+    item = WMGetListItem(panel->texLs, panel->textureIndex[0]);
+    titem = (TextureListItem*)item->clientData;
+    SetObjectForKey(titem->prop, "FTitleBack");
+
+    item = WMGetListItem(panel->texLs, panel->textureIndex[1]);
+    titem = (TextureListItem*)item->clientData;
+    SetObjectForKey(titem->prop, "UTitleBack");
+
+    item = WMGetListItem(panel->texLs, panel->textureIndex[2]);
+    titem = (TextureListItem*)item->clientData;
+    SetObjectForKey(titem->prop, "PTitleBack");
+
+    item = WMGetListItem(panel->texLs, panel->textureIndex[3]);
+    titem = (TextureListItem*)item->clientData;
+    SetObjectForKey(titem->prop, "MenuTitleBack");
+
+    item = WMGetListItem(panel->texLs, panel->textureIndex[4]);
+    titem = (TextureListItem*)item->clientData;
+    SetObjectForKey(titem->prop, "MenuTextBack");
+
+    item = WMGetListItem(panel->texLs, panel->textureIndex[5]);
+    titem = (TextureListItem*)item->clientData;
+    SetObjectForKey(titem->prop, "IconBack");
+}
+
+
+static void
+prepareForClose(_Panel *panel)
+{
     proplist_t textureList;
     proplist_t texture;
     int i;
@@ -1154,30 +1275,7 @@ storeData(_Panel *panel)
     WMSetUDObjectForKey(udb, textureList, "TextureList");
     PLRelease(textureList);
 
-    item = WMGetListItem(panel->texLs, panel->textureIndex[0]);
-    titem = (TextureListItem*)item->clientData;
-    SetObjectForKey(titem->prop, "FTitleBack");
-
-    item = WMGetListItem(panel->texLs, panel->textureIndex[1]);
-    titem = (TextureListItem*)item->clientData;
-    SetObjectForKey(titem->prop, "UTitleBack");
-
-    item = WMGetListItem(panel->texLs, panel->textureIndex[2]);
-    titem = (TextureListItem*)item->clientData;
-    SetObjectForKey(titem->prop, "PTitleBack");
-
-    item = WMGetListItem(panel->texLs, panel->textureIndex[3]);
-    titem = (TextureListItem*)item->clientData;
-    SetObjectForKey(titem->prop, "MenuTitleBack");
-
-    item = WMGetListItem(panel->texLs, panel->textureIndex[4]);
-    titem = (TextureListItem*)item->clientData;
-    SetObjectForKey(titem->prop, "MenuTextBack");
-
-    item = WMGetListItem(panel->texLs, panel->textureIndex[5]);
-    titem = (TextureListItem*)item->clientData;
-    SetObjectForKey(titem->prop, "IconBack");
-
+    WMSynchronizeUserDefaults(udb);
 }
 
 
@@ -1196,6 +1294,7 @@ InitAppearance(WMScreen *scr, WMWindow *win)
 
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;
+    panel->callbacks.prepareForClose = prepareForClose;
 
     AddSection(panel, ICON_FILE);
 

@@ -759,7 +759,7 @@ wIconPaint(WIcon *icon)
 	int l;
 	int w;
 
-	tmp = ShrinkString(scr->icon_title_font, icon->icon_name, 
+	tmp = ShrinkString(scr->icon_title_font, icon->icon_name,
 			   wPreferences.icon_size-4);
 	w = wTextWidth(scr->icon_title_font->font, tmp, l=strlen(tmp));
 

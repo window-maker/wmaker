@@ -55,6 +55,7 @@ typedef struct {
     void (*updateDomain)(Panel*);      /* save the changes to the dictionary */
     Bool (*requiresRestart)(Panel*);   /* return True if some static option was changed */
     void (*undoChanges)(Panel*);       /* reset values to those in the dictionary */
+    void (*prepareForClose)(Panel*);   /* called when exiting WPrefs */
 } CallbackRec;
 
 

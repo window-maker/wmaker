@@ -268,32 +268,35 @@ static WOptionEnumeration seIconPositions[] = {
 WDefaultEntry staticOptionList[] = {    
     
     {"DisableDithering",	"NO",			NULL,
-	  &wPreferences.no_dithering,	getBool,	NULL
+	&wPreferences.no_dithering,	getBool,	NULL
     },
     {"ColormapSize",	"4",			NULL,
-	  &wPreferences.cmap_size,	getInt,		NULL
+	&wPreferences.cmap_size,	getInt,		NULL
     },
     /* static by laziness */
     {"IconSize",	"64",			NULL,
-	  &wPreferences.icon_size,	getInt,		NULL
+	&wPreferences.icon_size,	getInt,		NULL
     },
     {"ModifierKey",	"Mod1",			NULL,
-	  &wPreferences.modifier_mask,	getModMask,	NULL
+	&wPreferences.modifier_mask,	getModMask,	NULL
     },
     {"DisableWSMouseActions", "NO",		NULL,
-	  &wPreferences.disable_root_mouse, getBool,	NULL
+	&wPreferences.disable_root_mouse, getBool,	NULL
     },
     {"FocusMode",	"manual",		seFocusModes,
-	  &wPreferences.focus_mode,	getEnum,	NULL
+	&wPreferences.focus_mode,	getEnum,	NULL
     }, /* have a problem when switching from manual to sloppy without restart */
     {"NewStyle",	"NO",			NULL,
-	  &wPreferences.new_style, 	getBool, 	NULL
+	&wPreferences.new_style, 	getBool, 	NULL
     },
     {"DisableDock",	"NO",		(void*) WM_DOCK,
-	  NULL, 	getBool,        setIfDockPresent
+	NULL, 	getBool,        setIfDockPresent
     },
     {"DisableClip",	"NO",		(void*) WM_CLIP,
-	  NULL, 	getBool,        setIfDockPresent
+	NULL, 	getBool,        setIfDockPresent
+    },
+    {"DisableMiniwindows", "NO",		NULL,
+	&wPreferences.disable_miniwindows, getBool,	NULL
     }
 };
 

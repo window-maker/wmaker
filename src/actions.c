@@ -916,11 +916,13 @@ wIconifyWindow(WWindow *wwin)
 		     ButtonMotionMask|ButtonReleaseMask, GrabModeAsync, 
 		     GrabModeAsync, None, None, CurrentTime);
     }
-    
-    if (!wwin->flags.icon_moved) {
-	PlaceIcon(wwin->screen_ptr, &wwin->icon_x, &wwin->icon_y);
+
+    if (!wPreferences.disable_miniwindows) {
+	if (!wwin->flags.icon_moved) {
+	    PlaceIcon(wwin->screen_ptr, &wwin->icon_x, &wwin->icon_y);
+	}
+	wwin->icon = wIconCreate(wwin);
     }
-    wwin->icon = wIconCreate(wwin);
 
     wwin->flags.miniaturized = 1;
     wwin->flags.mapped = 0;
@@ -939,28 +941,58 @@ wIconifyWindow(WWindow *wwin)
 	/* let all Expose events arrive so that we can repaint
 	 * something before the animation starts (and the server is grabbed) */
 	XSync(dpy, 0);
-	wClientSetState(wwin, IconicState, wwin->icon->icon_win);
+
+	if (wPreferences.disable_miniwindows)
+	    wClientSetState(wwin, IconicState, None);
+	else
+	    wClientSetState(wwin, IconicState, wwin->icon->icon_win);
+
 	flushExpose();
 #ifdef ANIMATIONS
 	if (!wwin->screen_ptr->flags.startup && !wwin->flags.skip_next_animation
 	    && !wPreferences.no_animations) {
+	    int ix, iy, iw, ih;
+
+	    if (!wPreferences.disable_miniwindows) {
+		ix = wwin->icon_x;
+		iy = wwin->icon_y;
+		iw = wwin->icon->core->width;
+		ih = wwin->icon->core->height;
+	    } else {
+		WArea area;
+		
+		if (wKWMGetIconGeometry(wwin, &area)) {
+		    ix = area.x1;
+		    iy = area.y1;
+		    iw = area.x2 - ix;
+		    ih = area.y2 - iy;
+		} else {
+		    ix = 0;
+		    iy = 0;
+		    iw = wwin->screen_ptr->scr_width;
+		    ih = wwin->screen_ptr->scr_height;
+		}
+	    }
 	    animateResize(wwin->screen_ptr, wwin->frame_x, wwin->frame_y, 
 			  wwin->frame->core->width, wwin->frame->core->height,
-			  wwin->icon_x, wwin->icon_y,
-			  wwin->icon->core->width, wwin->icon->core->height,
-			  False);
+			  ix, iy, iw, ih, False);
 	}
 #endif
     }
     
     wwin->flags.skip_next_animation = 0;
-    if (wwin->screen_ptr->current_workspace==wwin->frame->workspace ||
-	IS_OMNIPRESENT(wwin) || wPreferences.sticky_icons)
 
-        XMapWindow(dpy, wwin->icon->core->window);
-    AddToStackList(wwin->icon->core);
+    if (!wPreferences.disable_miniwindows) {
 
-    wLowerFrame(wwin->icon->core);
+	if (wwin->screen_ptr->current_workspace==wwin->frame->workspace ||
+	    IS_OMNIPRESENT(wwin) || wPreferences.sticky_icons)
+
+	    XMapWindow(dpy, wwin->icon->core->window);
+
+	AddToStackList(wwin->icon->core);
+
+	wLowerFrame(wwin->icon->core);
+    }
 
     if (present) {
 	WWindow *owner = recursiveTransientFor(wwin->screen_ptr->focused_window);
@@ -1001,8 +1033,8 @@ wIconifyWindow(WWindow *wwin)
 #endif
     }
 
-    
-    if (wwin->flags.selected)
+
+    if (wwin->flags.selected && !wPreferences.disable_miniwindows)
         wIconSelect(wwin->icon);
 
 #ifdef GNOME_STUFF
@@ -1014,8 +1046,9 @@ wIconifyWindow(WWindow *wwin)
 #endif
 
     UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
-
 }
+
+
 
 
 void
@@ -1042,10 +1075,12 @@ wDeiconifyWindow(WWindow  *wwin)
     if (!wwin->flags.shaded)
 	wwin->flags.mapped = 1;
 
-    if (wwin->icon->selected)
-        wIconSelect(wwin->icon);
+    if (!wPreferences.disable_miniwindows) {
+	if (wwin->icon->selected)
+	    wIconSelect(wwin->icon);
 
-    XUnmapWindow(dpy, wwin->icon->core->window);
+	XUnmapWindow(dpy, wwin->icon->core->window);
+    }
 
 #ifdef WMSOUND
     wSoundPlay(WMSOUND_DEICONIFY);
@@ -1053,11 +1088,32 @@ wDeiconifyWindow(WWindow  *wwin)
 
     /* if the window is in another workspace, do it silently */
 #ifdef ANIMATIONS
-    if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations 
+    if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations
 	&& !wwin->flags.skip_next_animation) {
-	animateResize(wwin->screen_ptr, wwin->icon_x, wwin->icon_y,
-		      wwin->icon->core->width, wwin->icon->core->height,
-		      wwin->frame_x, wwin->frame_y, 
+	int ix, iy, iw, ih;
+
+	if (!wPreferences.disable_miniwindows) {
+	    ix = wwin->icon_x;
+	    iy = wwin->icon_y;
+	    iw = wwin->icon->core->width;
+	    ih = wwin->icon->core->height;
+	} else {
+	    WArea area;
+		
+	    if (wKWMGetIconGeometry(wwin, &area)) {
+		ix = area.x1;
+		iy = area.y1;
+		iw = area.x2 - ix;
+		ih = area.y2 - iy;
+	    } else {
+		ix = 0;
+		iy = 0;
+		iw = wwin->screen_ptr->scr_width;
+		ih = wwin->screen_ptr->scr_height;
+	    }
+	}
+	animateResize(wwin->screen_ptr, ix, iy, iw, ih,
+		      wwin->frame_x, wwin->frame_y,
 		      wwin->frame->core->width, wwin->frame->core->height,
 		      False);
     }
@@ -1073,11 +1129,13 @@ wDeiconifyWindow(WWindow  *wwin)
 	wClientSetState(wwin, NormalState, None);
     }
     mapTransientsFor(wwin);
-    RemoveFromStackList(wwin->icon->core);
-/*    removeIconGrabs(wwin->icon);*/
-    wIconDestroy(wwin->icon);
-    wwin->icon = NULL;
 
+    if (!wPreferences.disable_miniwindows) {
+	RemoveFromStackList(wwin->icon->core);
+	/*    removeIconGrabs(wwin->icon);*/
+	wIconDestroy(wwin->icon);
+	wwin->icon = NULL;
+    }
     XUngrabServer(dpy);
     if (wPreferences.focus_mode==WKF_CLICK
 	|| wPreferences.focus_mode==WKF_SLOPPY)
@@ -1116,7 +1174,6 @@ static void
 hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate)
 {
     if (wwin->flags.miniaturized) {
-	/* XXX wrong fix, can cause side effects, must remove 'if' */
 	if (wwin->icon) { 
 	    XUnmapWindow(dpy, wwin->icon->core->window);
 	    wwin->icon->mapped = 0;

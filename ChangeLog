@@ -15,7 +15,9 @@ Changes since version 0.51.2:
 - show kbd mode for modelock  (id@windowmaker.org)
 - enhanced positioning of transient windows
 - added dynamically loadable texture renderer code (from ?)
-
+- added DisableMiniwindows option
+- kde: miniaturize animation will match the taskbar icon (KWM_WIN_ICON_GEOMETRY)
+- miniwindows show the title of the window if there is none set for it
 
 Changes since version 0.51.1:
 .............................

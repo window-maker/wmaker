@@ -178,6 +178,8 @@ static Atom _XA_KWM_WIN_ICONIFIED = 0;
 static Atom _XA_KWM_WIN_MAXIMIZED = 0;
 static Atom _XA_KWM_WIN_STICKY = 0;
 
+static Atom _XA_KWM_WIN_ICON_GEOMETRY = 0;
+
 static Atom _XA_KWM_CURRENT_DESKTOP = 0;
 static Atom _XA_KWM_NUMBER_OF_DESKTOPS = 0;
 static Atom _XA_KWM_DESKTOP_NAME_[MAX_WORKSPACES];
@@ -557,6 +559,9 @@ wKWMInitStuff(WScreen *scr)
 	_XA_KWM_WIN_ICONIFIED = XInternAtom(dpy, "KWM_WIN_ICONIFIED", False);
 
 	_XA_KWM_WIN_MAXIMIZED = XInternAtom(dpy, "KWM_WIN_MAXIMIZED", False);
+
+	_XA_KWM_WIN_ICON_GEOMETRY = XInternAtom(dpy, "KWM_WIN_ICON_GEOMETRY",
+						False);
 
 	_XA_KWM_COMMAND = XInternAtom(dpy, "KWM_COMMAND", False);
 
@@ -1515,6 +1520,15 @@ wKWMGetUsableArea(WScreen *scr, WArea *area)
 
     return getAreaHint(scr->root_win, _XA_KWM_WINDOW_REGION_[0], area);
 }
+
+
+
+Bool
+wKWMGetIconGeometry(WWindow *wwin, WArea *area)
+{
+    return getAreaHint(wwin->client_win, _XA_KWM_WIN_ICON_GEOMETRY, area);
+}
+
 
 
 #ifdef not_used

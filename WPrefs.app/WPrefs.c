@@ -106,10 +106,13 @@ static void loadConfigurations(WMScreen *scr, WMWindow *mainw);
 
 static void savePanelData(Panel *panel);
 
+static void prepareForClose();
 
 void
 quit(WMWidget *w, void *data)
 {
+    prepareForClose();
+
     exit(0);
 }
 
@@ -157,6 +160,7 @@ save(WMWidget *w, void *data)
 }
 
 
+
 static void
 undo(WMWidget *w, void *data)
 {
@@ -185,6 +189,23 @@ undoAll(WMWidget *w, void *data)
 	    (*rec->callbacks.undoChanges)((Panel*)rec);
     }
 }
+
+
+
+static void
+prepareForClose()
+{
+    int i;
+    
+    for (i=0; i<WPrefs.sectionCount; i++) {
+	PanelRec *rec = WMGetHangedData(WPrefs.sectionB[i]);
+
+	if (rec->callbacks.prepareForClose 
+	    && (rec->callbacks.flags & INITIALIZED_PANEL))
+	    (*rec->callbacks.prepareForClose)((Panel*)rec);
+    }
+}
+
 
 
 static void

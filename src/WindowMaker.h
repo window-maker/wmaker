@@ -313,7 +313,9 @@ typedef struct WPreferences {
 
     char dont_confirm_kill;	       /* do not confirm Kill application */
 
-    char dont_blink;
+    char disable_miniwindows;
+
+    char dont_blink;		       /* do not blink icon selection */
     
     /* Appearance options */
     char new_style;		       /* Use newstyle buttons */

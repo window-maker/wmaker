@@ -4,6 +4,14 @@ NEWS for veteran Window Maker users
 
 --- 0.51.2
 
+
+Appearance Editing in WPrefs
+----------------------------
+
+Added Appearance/Texture editing capability in WPrefs. Workspace background
+selection is not yet finished.
+
+
 New Themes
 ----------
 
@@ -52,6 +60,24 @@ or $(sysconfdir)/WindowMaker
 --- 0.51.0
 
 Window Maker has become a GNU program (part of the GNU Project).
+
+Title text drop shadow
+----------------------
+
+drop shadow option added for titlebar text. The is a compile time 
+option which needs to be defined in src/wconfig.h after you run
+configure and before you run make.
+
+New options and syntax for your WindowMaker domain file are:
+
+  Shadow = yes/no;
+  FShadowColor = <color>;  
+  PShadowColor = <color>;
+  UShadowColor = <color>;
+  MShadowColor = <color>;
+
+The shadow option is dynamic (no need for a restart).
+MShadowColor is for the menu title text.
 
 libPropList
 -----------

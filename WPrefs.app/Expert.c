@@ -31,7 +31,7 @@ typedef struct _Panel {
     
     WMWindow *win;
 
-    WMButton *swi[4];
+    WMButton *swi[5];
 
 } _Panel;
 
@@ -45,10 +45,11 @@ showData(_Panel *panel)
 {
     WMUserDefaults *udb = WMGetStandardUserDefaults();
 
-    WMSetButtonSelected(panel->swi[0], WMGetUDBoolForKey(udb, "NoXSetStuff"));
-    WMSetButtonSelected(panel->swi[1], GetBoolForKey("SaveSessionOnExit"));
-    WMSetButtonSelected(panel->swi[2], GetBoolForKey("UseSaveUnders"));
-    WMSetButtonSelected(panel->swi[3], GetBoolForKey("DisableBlinking"));
+    WMSetButtonSelected(panel->swi[0], GetBoolForKey("DisableMiniwindows"));
+    WMSetButtonSelected(panel->swi[1], WMGetUDBoolForKey(udb, "NoXSetStuff"));
+    WMSetButtonSelected(panel->swi[2], GetBoolForKey("SaveSessionOnExit"));
+    WMSetButtonSelected(panel->swi[3], GetBoolForKey("UseSaveUnders"));
+    WMSetButtonSelected(panel->swi[4], GetBoolForKey("DisableBlinking"));
 }
 
 
@@ -62,15 +63,17 @@ createPanel(Panel *p)
     WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
     WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
 
-    for (i=0; i<4; i++) {
+    for (i=0; i<5; i++) {
 	panel->swi[i] = WMCreateSwitchButton(panel->frame);
 	WMResizeWidget(panel->swi[i], FRAME_WIDTH-40, 25);
 	WMMoveWidget(panel->swi[i], 20, 20+i*25);
     }
-    WMSetButtonText(panel->swi[0], _("Do not set non-WindowMaker specific parameters (do not use xset)"));
-    WMSetButtonText(panel->swi[1], _("Automatically save session when exiting WindowMaker"));
-    WMSetButtonText(panel->swi[2], _("Use SaveUnder in window frames, icons, menus and other objects"));
-    WMSetButtonText(panel->swi[3], _("Disable cycling color highlighting of icons."));
+    
+    WMSetButtonText(panel->swi[0], _("Disable miniwindows (icons for miniaturized windows). For use with KDE/GNOME."));
+    WMSetButtonText(panel->swi[1], _("Do not set non-WindowMaker specific parameters (do not use xset)"));
+    WMSetButtonText(panel->swi[2], _("Automatically save session when exiting WindowMaker"));
+    WMSetButtonText(panel->swi[3], _("Use SaveUnder in window frames, icons, menus and other objects"));
+    WMSetButtonText(panel->swi[4], _("Disable cycling color highlighting of icons."));
 
     WMRealizeWidget(panel->frame);
     WMMapSubwidgets(panel->frame);
@@ -84,11 +87,13 @@ storeDefaults(_Panel *panel)
 {
     WMUserDefaults *udb = WMGetStandardUserDefaults();
 
-    WMSetUDBoolForKey(udb, WMGetButtonSelected(panel->swi[0]), "NoXSetStuff");
+    SetBoolForKey(WMGetButtonSelected(panel->swi[0]), "DisableMiniwindows");
 
-    SetBoolForKey(WMGetButtonSelected(panel->swi[1]), "SaveSessionOnExit");
-    SetBoolForKey(WMGetButtonSelected(panel->swi[2]), "UseSaveUnders");
-    SetBoolForKey(WMGetButtonSelected(panel->swi[3]), "DisableBlinking");
+    WMSetUDBoolForKey(udb, WMGetButtonSelected(panel->swi[1]), "NoXSetStuff");
+
+    SetBoolForKey(WMGetButtonSelected(panel->swi[2]), "SaveSessionOnExit");
+    SetBoolForKey(WMGetButtonSelected(panel->swi[3]), "UseSaveUnders");
+    SetBoolForKey(WMGetButtonSelected(panel->swi[4]), "DisableBlinking");
 }
 
 

@@ -89,6 +89,15 @@ saveDefaultsChanges(void)
 }
 
 
+
+void
+WMSynchronizeUserDefaults(WMUserDefaults *database)
+{
+    /* TODO: check what it should really do */
+    PLSave(database->appDomain, YES);
+}
+
+
 WMUserDefaults*
 WMGetStandardUserDefaults(void)
 {    

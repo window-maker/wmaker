@@ -73,6 +73,7 @@ static char *options[] = {
     "FShadowColor",    
     "PShadowColor",    
     "UShadowColor",    
+    "MShadowColor",
 #endif
     NULL
 };

@@ -93,5 +93,7 @@ void wKWMBroadcastStacking(WScreen *scr);
 
 char *wKWMGetWorkspaceName(WScreen *scr, int workspace);
 
+Bool wKWMGetIconGeometry(WWindow *wwin, WArea *area);
+
 #endif
 

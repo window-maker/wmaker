@@ -714,7 +714,7 @@ wClientGetNormalHints(WWindow *wwin, XWindowAttributes *wattribs, Bool geometry,
 	wwin->normal_hints->min_width = wwin->normal_hints->max_width;
     }
 
-    if (/*pre_icccm && */!wwin->screen_ptr->flags.startup && geometry) {
+    if (pre_icccm && !wwin->screen_ptr->flags.startup && geometry) {
 #ifdef DEBUG
 	printf("PRE ICCCM\n");	
 #endif	
