@@ -1,9 +1,9 @@
 /* setstyle.c - loads style related options to wmaker
  *
  *  WindowMaker window manager
- * 
+ *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 
@@ -37,7 +37,7 @@
 
 #define MAX_OPTIONS 128
 
-char *default_font = "sans:pixelsize=12";
+#define DEFAULT_FONT "sans:pixelsize=12"
 
 char *FontOptions[] = {
     "IconTitleFont",
@@ -80,91 +80,201 @@ Display *dpy;
 
 WMPropList *readBlackBoxStyle(char *path);
 
-char*
-capitalize(char *element)
+
+static Bool
+isCursorOption(char *option)
 {
-    unsigned int first = 1;
-    char *p;
-    char *b;
-    b = element;
-    for (p = b; *p != 0; p++) {
-	if (isalpha(*p) && first) {
-	    first = 0;
-	    *p = toupper(*p);
-	} else if (*p == '-' || *p == ' ') {
-	    first = 1;
-	}
+    int i;
+
+    for (i=0; CursorOptions[i]!=NULL; i++) {
+        if (strcasecmp(option, CursorOptions[i])==0) {
+            return True;
+        }
     }
-	return b;
+
+    return False;
 }
 
-char*
-getElementFromXLFD(const char *xlfd, int index)
+
+static Bool
+isFontOption(char *option)
 {
-    const char *p = xlfd;
-    while (*p != 0) {
-	if (*p == '-' && --index == 0) {
-	    const char *end = strchr(p + 1, '-');
-	    char *buf;
-	    size_t len;
-	    if (end == 0) end = p + strlen(p);
-	    len = end - (p + 1);
-	    buf = wmalloc(len);
-	    memcpy(buf, p + 1, len);
-	    buf[len] = 0;
-	    return buf;
-	}
-	p++;
+    int i;
+
+    for (i=0; FontOptions[i]!=NULL; i++) {
+        if (strcasecmp(option, FontOptions[i])==0) {
+            return True;
+        }
     }
-    return "*";
+
+    return False;
 }
 
-char* 
+
+static int
+countChar(char *str, char c)
+{
+    int count = 0;
+
+    if (!str)
+        return 0;
+
+    for (; *str!=0; str++) {
+        if (*str == c) {
+            count++;
+        }
+    }
+
+    return count;
+}
+
+
+typedef struct str {
+    char *str;
+    int len;
+} str;
+
+#define XLFD_TOKENS 14
+
+static str*
+getXLFDTokens(char *xlfd)
+{
+    static str tokens[XLFD_TOKENS];
+    int i, len, size;
+    char *ptr;
+
+    if (!xlfd || countChar(xlfd, '-')<XLFD_TOKENS)
+        return NULL;
+
+    memset(tokens, 0, sizeof(str)*XLFD_TOKENS);
+
+    len  = strlen(xlfd);
+
+    for (ptr=xlfd, i=0; i<XLFD_TOKENS && len>0; i++) {
+        size = strspn(ptr, "-");
+        ptr += size;
+        len -= size;
+        if (len <= 0)
+            break;
+        size = strcspn(ptr, "-");
+        if (size==0)
+            break;
+        tokens[i].str = ptr;
+        tokens[i].len = size;
+        ptr += size;
+        len -= size;
+    }
+
+    return tokens;
+}
+
+
+static int
+strToInt(str *token)
+{
+    int res=0, pos, c;
+
+    if (token->len==0 || token->str[0]=='*') {
+	return -1;
+    } else {
+        for (res=0, pos=0; pos<token->len; pos++) {
+            c = token->str[pos] - '0';
+            if (c<0 || c>9)
+                break;
+            res = res*10 + c;
+        }
+    }
+    return res;
+}
+
+
+static char*
+mapSlantToName(str *slant)
+{
+    if (slant->len==0 || slant->str[0]=='*')
+        return "roman";
+
+    switch(slant->str[0]) {
+    case 'i':
+        return "italic";
+    case 'o':
+        return "oblique";
+    case 'r':
+    default:
+        return "roman";
+    }
+}
+
+
+char*
 xlfdToFc(char *xlfd)
 {
-    char *Fcname = NULL;
+    str *tokens, *family, *weight, *slant;
+    char *name, buf[512];
+    int size, pixelsize;
 
-    char *family = getElementFromXLFD(xlfd, 2);
-    char *size = getElementFromXLFD(xlfd, 7);
-    char *weight = getElementFromXLFD(xlfd, 3);
-    char *slant = getElementFromXLFD(xlfd, 4);
+    tokens = getXLFDTokens(xlfd);
+    if (!tokens)
+        return wstrdup(DEFAULT_FONT);
 
-    if (strcmp(family, "*") != 0) {
-	Fcname = wstrconcat(Fcname, capitalize(family));
-    }
-    if (strcmp(size, "*") != 0) {
-	Fcname = wstrconcat(Fcname, ":pixelsize=");
-	Fcname = wstrconcat(Fcname, size);
-    }
-    if (strcmp(weight, "*") != 0) {
-	Fcname = wstrconcat(Fcname, ":weight=");
-	Fcname = wstrconcat(Fcname, capitalize(weight));
-    }
-    if (strcmp(slant, "*") != 0) {
-	if (strcmp(slant, "i") == 0) {
-	    Fcname = wstrconcat(Fcname, ":slant=");
-	    Fcname = wstrconcat(Fcname, "Italic");
-	} else if (strcmp(slant, "o") == 0) {
-	    Fcname = wstrconcat(Fcname, ":slant=");
-	    Fcname = wstrconcat(Fcname, "Oblique");
-	} else if (strcmp(slant, "ri") == 0) {
-	    Fcname = wstrconcat(Fcname, ":slant=");
-	    Fcname = wstrconcat(Fcname, "Rev Italic");
-	} else if (strcmp(slant, "ro") == 0) {
-	    Fcname = wstrconcat(Fcname, ":slant=");
-	    Fcname = wstrconcat(Fcname, "Rev Oblique");
-	}
-    }
-    if (!Fcname) 
-	Fcname = wstrdup(default_font);
+    family = &(tokens[1]);
+    weight = &(tokens[2]);
+    slant  = &(tokens[3]);
 
-    wfree(family);
-    wfree(size);
-    wfree(weight);
-    wfree(slant);
+    if (family->len==0 || family->str[0]=='*')
+        return wstrdup(DEFAULT_FONT);
 
-    return Fcname;
+    sprintf(buf, "%.*s", family->len, family->str);
+    name = wstrdup(buf);
+
+    pixelsize = strToInt(&tokens[6]);
+    size = strToInt(&tokens[7]);
+
+    if (size<=0 && pixelsize<=0) {
+        name = wstrappend(name, ":pixelsize=12");
+    } else if (pixelsize>0) {
+        /* if pixelsize is present size will be ignored so we skip it */
+        sprintf(buf, ":pixelsize=%d", pixelsize);
+        name = wstrappend(name, buf);
+    } else {
+        sprintf(buf, "-%d", size/10);
+        name = wstrappend(name, buf);
+    }
+
+    if (weight->len>0 && weight->str[0]!='*') {
+        sprintf(buf, ":weight=%.*s", weight->len, weight->str);
+        name = wstrappend(name, buf);
+    }
+
+    if (slant->len>0 && slant->str[0]!='*') {
+        sprintf(buf, ":slant=%s", mapSlantToName(slant));
+        name = wstrappend(name, buf);
+    }
+
+    name = wstrappend(name, ":xlfd=");
+    name = wstrappend(name, xlfd);
+
+    return name;
 }
+
+
+/* return converted font (if conversion is needed) else the original font */
+static char*
+convertFont(char *font)
+{
+    if (font[0]=='-') {
+        if (!strchr(font, ',')) {
+            return xlfdToFc(font);
+        } else {
+            wwarning("fontsets are not supported. replaced "
+                     "with default %s", DEFAULT_FONT);
+            return wstrdup(DEFAULT_FONT);
+        }
+    } else {
+        return font;
+    }
+}
+
 
 char*
 defaultsPathForDomain(char *domain)
@@ -174,19 +284,19 @@ defaultsPathForDomain(char *domain)
 
     gspath = getenv("GNUSTEP_USER_ROOT");
     if (gspath) {
-	strcpy(path, gspath);
-	strcat(path, "/");
+        strcpy(path, gspath);
+        strcat(path, "/");
     } else {
-	char *home;
-	
-	home = getenv("HOME");
-	if (!home) {
-	    printf("%s:could not get HOME environment variable!\n", ProgName);
-	    exit(0);
-	}
+        char *home;
 
-	strcpy(path, home);
-	strcat(path, "/GNUstep/");
+        home = getenv("HOME");
+        if (!home) {
+            printf("%s:could not get HOME environment variable!\n", ProgName);
+            exit(0);
+        }
+
+        strcpy(path, home);
+        strcat(path, "/GNUstep/");
     }
     strcat(path, DEFAULTS_DIR);
     strcat(path, "/");
@@ -207,40 +317,40 @@ hackPathInTexture(WMPropList *texture, char *prefix)
     type = WMGetFromPLArray(texture, 0);
     t = WMGetFromPLString(type);
     if (t == NULL)
-	return;
+        return;
     if (strcasecmp(t, "tpixmap")==0
-	|| strcasecmp(t, "spixmap")==0
-	|| strcasecmp(t, "mpixmap")==0
-	|| strcasecmp(t, "cpixmap")==0
-	|| strcasecmp(t, "tvgradient")==0
-	|| strcasecmp(t, "thgradient")==0		
-	|| strcasecmp(t, "tdgradient")==0) {
-	WMPropList *file;
-	char buffer[4018];
+        || strcasecmp(t, "spixmap")==0
+        || strcasecmp(t, "mpixmap")==0
+        || strcasecmp(t, "cpixmap")==0
+        || strcasecmp(t, "tvgradient")==0
+        || strcasecmp(t, "thgradient")==0
+        || strcasecmp(t, "tdgradient")==0) {
+        WMPropList *file;
+        char buffer[4018];
 
-	/* get pixmap file path */
-	file = WMGetFromPLArray(texture, 1);
-	sprintf(buffer, "%s/%s", prefix, WMGetFromPLString(file));
-	/* replace path with full path */
-	WMDeleteFromPLArray(texture, 1);
-	WMInsertInPLArray(texture, 1, WMCreatePLString(buffer));
+        /* get pixmap file path */
+        file = WMGetFromPLArray(texture, 1);
+        sprintf(buffer, "%s/%s", prefix, WMGetFromPLString(file));
+        /* replace path with full path */
+        WMDeleteFromPLArray(texture, 1);
+        WMInsertInPLArray(texture, 1, WMCreatePLString(buffer));
     } else if (strcasecmp(t, "bitmap") == 0) {
-	WMPropList *file;
-	char buffer[4018];
+        WMPropList *file;
+        char buffer[4018];
 
-	/* get bitmap file path */
-	file = WMGetFromPLArray(texture, 1);
-	sprintf(buffer, "%s/%s", prefix, WMGetFromPLString(file));
-	/* replace path with full path */
-	WMDeleteFromPLArray(texture, 1);
-	WMInsertInPLArray(texture, 1, WMCreatePLString(buffer));
-	
-	/* get mask file path */
-	file = WMGetFromPLArray(texture, 2);
-	sprintf(buffer, "%s/%s", prefix, WMGetFromPLString(file));
-	/* replace path with full path */
-	WMDeleteFromPLArray(texture, 2);
-	WMInsertInPLArray(texture, 2, WMCreatePLString(buffer));
+        /* get bitmap file path */
+        file = WMGetFromPLArray(texture, 1);
+        sprintf(buffer, "%s/%s", prefix, WMGetFromPLString(file));
+        /* replace path with full path */
+        WMDeleteFromPLArray(texture, 1);
+        WMInsertInPLArray(texture, 1, WMCreatePLString(buffer));
+
+        /* get mask file path */
+        file = WMGetFromPLArray(texture, 2);
+        sprintf(buffer, "%s/%s", prefix, WMGetFromPLString(file));
+        /* replace path with full path */
+        WMDeleteFromPLArray(texture, 2);
+        WMInsertInPLArray(texture, 2, WMCreatePLString(buffer));
     }
 }
 
@@ -257,36 +367,36 @@ hackPaths(WMPropList *style, char *prefix)
     keys = WMGetPLDictionaryKeys(style);
 
     for (i = 0; i < WMGetPropListItemCount(keys); i++) {
-	key = WMGetFromPLArray(keys, i);
+        key = WMGetFromPLArray(keys, i);
 
-	value = WMGetFromPLDictionary(style, key);
-	if (!value)
-	    continue;
-	
-	if (strcasecmp(WMGetFromPLString(key), "WorkspaceSpecificBack")==0) {
-	    if (WMIsPLArray(value)) {
-		int j;
-		WMPropList *texture;
-		
-		for (j = 0; j < WMGetPropListItemCount(value); j++) {
-		    texture = WMGetFromPLArray(value, j);
+        value = WMGetFromPLDictionary(style, key);
+        if (!value)
+            continue;
 
-		    if (texture && WMIsPLArray(texture) 
-			&& WMGetPropListItemCount(texture) > 2) {
+        if (strcasecmp(WMGetFromPLString(key), "WorkspaceSpecificBack")==0) {
+            if (WMIsPLArray(value)) {
+                int j;
+                WMPropList *texture;
 
-			hackPathInTexture(texture, prefix);
-		    }
-		}
-	    }
-	} else {
-	    
-	    if (WMIsPLArray(value) && WMGetPropListItemCount(value) > 2) {
+                for (j = 0; j < WMGetPropListItemCount(value); j++) {
+                    texture = WMGetFromPLArray(value, j);
 
-		hackPathInTexture(value, prefix);
-	    }
-	}
+                    if (texture && WMIsPLArray(texture)
+                        && WMGetPropListItemCount(texture) > 2) {
+
+                        hackPathInTexture(texture, prefix);
+                    }
+                }
+            }
+        } else {
+
+            if (WMIsPLArray(value) && WMGetPropListItemCount(value) > 2) {
+
+                hackPathInTexture(value, prefix);
+            }
+        }
     }
-    
+
 }
 
 
@@ -298,57 +408,57 @@ getColor(WMPropList *texture)
 
     type = WMGetFromPLArray(texture, 0);
     if (!type)
-	return NULL;
+        return NULL;
 
     value = NULL;
 
     str = WMGetFromPLString(type);
     if (strcasecmp(str, "solid")==0) {
-	value = WMGetFromPLArray(texture, 1);
+        value = WMGetFromPLArray(texture, 1);
     } else if (strcasecmp(str, "dgradient")==0
-	       || strcasecmp(str, "hgradient")==0
-	       || strcasecmp(str, "vgradient")==0) {
-	WMPropList *c1, *c2;
-	int r1, g1, b1, r2, g2, b2;
-	char buffer[32];
+               || strcasecmp(str, "hgradient")==0
+               || strcasecmp(str, "vgradient")==0) {
+        WMPropList *c1, *c2;
+        int r1, g1, b1, r2, g2, b2;
+        char buffer[32];
 
-	c1 = WMGetFromPLArray(texture, 1);
-	c2 = WMGetFromPLArray(texture, 2);
-	if (!dpy) {
-	    if (sscanf(WMGetFromPLString(c1), "#%2x%2x%2x", &r1, &g1, &b1)==3
-		&& sscanf(WMGetFromPLString(c2), "#%2x%2x%2x", &r2, &g2, &b2)==3) {
-		sprintf(buffer, "#%02x%02x%02x", (r1+r2)/2, (g1+g2)/2,
-			(b1+b2)/2);
-		value = WMCreatePLString(buffer);
-	    } else {
-		value = c1;
-	    }
-	} else {
-	    XColor color1;
-	    XColor color2;
-	    
-	    XParseColor(dpy, DefaultColormap(dpy, DefaultScreen(dpy)), 
-			WMGetFromPLString(c1), &color1);
-	    XParseColor(dpy, DefaultColormap(dpy, DefaultScreen(dpy)),
-			WMGetFromPLString(c2), &color2);
+        c1 = WMGetFromPLArray(texture, 1);
+        c2 = WMGetFromPLArray(texture, 2);
+        if (!dpy) {
+            if (sscanf(WMGetFromPLString(c1), "#%2x%2x%2x", &r1, &g1, &b1)==3
+                && sscanf(WMGetFromPLString(c2), "#%2x%2x%2x", &r2, &g2, &b2)==3) {
+                sprintf(buffer, "#%02x%02x%02x", (r1+r2)/2, (g1+g2)/2,
+                        (b1+b2)/2);
+                value = WMCreatePLString(buffer);
+            } else {
+                value = c1;
+            }
+        } else {
+            XColor color1;
+            XColor color2;
 
-	    sprintf(buffer, "#%02x%02x%02x", 
-		    (color1.red+color2.red)>>9,
-		    (color1.green+color2.green)>>9,
-		    (color1.blue+color2.blue)>>9);
-	    value = WMCreatePLString(buffer);	    
-	}
+            XParseColor(dpy, DefaultColormap(dpy, DefaultScreen(dpy)),
+                        WMGetFromPLString(c1), &color1);
+            XParseColor(dpy, DefaultColormap(dpy, DefaultScreen(dpy)),
+                        WMGetFromPLString(c2), &color2);
+
+            sprintf(buffer, "#%02x%02x%02x",
+                    (color1.red+color2.red)>>9,
+                    (color1.green+color2.green)>>9,
+                    (color1.blue+color2.blue)>>9);
+            value = WMCreatePLString(buffer);
+        }
     } else if (strcasecmp(str, "mdgradient")==0
-	       || strcasecmp(str, "mhgradient")==0
-	       || strcasecmp(str, "mvgradient")==0) {
-	
-	value = WMGetFromPLArray(texture, 1);
+               || strcasecmp(str, "mhgradient")==0
+               || strcasecmp(str, "mvgradient")==0) {
+
+        value = WMGetFromPLArray(texture, 1);
 
     } else if (strcasecmp(str, "tpixmap")==0
-	       || strcasecmp(str, "cpixmap")==0
-	       || strcasecmp(str, "spixmap")==0) {
-	
-	value = WMGetFromPLArray(texture, 2);
+               || strcasecmp(str, "cpixmap")==0
+               || strcasecmp(str, "spixmap")==0) {
+
+        value = WMGetFromPLArray(texture, 2);
     }
 
     return value;
@@ -372,112 +482,88 @@ hackStyle(WMPropList *style)
     keys = WMGetPLDictionaryKeys(style);
 
     for (i = 0; i < WMGetPropListItemCount(keys); i++) {
-	char *str;
+        char *str;
 
-	tmp = WMGetFromPLArray(keys, i);
-	str = WMGetFromPLString(tmp);
-	if (str) {
-	    int j, found;
+        tmp = WMGetFromPLArray(keys, i);
+        str = WMGetFromPLString(tmp);
+        if (str) {
+            if (ignoreFonts && isFontOption(str)) {
+                WMRemoveFromPLDictionary(style, tmp);
+                continue;
+            }
+            if (ignoreCursors && isCursorOption(str)) {
+                WMRemoveFromPLDictionary(style, tmp);
+                continue;
+            }
+            if (isFontOption(str)) {
+                WMPropList *value;
+                char *newfont, *oldfont;
 
-	    if (ignoreFonts) {
-		for (j = 0, found = 0; FontOptions[j]!=NULL; j++) {
-		    if (strcasecmp(str, FontOptions[j])==0) {
-			WMRemoveFromPLDictionary(style, tmp);
-			found = 1;
-			break;
-		    }
-		} 
-		if (found)
-		    continue;
-	    }
-	    if (ignoreCursors) {
-	        for (j = 0, found = 0; CursorOptions[j] != NULL; j++) {
-		    if (strcasecmp(str, CursorOptions[j]) == 0) {
-		        WMRemoveFromPLDictionary(style, tmp);
-		        found = 1;
-		        break;
-		    }
-		}
-	        if (found)
-		    continue;
-	    }
-	    for (j = 0; FontOptions[j]!=NULL; j++) {
-		if (strcasecmp(str, FontOptions[j]) == 0) {
-		    char *oldfont;
-		    WMPropList *value;
-		    value = WMGetFromPLDictionary(style, tmp);
-		    oldfont = WMGetFromPLString(value);
-		    if (oldfont[0] == '-') {
-			if (!strchr(oldfont, ',')) {
-			char *newfont;
-			newfont = xlfdToFc(oldfont);
-			WMPutInPLDictionary(style, tmp, WMCreatePLString(newfont));
-			break;
-			} else {
-			    wwarning("fontsets are not supported. replaced with default: %s", default_font);
-			    WMPutInPLDictionary(style, tmp, 
-				WMCreatePLString(default_font));
-			    break;
-			}
-		    } else {
-			break;
-		    }
-		}
-	    }
-
-	    if (strcasecmp(str, "IconTitleColor")==0
-		|| strcasecmp(str, "IconTitleBack")==0) {
-		foundIconTitle = 1;
-	    } else if (strcasecmp(str, "ResizebarBack")==0) {
-		foundResizebarBack = 1;
-	    }
-	}
+                value = WMGetFromPLDictionary(style, tmp);
+                if (value) {
+                    oldfont = WMGetFromPLString(value);
+                    newfont = convertFont(oldfont);
+                    if (newfont != oldfont) {
+                        value = WMCreatePLString(newfont);
+                        WMPutInPLDictionary(style, tmp, value);
+                        WMReleasePropList(value);
+                        wfree(newfont);
+                    }
+                }
+            }
+            if (strcasecmp(str, "IconTitleColor")==0
+                || strcasecmp(str, "IconTitleBack")==0) {
+                foundIconTitle = 1;
+            } else if (strcasecmp(str, "ResizebarBack")==0) {
+                foundResizebarBack = 1;
+            }
+        }
     }
 
     if (!foundIconTitle) {
-	/* set the default values */
-	tmp = WMGetFromPLDictionary(style, WMCreatePLString("FTitleColor"));
-	if (tmp) {
-	    WMPutInPLDictionary(style, WMCreatePLString("IconTitleColor"),
-				    tmp);
-	}
+        /* set the default values */
+        tmp = WMGetFromPLDictionary(style, WMCreatePLString("FTitleColor"));
+        if (tmp) {
+            WMPutInPLDictionary(style, WMCreatePLString("IconTitleColor"),
+                                tmp);
+        }
 
-	tmp = WMGetFromPLDictionary(style, WMCreatePLString("FTitleBack"));
-	if (tmp) {
-	    WMPropList *value;
+        tmp = WMGetFromPLDictionary(style, WMCreatePLString("FTitleBack"));
+        if (tmp) {
+            WMPropList *value;
 
-	    value = getColor(tmp);
+            value = getColor(tmp);
 
-	    if (value) {
-		WMPutInPLDictionary(style, WMCreatePLString("IconTitleBack"),
-					value);
-	    }
-	}
+            if (value) {
+                WMPutInPLDictionary(style, WMCreatePLString("IconTitleBack"),
+                                    value);
+            }
+        }
     }
 
     if (!foundResizebarBack) {
-	/* set the default values */
-	tmp = WMGetFromPLDictionary(style, WMCreatePLString("UTitleBack"));
-	if (tmp) {
-	    WMPropList *value;
+        /* set the default values */
+        tmp = WMGetFromPLDictionary(style, WMCreatePLString("UTitleBack"));
+        if (tmp) {
+            WMPropList *value;
 
-	    value = getColor(tmp);
+            value = getColor(tmp);
 
-	    if (value) {
-		WMPropList *t;
-		
-		t = WMCreatePLArray(WMCreatePLString("solid"), value, 
-					    NULL);
-		WMPutInPLDictionary(style, WMCreatePLString("ResizebarBack"),
-					t);
-	    }
-	}
+            if (value) {
+                WMPropList *t;
+
+                t = WMCreatePLArray(WMCreatePLString("solid"), value,
+                                    NULL);
+                WMPutInPLDictionary(style, WMCreatePLString("ResizebarBack"),
+                                    t);
+            }
+        }
     }
 
 
     if (!WMGetFromPLDictionary(style, WMCreatePLString("MenuStyle"))) {
-	WMPutInPLDictionary(style, WMCreatePLString("MenuStyle"),
-				WMCreatePLString("normal"));
+        WMPutInPLDictionary(style, WMCreatePLString("MenuStyle"),
+                            WMCreatePLString("normal"));
     }
 }
 
@@ -503,7 +589,7 @@ print_help()
 
 #define F_BLACKBOX	1
 
-int 
+int
 main(int argc, char **argv)
 {
     WMPropList *prop, *style;
@@ -517,54 +603,54 @@ main(int argc, char **argv)
     dpy = XOpenDisplay("");
 
     ProgName = argv[0];
-    
+
     if (argc<2) {
-	printf("%s: missing argument\n", ProgName);
-	printf("Try '%s --help' for more information\n", ProgName);
-	exit(1);
+        printf("%s: missing argument\n", ProgName);
+        printf("Try '%s --help' for more information\n", ProgName);
+        exit(1);
     }
 
     for (i = 1; i < argc; i++) {
-	if (strcmp("--ignore", argv[i])==0) {
-	    i++;
-	    if (i == argc) {
-		printf("%s: missing argument for option --ignore\n", ProgName);
-		exit(1);
-	    }
-	    ignoreList[ignoreCount++] = argv[i];
+        if (strcmp("--ignore", argv[i])==0) {
+            i++;
+            if (i == argc) {
+                printf("%s: missing argument for option --ignore\n", ProgName);
+                exit(1);
+            }
+            ignoreList[ignoreCount++] = argv[i];
 
-	} else if (strcmp("--no-fonts", argv[i])==0) {
-	    ignoreFonts = 1;
-	} else if (strcmp("--no-cursors", argv[i])==0) {
-	    ignoreCursors = 1;
-	} else if (strcmp("--version", argv[i])==0) {
-	    puts(PROG_VERSION);
-	    exit(0);
-	} else if (strcmp("--help", argv[i])==0) {
-	    print_help();
-	    exit(0);
+        } else if (strcmp("--no-fonts", argv[i])==0) {
+            ignoreFonts = 1;
+        } else if (strcmp("--no-cursors", argv[i])==0) {
+            ignoreCursors = 1;
+        } else if (strcmp("--version", argv[i])==0) {
+            puts(PROG_VERSION);
+            exit(0);
+        } else if (strcmp("--help", argv[i])==0) {
+            print_help();
+            exit(0);
 #if 0
-	} else if (strcmp("--format", argv[i])==0) {
-	    i++;
-	    if (i == argc) {
-		printf("%s: missing argument for option --format\n", ProgName);
-		exit(1);
-	    }
-	    if (strcasecmp(argv[i], "blackbox")==0) {
-		format = F_BLACKBOX;
-	    } else {
-		printf("%s: unknown theme format '%s'\n", ProgName, argv[i]);
-		exit(1);
-	    }
+        } else if (strcmp("--format", argv[i])==0) {
+            i++;
+            if (i == argc) {
+                printf("%s: missing argument for option --format\n", ProgName);
+                exit(1);
+            }
+            if (strcasecmp(argv[i], "blackbox")==0) {
+                format = F_BLACKBOX;
+            } else {
+                printf("%s: unknown theme format '%s'\n", ProgName, argv[i]);
+                exit(1);
+            }
 #endif
-	} else {
-	    if (file) {
-		printf("%s: invalid argument '%s'\n", ProgName, argv[i]);
-		printf("Try '%s --help' for more information\n", ProgName);
-		exit(1);
-	    }
-	    file = argv[i];
-	}
+        } else {
+            if (file) {
+                printf("%s: invalid argument '%s'\n", ProgName, argv[i]);
+                printf("Try '%s --help' for more information\n", ProgName);
+                exit(1);
+            }
+            file = argv[i];
+        }
     }
 
     WMPLSetCaseSensitive(False);
@@ -573,116 +659,116 @@ main(int argc, char **argv)
 
     prop = WMReadPropListFromFile(path);
     if (!prop) {
-	perror(path);
-	printf("%s:could not load WindowMaker configuration file.\n",
-	       ProgName);
-	exit(1);
+        perror(path);
+        printf("%s:could not load WindowMaker configuration file.\n",
+               ProgName);
+        exit(1);
     }
 
     if (stat(file, &statbuf) < 0) {
-	perror(file);
-	exit(1);
+        perror(file);
+        exit(1);
     }
 #if 0
     if (format == F_BLACKBOX) {
-	style = readBlackBoxStyle(file);
-	if (!style) {
-	    printf("%s: could not open style file\n", ProgName);
-	    exit(1);
-	}
+        style = readBlackBoxStyle(file);
+        if (!style) {
+            printf("%s: could not open style file\n", ProgName);
+            exit(1);
+        }
     } else
 #endif
- {
-	if (S_ISDIR(statbuf.st_mode)) {
-	    char buffer[4018];
-	    char *prefix;
-	    /* theme pack */
+    {
+        if (S_ISDIR(statbuf.st_mode)) {
+            char buffer[4018];
+            char *prefix;
+            /* theme pack */
 
-	    if (*argv[argc-1] != '/') {
-		if (!getcwd(buffer, 4000)) {
-		    printf("%s: complete path for %s is too long\n", ProgName,
-			   file);
-		    exit(1);
-		}
-		if (strlen(buffer) + strlen(file) > 4000) {
-		    printf("%s: complete path for %s is too long\n", ProgName,
-			   file);
-		    exit(1);
-		}
-		strcat(buffer, "/");
-	    } else {
-		buffer[0] = 0;
-	    }
-	    strcat(buffer, file);
-	    
-	    prefix = malloc(strlen(buffer)+10);
-	    if (!prefix) {
-		printf("%s: out of memory\n", ProgName);
-		exit(1);
-	    }
-	    strcpy(prefix, buffer);
+            if (*argv[argc-1] != '/') {
+                if (!getcwd(buffer, 4000)) {
+                    printf("%s: complete path for %s is too long\n", ProgName,
+                           file);
+                    exit(1);
+                }
+                if (strlen(buffer) + strlen(file) > 4000) {
+                    printf("%s: complete path for %s is too long\n", ProgName,
+                           file);
+                    exit(1);
+                }
+                strcat(buffer, "/");
+            } else {
+                buffer[0] = 0;
+            }
+            strcat(buffer, file);
 
-	    strcat(buffer, "/style");
-	
-	    style = WMReadPropListFromFile(buffer);
-	    if (!style) {
-		perror(buffer);
-		printf("%s:could not load style file.\n", ProgName);
-		exit(1);
-	    }
+            prefix = malloc(strlen(buffer)+10);
+            if (!prefix) {
+                printf("%s: out of memory\n", ProgName);
+                exit(1);
+            }
+            strcpy(prefix, buffer);
 
-	    hackPaths(style, prefix);
-	    free(prefix);
-	} else {
-	    /* normal style file */
-	    
-	    style = WMReadPropListFromFile(file);
-	    if (!style) {
-		perror(file);
-		printf("%s:could not load style file.\n", ProgName);
-		exit(1);
-	    }
-	}
+            strcat(buffer, "/style");
+
+            style = WMReadPropListFromFile(buffer);
+            if (!style) {
+                perror(buffer);
+                printf("%s:could not load style file.\n", ProgName);
+                exit(1);
+            }
+
+            hackPaths(style, prefix);
+            free(prefix);
+        } else {
+            /* normal style file */
+
+            style = WMReadPropListFromFile(file);
+            if (!style) {
+                perror(file);
+                printf("%s:could not load style file.\n", ProgName);
+                exit(1);
+            }
+        }
     }
-    
+
     if (!WMIsPLDictionary(style)) {
-	printf("%s: '%s' is not a style file/theme\n", ProgName, file);
-	exit(1);
+        printf("%s: '%s' is not a style file/theme\n", ProgName, file);
+        exit(1);
     }
 
     hackStyle(style);
 
     if (ignoreCount > 0) {
-	for (i = 0; i < ignoreCount; i++) {
-	    WMRemoveFromPLDictionary(style, WMCreatePLString(ignoreList[i]));
-	}
+        for (i = 0; i < ignoreCount; i++) {
+            WMRemoveFromPLDictionary(style, WMCreatePLString(ignoreList[i]));
+        }
     }
 
     WMMergePLDictionaries(prop, style, True);
 
     WMWritePropListToFile(prop, path, True);
     {
-	XEvent ev;
-	
-	if (dpy) {
-	    int i;
-	    char *msg = "Reconfigure";
+        XEvent ev;
 
-	    memset(&ev, 0, sizeof(XEvent));
-	    
-	    ev.xclient.type = ClientMessage;
-	    ev.xclient.message_type = XInternAtom(dpy, "_WINDOWMAKER_COMMAND",
-						  False);
-	    ev.xclient.window = DefaultRootWindow(dpy);
-	    ev.xclient.format = 8;
+        if (dpy) {
+            int i;
+            char *msg = "Reconfigure";
 
-	    for (i = 0; i <= strlen(msg); i++) {
-		ev.xclient.data.b[i] = msg[i];
-	    }
-	    XSendEvent(dpy, DefaultRootWindow(dpy), False, 
-		       SubstructureRedirectMask, &ev);
-	    XFlush(dpy);
-	}
+            memset(&ev, 0, sizeof(XEvent));
+
+            ev.xclient.type = ClientMessage;
+            ev.xclient.message_type = XInternAtom(dpy, "_WINDOWMAKER_COMMAND",
+                                                  False);
+            ev.xclient.window = DefaultRootWindow(dpy);
+            ev.xclient.format = 8;
+
+            for (i = 0; i <= strlen(msg); i++) {
+                ev.xclient.data.b[i] = msg[i];
+            }
+            XSendEvent(dpy, DefaultRootWindow(dpy), False,
+                       SubstructureRedirectMask, &ev);
+            XFlush(dpy);
+        }
     }
 
     exit(0);
@@ -693,7 +779,7 @@ main(int argc, char **argv)
 char*
 getToken(char *str, int i, char *buf)
 {
-    
+
 }
 
 
@@ -706,17 +792,17 @@ readBlackBoxStyle(char *path)
 
     f = fopen(path, "rb");
     if (!f) {
-	perror(path);
-	return NULL;
+        perror(path);
+        return NULL;
     }
 
     while (1) {
-	if (!fgets(buffer, 127, f))
-	    break;
+        if (!fgets(buffer, 127, f))
+            break;
 
-	if (strncasecmp(buffer, "menu.title:", 11)==0) {
-	    
-	}
+        if (strncasecmp(buffer, "menu.title:", 11)==0) {
+
+        }
     }
 }
 #endif
