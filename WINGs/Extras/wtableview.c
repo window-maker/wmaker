@@ -1158,12 +1158,11 @@ void WMReloadTableView(WMTableView *table)
     WMEmptyArray(table->selectedRows);
     
     if (table->clickedRow >= 0) {
-	table->clickedRow = -1;
-
 	if (table->action)
 	    (*table->action)(table, table->clientData);
 	WMPostNotificationName(WMTableViewSelectionDidChangeNotification,
 			       table, NULL);
+	table->clickedRow = -1;
     }
 
     if (table->delegate && table->delegate->numberOfRows) {

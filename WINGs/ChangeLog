@@ -60,6 +60,8 @@ Changes since wmaker 0.80.1:
 - Fixed a memleak in the file panel.
 - Double/triple-click selection in text widgets (Vitaly Ovtchinnikov
   <ov@rbcmail.ru>)
+- fixed bug in tableview (clicked row callback got incorrect row) (Carlos Torres 
+  <vlaadbrain@operamail.com>)
 
 Changes since wmaker 0.80.0:
 ............................
