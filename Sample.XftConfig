@@ -1,0 +1,79 @@
+# $XFree86: xc/lib/Xft/XftConfig.cpp,v 1.8 2001/11/21 23:41:12 keithp Exp $
+
+dir "/usr/share/fonts/truetype"
+dir "/usr/X11R6/lib/X11/fonts/TrueType"
+dir "/var/lib/defoma/x-ttcidfont-conf.d/dirs/TrueType"
+dir "/usr/X11R6/lib/X11/fonts/Type1"
+
+#
+# alias 'fixed' for 'mono'
+#
+match any family == "fixed"		edit family =+ "mono";
+
+#
+# Check users config file
+#
+includeif	"~/.xftconfig"
+
+#
+# Substitute TrueType fonts for Type1 versions
+#
+match any family == "Times"             edit family += "Times New Roman";
+#match any family == "Helvetica"         edit family += "Verdana";
+#match any family == "Helvetica"         edit family += "Arial";
+match any family == "Helvetica"         edit family += "Trebuchet MS";
+match any family == "Courier"           edit family += "Courier New";
+
+#
+# Use TrueType fonts for defaults
+#
+match any family == "serif"             edit family += "Times New Roman";
+match any family == "sans"              edit family += "Verdana";
+
+#
+# Use monotype.com (andale) face where possible
+#
+match
+        any family == "mono" 
+        all slant == roman
+        all weight < bold
+edit
+        family += "monotype.com";
+#
+# otherwise, use courier
+#
+match any family == "mono"              edit family += "Courier New";
+
+#
+# Alias between XLFD families and font file family name, prefer local fonts
+#
+match any family == "charter"		edit family += "bitstream charter";
+match any family == "bitstream charter" edit family =+ "charter";
+
+match any family == "Charter"           edit family += "Bitstream Charter";
+match any family == "Bitstream Charter" edit family =+ "Charter";
+
+match any family == "Lucidux Serif"     edit family += "LuciduxSerif";
+match any family == "LuciduxSerif"      edit family =+ "Lucidux Serif";
+
+match any family == "Lucidux Sans"      edit family += "LuciduxSans";
+match any family == "LuciduxSans"       edit family =+ "Lucidux Sans";
+
+match any family == "Lucidux Mono"      edit family += "LuciduxMono";
+match any family == "LuciduxMono"       edit family =+ "Lucidux Mono";
+    
+#
+# TrueType font aliases
+#
+match any family == "Comic Sans"        edit family += "Comic Sans MS";
+match any family == "Comic Sans MS"     edit family =+ "Comic Sans";
+match any family == "Trebuchet"         edit family += "Trebuchet MS";
+match any family == "Trebuchet MS"      edit family =+ "Trebuchet";
+match any family == "Monotype"          edit family =+ "Monotype.com";
+match any family == "Andale Mono"       edit family += "Monotype.com";
+match any family == "Monotype.com"      edit family =+ "Andale Mono";
+
+#
+#
+match any family == "webdings"		edit encoding += "glyphs-fontspecific";
+match any family == "symbol"		edit encoding += "glyphs-fontspecific";
