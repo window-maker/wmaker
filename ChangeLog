@@ -49,6 +49,7 @@ Changes since version 0.80.2:
   (this is to be consistent with deminiaturizing application's miniwindows
   which also happens in this case, since shading is a form of miniaturization)
 - Fixed bug with tpixmap from previous xinerama patch
+- Fixed edge resistance and move/resize frame drawing for borderless windows
 
 
 Changes since version 0.80.1:

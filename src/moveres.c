@@ -62,6 +62,13 @@
 #define DOWN            8
 #define VERTICAL        (UP|DOWN)
 
+
+/* True if window currently has a border. This also includes borderless
+ * windows which are currently selected
+ */
+#define HAS_BORDER(w) ((w)->flags.selected || !WFLAGP((w), no_border))
+
+
 /****** Global Variables ******/
 extern Time LastTimestamp;
 
@@ -255,6 +262,17 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
     int fw, fh;
     WMColor *color;
     WMPixel pixel;
+
+    /* This seems necessary for some odd reason (too lazy to write x1-1 and
+     * x2-1 everywhere below in the code). But why only for x? */
+    x1--; x2--;
+
+    if (HAS_BORDER(wwin)) {
+        x1 += FRAME_BORDER_WIDTH;
+        x2 += FRAME_BORDER_WIDTH;
+        y1 += FRAME_BORDER_WIDTH;
+        y2 += FRAME_BORDER_WIDTH;
+    }
 
     ty = y1 + wwin->frame->top_width;
     by = y2 - wwin->frame->bottom_width;
@@ -503,24 +521,27 @@ drawTransparentFrame(WWindow *wwin, int x, int y, int width, int height)
     int h = 0;
     int bottom = 0;
 
+    if (HAS_BORDER(wwin)) {
+        x += FRAME_BORDER_WIDTH;
+        y += FRAME_BORDER_WIDTH;
+    }
+
     if (!WFLAGP(wwin, no_titlebar) && !wwin->flags.shaded) {
         h = WMFontHeight(wwin->screen_ptr->title_font) + (wPreferences.window_title_clearance + TITLEBAR_EXTEND_SPACE) * 2;
     }
     if (!WFLAGP(wwin, no_resizebar) && !wwin->flags.shaded) {
         /* Can't use wwin-frame->bottom_width because, in some cases
          (e.g. interactive placement), frame does not point to anything. */
-        bottom = RESIZEBAR_HEIGHT - 1;
+        bottom = RESIZEBAR_HEIGHT;
     }
-    XDrawRectangle(dpy, root, gc, x, y, width + 1, height + 1);
+    XDrawRectangle(dpy, root, gc, x - 1, y - 1, width + 1, height + 1);
 
     if (h > 0) {
-        XDrawLine(dpy, root, gc, x + 1, y + h, x + width + 1, y + h);
+        XDrawLine(dpy, root, gc, x, y + h - 1, x + width, y + h - 1);
     }
     if (bottom > 0) {
-        XDrawLine(dpy, root, gc, x + 1,
-                  y + height - bottom,
-                  x + width + 1,
-                  y + height - bottom);
+        XDrawLine(dpy, root, gc, x, y + height - bottom,
+                  x + width, y + height - bottom);
     }
 }
 
@@ -642,8 +663,10 @@ typedef struct {
 
 #define WTOP(w) (w)->frame_y
 #define WLEFT(w) (w)->frame_x
-#define WRIGHT(w) ((w)->frame_x + (int)(w)->frame->core->width + FRAME_BORDER_WIDTH)
-#define WBOTTOM(w) ((w)->frame_y + (int)(w)->frame->core->height + FRAME_BORDER_WIDTH)
+#define WRIGHT(w) ((w)->frame_x + (int)(w)->frame->core->width - 1 + \
+    (HAS_BORDER(w) ? 2*FRAME_BORDER_WIDTH : 0))
+#define WBOTTOM(w) ((w)->frame_y + (int)(w)->frame->core->height - 1 + \
+    (HAS_BORDER(w) ? 2*FRAME_BORDER_WIDTH : 0))
 
 static int
 compareWTop(const void *a, const void *b)
@@ -901,8 +924,10 @@ initMoveData(WWindow *wwin, MoveData *data)
     data->calcX = wwin->frame_x;
     data->calcY = wwin->frame_y;
 
-    data->winWidth = wwin->frame->core->width + 2;
-    data->winHeight = wwin->frame->core->height + 2;
+    data->winWidth = wwin->frame->core->width +
+        (HAS_BORDER(wwin) ? 2*FRAME_BORDER_WIDTH : 0);
+    data->winHeight = wwin->frame->core->height +
+        (HAS_BORDER(wwin) ? 2*FRAME_BORDER_WIDTH : 0);
 }
 
 

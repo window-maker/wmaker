@@ -1425,7 +1425,7 @@ main(int argc, char **argv)
 	WMPropList *val;
 #if 0 /* some problem with Alpha... TODO: check if its right */
 	val = WMGetFromPLDictionary(domain, 
-				   WMCreatePLString("SmoothWorkspaceBack"));
+                                    WMCreatePLString("SmoothWorkspaceBack"));
 #else
 	val = getValueForKey(domain, "SmoothWorkspaceBack");
 #endif
@@ -1439,7 +1439,7 @@ main(int argc, char **argv)
 	wfatal("could not open display");
 	exit(1);
     }
-#if 1
+#if 0
     XSynchronize(dpy, 1);
 #endif
 
