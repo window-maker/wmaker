@@ -469,7 +469,6 @@ static void
 handleActionEvents(XEvent *event, void *data)
 {
     WMSlider *sPtr = (Slider*)data;
-    int ovalue = sPtr->value;
 
     CHECK_CLASS(data, WC_Slider);
 
@@ -512,7 +511,7 @@ handleActionEvents(XEvent *event, void *data)
 	break;
 
      case ButtonRelease:
-	if (!sPtr->flags.continuous && ovalue != sPtr->value && sPtr->action) {
+	if (!sPtr->flags.continuous && sPtr->action) {
 	    (*sPtr->action)(sPtr, sPtr->clientData);
 	}
 	sPtr->flags.dragging = 0;
