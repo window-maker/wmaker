@@ -2,6 +2,15 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+--- 0.61.1
+
+New libPropList
+---------------
+
+new libPropList-0.9.1 is REQUIRED to build Window Maker 0.61.1.
+go grab it and install it first.
+
+
 --- 0.60.1
 
 

@@ -109,7 +109,7 @@ DIST_COMMON =  Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
@@ -222,7 +222,7 @@ mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
-Default.iconset: $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes
+Default.iconset: $(top_builddir)/WindowMaker/Defaults/WMWindowAttributes
 	-rm -f Default.iconset
 	echo '{' > Default.iconset
 	grep Icon $(top_builddir)/WindowMaker/Defaults/WMWindowAttributes >> Default.iconset
