@@ -392,7 +392,6 @@ typedef struct WMAlertPanel {
     WMLabel *mLbl;		       /* message label */
     WMFrame *line;		       /* separator */
     short result;		       /* button that was pushed */
-    short done;
 } WMAlertPanel;
 
 
@@ -412,7 +411,6 @@ typedef struct WMGenericPanel {
     WMButton *altBtn;
     
     short result;
-    short done;
 } WMGenericPanel;
 
 
@@ -426,7 +424,6 @@ typedef struct WMInputPanel {
     WMLabel *mLbl;		       /* message label */
     WMTextField *text;		       /* text field */
     short result;		       /* button that was pushed */
-    short done;
 } WMInputPanel;
 
 
