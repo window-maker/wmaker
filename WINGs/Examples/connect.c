@@ -28,6 +28,7 @@ static void didInitialize(ConnectionDelegate *self, WMConnection *cPtr);
 
 static ConnectionDelegate socketDelegate = {
     NULL,              /* data */
+    NULL,              /* canResumeSending */
     NULL,              /* didCatchException */
     connectionDidDie,  /* didDie */
     didInitialize,     /* didInitialize */

@@ -307,8 +307,8 @@ ExecuteShellCommand(WScreen *scr, char *command)
 
 	SetupEnvironment(scr);
 
-#ifdef HAVE_SETPGID
-	setpgid(0, 0);
+#ifdef HAVE_SETSID
+        setsid();
 #endif
 	execl(shell, shell, "-c", command, NULL);
 	wsyserror("could not execute %s -c %s", shell, command);

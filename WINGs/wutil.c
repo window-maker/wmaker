@@ -14,7 +14,7 @@ WHandleEvents()
     W_CheckTimerHandlers();
 
     /* Do idle and timer stuff while there are no input events */
-    /* Do not wait for input here. just peek to se if input is available */
+    /* Do not wait for input here. just peek to see if input is available */
     while (!W_HandleInputEvents(False, -1) && W_CheckIdleHandlers()) {
         /* dispatch timer events */
         W_CheckTimerHandlers();

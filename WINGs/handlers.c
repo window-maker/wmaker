@@ -603,7 +603,6 @@ W_HandleInputEvents(Bool waitForInput, int inputfd)
 
     W_FlushASAPNotificationQueue();
 
-    /* --oldway-- return ((inputfd < 0) ? (count > 0) : FD_ISSET(inputfd, &rset));*/
     return (count > 0);
 #else /* not HAVE_SELECT, not HAVE_POLL */
     Neither select nor poll. You lose.

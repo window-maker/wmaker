@@ -2979,8 +2979,8 @@ execCommand(WAppIcon *btn, char *command, WSavedState *state)
 
 	SetupEnvironment(scr);
 
-#ifdef HAVE_SETPGID
-        setpgid(0, 0);
+#ifdef HAVE_SETSID
+        setsid();
 #endif
 
 	args = malloc(sizeof(char*)*(argc+1));

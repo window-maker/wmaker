@@ -184,8 +184,9 @@ typedef struct {
 typedef struct ConnectionDelegate {
     void *data;
 
-    void (*didCatchException)(struct ConnectionDelegate *self,
-                              WMConnection *cPtr);
+    void (*canResumeSending)(struct ConnectionDelegate *self, WMConnection *cPtr);
+
+    void (*didCatchException)(struct ConnectionDelegate *self, WMConnection *cPtr);
 
     void (*didDie)(struct ConnectionDelegate *self, WMConnection *cPtr);
 
@@ -976,6 +977,8 @@ char* WMGetConnectionProtocol(WMConnection *cPtr);
 Bool WMSetConnectionNonBlocking(WMConnection *cPtr, Bool flag);
 
 Bool WMSetConnectionCloseOnExec(WMConnection *cPtr, Bool flag);
+
+void WMSetConnectionShutdownOnClose(WMConnection *cPtr, Bool flag);
 
 void* WMGetConnectionClientData(WMConnection *cPtr);
 

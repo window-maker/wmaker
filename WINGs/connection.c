@@ -1,8 +1,8 @@
 /*
  *  WINGs WMConnection function library
- * 
+ *
  *  Copyright (c) 1999-2002 Dan Pascu
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -121,6 +121,7 @@ typedef struct W_Connection {
     char *protocol;
 
     Bool closeOnRelease;
+    Bool shutdownOnClose;
     Bool wasNonBlocking;
     Bool isNonBlocking;
 
@@ -192,9 +193,10 @@ inputHandler(int fd, int mask, void *clientData)
         return;
 
     if ((mask & WIWriteMask)) {
+        int result;
+
         if (cPtr->state == WCInProgress) {
             Bool failed;
-            int	result;
             int len = sizeof(result);
 
             WCErrorCode = 0;
@@ -228,7 +230,10 @@ inputHandler(int fd, int mask, void *clientData)
             if (failed)
                 return;
         } else if (cPtr->state == WCConnected) {
-            WMFlushConnection(cPtr);
+            result = WMFlushConnection(cPtr);
+            if (result>0 && cPtr->delegate && cPtr->delegate->canResumeSending) {
+                (*cPtr->delegate->canResumeSending)(cPtr->delegate, cPtr);
+            }
         }
     }
 
@@ -376,6 +381,7 @@ createConnectionWithSocket(int sock, Bool closeOnRelease)
     cPtr->sendTimeout.timeout = DefaultTimeout;
     cPtr->sendTimeout.handler = NULL;
     cPtr->closeOnRelease = closeOnRelease;
+    cPtr->shutdownOnClose = 1;
     cPtr->outputQueue =
         WMCreateArrayWithDestructor(16, (WMFreeDataProc*)WMReleaseData);
     cPtr->state = WCNotConnected;
@@ -412,7 +418,7 @@ WMCreateConnectionWithSocket(int sock, Bool closeOnRelease)
 
     /* some way to find out if it is connected, and binded. can't find
        if it listens though!!!
-    */  
+    */
 
     size = sizeof(clientname);
     n = getpeername(sock, (struct sockaddr*) &clientname, &size);
@@ -627,7 +633,9 @@ void
 WMDestroyConnection(WMConnection *cPtr)
 {
     if (cPtr->closeOnRelease && cPtr->sock>=0) {
-        shutdown(cPtr->sock, SHUT_RDWR);
+        if (cPtr->shutdownOnClose) {
+            shutdown(cPtr->sock, SHUT_RDWR);
+        }
         close(cPtr->sock);
     }
 
@@ -648,7 +656,9 @@ void
 WMCloseConnection(WMConnection *cPtr)
 {
     if (cPtr->sock>=0) {
-        shutdown(cPtr->sock, SHUT_RDWR);
+        if (cPtr->shutdownOnClose) {
+            shutdown(cPtr->sock, SHUT_RDWR);
+        }
         close(cPtr->sock);
         cPtr->sock = -1;
     }
@@ -743,10 +753,18 @@ WMEnqueueConnectionData(WMConnection *cPtr, WMData *data)
 }
 
 
+/*
+ * Return value:
+ * -1 - not connected or connection died while sending
+ *  0 - couldn't send the data (or part of it). data is saved in a queue
+ *      and will be sent when possible. after it is sent the canResumeSending
+ *      callback will be called.
+ *  1 - data was succesfully sent
+ */
 int
 WMSendConnectionData(WMConnection *cPtr, WMData *data)
 {
-    int bytes, pos, len, totalTransfer;
+    int bytes, pos, len;
     TimeoutData *tPtr = &cPtr->sendTimeout;
     const unsigned char *dataBytes;
 
@@ -766,8 +784,6 @@ WMSendConnectionData(WMConnection *cPtr, WMData *data)
         if (WMGetArrayItemCount(cPtr->outputQueue)>1 && cPtr->handler.write)
             return 0;
     }
-
-    totalTransfer = 0;
 
     while (WMGetArrayItemCount(cPtr->outputQueue) > 0) {
         data = WMGetFromArray(cPtr->outputQueue, 0);
@@ -793,7 +809,7 @@ WMSendConnectionData(WMConnection *cPtr, WMData *data)
                             WMAddInputHandler(cPtr->sock, WIWriteMask,
                                               inputHandler, cPtr);
                     }
-                    return totalTransfer;
+                    return 0;
                 default:
                     WCErrorCode = errno;
                     cPtr->state = WCDied;
@@ -804,7 +820,6 @@ WMSendConnectionData(WMConnection *cPtr, WMData *data)
                 }
             }
             pos += bytes;
-            totalTransfer += bytes;
         }
         WMDeleteFromArray(cPtr->outputQueue, 0);
         cPtr->bufPos = 0;
@@ -812,13 +827,18 @@ WMSendConnectionData(WMConnection *cPtr, WMData *data)
             WMDeleteTimerHandler(tPtr->handler);
             tPtr->handler = NULL;
         }
-        if (cPtr->handler.write) {
+        /*if (cPtr->handler.write) {
             WMDeleteInputHandler(cPtr->handler.write);
             cPtr->handler.write = NULL;
-        }
+        }*/
     }
 
-    return totalTransfer;
+    if (cPtr->handler.write) {
+        WMDeleteInputHandler(cPtr->handler.write);
+        cPtr->handler.write = NULL;
+    }
+
+    return 1;
 }
 
 
@@ -949,6 +969,13 @@ WMSetConnectionCloseOnExec(WMConnection *cPtr, Bool flag)
     }
 
     return True;
+}
+
+
+void
+WMSetConnectionShutdownOnClose(WMConnection *cPtr, Bool flag)
+{
+    cPtr->shutdownOnClose = ((flag==0) ? 0 : 1);
 }
 
 

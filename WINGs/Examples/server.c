@@ -42,6 +42,7 @@ static WMConnection *serverPtr = NULL;
 
 static ConnectionDelegate socketDelegate = {
     NULL,                 /* client data */
+    NULL,                 /* canResumeSending */
     NULL,                 /* didCatchException */
     connectionDidDie,     /* didDie */
     NULL,                 /* didInitialize */

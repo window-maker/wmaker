@@ -1,3 +1,10 @@
+Changes since wmaker 0.80.1:
+............................
+
+- added WMSetConnectionShutdownOnClose()
+- added an extra member to the ConnectionDelegate: canResumeSending
+  see NEWS for details.
+
 Changes since wmaker 0.80.0:
 ............................
 

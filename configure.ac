@@ -15,7 +15,7 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.80.1)
+AM_INIT_AUTOMAKE(WindowMaker, 0.80.2)
 
 AC_PROG_LIBTOOL
 
@@ -100,7 +100,7 @@ dnl not used anywhere
 dnl AC_FUNC_MEMCMP  
 AC_FUNC_VPRINTF
 AC_FUNC_ALLOCA
-AC_CHECK_FUNCS(gethostname select poll strerror strcasecmp strncasecmp setpgid atexit mallinfo mkstemp snprintf vsnprintf asprintf vasprintf)
+AC_CHECK_FUNCS(gethostname select poll strerror strcasecmp strncasecmp setsid atexit mallinfo mkstemp snprintf vsnprintf asprintf vasprintf)
 
 
 dnl ripped from samba
