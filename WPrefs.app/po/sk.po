@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WPrefs 0.45\n"
-"POT-Creation-Date: 2001-10-15 14:49+0200\n"
+"POT-Creation-Date: 2001-12-20 03:47+0100\n"
 "PO-Revision-Date: 2001-10-15 20:40+0100\n"
 "Last-Translator: Jan \"judas\" Tomka <judas@linux.sk>\n"
 "Language-Team: Slovak <sk@li.org>\n"
@@ -581,7 +581,7 @@ msgid "3D-flipping"
 msgstr "3D saltá"
 
 #: ../../WPrefs.app/Icons.c:241 ../../WPrefs.app/MouseSettings.c:838
-#: ../../WPrefs.app/MouseSettings.c:844
+#: ../../WPrefs.app/MouseSettings.c:843
 msgid "None"
 msgstr "®iadna"
 
@@ -653,7 +653,7 @@ msgstr ""
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:207
 #: ../../WPrefs.app/KeyboardShortcuts.c:456 ../../WPrefs.app/Menu.c:338
-#: ../../WPrefs.app/Menu.c:783
+#: ../../WPrefs.app/Menu.c:782
 msgid "Capture"
 msgstr "Zada»"
 
@@ -854,7 +854,7 @@ msgstr "Prepnú» jazyk klávesnice"
 msgid "Shortcut"
 msgstr "Klávesová skratka"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:450 ../../WPrefs.app/Menu.c:789
+#: ../../WPrefs.app/KeyboardShortcuts.c:450 ../../WPrefs.app/Menu.c:788
 msgid "Clear"
 msgstr "®iadna"
 
@@ -910,136 +910,136 @@ msgstr "Adresár s menu"
 msgid "Workspace Menu"
 msgstr "Pracovné plochy"
 
-#: ../../WPrefs.app/Menu.c:501
+#: ../../WPrefs.app/Menu.c:500 ../../WPrefs.app/MouseSettings.c:840
 msgid "Window List Menu"
 msgstr "Menu Okná"
 
-#: ../../WPrefs.app/Menu.c:520
+#: ../../WPrefs.app/Menu.c:519
 msgid "XTerm"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:523
+#: ../../WPrefs.app/Menu.c:522
 msgid "rxvt"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:526
+#: ../../WPrefs.app/Menu.c:525
 msgid "ETerm"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:529
+#: ../../WPrefs.app/Menu.c:528
 msgid "Run..."
 msgstr "Spusti»..."
 
-#: ../../WPrefs.app/Menu.c:530
+#: ../../WPrefs.app/Menu.c:529
 msgid "%a(Run,Type command to run)"
 msgstr "%a(Spusti»,Zadajte príkaz:)"
 
-#: ../../WPrefs.app/Menu.c:532
+#: ../../WPrefs.app/Menu.c:531
 msgid "Netscape"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:535
+#: ../../WPrefs.app/Menu.c:534
 msgid "gimp"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:538
+#: ../../WPrefs.app/Menu.c:537
 msgid "epic"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:541
+#: ../../WPrefs.app/Menu.c:540
 msgid "ee"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:544
+#: ../../WPrefs.app/Menu.c:543
 msgid "xv"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:547
+#: ../../WPrefs.app/Menu.c:546
 msgid "Acrobat Reader"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:550
+#: ../../WPrefs.app/Menu.c:549
 msgid "ghostview"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:553 ../../WPrefs.app/Menu.c:810
+#: ../../WPrefs.app/Menu.c:552 ../../WPrefs.app/Menu.c:809
 msgid "Exit Window Maker"
 msgstr "Ukonèi» Window Maker"
 
-#: ../../WPrefs.app/Menu.c:576
+#: ../../WPrefs.app/Menu.c:575
 msgid "Debian Menu"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:579
+#: ../../WPrefs.app/Menu.c:578
 msgid "RedHat Menu"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:582
+#: ../../WPrefs.app/Menu.c:581
 msgid "Menu Conectiva"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:585 ../../WPrefs.app/Themes.c:250
+#: ../../WPrefs.app/Menu.c:584 ../../WPrefs.app/Themes.c:250
 msgid "Themes"
 msgstr "Témy"
 
-#: ../../WPrefs.app/Menu.c:590
+#: ../../WPrefs.app/Menu.c:589
 msgid "Bg Images (scale)"
 msgstr "Obrázky pozadia (roztiahnuté)"
 
-#: ../../WPrefs.app/Menu.c:595
+#: ../../WPrefs.app/Menu.c:594
 msgid "Bg Images (tile)"
 msgstr "Obrázky pozadia (vedµa seba)"
 
-#: ../../WPrefs.app/Menu.c:600
+#: ../../WPrefs.app/Menu.c:599
 msgid "Assorted XTerms"
 msgstr "Rôzne XTermy"
 
-#: ../../WPrefs.app/Menu.c:602
+#: ../../WPrefs.app/Menu.c:601
 msgid "XTerm Yellow on Blue"
 msgstr "XTerm ¾ltá na modrej"
 
-#: ../../WPrefs.app/Menu.c:605
+#: ../../WPrefs.app/Menu.c:604
 msgid "XTerm White on Black"
 msgstr "XTerm biela na èiernej"
 
-#: ../../WPrefs.app/Menu.c:608
+#: ../../WPrefs.app/Menu.c:607
 msgid "XTerm Black on White"
 msgstr "XTerm èierna na bielej"
 
 # beige nie je maslo a tá farba nie je maslová...
-#: ../../WPrefs.app/Menu.c:611
+#: ../../WPrefs.app/Menu.c:610
 msgid "XTerm Black on Beige"
 msgstr "XTerm èierna na maslovej"
 
-#: ../../WPrefs.app/Menu.c:614
+#: ../../WPrefs.app/Menu.c:613
 msgid "XTerm White on Green"
 msgstr "XTerm biela na zelenej"
 
-#: ../../WPrefs.app/Menu.c:617
+#: ../../WPrefs.app/Menu.c:616
 msgid "XTerm White on Olive"
 msgstr "XTerm biela na olivovej"
 
-#: ../../WPrefs.app/Menu.c:620
+#: ../../WPrefs.app/Menu.c:619
 msgid "XTerm Blue on Blue"
 msgstr "XTerm modrá na modrej"
 
-#: ../../WPrefs.app/Menu.c:623
+#: ../../WPrefs.app/Menu.c:622
 msgid "XTerm BIG FONTS"
 msgstr "XTerm VE¥KÉ FONTY"
 
-#: ../../WPrefs.app/Menu.c:645
+#: ../../WPrefs.app/Menu.c:644
 msgid "Program to Run"
 msgstr "Spusti» program"
 
-#: ../../WPrefs.app/Menu.c:659
+#: ../../WPrefs.app/Menu.c:658
 msgid "Run the program inside a Xterm"
 msgstr "Spusti» program v XTerme"
 
-#: ../../WPrefs.app/Menu.c:669
+#: ../../WPrefs.app/Menu.c:668
 msgid "Path for Menu"
 msgstr "Cesta k menu"
 
-#: ../../WPrefs.app/Menu.c:682
+#: ../../WPrefs.app/Menu.c:681
 msgid ""
 "Enter the path for a file containing a menu\n"
 "or a list of directories with the programs you\n"
@@ -1055,11 +1055,11 @@ msgstr ""
 "alebo\n"
 "/usr/X11R6/bin ~/xbin"
 
-#: ../../WPrefs.app/Menu.c:697
+#: ../../WPrefs.app/Menu.c:696
 msgid "Command"
 msgstr "Príkaz"
 
-#: ../../WPrefs.app/Menu.c:711
+#: ../../WPrefs.app/Menu.c:710
 msgid ""
 "Enter a command that outputs a menu\n"
 "definition to stdout when invoked."
@@ -1067,11 +1067,11 @@ msgstr ""
 "Zadajte príkaz, ktorý po spustení\n"
 "generuje na výstup definíciu menu."
 
-#: ../../WPrefs.app/Menu.c:722
+#: ../../WPrefs.app/Menu.c:721
 msgid "Command to Open Files"
 msgstr "Otvára» súbory príkazom"
 
-#: ../../WPrefs.app/Menu.c:736
+#: ../../WPrefs.app/Menu.c:735
 msgid ""
 "Enter the command you want to use to open the\n"
 "files in the directories listed below."
@@ -1079,71 +1079,71 @@ msgstr ""
 "Zadajte príkaz, ktorým chcete otvára» súbory\n"
 "v nasledovných adresároch."
 
-#: ../../WPrefs.app/Menu.c:745
+#: ../../WPrefs.app/Menu.c:744
 msgid "Directories with Files"
 msgstr "Adresáre so súbormi"
 
-#: ../../WPrefs.app/Menu.c:758
+#: ../../WPrefs.app/Menu.c:757
 msgid "Strip extensions from file names"
 msgstr "Odstráni» prípony z mien súborov"
 
-#: ../../WPrefs.app/Menu.c:770
+#: ../../WPrefs.app/Menu.c:769
 msgid "Keyboard Shortcut"
 msgstr "Klávesová skratka"
 
-#: ../../WPrefs.app/Menu.c:806
+#: ../../WPrefs.app/Menu.c:805
 msgid "Arrange Icons"
 msgstr "Vyrovna» ikony"
 
-#: ../../WPrefs.app/Menu.c:807
+#: ../../WPrefs.app/Menu.c:806
 msgid "Hide All Windows Except For The Focused One"
 msgstr "Skry» v¹etky okná okrem aktívneho"
 
-#: ../../WPrefs.app/Menu.c:808
+#: ../../WPrefs.app/Menu.c:807
 msgid "Show All Windows"
 msgstr "Zobrazi» v¹etky okná"
 
-#: ../../WPrefs.app/Menu.c:811
+#: ../../WPrefs.app/Menu.c:810
 msgid "Exit X Session"
 msgstr "Ukonèi» sedenie X systému"
 
-#: ../../WPrefs.app/Menu.c:812
+#: ../../WPrefs.app/Menu.c:811
 msgid "Restart Window Maker"
 msgstr "Re¹tartova» Window Maker"
 
-#: ../../WPrefs.app/Menu.c:813
+#: ../../WPrefs.app/Menu.c:812
 msgid "Start Another Window Manager   : ("
 msgstr "Spusti» iný mana¾ér okien      : ("
 
-#: ../../WPrefs.app/Menu.c:815
+#: ../../WPrefs.app/Menu.c:814
 msgid "Save Current Session"
 msgstr "Ulo¾i» súèasné sedenie"
 
-#: ../../WPrefs.app/Menu.c:816
+#: ../../WPrefs.app/Menu.c:815
 msgid "Clear Saved Session"
 msgstr "Zmaza» ulo¾ené sedenie"
 
-#: ../../WPrefs.app/Menu.c:817
+#: ../../WPrefs.app/Menu.c:816
 msgid "Refresh Screen"
 msgstr "Obnovi» obrazovku"
 
-#: ../../WPrefs.app/Menu.c:818
+#: ../../WPrefs.app/Menu.c:817
 msgid "Open Info Panel"
 msgstr "Otvori» panel Info"
 
-#: ../../WPrefs.app/Menu.c:819
+#: ../../WPrefs.app/Menu.c:818
 msgid "Open Copyright Panel"
 msgstr "Otvori» panel Copyright"
 
-#: ../../WPrefs.app/Menu.c:825
+#: ../../WPrefs.app/Menu.c:824
 msgid "Window Manager to Start"
 msgstr "Spusti» mana¾ér okien"
 
-#: ../../WPrefs.app/Menu.c:841
+#: ../../WPrefs.app/Menu.c:840
 msgid "Do not confirm action."
 msgstr "Nepotvrdzova» èinnos»."
 
-#: ../../WPrefs.app/Menu.c:851
+#: ../../WPrefs.app/Menu.c:850
 msgid ""
 "Instructions:\n"
 "\n"
@@ -1255,11 +1255,11 @@ msgid "No, Keep Current Menu"
 msgstr "Nie, ponecha» súèasné menu"
 
 # info: aplikaèné menu ani menu aplikácii nie je celkom ono (ani hlavné menu...)
-#: ../../WPrefs.app/Menu.c:1832
+#: ../../WPrefs.app/Menu.c:1834
 msgid "Applications Menu Definition"
 msgstr "Definícia menu Aplikácie"
 
-#: ../../WPrefs.app/Menu.c:1834
+#: ../../WPrefs.app/Menu.c:1836
 msgid "Edit the menu for launching applications."
 msgstr "Úpravy menu Aplikácie, ktoré slú¾i na spú¹»anie programov."
 
@@ -1436,22 +1436,18 @@ msgid "Applications Menu"
 msgstr "Menu Aplikácie"
 
 #: ../../WPrefs.app/MouseSettings.c:841
-msgid "Window List Menu "
-msgstr "Menu Okná"
-
-#: ../../WPrefs.app/MouseSettings.c:842
 msgid "Select Windows"
 msgstr "Výber okien"
 
-#: ../../WPrefs.app/MouseSettings.c:845
+#: ../../WPrefs.app/MouseSettings.c:844
 msgid "Switch Workspaces"
 msgstr "Prepínanie pracovných plôch"
 
-#: ../../WPrefs.app/MouseSettings.c:850
+#: ../../WPrefs.app/MouseSettings.c:849
 msgid "Mouse Preferences"
 msgstr "Nastavenia my¹i"
 
-#: ../../WPrefs.app/MouseSettings.c:852
+#: ../../WPrefs.app/MouseSettings.c:851
 msgid ""
 "Mouse speed/acceleration, double click delay,\n"
 "mouse button bindings etc."
@@ -2150,3 +2146,4 @@ msgstr "nemo¾no otvori» display %s"
 #: ../../WPrefs.app/main.c:161
 msgid "could not initialize application"
 msgstr "nemo¾no inicializova» aplikáciu"
+
