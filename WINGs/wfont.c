@@ -320,7 +320,12 @@ WMCreateAntialiasedFont(WMScreen *scrPtr, char *fontName)
      *       use a default medium weight and a default roman slant if they
      *       are invalid.
      */
-    font->font.xft = XftFontOpenXlfd(display, scrPtr->screen, fname);
+    printf("%s\n", fname);
+    if (fname[0] == '-') {
+        font->font.xft = XftFontOpenXlfd(display, scrPtr->screen, fname);
+    } else {
+        font->font.xft = XftFontOpenName(display, scrPtr->screen, fname);
+    }
     if (!font->font.xft) {
         wfree(font);
         wfree(fname);
@@ -394,7 +399,11 @@ WMCreateAntialiasedFontSet(WMScreen *scrPtr, char *fontName)
      *       use a default medium weight and a default roman slant if they
      *       are invalid.
      */
-    font->font.xft = XftFontOpenXlfd(display, scrPtr->screen, fname);
+    if (fname[0] == '-') {
+        font->font.xft = XftFontOpenXlfd(display, scrPtr->screen, fname);
+    } else {
+        font->font.xft = XftFontOpenName(display, scrPtr->screen, fname);
+    }
     if (!font->font.xft) {
         wfree(font);
         wfree(fname);
