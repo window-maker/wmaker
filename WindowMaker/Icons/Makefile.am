@@ -5,13 +5,24 @@ defsdatadir = $(pkgdatadir)/Icons
 defsdata_DATA = \
 	BitchX.tiff\
 	DefaultAppIcon.tiff\
+	Ftp.png\
 	GNUstep.tiff\
 	GNUstep3D.tiff\
 	GNUstepGlow.tiff\
 	GNUterm.tiff\
+	GreenWilber.png\
+	ICQ.png\
+	Mozilla.png\
+	Netscape.png\
+	Pen.png\
+	Pencil.png\
+	Real.png\
+	Shell.png\
+	Speaker.png\
 	Terminal.tiff\
 	TerminalGNUstep.tiff\
 	TerminalLinux.tiff\
+	XChat.png\
 	clip.tiff\
 	defaultAppIcon.tiff\
 	defaultterm.tiff\
