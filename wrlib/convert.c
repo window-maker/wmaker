@@ -614,6 +614,8 @@ image2StandardPseudoColor(RContext *ctx, RImage *image)
 	err = (short*)malloc(3*(image->width+2)*sizeof(short));
 	nerr = (short*)malloc(3*(image->width+2)*sizeof(short));
 	if (!err || !nerr) {
+	    if (err)
+		free(err);
 	    if (nerr)
 		free(nerr);
 	    RErrorCode = RERR_NOMEMORY;
@@ -626,7 +628,6 @@ image2StandardPseudoColor(RContext *ctx, RImage *image)
 	    err[x++] = ptr[x1++];
 	}
         err[x] = err[x+1] = err[x+2] = 0;
-        x += 3;
 	/* convert and dither the image to XImage */
 	for (y=0, ofs=0; y<image->height; y++) {
 	    if (y<image->height-1) {
