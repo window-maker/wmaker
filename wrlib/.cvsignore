@@ -1,4 +1,4 @@
-Makefile
+Makefile Makefile.in
 *.lo *.la
 view testgrad testdraw get-wraster-flags
 .libs

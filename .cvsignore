@@ -1,2 +1,2 @@
-Makefile
+Makefile Makefile.in
 configure config.log config.cache config.status libtool

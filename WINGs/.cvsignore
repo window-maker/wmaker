@@ -1,4 +1,4 @@
-Makefile
+Makefile Makefile.in
 fontl testcolorpanel testmywidget testnot wmfile wtest wmquery connect
 get-wings-flags get-wutil-flags
 .libs

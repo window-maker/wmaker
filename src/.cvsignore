@@ -1,4 +1,4 @@
-Makefile
+Makefile Makefile.in
 config.h wconfig.h stamp-h
 .libs
 wmaker
