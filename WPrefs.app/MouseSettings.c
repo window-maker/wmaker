@@ -94,26 +94,10 @@ typedef struct _Panel {
 
 
 
-static char *modifierNames[] = {
-    "Shift",
-	"Lock",
-	"Control",
-	"Mod1",
-	"Mod2",
-	"Mod3",
-	"Mod4",
-	"Mod5"
-};
+static char *modifierNames[8]; 
 
 
-static char *buttonNames[] = {
-    "None",
-	"Btn1 (left)",
-	"Btn2 (middle)",
-	"Btn3 (right)",
-	"Btn4",
-	"Btn5"
-};
+static char *buttonNames[6];
 
 
 #define DELAY(i)		((i)*75+170)
@@ -599,7 +583,7 @@ createPanel(Panel *p)
 	WMReleaseFont(font);
 	WMReleaseColor(color);
     }
-    WMSetLabelText(panel->ddelaL, "msec");
+    WMSetLabelText(panel->ddelaL, _("msec"));
 
     WMMapSubwidgets(panel->ddelaF);
     
@@ -810,6 +794,22 @@ Panel*
 InitMouseSettings(WMScreen *scr, WMWidget *parent)
 {
     _Panel *panel;
+
+    modifierNames[0] = wstrdup(_("Shift"));
+    modifierNames[1] = wstrdup(_("Lock"));
+    modifierNames[2] = wstrdup(_("Control"));
+    modifierNames[3] = wstrdup(_("Mod1"));
+    modifierNames[4] = wstrdup(_("Mod2"));
+    modifierNames[5] = wstrdup(_("Mod3"));
+    modifierNames[6] = wstrdup(_("Mod4"));
+    modifierNames[7] = wstrdup(_("Mod5"));
+			
+    buttonNames[0] = wstrdup(_("None"));
+    buttonNames[1] = wstrdup(_("Btn1 (left)"));
+    buttonNames[2] = wstrdup(_("Btn2 (middle)"));
+    buttonNames[3] = wstrdup(_("Btn3 (right)"));
+    buttonNames[4] = wstrdup(_("Btn4"));
+    buttonNames[5] = wstrdup(_("Btn5"));
     
     panel = wmalloc(sizeof(_Panel));
     memset(panel, 0, sizeof(_Panel));

@@ -27,6 +27,10 @@ wmsetbg- set the workspace background into a image and make it persist between
 
 wdwrite- write data into the defaults database (configuration files).
 
+wdread- read Simple data from defaults database (for use in scripts for example)
+
+wmchlocale- change locale dependent settings of Window Maker (menu & fonts)
+
 wsetfont- set locale the fonts needed for a specific locale for Window Maker
 
 wmagnify- a program to magnify the area near the mouse pointer,

@@ -175,6 +175,8 @@ static proplist_t Yes, No;
 
 
 
+static char *spec_text;
+
 
 static void applySettings(WMButton *button, InspectorPanel *panel);
 
@@ -1117,7 +1119,7 @@ selectSpecification(WMWidget *bPtr, void *data)
     str = wmalloc(16 + strlen(wwin->wm_instance ? wwin->wm_instance : "?")
 		  + strlen(wwin->wm_class ? wwin->wm_class : "?"));
 
-    sprintf(str, "Inspecting  %s.%s",
+    sprintf(str, _("Inspecting  %s.%s"),
 	    wwin->wm_instance ? wwin->wm_instance : "?",
 	    wwin->wm_class ? wwin->wm_class : "?");
 
@@ -1125,17 +1127,6 @@ selectSpecification(WMWidget *bPtr, void *data)
 
     wfree(str);
 }
-
-
-
-
-#define SPEC_TEXT "The configuration will apply to all\n"\
-		     "windows that have their WM_CLASS property"\
-		     " set to the above selected\nname, when saved."
-
-
-#define SELEC_TEXT "Click in the window you wish to inspect."
-
 
 
 static void
@@ -1154,7 +1145,7 @@ selectWindow(WMWidget *bPtr, void *data)
 	return;
     }
     
-    WMSetLabelText(panel->specLbl, _(SELEC_TEXT));
+    WMSetLabelText(panel->specLbl, _("Click in the window you wish to inspect."));
 
     WMMaskEvent(dpy, ButtonPressMask, &event);
 
@@ -1172,7 +1163,7 @@ selectWindow(WMWidget *bPtr, void *data)
 						   True);
 	wCloseInspectorForWindow(wwin);
     } else {
-	WMSetLabelText(panel->specLbl, _(SPEC_TEXT));
+	WMSetLabelText(panel->specLbl, spec_text);
     }
 }
 
@@ -1193,6 +1184,10 @@ createInspectorForWindow(WWindow *wwin, int xpos, int ypos,
     WMPixmap *pixmap;
 #endif
 
+    spec_text = _("The configuration will apply to all\n"
+			"windows that have their WM_CLASS\n"
+			"property set to the above selected\n"
+			"name, when saved.");
 
     panel = wmalloc(sizeof(InspectorPanel));
     memset(panel, 0, sizeof(InspectorPanel));
@@ -1320,7 +1315,7 @@ createInspectorForWindow(WWindow *wwin, int xpos, int ypos,
     panel->specLbl = WMCreateLabel(panel->win);
     WMMoveWidget(panel->specLbl, 15, 210);
     WMResizeWidget(panel->specLbl, frame_width, 100);
-    WMSetLabelText(panel->specLbl, _(SPEC_TEXT));
+    WMSetLabelText(panel->specLbl, spec_text);
     WMSetLabelWraps(panel->specLbl, True);
     
     WMSetLabelTextAlignment(panel->specLbl, WALeft);

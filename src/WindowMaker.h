@@ -28,7 +28,7 @@
 
 #include <WINGs/WINGs.h>
 
-#if HAVE_LIBINTL_H && I18N
+#if defined(HAVE_LIBINTL_H) && defined(I18N)
 # include <libintl.h>
 # define _(text) gettext(text)
 #else

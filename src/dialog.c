@@ -1031,7 +1031,7 @@ handleLogoPush(XEvent *event, void *data)
 	WMDeleteTimerHandler(panel->timer);
 	panel->timer = NULL;
 
-	sprintf(version, "Version %s", VERSION);
+	sprintf(version, _("Version %s"), VERSION);
 	WMSetLabelText(panel->versionL, version);
     }
 
@@ -1133,10 +1133,10 @@ wShowInfoPanel(WScreen *scr)
 	font = NULL;
     }
     WMSetLabelTextAlignment(panel->name2L, WACenter);
-    WMSetLabelText(panel->name2L, "Window Manager for X");
+    WMSetLabelText(panel->name2L, _("Window Manager for X"));
 
     
-    sprintf(version, "Version %s", VERSION);
+    sprintf(version, _("Version %s"), VERSION);
     panel->versionL = WMCreateLabel(panel->win);
     WMResizeWidget(panel->versionL, 310, 16);
     WMMoveWidget(panel->versionL, 30, 95);
@@ -1157,21 +1157,21 @@ wShowInfoPanel(WScreen *scr)
 
     switch (scr->w_depth) {
      case 15:
-	strcpy(version, "32 thousand");
+	strcpy(version, _("32 thousand"));
 	break;
      case 16:
-	strcpy(version, "64 thousand");
+	strcpy(version, _("64 thousand"));
 	break;
      case 24:
      case 32:
-	strcpy(version, "16 million");
+	strcpy(version, _("16 million"));
 	break;
      default:
 	sprintf(version, "%d", 1<<scr->w_depth);
 	break;
     }
 
-    sprintf(buffer, "Using visual 0x%x: %s %ibpp (%s colors)\n",
+    sprintf(buffer, _("Using visual 0x%x: %s %ibpp (%s colors)\n"),
 	    (unsigned)scr->w_visual->visualid,
 	    visuals[scr->w_visual->class], scr->w_depth, version);
 
@@ -1179,20 +1179,20 @@ wShowInfoPanel(WScreen *scr)
     {
 	struct mallinfo ma = mallinfo();
 	sprintf(buffer+strlen(buffer), 
-		"Total allocated memory: %i kB. Total memory in use: %i kB.\n",
+		_("Total allocated memory: %i kB. Total memory in use: %i kB.\n"),
 		(ma.arena+ma.hblkhd)/1024, (ma.uordblks+ma.hblkhd)/1024);
 	
     }
 #endif
     
-    strcat(buffer, "Supported image formats: ");
+    strcat(buffer, _("Supported image formats: "));
     strl = RSupportedFileFormats();
     for (i=0; strl[i]!=NULL; i++) {
 	strcat(buffer, strl[i]);
 	strcat(buffer, " ");
     }
 
-    strcat(buffer, "\nAdditional Support For: ");
+    strcat(buffer, _("\nAdditional Support For: "));
     {
 	char *list[8];
 	char buf[80];
@@ -1211,14 +1211,14 @@ wShowInfoPanel(WScreen *scr)
 	list[j++] = "OLWM";
 #endif
 #ifdef WSOUND
-	list[j++] = "Sound";
+	list[j++] = _("Sound");
 #endif
 
 	buf[0] = 0;
 	for (i = 0; i < j; i++) {
 	    if (i > 0) {
 		if (i == j - 1)
-		    strcat(buf, " and ");
+		    strcat(buf, _(" and "));
 		else
 		    strcat(buf, ", ");
 	    }
@@ -1247,7 +1247,7 @@ wShowInfoPanel(WScreen *scr)
 
     WMMapWidget(panel->win);
 
-    wwin = wManageInternalWindow(scr, parent, None, "Info",
+    wwin = wManageInternalWindow(scr, parent, None, _("Info"),
 				 (scr->scr_width - 382)/2,
 				 (scr->scr_height - 230)/2, 382, 230);
 
@@ -1270,7 +1270,7 @@ wShowInfoPanel(WScreen *scr)
 	panel->timer = WMAddTimerHandler(100, logoPushCallback, panel);
 	panel->cycle = 0;
 	panel->x = 1;
-	panel->str = "Merry Christmas!";
+	panel->str = _("Merry X'mas!");
 	panel->oldPix = WMRetainPixmap(WMGetLabelImage(panel->logoL));
     } 
 #endif
@@ -1293,22 +1293,6 @@ typedef struct {
     WMLabel *licenseL;
 } LegalPanel;
 
-
-
-#define LICENSE_TEXT \
-	"    Window Maker is free software; you can redistribute it and/or modify "\
-	"it under the terms of the GNU General Public License as published "\
-	"by the Free Software Foundation; either version 2 of the License, "\
-	"or (at your option) any later version.\n\n\n"\
-	"    Window Maker is distributed in the hope that it will be useful, but "\
-	"WITHOUT ANY WARRANTY; without even the implied warranty of "\
-	"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU "\
-	"General Public License for more details.\n\n\n"\
-	"    You should have received a copy of the GNU General Public License "\
-	"along with this program; if not, write to the Free Software "\
-	"Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA "\
-	"02111-1307, USA."
- 
 
 static LegalPanel *legalPanel = NULL;
 
@@ -1355,7 +1339,19 @@ wShowLegalPanel(WScreen *scr)
     WMResizeWidget(panel->licenseL, 400, 230);
     WMMoveWidget(panel->licenseL, 10, 10);
     WMSetLabelTextAlignment(panel->licenseL, WALeft);
-    WMSetLabelText(panel->licenseL, LICENSE_TEXT);
+    WMSetLabelText(panel->licenseL,
+      _("    Window Maker is free software; you can redistribute it and/or\n"
+	"modify it under the terms of the GNU General Public License as\n"
+	"published by the Free Software Foundation; either version 2 of the\n"
+	"License, or (at your option) any later version.\n\n\n"
+	"    Window Maker is distributed in the hope that it will be useful,\n"
+	"but WITHOUT ANY WARRANTY; without even the implied warranty\n"
+	"of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+	"See the GNU General Public License for more details.\n\n\n"
+	"    You should have received a copy of the GNU General Public\n"
+	"License along with this program; if not, write to the Free Software\n"
+	"Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA\n"
+	"02111-1307, USA."));
     WMSetLabelRelief(panel->licenseL, WRGroove);
 
     WMRealizeWidget(panel->win);
@@ -1365,7 +1361,7 @@ wShowLegalPanel(WScreen *scr)
 
     XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
-    wwin = wManageInternalWindow(scr, parent, None, "Legal",
+    wwin = wManageInternalWindow(scr, parent, None, _("Legal"),
 				 (scr->scr_width - 420)/2,
 				 (scr->scr_height - 250)/2, 420, 250);
 
@@ -1675,19 +1671,6 @@ drawGNUstepLogo(Display *dpy, Drawable d, int width, int height,
 }
 
 
-
-#define GNUSTEP_TEXT \
-	"Window Maker is part of the GNUstep project.\n"\
-	"The GNUstep project aims to create a free\n"\
-	"implementation of the OpenStep(tm) specification\n"\
-	"which is a object-oriented framework for\n"\
-	"creating advanced graphical, multi-platform\n"\
-	"applications. Additionally, a development and\n"\
-	"user desktop enviroment will be created on top\n"\
-	"of the framework. For more information about\n"\
-	"GNUstep, please visit: www.gnustep.org"
-
-
 typedef struct {
     WScreen *scr;
     
@@ -1773,7 +1756,16 @@ wShowGNUstepPanel(WScreen *scr)
     WMMoveWidget(panel->textL, 30, 50);
     WMSetLabelTextAlignment(panel->textL, WARight);
     WMSetLabelImagePosition(panel->textL, WIPOverlaps);
-    WMSetLabelText(panel->textL, GNUSTEP_TEXT);
+    WMSetLabelText(panel->textL,
+	_("Window Maker is part of the GNUstep project.\n"\
+	"The GNUstep project aims to create a free\n"\
+	"implementation of the OpenStep(tm) specification\n"\
+	"which is a object-oriented framework for\n"\
+	"creating advanced graphical, multi-platform\n"\
+	"applications. Additionally, a development and\n"\
+	"user desktop enviroment will be created on top\n"\
+	"of the framework. For more information about\n"\
+	"GNUstep, please visit: www.gnustep.org"));
     WMSetLabelImage(panel->textL, pixmap);
 
     WMReleasePixmap(pixmap);
@@ -1785,7 +1777,7 @@ wShowGNUstepPanel(WScreen *scr)
 
     XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
-    wwin = wManageInternalWindow(scr, parent, None, "About GNUstep",
+    wwin = wManageInternalWindow(scr, parent, None, _("About GNUstep"),
 				 (scr->scr_width - 325)/2,
 				 (scr->scr_height - 200)/2, 325, 200);
 

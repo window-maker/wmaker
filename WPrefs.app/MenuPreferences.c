@@ -205,7 +205,7 @@ createPanel(Panel *p)
     WMSetButtonText(panel->wrapB, _("Always open submenus inside the screen, instead of scrolling.\nNote: this is annoying."));
 
     panel->autoB = WMCreateSwitchButton(panel->optF);
-    WMResizeWidget(panel->autoB, 440, 20);
+    WMResizeWidget(panel->autoB, 440, 32);
     WMMoveWidget(panel->autoB, 25, 45);
     WMSetButtonText(panel->autoB, _("Scroll off-screen menus when pointer is moved over them."));
     

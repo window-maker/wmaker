@@ -654,7 +654,7 @@ browseImageCallback(WMWidget *w, void *data)
 	ipath = wstrdup(wgethomedir());
     
     if (WMRunModalFilePanelForDirectory(opanel, panel->win, ipath,
-					"Open Image", NULL)) {
+					_("Open Image"), NULL)) {
 	char *path, *fullpath;
 	char *tmp, *tmp2;
 
@@ -935,7 +935,7 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
         updateTGradImage(panel);
 
         updateSGradButtons(panel);
-    } else wwarning("could not load file '%s': %s", panel->imageFile,
+    } else wwarning(_("could not load file '%s': %s"), panel->imageFile,
 		     RMessageForError(RErrorCode));
 
     /*...............................................*/
@@ -1054,7 +1054,7 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 
  bad_texture:
     str = PLGetDescription(texture);
-    wwarning("error creating texture %s", str);
+    wwarning(_("error creating texture %s"), str);
     wfree(str);
 
 }

@@ -21,7 +21,6 @@ POTFILES  = \
 	$(top_builddir)/WPrefs.app/Menu.c \
 	$(top_builddir)/WPrefs.app/MenuPreferences.c \
 	$(top_builddir)/WPrefs.app/MouseSettings.c \
-	$(top_builddir)/WPrefs.app/NoMenuAlert.c \
 	$(top_builddir)/WPrefs.app/Paths.c \
 	$(top_builddir)/WPrefs.app/Preferences.c \
 	$(top_builddir)/WPrefs.app/TexturePanel.c \
@@ -30,7 +29,6 @@ POTFILES  = \
 	$(top_builddir)/WPrefs.app/Workspace.c \
 	$(top_builddir)/WPrefs.app/double.c \
 	$(top_builddir)/WPrefs.app/editmenu.c \
-	$(top_builddir)/WPrefs.app/MenuGuru.c \
 	$(top_builddir)/WPrefs.app/xmodifier.c
 
 SUFFIXES = .po .mo

@@ -4,13 +4,15 @@
 #
 
 # xx herbert
-if test x"$1" = x"--batch" ; then
+if test "x$1" = "x--batch" ; then
   BATCH="1"
 else
   BATCH=""
 fi
 # /xx herbert
 
+# name of menu file we install (menu, plmenu)
+inst_menu=""
 
 LOCALE=$LANG
 if [ -z "$LOCALE" ]; then
@@ -264,6 +266,8 @@ test -f ~$GSDIR/Library/WindowMaker/exitscript || \
     cp $GLOBALDIR/exitscript.sh $GSDIR/Library/WindowMaker/exitscript
 chmod +rx $GSDIR/Library/WindowMaker/exitscript
 
+wsetfont --auto
+
 # xx herbert
 if test -n "$BATCH" ; then
   echo "Installation Finished"
@@ -287,7 +291,13 @@ if test -z "#LITE#" ; then
  echo "the property list format. The plain text format is more flexible, but"
  echo "the menu in the property list format can be edited graphically. The"
  echo "menu that will be used by default is the property list one. Read"
- echo "$GSDIR/Library/WindowMaker/README for information on how to change it."
+ echo "    $GSDIR/Library/WindowMaker/README"
+ echo "for information on how to change it."
+    if [ "${inst_menu%.*}" == "menu" ]; then
+ echo "However, since you have locale set to $LOCALE and plmenu for such locale"
+ echo "was not found, your WMRootMenu contains path to text formated menu:"
+ echo "    $GSDIR/Library/WindowMaker/$inst_menu"
+    fi
 else
  echo "Your copy of Window Maker is configured especially for KDE."
  echo "Window Maker application menus are not available."

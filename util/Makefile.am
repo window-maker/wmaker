@@ -3,12 +3,12 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 pkgdatadir  = $(datadir)/@PACKAGE@
 
-bin_PROGRAMS = wxcopy wxpaste wdwrite getstyle setstyle seticons geticonset wmsetbg wmsetup wmagnify
+bin_PROGRAMS = wxcopy wxpaste wdwrite wdread getstyle setstyle seticons geticonset wmsetbg wmsetup wmagnify
 
-bin_SCRIPTS = wmaker.inst wm-oldmenu2new wsetfont wkdemenu.pl
+bin_SCRIPTS = wmaker.inst wm-oldmenu2new wsetfont wmchlocale wkdemenu.pl
 
 EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new wsetfont directjpeg.c \
-		wkdemenu.pl
+		wkdemenu.pl wmchlocale.in
 
 INCLUDES = $(DFLAGS) -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib \
 	@HEADER_SEARCH_PATH@ \
@@ -20,6 +20,8 @@ INCLUDES = $(DFLAGS) -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib \
 liblist= @LIBRARY_SEARCH_PATH@ @LIBPL@ @X_EXTRA_LIBS@
 
 wdwrite_LDADD = $(liblist)
+
+wdread_LDADD = $(liblist)
 
 wxcopy_LDADD = @XLFLAGS@ @XLIBS@ 
 
@@ -51,7 +53,7 @@ wmsetbg_LDADD = \
 	@LIBPL@ \
 	@DLLIBS@
 
-CLEANFILES = wmaker.inst
+CLEANFILES = wmaker.inst wmchlocale
 
 wmaker.inst: $(srcdir)/wmaker.inst.in ./Makefile
 	-rm -f wmaker.inst
@@ -64,4 +66,9 @@ wmaker.inst: $(srcdir)/wmaker.inst.in ./Makefile
 
 	chmod 755 wmaker.inst
 
+wmchlocale: $(srcdir)/wmchlocale.in ./Makefile
+	-rm -f wmchlocale
+	sed -e "s|#pkgdatadir#|$(pkgdatadir)|" $(srcdir)/wmchlocale.in >wmchlocale
+
+	chmod 755 wmchlocale
 

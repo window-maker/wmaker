@@ -72,11 +72,16 @@ borderCallback(WMWidget *w, void *data)
     i = WMGetSliderValue(panel->borderS);
 
     if (i == 0)
-	WMSetLabelText(panel->borderL, "OFF");
-    else {
-        sprintf(buffer, "%i  pixel%s", i, i>1 ? "s" : "");
-	WMSetLabelText(panel->borderL, buffer);
-    }
+	sprintf(buffer, _("OFF"));
+    else if (i == 1)
+	sprintf(buffer, _("1 pixel"));
+    else if (i <= 4)
+	/* 2-4 */
+	sprintf(buffer, _("%i pixels"), i);
+    else
+	/* >4 */
+	sprintf(buffer, _("%i pixels "), i);		/* note space! */
+    WMSetLabelText(panel->borderL, buffer);
 }
 
 
@@ -297,17 +302,17 @@ createPanel(Panel *p)
     WMSetSliderAction(panel->borderS, borderCallback, panel);
 
     panel->borderL = WMCreateLabel(panel->borderF);
-    WMResizeWidget(panel->borderL, 50, 15);
+    WMResizeWidget(panel->borderL, 100, 15);
     WMMoveWidget(panel->borderL, 105, 20);
 
     panel->lrB = WMCreateSwitchButton(panel->borderF);
     WMMoveWidget(panel->lrB, 20, 40);
-    WMResizeWidget(panel->lrB, 90, 30);
+    WMResizeWidget(panel->lrB, 100, 30);
     WMSetButtonText(panel->lrB, _("Left/Right"));
 
     panel->tbB = WMCreateSwitchButton(panel->borderF);
     WMMoveWidget(panel->tbB, 120, 40);
-    WMResizeWidget(panel->tbB, 90, 30);
+    WMResizeWidget(panel->tbB, 100, 30);
     WMSetButtonText(panel->tbB, _("Top/Bottom"));
 
 

@@ -1252,7 +1252,7 @@ editEntry(WMenu *menu, WMenuEntry *entry)
     
     if (XGrabKeyboard(dpy, text->core->window, True, GrabModeAsync,
 		      GrabModeAsync, CurrentTime)!=GrabSuccess) {
-	wwarning("could not grab keyboard");
+	wwarning(_("could not grab keyboard"));
 	wTextDestroy(text);
 	
 	wSetFocusTo(menu->frame->screen_ptr, 

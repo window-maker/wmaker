@@ -3,6 +3,14 @@
 # language/font setting script for Window Maker
 #
 # by MANOME Tomonori <manome@itlb.te.noda.sut.ac.jp>
+# (rewriten slightly by judas@hell on Jan 27 2001
+#  -argument --nodef tries to change only font coding (limited!)
+#  -much easier to add new font codings
+#  -much harder to read code...
+#  -argument --auto gets locale by itself, but does not override if some
+#       coding is also given
+#  -argument --locale=?? takes locale code (ja, sk, ...)
+# )
 #
 # [Special Thanks To]
 # Korean fontset info from: 
