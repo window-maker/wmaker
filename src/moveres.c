@@ -255,13 +255,11 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 {
     WScreen *scr = wwin->screen_ptr;
     Window root = scr->root_win;
-    GC gc = scr->line_gc, saveGC;
+    GC gc = scr->line_gc;
     int ty, by, my, x, y, mx, s;
     char num[16];
     XSegment segment[4];
     int fw, fh;
-    WMColor *color;
-    WMPixel pixel;
 
     /* This seems necessary for some odd reason (too lazy to write x1-1 and
      * x2-1 everywhere below in the code). But why only for x? */
@@ -278,8 +276,8 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
     by = y2 - wwin->frame->bottom_width;
 
     if (wPreferences.size_display == WDIS_NEW) {
-        fw = WMWidthOfString(scr->tech_draw_font, "8888", 4);
-        fh = WMFontHeight(scr->tech_draw_font);
+        fw = XTextWidth(scr->tech_draw_font, "8888", 4);
+        fh = scr->tech_draw_font->ascent+scr->tech_draw_font->descent;
 
         XSetForeground(dpy, gc, scr->line_pixel);
 
@@ -329,25 +327,12 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 
         snprintf(num, sizeof(num), "%i", (by - ty - wwin->normal_hints->base_height) /
                  wwin->normal_hints->height_inc);
-        fw = WMWidthOfString(scr->tech_draw_font, num, strlen(num));
-
-        /* XSetForeground(dpy, gc, WMColorPixel(scr->window_title_color[WS_UNFOCUSED])); */
-
-        color = WMBlackColor(scr->wmscreen);
-        saveGC = scr->wmscreen->drawStringGC;
-        pixel = color->color.pixel;
+        fw = XTextWidth(scr->tech_draw_font, num, strlen(num));
 
         /* Display the height. */
+        XSetFont(dpy, gc, scr->tech_draw_font->fid);
+        XDrawString(dpy, root, gc, x - s + 3 - fw/2, my + scr->tech_draw_font->ascent - fh/2 + 1, num, strlen(num));
 
-        /* // ugly hack */
-        color->color.pixel = scr->line_pixel;
-        scr->wmscreen->drawStringGC = gc;
-        WMDrawString(scr->wmscreen, root, color, scr->tech_draw_font,
-                     x - s + 3 - fw/2, my - fh/2 + 1, num, strlen(num));
-        scr->wmscreen->drawStringGC = saveGC;
-        color->color.pixel = pixel;
-
-        XSetForeground(dpy, gc, scr->line_pixel);
         /* horizontal geometry */
         if (y1 < 15) {
             y = y2;
@@ -359,7 +344,7 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
         mx = x1 + (x2 - x1)/2;
         snprintf(num, sizeof(num), "%i", (x2 - x1 - wwin->normal_hints->base_width) /
                  wwin->normal_hints->width_inc);
-        fw = WMWidthOfString(scr->tech_draw_font, num, strlen(num));
+        fw = XTextWidth(scr->tech_draw_font, num, strlen(num));
 
         /* left arrow & end bar */
         segment[0].x1 = x1; segment[0].y1 = y - (s + 6);
@@ -395,17 +380,8 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 
         XDrawSegments(dpy, root, gc, segment, 4);
 
-        /* XSetForeground(dpy, gc, WMColorPixel(scr->window_title_color[WS_UNFOCUSED])); */
-
         /* Display the width. */
-        /* // ugly hack */
-        color->color.pixel = scr->line_pixel;
-        scr->wmscreen->drawStringGC = gc;
-        WMDrawString(scr->wmscreen, root, color, scr->tech_draw_font,
-                     mx - fw/2 + 1, y - s - fh/2 + 1, num, strlen(num));
-        scr->wmscreen->drawStringGC = saveGC;
-        color->color.pixel = pixel;
-        WMReleaseColor(color);
+        XDrawString(dpy, root, gc, mx - fw/2 + 1, y - s + scr->tech_draw_font->ascent - fh/2 + 1, num, strlen(num));
     } else {
         WSetGeometryViewShownSize(scr->gview,
                                   (x2 - x1 - wwin->normal_hints->base_width)

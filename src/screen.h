@@ -162,7 +162,10 @@ typedef struct _WScreen {
     WMFont *clip_title_font;	       /* for clip titles */
     WMFont *info_text_font;	       /* text on things like geometry
 					* hint boxes */
-    WMFont *tech_draw_font;
+    
+    XFontStruct *tech_draw_font;       /* font for tech draw style geom view
+                                          needs to be a core font so we can
+                                          use it with a XORing GC */
 
     WMFont *workspace_name_font;
 
