@@ -130,8 +130,8 @@ WMCreateList(WMWidget *parent)
 static int
 comparator(const void *a, const void *b)
 {
-    WMListItem *item1 = (WMListItem*)a;
-    WMListItem *item2 = (WMListItem*)b;
+    WMListItem *item1 = *(WMListItem**)a;
+    WMListItem *item2 = *(WMListItem**)b;
     
     if (strcmp(item1->text, item2->text) < 0)
 	return -1;

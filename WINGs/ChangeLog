@@ -3,6 +3,7 @@ changes since wmaker 0.61.1:
 
 - fixed WMInsertInBag(). It ignored index, and always put the new item at end.
 - added WMSaveUserDefaults().
+- fixed bug with sorting list items.
 
 
 changes since wmaker 0.61.0:
