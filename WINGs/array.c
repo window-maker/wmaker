@@ -77,20 +77,22 @@ WMFreeArray(WMArray *array)
 }
 
 
-int
-WMReplaceArrayElement(WMArray *array, unsigned int index, void *data)
+void*
+WMReplaceInArray(WMArray *array, unsigned int index, void *data)
 {
+    void *old;
+
     wassertrv(index > array->length, 0);
 
-    if (index == array->length)
-        return WMArrayAppend(array, data);
-
-    if (array->destructor) {
-        array->destructor(array->items[index]);
+    if (index == array->length) {
+        WMArrayAppend(array, data);
+        return NULL;
     }
+
+    old = array->items[index];
     array->items[index] = data;
 
-    return 1;
+    return old;
 }
 
 
@@ -174,11 +176,11 @@ WMDeleteFromArray(WMArray *array, unsigned index)
 void*
 WMArrayPop(WMArray *array)
 {
-    void *d = WMGetArrayElement(array, array->length-1);
+    void *last = array->items[length-1];
 
     removeFromArray(array, array->length-1);
 
-    return d;
+    return last;
 }
 
 
