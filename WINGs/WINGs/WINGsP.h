@@ -236,10 +236,6 @@ typedef struct W_Screen {
 
     WMHashTable *fontCache;
 
-    Bool useMultiByte;
-
-    Bool useWideChar;
-
     Bool antialiasedText;
 
     unsigned int ignoredModifierMask; /* modifiers to ignore when typing txt */
@@ -453,7 +449,6 @@ typedef struct _WINGsConfiguration {
     char *boldSystemFont;
     int  defaultFontSize;
     Bool antialiasedText;
-    Bool useMultiByte;
     char *floppyPath;
     unsigned doubleClickDelay;
     unsigned mouseWheelUp;

@@ -115,8 +115,6 @@ static char *font_options[] = {
     NULL
 };
 
-#define DEFAULT_FONT "sans-serif:pixelsize=12"
-
 char *ProgName;
 
 WMPropList *PixmapPath = NULL;

@@ -65,10 +65,6 @@ print_help()
     puts("               about what the original font was to allow hand tuning the");
     puts("               result or restoring the xlfd. The default is to not add it");
     puts("               as it results in long, unreadable and confusing names.");
-    puts("  --sets-too   try to approximate fontsets by using their first complete xlfd.");
-    puts("               This only works for singlebyte languages. The default is to");
-    puts("               replace the fontset with the default: 'sans-serif:pixelsize=12'");
-    puts("               which should display properly for any language.");
     puts("");
 }
 

@@ -1169,7 +1169,8 @@ handleLogoPush(XEvent *event, void *data)
         /* Alternatively we can draw text in a pixmap and scroll it smoothly */
         if ((panel->oldFont = WMGetLabelFont(panel->versionL))!=NULL)
             WMRetainFont(panel->oldFont);
-        font = WMCreateFont(WMWidgetScreen(panel->versionL), "-*-fixed-medium-r-*-*-13-*-*-*-*-*-*-*");
+        font = WMCreateFont(WMWidgetScreen(panel->versionL),
+                            "Lucida Console,Courier New,monospace:pixelsize=12");
         if (font) {
             WMSetLabelFont(panel->versionL, font);
             WMReleaseFont(font);
@@ -1215,10 +1216,11 @@ wShowInfoPanel(WScreen *scr)
     WMFont *font;
     char *strbuf = NULL;
     char buffer[256];
+    char *name;
     Window parent;
     WWindow *wwin;
     char **strl;
-    int i, width, sepWidth;
+    int i, width=50, sepWidth;
     char *visuals[] = {
         "StaticGray",
         "GrayScale",
@@ -1268,12 +1270,8 @@ wShowInfoPanel(WScreen *scr)
     WMResizeWidget(panel->name1L, 240, 30 - sepWidth);
     WMMoveWidget(panel->name1L, 100, 30);
 
-    if (WMIsAntialiasingEnabled(scr->wmscreen)) {
-        font = WMBoldSystemFontOfSize(scr->wmscreen, 24);
-    } else {
-        font = WMCreateFont(scr->wmscreen, "-*-utopia-*-r-*-*-25-*");
-        font = font ? font : WMBoldSystemFontOfSize(scr->wmscreen, 24);
-    }
+    name = "Lucida Sans,Comic Sans MS,URW Gothic L,Trebuchet MS,sans:bold:pixelsize=26";
+    font = WMCreateFont(scr->wmscreen, name);
     strbuf = "Window Maker";
     if (font) {
         width = WMWidthOfString(font, strbuf, strlen(strbuf));
@@ -1292,7 +1290,8 @@ wShowInfoPanel(WScreen *scr)
     panel->name2L = WMCreateLabel(panel->win);
     WMResizeWidget(panel->name2L, 240, 24);
     WMMoveWidget(panel->name2L, 100, 60);
-    font = WMBoldSystemFontOfSize(scr->wmscreen, 18);
+    name = "URW Gothic L,Nimbus Sans L,sans:pixelsize=16";
+    font = WMCreateFont(scr->wmscreen, name);
     if (font) {
         WMSetLabelFont(panel->name2L, font);
         WMReleaseFont(font);

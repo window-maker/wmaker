@@ -20,7 +20,6 @@ WPrefs_SOURCES = \
 	Configurations.c \
 	Expert.c \
 	Focus.c \
-	Font.c \
 	FontSimple.c \
 	Icons.c \
 	KeyboardSettings.c \

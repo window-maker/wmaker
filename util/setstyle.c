@@ -37,8 +37,6 @@
 
 #define MAX_OPTIONS 128
 
-#define DEFAULT_FONT "sans:pixelsize=12"
-
 char *FontOptions[] = {
     "IconTitleFont",
     "ClipTitleFont",

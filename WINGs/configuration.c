@@ -10,9 +10,9 @@ _WINGsConfiguration WINGsConfiguration;
 
 
 
-#define SYSTEM_FONT "-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-medium-r-*-*-%d-*-*-*-*-*-*-*"
+#define SYSTEM_FONT "sans:pixelsize=12"
 
-#define BOLD_SYSTEM_FONT "-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-bold-r-*-*-%d-*-*-*-*-*-*-*"
+#define BOLD_SYSTEM_FONT "sans:bold:pixelsize=12"
 
 #define FLOPPY_PATH "/floppy"
 
@@ -105,28 +105,6 @@ W_ReadConfigurations(void)
 
         WINGsConfiguration.antialiasedText =
             WMGetUDBoolForKey(defaults, "AntialiasedText");
-
-        WINGsConfiguration.useMultiByte = False;
-        str = WMGetUDStringForKey(defaults, "MultiByteText");
-        if (str) {
-            if (strcasecmp(str, "YES") == 0) {
-                WINGsConfiguration.useMultiByte = True;
-            } else if (strcasecmp(str, "AUTO") == 0) {
-                char *locale;
-
-                /* if it's a multibyte language (japanese, chinese or korean)
-                 * then set it to True */
-                locale = setlocale(LC_CTYPE, NULL);
-                if (locale != NULL
-                    && (strncmp(locale, "ja", 2) == 0
-                        || strncmp(locale, "zh", 2) == 0
-                        || strncmp(locale, "ru", 2) == 0
-                        || strncmp(locale, "ko", 2) == 0)) {
-
-                    WINGsConfiguration.useMultiByte = True;
-                }
-            }
-        }
 
         WINGsConfiguration.doubleClickDelay =
             WMGetUDIntegerForKey(defaults, "DoubleClickTime");

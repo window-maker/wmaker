@@ -5,11 +5,18 @@ To do before next release:
   and give a warning if font is not converted, but let user manually convert
   it with convertfonts as the process may need manual tweaking for best
   results)
-- Append .UTF-8 to locale
 - figure out a better gnustep path for wprefs.app installation
-- figure a better fullscreen level
 - check whether window states are being saved/restored properly via netwm
   on restart/crash-restart (grep for XXX/TODO)
+
+1. make AntialiasedText in WMGLOBAL work
+2. make wmaker read old xlfd, but warn about them so people use convert 
+   (I think it reads them, but the warning needs to be added)
+3. Set the default font
+4. Change all xlfd fonts we still use hardcoded in wmaker/wprefs
+5. Update NEWS/Changelog (remove old info that only applies to xft1)
+
+=====================================================================
 
 remake wrlib rule to not compile with -fomit-frame-pointer and stuff
 if its added to CFLAGS

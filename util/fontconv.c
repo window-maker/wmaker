@@ -6,7 +6,7 @@
 
 #include "../src/wconfig.h"
 
-#define DEFAULT_FONT "sans-serif:pixelsize=12"
+#define DEFAULT_FONT "sans:pixelsize=12"
 
 static int
 countChar(char *str, char c)
@@ -161,18 +161,19 @@ xlfdToFc(char *xlfd, char *useFamily, Bool keepXLFD)
 
 
 /* return converted font (if conversion is needed) else the original font */
-char* convertFont(char *font, Bool keepXLFD)
+char*
+convertFont(char *font, Bool keepXLFD)
 {
     if (font[0]=='-') {
         char *res;
         char *tmp= wstrdup(font);
         
         if (MB_CUR_MAX < 2) {
-            char *ptr= strchr(tmp, ',');
+            char *ptr = strchr(tmp, ',');
             if (ptr) *ptr= 0;
-            res= xlfdToFc(tmp, NULL, keepXLFD);
+            res = xlfdToFc(tmp, NULL, keepXLFD);
         } else {
-            res= xlfdToFc(tmp, "sans", keepXLFD);
+            res = xlfdToFc(tmp, "sans", keepXLFD);
         }
         wfree(tmp);
         
@@ -181,3 +182,4 @@ char* convertFont(char *font, Bool keepXLFD)
         return font;
     }
 }
+
