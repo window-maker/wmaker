@@ -35,11 +35,12 @@ prefsdata_DATA =\
 	menu.zh_TW.Big5\
 	plmenu\
 	plmenu.da\
+	plmenu.de\
 	plmenu.fr\
 	plmenu.hr\
-	plmenu.zh_CN\
 	plmenu.it\
-	plmenu.de\
+	plmenu.pl\
+	plmenu.zh_CN\
 	wmmacros\
 	xtree.dat
 

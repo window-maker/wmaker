@@ -26,7 +26,7 @@
  *	EXEC <program> - wykonanie jakiegokolwiek programu
  *	EXIT - wyj¶cie z menad¿era okien
  *	RESTART [<window manager>] - restart WindowMakera albo start innego
- *			                     manad¿er okien
+ *			                     manad¿era okien
  *	REFRESH - od¶wierzenie ekranu
  *	ARRANGE_ICONS - uporz±dkowanie ikon na pulpicie
  *	SHUTDOWN - zabicie wszystkich procesów (i wyj¶cie z X window)
@@ -167,7 +167,6 @@
 		"Irc"        EXEC ULUB_TERM -e irc %a(Irc,Podaj swoj pseudonim:)
 		"Ping"       EXEC ULUB_TERM -e ping %a(Ping,Podaj nazwe hosta:)
 		"Talk"       EXEC ULUB_TERM -e talk %a(Talk,Podaj nazwe uzytkownika, z ktorym chcesz nawiazac polaczenie:)
-		"Traceroute" EXEC ULUB_TERM -e traceroute %a(Traceroute,Podaj nazwe hosta:)
 	"Internet" END
 
 	"Editory" MENU
