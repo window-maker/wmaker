@@ -1516,16 +1516,7 @@ handleItemClick(XEvent *event, void *data)
 static void
 destroyEditMenu(WEditMenu *mPtr)
 {
-    WEditMenuItem *item;
-    WMArrayIterator iter;
-
     WMRemoveNotificationObserver(mPtr);
-
-    WM_ITERATE_ARRAY(mPtr->items, item, iter) {
-        if (item->submenu) {
-            WMDestroyWidget(item->submenu);
-        }
-    }
 
     WMFreeArray(mPtr->items);
 
