@@ -47,6 +47,7 @@
 #define WTEX_THGRADIENT	((1<<9)|WREL_BORDER_MASK)
 #define WTEX_TVGRADIENT	((1<<10)|WREL_BORDER_MASK)
 #define WTEX_TDGRADIENT	((1<<11)|WREL_BORDER_MASK)
+#define WTEX_FUNCTION	((1<<12)|WREL_BORDER_MASK)
 
 /* pixmap subtypes */
 #define WTP_TILE	2
@@ -120,6 +121,18 @@ typedef struct WTexTGradient {
     int opacity;
 } WTexTGradient;
 
+typedef struct WTexFunction {
+    short type;
+    char subtype;
+    XColor normal;
+    GC normal_gc;
+
+    void *handle;
+    RImage *(*render) (int, char**, int, int, int);
+    int argc;
+    char **argv;
+} WTexFunction;
+
 typedef union WTexture {
     WTexAny any;    
     WTexSolid solid;
@@ -127,6 +140,7 @@ typedef union WTexture {
     WTexMGradient mgradient;
     WTexPixmap pixmap;
     WTexTGradient tgradient;
+    WTexFunction function;
 } WTexture;
 
 
@@ -136,6 +150,9 @@ WTexMGradient *wTextureMakeMGradient(WScreen*, int, RColor**);
 WTexTGradient *wTextureMakeTGradient(WScreen*, int, RColor*, RColor*, char *, int);
 WTexPixmap *wTextureMakePixmap(WScreen *scr, int style, char *pixmap_file, 
 			       XColor *color);
+#ifdef TEXTURE_PLUGIN
+WTexFunction *wTextureMakeFunction(WScreen*, char *, char *, int, char **);
+#endif
 void wTextureDestroy(WScreen*, WTexture*);
 void wTexturePaint(WTexture *, Pixmap *, WCoreWindow*, int, int);
 void wTextureRender(WScreen*, WTexture*, Pixmap*, int, int, int);

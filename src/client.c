@@ -722,7 +722,6 @@ wClientGetNormalHints(WWindow *wwin, XWindowAttributes *wattribs, Bool geometry,
 	wwin->normal_hints->flags &= ~PPosition;
 #endif
 	if (wwin->normal_hints->flags & (USPosition|PPosition)) {
-	    puts("QWEWQEWQ");
 	    *x = wwin->normal_hints->x;
 	    *y = wwin->normal_hints->y;
 	}

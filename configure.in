@@ -98,6 +98,22 @@ AC_FUNC_VPRINTF
 AC_FUNC_ALLOCA
 AC_CHECK_FUNCS(gethostname select poll strerror strncasecmp setpgid atexit)
 
+
+
+dnl Loading of dynamic libraries at runtime
+dnl =======================================
+AC_CHECK_FUNC(dlopen, [HAVEDL="yes"], 
+	AC_CHECK_LIB(dl, dlopen, [DLLIBS="-ldl" HAVEDL="yes"],
+			 DLLIBS="" ))
+
+if test "x$HAVEDL" = xyes; then
+    AC_CHECK_HEADERS(dlfcn.h)
+fi
+
+
+
+dnl Check CPP
+dnl =========
 if test "x$CPP_PATH" = x; then
     AC_PATH_PROG(CPP_PATH, cpp, notfound, 
 		$PATH:/lib:/usr/bin:/bin:/usr/lib:/usr/ccs/lib)
@@ -153,6 +169,7 @@ dnl AM_GNU_GETTEXT
 
 
 INTLIBS=""
+DLLIBS=""
 
 
 AC_CHECK_FUNC(gettext, [HAVEGETTEXT="yes"], 
@@ -260,6 +277,9 @@ if test "x$NLSDIR" = "x"; then
 	fi
 fi
 
+
+
+AC_SUBST(DLLIBS)
 AC_SUBST(INTLIBS)
 AC_SUBST(NLSDIR)
 AC_SUBST(MOFILES)

@@ -1332,7 +1332,6 @@ getDefaultMenu(_Panel *panel, int *hasWSMenu)
 	}
     }
 
-    free(gspath);
     free(menuPath);
 
     if (menu) {
@@ -1358,7 +1357,6 @@ showData(_Panel *panel)
 
     menuPath = wmalloc(strlen(gspath)+32);
     strcpy(menuPath, gspath);
-    free(gspath);
     strcat(menuPath, "/Defaults/WMRootMenu");
 
     menu = PLGetProplistWithPath(menuPath);

@@ -115,5 +115,6 @@ wmaker_LDADD = \
 	@GFXLIBS@ \
 	@XLIBS@ \
 	@INTLIBS@ \
+	@DLLIBS@ \
 	-lm 
 

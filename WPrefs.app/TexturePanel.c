@@ -100,6 +100,7 @@ typedef struct _TexturePanel {
     WMButton *dispB;
     WMPopUpButton *arrP;
 
+    RImage *image;
     char *imageFile;
 
     /*****/
@@ -193,6 +194,36 @@ updateGradButtons(TexturePanel *panel)
 	WMReleasePixmap(pixmap);
 
 	free(colors);
+    }
+}
+
+
+
+static void
+updateTGradImage(TexturePanel *panel)
+{
+    RImage *image, *gradient;
+    WMPixmap *pixmap;
+    RColor from;
+    RColor to;
+    WMColor *color;
+
+    color = WMGetColorWellColor(panel->tcol1W);
+    from.red = WMRedComponentOfColor(color)>>8;
+    from.green = WMGreenComponentOfColor(color)>>8;
+    from.blue = WMBlueComponentOfColor(color)>>8;
+
+    color = WMGetColorWellColor(panel->tcol2W);
+    to.red = WMRedComponentOfColor(color)>>8;
+    to.green = WMGreenComponentOfColor(color)>>8;
+    to.blue = WMBlueComponentOfColor(color)>>8;
+
+    if (WMGetButtonSelected(panel->dirhB)) {
+	gradient = RRenderGradient(80, 30, &from, &to, RHorizontalGradient);
+    } else if (WMGetButtonSelected(panel->dirvB)) {
+	gradient = RRenderGradient(80, 30, &from, &to, RVerticalGradient);
+    } else {
+	gradient = RRenderGradient(80, 30, &from, &to, RDiagonalGradient);
     }
 }
 
@@ -619,15 +650,21 @@ browseImageCallback(WMWidget *w, void *data)
 		return;
 	    }
 
-	    pixmap = WMCreatePixmapFromRImage(scr, image, 128);
-	    RDestroyImage(image);
+	    if (panel->image)
+		RDestroyImage(panel->image);
+	    panel->image = image;
 
-	    size = WMGetPixmapSize(pixmap);
-	    WMSetLabelImage(panel->imageL, pixmap);
-	    WMResizeWidget(panel->imageL, size.width, size.height);
+	    if (WMGetPopUpButtonSelectedItem(panel->typeP) == TYPE_PIXMAP) {
+		pixmap = WMCreatePixmapFromRImage(scr, image, 128);
 
-	    WMReleasePixmap(pixmap);
+		size = WMGetPixmapSize(pixmap);
+		WMSetLabelImage(panel->imageL, pixmap);
+		WMResizeWidget(panel->imageL, size.width, size.height);
 
+		WMReleasePixmap(pixmap);
+	    } else {
+		updateTGradImage(panel);
+	    }
 	    panel->imageFile = path;
 
 	    WMSetTextFieldText(panel->imageT, path);
@@ -667,6 +704,11 @@ DestroyTexturePanel(TexturePanel *panel)
 void
 ShowTexturePanel(TexturePanel *panel)
 {
+    Display *dpy = WMScreenDisplay(WMWidgetScreen(panel->win));
+
+    WMSetWindowUPosition(panel->win, 
+			 WidthOfScreen(DefaultScreenOfDisplay(dpy)),
+			 HeightOfScreen(DefaultScreenOfDisplay(dpy)));
     WMMapWidget(panel->win);
 }
 
@@ -723,10 +765,10 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 
 	p = PLGetArrayElement(texture, 1);
 	if (!p) {
-	    goto bad_texture;
+	    str = "black";
+	} else {
+	    str = PLGetString(p);
 	}
-
-	str = PLGetString(p);
 	color = WMCreateNamedColor(scr, str, False);
 
 	WMSetColorWellColor(panel->defcW, color);
@@ -741,9 +783,10 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 
 	p = PLGetArrayElement(texture, 1);
 	if (!p) {
-	    goto bad_texture;
+	    str = "black";
+	} else {
+	    str = PLGetString(p);
 	}
-	str = PLGetString(p);
 	color = WMCreateNamedColor(scr, str, False);
 
 	WMSetColorWellColor(panel->tcol1W, color);
@@ -752,9 +795,10 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 
 	p = PLGetArrayElement(texture, 2);
 	if (!p) {
-	    goto bad_texture;
+	    str = "black";
+	} else {
+	    str = PLGetString(p);
 	}
-	str = PLGetString(p);
 	color = WMCreateNamedColor(scr, str, False);
 
 	WMSetColorWellColor(panel->tcol2W, color);
@@ -766,11 +810,43 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
     } else if (strcasecmp(type, "thgradient")==0
 	       || strcasecmp(type, "tvgradient")==0
 	       || strcasecmp(type, "tdgradient")==0) {
+	int i;
 
 	WMSetPopUpButtonSelectedItem(panel->typeP, TYPE_TGRADIENT);
 
-	/****** TODO: setador de textura apartir desse */
 	gradient = type[1];
+
+	WMSetTextFieldText(panel->imageT,
+			   PLGetString(PLGetArrayElement(texture, 1)));
+
+	i = 180;
+	sscanf(PLGetString(PLGetArrayElement(texture, 2)), "%i", &i);
+	WMSetSliderValue(panel->topaS, i);
+
+	p = PLGetArrayElement(texture, 3);
+	if (!p) {
+	    str = "black";
+	} else {
+	    str = PLGetString(p);
+	}
+	color = WMCreateNamedColor(scr, str, False);
+
+	WMSetColorWellColor(panel->tcol1W, color);
+
+	WMReleaseColor(color);
+
+	p = PLGetArrayElement(texture, 4);
+	if (!p) {
+	    str = "black";
+	} else {
+	    str = PLGetString(p);
+	}
+	color = WMCreateNamedColor(scr, str, False);
+
+	WMSetColorWellColor(panel->tcol2W, color);
+
+	WMReleaseColor(color);
+	
     /*...............................................*/
     } else if (strcasecmp(type, "mhgradient")==0
 	       || strcasecmp(type, "mvgradient")==0
@@ -787,10 +863,10 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 
 	p = PLGetArrayElement(texture, 1);
 	if (!p) {
-	    goto bad_texture;
+	    str = "black";
+	} else {
+	    str = PLGetString(p);
 	}
-
-	str = PLGetString(p);
 	color = WMCreateNamedColor(scr, str, False);
 
 	WMSetColorWellColor(panel->defcW, color);
@@ -803,9 +879,10 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 
 	    p = PLGetArrayElement(texture, i);
 	    if (!p) {
-		goto bad_texture;
+		str = "black";
+	    } else {
+		str = PLGetString(p);
 	    }
-	    str = PLGetString(p);
 
 	    XParseColor(WMScreenDisplay(scr), WMScreenRContext(scr)->cmap,
 			str, &xcolor);
@@ -1058,8 +1135,6 @@ CreateTexturePanel(WMWindow *keyWindow)
     WMAddPopUpButtonItem(panel->typeP, _("Image Texture"));
     WMSetPopUpButtonSelectedItem(panel->typeP, 0);
     WMSetPopUpButtonAction(panel->typeP, changeTypeCallback, panel);
-
-    WMSetPopUpButtonItemEnabled(panel->typeP, TYPE_TGRADIENT, False);
 
     /* color */
     panel->defcF = WMCreateFrame(panel->win);

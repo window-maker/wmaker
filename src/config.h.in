@@ -148,6 +148,9 @@
 /* Define if you have the strncasecmp function.  */
 #undef HAVE_STRNCASECMP
 
+/* Define if you have the <dlfcn.h> header file.  */
+#undef HAVE_DLFCN_H
+
 /* Define if you have the <fcntl.h> header file.  */
 #undef HAVE_FCNTL_H
 

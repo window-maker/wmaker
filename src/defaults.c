@@ -1602,6 +1602,7 @@ getEnum(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
  * (thgradient <file> <opaqueness> <color> <color>)
  * (tvgradient <file> <opaqueness> <color> <color>)
  * (tdgradient <file> <opaqueness> <color> <color>)
+ * (function <lib> <function> ...)
  */
 
 static WTexture*
@@ -1853,7 +1854,47 @@ parse_texture(WScreen *scr, proplist_t pl)
 
 	texture = (WTexture*)wTextureMakeTGradient(scr, style, &color1, &color2,
 						   val, opacity);
-    } else {
+    }
+#ifdef TEXTURE_PLUGIN
+    else if (strcasecmp(val, "function")==0) {
+
+	char *lib, *func, **argv;
+	int i, argc;
+
+        if (nelem < 3)
+	    return NULL;
+
+	/* get the library name */
+	elem = PLGetArrayElement(pl, 1);
+	if (!elem || !PLIsString(elem)) {
+	    return NULL;
+	}
+	lib = PLGetString(elem);
+
+	/* get the function name */
+	elem = PLGetArrayElement(pl, 2);
+	if (!elem || !PLIsString(elem)) {
+	    return NULL;
+	}
+	func = PLGetString(elem);
+
+	argc = nelem - 3;
+	argv = (char **) wmalloc (argc * sizeof (char *));
+
+	/* get the parameters */
+	for (i=0; i<argc; i++) {
+	    elem = PLGetArrayElement(pl, 3+i);
+	    if (!elem || !PLIsString(elem)) {
+		free (argv);
+		return NULL;
+	    }
+	    argv[i] = PLGetString(elem);
+	}
+
+	texture = (WTexture*)wTextureMakeFunction(scr, lib, func, argc, argv);
+    }
+#endif /* TEXTURE_PLUGIN */
+    else {
 	wwarning(_("invalid texture type %s"), val);
 	return NULL;
     }

@@ -24,6 +24,12 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
+#ifdef TEXTURE_PLUGIN
+# ifdef HAVE_DLFCN_H
+#  include <dlfcn.h>
+# endif
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -177,6 +183,17 @@ wTextureDestroy(WScreen *scr, WTexture *texture)
      case WTEX_TDGRADIENT:	
 	RDestroyImage(texture->tgradient.pixmap);
 	break;
+
+#ifdef TEXTURE_PLUGIN
+     case WTEX_FUNCTION:
+#ifdef HAVE_DLFCN_H
+        if (texture->function.handle) {
+	    dlclose (texture->function.handle);
+	}
+#endif
+	free (texture->function.argv);
+	break;
+#endif /* TEXTURE_PLUGIN */
     }
     if (CANFREE(texture->any.color.pixel))
       colors[count++] = texture->any.color.pixel;
@@ -353,6 +370,46 @@ wTextureMakeTGradient(WScreen *scr, int style, RColor *from, RColor *to,
 }
 
 
+#ifdef TEXTURE_PLUGIN
+WTexFunction*
+wTextureMakeFunction(WScreen *scr, char *lib, char *func, int argc, char **argv)
+{
+    WTexFunction *texture;
+    texture = wmalloc(sizeof(WTexture));
+    texture->type = WTEX_FUNCTION;
+    texture->handle = NULL;
+    texture->render = 0;
+    texture->argc = argc;
+    texture->argv = argv;
+
+#ifdef HAVE_DLFCN_H
+    /* open the library */
+    texture->handle = dlopen(lib, RTLD_LAZY);
+    if (!texture->handle) {
+        wwarning(_("library \"%s\" cound not be opened."), lib);
+	free(argv);
+	free(texture);
+	return NULL;
+    }
+
+    /* find the function */
+    texture->render = dlsym (texture->handle, func);
+    if (!texture->render) {
+        wwarning(_("function \"%s\" not founf in library \"%s\""), func, lib);
+	free(argv);
+	dlclose(texture->handle);
+	free(texture);
+	return NULL;
+    }
+#else
+    wwarning(_("function textures not supported on this system, sorry."));
+#endif
+
+    /* success! */
+    return texture;
+}
+#endif /* TEXTURE_PLUGIN */
+
 
 RImage*
 wTextureRenderImage(WTexture *texture, int width, int height, int relief)
@@ -452,6 +509,18 @@ wTextureRenderImage(WTexture *texture, int width, int height, int relief)
 	    RDestroyImage(grad);
 	}
 	break;
+
+#ifdef TEXTURE_PLUGIN
+     case WTEX_FUNCTION:
+#ifdef HAVE_DLFCN_H
+	if (texture->function.render) {
+            image = texture->function.render (
+	        texture->function.argc, texture->function.argv,
+		width, height, relief);
+	}
+#endif
+        break;
+#endif /* TEXTURE_PLUGIN */
 
      default:
 	puts("ERROR in wTextureRenderImage()");

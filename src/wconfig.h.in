@@ -209,6 +209,8 @@
 #undef WINDOW_BIRTH_ZOOM
 
 
+#define TEXTURE_PLUGIN
+
 /*
  *--------------------------------------------------------------------
  * 			Default Configuration

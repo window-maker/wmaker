@@ -14,6 +14,7 @@ Changes since version 0.51.2:
 - enhancements to the modelock patch (id@windowmaker.org)
 - show kbd mode for modelock  (id@windowmaker.org)
 - enhanced positioning of transient windows
+- added dynamically loadable texture renderer code (from ?)
 
 
 Changes since version 0.51.1:
