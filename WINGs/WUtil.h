@@ -347,6 +347,8 @@ WMBag *WMCreateListBagWithDestructor(void (*destructor)(void*));
 
 #define WMGetFirstInBag(bag, item) bag->func.firstInBag(bag, item)
     
+#define WMCountInBag(bag, item) bag->func.countInBag(bag, item)
+
 #define WMFindInBag(bag, match) bag->func.findInBag(bag, match)
     
 #define WMBagFirst(bag, ptr) bag->func.first(bag, ptr)
