@@ -160,7 +160,11 @@ WMFreeTypeRImage *renderChar(FT_Face face, FT_ULong char_index, RColor *color) {
 
     index = FT_Get_Char_Index(face, char_index);
 
-    FT_Load_Glyph(face, index, FT_LOAD_DEFAULT);
+    error = FT_Load_Glyph(face, index, FT_LOAD_DEFAULT);
+    if (error) {
+        _debug("error loading glyph\n");
+        return NULL;
+    }
     FT_Render_Glyph(face->glyph, ft_render_mode_normal);
 
     slot = face->glyph;
@@ -228,10 +232,10 @@ void initDrawFreeTypeString(proplist_t pl, void **init_data) {
         FT_Init_FreeType(&ft_library);
         inst_ft_library++;
     }
-    _debug("initialize freetype library\n");
 
     FT_New_Face(ft_library, PLGetString(PLGetArrayElement(pl, 4)), 0, &data->face);
     FT_Set_Pixel_Sizes(data->face, 0, atoi(PLGetString(PLGetArrayElement(pl, 5))));
+    _debug("initialize freetype library\n");
 }
 
 void
@@ -264,7 +268,8 @@ void
 logicalCombineArea(RImage *bg, RImage *image,
         int _sx, int _sy,
         int _sw, int _sh,
-        int _dx, int _dy) {
+        int _dx, int _dy,
+        int opaquueness) {
 
     if (_dx >= bg->width) {
         return;
@@ -292,9 +297,15 @@ logicalCombineArea(RImage *bg, RImage *image,
         _dy = 0;
     }
 
-    if (_sh > 0 && _sw > 0)
-        RCombineArea(bg, image, _sx, _sy,
-               _sw, _sh, _dx, _dy);
+    if (_sh > 0 && _sw > 0) {
+        if (opaquueness) {
+            RCombineAreaWithOpaqueness(bg, image, _sx, _sy,
+                    _sw, _sh, _dx, _dy, opaquueness);
+        } else {
+            RCombineArea(bg, image, _sx, _sy,
+                    _sw, _sh, _dx, _dy);
+        }
+    }
 
 }
 
@@ -327,8 +338,8 @@ drawFreeTypeString (proplist_t pl, Drawable d,
             if (!data->glyphs_array[text[i]]) {
                 data->glyphs_array[text[i]] = renderChar(data->face, (FT_ULong)text[i], &data->color);
                 data->glyphs_shadow_array[text[i]] = renderChar(data->face, (FT_ULong)text[i], &black_color);
-                _debug("alloc %c\n", text[i]);
             }
+            if (data->glyphs_array[text[i]])
             if (data->glyphs_array[text[i]]->image) {
                 int _sx, _dx, _sy, _dy, _sw, _sh;
 
@@ -338,10 +349,12 @@ drawFreeTypeString (proplist_t pl, Drawable d,
                 _sw = data->glyphs_array[text[i]]->image->width;
                 _sh = data->glyphs_array[text[i]]->image->height;
 
-                logicalCombineArea(rimg, data->glyphs_shadow_array[text[i]]->image, _sx, _sy,
-                        _sw, _sh, _dx-2, _dy-2);
-                logicalCombineArea(rimg, data->glyphs_array[text[i]]->image, _sx, _sy,
-                        _sw, _sh, _dx-3, _dy-3);
+                /*
+                logicalCombineArea(rimg, data->glyphs_shadow_array[text[i]]->image,
+                        _sx, _sy, _sw, _sh, _dx-2, _dy-2, 50);
+                        */
+                logicalCombineArea(rimg, data->glyphs_array[text[i]]->image,
+                        _sx, _sy, _sw, _sh, _dx-3, _dy-3, 0);
 
                 j += data->glyphs_array[text[i]]->advance_x >> 6;
             }
@@ -362,7 +375,7 @@ drawFreeTypeString (proplist_t pl, Drawable d,
 void
 destroyDrawString (proplist_t pl, void **init_data) {
     if (strcmp(PLGetString(PLGetArrayElement(pl, 2)), "drawPlainString") == 0) 
-        destroyDrawPlainString((Display *)init_data[0], (Colormap)init_data[1]);
+        destroyDrawPlainString((Display *)init_data[0], NULL);
     else if (strcmp(PLGetString(PLGetArrayElement(pl, 2)), "drawFreeTypeString") == 0) 
         destroyDrawFreeTypeString(pl, init_data);
 }
