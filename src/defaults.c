@@ -791,18 +791,18 @@ WDefaultEntry optionList[] = {
     },
     {"ScreenSwitchKey",  "None",		(void*)WKBD_SWITCH_SCREEN,
 	    NULL, 			getKeybind,	setKeyGrab	
-    }
+    },
 
 #ifdef KEEP_XKB_LOCK_STATUS
-    ,{"ToggleKbdModeKey", "None",                      (void*)WKBD_TOGGLE,
+    {"ToggleKbdModeKey", "None",                      (void*)WKBD_TOGGLE,
 	    NULL,                       getKeybind,     setKeyGrab
     },
     {"KbdModeLock", "NO",  	                  NULL,
 	    &wPreferences.modelock, 	getBool,	NULL
-    }
+    },
 #endif /* KEEP_XKB_LOCK_STATUS */
 
-    ,{"NormalCursor", "(builtin, left_ptr)",	(void*)WCUR_ROOT,
+    {"NormalCursor", "(builtin, left_ptr)",	(void*)WCUR_ROOT,
           NULL,				getCursor,	setCursor
     },
     {"ArrowCursor", "(builtin, top_left_arrow)",	(void*)WCUR_ARROW,

@@ -45,6 +45,7 @@ Changes since version 0.70.0:
   and further changes in the global domain file for those merged values was
   ignored making a system admin unable to set global defaults for all users
   using the global domains.
+- Fixed bug with improper setting of root/titlebar cursor (definable cursors).
 
 
 Changes since version 0.65.1:

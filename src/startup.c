@@ -805,8 +805,8 @@ StartUp(Bool defaultScreenOnly)
 
 
     /* cursors */
-    /*wCursor[WCUR_NORMAL] = None;*/
-    wCursor[WCUR_NORMAL] = XCreateFontCursor(dpy, XC_left_ptr);
+    wCursor[WCUR_NORMAL] = None;
+    /*wCursor[WCUR_NORMAL] = XCreateFontCursor(dpy, XC_left_ptr);*/
     wCursor[WCUR_ROOT] = XCreateFontCursor(dpy, XC_left_ptr);
     wCursor[WCUR_ARROW] = XCreateFontCursor(dpy, XC_top_left_arrow);
     wCursor[WCUR_MOVE] = XCreateFontCursor(dpy, XC_fleur);
