@@ -1412,7 +1412,7 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 	    }
 	}
     }
-    XFreeModifierMap(keymap);
+    XFreeModifiermap(keymap);
 
     XUngrabKeyboard(dpy, CurrentTime);
     wSetFocusTo(scr, newFocused);
