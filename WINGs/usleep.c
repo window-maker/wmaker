@@ -12,6 +12,9 @@
 #endif
 
 
+#include <unistd.h>
+#include <string.h>
+
 #if defined(HAVE_SELECT)
 
 #ifdef HAVE_SYS_SELECT_H

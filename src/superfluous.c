@@ -521,3 +521,21 @@ InitXThing(WScreen *scr)
 }
 
 #endif /* SILLYNESS */
+
+
+#ifdef GHOST_WINDOW_MOVE
+RImage*
+InitGhostWindowMove(WScreen *scr)
+{
+    RXImage *ximg;
+    RImage *img;
+
+    ximg = RGetXImage(scr->rcontext, scr->root_win, 0, 0, 
+		      scr->scr_width, scr->scr_height);
+    img = RCreateImageFromXImage(scr->rcontext, ximg->image, NULL);
+    RDestroyXImage(dpy, ximg);
+
+    return img;
+}
+
+#endif /* GHOST_WINDOW_MOVE */

@@ -855,7 +855,7 @@ scrollToColumn(WMBrowser *bPtr, int column, Bool updateScroller)
 	    if (!WMWidgetView(bPtr->columns[i])->flags.realized)
 		WMRealizeWidget(bPtr->columns[i]);
 	    WMMapWidget(bPtr->columns[i]);
-	    x += bPtr->columnSize.width+COLUMN_SPACING;
+	    x += bPtr->columnSize.width + COLUMN_SPACING;
 	} else {
 	    WMUnmapWidget(bPtr->columns[i]);
 	}
@@ -910,13 +910,15 @@ listCallback(void *self, void *clientData)
         /* open directory */
         if (item->isBranch) {
             WMAddBrowserColumn(bPtr);
-            loadColumn(bPtr, bPtr->usedColumnCount-1);
         }
         if (bPtr->usedColumnCount < bPtr->maxVisibleColumns)
             i = 0;
         else
             i = bPtr->usedColumnCount-bPtr->maxVisibleColumns;
         scrollToColumn(bPtr, i, True);
+	if (item->isBranch) {
+            loadColumn(bPtr, bPtr->usedColumnCount-1);
+	}
     }
   
 

@@ -739,8 +739,25 @@ wFrameWindowPaint(WFrameWindow *fwin)
 	    else
 		allButtons = 0;
         }
+
+#ifdef XKB_TITLE_HINT
+	if(fwin->flags.is_client_window_frame) {
+	    char * freebuff;
+	    freebuff = (char *)wmalloc((strlen(fwin->title)+6)*sizeof(char));
+	    if (fwin->flags.justification == WTJ_RIGHT) 
+	       sprintf(freebuff,"%s %s",fwin->title,fwin->languagemode?XKB_ON:XKB_OFF);
+	    else
+	       sprintf(freebuff,"%s %s",fwin->languagemode?XKB_ON:XKB_OFF,fwin->title);
+	    title = ShrinkString(*fwin->font, freebuff,
+			     fwin->titlebar->width - lofs - rofs);
+	    free(freebuff);
+	}
+	else title = ShrinkString(*fwin->font, fwin->title,
+			     fwin->titlebar->width - lofs - rofs);
+#else
 	title = ShrinkString(*fwin->font, fwin->title,
 			     fwin->titlebar->width - lofs - rofs);
+#endif /* XKB_TITLE_HINT */
 	titlelen = strlen(title);
 	w = wTextWidth((*fwin->font)->font, title, titlelen);
 

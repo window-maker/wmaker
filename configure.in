@@ -199,7 +199,7 @@ dnl ==================
 dnl List of supported locales
 dnl -------------------------
 supported_locales="cs de es fr gl it ja ko nl no pt ru se tr fi hr el pl ro dk zh_TW.Big5"
-supported_wprefs_locales="pt hr fr ko ja cs zh_TW.Big5"
+supported_wprefs_locales="pt hr fr ko ja cs zh_TW.Big5 es"
 
 for lang in $LINGUAS; do
 	ok=0
@@ -529,7 +529,7 @@ if test "$gif" = yes; then
     my_libname=""
     WM_CHECK_LIB(ungif, DGifOpenFileName, [$XLFLAGS $XLIBS])
     if test "x$ac_cv_lib_ungif_DGifOpenFileName" = xyes; then
-        my_libname=ungif
+        my_libname=-lungif
     fi
 dnl
 dnl libungif is the same thing as libgif for all practical purposes.
@@ -537,14 +537,14 @@ dnl
     if test "x$my_libname" = x; then
         WM_CHECK_LIB(gif, DGifOpenFileName, [$XLFLAGS $XLIBS])
         if test "x$ac_cv_lib_gif_DGifOpenFileName" = xyes; then
-            my_libname=gif
+            my_libname=-lgif
         fi
     fi
 
     if test "$my_libname" != x; then
 	WM_CHECK_HEADER(gif_lib.h)
 	if test "x$ac_cv_header_gif_lib_h" = xyes; then
-	    GFXLIBS="$GFXLIBS -l$my_libname"
+	    GFXLIBS="$GFXLIBS $my_libname"
 	    supported_gfx="$supported_gfx GIF"
             AC_DEFINE(USE_GIF)
 	fi

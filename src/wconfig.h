@@ -57,7 +57,7 @@
  */
 #define USECPP
 
-/* #define CPP_PATH /usr/bin/cpp */
+/* #define CPP_PATH /lib/cpp */
 
 /*
  * support for OffiX DND drag and drop in the Dock
@@ -152,6 +152,13 @@
  */
 
 #undef WS_INDICATOR 
+
+
+/*
+ * define HIDDENDOT if you want a dot to be shown in the application icon
+ * of applications that are hidden.
+ */
+#undef HIDDENDOT
 
 
 /*
@@ -524,9 +531,11 @@
 #undef SHAPED_BALLOON
 #endif
 
-
 #ifdef XKB_MODELOCK
 #define KEEP_XKB_LOCK_STATUS
+#define XKB_TITLE_HINT
+#define XKB_ON "[TH]"
+#define XKB_OFF "[EN]"
 #endif
 
 #if HAVE_LIBINTL_H && I18N

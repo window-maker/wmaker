@@ -1049,11 +1049,11 @@ storeData(_Panel *panel)
 
     item = WMGetListItem(panel->texLs, panel->textureIndex[3]);
     titem = (TextureListItem*)item->clientData;
-    SetObjectForKey(titem->prop, "MenuTextBack");
+    SetObjectForKey(titem->prop, "MenuTitleBack");
 
     item = WMGetListItem(panel->texLs, panel->textureIndex[4]);
     titem = (TextureListItem*)item->clientData;
-    SetObjectForKey(titem->prop, "MenuItemBack");
+    SetObjectForKey(titem->prop, "MenuTextBack");
 
     item = WMGetListItem(panel->texLs, panel->textureIndex[5]);
     titem = (TextureListItem*)item->clientData;

@@ -4,14 +4,13 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 lib_LTLIBRARIES = libwraster.la
 
-libwraster_la_LDFLAGS = -version-info 2:0:1
+libwraster_la_LDFLAGS = -version-info 2:1:1
 
 bin_SCRIPTS = get-wraster-flags
 
 noinst_PROGRAMS = testgrad testdraw view 
 
 EXTRA_DIST = test.png tile.xpm ballot_box.xpm 
-
 include_HEADERS = wraster.h
 
 libwraster_la_SOURCES = 	\

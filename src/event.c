@@ -298,7 +298,6 @@ DispatchEvent(XEvent *event)
      case VisibilityNotify:
 	handleVisibilityNotify(event);
 	break;
-
      default:
 	handleExtensions(event);
 	break;
@@ -446,6 +445,13 @@ handleExtensions(XEvent *event)
 	handleShapeNotify(event);
     }
 #endif	
+#ifdef KEEP_XKB_LOCK_STATUS   
+    if (wPreferences.modelock && event->type == (0x50|XkbIndicatorStateNotify)){
+	    /* if someone know how to call this 0x50
+	     * or how to clean code this please tell ]d */
+	handleXkbIndicatorStateNotify(event);
+    }
+#endif /*KEEP_XKB_LOCK_STATUS*/
 }
 
 
@@ -772,7 +778,7 @@ handleUnmapNotify(XEvent *event)
 	
 	/* if the window was reparented, do not reparent it back to the
 	 * root window */
-	wUnmanageWindow(wwin, !reparented, False);
+//	wUnmanageWindow(wwin, !reparented, False);
     }
     XUngrabServer(dpy);
 }
@@ -1133,6 +1139,31 @@ handleShapeNotify(XEvent *event)
 }
 #endif /* SHAPE */
 
+#ifdef KEEP_XKB_LOCK_STATUS   
+/* please help ]d if you know what to do */
+handleXkbIndicatorStateNotify(XEvent *event)
+{
+    WWindow *wwin;
+    WScreen *scr;
+    XkbStateRec staterec;
+    int i;
+
+    XkbGetState(dpy,XkbUseCoreKbd,&staterec);
+    for (i=0; i<wScreenCount; i++) {
+        scr = wScreenWithNumber(i);
+	wwin = scr->focused_window;
+	if (wwin->flags.focused) {
+	    wwin->frame->languagemode=staterec.compat_state&32?1:0;
+#ifdef XKB_TITLE_HINT
+            if (wwin->frame->titlebar) {
+	        XClearWindow(dpy, wwin->frame->titlebar->window);
+	        wFrameWindowPaint(wwin->frame);
+	    }
+#endif /* XKB_TITLE_HINT */
+	}
+    }
+}
+#endif /*KEEP_XKB_LOCK_STATUS*/
 
 static void 
 handleColormapNotify(XEvent *event)
@@ -1670,7 +1701,7 @@ handleKeyPress(XEvent *event)
 	    XkbGetState(dpy,XkbUseCoreKbd,&staterec);
 	    /*toggle*/
 	    XkbLockGroup(dpy,XkbUseCoreKbd,
-			 wwin->languagemode=staterec.compat_state&32?0:1);
+			 wwin->frame->languagemode=staterec.compat_state&32?0:1);
         }
         break;
 #endif /* KEEP_XKB_LOCK_STATUS */

@@ -131,6 +131,7 @@ enum {
 static void showData(_Panel *panel);
 
 
+
 static Bool
 isMenu(proplist_t item)
 {
@@ -326,6 +327,36 @@ getItemCommand(proplist_t item)
 }
 
 
+
+static proplist_t
+getSubmenuInColumn(_Panel *panel, int column)
+{
+    proplist_t parent;
+    proplist_t submenu;
+    WMList *list;
+    int r;
+
+    if (column == 0) {
+	return panel->menu;
+    }
+    if (column >= WMGetBrowserNumberOfColumns(panel->browser))
+	return NULL;
+
+    list = WMGetBrowserListInColumn(panel->browser, column - 1);
+    assert(list != NULL);
+
+    r = WMGetListSelectedItemRow(list);
+
+    parent = getSubmenuInColumn(panel, column - 1);
+
+    assert(parent != NULL);
+
+    submenu = PLGetArrayElement(parent, r + 1);
+
+    return submenu;
+}
+
+
 static void
 updateForItemType(_Panel *panel, int type)
 {
@@ -387,7 +418,7 @@ getItemOfSelectedEntry(WMBrowser *bPtr)
     int i;
 
     i = WMGetBrowserSelectedColumn(bPtr);
-    menu = (proplist_t)WMGetHangedData(WMGetBrowserListInColumn(bPtr, i));
+    menu = getSubmenuInColumn((_Panel*)WMGetHangedData(bPtr), i);
 
     i = WMGetBrowserSelectedRowInColumn(bPtr, i);
     item = PLGetArrayElement(menu, i+1);
@@ -406,7 +437,6 @@ performCommand(WMWidget *w, void *data)
     int column;
     int row;
     static int cmdIndex=0;
-    WMList *list;
     char *title = NULL;
 
     column = WMGetBrowserFirstVisibleColumn(panel->browser);
@@ -417,8 +447,7 @@ performCommand(WMWidget *w, void *data)
     if (column >= WMGetBrowserNumberOfColumns(panel->browser))
 	return;
 
-    list = WMGetBrowserListInColumn(panel->browser, column);
-    menu = WMGetHangedData(list);
+    menu = getSubmenuInColumn(panel, column);
     
     row = WMGetBrowserSelectedRowInColumn(panel->browser, column);
 
@@ -533,7 +562,7 @@ browserClick(WMWidget *w, void *data)
     _Panel *panel = (_Panel*)data;
     proplist_t item;
     char *command;
-
+    
     /* stop shortcut capture */
     panel->capturing = 0;
 
@@ -621,6 +650,7 @@ browserClick(WMWidget *w, void *data)
 }
 
 
+
 static void
 fillBrowserColumn(WMBrowser *bPtr, int column)
 {
@@ -629,21 +659,14 @@ fillBrowserColumn(WMBrowser *bPtr, int column)
     proplist_t menuList = NULL;
     int i;
 
-    if (column > 0) {
-	menuList = getItemOfSelectedEntry(panel->browser);
 
-	WMHangData(WMGetBrowserListInColumn(bPtr, column), menuList);
+    menuList = getSubmenuInColumn(panel, column);
+    assert(menuList != NULL);
 
-	if (column > WMGetBrowserFirstVisibleColumn(bPtr))
-	    WMSetTextFieldText(panel->tit2T, getItemTitle(menuList));
-	else
-	    WMSetTextFieldText(panel->tit1T, getItemTitle(menuList));
+    if (column > WMGetBrowserFirstVisibleColumn(bPtr)) {
+	WMSetTextFieldText(panel->tit2T, getItemTitle(menuList));
     } else {
-	menuList = panel->menu;
-
-	WMHangData(WMGetBrowserListInColumn(bPtr, column), menuList);
-
-	WMSetTextFieldText(panel->tit1T, getItemTitle(panel->menu));
+	WMSetTextFieldText(panel->tit1T, getItemTitle(menuList));
     }
 
     for (i=1; i<PLGetNumberOfElements(menuList); i++) {
@@ -666,6 +689,7 @@ changedItem(void *observerData, WMNotification *notification)
     WMListItem *litem;
     char *command;
     char *str;
+
 
     if (!item)
 	return;
@@ -741,13 +765,8 @@ changedTitle(void *observerData, WMNotification *notification)
     column = WMGetBrowserFirstVisibleColumn(panel->browser);
     if (panel->tit2T == t)
 	column++;
-
-    list = WMGetBrowserListInColumn(panel->browser, column);
-    if (!list) {
-	return;
-    }
     
-    menu = (proplist_t)WMGetHangedData(list);
+    menu = getSubmenuInColumn(panel, column);
     if (!menu)
 	return;
 
@@ -814,7 +833,11 @@ changedCommand(WMWidget *w, void *data)
 	    changeItemCommand(panel->editedItem, "EXIT");
 	    updateForItemType(panel, TExit);
 	}
-	/* fall through */
+	if (WMGetButtonSelected(panel->noconfirmB))
+	    changeItemParameter(panel->editedItem, "QUICK");
+	else
+	    changeItemParameter(panel->editedItem, "");
+	break;
      case CpShutdown:
 	if (strcmp(getItemCommand(panel->editedItem), "SHUTDOWN")!=0) {
 	    changeItemCommand(panel->editedItem, "SHUTDOWN");
@@ -963,16 +986,13 @@ scrolledBrowser(void *observerData, WMNotification *notification)
     proplist_t item;
 
     column = WMGetBrowserFirstVisibleColumn(panel->browser);
-    
-    list = WMGetBrowserListInColumn(panel->browser, column);
-    item = WMGetHangedData(list);
+
+    item = getSubmenuInColumn(panel, column);
     WMSetTextFieldText(panel->tit1T, getItemTitle(item));
 
-    list = WMGetBrowserListInColumn(panel->browser, column+1);
-    if (list) {
-	item = WMGetHangedData(list);
+    item = getSubmenuInColumn(panel, column + 1);
+    if (item)
 	WMSetTextFieldText(panel->tit2T, getItemTitle(item));
-    }
 }
 
 
@@ -1326,7 +1346,7 @@ getDefaultMenu(_Panel *panel, int *hasWSMenu)
 }
 
 
-static void 
+static void
 showData(_Panel *panel)
 {
     char *gspath;
@@ -1335,12 +1355,12 @@ showData(_Panel *panel)
     int hasWSMenu = 0;
 
     gspath = wusergnusteppath();
-    
+
     menuPath = wmalloc(strlen(gspath)+32);
     strcpy(menuPath, gspath);
     free(gspath);
     strcat(menuPath, "/Defaults/WMRootMenu");
-    
+
     menu = PLGetProplistWithPath(menuPath);
     pmenu = NULL;
 
@@ -1369,7 +1389,7 @@ showData(_Panel *panel)
 
     if (menu)
         PLRelease(menu);
-    
+
     if (panel->itemClipboard) {
 	PLRelease(panel->itemClipboard);
 	panel->itemClipboard = NULL;

@@ -3,6 +3,8 @@ changes since wmaker 0.51.2:
 
 - added WMColorWellDidChangeNotification
 - added wfindfileinarray()
+- fixed bug in window title setting 
+	(MANOME Tomonori <manome@itlb.te.noda.sut.ac.jp>)
 
 changes since wmaker 0.51.1:
 ............................

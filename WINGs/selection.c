@@ -77,7 +77,7 @@ WMDeleteSelectionHandler(WMWidget *widget, Atom selection)
 }
 
 
-static int gotError = 0;
+static Bool gotError = 0;
 /*
 static int
 errorHandler(XErrorEvent *error)
@@ -93,11 +93,11 @@ writeSelection(Display *dpy, Window requestor, Atom property, Atom type,
 /*
     printf("write to %x: %s\n", requestor, XGetAtomName(dpy, property));
 */
-    gotError = 0;
+    gotError = False;
 
     if (!XChangeProperty(dpy, requestor, property, type, format, 
 			 PropModeReplace, value, length))
-	return 0;
+	return False;
     XFlush(dpy);
 
     return !gotError;
@@ -309,7 +309,7 @@ W_GetTextSelection(WMScreen *scr, Atom selection)
 
 	return data;
     } else {
-	unsigned char *data;
+	char *data;
 	int bits;
 	Atom rtype;
 	unsigned long len, bytes;
@@ -343,7 +343,7 @@ W_GetTextSelection(WMScreen *scr, Atom selection)
 	if (XGetWindowProperty(scr->display, scr->groupLeader, 
 			       scr->clipboardAtom, 0, MAX_PROPERTY_SIZE, 
 			       False, XA_STRING, &rtype, &bits, &len,
-			       &bytes, &data)!=Success) {
+			       &bytes, (unsigned char**)&data)!=Success) {
 	    return NULL;
 	}
 	if (rtype!=XA_STRING || bits!=8) {

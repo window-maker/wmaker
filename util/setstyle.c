@@ -361,6 +361,11 @@ main(int argc, char **argv)
 	    exit(1);
 	}
     }
+    
+    if (!PLIsArray(style)) {
+	printf("%s: '%s' is not a style file/theme\n", ProgName, file);
+	exit(1);
+    }
 
     hackStyle(style);
 

@@ -175,7 +175,10 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
     if (napp) 
 	napp->last_workspace = wwin->screen_ptr->current_workspace;
 
-    if (wwin->flags.mapped && !WFLAGP(wwin, no_focusable)) {
+    if (WFLAGP(wwin, no_focusable))
+	return;
+
+    if (wwin->flags.mapped /*&& !WFLAGP(wwin, no_focusable)*/) {
 	/* install colormap if colormap mode is lock mode */
 	if (wPreferences.colormap_mode==WKF_CLICK)
 	    wColormapInstallForWindow(scr, wwin);
@@ -202,9 +205,6 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
     } else {
 	XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, timestamp);
     }
-
-    if (WFLAGP(wwin, no_focusable))
-	return;
 
     /* if this is not the focused window focus it */
     if (focused!=wwin) {
@@ -882,6 +882,7 @@ removeIconGrabs(WIcon *icon)
 }
 #endif
 
+
 void
 wIconifyWindow(WWindow *wwin)
 {
@@ -1115,9 +1116,12 @@ static void
 hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate)
 {
     if (wwin->flags.miniaturized) {
-	XUnmapWindow(dpy, wwin->icon->core->window);
+	/* XXX wrong fix, can cause side effects, must remove 'if' */
+	if (wwin->icon) { 
+	    XUnmapWindow(dpy, wwin->icon->core->window);
+	    wwin->icon->mapped = 0;
+	}
 	wwin->flags.hidden = 1;
-	wwin->icon->mapped = 0;
 #ifdef GNOME_STUFF
 	wGNOMEUpdateClientStateHint(wwin, False);
 #endif
@@ -1337,6 +1341,9 @@ wHideApplication(WApplication *wapp)
     if(wPreferences.auto_arrange_icons) {
 	wArrangeIcons(scr, True);
     }
+#ifdef HIDDENDOT
+    wAppIconPaint(wapp->app_icon);
+#endif
 }
 
 
@@ -1490,6 +1497,9 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
     if (wPreferences.auto_arrange_icons) {
         wArrangeIcons(scr, True);
     }
+#ifdef HIDDENDOT
+    wAppIconPaint(wapp->app_icon);
+#endif 
 }
 
 

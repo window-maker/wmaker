@@ -347,6 +347,22 @@ updateDockNumbers(WScreen *scr)
 }
 #endif /* WS_INDICATOR */
 
+#ifdef HIDDENDOT
+static void
+draw_dot(WScreen *scr, Drawable d)
+{
+    GC gc;
+    int y;
+    gc = scr->draw_gc;
+    y = wPreferences.icon_size-6;
+    XSetForeground(dpy, gc, scr->black_pixel);
+    XDrawLine(dpy, d, gc, 4, y, 5, y);
+    XDrawPoint(dpy, d, gc, 4, y+1);
+    XSetForeground(dpy, gc, scr->white_pixel);
+    XDrawLine(dpy, d, gc, 6, y, 6, y+1);
+    XDrawPoint(dpy, d, gc, 5, y+1);
+}
+#endif /* HIDDENDOT */
 
 void
 wAppIconPaint(WAppIcon *aicon)
@@ -368,6 +384,21 @@ wAppIconPaint(WAppIcon *aicon)
 		  scr->copy_gc, 0, 0, scr->dock_dots->width,
 		  scr->dock_dots->height, 0, 0);
     }
+
+#ifdef HIDDENDOT
+    {
+        WApplication *wapp;
+	wapp = wApplicationOf(aicon->main_window);
+	if(wapp)
+	if(wapp->flags.hidden){
+	XSetClipMask(dpy, scr->copy_gc, scr->dock_dots->mask);
+	XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
+	XCopyArea(dpy, scr->dock_dots->image, aicon->icon->core->window, 
+		  scr->copy_gc, 0, 0, 7,
+		  scr->dock_dots->height, 0, 0);
+        }
+    }
+#endif /* HIDDENDOT */
 
 #ifdef NEWAPPICON
     if (!wPreferences.strict_ns && aicon->icon->owner!=NULL) {

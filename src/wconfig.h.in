@@ -155,6 +155,13 @@
 
 
 /*
+ * define HIDDENDOT if you want a dot to be shown in the application icon
+ * of applications that are hidden.
+ */
+#undef HIDDENDOT
+
+
+/*
  * Ignores the PPosition hint from clients. This is needed for some
  * programs that have buggy implementations of such hint and place
  * themselves in strange locations.
@@ -524,9 +531,11 @@
 #undef SHAPED_BALLOON
 #endif
 
-
 #ifdef XKB_MODELOCK
 #define KEEP_XKB_LOCK_STATUS
+#define XKB_TITLE_HINT
+#define XKB_ON "[TH]"
+#define XKB_OFF "[EN]"
 #endif
 
 #if HAVE_LIBINTL_H && I18N

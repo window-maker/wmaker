@@ -39,8 +39,8 @@
 #define RLRASTER_H_
 
 
-/* version of the header for the library: 0.13 */
-#define WRASTER_HEADER_VERSION	13
+/* version of the header for the library: 0.14 */
+#define WRASTER_HEADER_VERSION	14
 
 
 #include <X11/Xlib.h>
@@ -381,12 +381,15 @@ int RConvertImageMask(RContext *context, RImage *image, Pixmap *pixmap,
 RXImage *RCreateXImage(RContext *context, int depth,
 		       unsigned width, unsigned height);
 
+RXImage *RGetXImage(RContext *context, Drawable d, int x, int y,
+		    unsigned width, unsigned height);
+
 void RDestroyXImage(RContext *context, RXImage *ximage);
 
 void RPutXImage(RContext *context, Drawable d, GC gc, RXImage *ximage, 
-		int src_x, int src_y, int dest_x, int dest_y, 
+		int src_x, int src_y, int dest_x, int dest_y,
 		unsigned width, unsigned height);
-
+    
 /* do not free the returned string! */
 const char *RMessageForError(int errorCode);
 

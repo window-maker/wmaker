@@ -2859,7 +2859,7 @@ fi
 
 
 supported_locales="cs de es fr gl it ja ko nl no pt ru se tr fi hr el pl ro dk zh_TW.Big5"
-supported_wprefs_locales="pt hr fr ko ja cs zh_TW.Big5"
+supported_wprefs_locales="pt hr fr ko ja cs zh_TW.Big5 es"
 
 for lang in $LINGUAS; do
 	ok=0
@@ -4655,7 +4655,7 @@ fi
 LDFLAGS="$LDFLAGS_old"
 
     if test "x$ac_cv_lib_ungif_DGifOpenFileName" = xyes; then
-        my_libname=ungif
+        my_libname=-lungif
     fi
     if test "x$my_libname" = x; then
         
@@ -4705,7 +4705,7 @@ fi
 LDFLAGS="$LDFLAGS_old"
 
         if test "x$ac_cv_lib_gif_DGifOpenFileName" = xyes; then
-            my_libname=gif
+            my_libname=-lgif
         fi
     fi
 
@@ -4749,7 +4749,7 @@ fi
 CPPFLAGS="$CPPFLAGS_old"
 
 	if test "x$ac_cv_header_gif_lib_h" = xyes; then
-	    GFXLIBS="$GFXLIBS -l$my_libname"
+	    GFXLIBS="$GFXLIBS $my_libname"
 	    supported_gfx="$supported_gfx GIF"
             cat >> confdefs.h <<\EOF
 #define USE_GIF 1

@@ -324,7 +324,7 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
     WMSetLabelText(panel->dndCommandLabel, 
 		   _("%d will be replaced with the file name"));
 #else
-    WMSetTextFieldEnabled(panel->dndCommandField, False);
+    WMSetTextFieldEditable(panel->dndCommandField, False);
     WMSetLabelText(panel->dndCommandLabel,
 		   _("DND support was not compiled in"));    
 #endif

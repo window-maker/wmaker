@@ -78,7 +78,7 @@ typedef struct InspectorPanel {
     WMFrame *wsFrm;
     WMButton *curRb;
     WMButton *setRb;
-    WMTextField *wsText;
+    WMPopUpButton *wsP;
     
     /* 5th page. application wide attributes */
     WMFrame *appFrm;

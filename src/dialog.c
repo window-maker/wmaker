@@ -1142,7 +1142,7 @@ wShowInfoPanel(WScreen *scr)
     panel->wwin = wwin;
 
     thePanel = panel;
-#ifndef SILLYNESS
+#ifdef SILLYNESS
     if (InitXThing(panel->scr)) {	
 	panel->timer = WMAddTimerHandler(100, logoPushCallback, panel);
 	panel->cycle = 0;

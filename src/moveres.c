@@ -1456,6 +1456,11 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
     /* This needs not to change while moving, else bad things can happen */
     int opaqueMove = wPreferences.opaque_move;
     MoveData moveData;
+#ifdef GHOST_WINDOW_MOVE
+    RImage *rimg;
+    
+    rimg = InitGhostWindowMove(scr);
+#endif
 
     initMoveData(wwin, &moveData);
 

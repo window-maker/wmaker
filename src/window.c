@@ -27,8 +27,8 @@
 #ifdef SHAPE
 #include <X11/extensions/shape.h>
 #endif
-#ifdef KEEP_XKB_LOCK_STATUS
-# include <X11/XKBlib.h>
+#ifdef KEEP_XKB_LOCK_STATUS     
+#include <X11/XKBlib.h>         
 #endif /* KEEP_XKB_LOCK_STATUS */
 #include <stdlib.h>
 #include <stdio.h>
@@ -1331,6 +1331,8 @@ wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 
     XUnmapWindow(dpy, frame->window);
 
+    XUnmapWindow(dpy, wwin->client_win);
+
     /* deselect window */
     wSelectWindow(wwin, False);
     
@@ -1487,7 +1489,7 @@ wWindowFocus(WWindow *wwin, WWindow *owin)
 #ifdef KEEP_XKB_LOCK_STATUS
     if (wPreferences.modelock) {
         if (!wwin->flags.focused) {
-            XkbLockGroup(dpy, XkbUseCoreKbd, wwin->languagemode);
+            XkbLockGroup(dpy, XkbUseCoreKbd, wwin->frame->languagemode);
         }
     }
 #endif /* KEEP_XKB_LOCK_STATUS */
@@ -1546,17 +1548,6 @@ wWindowFocus(WWindow *wwin, WWindow *owin)
 void
 wWindowUnfocus(WWindow *wwin)
 {
-#ifdef KEEP_XKB_LOCK_STATUS
-    static XkbStateRec staterec;
-    if (wPreferences.modelock) {
-        if (wwin->flags.focused) {
-	    XkbGetState(dpy,XkbUseCoreKbd,&staterec);
-	    wwin->languagemode=staterec.compat_state&32?1:0;
-	    XkbLockGroup(dpy,XkbUseCoreKbd,0); /* reset to workspace */
-        }
-    }
-#endif /* KEEP_XKB_LOCK_STATUS */
-
     CloseWindowMenu(wwin->screen_ptr);
 
     wFrameWindowChangeState(wwin->frame, wwin->flags.semi_focused 

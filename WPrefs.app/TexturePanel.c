@@ -570,7 +570,7 @@ browseImageCallback(WMWidget *w, void *data)
     WMSetFilePanelCanChooseDirectories(opanel, False);
     WMSetFilePanelCanChooseFiles(opanel, True);
 
-    if (WMRunModalFilePanelForDirectory(opanel, panel->win, "/home",
+    if (WMRunModalFilePanelForDirectory(opanel, panel->win, wgethomedir(),
 					"Open Image", NULL)) {
 	char *path, *fullpath;
 	char *tmp, *tmp2;

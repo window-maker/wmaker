@@ -466,14 +466,12 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 	insertAttribute(dict, winDic, AStartWorkspace, value, &different, flags);
 	PLRelease(value);
     } else if (WMGetButtonSelected(panel->setRb) != 0) {
-        char *ws_name = WMGetTextFieldText(panel->wsText);
-        if (ws_name) {
-            if (ws_name[0] != 0) {
-                value = PLMakeString(ws_name);
-                insertAttribute(dict, winDic, AStartWorkspace, value, &different, flags);
-                PLRelease(value);
-            }
-            free(ws_name);
+	int i = WMGetPopUpButtonSelectedItem(panel->wsP);
+	
+	if (i < panel->frame->screen_ptr->workspace_count) {
+	    value = PLMakeString(panel->frame->screen_ptr->workspaces[i]->name);
+	    insertAttribute(dict, winDic, AStartWorkspace, value, &different, flags);
+	    PLRelease(value);
         }
     }
 
@@ -911,9 +909,9 @@ revertSettings(WMButton *button, InspectorPanel *panel)
 
     n = wDefaultGetStartWorkspace(wwin->screen_ptr, wm_instance, wm_class);
 
-    if (n >= 0 && n <= wwin->screen_ptr->workspace_count) {
+    if (n >= 0 && n < wwin->screen_ptr->workspace_count) {
 	WMPerformButtonClick(panel->setRb);
-	WMSetTextFieldText(panel->wsText, wwin->screen_ptr->workspaces[n]->name);
+	WMSetPopUpButtonSelectedItem(panel->wsP, n);
     } else {
 	WMPerformButtonClick(panel->curRb);
     }
@@ -959,14 +957,11 @@ textEditedObserver(void *observerData, WMNotification *notification)
     if ((long)WMGetNotificationClientData(notification) != WMReturnTextMovement)
 	return;
 
-    if (WMGetNotificationObject(notification) == panel->fileText) {
-	showIconFor(WMWidgetScreen(panel->win), panel, NULL, NULL, 
-		    USE_TEXT_FIELD);
+    showIconFor(WMWidgetScreen(panel->win), panel, NULL, NULL, 
+		USE_TEXT_FIELD);
     /*
      WMPerformButtonClick(panel->updateIconBtn);
      */
-    } else
-	WMPerformButtonClick(panel->setRb);
 }
 
 
@@ -1240,7 +1235,7 @@ createInspectorForWindow(WWindow *wwin)
     panel->iconLbl = WMCreateLabel(panel->iconFrm);
     WMMoveWidget(panel->iconLbl, PWIDTH - (2 * 15) - 22 - 64, 30);
     WMResizeWidget(panel->iconLbl, 64, 64);
-    WMSetLabelRelief(panel->iconLbl, WRRaised);
+    WMSetLabelRelief(panel->iconLbl, WRGroove);
     WMSetLabelImagePosition(panel->iconLbl, WIPImageOnly);
     
     panel->browseIconBtn = WMCreateCommandButton(panel->iconFrm);
@@ -1302,21 +1297,19 @@ createInspectorForWindow(WWindow *wwin)
     WMGroupButtons(panel->curRb, panel->setRb);
     WMSetButtonText(panel->setRb, NULL);
 
-    panel->wsText = WMCreateTextField(panel->wsFrm);
-    WMMoveWidget(panel->wsText, 30, 40);
-    WMResizeWidget(panel->wsText, PWIDTH - (2 * 15) - 25 - 10 - (2 * 5), 20);
-    WMAddNotificationObserver(textEditedObserver, panel, 
-			      WMTextDidEndEditingNotification,
-			      panel->wsText);
-    
-    
+    panel->wsP = WMCreatePopUpButton(panel->wsFrm);
+    WMMoveWidget(panel->wsP, 30, 40);
+    WMResizeWidget(panel->wsP, PWIDTH - (2 * 15) - 25 - 10 - (2 * 5), 20);
+    for (i = 0; i < wwin->screen_ptr->workspace_count; i++) {
+	WMAddPopUpButtonItem(panel->wsP, scr->workspaces[i]->name);
+    }
+
     i = wDefaultGetStartWorkspace(wwin->screen_ptr, wwin->wm_instance,
                                   wwin->wm_class);
     if (i >= 0 && i <= wwin->screen_ptr->workspace_count) {
 	WMSetButtonSelected(panel->curRb, False);
 	WMSetButtonSelected(panel->setRb, True);
-	WMSetTextFieldText(panel->wsText,
-			   wwin->screen_ptr->workspaces[i]->name);
+	WMSetPopUpButtonSelectedItem(panel->wsP, i);
     } else {
 	WMSetButtonSelected(panel->curRb, True);
 	WMSetButtonSelected(panel->setRb, False);

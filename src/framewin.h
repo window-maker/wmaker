@@ -72,6 +72,10 @@ typedef struct WFrameWindow {
 
     char *title;		       /* window name (title) */
 
+#ifdef KEEP_XKB_LOCK_STATUS
+    int languagemode;
+#endif /* KEEP_XKB_LOCK_STATUS */
+
     /* thing that uses this frame. passed as data to callbacks */
     void *child;
     

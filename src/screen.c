@@ -32,6 +32,9 @@
 #ifdef SHAPE
 #include <X11/extensions/shape.h>
 #endif
+#ifdef KEEP_XKB_LOCK_STATUS     
+#include <X11/XKBlib.h>         
+#endif /* KEEP_XKB_LOCK_STATUS */
 
 #include <wraster.h>
 
@@ -425,7 +428,8 @@ createPixmaps(WScreen *scr)
     image = wDefaultGetImage(scr, "Logo", "WMPanel");
 
     if (!image) {
-	wwarning(_("could not load logo image for panels"));
+	wwarning(_("could not load logo image for panels: %s"),
+		 RMessageForError(RErrorCode));
     } else {
 	if (!RConvertImageMask(scr->rcontext, image, &p, &m, 128)) {
 	    wwarning(_("error making logo image for panel:%s"), RMessageForError(RErrorCode));
@@ -529,10 +533,12 @@ createInternalWindows(WScreen *scr)
       XCreateWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, scr->w_depth,
 		    CopyFromParent, scr->w_visual, vmask, &attribs);
 
+    
     /* for our window manager info notice board */
     scr->info_window =
       XCreateWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, CopyFromParent,
-		    CopyFromParent, CopyFromParent, 0, NULL);
+		    CopyFromParent, CopyFromParent, CWOverrideRedirect,
+		    &attribs);
 
     /*
      * If the window is clicked without having ButtonPress selected, the
@@ -668,6 +674,11 @@ wScreenInit(int screen_number)
     }
     
     XSelectInput(dpy, scr->root_win, event_mask);
+
+#ifdef KEEP_XKB_LOCK_STATUS     
+    XkbSelectEvents(dpy,XkbUseCoreKbd,XkbIndicatorStateNotifyMask,
+                                            XkbIndicatorStateNotifyMask);
+#endif /* KEEP_XKB_LOCK_STATUS */
 
     XSync(dpy, False);
     XSetErrorHandler(oldHandler);

@@ -171,6 +171,7 @@ RDestroyXImage(RContext *context, RXImage *rximage)
     free(rximage);
 #else /* XSHM */
     if (rximage->is_shared) {
+	XSync(context->dpy, False);
 	XShmDetach(context->dpy, &rximage->info);
 	XDestroyImage(rximage->image);
 	if (shmdt(rximage->info.shmaddr) < 0)
@@ -181,6 +182,66 @@ RDestroyXImage(RContext *context, RXImage *rximage)
 	XDestroyImage(rximage->image);
     }
 #endif
+}
+
+
+static unsigned
+getDepth(Display *dpy, Drawable d)
+{
+    Window w;
+    int foo;
+    unsigned bar;
+    unsigned depth;
+    
+    XGetGeometry(dpy, d, &w, &foo, &foo, &bar, &bar, &bar, &depth);
+    
+    return depth;
+}
+
+
+
+RXImage*
+RGetXImage(RContext *context, Drawable d, int x, int y,
+	   unsigned width, unsigned height)
+{
+    RXImage *ximg = NULL;
+
+#ifdef XSHM
+    if (context->attribs->use_shared_memory && 0) {
+	ximg = RCreateXImage(context, getDepth(context->dpy, d),
+			     width, height);
+
+	if (ximg && !ximg->is_shared) {
+	    RDestroyXImage(context, ximg);
+	    ximg = NULL;
+	}
+	if (ximg) {
+	    XShmGetImage(context->dpy, d, ximg->image, x, y, AllPlanes);
+	}
+    }
+    if (!ximg) {
+	ximg = malloc(sizeof(RXImage));
+	if (!ximg) {
+	    RErrorCode = RERR_NOMEMORY;
+	    return NULL;
+	}
+	ximg->is_shared = 0;
+	ximg->image = XGetImage(context->dpy, d, x, y, width, height,
+				AllPlanes, ZPixmap);
+    }
+    return ximg;
+#else /* !XSHM */
+    ximg = malloc(sizeof(RXImage));
+    if (!ximg) {
+	RErrorCode = RERR_NOMEMORY;
+	return NULL;
+    }
+    
+    ximg->image = XGetImage(context->dpy, d, x, y, width, height,
+			    AllPlanes, ZPixmap);
+
+    return ximg;
+#endif /* !XSHM */
 }
 
 

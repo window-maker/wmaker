@@ -2,8 +2,17 @@ Changes since version 0.51.2:
 .............................
 
 - made the Attributes panel be available for all windows, even
-for completely broken apps (although settings wont be saved for
-completely broken apps)
+  for completely broken apps (although settings wont be saved for
+  completely broken apps)
+- fixed compilation problems with compile time #defines
+- workaround for crash during startup related to hiding miniaturized windows
+  from Matt Armstrong <matt_armstrong@bigfoot.com>
+- fixed focus problem with unfocusable windows
+- fixed bug in WPrefs that changed EXIT to SHUTDOWN
+- fixed menu title messup bug in WPrefs
+- added a dot to mark hidden applications (compile time) (id@windowmaker.org)
+- enhancements to the modelock patch (id@windowmaker.org)
+- show kbd mode for modelock  (id@windowmaker.org)
 
 
 Changes since version 0.51.1:

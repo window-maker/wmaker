@@ -218,10 +218,6 @@ typedef struct WWindow {
     
     FocusMode focus_mode;	       /* type of keyboard input focus */
 
-#ifdef KEEP_XKB_LOCK_STATUS
-    int languagemode;
-#endif /* KEEP_XKB_LOCK_STATUS */
-
 #ifdef OLWM_HINTS_unfinished
     struct WOLWindowState ol_window_state;
 #endif

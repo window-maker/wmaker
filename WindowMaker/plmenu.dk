@@ -1,0 +1,433 @@
+(
+"Applikationer",
+        (
+        "Info",
+                ("Info Panel...", INFO_PANEL),
+                ("Copyright...", LEGAL_PANEL),
+                (
+                "Systemkonsol",
+                EXEC,
+                "xconsole"
+                ),
+                (
+                "Systembelastning",
+                EXEC,
+                "xosview || xload"
+                ),
+                (
+                "Procesliste",
+                EXEC,
+                "rxvt -fn 6x10 -geometry 80x50 -e top"
+                ),
+                (
+                "Brugsanvisninger",
+                EXEC,
+                "xman"
+                ),
+		(
+		"Kontrolpanel",
+		EXEC,
+		"control-panel"
+		),
+		(
+		"LinuxConfig",
+		EXEC,
+		"linuxconf"
+		)
+        ),
+	(
+	"Xterm",
+	EXEC,
+	"rxvt"
+	),
+        ("Arbejdsborde", WORKSPACE_MENU),
+        (
+        "Applikationer",
+                (
+                "Grafik",
+                        (
+                        "Gimp",
+                        EXEC,
+                        "gimp >/dev/null"
+                        ),
+			(
+			"Electric Eyes",
+			EXEC,
+			"ee"
+			),
+                        (
+                        "XV",
+                        EXEC,
+                        "xv"
+                        ),
+                        (
+                        "XPaint",
+                        EXEC,
+                        "xpaint"
+                        ),
+                        (
+                        "XFig",
+                        EXEC,
+                        "xfig"
+                        )
+                ),
+                (
+                "X Filhåndtering",
+                EXEC,
+                "xfm"
+                ),
+		(
+		"Midnight Commander",
+		EXEC,
+		"rxvt -fn 9x15 -e mc"
+		),
+                (
+                "OffiX Files",
+                EXEC,
+                "files"
+                ),
+                (
+                "LyX",
+                EXEC,
+                "lyx"
+                ),
+                (
+                "Netscape",
+                EXEC,
+                "netscape"
+                ),
+		(
+		"Netscape Mail",
+		EXEC,
+		"netscape -news"
+		),
+		(
+		"Lynx",
+		EXEC,
+		"rxvt -fn 9x15 -e lynx"
+		),
+                (
+                "Ghostview",
+                EXEC,
+                "ghostview %a(Skriv filnavn)"
+                ),
+                (
+                "Acrobat",
+                EXEC,
+                "/usr/local/Acrobat3/bin/acroread %a(Skriv PDF-filnavn)"
+                ),
+                (
+                "TkDesk",
+                EXEC,
+                "tkdesk"
+                ),
+		(
+		"X11 apps",
+		OPEN_MENU,
+		"/usr/local/bin"
+		)
+        ),
+        (
+        "Tekstbehandling",
+		(
+		"Wordperfect",
+		EXEC,
+		"/usr/local/wp8/wpbin/xwp"
+		),
+                (
+                "GXedit",
+                EXEC,
+                "gxedit"
+                ),
+		(
+		"Gnotepad+",
+		EXEC,
+		"gnp"
+		),
+		(
+		"gEdit",
+		EXEC,
+		"gedit"
+		),
+                (
+                "Emacs",
+                EXEC,
+                "xemacs || emacs"
+                ),
+                (
+                "NEdit",
+                EXEC,
+                "nedit"
+                ),
+		(
+		"TKnotepad",
+		EXEC,
+		"tknotepad"
+		),
+                (
+                "VI",
+                EXEC,
+                "gvim || rxvt -e vi"
+                )
+        ),
+	(
+	"KDE applikationer",
+		(
+		"Kmail",
+		EXEC,
+		"kmail"
+		),
+		(
+		"Kppp",
+		EXEC,
+		"kppp"
+		),
+		(
+		"K Filhåndtering",
+		EXEC,
+		"kfm -w"
+		),
+		(
+		"Kdehjælp",
+		EXEC,
+		"kdehelp"
+		)
+	),
+        (
+        "Diverse",
+                (
+                "Xmcd",
+                EXEC,
+                "xmcd 2> /dev/null"
+                ),
+                (
+                "Xplaycd",
+                EXEC,
+                "xplaycd"
+                ),
+                (
+                "Xmixer",
+                EXEC,
+                "xmixer"
+                )
+        ),
+        (
+        "Tilbehør",
+                (
+                "Lommeregner",
+                EXEC,
+                "xcalc"
+                ),
+                (
+                "Window Egenskaber",
+                EXEC,
+                "xprop | xmessage -center -title 'xprop' -file"
+                ),
+                (
+                "Vælg skrifttype",
+                EXEC,
+                "xfontsel"
+                ),
+                (
+                "Terminalemulator",
+                EXEC,
+                "xminicom"
+                ),
+                (
+                "Forstørrelsesglas",
+                EXEC,
+                "xmag"
+                ),
+                (
+                "Farver",
+                EXEC,
+                "xcmap"
+                ),
+                (
+                "XKill",
+                EXEC,
+                "xkill"
+                ),
+                (
+                "ASClock",
+                EXEC,
+                "asclock -shape"
+                ),
+                (
+                "Udklipsbord",
+                EXEC,
+                "xclipboard"
+                )
+        ),
+        (
+        "Markering",
+                (
+                "Kopier",
+                EXEC,
+                "echo '%s' | wxcopy"
+                ),
+                (
+                "Send e-post",
+                EXEC,
+                "xterm -name mail -T \"Pine\" -e pine %s"
+                ),
+                (
+                "Indtast URL",
+                EXEC,
+                "netscape %s"
+                ),
+                (
+                "Søg i manual",
+                EXEC,
+                "if ( man  %s  > /dev/null ); then man  %s  | xless;	else xmessage -center -title \"Manual Browser\" Sorry, but there is no manual page entry for  %s ...; fi"
+                )
+        ),
+        (
+        "Arbejdsbord",
+                ("Gem andre", HIDE_OTHERS),
+                ("Vis alle", SHOW_ALL),
+                ("Arranger ikoner", ARRANGE_ICONS),
+                ("Genindlæs", REFRESH),
+                (
+                "Lås",
+                EXEC,
+                "xlock -allowroot -usefirst"
+                ),
+                ("Gem miljø", SAVE_SESSION),
+                ("Slet gemt miljø", CLEAR_SESSION)
+        ),
+        (
+        "Udseende",
+                (
+                "Temaer",
+                OPEN_MENU,
+                "-noext /usr/local/share/WindowMaker/Themes  ~/GNUstep/Library/WindowMaker/Themes WITH setstyle"
+                ),
+                (
+                "Stil",
+                OPEN_MENU,
+                "-noext /usr/local/share/WindowMaker/Styles  ~/GNUstep/Library/WindowMaker/Styles WITH setstyle"
+                ),
+                (
+                "Ikonsæt",
+                OPEN_MENU,
+                "-noext /usr/local/share/WindowMaker/IconSets  ~/GNUstep/Library/WindowMaker/IconSets WITH seticons"
+                ),
+                (
+                "Baggrund",
+                        (
+                        "Ensfarvet",
+                                (
+                                "Sort",
+                                EXEC,
+                                "wdwrite WindowMaker WorkspaceBack  '(solid, black)'"
+                                ),
+                                (
+                                "Blå",
+                                EXEC,
+                                "wdwrite WindowMaker WorkspaceBack  '(solid, \"#505075\")'"
+                                ),
+                                (
+                                "Indigo",
+                                EXEC,
+                                "wdwrite WindowMaker WorkspaceBack  '(solid, \"#243e6c\")'"
+                                ),
+                                (
+                                "Mørkeblå",
+                                EXEC,
+                                "wdwrite WindowMaker WorkspaceBack  '(solid, \"#180090\")'"
+                                ),
+                                (
+                                "Lilla",
+                                EXEC,
+                                "wdwrite WindowMaker WorkspaceBack  '(solid, \"#554466\")'"
+                                ),
+                                (
+                                "Hvede",
+                                EXEC,
+                                "wdwrite WindowMaker WorkspaceBack  '(solid, \"wheat4\")'"
+                                ),
+                                (
+                                "Mørkegrå",
+                                EXEC,
+                                "wdwrite WindowMaker WorkspaceBack  '(solid, \"#333340\")'"
+                                ),
+                                (
+                                "Bordeaux",
+                                EXEC,
+                                "wdwrite WindowMaker WorkspaceBack  '(solid, \"#400020\")'"
+                                )
+                        ),
+                        (
+                        "Nuancer",
+                                (
+                                "Flag",
+                                EXEC,
+                                "wdwrite WindowMaker WorkspaceBack  '(mdgradient, green, red, white, green)'"
+                                ),
+                                (
+                                "Himmel",
+                                EXEC,
+                                "wdwrite WindowMaker WorkspaceBack  '(vgradient, blue4, white)'"
+                                ),
+    				(
+    				"Blue Shades",
+    				EXEC,
+    				"wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#7080a5\", \"#101020\")'"
+    				),
+				(
+				"Indigo Shades",
+				EXEC,
+				"wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#746ebc\", \"#242e4c\")'"
+				),
+			    	(
+			    	"Purple Shades",
+			    	EXEC,
+			    	"wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#654c66\", \"#151426\")'"
+			    	),
+    				(
+    				"Wheat Shades",
+    				EXEC,
+    				"wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#a09060\", \"#302010\")'"
+    				),
+    				(
+    				"Grey Shades",
+    				EXEC,
+    				"wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#636380\", \"#131318\")'"
+    				),
+    				(
+    				"Wine Shades",
+    				EXEC,
+    				"wdwrite WindowMaker WorkspaceBack  '(vgradient, \"#600040\", \"#180010\")'"
+    				)
+                        ),
+                        (
+                        "Billeder",
+                        OPEN_MENU,
+                        "-noext /usr/local/share/WindowMaker/Backgrounds  ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t"
+                        )
+                ),
+                (
+                "Gem tema",
+                EXEC,
+                "getstyle -t ~/GNUstep/Library/WindowMaker/Themes/\"%a(Theme name,Enter file name:)\""
+                ),
+                (
+                "Gem ikonsæt",
+                EXEC,
+                "geticonset ~/GNUstep/Library/WindowMaker/IconSets/\"%a(IconSet name,Enter file name:)\""
+                )
+        ),
+        (
+        "Afslut",
+                ("Genindlæs", RESTART),
+		("Start Fvwm2", RESTART, fvwm2),
+                ("Start AfterStep", RESTART, afterstep),
+		("Start Icewm", RESTART, icewm),
+		("Start KDE", RESTART, startkde),
+		("Start Flwm", RESTART, flwm),
+		("Start Blackbox", RESTART, blackbox),
+                ("Afslut WindowMaker...", EXIT),
+                ("Afslut X...", SHUTDOWN)
+        )
+)

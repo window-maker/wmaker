@@ -39,6 +39,7 @@ int main(int argc, char **argv)
   scr = WMCreateSimpleApplicationScreen(dpy);
 
 
+
 	
   pixmap = WMCreatePixmapFromXPMData(scr, GNUSTEP_XPM);
   WMSetApplicationIconImage(scr, pixmap); WMReleasePixmap(pixmap);
