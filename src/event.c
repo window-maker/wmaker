@@ -85,7 +85,9 @@ extern Atom _XA_WM_COLORMAP_NOTIFY;
 
 extern Atom _XA_WM_CHANGE_STATE;
 extern Atom _XA_WM_DELETE_WINDOW;
+extern Atom _XA_GNUSTEP_WM_ATTR;
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
+extern Atom _XA_GNUSTEP_TITLEBAR_STATE;
 extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
 extern Atom _XA_WINDOWMAKER_COMMAND;
 
@@ -887,6 +889,33 @@ handleClientMessage(XEvent *event)
 		    break;
 		}
 	    }
+	}
+    } else if (event->xclient.message_type == _XA_GNUSTEP_WM_ATTR) {
+	wwin = wWindowFor(event->xclient.window);
+	if (!wwin) return;
+	switch (event->xclient.data.l[0]) {
+	 case GSWindowLevelAttr:
+	   {
+	     int level = (int)event->xclient.data.l[0];
+	     if (WINDOW_LEVEL(wwin) != level) {
+	       ChangeStackingLevel(wwin->frame->core, level);
+	     }
+	   }
+	   break;
+	}
+    } else if (event->xclient.message_type == _XA_GNUSTEP_TITLEBAR_STATE) {
+	wwin = wWindowFor(event->xclient.window);
+	if (!wwin) return;
+	switch (event->xclient.data.l[0]) {
+	 case WMTitleBarNormal:
+	    wFrameWindowChangeState(wwin->frame, WS_UNFOCUSED);
+	    break;
+	 case WMTitleBarMain:
+	    wFrameWindowChangeState(wwin->frame, WS_PFOCUSED);
+	    break;
+	 case WMTitleBarKey:
+	    wFrameWindowChangeState(wwin->frame, WS_FOCUSED);
+	    break;
 	}
 #ifdef GNOME_STUFF
     } else if (wGNOMEProcessClientMessage(&event->xclient)) {

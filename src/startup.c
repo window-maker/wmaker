@@ -130,6 +130,7 @@ extern Atom _XA_WINDOWMAKER_ICON_SIZE;
 extern Atom _XA_WINDOWMAKER_ICON_TILE;
 
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
+extern Atom _XA_GNUSTEP_TITLEBAR_STATE;
 
 #ifdef OFFIX_DND
 extern Atom _XA_DND_PROTOCOL;
@@ -648,6 +649,7 @@ static char *atomNames[] = {
     "_WINDOWMAKER_COMMAND",
     "_WINDOWMAKER_ICON_SIZE",
     "_WINDOWMAKER_ICON_TILE"
+    GNUSTEP_TITLEBAR_STATE, 
 };
 
 
@@ -719,6 +721,8 @@ StartUp(Bool defaultScreenOnly)
 
     _XA_WINDOWMAKER_ICON_SIZE = atom[17];
     _XA_WINDOWMAKER_ICON_TILE = atom[18];
+
+    _XA_GNUSTEP_TITLEBAR_STATE = atom[99];
 
 #ifdef OFFIX_DND
     _XA_DND_SELECTION = XInternAtom(dpy, "DndSelection", False);

@@ -46,6 +46,12 @@
 
 #define GNUSTEP_WM_ATTR_NAME  "_GNUSTEP_WM_ATTR"
 
+#define	GNUSTEP_TITLEBAR_STATE 	"_GNUSTEP_TITLEBAR_STATE"
+enum {
+  WMTitleBarKey = 0,
+  WMTitleBarNormal = 1,
+  WMTitleBarMain = 2
+};
 
 #ifndef _WINGS_H_
 /* window stacking level */
