@@ -4,9 +4,10 @@
 #define _WINGS_H_
 
 #include <wraster.h>
+#include <WUtil.h>
 #include <X11/Xlib.h>
 
-#define WINGS_H_VERSION  990316
+#define WINGS_H_VERSION  990516
 
 
 #ifdef __cplusplus
