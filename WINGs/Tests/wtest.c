@@ -1206,10 +1206,6 @@ main(int argc, char **argv)
      */
 
     testList(scr);
-    testColorWell(scr);
-
-    testTextField(scr);
-    testText(scr);
 
 #if 0
     testColorWell(scr);
