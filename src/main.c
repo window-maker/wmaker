@@ -610,6 +610,7 @@ real_main(int argc, char **argv)
     int i, restart=0;
     char *str, *alt;
     int d, s;
+    int flag;
 #ifdef DEBUG
     Bool doSync = False;
 #endif
@@ -622,13 +623,16 @@ real_main(int argc, char **argv)
     str = wstrconcat("WMAKER_BIN_NAME=", argv[0]);
     putenv(str);
 
-    ArgCount = argc+1;
-    Arguments = wmalloc(sizeof(char*)*(ArgCount+2));
+    flag= 0;
+    ArgCount = argc;
+    Arguments = wmalloc(sizeof(char*)*(ArgCount+1));
     for (i= 0; i < argc; i++)
-      Arguments[i]= argv[i];
+    {
+        Arguments[i]= argv[i];
+    }
     /* add the extra option to signal that we're just restarting wmaker */
-    Arguments[argc]= "--for-real=";
-    Arguments[argc+1]= NULL;
+    Arguments[argc-1]= "--for-real=";
+    Arguments[argc]= NULL;
 
     WMInitializeApplication("WindowMaker", &argc, argv);
 
