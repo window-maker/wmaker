@@ -830,9 +830,9 @@ wManageWindow(WScreen *scr, Window window)
 
 #define ADEQUATE(x) ((x)!=None && (x)!=wwin->client_win && (x)!=fPtr->leader)
 
+	
         PropGetWMClass(wwin->main_window, &class, &instance);
-        buffer = wmalloc(strlen(instance)+strlen(class)+2);
-        sprintf(buffer, "%s.%s", instance, class);
+	buffer = StrConcatDot(instance, class);
 
         index = WMFindInArray(scr->fakeGroupLeaders, matchIdentifier, (void*)buffer);
         if (index != WANotFound) {

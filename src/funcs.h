@@ -93,11 +93,14 @@ void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next);
 char *MakeCPPArgs(char *path);
 #endif
 
+char *StrConcatDot(char *a, char *b);
+
 char *ExpandOptions(WScreen *scr, char *cmdline);
 
 void ExecuteShellCommand(WScreen *scr, char *command);
 
 void StartLogShell(WScreen *scr);
+
 
 Bool IsDoubleClick(WScreen *scr, XEvent *event);
 

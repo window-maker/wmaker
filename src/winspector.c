@@ -527,8 +527,7 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     else if (WMGetButtonSelected(panel->bothRb) != 0) {
         char *buffer;
 
-        buffer = wmalloc(strlen(wwin->wm_instance)+strlen(wwin->wm_class)+2);
-        sprintf(buffer, "%s.%s", wwin->wm_instance, wwin->wm_class);
+	buffer = StrConcatDot(wwin->wm_instance, wwin->wm_class);
         key = WMCreatePLString(buffer);
         wfree(buffer);
     } else if (WMGetButtonSelected(panel->defaultRb) != 0) {
@@ -684,8 +683,7 @@ saveSettings(WMButton *button, InspectorPanel *panel)
             char *class = wapp->main_window_desc->wm_class;
             char *buffer;
 
-            buffer = wmalloc(strlen(instance)+strlen(class)+2);
-            sprintf(buffer, "%s.%s", instance, class);
+	    buffer = StrConcatDot(instance, class);
 	    key2 = WMCreatePLString(buffer);
             wfree(buffer);
 

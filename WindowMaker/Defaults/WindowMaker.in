@@ -15,6 +15,7 @@
     "#pkgdatadir#/Pixmaps",
     "/usr/X11R6/include/X11/pixmaps",
     "~/GNUstep/Library/WindowMaker/Pixmaps",
+    "/usr/share/icons",
     "/usr/local/share/pixmaps",
     "/usr/share/pixmaps"
   );

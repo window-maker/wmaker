@@ -1271,3 +1271,22 @@ UpdateDomainFile(WDDomain *domain)
 }
 
 
+
+char*
+StrConcatDot(char *a, char *b)
+{
+    int len;
+    char *str;
+    
+    if (!a)
+	a = "";
+    if (!b)
+	b = "";
+    
+    len = strlen(a)+strlen(b)+4;
+    str = wmalloc(len);
+    
+    snprintf(str, len, "%s.%s", a, b);
+    
+    return str;
+}

@@ -34,6 +34,7 @@ Changes since version 0.80.0:
 - Window Maker will now use the WINDOWMAKER_ALT_WM environment variable (if
   it is defined) to overwrite the default hardcoded fallback window manager.
 - Added Czech translations of documentation (Jiri Hnidek <Jiri.Hnidek@vslib.cz>)
+- Fixed segfault with incomplete WM_CLASS specifications. 
 
 Changes since version 0.70.0:
 .............................
