@@ -1,10 +1,8 @@
 #include <WINGs.h>
-#include <WINGsP.h>
 #include <X11/Xlib.h>
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "wtext.h"
 
 
 void
