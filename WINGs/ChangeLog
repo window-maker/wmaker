@@ -11,13 +11,14 @@ Changes since wmaker 0.64.0:
 - fixed mem leak that occured when input handling was done with poll
 - simpler and more straightforward event handling for timer, idle, input
   and X events (also fixed some problems the old handling logic had)
-- moved timer, dile and input handler definitions and prototypes from
+- moved timer, idle and input handler definitions and prototypes from
   WINGs.h to WUtil.h because they're not GUI related.
 - better and more robust handling of events (timer, idle, input, X) in
   WMMaskEvent(). Also fixed a bug where input and timer events were not
   treated for undefined periods of time under some circumstances.
 - fixed secure textfields not to allow text selection, to avoid compromising
   sensitive information by pasting it to a terminal.
+- replaced wmkrange(), wmkpoint() and wmksize() functions with macros.
 
 
 changes since wmaker 0.63.1:

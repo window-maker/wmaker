@@ -261,6 +261,7 @@ WMIsHostEqualToHost(WMHost* hPtr, WMHost* aPtr)
 
     for (i=0; i<WMGetArrayItemCount(aPtr->addresses); i++) {
         adr1 = WMGetFromArray(aPtr->addresses, i);
+        // use WMFindInArray here --Dan
         for (j=0; j<WMGetArrayItemCount(hPtr->addresses); j++) {
             adr2 = WMGetFromArray(hPtr->addresses, j);
             if (strcmp(adr1, adr2)==0)

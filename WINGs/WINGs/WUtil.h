@@ -149,11 +149,12 @@ typedef int WMMatchDataProc(void *item, void *cdata);
 
 
 
-
 typedef struct {
     int position;
     int count;
 } WMRange;
+
+#define wmkrange(position, count) (WMRange){(position), (count)}
 
 
 
@@ -474,7 +475,6 @@ void WMPutInBag(WMBag *bag, void *item);
 /* insert will increment the index of elements after it by 1 */
 void WMInsertInBag(WMBag *bag, int index, void *item);
 
-/* this is slow */
 /* erase will remove the element from the bag,
  * but will keep the index of the other elements unchanged */
 int WMEraseFromBag(WMBag *bag, int index);

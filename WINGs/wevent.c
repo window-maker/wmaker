@@ -444,16 +444,6 @@ WMNextEvent(Display *dpy, XEvent *event)
 }
 
 
-/*
- * Is this comment still valid?
- * waitForEvent seems now to understand masked events. -Dan
- *
- * Cant use this because XPending() will make waitForEvent
- * return even if the event in the queue is not what we want,
- * and if we block until some new event arrives from the
- * server, other events already in the queue (like Expose)
- * will be deferred.
- */
 void
 WMMaskEvent(Display *dpy, long mask, XEvent *event)
 {

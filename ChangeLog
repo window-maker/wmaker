@@ -11,6 +11,10 @@ Changes since version 0.64.0:
 - fixed bug with multibyte text on libc5 systems (Osamu Ajiki <osam-a@astroarts.co.jp>)
 - fixed race conditions on signal handlers 
 - SIGINT will gently exit, SIGTERM will not be handled
+- When Window Maker calls wmsetbg to set the background, it will consider the
+  value of the DisableDithering option and pass the right switch to wmsetbg.
+- fixed a memleak in the dialog panels.
+
 
 Changes since version 0.63.1:
 .............................

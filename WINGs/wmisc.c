@@ -316,42 +316,5 @@ W_PaintTextAndImage(W_View *view, int wrap, GC textGC, W_Font *font,
 
 
 
-WMRange 
-wmkrange(int start, int count)
-{
-    WMRange range;
-    
-    range.position = start;
-    range.count = count;
-    
-    return range;
-}
-
-
-WMPoint 
-wmkpoint(int x, int y)
-{
-    WMPoint point;
-    
-    point.x = x;
-    point.y = y;
-    
-    return point;
-}
-
-
-WMSize 
-wmksize(unsigned int width, unsigned int height)
-{
-    WMSize size;
-    
-    size.width = width;
-    size.height = height;
-    
-    return size;
-}
-
-
-
 
 

@@ -808,6 +808,9 @@ destroyInfoPanel(WCoreWindow *foo, void *data, XEvent *event)
     if (thePanel->oldPix) {
 	WMReleasePixmap(thePanel->oldPix);
     }
+    if (thePanel->oldFont) {
+        WMReleaseFont(thePanel->oldFont);
+    }
     if (thePanel->icon) {
 	RDestroyImage(thePanel->icon);
     }
@@ -1068,8 +1071,8 @@ handleLogoPush(XEvent *event, void *data)
 	    "WHAT YOU SAY??",
 	    "WE GET SIGNAL",
 	    "SOMEBODY SET UP US THE BOMB",
-	    "ALL YOUR BASE ARE BELONG TO US!"
-
+	    "ALL YOUR BASE ARE BELONG TO US!",
+            "Oh My God!!! Larry is back!"
     };
 
 

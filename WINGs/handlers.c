@@ -55,7 +55,6 @@ static WMBag *idleHandler=NULL;
 
 static WMBag *inputHandler=NULL;
 
-// this should go to wevent.c and wutil.c too
 #define timerPending()	(timerHandler)
 
 

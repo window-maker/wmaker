@@ -36,8 +36,12 @@ typedef struct {
     WMSize size;
 } WMRect;
 
+#define wmksize(width, height) (WMSize){(width), (height)}
+#define wmkpoint(x, y)         (WMPoint){(x), (y)}
+#define wmkrect(pos, size)     (WMRect){(pos), (size)}
 
-/* WMRange was moved in WUtil.h */
+
+
 
 #define ClientMessageMask	(1L<<30)
 
@@ -572,15 +576,6 @@ typedef struct W_DragDestinationProcs {
 } WMDragDestinationProcs;
 
 
-
-/* ...................................................................... */
-
-
-WMRange wmkrange(int start, int count);
-
-WMPoint wmkpoint(int x, int y);
-
-WMSize wmksize(unsigned int width, unsigned int height);
 
 
 /* ....................................................................... */

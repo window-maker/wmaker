@@ -3134,18 +3134,21 @@ setWorkspaceSpecificBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 	    if (close(filedes[1]) < 0)
 		wsyserror("could not close pipe");
 
-	} else if (pid == 0) {
+        } else if (pid == 0) {
+            char *dither;
+
 	    SetupEnvironment(scr);
 
 	    if (close(0) < 0)
 		wsyserror("could not close pipe");
 	    if (dup(filedes[0]) < 0) {
 		wsyserror("dup() failed:can't set workspace specific background image");
-	    }
+            }
+            dither = wPreferences.no_dithering ? "-m" : "-d";
 	    if (wPreferences.smooth_workspace_back)
-		execlp("wmsetbg", "wmsetbg", "-helper", "-S", "-d", NULL);
+		execlp("wmsetbg", "wmsetbg", "-helper", "-S", dither, NULL);
 	    else
-		execlp("wmsetbg", "wmsetbg", "-helper", "-d", NULL);
+		execlp("wmsetbg", "wmsetbg", "-helper", dither, NULL);
 	    wsyserror("could not execute wmsetbg");
 	    exit(1);
 	} else {
@@ -3209,15 +3212,17 @@ setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 	}
     } else if (PLGetNumberOfElements(value) > 0) {
 	char *command;
-	char *text;
+        char *text;
+        char *dither;
 
 	SetupEnvironment(scr);
 	text = PLGetDescription(value);
-	command = wmalloc(strlen(text)+40);
+        command = wmalloc(strlen(text)+40);
+        dither = wPreferences.no_dithering ? "-m" : "-d";
 	if (wPreferences.smooth_workspace_back)
-	    sprintf(command, "wmsetbg -d -S -p '%s' &", text);
+	    sprintf(command, "wmsetbg %s -S -p '%s' &", dither, text);
 	else
-	    sprintf(command, "wmsetbg -d -p '%s' &", text);
+	    sprintf(command, "wmsetbg %s -p '%s' &", dither, text);
 	wfree(text);
 	system(command);
 	wfree(command);
