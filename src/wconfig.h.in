@@ -45,7 +45,7 @@
 #define TEXTURE_PLUGIN
 
 #ifdef TEXTURE_PLUGIN
-#define DRAWSTRING_PLUGIN
+#undef DRAWSTRING_PLUGIN
 #endif
 
 
