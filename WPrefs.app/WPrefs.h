@@ -42,7 +42,7 @@
 
 /****/
 
-#define WVERSION	"0.42"
+#define WVERSION	"0.43"
 #define WMVERSION	"0.62.x"
 
 

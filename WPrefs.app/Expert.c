@@ -99,7 +99,7 @@ storeDefaults(_Panel *panel)
 
     SetBoolForKey(WMGetButtonSelected(panel->swi[2]), "SaveSessionOnExit");
     SetBoolForKey(WMGetButtonSelected(panel->swi[3]), "UseSaveUnders");
-    SetBoolForKey(WMGetButtonSelected(panel->swi[4]), "WindowsCycling");
+    SetBoolForKey(WMGetButtonSelected(panel->swi[4]), "WindozeCycling");
     SetBoolForKey(WMGetButtonSelected(panel->swi[5]), "DontConfirmKill");
     SetBoolForKey(WMGetButtonSelected(panel->swi[6]), "DisableBlinking");
 }

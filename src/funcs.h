@@ -97,8 +97,6 @@ void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 
 void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next);
 
-void CycleWindow(WScreen *scr, Bool forward);
-
 #ifdef USECPP
 char *MakeCPPArgs(char *path);
 #endif

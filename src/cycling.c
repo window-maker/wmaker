@@ -47,8 +47,6 @@ extern WShortKey wKeyBindings[WKBD_LAST];
 
 
 
-
-
 static WWindow*
 nextToFocusAfter(WWindow *wwin)
 {
@@ -106,6 +104,74 @@ nextToFocusBefore(WWindow *wwin)
 }
 
 
+
+
+static WWindow*
+nextFocusWindow(WWindow *wwin)
+{
+    WWindow *tmp, *closest, *min;
+    Window d;
+
+    if (!wwin)
+        return NULL;
+    tmp = wwin->prev;
+    closest = NULL;
+    min = wwin;
+    d = 0xffffffff;
+    while (tmp) {
+        if (wWindowCanReceiveFocus(tmp) 
+            && (!WFLAGP(tmp, skip_window_list)|| tmp->flags.internal_window)) {
+            if (min->client_win > tmp->client_win)
+              min = tmp;
+            if (tmp->client_win > wwin->client_win
+                && (!closest
+                    || (tmp->client_win - wwin->client_win) < d)) {
+                closest = tmp;
+                d = tmp->client_win - wwin->client_win;
+            }
+        }
+        tmp = tmp->prev;
+    }
+    if (!closest||closest==wwin)
+      return min;
+    return closest;
+}
+
+
+static WWindow*
+prevFocusWindow(WWindow *wwin)
+{
+    WWindow *tmp, *closest, *max;
+    Window d;
+    
+    if (!wwin)
+        return NULL;
+    tmp = wwin->prev;
+    closest = NULL;
+    max = wwin;
+    d = 0xffffffff;
+    while (tmp) {
+        if (wWindowCanReceiveFocus(tmp) &&
+            (!WFLAGP(tmp, skip_window_list) || tmp->flags.internal_window)) {
+            if (max->client_win < tmp->client_win)
+              max = tmp;
+            if (tmp->client_win < wwin->client_win
+                && (!closest
+                    || (wwin->client_win - tmp->client_win) < d)) {
+                closest = tmp;
+                d = wwin->client_win - tmp->client_win;
+            }
+        }
+        tmp = tmp->prev;
+    }
+    if (!closest||closest==wwin)
+      return max;
+    return closest;
+}
+
+
+
+
 void
 StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 {
@@ -115,23 +181,37 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     WWindow *newFocused;
     WWindow *oldFocused;
     int modifiers;
-    XModifierKeymap *keymap;
+    XModifierKeymap *keymap = NULL;
+    Bool hasModifier;
     Bool somethingElse = False;
     XEvent ev;
 
     if (!wwin)
 	return;
+    
+    if (next)
+	hasModifier = (wKeyBindings[WKBD_FOCUSNEXT].modifier != 0);
+    else
+	hasModifier = (wKeyBindings[WKBD_FOCUSPREV].modifier != 0);
 
-    keymap = XGetModifierMapping(dpy);
+    if (hasModifier) {
+	keymap = XGetModifierMapping(dpy);
 
     
-    XGrabKeyboard(dpy, scr->root_win, False, GrabModeAsync, GrabModeAsync, 
-		  CurrentTime);
+	XGrabKeyboard(dpy, scr->root_win, False, GrabModeAsync, GrabModeAsync, 
+		      CurrentTime);
+    }
 
     if (next) {
-	newFocused = nextToFocusAfter(wwin);
+	if (wPreferences.windows_cycling)
+	    newFocused = nextToFocusAfter(wwin);
+	else
+	    newFocused = nextFocusWindow(wwin);
     } else {
-	newFocused = nextToFocusBefore(wwin); 
+	if (wPreferences.windows_cycling)
+	    newFocused = nextToFocusBefore(wwin);
+	else
+	    newFocused = prevFocusWindow(wwin);
     }
 
     scr->flags.doing_alt_tab = 1;
@@ -142,6 +222,11 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     wWindowFocus(newFocused, scr->focused_window);
     oldFocused = newFocused;
 
+    if (hasModifier)
+	done = False;
+    else
+	done = True;
+    
 #if 0
     if (wPreferences.popup_switchmenu && 
 	(!scr->switch_menu || !scr->switch_menu->flags.mapped)) {
@@ -149,7 +234,7 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 	OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);
 	openedSwitchMenu = True;
     }
-#endif	
+#endif
     while (!done) {
 	WMMaskEvent(dpy,KeyPressMask|KeyReleaseMask|ExposureMask, &ev);
 
@@ -209,9 +294,12 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 	    }
 	}
     }
-    XFreeModifiermap(keymap);
+    if (keymap)
+	XFreeModifiermap(keymap);
 
-    XUngrabKeyboard(dpy, CurrentTime);
+    if (hasModifier) {
+	XUngrabKeyboard(dpy, CurrentTime);
+    }
     wSetFocusTo(scr, newFocused);
 
     if (wPreferences.circ_raise) {
@@ -228,85 +316,4 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     }
 }
 
-
-
-
-
-
-static WWindow*
-nextFocusWindow(WScreen *scr)
-{
-    WWindow *tmp, *wwin, *closest, *min;
-    Window d;
-
-    if (!(wwin = scr->focused_window))
-        return NULL;
-    tmp = wwin->prev;
-    closest = NULL;
-    min = wwin;
-    d = 0xffffffff;
-    while (tmp) {
-        if (wWindowCanReceiveFocus(tmp) 
-            && (!WFLAGP(tmp, skip_window_list)|| tmp->flags.internal_window)) {
-            if (min->client_win > tmp->client_win)
-              min = tmp;
-            if (tmp->client_win > wwin->client_win
-                && (!closest
-                    || (tmp->client_win - wwin->client_win) < d)) {
-                closest = tmp;
-                d = tmp->client_win - wwin->client_win;
-            }
-        }
-        tmp = tmp->prev;
-    }
-    if (!closest||closest==wwin)
-      return min;
-    return closest;
-}
-
-
-static WWindow*
-prevFocusWindow(WScreen *scr)
-{
-    WWindow *tmp, *wwin, *closest, *max;
-    Window d;
-    
-    if (!(wwin = scr->focused_window))
-        return NULL;
-    tmp = wwin->prev;
-    closest = NULL;
-    max = wwin;
-    d = 0xffffffff;
-    while (tmp) {
-        if (wWindowCanReceiveFocus(tmp) &&
-            (!WFLAGP(tmp, skip_window_list) || tmp->flags.internal_window)) {
-            if (max->client_win < tmp->client_win)
-              max = tmp;
-            if (tmp->client_win < wwin->client_win
-                && (!closest
-                    || (wwin->client_win - tmp->client_win) < d)) {
-                closest = tmp;
-                d = wwin->client_win - tmp->client_win;
-            }
-        }
-        tmp = tmp->prev;
-    }
-    if (!closest||closest==wwin)
-      return max;
-    return closest;
-}
-
-
-void CycleWindow(WScreen *scr, Bool forward)
-{
-    WWindow *wwin;
-    
-    if (forward)
-	wwin = nextFocusWindow(scr);
-    else
-	wwin = prevFocusWindow(scr);
-    
-    if (wwin != NULL)
-	wSetFocusTo(scr, wwin);
-}
 

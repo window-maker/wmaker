@@ -10,6 +10,11 @@ Changes since version 0.63.0:
 - fixed a crash bug in WPrefs menu editor
 - added es and pt potfiles from conectiva/eliphas
 - added updated galician potfile (Jesus Bravo Alvarez <jba@pobox.com>)
+- added update hungarian potfiles (HORVATH Szabolcs <horvaths@inf.elte.hu>)
+- added updated single-click patch from John Morrissey <jwm@horde.net>
+- added updated danish translations (Birger Langkjer <birger.langkjer@image.dk>)
+- fixed WindozeCycling config in WPrefs
+- fixed circulate raise withour WindozeCycling
 
 Changes since version 0.62.1:
 .............................

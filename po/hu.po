@@ -1,0 +1,1475 @@
+# Hungarian translation of Window Maker
+# Copyright (C) 1998-2000 Free Software Foundation, Inc.
+# Horvath Szabolcs <horvathsz@penguinpowered.com>
+# thanks to magyar@lists.linux.hu.
+#                                                                                              
+msgid ""                                                                                       
+msgstr ""                                                                                      
+"Project-Id-Version: Window Maker 0.61.1\n"
+"POT-Creation-Date: 2000-07-12 08:32+0300\n"
+"PO-Revision-Date: 2000-07-27 19:50-0100\n"
+"Last-Translator: Horvath Szabolcs <horvathsz@penguinpowered.com>\n"
+"Language-Team: Hungarian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/appicon.c:570 ../src/dialog.c:223 ../src/dock.c:3301 ../src/dockedapp.c:210 ../src/dockedapp.c:251 ../src/rootmenu.c:1754 ../src/winspector.c:290 ../src/winspector.c:306
+msgid "Error"
+msgstr "Hiba"
+
+#: ../src/appicon.c:571
+msgid "Could not open specified icon file"
+msgstr "Nem található a megadott ikon fájl!"
+
+#: ../src/appicon.c:572 ../src/dialog.c:122 ../src/dialog.c:223 ../src/dialog.c:460 ../src/dialog.c:1477 ../src/dock.c:514 ../src/dock.c:522 ../src/dock.c:545 ../src/dock.c:3302 ../src/dockedapp.c:211 ../src/dockedapp.c:257 ../src/dockedapp.c:371 ../src/rootmenu.c:1758 ../src/winspector.c:291 ../src/winspector.c:307
+msgid "OK"
+msgstr "OK"
+
+#: ../src/appicon.c:599 ../src/dock.c:278
+msgid ""
+" will be forcibly closed.\n"
+"Any unsaved changes will be lost.\n"
+"Please confirm."
+msgstr ""
+" be lesz zárva.\n"
+"Minden el nem mentett információ elveszik.\n"
+"Erõsítsd meg."
+
+#: ../src/appicon.c:605 ../src/dock.c:283 ../src/winmenu.c:125
+msgid "Kill Application"
+msgstr "Alkalmazás kilövése"
+
+#: ../src/appicon.c:606 ../src/dock.c:284 ../src/winmenu.c:127
+msgid "Yes"
+msgstr "OK"
+
+#: ../src/appicon.c:606 ../src/dock.c:284 ../src/winmenu.c:127
+msgid "No"
+msgstr "Mégsem"
+
+#: ../src/appicon.c:624 ../src/dock.c:1196
+msgid "Unhide Here"
+msgstr "Elõtérbe rak"
+
+#: ../src/appicon.c:625 ../src/appicon.c:650 ../src/dock.c:1198 ../src/dock.c:1200 ../src/dock.c:3468 ../src/dock.c:3470 ../src/winmenu.c:465
+msgid "Hide"
+msgstr "Elrejt"
+
+#: ../src/appicon.c:626
+msgid "Set Icon..."
+msgstr "Ikon..."
+
+#: ../src/appicon.c:627 ../src/dock.c:1204 ../src/rootmenu.c:228 ../src/rootmenu.c:242 ../src/winmenu.c:512
+msgid "Kill"
+msgstr "Kilövés"
+
+#: ../src/appicon.c:648 ../src/dock.c:3466
+msgid "Unhide"
+msgstr "Elõtérbe rak"
+
+#: ../src/defaults.c:836 ../src/startup.c:767 ../src/startup.c:785 ../src/startup.c:791
+msgid "could not read domain \"%s\" from defaults database"
+msgstr "Az alapértelmezett adatbázisból a \"%s\" domain nem olvasható."
+
+#: ../src/defaults.c:882 ../src/defaults.c:1007 ../src/defaults.c:1046 ../src/defaults.c:1076
+msgid "Domain %s (%s) of defaults database is corrupted!"
+msgstr "A %s (%s) domain adatbázisa nem megfelelõ formátumú!"
+
+#: ../src/defaults.c:887 ../src/defaults.c:1028 ../src/defaults.c:1059 ../src/defaults.c:1085
+msgid "could not load domain %s from user defaults database"
+msgstr "A felhasználói adatbázisból nem tölthetõ be a %s domain."
+
+#: ../src/defaults.c:898 ../src/defaults.c:992
+msgid "Domain %s (%s) of global defaults database is corrupted!"
+msgstr "Az alapértelmezett adatbázisból a %s (%s) domain megsérült."
+
+#: ../src/defaults.c:917 ../src/defaults.c:997
+msgid "could not load domain %s from global defaults database"
+msgstr "Az alapértelmezett adatbázisból a %s domaint nem lehet betölteni."
+
+#: ../src/defaults.c:1305
+msgid "wrong option value for key \"%s\". Should be one of %s"
+msgstr "rossz érték a következõ kulcshoz: \"%s\". Válassz ezek közül egyet: %s."
+
+#: ../src/defaults.c:1352
+msgid "can't convert \"%s\" to boolean for key \"%s\""
+msgstr "a következõ adatot nem tudom logikai értékké alakítani: \"%s\". Ehhez a kulcshoz: \"%s\""
+
+#: ../src/defaults.c:1357 ../src/defaults.c:1391 ../src/defaults.c:1423 ../src/defaults.c:1436 ../src/defaults.c:1451 ../src/defaults.c:1465 ../src/defaults.c:1537 ../src/defaults.c:1549 ../src/defaults.c:1955 ../src/defaults.c:1972 ../src/defaults.c:1985 ../src/defaults.c:2018 ../src/defaults.c:2034 ../src/defaults.c:2065 ../src/defaults.c:2155
+msgid "using default \"%s\" instead"
+msgstr "az alapbeállítást \"%s\" használom helyette"
+
+#: ../src/defaults.c:1388
+msgid "can't convert \"%s\" to integer for key \"%s\""
+msgstr "a következõ adatot nem tudom egész típusúvá alakítani: \"%s\". Ehhez a kulcshoz: \"%s\""
+
+#: ../src/defaults.c:1418 ../src/defaults.c:1532 ../src/defaults.c:1950 ../src/defaults.c:1967 ../src/defaults.c:2013 ../src/defaults.c:2060 ../src/wdefaults.c:557 ../src/wdefaults.c:593
+msgid "Wrong option format for key \"%s\". Should be %s."
+msgstr "Hibás formátum a következõ kulcsnál: \"%s\". Valami ilyesminek kellene lennie: %s."
+
+#: ../src/defaults.c:1431
+msgid "Incorrect number of elements in array for key \"%s\"."
+msgstr "A \"%s\" kulcshoz tartozó tömbben helytelen számú elem található."
+
+#: ../src/defaults.c:1446
+msgid "Wrong value for key \"%s\". Should be Coordinate."
+msgstr "Rossz értéket adtál meg ennek a kulcsnak: \"%s\". Koordinátának kellene lennie."
+
+#: ../src/defaults.c:1461
+msgid "can't convert array to integers for \"%s\"."
+msgstr "nem tudom a tömböt számokká konvertálni: \"%s\"."
+
+#: ../src/defaults.c:1659 ../src/defaults.c:1691 ../src/defaults.c:1707 ../src/defaults.c:1753 ../src/defaults.c:1793 ../src/defaults.c:1831 ../src/defaults.c:1847
+msgid "\"%s\" is not a valid color name"
+msgstr "Ilyen szín nincs: \"%s\"!"
+
+#: ../src/defaults.c:1672
+msgid "bad number of arguments in gradient specification"
+msgstr "nem megfelelõ számú paraméter az összetevõk leírásában "
+
+#: ../src/defaults.c:1726
+msgid "too few arguments in multicolor gradient specification"
+msgstr "Elégtelen változómeghatározás a színátmenet-leírásban."
+
+#: ../src/defaults.c:1820
+msgid "bad number of arguments in textured gradient specification"
+msgstr "nem megfelelõ számú paraméter a mintázott színátmenet-leírásban."
+
+#: ../src/defaults.c:1863
+msgid "bad opacity value for tgradient texture \"%s\". Should be [0..255]"
+msgstr "Rossz érték a tgradient minta áttetszõségénél: \"%s\". 0..255 közötti értéknek kell lennie."
+
+#: ../src/defaults.c:1923
+msgid "could not initialize library %s"
+msgstr "A %s könyvtárat nem tudom kezdõállapotba hozni."
+
+#: ../src/defaults.c:1926
+msgid "could not find function %s::%s"
+msgstr "A %s::%s függvény nem található."
+
+#. TEXTURE_PLUGIN
+#: ../src/defaults.c:1933
+msgid "invalid texture type %s"
+msgstr "Érvénytelen minta típus: %s"
+
+#: ../src/defaults.c:1980
+msgid "Error in texture specification for key \"%s\""
+msgstr "A \"%s\" kulcsnál hiba van a minta leírásában."
+
+#: ../src/defaults.c:2030
+msgid "Wrong type for workspace background. Should be a texture type."
+msgstr "Rossz típust adtál meg a munkafelület hátterének. Minta típusnak kellene lennie."
+
+#: ../src/defaults.c:2078
+msgid "Wrong type for background of workspace %i. Should be a texture."
+msgstr "Rossz típust adtál meg a %i. számú munkafelület hátterének. Mintának kellene lennie."
+
+#: ../src/defaults.c:2122
+msgid "could not load any usable font!!!"
+msgstr "Egyetlen használható fontot sem tudok betölteni!!"
+
+#: ../src/defaults.c:2150
+msgid "could not get color for key \"%s\""
+msgstr "a \"%s\" kulcshoz tartozó színt nem találom"
+
+#: ../src/defaults.c:2210 ../src/rootmenu.c:494
+msgid "%s:invalid key modifier \"%s\""
+msgstr "%s: érvénytelen billentyû-módosító \"%s\""
+
+#: ../src/defaults.c:2222
+msgid "%s:invalid kbd shortcut specification \"%s\""
+msgstr "%s: érvénytelen gyorsbillentyû-leírás \"%s\""
+
+#: ../src/defaults.c:2229
+msgid "%s:invalid key in shortcut \"%s\""
+msgstr "%s: érvénytelen billentyû a \"%s\" gyorsbillentyûben"
+
+#: ../src/defaults.c:2255
+msgid "%s: modifier key %s is not valid"
+msgstr "%s: a %s módosító billentyû érvénytelen"
+
+#: ../src/defaults.c:2289
+msgid "could not load image in option %s: %s"
+msgstr "a kép nem betölthetõ a %s értékénél: %s"
+
+#: ../src/defaults.c:2371
+msgid "could not render texture for icon background"
+msgstr "nem alakítható a minta háttérikonná."
+
+#: ../src/dialog.c:122 ../src/dialog.c:467 ../src/dock.c:545 ../src/dockedapp.c:377 ../src/rootmenu.c:190 ../src/rootmenu.c:228 ../src/rootmenu.c:242
+msgid "Cancel"
+msgstr "Mégsem"
+
+#: ../src/dialog.c:218
+msgid "Could not open directory "
+msgstr "A könyvtár nem nyitható meg "
+
+#: ../src/dialog.c:271
+msgid "Could not load image file "
+msgstr "A kép nem lehet betölteni "
+
+#: ../src/dialog.c:403
+msgid "Directories"
+msgstr "Könyvtárak"
+
+#: ../src/dialog.c:412
+msgid "Icons"
+msgstr "Ikonok"
+
+#: ../src/dialog.c:450
+msgid "File Name:"
+msgstr "Fájlnév:"
+
+#: ../src/dialog.c:473
+msgid "Choose File"
+msgstr "Válassz fájlt"
+
+#: ../src/dialog.c:490 ../src/dialog.c:492
+msgid "Icon Chooser"
+msgstr "Ikon választó"
+
+#: ../src/dialog.c:1401 ../src/startup.c:325
+msgid "cannot open connection for crashing dialog panel. Aborting."
+msgstr "az ütközõ dialógus panelhez nem tudok kapcsolatot nyitni. Megszakítom."
+
+#: ../src/dialog.c:1427
+msgid "Fatal error"
+msgstr "Végzetes hiba"
+
+#: ../src/dialog.c:1438
+msgid ""
+"Window Maker received signal %i\n"
+"(%s)."
+msgstr ""
+"A WindowMaker egy %i jelzést vett.\n"
+"(%s)"
+
+#: ../src/dialog.c:1441
+msgid "Window Maker received signal %i."
+msgstr "Window Maker egy %i jelzést vett."
+
+#: ../src/dialog.c:1450
+msgid " This fatal error occured probably due to a bug. Please fill the included BUGFORM and report it to bugs@windowmaker.org."
+msgstr " Ezt a végzetes hibát valószínûleg egy programozási hiba okozta. Légy szíves töltsd ki a mellékelt BUG-kérdõívet és küldd el a bugs@windowmaker.org e-mail címre. Köszi!"
+
+#: ../src/dialog.c:1458
+msgid "What do you want to do now?"
+msgstr "Mit szeretnél most csinálni?"
+
+#: ../src/dialog.c:1464
+msgid "Select action"
+msgstr "Válassz ezek közül"
+
+#: ../src/dialog.c:1465
+msgid "Abort and leave a core file"
+msgstr "Megszakít (core fájl keletkezik)"
+
+#: ../src/dialog.c:1466
+msgid "Restart Window Maker"
+msgstr "Window Maker újraindítása"
+
+#: ../src/dialog.c:1467
+msgid "Start alternate window manager"
+msgstr "Másik ablakkezelõ indítása"
+
+#: ../src/dock.c:212
+msgid "Type the name for workspace %i:"
+msgstr "Ird be a %i. munkafelület nevét:"
+
+#: ../src/dock.c:213 ../src/dock.c:1160 ../src/dock.c:1163 ../src/dock.c:3384
+msgid "Rename Workspace"
+msgstr "Átnevezés"
+
+#: ../src/dock.c:508 ../src/dock.c:516
+msgid "Warning"
+msgstr "Figyelmeztetés"
+
+#: ../src/dock.c:509
+msgid "Some icons cannot be made omnipresent. Please make sure that no other icon is docked in the same positions on the other workspaces and the Clip is not full in some workspace."
+msgstr "Néhány ikont lehetetlen mindig láthatóvá tenni. Gyõzödj meg róla, hogy nincs-e másik ikon rögzítve ugyanebben a pozícióban másik munkafelületen vagy a Kapocs nincs-e megtelve valahol."
+
+#: ../src/dock.c:517
+msgid "Icon cannot be made omnipresent. Please make sure that no other icon is docked in the same position on the other workspaces and the Clip is not full in some workspace."
+msgstr "Ez az ikont lehetetlen mindig láthatóvá tenni. Gyõzödj meg róla, hogy nincs-e másik ikon rögzítve ugyanebben a pozícióban másik munkafelületen vagy a Kapocs nincs-e megtelve valahol."
+
+#: ../src/dock.c:543
+msgid "Workspace Clip"
+msgstr "Munkafelület kapocs"
+
+#: ../src/dock.c:544
+msgid "All selected icons will be removed!"
+msgstr "Minden kijelölt ikon el lesz távolítva!"
+
+#: ../src/dock.c:591 ../src/dock.c:1175 ../src/dock.c:1177 ../src/dock.c:3420
+msgid "Keep Icon"
+msgstr "Ikon megtartása"
+
+#: ../src/dock.c:592 ../src/dock.c:2130 ../src/dock.c:2264
+msgid "Type the command used to launch the application"
+msgstr "Írd be a parancsot, amivel az alkalmazás indul"
+
+#: ../src/dock.c:973
+msgid "could not launch application %s\n"
+msgstr "Az %s alkalmazást nem tudom futtatni\n"
+
+#: ../src/dock.c:1028
+msgid "could not create workspace submenu for Clip menu"
+msgstr "a Kapocs menühöz nem tudok munkafelület almenüt létrehozni"
+
+#: ../src/dock.c:1091
+msgid "could not create options submenu for Clip menu"
+msgstr "a Kapocs menühöz nem tudok opciók almenüt létrehozni"
+
+#: ../src/dock.c:1095
+msgid "Keep on Top"
+msgstr "Mindig felül"
+
+#: ../src/dock.c:1101
+msgid "Collapsed"
+msgstr "Ikonok behúzása"
+
+#: ../src/dock.c:1107
+msgid "AutoCollapse"
+msgstr "Automatikus behúzás"
+
+#: ../src/dock.c:1113
+msgid "AutoRaiseLower"
+msgstr "Automatikus elõtérbe/háttérbe rakás"
+
+#: ../src/dock.c:1119
+msgid "AutoAttract Icons"
+msgstr "Automatikusan vonzódnak az ikonok"
+
+#: ../src/dock.c:1125
+msgid "Keep Attracted Icons"
+msgstr "A vonzott ikonok megtartása"
+
+#: ../src/dock.c:1149 ../src/winmenu.c:407
+msgid "Keep on top"
+msgstr "Mindig felül"
+
+#: ../src/dock.c:1155
+msgid "Clip Options"
+msgstr "Kapocs beállítások"
+
+#: ../src/dock.c:1165
+msgid "Selected"
+msgstr "Kijelölt"
+
+#: ../src/dock.c:1170 ../src/dock.c:1173 ../src/dock.c:3411
+msgid "Select All Icons"
+msgstr "Minden ikon kijelölése"
+
+#: ../src/dock.c:1179 ../src/dock.c:1181 ../src/dock.c:3428
+msgid "Move Icon To"
+msgstr "Ikon mozgatása"
+
+#: ../src/dock.c:1186 ../src/dock.c:1189 ../src/dock.c:3439
+msgid "Remove Icon"
+msgstr "Ikon törlése"
+
+#: ../src/dock.c:1191
+msgid "Attract Icons"
+msgstr "Az ikonok vonzódnak"
+
+#: ../src/dock.c:1194
+msgid "Launch"
+msgstr "Indítás"
+
+#: ../src/dock.c:1202
+msgid "Settings..."
+msgstr "Beállítások..."
+
+#: ../src/dock.c:1595 ../src/dock.c:1609 ../src/dock.c:1623 ../src/dock.c:1633 ../src/dock.c:1658
+msgid "bad value in docked icon state info %s"
+msgstr "rossz érték a dokkolt ikon állapot-információjánál: %s"
+
+#: ../src/dock.c:1641
+msgid "bad value in docked icon position %i,%i"
+msgstr "rossz érték a dokkolt ikon pozícíójánál: %i, %i"
+
+#: ../src/dock.c:1897
+msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
+msgstr "túl sok ikon van a dokkban tárolva. Figyelmen kívûl hagyom, ami nem fér ki"
+
+#. icon->forced_dock = 1;
+#: ../src/dock.c:2129 ../src/dock.c:2263
+msgid "Dock Icon"
+msgstr "Rögzített ikon"
+
+#: ../src/dock.c:3294 ../src/dock.c:3298
+msgid "Could not execute command \"%s\""
+msgstr "A \"%s\" parancsot nem tudom végrehajtani"
+
+#: ../src/dock.c:3390
+msgid "Toggle Omnipresent"
+msgstr "Mindig látható mód ki/be"
+
+#: ../src/dock.c:3395 ../src/winmenu.c:417 ../src/winspector.c:1197
+msgid "Omnipresent"
+msgstr "Mindig látható"
+
+#: ../src/dock.c:3409
+msgid "Unselect All Icons"
+msgstr "Az ikonok kijelölésének megszüntetése"
+
+#: ../src/dock.c:3418
+msgid "Keep Icons"
+msgstr "Ikonok megtartása"
+
+#: ../src/dock.c:3426
+msgid "Move Icons To"
+msgstr "Ikonok mozgatása"
+
+#: ../src/dock.c:3437
+msgid "Remove Icons"
+msgstr "Ikonok törlése"
+
+#: ../src/dockedapp.c:130
+msgid "could not find icon %s, used in a docked application"
+msgstr "a %s ikont nem találom (egy rögzített alkalmazás használná)"
+
+#: ../src/dockedapp.c:209
+msgid "Could not open specified icon file: %s"
+msgstr "A következõ ikon-fájlt nem tudom megnyitni: %s"
+
+#: ../src/dockedapp.c:211
+msgid "Ignore"
+msgstr "Figyelmen kívûl hagy"
+
+#: ../src/dockedapp.c:252
+msgid "Sorry, icon cannot be made omnipresent. Please make sure that no other icon is docked in the same position on the other workspaces, and the Clip is not full in some workspace, then try again."
+msgstr "Bocs, ezt az ikont lehetetlen mindig láthatóvá tenni. Gyõzödj meg róla, hogy nincs-e másik ikon rögzítve ugyanebben a pozícióban másik munkafelület, illetve a Kapocs nincs-e valahol telítve. Utána próbáld újra. "
+
+#: ../src/dockedapp.c:313
+msgid "Start when WindowMaker is started"
+msgstr "Automatikus indítás"
+
+#: ../src/dockedapp.c:319
+msgid "Application path and arguments"
+msgstr "Alkalmazás elérési útvonala és paraméterei"
+
+#: ../src/dockedapp.c:330
+msgid "Command for files dropped with DND"
+msgstr "Parancs a DND módszerrel történõ indításhoz"
+
+#: ../src/dockedapp.c:342
+msgid "%d will be replaced with the file name"
+msgstr "A %d helyére a fájl neve kerül"
+
+#: ../src/dockedapp.c:346
+msgid "DND support was not compiled in"
+msgstr "DND-támogatás nincs belefordítva"
+
+#: ../src/dockedapp.c:352
+msgid "Icon Image"
+msgstr "Ikon"
+
+#: ../src/dockedapp.c:364 ../src/winspector.c:1333
+msgid "Browse..."
+msgstr "Tallózás..."
+
+#: ../src/dockedapp.c:409
+msgid "Docked Application Settings"
+msgstr "Rögzített alkalmazások beállításai"
+
+#: ../src/framewin.c:642 ../src/framewin.c:737 ../src/menu.c:467 ../src/texture.c:549
+msgid "could not render texture: %s"
+msgstr "a %s minta nem képezhetõ le"
+
+#: ../src/framewin.c:665 ../src/framewin.c:676 ../src/framewin.c:692 ../src/framewin.c:703 ../src/framewin.c:710 ../src/framewin.c:717 ../src/icon.c:350 ../src/menu.c:496
+msgid "error rendering image:%s"
+msgstr "hiba a %s kép leképezésekor"
+
+#: ../src/framewin.c:770
+msgid "error rendering image: %s"
+msgstr "hiba a %s kép leképezésekor"
+
+#: ../src/icon.c:229 ../src/wdefaults.c:427
+msgid "error loading image file \"%s\""
+msgstr "hiba a \"%s\" kép betöltése közben"
+
+#: ../src/icon.c:477 ../src/icon.c:486
+msgid "could not create directory %s"
+msgstr "A %s könyvtárat nem tudom létrehozni"
+
+#: ../src/icon.c:753
+msgid "could not find default icon \"%s\""
+msgstr "az alapértelmezett ikont \"%s\" nem találom"
+
+#: ../src/icon.c:759
+msgid "could not load default icon \"%s\":%s"
+msgstr "az alapértelmezett ikont nem tudom betölteni \"%s\":%s"
+
+#: ../src/main.c:193
+msgid "failed to restart Window Maker."
+msgstr "hiba a Window Maker újraindítása közben"
+
+#: ../src/main.c:196
+msgid "could not exec %s"
+msgstr "nem tudom végrehajtani: %s"
+
+#: ../src/main.c:245
+msgid "%s aborted.\n"
+msgstr "%s megszakítva \n"
+
+#: ../src/main.c:256
+msgid "Usage: %s [options]\n"
+msgstr "Használat: %s [opciók]\n"
+
+#: ../src/main.c:257
+msgid "The Window Maker window manager for the X window system"
+msgstr "Window Maker ablakkezelõ az X window systemhez"
+
+#: ../src/main.c:259
+msgid " -display host:dpy\tdisplay to use"
+msgstr "-display host:dpy\tmegjelenítõ a használathoz"
+
+#: ../src/main.c:261
+msgid " --no-cpp \t\tdisable preprocessing of configuration files"
+msgstr " --no-cpp \t\ta konfigurációs fájlok elõre feldolgozásának letiltása"
+
+#: ../src/main.c:263
+msgid " --no-dock\t\tdo not open the application Dock"
+msgstr "--no-dock\t\taz alkalmazások dokkja nem lesz kinyitva"
+
+#: ../src/main.c:264
+msgid " --no-clip\t\tdo not open the workspace Clip"
+msgstr "--no-clip\t\ta munkafelület kapocs nem lesz kinyitva"
+
+#: ../src/main.c:268
+msgid " --visual-id visualid\tvisual id of visual to use"
+msgstr "--visual-id visualid\tvizuális azonosító"
+
+#: ../src/main.c:269
+msgid " --static\t\tdo not update or save configurations"
+msgstr "--static\t\tne menti és nem is frissíti a beállításokat"
+
+#: ../src/main.c:271
+msgid " --synchronous\t\tturn on synchronous display mode"
+msgstr "--synchronous\t\tbekapcsolja a szinkronizált megjelenítést"
+
+#: ../src/main.c:273
+msgid " --version\t\tprint version and exit"
+msgstr "--version\t\tkiírja a verziószámot és kilép"
+
+#: ../src/main.c:274
+msgid " --help\t\t\tshow this message"
+msgstr "--help\t\t\tkiírja ezt a szöveget"
+
+#: ../src/main.c:286
+msgid ""
+"could not find user GNUstep directory (%s).\n"
+"Make sure you have installed Window Maker correctly and run wmaker.inst"
+msgstr ""
+"nem találom a felhasználó GNUstep könyvtárát (%s).\n"
+"Gyõzödj meg róla, hogy a Window Maker rendesen telepítve van és futtasd le a wmaker.inst scriptet!"
+
+#: ../src/main.c:307 ../src/main.c:312
+msgid "%s:could not execute initialization script"
+msgstr "%s: nem tudom futtatni a kezdeti beállításokat tartalmazó scriptet!"
+
+#: ../src/main.c:332 ../src/main.c:337
+msgid "%s:could not execute exit script"
+msgstr "%s: nem tudom futtatni a kilépési programot"
+
+#: ../src/main.c:410 ../src/main.c:417 ../src/main.c:425 ../src/main.c:441
+msgid "too few arguments for %s"
+msgstr "Elégtelen paraméter a következõhöz: %s"
+
+#: ../src/main.c:429
+msgid "bad value for visualid: \"%s\""
+msgstr "hibás érték a VisualID-nél: \"%s\""
+
+#: ../src/main.c:449
+msgid "%s: invalid argument '%s'\n"
+msgstr "%s: érvénytelen paraméter '%s'\n"
+
+#: ../src/main.c:450
+msgid "Try '%s --help' for more information\n"
+msgstr "Próbáld a '%s --help parancsot a további információkhoz\n"
+
+#: ../src/main.c:493
+msgid "X server does not support locale"
+msgstr "Az X-server nem támogatja a fordítások használatát"
+
+#: ../src/main.c:496
+msgid "cannot set locale modifiers"
+msgstr "a lokális módosításokat nem tudom beállítani"
+
+#: ../src/main.c:513
+msgid "could not open display \"%s\""
+msgstr "nem tudom megnyitni a \"%s\" megjelenítõt"
+
+#: ../src/menu.c:303
+msgid "wrealloc() failed while trying to add menu item"
+msgstr "wrealloc() függvény hibázott, amikor menüpontot próbált hozzáadni"
+
+#: ../src/misc.c:71
+msgid "could not define value for %s for cpp"
+msgstr "nem tudok értéket meghatározni a %s-hoz a cpp-nek"
+
+#: ../src/misc.c:101
+msgid "could not get password entry for UID %i"
+msgstr "nem tudom a jelszó bejegyzést kivenni a %i felhasználó azonosítóhoz"
+
+#: ../src/misc.c:125
+msgid "your machine is misconfigured. HOSTNAME is set to %s"
+msgstr "rosszul van beállítva a HOSTNAME: %s"
+
+#: ../src/misc.c:131
+msgid "your machine is misconfigured. HOST is set to %s"
+msgstr "rosszul van beállítva a HOST: %s"
+
+#: ../src/misc.c:749
+msgid "selection timed-out"
+msgstr "a kijelölés túllépte a megadott idõt"
+
+#: ../src/misc.c:765
+msgid "Program Arguments"
+msgstr "Program paraméterek"
+
+#: ../src/misc.c:766
+msgid "Enter command arguments:"
+msgstr "Kérem a parancs paramétereit:"
+
+#: ../src/misc.c:859
+msgid "unable to get dropped data from DND drop"
+msgstr "nem tudom az adatokat lekérdezni a DND parancshoz"
+
+#: ../src/misc.c:867
+msgid "error getting dropped data from DND drop"
+msgstr "hiba az adatok lekérdezése közben a DND parancsnál"
+
+#: ../src/misc.c:873
+msgid "out of memory while getting data from DND drop"
+msgstr "elfogyott a memória a DND parancs eredményének lekérdezése közben"
+
+#: ../src/misc.c:918 ../src/misc.c:1058
+msgid "out of memory during expansion of \"%s\""
+msgstr "elfogyott a memória a következõ vizsgálatánál: \"%s\""
+
+#: ../src/misc.c:972
+msgid "out of memory during expansion of \"%w\""
+msgstr "elfogyott a memória a következõ vizsgálatánál: \"%w\""
+
+#: ../src/misc.c:990
+msgid "out of memory during expansion of \"%W\""
+msgstr "elfogyott a memória a következõ vizsgálatánál: \"%W\""
+
+#: ../src/misc.c:1006
+msgid "out of memory during expansion of \"%a\""
+msgstr "elfogyott a memória a következõ vizsgálatánál: \"%a\""
+
+#: ../src/misc.c:1037
+msgid "out of memory during expansion of \"%d\""
+msgstr "elfogyott a memória a következõ vizsgálatánál: \"%d\""
+
+#: ../src/misc.c:1051
+msgid "selection not available"
+msgstr "kijelölés nem elérhetõ"
+
+#: ../src/misc.c:1123 ../src/misc.c:1129
+msgid "bad window name value in %s state info"
+msgstr "hibás az \"ablak neve\" érték az %s információjában"
+
+#: ../src/misc.c:1384
+msgid "could not send message to background image helper"
+msgstr "nem tudok üzenetet küldeni a háttérkép súgójának"
+
+#: ../src/pixmap.c:235
+msgid "could not load mask bitmap file \"%s\". Won't use mask"
+msgstr "nem tudom betölteni a bitkép fájl maszkját \"%s\". A maszk nem lesz használva."
+
+#: ../src/proplist.c:180
+msgid "unterminated string"
+msgstr "befejezetlen szöveg"
+
+#: ../src/proplist.c:247
+msgid "unterminated array"
+msgstr "befejezetlen tömb"
+
+#: ../src/proplist.c:256
+msgid "missing , in array or unterminated array"
+msgstr "hiányzó vesszõ (,) a tömbben vagy a tömb nincs befejezve"
+
+#: ../src/proplist.c:267
+msgid "could not get array element"
+msgstr "a tömb elemeit nem tudom elérni"
+
+#: ../src/proplist.c:297
+msgid "unterminated dictionary"
+msgstr "befejezetlen szótár"
+
+#: ../src/proplist.c:315
+msgid "missing dictionary key"
+msgstr "hiányzó szótár kulcs"
+
+#: ../src/proplist.c:317
+msgid "missing dictionary entry key or unterminated dictionary"
+msgstr "hiányzó szótár-kulcs bejegyzés vagy a szótár nincs befejezve"
+
+#: ../src/proplist.c:323
+msgid "error parsing dictionary key"
+msgstr "hiba a szótár kulcspárjaiban"
+
+#: ../src/proplist.c:332
+msgid "missing = in dictionary entry"
+msgstr "hiányzó = a szótár bejegyzésében"
+
+#: ../src/proplist.c:351
+msgid "missing ; in dictionary entry"
+msgstr "hiányzó ; a szótár bejegyzésben"
+
+#: ../src/proplist.c:432
+msgid "was expecting a string, dictionary, data or array. If it's a string, try enclosing it with \"."
+msgstr "egy szöveget, szótárt, adatot vagy tömböt vártam. Ha ez egy szöveg, akkor próbáld meg bezárni egy \" jellel."
+
+#: ../src/proplist.c:434
+msgid "Comments are not allowed inside WindowMaker owned domain files."
+msgstr "Magyarázatok nem lehetnek a WindowMaker saját domain fájljában"
+
+#: ../src/proplist.c:453
+msgid "could not open domain file %s"
+msgstr "A következõ domain fájlt nem tudom megnyitni: %s"
+
+#: ../src/proplist.c:466
+msgid "extra data after end of file"
+msgstr "extra adat a fájl-vége jel után"
+
+#: ../src/resources.c:44
+msgid "could not parse color \"%s\""
+msgstr "A \"%s\" színt nem tudom értelmezni"
+
+#: ../src/resources.c:48
+msgid "could not allocate color \"%s\""
+msgstr "A \"%s\" színt nem tudom lefoglalni"
+
+#: ../src/rootmenu.c:188 ../src/rootmenu.c:190
+msgid "Exit"
+msgstr "Kilépés"
+
+#: ../src/rootmenu.c:189
+msgid "Exit window manager?"
+msgstr "Biztos, hogy bezárod az ablakkezelõt?"
+
+#: ../src/rootmenu.c:225
+msgid "Close X session"
+msgstr "X-Sessiom beenden"
+
+#: ../src/rootmenu.c:226
+msgid ""
+"Close Window System session?\n"
+"Kill might close applications with unsaved data."
+msgstr ""
+"Tényleg bezárod az X Window-t?\n"
+"Az alkalmazásokban néhány nem mentett adat elveszhet."
+
+#: ../src/rootmenu.c:228 ../src/winmenu.c:505
+msgid "Close"
+msgstr "Bezárás"
+
+#: ../src/rootmenu.c:239
+msgid "Kill X session"
+msgstr "X bezárása"
+
+#: ../src/rootmenu.c:240
+msgid ""
+"Kill Window System session?\n"
+"(all applications will be closed)"
+msgstr ""
+"Tényleg lelövöd a X Window-t?\n"
+"(minden alkalmazás be lesz zárva)"
+
+#: ../src/rootmenu.c:507
+msgid "%s:invalid kbd shortcut specification \"%s\" for entry %s"
+msgstr "%s: érvénytelen gyorsbillentyû-leírásában \"%s\" a következõ bejegyzéshez: %s"
+
+#: ../src/rootmenu.c:515
+msgid "%s:invalid key in shortcut \"%s\" for entry %s"
+msgstr "%s: érvénytelen billentyû a gyorsbillentyûben \"%s\" a következõ bejegyzéshez: %s"
+
+#: ../src/rootmenu.c:568
+msgid "%s: unmatched '\"' in menu file"
+msgstr "%s: nem egyezõ \" jelek a menü fájlban"
+
+#: ../src/rootmenu.c:618
+msgid "%s: missing command"
+msgstr "%s: hiányzó parancs"
+
+#: ../src/rootmenu.c:651
+msgid "invalid OPEN_MENU specification: %s"
+msgstr "hibás OPEN_MENU leírás: %s"
+
+#: ../src/rootmenu.c:699
+msgid "%s:could not stat menu"
+msgstr "%s: nem tudom elérni a menüt "
+
+#: ../src/rootmenu.c:707
+msgid "%s:could not stat menu:%s"
+msgstr "%s: nem tudom elérni a menüt:%s"
+
+#: ../src/rootmenu.c:725
+msgid "too many parameters in OPEN_MENU: %s"
+msgstr "túl sok paraméter az OPEN_MENU-ben: %s"
+
+#: ../src/rootmenu.c:761
+msgid "There are more than one WORKSPACE_MENU commands in the applications menu. Only one is allowed."
+msgstr "Egynél több WORKSPACE_MENU-parancs van az alkalmazások menüben. Csak egy engedélyzett."
+
+#: ../src/rootmenu.c:790 ../src/rootmenu.c:808 ../src/rootmenu.c:818
+msgid "%s:missing parameter for menu command \"%s\""
+msgstr "%s: hiányzó paraméter a menü parancshoz \"%s\""
+
+#: ../src/rootmenu.c:882
+msgid "%s:unknown command \"%s\" in menu config."
+msgstr "%s: ismeretlen parancs \"%s\" a menü beállításaiban."
+
+#: ../src/rootmenu.c:890
+msgid "%s:can't add shortcut for entry \"%s\""
+msgstr "%s: nem tudom a gyorsbillentyût a \"%s\" bejegyzéshez hozzáadni"
+
+#: ../src/rootmenu.c:1027
+msgid "%s:maximal line size exceeded in menu config: %s"
+msgstr "%s: a maximál sorhosszt meghaladja a menü beállításaiban: %s"
+
+#: ../src/rootmenu.c:1049 ../src/rootmenu.c:1141 ../src/rootmenu.c:1242
+msgid "%s:missing command in menu config: %s"
+msgstr "%s: hiányzó parancs a menü beállításaiban %s"
+
+#: ../src/rootmenu.c:1079
+msgid "%s:syntax error in menu file:END declaration missing"
+msgstr "%s: szintaktikai hiba a menü fájlban: az END meghatározása hiányzik"
+
+#: ../src/rootmenu.c:1108 ../src/rootmenu.c:1207
+msgid "could not make arguments for menu file preprocessor"
+msgstr "nem tudok paramétereket készíteni a menü fájl elõfeldolgozójához"
+
+#: ../src/rootmenu.c:1114 ../src/rootmenu.c:1214
+msgid "%s:could not open/preprocess menu file"
+msgstr "%s: nem tudom megnyitni/elõre feldolgozni a menü fájlt"
+
+#: ../src/rootmenu.c:1126 ../src/rootmenu.c:1227
+msgid "%s:could not open menu file"
+msgstr "%s: nem tudom megnyitni a menü fájlt"
+
+#: ../src/rootmenu.c:1153
+msgid "%s:invalid menu file. MENU command is missing"
+msgstr "%s: érvénytelen menü fájl. MENU parancs hiányzik."
+
+#: ../src/rootmenu.c:1162
+msgid "error reading preprocessed menu data"
+msgstr "hiba az elõrefeldolgozott adatok olvasása közben"
+
+#: ../src/rootmenu.c:1254
+msgid "%s:no title given for the root menu"
+msgstr "%s: nincs megnevezve a gyökér (root) menü"
+
+#: ../src/rootmenu.c:1337 ../src/rootmenu.c:1404 ../src/rootmenu.c:1448
+msgid "out of memory while constructing directory menu %s"
+msgstr "elfogyott a memória amíg a könyvtár menüt hoztam létre"
+
+#: ../src/rootmenu.c:1347
+msgid "%s:could not stat file \"%s\" in menu directory"
+msgstr "%s: a menü könyvtárában a következõ fájlt nem sikerül elérnem: \"%s\""
+
+#: ../src/rootmenu.c:1502
+msgid "Commands"
+msgstr "Parancsok"
+
+#: ../src/rootmenu.c:1505
+msgid "Restart"
+msgstr "Újraindítás"
+
+#: ../src/rootmenu.c:1506
+msgid "Exit..."
+msgstr "Kilépés..."
+
+#: ../src/rootmenu.c:1551
+msgid "could not find menu file \"%s\" referenced in WMRootMenu"
+msgstr "nem találom a menü fájlt \"%s\". A WMRootMenu hivatkozik rá."
+
+#: ../src/rootmenu.c:1558
+msgid "could not access menu \"%s\" referenced in WMRootMenu"
+msgstr "a menü elérhetetlen: \"%s\". A WMRootMenu hivatkozik rá."
+
+#: ../src/rootmenu.c:1569
+msgid "using default menu file \"%s\" as the menu referenced in WMRootMenu could not be found "
+msgstr "az alap menü fájlt használom, mert a WMRootMenu-ben hivatkozott fájl \"%s\" nem található."
+
+#: ../src/rootmenu.c:1592 ../src/rootmenu.c:1668
+msgid "%s:format error in root menu configuration \"%s\""
+msgstr "%s: formai hiba a root menü konfigurációjában \"%s\""
+
+#: ../src/rootmenu.c:1755
+msgid "The applications menu could not be loaded. Look at the console output for a detailed description of the errors."
+msgstr "Az alkalmazások menüjét nem tudom betölteni. Nézd meg a konzol kimenetét a hibák bõvebb leírásáért!"
+
+#: ../src/screen.c:459
+msgid "could not load logo image for panels: %s"
+msgstr "nem tudom betölteni a logo-t a panelhez: %s"
+
+#: ../src/screen.c:463
+msgid "error making logo image for panel:%s"
+msgstr "hiba a logo készítése közben: %s"
+
+#: ../src/screen.c:751
+msgid "could not initialize graphics library context: %s"
+msgstr "nem tudom kezdõállapotba hozni a grafikáért felelõs könyvtárat: %s"
+
+#: ../src/screen.c:782
+msgid "could not do initialization of WINGs widget set"
+msgstr "nem tudom kezdõállapotba hozni a WING widget-et"
+
+#: ../src/screen.c:1114
+msgid "could not save session state in %s"
+msgstr "A session állapotát nem tudom elmenteni: %s"
+
+#: ../src/session.c:182 ../src/wdefaults.c:575 ../src/winspector.c:354
+msgid "can't convert \"%s\" to boolean"
+msgstr "a \"%s\"-t nem tudom logikai értékké alakítani"
+
+#: ../src/session.c:981
+msgid "out of memory while saving session state"
+msgstr "elfogyott a memória, miközben mentettem a session állapotát"
+
+#: ../src/session.c:1072
+msgid "end of memory while saving session state"
+msgstr "a memória végére értem, miközben mentettem a session állapotát "
+
+#: ../src/session.c:1206
+msgid "connection to the session manager was lost"
+msgstr "a session kezelõvel létrehozott kapcsolat elveszett"
+
+#: ../src/stacking.c:73
+msgid "could not get window list!!"
+msgstr "nem tudom lekérdezni az ablakok listáját!!"
+
+#: ../src/startup.c:194
+msgid "internal X error: %s\n"
+msgstr "belsõ X-hiba: %s\n"
+
+#: ../src/startup.c:259
+msgid "got signal %i (%s) - restarting\n"
+msgstr "a következõ jelzést vettem: %i (%s) - újraindítás\n"
+
+#: ../src/startup.c:261
+msgid "got signal %i - restarting\n"
+msgstr "a következõ jelzést vettem: %i - újraindítás\n"
+
+#: ../src/startup.c:275
+msgid "got signal %i (%s) - exiting...\n"
+msgstr "a következõ jelzést vettem: %i (%s) - kilépés...\n"
+
+#: ../src/startup.c:277
+msgid "got signal %i - exiting...\n"
+msgstr "a következõ jelzést vettem: %i - kilépek\n"
+
+#: ../src/startup.c:290
+msgid "got signal %i (%s)\n"
+msgstr "egy %i (%s) jelzést vettem\n"
+
+#: ../src/startup.c:292
+msgid "got signal %i\n"
+msgstr "egy %i jelzést vettem\n"
+
+#: ../src/startup.c:303
+msgid "crashed while trying to do some post-crash cleanup. Aborting immediatelly."
+msgstr "ütközés történt miközben a lefagyás után rendet akartam tenni. Megszakítom a mûveletet."
+
+#. we try to restart Window Maker
+#: ../src/startup.c:337
+msgid "trying to restart Window Maker..."
+msgstr "megpróbálom újraindítani a Window Makert"
+
+#: ../src/startup.c:342
+msgid "trying to start alternate window manager..."
+msgstr "megpróbálok egy másik ablakkezelõt elindítani"
+
+#: ../src/startup.c:347
+msgid "failed to start alternate window manager. Aborting."
+msgstr "hiba a másik ablakkezelõ indításakor. Megszakítom."
+
+#: ../src/startup.c:349
+msgid "a fatal error has occured, probably due to a bug. Please fill the included BUGFORM and report it."
+msgstr "végzetes hiba történt, valószínûleg egy programozási hibát találtál. Légy szíves töltsd ki a mellékelt BUG-kérdõívet és küldd el a megadott címre. Köszi!"
+
+#. check sanity of some values
+#: ../src/startup.c:777
+msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
+msgstr "az ikon mérete jelenleg %i-re van állítva, de ez túl kicsi. Helyette 16-t használok.\n"
+
+#: ../src/startup.c:805
+msgid "XKB is not supported. KbdModeLock is automatically disabled."
+msgstr "XKB nincs támogatva. KbdModeLock automatikusan letiltódik."
+
+#: ../src/startup.c:824
+msgid "it seems that there is already a window manager running"
+msgstr "nekem úgy tûnik, hogy már fut egy másik ablakkezelõ"
+
+#: ../src/startup.c:830
+msgid "could not manage screen %i"
+msgstr "nem tudom a menedzselni a %i képernyõt"
+
+#: ../src/startup.c:890
+msgid "could not manage any screen"
+msgstr "egy képernyõt sem tudok kezelni"
+
+#: ../src/switchmenu.c:114
+msgid "Windows"
+msgstr "Ablakok"
+
+#: ../src/texture.c:290 ../src/texture.c:334
+msgid "image file \"%s\" used as texture could not be found."
+msgstr "A \"%s\" kép (ami mintaként használatos) nem tölthetõ be."
+
+#: ../src/texture.c:296 ../src/texture.c:340
+msgid "could not load texture pixmap \"%s\":%s"
+msgstr "nem tudom betölteni a \"%s\":%s mintát"
+
+#: ../src/texture.c:400
+msgid "library \"%s\" cound not be opened."
+msgstr "a \"%s\" könyvtárat nem tudom megnyitni."
+
+#: ../src/texture.c:409
+msgid "function \"%s\" not found in library \"%s\""
+msgstr "A \"%s\" függvény nem található a \"%s\" könyvtárban"
+
+#: ../src/texture.c:416
+msgid "function textures not supported on this system, sorry."
+msgstr "A minta függvényeket ez a rendszer nem támogatja."
+
+#: ../src/wdefaults.c:421
+msgid "could not find icon file \"%s\""
+msgstr "nem találom a \"%s\" ikon fájlt"
+
+#: ../src/window.c:2607 ../src/window.c:2741
+msgid ""
+"the NumLock, ScrollLock or similar key seems to be turned on.\n"
+"Turn it off or some mouse actions and keyboard shortcuts will not work."
+msgstr ""
+"Úgy tûnik, hogy a NumLock vagy a ScrollLock vagy valamelyik hasonló billentyû be van kapcsolva.\n"
+"Kapcsold ki, vagy néhány egérmûvelet vagy billentyû-kombináció nem fog mûködni."
+
+#: ../src/winmenu.c:126
+msgid ""
+"This will kill the application.\n"
+"Any unsaved changes will be lost.\n"
+"Please confirm."
+msgstr ""
+"Ez bezárja az alkalmazást.\n"
+"Minden nem mentett adat elveszik.\n"
+"Biztos vagy benne?"
+
+#: ../src/winmenu.c:269 ../src/winmenu.c:277
+msgid "Set Shortcut"
+msgstr "Gyorsbillentyû "
+
+#: ../src/winmenu.c:357 ../src/winmenu.c:403
+msgid "could not create submenu for window menu"
+msgstr "az ablakok menüjéhez nem tudom az almenüt létrehozni"
+
+#: ../src/winmenu.c:412
+msgid "Keep at bottom"
+msgstr "Mindig alul"
+
+#: ../src/winmenu.c:440 ../src/winmenu.c:575
+msgid "Maximize"
+msgstr "Teljes méret"
+
+#: ../src/winmenu.c:448 ../src/winmenu.c:561
+msgid "Miniaturize"
+msgstr "Ikonállapot"
+
+#: ../src/winmenu.c:457 ../src/winmenu.c:592
+msgid "Shade"
+msgstr "Felhúzás"
+
+#: ../src/winmenu.c:473
+msgid "Resize/Move"
+msgstr "Átméretezés/Mozgatás"
+
+#: ../src/winmenu.c:481
+msgid "Select"
+msgstr "Kijelölés"
+
+#: ../src/winmenu.c:489
+msgid "Move To"
+msgstr "Mozgatás"
+
+#: ../src/winmenu.c:494
+msgid "Attributes..."
+msgstr "Tulajdonságok..."
+
+#: ../src/winmenu.c:496
+msgid "Options"
+msgstr "Beállítások"
+
+#: ../src/winmenu.c:556
+msgid "Deminiaturize"
+msgstr "Eredeti méret"
+
+#: ../src/winmenu.c:570
+msgid "Unmaximize"
+msgstr "Eredeti méret"
+
+#: ../src/winmenu.c:587
+msgid "Unshade"
+msgstr "Leeresztés"
+
+#: ../src/winspector.c:288
+msgid "Could not find icon \"%s\" specified for this window"
+msgstr "A \"%s\" ikon fájl ehhez az ablakhoz nem található"
+
+#: ../src/winspector.c:304
+msgid "Could not open specified icon \"%s\":%s"
+msgstr "Nem tudom megnyitni a következõ ikont \"%s\" : %s"
+
+#: ../src/winspector.c:1052
+msgid "Save"
+msgstr "Mentés"
+
+#: ../src/winspector.c:1060
+msgid "Apply"
+msgstr "Alkalmaz"
+
+#: ../src/winspector.c:1066
+msgid "Reload"
+msgstr "Újra"
+
+#: ../src/winspector.c:1075 ../src/winspector.c:1085
+msgid "Window Specification"
+msgstr "Ablak meghatározás"
+
+#: ../src/winspector.c:1076
+msgid "Window Attributes"
+msgstr "Ablak tulajdonságok"
+
+#: ../src/winspector.c:1077
+msgid "Advanced Options"
+msgstr "Haladó beállítások"
+
+#: ../src/winspector.c:1078
+msgid "Icon and Initial Workspace"
+msgstr "Ikon és munkafelület beállítások"
+
+#: ../src/winspector.c:1079
+msgid "Application Specific"
+msgstr "Alkalmazás beállításai"
+
+#: ../src/winspector.c:1093
+msgid "Defaults for all windows"
+msgstr "Alapértelmezés minden ablaknak"
+
+#: ../src/winspector.c:1144
+msgid ""
+"The configuration will apply to all\n"
+"windows that have their WM_CLASS property set to the above selected\n"
+"name, when saved."
+msgstr ""
+"A konfiguráció mentéskor alkalmazva lesz\n"
+"minden ablakra, ahol a WM_CLASS\n"
+"értéke a fentire van beállítva."
+
+#. *** attributes ***
+#: ../src/winspector.c:1151
+msgid "Attributes"
+msgstr "Tulajdonságok"
+
+#: ../src/winspector.c:1162
+msgid "Disable Titlebar"
+msgstr "Címsor letiltás"
+
+#: ../src/winspector.c:1164                                                                    
+msgid ""
+"Remove the titlebar of this window.\n"
+"To access the window commands menu of a window\n"
+"without it's titlebar, press Control+Esc (or the\n"
+"equivalent shortcut, if you changed the default\n"
+"settings)."
+msgstr ""
+"Eltünteti az ablak címsorát.\n"
+"Az ablak-parancsok menüjéhez a címsor nélküli\n"
+"ablakoknál a Control+Esc lenyomásával juthatsz\n"
+"(vagy egy ezzel egyenértékû gombkombinációval, ha\n"
+"közben átállítottad az alapértelmezést)."
+
+#: ../src/winspector.c:1171
+msgid "Disable Resizebar"
+msgstr "Átméretezés letiltás"
+
+#: ../src/winspector.c:1173
+msgid "Remove the resizebar of this window."
+msgstr "Az átméretezõ sávot elrejti"
+
+#: ../src/winspector.c:1176
+msgid "Disable Close Button"
+msgstr "Bezárás gomb letiltása"
+
+#: ../src/winspector.c:1178
+msgid "Remove the `close window' button of this window."
+msgstr "Elrejti a `bezárás' gombot az ablakról"
+
+#: ../src/winspector.c:1181
+msgid "Disable Miniaturize Button"
+msgstr "Ikonállapot gomb elrejtése"
+
+#: ../src/winspector.c:1183
+msgid "Remove the `miniaturize window' button of the window."
+msgstr "Elrejti az `Ikonállapot' gombot az ablakról"
+
+#: ../src/winspector.c:1186
+msgid "Keep on Top / Floating"
+msgstr "Mindig felül / Lebegés"
+
+#: ../src/winspector.c:1188
+msgid ""
+"Keep the window over other windows, not allowing\n"
+"them to covert it."
+msgstr ""
+"Az ablakot mindig felülre teszi, nem engedi, hogy\n"
+"más ablak beterítse."
+
+#: ../src/winspector.c:1192
+msgid "Keep at Bottom / Sunken"
+msgstr "Mindig alul / Süllyesztés"
+
+#: ../src/winspector.c:1194
+msgid "Keep the window under all other windows."
+msgstr "Az ablak mindig a legalsó lesz."
+
+#: ../src/winspector.c:1199
+msgid "Make window occupy all workspaces."
+msgstr "Az ablak minden munkafelületen megjelenik."
+
+#: ../src/winspector.c:1202
+msgid "Start Miniaturized"
+msgstr "Ikonállapotban indít"
+
+#: ../src/winspector.c:1204
+msgid ""
+"Make the window be automatically miniaturized when it's\n"
+"first shown."
+msgstr ""
+"Az ablak automatikusan ikonállapotba kerül, amikor\n"
+"elõször megjelenik."
+
+#: ../src/winspector.c:1208
+msgid "Start Maximized"
+msgstr "Teljes méretben indít"
+
+#: ../src/winspector.c:1210
+msgid ""
+"Make the window be automatically maximized when it's\n"
+"first shown."
+msgstr ""
+"Az ablak automatikusan betölti az egész képernyõt, amikor\n"
+"elõször megjelenik."
+
+#: ../src/winspector.c:1214
+msgid "Skip Window List"
+msgstr "Ablak-lista átugrása"
+
+#: ../src/winspector.c:1216
+msgid "Do not list the window in the window list menu."
+msgstr "Az ablak nem jelenik meg az \"Ablakok listája\" menüben"
+
+#: ../src/winspector.c:1231
+msgid "Advanced"
+msgstr "Haladó"
+
+#: ../src/winspector.c:1246
+msgid "Ignore HideOthers"
+msgstr "\"HideOthers\" figyelmen kívûl"
+
+#: ../src/winspector.c:1248
+msgid ""
+"Do not hide the window when issuing the\n"
+"`HideOthers' command."
+msgstr ""
+"Nem rejti el az ablakot, amikor a\n"
+"\"HideOthers\" parancsot hajtod végre."
+
+#: ../src/winspector.c:1252
+msgid "Don't Bind Keyboard Shortcuts"
+msgstr "Ne értelmezze a gyorsbillentyûket"
+
+#: ../src/winspector.c:1254
+msgid ""
+"Do not bind keyboard shortcuts from Window Maker\n"
+"when this window is focused. This will allow the\n"
+"window to receive all key combinations regardless\n"
+"of your shortcut configuration."
+msgstr ""
+"A Window Maker nem fogja értelmezni a gyorsbillentyûket,\n"
+"amikor ez az ablak aktív. Ez lehetõvé teszi, hogy az\n"
+"ablak _MINDEN_ gombkombinációt megkapjon, azt is, ami\n"
+"már esetleg szerepel a gyorsbillentyûid között."
+
+#: ../src/winspector.c:1260
+msgid "Don't Bind Mouse Clicks"
+msgstr "Ne értelmezze az egérkattintásokat"
+
+#: ../src/winspector.c:1262
+msgid ""
+"Do not bind mouse actions, such as `Alt'+drag\n"
+"in the window (when alt is the modifier you haveconfigured)."
+msgstr ""
+"Nem próbálja meg értelmezni az egér tevékenységét, pl az Alt+húzás-t\n"
+"az ablakon belül (ha az alt a módosító billentyûd)."
+
+#: ../src/winspector.c:1267
+msgid "Keep Inside Screen"
+msgstr "A képernyõn belül tart"
+
+#: ../src/winspector.c:1269
+msgid ""
+"Do not allow the window to move itself completely\n"
+"outside the screen. For bug compatibility.\n"
+msgstr ""
+"Nem engedélyezi az ablakot teljesen a képernyõ\n"
+"területén kívûlre rakni.\n"
+
+#: ../src/winspector.c:1273
+msgid "Don't Let It Take Focus"
+msgstr "Nem kaphat fókuszt"
+
+#: ../src/winspector.c:1275
+msgid ""
+"Do not let the window take keyboard focus when you\n"
+"click on it."
+msgstr ""
+"Amikor rákattintasz az ablakra, akkor a billentyûzet\n"
+"nem fókuszálódik rá."
+
+#: ../src/winspector.c:1279
+msgid "Don't Save Session"
+msgstr "Nem menti a sessiont"
+
+#: ../src/winspector.c:1281
+msgid ""
+"Do not save the associated application in the\n"
+"session's state, so that it won't be restarted\n"
+"together with other applications when Window Maker\n"
+"starts."
+msgstr ""
+"Nem menti a társított alkalmazás session tulajdonságait,\n"
+"így nem fog újraindulni más alkalmazásokkal együtt, amikor a\n"
+"Window Maker elindul."
+
+#: ../src/winspector.c:1287
+msgid "Emulate Application Icon"
+msgstr "Alkalmazás-ikon emuláció"
+
+#: ../src/winspector.c:1289
+msgid ""
+"Make this window act as an application that provides\n"
+"enough information to Window Maker for a dockable\n"
+"application icon to be created."
+msgstr ""
+"Az ablakot úgy állítja be, hogy elég információt szolgáltasson\n"
+"a Window Makernek ahhoz, hogy a dokkolt ikont létre tudja\n"
+"hozni."
+
+#: ../src/winspector.c:1294
+msgid "Full Screen Maximization"
+msgstr "Teljes képernyõs üzemmód"
+
+#: ../src/winspector.c:1296
+msgid ""
+"Make the window use the whole screen space when it's\n"
+"maximized. The titlebar and resizebar will be moved\n"
+"to outside the screen."
+msgstr ""
+"Az ablak az egész képernyõt el fogja foglalni, amikor\n"
+"maximalizálod. A címsor és az átméretezõsáv ki fog\n"
+"lógni a képernyõbõl."
+
+#: ../src/winspector.c:1302
+msgid "Disable Language Button"
+msgstr "Nyelv-gomb letiltása"
+
+#: ../src/winspector.c:1304
+msgid "Remove the `toggle language' button of the window."
+msgstr "Eltünteti a `nyelv ki/be' gombot az ablakról"
+
+#: ../src/winspector.c:1321
+msgid "Miniwindow Image"
+msgstr "Miniablak-kép"
+
+#: ../src/winspector.c:1340
+msgid "Update"
+msgstr "Frissítés"
+
+#: ../src/winspector.c:1355
+msgid "Icon File Name:"
+msgstr "Ikonfájl neve:"
+
+#: ../src/winspector.c:1367
+msgid "Ignore client supplied icon"
+msgstr "A kliens ikonjának letiltása"
+
+#: ../src/winspector.c:1374
+msgid "Initial Workspace"
+msgstr "Kezdeti munkafelület"
+
+#: ../src/winspector.c:1376
+msgid "The workspace to place the window when it'sfirst shown."
+msgstr "Amikor megjelenik, melyik munkafelületre helyezze az ablakot"
+
+#: ../src/winspector.c:1382
+msgid "Nowhere in particular"
+msgstr "Aktuális munkafelület"
+
+#: ../src/winspector.c:1400
+msgid "Application Wide"
+msgstr "Alkalmazás tulajdonságok"
+
+#: ../src/winspector.c:1411
+msgid "Start Hidden"
+msgstr "Indításkor elrejt"
+
+#: ../src/winspector.c:1413
+msgid "Automatically hide application when it's started."
+msgstr "Amikor elindul, automatikusan elrejti"
+
+#: ../src/winspector.c:1416
+msgid "No Application Icon"
+msgstr "Nincs alkalmazás-ikon"
+
+#: ../src/winspector.c:1418
+msgid ""
+"Disable the application icon for the application.\n"
+"Note that you won't be able to dock it anymore,\n"
+"and any icons that are already docked will stop\n"
+"working correctly."
+msgstr ""
+"Letiltja az alkalmazáshoz tartozó ikon megjelenését.\n"
+"Többé nem tudod dokkolni (rögzíteni) azt;\n"
+"és a többi ikon, ami már dokkolva van, lehetséges,\n"
+"hogy nem fog többé tökéletesen mûködni."
+
+#: ../src/workspace.c:107 ../src/workspace.c:108 ../src/workspace.c:703
+msgid "Workspace %i"
+msgstr "Munkafelület %i"
+
+#: ../src/workspace.c:760
+msgid "Workspaces"
+msgstr "Munkafelületek"
+
+#: ../src/workspace.c:762
+msgid "could not create Workspace menu"
+msgstr "nem tudom létrehozni a Munkafelület menüt"
+
+#: ../src/workspace.c:769
+msgid "New"
+msgstr "Új"
+
+#: ../src/workspace.c:770
+msgid "Destroy Last"
+msgstr "Utolsó elpusztítása"
+
+#: ../src/xutil.c:228
+msgid "invalid data in selection"
+msgstr "érvénytelen adat a kiválasztásban"
