@@ -291,8 +291,8 @@ WMCreateFont(WMScreen *scrPtr, char *fontName)
     if (scrPtr->useMultiByte) {
 	return WMCreateFontSet(scrPtr, fontName);
     } else if (scrPtr->antialiasedText) {
-        /*// should revert to normal if this fails? */
-        return WMCreateAAFont(scrPtr, fontName);
+        WMFont *font = WMCreateAAFont(scrPtr, fontName);
+        return font ? font : WMCreateNormalFont(scrPtr, fontName);
     } else {
         return WMCreateNormalFont(scrPtr, fontName);
     }
@@ -373,13 +373,15 @@ makeSystemFontOfSize(WMScreen *scrPtr, int size, Bool bold)
     WMFont *font;
     char *fontSpec, *aaFontSpec;
 
+#define WConf WINGsConfiguration
     if (bold) {
-        fontSpec = makeFontSetOfSize(WINGsConfiguration.boldSystemFont, size);
-        aaFontSpec = makeFontSetOfSize(WINGsConfiguration.aaBoldSystemFont, size);
+        fontSpec = makeFontSetOfSize(WConf.boldSystemFont, size);
+        aaFontSpec = makeFontSetOfSize(WConf.antialiasedBoldSystemFont, size);
     } else {
-        fontSpec = makeFontSetOfSize(WINGsConfiguration.systemFont, size);
-        aaFontSpec = makeFontSetOfSize(WINGsConfiguration.aaSystemFont, size);
+        fontSpec = makeFontSetOfSize(WConf.systemFont, size);
+        aaFontSpec = makeFontSetOfSize(WConf.antialiasedSystemFont, size);
     }
+#undef WConf
 
     if (scrPtr->useMultiByte) {
         font = WMCreateFontSet(scrPtr, fontSpec);
@@ -497,7 +499,6 @@ WMDrawString(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
         if (font->antialiased) {
 #ifdef XFT
             XftColor xftcolor;
-            XftDraw *xftdraw;
 
             xftcolor.color.red = color->color.red;
             xftcolor.color.green = color->color.green;
@@ -505,13 +506,10 @@ WMDrawString(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
             xftcolor.color.alpha = color->alpha;;
             xftcolor.pixel = W_PIXEL(color);
 
-            /* //share if possible */
-            xftdraw = XftDrawCreate(scr->display, d, scr->visual, scr->colormap);
+            XftDrawChange(scr->xftdraw, d);
 
-            XftDrawString8(xftdraw, &xftcolor, font->font.xft,
+            XftDrawString8(scr->xftdraw, &xftcolor, font->font.xft,
                            x, y + font->y, text, length);
-
-            XftDrawDestroy(xftdraw);
 #else
             assert(False);
 #endif
@@ -540,7 +538,6 @@ WMDrawImageString(WMScreen *scr, Drawable d, WMColor *color, WMColor *background
 #ifdef XFT
             XftColor textColor;
             XftColor bgColor;
-            XftDraw *xftdraw;
 
             textColor.color.red = color->color.red;
             textColor.color.green = color->color.green;
@@ -554,16 +551,14 @@ WMDrawImageString(WMScreen *scr, Drawable d, WMColor *color, WMColor *background
             bgColor.color.alpha = background->alpha;;
             bgColor.pixel = W_PIXEL(background);
 
-            /* //share if possible */
-            xftdraw = XftDrawCreate(scr->display, d, scr->visual, scr->colormap);
 
-            XftDrawRect(xftdraw, &bgColor, x, y,
+            XftDrawChange(scr->xftdraw, d);
+
+            XftDrawRect(scr->xftdraw, &bgColor, x, y,
                         WMWidthOfString(font, text, length), font->height);
 
-            XftDrawString8(xftdraw, &textColor, font->font.xft, x, y + font->y,
-                           text, length);
-
-            XftDrawDestroy(xftdraw);
+            XftDrawString8(scr->xftdraw, &textColor, font->font.xft,
+                           x, y + font->y, text, length);
 #else
             assert(False);
 #endif

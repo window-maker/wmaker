@@ -491,7 +491,8 @@ paintItem(List *lPtr, int index)
 {
     WMView *view = lPtr->view;
     W_Screen *scr = view->screen;
-    int width, height, x, y;
+    Display *display = scr->display;
+    int width, height, x, y, tlen;
     WMListItem *itemPtr;
 
     itemPtr = WMGetFromArray(lPtr->items, index);
@@ -500,10 +501,13 @@ paintItem(List *lPtr, int index)
     height = lPtr->itemHeight;
     x = 19;
     y = 2 + (index-lPtr->topItem) * lPtr->itemHeight + 1;
+    tlen = strlen(itemPtr->text);
 
     if (lPtr->flags.userDrawn) {
         WMRect rect;
+        Drawable d = view->window;
         int flags;
+
 
         rect.size.width = width;
         rect.size.height = height;
@@ -518,20 +522,41 @@ paintItem(List *lPtr, int index)
         if (itemPtr->isBranch)
             flags |= WLDSIsBranch;
 
+#ifdef DOUBLE_BUFFER_no
+        d = XCreatePixmap(display, view->window, view->size.width,
+                          view->size.height, scr->depth);
+#endif
+
         if (lPtr->draw)
-            (*lPtr->draw)(lPtr, index, view->window, itemPtr->text, flags,
-                          &rect);
+            (*lPtr->draw)(lPtr, index, d, itemPtr->text, flags, &rect);
+
+#ifdef DOUBLE_BUFFER_no
+        XCopyArea(display, d, view->window, scr->copyGC, x, y, width, height, x, y);
+        XFreePixmap(display, d);
+#endif
     } else {
+#ifdef DOUBLE_BUFFER
+        WMColor *back = (itemPtr->selected ? scr->white : view->backColor);
+        Drawable d;
+
+        d = XCreatePixmap(display, view->window, width, height, scr->depth);
+        XFillRectangle(display, d, WMColorGC(back), 0, 0, width, height);
+
+        W_PaintText(view, d, scr->normalFont,  4, 0, width, WALeft, scr->black,
+                    False, itemPtr->text, tlen);
+        XCopyArea(display, d, view->window, scr->copyGC, 0, 0, width, height, x, y);
+        XFreePixmap(display, d);
+#else
         if (itemPtr->selected) {
-            XFillRectangle(scr->display, view->window, WMColorGC(scr->white),
+            XFillRectangle(display, view->window, WMColorGC(scr->white),
                            x, y, width, height);
         } else {
-            XClearArea(scr->display, view->window, x, y, width, height, False);
+            XClearArea(display, view->window, x, y, width, height, False);
         }
 
         W_PaintText(view, view->window, scr->normalFont,  x+4, y, width,
-                    WALeft, scr->black, False,
-                    itemPtr->text, strlen(itemPtr->text));
+                    WALeft, scr->black, False, itemPtr->text, tlen);
+#endif
     }
 
     if ((index-lPtr->topItem+lPtr->fullFitLines)*lPtr->itemHeight >

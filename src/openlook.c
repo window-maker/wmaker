@@ -352,6 +352,9 @@ wOLWMCheckClientHints(WWindow *wwin)
 
 	    menuType = MT_LIMITED;
 
+            /* this is a transient-like window */
+            wwin->client_flags.olwm_transient = 1;
+
 	} else if (hints.winType == WT_NOTICE) {
 
 	    decoration = OL_DECORATION_ICONNAME;
@@ -396,11 +399,6 @@ wOLWMCheckClientHints(WWindow *wwin)
 	wwin->flags.olwm_limit_menu = 0;
     else
 	wwin->flags.olwm_limit_menu = 1;
-
-    /* this is a transient-like window */
-    if (hints.winType == WT_CMD) {
-	wwin->client_flags.olwm_transient = 1;
-    }
 
     /*
      * Emulate olwm pushpin.

@@ -1,8 +1,8 @@
 {
   SystemFont = "-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-%d-*,-*-*-medium-r-normal-*-*-*";
   BoldSystemFont = "-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-bold-r-normal-*-%d-*,-*-*-medium-r-normal-*-*-*";
-  AASystemFont = "-*-arial-medium-r-normal-*-%d-*-*-*-*-*-*-*";
-  AABoldSystemFont = "-*-arial-bold-r-normal-*-%d-*-*-*-*-*-*-*";
+  AntialiasedSystemFont = "-*-trebuchet ms-medium-r-normal-*-%d-*-*-*-*-*-*-*";
+  AntialiasedBoldSystemFont = "-*-trebuchet ms-bold-r-normal-*-%d-*-*-*-*-*-*-*";
   DefaultFontSize = 12;
   AntialiasedText = NO;
   MultiByteText = AUTO;

@@ -82,16 +82,20 @@ paintFrame(Frame *fPtr)
 {
     W_View *view = fPtr->view;
     W_Screen *scrPtr = view->screen;
-    int tx, ty, tw, th;
+    WMFont *font = scrPtr->normalFont;
+    Display *display = scrPtr->display;
+    int tx, ty, tw, th, tlen;
     int fy, fh;
     Bool drawTitle;
-    
-    if (fPtr->caption!=NULL)
-	th = WMFontHeight(scrPtr->normalFont);
-    else {
-	th = 0;
+
+    if (fPtr->caption!=NULL) {
+        th = WMFontHeight(font);
+        tlen = strlen(fPtr->caption);
+    } else {
+        th = 0;
+        tlen = 0;
     }
-    
+
     fh = view->size.height;
     fy = 0;
     
@@ -139,12 +143,11 @@ paintFrame(Frame *fPtr)
     }
 
     if (fPtr->caption!=NULL && fPtr->flags.titlePosition!=WTPNoTitle) {
-	tw = WMWidthOfString(scrPtr->normalFont, fPtr->caption, 
-			     strlen(fPtr->caption));
+	tw = WMWidthOfString(font, fPtr->caption, tlen);
 
-	tx = (view->size.width - tw) / 2;
-	
-	drawTitle = True;
+        tx = (view->size.width - tw) / 2;
+
+        drawTitle = True;
     } else {
 	drawTitle = False;
     }
@@ -180,7 +183,7 @@ paintFrame(Frame *fPtr)
 	gc[3] = WMColorGC(scrPtr->white);
 
 	for (i = 0; i < 4; i++) {
-	    XSetRegion(scrPtr->display, gc[i], region);
+	    XSetRegion(display, gc[i], region);
 	}
 	XDestroyRegion(region);
 
@@ -188,13 +191,31 @@ paintFrame(Frame *fPtr)
 			   fPtr->flags.relief, gc[0], gc[1], gc[2], gc[3]);
 
 	for (i = 0; i < 4; i++) {
-	    XSetClipMask(scrPtr->display, gc[i], None);
+	    XSetClipMask(display, gc[i], None);
 	}
     }
 
     if (drawTitle) {
-        WMDrawString(scrPtr, view->window, scrPtr->black, scrPtr->normalFont,
-                     tx, ty, fPtr->caption, strlen(fPtr->caption));
+        /* can't draw AA text over and over again because it gets messed */
+        if (font->antialiased) {
+#ifdef DOUBLE_BUFFER
+            Drawable d;
+
+            d = XCreatePixmap(display, view->window, tw, th, scrPtr->depth);
+            XFillRectangle(display, d, WMColorGC(view->backColor), 0, 0, tw, th);
+
+            WMDrawString(scrPtr, d, scrPtr->black, font, 0, 0, fPtr->caption, tlen);
+            XCopyArea(display, d, view->window, scrPtr->copyGC, 0, 0, tw, th, tx, ty);
+            XFreePixmap(display, d);
+#else
+            XClearArea(display, view->window, tx, ty, tw, th, False);
+            WMDrawString(scrPtr, view->window, scrPtr->black, font, tx, ty,
+                         fPtr->caption, tlen);
+#endif
+        } else {
+            WMDrawString(scrPtr, view->window, scrPtr->black, font, tx, ty,
+                         fPtr->caption, tlen);
+        }
     }
 }
 

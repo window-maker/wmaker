@@ -65,11 +65,11 @@ W_ReadConfigurations(void)
 	WINGsConfiguration.boldSystemFont = 
 	    WMGetUDStringForKey(defaults, "BoldSystemFont");
 
-	WINGsConfiguration.aaSystemFont =
-	    WMGetUDStringForKey(defaults, "AASystemFont");
+	WINGsConfiguration.antialiasedSystemFont =
+	    WMGetUDStringForKey(defaults, "AntialiasedSystemFont");
 
-	WINGsConfiguration.aaBoldSystemFont =
-	    WMGetUDStringForKey(defaults, "AABoldSystemFont");
+	WINGsConfiguration.antialiasedBoldSystemFont =
+	    WMGetUDStringForKey(defaults, "AntialiasedBoldSystemFont");
 
 #ifdef XFT
 	WINGsConfiguration.antialiasedText =
@@ -139,11 +139,11 @@ W_ReadConfigurations(void)
     if (!WINGsConfiguration.boldSystemFont) {
 	WINGsConfiguration.boldSystemFont = BOLD_SYSTEM_FONT;
     }
-    if (!WINGsConfiguration.aaSystemFont) {
-	WINGsConfiguration.aaSystemFont = AASYSTEM_FONT;
+    if (!WINGsConfiguration.antialiasedSystemFont) {
+	WINGsConfiguration.antialiasedSystemFont = AASYSTEM_FONT;
     }
-    if (!WINGsConfiguration.aaBoldSystemFont) {
-	WINGsConfiguration.aaBoldSystemFont = AABOLD_SYSTEM_FONT;
+    if (!WINGsConfiguration.antialiasedBoldSystemFont) {
+	WINGsConfiguration.antialiasedBoldSystemFont = AABOLD_SYSTEM_FONT;
     }
     if (!WINGsConfiguration.floppyPath) {
 	WINGsConfiguration.floppyPath = FLOPPY_PATH;

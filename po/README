@@ -85,7 +85,7 @@ with a .po extension, reconfigure WindowMaker and run
 make install.
 
 To update an already translated message file use the msgmerge command. As in:
-msgmerge WindowMaker.pot pt.po > pt.po.new
+msgmerge pt.po WindowMaker.pot > pt.po.new
 
 If you use an older version of gettext, the command is tupdate, instead
 of msgmerge.

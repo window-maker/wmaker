@@ -16,6 +16,9 @@ Changes since wmaker 0.80.1:
 - New options in WMGLOBAL: AntialiasedText, AASystemFont and AABoldSystemFont.
   Check NEWS for details.
 - Fixed some improper calls to snprintf in wfont.c
+- Added double buffering when drawing a WMFrame title with an AA font to avoid 
+  flickering.
+- Added double buffering when drawing WMList items to avoid flickering
 
 
 Changes since wmaker 0.80.0:

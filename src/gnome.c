@@ -650,7 +650,8 @@ wGNOMERemoveClient(WWindow *wwin)
 
 
 
-static void observer(void *self, WMNotification *notif)
+static void
+observer(void *self, WMNotification *notif)
 {
     WWindow *wwin = (WWindow*)WMGetNotificationObject(notif);
     const char *name = WMGetNotificationName(notif);
@@ -665,10 +666,12 @@ static void observer(void *self, WMNotification *notif)
 	wGNOMEUpdateClientStateHint(wwin, True);
     } else if (strcmp(name, WMNChangedState) == 0 && wwin) {
 	wGNOMEUpdateClientStateHint(wwin, False);
-    } 
+    }
 }
 
-static void wsobserver(void *self, WMNotification *notif)
+
+static void
+wsobserver(void *self, WMNotification *notif)
 {
     WScreen *scr = (WScreen*)WMGetNotificationObject(notif);
     const char *name = WMGetNotificationName(notif);
@@ -681,10 +684,8 @@ static void wsobserver(void *self, WMNotification *notif)
 	wGNOMEUpdateWorkspaceNamesHint(scr);
     } else if (strcmp(name, WMNWorkspaceChanged) == 0) {
 	wGNOMEUpdateCurrentWorkspaceHint(scr);
-	
-
     } else if (strcmp(name, WMNResetStacking) == 0) {
-	
+
     }
 }
 

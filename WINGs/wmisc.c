@@ -201,33 +201,28 @@ W_PaintTextAndImage(W_View *view, int wrap, WMColor *textColor, W_Font *font,
     int x, y, w, h;
     Drawable d = view->window;
 
-    
+
 #ifdef DOUBLE_BUFFER
     d = XCreatePixmap(screen->display, view->window, 
 		      view->size.width, view->size.height, screen->depth);
 #endif
-    
+
     /* background */
-#ifndef DOUBLE_BUFFER
     if (backColor) {
 	XFillRectangle(screen->display, d, WMColorGC(backColor),
 		       0, 0, view->size.width, view->size.height);
     } else {
+#ifndef DOUBLE_BUFFER
 	XClearWindow(screen->display, d);
-    }
 #else
-    if (backColor)
-	XFillRectangle(screen->display, d, WMColorGC(backColor), 0, 0,
-		       view->size.width, view->size.height);
-    else {
 	XSetForeground(screen->display, screen->copyGC, 
 		       view->attribs.background_pixel);
 	XFillRectangle(screen->display, d, screen->copyGC, 0, 0,
 		       view->size.width, view->size.height);
-    }
 #endif
+    }
 
-    
+
     if (relief == WRFlat) {
 	x = 0;
 	y = 0;
@@ -305,11 +300,11 @@ W_PaintTextAndImage(W_View *view, int wrap, WMColor *textColor, W_Font *font,
 	W_PaintText(view, d, font, x+ofs+4, y+ofs + (h-textHeight)/2, w-8,
 		    alignment, textColor, wrap, text, strlen(text));
     }
-    
-    
+
+
     /* draw relief */
     W_DrawRelief(screen, d, 0, 0, view->size.width, view->size.height, relief);
-    
+
 #ifdef DOUBLE_BUFFER
     XCopyArea(screen->display, d, view->window, screen->copyGC, 0, 0,
 	      view->size.width, view->size.height, 0, 0);

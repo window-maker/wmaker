@@ -139,11 +139,11 @@ typedef struct _WScreen {
 					* by other clients (not us) */
     WArea totalUsableArea;	       /* same as above, but including
 					* the dock and other stuff */
-    
+
 
     WMPixel black_pixel;
     WMPixel white_pixel;
-    
+
     WMPixel light_pixel;
     WMPixel dark_pixel;
 

@@ -440,10 +440,10 @@ paintItem(WMList *lPtr, int index, Drawable d, char *text, int state,
     y = rect->pos.y;
 
     if (state & WLDSSelected)
-	XFillRectangle(dpy, d, WMColorGC(panel->white), x, y, width, 
-		       height);
-    else 
-	XClearArea(dpy, d, x, y, width, height, False);
+	XFillRectangle(dpy, d, WMColorGC(panel->white), x, y, width, height);
+    else
+        //XClearArea(dpy, d, x, y, width, height, False);
+        XFillRectangle(dpy, d, WMColorGC(WMGrayColor(scr)), x, y, width, height);
 
     if (panel->shortcuts[index]) {
 	WMPixmap *pix = WMGetSystemPixmap(scr, WSICheckMark);

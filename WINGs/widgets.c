@@ -3,6 +3,10 @@
 #include "WINGsP.h"
 #include "wconfig.h"
 
+#ifdef XFT
+# include <X11/Xft/Xft.h>
+#endif
+
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
@@ -620,6 +624,10 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 
     scrPtr->fontSetCache = WMCreateHashTable(WMStringPointerHashCallbacks);
 
+#ifdef XFT
+    scrPtr->xftdraw = XftDrawCreate(scrPtr->display, W_DRAWABLE(scrPtr),
+                                    scrPtr->visual, scrPtr->colormap);
+#endif
 
     /* create input method stuff */
     W_InitIMStuff(scrPtr);
@@ -1037,7 +1045,7 @@ WMWidgetIsMapped(WMWidget *w)
 
 void
 WMSetWidgetBackgroundColor(WMWidget *w, WMColor *color)
-{    
+{
     W_SetViewBackgroundColor(W_VIEW(w), color);
     if (W_VIEW(w)->flags.mapped)
 	WMRedisplayWidget(w);

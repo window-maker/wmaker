@@ -124,19 +124,21 @@ typedef struct W_Screen {
     int depth;
 
     Colormap colormap;
-    
+
     Visual *visual;
-    
+
     Time lastEventTime;
-    
+
     Window rootWin;
 
+    struct _XftDraw *xftdraw;
+
     struct W_View *rootView;
-    
+
     RContext *rcontext;
 
     struct W_IMContext *imctx;
-    
+
     /* application related */
 
     W_FocusInfo *focusInfo;
@@ -408,8 +410,8 @@ typedef struct W_EventHandler {
 typedef struct _WINGsConfiguration {
     char *systemFont;
     char *boldSystemFont;
-    char *aaSystemFont;
-    char *aaBoldSystemFont;
+    char *antialiasedSystemFont;
+    char *antialiasedBoldSystemFont;
     int  defaultFontSize;
     Bool antialiasedText;
     Bool useMultiByte;
