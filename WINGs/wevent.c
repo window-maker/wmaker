@@ -902,6 +902,7 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 	    if ((handler->mask & WIExceptMask) && FD_ISSET(handler->fd, &eset))
 		mask |= WIExceptMask;
 
+            /* save it because the handler may remove itself! */
             next = handler->next;
 
 	    if (mask!=0 && handler->callback) {
