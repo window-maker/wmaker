@@ -636,6 +636,7 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
     IconPanel *panel;
     WMColor *color;
     WMFont *boldFont;
+    Bool result;
 
     panel = wmalloc(sizeof(IconPanel));
     memset(panel, 0, sizeof(IconPanel));
@@ -811,11 +812,13 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
 
     wUnmanageWindow(wwin, False, False);
 
+    result= panel->result;
+
     wfree(panel);
 
     XDestroyWindow(dpy, parent);
 
-    return panel->result;
+    return result;
 }
 
 
