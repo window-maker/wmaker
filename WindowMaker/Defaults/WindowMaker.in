@@ -120,6 +120,7 @@
   MenuTextColor = black;
   FTitleBack = (solid, black);
   UTitleBack = (solid, "rgb:aa/aa/aa");
+  ResizebarBack = (solid, "rgb:aa/aa/aa");
   PTitleBack = (solid, gray40);
   MenuTitleBack = (solid, black);
   MenuTextBack = (solid, "rgb:aa/aa/aa");

@@ -926,10 +926,10 @@ wIconifyWindow(WWindow *wwin)
 	    PlaceIcon(wwin->screen_ptr, &wwin->icon_x, &wwin->icon_y);
 	}
 	wwin->icon = wIconCreate(wwin);
+
+	wwin->icon->mapped = 1;
     }
 
-    if (wwin->icon)
-        wwin->icon->mapped = 1;
     wwin->flags.miniaturized = 1;
     wwin->flags.mapped = 0;
 

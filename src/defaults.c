@@ -151,6 +151,7 @@ static int setIconTitleFont();
 static int setIconTitleColor();
 static int setIconTitleBack();
 static int setDisplayFont();
+static int setLargeDisplayFont();
 static int setWTitleColor();
 static int setFTitleBack();
 static int setPTitleBack();
@@ -520,6 +521,9 @@ WDefaultEntry optionList[] = {
     },
     {"DisplayFont",	DEF_INFO_TEXT_FONT,	NULL,
 	  NULL,				getFont,	setDisplayFont
+    },
+    {"LargeDisplayFont"	DEF_WORKSPACE_NAME_FONT, NULL,
+	  NULL,				getFont,	setLargeDisplayFont
     },
     {"HighlightColor",	"white",		NULL,
 	  NULL,				getColor,	setHightlight
@@ -2500,6 +2504,19 @@ setDisplayFont(WScreen *scr, WDefaultEntry *entry, WFont *font, void *foo)
 	XResizeWindow(dpy, scr->geometry_display,
 	    scr->geometry_display_width, scr->geometry_display_height);
     }
+
+    return 0;
+}
+
+
+static int
+setLargeDisplayFont(WScreen *scr, WDefaultEntry *entry, WFont *font, void *foo)
+{
+    if (scr->workspace_name_font) {
+	wFreeFont(scr->workspace_name_font);
+    }
+    
+    scr->workspace_name_font = font;
 
     return 0;
 }

@@ -160,6 +160,10 @@ typedef struct W_Screen {
 
     WMHashTable *fontCache;
 
+
+    struct W_Balloon *balloon;
+
+    
     struct W_Pixmap *checkButtonImageOn;
     struct W_Pixmap *checkButtonImageOff;
     
@@ -200,7 +204,7 @@ typedef struct W_Screen {
     struct W_Pixmap *colorListIcon;
 	
     struct W_Pixmap *defaultObjectIcon;
-    
+
     Cursor defaultCursor;
     
     Cursor textCursor;
