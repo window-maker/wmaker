@@ -770,6 +770,32 @@ addWorkspaceMenu(WScreen *scr, WMenu *menu, char *title)
     return entry;
 }
 
+static WMenuEntry*
+addWindowsMenu(WScreen *scr, WMenu *menu, char *title)
+{
+    WMenu *wwmenu;
+    WWindow *wwin;
+    WMenuEntry *entry;
+
+    if (scr->flags.added_windows_menu) {
+	wwarning(_("There are more than one WINDOWS_MENU commands in the applications menu. Only one is allowed."));
+	return NULL;
+    } else {
+	scr->flags.added_windows_menu = 1;
+
+	wwmenu = wMenuCreate(scr, _("Window List"), False);
+	scr->switch_menu = wwmenu;
+	wwin = scr->focused_window;
+	while (wwin) {
+	    UpdateSwitchMenu(scr, wwin, ACTION_ADD);
+
+	    wwin = wwin->prev;
+	}
+	entry = wMenuAddCallback(menu, title, NULL, NULL);
+	wMenuEntrySetCascade(menu, entry, wwmenu);
+    }
+    return entry;
+}
 
 static WMenuEntry*
 addMenuEntry(WMenu *menu, char *title, char *shortcut, char *command,
@@ -844,6 +870,10 @@ addMenuEntry(WMenu *menu, char *title, char *shortcut, char *command,
     } else if (strcmp(command, "WORKSPACE_MENU")==0) {
 	entry = addWorkspaceMenu(scr, menu, title);
 	
+	shortcutOk = True;
+    } else if (strcmp(command, "WINDOWS_MENU")==0) {
+	entry = addWindowsMenu(scr, menu, title);
+
 	shortcutOk = True;
     } else if (strcmp(command, "ARRANGE_ICONS")==0) {
 	entry = wMenuAddCallback(menu, title, arrangeIconsCommand, NULL);

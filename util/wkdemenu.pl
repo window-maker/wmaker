@@ -54,9 +54,32 @@
 #
 #---------------------------------------------------------------------
 #
-# 21st January 2001.
+# v1.2.0 -- 14th February 2001.
 #
-# This script has been competely re-written to allow recursion of the
+# Added alphabetic sorting of the menus.
+#
+# Directories are now displayed before files in the menu.
+#
+#---------------------------------------------------------------------
+#
+# v1.1.5 -- 3rd February 2001. (No public release)
+#
+# Unsupported applnk files have a fallback entry in the menu tree so
+# that users can report menu entries that do not work. So far,
+# wkdemenu.pl assumes that there is an Exec= line in the application
+# definition, which is not always the case.
+#
+# --------------------------------------------------------------------
+#
+# v1.1.0 -- 29th January 2001.
+#
+# Code cleanup and bug fixes.
+#
+# --------------------------------------------------------------------
+#
+# v1.0.0 -- 21st January 2001.
+#
+# This script has been completely re-written to allow recursion of the
 # KDE menu directories to an arbitrary depth, fixing a major
 # functional limitation in the original script. To do this, I have
 # rewritten the code to traverse directories recursively, introducing
@@ -92,15 +115,15 @@
 # use. This still defaults to xterm, but could be used to specify
 # aterm, etc.
 #
+# Malcolm Cowe, malk@271m.net.
+#
+# --------------------------------------------------------------------
 #
 # To Do
 # -----
 #
 # Programmatically determine the system location for the KDE menu
 # directory. 
-#
-# Organise the output alphabetically, with directories appearing
-# before files.
 #
 # Find a better way to parse the Exec= lines. In the short term,
 # provide a user mechanism for generating exceptions to the curtailing
@@ -110,46 +133,51 @@
 # Optimise the code. This is my first proper PERL script, and I'm sure
 # there's a better way. =)
 #
+
 #
-# Malcolm Cowe, malk@271m.net.
+# Variables
+#
 
-###
-### Variables
-###
-
-### The External Menu file, this should NEVER point to the root menu file
+# The External Menu file, this should NEVER point to the root menu file
 $menufile = "$ENV{'HOME'}/.kde2wmaker.menu";
 
-### Base directory, location of all the KDE AppName.kdelnk files +
-### Malcolm Cowe, 21/01/2001.
-### Change the base directory default to point at the system files,
-### not the user files. Need to find a way of determining the prefix
-### programmatically.
+# Base directory, location of all the KDE AppName.kdelnk files.
+
+# Change the base directory default to point at the system files,
+# not the user files. Need to find a way of determining the prefix
+# programmatically.
 $prefix="/usr";
 $basedir = $prefix."/share/applnk";
-### - Malcolm Cowe, 21/01/2001.
 
-### Terminal to use. May be specified on the command line with the -t
-### switch. 
+# Terminal to use. May be specified on the command line with the -t
+# switch. 
 $term = "xterm";
 
-### Print to STDOUT, default is YES, a filename is specified
+# Xmessage command line to invoke (can vary platform to platform)
+$ostype = `uname -s`;
+if ($ostype =~ /^HP-UX$/) {
+  $xmsg = "xmessage -geometry 400x100 -f -";
+}
+else {
+  $xmsg = "xmessage -geometry 400x100 -file - -default \"okay\"";
+}
+
+# Print to STDOUT, default is YES, a filename is specified
 $stdout = 1;
 
-### + Malcolm Cowe, 21/01/2001.
-### KDE Locale Support
+# KDE Locale Support
 
-### Support for KDE internationalisation so that menu entries appear
-### in the language chosen by the user. Also gets around some problems
-### with the KDE applnk file format.
+# Support for KDE internationalisation so that menu entries appear
+# in the language chosen by the user. Also gets around some problems
+# with the KDE applnk file format.
 
-### The Locale is stored in one of two places, depending on the
-### version of KDE that is running.
+# The Locale is stored in one of two places, depending on the
+# version of KDE that is running.
 $kde2cf="$ENV{'HOME'}/.kde/share/config/kdeglobals";
 $kde1cf="$ENV{'HOME'}/.kderc";
 $kdeLanguage = "";
 
-### Open the file, if it exists, otherwise provide a default language.
+# Open the file, if it exists, otherwise provide a default language.
 unless(open KDERC, $kde2cf) {
   unless(open KDERC, $kde1cf) {
     $kdeLanguage = "C";
@@ -158,10 +186,10 @@ unless(open KDERC, $kde2cf) {
 
 if ( $kdeLanguage == ""){
   $kdeLanguage = "C";
-  ### Search through the contents of the file
+  # Search through the contents of the file
   while($line = <KDERC>) {
     chomp($line);
-    ### Grab the Language
+    # Grab the Language
     if($line =~ /^Language=/) {
       $kdeLanguage = $line;
       $kdeLanguage =~ s/Language=//;
@@ -172,14 +200,12 @@ if ( $kdeLanguage == ""){
   close(KDERC);
 }
 
-### - Malcolm Cowe, 21/01/2001.
 
+#
+# Begin Main Iteration.
+#
 
-###
-### Begin Main Iteration.
-###
-
-### Process command line arguments
+# Process command line arguments
 foreach $arg(@ARGV) {
   if($last) {
     if($last eq "-d") {
@@ -189,14 +215,11 @@ foreach $arg(@ARGV) {
       $menufile = $arg;
       $stdout = 0;
     }
-    ### + Malcolm Cowe, 21/01/2001.
     elsif($last eq "-t") {
       $term = $arg;
     }
-    ### - Malcolm Cowe, 21/01/2001.
     undef($last);
   } elsif($arg =~ /^-/) {
-    ### + Malcolm Cowe, 21/01/2001.
     if($arg =~ /^-[dfst]$/) {
       $last = $arg;
     } else {
@@ -205,16 +228,14 @@ foreach $arg(@ARGV) {
 	  "\t\t-d <KDE App.kdelnk dir>\n".
 	  "\t\t-f <output menufile>\n".
 	  "\t\t-t <X terminal application>\n");
-    ### - Malcolm Cowe, 21/01/2001.
       &Usage;
     }
   }
 }
 
-### Make sure the KDE Menu's Top Level Directory exists.
+# Make sure the KDE Menu's Top Level Directory exists.
 if(-d $basedir) {
-
-  ### See if there is an old menu file. If there is, rename it
+  # See if there is an old menu file. If there is, rename it
   unless($stdout) {
     if(-e $menufile) {
       print STDERR "\tFound $menufile, renaming\n\n";
@@ -223,9 +244,8 @@ if(-d $basedir) {
     open(MENUFILE,"> $menufile");
   }
 
-  ### Start the main menu entry
+  # Start the main menu entry
   if($stdout) {
-    ### + Malcolm Cowe, 21/01/2001.
     print STDOUT "\"KDE Applications\" MENU\n";
     process_dir (STDOUT, $basedir);
     print STDOUT "\"KDE Applications\" END\n";
@@ -233,125 +253,156 @@ if(-d $basedir) {
     print MENUFILE "\"KDE Applications\" MENU\n";
     process_dir (MENUFILE, $basedir);
     print MENUFILE "\"KDE Applications\" END\n";
-    ### - Malcolm Cowe, 21/01/2001.
   }
 
 } else {
-  ### Error out :/
+  # Error out :/
   print STDERR "ERROR:\n\t$basedir not found\n\tTry another directory.\n";
   exit(0);
 }
 
 # End of Main Iteration.
 
-### + Malcolm Cowe, 21/01/2001.
 
-### process_dir() works it's way through each file and directory in
-### the tree and generates the menu output to be used by Window Maker.
-
+# process_dir() works it's way through each file and directory in
+# the tree and generates the menu output to be used by Window Maker.
 sub process_dir {
 
   my $OUT = @_[0];
   my $path = @_[1];
   my $item;
   my @tld;
-  my ($gotLang, $gotDef, $gotExec);
+  my @tlf;
+  my @klist;
+  my ($gotLang, $gotDef, $gotExec, $inTerm);
   my $inDesktop;
 
-  ### tld == Top Level Directory.
+  # tld == Top Level Directory.
   opendir(TLD, $path) || return;
-  @tld = readdir(TLD);
+  # In order to display directories before files, the directory
+  # contents must be split. Directories are added to one array, files
+  # to a second. The lists are then sorted alphabetically by name and
+  # combined into a single list for processing by the rest of the
+  # subroutine. 
+  while (defined($file = readdir(TLD))) {
+    next if $file =~ /^\./;
+    if (-d "$path/$file") {
+      @tld = (@tld, $file);
+    }
+    else {
+      @tlf = (@tlf, $file);
+    }
+  }
   closedir(TLD);
+  # At this stage, only sort the directories, since the application
+  # sorting is done later, using the "Name=" field in the applnk file.
+  @tld = sort (@tld);
 
+  # Print out directory names first and then process the directories.
   foreach $item(@tld) {
+    print $OUT "\"$item\" MENU\n";
+    process_dir($OUT, "$path/$item");
+    print $OUT "\"$item\" END\n";
+  }
+
+  # Process the applnk files in the current directory.
+  foreach $item(@tlf) {
     $gotLang = 0;
     $gotDef = 0;
     $gotExec = 0;
+    $inTerm = 0;
     $inDesktop = 0;
 
-    ### Ignore hidden files and directories.
-    unless($item =~ /^\./) {
-      if (-d "$path/$item") {
-	print $OUT "\"$item\" MENU\n";
-	process_dir($OUT, "$path/$item");
-	print $OUT "\"$item\" END\n";
-      }
-      else {
-	# Process the contents of the applnk file to generate a menu
-	# entry for the application.
+    # Process the contents of the applnk file to generate a menu
+    # entry for the application.
 
-	open(SUB,"$path/$item");
+    open(SUB,"$path/$item");
 
-	### Search through the contents of the file
-	while($line = <SUB>) {
-	  chomp($line);
-	  ### Get the application's name. This is stored in the
-	  ### [Desktop Entry] section of the applnk description.
-	  ###
-	  ### The application's name can have one of these forms:
-	  ### Name=
-	  ### Name[]=
-	  ### Name[language]=
-	  ###
-	  ### Get the default name anyway (one of the first two, just
-	  ### in case there is no language specific entry).
-	  if ($inDesktop) {
-	    # Make sure we are in fact still in the [Desktop Entry]
-	    # section.
-	    if ($line =~ /^\[/) {
-	      $inDesktop = 0;
-	    }
-	    ### Extract the Name of the Application
-	    elsif ($line =~ /^Name=/ && (!$gotDef || !gotLang)) {
-	      $pname = $line;
-	      $pname =~ s/^Name=//s;
-	      $pname =~ s/\"/\'\'/g;
-	      $gotDef = 1;
-	    }
-	    elsif ($line =~ /^Name\[\]=/ && (!$gotDef || !gotLang)) {
-	      $pname = $line;
-	      $pname =~ s/^Name\[\]=//s;
-	      $pname =~ s/\"/\'\'/g;
-	      $gotDef = 1;
-	    }
-	    elsif ($line =~ /^Name\[$kdeLanguage\]=/ && !$gotLang) {
-	      $pname = $line;
-	      $pname =~ s/^Name\[$kdeLanguage\]=//s;
-	      $pname =~ s/\"/\'\'/g;
-	      $gotLang = 1;
-	    }
+    # Set a default application warning to run in case there is no
+    # Exec= line in the application definition. This will be
+    # useful for debugging exceptions.
+    $pname="$item";
+    $pargs="echo \"Could not extract executable information from:\\n\\n$path/$item.\"|".$xmsg;
 
-	    ### Grab the command
-	    if($line =~ /^Exec=/ && !$gotExec) {
-	      $pargs = $line;
-	      $pargs =~ s/^Exec=//s;
-	      # Strip off all command line options unless the
-	      # application is "kfmclient".
-	      if ($pargs !~ /^kfmclient/ 
-		  && $pargs !~ /^kcmshell/
-		  && $pargs !~ /^kdesu/){
-		($pargs) = split(/\s/, $pargs);
-	      }
-	      $gotExec = 1;
-	    }
-	    ### If Terminal=1, then we need to execute a term
-	    if($line =~ /^Terminal=1$/) {
-	      $pargs = "$term -T \"$pname\" -e $pargs";
-	    }
-	  }
-	  elsif ($line =~ /^\[Desktop\ Entry\]/ ||
-		 $line =~ /^\[KDE\ Desktop\ Entry\]/) {
-	    $inDesktop = 1;
-	  }
+    # Search through the contents of the file. Exit the loop at the
+    # EOF or if we have processed the [Desktop Entry Section] of the
+    # file.
+    while($line = <SUB>) {
+      chomp($line);
+      # Get the application's name. This is stored in the
+      # [Desktop Entry] section of the applnk description.
+      #
+      # The application's name can have one of these forms:
+      # Name=
+      # Name[]=
+      # Name[language]=
+      #
+      # Get the default name anyway (one of the first two, just
+      # in case there is no language specific entry).
+      if ($inDesktop) {
+	# Make sure we are in fact still in the [Desktop Entry]
+	# section.
+	if ($line =~ /^\[/) {
+	  $inDesktop = 0;
 	}
-
-	close(SUB);
-	### Begin printing menu items
-	print $OUT "\t\"$pname\" EXEC $pargs\n";
+	# Extract the Name of the Application
+	elsif ($line =~ /^Name\[?\]?=/
+	       && (!$gotDef || !gotLang)) {
+	  $pname = $line;
+	  $pname =~ s/^Name\[?\]?=//s;
+	  $pname =~ s/\"/\'\'/g;
+	  $gotDef = 1;
+	}
+	elsif ($line =~ /^Name\[$kdeLanguage\]=/ && !$gotLang) {
+	  $pname = $line;
+	  $pname =~ s/^Name\[$kdeLanguage\]=//s;
+	  $pname =~ s/\"/\'\'/g;
+	  $gotLang = 1;
+	}
+	# Grab the command
+	elsif($line =~ /^Exec=/ && !$gotExec) {
+	  $pargs = $line;
+	  $pargs =~ s/^Exec=//s;
+	  # Strip off all command line options unless the
+	  # application is "kfmclient", etc.
+	  if ($pargs !~ /^kfmclient/
+	      && $pargs !~ /^kcm/
+	      && $pargs !~ /^\/bin\/bash/
+	      && $pargs !~ /^kdesu/){
+	    ($pargs) = split(/\s/, $pargs);
+	  }
+	  else {
+	    # A double check to remove any dubious characters from
+	    # the command line of the exceptions listed in the
+	    # above "if" statement. The only culprit so far is the
+	    # KDE 1 kfmclient command line.
+	    $pargs =~ s/\%[a-zA-Z]//g;
+	  }
+	  $gotExec = 1;
+	}
+	# If Terminal=1, then we need to execute application
+	# within a terminal window.
+	elsif($line =~ /^Terminal=(1|true)$/i) {
+	  $inTerm=1;
+	}
+      }
+      elsif ($line =~ /^\[(KDE\ )?Desktop\ Entry\]/){
+	$inDesktop = 1;
       }
     }
+
+    close(SUB);
+
+    if ($inTerm) {
+      $pargs = "$term -T \"$pname\" -e $pargs";
+    }
+    @klist = (@klist, "\t\"$pname\" EXEC $pargs\n");
+  }
+
+  @klist = sort(@klist);
+  foreach (@klist) {
+    print $OUT $_;
   }
 
   return;
 }
-### - Malcolm Cowe, 21/01/2001.

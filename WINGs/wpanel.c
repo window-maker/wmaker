@@ -170,7 +170,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 
 
     if (msg) {
-	panel->mLbl = WMCreateLabel(panel->win);
+	panel->mLbl = WMCreateLabel(panel->vbox);
 	WMSetLabelWraps(panel->mLbl, True);
 	WMMapWidget(panel->mLbl);
 	WMAddBoxSubview(panel->vbox, WMWidgetView(panel->mLbl), True, True,

@@ -310,6 +310,7 @@ typedef struct _WScreen {
 	unsigned int dnd_data_convertion_status:1;
 	unsigned int root_menu_changed_shortcuts:1;
 	unsigned int added_workspace_menu:1;
+	unsigned int added_windows_menu:1;
 	unsigned int startup2:1;       /* startup phase 2 */
 	unsigned int supports_tiff:1;
 	unsigned int clip_balloon_mapped:1;

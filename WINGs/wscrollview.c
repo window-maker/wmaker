@@ -14,7 +14,7 @@ typedef struct W_ScrollView {
     
     WMScroller *vScroller;
     WMScroller *hScroller;
-    
+        
     short lineScroll;
     short pageScroll;
     

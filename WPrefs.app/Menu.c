@@ -40,6 +40,7 @@ typedef enum {
     PipeInfo,
     DirectoryInfo,
     WSMenuInfo,
+    WWindowListInfo,
     LastInfo
 } InfoType;
 
@@ -461,6 +462,7 @@ createPanel(_Panel *p)
 	panel->markerPix[PipeInfo] = pixm;
 	panel->markerPix[DirectoryInfo] = pixm;
 	panel->markerPix[WSMenuInfo] = pixm;
+	panel->markerPix[WWindowListInfo] = pixm;
 
 	XFreeGC(dpy, gc);
     }
@@ -495,6 +497,7 @@ createPanel(_Panel *p)
 	data = putNewItem(panel, pad, PipeInfo, _("Generated Submenu"));
 	data = putNewItem(panel, pad, DirectoryInfo, _("Directory Contents"));
 	data = putNewItem(panel, pad, WSMenuInfo, _("Workspace Menu"));
+	data = putNewItem(panel, pad, WWindowListInfo, _("Window List Menu"));
 
 	panel->itemPad[0] = pad;
     }
@@ -1029,6 +1032,8 @@ parseCommand(proplist_t item)
 	}
     } else if (strcmp(command, "WORKSPACE_MENU") == 0) {
 	data->type = WSMenuInfo;
+    } else if (strcmp(command, "WINDOWS_MENU") == 0) {
+	data->type = WWindowListInfo;
     } else {
 	int cmd;
 
@@ -1112,6 +1117,10 @@ updateFrameTitle(_Panel *panel, char *title, InfoType type)
 
 	 case WSMenuInfo:
 	    tmp = wstrconcat(title, _(": Open Workspaces Submenu"));
+	    break;
+
+	 case WWindowListInfo:
+	    tmp = wstrconcat(title, _(": Open Window List Submenu"));
 	    break;
 
 	 default:
@@ -1702,6 +1711,10 @@ processData(char *title, ItemData *data)
 	
      case WSMenuInfo:
 	PLAppendArrayElement(item, PLMakeString("WORKSPACE_MENU"));
+	break;
+
+     case WWindowListInfo:
+	PLAppendArrayElement(item, PLMakeString("WINDOWS_MENU"));
 	break;
 
      default:

@@ -72,7 +72,6 @@ void clickedTable(WMWidget *w, void *self)
 
 main(int argc, char **argv)
 {
-    Display *dpy = XOpenDisplay("");
     WMScreen *scr;
     WMWindow *win;
     WMTableView *table;
@@ -81,14 +80,7 @@ main(int argc, char **argv)
     
     WMInitializeApplication("test", &argc, argv);
     
-    
-    
-    dpy = XOpenDisplay("");
-    if (!dpy) {
-	exit(1);
-    }
-    
-    scr = WMCreateScreen(dpy, DefaultScreen(dpy));
+    scr = WMOpenScreen();
 
     
     win = WMCreateWindow(scr, "eweq");
