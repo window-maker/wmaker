@@ -38,6 +38,7 @@ libWINGs_a_SOURCES = 	\
 	notification.c \
 	proplist.c \
 	selection.c \
+	snprintf.c \
 	string.c \
 	tree.c \
 	userdefaults.c \
@@ -94,6 +95,7 @@ libWUtil_a_SOURCES = 	\
 	misc.c \
 	notification.c \
 	proplist.c \
+	snprintf.c \
 	string.c \
 	tree.c \
 	userdefaults.c \
