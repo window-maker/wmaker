@@ -29,7 +29,7 @@
  * -  assess danger of destroying widgets whose actions link to other pages
  * -  change cursor shape around pixmaps
  * -  redo blink code to reduce paint event... use pixmap buffer...
- * -  confirm with Alfredo et. all about field markers 0xFA and 0xCE
+ * -  confirm with Alfredo et. all about field marker 0xFA 
  * -  add paragraph support (full) and '\n' code in getStream..
  * -  use currentTextBlock and neighbours for fast paint and layout
  * -  replace copious uses of Refreshtext with appropriate layOut()...
@@ -1328,6 +1328,8 @@ deleteTextInteractively(Text *tPtr, KeySym ksym)
             tPtr->tpos = (back? sibling->used : 0);
         }
     }
+
+    WMRefreshText(tPtr, tPtr->vpos, tPtr->hpos);
 }
     
 
@@ -1375,6 +1377,7 @@ return;
         if (tPtr->currentTextBlock) { 
             tPtr->tpos = tPtr->currentTextBlock->used;
         }
+        WMRefreshText(tPtr, tPtr->vpos, tPtr->hpos);
         return;
     }
 
@@ -1437,6 +1440,8 @@ return;
         }
 
     }
+
+    WMRefreshText(tPtr, tPtr->vpos, tPtr->hpos);
 }
 
 
@@ -1482,7 +1487,6 @@ pasteText(WMView *view, Atom selection, Atom target, Time timestamp,
         } else { 
             insertTextInteractively(tPtr, str, strlen(str));
         }
-        WMRefreshText(tPtr, tPtr->vpos, tPtr->hpos);
     } else {
         int n;
         str = XFetchBuffer(tPtr->view->screen->display, &n, 0);
@@ -1494,7 +1498,6 @@ pasteText(WMView *view, Atom selection, Atom target, Time timestamp,
             } else { 
                 insertTextInteractively(tPtr, str, n);
             }
-            WMRefreshText(tPtr, tPtr->vpos, tPtr->hpos);
             XFree(str);
         }
     }
@@ -1514,7 +1517,7 @@ releaseSelection(Text *tPtr)
     WMDeleteSelectionHandler(tPtr->view, XA_PRIMARY,
         CurrentTime);
 
-    paintText(tPtr);
+    WMRefreshText(tPtr, tPtr->vpos, tPtr->hpos);
 }
 
 static WMData *
@@ -1651,7 +1654,6 @@ printf("same %d %d\n", x, tPtr->cursor.x + tPtr->visible.x);
         case XK_Delete:
         case XK_KP_Delete:
             deleteTextInteractively(tPtr, ksym);
-            WMRefreshText(tPtr, tPtr->vpos, tPtr->hpos);
         break;
 
         case XK_Control_R :
@@ -1664,7 +1666,6 @@ printf("same %d %d\n", x, tPtr->cursor.x + tPtr->visible.x);
         default:
         if (buffer[0] != 0 && !control_pressed) {
             insertTextInteractively(tPtr, buffer, 1);
-            WMRefreshText(tPtr, tPtr->vpos, tPtr->hpos);
 
         } else if (control_pressed && ksym==XK_r) {
             Bool i = !tPtr->flags.rulerShown; 
@@ -1821,7 +1822,6 @@ handleActionEvents(XEvent *event, void *data)
                         } else { 
                             insertTextInteractively(tPtr, text, n-1);
                         }
-                        WMRefreshText(tPtr, tPtr->vpos, tPtr->hpos);
                         XFree(text);
                     } else tPtr->flags.waitingForSelection = True;
             } }
@@ -2097,7 +2097,7 @@ getStream(WMText *tPtr, int sel)
                if (!tPtr->flags.ignoreNewLine && (tb->first || tb->blank))
                    length += 1;
                if (tb->graphic)
-                   length += 1; /* field markers 0xFA and 0xCE */
+                   length += 2; /* field markers 0xFA and size */
             } else if (sel && tb->selected) {
                length += (tb->s_end - tb->s_begin);
                if (!tPtr->flags.ignoreNewLine && (tb->first || tb->blank))
@@ -2118,12 +2118,12 @@ getStream(WMText *tPtr, int sel)
             if (!sel || (tb->graphic && tb->selected)) {
                 if (!tPtr->flags.ignoreNewLine && (tb->first || tb->blank))
                     text[where++] = '\n';
-                if(tb->graphic)
+                if(tb->graphic) {
                     text[where++] = 0xFA;
+                    text[where++] = tb->used;
+                }
                 memcpy(&text[where], tb->text, tb->used);
                 where += tb->used;
-                if(tb->graphic)
-                    text[where++] = 0xCE;
           
             } else if (sel && tb->selected) {
                 if (!tPtr->flags.ignoreNewLine && (tb->first || tb->blank))
@@ -2146,12 +2146,13 @@ getStream(WMText *tPtr, int sel)
 WMBag * 
 getStreamIntoBag(WMText *tPtr, int sel)
 {
-    char *stream, *start = NULL, *fa = NULL, *ce = NULL;
+    char *stream, *start = NULL, *fa = NULL;
     WMBag *bag;
     WMData *data;
    
     if (!tPtr)
         return NULL;
+
 
     stream = getStream(tPtr, sel);
     if(!stream)
@@ -2163,28 +2164,23 @@ getStreamIntoBag(WMText *tPtr, int sel)
     while (start) {
         fa = strchr(start, 0xFA);
         if (fa) {
-            data = WMCreateDataWithBytes((void *)start, (int)(fa - start));
-            WMSetDataFormat(data, 8);
-            //desc = wmalloc((int)(fa - start));
-            //memcpy(desc,  start, (int)(fa - start));
+            unsigned char len = *(fa+1);
+
+            if(start != fa) {
+                data = WMCreateDataWithBytes((void *)start, (int)(fa - start));
+                WMSetDataFormat(data, 8);
+            	WMPutInBag(bag, (void *) data);
+			}
+
+            data = WMCreateDataWithBytes((void *)(fa+2), len);
+            WMSetDataFormat(data, 32);
             WMPutInBag(bag, (void *) data);
-                    
-            ce = strchr(fa, 0xCE);
-            if (ce) {
-                data = WMCreateDataWithBytes(fa+1, ((int)(ce - fa))-1);
-                WMSetDataFormat(data, 32);
-                WMPutInBag(bag, (void *) data);
-start = ce+1;
-            } else {  
-                start = fa + 1;
-            }   
+            start = fa + len + 2;
             
          } else {
              if (start && strlen(start)) {
                  data = WMCreateDataWithBytes((void *)start, strlen(start));
                  WMSetDataFormat(data, 8);
- //                desc = wmalloc(strlen(start));
-   //              memcpy(desc, start, strlen(start));
                  WMPutInBag(bag, (void *) data);
              }   
              start = fa;
@@ -2347,6 +2343,7 @@ WMAppendTextStream(WMText *tPtr, char *text)
     else
         insertPlainText(tPtr, text);
 
+    
 }
 
 
