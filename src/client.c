@@ -362,16 +362,15 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 	    WApplication *wapp = wApplicationOf(wwin->main_window);
 	    char **argv;
 	    int argc;
-	    if (!wapp || !wapp->app_icon)
+
+            if (!wapp || !wapp->app_icon)
 		break;
-       
+
 	    if (XGetCommand(dpy, wwin->main_window, &argv, &argc)) {
 		if (argc > 0 && argv != NULL) {
-		    if (wapp->app_icon->command) {
-		        free(wapp->app_icon->command);
-		        wapp->app_icon->command = NULL;
-		    }
-		    wapp->app_icon->command = wtokenjoin(argv,argc);
+		    if (wapp->app_icon->command)
+		        wfree(wapp->app_icon->command);
+		    wapp->app_icon->command = wtokenjoin(argv, argc);
 		}
 		if (argv) {
 		    XFreeStringList(argv);
