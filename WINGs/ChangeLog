@@ -22,6 +22,9 @@ changes since wmaker 0.61.1:
   item that is beyond the total number of items present in the popup button.
 - changed names of functions for SplitView to be consistent. Some contained
   SubView while other Subview. Now all have Subview.
+- fixed a bug in how input events were posted. Establishing 2 or more input 
+  handlers for the same file descriptor, handling different (read/write/except)
+  events, caused wrong handlers to be called.
 
 changes since wmaker 0.61.0:
 ............................

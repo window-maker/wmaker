@@ -796,14 +796,17 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 
 	    mask = 0;
 
-	    if (fds[k].revents & (POLLIN|POLLRDNORM|POLLRDBAND|POLLPRI))
-		mask |= WIReadMask;
-	    
-	    if (fds[k].revents & (POLLOUT | POLLWRBAND))
-		mask |= WIWriteMask;
-	    
-	    if (fds[k].revents & (POLLHUP | POLLNVAL | POLLERR))
-		mask |= WIExceptMask;
+            if ((handler->mask & WIReadMask) &&
+                fds[k].revents & (POLLIN|POLLRDNORM|POLLRDBAND|POLLPRI))
+                mask |= WIReadMask;
+
+            if ((handler->mask & WIWriteMask) &&
+                fds[k].revents & (POLLOUT | POLLWRBAND))
+                mask |= WIWriteMask;
+
+            if ((handler->mask & WIExceptMask) &&
+                fds[k].revents & (POLLHUP | POLLNVAL | POLLERR))
+                mask |= WIExceptMask;
 
             next = handler->next;
 
@@ -890,13 +893,13 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 
 	    mask = 0;
 
-	    if (FD_ISSET(handler->fd, &rset))
+	    if ((handler->mask & WIReadMask) && FD_ISSET(handler->fd, &rset))
 		mask |= WIReadMask;
 	    
-	    if (FD_ISSET(handler->fd, &wset))
+	    if ((handler->mask & WIWriteMask) && FD_ISSET(handler->fd, &wset))
 		mask |= WIWriteMask;
 	    
-	    if (FD_ISSET(handler->fd, &eset))
+	    if ((handler->mask & WIExceptMask) && FD_ISSET(handler->fd, &eset))
 		mask |= WIExceptMask;
 
             next = handler->next;
