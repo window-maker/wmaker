@@ -2,7 +2,13 @@
 Instructions for translating po files can be found in the po/README directory
 in the top of the WindowMaker source tree.
 
-File	Language		Current Maintainer
+File	Language	Note	Current Maintainer
 ------------------------------------------------------------------------------
-sk.po   Slovak			Jan "judas" Tomka <tomka@oalevice.sk>
+cs.po	Czech		1	Jiri Hnidek <Jiri.Hnidek@vslib.cz
+sk.po	Slovak			Jan "judas" Tomka <tomka@oalevice.sk>
+
+
+Notes
+-----
+1. Uses iso8859-2 character set.
 
