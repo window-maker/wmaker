@@ -277,17 +277,17 @@ RSmoothImage(RImage *image)
 	    *ptr = v/6;
 	    v = *(ptr+1) + 2 * *(ptr+1 + ch) + 2 * *(ptr+1 + w) + *(ptr+1 + w + ch);
 	    *(ptr+1) = v/6;
-	    v = *ptr + 2 * *(ptr+2 + ch) + 2 * *(ptr+2 + w) + *(ptr+2 + w + ch);
+            v = *(ptr+2) + 2 * *(ptr+2 + ch) + 2 * *(ptr+2 + w) + *(ptr+2 + w + ch);
 	    *(ptr+2) = v/6;
 	    
 	    ptr+= ch;
 	}
 	/* last column */
 	v = 3 * *ptr + 3 * *(ptr + w);
-	*ptr = v/6;
-	v = 3 * *ptr + 3 * *(ptr+1 + w);
-	*(ptr+1) = v/6;
-	v = 3 * *ptr + 3 * *(ptr+2 + w);
+        *ptr = v/6;
+	v = 3 * *(ptr+1) + 3 * *(ptr+1 + w);
+        *(ptr+1) = v/6;
+	v = 3 * *(ptr+2) + 3 * *(ptr+2 + w);
 	*(ptr+2) = v/6;
 	
 	ptr+= ch;
