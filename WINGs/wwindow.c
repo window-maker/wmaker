@@ -40,7 +40,7 @@ typedef struct W_Window {
 	unsigned configured:1;
 	unsigned documentEdited:1;
 
-	unsigned setUPos:1;
+	unsigned setPPos:1;
 	unsigned setAspect:1;
     } flags;
 } _Window;
@@ -312,8 +312,8 @@ setSizeHints(WMWindow *win)
 
     hints->flags = 0;
 
-    if (win->flags.setUPos) {
-	hints->flags |= USPosition;
+    if (win->flags.setPPos) {
+	hints->flags |= PPosition;
 	hints->x = win->upos.x;
 	hints->y = win->upos.y;
     }
@@ -469,7 +469,7 @@ WMSetWindowAspectRatio(WMWindow *win, int minX, int minY,
 void
 WMSetWindowInitialPosition(WMWindow *win, int x, int y)
 {
-    win->flags.setUPos = 1;
+    win->flags.setPPos = 1;
     win->upos.x = x;
     win->upos.y = y;
     if (win->view->flags.realized)
