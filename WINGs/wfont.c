@@ -681,7 +681,6 @@ changeFontProp(char *fname, char *newprop, int which)
 WMFont*
 WMNormalizeFont(WMScreen *scr, WMFont *font)
 {
-    WMFont *newfont=NULL;
     char fname[256];
 
     if (!scr || !font)
@@ -690,19 +689,16 @@ WMNormalizeFont(WMScreen *scr, WMFont *font)
     snprintf(fname, 255, "%s", font->name);
     changeFontProp(fname, "medium", 2);
     changeFontProp(fname, "r", 3);
-    newfont = WMCreateNormalFont(scr, fname);
-
-    if (!newfont)
-        return NULL;
-
-    return newfont;
+    if (font->antialiased)
+        return WMCreateAAFont(scr, fname);
+    else
+        return WMCreateNonAAFont(scr, fname);
 }
 
 
 WMFont*
 WMStrengthenFont(WMScreen *scr, WMFont *font)
 {
-    WMFont *newfont=NULL;
     char fname[256];
 
     if (!scr || !font)
@@ -710,19 +706,16 @@ WMStrengthenFont(WMScreen *scr, WMFont *font)
 
     snprintf(fname, 255, "%s", font->name);
     changeFontProp(fname, "bold", 2);
-    newfont = WMCreateNormalFont(scr, fname);
-
-    if (!newfont)
-        return NULL;
-
-    return newfont;
+    if (font->antialiased)
+        return WMCreateAAFont(scr, fname);
+    else
+        return WMCreateNonAAFont(scr, fname);
 }
 
 
 WMFont*
 WMUnstrengthenFont(WMScreen *scr, WMFont *font)
 {
-    WMFont *newfont=NULL;
     char fname[256];
 
     if (!scr || !font)
@@ -730,39 +723,37 @@ WMUnstrengthenFont(WMScreen *scr, WMFont *font)
 
     snprintf(fname, 255, "%s", font->name);
     changeFontProp(fname, "medium", 2);
-    newfont = WMCreateNormalFont(scr, fname);
-
-    if (!newfont)
-        return NULL;
-
-    return newfont;
+    if (font->antialiased)
+        return WMCreateAAFont(scr, fname);
+    else
+        return WMCreateNonAAFont(scr, fname);
 }
 
 
 WMFont*
 WMEmphasizeFont(WMScreen *scr, WMFont *font)
 {
-    WMFont *newfont=NULL;
     char fname[256];
 
     if (!scr || !font)
         return NULL;
 
     snprintf(fname, 255, "%s", font->name);
-    changeFontProp(fname, "o", 3);
-    newfont = WMCreateNormalFont(scr, fname);
+    if (font->antialiased)
+        changeFontProp(fname, "i", 3);
+    else
+        changeFontProp(fname, "o", 3);
 
-    if (!newfont)
-        return NULL;
-
-    return newfont;
+    if (font->antialiased)
+        return WMCreateAAFont(scr, fname);
+    else
+        return WMCreateNonAAFont(scr, fname);
 }
 
 
 WMFont*
 WMUnemphasizeFont(WMScreen *scr, WMFont *font)
 {
-    WMFont *newfont=NULL;
     char fname[256];
 
     if (!scr || !font)
@@ -770,22 +761,10 @@ WMUnemphasizeFont(WMScreen *scr, WMFont *font)
 
     snprintf(fname, 255, "%s", font->name);
     changeFontProp(fname, "r", 3);
-    newfont = WMCreateNormalFont(scr, fname);
-
-    if (!newfont)
-        return NULL;
-
-    return newfont;
-}
-
-
-WMFont*
-WMGetFontOfSize(WMScreen *scr, WMFont *font, int size)
-{
-    if(!scr || !font || size<1)
-        return NULL;
-
-    return font;
+    if (font->antialiased)
+        return WMCreateAAFont(scr, fname);
+    else
+        return WMCreateNonAAFont(scr, fname);
 }
 
 

@@ -1264,6 +1264,8 @@ destroyList(List *lPtr)
     if (lPtr->doubleBuffer)
         XFreePixmap(lPtr->view->screen->display, lPtr->doubleBuffer);
 
+    WMRemoveNotificationObserver(lPtr);
+
     wfree(lPtr);
 }
 

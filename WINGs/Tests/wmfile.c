@@ -70,14 +70,15 @@ int main(int argc, char **argv)
   extern char *optarg;
   extern int optind;
 
-  WMInitializeApplication("WMFile", &argc, argv);
-    
-  ProgName = argv[0];
-
   if (!dpy) {
     puts("could not open display");
     exit(1);
   }
+
+  WMInitializeApplication("WMFile", &argc, argv);
+
+  ProgName = argv[0];
+
   while((ch = getopt(argc, argv, "si:ht:")) != -1)
     switch(ch) 
     { 

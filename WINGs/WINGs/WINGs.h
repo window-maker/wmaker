@@ -744,8 +744,6 @@ WMFont* WMEmphasizeFont(WMScreen *scr, WMFont *font);
 
 WMFont* WMUnemphasizeFont(WMScreen *scr, WMFont *font);
 
-WMFont* WMGetFontOfSize(WMScreen *scr, WMFont *font, int size);
-
 /* ....................................................................... */
 
 WMPixmap* WMRetainPixmap(WMPixmap *pixmap);
