@@ -3,6 +3,10 @@
 - fixed problem with WINGs based apps exiting with a "X_RotateProperties"
   related error when text was selected in a textfiled (including WPrefs.app
   and Window Maker itself).
+- Fixed some non-portable shell constructs used in installed scripts
+  (Johnny C. Lam <lamj@stat.cmu.edu>)
+- Fixed crash with long titles in the window list menu
+  (Alban Hertroys <dalroi@wit401310.student.utwente.nl>)
 
 
 Changes since version 0.64.0:
