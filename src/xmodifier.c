@@ -256,6 +256,7 @@ x_reset_modifier_mapping (Display *display)
 "	by the keysyms used to control those bits.  Mod1 does NOT always\n"
 "	mean Meta, although some non-ICCCM-compliant programs assume that.\n");
 #endif
+    XFree(x_modifier_keymap);
 }
 
 

@@ -125,7 +125,7 @@ static proplist_t sShaded;
 static proplist_t sMiniaturized;
 static proplist_t sHidden;
 static proplist_t sGeometry;
-static proplist_t sShortcut;
+static proplist_t sShortcutMask;
 
 static proplist_t sDock;
 
@@ -148,7 +148,7 @@ make_keys()
     sHidden = PLMakeString("Hidden");
     sGeometry = PLMakeString("Geometry");
     sDock = PLMakeString("Dock");
-    sShortcut = PLMakeString("Shortcut");
+    sShortcutMask = PLMakeString("ShortcutMask");
 
     sYes = PLMakeString("Yes");
     sNo = PLMakeString("No");
@@ -255,7 +255,8 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
         geometry = PLMakeString(buffer);
 	
 	for (mask = 0, i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
-	    if (WMGetFirstInBag(scr->shortcutWindows[i], wwin)) {
+	    if (scr->shortcutWindows[i] != NULL &&
+		WMGetFirstInBag(scr->shortcutWindows[i], wwin) != WBNotFound) {
 		mask |= 1<<i;
 	    }
 	}
@@ -269,7 +270,7 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
                                                 sShaded, shaded,
                                                 sMiniaturized, miniaturized,
                                                 sHidden, hidden,
-						sShortcut, shortcut,
+						sShortcutMask, shortcut,
                                                 sGeometry, geometry,
                                                 NULL);
 
@@ -331,7 +332,8 @@ wSessionSaveState(WScreen *scr)
     while (wwin) {
         WApplication *wapp=wApplicationOf(wwin->main_window);
 
-        if (wwin->transient_for==None && WMGetFirstInBag(wapp_list, wapp)<0
+        if (wwin->transient_for==None 
+	    && WMGetFirstInBag(wapp_list, wapp)==WBNotFound
 	    && !WFLAGP(wwin, dont_save_session)) {
             /* A entry for this application was not yet saved. Save one. */
             if ((win_info = makeWindowState(wwin, wapp))!=NULL) {

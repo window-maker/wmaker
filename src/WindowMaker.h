@@ -425,6 +425,7 @@ typedef struct WPreferences {
 	unsigned int nocpp:1;	       /* don't use cpp */
 	unsigned int noupdates:1;      /* don't require ~/GNUstep (-static) */
 	unsigned int noautolaunch:1;   /* don't autolaunch apps */
+	unsigned int norestore:1;      /* don't restore session */
     } flags;			       /* internal flags */
 } WPreferences;
 

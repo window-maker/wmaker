@@ -896,27 +896,26 @@ StartUp(Bool defaultScreenOnly)
 	wMenuRestoreState(wScreen[j]);
 	
 	/* If we're not restarting restore session */
-	if (ws_state == NULL)
+	if (ws_state == NULL && !wPreferences.flags.norestore)
 	    wSessionRestoreState(wScreen[j]);
 	
-if(!wPreferences.flags.noautolaunch)
-{
-	/* auto-launch apps */
-	if (!wPreferences.flags.nodock && wScreen[j]->dock) {
-	    wScreen[j]->last_dock = wScreen[j]->dock;
-	    wDockDoAutoLaunch(wScreen[j]->dock, 0);
-	}
-	/* auto-launch apps in clip */
-	if (!wPreferences.flags.noclip) {
-	    int i;
-	    for(i=0; i<wScreen[j]->workspace_count; i++) {
-		if (wScreen[j]->workspaces[i]->clip) {
-		    wScreen[j]->last_dock = wScreen[j]->workspaces[i]->clip;
-		    wDockDoAutoLaunch(wScreen[j]->workspaces[i]->clip, i);
+	if (!wPreferences.flags.noautolaunch) {
+	    /* auto-launch apps */
+	    if (!wPreferences.flags.nodock && wScreen[j]->dock) {
+		wScreen[j]->last_dock = wScreen[j]->dock;
+		wDockDoAutoLaunch(wScreen[j]->dock, 0);
+	    }
+	    /* auto-launch apps in clip */
+	    if (!wPreferences.flags.noclip) {
+		int i;
+		for(i=0; i<wScreen[j]->workspace_count; i++) {
+		    if (wScreen[j]->workspaces[i]->clip) {
+			wScreen[j]->last_dock = wScreen[j]->workspaces[i]->clip;
+			wDockDoAutoLaunch(wScreen[j]->workspaces[i]->clip, i);
+		    }
 		}
 	    }
 	}
-}
 
 	/* go to workspace where we were before restart */
 	if (ws_state) { 

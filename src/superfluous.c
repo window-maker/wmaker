@@ -516,9 +516,8 @@ error:
     while (--i > 0) {
 	XFreePixmap(dpy, d[i]);
     }
-
-    return False;
 #endif
+    return False;
 }
 
 

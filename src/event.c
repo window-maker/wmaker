@@ -1401,7 +1401,7 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 	} else if (ev.type == KeyRelease) {
 	    int i;
 
-	    for (i = 0; i <= 8 * keymap->max_keypermod; i++) {
+	    for (i = 0; i < 8 * keymap->max_keypermod; i++) {
 		if (keymap->modifiermap[i] == ev.xkey.keycode &&
 		    wKeyBindings[WKBD_FOCUSNEXT].modifier 
 		    & 1<<(i/keymap->max_keypermod)) {

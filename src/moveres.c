@@ -1687,6 +1687,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 		break;
 
 	    if (started) {
+		XEvent e;
 		if (!opaqueMove) {
 		    drawFrames(wwin, scr->selected_windows,
 			       moveData.realX - wwin->frame_x,
@@ -1707,6 +1708,22 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 		}
 		if (wPreferences.move_display == WDIS_NEW)
 		    showPosition(wwin, moveData.realX, moveData.realY);
+		
+		/* discard all enter/leave events that happened until
+		 * the time the button was released */
+		/*
+		while (XCheckTypedEvent(dpy, EnterNotify, &e)) {
+		    if (e.xcrossing.time > event.xbutton.time) {
+			XPutBackEvent(dpy, &e);
+			break;
+		    } 
+		}
+		while (!XCheckTypedEvent(dpy, LeaveNotify, &e)) {
+		    if (e.xcrossing.time > event.xbutton.time) {
+			XPutBackEvent(dpy, &e);
+			break;
+		    }
+		}*/
 
 		if (!scr->selected_windows) {
 		    /* get rid of the geometry window */

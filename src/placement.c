@@ -196,9 +196,7 @@ PlaceIcon(WScreen *scr, int *x_ret, int *y_ret)
 
 #define INDEX(x,y)	(((y)+1)*(sw+2) + (x) + 1)
 
-    for (obj = WMBagLast(scr->stacking_list, &iter);
-	 obj != NULL;
-	 obj = WMBagNext(scr->stacking_list, &iter)) {
+    WM_ETARETI_BAG(scr->stacking_list, obj, iter) {
 
 	while (obj) {
 	    int x, y;

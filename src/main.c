@@ -427,6 +427,7 @@ print_help()
     puts(_(" --no-dock		do not open the application Dock"));
     puts(_(" --no-clip		do not open the workspace Clip"));
     puts(_(" --no-autolaunch	do not autolaunch applications"));
+    puts(_(" --dont-restore	do not restore saved session"));
 
     puts(_(" --locale locale		locale to use"));
 
@@ -590,7 +591,10 @@ main(int argc, char **argv)
 #endif
 	    if (strcmp(argv[i], "-no-autolaunch")==0
 		|| strcmp(argv[i], "--no-autolaunch")==0) {
-			wPreferences.flags.noautolaunch = 1;
+		wPreferences.flags.noautolaunch = 1;
+	    } else if (strcmp(argv[i], "-dont-restore")==0
+		|| strcmp(argv[i], "--dont-restore")==0) {
+		wPreferences.flags.norestore = 1;
 	    } else if (strcmp(argv[i], "-nodock")==0
 		|| strcmp(argv[i], "--no-dock")==0) {
 		wPreferences.flags.nodock=1;
