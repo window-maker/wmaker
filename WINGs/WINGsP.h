@@ -355,7 +355,7 @@ typedef struct _WINGsConfiguration {
     unsigned doubleClickDelay;
 } _WINGsConfiguration;
 
-_WINGsConfiguration WINGsConfiguration;
+extern _WINGsConfiguration WINGsConfiguration;
 
 
 
@@ -460,11 +460,6 @@ char *W_GetTextSelection(WMScreen *scr, Atom selection);
 
 void W_HandleSelectionEvent(XEvent *event);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-#endif /* _WINGSP_H_ */
 
 void W_FlushASAPNotificationQueue();
 
@@ -475,3 +470,9 @@ struct W_Balloon *W_CreateBalloon(WMScreen *scr);
 void W_BalloonHandleEnterView(WMView *view);
 
 void W_BalloonHandleLeaveView(WMView *view);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /* _WINGSP_H_ */

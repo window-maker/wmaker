@@ -38,7 +38,7 @@ libwraster_la_SOURCES = 	\
 
 INCLUDES = @DFLAGS@ @HEADER_SEARCH_PATH@
 
-LIBLIST = libwraster.la @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ -lm
+LIBLIST = $(top_builddir)/wrlib/libwraster.la @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ -lm
 
 view_SOURCES= view.c
 

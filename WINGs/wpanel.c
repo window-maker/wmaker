@@ -27,8 +27,16 @@ handleKeyPress(XEvent *event, void *clientData)
 {
     WMAlertPanel *panel = (WMAlertPanel*)clientData;
 
-    if (event->xkey.keycode == panel->retKey) {
+    if (event->xkey.keycode == panel->retKey && panel->defBtn) {
 	WMPerformButtonClick(panel->defBtn);
+    }
+    if (event->xkey.keycode == panel->escKey) {
+	if (panel->altBtn || panel->othBtn) {
+	    WMPerformButtonClick(panel->othBtn ? panel->othBtn : panel->altBtn);
+	} else {
+	    panel->result = WAPRDefault;
+	    panel->done=1;
+	}
     }
 }
 
@@ -87,6 +95,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 
         
     panel->retKey = XKeysymToKeycode(scrPtr->display, XK_Return);
+    panel->escKey = XKeysymToKeycode(scrPtr->display, XK_Escape);
 
     if (owner)
 	panel->win = WMCreatePanelWithStyleForWindow(owner, "alertPanel",
@@ -231,8 +240,17 @@ handleKeyPress2(XEvent *event, void *clientData)
 {
     WMInputPanel *panel = (WMInputPanel*)clientData;
 
-    if (event->xkey.keycode == panel->retKey) {
+    if (event->xkey.keycode == panel->retKey && panel->defBtn) {
 	WMPerformButtonClick(panel->defBtn);
+    }
+    if (event->xkey.keycode == panel->escKey) {
+	if (panel->altBtn) {
+            WMPerformButtonClick(panel->altBtn);
+	} else {
+	    /*           printf("got esc\n");*/
+	    panel->done = 1;
+	    panel->result = WAPRDefault;
+	}
     }
 }
 
@@ -285,8 +303,21 @@ endedEditingObserver(void *observerData, WMNotification *notification)
 {
     WMInputPanel *panel = (WMInputPanel*)observerData;
     
-    if ((int)WMGetNotificationClientData(notification) == WMReturnTextMovement) {
-	WMPerformButtonClick(panel->defBtn);
+    switch ((int)WMGetNotificationClientData(notification)) {
+     case WMReturnTextMovement:
+	if (panel->defBtn)
+	    WMPerformButtonClick(panel->defBtn);
+	break;
+     case WMEscapeTextMovement:
+	if (panel->altBtn)
+	    WMPerformButtonClick(panel->altBtn);
+	else {
+	    panel->done = 1;
+	    panel->result = WAPRDefault;
+	}
+	break;
+     default:
+	break;
     }
 }
 
@@ -303,6 +334,7 @@ WMCreateInputPanel(WMScreen *scrPtr, WMWindow *owner, char *title, char *msg,
     memset(panel, 0, sizeof(WMInputPanel));
 
     panel->retKey = XKeysymToKeycode(scrPtr->display, XK_Return);
+    panel->escKey = XKeysymToKeycode(scrPtr->display, XK_Escape);
 
     if (owner)
 	panel->win = WMCreatePanelWithStyleForWindow(owner, "inputPanel",

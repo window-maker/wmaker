@@ -441,7 +441,7 @@ msgstr ""
 "\"Gimmicks\" und Animationen ein-/ausschalten. Z.B.\n"
 "das \"Ghosting\" einen bewegten Docks wenn es aus die\n"
 "andere Seite gezogen wird und die \"Explosion\" für\n"
-"aus dem Dock genommene Icons.\n"
+"aus dem Dock genommene Icons."
 
 #: ../../WPrefs.app/Configurations.c:396
 msgid "Sounds"
@@ -504,7 +504,7 @@ msgid ""
 msgstr ""
 "Animationsgeschwindigkeit, Titelzeilen-Stil, diverse\n"
 "Optionen und für Window Maker reservierte Farbtiefe\n"
-"bei 8bit-Displays\n"
+"bei 8bit-Displays"
 
 #: ../../WPrefs.app/Expert.c:74
 msgid "Disable miniwindows (icons for miniaturized windows). For use with KDE/GNOME."
@@ -1184,7 +1184,7 @@ msgstr "konnte temporäre Datei %s nicht erzeugen"
 
 #: ../../WPrefs.app/MouseSettings.c:843
 msgid "could not rename file %s to %s\n"
-msgstr "konnte Datei %s nicht in Datei %s umbenennen"
+msgstr "konnte Datei %s nicht in Datei %s umbenennen\n"
 
 #: ../../WPrefs.app/MouseSettings.c:927
 msgid "Mouse Preferences"
@@ -1531,7 +1531,7 @@ msgid ""
 "frame should be displayed.\n"
 msgstr ""
 "Ob die Fenster mit Inhalt verschoben werden\n"
-"oder nur ein Rahmen angezeigt werden soll."
+"oder nur ein Rahmen angezeigt werden soll.\n"
 
 #: ../../WPrefs.app/WindowHandling.c:341
 msgid "When maximizing..."

@@ -352,12 +352,14 @@ listIconPaths(WMList *lPtr)
 }
 
 
-void drawIconProc(WMList *lPtr, int index, Drawable d, char *text,
-                        int state, WMRect *rect) {
+void
+drawIconProc(WMList *lPtr, int index, Drawable d, char *text,
+	     int state, WMRect *rect) 
+{
     IconPanel *panel = WMGetHangedData(lPtr);
     GC gc = panel->scr->draw_gc;
     GC copygc = panel->scr->copy_gc;
-    char *buffer, *dirfile, *iconfile;
+    char *buffer, *dirfile;
     WMPixmap *pixmap;
     WMColor *blackcolor;
     WMColor *whitecolor;
@@ -383,35 +385,60 @@ void drawIconProc(WMList *lPtr, int index, Drawable d, char *text,
         return;
     }
 
-    XClearArea(dpy, d, rect->pos.x,rect->pos.y, width, 64, False);
+    XClearArea(dpy, d, rect->pos.x, rect->pos.y, width, rect->size.height, 
+	       False);
     XSetClipMask(dpy, gc, None);
-    XDrawRectangle(dpy, d, WMColorGC(whitecolor), rect->pos.x + 5,rect->pos.y +5, width - 10, 54);
+    /*
+    XDrawRectangle(dpy, d, WMColorGC(whitecolor), rect->pos.x + 5, 
+		   rect->pos.y +5, width - 10, 54);
+     */
+    XDrawLine(dpy, d, WMColorGC(whitecolor), rect->pos.x,
+	      rect->pos.y+rect->size.height-1, rect->pos.x+width, 
+	      rect->pos.y+rect->size.height-1);
+   
+    
     if (state&WLDSSelected) {
-        XFillRectangle(dpy, d, WMColorGC(whitecolor), rect->pos.x + 5,rect->pos.y +5, width - 10, 54);
+        XFillRectangle(dpy, d, WMColorGC(whitecolor), rect->pos.x,
+		       rect->pos.y, width, rect->size.height);
     }
 
+    size = WMGetPixmapSize(pixmap);
 
     XSetClipMask(dpy, copygc, WMGetPixmapMaskXID(pixmap));
-    XSetClipOrigin(dpy, copygc, rect->pos.x, rect->pos.y);
-    size = WMGetPixmapSize(pixmap);
+    XSetClipOrigin(dpy, copygc, rect->pos.x + (width-size.width)/2,
+		   rect->pos.y+2);
     XCopyArea(dpy, WMGetPixmapXID(pixmap), d, copygc, 0, 0,
-             size.width>100?100:size.width, size.height>64?64:size.height, rect->pos.x,rect->pos.y);
+	      size.width>100?100:size.width, size.height>64?64:size.height, 
+	      rect->pos.x + (width-size.width)/2, rect->pos.y+2);
 
     {
         int i,j;
+	int fheight = WMFontHeight(panel->normalfont);
+	int tlen = strlen(text);
+	int twidth = WMWidthOfString(panel->normalfont, text, tlen);
+	int ofx, ofy;
+	
+	ofx = rect->pos.x + (width - twidth)/2;
+	ofy = rect->pos.y + 64 - fheight;
+	
         for(i=-1;i<2;i++)
-        for(j=-1;j<2;j++)
-            WMDrawString(wmscr, d, WMColorGC(whitecolor), panel->normalfont , rect->pos.x+i+7, rect->pos.y+62+j-WMFontHeight(panel->normalfont), text, strlen(text));
-    }
-    WMDrawString(wmscr, d, WMColorGC(blackcolor), panel->normalfont , rect->pos.x+7, rect->pos.y+62-WMFontHeight(panel->normalfont), text, strlen(text));
+	    for(j=-1;j<2;j++)
+		WMDrawString(wmscr, d, WMColorGC(whitecolor), 
+			     panel->normalfont, ofx+i, ofy+j,
+			     text, tlen);
 
-	WMReleasePixmap(pixmap);
+	WMDrawString(wmscr, d, WMColorGC(blackcolor), panel->normalfont, 
+		     ofx, ofy, text, tlen);
+    }
+
+    WMReleasePixmap(pixmap);
     /* I hope it is better to do not use cache / on my box it is fast nuff */
     XFlush(dpy);
 
     WMReleaseColor(blackcolor);
     WMReleaseColor(whitecolor);
 }
+
 
 static void
 buttonCallback(void *self, void *clientData)
@@ -429,7 +456,7 @@ buttonCallback(void *self, void *clientData)
     } else if (bPtr==panel->previewButton) {
         /**** Previewer ****/
         WMSetButtonEnabled(bPtr, False);
-        WMSetListUserDrawItemHeight(panel->iconList, 64);
+        WMSetListUserDrawItemHeight(panel->iconList, 68);
         WMSetListUserDrawProc(panel->iconList, drawIconProc);
         WMRedisplayWidget(panel->iconList);
         /* for draw proc to access screen/gc */

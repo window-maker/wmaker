@@ -133,10 +133,17 @@ processEvents(int event_count)
 void
 wSetFocusTo(WScreen *scr, WWindow  *wwin)
 {
+    static WScreen *old_scr=NULL;
+
+    WWindow *old_focused;
     WWindow *focused=scr->focused_window;
     int timestamp=LastTimestamp;
     WApplication *oapp=NULL, *napp=NULL;
     int wasfocused;
+
+    if (!old_scr)
+      old_scr=scr;
+    old_focused=old_scr->focused_window;
 
     LastFocusChange = timestamp;
 
@@ -148,13 +155,13 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 */
       timestamp = CurrentTime;
 
-    if (focused)
-	oapp = wApplicationOf(focused->main_window);
+    if (old_focused)
+	oapp = wApplicationOf(old_focused->main_window);
 
     if (wwin == NULL) {
 	XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, timestamp);
-	if (focused) {
-	    wWindowUnfocus(focused);
+	if (old_focused) {
+	    wWindowUnfocus(old_focused);
 	}
 	if (oapp) {
 	    wAppMenuUnmap(oapp->menu);
@@ -167,7 +174,10 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 	wKWMSendEventMessage(NULL, WKWMFocusWindow);
 #endif
 	return;
+    } else if(old_scr != scr && old_focused) {
+        wWindowUnfocus(old_focused);
     }
+
     wasfocused = wwin->flags.focused;
     napp = wApplicationOf(wwin->main_window);
 
@@ -245,6 +255,7 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
     wKWMSendEventMessage(wwin, WKWMFocusWindow);
 #endif
     XFlush(dpy);
+    old_scr=scr;
 }
 
 

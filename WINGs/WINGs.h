@@ -180,6 +180,7 @@ typedef enum {
 enum {
     WMIllegalTextMovement,
 	WMReturnTextMovement,
+	WMEscapeTextMovement,
 	WMTabTextMovement,
 	WMBacktabTextMovement,
 	WMLeftTextMovement,
@@ -350,6 +351,7 @@ typedef struct WMAlertPanel {
     short done;
     
     KeyCode retKey;
+    KeyCode escKey;
 } WMAlertPanel;
 
 
@@ -364,6 +366,7 @@ typedef struct WMInputPanel {
     short done;
     
     KeyCode retKey;
+    KeyCode escKey;
 } WMInputPanel;
 
 

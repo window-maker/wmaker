@@ -49,9 +49,11 @@ WMAppendBag(WMBag *bag, WMBag *appendedBag)
     bag->items = wrealloc(bag->items, 
 			  sizeof(void*) * (bag->size+appendedBag->count));
 
-    memcpy(bag->items + bag->count, appendedBag->items, appendedBag->count);
+    memcpy(bag->items + bag->count, appendedBag->items,
+	  sizeof(void*) * appendedBag->count);
 
     bag->count += appendedBag->count;
+    bag->size += appendedBag->count;
 }
 
 

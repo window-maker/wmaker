@@ -30,7 +30,6 @@
 
 
 
-extern _WINGsConfiguration WINGsConfiguration;
 
 
 

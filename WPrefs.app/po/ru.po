@@ -826,7 +826,7 @@ msgid ""
 "Always open submenus inside the screen, instead of scrolling.\n"
 "Note: this can be an annoyance at some circumstances.\n"
 msgstr ""
-"Всегда открывать подменю внутри экрана, вместо прокрутки."
+"Всегда открывать подменю внутри экрана, вместо прокрутки.\n"
 
 #: ../../WPrefs.app/MenuPreferences.c:209
 msgid "Scroll off-screen menus when pointer is moved over them."

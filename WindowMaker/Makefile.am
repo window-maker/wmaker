@@ -25,6 +25,7 @@ prefsdata_DATA =\
 	menu.ko\
 	menu.nl\
 	menu.no\
+	menu.pl\
 	menu.pt\
 	menu.ru\
 	menu.se\
