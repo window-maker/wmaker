@@ -362,7 +362,7 @@ print_help()
 }
 
 
-#default F_BLACKBOX	1
+#define F_BLACKBOX	1
 
 int 
 main(int argc, char **argv)
@@ -403,6 +403,7 @@ main(int argc, char **argv)
 	} else if (strcmp("--help", argv[i])==0) {
 	    print_help();
 	    exit(0);
+#if 0
 	} else if (strcmp("--format", argv[i])==0) {
 	    i++;
 	    if (i == argc) {
@@ -412,9 +413,10 @@ main(int argc, char **argv)
 	    if (strcasecmp(argv[i], "blackbox")==0) {
 		format = F_BLACKBOX;
 	    } else {
-		printf("%s: unknown theme format '%s'\n", ProgName);
+		printf("%s: unknown theme format '%s'\n", ProgName, argv[i]);
 		exit(1);
 	    }
+#endif
 	} else {
 	    if (file) {
 		printf("%s: invalid argument '%s'\n", ProgName, argv[i]);
@@ -441,14 +443,16 @@ main(int argc, char **argv)
 	perror(file);
 	exit(1);
     }
-
+#if 0
     if (format == F_BLACKBOX) {
 	style = readBlackBoxStyle(file);
 	if (!style) {
 	    printf("%s: could not open style file\n", ProgName);
 	    exit(1);
 	}
-    } else {
+    } else
+#endif
+ {
 	if (S_ISDIR(statbuf.st_mode)) {
 	    char buffer[4018];
 	    char *prefix;
@@ -545,7 +549,7 @@ main(int argc, char **argv)
 }
 
 
-
+#if 0
 char*
 getToken(char *str, int i, char *buf)
 {
@@ -576,3 +580,4 @@ readBlackBoxStyle(char *path)
 	}
     }
 }
+#endif
