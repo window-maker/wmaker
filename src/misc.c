@@ -708,51 +708,114 @@ ParseCommand(char *command, char ***argv, int *argc)
     WMFreeBag(bag);
 }
 
-#if 0
+
 static void
-timeup(void *foo)
+timeoutHandler(void *data)
 {
-    *(int*)foo=1;
+    *(int*)data = 1;
 }
-#endif
+
+
+static char*
+getTextSelection(WScreen *screen, Atom selection)
+{
+    int buffer = -1;
+    
+    switch (selection) {
+     case XA_CUT_BUFFER0:
+	buffer = 0;
+	break;
+     case XA_CUT_BUFFER1:
+	buffer = 1;
+	break;
+     case XA_CUT_BUFFER2:
+	buffer = 2;
+	break;
+     case XA_CUT_BUFFER3:
+	buffer = 3;
+	break;
+     case XA_CUT_BUFFER4:
+	buffer = 4;
+	break;
+     case XA_CUT_BUFFER5:
+	buffer = 5;
+	break;
+     case XA_CUT_BUFFER6:
+	buffer = 6;
+	break;
+     case XA_CUT_BUFFER7:
+	buffer = 7;
+	break;
+    }
+    if (buffer >= 0) {
+	char *data;
+	int size;
+
+	data = XFetchBuffer(dpy, &size, buffer);
+
+	return data;
+    } else {
+	char *data;
+	int bits;
+	Atom rtype;
+	unsigned long len, bytes;
+	WMHandlerID timer;
+	int timeout = 0;
+	XEvent ev;
+	static Atom clipboard = 0;
+	
+	if (!clipboard) 
+	    clipboard = XInternAtom(dpy, "CLIPBOARD", False);
+	
+	XDeleteProperty(dpy, screen->info_window, clipboard);
+	
+	XConvertSelection(dpy, selection, XA_STRING,
+			  clipboard, screen->info_window,
+			  CurrentTime);
+	
+	timer = WMAddTimerHandler(1000, timeoutHandler, &timeout);
+	
+	while (!XCheckTypedWindowEvent(dpy, screen->info_window,
+				       SelectionNotify, &ev) && !timeout);
+	
+	if (!timeout) {
+	    WMDeleteTimerHandler(timer);
+	} else {
+	    wwarning("selection retrieval timed out");
+	    return NULL;
+	}
+
+	/* nobody owns the selection or the current owner has
+	 * nothing to do with what we need */
+	if (ev.xselection.property == None) {
+	    return NULL;
+	}
+
+	if (XGetWindowProperty(dpy, screen->info_window,
+			       clipboard, 0, 1024,
+			       False, XA_STRING, &rtype, &bits, &len,
+			       &bytes, (unsigned char**)&data)!=Success) {
+	    return NULL;
+	}
+	if (rtype!=XA_STRING || bits!=8) {
+	    wwarning("invalid data in text selection");
+	    if (data)
+		XFree(data);
+	    return NULL;
+	}
+	return data;
+    }
+}
+
 static char*
 getselection(WScreen *scr)
 {
     char *tmp;
-    extern char *W_GetTextSelection(); /* in WINGs */
     
-    tmp = W_GetTextSelection(scr->wmscreen, XA_PRIMARY);
+    tmp = getTextSelection(scr, XA_PRIMARY);
     if (!tmp)
-	tmp = W_GetTextSelection(scr->wmscreen, XA_CUT_BUFFER0);
+	tmp = getTextSelection(scr, XA_CUT_BUFFER0);
     return tmp;
-
-#if 0
-    XEvent event;
-    int timeover=0;
-    WMHandlerID *id;
-    
-#ifdef DEBUG
-    puts("getting selection");
-#endif
-    RequestSelection(dpy, scr->no_focus_win, LastTimestamp);
-    /* timeout on 1 sec. */
-    id = WMAddTimerHandler(1000, timeup, &timeover);
-    while (!timeover) {
-	WMNextEvent(dpy, &event);
-	if (event.type == SelectionNotify 
-	    && event.xany.window==scr->no_focus_win) {
-	    WMDeleteTimerHandler(id);
-#ifdef DEBUG
-	    puts("selection ok");
-#endif
-	    return GetSelection(dpy, scr->no_focus_win);
-	} else {
-	    WMHandleEvent(&event);
-	}
-    }
-    wwarning(_("selection timed-out"));
-    return NULL;
-#endif
 }
 
 
@@ -1023,9 +1086,9 @@ ExpandOptions(WScreen *scr, char *cmdline)
 #if defined(OFFIX_DND) || defined(XDND)
 	     case 'd':
 #ifdef XDND
-        if(scr->xdestring) {
-            dropped_thing = wstrdup(scr->xdestring);
-        }
+		if(scr->xdestring) {
+		    dropped_thing = wstrdup(scr->xdestring);
+		}
 #endif
 		if (!dropped_thing) {
 		    dropped_thing = get_dnd_selection(scr);
@@ -1066,6 +1129,7 @@ ExpandOptions(WScreen *scr, char *cmdline)
 		strcat(out,selection);
 		optr+=slen;
 		break;
+
 	     default:
 		out[optr++]='%';
 		out[optr++]=cmdline[ptr];
