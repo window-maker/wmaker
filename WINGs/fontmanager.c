@@ -30,48 +30,58 @@ changeFontProp(char *fname, char *newprop, int which)
 
 
 WMFont *
-WMGetFontPlain(WMScreen *scrPtr, WMFont *font) 
+WMGetFontPlain(WMScreen *scr, WMFont *font) 
 {
-    if(!scrPtr || !font)
-        return NULL;
+    if(!scr || !font)
+        return font;
+
     return font;
 }
 
 WMFont *
-WMGetFontBold(WMScreen *scrPtr, WMFont *font) 
+WMGetFontBold(WMScreen *scr, WMFont *font) 
 {
 	WMFont *newfont=NULL;
 	char fname[256];
-	if(!scrPtr || !font)
-		return NULL;
+
+	if(!scr || !font)
+        return font;
+
 	snprintf(fname, 255, font->name);
 	changeFontProp(fname, "bold", 2);
-	newfont = WMCreateNormalFont(scrPtr, fname);
+	newfont = WMCreateNormalFont(scr, fname);
+
 	if(!newfont)
 		newfont = font;
+
 	return newfont;
 }
 
 WMFont *
-WMGetFontItalic(WMScreen *scrPtr, WMFont *font) 
+WMGetFontItalic(WMScreen *scr, WMFont *font) 
 {
 	WMFont *newfont=NULL;
 	char fname[256];
-	if(!scrPtr || !font)
-		return NULL;
+
+	if(!scr || !font)
+        return font;
+
 	snprintf(fname, 255, font->name);
 	changeFontProp(fname, "o", 3);
-	newfont = WMCreateNormalFont(scrPtr, fname);
+	newfont = WMCreateNormalFont(scr, fname);
+
 	if(!newfont)
 		newfont = font;
+
 	return newfont;
 }
 
 WMFont *
-WMGetFontOfSize(WMScreen *scrPtr, WMFont *font, int size) 
+WMGetFontOfSize(WMScreen *scr, WMFont *font, int size) 
 {
-    if(!scrPtr || !font || size<1)
-        return NULL;
+    if(!scr || !font || size<1)
+        return font;
+
     return font;
 }
 

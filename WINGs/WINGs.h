@@ -393,8 +393,7 @@ typedef struct WMInputPanel {
 
 /* WMRuler: */
 typedef struct {
-    unsigned short *tabs;       /* a growable array of tabstops */
-    unsigned short ntabstops;   /* how many there are */
+    WMArray  *tabs;             /* a growable array of tabstops */
     unsigned short left;        /* left margin marker */
     unsigned short right;       /* right margin marker */
     unsigned short first;       /* indentation marker for first line only */
@@ -698,6 +697,11 @@ WMFont *WMSystemFontOfSize(WMScreen *scrPtr, int size);
 WMFont *WMBoldSystemFontOfSize(WMScreen *scrPtr, int size);
 
 XFontSet WMGetFontFontSet(WMFont *font);
+
+WMFont * WMGetFontPlain(WMScreen *scr, WMFont *font);
+WMFont * WMGetFontBold(WMScreen *scr, WMFont *font);
+WMFont * WMGetFontItalic(WMScreen *scr, WMFont *font);
+WMFont * WMGetFontOfSize(WMScreen *scr, WMFont *font, int size);
 
 /* ....................................................................... */
 
@@ -1499,11 +1503,11 @@ char * WMGetTextStream(WMText *tPtr);
 /* free the text */
 char * WMGetTextSelected(WMText *tPtr);
 
-/* destroy the bag */
-WMBag * WMGetTextStreamIntoBag(WMText *tPtr);
+/* destroy the array */
+WMArray * WMGetTextStreamIntoArray(WMText *tPtr);
 
-/* destroy the bag */
-WMBag * WMGetTextSelectedIntoBag(WMText *tPtr);
+/* destroy the array */
+WMArray* WMGetTextSelectedIntoArray(WMText *tPtr);
 
 void WMSetTextSelectionColor(WMText *tPtr, WMColor *color);
 
@@ -1518,10 +1522,10 @@ void WMSetTextParser(WMText *tPtr, WMAction *parser);
 void WMSetTextWriter(WMText *tPtr, WMAction *writer);
 
 void *WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w, char *description,
-    WMColor *color, unsigned short first, unsigned short reserved);
+    WMColor *color, unsigned short first, unsigned short extraInfo);
     
 void *WMCreateTextBlockWithPixmap(WMText *tPtr, WMPixmap *p, char *description, 
-	WMColor *color, unsigned short first, unsigned short reserved);
+	WMColor *color, unsigned short first, unsigned short extraInfo);
 
 void *WMCreateTextBlockWithText(WMText *tPtr, char *text, WMFont *font,
     WMColor *color, unsigned short first, unsigned short length);
