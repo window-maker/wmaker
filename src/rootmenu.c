@@ -265,7 +265,8 @@ static void
 restartCommand(WMenu *menu, WMenuEntry *entry)
 {
     Shutdown(WSRestartPreparationMode);
-    Restart((char*)entry->clientdata);
+    Restart((char*)entry->clientdata, False);
+    Restart(NULL, True);
 }
 
 

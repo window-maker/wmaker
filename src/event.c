@@ -220,7 +220,7 @@ DispatchEvent(XEvent *event)
 
 	Shutdown(WSRestartPreparationMode);
 	/* received SIGHUP */
-	Restart(NULL);
+	Restart(NULL, True);
     }
 
     /* for the case that all that is wanted to be dispatched is

@@ -1779,7 +1779,8 @@ wSelectWindow(WWindow *wwin, Bool flag)
 void
 wMakeWindowVisible(WWindow *wwin)
 {
-    wWorkspaceChange(wwin->screen_ptr, wwin->frame->workspace);
+    if (wwin->frame->workspace != wwin->screen_ptr->current_workspace)
+	wWorkspaceChange(wwin->screen_ptr, wwin->frame->workspace);
 
     if (wwin->flags.shaded) {
 	wUnshadeWindow(wwin);

@@ -1068,7 +1068,8 @@ performCommand(WScreen *scr, char *command, XClientMessageEvent *event)
     } else if (strncmp(command, "go:", 3)==0) {
 
 	Shutdown(WSRestartPreparationMode);
-	Restart(&command[3]);
+	Restart(&command[3], False);
+	Restart(NULL, True);
 
     } else if (strcmp(command, "desktop+1")==0) {
 
@@ -1122,7 +1123,7 @@ performCommand(WScreen *scr, char *command, XClientMessageEvent *event)
     } else if (strcmp(command, "wmaker:restart")==0) {
 
 	Shutdown(WSRestartPreparationMode);
-	Restart(NULL);
+	Restart(NULL, True);
 
     } else if (strcmp(command, "wmaker:exit")==0) {
 
