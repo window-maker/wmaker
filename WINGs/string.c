@@ -187,6 +187,21 @@ wstrdup(char *str)
 
 
 char*
+wstrndup(char *str, size_t len)
+{
+    char *copy;
+
+    assert(str!=NULL);
+
+    len = WMIN(len, strlen(str));
+    copy = strncpy(wmalloc(len+1), str, len);
+    copy[len] = 0;
+
+    return copy;
+}
+
+
+char*
 wstrconcat(char *str1, char *str2)
 {
     char *str;

@@ -529,6 +529,8 @@ WMIsAntialiasingEnabled(WMScreen *scrPtr)
 Bool
 WMIsAntialiasedFont(WMFont *font)
 {
+    wassertrv(font!=NULL, False);
+
     return font->antialiased;
 }
 
@@ -539,6 +541,15 @@ WMFontHeight(WMFont *font)
     wassertrv(font!=NULL, 0);
 
     return font->height;
+}
+
+
+char*
+WMGetFontName(WMFont *font)
+{
+    wassertrv(font!=NULL, NULL);
+
+    return font->name;
 }
 
 

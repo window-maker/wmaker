@@ -49,6 +49,8 @@ Changes since wmaker 0.80.1:
   most once for each font in a fontset (eliminates a possible security exploit)
 - Fixed WMGetTextDefaultColor() not to retain the returned color. It returns
   only a reference to the internal color, which you shouldn't release
+- Added wstrndup()
+- Added WMGetFontName()
 
 
 Changes since wmaker 0.80.0:

@@ -764,6 +764,8 @@ WMFont* WMRetainFont(WMFont *font);
 
 void WMReleaseFont(WMFont *font);
 
+char* WMGetFontName(WMFont *font);
+
 unsigned int WMFontHeight(WMFont *font);
 
 Bool WMIsAntialiasedFont(WMFont *font);
