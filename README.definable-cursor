@@ -1,10 +1,10 @@
 # README.definable-cursor: How to use definable-cursor patch for Window Maker
 # created 1999-Apr-24 14:53 jmk
-# autodate: 1999-Apr-24 16:29
+# autodate: 2001-Sep-05 22:40
 
-__________________________________________________
-|O|  Definable Mouse Cursors for Window Maker  |X|
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++------------------------------------------+
+| Definable Mouse Cursors for Window Maker |
++------------------------------------------+
 
 The definable-cursor patch for Window Maker
 <http://www.windowmaker.org/> allows user-definable mouse cursors; the
@@ -12,56 +12,95 @@ cursors can either be the built-in ones from the X11 cursor font, or
 they can be bitmap (XBM) files.  User-definable cursors can be useful
 for theme-builders, lefthanders, and the visually impaired.
 
-This README describes how to apply the patch to Window Maker and how to
-use the features it enables.
+This README describes how to enable user-definable cursors in Window
+Maker as well as how to use them.
 
-____________________________
-|O|  Applying the Patch  |X|
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++----------------------------+
+| Enabling Definable Cursors |
++----------------------------+
 
-The definable-cursor patch is available from
-<http://www.pobox.com/~jmknoble/WindowMaker/patches/>.
+If you want to enable definable mouse cursors in Window Maker, you must
+do so before you configure and build Window Maker.  Here's how:
 
-To apply the patch, do the following (where `XX' is the version of
-Window Maker you're patching):
+  (1) Edit src/wconfig.h.in and change the following line:
+  
+        #undef DEFINABLE_CURSOR
 
-    (0) gzip -dc WindowMaker-XX.tar.gz | tar -xvf -
-    
-    (1) cd ./WindowMaker-XX
-    
-    (2) patch </wherever/you/put/WindowMaker-XX-definable-cursor.patch
-    
-    (3) Build Window Maker according to the instructions in the
-        accompanying `INSTALL' file.
+      to:
+      
+        #define DEFINABLE_CURSOR
 
-___________________________________
-|O|  Defining Your Own Cursors  |X|
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  (2) Configure and build Window Maker as you normally would:
+  
+        ./configure
+	make
 
-A cursor specification is one of:
++---------------------------+
+| Defining Your Own Cursors |
++---------------------------+
+
+A cursor specification takes one of the following forms in the
+~/GNUstep/Defaults/WindowMaker file:
 
     (none)
     (builtin, <cursor-name>)
     (bitmap, <bitmap-filename>, <mask-filename>)
 
-where <cursor-name> uses the same syntax as for `xsetroot -cursor_name',
-and <bitmap-filename> and <mask-filename> are the same as for
-`xsetroot -cursor'; <bitmap-filename> and <mask-filename> are searched
-for along WM's PixmapPath.  If you use `(none)', the cursor will be
-inherited from the parent window (which often ends up being the root
-window).
+They have the following meanings:
+
+    none     The cursor is inherited from the parent window (often,
+             this means the root window).
+            
+    builtin  Use the cursor named <cursor-name> from X11's set of
+             built-in cursors.  The names are the same as you use
+             with 'xsetroot -cursor_name'.  See the xsetroot(1) man
+             page for more information.
+
+    bitmap   Use the bitmap in <bitmap-filename> as the foreground
+             cursor bitmap, and the one in <mask-filename> as the
+             background (mask) bitmap.  This is pretty much the same
+             as 'xsetroot -cursor', except that Window Maker searches
+             for the bitmaps along its PixmapPath.
 
 You can set the following cursor types (they're shown here with their
 defaults):
 
-    NormalCursor = (builtin, left_ptr);
-    MoveCursor   = (builtin, fleur);
-    ResizeCursor = (builtin, sizing);
-    WaitCursor   = (builtin, watch);
+    NormalCursor            = (builtin, left_ptr);
+    ArrowCursor             = (builtin, top_left_arrow);
+    MoveCursor              = (builtin, fleur);
+    TopLeftResizeCursor     = (builtin, top_left_corner);
+    TopRightResizeCursor    = (builtin, top_right_corner);
+    BottomLeftResizeCursor  = (builtin, bottom_left_corner);
+    BottomRightResizeCursor = (builtin, bottom_right_corner);
+    VerticalResizeCursor    = (builtin, sb_v_double_arrow);
+    HorizontalResizeCursor  = (builtin, sb_h_double_arrow);
+    WaitCursor              = (builtin, watch);
+    QuestionCursor          = (builtin, question_arrow);
+    TextCursor              = (builtin, xterm);
+    SelectCursor            = (builtin, cross);
 
-______________________
-|O|  Random Notes  |X|
-^^^^^^^^^^^^^^^^^^^^^^
+The following cursor types are allowed, but they're deprecated (Window
+Maker used them in the past, but doesn't use them anymore):
+
+    ResizeCursor            = (builtin, sizing);
+
++----------------------------------------------+
+| Using Cursors with 'getstyle' and 'setstyle' |
++----------------------------------------------+
+
+The 'getstyle' and 'setstyle' style- and theme-management utilities
+can handle user-definable cursors.  By default, 'getstyle' ignores
+cursor definitions; using 'getstyle -t' to get theme-related settings
+will also include any cursors you've defined in the resulting
+stylefile.
+
+However, by default, 'setstyle' does *not* ignore cursor settings.  If
+you wish to set a style or theme without installing cursor settings,
+you can use 'setstyle --no-cursors' to ignore the cursor definitions.
+
++--------------+
+| Random Notes |
++--------------+
 
 Most X11 cursors are 16x16 bitmaps.  Many X servers can actually handle
 larger cursors, though.  To check, use:
@@ -75,12 +114,7 @@ and in the resulting output look for a line such as:
 The example above indicates that my X server can handle cursors up to
 64 pixels wide by 64 pixels high.
 
-You can create your own bitmap cursors using the `bitmap' program that
-accompanies most X11 distributions.  For example bitmap cursors, see
-<http://www.pobox.com/~jmknoble/WindowMaker/cursors/>.
+You can create your own bitmap cursors using the 'bitmap' program that
+accompanies most X11 distributions.  For example bitmap cursors and
+masks, see <http://www.pobox.com/~jmknoble/WindowMaker/cursors/>.
 
-For an example
-
---jim
-
-%%%%%%%%%%%%%%% jim knoble %%%%%%%% jmknoble@pobox.com %%%%%%%%%%%%%%%%%

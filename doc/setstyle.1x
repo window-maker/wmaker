@@ -4,7 +4,7 @@
 setstyle \- set style related options for Window Maker or loads a theme
 .SH SYNOPSIS
 .B setstyle
-.I "[--no-fonts] [--help] [--version]"
+.I "[--no-fonts] [--no-cursors] [--help] [--version]"
 .I stylefile
 .SH DESCRIPTION
 .B setstyle
@@ -17,10 +17,21 @@ be treated as a theme pack and it will be loaded appropriately. If the
 (\fIIconTitleFont\fP, \fIClipTitleFont\fP, \fIDisplayFont\fP,
 \fIMenuTextFont\fP, \fIMenuTitleFont\fP, \fIWindowTitleFont\fP) in the
 style file will be ignored.
+
+If the \fB\-\-no\-cursors\fP flag is specified, any mouse cursor
+definitions (\fINormalCursor\fP, \fIArrowCursor\fP, \fIMoveCursor\fP,
+\fITopLeftResizeCursor\fP, \fITopRightResizeCursor\fP,
+\fIBottomLeftResizeCursor\fP, \fIBottomRightResizeCursor\fP, 
+\fIVerticalResizeCursor\fP, \fIHorizontalResizeCursor\fP, 
+\fIWaitCursor\fP, \fIQuestionCursor\fP, \fITextCursor\fP, 
+\fISelectCursor\fP) in the style or theme will be ignored.
 .SH OPTIONS
 .TP
 .B \-\-no\-fonts
 ignore font related options in style file.
+.TP
+.B \-\-no\-cursors
+ignore cursor definition options in style file.
 .TP
 .B \-\-help
 print a help message

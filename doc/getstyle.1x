@@ -24,15 +24,23 @@ The following options are stored by default: \fIIconBack\fP,
 \fIFTitleColor\fP, \fIPTitleColor\fP, \fIUTitleColor\fP,
 \fIFTitleBack\fP, \fIPTitleBack, UTitleBack\fP, \fIMenuTitleColor\fP,
 \fIMenuTextColor\fP, \fIMenuDisabledColor\fP, \fIMenuTitleBack\fP and
-\fIMenuTextBack\fP. If either \fB-t\fP or \fB--theme-options\fP is
-specificied, in addition to the previous options, \fIWorkspaceBack\fP
-is \fIalso\fP stored.
+\fIMenuTextBack\fP.
+
+If either \fB-t\fP or \fB--theme-options\fP is specified, in addition
+to the previous options, \fIWorkspaceBack\fP is \fIalso\fP stored,
+along with any user-definable mouse cursor settings
+(\fINormalCursor\fP, \fIArrowCursor\fP, \fIMoveCursor\fP,
+\fITopLeftResizeCursor\fP, \fITopRightResizeCursor\fP,
+\fIBottomLeftResizeCursor\fP, \fIBottomRightResizeCursor\fP, 
+\fIVerticalResizeCursor\fP, \fIHorizontalResizeCursor\fP, 
+\fIWaitCursor\fP, \fIQuestionCursor\fP, \fITextCursor\fP, 
+\fISelectCursor\fP) that are present.
 
 .SH OPTIONS
 .TP
 .B \-t
-dumps theme related information too, which is the root background texture.
-This option is always enabled when the \-p option is used.
+dumps theme related information too, which includes the root background
+texture.  This option is always enabled when the \-p option is used.
 .TP
 .B \-p
 creates a theme pack in the directory named by the theme name appended

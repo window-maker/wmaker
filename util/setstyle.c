@@ -48,10 +48,29 @@ char *FontOptions[] = {
 	NULL
 };
 
+char *CursorOptions[] = {
+    "NormalCursor"
+    ,"ArrowCursor"
+    ,"MoveCursor"
+    ,"ResizeCursor"
+    ,"TopLeftResizeCursor"
+    ,"TopRightResizeCursor"
+    ,"BottomLeftResizeCursor"
+    ,"BottomRightResizeCursor"
+    ,"VerticalResizeCursor"
+    ,"HorizontalResizeCursor"
+    ,"WaitCursor"
+    ,"QuestionCursor"
+    ,"TextCursor"
+    ,"SelectCursor"
+    ,NULL
+};
+
 
 
 char *ProgName;
 int ignoreFonts = 0;
+int ignoreCursors = 0;
 
 Display *dpy;
 
@@ -287,6 +306,17 @@ hackStyle(proplist_t style)
 		if (found)
 		    continue;
 	    }
+	    if (ignoreCursors) {
+	        for (j = 0, found = 0; CursorOptions[j] != NULL; j++) {
+		    if (strcasecmp(str, CursorOptions[j]) == 0) {
+		        PLRemoveDictionaryEntry(style, tmp);
+		        found = 1;
+		        break;
+		    }
+		}
+	        if (found)
+		    continue;
+	    }
 
 	    if (strcasecmp(str, "IconTitleColor")==0
 		|| strcasecmp(str, "IconTitleBack")==0) {
@@ -367,6 +397,11 @@ print_help()
     puts("Reads style/theme configuration from FILE and updates Window Maker.");
     puts("");
     puts("  --no-fonts		ignore font related options");
+    /* Why these stupid tabs?  They're misleading to the programmer,
+     * and they don't do any better than aligning via spaces:  If you
+     * have a proportional font, all bets are off anyway.  Sheesh.
+     */
+    puts("  --no-cursors		ignore cursor related options");
     puts("  --ignore <option>	ignore changes in the specified option");
     puts("  --help		display this help and exit");
     /*
@@ -412,6 +447,8 @@ main(int argc, char **argv)
 
 	} else if (strcmp("--no-fonts", argv[i])==0) {
 	    ignoreFonts = 1;
+	} else if (strcmp("--no-cursors", argv[i])==0) {
+	    ignoreCursors = 1;
 	} else if (strcmp("--version", argv[i])==0) {
 	    puts(PROG_VERSION);
 	    exit(0);

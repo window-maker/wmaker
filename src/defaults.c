@@ -814,35 +814,51 @@ WDefaultEntry optionList[] = {
     ,{"NormalCursor", "(builtin, left_ptr)",	(void*)WCUR_ROOT,
           NULL,				getCursor,	setCursor
     },
+    {"ArrowCursor", "(builtin, top_left_arrow)",	(void*)WCUR_ARROW,
+          NULL,				getCursor,	setCursor
+    },
     {"MoveCursor", "(builtin, fleur)",		(void*)WCUR_MOVE,
           NULL,				getCursor,	setCursor
     },
-#if 0
-    {"TopLeftResizeCursor", "(builtin, sizing)",	(void*)WCUR_TOPLEFTRESIZE,
+    {"ResizeCursor", "(builtin, sizing)",	(void*)WCUR_RESIZE,
           NULL,				getCursor,	setCursor
     },
-    {"TopRightResizeCursor", "(builtin, sizing)",	(void*)WCUR_TOPRIGHTRESIZE,
+    {"TopLeftResizeCursor", "(builtin, top_left_corner)",
+	  (void*)WCUR_TOPLEFTRESIZE,
           NULL,				getCursor,	setCursor
     },
-    {"BottomLeftResizeCursor", "(builtin, sizing)",	(void*)WCUR_BOTTOMLEFTRESIZE,
+    {"TopRightResizeCursor", "(builtin, top_right_corner)",
+	  (void*)WCUR_TOPRIGHTRESIZE,
           NULL,				getCursor,	setCursor
     },
-    {"BottomRightResizeCursor", "(builtin, sizing)",	(void*)WCUR_BOTTOMRIGHTRESIZE,
+    {"BottomLeftResizeCursor", "(builtin, bottom_left_corner)",
+	  (void*)WCUR_BOTTOMLEFTRESIZE,
           NULL,				getCursor,	setCursor
     },
-    {"VerticalResizeCursor", "(builtin, sizing)",	(void*)WCUR_VERTICALRESIZE,
+    {"BottomRightResizeCursor", "(builtin, bottom_right_corner)",
+	  (void*)WCUR_BOTTOMRIGHTRESIZE,
           NULL,				getCursor,	setCursor
     },
-    {"HorizonResizeCursor", "(builtin, sizing)",	(void*)WCUR_HORIZONRESIZE,
+    {"VerticalResizeCursor", "(builtin, sb_v_double_arrow)",
+	  (void*)WCUR_VERTICALRESIZE,
+          NULL,				getCursor,	setCursor
+    },
+    {"HorizontalResizeCursor", "(builtin, sb_h_double_arrow)",
+	  (void*)WCUR_HORIZONRESIZE,
           NULL,				getCursor,	setCursor
     },
     {"WaitCursor", "(builtin, watch)",		(void*)WCUR_WAIT,
           NULL,				getCursor,	setCursor
     },
-    {"ArrowCursor", "(builtin, top_left_arrow)",	(void*)WCUR_ARROW,
+    {"QuestionCursor", "(builtin, question_arrow)",	(void*)WCUR_QUESTION,
+          NULL,				getCursor,	setCursor
+    },
+    {"TextCursor", "(builtin, xterm)",		(void*)WCUR_TEXT,
+          NULL,				getCursor,	setCursor
+    },
+    {"SelectCursor", "(builtin, cross)",	(void*)WCUR_SELECT,
           NULL,				getCursor,	setCursor
     }
-#endif
 #endif /* DEFINABLE_CURSOR */
 };
 

@@ -77,7 +77,6 @@ static char *options[] = {
     "WindowTitleExtendSpace",
     "MenuTitleExtendSpace",
     "MenuTextExtendSpace",
-    "NormalCursor",
     NULL
 };
 
@@ -85,6 +84,20 @@ static char *options[] = {
 /* table of theme related options */
 static char *theme_options[] = {
     "WorkspaceBack",
+    "NormalCursor",
+    "ArrowCursor",
+    "MoveCursor",
+    "ResizeCursor",
+    "TopLeftResizeCursor",
+    "TopRightResizeCursor",
+    "BottomLeftResizeCursor",
+    "BottomRightResizeCursor",
+    "VerticalResizeCursor",
+    "HorizontalResizeCursor",
+    "WaitCursor",
+    "QuestionCursor",
+    "TextCursor",
+    "SelectCursor",
     NULL
 };
 
