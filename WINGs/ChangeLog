@@ -64,6 +64,7 @@ Changes since wmaker 0.80.1:
   <vlaadbrain@operamail.com>)
 - Fixed bug in resizing a scrollview
 - Fixed bug with wrong text wrapping (Alexey Voinov <voins@voins.program.ru>)
+- Added wmkrect()
 
 
 Changes since wmaker 0.80.0:

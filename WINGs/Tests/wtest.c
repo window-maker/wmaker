@@ -10,8 +10,9 @@
 
 /*
  * You need to define this function to link any program to WINGs.
+ * (this is no longer required as there is a default abort handler in WINGs)
  * This will be called when the application will be terminated because
- * on a fatal error.
+ * of a fatal error (only for memory allocation failures ATM).
  */
 void
 wAbort()

@@ -106,6 +106,10 @@ Changes since version 0.80.2:
   maximizing to support succesive maximizations in different directions
   without the need to do an intermediary un-maximize step (eliminates flicker)
 - Made keyboard/mouse maximization behavior consinstent relative to each other
+- Enhanced wmsetbg's man page with description for -b | --back-color
+  (Marcelo E. Magallon <marcelo.magallon@bigfoot.com>)
+- Do not use the disabled clip color for the clip's workspace navigation arrows
+  when the clip is collapsed (it made them look like disabled)
 
 
 Changes since version 0.80.1:

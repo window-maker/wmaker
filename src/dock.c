@@ -266,7 +266,7 @@ killCallback(WMenu *menu, WMenuEntry *entry)
     if (icon->icon && icon->icon->owner) {
         fPtr = icon->icon->owner->fake_group;
     } else {
-        /* is this really necessary? can we kill a dock icon not running? */
+        /* is this really necessary? can we kill a non-running dock icon? */
         Window win = icon->main_window;
         int index;
 
@@ -356,10 +356,11 @@ paintClipButtons(WAppIcon *clipIcon, Bool lpushed, Bool rpushed)
     Bool collapsed = clipIcon->dock->collapsed;
 #endif
 
-    if (!clipIcon->dock->collapsed)
-        color = scr->clip_title_color[CLIP_NORMAL];
-    else
-        color = scr->clip_title_color[CLIP_COLLAPSED];
+    //if (!clipIcon->dock->collapsed)
+    //    color = scr->clip_title_color[CLIP_NORMAL];
+    //else
+    //    color = scr->clip_title_color[CLIP_COLLAPSED];
+    color = scr->clip_title_color[CLIP_NORMAL];
 
     XSetForeground(dpy, gc, WMColorPixel(color));
 

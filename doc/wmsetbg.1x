@@ -22,6 +22,14 @@ window image on start up.
 .B -a|--maxscale
 scales the specified \fIimage\fP preserving its aspect ratio
 .TP
+.B -b|--back-color
+the specified \fIcolor\fP is used as the background color for the
+\fItexture\fP.  Window Maker temporarely sets the background to this
+color while loading and processing the texture.  You can specify colors
+using their X11 names or as an RGB tiplet (either as "rgb:RR/GG/BB" or
+"#RRGGBB") (reference to appropiate manpage should be here).  In the
+later case \fIcolor\fB is a quoted string.
+.TP
 .B -e|--center
 centers the specified \fIimage\fP
 .TP
