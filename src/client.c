@@ -607,11 +607,51 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 		    /* TODO: remake appmenu update */
 		    wAppMenuDestroy(wapp->menu);
 		}
-		wapp->menu = wAppMenuGet(wwin->screen_ptr, wwin->main_window);
-		/* make the appmenu be mapped */
-		wSetFocusTo(wwin->screen_ptr, NULL);
-		wSetFocusTo(wwin->screen_ptr, 
-			    wwin->screen_ptr->focused_window);
+                if (wwin->fake_group) {
+                    extern WPreferences wPreferences;
+                    WScreen *scr = wwin->screen_ptr;
+                    WWindow *foo = scr->focused_window;
+                    WFakeGroupLeader *fPtr = wwin->fake_group;
+
+                    wApplicationDestroy(wapp);
+                    while (foo) {
+                        if (foo->fake_group && foo->fake_group==fPtr) {
+                            WSETUFLAG(foo, shared_appicon, 0);
+                            foo->fake_group = NULL;
+                            if (foo->group_id!=None)
+                                foo->main_window = foo->group_id;
+                            else if (foo->client_leader!=None)
+                                foo->main_window = foo->client_leader;
+                            else if (WFLAGP(foo, emulate_appicon))
+                                foo->main_window = foo->client_win;
+                            else
+                                foo->main_window = None;
+                            if (foo->main_window) {
+                                wapp = wApplicationCreate(scr, foo->main_window);
+                            }
+                        }
+                        foo = foo->prev;
+                    }
+
+                    if (fPtr->leader!=None)
+                        XDestroyWindow(dpy, fPtr->leader);
+                    fPtr->retainCount = 0;
+                    fPtr->leader = None;
+                    fPtr->origLeader = None;
+
+                    wapp = wApplicationOf(wwin->main_window);
+                    if (wapp) {
+                        wapp->menu = wAppMenuGet(scr, wwin->main_window);
+                    }
+                    if (wPreferences.auto_arrange_icons) {
+                        wArrangeIcons(wwin->screen_ptr, True);
+                    }
+                } else {
+                    wapp->menu = wAppMenuGet(wwin->screen_ptr, wwin->main_window);
+                }
+                /* make the appmenu be mapped */
+                wSetFocusTo(wwin->screen_ptr, NULL);
+                wSetFocusTo(wwin->screen_ptr, wwin->screen_ptr->focused_window);
 	    }
 	} else if (event->atom==_XA_GNUSTEP_WM_ATTR) {
 	    GNUstepWMAttributes *attr;

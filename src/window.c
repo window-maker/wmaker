@@ -807,7 +807,7 @@ wManageWindow(WScreen *scr, Window window)
         WSETUFLAG(wwin, shared_appicon, 0);
     }
 
-    {
+    if (wwin->main_window) {
         extern Atom _XA_WINDOWMAKER_MENU;
         XTextProperty text_prop;
 
