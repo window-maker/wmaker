@@ -34,7 +34,6 @@ Usage
  - What is an appicon? 
  - How do I get new apps on the dock (The line of pixmaps on the right side
    of the screen by default) 
- - What is the button in the middle of the Clip? 
  - What is the difference between the Exit and Exit Session Option? 
  - How do I "dock" Icons on the Clip? 
  - Why do none of my Key Bindings work in WindowMaker 0.1x.x 
@@ -63,6 +62,8 @@ Configuration
    screenshots? 
  - How do I get superfluous bells and whistles working? 
  - How do I get my oldstyle back? 
+ - How can I set dock/clip to use single click to launch applications,
+   instead of double click?
 
 Other Applications 
  - How do I assign gimp an appicon? 
@@ -428,18 +429,6 @@ indicating when it is close enough to dock, and where it will be placed. To make
 sure this application will be there next time you start up windowmaker, exit
 windowmaker with the "exit session" option. 
 
-### Obsoleted
-What is the button in the middle of the Clip? 
-----------------------------------
-Dan Pascu gives this insightful answer: 
-
-"Well, it's the power on indicator. To be sure that Clip is working ;)" 
-
-In 0.15.x, the light now means that the Clip is in its expanded stateto show any
-appicons attached to it. When collapsed, it expands when you drag an appicon
-near it to dock. 
-###
-
 What is the difference between the 'Exit' and 'Exit Session' Options? 
 ----------------------------------
 Another Answer from Dan Pascu: 
@@ -733,6 +722,19 @@ How do I get the classic NeXT(tm)-like style back?
 Add NewStyle=NO; to your ~/GNUstep/Defaults/Windowmaker file. 
 
 This option was added as a runtime option in WindowMaker >= 0.16.1 
+
+
+How can I set dock/clip to use single click to launch applications, instead
+of double click?
+----------------------------------
+You cannot do this. This is because single click is used to select app-icons,
+or to raise/lower the app-icon or the dock/clip.
+If this is impelmented then you will be unable to select or raise/lower
+dock/clip or app-icons, without also launching the application it represents.
+
+So don't ask for this to be implemented, because it will not be. Double
+click is used for a reason, is not just some weird idea we got in a morning
+when we wake up too early.
 
 
 
