@@ -652,39 +652,6 @@ toggleAutoAttractCallback(WMenu *menu, WMenuEntry *entry)
 }
 
 
-#if 0
-static void
-toggleKeepCallback(WMenu *menu, WMenuEntry *entry)
-{
-    WDock *dock = (WDock*)entry->clientdata;
-    WAppIcon *btn;
-    int i;
-
-    assert(entry->clientdata!=NULL);
-
-    dock->keep_attracted = !dock->keep_attracted;
-
-    if (dock->keep_attracted) {
-	for (i=0; i< dock->max_icons; i++) {
-	    btn = dock->icon_array[i];
-	    if (btn && btn->attracted && btn->command) {
-		btn->attracted = 0;
-		if (btn->icon->shadowed) {
-		    btn->icon->shadowed = 0;
-		    btn->icon->force_paint = 1;
-		    wAppIconPaint(btn);
-		}
-	    }
-	}
-    }
-
-    entry->flags.indicator_on = dock->keep_attracted;
-
-    wMenuPaint(menu);
-}
-#endif
-
-
 static void
 selectCallback(WMenu *menu, WMenuEntry *entry)
 {
