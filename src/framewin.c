@@ -1082,16 +1082,24 @@ wFrameWindowPaint(WFrameWindow *fwin)
 		       fwin->title_pixel[fwin->flags.state]);
 	
 #ifdef DRAWSTRING_PLUGIN
-    if (scr->drawstring_func[fwin->flags.state + fwin->drawstring_proc_offset]) {
-        scr->drawstring_func[fwin->flags.state + fwin->drawstring_proc_offset]->
-            proc.drawString(scr->drawstring_func[fwin->flags.state 
-                    + fwin->drawstring_proc_offset]->arg, fwin->titlebar->window,
-                    x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE,
-                    fwin->titlebar->width, fwin->top_width,
-                    fwin->title, wPluginPackData(2, *fwin->title_gc, *fwin->font));
+#define DRAWSTRING_CURRENT_STATE fwin->flags.state + fwin->drawstring_proc_offset
+    if (scr->drawstring_func[DRAWSTRING_CURRENT_STATE]) {
+        void **p = wPluginPackData(4, 
+                *fwin->title_gc,
+                *fwin->font,
+                scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->data,
+                "extendable");
+        scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->proc.drawString(
+                scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->arg,
+                fwin->titlebar->window,
+                x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE,
+                fwin->titlebar->width, fwin->top_width,
+                fwin->title, p);
+        free(p);
     } else {
         WMDrawString(scr->wmscreen, fwin->titlebar->window, 
-                *fwin->title_gc, *fwin->font, x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE, 
+                *fwin->title_gc, *fwin->font,
+                x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE, 
                 title, titlelen);
     }
 #else

@@ -101,6 +101,7 @@ wPluginCreateFunction(int type, char *library_name,
 
     if (pl_arg) function->arg = PLDeepCopy(pl_arg);
     function->data = init_data;
+    printf("init data %x\n", function->data);
     if (init_proc_name) {
         initProc = dlsym(function->handle, init_proc_name);
         if (initProc) {
@@ -123,11 +124,9 @@ wPluginDestroyFunction(WFunction *function)
 	return;
 
     if (function->data) {
-        if (function->freeData) {
+        if (function->freeData)
             function->freeData(function->arg, &function->data);
-        } else {
-            wfree(function->data);
-        }
+        wfree(function->data);
     }
     if (function->arg) PLRelease(function->arg);
     wfree(function);

@@ -652,11 +652,11 @@ void wWorkspaceManageEdge(WScreen *scr)
     int vmask;
     XSetWindowAttributes attribs;
 
-    puts("wWorkspaceManageEdge()");
+    /* puts("wWorkspaceManageEdge()"); */
     if (wPreferences.vedge_thickness) {
         initVDesk = True;
         for (w = 0; w < scr->workspace_count; w++) {
-            puts("reset workspace");
+            /* puts("reset workspace"); */
             wWorkspaceSetViewPort(scr, w, 0, 0);
         }
 
