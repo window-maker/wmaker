@@ -1198,9 +1198,9 @@ createInspectorForWindow(WWindow *wwin, int xpos, int ypos,
 #endif
 
     spec_text = _("The configuration will apply to all\n"
-			"windows that have their WM_CLASS\n"
-			"property set to the above selected\n"
-			"name, when saved.");
+                  "windows that have their WM_CLASS\n"
+                  "property set to the above selected\n"
+                  "name, when saved.");
 
     panel = wmalloc(sizeof(InspectorPanel));
     memset(panel, 0, sizeof(InspectorPanel));

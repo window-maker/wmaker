@@ -385,6 +385,7 @@ typedef struct WMListItem {
 typedef struct WMAlertPanel {
     WMWindow *win;		       /* window */
     WMBox *vbox;
+    WMBox *hbox;
     WMButton *defBtn;		       /* default button */
     WMButton *altBtn;		       /* alternative button */
     WMButton *othBtn;		       /* other button */

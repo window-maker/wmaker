@@ -10,15 +10,18 @@ EXTRA_DIST = cs.po de.po es.po et.po fr.po gl.po ja.po ko.po nl.po pt.po \
 
 POTFILES  = \
 	$(top_builddir)/src/appicon.c \
+	$(top_builddir)/src/application.c \
 	$(top_builddir)/src/defaults.c \
 	$(top_builddir)/src/dialog.c \
 	$(top_builddir)/src/dock.c \
 	$(top_builddir)/src/dockedapp.c \
-	$(top_builddir)/src/event.c \
 	$(top_builddir)/src/framewin.c \
+	$(top_builddir)/src/gnome.c \
 	$(top_builddir)/src/icon.c \
+	$(top_builddir)/src/kwm.c \
 	$(top_builddir)/src/main.c \
 	$(top_builddir)/src/menu.c \
+	$(top_builddir)/src/menureader.c \
 	$(top_builddir)/src/misc.c \
 	$(top_builddir)/src/pixmap.c \
 	$(top_builddir)/src/resources.c \
@@ -33,9 +36,8 @@ POTFILES  = \
 	$(top_builddir)/src/window.c \
 	$(top_builddir)/src/winmenu.c \
 	$(top_builddir)/src/winspector.c \
-	$(top_builddir)/src/workspace.c \
-	$(top_builddir)/src/xutil.c 
-
+	$(top_builddir)/src/wmspec.c \
+	$(top_builddir)/src/workspace.c
 
 SUFFIXES = .po .mo
 

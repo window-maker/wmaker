@@ -181,11 +181,11 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 	WMSetLabelTextAlignment(panel->mLbl, WACenter);
     }
     
-    hbox = WMCreateBox(panel->vbox);
-    WMSetBoxBorderWidth(hbox, 10);
-    WMSetBoxHorizontal(hbox, True);
-    WMMapWidget(hbox);
-    WMAddBoxSubview(panel->vbox, WMWidgetView(hbox), False, True, 44, 0, 0);
+    panel->hbox = WMCreateBox(panel->vbox);
+    WMSetBoxBorderWidth(panel->hbox, 10);
+    WMSetBoxHorizontal(panel->hbox, True);
+    WMMapWidget(panel->hbox);
+    WMAddBoxSubview(panel->vbox, WMWidgetView(panel->hbox), False, True, 44, 0, 0);
     
     /* create buttons */
     if (otherButton) 
@@ -221,9 +221,9 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     }
 
     if (defaultButton) {
-	panel->defBtn = WMCreateCommandButton(hbox);
+	panel->defBtn = WMCreateCommandButton(panel->hbox);
 	WMSetButtonAction(panel->defBtn, alertPanelOnClick, panel);
-	WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->defBtn),
+	WMAddBoxSubviewAtEnd(panel->hbox, WMWidgetView(panel->defBtn),
 			     False, True, dw, 0, 0);
 	WMSetButtonText(panel->defBtn, defaultButton);
 	WMSetButtonImage(panel->defBtn, scrPtr->buttonArrow);
@@ -231,21 +231,21 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 	WMSetButtonImagePosition(panel->defBtn, WIPRight);
     }
     if (alternateButton) {
-	panel->altBtn = WMCreateCommandButton(hbox);
-	WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->altBtn),
+	panel->altBtn = WMCreateCommandButton(panel->hbox);
+	WMAddBoxSubviewAtEnd(panel->hbox, WMWidgetView(panel->altBtn),
 			     False, True, aw, 0, 5);
 	WMSetButtonAction(panel->altBtn, alertPanelOnClick, panel);
 	WMSetButtonText(panel->altBtn, alternateButton);
     }
     if (otherButton) {
-	panel->othBtn = WMCreateCommandButton(hbox);
+	panel->othBtn = WMCreateCommandButton(panel->hbox);
 	WMSetButtonAction(panel->othBtn, alertPanelOnClick, panel);
-	WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->othBtn),
+	WMAddBoxSubviewAtEnd(panel->hbox, WMWidgetView(panel->othBtn),
 			     False, True, ow, 0, 5);
 	WMSetButtonText(panel->othBtn, otherButton);
     }
     
-    WMMapSubwidgets(hbox);
+    WMMapSubwidgets(panel->hbox);
     
     WMCreateEventHandler(W_VIEW(panel->win), KeyPressMask,
 			 handleKeyPress, panel);

@@ -526,7 +526,7 @@ createPanel(_Panel *p)
 	data->param.exec.command = "eterm";
 
 	data = putNewItem(panel, pad, ExecInfo, _("Run..."));
-	data->param.exec.command = "%a(Run,Type command to run)";
+	data->param.exec.command = _("%a(Run,Type command to run)");
 
 	data = putNewItem(panel, pad, ExecInfo, _("Netscape"));
 	data->param.exec.command = "netscape";

@@ -12,7 +12,6 @@ Do ASAP:
 
 Need to do:
 ===========
-- put a "Do not save workspace state" in the exit confirmation dialog
 - allow user to select/restore default root menu from wprefs
 - support for X11R6.4 extension for getting extra visual info in wrlib's
   automatic best context guessing

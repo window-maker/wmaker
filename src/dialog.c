@@ -107,6 +107,64 @@ wMessageDialog(WScreen *scr, char *title, char *message,
 }
 
 
+void
+toggleSaveSession(WMWidget *w, void *data)
+{
+    wPreferences.save_session_on_exit = WMGetButtonSelected((WMButton *) w);
+}
+
+
+int
+wExitDialog(WScreen *scr, char *title, char *message,
+            char *defBtn, char *altBtn, char *othBtn)
+{
+    WMAlertPanel *panel;
+    WMButton *saveSessionBtn;
+    Window parent;
+    WWindow *wwin;
+    int result;
+
+    panel = WMCreateAlertPanel(scr->wmscreen, NULL, title, message,
+                               defBtn, altBtn, othBtn);
+
+    /* add save session button */
+    saveSessionBtn = WMCreateSwitchButton(panel->hbox);
+    WMSetButtonAction(saveSessionBtn, toggleSaveSession, NULL);
+    WMAddBoxSubview(panel->hbox, WMWidgetView(saveSessionBtn),
+                            False, True, 200, 0, 0);
+    WMSetButtonText(saveSessionBtn, _("Save workspace state"));
+    WMSetButtonSelected(saveSessionBtn, wPreferences.save_session_on_exit);
+    WMRealizeWidget(saveSessionBtn);
+    WMMapWidget(saveSessionBtn);
+
+    parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 400, 180, 0, 0, 0);
+
+    XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
+
+    wwin = wManageInternalWindow(scr, parent, None, NULL,
+                                (scr->scr_width - 400)/2,
+                                (scr->scr_height - 180)/2, 400, 180);
+    wwin->client_leader = WMWidgetXID(panel->win);
+
+    WMMapWidget(panel->win);
+
+    wWindowMap(wwin);
+
+    WMRunModalLoop(WMWidgetScreen(panel->win), WMWidgetView(panel->win));
+
+    result = panel->result;
+
+    WMUnmapWidget(panel->win);
+
+    wUnmanageWindow(wwin, False, False);
+
+    WMDestroyAlertPanel(panel);
+
+    XDestroyWindow(dpy, parent);
+
+    return result;
+}
+
 
 int
 wInputDialog(WScreen *scr, char *title, char *message, char **text)

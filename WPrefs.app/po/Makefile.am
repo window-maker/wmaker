@@ -8,8 +8,6 @@ EXTRA_DIST = pt.po hr.po fr.po ko.po cs.po ja.po zh_TW.Big5.po es.po\
 		zh_CN.po fi.po it.po ru.po de.po hu.po bg.po sk.po
 
 POTFILES  = \
-	$(top_builddir)/WPrefs.app/main.c \
-	$(top_builddir)/WPrefs.app/WPrefs.c \
 	$(top_builddir)/WPrefs.app/Appearance.c \
 	$(top_builddir)/WPrefs.app/Configurations.c \
 	$(top_builddir)/WPrefs.app/Expert.c \
@@ -25,11 +23,11 @@ POTFILES  = \
 	$(top_builddir)/WPrefs.app/Preferences.c \
 	$(top_builddir)/WPrefs.app/TexturePanel.c \
 	$(top_builddir)/WPrefs.app/Themes.c \
+	$(top_builddir)/WPrefs.app/WPrefs.c \
 	$(top_builddir)/WPrefs.app/WindowHandling.c \
 	$(top_builddir)/WPrefs.app/Workspace.c \
-	$(top_builddir)/WPrefs.app/double.c \
-	$(top_builddir)/WPrefs.app/editmenu.c \
-	$(top_builddir)/WPrefs.app/xmodifier.c
+	$(top_builddir)/WPrefs.app/imagebrowser.c \
+	$(top_builddir)/WPrefs.app/main.c
 
 SUFFIXES = .po .mo
 

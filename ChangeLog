@@ -7,6 +7,9 @@ Changes since version 0.70.0:
 - Fixed compilation for systems that required -lintl for WINGs
   (Jim Knoble <jmknoble@pobox.com>)
 - Removed redundant include/lib paths from the get-*-flags scripts
+- Updated slovak .po files (Jan Tomka <judas@linux.sk>)
+- Added "Save workspace state" switch button on the exit confirmation panel
+  (based on a patch sent by Jan Tomka <judas@linux.sk>)
 
 
 Changes since version 0.65.1:

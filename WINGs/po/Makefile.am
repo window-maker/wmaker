@@ -7,29 +7,19 @@ CLEANFILES = $(CATALOGS) WINGs.pot
 EXTRA_DIST = cs.po sk.po
 
 POTFILES  = \
-	$(top_builddir)/WINGs/configuration.c \
 	$(top_builddir)/WINGs/connection.c \
-	$(top_builddir)/WINGs/dragdestination.c \
-	$(top_builddir)/WINGs/dragsource.c \
 	$(top_builddir)/WINGs/error.c \
 	$(top_builddir)/WINGs/findfile.c \
-	$(top_builddir)/WINGs/hashtable.c \
 	$(top_builddir)/WINGs/host.c \
-	$(top_builddir)/WINGs/international.c \
-	$(top_builddir)/WINGs/memory.c \
 	$(top_builddir)/WINGs/proplist.c \
+	$(top_builddir)/WINGs/userdefaults.c \
 	$(top_builddir)/WINGs/wcolor.c \
 	$(top_builddir)/WINGs/wcolorpanel.c \
 	$(top_builddir)/WINGs/wfilepanel.c \
 	$(top_builddir)/WINGs/wfont.c \
 	$(top_builddir)/WINGs/wfontpanel.c \
 	$(top_builddir)/WINGs/widgets.c \
-	$(top_builddir)/WINGs/wruler.c \
-	$(top_builddir)/WINGs/wtext.c \
-	$(top_builddir)/WINGs/wview.c \
-	$(top_builddir)/WINGs/wtextfield.c \
-	$(top_builddir)/WINGs/wwindow.c
-
+	$(top_builddir)/WINGs/wruler.c
 
 SUFFIXES = .po .mo
 
