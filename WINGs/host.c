@@ -254,7 +254,8 @@ WMFlushHostCache()
 Bool
 WMIsHostEqualToHost(WMHost* hPtr, WMHost* aPtr)
 {
-    int	i;
+    int	i, j;
+    char *adr1, *adr2;
 
     wassertrv(hPtr!=NULL && aPtr!=NULL, False);
 
@@ -262,9 +263,12 @@ WMIsHostEqualToHost(WMHost* hPtr, WMHost* aPtr)
         return True;
 
     for (i=0; i<WMGetBagItemCount(aPtr->addresses); i++) {
-        if (WMGetFirstInBag(hPtr->addresses,
-                            WMGetFromBag(aPtr->addresses, i)) >= 0)
-            return True;
+        adr1 = WMGetFromBag(aPtr->addresses, i);
+        for (j=0; j<WMGetBagItemCount(hPtr->addresses); j++) {
+            adr2 = WMGetFromBag(hPtr->addresses, j);
+            if (strcmp(adr1, adr2)==0)
+                return True;
+        }
     }
 
     return False;
