@@ -10,6 +10,7 @@ To do before next release:
 - figure out a better gnustep path for wprefs.app installation
 - add -fno-strict-aliasing (do this only for gcc >= 3.3)
 - pick a good font fallback
+- figure a better fullscreen level
 
 
 remake wrlib rule to not compile with -fomit-frame-pointer and stuff
