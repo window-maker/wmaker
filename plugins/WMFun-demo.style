@@ -1,0 +1,65 @@
+{
+  HighlightColor = white;
+  HighlightTextColor = black;
+  ClipTitleColor = black;
+  CClipTitleColor = "rgb:61/61/61";
+  FTitleColor = white;
+  PTitleColor = white;
+  UTitleColor = black;
+  FTitleBack = (
+    function,
+    libwmfun.so,
+    waves,
+    "--from",
+    "rgb:c0/20/af",
+    "--to",
+    "rgb:00/00/00",
+    8,
+    12
+  );
+  PTitleBack = (hgradient, "rgb:51/50/55", "rgb:80/80/80");
+  UTitleBack = (
+    function,
+    libwmfun.so,
+    waves,
+    "--from",
+    "rgb:c2/c0/c5",
+    "--to",
+    "rgb:82/80/85",
+    8,
+    12
+  );
+  MenuTitleColor = white;
+  MenuTextColor = black;
+  MenuDisabledColor = gray40;
+  MenuTitleBack = (
+    function,
+    libwmfun.so,
+    fade,
+    "--from",
+    "rgb:2f/3f/9f",
+    "--to",
+    "rgb:bf/bf/bf"
+  );
+  MenuTextBack = (
+    function,
+    libwmfun.so,
+    fade,
+    "--from",
+    "rgb:40/60/ff",
+    "--to",
+    "rgb:ff/ff/ff"
+  );
+  IconBack = (
+    function,
+    libwmfun.so,
+    bilinear,
+    "rgb:ff/ff/40",
+    "rgb:df/10/10",
+    "rgb:60/ff/20",
+    "rgb:10/30/ff"
+  );
+  IconTitleColor = white;
+  IconTitleBack = "rgb:50/5a/5e";
+  WorkspaceBack = (solid, "rgb:24/3e/6c");
+}

@@ -1,0 +1,8 @@
+AC_INIT
+AM_INIT_AUTOMAKE(libwmfun, 0.0.3)
+
+AC_PROG_CC
+
+AM_PROG_LIBTOOL
+
+AC_OUTPUT([Makefile libwmfun/Makefile])

@@ -1,0 +1,8 @@
+Sat Apr  2 22:25:36 EET DST 1999  Dan Pascu <dan@services.iiruc.ro>
+	* fixed the autoconf stuff.
+        * Added a small demo style file to show the abillities of the library.
+
+Sun Feb 21 16:24:53 1999  Tobias Gloth  (gloth@online.de)
+
+	* initial revision of all files.
+
