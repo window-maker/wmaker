@@ -31,7 +31,7 @@ x86_check_mmx()
 {
     static int result = -1;
 
-    return 1;    
+    return 1;
     
     if (result >= 0)
 	return result;
@@ -74,6 +74,8 @@ x86_check_mmx()
  * PPlain	YES	YES	
  * MMX				DONE
  *
+ * 
+ * - try to align stack (local variable space) into quadword boundary
  */
 
 
@@ -107,7 +109,6 @@ x86_mmx_TrueColor_32_to_16(unsigned char *image, // 8
 
     asm volatile
 	(
-	 "andl $-8, %ebp		\n" // make it align
 	 "subl $128, %esp		\n" // alloc some more stack
 
 	 "pusha				\n"

@@ -119,9 +119,11 @@ RCreateImageFromXImage(RContext *context, XImage *image, XImage *mask)
 	}
     }
 
+
+#define MIN(a,b) ((a)<(b)?(a):(b))
     if (mask) {
-	for (y = 0; y < mask->height; y++) {
-	    for (x = 0; x < mask->width; x++) {
+	for (y = 0; y < MIN(mask->height, image->height); y++) {
+	    for (x = 0; x < MIN(mask->width, image->width); x++) {
 		if (XGetPixel(mask, x, y)) {
 		    *(data++) = 0xff;
 		} else {
