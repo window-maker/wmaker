@@ -22,7 +22,8 @@ WMReleasePixmap(WMPixmap *pixmap)
     pixmap->refCount--;
 
     if (pixmap->refCount<1) {
-	XFreePixmap(pixmap->screen->display, pixmap->pixmap);
+	if (pixmap->pixmap)
+	    XFreePixmap(pixmap->screen->display, pixmap->pixmap);
 	if (pixmap->mask)
 	    XFreePixmap(pixmap->screen->display, pixmap->mask);
 	free(pixmap);

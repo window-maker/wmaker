@@ -10,7 +10,7 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.53.0)
+AM_INIT_AUTOMAKE(WindowMaker, 0.53.1)
 
 AM_PROG_LIBTOOL
 
@@ -319,7 +319,7 @@ dnl
 dnl Disable some stuff that are duplicated in kde
 dnl ---------------------------------------------
 AC_ARG_ENABLE(lite,
-  [  --enable-lite		  disable stuff duplicated in KDE/GNOME ],
+  [  --enable-lite		  disable some stuff (dont use it) ],
   [if test x$enableval = xyes; then
         LITE=yes
 	AC_DEFINE(LITE)

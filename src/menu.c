@@ -1796,9 +1796,9 @@ wMenuScroll(WMenu *menu, XEvent *event)
 
         WMNextEvent(dpy, &ev);
         switch (ev.type) {
-        case EnterNotify:
+	 case EnterNotify:
             WMHandleEvent(&ev);
-        case MotionNotify:
+	 case MotionNotify:
             x = (ev.type==MotionNotify) ? ev.xmotion.x_root : ev.xcrossing.x_root;
             y = (ev.type==MotionNotify) ? ev.xmotion.y_root : ev.xcrossing.y_root;
 
@@ -1938,8 +1938,7 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
         smenu = parentMenu(menu);
         old_frame_x = smenu->frame_x;
         old_frame_y = smenu->frame_y;
-    }
-    else if (event->xbutton.window == menu->frame->core->window) {
+    } else if (event->xbutton.window == menu->frame->core->window) {
         /* This is true if the menu was launched with right click on root window */
         delayed_select = 1;
         d_data.delayed_select = &delayed_select;
@@ -2195,8 +2194,7 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
 	}
     }
 
-    if (((WMenu*)desc->parent)->flags.brother || close_on_exit
-	|| !smenu)
+    if (((WMenu*)desc->parent)->flags.brother || close_on_exit || !smenu)
 	closeCascade(desc->parent);
 
     /* close the cascade windows that should not remain opened */

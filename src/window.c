@@ -1552,9 +1552,9 @@ wWindowFocus(WWindow *wwin, WWindow *owin)
 
     wFrameWindowChangeState(wwin->frame, WS_FOCUSED);
 
-    wWindowResetMouseGrabs(wwin);
-
     wwin->flags.focused = 1;
+
+    wWindowResetMouseGrabs(wwin);
 
     UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
 
@@ -1621,6 +1621,7 @@ wWindowUnfocus(WWindow *wwin)
 	}
     }
     wwin->flags.focused = 0;
+
     wWindowResetMouseGrabs(wwin);
 
     UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
@@ -2334,7 +2335,7 @@ wWindowResetMouseGrabs(WWindow *wwin)
 			  GrabModeAsync, None, None);
     }
     
-    if (!wwin->flags.focused) {
+    if (!wwin->flags.focused && !WFLAGP(wwin, no_focusable)) {
 	/* the passive grabs to focus the window */
 	if (wPreferences.focus_mode == WKF_CLICK)
 	    XGrabButton(dpy, AnyButton, AnyModifier, wwin->client_win,

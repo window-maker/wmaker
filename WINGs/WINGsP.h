@@ -134,7 +134,9 @@ typedef struct W_Screen {
     struct W_FontPanel *sharedFontPanel;
 
     struct W_ColorPanel *sharedColorPanel;
-    
+
+    Pixmap stipple;
+
     /* colors */
     W_Color *white;
     W_Color *black;
@@ -432,3 +434,8 @@ void W_FlushASAPNotificationQueue();
 
 void W_FlushIdleNotificationQueue();
 
+struct W_Balloon *W_CreateBalloon(WMScreen *scr);
+
+void W_BalloonHandleEnterView(WMView *view);
+
+void W_BalloonHandleLeaveView(WMView *view);

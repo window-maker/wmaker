@@ -297,10 +297,9 @@ static char *CHECK_MARK[] = {
 "#%======="};
 
 
-#define STIPPLE_WIDTH 8
-#define STIPPLE_HEIGHT 8
-static unsigned char STIPPLE_BITS[] = {
-   0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa};
+#define STIPPLE_WIDTH 2
+#define STIPPLE_HEIGHT 2
+static unsigned char STIPPLE_BITS[] = {0x01, 0x02};
 
 
 extern void W_ReadConfigurations(void);
@@ -632,9 +631,8 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     /* we need a 1bpp drawable for the monoGC, so borrow this one */
     scrPtr->monoGC = XCreateGC(display, stipple, 0, NULL);
 
-    XFreePixmap(display, stipple);
-    
-    
+    scrPtr->stipple = stipple;
+
     scrPtr->normalFont = WMSystemFontOfSize(scrPtr, 12);
 
     scrPtr->boldFont = WMBoldSystemFontOfSize(scrPtr, 12);
@@ -740,6 +738,10 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     scrPtr->clipboardAtom = XInternAtom(display, "CLIPBOARD", False);
     
     scrPtr->rootView = W_CreateRootView(scrPtr);
+
+
+    scrPtr->balloon = W_CreateBalloon(scrPtr);
+
 
     W_InitApplication(scrPtr);
     

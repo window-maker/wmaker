@@ -387,6 +387,9 @@ WDefaultEntry optionList[] = {
     {"CycleWorkspaces", "NO",			NULL,
 	  &wPreferences.ws_cycle,        getBool,	NULL
     },
+    {"IAmAnnoyingAndDontWantWorkspaceNameDisplay", "NO",NULL,
+	  &wPreferences.no_workspace_name_display, getBool, NULL
+    },
     {"StickyIcons", "NO",			NULL,
 	  &wPreferences.sticky_icons, getBool, setStickyIcons
     },
@@ -522,7 +525,7 @@ WDefaultEntry optionList[] = {
     {"DisplayFont",	DEF_INFO_TEXT_FONT,	NULL,
 	  NULL,				getFont,	setDisplayFont
     },
-    {"LargeDisplayFont"	DEF_WORKSPACE_NAME_FONT, NULL,
+    {"LargeDisplayFont",DEF_WORKSPACE_NAME_FONT, NULL,
 	  NULL,				getFont,	setLargeDisplayFont
     },
     {"HighlightColor",	"white",		NULL,

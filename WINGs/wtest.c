@@ -143,6 +143,8 @@ testGradientButtons(WMScreen *scr)
     WMSetButtonAltImage(btn, pix2);
     WMSetButtonText(btn, "Cool");
 
+    WMSetBalloonTextForView("This is a button", WMWidgetView(btn));
+
     btn = WMCreateButton(win, WBTMomentaryChange);
     WMResizeWidget(btn, 60, 24);
     WMMoveWidget(btn, 90, 100);
@@ -152,6 +154,8 @@ testGradientButtons(WMScreen *scr)
     WMSetButtonAltImage(btn, pix2);
     WMSetButtonText(btn, "Button");
 
+    WMSetBalloonTextForView("This is another button", WMWidgetView(btn));
+
     btn = WMCreateButton(win, WBTMomentaryChange);
     WMResizeWidget(btn, 60, 24);
     WMMoveWidget(btn, 160, 100);
@@ -160,7 +164,10 @@ testGradientButtons(WMScreen *scr)
     WMSetButtonImage(btn, pix1);
     WMSetButtonAltImage(btn, pix2);
     WMSetButtonText(btn, "Test");
-    
+
+    WMSetBalloonTextForView("This is yet another button.\nBut the balloon has 3 lines.\nYay!",
+			    WMWidgetView(btn));
+
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
     WMMapWidget(win);
@@ -409,15 +416,17 @@ int main(int argc, char **argv)
      * 
      * Put the testSomething() function you want to test here.
      */
+    testGradientButtons(scr);
+
 #if 0
     testOpenFilePanel(scr);
     testFontPanel(scr);
     testList(scr);
     testGradientButtons(scr);
     testScrollView(scr);
-#endif
+
     testColorWell(scr);
-#if 1
+
     testSlider(scr);
     testTextField(scr);
     testPullDown(scr);

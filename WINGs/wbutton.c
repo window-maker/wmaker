@@ -13,9 +13,11 @@ typedef struct W_Button {
     char *altCaption;
     
     WMFont *font;
-    
+
     W_Pixmap *image;
     W_Pixmap *altImage;
+
+    W_Pixmap *dimage;
 
     void *clientData;
     WMAction *action;
@@ -231,14 +233,62 @@ WMCreateButton(WMWidget *parent, WMButtonType type)
 }
 
 
+static void
+updateDisabledMask(WMButton *bPtr)
+{
+    WMScreen *scr = WMWidgetScreen(bPtr);
+    Display *dpy = scr->display;
+
+    if (bPtr->image) {
+	XGCValues gcv;
+
+	bPtr->dimage->mask = XCreatePixmap(dpy, scr->stipple,
+					   bPtr->dimage->width, 
+					   bPtr->dimage->height, 1);
+
+	XSetForeground(dpy, scr->monoGC, 0);
+	XFillRectangle(dpy, bPtr->dimage->mask, scr->monoGC, 0, 0,
+		       bPtr->dimage->width, bPtr->dimage->height);
+
+	gcv.foreground = 1;
+	gcv.background = 0;
+	gcv.stipple = scr->stipple;
+	gcv.fill_style = FillStippled;
+	gcv.clip_mask = bPtr->image->mask;
+	gcv.clip_x_origin = 0;
+	gcv.clip_y_origin = 0;
+	
+	XChangeGC(dpy, scr->monoGC, GCForeground|GCBackground|GCStipple
+		  |GCFillStyle|GCClipMask|GCClipXOrigin|GCClipYOrigin, &gcv);
+
+	XFillRectangle(dpy, bPtr->dimage->mask, scr->monoGC, 0, 0,
+		       bPtr->dimage->width, bPtr->dimage->height);
+
+	gcv.fill_style = FillSolid;
+	gcv.clip_mask = None;
+	XChangeGC(dpy, scr->monoGC, GCFillStyle|GCClipMask, &gcv);
+    }
+}
+
+
 void
 WMSetButtonImage(WMButton *bPtr, WMPixmap *image)
 {
     if (bPtr->image!=NULL)
 	WMReleasePixmap(bPtr->image);
     bPtr->image = WMRetainPixmap(image);
-    
-    
+
+    if (bPtr->dimage) {
+	bPtr->dimage->pixmap = None;
+	WMReleasePixmap(bPtr->dimage);
+    }
+
+    bPtr->dimage = WMCreatePixmapFromXPixmaps(WMWidgetScreen(bPtr), 
+					      image->pixmap, None, 
+					      image->width, image->height,
+					      image->depth);
+    updateDisabledMask(bPtr);
+
     if (bPtr->view->flags.realized) {
 	paintButton(bPtr);
     }
@@ -502,7 +552,10 @@ paintButton(Button *bPtr)
 
     gc = NULL;
     caption = bPtr->caption;
-    image = bPtr->image;
+    if (bPtr->flags.enabled)
+	image = bPtr->image;
+    else
+	image = bPtr->dimage;
     offset = 0;
     if (bPtr->flags.bordered)
 	relief = WRRaised;
@@ -689,7 +742,7 @@ destroyButton(Button *bPtr)
     if (bPtr->flags.addedObserver) {
 	WMRemoveNotificationObserver(bPtr);
     }
-    
+
     if (bPtr->timer)
 	WMDeleteTimerHandler(bPtr->timer);
     
@@ -704,7 +757,13 @@ destroyButton(Button *bPtr)
     
     if (bPtr->image)
 	WMReleasePixmap(bPtr->image);
-    
+
+    if (bPtr->dimage) {
+	/* yuck.. kluge */
+	bPtr->dimage->pixmap = None;
+
+	WMReleasePixmap(bPtr->dimage);
+    }
     if (bPtr->altImage)
 	WMReleasePixmap(bPtr->altImage);
 

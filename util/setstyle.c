@@ -21,7 +21,7 @@
  */
 
 
-#define PROG_VERSION "setstyle (Window Maker) 0.4"
+#define PROG_VERSION "setstyle (Window Maker) 0.5"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -35,6 +35,7 @@
 
 #include "../src/wconfig.h"
 
+#define MAX_OPTIONS 128
 
 char *FontOptions[] = {
     "IconTitleFont",
@@ -344,11 +345,11 @@ print_help()
     printf("Usage: %s [OPTIONS] FILE\n", ProgName);
     puts("Reads style/theme configuration from FILE and updates Window Maker.");
     puts("");
-    puts("  --no-fonts	ignore font related options");
-    puts("  --help	display this help and exit");
-    puts("  --version	output version information and exit");
+    puts("  --no-fonts		ignore font related options");
+    puts("  --ignore <option>	ignore changes in the specified option");
+    puts("  --help		display this help and exit");
+    puts("  --version		output version information and exit");
 }
-
 
 
 int 
@@ -359,6 +360,8 @@ main(int argc, char **argv)
     char *file = NULL;
     struct stat statbuf;
     int i;
+    int ignoreCount = 0;
+    char *ignoreList[MAX_OPTIONS];
 
     dpy = XOpenDisplay("");
 
@@ -371,7 +374,15 @@ main(int argc, char **argv)
     }
 
     for (i = 1; i < argc; i++) {
-	if (strcmp("--no-fonts", argv[i])==0) {
+	if (strcmp("--ignore", argv[i])==0) {
+	    i++;
+	    if (i == argc) {
+		printf("%s: missing argument for option --ignore", ProgName);
+		exit(1);
+	    }
+	    ignoreList[ignoreCount++] = argv[i];
+
+	} else if (strcmp("--no-fonts", argv[i])==0) {
 	    ignoreFonts = 1;
 	} else if (strcmp("--version", argv[i])==0) {
 	    puts(PROG_VERSION);
@@ -460,6 +471,12 @@ main(int argc, char **argv)
     }
 
     hackStyle(style);
+
+    if (ignoreCount > 0) {
+	for (i = 0; i < ignoreCount; i++) {
+	    PLRemoveDictionaryEntry(style, PLMakeString(ignoreList[i]));
+	}
+    }
 
     PLMergeDictionaries(prop, style);
 

@@ -1,6 +1,6 @@
 /*  session.h
  *
- *  Copyright (c) 1998 Dan Pascu
+ *  Copyright (c) 1999 Alfredo K. Kojima
  *
  *  Window Maker window manager
  *
@@ -67,5 +67,7 @@ void wSessionRequestShutdown(void);
 Bool  wSessionIsManaged(void);
 
 #endif
+
+Bool wSessionGetStateFor(WWindow *wwin, WSessionData *state);
 
 #endif

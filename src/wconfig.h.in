@@ -362,7 +362,10 @@
 /* delay for menu item selection hysteresis */
 #define MENU_SELECT_DELAY 200
 
-/* animation speed constants */
+/* delay for jumpback of scrolled menus */
+#define MENU_JUMP_BACK_DELAY 	200
+
+/* *** animation speed constants *** */
 
 /* icon slide */
 #define ICON_SLIDE_SLOWDOWN_UF	20
@@ -400,7 +403,7 @@
 
 #define MENU_SCROLL_STEPS_U	1
 #define MENU_SCROLL_DELAY_U	8
-#define MENU_JUMP_BACK_DELAY 0
+0
 
 /* shade animation */
 #define SHADE_STEPS_UF		5
@@ -417,6 +420,12 @@
 
 #define SHADE_STEPS_U		20
 #define SHADE_DELAY_U		10
+
+
+/* workspace name on switch display */
+#define WORKSPACE_NAME_FADE_DELAY 30
+
+#define WORKSPACE_NAME_DELAY	500
 
 /* window birth animation steps (DO NOT MAKE IT RUN-TIME) */
 #define WINDOW_BIRTH_STEPS	20

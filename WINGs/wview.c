@@ -102,43 +102,6 @@ adoptChildView(W_View *view, W_View *child)
 }
 
 
-static void
-handleEvents(XEvent *event, void *data)
-{
-    W_View *view = (W_View*)data;
-    
-    if (event->type == ConfigureNotify) {
-
-	if (event->xconfigure.width != view->size.width
-	    || event->xconfigure.height != view->size.height) {
-
-	    view->size.width = event->xconfigure.width;
-	    view->size.height = event->xconfigure.height;
-
-	    if (view->flags.notifySizeChanged) {
-		WMPostNotificationName(WMViewSizeDidChangeNotification,
-				       view, NULL);
-	    }
-	}
-	if (event->xconfigure.x != view->pos.x
-	    || event->xconfigure.y != view->pos.y) {
-
-	    if (event->xconfigure.send_event) {
-		view->pos.x = event->xconfigure.x;
-		view->pos.y = event->xconfigure.y;
-	    } else {
-		Window foo;
-
-		XTranslateCoordinates(view->screen->display,
-				      view->window, view->screen->rootWin,
-				      event->xconfigure.x, event->xconfigure.y,
-				      &view->pos.x, &view->pos.y, &foo);
-	    }
-	}
-    }
-}
-
-
 static W_View*
 createView(W_Screen *screen, W_View *parent)
 {
@@ -212,9 +175,6 @@ W_CreateTopView(W_Screen *screen)
 
     view->flags.topLevel = 1;
     view->attribs.event_mask |= StructureNotifyMask;
-
-    /* catch changes in the toplevel window (resize from user etc.) */
-    WMCreateEventHandler(view, StructureNotifyMask, handleEvents, view);
 
     return view;
 }

@@ -1150,9 +1150,9 @@ wDeiconifyWindow(WWindow  *wwin)
 	wwin->icon = NULL;
     }
     XUngrabServer(dpy);
-    if (wPreferences.focus_mode==WKF_CLICK
-	|| wPreferences.focus_mode==WKF_SLOPPY)
-      wSetFocusTo(wwin->screen_ptr, wwin);
+
+    if (wPreferences.focus_mode==WKF_CLICK)
+	wSetFocusTo(wwin->screen_ptr, wwin);
 
 #ifdef ANIMATIONS
     if (!wwin->screen_ptr->flags.startup) {

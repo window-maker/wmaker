@@ -172,8 +172,8 @@ WMCreateWindowWithStyle(WMScreen *screen, char *name, int style)
     screen->windowList = win;
 
     WMCreateEventHandler(win->view, ExposureMask|StructureNotifyMask
-			 |ClientMessageMask|FocusChangeMask, handleEvents, 
-			 win);
+			 |ClientMessageMask|FocusChangeMask, 
+			 handleEvents, win);
 
     W_ResizeView(win->view, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
@@ -616,6 +616,7 @@ static void
 handleEvents(XEvent *event, void *clientData)
 {
     _Window *win = (_Window*)clientData;
+    W_View *view = win->view;
     
     
     switch (event->type) {
@@ -629,11 +630,42 @@ handleEvents(XEvent *event, void *clientData)
 	    }
 	}
 	break;
+
      case UnmapNotify:
 	WMUnmapWidget(win);
 	break;
+
      case DestroyNotify:
 	destroyWindow(win);
+	break;
+	
+     case ConfigureNotify:
+	if (event->xconfigure.width != view->size.width
+	    || event->xconfigure.height != view->size.height) {
+
+	    view->size.width = event->xconfigure.width;
+	    view->size.height = event->xconfigure.height;
+
+	    if (view->flags.notifySizeChanged) {
+		WMPostNotificationName(WMViewSizeDidChangeNotification,
+				       view, NULL);
+	    }
+	}
+	if (event->xconfigure.x != view->pos.x
+	    || event->xconfigure.y != view->pos.y) {
+
+	    if (event->xconfigure.send_event) {
+		view->pos.x = event->xconfigure.x;
+		view->pos.y = event->xconfigure.y;
+	    } else {
+		Window foo;
+
+		XTranslateCoordinates(view->screen->display,
+				      view->window, view->screen->rootWin,
+				      event->xconfigure.x, event->xconfigure.y,
+				      &view->pos.x, &view->pos.y, &foo);
+	    }
+	}
 	break;
     }
 }

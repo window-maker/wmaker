@@ -172,7 +172,7 @@ W_PaintText(W_View *view, Drawable d, WMFont *font,  int x, int y,
 void
 W_PaintTextAndImage(W_View *view, int wrap, GC textGC, W_Font *font,
 		    WMReliefType relief, char *text,
-		    WMAlignment alignment,  W_Pixmap *image, 
+		    WMAlignment alignment,  W_Pixmap *image,
 		    WMImagePosition position, GC backGC, int ofs)
 {
     W_Screen *screen = view->screen;
@@ -264,7 +264,7 @@ W_PaintTextAndImage(W_View *view, int wrap, GC textGC, W_Font *font,
 	
 	ix += ofs;
 	iy += ofs;
-    
+
 	XSetClipOrigin(screen->display, screen->clipGC, ix, iy);
 	XSetClipMask(screen->display, screen->clipGC, image->mask);
 

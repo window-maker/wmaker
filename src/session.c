@@ -776,7 +776,7 @@ wSessionGetStateFor(WWindow *wwin, WSessionData *state)
 	   &state->width, &state->height,
 	   &state->user_changed_width, &state->user_changed_height);
 
-    
+
     /* state */
     value = PLGetArrayElement(slist, index++);
     str = PLGetString(value);
@@ -784,18 +784,18 @@ wSessionGetStateFor(WWindow *wwin, WSessionData *state)
     sscanf(str, "%i %i %i", &state->miniaturized, &state->shaded,
 	   &state->maximized);
 
-    
+
     /* attributes */
     value = PLGetArrayElement(slist, index++);
     str = PLGetString(value);
 
     getAttributeState(str, &state->mflags, &state->flags);
 
-    
+
     /* workspace */
     value = PLGetArrayElement(slist, index++);
     str = PLGetString(value);
-    
+
     sscanf(str, "%i", &state->workspace);
 
 
@@ -808,7 +808,7 @@ wSessionGetStateFor(WWindow *wwin, WSessionData *state)
     /* shortcuts */
     value = PLGetArrayElement(slist, index++);
     str = PLGetString(value);
-    
+
     sscanf(str, "%i", &state->shortcuts);
 }
 

@@ -639,6 +639,22 @@ extern char *WMViewSizeDidChangeNotification;
 
 extern char *WMViewRealizedNotification;
 
+
+/* ....................................................................... */
+
+void WMSetBalloonTextForView(char *text, WMView *view);
+
+void WMSetBalloonTextAlignment(WMScreen *scr, WMAlignment alignment);
+
+void WMSetBalloonFont(WMScreen *scr, WMFont *font);
+
+void WMSetBalloonTextColor(WMScreen *scr, WMColor *color);
+
+void WMSetBalloonDelay(WMScreen *scr, int delay);
+
+void WMSetBalloonEnabled(WMScreen *scr, Bool flag);
+
+
 /* ....................................................................... */
 
 WMWindow *WMCreateWindow(WMScreen *screen, char *name);

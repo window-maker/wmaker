@@ -610,20 +610,20 @@ parseTexture(RContext *rc, char *text)
 
 	handle = dlopen(lib, RTLD_LAZY);
 	if (!handle) {
-            wwarning(_("could not find library %s"), lib);
+            wwarning("could not find library %s", lib);
 	    goto function_cleanup;
 	}
 
 	initFunc = dlsym(handle, "initWindowMaker");
         if (!initFunc) {
-	    wwarning(_("could not initialize library %s"), lib);
+	    wwarning("could not initialize library %s", lib);
 	    goto function_cleanup;
         }
         initFunc(dpy, DefaultColormap(dpy, scr));
 
         mainFunc = dlsym(handle, func);
         if (!mainFunc) {
-            wwarning(_("could not find function %s::%s"), lib, func);
+            wwarning("could not find function %s::%s", lib, func);
 	    goto function_cleanup;
         }
         image = mainFunc(argc, argv, scrWidth, scrHeight, 0);

@@ -114,6 +114,7 @@ static Shortcut *shortcutList = NULL;
  * REFRESH - forces the desktop to be repainted
  * EXIT [QUICK] - exit the window manager [without confirmation]
  * EXEC <program> - execute an external program
+ * SHEXEC <command> - execute a shell command
  * WORKSPACE_MENU - places the workspace submenu
  * ARRANGE_ICONS
  * RESTART [<window manager>] - restarts the window manager
@@ -807,7 +808,18 @@ addMenuEntry(WMenu *menu, char *title, char *shortcut, char *command,
 	    wwarning(_("%s:missing parameter for menu command \"%s\""),
 		     file_name, command);
 	else {
-	    entry = wMenuAddCallback(menu, title, execCommand, wstrdup(params));
+	    entry = wMenuAddCallback(menu, title, execCommand, 
+				     wstrappend("exec ", params));
+	    entry->free_cdata = free;
+	    shortcutOk = True;
+	}
+    } else if (strcmp(command, "SHEXEC")==0) {
+	if (!params)
+	    wwarning(_("%s:missing parameter for menu command \"%s\""),
+		     file_name, command);
+	else {
+	    entry = wMenuAddCallback(menu, title, execCommand,
+				     wstrdup(params));
 	    entry->free_cdata = free;
 	    shortcutOk = True;
 	}

@@ -579,10 +579,20 @@ renderResizebarTexture(WScreen *scr, WTexture *texture, int width, int height,
     ROperateLine(img, RSubtractOperation, cwidth, 2, cwidth, height-1, &dark);
     ROperateLine(img, RAddOperation, cwidth+1, 2, cwidth+1, height-1, &light);
 
-    ROperateLine(img, RSubtractOperation, width-cwidth-2, 2, width-cwidth-2,
-		 height-1, &dark);
+    if (width > 1)
+	ROperateLine(img, RSubtractOperation, width-cwidth-2, 2, 
+		     width-cwidth-2, height-1, &dark);
     ROperateLine(img, RAddOperation, width-cwidth-1, 2, width-cwidth-1, 
 		 height-1, &light);
+
+#ifdef SHADOW_RESIZEBAR
+    ROperateLine(img, RAddOperation, 0, 1, 0, height-1, &light);
+    ROperateLine(img, RSubtractOperation, width-1, 1, width-1, height-1,
+		 &dark);
+    ROperateLine(img, RSubtractOperation, 0, height-1, width-1, height-1,
+		 &dark);
+#endif /* SHADOW_RESIZEBAR */
+
 
     if (!RConvertImage(scr->rcontext, img, pmap)) {
 	wwarning(_("error rendering image: %s"), RMessageForError(RErrorCode));

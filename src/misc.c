@@ -1436,7 +1436,7 @@ ExecuteShellCommand(WScreen *scr, char *command)
 #ifdef HAVE_SETPGID
 	setpgid(0, 0);
 #endif
-	execl(shell, shell, "-c", wstrappend("exec ", command), NULL);
+	execl(shell, shell, "-c", command, NULL);
 	wsyserror("could not execute %s -c %s", shell, command);
 	Exit(-1);
     } else if (pid < 0) {

@@ -496,7 +496,7 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
 	if (tmp && (instance || class))
 	    sprintf(tmp, "%s [%s.%s]", _("Icon Chooser"), instance, class);
 	else
-	    tmp = _("Icon Chooser");
+	    strcpy(tmp, _("Icon Chooser"));
 
 	wwin = wManageInternalWindow(scr, parent, None, tmp,
 				     (scr->scr_width - 450)/2,

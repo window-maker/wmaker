@@ -141,7 +141,6 @@ typedef struct {
     unsigned int olwm_transient:1;
     unsigned int olwm_warp_to_pin:1;
 #endif
-
 } WWindowAttributes;
 
 

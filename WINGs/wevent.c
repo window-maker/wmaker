@@ -586,7 +586,7 @@ WMHandleEvent(XEvent *event)
 
 	return False;
     }
-        
+
     view->screen->lastEventTime = getEventTime(view->screen, event);
 
     toplevel = W_TopLevelOfView(view);
@@ -636,6 +636,12 @@ WMHandleEvent(XEvent *event)
 	    return True;
 	}
     }
+
+    /* do balloon stuffs */
+    if (event->type == EnterNotify)
+	W_BalloonHandleEnterView(view);
+    else if (event->type == LeaveNotify)
+	W_BalloonHandleLeaveView(view);
 
     /* This is a hack. It will make the panel be secure while
      * the event handlers are handled, as some event handler

@@ -369,6 +369,9 @@ typedef struct WPreferences {
     char window_balloon;
     char miniwin_balloon;
     char appicon_balloon;
+    
+    char no_workspace_name_display;
+    
 #ifdef WEENDOZE_CYCLE
     char windoze_cycling;	       /* Windoze 95 style Alt+Tabbing */
     char popup_switchmenu;	       /* Popup the switchmenu when Alt+Tabbing */

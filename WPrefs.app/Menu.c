@@ -101,23 +101,25 @@ enum {
 
 enum {
     CpExec = 0,
-	CpArrange = 1,
-	CpHide = 2,
-	CpShow = 3,
-	CpExit = 4,
-	CpShutdown = 5,
-	CpRestart = 6,
-	CpRestartWM = 7,
-	CpSaveSession = 8,
-	CpClearSession = 9,
-	CpRefresh = 10,
-	CpInfo = 11,
-	CpLegal = 12
+	CpShExec = 1,
+	CpArrange = 2,
+	CpHide = 3,
+	CpShow = 4,
+	CpExit = 5,
+	CpShutdown = 6,
+	CpRestart = 7,
+	CpRestartWM = 8,
+	CpSaveSession = 9,
+	CpClearSession = 10,
+	CpRefresh = 11,
+	CpInfo = 12,
+	CpLegal = 13
 };
 
 enum {
     TNothing,
 	TExec,
+	TShExec,
 	TSimpleCommand,
 	TRestart,
 	TRestartWM,
@@ -375,7 +377,8 @@ updateForItemType(_Panel *panel, int type)
     } else {
 	WMMapWidget(panel->shoF);
     }
-    if (type==TExec || type==TRestart || type==TExternalMenu) {
+    if (type==TExec || type == TShExec || type==TRestart 
+	|| type==TExternalMenu) {
 	WMMapWidget(panel->proF);
     } else {
 	WMUnmapWidget(panel->proF);
@@ -403,7 +406,9 @@ updateForItemType(_Panel *panel, int type)
     if (type == TRestart) {
 	WMSetFrameTitle(panel->proF, _("Window Manager"));
     } else if (type == TExternalMenu) {
-	WMSetFrameTitle(panel->proF, _("Program to open files"));
+	WMSetFrameTitle(panel->proF, _("Program to Open Files"));
+    } else if (type == TShExec) {
+	WMSetFrameTitle(panel->proF, _("Command to Execute"));
     } else {
 	WMSetFrameTitle(panel->proF, _("Program to Run"));
     }
@@ -623,6 +628,10 @@ browserClick(WMWidget *w, void *data)
 	WMSetTextFieldText(panel->proT, getItemParameter(item));
 	WMSetPopUpButtonSelectedItem(panel->cmdP, CpExec);
 	updateForItemType(panel, TExec);
+    } else if (strcmp(command, "SHEXEC")==0) {
+	WMSetTextFieldText(panel->proT, getItemParameter(item));
+	WMSetPopUpButtonSelectedItem(panel->cmdP, CpShExec);
+	updateForItemType(panel, TShExec);
     } else if (strcmp(command, "WORKSPACE_MENU")==0) {
 	updateForItemType(panel, TWSMenu);
     } else if (strcmp(command, "EXIT")==0) {
@@ -733,7 +742,8 @@ changedItem(void *observerData, WMNotification *notification)
 	    litem->text = str;
 	
 	    WMRedisplayWidget(list);
-	} else if (strcmp(command, "EXEC")==0 
+	} else if (strcmp(command, "EXEC")==0
+		   || strcmp(command, "SHEXEC")==0
 		   || strcmp(command, "RESTART")==0) {
 	    if (t == panel->proT) {
 		str = WMGetTextFieldText(t);
@@ -819,6 +829,15 @@ changedCommand(WMWidget *w, void *data)
 	    changeItemParameter(panel->editedItem, tmp);
 	    free(tmp);
 	    updateForItemType(panel, TExec);
+	}
+	break;
+     case CpShExec:
+	if (strcmp(getItemCommand(panel->editedItem), "SHEXEC")!=0) {
+	    changeItemCommand(panel->editedItem, "SHEXEC");
+	    tmp = WMGetTextFieldText(panel->proT);
+	    changeItemParameter(panel->editedItem, tmp);
+	    free(tmp);
+	    updateForItemType(panel, TShExec);
 	}
 	break;
      case CpArrange:
@@ -993,7 +1012,6 @@ scrolledBrowser(void *observerData, WMNotification *notification)
 {
     _Panel *panel = (_Panel*)observerData;
     int column;
-    WMList *list;
     proplist_t item;
 
     column = WMGetBrowserFirstVisibleColumn(panel->browser);
@@ -1132,12 +1150,13 @@ createPanel(_Panel *p)
     WMResizeWidget(panel->cmdP, 170, 20);
     WMMoveWidget(panel->cmdP, 10, 20);
     WMAddPopUpButtonItem(panel->cmdP, _("Run Program"));
+    WMAddPopUpButtonItem(panel->cmdP, _("Execute Shell Command"));
     WMAddPopUpButtonItem(panel->cmdP, _("Arrange Icons"));
     WMAddPopUpButtonItem(panel->cmdP, _("Hide Others"));
     WMAddPopUpButtonItem(panel->cmdP, _("Show All Windows"));
     WMAddPopUpButtonItem(panel->cmdP, _("Exit WindowMaker"));
     WMAddPopUpButtonItem(panel->cmdP, _("Exit X Session"));
-    WMAddPopUpButtonItem(panel->cmdP, _("Start window manager"));
+    WMAddPopUpButtonItem(panel->cmdP, _("Start Window Manager"));
     WMAddPopUpButtonItem(panel->cmdP, _("Restart WindowMaker"));
     WMAddPopUpButtonItem(panel->cmdP, _("Save Session"));
     WMAddPopUpButtonItem(panel->cmdP, _("Clear Session"));

@@ -139,7 +139,7 @@ wmquery_LDADD = libWINGs.a $(LIBLIST)
 EXTRA_DIST = logo.xpm 
 
 # wbutton.c 
-libWINGs_a_SOURCES =  	WINGs.h 	WINGsP.h 	configuration.c 	llist.h 	llist.c 	international.c 	notification.c 	selection.c 	userdefaults.c 	wapplication.c 	wbrowser.c 	wbutton.c 	wcolor.c 	wcolorpanel.c 	wcolorwell.c 	wevent.c 	wfilepanel.c 	wframe.c 	wfont.c 	wfontpanel.c 	widgets.c 	wlabel.c 	wlist.c 	wmisc.c 	wpanel.c 	wpixmap.c 	wpopupbutton.c 	wscroller.c 	wscrollview.c 	wslider.c 	wsplitview.c 	wtextfield.c 	wwindow.c 	wview.c 	error.c 	findfile.c 	hashtable.c 	memory.c 	usleep.c
+libWINGs_a_SOURCES =  	WINGs.h 	WINGsP.h 	configuration.c 	llist.h 	llist.c 	international.c 	notification.c 	selection.c 	userdefaults.c 	wapplication.c 	wballoon.c 	wbrowser.c 	wbutton.c 	wcolor.c 	wcolorpanel.c 	wcolorwell.c 	wevent.c 	wfilepanel.c 	wframe.c 	wfont.c 	wfontpanel.c 	widgets.c 	wlabel.c 	wlist.c 	wmisc.c 	wpanel.c 	wpixmap.c 	wpopupbutton.c 	wscroller.c 	wscrollview.c 	wslider.c 	wsplitview.c 	wtextfield.c 	wwindow.c 	wview.c 	error.c 	findfile.c 	hashtable.c 	memory.c 	usleep.c
 
 
 INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/src 	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @HEADER_SEARCH_PATH@ -DDEBUG
@@ -159,12 +159,12 @@ X_LIBS = @X_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 libWINGs_a_LIBADD = 
 libWINGs_a_OBJECTS =  configuration.o llist.o international.o \
-notification.o selection.o userdefaults.o wapplication.o wbrowser.o \
-wbutton.o wcolor.o wcolorpanel.o wcolorwell.o wevent.o wfilepanel.o \
-wframe.o wfont.o wfontpanel.o widgets.o wlabel.o wlist.o wmisc.o \
-wpanel.o wpixmap.o wpopupbutton.o wscroller.o wscrollview.o wslider.o \
-wsplitview.o wtextfield.o wwindow.o wview.o error.o findfile.o \
-hashtable.o memory.o usleep.o
+notification.o selection.o userdefaults.o wapplication.o wballoon.o \
+wbrowser.o wbutton.o wcolor.o wcolorpanel.o wcolorwell.o wevent.o \
+wfilepanel.o wframe.o wfont.o wfontpanel.o widgets.o wlabel.o wlist.o \
+wmisc.o wpanel.o wpixmap.o wpopupbutton.o wscroller.o wscrollview.o \
+wslider.o wsplitview.o wtextfield.o wwindow.o wview.o error.o \
+findfile.o hashtable.o memory.o usleep.o
 AR = ar
 PROGRAMS =  $(noinst_PROGRAMS)
 
