@@ -24,6 +24,7 @@
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "wconfig.h"
 

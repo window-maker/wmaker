@@ -467,7 +467,7 @@ strToInt(str *token)
     int res=0, pos, c;
 
     if (token->len==0 || token->str[0]=='*') {
-	return -1;
+        return -1;
     } else {
         for (res=0, pos=0; pos<token->len; pos++) {
             c = token->str[pos] - '0';
@@ -589,7 +589,7 @@ findCopyFile(char *dir, char *file)
     if (!fullPath) {
         char buffer[4000];
 
-        sprintf(buffer, "coould not find file %s", file);
+        sprintf(buffer, "could not find file %s", file);
         abortar(buffer);
     }
     copyFile(dir, fullPath);
@@ -776,7 +776,7 @@ main(int argc, char **argv)
 
                 oldfont = WMGetFromPLString(val);
                 newfont = convertFont(oldfont);
-                /* font is a reference to old if conversion is not needed */
+                /* newfont is a reference to old if conversion is not needed */
                 if (newfont != oldfont) {
                     WMReleasePropList(val);
                     val = WMCreatePLString(newfont);

@@ -14,10 +14,6 @@ _WINGsConfiguration WINGsConfiguration;
 
 #define BOLD_SYSTEM_FONT "-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-bold-r-*-*-%d-*-*-*-*-*-*-*"
 
-#define XFTSYSTEM_FONT "-*-arial-medium-r-normal-*-%d-*-*-*-*-*-*-*"
-
-#define XFTBOLD_SYSTEM_FONT "-*-arial-bold-r-normal-*-%d-*-*-*-*-*-*-*"
-
 #define FLOPPY_PATH "/floppy"
 
 
@@ -45,6 +41,7 @@ getButtonWithName(const char *name, unsigned defaultButton)
 }
 
 
+// fix this
 static Bool
 missingOrInvalidXLFD(char *xlfd)
 {

@@ -79,7 +79,7 @@ createDropDataArray(WMArray *requiredTypes)
 static WMArray*
 getTypesFromTypeList(WMScreen *scr, Window sourceWin)
 {
-    WMDraggingInfo *info = &scr->dragInfo;
+    /* // WMDraggingInfo *info = &scr->dragInfo;*/
     Atom dataType;
     Atom* typeAtomList;
     WMArray* typeList;
@@ -365,7 +365,6 @@ W_DragDestinationStoreEnterMsgInfo(WMDraggingInfo *info,
                                    WMView *toplevel, XClientMessageEvent *event)
 {
     WMScreen *scr = W_VIEW_SCREEN(toplevel);
-    int i,j, typesCount;
 
     if (XDND_DEST_INFO(info) == NULL)
         initDestinationDragInfo(info);
@@ -609,7 +608,7 @@ static void
 sendAllowedAction(WMView *destView, Atom action)
 {
     WMScreen *scr = W_VIEW_SCREEN(destView);
-    WMPoint destPos = WMGetViewScreenPosition(destView);
+    /* // WMPoint destPos = WMGetViewScreenPosition(destView); */
     WMSize destSize = WMGetViewSize(destView);
     int destX, destY;
     Window foo;

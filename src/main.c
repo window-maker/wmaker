@@ -717,22 +717,25 @@ main(int argc, char **argv)
     }
 
 
-    if (!Locale) {
-	Locale = getenv("LC_ALL");
-    }
-    if (!Locale) {
-    	Locale = getenv("LANG");
+    if (Locale) {
+        /* return of wstrconcat should not be free-ed! read putenv man page */
+        putenv(wstrconcat("LANG=", Locale));
+    } else {
+        Locale = getenv("LC_ALL");
+        if (!Locale) {
+            Locale = getenv("LANG");
+        }
     }
 
     setlocale(LC_ALL, "");
 
     if (!Locale || strcmp(Locale, "C")==0 || strcmp(Locale, "POSIX")==0) 
-      Locale = NULL;
+        Locale = NULL;
 #ifdef I18N
     if (getenv("NLSPATH"))
-      bindtextdomain("WindowMaker", getenv("NLSPATH"));
+        bindtextdomain("WindowMaker", getenv("NLSPATH"));
     else
-      bindtextdomain("WindowMaker", LOCALEDIR);
+        bindtextdomain("WindowMaker", LOCALEDIR);
     textdomain("WindowMaker");
 
     if (!XSupportsLocale()) {

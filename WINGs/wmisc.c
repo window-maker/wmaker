@@ -120,6 +120,7 @@ fitText(char *text, WMFont *font, int width, int wrap)
 		i = j;
 	}
     } else {
+        //i = strcspn(text, "\n\r");
 	while (text[i]!='\n' && text[i]!=0)
 	    i++;
     }

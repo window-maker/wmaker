@@ -123,6 +123,9 @@ Changes since version 0.80.2:
   appicon when a KDE3 application opens a config panel.
 - Updated slovak translation (Jan Tomka <judas@linux.sk>)
 - Added xdnd v3 support in WINGs (Sylvain Reynal <sreynal@nerim.net>)
+- Check whether libXft is at least version 2.1.2 else refuse to compile.
+- Fixed bug in icon chooser dialog that could cause a segmentation fault
+  in some cases (Pascal Hofstee <caelian@gmail.com>)
 
 
 Changes since version 0.80.1:

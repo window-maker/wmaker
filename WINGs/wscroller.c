@@ -306,10 +306,9 @@ paintArrow(WMScroller *sPtr, Drawable d, int part)
 	    gc = scr->whiteGC;
 #endif
     }
-    
-	
+
+
     if (sPtr->flags.horizontal) {
-	    
 	/* paint button */
 #ifndef DOUBLE_BUFFER
 	XFillRectangle(scr->display, d, gc,
@@ -326,7 +325,7 @@ paintArrow(WMScroller *sPtr, Drawable d, int part)
 	XSetClipOrigin(scr->display, scr->clipGC,
 		       ofs + (BUTTON_SIZE - arrow->width) / 2, 
 		       2 + (BUTTON_SIZE - arrow->height) / 2);
-	
+
 	XCopyArea(scr->display, arrow->pixmap, d, scr->clipGC,
 		  0, 0, arrow->width, arrow->height,
 		  ofs + (BUTTON_SIZE - arrow->width) / 2, 

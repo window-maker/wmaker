@@ -86,7 +86,7 @@ void wXDNDMakeAwareness(Window window) {
 }
 
 void wXDNDClearAwareness(Window window) {
-    long int xdnd_version = 3;
+    //long int xdnd_version = 3;
     XDeleteProperty (dpy, window, _XA_XdndAware);
 }
 

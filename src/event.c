@@ -478,7 +478,7 @@ handleMapRequest(XEvent *ev)
     Window window = ev->xmaprequest.window;
 
 #ifdef DEBUG
-    L("got map request for %x\n", (unsigned)window);
+    printf("got map request for %x\n", (unsigned)window);
 #endif
     if ((wwin = wWindowFor(window))) {
 	if (wwin->flags.shaded) {
@@ -553,7 +553,7 @@ handleDestroyNotify(XEvent *event)
     int index;
 
 #ifdef DEBUG
-    L("got destroy notify");
+    printf("got destroy notify\n");
 #endif
     wwin = wWindowFor(window);
     if (wwin) {
@@ -607,7 +607,7 @@ handleExpose(XEvent *event)
     XEvent ev;
 
 #ifdef DEBUG
-    L("got expose");
+    printf("got expose\n");
 #endif
     while (XCheckTypedWindowEvent(dpy, event->xexpose.window, Expose, &ev));
 
@@ -662,7 +662,7 @@ handleButtonPress(XEvent *event)
     WScreen *scr;
     
 #ifdef DEBUG
-    L("got button press");
+    printf("got button press\n");
 #endif
     scr = wScreenForRootWindow(event->xbutton.root);
     
@@ -749,7 +749,7 @@ handleMapNotify(XEvent *event)
 {
     WWindow *wwin;
 #ifdef DEBUG
-    L("got map");
+    printf("got map\n");
 #endif
     wwin = wWindowFor(event->xmap.event);
     if (wwin && wwin->client_win == event->xmap.event) {
@@ -772,7 +772,7 @@ handleUnmapNotify(XEvent *event)
     XEvent ev;
     Bool withdraw = False;
 #ifdef DEBUG
-    L("got unmap");
+    printf("got unmap\n");
 #endif
     /* only process windows with StructureNotify selected 
      * (ignore SubstructureNotify) */
@@ -824,7 +824,7 @@ handleConfigureRequest(XEvent *event)
 {
     WWindow *wwin;
 #ifdef DEBUG
-    L("got configure request");
+    printf("got configure request\n");
 #endif
     if (!(wwin=wWindowFor(event->xconfigurerequest.window))) {
 	/*
@@ -847,7 +847,7 @@ handlePropertyNotify(XEvent *event)
     unsigned int ju;
     WScreen *scr;
 #ifdef DEBUG
-    L("got property notify");
+    printf("got property notify\n");
 #endif
     if ((wwin=wWindowFor(event->xproperty.window))) {
 	if (!XGetGeometry(dpy, wwin->client_win, &jr, &ji, &ji,
@@ -876,7 +876,7 @@ handleClientMessage(XEvent *event)
     WWindow *wwin;
     WObjDescriptor *desc;
 #ifdef DEBUG
-    L("got client message");
+    printf("got client message\n");
 #endif
     /* handle transition from Normal to Iconic state */
     if (event->xclient.message_type == _XA_WM_CHANGE_STATE
@@ -1038,7 +1038,7 @@ handleEnterNotify(XEvent *event)
     XEvent ev;
     WScreen *scr = wScreenForRootWindow(event->xcrossing.root);
 #ifdef DEBUG
-    L("got enter notify");
+    printf("got enter notify\n");
 #endif
 
 #ifdef VIRTUAL_DESKTOP
@@ -1178,7 +1178,7 @@ handleShapeNotify(XEvent *event)
     WWindow *wwin;
     XEvent ev;
 #ifdef DEBUG
-    L("got shape notify");
+    printf("got shape notify\n");
 #endif
     while (XCheckTypedWindowEvent(dpy, shev->window, event->type, &ev)) {
 	XShapeEvent *sev = (XShapeEvent*)&ev;
@@ -1739,7 +1739,7 @@ handleMotionNotify(XEvent *event)
 	    p.y >= (rect.pos.y + rect.size.height - 2)) {
     	    WMenu *menu;
 #ifdef DEBUG
-            L("pointer at screen edge");
+            printf("pointer at screen edge\n");
 #endif
             menu = wMenuUnderPointer(scr);
             if (menu!=NULL)

@@ -22,7 +22,8 @@ typedef struct W_ICContext {
 
 
 
-Bool W_InitIMStuff(WMScreen *scr)
+Bool
+W_InitIMStuff(WMScreen *scr)
 {
     WMIMContext *ctx;
     
@@ -38,7 +39,8 @@ Bool W_InitIMStuff(WMScreen *scr)
 }
 
 
-void W_CloseIMStuff(WMScreen *scr)
+void
+W_CloseIMStuff(WMScreen *scr)
 {
     if (!scr->imctx) 
 	return;
@@ -51,7 +53,8 @@ void W_CloseIMStuff(WMScreen *scr)
 
 
 
-WMICContext *W_CreateIC(WMView *view)
+WMICContext*
+W_CreateIC(WMView *view)
 {
     WMScreen *scr = W_VIEW_SCREEN(view);
     WMICContext *ctx;
@@ -60,11 +63,12 @@ WMICContext *W_CreateIC(WMView *view)
     ctx->next = scr->imctx->icList;
     if (scr->imctx->icList)
 	scr->imctx->icList->prev = ctx;
-    scr->imctx = ctx;
+    //scr->imctx = ctx;
 }
 
 
-void W_DestroyIC(WMICContext *ctx)
+void
+W_DestroyIC(WMICContext *ctx)
 {
     XDestroyIC(ctx->xic);
     
@@ -72,8 +76,9 @@ void W_DestroyIC(WMICContext *ctx)
 }
 
 
-int W_LookupString(WMView *view, XKeyEvent *event,
-		   char buffer, int bufsize, KeySym ksym)
+int
+W_LookupString(WMView *view, XKeyEvent *event,
+               char buffer, int bufsize, KeySym ksym)
 {
     
 }

@@ -636,6 +636,7 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
     IconPanel *panel;
     WMColor *color;
     WMFont *boldFont;
+    Bool result;
 
     panel = wmalloc(sizeof(IconPanel));
     memset(panel, 0, sizeof(IconPanel));
@@ -784,7 +785,7 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
 	/* check if the file the user selected is not the one that
 	 * would be loaded by default with the current search path */
 	*file = WMGetListSelectedItem(panel->iconList)->text;
-	if ((*file)[0]==0) {
+	if (**file==0) {
 	    wfree(*file);
 	    *file = NULL;
 	} else {
@@ -803,6 +804,8 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
 	*file = NULL;
     }
 
+    result = panel->result;
+
     WMReleaseFont(panel->normalfont);
 
     WMUnmapWidget(panel->win);
@@ -815,7 +818,7 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
 
     XDestroyWindow(dpy, parent);
 
-    return panel->result;
+    return result;
 }
 
 
@@ -861,6 +864,10 @@ typedef struct {
 #define COPYRIGHT_TEXT  \
      "Copyright \xa9 1997-2003 Alfredo K. Kojima <kojima@windowmaker.org>\n"\
      "Copyright \xa9 1998-2003 Dan Pascu <dan@windowmaker.org>"
+
+#define COPYRIGHT_TEXT_UTF8  \
+     "Copyright \xc2\xa9 1997-2003 Alfredo K. Kojima <kojima@windowmaker.org>\n"\
+     "Copyright \xc2\xa9 1998-2003 Dan Pascu <dan@windowmaker.org>"
 
 
 
@@ -1310,7 +1317,7 @@ wShowInfoPanel(WScreen *scr)
     WMResizeWidget(panel->copyrL, 360, 40);
     WMMoveWidget(panel->copyrL, 15, 185);
     WMSetLabelTextAlignment(panel->copyrL, WALeft);
-    WMSetLabelText(panel->copyrL, COPYRIGHT_TEXT);
+    WMSetLabelText(panel->copyrL, COPYRIGHT_TEXT_UTF8);
     /* we want the (c) character in the font, so don't use a FontSet here */
     // fix this -Dan font = WMCreateFontWithFlags(scr->wmscreen, "SystemFont-11", WFNormalFont);
     font = WMSystemFontOfSize(scr->wmscreen, 11);

@@ -66,8 +66,8 @@ static WMEventHook *extraEventHandler=NULL;
  *
  */
 void
-    WMCreateEventHandler(WMView *view, unsigned long mask, WMEventProc *eventProc,
-                         void *clientData)
+WMCreateEventHandler(WMView *view, unsigned long mask, WMEventProc *eventProc,
+                     void *clientData)
 {
     W_EventHandler *hPtr;
     WMArrayIterator iter;

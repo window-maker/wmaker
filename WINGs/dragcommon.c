@@ -193,14 +193,15 @@ W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event)
     WMDraggingInfo *info = &scr->dragInfo;
     Atom messageType = event->message_type;
 
-    char* msgTypeName = XGetAtomName(scr->display, messageType);
-
 #ifdef XDND_DEBUG
+    {
+        char* msgTypeName = XGetAtomName(scr->display, messageType);
 
-    if (msgTypeName != NULL)
-        printf("event type = %s\n", msgTypeName);
-    else
-        printf("pb with event type !\n");
+        if (msgTypeName != NULL)
+            printf("event type = %s\n", msgTypeName);
+        else
+            printf("pb with event type !\n");
+    }
 #endif
 
 
