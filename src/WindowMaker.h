@@ -65,7 +65,6 @@ enum {
 	WMMainMenuLevel = 6,
 	WMOuterSpaceLevel = 7
 };
-#define MAX_WINDOW_LEVELS 8
 
 /*
  * WObjDescriptor will be used by the event dispatcher to

@@ -139,7 +139,7 @@ PlaceIcon(WScreen *scr, int *x_ret, int *y_ret)
     int x, y;
     int isize = wPreferences.icon_size;
     int done = 0;
-    int level;
+    WMBagIterator iter;
 
     /*
      * Find out screen boundaries.
@@ -196,9 +196,10 @@ PlaceIcon(WScreen *scr, int *x_ret, int *y_ret)
 
 #define INDEX(x,y)	(((y)+1)*(sw+2) + (x) + 1)
 
-    for (level = MAX_WINDOW_LEVELS-1; level >= WMDesktopLevel; level--) {
-	obj = scr->stacking_list[level];
-	
+    for (obj = WMBagLast(scr->stacking_list, &iter);
+	 obj != NULL;
+	 obj = WMBagNext(scr->stacking_list, &iter)) {
+
 	while (obj) {
 	    int x, y;
 

@@ -2053,7 +2053,9 @@ wUnselectWindows(WScreen *scr)
 	return;
     
     while (WMGetBagItemCount(scr->selected_windows)) {
-	wwin = WMGetFromBag(scr->selected_windows, 0);
+	WMBagIterator dummy;
+	
+	wwin = WMBagFirst(scr->selected_windows, &dummy);
         if (wwin->flags.miniaturized && wwin->icon && wwin->icon->selected)
             wIconSelect(wwin->icon);
 

@@ -45,6 +45,9 @@ extern XContext wStackContext;
 extern WPreferences wPreferences;
 
 
+
+
+
 /*
  *---------------------------------------------------------------------- 
  * RemakeStackList--
@@ -65,19 +68,16 @@ RemakeStackList(WScreen *scr)
     unsigned int nwindows;
     Window junkr, junkp;
     WCoreWindow *frame;
-    WCoreWindow *onbotw[MAX_WINDOW_LEVELS];
+    WCoreWindow *tmp;
     int level;
     int i, c;
-
+    
     if (!XQueryTree(dpy, scr->root_win, &junkr, &junkp, &windows, &nwindows)) {
 	wwarning(_("could not get window list!!"));
 	return;
     } else {
-	for (i=0; i<MAX_WINDOW_LEVELS; i++) {
-	    scr->stacking_list[i] = NULL;
-	    onbotw[i] = NULL;
-/*	    scr->window_level_count[i] = 0;*/
-	}
+	WMEmptyBag(scr->stacking_list);
+
 	/* verify list integrity */
 	c=0;
 	for (i=0; i<nwindows; i++) {
@@ -88,12 +88,12 @@ RemakeStackList(WScreen *scr)
 	    if (!frame) continue;
 	    c++;
 	    level = frame->stacking->window_level;
-	    if (onbotw[level])
-	      onbotw[level]->stacking->above = frame;
-	    frame->stacking->under = onbotw[level];
+	    tmp = WMGetFromBag(scr->stacking_list, level);
+	    if (tmp)
+		tmp->stacking->above = frame;
+	    frame->stacking->under = tmp;
 	    frame->stacking->above = NULL;
-	    onbotw[level] = frame;
-/*	    scr->window_level_count[level]++;*/
+	    WMSetInBag(scr->stacking_list, level, frame);
         }
         XFree(windows);
 #ifdef DEBUG
@@ -102,12 +102,6 @@ RemakeStackList(WScreen *scr)
 	}
 #endif
 	scr->window_count = c;
-    }
-    /* now, just concatenate the lists */
-    for (i=0; i<MAX_WINDOW_LEVELS; i++) {
-	scr->stacking_list[i] = onbotw[i];
-	if (onbotw[i])
-	  onbotw[i]->stacking->above = NULL;
     }
     
     CommitStacking(scr);
@@ -128,15 +122,16 @@ void
 CommitStacking(WScreen *scr)
 {
     WCoreWindow *tmp;
-    int nwindows;
+    int nwindows, i;
     Window *windows;
-    int i, level;
+    WMBagIterator iter;
     
     nwindows = scr->window_count;
     windows = wmalloc(sizeof(Window)*nwindows);
-    i=0;
-    for (level=MAX_WINDOW_LEVELS-1; level>=0; level--) {
-	tmp = scr->stacking_list[level];
+
+    for (tmp = WMBagLast(scr->stacking_list, &iter), i = 0;
+	 iter != NULL;
+	 WMBagNext(scr->stacking_list, &iter)) {
 	while (tmp) {
 #ifdef DEBUG
 	    if (i>=nwindows) {
@@ -203,7 +198,7 @@ wRaiseFrame(WCoreWindow *frame)
 {
     WCoreWindow *wlist = frame, *wlist_above;
     int level = frame->stacking->window_level;
-    int i;
+    WScreen *scr = frame->screen_ptr;
 
     /* already on top */
     if (frame->stacking->above == NULL) {
@@ -211,7 +206,7 @@ wRaiseFrame(WCoreWindow *frame)
     }
 
     /* insert on top of other windows */
-#if 1
+
     while (wlist) {
 	if (wlist == (wlist_above = wlist->stacking->above)) {
 	    wwarning("You just found a bug in wmaker. Please try to figure what type of raising/lowering operations you did with which applications and report. Please give complete information about how to reproduce it.");
@@ -220,32 +215,30 @@ wRaiseFrame(WCoreWindow *frame)
 	    wlist=wlist_above;
 	}
     }
-#else
-    while (wlist)
-	wlist = wlist->stacking->above;
-#endif
+
     /* window is inserted before the point found */
     if (wlist==NULL) {
 	/* top most window (last on the list) */
 	if (frame->stacking->under)
-	  frame->stacking->under->stacking->above = frame->stacking->above;
+	    frame->stacking->under->stacking->above = frame->stacking->above;
 	if (frame->stacking->above)
-	  frame->stacking->above->stacking->under = frame->stacking->under;
+	    frame->stacking->above->stacking->under = frame->stacking->under;
 	
 	frame->stacking->above = NULL;
-	frame->stacking->under = frame->screen_ptr->stacking_list[level];
-	frame->screen_ptr->stacking_list[level]->stacking->above=frame;
-	frame->screen_ptr->stacking_list[level] = frame;
+	frame->stacking->under = WMGetFromBag(scr->stacking_list, level);
+	frame->stacking->under->stacking->above = frame;
+	WMSetInBag(scr->stacking_list, level, frame);
+
     } else if (frame!=wlist) {
 	if (frame->stacking->under)
-	  frame->stacking->under->stacking->above = frame->stacking->above;
+	    frame->stacking->under->stacking->above = frame->stacking->above;
 	if (frame->stacking->above)
-	  frame->stacking->above->stacking->under = frame->stacking->under;
+	    frame->stacking->above->stacking->under = frame->stacking->under;
 	
 	frame->stacking->above = wlist;
 	frame->stacking->under = wlist->stacking->under;
 	if (wlist->stacking->under)
-	  wlist->stacking->under->stacking->above = frame;
+	    wlist->stacking->under->stacking->above = frame;
 	wlist->stacking->under = frame;
     }
 #ifdef removed
@@ -254,7 +247,7 @@ wRaiseFrame(WCoreWindow *frame)
     {
 	/* raise transients under us from bottom to top 
 	 * so that the order is kept */
-	again:
+  again:
 	wlist = frame->stacking->under;
 	while (wlist && wlist->stacking->under)
 	  wlist = wlist->stacking->under;
@@ -281,17 +274,18 @@ wRaiseFrame(WCoreWindow *frame)
     /* try to optimize things a little */
     if (frame->stacking->above == NULL) {
 	WCoreWindow *above=NULL;
+	WMBagIterator iter;
 
-	for (i=level+1; i<MAX_WINDOW_LEVELS; i++) {
-	    if (frame->screen_ptr->stacking_list[i]!=NULL) {
-		/* can't optimize */
-		above = frame->screen_ptr->stacking_list[i];
-		while (above->stacking->under)
-		    above = above->stacking->under;
-		break;
-	    }
+	for (above = WMBagIteratorAtIndex(scr->stacking_list, level+1, &iter);
+	     above != NULL;
+	     above = WMBagNext(scr->stacking_list, &iter)) {
+	    
+	    /* can't optimize */
+	    while (above->stacking->under)
+		above = above->stacking->under;
+	    break;
 	}
-	if (!above) {
+	if (above == NULL) {
 	    XRaiseWindow(dpy, frame->window);
 	} else {
 	    moveFrameToUnder(above, frame);
@@ -303,12 +297,12 @@ wRaiseFrame(WCoreWindow *frame)
     {
 	WWindow *wwin = wWindowFor(frame->window);
 
-	if (wwin)
+	if (wwin != NULL)
 	    wKWMSendEventMessage(wwin, WKWMRaiseWindow);
     }
 #endif
 #ifdef VIRTUAL_DESKTOP
-    wWorkspaceRaiseEdge(frame->screen_ptr);
+    wWorkspaceRaiseEdge(scr);
 #endif
 }
 
@@ -328,7 +322,7 @@ wRaiseLowerFrame(WCoreWindow *frame)
 	while (scan) {
 
 	    if (scan->descriptor.parent_type == WCLASS_WINDOW) {
-		WWindow *scan_wwin = (WWindow*) scan->descriptor.parent;
+		WWindow *scan_wwin = (WWindow*)scan->descriptor.parent;
 		
 		if (wWindowObscuresWindow(scan_wwin, frame_wwin)
 		    && scan_wwin->flags.mapped) {
@@ -350,13 +344,12 @@ wRaiseLowerFrame(WCoreWindow *frame)
 void 
 wLowerFrame(WCoreWindow *frame)
 {
-    WScreen *scr=frame->screen_ptr;
+    WScreen *scr = frame->screen_ptr;
     WCoreWindow *prev, *wlist=frame;
     int level = frame->stacking->window_level;
-    int i;
 
     /* already in bottom */
-    if (wlist->stacking->under==NULL) {
+    if (wlist->stacking->under == NULL) {
 	return;
     }
 #ifdef removed
@@ -371,17 +364,17 @@ wLowerFrame(WCoreWindow *frame)
 #endif
     prev = wlist;
     /* remove from the list */
-    if (scr->stacking_list[level] == frame) {
+    if (WMGetFromBag(scr->stacking_list, level) == frame) {
 	/* it was the top window */
-	scr->stacking_list[level] = frame->stacking->under;
-	scr->stacking_list[level]->stacking->above = NULL;
+	WMSetInBag(scr->stacking_list, level, frame->stacking->under);
+	frame->stacking->under->stacking->above = NULL;
     } else {
 	if (frame->stacking->under)
-	  frame->stacking->under->stacking->above = frame->stacking->above;
+	    frame->stacking->under->stacking->above = frame->stacking->above;
 	if (frame->stacking->above)
-	  frame->stacking->above->stacking->under = frame->stacking->under;
+	    frame->stacking->above->stacking->under = frame->stacking->under;
     }
-    wlist = scr->stacking_list[level];
+    wlist = WMGetFromBag(scr->stacking_list, level);
     /* look for place to put this window */
 #ifdef removed
     if (wPreferences.on_top_transients)
@@ -410,20 +403,22 @@ wLowerFrame(WCoreWindow *frame)
     frame->stacking->above = wlist;
     frame->stacking->under = wlist->stacking->under;
     if (wlist->stacking->under)
-      wlist->stacking->under->stacking->above = frame;
+	wlist->stacking->under->stacking->above = frame;
     wlist->stacking->under = frame;
 
     /* try to optimize things a little */
     if (frame->stacking->above == NULL) {
 	WCoreWindow *above = NULL;
-	for (i=level-1; i>=0; i--) {
-	    if (scr->stacking_list[i]!=NULL) {
-		/* can't optimize */
-		above = scr->stacking_list[i];
-		while (above->stacking->under)
-		  above = above->stacking->under;
-		break;
-	    }
+	WMBagIterator iter;
+	
+	for (above = WMBagIteratorAtIndex(scr->stacking_list, level-1, &iter);
+	     above != NULL;
+	     above = WMBagPrevious(scr->stacking_list, &iter)) {
+	
+	    /* can't optimize */
+	    while (above->stacking->under)
+		above = above->stacking->under;
+	    break;
 	}
 	if (!above) {
 	    XLowerWindow(dpy, frame->window);
@@ -462,16 +457,16 @@ AddToStackList(WCoreWindow *frame)
 {
     WCoreWindow *prev, *tmpw, *wlist;
     int index = frame->stacking->window_level;
+    WScreen *scr = frame->screen_ptr;
 
     frame->screen_ptr->window_count++;
-/*    frame->screen_ptr->window_level_count[index]++;*/
     XSaveContext(dpy, frame->window, wStackContext, (XPointer)frame);
-    tmpw = frame->screen_ptr->stacking_list[index];
+    tmpw = WMGetFromBag(scr->stacking_list, index);
     if (!tmpw) {
-	frame->screen_ptr->stacking_list[index] = frame;
+	WMSetInBag(scr->stacking_list, index, frame);
 	frame->stacking->above = NULL;
 	frame->stacking->under = NULL;
-	CommitStacking(frame->screen_ptr);	
+	CommitStacking(scr);
 	return;
     }
     prev = tmpw;
@@ -482,7 +477,7 @@ AddToStackList(WCoreWindow *frame)
     {
 	WCoreWindow *trans = NULL;
 	  
-	wlist = frame->screen_ptr->stacking_list[index];
+	wlist = WMGetFromBag(scr->stacking_list, index);
 	while (wlist) {
 	    if (wlist->stacking->child_of == frame)
 	      trans = wlist;
@@ -499,7 +494,7 @@ AddToStackList(WCoreWindow *frame)
 	} else {
 	    frame->stacking->under = tmpw;
 	    tmpw->stacking->above = frame;
-	    frame->screen_ptr->stacking_list[index] = frame;	    
+	    WMSetInBag(scr->stacking_list, index, frame);	    
 	}
     }
 #ifdef removed
@@ -508,10 +503,10 @@ AddToStackList(WCoreWindow *frame)
 	frame->stacking->above = NULL;
 	frame->stacking->under = tmpw;
 	tmpw->stacking->above = frame;
-	frame->screen_ptr->stacking_list[index] = frame;
+	WMSetInBag(scr->stacking_list, index, frame);
     }
 #endif
-    CommitStacking(frame->screen_ptr);
+    CommitStacking(scr);
 }
 
 
@@ -532,6 +527,7 @@ void
 MoveInStackListAbove(WCoreWindow *next, WCoreWindow *frame)
 {
     WCoreWindow *tmpw;
+    WScreen *scr = frame->screen_ptr;
     int index;
 
     if (!next || frame->stacking->under == next)
@@ -542,9 +538,9 @@ MoveInStackListAbove(WCoreWindow *next, WCoreWindow *frame)
 
     index = frame->stacking->window_level;
 
-    tmpw = frame->screen_ptr->stacking_list[index];
+    tmpw = WMGetFromBag(scr->stacking_list, index);
     if (tmpw == frame)
-        frame->screen_ptr->stacking_list[index] = frame->stacking->under;
+	WMSetInBag(scr->stacking_list, index, frame->stacking->under);
     if (frame->stacking->under)
         frame->stacking->under->stacking->above = frame->stacking->above;
     if (frame->stacking->above)
@@ -555,23 +551,23 @@ MoveInStackListAbove(WCoreWindow *next, WCoreWindow *frame)
     frame->stacking->above = next->stacking->above;
     next->stacking->above = frame;
     if (tmpw == next)
-        frame->screen_ptr->stacking_list[index] = frame;
+	WMSetInBag(scr->stacking_list, index, frame);
 
     /* try to optimize things a little */
     if (frame->stacking->above == NULL) {
-        WCoreWindow *above=NULL;
-        int i;
+        WCoreWindow *above = NULL;
+	WMBagIterator iter;
 
-        for (i=index+1; i<MAX_WINDOW_LEVELS; i++) {
-            if (frame->screen_ptr->stacking_list[i]!=NULL) {
-                /* can't optimize */
-                above = frame->screen_ptr->stacking_list[i];
-                while (above->stacking->under)
-                    above = above->stacking->under;
-                break;
-            }
+	for (above = WMBagIteratorAtIndex(scr->stacking_list, index+1, &iter);
+	     above != NULL;
+	     above = WMBagNext(scr->stacking_list, &iter)) {
+
+	    /* can't optimize */
+	    while (above->stacking->under)
+		above = above->stacking->under;
+	    break;
         }
-        if (!above) {
+        if (above == NULL) {
             XRaiseWindow(dpy, frame->window);
         } else {
             moveFrameToUnder(above, frame);
@@ -600,6 +596,7 @@ MoveInStackListUnder(WCoreWindow *prev, WCoreWindow *frame)
 {
     WCoreWindow *tmpw;
     int index;
+    WScreen *scr = frame->screen_ptr;
 
     if (!prev || frame->stacking->above == prev)
         return;
@@ -609,9 +606,9 @@ MoveInStackListUnder(WCoreWindow *prev, WCoreWindow *frame)
 
     index = frame->stacking->window_level;
 
-    tmpw = frame->screen_ptr->stacking_list[index];
+    tmpw = WMGetFromBag(scr->stacking_list, index);
     if (tmpw == frame)
-        frame->screen_ptr->stacking_list[index] = frame->stacking->under;
+        WMSetInBag(scr->stacking_list, index, frame->stacking->under);
     if (frame->stacking->under)
         frame->stacking->under->stacking->above = frame->stacking->above;
     if (frame->stacking->above)
@@ -638,14 +635,14 @@ RemoveFromStackList(WCoreWindow *frame)
     }
     /* remove from the window stack list */
     if (frame->stacking->under)
-      frame->stacking->under->stacking->above = frame->stacking->above;
+	frame->stacking->under->stacking->above = frame->stacking->above;
     if (frame->stacking->above)
-      frame->stacking->above->stacking->under = frame->stacking->under;
+	frame->stacking->above->stacking->under = frame->stacking->under;
     else /* this was the first window on the list */
-      frame->screen_ptr->stacking_list[index] = frame->stacking->under;
+	WMSetInBag(frame->screen_ptr->stacking_list, index, 
+		   frame->stacking->under);
 
     frame->screen_ptr->window_count--;
-/*    frame->screen_ptr->window_level_count[index]--;*/
 }
 
 

@@ -28,7 +28,6 @@ Need to do:
 - remake internal string processing to use wchar? unicode?
 - add new file for stuff like default commands and dnd commands for
 docked apps, balloons for the dock etc
-- alpha-channel app specified icons 
 
 Maybe some day:
 ===============

@@ -59,6 +59,11 @@ extern Panel *InitAppearance(WMScreen *scr, WMWindow *win);
 
 
 
+
+#define ICON_TITLE_FONT "-adobe-helvetica-bold-r-*-*-10-*"
+#define ICON_TITLE_VFONT "-adobe-helvetica-bold-r-*-*-10-[]-*"
+
+
 #define MAX_SECTIONS 16
 
 
@@ -441,10 +446,90 @@ LocateImage(char *name)
 }
 
 
+
+static WMPixmap*
+makeTitledIcon(WMScreen *scr, WMPixmap *icon, char *title1, char *title2)
+{
+    return WMRetainPixmap(icon);
+    
+#if 0
+    static GC gc = NULL;
+    static XFontStruct *hfont = NULL;
+    static XFontStruct *vfont = NULL;
+    WMPixmap *tmp;
+    Pixmap pix, mask;
+    Display *dpy = WMScreenDisplay(scr);
+    WMColor *black = WMBlackColor(scr);
+    GC fgc;
+    WMSize size = WMGetPixmapSize(icon);
+
+    
+    tmp = WMCreatePixmap(scr, 60, 60, WMScreenDepth(scr), True);
+
+    pix = WMGetPixmapXID(tmp);
+    mask = WMGetPixmapMaskXID(tmp);
+
+    if (gc == NULL) {
+	gc = XCreateGC(dpy, mask, 0, NULL);
+
+	hfont = XLoadQueryFont(dpy, ICON_TITLE_FONT);
+	vfont = XLoadQueryFont(dpy, ICON_TITLE_VFONT);
+    }
+    
+    if (hfont == NULL) {
+	return WMRetainPixmap(icon);
+    }
+    
+    XSetForeground(dpy, gc, 0);
+    XFillRectangle(dpy, mask, gc, 0, 0, 60, 60);
+    
+    fgc = WMColorGC(black);
+    
+    XSetForeground(dpy, gc, 1);
+    
+    XCopyArea(dpy, WMGetPixmapXID(icon), pix, fgc, 0, 0,
+	      size.width, size.height, 12, 12);
+    
+    if (WMGetPixmapMaskXID(icon) != None)
+	XCopyPlane(dpy, WMGetPixmapMaskXID(icon), mask, gc, 0, 0,
+		   size.width, size.height, 12, 12, 1);
+    else
+	XFillRectangle(dpy, mask, gc, 12, 12, 48, 48);
+
+
+    if (title1) {
+	XSetFont(dpy, fgc, vfont->fid);
+	XSetFont(dpy, gc, vfont->fid);
+
+	XDrawString(dpy, pix, fgc, 0, vfont->ascent, 
+		    title1, strlen(title1));
+	
+	XDrawString(dpy, mask, gc, 0, vfont->ascent, 
+		    title1, strlen(title1));
+    }
+
+    if (title2) {
+	XSetFont(dpy, fgc, hfont->fid);
+	XSetFont(dpy, gc, hfont->fid);
+
+	XDrawString(dpy, pix, fgc, (title1 ? 12 : 0), hfont->ascent, 
+		    title2, strlen(title2));
+	
+	XDrawString(dpy, mask, gc, (title1 ? 12 : 0), hfont->ascent, 
+		    title2, strlen(title2));
+    }
+
+    return tmp;
+#endif
+}
+
+
 void
-SetButtonAlphaImage(WMScreen *scr, WMButton *bPtr, char *file)
+SetButtonAlphaImage(WMScreen *scr, WMButton *bPtr, char *file,
+		    char *title1, char *title2)
 {
     WMPixmap *icon;
+    WMPixmap *icon2;
     RColor color;
     char *iconPath;
 
@@ -461,11 +546,19 @@ SetButtonAlphaImage(WMScreen *scr, WMButton *bPtr, char *file)
     } else {
 	icon = NULL;
     }
+    
+    if (icon) {
+	icon2 = makeTitledIcon(scr, icon, title1, title2);
+	if (icon)
+	    WMReleasePixmap(icon);
+    } else {
+	icon2 = NULL;
+    }
+    
+    WMSetButtonImage(bPtr, icon2);
 
-    WMSetButtonImage(bPtr, icon);
-
-    if (icon)
-	WMReleasePixmap(icon);
+    if (icon2)
+	WMReleasePixmap(icon2);
 
     color.red = 0xff;
     color.green = 0xff;
@@ -508,8 +601,19 @@ AddSection(Panel *panel, char *iconFile)
     WMSetBalloonTextForView(((PanelRec*)panel)->description,
 			    WMWidgetView(bPtr));
 
-    SetButtonAlphaImage(WMWidgetScreen(bPtr), bPtr, iconFile);
-
+    {
+	char *t1, *t2;
+	
+	t1 = wstrdup(((PanelRec*)panel)->sectionName);
+	t2 = strchr(t1, ' ');
+	if (t2) {
+	    *t2 = 0;
+	    t2++;
+	}
+	SetButtonAlphaImage(WMWidgetScreen(bPtr), bPtr, iconFile,
+			    t1, t2);
+	free(t1);
+    }
     WMMapWidget(bPtr);
 
     WPrefs.sectionB[WPrefs.sectionCount] = bPtr;

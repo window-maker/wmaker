@@ -105,15 +105,14 @@ typedef struct _WScreen {
 
     struct WApplication *wapp_list;    /* list of all aplications */
 
-    struct _WCoreWindow *stacking_list[MAX_WINDOW_LEVELS];
-    				       /* array of lists of windows
+    WMBag *stacking_list;	       /* bag of lists of windows
 					* in stacking order.
-					* The array order is in window level
-					* order and each list on the array
+					* Indexed by window level
+					* and each list on the array
 					* is ordered from the topmost to
 					* the lowest window
 					*/
-/*    int window_level_count[MAX_WINDOW_LEVELS];*/
+
     int window_count;		       /* number of windows in window_list */
 
     int workspace_count;	       /* number of workspaces */

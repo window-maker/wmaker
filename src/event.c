@@ -1656,16 +1656,18 @@ handleKeyPress(XEvent *event)
         if (scr->shortcutWindows[index]) {
             WMBag *list = scr->shortcutWindows[index];
             int cw;
-	    int i;
 	    int count = WMGetBagItemCount(list);
 	    WWindow *twin;
+	    WMBagIterator iter;
+	    WWindow *wwin;
 
             wUnselectWindows(scr);
             cw = scr->current_workspace;
 
-            for (i = count-1; i >= 0; i--) {
-		WWindow *wwin = WMGetFromBag(list, i);
-
+	    for (wwin = WMBagLast(list, &iter);
+		 iter != NULL;
+		 wwin = WMBagPrevious(list, &iter)) {
+			
 		if (count > 1)
 		    wWindowChangeWorkspace(wwin, cw);
 
@@ -1676,8 +1678,8 @@ handleKeyPress(XEvent *event)
             }
 	    
 	    /* rotate the order of windows, to create a cycling effect */
-	    twin = WMGetFromBag(list, 0);
-	    WMDeleteFromBag(list, 0);
+	    twin = WMBagFirst(list, &iter);
+	    WMRemoveFromBag(list, twin);
 	    WMPutInBag(list, twin);
 
         } else if (wwin && ISMAPPED(wwin) && ISFOCUSED(wwin)) {

@@ -161,7 +161,8 @@ Shutdown(WShutdownMode mode)
 void
 RestoreDesktop(WScreen *scr)
 {
-    int i;
+    WMBagIterator iter;
+    WCoreWindow *core;
 
     if (scr->helper_pid > 0) {
 	kill(scr->helper_pid, SIGTERM);
@@ -172,14 +173,12 @@ RestoreDesktop(WScreen *scr)
     wDestroyInspectorPanels();
 
     /* reparent windows back to the root window, keeping the stacking order */
-    for (i=0; i<MAX_WINDOW_LEVELS; i++) {
-        WCoreWindow *core, *next;
+    for (core = WMBagFirst(scr->stacking_list, &iter);
+	 core != NULL;
+	 core = WMBagNext(scr->stacking_list, &iter)) {
+        WCoreWindow *next;
         WWindow *wwin;
-        
-        if (!scr->stacking_list[i])
-            continue;
-        
-        core = scr->stacking_list[i];
+
         /* go to the end of the list */
         while (core->stacking->under)
             core = core->stacking->under;

@@ -78,8 +78,6 @@ void AddSection(Panel *panel, char *iconFile);
 
 char *LocateImage(char *name);
 
-void SetButtonAlphaImage(WMScreen *scr, WMButton *bPtr, char *file);
-
 WMWindow *GetWindow(Panel *panel);
 
 /* manipulate the dictionary for the WindowMaker domain */

@@ -125,6 +125,7 @@ static proplist_t sShaded;
 static proplist_t sMiniaturized;
 static proplist_t sHidden;
 static proplist_t sGeometry;
+static proplist_t sShortcut;
 
 static proplist_t sDock;
 
@@ -147,6 +148,7 @@ make_keys()
     sHidden = PLMakeString("Hidden");
     sGeometry = PLMakeString("Geometry");
     sDock = PLMakeString("Dock");
+    sShortcut = PLMakeString("Shortcut");
 
     sYes = PLMakeString("Yes");
     sNo = PLMakeString("No");
@@ -185,6 +187,24 @@ getBool(proplist_t value)
 }
 
 
+static unsigned
+getInt(proplist_t value)
+{
+    char *val;
+    unsigned n;
+    
+    if (!PLIsString(value))
+	return 0;
+    val = PLGetString(value);
+    if (!val)
+	return 0;
+    if (sscanf(val, "%u", &n) != 1)
+	return 0;
+
+    return n;
+}
+
+
 
 static proplist_t
 makeWindowState(WWindow *wwin, WApplication *wapp)
@@ -193,10 +213,12 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
     Window win;
     int argc;
     char **argv;
+    int i;
+    unsigned mask;
     char *class, *instance, *command=NULL, buffer[256];
     proplist_t win_state, cmd, name, workspace;
     proplist_t shaded, miniaturized, hidden, geometry;
-    proplist_t dock;
+    proplist_t dock, shortcut;
 
     if (wwin->main_window!=None && wwin->main_window!=wwin->client_win)
         win = wwin->main_window;
@@ -231,6 +253,15 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
         sprintf(buffer, "%ix%i+%i+%i", wwin->client.width, wwin->client.height,
 		wwin->frame_x, wwin->frame_y);
         geometry = PLMakeString(buffer);
+	
+	for (mask = 0, i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
+	    if (WMGetFirstInBag(scr->shortcutWindows[i], wwin)) {
+		mask |= 1<<i;
+	    }
+	}
+
+	sprintf(buffer, "%u", mask);
+	shortcut = PLMakeString(buffer);
 
         win_state = PLMakeDictionaryFromEntries(sName, name,
                                                 sCommand, cmd,
@@ -238,6 +269,7 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
                                                 sShaded, shaded,
                                                 sMiniaturized, miniaturized,
                                                 sHidden, hidden,
+						sShortcut, shortcut,
                                                 sGeometry, geometry,
                                                 NULL);
 
@@ -245,6 +277,7 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
         PLRelease(cmd);
         PLRelease(workspace);
         PLRelease(geometry);
+	PLRelease(shortcut);
         if (wapp && wapp->app_icon && wapp->app_icon->dock) {
             int i;
             char *name;
@@ -381,6 +414,7 @@ getWindowState(WScreen *scr, proplist_t win_state)
     WSavedState *state = wmalloc(sizeof(WSavedState));
     proplist_t value;
     char *tmp;
+    unsigned mask;
     int i;
 
     memset(state, 0, sizeof(WSavedState));
@@ -406,6 +440,10 @@ getWindowState(WScreen *scr, proplist_t win_state)
         state->miniaturized = getBool(value);
     if ((value = PLGetDictionaryEntry(win_state, sHidden))!=NULL)
         state->hidden = getBool(value);
+    if ((value = PLGetDictionaryEntry(win_state, sHidden))!=NULL) {
+        mask = getInt(value);
+	state->window_shortcuts = mask;
+    }
 
     value = PLGetDictionaryEntry(win_state, sGeometry);
     if (value && PLIsString(value)) {

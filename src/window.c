@@ -834,7 +834,7 @@ wManageWindow(WScreen *scr, Window window)
 	    wwin->flags.miniaturized = wstate->miniaturized;
 	    workspace = wstate->workspace;
 
-	    if (scr->flags.startup && wstate->window_shortcuts >= 0) {
+	    if (scr->flags.startup && wstate->window_shortcuts > 0) {
 		int i;
 
 		for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
