@@ -148,8 +148,8 @@ WMPathForResourceOfType(char *resource, char *ext)
             return path;
     }
 
-    appdir = wmalloc(strlen(WMApplication.applicationName)+10);
-    sprintf(appdir, "Apps/%s.app", WMApplication.applicationName);
+    appdir = wmalloc(strlen(WMApplication.applicationName)+20);
+    sprintf(appdir, "Applications/%s.app", WMApplication.applicationName);
 
     if (getenv("GNUSTEP_USER_ROOT")) {
         path = checkFile(getenv("GNUSTEP_USER_ROOT"), appdir, ext, resource);
