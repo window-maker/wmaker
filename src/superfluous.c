@@ -27,7 +27,7 @@
 
 #include <stdlib.h>
 #include <unistd.h>
-
+#include <math.h>
 #include <time.h>
 
 #include <wraster.h>
@@ -139,7 +139,14 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
     RDestroyImage(icon);
     RDestroyImage(back);
 }
-#else /* !DEMATERIALIZE_ICON */
+#endif /* DEMATERIALIZE_ICON */
+
+
+
+
+
+
+#ifdef NORMAL_ICON_KABOOM
 void
 DoKaboom(WScreen *scr, Window win, int x, int y)
 {
@@ -284,7 +291,7 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
     
     XFreePixmap(dpy, tmp);
 }
-#endif /* !DEMATERIALIZE_ICON */
+#endif /* NORMAL_ICON_KABOOM */
 
 
 Pixmap

@@ -2542,6 +2542,7 @@ setClipTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
     }
     scr->clip_title_pixel[index] = color->pixel;
 
+#ifdef GRADIENT_CLIP_ARROW
     if (index == CLIP_NORMAL) {
 	RImage *image;
 	RColor color1, color2;
@@ -2562,6 +2563,8 @@ setClipTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
 	RConvertImage(scr->rcontext, image, &scr->clip_arrow_gradient);
 	RDestroyImage(image);
     }
+#endif /* GRADIENT_CLIP_ARROW */
+
     return REFRESH_ICON_TITLE_COLOR;
 }
 

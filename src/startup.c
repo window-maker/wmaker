@@ -160,18 +160,18 @@ extern void NotifyDeadProcess(pid_t pid, unsigned char status);
 typedef struct _CrashPanel {
     WMWindow *win;              /* main window */
 
-      WMLabel *iconL;           /* application icon */
-      WMLabel *nameL;           /* title of panel */
+    WMLabel *iconL;           /* application icon */
+    WMLabel *nameL;           /* title of panel */
 
-      WMFrame *sepF;            /* separator frame */
+    WMFrame *sepF;            /* separator frame */
+    
+    WMLabel *noteL;           /* Title of note */
+    WMLabel *note2L;          /* body of note with what happened */
 
-      WMLabel *noteL;           /* Title of note */
-      WMLabel *note2L;          /* body of note with what happened */
+    WMFrame *whatF;           /* "what to do next" frame */
+    WMPopUpButton *whatP;   /* action selection popup button */
 
-      WMFrame *whatF;           /* "what to do next" frame */
-        WMPopUpButton *whatP;   /* action selection popup button */
-
-      WMButton *okB;            /* ok button */
+    WMButton *okB;            /* ok button */
 
     Bool done;                  /* if finished with this dialog */
     int action;                 /* what to do after */

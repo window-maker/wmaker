@@ -222,6 +222,11 @@
  */
 #undef WINDOW_BIRTH_ZOOM
 
+/*
+ * whether arrow drawing in clip buttons should be gradiented
+ */
+#undef GRADIENT_CLIP_ARROWS
+
 
 #define TEXTURE_PLUGIN
 
@@ -565,6 +570,10 @@
 #define XKB_TITLE_HINT
 #define XKB_ON "[TH]"
 #define XKB_OFF "[EN]"
+#endif
+
+#ifndef DEMATERIALIZE_ICON
+# define NORMAL_ICON_KABOOM
 #endif
 
 #if HAVE_LIBINTL_H && I18N

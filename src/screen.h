@@ -237,7 +237,9 @@ typedef struct _WScreen {
     unsigned int geometry_display_height;
     int keymove_tick;
 
+#ifdef GRADIENT_CLIP_ARROW
     Pixmap clip_arrow_gradient;
+#endif
 
     struct RContext *rcontext;	       /* wrlib context */
     
