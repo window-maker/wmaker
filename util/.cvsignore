@@ -1,5 +1,5 @@
 Makefile Makefile.in
 wmsetup wmagnify wxcopy wxpaste wdwrite getstyle setstyle seticons geticonset
-wmsetbg wmaker.inst wdread wmchlocale convertfonts
+wmsetbg wmaker.inst wdread convertfonts
 .libs
 .psrc .inslog2 tca.map tca.log pchdir *.rpt
