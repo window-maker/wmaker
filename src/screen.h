@@ -299,10 +299,6 @@ typedef struct _WScreen {
     char *xdestring;
 #endif
 
-#ifdef KWM_HINTS
-    Window kwm_dock;
-#endif
-
 #ifdef NETWM_HINTS
     struct NetData *netdata;
 #endif
@@ -327,10 +323,6 @@ typedef struct _WScreen {
         unsigned int doing_alt_tab:1;
         unsigned int jump_back_pending:1;
         unsigned int ignore_focus_events:1;
-#ifdef KWM_HINTS
-        unsigned int kwm_syncing_name:1;
-        unsigned int kwm_syncing_count:1;
-#endif
     } flags;
 } WScreen;
 

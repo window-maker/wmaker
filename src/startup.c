@@ -64,10 +64,6 @@
 
 #include "xutil.h"
 
-#ifdef KWM_HINTS
-#include "kwm.h"
-#endif
-
 #if 0
 #ifdef SYS_SIGLIST_DECLARED
 extern const char * const sys_siglist[];
@@ -882,10 +878,6 @@ StartUp(Bool defaultScreenOnly)
         } else {
             wSessionRestoreLastWorkspace(wScreen[j]);
         }
-
-#ifdef KWM_HINTS
-        wKWMSetInitializedHint(wScreen[j]);
-#endif
     }
 
     if (wScreenCount == 0) {
@@ -965,9 +957,6 @@ manageAllWindows(WScreen *scr, int crashRecovery)
         if (children[i] == None)
             continue;
 
-#ifdef KWM_HINTS
-        wKWMCheckModule(scr, children[i]);
-#endif
         wwin = wManageWindow(scr, children[i]);
         if (wwin) {
             /* apply states got from WSavedState */

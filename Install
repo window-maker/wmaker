@@ -124,33 +124,6 @@ echo
 echo "Option Selection"
 echo "================"
 
-######################## KDE
-echo
-echo "Do you want KDE support?"
-echo -n "<y/n> [n] "
-read kde
-if [ "$kde" = y -o "$kde" = Y ]; then
-	OPTIONS="$OPTIONS --enable-kde"
-fi
-
-######################## GNOME
-echo
-echo "Do you want GNOME support?"
-echo -n "<y/n> [n] "
-read gnome
-if [ "$gnome" = y -o "$gnome" = Y ]; then
-	OPTIONS="$OPTIONS --enable-gnome"
-fi
-
-######################## OLWM
-echo
-echo "Do you want OPEN LOOK(tm)/olwm support?"
-echo -n "<y/n> [n] "
-read olwm
-if [ "$olwm" = y -o "$olwm" = Y ]; then
-	OPTIONS="$OPTIONS --enable-openlook"
-fi
-
 ######################## NLS
 echo
 echo "Do you want National Language Support?"

@@ -373,10 +373,6 @@ PropCleanUp(Window root)
     XDeleteProperty(dpy, root, _XA_WINDOWMAKER_NOTICEBOARD);
 
     XDeleteProperty(dpy, root, XA_WM_ICON_SIZE);
-
-#ifdef KWM_HINTS
-    XDeleteProperty(dpy, root, XInternAtom(dpy, "KWM_RUNNING", False));
-#endif
 }
 
 

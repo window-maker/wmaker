@@ -103,12 +103,8 @@ W_ReadConfigurations(void)
         WINGsConfiguration.boldSystemFont =
             WMGetUDStringForKey(defaults, "BoldSystemFont");
 
-#ifdef XFT
         WINGsConfiguration.antialiasedText =
             WMGetUDBoolForKey(defaults, "AntialiasedText");
-#else
-        WINGsConfiguration.antialiasedText = False;
-#endif
 
         WINGsConfiguration.useMultiByte = False;
         str = WMGetUDStringForKey(defaults, "MultiByteText");

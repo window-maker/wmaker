@@ -43,20 +43,12 @@ typedef struct W_Application {
 typedef struct W_Font {
     struct W_Screen *screen;
 
-#ifdef XFT
     struct _XftFont *font;
-#else
-    // pick one
-    //XFontSet font;
-    XFontStruct *font;
-#endif
 
     short height;
     short y;
     short refCount;
     char *name;
-    //unsigned int notFontSet:1;
-    //unsigned int antialiased:1;
 } W_Font;
 
 

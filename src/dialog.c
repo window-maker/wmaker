@@ -1370,20 +1370,11 @@ wShowInfoPanel(WScreen *scr)
         char buf[80];
         int j = 0;
 
-#ifdef MWM_HINTS
-        list[j++] = "MWM";
-#endif
-#ifdef KWM_HINTS
-        list[j++] = "KDE";
-#endif
-#ifdef GNOME_STUFF
-        list[j++] = "GNOME";
-#endif
-#ifdef OLWM_HINTS
-        list[j++] = "OLWM";
-#endif
 #ifdef NETWM_HINTS
         list[j++] = "WMSPEC";
+#endif
+#ifdef MWM_HINTS
+        list[j++] = "MWM";
 #endif
 
         buf[0] = 0;
@@ -1405,12 +1396,10 @@ wShowInfoPanel(WScreen *scr)
         strbuf = wstrappend(strbuf, _("\nSound enabled"));
     }
 
-#ifdef XFT
     strbuf = wstrappend(strbuf, _("; Antialiased text"));
-#endif
 
 #ifdef VIRTUAL_DESKTOP
-    strbuf = wstrappend(strbuf, _("; VirtualDesktop"));
+    strbuf = wstrappend(strbuf, _(", VirtualDesktop"));
 #endif
 
 #ifdef XINERAMA

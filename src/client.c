@@ -43,9 +43,6 @@
 #include "stacking.h"
 #include "appicon.h"
 #include "appmenu.h"
-#ifdef KWM_HINTS
-#include "kwm.h"
-#endif
 #ifdef NETWM_HINTS
 # include "wmspec.h"
 #endif
@@ -339,9 +336,6 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
         break;
 
     case XA_WM_ICON_NAME:
-#ifdef KWM_HINTS
-        wKWMSendEventMessage(wwin, WKWMChangedClient);
-#endif
         if (!wwin->icon)
             break;
         else {
@@ -504,9 +498,6 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
                 if (wapp && wapp->app_icon) {
                     wIconUpdate(wapp->app_icon->icon);
                 }
-#ifdef KWM_HINTS
-                wKWMSendEventMessage(wwin, WKWMIconChange);
-#endif
             }
 
             if (wwin->wm_hints->flags & UrgencyHint)
@@ -663,17 +654,8 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 
             XFree(attr);
         } else {
-#if defined(KWM_HINTS) || defined(NETWM_HINTS)
-            Bool done = False;
-#endif
-#ifdef KWM_HINTS
-            if (!done)
-                done = wKWMCheckClientHintChange(wwin, event);
-#endif /* KWM_HINTS */
 #ifdef NETWM_HINTS
-            if (!done) {
-                done = wNETWMCheckClientHintChange(wwin, event);
-            }
+            wNETWMCheckClientHintChange(wwin, event);
 #endif
         }
     }

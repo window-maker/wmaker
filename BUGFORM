@@ -35,9 +35,6 @@ to bugs@windowmaker.org
 [ ]  --enable-kanji
 [ ]  --disable-shape   
 [ ]  --enable-single-icon
-[ ]  --enable-kde
-[ ]  --enable-gnome
-[ ]  --enable-openlook
 [ ]  --enable-modelock
 [ ]  Others: .......................
 

@@ -4,11 +4,11 @@ Version:        VERSION
 Entered-date:   DATE
 Description:    N*EXTSTEP alike, good looking, fast and easy to use/configure
 		window manager for X11. Features support for GNUstep, ICCCM,
-		Motif(tm), OPEN LOOK(tm), KDE and GNOME hints. Multiple 
-		workspaces, easy to use application dock, very flexible menus, 
-		graphical configuration, 13 types of decoration textures, 
-		national language support, themes etc
-Keywords:       window-manager X11 GNUstep NEXTSTEP GNOME KDE OpenLook Motif
+		Motif(tm) and NETWM hints. Multiple workspaces, easy to use
+		application dock, very flexible menus, graphical configuration,
+		13 types of decoration textures, national language support,
+		themes etc
+Keywords:       window-manager X11 GNUstep NEXTSTEP NETWM Motif XFT
 Author:         kojima@windowmaker.org (Alfredo K. Kojima)
 Maintained-by:  kojima@windowmaker.org (Alfredo K. Kojima)
 		dan@windowmaker.org (Dan Pascu)

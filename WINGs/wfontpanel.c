@@ -9,10 +9,8 @@
 #include <ctype.h>
 #include <string.h>
 
-#ifdef XFT
 #include <X11/Xft/Xft.h>
 #include <fontconfig/fontconfig.h>
-#endif
 
 
 /* XXX TODO */
@@ -85,9 +83,7 @@ static int scalableFontSizes[] = {
 
 
 
-#ifdef XFT
 static void setFontPanelFontName(FontPanel *panel, FcChar8 *family, FcChar8 *style, double size);
-#endif
 
 static int isXLFD(char *font, int *length_ret);
 
@@ -367,7 +363,6 @@ WMGetFontPanelFont(WMFontPanel *panel)
 void
 WMSetFontPanelFont(WMFontPanel *panel, char *fontName)
 {
-#ifdef XFT
     int fname_len;
     FcPattern *pattern;
     FcChar8 *family, *style;
@@ -391,7 +386,6 @@ WMSetFontPanelFont(WMFontPanel *panel, char *fontName)
                 setFontPanelFontName(panel, family, style, size);
 
     FcPatternDestroy(pattern);
-#endif
 }
 
 
@@ -485,66 +479,7 @@ isXLFD(char *font, int *length_ret)
     return c==NUM_FIELDS;
 }
 
-#ifndef XFT
-static Bool
-parseFont(char *font, char values[NUM_FIELDS][256])
-{
-    char *ptr;
-    int part;
-    char buffer[256], *bptr;
 
-    part = FOUNDRY;
-    ptr = font;
-    ptr++; /* skip first - */
-    bptr = buffer;
-    while (*ptr) {
-        if (*ptr == '-') {
-            *bptr = 0;
-            strcpy(values[part], buffer);
-            bptr = buffer;
-            part++;
-        } else {
-            *bptr++ = *ptr;
-        }
-        ptr++;
-    }
-    *bptr = 0;
-    strcpy(values[part], buffer);
-
-    return True;
-}
-
-
-
-
-
-typedef struct {
-    char *weight;
-    char *slant;
-
-    char *setWidth;
-    char *addStyle;
-
-    char showSetWidth; /* when duplicated */
-    char showAddStyle; /* when duplicated */
-
-    WMArray *sizes;
-} Typeface;
-
-
-typedef struct {
-    char *name;
-
-    char *foundry;
-    char *registry, *encoding;
-
-    char showFoundry; /* when duplicated */
-    char showRegistry; /* when duplicated */
-
-    WMArray *typefaces;
-} Family;
-#endif
-#ifdef XFT
 typedef struct {
     char *typeface;
     WMArray *sizes;
@@ -554,9 +489,6 @@ typedef struct {
     char *name; /* gotta love simplicity */
     WMArray *typefaces;
 } Xft_Family;
-#endif
-
-
 
 
 static int
@@ -575,11 +507,7 @@ compare_int(const void *a, const void *b)
 
 
 static void
-#ifdef XFT
 addSizeToTypeface(Xft_Typeface *face, int size)
-#else
-addSizeToTypeface(Typeface *face, int size)
-#endif
 {
     if (size == 0) {
         int j;
@@ -600,7 +528,6 @@ addSizeToTypeface(Typeface *face, int size)
     }
 }
 
-#ifdef XFT
 static void
 addTypefaceToXftFamily(Xft_Family *fam, char *style)
 {
@@ -628,57 +555,11 @@ addTypefaceToXftFamily(Xft_Family *fam, char *style)
     WMAddToArray(fam->typefaces, face);
 }
 
-#else /* XFT */
-
-static void
-addTypefaceToFamily(Family *family, char fontFields[NUM_FIELDS][256])
-{
-    Typeface *face;
-    WMArrayIterator i;
-
-    if (family->typefaces) {
-        WM_ITERATE_ARRAY(family->typefaces, face, i) {
-            int size;
-
-            if (strcmp(face->weight, fontFields[WEIGHT]) != 0) {
-                continue;
-            }
-            if (strcmp(face->slant, fontFields[SLANT]) != 0) {
-                continue;
-            }
-
-            size = atoi(fontFields[PIXEL_SIZE]);
-
-            addSizeToTypeface(face, size);
-
-            return;
-        }
-    } else {
-        family->typefaces = WMCreateArray(4);
-    }
-
-    face = wmalloc(sizeof(Typeface));
-    memset(face, 0, sizeof(Typeface));
-
-    face->weight = wstrdup(fontFields[WEIGHT]);
-    face->slant = wstrdup(fontFields[SLANT]);
-    face->setWidth = wstrdup(fontFields[SETWIDTH]);
-    face->addStyle = wstrdup(fontFields[ADD_STYLE]);
-
-    face->sizes = WMCreateArray(4);
-    addSizeToTypeface(face, atoi(fontFields[PIXEL_SIZE]));
-
-    WMAddToArray(family->typefaces, face);
-}
-#endif
-
 /*
  * families (same family name) (Hashtable of family -> array)
  * 	registries (same family but different registries)
  *
  */
-
-#ifdef XFT
 static void
 addFontToXftFamily(WMHashTable *families, char *name, char *style)
 {
@@ -709,138 +590,18 @@ addFontToXftFamily(WMHashTable *families, char *name, char *style)
     WMHashInsert(families, fam->name, array);
 }
 
-#else /* XFT */
-
-static void
-addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
-{
-    WMArrayIterator i;
-    Family *fam;
-    WMArray *family;
-
-
-    family = WMHashGet(families, fontFields[FAMILY]);
-
-    if (family) {
-        /* look for same encoding/registry and foundry */
-        WM_ITERATE_ARRAY(family, fam, i) {
-            int enc, reg, found;
-
-            enc = (strcmp(fam->encoding, fontFields[ENCODING]) == 0);
-            reg = (strcmp(fam->registry, fontFields[REGISTRY]) == 0);
-            found = (strcmp(fam->foundry, fontFields[FOUNDRY]) == 0);
-
-            if (enc && reg && found) {
-                addTypefaceToFamily(fam, fontFields);
-                return;
-            }
-        }
-        /* look for same encoding/registry */
-        WM_ITERATE_ARRAY(family, fam, i) {
-            int enc, reg;
-
-            enc = (strcmp(fam->encoding, fontFields[ENCODING]) == 0);
-            reg = (strcmp(fam->registry, fontFields[REGISTRY]) == 0);
-
-            if (enc && reg) {
-                /* has the same encoding, but the foundry is different */
-                fam->showFoundry = 1;
-
-                fam = wmalloc(sizeof(Family));
-                memset(fam, 0, sizeof(Family));
-
-                fam->name = wstrdup(fontFields[FAMILY]);
-                fam->foundry = wstrdup(fontFields[FOUNDRY]);
-                fam->registry = wstrdup(fontFields[REGISTRY]);
-                fam->encoding = wstrdup(fontFields[ENCODING]);
-                fam->showFoundry = 1;
-
-                addTypefaceToFamily(fam, fontFields);
-
-                WMAddToArray(family, fam);
-                return;
-            }
-        }
-        /* look for same foundry */
-        WM_ITERATE_ARRAY(family, fam, i) {
-            int found;
-
-            found = (strcmp(fam->foundry, fontFields[FOUNDRY]) == 0);
-
-            if (found) {
-                /* has the same foundry, but encoding is different */
-                fam->showRegistry = 1;
-
-                fam = wmalloc(sizeof(Family));
-                memset(fam, 0, sizeof(Family));
-
-                fam->name = wstrdup(fontFields[FAMILY]);
-                fam->foundry = wstrdup(fontFields[FOUNDRY]);
-                fam->registry = wstrdup(fontFields[REGISTRY]);
-                fam->encoding = wstrdup(fontFields[ENCODING]);
-                fam->showRegistry = 1;
-
-                addTypefaceToFamily(fam, fontFields);
-
-                WMAddToArray(family, fam);
-                return;
-            }
-        }
-        /* foundry and encoding do not match anything known */
-        fam = wmalloc(sizeof(Family));
-        memset(fam, 0, sizeof(Family));
-
-        fam->name = wstrdup(fontFields[FAMILY]);
-        fam->foundry = wstrdup(fontFields[FOUNDRY]);
-        fam->registry = wstrdup(fontFields[REGISTRY]);
-        fam->encoding = wstrdup(fontFields[ENCODING]);
-        fam->showFoundry = 1;
-        fam->showRegistry = 1;
-
-        addTypefaceToFamily(fam, fontFields);
-
-        WMAddToArray(family, fam);
-        return;
-    }
-
-    family = WMCreateArray(8);
-
-    fam = wmalloc(sizeof(Family));
-    memset(fam, 0, sizeof(Family));
-
-    fam->name = wstrdup(fontFields[FAMILY]);
-    fam->foundry = wstrdup(fontFields[FOUNDRY]);
-    fam->registry = wstrdup(fontFields[REGISTRY]);
-    fam->encoding = wstrdup(fontFields[ENCODING]);
-
-    addTypefaceToFamily(fam, fontFields);
-
-    WMAddToArray(family, fam);
-
-    WMHashInsert(families, fam->name, family);
-}
-#endif /* XFT */
-
-
 
 static void
 listFamilies(WMScreen *scr, WMFontPanel *panel)
 {
-#ifdef XFT
     FcObjectSet *os = 0;
     FcFontSet	*fs;
     FcPattern	*pat;
-#else /* XFT */
-    char **fontList;
-    char fields[NUM_FIELDS][256];
-    int count;
-#endif /* XFT */
     WMHashTable *families;
     WMHashEnumerator enumer;
     WMArray *array;
     int i;
 
-#ifdef XFT
     pat = FcPatternCreate();
     os = FcObjectSetBuild(FC_FAMILY, FC_STYLE, 0);
     fs = FcFontList(0, pat, os);
@@ -851,19 +612,9 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
     }
     if (pat)
         FcPatternDestroy (pat);
-#else /* XFT */
-    fontList = XListFonts(scr->display, ALL_FONTS_MASK, MAX_FONTS_TO_RETRIEVE,
-                          &count);
-    if (!fontList) {
-        WMRunAlertPanel(scr, panel->win, _("Error"),
-                        _("Could not retrieve font list"), _("OK"), NULL, NULL);
-        return;
-    }
-#endif /* XFT */
 
     families = WMCreateHashTable(WMStringPointerHashCallbacks);
 
-#ifdef XFT
     if(fs) {
         for (i = 0; i < fs->nfont; i++) {
             FcChar8 *family;
@@ -875,31 +626,9 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
         }
         FcFontSetDestroy(fs);
     }
-#else /* XFT */
-    for (i = 0; i < count; i++) {
-        int fname_len;
-
-        if (!isXLFD(fontList[i], &fname_len)) {
-            *fontList[i] = '\0';
-            continue;
-        }
-        if (fname_len > 255) {
-            wwarning(_("font name %s is longer than 256, which is invalid."),
-                     fontList[i]);
-            *fontList[i] = '\0';
-            continue;
-        }
-        if (!parseFont(fontList[i], fields)) {
-            *fontList[i] = '\0';
-            continue;
-        }
-        addFontToFamily(families, fields);
-    }
-#endif  /* XFT */
 
     enumer = WMEnumerateHashTable(families);
 
-#ifdef XFT
     while ((array = WMNextHashEnumeratorItem(&enumer))) {
         WMArrayIterator i;
         Xft_Family *fam;
@@ -915,35 +644,7 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
 
         WMFreeArray(array);
     }
-#else /* XFT */
-    while ((array = WMNextHashEnumeratorItem(&enumer))) {
-        WMArrayIterator i;
-        Family *fam;
-        char buffer[256];
-        WMListItem *item;
 
-        WM_ITERATE_ARRAY(array, fam, i) {
-            strcpy(buffer, fam->name);
-
-            if (fam->showFoundry) {
-                strcat(buffer, " ");
-                strcat(buffer, fam->foundry);
-                strcat(buffer, " ");
-            }
-            if (fam->showRegistry) {
-                strcat(buffer, " (");
-                strcat(buffer, fam->registry);
-                strcat(buffer, "-");
-                strcat(buffer, fam->encoding);
-                strcat(buffer, ")");
-            }
-            item = WMAddListItem(panel->famLs, buffer);
-
-            item->clientData = fam;
-        }
-        WMFreeArray(array);
-    }
-#endif /* XFT */
     WMSortListItems(panel->famLs);
 
     WMFreeHashTable(families);
@@ -954,53 +655,28 @@ static void
 getSelectedFont(FontPanel *panel, char buffer[], int bufsize)
 {
     WMListItem *item;
-#ifdef XFT
     Xft_Family *family;
     Xft_Typeface *face;
-#else
-    Family *family;
-    Typeface *face;
-#endif
     char *size;
 
 
     item = WMGetListSelectedItem(panel->famLs);
     if (!item)
         return;
-#ifdef XFT
     family = (Xft_Family*)item->clientData;
-#else
-    family = (Family*)item->clientData;
-#endif
 
     item = WMGetListSelectedItem(panel->typLs);
     if (!item)
         return;
-#ifdef XFT
     face = (Xft_Typeface*)item->clientData;
-#else
-    face = (Typeface*)item->clientData;
-#endif
 
     size = WMGetTextFieldText(panel->sizT);
 
-#ifdef XFT
     snprintf(buffer, bufsize, "%s:style=%s:pixelsize=%s",
              family->name,
              face->typeface,
              size);
-#else
-    snprintf(buffer, bufsize, "-%s-%s-%s-%s-%s-%s-%s-*-*-*-*-*-%s-%s",
-             family->foundry,
-             family->name,
-             face->weight,
-             face->slant,
-             face->setWidth,
-             face->addStyle,
-             size,
-             family->registry,
-             family->encoding);
-#endif /* XFT */
+
     wfree(size);
 }
 
@@ -1027,13 +703,8 @@ familyClick(WMWidget *w, void *data)
 {
     WMList *lPtr = (WMList*)w;
     WMListItem *item;
-#ifdef XFT
     Xft_Family *family;
     Xft_Typeface *face;
-#else
-    Family *family;
-    Typeface *face;
-#endif
     FontPanel *panel = (FontPanel*)data;
     WMArrayIterator i;
     /* current typeface and size */
@@ -1051,11 +722,7 @@ familyClick(WMWidget *w, void *data)
 
 
     item = WMGetListSelectedItem(lPtr);
-#ifdef XFT
     family = (Xft_Family*)item->clientData;
-#else
-    family = (Family*)item->clientData;
-#endif
 
     WMClearList(panel->typLs);
 
@@ -1065,44 +732,11 @@ familyClick(WMWidget *w, void *data)
         int top=0;
         WMListItem *fitem;
 
-#ifdef XFT
         strcpy(buffer, face->typeface);
         if(strcasecmp(face->typeface, "Roman") == 0)
             top = 1;
         if(strcasecmp(face->typeface, "Regular") == 0)
             top = 1;
-#else
-        if (strcmp(face->weight, "medium") == 0) {
-            buffer[0] = 0;
-        } else {
-            if (*face->weight) {
-                strcpy(buffer, face->weight);
-                buffer[0] = toupper(buffer[0]);
-                strcat(buffer, " ");
-            } else {
-                buffer[0] = 0;
-            }
-        }
-
-        if (strcmp(face->slant, "r") == 0) {
-            strcat(buffer, _("Roman"));
-            top = 1;
-        } else if (strcmp(face->slant, "i") == 0) {
-            strcat(buffer, _("Italic"));
-        } else if (strcmp(face->slant, "o") == 0) {
-            strcat(buffer, _("Oblique"));
-        } else if (strcmp(face->slant, "ri") == 0) {
-            strcat(buffer, _("Rev Italic"));
-        } else if (strcmp(face->slant, "ro") == 0) {
-            strcat(buffer, _("Rev Oblique"));
-        } else {
-            strcat(buffer, face->slant);
-        }
-
-        if (buffer[0] == 0) {
-            strcpy(buffer, _("Normal"));
-        }
-#endif
         if (top)
             fitem = WMInsertListItem(panel->typLs, 0, buffer);
         else
@@ -1141,11 +775,7 @@ typefaceClick(WMWidget *w, void *data)
 {
     FontPanel *panel = (FontPanel*)data;
     WMListItem *item;
-#ifdef XFT
     Xft_Typeface *face;
-#else
-    Typeface *face;
-#endif
     WMArrayIterator i;
     char buffer[32];
 
@@ -1157,11 +787,7 @@ typefaceClick(WMWidget *w, void *data)
 
 
     item = WMGetListSelectedItem(panel->typLs);
-#ifdef XFT
     face = (Xft_Typeface*)item->clientData;
-#else
-    face = (Typeface*)item->clientData;
-#endif
 
     WMClearList(panel->sizLs);
 
@@ -1207,7 +833,6 @@ sizeClick(WMWidget *w, void *data)
 }
 
 
-#ifdef XFT
 static void
 setFontPanelFontName(FontPanel *panel, FcChar8 *family, FcChar8 *style, double size)
 {
@@ -1290,5 +915,4 @@ setFontPanelFontName(FontPanel *panel, FcChar8 *family, FcChar8 *style, double s
     return;
 }
 
-#endif
 

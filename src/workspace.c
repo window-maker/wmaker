@@ -47,9 +47,6 @@
 #include "actions.h"
 #include "workspace.h"
 #include "appicon.h"
-#ifdef KWM_HINTS
-#include "kwm.h"
-#endif
 #ifdef NETWM_HINTS
 #include "wmspec.h"
 #endif
@@ -105,11 +102,6 @@ wWorkspaceNew(WScreen *scr)
         wspace = wmalloc(sizeof(WWorkspace));
         wspace->name = NULL;
 
-#ifdef KWM_HINTS
-        if (scr->flags.kwm_syncing_count) {
-            wspace->name = wKWMGetWorkspaceName(scr, scr->workspace_count-1);
-        }
-#endif
         if (!wspace->name) {
             wspace->name = wmalloc(strlen(_("Workspace %i"))+8);
             sprintf(wspace->name, _("Workspace %i"), scr->workspace_count);
@@ -635,10 +627,8 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
         }
     }
 
-#if defined KWM_HINTS || defined NETWM_HINTS
-    wScreenUpdateUsableArea(scr);
-#endif
 #ifdef NETWM_HINTS
+    wScreenUpdateUsableArea(scr);
     wNETWMUpdateDesktop(scr);
 #endif
 

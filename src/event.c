@@ -60,12 +60,6 @@
 #include "balloon.h"
 #include "xinerama.h"
 
-#ifdef GNOME_STUFF
-# include "gnome.h"
-#endif
-#ifdef KWM_HINTS
-# include "kwm.h"
-#endif
 #ifdef NETWM_HINTS
 # include "wmspec.h"
 #endif
@@ -627,10 +621,6 @@ handleDestroyNotify(XEvent *event)
         }
         wApplicationDestroy(app);
     }
-
-#ifdef KWM_HINTS
-    wKWMCheckDestroy(&event->xdestroywindow);
-#endif
 }
 
 
@@ -724,10 +714,6 @@ handleButtonPress(XEvent *event)
                    wPreferences.mouse_wheel!=WA_NONE) {
             wWorkspaceRelativeChange(scr, -1);
         }
-#ifdef GNOME_STUFF
-        else if (wGNOMEProxyizeButtonEvent(scr, event))
-            return;
-#endif
     }
 #endif /* !LITE */
 
@@ -897,11 +883,6 @@ handlePropertyNotify(XEvent *event)
     }
 
     scr = wScreenForWindow(event->xproperty.window);
-    if (scr && scr->root_win == event->xproperty.window) {
-#ifdef KWM_HINTS
-        wKWMCheckRootHintChange(scr, &event->xproperty);
-#endif
-    }
 }
 
 
@@ -1001,14 +982,6 @@ handleClientMessage(XEvent *event)
     } else if (wNETWMProcessClientMessage(&event->xclient)) {
         /* do nothing */
 #endif
-#ifdef GNOME_STUFF
-    } else if (wGNOMEProcessClientMessage(&event->xclient)) {
-        /* do nothing */
-#endif /* GNOME_STUFF */
-#ifdef KWM_HINTS
-    } else if (wKWMProcessClientMessage(&event->xclient)) {
-        /* do nothing */
-#endif /* KWM_HINTS */
 #ifdef XDND
     } else if (wXDNDProcessClientMessage(&event->xclient)) {
         /* do nothing */

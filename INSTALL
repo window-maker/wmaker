@@ -128,9 +128,9 @@ CONFIGURE OPTIONS:
 These options can be passed to the configure script to enable/disable
 some Window Maker features. Example:
 
-./configure --enable-kde --enable-gnome
+./configure --enable-modelock --disable-gif
 
-will configure Window Maker with KDE and GNOME supported compiled in.
+will configure Window Maker with modelock supported and disable gif support.
 
 
 To get a list of other options, run ./configure --help
@@ -152,15 +152,6 @@ To get a list of other options, run ./configure --help
 
 --disable-motif 
 	disable support for mwm window manager hints
-
---enable-openlook
-	enable support for OPEN LOOK(tm) window manager hints
-
---enable-gnome
-	enable support for GNOME window manager hints
-
---enable-kde
-	enable support for kde/kwm window manager hints
 
 --enable-lite
 	remove things that are already supported in desktop environments,
@@ -352,9 +343,9 @@ following.
 	to get a complete listing of other options that are available.
 
 	2. Run configure with the options you want. For example, if you
-	want to use the --enable-kde option, type:
+	want to use the --enable-modelock option, type:
 
-	./configure --enable-kde
+	./configure --enable-modelock
 
 	3. (optional) Edit src/wconfig.h with your favorite text editor 
 	and browse through it for some options you might want to change.

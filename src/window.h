@@ -146,12 +146,6 @@ typedef struct {
      */
     unsigned int emulate_appicon:1;
 
-    /* toolkit specific attribute flags. These are unchangeable and
-     * unconfigurable and must not be saved as state. */
-#ifdef OLWM_HINTS
-    unsigned int olwm_transient:1;
-    unsigned int olwm_warp_to_pin:1;
-#endif
 } WWindowAttributes;
 
 
@@ -250,10 +244,6 @@ typedef struct WWindow {
 
     FocusMode focus_mode;	       /* type of keyboard input focus */
 
-#ifdef OLWM_HINTS_unfinished
-    struct WOLWindowState ol_window_state;
-#endif
-
     long event_mask;		       /* the event mask thats selected */
 
 #ifdef MONITOR_HEARTBEAT
@@ -309,15 +299,6 @@ typedef struct WWindow {
         unsigned int user_changed_height:1;
         unsigned int wm_name_changed:1;
 
-#ifdef KWM_HINTS
-        unsigned int kwm_hidden_for_modules:1;
-        unsigned int kwm_managed:1;
-        unsigned int kwm_menubar:1;
-#endif
-#ifdef OLWM_HINTS
-        unsigned int olwm_push_pin_out:1;/* emulate pushpin behaviour */
-        unsigned int olwm_limit_menu:1;
-#endif
 #ifdef NETWM_HINTS
         unsigned int net_state_from_client:1; /* state hint was set by client */
         unsigned int net_skip_pager:1;

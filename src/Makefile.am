@@ -38,14 +38,10 @@ wmaker_SOURCES = 	\
 	framewin.h \
 	geomview.c \
 	geomview.h \
-	gnome.c \
-	gnome.h \
 	funcs.h \
 	icon.c \
 	icon.h \
 	keybind.h \
-	kwm.h \
-	kwm.c \
 	main.c \
 	menu.c \
 	menu.h \
@@ -54,8 +50,6 @@ wmaker_SOURCES = 	\
 	motif.c \
 	motif.h \
 	moveres.c \
-	openlook.c \
-	openlook.h \
 	pixmap.c \
 	pixmap.h \
 	placement.c \

@@ -50,14 +50,6 @@
 #include "wsound.h"
 #include "xinerama.h"
 
-#ifdef GNOME_STUFF
-# include "gnome.h"
-#endif
-#ifdef KWM_HINTS
-# include "kwm.h"
-#endif
-
-
 
 /****** Global Variables ******/
 extern Time LastTimestamp;
@@ -433,10 +425,6 @@ wMaximizeWindow(WWindow *wwin, int directions)
         wwin->old_geometry.y = wwin->frame_y;
     }
     wwin->flags.maximized = directions;
-
-#ifdef KWM_HINTS
-    wKWMUpdateClientGeometryRestore(wwin);
-#endif
 
     if (directions & MAX_HORIZONTAL) {
         new_width = (usableArea.x2-usableArea.x1)-FRAME_BORDER_WIDTH*2;
@@ -1014,30 +1002,20 @@ wIconifyWindow(WWindow *wwin)
                 iw = wwin->icon->core->width;
                 ih = wwin->icon->core->height;
             } else {
-#ifdef KWM_HINTS
-                WArea area;
-
-                if (wKWMGetIconGeometry(wwin, &area)) {
-                    ix = area.x1;
-                    iy = area.y1;
-                    iw = area.x2 - ix;
-                    ih = area.y2 - iy;
-                } else
-#endif /* KWM_HINTS */
 #ifdef NETWM_HINTS
-                    if (wwin->flags.net_handle_icon) {
-                        ix = wwin->icon_x;
-                        iy = wwin->icon_y;
-                        iw = wwin->icon_w;
-                        ih = wwin->icon_h;
-                    } else
+                if (wwin->flags.net_handle_icon) {
+                    ix = wwin->icon_x;
+                    iy = wwin->icon_y;
+                    iw = wwin->icon_w;
+                    ih = wwin->icon_h;
+                } else
 #endif
-                    {
-                        ix = 0;
-                        iy = 0;
-                        iw = wwin->screen_ptr->scr_width;
-                        ih = wwin->screen_ptr->scr_height;
-                    }
+                {
+                    ix = 0;
+                    iy = 0;
+                    iw = wwin->screen_ptr->scr_width;
+                    ih = wwin->screen_ptr->scr_height;
+                }
             }
             animateResize(wwin->screen_ptr, wwin->frame_x, wwin->frame_y,
                           wwin->frame->core->width, wwin->frame->core->height,
@@ -1192,30 +1170,20 @@ wDeiconifyWindow(WWindow  *wwin)
                 iw = wwin->icon->core->width;
                 ih = wwin->icon->core->height;
             } else {
-#ifdef KWM_HINTS
-                WArea area;
-
-                if (wKWMGetIconGeometry(wwin, &area)) {
-                    ix = area.x1;
-                    iy = area.y1;
-                    iw = area.x2 - ix;
-                    ih = area.y2 - iy;
-                } else
-#endif /* KWM_HINTS */
 #ifdef NETWM_HINTS
-                    if (wwin->flags.net_handle_icon) {
-                        ix = wwin->icon_x;
-                        iy = wwin->icon_y;
-                        iw = wwin->icon_w;
-                        ih = wwin->icon_h;
-                    } else
+                if (wwin->flags.net_handle_icon) {
+                    ix = wwin->icon_x;
+                    iy = wwin->icon_y;
+                    iw = wwin->icon_w;
+                    ih = wwin->icon_h;
+                } else
 #endif
-                    {
-                        ix = 0;
-                        iy = 0;
-                        iw = wwin->screen_ptr->scr_width;
-                        ih = wwin->screen_ptr->scr_height;
-                    }
+                {
+                    ix = 0;
+                    iy = 0;
+                    iw = wwin->screen_ptr->scr_width;
+                    ih = wwin->screen_ptr->scr_height;
+                }
             }
             animateResize(wwin->screen_ptr, ix, iy, iw, ih,
                           wwin->frame_x, wwin->frame_y,

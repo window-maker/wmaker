@@ -53,15 +53,6 @@
 #include "session.h"
 #include "balloon.h"
 #include "geomview.h"
-#ifdef KWM_HINTS
-# include "kwm.h"
-#endif
-#ifdef GNOME_STUFF
-# include "gnome.h"
-#endif
-#ifdef OLWM_HINTS
-# include "openlook.h"
-#endif
 #ifdef NETWM_HINTS
 # include "wmspec.h"
 #endif
@@ -778,18 +769,6 @@ wScreenInit(int screen_number)
 
     createInternalWindows(scr);
 
-#ifdef KWM_HINTS
-    wKWMInitStuff(scr);
-#endif
-
-#ifdef GNOME_STUFF
-    wGNOMEInitStuff(scr);
-#endif
-
-#ifdef OLWM_HINTS
-    wOLWMInitStuff(scr);
-#endif
-
 #ifdef NETWM_HINTS
     wNETWMInitStuff(scr);
 #endif
@@ -884,30 +863,6 @@ wScreenUpdateUsableArea(WScreen *scr)
         {
             WArea area;
             if (wNETWMGetUsableArea(scr, i, &area)) {
-                scr->totalUsableArea[i].x1 = WMAX(scr->totalUsableArea[i].x1, area.x1);
-                scr->totalUsableArea[i].y1 = WMAX(scr->totalUsableArea[i].y1, area.y1);
-                scr->totalUsableArea[i].x2 = WMIN(scr->totalUsableArea[i].x2, area.x2);
-                scr->totalUsableArea[i].y2 = WMIN(scr->totalUsableArea[i].y2, area.y2);
-            }
-        }
-#endif
-
-#ifdef GNOME_STUFF
-        {
-            WArea area;
-            if (wGNOMEGetUsableArea(scr, i, &area)) {
-                scr->totalUsableArea[i].x1 = WMAX(scr->totalUsableArea[i].x1, area.x1);
-                scr->totalUsableArea[i].y1 = WMAX(scr->totalUsableArea[i].y1, area.y1);
-                scr->totalUsableArea[i].x2 = WMIN(scr->totalUsableArea[i].x2, area.x2);
-                scr->totalUsableArea[i].y2 = WMIN(scr->totalUsableArea[i].y2, area.y2);
-            }
-        }
-#endif
-
-#ifdef KWM_HINTS
-        {
-            WArea area;
-            if (wKWMGetUsableArea(scr, i, &area)) {
                 scr->totalUsableArea[i].x1 = WMAX(scr->totalUsableArea[i].x1, area.x1);
                 scr->totalUsableArea[i].y1 = WMAX(scr->totalUsableArea[i].y1, area.y1);
                 scr->totalUsableArea[i].x2 = WMIN(scr->totalUsableArea[i].x2, area.x2);
@@ -1033,64 +988,6 @@ wScreenUpdateUsableArea(WScreen *scr)
     }
 #endif
 
-#ifdef KWM_HINTS
-    {
-        WArea area;
-        if (wKWMGetUsableArea(scr, &area)) {
-            scr->totalUsableArea.x1 = WMAX(scr->totalUsableArea.x1, area.x1);
-            scr->totalUsableArea.y1 = WMAX(scr->totalUsableArea.y1, area.y1);
-            scr->totalUsableArea.x2 = WMIN(scr->totalUsableArea.x2, area.x2);
-            scr->totalUsableArea.y2 = WMIN(scr->totalUsableArea.y2, area.y2);
-        }
-    }
-#endif
-
-#ifdef GNOME_STUFF
-    {
-        WReservedArea *area = scr->reservedAreas;
-
-        while (area) {
-            int th, bh;
-            int lw, rw;
-            int w, h;
-
-            w = area->area.x2 - area->area.x1;
-            h = area->area.y2 - area->area.y1;
-
-            th = area->area.y1;
-            bh = scr->scr_height - area->area.y2;
-            lw = area->area.x1;
-            rw = scr->scr_width - area->area.x2;
-
-            if (WMIN(th, bh) <= WMIN(lw, rw)) {
-                /* horizontal */
-                if (th < bh) {
-                    /* on top */
-                    if (scr->totalUsableArea.y1 < area->area.y2)
-                        scr->totalUsableArea.y1 = area->area.y2;
-                } else {
-                    /* on bottom */
-                    if (scr->totalUsableArea.y2 > area->area.y1)
-                        scr->totalUsableArea.y2 = area->area.y1;
-                }
-            } else {
-                /* vertical */
-                if (lw < rw) {
-                    /* on left */
-                    if (scr->totalUsableArea.x1 < area->area.x2)
-                        scr->totalUsableArea.x1 = area->area.x2;
-                } else {
-                    /* on right */
-                    if (scr->totalUsableArea.x2 > area->area.x1)
-                        scr->totalUsableArea.x2 = area->area.x1;
-                }
-            }
-
-            area = area->next;
-        }
-    }
-#endif /* GNOME_STUFF */
-
     if (scr->totalUsableArea.x2 - scr->totalUsableArea.x1 < scr->scr_width/2) {
         scr->totalUsableArea.x2 = scr->usableArea.x2;
         scr->totalUsableArea.x1 = scr->usableArea.x1;
@@ -1099,18 +996,6 @@ wScreenUpdateUsableArea(WScreen *scr)
         scr->totalUsableArea.y2 = scr->usableArea.y2;
         scr->totalUsableArea.y1 = scr->usableArea.y1;
     }
-
-#ifdef not_used
-#ifdef KWM_HINTS
-    {
-        int i;
-
-        for (i = 0; i < scr->workspace_count; i++) {
-            wKWMSetUsableAreaHint(scr, i);
-        }
-    }
-#endif
-#endif
 
 #ifdef NETWM_HINTS
     wNETWMUpdateWorkarea(scr);

@@ -365,8 +365,8 @@ for your convenience.
 
 
 2.8 Can I use WindowMaker with KDE or GNOME or CDE? 
-----------------------------------
-Contrary to a lot of people thinks, KDE is NOT a window manager. KDE is
+---------------------------------------------------
+Contrary to a lot of people think, KDE is NOT a window manager. KDE is
 a suite of various applications that includes a custom window manager (kwm).
 The same is true for CDE. 
 
@@ -386,7 +386,7 @@ mouse.
 
 
 2.9 How do I get Window Maker working with xdm in Redhat 5.[01]? 
-----------------------------------
+----------------------------------------------------------------
 After running wmaker.inst and letting it write to .xinitrc,
 cp .xinitrc .xsession
 and make sure that /usr/local/bin is in your $PATH for the Xserver. You can
@@ -1311,14 +1311,8 @@ in routines/xsci/jpc_SGraph.c
 5.12 Netscape shows black and white icons
 ----------------------------------
 
-This is because Netscape uses monochrome icons when running under olwm
-and you are using the OPEN LOOK emulation option. If you do not use any XView
-apps anyway, recompile Window Maker without the --enable-openlook option.
-If you need OPEN LOOK emulation, you will have to get used to the monochrome
-icons or change then manually in the Attributes panel for each window.
-I have also seen this happen on some systems if you run Netscape in a high
-colour depth (32bpp) regardless of whether you're using openlook or not.
-That is a Netscape bug.  Therefore, bug Netscape.
+I have seen this happen on some systems if you run Netscape in a high
+colour depth (32bpp). That is a Netscape bug. Therefore, bug Netscape.
 
 
 5.13 Snow flakes from xsnow don't acumulate on titlebars!
@@ -1470,11 +1464,14 @@ the files manually. Or download the whole distribution.
 
 
 7.5 Will you add GNOME or KDE support?
-----------------------------------
+--------------------------------------
 
 Support for GNOME (and KDE) hints is included since 0.50.0.  You have to
 enable them at compile-time using the appropriate arguments to ./configure.
 Please read the INSTALL file for more details.
+Note: starting with version 0.90.0, support for legacy Gnome-1.x and KDE-2.x
+was dropped in favor of NETWM support (used by both Gnome-2.x and KDE-3.x)
+
 
 -=-=-=-=-
 Themes:

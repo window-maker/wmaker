@@ -68,9 +68,7 @@
 /*
  * support for XDND drop in the Dock. Experimental
  */
-#ifdef GNOME_STUFF
-#define XDND
-#endif
+/*#define XDND*/
 
 /*
  * support for Motif window manager (mwm) window hints
@@ -534,12 +532,7 @@
 #define MAX_ICON_WIDTH	60	       /* size of the icon pixmap */
 #define MAX_ICON_HEIGHT 48
 
-/* KDE may have problems with more than 32 workspaces */
-#ifdef KWM_HINTS
-# define MAX_WORKSPACES 32
-#else
-# define MAX_WORKSPACES  100
-#endif
+#define MAX_WORKSPACES  100
 
 #define MAX_MENU_TEXT_LENGTH 512
 

@@ -1,8 +1,6 @@
 
 #include "wconfig.h"
 
-#ifdef XFT
-
 #include <X11/Xft/Xft.h>
 #include <fontconfig/fontconfig.h>
 
@@ -380,7 +378,5 @@ WMCopyFontWithStyle(WMScreen *scrPtr, WMFont *font, WMFontStyle style)
     return copy;
 }
 
-
-#endif /* XFT */
 
 

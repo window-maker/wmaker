@@ -161,15 +161,6 @@ Zoznam v¹etkých mo¾ností vypí¹e príkaz ./configure --help
 --disable-motif 
 	zaká¾e podporu pre pokyny mana¾éra okien wmw 
 
---enable-openlook
-	povolí podporu pre pokyny mana¾éra okien OPEN LOOK(tm)
-
---enable-gnome
-	povolí podporu pre pokyny mana¾éra okien GNOME
-
---enable-kde
-	povolí podporu pre pokyny mana¾éra okien kde/kwm
-
 --enable-lite
 	odstráni veci, ktoré sa u¾ nachádzajú v desktopových prostrediach
 	ako KDE a GNOME. Odstránené veci sú: zoznam okien, menu aplikácií,

@@ -153,15 +153,6 @@ Seznam ostatních mo¾ností dostanete spu¹tìním ./configure --help
 --disable-motif
         zaká¾e podporu pokynù pro okenní mana¾er mwm.
 
---enable-openlook
-        povolí podporu pokynù pro okenní mana¾er OPEN LOOK(tm).
-
---enable-gnome
-        povolí podporu pokynù pro GNOME.
-
---enable-kde
-        povolí podporu pokynù pro KDE.
-
 --enable-lite
         odstraní nástroje a funkce, které jsou u¾ dostupné v desktopových
         prosøedích KDE a GNOME. Odstraní se: seznam oken, menu aplikací,

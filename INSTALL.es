@@ -165,15 +165,6 @@ Para obtener una lista de otras opciones, ejecute ./configure --help
 --disable-motif 
 	desactiva el soporte para el gestor de ventanas mwm.
 
---enable-openlook
-	activa el soporte para el gestor de ventanas OPEN LOOK(tm)
-
---enable-gnome
-	activa el soporte para el gestor de ventanas GNOME.
-
---enable-kde
-	activa el soporte para el gestor de ventanas kde/kwm.
-
 --enable-lite
 	quita cosas que ya están soportadas en los entornos de escritorio, 
 	tal como KDE y Gnome. Desactiva cosas como: lista de ventanas, 

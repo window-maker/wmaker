@@ -1272,19 +1272,6 @@ wFrameWindowChangeTitle(WFrameWindow *fwin, char *new_title)
 }
 
 
-#ifdef OLWM_HINTS
-void
-wFrameWindowUpdatePushButton(WFrameWindow *fwin, Bool pushed)
-{
-    fwin->flags.right_button_pushed_in = pushed;
-
-    paintButton(fwin->right_button, fwin->title_texture[fwin->flags.state],
-                WMColorPixel(fwin->title_color[fwin->flags.state]),
-                fwin->rbutton_image, pushed);
-}
-#endif /* OLWM_HINTS */
-
-
 #ifdef XKB_BUTTON_HINT
 void
 wFrameWindowUpdateLanguageButton(WFrameWindow *fwin)
@@ -1467,16 +1454,9 @@ handleButtonExpose(WObjDescriptor *desc, XEvent *event)
                         WMColorPixel(fwin->title_color[fwin->flags.state]),
                         fwin->lbutton_image, False);
         } else {
-            Bool pushed = False;
-
-#ifdef OLWM_HINTS
-            if (fwin->flags.right_button_pushed_in)
-                pushed = True;
-#endif
-            /* emulate the olwm pushpin in the "out" state */
             paintButton(button, fwin->title_texture[fwin->flags.state],
                         WMColorPixel(fwin->title_color[fwin->flags.state]),
-                        fwin->rbutton_image, pushed);
+                        fwin->rbutton_image, False);
         }
 }
 

@@ -217,31 +217,6 @@ http://shadowmere.student.utwente.nl/
 Note que debe compilar Window Maker con el parámetro --enable-sound
 y definir la opción DisableSound a NO.
 
-Soporte para OpenL**k
-=====================
-
-Calculo que muchos usuarios, principalmente del mundo académico, 
-tienen que usar aplicaciones escritas usando los toolkits OpenL**k,
-así que tener soporte para estas aplicaciones debe ser de algún uso.
-
-Para activarlo, use  --enable-openlook al hacer el configure. Note que
-no todo está implementado.
-
-Las cosas implementadas incluyen consejos de adorno y el push-pin. Las cosas 
-no implementadas incluyen _SUN_WINDOW_STATE (la cosa compuesta que lleva el estado),
-cosas que interesan sobre arrastrar y soltar, cabecera (no estoy seguro de que sea así)
-y cadenas footer.
-
-Por favor hágame saber si algo no funciona. Si la característica ya está implimentada,
-pero no funciona por un error, intentaré arreglarlo. Si esta es una característica no
-implementada y menciona que es importante (obs: no solo superficial), consideraré 
-implementarlo.
-
-El estado "out" del pushpin es emular un botón presionado. Solo cliquee 
-en el botón para hacer que se libere, lo cuál corresponde al estado 
-pinned-in del pushpin. Si pulsa otra vez en el boton liberado, servirá de
-botón normal de cerrado: cerrará la ventana.
-
 
 Ajuste de Rendimiento.
 =====================

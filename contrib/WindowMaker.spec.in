@@ -50,7 +50,6 @@ export CFLAGS LINGUAS NLSDIR GNUSTEP_LOCAL_ROOT;
 
 ./configure --prefix=/usr --exec-prefix=/usr/X11R6 \
 	--sysconfdir=/etc/X11 --enable-modelock \
-	--enable-kde --enable-gnome --enable-openlook \
 	--enable-usermenu
 make
 

@@ -16,7 +16,6 @@ To do before next release:
 - clean up netwm hints on exit
 - check whether window states are being saved/restored properly via netwm
   on restart/crash-restart (grep for XXX/TODO)
-- remove legacy stuff for openlook/gnome-1/kde-1 (don't forget to remove README.KDE/.GNOME)
 - review wmaker.inst
 
 remake wrlib rule to not compile with -fomit-frame-pointer and stuff

@@ -167,18 +167,6 @@ Afin d'obtenir la liste des autres options, exécutez ./configure --help
 	désactive le support pour les fonctionnalités en rapport avec le gestionnaire
 	de fenêtres mwm.
 
---enable-openlook
-	désactive le support pour les fonctionnalités en rapport avec le gestionnaire
-	de fenêtres OPEN LOOK(tm).
-
---enable-gnome
-	désactive le support pour les fonctionnalités en rapport avec le gestionnaire
-	de fenêtres GNOME.
-
---enable-kde
-	désactive le support pour les fonctionnalités en rapport avec le gestionnaire
-	de fenêtres kde/kwm.
-
 --enable-lite
 	désactive des fonctionnalités déjà prises en compte par les gestionnaires de
 	bureau tels que KDE et GNOME. Celà concerne : la liste de fenêtres, le menu

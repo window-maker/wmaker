@@ -51,7 +51,8 @@ Window Maker was designed keeping integration with GNUstep in mind and is the
 (www.gnu.org) Read more about GNUstep further on this file.
 
 Hints (information given by applications to integrate well with the window 
-manager) for Motif(tm), OPEN LOOK(tm), KDE and GNOME are also supported. 
+manager) for Motif(tm) and NETWM are also supported (NETWM is used by KDE
+and GNOME, so they are automatically supported as a result). 
 So you can replace any of the window managers for these environments
 with Window Maker while keeping most, if not all, of the native window manager
 functionality.
@@ -218,31 +219,6 @@ http://shadowmere.student.utwente.nl/
 
 Note that you must compile Window Maker with the --enable-sound configure
 flag and set the DisableSound option to NO.
-
-
-OpenL**k support
-================
-
-I guess many users, mainly from the academic world, have to use
-applications written using the OpenL**k toolkits, so having support
-for these apps must be of some use.
-
-To enable, use --enable-openlook when doing the configure. Note that
-not everything is implemented. 
-
-Implemented stuff include decoration hints and the push-pin. Not implemented
-stuff include _SUN_WINDOW_STATE (the compose led state stuff), drag and drop
-interest stuff, header (not sure what's it) and footer strings.
-
-Please give me feedback if something doesn't work. If the feature is
-already implemented, but is not working because of a bug, I'll try to
-have that fixed. If it's a non-implemented feature and you mention that
-it's important (ie: not just cosmetical), I'll consider implementing it.
-
-The "out" state of the pushpin is emulated as a pushed-in close button.
-Just click on the button to make it pushed-out, which corresponds
-to the pinned-in state of the pushpin. If you push again in the pushed-out
-close button, it will act as a normal close button: it will close the window.
 
 
 Performance Tuning

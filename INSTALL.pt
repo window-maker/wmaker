@@ -155,15 +155,6 @@ Para obter uma lista com outras opcoes, execute ./configure --help:
 --disable-motif
 	Desativa compatibilidade com gerenciador de janelas mwm.
 
---enable-openlook
-	Ativa compatibilidade com gerenciador de janelas OPEN LOOK(tm).
-
---enable-gnome
-	Ativa compatibilidade com gerenciador de janelas GNOME.
-
---enable-kde
-	Ativa compatibilidade com gerenciador de janelas kde/kwm.
-
 --enable-lite
 	Remove coisas que já são suportadas em ambientes desktops como o KDE
 	e o GNOME. As opções desativadas são: lista de janelas (window list), menu de

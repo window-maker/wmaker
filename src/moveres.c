@@ -47,10 +47,6 @@
 #include <WINGs/WINGsP.h>
 
 
-#ifdef KWM_HINTS
-#include "kwm.h"
-#endif
-
 /* How many different types of geometry/position
  display thingies are there? */
 #define NUM_DISPLAYS 5
@@ -2326,11 +2322,6 @@ wSelectWindows(WScreen *scr, XEvent *ev)
             XUngrabServer(dpy);
             XUngrabPointer(dpy, CurrentTime);
             selectWindowsInside(scr, x, y, x + w, y + h);
-
-#ifdef KWM_HINTS
-            wKWMSelectRootRegion(scr, xp, yp, w, h,
-                                 event.xbutton.state & ControlMask);
-#endif /* KWM_HINTS */
 
 #ifdef DEBUG
             puts("End window selection");

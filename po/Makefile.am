@@ -17,9 +17,7 @@ POTFILES  = \
 	$(top_builddir)/src/dock.c \
 	$(top_builddir)/src/dockedapp.c \
 	$(top_builddir)/src/framewin.c \
-	$(top_builddir)/src/gnome.c \
 	$(top_builddir)/src/icon.c \
-	$(top_builddir)/src/kwm.c \
 	$(top_builddir)/src/main.c \
 	$(top_builddir)/src/menu.c \
 	$(top_builddir)/src/menureader.c \

@@ -19,18 +19,18 @@ AM_INIT_AUTOMAKE(WindowMaker, 0.85.0)
 
 AC_PROG_LIBTOOL
 
-# by Marcelo Magallon <mmagallo@efis.ucr.ac.cr>
-# Turn around -rpath problem with libtool 1.0c
-# This define should be improbable enough to not conflict with anything
-case ${host} in
-  *-pc-linux-gnu)
-    AC_MSG_RESULT([Fixing libtool for -rpath problems.])
-    sed < libtool > libtool-2 \
-    's/^hardcode_libdir_flag_spec.*$/hardcode_libdir_flag_spec=" -D__LIBTOOL_IS_A_FOOL__ "/'
-    mv libtool-2 libtool
-    chmod 755 libtool
-  ;;
-esac
+dnl # by Marcelo Magallon <mmagallo@efis.ucr.ac.cr>
+dnl # Turn around -rpath problem with libtool 1.0c
+dnl # This define should be improbable enough to not conflict with anything
+dnl case ${host} in
+dnl   *-pc-linux-gnu)
+dnl     AC_MSG_RESULT([Fixing libtool for -rpath problems.])
+dnl     sed < libtool > libtool-2 \
+dnl     's/^hardcode_libdir_flag_spec.*$/hardcode_libdir_flag_spec=" -D__LIBTOOL_IS_A_FOOL__ "/'
+dnl     mv libtool-2 libtool
+dnl     chmod 755 libtool
+dnl   ;;
+dnl esac
 
 
 AM_CONFIG_HEADER(src/config.h)
@@ -102,8 +102,7 @@ AC_FUNC_VPRINTF
 AC_FUNC_ALLOCA
 AC_CHECK_FUNCS(gethostname select poll strerror strcasecmp strncasecmp \
 	       setsid atexit mallinfo mkstemp snprintf vsnprintf asprintf \
-	       vasprintf mbsnrtowcs mbsrtowcs mbrtowc mbrlen wcsnrtombs \
-	       wcsrtombs wcstombs)
+	       vasprintf)
 
 dnl ripped from samba
 dnl 
@@ -181,7 +180,7 @@ AC_HEADER_SYS_WAIT
 AC_HEADER_TIME
 AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h sys/time.h sys/types.h \
 		 libintl.h sys/select.h poll.h malloc.h ctype.h string.h \
-		 strings.h wchar.h)
+		 strings.h)
 
 
 
@@ -381,36 +380,7 @@ AC_SUBST(supported_locales)
 dnl Support for various hint things
 dnl ===============================
 
-gnome_on="no"
-kde_on="no"
-openlook_on="no"
-netwm_on="no"
 vdesktop_on="no"
-
-
-AC_ARG_ENABLE(gnome,
-  [  --enable-gnome          enable stuff needed for GNOME ],
-  [if test x$enableval = xyes; then
-    AC_DEFINE(GNOME_STUFF, 1, [define if you want GNOME stuff support])
-    gnome_on=yes
-  fi])
-
-
-AC_ARG_ENABLE(kde,
-  [  --enable-kde            enable support for KDE window manager (kwm) hints ],
-  [if test x$enableval = xyes; then
-    AC_DEFINE(KWM_HINTS, 1, [define if you want KDE hint support])
-    kde_on=yes
-  fi])
-
-
-AC_ARG_ENABLE(openlook,
-  [  --enable-openlook       enable support for OPEN LOOK(tm) (olwm) hints ],
-  [if test x$enableval = xyes; then
-    AC_DEFINE(OLWM_HINTS, 1, [define if you want OPEN LOOK(tm) hint support])
-    openlook_on=yes
-  fi])
-
 
 AC_ARG_ENABLE(vdesktop,
   [  --enable-vdesktop       enable virtual desktop],
@@ -583,7 +553,6 @@ fi
 
 AC_SUBST(XFTFLAGS)
 AC_SUBST(XFTLIBS)
-AC_DEFINE(XFT, 1, [define if you want support for antialiased fonts (set by configure)])
 
 
 dnl XINERAMA support
@@ -1124,20 +1093,6 @@ else
 	languages=`echo $MOFILES | sed 's/.mo//g'`
 fi
 
-extrasupport=''
-if test "$openlook_on" = "yes"; then
-  extrasupport="OpenLook $extrasupport"
-fi
-if test "$gnome_on" = "yes"; then
-extrasupport="Gnome-1.x $extrasupport"
-fi
-if test "$kde_on" = "yes"; then
-  extrasupport="KDE-1.x $extrasupport"
-fi
-if test "x$extrasupport" = "x"; then
-  extrasupport="None"
-fi
-
 echo
 echo "Window Maker was configured as follows:"
 echo
@@ -1150,7 +1105,6 @@ echo "Use inline MMX(tm) x86 assembly     : $mmx_support"
 echo "Antialiased text support in WINGs   : $xft"
 echo "Xinerama extension support          : $xinerama"
 echo "Virtual desktop support             : $vdesktop_on"
-echo "Supported legacy environments       : $extrasupport"
 echo "Translated message files to install : $mof"
 dnl echo "Supported languages beside English  : $languages"
 if test "x$MOFILES" != "x"; then

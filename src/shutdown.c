@@ -36,12 +36,6 @@
 #include "properties.h"
 #include "session.h"
 #include "winspector.h"
-#ifdef KWM_HINTS
-# include "kwm.h"
-#endif
-#ifdef OLWM_HINTS
-# include "openlook.h"
-#endif
 
 extern Atom _XA_WM_DELETE_WINDOW;
 extern Time LastTimestamp;
@@ -105,9 +99,6 @@ Shutdown(WShutdownMode mode)
 #endif
                     wSessionSaveClients(scr);
 
-#ifdef KWM_HINTS
-                wKWMShutdown(scr, True);
-#endif
                 wScreenSaveState(scr);
 
                 if (mode == WSKillMode)
@@ -128,14 +119,7 @@ Shutdown(WShutdownMode mode)
             if (scr) {
                 if (scr->helper_pid)
                     kill(scr->helper_pid, SIGKILL);
-#ifdef KWM_HINTS
-                wKWMShutdown(scr, False);
-#endif
-#ifdef OLWM_HINTS
-                wOLWMShutdown(scr);
-#endif
                 wScreenSaveState(scr);
-
                 RestoreDesktop(scr);
             }
         }

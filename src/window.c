@@ -59,15 +59,6 @@
 #ifdef MWM_HINTS
 # include "motif.h"
 #endif
-#ifdef KWM_HINTS
-# include "kwm.h"
-#endif
-#ifdef GNOME_STUFF
-# include "gnome.h"
-#endif
-#ifdef OLWM_HINTS
-# include "openlook.h"
-#endif
 #ifdef NETWM_HINTS
 # include "wmspec.h"
 #endif
@@ -443,20 +434,6 @@ wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
             check = wNETWMCheckClientHints(wwin, &tmp_level, &tmp_workspace);
 #endif
 
-#ifdef GNOME_STUFF
-        if (!check)
-            check = wGNOMECheckClientHints(wwin, &tmp_level, &tmp_workspace);
-#endif /* GNOME_STUFF */
-
-#ifdef KWM_HINTS
-        if (!check)
-            check = wKWMCheckClientHints(wwin, &tmp_level, &tmp_workspace);
-#endif /* KWM_HINTS */
-
-#ifdef OLWM_HINTS
-        wOLWMCheckClientHints(wwin);
-#endif /* OLWM_HINTS */
-
         /* window levels are between INT_MIN+1 and INT_MAX, so if we still
          * have INT_MIN that means that no window level was requested. -Dan
          */
@@ -749,15 +726,6 @@ wManageWindow(WScreen *scr, Window window)
         title = NULL;
     }
 
-#ifdef KWM_HINTS
-    if (title && !wKWMManageableClient(scr, window, title)) {
-        XFree(title);
-        XUngrabServer(dpy);
-        return NULL;
-    }
-#endif /* KWM_HINTS */
-
-
     wwin = wWindowCreate();
 
     XSaveContext(dpy, window, wWinContext, (XPointer)&wwin->client_descriptor);
@@ -882,24 +850,6 @@ wManageWindow(WScreen *scr, Window window)
 
     wWindowSetupInitialAttributes(wwin, &window_level, &workspace);
 
-#ifdef OLWM_HINTS
-    if (wwin->client_flags.olwm_transient && wwin->transient_for==None
-        && wwin->group_id != None && wwin->group_id != window) {
-
-        transientOwner = wWindowFor(wwin->group_id);
-
-        if (transientOwner) {
-            wwin->transient_for = wwin->group_id;
-
-            /* transients can't be iconified or maximized */
-            if (wwin->transient_for) {
-                WSETUFLAG(wwin, no_miniaturizable, 1);
-                WSETUFLAG(wwin, no_miniaturize_button, 1);
-            }
-        }
-    }
-#endif /* OLWM_HINTS */
-
     /* Make broken apps behave as a nice app. */
     if (WFLAGP(wwin, emulate_appicon)) {
         wwin->main_window = wwin->client_win;
@@ -1023,24 +973,9 @@ wManageWindow(WScreen *scr, Window window)
         wwin->flags.maximized = MAX_VERTICAL|MAX_HORIZONTAL;
     }
 
-    {
-#if defined(NETWM_HINTS) || defined(GNOME_STUFF) || defined(KWM_HINTS)
-        Bool bla = False;
-#endif
-
 #ifdef NETWM_HINTS
-        if (!bla)
-            bla = wNETWMCheckInitialClientState(wwin);
+    wNETWMCheckInitialClientState(wwin);
 #endif
-#ifdef GNOME_STUFF
-        if (!bla)
-            bla = wGNOMECheckInitialClientState(wwin);
-#endif
-#ifdef KWM_HINTS
-        if (!bla)
-            bla = wKWMCheckClientInitialState(wwin);
-#endif
-    }
 
     /* apply previous state if it exists and we're in startup */
     if (scr->flags.startup && wm_state >= 0) {
@@ -1371,16 +1306,6 @@ wManageWindow(WScreen *scr, Window window)
 
     wwin->frame->child = wwin;
 
-#ifdef OLWM_HINTS
-    /* emulate olwm push pin. Make the button look as pushed-in for
-     * the pinned-out state. When the button is clicked, it will
-     * revert to the normal position, which means the pin is pinned-in.
-     */
-    if (wwin->flags.olwm_push_pin_out)
-        wFrameWindowUpdatePushButton(wwin->frame, True);
-#endif /* OLWM_HINTS */
-
-
     wwin->frame->workspace = workspace;
 
     wwin->frame->on_click_left = windowIconifyClick;
@@ -1610,16 +1535,6 @@ wManageWindow(WScreen *scr, Window window)
 
     wColormapInstallForWindow(scr, scr->cmap_window);
 
-
-#ifdef OLWM_HINTS
-    if (wwin->client_flags.olwm_warp_to_pin && wwin->frame->titlebar != NULL
-        && !WFLAGP(wwin, no_close_button) && !withdraw) {
-
-        XWarpPointer(dpy, None, None, 0, 0, 0, 0,
-                     wwin->frame_x + width - wwin->frame->titlebar->height * 2,
-                     wwin->frame_y);
-    }
-#endif
 
     /*
      *------------------------------------------------------------
@@ -2328,9 +2243,6 @@ wWindowSynthConfigureNotify(WWindow *wwin)
 
     sevent.xconfigure.override_redirect = False;
     XSendEvent(dpy, wwin->client_win, False, StructureNotifyMask, &sevent);
-#ifdef KWM_HINTS
-    wKWMSendEventMessage(wwin, WKWMChangedClient);
-#endif
     XFlush(dpy);
 }
 
@@ -3354,18 +3266,6 @@ windowCloseClick(WCoreWindow *sender, void *data, XEvent *event)
     if (event->xbutton.state & ControlMask) {
         wClientKill(wwin);
     } else {
-#ifdef OLWM_HINTS
-        if (wwin->flags.olwm_push_pin_out) {
-
-            wwin->flags.olwm_push_pin_out = 0;
-
-            wOLWMChangePushpinState(wwin, True);
-
-            wFrameWindowUpdatePushButton(wwin->frame, False);
-
-            return;
-        }
-#endif
         if (wwin->protocols.DELETE_WINDOW && event->xbutton.state==0) {
             /* send delete message */
             wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, LastTimestamp);
