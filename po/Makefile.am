@@ -48,7 +48,7 @@ all-local: $(CATALOGS)
 
 WindowMaker.pot: $(POTFILES)
 	xgettext --default-domain=WindowMaker \
-	--add-comments --keyword=_ $(POTFILES)
+	--add-comments --keyword=_ --keyword=N_ $(POTFILES)
 	if cmp -s WindowMaker.po WindowMaker.pot; then \
 	    rm -f WindowMaker.po; \
 	else \

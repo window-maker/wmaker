@@ -31,7 +31,7 @@ all-local: $(CATALOGS)
 
 WINGs.pot: $(POTFILES)
 	xgettext --default-domain=WINGs \
-	--add-comments --keyword=_ $(POTFILES)
+	--add-comments --keyword=_ --keyword=N_ $(POTFILES)
 	if cmp -s WINGs.po WINGs.pot; then \
 	    rm -f WINGs.po; \
 	else \

@@ -1,6 +1,7 @@
 Changes since version 0.91.0:
 .............................
 - fixed crash with info panel and alt-tabbing
+- updated Japanese translations (Takeo Hashimoto <HashimotoTakeo@mac.com>)
 
 Changes since version 0.90.0:
 .............................

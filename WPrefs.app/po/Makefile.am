@@ -39,7 +39,7 @@ all-local: $(CATALOGS)
 
 WPrefs.pot: $(POTFILES)
 	xgettext --default-domain=WPrefs \
-	--add-comments --keyword=_ $(POTFILES)
+	--add-comments --keyword=_ --keyword=N_ $(POTFILES)
 	if cmp -s WPrefs.po WPrefs.pot; then \
 	    rm -f WPrefs.po; \
 	else \
