@@ -294,6 +294,13 @@ handleExitSig(int sig)
     sigprocmask(SIG_UNBLOCK, &sigs, NULL);
 }
 
+/* Dummy signal handler */
+static void
+dummyHandler(int sig)
+{
+}
+
+
 /*
  *----------------------------------------------------------------------
  * handleSig--
@@ -715,12 +722,6 @@ static char *atomNames[] = {
     GNUSTEP_TITLEBAR_STATE
 };
 
-static void
-handle_sigpipe(int signum)
-{
-    if (0) signum=0; /* To avoid a gcc warning */
-    return;
-}
 
 /*
  *----------------------------------------------------------
@@ -853,12 +854,12 @@ StartUp(Bool defaultScreenOnly)
     sigaction(SIGUSR2, &sig_action, NULL);
 
     /* ignore dead pipe */
-    sig_action.sa_handler = &handle_sigpipe;
     /* Because POSIX mandates that only signal with handlers are reset
-       accross an exec*(), we do not want to propagate ignoring SIGPIPEs
-       to children. Hence the dummy handler.
-       Philippe Troin <phil@fifi.org>
-    */
+     * accross an exec*(), we do not want to propagate ignoring SIGPIPEs
+     * to children. Hence the dummy handler.
+     * Philippe Troin <phil@fifi.org>
+     */
+    sig_action.sa_handler = &dummyHandler;
     sig_action.sa_flags = SA_RESTART;
     sigaction(SIGPIPE, &sig_action, NULL);
 
