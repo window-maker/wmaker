@@ -46,7 +46,7 @@
 
 
 void** 
-wPluginPackInitData(int members, ...) 
+wPluginPackData(int members, ...) 
 {
     void **p;
     va_list vp;
@@ -56,9 +56,7 @@ wPluginPackInitData(int members, ...)
     va_start(vp, members);
     for(i=0;i<members;i++) {
         p[i] = va_arg(vp, void *);
-        printf(" %d > %d\n",i,(int)p[i]);
     }
-    printf(" s> %s\n",(char*)p[2]);
     va_end(vp);
     return p;
 }

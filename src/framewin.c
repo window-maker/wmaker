@@ -1085,10 +1085,10 @@ wFrameWindowPaint(WFrameWindow *fwin)
     if (scr->drawstring_func[fwin->flags.state + fwin->drawstring_proc_offset]) {
         scr->drawstring_func[fwin->flags.state + fwin->drawstring_proc_offset]->
             proc.drawString(scr->drawstring_func[fwin->flags.state 
-                    + fwin->drawstring_proc_offset]->arg,
-                    fwin->titlebar->window, *fwin->title_gc,
-                    *fwin->font, x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE,
-                    fwin->titlebar->width, fwin->top_width, fwin->title, titlelen);
+                    + fwin->drawstring_proc_offset]->arg, fwin->titlebar->window,
+                    x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE,
+                    fwin->titlebar->width, fwin->top_width,
+                    fwin->title, wPluginPackData(2, *fwin->title_gc, *fwin->font));
     } else {
         WMDrawString(scr->wmscreen, fwin->titlebar->window, 
                 *fwin->title_gc, *fwin->font, x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE, 

@@ -2211,7 +2211,7 @@ getTextRenderer(WScreen *scr, WDefaultEntry *entry, proplist_t value,
             func = PLGetString(elem);
             scr->drawstring_func[changed] = wPluginCreateFunction (W_FUNCTION_DRAWSTRING,
                     lib, "initDrawString", func, "destroyDrawString", value,
-                    wPluginPackInitData(3, dpy, scr->w_colormap,"-DATA-"));
+                    wPluginPackData(3, dpy, scr->w_colormap,"-DATA-"));
         }
 
         return getColor(scr, entry, PLGetArrayElement(value,3), addr, ret);

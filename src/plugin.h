@@ -95,6 +95,6 @@ WFunction* wPluginCreateFunction(int type, char *library_name,
 
 void wPluginDestroyFunction(WFunction *function);
 
-void** wPluginPackInitData(int members, ...);
+void** wPluginPackData(int members, ...);
 
 #endif
