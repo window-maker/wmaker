@@ -239,7 +239,7 @@ static void copyLine(int x1, int y1, int x2, int y2, int nwidth, int format,
 	    else
 		dst[offset++] = 255;
 
-	    // calc next step
+	    /* calc next step */
 	    if (p > 0) {
 		x1 += xi;
 		y1 += yi;
@@ -266,7 +266,7 @@ static void copyLine(int x1, int y1, int x2, int y2, int nwidth, int format,
 	    else
 		dst[offset++] = 255;
 
-	    // calc next step
+	    /* calc next step */
 	    if (p > 0) {
 		x1 += xi;
 		y1 += yi;
@@ -295,7 +295,7 @@ static RImage *rotateImage(RImage *image, float angle)
     unsigned char *src, *dst;
     int dpr, dpru, p;
     
-    // only 180o for now
+    /* only 180o for now */
     if (angle > 180.0)
 	angle -= 180.0;
     
@@ -342,7 +342,8 @@ static RImage *rotateImage(RImage *image, float angle)
 
 	    copyLine(x1, y1, xx, yy, nwidth, image->format, dst, &src);
 
-	    // calc next step
+	    /* calc next step */
+
 	    if (p > 0) {
 		x1 += xi;
 		y1 += yi;
@@ -368,7 +369,7 @@ static RImage *rotateImage(RImage *image, float angle)
 
 	    copyLine(x1, y1, xx, yy, nwidth, image->format, dst, &src);
 
-	    // calc next step
+	    /* calc next step*/
 	    if (p > 0) {
 		x1 += xi;
 		y1 += yi;
