@@ -26,10 +26,6 @@
 #include "WindowMaker.h"
 #include <sys/types.h>
 
-#ifdef XDE_DND
-#include <gdk/gdk.h>
-#endif
-
 #include <proplist.h>
 
 
@@ -298,7 +294,7 @@ typedef struct _WScreen {
     struct WWindow *shortcutWindow[MAX_WINDOW_SHORTCUTS];
     struct LinkedList *shortcutSelectedWindows[MAX_WINDOW_SHORTCUTS];
 
-#ifdef XDE_DND
+#ifdef XDND
     char *xdestring;
 #endif
 

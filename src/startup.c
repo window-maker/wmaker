@@ -57,6 +57,9 @@
 #include "defaults.h"
 #include "properties.h"
 #include "dialog.h"
+#ifdef XDND
+#include "xdnd.h"
+#endif
 
 #include "xutil.h"
 
@@ -124,14 +127,6 @@ extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 #ifdef OFFIX_DND
 extern Atom _XA_DND_PROTOCOL;
 extern Atom _XA_DND_SELECTION;
-#endif
-#ifdef XDE_DND
-extern Atom _XA_XDE_REQUEST;
-extern Atom _XA_XDE_ENTER;
-extern Atom _XA_XDE_LEAVE;
-extern Atom _XA_XDE_DATA_AVAILABLE;
-extern Atom _XDE_FILETYPE;
-extern Atom _XDE_URLTYPE;
 #endif
 
 
@@ -697,13 +692,8 @@ StartUp(Bool defaultScreenOnly)
     _XA_DND_SELECTION = XInternAtom(dpy, "DndSelection", False);
     _XA_DND_PROTOCOL = XInternAtom(dpy, "DndProtocol", False);
 #endif
-#ifdef XDE_DND
-    _XA_XDE_ENTER = XInternAtom(dpy, "_XDE_ENTER", False);
-    _XA_XDE_REQUEST = XInternAtom(dpy, "_XDE_REQUEST", False);
-    _XA_XDE_LEAVE = XInternAtom(dpy, "_XDE_LEAVE", False);
-    _XA_XDE_DATA_AVAILABLE = XInternAtom(dpy, "_XDE_DATA_AVAILABLE", False);
-    _XDE_FILETYPE = XInternAtom(dpy, "file:ALL", False);
-    _XDE_URLTYPE = XInternAtom(dpy, "url:ALL", False);
+#ifdef XDND
+    wXDNDInitializeAtoms();
 #endif
 
 

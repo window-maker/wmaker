@@ -34,8 +34,8 @@
 #ifdef SHAPE
 #include <X11/extensions/shape.h>
 #endif
-#ifdef XDE_DND
-#include "xde.h"
+#ifdef XDND
+#include "xdnd.h"
 #endif
 
 #ifdef KEEP_XKB_LOCK_STATUS     
@@ -405,6 +405,7 @@ handleDeadProcess(void *foo)
 static void
 saveTimestamp(XEvent *event)
 {
+    WScreen *scr = wScreenForWindow(event->xany.window);
     LastTimestamp = CurrentTime;
 
     switch (event->type) {
@@ -434,6 +435,29 @@ saveTimestamp(XEvent *event)
 	break;
      case SelectionNotify:
 	LastTimestamp = event->xselection.time;
+#ifdef XDND
+    wXDNDProcessSelection(&event->xselection);
+    {
+        char *retain = scr->xdestring;
+        for (;retain[0];retain++) {
+            if (retain[0] < 32) retain[0] = 32;
+            if (!strncmp(retain, "file:", 5)) {
+                int i;
+                for (i=0;i<5;retain[i++]=' ');
+            }
+        }
+        retain = scr->xdestring;
+        if (scr->xdestring){
+            if (!strncmp(scr->xdestring, "file:", 5))
+                scr->xdestring+=5;
+        }
+        wDockReceiveDNDDrop(scr,event);
+        if (retain){
+            XFree(retain);
+            scr->xdestring = NULL;
+        }
+    }
+#endif
 	break;
     }
 }
@@ -911,10 +935,10 @@ handleClientMessage(XEvent *event)
     } else if (wKWMProcessClientMessage(&event->xclient)) {
 	/* do nothing */
 #endif /* KWM_HINTS */
-#ifdef XDE_DND
-    } else if (wXDEProcessClientMessage(&event->xclient)) {
+#ifdef XDND
+    } else if (wXDNDProcessClientMessage(&event->xclient)) {
 	/* do nothing */
-#endif /* XDE_DND */
+#endif /* XDND */
 #ifdef OFFIX_DND
     } else if (event->xclient.message_type==_XA_DND_PROTOCOL) {
 	WScreen *scr = wScreenForWindow(event->xclient.window);

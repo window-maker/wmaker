@@ -77,8 +77,8 @@ wmaker_SOURCES = 	\
 	texture.h \
 	usermenu.c \
 	usermenu.h \
-	xde.h \
-	xde.c \
+	xdnd.h \
+	xdnd.c \
 	xmodifier.h \
 	xmodifier.c \
 	xutil.c \

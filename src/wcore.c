@@ -69,9 +69,6 @@ wCoreCreateTopLevel(WScreen *screen, int x, int y, int width, int height,
     attribs.border_pixel = screen->frame_border_pixel;
     attribs.event_mask = SubstructureRedirectMask | ButtonPressMask
         | ButtonReleaseMask | ButtonMotionMask | ExposureMask | EnterWindowMask
-#ifdef XDE_DND
-	| StructureNotifyMask
-#endif
         | LeaveWindowMask;
 
     vmask |= CWColormap;

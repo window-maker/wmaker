@@ -44,6 +44,9 @@
 #include "framewin.h"
 #include "dialog.h"
 #include "client.h"
+#ifdef XDND
+#include "xdnd.h"
+#endif
 
 /*
  * icon_file for the dock is got from the preferences file by
@@ -103,6 +106,9 @@ wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance,
     dicon->icon = wIconCreateWithIconFile(scr, path, tile);
     if (path)
 	free(path);
+#ifdef XDND
+    wXDNDMakeAwareness(dicon->icon->core->window);
+#endif
 #ifdef REDUCE_APPICONS
     dicon->num_apps = 0;
 #endif
@@ -218,6 +224,9 @@ wAppIconCreate(WWindow *leader_win)
         XChangeWindowAttributes(dpy, aicon->icon->core->window,
                 CWSaveUnder, &attribs);
     }
+#endif
+#ifdef XDND
+    wXDNDMakeAwareness(aicon->icon->core->window);
 #endif
 
     /* will be overriden if docked */

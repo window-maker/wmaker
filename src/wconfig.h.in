@@ -72,9 +72,9 @@
 #define OFFIX_DND
 
 /*
- * support for XDE drang and drop in the Dock. Experimental
+ * support for XDND drop in the Dock. Experimental
  */
-#undef XDE_DND
+#undef XDND
 
 /*
  * support for Motif window manager (mwm) window hints

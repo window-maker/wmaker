@@ -113,15 +113,6 @@ Atom _XA_WINDOWMAKER_COMMAND;
 Atom _XA_DND_PROTOCOL;
 Atom _XA_DND_SELECTION;
 #endif
-#ifdef XDE_DND
-Atom _XA_XDE_REQUEST;
-Atom _XA_XDE_ENTER;
-Atom _XA_XDE_LEAVE;
-Atom _XA_XDE_DATA_AVAILABLE;
-Atom _XDE_FILETYPE;
-Atom _XDE_URLTYPE;
-#endif
-
 
 /* cursors */
 Cursor wCursor[WCUR_LAST];

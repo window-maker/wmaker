@@ -875,8 +875,11 @@ get_dnd_selection(WScreen *scr)
     char *flat_string;
     int count;
     
-#ifdef XDE_DND
+#ifdef XDND
     if(scr->xdestring) {
+        /*
+        printf(" return %s\n",scr->xdestring);
+        */
 	return (wstrdup(scr->xdestring));
     }
 #endif
