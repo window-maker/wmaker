@@ -384,6 +384,8 @@ main(int argc, char **argv)
 	WMRulerMargins margins;
 	void *tb = NULL;
 
+	printf("copy and paste this string: \n
+		here is some <b> bold <i>italic <u>underlined</u> </i> </b> text :-) \n");
 
 	WMInitializeApplication("WMText", &argc, argv);
 	dpy = XOpenDisplay(NULL);
@@ -420,6 +422,7 @@ main(int argc, char **argv)
 	//margins = WMGetTextRulerMargins(text);
 
 
+#if 1
 
 
 	WMAppendTextStream(text, 
@@ -545,6 +548,7 @@ write something like a trivial tic-tac-toe game ");
 	WMAppendTextStream(text, " without knowing much Xlib. "
 		"<p><p>(BTW, don't  <i>press</i> that button that is <u>screeming</u>"
 		" to be pressed!");
+#endif
 
 
 
