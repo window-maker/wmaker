@@ -7,6 +7,7 @@ Changes since version 0.90.0:
   is set to 0.
 - fixed virtual desktop to resize the edge on the fly when edge thickness
   changes.
+- limit VirtualEdgeThickness to values in the 0..10 range
 
 
 Changes since version 0.80.2:

@@ -1026,6 +1026,18 @@ destroyEdge(WScreen *scr)
 void
 wWorkspaceUpdateEdge(WScreen *scr)
 {
+    static int thickness = -1;
+
+    if ((int)wPreferences.vedge_thickness < 0)
+        wPreferences.vedge_thickness = 0;
+    else if ((int)wPreferences.vedge_thickness > 10)
+        wPreferences.vedge_thickness = 10;
+
+    if (wPreferences.vedge_thickness == thickness)
+        return;
+
+    thickness = wPreferences.vedge_thickness;
+
     if (wPreferences.vedge_thickness) {
         destroyEdge(scr);
         wWorkspaceManageEdge(scr);

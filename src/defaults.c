@@ -423,7 +423,7 @@ WDefaultEntry optionList[] = {
     &wPreferences.superfluous, 	getBool, 	NULL
     },
     {"AdvanceToNewWorkspace", "NO",		NULL,
-    &wPreferences.ws_advance,      getBool,       NULL
+    &wPreferences.ws_advance,      getBool,     NULL
     },
     {"CycleWorkspaces", "NO",			NULL,
     &wPreferences.ws_cycle,        getBool,	NULL
@@ -434,26 +434,26 @@ WDefaultEntry optionList[] = {
     {"WorkspaceBorder", "None",			seWorkspaceBorder,
     &wPreferences.workspace_border_position, getEnum, updateUsableArea
     },
-    {"WorkspaceBorderSize", "0",       		NULL,
+    {"WorkspaceBorderSize", "0",       		 NULL,
     &wPreferences.workspace_border_size, getInt, updateUsableArea
     },
 #ifdef VIRTUAL_DESKTOP
-    {"VirtualEdgeThickness", "1",   NULL,
-    &wPreferences.vedge_thickness, getInt,        setVirtualEdgeThickness
+    {"VirtualEdgeThickness", "1",               NULL,
+    &wPreferences.vedge_thickness, getInt,      setVirtualEdgeThickness
     },
-    {"VirtualEdgeExtendSpace", "0",   NULL,
-    &wPreferences.vedge_bordersize, getInt,        NULL
+    {"VirtualEdgeExtendSpace", "0",             NULL,
+    &wPreferences.vedge_bordersize, getInt,     NULL
     },
-    {"VirtualEdgeHorizonScrollSpeed", "30",  NULL,
-    &wPreferences.vedge_hscrollspeed, getInt,     NULL
+    {"VirtualEdgeHorizonScrollSpeed", "30",     NULL,
+    &wPreferences.vedge_hscrollspeed, getInt,   NULL
     },
-    {"VirtualEdgeVerticalScrollSpeed", "30", NULL,
-    &wPreferences.vedge_vscrollspeed, getInt,     NULL
+    {"VirtualEdgeVerticalScrollSpeed", "30",    NULL,
+    &wPreferences.vedge_vscrollspeed, getInt,   NULL
     },
-    {"VirtualEdgeResistance", "30", NULL,
+    {"VirtualEdgeResistance", "30",             NULL,
     &wPreferences.vedge_resistance, getInt,     NULL
     },
-    {"VirtualEdgeAttraction", "30", NULL,
+    {"VirtualEdgeAttraction", "30",             NULL,
     &wPreferences.vedge_attraction, getInt,     NULL
     },
     {"VirtualEdgeLeftKey", "None",		    (void*)WKBD_VDESK_LEFT,
@@ -947,11 +947,9 @@ readGlobalDomain(char *domainName, Bool requireDictionary)
 }
 
 
-
-
-
 #if defined(GLOBAL_PREAMBLE_MENU_FILE) || defined(GLOBAL_EPILOGUE_MENU_FILE)
-static void prependMenu(WMPropList *destarr, WMPropList *array)
+static void
+prependMenu(WMPropList *destarr, WMPropList *array)
 {
     WMPropList *item;
     int i;
@@ -963,7 +961,9 @@ static void prependMenu(WMPropList *destarr, WMPropList *array)
     }
 }
 
-static void appendMenu(WMPropList *destarr, WMPropList *array)
+
+static void
+appendMenu(WMPropList *destarr, WMPropList *array)
 {
     WMPropList *item;
     int i;
@@ -977,7 +977,8 @@ static void appendMenu(WMPropList *destarr, WMPropList *array)
 #endif
 
 
-void wDefaultsMergeGlobalMenus(WDDomain *menuDomain)
+void
+wDefaultsMergeGlobalMenus(WDDomain *menuDomain)
 {
     WMPropList *menu = menuDomain->dictionary;
     WMPropList *submenu;
@@ -1591,10 +1592,8 @@ again:
 
     if (ret)
         *ret = &data;
-
-    if (addr) {
+    if (addr)
         *(char*)addr = data;
-    }
 
     return True;
 }
@@ -1622,10 +1621,9 @@ getInt(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr,
 
     if (ret)
         *ret = &data;
-
-    if (addr) {
+    if (addr)
         *(int*)addr = data;
-    }
+
     return True;
 }
 
@@ -1705,10 +1703,8 @@ again:
 
     if (ret)
         *ret = &data;
-
-    if (addr) {
+    if (addr)
         *(WCoord*)addr = data;
-    }
 
     return True;
 }
@@ -1732,7 +1728,6 @@ getString(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr,
 
     if (ret)
         *ret = &data;
-
     if (addr)
         *(char**)addr = wstrdup(data);
 
@@ -1822,7 +1817,6 @@ getEnum(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr,
 
     if (ret)
         *ret = &data;
-
     if (addr)
         *(signed char*)addr = data;
 
@@ -3367,7 +3361,7 @@ setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, WMPropList *value,
 
 #ifdef VIRTUAL_DESKTOP
 static int
-setVirtualEdgeThickness(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
+setVirtualEdgeThickness(WScreen *scr, WDefaultEntry *entry, int *value, void *dummy)
 {
     wWorkspaceUpdateEdge(scr);
     return 0;
