@@ -25,8 +25,10 @@
 #     Luke Kendall <luke@research.canon.com.au>
 # Bug fix info for Korean font section from:
 #     CHOI Junho <junker@jazz.snu.ac.kr>
+# Ukrainian fontset info from: 
+#     Bohdan Vlasyuk <bohdan@vstu.edu.ua>
 
-VERSION="Version 0.5  1998/12/07"
+VERSION="Version 0.6  2002/01/12"
 
 WDWRITE="wdwrite"
 WDREAD="wdread"
@@ -48,6 +50,7 @@ Usage:                              $VERSION
  korean     helvetica/-*-kodig(ksc5601)   See *Note1.
  korean2    helvetica/daewoo(ksc5601)     Included in X11R6/XFree86("fnon" pkg)
  russian    helvetica(koi8-r)             Included in X11R6/XFree86("fcyr" pkg)
+ ukrainian  helvetica(koi8-u)             See *Note1.
  turkish    unknown                       See *Note2.
 -----------------------------------------------------------------------
 Latin1 Languages: Danish/Dutch/English/Finnish/French/Galician/German/
@@ -55,11 +58,12 @@ Latin1 Languages: Danish/Dutch/English/Finnish/French/Galician/German/
 Latin2 Languages: Croatian/Czech/Polish/Romanian/Slovenian/...
 
 *Note1: Not included in X11R6/XFree86. You can download them from ...
- Latin2 X fonts packages: http://sizif.mf.uni-lj.si/linux/cee/iso8859-2.html
- Greek X fonts packages:  ftp://argeas.argos.hol.gr/pub/unix/linux/GREEK/fonts/
-                          ftp://ftp.ntua.gr/pub/fonts/X11/
- Korean X fonts packages: ftp://linux.sarang.net  (Linux RPM)
-                          ftp://ftp.kaist.ac.kr/pub/hangul/fonts
+ Latin2 X fonts packages:    http://sizif.mf.uni-lj.si/linux/cee/iso8859-2.html
+ Greek X fonts packages:     ftp://argeas.argos.hol.gr/pub/unix/linux/GREEK/fonts/
+                             ftp://ftp.ntua.gr/pub/fonts/X11/
+ Korean X fonts packages:    ftp://linux.sarang.net  (Linux RPM)
+                             ftp://ftp.kaist.ac.kr/pub/hangul/fonts
+ Ukrainian X fonts packages: http://www.inp.nsk.su/~bolkhov/files/fonts/cyr-rfx/
 *Note2: please let me know appropriate font setting for WMGLOBAL/WindowMaker,
         and the fonts' URL to download. mail-to: manome@itlb.te.noda.sut.ac.jp
 EOF
@@ -97,13 +101,14 @@ fi
 #
 # For --auto and --locale= switch...
 #
-all_codings="latin1 latin2 greek japanese korean2 russian"
+all_codings="latin1 latin2 greek japanese korean2 russian ukrainian"
 latin1="ca da de gl nl fi fr de is it no pt es sv se"
 latin2="hr cz cs hu pl ro sk sl"
 greek="el"
 japanese="ja"
 korean2="ko"
 russian="ru bg"
+ukrainian="uk" # note that it's really uk, not ua.
 
 #
 # These are lists of all domains and keys we're gonna change...
@@ -127,7 +132,7 @@ NotFont="MultiByteText"
 # of $NonedefAble will have changed only coding part of font name (if --nodef
 # command line argument is used).
 #
-NodefAble="default latin1 latin2 greek russian"
+NodefAble="default latin1 latin2 greek russian ukrainian"
 NodefUnable="japanese korean korean2"
 Supported="$NodefAble $NodefUnable"
 
@@ -136,12 +141,15 @@ defaultCoding="*-*"
  latin2Coding="iso8859-2"
   greekCoding="iso8859-7"
 russianCoding="koi8-r"
+ukrainianCoding="koi8-u"
 
 defaultMultiByteText="AUTO"
  latin1MultiByteText="NO"
  latin2MultiByteText="YES"
   greekMultiByteText="YES"
 russianMultiByteText="YES"
+ukrainianMultiByteText="YES"
+
 
 #
 # Default WindowMaker fonts for NodefAble font families (part telling us

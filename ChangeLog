@@ -17,6 +17,10 @@ Changes since version 0.80.0:
 - Fixed another focus related problem when changing workspaces.
 - Fixed problem with saving session when shared appicon is enabled (not
   all instances were saved in the session, only one per shared appicon)
+- Added support for the ukrainian language in wsetfont
+  (Bohdan Vlasyuk <bohdan@bodq.vstu.vinnica.ua>)
+- Fixed a bug that crashed Window Maker when setting the "Emulate AppIcon"
+  option for a window using the window Inspector.
 
 
 Changes since version 0.70.0:

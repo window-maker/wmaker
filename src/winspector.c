@@ -652,17 +652,19 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     different |= insertAttribute(dict, winDic, ANoLanguageButton, value, flags);
 #endif
 
-    value = (WMGetButtonSelected(panel->appChk[0])!=0) ? Yes : No;
-    different2 |= insertAttribute(dict, appDic, AStartHidden, value, flags);
+    if (wwin->main_window!=None && wApplicationOf(wwin->main_window)!=NULL) {
+        value = (WMGetButtonSelected(panel->appChk[0])!=0) ? Yes : No;
+        different2 |= insertAttribute(dict, appDic, AStartHidden, value, flags);
 
-    value = (WMGetButtonSelected(panel->appChk[1])!=0) ? Yes : No;
-    different2 |= insertAttribute(dict, appDic, ANoAppIcon, value, flags);
+        value = (WMGetButtonSelected(panel->appChk[1])!=0) ? Yes : No;
+        different2 |= insertAttribute(dict, appDic, ANoAppIcon, value, flags);
 
-    value = (WMGetButtonSelected(panel->appChk[2])!=0) ? Yes : No;
-    different2 |= insertAttribute(dict, appDic, ASharedAppIcon, value, flags);
+        value = (WMGetButtonSelected(panel->appChk[2])!=0) ? Yes : No;
+        different2 |= insertAttribute(dict, appDic, ASharedAppIcon, value, flags);
+    }
 
-    if (panel->inspected->fake_group) {
-        key2 = WMCreatePLString(panel->inspected->fake_group->identifier);
+    if (wwin->fake_group) {
+        key2 = WMCreatePLString(wwin->fake_group->identifier);
         if (WMIsPropListEqualTo(key, key2)) {
             WMMergePLDictionaries(winDic, appDic, True);
             different |= different2;
@@ -674,8 +676,8 @@ saveSettings(WMButton *button, InspectorPanel *panel)
         }
         WMReleasePropList(key2);
         WMReleasePropList(appDic);
-    } else if (panel->inspected->main_window != panel->inspected->client_win) {
-        WApplication *wapp = wApplicationOf(panel->inspected->main_window);
+    } else if (wwin->main_window != wwin->client_win) {
+        WApplication *wapp = wApplicationOf(wwin->main_window);
 
 	if (wapp) {
             char *instance = wapp->main_window_desc->wm_instance;

@@ -370,7 +370,6 @@ W_HandleSelectionEvent(XEvent *event)
 
 
 
-
 Bool
 WMCreateSelectionHandler(WMView *view, Atom selection, Time timestamp,
 			 WMSelectionProcs *procs, void *cdata)
@@ -416,9 +415,15 @@ WMRequestSelection(WMView *view, Atom selection, Atom target, Time timestamp,
 
     if (XGetSelectionOwner(W_VIEW_SCREEN(view)->display, selection) == None)
 	return False;
-    
+
+    if (!XConvertSelection(W_VIEW_SCREEN(view)->display, selection, target,
+			   W_VIEW_SCREEN(view)->clipboardAtom,
+			   W_VIEW_DRAWABLE(view), timestamp)) {
+        return False;
+    }
+
     handler = wmalloc(sizeof(SelectionCallback));
-    
+
     handler->view = view;
     handler->selection = selection;
     handler->target = target;
@@ -426,19 +431,13 @@ WMRequestSelection(WMView *view, Atom selection, Atom target, Time timestamp,
     handler->callback = callback;
     handler->data = cdata;
     memset(&handler->flags, 0, sizeof(handler->flags));
-    
+
     if (selCallbacks == NULL) {
 	selCallbacks = WMCreateArrayWithDestructor(4, wfree);
     }
 
     WMAddToArray(selCallbacks, handler);
 
-    if (!XConvertSelection(W_VIEW_SCREEN(view)->display, selection, target,
-			   W_VIEW_SCREEN(view)->clipboardAtom,
-			   W_VIEW_DRAWABLE(view), timestamp)) {
-	return False;
-    }
-    
     return True;
 }
 
