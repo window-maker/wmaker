@@ -400,7 +400,7 @@ wApplicationCreate(WWindow *wwin)
 
         /* If the icon was saved by us from the client supplied icon, but is
          * missing, recreate it. */
-        if (tmp && strstr(tmp, ".AppInfo/WindowMaker")!=NULL &&
+        if (tmp && strstr(tmp, "Library/WindowMaker/CachedPixmaps")!=NULL &&
             stat(tmp, &dummy)!=0 && errno==ENOENT) {
             wmessage(_("recreating missing icon '%s'"), tmp);
             path = wIconStore(wapp->app_icon->icon);

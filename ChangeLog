@@ -11,7 +11,7 @@ Changes since version 0.91.0:
   default installation path (for non GNUstep users) is now $(prefix)/bin
 - fixed bug with infinite loop in some circumstances in fitText() in WINGs
 - fixed to allow parallel builds on SMP systems using make -j
-
+- applied .AppInfo --> Library path rename patch (Alex Perez <aperez@student.santarosa.edu>)
 
 Changes since version 0.90.0:
 .............................

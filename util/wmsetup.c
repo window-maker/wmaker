@@ -41,17 +41,18 @@ main()
 
 char *RequiredDirectories[] = {
     "/Defaults",
-    "/.AppInfo",
     "/Library",
     "/Library/Icons",
     "/Library/WindowMaker",
     "/Library/WindowMaker/Backgrounds",
     "/Library/WindowMaker/IconSets",
     "/Library/WindowMaker/Pixmaps",
+    "/Library/WindowMaker/CachedPixmaps",
     "/Library/WindowMaker/SoundSets",
     "/Library/WindowMaker/Sounds",
     "/Library/WindowMaker/Styles",
     "/Library/WindowMaker/Themes",
+    "/Library/WindowMaker/WPrefs",
     NULL
 };
 

@@ -135,8 +135,12 @@ else
 fi
 
 
-if [ ! -d "$GSDIR/.AppInfo" ]; then
-	make_dir $GSDIR/.AppInfo
+if [ ! -d "$GSDIR/Library/WindowMaker/CachedPixmaps" ]; then
+	make_dir $GSDIR/WindowMaker/CachedPixmaps
+fi
+
+if [ ! -d "$GSDIR/Library/WindowMaker/WPrefs" ]; then
+	make_dir $GSDIR/WindowMaker/WPrefs
 fi
 
 if [ ! -d "$GSDIR/Defaults" ]; then

@@ -496,7 +496,7 @@ getnameforicon(WWindow *wwin)
     prefix = wusergnusteppath();
     len = strlen(prefix)+64+strlen(suffix);
     path = wmalloc(len+1);
-    snprintf(path, len, "%s/.AppInfo", prefix);
+    snprintf(path, len, "%s/Library/WindowMaker/CachedPixmaps", prefix);
 
     if (access(path, F_OK)!=0) {
         if (mkdir(path, S_IRUSR|S_IWUSR|S_IXUSR)) {
@@ -527,7 +527,7 @@ getnameforicon(WWindow *wwin)
 
 /*
  * wIconStore--
- * 	Stores the client supplied icon at ~/GNUstep/.AppInfo/WindowMaker
+ * 	Stores the client supplied icon at ~/GNUstep/Library/WindowMaker/CachedPixmaps
  * and returns the path for that icon. Returns NULL if there is no
  * client supplied icon or on failure.
  *

@@ -699,7 +699,7 @@ wSessionSendSaveYourself(WScreen *scr)
  * might want to keep the dock configuration while not wanting to
  * resume a previously saved session.
  * So, wmaker specific state info can be saved in
- * ~/GNUstep/.AppInfo/WindowMaker/statename.state
+ * ~/GNUstep/Library/WindowMaker/statename.state
  * Its better to not put it in the defaults directory because:
  * - its not a defaults file (having domain names like wmaker0089504baa
  * in the defaults directory wouldn't be very neat)
@@ -1023,7 +1023,7 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
     i = 0;
     do {
         if (gsPrefix)
-            snprintf(statefile, len, "%s/.AppInfo/WindowMaker/wmaker.%l%i.state",
+            snprintf(statefile, len, "%s/Library/WindowMaker/wmaker.%l%i.state",
                      prefix, t, i);
         else
             snprintf(statefile, len, "%s/wmaker.%l%i.state", prefix, t, i);
