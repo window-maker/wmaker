@@ -582,23 +582,37 @@ WMTreeNode* WMCreateTreeNodeWithDestructor(void *data, WMFreeDataProc *destructo
 
 WMTreeNode* WMInsertItemInTree(WMTreeNode *parent, int index, void *item);
 
-WMTreeNode* WMAddItemToTree(WMTreeNode *parent, void *item);
+#define WMAddItemToTree(parent, item)  WMInsertItemInTree(parent, -1, item)
 
-WMTreeNode* WMInsertNodeInTree(WMTreeNode *parent, int index, WMTreeNode *node);
+WMTreeNode* WMInsertNodeInTree(WMTreeNode *parent, int index, WMTreeNode *aNode);
 
-WMTreeNode* WMAddNodeToTree(WMTreeNode *parent, WMTreeNode *node);
+#define WMAddNodeToTree(parent, aNode)  WMInsertNodeInTree(parent, -1, aNode)
 
-int WMGetTreeNodeDepth(WMTreeNode *node);
+void WMDestroyTreeNode(WMTreeNode *aNode);
 
-void WMDestroyTreeNode(WMTreeNode *node);
+void WMDeleteLeafForTreeNode(WMTreeNode *aNode, int index);
 
-void* WMGetDataForTreeNode(WMTreeNode *node);
+void WMRemoveLeafForTreeNode(WMTreeNode *aNode, void *leaf);
 
-WMTreeNode* WMGetParentForTreeNode(WMTreeNode *node);
+void* WMReplaceDataForTreeNode(WMTreeNode *aNode, void *newData);
 
-void WMSortLeavesForTreeNode(WMTreeNode *node, WMCompareDataProc *comparer);
+void* WMGetDataForTreeNode(WMTreeNode *aNode);
 
-void WMSortTree(WMTreeNode *root, WMCompareDataProc *comparer);
+int WMGetTreeNodeDepth(WMTreeNode *aNode);
+
+WMTreeNode* WMGetParentForTreeNode(WMTreeNode *aNode);
+
+/* Sort only the leaves of the passed node */
+void WMSortLeavesForTreeNode(WMTreeNode *aNode, WMCompareDataProc *comparer);
+
+/* Sort all tree recursively starting from the passed node */
+void WMSortTree(WMTreeNode *aNode, WMCompareDataProc *comparer);
+
+/* Returns the first node which matches node's data with cdata by 'match' */
+WMTreeNode* WMFindInTree(WMTreeNode *aTree, WMMatchDataProc *match, void *cdata);
+
+/* Returns first tree node that has data == cdata */
+#define WMGetFirstInTree(aTree, cdata) WMFindInTree(atree, NULL, cdata)
 
 
 /*--------------------------------------------------------------------------*/

@@ -22,18 +22,19 @@ typedef struct W_TreeNode {
 
 
 
+
 void
 destroyNode(void *data)
 {
-    WMTreeNode *node = (WMTreeNode*) data;
+    WMTreeNode *aNode = (WMTreeNode*) data;
 
-    if (node->destructor) {
-        (*node->destructor)(node->data);
+    if (aNode->destructor) {
+        (*aNode->destructor)(aNode->data);
     }
-    if (node->leaves) {
-        WMFreeArray(node->leaves);
+    if (aNode->leaves) {
+        WMFreeArray(aNode->leaves);
     }
-    wfree(node);
+    wfree(aNode);
 }
 
 
@@ -47,157 +48,232 @@ WMCreateTreeNode(void *data)
 WMTreeNode*
 WMCreateTreeNodeWithDestructor(void *data, WMFreeDataProc *destructor)
 {
-    WMTreeNode *node;
+    WMTreeNode *aNode;
 
-    node = (WMTreeNode*) wmalloc(sizeof(W_TreeNode));
-    memset(node, 0, sizeof(W_TreeNode));
+    aNode = (WMTreeNode*) wmalloc(sizeof(W_TreeNode));
+    memset(aNode, 0, sizeof(W_TreeNode));
 
-    node->destructor = destructor;
+    aNode->destructor = destructor;
 
-    node->data = data;
-    node->parent = NULL;
-    node->depth = 0;
-    node->leaves = WMCreateArrayWithDestructor(1, destroyNode);
+    aNode->data = data;
+    aNode->parent = NULL;
+    aNode->depth = 0;
+    aNode->leaves = NULL;
+    /*aNode->leaves = WMCreateArrayWithDestructor(1, destroyNode);*/
 
-    return node;
+    return aNode;
 }
 
 
 WMTreeNode*
 WMInsertItemInTree(WMTreeNode *parent, int index, void *item)
 {
-    WMTreeNode *node;
+    WMTreeNode *aNode;
 
     wassertrv(parent!=NULL, NULL);
 
-    node = WMCreateTreeNodeWithDestructor(item, parent->destructor);
-    node->parent = parent;
-    node->depth = parent->depth+1;
-    if (index < 0 || index > WMGetArrayItemCount(parent->leaves)) {
-        WMAddToArray(parent->leaves, node);
+    aNode = WMCreateTreeNodeWithDestructor(item, parent->destructor);
+    aNode->parent = parent;
+    aNode->depth = parent->depth+1;
+    if (!parent->leaves) {
+        parent->leaves = WMCreateArrayWithDestructor(1, destroyNode);
+    }
+    if (index < 0) {
+        WMAddToArray(parent->leaves, aNode);
     } else {
-        WMInsertInArray(parent->leaves, index, node);
+        WMInsertInArray(parent->leaves, index, aNode);
     }
 
-    return node;
-}
-
-
-WMTreeNode*
-WMAddItemToTree(WMTreeNode *parent, void *item)
-{
-    WMTreeNode *node;
-
-    wassertrv(parent!=NULL, NULL);
-
-    node = WMCreateTreeNodeWithDestructor(item, parent->destructor);
-    node->parent = parent;
-    node->depth = parent->depth+1;
-    WMAddToArray(parent->leaves, node);
-
-    return node;
+    return aNode;
 }
 
 
 static void
-updateNodeDepth(WMTreeNode *node, int depth)
+updateNodeDepth(WMTreeNode *aNode, int depth)
 {
     int i;
 
-    node->depth = depth;
-    for (i=0; i<WMGetArrayItemCount(node->leaves); i++) {
-        updateNodeDepth(WMGetFromArray(node->leaves, i), depth+1);
+    aNode->depth = depth;
+
+    if (aNode->leaves) {
+        for (i=0; i<WMGetArrayItemCount(aNode->leaves); i++) {
+            updateNodeDepth(WMGetFromArray(aNode->leaves, i), depth+1);
+        }
     }
 }
 
 
 WMTreeNode*
-WMInsertNodeInTree(WMTreeNode *parent, int index, WMTreeNode *node)
+WMInsertNodeInTree(WMTreeNode *parent, int index, WMTreeNode *aNode)
 {
     wassertrv(parent!=NULL, NULL);
-    wassertrv(node!=NULL, NULL);
+    wassertrv(aNode!=NULL, NULL);
 
-    node->parent = parent;
-    updateNodeDepth(node, parent->depth+1);
-    if (index < 0 || index > WMGetArrayItemCount(parent->leaves)) {
-        WMAddToArray(parent->leaves, node);
+    aNode->parent = parent;
+    updateNodeDepth(aNode, parent->depth+1);
+    if (!parent->leaves) {
+        parent->leaves = WMCreateArrayWithDestructor(1, destroyNode);
+    }
+    if (index < 0) {
+        WMAddToArray(parent->leaves, aNode);
     } else {
-        WMInsertInArray(parent->leaves, index, node);
+        WMInsertInArray(parent->leaves, index, aNode);
     }
 
-    return node;
-}
-
-
-WMTreeNode*
-WMAddNodeToTree(WMTreeNode *parent, WMTreeNode *node)
-{
-    wassertrv(parent!=NULL, NULL);
-    wassertrv(node!=NULL, NULL);
-
-    node->parent = parent;
-    updateNodeDepth(node, parent->depth+1);
-    WMAddToArray(parent->leaves, node);
-
-    return node;
-}
-
-
-int
-WMGetTreeNodeDepth(WMTreeNode *node)
-{
-    return node->depth;
+    return aNode;
 }
 
 
 void
-WMDestroyTreeNode(WMTreeNode *node)
+WMDestroyTreeNode(WMTreeNode *aNode)
 {
-    destroyNode(node);
+    wassertr(aNode!=NULL);
+
+    if (aNode->parent && aNode->parent->leaves) {
+        WMRemoveFromArray(aNode->parent->leaves, aNode);
+    } else {
+        destroyNode(aNode);
+    }
+}
+
+
+void
+WMDeleteLeafForTreeNode(WMTreeNode *aNode, int index)
+{
+    wassertr(aNode!=NULL);
+    wassertr(aNode->leaves!=NULL);
+
+    WMDeleteFromArray(aNode->leaves, index);
+}
+
+
+static int
+sameData(void *item, void *data)
+{
+    return (((WMTreeNode*)item)->data == data);
+}
+
+
+void
+WMRemoveLeafForTreeNode(WMTreeNode *aNode, void *leaf)
+{
+    int index;
+
+    wassertr(aNode!=NULL);
+    wassertr(aNode->leaves!=NULL);
+
+    index = WMFindInArray(aNode->leaves, sameData, leaf);
+    if (index != WANotFound) {
+        WMDeleteFromArray(aNode->leaves, index);
+    }
 }
 
 
 void*
-WMGetDataForTreeNode(WMTreeNode *node)
+WMReplaceDataForTreeNode(WMTreeNode *aNode, void *newData)
 {
-    return node->data;
+    void *old;
+
+    wassertrv(aNode!=NULL, NULL);
+
+    old = aNode->data;
+    aNode->data = newData;
+
+    return old;
+}
+
+
+void*
+WMGetDataForTreeNode(WMTreeNode *aNode)
+{
+    return aNode->data;
+}
+
+
+int
+WMGetTreeNodeDepth(WMTreeNode *aNode)
+{
+    return aNode->depth;
 }
 
 
 WMTreeNode*
-WMGetParentForTreeNode(WMTreeNode *node)
+WMGetParentForTreeNode(WMTreeNode *aNode)
 {
-    return node->parent;
+    return aNode->parent;
 }
 
 
 void
-WMSortLeavesForTreeNode(WMTreeNode *node, WMCompareDataProc *comparer)
+WMSortLeavesForTreeNode(WMTreeNode *aNode, WMCompareDataProc *comparer)
 {
-    wassertr(node!=NULL);
+    wassertr(aNode!=NULL);
 
-    WMSortArray(node->leaves, comparer);
+    if (aNode->leaves) {
+        WMSortArray(aNode->leaves, comparer);
+    }
 }
 
 
 static void
-sortLeavesForNode(WMTreeNode *node, WMCompareDataProc *comparer)
+sortLeavesForNode(WMTreeNode *aNode, WMCompareDataProc *comparer)
 {
     int i;
 
-    WMSortArray(node->leaves, comparer);
-    for (i=0; i<WMGetArrayItemCount(node->leaves); i++) {
-        sortLeavesForNode(WMGetFromArray(node->leaves, i), comparer);
+    if (!aNode->leaves)
+        return;
+
+    WMSortArray(aNode->leaves, comparer);
+    for (i=0; i<WMGetArrayItemCount(aNode->leaves); i++) {
+        sortLeavesForNode(WMGetFromArray(aNode->leaves, i), comparer);
     }
 }
 
 
 void
-WMSortTree(WMTreeNode *root, WMCompareDataProc *comparer)
+WMSortTree(WMTreeNode *aNode, WMCompareDataProc *comparer)
 {
-    wassertr(root!=NULL);
+    wassertr(aNode!=NULL);
 
-    sortLeavesForNode(root, comparer);
+    sortLeavesForNode(aNode, comparer);
+}
+
+
+static WMTreeNode*
+findNodeInTree(WMTreeNode *aNode, WMMatchDataProc *match, void *cdata)
+{
+    if (match==NULL) {
+        if (aNode->data == cdata) {
+            return aNode;
+        }
+    } else {
+        if ((*match)(aNode->data, cdata)) {
+            return aNode;
+        }
+    }
+
+    if (aNode->leaves) {
+        WMTreeNode *leaf;
+        int i;
+
+        for (i=0; i<WMGetArrayItemCount(aNode->leaves); i++) {
+            leaf = findNodeInTree(WMGetFromArray(aNode->leaves, i), match, cdata);
+            if (leaf) {
+                return leaf;
+            }
+        }
+    }
+
+    return NULL;
+}
+
+
+WMTreeNode*
+WMFindInTree(WMTreeNode *aTree, WMMatchDataProc *match, void *cdata)
+{
+    wassertrv(aTree!=NULL, NULL);
+
+    return findNodeInTree(aTree, match, cdata);
 }
 
 
