@@ -21,8 +21,18 @@ Changes since version 0.61.1:
 - optimized frame drawing (Swivel <swivel@gnugeneration.com>)
 - removed broken optimized frame drawing patch
 - added Select Window button in attribute inspector
+- made icon images scale by a constant factor when changing icon size
+- added support for standard colormaps in PseudoColor visuals
+- changed geometry view for move/resize to a WINGs widget
+- removed DisplayFont option
+- added NoBorder attribute
+- changed semantics of GNUstep window attribute hints
 - added get-wings-flags and get-wutil-flags with the same purpose as
   get-wraster-flags, but for compiling and linking with WINGs/WUtil
+- fixed bug handling non-string values given to string valued options in 
+  defaults.c
+- fixed colormap_window crash bug (appears when launching some apps from dock,
+  or removing apps from gnome panel etc)
 
 Changes since version 0.61.0:
 .............................

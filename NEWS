@@ -5,15 +5,12 @@ NEWS for veteran Window Maker users
 --- 0.61.2
 
 
-Patches, po files, bug fixes etc
---------------------------------
+NoBorder Window Attribute
+--------------------------
 
-I am very sorry, but I think I lost the folder I kept all the
-patches and contributions I received since the last release :(
-If you have sent something to me, but it's not included in this
-release, please resend it.
-My sincere apologies.
-	-Alfredo
+The NoBorder window attribute (to be put in
+~/GNUstep/Defaults/WindowAttributes) was added and will remove the
+1 pixel border around windows.
 
 
 Removed "Keep Attracted Icons" option from Clip's menu
@@ -36,6 +33,13 @@ Please don't ask for this option back. It's error prone, and very unintuitive.
 Considering it's very restrictive usability, and it's very ambiguous topic, it
 does not need a special entry in the Clip's menu, taking in count that there
 are already better alternative ways of gaining the same functionality.
+
+
+Removed DisplayFont Option
+---------------------------
+
+The font for the geometry size will be controlled by the default
+WINGs font (SystemFont in WMGLOBAL) now.
 
 
 --- 0.61.1

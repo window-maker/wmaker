@@ -8,7 +8,7 @@ Do ASAP:
 - blink border of clients with UrgencyHint set between red and black
 - finish session stuff
 - add multiline support for balloons
-- finish XStandardColormap stuff in wrlib
+- remove colors_per_channel stuff from wmaker after?
 
 Need to do:
 ===========

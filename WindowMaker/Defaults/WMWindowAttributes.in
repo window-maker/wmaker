@@ -3,6 +3,7 @@
   Logo.WMPanel = {Icon = GNUstepGlow.#extension#;};
   Logo.WMClip = {Icon = clip.#extension#;};
   Dockit = {Icon = GNUstepGlow.#extension#;};
+  DockApp = {NoAppIcon = NO;};
   WMSoundServer = {Icon = sound.#extension#;};
   XTerm = {Icon = GNUterm.#extension#;};
   NXTerm = {Icon = GNUterm.#extension#;};

@@ -417,7 +417,7 @@ parseTexture(RContext *rc, char *text)
 		    w = (scrHeight*iwidth)/iheight;
 		}
 	    }
-	    {
+	    if (w != image->width || h != image->height) {
 		RImage *simage;
 
 		if (smooth)
@@ -432,9 +432,10 @@ parseTexture(RContext *rc, char *text)
 		}
 		RDestroyImage(image);
 		image = simage;
-		iwidth = image->width;
-		iheight = image->height;
 	    }
+	    iwidth = image->width;
+	    iheight = image->height;
+
 	    /* fall through */
 	 case 'C':
 	    {
@@ -1390,11 +1391,18 @@ main(int argc, char **argv)
     if (!obey_user && DefaultDepth(dpy, scr) <= 8)
         render_mode = RDitheredRendering;
 
-    rattr.flags = RC_RenderMode | RC_ColorsPerChannel | RC_DefaultVisual;
+    rattr.flags = RC_RenderMode | RC_ColorsPerChannel
+	| RC_StandardColormap;
     rattr.render_mode = render_mode;
     rattr.colors_per_channel = cpc;
+    rattr.standard_colormap_mode = RCreateStdColormap;
 
     rc = RCreateContext(dpy, scr, &rattr);
+    if (!rc) {
+	wfatal("could not initialize wrlib:",
+	       RMessageForError(RErrorCode));
+	exit(1);
+    }
 
     if (helperMode) {
 	/* lower priority, so that it wont use all the CPU */

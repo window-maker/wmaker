@@ -1,7 +1,7 @@
 ("Applications",
  ("Info",
-  ("Info Panel...", INFO_PANEL),
-  ("Legal...", LEGAL_PANEL),
+  ("Info Panel", INFO_PANEL),
+  ("Legal", LEGAL_PANEL),
   ("System Console", EXEC, "xconsole"),
   ("System Load", SHEXEC, "xosview || xload"),
   ("Process List", EXEC, "xterm -e top"),
@@ -101,6 +101,6 @@
   ("Start BlackBox", RESTART, blackbox),
   ("Start kwm", RESTART, kwm),
   ("Start IceWM", RESTART, icewm),
-  ("Exit...", EXIT)
+  ("Exit", EXIT)
  )
 )

@@ -10,7 +10,7 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.61.1)
+AM_INIT_AUTOMAKE(WindowMaker, 0.62.0)
 
 AM_PROG_LIBTOOL
 
@@ -26,9 +26,6 @@ case ${host} in
     chmod 755 libtool
   ;;
 esac
-
-W_SYSTEM=`uname -s`
-
 
 
 AM_CONFIG_HEADER(src/config.h)
@@ -162,6 +159,40 @@ AC_C_CONST
 #AC_TYPE_SIZE_T
 #AC_TYPE_PID_T
 AC_TYPE_SIGNAL
+
+    
+
+dnl Compiler/architecture specific optimizations
+dnl ============================================
+    
+
+dnl GCC with MMX support
+dnl --------------------
+
+if test "$ac_cv_prog_gcc" = yes; then
+    x86=0
+    changequote(,)dnl
+    case "$host_cpu" in
+	i[3456]86) x86=1
+	;;
+    esac
+    changequote([,])dnl
+
+    if test $x86 = 1; then
+        AC_DEFINE(ASM_X86)
+
+	AC_CACHE_CHECK(whether gcc supports MMX(tm) inline asm,
+		       ac_cv_c_inline_mmx,
+		       [AC_TRY_COMPILE(,[asm ("movq %mm0, %mm1");],
+		       ac_cv_c_inline_mmx=yes,
+		       ac_cv_c_inline_mmx=no)])
+
+	if test "x$ac_cv_c_inline_mmx" = xyes; then
+		AC_DEFINE(ASM_X86_MMX)
+	fi
+    fi
+fi
+
 
 
 dnl gettext
@@ -462,7 +493,7 @@ if test "x$LIBPL" = "x"; then
    echo "         Window Maker requires libPropList to build."
    echo "         Please read INSTALL to find where you can find libPropList,"
    echo "         and install it first."
-   if test x$W_SYSTEM = xLinux; then
+   if test x$host_os = xlinux; then
    echo "         If you're using some prepackaged version of libPropList,"
    echo "         make sure you install it's \"development\" package as well."
    fi

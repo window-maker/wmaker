@@ -85,3 +85,9 @@
 /* define if you have then inet_aton function */
 #undef HAVE_INET_ATON
 
+/* define if processor is x86 */
+#undef ASM_X86
+
+/* define if processor is x86 with MMX(tm) support */
+#undef ASM_X86_MMX
+

@@ -24,6 +24,7 @@ CPPFLAGS="$CPPFLAGS_old"
 ])
 
 
+
 dnl
 dnl WM_CHECK_REDCRAP_BUGS(prefix,bindir,libdir)
 dnl
