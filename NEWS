@@ -13,6 +13,16 @@ you may specify --with-gnustepdir=/usr/GNUstep
 If the GNUSTEP_LOCAL_ROOT environment variable is defined when configure is
 executed, it will be used (and you don't need to use --with-gnustepdir)
 
+Cached Pixmaps Directory
+------------------------
+
+The directory where Window Maker stores the cached application pixmaps for
+its later use has changed from ~/GNUstep/.AppInfo/WindowMaker to
+~/GNUstep/Library/WindowMaker/CachedPixmaps for better compatibility with
+the GNUstep path structure.
+Also WPrefs now stores internal data in ~/GNUstep/Library/WindowMaker/WPrefs
+(it was ~/GNUstep/.AppInfo/WPrefs before)
+
 
 --- 0.91.1
 
