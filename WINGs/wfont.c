@@ -161,6 +161,7 @@ alreadyHasStringValue(XftPattern *pattern, const char *object, char *value)
 
 
 // check if to add a fallback size too. -Dan
+// also handle an xlfd with %d for size?
 static char*
 makeFontOfSize(char *font, int size, char *fallback)
 {
