@@ -1949,6 +1949,11 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
         d_data.magic = WMAddTimerHandler(wPreferences.dblclick_time,
                                         delaySelection, &d_data);
     }
+    
+    if (menu->flags.inside_handler) {
+	return;
+    }
+    menu->flags.inside_handler = 1;
 
     wRaiseFrame(menu->frame->core);
     
@@ -1963,7 +1968,7 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
     }
 
     if (menu->flags.editing) {
-	return;
+	goto byebye;
     }
     entry_no = getEntryAt(menu, x, y);
     if (entry_no>=0) {
@@ -1972,9 +1977,9 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
 	if (!close_on_exit && (bev->state & ControlMask) && smenu
 	    && entry->flags.editable) {
 	    editEntry(smenu, entry);
-	    return;
+	    goto byebye;
 	} else if (bev->state & ControlMask) {
-	    return;
+	    goto byebye;
 	}
 
 	if (entry->flags.enabled && entry->cascade>=0 && menu->cascades) {
@@ -2005,7 +2010,7 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
     while (!done) {
 	int x, y;
 
-	XAllowEvents(dpy, SyncPointer, CurrentTime);
+	XAllowEvents(dpy, AsyncPointer|SyncPointer, CurrentTime);
 
 	WMMaskEvent(dpy, ExposureMask|ButtonMotionMask|ButtonReleaseMask
 		    |ButtonPressMask, &ev);
@@ -2205,6 +2210,9 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
 
     if (!wPreferences.wrap_menus)
         wMenuMove(parentMenu(desc->parent), old_frame_x, old_frame_y, True);
+
+byebye:    
+    ((WMenu*)desc->parent)->flags.inside_handler = 0;
 }
 
 
