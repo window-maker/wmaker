@@ -17,7 +17,6 @@
  *       note that WMCreateEventHandler takes one data, but need widget & tPtr
  * -  FIX: graphix blocks MUST be skipped if monoFont even though they exist!
  * -  check if support for Horizontal Scroll is complete
- * -  assess danger of destroying widgets whose actions link to other pages
  * -  Tabs now are simply replaced by 4 spaces...
  * -  redo blink code to reduce paint event... use pixmap buffer...
  * -  add paragraph support (full) and '\n' code in getStream..
@@ -200,7 +199,7 @@ output(char *ptr, int len)
 #define STIPPLE_WIDTH 8
 #define STIPPLE_HEIGHT 8
 static unsigned char STIPPLE_BITS[] = {
-    0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa
+  0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa
 };
 
 
@@ -825,9 +824,12 @@ _getSibling:
                     XRectangle rect;
 
                     if ( sectionWasSelected(tPtr, tb, &rect, 0)) {
+                        Drawable d = (0&&tb->object?
+                          (WMWidgetView(tb->d.widget))->window : tPtr->db);
+
                         tb->selected = True;
-                        XFillRectangle(dpy, tPtr->db, tPtr->stippledGC,
-                        //XFillRectangle(dpy, tPtr->db, greyGC,
+                        XFillRectangle(dpy, d, tPtr->stippledGC,
+                        //XFillRectangle(dpy, tPtr->db, tPtr->stippledGC,
                             rect.x, rect.y, rect.width, rect.height);
                     }
                 }
@@ -3613,6 +3615,17 @@ WMRemoveTextBlock(WMText *tPtr)
     return (void *)tb;
 }
 
+
+static void
+destroyWidget(WMWidget *widget)
+{
+  if(!widget)
+    return;
+
+  WMDestroyWidget(widget);
+  wfree(widget); 
+}
+
 void 
 WMDestroyTextBlock(WMText *tPtr, void *vtb)
 {
@@ -3622,13 +3635,14 @@ WMDestroyTextBlock(WMText *tPtr, void *vtb)
 
     if (tb->graphic) {
         if(tb->object) {
-            /* naturally, there's a danger to destroying 
-                 widgets whose action brings us here:
-            ie. press a button to destroy it... need to 
-            find a safer way. till then... this stays commented out */
-            /* WMDestroyWidget(tb->d.widget);
-            wfree(tb->d.widget); */
-            tb->d.widget = NULL;
+/* naturally, there's a danger to destroying widgets whose action 
+   brings us here: ie. press a button to destroy it... 
+   need to find a safer way. till then... this stays commented out */
+/* 5 months later... destroy it 10 seconds after now which should be 
+   enough time for the widget's action to be completed... :-) */
+          WMAddTimerHandler(10000, destroyWidget, (void *)tb->d.widget);
+          tb->d.widget = NULL;
+
         } else {
             WMReleasePixmap(tb->d.pixmap);
             tb->d.pixmap = NULL;
