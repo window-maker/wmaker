@@ -4130,6 +4130,14 @@ iconMouseDown(WObjDescriptor *desc, XEvent *event)
                (event->xbutton.state & ShiftMask) && aicon!=scr->clip_icon) {
         wClipMakeIconOmnipresent(aicon, !aicon->omnipresent);
     } else if (event->xbutton.button == Button3) {
+	if (event->xbutton.send_event &&
+	    XGrabPointer(dpy, aicon->icon->core->window, True, ButtonMotionMask
+			 |ButtonReleaseMask|ButtonPressMask, GrabModeAsync,
+			 GrabModeAsync, None, None, CurrentTime) !=GrabSuccess) {
+	    wwarning("pointer grab failed for dockicon menu");
+	    return;
+	}
+
 	openDockMenu(dock, aicon, event);
     }
 }

@@ -1380,14 +1380,16 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     }
     XFree(keymap);
 
-    /* restore order */
-    CommitStacking(scr);
-
     XUngrabKeyboard(dpy, CurrentTime);
     wSetFocusTo(scr, newFocused);
 
-    if (wPreferences.circ_raise)
+    if (wPreferences.circ_raise) {
 	wRaiseFrame(newFocused->frame->core);
+    	CommitStacking(scr);
+    } else {
+    	/* restore order */
+    	CommitStacking(scr);
+    }
 
     scr->flags.doing_alt_tab = 0;
     if (openedSwitchMenu) 

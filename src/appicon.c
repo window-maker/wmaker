@@ -759,6 +759,14 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
 	if (!wapp)
 	    return;
 
+	if (event->xbutton.send_event &&
+	    XGrabPointer(dpy, aicon->icon->core->window, True, ButtonMotionMask
+			 |ButtonReleaseMask|ButtonPressMask, GrabModeAsync,
+			 GrabModeAsync, None, None, CurrentTime) !=GrabSuccess) {
+	    wwarning("pointer grab failed for appicon menu");
+	    return;
+	}
+
 	openApplicationMenu(wapp, event->xbutton.x_root,
 			    event->xbutton.y_root);
 
