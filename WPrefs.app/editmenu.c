@@ -69,6 +69,8 @@ typedef struct W_EditMenu {
     
     WEditMenuDelegate *delegate;
 
+    WMTextFieldDelegate *tdelegate;
+
     /* item dragging */
     int draggedItem;
     int dragX, dragY;
@@ -379,7 +381,7 @@ realizeObserver(void *self, WMNotification *not)
 {
     WEditMenu *menu = (WEditMenu*)self;
     GNUstepWMAttributes attribs;
-    
+
     memset(&attribs, 0, sizeof(GNUstepWMAttributes));
     attribs.flags = GSWindowStyleAttr|GSWindowLevelAttr;
     attribs.window_style = WMBorderlessWindowMask;
@@ -402,8 +404,9 @@ itemSelectObserver(void *self, WMNotification *notif)
 	return;
     }
 
-    if (menu->selectedItem && !menu->selectedItem->submenu) {
-	deselectItem(menu);
+    if (menu->selectedItem) {
+	if (!menu->selectedItem->submenu)
+	    deselectItem(menu);
 	if (menu->flags.isEditing)
 	    stopEditItem(menu, False);
     }
@@ -829,7 +832,7 @@ selectItem(WEditMenu *menu, WEditMenuItem *item)
     if (item && !item->flags.isTitle) {
 	highlightItem(item, True);
 
-	if (item->submenu) {
+	if (item->submenu && !W_VIEW_MAPPED(item->submenu->view)) {
 	    WMPoint pt;
 	    XSizeHints *hints;
 
@@ -926,7 +929,7 @@ textEndedEditing(struct WMTextFieldDelegate *self, WMNotification *notif)
     int reason;
     int i;
     WEditMenuItem *item;
-
+    
     if (!menu->flags.isEditing)
 	return;
 
@@ -992,10 +995,14 @@ editItemLabel(WEditMenuItem *item)
 	mPtr->tfield = WMCreateTextField(mPtr);
 	WMSetTextFieldBeveled(mPtr->tfield, False);
 	WMRealizeWidget(mPtr->tfield);
-	
-	textFieldDelegate.data = mPtr;
 
-	WMSetTextFieldDelegate(mPtr->tfield, &textFieldDelegate);
+	mPtr->tdelegate = wmalloc(sizeof(WMTextFieldDelegate));
+	memcpy(mPtr->tdelegate, &textFieldDelegate,
+	       sizeof(WMTextFieldDelegate));
+	
+	mPtr->tdelegate->data = mPtr;
+
+	WMSetTextFieldDelegate(mPtr->tfield, mPtr->tdelegate);
     }
     tf = mPtr->tfield;
 
@@ -1007,7 +1014,7 @@ editItemLabel(WEditMenuItem *item)
     WMMoveWidget(tf, 0, item->view->pos.y);
     WMMapWidget(tf);
     WMSetFocusToWidget(tf);
-    
+
     mPtr->flags.isEditing = 1;
 }
 
@@ -1060,7 +1067,7 @@ findMenuInWindow(Display *dpy, Window toplevel, int x, int y)
     WEditMenu *menu;
     WMView *view;
     int (*oldHandler)(Display *, XErrorEvent *);
-
+    
     view = W_GetViewForXWindow(dpy, toplevel);
     if (view && view->self && WMWidgetClass(view->self) == EditMenuClass) {
 	menu = (WEditMenu*)view->self;
@@ -1219,27 +1226,6 @@ dragMenu(WEditMenu *menu)
 }
 
 
-static WEditMenu*
-duplicateMenu(WEditMenu *menu)
-{
-    WEditMenu *nmenu;
-    WEditMenuItem *title;
-    
-    if (menu->flags.isTitled) {
-	title = WMGetFromBag(menu->items, 0);
-    }
-
-    nmenu = WCreateEditMenu(WMWidgetScreen(menu), title->label);
-    
-    memcpy(&nmenu->flags, &menu->flags, sizeof(menu->flags));
-    nmenu->delegate = menu->delegate;
-
-    WMRealizeWidget(nmenu);
-    
-    return nmenu;
-}
-
-
 
 static WEditMenuItem*
 duplicateItem(WEditMenuItem *item)
@@ -1252,6 +1238,46 @@ duplicateItem(WEditMenuItem *item)
 
     return nitem;
 }
+
+
+
+
+static WEditMenu*
+duplicateMenu(WEditMenu *menu)
+{
+    WEditMenu *nmenu;
+    WEditMenuItem *item;
+    WMBagIterator iter;
+    Bool first = menu->flags.isTitled;
+
+    nmenu = WCreateEditMenu(WMWidgetScreen(menu), WGetEditMenuTitle(menu));
+
+    memcpy(&nmenu->flags, &menu->flags, sizeof(menu->flags));
+    nmenu->delegate = menu->delegate;
+    
+    WM_ITERATE_BAG(menu->items, item, iter) {
+	WEditMenuItem *nitem;
+	
+	if (first) {
+	    first = False;
+	    continue;
+	}
+
+	nitem = WAddMenuItemWithTitle(nmenu, item->label);
+	if (item->pixmap)
+	    WSetEditMenuItemImage(nitem, item->pixmap);
+
+	if (menu->delegate && menu->delegate->itemCloned) {
+	    (*menu->delegate->itemCloned)(menu->delegate, menu,
+					  item, nitem);
+	}
+    }
+
+    WMRealizeWidget(nmenu);
+
+    return nmenu;
+}
+
 
 
 static void
@@ -1329,7 +1355,7 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
 	    XQueryPointer(dpy, win, &blaw, &blaw, &blai, &blai, &x, &y, &blau);
 
 	    dmenu = findMenuInWindow(dpy, win, x, y);
-		
+
 	    if (dmenu) {
 		handleDragOver(dmenu, dview, dritem, x - dx, y - dy);
 		enteredMenu = True;
@@ -1457,6 +1483,8 @@ destroyEditMenu(WEditMenu *mPtr)
     }
     
     WMFreeBag(mPtr->items);
+    
+    free(mPtr->tdelegate);
     
     free(mPtr);
 }
