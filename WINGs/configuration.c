@@ -1,6 +1,7 @@
 
 
 #include "WINGsP.h"
+#include "wconfig.h"
 
 #include <X11/Xlocale.h>
 
@@ -12,6 +13,10 @@ _WINGsConfiguration WINGsConfiguration;
 #define SYSTEM_FONT "-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-medium-r-*-*-%d-*-*-*-*-*-*-*"
 
 #define BOLD_SYSTEM_FONT "-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-bold-r-*-*-%d-*-*-*-*-*-*-*"
+
+#define AASYSTEM_FONT "-*-arial-medium-r-normal-*-%d-*-*-*-*-*-*-*"
+
+#define AABOLD_SYSTEM_FONT "-*-arial-bold-r-normal-*-%d-*-*-*-*-*-*-*"
 
 #define FLOPPY_PATH "/floppy"
 
@@ -59,6 +64,19 @@ W_ReadConfigurations(void)
 
 	WINGsConfiguration.boldSystemFont = 
 	    WMGetUDStringForKey(defaults, "BoldSystemFont");
+
+	WINGsConfiguration.aaSystemFont =
+	    WMGetUDStringForKey(defaults, "AASystemFont");
+
+	WINGsConfiguration.aaBoldSystemFont =
+	    WMGetUDStringForKey(defaults, "AABoldSystemFont");
+
+#ifdef XFT
+	WINGsConfiguration.antialiasedText =
+            WMGetUDBoolForKey(defaults, "AntialiasedText");
+#else
+        WINGsConfiguration.antialiasedText = False;
+#endif
 
 	WINGsConfiguration.useMultiByte = False;
 	str = WMGetUDStringForKey(defaults, "MultiByteText");
@@ -120,6 +138,12 @@ W_ReadConfigurations(void)
     }
     if (!WINGsConfiguration.boldSystemFont) {
 	WINGsConfiguration.boldSystemFont = BOLD_SYSTEM_FONT;
+    }
+    if (!WINGsConfiguration.aaSystemFont) {
+	WINGsConfiguration.aaSystemFont = AASYSTEM_FONT;
+    }
+    if (!WINGsConfiguration.aaBoldSystemFont) {
+	WINGsConfiguration.aaBoldSystemFont = AABOLD_SYSTEM_FONT;
     }
     if (!WINGsConfiguration.floppyPath) {
 	WINGsConfiguration.floppyPath = FLOPPY_PATH;

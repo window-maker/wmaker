@@ -10,6 +10,12 @@ Changes since wmaker 0.80.1:
 - Added alpha channel to WMColor. 2 new functions also:
   WMCreateRGBAColor() and WMSetColorAlpha()
 - Miscelaneous code cleanups in wtext.c
+- Added Xft support in WINGs (for drawing antialiased fonts with transparency).
+- Added a new function: WMCreateAAFont() to create a font which will be
+  drawn antialiased using Xft (if available, else function returns NULL)
+- New options in WMGLOBAL: AntialiasedText, AASystemFont and AABoldSystemFont.
+  Check NEWS for details.
+- Fixed some improper calls to snprintf in wfont.c
 
 
 Changes since wmaker 0.80.0:

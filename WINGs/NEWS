@@ -1,3 +1,47 @@
+*** Wed Oct  9 07:10:04 EEST 2002 - Dan
+
+Xft support in WINGs
+--------------------
+
+If Xft is detected when configure it is run, support for drawing antialiased
+fonts with transparency will be compiled into WINGs.
+You need at least Xfree86 version 4.0.x for this but at least 4.1.x is
+recommended.
+
+For Xft support there is a new function to create a font that will render
+using antialiasing and transparency: WMCreateAAFont().
+Passing such a font to WMDrawString() or WMDrawImageString() will result
+in antialiased text displayed on screen. Modifying the alpha value for the
+WMColor passed to WMDrawString() or WMDrawImageString() will result in text
+being displayed with the appropriate transparency.
+
+To control antialiased font behavior, there are 3 new options that go into
+WMGLOBAL. Two of them are to set the system font used when an antialiased
+font is required. They operate in a similar way as SystemFont and
+BoldSystemFont, just they are used when antialiased fonts are requested.
+They are named AASystemFont respectively AABoldSystemFont. They are kept
+separate from SystemFont and BoldSystemFont because the same fonts don't
+render well as both normal and antialiased if they are not TrueType fonts.
+Even though you can specify any font in the XLFD format for these new
+options, it is recomended to use TrueType fonts for the antialiased case
+since other fonts (standard X fonts)  don't render well and give ugly
+results.
+
+The third option is an option that globally controls if WINGs uses or not
+antialiased fonts. It is named AntialiasedText and it has a boolean Yes/No
+value. If set to Yes, WINGs will try to use antialiased fonts (if support
+was compiled in, and antialiased fonts can be found) then revert to normal
+fonts if not possible. Note that this applies if WMCreateFont(),
+WMSystemFont(), WMSystemFontOfSize(), WMBoldSystemFont() or
+WMBoldSystemFontOFize() are used. If any of the direct creation functions
+are used, such as WMCreateAAFont() or WMCreateNormalFont(), then that kind
+of font is returned independently of the value of AntialiasedText.
+(However note that an antialiased font cannot be created if Xft support was
+no compiled into WINGs, even if you call WMCreateAAFont() directly. In this
+case WMCreateAAFont() will always return NULL)
+
+
+
 *** Mon Sep 09 06:58:30 EEST 2002 - Dan
 
 New delegate for the WMConnection class

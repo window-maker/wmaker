@@ -85,11 +85,11 @@ dnl
 dnl Specify paths to look for libraries and headers
 dnl ===============================================
 AC_ARG_WITH(libs-from,
-[  --with-libs-from	  pass compiler flags to look for libraries],
+[  --with-libs-from        pass compiler flags to look for libraries],
 	[lib_search_path="$withval $lib_search_path"])
 
 AC_ARG_WITH(incs-from,
-[  --with-incs-from	  pass compiler flags to look for header files],
+[  --with-incs-from        pass compiler flags to look for header files],
 	[inc_search_path="$withval $inc_search_path"])
 
 
@@ -369,7 +369,7 @@ dnl ===============================
 
 
 AC_ARG_ENABLE(gnome,
-  [  --enable-gnome	  enable stuff needed for GNOME ],
+  [  --enable-gnome          enable stuff needed for GNOME ],
   [if test x$enableval = xyes; then
     AC_DEFINE(GNOME_STUFF, 1, [define if you want GNOME stuff support])
     gnome_on=yes
@@ -377,7 +377,7 @@ AC_ARG_ENABLE(gnome,
 
 
 AC_ARG_ENABLE(kde,
-  [  --enable-kde		  enable support for KDE window manager (kwm) hints ],
+  [  --enable-kde            enable support for KDE window manager (kwm) hints ],
   [if test x$enableval = xyes; then
     AC_DEFINE(KWM_HINTS, 1, [define if you want KDE hint support])
     kde_on=yes
@@ -385,7 +385,7 @@ AC_ARG_ENABLE(kde,
 
 
 AC_ARG_ENABLE(openlook,
-  [  --enable-openlook	  enable support for OPEN LOOK(tm) (olwm) hints ],
+  [  --enable-openlook       enable support for OPEN LOOK(tm) (olwm) hints ],
   [if test x$enableval = xyes; then
     AC_DEFINE(OLWM_HINTS, 1, [define if you want OPEN LOOK(tm) hint support])
     openlook_on=yes
@@ -396,7 +396,7 @@ dnl
 dnl Disable some stuff that are duplicated in kde
 dnl ---------------------------------------------
 AC_ARG_ENABLE(lite,
-  [  --enable-lite		  disable some stuff (dont use it) ],
+  [  --enable-lite           disable some stuff (dont use it) ],
   [if test x$enableval = xyes; then
         LITE=yes
 	AC_DEFINE(LITE, 1, [define if you want the 'lite' version])
@@ -460,7 +460,7 @@ dnl by MANOME Tomonori
 dnl ===========================================
 use_locale=yes
 AC_ARG_ENABLE(locale, 
-[  --disable-locale	  disable use of X locale support],
+[  --disable-locale        disable use of X locale support],
 		use_locale=no)
 
 if test "$use_locale" = yes; then
@@ -486,7 +486,7 @@ AC_CHECK_LIB(X11, XConvertCase,
 dnl XKB keyboard language status
 dnl ============================
 AC_ARG_ENABLE(modelock,
-[  --enable-modelock	  XKB keyboard language status support],
+[  --enable-modelock       XKB keyboard language status support],
 		AC_DEFINE(XKB_MODELOCK, 1, [whether XKB language MODELOCK should be enabled]))
 
 
@@ -495,7 +495,7 @@ dnl Shape support
 dnl =============
 shape=yes
 AC_ARG_ENABLE(shape, 
-[  --disable-shape	  disable shaped window extension support],
+[  --disable-shape         disable shaped window extension support],
 		shape=$enableval, shape=yes)
 
 added_xext=no
@@ -508,11 +508,27 @@ if test "$shape" = yes; then
 fi
 
 
+dnl Xft antialiased font support
+dnl ============================
+xft=yes
+XFTLIBS=""
+AC_ARG_ENABLE(xft, 
+[  --disable-xft           disable Xft antialiased font support],
+		xft=$enableval, xft=yes)
+
+if test "$xft" = yes; then
+	AC_CHECK_LIB(Xft, XftDrawCreate, [XFTLIBS="-lXft"
+		AC_SUBST(XFTLIBS)
+		AC_DEFINE(XFT, 1, [define if you want support for antialiased fonts (set by configure)])],
+		xft=no, $XLFLAGS $XLIBS)
+fi
+
+
 dnl XINERAMA support
 dnl ================
 xinerama=no
 #AC_ARG_ENABLE(xinerama, 
-#[  --disable-xinerama	  disable XInerama extension support],
+#[  --disable-xinerama     disable XInerama extension support],
 #		xinerama=$enableval, xinerama=yes)
 
 if test "$xinerama" = yes; then
@@ -568,7 +584,7 @@ dnl XPM Support
 dnl ===========
 xpm=yes
 AC_ARG_ENABLE(xpm, 
-[  --disable-xpm	  	  disable use of XPM pixmaps through libXpm],
+[  --disable-xpm           disable use of XPM pixmaps through libXpm],
 	xpm=$enableval, xpm=yes)
 
 if test "$xpm" = yes; then
@@ -604,7 +620,7 @@ dnl PNG Support
 dnl ===========
 png=yes
 AC_ARG_ENABLE(png, 
-[  --disable-png	  	  disable PNG support through libpng],
+[  --disable-png           disable PNG support through libpng],
 	png=$enableval, png=yes, png=no)
 
 
@@ -627,7 +643,7 @@ dnl ============
 jpeg=yes
 ljpeg=""
 AC_ARG_ENABLE(jpeg,
-[  --disable-jpeg	  disable JPEG support through libjpeg],
+[  --disable-jpeg          disable JPEG support through libjpeg],
 	jpeg=$enableval, jpeg=yes, jpeg=no)
 
 if test "$jpeg" = yes; then
@@ -685,7 +701,7 @@ fi
 dnl TIFF Support
 dnl ============
 AC_ARG_ENABLE(tiff, 
-[  --disable-tiff	  disable use of TIFF images through libtiff],
+[  --disable-tiff          disable use of TIFF images through libtiff],
 	tif=$enableval, tif=yes, tif=no)
 
 #
@@ -906,7 +922,7 @@ cat <<EOF >get-wings-flags
 
 WCFLAGS="$inc_search_path"
 WLFLAGS="$lib_search_path"
-WLIBS="-lWINGs -lwraster $GFXLIBS $XLIBS -lm $NETLIBS $INTLIBS"
+WLIBS="-lWINGs -lwraster $GFXLIBS $XFTLIBS $XLIBS -lm $NETLIBS $INTLIBS"
 
 usage="Usage: get-wings-flags #lp#--cflags#rp# #lp#--ldflags#rp# #lp#--libs#rp#"
 
@@ -1002,6 +1018,7 @@ echo "Installation path prefix: $prefix"
 echo "Installation path prefix for binaries: $_bindir"
 echo "Installation path for WPrefs.app: $wprefsdir" | sed -e 's|\$(prefix)|'"$prefix|"
 echo "Graphic format libraries: $supported_gfx"
+echo "Antialiased font support for WINGs: $xft"
 echo "Use assembly routines for wrlib: $asm_support"
 echo "Use inline MMX(tm) x86 assembly: $mmx_support"
 dnl echo "Sound support: yes"

@@ -38,17 +38,17 @@ geticonset_LDADD= $(top_builddir)/WINGs/libWUtil.a $(liblist)
 wmagnify_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a \
 	$(top_builddir)/wrlib/libwraster.la \
-	@INTLIBS@ @DLLIBS@
+	@XFTLIBS@ @INTLIBS@ @DLLIBS@
 
 wmsetup_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a \
 	$(top_builddir)/wrlib/libwraster.la \
-	@INTLIBS@ @DLLIBS@
+	@XFTLIBS@ @INTLIBS@ @DLLIBS@
 
 wmsetbg_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a \
 	$(top_builddir)/wrlib/libwraster.la \
-	@INTLIBS@ @DLLIBS@
+	@XFTLIBS@ @INTLIBS@ @DLLIBS@
 
 CLEANFILES = wmaker.inst wmchlocale
 

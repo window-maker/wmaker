@@ -7,7 +7,7 @@
 #include <WINGs/WUtil.h>
 #include <X11/Xlib.h>
 
-#define WINGS_H_VERSION  20020104
+#define WINGS_H_VERSION  20021008
 
 
 #ifdef __cplusplus
@@ -698,6 +698,8 @@ WMPoint WMGetDraggingInfoImageLocation(WMDraggingInfo *info);
 WMFont* WMCreateFontSet(WMScreen *scrPtr, char *fontName);
 
 WMFont* WMCreateNormalFont(WMScreen *scrPtr, char *fontName);
+
+WMFont* WMCreateAAFont(WMScreen *scrPtr, char *fontName);
 
 WMFont* WMCreateFont(WMScreen *scrPtr, char *fontName);
 

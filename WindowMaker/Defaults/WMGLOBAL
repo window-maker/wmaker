@@ -1,9 +1,12 @@
 {
   SystemFont = "-*-helvetica-medium-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-medium-r-normal-*-%d-*,-*-*-medium-r-normal-*-*-*";
   BoldSystemFont = "-*-helvetica-bold-r-normal-*-%d-*-*-*-*-*-*-*,-*-*-bold-r-normal-*-%d-*,-*-*-medium-r-normal-*-*-*";
+  AASystemFont = "-*-arial-medium-r-normal-*-%d-*-*-*-*-*-*-*";
+  AABoldSystemFont = "-*-arial-bold-r-normal-*-%d-*-*-*-*-*-*-*";
   DefaultFontSize = 12;
-  FloppyPath = "/floppy";
+  AntialiasedText = NO;
   MultiByteText = AUTO;
+  FloppyPath = "/floppy";
   DoubleClickTime = 250;
   MouseWheelUp = Button4;
   MouseWheelDown = Button5;

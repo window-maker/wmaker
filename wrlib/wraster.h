@@ -79,11 +79,11 @@ extern "C" {
 /* standard colormap usage */
 #define RC_StandardColormap	(1<<7)
 
-    
-    
 
-    
-    
+
+
+
+
 /* std colormap usage/creation modes */
 enum {
     RUseStdColormap,		       /* default. fallbacks to RIgnore.. if 
@@ -91,7 +91,7 @@ enum {
     RCreateStdColormap,
     RIgnoreStdColormap
 };
-    
+
 
     
 typedef struct RContextAttributes {

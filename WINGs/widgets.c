@@ -749,6 +749,8 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 
     scrPtr->useMultiByte = WINGsConfiguration.useMultiByte;
 
+    scrPtr->antialiasedText = WINGsConfiguration.antialiasedText;
+
     scrPtr->normalFont = WMSystemFontOfSize(scrPtr, 
 		WINGsConfiguration.defaultFontSize);
 

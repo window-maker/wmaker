@@ -7,7 +7,7 @@ noinst_PROGRAMS = connect server fontl puzzle
 
 
 LDADD= $(top_builddir)/WINGs/libWINGs.a $(top_builddir)/wrlib/libwraster.la \
-	@INTLIBS@
+	@XFTLIBS@ @INTLIBS@
 
 
 fontl_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a

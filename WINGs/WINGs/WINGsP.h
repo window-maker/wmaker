@@ -8,7 +8,7 @@
 
 #include <WINGs/WINGs.h>
 
-#if WINGS_H_VERSION < 20020104
+#if WINGS_H_VERSION < 20021008
 #error There_is_an_old_WINGs.h_file_somewhere_in_your_system._Please_remove_it.
 #endif
 
@@ -32,11 +32,11 @@ extern "C" {
 
 #define SCROLLER_WIDTH	 20
 
-    
-    
+
+
 #define XDND_VERSION 4
 
-    
+
 typedef struct W_Application {
     char *applicationName;
     int argc;
@@ -50,13 +50,15 @@ typedef struct W_Font {
 
     union {
 	XFontSet set;
-	XFontStruct *normal;
+        XFontStruct *normal;
+        struct _XftFont *xft;
     } font;
     short height;
     short y;
     short refCount;
     char *name;
     unsigned int notFontSet:1;
+    unsigned int antialiased:1;
 } W_Font;
 
 
@@ -197,12 +199,14 @@ typedef struct W_Screen {
     WMHashTable *fontSetCache;
 
     Bool useMultiByte;
-    
+
+    Bool antialiasedText;
+
     unsigned int ignoredModifierMask; /* modifiers to ignore when typing txt */
 
     struct W_Balloon *balloon;
 
-    
+
     struct W_Pixmap *checkButtonImageOn;
     struct W_Pixmap *checkButtonImageOff;
     
@@ -404,7 +408,10 @@ typedef struct W_EventHandler {
 typedef struct _WINGsConfiguration {
     char *systemFont;
     char *boldSystemFont;
+    char *aaSystemFont;
+    char *aaBoldSystemFont;
     int  defaultFontSize;
+    Bool antialiasedText;
     Bool useMultiByte;
     char *floppyPath;
     unsigned doubleClickDelay;
@@ -428,10 +435,10 @@ extern _WINGsConfiguration WINGsConfiguration;
 #define W_VIEW_DISPLAY(view)    (view)->screen->display
 #define W_VIEW_SCREEN(view)	(view)->screen
 #define W_VIEW_DRAWABLE(view)	(view)->window
-    
+
 #define W_VIEW_WIDTH(view)	(view)->size.width
 #define W_VIEW_HEIGHT(view)	(view)->size.height
-    
+
 
 #define W_PIXEL(c)		(c)->color.pixel
 
@@ -480,7 +487,7 @@ void W_ResizeView(W_View *view, unsigned int width, unsigned int height);
 void W_SetViewBackgroundColor(W_View *view, WMColor *color);
 
 void W_SetViewCursor(W_View *view, Cursor cursor);
-    
+
 void W_DrawRelief(W_Screen *scr, Drawable d, int x, int y, unsigned int width,
 		  unsigned int height, WMReliefType relief);
 
