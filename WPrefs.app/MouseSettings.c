@@ -49,6 +49,7 @@ typedef struct _Panel {
     WMLabel *speedL;
     WMButton *speedB[5];
     WMLabel *acceL;
+    WMTextField *acceT;
     WMLabel *threL;
     WMTextField *threT;
     
@@ -137,25 +138,40 @@ speedClick(WMWidget *w, void *data)
     int threshold;
     char *tmp;
 
-    for (i=0; i<5; i++) {
-	if (panel->speedB[i]==w)
-	    break;
-    }
-    
-    panel->lastClickedSpeed = panel->speedB[i];
-    panel->acceleration = 0.5+(i*0.5);
+    if (w == NULL) {
+	float accel;
 
-    sprintf(buffer, _("Accel.: %.2f"), 0.5+(i*0.5));
-    WMSetLabelText(panel->acceL, buffer);
+	tmp = WMGetTextFieldText(panel->acceT);
+	if (sscanf(tmp, "%f", &accel)!=1 || accel < 0) {
+	    WMRunAlertPanel(WMWidgetScreen(w), GetWindow(panel), _("Error"),
+			    _("Invalid mouse acceleration value. Must be a positive real value."),
+			    _("OK"), NULL, NULL);
+	    free(tmp);
+	    return;
+	}
+	panel->acceleration = accel;
+	free(tmp);
+    } else {
+	for (i=0; i<5; i++) {
+	    if (panel->speedB[i]==w)
+		break;
+	}
     
+	panel->acceleration = 0.5+(i*0.5);
+
+	sprintf(buffer, "%.2f", 0.5+(i*0.5));
+	WMSetTextFieldText(panel->acceT, buffer);
+    }
+
     tmp = WMGetTextFieldText(panel->threT);
     if (sscanf(tmp, "%i", &threshold)!=1 || threshold < 0 
 	|| threshold > panel->maxThreshold) {
-	WMRunAlertPanel(WMWidgetScreen(w), GetWindow(panel), _("Error"),
+	WMRunAlertPanel(WMWidgetScreen(panel->win), GetWindow(panel), _("Error"),
 			_("Invalid mouse acceleration threshold value. Must be the number of pixels to travel before accelerating."),
 			_("OK"), NULL, NULL);
     } else {
-	setMouseAccel(WMWidgetScreen(w), 0.5+(i*0.5), threshold);
+	setMouseAccel(WMWidgetScreen(panel->win), panel->acceleration, 
+		      threshold);
     }
     free(tmp);
 }
@@ -166,7 +182,7 @@ returnPressed(void *observerData, WMNotification *notification)
 {
     _Panel *panel = (_Panel*)observerData;
 
-    speedClick(panel->lastClickedSpeed, panel);
+    speedClick(NULL, panel);
 }
 
 
@@ -554,8 +570,15 @@ createPanel(Panel *p)
     free(buf2);
     
     panel->acceL = WMCreateLabel(panel->speedF);
-    WMResizeWidget(panel->acceL, 100, 16);
+    WMResizeWidget(panel->acceL, 80, 16);
     WMMoveWidget(panel->acceL, 10, 67);
+    WMSetLabelText(panel->acceL, _("Acceler.:"));
+
+    panel->acceT = WMCreateTextField(panel->speedF);
+    WMResizeWidget(panel->acceT, 35, 20);
+    WMMoveWidget(panel->acceT, 85, 65);
+    WMAddNotificationObserver(returnPressed, panel,
+			      WMTextDidEndEditingNotification, panel->acceT);
 
 
     panel->threL = WMCreateLabel(panel->speedF);
@@ -564,8 +587,8 @@ createPanel(Panel *p)
     WMSetLabelText(panel->threL, _("Threshold:"));
     
     panel->threT = WMCreateTextField(panel->speedF);
-    WMResizeWidget(panel->threT, 40, 20);
-    WMMoveWidget(panel->threT, 190, 65);
+    WMResizeWidget(panel->threT, 30, 20);
+    WMMoveWidget(panel->threT, 200, 65);
     WMAddNotificationObserver(returnPressed, panel,
 			      WMTextDidEndEditingNotification, panel->threT);
 

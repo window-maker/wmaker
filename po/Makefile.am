@@ -1,11 +1,11 @@
-nlsdir      = @NLSDIR@
+nlsdir      = $(DESTDIR)/@NLSDIR@
 
 CATALOGS = @MOFILES@
 
-CLEANFILES = $(CATALOGS)
+CLEANFILES = $(CATALOGS) WindowMaker.pot
 
 EXTRA_DIST = cs.po de.po es.po fr.po gl.po ja.po ko.po nl.po pt.po se.po it.po \
-	no.po ru.po tr.po fi.po hr.po el.po pl.po ja.po.broken ro.po
+	no.po ru.po tr.po fi.po hr.po el.po pl.po ro.po dk.po
 
 POTFILES  = \
 	$(top_builddir)/src/appicon.c \
@@ -53,8 +53,8 @@ WindowMaker.pot: $(POTFILES)
 	fi
 
 install-data-local:  $(CATALOGS)
-	$(mkinstalldirs) $(nlsdir) 
-	chmod 755 $(nlsdir) 
+	$(mkinstalldirs) $(DESTDIR)$(nlsdir) 
+	chmod 755 $(DESTDIR)$(nlsdir) 
 	for n in $(CATALOGS) __DuMmY ; do \
 		if test "$$n" -a "$$n" != "__DuMmY" ; then \
 			l=`basename $$n .mo`; \

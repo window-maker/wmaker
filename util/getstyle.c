@@ -63,6 +63,12 @@ static char *options[] = {
     "IconBack",	
     "IconTitleColor",
     "IconTitleBack",
+#ifdef TITLE_TEXT_SHADOW
+    "Shadow",
+    "FShadowColor",    
+    "PShadowColor",    
+    "UShadowColor",    
+#endif
     NULL
 };
 
@@ -91,6 +97,21 @@ print_help()
     puts(" -h	print help");
     puts(" -t	get theme options too");
     puts(" -p	produce a theme pack");
+}
+
+
+char*
+globalDefaultsPathForDomain(char *domain)
+{
+    char path[1024];
+    char *tmp;
+
+    sprintf(path, "%s/%s/%s", PKGDATADIR, DEFAULTS_DIR, domain);
+
+    tmp = malloc(strlen(path)+2);
+    strcpy(tmp, path);
+
+    return tmp;    
 }
 
 
@@ -401,6 +422,12 @@ findCopyFile(char *dir, char *file)
     char *fullPath;
 
     fullPath = wfindfileinarray(PixmapPath, file);
+    if (!fullPath) {
+	char buffer[4000];
+
+	sprintf(buffer, "coould not find file %s", file);
+	abortar(buffer);
+    }
     copyFile(dir, fullPath);
     free(fullPath);
 }
@@ -444,6 +471,7 @@ makeThemePack(proplist_t style, char *themeName)
 	    if (t && (strcasecmp(t, "tpixmap")==0
 		      || strcasecmp(t, "spixmap")==0
 		      || strcasecmp(t, "cpixmap")==0
+		      || strcasecmp(t, "mpixmap")==0
 		      || strcasecmp(t, "tdgradient")==0
 		      || strcasecmp(t, "tvgradient")==0
 		      || strcasecmp(t, "thgradient")==0)) {
@@ -515,6 +543,16 @@ main(int argc, char **argv)
 	       ProgName, path);
 	exit(1);
     }
+    free(path);
+
+    /* get global value */
+    path = globalDefaultsPathForDomain("WindowMaker");
+    val = PLGetProplistWithPath(path);
+    if (val) {
+	PLMergeDictionaries(val, prop);
+	PLRelease(prop);
+	prop = val;
+    }
 
     style = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
 
@@ -528,7 +566,8 @@ main(int argc, char **argv)
     }
 
     val = PLGetDictionaryEntry(prop, PLMakeString("PixmapPath"));
-    PixmapPath = PLGetString(val);
+    if (val)
+    	PixmapPath = PLGetString(val);
 
     if (theme_too) {
         for (i=0; theme_options[i]!=NULL; i++) {
@@ -542,7 +581,6 @@ main(int argc, char **argv)
 
     if (make_pack) {
 	char *path;
-	char *themeDir;
 
 	makeThemePack(style, style_file);
 

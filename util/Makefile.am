@@ -7,10 +7,10 @@ bin_PROGRAMS = wxcopy wxpaste wdwrite getstyle setstyle seticons geticonset wmse
 
 bin_SCRIPTS = wmaker.inst wm-oldmenu2new wsetfont
 
-EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new wsetfont
+EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new wsetfont directjpeg.c
 
-INCLUDES = @DFLAGS@ -I$(top_srcdir)/wrlib -I$(top_srcdir)/libPropList\
-	 @XCFLAGS@ @GFXFLAGS@ 
+INCLUDES = @DFLAGS@ -I$(top_srcdir)/wrlib \
+	 -I$(top_srcdir)/libPropList @XCFLAGS@ @GFXFLAGS@
 
 # X_EXTRA_LIBS is for libproplist in systems that need -lsocket 
 liblist= $(top_builddir)/libPropList/libPropList.la @X_EXTRA_LIBS@ 
@@ -31,8 +31,8 @@ seticons_LDADD= $(liblist)
 geticonset_LDADD= $(liblist)
 
 wmsetbg_LDADD = \
-	$(top_builddir)/wrlib/libwraster.la \
 	$(top_builddir)/WINGs/libWINGs.a \
+	$(top_builddir)/wrlib/libwraster.la \
 	$(top_builddir)/libPropList/libPropList.la \
 	@GFXLFLAGS@ @XLFLAGS@ @GFXLIBS@ @XLIBS@ -lm 
 
@@ -50,7 +50,7 @@ wxpaste_SOURCES = wxpaste.c
 
 wdwrite_SOURCES = wdwrite.c
 
-wmsetbg_SOURCES = wmsetbg.c
+wmsetbg_SOURCES = wmsetbg.c 
 
 CLEANFILES = wmaker.inst
 

@@ -118,6 +118,7 @@ static void handleKeyPress();
 static void handleFocusIn();
 static void handleMotionNotify();
 
+
 #ifdef SHAPE
 static void handleShapeNotify();
 #endif
@@ -272,7 +273,7 @@ DispatchEvent(XEvent *event)
 	handleEnterNotify(event);
 	break;
 
-    case LeaveNotify:
+     case LeaveNotify:
         handleLeaveNotify(event);
 	break;
 
@@ -296,6 +297,7 @@ DispatchEvent(XEvent *event)
 
      default:
 	handleExtensions(event);
+	break;
     }
 }
 
@@ -455,12 +457,10 @@ handleMapRequest(XEvent *ev)
 #endif
 
     if ((wwin=wWindowFor(window))) {
-	/* deiconify window */
-	if (wwin->flags.maximized) {
-	    wMaximizeWindow(wwin, wwin->flags.maximized);
-	}
-	if (wwin->flags.shaded)
+	if (wwin->flags.shaded) {
 	    wUnshadeWindow(wwin);
+	}
+	/* deiconify window */
 	if (wwin->flags.miniaturized) {
 	    wDeiconifyWindow(wwin);
 	} else if (wwin->flags.hidden) {
@@ -508,12 +508,15 @@ handleMapRequest(XEvent *ev)
         if (state==IconicState)
             wwin->flags.miniaturized = 1;
 
-        if (state==WithdrawnState) {
+        if (state == WithdrawnState) {
 	    wwin->flags.mapped = 0;
 	    wClientSetState(wwin, WithdrawnState, None);
-	    wUnmanageWindow(wwin, True);
+	    wUnmanageWindow(wwin, True, False);
         } else {
             wClientSetState(wwin, NormalState, None);
+	    if (wwin->flags.maximized) {
+		wMaximizeWindow(wwin, wwin->flags.maximized);
+	    }
             if (wwin->flags.shaded) {
                 wwin->flags.shaded = 0;
                 wwin->flags.skip_next_animation = 1;
@@ -553,7 +556,7 @@ handleDestroyNotify(XEvent *event)
 
     wwin = wWindowFor(window);
     if (wwin) {
-	wUnmanageWindow(wwin, False);
+	wUnmanageWindow(wwin, False, True);
     }
 
     app = wApplicationOf(window);
@@ -647,7 +650,6 @@ handleButtonPress(XEvent *event)
 		  event->xbutton.window = scr->switch_menu->frame->core->window;
 	    }
 	} else if (event->xbutton.button==wPreferences.select_button) {
-
 	    wUnselectWindows(scr);
 	    wSelectWindows(scr, event);
 	}
@@ -659,7 +661,7 @@ handleButtonPress(XEvent *event)
 	} else if (event->xbutton.button==Button5) {
 
 	    wWorkspaceRelativeChange(scr, 1);
-	    
+
 	}
 #endif /* MOUSE_WS_SWITCH */
     }
@@ -782,7 +784,7 @@ handleUnmapNotify(XEvent *event)
 	
 	/* if the window was reparented, do not reparent it back to the
 	 * root window */
-	wUnmanageWindow(wwin, !reparented);
+	wUnmanageWindow(wwin, !reparented, False);
     }
     XUngrabServer(dpy);
 }
@@ -832,8 +834,8 @@ handlePropertyNotify(XEvent *event)
 	wClientCheckProperty(wapp->main_window_desc, &event->xproperty);
     }
     
-    scr = wScreenForRootWindow(event->xproperty.window);
-    if (scr) {
+    scr = wScreenForWindow(event->xproperty.window);
+    if (scr && scr->root_win == event->xproperty.window) {
 #ifdef KWM_HINTS
 	wKWMCheckRootHintChange(scr, &event->xproperty);
 #endif
@@ -1015,18 +1017,24 @@ handleEnterNotify(XEvent *event)
 	    scr->autoRaiseTimer = NULL;
 	}
     } else {
-	/* set focus if in focus-follows-mouse mode and the event
+	/* set auto raise timer even if in focus-follows-mouse mode
+	 * and the event is for the frame window, even if the window
+	 * has focus already.  useful if you move the pointer from a focused
+	 * window to the root window and back pretty fast 
+	 *
+	 * set focus if in focus-follows-mouse mode and the event
 	 * is for the frame window and window doesn't have focus yet */
 	if ((wPreferences.focus_mode==WKF_POINTER
 	     || wPreferences.focus_mode==WKF_SLOPPY)
-	    && wwin->frame->core->window==event->xcrossing.window
-	    && !wwin->flags.focused) {
-	    wSetFocusTo(scr, wwin);
-	    
-	    if (scr->autoRaiseTimer)
-		WMDeleteTimerHandler(scr->autoRaiseTimer);
-	    scr->autoRaiseTimer = NULL;
-	    
+		&& wwin->frame->core->window==event->xcrossing.window) {
+
+		if (!wwin->flags.focused)
+		wSetFocusTo(scr, wwin);
+
+		if (scr->autoRaiseTimer)
+			WMDeleteTimerHandler(scr->autoRaiseTimer);
+		scr->autoRaiseTimer = NULL;
+
 	    if (wPreferences.raise_delay && !WFLAGP(wwin, no_focusable)) {
 		scr->autoRaiseWindow = wwin->frame->core->window;
 		scr->autoRaiseTimer
@@ -1533,3 +1541,5 @@ handleMotionNotify(XEvent *event)
         }
     }
 }
+
+

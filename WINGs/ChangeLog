@@ -1,3 +1,15 @@
+
+changes since wmaker 0.50.2:
+............................
+
+- added wsetabort() - look WUtil.h
+- fixed bug in WMList resize
+- added notification sending when changing textfield programatically
+- removed WMHideWindow()
+- fixed bug in WMCloseWindow()
+- added textfield selection patch
+- added color panel code
+
 changes since wmaker 0.20.3:
 ............................
 

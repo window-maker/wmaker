@@ -38,6 +38,8 @@
 #include "wcore.h"
 #include "framewin.h"
 #include "window.h"
+#include "icon.h"
+#include "appicon.h"
 
 
 extern WPreferences wPreferences;
@@ -89,8 +91,14 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
 	RDestroyImage(icon);
 	return;
     }
-    
+
     for (i=0; i<DEMATERIALIZE_STEPS; i++) {
+	XEvent foo;
+	if (XCheckTypedWindowEvent(dpy, scr->root_win, ButtonPressMask,
+				   &foo)) {
+	    XClearWindow(dpy, scr->root_win);
+	    break;
+	}
 	image = RCloneImage(back);
 	RCombineImagesWithOpaqueness(image, icon, 
 		     (DEMATERIALIZE_STEPS-1-i)*256/(DEMATERIALIZE_STEPS+2));
@@ -120,7 +128,8 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
     int ll;
 #endif
     char pvx[PIECES], pvy[PIECES];
-    char ax[PIECES], ay[PIECES];
+    /* in MkLinux/PPC gcc seems to think that char is unsigned? */
+    signed char ax[PIECES], ay[PIECES];
     Pixmap tmp;
 
     XSetClipMask(dpy, scr->copy_gc, None);
@@ -171,7 +180,15 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
 
     j=k;
     while (k>0) {
-	for (i=0; i<j; i++) {
+	XEvent foo;
+
+	if (XCheckTypedWindowEvent(dpy, scr->root_win, ButtonPressMask,
+				   &foo)) {
+	    XClearWindow(dpy, scr->root_win);
+	    break;
+	}
+
+	for (i=0; i<j ; i++) {
 	    if (ax[i]>=0) {
 		int _px = px[i]>>KAB_PRECISION;
 #ifdef ICON_KABOOM_EXTRA
@@ -405,3 +422,101 @@ DoWindowBirth(WWindow *wwin)
 }
 #endif
 
+
+
+#ifdef SILLYNESS
+static WMPixmap *data[12];
+
+
+static Bool
+loadData(WScreen *scr)
+{
+    FILE *f;
+    int i;
+    RImage *image;
+    Pixmap d[12];
+
+    f = fopen(PKGDATADIR"/xtree.dat", "r");
+    if (!f)
+	return False;
+
+    image = RCreateImage(50, 50, False);
+    if (!image) {
+	fclose(f);
+	return False;
+    }
+
+    for (i = 0; i < 12; i++) {
+	if (fread(image->data[0], 50*50, 1, f)!=1) {
+	    goto error;
+	}
+	if (fread(image->data[1], 50*50, 1, f)!=1) {
+	    goto error;
+	}
+	if (fread(image->data[2], 50*50, 1, f)!=1) {
+	    goto error;
+	}
+	if (!RConvertImage(scr->rcontext, image, &(d[i]))) {
+	    goto error;
+	}
+    }
+    RDestroyImage(image);
+
+    fclose(f);
+
+    for (i=0; i<12; i++) {
+	data[i] = WMCreatePixmapFromXPixmaps(scr->wmscreen, d[i], None, 50, 50, 
+					     scr->w_depth);
+    }
+
+    return True;
+
+error:
+    RDestroyImage(image);
+
+    fclose(f);
+
+    while (--i > 0) {
+	XFreePixmap(dpy, d[i]);
+    }
+
+    return False;
+}
+
+
+WMPixmap*
+DoXThing(WWindow *wwin)
+{
+    static int order = 0;
+
+    order++;
+
+    return data[order % 12];
+}
+
+
+Bool
+InitXThing(WScreen *scr)
+{
+    time_t t;
+    struct tm *l;
+    static int i = 0;
+
+    if (i)
+	return True;
+
+    t = time(NULL);
+    l = localtime(&t);
+    if ((l->tm_mon!=12||l->tm_mday<24||l->tm_mday>26)) {
+	return False;
+    }
+ 
+    if (!loadData(scr))
+	return False;
+
+    i = 1;
+    
+    return True;
+}
+
+#endif /* SILLYNESS */

@@ -10,7 +10,7 @@ dnl
 
 AC_INIT(src/WindowMaker.h)
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.50.2)
+AM_INIT_AUTOMAKE(WindowMaker, 0.51.0)
 
 AM_PROG_LIBTOOL
 
@@ -53,6 +53,17 @@ AC_PROG_LN_S
 AC_PROG_GCC_TRADITIONAL
 
 
+dnl the prefix
+dnl ==========
+dnl
+dnl move this earlier in the script... anyone know why this is handled
+dnl in such a bizarre way?
+
+test "x$prefix" = xNONE && prefix=$ac_default_prefix
+dnl Let make expand exec_prefix.
+test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
+
+
 dnl Checks for library functions.
 dnl ============================
 dnl not used anywhere
@@ -60,13 +71,7 @@ dnl AC_FUNC_MEMCMP
 AC_TYPE_SIGNAL
 AC_FUNC_VPRINTF
 AC_FUNC_ALLOCA
-AC_CHECK_FUNCS(gethostname gettimeofday select poll strerror strncasecmp setpgid)
-
-if test "$ac_cv_func_gettimeofday" != yes; then
-	echo "The gettimeofday() system call is not available in your system"
-	echo "but it is required by Window Maker. Sorry."
-	exit 1
-fi
+AC_CHECK_FUNCS(gethostname select poll strerror strncasecmp setpgid atexit)
 
 if test "x$CPP_PATH" = x; then
     AC_PATH_PROG(CPP_PATH, cpp, notfound,
@@ -92,6 +97,26 @@ if test "$CPP_PATH" = "/usr/ccs/lib/cpp" -o "$CPP_PATH" = "notfound" ; then
     fi
 fi
 AC_DEFINE_UNQUOTED(CPP_PATH, "$CPP_PATH")
+
+
+
+dnl Checks for header files.
+dnl =======================
+dnl AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h sys/time.h sys/types.h\
+		libintl.h sys/select.h poll.h)
+
+
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+dnl ==============================================================
+AC_DECL_SYS_SIGLIST
+AC_C_CONST
+AC_TYPE_SIZE_T
+AC_TYPE_PID_T
+AC_HEADER_TIME
+
 
 dnl gettext
 dnl =======
@@ -119,7 +144,7 @@ fi
 
 if test "$LINGUAS" != ""; then
     if test "$XGETTEXT" != "" -a "$HAVEGETTEXT" != ""; then
-        I18N="-DI18N"
+        AC_DEFINE(I18N)
         PO=""
 #       if test "$LINGUAS" = ""; then
 #   	    ling=` (cd src/po; /bin/ls *.po) `
@@ -130,7 +155,6 @@ if test "$LINGUAS" != ""; then
 #       fi
         echo "xgettext and gettext() exist; will build i18n support for $LINGUAS"
     else
-        I18N=""
         LINGUAS=""
         PO=""
         echo "xgettext and libintl.a don't both exist; will not build i18n support"
@@ -148,7 +172,7 @@ dnl ==================
 
 dnl List of supported locales
 dnl -------------------------
-supported_locales="cs de es fr gl it ja ko nl no pt ru se tr fi hr el pl ro"
+supported_locales="cs de es fr gl it ja ko nl no pt ru se tr fi hr el pl ro dk"
 supported_wprefs_locales="pt hr fr ko ja cs"
 
 for lang in $LINGUAS; do
@@ -185,23 +209,20 @@ AC_ARG_ENABLE(kanji,
 		enable_kanji=no)
 
 if test "$enable_kanji" = yes; then
-	I18N_MB="#define I18N_MB"
 	case $host_os in
 	freebsd*)
 		AC_CHECK_LIB(xpg4, setlocale, [LIBS="$LIBS -lxpg4"]);;
 	*)
 		;;
 	esac
-else
-	I18N_MB="#undef I18N_MB"
+        AC_DEFINE(I18N_MB)
 fi
-AC_SUBST(I18N_MB)
 
 
 dnl XKB keyboard language status
 dnl ============================
 AC_ARG_ENABLE(modelock,
-[  --enable-modelock	   XKB keyboard language status support],
+[  --enable-modelock	  XKB keyboard language status support],
 		X_CFLAGS="$X_CFLAGS -DXKB_MODELOCK",)
 
 
@@ -215,12 +236,12 @@ if test "x$NLSDIR" = "x"; then
 	if test "x$with_nlsdir" != "x"; then
 		NLSDIR=$with_nlsdir
 	else
-		NLSDIR='$(prefix)/lib/locale'
+		NLSDIR=`eval echo $prefix/lib/locale`
 	fi
 fi
 
+AC_DEFINE_UNQUOTED(NLSDIR, "$NLSDIR")
 
-AC_SUBST(I18N)
 AC_SUBST(INTLIBS)
 AC_SUBST(NLSDIR)
 AC_SUBST(MOFILES)
@@ -233,7 +254,7 @@ dnl ===============================
 
 
 AC_ARG_ENABLE(gnome,
-  [  --enable-gnome           enable stuff needed for GNOME ],
+  [  --enable-gnome	  enable stuff needed for GNOME ],
   [if test x$enableval = xyes; then
     AC_DEFINE(GNOME_STUFF)
     gnome_on=yes
@@ -241,23 +262,32 @@ AC_ARG_ENABLE(gnome,
 
 
 AC_ARG_ENABLE(kde,
-  [  --enable-kde             enable support for KDE window manager (kwm) hints ],
+  [  --enable-kde		  enable support for KDE window manager (kwm) hints ],
   [if test x$enableval = xyes; then
     AC_DEFINE(KWM_HINTS)
     kde_on=yes
   fi])
 
 
+AC_ARG_ENABLE(openlook,
+  [  --enable-openlook	  enable support for OPEN LOOK(tm) (olwm) hints ],
+  [if test x$enableval = xyes; then
+    AC_DEFINE(OLWM_HINTS)
+    openlook_on=yes
+  fi])
+
+
 dnl
 dnl Disable some stuff that are duplicated in kde
 dnl ---------------------------------------------
-LITE=
 AC_ARG_ENABLE(lite,
-  [  --enable-lite             disable stuff duplicated in KDE/GNOME ],
+  [  --enable-lite		  disable stuff duplicated in KDE/GNOME ],
   [if test x$enableval = xyes; then
-	LITE=-DLITE
+        LITE=yes
+	AC_DEFINE(LITE)
+        AC_SUBST(LITE)
   fi])
-AC_SUBST(LITE)
+
 
 
 dnl ===========================================
@@ -275,8 +305,14 @@ XLIBS="$X_EXTRA_LIBS -lX11"
 dnl Decide which locale function to use, setlocale() or _Xsetlocale()
 dnl by MANOME Tomonori 
 dnl ===========================================
-AC_CHECK_LIB(X11, _Xsetlocale, [X_LOCALE="-DX_LOCALE"],, $XLFLAGS $XLIBS)
-AC_SUBST(X_LOCALE)
+use_locale=yes
+AC_ARG_ENABLE(locale, 
+[  --disable-locale	  disable use of X locale support],
+		use_locale=no)
+
+if test "$use_locale" = yes; then
+  AC_CHECK_LIB(X11, _Xsetlocale, AC_DEFINE(X_LOCALE),, $XLFLAGS $XLIBS)
+fi
 
 
 dnl Shape support
@@ -290,10 +326,9 @@ added_xext=no
 
 if test "$shape" = yes; then
 	AC_CHECK_LIB(Xext, XShapeSelectInput, [XLIBS="-lXext $XLIBS"
-		added_xext=yes SHAPE=-DSHAPE], shape=no, $XLFLAGS $XLIBS)
+		added_xext=yes
+                AC_DEFINE(SHAPE)], shape=no, $XLFLAGS $XLIBS)
 fi
-
-AC_SUBST(SHAPE)
 
 
 dnl MIT-SHM support
@@ -314,11 +349,9 @@ if test "$shm" = yes; then
 		if test "$added_xext" = no; then
 			XLIBS="-lXext $XLIBS"
 		fi
-		XSHM=-DXSHM
+                AC_DEFINE(XSHM)
 	fi
 fi
-
-AC_SUBST(XSHM)
 
 
 dnl R6 Style Session Management Support
@@ -367,8 +400,9 @@ if test "$xpm" = yes; then
 	my_old_cppflags=$CPPFLAGS
 	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH $XCFLAGS"
 	AC_CHECK_HEADER(X11/xpm.h,
-		[GFXFLAGS="$GFXFLAGS -DUSE_XPM" GFXLIBS="$GFXLIBS -lXpm"
-		 supported_gfx="XPM"], supported_gfx="XPM (builtin)")
+		[GFXLIBS="$GFXLIBS -lXpm"
+		 supported_gfx="XPM"
+                 AC_DEFINE(USE_XPM)], supported_gfx="XPM (builtin)")
 	CPPFLAGS=$my_old_cppflags
     fi
 fi
@@ -402,8 +436,9 @@ if test "$png" = yes ; then
 	my_old_cppflags=$CPPFLAGS
 	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH $XCFLAGS"
 	AC_CHECK_HEADER(png.h,
-		[GFXLIBS="$GFXLIBS -lpng -lz" GFXFLAGS="$GFXFLAGS -DUSE_PNG" 
-		supported_gfx="$supported_gfx PNG"], )
+		[GFXLIBS="$GFXLIBS -lpng -lz" 
+		 supported_gfx="$supported_gfx PNG"
+                 AC_DEFINE(USE_PNG)], )
 	CPPFLAGS=$my_old_cppflags
     fi
 fi
@@ -424,8 +459,9 @@ if test "$jpeg" = yes; then
 	my_old_cppflags=$CPPFLAGS
 	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH $XCFLAGS"
 	AC_TRY_CPP(jpeglib.h,
-		[GFXLIBS="$GFXLIBS -ljpeg" GFXFLAGS="$GFXFLAGS -DUSE_JPEG"
-		supported_gfx="$supported_gfx JPEG"], jpeg_not_found=yes)
+		[GFXLIBS="$GFXLIBS -ljpeg"
+		 supported_gfx="$supported_gfx JPEG"
+                 AC_DEFINE(USE_JPEG)], jpeg_not_found=yes)
 	CPPFLAGS=$my_old_cppflags
     fi
 fi
@@ -461,8 +497,9 @@ dnl
 	my_old_cppflags=$CPPFLAGS
 	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH $XCFLAGS"
 	AC_CHECK_HEADER(gif_lib.h,
-		[GFXLIBS="$GFXLIBS -l$my_libname" GFXFLAGS="$GFXFLAGS -DUSE_GIF"
-		supported_gfx="$supported_gfx GIF"], )
+		[GFXLIBS="$GFXLIBS -l$my_libname"
+		 supported_gfx="$supported_gfx GIF"
+                 AC_DEFINE(USE_GIF)], )
 	CPPFLAGS=$my_old_cppflags
     fi
 fi
@@ -510,8 +547,10 @@ dnl
 	my_old_cppflags=$CPPFLAGS
 	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH $XCFLAGS"
 	AC_CHECK_HEADER(tiffio.h,
-		[GFXFLAGS="$GFXFLAGS -DUSE_TIFF" GFXLIBS="$my_libname $GFXLIBS"
-		ICONEXT="tiff" supported_gfx="$supported_gfx TIFF"], )
+		[GFXLIBS="$my_libname $GFXLIBS"
+		 ICONEXT="tiff"
+                 supported_gfx="$supported_gfx TIFF"
+                 AC_DEFINE(USE_TIFF)], )
 	CPPFLAGS=$my_old_cppflags
     fi
 fi
@@ -550,21 +589,11 @@ AC_ARG_ENABLE(sound,
 [  --disable-sound	  disable sound support ],
 		sound=$enableval, sound=yes)
 if test "$sound" = yes; then	
-	SOUND="#define WMSOUND"	
-else
-	SOUND="#undef WMSOUND"	
+        AC_DEFINE(WMSOUND)
 fi
-AC_SUBST(SOUND)
 
 
 # AC_PREFIX_PROGRAM(wmaker)
-
-if test "${prefix}" = "NONE"; then
-	prefix="/usr/local"
-fi
-if test "${exec_prefix}" = "NONE"; then
-	exec_prefix='$(prefix)'
-fi
 
 dnl Support for PIXMAPDIR option
 dnl ============================
@@ -574,10 +603,13 @@ AC_ARG_WITH(pixmapdir,
 if test "x$with_pixmapdir" != "x"; then
 	pixmapdir=$with_pixmapdir
 else
-	pixmapdir='$(datadir)/pixmaps'
+	pixmapdir=`eval echo ${datadir}/pixmaps`
 fi
 
-AC_SUBST(pixmapdir)
+AC_DEFINE_UNQUOTED(PIXMAPDIR, "$pixmapdir")
+
+pkgdatadir=`eval echo $datadir`
+AC_DEFINE_UNQUOTED(PKGDATADIR, "$pkgdatadir/WindowMaker")
 
 
 dnl Support for GNUSTEP_LOCAL_ROOT, for WPrefs.app
@@ -586,8 +618,7 @@ dnl ==============================================
 appspath=""
 
 AC_ARG_WITH(appspath,
-[  --with-appspath=PATH    specify the path of the GNUstep applications
-directory], appspath=$withval )
+[  --with-appspath=PATH    specify the directory for GNUstep applications], appspath=$withval )
 
 if test "x$appspath" = "x"; then
     gnustepdir='$(prefix)/GNUstep'
@@ -612,101 +643,9 @@ AC_ARG_ENABLE(single-icon,
 [  --enable-single-icon    use single application icon per WM_INSTANCE+WM_CLASS
 ],
 if test "$enableval" = yes; then
-	REDUCE_APPICONS="#define REDUCE_APPICONS"
-else
-	REDUCE_APPICONS="#undef REDUCE_APPICONS"
-fi,
-	REDUCE_APPICONS="#undef REDUCE_APPICONS"
-)	
-AC_SUBST(REDUCE_APPICONS)
-
-
-dnl Checks for header files.
-dnl =======================
-dnl AC_HEADER_STDC
-AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h sys/time.h sys/types.h\
-		libintl.h sys/select.h poll.h)
-
-
-
-dnl Checks for typedefs, structures, and compiler characteristics.
-dnl ==============================================================
-AC_DECL_SYS_SIGLIST
-AC_C_CONST
-AC_TYPE_SIZE_T
-AC_TYPE_PID_T
-AC_HEADER_TIME
-
-
-
-dnl Shared Library Support (unfinished)
-dnl ===================================
-
-enable_shared=no
-#AC_ARG_ENABLE(shared,
-#[  --enable-shared	  build libraries as shared ], enable_shared=yes, 
-#							enable_shared=no)
-
-if test "$enable_shared" = yes; then
-    if test "$GCC" = yes; then
-    	_CFLAGS="-fPIC"
-	LDSHARED='$CC -shared'
-    else
-    	# find system name and corresponding cc options
-  	case `(uname -sr || echo unknown) 2>/dev/null` in
-  	  SunOS\ 5*)
-	     _CFLAGS="-fast -xcg89 -KPIC -R."
-             LDSHARED='$CC -G';;
-  	  SunOS\ 4*)
-	     _CFLAGS="-PIC"
-             LDSHARED="ld";;
-	  IRIX*)
-	     _CFLAGS="-ansi -rpath ."
-             LDSHARED='$CC -shared';;
-	  SCO_SV\ 3.2*)
-	     _CFLAGS="-dy -KPIC "
-             LDSHARED='$CC -dy -KPIC -G';;
-	  HP-UX*)
-	     _CFLAGS="+z"
-             LDSHARED="ld -b"
-             SHAREDLIBS='libz.sl';;
-	  *)
-	     _CFLAGS=""
-             LDSHARED='$CC -shared';;
-	esac
-    fi
-
-    AC_MSG_CHECKING([for shared library support])
-
-    test=tmptest$$
-    cat > $test.c <<EOF
-int hello() { printf("hello\n"); }
-EOF
-
-
-    # we must test in two steps (cc then ld), required at least on SunOS 4.x
-    if test "`($CC -c $_CFLAGS $test.c) 2>&1`" = "" &&
-    		test "`($LDSHARED -o $test.so $test.o) 2>&1`" = ""; then
-  	CFLAGS="$CFLAGS $_CFLAGS"
-	WRASTERLIB='libwraster.so.$(WRASTER_VER)'
-	WINGSLIB='libWINGs.so.$(WINGS_VER)'
-	AC_MSG_RESULT([yes, building shared])
-    else
-  	LDSHARED='$CC'
-	WRASTERLIB='libwraster.a'
-	WINGSLIB='libWINGs.a'
-	AC_MSG_RESULT([no, building static])
-    fi
-    rm -f $test.[co] $test.so
+	AC_DEFINE(REDUCE_APPICONS)
 fi
-
-#AC_SUBST(WRASTER_VER)
-#AC_SUBST(WINGS_VER)
-#AC_SUBST(WRASTERLIB)
-# AC_SUBST(WINGSLIB)
-# AC_SUBST(LDSHARED)
-
+)
 
 
 dnl
@@ -760,16 +699,16 @@ dnl 	| sed -e 's|\$(prefix)|'"$prefix|" >> WINGs-flags
 dnl The #lp# and #rp# stuff below is a hack because [ and ] get lost when
 dnl parsed by m4
 
-cat <<EOF >WINGs-flags
+cat <<EOF >get-wraster-flags
 #!/bin/sh
 
 prefix="$prefix"
 exec_prefix=\$prefix
 
-WFLAGS="$LIBPL_INC_PATH -I\$prefix/include"
-WLIBS="-L\$exec_prefix/lib -lWINGs -lwraster $LIBPL_LIBS $GFXLIBS -lm"
+WFLAGS="-I\$prefix/include $XCFLAGS"
+WLIBS="-L\$exec_prefix/lib $XLFLAGS -lwraster $GFXLIBS $XLIBS -lm"
 
-usage="Usage: WINGs-flags #lp#--libs#rp# #lp#--incs#rp#"
+usage="Usage: get-wraster-flags #lp#--libs#rp# #lp#--incs#rp#"
 
 if test \$# -eq 0; then
       echo "\${usage}" 1>&2
@@ -795,10 +734,10 @@ done
 
 EOF
 
-sed 's/#lp#/[/g' WINGs-flags | sed 's/#rp#/]/g' > WINGs/WINGs-flags
+sed 's/#lp#/[/g' get-wraster-flags | sed 's/#rp#/]/g' > wrlib/get-wraster-flags
 
-chmod 755 WINGs/WINGs-flags
-rm -f WINGs-flags
+chmod 755 wrlib/get-wraster-flags
+rm -f get-wraster-flags
 
 
 dnl
@@ -817,7 +756,7 @@ echo
 echo "Window Maker was configured as follows:"
 echo
 echo "Installation path prefix: $prefix"
-echo "Installation path prefix for binaries: $exec_prefix" | sed -e 's|\$(prefix)|'"$prefix|"
+echo "Installation path prefix for binaries: $exec_prefix" | sed -e 's|\${prefix}|'"$prefix|"
 echo "Installation path for WPrefs.app: $wprefsdir" | sed -e 's|\$(prefix)|'"$prefix|"
 echo "Graphic format libraries: $supported_gfx"
 echo "Sound support: $sound"
@@ -825,20 +764,16 @@ echo "Translated message files to install: $mof"
 if test "x$MOFILES" != "x"; then
 	echo "Installation path of translated messages: $NLSDIR" | sed -e 's|\$(prefix)|'"$prefix|"
 fi
-if test x$kde_on != x; then
-	echo "KDE support enabled"
-fi
-if test x$LITE != x; then
-	echo "Duplicated stuff with KDE will be removed"
-fi 
-if test x$gnome_on != x; then
-	echo "GNOME support enabled"
-fi
+
 
 if test "$jpeg_not_found" = yes; then
+echo "WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING"
+echo
 echo "JPEG support will not be included because the JPEG library is"
 echo "not installed correctly or was not found. Background images"
 echo "from themes will not display as they usually are JPEG files."
+echo
+echo "WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING"
 fi
 
 

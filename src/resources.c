@@ -132,11 +132,11 @@ wFreeFont(WFont *font)
 int
 wGetColor(WScreen *scr, char *color_name, XColor *color)
 {
-    if (!XParseColor(dpy, scr->colormap, color_name, color)) {
+    if (!XParseColor(dpy, scr->w_colormap, color_name, color)) {
 	wwarning(_("could not parse color \"%s\""), color_name);
 	return False;
     }
-    if (!XAllocColor(dpy, scr->colormap, color)) {
+    if (!XAllocColor(dpy, scr->w_colormap, color)) {
 	wwarning(_("could not allocate color \"%s\""), color_name);
 	return False;
     }
@@ -151,6 +151,6 @@ wFreeColor(WScreen *scr, unsigned long pixel)
 	unsigned long colors[1];
 	
 	colors[0] = pixel;
-	XFreeColors(dpy, scr->colormap, colors, 1, 0);
+	XFreeColors(dpy, scr->w_colormap, colors, 1, 0);
     }
 }

@@ -2,7 +2,7 @@
 #
 # WindowMaker configuration and compilation script.
 #
-# Copyright (c) 1997, 1998 Alfredo K. Kojima
+# Copyright (c) 1997, 1998, 1999 Alfredo K. Kojima
 #
 
 export LINGUAS;LINGUAS=""
@@ -57,6 +57,35 @@ if [ "$rtfm" != y ]; then
 	echo "Please read the INSTALL file before installing"
 	exit
 fi
+echo "Are you lying?"
+echo -n "<y/n> "
+read rtfm
+if [ "$rtfm" != n ]; then
+	echo "What a shame!"
+	echo "Please read the INSTALL file before installing"
+	exit
+fi
+echo "Do you *swear* that you really read the INSTALL file?"
+echo -n "<y/n> "
+read rtfm
+if [ "$rtfm" != y ]; then
+	echo "Please read the INSTALL file before installing"
+	exit
+fi
+echo "Last chance. You will not get help if you have some problem"
+echo "because you didn't read that file. Even if your computer explodes."
+echo "Do you *really* read it?"
+echo -n "<y/n> "
+read rtfm
+if [ "$rtfm" != y ]; then
+	echo "Please read the INSTALL file before installing"
+	exit
+fi
+echo
+echo "Ok, you have been warned."
+echo
+perai
+
 
 if test "$USER" != "root"; then
 	echo
@@ -78,13 +107,6 @@ echo -n "<y/n> [n] "
 read kde
 if [ "$kde" = y -o "$kde" = Y ]; then
 	OPTIONS="$OPTIONS --enable-kde"
-	echo "Do you want to disable features that become duplicated with"
-	echo "KDE support (like root menus)?"
-	echo -n "<y/n> [n] "
-	read lite
-	if [ "$lite" = y -o "lite" = Y ]; then
-		OPTIONS="$OPTIONS --enable-lite"
-	fi
 fi
 
 ######################## GNOME
@@ -94,6 +116,15 @@ echo -n "<y/n> [n] "
 read gnome
 if [ "$gnome" = y -o "$gnome" = Y ]; then
 	OPTIONS="$OPTIONS --enable-gnome"
+fi
+
+######################## OLWM
+echo
+echo "Do you want OPEN LOOK(tm)/olwm support?"
+echo -n "<y/n> [n] "
+read olwm
+if [ "$olwm" = y -o "$olwm" = Y ]; then
+	OPTIONS="$OPTIONS --enable-openlook"
 fi
 
 ######################## NLS
@@ -184,8 +215,9 @@ while [ $done = 0 ]; do
     	done=1
     fi
     echo
-    echo "   $PREFIX/bin must be in the PATH environment variable of all users"
-    echo "will who use Window Maker"
+    echo "   $PREFIX/bin must be in the PATH environment variable"
+    echo "of all users who will use Window Maker"
+    echo
     echo "   Make sure $PREFIX/lib is in the /etc/ld.so.conf file"
     perai
 done
@@ -227,7 +259,7 @@ echo "--------------------------"
 perform make install
 
 if [ `uname -s` = "Linux" ]; then
-	/sbin/ldconfig -v
+	/sbin/ldconfig
 fi
 
 echo 

@@ -36,7 +36,10 @@
 #include "properties.h"
 #include "winspector.h"
 #ifdef KWM_HINTS
-#include "kwm.h"
+# include "kwm.h"
+#endif
+#ifdef OLWM_HINTS
+# include "openlook.h"
 #endif
 
 extern Atom _XA_WM_DELETE_WINDOW;
@@ -63,49 +66,53 @@ Shutdown(WShutdownMode mode)
     int i;
 
     switch (mode) {
-     case WSExitMode:
-	for (i=0; i<wScreenCount; i++) {
-	    WScreen *scr;
-
-	    scr = wScreenWithNumber(i);
-	    if (scr) {
-		if (scr->helper_pid)
-		    kill(scr->helper_pid, SIGKILL);
-		
-#ifdef KWM_HINTS
-		wKWMShutdown(scr, True);
-#endif
-		wScreenSaveState(scr);
-
-		RestoreDesktop(scr);
-	    }
-	}
-
-	ExecExitScript();
-	Exit(0);
-	break;
-
      case WSLogoutMode:
-#ifdef R6SM
+#ifdef XSMP_ENABLED
 	wSessionRequestShutdown();
 	break;
 #else
 	/* fall through */
 #endif
      case WSKillMode:
-	for (i=0; i<wScreenCount; i++) {
+     case WSExitMode:
+	/* if there is no session manager, send SAVE_YOURSELF to
+	 * the clients */
+#if 0
+#ifdef XSMP_ENABLED
+	if (!wSessionIsManaged())
+#endif
+	    for (i = 0; i < wScreenCount; i++) {
+		WScreen *scr;
+
+		scr = wScreenWithNumber(i);
+		if (scr) {
+		    wSessionSendSaveYourself(scr);
+		}
+	    }
+#endif
+	for (i = 0; i < wScreenCount; i++) {
 	    WScreen *scr;
-		
+
 	    scr = wScreenWithNumber(i);
 	    if (scr) {
 		if (scr->helper_pid)
 		    kill(scr->helper_pid, SIGKILL);
+
+		/* if the session is not being managed, save restart info */
+#ifdef XSMP_ENABLED
+		if (!wSessionIsManaged())
+#endif
+		    wSessionSaveClients(scr);
+
 #ifdef KWM_HINTS
 		wKWMShutdown(scr, True);
 #endif
 		wScreenSaveState(scr);
 
-		wipeDesktop(scr);
+		if (mode == WSKillMode)
+		    wipeDesktop(scr);
+		else
+		    RestoreDesktop(scr);
 	    }
 	}
 	ExecExitScript();
@@ -122,6 +129,9 @@ Shutdown(WShutdownMode mode)
 		    kill(scr->helper_pid, SIGKILL);
 #ifdef KWM_HINTS
 		wKWMShutdown(scr, False);
+#endif
+#ifdef OLWM_HINTS
+		wOLWMShutdown(scr);
 #endif
 		wScreenSaveState(scr);
 
@@ -179,7 +189,7 @@ RestoreDesktop(WScreen *scr)
             if (core->descriptor.parent_type==WCLASS_WINDOW) {
                 wwin = core->descriptor.parent;
                 wwin->flags.mapped=1;
-                wUnmanageWindow(wwin, !wwin->flags.internal_window);
+                wUnmanageWindow(wwin, !wwin->flags.internal_window, False);
             }
             core = next;
         }

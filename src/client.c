@@ -95,8 +95,10 @@ wClientRestore(WWindow *wwin)
       XMapWindow(dpy, wwin->client_win);
     
     /* don't let the window get iconified after restart */
+    /*
     if (wwin->flags.shaded)
-      wClientSetState(wwin, NormalState, None);
+	wClientSetState(wwin, NormalState, None);
+     */
 }
 
 
@@ -356,7 +358,7 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 	    WApplication *wapp = wApplicationOf(wwin->main_window);
 	    char **argv;
 	    int argc;
-	    
+
 	    if (wapp && wapp->app_icon) {
 		if (wapp->app_icon->command!=NULL)
 		    free(wapp->app_icon->command);

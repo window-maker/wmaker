@@ -24,6 +24,9 @@ ConfigureNotify
 Olly Betts <olly@muscat.co.uk>
 shaded window indication in window list
 
+Tudor Bosman <tudorb@caltech.edu>
+autoraise bugfix
+
 Rob Clark <rclark@turing.cs.hmc.edu>
 Text input field, 15bpp support
 
@@ -62,12 +65,15 @@ Better detection of gfx libraries, added IconTitleColor/IconTitleBack
 Greg Hayes <sdc@choice.net>
 Twisted miniaturization  animation
 
+Alban Hertroys
+WINGs color panel
+
 HIDEKI Fujimoto <hideki70@osk2.threewebnet.or.jp>
 FreeBSD portability, icon arrangement fixes, dock initialization bug fix,
 some I18N related fixes
 
 Pascal Hofstee <daeron@wit401305.student.utwente.nl>
-WINGs bug fixes
+WINGs bug fixes, WINGs color panel
 
 Robert A. Holak <panthar@tradeservices.com>
 bug fix
@@ -108,7 +114,7 @@ Stuart Luppescu <s-luppescu@uchicago.edu>
 Documentation help
 
 Marcelo E. Magallon <mmagallo@efis.ucr.ac.cr>
-CPP search path improvement, man pages
+CPP search path improvement, man pages, bug fixes
 
 Tim Malone <mrgone@eskimo.com>
 bug fix, jpeg bug fix
@@ -124,6 +130,9 @@ Andrea Mistrali <andre@ulmo.aleph.it>
 
 Jeff Meininger <jeffm@boxybutgood.com>
 Fix for unassociated alpha tiff
+
+Craig Nellist <crn@ozemail.com.au>
+selection in textfield
 
 Dan Pascu <dan@services.iiruc.ro>
 dock ghost (superfluous mode) fix, enhancement for scrollable menus,
@@ -174,7 +183,12 @@ Sam Varner <varner@nmr.physics.wm.edu>
 many fixes and enhancements for move, resize and window placement code.
 
 Marco van Hylckama Vlieg <fatal@global.uibk.ac.at>
-house icon for WINGs file dialogs, defaultAppIcon and Clip xpm icon
+house icon for WINGs file dialogs, defaultAppIcon and Clip xpm tchX.tiff
+Plus the following icons:
+DefaultAppIcon.tiff GNUterm.tiff clip2.tiff defaultterm.tiff draw.tiff
+linuxterm.tiff mixer.tiff notepad.tiff pdf.tiff ps.tiff real.tiff sgiterm.tiff
+sound.tiff staroffice2.tiff timer.tiff wilber.tiff write.tiff xdvi.tiff
+xv.tiff
 
 David Wang <dwang@cisco.com>
 edge resistance, 8bpp balloon bug fix, other 8bpp related fixes
@@ -186,10 +200,12 @@ libproplist. Chooses best depth in screen.
 FRBall <frb@umr.edu>
 dgradient fix
 
-"]d" <mhz@gpf.or.th>
+
+"]d" <id@maliwan.org>
 Window list menu miniaturized/hidden hints, XDE support, XKB lock 
 language status, WINGs enhancements, bug fixes, window commands menu
-enhancement, window move/resize by keyboard
+enhancement, window move/resize by keyboard. GNUstepGlow.tiff icon,
+WINGs color panel
 
 
 Trae Mc Combs <x@themes.org>

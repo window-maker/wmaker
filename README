@@ -41,27 +41,20 @@
 Description
 ===========
 
-Window Maker is a window manager designed to emulate the look and feel of
-part of the NEXTSTEP(tm) GUI. It's supposed to be relatively fast and small,
-feature rich, easy to configure and easy to use, with a simple and elegant
-appearance borrowed from NEXTSTEP(tm).
+Window Maker is the GNU window manager for the X Window System. It was
+designed to emulate the look and feel of part of the NEXTSTEP(tm) GUI. It's
+supposed to be relatively fast and small, feature rich, easy to configure and
+easy to use, with a simple and elegant appearance borrowed from NEXTSTEP(tm).
 
 Window Maker was designed keeping integration with GNUstep in mind and is the
 "official" window manager for it. Read more about GNUstep further on this
 file.
 
-\begin{marketing babble}
-Window Maker is also KDE and GNOME compliant, which means you can use
-it as the window manager of these desktop environments and even fully
-replace kwm with wmaker if you use KDE. In that case, you would benefit
-from the best of both worlds, being able to take advantage of the usability
-and unique features of Window Maker, while still having access to KDE
-features such as the panel, pager and tight integration with all KDE 
-applications. I've known of many cases where people keep switching KDE
-and Window Maker depending on their mood or needs of the day, but now
-you don't need that anymore :)
-As GNOME components become more available, the same can be said about it. 
-\end{marketing babble}
+Hints (information given by applications to integrate well with the window 
+manager) for Motif(tm), OPEN LOOK(tm), KDE and GNOME are also supported. 
+So you can replace any of the window managers for these environments
+with Window Maker while keeping most, if not all, of the window manager
+functionality.
 
 Window Maker was previously called WindowMaker.
 
@@ -136,6 +129,7 @@ options/features and other stuff.
 * po/ has message catalogs wich are the translated versions of the messages
 displayed by Window Maker.
 
+* docklib-x.x.tar.gz  a library for writing dockapps
 
 
 Mailing List
@@ -201,6 +195,31 @@ http://www.frontiernet.net/~southgat/wmsound
 
 Note that you must compile Window Maker with the --enable-sound configure
 flag and set the DisableSound option to NO.
+
+
+OpenL**k support
+================
+
+I guess many users, mainly from the academic world, have to use
+applications written using the OpenL**k toolkits, so having support
+for these apps must be of some use.
+
+To enable, use --enable-openlook when doing the configure. Note that
+not everything is implemented. 
+
+Implemented stuff include decoration hints and the push-pin. Not implemented
+stuff include _SUN_WINDOW_STATE (the compose led state stuff), header (not
+sure what's it) and footer strings.
+
+Please give me feedback if something doesn't work. If the feature is
+already implemented, but is not working because of a bug, I'll try to
+have that fixed. If it's a non-implemented feature and you mention that
+it's important (ie: not just cosmetical), I'll consider implementing it.
+
+The "out" state of the pushpin is emulated as a pushed-in close button.
+Just click on the button to make it pushed-out, which corresponds
+to the pinned-in state of the pushpin. If you push again in the pushed-out
+close button, it will act as a normal close button: it will close the window.
 
 
 Performance Tuning

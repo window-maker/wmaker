@@ -34,10 +34,10 @@ to bugs@windowmaker.org
 4. Configure time options you specified:
 [ ]  --enable-kanji
 [ ]  --disable-shape   
-[ ]  --disable-xpm    
-[ ]  --disable-tiff  
-[ ]  --disable-png 
 [ ]  --enable-single-icon
+[ ]  --enable-kde
+[ ]  --enable-gnome
+[ ]  --enable-openlook
 [ ]  Others: .......................
 
 

@@ -106,6 +106,7 @@ Atom _XA_WINDOWMAKER_WM_PROTOCOLS;
 Atom _XA_WINDOWMAKER_STATE;
 
 Atom _XA_WINDOWMAKER_WM_FUNCTION;
+Atom _XA_WINDOWMAKER_NOTICEBOARD;
 
 #ifdef OFFIX_DND
 Atom _XA_DND_PROTOCOL;
@@ -156,7 +157,7 @@ extern void StartUp();
 void
 Exit(int status)
 {
-#ifdef R6SM
+#ifdef XSMP_ENABLED
     wSessionDisconnectManager();
 #endif
     XCloseDisplay(dpy);
@@ -180,7 +181,7 @@ Restart(char *manager)
 	    }
 	}
     }
-#ifdef R6SM
+#ifdef XSMP_ENABLED
     wSessionDisconnectManager();
 #endif
     XCloseDisplay(dpy);
@@ -250,20 +251,21 @@ wAbort(Bool dumpCore)
 void
 print_help()
 {
-    printf(_("usage: %s [-options]\n"), ProgName);
+    printf(_("usage: %s [options]\n"), ProgName);
     puts(_("options:"));
 #ifdef USECPP
-    puts(_(" -nocpp 		disable preprocessing of configuration files"));
+    puts(_(" --no-cpp 		disable preprocessing of configuration files"));
 #endif
-    puts(_(" -nodock		do not open the application Dock"));
-    puts(_(" -noclip		do not open the workspace Clip"));
+    puts(_(" --no-dock		do not open the application Dock"));
+    puts(_(" --no-clip		do not open the workspace Clip"));
     /*
-    puts(_(" -locale locale		locale to use"));
+    puts(_(" --locale locale		locale to use"));
     */
-    puts(_(" -visualid visualid	visual id of visual to use"));
+    puts(_(" --visual-id visualid	visual id of visual to use"));
     puts(_(" -display host:dpy	display to use"));
-    puts(_(" -static		do not update or save configurations"));
-    puts(_(" -version		print version and exit"));
+    puts(_(" --static		do not update or save configurations"));
+    puts(_(" --version		print version and exit"));
+    puts(_(" --help			show this message"));
 }
 
 
@@ -328,6 +330,8 @@ main(int argc, char **argv)
     char *str;
     int d, s;
 
+    wsetabort(wAbort);
+    
     ArgCount = argc;
     Arguments = argv;
 
@@ -348,21 +352,26 @@ main(int argc, char **argv)
     if (argc>1) {
 	for (i=1; i<argc; i++) {
 #ifdef USECPP
-	    if (strcmp(argv[i], "-nocpp")==0) {
+	    if (strcmp(argv[i], "-nocpp")==0
+		|| strcmp(argv[i], "--no-cpp")==0) {
 		wPreferences.flags.nocpp=1;
 	    } else
 #endif
-	    if (strcmp(argv[i], "-nodock")==0) {
+	    if (strcmp(argv[i], "-nodock")==0
+		|| strcmp(argv[i], "--no-dock")==0) {
 		wPreferences.flags.nodock=1;
-	    } else if (strcmp(argv[i], "-noclip")==0) {
+	    } else if (strcmp(argv[i], "-noclip")==0
+		       || strcmp(argv[i], "--no-clip")==0) {
 		wPreferences.flags.noclip=1;
-	    } else if (strcmp(argv[i], "-version")==0) {
+	    } else if (strcmp(argv[i], "-version")==0
+		       || strcmp(argv[i], "--version")==0) {
 		printf("Window Maker %s\n", VERSION);
 		exit(0);
-	    } else if (strcmp(argv[i], "-global_defaults_path")==0) {
+	    } else if (strcmp(argv[i], "--global_defaults_path")==0) {
 		printf("%s/Defaults/WindowMaker", PKGDATADIR);
 		exit(0);
-	    } else if (strcmp(argv[i], "-locale")==0) {
+	    } else if (strcmp(argv[i], "-locale")==0
+		       || strcmp(argv[i], "--locale")==0) {
 		i++;
 		if (i>=argc) {
 		    wwarning(_("too few arguments for %s"), argv[i-1]);
@@ -376,7 +385,8 @@ main(int argc, char **argv)
 		    exit(0);
 		}
 		DisplayName = argv[i];
-	    } else if (strcmp(argv[i], "-visualid")==0) {
+	    } else if (strcmp(argv[i], "-visualid")==0
+		       || strcmp(argv[i], "--visual-id")==0) {
 		i++;
 		if (i>=argc) {
 		    wwarning(_("too few arguments for %s"), argv[i-1]);
@@ -386,9 +396,11 @@ main(int argc, char **argv)
 		    wwarning(_("bad value for visualid: \"%s\""), argv[i]);
 		    exit(0);
 		}
-	    } else if (strcmp(argv[i], "-static")==0) {
+	    } else if (strcmp(argv[i], "-static")==0
+		       || strcmp(argv[i], "--static")==0) {
+
 		wPreferences.flags.noupdates = 1;
-#ifdef R6SM
+#ifdef XSMP_ENABLED
 	    } else if (strcmp(argv[i], "-clientid")==0
 		       || strcmp(argv[i], "-restore")==0) {
 		i++;
@@ -496,7 +508,7 @@ main(int argc, char **argv)
     wSoundInitialize();
 #endif
 
-#ifdef R6SM
+#ifdef XSMP_ENABLED
     wSessionConnectManager(argv, argc);
 #endif
     

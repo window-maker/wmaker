@@ -1,5 +1,3 @@
-nlsdir = @NLSDIR@
-
 AUTOMAKE_OPTIONS = no-dependencies
 
 BUILT_SOURCES = wconfig.h
@@ -100,13 +98,7 @@ wmaker_SOURCES = 	\
 	text.h 
 
 
-CPPFLAGS = \
-	@CPPFLAGS@ \
-	@SHAPE@ @I18N@ @X_LOCALE@ @LITE@ \
-	@DFLAGS@ \
-	-DNLSDIR="\"$(nlsdir)\"" \
-	-DPKGDATADIR="\"$(pkgdatadir)\"" \
-	-DPIXMAPDIR="\"$(pixmapdir)\"" 
+CPPFLAGS = @CPPFLAGS@ @DFLAGS@
 	
 
 INCLUDES = \

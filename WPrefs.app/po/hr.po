@@ -1271,4 +1271,3 @@ msgstr "ne mogu inicijalizirati aplikaciju"
 # msgid "Icon Size"
 # msgstr "Velièina ikone"
 # 
- 

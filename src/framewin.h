@@ -108,6 +108,10 @@ typedef struct WFrameWindow {
 	unsigned int is_client_window_frame:1;
 	
 	unsigned int incomplete_title:1;
+
+#ifdef OLWM_HINTS
+	unsigned int right_button_pushed_in:1;
+#endif
     } flags;
 } WFrameWindow;
 
@@ -137,5 +141,8 @@ void wFrameWindowHideButton(WFrameWindow *fwin, int flags);
 
 int wFrameWindowChangeTitle(WFrameWindow *fwin, char *new_title);
 
+#ifdef OLWM_HINTS
+void wFrameWindowUpdatePushButton(WFrameWindow *fwin, Bool pushed);
+#endif
 
 #endif

@@ -7,11 +7,11 @@ SUPPORTED PLATFORMS
 ===================
 (ie: I've heard someone has compiled it on...)
 
-- Intel/Linux Slackware 3.5 (primary platform)
-- Intel/Linux other distributions
-- Sparc/Linux RedHat 5.1
-- PowerPC/MkLinux
-- Alpha/Linux RedHat 5.1
+- Intel GNU/Linux Slackware 3.5 (primary platform)
+- Intel GNU/Linux other distributions
+- Sparc GNU/Linux RedHat 5.1
+- PowerPC GNU/MkLinux
+- Alpha GNU/Linux RedHat 5.1
 - FreeBSD
 - NetBSD
 - Solaris 2.5.1, 2.5.2
@@ -30,6 +30,7 @@ SUPPORTED PLATFORMS
 - Corel NetWinder
 - SunOS 4.x
 - PowerMac / Power MachTen 4.1.1 over MacOS
+- Amiga 3000 running RedHat Linux 5.1 (Rawhide)
 
 Patches to make it work on other platforms are welcome. 
 
@@ -59,7 +60,7 @@ The following is required to build Window Maker:
 	program, including Window Maker.
 
 - autoconf, automake and libtool
-	autoconf and automake are not required, but if you have one or
+	These tools are not needed, but IF you have one or
 	more of them installed, make sure you have ALL of the following 
 	with exactly these versions:
 		autoconf 2.12
@@ -67,7 +68,8 @@ The following is required to build Window Maker:
 		libtool 1.2
 	If you have a different version, disable them by temporarily
 	renaming them to something else or uninstalling them from your
-	system.
+	system. If you don't develop software you don't need them,
+	so you can safely uninstall. 
 
 - lex (or flex) and yacc (or bison)
 	These are used by libPropList. lex is actually not needed since
@@ -127,55 +129,69 @@ support compiled in.
 
 To get a list of other options, run ./configure --help
 
---enable-kanji	support to display Kanji characters, Korean, Chinese 
-		and other languagues that require special characters.
+--enable-kanji
+	support to display Kanji characters, Korean, Chinese and other
+	languagues that require special characters.
 
---enable-single-icon  enables the collapsing of all appicons of the
-	 WM_CLASS+WM_INSTANCE into a single one. This feature is not 
-	supported at all by the developers. If you have some trouble with it,
-	contact it's author: Christopher Seawood <cls@seawood.org>
+--enable-single-icon
+	enables the collapsing of all appicons of the WM_CLASS+WM_INSTANCE
+	into a single one. This feature is not supported at all by the
+	developers. If you have some trouble with it, contact it's author:
+	Christopher Seawood <cls@seawood.org>
 
---disable-shm 	disable use of the MIT shared memory extension. This will
-	slow down texture generation a little bit, but in some cases
-	it seems to be necessary due to a bug that manifests as messed
-	icons and textures.
+--disable-shm
+	disable use of the MIT shared memory extension. This will slow down
+	texture generation a little bit, but in some cases it seems to be
+	necessary due to a bug that manifests as messed icons and textures.
 
---disable-motif disable support for mwm hints
+--disable-motif 
+	disable support for mwm window manager hints
 
---enable-gnome enable support for stuff needed by GNOME 
-	(GNOME compliant bla bla bla)
+--enable-openlook
+	enable support for OPEN LOOK(tm) window manager hints
 
---enable-kde enable support for kde/kwm hints
+--enable-gnome
+	enable support for GNOME window manager hints
 
---enable-lite remove things that are already supported in desktop
-		environments, like KDE and GNOME. Disabled things
-		are: window list, root applications menu,
-		multiple window selection. Note that you will not
-		be able to exit Window Maker from itself anymore;
-		you will have to use kill with the SIGTERM signal
-		or exit it from KDE.
+--enable-kde
+	enable support for kde/kwm window manager hints
 
---enable-modelock  XKB language status lock support. If you don't know 
-	what it is you probably don't need it.
+--enable-lite
+	remove things that are already supported in desktop environments,
+	like KDE and GNOME. Disabled things are: window list, root
+	applications menu, multiple window selection. Note that you will not
+	be able to exit Window Maker from itself anymore; you will have to
+	use kill with the SIGTERM signal or exit it from KDE. It is not
+	advisable to enable it.
 
---enable-sound	enable support of sound effects module
+--enable-modelock
+	XKB language status lock support. If you don't know what it is you
+	probably don't need it.
 
---disable-xpm   disables use of the XPM library even if it is available on
-	your system. 
+--enable-sound	
+	enable support of sound effects module
 
---disable-png	disables use of PNG library
+--disable-xpm   
+	disables use of the XPM library even if it is available on your
+	system.
 
---disable-tiff 	disable use of TIFF library
+--disable-png	
+	disables use of PNG library
 
---disable-gif 	disable use of GIF library
+--disable-tiff
+	disable use of TIFF library
 
---disable-jpeg 	disable use of JPEG library
+--disable-gif
+	disable use of GIF library
 
---disable-shape  disables shaped windows (for oclock, xeyes etc.)
+--disable-jpeg
+	disable use of JPEG library
 
---enable-debug	adds extra debugging information. Do not use it
-	unless you're debugging Window Maker.
+--disable-shape
+	disables shaped windows (for oclock, xeyes etc.)
 
+--enable-debug
+	Do not use it unless you know what you're doing.
 
 
 PLATFORM SPECIFIC NOTES:
@@ -194,27 +210,48 @@ PLATFORM SPECIFIC NOTES:
 	If you have a Ultra Creator 3D or some other machine with high-end
 	graphics, be sure to start the X server with the default visual
 	set to 24bpp or you might experience problems with mangled colors.
-	This is a bug and will be fixed.
+	This is a wmaker bug and will be fixed.
 
-- RedHat Linux
-	Make sure you don't have the LANG and LINGUAS environment variables
-	set to en_RN. Also, make sure you have /usr/local/bin in your
-	PATH environment variable, as for some mysterious reason the folks
-	at RedHat did not include it in the default configuration files
-	in RH 5.{0,1}.
-	Check the TROUBLESHOOTING section if you have problems with libtool.
-	Before trying to install, uninstall libtool-1.2b and install
-	libtool-1.2, which you can get from ftp.gnu.org or it's mirrors.
+- GNU/Linux in general
+	Make sure you have /usr/local/lib in /etc/ld.so.conf and that you
+	run ldconfig after installing.
+
+- RedHat GNU/Linux
+	RedHat systems have several annoying problems. If you use it, 
+	be sure to follow the steps below or Window Maker will not work:
+
+	* make sure you don't have the LANG and LINGUAS environment variables
+	set to en_RN;
+
+	* make sure you have /usr/local/bin in your PATH environment
+	variable, as for some mysterious reason the folks at RedHat did not
+	include it in the default configuration files in RH 5.x;
+
+	* make sure you have /usr/local/lib in /etc/ld.so.conf before running
+	ldconfig;
+
+	* if you have problems that mention an error message with --no-reexec
+	uninstall libtool-1.2b and install libtool-1.2 instead. libtool-1.2
+	can be found in ftp.gnu.org  Also read the TROUBLESHOOTING section;
+
+	* if you installed the Window Maker package from RedHat and are
+	installing a new version of it by hand (compiling yourself), uninstall
+	the package from RedHat before.
+
+	* make a symbolic link from /usr/X11 to /usr/X11R6
+	(type ln -s /usr/X11R6 /usr/X11 ) and make sure you have a symbolic
+	link from /usr/include/X11 to /usr/X11R6/include/X11 (if not,
+	type ln -s /usr/X11R6/include/X11 /usr/include/X11 )
 
 - PowerPC MkLinux
 	You will need to have the latest version of Xpmac. Older versions
 	seem to have bugs that cause the system to hang.
 
-- Debian Linux
+- Debian GNU/Linux
 	If you want JPEG and TIFF support, make sure you have libtiff-dev 
 	and libjpeg-dev	installed.
 
-- SuSE Linux
+- SuSE GNU/Linux
         If you installed the Window Maker package from SuSE,
         uninstall it before trying to compile wmaker or you
         might have problems.
@@ -224,7 +261,6 @@ PLATFORM SPECIFIC NOTES:
 	backgrounds. If you use MetroX and has weird problems with
 	textures, do not use textures in titlebars. Or use a different
 	X server.
-
 
 INSTALLATION:
 =============
@@ -246,14 +282,15 @@ Build Window Maker
 then, login as root and type:
 
 	make install
+	ldconfig
 
 or if you want to strip the debugging symbols from the binaries and make them
 smaller, you can instead type:
 
 	make install-strip
+	ldconfig
 
 This will build and install Window Maker with default parameters.
-If you run on a Linux system, also run ldconfig -v
 
 If you want to customize some compile-time options, you can do the
 following. 
@@ -349,10 +386,9 @@ ltconfig: unrecognized option `--no-reexec'
 Try `ltconfig --help' for more information.
 configure: error: libtool configure failed
 
-remove the --no-reexec option from aclocal.m4 and libPropList/aclocal/m4
+remove the --no-reexec option from aclocal.m4 and libPropList/aclocal.m4
 and reconfigure
-Also make sure the autoconf and automake versions you have installed are at
-least:
+Also make sure the autoconf and automake versions you have installed are:
 autoconf 2.12
 automake 1.3
 libtool 1.2

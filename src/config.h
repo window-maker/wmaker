@@ -62,11 +62,15 @@
 /* define to the path to cpp */
 #define CPP_PATH "/lib/cpp"
 
+/* define to the directory containing NLS information
+ * set by configure */
+#define NLSDIR "/usr/local/lib/locale"
+
 /* package name */
 #define PACKAGE "WindowMaker" 
 
 /* package version */
-#define VERSION "0.50.0" 
+#define VERSION "0.51.0" 
 
 /* define if you want GNOME stuff support */
 /* #undef GNOME_STUFF */
@@ -74,11 +78,73 @@
 /* define if you want KDE hint support */
 /* #undef KWM_HINTS */
 
+/* define if you want OPEN LOOK(tm) hint support */
+/* #undef OLWM_HINTS */
+
+/* define if XPM libraries are available
+ * set by configure */
+#define USE_XPM 1
+
+/* define if PNG libraries are available
+ * set by configure */
+#define USE_PNG 1
+
+/* define if JPEG libraries are available
+ * set by configure */
+#define USE_JPEG 1
+
+/* define if GIF libraries are available
+ * set by configure */
+#define USE_GIF 1
+
+/* define if TIFF libraries are available
+ * set by configure */
+#define USE_TIFF 1
+
+/* define if X's shared memory extension is available
+ * set by configure */
+#define XSHM 1
+
+/* define an extra path for pixmaps
+ * set by configure */
+#define PIXMAPDIR "/usr/local/share/pixmaps"
+
+/*
+ * define REDUCE_APPICONS if you want apps with the same WM_INSTANCE &&
+ * WM_CLASS to share an appicon
+ */
+/* #undef REDUCE_APPICONS */
+
+/* Internationalization (I18N) support 
+ * set by configure */
+/* #undef I18N */
+
+/* Multi-byte (japanese, korean, chinese etc.) character support */
+/* #undef I18N_MB */
+
+/* define if you want sound support */
+#define WMSOUND 1
+
+/* define if you want the 'lite' version */
+/* #undef LITE */
+
+/* define if you want support for shaped windows
+ * set by configure */
+#define SHAPE 1
+
+/* define if you want support for X window's X_LOCALE
+ * set by configure */
+#define X_LOCALE 1
+
+/* the place where the configuration is stored
+ * defined by configure */
+#define PKGDATADIR "/usr/local/share/WindowMaker"
+
+/* Define if you have the atexit function.  */
+#define HAVE_ATEXIT 1
+
 /* Define if you have the gethostname function.  */
 #define HAVE_GETHOSTNAME 1
-
-/* Define if you have the gettimeofday function.  */
-#define HAVE_GETTIMEOFDAY 1
 
 /* Define if you have the poll function.  */
 #define HAVE_POLL 1

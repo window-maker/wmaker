@@ -33,7 +33,8 @@ prefsdata_DATA =\
 	plmenu\
 	plmenu.fr\
 	plmenu.hr\
-	wmmacros
+	wmmacros \
+	xtree.dat
 
 EXTRA_DIST = $(prefsdata_DATA) mkMakefile
 

@@ -159,11 +159,11 @@ RLoadJPEG(RContext *context, char *file_name, int index)
     while (cinfo.output_scanline < cinfo.output_height) {
         jpeg_read_scanlines(&cinfo, buffer,(JDIMENSION) 1);
 	for (i=0,j=0; i<cinfo.image_width; i++) {
-	    if(cinfo.out_color_space==JCS_RGB) {
+	    if (cinfo.out_color_space==JCS_RGB) {
 		*(r++) = buffer[0][j++];
 		*(g++) = buffer[0][j++];
-		*(b++) = buffer[0][j++];}
-	    else {
+		*(b++) = buffer[0][j++];
+	    } else {
 		*(r++) = *(g++) = *(b++) = buffer[0][j++];
 	    }
 	}

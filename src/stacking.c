@@ -151,6 +151,10 @@ CommitStacking(WScreen *scr)
     }
     XRestackWindows(dpy, windows, i);
     free(windows);
+    
+#ifdef KWM_HINTS
+    wKWMBroadcastStacking(scr);
+#endif
 }
 
 /*
@@ -173,6 +177,10 @@ moveFrameToUnder(WCoreWindow *under, WCoreWindow *frame)
     wins[0] = under->window;
     wins[1] = frame->window;
     XRestackWindows(dpy, wins, 2);
+
+#ifdef KWM_HINTS
+    wKWMBroadcastStacking(under->screen_ptr);
+#endif
 }
 
 /*
@@ -192,7 +200,7 @@ moveFrameToUnder(WCoreWindow *under, WCoreWindow *frame)
 void 
 wRaiseFrame(WCoreWindow *frame)
 {
-    WCoreWindow *wlist=frame;
+    WCoreWindow *wlist = frame, *wlist_above;
     int level = frame->stacking->window_level;
     int i;
 
@@ -202,9 +210,19 @@ wRaiseFrame(WCoreWindow *frame)
     }
 
     /* insert on top of other windows */
+#if 1
+    while (wlist) {
+	if (wlist == (wlist_above = wlist->stacking->above)) {
+	    wwarning("You just found a bug in wmaker. Please try to figure what type of raising/lowering operations you did with which applications and report. Please give complete information about how to reproduce it.");
+	    break;
+	} else {
+	    wlist=wlist_above;
+	}
+    }
+#else
     while (wlist)
 	wlist = wlist->stacking->above;
-
+#endif
     /* window is inserted before the point found */
     if (wlist==NULL) {
 	/* top most window (last on the list) */
@@ -229,7 +247,10 @@ wRaiseFrame(WCoreWindow *frame)
 	  wlist->stacking->under->stacking->above = frame;
 	wlist->stacking->under = frame;
     }
-    if (wPreferences.on_top_transients) {
+#ifdef removed
+    if (wPreferences.on_top_transients)
+#endif
+    {
 	/* raise transients under us from bottom to top 
 	 * so that the order is kept */
 	again:
@@ -287,15 +308,38 @@ wRaiseFrame(WCoreWindow *frame)
 #endif
 }
 
+
 void
 wRaiseLowerFrame(WCoreWindow *frame)
 {
     if (!frame->stacking->above
 	||(frame->stacking->window_level
-	   !=frame->stacking->above->stacking->window_level))
-      wLowerFrame(frame);
-    else
-      wRaiseFrame(frame);
+	   !=frame->stacking->above->stacking->window_level)) {
+
+	wLowerFrame(frame);
+    } else {
+	WCoreWindow *scan = frame->stacking->above;
+	WWindow *frame_wwin = (WWindow*) frame->descriptor.parent;
+
+	while (scan) {
+
+	    if (scan->descriptor.parent_type == WCLASS_WINDOW) {
+		WWindow *scan_wwin = (WWindow*) scan->descriptor.parent;
+		
+		if (wWindowObscuresWindow(scan_wwin, frame_wwin)
+		    && scan_wwin->flags.mapped) {
+		    break;
+		}
+	    }
+	    scan = scan->stacking->above;
+	}
+
+	if (scan) {
+	    wRaiseFrame(frame);
+	} else {
+	    wLowerFrame(frame);
+	}
+    }
 }
 
 
@@ -311,10 +355,16 @@ wLowerFrame(WCoreWindow *frame)
     if (wlist->stacking->under==NULL) {
 	return;
     }
+#ifdef removed
     if (wPreferences.on_top_transients &&
 	wlist->stacking->under==wlist->stacking->child_of) {
 	return;
     }
+#else
+    if (wlist->stacking->under==wlist->stacking->child_of) {
+	return;
+    }
+#endif
     prev = wlist;
     /* remove from the list */
     if (scr->stacking_list[level] == frame) {
@@ -329,7 +379,10 @@ wLowerFrame(WCoreWindow *frame)
     }
     wlist = scr->stacking_list[level];
     /* look for place to put this window */
-    if (wPreferences.on_top_transients) {
+#ifdef removed
+    if (wPreferences.on_top_transients)
+#endif
+    {
 	WCoreWindow *owner = frame->stacking->child_of;
 	
 	if (owner != wlist) {
@@ -341,11 +394,14 @@ wLowerFrame(WCoreWindow *frame)
 		wlist = wlist->stacking->under;
 	    }
 	}
-    } else {
+    } 
+#ifdef removed
+    else {
 	while (wlist->stacking->under) {
 	    wlist = wlist->stacking->under;
 	}
     }
+#endif
     /* insert under the place found */
     frame->stacking->above = wlist;
     frame->stacking->under = wlist->stacking->under;
@@ -416,7 +472,10 @@ AddToStackList(WCoreWindow *frame)
     }
     prev = tmpw;
     /* check if this is a transient owner */
-    if (wPreferences.on_top_transients) {
+#ifdef removed
+    if (wPreferences.on_top_transients)
+#endif
+    {
 	WCoreWindow *trans = NULL;
 	  
 	wlist = frame->screen_ptr->stacking_list[index];
@@ -438,13 +497,16 @@ AddToStackList(WCoreWindow *frame)
 	    tmpw->stacking->above = frame;
 	    frame->screen_ptr->stacking_list[index] = frame;	    
 	}
-    } else {
+    }
+#ifdef removed
+    else {
 	/* put on top of the stacking list */
 	frame->stacking->above = NULL;
 	frame->stacking->under = tmpw;
 	tmpw->stacking->above = frame;
 	frame->screen_ptr->stacking_list[index] = frame;
     }
+#endif
     CommitStacking(frame->screen_ptr);
 }
 

@@ -552,4 +552,5 @@ int main(int argc, char **argv)
   /*  benchmark();*/
 
     getchar();
+    return 0;
 }

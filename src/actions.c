@@ -20,8 +20,6 @@
  *  USA.
  */
 
-#define HACK
-
 #include "wconfig.h"
 
 
@@ -117,6 +115,7 @@ processEvents(int event_count)
 #endif /* ANIMATIONS */
 
 
+
 /*
  *---------------------------------------------------------------------- 
  * wSetFocusTo--
@@ -141,9 +140,12 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 
     LastFocusChange = timestamp;
 
-#ifndef HACK
+/*
+ * This is a hack, because XSetInputFocus() should have a proper
+ * timestamp instead of CurrentTime but it seems that some times
+ * clients will not receive focus properly that way.
     if (ignoreTimestamp)
-#endif
+*/
       timestamp = CurrentTime;
 
     if (focused)
@@ -310,20 +312,19 @@ wShadeWindow(WWindow  *wwin)
     }
 #endif  /* ANIMATIONS */
 
-
     wwin->flags.skip_next_animation = 0;
-    XGetWindowAttributes(dpy, wwin->client_win, &attribs);    
-    wwin->flags.shaded=1;
+    wwin->flags.shaded = 1;
     wwin->flags.mapped=0;
+    XGetWindowAttributes(dpy, wwin->client_win, &attribs);
     /* prevent window withdrawal when getting UnmapNotify */
     XSelectInput(dpy, wwin->client_win, 
-		 attribs.your_event_mask & ~StructureNotifyMask);
+                 attribs.your_event_mask & ~StructureNotifyMask);
     XUnmapWindow(dpy, wwin->client_win);
     XSelectInput(dpy, wwin->client_win, attribs.your_event_mask);
-    
+
     /* for the client it's just like iconification */
     wFrameWindowResize(wwin->frame, wwin->frame->core->width,
-		       wwin->frame->top_width-1);
+		       wwin->frame->top_width - 1);
     
     wwin->client.y = wwin->frame_y - wwin->client.height 
 	+ wwin->frame->top_width;
@@ -365,8 +366,8 @@ wUnshadeWindow(WWindow  *wwin)
     if (!wwin->flags.shaded)
 	return;
     
-    wwin->flags.shaded=0;
-    wwin->flags.mapped=1;
+    wwin->flags.shaded = 0;
+    wwin->flags.mapped = 1;
     XMapWindow(dpy, wwin->client_win);
 
 #ifdef WMSOUND
@@ -781,14 +782,13 @@ unmapTransientsFor(WWindow *wwin)
 	    XGetWindowAttributes(dpy, tmp->client_win, &attribs);
 	    tmp->flags.miniaturized=1;
 	    if (!tmp->flags.shaded) {
-		tmp->flags.mapped=0;
-		XSelectInput(dpy, tmp->client_win, 
-			     attribs.your_event_mask & ~StructureNotifyMask);
-		XUnmapWindow(dpy, tmp->client_win);
-		XSelectInput(dpy, tmp->client_win, attribs.your_event_mask);
+		wWindowUnmap(tmp);
+	    } else {
+		XUnmapWindow(dpy, tmp->frame->core->window);
 	    }
-	    XUnmapWindow(dpy, tmp->frame->core->window);
+	    /*
 	    if (!tmp->flags.shaded)
+	     */
 		wClientSetState(tmp, IconicState, None);
 #ifdef KWM_HINTS
 	    wKWMUpdateClientStateHint(tmp, KWMIconifiedFlag);
@@ -816,14 +816,16 @@ mapTransientsFor(WWindow *wwin)
 	    && /*!tmp->flags.mapped*/ tmp->flags.miniaturized 
 	    && tmp->icon==NULL) {
 	    mapTransientsFor(tmp);
-	    tmp->flags.miniaturized=0;
+	    tmp->flags.miniaturized = 0;
 	    if (!tmp->flags.shaded) {
-		tmp->flags.mapped=1;
-		XMapWindow(dpy, tmp->client_win);
+		wWindowMap(tmp);
+	    } else {
+		XMapWindow(dpy, tmp->frame->core->window);
 	    }
-	    XMapWindow(dpy, tmp->frame->core->window);
  	    tmp->flags.semi_focused = 0;
+	    /*
 	    if (!tmp->flags.shaded)
+	     */
 		wClientSetState(tmp, NormalState, None);
 #ifdef KWM_HINTS
 	    wKWMUpdateClientStateHint(tmp, KWMIconifiedFlag);
@@ -903,8 +905,10 @@ wIconifyWindow(WWindow *wwin)
 	return;
     }
 
-    if (wwin->flags.miniaturized)
+    if (wwin->flags.miniaturized) {
 	return;
+    }
+
     
     if (wwin->transient_for!=None) {
 	WWindow *owner = wWindowFor(wwin->transient_for);
@@ -941,12 +945,7 @@ wIconifyWindow(WWindow *wwin)
 #endif
 
 	XUngrabPointer(dpy, CurrentTime);
-	/* prevent window withdrawal when getting UnmapNotify */
-	XSelectInput(dpy, wwin->client_win, 
-		     attribs.your_event_mask & ~StructureNotifyMask);
-	XUnmapWindow(dpy, wwin->client_win);
-	XSelectInput(dpy, wwin->client_win, attribs.your_event_mask);
-	XUnmapWindow(dpy, wwin->frame->core->window);
+	wWindowUnmap(wwin);
 	/* let all Expose events arrive so that we can repaint
 	 * something before the animation starts (and the server is grabbed) */
 	XSync(dpy, 0);
@@ -975,7 +974,12 @@ wIconifyWindow(WWindow *wwin)
 
     if (present) {
 	WWindow *owner = recursiveTransientFor(wwin->screen_ptr->focused_window);
-	setupIconGrabs(wwin->icon);
+
+/*
+ * It doesn't seem to be working and causes button event hangup 
+ * when deiconifying a transient window.
+ setupIconGrabs(wwin->icon);
+ */
 	if ((wwin->flags.focused 
 	     || (owner && wwin->client_win == owner->client_win))
 	    && wPreferences.focus_mode==WKF_CLICK) {
@@ -1034,15 +1038,18 @@ wDeiconifyWindow(WWindow  *wwin)
 
     if (wwin->transient_for != None) {
 	WWindow *owner = recursiveTransientFor(wwin);
-	wDeiconifyWindow(owner);
-	wSetFocusTo(wwin->screen_ptr, wwin);
-	wRaiseFrame(wwin->frame->core);
-	return;
+
+	if (wwin->flags.miniaturized) {
+	    wDeiconifyWindow(owner);
+	    wSetFocusTo(wwin->screen_ptr, wwin);
+	    wRaiseFrame(wwin->frame->core);
+	    return;
+	}
     }
 
-    wwin->flags.miniaturized=0;
+    wwin->flags.miniaturized = 0;
     if (!wwin->flags.shaded)
-	wwin->flags.mapped=1;
+	wwin->flags.mapped = 1;
 
     if (wwin->icon->selected)
         wIconSelect(wwin->icon);
@@ -1076,7 +1083,7 @@ wDeiconifyWindow(WWindow  *wwin)
     }
     mapTransientsFor(wwin);
     RemoveFromStackList(wwin->icon->core);
-    removeIconGrabs(wwin->icon);
+/*    removeIconGrabs(wwin->icon);*/
     wIconDestroy(wwin->icon);
     wwin->icon = NULL;
 
@@ -1117,9 +1124,6 @@ wDeiconifyWindow(WWindow  *wwin)
 static void
 hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate)
 {
-    XWindowAttributes attribs;
-    
-    
     if (wwin->flags.miniaturized) {
 	XUnmapWindow(dpy, wwin->icon->core->window);
 	wwin->flags.hidden = 1;
@@ -1136,31 +1140,15 @@ hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate)
     if (wwin->flags.inspector_open) {
         WWindow *pwin = wwin->inspector->frame;
 
-        XGetWindowAttributes(dpy, pwin->client_win, &attribs);
+	wWindowUnmap(pwin);
         pwin->flags.hidden = 1;
-        pwin->flags.mapped = 0;
-        /* prevent window withdrawal when getting UnmapNotify */
-        XSelectInput(dpy, pwin->client_win,
-                     attribs.your_event_mask & ~StructureNotifyMask);
-        XUnmapWindow(dpy, pwin->client_win);
-        XSelectInput(dpy, pwin->client_win, attribs.your_event_mask);
 
-        XUnmapWindow(dpy, pwin->frame->core->window);
         wClientSetState(pwin, IconicState, icon->icon_win);
     }
 
-    XGetWindowAttributes(dpy, wwin->client_win, &attribs);
-
     wwin->flags.hidden = 1;
-    wwin->flags.mapped = 0;
-
-    /* prevent window withdrawal when getting UnmapNotify */
-    XSelectInput(dpy, wwin->client_win, 
-		 attribs.your_event_mask & ~StructureNotifyMask);
-    XUnmapWindow(dpy, wwin->client_win);
-    XSelectInput(dpy, wwin->client_win, attribs.your_event_mask);
-
-    XUnmapWindow(dpy, wwin->frame->core->window);
+    wWindowUnmap(wwin);
+    
     wClientSetState(wwin, IconicState, icon->icon_win);
     flushExpose();
 #ifdef WMSOUND

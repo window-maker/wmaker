@@ -3,6 +3,14 @@
 # Install Window Maker for the current user
 #
 
+# xx herbert
+if test x"$1" = x"--batch" ; then
+  BATCH="1"
+else
+  BATCH=""
+fi
+# /xx herbert
+
 # directory where system wide configuration is stored
 GLOBALDIR="#pkgdatadir#"
 
@@ -112,7 +120,9 @@ echo "Copying defaults database..."
 FILES=`(cd $GLOBALDIR/Defaults;ls *)`
 all=""
 for i in $FILES; do
-	if [ -f $GSDIR/Defaults/$i ]; then
+# xx herbert
+	if [ -f $GSDIR/Defaults/$i -a -z "$BATCH" ]; then
+# /xx herbert
 		echo "The configuration file \"$i\" already exists in your defaults database."
 		echo "Do you wish to replace it? <y/n/a> [n] $all"
 		if [ "$all" != "a" ]; then
@@ -203,7 +213,9 @@ fi
 if test -z "#LITE#" ; then
 FILES=`(cd $GLOBALDIR; ls menu menu.* plmenu plmenu.?? wmmacros)`
 for i in $FILES; do
-	if [ -f "$GSDIR/Library/WindowMaker/$i" ]; then
+# xx herbert
+	if [ -f "$GSDIR/Library/WindowMaker/$i" -a -z "$BATCH" ]; then
+# /xx herbert
 		echo "The file \"$i\" already exists in $GSDIR/Library/WindowMaker"
 		echo "Do you wish to replace it? <y/n/a> [n] $all"
 		if [ "$all" != "a" ]; then
@@ -222,11 +234,30 @@ done
 fi
 
 cp $GLOBALDIR/README.themes $GSDIR/Library/WindowMaker 
-cp $GLOBALDIR/README $GSDIR/Library/WindowMaker 
-cp -i $GLOBALDIR/autostart.sh $GSDIR/Library/WindowMaker/autostart
-chmod +rx $GSDIR/Library/WindowMaker/autostart
-cp -i $GLOBALDIR/exitscript.sh $GSDIR/Library/WindowMaker/exitscript
-chmod +rx $GSDIR/Library/WindowMaker/exitscript
+cp $GLOBALDIR/README $GSDIR/Library/WindowMaker
+# xx herbert
+if test -n "$BATCH"; then
+  test -f ~$GSDIR/Library/WindowMaker/autostart || \
+    cp $GLOBALDIR/autostart.sh $GSDIR/Library/WindowMaker/autostart
+  chmod +rx $GSDIR/Library/WindowMaker/autostart
+  test -f ~$GSDIR/Library/WindowMaker/exitscript || \
+    cp $GLOBALDIR/exitscript.sh $GSDIR/Library/WindowMaker/exitscript
+  chmod +rx $GSDIR/Library/WindowMaker/exitscript
+else
+  cp -i $GLOBALDIR/autostart.sh $GSDIR/Library/WindowMaker/autostart
+  chmod +rx $GSDIR/Library/WindowMaker/autostart
+  cp -i $GLOBALDIR/exitscript.sh $GSDIR/Library/WindowMaker/exitscript
+  chmod +rx $GSDIR/Library/WindowMaker/exitscript
+fi
+# /xx herbert
+
+# xx herbert
+if test -n "$BATCH" ; then
+  echo "Installation Finished"
+  exit 0
+fi
+# /xx herbert
+
 
 #
 #######################
@@ -250,10 +281,14 @@ else
 fi
 }
 
-if test -z "`grep wmaker ~/.xinitrc`"; then
-	show_end_message
-	exit 0
-fi
+wmaker_found=1
+for xinit in .xinitrc .Xclients .xsession; do
+     test ! -f "$HOME/$xinit" && continue
+     test -z "`grep wmaker $HOME/$xinit`"
+     [ $? -eq 0 ] && wmaker_found=0
+done
+[ $wmaker_found -eq 1 ] && show_end_message && exit 0
+
 
 trap "show_end_message;exit" 2
 

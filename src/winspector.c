@@ -169,10 +169,8 @@ destroyInspector(WCoreWindow *foo, void *data, XEvent *event)
 
     WMRemoveNotificationObserver(panel);
 
-    XUnmapWindow(dpy, panel->parent);
-    XReparentWindow(dpy, panel->parent, panel->frame->screen_ptr->root_win,
-		    0, 0);
-    wUnmanageWindow(panel->frame, False);
+    panel->frame->flags.mapped = 0;
+    wUnmanageWindow(panel->frame, True, False);
 
     freeInspector(panel);
 }
@@ -187,8 +185,8 @@ wDestroyInspectorPanels()
     while (panelList != NULL) {
         panel = panelList;
         panelList = panelList->nextPtr;
+        wUnmanageWindow(panel->frame, False, False);
         WMDestroyWidget(panel->win);
-        wUnmanageWindow(panel->frame, False);
 
         panel->inspected->flags.inspector_open = 0;
         panel->inspected->inspector = NULL;
@@ -744,7 +742,7 @@ applySettings(WMButton *button, InspectorPanel *panel)
     }
     
     if (WFLAGP(wwin, no_bind_keys) != old_no_bind_keys) {
-	if (!WFLAGP(wwin, no_bind_keys)) {
+	if (WFLAGP(wwin, no_bind_keys)) {
 	    XUngrabKey(dpy, AnyKey, AnyModifier, wwin->frame->core->window);
 	} else {
 	    wWindowSetKeyGrabs(wwin);
@@ -923,7 +921,9 @@ chooseIconCallback(WMWidget *self, void *clientData)
     
     WMSetButtonEnabled(panel->browseIconBtn, False);
     
-    result = wIconChooserDialog(panel->frame->screen_ptr, &file);
+    result = wIconChooserDialog(panel->frame->screen_ptr, &file,
+				panel->inspected->wm_instance,
+				panel->inspected->wm_class);
     
     panel->choosingIcon = 0;
 
@@ -946,7 +946,7 @@ textEditedObserver(void *observerData, WMNotification *notification)
 {
     InspectorPanel *panel = (InspectorPanel*)observerData;
 
-    if ((int)WMGetNotificationClientData(notification) != WMReturnTextMovement)
+    if ((long)WMGetNotificationClientData(notification) != WMReturnTextMovement)
 	return;
 
     if (observerData == panel->fileText) {

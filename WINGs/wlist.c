@@ -752,15 +752,15 @@ handleActionEvents(XEvent *event, void *data)
 	if (event->xbutton.x > WMWidgetWidth(lPtr->vScroller)) {
 	    tmp = getItemIndexAt(lPtr, event->xbutton.y);
 
-	    if (tmp>=0) {
-		WMSelectListItem(lPtr, tmp);
-		lPtr->selectedItem = tmp;
-	    }
 	    lPtr->flags.buttonPressed = 1;
 
-	    if (WMIsDoubleClick(event)) {
-		if (lPtr->doubleAction)
-		    (*lPtr->doubleAction)(lPtr, lPtr->doubleClientData);
+	    if (tmp >= 0) {
+		WMSelectListItem(lPtr, tmp);
+		if (tmp == lPtr->selectedItem && WMIsDoubleClick(event)) {
+		    if (lPtr->doubleAction)
+			(*lPtr->doubleAction)(lPtr, lPtr->doubleClientData);
+		}
+		lPtr->selectedItem = tmp;
 	    }
 	}
 	break;
@@ -793,6 +793,14 @@ resizeList(WMList *lPtr, unsigned int width, unsigned int height)
     } else {
 	lPtr->flags.dontFitAll = 0;
     }
+
+    if (lPtr->itemCount - lPtr->topItem <= lPtr->fullFitLines) {
+	lPtr->topItem = lPtr->itemCount - lPtr->fullFitLines;
+	if (lPtr->topItem < 0)
+	    lPtr->topItem = 0;
+    }
+
+    updateScroller(lPtr);
 }
 
 

@@ -18,9 +18,7 @@ lib_LIBRARIES = libWINGs.a
 
 include_HEADERS = WINGs.h WUtil.h WINGsP.h
 
-bin_SCRIPTS = WINGs-flags
-
-noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget
+noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel
 
 testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h
 
@@ -39,6 +37,10 @@ wtest_DEPENDENCIES = libWINGs.a
 wmfile_SOURCES = wmfile.c 
 
 wmfile_LDADD = libWINGs.a $(LIBLIST)
+	
+testcolorpanel_SOURCES = testcolorpanel.c
+
+testcolorpanel_LDADD = libWINGs.a $(LIBLIST)
 
 
 wmquery_SOURCES = wmquery.c 
@@ -61,6 +63,7 @@ libWINGs_a_SOURCES = 	\
 	wbrowser.c \
 	wbutton.c \
 	wcolor.c \
+	wcolorpanel.c \
 	wcolorwell.c \
 	wevent.c \
 	wfilepanel.c \

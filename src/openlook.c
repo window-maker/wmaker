@@ -22,7 +22,7 @@
  */
 
 /*
- * based on olwm code
+ * Semantics and hint information taken from olwm code
  */
 
 #include "wconfig.h"
@@ -32,6 +32,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/Xatom.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -83,21 +84,20 @@ typedef struct {
 
 
 typedef struct {
-    unsigned long flags;
-    unsigned long state;
-} OLWindowState;
+    unsigned used:1;
 
-#define OL_STATE_SEMANTIC	(1<<0)
+    unsigned semantic:1;
 
-#define OL_STATE_COMPOSE	(1<<0)
-#define OL_STATE_CAPSLOCK	(1<<1)
-#define OL_STATE_NUMLOCK	(1<<2)
-#define OL_STATE_SCROLLLOCK	(1<<3)
+    unsigned semantic_compose:1;
+    unsigned semantic_capslock:1;
+    unsigned semantic_numlock:1;
+    unsigned semantic_scrolllock:1;
+} WOLWindowState;
 
 
 static Atom _XA_SUN_WM_PROTOCOLS = 0;
 
-
+#ifdef unused
 static Bool
 getWindowState(Window win, OLWindowState *state)
 {
@@ -122,13 +122,14 @@ getWindowState(Window win, OLWindowState *state)
     
     return True;
 }
-
+#endif
 
 static Bool
 getWindowHints(Window window, OLHints *hints)
 {
     long *data;
     int count;
+    static Atom _XA_OL_WIN_ATTR = 0;
 
     if (!_XA_OL_WIN_ATTR) {
 	_XA_OL_WIN_ATTR = XInternAtom(dpy, "_OL_WIN_ATTR", False);
@@ -162,6 +163,8 @@ getWindowHints(Window window, OLHints *hints)
 	XFree(data);
 	return False;
     }
+
+    printf("WINDOW TYPE %s\n", XGetAtomName(dpy, hints->winType));
 
     XFree(data);
 
@@ -209,8 +212,8 @@ applyDecorationHints(Window win, int *flags)
 	_XA_ICONNAME = XInternAtom(dpy, "_OL_DECOR_ICON_NAME", False);
     }
 
-    atoms = PropGetCheckProperty(win, _XA_OL_DECOR_ADD, XA_ATOM, 32, 0, 
-				 &count);
+    atoms = (Atom*)PropGetCheckProperty(win, _XA_OL_DECOR_ADD, XA_ATOM, 32, 0, 
+					&count);
     if (atoms) {
 	for (i=0; i < count; i++) {
 	    if (atoms[i] == _XA_CLOSE)
@@ -229,8 +232,8 @@ applyDecorationHints(Window win, int *flags)
 	XFree(atoms);
     }
 
-    atoms = PropGetCheckProperty(win, _XA_OL_DECOR_DEL, XA_ATOM, 32, 0, 
-				 &count);
+    atoms = (Atom*)PropGetCheckProperty(win, _XA_OL_DECOR_DEL, XA_ATOM, 32, 0, 
+					&count);
     if (atoms) {
 	for (i=0; i < count; i++) {
 	    if (atoms[i] == _XA_CLOSE)
@@ -267,11 +270,42 @@ wOLWMInitStuff(WScreen *scr)
 
 
 void
+wOLWMChangePushpinState(WWindow *wwin, Bool state)
+{
+    static Atom pinState = 0;
+
+    if (!pinState) {
+	pinState = XInternAtom(dpy, "_OL_PIN_STATE", False);
+    }
+
+    XChangeProperty(dpy, wwin->client_win, pinState, XA_INTEGER, 32,
+		    PropModeReplace, (unsigned char *)&state, 1);
+}
+
+
+void
 wOLWMShutdown(WScreen *scr)
 {
     XDeleteProperty(dpy, scr->root_win, _XA_SUN_WM_PROTOCOLS);
 }
 
+
+#ifdef unfinished
+void
+wOLWMUpdateWindowState(WWindow *wwin)
+{
+    if (wwin->ol_window_state.used) {
+	if (wwin->ol_window_state.semantic) {
+	    if (wwin->ol_window_state.semantic_compose)
+		setComposeLed(True);
+	    else
+		setComposeLed(False);
+	}
+    } else {
+	setComposeLed(False);
+    }
+}
+#endif /* unfinished */
 
 void
 wOLWMCheckClientHints(WWindow *wwin)
@@ -279,7 +313,7 @@ wOLWMCheckClientHints(WWindow *wwin)
     OLHints hints;
     static Atom WT_BASE = 0, WT_CMD, WT_NOTICE, WT_HELP, WT_OTHER;
     static Atom MT_FULL, MT_LIMITED, MT_NONE;
-    int decorations;
+    int decoration;
     int pinInitState = OL_PIN_IN;
     Atom menuType;
 
@@ -300,7 +334,7 @@ wOLWMCheckClientHints(WWindow *wwin)
     if (!getWindowHints(wwin->client_win, &hints) ||
 	!(hints.flags & OL_WINTYPE)) {
 
-	decorations = OL_DECORATION_CLOSEBUTTON|OL_DECORATION_RESIZEABLE
+	decoration = OL_DECORATION_CLOSEBUTTON|OL_DECORATION_RESIZEABLE
 	    |OL_DECORATION_HEADER|OL_DECORATION_ICONNAME;
 
 	menuType = MT_FULL;
@@ -308,32 +342,32 @@ wOLWMCheckClientHints(WWindow *wwin)
     } else {
 	if (hints.winType == WT_BASE) {
 
-	    decorations = OL_DECORATION_CLOSEBUTTON|OL_DECORATION_RESIZEABLE
+	    decoration = OL_DECORATION_CLOSEBUTTON|OL_DECORATION_RESIZEABLE
 		|OL_DECORATION_HEADER|OL_DECORATION_ICONNAME;
 
 	    menuType = MT_FULL;
 
 	} else if (hints.winType == WT_CMD) {
 
-	    decorations = OL_DECORATION_PUSHPIN|OL_DECORATION_RESIZEABLE
+	    decoration = OL_DECORATION_PUSHPIN|OL_DECORATION_RESIZEABLE
 		|OL_DECORATION_HEADER|OL_DECORATION_ICONNAME;
 
 	    menuType = MT_LIMITED;
 
 	} else if (hints.winType == WT_NOTICE) {
 
-	    decorations = OL_DECORATION_ICONNAME;
+	    decoration = OL_DECORATION_ICONNAME;
 	    menuType = MT_NONE;
 
 	} else if (hints.winType == WT_HELP) {
 
-	    decorations = OL_DECORATION_PUSHPIN|OL_DECORATION_HEADER
+	    decoration = OL_DECORATION_PUSHPIN|OL_DECORATION_HEADER
 		|OL_DECORATION_ICONNAME|OL_DECORATION_WARPTOPIN;
 	    menuType = MT_LIMITED;
 	    
 	} else if (hints.winType == WT_OTHER) {
 
-	    decorations = OL_DECORATION_ICONNAME;
+	    decoration = OL_DECORATION_ICONNAME;
 	    menuType = MT_NONE;
 
 	    if (hints.flags & OL_MENUTYPE) {
@@ -365,20 +399,35 @@ wOLWMCheckClientHints(WWindow *wwin)
     else
 	wwin->flags.olwm_limit_menu = 1;
 
+    /* this is a transient-like window */
+    if (hints.winType == WT_CMD) {
+	wwin->client_flags.olwm_transient = 1;
+    }
+
     /*
-     * Emulate olwm pushpin. 
+     * Emulate olwm pushpin.
      * If the initial state of the pin is in, then put the normal close
      * button. If not, make the close button different and when the
      * user moves the window or clicks in the close button, turn it
      * into a normal close button.
      */
     if ((decoration & OL_DECORATION_PUSHPIN) && pinInitState==OL_PIN_OUT) {
-	wwin->flags.olwm_push_pin = 1;
+	wwin->flags.olwm_push_pin_out = 1;
+
+	wOLWMChangePushpinState(wwin, False);
+    } else {
+	wOLWMChangePushpinState(wwin, True);
     }
 
+    if (!(decoration & OL_DECORATION_RESIZEABLE)) {
+	wwin->client_flags.no_resizable = 1;
+	wwin->client_flags.no_resizebar = 1;
+    }
+
+    if (decoration & OL_DECORATION_WARPTOPIN) {
+	wwin->client_flags.olwm_warp_to_pin = 1;
+    }
 
 }
-
-
 #endif
 

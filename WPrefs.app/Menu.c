@@ -636,8 +636,8 @@ fillBrowserColumn(WMBrowser *bPtr, int column)
 	else
 	    WMSetTextFieldText(panel->tit1T, getItemTitle(menuList));
     } else {
-	WMSetTextFieldText(panel->tit1T, getItemTitle(panel->menu));
 	menuList = panel->menu;
+	WMSetTextFieldText(panel->tit1T, getItemTitle(panel->menu));
     }
 
     WMHangData(WMGetBrowserListInColumn(bPtr, column), menuList);
@@ -743,6 +743,8 @@ changedTitle(void *observerData, WMNotification *notification)
     }
     
     menu = (proplist_t)WMGetHangedData(list);
+    if (!menu)
+	return;
 
     txt = WMGetTextFieldText(t);
     changeItemTitle(menu, txt);
@@ -1272,6 +1274,48 @@ postProcessMenu(proplist_t menu)
 }
 
 
+static proplist_t
+getDefaultMenu(_Panel *panel, int *hasWSMenu)
+{
+    proplist_t menu, pmenu;
+    char *menuPath, *gspath;
+
+    gspath = wusergnusteppath();
+
+    menuPath = wmalloc(strlen(gspath)+128);
+    /* if there is a localized plmenu for the tongue put it's filename here */
+    sprintf(menuPath, _("%s/Library/WindowMaker/plmenu"), gspath);
+
+    menu = PLGetProplistWithPath(menuPath);
+    if (!menu) {
+	wwarning("%s:could not read property list menu", menuPath);
+
+	if (strcmp("%s/Library/WindowMaker/plmenu",
+		   _("%s/Library/WindowMaker/plmenu"))!=0) {
+
+	    sprintf(menuPath, "%s/Library/WindowMaker/plmenu", gspath);
+	    menu = PLGetProplistWithPath(menuPath);
+	    wwarning("%s:could not read property list menu", menuPath);
+	}
+	if (!menu) {
+	    WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
+			    _("Error"), _("Could not copy default plmenu file "
+					  "from ~/GNUstep/Library/WindowMaker"),
+			    _("OK"), NULL, NULL);
+	    return NULL;
+	}
+    }
+
+    free(gspath);
+    free(menuPath);
+
+    pmenu = preProcessMenu(menu, hasWSMenu);
+    PLRelease(menu);
+
+    return pmenu;
+}
+
+
 static void 
 showData(_Panel *panel)
 {
@@ -1289,25 +1333,31 @@ showData(_Panel *panel)
     strcat(menuPath, "/Defaults/WMRootMenu");
     
     menu = PLGetProplistWithPath(menuPath);
-    
+    pmenu = NULL;
+
     if (!menu || !PLIsArray(menu)) {
-	sprintf(buffer, _("The format of the current menu in ~/G/D/WMRootMenu "
-		"is not supported by WPrefs. A new menu will be created.\n"
-		"You can also replace ~/G/D/WMRootMenu with ~/G/L/W/plmenu "
-		"to get the default menu."));
+	sprintf(buffer, _("The format of the menu in ~/G/D/WMRootMenu is "
+		"not recognized by WPrefs. It might be in a format different "
+		"than the one supported by WPrefs or contain a syntax error. "
+		"Do you want to continue using the current menu to edit "
+		"it by hand later or replace it with a default menu in the new "
+		"format?"));
 	if (WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
-			    _("Warning"), buffer, _("OK"), _("Cancel"), 
-			    NULL)==WAPRDefault) {
+			    _("Warning"), buffer, _("Keep current menu"),
+			    _("Install default menu"), NULL)!=WAPRDefault) {
 	    panel->dontSave = 0;
+
+	    pmenu = getDefaultMenu(panel, &hasWSMenu);
 	} else {
 	    WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
 			    _("Warning"), _("Any changes made in this section will not be saved"),
 			    _("OK"), NULL, NULL);
-	    panel->dontSave = 1;	    
+	    panel->dontSave = 1;
 	}
-	
-	pmenu = PLMakeArrayFromElements(PLMakeString("Applications"),
-					NULL);
+	if (!pmenu) {
+	    pmenu = PLMakeArrayFromElements(PLMakeString("Applications"),
+					    NULL);
+	}
     } else {
 	pmenu = preProcessMenu(menu, &hasWSMenu);
     }
@@ -1369,7 +1419,7 @@ InitMenu(WMScreen *scr, WMWindow *win)
     panel->sectionName = _("Applications Menu Definition");
 
     panel->win = win;
-    
+
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;
     

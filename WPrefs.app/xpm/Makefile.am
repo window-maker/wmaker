@@ -10,6 +10,7 @@ xpmdata_DATA = \
 	dock.xpm \
 	dontlinkworkspaces.xpm \
 	ergonomic.xpm \
+	ergowood.xpm \
 	expert.xpm \
 	fonts.xpm \
 	iconprefs.xpm \
@@ -23,6 +24,7 @@ xpmdata_DATA = \
 	minimouseleft.xpm \
 	minimousemiddle.xpm \
 	minimouseright.xpm \
+	miscprefs2.xpm \
 	moreanim.xpm \
 	mousesettings.xpm \
 	mousespeed.xpm \
@@ -42,6 +44,8 @@ xpmdata_DATA = \
 	speed3s.xpm \
 	speed4.xpm \
 	speed4s.xpm \
+	temp.xpm \
+	theme.xpm \
 	timer0.xpm \
 	timer0s.xpm \
 	timer1.xpm \

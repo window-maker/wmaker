@@ -1,4 +1,5 @@
 {
+  OpenTransientOnOwnerWorkspace = NO;
   EdgeResistance = 5;
   IconificationStyle = Zoom;
   IconPath = (
@@ -50,7 +51,6 @@
   ResizeDisplay = line;
   MoveDisplay = floating;
   OpaqueMove = YES;
-  OnTopTransients = YES;
   IconPosition = "blh";
   WrapMenus = NO;
   ScrollableMenus = YES;

@@ -194,6 +194,7 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     WMResizeWidget(fPtr->homeButton, 28, 28);
     WMSetButtonImagePosition(fPtr->homeButton, WIPImageOnly);
     WMSetButtonImage(fPtr->homeButton, scrPtr->homeIcon);
+	WMSetButtonAltImage(fPtr->homeButton, scrPtr->homeAltIcon);
     WMSetButtonAction(fPtr->homeButton, goHome, fPtr);
 
     WMRealizeWidget(fPtr->win);
@@ -281,6 +282,9 @@ WMRunModalSavePanelForDirectory(WMFilePanel *panel, WMWindow *owner,
 	WMHandleEvent(&event);
     }
 
+    /* Must withdraw window because the next time we map
+     * it, it might have a different transient owner. 
+     */
     WMCloseWindow(panel->win);
 
     return (panel->flags.canceled ? False : True);

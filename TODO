@@ -2,13 +2,10 @@
 Do ASAP:
 ========
 - fix bestvisual selection code. Broken.
-- add a dialog to let user choose if we should restart, restart twm or continue crashing on crash. Do not forget to check if wmaker is already fully running.
 - fix RemakeStackList() to account for transient windows
-- make unhide app map windows in the same stacking order they were before
-hiding
 - blink border of clients with UrgencyHint set between red and black
 - finish session stuff
-- fix scroller to not jump while dragging knob (lock setparameters() while dragging?)
+- fix scroller to not jump while dragging knob
 - add multiline support for balloons
 - move/add balloon to WINGs
 - finish XStandardColormap stuff in wrlib
@@ -26,8 +23,6 @@ Need to do:
   functionality provided by the image libraries to load a minimal
   amount of data.
 + investigate memory leaks 
-- make Docked apps with WM_CLIENT_MACHINE be launched from respective
-	machines (also put a marking showing it's remote launched)
 - rewrite defaults/wdefaults stuff to use WINGs UD stuff. Search list:
   ~/G/D/WindowMaker /u/l/s/W/D/WindowMaker built-in-defaults
 - remake internal string processing to use wchar? unicode?

@@ -98,6 +98,11 @@
  * wmaker:exit - exit wmaker
  */
 
+/*
+ * TODO
+ * different WORKAREA for each workspace
+ */
+
 
 #include "wconfig.h"
 
@@ -151,6 +156,7 @@ static Atom _XA_KWM_RUNNING = 0;
 static Atom _XA_KWM_MODULE = 0;
 
 static Atom _XA_KWM_MODULE_INIT = 0;
+static Atom _XA_KWM_MODULE_INITIALIZED = 0;
 static Atom _XA_KWM_MODULE_DESKTOP_CHANGE = 0;
 static Atom _XA_KWM_MODULE_DESKTOP_NAME_CHANGE = 0;
 static Atom _XA_KWM_MODULE_DESKTOP_NUMBER_CHANGE = 0;
@@ -264,6 +270,31 @@ sendClientMessage(WScreen *scr, Window window, Atom atom, long value)
 }
 
 
+static void
+sendTextMessage(WScreen *scr, Window window, Atom atom, char *text)
+{
+    XEvent event;
+    long mask = 0;
+    int i;
+
+    assert(atom!=0);
+
+    memset(&event, 0, sizeof(XEvent));
+    event.xclient.type = ClientMessage;
+    event.xclient.message_type = atom;
+    event.xclient.window = window;
+    event.xclient.format = 8;
+
+    for (i=0; i<20 && text[i]; i++)
+	event.xclient.data.b[i] = text[i];
+
+    if (scr && scr->root_win == window)
+	mask = SubstructureRedirectMask;
+
+    XSendEvent(dpy, window, False, mask, &event);
+}
+
+
 static Bool
 getAreaHint(Window win, Atom atom, WArea *area)
 {
@@ -334,6 +365,7 @@ addModule(WScreen *scr, Window window)
 	}
     }
 
+    /* send list of windows */
     for (ptr = scr->focused_window; ptr!=NULL; ptr = ptr->prev) {
 	if (!ptr->flags.kwm_hidden_for_modules
 	    && !WFLAGP(ptr, skip_window_list)) {
@@ -341,12 +373,21 @@ addModule(WScreen *scr, Window window)
 			      ptr->client_win);
 	}
     }
+
+    /* send window stacking order */
     wKWMSendStacking(scr, window);
 
+    /* send focused window */
     if (scr->focused_window && scr->focused_window->flags.focused) {
 	sendClientMessage(scr, window, _XA_KWM_MODULE_WIN_ACTIVATE,
 			  scr->focused_window->client_win);
     }
+
+    /* tell who we are */
+    sendTextMessage(scr, window, _XA_KWM_COMMAND, "wm:wmaker");
+
+
+    sendClientMessage(scr, window, _XA_KWM_MODULE_INITIALIZED, 0);
 #ifdef DEBUG1
     KWMModules->title = NULL;
     XFetchName(dpy, window, &KWMModules->title);
@@ -539,9 +580,13 @@ wKWMInitStuff(WScreen *scr)
 	_XA_KWM_MODULE = XInternAtom(dpy, "KWM_MODULE", False);
 
 	_XA_KWM_MODULE_INIT = XInternAtom(dpy, "KWM_MODULE_INIT", False);
+	_XA_KWM_MODULE_INITIALIZED = XInternAtom(dpy, "KWM_MODULE_INITIALIZED", False);
+
+	/* dunno what these do, but Matthias' patch contains it... */
 	_XA_KWM_MODULE_DESKTOP_CHANGE = XInternAtom(dpy, "KWM_MODULE_DESKTOP_CHANGE", False);
 	_XA_KWM_MODULE_DESKTOP_NAME_CHANGE = XInternAtom(dpy, "KWM_MODULE_DESKTOP_NAME_CHANGE", False);
 	_XA_KWM_MODULE_DESKTOP_NUMBER_CHANGE = XInternAtom(dpy, "KWM_MODULE_DESKTOP_NUMBER_CHANGE", False);
+
 	_XA_KWM_MODULE_WIN_ADD = XInternAtom(dpy, "KWM_MODULE_WIN_ADD", False);
 	_XA_KWM_MODULE_WIN_REMOVE = XInternAtom(dpy, "KWM_MODULE_WIN_REMOVE", False);
 	_XA_KWM_MODULE_WIN_CHANGE = XInternAtom(dpy, "KWM_MODULE_WIN_CHANGE", False);
@@ -593,6 +638,19 @@ wKWMSendStacking(WScreen *scr, Window module)
 		sendClientMessage(scr, module, _XA_KWM_MODULE_WIN_RAISE,
 				  wwin->client_win);
 	}
+    }
+}
+
+
+void
+wKWMBroadcastStacking(WScreen *scr)
+{
+    KWMModuleList *ptr = KWMModules;
+
+    while (ptr) {
+	wKWMSendStacking(scr, ptr->window);
+
+	ptr = ptr->next;
     }
 }
 
@@ -963,7 +1021,7 @@ performCommand(WScreen *scr, char *command, XClientMessageEvent *event)
        || strcmp(command, "execute")==0) {
 	char *cmd;
 
-	cmd = ExpandOptions(scr, _("%a(Run Command,Type the command to run"));
+	cmd = ExpandOptions(scr, _("%a(Run Command,Type the command to run:)"));
 	if (cmd) {
 	    ExecuteShellCommand(scr, cmd);
 	    free(cmd);
@@ -1043,7 +1101,7 @@ performCommand(WScreen *scr, char *command, XClientMessageEvent *event)
     } else if (strcmp(command, "moduleRaised")==0) { /* useless */
     } else if (strcmp(command, "deskUnclutter")==0) {
     } else if (strcmp(command, "deskCascade")==0) {
-    } else if (strcmp(command, "configure")==0) { /* useless */
+    } else if (strcmp(command, "configure")==0) {
     } else if (strcmp(command, "taskManager")==0) {
     } else if (strcmp(command, "darkenScreen")==0) { /* breaks consistency */
 #endif
@@ -1276,6 +1334,9 @@ wKWMManageableClient(WScreen *scr, Window win, char *title)
     }
     
     ptr = KWMDoNotManageCrap;
+    /*
+     * TODO: support for glob patterns or regexes
+     */
     if (ptr && strncmp(ptr->title, title, strlen(ptr->title))==0) {
 	next = ptr->next;
 	free(ptr);
@@ -1456,6 +1517,7 @@ wKWMGetUsableArea(WScreen *scr, WArea *area)
 }
 
 
+#ifdef not_used
 void
 wKWMSetUsableAreaHint(WScreen *scr, int workspace)
 {
@@ -1463,6 +1525,16 @@ wKWMSetUsableAreaHint(WScreen *scr, int workspace)
      * the next time the area changes, we won't know what should
      * be the new final area. This protocol isn't worth a shit :/
      */
+/*
+ * According to Matthias Ettrich:  
+ * Indeed, there's no protocol to deal with the area yet in case several
+ * clients want to influence it. It is sufficent, though, if it is clear
+ * that one process is responsable for the area. For KDE this is kpanel, but
+ * I see that there might be a conflict with the docking area of windowmaker
+ * itself.
+ * 
+ */
+
 #ifdef notdef
     char buffer[64];
 
@@ -1478,7 +1550,7 @@ wKWMSetUsableAreaHint(WScreen *scr, int workspace)
 		scr->totalUsableArea);
 #endif
 }
-
+#endif /* not_used */
 
 void
 wKWMSendEventMessage(WWindow *wwin, WKWMEventMessage message)

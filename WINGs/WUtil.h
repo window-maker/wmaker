@@ -39,7 +39,8 @@
 
 #ifdef NDEBUG
 
-#define wassertr(expr, val)		((void)0)
+#define wassertr(expr)		{}
+#define wassertrv(expr, val)	{}
 
 #else /* !NDEBUG */
 
@@ -117,6 +118,10 @@ typedef void WMNotificationObserverAction(void *observerData,
 
 
 /*......................................................................*/
+
+typedef void (waborthandler)(int);
+
+waborthandler *wsetabort(waborthandler*);
 
 
 void wfatal(const char *msg, ...);

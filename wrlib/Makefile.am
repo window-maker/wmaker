@@ -4,11 +4,13 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 lib_LTLIBRARIES = libwraster.la
 
-libwraster_la_LDFLAGS = -version-info 1:1:0
+libwraster_la_LDFLAGS = -version-info 1:1:1
 
-noinst_PROGRAMS = test testgrad testdraw view 
+bin_SCRIPTS = get-wraster-flags
 
-EXTRA_DIST = test.png tile.xpm ballot_box.xpm ballot_box.tiff
+noinst_PROGRAMS = testgrad testdraw view 
+
+EXTRA_DIST = test.png tile.xpm ballot_box.xpm 
 
 include_HEADERS = wraster.h
 
@@ -35,17 +37,13 @@ libwraster_la_SOURCES = 	\
 	gif.c
 
 
-INCLUDES = @DFLAGS@ @XCFLAGS@ @GFXFLAGS@ @XSHM@
+INCLUDES = @DFLAGS@ @XCFLAGS@ @GFXFLAGS@
 
 LIBLIST = libwraster.la @GFXLFLAGS@ @XLFLAGS@ @GFXLIBS@ @XLIBS@ -lm
 
 view_SOURCES= view.c
 
 view_LDADD = $(LIBLIST)
-
-test_SOURCES = test.c
-
-test_LDADD = $(LIBLIST)
 
 testgrad_SOURCES = testgrad.c
 

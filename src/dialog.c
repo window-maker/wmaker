@@ -91,7 +91,7 @@ wMessageDialog(WScreen *scr, char *title, char *message,
 
     WMUnmapWidget(panel->win);
 
-    wUnmanageWindow(wwin, False);
+    wUnmanageWindow(wwin, False, False);
 
     WMDestroyAlertPanel(panel);
 
@@ -142,7 +142,7 @@ wInputDialog(WScreen *scr, char *title, char *message, char **text)
     else
 	result = NULL;
     
-    wUnmanageWindow(wwin, False);
+    wUnmanageWindow(wwin, False, False);
     
     WMDestroyInputPanel(panel);
 
@@ -380,7 +380,7 @@ buttonCallback(void *self, void *clientData)
 
 
 Bool
-wIconChooserDialog(WScreen *scr, char **file)
+wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
 {
     WWindow *wwin;
     Window parent;
@@ -480,10 +480,22 @@ wIconChooserDialog(WScreen *scr, char **file)
 
     XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
-    wwin = wManageInternalWindow(scr, parent, None, _("Icon Chooser"),
-				 (scr->scr_width - 450)/2,
-				 (scr->scr_height - 280)/2, 450, 280);
+    {
+	char *tmp;
 
+	tmp = malloc((instance ? strlen(instance) : 0)
+		     + (class ? strlen(class) : 0) + 32);
+
+	if (tmp && (instance || class))
+	    sprintf(tmp, "%s [%s.%s]", _("Icon Chooser"), instance, class);
+	else
+	    tmp = _("Icon Chooser");
+
+	wwin = wManageInternalWindow(scr, parent, None, tmp,
+				     (scr->scr_width - 450)/2,
+				     (scr->scr_height - 280)/2, 450, 280);
+	free(tmp);
+    }
     
     /* put icon paths in the list */
     listIconPaths(panel->dirList);
@@ -528,7 +540,7 @@ wIconChooserDialog(WScreen *scr, char **file)
 
     WMDestroyWidget(panel->win);    
 
-    wUnmanageWindow(wwin, False);
+    wUnmanageWindow(wwin, False, False);
 
     free(panel);
 
@@ -568,14 +580,16 @@ typedef struct {
     RImage *icon;
     RImage *pic;
     WMPixmap *oldPix;
+    char *str;
+    char x;
 #endif
 } InfoPanel;
 
 
 
 #define COPYRIGHT_TEXT  \
-     "Copyright \xa9 1997, 1998 Alfredo K. Kojima <kojima@windowmaker.org>\n"\
-     "Copyright \xa9 1998 Dan Pascu <dan@windowmaker.org>"
+     "Copyright \xa9 1997~1999 Alfredo K. Kojima <kojima@windowmaker.org>\n"\
+     "Copyright \xa9 1998,1999 Dan Pascu <dan@windowmaker.org>"
 
  
 
@@ -602,7 +616,7 @@ destroyInfoPanel(WCoreWindow *foo, void *data, XEvent *event)
 
     WMDestroyWidget(thePanel->win);
 
-    wUnmanageWindow(thePanel->wwin, False);
+    wUnmanageWindow(thePanel->wwin, False, False);
 
     free(thePanel);
     
@@ -658,14 +672,26 @@ renderText(WMScreen *scr, char *text, char *font, RColor *from, RColor *to)
 }
 
 #ifdef SILLYNESS
+
+extern WMPixmap *DoXThing();
+extern Bool InitXThing();
+
 static void
 logoPushCallback(void *data)
 {
     InfoPanel *panel = (InfoPanel*)data;
     char buffer[512];
     int i;
+    int len;
 
-    if (panel->cycle < 30) {
+    if (panel->x) {
+	if (!(panel->cycle % 4)) {
+	    WMPixmap *p;
+
+	    p = DoXThing(panel->wwin);
+	    WMSetLabelImage(panel->logoL, p);
+	}
+    } else if (panel->cycle < 30) {
 	RImage *image;
 	WMPixmap *pix;
 
@@ -677,11 +703,17 @@ logoPushCallback(void *data)
 	WMReleasePixmap(pix);
     }
 
-    i = panel->cycle%150;
+    i = panel->cycle%200;
 
-    strncpy(buffer, "Sloppy focus is a *?#@", i<22 ? i : 22);
-    if (i >= 22)
-	memset(&buffer[22], ' ', i-22);
+    len = strlen(panel->str);
+
+    strncpy(buffer, panel->str, i<len ? i : len);
+    if (i >= len)
+	memset(&buffer[len], ' ', i-len);
+
+    strncpy(buffer, panel->str, i<len ? i : len);
+    if (i >= len)
+	memset(&buffer[len], ' ', i-len);
     buffer[i]=0;
     WMSetLabelText(panel->versionL, buffer);
 
@@ -800,12 +832,18 @@ handleLogoPush(XEvent *event, void *data)
 "           ...XX&v8<30000003-N@...           ",
 "             .....XmnbN:q&Bo....             ",
 "                 ............                "};
+    static char *msgs[] = {
+	"Sloppy focus is a *?#@",
+	    "Repent! Sloppy focus users will burn in hell!!!",
+	    "Have a nice day!"
+    };
 
     clicks++;
     if (!panel->timer && !broken && clicks > 2) {
 	char *file;
 	char *path;
 
+	panel->x = 0;
 	clicks = 0;
 	if (!panel->icon) {
 	    file = wDefaultGetIconFile(panel->scr, "Logo", "WMPanel", False);
@@ -851,12 +889,16 @@ handleLogoPush(XEvent *event, void *data)
 		RCombineImageWithColor(panel->pic, &color);
 	    }
 	}
+
+	panel->str = msgs[rand()%(sizeof(msgs)/sizeof(char*))];
+
 	panel->timer = WMAddTimerHandler(50, logoPushCallback, panel);
 	panel->cycle = 0;
 	panel->oldPix = WMRetainPixmap(WMGetLabelImage(panel->logoL));
     } else if (panel->timer) {
 	char version[20];
 
+	panel->x = 0;
 	clicks = 0;
 	WMSetLabelImage(panel->logoL, panel->oldPix);
 	WMReleasePixmap(panel->oldPix);
@@ -871,11 +913,12 @@ handleLogoPush(XEvent *event, void *data)
 
     {
 	XEvent ev;
-	while (XCheckTypedWindowEvent(dpy, WMWidgetXID(panel->versionL), 
+	while (XCheckTypedWindowEvent(dpy, WMWidgetXID(panel->versionL),
 				      ButtonPress, &ev));
     }
 }
 #endif /* SILLYNESS */
+
 
 void
 wShowInfoPanel(WScreen *scr)
@@ -899,6 +942,7 @@ wShowInfoPanel(WScreen *scr)
 	    "TrueColor",
 	    "DirectColor"
     };
+
 
     if (thePanel) {
 	wRaiseFrame(thePanel->wwin->frame->core);
@@ -1080,6 +1124,14 @@ wShowInfoPanel(WScreen *scr)
     panel->wwin = wwin;
 
     thePanel = panel;
+
+    if (InitXThing(panel->scr)) {
+	panel->timer = WMAddTimerHandler(100, logoPushCallback, panel);
+	panel->cycle = 0;
+	panel->x = 1;
+	panel->str = "Merry X'mas!";
+	panel->oldPix = WMRetainPixmap(WMGetLabelImage(panel->logoL));
+    } 
 }
 
 
@@ -1125,7 +1177,7 @@ destroyLegalPanel(WCoreWindow *foo, void *data, XEvent *event)
 
     WMDestroyWidget(legalPanel->win);    
 
-    wUnmanageWindow(legalPanel->wwin, False);
+    wUnmanageWindow(legalPanel->wwin, False, False);
 
     free(legalPanel);
     

@@ -187,7 +187,7 @@ wTextureDestroy(WScreen *scr, WTexture *texture)
 	 * to do reference counting for colors. */
 	XSync(dpy,0);
 	oldhandler = XSetErrorHandler(dummyErrorHandler);
-	XFreeColors(dpy, scr->colormap, colors, count, 0);
+	XFreeColors(dpy, scr->w_colormap, colors, count, 0);
 	XSync(dpy,0);
 	XSetErrorHandler(oldhandler);
     }

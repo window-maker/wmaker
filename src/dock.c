@@ -760,10 +760,9 @@ mainIconCreate(WScreen *scr, int type)
         btn->icon->core->descriptor.handle_leavenotify = clipLeaveNotify;
         /*x_pos = scr->scr_width - ICON_SIZE*2 - DOCK_EXTRA_SPACE;*/
         x_pos = 0;
-    }
-    else {
+    } else {
         btn = wAppIconCreateForDock(scr, NULL, "Logo", "WMDock", TILE_NORMAL);
-        x_pos = scr->scr_width - ICON_SIZE - DOCK_EXTRA_SPACE;
+        x_pos = scr->scr_width - ICON_SIZE - DOCK_EXTRA_SPACE - 1;
     }
 
     btn->xindex = 0;
@@ -1064,7 +1063,9 @@ dockMenuCreate(WScreen *scr, int type)
 
     wMenuAddCallback(menu, _("Unhide Here"), unhideHereCallback, NULL);
 
-    wMenuAddCallback(menu, _("(Un)Hide"), hideCallback, NULL);
+    entry = wMenuAddCallback(menu, _("Hide"), hideCallback, NULL);
+    free(entry->text);
+    entry->text = _("Hide");
 
     wMenuAddCallback(menu, _("Settings..."), settingsCallback, NULL);
 
@@ -1615,7 +1616,7 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
                     dock->x_pos = DOCK_EXTRA_SPACE;
                     dock->on_right_side = 0;
                 } else {
-                    dock->x_pos = scr->scr_width - DOCK_EXTRA_SPACE - ICON_SIZE;
+                    dock->x_pos = scr->scr_width - DOCK_EXTRA_SPACE - ICON_SIZE - 1;
                     dock->on_right_side = 1;
                 }
             }
@@ -1829,7 +1830,7 @@ wDockDoAutoLaunch(WDock *dock, int workspace)
     WSavedState *state;
     int i;
 
-    for (i=0; i < dock->max_icons; i++) {
+    for (i = 0; i < dock->max_icons; i++) {
         btn = dock->icon_array[i];
         if (!btn || !btn->auto_launch)
             continue;
@@ -2333,7 +2334,7 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
 	    if (abs(ex_x) > DOCK_DETTACH_THRESHOLD)
 		return False;
 
-	    if (ex_y >= 0 && ex_y < max_y_icons && (aicon == icon || !aicon)) {
+	    if (ex_y >= 0 && ex_y <= max_y_icons && (aicon == icon || !aicon)) {
 
 		*ret_y = ex_y;
 
@@ -2369,7 +2370,7 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
 		}
 		sig = -sig;
 	    }
-	    if (done && closest >= 0 && closest < max_y_icons &&
+	    if (done && closest >= 0 && closest <= max_y_icons &&
 		((ex_y >= closest && ex_y - closest < DOCK_DETTACH_THRESHOLD+1)
 		||
 		 (ex_y < closest && closest - ex_y <= DOCK_DETTACH_THRESHOLD+1))) {
@@ -2381,7 +2382,7 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
 	} else { /* !redocking */
 
 	    /* if slot is free and the icon is close enough, return it */
-	    if (!aicon && ex_x == 0 && ex_y >= 0 && ex_y < max_y_icons) {
+	    if (!aicon && ex_x == 0 && ex_y >= 0 && ex_y <= max_y_icons) {
 		*ret_y = ex_y;
 		return True;
 	    }
@@ -2690,7 +2691,7 @@ swapDock(WDock *dock)
 
 
     if (dock->on_right_side) {
-	x = dock->x_pos = scr->scr_width - ICON_SIZE - DOCK_EXTRA_SPACE;
+	x = dock->x_pos = scr->scr_width - ICON_SIZE - DOCK_EXTRA_SPACE - 1;
     } else {
 	x = dock->x_pos = DOCK_EXTRA_SPACE;
     }
@@ -3115,6 +3116,7 @@ openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
     WScreen *scr = dock->screen_ptr;
     WObjDescriptor *desc;
     WMenuEntry *entry;
+    WApplication *wapp = NULL;
     int index = 0;
     int x_pos;
     int appIsRunning = aicon->running && aicon->icon && aicon->icon->owner;
@@ -3172,10 +3174,19 @@ openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
     entry = dock->menu->entries[++index];
     entry->clientdata = aicon;
     wMenuSetEnabled(dock->menu, index, appIsRunning);
-   
+
     /* hide */
     entry = dock->menu->entries[++index];
     entry->clientdata = aicon;
+    if (aicon->icon->owner) {
+        wapp = wApplicationOf(aicon->icon->owner->main_window);
+    	if (wapp && wapp->flags.hidden)
+	    entry->text = _("Unhide");
+    	else
+	    entry->text = _("Hide");
+    } else {
+	entry->text = _("Hide");
+    }
     wMenuSetEnabled(dock->menu, index, appIsRunning);
 
     /* settings */
@@ -3370,12 +3381,12 @@ handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 		
 		if (ev.xmotion.x_root > dock->x_pos + ICON_SIZE*2) {
 		    XMoveWindow(dpy, scr->dock_shadow, scr->scr_width-ICON_SIZE
-				      -DOCK_EXTRA_SPACE, dock->y_pos);
+				      -DOCK_EXTRA_SPACE-1, dock->y_pos);
                     if (superfluous) {
 		    if (ghost==None) {
 			ghost = MakeGhostDock(dock, dock->x_pos,
 					      scr->scr_width-ICON_SIZE
-                                                  -DOCK_EXTRA_SPACE,
+                                                  -DOCK_EXTRA_SPACE-1,
                                                   dock->y_pos);
 			XSetWindowBackgroundPixmap(dpy, scr->dock_shadow,
 						   ghost);
@@ -3993,6 +4004,10 @@ clipAutoRaise(void *cdata)
 
     if (dock->auto_raise_lower)
         wDockRaise(dock);
+
+    if (dock->screen_ptr->flags.clip_balloon_mapped) {
+        showClipBalloon(dock, dock->screen_ptr->current_workspace);
+    }
 
     dock->auto_raise_magic = NULL;
 }

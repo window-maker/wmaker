@@ -40,7 +40,7 @@ extern Atom _XA_WM_CLIENT_LEADER;
 extern Atom _XA_WM_TAKE_FOCUS;
 extern Atom _XA_WM_DELETE_WINDOW;
 extern Atom _XA_WM_SAVE_YOURSELF;
-#ifdef R6SM
+#ifdef XSMP_ENABLED
 extern Atom _XA_WM_WINDOW_ROLE;
 extern Atom _XA_SM_CLIENT_ID;
 #endif
@@ -52,7 +52,7 @@ extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
 extern Atom _XA_WINDOWMAKER_MENU;
 extern Atom _XA_WINDOWMAKER_WM_PROTOCOLS;
-
+extern Atom _XA_WINDOWMAKER_NOTICEBOARD;
 
 int
 PropGetNormalHints(Window window, XSizeHints *size_hints, int *pre_iccm)
@@ -126,9 +126,11 @@ PropGetCheckProperty(Window window, Atom hint, Atom type, int format,
     unsigned long bytes_after_ret;
     unsigned char *data;
     int tmp;
-    
+
     if (count <= 0)
 	tmp = 0xffffff;
+    else
+	tmp = count;
 
     if (XGetWindowProperty(dpy, window, hint, 0, tmp, False, type,
 			   &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
@@ -186,11 +188,12 @@ PropGetGNUstepWMAttr(Window window, GNUstepWMAttributes **attr)
 void
 PropSetWMakerProtocols(Window root)
 {
-    Atom protocols[2];
+    Atom protocols[3];
     int count=0;
     
     protocols[count++] = _XA_WINDOWMAKER_MENU;
     protocols[count++] = _XA_WINDOWMAKER_WM_FUNCTION;
+    protocols[count++] = _XA_WINDOWMAKER_NOTICEBOARD;
 
     XChangeProperty(dpy, root, _XA_WINDOWMAKER_WM_PROTOCOLS, XA_ATOM,
 		    32, PropModeReplace,  (unsigned char *)protocols, count);
@@ -216,7 +219,7 @@ PropGetClientLeader(Window window)
 }
 
 
-#ifdef R6SM
+#ifdef XSMP_ENABLED
 char*
 PropGetClientID(Window window)
 {
@@ -265,7 +268,7 @@ PropGetWindowRole(Window window)
 	return NULL;
     }
 }
-#endif /* R6SM */
+#endif /* XSMP_ENABLED */
 
 
 void
@@ -292,7 +295,9 @@ void
 PropCleanUp(Window root)
 {
     XDeleteProperty(dpy, root, _XA_WINDOWMAKER_WM_PROTOCOLS);
-    
+
+    XDeleteProperty(dpy, root, _XA_WINDOWMAKER_NOTICEBOARD);
+
     XDeleteProperty(dpy, root, XA_WM_ICON_SIZE);
 
 #ifdef KWM_HINTS

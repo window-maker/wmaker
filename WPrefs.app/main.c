@@ -43,7 +43,6 @@ struct {
 static pid_t DeadChildren[MAX_DEATHS];
 static int DeadChildrenCount = 0;
 
-
 void
 wAbort(Bool foo)
 {
@@ -72,11 +71,12 @@ print_help(char *progname)
     printf(_("usage: %s [options]\n"), progname);
     puts(_("options:"));
     puts(_(" -display <display>	display to be used"));
-    puts(_(" -version		print version number and exit"));
+    puts(_(" --version		print version number and exit"));
+    puts(_(" --help		print this message and exit"));
 }
 
 
-
+#if 0
 static RETSIGTYPE
 handleDeadChild(int sig)
 {
@@ -88,7 +88,7 @@ handleDeadChild(int sig)
 	DeadChildren[DeadChildrenCount++] = pid;
     }
 }
-
+#endif
 
 void
 AddDeadChildHandler(pid_t pid, void (*handler)(void*), void *data)
@@ -107,7 +107,6 @@ AddDeadChildHandler(pid_t pid, void (*handler)(void*), void *data)
 }
 
 
-
 int 
 main(int argc, char **argv)
 {
@@ -117,14 +116,17 @@ main(int argc, char **argv)
     int i;
     char *display_name="";
 
+    wsetabort(wAbort);
+    
     memset(DeadHandlers, 0, sizeof(DeadHandlers));
     
     WMInitializeApplication("WPrefs", &argc, argv);
     
     if (argc>1) {
 	for (i=1; i<argc; i++) {
-	    if (strcmp(argv[i], "-version")==0) {
-		printf("WPrefs %s\n", WVERSION);
+	    if (strcmp(argv[i], "-version")==0
+		|| strcmp(argv[i], "--version")==0) {
+		printf("WPrefs (Window Maker) %s\n", WVERSION);
 		exit(0);
 	    } else if (strcmp(argv[i], "-display")==0) {
 		i++;

@@ -398,11 +398,14 @@ wBalloonInitialize(WScreen *scr)
     
     scr->balloon = bal;
 
-    vmask = CWSaveUnder|CWOverrideRedirect|CWColormap;
+    vmask = CWSaveUnder|CWOverrideRedirect|CWColormap|CWBackPixel
+	|CWBorderPixel;
     attribs.save_under = True;
     attribs.override_redirect = True;
     attribs.colormap = scr->w_colormap;
-    
+    attribs.background_pixel = scr->icon_back_texture->normal.pixel;
+    attribs.border_pixel = 0; /* do not care */
+
     bal->window = XCreateWindow(dpy, scr->root_win, 1, 1, 10, 10, 1,
 				scr->w_depth, CopyFromParent,
 				scr->w_visual, vmask, &attribs);

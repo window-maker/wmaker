@@ -9,11 +9,10 @@ Status of GNOME support
 
 GNOME window manager protocols seem to be a work in progress.
 Things still change fairly frequently, so, the stuff implemented
-may not reflect the protocol-of-the-day. If something doesn't
-work, that's because the protocols have changed again and I still
+may not reflect the latest protocol. If something doesn't work, 
+that's probably because the protocols have changed again and I still
 didn't have time to reimplement everything or noticed that it
-changed (there are no version numbers in the specification).
-If that happens, please tell me exactly what doesn't work.
+changed.  If that happens, please tell me exactly what doesn't work.
 
 Other than that, the so called "GNOME Window Manager Compliance - How to
 write a GNOME compliant Window Manager" document, says this:
@@ -48,3 +47,4 @@ Also, do not disable mwm hints support (they are enabled by default).
 
 I am not sure, but using --enable-lite or DisableWSMouseActions=YES;
 might be a bad idea in case of GNOME.
+

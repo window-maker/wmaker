@@ -43,16 +43,13 @@ WPrefs_SOURCES = \
 	xmodifier.c
 
 CPPFLAGS = \
-	@CPPFLAGS@ \
-	@SHAPE@ @I18N@ @X_LOCALE@ \
-	-DNLSDIR="\"$(nlsdir)\"" 
+	@CPPFLAGS@
 
 
 INCLUDES = \
 	-I$(top_srcdir)/wrlib \
 	-I$(top_srcdir)/WINGs \
-	-I$(top_srcdir)/libPropList \
-	@XCFLAGS@ 
+	-I$(top_srcdir)/libPropList @XCFLAGS@ 
 
 WPrefs_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
 

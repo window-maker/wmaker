@@ -69,7 +69,9 @@ Bool wKWMManageableClient(WScreen *scr, Window win, char *title);
 
 void wKWMCheckClientInitialState(WWindow *wwin);
 
+#ifdef not_used
 void wKWMSetUsableAreaHint(WScreen *scr, int workspace);
+#endif
 
 void wKWMSetInitializedHint(WScreen *scr);
 
@@ -86,6 +88,8 @@ void wKWMCheckDestroy(XDestroyWindowEvent *event);
 void wKWMUpdateActiveWindowHint(WScreen *scr);
 
 void wKWMSendStacking(WScreen *scr, Window module);
+
+void wKWMBroadcastStacking(WScreen *scr);
 
 char *wKWMGetWorkspaceName(WScreen *scr, int workspace);
 

@@ -670,7 +670,7 @@ _keyloop(_looper *lpr){
 }
 
 #endif
-#define _KS 20;
+#define _KS 20
 
 int
 wKeyboardMoveResizeWindow(WWindow *wwin)
@@ -686,6 +686,8 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
     int src_x = wwin->frame_x;
     int src_y = wwin->frame_y;
     int done,off_x,off_y,ww,wh;
+    int kspeed = 1;
+    Time lastTime = 0;
     KeySym keysym=NoSymbol;
     KeyCode shiftl,shiftr,ctrll,ctrlmode;
 
@@ -710,11 +712,19 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
         wUnselectWindows(scr);
     }
     XGrabServer(dpy);
-    if (!scr->selected_windows){
-        drawTransparentFrame(wwin, src_x, src_y, w, h);
-        mapPositionDisplay(wwin, src_x, src_y, w, h);
-    } else {
-        drawFrames(wwin,scr->selected_windows,0,0,0,0);
+	XGrabPointer(dpy, scr->root_win, True, PointerMotionMask
+		     |ButtonReleaseMask|ButtonPressMask, GrabModeAsync,
+		     GrabModeAsync, None, wCursor[WCUR_DEFAULT], CurrentTime);
+
+    if (wwin->flags.shaded || scr->selected_windows) {
+	if(scr->selected_windows)
+	    drawFrames(wwin,scr->selected_windows,off_x,off_y,0,0);
+	else drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
+	if(!scr->selected_windows)
+            mapPositionDisplay(wwin, src_x, src_y, w, h);
+    }
+    else {
+	drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
     }
     ww=w;
     wh=h;
@@ -725,17 +735,34 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 	 */
 	WMMaskEvent(dpy, KeyPressMask | ButtonReleaseMask 
 		    | ButtonPressMask | ExposureMask, &event);
-	if (!scr->selected_windows){
-	    drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, ww, wh);
+    	if (wwin->flags.shaded || scr->selected_windows) {
+	    if(scr->selected_windows)
+	        drawFrames(wwin,scr->selected_windows,off_x,off_y,0,0);
+	    else drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
+	    /*** I HATE EDGE RESISTANCE - ]d ***/
 	}
 	else {
-	    drawFrames(wwin,scr->selected_windows,off_x,off_y,0,0);
+	    drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, ww, wh);
 	}
+
 	if(ctrlmode)
 	    showGeometry(wwin, src_x+off_x, src_y+off_y, src_x+off_x+ww, src_y+off_y+wh,0);
+
+	XUngrabServer(dpy);
+	XSync(dpy, False);
+
 	switch (event.type) {
 	 case KeyPress:
-	    if (event.xkey.state & ControlMask){
+	    /* accelerate */
+	    if (event.xkey.time - lastTime > 50) {
+		kspeed = 1;
+	    } else {
+		if (kspeed < 20)
+		    kspeed++;
+	    }
+	    lastTime = event.xkey.time;
+
+	    if (event.xkey.state & ControlMask && !wwin->flags.shaded){
 		ctrlmode=1;
 		wUnselectWindows(scr);
 	    }
@@ -761,33 +788,33 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 		 case XK_KP_Up:
 		 case XK_k:
 		    if (ctrlmode){
-			h-=_KS;
+			h-=kspeed;
 		    }
-		    else off_y-=_KS;
+		    else off_y-=kspeed;
 		    break;
 		 case XK_Down:
 		 case XK_KP_Down:
 		 case XK_j:
 		    if (ctrlmode){
-			h+=_KS;
+			h+=kspeed;
 		    }
-		    else off_y+=_KS;
+		    else off_y+=kspeed;
 		    break;
 		 case XK_Left:
 		 case XK_KP_Left:
 		 case XK_h:
 		    if (ctrlmode){
-			w-=_KS;
+			w-=kspeed;
 		    }
-		    else off_x-=_KS;
+		    else off_x-=kspeed;
 		    break;
 		 case XK_Right:
 		 case XK_KP_Right:
 		 case XK_l:
 		    if (ctrlmode){
-			w+=_KS;
+			w+=kspeed;
 		    }
-		    else off_x+=_KS;
+		    else off_x+=kspeed;
 		    break;
 		}
 		ww=w;wh=h;
@@ -833,30 +860,38 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 	    WMHandleEvent(&event);
 	    break;
 	}
-	/*
-	 XUngrabServer(dpy);
-	 WMHandleEvent(&event);
-	 XSync(dpy, False);
-	 XGrabServer(dpy);
-	 * */
-	if (!scr->selected_windows){
+
+	XGrabServer(dpy);
+	/*xxx*/
+
+	if (wwin->flags.shaded && !scr->selected_windows){
+	    moveGeometryDisplayCentered(scr, src_x+off_x + w/2, src_y+off_y + h/2);
+	}
+	else {
 	    if(ctrlmode){
 		unmapPositionDisplay(wwin);
 		mapGeometryDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh);
 	    }
-	    else {
+	    else if(!scr->selected_windows){
 		unmapGeometryDisplay(wwin);
 		mapPositionDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh);
 	    }
-	    drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, ww, wh);
+	}
+
+    	if (wwin->flags.shaded || scr->selected_windows) {
+	    if(scr->selected_windows)
+	        drawFrames(wwin,scr->selected_windows,off_x,off_y,0,0);
+	    else drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
 	}
 	else {
-	    drawFrames(wwin,scr->selected_windows,off_x,off_y,0,0);
+	    drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, ww, wh);
 	}
+
+
 	if(ctrlmode){
 	    showGeometry(wwin, src_x+off_x, src_y+off_y, src_x+off_x+ww, src_y+off_y+wh,0);
 	}
-	else
+	else if(!scr->selected_windows)
 	    showPosition(wwin, src_x+off_x, src_y+off_y);
 	/**/
 	
@@ -865,12 +900,15 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 	    /*
 	     WMDeleteTimerWithClientData(&looper);
 	     */
-	    if (!scr->selected_windows){
-		drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, ww, wh);
-	    }
-	    else {
-		drawFrames(wwin,scr->selected_windows,off_x,off_y,0,0);
-	    }
+            if (wwin->flags.shaded || scr->selected_windows) {
+	        if(scr->selected_windows)
+	            drawFrames(wwin,scr->selected_windows,off_x,off_y,0,0);
+	        else drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
+            }
+            else {
+                drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, ww, wh);
+            }
+
 	    if(ctrlmode){
 		showGeometry(wwin, src_x+off_x, src_y+off_y, src_x+off_x+ww, src_y+off_y+wh,0);
 		unmapGeometryDisplay(wwin);
@@ -878,20 +916,27 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 	    else
 		unmapPositionDisplay(wwin);
 	    XUngrabKeyboard(dpy, CurrentTime);
+	    XUngrabPointer(dpy, CurrentTime);
 	    XUngrabServer(dpy);
 	    if(done==2){
-		if (!scr->selected_windows){
-		    wWindowConfigure(wwin, src_x+off_x, src_y+off_y, ww, wh - vert_border);
-		    wWindowSynthConfigureNotify(wwin);
-		}
-		else {
+    		if (wwin->flags.shaded || scr->selected_windows) {
 		    LinkedList *list;
 		    list=scr->selected_windows;
-		    doWindowMove(wwin,0,0,scr->selected_windows,off_x,off_y,0,0);
-		    while (list) {
-			wWindowSynthConfigureNotify(list->head);
-			list = list->tail;
+		    if(!scr->selected_windows){
+		    	wWindowMove(wwin, src_x+off_x, src_y+off_y);
+		        wWindowSynthConfigureNotify(wwin);
 		    }
+		    else {
+			    doWindowMove(wwin,0,0,scr->selected_windows,off_x,off_y,0,0);
+			    while (list) {
+				wWindowSynthConfigureNotify(list->head);
+				list = list->tail;
+			    }
+		    }
+		}
+		else {
+		    wWindowConfigure(wwin, src_x+off_x, src_y+off_y, ww, wh - vert_border);
+		    wWindowSynthConfigureNotify(wwin);
 		}
 		wWindowChangeWorkspace(wwin, scr->current_workspace);
 		wSetFocusTo(scr, wwin);
@@ -908,7 +953,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
     WScreen *scr = wwin->screen_ptr;
     XEvent event;
     Window root = scr->root_win;
-    KeyCode shiftl, shiftr, tab;
+    KeyCode shiftl, shiftr;
     int w = wwin->frame->core->width;
     int h = wwin->frame->core->height;
     int x = wwin->frame_x;
@@ -921,7 +966,6 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
     /* This needs not to change while moving, else bad things can happen */
     int opaque_move = wPreferences.opaque_move;
     int XOffset, YOffset, origDragX, origDragY;
-    int grid = 0;
     
     origDragX = wwin->frame_x;
     origDragY = wwin->frame_y;
@@ -942,7 +986,6 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 #endif
     shiftl = XKeysymToKeycode(dpy, XK_Shift_L);
     shiftr = XKeysymToKeycode(dpy, XK_Shift_R);
-    tab = XKeysymToKeycode(dpy, XK_Tab);
     while (1) {
 	if (warped) {
             int junk;
@@ -984,17 +1027,10 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 		} 
 		showPosition(wwin, x, y);
 	    }
-	    if (event.xkey.keycode == tab) {
-		grid = !grid;
-	    }
 	    break;
 	    
 	 case MotionNotify:
 	    if (started) {
-		if (grid) {
-		    event.xmotion.x_root = (event.xmotion.x_root/10)*10;
-		    event.xmotion.y_root = (event.xmotion.y_root/10)*10;
-		}
 		showPosition(wwin, x, y);
 
                 if (!opaque_move) {

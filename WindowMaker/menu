@@ -77,7 +77,8 @@
  * %a(title[,prompt]) - opens a input box with the specified title and the
  *			optional prompt	and do substitution with what you typed
  * %w - substitute with XID for the current focused window
- *
+ * %W - substitute with the number of the current workspace
+ * 
  * You can override special characters (as % and ") with the \ character:
  * ex: xterm -T "\"Hello World\""
  *
@@ -204,7 +205,9 @@
 
 	"Exit"	MENU
 		"Restart" RESTART
-		"Start AfterStep" RESTART afterstep
+		"Start BlackBox" RESTART blackbox
+		"Start kwm" RESTART kwm
+		"Start IceWM" RESTART icewm
 		"Exit..."  EXIT
 		"Kill session..." SHUTDOWN
 	"Exit" END

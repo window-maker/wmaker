@@ -80,7 +80,7 @@ renderTexture(_Panel *panel, char *texture, int width, int height,
     return None;
 }
 
-
+#if 0
 static void
 updatePreviewBox(_Panel *panel, int elements)
 {
@@ -134,7 +134,7 @@ getStrArrayForKey(char *key)
 
     return PLGetDescription(v);
 }
-
+#endif
 
 static void
 createPanel(Panel *p)
@@ -157,7 +157,8 @@ createPanel(Panel *p)
     panel->secP = WMCreatePopUpButton(panel->frame);
     WMResizeWidget(panel->secP, 242, 20);
     WMMoveWidget(panel->secP, 10, 207);
-//    WMSetPopUpButtonAction(panel->secP, changePage, panel);
+/*    WMSetPopUpButtonAction(panel->secP, changePage, panel);
+ */
 
 
     /* texture list */

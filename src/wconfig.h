@@ -51,26 +51,12 @@
 /* #define CPP_PATH /lib/cpp */
 
 /*
- * Internationalization (I18N) support
- * Multi-byte (japanese, korean, chinese etc.) character support
- * set by configure
- */
-#undef I18N_MB
-
-
-/*
- * sound support
- */
-#define WMSOUND
-
-
-/*
  * support for OffiX DND drag and drop in the Dock
  */
 #define OFFIX_DND
 
 /*
- * support for XDE drang and drop in the Dock. still in beta
+ * support for XDE drang and drop in the Dock. Experimental
  */
 #undef XDE_DND
 
@@ -123,11 +109,6 @@
  */
 #define NUMLOCK_HACK
 
-/*
- * define REDUCE_APPICONS if you want apps with the same WM_INSTANCE &&
- * WM_CLASS to share an appicon
- */
-#undef REDUCE_APPICONS
 
 
 /*
@@ -162,6 +143,14 @@
  */
 
 #undef WS_INDICATOR 
+
+
+/*
+ * Ignores the PPosition hint from clients. This is needed for some
+ * programs that have buggy implementations of such hint and place
+ * themselves in strange locations.
+ */
+#undef IGNORE_NOPPOSITION
 
 
 #define SILLYNESS
@@ -392,7 +381,7 @@
 #define PLACETEST_VSTEP	8
 
 
-#define DOCK_EXTRA_SPACE	1
+#define DOCK_EXTRA_SPACE	0
 
 /* Vicinity in which an icon can be attached to the clip */
 #define CLIP_ATTACH_VICINITY	1
@@ -442,6 +431,15 @@
 
 
 #define FRAME_BORDER_COLOR "black"
+
+
+#ifdef TITLE_TEXT_SHADOW
+#define TITLE_TEXT_SHADOW_X_OFFSET 1
+#define TITLE_TEXT_SHADOW_Y_OFFSET 1
+#define TITLE_TEXT_SHADOW_WIDTH 1
+#define TITLE_TEXT_SHADOW_HEIGHT 1
+#endif
+
 
 /*
  *----------------------------------------------------------------------

@@ -40,7 +40,7 @@ void PropCleanUp(Window root);
 
 Window PropGetClientLeader(Window window);
 
-#ifdef R6SM
+#ifdef XSMP_ENABLED
 char *PropGetClientID(Window window);
 #endif
 

@@ -117,6 +117,7 @@ extern Atom _XA_WINDOWMAKER_MENU;
 extern Atom _XA_WINDOWMAKER_WM_PROTOCOLS;
 extern Atom _XA_WINDOWMAKER_STATE;
 extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
+extern Atom _XA_WINDOWMAKER_NOTICEBOARD;
 
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 
@@ -252,7 +253,7 @@ handleSig(int sig)
      * here. Xlib calls are not reentrant so the integrity of Xlib is
      * not guaranteed if a Xlib call is made from a signal handler.
      */
-    if (sig == SIGHUP) {
+    if (sig == SIGUSR1) {
 #ifdef SYS_SIGLIST_DECLARED
         wwarning(_("got signal %i (%s) - restarting\n"), sig, sys_siglist[sig]);
 #else
@@ -269,8 +270,12 @@ handleSig(int sig)
 	    WMAddIdleHandler(delayedAction, NULL);
 	}
         return;
-    } else if (sig == SIGTERM) {
-	printf(_("%s: Received signal SIGTERM. Exiting..."), ProgName);
+    } else if (sig == SIGTERM || sig == SIGHUP) {
+#ifdef SYS_SIGLIST_DECLARED
+        wwarning(_("got signal %i (%s) - exiting...\n"), sig, sys_siglist[sig]);
+#else
+        wwarning(_("got signal %i - exiting...\n"), sig);
+#endif
 
 	WProgramState = WSTATE_NEED_EXIT;
 
@@ -550,6 +555,7 @@ wScreenForRootWindow(Window window)
     }
 
     assert("bad_root_window" && 0);
+    
     return NULL;
 }
 
@@ -622,14 +628,16 @@ StartUp(Bool defaultScreenOnly)
     _XA_WINDOWMAKER_STATE = XInternAtom(dpy, "_WINDOWMAKER_STATE", False);
 
     _XA_WINDOWMAKER_WM_PROTOCOLS =
-      XInternAtom(dpy, "_WINDOWMAKER_WM_PROTOCOLS", False);
+	XInternAtom(dpy, "_WINDOWMAKER_WM_PROTOCOLS", False);
 
     _XA_GNUSTEP_WM_MINIATURIZE_WINDOW = 
-      XInternAtom(dpy, GNUSTEP_WM_MINIATURIZE_WINDOW, False);
+	XInternAtom(dpy, GNUSTEP_WM_MINIATURIZE_WINDOW, False);
     
     _XA_WINDOWMAKER_WM_FUNCTION = XInternAtom(dpy, "_WINDOWMAKER_WM_FUNCTION",
-					  False);
+					      False);
 
+    _XA_WINDOWMAKER_NOTICEBOARD = XInternAtom(dpy, "_WINDOWMAKER_NOTICEBOARD",
+					      False);
 
 #ifdef OFFIX_DND
     _XA_DND_SELECTION = XInternAtom(dpy, "DndSelection", False);
@@ -664,6 +672,7 @@ StartUp(Bool defaultScreenOnly)
     sig_action.sa_flags = 0;
     sigaction(SIGINT, &sig_action, NULL);
     sigaction(SIGTERM, &sig_action, NULL);
+    sigaction(SIGHUP, &sig_action, NULL);
     sigaction(SIGQUIT, &sig_action, NULL);
     sigaction(SIGSEGV, &sig_action, NULL);
     sigaction(SIGBUS, &sig_action, NULL);
@@ -672,11 +681,11 @@ StartUp(Bool defaultScreenOnly)
     sigaction(SIGABRT, &sig_action, NULL);
 #endif
 
-    /* Here we set SA_RESTART for safety, because SIGHUP may not be handled
+    /* Here we set SA_RESTART for safety, because SIGUSR1 may not be handled
      * immediately.
      * -Dan */
     sig_action.sa_flags = SA_RESTART;
-    sigaction(SIGHUP, &sig_action, NULL);
+    sigaction(SIGUSR1, &sig_action, NULL);
 
     /* ignore dead pipe */
     sig_action.sa_handler = ignoreSig;
@@ -930,7 +939,6 @@ manageAllWindows(WScreen *scr)
 		XMoveWindow(dpy, children[i], scr->scr_width+10,
 			    scr->scr_height+10);
 	    }
-
 	    wwin = wManageWindow(scr, children[i]);
 	    if (wwin) {
 		if (state==WithdrawnState) {
@@ -938,7 +946,7 @@ manageAllWindows(WScreen *scr)
 		    wClientSetState(wwin, WithdrawnState, None);
 		    XSelectInput(dpy, wwin->client_win, NoEventMask);
 		    XRemoveFromSaveSet(dpy, wwin->client_win);
-		    wUnmanageWindow(wwin, True);
+		    wUnmanageWindow(wwin, True, False);
                 } else {
                     /* apply states got from WSavedState */
                     /* shaded + minimized is not restored correctly */
@@ -963,6 +971,7 @@ manageAllWindows(WScreen *scr)
 				|| wwin->transient_for==wwin->client_win
 				|| !windowInList(wwin->transient_for,
 						 children, nchildren)) {
+			        wwin->flags.miniaturized = 0;
 				wIconifyWindow(wwin);
 				wwin->flags.ignore_next_unmap=1;
 			    }

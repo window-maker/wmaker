@@ -65,8 +65,6 @@ DFLAGS = @DFLAGS@
 GFXFLAGS = @GFXFLAGS@
 GFXLFLAGS = @GFXLFLAGS@
 GFXLIBS = @GFXLIBS@
-I18N = @I18N@
-I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
 LD = @LD@
@@ -79,19 +77,13 @@ NLSDIR = @NLSDIR@
 NM = @NM@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
-REDUCE_APPICONS = @REDUCE_APPICONS@
-SHAPE = @SHAPE@
-SOUND = @SOUND@
 VERSION = @VERSION@
 WPMOFILES = @WPMOFILES@
 XCFLAGS = @XCFLAGS@
 XGETTEXT = @XGETTEXT@
 XLFLAGS = @XLFLAGS@
 XLIBS = @XLIBS@
-XSHM = @XSHM@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
-X_LOCALE = @X_LOCALE@
-pixmapdir = @pixmapdir@
 wprefsdir = @wprefsdir@
 
 AUTOMAKE_OPTIONS = no-dependencies
@@ -110,9 +102,7 @@ lib_LIBRARIES = libWINGs.a
 
 include_HEADERS = WINGs.h WUtil.h WINGsP.h
 
-bin_SCRIPTS = WINGs-flags
-
-noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget
+noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel
 
 testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h
 
@@ -131,6 +121,10 @@ wtest_DEPENDENCIES = libWINGs.a
 wmfile_SOURCES = wmfile.c 
 
 wmfile_LDADD = libWINGs.a $(LIBLIST)
+
+testcolorpanel_SOURCES = testcolorpanel.c
+
+testcolorpanel_LDADD = libWINGs.a $(LIBLIST)
 
 wmquery_SOURCES = wmquery.c 
 
@@ -151,6 +145,7 @@ libWINGs_a_SOURCES = 	\
 	wbrowser.c \
 	wbutton.c \
 	wcolor.c \
+	wcolorpanel.c \
 	wcolorwell.c \
 	wevent.c \
 	wfilepanel.c \
@@ -196,10 +191,11 @@ X_PRE_LIBS = @X_PRE_LIBS@
 libWINGs_a_LIBADD = 
 libWINGs_a_OBJECTS =  configuration.o international.o notification.o \
 selection.o userdefaults.o wapplication.o wbrowser.o wbutton.o wcolor.o \
-wcolorwell.o wevent.o wfilepanel.o wframe.o wfont.o wfontpanel.o \
-widgets.o wlabel.o wlist.o wmisc.o wpanel.o wpixmap.o wpopupbutton.o \
-wscroller.o wscrollview.o wslider.o wsplitview.o wtextfield.o wwindow.o \
-wview.o error.o findfile.o hashtable.o memory.o usleep.o
+wcolorpanel.o wcolorwell.o wevent.o wfilepanel.o wframe.o wfont.o \
+wfontpanel.o widgets.o wlabel.o wlist.o wmisc.o wpanel.o wpixmap.o \
+wpopupbutton.o wscroller.o wscrollview.o wslider.o wsplitview.o \
+wtextfield.o wwindow.o wview.o error.o findfile.o hashtable.o memory.o \
+usleep.o
 AR = ar
 PROGRAMS =  $(noinst_PROGRAMS)
 
@@ -222,8 +218,11 @@ testmywidget_DEPENDENCIES =  libWINGs.a \
 $(top_builddir)/wrlib/libwraster.la \
 $(top_builddir)/libPropList/libPropList.la
 testmywidget_LDFLAGS = 
-SCRIPTS =  $(bin_SCRIPTS)
-
+testcolorpanel_OBJECTS =  testcolorpanel.o
+testcolorpanel_DEPENDENCIES =  libWINGs.a \
+$(top_builddir)/wrlib/libwraster.la \
+$(top_builddir)/libPropList/libPropList.la
+testcolorpanel_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
@@ -237,8 +236,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP = --best
-SOURCES = $(libWINGs_a_SOURCES) $(wtest_SOURCES) $(wmquery_SOURCES) $(wmfile_SOURCES) $(fontl_SOURCES) $(testmywidget_SOURCES)
-OBJECTS = $(libWINGs_a_OBJECTS) $(wtest_OBJECTS) $(wmquery_OBJECTS) $(wmfile_OBJECTS) $(fontl_OBJECTS) $(testmywidget_OBJECTS)
+SOURCES = $(libWINGs_a_SOURCES) $(wtest_SOURCES) $(wmquery_SOURCES) $(wmfile_SOURCES) $(fontl_SOURCES) $(testmywidget_SOURCES) $(testcolorpanel_SOURCES)
+OBJECTS = $(libWINGs_a_OBJECTS) $(wtest_OBJECTS) $(wmquery_OBJECTS) $(wmfile_OBJECTS) $(fontl_OBJECTS) $(testmywidget_OBJECTS) $(testcolorpanel_OBJECTS)
 
 all: all-recursive all-am
 
@@ -356,24 +355,9 @@ testmywidget: $(testmywidget_OBJECTS) $(testmywidget_DEPENDENCIES)
 	@rm -f testmywidget
 	$(LINK) $(testmywidget_LDFLAGS) $(testmywidget_OBJECTS) $(testmywidget_LDADD) $(LIBS)
 
-install-binSCRIPTS: $(bin_SCRIPTS)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(bindir)
-	@list='$(bin_SCRIPTS)'; for p in $$list; do \
-	  if test -f $$p; then \
-	    echo " $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
-	    $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
-	  else if test -f $(srcdir)/$$p; then \
-	    echo " $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
-	    $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
-	  else :; fi; fi; \
-	done
-
-uninstall-binSCRIPTS:
-	@$(NORMAL_UNINSTALL)
-	list='$(bin_SCRIPTS)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
-	done
+testcolorpanel: $(testcolorpanel_OBJECTS) $(testcolorpanel_DEPENDENCIES)
+	@rm -f testcolorpanel
+	$(LINK) $(testcolorpanel_LDFLAGS) $(testcolorpanel_OBJECTS) $(testcolorpanel_LDADD) $(LIBS)
 
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)
@@ -479,13 +463,13 @@ dvi: dvi-recursive
 check: all-am
 	$(MAKE) check-recursive
 installcheck: installcheck-recursive
-all-am: Makefile $(LIBRARIES) $(PROGRAMS) $(SCRIPTS) $(HEADERS)
+all-am: Makefile $(LIBRARIES) $(PROGRAMS) $(HEADERS)
 
-install-exec-am: install-libLIBRARIES install-binSCRIPTS
+install-exec-am: install-libLIBRARIES
 
 install-data-am: install-includeHEADERS
 
-uninstall-am: uninstall-libLIBRARIES uninstall-binSCRIPTS uninstall-includeHEADERS
+uninstall-am: uninstall-libLIBRARIES uninstall-includeHEADERS
 
 install-exec: install-exec-recursive install-exec-am
 	@$(NORMAL_INSTALL)
@@ -501,8 +485,7 @@ uninstall: uninstall-recursive uninstall-am
 install-strip:
 	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' INSTALL_SCRIPT='$(INSTALL_PROGRAM)' install
 installdirs: installdirs-recursive
-	$(mkinstalldirs)  $(DATADIR)$(libdir) $(DATADIR)$(bindir) \
-		$(DATADIR)$(includedir)
+	$(mkinstalldirs)  $(DATADIR)$(libdir) $(DATADIR)$(includedir)
 
 
 mostlyclean-generic:
@@ -555,12 +538,11 @@ clean-compile maintainer-clean-compile mostlyclean-libtool \
 distclean-libtool clean-libtool maintainer-clean-libtool \
 mostlyclean-noinstPROGRAMS distclean-noinstPROGRAMS \
 clean-noinstPROGRAMS maintainer-clean-noinstPROGRAMS \
-uninstall-binSCRIPTS install-binSCRIPTS uninstall-includeHEADERS \
-install-includeHEADERS install-data-recursive uninstall-data-recursive \
-install-exec-recursive uninstall-exec-recursive installdirs-recursive \
-uninstalldirs-recursive all-recursive check-recursive \
-installcheck-recursive info-recursive dvi-recursive \
-mostlyclean-recursive distclean-recursive clean-recursive \
+uninstall-includeHEADERS install-includeHEADERS install-data-recursive \
+uninstall-data-recursive install-exec-recursive \
+uninstall-exec-recursive installdirs-recursive uninstalldirs-recursive \
+all-recursive check-recursive installcheck-recursive info-recursive \
+dvi-recursive mostlyclean-recursive distclean-recursive clean-recursive \
 maintainer-clean-recursive tags tags-recursive mostlyclean-tags \
 distclean-tags clean-tags maintainer-clean-tags distdir info dvi \
 installcheck all-am install-exec-am install-data-am uninstall-am \

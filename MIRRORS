@@ -1,6 +1,6 @@
 
-WindowMaker FTP Mirror Sites
-============================
+Window Maker FTP Mirror Sites
+=======-=====================
 
 Official Site (USA):
 --------------------
@@ -43,8 +43,8 @@ ftp://ftp.ameth.org/pub/mirrors/ftp.windowmaker.org/
 Contact: Chase Phillips <shepard@ameth.org>
 
 
-Third Party WindowMaker Distribution Packages
-=============================================
+Third Party Window Maker Distribution Packages
+==============================================
 
 Debian GNU/Linux (deb)
 ----------------------
@@ -54,8 +54,8 @@ Sites:
 http://master.debian.org/~mmagallo/packages/wmaker/
 
 
-RedHat Linux (RPM)
-------------------
+RedHat GNU/Linux (RPM)
+----------------------
 
 Contact: Jim Knoble <jmknoble@pobox.com>
 Sites:

@@ -177,7 +177,26 @@ typedef struct W_Screen {
     struct W_Pixmap *checkMark;
 
     struct W_Pixmap *homeIcon;
-    
+	struct W_Pixmap *homeAltIcon;
+
+	struct W_Pixmap *magnifyIcon;
+	struct W_Pixmap *wheelIcon;
+	struct W_Pixmap *grayIcon;
+	struct W_Pixmap *rgbIcon;
+	struct W_Pixmap *cmykIcon;
+	struct W_Pixmap *hsbIcon;
+	struct W_Pixmap *customPaletteIcon;
+	struct W_Pixmap *colorListIcon;
+
+	struct W_Pixmap *magnifyAltIcon;
+	struct W_Pixmap *wheelAltIcon;
+	struct W_Pixmap *grayAltIcon;
+	struct W_Pixmap *rgbAltIcon;
+	struct W_Pixmap *cmykAltIcon;
+	struct W_Pixmap *hsbAltIcon;
+	struct W_Pixmap *customPaletteAltIcon;
+	struct W_Pixmap *colorListAltIcon;
+	
     struct W_Pixmap *defaultObjectIcon;
     
     Cursor defaultCursor;
@@ -395,3 +414,5 @@ void W_RedisplayView(WMView *view);
 Bool W_ApplicationInitialized(void);
 
 char *W_GetTextSelection(WMScreen *scr, Atom selection);
+
+void W_HandleSelectionEvent(XEvent *event);

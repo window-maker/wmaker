@@ -137,7 +137,8 @@ static Shortcut *shortcutList = NULL;
  *		  CLEAR_SESSION is used. If SaveSessionOnExit = Yes; in
  *		  WindowMaker domain file, then saving is automatically
  *		  done on every windowmaker exit, overwriting any
- *		  SAVE_SESSION or CLEAR_SESSION (see below).
+ *		  SAVE_SESSION or CLEAR_SESSION (see below). Also save
+ *		  dock state now.
  * CLEAR_SESSION - clears any previous saved session. This will not have
  *		  any effect if SaveSessionOnExit is True.
  *							     
@@ -181,7 +182,7 @@ exitCommand(WMenu *menu, WMenuEntry *entry)
 	return;
     inside = 1;
 
-    if ((int)entry->clientdata==M_QUICK
+    if ((long)entry->clientdata==M_QUICK
 	|| wMessageDialog(menu->frame->screen_ptr, _("Exit"),
 			  _("Exit window manager?"), 
 			  _("Exit"), _("Cancel"), NULL)==WAPRDefault) {
@@ -211,10 +212,10 @@ shutdownCommand(WMenu *menu, WMenuEntry *entry)
 
     
     result = R_CANCEL;
-    if ((int)entry->clientdata==M_QUICK)
+    if ((long)entry->clientdata==M_QUICK)
 	result = R_CLOSE;
     else {
-#ifdef R6SM
+#ifdef XSMP_ENABLED
 	if (wSessionIsManaged()) {
 	    int r;
 	    
@@ -243,11 +244,11 @@ shutdownCommand(WMenu *menu, WMenuEntry *entry)
     } 
     
     if (result!=R_CANCEL) {
-#ifdef R6SM
+#ifdef XSMP_ENABLED
 	if (result == R_CLOSE) {
 	    Shutdown(WSLogoutMode);
 	} else 
-#endif /* R6SM */
+#endif /* XSMP_ENABLED */
 	{
 	    Shutdown(WSKillMode);
 	}
@@ -296,7 +297,10 @@ hideOthersCommand(WMenu *menu, WMenuEntry *entry)
 static void
 saveSessionCommand(WMenu *menu, WMenuEntry *entry)
 {
-    wSessionSaveState(menu->frame->screen_ptr);
+    if (!wPreferences.save_session_on_exit)
+	wSessionSaveState(menu->frame->screen_ptr);
+
+    wScreenSaveState(menu->frame->screen_ptr);
 }
 
 

@@ -153,7 +153,7 @@ RMessageForError(int errorCode)
 	return "invalid or corrupted image file";
 	break;
      case RERR_BADFORMAT:
-	return "unsupported image format";
+	return "the image format in the file is not supported and can't be loaded";
 	break;
      case RERR_BADINDEX:
 	return "image file does not contain requested image index";

@@ -97,7 +97,9 @@
   ), 
  ("Exit",
   ("Restart", RESTART),
-  ("Start AfterStep", RESTART, afterstep),
+  ("Start BlackBox", RESTART, blackbox),
+  ("Start kwm", RESTART, kwm),
+  ("Start IceWM", RESTART, icewm),
   ("Exit...", EXIT),
   ("Kill session...", SHUTDOWN)
  )

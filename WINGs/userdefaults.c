@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <assert.h>
 
+
+#include "../src/config.h"
+
 #include "WUtil.h"
 
 #include <proplist.h>
@@ -168,7 +171,7 @@ WMGetStandardUserDefaults(void)
 	/* set to save changes in defaults when program is exited */
 
 
-#if !defined(HAVE_ATEXIT) && defined(HAVE_ON_EXIT)
+#ifndef HAVE_ATEXIT
 	on_exit(saveDefaultsChanges,0);
 #else
 	atexit(saveDefaultsChanges);

@@ -68,7 +68,13 @@ typedef struct WReservedArea {
  */
 typedef struct _WScreen {
     int	screen;			       /* screen number */
-    
+
+#if 0
+    Atom managerAtom;		       /* WM_Sn atom for manager selection */
+    Window managerWindow;	       /* window for manager selection */
+#endif
+    Window info_window;		       /* for our window manager info stuff */
+
     int scr_width;		       /* size of the screen */
     int scr_height;
 
@@ -86,7 +92,7 @@ typedef struct _WScreen {
     Visual *w_visual;
     int  w_depth;
     Colormap w_colormap;	       /* our colormap */
-    
+
     Window no_focus_win;	       /* window to get focus when nobody
 					* else can do it */
 
@@ -150,8 +156,13 @@ typedef struct _WScreen {
     WMPixel select_pixel;
     WMPixel select_text_pixel;
     /* foreground colors */
+#ifdef TITLE_TEXT_SHADOW
+    WMPixel window_title_pixel[6];
+    WMPixel menu_title_pixel[6];       /* menu titlebar text */
+#else /* !TITLE_TEXT_SHADOW */
     WMPixel window_title_pixel[3];     /* window titlebar text (foc, unfoc, pfoc)*/
     WMPixel menu_title_pixel[3];       /* menu titlebar text */
+#endif /* !TITLE_TEXT_SHADOW */
     WMPixel clip_title_pixel[2];       /* clip title text */
     WMPixel mtext_pixel;	        /* menu item text */
     WMPixel dtext_pixel;	        /* disabled menu item text */

@@ -370,8 +370,8 @@ WDefaultEntry optionList[] = {
     {"AlignSubmenus",	"NO",			NULL,
 	  &wPreferences.align_menus,	getBool,	NULL
     },
-    {"OnTopTransients",	"NO",			NULL,
-	  &wPreferences.on_top_transients, getBool,	NULL
+    {"OpenTransientOnOwnerWorkspace",	"NO",			NULL,
+	  &wPreferences.open_transients_with_parent, getBool,	NULL
     },
     {"WindowPlacement",	"auto",		sePlacements,
 	  &wPreferences.window_placement, getEnum,	NULL
@@ -632,9 +632,9 @@ WDefaultEntry optionList[] = {
     },
     {"WindowShortcut4Key","None",		(void*)WKBD_WINDOW4,
 	    NULL, 			getKeybind,	setKeyGrab
-    },
+    }
 #ifdef EXTEND_WINDOWSHORTCUT
-    {"WindowShortcut5Key","None",		(void*)WKBD_WINDOW5,
+    ,{"WindowShortcut5Key","None",		(void*)WKBD_WINDOW5,
 	    NULL, 			getKeybind,	setKeyGrab
     },
     {"WindowShortcut6Key","None",		(void*)WKBD_WINDOW6,
@@ -651,17 +651,34 @@ WDefaultEntry optionList[] = {
     },
     {"WindowShortcut10Key","None",		(void*)WKBD_WINDOW10,
 	    NULL, 			getKeybind,	setKeyGrab
-    },
+    }
 #endif /* EXTEND_WINDOWSHORTCUT */
 
 #ifdef KEEP_XKB_LOCK_STATUS
-    {"ToggleKbdModeKey", "None",                      (void*)WKBD_TOGGLE,
+    ,{"ToggleKbdModeKey", "None",                      (void*)WKBD_TOGGLE,
 	    NULL,                       getKeybind,     setKeyGrab
     },
     {"KbdModeLock", "NO",  	                  NULL,
 	    &wPreferences.modelock, 	getBool,	NULL
     }
 #endif /* KEEP_XKB_LOCK_STATUS */
+#ifdef TITLE_TEXT_SHADOW
+    ,{"FShadowColor",     "black",                (void*)WS_SFOCUSED,
+          NULL,                         getColor,       setWTitleColor
+    },
+    {"PShadowColor",     "black",                (void*)WS_SPFOCUSED,
+          NULL,                         getColor,       setWTitleColor
+    },
+    {"UShadowColor",     "grey50",               (void*)WS_SUNFOCUSED,
+         NULL,                         getColor,       setWTitleColor
+    },
+    {"MShadowColor",     "black",               (void*)WS_SMENU,
+          NULL,                         getColor,       setMenuTitleColor
+    },
+    {"Shadow", "Yes",                    NULL,
+         &wPreferences.title_shadow, getBool,  setJustify
+    }
+#endif /* TITLE_TEXT_SHADOW */
 };
 
 
@@ -1550,7 +1567,7 @@ static int
 getEnum(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
 	void **ret)
 {
-    static char data;
+    static signed char data;
 
     data = string2index(entry->plkey, value, entry->default_value,
 			(WOptionEnumeration*)entry->extra_data);
@@ -1561,7 +1578,7 @@ getEnum(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
       *ret = &data;
 
     if (addr)
-      *(char*)addr = data;
+      *(signed char*)addr = data;
     
     return True;    
 }
@@ -1615,7 +1632,7 @@ parse_texture(WScreen *scr, proplist_t pl)
 	  return NULL;
 	val = PLGetString(elem);
 
-	if (!XParseColor(dpy, scr->colormap, val, &color)) {
+	if (!XParseColor(dpy, scr->w_colormap, val, &color)) {
 	    wwarning(_("\"%s\" is not a valid color name"), val);
 	    return NULL;
 	}
@@ -1647,7 +1664,7 @@ parse_texture(WScreen *scr, proplist_t pl)
 	  return NULL;
 	val = PLGetString(elem);
 
-	if (!XParseColor(dpy, scr->colormap, val, &xcolor)) {
+	if (!XParseColor(dpy, scr->w_colormap, val, &xcolor)) {
 	    wwarning(_("\"%s\" is not a valid color name"), val);
 	    return NULL;
 	}
@@ -1663,7 +1680,7 @@ parse_texture(WScreen *scr, proplist_t pl)
 	}
 	val = PLGetString(elem);
 
-	if (!XParseColor(dpy, scr->colormap, val, &xcolor)) {
+	if (!XParseColor(dpy, scr->w_colormap, val, &xcolor)) {
 	    wwarning(_("\"%s\" is not a valid color name"), val);
 	    return NULL;
 	}
@@ -1709,7 +1726,7 @@ parse_texture(WScreen *scr, proplist_t pl)
 	    }
 	    val = PLGetString(elem);
 
-	    if (!XParseColor(dpy, scr->colormap, val, &color)) {
+	    if (!XParseColor(dpy, scr->w_colormap, val, &color)) {
 		wwarning(_("\"%s\" is not a valid color name"), val);
 		for (--i; i>=0; --i) {
 		    free(colors[i]);
@@ -1749,7 +1766,7 @@ parse_texture(WScreen *scr, proplist_t pl)
 	}
 	val = PLGetString(elem);
 
-	if (!XParseColor(dpy, scr->colormap, val, &color)) {
+	if (!XParseColor(dpy, scr->w_colormap, val, &color)) {
 	    wwarning(_("\"%s\" is not a valid color name"), val);
 	    return NULL;
 	}
@@ -1787,7 +1804,7 @@ parse_texture(WScreen *scr, proplist_t pl)
 	  return NULL;
 	val = PLGetString(elem);
 
-	if (!XParseColor(dpy, scr->colormap, val, &xcolor)) {
+	if (!XParseColor(dpy, scr->w_colormap, val, &xcolor)) {
 	    wwarning(_("\"%s\" is not a valid color name"), val);
 	    return NULL;
 	}
@@ -1803,7 +1820,7 @@ parse_texture(WScreen *scr, proplist_t pl)
 	}
 	val = PLGetString(elem);
 
-	if (!XParseColor(dpy, scr->colormap, val, &xcolor)) {
+	if (!XParseColor(dpy, scr->w_colormap, val, &xcolor)) {
 	    wwarning(_("\"%s\" is not a valid color name"), val);
 	    return NULL;
 	}
@@ -2441,15 +2458,31 @@ setWTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
 
 
 static int 
-setMenuTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, void *foo)
+setMenuTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
 {
+#ifdef TITLE_TEXT_SHADOW
+    if (index == WS_SMENU){
+        if (scr->menu_title_pixel[WS_SMENU]!=scr->white_pixel &&
+             scr->menu_title_pixel[WS_SMENU]!=scr->black_pixel) {
+             wFreeColor(scr, scr->menu_title_pixel[WS_SMENU]);
+        }
+        scr->menu_title_pixel[WS_SMENU] = color->pixel;
+    }
+    else {
+        if (scr->menu_title_pixel[0]!=scr->white_pixel &&
+             scr->menu_title_pixel[0]!=scr->black_pixel) {
+             wFreeColor(scr, scr->menu_title_pixel[0]);
+        }
+        scr->menu_title_pixel[0] = color->pixel;
+    }
+#else /* !TITLE_TEXT_SHADOW */
     if (scr->menu_title_pixel[0]!=scr->white_pixel &&
 	scr->menu_title_pixel[0]!=scr->black_pixel) {
 	wFreeColor(scr, scr->menu_title_pixel[0]);
     }
     
     scr->menu_title_pixel[0] = color->pixel;
-    
+#endif /* !TITLE_TEXT_SHADOW */
     XSetForeground(dpy, scr->menu_title_gc, color->pixel);
     
     return REFRESH_FORE_COLOR;
@@ -2528,7 +2561,7 @@ setIconTitleBack(WScreen *scr, WDefaultEntry *entry, XColor *color, void *foo)
     if (scr->icon_title_texture) {
 	wTextureDestroy(scr, (WTexture*)scr->icon_title_texture);
     }
-    XQueryColor (dpy, scr->colormap, color);
+    XQueryColor (dpy, scr->w_colormap, color);
     scr->icon_title_texture = wTextureMakeSolid(scr, color);
     
     return REFRESH_WINDOW_TEXTURES;
@@ -2639,15 +2672,19 @@ setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
     if (scr->flags.backimage_helper_launched) {
 	char *str;
 
-	/* set the default workspace background to this one */
-	str = PLGetDescription(value);
-	if (str) {
-	    SendHelperMessage(scr, 'S', 0, str);
-	    free(str);
-	} else {
+	if (PLGetNumberOfElements(value)==0) {
 	    SendHelperMessage(scr, 'U', 0, NULL);
+	} else {
+	    /* set the default workspace background to this one */
+	    str = PLGetDescription(value);
+	    if (str) {
+		SendHelperMessage(scr, 'S', 0, str);
+		free(str);
+		SendHelperMessage(scr, 'C', scr->current_workspace+1, NULL);
+	    } else {
+		SendHelperMessage(scr, 'U', 0, NULL);
+	    }
 	}
-	SendHelperMessage(scr, 'C', scr->current_workspace+1, NULL);
     } else {
 	char *command;
 	char *text;

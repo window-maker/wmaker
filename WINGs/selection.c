@@ -6,196 +6,260 @@
 
 #include "WINGsP.h"
 
-#if 0
+#define MAX_PROPERTY_SIZE 8*1024
 
-typedef struct W_SelectionHandler {
+
+typedef struct SelectionHandler {
     WMWidget *widget;
     Atom selection;
-    void *clientData;
-    WMSelectionProc *proc;
-    WMHandlerID timerID;
-    W_SelectionHandler *next;
-    W_SelectionHandler *prev;
-} W_SelectionHandler;
-#endif
+    Time timestamp;
+    WMConvertSelectionProc *convProc;
+    WMLoseSelectionProc *loseProc;
+    WMSelectionDoneProc *doneProc;
 
-#define SELECTION_TIMEOUT	2000
-#define MAX_PROPERTY_SIZE	10*1024
-#if 0
+    struct {
+	unsigned delete_pending:1;
+	unsigned done_pending:1;
+    } flags;
+
+    struct SelectionHandler *next;
+} SelectionHandler;
+
+
+static SelectionHandler *selHandlers = NULL;
 
 
 void
-WMWriteSelectionToClipboard(WMSelection *selection)
+WMDeleteSelectionHandler(WMWidget *widget, Atom selection)
 {
-}
+    SelectionHandler *handler, *tmp;
+    Display *dpy = WMWidgetScreen(widget)->display;
+    Window win = WMWidgetXID(widget);
+    Time timestamp;
 
+    if (!selHandlers)
+        return;
 
-WMSelection*
-WMCreateSelectionWithData(WMData *data, Atom type)
-{
-    
-}
-#endif
+    tmp = selHandlers;
 
-#if 0
+    if (tmp->widget == widget) {
 
-#define MAX_PROPERTY_SIZE	100*1024
-
-
-static void
-handleSelectionEvent(XEvent *event, void *data)
-{
-    W_SelectionHandler *handler = (W_SelectionHandler*)data;
-    char *data = NULL;
-    Atom type;
-    int format, result;
-    unsigned long numItems, bytesAfter;
-    WMScreen *scr = WMWidgetScreen(handler->widget);
-
-    WMDeleteTimerHandler(handler->timerID);
-
-    if (handler->next)
-	handler->next->prev = handler->prev;
-    if (handler->prev)
-	handler->prev->next = handler->next;
-    if (handler == WMWidgetScreen(handler->widget)->selectionHandlerList)
-	WMWidgetScreen(handler->widget)->selectionHandlerList = handler->next;
-    
-    if (event->xselection.property == None) {
-	char *name = XGetAtomName(event->xselection.display, 
-				  handler->selection);
-	char *form = XGetAtomName(event->xselection.display, handler->type);
-	wwarning("error retrieving selection %s with form %s\n", name, form);
-	if (name)
-	    XFree(name);
-	if (form)
-	    XFree(form);
-	free(handler);
-	return;
-    }
-
-    if (XGetWindowProperty(event->xselection.display,
-			   event->xselection.requestor, handler->property,
-			   0, MAX_PROPERTY_SIZE, False, AnyPropertyType,
-			   &type, &format, &numItems, &bytesAfter,
-			   &data) != Success || type == None) {
-	if (data)
-	    XFree(data);
-	free(handler);
-	return;
-    }
-    if (bytesAfter!=0) {
-	wwarning("data in selection is too large");
-	if (data)
-	    XFree(data);
-	free(handler);
-	return;
-    }
-    if (type == XA_STRING || type == scr->compoundTextAtom) {
-	if (format!=8) {
-	    wwarning("string in selection has format %i, which is invalid",
-		     format);
-	    if (data)
-		XFree(data);
-	    free(handler);
+	if (tmp->flags.done_pending) {
+	    tmp->flags.delete_pending = 1;
 	    return;
 	}
-	(*handler->proc)();
+        selHandlers = tmp->next;
+	timestamp = tmp->timestamp;
+        free(tmp);
+    } else {
+        while (tmp->next) {
+            if (tmp->next->widget == widget) {
+
+		if (tmp->next->flags.done_pending) {
+		    tmp->next->flags.delete_pending = 1;
+		    return;
+		}
+                handler = tmp->next;
+                tmp->next = handler->next;
+		timestamp = handler->timestamp;
+                free(handler);
+                break;
+            }
+            tmp = tmp->next;
+        }
     }
+
+    XGrabServer(dpy);
+    if (XGetSelectionOwner(dpy, selection) == win) {
+	XSetSelectionOwner(dpy, selection, None, timestamp);
+    }
+    XUngrabServer(dpy);
+}
+
+
+static int gotError = 0;
+/*
+static int
+errorHandler(XErrorEvent *error)
+{
+    return 0;
+}
+*/
+
+static Bool
+writeSelection(Display *dpy, Window requestor, Atom property, Atom type,
+	       void *value, long length, int format)
+{
+/*
+    printf("write to %x: %s\n", requestor, XGetAtomName(dpy, property));
+*/
+    gotError = 0;
+
+    if (!XChangeProperty(dpy, requestor, property, type, format, 
+			 PropModeReplace, value, length))
+	return 0;
+    XFlush(dpy);
+
+    return !gotError;
 }
 
 
 static void
-timeoutHandler(void *data)
+notifySelection(XEvent *event, Atom prop)
 {
-    W_SelectionHandler *handler = (W_SelectionHandler*)data;
-
-    wwarning("selection timed out");
-    WMDeleteEventHandler(WMWidgetView(handler->widget), SelectionNotifyMask,
-			 handleSelectionEvent, data);
-    if (handler->next)
-	handler->next->prev = handler->prev;
-    if (handler->prev)
-	handler->prev->next = handler->next;
-    if (handler == WMWidgetScreen(handler->widget)->selectionHandlerList)
-	WMWidgetScreen(handler->widget)->selectionHandlerList = handler->next;
+    XEvent ev;
+/*
+    printf("envent to %x\n", event->xselectionrequest.requestor);
+*/
+    ev.xselection.type = SelectionNotify;
+    ev.xselection.serial = 0;
+    ev.xselection.send_event = True;
+    ev.xselection.display = event->xselectionrequest.display;
+    ev.xselection.requestor = event->xselectionrequest.requestor;
+    ev.xselection.target = event->xselectionrequest.target;
+    ev.xselection.property = prop;
+    ev.xselection.time = event->xselectionrequest.time;
+    
+    XSendEvent(event->xany.display, event->xselectionrequest.requestor, 
+	       False, 0, &ev);
+    XFlush(event->xany.display);
 }
-
 
 
 void
-WMGetSelection(WMWidget *widget, Atom selection, Atom type, Atom property,
-	       WMSelectionProc *proc, void *clientData, Time time)
+W_HandleSelectionEvent(XEvent *event)
 {
-    WMScreen *scr = WMWidgetScreen(widget);
-    void *data;
-    Atom rtype;
-    int bits;
-    unsigned long len, bytes;
-    unsigned char *data;
-    int buffer = -1;
+    SelectionHandler *handler;
 
-    switch (selection) {
-     case XA_CUT_BUFFER0:
-	buffer = 0;
-	break;
-     case XA_CUT_BUFFER1:
-	buffer = 1;
-	break;
-     case XA_CUT_BUFFER2:
-	buffer = 2;
-	break;
-     case XA_CUT_BUFFER3:
-	buffer = 3;
-	break;
-     case XA_CUT_BUFFER4:
-	buffer = 4;
-	break;
-     case XA_CUT_BUFFER5:
-	buffer = 5;
-	break;
-     case XA_CUT_BUFFER6:
-	buffer = 6;
-	break;
-     case XA_CUT_BUFFER7:
-	buffer = 7;
-	break;
-    }
-    if (buffer >= 0) {
-	char *data;
-	int size;
-	
-	data = XFetchBuffer(scr->display, &size, buffer);
-	
-    } else {
-	W_SelectionHandler *handler;
-	
-	XDeleteProperty(scr->display, WMWidgetXID(widget), selection);
-	XConvertSelection(scr->display, selection, type, property,
-			  WMWidgetXID(widget), time);
+    handler = selHandlers;
 
-	handler = wmalloc(sizeof(W_SelectionHandler));
-	handler->widget = widget;
-	handler->selection = selection;
-	handler->type = type;
-	handler->property = property;
-	handler->clientData = clientData;
-	handler->proc = proc;
-	handler->timerID = WMAddTimerHandler(SELECTION_TIMEOUT,
-					     timeoutHandler, handler);
+    while (handler) {
+	if (WMWidgetXID(handler->widget)==event->xany.window
+/*	    && handler->selection == event->selection*/) {
 
-	handler->next = scr->selectionHandlerList;
-	handler->prev = NULL;
-	if (scr->selectionHandlerList)
-	    scr->selectionHandlerList->prev = handler;
-	scr->selectionHandlerList = handler;
+	    switch (event->type) {
+	     case SelectionClear:
+		if (handler->loseProc)
+		    (*handler->loseProc)(handler->widget, handler->selection);
+		break;
 
-	WMCreateEventHandler(WMWidgetView(widget), SelectionNotifyMask,
-			     handleSelectionEvent, handler);
+	     case SelectionRequest:
+		if (handler->convProc) {
+		    Atom atom;
+		    void *data;
+		    unsigned length;
+		    int format;
+		    Atom prop;
+
+		    /* they're requesting for something old */
+		    if (event->xselectionrequest.time < handler->timestamp
+			&& event->xselectionrequest.time != CurrentTime) {
+
+			notifySelection(event, None);
+			break;
+		    }
+
+		    handler->flags.done_pending = 1;
+
+		    if (!(*handler->convProc)(handler->widget,
+					     handler->selection,
+					     event->xselectionrequest.target,
+					     &atom, &data, &length, &format)) {
+
+			notifySelection(event, None);
+			break;
+		    }
+
+		    
+		    prop = event->xselectionrequest.property;
+		    /* obsolete clients that don't set the property field */
+		    if (prop == None)
+			prop = event->xselectionrequest.target;
+
+		    if (!writeSelection(event->xselectionrequest.display,
+					event->xselectionrequest.requestor,
+					prop, atom, data, length, format)) {
+
+			free(data);
+			notifySelection(event, None);
+			break;
+		    }
+		    free(data);
+
+		    notifySelection(event, prop);
+
+		    if (handler->doneProc) {
+			(*handler->doneProc)(handler->widget, 
+					     handler->selection,
+					     event->xselectionrequest.target);
+		    }
+
+		    handler->flags.done_pending = 0;
+
+		    /* in case the handler was deleted from some
+		     * callback */
+		    if (handler->flags.delete_pending) {
+			WMDeleteSelectionHandler(handler->widget,
+						 handler->selection);
+		    }
+		}
+		break;
+
+	     case SelectionNotify:
+		
+		break;
+	    }
+	}
+
+	handler = handler->next;
     }
 }
 
-#endif
+
+
+
+Bool
+WMCreateSelectionHandler(WMWidget *w, Atom selection, Time timestamp,
+			 WMConvertSelectionProc *convProc,
+			 WMLoseSelectionProc *loseProc,
+			 WMSelectionDoneProc *doneProc)
+{
+    SelectionHandler *handler, *tmp;
+    Display *dpy = WMWidgetScreen(w)->display;
+
+    XSetSelectionOwner(dpy, selection, WMWidgetXID(w), timestamp);
+    if (XGetSelectionOwner(dpy, selection) != WMWidgetXID(w))
+	return False;
+
+    handler = malloc(sizeof(SelectionHandler));
+    if (!handler)
+	return False;
+
+    handler->widget = w;
+    handler->selection = selection;
+    handler->timestamp = timestamp;
+    handler->convProc = convProc;
+    handler->loseProc = loseProc;
+    handler->doneProc = doneProc;
+    memset(&handler->flags, 0, sizeof(handler->flags));
+
+    if (!selHandlers) {
+	/* first in the queue */
+	handler->next = selHandlers;
+	selHandlers = handler;
+    } else {
+	tmp = selHandlers;
+	while (tmp->next) {
+	    tmp = tmp->next;
+	}
+	handler->next = tmp->next;
+	tmp->next = handler;
+    }
+
+    return True;
+}
+
+
 
 
 
@@ -270,7 +334,8 @@ W_GetTextSelection(WMScreen *scr, Atom selection)
 	    return NULL;
 	}
 	
-	/* nobody owns the selection */
+	/* nobody owns the selection or the current owner has
+	 * nothing to do with what we need */
 	if (ev.xselection.property == None) {
 	    return NULL;
 	}

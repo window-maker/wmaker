@@ -5,14 +5,98 @@
 # Èt pro  3 20:38:36 CET 1998 David Sauer
 msgid ""
 msgstr ""
-"Project-Id-Version: WPrefs 0.8 (WindowMaker 0.20.x)\n"
-"POT-Creation-Date: 1998-12-11 00:10+0100\n"
-"PO-Revision-Date: 1998-10-27 13:02+01:00\n"
+"Project-Id-Version: WPrefs 0.9 (WindowMaker 0.50.x)\n"
+"POT-Creation-Date: 1999-01-11 07:20+0100\n"
+"PO-Revision-Date: 1999-01-11 07:37+01:00\n"
 "Last-Translator: David Sauer <xsauer@fel.cvut.cz>\n"
 "Language-Team: czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: unknown\n"
+
+#: ../../WPrefs.app/Configurations.c:142 ../../WPrefs.app/Configurations.c:148
+#: ../../WPrefs.app/MouseSettings.c:510 ../../WPrefs.app/WindowHandling.c:274
+#: ../../WPrefs.app/WindowHandling.c:286 ../../WPrefs.app/Workspace.c:71
+#: ../../WPrefs.app/Workspace.c:77
+#, c-format
+msgid "could not load icon %s"
+msgstr "nelze naèíst ikonu %s"
+
+#: ../../WPrefs.app/Configurations.c:156 ../../WPrefs.app/Workspace.c:85
+#, c-format
+msgid "could not process icon %s:"
+msgstr "nelze zpracovat ikonu %s:"
+
+#: ../../WPrefs.app/Configurations.c:181 ../../WPrefs.app/Workspace.c:124
+#, c-format
+msgid "could not load image file %s"
+msgstr "ze souboru %s nelze naèíst obrázek"
+
+#: ../../WPrefs.app/Configurations.c:195
+msgid "Icon Slide Speed"
+msgstr "Rychlost klouzání ikony"
+
+#: ../../WPrefs.app/Configurations.c:201
+msgid "Shade Animation Speed"
+msgstr "Rychlost zmìny okna na titulek"
+
+#: ../../WPrefs.app/Configurations.c:234 ../../WPrefs.app/Configurations.c:246
+#: ../../WPrefs.app/Focus.c:310 ../../WPrefs.app/Focus.c:321
+#: ../../WPrefs.app/MenuPreferences.c:135
+#: ../../WPrefs.app/MenuPreferences.c:146
+#: ../../WPrefs.app/MenuPreferences.c:174
+#: ../../WPrefs.app/MenuPreferences.c:189 ../../WPrefs.app/MouseSettings.c:538
+#: ../../WPrefs.app/MouseSettings.c:549 ../../WPrefs.app/MouseSettings.c:604
+#: ../../WPrefs.app/MouseSettings.c:615 ../../WPrefs.app/MouseSettings.c:651
+#: ../../WPrefs.app/MouseSettings.c:666 ../../WPrefs.app/MouseSettings.c:682
+#: ../../WPrefs.app/WPrefs.c:403 ../../WPrefs.app/WPrefs.c:421
+#, c-format
+msgid "could not load icon file %s"
+msgstr "nelze naèíst soubor s ikonou %s"
+
+#: ../../WPrefs.app/Configurations.c:262
+msgid "Titlebar Style"
+msgstr "Styl titulku"
+
+#: ../../WPrefs.app/Configurations.c:299
+msgid "Animations and Sound"
+msgstr "Animace a Zvuky"
+
+#: ../../WPrefs.app/Configurations.c:305
+msgid "Animations"
+msgstr "Animace"
+
+#: ../../WPrefs.app/Configurations.c:321
+msgid "Superfluous"
+msgstr "Animace++"
+
+#: ../../WPrefs.app/Configurations.c:337
+msgid "Sounds"
+msgstr "Zvuky"
+
+#: ../../WPrefs.app/Configurations.c:354
+msgid "Note: sound requires a module distributed separately"
+msgstr "Poznámka: zvuk vy¾aduje samostatný modul"
+
+#: ../../WPrefs.app/Configurations.c:364
+msgid "Dithering colormap for 8bpp"
+msgstr "Ditherovat na 8bpp"
+
+#: ../../WPrefs.app/Configurations.c:369
+msgid "Disable dithering in any visual/depth"
+msgstr "Zaka¾ jakékoli ditherování"
+
+#: ../../WPrefs.app/Configurations.c:390
+msgid "More colors for applications"
+msgstr "Barvy aplikacím"
+
+#: ../../WPrefs.app/Configurations.c:397
+msgid "More colors for WindowMaker"
+msgstr "Barvy WindowMakeru"
+
+#: ../../WPrefs.app/Configurations.c:450
+msgid "Other Configurations"
+msgstr "Dal¹í konfigurace"
 
 #: ../../WPrefs.app/Expert.c:70
 msgid "Do not set non-WindowMaker specific parameters (do not use xset)"
@@ -104,25 +188,13 @@ msgstr "... které je pod my¹í."
 msgid "Automatic Window Raise Delay"
 msgstr "Prodleva pøi vyzdvihnutí oken"
 
-#: ../../WPrefs.app/Focus.c:310 ../../WPrefs.app/Focus.c:321
-#: ../../WPrefs.app/MenuPreferences.c:135
-#: ../../WPrefs.app/MenuPreferences.c:146
-#: ../../WPrefs.app/MenuPreferences.c:174
-#: ../../WPrefs.app/MenuPreferences.c:189 ../../WPrefs.app/MouseSettings.c:538
-#: ../../WPrefs.app/MouseSettings.c:549 ../../WPrefs.app/MouseSettings.c:604
-#: ../../WPrefs.app/MouseSettings.c:615 ../../WPrefs.app/MouseSettings.c:651
-#: ../../WPrefs.app/MouseSettings.c:666 ../../WPrefs.app/MouseSettings.c:682
-#, c-format
-msgid "could not load icon file %s"
-msgstr "nelze naèíst soubor s ikonou %s"
-
 #: ../../WPrefs.app/Focus.c:341
 msgid "msec"
 msgstr "ms"
 
 #: ../../WPrefs.app/Focus.c:358
-msgid "Do not let aplications receive the click used to focus windows."
-msgstr "Nepovolit aplikaci pøijmout »uk my¹í k zamìøení oken."
+msgid "Do not let applications receive the click used to focus windows."
+msgstr "Nenechat aplikaci pøijmout »uk my¹í k zamìøení oken."
 
 #: ../../WPrefs.app/Focus.c:364
 msgid "Automatically focus new windows."
@@ -131,6 +203,50 @@ msgstr "Automaticky zamìøit nová okna."
 #: ../../WPrefs.app/Focus.c:385
 msgid "Window Focus Preferences"
 msgstr "Nastavení zamìøení oken"
+
+#: ../../WPrefs.app/Icons.c:178
+msgid "Icon Positioning"
+msgstr "Umis»ování ikon"
+
+#: ../../WPrefs.app/Icons.c:225
+msgid "Iconification Animation"
+msgstr "Animace ikonifikace"
+
+#: ../../WPrefs.app/Icons.c:236
+msgid "Shrinking/Zooming"
+msgstr "Zmen¹ení/Zvìt¹ení"
+
+#: ../../WPrefs.app/Icons.c:237
+msgid "Spinning/Twisting"
+msgstr "Víøení/Kroucení"
+
+#: ../../WPrefs.app/Icons.c:238
+msgid "3D-flipping"
+msgstr "3D-salta"
+
+#: ../../WPrefs.app/Icons.c:239
+msgid "None"
+msgstr "®ádná"
+
+#: ../../WPrefs.app/Icons.c:247
+msgid "Icon Display"
+msgstr "Zobrazení Ikony"
+
+#: ../../WPrefs.app/Icons.c:252
+msgid "Auto-arrange icons"
+msgstr "Automaticky rovnat ikony"
+
+#: ../../WPrefs.app/Icons.c:257
+msgid "Omnipresent miniwindows"
+msgstr "Miniokna na v¹ech plochách"
+
+#: ../../WPrefs.app/Icons.c:265
+msgid "Icon Size"
+msgstr "Velikost ikony"
+
+#: ../../WPrefs.app/Icons.c:335
+msgid "Icon Preferences"
+msgstr "Nastavení ikon"
 
 #: ../../WPrefs.app/KeyboardSettings.c:72
 msgid "Initial Key Repeat"
@@ -148,187 +264,191 @@ msgstr "Zkuste klávesnici zde"
 msgid "Keyboard Preferences"
 msgstr "Nastavení klávesnice"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:170 ../../WPrefs.app/Menu.c:923
-#: ../../WPrefs.app/Menu.c:1290 ../../WPrefs.app/MenuGuru.c:263
+#: ../../WPrefs.app/KeyboardShortcuts.c:183 ../../WPrefs.app/Menu.c:932
+#: ../../WPrefs.app/Menu.c:1299 ../../WPrefs.app/MenuGuru.c:263
 msgid "Cancel"
 msgstr "Nic"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:171
+#: ../../WPrefs.app/KeyboardShortcuts.c:184
 msgid "Press the desired shortcut key(s) or click Cancel to stop capturing."
 msgstr "Stisknìte po¾adované klávesy nebo pou¾ijete \"Nic\"."
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:189
-#: ../../WPrefs.app/KeyboardShortcuts.c:390 ../../WPrefs.app/Menu.c:935
-#: ../../WPrefs.app/Menu.c:1157
+#: ../../WPrefs.app/KeyboardShortcuts.c:204
+#: ../../WPrefs.app/KeyboardShortcuts.c:444 ../../WPrefs.app/Menu.c:944
+#: ../../WPrefs.app/Menu.c:1166
 msgid "Capture"
 msgstr "Snímat"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:190
-#: ../../WPrefs.app/KeyboardShortcuts.c:397
+#: ../../WPrefs.app/KeyboardShortcuts.c:205
+#: ../../WPrefs.app/KeyboardShortcuts.c:451
 msgid "Click Capture to interactively define the shortcut key."
 msgstr "Pou¾ijte \"Snímat\" k definici klávesy."
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:308
+#: ../../WPrefs.app/KeyboardShortcuts.c:359
 msgid "Actions"
 msgstr "Akce"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:322
+#: ../../WPrefs.app/KeyboardShortcuts.c:375
 msgid "Open applications menu"
 msgstr "Otevøít menu aplikací"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:323
+#: ../../WPrefs.app/KeyboardShortcuts.c:376
 msgid "Open window list menu"
 msgstr "Otevøít menu s okny"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:324
+#: ../../WPrefs.app/KeyboardShortcuts.c:377
 msgid "Open window commands menu"
 msgstr "Otevøít menu s pøikazy pro okno"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:325
+#: ../../WPrefs.app/KeyboardShortcuts.c:378
 msgid "Hide active application"
 msgstr "Skrýt aplikaci"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:326
+#: ../../WPrefs.app/KeyboardShortcuts.c:379
 msgid "Miniaturize active window"
 msgstr "Miniaturizace"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:327
+#: ../../WPrefs.app/KeyboardShortcuts.c:380
 msgid "Close active window"
 msgstr "Uzavøít okno"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:328
+#: ../../WPrefs.app/KeyboardShortcuts.c:381
 msgid "Maximize active window"
 msgstr "Maximalizace okna"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:329
+#: ../../WPrefs.app/KeyboardShortcuts.c:382
 msgid "Maximize active window vertically"
 msgstr "Vertikální maximalizace"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:330
+#: ../../WPrefs.app/KeyboardShortcuts.c:383
 msgid "Raise active window"
 msgstr "Aktivní okno vý¹e"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:331
+#: ../../WPrefs.app/KeyboardShortcuts.c:384
 msgid "Lower active window"
 msgstr "Aktivní okno ní¾e"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:332
+#: ../../WPrefs.app/KeyboardShortcuts.c:385
 msgid "Raise/Lower window under mouse pointer"
 msgstr "Okno pod ukazatelem my¹i vý¹e/ní¾e"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:333
+#: ../../WPrefs.app/KeyboardShortcuts.c:386
 msgid "Shade active window"
 msgstr "Z okna jen titulek"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:334
+#: ../../WPrefs.app/KeyboardShortcuts.c:387
+msgid "Move/Resize active window"
+msgstr "Pøesunou/zvìt¹it aktivní okno"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:388
 msgid "Select active window"
 msgstr "Vyber okno"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:335
+#: ../../WPrefs.app/KeyboardShortcuts.c:389
 msgid "Focus next window"
 msgstr "Zamìøit dal¹í okno"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:336
+#: ../../WPrefs.app/KeyboardShortcuts.c:390
 msgid "Focus previous window"
 msgstr "Zamìøit pøedchozí okno"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:337
+#: ../../WPrefs.app/KeyboardShortcuts.c:391
 msgid "Switch to next workspace"
 msgstr "Dal¹í plocha"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:338
+#: ../../WPrefs.app/KeyboardShortcuts.c:392
 msgid "Switch to previous workspace"
 msgstr "Pøedchozí plocha"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:339
+#: ../../WPrefs.app/KeyboardShortcuts.c:393
 msgid "Switch to next ten workspaces"
 msgstr "Dal¹ích 10 ploch"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:340
+#: ../../WPrefs.app/KeyboardShortcuts.c:394
 msgid "Switch to previous ten workspaces"
 msgstr "Pøedchozích 10 ploch"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:341
+#: ../../WPrefs.app/KeyboardShortcuts.c:395
 msgid "Switch to workspace 1"
 msgstr "Pøepni na plochu 1"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:342
+#: ../../WPrefs.app/KeyboardShortcuts.c:396
 msgid "Switch to workspace 2"
 msgstr "Pøepni na plochu 2"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:343
+#: ../../WPrefs.app/KeyboardShortcuts.c:397
 msgid "Switch to workspace 3"
 msgstr "Pøepni na plochu 3"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:344
+#: ../../WPrefs.app/KeyboardShortcuts.c:398
 msgid "Switch to workspace 4"
 msgstr "Pøepni na plochu 4"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:345
+#: ../../WPrefs.app/KeyboardShortcuts.c:399
 msgid "Switch to workspace 5"
 msgstr "Pøepni na plochu 5"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:346
+#: ../../WPrefs.app/KeyboardShortcuts.c:400
 msgid "Switch to workspace 6"
 msgstr "Pøepni na plochu 6"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:347
+#: ../../WPrefs.app/KeyboardShortcuts.c:401
 msgid "Switch to workspace 7"
 msgstr "Pøepni na plochu 7"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:348
+#: ../../WPrefs.app/KeyboardShortcuts.c:402
 msgid "Switch to workspace 8"
 msgstr "Pøepni na plochu 8"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:349
+#: ../../WPrefs.app/KeyboardShortcuts.c:403
 msgid "Switch to workspace 9"
 msgstr "Pøepni na plochu 9"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:350
+#: ../../WPrefs.app/KeyboardShortcuts.c:404
 msgid "Switch to workspace 10"
 msgstr "Pøepni na plochu 10"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:351
+#: ../../WPrefs.app/KeyboardShortcuts.c:405
 msgid "Shortcut for window 1"
 msgstr "Zkratka pro okno 1"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:352
+#: ../../WPrefs.app/KeyboardShortcuts.c:406
 msgid "Shortcut for window 2"
 msgstr "Zkratka pro okno 2"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:353
+#: ../../WPrefs.app/KeyboardShortcuts.c:407
 msgid "Shortcut for window 3"
 msgstr "Zkratka pro okno 3"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:354
+#: ../../WPrefs.app/KeyboardShortcuts.c:408
 msgid "Shortcut for window 4"
 msgstr "Zkratka pro okno 4"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:355
+#: ../../WPrefs.app/KeyboardShortcuts.c:409
 msgid "Raise Clip"
 msgstr "Sponku vý¹e"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:356
+#: ../../WPrefs.app/KeyboardShortcuts.c:410
 msgid "Lower Clip"
 msgstr "Sponku ní¾e"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:357
+#: ../../WPrefs.app/KeyboardShortcuts.c:411
 msgid "Raise/Lower Clip"
 msgstr "Sponku vý¹e/ní¾e"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:359
+#: ../../WPrefs.app/KeyboardShortcuts.c:413
 msgid "Toggle keyboard language"
 msgstr "Nastavit jazyk pro klávesnici"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:373 ../../WPrefs.app/Menu.c:1146
+#: ../../WPrefs.app/KeyboardShortcuts.c:427 ../../WPrefs.app/Menu.c:1155
 msgid "Shortcut"
 msgstr "Zkratka"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:384
+#: ../../WPrefs.app/KeyboardShortcuts.c:438
 msgid "Clear"
 msgstr "Vyma¾"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:445
+#: ../../WPrefs.app/KeyboardShortcuts.c:499
 msgid "Keyboard Shortcut Preferences"
 msgstr "Nastavení klávesových zkratek"
 
@@ -340,7 +460,7 @@ msgstr "Mana¾er oken"
 msgid "Program to open files"
 msgstr "Program na otvírání souborù"
 
-#: ../../WPrefs.app/Menu.c:377 ../../WPrefs.app/Menu.c:1133
+#: ../../WPrefs.app/Menu.c:377 ../../WPrefs.app/Menu.c:1142
 msgid "Program to Run"
 msgstr "Spustit program"
 
@@ -361,119 +481,119 @@ msgstr "Externí menu"
 msgid "Workspaces"
 msgstr "Pracovní plochy"
 
-#: ../../WPrefs.app/Menu.c:1017 ../../WPrefs.app/Menu.c:1032
+#: ../../WPrefs.app/Menu.c:1026 ../../WPrefs.app/Menu.c:1041
 msgid "Commands"
 msgstr "Pøíkazy"
 
-#: ../../WPrefs.app/Menu.c:1018 ../../WPrefs.app/Menu.c:1033
+#: ../../WPrefs.app/Menu.c:1027 ../../WPrefs.app/Menu.c:1042
 msgid "Add Command"
 msgstr "Pøidat pøíkaz"
 
-#: ../../WPrefs.app/Menu.c:1019 ../../WPrefs.app/Menu.c:1034
+#: ../../WPrefs.app/Menu.c:1028 ../../WPrefs.app/Menu.c:1043
 msgid "Add Submenu"
 msgstr "Pøidat podmenu"
 
-#: ../../WPrefs.app/Menu.c:1020 ../../WPrefs.app/Menu.c:1035
+#: ../../WPrefs.app/Menu.c:1029 ../../WPrefs.app/Menu.c:1044
 msgid "Add External Menu"
 msgstr "Pøidat externí menu"
 
-#: ../../WPrefs.app/Menu.c:1021 ../../WPrefs.app/Menu.c:1036
+#: ../../WPrefs.app/Menu.c:1030 ../../WPrefs.app/Menu.c:1045
 msgid "Add Workspace Menu"
 msgstr "Pøidat menu ploch"
 
-#: ../../WPrefs.app/Menu.c:1022 ../../WPrefs.app/Menu.c:1037
+#: ../../WPrefs.app/Menu.c:1031 ../../WPrefs.app/Menu.c:1046
 msgid "Remove Item"
 msgstr "Odstraò polo¾ku"
 
-#: ../../WPrefs.app/Menu.c:1023 ../../WPrefs.app/Menu.c:1038
+#: ../../WPrefs.app/Menu.c:1032 ../../WPrefs.app/Menu.c:1047
 msgid "Cut Item"
 msgstr "Vyøízni polo¾ku"
 
-#: ../../WPrefs.app/Menu.c:1024 ../../WPrefs.app/Menu.c:1039
+#: ../../WPrefs.app/Menu.c:1033 ../../WPrefs.app/Menu.c:1048
 msgid "Copy Item"
 msgstr "Zkopíruj polo¾ku"
 
-#: ../../WPrefs.app/Menu.c:1025 ../../WPrefs.app/Menu.c:1040
+#: ../../WPrefs.app/Menu.c:1034 ../../WPrefs.app/Menu.c:1049
 msgid "Paste Item"
 msgstr "Vlo¾ polo¾ku"
 
-#: ../../WPrefs.app/Menu.c:1069
+#: ../../WPrefs.app/Menu.c:1078
 msgid "Label"
 msgstr "Oznaèení"
 
-#: ../../WPrefs.app/Menu.c:1082
+#: ../../WPrefs.app/Menu.c:1091
 msgid "Command"
 msgstr "Pøíkaz"
 
-#: ../../WPrefs.app/Menu.c:1087
+#: ../../WPrefs.app/Menu.c:1096
 msgid "Run Program"
 msgstr "Spus» program"
 
-#: ../../WPrefs.app/Menu.c:1088
+#: ../../WPrefs.app/Menu.c:1097
 msgid "Arrange Icons"
 msgstr "Srovnej ikony"
 
-#: ../../WPrefs.app/Menu.c:1089
+#: ../../WPrefs.app/Menu.c:1098
 msgid "Hide Others"
 msgstr "Skryj ostatní"
 
-#: ../../WPrefs.app/Menu.c:1090
+#: ../../WPrefs.app/Menu.c:1099
 msgid "Show All Windows"
 msgstr "Uka¾ v¹echna okna"
 
-#: ../../WPrefs.app/Menu.c:1091
+#: ../../WPrefs.app/Menu.c:1100
 msgid "Exit WindowMaker"
 msgstr "Ukonèit mana¾era oken"
 
-#: ../../WPrefs.app/Menu.c:1092
+#: ../../WPrefs.app/Menu.c:1101
 msgid "Exit X Session"
 msgstr "Ukonèit sezení X"
 
-#: ../../WPrefs.app/Menu.c:1093
+#: ../../WPrefs.app/Menu.c:1102
 msgid "Start window manager"
 msgstr "Odstartovat mana¾er oken"
 
-#: ../../WPrefs.app/Menu.c:1094
+#: ../../WPrefs.app/Menu.c:1103
 msgid "Restart WindowMaker"
 msgstr "RestartWindowMakeru"
 
-#: ../../WPrefs.app/Menu.c:1095
+#: ../../WPrefs.app/Menu.c:1104
 msgid "Save Session"
 msgstr "Ulo¾it stav sezení"
 
-#: ../../WPrefs.app/Menu.c:1096
+#: ../../WPrefs.app/Menu.c:1105
 msgid "Clear Session"
 msgstr "Vymazat sezení"
 
-#: ../../WPrefs.app/Menu.c:1097
+#: ../../WPrefs.app/Menu.c:1106
 msgid "Refresh Screen"
 msgstr "Obnovit obrazovku"
 
-#: ../../WPrefs.app/Menu.c:1098
+#: ../../WPrefs.app/Menu.c:1107
 msgid "Info Panel"
 msgstr "Informace"
 
-#: ../../WPrefs.app/Menu.c:1099
+#: ../../WPrefs.app/Menu.c:1108
 msgid "Legal Panel"
 msgstr "Copyright"
 
-#: ../../WPrefs.app/Menu.c:1107
+#: ../../WPrefs.app/Menu.c:1116
 msgid "Open workspace menu"
 msgstr "Otevøít menu ploch"
 
-#: ../../WPrefs.app/Menu.c:1114
+#: ../../WPrefs.app/Menu.c:1123
 msgid "No confirmation panel"
 msgstr "Bez ukonèovacího dialogu"
 
-#: ../../WPrefs.app/Menu.c:1120
+#: ../../WPrefs.app/Menu.c:1129
 msgid "Menu Path/Directory List"
 msgstr "Cesta k menu/adresáø"
 
-#: ../../WPrefs.app/Menu.c:1165
+#: ../../WPrefs.app/Menu.c:1174
 msgid "Ask help to the Guru"
 msgstr "Zeptat se Mistra"
 
-#: ../../WPrefs.app/Menu.c:1285
+#: ../../WPrefs.app/Menu.c:1294
 msgid ""
 "The format of the current menu in ~/G/D/WMRootMenu is not supported by "
 "WPrefs. A new menu will be created.\n"
@@ -484,22 +604,27 @@ msgstr ""
 "Bude vytvoøeno nové menu.\n"
 "Standardní menu získáte pøíkazem \"cp ~/G/L/W/plmenu ~/G/D/WMRootMenu\"."
 
-#: ../../WPrefs.app/Menu.c:1290 ../../WPrefs.app/Menu.c:1295
+#: ../../WPrefs.app/Menu.c:1299 ../../WPrefs.app/Menu.c:1304
+#: ../../WPrefs.app/WPrefs.c:597
 msgid "Warning"
 msgstr "Varování"
 
-#: ../../WPrefs.app/Menu.c:1290 ../../WPrefs.app/Menu.c:1296
+#: ../../WPrefs.app/Menu.c:1299 ../../WPrefs.app/Menu.c:1305
 #: ../../WPrefs.app/MenuGuru.c:119 ../../WPrefs.app/MenuGuru.c:126
 #: ../../WPrefs.app/MenuGuru.c:140 ../../WPrefs.app/MouseSettings.c:156
-#: ../../WPrefs.app/Text.c:181
+#: ../../WPrefs.app/Text.c:181 ../../WPrefs.app/Themes.c:98
+#: ../../WPrefs.app/WPrefs.c:558 ../../WPrefs.app/WPrefs.c:563
+#: ../../WPrefs.app/WPrefs.c:574 ../../WPrefs.app/WPrefs.c:584
+#: ../../WPrefs.app/WPrefs.c:590 ../../WPrefs.app/WPrefs.c:597
+#: ../../WPrefs.app/WPrefs.c:614 ../../WPrefs.app/WPrefs.c:619
 msgid "OK"
 msgstr "OK"
 
-#: ../../WPrefs.app/Menu.c:1295
+#: ../../WPrefs.app/Menu.c:1304
 msgid "Any changes made in this section will not be saved"
 msgstr "Jakékoli zmìny v této sekci budou zru¹eny"
 
-#: ../../WPrefs.app/Menu.c:1360
+#: ../../WPrefs.app/Menu.c:1369
 msgid "Applications Menu Definition"
 msgstr "Definice menu aplikací"
 
@@ -647,7 +772,16 @@ msgstr "Posouvat menu pøi pohybu ukazatele nad tímto menu."
 msgid "Menu Preferences"
 msgstr "Nastavení menu"
 
+#: ../../WPrefs.app/MouseSettings.c:148
+#, c-format
+msgid "Accel.: %.2f"
+msgstr "Zrychl.: %.2f"
+
 #: ../../WPrefs.app/MouseSettings.c:154 ../../WPrefs.app/Text.c:181
+#: ../../WPrefs.app/Themes.c:96 ../../WPrefs.app/WPrefs.c:558
+#: ../../WPrefs.app/WPrefs.c:563 ../../WPrefs.app/WPrefs.c:572
+#: ../../WPrefs.app/WPrefs.c:582 ../../WPrefs.app/WPrefs.c:590
+#: ../../WPrefs.app/WPrefs.c:614 ../../WPrefs.app/WPrefs.c:619
 msgid "Error"
 msgstr "Chyba"
 
@@ -685,13 +819,6 @@ msgstr "nelze pøevzít mapování modifikátorù kláves"
 #: ../../WPrefs.app/MouseSettings.c:497
 msgid "Mouse Speed"
 msgstr "Rychlost my¹i"
-
-#: ../../WPrefs.app/MouseSettings.c:510 ../../WPrefs.app/WindowHandling.c:274
-#: ../../WPrefs.app/WindowHandling.c:286 ../../WPrefs.app/Workspace.c:71
-#: ../../WPrefs.app/Workspace.c:77
-#, c-format
-msgid "could not load icon %s"
-msgstr "nelze naèíst ikonu %s"
 
 #: ../../WPrefs.app/MouseSettings.c:564
 msgid "Threshold:"
@@ -756,23 +883,23 @@ msgstr "ve volbì IconPath je nesprávná hodnota. Pou¾ívám standardní nastavení"
 msgid "bad value in option PixmapPath. Using default path list"
 msgstr "ve volbì PixmapPath je chybná hodnota. Pou¾ívám standard."
 
-#: ../../WPrefs.app/Paths.c:301
+#: ../../WPrefs.app/Paths.c:302
 msgid "Icon Search Paths"
 msgstr "Adresáøe ikon"
 
-#: ../../WPrefs.app/Paths.c:313 ../../WPrefs.app/Paths.c:349
+#: ../../WPrefs.app/Paths.c:314 ../../WPrefs.app/Paths.c:350
 msgid "Add"
 msgstr "Pøidat"
 
-#: ../../WPrefs.app/Paths.c:320 ../../WPrefs.app/Paths.c:356
+#: ../../WPrefs.app/Paths.c:321 ../../WPrefs.app/Paths.c:357
 msgid "Remove"
 msgstr "Odstranit"
 
-#: ../../WPrefs.app/Paths.c:337
+#: ../../WPrefs.app/Paths.c:338
 msgid "Pixmap Search Paths"
 msgstr "Adresáøe pro obrázky"
 
-#: ../../WPrefs.app/Paths.c:385
+#: ../../WPrefs.app/Paths.c:386
 msgid "Search Path Configuration"
 msgstr "Konfigurace prohledávaných cest"
 
@@ -1007,6 +1134,179 @@ msgstr "Pozadí ikon"
 msgid "Texture and Color Preferences"
 msgstr "Nastavení textur a barev"
 
+#: ../../WPrefs.app/Themes.c:71 ../../WPrefs.app/Themes.c:82
+msgid "Set"
+msgstr "Nastavit"
+
+#: ../../WPrefs.app/Themes.c:132
+msgid "Stop"
+msgstr "Stop"
+
+#: ../../WPrefs.app/Themes.c:143 ../../WPrefs.app/Themes.c:205
+#: ../../WPrefs.app/Themes.c:225
+msgid "Download"
+msgstr "Stáhnout"
+
+#: ../../WPrefs.app/Themes.c:173
+msgid "Save Current Theme"
+msgstr "Ulo¾it aktuální téma"
+
+#: ../../WPrefs.app/Themes.c:182
+msgid "Load"
+msgstr "Naèíst"
+
+#: ../../WPrefs.app/Themes.c:187
+msgid "Install"
+msgstr "Instalovat"
+
+#: ../../WPrefs.app/Themes.c:195
+msgid "Tile of The Day"
+msgstr "Obrázek dne"
+
+#: ../../WPrefs.app/Themes.c:215
+msgid "Bar of The Day"
+msgstr "Titulek dne"
+
+#: ../../WPrefs.app/Themes.c:252
+msgid "Themes"
+msgstr "Témata"
+
+#: ../../WPrefs.app/WPrefs.c:201
+msgid "Window Maker Preferences"
+msgstr "Nastavení Window Makeru"
+
+#: ../../WPrefs.app/WPrefs.c:225
+msgid "Revert Page"
+msgstr "Stránku zpìt"
+
+#: ../../WPrefs.app/WPrefs.c:231
+msgid "Revert All"
+msgstr "V¹e zpìt"
+
+#: ../../WPrefs.app/WPrefs.c:237
+msgid "Save"
+msgstr "Ulo¾"
+
+#: ../../WPrefs.app/WPrefs.c:243
+msgid "Close"
+msgstr "Uzavøi"
+
+#: ../../WPrefs.app/WPrefs.c:260
+msgid "Window Maker Preferences Utility"
+msgstr "Konfiguraèní program Window Makeru"
+
+#: ../../WPrefs.app/WPrefs.c:267
+#, c-format
+msgid "Version %s for Window Maker %s"
+msgstr "Verze %s pro Window Maker %s"
+
+#: ../../WPrefs.app/WPrefs.c:274
+msgid "Starting..."
+msgstr "Startuji..."
+
+#: ../../WPrefs.app/WPrefs.c:280
+msgid ""
+"Programming/Design: Alfredo K. Kojima\n"
+"Artwork: Marco van Hylckama Vlieg\n"
+"More Programming: James Thompson"
+msgstr ""
+"Programoval/Návrh: Alfredo K. Kojima\n"
+"Pøedloha: Marco van Hylckama Vlieg\n"
+"Spolupracoval: James Thompson"
+
+#: ../../WPrefs.app/WPrefs.c:368
+#, c-format
+msgid "could not locate image file %s\n"
+msgstr "nelze najít soubor %s s obrázkem\n"
+
+#: ../../WPrefs.app/WPrefs.c:474
+#, c-format
+msgid "could not load image file %s:%s"
+msgstr "nelze naèíst soubor sobrázkem %s:%s"
+
+#: ../../WPrefs.app/WPrefs.c:493
+msgid "Loading Window Maker configuration files..."
+msgstr "Ètu konfiguraèní soubory Window Makeru"
+
+#: ../../WPrefs.app/WPrefs.c:497
+msgid "Initializing configuration panels..."
+msgstr "Inicializace konfiguraèních panelù..."
+
+#: ../../WPrefs.app/WPrefs.c:525
+msgid ""
+"WPrefs is free software and is distributed WITHOUT ANY WARRANTY under the "
+"terms of the GNU General Public License. Redistribution of the icons in this "
+"program separately from the program is prohibited."
+msgstr "Program WPrefs je volnì ¹iøitelný software, který je distribuován BEZ JAKÉKOLI ZÁRUKY pod Obecnou Veøejnou Licencí GNU. Redistribuce ikon z tohoto programu bez programu samotného je zakázána."
+
+#: ../../WPrefs.app/WPrefs.c:557 ../../WPrefs.app/WPrefs.c:613
+#, c-format
+msgid "Window Maker domain (%s) is corrupted!"
+msgstr "Doména Window Makeru (%s) je po¹kozena!"
+
+#: ../../WPrefs.app/WPrefs.c:561
+#, c-format
+msgid "Could not load Window Maker domain (%s) from defaults database."
+msgstr "z databáze standardù nelze naèíst doménu Window Makeru (%s)."
+
+#: ../../WPrefs.app/WPrefs.c:569
+msgid "could not extract version information from Window Maker"
+msgstr "od Window Makeru nelze získat èíslo verze"
+
+#: ../../WPrefs.app/WPrefs.c:570
+msgid "Make sure wmaker is in your search path."
+msgstr "Zajistìte, aby byl Window Maker v prohledávané cestì."
+
+#: ../../WPrefs.app/WPrefs.c:573
+msgid ""
+"Could not extract version from Window Maker. Make sure it is correctly "
+"installed and is in your PATH environment variable."
+msgstr "Od Window Makeru nelze získat èíslo verze. Zjistìte, je-li správnì instalován a je v prohledávaných adresáøích."
+
+#: ../../WPrefs.app/WPrefs.c:583
+msgid ""
+"Could not extract version from Window Maker. Make sure it is correctly "
+"installed."
+msgstr ""
+"Od Window Makeru nelze získat èíslo verze. Zjistìte, je-li správne "
+"instalován."
+
+#: ../../WPrefs.app/WPrefs.c:588
+#, c-format
+msgid ""
+"WPrefs only supports Window Maker 0.18.0 or newer.\n"
+"The version installed is %i.%i.%i\n"
+msgstr ""
+"Program WPrefs podporuje Window Maker 0.18.0 a vy¹¹í.\n"
+"Instalovaná verze je %i.%i.%i\n"
+
+#: ../../WPrefs.app/WPrefs.c:595
+#, c-format
+msgid ""
+"Window Maker %i.%i.%i, which is installed in your system, is not fully "
+"supported by this version of WPrefs."
+msgstr ""
+"Instalovaný Window Maker %i.%i.%i není plnì touto verzí programu WPrefs "
+"podporován."
+
+#: ../../WPrefs.app/WPrefs.c:602
+msgid "could not run \"wmaker -global_defaults_path\"."
+msgstr "nelze provést \"wmaker -global_defaults_path\""
+
+#: ../../WPrefs.app/WPrefs.c:617
+#, c-format
+msgid "Could not load global Window Maker domain (%s)."
+msgstr "Nelze naèíst globální doménu pro Window Maker (%s)."
+
+#: ../../WPrefs.app/WPrefs.c:863
+#, c-format
+msgid ""
+"bad speed value for option %s\n"
+". Using default Medium"
+msgstr ""
+"pro volbu %s je chybnì urèená\n"
+"ryclost. Pou¾ita 'Medium'"
+
 #: ../../WPrefs.app/WindowHandling.c:108
 #, c-format
 msgid "bad option value %s in WindowPlacement. Using default value"
@@ -1064,16 +1364,6 @@ msgstr "Dialogy dr¾et nad vlastníky"
 msgid "Window Handling Preferences"
 msgstr "Nastavení práce s okny"
 
-#: ../../WPrefs.app/Workspace.c:85
-#, c-format
-msgid "could not process icon %s:"
-msgstr "nelze zpracovat ikonu %s:"
-
-#: ../../WPrefs.app/Workspace.c:124
-#, c-format
-msgid "could not load image file %s"
-msgstr "ze souboru %s nelze naèíst obrázek"
-
 #: ../../WPrefs.app/Workspace.c:137
 msgid "Workspace Navigation"
 msgstr "Orientace v plochách"
@@ -1100,167 +1390,41 @@ msgstr "Dok/Sponka"
 msgid "Workspace Preferences"
 msgstr "Nastavení pracovní plochy     "
 
-#: ../../WPrefs.app/main.c:56
+#: ../../WPrefs.app/main.c:72
 #, c-format
 msgid "usage: %s [options]\n"
 msgstr "pou¾ití: %s [volby]\n"
 
-#: ../../WPrefs.app/main.c:57
+#: ../../WPrefs.app/main.c:73
 msgid "options:"
 msgstr "volby:"
 
-#: ../../WPrefs.app/main.c:58
+#: ../../WPrefs.app/main.c:74
 msgid " -display <display>\tdisplay to be used"
 msgstr " -display <display>\tkterý display pou¾ít"
 
-#: ../../WPrefs.app/main.c:59
+#: ../../WPrefs.app/main.c:75
 msgid " -version\t\tprint version number and exit"
 msgstr " -version\t\tzobraz verzi a konec"
 
-#: ../../WPrefs.app/main.c:82
+#: ../../WPrefs.app/main.c:132
 #, c-format
 msgid "too few arguments for %s"
 msgstr "nedostatek argumetù pro %s"
 
-#: ../../WPrefs.app/main.c:104
+#: ../../WPrefs.app/main.c:154
 msgid "X server does not support locale"
 msgstr "X server nepodporuje nastavení místních zvyklostí"
 
-#: ../../WPrefs.app/main.c:107
+#: ../../WPrefs.app/main.c:157
 msgid "cannot set locale modifiers"
 msgstr "nelze nastavit modifikátory místních zvyklostí"
 
-#: ../../WPrefs.app/main.c:113
+#: ../../WPrefs.app/main.c:163
 #, c-format
 msgid "could not open display %s"
 msgstr "nelze otevøít displej %s"
 
-#: ../../WPrefs.app/main.c:121
+#: ../../WPrefs.app/main.c:171
 msgid "could not initialize application"
 msgstr "nelze inicializovat aplikaci"
-
-msgid "Icon Slide Speed"
-msgstr "Rychlost klouzání ikony"
-
-msgid "Shade Animation Speed"
-msgstr "Rychlost zmìny okna na titulek"
-
-msgid "Titlebar Style"
-msgstr "Styl titulku"
-
-msgid "Animations and Sound"
-msgstr "Animace a Zvuky"
-
-msgid "Animations"
-msgstr "Animace"
-
-msgid "Superfluous"
-msgstr "Animace++"
-
-msgid "Sounds"
-msgstr "Zvuky"
-
-msgid "Note: sound requires a module distributed separately"
-msgstr "Poznámka: zvuk vy¾aduje samostatný modul"
-
-msgid "Dithering colormap for 8bpp"
-msgstr "Ditherovat na 8bpp"
-
-msgid "Disable dithering in any visual/depth"
-msgstr "Zaka¾ jakékoli ditherování"
-
-msgid "More colors for applications"
-msgstr "Barvy aplikacím"
-
-msgid "More colors for WindowMaker"
-msgstr "Barvy WindowMakeru"
-
-msgid "Other Configurations"
-msgstr "Dal¹í konfigurace"
-
-msgid "Window Maker Preferences"
-msgstr "Nastavení Window Makeru"
-
-msgid "Revert Page"
-msgstr "Stránku zpìt"
-
-msgid "Revert All"
-msgstr "V¹e zpìt"
-
-msgid "Save"
-msgstr "Ulo¾"
-
-msgid "Close"
-msgstr "Uzavøi"
-
-msgid "Version %s for Window Maker %s"
-msgstr "Verze %s pro Window Maker %s"
-
-msgid "Starting..."
-msgstr "Startuji..."
-
-msgid ""
-"Programming/Design: Alfredo K. Kojima\n"
-"Artwork: Marco van Hylckama Vlieg\n"
-"More Programming: James Thompson"
-msgstr ""
-"Programoval/Návrh: Alfredo K. Kojima\n"
-"Pøedloha: Marco van Hylckama Vlieg\n"
-"Spolupracoval: James Thompson"
-
-msgid "could not locate image file %s\n"
-msgstr "nelze najít soubor %s s obrázkem\n"
-
-msgid "Loading Window Maker configuration files..."
-msgstr "Ètu konfiguraèní soubory Window Makeru"
-
-msgid "Initializing configuration panels..."
-msgstr "Inicializace konfiguraèních panelù..."
-
-msgid "Window Maker domain (%s) is corrupted!"
-msgstr "Doména Window Makeru (%s) je po¹kozena!"
-
-msgid "Could not load Window Maker domain (%s) from defaults database."
-msgstr "z databáze standardù nelze naèíst doménu Window Makeru (%s)."
-
-msgid "could not extract version information from Window Maker"
-msgstr "od Window Makeru nelze získat èíslo verze"
-
-msgid "Make sure Window Maker is in your search path."
-msgstr ""
-"Zajistìte, aby byl Window Maker v prohledávaných adresáøích ($PATH)."
-
-msgid ""
-"Could not extract version from Window Maker. Make sure it is correctly "
-"installed."
-msgstr ""
-"Od Window Makeru nelze získat èíslo verze. Zjistìte, je-li správne "
-"instalován."
-
-msgid ""
-"WPrefs only supports Window Maker 0.18.0 or newer.\n"
-"The version installed is %i.%i.%i\n"
-msgstr ""
-"Program WPrefs podporuje Window Maker 0.18.0 a vy¹¹í.\n"
-"Instalovaná verze je %i.%i.%i\n"
-
-msgid ""
-"Window Maker %i.%i.%i, which is installed in your system, is not fully "
-"supported by this version of WPrefs."
-msgstr ""
-"Instalovaný Window Maker %i.%i.%i není plnì touto verzí programu WPrefs "
-"podporován."
-
-msgid "could not run \"wmaker -global_defaults_path\"."
-msgstr "nelze provést \"wmaker -global_defaults_path\""
-
-msgid "Could not load global Window Maker domain (%s)."
-msgstr "Nelze naèíst globální doménu pro Window Maker (%s)."
-
-msgid ""
-"bad speed value for option %s\n"
-". Using default Medium"
-msgstr ""
-"pro volbu %s je chybnì urèená\n"
-"ryclost. Pou¾ita 'Medium'"
- 

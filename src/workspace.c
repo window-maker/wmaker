@@ -128,7 +128,9 @@ wWorkspaceNew(WScreen *scr)
 	    wKWMUpdateWorkspaceCountHint(scr);
 	    wKWMUpdateWorkspaceNameHint(scr, scr->workspace_count-1);
 	}
+#ifdef not_used
 	wKWMSetUsableAreaHint(scr, scr->workspace_count-1);
+#endif
 #endif
 	XFlush(dpy);
 
@@ -261,7 +263,7 @@ wWorkspaceRelativeChange(WScreen *scr, int amount)
 void
 wWorkspaceForceChange(WScreen *scr, int workspace)
 {
-    WWindow *tmp, *foc=NULL;
+    WWindow *tmp, *foc=NULL, *foc2=NULL;
     
     if (workspace >= MAX_WORKSPACES || workspace < 0)
 	return;
@@ -280,15 +282,18 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 
     wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
 
-    if ((tmp = scr->focused_window)!= NULL) {	
+    if ((tmp = scr->focused_window)!= NULL) {
+	if (IS_OMNIPRESENT(tmp))
+	    foc = tmp;
+
 	while (tmp) {
 	    if (tmp->frame->workspace!=workspace && !tmp->flags.selected) {
 		/* unmap windows not on this workspace */
 		if ((tmp->flags.mapped||tmp->flags.shaded)
 		    && !IS_OMNIPRESENT(tmp)
 		    && !tmp->flags.changing_workspace) {
-		    XUnmapWindow(dpy, tmp->frame->core->window);
-		    tmp->flags.mapped = 0;
+		    
+		    wWindowUnmap(tmp);
 		}
                 /* also unmap miniwindows not on this workspace */
                 if (tmp->flags.miniaturized && !IS_OMNIPRESENT(tmp) 
@@ -311,23 +316,23 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 		    if (wapp) {
 			wapp->last_workspace = workspace;
 		    }
+		    if (!foc2)
+			foc2 = tmp;
 		}
             } else {
 		/* change selected windows' workspace */
 		if (tmp->flags.selected) {
 		    wWindowChangeWorkspace(tmp, workspace);
-                    if (!tmp->flags.miniaturized) {
+                    if (!tmp->flags.miniaturized && !foc) {
                         foc = tmp;
                     }
                 } else {
 		    if (!tmp->flags.hidden) {
 			if (!(tmp->flags.mapped || tmp->flags.miniaturized)) {
 			    /* remap windows that are on this workspace */
-			    XMapWindow(dpy, tmp->frame->core->window);
+			    wWindowMap(tmp);
 			    if (!foc)
 				foc = tmp;
-			    if (!tmp->flags.shaded)
-				tmp->flags.mapped = 1;
 			}
 			/* Also map miniwindow if not omnipresent */
 			if (!wPreferences.sticky_icons &&
@@ -342,7 +347,10 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 	    tmp = tmp->prev;
 	}
 
-	if (scr->focused_window->flags.mapped) {
+	if (!foc)
+	    foc = foc2;
+
+	if (scr->focused_window->flags.mapped && !foc) {
 	    foc = scr->focused_window;
 	}
 	if (wPreferences.focus_mode == WKF_CLICK) {
@@ -393,14 +401,14 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 #ifdef KWM_HINTS
     wKWMUpdateCurrentWorkspaceHint(scr);
 #endif
-    XFlush(dpy);
+    XSync(dpy, False);
 }
 
 
 static void
 switchWSCommand(WMenu *menu, WMenuEntry *entry)
 {
-    wWorkspaceChange(menu->frame->screen_ptr, (int)entry->clientdata);
+    wWorkspaceChange(menu->frame->screen_ptr, (long)entry->clientdata);
 }
 
 
@@ -517,7 +525,7 @@ onMenuEntryEdited(WMenu *menu, WMenuEntry *entry)
     char *tmp;
 
     tmp = entry->text;
-    wWorkspaceRename(menu->frame->screen_ptr, (int)entry->clientdata, tmp);
+    wWorkspaceRename(menu->frame->screen_ptr, (long)entry->clientdata, tmp);
 }
 
 
@@ -546,7 +554,8 @@ wWorkspaceMenuMake(WScreen *scr, Bool titled)
 void
 wWorkspaceMenuUpdate(WScreen *scr, WMenu *menu)
 {
-    int i, ws;
+    int i;
+    long ws;
     char title[MAX_WORKSPACENAME_WIDTH+1];
     WMenuEntry *entry;
     int tmp;

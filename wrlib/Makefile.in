@@ -65,8 +65,6 @@ DFLAGS = @DFLAGS@
 GFXFLAGS = @GFXFLAGS@
 GFXLFLAGS = @GFXLFLAGS@
 GFXLIBS = @GFXLIBS@
-I18N = @I18N@
-I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
 LD = @LD@
@@ -79,30 +77,26 @@ NLSDIR = @NLSDIR@
 NM = @NM@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
-REDUCE_APPICONS = @REDUCE_APPICONS@
-SHAPE = @SHAPE@
-SOUND = @SOUND@
 VERSION = @VERSION@
 WPMOFILES = @WPMOFILES@
 XCFLAGS = @XCFLAGS@
 XGETTEXT = @XGETTEXT@
 XLFLAGS = @XLFLAGS@
 XLIBS = @XLIBS@
-XSHM = @XSHM@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
-X_LOCALE = @X_LOCALE@
-pixmapdir = @pixmapdir@
 wprefsdir = @wprefsdir@
 
 AUTOMAKE_OPTIONS = no-dependencies
 
 lib_LTLIBRARIES = libwraster.la
 
-libwraster_la_LDFLAGS = -version-info 1:1:0
+libwraster_la_LDFLAGS = -version-info 1:1:1
 
-noinst_PROGRAMS = test testgrad testdraw view 
+bin_SCRIPTS = get-wraster-flags
 
-EXTRA_DIST = test.png tile.xpm ballot_box.xpm ballot_box.tiff
+noinst_PROGRAMS = testgrad testdraw view 
+
+EXTRA_DIST = test.png tile.xpm ballot_box.xpm 
 
 include_HEADERS = wraster.h
 
@@ -128,17 +122,13 @@ libwraster_la_SOURCES = 	\
 	tiff.c		\
 	gif.c
 
-INCLUDES = @DFLAGS@ @XCFLAGS@ @GFXFLAGS@ @XSHM@
+INCLUDES = @DFLAGS@ @XCFLAGS@ @GFXFLAGS@
 
 LIBLIST = libwraster.la @GFXLFLAGS@ @XLFLAGS@ @GFXLIBS@ @XLIBS@ -lm
 
 view_SOURCES= view.c
 
 view_LDADD = $(LIBLIST)
-
-test_SOURCES = test.c
-
-test_LDADD = $(LIBLIST)
 
 testgrad_SOURCES = testgrad.c
 
@@ -169,9 +159,6 @@ convolve.lo nxpm.lo xpm.lo xutil.lo ppm.lo png.lo jpeg.lo tiff.lo \
 gif.lo
 PROGRAMS =  $(noinst_PROGRAMS)
 
-test_OBJECTS =  test.o
-test_DEPENDENCIES =  libwraster.la
-test_LDFLAGS = 
 testgrad_OBJECTS =  testgrad.o
 testgrad_DEPENDENCIES =  libwraster.la
 testgrad_LDFLAGS = 
@@ -181,6 +168,8 @@ testdraw_LDFLAGS =
 view_OBJECTS =  view.o
 view_DEPENDENCIES =  libwraster.la
 view_LDFLAGS = 
+SCRIPTS =  $(bin_SCRIPTS)
+
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
@@ -195,10 +184,10 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP = --best
-SOURCES = $(libwraster_la_SOURCES) $(test_SOURCES) $(testgrad_SOURCES) $(testdraw_SOURCES) $(view_SOURCES)
-OBJECTS = $(libwraster_la_OBJECTS) $(test_OBJECTS) $(testgrad_OBJECTS) $(testdraw_OBJECTS) $(view_OBJECTS)
+SOURCES = $(libwraster_la_SOURCES) $(testgrad_SOURCES) $(testdraw_SOURCES) $(view_SOURCES)
+OBJECTS = $(libwraster_la_OBJECTS) $(testgrad_OBJECTS) $(testdraw_OBJECTS) $(view_OBJECTS)
 
-all: Makefile $(LTLIBRARIES) $(PROGRAMS) $(HEADERS)
+all: Makefile $(LTLIBRARIES) $(PROGRAMS) $(SCRIPTS) $(HEADERS)
 
 .SUFFIXES:
 .SUFFIXES: .S .c .lo .o .s
@@ -285,10 +274,6 @@ distclean-noinstPROGRAMS:
 
 maintainer-clean-noinstPROGRAMS:
 
-test: $(test_OBJECTS) $(test_DEPENDENCIES)
-	@rm -f test
-	$(LINK) $(test_LDFLAGS) $(test_OBJECTS) $(test_LDADD) $(LIBS)
-
 testgrad: $(testgrad_OBJECTS) $(testgrad_DEPENDENCIES)
 	@rm -f testgrad
 	$(LINK) $(testgrad_LDFLAGS) $(testgrad_OBJECTS) $(testgrad_LDADD) $(LIBS)
@@ -300,6 +285,25 @@ testdraw: $(testdraw_OBJECTS) $(testdraw_DEPENDENCIES)
 view: $(view_OBJECTS) $(view_DEPENDENCIES)
 	@rm -f view
 	$(LINK) $(view_LDFLAGS) $(view_OBJECTS) $(view_LDADD) $(LIBS)
+
+install-binSCRIPTS: $(bin_SCRIPTS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(bindir)
+	@list='$(bin_SCRIPTS)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    echo " $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
+	    $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
+	  else if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
+	    $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
+	  else :; fi; fi; \
+	done
+
+uninstall-binSCRIPTS:
+	@$(NORMAL_UNINSTALL)
+	list='$(bin_SCRIPTS)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
+	done
 
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)
@@ -357,7 +361,7 @@ dvi:
 check: all
 	$(MAKE)
 installcheck:
-install-exec: install-libLTLIBRARIES
+install-exec: install-libLTLIBRARIES install-binSCRIPTS
 	@$(NORMAL_INSTALL)
 
 install-data: install-includeHEADERS
@@ -366,12 +370,13 @@ install-data: install-includeHEADERS
 install: install-exec install-data all
 	@:
 
-uninstall: uninstall-libLTLIBRARIES uninstall-includeHEADERS
+uninstall: uninstall-libLTLIBRARIES uninstall-binSCRIPTS uninstall-includeHEADERS
 
 install-strip:
 	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' INSTALL_SCRIPT='$(INSTALL_PROGRAM)' install
 installdirs:
-	$(mkinstalldirs)  $(DATADIR)$(libdir) $(DATADIR)$(includedir)
+	$(mkinstalldirs)  $(DATADIR)$(libdir) $(DATADIR)$(bindir) \
+		$(DATADIR)$(includedir)
 
 
 mostlyclean-generic:
@@ -416,12 +421,12 @@ distclean-compile clean-compile maintainer-clean-compile \
 mostlyclean-libtool distclean-libtool clean-libtool \
 maintainer-clean-libtool mostlyclean-noinstPROGRAMS \
 distclean-noinstPROGRAMS clean-noinstPROGRAMS \
-maintainer-clean-noinstPROGRAMS uninstall-includeHEADERS \
-install-includeHEADERS tags mostlyclean-tags distclean-tags clean-tags \
-maintainer-clean-tags distdir info dvi installcheck install-exec \
-install-data install uninstall all installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+maintainer-clean-noinstPROGRAMS uninstall-binSCRIPTS install-binSCRIPTS \
+uninstall-includeHEADERS install-includeHEADERS tags mostlyclean-tags \
+distclean-tags clean-tags maintainer-clean-tags distdir info dvi \
+installcheck install-exec install-data install uninstall all \
+installdirs mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

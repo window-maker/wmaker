@@ -55,13 +55,14 @@
 #ifdef MWM_HINTS
 # include "motif.h"
 #endif
-
 #ifdef KWM_HINTS
-#include "kwm.h"
+# include "kwm.h"
 #endif
-
 #ifdef GNOME_STUFF
-#include "gnome.h"
+# include "gnome.h"
+#endif
+#ifdef OLWM_HINTS
+# include "openlook.h"
 #endif
 
 /****** Global Variables ******/
@@ -368,6 +369,10 @@ wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 	wGNOMECheckClientHints(wwin, &tmp_level, &tmp_workspace);
 #endif /* GNOME_STUFF */
 
+#ifdef OLWM_HINTS
+	wOLWMCheckClientHints(wwin);
+#endif /* OLWM_HINTS */
+
 	if (tmp_level < 0) {
 	    if (WFLAGP(wwin, floating))
 		*level = WMFloatingLevel;
@@ -430,24 +435,31 @@ wWindowCanReceiveFocus(WWindow *wwin)
     return True;
 }
 
-#if 0
+
 Bool
 wWindowObscuresWindow(WWindow *wwin, WWindow *obscured)
 {
+    int w1, h1, w2, h2;
+
+    w1 = wwin->frame->core->width;
+    h1 = wwin->frame->core->height;
+    w2 = obscured->frame->core->width;
+    h2 = obscured->frame->core->height;
+
     if (!IS_OMNIPRESENT(wwin) && !IS_OMNIPRESENT(obscured)
 	&& wwin->frame->workspace != obscured->frame->workspace)
 	return False;
 
-    if (wwin->frame_x+wwin->frame->core->width < obscured->frame_x
-	|| wwin->frame_y+wwin->frame->core->height < obscured->frame_y
-	|| wwin->frame_x > obscured->frame_x+obscured->frame->core->width
-	|| wwin->frame_y > obscured->frame_y+obscured->frame->core->height) {
+    if (wwin->frame_x + w1 < obscured->frame_x
+	|| wwin->frame_y + h1 < obscured->frame_y
+	|| wwin->frame_x > obscured->frame_x + w2
+	|| wwin->frame_y > obscured->frame_y + h2) {
 	return False;
     }
 
     return True;
 }
-#endif
+
 
 /*
  *----------------------------------------------------------------
@@ -480,6 +492,7 @@ wManageWindow(WScreen *scr, Window window)
     XWindowAttributes wattribs;    
     XSetWindowAttributes attribs;
     WWindowState *win_state;
+    WWindow *transientOwner = NULL;
     int window_level;
     int foo;
     int workspace = -1;
@@ -595,22 +608,12 @@ wManageWindow(WScreen *scr, Window window)
 	if (wwin->transient_for==None || wwin->transient_for==window) {
 	    wwin->transient_for = scr->root_win;
 	} else {
-	    WWindow *owner;
-	    owner = wWindowFor(wwin->transient_for);
-	    if (owner && owner->main_window!=None) {
-		wwin->main_window = owner->main_window;
+	    transientOwner = wWindowFor(wwin->transient_for);
+	    if (transientOwner && transientOwner->main_window!=None) {
+		wwin->main_window = transientOwner->main_window;
             } /*else {
 		wwin->main_window = None;
             }*/
-
-	    /* don't let transients start miniaturized if their owners
-	     * are not */
-	    if (owner && !owner->flags.miniaturized 
-		&& wwin->flags.miniaturized) {
-		wwin->flags.miniaturized = 0;
-		if (wwin->wm_hints)
-		    wwin->wm_hints->initial_state = NormalState;
-	    }
 	}
     }
 
@@ -633,8 +636,25 @@ wManageWindow(WScreen *scr, Window window)
      *--------------------------------------------------
      */
 
-
     wWindowSetupInitialAttributes(wwin, &window_level, &workspace);
+
+#ifdef OLWM_HINTS
+    if (wwin->client_flags.olwm_transient && wwin->transient_for==None
+	&& wwin->group_id!=None && wwin->group_id != window) {
+
+	transientOwner = wWindowFor(wwin->group_id);
+
+	if (transientOwner) {
+	    wwin->transient_for = wwin->group_id;
+
+	    /* transients can't be iconified or maximized */
+	    if (wwin->transient_for) {
+		WSETUFLAG(wwin, no_miniaturizable, 1);
+		WSETUFLAG(wwin, no_miniaturize_button, 1);
+	    }
+	}
+    }
+#endif /* OLWM_HINTS */
 
     /*
      * Make broken apps behave as a nice app.
@@ -650,11 +670,12 @@ wManageWindow(WScreen *scr, Window window)
      *
      *------------------------------------------------------------
      */
+
     if (WFLAGP(wwin, start_miniaturized) && !WFLAGP(wwin, no_miniaturizable)) {
 	wwin->flags.miniaturized = 1;
     }
 
-    if (WFLAGP(wwin, start_maximized)) {
+    if (WFLAGP(wwin, start_maximized) && !WFLAGP(wwin, no_resizable)) {
 	wwin->flags.maximized = MAX_VERTICAL|MAX_HORIZONTAL;
     }
 
@@ -710,21 +731,37 @@ wManageWindow(WScreen *scr, Window window)
 	}
     }
 
+    /* don't let transients start miniaturized if their owners are not */
+    if (transientOwner && !transientOwner->flags.miniaturized 
+	&& wwin->flags.miniaturized) {
+	wwin->flags.miniaturized = 0;
+	if (wwin->wm_hints)
+	    wwin->wm_hints->initial_state = NormalState;
+    }
 
     /* set workspace on which the window starts */    
     if (workspace >= 0) {
 	if (workspace > scr->workspace_count-1) {
-	    wWorkspaceMake(scr, workspace - scr->workspace_count + 1);
-	    workspace = scr->workspace_count - 1;
+	    workspace = workspace % scr->workspace_count;
 	}
     } else {
 	int w;
 
 	w = wDefaultGetStartWorkspace(scr, wwin->wm_instance, wwin->wm_class);
+
         if (w >= 0 && w < scr->workspace_count && !(IS_OMNIPRESENT(wwin))) {
+
             workspace = w;
+
         } else {
-            workspace = scr->current_workspace;
+	    if (wPreferences.open_transients_with_parent && transientOwner) {
+
+		workspace = transientOwner->frame->workspace;
+
+	    } else {
+
+		workspace = scr->current_workspace;
+	    }
         }
     }
 
@@ -795,9 +832,17 @@ wManageWindow(WScreen *scr, Window window)
 	foo |= WFF_LEFT_BUTTON;
     if (foo!=0)
 	wFrameWindowHideButton(wwin->frame, foo);
-    
-    
+
     wwin->frame->child = wwin;
+
+#ifdef OLWM_HINTS
+    /* emulate olwm push pin. Make the button look as pushed-in for
+     * the pinned-out state. When the button is clicked, it will
+     * revert to the normal position, which means the pin is pinned-in.
+     */
+    if (wwin->flags.olwm_push_pin_out)
+	wFrameWindowUpdatePushButton(wwin->frame, True);
+#endif /* OLWM_HINTS */
 
     wFrameWindowChangeTitle(wwin->frame, title ? title : DEF_WINDOW_TITLE);
     if (title)
@@ -902,17 +947,22 @@ wManageWindow(WScreen *scr, Window window)
             wClientSetState(wwin, NormalState, None);
         }
 
-#if 0
 	/* if not auto focus, then map the window under the currently
 	 * focused window */
+#define _WIDTH(w) (w)->frame->core->width
+#define _HEIGHT(w) (w)->frame->core->height
 	if (!wPreferences.auto_focus && scr->focused_window
 	    && !scr->flags.startup 
 	    && wWindowObscuresWindow(wwin, scr->focused_window)
+	    && (_WIDTH(wwin) > (_WIDTH(scr->focused_window)*5)/3 
+		|| _HEIGHT(wwin) > (_HEIGHT(scr->focused_window)*5)/3)
 	    && WINDOW_LEVEL(scr->focused_window) == WINDOW_LEVEL(wwin)) {
 	    MoveInStackListUnder(scr->focused_window->frame->core,
 				 wwin->frame->core);
 	}
-#endif
+#undef _WIDTH
+#undef _HEIGHT
+
 	if (wPreferences.superfluous && !wPreferences.no_animations
 	    && !scr->flags.startup && wwin->transient_for==None
 	    /* 
@@ -943,12 +993,12 @@ wManageWindow(WScreen *scr, Window window)
     }
 
     /* setup stacking descriptor */
-    if (wPreferences.on_top_transients && wwin->transient_for!=None
-	&& wwin->transient_for!=scr->root_win) {
-	WWindow *tmp;
-	tmp = wWindowFor(wwin->transient_for);
-	if (tmp)
-	    wwin->frame->core->stacking->child_of = tmp->frame->core;
+    if (transientOwner) {
+	/* && wPreferences.on_top_transients */
+	if (transientOwner) {
+	    wwin->frame->core->stacking->child_of =
+		transientOwner->frame->core;
+	}
     } else {
 	wwin->frame->core->stacking->child_of = NULL;
     }
@@ -965,7 +1015,7 @@ wManageWindow(WScreen *scr, Window window)
 	/* add window at beginning of focus window list */
 	tmp = scr->focused_window;
 	while (tmp->prev)
-	  tmp = tmp->prev;
+	    tmp = tmp->prev;
 	tmp->prev = wwin;
 	wwin->next = tmp;
 	wwin->prev = NULL;
@@ -994,9 +1044,8 @@ wManageWindow(WScreen *scr, Window window)
 
 
     if (!wwin->flags.miniaturized && workspace == scr->current_workspace) {
-	WWindow *tmp = wWindowFor(wwin->transient_for);
-
-	if ((tmp && tmp->flags.focused) || wPreferences.auto_focus)
+	if ((transientOwner && transientOwner->flags.focused)
+	    || wPreferences.auto_focus)
 	    wSetFocusTo(scr, wwin);
     } else {
 	wwin->flags.ignore_next_unmap = 1;
@@ -1016,13 +1065,23 @@ wManageWindow(WScreen *scr, Window window)
      * Prevent window withdrawal when getting the 
      * unmap notifies generated during reparenting
      */
-    wwin->flags.mapped=0;
+    wwin->flags.mapped = 0;
 
     XSync(dpy, 0);
 
     wColormapInstallForWindow(wwin->screen_ptr, scr->cmap_window);
 
     UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_ADD);
+
+#ifdef OLWM_HINTS
+    if (wwin->client_flags.olwm_warp_to_pin && wwin->frame->titlebar != NULL
+	&& !WFLAGP(wwin, no_close_button)) {
+
+	XWarpPointer(dpy, None, None, 0, 0, 0, 0, 
+		     wwin->frame_x + width - wwin->frame->titlebar->height * 2,
+		     wwin->frame_y);
+    }
+#endif
 
     /*
      *--------------------------------------------------
@@ -1125,7 +1184,11 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
     XMapSubwindows(dpy, wwin->frame->core->window);
     
     /* setup stacking descriptor */
-    if (wPreferences.on_top_transients && wwin->transient_for!=None
+    if (
+#ifdef removed
+	wPreferences.on_top_transients && 
+#endif
+	wwin->transient_for!=None
 	&& wwin->transient_for!=scr->root_win) {
 	WWindow *tmp;
 	tmp = wWindowFor(wwin->transient_for);
@@ -1182,12 +1245,12 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
  *---------------------------------------------------------------------- 
  */
 void
-wUnmanageWindow(WWindow *wwin, int restore)
+wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 {
     WCoreWindow *frame = wwin->frame->core;
-    WWindow *owner;
-    WWindow *newFocusedWindow;
-    int wasNotFocused;
+    WWindow *owner = NULL;
+    WWindow *newFocusedWindow = NULL;
+    int wasFocused;
     WScreen *scr = wwin->screen_ptr;
 
 
@@ -1207,9 +1270,13 @@ wUnmanageWindow(WWindow *wwin, int restore)
     if (wwin->flags.menu_open_for_me) {
 	CloseWindowMenu(scr);
     }
-    if (!wwin->flags.internal_window)
-        XRemoveFromSaveSet(dpy, wwin->client_win);
-    XSelectInput(dpy, wwin->client_win, NoEventMask);
+
+    if (!destroyed) {
+	if (!wwin->flags.internal_window)
+	    XRemoveFromSaveSet(dpy, wwin->client_win);
+
+	XSelectInput(dpy, wwin->client_win, NoEventMask);
+    }
 
     XUnmapWindow(dpy, frame->window);
 
@@ -1232,12 +1299,15 @@ wUnmanageWindow(WWindow *wwin, int restore)
     if (wwin->transient_for!=scr->root_win) {
 	owner = wWindowFor(wwin->transient_for);
 	if (owner) {
-	    owner->flags.semi_focused = 0;
-	    wFrameWindowChangeState(owner->frame, WS_UNFOCUSED);
+	    if (!owner->flags.semi_focused) {
+		owner = NULL;
+	    } else {
+		owner->flags.semi_focused = 0;
+	    }
 	}
     }
 
-    wasNotFocused = !wwin->flags.focused;
+    wasFocused = wwin->flags.focused;
     
     /* remove from window focus list */
     if (!wwin->prev && !wwin->next) {
@@ -1313,8 +1383,13 @@ wUnmanageWindow(WWindow *wwin, int restore)
     printf("destroying window %x frame %x\n", (unsigned)wwin->client_win,
 	   (unsigned)frame->window);
 #endif
-    if (!wasNotFocused)
+
+    if (wasFocused) {
+	if (newFocusedWindow != owner && owner) {
+	    wFrameWindowChangeState(owner->frame, WS_UNFOCUSED);
+	}
 	wSetFocusTo(scr, newFocusedWindow);
+    }
     wWindowDestroy(wwin);
     XFlush(dpy);
 }
@@ -1346,9 +1421,29 @@ void
 wWindowMap(WWindow *wwin)
 {
     XMapWindow(dpy, wwin->frame->core->window);
-    wwin->flags.mapped = 1;
+    if (!wwin->flags.shaded) {
+	XMapWindow(dpy, wwin->client_win);
+	wwin->flags.mapped = 1;
+    }
 }
 
+
+void
+wWindowUnmap(WWindow *wwin)
+{
+    XWindowAttributes attribs;
+
+    XGetWindowAttributes(dpy, wwin->client_win, &attribs);
+    wwin->flags.mapped = 0;
+
+    /* prevent window withdrawal when getting UnmapNotify */
+    XSelectInput(dpy, wwin->client_win,
+		 attribs.your_event_mask & ~StructureNotifyMask);
+    XUnmapWindow(dpy, wwin->client_win);
+    XSelectInput(dpy, wwin->client_win, attribs.your_event_mask);
+
+    XUnmapWindow(dpy, wwin->frame->core->window);
+}
 
 
 void
@@ -1504,7 +1599,6 @@ wWindowChangeWorkspace(WWindow *wwin, int workspace)
 		wapp->last_workspace = workspace;
 	    }
 	    unmap = 1;
-	    wwin->flags.mapped = 0;
 	    wSetFocusTo(scr, NULL);
 	}
     } else {
@@ -1525,8 +1619,9 @@ wWindowChangeWorkspace(WWindow *wwin, int workspace)
     wKWMUpdateClientWorkspace(wwin);
     wKWMSendEventMessage(wwin, WKWMChangedClient);
 #endif
-    if (unmap)
-	XUnmapWindow(dpy, wwin->frame->core->window);
+    if (unmap) {
+	wWindowUnmap(wwin);
+    }
 }
 
 
@@ -2492,12 +2587,29 @@ windowCloseClick(WCoreWindow *sender, void *data, XEvent *event)
 
     CloseWindowMenu(wwin->screen_ptr);
 
+    if (event->xbutton.button < Button1 || event->xbutton.button > Button3)
+	return;
+
     /* if control-click, kill the client */
     if (event->xbutton.state & ControlMask) {
 	wClientKill(wwin);
-    } else if (wwin->protocols.DELETE_WINDOW && event->xbutton.state==0) {
-	/* send delete message */
-	wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, LastTimestamp);
+    } else {
+#ifdef OLWM_HINTS
+	if (wwin->flags.olwm_push_pin_out) {
+
+	    wwin->flags.olwm_push_pin_out = 0;
+
+	    wOLWMChangePushpinState(wwin, True);
+
+	    wFrameWindowUpdatePushButton(wwin->frame, False);
+
+	    return;
+	}
+#endif
+	if (wwin->protocols.DELETE_WINDOW && event->xbutton.state==0) {
+	    /* send delete message */
+	    wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, LastTimestamp);
+	}
     }
 }
 
@@ -2508,6 +2620,9 @@ windowCloseDblClick(WCoreWindow *sender, void *data, XEvent *event)
     WWindow *wwin = data;
 
     CloseWindowMenu(wwin->screen_ptr);
+
+    if (event->xbutton.button < Button1 || event->xbutton.button > Button3)
+	return;
 
     /* send delete message */
     if (wwin->protocols.DELETE_WINDOW) {
@@ -2526,7 +2641,10 @@ windowIconifyClick(WCoreWindow *sender, void *data, XEvent *event)
     event->xbutton.state &= ValidModMask;
     
     CloseWindowMenu(wwin->screen_ptr);
-    
+
+    if (event->xbutton.button < Button1 || event->xbutton.button > Button3)
+	return;
+
     if (wwin->protocols.MINIATURIZE_WINDOW && event->xbutton.state==0) {
 	wClientSendProtocol(wwin, _XA_GNUSTEP_WM_MINIATURIZE_WINDOW,
 			    LastTimestamp);

@@ -455,7 +455,158 @@ loadPixmaps(WMScreen *scr)
 						   scr->depth);
     }
     RDestroyImage(tmp);
-    RDestroyImage(image);
+ 	/* Magnifying Glass Icon for ColorPanel */
+	tmp = RGetSubImage(image, 24, 0, 40, 32);
+	if (!RConvertImage(scr->rcontext, tmp, &pixmap)) {
+		scr->magnifyIcon = NULL;
+	} else {
+		scr->magnifyIcon = WMCreatePixmapFromXPixmaps(scr, pixmap, None, 40, 32, scr->depth);
+	}
+	RDestroyImage(tmp);
+	/* ColorWheel Icon for ColorPanel */
+ 	tmp = RGetSubImage(image, 0, 25, 24, 24);
+	if (!RConvertImage(scr->rcontext, tmp, &pixmap)) {
+		scr->wheelIcon = NULL;
+	} else {
+		scr->wheelIcon = WMCreatePixmapFromXPixmaps(scr, pixmap, None, 24, 24, scr->depth);
+	}
+	RDestroyImage(tmp);
+	/* GrayScale Icon for ColorPanel */
+ 	tmp = RGetSubImage(image, 65, 0, 40, 24);
+	if (!RConvertImage(scr->rcontext, tmp, &pixmap)) {
+		scr->grayIcon = NULL;
+	} else {
+		scr->grayIcon = WMCreatePixmapFromXPixmaps(scr, pixmap, None, 40, 24, scr->depth);
+	}
+	RDestroyImage(tmp);
+	/* RGB Icon for ColorPanel */
+ 	tmp = RGetSubImage(image, 25, 33, 40, 24);
+	if (!RConvertImage(scr->rcontext, tmp, &pixmap)) {
+		scr->rgbIcon = NULL;
+	} else {
+		scr->rgbIcon = WMCreatePixmapFromXPixmaps(scr, pixmap, None, 40, 24, scr->depth);
+	}
+	RDestroyImage(tmp);
+	/* CMYK Icon for ColorPanel */
+ 	tmp = RGetSubImage(image, 65, 25, 40, 24);
+	if (!RConvertImage(scr->rcontext, tmp, &pixmap)) {
+		scr->cmykIcon = NULL;
+	} else {
+		scr->cmykIcon = WMCreatePixmapFromXPixmaps(scr, pixmap, None, 40, 24, scr->depth);
+	}
+	RDestroyImage(tmp);
+	/* HSB Icon for ColorPanel */
+ 	tmp = RGetSubImage(image, 0, 57, 40, 24);
+	if (!RConvertImage(scr->rcontext, tmp, &pixmap)) {
+		scr->hsbIcon = NULL;
+	} else {
+		scr->hsbIcon = WMCreatePixmapFromXPixmaps(scr, pixmap, None, 40, 24, scr->depth);
+	}
+	RDestroyImage(tmp);
+	/* CustomColorPalette Icon for ColorPanel */
+ 	tmp = RGetSubImage(image, 81, 57, 40, 24);
+	if (!RConvertImage(scr->rcontext, tmp, &pixmap)) {
+		scr->customPaletteIcon = NULL;
+	} else {
+		scr->customPaletteIcon = WMCreatePixmapFromXPixmaps(scr, pixmap, None, 40, 24, scr->depth);
+	}
+	RDestroyImage(tmp);
+	/* ColorList Icon for ColorPanel */
+ 	tmp = RGetSubImage(image, 41, 57, 40, 24);
+	if (!RConvertImage(scr->rcontext, tmp, &pixmap)) {
+		scr->colorListIcon = NULL;
+	} else {
+		scr->colorListIcon = WMCreatePixmapFromXPixmaps(scr, pixmap, None, 40, 24, scr->depth);
+	}
+	RDestroyImage(tmp);
+
+	RDestroyImage(image);
+
+	image = RLoadImage(scr->rcontext, WINGS_IMAGES_FILE, 0);
+    if (!image) {
+	wwarning("WINGs: could not load widget images file: %s", 
+		 RMessageForError(RErrorCode));
+	return False;
+    }
+    /* make it have a white background */
+    gray.red = 0xff;
+    gray.green = 0xff;
+    gray.blue = 0xff;
+    RCombineImageWithColor(image, &gray);
+    tmp = RGetSubImage(image, 0, 0, 24, 24);
+    if (!RConvertImage(scr->rcontext, tmp, &pixmap)) {
+	scr->homeAltIcon = NULL;
+    } else {
+	scr->homeAltIcon = WMCreatePixmapFromXPixmaps(scr, pixmap, None, 24, 24,
+						   scr->depth);
+    }
+    RDestroyImage(tmp);
+	/* Magnifying Glass Icon for ColorPanel */
+	tmp = RGetSubImage(image, 25, 0, 40, 32);
+	if (!RConvertImage(scr->rcontext, tmp, &pixmap)) {
+		scr->magnifyAltIcon = NULL;
+	} else {
+		scr->magnifyAltIcon = WMCreatePixmapFromXPixmaps(scr, pixmap, None, 40, 32, scr->depth);
+	}
+	RDestroyImage(tmp);
+	/* ColorWheel Icon for ColorPanel */
+ 	tmp = RGetSubImage(image, 0, 25, 24, 24);
+	if (!RConvertImage(scr->rcontext, tmp, &pixmap)) {
+		scr->wheelAltIcon = NULL;
+	} else {
+		scr->wheelAltIcon = WMCreatePixmapFromXPixmaps(scr, pixmap, None, 24, 24, scr->depth);
+	}
+	RDestroyImage(tmp);
+	/* GrayScale Icon for ColorPanel */
+ 	tmp = RGetSubImage(image, 65, 0, 40, 24);
+	if (!RConvertImage(scr->rcontext, tmp, &pixmap)) {
+		scr->grayAltIcon = NULL;
+	} else {
+		scr->grayAltIcon = WMCreatePixmapFromXPixmaps(scr, pixmap, None, 40, 24, scr->depth);
+	}
+	RDestroyImage(tmp);
+	/* RGB Icon for ColorPanel */
+ 	tmp = RGetSubImage(image, 25, 33, 40, 24);
+	if (!RConvertImage(scr->rcontext, tmp, &pixmap)) {
+		scr->rgbAltIcon = NULL;
+	} else {
+		scr->rgbAltIcon = WMCreatePixmapFromXPixmaps(scr, pixmap, None, 40, 24, scr->depth);
+	}
+	RDestroyImage(tmp);
+	/* CMYK Icon for ColorPanel */
+ 	tmp = RGetSubImage(image, 65, 25, 40, 24);
+	if (!RConvertImage(scr->rcontext, tmp, &pixmap)) {
+		scr->cmykAltIcon = NULL;
+	} else {
+		scr->cmykAltIcon = WMCreatePixmapFromXPixmaps(scr, pixmap, None, 40, 24, scr->depth);
+	}
+	RDestroyImage(tmp);
+	/* HSB Icon for ColorPanel */
+ 	tmp = RGetSubImage(image, 0, 57, 40, 24);
+	if (!RConvertImage(scr->rcontext, tmp, &pixmap)) {
+		scr->hsbAltIcon = NULL;
+	} else {
+		scr->hsbAltIcon = WMCreatePixmapFromXPixmaps(scr, pixmap, None, 40, 24, scr->depth);
+	}
+	RDestroyImage(tmp);
+	/* CustomColorPalette Icon for ColorPanel */
+ 	tmp = RGetSubImage(image, 81, 57, 40, 24);
+	if (!RConvertImage(scr->rcontext, tmp, &pixmap)) {
+		scr->customPaletteAltIcon = NULL;
+	} else {
+		scr->customPaletteAltIcon = WMCreatePixmapFromXPixmaps(scr, pixmap, None, 40, 24, scr->depth);
+	}
+	RDestroyImage(tmp);
+	/* ColorList Icon for ColorPanel */
+ 	tmp = RGetSubImage(image, 41, 57, 40, 24);
+	if (!RConvertImage(scr->rcontext, tmp, &pixmap)) {
+		scr->colorListAltIcon = NULL;
+	} else {
+		scr->colorListAltIcon = WMCreatePixmapFromXPixmaps(scr, pixmap, None, 40, 24, scr->depth);
+	}
+	RDestroyImage(tmp);
+
+   RDestroyImage(image);
 
 #if 0
     scr->defaultObjectIcon =

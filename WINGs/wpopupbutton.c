@@ -190,8 +190,8 @@ WMInsertPopUpButtonItem(WMPopUpButton *bPtr, int index, char *title)
 	while (--i > 0) {
 	    tmp = tmp->nextPtr;
 	}
-	bPtr->items->nextPtr = tmp->nextPtr;
-	tmp->nextPtr = bPtr->items;
+	itemPtr->nextPtr = tmp->nextPtr;
+	tmp->nextPtr = itemPtr;
     }
     
     bPtr->itemCount++;

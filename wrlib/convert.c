@@ -716,12 +716,12 @@ RGetClosestXColor(RContext *context, RColor *color, XColor *retColor)
 	gtable = computeTable(gmask);
 	btable = computeTable(bmask);
 
-	retColor->pixel = (rtable[color->red]<<roffs) |
-	    (rtable[color->green]<<goffs) | (rtable[color->blue]<<boffs);
+        retColor->pixel = (rtable[color->red]<<roffs) |
+	    (gtable[color->green]<<goffs) | (btable[color->blue]<<boffs);
 
-	retColor->red = rtable[color->red] << 8;	
-	retColor->green = rtable[color->green] << 8;
-	retColor->blue = rtable[color->blue] << 8;
+	retColor->red = color->red << 8;
+	retColor->green = color->green << 8;
+	retColor->blue = color->blue << 8;
 	retColor->flags = DoRed|DoGreen|DoBlue;
 	
     } else if (context->vclass == PseudoColor || context->vclass == StaticColor) {

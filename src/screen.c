@@ -28,6 +28,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/Xatom.h>
 #ifdef SHAPE
 #include <X11/extensions/shape.h>
 #endif
@@ -49,10 +50,13 @@
 #include "session.h"
 #include "balloon.h"
 #ifdef KWM_HINTS
-#include "kwm.h"
+# include "kwm.h"
 #endif
 #ifdef GNOME_STUFF
-#include "gnome.h"
+# include "gnome.h"
+#endif
+#ifdef OLWM_HINTS
+# include "openlook.h"
 #endif
 
 #include <proplist.h>
@@ -76,6 +80,7 @@
 extern Cursor wCursor[WCUR_LAST];
 extern WPreferences wPreferences;
 extern Atom _XA_WINDOWMAKER_STATE;
+extern Atom _XA_WINDOWMAKER_NOTICEBOARD;
 
 
 extern int wScreenCount;
@@ -511,16 +516,24 @@ createInternalWindows(WScreen *scr)
       XCreateWindow(dpy, scr->root_win, 0, 0, wPreferences.icon_size, 
 		    wPreferences.icon_size, 0, scr->w_depth, CopyFromParent, 
 		    scr->w_visual, vmask, &attribs);
-   
+
     /* workspace name balloon for clip */
-    vmask = CWBackPixel|CWSaveUnder|CWOverrideRedirect|CWColormap;
+    vmask = CWBackPixel|CWSaveUnder|CWOverrideRedirect|CWColormap
+	|CWBorderPixel;
     attribs.save_under = True;
     attribs.override_redirect = True;
     attribs.colormap = scr->w_colormap;
     attribs.background_pixel = scr->icon_back_texture->normal.pixel;
+    attribs.border_pixel = 0; /* do not care */
     scr->clip_balloon =
-      XCreateWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, scr->w_depth, 
+      XCreateWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, scr->w_depth,
 		    CopyFromParent, scr->w_visual, vmask, &attribs);
+
+    /* for our window manager info notice board */
+    scr->info_window =
+      XCreateWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, CopyFromParent,
+		    CopyFromParent, CopyFromParent, 0, NULL);
+
     /*
      * If the window is clicked without having ButtonPress selected, the
      * resulting event will have event.xbutton.window == root.
@@ -528,6 +541,69 @@ createInternalWindows(WScreen *scr)
     XSelectInput(dpy, scr->clip_balloon, ButtonPressMask);
 }
 
+
+#if 0
+static Bool
+aquireManagerSelection(WScreen *scr)
+{
+    char buffer[32];
+    XEvent ev;
+    Time timestamp;
+
+    sprintf(buffer, "WM_S%i", scr->screen);
+    scr->managerAtom = XInternAtom(dpy, buffer, False);
+
+    /* for race-conditions... */
+    XGrabServer(dpy);
+
+    /* if there is another manager running, don't try to replace it
+     * (for now, at least) */
+    if (XGetSelectionOwner(dpy, scr->managerAtom) != None) {
+	XUngrabServer(dpy);
+	return False;
+    }
+
+    /* become the manager for this screen */
+
+    scr->managerWindow = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 1, 1,
+					     0, 0, 0);
+
+    XSelectInput(dpy, scr->managerWindow, PropertyChangeMask);
+    /* get a timestamp */
+    XChangeProperty(dpy, scr->managerWindow, scr->managerAtom,
+		    XA_INTEGER, 32, PropModeAppend, NULL, 0);
+    while (1) {
+	XWindowEvent(dpy, scr->managerWindow, &ev);
+	if (ev.type == PropertyNotify) {
+	    timestamp = ev.xproperty.time;
+	    break;
+	}
+    }
+    XSelectInput(dpy, scr->managerWindow, NoEvents);
+    XDeleteProperty(dpy, scr->managerWindow, scr->managerAtom);
+
+    XSetSelectionOwner(dpy, scr->managerAtom, scr->managerWindow, CurrentTime);
+
+    XUngrabServer(dpy);
+
+    /* announce our arrival */
+
+    ev.xclient.type = ClientMessage;
+    ev.xclient.message_type = XInternAtom(dpy, "MANAGER", False);
+    ev.xclient.destination = scr->root_win;
+    ev.xclient.format = 32;
+    ev.xclient.data.l[0] = timestamp;
+    ev.xclient.data.l[1] = scr->managerAtom;
+    ev.xclient.data.l[2] = scr->managerWindow;
+    ev.xclient.data.l[3] = 0;
+    ev.xclient.data.l[4] = 0;
+
+    XSendEvent(dpy, scr->root_win, False, StructureNotify, &ev);
+    XSync(dpy, False);
+
+    return True;
+}
+#endif
 
 /*
  *----------------------------------------------------------------------
@@ -575,6 +651,13 @@ wScreenInit(int screen_number)
     scr->totalUsableArea.x2 = scr->scr_width;
     scr->totalUsableArea.y2 = scr->scr_height;
 
+#if 0
+    if (!aquireManagerSelection(scr)) {
+	free(scr);
+
+	return NULL;
+    }
+#endif
     CantManageScreen = 0;
     oldHandler = XSetErrorHandler((XErrorHandler)alreadyRunningError);
 
@@ -677,6 +760,10 @@ wScreenInit(int screen_number)
     wGNOMEInitStuff(scr);
 #endif
 
+#ifdef OLWM_HINTS
+    wOLWMInitStuff(scr);
+#endif
+
     /* create initial workspace */
     wWorkspaceNew(scr);
 
@@ -694,6 +781,15 @@ wScreenInit(int screen_number)
 
     /* setup WindowMaker protocols property in the root window*/
     PropSetWMakerProtocols(scr->root_win);
+
+    /* setup our noticeboard */
+    XChangeProperty(dpy, scr->info_window, _XA_WINDOWMAKER_NOTICEBOARD,
+		    XA_WINDOW, 32, PropModeReplace, 
+		    (unsigned char*)&scr->info_window, 1);
+    XChangeProperty(dpy, scr->root_win, _XA_WINDOWMAKER_NOTICEBOARD,
+		    XA_WINDOW, 32, PropModeReplace, 
+		    (unsigned char*)&scr->info_window, 1);
+
 
 #ifdef BALLOON_TEXT
     /* initialize balloon text stuff */
@@ -819,6 +915,7 @@ wScreenUpdateUsableArea(WScreen *scr)
 	scr->totalUsableArea.y1 = scr->usableArea.y1;
     }
 
+#ifdef not_used
 #ifdef KWM_HINTS
     {
 	int i;
@@ -827,6 +924,7 @@ wScreenUpdateUsableArea(WScreen *scr)
 	    wKWMSetUsableAreaHint(scr, i);
 	}
     }
+#endif
 #endif
 }
 

@@ -164,7 +164,9 @@ chooseIconCallback(WMWidget *self, void *clientData)
 
     WMSetButtonEnabled(panel->browseBtn, False);
     
-    result = wIconChooserDialog(panel->wwin->screen_ptr, &file);
+    result = wIconChooserDialog(panel->wwin->screen_ptr, &file, 
+				panel->editedIcon->wm_instance,
+				panel->editedIcon->wm_class);
 
     panel->choosingIcon = 0;
     if (!panel->destroyed) {
@@ -403,7 +405,7 @@ DestroyDockAppSettingsPanel(AppSettingsPanel *panel)
 	XUnmapWindow(dpy, panel->wwin->client_win);
 	XReparentWindow(dpy, panel->wwin->client_win, 
 			panel->wwin->screen_ptr->root_win, 0, 0);
-	wUnmanageWindow(panel->wwin, False);
+	wUnmanageWindow(panel->wwin, False, False);
     }
 
     panel->destroyed = 1;

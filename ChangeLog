@@ -1,3 +1,41 @@
+Changes since version 0.50.2:
+.............................
+
+- added some new icons made by Marco
+- kde: fixed stacking order reporting for modules
+- gnome: fixed state change request handling
+- fixed handling of file names with non-alphanum characters in wmsetbg
+- hopefully fixed timestamp problem that caused regeneration of configure
+- fixed a bug in the auto raise code
+- made SIGHUP exit wmaker and SIGUSR1 restart for GNOME compatibility
+- fixed %a() bug (now it really is fixed!)
+- fixed docking icons in last icon
+- fixed WMInsertPopUpButtonItem()
+- fixed bug that caused fonts of themes to be ignored
+- fixed bug in path handling in getstyle
+- stop icon explosion animation by clicking on root window
+- made SAVE_SESSION save the state of the dock
+- added command line option aliases that adhere to the GNU standards
+- fixed png gamma bug (actually unmade buggy fix)
+- fixed bug in property notify handling
+- removed KeepTransientsOnTop
+- fixed window focus when switching workspaces
+- fixed attribute inspector Apply for dont bind keys
+- fixed bad colormap bug (I hope)
+- added acceleration to keyboard window move
+- %W expand to current workspace #
+- fixed background pixmap color problem (cpixmap etc)
+- applied drop shadow patch
+- fixed crash on startup with xconsole and xdm
+- fixed portability prob with MkLinux/PPC
+- fixed portability prob with Alpha
+- added color panel to WINGs
+- added support for olwm/OPEN LOOK(tm) hints
+- added SaveYourself support
+- fixed bug in start maximized
+- added _WINDOWMAKER_NOTICEBOARD protocol
+- added docklib
+
 Changes since version 0.50.1:
 .............................
 

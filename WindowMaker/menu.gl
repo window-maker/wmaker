@@ -116,12 +116,6 @@
 		"Grabar Area de traballo" EXEC SAVE_WORKSPACE
 	"Area Traballo" END
 	
-#if (UID==0)	// Só o ve root ou usuarios con UID=0
-	"Sistema" MENU
-		// Panel de control
-		"Panel de control de RH" EXEC control-panel
-	"Sistema" END
-#endif
 	"Sair"	MENU
 		"Reinicializar" RESTART
 		"Iniciar AfterStep" RESTART afterstep

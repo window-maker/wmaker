@@ -1,5 +1,5 @@
 /*
- * définition du menu de fond pour WindowMaker
+ * Définition du menu de fond pour WindowMaker
  * 
  * La syntaxe est:
  *
@@ -85,41 +85,46 @@
  * Syntaxe d'OPEN_MENU:
  *
  * 1. Utilisation d'un fichier de menu.
- * 	// Ouvre "fichier.menu" (celui-ci doit contenir un fichier de menu
- *	// valide) et l'insère à la position courante.
+ * 	/ Ouvre "fichier.menu" (celui-ci doit contenir un fichier de menu
+ *	/ valide) et l'insère à la position courante.
  *
  *   OPEN_MENU fichier.menu
  *
  * 2. Utilisation de "pipes".
- *	// Ouvre une commande et utilise sa sortie standard pour construire
- *	// un menu (la sortie standard de la commande doit être une
- *	// description de menu valide). L'espace entre '|' est optionel.
+ *	/ Ouvre une commande et utilise sa sortie standard pour construire
+ *	/ un menu (la sortie standard de la commande doit être une
+ *	/ description de menu valide). L'espace entre '|' est optionel.
  *
  *   OPEN_MENU | commande
  *
  * 3. Utilisation de répertoires.
- *	// Ouvre un ou plusieurs répertoires et construit un menu avec tout
- *	// les sous répertoires et les fichiers éxécutables a l'intérieur et
- *	// les classe dans l'ordre alphabétique.
+ *	/ Ouvre un ou plusieurs répertoires et construit un menu avec tout
+ *	/ les sous répertoires et les fichiers éxécutables a l'intérieur et
+ *	/ les classe dans l'ordre alphabétique.
  *
  *   OPEN_MENU /un/répertoire [/un/autre/repértoire ...]
  *
  * 4. Utilisation de répertoires avec une commande.
- *	// Ouvre un ou plusieurs répertoires et construit un menu avec tout
- *	// les sous répertoires et les fichiers lisibles a l'intérieur et
- *	// les classe dans l'ordre alphabétique, précédant chacun d'eux
- *	// d'une commande.
+ *	/ Ouvre un ou plusieurs répertoires et construit un menu avec tout
+ *	/ les sous répertoires et les fichiers lisibles a l'intérieur et
+ *	/ les classe dans l'ordre alphabétique, précédant chacun d'eux
+ *	/ d'une commande.
  *
  *   OPEN_MENU /un/répertoire [/un/autre/répertoire ...] WITH commande -option
+ *
+ *   Options:
+ *           -noext   retirer tout ce qui se trouve après le dernier point
+ *                    dans le nom de fichier.
  *
  * <Parametre> est le programme a éxécuter.
  *
  * ** Options pour la ligne de commande après EXEC:
  *
- * %s		substituer avec la sélection courante
- * %a(message)	ouvre une boite de dialogue avec un message et fait la
- *		substitution avec ce que vous avez tapé
- * %w		substituer par la "XID" de la fenêtre en avant plan courante
+ * %s		        substituer avec la sélection courante
+ * %a(titre[,message])	ouvre une boite de dialogue avec un message et fait la
+ *		        substitution avec ce que vous avez tapé
+ * %w		        substituer par la "XID" de la fenêtre en avant plan
+ *                      courante
  *
  * Vous pouvez outrepasser des charactères spéciaux (comme % et ") avec le
  * charactère \
@@ -134,13 +139,13 @@
  *
  * "Test" MENU
  *	"XTerm" EXEC xterm
- *		// Crée un sous menu avec le contenu de /usr/openwin/bin
+ *		/ Crée un sous menu avec le contenu de /usr/openwin/bin
  *	"Applications XView" OPEN_MENU "/usr/openwin/bin"
- *		// Quelques applications X11 dans différents répertoires
+ *		/ Quelques applications X11 dans différents répertoires
  *	"Applications X11" OPEN_MENU /usr/X11/bin ~/bin/X11
- *		// Définir quelques images de fond
+ *		/ Définir quelques images de fond
  *	"Fond d'écran" OPEN_MENU ~/images /usr/share/images WITH wmsetbg -u -t
- *		// Insère le fichier "style.menu" dans cette entrée
+ *		/ Insère le fichier "style.menu" dans cette entrée
  *	"Style" OPEN_MENU style.menu
  * "Test" END
  */
@@ -156,6 +161,7 @@
 		"Liste des processus" EXEC xterm -e top
 		"Butineur d'aide" EXEC xman
 	"Informations" END
+	"Démarrer..." EXEC %a(Démarrer,Tapez une commande à démarrer:)
 	"Terminal X" EXEC xterm -sb
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
 	"Espaces de travail" WORKSPACE_MENU
@@ -171,7 +177,7 @@
 		"LyX" EXEC lyx
 		"Netscape" EXEC netscape
 		"Ghostview" EXEC ghostview %a(Entrez un fichier)
-		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Entrez un fichier PDF)
+		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobat,Entrez un fichier PDF)
 		"TkDesk" EXEC tkdesk
 	"Applications" END
 	"Editeurs" MENU
@@ -216,9 +222,9 @@
 	"Espace de travail" END
 
 	"Apparence" MENU
-		"Thèmes" OPEN_MENU THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Styles" OPEN_MENU STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Jeu d'icônes" OPEN_MENU ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Thèmes" OPEN_MENU -noext THEMES_DIR ~/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Styles" OPEN_MENU -noext STYLES_DIR ~/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Jeu d'icônes" OPEN_MENU -noext ICON_SETS_DIR ~/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Fond d'écran" MENU
 			"Unifié" MENU
 				"Noir" WS_BACK '(solid, black)'
@@ -240,10 +246,10 @@
 				"Dégradés de Gris" WS_BACK '(vgradient, "#636380", "#131318")'
 				"Dégradés de Bordeau" WS_BACK '(vgradient, "#600040", "#180010")'
 			"Degradé" END
-			"Images" OPEN_MENU BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+			"Images" OPEN_MENU -noext BACKGROUNDS_DIR ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Fond d'écran" END
-		"Sauver le thème" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Nom du theme)"
-		"Sauver le jeu d'icônes" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(Nom du jeu d'icones)"
+		"Sauver le thème" EXEC getstyle -t ~/GNUstep/Library/WindowMaker/Themes/"%a(Nom du thème,Entrez un nom de fichier:)"
+		"Sauver le jeu d'icônes" EXEC geticonset ~/GNUstep/Library/WindowMaker/IconSets/"%a(Nom du jeu d'icônes,Entrez un nom de fichier:)"
 	"Apparence" END
 
 	"Quitter" MENU

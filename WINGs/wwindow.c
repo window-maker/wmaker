@@ -432,15 +432,6 @@ realizeWindow(WMWindow *win)
 
 
 void
-WMHideWindow(WMWindow *win)
-{
-    WMUnmapWidget(win);
-    XWithdrawWindow(win->view->screen->display, win->view->window,
-		    win->view->screen->screen);
-}
-
-
-void
 WMSetWindowMinSize(WMWindow *win, unsigned width, unsigned height)
 {
     win->minSize.width = width;
@@ -564,6 +555,7 @@ WMSetWindowMiniwindowTitle(WMWindow *win, char *title)
 void
 WMCloseWindow(WMWindow *win)
 {
+    WMUnmapWidget(win);
     /* withdraw the window */
     if (win->view->flags.realized)
 	XWithdrawWindow(win->view->screen->display, win->view->window,
@@ -587,6 +579,9 @@ handleEvents(XEvent *event, void *clientData)
 		(*win->closeAction)(win, win->closeData);
 	    }
 	}
+	break;
+     case UnmapNotify:
+	WMUnmapWidget(win);
 	break;
      case DestroyNotify:
 	destroyWindow(win);

@@ -16,18 +16,18 @@
 #endif
 
 
+#include <X11/Xos.h>
+
 #ifdef HAVE_SYS_SELECT_H
 # include <sys/select.h>
 #endif
 
-#ifdef HAVE_GETTIMEOFDAY
-# include <sys/time.h>
-# ifdef TIME_WITH_SYS_TIME
-#  include <time.h>
-# endif
-#else /* ! HAVE_GETTIMEOFDAY */
-# include <time.h>
-#endif /* ! HAVE_GETTIMEOFDAY */
+#include <time.h>
+
+#ifndef X_GETTIMEOFDAY
+#define X_GETTIMEOFDAY(t) gettimeofday(t, (struct timezone*)0)
+#endif
+
 
 
 extern _WINGsConfiguration WINGsConfiguration;
@@ -119,15 +119,10 @@ static WMEventHook *extraEventHandler=NULL;
 #define idlePending()	(idleHandler)
 
 
-#ifdef HAVE_GETTIMEOFDAY
 static void
 rightNow(struct timeval *tv) {
-    gettimeofday(tv, NULL);
+    X_GETTIMEOFDAY(tv);
 }
-#else /* !HAVE_GETTIMEOFDAY */
-# define rightNow(tv)	(tv)->tv_sec==time(NULL),(tv)->tv_usec=0
-#endif /* !HAVE_GETTIMEOFDAY */
-
 
 /* is t1 after t2 ? */
 #define IS_AFTER(t1, t2)	(((t1).tv_sec > (t2).tv_sec) || \
@@ -591,6 +586,12 @@ WMHandleEvent(XEvent *event)
 
     toplevel = W_TopLevelOfView(view);
 
+    if (event->type == SelectionNotify || event->type == SelectionClear
+	|| event->type == SelectionRequest) {
+	/* handle selection related events */
+	W_HandleSelectionEvent(event);
+    }
+
     /* if it's a key event, redispatch it to the focused control */
     if (mask & (KeyPressMask|KeyReleaseMask)) {
 	W_View *focused = W_FocusedViewOfToplevel(toplevel);
@@ -619,8 +620,8 @@ WMHandleEvent(XEvent *event)
         while (XCheckTypedWindowEvent(event->xexpose.display, view->window,
 				      Expose, event));
     }
-    
-    
+
+
     if (view->screen->modal && toplevel!=view->screen->modalView
 	&& !toplevel->flags.worksWhenModal) {
 	if (event->type == KeyPress || event->type == KeyRelease

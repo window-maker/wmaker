@@ -45,8 +45,8 @@ WPrefs.pot: $(POTFILES)
 
 
 install-data-local:  $(CATALOGS)
-	$(mkinstalldirs) $(nlsdir) 
-	chmod 755 $(nlsdir) 
+	$(mkinstalldirs) $(DESTDIR)$(nlsdir) 
+	chmod 755 $(DESTDIR)$(nlsdir) 
 	for n in $(CATALOGS) __DuMmY ; do \
 		if test "$$n" -a "$$n" != "__DuMmY" ; then \
 			l=`basename $$n .mo`; \

@@ -65,8 +65,6 @@ DFLAGS = @DFLAGS@
 GFXFLAGS = @GFXFLAGS@
 GFXLFLAGS = @GFXLFLAGS@
 GFXLIBS = @GFXLIBS@
-I18N = @I18N@
-I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
 LD = @LD@
@@ -79,19 +77,13 @@ NLSDIR = @NLSDIR@
 NM = @NM@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
-REDUCE_APPICONS = @REDUCE_APPICONS@
-SHAPE = @SHAPE@
-SOUND = @SOUND@
 VERSION = @VERSION@
 WPMOFILES = @WPMOFILES@
 XCFLAGS = @XCFLAGS@
 XGETTEXT = @XGETTEXT@
 XLFLAGS = @XLFLAGS@
 XLIBS = @XLIBS@
-XSHM = @XSHM@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
-X_LOCALE = @X_LOCALE@
-pixmapdir = @pixmapdir@
 wprefsdir = @wprefsdir@
 
 tiffdatadir = $(wprefsdir)/tiff
@@ -106,6 +98,7 @@ tiffdata_DATA = \
 	dock.tiff \
 	dontlinkworkspaces.tiff \
 	ergonomic.tiff \
+	ergowood.tiff \
 	expert.tiff \
 	fonts.tiff \
 	iconprefs.tiff \
@@ -119,6 +112,7 @@ tiffdata_DATA = \
 	minimouseleft.tiff \
 	minimousemiddle.tiff \
 	minimouseright.tiff \
+	miscprefs2.tiff \
 	moreanim.tiff \
 	mousesettings.tiff \
 	mousespeed.tiff \
@@ -138,6 +132,8 @@ tiffdata_DATA = \
 	speed3s.tiff \
 	speed4.tiff \
 	speed4s.tiff \
+	temp.tiff \
+	theme.tiff \
 	timer0.tiff \
 	timer0s.tiff \
 	timer1.tiff \
@@ -161,7 +157,7 @@ CONFIG_HEADER = ../../src/config.h
 CONFIG_CLEAN_FILES = 
 DATA =  $(tiffdata_DATA)
 
-DIST_COMMON =  Makefile.am Makefile.in
+DIST_COMMON =  README Makefile.am Makefile.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)

@@ -564,7 +564,7 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
     }
     free(path);
 
-    file = popen("wmaker -version", "r");
+    file = popen("wmaker --version", "r");
     if (!file || !fgets(buffer, 1023, file)) {
 	wsyserror(_("could not extract version information from Window Maker"));
 	wfatal(_("Make sure wmaker is in your search path."));
@@ -597,9 +597,9 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
 	WMRunAlertPanel(scr, mainw, _("Warning"), mbuf, _("OK"), NULL, NULL);
     }
 
-    file = popen("wmaker -global_defaults_path", "r");
+    file = popen("wmaker --global_defaults_path", "r");
     if (!file || !fgets(buffer, 1023, file)) {
-	wsyserror(_("could not run \"wmaker -global_defaults_path\"."));
+	wsyserror(_("could not run \"wmaker --global_defaults_path\"."));
 	exit(1);
     }
     if (file)

@@ -38,6 +38,7 @@ char *FontOptions[] = {
 	"DisplayFont",
 	"MenuTextFont",
 	"MenuTitleFont",
+	"WindowTitleFont",
 	NULL
 };
 
@@ -103,13 +104,14 @@ hackPaths(proplist_t style, char *prefix)
 	    t = PLGetString(type);
 	    if (t && (strcasecmp(t, "tpixmap")==0
 		      || strcasecmp(t, "spixmap")==0
+		      || strcasecmp(t, "mpixmap")==0
 		      || strcasecmp(t, "cpixmap")==0
 		      || strcasecmp(t, "tvgradient")==0
 		      || strcasecmp(t, "thgradient")==0		
 		      || strcasecmp(t, "tdgradient")==0)) {
 		proplist_t file;
 		char buffer[4018];
-		
+
 		file = PLGetArrayElement(value, 1);
 		sprintf(buffer, "%s/%s", prefix, PLGetString(file));
 		PLRemoveArrayElement(value, 1);
@@ -147,15 +149,17 @@ hackStyle(proplist_t style)
 	if (str) {
 	    int j, found;
 
-	    for (j = 0, found = 0; FontOptions[j]!=NULL; j++) {
-		if (strcasecmp(str, FontOptions[j])==0) {
-		    PLRemoveDictionaryEntry(style, tmp);
-		    found = 1;
-		    break;
-		}
-	    } 
-	    if (found)
-		continue;
+	    if (ignoreFonts) {
+		for (j = 0, found = 0; FontOptions[j]!=NULL; j++) {
+		    if (strcasecmp(str, FontOptions[j])==0) {
+			PLRemoveDictionaryEntry(style, tmp);
+			found = 1;
+			break;
+		    }
+		} 
+		if (found)
+		    continue;
+	    }
 
 	    if (strcasecmp(str, "IconTitleColor")==0
 		|| strcasecmp(str, "IconTitleBack")==0) {

@@ -10,6 +10,7 @@ tiffdata_DATA = \
 	dock.tiff \
 	dontlinkworkspaces.tiff \
 	ergonomic.tiff \
+	ergowood.tiff \
 	expert.tiff \
 	fonts.tiff \
 	iconprefs.tiff \
@@ -23,6 +24,7 @@ tiffdata_DATA = \
 	minimouseleft.tiff \
 	minimousemiddle.tiff \
 	minimouseright.tiff \
+	miscprefs2.tiff \
 	moreanim.tiff \
 	mousesettings.tiff \
 	mousespeed.tiff \
@@ -42,6 +44,8 @@ tiffdata_DATA = \
 	speed3s.tiff \
 	speed4.tiff \
 	speed4s.tiff \
+	temp.tiff \
+	theme.tiff \
 	timer0.tiff \
 	timer0s.tiff \
 	timer1.tiff \

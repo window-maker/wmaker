@@ -782,7 +782,8 @@ getuserinput(WScreen *scr, char *line, int *ptr)
     char *ret;
     char *title;
     char *prompt;
-    int j, k, state;
+    int j, state;
+    int begin;
     char tbuffer[256], pbuffer[256];
 
     title = _("Program Arguments");
@@ -796,11 +797,12 @@ getuserinput(WScreen *scr, char *line, int *ptr)
 
     state = _STARTING;
     j = 0;
-    for (; line[*ptr]==0 && state!=_DONE; *ptr++) {
+    for (; line[*ptr]!=0 && state!=_DONE; (*ptr)++) {
 	switch (state) {
 	 case _STARTING:
 	    if (line[*ptr]=='(') {
 		state = _TITLE;
+		begin = *ptr+1;
 	    } else {
 		state = _DONE;
 	    }
@@ -810,37 +812,38 @@ getuserinput(WScreen *scr, char *line, int *ptr)
 	    if (j <= 0 && line[*ptr]==',') {
 
 		j = 0;
-		if (*ptr > 1) {
-		    strncpy(tbuffer, &line[1], WMIN(*ptr, 255));
-		    tbuffer[WMIN(*ptr, 255)] = 0;
+		if (*ptr > begin) {
+		    strncpy(tbuffer, &line[begin], WMIN(*ptr-begin, 255));
+		    tbuffer[WMIN(*ptr-begin, 255)] = 0;
 		    title = (char*)tbuffer;
 		}
-		k = *ptr+1;
+		begin = *ptr+1;
 		state = _PROMPT;
 
 	    } else if (j <= 0 && line[*ptr]==')') {
 
-		if (*ptr > 1) {
-		    strncpy(tbuffer, &line[1], WMIN(*ptr, 255));
-		    tbuffer[WMIN(*ptr, 255)] = 0;
+		if (*ptr > begin) {
+		    strncpy(tbuffer, &line[begin], WMIN(*ptr-begin, 255));
+		    tbuffer[WMIN(*ptr-begin, 255)] = 0;
 		    title = (char*)tbuffer;
 		}
 		state = _DONE;
 
-	    } else if (line[*ptr]=='(') 
-		    j++;
-	    else if (line[*ptr]==')')
+	    } else if (line[*ptr]=='(') {
+		j++;
+	    } else if (line[*ptr]==')') {
 		j--;
+	    }
 
 	    break;
 
 	 case _PROMPT:
 	    if (line[*ptr]==')' && j==0) {
 
-		if (*ptr-k > 1) {
-		    strncpy(pbuffer, &line[k], WMIN(*ptr-k, 255));
-		    pbuffer[WMIN(*ptr-k, 255)] = 0;
-		    title = (char*)pbuffer;
+		if (*ptr-begin > 1) {
+		    strncpy(pbuffer, &line[begin], WMIN(*ptr-begin, 255));
+		    pbuffer[WMIN(*ptr-begin, 255)] = 0;
+		    prompt = (char*)pbuffer;
 		}
 		state = _DONE;
 	    } else if (line[*ptr]=='(')
@@ -919,6 +922,7 @@ get_dnd_selection(WScreen *scr)
  * OPTION	w	NORMAL		<selected window id>
  * OPTION	a	NORMAL		<input text>
  * OPTION	d	NORMAL		<OffiX DND selection object>
+ * OPTION	W	NORMAL		<current workspace>
  * OPTION	etc.	NORMAL		%<input>
  */
 #define TMPBUFSIZE 64
@@ -1002,6 +1006,21 @@ ExpandOptions(WScreen *scr, char *cmdline)
 		} else {
 		    out[optr++]=' ';
 		}
+		break;
+		
+	     case 'W':
+		sprintf(tmpbuf, "0x%x", 
+			(unsigned int)scr->current_workspace);
+		slen = strlen(tmpbuf);
+		olen += slen;
+		nout = realloc(out,olen);
+		if (!nout) {
+		    wwarning(_("out of memory during expansion of \"%W\""));
+		    goto error;
+		}
+		out = nout;
+		strcat(out,tmpbuf);
+		optr+=slen;
 		break;
 		
 	     case 'a':

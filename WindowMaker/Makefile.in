@@ -65,8 +65,6 @@ DFLAGS = @DFLAGS@
 GFXFLAGS = @GFXFLAGS@
 GFXLFLAGS = @GFXLFLAGS@
 GFXLIBS = @GFXLIBS@
-I18N = @I18N@
-I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
 LD = @LD@
@@ -79,19 +77,13 @@ NLSDIR = @NLSDIR@
 NM = @NM@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
-REDUCE_APPICONS = @REDUCE_APPICONS@
-SHAPE = @SHAPE@
-SOUND = @SOUND@
 VERSION = @VERSION@
 WPMOFILES = @WPMOFILES@
 XCFLAGS = @XCFLAGS@
 XGETTEXT = @XGETTEXT@
 XLFLAGS = @XLFLAGS@
 XLIBS = @XLIBS@
-XSHM = @XSHM@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
-X_LOCALE = @X_LOCALE@
-pixmapdir = @pixmapdir@
 wprefsdir = @wprefsdir@
 
 SUBDIRS = Backgrounds Defaults IconSets Icons Pixmaps Styles Themes
@@ -129,7 +121,8 @@ prefsdata_DATA =\
 	plmenu\
 	plmenu.fr\
 	plmenu.hr\
-	wmmacros
+	wmmacros \
+	xtree.dat
 
 EXTRA_DIST = $(prefsdata_DATA) mkMakefile
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

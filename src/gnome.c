@@ -464,7 +464,9 @@ wGNOMEProcessClientMessage(XClientMessageEvent *event)
 	} else {
 	    done = False;
 	}
-	return done;
+
+	if (done)
+	    return True;
     }
 
     /* window specific client messages */    

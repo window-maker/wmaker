@@ -140,7 +140,7 @@ showData(_Panel *panel)
 
     sliderCallback(NULL, panel);
     
-    WMSetButtonSelected(panel->tranB, GetBoolForKey("OnTopTransients"));
+    WMSetButtonSelected(panel->tranB, GetBoolForKey("OpenTransientOnOwnerWorkspace"));
     
     WMSetButtonSelected(panel->opaqB, GetBoolForKey("OpaqueMove"));
     
@@ -159,7 +159,7 @@ storeData(_Panel *panel)
     SetBoolForKey(WMGetButtonSelected(panel->miconB), "NoWindowOverIcons");
     SetBoolForKey(WMGetButtonSelected(panel->mdockB), "NoWindowOverDock");
     SetBoolForKey(WMGetButtonSelected(panel->opaqB), "OpaqueMove");
-    SetBoolForKey(WMGetButtonSelected(panel->tranB), "OnTopTransients");
+    SetBoolForKey(WMGetButtonSelected(panel->tranB), "OpenTransientOnOwnerWorkspace");
     SetStringForKey(placements[WMGetPopUpButtonSelectedItem(panel->placP)],
 		    "WindowPlacement");
     sprintf(x, "%i", WMGetSliderValue(panel->hsli));
@@ -317,7 +317,7 @@ createPanel(Panel *p)
     panel->tranB = WMCreateSwitchButton(panel->tranF);
     WMMoveWidget(panel->tranB, 10, 5);
     WMResizeWidget(panel->tranB, 250, 30);
-    WMSetButtonText(panel->tranB, _("Keep transients above their owners"));
+    WMSetButtonText(panel->tranB, _("Open transients in same workspace as their owners"));
     
     WMMapSubwidgets(panel->tranF);
     

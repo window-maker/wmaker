@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <signal.h>
 
 #ifndef False
 # define False 0
@@ -37,7 +38,33 @@
 # define True 1
 #endif
 
-extern void wAbort(int);
+
+static void
+defaultHandler(int bla)
+{
+    if (bla)
+	raise(SIGABRT);
+    else
+	exit(1);
+}
+
+
+static waborthandler *aborthandler = (waborthandler*)defaultHandler;
+
+#define wAbort(a) (*aborthandler)(a)
+
+
+waborthandler*
+wsetabort(waborthandler *handler)
+{
+    waborthandler *old = aborthandler;
+
+    aborthandler = handler;
+
+    return old;
+}
+
+
 
 static int Aborting=0; /* if we're in the middle of an emergency exit */
 

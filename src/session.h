@@ -25,13 +25,17 @@
 
 void wSessionSaveState(WScreen *scr);
 
+void wSessionSaveClients(WScreen *scr);
+
+void wSessionSendSaveYourself(WScreen *scr);
+
 void wSessionClearState(WScreen *scr);
 
 void wSessionRestoreState(WScreen *scr);
 
 void wSessionRestoreLastWorkspace(WScreen *scr);
 
-#ifdef R6SM
+#ifdef XSMP_ENABLED
 void wSessionConnectManager(char **argv, int argc);
 
 void wSessionDisconnectManager(void);

@@ -173,6 +173,12 @@ typedef enum {
 #define WS_FOCUSED	0
 #define WS_UNFOCUSED	1
 #define WS_PFOCUSED	2
+#ifdef TITLE_TEXT_SHADOW
+#define WS_SMENU       3
+#define WS_SFOCUSED    3
+#define WS_SUNFOCUSED  4
+#define WS_SPFOCUSED   5
+#endif /* TITLE_TEXT_SHADOW */
 
 /* clip title colors */
 #define CLIP_NORMAL    0
@@ -240,9 +246,13 @@ typedef struct WPreferences {
 
     char ignore_focus_click;
 
-    char on_top_transients;	       /* transient windows are kept on top
-					* of their owners */
+    char open_transients_with_parent;  /* open transient window in
+					same workspace as parent */
     char title_justification;	       /* titlebar text alignment */
+
+#ifdef TITLE_TEXT_SHADOW
+    char title_shadow;
+#endif
 
 #ifdef KEEP_XKB_LOCK_STATUS
     char modelock;

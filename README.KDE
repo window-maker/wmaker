@@ -10,8 +10,8 @@ Window Maker, if you think these advantages are worthy:
 
 		Window Maker			KWM
 =============================================================================
-Looks		NEXTSTEP/NEXTSTEP enhanced	Original, but reminds
-						Weendoze
+Looks		NEXTSTEP(tm)/NEXTSTEP(tm) 	Original, but reminds
+				enhanced	Windows(tm)
 
 Decoration	solid, gradient, multi-color	solid, vertical and
 Textures	gradient, pixmaps, textured	horizontal gradient,
@@ -23,11 +23,13 @@ Textures	gradient, pixmaps, textured	horizontal gradient,
 Configurable	No				Yes, but not totally
 Titlebar Buttons
 
-Window Specific	Yes				No
-Configuration
+Mini CLI        Yes, but limited                Yes
 
-Quick Keyboard	Yes				No
-Navigation
+Window Specific	Yes				In KDE 1.1, yes.
+Configuration                                   In KDE 1.0, no.
+
+Quick Keyboard	Yes				In KDE 1.1, yes
+Navigation                                      In KDE 1.0, no.
 
 Pager		KDE pagers will work as 	Yes
 		well as GNOME pagers
@@ -35,11 +37,12 @@ Pager		KDE pagers will work as 	Yes
 Session		Not yet supported, but		Yes, old (pre-X11R6) style
 Management	X11R6 style SM is being worked.
 
-Dock		kpanel and the Dock		kpanel
+Dock		kpanel, GNOME panel and Dock	kpanel
 
 GNOME support	Yes				No
 
-Memory Usage(1)	1.85Mb	Lite: 1.79Mb 		3.13Mb
+Memory Usage(1)	1.85Mb	Lite: 1.79Mb 		In KDE 1.0, 3.13Mb
+						In KDE 1.1, probably more
 
 
 (1) Memory usage was tested by running wmaker and kwm at the same machine
@@ -56,15 +59,20 @@ To enable KDE support in Window Maker, you must compile it after
 configuring it as follows:
 ./configure --enable-kde --enable-lite
 
-The --enable-lite flag is optional, but will reduce some memory
+The --enable-lite flag is *optional*, but will reduce some memory
 usage by removing things that are duplicated in Window Maker and KDE.
-
+Do not enable it if you don't care about a few dozen kbytes of memory
+savings (see table above). It won't make KDE or Window Maker any 
+slower/faster.
 
 Then, open WPrefs and turn on the "Disable mouse actions"
 option in the Mouse related options panel. Or enable the 
 DisableWSMouseActions option by hand.
 
 Then, just replace kwm with wmaker in your startkde script.
+If you are going to use Window Makers sound server, comment out
+kwmsound in startkde.  Also if wmaker sets your root window
+background, comment out kbgndwm, kde's wallpaper setter.
 
 Make sure to disable workspace background setting in KDE. If you
 wont be using Window Maker themes anyway, you can set
@@ -109,3 +117,10 @@ positioning/maximization code and kpanel's position.
 * It seems kpanel (and maybe KDE in general) doesn't like dynamically
 changing the number of workspaces. So, don't create or destroy workspaces
 while running on KDE, unless you really need.
+
+* If kpanel, kwmpager or kpager becomes confused about the number of
+windows present, restart them.
+
+* Wmaker opens windows by default under/over the panel, when the panel is
+at top or left of screen.  Use the GUI configuration tool WPrefs to change
+this.

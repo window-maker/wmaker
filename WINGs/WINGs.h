@@ -113,7 +113,7 @@ typedef enum {
     WALeft,
 	WACenter,
 	WARight,
-	WMJustified		       /* not valid for textfields */
+	WAJustified		       /* not valid for textfields */
 } WMAlignment;
 
 
@@ -174,6 +174,17 @@ enum {
 	WMUpTextMovement,
 	WMDownTextMovement
 };
+
+typedef enum {
+	WMGrayModeColorPanel,
+ 	WMRGBModeColorPanel,
+	WMCMYKModeColorPanel,
+	WMHSBModeColorPanel,
+	WMCustomPaletteModeColorPanel,
+	WMColorListModeColorPanel,
+	WMWheelModeColorPanel
+} WMColorPanelMode;
+
 
 
 /* system images */
@@ -282,6 +293,8 @@ typedef WMFilePanel WMSavePanel;
 
 typedef struct W_FontPanel WMFontPanel;
 
+typedef struct W_ColorPanel WMColorPanel;
+
 
 /* item for WMList */
 typedef struct WMListItem {
@@ -370,7 +383,17 @@ typedef WMWidget *WMMatrixCreateCellProc(WMMatrix *mPtr);
 typedef void WMBrowserFillColumnProc(WMBrowser *bPtr, int column);
 
 
+typedef Bool WMConvertSelectionProc(WMWidget *w, Atom selection, Atom target,
+				    Atom *type, void **value, unsigned *length,
+				    int *format);
+
+typedef void WMLoseSelectionProc(WMWidget *w, Atom selection);
+
+typedef void WMSelectionDoneProc(WMWidget *w, Atom selection, Atom target);
+
 /* ....................................................................... */
+
+
 
 void WMInitializeApplication(char *applicationName, int *argc, char **argv);
 
@@ -886,6 +909,20 @@ char *WMGetPopUpButtonItem(WMPopUpButton *bPtr, int index);
 int WMGetPopUpButtonNumberOfItems(WMPopUpButton *bPtr);
 
 void WMSetPopUpButtonEnabled(WMPopUpButton *bPtr, Bool flag);
+
+/* ....................................................................... */
+
+WMColorPanel *WMGetColorPanel(WMScreen *scrPtr);
+
+void WMFreeColorPanel(WMColorPanel *panel);
+
+int WMRunColorPanel(WMColorPanel *panel, WMWindow *owner, RColor color);
+
+void WMSetColorPanelColor(WMColorPanel *panel, RColor color);
+
+RColor WMGetColorPanelColor(WMColorPanel *panel);
+
+void WMSetPickerMode(WMColorPanel *panel, WMColorPanelMode mode);
 
 /* ....................................................................... */
 

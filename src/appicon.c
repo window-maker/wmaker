@@ -498,7 +498,7 @@ setIconCallback(WMenu *menu, WMenuEntry *entry)
     
     wretain(icon);
 
-    result = wIconChooserDialog(scr, &file);    
+    result = wIconChooserDialog(scr, &file, icon->wm_instance, icon->wm_class);
     
     if (result && !icon->destroyed) {
 	if (file[0]==0) {

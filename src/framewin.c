@@ -759,12 +759,28 @@ wFrameWindowPaint(WFrameWindow *fwin)
 
 	XSetForeground(dpy, *fwin->title_gc, 
 		       fwin->title_pixel[fwin->flags.state]);
-	
+	    
 	wDrawString(fwin->titlebar->window, *fwin->font,
 		    *fwin->title_gc, x, 
 		    (*fwin->font)->y + TITLEBAR_EXTRA_HEIGHT/2, title,
 		    titlelen);
-	
+
+#ifdef TITLE_TEXT_SHADOW
+       if(wPreferences.title_shadow){
+          int shadowx,shadowy;
+          XSetForeground(dpy, *fwin->title_gc, 
+              fwin->title_pixel[fwin->flags.state+3]);
+           for(shadowx=0;shadowx<TITLE_TEXT_SHADOW_WIDTH;shadowx++)
+           for(shadowy=0;shadowy<TITLE_TEXT_SHADOW_HEIGHT;shadowy++)
+               wDrawString(fwin->titlebar->window, *fwin->font,
+                       *fwin->title_gc,
+                       x + shadowx + TITLE_TEXT_SHADOW_X_OFFSET, 
+                       (*fwin->font)->y + TITLEBAR_EXTRA_HEIGHT/2
+                        + shadowy + TITLE_TEXT_SHADOW_Y_OFFSET, title,
+                       titlelen);
+       }
+#endif /* TITLE_TEXT_SHADOW */
+
 	free(title);
     }
 }
@@ -900,6 +916,20 @@ wFrameWindowChangeTitle(WFrameWindow *fwin, char *new_title)
 }
 
 
+#ifdef OLWM_HINTS
+void
+wFrameWindowUpdatePushButton(WFrameWindow *fwin, Bool pushed)
+{
+    fwin->flags.right_button_pushed_in = pushed;
+
+    paintButton(fwin->right_button, fwin->title_texture[fwin->flags.state],
+		fwin->title_pixel[fwin->flags.state],
+		fwin->rbutton_image, pushed);
+}
+#endif /* OLWM_HINTS */
+
+
+
 /*********************************************************************/
 
 static void 
@@ -951,6 +981,7 @@ checkTitleSize(WFrameWindow *fwin)
 	fwin->flags.incomplete_title = 0;
     }
 }
+
 
 static void
 paintButton(WCoreWindow *button, WTexture *texture, unsigned long color,
@@ -1050,15 +1081,22 @@ handleButtonExpose(WObjDescriptor *desc, XEvent *event)
 {
     WFrameWindow *fwin = (WFrameWindow*)desc->parent;
     WCoreWindow *button = (WCoreWindow*)desc->self;
-    
+
     if (button == fwin->left_button) {
 	paintButton(button, fwin->title_texture[fwin->flags.state],
 		    fwin->title_pixel[fwin->flags.state],
 		    fwin->lbutton_image, False);
     } else {
+	Bool pushed = False;
+
+#ifdef OLWM_HINTS
+	if (fwin->flags.right_button_pushed_in)
+	    pushed = True;
+#endif
+	/* emulate the olwm pushpin in the "out" state */
 	paintButton(button, fwin->title_texture[fwin->flags.state],
 		    fwin->title_pixel[fwin->flags.state],
-		    fwin->rbutton_image, False);
+		    fwin->rbutton_image, pushed);
     }
 }
 

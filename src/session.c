@@ -1,7 +1,7 @@
 /* session.c - session state handling and R6 style session management
  *
  *  Copyright (c) 1998 Dan Pascu
- *  Copyright (c) 1998 Alfredo Kojima
+ *  Copyright (c) 1998, 1999 Alfredo Kojima
  *
  *  Window Maker window manager
  *
@@ -21,12 +21,50 @@
  *  USA.
  */
 
+
+/*
+ * 
+ * If defined(XSMP_ENABLED) and session manager is running then
+ * 	do normal stuff
+ * else
+ * 	do pre-R6 session management stuff (save window state and relaunch)
+ *
+ * When doing a checkpoint:
+ * 
+ * = Without XSMP
+ * Open "Stop"/status Dialog
+ * Send SAVE_YOURSELF to clients and wait for reply
+ * Save restart info
+ * Save state of clients
+ * 
+ * = With XSMP
+ * Send checkpoint request to sm
+ *
+ * When exiting:
+ * -------------
+ * 
+ * = Without XSMP
+ * 
+ * Open "Exit Now"/status Dialog
+ * Send SAVE_YOURSELF to clients and wait for reply
+ * Save restart info
+ * Save state of clients
+ * Send DELETE to all clients
+ * When no more clients are left or user hit "Exit Now", exit
+ * 
+ * = With XSMP
+ *
+ * Send Shutdown request to session manager
+ * if SaveYourself message received, save state of clients 
+ * if the Die message is received, exit.
+ */
+
 #include "wconfig.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-#ifdef R6SM
+#ifdef XSMP_ENABLED
 #include <X11/SM/SMlib.h>
 #endif
 
@@ -40,6 +78,7 @@
 #include "WindowMaker.h"
 #include "screen.h"
 #include "window.h"
+#include "client.h"
 #include "session.h"
 #include "wcore.h"
 #include "framewin.h"
@@ -56,8 +95,13 @@
 
 #include <proplist.h>
 
+/** Global **/
 
-#ifdef R6SM
+extern Atom _XA_WM_SAVE_YOURSELF;
+
+extern Time LastTimestamp;
+
+#ifdef XSMP_ENABLED
 
 extern int wScreenCount;
 
@@ -528,8 +572,89 @@ wSessionRestoreLastWorkspace(WScreen *scr)
 }
 
 
+static void
+clearWaitingAckState(WScreen *scr)
+{
+    WWindow *wwin;
+    WApplication *wapp;
 
-#ifdef R6SM
+    for (wwin = scr->focused_window; wwin != NULL; wwin = wwin->prev) {
+	wwin->flags.waiting_save_ack = 0;
+	if (wwin->main_window != None) {
+	    wapp = wApplicationOf(wwin->main_window);
+	    if (wapp)
+		wapp->main_window_desc->flags.waiting_save_ack = 0;
+	}
+    }
+}
+
+
+void
+wSessionSaveClients(WScreen *scr)
+{
+    
+}
+		    
+
+/*
+ * With XSMP, this job is done by smproxy
+ */
+void
+wSessionSendSaveYourself(WScreen *scr)
+{
+    WWindow *wwin;
+    int count;
+
+    /* freeze client interaction with clients */
+    XGrabKeyboard(dpy, scr->root_win, False, GrabModeAsync, GrabModeAsync,
+		  CurrentTime);
+    XGrabPointer(dpy, scr->root_win, False, ButtonPressMask|ButtonReleaseMask,
+		 GrabModeAsync, GrabModeAsync, scr->root_win, None,
+		 CurrentTime);
+
+    clearWaitingAckState(scr);
+
+    count = 0;
+
+    /* first send SAVE_YOURSELF for everybody */
+    for (wwin = scr->focused_window; wwin != NULL; wwin = wwin->prev) {
+	WWindow *mainWin;
+
+	mainWin = wWindowFor(wwin->main_window);
+
+	if (mainWin) {
+	    /* if the client is a multi-window client, only send message
+	     * to the main window */
+	    wwin = mainWin;
+	}
+
+	/* make sure the SAVE_YOURSELF flag is up-to-date */
+	PropGetProtocols(wwin->client_win, &wwin->protocols);
+
+	if (wwin->protocols.SAVE_YOURSELF) {
+	    if (!wwin->flags.waiting_save_ack) {
+		wClientSendProtocol(wwin, _XA_WM_SAVE_YOURSELF, LastTimestamp);
+
+		wwin->flags.waiting_save_ack = 1;
+		count++;
+	    }
+	} else {
+	    wwin->flags.waiting_save_ack = 0;
+	}
+    }
+
+    /* then wait for acknowledge */
+    while (count > 0) {
+	
+    }
+
+    XUngrabPointer(dpy, CurrentTime);
+    XUngrabKeyboard(dpy, CurrentTime);
+    XFlush(dpy);
+}
+
+
+#ifdef XSMP_ENABLED
 /*
  * With full session management support, the part of WMState 
  * that store client window state will become obsolete (maybe we can reuse
@@ -548,7 +673,7 @@ wSessionRestoreLastWorkspace(WScreen *scr)
  * The old session code will become obsolete. When wmaker is
  * compiled with R6 sm support compiled in, itll be better to
  * use a totally rewritten state saving code, but we can keep
- * the current code for when R6SM is not compiled in. 
+ * the current code for when XSMP_ENABLED is not compiled in. 
  * 
  * This will be confusing to old users (well get lots of "SAVE_SESSION broke!"
  * messages), but itll be better.
@@ -803,8 +928,8 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
 
     {
 	proplist_t statefile;
-	
-	statefile = PLMakeDictionaryFromEntries(PLMakeString("Version"), 
+
+	statefile = PLMakeDictionaryFromEntries(PLMakeString("Version"),
 						PLMakeString("1.0"),
 
 						PLMakeString("Screens"),
@@ -1107,10 +1232,11 @@ wSessionRequestShutdown(void)
 			       False, True);
 }
 
+
 Bool 
 wSessionIsManaged(void)
 {
     return sSMCConn!=NULL;
 }
 
-#endif /* !R6SM */
+#endif /* !XSMP_ENABLED */

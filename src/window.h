@@ -101,7 +101,7 @@ typedef struct {
 
     /* ours */
     unsigned int kill_close:1;	       /* can't send WM_DELETE_WINDOW */
-	
+
     unsigned int no_shadeable:1;
     unsigned int omnipresent:1;
     unsigned int skip_window_list:1;
@@ -132,6 +132,14 @@ typedef struct {
      * generate their own appicons and for apps that have no_appicon=1
      */
     unsigned int emulate_appicon:1;
+
+    /* toolkit specific attribute flags. These are unchangeable and
+     * unconfigurable and must not be saved as state. */
+#ifdef OLWM_HINTS
+    unsigned int olwm_transient:1;
+    unsigned int olwm_warp_to_pin:1;
+#endif
+
 } WWindowAttributes;
 
 
@@ -141,9 +149,8 @@ typedef struct {
  */
 typedef struct {
     unsigned int TAKE_FOCUS:1;
-    unsigned int SAVE_YOURSELF:1;
     unsigned int DELETE_WINDOW:1;
-
+    unsigned int SAVE_YOURSELF:1;
     /* WindowMaker specific */
     unsigned int MINIATURIZE_WINDOW:1;
 #ifdef MONITOR_HEARTBEAT 
@@ -212,7 +219,11 @@ typedef struct WWindow {
 #ifdef KEEP_XKB_LOCK_STATUS
     int languagemode;
 #endif /* KEEP_XKB_LOCK_STATUS */
-    
+
+#ifdef OLWM_HINTS_unfinished
+    struct WOLWindowState ol_window_state;
+#endif
+
 #ifdef MONITOR_HEARTBEAT
     time_t last_beat;
 #endif
@@ -253,11 +264,12 @@ typedef struct WWindow {
 
 	unsigned int menu_open_for_me:1;   /* window commands menu */
 
+	unsigned int waiting_save_ack:1;   /* waiting for SAVE_YOURSELF ack */
 #ifdef KWM_HINTS
 	unsigned int kwm_hidden_for_modules:1;
 #endif
 #ifdef OLWM_HINTS
-	unsigned int olwm_push_pin:1;      /* emulate pushpin behaviour */
+	unsigned int olwm_push_pin_out:1;/* emulate pushpin behaviour */
 	unsigned int olwm_limit_menu:1;
 #endif
     } flags;		/* state of the window */
@@ -314,7 +326,7 @@ void wWindowClearShape(WWindow *wwin);
 
 WWindow *wManageWindow(WScreen *scr, Window window);
 
-void wUnmanageWindow(WWindow *wwin, int restore);
+void wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed);
 
 void wWindowFocus(WWindow *wwin);
 void wWindowUnfocus(WWindow *wwin);
@@ -350,6 +362,8 @@ void wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace);
 void wWindowUpdateGNUstepAttr(WWindow *wwin, GNUstepWMAttributes *attr);
 
 void wWindowMap(WWindow *wwin);
+
+void wWindowUnmap(WWindow *wwin);
 
 Bool wWindowCanReceiveFocus(WWindow *wwin);
 

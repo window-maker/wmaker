@@ -42,12 +42,15 @@
 
 #include <proplist.h>
 
+#define PROG_VERSION	"wmsetbg (Window Maker) 2.1"
+
 
 #define WORKSPACE_COUNT (MAX_WORKSPACES+1)
 
 
 
 Display *dpy;
+char *display = "";
 Window root;
 int scr;
 int scrWidth;
@@ -56,6 +59,8 @@ int scrHeight;
 Pixmap CurrentPixmap = None;
 char *PixmapPath = NULL;
 
+
+extern Pixmap LoadJPEG(RContext *rc, char *file_name, int *width, int *height);
 
 
 typedef struct BackgroundTexture {
@@ -73,17 +78,20 @@ typedef struct BackgroundTexture {
 
 
 
-
 RImage*
 loadImage(RContext *rc, char *file)
 {
     char *path;
     RImage *image;
 
-    path = wfindfile(PixmapPath, file);
-    if (!path) {
-	wwarning("%s:could not find image file used in texture", file);
-	return NULL;
+    if (access(file, F_OK)!=0) {
+	path = wfindfile(PixmapPath, file);
+	if (!path) {
+	    wwarning("%s:could not find image file used in texture", file);
+	    return NULL;
+	}
+    } else {
+	path = wstrdup(file);
     }
 
     image = RLoadImage(rc, path, 0);
@@ -95,7 +103,6 @@ loadImage(RContext *rc, char *file)
 
     return image;
 }
-
 
 
 BackgroundTexture*
@@ -315,15 +322,24 @@ parseTexture(RContext *rc, char *text)
 	  || strcasecmp(type, "mpixmap")==0
 	  || strcasecmp(type, "tpixmap")==0) {
 	XColor color;
-	Pixmap pixmap;
-	RImage *image;
+	Pixmap pixmap = None;
+	RImage *image = NULL;
 	int w, h;
+	int iwidth, iheight;
 
 	GETSTR(val, tmp, 1);
+/*
+	if (toupper(type[0]) == 'T' || toupper(type[0]) == 'C')
+	    pixmap = LoadJPEG(rc, tmp, &iwidth, &iheight);
+ */
 
-	image = loadImage(rc, tmp);
-	if (!image) {
-	    goto error;
+	if (!pixmap) {
+	    image = loadImage(rc, tmp);
+	    if (!image) {
+		goto error;
+	    }
+	    iwidth = image->width;
+	    iheight = image->height;
 	}
 
 	GETSTR(val, tmp, 2);
@@ -333,24 +349,26 @@ parseTexture(RContext *rc, char *text)
 	    RDestroyImage(image);
 	    goto error;
 	}
-	{
+	if (!XAllocColor(dpy, DefaultColormap(dpy, scr), &color)) {
 	    RColor rcolor;
 
 	    rcolor.red = color.red >> 8;
 	    rcolor.green = color.green >> 8;
-	    rcolor.blue = color.blue >> 8;	    
+	    rcolor.blue = color.blue >> 8;
 	    RGetClosestXColor(rc, &rcolor, &color);
 	}
 	switch (toupper(type[0])) {
 	 case 'T':
-	    texture->width = image->width;
-	    texture->height = image->height;
-	    if (!RConvertImage(rc, image, &pixmap)) {
+	    texture->width = iwidth;
+	    texture->height = iheight;
+	    if (!pixmap && !RConvertImage(rc, image, &pixmap)) {
 		wwarning("could not convert texture:%s", 
 			 RMessageForError(RErrorCode));
 		RDestroyImage(image);
 		goto error;
 	    }
+	    if (image)
+		RDestroyImage(image);
 	    break;
 	 case 'S':
 	 case 'M':
@@ -358,12 +376,12 @@ parseTexture(RContext *rc, char *text)
 		w = scrWidth;
 		h = scrHeight;
 	    } else {
-		if (image->width*scrHeight > image->height*scrWidth) {
+		if (iwidth*scrHeight > iheight*scrWidth) {
 		    w = scrWidth;
-		    h = (scrWidth*image->height)/image->width;
+		    h = (scrWidth*iheight)/iwidth;
 		} else {
 		    h = scrHeight;
-		    w = (scrHeight*image->width)/image->height;
+		    w = (scrHeight*iwidth)/iheight;
 		}
 	    }
 	    {
@@ -378,21 +396,22 @@ parseTexture(RContext *rc, char *text)
 		}
 		RDestroyImage(image);
 		image = simage;
+		iwidth = image->width;
+		iheight = image->height;
 	    }
 	    /* fall through */
-	 case 'c':
 	 case 'C':
 	    {
 		Pixmap cpixmap;
 
-		if (!RConvertImage(rc, image, &pixmap)) {
+		if (!pixmap && !RConvertImage(rc, image, &pixmap)) {
 		    wwarning("could not convert texture:%s", 
 			     RMessageForError(RErrorCode));
 		    RDestroyImage(image);
 		    goto error;
 		}
 
-		if (image->width != scrWidth || image->height != scrHeight) {
+		if (iwidth != scrWidth || iheight != scrHeight) {
 		    int x, y, sx, sy, w, h;
 
 		    cpixmap = XCreatePixmap(dpy, root, scrWidth, scrHeight,
@@ -402,21 +421,21 @@ parseTexture(RContext *rc, char *text)
 		    XFillRectangle(dpy, cpixmap, DefaultGC(dpy, scr),
 				   0, 0, scrWidth, scrHeight);
 
-		    if (image->height < scrHeight) {
-			h = image->height;
+		    if (iheight < scrHeight) {
+			h = iheight;
 			y = (scrHeight - h)/2;
 			sy = 0;
 		    } else {
-			sy = (image->height - scrHeight)/2;
+			sy = (iheight - scrHeight)/2;
 			y = 0;
 			h = scrHeight;
 		    }
-		    if (image->width < scrWidth) {
-			w = image->width;
+		    if (iwidth < scrWidth) {
+			w = iwidth;
 			x = (scrWidth - w)/2;
 			sx = 0;
 		    } else {
-			sx = (image->width - scrWidth)/2;
+			sx = (iwidth - scrWidth)/2;
 			x = 0;
 			w = scrWidth;
 		    }
@@ -426,7 +445,8 @@ parseTexture(RContext *rc, char *text)
 		    XFreePixmap(dpy, pixmap);
 		    pixmap = cpixmap;
 		}
-		RDestroyImage(image);
+		if (image)
+		    RDestroyImage(image);
 
 		texture->width = scrWidth;
 		texture->height = scrHeight;
@@ -638,7 +658,7 @@ duplicatePixmap(Pixmap pixmap, int width, int height)
 
     /* must open a new display or the RetainPermanent will
      * leave stuff allocated in RContext unallocated after exit */
-    tmpDpy = XOpenDisplay("");
+    tmpDpy = XOpenDisplay(display);
     if (!tmpDpy) {
 	wwarning("could not open display to update background image information");
 
@@ -855,7 +875,7 @@ helperLoop(RContext *rc)
 
 
 void
-updateDomain(char *domain, int workspace, char *texture)
+updateDomain(char *domain, char *texture)
 {
     char *program = "wdwrite";
 
@@ -952,21 +972,25 @@ wAbort()
 void
 print_help(char *ProgName)
 {
-    printf("usage: %s [-options] image\n", ProgName);
+    printf("usage: %s [options] image\n", ProgName);
     puts("options:");
-    puts(" -d		dither image");
-    puts(" -m		match  colors");
-    puts(" -b <color>	background color");
-    puts(" -t		tile   image");
-    puts(" -e		center image");
-    puts(" -s		scale  image (default)");
-    puts(" -a		scale  image and keep aspect ratio");
-    puts(" -u		update WindowMaker domain database");
-    puts(" -D <domain>	update <domain> database");
-    puts(" -c <cpc>	colors per channel to use");
-    puts(" -p <texture>	proplist style texture specification");
-/*    puts(" -w <workspace> update the background for the specified workspace");
- */
+#define P(m) puts(m)
+P(" -display	 		display to use");
+P(" -d, --dither	 		dither image");
+P(" -m, --match			match  colors");
+P(" -b, --back-color <color>	background color");
+P(" -t, --tile			tile   image");
+P(" -e, --center			center image");
+P(" -s, --scale			scale  image (default)");
+P(" -a, --maxscale			scale  image and keep aspect ratio");
+P(" -u, --update-wmaker		update WindowMaker domain database");
+P(" -D, --update-domain <domain>	update <domain> database");
+P(" -c, --colors <cpc>		colors per channel to use");
+P(" -p, --parse <texture>		proplist style texture specification");
+P(" -w, --workspace <workspace>	update background for the specified workspace");
+P("     --version 			show version of wmsetbg and exit");
+P("     --help 			show this help and exit");    
+#undef P
 }
 
 
@@ -1044,26 +1068,41 @@ main(int argc, char **argv)
     
     WMInitializeApplication("wmsetbg", &argc, argv);
     
-    for (i=0; i<argc; i++) {
+    for (i=1; i<argc; i++) {
 	if (strcmp(argv[i], "-helper")==0) {
 	    helperMode = 1;
-	} else if (strcmp(argv[i], "-s")==0) {
+	} else if (strcmp(argv[i], "-display")==0) {
+	    i++;
+	    if (i>=argc) {
+		wfatal("too few arguments for %s\n", argv[i-1]);
+		exit(1);
+	    }
+	    display = argv[i+1];
+	} else if (strcmp(argv[i], "-s")==0
+		   || strcmp(argv[i], "--scale")==0) {
 	    style = "spixmap";
-	} else if (strcmp(argv[i], "-t")==0) {
+	} else if (strcmp(argv[i], "-t")==0
+		   || strcmp(argv[i], "--tile")==0) {
 	    style = "tpixmap";
-	} else if (strcmp(argv[i], "-e")==0) {
+	} else if (strcmp(argv[i], "-e")==0
+		   || strcmp(argv[i], "--center")==0) {
 	    style = "cpixmap";
-	} else if (strcmp(argv[i], "-a")==0) {
+	} else if (strcmp(argv[i], "-a")==0
+		   || strcmp(argv[i], "--maxscale")==0) {
 	    style = "mpixmap";	    
-	} else if (strcmp(argv[i], "-d")==0) {
+	} else if (strcmp(argv[i], "-d")==0
+		   || strcmp(argv[i], "--dither")==0) {
 	    render_mode = RM_DITHER;
 	    obey_user++;
-	} else if (strcmp(argv[i], "-m")==0) {
+	} else if (strcmp(argv[i], "-m")==0
+		   || strcmp(argv[i], "--match")==0) {
 	    render_mode = RM_MATCH;
 	    obey_user++;
-	} else if (strcmp(argv[i], "-u")==0) {
+	} else if (strcmp(argv[i], "-u")==0
+		   || strcmp(argv[i], "--update-wmaker")==0) {
 	    update++;
-	} else if (strcmp(argv[i], "-D")==0) {
+	} else if (strcmp(argv[i], "-D")==0
+		   || strcmp(argv[i], "--update-domain")==0) {
 	    update++;
 	    i++;
 	    if (i>=argc) {
@@ -1071,7 +1110,8 @@ main(int argc, char **argv)
 		exit(1);
 	    }
 	    domain = wstrdup(argv[i]);
-	} else if (strcmp(argv[i], "-c")==0) {
+	} else if (strcmp(argv[i], "-c")==0
+		   || strcmp(argv[i], "--colors")==0) {
 	    i++;
 	    if (i>=argc) {
 		wfatal("too few arguments for %s\n", argv[i-1]);
@@ -1081,21 +1121,24 @@ main(int argc, char **argv)
 		wfatal("bad value for colors per channel: \"%s\"\n", argv[i]);
 		exit(1);
 	    }
-	} else if (strcmp(argv[i], "-b")==0) {
+	} else if (strcmp(argv[i], "-b")==0
+		   || strcmp(argv[i], "--back-color")==0) {
 	    i++;
 	    if (i>=argc) {
 		wfatal("too few arguments for %s\n", argv[i-1]);
 		exit(1);
 	    }
 	    back_color = argv[i];
-	} else if (strcmp(argv[i], "-p")==0) {
+	} else if (strcmp(argv[i], "-p")==0
+		   || strcmp(argv[i], "--parse")==0) {
 	    i++;
 	    if (i>=argc) {
 		wfatal("too few arguments for %s\n", argv[i-1]);
 		exit(1);
 	    }
 	    texture = argv[i];
-	} else if (strcmp(argv[i], "-w")==0) {
+	} else if (strcmp(argv[i], "-w")==0
+		   || strcmp(argv[i], "--workspace")==0) {
 	    i++;
 	    if (i>=argc) {
 		wfatal("too few arguments for %s\n", argv[i-1]);
@@ -1106,6 +1149,11 @@ main(int argc, char **argv)
 			argv[i]);
 		exit(1);
 	    }
+	} else if (strcmp(argv[i], "--version")==0) {
+
+	    printf(PROG_VERSION);
+	    exit(0);
+
 	} else if (argv[i][0] != '-') {
 	    image_name = argv[i];
 	} else {
@@ -1113,12 +1161,16 @@ main(int argc, char **argv)
 	    exit(1);
 	}
     }
+    if (!image_name && !texture) {
+	printf("%s: you must specify a image file name\n", argv[0]);
+	exit(1);
+    }
 
     domain_prop = getDomain(domain);
     
     PixmapPath = getPixmapPath(domain_prop);
 
-    dpy = XOpenDisplay("");
+    dpy = XOpenDisplay(display);
     if (!dpy) {
 	wfatal("could not open display");
 	exit(1);
@@ -1153,12 +1205,12 @@ main(int argc, char **argv)
 	char buffer[4098];
 
 	if (!texture) {
-	    sprintf(buffer, "(%s, %s, %s)", style, image_name, back_color);
+	    sprintf(buffer, "(%s, \"%s\", %s)", style, image_name, back_color);
 	    texture = (char*)buffer;
 	}
 
 	if (update && workspace < 0) {
-	    updateDomain(domain, workspace, texture);
+	    updateDomain(domain, texture);
 	}
 
 	tex = parseTexture(rc, texture);
@@ -1167,10 +1219,12 @@ main(int argc, char **argv)
 
 	if (workspace<0)
 	    changeTexture(tex);
-	else
+	else {
+	    /* always update domain */
 	    changeTextureForWorkspace(domain_prop, texture, workspace);
+	}
     }
 
-    return -1;
+    return 0;
 }
 

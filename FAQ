@@ -58,6 +58,8 @@ Summary of Contents:
 	 shaded and I can't run new instances.
      3.9 When I run wmaker it complains about not being able to load any
      	 fonts.
+     3.10 When I set the root background with wmsetbg by hand it works,
+     	 but when I do that from the configuration files it doesnt!
 
 4 - Configuration 
      4.1 What are those files inside my ~/GNUstep directory? 
@@ -680,12 +682,32 @@ the WM_CLASS hint for the window, like the -name parameter for
 xterm, rxvt and other programs.
 
 
+
 3.9 When I run wmaker it complains about not being able to load any fonts.
 ----------------------------------
 Check if the locale settings are correct. If you're not sure what to
 do, unset the LANG environment variable before running wmaker.
 
 TODO: give complete explanation
+
+
+
+3.10 When I set the root background with wmsetbg by hand it works,
+     but when I do that from the configuration files it doesnt!
+----------------------------------
+
+DOH! If you set the root background with wmsetbg by hand, it will obviously
+find the image, since you have explicitly specified it by hand. But if you
+simply put it in ~/GNUstep/Defaults/WindowMaker in some option like
+WorkspaceBack, it will not find the image because Window Maker can't read
+your mind to figure where you put the image. So, to fix it, you have to
+either place the full path for the image in the texture specification or put
+the path for the directory you put your background images in the PixmapPath
+option. You can also put all your background images in places like
+~/GNUstep/Library/WindowMaker/Backgrounds or
+/usr/local/share/WindowMaker/Backgrounds
+
+
 
 -=-=-=-=-=-=-=-
 Configuration:

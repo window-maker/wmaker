@@ -27,6 +27,7 @@ hr.po	Croatian	3	Toni Bilic <tbilic@efos.hr>
 el.po	Greek			Nikolaos Papagrigoriou <papanikos@usa.net>
 pl.po	Polish			Piotr Dembiñski <pdemb@aurora.put.poznan.pl>
 ro.po	Romanian		Andrei Vuta <gigi_man@manag.pub.ro>
+dk.po	Danish			Birger Langkjer <langkjer@post3.tele.dk>
 
 
 Some translations are based on previous translations by other people.
@@ -64,8 +65,11 @@ Then rename the WindowMake.pot file to the language code
 with a .po extension, reconfigure WindowMaker and run
 make install.
 
-To update an already translated message file use the tupdate command. As in:
-tupdate WindowMaker.pot pt.po > pt.po.new
+To update an already translated message file use the msgmerge command. As in:
+msgmerge WindowMaker.pot pt.po > pt.po.new
+
+If you use an older version of gettext, the command is tupdate, instead
+of msgmerge.
 
 
 Notes: 
