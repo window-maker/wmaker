@@ -129,7 +129,9 @@ createView(W_Screen *screen, W_View *parent)
 
 	adoptChildView(parent, view);
     }
-    
+
+    view->refCount = 1;
+
     view->eventHandlers = WMCreateBag(4);
 
     return view;
@@ -465,8 +467,11 @@ destroyView(W_View *view)
 void
 W_DestroyView(W_View *view)
 {
-    if (view->refCount == 0)
-	destroyView(view);
+    view->refCount--;
+
+    if (view->refCount < 1) {
+        destroyView(view);
+    }
 }
 
 
@@ -672,7 +677,7 @@ W_ReleaseView(WMView *view)
 {
     view->refCount--;
 
-    if (view->refCount < 0) {
+    if (view->refCount < 1) {
 	destroyView(view);
     }
 }
