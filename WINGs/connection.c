@@ -710,7 +710,7 @@ WMSendConnectionData(WMConnection *cPtr, WMData *data) /*FOLD00*/
 {
     int bytes, pos, len, totalTransfer;
     TimeoutData *tPtr = &cPtr->sendTimeout;
-    const void *dataBytes;
+    const unsigned char *dataBytes;
 
     wassertrv(cPtr->state!=WCNotConnected && cPtr->state!=WCListening, -1);
     wassertrv(cPtr->state!=WCInProgress && cPtr->state!=WCFailed, -1);
@@ -733,7 +733,7 @@ WMSendConnectionData(WMConnection *cPtr, WMData *data) /*FOLD00*/
 
     while (WMGetBagItemCount(cPtr->outputQueue) > 0) {
         data = WMGetFromBag(cPtr->outputQueue, 0);
-        dataBytes = WMDataBytes(data);
+        dataBytes = (const unsigned char *)WMDataBytes(data);
         len = WMGetDataLength(data);
         pos = cPtr->bufPos; /* where we're left last time */
         while(pos < len) {

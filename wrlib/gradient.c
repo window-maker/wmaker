@@ -172,14 +172,13 @@ renderVGradient(unsigned width, unsigned height, int r0, int g0, int b0,
     unsigned long r, g, b, dr, dg, db;
     RImage *image;
     unsigned char *ptr;
-    unsigned int *iptr;
     unsigned char rr, gg, bb;
 
     image = RCreateImage(width, height, False);
     if (!image) {
 	return NULL;
     }    
-    iptr = (unsigned int*)ptr = image->data;
+    ptr = image->data;
 
     r = r0<<16;
     g = g0<<16;

@@ -158,7 +158,9 @@ WMSetDataLength(WMData *aData, unsigned length) /*FOLD00*/
         WMSetDataCapacity(aData, length);
     }
     if (length > aData->length) {
-        memset(aData->bytes + aData->length, 0, length - aData->length);
+		unsigned char	*dataBytes = (unsigned char *)aData->bytes;
+
+        memset(dataBytes + aData->length, 0, length - aData->length);
     }
     aData->length = length;
 }
@@ -202,10 +204,12 @@ WMGetDataBytesWithLength(WMData *aData, void *buffer, unsigned length) /*FOLD00*
 void
 WMGetDataBytesWithRange(WMData *aData, void *buffer, WMRange aRange) /*FOLD00*/
 {
+	unsigned char *dataBytes = (unsigned char *)aData->bytes;
+
     wassertr(aRange.position < aData->length);
     wassertr(aRange.count <= aData->length-aRange.position);
 
-    memcpy(buffer, aData->bytes + aRange.position, aRange.count);
+    memcpy(buffer,dataBytes + aRange.position, aRange.count);
 }
 
 
@@ -258,6 +262,7 @@ WMAppendDataBytes(WMData *aData, void *bytes, unsigned length) /*FOLD00*/
 {
     unsigned oldLength = aData->length;
     unsigned newLength = oldLength + length;
+	unsigned char *dataBytes = (unsigned char *)aData->bytes;
 
     if (newLength > aData->capacity) {
         unsigned nextCapacity = aData->capacity + aData->growth;
@@ -272,7 +277,7 @@ WMAppendDataBytes(WMData *aData, void *bytes, unsigned length) /*FOLD00*/
         WMSetDataCapacity(aData, nextCapacity);
         aData->growth = nextGrowth;
     }
-    memcpy(aData->bytes + oldLength, bytes, length);
+    memcpy(dataBytes + oldLength, bytes, length);
     aData->length = newLength;
 }
 
@@ -291,20 +296,24 @@ WMAppendData(WMData *aData, WMData *anotherData) /*FOLD00*/
 void
 WMReplaceDataBytesInRange(WMData *aData, WMRange aRange, void *bytes) /*FOLD00*/
 {
+	unsigned char *dataBytes = (unsigned char *)aData->bytes;
+
     wassertr(aRange.position < aData->length);
     wassertr(aRange.count <= aData->length-aRange.position);
 
-    memcpy(aData->bytes + aRange.position, bytes, aRange.count);
+    memcpy(dataBytes + aRange.position, bytes, aRange.count);
 }
 
 
 void
 WMResetDataBytesInRange(WMData *aData, WMRange aRange) /*FOLD00*/
 {
+	unsigned char *dataBytes = (unsigned char *)aData->bytes;
+
     wassertr(aRange.position < aData->length);
     wassertr(aRange.count <= aData->length-aRange.position);
 
-    memset(aData->bytes + aRange.position, 0, aRange.count);
+    memset(dataBytes + aRange.position, 0, aRange.count);
 }
 
 
