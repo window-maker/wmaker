@@ -1480,16 +1480,15 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 
 	    if(done==2) {
     		if (wwin->flags.shaded || scr->selected_windows) {
-		    WMBag *bag;
-		    bag=scr->selected_windows;
-		    if (!WMGetBagItemCount(scr->selected_windows)) {
+		    if (!scr->selected_windows) {
 		    	wWindowMove(wwin, src_x+off_x, src_y+off_y);
 		        wWindowSynthConfigureNotify(wwin);
 		    } else {
-			int i;
-			doWindowMove(wwin,scr->selected_windows,off_x,off_y);
-			for (i = 0; i < WMGetBagItemCount(bag); i++) {
-			    wWindowSynthConfigureNotify(WMGetFromBag(bag, i));
+                int i;
+                WMBag *bag = scr->selected_windows;
+                doWindowMove(wwin,scr->selected_windows,off_x,off_y);
+                for (i = 0; i < WMGetBagItemCount(bag); i++) {
+                    wWindowSynthConfigureNotify(WMGetFromBag(bag, i));
 			}
 		    }
 		} else {
