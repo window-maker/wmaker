@@ -575,8 +575,8 @@ autoScroll(void *data)
     int dy = 0;
 
 
-    if (bPtr->scrollStartY >= scrHeight-1
-	&& bPtr->menuView->pos.y+bPtr->menuView->size.height >= scrHeight-1) {
+    if (bPtr->scrollStartY > scrHeight-1
+	&& bPtr->menuView->pos.y+bPtr->menuView->size.height > scrHeight-1) {
 	repeat = 1;
 
 	if (bPtr->menuView->pos.y+bPtr->menuView->size.height-5 
@@ -604,6 +604,9 @@ autoScroll(void *data)
 	oldItem = bPtr->highlightedItem;
 	bPtr->highlightedItem = (bPtr->scrollStartY - bPtr->menuView->pos.y)
 	    / bPtr->view->size.height;
+
+	if (bPtr->highlightedItem >= WMGetBagItemCount(bPtr->items))
+	    bPtr->highlightedItem = WMGetBagItemCount(bPtr->items)-1;
 
 	if (oldItem!=bPtr->highlightedItem) {
 	    WMMenuItem *item = 
