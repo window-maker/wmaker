@@ -474,6 +474,7 @@ WMSetWindowInitialPosition(WMWindow *win, int x, int y)
     win->upos.y = y;
     if (win->view->flags.realized)
 	setSizeHints(win);
+    WMMoveWidget(win, x, y);
 }
 
 
