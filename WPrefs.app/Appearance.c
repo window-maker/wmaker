@@ -1857,7 +1857,7 @@ createPanel(Panel *p)
     WMGroupButtons(panel->taliB[0], panel->taliB[1]);
     WMGroupButtons(panel->taliB[0], panel->taliB[2]);
 
-    WMMapSubwidgets(panel->taliB);
+    WMMapSubwidgets(panel->taliF);
     
     WMMapSubwidgets(panel->optF);
 

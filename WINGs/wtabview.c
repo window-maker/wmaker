@@ -640,6 +640,8 @@ WMSetTabViewFont(WMTabView *tPtr, WMFont *font)
 	WMReleaseFont(tPtr->font);
 
     tPtr->font = WMRetainFont(font);
+    tPtr->tabHeight = WMFontHeight(tPtr->font) + 3;
+    recalcTabWidth(tPtr);
 }
 
 
