@@ -424,7 +424,7 @@ int main(int argc, char **argv)
      * 
      * Put the testSomething() function you want to test here.
      */
-#if 0
+#if 1
     testOpenFilePanel(scr);
     testFontPanel(scr);
     testList(scr);

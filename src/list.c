@@ -131,7 +131,7 @@ list_remove_head(LinkedList** list)
  * The difference is that above function do a copying of the structure
  * unlike the below that only changes where list points.
  * This makes the above function twice slower, because it copies the
- * whole structure, which contains 2 pointers. -Dan
+ * whole structure, which contains 2 pointers. -Dan.
  * 
  * I don't know. I just copied this file from the gcc distribution
  * (I liked the API). One could think that the above function would

@@ -1,5 +1,5 @@
 /*
- * wconfig.h- default configuration and definitions 
+ * wconfig.h- default configuration and definitions + compile time options
  * 
  *  WindowMaker window manager
  * 
@@ -25,6 +25,8 @@
 
 #include "config.h"
 
+/*** Change it (wconfig.h) *after* you ran configure ***/
+
 /*
  *--------------------------------------------------------------------
  * 			Feature Selection
@@ -38,14 +40,6 @@
 /* undefine ANIMATIONS if you don't want animations for iconification,
  * shading, icon arrangement etc. */
 #define ANIMATIONS
-
-
-/*
- * #undef if you dont want the window creation animation when superfluous
- * is enabled.
- * THIS WILL NOT BE MADE RUN-TIME.
- */
-#define WINDOW_BIRTH_ZOOM
 
 
 /*
@@ -83,13 +77,11 @@
  */
 #define OFFIX_DND
 
-
-/* define CONFIGURE_WINDOW_WHILE_MOVING if you want WindowMaker to send
- * the synthetic ConfigureNotify event to windows while moving at every
- * single movement. Default is to send a synthetic ConfigureNotify event
- * only at the end of window moving, which improves performance.
+/*
+ * support for XDE drang and drop in the Dock. still in beta
  */
-#undef CONFIGURE_WINDOW_WHILE_MOVING
+#undef XDE_DND
+
 
 /*
  * Undefine BALLOON_TEXT if you don't want balloons for showing extra
@@ -132,7 +124,36 @@
  */
 #define NUMLOCK_HACK
 
+/*
+ * define REDUCE_APPICONS if you want apps with the same WM_INSTANCE &&
+ * WM_CLASS to share an appicon
+ */
+@REDUCE_APPICONS@
 
+
+/*
+ * define OPTIMIZE_SHAPE if you want the shape setting code to be optimized
+ * for applications that change their shape frequently (like xdaliclock
+ * -shape), removing flickering. If wmaker and your display are on
+ * different machines and the network connection is slow, it is not
+ * recommended. 
+ */
+#undef OPTIMIZE_SHAPE
+
+/* define CONFIGURE_WINDOW_WHILE_MOVING if you want WindowMaker to send
+ * the synthetic ConfigureNotify event to windows while moving at every
+ * single movement. Default is to send a synthetic ConfigureNotify event
+ * only at the end of window moving, which improves performance.
+ */
+#undef CONFIGURE_WINDOW_WHILE_MOVING
+
+
+/*
+ *..........................................................................
+ * The following options WILL NOT BE MADE RUN-TIME. Please do not request.
+ * They will only add unneeded bloat.
+ *..........................................................................
+ */
 
 /*
  * define SHADOW_RESIZEBAR if you want a resizebar with shadows like in
@@ -141,19 +162,24 @@
  */
 #undef SHADOW_RESIZEBAR
 
-/*
- * define REDUCE_APPICONS if you want apps with the same WM_INSTANCE &&
- * WM_CLASS to share an appicon
- */
-@REDUCE_APPICONS@
 
 /*
- * Define SPREAD_ICON if you want icon blowing animation (when detached from
- * dock/clip in the superfluous mode), to spread the icon in four directions.
- * If this is undefined, then the classic "Falling pieces" animation is used.
+ * Define DEMATERIALIZE_ICON if you want the undocked icon animation
+ * to be a progressive disaparison animation. 
  */
-#undef SPREAD_ICON
+#undef DEMATERIALIZE_ICON
 
+/*
+ * Define ICON_KABOOM_EXTRA if you want extra fancy icon undocking
+ * explosion animation.
+ */
+#undef ICON_KABOOM_EXTRA
+
+/*
+ * #undef if you dont want the window creation animation when superfluous
+ * is enabled.
+ */
+#undef WINDOW_BIRTH_ZOOM
 
 
 /*
@@ -227,6 +253,12 @@
  * opposed to OpenStep */
 #define SINGLE_MENULEVEL
 
+/* max. time to spend doing animations in seconds. If the animation
+ * time exceeds this value, it is immediately finished. Usefull for
+ * moments of high-load.
+ */
+#define MAX_ANIMATION_TIME	1
+
 /* Zoom animation */
 #define MINIATURIZE_ANIMATION_FRAMES_Z   5
 #define MINIATURIZE_ANIMATION_STEPS_Z    12
@@ -241,6 +273,9 @@
 #define MINIATURIZE_ANIMATION_STEPS_F    16
 #define MINIATURIZE_ANIMATION_DELAY_F    1000
 #define MINIATURIZE_ANIMATION_TWIST_F    0.5
+  
+
+#define HIDE_ANIMATION_STEPS (MINIATURIZE_ANIMATION_STEPS*2/3)
 
 
 #define BALLOON_DELAY	1000
@@ -303,9 +338,14 @@
 /* window birth animation steps (DO NOT MAKE IT RUN-TIME) */
 #define WINDOW_BIRTH_STEPS	20
 
+/* number of steps for icon dematerialization. */
+#define DEMATERIALIZE_STEPS	16
 
 /* Delay when cycling colors of selected icons. */
-#define COLOR_CYCLE_DELAY	300
+#define COLOR_CYCLE_DELAY	200
+
+/* size of the pieces in the undocked icon explosion */
+#define ICON_KABOOM_PIECE_SIZE 4
 
 
 /* Position increment for smart placement. >= 1  raise these values if it's
@@ -318,6 +358,10 @@
 
 /* Vicinity in which an icon can be attached to the clip */
 #define CLIP_ATTACH_VICINITY	1
+
+/* The amount of space (in multiples of the icon size)
+ * a docked icon must be dragged out to detach it */
+#define DOCK_DETTACH_THRESHOLD	3
 
 /* Delay (in ms) after which the clip will autocollapse when leaved */
 #define AUTO_COLLAPSE_DELAY     1000
@@ -355,14 +399,6 @@
  */
 
 #undef WS_INDICATOR 
-
-
-/* the button positions in the clip */
-#define LCLIPB_X	4
-#define RCLIPB_X	32
-#define CLIPB_Y		41
-#define CLIPB_W		27
-#define CLIPB_H		18
 
 
 /*
@@ -413,17 +449,21 @@
 
 #define MAXLINE		1024
 
+
 #ifdef _MAX_PATH
 # define DEFAULT_PATH_MAX	_MAX_PATH
 #else
 # define DEFAULT_PATH_MAX	512
 #endif
 
+
+#define DEBUG0
+
+/* some rules */
+
 #ifndef SHAPE
 #undef SHAPED_BALLOON
 #endif
-
-#define DEBUG0
 
 
 #if HAVE_LIBINTL_H && I18N

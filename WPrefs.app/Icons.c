@@ -1,6 +1,6 @@
 /* Icons.c- icon preferences
  * 
- *  WPrefs - WindowMaker Preferences Program
+ *  WPrefs - Window Maker Preferences Program
  * 
  *  Copyright (c) 1998 Alfredo K. Kojima
  * 

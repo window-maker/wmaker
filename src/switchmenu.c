@@ -1,5 +1,5 @@
 /* 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997 Shige Abe and 
  *		       Alfredo K. Kojima

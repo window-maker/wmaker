@@ -1,6 +1,6 @@
 /* dockedapp.c- docked application settings panel
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1998 Alfredo K. Kojima
  * 
@@ -335,7 +335,7 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
     WMMoveWidget(panel->iconField, 10, 20);
     WMSetTextFieldText(panel->iconField, 
 		       wDefaultGetIconFile(scr, aicon->wm_instance, 
-					   aicon->wm_class, False));
+					   aicon->wm_class, True));
     
     panel->browseBtn = WMCreateCommandButton(panel->iconFrame);
     WMResizeWidget(panel->browseBtn, 70, 24);

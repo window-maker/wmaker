@@ -7,17 +7,16 @@
 # include <sys/time.h>
 #endif
 
-#ifdef _AIX
-#include <sys/select.h>
-#endif
-
 #ifdef HAVE_SYS_TYPES_H
 # include <sys/types.h>
 #endif
 
+
 #if defined(HAVE_SELECT)
 
- 
+#ifdef HAVE_SYS_SELECT_H
+# include <sys/select.h>
+#endif
 
 void
 wusleep(unsigned int microsecs)

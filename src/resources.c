@@ -1,6 +1,6 @@
 /* resources.c - manage X resources (fonts, colors etc)
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 

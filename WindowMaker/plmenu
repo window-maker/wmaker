@@ -80,8 +80,14 @@
     ("Wine", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, \"#400020\")'")
     ),
    ("Gradient",
-    ("Flag", EXEC, "wdwrite WindowMaker WorkspaceBack '(mdgradient, green, red, white, green)'"),
-    ("Sky", EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, blue4, white)'")
+    ("Sunset", EXEC, "wdwrite WindowMaker WorkspaceBack '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'"),
+    ("Sky", EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, blue4, white)'"),
+    ("Blue Shades",   EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#7080a5\", \"#101020\")'"),
+    ("Indigo Shades", EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#746ebc\", \"#242e4c\")'"),
+    ("Purple Shades", EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#654c66\", \"#151426\")'"),
+    ("Wheat Shades",  EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#a09060\", \"#302010\")'"),
+    ("Grey Shades",   EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#636380\", \"#131318\")'"),
+    ("Wine Shades",   EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#600040\", \"#180010\")'")
     ),
    ("Images", OPEN_MENU, "/usr/local/share/WindowMaker/Backgrounds ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
    ),   

@@ -1,6 +1,6 @@
 /* WPrefs.c- main window and other basic stuff
  * 
- *  WPrefs - WindowMaker Preferences Program
+ *  WPrefs - Window Maker Preferences Program
  * 
  *  Copyright (c) 1998 Alfredo K. Kojima
  * 
@@ -193,7 +193,7 @@ createMainWindow(WMScreen *scr)
 
     WPrefs.win = WMCreateWindow(scr, "wprefs");
     WMResizeWidget(WPrefs.win, 520, 390);
-    WMSetWindowTitle(WPrefs.win, _("WindowMaker Preferences"));
+    WMSetWindowTitle(WPrefs.win, _("Window Maker Preferences"));
     WMSetWindowCloseAction(WPrefs.win, quit, NULL);
     WMSetWindowMaxSize(WPrefs.win, 520, 390);
     WMSetWindowMinSize(WPrefs.win, 520, 390);
@@ -252,14 +252,14 @@ createMainWindow(WMScreen *scr)
     WMResizeWidget(WPrefs.nameL, FRAME_WIDTH-20, 30);
     WMMoveWidget(WPrefs.nameL, 10, 25);
     WMSetLabelFont(WPrefs.nameL, font);
-    WMSetLabelText(WPrefs.nameL, "WindowMaker Preferences Utility");
+    WMSetLabelText(WPrefs.nameL, "Window Maker Preferences Utility");
     WMReleaseFont(font);
 
     WPrefs.versionL = WMCreateLabel(WPrefs.banner);
     WMResizeWidget(WPrefs.versionL, FRAME_WIDTH-20, 20);
     WMMoveWidget(WPrefs.versionL, 10, 65);
     WMSetLabelTextAlignment(WPrefs.versionL, WACenter);
-    sprintf(buffer, _("Version %s for WindowMaker %s"), WVERSION, WMVERSION);
+    sprintf(buffer, _("Version %s for Window Maker %s"), WVERSION, WMVERSION);
     WMSetLabelText(WPrefs.versionL, buffer);
 
     WPrefs.statusL = WMCreateLabel(WPrefs.banner);
@@ -269,11 +269,12 @@ createMainWindow(WMScreen *scr)
     WMSetLabelText(WPrefs.statusL, _("Starting..."));
      
     WPrefs.creditsL = WMCreateLabel(WPrefs.banner);
-    WMResizeWidget(WPrefs.creditsL, FRAME_WIDTH-20, 40);
-    WMMoveWidget(WPrefs.creditsL, 10, FRAME_HEIGHT-40);
+    WMResizeWidget(WPrefs.creditsL, FRAME_WIDTH-20, 60);
+    WMMoveWidget(WPrefs.creditsL, 10, FRAME_HEIGHT-60);
     WMSetLabelTextAlignment(WPrefs.creditsL, WACenter);
     WMSetLabelText(WPrefs.creditsL, _("Programming/Design: Alfredo K. Kojima\n"
-		   		"Artwork: Marco van Hylckama Vlieg"));
+		   		"Artwork: Marco van Hylckama Vlieg\n"
+				      "More Programming: James Thompson"));
    
     
     WMMapSubwidgets(WPrefs.win);
@@ -465,7 +466,8 @@ Initialize(WMScreen *scr)
 	
 	tmp = RLoadImage(WMScreenRContext(scr), path, 0);
 	if (!tmp) {
-	    wwarning("could not load image file %s:%s", path, RErrorString);
+	    wwarning("could not load image file %s:%s", path, 
+		     RMessageForError(RErrorCode));
 	} else {
 	    icon = WMCreatePixmapFromRImage(scr, tmp, 0);
 	    RDestroyImage(tmp);
@@ -483,7 +485,7 @@ Initialize(WMScreen *scr)
     WMRealizeWidget(WPrefs.win);
     WMMapWidget(WPrefs.win);
     XFlush(WMScreenDisplay(scr));
-    WMSetLabelText(WPrefs.statusL, _("Loading WindowMaker configuration files..."));
+    WMSetLabelText(WPrefs.statusL, _("Loading Window Maker configuration files..."));
     XFlush(WMScreenDisplay(scr));
     loadConfigurations(scr, WPrefs.win);
 
@@ -540,11 +542,11 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
 	if (!PLIsDictionary(db)) {
 	    PLRelease(db);
 	    db = NULL;
-	    sprintf(mbuf, _("WindowMaker domain (%s) is corrupted!"), path);
+	    sprintf(mbuf, _("Window Maker domain (%s) is corrupted!"), path);
 	    WMRunAlertPanel(scr, mainw, _("Error"), mbuf, _("OK"), NULL, NULL);
 	}
     } else {
-	sprintf(mbuf, _("Could not load WindowMaker domain (%s) from defaults database."),
+	sprintf(mbuf, _("Could not load Window Maker domain (%s) from defaults database."),
 		path);
 	WMRunAlertPanel(scr, mainw, _("Error"), mbuf, _("OK"), NULL, NULL);
     }
@@ -552,32 +554,33 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
 
     file = popen("wmaker -version", "r");
     if (!file || !fgets(buffer, 1023, file)) {
-	wsyserror(_("could not extract version information from WindowMaker"));
-	wfatal(_("Make sure WindowMaker is in your search path."));
+	wsyserror(_("could not extract version information from Window Maker"));
+	wfatal(_("Make sure Window Maker is in your search path."));
 	
 	WMRunAlertPanel(scr, mainw, _("Error"),
-			_("Could not extract version from WindowMaker. Make sure it is correctly installed."),
+			_("Could not extract version from Window Maker. Make sure it is correctly installed."),
 			_("OK"), NULL, NULL);
 	exit(1);
     }
     if (file)
 	pclose(file);
     
-    if (sscanf(buffer, "WindowMaker %i.%i.%i",&v1,&v2,&v3)!=3) {
+    if (sscanf(buffer, "Window Maker %i.%i.%i",&v1,&v2,&v3)!=3
+	&& sscanf(buffer, "WindowMaker %i.%i.%i",&v1,&v2,&v3)!=3) {
 	WMRunAlertPanel(scr, mainw, _("Error"),
-			_("Could not extract version from WindowMaker. Make sure it is correctly installed."),
+			_("Could not extract version from Window Maker. Make sure it is correctly installed."),
 			_("OK"), NULL, NULL);
 	exit(1);
     }
     if (v1 == 0 && (v2 < 18 || v3 < 0)) {
-	sprintf(mbuf, _("WPrefs only supports WindowMaker 0.18.0 or newer.\n"
+	sprintf(mbuf, _("WPrefs only supports Window Maker 0.18.0 or newer.\n"
 		"The version installed is %i.%i.%i\n"), v1, v2, v3);
 	WMRunAlertPanel(scr, mainw, _("Error"), mbuf, _("OK"), NULL, NULL);
 	exit(1);
 
     }
     if (v1 > 1 || (v1 == 1 && (v2 > 0))) {
-	sprintf(mbuf, _("WindowMaker %i.%i.%i, which is installed in your system, is not fully supported by this version of WPrefs."),
+	sprintf(mbuf, _("Window Maker %i.%i.%i, which is installed in your system, is not fully supported by this version of WPrefs."),
 		v1, v2, v3);
 	WMRunAlertPanel(scr, mainw, _("Warning"), mbuf, _("OK"), NULL, NULL);
     }
@@ -595,11 +598,11 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
 	if (!PLIsDictionary(gdb)) {
 	    PLRelease(gdb);
 	    gdb = NULL;
-	    sprintf(mbuf, _("WindowMaker domain (%s) is corrupted!"), buffer);
+	    sprintf(mbuf, _("Window Maker domain (%s) is corrupted!"), buffer);
 	    WMRunAlertPanel(scr, mainw, _("Error"), mbuf, _("OK"), NULL, NULL);
 	}
     } else {
-	sprintf(mbuf, _("Could not load global WindowMaker domain (%s)."),
+	sprintf(mbuf, _("Could not load global Window Maker domain (%s)."),
 		buffer);
 	WMRunAlertPanel(scr, mainw, _("Error"), mbuf, _("OK"), NULL, NULL);
     }

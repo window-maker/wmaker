@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -110,7 +110,7 @@ wPixmapCreateFromXBMData(WScreen *scr, char *data, char *mask,
 }
 
 
-
+#ifdef unused
 WPixmap*
 wPixmapCreateFromBitmap(WScreen *scr, Pixmap bitmap, Pixmap mask,
 			unsigned long fg, unsigned long bg)
@@ -169,7 +169,7 @@ wPixmapCreateFromBitmap(WScreen *scr, Pixmap bitmap, Pixmap mask,
     pix->depth = scr->w_depth;
     return pix;
 }
-
+#endif /* unused */
 
 WPixmap*
 wPixmapCreate(WScreen *scr, Pixmap image, Pixmap mask)

@@ -37,7 +37,6 @@ load_graymap(char *file_name, FILE *file, int w, int h, int max, int raw)
     
     image = RCreateImage(w, h, 0);
     if (!image) {
-	sprintf(RErrorString, "out of memory");
 	return NULL;
     }
     if (!raw) {
@@ -56,7 +55,7 @@ load_graymap(char *file_name, FILE *file, int w, int h, int max, int raw)
     return image;
     
   short_file:
-    sprintf(RErrorString, "PPM file \"%s\" seems to be truncated", file_name);
+    RErrorCode = RERR_BADIMAGEFILE;
     return NULL;
 }
 
@@ -71,7 +70,6 @@ load_pixmap(char *file_name, FILE *file, int w, int h, int max, int raw)
     
     image = RCreateImage(w, h, 0);
     if (!image) {
-	sprintf(RErrorString, "out of memory");
 	return NULL;
     }
     r = image->data[0];
@@ -98,7 +96,7 @@ load_pixmap(char *file_name, FILE *file, int w, int h, int max, int raw)
     return image;
     
   short_file:
-    sprintf(RErrorString, "PPM file \"%s\" seems to be truncated", file_name);
+    RErrorCode = RERR_BADIMAGEFILE;
     return NULL;
 }
 
@@ -114,11 +112,9 @@ RLoadPPM(RContext *context, char *file_name, int index)
 
 #define GETL() if (!fgets(buffer, 255, file)) goto short_file
     
-    RErrorString[0] = 0;
-
     file = fopen(file_name, "r");
     if (!file) {
-	sprintf(RErrorString, "could not open PPM file \"%s\"", file_name);
+	RErrorCode = RERR_OPEN;
 	return NULL;
     }
     
@@ -127,7 +123,7 @@ RLoadPPM(RContext *context, char *file_name, int index)
 
     /* only accept raw pixmaps or graymaps */
     if (buffer[0] != 'P' || (buffer[1] != '5' && buffer[1] != '6')) {
-	sprintf(RErrorString, "unknown PPM format in \"%s\"", file_name);
+	RErrorCode = RERR_BADFORMAT;
 	fclose(file);
 	return NULL;
     }
@@ -160,12 +156,8 @@ RLoadPPM(RContext *context, char *file_name, int index)
     return image;
     
   bad_file:
-    sprintf(RErrorString, "PPM file \"%s\" seems to be corrupted", file_name);
-    fclose(file);
-    return NULL;
-    
   short_file:
-    sprintf(RErrorString, "PPM file \"%s\" seems to be truncated", file_name);
+    RErrorCode = RERR_BADIMAGEFILE;
     fclose(file);
     return NULL;
 }

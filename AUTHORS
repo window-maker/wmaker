@@ -2,7 +2,7 @@ Information about locale translators is at src/po/README and
 Library/WindowMaker/README
 
 Many thanks to the following people who have contributed
-patches, bug fixes and other stuff for WindowMaker:
+patches, bug fixes and other stuff for Window Maker:
 
 ABE Shige <sabe@ibm.net>
 I18N support, diagonal and vertical gradient, cosmetic additions to
@@ -15,7 +15,7 @@ Fix for cascade window placement
 
 Peter Bentley <peter.bentley@nomura.co.uk>
 fixed WM_STATE handling bug, fixed some memory leaks, made application menus
-be mapped near the windows for non-click-to-focus modes.
+be mapped near the windows for non-click-to-focus modes, timer bug
 
 Ulf Betlehem <flu@iki.fi>
 Window resize with Meta-Click3, fixed OpaqueMove to send only 1 synth.
@@ -28,7 +28,7 @@ Rob Clark <rclark@turing.cs.hmc.edu>
 Text input field, 15bpp support
 
 Sylvain CORRE <sylvain.corre@wanadoo.fr>
-bug fix for MkLinux/PPC, bug fix for cpixmap in wmsetbg
+bug fix for MkLinux/PPC
 
 Frederic Devernay <devernay@istar.fr>
 dock fix for openwindows, made asclock be friendlier with colorcell impaired
@@ -63,6 +63,9 @@ HIDEKI Fujimoto <hideki70@osk2.threewebnet.or.jp>
 FreeBSD portability, icon arrangement fixes, dock initialization bug fix,
 some I18N related fixes
 
+Pascal Hofstee <daeron@wit401305.student.utwente.nl>
+WINGs bug fixes
+
 Robert A. Holak <panthar@tradeservices.com>
 bug fix
 
@@ -71,6 +74,9 @@ Workspace change bug fix
 
 Sudish Joseph <sj@eng.mindspring.net>
 Modifier binding fix and other bug fixes
+
+Luke Kendall <luke@research.canon.com.au>
+menu format converter, various enhancements to wxcopy and wxpaste
 
 Bradley M Keryan <keryan@andrew.cmu.edu>
 EMACS/keypad like cursor movement for WINGs textfield
@@ -136,6 +142,9 @@ Ture Pelsson <ture@lysator.liu.se>
 various portability fixes, replaced busy wait with select() in event
 handling code, fixed problem with some misbehaved kids after a fork().
 
+Toby Sargeant <?>
+menu format converter
+
 Carsten Schaar <nhadcasc@fs-maphy.uni-hannover.de>
 SCO portability, german locale, autoconf enhancements
 
@@ -168,7 +177,7 @@ FRBall <frb@umr.edu>
 dgradient fix
 
 "]d" <mhz@gpf.or.th>
-Window list menu miniaturized/hidden hints
+Window list menu miniaturized/hidden hints, XDE support
 
 Trae Mc Combs <x@themes.org>
 BlueWaves.jpeg background image in BlueWaves theme.

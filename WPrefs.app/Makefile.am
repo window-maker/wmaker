@@ -12,7 +12,7 @@ wpdatadir = @wprefsdir@
 
 wpdata_DATA = WPrefs.tiff WPrefs.xpm
 
-EXTRA_DIST = $(wpdata_DATA)
+EXTRA_DIST = $(wpdata_DATA) TexturePanel.icons
 
 WPrefs_SOURCES = \
 	main.c \
@@ -31,6 +31,8 @@ WPrefs_SOURCES = \
 	Preferences.c \
 	Text.c \
 	TextureAndColor.c \
+	TexturePanel.c \
+	TexturePanel.h \
 	WindowHandling.c \
 	Workspace.c \
 	double.c \
@@ -48,14 +50,14 @@ INCLUDES = \
 	-I$(top_srcdir)/wrlib \
 	-I$(top_srcdir)/WINGs \
 	@XCFLAGS@ \
-	@LIBPL_INC_PATH@ 
+	-I$(top_srcdir)/libPropList
 
 WPrefs_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
 
 WPrefs_LDADD = \
 	-L$(top_builddir)/WINGs -lWINGs\
 	-L$(top_builddir)/wrlib -lwraster \
-	@LIBPL_LIBS@ \
+	-L$(top_builddir)/libPropList -lPropList \
 	@XLFLAGS@ \
 	@GFXLIBS@ \
 	@XLIBS@ \

@@ -1,6 +1,6 @@
 /* defaults.c - manage configuration through defaults db
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -96,6 +96,14 @@ typedef struct {
 } WDefaultEntry;
 
 
+/* used to map strings to integers */
+typedef struct {
+    char *string;
+    short value;
+    char is_alias;
+} WOptionEnumeration;
+
+
 
 /* type converters */
 static int getBool();
@@ -106,20 +114,14 @@ static int getCoord();
 static int getString();
 #endif
 static int getPathList();
-static int getFocusMode();
-static int getPlacement();
-static int getGeomDisp();
+static int getEnum();
 static int getTexture();
 static int getWSBackground();
-static int getJust();
 static int getFont();
 static int getColor();
 static int getKeybind();
 static int getModMask();
-static int getSpeed();
-static int getMButton();
-static int getIconPosition();
-static int getIconificationStyle();
+
 
 /* value setting functions */
 static int setJustify();
@@ -157,6 +159,94 @@ static int setClipTitleColor();
 
 
 /*
+ * Tables to convert strings to enumeration values.
+ * Values stored are char
+ */
+
+
+/* WARNING: sum of length of all value strings must not exceed
+ * this value */
+#define TOTAL_VALUES_LENGTH	80
+
+
+
+static WOptionEnumeration seFocusModes[] = {
+    {"Manual", WKF_CLICK, 0}, {"ClickToFocus", WKF_CLICK, 1},
+    {"Auto", WKF_POINTER, 0}, {"FocusFollowMouse", WKF_POINTER, 1},
+    {"Sloppy", WKF_SLOPPY, 0}, {"SemiAuto", WKF_SLOPPY, 1},
+    {NULL, 0, 0}
+};
+
+static WOptionEnumeration seColormapModes[] = {
+    {"Manual", WKF_CLICK, 0}, {"ClickToFocus", WKF_CLICK, 1},
+    {"Auto", WKF_POINTER, 0}, {"FocusFollowMouse", WKF_POINTER, 1},
+    {NULL, 0, 0}
+};
+
+static WOptionEnumeration sePlacements[] = {
+    {"Auto", WPM_SMART, 0}, {"Smart", WPM_SMART, 1},
+    {"Cascade", WPM_CASCADE, 0},
+    {"Random", WPM_RANDOM, 0},
+    {"Manual", WPM_MANUAL, 0},
+    {NULL, 0, 0}
+};
+
+static WOptionEnumeration seGeomDisplays[] = {
+    {"Center", WDIS_CENTER, 0},
+    {"Corner", WDIS_TOPLEFT, 0},
+    {"Floating", WDIS_FRAME_CENTER, 0},
+    {"Line", WDIS_NEW, 0},
+    {NULL, 0, 0}
+};
+
+static WOptionEnumeration seSpeeds[] = {
+    {"UltraFast", SPEED_ULTRAFAST, 0},
+    {"Fast", SPEED_FAST, 0},
+    {"Medium", SPEED_MEDIUM, 0},
+    {"Slow", SPEED_SLOW, 0},
+    {"UltraSlow", SPEED_ULTRASLOW, 0},
+    {NULL, 0, 0}
+};
+
+static WOptionEnumeration seMouseButtons[] = {
+    {"Left", Button1, 0}, {"Button1", Button1, 1},
+    {"Middle", Button2, 0}, {"Button2", Button2, 1},
+    {"Right", Button3, 0}, {"Button3", Button3, 1},
+    {"Button4", Button4, 0},
+    {"Button5", Button5, 0},
+    {NULL, 0, 0}
+};
+
+static WOptionEnumeration seIconificationStyles[] = {
+    {"Zoom", WIS_ZOOM, 0},
+    {"Twist", WIS_TWIST, 0},
+    {"Flip", WIS_FLIP, 0},
+    {"None", WIS_NONE, 0},
+    {NULL, 0, 0}
+};
+
+static WOptionEnumeration seJustifications[] = {
+    {"Left", WTJ_LEFT, 0},
+    {"Center", WTJ_CENTER, 0},
+    {"Right", WTJ_RIGHT, 0},
+    {NULL, 0, 0}
+};
+
+static WOptionEnumeration seIconPositions[] = {
+    {"blv", IY_BOTTOM|IY_LEFT|IY_VERT, 0},
+    {"blh", IY_BOTTOM|IY_LEFT|IY_HORIZ, 0},
+    {"brv", IY_BOTTOM|IY_RIGHT|IY_VERT, 0},
+    {"brh", IY_BOTTOM|IY_RIGHT|IY_HORIZ, 0},
+    {"tlv", IY_TOP|IY_LEFT|IY_VERT, 0},
+    {"tlh", IY_TOP|IY_LEFT|IY_HORIZ, 0},
+    {"trv", IY_TOP|IY_RIGHT|IY_VERT, 0},
+    {"trh", IY_TOP|IY_RIGHT|IY_HORIZ, 0},
+    {NULL, 0, 0}
+};
+
+
+
+/*
  * All entries in the tables bellow, NEED to have a default value
  * defined, and this value needs to be correct.
  */
@@ -184,8 +274,8 @@ WDefaultEntry staticOptionList[] = {
     {"DisableWSMouseActions", "NO",		NULL,
 	  &wPreferences.disable_root_mouse, getBool,	NULL
     },
-    {"FocusMode",	"manual",		(void*)False,
-	  &wPreferences.focus_mode,	getFocusMode,	NULL
+    {"FocusMode",	"manual",		seFocusModes,
+	  &wPreferences.focus_mode,	getEnum,	NULL
     }, /* have a problem when switching from manual to sloppy without restart */
     {"NewStyle",	"NO",			NULL,
 	  &wPreferences.new_style, 	getBool, 	NULL
@@ -195,27 +285,27 @@ WDefaultEntry staticOptionList[] = {
     },
     {"DisableClip",	"NO",		(void*) WM_CLIP,
 	  NULL, 	getBool,        setIfDockPresent
-    },
+    }
 };
 
 
 
 WDefaultEntry optionList[] = {
       /* dynamic options */
-    {"IconPosition",	"blh",			NULL,
-	  &wPreferences.icon_yard,	getIconPosition,	setIconPosition
+    {"IconPosition",	"blh",			seIconPositions,
+	  &wPreferences.icon_yard,	getEnum,	setIconPosition
     },
-    {"IconificationStyle", "Zoom",             NULL,
-         &wPreferences.iconification_style,    getIconificationStyle, NULL
+    {"IconificationStyle", "Zoom",             seIconificationStyles,
+         &wPreferences.iconification_style,    getEnum, NULL
     },
-    {"SelectWindowsMouseButton", "Left",	NULL,
-	  &wPreferences.select_button, 	getMButton,	NULL
+    {"SelectWindowsMouseButton", "Left",	seMouseButtons,
+	  &wPreferences.select_button, 	getEnum,	NULL
     },
-    {"WindowListMouseButton", "Middle",		NULL,
-	  &wPreferences.windowl_button, getMButton,	NULL
+    {"WindowListMouseButton", "Middle",		seMouseButtons,
+	  &wPreferences.windowl_button, getEnum,	NULL
     },
-    {"ApplicationMenuMouseButton", "Right",	NULL,
-	  &wPreferences.menu_button,	getMButton,	NULL
+    {"ApplicationMenuMouseButton", "Right",	seMouseButtons,
+	  &wPreferences.menu_button,	getEnum,	NULL
     },
     {"PixmapPath",	DEF_PIXMAP_PATHS,	NULL,
 	  &wPreferences.pixmap_path,	getPathList,	NULL
@@ -223,8 +313,8 @@ WDefaultEntry optionList[] = {
     {"IconPath",	DEF_ICON_PATHS,		NULL,
 	  &wPreferences.icon_path,	getPathList,	NULL
     },
-    {"ColormapMode",	"auto",			(void*)True,
-	  &wPreferences.colormap_mode,	getFocusMode,	NULL
+    {"ColormapMode",	"auto",			seColormapModes,
+	  &wPreferences.colormap_mode,	getEnum,	NULL
     },
     {"AutoFocus", 	"NO",			NULL,
 	  &wPreferences.auto_focus,	getBool,	NULL
@@ -256,14 +346,14 @@ WDefaultEntry optionList[] = {
     {"ScrollableMenus",	"NO",			NULL,
 	  &wPreferences.scrollable_menus, getBool,	NULL
     },
-    {"MenuScrollSpeed",	"medium",    		NULL,
-	  &wPreferences.menu_scroll_speed, getSpeed,    NULL
+    {"MenuScrollSpeed",	"medium",    		seSpeeds,
+	  &wPreferences.menu_scroll_speed, getEnum,    	NULL
     },
-    {"IconSlideSpeed",	"medium",		NULL,
-	  &wPreferences.icon_slide_speed, getSpeed,     NULL
+    {"IconSlideSpeed",	"medium",		seSpeeds,
+	  &wPreferences.icon_slide_speed, getEnum,     	NULL
     },
-    {"ShadeSpeed",	"medium",    		NULL,
-	  &wPreferences.shade_speed, getSpeed,		NULL
+    {"ShadeSpeed",	"medium",    		seSpeeds,
+	  &wPreferences.shade_speed,	 getEnum,	NULL
     },
     {"DoubleClickTime",	"250",   (void*) &wPreferences.dblclick_time,
 	  &wPreferences.dblclick_time, getInt,        setDoubleClick,
@@ -274,8 +364,8 @@ WDefaultEntry optionList[] = {
     {"OnTopTransients",	"NO",			NULL,
 	  &wPreferences.on_top_transients, getBool,	NULL
     },
-    {"WindowPlacement",	"auto",		NULL,
-	  &wPreferences.window_placement, getPlacement,	NULL
+    {"WindowPlacement",	"auto",		sePlacements,
+	  &wPreferences.window_placement, getEnum,	NULL
     },
     {"IgnoreFocusClick","NO",			NULL,
 	  &wPreferences.ignore_focus_click, getBool,	NULL
@@ -301,20 +391,22 @@ WDefaultEntry optionList[] = {
     {"AutoArrangeIcons", "NO",			NULL,
 	  &wPreferences.auto_arrange_icons, getBool,	NULL
     },
+	/*
     {"NoWindowUnderDock", "NO",			NULL,
 	  &wPreferences.no_window_under_dock, getBool,	NULL
     },
+	 */
     {"NoWindowOverIcons", "NO",			NULL,
 	  &wPreferences.no_window_over_icons, getBool,  NULL
     },
     {"WindowPlaceOrigin", "(0, 0)",		NULL,
 	  &wPreferences.window_place_origin, getCoord,	NULL
     },
-    {"ResizeDisplay",	"corner",	       	NULL,
-	  &wPreferences.size_display,	getGeomDisp,	NULL
+    {"ResizeDisplay",	"corner",	       	seGeomDisplays,
+	  &wPreferences.size_display,	getEnum,	NULL
     },
-    {"MoveDisplay",	"corner",      		NULL,
-	  &wPreferences.move_display,	getGeomDisp,	NULL
+    {"MoveDisplay",	"corner",      		seGeomDisplays,
+	  &wPreferences.move_display,	getEnum,	NULL
     },
     {"DontConfirmKill",	"NO",			NULL,
 	  &wPreferences.dont_confirm_kill,	getBool,NULL
@@ -341,8 +433,8 @@ WDefaultEntry optionList[] = {
     {"IconBack",	"(solid, gray)",       	NULL,
 	  NULL,				getTexture,	setIconTile
     },
-    {"TitleJustify",	"center",		NULL,
-	  &wPreferences.title_justification, getJust,	setJustify
+    {"TitleJustify",	"center",		seJustifications,
+	  &wPreferences.title_justification, getEnum,	setJustify
     },
     {"WindowTitleFont",	DEF_TITLE_FONT,	       	NULL,
 	  NULL,				getFont,	setWinTitleFont
@@ -504,14 +596,9 @@ WDefaultEntry optionList[] = {
     },
     {"Workspace10Key", "None",			(void*)WKBD_WORKSPACE10,
 	  NULL,				getKeybind,	setKeyGrab
-    },
+    }
 };
 
-
-
-/* Option names */
-static proplist_t DCenter, DCorner, DFloating, DLine;
-static proplist_t JLeft, JCenter, JRight;
 
 #if 0
 static void rereadDefaults(void);
@@ -534,15 +621,6 @@ initDefaults()
     WDefaultEntry *entry;
 
     PLSetStringCmpHook(StringCompareHook);
-
-    DCenter = PLMakeString("Center");
-    DCorner = PLMakeString("Corner");
-    DFloating = PLMakeString("Floating");
-    DLine = PLMakeString("Line");
-
-    JLeft = PLMakeString("Left");
-    JCenter = PLMakeString("Center");
-    JRight = PLMakeString("Right");
 
     for (i=0; i<sizeof(optionList)/sizeof(WDefaultEntry); i++) {
 	entry = &optionList[i];
@@ -1114,6 +1192,44 @@ wDefaultUpdateIcons(WScreen *scr)
 	PLGetString(entry->plkey), x); \
 	return False; }
 
+
+
+static int
+string2index(proplist_t key, proplist_t val, proplist_t def,
+	     WOptionEnumeration *values)
+{
+    char *str;
+    WOptionEnumeration *v;
+    char buffer[TOTAL_VALUES_LENGTH];
+
+    if (PLIsString(val) && (str = PLGetString(val))) {
+	for (v=values; v->string!=NULL; v++) {
+	    if (strcasecmp(v->string, str)==0)
+		return v->value;
+	}
+    }
+
+    buffer[0] = 0;
+    for (v=values; v->string!=NULL; v++) {
+	if (!v->is_alias) {
+	    if (buffer[0]!=0)
+		strcat(buffer, ", ");
+	    strcat(buffer, v->string);
+	}
+    }
+    wwarning(_("wrong option value for key \"%s\". Should be one of %s"),
+	     PLGetString(key), buffer);
+
+    if (def) {
+	return string2index(key, val, NULL, values);
+    }
+
+    return -1;
+}
+
+
+
+
 /*
  * value - is the value in the defaults DB
  * addr - is the address to store the data
@@ -1375,272 +1491,24 @@ again:
 
 
 static int 
-getFocusMode(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
-	     void **ret)
+getEnum(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
+	void **ret)
 {
     static char data;
-    char *val;
-    int second_pass=0;
 
-    STRINGP("one of Manual, Auto or Sloppy");
-
-    val = PLGetString(value);
-
-again:
-    if (strcasecmp(val, "manual")==0 || strcasecmp(val, "clicktofocus")==0)
-      data = WKF_CLICK;
-    else if (strcasecmp(val, "auto")==0 || strcasecmp(val, "focusfollowsmouse")==0)
-      data = WKF_POINTER;
-    else if ((strcasecmp(val, "semiauto")==0 || strcasecmp(val, "sloppy")==0)
-	     && !(int)entry->extra_data)
-      data = WKF_SLOPPY;
-    else {
-	if (!(int)entry->extra_data)
-	    wwarning(_("Invalid focus mode \"%s\". Should be Manual, "
-		       "Auto or Sloppy."), PLGetString(value));
-	else
-	    wwarning(_("Invalid colormap focus mode \"%s\". Should be Manual or "
-		       "Auto."), PLGetString(value));
-        if (second_pass==0) {
-            val = PLGetString(entry->plvalue);
-            second_pass = 1;
-            wwarning(_("using default \"%s\" instead"), val);
-            goto again;
-        }
-        return False;
-    }
-    
-    if (ret)
-      *ret = &data;
-    
-    if (addr)
-      *(char*)addr = data;
-    
-    return True;
-}
-
-
-static int 
-getPlacement(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
-	     void **ret)
-{
-    static char data;
-    char *val;
-    int second_pass=0;
-
-    STRINGP("one of Auto, Cascade, Random or Manual");
-
-    val = PLGetString(value);
-
-again:
-    if (strcasecmp(val, "auto")==0 || strcasecmp(val, "smart")==0)
-      data = WPM_SMART;
-    else if (strcasecmp(val, "cascade")==0)
-      data = WPM_CASCADE;
-    else if (strcasecmp(val, "manual")==0)
-      data = WPM_MANUAL;
-    else if (strcasecmp(val, "random")==0)
-      data = WPM_RANDOM;
-    else {
-	wwarning(_("Invalid window placement mode \"%s\". "
-		   "Should be Auto, Cascade, Random or Manual."),
-		 PLGetString(value));
-        if (second_pass==0) {
-            val = PLGetString(entry->plvalue);
-            second_pass = 1;
-            wwarning(_("using default \"%s\" instead"), val);
-            goto again;
-        }
+    data = string2index(entry->key, value, entry->default_value,
+			(WOptionEnumeration*)entry->extra_data);
+    if (data < 0)
 	return False;
-    }
-    
+
     if (ret)
       *ret = &data;
-    
+
     if (addr)
       *(char*)addr = data;
     
     return True;    
 }
-
-
-
-static int 
-getGeomDisp(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
-	    void **ret)
-{
-    static char data;
-    int changed=0;
-
-    STRINGP("one of Center, Corner, Floating or Line");
-
-again:
-    if(PLIsEqual(value, DCenter))
-      data = WDIS_CENTER;
-    else if(PLIsEqual(value, DCorner))
-      data = WDIS_TOPLEFT;
-    else if(PLIsEqual(value, DFloating))
-      data = WDIS_FRAME_CENTER;
-    else if(PLIsEqual(value, DLine))
-      data = WDIS_NEW;
-    else {
-	wwarning(_("Invalid geometry display type \"%s\". Should "
-		   "be Center, Corner, Floating or Line."),
-		 PLGetString(value));
-        if (changed==0) {
-            value = entry->plvalue;
-            changed = 1;
-            wwarning(_("using default \"%s\" instead"), entry->default_value);
-            goto again;
-        }
-	return False;
-    }
-    
-    if (ret)
-      *ret = &data;
-    
-    if (addr)
-      *(char*)addr = data;
-    
-    return True;
-}
-
-
-static int 
-getSpeed(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
-	 void **ret)
-{
-    static int data;
-    char *val;
-    int second_pass=0;
-
-    STRINGP("one of UltraFast, Fast, Medium, Slow or UltraSlow");
-
-    val = PLGetString(value);
-
-again:
-    
-    if (strcasecmp(val, "ultrafast")==0)
-      data = SPEED_ULTRAFAST;
-    else if (strcasecmp(val, "fast")==0)
-      data = SPEED_FAST;
-    else if (strcasecmp(val, "medium")==0)
-      data = SPEED_MEDIUM;
-    else if (strcasecmp(val, "slow")==0)
-      data = SPEED_SLOW;
-    else if (strcasecmp(val, "ultraslow")==0)
-      data = SPEED_ULTRASLOW;
-    else {
-	wwarning(_("Invalid speed \"%s\". Should be UltraFast, Fast, "
-                   "Medium, Slow or UltraSlow."), PLGetString(value));
-        if (second_pass==0) {
-            val = PLGetString(entry->plvalue);
-            second_pass = 1;
-            wwarning(_("using default \"%s\" instead"), val);
-            goto again;
-        }
-        return False;
-    }
-    
-    if (ret)
-      *ret = &data;
-    
-    if (addr)
-      *(int*)addr = data;
-    
-    return True;
-}
-
-
-static int 
-getMButton(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
-	     void **ret)
-{
-    static char data;
-    char *val;
-    int second_pass=0;
-
-    STRINGP("one of Left, Middle, Right or Button1 through Button5");
-
-    val = PLGetString(value);
-
-again:
-    if (strcasecmp(val, "left")==0 || strcasecmp(val, "button1")==0)
-      data = Button1;
-    else if (strcasecmp(val, "middle")==0 || strcasecmp(val, "button2")==0)
-      data = Button2;
-    else if (strcasecmp(val, "right")==0 || strcasecmp(val, "button3")==0)
-      data = Button3;
-    else if (strcasecmp(val, "button4")==0)
-      data = Button4;
-    else if (strcasecmp(val, "button5")==0)
-      data = Button4;
-    else {
-	wwarning(_("Invalid mouse button \"%s\". "
-		   "Should be Left, Middle, Right or Button1 through Button5"),
-		 PLGetString(value));
-        if (second_pass==0) {
-            val = PLGetString(entry->plvalue);
-            second_pass = 1;
-            wwarning(_("using default \"%s\" instead"), val);
-            goto again;
-        }
-	return False;
-    }
-    
-    if (ret)
-      *ret = &data;
-    
-    if (addr)
-      *(char*)addr = data;
-    
-    return True;    
-}
-
-
-static int 
-getIconificationStyle(WScreen *scr, WDefaultEntry *entry, proplist_t value,
-                      void *addr, void **ret)
-{
-    static char data;
-    char *val;
-    int second_pass=0;
-
-    STRINGP("one of Zoom, Twist, Flip or None");
-
-    val = PLGetString(value);
-
-again:
-    if (strcasecmp(val, "zoom")==0)
-      data = WIS_ZOOM;
-    else if (strcasecmp(val, "twist")==0)
-      data = WIS_TWIST;
-    else if (strcasecmp(val, "flip")==0)
-      data = WIS_FLIP;
-    else if (strcasecmp(val, "none")==0)
-      data = WIS_NONE;
-    else {
-	wwarning(_("Invalid iconification style \"%s\". "
-		   "Should be Zoom, Twist, Flip or None"),
-		 PLGetString(value));
-        if (second_pass==0) {
-            val = PLGetString(entry->plvalue);
-            second_pass = 1;
-            wwarning(_("using default \"%s\" instead"), val);
-            goto again;
-        }
-	return False;
-    }
-    
-    if (ret)
-      *ret = &data;
-    
-    if (addr)
-      *(char*)addr = data;
-    
-    return True;    
-}
-
 
 
 
@@ -1745,7 +1613,7 @@ parse_texture(WScreen *scr, proplist_t pl)
 	RColor **colors;
 	int i, count;
 	int type;
-	
+
 	if (nelem < 3) {
 	    wwarning(_("too few arguments in multicolor gradient specification"));
 	    return NULL;
@@ -1759,27 +1627,27 @@ parse_texture(WScreen *scr, proplist_t pl)
 	    type = WTEX_MDGRADIENT;
 
 	count = nelem-1;
-	
+
 	colors = wmalloc(sizeof(RColor*)*(count+1));
-	
+
 	for (i=0; i<count; i++) {
 	    elem = PLGetArrayElement(pl, i+1);
 	    if (!elem || !PLIsString(elem)) {
-		for ( ; i>=0; --i) {
+		for (--i; i>=0; --i) {
 		    free(colors[i]);
 		}
 		free(colors);
-		break;
+		return NULL;
 	    }
 	    val = PLGetString(elem);
 
 	    if (!XParseColor(dpy, scr->colormap, val, &color)) {
 		wwarning(_("\"%s\" is not a valid color name"), val);
-		for ( ; i>=0; --i) {
+		for (--i; i>=0; --i) {
 		    free(colors[i]);
 		}
-		free(colors);	
-		break;
+		free(colors);
+		return NULL;
 	    } else {
 		colors[i] = wmalloc(sizeof(RColor));
 		colors[i]->red = color.red >> 8;
@@ -2224,43 +2092,6 @@ again:
 }
 #endif /* !EXPERIMENTAL */
 
-static int 
-getJust(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
-	void **ret)
-{
-    static char data;
-    int changed=0;
-
-    STRINGP("one of Left, Center or Right");
-
-again:
-    if(PLIsEqual(value, JLeft))
-      data = WTJ_LEFT;
-    else if(PLIsEqual(value, JRight))
-      data = WTJ_RIGHT;
-    else if(PLIsEqual(value, JCenter))
-      data = WTJ_CENTER;
-    else {
-	wwarning(_("Invalid justification type \"%s\". Should be "
-		   "Left, Center or Right"), PLGetString(value));
-        if (changed==0) {
-            value = entry->plvalue;
-            changed = 1;
-            wwarning(_("using default \"%s\" instead"), entry->default_value);
-            goto again;
-        }
-        return False;
-    }
-
-    if (ret)
-      *ret = &data;
-    
-    if (addr)
-      *(char*)addr = data;
-    
-    return True;
-}
-
 
 static int 
 getFont(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
@@ -2423,58 +2254,6 @@ getModMask(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
     return True;
 }
 
-
-
-static int
-getIconPosition(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
-	    void **ret)
-{
-    static int data;
-    char *val;
-    int second_pass=0;
-
-    STRINGP("one of blv, blh, brv, brh, tlv, tlh, trv, trh");
-
-    val = PLGetString(value);
-
-again:
-    if (strlen(val)==3) {
-	if (val[0]=='T' || val[0]=='t') {
-	    data = IY_TOP;
-	} else {
-	    data = IY_BOTTOM;
-	}
-	if (val[1]=='R' || val[1]=='r') {
-	    data |= IY_RIGHT;
-	} else {
-	    data |= IY_LEFT;
-	}
-	if (val[2]=='V' || val[2]=='v') {
-	    data |= IY_VERT;
-	} else {
-	    data |= IY_HORIZ;
-	}
-    } else {
-	wwarning(_("Invalid icon Position \"%s\". "
-		   "Should be one of blv, blh, brv, brh, tlv, tlh, trv, trh"),
-		 PLGetString(value));
-        if (second_pass==0) {
-            val = PLGetString(entry->plvalue);
-            second_pass = 1;
-            wwarning(_("using default \"%s\" instead"), val);
-            goto again;
-        }
-	return False;
-    }
-    
-    if (ret)
-      *ret = &data;
-    
-    if (addr)
-      *(int*)addr = data;
-    
-    return True;    
-}
 
 
 /* ---------------- value setting functions --------------- */
@@ -2857,17 +2636,14 @@ setMenuDisabledColor(WScreen *scr, WDefaultEntry *entry, XColor *color, void *fo
  *   WPixel color;		       // color for solid texture
  *   proplist_t texture;	       // for checking updates
  * };
+ *
  * 
- * spixmap and cpixmap textures are rendered by wmsetbg in a buffer
- * supplied by wmaker (-x drawable-XID). 
- * All other textures are rendered by wmaker itself. This is to 
- * prevent wmaker from blocking when rendering large pixmaps.
- * tpixmap must be rendered by wmaker because we dont know the size
- * of the image before loading the image. We supply the pixmap
- * to wmsetbg, instead of letting wmsetbg create it for 2 reasons:
- * 1 - Xlib will free the pixmap when wmsetbg exits
- * 2 - it would require wmaker to figure when wmsetbg finished
- * rendering (complicated synchronization...).
+ * All textures are rendered by wmsetbg. When it exits with status 0
+ * it outputs the pixmap ID.
+ * wmaker will monitor the fd and when it becomes available it reads the 
+ * pixmap ID and uses it in the texture. The data read from the fd
+ * is the pixmap ID and the pid of the wmsetbg process, separated by
+ * a space (the pid is to allow paralel wmsetbg processes).
  * 
  * The workspace background cant be set if the pid field of the
  * texture is 0. Otherwise, the texture is still being rendered

@@ -1,7 +1,7 @@
 /* motif.h-- stuff for support for mwm hints
  *  ripped from E.h (enlightenment)
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 

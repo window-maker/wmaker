@@ -1,6 +1,6 @@
 /* event.c- event loop and handling
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -34,6 +34,11 @@
 #ifdef SHAPE
 #include <X11/extensions/shape.h>
 #endif
+#ifdef XDE_DND
+#include <X11/Xatom.h>
+#include <gdk/gdk.h>
+#endif
+
 
 #include "WindowMaker.h"
 #include "window.h"
@@ -67,20 +72,29 @@ extern WPreferences wPreferences;
 
 extern Atom _XA_WM_CHANGE_STATE;
 extern Atom _XA_WM_DELETE_WINDOW;
-extern Atom _XA_WINDOWMAKER_WM_MINIATURIZE_WINDOW;
+extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
 
 #ifdef OFFIX_DND
 extern Atom _XA_DND_PROTOCOL;
 #endif
+#ifdef XDE_DND
+extern Atom _XA_XDE_REQUEST;
+extern Atom _XA_XDE_ENTER;
+extern Atom _XA_XDE_LEAVE;
+extern Atom _XA_XDE_DATA_AVAILABLE;
+extern Atom _XDE_FILETYPE;
+extern Atom _XDE_URLTYPE;
+#endif
+
 
 #ifdef SHAPE
-extern int ShapeEventBase;
+extern Bool wShapeSupported;
+extern int wShapeEventBase;
 #endif
 
 /* special flags */
-extern char WRestartASAP;
-extern char WExitASAP;
+extern char WProgramState;
 extern char WDelayedActionSet;
 
 
@@ -132,132 +146,9 @@ typedef struct DeathHandler {
 
 static DeathHandler *deathHandler=NULL;
 
-static WWindowState *windowState=NULL;
 
 
-
-
-WMagicNumber
-wAddWindowSavedState(char *instance, char *class, char *command,
-                     pid_t pid, WSavedState *state)
-{
-    WWindowState *wstate;
-
-    wstate = malloc(sizeof(WWindowState));
-    if (!wstate)
-        return 0;
-
-    memset(wstate, 0, sizeof(WWindowState));
-    wstate->pid = pid;
-    if (instance)
-        wstate->instance = wstrdup(instance);
-    if (class)
-        wstate->class = wstrdup(class);
-    if (command)
-        wstate->command = wstrdup(command);
-    wstate->state = state;
-
-    wstate->next = windowState;
-    windowState = wstate;
-
-#ifdef DEBUG
-    printf("Added WindowState with ID %p, for %s.%s : \"%s\"\n", wstate, instance,
-           class, command);
-#endif
-
-    return wstate;
-}
-
-
-#define SAME(x, y) (((x) && (y) && !strcmp((x), (y))) || (!(x) && !(y)))
-
-
-WMagicNumber
-wGetWindowSavedState(Window win)
-{
-    char *instance, *class, *command=NULL;
-    WWindowState *wstate = windowState;
-    char **argv;
-    int argc;
-
-    if (!wstate)
-        return NULL;
-
-    if (XGetCommand(dpy, win, &argv, &argc) && argc>0) {
-        command = FlattenStringList(argv, argc);
-        XFreeStringList(argv);
-    }
-    if (!command)
-        return NULL;
-
-    if (PropGetWMClass(win, &class, &instance)) {
-        while (wstate) {
-            if (SAME(instance, wstate->instance) &&
-                SAME(class, wstate->class) &&
-                SAME(command, wstate->command)) {
-                break;
-            }
-            wstate = wstate->next;
-        }
-    } else {
-        wstate = NULL;
-    }
-
-#ifdef DEBUG
-    printf("Read WindowState with ID %p, for %s.%s : \"%s\"\n", wstate, instance,
-           class, command);
-#endif
-
-    if (command) free(command);
-    if (instance) XFree(instance);
-    if (class) XFree(class);
-
-    return wstate;
-}
-
-
-void 
-wDeleteWindowSavedState(WMagicNumber id)
-{
-    WWindowState *tmp, *wstate=(WWindowState*)id;
-
-    if (!wstate || !windowState)
-        return;
-
-    tmp = windowState;
-    if (tmp==wstate) {
-        windowState = wstate->next;
-#ifdef DEBUG
-        printf("Deleted WindowState with ID %p, for %s.%s : \"%s\"\n",
-               wstate, wstate->instance, wstate->class, wstate->command);
-#endif
-        if (wstate->instance) free(wstate->instance);
-        if (wstate->class)    free(wstate->class);
-        if (wstate->command)  free(wstate->command);
-        free(wstate->state);
-        free(wstate);
-    } else {
-	while (tmp->next) {
-	    if (tmp->next==wstate) {
-		tmp->next=wstate->next;
-#ifdef DEBUG
-                printf("Deleted WindowState with ID %p, for %s.%s : \"%s\"\n",
-                       wstate, wstate->instance, wstate->class, wstate->command);
-#endif
-                if (wstate->instance) free(wstate->instance);
-                if (wstate->class)    free(wstate->class);
-                if (wstate->command)  free(wstate->command);
-                free(wstate->state);
-                free(wstate);
-		break;
-	    }
-	    tmp = tmp->next;
-	}
-    }
-}
-
-
-WMagicNumber
+WDeathHandlerID
 wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata)
 {
     DeathHandler *handler;
@@ -280,7 +171,7 @@ wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata)
 
 
 void 
-wDeleteDeathHandler(WMagicNumber id)
+wDeleteDeathHandler(WDeathHandlerID id)
 {
     DeathHandler *tmp, *handler=(DeathHandler*)id;
 
@@ -312,8 +203,8 @@ DispatchEvent(XEvent *event)
     if (deathHandler)
 	handleDeadProcess(NULL);
     
-    if (WExitASAP) {
-	WExitASAP = 0;
+    if (WProgramState==WSTATE_NEED_EXIT) {
+	WProgramState = WSTATE_EXITING;
 
 	/* 
 	 * WMHandleEvent() can't be called from anything
@@ -331,8 +222,8 @@ DispatchEvent(XEvent *event)
 	ExecExitScript();
 	/* received SIGTERM */
 	exit(0);
-    } else if (WRestartASAP) {
-	WRestartASAP = 0;
+    } else if (WProgramState == WSTATE_NEED_RESTART) {
+	WProgramState = WSTATE_RESTARTING;
 
 	for (i=0; i<wScreenCount; i++) {
 	    WScreen *scr;
@@ -487,26 +378,10 @@ static void
 handleDeadProcess(void *foo)
 {
     DeathHandler *tmp;
-    WWindowState *wins;
+    int i;
 
-    int tmpPtr = deadProcessPtr;
-
-    if (windowState) {
-        while (tmpPtr>0) {
-            tmpPtr--;
-
-            wins = windowState;
-            while (wins) {
-                WWindowState *t;
-
-                t = wins->next;
-
-                if (wins->pid == deadProcesses[tmpPtr].pid) {
-                    wDeleteWindowSavedState(wins);
-                }
-                wins = t;
-            }
-        }
+    for (i=0; i<deadProcessPtr; i++) {
+	wWindowDeleteSavedStatesForPID(deadProcesses[i].pid);
     }
 
     if (!deathHandler) {
@@ -577,7 +452,7 @@ static void
 handleExtensions(XEvent *event)
 {
 #ifdef SHAPE
-    if (event->type == (ShapeEventBase+ShapeNotify)) {
+    if (wShapeSupported && event->type == (wShapeEventBase+ShapeNotify)) {
 	handleShapeNotify(event);
     }
 #endif	
@@ -1012,9 +887,88 @@ handleClientMessage(XEvent *event)
 		}
 	    }
 	}
+#ifdef XDE_DND
+    } else if (event->xclient.message_type==_XA_XDE_DATA_AVAILABLE) {
+	GdkEvent gdkev;
+	WScreen *scr = wScreenForWindow(event->xclient.window);
+	Atom tmpatom;
+	int datalenght;
+	long tmplong;
+	char * tmpstr, * runstr, * freestr, * tofreestr;
+	    printf("x\n");
+	gdkev.dropdataavailable.u.allflags = event->xclient.data.l[1];
+	gdkev.dropdataavailable.timestamp = event->xclient.data.l[4];
+
+	if(gdkev.dropdataavailable.u.flags.isdrop){
+		gdkev.dropdataavailable.type = GDK_DROP_DATA_AVAIL;
+		gdkev.dropdataavailable.requestor = event->xclient.data.l[0];
+		XGetWindowProperty(dpy,gdkev.dropdataavailable.requestor,
+				event->xclient.data.l[2],
+				0, LONG_MAX -1,
+				0, XA_PRIMARY, &tmpatom,
+				&datalenght,
+				&gdkev.dropdataavailable.data_numbytes,
+				&tmplong,
+				&tmpstr);
+		datalenght=gdkev.dropdataavailable.data_numbytes-1;
+		tofreestr=tmpstr;
+		runstr=NULL;
+                for(;datalenght>0;datalenght-=(strlen(tmpstr)+1),tmpstr=&tmpstr[strlen(tmpstr)+1]){
+		freestr=runstr;runstr=wstrappend(runstr,tmpstr);free(freestr);
+		freestr=runstr;runstr=wstrappend(runstr," ");free(freestr);
+		}
+                free(tofreestr);
+		scr->xdestring=runstr;
+		/* no need to redirect ? */
+	        wDockReceiveDNDDrop(scr,event);
+		free(runstr);
+		scr->xdestring=NULL;
+	}
+
+    } else if (event->xclient.message_type==_XA_XDE_LEAVE) {
+	    printf("leave\n");
+    } else if (event->xclient.message_type==_XA_XDE_ENTER) {
+	GdkEvent gdkev;
+	XEvent replyev;
+
+	gdkev.dropenter.u.allflags=event->xclient.data.l[1];
+	printf("from win %x\n",event->xclient.data.l[0]);
+	printf("to win %x\n",event->xclient.window);
+        printf("enter %x\n",event->xclient.data.l[1]);
+        printf("v %x ",event->xclient.data.l[2]);
+        printf("%x ",event->xclient.data.l[3]);
+        printf("%x\n",event->xclient.data.l[4]);
+
+	if(event->xclient.data.l[2]==_XDE_FILETYPE ||
+	   event->xclient.data.l[3]==_XDE_FILETYPE ||
+	   event->xclient.data.l[4]==_XDE_FILETYPE ||
+	   event->xclient.data.l[2]==_XDE_URLTYPE ||
+	   event->xclient.data.l[3]==_XDE_URLTYPE ||
+	   event->xclient.data.l[4]==_XDE_URLTYPE)
+        if(gdkev.dropenter.u.flags.sendreply){
+		/*reply*/
+            replyev.xclient.type = ClientMessage;
+            replyev.xclient.window = event->xclient.data.l[0];
+            replyev.xclient.format = 32;
+            replyev.xclient.message_type = _XA_XDE_REQUEST;
+            replyev.xclient.data.l[0] = event->xclient.window;
+
+            gdkev.dragrequest.u.allflags = 0;
+            gdkev.dragrequest.u.flags.protocol_version = 0;
+            gdkev.dragrequest.u.flags.willaccept = 1;
+            gdkev.dragrequest.u.flags.delete_data = 0;
+
+            replyev.xclient.data.l[1] = gdkev.dragrequest.u.allflags;
+            replyev.xclient.data.l[2] = replyev.xclient.data.l[3] = 0;
+            replyev.xclient.data.l[4] = event->xclient.data.l[2];
+            XSendEvent(dpy, replyev.xclient.window, 0, NoEventMask, &replyev);
+            XSync(dpy, 0);
+        }
+#endif /* XDE_DND */
 #ifdef OFFIX_DND
     } else if (event->xclient.message_type==_XA_DND_PROTOCOL) {
-        if (wDockReceiveDNDDrop(wScreenForWindow(event->xclient.window),event))
+	WScreen *scr = wScreenForWindow(event->xclient.window);
+        if (scr && wDockReceiveDNDDrop(scr,event))
 	    goto redirect_message;
 #endif /* OFFIX_DND */
     } else {
@@ -1197,16 +1151,39 @@ handleShapeNotify(XEvent *event)
 {
     XShapeEvent *shev = (XShapeEvent*)event;
     WWindow *wwin;
-    puts("got shape notify");
+    XEvent ev;
+
 #ifdef DEBUG
     puts("got shape notify");
 #endif
-    wwin = wWindowFor(event->xany.window);
+
+    while (XCheckTypedWindowEvent(dpy, shev->window, event->type, &ev)) {
+	XShapeEvent *sev = (XShapeEvent*)&ev;
+
+	if (sev->kind == ShapeBounding) {
+	    if (sev->shaped == shev->shaped) {
+		*shev = *sev;
+	    } else {
+		XPutBackEvent(dpy, &ev);
+		break;
+	    }
+	}
+    }
+
+    wwin = wWindowFor(shev->window);
     if (!wwin || shev->kind != ShapeBounding)
       return;
-    
-    wwin->flags.shaped = shev->shaped;
-    wWindowSetShape(wwin);
+
+    if (!shev->shaped && wwin->flags.shaped) {
+
+	wwin->flags.shaped = 0;
+	wWindowClearShape(wwin);
+
+    } else if (shev->shaped) {
+
+	wwin->flags.shaped = 1;
+	wWindowSetShape(wwin);
+    }
 }
 #endif /* SHAPE */
 
@@ -1263,15 +1240,14 @@ handleFocusIn(XEvent *event)
 {
     WWindow *wwin;
 
-    if (event->xfocus.mode == NotifyUngrab) {
-	return;
-    }
     /*
      * For applications that like stealing the focus.
      */
     while (XCheckTypedEvent(dpy, FocusIn, event));    
     saveTimestamp(event);
-    if (event->xfocus.mode == NotifyUngrab) {
+    if (event->xfocus.mode == NotifyUngrab
+	|| event->xfocus.mode == NotifyGrab
+	|| event->xfocus.detail > NotifyNonlinearVirtual) {
 	return;
     }
 
@@ -1282,7 +1258,9 @@ handleFocusIn(XEvent *event)
 	else
 	    wSetFocusTo(wwin->screen_ptr, NULL);
     } else if (!wwin) {
-	wSetFocusTo(wScreenForWindow(event->xfocus.window), NULL);
+	WScreen *scr = wScreenForWindow(event->xfocus.window);
+	if (scr)
+	    wSetFocusTo(scr, NULL);
     }
 }
 
@@ -1366,7 +1344,7 @@ handleKeyPress(XEvent *event)
 	    CloseWindowMenu(scr);
 	    
 	    if (wwin->protocols.MINIATURIZE_WINDOW)
-	      	wClientSendProtocol(wwin, _XA_WINDOWMAKER_WM_MINIATURIZE_WINDOW,
+	      	wClientSendProtocol(wwin, _XA_GNUSTEP_WM_MINIATURIZE_WINDOW,
 				    event->xbutton.time);
 	    else {
 		if (!wwin->window_flags.no_miniaturizable)
@@ -1469,36 +1447,30 @@ handleKeyPress(XEvent *event)
                 wRaiseFrame(wwin->frame->core);
         }
 	break;
-    case WKBD_WORKSPACE1:
-	wWorkspaceChange(scr, 0);
-	break;
-     case WKBD_WORKSPACE2:
-	wWorkspaceChange(scr, 1);
-	break;
-     case WKBD_WORKSPACE3:
-	wWorkspaceChange(scr, 2);
-	break;
-     case WKBD_WORKSPACE4:
-	wWorkspaceChange(scr, 3);
-	break;
-     case WKBD_WORKSPACE5:
-	wWorkspaceChange(scr, 4);
-	break;
-     case WKBD_WORKSPACE6:
-	wWorkspaceChange(scr, 5);
-	break;
-     case WKBD_WORKSPACE7:
-	wWorkspaceChange(scr, 6);
-	break;
-     case WKBD_WORKSPACE8:
-	wWorkspaceChange(scr, 7);
-	break;
-     case WKBD_WORKSPACE9:
-	wWorkspaceChange(scr, 8);
-	break;
-     case WKBD_WORKSPACE10:
-	wWorkspaceChange(scr, 9);
-	break;
+#if (defined(__STDC__) && !defined(UNIXCPP)) || defined(ANSICPP)
+#define GOTOWORKS(wk)	case WKBD_WORKSPACE##wk:\
+			i = (scr->current_workspace/10)*10 + wk - 1;\
+			if (wPreferences.ws_advance || i<scr->workspace_count)\
+			    wWorkspaceChange(scr, i);\
+			break
+#else
+#define GOTOWORKS(wk)	case WKBD_WORKSPACE/**/wk:\
+			i = (scr->current_workspace/10)*10 + wk - 1;\
+			if (wPreferences.ws_advance || i<scr->workspace_count)\
+			    wWorkspaceChange(scr, i);\
+			break
+#endif
+    GOTOWORKS(1);
+    GOTOWORKS(2);
+    GOTOWORKS(3);
+    GOTOWORKS(4);
+    GOTOWORKS(5);
+    GOTOWORKS(6);
+    GOTOWORKS(7);
+    GOTOWORKS(8);
+    GOTOWORKS(9);
+    GOTOWORKS(10);
+#undef GOTOWORKS
      case WKBD_NEXTWORKSPACE:
 	if (scr->current_workspace < scr->workspace_count-1)
             wWorkspaceChange(scr, scr->current_workspace+1);

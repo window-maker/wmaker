@@ -1,6 +1,6 @@
 /* GNUstep.h-- stuff for compatibility with GNUstep applications
  *
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -42,7 +42,7 @@
 #undef WINGS_BOOL_FLAG
 #endif
 
-#define WINDOWMAKER_WM_MINIATURIZE_WINDOW "_WINDOWMAKER_WM_MINIATURIZE_WINDOW"
+#define GNUSTEP_WM_MINIATURIZE_WINDOW "_GNUSTEP_WM_MINIATURIZE_WINDOW"
 
 #define GNUSTEP_WM_ATTR_NAME  "_GNUSTEP_WM_ATTR"
 
@@ -67,8 +67,9 @@ enum {
 };
 #endif /* _WINGS_H_ */
 
-/* GNUstep protocols atom names */
-#define GNUSTEP_WM_RESIZEBAR "_GNUSTEP_WM_RESIZEBAR"
+/* window manager -> appkit notifications */
+#define GNUSTEP_WM_NOTIFICATION		"GNUSTEP_WM_NOTIFICATION"
+
 
 typedef struct {
     CARD32 flags;
@@ -92,6 +93,9 @@ typedef struct {
 
 /* extra flags */
 #define GSDocumentEditedFlag	(1<<0)
+#define GSWindowWillResizeNotificationsFlag (1<<1)
+#define GSWindowWillMoveNotificationsFlag (1<<2)
+
 #define GSNoApplicationIconFlag	(1<<5)
 
 

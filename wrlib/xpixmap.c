@@ -56,8 +56,6 @@ RCreateImageFromXImage(RContext *context, XImage *image, XImage *mask)
     int rshift, gshift, bshift;
     int rmask, gmask, bmask;
 
-    RErrorString[0] = 0;
-    
     assert(image!=NULL);
     assert(image->format==ZPixmap);
     assert(!mask || mask->format==ZPixmap);
@@ -69,9 +67,7 @@ RCreateImageFromXImage(RContext *context, XImage *image, XImage *mask)
       
 
     /* I don't know why, but XGetImage() for pixmaps don't set the
-     * {red,green,blue}_mask values correctly. This will not
-     * work for imageis of depth different than the root window 
-     * one used in wrlib
+     * {red,green,blue}_mask values correctly. 
      */ 
     if (context->depth==image->depth) {
      	rmask = context->visual->red_mask;
@@ -100,12 +96,25 @@ RCreateImageFromXImage(RContext *context, XImage *image, XImage *mask)
 #define NORMALIZE_BLUE(pixel)	((bshift>0) ? ((pixel) & bmask) >> bshift \
 					: ((pixel) & bmask) << -bshift)
 
-    for (y = 0; y < image->height; y++) {
-	for (x = 0; x < image->width; x++) {
-	    pixel = XGetPixel(image, x, y);
-	    *(r++) = NORMALIZE_RED(pixel);
-	    *(g++) = NORMALIZE_GREEN(pixel);
-	    *(b++) = NORMALIZE_BLUE(pixel);
+    if (image->depth==1) {
+	for (y = 0; y < image->height; y++) {
+	    for (x = 0; x < image->width; x++) {
+		pixel = XGetPixel(image, x, y);
+		if (pixel) {
+		    *(r++) = *(g++) = *(b++) = 0;
+		} else {
+		    *(r++) = *(g++) = *(b++) = 0xff;		    
+		}
+	    }
+	}
+    } else {
+	for (y = 0; y < image->height; y++) {
+	    for (x = 0; x < image->width; x++) {
+		pixel = XGetPixel(image, x, y);
+		*(r++) = NORMALIZE_RED(pixel);
+		*(g++) = NORMALIZE_GREEN(pixel);
+		*(b++) = NORMALIZE_BLUE(pixel);
+	    }
 	}
     }
 
@@ -115,7 +124,7 @@ RCreateImageFromXImage(RContext *context, XImage *image, XImage *mask)
 		if (XGetPixel(mask, x, y)) {
 		    *(a++) = 0xff;
 		} else {
-		    *(a++) = 0xff;
+		    *(a++) = 0;
 		}
 	    }
 	}
@@ -134,7 +143,6 @@ RCreateImageFromDrawable(RContext *context, Drawable drawable, Pixmap mask)
     int foo;
     Window baz;
 
-    RErrorString[0] = 0;
 
     assert(drawable!=None);
     
@@ -147,7 +155,7 @@ RCreateImageFromDrawable(RContext *context, Drawable drawable, Pixmap mask)
 		     ZPixmap);
     
     if (!pimg) {
-	sprintf(RErrorString, "could not get image");
+	RErrorCode = RERR_XERROR;
 	return NULL;
     }
     mimg = NULL;

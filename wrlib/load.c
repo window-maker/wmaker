@@ -29,6 +29,7 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <time.h>
+#include <assert.h>
 
 #ifdef USE_PNG
 #include <png.h>
@@ -213,13 +214,13 @@ RLoadImage(RContext *context, char *file, int index)
     RImage *image = NULL;
     int i;
     struct stat st;
-    
-    RErrorString[0] = 0;
-    
+
+    assert(file!=NULL);
+
     if (RImageCacheSize<0) {
 	init_cache();
     }
-    
+
     if (RImageCacheSize>0) {
 	
 	for (i=0; i<RImageCacheSize; i++) {
@@ -243,11 +244,10 @@ RLoadImage(RContext *context, char *file, int index)
 
     switch (identFile(file)) {
      case IM_ERROR:
-	sprintf(RErrorString, "error opening file");
 	return NULL;
 
      case IM_UNKNOWN:
-	sprintf(RErrorString, "unknown image format");
+	RErrorCode = RERR_BADFORMAT;
 	return NULL;
 
      case IM_XPM:
@@ -283,7 +283,7 @@ RLoadImage(RContext *context, char *file, int index)
 	break;
 
      default:
-	sprintf(RErrorString, "unsupported image format");
+	RErrorCode = RERR_BADFORMAT;
 	return NULL;
     }
     
@@ -338,14 +338,16 @@ identFile(char *path)
     int fd;
     unsigned char buffer[32];
 
-    if (!path) 
-	return IM_ERROR;
+    assert(path!=NULL);
 
     fd = open(path, O_RDONLY);
-    if (fd < 0)
+    if (fd < 0) {
+	RErrorCode = RERR_OPEN;
 	return IM_ERROR;
+    }
     if (read(fd, buffer, 32)<1) {
 	close(fd);
+	RErrorCode = RERR_READ;
 	return IM_ERROR;
     }
     close(fd);

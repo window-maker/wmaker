@@ -68,8 +68,6 @@ I18N = @I18N@
 I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
-LIBPL_INC_PATH = @LIBPL_INC_PATH@
-LIBPL_LIBS = @LIBPL_LIBS@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
@@ -106,6 +104,7 @@ libwraster_a_SOURCES = 	\
 	draw.c		\
 	color.c		\
 	load.c 		\
+	save.c		\
 	gradient.c 	\
 	xpixmap.c	\
 	convert.c 	\
@@ -155,7 +154,7 @@ X_CFLAGS = @X_CFLAGS@
 X_LIBS = @X_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 libwraster_a_DEPENDENCIES =  @ALLOCA@
-libwraster_a_OBJECTS =  raster.o draw.o color.o load.o gradient.o \
+libwraster_a_OBJECTS =  raster.o draw.o color.o load.o save.o gradient.o \
 xpixmap.o convert.o context.o misc.o scale.o convolve.o nxpm.o xpm.o \
 xutil.o ppm.o png.o jpeg.o tiff.o gif.o
 AR = ar

@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -31,7 +31,8 @@ typedef void (WCallBack)(void *cdata);
 
 typedef void (WDeathHandler)(pid_t pid, unsigned int status, void *cdata);
 
-typedef void* WMagicNumber;
+typedef void* WDeathHandlerID;
+
 
 void RestoreDesktop(WScreen *scr);
 
@@ -61,14 +62,7 @@ void UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action);
 
 void UpdateSwitchMenuWorkspace(WScreen *scr, int workspace);
 
-WMagicNumber wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata);
-
-WMagicNumber wAddWindowSavedState(char *instance, char *class, char *command,
-                                  pid_t pid, WSavedState *state);
-
-WMagicNumber wGetWindowSavedState(Window win);
-
-void wDeleteWindowSavedState(WMagicNumber id);
+WDeathHandlerID wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata);
 
 void wColormapInstallForWindow(WScreen *scr, WWindow *wwin);
 
@@ -117,15 +111,13 @@ char *GetShortcutString(char *text);
 void wHackedGrabKey(int keycode, unsigned int modifiers,
 		    Window grab_window, Bool owner_events, int pointer_mode,
 		    int keyboard_mode);
+#endif
 
 void wHackedGrabButton(unsigned int button, unsigned int modifiers, 
 		       Window grab_window, Bool owner_events, 
 		       unsigned int event_mask, int pointer_mode, 
 		       int keyboard_mode, Window confine_to, Cursor cursor);
 
-void wHackedUngrabButton(unsigned int button, unsigned int modifiers,
-			 Window grab_window);
-#endif
 
 /* this function is in dock.c */
 void ParseCommand(char *command, char ***argv, int *argc);

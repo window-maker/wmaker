@@ -435,9 +435,10 @@ paintItem(WMList *lPtr, Drawable d, char *text, int state, WMRect *rect)
 		       width, height);
     else 
 	XClearArea(scr->display, d, x, y, width, height, False);
-	
-    W_PaintText(view, d, scr->normalFont,  x+4, y, width,
-		WALeft, W_GC(scr->black), False, text, strlen(text));
+
+    if (text)
+        W_PaintText(view, d, scr->normalFont,  x+4, y, width,
+		    WALeft, W_GC(scr->black), False, text, strlen(text));
     
     if (state & WLDSIsBranch) {
 	XDrawLine(scr->display, d, W_GC(scr->darkGray), x+width-11, y+3,

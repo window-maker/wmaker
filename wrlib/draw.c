@@ -68,8 +68,8 @@ RPutPixel(RImage *image, int x, int y, RColor *color)
 
     assert(image!=NULL);
     assert(color!=NULL);
-    assert(x >= 0 && x < image->width);
-    assert(y >= 0 && y < image->height);
+    if (x < 0 || x >= image->width || y < 0 || y >= image->height)
+	return;
 
     ofs = y*image->width + x;
     sr = image->data[0] + ofs;

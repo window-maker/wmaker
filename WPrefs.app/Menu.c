@@ -1,6 +1,6 @@
 /* Menu.c- menu definition
  * 
- *  WPrefs - WindowMaker Preferences Program
+ *  WPrefs - Window Maker Preferences Program
  * 
  *  Copyright (c) 1998 Alfredo K. Kojima
  * 
@@ -1280,9 +1280,8 @@ showData(_Panel *panel)
     strcat(menuPath, "/Defaults/WMRootMenu");
     
     menu = PLGetProplistWithPath(menuPath);
-    free(menuPath);
     
-    if (!PLIsArray(menu)) {
+    if (!menu || !PLIsArray(menu)) {
 	sprintf(buffer, _("The format of the current menu in ~/G/D/WMRootMenu "
 		"is not supported by WPrefs. A new menu will be created.\n"
 		"You can also replace ~/G/D/WMRootMenu with ~/G/L/W/plmenu "
@@ -1303,8 +1302,11 @@ showData(_Panel *panel)
     } else {
 	pmenu = preProcessMenu(menu, &hasWSMenu);
     }
-    PLSetFilename(pmenu, PLGetFilename(menu));
-    PLRelease(menu);
+    PLSetFilename(pmenu, menuPath);
+    free(menuPath);
+
+    if (menu)
+        PLRelease(menu);
     
     if (panel->itemClipboard) {
 	PLRelease(panel->itemClipboard);

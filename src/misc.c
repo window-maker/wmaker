@@ -1,5 +1,5 @@
 /* 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -30,6 +30,7 @@
 #include <unistd.h>
 #include <pwd.h>
 #include <math.h>
+#include <time.h>
 
 #include <wraster.h>
 
@@ -411,8 +412,10 @@ eatExpose()
 void
 SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
 {
+    time_t time0 = time(NULL);
     float dx, dy, x=from_x, y=from_y, sx, sy, px, py;
     int dx_is_bigger=0;
+
     /* animation parameters */
     static struct {
 	int delay;
@@ -437,18 +440,18 @@ SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
     }
 
     if (dx_is_bigger) {
-        px = dx / apars[wPreferences.icon_slide_speed].slowdown;
-        if (px < apars[wPreferences.icon_slide_speed].steps && px > 0)
-            px = apars[wPreferences.icon_slide_speed].steps;
-        else if (px > -apars[wPreferences.icon_slide_speed].steps && px < 0)
-            px = -apars[wPreferences.icon_slide_speed].steps;
+        px = dx / apars[(int)wPreferences.icon_slide_speed].slowdown;
+        if (px < apars[(int)wPreferences.icon_slide_speed].steps && px > 0)
+            px = apars[(int)wPreferences.icon_slide_speed].steps;
+        else if (px > -apars[(int)wPreferences.icon_slide_speed].steps && px < 0)
+            px = -apars[(int)wPreferences.icon_slide_speed].steps;
         py = (sx == 0 ? 0 : px*dy/dx);
     } else {
-        py = dy / apars[wPreferences.icon_slide_speed].slowdown;
-        if (py < apars[wPreferences.icon_slide_speed].steps && py > 0)
-            py = apars[wPreferences.icon_slide_speed].steps;
-        else if (py > -apars[wPreferences.icon_slide_speed].steps && py < 0)
-            py = -apars[wPreferences.icon_slide_speed].steps;
+        py = dy / apars[(int)wPreferences.icon_slide_speed].slowdown;
+        if (py < apars[(int)wPreferences.icon_slide_speed].steps && py > 0)
+            py = apars[(int)wPreferences.icon_slide_speed].steps;
+        else if (py > -apars[(int)wPreferences.icon_slide_speed].steps && py < 0)
+            py = -apars[(int)wPreferences.icon_slide_speed].steps;
         px = (sy == 0 ? 0 : py*dx/dy);
     }
 
@@ -461,26 +464,28 @@ SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
             y = (float)to_y;
 
         if (dx_is_bigger) {
-            px = px * (1.0 - 1/(float)apars[wPreferences.icon_slide_speed].slowdown);
-            if (px < apars[wPreferences.icon_slide_speed].steps && px > 0)
-                px = apars[wPreferences.icon_slide_speed].steps;
-            else if (px > -apars[wPreferences.icon_slide_speed].steps && px < 0)
-                px = -apars[wPreferences.icon_slide_speed].steps;
+            px = px * (1.0 - 1/(float)apars[(int)wPreferences.icon_slide_speed].slowdown);
+            if (px < apars[(int)wPreferences.icon_slide_speed].steps && px > 0)
+                px = apars[(int)wPreferences.icon_slide_speed].steps;
+            else if (px > -apars[(int)wPreferences.icon_slide_speed].steps && px < 0)
+                px = -apars[(int)wPreferences.icon_slide_speed].steps;
             py = (sx == 0 ? 0 : px*dy/dx);
         } else {
-            py = py * (1.0 - 1/(float)apars[wPreferences.icon_slide_speed].slowdown);
-            if (py < apars[wPreferences.icon_slide_speed].steps && py > 0)
-                py = apars[wPreferences.icon_slide_speed].steps;
-            else if (py > -apars[wPreferences.icon_slide_speed].steps && py < 0)
-                py = -apars[wPreferences.icon_slide_speed].steps;
+            py = py * (1.0 - 1/(float)apars[(int)wPreferences.icon_slide_speed].slowdown);
+            if (py < apars[(int)wPreferences.icon_slide_speed].steps && py > 0)
+                py = apars[(int)wPreferences.icon_slide_speed].steps;
+            else if (py > -apars[(int)wPreferences.icon_slide_speed].steps && py < 0)
+                py = -apars[(int)wPreferences.icon_slide_speed].steps;
             px = (sy == 0 ? 0 : py*dx/dy);
         }
 
         XMoveWindow(dpy, win, (int)x, (int)y);
         XFlush(dpy);
-        if (apars[wPreferences.icon_slide_speed].delay > 0) {
-            wusleep(apars[wPreferences.icon_slide_speed].delay*1000L);
+        if (apars[(int)wPreferences.icon_slide_speed].delay > 0) {
+            wusleep(apars[(int)wPreferences.icon_slide_speed].delay*1000L);
         }
+	if (time(NULL) - time0 > MAX_ANIMATION_TIME)
+	    break;
     }
     XMoveWindow(dpy, win, to_x, to_y);
 
@@ -723,16 +728,25 @@ ParseCommand(char *command, char ***argv, int *argc)
     *argc = count;
 }
 
-
+#if 0
 static void
 timeup(void *foo)
 {
     *(int*)foo=1;
 }
-
+#endif
 static char*
 getselection(WScreen *scr)
 {
+    char *tmp;
+    extern char *W_GetTextSelection(); /* in WINGs */
+    
+    tmp = W_GetTextSelection(scr->wmscreen, XA_PRIMARY);
+    if (!tmp)
+	tmp = W_GetTextSelection(scr->wmscreen, XA_CUT_BUFFER0);
+    return tmp;
+
+#if 0
     XEvent event;
     int timeover=0;
     WMHandlerID *id;
@@ -758,6 +772,7 @@ getselection(WScreen *scr)
     }
     wwarning(_("selection timed-out"));
     return NULL;
+#endif
 }
 
 
@@ -806,6 +821,11 @@ get_dnd_selection(WScreen *scr)
     char *flat_string;
     int count;
     
+#ifdef XDE_DND
+    if(scr->xdestring) {
+	return (wstrdup(scr->xdestring));
+    }
+#endif
     result=XGetTextProperty(dpy, scr->root_win, &text_ret, _XA_DND_SELECTION);
     
     if (result==0 || text_ret.value==NULL || text_ret.encoding==None
@@ -947,6 +967,10 @@ ExpandOptions(WScreen *scr, char *cmdline)
 		    out = nout;
 		    strcat(out,user_input);
 		    optr+=slen;
+		} else {
+		    /* Not an error, but user has Canceled the dialog box.
+		     * This will make the command to not be performed. */
+		    goto error;
 		}
 		break;
 
@@ -974,13 +998,10 @@ ExpandOptions(WScreen *scr, char *cmdline)
 		
 	     case 's':
 		if (!selection) {
-		    if (!XGetSelectionOwner(dpy, XA_PRIMARY)) {
-			wwarning(_("selection not available"));
-			goto error;
-		    }
 		    selection = getselection(scr);
 		}
 		if (!selection) {
+		    wwarning(_("selection not available"));
 		    goto error;
 		}
 		slen = strlen(selection);
@@ -1157,7 +1178,7 @@ GetShortcutString(char *text)
 	buffer = wstrappend(buffer, "^");
     }
     buffer = wstrappend(buffer, text);
-
+    
     /* get key */
 /*    ksym = XStringToKeysym(text);
     tmp = keysymToString(ksym, modmask);

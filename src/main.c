@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -96,7 +96,7 @@ Atom _XA_WM_CLIENT_LEADER;
 Atom _XA_WM_COLORMAP_WINDOWS;
 
 Atom _XA_GNUSTEP_WM_ATTR;
-Atom _XA_WINDOWMAKER_WM_MINIATURIZE_WINDOW;
+Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 Atom _XA_GNUSTEP_WM_RESIZEBAR;
 
 #ifdef MWM_HINTS
@@ -114,6 +114,14 @@ Atom _XA_WINDOWMAKER_WM_FUNCTION;
 Atom _XA_DND_PROTOCOL;
 Atom _XA_DND_SELECTION;
 #endif
+#ifdef XDE_DND
+Atom _XA_XDE_REQUEST;
+Atom _XA_XDE_ENTER;
+Atom _XA_XDE_LEAVE;
+Atom _XA_XDE_DATA_AVAILABLE;
+Atom _XDE_FILETYPE;
+Atom _XDE_URLTYPE;
+#endif
 
 
 /* cursors */
@@ -125,13 +133,13 @@ Time LastTimestamp;
 Time LastFocusChange;
 
 #ifdef SHAPE
-int ShapeEventBase;
+Bool wShapeSupported;
+int wShapeEventBase;
 #endif
 
 
 /* special flags */
-char WRestartASAP = 0;
-char WExitASAP = 0;
+char WProgramState = WSTATE_NORMAL;
 char WDelayedActionSet = 0;
 
 /* temporary stuff */
@@ -174,6 +182,7 @@ Restart(char *manager)
 	/* fallback */
 	execv(Arguments[0], Arguments);
     }
+    wsyserror(_("could not exec window manager"));
     wfatal(_("Restart failed!!!"));
     exit(-1);
 }
@@ -186,16 +195,19 @@ SetupEnvironment(WScreen *scr)
     char *tmp, *ptr;
     char buf[16];
 
-    if (wScreenCount == 1)
-	return;
-
-    tmp = wmalloc(strlen(DisplayName)+64);
-    sprintf(tmp, "DISPLAY=%s", XDisplayName(DisplayName));
-    ptr = strchr(strchr(DisplayName, ':'), '.');
-    if (ptr)
-	*ptr = 0;
-    sprintf(buf, ".%i", scr->screen);
-    strcat(tmp, buf);
+    if (wScreenCount > 1) {
+    	tmp = wmalloc(strlen(DisplayName)+64);
+    	sprintf(tmp, "DISPLAY=%s", XDisplayName(DisplayName));
+    	ptr = strchr(strchr(tmp, ':'), '.');
+    	if (ptr)
+	    *ptr = 0;
+    	sprintf(buf, ".%i", scr->screen);
+    	strcat(tmp, buf);
+    	putenv(tmp);
+    }
+    tmp = wmalloc(60);
+    sprintf(tmp, "WRASTER_COLOR_RESOLUTION%i=%i", scr->screen, 
+		scr->rcontext->attribs->colors_per_channel);
     putenv(tmp);
 }
 
@@ -253,8 +265,9 @@ check_defaults()
 
     path = wdefaultspathfordomain("");
     if (access(path, R_OK)!=0) {
-	wfatal(_("could not find user GNUstep directory.\n"
-		 "Make sure you have installed WindowMaker correctly and run wmaker.inst"));
+	wfatal(_("could not find user GNUstep directory (%s).\n"
+		 "Make sure you have installed Window Maker correctly and run wmaker.inst"),
+	       path);
 	exit(1);
     }
     
@@ -342,7 +355,7 @@ main(int argc, char **argv)
 	    } else if (strcmp(argv[i], "-noclip")==0) {
 		wPreferences.flags.noclip=1;
 	    } else if (strcmp(argv[i], "-version")==0) {
-		printf("WindowMaker %s\n", VERSION);
+		printf("Window Maker %s\n", VERSION);
 		exit(0);
 	    } else if (strcmp(argv[i], "-global_defaults_path")==0) {
 		printf("%s/Defaults/WindowMaker", PKGDATADIR);
@@ -367,7 +380,7 @@ main(int argc, char **argv)
 		    wwarning(_("too few arguments for %s"), argv[i-1]);
 		    exit(0);
 		}
-		if (sscanf(argv[i], "%d", &wVisualID)!=1) {
+		if (sscanf(argv[i], "%i", &wVisualID)!=1) {
 		    wwarning(_("bad value for visualid: \"%s\""), argv[i]);
 		    exit(0);
 		}
@@ -415,6 +428,16 @@ main(int argc, char **argv)
  	wwarning(_("cannot set locale modifiers"));
     }
 #endif
+    
+    if (Locale) {
+	char *ptr;
+	
+	Locale = wstrdup(Locale);
+	ptr = strchr(Locale, '.');
+	if (ptr)
+	    *ptr = 0;
+    }
+    
 
     /* open display */
     dpy = XOpenDisplay(DisplayName);

@@ -3,10 +3,12 @@
 			---------------------------
 
 
-If you find a bug please fill this form and send it to 
+	If you find a bug please fill this form and send it to 
 developers@windowmaker.org 
-You can also report a bug in the WWW bug tracker at
-http://windowmaker.org/cgi-bin/bugs
+
+	You can also report a bug in the WWW bug tracker at
+http://windowmaker.org/cgi-bin/bugs or by sending this report 
+to bugs@windowmaker.org
 
 
 0. Before reporting this bug I already:
@@ -34,7 +36,7 @@ http://windowmaker.org/cgi-bin/bugs
 [ ]  --disable-shape   
 [ ]  --disable-xpm    
 [ ]  --disable-tiff  
-[ ]  --disable-png   
+[ ]  --disable-png 
 [ ]  --enable-single-icon
 [ ]  Others: .......................
 
@@ -68,4 +70,6 @@ X Server Vendor: ...................... Color Depth: .................
 WindowMaker Version (run "wmaker -version"): .........................
 
 
+11. backtrace if the bug made Window Maker crash. The README file 
+has instructions to make one.
 

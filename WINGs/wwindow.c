@@ -149,7 +149,6 @@ WMWindow*
 WMCreateWindowWithStyle(WMScreen *screen, char *name, int style)
 {
     _Window *win;
-    static int initedApp = 0;
 
     win = wmalloc(sizeof(_Window));
     memset(win, 0, sizeof(_Window));
@@ -175,11 +174,6 @@ WMCreateWindowWithStyle(WMScreen *screen, char *name, int style)
 
     W_ResizeView(win->view, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
-    if (!initedApp) {
-	W_InitApplication(screen);
-	initedApp = 1;
-    }
-    
     WMAddNotificationObserver(realizeObserver, win,
 			      WMViewRealizedNotification, win->view);
 

@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -32,7 +32,9 @@ void wClientKill(WWindow *wwin);
 void wClientCheckProperty(WWindow *wwin, XPropertyEvent *event);
 
 
-void GetNormalHints(WWindow *wwin, XWindowAttributes *wattribs, int geometry);
+void wClientGetNormalHints(WWindow *wwin, XWindowAttributes *wattribs,
+			   Bool geometry, int *x, int *y, unsigned *width,
+			   unsigned *height);
 void GetColormapWindows(WWindow *wwin);
 
 #endif

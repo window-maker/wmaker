@@ -68,8 +68,6 @@ I18N = @I18N@
 I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
-LIBPL_INC_PATH = @LIBPL_INC_PATH@
-LIBPL_LIBS = @LIBPL_LIBS@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
@@ -193,15 +191,15 @@ CPPFLAGS = \
 	-DPIXMAPDIR="\"$(pixmapdir)\"" 
 
 INCLUDES = \
-	-I$(top_srcdir)/wrlib \
-	-I$(top_srcdir)/WINGs \
 	@XCFLAGS@ \
-	@LIBPL_INC_PATH@ 
+	-I$(top_srcdir)/libPropList \
+	-I$(top_srcdir)/wrlib \
+	-I$(top_srcdir)/WINGs 
 
 wmaker_LDADD = \
-	$(top_builddir)/WINGs/libWINGs.a\
-	$(top_builddir)/wrlib/libwraster.a\
-	@LIBPL_LIBS@ \
+	-L$(top_builddir)/WINGs -lWINGs\
+	-L$(top_builddir)/wrlib -lwraster\
+	-L$(top_builddir)/libPropList -lPropList\
 	@XLFLAGS@ \
 	@GFXLIBS@ \
 	@XLIBS@ \
@@ -227,8 +225,7 @@ placement.o properties.o proplist.o resources.o rootmenu.o screen.o \
 session.o shutdown.o stacking.o startup.o superfluous.o switchmenu.o \
 texture.o xmodifier.o xutil.o wcore.o wdefaults.o window.o winmenu.o \
 winspector.o workspace.o wmsound.o text.o
-wmaker_DEPENDENCIES =  $(top_builddir)/WINGs/libWINGs.a \
-$(top_builddir)/wrlib/libwraster.a
+wmaker_DEPENDENCIES = 
 wmaker_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)

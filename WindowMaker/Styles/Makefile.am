@@ -23,7 +23,6 @@ defsdata_DATA = \
 	Pink\
 	Pumpkin\
 	Purple\
-	Rainbow\
 	Red\
 	RednBlue\
 	ShinyBrown\

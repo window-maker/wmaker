@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -26,7 +26,12 @@
 #include "WindowMaker.h"
 #include <sys/types.h>
 
+#ifdef XDE_DND
+#include <gdk/gdk.h>
+#endif
+
 #include <proplist.h>
+
 
 typedef struct WFont {
 #ifndef I18N_MB
@@ -238,6 +243,10 @@ typedef struct _WScreen {
     Window autoRaiseWindow;	       /* window that is scheduled to be
 					* raised */
 
+#ifdef XDE_DND
+    char *xdestring;
+#endif
+
     struct {
 	unsigned int startup:1;	       /* during window manager startup */
 	unsigned int regenerate_icon_textures:1;
@@ -256,6 +265,7 @@ typedef struct _WScreen {
 #define WSS_SWITCHMENU	(1<<1)
 #define WSS_WSMENU	(1<<2)
 
+/* changes must update wSaveScreenState/getWorkspaceState */
 typedef struct WWorkspaceState {
     int flags;
     int workspace;

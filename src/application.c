@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -132,6 +132,59 @@ extractIcon(WWindow *wwin)
 }
 
 
+static void
+saveIconNameFor(char *iconPath, char *wm_instance, char *wm_class)
+{
+    proplist_t dict = WDWindowAttributes->dictionary;
+    proplist_t adict, key, iconk;
+    proplist_t val;
+    char *tmp;
+    int i;
+	
+    i = 0;
+    if (wm_instance)
+	i += strlen(wm_instance);
+    if (wm_class)
+	i += strlen(wm_class);
+
+    tmp = wmalloc(i+8);
+    *tmp = 0;
+    if (wm_class && wm_instance) {
+	sprintf(tmp, "%s.%s", wm_instance, wm_class);
+    } else {
+	if (wm_instance)
+	    strcat(tmp, wm_instance);
+	if (wm_class)
+	    strcat(tmp, wm_class);
+    }
+    
+    key = PLMakeString(tmp); 
+    free(tmp);
+    adict = PLGetDictionaryEntry(dict, key);
+    
+    iconk = PLMakeString("Icon");
+    
+    if (adict) {
+	val = PLGetDictionaryEntry(adict, iconk);
+    } else {
+	/* no dictionary for app, so create one */
+	adict = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+	PLInsertDictionaryEntry(dict, key, adict);
+	PLRelease(adict);
+	val = NULL;
+    }
+    if (!val) {
+	val = PLMakeString(iconPath);
+	PLInsertDictionaryEntry(adict, iconk, val);
+	PLRelease(val);
+    }
+    PLRelease(key);
+
+    if (val)
+	PLSave(dict, YES);
+}
+
+
 void
 wApplicationExtractDirPackIcon(WScreen *scr, char *path, 
 				char *wm_instance, char *wm_class)
@@ -162,56 +215,27 @@ wApplicationExtractDirPackIcon(WScreen *scr, char *path,
     }
     
     if (iconPath) {
-	proplist_t dict = WDWindowAttributes->dictionary;
-	proplist_t adict, key, iconk;
-	proplist_t val;
-	char *tmp;
-	int i;
-	
-	i = 0;
-	if (wm_instance)
-	    i += strlen(wm_instance);
-	if (wm_class)
-	    i += strlen(wm_class);
+	saveIconNameFor(iconPath, wm_instance, wm_class);
 
-	tmp = wmalloc(i+8);
-	*tmp = 0;
-	if (wm_class && wm_instance) {
-	    sprintf(tmp, "%s.%s", wm_instance, wm_class);
-	} else {
-	    if (wm_instance)
-		strcat(tmp, wm_instance);
-	    if (wm_class)
-		strcat(tmp, wm_class);
-	}
-
-	key = PLMakeString(tmp); 
-	free(tmp);
-	adict = PLGetDictionaryEntry(dict, key);
-	
-	iconk = PLMakeString("Icon");
-
-	if (adict) {
-	    val = PLGetDictionaryEntry(adict, iconk);
-	} else {
-	    /* no dictionary for app, so create one */
-	    adict = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
-	    PLInsertDictionaryEntry(dict, key, adict);
-	    PLRelease(adict);
-	    val = NULL;
-	}
-	if (!val) {
-	    val = PLMakeString(iconPath);
-	    PLInsertDictionaryEntry(adict, iconk, val);
-	    PLRelease(val);
-	}
-	PLRelease(key);
-
-	if (val)
-	    PLSave(dict, YES);
-	
 	free(iconPath);
     }
+}
+
+
+static Bool
+extractClientIcon(WAppIcon *icon)
+{
+    char *path;
+
+    path = wIconStore(icon->icon);
+    if (!path)
+	return False;
+
+    saveIconNameFor(path, icon->wm_instance, icon->wm_class);
+
+    free(path);
+
+    return True;
 }
 
 
@@ -337,6 +361,9 @@ wApplicationCreate(WScreen *scr, Window main_window)
     if (wapp->app_icon && !wapp->app_icon->docked) {
 #else
     if (wapp->app_icon && !wapp->app_icon->docked && wapp->app_icon->num_apps == 1) {
+#ifdef THIS_SUCKS
+    }
+#endif
 #endif
         WIcon *icon = wapp->app_icon->icon;
         WDock *clip = scr->workspaces[scr->current_workspace]->clip;
@@ -348,7 +375,7 @@ wApplicationCreate(WScreen *scr, Window main_window)
                 wapp->app_icon->icon->shadowed = 1;
                 wapp->app_icon->icon->force_paint = 1;
                 /* We don't do an wAppIconPaint() here because it's in
-                 * wDockAttachIcon(). -Dan
+                 * wDockAttachIcon(). -Dan.
                  */
             }
             wDockAttachIcon(clip, wapp->app_icon, x, y);
@@ -367,6 +394,16 @@ wApplicationCreate(WScreen *scr, Window main_window)
 	wArrangeIcons(scr, True);
     }
 
+    if (wapp->app_icon) {
+	char *tmp;
+
+	/* if the displayed icon was supplied by the client, save the icon */
+	tmp = wDefaultGetIconFile(scr, wapp->app_icon->wm_instance,
+				  wapp->app_icon->wm_class, True);
+	if (!tmp)
+	    extractClientIcon(wapp->app_icon);
+    }
+    
     wapp->prev = NULL; 
     wapp->next = scr->wapp_list;
     if (scr->wapp_list)

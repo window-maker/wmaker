@@ -243,6 +243,9 @@ WMGetSavePanel(WMScreen *scrPtr)
 void
 WMFreeFilePanel(WMFilePanel *panel)
 {
+    if (panel == WMWidgetScreen(panel->win)->sharedSavePanel) {
+	WMWidgetScreen(panel->win)->sharedSavePanel = NULL;
+    }
     if (panel == WMWidgetScreen(panel->win)->sharedOpenPanel) {
 	WMWidgetScreen(panel->win)->sharedOpenPanel = NULL;
     }
@@ -501,8 +504,12 @@ getCurrentFileName(WMFilePanel *panel)
     if (path[len-1]=='/') {
 	file = WMGetTextFieldText(panel->fileField);
 	tmp = wmalloc(strlen(path)+strlen(file)+8);
-	strcpy(tmp, path);
-	strcat(tmp, file);
+        if (file[0]!='/') {
+           strcpy(tmp, path);
+           strcat(tmp, file);
+        } else
+           strcpy(tmp, file);
+
 	free(file);
 	free(path);
 	return tmp;

@@ -6,7 +6,7 @@ SUBDIRS = Resources
 
 
 LIBLIST= -L$(top_builddir)/wrlib -lwraster @XLFLAGS@ @GFXLIBS@ @XLIBS@ \
-	-lm @LIBPL_LIBS@ 
+	-lm -L$(top_builddir)/libPropList -lPropList
 
 
 lib_LIBRARIES = libWINGs.a
@@ -78,13 +78,13 @@ libWINGs_a_SOURCES = 	\
 	findfile.c \
 	hashtable.c \
 	memory.c \
-	usleep.c 
+	usleep.c
 
 ##
 ## Find a better way than $(GFXFLAGS) to inform widgets.c wich of 
 ## tiff or xpm images should be used
 
-INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/src @XCFLAGS@ \
+INCLUDES = @XCFLAGS@ -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
 	-DRESOURCE_PATH=\"$(datadir)/WINGs\" $(GFXFLAGS) -DDEBUG \
-	@LIBPL_INC_PATH@
+	-I$(top_srcdir)/libPropList
 

@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -127,14 +127,6 @@ typedef struct WObjDescriptor {
 #define WTJ_LEFT	1
 #define WTJ_RIGHT	2
 
-
-/* icon box positions */
-#define WIB_BOTTOM	0
-#define WIB_TOP		1
-#define WIB_LEFT	2
-#define WIB_RIGHT	3
-
-
 /* iconification styles */
 #define WIS_ZOOM        0
 #define WIS_TWIST       1
@@ -157,9 +149,6 @@ typedef struct WObjDescriptor {
 #define SPEED_SLOW	3
 #define SPEED_ULTRASLOW 4
 
-/* startup warnings */
-#define WAR_DEFAULTS_DIR	1 /* created defaults DB directory */
-
 
 /* window states */
 #define WS_FOCUSED	0
@@ -180,16 +169,17 @@ typedef struct WObjDescriptor {
 #define	IY_LEFT		0
 
 
+/* program states */
+#define WSTATE_NORMAL		0
+#define WSTATE_NEED_EXIT	1
+#define WSTATE_NEED_RESTART	2
+#define WSTATE_EXITING		3
+#define WSTATE_RESTARTING	4
 
-typedef struct W2Color {
-    char *color1;
-    char *color2;
-} W2Color;
 
 typedef struct WCoord {
     int x, y;
 } WCoord;
-
 
 
 typedef struct WPreferences {
@@ -213,8 +203,9 @@ typedef struct WPreferences {
     
     char use_saveunders;	       /* turn on SaveUnders for menus,
 					* icons etc. */ 
-    
+/*
     char no_window_under_dock;
+ */
 
     char no_window_over_icons;
 
@@ -257,7 +248,7 @@ typedef struct WPreferences {
 
     WCoord *win_menu_pos;
     
-    int icon_yard;		       /* aka iconbox */
+    char icon_yard;		       /* aka iconbox */
 
     int raise_delay;		       /* delay for autoraise. 0 is disabled */
 
@@ -298,13 +289,13 @@ typedef struct WPreferences {
     int dblclick_time;		       /* double click delay time in ms */
 
     /* animate menus */
-    int menu_scroll_speed;	       /* how fast menus are scrolled */
+    char menu_scroll_speed;	       /* how fast menus are scrolled */
 
     /* animate icon sliding */
-    int icon_slide_speed;	       /* icon slide animation speed */
+    char icon_slide_speed;	       /* icon slide animation speed */
 
     /* shading animation */
-    int shade_speed;
+    char shade_speed;
     
     int edge_resistance;
     

@@ -1,6 +1,6 @@
 /* Preferences.c- misc personal preferences
  * 
- *  WPrefs - WindowMaker Preferences Program
+ *  WPrefs - Window Maker Preferences Program
  * 
  *  Copyright (c) 1998 Alfredo K. Kojima
  * 
@@ -192,7 +192,7 @@ createPanel(Panel *p)
     panel->raisB = WMCreateSwitchButton(panel->optF);
     WMResizeWidget(panel->raisB, 440, 20);
     WMMoveWidget(panel->raisB, 20, 25);
-    WMSetButtonText(panel->raisB, _("Raise window when switching focus with keyboard."));
+    WMSetButtonText(panel->raisB, _("Raise window when switching focus with keyboard (CirculateRaise)."));
 
     WMMapSubwidgets(panel->optF);
     

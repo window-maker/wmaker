@@ -68,8 +68,6 @@ I18N = @I18N@
 I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
-LIBPL_INC_PATH = @LIBPL_INC_PATH@
-LIBPL_LIBS = @LIBPL_LIBS@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
@@ -116,7 +114,6 @@ defsdata_DATA = \
 	Pink\
 	Pumpkin\
 	Purple\
-	Rainbow\
 	Red\
 	RednBlue\
 	ShinyBrown\

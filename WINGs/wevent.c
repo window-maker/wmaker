@@ -31,7 +31,7 @@ extern _WINGsConfiguration WINGsConfiguration;
 
 typedef struct TimerHandler {
     WMCallback		*callback;	       /* procedure to call */
-    unsigned long 	msec;		       /* when to call the callback */
+    struct timeval	when;		       /* when to call the callback */
     void 		*clientData;
     struct TimerHandler *next;
 } TimerHandler;
@@ -114,20 +114,30 @@ static WMEventHook *extraEventHandler=NULL;
 #define idlePending()	(idleHandler)
 
 
-
-/* return current time in milliseconds */
 #ifdef HAVE_GETTIMEOFDAY
-static unsigned long 
-rightNow(void) {
-    struct timeval tv;
-
-    gettimeofday(&tv, NULL);
-
-    return 1000L*(unsigned long)tv.tv_sec + (unsigned long)tv.tv_usec/1000L;
+static void
+rightNow(struct timeval *tv) {
+    gettimeofday(tv, NULL);
 }
 #else /* !HAVE_GETTIMEOFDAY */
-# define rightNow()	(1000*(unsigned long)time(NULL))
+# define rightNow(tv)	(tv)->tv_sec==time(NULL),(tv)->tv_usec=0
 #endif /* !HAVE_GETTIMEOFDAY */
+
+
+/* is t1 after t2 ? */
+#define IS_AFTER(t1, t2)	(((t1).tv_sec > (t2).tv_sec) || \
+				 (((t1).tv_sec == (t2).tv_sec) \
+				  && ((t1).tv_usec > (t2).tv_usec)))
+
+
+static void
+addmillisecs(struct timeval *tv, int milliseconds)
+{
+    tv->tv_usec += milliseconds*1000;
+
+    tv->tv_sec += tv->tv_usec/1000000;
+    tv->tv_usec = tv->tv_usec%1000000;
+}
 
 
 WMHandlerID
@@ -139,17 +149,18 @@ WMAddTimerHandler(int milliseconds, WMCallback *callback, void *cdata)
     if (!handler)
       return NULL;
     
-    handler->msec = rightNow()+milliseconds;
+    rightNow(&handler->when);
+    addmillisecs(&handler->when, milliseconds);
     handler->callback = callback;
     handler->clientData = cdata;
     /* insert callback in queue, sorted by time left */
-    if (!timerHandler || timerHandler->msec >= handler->msec) {
+    if (!timerHandler || !IS_AFTER(handler->when, timerHandler->when)) {
 	/* first in the queue */
 	handler->next = timerHandler;
 	timerHandler = handler;
     } else {
 	tmp = timerHandler;
-	while (tmp->next && tmp->next->msec < handler->msec) {
+	while (tmp->next && IS_AFTER(handler->when, tmp->next->when)) {
 	    tmp = tmp->next;
 	}
 	handler->next = tmp->next;
@@ -341,12 +352,11 @@ static void
 checkTimerHandlers()
 {
     TimerHandler *handler;
-    unsigned long now = rightNow();
+    struct timeval now;
+    
+    rightNow(&now);
 
-    if (!timerHandler || (timerHandler->msec > now))
-      return;
-
-    while (timerHandler && timerHandler->msec <= now) {
+    while (timerHandler && IS_AFTER(now, timerHandler->when)) {
 	handler = timerHandler;
 	timerHandler = timerHandler->next;
 	handler->next = NULL;
@@ -357,22 +367,26 @@ checkTimerHandlers()
 
 
 
-static unsigned long
-msToNextTimerEvent()
+static void
+delayUntilNextTimerEvent(struct timeval *delay)
 {
-    unsigned long now;
+    struct timeval now;
 
     if (!timerHandler) {
         /* The return value of this function is only valid if there _are_
          timers active. */
-        return 0;
+	delay->tv_sec = 0;
+	delay->tv_usec = 0;
+	return;
     }
 
-    now = rightNow();
-    if (timerHandler->msec < now) {
-        return 0;
+    rightNow(&now);
+    if (IS_AFTER(now, timerHandler->when)) {
+	delay->tv_sec = 0;
+	delay->tv_usec = 0;
     } else {
-        return timerHandler->msec - now;
+	delay->tv_sec = timerHandler->when.tv_sec - now.tv_sec;
+	delay->tv_usec = timerHandler->when.tv_usec - now.tv_usec;
     }
 }
 
@@ -693,7 +707,6 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 #ifndef HAVE_SELECT
 #error This_system_does_not_have_select(2)_and_is_not_supported
 #endif
-    unsigned long milliseconds;
     struct timeval timeout;
     struct timeval *timeoutPtr;
     fd_set rset, wset, eset;
@@ -730,9 +743,7 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
      * next timer expires.
      */
     if (timerPending()) {
-	milliseconds = msToNextTimerEvent();
-	timeout.tv_sec = milliseconds / 1000;
-	timeout.tv_usec = (milliseconds % 1000) * 1000;
+	delayUntilNextTimerEvent(&timeout);
 	timeoutPtr = &timeout;
     } else {
 	timeoutPtr = (struct timeval*)0;
@@ -841,9 +852,7 @@ WMMaskEvent(Display *dpy, long mask, XEvent *event)
          * next timer expires.
          */
         if (timerPending()) {
-            milliseconds = msToNextTimerEvent();
-            timeout.tv_sec = milliseconds / 1000;
-            timeout.tv_usec = (milliseconds % 1000) * 1000;
+	    delayUntilNextTimerEvent(&timeout);
             timeoutOrInfty = &timeout;
         } else {
             timeoutOrInfty = (struct timeval*)0;

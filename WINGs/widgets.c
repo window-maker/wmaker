@@ -421,7 +421,8 @@ loadPixmaps(WMScreen *scr)
     
     image = RLoadImage(scr->rcontext, WINGS_IMAGES_FILE, 0);
     if (!image) {
-	wwarning("WINGs: could not load widget images file: %s", RErrorString);
+	wwarning("WINGs: could not load widget images file: %s", 
+		 RMessageForError(RErrorCode));
 	return False;
     }
     /* make it have a gray background */
@@ -653,6 +654,8 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     
     scrPtr->rootView = W_CreateRootView(scrPtr);
 
+    W_InitApplication(scrPtr);
+    
     return scrPtr;
 }
 
@@ -883,6 +886,13 @@ Display*
 WMScreenDisplay(WMScreen *scr)
 {
     return scr->display;
+}
+
+
+int 
+WMScreenDepth(WMScreen *scr)
+{
+    return scr->depth;
 }
 
 

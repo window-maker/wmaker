@@ -681,7 +681,7 @@ msgstr "Création du fichier temporaire %s impossible"
 
 #: ../../WPrefs/MouseSettings.c:756
 msgid "could not rename file %s to %s\n"
-msgstr "Changement de nom de %s à %s impossible"
+msgstr "Changement de nom de %s à %s impossible\n"
 
 #: ../../WPrefs/MouseSettings.c:839
 msgid "Mouse Preferences"

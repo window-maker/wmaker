@@ -15,6 +15,7 @@ libwraster_a_SOURCES = 	\
 	draw.c		\
 	color.c		\
 	load.c 		\
+	save.c		\
 	gradient.c 	\
 	xpixmap.c	\
 	convert.c 	\

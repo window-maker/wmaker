@@ -68,8 +68,6 @@ I18N = @I18N@
 I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
-LIBPL_INC_PATH = @LIBPL_INC_PATH@
-LIBPL_LIBS = @LIBPL_LIBS@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
@@ -105,7 +103,7 @@ wpdatadir = @wprefsdir@
 
 wpdata_DATA = WPrefs.tiff WPrefs.xpm
 
-EXTRA_DIST = $(wpdata_DATA)
+EXTRA_DIST = $(wpdata_DATA) TexturePanel.icons
 
 WPrefs_SOURCES = \
 	main.c \
@@ -124,6 +122,8 @@ WPrefs_SOURCES = \
 	Preferences.c \
 	Text.c \
 	TextureAndColor.c \
+	TexturePanel.c \
+	TexturePanel.h \
 	WindowHandling.c \
 	Workspace.c \
 	double.c \
@@ -140,14 +140,14 @@ INCLUDES = \
 	-I$(top_srcdir)/wrlib \
 	-I$(top_srcdir)/WINGs \
 	@XCFLAGS@ \
-	@LIBPL_INC_PATH@ 
+	-I$(top_srcdir)/libPropList
 
 WPrefs_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
 
 WPrefs_LDADD = \
 	-L$(top_builddir)/WINGs -lWINGs\
 	-L$(top_builddir)/wrlib -lwraster \
-	@LIBPL_LIBS@ \
+	-L$(top_builddir)/libPropList -lPropList \
 	@XLFLAGS@ \
 	@GFXLIBS@ \
 	@XLIBS@ \
@@ -169,7 +169,8 @@ X_PRE_LIBS = @X_PRE_LIBS@
 WPrefs_OBJECTS =  main.o WPrefs.o Configurations.o Expert.o Focus.o \
 Icons.o KeyboardSettings.o KeyboardShortcuts.o Menu.o MenuPreferences.o \
 MouseSettings.o Paths.o Preferences.o Text.o TextureAndColor.o \
-WindowHandling.o Workspace.o double.o MenuGuru.o xmodifier.o
+TexturePanel.o WindowHandling.o Workspace.o double.o MenuGuru.o \
+xmodifier.o
 WPrefs_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)

@@ -39,8 +39,8 @@
 #define RLRASTER_H_
 
 
-/* version of the header for the library: 0.8 */
-#define WRASTER_HEADER_VERSION	8
+/* version of the header for the library: 0.10 */
+#define WRASTER_HEADER_VERSION	10
 
 #ifdef HAVE_ALLOCA_H
 #include <alloca.h>
@@ -158,9 +158,11 @@ typedef struct RImage {
  */
 typedef struct RXImage {
     XImage *image;
+
+    /* Private data. Do not access */
 #ifdef XSHM
     XShmSegmentInfo info;
-    int is_shared;
+    char is_shared;
 #endif
 } RXImage;
 
@@ -216,6 +218,22 @@ enum {
 
 
 
+/* error codes */
+#define RERR_NONE		0
+#define RERR_OPEN	 	1      /* cant open file */
+#define RERR_READ		2      /* error reading from file */
+#define RERR_WRITE		3      /* error writing to file */
+#define RERR_NOMEMORY		4      /* out of memory */
+#define RERR_NOCOLOR		5      /* out of color cells */
+#define RERR_BADIMAGEFILE	6      /* image file is corrupted or invalid */
+#define RERR_BADFORMAT		7      /* image file format is unknown */
+#define RERR_BADINDEX		8      /* no such image index in file */
+
+#define RERR_BADVISUALID	16     /* invalid visual ID requested for context */
+
+#define RERR_XERROR		127    /* internal X error */
+#define RERR_INTERNAL		128    /* should not happen */
+
 
 /*
  * Returns a NULL terminated array of strings containing the
@@ -231,6 +249,7 @@ void RFreeStringList(char **list);
 RContext *RCreateContext(Display *dpy, int screen_number,
 			 RContextAttributes *attribs);
 
+void RDestroyContext(RContext *context);
 
 Bool RGetClosestXColor(RContext *context, RColor *color, XColor *retColor);
 
@@ -251,6 +270,10 @@ void RDestroyImage(RImage *image);
 
 RImage *RGetImageFromXPMData(RContext *context, char **data);
 
+/*
+ * RImage storing
+ */
+Bool RSaveImage(RImage *image, char *filename, char *format);
 
 /*
  * Area manipulation
@@ -320,9 +343,9 @@ void RHSVtoRGB(RHSVColor *hsv, RColor *rgb);
 /*
  * Painting
  */
-int RClearImage(RImage *image, RColor *color);
+void RClearImage(RImage *image, RColor *color);
 
-int RBevelImage(RImage *image, int bevel_type);
+void RBevelImage(RImage *image, int bevel_type);
 
 RImage *RRenderGradient(unsigned width, unsigned height, RColor *from, 
 			RColor *to, int style);
@@ -343,7 +366,7 @@ int RConvertImageMask(RContext *context, RImage *image, Pixmap *pixmap,
 /*
  * misc. utilities
  */
-RXImage *RCreateXImage(RContext *context, int depth, 
+RXImage *RCreateXImage(RContext *context, int depth,
 		       unsigned width, unsigned height);
 
 void RDestroyXImage(RContext *context, RXImage *ximage);
@@ -352,13 +375,12 @@ void RPutXImage(RContext *context, Drawable d, GC gc, RXImage *ximage,
 		int src_x, int src_y, int dest_x, int dest_y, 
 		unsigned width, unsigned height);
 
+/* do not free the returned string! */
+const char *RMessageForError(int errorCode);
+
 
 /****** Global Variables *******/
 
-/*
- * Where error strings are stored
- */
-extern char RErrorString[];
-
+extern int RErrorCode;
 
 #endif

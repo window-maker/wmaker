@@ -1,6 +1,6 @@
 /* winspector.c - window attribute inspector
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -291,7 +291,7 @@ showIconFor(WMScreen *scrPtr, InspectorPanel *panel,
 	    
 	    buf = wmalloc(strlen(file)+80);
 	    sprintf(buf, _("Could not open specified icon \"%s\":%s"),
-		    file, RErrorString);
+		    file, RMessageForError(RErrorCode));
             wMessageDialog(panel->frame->screen_ptr, _("Error"), buf,
 			   _("OK"), NULL, NULL);
 	    free(buf);
@@ -936,10 +936,14 @@ textEditedObserver(void *observerData, WMNotification *notification)
     if ((int)WMGetNotificationClientData(notification) != WMReturnTextMovement)
 	return;
 
-    showIconFor(WMWidgetScreen(panel->win), panel, NULL, NULL, USE_TEXT_FIELD);
+    if (observerData == panel->fileText) {
+	showIconFor(WMWidgetScreen(panel->win), panel, NULL, NULL, 
+		    USE_TEXT_FIELD);
     /*
-    WMPerformButtonClick(panel->updateIconBtn);
+     WMPerformButtonClick(panel->updateIconBtn);
      */
+    } else
+	WMPerformButtonClick(panel->setRb);
 }
 
 static InspectorPanel*
@@ -1242,6 +1246,9 @@ createInspectorForWindow(WWindow *wwin)
     panel->wsText = WMCreateTextField(panel->wsFrm);
     WMMoveWidget(panel->wsText, 30, 40);
     WMResizeWidget(panel->wsText, PWIDTH - (2 * 15) - 25 - 10 - (2 * 5), 20);
+    WMAddNotificationObserver(textEditedObserver, panel, 
+			      WMTextDidEndEditingNotification,
+			      panel->wsText);
     
     
     i = wDefaultGetStartWorkspace(wwin->screen_ptr, wwin->wm_instance,

@@ -1,7 +1,7 @@
 
-#include "wraster.h"
 
 #include <X11/Xlib.h>
+#include "wraster.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -116,7 +116,7 @@ void main(int argc, char **argv)
 
     if (!ctx) {
 	printf("could not initialize graphics library context: %s\n",
-               RErrorString);
+	       RMessageForError(RErrorCode));
 	exit(1);
     }
 
@@ -139,14 +139,15 @@ void main(int argc, char **argv)
 
     val.background_pixel = ctx->black;
     val.colormap = ctx->cmap;
+    val.backing_store = Always;
 #ifdef BENCH
     win = XCreateWindow(dpy, DefaultRootWindow(dpy), 10, 10, 250, 250,
                         0, ctx->depth, InputOutput, ctx->visual,
-                        CWColormap|CWBackPixel, &val);
+                        CWColormap|CWBackPixel|CWBackingStore, &val);
 #else
     win = XCreateWindow(dpy, DefaultRootWindow(dpy), 10, 10, 750, 250,
                         0, ctx->depth, InputOutput, ctx->visual,
-                        CWColormap|CWBackPixel, &val);
+                        CWColormap|CWBackPixel|CWBackingStore, &val);
 #endif
     XMapRaised(dpy, win);
     XFlush(dpy);

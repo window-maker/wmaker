@@ -1,3 +1,57 @@
+Changes since version 0.20.1:
+.............................
+
+- fixed timer bug
+- removed NoWindowUnderDock
+- error reporting mechanism has changed in wrlib. Instead of a writing
+the message in a string, it will place the error code in RErrorCode
+- smoother icon selection
+- persistent client supplied icon pixmaps
+- fixed yet another crash on emacs exit bug
+- fixed portability prob in wrlib shm code
+- fixed bug in DISPLAY variable setting in multiheads
+- fixed a few more portability problems related to storing struct properties
+- fixed damaged balloons on Suns/8bpp (I guess)
+- better "one of" type option handling
+- added a timeout for some animations
+- support for large binary files in wxcopy/wxpaste
+- fixed bug of losing focus when resizing/moving windows
+- fixed bug in libproplist
+- fixed focus with sloppy
+- changed permissions of shm segments to 0666. Now, if someone has a shm
+leak, we can know who it is.
+- faster titlebar texture update
+- faster icon kaboom
+- added different undocking animation
+- updated wmaker -version to output "Window Maker" instead of WindowMaker
+- fixed crash bug with transient windows (gimp etc)
+- fixed bug with popen()+wwarning() - problem opening cpp'ed menus
+- added test for header files in configure for gfx libraries
+- simplified building process, making libPropList be always built
+- fixed crash with bad mgradient color entry
+- docked appicons that are being edited/killed cant be moved (mutex fix)
+- more features in wxcopy/wxpaste
+- fixed bug with state file in multiheads
+- selection retrieval moved to WINGs
+- fixed workspacekey to switch workspaces in the current layer
+- fixed workspacekey to not switch to inexisting workspace unless
+AdvanceToNewWorkspace is YES
+- fixed bug with disappearing windows if a workspace switch is made on startup
+- fixed blocking of window creation/destroy events when opening menu with kbd
+- fixed aspect ratio setting bug
+- fixed crashing when miniaturized window is closed during animation
+- added XDE support
+- fixed stupid bug in shape stuff
+- raised threshold for removing docked icons
+- fixed HideOthers for windows with NoAppIcon=YES
+- if Cancel is pressed in dialog box of %a in menu cmd lines, the command
+will be canceled
+- slightly better dithering for 8bpp
+- apps menu will use $SHELL, instead of /bin/sh to run EXEC menu commands
+- cleaned up some code (GetNormalHints(), wManageWindow(),
+wGetWindowSavedState() et al, )
+
+
 Changes since version 0.20.0:
 .............................
 
@@ -35,7 +89,6 @@ Changes since version 0.19.3:
 - fixed a memory allocation problem in wrlib.
 - AIX bug compatibility in XmbTextEntents()
 - fixed jpeg loading bug
-
 
 Changes since version 0.19.2:
 .............................

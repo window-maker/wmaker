@@ -1,6 +1,6 @@
 /* winspector.h - window attribute inspector header file
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 

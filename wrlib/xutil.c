@@ -39,6 +39,7 @@
 
 
 #ifdef XSHM
+
 static int shmError;
 
 static int (*oldErrorHandler)();
@@ -52,6 +53,8 @@ errorHandler(Display *dpy, XErrorEvent *err)
 
     return 0;
 }
+
+
 #endif
 
 
@@ -59,26 +62,27 @@ RXImage*
 RCreateXImage(RContext *context, int depth, unsigned width, unsigned height)
 {
     RXImage *rximg;
+    Visual *visual = context->visual;
     
     rximg = malloc(sizeof(RXImage));
     if (!rximg) {
-	sprintf(RErrorString, "out of memory trying to create XImage");
+	RErrorCode = RERR_NOMEMORY;
 	return NULL;
     }
     
 #ifndef XSHM
-    rximg->image = XCreateImage(context->dpy, context->visual, depth,
+    rximg->image = XCreateImage(context->dpy, visual, depth,
 				ZPixmap, 0, NULL, width, height, 8, 0);
     if (!rximg->image) {
 	free(rximg);
-	sprintf(RErrorString, "error creating XImage");
+	RErrorCode = RERR_XERROR;
 	return NULL;
     }
     rximg->image->data = malloc(rximg->image->bytes_per_line*height);
     if (!rximg->image->data) {
 	XDestroyImage(rximg->image);
 	free(rximg);
-	sprintf(RErrorString, "out of memory trying to create XImage");
+	RErrorCode = RERR_NOMEMORY;
 	return NULL;
     }
     
@@ -86,42 +90,44 @@ RCreateXImage(RContext *context, int depth, unsigned width, unsigned height)
     if (!context->attribs->use_shared_memory) {
     retry_without_shm:
 	rximg->is_shared = 0;
-	rximg->image = XCreateImage(context->dpy, context->visual, depth,
+	rximg->image = XCreateImage(context->dpy, visual, depth,
 				    ZPixmap, 0, NULL, width, height, 8, 0);
 	if (!rximg->image) {
 	    free(rximg);
-	    sprintf(RErrorString, "error creating XImage");
+	    RErrorCode = RERR_XERROR;
 	    return NULL;
 	}
 	rximg->image->data = malloc(rximg->image->bytes_per_line*height);
 	if (!rximg->image->data) {
 	    XDestroyImage(rximg->image);
 	    free(rximg);
-	    sprintf(RErrorString, "out of memory trying to create XImage");
+	    RErrorCode = RERR_NOMEMORY;
 	    return NULL;
 	}
     } else {
 	rximg->is_shared = 1;
 
-	rximg->image = XShmCreateImage(context->dpy, context->visual, depth,
+	rximg->info.readOnly = False;
+
+	rximg->image = XShmCreateImage(context->dpy, visual, depth,
 				       ZPixmap, NULL, &rximg->info, width, 
 				       height);	
 
 	rximg->info.shmid = shmget(IPC_PRIVATE, 
 				   rximg->image->bytes_per_line*height,
-				   IPC_CREAT|0770);
+				   IPC_CREAT|0666);
 	if (rximg->info.shmid < 0) {
 	    context->attribs->use_shared_memory = 0;
-	    perror("wrlib:could not allocate shared memory segment:");
+	    perror("wrlib:could not allocate shared memory segment");
 	    XDestroyImage(rximg->image);
 	    goto retry_without_shm;
 	}
 	
 	rximg->info.shmaddr = shmat(rximg->info.shmid, 0, 0);
-	if (rximg->info.shmaddr == (void*)-1) {
+	if ((int)rximg->info.shmaddr < 0) {
 	    context->attribs->use_shared_memory = 0;
 	    if (shmctl(rximg->info.shmid, IPC_RMID, 0) < 0)
-		perror("wrlib:shmctl:");
+		perror("wrlib:shmctl");
 	    perror("wrlib:could not allocate shared memory");
 	    XDestroyImage(rximg->image);
 	    goto retry_without_shm;
@@ -141,13 +147,12 @@ RCreateXImage(RContext *context, int depth, unsigned width, unsigned height)
 	    context->attribs->use_shared_memory = 0;
 	    XDestroyImage(rximg->image);
 	    if (shmdt(rximg->info.shmaddr) < 0)
-		perror("wrlib:shmdt:");
+		perror("wrlib:shmdt");
 	    if (shmctl(rximg->info.shmid, IPC_RMID, 0) < 0)
-		perror("wrlib:shmctl:");
+		perror("wrlib:shmctl");
 	    printf("wrlib:error attaching shared memory segment to XImage\n");
 	    goto retry_without_shm;
 	}
-
     }
 #endif /* XSHM */
     
@@ -160,20 +165,19 @@ RDestroyXImage(RContext *context, RXImage *rximage)
 {
 #ifndef XSHM
     XDestroyImage(rximage->image);
+    free(rximage);
 #else /* XSHM */
     if (rximage->is_shared) {
-	XSync(context->dpy, False);
 	XShmDetach(context->dpy, &rximage->info);
 	XDestroyImage(rximage->image);
 	if (shmdt(rximage->info.shmaddr) < 0)
-	    perror("wrlib:shmdt:");
+	    perror("wrlib:shmdt");
 	if (shmctl(rximage->info.shmid, IPC_RMID, 0) < 0)
-	    perror("wrlib:shmctl:");
+	    perror("wrlib:shmctl");
     } else {
 	XDestroyImage(rximage->image);
     }
 #endif
-    free(rximage);
 }
 
 
@@ -197,3 +201,19 @@ RPutXImage(RContext *context, Drawable d, GC gc, RXImage *ximage, int src_x,
 #endif /* XSHM */
 }
 
+
+#ifdef XSHM
+Pixmap
+R_CreateXImageMappedPixmap(RContext *context, RXImage *rximage)
+{
+    Pixmap pix;
+
+    pix = XShmCreatePixmap(context->dpy, context->drawable, 
+			   rximage->image->data, &rximage->info,
+			   rximage->image->width, rximage->image->height,
+			   rximage->image->depth);
+
+    return pix;
+}
+
+#endif /* XSHM */

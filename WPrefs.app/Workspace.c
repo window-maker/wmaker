@@ -1,6 +1,6 @@
 /* Workspace.c- workspace options
  * 
- *  WPrefs - WindowMaker Preferences Program
+ *  WPrefs - Window Maker Preferences Program
  * 
  *  Copyright (c) 1998 Alfredo K. Kojima
  * 
@@ -64,6 +64,7 @@ createImages(WMScreen *scr, RContext *rc, RImage *xis, char *file,
 	     WMPixmap **icon1,  WMPixmap **icon2)
 {
     RImage *icon;
+    RColor gray = {0xae,0xaa,0xae};
     
     *icon1 = WMCreatePixmapFromFile(scr, file);
     if (!*icon1) {
@@ -77,10 +78,11 @@ createImages(WMScreen *scr, RContext *rc, RImage *xis, char *file,
 	*icon2 = NULL;
 	return;
     }
+    RCombineImageWithColor(icon, &gray);
     if (xis) {
-	RCombineImages(icon, xis);
+	RCombineImagesWithOpaqueness(icon, xis, 180);
 	if (!(*icon2 = WMCreatePixmapFromRImage(scr, icon, 127))) {
-	    wwarning(_("could not process icon %s:"), file, RErrorString);
+	    wwarning(_("could not process icon %s:"), file, RMessageForError(RErrorCode));
 	    *icon2 = NULL;
 	}
     }

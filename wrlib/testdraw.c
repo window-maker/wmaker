@@ -1,13 +1,13 @@
 
-#include "wraster.h"
-
 #include <X11/Xlib.h>
+#include "wraster.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <sys/time.h>
 #include <time.h>
+
 
 Display *dpy;
 RContext *ctx;
@@ -63,7 +63,7 @@ testDraw()
      * in the second slot, and also save a copy for later use. */
     icon = RLoadImage(ctx, "ballot_box.xpm", 0);
     if (!icon) {
-	puts(RErrorString);
+	puts(RMessageForError(RErrorCode));
 	exit(1);
     }
     RCombineArea(img, icon, 0, 0, icon->width, icon->height, 8, 8);
@@ -538,7 +538,7 @@ void main(int argc, char **argv)
 
     if (!ctx) {
 	printf("could not initialize graphics library context: %s\n",
-               RErrorString);
+	       RMessageForError(RErrorCode));
 	exit(1);
     }
 
@@ -546,10 +546,10 @@ void main(int argc, char **argv)
     testDraw();
 
     testBevel();
-/*
+
     drawClip();
 
-    benchmark();
-*/
+  /*  benchmark();*/
+
     getchar();
 }

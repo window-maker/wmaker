@@ -1,6 +1,6 @@
 /* icon.c - window icon and dock and appicon parent
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -27,8 +27,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include <ctype.h>
 #include <wraster.h>
+#include <sys/stat.h>
 
 #include "WindowMaker.h"
 #include "wcore.h"
@@ -177,7 +179,7 @@ wIconCreateWithIconFile(WScreen *scr, char *iconfile, int tile)
     if (iconfile) {
 	icon->image = RLoadImage(scr->rcontext, iconfile, 0);
 	if (!icon->image) {
-	    wwarning(_("error loading image file \"%s\""), iconfile, RErrorString);
+	    wwarning(_("error loading image file \"%s\""), iconfile, RMessageForError(RErrorCode));
 	}
 
 	icon->image = wIconValidateIconSize(scr, icon->image);
@@ -291,7 +293,7 @@ makeIcon(WScreen *scr, RImage *icon, int titled, int shadowed, int tileType)
     }
 
     if (!RConvertImage(scr->rcontext, tile, &pixmap)) {
-	wwarning(_("error rendering image:%s"), RErrorString);
+	wwarning(_("error rendering image:%s"), RMessageForError(RErrorCode));
     }
     RDestroyImage(tile);
 
@@ -389,6 +391,106 @@ wIconChangeImageFile(WIcon *icon, char *file)
     return !error;
 }
 
+
+
+static char*
+getnameforicon(WWindow *wwin)
+{
+    char *prefix, *suffix;
+    char *path;
+    int len;
+    
+    if (wwin->wm_class && wwin->wm_instance) {
+	suffix = wmalloc(strlen(wwin->wm_class)+strlen(wwin->wm_instance)+2);
+	sprintf(suffix, "%s.%s", wwin->wm_instance, wwin->wm_class);
+    } else if (wwin->wm_class) {
+	suffix = wmalloc(strlen(wwin->wm_class)+1);
+	strcpy(suffix, wwin->wm_class);
+    } else {
+	suffix = wmalloc(strlen(wwin->wm_instance)+1);
+	strcpy(suffix, wwin->wm_instance);
+    }
+    
+    prefix = getenv("GNUSTEP_USER_PATH");
+    if (!prefix) {
+	len = strlen(wgethomedir())+64+strlen(suffix);
+	path = wmalloc(len+1);
+	sprintf(path, "%s/GNUstep/.AppInfo", wgethomedir());
+    } else {
+	prefix = wexpandpath(prefix);
+	len = strlen(prefix)+64+strlen(suffix);
+	path = wmalloc(len+1);
+	sprintf(path, "%s/.AppInfo", prefix);
+	free(prefix);
+    }
+    if (access(path, F_OK)!=0) {
+	if (mkdir(path, S_IRUSR|S_IWUSR|S_IXUSR)) {
+	    wsyserror(_("could not create directory %s"), path);
+	    free(path);
+	    free(suffix);
+	    return NULL;
+	}
+    }
+    strcat(path, "/WindowMaker");
+    if (access(path, F_OK)!=0) {
+	if (mkdir(path, S_IRUSR|S_IWUSR|S_IXUSR)!=0) {
+	    wsyserror(_("could not create directory %s"), path);
+	    free(path);
+	    free(suffix);
+	    return NULL;
+	}
+    }
+
+    strcat(path, "/");
+    strcat(path, suffix);
+    strcat(path, ".xpm");
+    free(suffix);
+
+    return path;
+}
+
+
+/*
+ * wIconStore--
+ * 	Stores the client supplied icon at ~/GNUstep/.AppInfo/WindowMaker
+ * and returns the path for that icon. Returns NULL if there is no
+ * client supplied icon or on failure.
+ * 
+ * Side effects:
+ * 	New directories might be created.
+ */
+char*
+wIconStore(WIcon *icon)
+{
+    char *path;
+    RImage *image;
+    WWindow *wwin = icon->owner;
+
+    if (!wwin || !wwin->wm_hints || !(wwin->wm_hints->flags & IconPixmapHint)
+	|| wwin->wm_hints->icon_pixmap == None)
+	return NULL;
+
+    path = getnameforicon(wwin);
+
+    image = RCreateImageFromDrawable(icon->core->screen_ptr->rcontext,
+				     wwin->wm_hints->icon_pixmap,
+				     (wwin->wm_hints->flags & IconMaskHint)
+				     ? wwin->wm_hints->icon_mask : None);
+    if (!image) {
+	free(path);
+	return NULL;
+    }
+
+    if (!RSaveImage(image, path, "XPM")) {
+	free(path);
+	path = NULL;
+    }
+    RDestroyImage(image);
+
+    return path;
+}
+
+
 /*
 void
 wIconChangeIconWindow(WIcon *icon, Window new_window);
@@ -399,17 +501,14 @@ cycleColor(void *data)
 {
     WIcon *icon = (WIcon*)data;
     WScreen *scr = icon->core->screen_ptr;
+    XGCValues gcv;
 
-    icon->step = !icon->step;
-    if (icon->step) {
-	XSetForeground(dpy, scr->icon_select_gc, scr->white_pixel);
-	XSetBackground(dpy, scr->icon_select_gc, scr->black_pixel);
-    } else {
-	XSetForeground(dpy, scr->icon_select_gc, scr->black_pixel);
-	XSetBackground(dpy, scr->icon_select_gc, scr->white_pixel);
-    }
+    icon->step--;
+    gcv.dash_offset = icon->step;
+    XChangeGC(dpy, scr->icon_select_gc, GCDashOffset, &gcv);
+
     XDrawRectangle(dpy, icon->core->window, scr->icon_select_gc, 0, 0,
-		   icon->core->width-1, icon->core->height-1);    
+		   icon->core->width-1, icon->core->height-1);
     icon->handlerID = WMAddTimerHandler(COLOR_CYCLE_DELAY, cycleColor, icon);
 }
 
@@ -517,17 +616,9 @@ wIconUpdate(WIcon *icon)
 
 	if (XGetWindowAttributes(dpy, icon->icon_win, &attr)) {
 	    if (attr.all_event_masks & ButtonPressMask) {
-		XGrabButton(dpy, Button1, MOD_MASK, icon->core->window, True,
-			    ButtonPressMask, GrabModeSync, GrabModeAsync, None,
-			    wCursor[WCUR_ARROW]);
-		XGrabButton(dpy, Button1, MOD_MASK|LockMask, icon->core->window,
-			    True, ButtonPressMask, GrabModeSync, GrabModeAsync,
-			    None, wCursor[WCUR_ARROW]);
-#ifdef NUMLOCK_HACK
 		wHackedGrabButton(Button1, MOD_MASK, icon->core->window, True, 
 				  ButtonPressMask, GrabModeSync, GrabModeAsync,
 				  None, wCursor[WCUR_ARROW]);
-#endif
 	    }
 	}
     } else if (wwin && wwin->wm_hints
@@ -615,7 +706,7 @@ wIconUpdate(WIcon *icon)
                       image = RLoadImage(scr->rcontext, path, 0);
                       if (!image) {
                           wwarning(_("could not load default icon \"%s\":%s"),
-				   file, RErrorString);
+				   file, RMessageForError(RErrorCode));
                       }
                       free(path);
                   }

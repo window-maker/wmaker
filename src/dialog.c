@@ -1,6 +1,6 @@
 /* dialog.c - dialog windows for internal use
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -600,11 +600,13 @@ renderText(WMScreen *scr, char *text, char *font, RColor *from, RColor *to)
 
     gradient = RRenderGradient(w, h, from, to, RVerticalGradient);
     if (!gradient) {
-	wwarning("error doing image processing:%s", RErrorString);
+	wwarning("error doing image processing:%s",
+		RMessageForError(RErrorCode));
 	goto bye;
     }
     if (!RConvertImage(rc, gradient, &grad)) {
-	wwarning("error doing image processing:%s", RErrorString);
+	wwarning("error doing image processing:%s",
+		RMessageForError(RErrorCode));
 	goto bye;
     }
 
@@ -642,7 +644,7 @@ wShowInfoPanel(WScreen *scr)
     WMSize size;
     WMFont *font;
     char version[32];
-    char buffer[256];
+    char buffer[512];
     Window parent;
     WWindow *wwin;
     RColor color1, color2;
@@ -686,10 +688,10 @@ wShowInfoPanel(WScreen *scr)
     color1.red = 0;
     color1.green = 0;
     color1.blue = 0;
-    color2.red = 0x80;
-    color2.green = 0x80;
-    color2.blue = 0x80;
-    logo = renderText(scr->wmscreen, "    WindowMaker    ",
+    color2.red = 0x50;
+    color2.green = 0x50;
+    color2.blue = 0x60;
+    logo = renderText(scr->wmscreen, "    Window Maker    ",
 		      "-*-times-bold-r-*-*-24-*", &color1, &color2);
     if (logo) {
 	WMSetLabelImagePosition(panel->name1L, WIPImageOnly);
@@ -701,7 +703,7 @@ wShowInfoPanel(WScreen *scr)
 	    WMSetLabelFont(panel->name1L, font);
 	    WMReleaseFont(font);
 	}
-	WMSetLabelText(panel->name1L, "WindowMaker");
+	WMSetLabelText(panel->name1L, "Window Maker");
     }
 
     panel->name2L = WMCreateLabel(panel->win);
@@ -735,15 +737,37 @@ wShowInfoPanel(WScreen *scr)
 	WMSetLabelFont(panel->copyrL, font);
     }
 
-    sprintf(buffer, "Using visual %s %ibpp (0x%x)\n", 
-	    visuals[scr->w_visual->class], scr->w_depth,
-	    (unsigned)scr->w_visual->visualid);
+    switch (scr->w_depth) {
+     case 15:
+	strcpy(version, "32 thousand");
+	break;
+     case 16:
+	strcpy(version, "64 thousand");
+	break;
+     case 24:
+     case 32:
+	strcpy(version, "16 million");
+	break;
+     default:
+	sprintf(version, "%d", 1<<scr->w_depth);
+	break;
+    }
+
+    sprintf(buffer, "Using visual 0x%x: %s %ibpp (%s colors)\n",
+	    (unsigned)scr->w_visual->visualid,
+	    visuals[scr->w_visual->class], scr->w_depth, version);
+
     strcat(buffer, "Supported image formats: ");
     strl = RSupportedFileFormats();
     for (i=0; strl[i]!=NULL; i++) {
 	strcat(buffer, strl[i]);
 	strcat(buffer, " ");
     }
+#ifdef WMSOUND
+    strcat(buffer, "\nSound support compiled in");
+#else
+    strcat(buffer, "\nSound support not available");
+#endif
 
     panel->infoL = WMCreateLabel(panel->win);
     WMResizeWidget(panel->infoL, 350, 75);
@@ -801,11 +825,11 @@ typedef struct {
 
 
 #define LICENSE_TEXT \
-	"    WindowMaker is free software; you can redistribute it and/or modify "\
+	"    Window Maker is free software; you can redistribute it and/or modify "\
 	"it under the terms of the GNU General Public License as published "\
 	"by the Free Software Foundation; either version 2 of the License, "\
 	"or (at your option) any later version.\n\n\n"\
-	"    WindowMaker is distributed in the hope that it will be useful, but "\
+	"    Window Maker is distributed in the hope that it will be useful, but "\
 	"WITHOUT ANY WARRANTY; without even the implied warranty of "\
 	"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU "\
 	"General Public License for more details.\n\n\n"\

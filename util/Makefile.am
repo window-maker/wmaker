@@ -5,28 +5,32 @@ pkgdatadir  = $(datadir)/@PACKAGE@
 
 bin_PROGRAMS = wxcopy wxpaste wdwrite getstyle setstyle seticons geticonset wmsetbg
 
-bin_SCRIPTS = wmaker.inst dockit 
+bin_SCRIPTS = wmaker.inst wm-oldmenu2new
 
-EXTRA_DIST = wmaker.inst.in bughint dockit
+EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new
 
-INCLUDES = @DFLAGS@ -I$(top_srcdir)/wrlib @XCFLAGS@ @LIBPL_INC_PATH@ @GFXFLAGS@ 
+INCLUDES = @DFLAGS@ @XCFLAGS@ -I$(top_srcdir)/wrlib -I$(top_srcdir)/libPropList @GFXFLAGS@ 
 
-wdwrite_LDADD = @LIBPL_LIBS@ @X_EXTRA_LIBS@ 
+# X_EXTRA_LIBS is for libproplist in systems that need -lsocket 
+liblist= -L$(top_builddir)/libPropList -lPropList @X_EXTRA_LIBS@ 
+
+
+wdwrite_LDADD = $(liblist)
 
 wxcopy_LDADD = @XLFLAGS@ @XLIBS@ 
 
 wxpaste_LDADD = @XLFLAGS@ @XLIBS@ 
 
-getstyle_LDADD = @LIBPL_LIBS@ @X_EXTRA_LIBS@
+getstyle_LDADD = $(liblist)
 
-setstyle_LDADD = @LIBPL_LIBS@ @X_EXTRA_LIBS@
+setstyle_LDADD = $(liblist)
 
-seticons_LDADD= @LIBPL_LIBS@ @X_EXTRA_LIBS@
+seticons_LDADD= $(liblist)
 
-geticonset_LDADD= @LIBPL_LIBS@ @X_EXTRA_LIBS@
+geticonset_LDADD= $(liblist)
 
-wmsetbg_LDADD = @LIBPL_LIBS@ -L$(top_builddir)/wrlib -lwraster @XLFLAGS@\
-	 @GFXLIBS@ @XLIBS@ -lm 
+wmsetbg_LDADD = -L$(top_builddir)/libPropList -lPropList \
+	-L$(top_builddir)/wrlib -lwraster @XLFLAGS@ @GFXLIBS@ @XLIBS@ -lm 
 
 getstyle_SOURCES = getstyle.c
 

@@ -573,9 +573,9 @@ handleEvents(XEvent *event, void *data)
 #endif
 	paintTextField(tPtr);
 
-        WMPostNotificationName(WMTextDidBeginEditingNotification, tPtr, NULL);
+	WMPostNotificationName(WMTextDidBeginEditingNotification, tPtr, NULL);
 
-        tPtr->flags.notIllegalMovement = 0;
+	tPtr->flags.notIllegalMovement = 0;
 	break;
 	
      case FocusOut:
@@ -588,8 +588,8 @@ handleEvents(XEvent *event, void *data)
 
 	paintTextField(tPtr);
 	if (!tPtr->flags.notIllegalMovement) {
-            WMPostNotificationName(WMTextDidEndEditingNotification, tPtr,
-                                   WMIllegalTextMovement);
+	    WMPostNotificationName(WMTextDidEndEditingNotification, tPtr,
+				   (void*)WMIllegalTextMovement);
 	}
 	break;
 	
@@ -614,7 +614,6 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     int count, refresh = 0;
     int control_pressed = 0;
     int changed;
-    WMNotification *notif;
     WMScreen *scr = tPtr->view->screen;
 
     changed = 0;
@@ -629,29 +628,27 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     switch (ksym) {
      case XK_Tab:
 	if (event->xkey.state & ShiftMask) {
-	    notif = WMCreateNotification(WMTextDidEndEditingNotification,
-					 tPtr, (void*)WMBacktabTextMovement);
 	    if (tPtr->view->prevFocusChain) {
 		W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
 				     tPtr->view->prevFocusChain);
 		tPtr->flags.notIllegalMovement = 1;
 	    }
+	    WMPostNotificationName(WMTextDidEndEditingNotification, tPtr,
+				   (void*)WMBacktabTextMovement);
 	} else {
-	    notif = WMCreateNotification(WMTextDidEndEditingNotification,
-					 tPtr, (void*)WMTabTextMovement);
 	    if (tPtr->view->nextFocusChain) {
 		W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
 				 tPtr->view->nextFocusChain);
 		tPtr->flags.notIllegalMovement = 1;
 	    }
+	    WMPostNotificationName(WMTextDidEndEditingNotification,
+				   tPtr, (void*)WMTabTextMovement);
 	}
-	WMPostNotification(notif);
-	WMReleaseNotification(notif);
 	break;
 	
      case XK_Return:
-	WMPostNotificationName(WMTextDidEndEditingNotification, tPtr,
-                               (void*)WMReturnTextMovement);
+	WMPostNotificationName(WMTextDidEndEditingNotification, tPtr, 
+			       (void*)WMReturnTextMovement);
 	break;
 
      case WM_EMACSKEY_LEFT:

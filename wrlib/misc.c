@@ -28,7 +28,7 @@
 #include "wraster.h"
 
 
-int 
+void 
 RBevelImage(RImage *image, int bevel_type)
 {
     RColor color;
@@ -36,7 +36,7 @@ RBevelImage(RImage *image, int bevel_type)
     int w, h;
 
     if (image->width<3 || image->height<3)
-        return False;
+        return;
 
     w = image->width;
     h = image->height;
@@ -86,11 +86,10 @@ RBevelImage(RImage *image, int bevel_type)
         ROperateLine(image, RAddOperation, 0, h-1, w-1, h-1, &cdelta); /* bottom */
         ROperateLine(image, RAddOperation, w-1, 0, w-1, h-2, &cdelta); /* right */
     }
-    return True;
 }
 
 
-int 
+void
 RClearImage(RImage *image, RColor *color)
 {
     int bytes;
@@ -111,21 +110,64 @@ RClearImage(RImage *image, RColor *color)
 	dr = image->data[0];
 	dg = image->data[1];
 	db = image->data[2];
-    
-	r = color->red;
-	g = color->green;
-	b = color->blue;
+
 	alpha = color->alpha;
+	r = color->red * alpha;
+	g = color->green * alpha;
+	b = color->blue * alpha;
 	nalpha = 255 - alpha;
 
 	for (i=0; i<bytes; i++) {
-	    *dr = (((int)*dr * nalpha) + (r * alpha))/256;
-	    *dg = (((int)*dg * nalpha) + (g * alpha))/256;
-	    *db = (((int)*db * nalpha) + (b * alpha))/256;
+	    *dr = (((int)*dr * nalpha) + r)/256;
+	    *dg = (((int)*dg * nalpha) + g)/256;
+	    *db = (((int)*db * nalpha) + b)/256;
 	    dr++;    dg++;    db++;
 	}
     }
+}
 
-    return True;
+
+const char*
+RMessageForError(int errorCode)
+{
+    switch (errorCode) {
+     case RERR_NONE:
+	return "no error";
+	break;
+     case RERR_OPEN:
+	return "could not open file";
+	break;
+     case RERR_READ:
+	return "error reading from file";
+	break;
+     case RERR_WRITE:
+	return "error writing to file";
+	break;
+     case RERR_NOMEMORY:
+	return "out of memory";
+	break;
+     case RERR_NOCOLOR:
+	return "out of color cells";
+	break;
+     case RERR_BADIMAGEFILE:
+	return "invalid or corrupted image file";
+	break;
+     case RERR_BADFORMAT:
+	return "unsupported image format";
+	break;
+     case RERR_BADINDEX:
+	return "image file does not contain requested image index";
+	break;
+     case RERR_BADVISUALID:
+	return "request for an invalid visual ID";
+	break;
+     case RERR_XERROR:
+	return "internal X error";
+	break;
+     default:
+     case RERR_INTERNAL:
+	return "internal error";
+	break;
+    }
 }
 

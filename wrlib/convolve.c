@@ -130,7 +130,7 @@ RBlurImage(RImage *image)
     return True;
     
     outofmem:
-    sprintf(RErrorString, "out of memory");
+    RErrorCode = RERR_NOMEMORY;
 #ifdef C_ALLOCA
     alloca(0);
 #endif

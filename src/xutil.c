@@ -30,8 +30,9 @@
 #include "xutil.h"
 
 #include <WUtil.h>
-
+#if 0
 static Atom Clipboard=0;
+#endif
 
 static char *requestCodes[] = {
     "DUMMY",    
@@ -169,7 +170,7 @@ FormatXError(Display *dpy, XErrorEvent *error, char *buffer, int size)
       return;
     buffer += i;
     if (error->request_code >= sizeof(requestCodes)/sizeof(char*)) {
-	sprintf(buffer, "\n	Unknown request code: %i\n",
+	sprintf(buffer, "\n	Request code: %i\n",
 		error->request_code);
     } else {
 	sprintf(buffer, "\n	Request code: %i %s\n", error->request_code,
@@ -194,6 +195,7 @@ FormatXError(Display *dpy, XErrorEvent *error, char *buffer, int size)
 }
 
 
+#if 0
 /*
  *---------------------------------------------------------------------- 
  * GetSelection--
@@ -231,3 +233,4 @@ GetSelection(Display *dpy, Window requestor)
     }
 }
 
+#endif

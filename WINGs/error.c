@@ -1,5 +1,5 @@
 /*
- *  WindowMaker miscelaneous function library
+ *  Window Maker miscelaneous function library
  * 
  *  Copyright (c) 1997 Alfredo K. Kojima
  * 
@@ -53,7 +53,8 @@ wfatal(const char *msg, ...)
     fputs(_WINGS_progname, stderr);
     fputs(" fatal error: ",stderr);
     fputs(buf, stderr);
-    fflush(NULL);
+    fflush(stdout);
+    fflush(stderr);
 
     va_end(args);
 }
@@ -79,7 +80,8 @@ wwarning(const char *msg, ...)
     fputs(_WINGS_progname, stderr);
     fputs(" warning: ",stderr);
     fputs(buf, stderr);
-    fflush(NULL);
+    fflush(stdout);
+    fflush(stderr);
     
     va_end(args);
 }
@@ -109,7 +111,8 @@ wsyserror(const char *msg, ...)
     strcat(buf, strerror(error));
     strcat(buf,"\n");
     fputs(buf, stderr);
-    fflush(NULL);
+    fflush(stderr);
+    fflush(stdout);
 #else
     perror(buf);
 #endif

@@ -4,7 +4,7 @@ CATALOGS = @WPMOFILES@
 
 CLEANFILES = $(CATALOGS)
 
-EXTRA_DIST = pt.po hr.po fr.po ko.po cs.po
+EXTRA_DIST = pt.po hr.po fr.po ko.po cs.po ja.po
 
 POTFILES  = \
 	$(top_builddir)/WPrefs/Configurations.c \

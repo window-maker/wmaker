@@ -19,6 +19,13 @@ Instructions for editing the plain text menus can be found in the menu
 file itself, kindly translated to your tongue for your convenience, by
 the translation contributors. 
 
+There is a script to convert plain text menus to property list menus
+in the utils directory, named wm-oldmenu2new. 
+
+If you are unsure to wich format to use, stick with the plain text menus
+as they are more flexible. If for some psychological reason you are
+scared by text based configuration, use the property list menu.
+
 
 Localized menu file translators:
 --------------------------------
@@ -46,3 +53,5 @@ menu.hr	Croatian	Toni Bilic <tbilic@efos.hr>
 menu.el Greek		Nikolaos Papagrigoriou <papanikos@usa.net>
 menu.dk Danish		John M. Lockard <jlockard@math.lsa.umich.edu>
 			Jacob Sparre Andersen <sparre@cats.nbi.dk>
+menu.sl Slovene		Alen Salamun <snowman@hal9000.medinet.si>
+

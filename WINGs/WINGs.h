@@ -6,7 +6,7 @@
 #include <wraster.h>
 #include <X11/Xlib.h>
 
-#define WINGS_H_VERSION  980922
+#define WINGS_H_VERSION  980930
 
 
 
@@ -286,6 +286,7 @@ typedef struct W_FontPanel WMFontPanel;
 /* item for WMList */
 typedef struct WMListItem {
     char *text;
+    void *clientData;		       /* ptr for user clientdata. */
         
     struct WMListItem *nextPtr;
     
@@ -393,6 +394,12 @@ void WMScreenMainLoop(WMScreen *scr);
 
 RContext *WMScreenRContext(WMScreen *scr);
 
+Display *WMScreenDisplay(WMScreen *scr);
+
+int WMScreenDepth(WMScreen *scr);
+
+
+
 void WMSetApplicationIconImage(WMScreen *app, WMPixmap *icon);
 
 WMPixmap *WMGetApplicationIconImage(WMScreen *app);
@@ -434,11 +441,11 @@ WMHandlerID WMAddInputHandler(int fd, int condition, WMInputProc *proc,
 void WMDeleteInputHandler(WMHandlerID handlerID);
 
 /* ....................................................................... */
-
+/*
 void WMDragImageFromView(WMView *view, WMPixmap *image, WMPoint atLocation,
 			 WMSize mouseOffset, XEvent *event, Bool slideBack);
 
-
+*/
 
 /* ....................................................................... */
 
@@ -546,8 +553,6 @@ int WMWidthOfString(WMFont *font, char *text, int length);
 /* ....................................................................... */
 
 WMScreen *WMWidgetScreen(WMWidget *w);
-
-Display *WMScreenDisplay(WMScreen *scr);
 
 void WMUnmapWidget(WMWidget *w);
 
@@ -898,6 +903,10 @@ WMScroller *WMGetScrollViewHorizontalScroller(WMScrollView *sPtr);
 
 WMScroller *WMGetScrollViewVerticalScroller(WMScrollView *sPtr);
 
+void WMSetScrollViewLineScroll(WMScrollView *sPtr, int amount);
+
+void WMSetScrollViewPageScroll(WMScrollView *sPtr, int amount);
+
 /* ....................................................................... */
 
 WMSlider *WMCreateSlider(WMWidget *parent);
@@ -963,7 +972,7 @@ void WMDestroyInputPanel(WMInputPanel *panel);
 /* ....................................................................... */
 
 /* only 1 instance per WMScreen */
-WMOpenPanel *WMGetOpenPanel(WMScreen *app);
+WMOpenPanel *WMGetOpenPanel(WMScreen *scrPtr);
 
 WMSavePanel *WMGetSavePanel(WMScreen *scrPtr);
 

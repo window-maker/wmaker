@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -45,7 +45,7 @@ extern Atom _XA_WM_DELETE_WINDOW;
 extern Atom _XA_WM_SAVE_YOURSELF;
 
 extern Atom _XA_GNUSTEP_WM_ATTR;
-extern Atom _XA_WINDOWMAKER_WM_MINIATURIZE_WINDOW;
+extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 
 extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
 extern Atom _XA_WINDOWMAKER_MENU;
@@ -106,7 +106,7 @@ PropGetProtocols(Window window, WProtocols *prots)
 	  prots->DELETE_WINDOW=1;
 	else if (protocols[i]==_XA_WM_SAVE_YOURSELF)
 	  prots->SAVE_YOURSELF=1;
-	else if (protocols[i]==_XA_WINDOWMAKER_WM_MINIATURIZE_WINDOW)
+	else if (protocols[i]==_XA_GNUSTEP_WM_MINIATURIZE_WINDOW)
 	  prots->MINIATURIZE_WINDOW=1;
     }
     XFree(protocols);
@@ -121,12 +121,11 @@ PropGetGNUstepWMAttr(Window window, GNUstepWMAttributes **attr)
     unsigned long nitems_ret;
     unsigned long bytes_after_ret;
     CARD32 *data;
-    
-    if (XGetWindowProperty(dpy, window, _XA_GNUSTEP_WM_ATTR, 0, 
-			   sizeof(GNUstepWMAttributes), 
+
+    if (XGetWindowProperty(dpy, window, _XA_GNUSTEP_WM_ATTR, 0, 9,
 			   False, _XA_GNUSTEP_WM_ATTR,
 			   &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
-			   (unsigned char **)&data)!=Success)
+			   (unsigned char **)&data)!=Success || !data)
       return False;
     if (type_ret!=_XA_GNUSTEP_WM_ATTR || !data || fmt_ret!=32)
       return False;
@@ -162,12 +161,32 @@ PropGetMotifWMHints(Window window, MWMHints **mwmhints)
     int fmt_ret;
     unsigned long nitems_ret;
     unsigned long bytes_after_ret;
+    CARD32 *data;
     
-    if (XGetWindowProperty(dpy, window, _XA_MOTIF_WM_HINTS, 0, 20,
+    if (XGetWindowProperty(dpy, window, _XA_MOTIF_WM_HINTS, 0,
+			   PROP_MWM_HINTS_ELEMENTS,
 			   False, _XA_MOTIF_WM_HINTS,
 			   &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
-			   (unsigned char **)mwmhints)!=Success)
+			   (unsigned char **)&data)!=Success)
       return 0;
+    
+    if (type_ret!=_XA_MOTIF_WM_HINTS || fmt_ret!=32 
+	|| nitems_ret!=PROP_MWM_HINTS_ELEMENTS || !data)
+	return 0;
+    
+    *mwmhints = malloc(sizeof(MWMHints));
+    if (!*mwmhints) {
+	XFree(data);
+	return 0;
+    }
+
+    (*mwmhints)->flags = data[0];
+    (*mwmhints)->functions = data[1];
+    (*mwmhints)->decorations = data[2];
+    (*mwmhints)->inputMode = data[3];
+
+    XFree(data);
+
     if (type_ret==_XA_MOTIF_WM_HINTS)
       return 1;
     else 
@@ -199,8 +218,8 @@ PropGetClientLeader(Window window, Window *leader)
     unsigned long bytes_after_ret;
     Window *win;
 
-    if (XGetWindowProperty(dpy, window, _XA_WM_CLIENT_LEADER, 0, 
-			   sizeof(Window), False, AnyPropertyType,
+    if (XGetWindowProperty(dpy, window, _XA_WM_CLIENT_LEADER, 0, 4,
+			   False, AnyPropertyType,
 			   &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
 			   (unsigned char**)&win)!=Success)
       return 0;

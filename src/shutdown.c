@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -111,9 +111,9 @@ WipeDesktop(WScreen *scr)
     wwin = scr->focused_window;
     while (wwin) {
 	if (wwin->protocols.DELETE_WINDOW)
-	  wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, LastTimestamp);
+	    wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, LastTimestamp);
 	else
-	  wClientKill(wwin);
+	    wClientKill(wwin);
 	wwin = wwin->prev;
     }
     XSync(dpy, False);

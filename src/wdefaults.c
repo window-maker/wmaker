@@ -1,6 +1,6 @@
 /* wdefaults.c - window specific defaults
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -399,7 +399,7 @@ wDefaultGetImage(WScreen *scr, char *winstance, char *wclass)
     
     image = RLoadImage(scr->rcontext, path, 0);
     if (!image) {
-	wwarning(_("error loading image file \"%s\""), path, RErrorString);
+	wwarning(_("error loading image file \"%s\""), path, RMessageForError(RErrorCode));
     }
     free(path);
 

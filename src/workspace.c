@@ -1,6 +1,6 @@
 /* workspace.c- Workspace management
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -182,6 +182,10 @@ wWorkspaceDelete(WScreen *scr, int workspace)
 void
 wWorkspaceChange(WScreen *scr, int workspace)
 {
+    if (scr->flags.startup || scr->flags.startup2) {
+	return;
+    }
+    
     if (workspace != scr->current_workspace) {
         wWorkspaceForceChange(scr, workspace);
     }

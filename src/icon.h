@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -41,14 +41,13 @@ typedef struct WIcon {
 
     char		*file;	       /* the file with the icon image */
     RImage 		*image;
-    
-    short		tile_type;
 
+    unsigned int 	tile_type:4;
     unsigned int 	show_title:1;
     unsigned int 	has_titlebar:1;
     unsigned int 	force_paint:1; /* True for icon update and repaint */
     unsigned int 	selected:1;
-    unsigned int	step:1;
+    unsigned int	step:3;	       /* selection cycle step */
     unsigned int	shadowed:1;    /* If the icon is to be blured */
     unsigned int 	mapped:1;
     unsigned int	highlighted:1;
@@ -70,5 +69,7 @@ Bool wIconChangeImageFile(WIcon *icon, char *file);
 void wIconSelect(WIcon *icon);
 
 RImage *wIconValidateIconSize(WScreen *scr, RImage *icon);
+
+char *wIconStore(WIcon *icon);
 
 #endif /* WMICON_H_ */

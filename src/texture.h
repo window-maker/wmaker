@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -151,6 +151,7 @@ void wTexturePaintTitlebar(struct WWindow *wwin, WTexture *texture, Pixmap *tdat
 
 #define FREE_PIXMAP(p) if ((p)!=None) XFreePixmap(dpy, (p)), (p)=None
 
-void wDrawBevel(WCoreWindow *core, WTexSolid *texture, int relief);
+void wDrawBevel(Drawable d, unsigned width, unsigned height,
+		WTexSolid *texture, int relief);
 
 #endif

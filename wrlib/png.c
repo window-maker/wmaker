@@ -73,20 +73,20 @@ RLoadPNG(RContext *context, char *file, int index)
     
     f = fopen(file, "r");
     if (!f) {
-	sprintf(RErrorString, "could not open file \"%s\"", file);
+	RErrorCode = RERR_OPEN;
 	return NULL;
     }
     png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, 
 				 (png_error_ptr)NULL, (png_error_ptr)NULL);
     if (!png) {
-	sprintf(RErrorString, "error loading PNG file \"%s\"", file);
+	RErrorCode = RERR_NOMEMORY;
 	fclose(f);
 	return NULL;
     }
     
     pinfo = png_create_info_struct(png);
     if (!pinfo) {
-	sprintf(RErrorString, "error loading PNG file \"%s\"", file);
+	RErrorCode = RERR_NOMEMORY;
 	fclose(f);
 	png_destroy_read_struct(&png, NULL, NULL);
 	return NULL;
@@ -94,14 +94,14 @@ RLoadPNG(RContext *context, char *file, int index)
 
     einfo = png_create_info_struct(png);
     if (!einfo) {
-	sprintf(RErrorString, "error loading PNG file \"%s\"", file);
+	RErrorCode = RERR_NOMEMORY;
 	fclose(f);
 	png_destroy_read_struct(&png, &pinfo, NULL);
 	return NULL;
     }
 
+    RErrorCode = RERR_INTERNAL;
     if (setjmp(png->jmpbuf)) {
-	sprintf(RErrorString, "error loading PNG file \"%s\"", file);
 	fclose(f);
 	png_destroy_read_struct(&png, &pinfo, &einfo);
 	if (image)
@@ -126,7 +126,6 @@ RLoadPNG(RContext *context, char *file, int index)
     /* allocate RImage */
     image = RCreateImage(width, height, alpha);
     if (!image) {
-	sprintf(RErrorString, "could not create RImage");
 	fclose(f);
 	png_destroy_read_struct(&png, &pinfo, &einfo);
 	return NULL;
@@ -157,7 +156,7 @@ RLoadPNG(RContext *context, char *file, int index)
     } else if ((tmp = getenv("DISPLAY_GAMMA")) != NULL) {
 	sgamma = atof(tmp);
 	if (sgamma==0)
-	  sgamma = 1;
+	    sgamma = 1;
     } else {
 	sgamma = 2.0;
     }
@@ -179,7 +178,7 @@ RLoadPNG(RContext *context, char *file, int index)
 
     png_rows = alloca(sizeof(char*)*height);
     if (!png_rows) {
-	sprintf(RErrorString, "out of memory loading \"%s\"", file);
+	RErrorCode = RERR_NOMEMORY;
 	fclose(f);
 	RDestroyImage(image);
 	png_destroy_read_struct(&png, &pinfo, &einfo);
@@ -191,7 +190,7 @@ RLoadPNG(RContext *context, char *file, int index)
     for (y=0; y<height; y++) {
 	png_rows[y] = alloca(png_get_rowbytes(png, pinfo));
 	if (!png_rows[y]) {
-	    sprintf(RErrorString, "out of memory loading \"%s\"", file);
+	    RErrorCode = RERR_NOMEMORY;
 	    fclose(f);
 	    RDestroyImage(image);
 	    png_destroy_read_struct(&png, &pinfo, &einfo);

@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -111,7 +111,7 @@ RemakeStackList(WScreen *scr)
 	    scr->window_level_count[level]++;
         }
         XFree(windows);
-#ifdef DEBUG0
+#ifdef DEBUG
 	if (c!=scr->window_count) {
 	    puts("Found different number of windows than in window lists!!!");
 	}
@@ -153,7 +153,7 @@ CommitStacking(WScreen *scr)
     for (level=MAX_WINDOW_LEVELS-1; level>=0; level--) {
 	tmp = scr->stacking_list[level];
 	while (tmp) {
-#ifndef DEBUG
+#ifdef DEBUG
 	    if (i>=nwindows) {
 		puts("Internal inconsistency! window_count is incorrect!!!");
 		printf("window_count says %i windows\n", nwindows);

@@ -21,7 +21,6 @@
  *  USA.
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -49,7 +48,7 @@
 
 char *ProgName;
 
-
+#ifdef at_one_step_from_the_trash
 /* Alfredo please take a look at this function. I don't like the way
  * it sends the XKillClient. Should it interfere this way with the rest?
  * This was added by the patch to allow the transparent background for Eterm.
@@ -76,25 +75,34 @@ setPixmapProperty(Pixmap pixmap, Display *dpy, Window root)
     XGetWindowProperty(dpy, root, prop, 0L, 1L, True, AnyPropertyType,
                        &type, &format, &length, &after, &data);
 
+    /* I think this is OK -Alfredo */
     if ((type == XA_PIXMAP) && (format == 32) && (length == 1)) {
         XKillClient(dpy, *((Pixmap *)data));
     }
     XDeleteProperty(dpy, root, prop);
 
+    /* I don't understand this one. The atom is *always* created in
+     the previous XInternAtom() -Alfredo */
     prop = XInternAtom(dpy, "_XROOTPMAP_ID", True);
     if (prop == None)
         return;
 
     /* Now add the new one.  We use PropModeAppend because PropModeReplace
      doesn't seem to work if there isn't already a property there. */
+    /* Must be something wrong with this code.
+     * Anyways, better do a XGrabServer() between the XDeleteProperty() and
+     * this XChangeProperty() if things will be this way. -Alfredo */
     XChangeProperty(dpy, root, prop, XA_PIXMAP, 32, PropModeAppend,
                     (unsigned char *) &pixmap, 1);
 
     XFlush(dpy);
+    /* Potential resource leak. Must check the rest of the
+     * program for other resources that rely on XCloseDisplay() to
+     * free them. -Alfredo */
     XSetCloseDownMode(dpy, RetainPermanent);
     XFlush(dpy);
 }
-
+#endif
 
 void*
 wmalloc(size_t size)
@@ -235,6 +243,11 @@ getPixmapPath(char *domain)
 }
 
 
+
+
+
+
+
 int
 main(int argc, char **argv)
 {
@@ -361,7 +374,7 @@ main(int argc, char **argv)
         execlp(program, program, domain, "WorkspaceBack", value, NULL);
         printf("%s: warning could not run \"%s\"\n", ProgName, program);
         /* Do not exit. At least try to put the image in the background */
-	/* Won't this waste CPU for nothing? We're going to be called again, 
+	/* Won't this waste CPU for nothing? We're going to be called again,
 	 * anyways. -Alfredo */
         /* If it fails to update the WindowMaker domain with "wdwrite" we
          * won't be called again, because Window Maker will not notice any
@@ -400,7 +413,7 @@ main(int argc, char **argv)
     rcontext = RCreateContext(dpy, screen_number, &rattr);
     if (!rcontext) {
 	printf("could not initialize graphics library context: %s\n",
-               RErrorString);
+               RMessageForError(RErrorCode));
 	exit(1);
     }
 
@@ -418,7 +431,7 @@ main(int argc, char **argv)
 #endif
 
     if (!image) {
-        printf("could not load image %s:%s\n", image_name, RErrorString);
+        printf("could not load image %s:%s\n", image_name, RMessageForError(RErrorCode));
         exit(1);
     }
 
@@ -433,7 +446,7 @@ main(int argc, char **argv)
             exit(1);
         }
         RDestroyImage(image);
-        image = tmp;
+	image = tmp;
     } else if (style==WTP_CENTER && (image->width!=scr_width
 	       || image->height!=scr_height)) {
         RColor color;
@@ -445,13 +458,13 @@ main(int argc, char **argv)
         tmp = RMakeCenteredImage(image, scr_width, scr_height, &color);
 	if (!tmp) {
 	    printf("could not create centered image: %s\n", image_name);
-	    exit(1);
+  	    exit(1);
 	}
         RDestroyImage(image);
         image = tmp;
     }
 #ifdef DEBUG
-    gettimeofday(&timev, NULL);
+      gettimeofday(&timev, NULL);
     t2 = (double)timev.tv_sec + (((double)timev.tv_usec)/1000000);
     total = t2 - t1;
     printf("scale image in %f sec\n", total);
@@ -470,7 +483,9 @@ main(int argc, char **argv)
 #endif
     RDestroyImage(image);
     if (secretBuffer==None) {
+#ifdef at_one_step_from_the_trash
 	setPixmapProperty(pixmap, dpy, root_win);
+#endif
 	XSetWindowBackgroundPixmap(dpy, root_win, pixmap);
 	XClearWindow(dpy, root_win);
     } else {

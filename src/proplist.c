@@ -4,7 +4,7 @@
  * property lists with errors, but will print more descriptive error messages
  * and will hopefully not crash.
  *
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1998 Alfredo K. Kojima
  * 
@@ -110,7 +110,7 @@ unescapestr(char *src)
           ch = *(++src_ptr);
           if((ch>='0') && (ch<='3')) /* assume next 2 chars are octal too */
             {
-              *dest_ptr = ((ch & 07) << 3);
+              *dest_ptr = ((ch & 07) << 6);
               *dest_ptr |= ((*(++src_ptr)&07)<<3);
               *dest_ptr |= *(++src_ptr)&07;
             }

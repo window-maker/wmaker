@@ -109,11 +109,9 @@ RLoadJPEG(RContext *context, char *file_name, int index)
 
     file = fopen(file_name, "r");
     if (!file) {
-	sprintf(RErrorString, "could not open JPEG file \"%s\"", file_name);
+	RErrorCode = RERR_OPEN;
 	return NULL;
     }
-
-    RErrorString[0] = 0;
 
     cinfo.err = jpeg_std_error(&jerr.pub);
     jerr.pub.error_exit = my_error_exit;
@@ -135,13 +133,13 @@ RLoadJPEG(RContext *context, char *file_name, int index)
 
     buffer[0] = (JSAMPROW)malloc(cinfo.image_width*cinfo.num_components);
     if (!buffer[0]) {
-	sprintf(RErrorString, "out of memory");
+	RErrorCode = RERR_NOMEMORY;
 	goto bye;
     }
 
     image = RCreateImage(cinfo.image_width, cinfo.image_height, False);
     if (!image) {
-	sprintf(RErrorString, "out of memory");
+	RErrorCode = RERR_NOMEMORY;
 	goto bye;
     }
 

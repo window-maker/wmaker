@@ -68,8 +68,6 @@ I18N = @I18N@
 I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
-LIBPL_INC_PATH = @LIBPL_INC_PATH@
-LIBPL_LIBS = @LIBPL_LIBS@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
@@ -91,10 +89,10 @@ X_LOCALE = @X_LOCALE@
 pixmapdir = @pixmapdir@
 wprefsdir = @wprefsdir@
 
-SUBDIRS = wrlib WINGs src util po WindowMaker wmlib test WPrefs.app doc
+SUBDIRS = libPropList wrlib WINGs src util po WindowMaker wmlib test WPrefs.app doc
 
 EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N MIRRORS Install acconfig.h\
-	libPropList.tar.gz mkpatch
+	mkpatch
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ./src/config.h
@@ -310,12 +308,6 @@ installcheck all-am install-exec install-data install uninstall all \
 installdirs mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
-
-libPropList.tar.gz:
-	-(cd libPropList; $(MAKE) distclean)
-	-rm -f libPropList.tar.gz
-	tar cf libPropList.tar libPropList
-	gzip -9 libPropList.tar
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

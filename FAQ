@@ -5,6 +5,9 @@ http://www.dpo.uab.edu/~grapeape/wmfaq.html or
 http://wm.gnu.net/wmfaq/
 --------------------------
 
+This version was slightly modified by me (Alfredo). Chris, I enclosed
+my changes with "###". Please add the changes to your official version.
+
 
 Summary of Contents:
 Introduction 
@@ -21,8 +24,10 @@ Installation
  - How do I get libjpeg to work? 
  - How do I get libpng to work? 
  - Does wmsound work with 0.1x.x? 
- - How do I switch CDE's windowmanager to use WindowMaker? 
+ - Can I use WindowMaker with KDE or GNOME or CDE?
+ - How do I switch CDE's windowmanager to use WindowMaker?
  - Do I need to rerun wmaker.inst with every new version of WindowMaker? 
+ - When I run wmaker it quits complaing about something __register_frame_info.
 
 Usage 
  - What is an appicon? 
@@ -76,10 +81,12 @@ Programming
 
 Miscellaneous Questions 
  - Is there a pager for WindowMaker? 
- - Can I have folders like in AfterStep? 
+ - Can I have folders like in AfterStep?
  - What exactly are Themes? 
  - How do I install a Theme? 
- - How do I make a Theme? 
+ - How do I make a Theme?
+ - Why don't you distribute {normal diff,xdelta} patches?
+
 
 ========================================================================
 
@@ -241,6 +248,32 @@ or at
 http://wm.gnu.net/files.html#wmsound 
 
 
+
+### New, possibly with some errors
+
+Can I use WindowMaker with KDE or GNOME or CDE?
+----------------------------------
+
+Contrary to a lot of people thinks, KDE is NOT a window manager. KDE is
+a suite of various applications that includes a custom window manager.
+The same is true for CDE. 
+
+Now, answering the question: Yes, you can use WindowMaker in these
+environments. To use WindowMaker with GNOME, you don't need to do anything
+special. To use it with CDE, read the answer for "How do I switch CDE's
+windowmanager to use WindowMaker?" 
+
+To use it with KDE, read it's documentation to get rid of kwm (and possibly
+kpanel) and replace it with wmaker. Then, start WPrefs.app, go to "Mouse
+Preferences" and set the "Disable mouse actions" check box. You will need to
+restart WindowMaker to make this change take effect. The "Disable mouse
+actions" change is needed to allow you to use krootwm, wich enables you to
+use kfm's desktop icons, but will prevent you from accessing WindowMaker's
+Applications and Window List menus with the mouse.
+
+###
+
+
 How do I switch CDE's window-manager to use WindowMaker? 
 ----------------------------------
 Method 1: 
@@ -321,6 +354,16 @@ The only problem I have at the moment is I seem to get multiple copies of
 asclock running when I log in again. 
 
 
+### New
+You can also use the normal "Exit Session" command from the WM root menu
+and place additional commands required to shutdown CDE in
+~/GNUstep/Library/WindowMaker/exitscript 
+
+So, if you add "dtaction ExitSession" in that file, the command to
+shutdown CDE will be automatically executed when you exit WindowMaker.
+###
+
+
 Do I need to rerun wmaker.inst with every new version of WindowMaker?
 ----------------------------------
 Dan Pascu reveals the answer: 
@@ -337,7 +380,14 @@ So even if new options are added, they will reflect in the user configuration.
 Only if user wishes to change the default behavior, he needs to add that option
 to the config file. 
 
+### New
+When I run wmaker it quits complaing about something __register_frame_info.
+-----------------------------------------------------------
 
+This seems to be related to pgcc, gcc-2.8.0 or something. Try using gcc
+2.7.x to compile wmaker.
+
+###
 
 -=-=-=-
 Usage:
@@ -361,7 +411,7 @@ indicating when it is close enough to dock, and where it will be placed. To make
 sure this application will be there next time you start up windowmaker, exit
 windowmaker with the "exit session" option. 
 
-
+### Obsoleted
 What is the button in the middle of the Clip? 
 ----------------------------------
 Dan Pascu gives this insightful answer: 
@@ -371,7 +421,7 @@ Dan Pascu gives this insightful answer:
 In 0.15.x, the light now means that the Clip is in its expanded stateto show any
 appicons attached to it. When collapsed, it expands when you drag an appicon
 near it to dock. 
-
+###
 
 What is the difference between the 'Exit' and 'Exit Session' Options? 
 ----------------------------------
@@ -403,7 +453,9 @@ How do I rename workspaces?
 Right click on the "desktop" (root window) to show the menu (don't hold the
 button down). Go to the workspaces menu and hold the Control key down and
 click on the workspace you would like to rename and type the name. 
-
+### New
+If you use the clip, use the "Rename Workspace" command in the clip menu.
+###
 
 How can I resize a window if the window is larger than my currect
 desktop? 
@@ -430,7 +482,12 @@ You docked xyz using dockit. Dockit does not generate correct application
 icons most of the time. The only way to get around it is to edit
 ~/GNUstep/Defaults/WMState and set ForcedDock = YES; in the entry for xyz.
 If you use rxvt, upgrade to rxvt 2.4.6 or newer.
-
+### New
+There is another better way to dock applications that do not have an appicon,
+wich is by using the "Emulate Application Icon" option in the 
+"Advanced Options" section of the attributes panel. If you turn this option 
+ON and restart that application, you should get a dockable application icon.
+###
 
 -=-=-=-=-=-=-=-
 Configuration:
@@ -523,10 +580,13 @@ transparent parts of your icon.
 How do you dock <insert program here> that doesn't have an appicon in
 the new version of WindowMaker? 
 ----------------------------------
-Use the tcl script dockit which is included with WindowMaker 0.15.x. By default
-you can run it by double clicking on the main dock icon. Note that dockit
-can generate problematic appicons.
-
+### Updated
+Open the window commands menu for the main window of the application
+(the first window that is opened by the app and also causes the whole
+application to exit, when it is closed), choose "Attributes..." and
+go to the "Advanced Options" section. Then, check ON the 
+"Emulate Application Icon" check box.
+###
 
 How do I get x11amp to not have a title bar? (or any other program for
 that matter?) 
@@ -776,8 +836,8 @@ For example:
 
 rxvt -name foo -e irc 
 
-Then, go to the Attributes menu (right click on titlebar (or hit F10) and choose
-'Attributes...')
+Then, go to the Attributes menu (right click on titlebar (or hit Control+Esc
+and choose 'Attributes...')
 Then choose 'Advanced Options' from the listbox and enable 'Don't Bind
 Keyboard shortcuts'.
 Click 'Save' and 'Apply' and you should be able to run your session without the
@@ -903,5 +963,38 @@ To make a Theme.tar.gz, these are the steps I take:
      gzip -9 ThemeName.tar
 
   4.Now give it to your friends!
+
+
+### New
+
+Why don't you distribute {normal diff,xdelta} patches?
+------------------------------------------------------------
+
+Whenever possible plain diff patches are distributed. If the new 
+version has new binary files, normal diff won't be able to handle
+them, so a patch package is distributed, instead. We don't use
+xdelta because:
+- most systems do not have xdelta installed;
+- xdelta is picky and require the file to be patched to be
+exactly the same as the one used to make the patch. The patch package
+scheme used is much more flexible.
+
+We do not distribute a simple diff with the binary files separately
+(and variations, like uuencoding the binary files) because:
+- it is more complicated and error prone to require the user to manually
+move the files to the correct places;
+- the current patch package scheme *does* distribute the binary files
+and diff files separately. If the user wants to install everything by
+hand, nobody will object to that;
+- sooner or later someone will certainly ask for a script to automate the
+file moving stuff.
+
+So we hacked a script (mkpatch) that automatically creates a patch package
+with the normal text diff file, a list of removed files and the binary files
+that have changed or been added, plus a script that does the patching
+automatically. If you don't like the script, you can apply the patch and
+move the files manually. Or download the whole distribution.
+
+###
 
 

@@ -5,6 +5,13 @@
 
 #include <sys/types.h>
 
+
+/* SunOS 4.x Blargh.... */
+#ifndef NULL
+#define NULL ((void*)0)
+#endif
+
+
 /*
  * Warning: proplist.h #defines BOOL which will clash with the
  * typedef BOOL in Xmd.h
@@ -65,7 +72,12 @@ typedef struct {
 } WMHashTableCallbacks;
 
 
-
+#if 0
+typedef struct {
+    char character;		       /* the escape character */
+    char *value;		       /* value to place */
+} WMSEscapes;
+#endif
 
 
 typedef void WMNotificationObserverAction(void *observerData, 
@@ -105,6 +117,10 @@ char *wdefaultspathfordomain(char *domain);
 
 void wusleep(unsigned int microsec);
 
+#if 0
+int wsprintesc(char *buffer, int length, char *format, WMSEscapes **escapes,
+	       int count);
+#endif
 /*......................................................................*/
 
 

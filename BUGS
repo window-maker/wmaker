@@ -1,10 +1,13 @@
 - the app menu does not update after a style/theme change without restart.
-- the animation of shade puts ImageMagick/display in a weird state
 - during startup, transient windows should be miniaturized with their owners
   not in their own icons
-- shaped windows don't resize very well
 - stacking code is buggy (or XFree is buggy)
 - WINGs has problems in some platforms (SGI, Sun etc.) Anyone on these
 systems want to fix it?
 - save session doesnt work on some platforms (Alpha and Sparc)
-- GNUSTEP_WM_ATTR in WINGs has problems on Alpha boxes
+- texture pixmaps are being incorrectly freed somewhere. Either
+fix bug (to support broken MetroX servers) or remove all useless references
+to the Pixmap (to save memory and drop bug compatibility).
+- host information is not saved/honored by the dock or save session stuff.
+It should at least check if the host is the local machine and only save it
+in the session/allow docking it if yes.

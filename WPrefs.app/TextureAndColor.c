@@ -1,6 +1,6 @@
 /* TextureAndColor.c- color/texture for titlebar etc.
  * 
- *  WPrefs - WindowMaker Preferences Program
+ *  WPrefs - Window Maker Preferences Program
  * 
  *  Copyright (c) 1998 Alfredo K. Kojima
  * 
@@ -23,18 +23,20 @@
 
 #include "WPrefs.h"
 
+#include "TexturePanel.h"
+
 typedef struct _Panel {
     WMFrame *frame;
-    char *sectionName;   
+    char *sectionName;
 
     CallbackRec callbacks;
-    
+
     WMWindow *win;
-    
+
     WMPopUpButton *secP;
-    
+
     WMLabel *prevL;
-    
+
     /* window titlebar */
     WMFrame *focF;
     WMColorWell *focC;
@@ -42,14 +44,14 @@ typedef struct _Panel {
     WMTextField *focT;
     WMLabel *foc2L;
     WMButton *focB;
-    
+
     WMFrame *unfF;
     WMColorWell *unfC;
     WMLabel *unfL;
     WMTextField *unfT;
     WMLabel *unf2L;
     WMButton *unfB;
-   
+
     WMFrame *ownF;
     WMColorWell *ownC;
     WMLabel *ownL;
@@ -61,7 +63,7 @@ typedef struct _Panel {
     WMFrame *backF;
     WMTextField *backT;
     WMButton *backB;
-    
+
     WMFrame *textF;
     WMColorWell *textC;
 
@@ -80,7 +82,7 @@ typedef struct _Panel {
     WMLabel *seltL;
     WMColorWell *selbC;
     WMLabel *selbL;
-    
+
     /* workspace/clip */
     WMFrame *workF;
     WMTextField *workT;
@@ -97,7 +99,7 @@ typedef struct _Panel {
     WMTextField *iconT;
     WMButton *iconB;
 
-    
+    Pixmap preview;
     Pixmap ftitle;
     Pixmap utitle;
     Pixmap otitle;
@@ -123,10 +125,53 @@ typedef struct _Panel {
 #define EVERYTHING	0xff
 
 
+static Pixmap
+renderTexture(_Panel *panel, char *texture, int width, int height, 
+	      Bool bordered)
+{
+    return None;
+}
+
+
 static void
 updatePreviewBox(_Panel *panel, int elements)
 {
+    WMScreen *scr = WMWidgetScreen(panel->win);
+    Display *dpy = WMScreenDisplay(scr);
+ /*   RContext *rc = WMScreenRContext(scr);*/
+    int refresh = 0;
+    char *tmp;
+
+    if (!panel->preview) {
+	panel->preview = XCreatePixmap(dpy, WMWidgetXID(panel->win),
+				       220-4, 185-4, WMScreenDepth(scr));
+
+	refresh = -1;
+    }
+
+    if (elements & FTITLE) {
+	if (panel->ftitle)
+	    XFreePixmap(dpy, panel->ftitle);
+
+	tmp = WMGetTextFieldText(panel->focT);
+	panel->ftitle = renderTexture(panel, tmp, 180, 20, True);
+	free(tmp);
+    }
+
+    /* have to repaint everything to make things simple, eliminating
+     * clipping stuff */
+    if (refresh) {
+	
+    }
     
+    if (refresh<0) {
+	WMPixmap *pix;
+	pix = WMCreatePixmapFromXPixmaps(scr, panel->preview, None,
+					 220-4, 185-4, WMScreenDepth(scr));
+
+	WMSetLabelImage(panel->prevL, pix);
+	WMReleasePixmap(pix);
+    }
 }
 
 

@@ -96,7 +96,7 @@ EOF
 	for i in $files; do
 		echo $OTREE/$i
 		echo "echo \"Removing ../$i\"" >> $TMP/delfiles
-		if [ -d $OTREE/$i ]; then
+		if [ -d $OTREE/$delfiles ]; then
 			echo "rm -rf ../$i" >> $TMP/delfiles
 		else
 			echo "rm ../$i" >> $TMP/delfiles
@@ -156,7 +156,7 @@ while [ $index -lt $dircount ]; do
 	mv tmpdir/`basename $origname` ../$origname
 	index=`expr $index + 1`
 done
-rmdir tmpdir
+rm -fr tmpdir
 
 #copy files
 index=0
@@ -250,7 +250,7 @@ check_text_changes() {
 		else
 			cat $TMP/tmp >> $TMP/bindiff
 		fi
-		rm -f $TMP/tmp
+		rm -fr $TMP/tmp
 	done
 }
 
@@ -300,7 +300,12 @@ dir=`pwd`
 dir=`basename $dir`
 cd $savedir
 
-if test ! "$dir" = "$TARGET_TREE"; then
+if test "$USER" = root; then
+	echo "Do not run this script as the root user"
+	exit 1
+fi
+
+if test "$dir" != "$TARGET_TREE"; then
 	echo "You must move the \"TMP\" directory to inside the "
 	echo "\"$TARGET_TREE\" directory before running this script."
 	exit 1

@@ -102,16 +102,16 @@ CPPFLAGS = \
 	
 
 INCLUDES = \
-	-I$(top_srcdir)/wrlib \
-	-I$(top_srcdir)/WINGs \
 	@XCFLAGS@ \
-	@LIBPL_INC_PATH@ 
+	-I$(top_srcdir)/libPropList \
+	-I$(top_srcdir)/wrlib \
+	-I$(top_srcdir)/WINGs 
 
 
 wmaker_LDADD = \
-	$(top_builddir)/WINGs/libWINGs.a\
-	$(top_builddir)/wrlib/libwraster.a\
-	@LIBPL_LIBS@ \
+	-L$(top_builddir)/WINGs -lWINGs\
+	-L$(top_builddir)/wrlib -lwraster\
+	-L$(top_builddir)/libPropList -lPropList\
 	@XLFLAGS@ \
 	@GFXLIBS@ \
 	@XLIBS@ \

@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -36,6 +36,9 @@
 #include <X11/cursorfont.h>
 #include <X11/Xproto.h>
 #include <X11/keysym.h>
+#ifdef SHAPE
+#include <X11/extensions/shape.h>
+#endif
 
 #include "WindowMaker.h"
 #include "GNUstep.h"
@@ -80,6 +83,11 @@ extern WShortKey wKeyBindings[WKBD_LAST];
 extern int wScreenCount;
 
 
+#ifdef SHAPE
+extern Bool wShapeSupported;
+extern int wShapeEventBase;
+#endif
+
 /* contexts */
 extern XContext wWinContext;
 extern XContext wAppWinContext;
@@ -102,20 +110,27 @@ extern Atom _XA_WINDOWMAKER_WM_PROTOCOLS;
 extern Atom _XA_WINDOWMAKER_STATE;
 extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
 
-extern Atom _XA_WINDOWMAKER_WM_MINIATURIZE_WINDOW;
-extern Atom _XA_GNUSTEP_WM_RESIZEBAR;
+extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 
 #ifdef OFFIX_DND
 extern Atom _XA_DND_PROTOCOL;
 extern Atom _XA_DND_SELECTION;
 #endif
+#ifdef XDE_DND
+extern Atom _XA_XDE_REQUEST;
+extern Atom _XA_XDE_ENTER;
+extern Atom _XA_XDE_LEAVE;
+extern Atom _XA_XDE_DATA_AVAILABLE;
+extern Atom _XDE_FILETYPE;
+extern Atom _XDE_URLTYPE;
+#endif
+
 
 /* cursors */
 extern Cursor wCursor[WCUR_LAST];
 
 /* special flags */
-extern char WRestartASAP;
-extern char WExitASAP;
+extern char WProgramState;
 extern char WDelayedActionSet;
 
 /***** Local *****/
@@ -160,6 +175,7 @@ catchXError(Display *dpy, XErrorEvent *error)
 	     */
 	    || (error->request_code == X_InstallColormap))) {
 #ifndef DEBUG
+
 	return 0;
 #else
 	printf("got X error %x %x %x\n", error->request_code,
@@ -167,7 +183,7 @@ catchXError(Display *dpy, XErrorEvent *error)
 	return 0;
 #endif
     }
-    FormatXError(dpy, error, buffer, MAXLINE); 
+    FormatXError(dpy, error, buffer, MAXLINE);
     wwarning(_("internal X error: %s\n"), buffer);
     return -1;
 }
@@ -217,6 +233,7 @@ static RETSIGTYPE
 handleSig(int sig)
 {
     static int already_crashed = 0;
+    int dumpcore = 0;
 #ifndef NO_EMERGENCY_AUTORESTART
     char *argv[2];
     
@@ -225,8 +242,8 @@ handleSig(int sig)
     
     /* 
      * No functions that potentially do Xlib calls should be called from
-     * here. Xlib calls are not atomic so, so the logical integrity of
-     * Xlib is not guaranteed if a Xlib call is made from a signal handler.
+     * here. Xlib calls are not reentrant so the integrity of Xlib is
+     * not guaranteed if a Xlib call is made from a signal handler.
      */
     if (sig == SIGHUP) {
 #ifdef SYS_SIGLIST_DECLARED
@@ -235,7 +252,8 @@ handleSig(int sig)
         wwarning(_("got signal %i - restarting\n"), sig);
 #endif
 
-	WRestartASAP = 1;
+	WProgramState = WSTATE_NEED_RESTART;
+
 	/* setup idle handler, so that this will be handled when
 	 * the select() is returned becaused of the signal, even if
 	 * there are no X events in the queue */
@@ -244,10 +262,11 @@ handleSig(int sig)
 	    WMAddIdleHandler(delayedAction, NULL);
 	}
         return;
-    } else if (sig==SIGTERM) {
+    } else if (sig == SIGTERM) {
 	printf(_("%s: Received signal SIGTERM. Exiting..."), ProgName);
-	
-	WExitASAP = 1;
+
+	WProgramState = WSTATE_NEED_EXIT;
+
 	if (!WDelayedActionSet) {
 	    WDelayedActionSet = 1;
 	    WMAddIdleHandler(delayedAction, NULL);
@@ -260,14 +279,16 @@ handleSig(int sig)
 #else
     wfatal(_("got signal %i\n"), sig);
 #endif
-    
+
     if (sig==SIGSEGV || sig==SIGFPE || sig==SIGBUS || sig==SIGILL) {
 	if (already_crashed) {
 	    wfatal(_("crashed while trying to do some post-crash cleanup. Aborting immediatelly."));
 	    abort();
 	}
 	already_crashed = 1;
-	
+
+	dumpcore = 1;
+
 #ifndef NO_EMERGENCY_AUTORESTART
     	/* restart another window manager so that the X session doesn't
 	 * go to space */
@@ -276,7 +297,7 @@ handleSig(int sig)
     	if (dpy)
 	    XCloseDisplay(dpy);
     	dpy = NULL;
-    
+
     	argv[0] = FALLBACK_WINDOWMANAGER;
     	execvp(FALLBACK_WINDOWMANAGER, argv);
 
@@ -287,8 +308,8 @@ handleSig(int sig)
     	execvp("twm", argv);
 #endif /* !NO_EMERGENCY_AUTORESTART */
     }
-    
-    wAbort(sig==SIGSEGV);
+
+    wAbort(dumpcore);
 }
 
 
@@ -328,14 +349,22 @@ getWorkspaceState(Window root, WWorkspaceState **state)
     int fmt_ret;    
     unsigned long nitems_ret;
     unsigned long bytes_after_ret;
+    CARD32 *data;
 
-    if (XGetWindowProperty(dpy, root, _XA_WINDOWMAKER_STATE, 0,
-                           sizeof(WWorkspaceState),
+    if (XGetWindowProperty(dpy, root, _XA_WINDOWMAKER_STATE, 0, 2,
                            True, _XA_WINDOWMAKER_STATE,
                            &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
-                           (unsigned char **)state)!=Success)
+                           (unsigned char **)&data)!=Success || !data)
       return 0;
-    if (type_ret==_XA_WINDOWMAKER_STATE)
+
+    *state = malloc(sizeof(WWorkspaceState));
+    if (*state) {
+	(*state)->flags = data[0];
+	(*state)->workspace = data[1];
+    }
+    XFree(data);
+
+    if (*state && type_ret==_XA_WINDOWMAKER_STATE)
       return 1;
     else
       return 0;
@@ -410,7 +439,7 @@ wHackedGrabKey(int keycode, unsigned int modifiers,
 		 grab_window, owner_events, pointer_mode, keyboard_mode);
     /* phew, I guess that's all, right? */
 }
-
+#endif
 
 void 
 wHackedGrabButton(unsigned int button, unsigned int modifiers, 
@@ -418,9 +447,16 @@ wHackedGrabButton(unsigned int button, unsigned int modifiers,
 		  unsigned int event_mask, int pointer_mode, 
 		  int keyboard_mode, Window confine_to, Cursor cursor)
 {
+    XGrabButton(dpy, button, modifiers, grab_window, owner_events,
+		event_mask, pointer_mode, keyboard_mode, confine_to, cursor);
+
     if (modifiers==AnyModifier)
 	return;
+
+    XGrabButton(dpy, button, modifiers|LockMask, grab_window, owner_events,
+		event_mask, pointer_mode, keyboard_mode, confine_to, cursor);
     
+#ifdef NUMLOCK_HACK    
     /* same as above, but for mouse buttons */
     if (_NumLockMask)
 	XGrabButton(dpy, button, modifiers|_NumLockMask,
@@ -446,9 +482,10 @@ wHackedGrabButton(unsigned int button, unsigned int modifiers,
 	XGrabButton(dpy, button, modifiers|_ScrollLockMask|_NumLockMask|LockMask,
 		    grab_window, owner_events, event_mask, pointer_mode,
 		    keyboard_mode, confine_to, cursor);
+#endif /* NUMLOCK_HACK */
 }
 
-
+#ifdef notused
 void
 wHackedUngrabButton(unsigned int button, unsigned int modifiers, 
 		    Window grab_window)
@@ -466,7 +503,7 @@ wHackedUngrabButton(unsigned int button, unsigned int modifiers,
     XUngrabButton(dpy, button, modifiers|_NumLockMask|_ScrollLockMask|LockMask,
 		  grab_window);
 }
-#endif /* NUMLOCK_HACK */
+#endif
 
 
 
@@ -505,7 +542,10 @@ WScreen*
 wScreenForWindow(Window window)
 {
     XWindowAttributes attr;
-    
+
+    if (wScreenCount==1)
+	return wScreen[0];
+
     if (XGetWindowAttributes(dpy, window, &attr)) {
 	return wScreenForRootWindow(attr.root);
     }
@@ -568,12 +608,9 @@ StartUp(Bool defaultScreenOnly)
     _XA_WINDOWMAKER_WM_PROTOCOLS =
       XInternAtom(dpy, "_WINDOWMAKER_WM_PROTOCOLS", False);
 
-    _XA_WINDOWMAKER_WM_MINIATURIZE_WINDOW = 
-      XInternAtom(dpy, WINDOWMAKER_WM_MINIATURIZE_WINDOW, False);
+    _XA_GNUSTEP_WM_MINIATURIZE_WINDOW = 
+      XInternAtom(dpy, GNUSTEP_WM_MINIATURIZE_WINDOW, False);
     
-    _XA_GNUSTEP_WM_RESIZEBAR =
-      XInternAtom(dpy, GNUSTEP_WM_RESIZEBAR, False);
-
     _XA_WINDOWMAKER_WM_FUNCTION = XInternAtom(dpy, "_WINDOWMAKER_WM_FUNCTION",
 					  False);
 
@@ -582,6 +619,15 @@ StartUp(Bool defaultScreenOnly)
     _XA_DND_SELECTION = XInternAtom(dpy, "DndSelection", False);
     _XA_DND_PROTOCOL = XInternAtom(dpy, "DndProtocol", False);
 #endif
+#ifdef XDE_DND
+    _XA_XDE_ENTER = XInternAtom(dpy, "_XDE_ENTER", False);
+    _XA_XDE_REQUEST = XInternAtom(dpy, "_XDE_REQUEST", False);
+    _XA_XDE_LEAVE = XInternAtom(dpy, "_XDE_LEAVE", False);
+    _XA_XDE_DATA_AVAILABLE = XInternAtom(dpy, "_XDE_DATA_AVAILABLE", False);
+    _XDE_FILETYPE = XInternAtom(dpy, "file:ALL", False);
+    _XDE_URLTYPE = XInternAtom(dpy, "url:ALL", False);
+#endif
+
 
     /* cursors */
     wCursor[WCUR_NORMAL] = XCreateFontCursor(dpy, XC_left_ptr);    
@@ -659,15 +705,18 @@ StartUp(Bool defaultScreenOnly)
 	wwarning(_("could not read domain \"%s\" from defaults database"),
 		 "WMWindowAttributes");
     }
-    
+
+    XSetErrorHandler((XErrorHandler)catchXError);
 
     /* Sound init */
 #ifdef WMSOUND
     wSoundInit(dpy);
 #endif
 
-    XSetErrorHandler((XErrorHandler)catchXError);
-
+#ifdef SHAPE
+    /* ignore j */
+    wShapeSupported = XShapeQueryExtension(dpy, &wShapeEventBase, &j);
+#endif
 
     if (defaultScreenOnly) {
 	max = 1;
@@ -675,32 +724,37 @@ StartUp(Bool defaultScreenOnly)
 	max = ScreenCount(dpy);
     }
     wScreen = wmalloc(sizeof(WScreen*)*max);
-    
+
+    wScreenCount = 0;
+
+    /* manage the screens */
     for (j = 0; j < max; j++) {
 	if (defaultScreenOnly || max==1) {
-	    wScreen[j] = wScreenInit(DefaultScreen(dpy));
-	    if (!wScreen[j]) {
+	    wScreen[wScreenCount] = wScreenInit(DefaultScreen(dpy));
+	    if (!wScreen[wScreenCount]) {
 		wfatal(_("it seems that there already is a window manager running"));
 		exit(1);
 	    }
 	} else {
-	    wScreen[j] = wScreenInit(j);
-	    if (!wScreen[j]) {
+	    wScreen[wScreenCount] = wScreenInit(j);
+	    if (!wScreen[wScreenCount]) {
 		wwarning(_("could not manage screen %i"), j);
 		continue;
 	    }
 	}
 	wScreenCount++;
+    }
 
+    /* initialize/restore state for the screens */
+    for (j = 0; j < wScreenCount; j++) {
 	/* restore workspace state */
 	if (!getWorkspaceState(wScreen[j]->root_win, &ws_state)) {
 	    ws_state = NULL;
 	}
 
 	wScreenRestoreState(wScreen[j]);
-	
-	/* manage all windows that were already 
-	 * here before us */
+
+	/* manage all windows that were already here before us */
 	if (!wPreferences.flags.nodock && wScreen[j]->dock)
 	    wScreen[j]->last_dock = wScreen[j]->dock;
 	
@@ -733,7 +787,7 @@ StartUp(Bool defaultScreenOnly)
 	/* go to workspace where we were before restart */
 	if (ws_state) { 
 	    wWorkspaceForceChange(wScreen[j], ws_state->workspace);
-	    XFree(ws_state);
+	    free(ws_state);
 	} else {
 	    wSessionRestoreLastWorkspace(wScreen[j]);
 	}
@@ -771,6 +825,16 @@ getState(Window window)
     return -1;
 }
 
+
+static Bool
+windowInList(Window window, Window *list, int count)
+{
+    for (; count>=0; count--) {
+	if (window == list[count])
+	    return True;
+    }
+    return False;
+}
 
 /*
  *-----------------------------------------------------------------------
@@ -865,8 +929,14 @@ manageAllWindows(WScreen *scr)
                             (wwin->wm_hints->flags & StateHint) && state<0)
                             state=wwin->wm_hints->initial_state;
                         if (state==IconicState) {
-                            wIconifyWindow(wwin);
-                            wwin->flags.ignore_next_unmap=1;
+			    /* iconify if it's not a transient */
+			    if (wwin->transient_for==None 
+				|| wwin->transient_for==wwin->client_win
+				|| !windowInList(wwin->transient_for,
+						 children, nchildren)) {
+				wIconifyWindow(wwin);
+				wwin->flags.ignore_next_unmap=1;
+			    }
                         } else {
                             wClientSetState(wwin, NormalState, None);
                         }

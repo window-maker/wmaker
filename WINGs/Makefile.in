@@ -68,8 +68,6 @@ I18N = @I18N@
 I18N_MB = @I18N_MB@
 ICONEXT = @ICONEXT@
 INTLIBS = @INTLIBS@
-LIBPL_INC_PATH = @LIBPL_INC_PATH@
-LIBPL_LIBS = @LIBPL_LIBS@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
@@ -96,7 +94,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUBDIRS = Resources
 
 LIBLIST= -L$(top_builddir)/wrlib -lwraster @XLFLAGS@ @GFXLIBS@ @XLIBS@ \
-	-lm @LIBPL_LIBS@ 
+	-lm -L$(top_builddir)/libPropList -lPropList
 
 lib_LIBRARIES = libWINGs.a
 
@@ -165,11 +163,11 @@ libWINGs_a_SOURCES = 	\
 	findfile.c \
 	hashtable.c \
 	memory.c \
-	usleep.c 
+	usleep.c
 
-INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/src @XCFLAGS@ \
+INCLUDES = @XCFLAGS@ -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
 	-DRESOURCE_PATH=\"$(datadir)/WINGs\" $(GFXFLAGS) -DDEBUG \
-	@LIBPL_INC_PATH@
+	-I$(top_srcdir)/libPropList
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../src/config.h
 CONFIG_CLEAN_FILES = 

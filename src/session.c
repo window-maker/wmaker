@@ -2,7 +2,7 @@
  *
  *  Copyright (c) 1998 Dan Pascu
  *
- *  WindowMaker window manager
+ *  Window Maker window manager
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -452,7 +452,7 @@ wSessionRestoreState(WScreen *scr)
         if (found) {
             wDockLaunchWithState(dock, btn, state);
         } else if ((pid = execCommand(scr, command, host)) > 0) {
-            wAddWindowSavedState(instance, class, command, pid, state);
+            wWindowAddSavedState(instance, class, command, pid, state);
         } else {
             free(state);
         }

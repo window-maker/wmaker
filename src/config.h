@@ -66,7 +66,7 @@
 #define PACKAGE "WindowMaker" 
 
 /* package version */
-#define VERSION "0.20.1" 
+#define VERSION "0.20.2" 
 
 /* Define if you have the gethostname function.  */
 #define HAVE_GETHOSTNAME 1

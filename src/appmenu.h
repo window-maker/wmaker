@@ -1,6 +1,6 @@
 /* appmenu.h- application defined menu
  *
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 

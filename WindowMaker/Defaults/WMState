@@ -2,8 +2,8 @@
   Dock = {
     Applications = (
       {
-        Command = dockit;
-        Name = dockit.Dockit;
+        Command = "";
+        Name = Logo.WMDock;
         AutoLaunch = No;
         Forced = No;
         Position = "0,0";

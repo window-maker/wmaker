@@ -1,6 +1,13 @@
 changes since wmaker 0.20.0:
 ............................
 
+- added generic object field for WMListItem. This is for hanging generic
+  clientdata
+
+
+changes since wmaker 0.20.0:
+............................
+
 - changed WMGetFilePanelFile() with WMGetFilePanelFileName()
 - made SavePanel
 

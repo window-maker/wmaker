@@ -1,6 +1,6 @@
 /* winmenu.c - command menu for windows
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -60,7 +60,7 @@
 /**** Global data ***/
 extern Time LastTimestamp;
 extern Atom _XA_WM_DELETE_WINDOW;
-extern Atom _XA_WINDOWMAKER_WM_MINIATURIZE_WINDOW;
+extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 
 extern WShortKey wKeyBindings[WKBD_LAST];
 
@@ -92,7 +92,7 @@ execMenuCommand(WMenu *menu, WMenuEntry *entry)
 	break;
      case MC_MINIATURIZE:
 	if (wwin->protocols.MINIATURIZE_WINDOW) {
-	    wClientSendProtocol(wwin, _XA_WINDOWMAKER_WM_MINIATURIZE_WINDOW,
+	    wClientSendProtocol(wwin, _XA_GNUSTEP_WM_MINIATURIZE_WINDOW,
 				LastTimestamp);
 	} else {
 	    wIconifyWindow(wwin);

@@ -1,3 +1,6 @@
+wm-oldmenu2new - converts between the plain text file menu format to the
+ 	 property list menu format.
+
 bughint- gathers some information for bug reporting
 
 dockit- a Tcl/Tk for docking applications that normally can't be docked.

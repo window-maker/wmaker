@@ -1,7 +1,6 @@
 
-#include "wraster.h"
-
 #include <X11/Xlib.h>
+#include "wraster.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include "tile.xpm"
@@ -32,11 +31,11 @@ void main(int argc, char **argv)
 	img = RLoadImage(ctx, argv[1], argc>2 ? atol(argv[2]) : 0);
 
     if (!img) {
-	puts(RErrorString);
+	puts(RMessageForError(RErrorCode));
 	exit(1);
     }
     if (!RConvertImage(ctx, img, &pix)) {
-	puts(RErrorString);
+	puts(RMessageForError(RErrorCode));
 	exit(1);
     }
 

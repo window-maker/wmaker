@@ -45,25 +45,37 @@ RGetImageFromXPMData(RContext *context, char **data)
     int i;
     int transp=-1;
     
-    RErrorString[0] = 0;
-    if (XpmCreateXpmImageFromData(data, &xpm, (XpmInfo *)NULL)!=XpmSuccess) {
-	sprintf(RErrorString, "error converting XPM data");
+    i = XpmCreateXpmImageFromData(data, &xpm, (XpmInfo *)NULL);
+    if (i!=XpmSuccess) {
+	switch (i) {
+	 case XpmOpenFailed:
+	    RErrorCode = RERR_OPEN;
+	    break;
+	 case XpmFileInvalid:
+	    RErrorCode = RERR_BADIMAGEFILE;
+	    break;
+	 case XpmNoMemory:
+	    RErrorCode = RERR_NOMEMORY;
+	    break;
+	 default:
+	    RErrorCode = RERR_BADIMAGEFILE;
+	    break;
+	}
 	return NULL;
     }
     if (xpm.height<1 || xpm.width < 1) {
-	sprintf(RErrorString, "can't convert XPM data. Size too weird");
+	RErrorCode = RERR_BADIMAGEFILE;
 	XpmFreeXpmImage(&xpm);
 	return NULL;
     }
 
     if (xpm.colorTable==NULL) {
-	sprintf(RErrorString, "error converting XPM data");
+	RErrorCode = RERR_BADIMAGEFILE;
 	XpmFreeXpmImage(&xpm);
 	return NULL;
     }
     image = RCreateImage(xpm.width, xpm.height, True);
     if (!image) {
-	sprintf(RErrorString, ":could not create RImage");
 	XpmFreeXpmImage(&xpm);
 	return NULL;
     }
@@ -77,7 +89,7 @@ RGetImageFromXPMData(RContext *context, char **data)
 		  free(color_table[i]);
 	    }
 	    RDestroyImage(image);
-	    sprintf(RErrorString, "out of memory while converting XPM data");
+	    RErrorCode = RERR_NOMEMORY;
 	    XpmFreeXpmImage(&xpm);
 	    return NULL;
 	}
@@ -141,26 +153,37 @@ RLoadXPM(RContext *context, char *file, int index)
     int i;
     int transp=-1;
     
-    RErrorString[0] = 0;
-    if (XpmReadFileToXpmImage(file, &xpm, (XpmInfo *)NULL)!=XpmSuccess) {
-	sprintf(RErrorString, "error loading XPM file \"%s\"", file);
+    i = XpmReadFileToXpmImage(file, &xpm, (XpmInfo *)NULL);
+    if (i!=XpmSuccess) {
+	switch (i) {
+	 case XpmOpenFailed:
+	    RErrorCode = RERR_OPEN;
+	    break;
+	 case XpmFileInvalid:
+	    RErrorCode = RERR_BADIMAGEFILE;
+	    break;
+	 case XpmNoMemory:
+	    RErrorCode = RERR_NOMEMORY;
+	    break;
+	 default:
+	    RErrorCode = RERR_BADIMAGEFILE;
+	    break;
+	}
 	return NULL;
     }
     if (xpm.height<1 || xpm.width < 1) {
-	sprintf(RErrorString, "can't load XPM file \"%s\". Size too weird", 
-		file);
+	RErrorCode = RERR_BADIMAGEFILE;
 	XpmFreeXpmImage(&xpm);
 	return NULL;
     }
 
     if (xpm.colorTable==NULL) {
-	sprintf(RErrorString, "error loading XPM file \"%s\"", file);
+	RErrorCode = RERR_BADIMAGEFILE;
 	XpmFreeXpmImage(&xpm);
 	return NULL;
     }
     image = RCreateImage(xpm.width, xpm.height, True);
     if (!image) {
-	strcat(RErrorString, ":could not create RImage");
 	XpmFreeXpmImage(&xpm);
 	return NULL;
     }
@@ -174,8 +197,7 @@ RLoadXPM(RContext *context, char *file, int index)
 		  free(color_table[i]);
 	    }
 	    RDestroyImage(image);
-	    sprintf(RErrorString, "out of memory while loading file \"%s\"", 
-		    file);
+	    RErrorCode = RERR_NOMEMORY;
 	    XpmFreeXpmImage(&xpm);
 	    return NULL;
 	}
@@ -223,6 +245,5 @@ RLoadXPM(RContext *context, char *file, int index)
     XpmFreeXpmImage(&xpm);
     return image;
 }
-
 
 #endif /* USE_XPM */

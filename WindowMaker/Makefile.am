@@ -1,11 +1,11 @@
-SUBDIRS = Defaults Styles Themes Icons Pixmaps Backgrounds IconSets Sounds
+SUBDIRS = Defaults Styles Themes Icons Pixmaps Backgrounds IconSets 
 
 prefsdatadir = $(pkgdatadir)
 
-prefsdata_DATA = wmmacros README menu plmenu autostart.sh \
+prefsdata_DATA = wmmacros README menu plmenu autostart.sh exitscript.sh \
 	menu.cz menu.de menu.fr menu.gl menu.ja menu.ko menu.nl menu.pt  \
 	menu.it menu.no menu.he menu.es menu.ru menu.tr menu.el menu.se \
-	menu.fi menu.hr menu.dk
+	menu.fi menu.hr menu.dk menu.sl
 
 
 EXTRA_DIST = $(prefsdata_DATA) wmmacros.in plmenu.in

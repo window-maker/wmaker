@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  *
@@ -128,6 +128,9 @@ typedef struct {
 
     /* WindowMaker specific */
     unsigned int MINIATURIZE_WINDOW:1;
+#ifdef MONITOR_HEARTBEAT 
+    unsigned int HEARTBEAT:1;
+#endif
 } WProtocols;
 
 
@@ -184,6 +187,9 @@ typedef struct WWindow {
     
     FocusMode focus_mode;	       /* type of keyboard input focus */
 
+#ifdef MONITOR_HEARTBEAT
+    time_t last_beat;
+#endif
     struct {
 	/* state flags */
 	unsigned int mapped:1;	
@@ -219,19 +225,25 @@ typedef struct WWindow {
 	unsigned int destroyed:1;      /* window was already destroyed */
     } flags;		/* state of the window */
 
-    char *icon_text;
     struct WIcon *icon;		       /* icon info for the window */
     int icon_x, icon_y;		       /* position of the icon */
 } WWindow;
 
 
+/*
+ * Changes to this must update wWindowSaveState/getSavedState
+ * 
+ */
 typedef struct WSavedState {
     int workspace;
     int miniaturized;
     int shaded;
     int hidden;
     int use_geometry;
-    int x, y, w, h;
+    int x;
+    int y;
+    unsigned int w;
+    unsigned int h;
 } WSavedState;
 
 
@@ -245,11 +257,16 @@ typedef struct WWindowState {
 } WWindowState;
 
 
+typedef void* WMagicNumber;
+
+
+
 void wWindowDestroy(WWindow *wwin);
 WWindow *wWindowCreate();
 
 #ifdef SHAPE
 void wWindowSetShape(WWindow *wwin);
+void wWindowClearShape(WWindow *wwin);
 #endif
 
 WWindow *wManageWindow(WScreen *scr, Window window);
@@ -292,5 +309,15 @@ void wWindowUpdateGNUstepAttr(WWindow *wwin, GNUstepWMAttributes *attr);
 void wWindowMap(WWindow *wwin);
 
 Bool wWindowCanReceiveFocus(WWindow *wwin);
+
+void wWindowDeleteSavedStatesForPID(pid_t pid);
+
+WMagicNumber wWindowAddSavedState(char *instance, char *class, char *command,
+                                  pid_t pid, WSavedState *state);
+
+WMagicNumber wWindowGetSavedState(Window win);
+
+void wWindowDeleteSavedState(WMagicNumber id);
+
 
 #endif

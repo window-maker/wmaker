@@ -348,23 +348,19 @@ msgstr "%s: dimensiuni invalide ale hartii de culori in linia \"%s\""
 
 #: ../resource.c:579
 msgid "%s: invalid geometry display type \"%s\". Shouldbe center, corner, floating or line"
-msgstr "%s: tip de geometrie a monitorului invalid \"%s\". Valori permise: center, corner, floating
-sau line"
+msgstr "%s: tip de geometrie a monitorului invalid \"%s\". Valori permise: center, corner, floating sau line"
 
 #: ../resource.c:601
 msgid "%s: invalid focus mode \"%s.\" Should be manual, auto or semiauto"
-msgstr "%s: mod de focalizare invalid \"%s.\" Valori permise: manual, auto
-sau semiauto"
+msgstr "%s: mod de focalizare invalid \"%s.\" Valori permise: manual, auto sau semiauto"
 
 #: ../resource.c:619
 msgid "%s: invalid window placement mode \"%s\". Should be auto, cascade or manual"
-msgstr "%s: modo al plasarii ferestrei invalid \"%s\". Valori permise: auto, cascade
-sau manual"
+msgstr "%s: modo al plasarii ferestrei invalid \"%s\". Valori permise: auto, cascade sau manual"
 
 #: ../resource.c:639
 msgid "%s: invalid texture type \"%s\" Should be solid, dgradient, vgradient or hgradient"
-msgstr "%s: tip de textura invalid \"%s\" Valori permise: solid, dgradient, vgradient
-sau hgradient"
+msgstr "%s: tip de textura invalid \"%s\" Valori permise: solid, dgradient, vgradient sau hgradient"
 
 #: ../resource.c:666
 msgid "%s: invalid gradient spec. \"%s\""
@@ -376,8 +372,7 @@ msgstr "%s: coordonata invalida \"%s\""
 
 #: ../resource.c:701
 msgid "%s: invalid justification type \"%s\". Should be left, center or right"
-msgstr "%s: tipul de justificare invalid \"%s\". Valori permise: left, center
-sau right"
+msgstr "%s: tipul de justificare invalid \"%s\". Valori permise: left, center sau right"
 
 #: ../resource.c:731
 msgid "could not make arguments for preference file preprocessor"
@@ -405,8 +400,7 @@ msgstr "nu se poate gasi icon-ul de bakground \"%s\" "
 
 #: ../raster.c:183
 msgid "invalid dither colormap size specification.disabling"
-msgstr "specificarea marimii hartii de culori e invalida.
-Dezactivare"
+msgstr "specificarea marimii hartii de culori e invalida.  Dezactivare"
 
 #: ../raster.c:193
 msgid "Could not build PseudoColor color table\n"
@@ -438,8 +432,7 @@ msgstr "Ferestre"
 
 #: ../dock.c:171
 msgid "could not open file \"%s\" to save Dock state"
-msgstr "e' fisierul \"%s\" nu se poate deschide pt. salvarea starii
-Dock-ului"
+msgstr "e' fisierul \"%s\" nu se poate deschide pt. salvarea starii Dock-ului"
 
 #: ../dock.c:687
 msgid "Could not execute program \"%s\""

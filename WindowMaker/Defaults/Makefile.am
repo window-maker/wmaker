@@ -18,7 +18,7 @@ WindowMaker: $(srcdir)/WindowMaker.in ./Makefile
 	sed -e "s:#pkgdatadir#:$(pkgdatadir):" $(srcdir)/WindowMaker.in > WindowMaker
 	chmod 644 WindowMaker
 
-WMState: $(srcdir)/WMState.in ./Makefile
+WMState: $(srcdir)/WMState.in $(srcdir)/Makefile
 	-rm -f WMState
 	sed -e "s:#wprefs#:$(wprefsdir)/WPrefs:" $(srcdir)/WMState.in > WMState
 	chmod 644 WMState

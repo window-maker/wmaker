@@ -1,4 +1,6 @@
 {
+  EdgeResistance = 5;
+  IconificationStyle = Zoom;
   IconPath = (
     "~/GNUstep/Library/Icons",
     "/usr/local/share/WindowMaker/Icons",
@@ -17,7 +19,6 @@
     "/usr/local/share/pixmaps",
     "/usr/share/pixmaps"
   );
-  IconificationStyle = Zoom;
   WindowTitleBalloons = YES;
   IconSize = 64;
   FocusMode = manual;
@@ -36,7 +37,6 @@
   SaveSessionOnExit = NO;
   ColormapMode = auto;
   RaiseDelay = 0;
-  EdgeResistance = 0;
   AutoFocus = YES;
   WindowPlacement = auto;
   WindowPlaceOrigin = (64, 64);
@@ -48,7 +48,7 @@
   AdvanceToNewWorkspace = NO;
   CycleWorkspaces = NO;
   ResizeDisplay = line;
-  MoveDisplay = corner;
+  MoveDisplay = floating;
   OpaqueMove = YES;
   OnTopTransients = YES;
   IconPosition = "blh";
@@ -59,7 +59,6 @@
   ShadeSpeed = medium;
   DoubleClickTime = 250;
   AlignSubmenus = NO;
-  NoWindowUnderDock = YES;
   NoWindowOverIcons = NO;
   IgnoreFocusClick = NO;
   CloseKey = None;

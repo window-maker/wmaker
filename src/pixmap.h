@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -42,12 +42,6 @@ WPixmap *wPixmapCreateFromXPMData(WScreen *scr, char **data);
 WPixmap *wPixmapCreateFromXBMData(WScreen *scr, char *data, char *mask, 
 				  int width, int height, unsigned long fg, 
 				  unsigned long bg);
-
-WPixmap *wPixmapLoadXBMFile(WScreen *scr, char *path, char *mask_path);
-
-WPixmap *wPixmapCreateFromBitmap(WScreen *scr, Pixmap bitmap, Pixmap mask,
-				 unsigned long fg, unsigned long bg);
-
 void wPixmapDestroy(WPixmap *pix);
 
 #endif

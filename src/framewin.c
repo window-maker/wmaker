@@ -1,5 +1,5 @@
 /* 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -523,7 +523,7 @@ renderTexture(WScreen *scr, WTexture *texture, int width, int height,
     }
     
     if (!img) {
-        wwarning(_("could not render gradient: %s"), RErrorString);
+        wwarning(_("could not render gradient: %s"), RMessageForError(RErrorCode));
         return;
     }
     
@@ -539,7 +539,7 @@ renderTexture(WScreen *scr, WTexture *texture, int width, int height,
 	if (limg) {
 	    RBevelImage(limg, RBEV_RAISED2);
 	    if (!RConvertImage(scr->rcontext, limg, lbutton)) {
-		wwarning(_("error rendering image:%s"), RErrorString);
+		wwarning(_("error rendering image:%s"), RMessageForError(RErrorCode));
 	    }
 	    x += limg->width;
 	    w -= limg->width;
@@ -554,7 +554,7 @@ renderTexture(WScreen *scr, WTexture *texture, int width, int height,
 	if (rimg) {
 	    RBevelImage(rimg, RBEV_RAISED2);
 	    if (!RConvertImage(scr->rcontext, rimg, rbutton)) {
-		wwarning(_("error rendering image:%s"), RErrorString);
+		wwarning(_("error rendering image:%s"), RMessageForError(RErrorCode));
 	    }
 	    w -= rimg->width;
 	    RDestroyImage(rimg);
@@ -565,25 +565,117 @@ renderTexture(WScreen *scr, WTexture *texture, int width, int height,
 	    RBevelImage(mimg, RBEV_RAISED2);
 
 	    if (!RConvertImage(scr->rcontext, mimg, title)) {
-		wwarning(_("error rendering image:%s"), RErrorString);
+		wwarning(_("error rendering image:%s"), RMessageForError(RErrorCode));
 	    }
 	    RDestroyImage(mimg);
 	} else {
 	    RBevelImage(img, RBEV_RAISED2);
 	    
 	    if (!RConvertImage(scr->rcontext, img, title)) {
-		wwarning(_("error rendering image:%s"), RErrorString);
+		wwarning(_("error rendering image:%s"), RMessageForError(RErrorCode));
 	    }
 	}
     } else {
 	RBevelImage(img, RBEV_RAISED2);
 
 	if (!RConvertImage(scr->rcontext, img, title)) {
-	    wwarning(_("error rendering image:%s"), RErrorString);
+	    wwarning(_("error rendering image:%s"), RMessageForError(RErrorCode));
 	}
     }
 
     RDestroyImage(img);
+}
+
+
+static void
+updateTexture(WFrameWindow *fwin)
+{
+    int i;
+    unsigned long pixel;
+		
+    i = fwin->flags.state;
+    if (fwin->titlebar) {
+	if (fwin->title_texture[i]->any.type!=WTEX_SOLID) {
+	    XSetWindowBackgroundPixmap(dpy, fwin->titlebar->window,
+				       fwin->title_back[i]);
+	    if (wPreferences.new_style) {
+		if (fwin->left_button && fwin->lbutton_back[i])
+		    XSetWindowBackgroundPixmap(dpy, fwin->left_button->window,
+					       fwin->lbutton_back[i]);
+		
+		if (fwin->right_button && fwin->rbutton_back[i])
+		    XSetWindowBackgroundPixmap(dpy, fwin->right_button->window,
+					       fwin->rbutton_back[i]);
+	    }
+	} else {
+	    pixel = fwin->title_texture[i]->solid.normal.pixel;
+	    XSetWindowBackground(dpy, fwin->titlebar->window, pixel);
+	    if (wPreferences.new_style) {
+		if (fwin->left_button)
+		    XSetWindowBackground(dpy, fwin->left_button->window,
+					 pixel);
+		if (fwin->right_button)
+		    XSetWindowBackground(dpy, fwin->right_button->window,
+					 pixel);
+	    }
+	}
+	XClearWindow(dpy, fwin->titlebar->window);
+	
+	if (fwin->left_button) {
+	    XClearWindow(dpy, fwin->left_button->window);
+	    handleButtonExpose(&fwin->left_button->descriptor, NULL);
+	}
+	if (fwin->right_button) {
+	    XClearWindow(dpy, fwin->right_button->window);
+	    handleButtonExpose(&fwin->right_button->descriptor, NULL);
+	}
+    }
+    
+    if (fwin->resizebar) {
+	XSetWindowBackground(dpy, fwin->resizebar->window, 
+			     fwin->resizebar_texture[0]->solid.normal.pixel);
+	XClearWindow(dpy, fwin->resizebar->window);
+    }
+}
+
+
+
+static void
+remakeTexture(WFrameWindow *fwin, int state)
+{
+    Pixmap pmap, lpmap, rpmap;
+
+    if (fwin->title_texture[state] && fwin->titlebar) {
+	FREE_PIXMAP(fwin->title_back[state]);
+	if (wPreferences.new_style) {
+	    FREE_PIXMAP(fwin->lbutton_back[state]);
+	    FREE_PIXMAP(fwin->rbutton_back[state]);
+	}
+
+	if (fwin->title_texture[state]->any.type!=WTEX_SOLID) {
+	    int left, right;
+	    int width;
+
+	    /* eventually surrounded by if new_style */
+	    left = fwin->left_button && !fwin->flags.hide_left_button
+		&& !fwin->flags.lbutton_dont_fit;
+	    right = fwin->right_button && !fwin->flags.hide_right_button
+		&& !fwin->flags.rbutton_dont_fit;
+	    
+	    width = fwin->core->width+1;
+	    
+	    renderTexture(fwin->screen_ptr, fwin->title_texture[state],
+			  width, fwin->titlebar->height,
+			  fwin->titlebar->height, fwin->titlebar->height,
+			  left, right, &pmap, &lpmap, &rpmap);
+	    
+	    fwin->title_back[state] = pmap;
+	    if (wPreferences.new_style) {
+		fwin->lbutton_back[state] = lpmap;
+		fwin->rbutton_back[state] = rpmap;
+	    }
+	}
+    }
 }
 
 
@@ -596,103 +688,36 @@ wFrameWindowPaint(WFrameWindow *fwin)
 
     if (fwin->flags.need_texture_remake) {
 	int i;
-	Pixmap pmap, lpmap, rpmap;
 
 	fwin->flags.need_texture_remake = 0;
+	fwin->flags.need_texture_change = 0;
 
-	for (i=0; i < (fwin->flags.single_texture ? 1 : 3); i++) {
-	    if (fwin->title_texture[i] && fwin->titlebar) {
-		FREE_PIXMAP(fwin->title_back[i]);
-                if (wPreferences.new_style) {
-		    FREE_PIXMAP(fwin->lbutton_back[i]);
-		    FREE_PIXMAP(fwin->rbutton_back[i]);
-                }
+	if (fwin->flags.single_texture) {
+	    remakeTexture(fwin, 0);
+	    updateTexture(fwin);
+	} else {
+	    /* first render the texture for the current state... */
+	    remakeTexture(fwin, fwin->flags.state);
+	    /* ... and paint it */
+	    updateTexture(fwin);
 
-		if (fwin->title_texture[i]->any.type!=WTEX_SOLID) {
-		    int left, right;
-		    int width;
-
-                    /* eventually surrounded by if new_style */
-		    left = fwin->left_button && !fwin->flags.hide_left_button
-			&& !fwin->flags.lbutton_dont_fit;
-		    right = fwin->right_button && !fwin->flags.hide_right_button
-			&& !fwin->flags.rbutton_dont_fit;
-
-		    width = fwin->core->width+1;
-		    
-		    renderTexture(fwin->screen_ptr, fwin->title_texture[i],
-                                  width, fwin->titlebar->height,
-				  fwin->titlebar->height, fwin->titlebar->height,
-				  left, right, &pmap, &lpmap, &rpmap);
-
-		    fwin->title_back[i] = pmap;
-                    if (wPreferences.new_style) {
-			fwin->lbutton_back[i] = lpmap;
-			fwin->rbutton_back[i] = rpmap;
-		    }
-		}
+	    for (i=0; i < 3; i++) {
+		if (i!=fwin->flags.state)
+		    remakeTexture(fwin, i);
 	    }
 	}
-	
-	fwin->flags.need_texture_change = 1;
     }
     
-    if (fwin->flags.need_texture_change) {
-	int i;
-	unsigned long pixel;
-	
+    if (fwin->flags.need_texture_change) {	
 	fwin->flags.need_texture_change = 0;
 	
-	i = fwin->flags.state;
-	if (fwin->titlebar) {
-	    if (fwin->title_texture[i]->any.type!=WTEX_SOLID) {
-		XSetWindowBackgroundPixmap(dpy, fwin->titlebar->window,
-					   fwin->title_back[i]);
-                if (wPreferences.new_style) {
-		    if (fwin->left_button && fwin->lbutton_back[i])
-                        XSetWindowBackgroundPixmap(dpy,
-                                                   fwin->left_button->window,
-						   fwin->lbutton_back[i]);
-		    
-		    if (fwin->right_button && fwin->rbutton_back[i])
-                        XSetWindowBackgroundPixmap(dpy,
-                                                   fwin->right_button->window,
-						   fwin->rbutton_back[i]);
-                }
-	    } else {
-		pixel = fwin->title_texture[i]->solid.normal.pixel;
-		XSetWindowBackground(dpy, fwin->titlebar->window, pixel);
-                if (wPreferences.new_style) {
-		    if (fwin->left_button)
-                        XSetWindowBackground(dpy, fwin->left_button->window,
-                                             pixel);
-		    if (fwin->right_button)
-                        XSetWindowBackground(dpy, fwin->right_button->window,
-                                             pixel);
-                }
-	    }
-	    XClearWindow(dpy, fwin->titlebar->window);
-	    
-	    if (fwin->left_button) {
-		XClearWindow(dpy, fwin->left_button->window);
-		handleButtonExpose(&fwin->left_button->descriptor, NULL);
-	    }
-	    if (fwin->right_button) {
-		XClearWindow(dpy, fwin->right_button->window);
-		handleButtonExpose(&fwin->right_button->descriptor, NULL);
-	    }
-	}
-	
-	if (fwin->resizebar) {
-	    XSetWindowBackground(dpy, fwin->resizebar->window, 
-				 fwin->resizebar_texture[0]->solid.normal.pixel);
-	    XClearWindow(dpy, fwin->resizebar->window);
-	}
+	updateTexture(fwin);
     }
     
     if (fwin->titlebar && !fwin->flags.repaint_only_resizebar
 	&& fwin->title_texture[fwin->flags.state]->any.type==WTEX_SOLID) {
-	wDrawBevel(fwin->titlebar, 
+	wDrawBevel(fwin->titlebar->window, fwin->titlebar->width,
+		   fwin->titlebar->height,
 		   (WTexSolid*)fwin->title_texture[fwin->flags.state], 
 		   WREL_RAISED);
     }
@@ -1011,10 +1036,12 @@ paintButton(WCoreWindow *button, WTexture *texture, unsigned long color,
 	
         if (wPreferences.new_style) {
 	    if (texture->any.type==WTEX_SOLID || pushed) {
-		wDrawBevel(button, (WTexSolid*)texture, WREL_RAISED);
+		wDrawBevel(button->window, button->width, button->height,
+			   (WTexSolid*)texture, WREL_RAISED);
 	    }
         } else {
-	    wDrawBevel(button, scr->widget_texture, WREL_RAISED);
+	    wDrawBevel(button->window, button->width, button->height,
+		       scr->widget_texture, WREL_RAISED);
 	}
     }
     

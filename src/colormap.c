@@ -1,11 +1,12 @@
 /* colormap.c - colormap handling code
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1998 Alfredo K. Kojima
  * 
  *  This code slightly based on fvwm code, 
  *  Copyright (c) Rob Nation and others
+ *  but completely rewritten.
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

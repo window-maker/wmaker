@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -19,8 +19,7 @@
  *  USA.
  */
 
-#define PSIZE 4
-#define PIECES ((64/PSIZE)*(64/PSIZE))
+#define PIECES ((64/ICON_KABOOM_PIECE_SIZE)*(64/ICON_KABOOM_PIECE_SIZE))
 
 
 

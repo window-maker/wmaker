@@ -6,7 +6,7 @@
 #include "WINGs.h"
 #include "WUtil.h"
 
-#if WINGS_H_VERSION < 980922
+#if WINGS_H_VERSION < 980930
 #error There_is_an_old_WINGs.h_file_somewhere_in_your_system._Please_remove_it.
 #endif
 
@@ -234,8 +234,8 @@ typedef struct W_View {
 #if 0
     struct W_DragSourceProcs *dragSourceProcs;
     struct W_DragDestinationProcs *dragDestinationProcs;
-#endif
     int helpContext;
+#endif
 
     struct {
 	unsigned int realized:1;

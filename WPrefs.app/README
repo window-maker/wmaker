@@ -67,9 +67,8 @@ By default, WPrefs.app will be installed in the GNUstep applications
 directory, which is /usr/local/GNUstep/Apps. If you want to install it
 somewhere else, like in /some_weird_path/Apps, set the GNUSTEP_LOCAL_ROOT
 environment variable to some_weird_path before running configure for
-WindowMaker. Leave this variable always set (make it be set from your
-.profile or .tcshrc or whatever), or WPrefs.app will not find it's resource
-files (like icons).
+WindowMaker. You can also configure Window Maker supplying the --with-appspath
+option to configure, like ./configure --with-appspath=/usr/GNUstep/Apps
 If you change your mind after installing, you can move the .app directory 
 to one of the following GNUstep/Apps directories:
 
@@ -91,6 +90,9 @@ Credits
 User interface design, programming and a few icons:
     Alfredo K. Kojima <kojima@windowmaker.org>		
 
+Additional programming:
+    James Thompson <jamest@math.ksu.edu>
+
 Icon and image artwork:
     Marco van Hylckama Vlieg <fatal@global.uibk.ac.at>
 
@@ -99,7 +101,7 @@ WindowMaker
 -----------
 
     If for some weird reason you end up with this preferences program and 
-don't have WindowMaker yet, you can get more information about it at
+don't have Window Maker yet, you can get more information about it at
 http://windowmaker.org and download it at ftp://ftp.windowmaker.org
 
 

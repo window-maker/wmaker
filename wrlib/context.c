@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include <math.h>
 
@@ -65,14 +66,11 @@ allocatePseudoColor(RContext *ctx)
       ncolors = cpc * cpc * cpc;
     }
 
-    if (cpc < 2 || ncolors > (1<<ctx->depth)) {
-	sprintf(RErrorString, "invalid colormap size %i", cpc);
-	return NULL;
-    }
+    assert(cpc >= 2 && ncolors <= (1<<ctx->depth));
 
     colors = malloc(sizeof(XColor)*ncolors);
     if (!colors) {
-	sprintf(RErrorString, "out of memory");
+	RErrorCode = RERR_NOMEMORY;
 	return NULL;
     }
     i=0;
@@ -89,7 +87,6 @@ allocatePseudoColor(RContext *ctx)
 	for (r=0; r<cpc; r++) {
 	    for (g=0; g<cpc; g++) {
 		for (b=0; b<cpc; b++) {
-
 		    colors[i].red=(r*0xffff) / (cpc-1);
 		    colors[i].green=(g*0xffff) / (cpc-1);
 		    colors[i].blue=(b*0xffff) / (cpc-1);
@@ -191,16 +188,13 @@ allocateGrayScale(RContext *ctx)
       /* we might as well use all grays */
       ncolors = 1<<ctx->depth;
     } else {
-      if ( ncolors > (1<<ctx->depth) ) {
-	/* reduce colormap size */
-	cpc = ctx->attribs->colors_per_channel = 1<<((int)ctx->depth/3);
-	ncolors = cpc * cpc * cpc;
-      }
+	if ( ncolors > (1<<ctx->depth) ) {
+	    /* reduce colormap size */
+	    cpc = ctx->attribs->colors_per_channel = 1<<((int)ctx->depth/3);
+	    ncolors = cpc * cpc * cpc;
+	}
       
-      if (cpc < 2 || ncolors > (1<<ctx->depth)) {
-	sprintf(RErrorString, "invalid colormap size %i", cpc);
-	return NULL;
-      }
+	assert(cpc >= 2 && ncolors <= (1<<ctx->depth));
     }
 
     if (ncolors>=256 && ctx->vclass==StaticGray) {
@@ -210,7 +204,7 @@ allocateGrayScale(RContext *ctx)
 
     colors = malloc(sizeof(XColor)*ncolors);
     if (!colors) {
-	sprintf(RErrorString, "out of memory");
+	RErrorCode = RERR_NOMEMORY;
 	return False;
     }
     for (i=0; i<ncolors; i++) {
@@ -290,11 +284,9 @@ mygetenv(char *var, int scr)
     char *p;
     char varname[64];
 
-    if (scr==0) {
-	p = getenv(var);
-    }
-    if (scr!=0 || !p) {
-	sprintf(varname, "%s%i", var, scr);
+    sprintf(varname, "%s%i", var, scr);
+    p = getenv(varname);
+    if (!p) {
 	p = getenv(var);
     }
     return p;
@@ -318,6 +310,16 @@ gatherconfig(RContext *context, int screen_n)
 	    context->attribs->rgamma = g1;
 	    context->attribs->ggamma = g2;
 	    context->attribs->bgamma = g3;
+	}
+    }
+    ptr = mygetenv("WRASTER_COLOR_RESOLUTION", screen_n);
+    if (ptr) {
+	int i;
+	if (sscanf(ptr, "%d", &i)!=1 || i<2 || i>6) {
+	    printf("wrlib: invalid value for color resolution \"%s\"\n",ptr);
+	} else {
+	    context->attribs->flags |= RC_ColorsPerChannel;
+	    context->attribs->colors_per_channel = i;
 	}
     }
 }
@@ -355,6 +357,7 @@ getColormap(RContext *context, int screen_number)
 	color.red = color.green = color.blue = 0xffff;
 	XAllocColor(context->dpy, cmap, &color);
 	context->white = color.pixel;
+	
     }
     context->cmap = cmap;
 }
@@ -381,10 +384,9 @@ RCreateContext(Display *dpy, int screen_number, RContextAttributes *attribs)
     XGCValues gcv;
 
     
-    RErrorString[0]=0;
     context = malloc(sizeof(RContext));
     if (!context) {
-	sprintf(RErrorString, "out of memory");
+	RErrorCode = RERR_NOMEMORY;
 	return NULL;
     }
     memset(context, 0, sizeof(RContext));
@@ -396,7 +398,7 @@ RCreateContext(Display *dpy, int screen_number, RContextAttributes *attribs)
     context->attribs = malloc(sizeof(RContextAttributes));
     if (!context->attribs) {
 	free(context);
-	sprintf(RErrorString, "out of memory");
+	RErrorCode = RERR_NOMEMORY;
 	return NULL;
     }
     if (!attribs)
@@ -415,34 +417,34 @@ RCreateContext(Display *dpy, int screen_number, RContextAttributes *attribs)
 	templ.visualid = context->attribs->visualid;
 	vinfo = XGetVisualInfo(context->dpy, VisualIDMask|VisualScreenMask,
 			       &templ, &nret);
-
 	if (!vinfo || nret==0) {
-	    sprintf(RErrorString, "invalid visual id %x\n", 
-		    (unsigned int)context->attribs->visualid);
-	} else {
-	    if (vinfo[0].visual == DefaultVisual(dpy, screen_number)) {
-		context->attribs->flags |= RC_DefaultVisual;
-	    } else {
-		XSetWindowAttributes attr;
-		unsigned long mask;
-		
-		context->visual = vinfo[0].visual;
-		context->depth = vinfo[0].depth;
-		context->vclass = vinfo[0].class;
-		getColormap(context, screen_number);
-		attr.colormap = context->cmap;
-                attr.override_redirect = True;
-		attr.border_pixel = 0;
-		attr.background_pixel = 0;
-		mask = CWBorderPixel|CWColormap|CWOverrideRedirect|CWBackPixel;
-		context->drawable =
-                    XCreateWindow(dpy, RootWindow(dpy, screen_number), 1, 1, 
-				  1, 1, 0, context->depth, CopyFromParent,
-				  context->visual, mask, &attr);
-/*		XSetWindowColormap(dpy, context->drawable, attr.colormap);*/
-	    }
-	    XFree(vinfo);
+	    free(context);
+	    RErrorCode = RERR_BADVISUALID;
+	    return NULL;
 	}
+
+	if (vinfo[0].visual == DefaultVisual(dpy, screen_number)) {
+	    context->attribs->flags |= RC_DefaultVisual;
+	} else {
+	    XSetWindowAttributes attr;
+	    unsigned long mask;
+		
+	    context->visual = vinfo[0].visual;
+	    context->depth = vinfo[0].depth;
+	    context->vclass = vinfo[0].class;
+	    getColormap(context, screen_number);
+	    attr.colormap = context->cmap;
+	    attr.override_redirect = True;
+	    attr.border_pixel = 0;
+	    attr.background_pixel = 0;
+	    mask = CWBorderPixel|CWColormap|CWOverrideRedirect|CWBackPixel;
+	    context->drawable =
+		XCreateWindow(dpy, RootWindow(dpy, screen_number), 1, 1, 
+			      1, 1, 0, context->depth, CopyFromParent,
+			      context->visual, mask, &attr);
+	    /*		XSetWindowColormap(dpy, context->drawable, attr.colormap);*/
+	}
+	XFree(vinfo);
     }
 
     /* use default */

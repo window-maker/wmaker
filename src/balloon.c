@@ -1,5 +1,5 @@
 /* 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1998 Alfredo K. Kojima
  * 
@@ -137,7 +137,8 @@ makePixmap(WScreen *scr, int width, int height, int side, Pixmap *mask)
     if (!bal->monoGC) {
 	bal->monoGC = XCreateGC(dpy, bitmap, 0, NULL);
     }
-    XSetForeground(dpy, bal->monoGC, scr->black_pixel);
+    XSetForeground(dpy, bal->monoGC, 
+		   BlackPixelOfScreen(ScreenOfDisplay(dpy, scr->screen)));
     XFillRectangle(dpy, bitmap, bal->monoGC, 0, 0, width+SPACE, height+SPACE);
     
     pixmap = XCreatePixmap(dpy, scr->root_win, width+SPACE, height+SPACE,
@@ -152,7 +153,8 @@ makePixmap(WScreen *scr, int width, int height, int side, Pixmap *mask)
     }
     x = 0;
 
-    XSetForeground(dpy, bal->monoGC, scr->white_pixel);
+    XSetForeground(dpy, bal->monoGC, 
+		   WhitePixelOfScreen(ScreenOfDisplay(dpy, scr->screen)));
     drawBalloon(bitmap, bal->monoGC, x, y, width, height, side);
     XSetForeground(dpy, scr->draw_gc, scr->white_pixel);
     drawBalloon(pixmap, scr->draw_gc, x+1, y+1, width-2, height-2, side);

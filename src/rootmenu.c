@@ -1,6 +1,6 @@
 /* rootmenu.c- user defined menu
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -151,29 +151,16 @@ static void
 execCommand(WMenu *menu, WMenuEntry *entry)
 {
     char *cmdline;
-#if 0
-    char *path, *chr;
-#endif
-    cmdline = ExpandOptions(menu->frame->screen_ptr, (char*)entry->clientdata);
-#if 0
-    path = wstrdup(cmdline);
-    chr = strchr(path, ' ');
-    if (chr)
-	*chr = 0;
+    static char *shell = NULL;
     
-    if (access(path, X_OK)!=0) {
-	path = realloc(path, strlen(cmdline)+128);
-	sprintf(path, _("Program \"%s\" not found or cannot be executed."),
-		cmdline);
-	wMessageDialog(menu->frame->screen_ptr, _("Error"), path, 
-		       _("OK"), NULL, NULL);
-	free(path);
-	free(cmdline);
-	return;
+    if (!shell) {
+	shell = getenv("SHELL");
+	if (!shell)
+	    shell = "/bin/sh";
     }
-    
-    free(path);
-#endif
+
+    cmdline = ExpandOptions(menu->frame->screen_ptr, (char*)entry->clientdata);
+
     XGrabPointer(dpy, menu->frame->screen_ptr->root_win, True, 0,
 		 GrabModeAsync, GrabModeAsync, None, wCursor[WCUR_WAIT],
 		 CurrentTime);
@@ -184,7 +171,7 @@ execCommand(WMenu *menu, WMenuEntry *entry)
          * correctly '~/' expansion and '>' redirection.
          * While we can do '~/' expansion ourselves, we can do nothing about
          * '>' redirection.
-         * So we better let /bin/sh to do that for us. -Dan
+         * So we better let /bin/sh to do that for us. Dan.
 	 * Ok. -Alfredo
          */
         if (fork()==0) {
@@ -193,7 +180,8 @@ execCommand(WMenu *menu, WMenuEntry *entry)
 #ifdef HAVE_SETPGID
             setpgid(0, 0);
 #endif
-            execl("/bin/sh", "/bin/sh", "-c", cmdline, NULL);
+            execl(shell, shell, "-c", cmdline, NULL);
+	    wsyserror("could not exec %s -c %s\n", shell, cmdline);
             exit(-1);
         }
 	free(cmdline);
@@ -206,8 +194,13 @@ execCommand(WMenu *menu, WMenuEntry *entry)
 static void
 exitCommand(WMenu *menu, WMenuEntry *entry)
 {
+    static int inside = 0;
+
     /* prevent reentrant calls */
-    wMenuSetEnabled(menu, entry->order, False);
+    if (inside)
+	return;
+    inside = 1;
+
     if ((int)entry->clientdata==M_QUICK
 	|| wMessageDialog(menu->frame->screen_ptr, _("Exit"),
 			  _("Exit window manager?"), 
@@ -223,15 +216,20 @@ exitCommand(WMenu *menu, WMenuEntry *entry)
 	ExecExitScript();
 	exit(0);
     }
-    wMenuSetEnabled(menu, entry->order, True);
+    inside = 0;
 }
 
 
 static void
 shutdownCommand(WMenu *menu, WMenuEntry *entry)
 {
+    static int inside = 0;
+
     /* prevent reentrant calls */
-    wMenuSetEnabled(menu, entry->order, False);
+    if (inside)
+	return;
+    inside = 1;
+
     if ((int)entry->clientdata==M_QUICK
 	|| wMessageDialog(menu->frame->screen_ptr, _("Close X session"), 
 	  _("Close Window System session?\n(all applications will be closed)"),
@@ -245,7 +243,7 @@ shutdownCommand(WMenu *menu, WMenuEntry *entry)
 	ExecExitScript();
 	exit(0);
     }
-    wMenuSetEnabled(menu, entry->order, True);
+    inside = 0;
 }
 
 

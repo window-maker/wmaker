@@ -1,12 +1,103 @@
 
-NEWS for veteran WindowMaker users
-----------------------------------
+NEWS for veteran Window Maker users
+-----------------------------------
+
+--- 0.20.2
+
+
+The name of WindowMaker was changed to Window Maker.
+
+Window creation animation disabled by default.
+
+xdaliclock -shape
+-----------------
+
+If you use it edit src/wconfig.h and #define OPTIMIZE_SHAPE or disable the
+titlebar and resizebar for the window. OPTIMIZE_SHAPE will remove the
+flickering for xdaliclock and other programs that change their shapes often,
+but will increase network traffic considerably. So, if you use xdaliclock
+from a remote machine it can get slow.
+
+
+Applications Menu
+-----------------
+
+The applications menu will now use the shell in the SHELL environment
+variable to execute EXEC menu commands. If it is unset (I think it's always
+automatically set by the shell program) it will use /bin/sh
+
+
+Extra fancy icon kaboom :)
+--------------------------
+
+Edit src/wconfig.h and #define ICON_KABOOM_EXTRA to get
+more effects for the icon undocking animation.
+
+Options for superfluous stuff are even more superfluous, so this
+will not become runtime.
+
+
+XDE drag and drop support
+-------------------------
+
+Support for XDE drag and drop was added (by "]d" <id@maliwan.org>).
+To enable, edit src/wconfig.h
+The support works with gtk 1.1.2
+
+
+libPropList
+-----------
+
+libPropList will now be built automatically by wmaker. Wich means
+the (simplified) building process is now:
+
+./configure
+make
+make install
+
+instead of:
+
+tar xzf libPropList.tar.gz
+(cd libPropList; make)
+make
+make install
+
+You also don't need to worry about GNOME libPropList incompatibilities
+anymore. 
+
+
+Bug with focus lost in sloppy focus fixed
+-----------------------------------------
+
+The bug only occurs in sloppy or auto focus modes, with AutoFocus disabled
+and Superfluous enabled. There is no easy/clean way to fix this, so Window
+Maker will disable the animation of window creation if the focus mode is
+either sloppy or auto AND AutoFocus=NO.
+
+If you want the animation, enable AutoFocus or use manual focus mode
+(prefered). 
+
+
+The NoWindowUnderDock option was removed
+----------------------------------------
+To obtain the same result, use the "Floating Dock" option in the dock menu.
+
+
+Persistent Program Suplied Icons
+--------------------------------
+
+Application supplied icons are now stored, so that the dock will keep
+showing them after the app is exited. The icons are stored at
+~/GNUstep/.AppInfo/WindowMaker/
+
 
 --- 0.20.0
 
+  
 Multihead support. wmaker will now manage all screens that are attached to the
 display. 
 ------------------------------------------------------------------------------
+  
 
 It does so from a single process (instead of spawning a new process for each
 screen, like fvwm does). This keeps memory usage a lot lower than fvwm.
@@ -26,6 +117,7 @@ exitscript
 ----------
 
 ~/G/L/W/exitscript will be called automatically when wmaker is exited.
+
 
 New runtime options
 -------------------
@@ -53,6 +145,7 @@ New theme
 ---------
 
 A new theme named Night, is available in this distribution.
+
 
 
 --- 0.19.3

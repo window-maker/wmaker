@@ -1,6 +1,6 @@
 /* action.c- misc. window commands (miniaturize, hide etc.)
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <math.h>
+#include <time.h>
 
 #include "WindowMaker.h"
 #include "wcore.h"
@@ -69,8 +70,8 @@ static struct {
     {SHADE_STEPS_S, SHADE_DELAY_S},
     {SHADE_STEPS_U, SHADE_DELAY_U}};
 
-#define SHADE_STEPS	shadePars[wPreferences.shade_speed].steps
-#define SHADE_DELAY	shadePars[wPreferences.shade_speed].delay
+#define SHADE_STEPS	shadePars[(int)wPreferences.shade_speed].steps
+#define SHADE_DELAY	shadePars[(int)wPreferences.shade_speed].delay
 
 
 static int ignoreTimestamp=0;
@@ -245,11 +246,12 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 void
 wShadeWindow(WWindow  *wwin)
 {
-    XWindowAttributes attribs;  
-#ifdef ANIMATIONS    
+    XWindowAttributes attribs;
+    time_t time0 = time(NULL);
+#ifdef ANIMATIONS
     int y, s, w, h;
 #endif
- 
+
     if (wwin->flags.shaded)
 	return;
 
@@ -276,6 +278,9 @@ wShadeWindow(WWindow  *wwin)
                 wusleep(SHADE_DELAY*1000L);
 	    h-=s;
 	    y-=s;
+
+	    if (time(NULL)-time0 > MAX_ANIMATION_TIME)
+		break;
 	}
 	XMoveWindow(dpy, wwin->client_win, 0, wwin->frame->top_width);
     }
@@ -302,6 +307,7 @@ wShadeWindow(WWindow  *wwin)
 
 #ifdef ANIMATIONS
     if (!wwin->screen_ptr->flags.startup) {
+	/* Look at processEvents() for reason of this code. */
     	XSync(dpy, 0);
     	processEvents(XPending(dpy));
     }
@@ -312,6 +318,7 @@ wShadeWindow(WWindow  *wwin)
 void
 wUnshadeWindow(WWindow  *wwin)
 {
+    time_t time0 = time(NULL);
 #ifdef ANIMATIONS
     int y, s, w, h;    
 #endif /* ANIMATIONS */
@@ -347,6 +354,9 @@ wUnshadeWindow(WWindow  *wwin)
                     wusleep(SHADE_DELAY*2000L/3);
 		h+=s;
 		y+=s;
+		
+		if (time(NULL)-time0 > MAX_ANIMATION_TIME)
+		    break;
 	    }
 	}
 	XMoveWindow(dpy, wwin->client_win, 0, wwin->frame->top_width);
@@ -395,9 +405,15 @@ wMaximizeWindow(WWindow *wwin, int directions)
 	    if (!(wPreferences.icon_yard & IY_RIGHT))
 		new_x += wPreferences.icon_size;
 	}
-	
+#if 0
 	if (wPreferences.no_window_under_dock
 	    && wwin->screen_ptr->dock) {
+	    new_width -= wPreferences.icon_size + DOCK_EXTRA_SPACE;
+	    if (!wwin->screen_ptr->dock->on_right_side) 
+		new_x += wPreferences.icon_size + DOCK_EXTRA_SPACE;
+	}
+#endif
+	if (wwin->screen_ptr->dock && !wwin->screen_ptr->dock->lowered) {
 	    new_width -= wPreferences.icon_size + DOCK_EXTRA_SPACE;
 	    if (!wwin->screen_ptr->dock->on_right_side) 
 		new_x += wPreferences.icon_size + DOCK_EXTRA_SPACE;
@@ -679,181 +695,6 @@ animateResize(WScreen *scr, int x, int y, int w, int h,
 #endif /* ANIMATIONS */
 
 
-/* Here are defined the miniaturize animation functions. The above defined
- * functions, use a separate function that implements the animation for each
- * different style, and a wrapper that calls them accordingly.
- * The below function is a single function that implements all the miniaturize
- * animation styles in one single function, using switch{} and if() statements
- * to differentiate them.
- * The above code is more generic and elegant, letting one to extend it very
- * easily (though I don't think one would ;), but will make the code a little
- * bit bigger, using three functions and a wrapper.
- * The below version, is smaller, being optimised for size, but is less
- * elegant, and harder to be extended. Also is harder to read.
- * I let them both here so you can take a look, and decide which one you like
- * more. I would use the above functions because they are nicer, and easier to
- * read and follow, and only a little bit bigger. -Dan
- */
-
-
-#ifdef ANIMATIONS_DONT_USE_THIS
-static void 
-animateResize(WScreen *scr, int x, int y, int w, int h, 
-	      int fx, int fy, int fw, int fh, int hiding)
-{
-#define FRAMES (MINIATURIZE_ANIMATION_FRAMES_Z)
-    float cx[FRAMES], cy[FRAMES], cw[FRAMES], ch[FRAMES];
-    float xstep, ystep, wstep, hstep;
-    XPoint points[5]; 
-    float angle, final_angle, a, d, delta, dx, dch, midy, twist=0.5;
-    int style = wPreferences.iconification_style; /* Catch the value */
-                                                  /* to avoid changes while animating */
-    int frames, steps, delay, i, j;
-
-    if (style == WIS_NONE)
-        return;
-
-    switch(style) {
-    case WIS_TWIST:
-        frames = MINIATURIZE_ANIMATION_FRAMES_T;
-        steps = MINIATURIZE_ANIMATION_STEPS_T;
-        delay = MINIATURIZE_ANIMATION_DELAY_T;
-        twist = MINIATURIZE_ANIMATION_TWIST_T;
-        break;
-    case WIS_FLIP:
-        frames = MINIATURIZE_ANIMATION_FRAMES_F;
-        steps = MINIATURIZE_ANIMATION_STEPS_F;
-        delay = MINIATURIZE_ANIMATION_DELAY_F;
-        twist = MINIATURIZE_ANIMATION_TWIST_F;
-        break;
-    case WIS_ZOOM:
-    default:
-        frames = MINIATURIZE_ANIMATION_FRAMES_Z;
-        steps = MINIATURIZE_ANIMATION_STEPS_Z;
-        delay = MINIATURIZE_ANIMATION_DELAY_Z;
-        break;
-    }
-
-    steps = (hiding ? (steps*2)/3 : steps);
-    if (steps == 0)
-        return;
-
-    if (style == WIS_TWIST) {
-        x += w/2;
-        y += h/2;
-        fx += fw/2;
-        fy += fh/2;
-    }
-    xstep = (float)(fx-x)/steps;
-    ystep = (float)(fy-y)/steps;
-    wstep = (float)(fw-w)/steps;
-    hstep = (float)(fh-h)/steps;
-    for (j=0; j<frames; j++) {
-        cx[j] = (float)x;
-        cy[j] = (float)y;
-        cw[j] = (float)w;
-        ch[j] = (float)h;
-    }
-
-    if (style==WIS_TWIST || style==WIS_FLIP) {
-        final_angle = 2*WM_PI*twist;
-        delta = (float)(final_angle/frames);
-        for (angle=0;; angle+=delta) {
-            if (angle > final_angle)
-                angle = final_angle;
-            switch (style) {
-            case WIS_TWIST:
-                a = atan(ch[0]/cw[0]);
-                d = sqrt((cw[0]/2)*(cw[0]/2)+(ch[0]/2)*(ch[0]/2));
-                points[0].x = cx[0]+cos(angle-a)*d;
-                points[0].y = cy[0]+sin(angle-a)*d;
-                points[1].x = cx[0]+cos(angle+a)*d;
-                points[1].y = cy[0]+sin(angle+a)*d;
-                points[2].x = cx[0]+cos(angle-a+WM_PI)*d;
-                points[2].y = cy[0]+sin(angle-a+WM_PI)*d;
-                points[3].x = cx[0]+cos(angle+a+WM_PI)*d;
-                points[3].y = cy[0]+sin(angle+a+WM_PI)*d;
-                points[4].x = cx[0]+cos(angle-a)*d;
-                points[4].y = cy[0]+sin(angle-a)*d;
-                break;
-            case WIS_FLIP:
-                dx = (cw[0]/10) - ((cw[0]/5) * sin(angle));
-                dch = (ch[0]/2) * cos(angle);
-                midy = cy[0] + (ch[0]/2);
-                points[0].x = cx[0] + dx;         points[0].y = midy - dch;
-                points[1].x = cx[0] + cw[0] - dx; points[1].y = points[0].y;
-                points[2].x = cx[0] + cw[0] + dx; points[2].y = midy + dch;
-                points[3].x = cx[0] - dx;         points[3].y = points[2].y;
-                points[4].x = points[0].x;        points[4].y = points[0].y;
-                break;
-            }
-
-            XGrabServer(dpy);
-            XDrawLines(dpy, scr->root_win, scr->frame_gc, points, 5, CoordModeOrigin);
-            XFlush(dpy);
-            if (delay>0)
-                wusleep(delay);
-
-            XDrawLines(dpy, scr->root_win, scr->frame_gc, points, 5, CoordModeOrigin);
-            XUngrabServer(dpy);
-            cx[0]+=xstep;
-            cy[0]+=ystep;
-            cw[0]+=wstep;
-            ch[0]+=hstep;
-            if (angle >= final_angle)
-                break;
-
-        }
-        XFlush(dpy);
-    } else {
-        /* Zoom or default */
-        XGrabServer(dpy);
-        for (i=0; i<steps; i++) {
-            for (j=0; j<frames; j++) {
-                XDrawRectangle(dpy, scr->root_win, scr->frame_gc,
-                               (int)cx[j], (int)cy[j], (int)cw[j], (int)ch[j]);
-            }
-            XFlush(dpy);
-            if (delay>0)
-                wusleep(delay);
-
-            for (j=0; j<frames; j++) {
-                XDrawRectangle(dpy, scr->root_win, scr->frame_gc,
-                               (int)cx[j], (int)cy[j], (int)cw[j], (int)ch[j]);
-                if (j<frames-1) {
-                    cx[j]=cx[j+1];
-                    cy[j]=cy[j+1];
-                    cw[j]=cw[j+1];
-                    ch[j]=ch[j+1];
-                } else {
-                    cx[j]+=xstep;
-                    cy[j]+=ystep;
-                    cw[j]+=wstep;
-                    ch[j]+=hstep;
-                }
-            }
-        }
-
-        for (j=0; j<frames; j++) {
-            XDrawRectangle(dpy, scr->root_win, scr->frame_gc,
-                           (int)cx[j], (int)cy[j], (int)cw[j], (int)ch[j]);
-        }
-        XFlush(dpy);
-        if (delay>0)
-            wusleep(MINIATURIZE_ANIMATION_DELAY_Z);
-
-        for (j=0; j<frames; j++) {
-            XDrawRectangle(dpy, scr->root_win, scr->frame_gc,
-                           (int)cx[j], (int)cy[j], (int)cw[j], (int)ch[j]);
-        }
-
-        XUngrabServer(dpy);
-    }
-}
-#undef FRAMES
-#endif /* ANIMATIONS */
-
-
 static void
 flushExpose()
 {
@@ -942,12 +783,23 @@ setupIconGrabs(WIcon *icon)
 static WWindow*
 recursiveTransientFor(WWindow *wwin)
 {
+    int i;
+
     if (!wwin)
 	return None;
 
-    /* TODO: a buggy client can put this in a infinite loop */
-    while (wwin->transient_for != None)
+    /* hackish way to detect transient_for cycle */ 
+    i = wwin->screen_ptr->window_count+1;
+
+    while (wwin && wwin->transient_for != None && i>0) {
 	wwin = wWindowFor(wwin->transient_for);
+	i--;
+    }
+    if (i==0 && wwin) {
+	wwarning("%s has a severely broken WM_TRANSIENT_FOR hint.",
+		 wwin->frame->title);
+	return NULL;
+    }
 
     return wwin;
 }
@@ -1009,6 +861,10 @@ wIconifyWindow(WWindow *wwin)
     unmapTransientsFor(wwin);
 
     if (present) {
+#ifdef WMSOUND
+	wSoundPlay(WMSOUND_ICONIFY);
+#endif
+
 	XUngrabPointer(dpy, CurrentTime);
 	/* prevent window withdrawal when getting UnmapNotify */
 	XSelectInput(dpy, wwin->client_win, 
@@ -1043,9 +899,10 @@ wIconifyWindow(WWindow *wwin)
 #endif
 
     if (present) {
+	WWindow *owner = recursiveTransientFor(wwin->screen_ptr->focused_window);
 	setupIconGrabs(wwin->icon);
-	if ((wwin->flags.focused || wwin->client_win ==
-	     recursiveTransientFor(wwin->screen_ptr->focused_window)->client_win)
+	if ((wwin->flags.focused 
+	     || (owner && wwin->client_win == owner->client_win))
 	    && wPreferences.focus_mode==WKF_CLICK) {
 	    WWindow *tmp;
 	    
@@ -1060,20 +917,18 @@ wIconifyWindow(WWindow *wwin)
 	} else if (wPreferences.focus_mode!=WKF_CLICK) {
 	    wSetFocusTo(wwin->screen_ptr, NULL);
 	}
-	
-#ifdef WMSOUND
-   if (present) {
-     wSoundPlay(WMSOUND_ICONIFY);
-   }
-#endif
 
 #ifdef ANIMATIONS
-	/*
 	if (!wwin->screen_ptr->flags.startup) {
+	    Window clientwin = wwin->client_win;
+
 	    XSync(dpy, 0);
 	    processEvents(XPending(dpy));
+	    
+	    /* the window can disappear while doing the processEvents() */
+	    if (!wWindowFor(clientwin))
+		return;
 	}
-	*/
 #endif
     }
 
@@ -1111,7 +966,11 @@ wDeiconifyWindow(WWindow  *wwin)
         wIconSelect(wwin->icon);
 
     XUnmapWindow(dpy, wwin->icon->core->window);
-    
+
+#ifdef WMSOUND
+    wSoundPlay(WMSOUND_DEICONIFY);
+#endif
+
     /* if the window is in another workspace, do it silently */
 #ifdef ANIMATIONS
     if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations 
@@ -1144,14 +1003,15 @@ wDeiconifyWindow(WWindow  *wwin)
 	|| wPreferences.focus_mode==WKF_SLOPPY)
       wSetFocusTo(wwin->screen_ptr, wwin);
 
-#ifdef WMSOUND
-    wSoundPlay(WMSOUND_DEICONIFY);
-#endif
-
 #ifdef ANIMATIONS
     if (!wwin->screen_ptr->flags.startup) {
+	Window clientwin = wwin->client_win;
+	
     	XSync(dpy, 0);
     	processEvents(XPending(dpy));
+	
+	if (!wWindowFor(clientwin))
+	    return;
     }
 #endif
     
@@ -1209,6 +1069,9 @@ hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate)
     XUnmapWindow(dpy, wwin->frame->core->window);
     wClientSetState(wwin, IconicState, icon->icon_win);
     flushExpose();
+#ifdef WMSOUND
+    wSoundPlay(WMSOUND_HIDE);
+#endif
 #ifdef ANIMATIONS
     if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations &&
 	!wwin->flags.skip_next_animation && animate) {
@@ -1221,10 +1084,6 @@ hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate)
     wwin->flags.skip_next_animation = 0;
 
     UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
-
-#ifdef WMSOUND
-    wSoundPlay(WMSOUND_HIDE);
-#endif
 }
 
 
@@ -1269,7 +1128,7 @@ wHideOtherApplications(WWindow *awin)
 	    }
 #endif
 
-	    if (wwin->main_window==None) {
+	    if (wwin->main_window==None || wwin->window_flags.no_appicon) {
 		if (!wwin->window_flags.no_miniaturizable) {
 		    wwin->flags.skip_next_animation = 1;
 		    wIconifyWindow(wwin);
@@ -1412,14 +1271,13 @@ unhideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate,
 
     wwin->flags.hidden=0;
     wwin->flags.mapped=1;
+    
+#ifdef WMSOUND
+    wSoundPlay(WMSOUND_UNHIDE);
+#endif
 #ifdef ANIMATIONS
-    /* something is redundant here. animate passed here is
-     * !wwin->flags.skip_next_animation, so this flag is tested twice.
-     * Either we shold not test skip_next_animation here, or don't pass
-     * animate to this function. -Dan
-     */
-    if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations &&
-	!wwin->flags.skip_next_animation && animate) {
+    if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations 
+	&& animate) {
 	animateResize(wwin->screen_ptr, icon_x, icon_y,
 		      icon->core->width, icon->core->height,
 		      wwin->frame_x, wwin->frame_y, 
@@ -1443,10 +1301,6 @@ unhideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate,
     }
 
     UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
-
-#ifdef WMSOUND
-    wSoundPlay(WMSOUND_UNHIDE);
-#endif
 }
 
 
@@ -1594,7 +1448,7 @@ wRefreshDesktop(WScreen *scr)
     attr.save_under = False;
     win = XCreateWindow(dpy, scr->root_win, 0, 0, scr->scr_width, 
 			scr->scr_height, 0, CopyFromParent, CopyFromParent,
-			(Visual *) CopyFromParent, CWBackingStore|CWSaveUnder,
+			(Visual *)CopyFromParent, CWBackingStore|CWSaveUnder,
 			&attr);
     XMapRaised(dpy, win);
     XDestroyWindow(dpy, win);

@@ -20,7 +20,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <X11/Xlib.h>
+#include <X11/Xatom.h>
 
 
 #define LINESIZE	(4*1024)
@@ -29,7 +31,16 @@
 void
 help(char *progn)
 {
-    printf("usage: %s [-cutbuffer number] [filename]\n", progn);
+    fprintf
+    (
+     stderr,
+     "usage: %s [options] [filename]\n"
+     "	-display display\n"
+     "	-cutbuffer number\n"
+     "	-nolimit\n"
+     "	-clearselection\n",
+     progn
+    );
 }
 
 static int
@@ -48,8 +59,12 @@ main(int argc, char **argv)
     char *filename=NULL;
     FILE *file=stdin;
     char *buf=NULL;
+    char *display_name="";
     int l=0;
-    
+    int buf_len = 0;
+    int	limit_check = 1;
+    int clear_selection = 0;
+
     for (i=1; i<argc; i++) {
 	if (argv[i][0]=='-') {
 	    if (argv[i][1]=='h') {
@@ -59,19 +74,30 @@ main(int argc, char **argv)
 		if (i<argc-1) {
 		    i++;
 		    if (sscanf(argv[i],"%i", &buffer)!=1) {
-			printf("%s: could not convert \"%s\" to int\n", 
+			fprintf(stderr, "%s: could not convert \"%s\" to int\n", 
 			       argv[0], argv[i]);
 			exit(1);
 		    }
 		    if (buffer<0 || buffer > 7) {
-			printf("%s: invalid buffer number %i\n", argv[0],
-			       buffer);
+			fprintf(stderr, "%s: invalid buffer number %i\n",
+			    argv[0], buffer);
 			exit(1);
 		    }
 		} else {
 		    help(argv[0]);
 		    exit(1);
 		}
+	    } else if (strcmp(argv[i], "-display")==0) {
+		if (i < argc-1) {
+		    display_name = argv[++i];
+		} else {
+		    help(argv[0]);
+		    exit(1);
+		}
+	    } else if (strcmp(argv[i],"-clearselection")==0) {
+		clear_selection = 1;
+	    } else if (strcmp(argv[i],"-nolimit")==0) {
+		limit_check = 0;
 	    } else {
 		help(argv[0]);
 		exit(1);
@@ -90,10 +116,11 @@ main(int argc, char **argv)
 	}
     }
 
-    dpy = XOpenDisplay("");
+    dpy = XOpenDisplay(display_name);
     XSetErrorHandler(errorHandler);
     if (!dpy) {
-	printf("%s: could not open display\n", argv[0]);
+	fprintf(stderr, "%s: could not open display \"%s\"\n", argv[0],
+		XDisplayName(display_name));
 	exit(1);
     }
     if (buffer<0) {
@@ -105,34 +132,61 @@ main(int argc, char **argv)
 	char tmp[LINESIZE+2];
 	int nl=0;
 
-	if (!fgets(tmp, LINESIZE, file)) {
+	/*
+	 * Use read() instead of fgets() to preserve NULs, since
+	 * especially since there's no reason to read one line at a time.
+	 */
+	if ((nl = fread(tmp, 1, LINESIZE, file)) <= 0) {
 	    break;
 	}
-	nl = strlen(tmp);
-	if (!buf)
-	    nbuf = malloc(l+nl+1);
-	else
-	    nbuf = realloc(buf, l+nl+1);
+	if (buf_len == 0) {
+	    nbuf = malloc(buf_len = l+nl+1);
+	}
+	else {
+	    if (buf_len < l+nl+1) {
+		/*
+		 * To avoid terrible performance on big input buffers,
+		 * grow by doubling, not by the minimum needed for the
+		 * current line.
+		 */
+		buf_len = 2 * buf_len + nl + 1;
+		nbuf = realloc(buf, buf_len);
+	    }
+	    else {
+		nbuf = buf;
+	    }
+	}
 	if (!nbuf) {
-	    printf("%s: out of memory\n", argv[0]);
+	    fprintf(stderr, "%s: out of memory\n", argv[0]);
 	    exit(1);
 	}
 	buf=nbuf;
-	if (l==0) {
-	    strcpy(buf,tmp);
-	} else {
-	    strcat(buf, tmp);
-	}
+	/*
+	 * Don't strcat, since it would make the algorithm n-squared.
+	 * Don't use strcpy, since it stops on a NUL.
+	 */
+	memcpy(buf+l, tmp, nl);
 	l+=nl;
-	if (l>=MAXDATA) {
-	    printf("%s: too much data in input\n", argv[0]);
+	if (limit_check && l>=MAXDATA) {
+	    fprintf
+	    (
+		stderr,
+		"%s: too much data in input - more than %d bytes\n"
+		"  use the -nolimit argument to remove the limit check.\n",
+		argv[0], MAXDATA
+	    );
 	    exit(1);
 	}
     }
-    if (buf)
-      XStoreBuffer(dpy, buf, l, buffer);
+
+    if (clear_selection) {
+	XSetSelectionOwner(dpy, XA_PRIMARY, None, CurrentTime);
+    }
+    if (buf) {
+	XStoreBuffer(dpy, buf, l, buffer);
+    }
     XFlush(dpy);
     XCloseDisplay(dpy);
-    exit(1);
+    exit(buf == NULL || errno != 0);
 }
 

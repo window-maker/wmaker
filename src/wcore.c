@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -65,10 +65,13 @@ wCoreCreateTopLevel(WScreen *screen, int x, int y, int width, int height,
     attribs.override_redirect = True;
     attribs.cursor = wCursor[WCUR_DEFAULT];
     attribs.background_pixmap = None;
-    attribs.background_pixel = screen->light_pixel;
+    attribs.background_pixel = screen->black_pixel;
     attribs.border_pixel = screen->frame_border_pixel;
     attribs.event_mask = SubstructureRedirectMask | ButtonPressMask
         | ButtonReleaseMask | ButtonMotionMask | ExposureMask | EnterWindowMask
+#ifdef XDE_DND
+	| StructureNotifyMask
+#endif
         | LeaveWindowMask;
 
     vmask |= CWColormap;

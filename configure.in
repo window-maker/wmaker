@@ -1,14 +1,27 @@
-dnl 
-dnl WindowMaker autoconf input.
-dnl 
+dnl
+dnl Window Maker autoconf input.
+dnl
 dnl Process with: aclocal; autoconf; automake
+dnl
+dnl
+dnl Shared library generation stuff taken from configure script from zlib
+dnl
 
 
 AC_INIT(src/WindowMaker.h)
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.20.1)
+AM_INIT_AUTOMAKE(WindowMaker, 0.20.2)
 
 
+dnl Shared Library Versions
+
+WINGS_VER=0.0.1
+WRASTER_VER=0.0.1
+
+
+dnl configure/build bundled libraries
+dnl ===================================
+AC_CONFIG_SUBDIRS(libPropList)
 
 
 AM_CONFIG_HEADER(src/config.h)
@@ -118,8 +131,8 @@ dnl ==================
 
 dnl List of supported locales
 dnl -------------------------
-supported_locales="cs de es fr gl it ja ko nl no pt ru se tr fi hr el"
-supported_wprefs_locales="pt hr fr ko"
+supported_locales="cs de es fr gl it ja ko nl no pt ru se tr fi hr el pl ro"
+supported_wprefs_locales="pt hr fr ko ja"
 
 for lang in $LINGUAS; do
 	ok=0
@@ -184,17 +197,14 @@ fi
 dnl Put it back once we have some real gnome support...
 dnl
 dnl AC_ARG_WITH(gnome, 
-dnl	[  --with-gnome            enable support for GNOME extensions ],
-dnl	[with_gnome=$withval], [with_gnome=yes])
-dnl AC_MSG_CHECKING([for GNOME support])
-dnl if test "x$with_gnome" = "xyes"; then
-dnl	HAVE_GNOME="#define MWM_HINTS"
-dnl	AC_MSG_RESULT(yes)
+dnl	[  --enable-gnome            enable support for GNOME extensions ],
+dnl	[enable_gnome=$withval], [enable_gnome=yes])
+dnl if test "$enable_gnome" = yes; then
+dnl 	GNOME="#define GNOME"
 dnl else
-dnl	HAVE_GNOME="#undef MWM_HINTS"
-dnl	AC_MSG_RESULT(no)
+dnl	GNOME="#undef GNOME"
 dnl fi
-dnl AC_SUBST(HAVE_GNOME)
+dnl AC_SUBST(GNOME)
 
 AC_SUBST(I18N)
 AC_SUBST(INTLIBS)
@@ -267,6 +277,7 @@ dnl ==============================================
 dnl         Graphic Format Libraries
 dnl ==============================================
 
+
 dnl
 dnl Specify paths to look for graphic format libraries
 dnl ==================================================
@@ -292,8 +303,17 @@ AC_ARG_ENABLE(xpm,
 
 if test "$xpm" = yes; then
     AC_CHECK_LIB(Xpm, XpmCreatePixmapFromData,
-	[GFXFLAGS="$GFXFLAGS -DUSE_XPM" GFXLIBS="$GFXLIBS -lXpm"],,
+    	my_libok=yes, my_libok=no,
 	$GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS $XLIBS)
+
+    if test "$my_libok" = yes; then
+	my_old_cppflags=$CPPFLAGS
+	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH $XCFLAGS"
+	AC_CHECK_HEADER(X11/xpm.h,
+		[GFXFLAGS="$GFXFLAGS -DUSE_XPM" GFXLIBS="$GFXLIBS -lXpm"
+		 supported_gfx="XPM"], supported_gfx="XPM (builtin)")
+	CPPFLAGS=$my_old_cppflags
+    fi
 fi
 
 
@@ -317,17 +337,23 @@ AC_CHECK_LIB(z, gzread, zlib=yes, zlib=no, $GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS)
 dnl PNG Support
 dnl ===========
 png=yes
-AC_ARG_ENABLE(png, 
-[  --disable-png	  	  disable PNG support through libpng],
-	png=$enableval, png=yes)
+# assume libz is present...
+#AC_ARG_ENABLE(png, 
+#[  --disable-png	  	  disable PNG support through libpng],
+#	png=$enableval, png=yes)
 
 
-if test "$png" = yes; then
-    if test "$zlib" = yes; then
-       AC_CHECK_LIB(png, png_get_valid, 
-       		[GFXLIBS="$GFXLIBS -lpng -lz" GFXFLAGS="$GFXFLAGS -DUSE_PNG" 
-		supported_gfx="$supported_gfx PNG"],,
+if test "$png" = yes -a "$zlib" = yes ; then
+    AC_CHECK_LIB(png, png_get_valid, my_libok=yes, my_libok=no,
 		$GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS -lz -lm)
+
+    if test "$my_libok" = yes; then
+	my_old_cppflags=$CPPFLAGS
+	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH"
+	AC_CHECK_HEADER(png.h,
+		[GFXLIBS="$GFXLIBS -lpng -lz" GFXFLAGS="$GFXFLAGS -DUSE_PNG" 
+		supported_gfx="$supported_gfx PNG"], )
+	CPPFLAGS=$my_old_cppflags
     fi
 fi
 
@@ -340,10 +366,17 @@ AC_ARG_ENABLE(jpeg,
 	jpeg=$enableval, jpeg=yes)
 
 if test "$jpeg" = yes; then
-	AC_CHECK_LIB(jpeg, jpeg_destroy_compress,
-		[GFXLIBS="$GFXLIBS -ljpeg" GFXFLAGS="$GFXFLAGS -DUSE_JPEG"
-		supported_gfx="$supported_gfx JPEG"],,
+	AC_CHECK_LIB(jpeg, jpeg_destroy_compress, my_libok=yes, my_libok=no,
 		$GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS)
+
+    if test "$my_libok" = yes; then
+	my_old_cppflags=$CPPFLAGS
+	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH"
+	AC_TRY_CPP(jpeglib.h,
+		[GFXLIBS="$GFXLIBS -ljpeg" GFXFLAGS="$GFXFLAGS -DUSE_JPEG"
+		supported_gfx="$supported_gfx JPEG"], )
+	CPPFLAGS=$my_old_cppflags
+    fi
 fi
 
 
@@ -359,19 +392,28 @@ AC_ARG_ENABLE(gif,
 
 if test "$gif" = yes; then
 	retry=no
-	AC_CHECK_LIB(ungif, DGifOpenFileName,
-	    [GFXLIBS="$GFXLIBS -lungif" GFXFLAGS="$GFXFLAGS -DUSE_GIF"
-	    supported_gfx="$supported_gfx GIF"],retry=yes,
-	    $GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS)
+	AC_CHECK_LIB(ungif, DGifOpenFileName, 
+		[my_libok=yes my_libname=ungif],
+	    	[retry=yes my_libok=no],
+	    	$GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS)
 dnl
 dnl libungif is the same thing as libgif for all practical purposes.
 dnl
 	if test "$retry" = yes; then
-	    AC_CHECK_LIB(gif, DGifOpenFileName,
-		[GFXLIBS="$GFXLIBS -lgif" GFXFLAGS="$GFXFLAGS -DUSE_GIF"
-		supported_gfx="$supported_gfx GIF"],,
+	    AC_CHECK_LIB(gif, DGifOpenFileName, 
+	    	[my_libok=yes my_libname=gif], 
+		my_libok=no,
 		$GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS)
 	fi
+	
+    if test "$my_libok" = yes; then
+	my_old_cppflags=$CPPFLAGS
+	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH"
+	AC_CHECK_HEADER(gif_lib.h,
+		[GFXLIBS="$GFXLIBS -l$my_libname" GFXFLAGS="$GFXFLAGS -DUSE_GIF"
+		supported_gfx="$supported_gfx GIF"], )
+	CPPFLAGS=$my_old_cppflags
+    fi
 fi
 
 
@@ -393,27 +435,34 @@ ICONEXT="xpm"
 #
 
 if test "$tif" = yes; then
+    my_libname=""
     AC_CHECK_LIB(tiff, TIFFGetVersion, 
-	[GFXFLAGS="$GFXFLAGS -DUSE_TIFF" GFXLIBS="-ltiff $GFXLIBS" 
-	ICONEXT="tiff"],,
+    	[my_libok=yes my_libname="-ltiff"], my_libok=no,
 	[$GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS $XLIBS $GFXLIBS -lm])
 dnl
 dnl Retry with zlib
 dnl
-    if test ! "$ICONEXT" = "tiff"; then
+    if test "$my_libok" = no; then
     	if test "$zlib" = "yes"; then
-    	    AC_CHECK_LIB(tiff, TIFFGetVersion, 
-		[GFXFLAGS="$GFXFLAGS -DUSE_TIFF" GFXLIBS="-ltiff -lz $GFXLIBS" 
-		ICONEXT="tiff"],,
+    	    AC_CHECK_LIB(tiff, TIFFGetVersion,
+	    	[my_libok=yes my_libname="-ltiff -lz"], my_libok=no,
 		[$GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS $XLIBS $GFXLIBS -lz -lm])
 	fi
     fi
     
-    if test ! "$ICONEXT" = "tiff"; then
+    if test "$my_libok" = no; then
 	AC_CHECK_LIB(tiff34, TIFFGetVersion, 
-		[GFXFLAGS="$GFXFLAGS -DUSE_TIFF" GFXLIBS="-ltiff34 $GFXLIBS"
-		ICONEXT="tiff"],,
+		[my_libok=yes my_libname="-ltiff34"], my_libok=no,
 		[$GFX_INC_PATH $GFX_LIB_PATH $XLFLAGS $XLIBS $GFXLIBS -lm])
+    fi
+    
+    if test "$my_libok" = yes; then
+	my_old_cppflags=$CPPFLAGS
+	CPPFLAGS="$CPPFLAGS $GFX_INC_PATH"
+	AC_CHECK_HEADER(tiffio.h,
+		[GFXFLAGS="$GFXFLAGS -DUSE_TIFF" GFXLIBS="$my_libname $GFXLIBS"
+		ICONEXT="tiff" supported_gfx="$supported_gfx TIFF"], )
+	CPPFLAGS=$my_old_cppflags
     fi
 fi
 
@@ -430,70 +479,76 @@ dnl ==============================================
 
 dnl =====================================================
 dnl        Check for libPropList
+dnl Always use the included libPropList, even if it is 
+dnl already installed.
 dnl =====================================================
 
-PLPATH=`pwd`/libPropList
+
+#LIBPL_LIBS="-L${top_builddir}/libPropList -lPropList"
+#LIBPL_INC_PATH="-I${top_srcdir}/libPropList"
+#
+#
+#PLPATH=`pwd`/libPropList
+#
+#if test -f $PLPATH/libPropList.a; then
+#	echo "using bundled libPropList, already compiled."
+#	needtobuild=no
+#	LIBPL_LIBS="-L$PLPATH -lPropList"
+#	LIBPL_INC_PATH="-I$PLPATH"
+#else
+#	AC_CHECK_LIB(PropList, PLGetString,
+#		[LIBPL_LIBS=-lPropList LIBPL_INC_PATH="" needtobuild=no],
+#		[LIBPL_LIBS="-L$PLPATH -lPropList"
+#		 LIBPL_INC_PATH="-I$PLPATH"
+#		 needtobuild=yes])
+#fi
+#
+#
+#if test "$needtobuild" = yes; then
+#    if test -f libPropList/libPropList.a; then
+#	echo "using included libPropList"
+#    else
+#	echo "********** WARNING *************"
+#	echo "libPropList is not installed in your system."
+#	echo "You need to build it before building Window Maker (if you already"
+#	echo "did that, remove config.cache and rerun configure)."
+#	echo "Please read the INSTALL file for detailed instructions."
+#	echo "Press <Return> to continue configuring Window Maker or"
+#	echo "type b and <Return> to build it now."
+#	read foo
+#	if test "$foo" = b; then
+#	    echo
+#	    echo "Building libPropList..."
+#	    echo
+#	    if test ! -d libPropList; then
+#		gzip -d -c libPropList.tar.gz | tar xf -
+#	    fi
+#	    ok=no
+#	    if (cd libPropList; ./configure); then
+#		if (cd libPropList; make); then
+#		    ok=yes
+#		fi
+#	    fi
+#	    if test "$ok" = no; then
+#		echo "********** WARNING **********"
+#		echo "An error occurred while building libPropList"
+#		echo "Please build it manually."
+#		echo "Press <Return> to continue."
+#		read foo
+#	    fi
+#	    echo
+#	    echo "resuming Window Maker configuration..."
+#	    echo
+#	fi
+#   fi
+#fi
+#
+#AC_SUBST(LIBPL_LIBS)
+#AC_SUBST(LIBPL_INC_PATH)
 
 
-if test -f $PLPATH/libPropList.a; then
-	echo Using compiled libPropList
- 	needtobuild=no
-	LIBPL_LIBS="-L$PLPATH -lPropList"
-	LIBPL_INC_PATH="-I$PLPATH"
-else
-	AC_CHECK_LIB(PropList, PLGetString,
-		[LIBPL_LIBS=-lPropList LIBPL_INC_PATH="" needtobuild=no],
-		[LIBPL_LIBS="-L$PLPATH -lPropList"
-		 LIBPL_INC_PATH="-I$PLPATH"
-		 needtobuild=yes])
-fi
-
-
-if test "$needtobuild" = yes; then
-    if test -f libPropList/libPropList.a; then
-	echo "using included libPropList"
-    else
-	echo "********** WARNING *************"
-	echo "libPropList is not installed in your system."
-	echo "You need to build it before building WindowMaker (if you already"
-	echo "did that, remove config.cache and rerun configure)."
-	echo "Please read the INSTALL file for detailed instructions."
-	echo "Press <Return> to continue configuring WindowMaker or"
-	echo "type b and <Return> to build it now."
-	read foo
-	if test "$foo" = b; then
-	    echo
-	    echo "Building libPropList..."
-	    echo
-	    if test ! -d libPropList; then
-		gzip -d -c libPropList.tar.gz | tar xf -
-	    fi
-	    ok=no
-	    if (cd libPropList; ./configure); then
-		if (cd libPropList; make); then
-		    ok=yes
-		fi
-	    fi
-	    if test "$ok" = no; then
-		echo "********** WARNING **********"
-		echo "An error occurred while building libPropList"
-		echo "Please build it manually."
-		echo "Press <Return> to continue."
-		read foo
-	    fi
-	    echo
-	    echo "resuming WindowMaker configuration..."
-	    echo
-	fi
-    fi
-fi
-
-AC_SUBST(LIBPL_LIBS)
-AC_SUBST(LIBPL_INC_PATH)
-
-
-dnl Paranoia setup
-dnl ==============
+dnl Debugging setup
+dnl ===============
 AC_ARG_ENABLE(debug, 
 [  --enable-debug	  enable debugging ],, enable_debug=no)
 
@@ -544,15 +599,22 @@ AC_SUBST(pixmapdir)
 dnl Support for GNUSTEP_LOCAL_ROOT, for WPrefs.app
 dnl ==============================================
 
-gnustepdir="${prefix}/GNUstep"
+appspath=""
 
-if test "x$GNUSTEP_LOCAL_ROOT" != "x" ; then
+AC_ARG_WITH(appspath,
+[  --with-appspath=PATH   specify the path of the GNUstep applications directory ])
+
+if test "x$appspath" = "x"; then
+    gnustepdir="${prefix}/GNUstep"
+
+    if test "x$GNUSTEP_LOCAL_ROOT" != "x" ; then
 	gnustepdir=`echo "$GNUSTEP_LOCAL_ROOT" | sed -e "s%${prefix}%\${prefix}%"`
+    fi
+
+    appspath=$gnustepdir/Apps
 fi
 
-appsdir=$gnustepdir/Apps
-
-wprefsdir=$appsdir/WPrefs.app
+wprefsdir=$appspath/WPrefs.app
 
 AC_SUBST(wprefsdir)
 
@@ -560,7 +622,8 @@ AC_SUBST(wprefsdir)
 dnl Enable single appicon per wm instance+class combo -cls
 dnl =====================================================
 AC_ARG_ENABLE(single-icon,
-[  --enable-single-icon    use single application icon per WM_INSTANCE+WM_CLASS (unsupported) ],
+[  --enable-single-icon    use single application icon per WM_INSTANCE+WM_CLASS
+],
 if test "$enableval" = yes; then
 	REDUCE_APPICONS="#define REDUCE_APPICONS"
 else
@@ -601,6 +664,75 @@ if test "$GCC" = "yes"; then
 fi
 
 
+dnl Shared Library Support (unfinished)
+dnl ===================================
+
+enable_shared=no
+#AC_ARG_ENABLE(shared,
+#[  --enable-shared	  build libraries as shared ], enable_shared=yes, 
+#							enable_shared=no)
+
+if test "$enable_shared" = yes; then
+    if test "$GCC" = yes; then
+    	_CFLAGS="-fPIC"
+	LDSHARED='$CC -shared'
+    else
+    	# find system name and corresponding cc options
+  	case `(uname -sr || echo unknown) 2>/dev/null` in
+  	  SunOS\ 5*)
+	     _CFLAGS="-fast -xcg89 -KPIC -R."
+             LDSHARED='$CC -G';;
+  	  SunOS\ 4*)
+	     _CFLAGS="-PIC"
+             LDSHARED="ld";;
+	  IRIX*)
+	     _CFLAGS="-ansi -rpath ."
+             LDSHARED='$CC -shared';;
+	  SCO_SV\ 3.2*)
+	     _CFLAGS="-dy -KPIC "
+             LDSHARED='$CC -dy -KPIC -G';;
+	  HP-UX*)
+	     _CFLAGS="+z"
+             LDSHARED="ld -b"
+             SHAREDLIBS='libz.sl';;
+	  *)
+	     _CFLAGS=""
+             LDSHARED='$CC -shared';;
+	esac
+    fi
+
+    AC_MSG_CHECKING([for shared library support])
+
+    test=tmptest$$
+    cat > $test.c <<EOF
+int hello() { printf("hello\n"); }
+EOF
+
+
+    # we must test in two steps (cc then ld), required at least on SunOS 4.x
+    if test "`($CC -c $_CFLAGS $test.c) 2>&1`" = "" &&
+    		test "`($LDSHARED -o $test.so $test.o) 2>&1`" = ""; then
+  	CFLAGS="$CFLAGS $_CFLAGS"
+	WRASTERLIB='libwraster.so.$(WRASTER_VER)'
+	WINGSLIB='libWINGs.so.$(WINGS_VER)'
+	AC_MSG_RESULT([yes, building shared])
+    else
+  	LDSHARED='$CC'
+	WRASTERLIB='libwraster.a'
+	WINGSLIB='libWINGs.a'
+	AC_MSG_RESULT([no, building static])
+    fi
+    rm -f $test.[co] $test.so
+fi
+
+#AC_SUBST(WRASTER_VER)
+#AC_SUBST(WINGS_VER)
+#AC_SUBST(WRASTERLIB)
+# AC_SUBST(WINGSLIB)
+# AC_SUBST(LDSHARED)
+
+
+
 dnl
 dnl Nicolai:  Program tests for Documentation Section
 dnl =================================================
@@ -633,7 +765,6 @@ AC_OUTPUT(Makefile po/Makefile util/Makefile test/Makefile wmlib/Makefile \
 	WindowMaker/Themes/Makefile WindowMaker/Backgrounds/Makefile \
 	WindowMaker/Pixmaps/Makefile WindowMaker/Icons/Makefile \
 	WindowMaker/IconSets/Makefile \
-	WindowMaker/Sounds/Makefile \
 	WPrefs.app/Makefile WPrefs.app/tiff/Makefile WPrefs.app/xpm/Makefile \
 	WPrefs.app/po/Makefile )
 
@@ -653,32 +784,15 @@ dnl
 dnl Spit out the configuration
 dnl ==========================
 
-formats="XPM PPM"
-a=0
-for i in $GFXFLAGS; do
-    case "$i" in
-    	-DUSE_GIF)
-		formats="$formats GIF"
-		;;
-	-DUSE_TIFF)
-		formats="$formats TIFF"
-		;;
-	-DUSE_PNG)
-		formats="$formats PNG"
-		;;
-	-DUSE_JPEG)
-		formats="$formats JPEG"
-		;;
-    esac
-done
+supported_gfx="$supported_gfx PPM (built-in)"
 
 echo
-echo "WindowMaker was configured as follows:"
+echo "Window Maker was configured as follows:"
 echo
 echo "Installation path prefix: $prefix"
 echo "Installation path prefix for binaries: $exec_prefix"
 echo "Installation path for WPrefs.app: $wprefsdir"
-echo "Graphic format libraries: $formats"
+echo "Graphic format libraries: $supported_gfx"
 if test "x$MOFILES" = "x"; then
 	mof=none
 else
@@ -688,9 +802,6 @@ echo "Translated message files to install: $mof"
 if test "x$MOFILES" != "x"; then
 	echo "Installation path of translated messages: $NLSDIR"
 fi
-
-echo "What!? WPrefs.app won't be installed where you want it?"
-echo "May I point to you to the INSTALL file?"
 
 
 dnl This is for Emacs.  I'm lazy, I know... (nicolai)

@@ -1,7 +1,6 @@
 
-#include "wraster.h"
-
 #include <X11/Xlib.h>
+#include "wraster.h"
 #include <stdio.h>
 
 Display *dpy;
@@ -57,12 +56,12 @@ void main(int argc, char **argv)
 #endif
 
     if (!img) {
-	puts(RErrorString);
+	puts(RMessageForError(RErrorCode));
 	exit(1);
     }
     new = RLoadImage(ctx, "tile.xpm", 0);
     if (!new) {
-	puts(RErrorString);
+	puts(RMessageForError(RErrorCode));
 	exit(1);
     }
     RCombineArea(new, img, 0, 0, img->width, img->height, 8, 8);

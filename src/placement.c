@@ -1,6 +1,6 @@
 /* placement.c - window and icon placement on screen
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -325,13 +325,13 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret)
     int extra_height;
 
     if (wwin->frame)
-	extra_height = wwin->frame->top_width + wwin->frame->bottom_width;
+	extra_height = wwin->frame->top_width + wwin->frame->bottom_width + 2;
     else
 	extra_height = 24; /* random value */
     
     swidth = scr->scr_width;
     sx = X_ORIGIN;
-    if (scr->dock && wPreferences.no_window_under_dock) {
+    if (scr->dock && !scr->dock->lowered) {
         if (scr->dock->on_right_side)
             swidth -= wPreferences.icon_size + DOCK_EXTRA_SPACE;
         else if (X_ORIGIN < wPreferences.icon_size + DOCK_EXTRA_SPACE)
@@ -459,7 +459,7 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret)
         if (wPreferences.window_placement == WPM_CASCADE)
             scr->cascade_index++;
 
-        if (scr->dock && wPreferences.no_window_under_dock) {
+        if (scr->dock && !scr->dock->lowered) {
             int x2;
 
             x2 = *x_ret + wwin->client.width;
@@ -484,7 +484,7 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret)
 	    if (h<1) h = 1;
 	    *x_ret = rand()%w;
 	    *y_ret = rand()%h;
-	    if (scr->dock && wPreferences.no_window_under_dock) {
+	    if (scr->dock && !scr->dock->lowered) {
 		int x2;
 		    
 		x2 = *x_ret + wwin->client.width;

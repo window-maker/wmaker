@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -271,7 +271,7 @@ wTextureMakePixmap(WScreen *scr, int style, char *pixmap_file, XColor *color)
     image = RLoadImage(scr->rcontext, file, 0);
     if (!image) {
 	wwarning(_("could not load texture pixmap \"%s\":%s"), file,
-			RErrorString);
+			RMessageForError(RErrorCode));
 	free(file);
 	return NULL;
     }
@@ -374,7 +374,7 @@ wTextureRenderImage(WTexture *texture, int width, int height, int relief)
     }
 
     if (!image) {
-	wwarning(_("could not render texture: %s"), RErrorString);
+	wwarning(_("could not render texture: %s"), RMessageForError(RErrorCode));
 	return None;
     }
 
@@ -485,11 +485,11 @@ renderTexture(WScreen *scr, int width, int height, WTexture *texture,
     img = wTextureRenderImage(texture, width, height, rel);
     
     if (!img) {
-	wwarning(_("could not render texture: %s"), RErrorString);
+	wwarning(_("could not render texture: %s"), RMessageForError(RErrorCode));
 	return None;
     }
     if (!RConvertImage(scr->rcontext, img, &pix)) {
-	wwarning(_("error rendering image:%s"), RErrorString);
+	wwarning(_("error rendering image:%s"), RMessageForError(RErrorCode));
     }
     RDestroyImage(img);
     return pix;
@@ -497,7 +497,8 @@ renderTexture(WScreen *scr, int width, int height, WTexture *texture,
  
 
 void
-wDrawBevel(WCoreWindow *core, WTexSolid *texture, int relief)
+wDrawBevel(Drawable d, unsigned width, unsigned height,
+	   WTexSolid *texture, int relief)
 {
     GC light, dim, dark;
     XSegment segs[4];
@@ -514,53 +515,54 @@ wDrawBevel(WCoreWindow *core, WTexSolid *texture, int relief)
      case WREL_RAISED:
      case WREL_ICON:
 	segs[0].x1 = 1;
-	segs[0].x2 = core->width - 2;
-	segs[0].y2 = segs[0].y1 = core->height - 2;
-	segs[1].x1 = core->width - 2;
+	segs[0].x2 = width - 2;
+	segs[0].y2 = segs[0].y1 = height - 2;
+	segs[1].x1 = width - 2;
 	segs[1].y1 = 1;
-	segs[1].x2 = core->width - 2;
-	segs[1].y2 = core->height - 2;
-	XDrawSegments(dpy, core->window, dim, segs, 2);
+	segs[1].x2 = width - 2;
+	segs[1].y2 = height - 2;
+	XDrawSegments(dpy, d, dim, segs, 2);
 	segs[0].x1 = 0;
-	segs[0].x2 = core->width - 1;
-	segs[0].y2 = segs[0].y1 = core->height - 1;
-	segs[1].x1 = segs[1].x2 = core->width - 1;
+	segs[0].x2 = width - 1;
+	segs[0].y2 = segs[0].y1 = height - 1;
+	segs[1].x1 = segs[1].x2 = width - 1;
 	segs[1].y1 = 0;
-	segs[1].y2 = core->height - 1;
-	XDrawSegments(dpy, core->window, dark, segs, 2);
+	segs[1].y2 = height - 1;
+	XDrawSegments(dpy, d, dark, segs, 2);
 	segs[0].x1 = segs[0].y1 = segs[0].y2 = 0;
-	segs[0].x2 = core->width - 2;
+	segs[0].x2 = width - 2;
 	segs[1].x1 = segs[1].y1 = 0;
 	segs[1].x2 = 0;
-	segs[1].y2 = core->height - 2;
-	XDrawSegments(dpy, core->window, light, segs, 2);
+	segs[1].y2 = height - 2;
+	XDrawSegments(dpy, d, light, segs, 2);
 	if (relief==WREL_ICON) {
 	    segs[0].x1 = segs[0].y1 = segs[0].y2 = 1;
-	    segs[0].x2 = core->width - 2;
+	    segs[0].x2 = width - 2;
 	    segs[1].x1 = segs[1].y1 = 1;
 	    segs[1].x2 = 1;
-	    segs[1].y2 = core->height - 2;
-	    XDrawSegments(dpy, core->window, light, segs, 2);
+	    segs[1].y2 = height - 2;
+	    XDrawSegments(dpy, d, light, segs, 2);
 	}
 	break;
-		
+#ifdef unused		
      case WREL_SUNKEN:
 	segs[0].x1 = 0;
-	segs[0].x2 = core->width - 1;
+	segs[0].x2 = width - 1;
 	segs[0].y2 = segs[0].y1 = 0;
 	segs[1].x1 = segs[1].x2 = 0;
 	segs[1].y1 = 0;
-	segs[1].y2 = core->height - 1;
-	XDrawSegments(dpy, core->window, dark, segs, 2);
+	segs[1].y2 = height - 1;
+	XDrawSegments(dpy, d, dark, segs, 2);
 	
 	segs[0].x1 = 0;
-	segs[0].y1 = segs[0].y2 = core->height - 1;
-	segs[0].x2 = core->width - 1;
-	segs[1].x2 = segs[1].x1 = core->width - 1;
+	segs[0].y1 = segs[0].y2 = height - 1;
+	segs[0].x2 = width - 1;
+	segs[1].x2 = segs[1].x1 = width - 1;
 	segs[1].y1 = 1;
-	segs[1].y2 = core->height - 1;
-	XDrawSegments(dpy, core->window, light, segs, 2);
-	break;	
+	segs[1].y2 = height - 1;
+	XDrawSegments(dpy, d, light, segs, 2);
+	break;
+#endif
     }
 }
 

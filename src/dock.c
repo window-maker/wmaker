@@ -1,6 +1,6 @@
 /* dock.c- built-in Dock module for WindowMaker
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -69,22 +69,6 @@
 #define CLIP_IDLE         0
 #define CLIP_FORWARD      2
 
-/* This should be 24. It looks better. 
- * Proof: the golden ratio is ~1.6:
- * 64/1.6 = 24, thus 24 will look better than 22 :)
- * -Alfredo
- *
- * This is true, but...  ;)
- * CLIP_BUTTON_SIZE only means the button itself, without the black delimiting
- * line. So because one sees the black line together with the button, it should
- * be 23. There is no big difference between 23 and 24, but 23 gives also a
- * better aspect ratio between the button and the arrow mark.
- * Anyway if you feel stronger for 24 you can change it as it is not very
- * important.
- *
- * BTW I think you meant 64-64/1.6=24 or 64/(1.6*1.6) ;)
- * -Dan
- */
 #define CLIP_BUTTON_SIZE  23
 
 
@@ -260,6 +244,9 @@ killCallback(WMenu *menu, WMenuEntry *entry)
     assert(entry->clientdata!=NULL);
     
     icon = (WAppIcon*)entry->clientdata;
+    
+    icon->editing = 1;
+    
 #ifdef REDUCE_APPICONS
     /* Send a delete message to the main window of each application
      * bound to this docked appicon. - cls
@@ -286,6 +273,8 @@ killCallback(WMenu *menu, WMenuEntry *entry)
 	}
     }
 #endif /* !REDUCE_APPICONS */
+    
+    icon->editing = 0;
 }
 
 
@@ -437,7 +426,7 @@ removeIconsCallback(WMenu *menu, WMenuEntry *entry)
 	selectedIcons = list_cons(clickedIcon, NULL);
     }
 
-    while(selectedIcons) {
+    while (selectedIcons) {
         aicon = selectedIcons->head;
         keepit = aicon->running && wApplicationOf(aicon->main_window);
         wDockDetach(dock, aicon);
@@ -475,7 +464,8 @@ keepIconsCallback(WMenu *menu, WMenuEntry *entry)
     if (!selectedIcons && clickedIcon!=dock->screen_ptr->clip_icon) {
 	char *command = NULL;
 			
-	if (!clickedIcon->command) {
+	if (!clickedIcon->command && !clickedIcon->editing) {
+	    clickedIcon->editing = 1;
 	    if (wInputDialog(dock->screen_ptr, _("Keep Icon"),
 			     _("Type the command used to launch the application"),
 			     &command)==WDB_OK) {
@@ -485,7 +475,9 @@ keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 		    command = NULL;
 		}
 		clickedIcon->command = command;
+		clickedIcon->editing = 0;
 	    } else {
+		clickedIcon->editing = 0;
 		if (command)
 		    free(command);
 		return;
@@ -913,7 +905,7 @@ updateClipOptionsMenu(WMenu *menu, WDock *dock)
     if (!menu || !dock)
         return;
 
-    /* floating */
+    /* keep on top */
     entry = menu->entries[index];
     entry->flags.indicator_on = !dock->lowered;
     entry->clientdata = dock;
@@ -955,7 +947,7 @@ makeClipOptionsMenu(WScreen *scr)
 	return NULL;
     }
 
-    entry = wMenuAddCallback(menu, _("Floating Clip"),
+    entry = wMenuAddCallback(menu, _("Keep Clip On Top"),
                              toggleLoweredCallback, NULL);
     entry->flags.indicator = 1;
     entry->flags.indicator_on = 1;
@@ -1003,7 +995,7 @@ dockMenuCreate(WScreen *scr, int type)
 
     menu = wMenuCreate(scr, NULL, False);
     if (type != WM_CLIP) {
-        entry = wMenuAddCallback(menu, _("Floating Dock"),
+        entry = wMenuAddCallback(menu, _("Keep Dock On Top"),
                                  toggleLoweredCallback, NULL);
         entry->flags.indicator = 1;
         entry->flags.indicator_on = 1;
@@ -1919,6 +1911,7 @@ wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 
     wwin = icon->icon->owner;
     if (icon->command==NULL) {
+	icon->editing = 0;
 	if (XGetCommand(dpy, wwin->client_win, &argv, &argc) && argc>0) {
 	    
 	    icon->command = FlattenStringList(argv, argc);
@@ -1928,6 +1921,7 @@ wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 	    
 /*	    icon->forced_dock = 1;*/
             if (!icon->attracted || dock->type!=WM_CLIP || dock->keep_attracted) {
+		icon->editing = 1;
                 if (wInputDialog(dock->screen_ptr, _("Dock Icon"),
                                  _("Type the command used to launch the application"),
 				 &command)==WDB_OK) {
@@ -1937,7 +1931,9 @@ wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
                         command = NULL;
                     }
                     icon->command = command;
+		    icon->editing = 0;
                 } else {
+		    icon->editing = 0;
 		    if (command)
 			free(command);
 		    /* If the target is the dock, reject the icon. If
@@ -1949,13 +1945,15 @@ wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 			    icon->icon->shadowed = 1;
 			    icon->icon->force_paint = 1;
 			}
-		    } else
+		    } else {
 			return False;
+		    }
                 }
             }
 	}
+    } else {
+	icon->editing = 0;
     }
-    
 
     for (index=1; index<dock->max_icons; index++)
         if (dock->icon_array[index] == NULL)
@@ -2044,6 +2042,7 @@ moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y)
         } else {
             char *command=NULL;
 
+	    icon->editing = 1;
 /*            icon->forced_dock = 1;*/
             if (wInputDialog(src->screen_ptr, _("Dock Icon"),
 			     _("Type the command used to launch the application"),
@@ -2055,10 +2054,12 @@ moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y)
                 }
                 icon->command = command;
             } else {
+		icon->editing = 0;
 		if (command)
 		    free(command);
 		return False;
             }
+	    icon->editing = 0;
         }
     }
 
@@ -2207,9 +2208,9 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
     int dx, dy;
     int ex_x, ex_y;
     int i, offset = ICON_SIZE/2;
-    int only_down = (dock->type == WM_DOCK);
     WAppIcon *aicon = NULL;
     WAppIcon *nicon = NULL;
+
 
     dx = dock->x_pos;
     dy = dock->y_pos;
@@ -2231,50 +2232,116 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
     else
         ex_x = (req_x + offset - dx)/ICON_SIZE;
 
-    if ((ex_y < 1 || ex_x != 0) && only_down)
-        return False;
+    /* check if the icon is outside the screen boundaries */
+    if (dx + ex_x*ICON_SIZE < -ICON_SIZE+2 ||
+	dx + ex_x*ICON_SIZE > scr->scr_width-1 ||
+	dy + ex_y*ICON_SIZE < -ICON_SIZE+2 ||
+	dy + ex_y*ICON_SIZE > scr->scr_height-1)
+	return False;
 
-    if (dock->x_pos + ex_x*ICON_SIZE < -ICON_SIZE+2 ||
-        dock->x_pos + ex_x*ICON_SIZE > scr->scr_width-1 ||
-        dock->y_pos + ex_y*ICON_SIZE < -ICON_SIZE+2 ||
-        dock->y_pos + ex_y*ICON_SIZE > scr->scr_height-1)
-        return False;
+    if (dock->type == WM_DOCK) {
+	for (i=0; i<dock->max_icons; i++) {
+	    nicon = dock->icon_array[i];
+	    if (nicon && nicon->yindex == ex_y) {
+		aicon = nicon;
+		break;
+	    }
+	}
 
-    for (i=0; i<dock->max_icons; i++) {
-        nicon = dock->icon_array[i];
-        if (nicon && nicon->xindex == ex_x && nicon->yindex == ex_y) {
-            aicon = nicon;
-            break;
-        }
-    }
+	*ret_x = 0;
 
-    if (!only_down) {
-        int neighbours = 0;
-        for (i=0; i<dock->max_icons; i++) {
-            nicon = dock->icon_array[i];
-            if (nicon && nicon != icon && /* Icon can't be it's own neighbour */
-                (abs(nicon->xindex - ex_x) <= CLIP_ATTACH_VICINITY &&
-                 abs(nicon->yindex - ex_y) <= CLIP_ATTACH_VICINITY)) {
-                neighbours = 1;
-                break;
-            }
-        }
-        if ((!redocking && neighbours && !aicon) ||
-            (redocking && neighbours && (aicon == icon || !aicon))) {
-            *ret_x = ex_x;
-            *ret_y = ex_y;
-            return True;
-        }
+	if (redocking) {
+	    int sig, done, closest;
+
+	    /* Possible cases when redocking:
+	     *
+	     * icon dragged out of range of any slot -> false
+	     * icon dragged to range of free slot
+	     * icon dragged to range of same slot
+	     * icon dragged to range of different icon
+	     */
+	    if (abs(ex_x) > DOCK_DETTACH_THRESHOLD)
+		return False;
+
+	    if (ex_y >=0 && (aicon == icon || !aicon)) {
+
+		*ret_y = ex_y;
+
+		return True;
+	    }
+
+	    /* start looking at the upper slot or lower? */
+	    if (ex_y*ICON_SIZE < (req_y + offset - dy))
+		sig = 1;
+	    else
+		sig = -1;
+
+	    closest = -1;
+	    done = 0;
+	    /* look for closest free slot */
+	    for (i=0; i<(DOCK_DETTACH_THRESHOLD+1)*2 && !done; i++) {
+		int j;
+
+		done = 1;
+		closest = sig*(i/2) + ex_y;
+		/* check if this slot is used */
+		if (closest >= 0) {
+		    for (j = 0; j<dock->max_icons; j++) {
+			if (dock->icon_array[j] 
+			    && dock->icon_array[j]->yindex==closest) {
+			    /* slot is used by someone else */
+			    if (dock->icon_array[j]!=icon)
+				done = 0;
+			    break;
+			}
+		    }
+		}
+		sig = -sig;
+	    }
+	    if (done && closest >= 0 &&
+		((ex_y >= closest && ex_y - closest < DOCK_DETTACH_THRESHOLD+1)
+		||
+		 (ex_y < closest && closest - ex_y <= DOCK_DETTACH_THRESHOLD+1))) {
+
+		*ret_y = closest;
+
+		return True;
+	    }
+	} else { /* !redocking */
+
+	    /* if slot is free and the icon is close enough, return it */
+	    if (!aicon && ex_x==0 && ex_y>=0) {
+		*ret_y = ex_y;
+		return True;
+	    }
+	}
+    } else { /* CLIP */
+	int neighbours = 0;
+
+	for (i=0; i<dock->max_icons; i++) {
+	    nicon = dock->icon_array[i];
+	    if (nicon && nicon->xindex == ex_x && nicon->yindex == ex_y) {
+		aicon = nicon;
+		break;
+	    }
+	}
+	
+	for (i=0; i<dock->max_icons; i++) {
+	    nicon = dock->icon_array[i];
+	    if (nicon && nicon != icon && /* Icon can't be it's own neighbour */
+		(abs(nicon->xindex - ex_x) <= CLIP_ATTACH_VICINITY &&
+		 abs(nicon->yindex - ex_y) <= CLIP_ATTACH_VICINITY)) {
+		neighbours = 1;
+		break;
+	    }
+	}
+	if ((!redocking && neighbours && !aicon) ||
+	    (redocking && neighbours && (aicon == icon || !aicon))) {
+	    *ret_x = ex_x;
+	    *ret_y = ex_y;
+	    return True;
+	}
     }
-    else {
-        if ((!redocking && !aicon) ||
-            (redocking && (aicon==icon || !aicon))) {
-            *ret_x = 0;
-            *ret_y = ex_y;
-            return True;
-        }
-    }
-    
     return False;
 }
 
@@ -2296,18 +2363,12 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 {
     WScreen *scr = dock->screen_ptr;
     WAppIcon *btn;
-#if 1
     unsigned char *slot_map;
     int mwidth;
     int r;
     int x, y;
     int i, done = False;
     int corner;
-#else
-    int n = MAX(dock->max_icons, MAX(scr->scr_width, scr->scr_height)/ICON_SIZE + 1);
-    unsigned char *north, *south, *east, *west;
-    int i, j, done=False;
-#endif
     int sx=0, sy=0, ex=scr->scr_width, ey=scr->scr_height;
 
     /* if the dock is full */
@@ -2326,7 +2387,6 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
         ex = dock->x_pos;
     if (sx > dock->x_pos+ICON_SIZE)
         sx = dock->x_pos+ICON_SIZE;
-#if 1
 #define C_NONE 0
 #define C_NW 1
 #define C_NE 2
@@ -2347,9 +2407,6 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 	    corner = C_NONE;
     } else
 	corner = C_NONE;
-    
-    /* This one checks for diagonal positions, uses less memory
-     * and CPU. -Alfredo */
     
     /* If the clip is in the corner, use only slots that are in the border
      * of the screen */
@@ -2530,90 +2587,6 @@ wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
     free(slot_map);
 #undef XY2OFS
     return done;
-#else
-    north = (unsigned char*) wmalloc(sizeof(unsigned char) * n);
-    south = (unsigned char*) wmalloc(sizeof(unsigned char) * n);
-    east  = (unsigned char*) wmalloc(sizeof(unsigned char) * n);
-    west  = (unsigned char*) wmalloc(sizeof(unsigned char) * n);
-
-    /* We allow 3 passes to find a free position. This can be increased,
-     * but usually is more than enough for a normal (<25 icons/clip)
-     * environment. 25 free slots are found in the first pass for a
-     * 1024x768 screen size.
-     *
-     */
-    for (i=0; i<3 && !done; i++) {
-        memset(north, 0, sizeof(unsigned char) * n);
-        memset(south, 0, sizeof(unsigned char) * n);
-        memset(east,  0, sizeof(unsigned char) * n);
-        memset(west,  0, sizeof(unsigned char) * n);
-        for (j=0; j<dock->max_icons; j++) {
-            btn = dock->icon_array[j];
-            if (!btn)
-                continue;
-
-            if (btn->yindex == i && btn->xindex >= 0)
-                east[btn->xindex] = 1;
-            else if (btn->yindex == -i && btn->xindex < 0)
-                west[-(btn->xindex)] = 1;
-            else if (btn->xindex == -i && btn->yindex >= 0)
-                south[btn->yindex] = 1;
-            else if (btn->xindex == i && btn->yindex < 0)
-                north[-(btn->yindex)] = 1;
-        }
-        for (j=1; j<n; j++) {
-            int x, y;
-
-            if (east[j]==0) {
-                x = dock->x_pos + j*ICON_SIZE;
-                y = dock->y_pos + i*ICON_SIZE;
-                if (ON_SCREEN(x, y, sx, ex, sy, ey)) {
-                    *x_pos = j;
-                    *y_pos = i;
-                    done = True;
-                    break;
-                }
-            }
-            if (west[j]==0) {
-                x = dock->x_pos + (-j)*ICON_SIZE;
-                y = dock->y_pos + (-i)*ICON_SIZE;
-                if (ON_SCREEN(x, y, sx, ex, sy, ey)) {
-                    *x_pos = -j;
-                    *y_pos = -i;
-                    done = True;
-                    break;
-                }
-            }
-            if (south[j]==0) {
-                x = dock->x_pos + (-i)*ICON_SIZE;
-                y = dock->y_pos + (j)*ICON_SIZE;
-                if (ON_SCREEN(x, y, sx, ex, sy, ey)) {
-                    *x_pos = -i;
-                    *y_pos = j;
-                    done = True;
-                    break;
-                }
-            }
-            if (north[j]==0) {
-                x = dock->x_pos + (i)*ICON_SIZE;
-                y = dock->y_pos + (-j)*ICON_SIZE;
-                if (ON_SCREEN(x, y, sx, ex, sy, ey)) {
-                    *x_pos = i;
-                    *y_pos = -j;
-                    done = True;
-                    break;
-                }
-            }
-        }
-    }
-
-    free(north);
-    free(south);
-    free(east);
-    free(west);
-
-    return done;   /* If done is True this means that we found a free slot */
-#endif
 }
 
 
@@ -2727,8 +2700,8 @@ execCommand(WAppIcon *btn, char *command, WSavedState *state)
             else
                 state->workspace = scr->current_workspace;
         }
-        wAddWindowSavedState(btn->wm_instance, btn->wm_class,
-                             cmdline, pid, state);
+        wWindowAddSavedState(btn->wm_instance, btn->wm_class, cmdline, pid,
+			     state);
         wAddDeathHandler(pid, (WDeathHandler*)trackDeadProcess,
                          btn->dock);
     } else if (state) {
@@ -3051,7 +3024,7 @@ openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
     int appIsRunning = aicon->running && aicon->icon && aicon->icon->owner;
     
     if (dock->type == WM_DOCK) {
-	/* floating */
+	/* keep on top */
 	entry = dock->menu->entries[index];
 	entry->flags.indicator_on = !dock->lowered;
 	entry->clientdata = dock;
@@ -3124,8 +3097,7 @@ openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
     
     if (dock->type == WM_CLIP) {
 	x_pos = event->xbutton.x_root+2;
-    }
-    else {
+    } else {
 	x_pos = dock->on_right_side ?
 	    scr->scr_width - dock->menu->frame->core->width - 2 : 0;
     }
@@ -3609,13 +3581,6 @@ handleClipChangeWorkspace(WScreen *scr, XEvent *event)
     int new_dir;
     WDock *clip = scr->clip_icon->dock;
 
-    /* if this is reached during startup (before the 1st wWorkspaceForceChange)
-     * we will get undesired effects, like having all windows unmapped and
-     * don't having them back if the clip buttons are clicked.
-     */
-    if (scr->flags.startup2 || scr->flags.startup)
-	return;
-    
     direction = getClipButton(event->xbutton.x, event->xbutton.y);
 
     clip->lclip_button_pushed = direction==CLIP_REWIND;
@@ -3680,6 +3645,9 @@ iconMouseDown(WObjDescriptor *desc, XEvent *event)
     WAppIcon *aicon = desc->parent;
     WDock *dock = aicon->dock;
     WScreen *scr = aicon->icon->core->screen_ptr;
+
+    if (aicon->editing)
+	return;
 
     scr->last_dock = dock;
 

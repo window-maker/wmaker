@@ -25,9 +25,9 @@ and faster than say, Motif or even Athena. Knowing Xlib will help you to
 workaround some of it's limitations, although you'll probably be able to 
 write something like a trivial tic-tac-toe game without knowing much Xlib.
 
-   Some of it's functions are designed to support the WindowMaker window
+   Some of it's functions are designed to support the Window Maker window
 manager (see http://windowmaker.org) In fact, it's primary role is to
-support WindowMaker. All other uses of it are just an added bonus.
+support Window Maker. All other uses of it are just an added bonus.
 
    It will help you to understand the API if you read the ApplicationKit
 reference manual, distributed as a PDF by Apple. The function names,

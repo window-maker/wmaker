@@ -8,6 +8,13 @@ If I18N support does not work for you, check these:
 	  can check if your locale is supported by X's locale emulation.
 	  See "/usr/X11R6/lib/X11/locale/locale.alias"
 
+	- Check if you're using appropriate fonts for the locale you
+	  chose. If you're using a font set that has a different 
+	  encoding than the one used by Xlib or libc, bad things can
+	  happen. Try specifically putting the encoding in the LANG 
+	  variable, like ru_RU.KOI8-R. Again, see
+	  "/usr/X11R6/lib/X11/locale/locale.alias"
+
 	- if your OS doesn't support any locale or if your OS doesn't 
  	  support a locale for your language, you can use X Window System's
 	  locale emulation feature instead of OS's locale. To use this

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Install WindowMaker for the current user
+# Install Window Maker for the current user
 #
 
 # directory where system wide configuration is stored
@@ -16,9 +16,22 @@ BINDIR="#bindir#"
 
 make_script() {
 	ISCRIPT=$1
-	echo '#!/bin/sh' >> $ISCRIPT
-	echo '# WindowMaker Default .xinitrc' >> $ISCRIPT
-	echo "exec $BINDIR/wmaker" >> $ISCRIPT
+
+	cat << EOF >> $ISCRIPT
+#!/bin/sh
+# Window Maker default X session startup script 
+
+PATH="\$PATH:$BINDIR"
+
+# If you login from xdm, uncomment this to make error messages appear
+# in the console window.
+#
+# tail -f $HOME/.xsession-errors > /dev/console
+
+exec wmaker
+
+EOF
+	chmod +rx $ISCRIPT
 }
 
 
@@ -51,7 +64,7 @@ echo "Installing WindowMaker $VERSION for current user..."
 
 if [ ! -d $GLOBALDIR ]; then
       echo "Could not find global configurations files"
-      echo "Make sure you've installed WindowMaker correctly"
+      echo "Make sure you've installed Window Maker correctly"
       exit 1
 fi
 
@@ -175,6 +188,14 @@ else
 fi
 
 
+if [ ! -d "$GSDIR/Library/WindowMaker/SoundSets" ]; then
+	echo "Creating sound set library $GSDIR/Library/WindowMaker/SoundSets"
+	mkdir  $GSDIR/Library/WindowMaker/SoundSets
+else
+	echo "Default SoundSets directory already exists. Skipping..."
+fi
+
+
 echo "Copying default menu configuration files..."
 FILES=`(cd $GLOBALDIR;ls -1 menu* plmenu wmmacros)`
 all=""
@@ -206,11 +227,28 @@ chmod +rx $GSDIR/Library/WindowMaker/autostart
 
 DATE=`date +%m%d%H%M`
 
+show_end_message() {
+
+echo
+echo "Installation Finished"
+echo
+echo "There are menus in 2 different file formats. The plain text format and"
+echo "the property list format. The plain text format is more flexible, but"
+echo "the menu in the property list format can be edited graphically. The"
+echo "menu that will be used by default is the plain text. Read"
+echo "$GSDIR/Library/WindowMaker/README for information on how to change it."
+
+}
+
+
+trap "show_end_message;exit" 2
+
 echo
 echo "Now the .xinitrc, .Xclients or .xsession script must be updated so that"
 echo "it calls wmaker when you start an X session."
 echo "Type the name of the file that must be changed (normally .xinitrc)."
 echo "If the file already exists, it will be backed up with a .old.$DATE extension"
+echo "If you want to edit it by hand, hit <Control>-C now."
 read file
 
 if test "x$file" = "x"; then
@@ -224,12 +262,5 @@ fi
 
 make_script $USERDIR/$file
 
-echo "Installation Finished"
-echo
-echo "There are menus in 2 different file formats. The plain text format and"
-echo "the property list format. The plain text format is more flexible, but"
-echo "the menu in the property list format can be edited graphically. The"
-echo "menu that will be used by default is the plain text. Read"
-echo "$GSDIR/Library/WindowMaker/README for information on how to change it."
-
+show_end_message
 

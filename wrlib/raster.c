@@ -29,12 +29,10 @@
 
 #include <assert.h>
 
-#define MAXERRLEN	512
 
+char *WRasterLibVersion="0.9";
 
-char *WRasterLibVersion="0.2";
-
-char RErrorString[MAXERRLEN];
+int RErrorCode=RERR_NONE;
 
 
 
@@ -48,7 +46,7 @@ RCreateImage(unsigned width, unsigned height, int alpha)
 
     image = malloc(sizeof(RImage));
     if (!image) {
-        sprintf(RErrorString, "out of memory");
+	RErrorCode = RERR_NOMEMORY;
         return NULL;
     }
 
@@ -69,7 +67,7 @@ RCreateImage(unsigned width, unsigned height, int alpha)
     }
     if (image)
       free(image);
-    sprintf(RErrorString, "out of memory");
+    RErrorCode = RERR_NOMEMORY;
     return NULL;
 }
 
@@ -207,11 +205,10 @@ RCombineImages(RImage *image, RImage *src)
 	    *dg = (((int)*dg * calpha) + ((int)*sg * alpha))/256;
 	    *db = (((int)*db * calpha) + ((int)*sb * alpha))/256;
 	    if (image->data[3])
-		*da |= *sa;
+		*da++ |= *sa;
 	    dr++;    dg++;    db++;    
 	    sr++;    sg++;    sb++;
 	    sa++;
-	    da++;
 	}
     }
 }
@@ -223,7 +220,7 @@ void
 RCombineImagesWithOpaqueness(RImage *image, RImage *src, int opaqueness)
 {
     register int i;
-    unsigned char *dr, *dg, *db;
+    unsigned char *dr, *dg, *db, *da;
     unsigned char *sr, *sg, *sb, *sa;
     int c_opaqueness;
 
@@ -234,6 +231,7 @@ RCombineImagesWithOpaqueness(RImage *image, RImage *src, int opaqueness)
     dr = image->data[0];
     dg = image->data[1];
     db = image->data[2];
+    da = image->data[3];
 
     sr = src->data[0];
     sg = src->data[1];
@@ -255,14 +253,30 @@ RCombineImagesWithOpaqueness(RImage *image, RImage *src, int opaqueness)
     } else {
 	int tmp;
 
-	for (i=0; i<image->width*image->height; i++) {
-	        tmp= (*sa * opaqueness)/256;
-		*dr = (((int)*dr *(int)(255-tmp)) + ((int)*sr *(int)tmp))/256;
-		*dg = (((int)*dg *(int)(255-tmp)) + ((int)*sg *(int)tmp))/256;
-		*db = (((int)*db *(int)(255-tmp)) + ((int)*sb *(int)tmp))/256;
+	if (image->data[3]) {
+	    for (i=0; i<image->width*image->height; i++) {
+		tmp = (*sa * opaqueness)/256;
+		*dr = (((int)*dr * (255-tmp)) + ((int)*sr * tmp))/256;
+		*dg = (((int)*dg * (255-tmp)) + ((int)*sg * tmp))/256;
+		*db = (((int)*db * (255-tmp)) + ((int)*sb * tmp))/256;
+		*da |= tmp;
+
 		dr++;    dg++;    db++;
 		sr++;    sg++;    sb++;
 		sa++;
+		da++;
+	    }
+	} else {
+	    for (i=0; i<image->width*image->height; i++) {
+		tmp = (*sa * opaqueness)/256;
+		*dr = (((int)*dr * (255-tmp)) + ((int)*sr * tmp))/256;
+		*dg = (((int)*dg * (255-tmp)) + ((int)*sg * tmp))/256;
+		*db = (((int)*db * (255-tmp)) + ((int)*sb * tmp))/256;
+
+		dr++;    dg++;    db++;
+		sr++;    sg++;    sb++;
+		sa++;
+	    }
 	}
     }
 #undef OP

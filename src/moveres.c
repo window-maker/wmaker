@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -70,10 +70,10 @@ wGetGeometryWindowSize(WScreen *scr, unsigned int *width,
 {
 #ifdef I18N_MB
     *width = XmbTextEscapement(scr->info_text_font->font, "-8888 x -8888", 13);
-    *height = (3 * scr->info_text_font->height) / 2;
+    *height = (7 * scr->info_text_font->height) / 4 - 1;
 #else
     *width = XTextWidth(scr->info_text_font->font, "-8888 x -8888", 13);
-    *height = (3 * scr->info_text_font->font->ascent) / 2;
+    *height = (7 * scr->info_text_font->font->ascent) / 4 - 1;
 #endif
 }
 
@@ -132,7 +132,9 @@ showPosition(WWindow *wwin, int x, int y)
 		  scr->scr_height);
 #endif
     } else {
-	XClearWindow(dpy, scr->geometry_display);
+	XClearArea(dpy, scr->geometry_display, 1, 1, 
+		   scr->geometry_display_width-2, scr->geometry_display_height-2,
+		   False);
 	sprintf(num, "%+i  %-+i", x, y);
 	fw = wTextWidth(scr->info_text_font->font, num, strlen(num));
 	
@@ -143,6 +145,9 @@ showPosition(WWindow *wwin, int x, int y)
 		    (scr->geometry_display_width - 2 - fw) / 2,
 		    (scr->geometry_display_height-fh)/2 + scr->info_text_font->y,
 		    num, strlen(num));
+	wDrawBevel(scr->geometry_display, scr->geometry_display_width+1,
+		   scr->geometry_display_height+1, scr->resizebar_texture[0],
+		   WREL_RAISED);
     }
 }
 
@@ -326,7 +331,9 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 	wDrawString(root, scr->info_text_font, gc,
 		    mx - fw/2 + 1, y - s + fh/2 + 1, num, strlen(num));	
     } else {
-	XClearWindow(dpy, scr->geometry_display);
+	XClearArea(dpy, scr->geometry_display, 1, 1, 
+		   scr->geometry_display_width-2, scr->geometry_display_height-2,
+		   False);
 	sprintf(num, "%i x %-i", (x2 - x1 - wwin->normal_hints->base_width)
 		/ wwin->normal_hints->width_inc,
 		(by - ty - wwin->normal_hints->base_height)
@@ -342,6 +349,9 @@ showGeometry(WWindow *wwin, int x1, int y1, int x2, int y2, int direction)
 		    (scr->geometry_display_width-fw)/2,
 		    (scr->geometry_display_height-fh)/2 +scr->info_text_font->y,
 		    num, strlen(num));
+	wDrawBevel(scr->geometry_display, scr->geometry_display_width+1,
+		   scr->geometry_display_height+1, scr->resizebar_texture[0],
+		   WREL_RAISED);
     }
 }
 

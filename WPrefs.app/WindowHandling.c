@@ -1,6 +1,6 @@
 /* WindowHandling.c- options for handling windows
  * 
- *  WPrefs - WindowMaker Preferences Program
+ *  WPrefs - Window Maker Preferences Program
  * 
  *  Copyright (c) 1998 Alfredo K. Kojima
  * 
@@ -44,7 +44,6 @@ typedef struct _Panel {
     
     WMFrame *maxiF;
     WMButton *miconB;
-    WMButton *mdockB;
     
     WMFrame *opaqF;
     WMButton *opaqB;
@@ -99,11 +98,11 @@ getPlacement(char *str)
     if (strcasecmp(str, "auto")==0 || strcasecmp(str, "smart")==0)
 	return 0;
     else if (strcasecmp(str, "random")==0)
-	return 3;
+	return 1;
     else if (strcasecmp(str, "manual")==0)
 	return 2;
     else if (strcasecmp(str, "cascade")==0)
-	return 1;
+	return 3;
     else
 	wwarning(_("bad option value %s in WindowPlacement. Using default value"),
 		 str);
@@ -145,8 +144,6 @@ showData(_Panel *panel)
     WMSetButtonSelected(panel->opaqB, GetBoolForKey("OpaqueMove"));
     
     WMSetButtonSelected(panel->miconB, GetBoolForKey("NoWindowOverIcons"));
-    
-    WMSetButtonSelected(panel->mdockB, GetBoolForKey("NoWindowUnderDock"));
 }
 
 
@@ -157,7 +154,6 @@ storeData(_Panel *panel)
     char x[16], y[16];
     
     SetBoolForKey(WMGetButtonSelected(panel->miconB), "NoWindowOverIcons");
-    SetBoolForKey(WMGetButtonSelected(panel->mdockB), "NoWindowUnderDock");
     SetBoolForKey(WMGetButtonSelected(panel->opaqB), "OpaqueMove");
     SetBoolForKey(WMGetButtonSelected(panel->tranB), "OnTopTransients");
     SetStringForKey(placements[WMGetPopUpButtonSelectedItem(panel->placP)],
@@ -296,15 +292,10 @@ createPanel(Panel *p)
     WMSetFrameTitle(panel->maxiF, _("When maximizing..."));
     
     panel->miconB = WMCreateSwitchButton(panel->maxiF);
-    WMResizeWidget(panel->miconB, 185, 20);
+    WMResizeWidget(panel->miconB, 185, 35);
     WMMoveWidget(panel->miconB, 10, 20);
     WMSetButtonText(panel->miconB, _("...do not resize over icons"));
-    
-    panel->mdockB = WMCreateSwitchButton(panel->maxiF);
-    WMResizeWidget(panel->mdockB, 185, 20);
-    WMMoveWidget(panel->mdockB, 10, 40);
-    WMSetButtonText(panel->mdockB, _("...do not resize over dock"));
-    
+
     WMMapSubwidgets(panel->maxiF);
     
     /****************  Transients On Top ****************/

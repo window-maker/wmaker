@@ -1,6 +1,6 @@
 /* appicon.c- icon for applications (not mini-window)
  *
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -153,7 +153,9 @@ wAppIconCreate(WWindow *leader_win)
     aicon->prev = NULL;
     aicon->next = scr->app_icon_list;
     if (scr->app_icon_list) {
-#ifdef REDUCE_APPICONS
+#ifndef REDUCE_APPICONS
+        scr->app_icon_list->prev = aicon;
+#else
 	/* If we aren't going to have a match, jump straight to new appicon */
 	if (leader_win->wm_class == NULL || leader_win->wm_class == NULL)
 	    atmp = NULL;
@@ -185,11 +187,9 @@ wAppIconCreate(WWindow *leader_win)
 	    atmp = atmp->next;
 	}
 	if (atmp == NULL) {
-#endif
-        scr->app_icon_list->prev = aicon;
-#ifdef REDUCE_APPICONS
+	    scr->app_icon_list->prev = aicon;
 	}
-#endif
+#endif /* REDUCE_APPICONS */
     }
     scr->app_icon_list = aicon;
 
@@ -658,6 +658,9 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
     int clickButton = event->xbutton.button;
     Pixmap ghost = None;
 
+    if (aicon->editing)
+	return;
+    
     if (IsDoubleClick(scr, event)) {
 	iconDblClick(desc, event);
 	return;

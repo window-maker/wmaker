@@ -1,6 +1,6 @@
 /* menu.c- generic menu, used for root menu, application menus etc.
  *
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -51,8 +51,8 @@ extern WPreferences wPreferences;
 
 #define MOD_MASK wPreferences.modifier_mask
 
-#define MENU_SCROLL_STEP  menuScrollParameters[wPreferences.menu_scroll_speed].steps
-#define MENU_SCROLL_DELAY menuScrollParameters[wPreferences.menu_scroll_speed].delay
+#define MENU_SCROLL_STEP  menuScrollParameters[(int)wPreferences.menu_scroll_speed].steps
+#define MENU_SCROLL_DELAY menuScrollParameters[(int)wPreferences.menu_scroll_speed].delay
 
 
 
@@ -858,7 +858,8 @@ keyboardMenu(WMenu *menu)
     while (!done) {
 	XAllowEvents(dpy, AsyncKeyboard, CurrentTime);
 	WMMaskEvent(dpy, ExposureMask|ButtonMotionMask|ButtonPressMask
-		   |ButtonReleaseMask|KeyPressMask|KeyReleaseMask, &event);
+		    |ButtonReleaseMask|KeyPressMask|KeyReleaseMask
+		    |SubstructureNotifyMask, &event);
 	
 	switch (event.type) {
 	 case KeyPress:
@@ -1750,7 +1751,7 @@ menuExpose(WObjDescriptor *desc, XEvent *event)
 typedef struct {
     int *delayed_select;
     WMenu *menu;
-    WMagicNumber magic;
+    WMHandlerID magic;
 } delay_data;
 
 
@@ -1853,7 +1854,7 @@ menuMouseDown(WObjDescriptor *desc, XEvent *event)
     }
 
     while (!done) {
-      int x, y;
+	int x, y;
 	WMMaskEvent(dpy, ExposureMask|ButtonMotionMask|ButtonReleaseMask
 		    |ButtonPressMask, &ev);
 	switch (ev.type) {

@@ -42,6 +42,7 @@ char *alloca ();
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
 #include "wraster.h"
 
@@ -100,7 +101,7 @@ RGetImageFromXPMData(RContext *context, char **data)
 
     if (!color_table[0] || !color_table[1] || !color_table[2] ||
 	!color_table[3] || !symbol_table || !bsize) {
-	sprintf(RErrorString, "out of memory while converting XPM data");
+	RErrorCode = RERR_MEMORY;
 	alloca(0);
 	return NULL;
     }
@@ -149,7 +150,6 @@ RGetImageFromXPMData(RContext *context, char **data)
 
     image = RCreateImage(w, h, transp);
     if (!image) {
-	sprintf(RErrorString, "out of memory while converting XPM data");
 	alloca(0);
 	return NULL;
     }
@@ -205,7 +205,7 @@ RGetImageFromXPMData(RContext *context, char **data)
     return image;
 
   bad_format:
-    sprintf(RErrorString, "XPM data is not in the normalized format");
+    RErrorCode = RERR_BADIMAGEFILE;
 #ifdef C_ALLOCA
     alloca(0);
 #endif
@@ -234,7 +234,7 @@ RLoadXPM(RContext *context, char *file, int index)
     
     f = fopen(file, "r");
     if (!f) {
-	sprintf(RErrorString, "can't open XPM file \"%s\"", file);
+	RErrorCode = RERR_OPEN;
 	return NULL;
     }
     /* sig */
@@ -270,8 +270,7 @@ RLoadXPM(RContext *context, char *file, int index)
 
     if (!color_table[0] || !color_table[1] || !color_table[2] ||
 	!color_table[3] || !symbol_table || !bsize) {
-	sprintf(RErrorString, "out of memory while loading XPM file \"%s\"",
-		file);
+	RErrorCode = RERR_MEMORY;
 	fclose(f);
 	alloca(0);
 	return NULL;
@@ -325,8 +324,6 @@ RLoadXPM(RContext *context, char *file, int index)
 
     image = RCreateImage(w, h, transp);
     if (!image) {
-	sprintf(RErrorString, "out of memory while loading XPM file \"%s\"",
-		file);
 	fclose(f);
 	alloca(0);
 	return NULL;
@@ -390,7 +387,7 @@ RLoadXPM(RContext *context, char *file, int index)
     return image;
 
   bad_format:
-    sprintf(RErrorString, "XPM file \"%s\" is not in the normalized format", file);
+    RErrorCode = RERR_BADIMAGEFILE;
     fclose(f);
 #ifdef C_ALLOCA
     alloca(0);
@@ -400,7 +397,7 @@ RLoadXPM(RContext *context, char *file, int index)
     return NULL;
     
   bad_file:
-    sprintf(RErrorString, "bad XPM file \"%s\"", file);
+    RErrorCode = RERR_BADIMAGEFILE;
     fclose(f);
 #ifdef C_ALLOCA
     alloca(0);
@@ -411,3 +408,214 @@ RLoadXPM(RContext *context, char *file, int index)
 }
 
 #endif
+
+
+typedef struct XPMColor {
+    unsigned char red;
+    unsigned char green;
+    unsigned char blue;
+    char text[12];
+    struct XPMColor *next;
+} XPMColor;
+
+
+
+#define I2CHAR(i)	((i)<12 ? (i)+'0' : ((i)<38 ? (i)+'A'-12 : (i)+'a'-38))
+#define CINDEX(xpmc)	(((unsigned)(xpmc)->red)<<16|((unsigned)(xpmc)->green)<<8|((unsigned)(xpmc)->blue))
+
+
+
+static XPMColor*
+lookfor(XPMColor *list, int index)
+{
+    if (!list)
+	return NULL;
+
+    for (; list!=NULL; list=list->next) {
+	if (CINDEX(list) == index)
+	    return list;
+    }
+    return NULL;
+}
+
+/*
+ * Looks for the color in the colormap and inserts if it is not found.
+ * 
+ * list is a binary search list. The unbalancing problem is just ignored.
+ * 
+ * Returns False on error
+ */
+static Bool
+addcolor(XPMColor **list, unsigned r, unsigned g, unsigned b, int *colors)
+{
+    XPMColor *tmpc;
+    XPMColor *newc;
+    int index;
+
+    index = r<<16|g<<8|b;
+    tmpc = *list;
+
+    tmpc = lookfor(*list, index);
+
+    if (tmpc)
+	return True;
+
+    newc = malloc(sizeof(XPMColor));
+
+    if (!newc) {
+
+	RErrorCode = RERR_NOMEMORY;
+
+	return False;
+    }
+
+    newc->red = r;
+    newc->green = g;
+    newc->blue = b;
+    newc->next = *list;
+    *list = newc;
+
+    (*colors)++;
+
+    return True;
+}
+
+
+static void
+outputcolormap(FILE *file, XPMColor *colormap, int colorCount)
+{
+    int j;
+    int i,index;
+
+    if (!colormap)
+	return;
+
+    for (index=0; colormap!=NULL; colormap=colormap->next,index++) {
+	j = index;
+	for (i=0; i<colorCount/64+1; i++) {
+	    colormap->text[i] = I2CHAR(j&63);
+	    j >>= 5;
+	}
+	colormap->text[i] = 0;
+	fprintf(file, "\"%s c #%02x%02x%02x\",\n", colormap->text, colormap->red,
+		colormap->green, colormap->blue);
+    }
+}
+
+
+static void
+freecolormap(XPMColor *colormap)
+{
+    XPMColor *tmp;
+    
+    while (colormap) {
+	tmp = colormap->next;
+	free(colormap);
+	colormap = tmp;
+    }
+}
+
+
+
+/* save routine is common to internal support and library support */
+Bool 
+RSaveXPM(RImage *image, char *filename)
+{
+    FILE *file;
+    int x, y;
+    int colorCount=0;
+    XPMColor *colormap = NULL;
+    XPMColor *tmpc;
+    int i;
+    int ok = 0;
+    unsigned char *r, *g, *b, *a;
+    char transp[16];
+
+    file = fopen(filename, "w+");
+    if (!file) {
+	RErrorCode = RERR_OPEN;
+	return False;
+    }
+
+    fprintf(file, "/* XPM */\n");
+
+    fprintf(file, "static char *image[] = {\n");
+
+    r = image->data[0];
+    g = image->data[1];
+    b = image->data[2];
+    a = image->data[3];
+
+    /* first pass: make colormap for the image */
+    if (a)
+	colorCount = 1;
+    for (y = 0; y < image->height; y++) {
+	for (x = 0; x < image->width; x++) {
+	    if (!a || *a++>127)
+		if (!addcolor(&colormap, *r, *g, *b, &colorCount)) {
+		    goto uhoh;
+		}
+	    r++; g++; b++;
+	}
+    }
+
+    /* write header info */
+    fprintf(file, "\"%i %i %i %i\",\n", image->width, image->height, 
+	    colorCount, colorCount/64+1);
+
+
+    /* write colormap data */
+    if (image->data[3]) {
+	for (i=0; i<colorCount/64+1; i++)
+	    transp[i] = ' ';
+	transp[i] = 0;
+
+	fprintf(file, "\"%s c None\",\n", transp);
+    }
+    
+    i = 0;
+    outputcolormap(file, colormap, colorCount);
+
+    r = image->data[0];
+    g = image->data[1];
+    b = image->data[2];
+    a = image->data[3];
+
+    /* write data */
+    for (y = 0; y < image->height; y++) {
+
+	fprintf(file, "\"");
+
+	for (x = 0; x < image->width; x++) {
+
+	    if (!a || *a++>127) {
+		tmpc = lookfor(colormap, (unsigned)*r<<16|(unsigned)*g<<8|(unsigned)*b);
+
+		fprintf(file, tmpc->text);
+	    } else {
+		fprintf(file, transp);
+	    }
+
+	    r++; g++; b++;
+	}
+
+	if (y < image->height-1)
+	    fprintf(file, "\",\n");
+	else
+	    fprintf(file, "\"};\n");
+    }
+
+    ok = 1;
+uhoh:
+    errno = 0;
+    fclose(file);
+    if (ok && errno==ENOSPC) {
+	RErrorCode = RERR_WRITE;
+    }
+
+    freecolormap(colormap);
+
+    return ok ? True : False;
+}
+
+

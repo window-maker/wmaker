@@ -1,6 +1,6 @@
 /* MouseSettings.c- mouse options (some are equivalent to xset)
  * 
- *  WPrefs - WindowMaker Preferences Program
+ *  WPrefs - Window Maker Preferences Program
  * 
  *  Copyright (c) 1998 Alfredo K. Kojima
  * 
@@ -738,8 +738,8 @@ createPanel(Panel *p)
     WMSetFrameTitle(panel->grabF, _("Mouse Grab Modifier"));
     
     panel->grabP = WMCreatePopUpButton(panel->grabF);
-    WMResizeWidget(panel->grabP, 120, 20);
-    WMMoveWidget(panel->grabP, 60, 25);
+    WMResizeWidget(panel->grabP, 160, 20);
+    WMMoveWidget(panel->grabP, 40, 25);
 
     fillModifierPopUp(panel->grabP);
     

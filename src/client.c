@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -58,6 +58,11 @@ extern Atom _XA_WINDOWMAKER_MENU;
 extern Atom _XA_GNUSTEP_WM_ATTR;
 extern Atom _XA_GNUSTEP_WM_RESIZEBAR;
 
+#ifdef SHAPE
+extern Bool wShapeSupported;
+#endif
+
+
 /*
  *--------------------------------------------------------------------
  * wClientRestore--
@@ -72,8 +77,8 @@ wClientRestore(WWindow *wwin)
     
     wClientGetGravityOffsets(wwin, &gx, &gy);
     /* set the positio of the frame on screen */
-    wwin->frame_x -= gx * (wwin->old_border_width - FRAME_BORDER_WIDTH);
-    wwin->frame_y -= gy * (wwin->old_border_width - FRAME_BORDER_WIDTH);
+    wwin->frame_x -= gx * FRAME_BORDER_WIDTH;
+    wwin->frame_y -= gy * FRAME_BORDER_WIDTH;
     /* if gravity is to the south, account for the border sizes */
     if (gy > 0)
 	wwin->frame_y += (wwin->frame->top_width + wwin->frame->bottom_width);
@@ -105,7 +110,7 @@ wClientRestore(WWindow *wwin)
 void
 wClientSetState(WWindow *wwin, int state, Window icon_win)
 {
-    unsigned long data[2];
+    CARD32 data[2];
     
     wwin->state = state;
 
@@ -186,7 +191,7 @@ wClientConfigure(WWindow *wwin, XConfigureRequestEvent *xcre)
 	return;
     }
 #ifdef SHAPE
-    {
+    if (wShapeSupported) {
 	int junk;
 	unsigned int ujunk;
 	int b_shaped;
@@ -492,9 +497,16 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 	
      case XA_WM_NORMAL_HINTS:
 	/* normal (geometry) hints */
-	
-	XGetWindowAttributes(dpy, wwin->client_win, &attribs);
-	GetNormalHints(wwin, &attribs, False);
+	{
+	    int foo;
+	    unsigned bar;
+
+	    XGetWindowAttributes(dpy, wwin->client_win, &attribs);
+	    wClientGetNormalHints(wwin, &attribs, False, &foo, &foo,
+				  &bar, &bar);
+	    /* TODO: should we check for consistency of the current
+	     * size against the new geometry hints? */
+	}
 	break;
 	
      case XA_WM_TRANSIENT_FOR:
@@ -593,17 +605,19 @@ wClientCheckProperty(WWindow *wwin, XPropertyEvent *event)
 
 /*
  *---------------------------------------------------------------------- 
- * GetNormalHints--
+ * wClientGetNormalHints--
  * 	Get size (normal) hints and a default geometry for the client 
- * window. The hints are also checked for inconsistency.
+ * window. The hints are also checked for inconsistency. If geometry is
+ * True, the returned data will account for client specified initial
+ * geometry.
  * 
  * Side effects:
- * 	normal_hints is filled with valid data and geometry information 
- * about the client is also changed.
+ * 	normal_hints is filled with valid data.
  *---------------------------------------------------------------------- 
  */
 void
-GetNormalHints(WWindow *wwin, XWindowAttributes *wattribs, int geometry)
+wClientGetNormalHints(WWindow *wwin, XWindowAttributes *wattribs, Bool geometry,
+		      int *x, int *y, unsigned *width, unsigned *height)
 {
     int pre_icccm=0;
     
@@ -614,11 +628,11 @@ GetNormalHints(WWindow *wwin, XWindowAttributes *wattribs, int geometry)
     if (!PropGetNormalHints(wwin->client_win, wwin->normal_hints, &pre_icccm)) {
 	wwin->normal_hints->flags = 0;
     }
-    wwin->client.x = wattribs->x;
-    wwin->client.y = wattribs->y;
+    *x = wattribs->x;
+    *y = wattribs->y;
     
-    wwin->client.width = wattribs->width;
-    wwin->client.height = wattribs->height;
+    *width = wattribs->width;
+    *height = wattribs->height;
 
     if (!(wwin->normal_hints->flags & PWinGravity)) {
 	wwin->normal_hints->win_gravity = NorthWestGravity;
@@ -677,12 +691,12 @@ GetNormalHints(WWindow *wwin, XWindowAttributes *wattribs, int geometry)
 	printf("PRE ICCCM\n");	
 #endif	
 	if (wwin->normal_hints->flags & (USPosition|PPosition)) {
-	    wwin->client.x = wwin->normal_hints->x;
-	    wwin->client.y = wwin->normal_hints->y;
+	    *x = wwin->normal_hints->x;
+	    *y = wwin->normal_hints->y;
 	}
 	if (wwin->normal_hints->flags & (USSize|PSize)) {
-	    wwin->client.width = wwin->normal_hints->width;
-	    wwin->client.height = wwin->normal_hints->height;
+	    *width = wwin->normal_hints->width;
+	    *height = wwin->normal_hints->height;
 	}
     }
 }

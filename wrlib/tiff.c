@@ -57,7 +57,7 @@ RLoadTIFF(RContext *context, char *file, int index)
     i = index;
     while (i>0) {
 	if (!TIFFReadDirectory(tif)) {
-	    sprintf(RErrorString, "bad index %i for file \"%s\"", index, file);
+	    RErrorCode = RERR_BADINDEX;
 	    TIFFClose(tif);
 	    return NULL;
 	}
@@ -76,7 +76,7 @@ RLoadTIFF(RContext *context, char *file, int index)
     amode = (extrasamples == 1 && sampleinfo[0] == EXTRASAMPLE_ASSOCALPHA);
     
     if (width<1 || height<1) {
-	sprintf(RErrorString, "bad data in file \"%s\"", file);
+	RErrorCode = RERR_BADIMAGEFILE;
 	TIFFClose(tif);
 	return NULL;
     }
@@ -85,10 +85,10 @@ RLoadTIFF(RContext *context, char *file, int index)
     ptr = data = (uint32*)_TIFFmalloc(width * height * sizeof(uint32));
     
     if (!data) {
-	sprintf(RErrorString, "out of memory");
+	RErrorCode = RERR_NOMEMORY;
     } else {
 	if (!TIFFReadRGBAImage(tif, width, height, data, 0)) {
-	    sprintf(RErrorString, "error reading file \"%s\"", file);
+	    RErrorCode = RERR_BADIMAGEFILE;
 	} else {
 	    
 	    /* convert data */

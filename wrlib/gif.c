@@ -58,12 +58,22 @@ RLoadGIF(RContext *context, char *file, int index)
 	index = 0;
 
     /* default error message */
-    sprintf(RErrorString, "file does not contain image of index %i", index);
+    RErrorCode = RERR_BADINDEX;
 
     gif = DGifOpenFileName(file);
     
     if (!gif) {
-	sprintf(RErrorString, "could not load gif file");
+	switch (GifLastError()) {
+	 case D_GIF_ERR_OPEN_FAILED:
+	    RErrorCode = RERR_OPEN;
+	    break;
+	 case D_GIF_ERR_READ_FAILED:
+	    RErrorCode = RERR_READ;
+	    break;
+	 default:
+	    RErrorCode = RERR_BADIMAGEFILE;
+	    break;
+	}
 	return NULL;
     }
 
@@ -76,8 +86,7 @@ RLoadGIF(RContext *context, char *file, int index)
 	GifByteType *extension;
 
 	if (DGifGetRecordType(gif, &recType) == GIF_ERROR) {
-	    sprintf(RErrorString, "error while loading gif");
-	    goto bye;
+	    goto giferr;
 	}
 	switch (recType) {
 	 case IMAGE_DESC_RECORD_TYPE:
@@ -85,8 +94,7 @@ RLoadGIF(RContext *context, char *file, int index)
 		break;
 
 	    if (DGifGetImageDesc(gif)==GIF_ERROR) {
-		sprintf(RErrorString, "error while loading gif");
-		goto bye;
+		goto giferr;
 	    }
 	    
 	    width = gif->Image.Width;
@@ -103,7 +111,6 @@ RLoadGIF(RContext *context, char *file, int index)
 		 * lets just render it with whatever garbage the stack 
 		 * has :)
 		 * 
-		sprintf(RErrorString, "bad gif file");
 		
 		goto bye;
 		 */
@@ -117,13 +124,12 @@ RLoadGIF(RContext *context, char *file, int index)
 
 	    buffer = malloc(width * sizeof(GifColorType));
 	    if (!buffer) {
-		sprintf(RErrorString, "out of memory while loading gif");
+		RErrorCode = RERR_NOMEMORY;
 		goto bye;
 	    }
 
 	    image = RCreateImage(width, height, False);
 	    if (!image) {
-		sprintf(RErrorString, "out of memory while loading gif");
 		goto bye;
 	    }
 
@@ -134,8 +140,7 @@ RLoadGIF(RContext *context, char *file, int index)
 		    for (k = InterlacedOffset[j]; k < height;
 			 k += InterlacedJumps[j]) {
 			if (DGifGetLine(gif, buffer, width)==GIF_ERROR) {
-			    sprintf(RErrorString, "error while loading gif");
-			    goto bye;
+			    goto giferr;
 			}
 			ofs = k*width;
 			for (l = 0; l < width; l++, ofs++) {
@@ -149,8 +154,7 @@ RLoadGIF(RContext *context, char *file, int index)
 	    } else {
 		for (j = 0; j < height; j++) {
 		    if (DGifGetLine(gif, buffer, width)==GIF_ERROR) {
-			sprintf(RErrorString, "error while loading gif");
-			goto bye;
+			goto giferr;
 		    }
 		    for (k = 0; k < width; k++, ofs++) {
 			int pixel = buffer[k];
@@ -165,13 +169,11 @@ RLoadGIF(RContext *context, char *file, int index)
 	 case EXTENSION_RECORD_TYPE:
 	    /* skip all extension blocks */
 	    if (DGifGetExtension(gif, &extCode, &extension)==GIF_ERROR) {
-		sprintf(RErrorString, "error while loading gif");
-		goto bye;
+		goto giferr;
 	    }
 	    while (extension) {
 		if (DGifGetExtensionNext(gif, &extension)==GIF_ERROR) {
-		    sprintf(RErrorString, "error while loading gif");
-		    goto bye;
+		    goto giferr;
 		}
 	    }
 	    break;
@@ -183,6 +185,18 @@ RLoadGIF(RContext *context, char *file, int index)
 
     /* yuck! */
     goto did_not_get_any_errors;
+giferr:
+    switch (GifLastError()) {
+     case D_GIF_ERR_OPEN_FAILED:
+	RErrorCode = RERR_OPEN;
+	break;
+     case D_GIF_ERR_READ_FAILED:
+	RErrorCode = RERR_READ;
+	break;
+     default:
+	RErrorCode = RERR_BADIMAGEFILE;
+	break;
+    }    
 bye:
     if (image)
 	RDestroyImage(image);

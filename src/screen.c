@@ -1,6 +1,6 @@
 /* screen.c - screen management
  * 
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -402,7 +402,7 @@ createPixmaps(WScreen *scr)
 	wwarning(_("could not load logo image for panels"));
     } else {
 	if (!RConvertImageMask(scr->rcontext, image, &p, &m, 128)) {
-	    wwarning(_("error making logo image for panel:%s"), RErrorString);
+	    wwarning(_("error making logo image for panel:%s"), RMessageForError(RErrorCode));
 	} else {
 	    wmpix = WMCreatePixmapFromXPixmaps(scr->wmscreen, p, m,
 					       image->width, image->height, 
@@ -582,7 +582,7 @@ wScreenInit(int screen_number)
     scr->rcontext = RCreateContext(dpy, screen_number, &rattr);
     if (!scr->rcontext) {
 	wwarning(_("could not initialize graphics library context: %s"),
-		 RErrorString);
+		 RMessageForError(RErrorCode));
 	wAbort(False);
     } else {
 	char **formats;
@@ -713,6 +713,7 @@ wScreenSaveState(WScreen *scr)
     WWindow *wwin;
     char *str;
     proplist_t path, old_state, foo;
+    CARD32 data[2];
 
 
     make_keys();
@@ -722,11 +723,12 @@ wScreenSaveState(WScreen *scr)
  */
     wstate.workspace = scr->current_workspace;
 
+    data[0] = wstate.flags;
+    data[1] = wstate.workspace;
 
     XChangeProperty(dpy, scr->root_win, _XA_WINDOWMAKER_STATE,
                     _XA_WINDOWMAKER_STATE, 32, PropModeReplace,
-                    (unsigned char *) &wstate, 
-		    sizeof(WWorkspaceState)/sizeof(int));
+                    (unsigned char *) data, 2);
     
     /* save state of windows */
     wwin = scr->focused_window;

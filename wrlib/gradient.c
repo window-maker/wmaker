@@ -220,8 +220,8 @@ renderVGradient(unsigned width, unsigned height, int r0, int g0, int b0,
  *----------------------------------------------------------------------
  */
 #if 0
-/* This version is slower then the second below. It uses more operations,
- * most of them multiplication of floats. -Dan
+/* This version is slower then the one below. It uses more operations,
+ * most of them multiplication of floats. Dan.
  */
 static RImage*
 renderDGradient(unsigned width, unsigned height, int r0, int g0, int b0,

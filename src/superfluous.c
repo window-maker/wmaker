@@ -1,5 +1,5 @@
 /*
- *  WindowMaker window manager
+ *  Window Maker window manager
  * 
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
  * 
@@ -26,6 +26,8 @@
 
 #include <stdlib.h>
 #include <unistd.h>
+
+#include <time.h>
 
 #include <wraster.h>
 
@@ -57,41 +59,106 @@ play(Display *dpy, int pitch, int delay)
 }
 #endif
 
+#ifdef DEMATERIALIZE_ICON
+void
+DoKaboom(WScreen *scr, Window win, int x, int y)
+{
+    RImage *icon;
+    RImage *back;
+    RImage *image;
+    Pixmap pixmap;
+    XImage *ximage;
+    int i;
+    int w, h;
 
+    h = w = wPreferences.icon_size;
+    if (x < 0 || x + w > scr->scr_width || y < 0 || y + h > scr->scr_height)
+	return;
+
+    icon = RCreateImageFromDrawable(scr->rcontext, win, None);
+    if (!icon) 
+	return;
+
+    XUnmapWindow(dpy, win);
+    XSync(dpy, False);
+
+    ximage = XGetImage(dpy, scr->root_win, x, y, w, h, AllPlanes, ZPixmap);
+    back = RCreateImageFromXImage(scr->rcontext, ximage, NULL);
+    XDestroyImage(ximage);
+    if (!back) {
+	RDestroyImage(icon);
+	return;
+    }
+    
+    for (i=0; i<DEMATERIALIZE_STEPS; i++) {
+	image = RCloneImage(back);
+	RCombineImagesWithOpaqueness(image, icon, 
+		     (DEMATERIALIZE_STEPS-1-i)*256/(DEMATERIALIZE_STEPS+2));
+	RConvertImage(scr->rcontext, image, &pixmap);
+	XCopyArea(dpy, pixmap, scr->root_win, scr->copy_gc, 0, 0, w, h, x, y);
+	XFreePixmap(dpy, pixmap);
+	XFlush(dpy);
+    }
+    XClearArea(dpy, scr->root_win, x, y, w, h, False);
+    XFlush(dpy);
+
+    RDestroyImage(icon);
+    RDestroyImage(back);
+}
+
+#else /* !DEMATERIALIZE_ICON */
 void
 DoKaboom(WScreen *scr, Window win, int x, int y)
 {
     int i, j, k;
     int sw=scr->scr_width, sh=scr->scr_height;
-    short px[PIECES], py[PIECES];
+#define KAB_PRECISION	4
+    int px[PIECES];
+    short py[PIECES];
+#ifdef ICON_KABOOM_EXTRA
+    short ptx[2][PIECES], pty[2][PIECES];
+    int ll;
+#endif
     char pvx[PIECES], pvy[PIECES];
     char ax[PIECES], ay[PIECES];
     Pixmap tmp;
-    XImage *img;
-    
-    img=XGetImage(dpy, win, 0, 0, wPreferences.icon_size, 
-		  wPreferences.icon_size, AllPlanes, ZPixmap);
-    XUnmapWindow(dpy,win);
-    if (!img)
-      return;
+
     XSetClipMask(dpy, scr->copy_gc, None);
     tmp = XCreatePixmap(dpy, scr->root_win, wPreferences.icon_size, 
 			wPreferences.icon_size, scr->depth);
-    XPutImage(dpy, tmp, scr->copy_gc, img, 0, 0, 0, 0, wPreferences.icon_size,
-	      wPreferences.icon_size);
-    XDestroyImage(img);
-    for (i=0,k=0; i<wPreferences.icon_size/PSIZE; i++) {
-	for (j=0; j<wPreferences.icon_size/PSIZE; j++) {
-	    if (rand()%3) {
+    if (scr->w_visual == DefaultVisual(dpy, scr->screen))
+	XCopyArea(dpy, win, tmp, scr->copy_gc, 0, 0, wPreferences.icon_size,
+		  wPreferences.icon_size, 0, 0);
+    else {
+	XImage *image;
+
+	image = XGetImage(dpy, win, 0, 0, wPreferences.icon_size,
+			  wPreferences.icon_size, AllPlanes, ZPixmap);
+	if (!image) {
+	    XUnmapWindow(dpy, win);
+	    return;
+	}
+	XPutImage(dpy, tmp, scr->copy_gc, image, 0, 0, 0, 0, 
+		  wPreferences.icon_size, wPreferences.icon_size);
+	XDestroyImage(image);
+    }
+
+    for (i=0,k=0; i<wPreferences.icon_size/ICON_KABOOM_PIECE_SIZE && k<PIECES;
+	 i++) {
+	for (j=0; j<wPreferences.icon_size/ICON_KABOOM_PIECE_SIZE && k<PIECES;
+	     j++) {
+	    if (rand()%2) {
 		ax[k]=i;
 		ay[k]=j;
-		px[k]=x+i*PSIZE;
-		py[k]=y+j*PSIZE;
-		pvx[k]=rand()%7-3;
-#ifdef SPREAD_ICON
-                pvy[k]=rand()%7-3;
-#else
-                pvy[k]=-12-rand()%6;
+		px[k]=(x+i*ICON_KABOOM_PIECE_SIZE)<<KAB_PRECISION;
+		py[k]=y+j*ICON_KABOOM_PIECE_SIZE;
+		pvx[k]=rand()%(1<<(KAB_PRECISION+3))-(1<<(KAB_PRECISION+3))/2;
+                pvy[k]=-15-rand()%7;
+#ifdef ICON_KABOOM_EXTRA
+		for (ll=0; ll<2; ll++) {
+		    ptx[ll][k] = px[k];
+		    pty[ll][k] = py[k];
+		}
 #endif
 		k++;
 	    } else {
@@ -99,56 +166,82 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
 	    }
 	}
     }
+
+    XUnmapWindow(dpy, win);
+
     j=k;
     while (k>0) {
 	for (i=0; i<j; i++) {
 	    if (ax[i]>=0) {
+		int _px = px[i]>>KAB_PRECISION;
+#ifdef ICON_KABOOM_EXTRA
+		XClearArea(dpy, scr->root_win, ptx[1][i], pty[1][i],
+			   ICON_KABOOM_PIECE_SIZE, ICON_KABOOM_PIECE_SIZE,
+			   False);
+
+		ptx[1][i] = ptx[0][i];
+		pty[1][i] = pty[0][i];
+		ptx[0][i] = _px;
+		pty[0][i] = py[i];
+#else
+		XClearArea(dpy, scr->root_win, _px, py[i],
+			   ICON_KABOOM_PIECE_SIZE, ICON_KABOOM_PIECE_SIZE,
+			   False);
+#endif
 		px[i]+=pvx[i];
 		py[i]+=pvy[i];
-#ifdef SPREAD_ICON
-                pvx[i]+=(pvx[i]>0 ? 2 : -2);
-                pvy[i]+=(pvy[i]>0 ? 2 : -2);
-                /* The following are nice, but too slow.
-                 * The animation can have an unknown duration, depending
-                 * on what rand() returns. Until the animation ends, the user
-                 * cannot do anything, which is not too good. -Dan
-                 */
-                /*pvx[i]+=rand()%5-2;
-                pvy[i]+=rand()%5-2;*/
-
-#else
+		_px = px[i]>>KAB_PRECISION;
                 pvy[i]++;
-#endif
-                if (px[i]<-wPreferences.icon_size || px[i]>sw || py[i]>sh
-#ifdef SPREAD_ICON
-                    || px[i]<0 || py[i]<0
-#endif
-                   ) {
+                if (_px<-wPreferences.icon_size || _px>sw || py[i]>=sh) {
+#ifdef ICON_KABOOM_EXTRA
+		    if (py[i]>sh && _px<sw && _px>0) {
+			pvy[i] = -(pvy[i]/2);
+			if (abs(pvy[i]) > 3) {
+			    py[i] = sh-ICON_KABOOM_PIECE_SIZE;
+			    XCopyArea(dpy, tmp, scr->root_win, scr->copy_gc,
+				      ax[i]*ICON_KABOOM_PIECE_SIZE, 
+				      ay[i]*ICON_KABOOM_PIECE_SIZE,
+				      ICON_KABOOM_PIECE_SIZE, 
+				      ICON_KABOOM_PIECE_SIZE,
+				      _px, py[i]);
+			} else {
+			    ax[i] = -1;
+			}
+		    } else {
+			ax[i] = -1;
+		    }
+		    if (ax[i]<0) {
+			for (ll=0; ll<2; ll++)
+			    XClearArea(dpy, scr->root_win, ptx[ll][i], pty[ll][i],
+				       ICON_KABOOM_PIECE_SIZE, 
+				       ICON_KABOOM_PIECE_SIZE, False);
+			k--;
+		    }
+#else /* !ICON_KABOOM_EXTRA */
                     ax[i]=-1;
 		    k--;
+#endif /* !ICON_KABOOM_EXTRA */
 		} else {
 		    XCopyArea(dpy, tmp, scr->root_win, scr->copy_gc, 
-			      ax[i]*PSIZE, ay[i]*PSIZE, 
-			      PSIZE, PSIZE, px[i], py[i]);
+			      ax[i]*ICON_KABOOM_PIECE_SIZE, ay[i]*ICON_KABOOM_PIECE_SIZE,
+			      ICON_KABOOM_PIECE_SIZE, ICON_KABOOM_PIECE_SIZE,
+			      _px, py[i]);
 		}
 	    }
 	}
+
+	XFlush(dpy);
 #ifdef SPEAKER_SOUND
 	play(dpy, 100+rand()%250, 12);
 #else
-# if (MINIATURIZE_ANIMATION_DELAY_Z > 0)
+# if (MINIATURIZE_ANIMATION_DELAY_Z > 0)	
 	wusleep(MINIATURIZE_ANIMATION_DELAY_Z*2);
 # endif
 #endif
-	for (i=0; i<j; i++) {
-	    if (ax[i]>=0) {
-		XClearArea(dpy, scr->root_win, px[i], py[i], PSIZE, PSIZE, 1);
-	    }
-	}
     }
     XFreePixmap(dpy, tmp);
 }
-
+#endif /* !DEMATERIALIZE_ICON */
 
 
 Pixmap
@@ -275,6 +368,7 @@ DoWindowBirth(WWindow *wwin)
     int x, y;
     int dw, dh;
     int i;
+    time_t time0 = time(NULL);
 
     dw = (width-w)/WINDOW_BIRTH_STEPS;
     dh = (height-h)/WINDOW_BIRTH_STEPS;
@@ -294,8 +388,11 @@ DoWindowBirth(WWindow *wwin)
 	h += dh;
 	XMoveResizeWindow(dpy, wwin->frame->core->window, x, y, w, h);
 	XFlush(dpy);
+	/* a timeout */
+	if (time(NULL)-time0 > MAX_ANIMATION_TIME)
+	    break;
     }
-       
+
     XMoveResizeWindow(dpy, wwin->frame->core->window,
 		      wwin->frame_x, wwin->frame_y, width, height);
     XFlush(dpy);
