@@ -1,5 +1,22 @@
-/* WMRuler: nifty ruler widget for WINGs  (OK, for WMText ;-) */
-/* Copyleft (>) 1999, 2000 Nwanua Elumeze <nwanua@colorado.edu> */
+/*
+ *  WINGs WMRuler nifty ruler widget for WINGs  (OK, for WMText ;-) 
+ *
+ *  Copyright (c) 1999-2000 Nwanua Elumeze
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
 
 
 #include "WINGsP.h"
@@ -26,8 +43,9 @@ typedef struct W_Ruler {
 
     struct {
 	unsigned int buttonPressed:1;
-	/* 0, 1, 2, 3, 4, 5, 6 */
-	unsigned int whichMarker:3;	/* none, left, right, first, body, tabstop, both */
+	unsigned int whichMarker:3;
+	/*    0,    1,     2,     3,    4,       5,            6 */
+	/* none, left, right, first, body, tabstop, first & body */
 	unsigned int RESERVED:28;
     } flags;
 } Ruler;
@@ -43,7 +61,8 @@ typedef struct W_Ruler {
    |
 
  */
-static void drawLeftMarker(Ruler * rPtr)
+static void 
+drawLeftMarker(Ruler * rPtr)
 {
     XPoint points[4];
     int xpos = (rPtr->flags.whichMarker == 1 ?
@@ -66,9 +85,9 @@ static void drawLeftMarker(Ruler * rPtr)
 
 /* Marker for right margin
 
-   /|
-   / |
-   /__|
+  /|
+ / |
+/__|
    |
    |
 
