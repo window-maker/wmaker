@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,   
  *  USA.
  */
 #include "wconfig.h"
@@ -46,9 +46,6 @@
 #include "actions.h"
 #include "workspace.h"
 #include "appicon.h"
-#ifdef GNOME_STUFF
-#include "gnome.h"
-#endif
 #ifdef KWM_HINTS
 #include "kwm.h"
 #endif
@@ -134,18 +131,8 @@ wWorkspaceNew(WScreen *scr)
     wspace->height = scr->scr_height;
     wspace->width = scr->scr_width;
 #endif
-#ifdef GNOME_STUFF
-	wGNOMEUpdateWorkspaceHints(scr);
-#endif
-#ifdef KWM_HINTS
-	if (!scr->flags.kwm_syncing_count) {
-	    wKWMUpdateWorkspaceCountHint(scr);
-	    wKWMUpdateWorkspaceNameHint(scr, scr->workspace_count-1);
-	}
-#ifdef not_used
-	wKWMSetUsableAreaHint(scr, scr->workspace_count-1);
-#endif
-#endif
+	WMPostNotificationName(WMNWorkspaceCreated, scr,
+			       (void*)(scr->workspace_count-1));
 	XFlush(dpy);
 
 	return scr->workspace_count-1;
@@ -220,12 +207,8 @@ wWorkspaceDelete(WScreen *scr, int workspace)
 	wMenuRealize(menu);
     }
 
-#ifdef GNOME_STUFF
-    wGNOMEUpdateWorkspaceHints(scr);
-#endif
-#ifdef KWM_HINTS
-    wKWMUpdateWorkspaceCountHint(scr);
-#endif
+    WMPostNotificationName(WMNWorkspaceDestroyed, scr,
+			   (void*)(scr->workspace_count-1));
 
     if (scr->current_workspace >= scr->workspace_count)
 	wWorkspaceChange(scr, scr->workspace_count-1);
@@ -622,12 +605,8 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 
     showWorkspaceName(scr, workspace);
 
-#ifdef GNOME_STUFF
-    wGNOMEUpdateCurrentWorkspaceHint(scr);
-#endif
-#ifdef KWM_HINTS
-    wKWMUpdateCurrentWorkspaceHint(scr);
-#endif
+    WMPostNotificationName(WMNWorkspaceChanged, scr, (void*)workspace);
+
 /*   XSync(dpy, False); */
 }
 
@@ -919,17 +898,10 @@ wWorkspaceRename(WScreen *scr, int workspace, char *name)
 	}
     }
 
-    UpdateSwitchMenuWorkspace(scr, workspace);
-
     if (scr->clip_icon)
         wClipIconPaint(scr->clip_icon);
 
-#ifdef GNOME_STUFF
-    wGNOMEUpdateWorkspaceNamesHint(scr);
-#endif
-#ifdef KWM_HINTS
-    wKWMUpdateWorkspaceNameHint(scr, workspace);
-#endif
+    WMPostNotificationName(WMNWorkspaceNameChanged, scr, (void*)workspace);
 }
 
 
@@ -1112,13 +1084,9 @@ wWorkspaceRestoreState(WScreen *scr)
                 }
             }
         }
-#ifdef KWM_HINTS
-	wKWMUpdateWorkspaceNameHint(scr, i);
-#endif
+
+	WMPostNotificationName(WMNWorkspaceNameChanged, scr, (void*)i);
     }
-#ifdef GNOME_STUFF
-    wGNOMEUpdateWorkspaceNamesHint(scr);
-#endif
 }
 
 

@@ -35,14 +35,20 @@
 #include "actions.h"
 #include "properties.h"
 #include "stacking.h"
-#ifdef KWM_HINTS
-#include "kwm.h"
-#endif
+
 
 /*** Global Variables ***/
 extern XContext wStackContext;
 
 extern WPreferences wPreferences;
+
+
+static void notifyStackChange(WCoreWindow *frame, char *detail)
+{
+    WWindow *wwin = wWindowFor(frame->window);
+
+    WMPostNotificationName(WMNChangedStacking, wwin, detail);
+}
 
 
 /*
@@ -145,11 +151,9 @@ CommitStacking(WScreen *scr)
     }
     XRestackWindows(dpy, windows, i);
     wfree(windows);
+
     
-#ifdef KWM_HINTS
-    wKWMBroadcastStacking(scr);
-#endif
-    
+    WMPostNotificationName(WMNResetStacking, scr, NULL);
 }
 
 /*
@@ -172,10 +176,6 @@ moveFrameToUnder(WCoreWindow *under, WCoreWindow *frame)
     wins[0] = under->window;
     wins[1] = frame->window;
     XRestackWindows(dpy, wins, 2);
-
-#ifdef KWM_HINTS
-    wKWMBroadcastStacking(under->screen_ptr);
-#endif
 }
 
 /*
@@ -253,18 +253,12 @@ again:
     } else {
 	moveFrameToUnder(frame->stacking->above, frame);
     }
-#ifdef KWM_HINTS
-    {
-	WWindow *wwin = wWindowFor(frame->window);
 
-	if (wwin != NULL)
-	    wKWMSendEventMessage(wwin, WKWMRaiseWindow);
-    }
-#endif
+    notifyStackChange(frame, "raise");
+
 #ifdef VIRTUAL_DESKTOP
     wWorkspaceRaiseEdge(scr);
 #endif
-    
 }
 
 
@@ -374,15 +368,8 @@ wLowerFrame(WCoreWindow *frame)
     } else {
 	moveFrameToUnder(frame->stacking->above, frame);
     }
-#ifdef KWM_HINTS
-    {
-	WWindow *wwin = wWindowFor(frame->window);
 
-	if (wwin)
-	    wKWMSendEventMessage(wwin, WKWMLowerWindow);
-    }
-#endif
-        
+    notifyStackChange(frame, "lower");        
 }
 
 
@@ -446,8 +433,7 @@ AddToStackList(WCoreWindow *frame)
 	curtop->stacking->above = frame;
 	WMSetInBag(scr->stacking_list, index, frame);
     }
-    CommitStacking(scr);
-        
+    CommitStacking(scr);        
 }
 
 
@@ -516,7 +502,8 @@ MoveInStackListAbove(WCoreWindow *next, WCoreWindow *frame)
     } else {
         moveFrameToUnder(frame->stacking->above, frame);
     }
-        
+
+    WMPostNotificationName(WMNResetStacking, scr, NULL);
 }
 
 
@@ -561,6 +548,8 @@ MoveInStackListUnder(WCoreWindow *prev, WCoreWindow *frame)
     frame->stacking->under = prev->stacking->under;
     prev->stacking->under = frame;
     moveFrameToUnder(prev, frame);
+    
+    WMPostNotificationName(WMNResetStacking, scr, NULL);
 }
 
 

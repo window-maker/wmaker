@@ -16,6 +16,9 @@ Changes since version 0.65.1:
 - added spanish INSTALL file (Efrain Maximiliano Palermo <max_drake2001@yahoo.com.ar>)
 - updated Finnish pots (Tomi Kajala <tomi@iki.fi>)
 - copy/paste launching in Dock
+- fixed bug in positioning of window list menu when opened by kbd
+- internal code clean-up with notifications for window state change and other
+  stuff
 
 Changes since version 0.65.0:
 .............................

@@ -249,7 +249,6 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 	    if (wKeyBindings[WKBD_FOCUSNEXT].keycode == ev.xkey.keycode
 		&& wKeyBindings[WKBD_FOCUSNEXT].modifier == modifiers) {
 
-		UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
 		newFocused = nextToFocusAfter(newFocused);
 		wWindowFocus(newFocused, oldFocused);
 		oldFocused = newFocused;
@@ -260,12 +259,9 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 		    XRaiseWindow(dpy, newFocused->frame->core->window);
 		}
 
-		UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
-
 	    } else if (wKeyBindings[WKBD_FOCUSPREV].keycode == ev.xkey.keycode
 		       && wKeyBindings[WKBD_FOCUSPREV].modifier == modifiers) {
 
-		UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
 		newFocused = nextToFocusBefore(newFocused);
 		wWindowFocus(newFocused, oldFocused);
 		oldFocused = newFocused;
@@ -275,7 +271,6 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 		    CommitStacking(scr);
 		    XRaiseWindow(dpy, newFocused->frame->core->window);
 		}
-		UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
 
 	    } else {
 		somethingElse = True;

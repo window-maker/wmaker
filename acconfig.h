@@ -83,6 +83,9 @@
 /* define if your X server has XInternAtoms() */
 #undef HAVE_XINTERNATOMS
 
+/* define if your X server has XConvertCase() */
+#undef HAVE_XCONVERTCASE
+
 /* define if you want Hermes support */
 #undef HAVE_HERMES
 

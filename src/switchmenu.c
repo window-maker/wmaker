@@ -46,6 +46,10 @@ extern WPreferences wPreferences;
 extern Time LastTimestamp;
 
 
+static void observer(void *self, WMNotification *notif);
+static void wsobserver(void *self, WMNotification *notif);
+
+
 /*
  * FocusWindow
  *
@@ -91,6 +95,22 @@ OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard)
 {
     WMenu *switchmenu = scr->switch_menu;
     WWindow *wwin;
+    static int initialized = 0;
+    
+    if (!initialized) {
+	initialized = 1;
+
+	WMAddNotificationObserver(observer, NULL, WMNManaged, NULL);
+	WMAddNotificationObserver(observer, NULL, WMNUnmanaged, NULL);
+	WMAddNotificationObserver(observer, NULL, WMNChangedWorkspace, NULL);
+	WMAddNotificationObserver(observer, NULL, WMNChangedState, NULL);
+	WMAddNotificationObserver(observer, NULL, WMNChangedFocus, NULL);
+	WMAddNotificationObserver(observer, NULL, WMNChangedStacking, NULL);
+	WMAddNotificationObserver(observer, NULL, WMNChangedName, NULL);
+
+	WMAddNotificationObserver(wsobserver, NULL, WMNWorkspaceChanged, NULL);
+	WMAddNotificationObserver(wsobserver, NULL, WMNWorkspaceNameChanged, NULL);	
+    }
 
     if (switchmenu) {
 	if (switchmenu->flags.mapped) {
@@ -106,6 +126,9 @@ OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard)
 				   x-switchmenu->frame->core->width/2, y);
 	    }
 	} else {
+	    if (keyboard && x==scr->scr_width/2 && y==scr->scr_height/2) {
+		y = y - switchmenu->frame->core->height/2;
+	    }
 	    wMenuMapAt(switchmenu, x-switchmenu->frame->core->width/2, y,
 		       keyboard);
 	}
@@ -175,7 +198,7 @@ menuIndexForWindow(WMenu *menu, WWindow *wwin, int old_pos)
 /*
  * Update switch menu
  */
-void 
+void
 UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
 {
     WMenu *switchmenu = scr->switch_menu;
@@ -278,7 +301,7 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
 			int idx = -1;
 			char *t, *rt;
 			int it, ion;
-			
+
 			if (IS_OMNIPRESENT(wwin)) {
 			    snprintf(entry->rtext, MAX_WORKSPACENAME_WIDTH,
 				     "[*]");
@@ -367,13 +390,54 @@ UpdateSwitchMenuWorkspace(WScreen *scr, int workspace)
 	    if (IS_OMNIPRESENT(wwin))
 		snprintf(menu->entries[i]->rtext, MAX_WORKSPACENAME_WIDTH,"[*]");
 	    else
-		snprintf(menu->entries[i]->rtext, MAX_WORKSPACENAME_WIDTH,"[%s]", 
+		snprintf(menu->entries[i]->rtext, MAX_WORKSPACENAME_WIDTH,"[%s]",
 			scr->workspaces[wwin->frame->workspace]->name);
 	    menu->flags.realized = 0;
 	}
     }
     if (!menu->flags.realized)
 	wMenuRealize(menu);
+}
+
+
+static void observer(void *self, WMNotification *notif)
+{
+    WWindow *wwin = (WWindow*)WMGetNotificationObject(notif);
+    const char *name = WMGetNotificationName(notif);
+    void *data = WMGetNotificationClientData(notif);
+
+    if (strcmp(name, WMNManaged) == 0 && wwin)
+	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_ADD);
+    else if (strcmp(name, WMNUnmanaged) == 0 && wwin)
+	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_REMOVE);
+    else if (strcmp(name, WMNChangedWorkspace) == 0 && wwin)
+	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_WORKSPACE);
+    else if (strcmp(name, WMNChangedFocus) == 0 && wwin)
+	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
+    else if (strcmp(name, WMNChangedName) == 0 && wwin)
+	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE);
+    else if (strcmp(name, WMNChangedState) == 0 && wwin) {
+
+	if (strcmp((char*)data, "omnipresent") == 0) {
+	    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_WORKSPACE);
+	} else {
+	    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
+	}
+    }
+}
+
+
+static void wsobserver(void *self, WMNotification *notif)
+{
+    WScreen *scr = (WScreen*)WMGetNotificationObject(notif);
+    const char *name = WMGetNotificationName(notif);
+    void *data = WMGetNotificationClientData(notif);
+
+    if (strcmp(name, WMNWorkspaceNameChanged) == 0) {
+	UpdateSwitchMenuWorkspace(scr, (int)data);
+    } else if (strcmp(name, WMNWorkspaceChanged) == 0) {
+	
+    }
 }
 
 

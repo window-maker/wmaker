@@ -96,6 +96,7 @@ extern Time LastTimestamp;
 extern void DoWindowBirth(WWindow*);
 
 
+
 /***** Local Stuff *****/
 
 
@@ -1215,16 +1216,7 @@ wManageWindow(WScreen *scr, Window window)
     /* Update name must come after WApplication stuff is done */
     wWindowUpdateName(wwin, title);
     if (title)
-	XFree(title);
-    
-
-#ifdef GNOME_STUFF
-    wGNOMEUpdateClientStateHint(wwin, True);
-#endif
-#ifdef KWM_HINTS
-    wKWMUpdateClientWorkspace(wwin);
-    wKWMUpdateClientStateHint(wwin, KWMAllFlags);
-#endif
+	XFree(title);    
 
     XUngrabServer(dpy);
 
@@ -1250,19 +1242,14 @@ wManageWindow(WScreen *scr, Window window)
     if (!WFLAGP(wwin, no_bind_keys)) {
 	wWindowSetKeyGrabs(wwin);
     }
-#ifdef GNOME_STUFF
-    wGNOMEUpdateClientListHint(scr);
-#endif
-#ifdef KWM_HINTS
-    wwin->flags.kwm_managed = 1;
 
-    wKWMSendEventMessage(wwin, WKWMAddWindow);
-#endif
+
+    WMPostNotificationName(WMNManaged, wwin, NULL);
+
 
     wColormapInstallForWindow(scr, scr->cmap_window);
 
-    UpdateSwitchMenu(scr, wwin, ACTION_ADD);
-
+    
 #ifdef OLWM_HINTS
     if (wwin->client_flags.olwm_warp_to_pin && wwin->frame->titlebar != NULL
 	&& !WFLAGP(wwin, no_close_button) && !withdraw) {
@@ -1448,8 +1435,6 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
 
     wWindowSetKeyGrabs(wwin);
 
-    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_ADD);    
-
     return wwin;
 }
 
@@ -1476,12 +1461,6 @@ wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
     int wasFocused;
     WScreen *scr = wwin->screen_ptr;
 
-
-#ifdef KWM_HINTS
-    wwin->frame->workspace = -1;
-
-    wKWMUpdateClientWorkspace(wwin);
-#endif
 
     /* First close attribute editor window if open */
     if (wwin->flags.inspector_open) {
@@ -1516,8 +1495,6 @@ wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
        WMDeleteTimerWithClientData(wwin->frame->core);
 
     XFlush(dpy);
-
-    UpdateSwitchMenu(scr, wwin, ACTION_REMOVE);
 
     /* reparent the window back to the root */
     if (restore)
@@ -1609,12 +1586,7 @@ wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
     }
 
     if (!wwin->flags.internal_window) {
-#ifdef GNOME_STUFF
-	wGNOMERemoveClient(wwin);
-#endif
-#ifdef KWM_HINTS
-	wKWMSendEventMessage(wwin, WKWMRemoveWindow);
-#endif
+	WMPostNotificationName(WMNUnmanaged, wwin, NULL);
     }
 
 #ifdef DEBUG
@@ -1681,13 +1653,13 @@ wWindowFocus(WWindow *wwin, WWindow *owin)
     wwin->flags.semi_focused = 0;
 
     if (wwin->flags.is_gnustep == 0)
-      wFrameWindowChangeState(wwin->frame, WS_FOCUSED);
+	wFrameWindowChangeState(wwin->frame, WS_FOCUSED);
 
     wwin->flags.focused = 1;
 
     wWindowResetMouseGrabs(wwin);
 
-    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
+    WMPostNotificationName(WMNChangedFocus, wwin, (void*)True);
 
     if (owin == wwin || !owin)
 	return;
@@ -1737,8 +1709,8 @@ wWindowUnfocus(WWindow *wwin)
     CloseWindowMenu(wwin->screen_ptr);
 
     if (wwin->flags.is_gnustep == 0)
-      wFrameWindowChangeState(wwin->frame, wwin->flags.semi_focused 
-			    ? WS_PFOCUSED : WS_UNFOCUSED);
+	wFrameWindowChangeState(wwin->frame, wwin->flags.semi_focused 
+				? WS_PFOCUSED : WS_UNFOCUSED);
 
     if (wwin->transient_for!=None 
 	&& wwin->transient_for!=wwin->screen_ptr->root_win) {
@@ -1756,8 +1728,7 @@ wWindowUnfocus(WWindow *wwin)
 
     wWindowResetMouseGrabs(wwin);
 
-    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
-
+    WMPostNotificationName(WMNChangedFocus, wwin, (void*)False);
 }
 
 
@@ -1766,9 +1737,8 @@ wWindowUpdateName(WWindow *wwin, char *newTitle)
 {
     WApplication *app = wApplicationOf(wwin->main_window);
     int instIndex = 0;
-    Bool res;
     char prefix[32] = "";
-    char *tmp, *title;
+    char *title;
     
     if (!wwin->frame)
 	return;
@@ -1782,10 +1752,8 @@ wWindowUpdateName(WWindow *wwin, char *newTitle)
     if (!newTitle) {
 	/* the hint was removed */
 	title = DEF_WINDOW_TITLE;
-	
-#ifdef KWM_HINTS
-	wKWMSendEventMessage(wwin, WKWMChangedClient);
-#endif	
+
+	WMPostNotificationName(WMNChangedName, wwin, NULL);
     } else {
 	title = newTitle;
     }
@@ -1799,11 +1767,8 @@ wWindowUpdateName(WWindow *wwin, char *newTitle)
 #endif
     
     if (wFrameWindowChangeTitle(wwin->frame, title)) {
-	/* only update the menu if the title has actually changed */
-	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE);
-#ifdef KWM_HINTS
-	wKWMSendEventMessage(wwin, WKWMChangedClient);
-#endif
+
+	WMPostNotificationName(WMNChangedName, wwin, NULL);
     }
 
 #ifndef NO_WINDOW_ENUMERATOR
@@ -1996,16 +1961,13 @@ wWindowChangeWorkspace(WWindow *wwin, int workspace)
 	}
     }
     if (!IS_OMNIPRESENT(wwin)) {
+	int oldWorkspace = wwin->frame->workspace;
+	
 	wwin->frame->workspace = workspace;
-        UpdateSwitchMenu(scr, wwin, ACTION_CHANGE_WORKSPACE);
+
+	WMPostNotificationName(WMNChangedWorkspace, wwin, (void*)oldWorkspace);
     }
-#ifdef GNOME_STUFF
-    wGNOMEUpdateClientStateHint(wwin, True);
-#endif
-#ifdef KWM_HINTS
-    wKWMUpdateClientWorkspace(wwin);
-    wKWMSendEventMessage(wwin, WKWMChangedClient);
-#endif
+
     if (unmap) {
 	wWindowUnmap(wwin);
     }
@@ -2809,6 +2771,15 @@ wWindowDeleteSavedStatesForPID(pid_t pid)
 	    tmp = tmp->next;
 	}
     }    
+}
+
+
+void
+wWindowSetOmnipresent(WWindow *wwin, Bool flag)
+{
+    wwin->flags.omnipresent = flag;
+    
+    WMPostNotificationName(WMNChangedState, wwin, "omnipresent");
 }
 
 

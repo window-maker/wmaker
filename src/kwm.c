@@ -232,6 +232,11 @@ enum {
 
 
 
+static void observer(void *self, WMNotification *notif);
+static void wsobserver(void *self, WMNotification *notif);
+
+
+
 static Bool
 getSimpleHint(Window win, Atom atom, long *retval)
 {
@@ -637,6 +642,23 @@ wKWMInitStuff(WScreen *scr)
     SETSTR(KWM_STRING_TODESKTOP, _("Move To"));
     SETSTR(KWM_STRING_ONTOCURRENTDESKTOP, _("Bring Here"));
 #undef SETSTR
+    
+    /* catch any notifications from any objects */
+    
+    WMAddNotificationObserver(observer, scr, WMNManaged, NULL);
+    WMAddNotificationObserver(observer, scr, WMNUnmanaged, NULL);
+    WMAddNotificationObserver(observer, scr, WMNChangedWorkspace, NULL);
+    WMAddNotificationObserver(observer, scr, WMNChangedState, NULL);
+    WMAddNotificationObserver(observer, scr, WMNChangedFocus, NULL);
+    WMAddNotificationObserver(observer, scr, WMNChangedStacking, NULL);
+    WMAddNotificationObserver(observer, scr, WMNChangedName, NULL);
+
+    WMAddNotificationObserver(wsobserver, scr, WMNWorkspaceCreated, NULL);
+    WMAddNotificationObserver(wsobserver, scr, WMNWorkspaceDestroyed, NULL);
+    WMAddNotificationObserver(wsobserver, scr, WMNWorkspaceChanged, NULL);
+    WMAddNotificationObserver(wsobserver, scr, WMNWorkspaceNameChanged, NULL);
+    
+    WMAddNotificationObserver(wsobserver, scr, WMNResetStacking, NULL);    
 }
 
 
@@ -846,10 +868,7 @@ wKWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event)
 
 	if (flag != wwin->client_flags.omnipresent) {
 
-	    wwin->client_flags.omnipresent = flag;
-
-	    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_WORKSPACE);
-
+	    wWindowSetOmnipresent(wwin, flag);
 	}
     } else if (event->atom == _XA_KWM_WIN_MAXIMIZED) {
 	int bla = 0;
@@ -1039,8 +1058,7 @@ performWindowCommand(WScreen *scr, char *command)
     } else if (strcmp(command, "winSticky")==0) {
 
 	if (wwin) {
-	    wwin->client_flags.omnipresent ^= 1;
-	    UpdateSwitchMenu(scr, wwin, ACTION_CHANGE_WORKSPACE);
+	    wWindowSetOmnipresent(wwin, !wwin->client_flags.omnipresent);
 	}
 
     } else if (strcmp(command, "winShade")==0) {
@@ -1676,7 +1694,7 @@ wKWMSendEventMessage(WWindow *wwin, WKWMEventMessage message)
     sendToModules(wwin ? wwin->screen_ptr : NULL, msg, wwin, 0);
 }
 
-
+#if 0
 static void
 writeSocket(int sock, char *data)
 {
@@ -1772,7 +1790,7 @@ connectKFM(WScreen *scr)
 
     return sock;
 }
-
+#endif
 
 void
 wKWMSelectRootRegion(WScreen *scr, int x, int y, int w, int h, Bool control)
@@ -1792,6 +1810,111 @@ wKWMSelectRootRegion(WScreen *scr, int x, int y, int w, int h, Bool control)
     
     close(sock);
 #endif
+}
+
+
+
+
+static void observer(void *self, WMNotification *notif)
+{
+    WScreen *scr = (WScreen*)self;
+    WWindow *wwin = (WWindow*)WMGetNotificationObject(notif);
+    const char *name = WMGetNotificationName(notif);
+    void *data = WMGetNotificationClientData(notif);
+
+    if (strcmp(name, WMNManaged) == 0 && wwin) {
+	wKWMUpdateClientWorkspace(wwin);
+	wKWMUpdateClientStateHint(wwin, KWMAllFlags);
+	
+	wwin->flags.kwm_managed = 1;
+
+	wKWMSendEventMessage(wwin, WKWMAddWindow);
+	
+    } else if (strcmp(name, WMNUnmanaged) == 0 && wwin) {
+	wwin->frame->workspace = -1;
+	
+	wKWMUpdateClientWorkspace(wwin);
+	
+	wKWMSendEventMessage(wwin, WKWMRemoveWindow);
+	
+    } else if (strcmp(name, WMNChangedWorkspace) == 0 && wwin) {
+	wKWMUpdateClientWorkspace(wwin);
+	wKWMSendEventMessage(wwin, WKWMChangedClient);
+	
+    } else if (strcmp(name, WMNChangedFocus) == 0) {
+	wKWMUpdateActiveWindowHint(scr);
+	wKWMSendEventMessage(wwin, WKWMFocusWindow);
+	
+    } else if (strcmp(name, WMNChangedName) == 0) {
+	wKWMSendEventMessage(wwin, WKWMChangedClient);
+
+    } else if (strcmp(name, WMNChangedState) == 0) {
+	char *detail = (char*)data;
+
+	if (strcmp(detail, "shade") == 0) {
+	    wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
+	    wKWMSendEventMessage(wwin, WKWMChangedClient);
+	} else if (strcmp(detail, "omnipresent") == 0) {
+	    wKWMUpdateClientStateHint(wwin, KWMStickyFlag);
+	    wKWMSendEventMessage(wwin, WKWMChangedClient);	    
+	} else if (strcmp(detail, "maximize") == 0) {
+	    wKWMUpdateClientStateHint(wwin, KWMMaximizedFlag);
+	    wKWMSendEventMessage(wwin, WKWMChangedClient);	    
+	} else if (strcmp(detail, "iconify-transient") == 0) {
+	    if (wwin->flags.miniaturized) {
+		wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
+		wKWMSendEventMessage(wwin, WKWMRemoveWindow);
+		wwin->flags.kwm_hidden_for_modules = 1;
+	    } else {
+		wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
+		if (wwin->flags.kwm_hidden_for_modules) {
+		    wKWMSendEventMessage(wwin, WKWMAddWindow);
+		    wwin->flags.kwm_hidden_for_modules = 0;
+		}
+	    }
+	} else if (strcmp(detail, "iconify") == 0) {
+	    wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
+	    wKWMSendEventMessage(wwin, WKWMChangedClient);
+	} else if (strcmp(detail, "hide") == 0) {
+	    wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
+	    wKWMSendEventMessage(wwin, WKWMChangedClient);	    
+	}
+
+    } else if (strcmp(name, WMNChangedStacking) == 0 && wwin) {
+	if (data == NULL)	
+	    wKWMBroadcastStacking(wwin->screen_ptr);
+	else if (strcmp(data, "lower") == 0)
+	    wKWMSendEventMessage(wwin, WKWMLowerWindow);
+	else if (strcmp(data, "raise") == 0)
+	    wKWMSendEventMessage(wwin, WKWMRaiseWindow);	    
+    }
+}
+
+
+static void wsobserver(void *self, WMNotification *notif)
+{
+    WScreen *scr = (WScreen*)WMGetNotificationObject(notif);
+    const char *name = WMGetNotificationName(notif);
+    void *data = WMGetNotificationClientData(notif);
+
+    if (strcmp(name, WMNWorkspaceCreated) == 0) {
+	if (!scr->flags.kwm_syncing_count) {
+	    wKWMUpdateWorkspaceCountHint(scr);
+	    wKWMUpdateWorkspaceNameHint(scr, (int)data);
+	}
+#ifdef not_used
+	wKWMSetUsableAreaHint(scr, scr->workspace_count-1);
+#endif
+    } else if (strcmp(name, WMNWorkspaceDestroyed) == 0) {
+	wKWMUpdateWorkspaceCountHint(scr);	
+    } else if (strcmp(name, WMNWorkspaceNameChanged) == 0) {
+	wKWMUpdateWorkspaceNameHint(scr, (int)data);
+    } else if (strcmp(name, WMNWorkspaceChanged) == 0) {
+	wKWMUpdateCurrentWorkspaceHint(scr);
+
+    } else if (strcmp(name, WMNResetStacking) == 0) {
+	wKWMBroadcastStacking(scr);
+    }
 }
 
 

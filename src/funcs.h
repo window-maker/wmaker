@@ -43,7 +43,10 @@ void SetupEnvironment(WScreen *scr);
 
 void DispatchEvent(XEvent *event);
 
-#ifndef LITE
+#ifdef LITE
+#define UpdateSwitchMenu(a,b,c)
+#else
+void UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action);
 
 Bool wRootMenuPerformShortcut(XEvent *event);
 
@@ -55,6 +58,8 @@ void OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard);
 
 #endif /* !LITE */
 
+
+
 void OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard);
 
 void OpenMiniwindowMenu(WWindow *wwin, int x, int y);
@@ -62,20 +67,6 @@ void OpenMiniwindowMenu(WWindow *wwin, int x, int y);
 void OpenWorkspaceMenu(WScreen *scr, int x, int y);
 
 void CloseWindowMenu(WScreen *scr);
-
-#ifdef LITE
-
-#define UpdateSwitchMenu(a, b, c)
-
-#define UpdateSwitchMenuWorkspace(a, b)
-
-#else /*! LITE */
-
-void UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action);
-
-void UpdateSwitchMenuWorkspace(WScreen *scr, int workspace);
-
-#endif /* !LITE */
 
 WMagicNumber wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata);
 

@@ -401,4 +401,6 @@ void wWindowDeleteSavedState(WMagicNumber id);
 
 Bool wWindowObscuresWindow(WWindow *wwin, WWindow *obscured);
 
+void wWindowSetOmnipresent(WWindow *wwin, Bool flag);
+
 #endif

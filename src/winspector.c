@@ -47,6 +47,7 @@
 #include "dock.h"
 #include "client.h"
 
+
 #include <proplist.h>
 
 
@@ -876,7 +877,7 @@ applySettings(WMButton *button, InspectorPanel *panel)
 			 skip_window_list ? ACTION_REMOVE : ACTION_ADD);
     } else {
 	if (WFLAGP(wwin, omnipresent) != old_omnipresent) {
-	    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_WORKSPACE);
+	    WMPostNotificationName(WMNChangedState, wwin, "omnipresent");
 	}
     }
     

@@ -490,7 +490,24 @@ extern unsigned int ValidModMask;
 extern char WProgramState;
 extern char WProgramSigState;
 
+
 /****** Global Functions ******/
 extern void wAbort(Bool dumpCore);
 
+
+/****** Notifications ******/
+extern const char *WMNManaged;
+extern const char *WMNUnmanaged;
+extern const char *WMNChangedWorkspace;
+extern const char *WMNChangedState;
+extern const char *WMNChangedFocus;
+extern const char *WMNChangedStacking;
+extern const char *WMNChangedName;
+
+extern const char *WMNWorkspaceCreated;
+extern const char *WMNWorkspaceDestroyed;
+extern const char *WMNWorkspaceChanged;
+extern const char *WMNWorkspaceNameChanged;
+
+extern const char *WMNResetStacking;
 #endif

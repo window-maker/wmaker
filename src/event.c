@@ -594,11 +594,11 @@ static void
 executeButtonAction(WScreen *scr, XEvent *event, int action)
 {
     switch(action) {
-    case WA_SELECT_WINDOWS:
+     case WA_SELECT_WINDOWS:
         wUnselectWindows(scr);
         wSelectWindows(scr, event);
         break;
-    case WA_OPEN_APPMENU:
+     case WA_OPEN_APPMENU:
         OpenRootMenu(scr, event->xbutton.x_root, event->xbutton.y_root, False);
         /* ugly hack */
         if (scr->root_menu) {
@@ -608,7 +608,7 @@ executeButtonAction(WScreen *scr, XEvent *event, int action)
                 event->xbutton.window = scr->root_menu->frame->core->window;
         }
         break;
-    case WA_OPEN_WINLISTMENU:
+     case WA_OPEN_WINLISTMENU:
         OpenSwitchMenu(scr, event->xbutton.x_root, event->xbutton.y_root, False);
         if (scr->switch_menu) {
             if (scr->switch_menu->brother->flags.mapped)
@@ -1379,7 +1379,6 @@ handleKeyPress(XEvent *event)
         OpenRootMenu(scr, scr->scr_width/2, scr->scr_height/2, True);
         break;
      case WKBD_WINDOWLIST:
-	/*OpenSwitchMenu(scr, event->xkey.x_root, event->xkey.y_root, True);*/
         OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, True);
         break;
 #endif /* !LITE */

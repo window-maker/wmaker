@@ -102,6 +102,10 @@ static Atom _XA_WIN_CLIENT_LIST;
 static Atom _XA_WIN_DESKTOP_BUTTON_PROXY;
 
 
+static void observer(void *self, WMNotification *notif);
+static void wsobserver(void *self, WMNotification *notif);
+
+
 void
 wGNOMEInitStuff(WScreen *scr)
 {
@@ -183,6 +187,17 @@ wGNOMEInitStuff(WScreen *scr)
 		    PropModeReplace, (unsigned char*)supportedStuff, count);
 
     XFlush(dpy);
+
+    WMAddNotificationObserver(observer, NULL, WMNManaged, NULL);
+    WMAddNotificationObserver(observer, NULL, WMNUnmanaged, NULL);
+    WMAddNotificationObserver(observer, NULL, WMNChangedWorkspace, NULL);
+    WMAddNotificationObserver(observer, NULL, WMNChangedState, NULL);
+    WMAddNotificationObserver(observer, NULL, WMNChangedFocus, NULL);
+    WMAddNotificationObserver(observer, NULL, WMNChangedStacking, NULL);
+    WMAddNotificationObserver(observer, NULL, WMNChangedName, NULL);
+
+    WMAddNotificationObserver(wsobserver, NULL, WMNWorkspaceChanged, NULL);
+    WMAddNotificationObserver(wsobserver, NULL, WMNWorkspaceNameChanged, NULL);
 }
 
 
@@ -328,8 +343,8 @@ wGNOMECheckClientHints(WWindow *wwin, int *layer, int *workspace)
 
 			XGetWindowAttributes(dpy, wwin->client_win, &wattribs);
 			wClientGetNormalHints(wwin, &wattribs, False,
-					&area->area.x1, &area->area.y1,
-					&area->area.x2, &area->area.y2);
+					      &area->area.x1, &area->area.y1,
+					      &area->area.x2, &area->area.y2);
 			area->area.x2 = area->area.x2 + area->area.x1;
 			area->area.y2 = area->area.y2 + area->area.y1;
 
@@ -521,7 +536,6 @@ wGNOMEProcessClientMessage(XClientMessageEvent *event)
 	}
     } else if (event->message_type == _XA_WIN_STATE) {
 	int flags, mask;
-	Bool updateWindowList = False;
 	int maximize = 0;
 
 	mask = event->data.l[0];
@@ -529,9 +543,7 @@ wGNOMEProcessClientMessage(XClientMessageEvent *event)
 
 	if (mask & WIN_STATE_STICKY) {
 	    if ((flags & WIN_STATE_STICKY) != WFLAGP(wwin, omnipresent)) {
-		wwin->client_flags.omnipresent = (flags & WIN_STATE_STICKY)!=0;
-		wGNOMEUpdateClientStateHint(wwin, False);
-		updateWindowList = True;
+		wWindowSetOmnipresent(wwin, (flags & WIN_STATE_STICKY)!=0);
 	    }
 	}
 
@@ -561,7 +573,6 @@ wGNOMEProcessClientMessage(XClientMessageEvent *event)
 	    if ((maximize & both) && !(wwin->flags.maximized & both)) {
 		wMaximizeWindow(wwin, maximize);
 	    }
-	    updateWindowList = False;
 #undef both
 	}
 
@@ -571,12 +582,7 @@ wGNOMEProcessClientMessage(XClientMessageEvent *event)
 		    wUnshadeWindow(wwin);
 		else
 		    wShadeWindow(wwin);
-		updateWindowList = False;
 	    }
-	}
-
-	if (updateWindowList) {
-	    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
 	}
     } else if (event->message_type == _XA_WIN_WORKSPACE) {
 
@@ -635,6 +641,47 @@ wGNOMERemoveClient(WWindow *wwin)
 
     if (flag) {
 	wScreenUpdateUsableArea(wwin->screen_ptr);
+    }
+}
+
+
+
+
+static void observer(void *self, WMNotification *notif)
+{
+    WWindow *wwin = (WWindow*)WMGetNotificationObject(notif);
+    const char *name = WMGetNotificationName(notif);
+
+    if (strcmp(name, WMNManaged) == 0 && wwin) {
+	wGNOMEUpdateClientStateHint(wwin, True);
+	
+	wGNOMEUpdateClientListHint(wwin->screen_ptr);
+    } else if (strcmp(name, WMNUnmanaged) == 0 && wwin) {
+	wGNOMERemoveClient(wwin);
+    } else if (strcmp(name, WMNChangedWorkspace) == 0 && wwin) {
+	wGNOMEUpdateClientStateHint(wwin, True);
+    } else if (strcmp(name, WMNChangedState) == 0 && wwin) {
+	wGNOMEUpdateClientStateHint(wwin, False);
+    } 
+}
+
+static void wsobserver(void *self, WMNotification *notif)
+{
+    WScreen *scr = (WScreen*)WMGetNotificationObject(notif);
+    const char *name = WMGetNotificationName(notif);
+    
+    if (strcmp(name, WMNWorkspaceCreated) == 0) {
+	wGNOMEUpdateWorkspaceHints(scr);
+    } else if (strcmp(name, WMNWorkspaceDestroyed) == 0) {
+	wGNOMEUpdateWorkspaceHints(scr);
+    } else if (strcmp(name, WMNWorkspaceNameChanged) == 0) {
+	wGNOMEUpdateWorkspaceNamesHint(scr);
+    } else if (strcmp(name, WMNWorkspaceChanged) == 0) {
+	wGNOMEUpdateCurrentWorkspaceHint(scr);
+	
+
+    } else if (strcmp(name, WMNResetStacking) == 0) {
+	
     }
 }
 

@@ -167,10 +167,8 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 	    wApplicationDeactivate(oapp);
 #endif
 	}
-#ifdef KWM_HINTS
-	wKWMUpdateActiveWindowHint(scr);
-	wKWMSendEventMessage(NULL, WKWMFocusWindow);
-#endif
+	
+	WMPostNotificationName(WMNChangedFocus, NULL, (void*)True);
 	return;
     } else if (old_scr != scr && old_focused) {
         wWindowUnfocus(old_focused);
@@ -248,10 +246,7 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 	wApplicationActivate(napp);
 #endif
     }
-#ifdef KWM_HINTS
-    wKWMUpdateActiveWindowHint(scr);
-    wKWMSendEventMessage(wwin, WKWMFocusWindow);
-#endif
+    
     XFlush(dpy);
     old_scr=scr;
 }
@@ -319,15 +314,7 @@ wShadeWindow(WWindow  *wwin)
     wClientSetState(wwin, IconicState, None);
      */
 
-#ifdef GNOME_STUFF
-    wGNOMEUpdateClientStateHint(wwin, False);
-#endif
-#ifdef KWM_HINTS
-    wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
-    wKWMSendEventMessage(wwin, WKWMChangedClient);
-#endif
-    /* update window list to reflect shaded state */
-    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
+    WMPostNotificationName(WMNChangedState, wwin, "shade");
 
 #ifdef ANIMATIONS
     if (!wwin->screen_ptr->flags.startup) {
@@ -401,17 +388,7 @@ wUnshadeWindow(WWindow  *wwin)
     if (wwin->flags.focused)
 	wSetFocusTo(wwin->screen_ptr, wwin);
 
-#ifdef GNOME_STUFF
-    wGNOMEUpdateClientStateHint(wwin, False);
-#endif
-#ifdef KWM_HINTS
-    wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
-    wKWMSendEventMessage(wwin, WKWMChangedClient);
-#endif
-
-    /* update window list to reflect unshaded state */
-    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
-
+    WMPostNotificationName(WMNChangedState, wwin, "shade");
 }
 
 
@@ -505,14 +482,8 @@ wMaximizeWindow(WWindow *wwin, int directions)
     
     wWindowConfigure(wwin, new_x, new_y, new_width, new_height);
 
-    
-#ifdef GNOME_STUFF
-    wGNOMEUpdateClientStateHint(wwin, False);
-#endif
-#ifdef KWM_HINTS
-    wKWMUpdateClientStateHint(wwin, KWMMaximizedFlag);
-    wKWMSendEventMessage(wwin, WKWMChangedClient);
-#endif
+
+    WMPostNotificationName(WMNChangedState, wwin, "maximize");
 
     wSoundPlay(WSOUND_MAXIMIZE);
 }
@@ -538,13 +509,7 @@ wUnmaximizeWindow(WWindow *wwin)
     wWindowConfigure(wwin, restore_x, restore_y,
 		     wwin->old_geometry.width, wwin->old_geometry.height);
 
-#ifdef GNOME_STUFF
-    wGNOMEUpdateClientStateHint(wwin, False);
-#endif
-#ifdef KWM_HINTS
-    wKWMUpdateClientStateHint(wwin, KWMMaximizedFlag);
-    wKWMSendEventMessage(wwin, WKWMChangedClient);
-#endif
+    WMPostNotificationName(WMNChangedState, wwin, "maximize");
 
     wSoundPlay(WSOUND_UNMAXIMIZE);
 }
@@ -809,15 +774,9 @@ unmapTransientsFor(WWindow *wwin)
 	    /*
 	    if (!tmp->flags.shaded)
 	     */
-		wClientSetState(tmp, IconicState, None);
-#ifdef KWM_HINTS
-	    wKWMUpdateClientStateHint(tmp, KWMIconifiedFlag);
-	    wKWMSendEventMessage(tmp, WKWMRemoveWindow);
-	    tmp->flags.kwm_hidden_for_modules = 1;
-#endif
-
-	    UpdateSwitchMenu(wwin->screen_ptr, tmp, ACTION_CHANGE_STATE);
-
+	    wClientSetState(tmp, IconicState, None);
+	    
+	    WMPostNotificationName(WMNChangedState, tmp, "iconify-transient");
 	}
 	tmp = tmp->prev;
     }
@@ -846,17 +805,9 @@ mapTransientsFor(WWindow *wwin)
 	    /*
 	    if (!tmp->flags.shaded)
 	     */
-		wClientSetState(tmp, NormalState, None);
-#ifdef KWM_HINTS
-	    wKWMUpdateClientStateHint(tmp, KWMIconifiedFlag);
-	    if (tmp->flags.kwm_hidden_for_modules) {
-		wKWMSendEventMessage(tmp, WKWMAddWindow);
-		tmp->flags.kwm_hidden_for_modules = 0;
-	    }
-#endif
-
-	    UpdateSwitchMenu(wwin->screen_ptr, tmp, ACTION_CHANGE_STATE);
-
+	    wClientSetState(tmp, NormalState, None);
+	    
+	    WMPostNotificationName(WMNChangedState, tmp, "iconify-transient");
 	}
 	tmp = tmp->prev;
     }
@@ -1072,15 +1023,7 @@ wIconifyWindow(WWindow *wwin)
     if (wwin->flags.selected && !wPreferences.disable_miniwindows)
         wIconSelect(wwin->icon);
 
-#ifdef GNOME_STUFF
-    wGNOMEUpdateClientStateHint(wwin, False);
-#endif
-#ifdef KWM_HINTS
-    wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
-    wKWMSendEventMessage(wwin, WKWMChangedClient);
-#endif
-
-    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
+    WMPostNotificationName(WMNChangedState, wwin, "iconify");
 }
 
 
@@ -1193,15 +1136,7 @@ wDeiconifyWindow(WWindow  *wwin)
         wArrangeIcons(wwin->screen_ptr, True);
     }
 
-#ifdef GNOME_STUFF
-    wGNOMEUpdateClientStateHint(wwin, False);
-#endif
-#ifdef KWM_HINTS
-    wKWMUpdateClientStateHint(wwin, KWMIconifiedFlag);
-    wKWMSendEventMessage(wwin, WKWMChangedClient);
-#endif
-
-    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
+    WMPostNotificationName(WMNChangedState, wwin, "iconify");
 }
 
 
@@ -1215,12 +1150,8 @@ hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate)
 	    wwin->icon->mapped = 0;
 	}
 	wwin->flags.hidden = 1;
-#ifdef GNOME_STUFF
-	wGNOMEUpdateClientStateHint(wwin, False);
-#endif
-
-	UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
-
+	
+	WMPostNotificationName(WMNChangedState, wwin, "hide");
 	return;
     }
 
@@ -1245,11 +1176,7 @@ hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate)
 #endif
     wwin->flags.skip_next_animation = 0;
 
-#ifdef GNOME_STUFF
-    wGNOMEUpdateClientStateHint(wwin, False);
-#endif
-
-    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
+    WMPostNotificationName(WMNChangedState, wwin, "hide");
 }
 
 
@@ -1400,12 +1327,7 @@ unhideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate,
 	wUnhideInspectorForWindow(wwin);
     }
 
-#ifdef GNOME_STUFF
-    wGNOMEUpdateClientStateHint(wwin, False);
-#endif
-
-    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_CHANGE_STATE);
-
+    WMPostNotificationName(WMNChangedState, wwin, "hide");
 }
 
 
@@ -1444,7 +1366,7 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
 		    }
 		    wlist->flags.hidden = 0;
 
-		    UpdateSwitchMenu(scr, wlist, ACTION_CHANGE_STATE);
+		    WMPostNotificationName(WMNChangedState, wlist, "hide");
 
 		    if (wlist->frame->workspace != scr->current_workspace)
 			wWindowChangeWorkspace(wlist, scr->current_workspace);
