@@ -14,6 +14,9 @@ Changes since version 0.91.0:
 - fixed to allow parallel builds on SMP systems using make -j
 - updated Italian translation (Marco Colombo <m.colombo@ed.ac.uk>)
 - applied .AppInfo --> Library path rename patch (Alex Perez <aperez@student.santarosa.edu>)
+- added code to automatically update the icon paths from the old .AppInfo
+  style to the new Library/WindowMaker style in WMWindowAttributes when
+  Window Maker starts to make transition transparent for users.
 
 
 Changes since version 0.90.0:

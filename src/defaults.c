@@ -971,6 +971,53 @@ appendMenu(WMPropList *destarr, WMPropList *array)
 #endif
 
 
+/* Fixup paths for cached pixmaps from .AppInfo to Library/WindowMaker/... */
+static Bool
+fixupCachedPixmapsPaths(WMPropList *dict)
+{
+    WMPropList *allApps, *app, *props, *iconkey, *icon, *newicon;
+    char *path, *fixedpath, *ptr, *search, *replace;
+    int i, len, slen;
+    Bool changed = False;
+
+    search  = "/.AppInfo/WindowMaker/";
+    slen = strlen(search);
+
+    iconkey = WMCreatePLString("Icon");
+    allApps = WMGetPLDictionaryKeys(dict);
+
+    for (i=0; i < WMGetPropListItemCount(allApps); i++) {
+        app = WMGetFromPLArray(allApps, i);
+        props = WMGetFromPLDictionary(dict, app);
+        if (!props)
+            continue;
+        icon = WMGetFromPLDictionary(props, iconkey);
+        if (icon && WMIsPLString(icon)) {
+            path = WMGetFromPLString(icon);
+            ptr = strstr(path, search);
+            if (ptr) {
+                changed = True;
+                len = (ptr - path);
+                fixedpath = wmalloc(strlen(path)+32);
+                strncpy(fixedpath, path, len);
+                fixedpath[len] = 0;
+                strcat(fixedpath, "/Library/WindowMaker/CachedPixmaps/");
+                strcat(fixedpath, ptr+slen);
+                newicon = WMCreatePLString(fixedpath);
+                WMPutInPLDictionary(props, iconkey, newicon);
+                WMReleasePropList(newicon);
+                wfree(fixedpath);
+            }
+        }
+    }
+
+    WMReleasePropList(allApps);
+    WMReleasePropList(iconkey);
+
+    return changed;
+}
+
+
 void
 wDefaultsMergeGlobalMenus(WDDomain *menuDomain)
 {
@@ -1075,6 +1122,15 @@ wDefaultsInitDomain(char *domain, Bool requireDictionary)
                 db->dictionary = NULL;
                 wwarning(_("Domain %s (%s) of defaults database is corrupted!"),
                          domain, the_path);
+            }
+            if (strcmp(domain, "WMWindowAttributes")==0 && db->dictionary) {
+                if (fixupCachedPixmapsPaths(db->dictionary)) {
+                    WMWritePropListToFile(db->dictionary, db->path, True);
+                    /* re-read the timestamp. if this fails take current time */
+                    if (stat(db->path, &stbuf)<0) {
+                        stbuf.st_mtime = time(NULL);
+                    }
+                }
             }
             db->timestamp = stbuf.st_mtime;
         } else {
