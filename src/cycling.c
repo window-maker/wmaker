@@ -47,10 +47,12 @@ extern WShortKey wKeyBindings[WKBD_LAST];
 
 static void raiseWindow(WSwitchPanel *swpanel, WWindow *wwin)
 {
+    Window swwin= wSwitchPanelGetWindow(swpanel);
+    
     if (wwin->flags.mapped) {
         Window win[2];
     
-        win[0]= wSwitchPanelGetWindow(swpanel);
+        win[0]= swwin;
         win[1]= wwin->frame->core->window;
     
         XRestackWindows(dpy, win, 2);
@@ -249,9 +251,11 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
         wSetFocusTo(scr, newFocused);
     }
 
-    if (swpanel)
-        wSwitchPanelDestroy(swpanel);
-
+    if (!getenv("SWPDEBUG"))
+    {
+        if (swpanel)
+          wSwitchPanelDestroy(swpanel);
+    }
     scr->flags.doing_alt_tab = 0;
 
     if (somethingElse)

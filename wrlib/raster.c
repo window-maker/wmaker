@@ -447,7 +447,12 @@ RCopyArea(RImage *image, RImage *src, int sx, int sy, unsigned width,
             }
         } else {
             for (y=0; y < height; y++) {
-                memcpy(d, s, width*3);
+                for (x=0; x < width; x++) {
+                    *d++ = *s++;
+                    *d++ = *s++;
+                    *d++ = *s++;
+                    s++;
+                }
                 d += dwi;
                 s += swi;
             }

@@ -103,6 +103,19 @@ WMCreateRGBColor(WMScreen *scr, unsigned short red, unsigned short green,
 }
 
 
+RColor WMGetRColorFromColor(WMColor *color)
+{
+    RColor rcolor;
+    
+    rcolor.red= color->color.red>>8;
+    rcolor.green= color->color.green>>8;
+    rcolor.blue= color->color.blue>>8;
+    rcolor.alpha= color->alpha>>8;
+    
+    return rcolor;
+}
+
+
 WMColor*
 WMCreateRGBAColor(WMScreen *scr, unsigned short red, unsigned short green,
                   unsigned short blue, unsigned short alpha, Bool exact)

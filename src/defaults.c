@@ -129,7 +129,7 @@ static int getModMask();
 #ifdef NEWSTUFF
 static int getRImage();
 #endif
-
+static int getPLArray();
 
 /* value setting functions */
 static int setJustify();
@@ -173,10 +173,9 @@ static int setClipTitleFont();
 static int setClipTitleColor();
 
 static int setMenuStyle();
-#if 0
-static int setMultiByte();
-#endif
+static int setSwPOptions();
 static int updateUsableArea();
+
 
 extern Cursor wCursor[WCUR_LAST];
 static int getCursor();
@@ -369,11 +368,6 @@ WDefaultEntry staticOptionList[] = {
     {"DisableMiniwindows", "NO",		NULL,
     &wPreferences.disable_miniwindows, getBool,	NULL
     }
-#if 0
-    ,{"MultiByteText", "NO", 			NULL,
-    &wPreferences.multi_byte_text, getBool,	setMultiByte
-    }
-#endif
 };
 
 
@@ -667,6 +661,9 @@ WDefaultEntry optionList[] = {
     },
     {"IconTitleBack",	"black",       		NULL,
     NULL,				getColor,	setIconTitleBack
+    },
+    {"SwitchPanelImages", "(\"swtile.png\")",    &wPreferences,
+    NULL,                               getPLArray,     setSwPOptions
     },
     /* keybindings */
 #ifndef LITE
@@ -1709,6 +1706,23 @@ again:
     return True;
 }
 
+
+static int
+getPLArray(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr,
+           void **ret)
+{
+    if (!WMIsPLArray(value)) {
+        wwarning(_("Wrong value for key \"%s\". Should be an array."),
+                 entry->key);
+        return False;
+    }
+
+    WMRetainPropList(value);
+
+    *ret= value;
+
+    return True;
+}
 
 #if 0
 /* This function is not used at the moment. */
@@ -3504,6 +3518,124 @@ setMenuStyle(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
 }
 
 
+static RImage *chopOffImage(RImage *image, int x, int y, int w, int h)
+{
+    RImage *img= RCreateImage(w, h, image->format == RRGBAFormat);
+    
+    RCopyArea(img, image, x, y, w, h, 0, 0);
+    
+    return img;
+}
+
+static int
+setSwPOptions(WScreen *scr, WDefaultEntry *entry, WMPropList *array, void *foo)
+{
+    char *path;
+    RImage *bgimage;
+    int cwidth, cheight;
+    WPreferences *prefs= (WPreferences*)foo;
+
+    switch (WMGetPropListItemCount(array))
+    {
+    case 4:
+        path= FindImage(wPreferences.pixmap_path, WMGetFromPLString(WMGetFromPLArray(array, 1)));
+        if (!path) {
+            wwarning(_("Could not find image \"%s\" for option \"%s\""), 
+                     WMGetFromPLString(WMGetFromPLArray(array, 1)),
+                     entry->key);
+        } else {
+            bgimage= RLoadImage(scr->rcontext, path, 0);
+            if (!bgimage) {
+                wwarning(_("Could not load image \"%s\" for option \"%s\""), 
+                         path, entry->key);
+                wfree(path);
+            } else {
+                wfree(path);
+            
+                cwidth= atoi(WMGetFromPLString(WMGetFromPLArray(array, 2)));
+                cheight= atoi(WMGetFromPLString(WMGetFromPLArray(array, 3)));
+
+                if (cwidth <= 0 || cheight <= 0 ||
+                    cwidth >= bgimage->width - 2 ||
+                    cheight >= bgimage->height - 2)
+                    wwarning(_("Invalid split sizes for SwitchPanel back image."));
+                else {
+                    int i;
+                    int swidth, theight;
+                    for (i= 0; i < 9; i++) {
+                        if (prefs->swbackImage[i])
+                          RReleaseImage(prefs->swbackImage[i]);
+                        prefs->swbackImage[i]= NULL;
+                    }
+                    swidth= (bgimage->width - cwidth) / 2;
+                    theight= (bgimage->height - cheight) / 2;
+
+                    prefs->swbackImage[0]= chopOffImage(bgimage, 0, 0,
+                                                        swidth, theight);
+                    prefs->swbackImage[1]= chopOffImage(bgimage, swidth, 0,
+                                                        cwidth, theight);
+                    prefs->swbackImage[2]= chopOffImage(bgimage, swidth+cwidth, 0,
+                                                        swidth, theight);
+
+                    prefs->swbackImage[3]= chopOffImage(bgimage, 0, theight,
+                                                        swidth, cheight);
+                    prefs->swbackImage[4]= chopOffImage(bgimage, swidth, theight,
+                                                        cwidth, cheight);
+                    prefs->swbackImage[5]= chopOffImage(bgimage, swidth+cwidth, theight,
+                                                        swidth, cheight);
+
+                    prefs->swbackImage[6]= chopOffImage(bgimage, 0, theight+cheight,
+                                                        swidth, theight);
+                    prefs->swbackImage[7]= chopOffImage(bgimage, swidth, theight+cheight,
+                                                        cwidth, theight);
+                    prefs->swbackImage[8]= chopOffImage(bgimage, swidth+cwidth, theight+cheight,
+                                                        swidth, theight);
+
+                    // check if anything failed
+                    for (i= 0; i < 9; i++) {
+                        if (!prefs->swbackImage[i]) {
+                            for (; i>=0; --i) {
+                                RReleaseImage(prefs->swbackImage[i]);
+                                prefs->swbackImage[i]= NULL;
+                            }
+                            break;
+                        }
+                    }
+                }
+                RReleaseImage(bgimage);
+            }
+        }
+
+    case 1:
+        path= FindImage(wPreferences.pixmap_path, WMGetFromPLString(WMGetFromPLArray(array, 0)));
+        if (!path) {
+            wwarning(_("Could not find image \"%s\" for option \"%s\""), 
+                     WMGetFromPLString(WMGetFromPLArray(array, 0)),
+                     entry->key);
+        } else {
+            if (prefs->swtileImage) RReleaseImage(prefs->swtileImage);
+
+            prefs->swtileImage= RLoadImage(scr->rcontext, path, 0);
+            if (!prefs->swtileImage) {
+                wwarning(_("Could not load image \"%s\" for option \"%s\""), 
+                         path, entry->key);
+            }
+            wfree(path);
+        }
+        break;
+
+    default:
+        wwarning(_("Invalid number of arguments for option \"%s\""),
+                 entry->key);
+        break;
+    }
+
+    WMReleasePropList(array);
+        
+    return 0;
+}
+
+
 /*
  static int
  setButtonImages(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
@@ -3532,19 +3664,6 @@ setDoubleClick(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
 
     return 0;
 }
-
-
-#if 0
-static int
-setMultiByte(WScreen *scr, WDefaultEntry *entry, char *value, void *foo)
-{
-    extern _WINGsConfiguration WINGsConfiguration;
-
-    WINGsConfiguration.useMultiByte = *value;
-
-    return 0;
-}
-#endif
 
 
 static int

@@ -830,6 +830,8 @@ WMColor* WMCreateRGBAColor(WMScreen *scr, unsigned short red,
 
 WMColor* WMCreateNamedColor(WMScreen *scr, char *name, Bool exact);
 
+RColor WMGetRColorFromColor(WMColor *color);
+
 void WMSetColorAlpha(WMColor *color, unsigned short alpha);
 
 unsigned short WMRedComponentOfColor(WMColor *color);

@@ -472,6 +472,9 @@ typedef struct WPreferences {
     unsigned int workspace_border_size; /* Size in pixels of the workspace border */
     char workspace_border_position;     /* Where to leave a workspace border */
 
+    RImage *swtileImage;
+    RImage *swbackImage[9];
+
     struct {
         unsigned int nodock:1;	       /* don't display the dock */
         unsigned int noclip:1;         /* don't display the clip */

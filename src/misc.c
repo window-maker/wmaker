@@ -424,9 +424,6 @@ ShrinkString(WMFont *font, char *string, int width)
     char *text;
     int p1, p2, t;
 
-    if (wPreferences.multi_byte_text)
-        return wstrdup(string);
-
     p = strlen(string);
     w = WMWidthOfString(font, string, p);
     text = wmalloc(strlen(string)+8);

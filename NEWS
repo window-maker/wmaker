@@ -2,6 +2,41 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+--- 0.91.0
+
+Alt-Tab Window Switching
+------------------------
+
+You can change the appearance of the panel shown during Alt-Tab window switching
+with the SwitchPanelImages option:
+
+ (selected_icon_tile_image, background_image, width, height)
+
+selected_icon_tile_image is the image used to highlight the currently selected
+window icon. It must be 64x64 pixels.
+
+background_image is the image used in the background of the panel. It must
+be at least 64x80.
+
+width and height are the width and size of the central part of the image.
+When drawing the panel, the image will be split as:
+                           |W |
+			+--+--+--+
+			|  |  |  |
+			+--+--+--+ -
+			|  |  |  | H
+			+--+--+--+ -
+			|  |  |  |
+			+--+--+--+
+
+The 4 corner images will be copied in their original sizes and the rest will
+be scaled to the final panel size.
+
+background_image, width and height are optional. If you leave them out,
+a gray panel will be used. If your machine is not very fast, you may want 
+to use it.
+
+
 --- 0.90.0
 
 
