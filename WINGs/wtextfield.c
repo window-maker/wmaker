@@ -124,13 +124,13 @@ struct W_ViewDelegate _TextFieldViewDelegate = {
 
 
 static void
-normalizeRange(TextField *tPtr, WMRange *range)
+normalizeRange(TextField *tPtr, WMRange *range) /*fold00*/
 {
     if (range->position < 0 && range->count < 0)
     	range->count = 0;
 
     if (range->count == 0) {
-    	range->position = 0;
+    	/*range->position = 0; why is this?*/
 	return;
     }
     
@@ -158,7 +158,7 @@ normalizeRange(TextField *tPtr, WMRange *range)
 }
 
 static void
-memmv(char *dest, char *src, int size)
+memmv(char *dest, char *src, int size) /*fold00*/
 {
     int i;
     
@@ -175,7 +175,7 @@ memmv(char *dest, char *src, int size)
 
 
 static int
-incrToFit(TextField *tPtr)
+incrToFit(TextField *tPtr) /*fold00*/
 {
     int vp = tPtr->viewPosition;
 
@@ -187,7 +187,7 @@ incrToFit(TextField *tPtr)
 
 
 static int
-incrToFit2(TextField *tPtr)
+incrToFit2(TextField *tPtr) /*fold00*/
 {
     int vp = tPtr->viewPosition;
     while (TEXT_WIDTH2(tPtr, tPtr->viewPosition, tPtr->cursorPosition) 
@@ -200,7 +200,7 @@ incrToFit2(TextField *tPtr)
 
 
 static void
-decrToFit(TextField *tPtr)
+decrToFit(TextField *tPtr) /*fold00*/
 {
     while (TEXT_WIDTH(tPtr, tPtr->viewPosition-1) < tPtr->usableWidth
 	   && tPtr->viewPosition>0)
@@ -211,7 +211,7 @@ decrToFit(TextField *tPtr)
 #undef TEXT_WIDTH2
 
 static Bool
-requestHandler(WMWidget *w, Atom selection, Atom target, Atom *type,
+requestHandler(WMWidget *w, Atom selection, Atom target, Atom *type, /*fold00*/
 	       void **value, unsigned *length, int *format) 
 {
     TextField *tPtr = w;
@@ -263,7 +263,7 @@ requestHandler(WMWidget *w, Atom selection, Atom target, Atom *type,
 
 
 static void
-lostHandler(WMWidget *w, Atom selection)
+lostHandler(WMWidget *w, Atom selection) /*fold00*/
 {
     TextField *tPtr = (WMTextField*)w;
 
@@ -280,7 +280,7 @@ _notification(void *observerData, WMNotification *notification)
 }
 
 WMTextField*
-WMCreateTextField(WMWidget *parent)
+WMCreateTextField(WMWidget *parent) /*fold00*/
 {
     TextField *tPtr;
 
@@ -339,7 +339,7 @@ WMCreateTextField(WMWidget *parent)
 
 
 void
-WMSetTextFieldDelegate(WMTextField *tPtr, WMTextFieldDelegate *delegate)
+WMSetTextFieldDelegate(WMTextField *tPtr, WMTextFieldDelegate *delegate) /*fold00*/
 {
     CHECK_CLASS(tPtr, WC_TextField);
     
@@ -348,7 +348,7 @@ WMSetTextFieldDelegate(WMTextField *tPtr, WMTextFieldDelegate *delegate)
 
 
 void
-WMInsertTextFieldText(WMTextField *tPtr, char *text, int position)
+WMInsertTextFieldText(WMTextField *tPtr, char *text, int position) /*fold00*/
 {
     int len;
  
@@ -393,7 +393,7 @@ WMInsertTextFieldText(WMTextField *tPtr, char *text, int position)
 }
 
 void
-WMDeleteTextFieldRange(WMTextField *tPtr, WMRange range)
+WMDeleteTextFieldRange(WMTextField *tPtr, WMRange range) /*fold00*/
 {
     CHECK_CLASS(tPtr, WC_TextField);
 
@@ -421,7 +421,7 @@ WMDeleteTextFieldRange(WMTextField *tPtr, WMRange range)
 
 
 char*
-WMGetTextFieldText(WMTextField *tPtr)
+WMGetTextFieldText(WMTextField *tPtr) /*fold00*/
 {
     CHECK_CLASS(tPtr, WC_TextField);
         
@@ -430,7 +430,7 @@ WMGetTextFieldText(WMTextField *tPtr)
 
 
 void
-WMSetTextFieldText(WMTextField *tPtr, char *text)
+WMSetTextFieldText(WMTextField *tPtr, char *text) /*fold00*/
 {
     CHECK_CLASS(tPtr, WC_TextField);
     
@@ -461,7 +461,7 @@ WMSetTextFieldText(WMTextField *tPtr, char *text)
 
 
 void
-WMSetTextFieldAlignment(WMTextField *tPtr, WMAlignment alignment)
+WMSetTextFieldAlignment(WMTextField *tPtr, WMAlignment alignment) /*fold00*/
 {
     CHECK_CLASS(tPtr, WC_TextField);
     
@@ -479,7 +479,7 @@ WMSetTextFieldAlignment(WMTextField *tPtr, WMAlignment alignment)
 
 
 void
-WMSetTextFieldBordered(WMTextField *tPtr, Bool bordered)
+WMSetTextFieldBordered(WMTextField *tPtr, Bool bordered) /*fold00*/
 {
     CHECK_CLASS(tPtr, WC_TextField);
     
@@ -492,7 +492,7 @@ WMSetTextFieldBordered(WMTextField *tPtr, Bool bordered)
 
 
 void
-WMSetTextFieldBeveled(WMTextField *tPtr, Bool flag)
+WMSetTextFieldBeveled(WMTextField *tPtr, Bool flag) /*fold00*/
 {
     CHECK_CLASS(tPtr, WC_TextField);
     
@@ -506,7 +506,7 @@ WMSetTextFieldBeveled(WMTextField *tPtr, Bool flag)
 
 
 void
-WMSetTextFieldSecure(WMTextField *tPtr, Bool flag)
+WMSetTextFieldSecure(WMTextField *tPtr, Bool flag) /*fold00*/
 {
     CHECK_CLASS(tPtr, WC_TextField);
     
@@ -519,7 +519,7 @@ WMSetTextFieldSecure(WMTextField *tPtr, Bool flag)
 
 
 Bool
-WMGetTextFieldEditable(WMTextField *tPtr)
+WMGetTextFieldEditable(WMTextField *tPtr) /*fold00*/
 {
     CHECK_CLASS(tPtr, WC_TextField);
     
@@ -528,7 +528,7 @@ WMGetTextFieldEditable(WMTextField *tPtr)
 
 
 void
-WMSetTextFieldEditable(WMTextField *tPtr, Bool flag)
+WMSetTextFieldEditable(WMTextField *tPtr, Bool flag) /*fold00*/
 {
     CHECK_CLASS(tPtr, WC_TextField);
     
@@ -541,7 +541,7 @@ WMSetTextFieldEditable(WMTextField *tPtr, Bool flag)
 
 
 void
-WMSelectTextFieldRange(WMTextField *tPtr, WMRange range)
+WMSelectTextFieldRange(WMTextField *tPtr, WMRange range) /*FOLD00*/
 {
     CHECK_CLASS(tPtr, WC_TextField);
     
@@ -560,7 +560,7 @@ WMSelectTextFieldRange(WMTextField *tPtr, WMRange range)
 
 
 void
-WMSetTextFieldCursorPosition(WMTextField *tPtr, unsigned int position)
+WMSetTextFieldCursorPosition(WMTextField *tPtr, unsigned int position) /*fold00*/
 {
     CHECK_CLASS(tPtr, WC_TextField);
     
@@ -577,7 +577,7 @@ WMSetTextFieldCursorPosition(WMTextField *tPtr, unsigned int position)
 
 
 void
-WMSetTextFieldNextTextField(WMTextField *tPtr, WMTextField *next)
+WMSetTextFieldNextTextField(WMTextField *tPtr, WMTextField *next) /*fold00*/
 {
     CHECK_CLASS(tPtr, WC_TextField);
     if (next == NULL) {
@@ -600,7 +600,7 @@ WMSetTextFieldNextTextField(WMTextField *tPtr, WMTextField *next)
 
 
 void
-WMSetTextFieldPrevTextField(WMTextField *tPtr, WMTextField *prev)
+WMSetTextFieldPrevTextField(WMTextField *tPtr, WMTextField *prev) /*fold00*/
 {
     CHECK_CLASS(tPtr, WC_TextField);
     if (prev == NULL) {
@@ -623,7 +623,7 @@ WMSetTextFieldPrevTextField(WMTextField *tPtr, WMTextField *prev)
 
 
 void 
-WMSetTextFieldFont(WMTextField *tPtr, WMFont *font)
+WMSetTextFieldFont(WMTextField *tPtr, WMFont *font) /*fold00*/
 {
     CHECK_CLASS(tPtr, WC_TextField);
     
@@ -642,14 +642,14 @@ WMSetTextFieldFont(WMTextField *tPtr, WMFont *font)
 
 
 WMFont*
-WMGetTextFieldFont(WMTextField *tPtr)
+WMGetTextFieldFont(WMTextField *tPtr) /*fold00*/
 {
     return tPtr->font;
 }
 
 
 static void 
-didResizeTextField(W_ViewDelegate *self, WMView *view)
+didResizeTextField(W_ViewDelegate *self, WMView *view) /*fold00*/
 {
     WMTextField *tPtr = (WMTextField*)view->self;
 
@@ -661,7 +661,7 @@ didResizeTextField(W_ViewDelegate *self, WMView *view)
 
 
 static char*
-makeHiddenString(int length)
+makeHiddenString(int length) /*fold00*/
 {
     char *data = wmalloc(length+1);
 
@@ -673,7 +673,7 @@ makeHiddenString(int length)
 
 
 static void
-paintCursor(TextField *tPtr)
+paintCursor(TextField *tPtr) /*fold00*/
 {
     int cx;
     WMScreen *screen = tPtr->view->screen;
@@ -726,7 +726,7 @@ paintCursor(TextField *tPtr)
 
 
 static void
-drawRelief(WMView *view, Bool beveled)
+drawRelief(WMView *view, Bool beveled) /*fold00*/
 {
     WMScreen *scr = view->screen;
     Display *dpy = scr->display;
@@ -763,7 +763,7 @@ drawRelief(WMView *view, Bool beveled)
 
 
 static void
-paintTextField(TextField *tPtr)
+paintTextField(TextField *tPtr) /*fold00*/
 {
     W_Screen *screen = tPtr->view->screen;
     W_View *view = tPtr->view;
@@ -899,7 +899,7 @@ paintTextField(TextField *tPtr)
 
 #if 0
 static void
-blinkCursor(void *data)
+blinkCursor(void *data) /*fold00*/
 {
     TextField *tPtr = (TextField*)data;
     
@@ -917,7 +917,7 @@ blinkCursor(void *data)
 
 
 static void
-handleEvents(XEvent *event, void *data)
+handleEvents(XEvent *event, void *data) /*fold00*/
 {
     TextField *tPtr = (TextField*)data;
 
@@ -971,10 +971,12 @@ handleEvents(XEvent *event, void *data)
 
 
 static void
-handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
+handleTextFieldKeyPress(TextField *tPtr, XEvent *event) /*FOLD00*/
 {
     char buffer[64];
     KeySym ksym;
+    char *textEvent = NULL;
+    void *data;
     int count, refresh = 0;
     int control_pressed = 0;
     int cancelSelection = 1;
@@ -986,14 +988,6 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     count = XLookupString(&event->xkey, buffer, 63, &ksym, NULL);
     buffer[count] = '\0';
 
-    /* Be careful in any case in this switch statement, never to call
-     * to more than a function that can generate text change notifications.
-     * Only one text change notification should be sent in any case.
-     * Else hazardous things can happen.
-     * Maybe we need a better solution than the function wrapper to inform
-     * functions that change text in text fields, if they need to send a
-     * change notification or not. -Dan
-     */
     switch (ksym) {
      case XK_Tab:
 #ifdef XK_ISO_Left_Tab
@@ -1004,23 +998,22 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 		W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
 				     tPtr->view->prevFocusChain);
 		tPtr->flags.notIllegalMovement = 1;
-	    }
-	    NOTIFY(tPtr, didEndEditing, WMTextDidEndEditingNotification,
-		   (void*)WMBacktabTextMovement);
+            }
+            data = (void*)WMBacktabTextMovement;
 	} else {
 	    if (tPtr->view->nextFocusChain) {
 		W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
 				     tPtr->view->nextFocusChain);
 		tPtr->flags.notIllegalMovement = 1;
-	    }
-	    NOTIFY(tPtr, didEndEditing, WMTextDidEndEditingNotification,
-		   (void*)WMTabTextMovement);
+            }
+            data = (void*)WMTabTextMovement;
 	}
+        textEvent = WMTextDidEndEditingNotification;
 	break;
 
      case XK_Return:
-	NOTIFY(tPtr, didEndEditing, WMTextDidEndEditingNotification,
-	       (void*)WMReturnTextMovement);
+        data = (void*)WMReturnTextMovement;
+        textEvent = WMTextDidEndEditingNotification;
 	break;
 
      case WM_EMACSKEY_LEFT:
@@ -1141,15 +1134,15 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
      case XK_BackSpace:
      	if (tPtr->selection.count) {
 	    WMDeleteTextFieldRange(tPtr, tPtr->selection);
-            NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
-                   (void*)WMDeleteTextEvent);
+            data = (void*)WMDeleteTextEvent;
+            textEvent = WMTextDidChangeNotification;
 	} else if (tPtr->cursorPosition > 0) {
             WMRange range;
             range.position = tPtr->cursorPosition - 1;
             range.count = 1;
 	    WMDeleteTextFieldRange(tPtr, range);
-            NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
-                   (void*)WMDeleteTextEvent);
+            data = (void*)WMDeleteTextEvent;
+            textEvent = WMTextDidChangeNotification;
 	}
 	break;
 	
@@ -1163,34 +1156,30 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     case XK_Delete:
      	if (tPtr->selection.count) {
 	    WMDeleteTextFieldRange(tPtr, tPtr->selection);
-            NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
-                   (void*)WMDeleteTextEvent);
+            data = (void*)WMDeleteTextEvent;
+            textEvent = WMTextDidChangeNotification;
 	} else if (tPtr->cursorPosition < tPtr->textLen) {
             WMRange range;
             range.position = tPtr->cursorPosition;
             range.count = 1;
 	    WMDeleteTextFieldRange(tPtr, range);
-            NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
-                   (void*)WMDeleteTextEvent);
-	}
+            data = (void*)WMDeleteTextEvent;
+            textEvent = WMTextDidChangeNotification;
+        }
 	break;
 
     normal_key:
      default:
 	if (count > 0 && !iscntrl(buffer[0])) {
-            if (tPtr->selection.count) {
+            if (tPtr->selection.count)
                 WMDeleteTextFieldRange(tPtr, tPtr->selection);
-                tPtr->selection.count = 0;
-                refresh = 1;
-            }
-            /* TODO: check if this is correct. */
-            cancelSelection = 0;
 	    WMInsertTextFieldText(tPtr, buffer, tPtr->cursorPosition);
-            tPtr->selection.position = tPtr->cursorPosition;
-            NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
-                   (void*)WMInsertTextEvent);
-	} else
-	    return;
+            data = (void*)WMInsertTextEvent;
+            textEvent = WMTextDidChangeNotification;
+        } else {
+            /* should we rather break and goto the notification code below? -Dan */
+            return;
+        }
 	break;
     }
 
@@ -1203,7 +1192,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
             XSetSelectionOwner(tPtr->view->screen->display,
                     	       XA_PRIMARY, tPtr->view->window,
 			       event->xbutton.time);
-            notif = WMCreateNotification("_lostOwnership", NULL,tPtr);
+            notif = WMCreateNotification("_lostOwnership", NULL, tPtr);
             WMPostNotification(notif);
             WMReleaseNotification(notif);
 
@@ -1217,6 +1206,27 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     	tPtr->selection.position = tPtr->cursorPosition;
     }
 
+    /*printf("(%d,%d)\n", tPtr->selection.position, tPtr->selection.count);*/
+
+    if (textEvent) {
+        WMNotification *notif = WMCreateNotification(textEvent, tPtr, data);
+
+        if (tPtr->delegate) {
+            if (textEvent==WMTextDidBeginEditingNotification &&
+                tPtr->delegate->didBeginEditing)
+                (*tPtr->delegate->didBeginEditing)(tPtr->delegate, notif);
+            else if (textEvent==WMTextDidEndEditingNotification &&
+                     tPtr->delegate->didEndEditing)
+                (*tPtr->delegate->didEndEditing)(tPtr->delegate, notif);
+            else if (textEvent==WMTextDidChangeNotification &&
+                     tPtr->delegate->didChange)
+                (*tPtr->delegate->didChange)(tPtr->delegate, notif);
+        }
+
+        WMPostNotification(notif);
+        WMReleaseNotification(notif);
+    }
+
     if (refresh)
 	paintTextField(tPtr);
 
@@ -1225,7 +1235,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 
 
 static int
-pointToCursorPosition(TextField *tPtr, int x)
+pointToCursorPosition(TextField *tPtr, int x) /*fold00*/
 {
     int a, b, mid;
     int tw;
@@ -1255,7 +1265,7 @@ pointToCursorPosition(TextField *tPtr, int x)
 
 
 static void
-handleTextFieldActionEvents(XEvent *event, void *data)
+handleTextFieldActionEvents(XEvent *event, void *data) /*fold00*/
 {
     TextField *tPtr = (TextField*)data;
     static int move = 0;
@@ -1433,7 +1443,7 @@ handleTextFieldActionEvents(XEvent *event, void *data)
 
 
 static void
-destroyTextField(TextField *tPtr)
+destroyTextField(TextField *tPtr) /*fold00*/
 {
 #if 0
     if (tPtr->timerID)

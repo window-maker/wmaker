@@ -13,6 +13,8 @@ Changes since version 0.61.1:
 - added a lock to docked icons
 - fixed crashing bug in WPrefs.app's Appearance section.
 - fixed sorting of names in icon chooser, and file browser.
+- fixed name completion problem in file browser.
+
 
 Changes since version 0.61.0:
 .............................

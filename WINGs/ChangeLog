@@ -7,6 +7,8 @@ changes since wmaker 0.61.1:
 - added WMGetPopUpButtonMenuItem(WMPopUpButton *bPtr, int index)
 - WMSortListItemsWithComparer(WMList *lPtr, (int)(f)(const void*, const void*))
 - fixed bug with sorting list items.
+- fixed bug in handling keyboard input associated with selection and
+  notification sending.
 
 
 changes since wmaker 0.61.0:
