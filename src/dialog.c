@@ -958,11 +958,17 @@ handleLogoPush(XEvent *event, void *data)
 "             .....XmnbN:q&Bo....             ",
 "                 ............                "};
     static char *msgs[] = {
-	    "Have a nice day!"
+	    "Have a nice day!",
+	    "Focus follow mouse users will burn in hell!!!",
+	    "F'ck Canada!!!!",
+	    "F'ck Bastard Imperialists!!!",
+	    "Hi! My name is bobby...",
+	    "AHH! The neurotic monkeys are after me!"
     };
 
 
     clicks++;
+	       
     if (!panel->timer && !broken && clicks > 0) {
 	char *file;
 	char *path;
