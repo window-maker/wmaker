@@ -257,8 +257,8 @@ WMGetSubdataWithRange(WMData *aData, WMRange aRange) /*FOLD00*/
 
     buffer = wmalloc(aRange.count);
     WMGetDataBytesWithRange(aData, buffer, aRange);
-    newData = WMCreateDataWithBytesNoCopy(buffer, aRange.count, wfree);
-    //newData->freeData = 1;
+    newData = WMCreateDataWithBytesNoCopy(buffer, aRange.count, NULL);
+    newData->freeData = 1;
     newData->format = aData->format;
     
     return newData;
