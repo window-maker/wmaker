@@ -13,7 +13,7 @@ VERSION="#version#"
 BINDIR="#bindir#"
 
 make_dir() {
-	make_dir $1
+	mkdir $1
 	chmod +rw $1
 }
 
