@@ -45,9 +45,6 @@ typedef struct W_FilePanel {
 	unsigned int canFreeFileTypes:1;
 	unsigned int fileMustExist:1;
 	unsigned int panelType:1;
-
-	/**/
-	unsigned int ignoreTextChangeNotification:1;
     } flags;
 } W_FilePanel;
 
@@ -117,9 +114,6 @@ textChangedObserver(void *observerData, WMNotification *notification)
     int col = WMGetBrowserNumberOfColumns(panel->browser) - 1;
     int i, textEvent;
 
-    if (panel->flags.ignoreTextChangeNotification)
-	return;
-
     if (!(list = WMGetBrowserListInColumn(panel->browser, col)))
 	return;
 
@@ -142,11 +136,8 @@ textChangedObserver(void *observerData, WMNotification *notification)
         if (textEvent!=WMDeleteTextEvent) {
             WMRange range;
 
-            panel->flags.ignoreTextChangeNotification = 1;
 	    WMInsertTextFieldText(panel->fileField, &item->text[textLen],
                                   textLen);
-            panel->flags.ignoreTextChangeNotification = 0;
-
 	    WMSetTextFieldCursorPosition(panel->fileField, itemTextLen);
 	    range.position = textLen;
 	    range.count = itemTextLen - textLen;
@@ -571,15 +562,11 @@ browserClick(WMBrowser *bPtr, WMFilePanel *panel)
     int col = WMGetBrowserSelectedColumn(bPtr);
     WMListItem *item = WMGetBrowserSelectedItemInColumn(bPtr, col);
 
-    panel->flags.ignoreTextChangeNotification = 1;
-
     if (!item || item->isBranch)
 	WMSetTextFieldText(panel->fileField, NULL);
     else {
 	WMSetTextFieldText(panel->fileField, item->text);
     }
-
-    panel->flags.ignoreTextChangeNotification = 0;
 }
 
 

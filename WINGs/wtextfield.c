@@ -281,9 +281,9 @@ WMInsertTextFieldText(WMTextField *tPtr, char *text, int position)
 }
 
 
-static void
-deleteTextFieldRange(WMTextField *tPtr, WMRange range)
-{    
+void
+WMDeleteTextFieldRange(WMTextField *tPtr, WMRange range)
+{
     CHECK_CLASS(tPtr, WC_TextField);
 
     if (range.position >= tPtr->textLen)
@@ -311,13 +311,6 @@ deleteTextFieldRange(WMTextField *tPtr, WMRange range)
     }
 
     paintTextField(tPtr);
-}
-
-
-void
-WMDeleteTextFieldRange(WMTextField *tPtr, WMRange range)
-{
-    deleteTextFieldRange(tPtr, range);
 }
 
 
@@ -1022,7 +1015,8 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
                 range.count = 1;
             }
 	    WMDeleteTextFieldRange(tPtr, range);
-	    NOTIFY(tPtr, didChange, WMTextDidChangeNotification, NULL);
+            NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
+                   (void*)WMDeleteTextEvent);
 	}
 	break;
 	
@@ -1046,7 +1040,8 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 		range.count = 1;
             }
 	    WMDeleteTextFieldRange(tPtr, range);
-	    NOTIFY(tPtr, didChange, WMTextDidChangeNotification, NULL);
+            NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
+                   (void*)WMDeleteTextEvent);
 	}
 	break;
 
@@ -1066,9 +1061,10 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 		range.count = 1;
             }
             if (tPtr->prevselection.count)
-                deleteTextFieldRange(tPtr, range);
+                WMDeleteTextFieldRange(tPtr, range);
 	    WMInsertTextFieldText(tPtr, buffer, tPtr->cursorPosition);
-	    NOTIFY(tPtr, didChange, WMTextDidChangeNotification, NULL);
+            NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
+                   (void*)WMInsertTextEvent);
 	} else {
 	    return;
 	}
@@ -1250,7 +1246,8 @@ handleTextFieldActionEvents(XEvent *event, void *data)
                 if (text) {
 		    WMInsertTextFieldText(tPtr, text, tPtr->cursorPosition);
 		    XFree(text);
-		    NOTIFY(tPtr, didChange, WMTextDidChangeNotification, NULL);
+                    NOTIFY(tPtr, didChange, WMTextDidChangeNotification,
+                           (void*)WMInsertTextEvent);
                 }
             }
             break;
