@@ -633,11 +633,13 @@ paintTextField(TextField *tPtr)
 {
     W_Screen *screen = tPtr->view->screen;
     W_View *view = tPtr->view;
+    W_View viewbuffer;
     int tx, ty, tw, th;
     int rx;
     int bd;
     int totalWidth;
     char *text;
+    Pixmap drawbuffer;
 
     
     if (!view->flags.realized || !view->flags.mapped)
@@ -656,6 +658,16 @@ paintTextField(TextField *tPtr)
     }
 
     totalWidth = tPtr->view->size.width - 2*bd;
+    
+    drawbuffer = XCreatePixmap(screen->display, view->window,
+            view->size.width, view->size.height, screen->depth);
+    XFillRectangle(screen->display, drawbuffer, WMColorGC(screen->white),
+            0,0, view->size.width,view->size.height);
+    /* this is quite dirty */
+    viewbuffer.screen = view->screen;
+    viewbuffer.size = view->size;
+    viewbuffer.window = drawbuffer;
+
 
     if (tPtr->textLen > 0) {
     	tw = WMWidthOfString(tPtr->font, &(text[tPtr->viewPosition]),
@@ -665,12 +677,12 @@ paintTextField(TextField *tPtr)
 
 	ty = tPtr->offsetWidth;
 	switch (tPtr->flags.alignment) {
-	 case WALeft:
+     case WALeft:
 	    tx = tPtr->offsetWidth + 1;
 	    if (tw < tPtr->usableWidth)
-		XClearArea(screen->display, view->window, bd+tw, bd,
-			   totalWidth-tw, view->size.height-2*bd, 
-			   False);
+        XFillRectangle(screen->display, drawbuffer,
+                WMColorGC(screen->white),
+                bd+tw,bd, totalWidth-tw,view->size.height-2*bd);
 	    break;
 	
 	 case WACenter:	    
@@ -692,58 +704,62 @@ paintTextField(TextField *tPtr)
         if (!tPtr->flags.enabled)
             WMSetColorInGC(screen->darkGray, screen->textFieldGC);
 
-        WMDrawImageString(screen, view->window, screen->textFieldGC,
+        WMDrawImageString(screen, drawbuffer, screen->textFieldGC,
                           tPtr->font, tx, ty,
                           &(text[tPtr->viewPosition]),
                           tPtr->textLen - tPtr->viewPosition);
 
         if (tPtr->selection.count) {
-            int count;
+            int count,count2;
 
             count = tPtr->selection.count < 0
                 ? tPtr->selection.position + tPtr->selection.count
                 : tPtr->selection.position;
+            count2 = abs(tPtr->selection.count);
+            if (count < tPtr->viewPosition) {
+                count2 = abs(count2 - abs(tPtr->viewPosition - count));
+                count = tPtr->viewPosition;
+            }
 
-            /*
-             rx = tx + WMWidthOfString(tPtr->font,
-             &(text[tPtr->viewPosition]),
-             count)
-             - WMWidthOfString(tPtr->font,
-             text,tPtr->viewPosition);
-             */
+
             rx = tPtr->offsetWidth + 1 + WMWidthOfString(tPtr->font,text,count)
                 - WMWidthOfString(tPtr->font,text,tPtr->viewPosition);
 
             XSetBackground(screen->display, screen->textFieldGC,
-                           screen->gray->color.pixel);
+                    screen->gray->color.pixel);
 
-            WMDrawImageString(screen, view->window, screen->textFieldGC,
-                              tPtr->font, rx, ty, &(text[count]),
-                              abs(tPtr->selection.count));
+            WMDrawImageString(screen, drawbuffer, screen->textFieldGC,
+                    tPtr->font, rx, ty, &(text[count]),
+                    abs(tPtr->selection.count));
 
             XSetBackground(screen->display, screen->textFieldGC,
-                           screen->white->color.pixel);
+                    screen->white->color.pixel);
         }
 
         if (!tPtr->flags.enabled)
             WMSetColorInGC(screen->black, screen->textFieldGC);
     } else {
-	XClearArea(screen->display, view->window, bd, bd, totalWidth,
-		   view->size.height - 2*bd, False);
+            XFillRectangle(screen->display, drawbuffer,
+            WMColorGC(screen->white),
+            bd,bd, totalWidth,view->size.height-2*bd);
     }
 
-    /* draw cursor */
-    if (tPtr->flags.focused && tPtr->flags.enabled && tPtr->flags.cursorOn) {
-	paintCursor(tPtr);
-    }
-    
     /* draw relief */
     if (tPtr->flags.bordered) {
-	drawRelief(view, tPtr->flags.beveled);
+        drawRelief(&viewbuffer, tPtr->flags.beveled);
     }
 
     if (tPtr->flags.secure)
         free(text);
+    XCopyArea(screen->display, drawbuffer, view->window,
+            screen->copyGC, 0,0, view->size.width,
+            view->size.height,0,0);
+    XFreePixmap(screen->display, drawbuffer);
+
+    /* draw cursor */
+    if (tPtr->flags.focused && tPtr->flags.enabled && tPtr->flags.cursorOn) {
+        paintCursor(tPtr);
+    }
 }
 
 
