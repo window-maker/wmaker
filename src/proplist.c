@@ -405,7 +405,7 @@ get_object(FILE *f)
 	
 	/* array */
      case '(':
-	DPUT("getting arrray");
+	DPUT("getting array");
 	pl = get_array(f);
 	break;
 	
@@ -417,7 +417,7 @@ get_object(FILE *f)
 
 	/* quoted string */
      case '"':
-	DPUT("getting qstring");
+	DPUT("getting quoted string");
 	pl = get_qstring(f);
 	break;
 

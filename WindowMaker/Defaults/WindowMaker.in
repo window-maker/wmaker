@@ -108,7 +108,7 @@
   MenuTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
   MenuTextFont = "-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*";
   IconTitleFont = "-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-*-*";
-  ClipTitleFont = "-*-helvetica-medium-r-normal-*-10-*-*-*-*-*-*-*";
+  ClipTitleFont = "-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*";
   DisplayFont = "-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*";
   HighlightColor = white;
   HighlightTextColor = black;

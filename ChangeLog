@@ -5,6 +5,8 @@ Changes since version 0.65.1:
 - Fixed some more bash specific constructs in wsetfont.
     (Marcelo E. Magallon <marcelo.magallon@bigfoot.com>)
 - fixed crash with broken apps that set null WM_CLASS
+- replaced I18N_MB with I18N in one place in src/wconfig.h.in
+- fixed default clip title font in WindowMaker.in
 
 Changes since version 0.65.0:
 .............................
