@@ -51,7 +51,7 @@ Changes since version 0.53.0:
 - fixed crash bug when iconsize=24
 - fixed portability prob with raise() in SunOS
 - fixed icon placement bug (Markus Schoder <Markus.Schoder@online.de>)
-- added delete button in file panel.
+- added delete and floppy buttons in file panel.
 
 
 Changes since version 0.52.0:
