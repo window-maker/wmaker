@@ -178,16 +178,21 @@ typedef struct W_Text {
 
 #define TYPETEXT 0
 
+#if 0
 /* just to print blocks of text not terminated by \0 */
 static void 
 output(char *ptr, int len)
-{   
-    char s[len+1]; 
+{
+    char *s;
+
+    s = wmalloc(len+1);
     memcpy(s, ptr, len);
     s[len] = 0; 
     /* printf(" s is [%s] (%d)\n",  s, strlen(s)); */
     printf("[%s]\n",  s);
+    wfree(s);
 }
+#endif
 
 
 #if DO_BLINK
@@ -829,7 +834,7 @@ _getSibling:
 
                         tb->selected = True;
                         XFillRectangle(dpy, d, tPtr->stippledGC,
-                        //XFillRectangle(dpy, tPtr->db, tPtr->stippledGC,
+                        /*XFillRectangle(dpy, tPtr->db, tPtr->stippledGC,*/
                             rect.x, rect.y, rect.width, rect.height);
                     }
                 }
@@ -2025,20 +2030,22 @@ insertTextInteractively(Text *tPtr, char *text, int len)
     if ((newline = strchr(text, '\n'))) {
         int nlen = (int)(newline-text);
         int s = tb->used - tPtr->tpos;
-        char save[s];
-
 
         if (!tb->blank && nlen>0) {
-            if (s > 0) { 
+            char *save;
+
+            if (s > 0) {
+                save = wmalloc(s);
                 memcpy(save, &tb->text[tPtr->tpos], s);
                 tb->used -= (tb->used - tPtr->tpos);
             }
             insertTextInteractively(tPtr, text, nlen);
             newline++;
             WMAppendTextStream(tPtr, newline);
-            if (s>0)
+            if (s>0) {
                 insertTextInteractively(tPtr, save, s);
-
+                wfree(save);
+            }
         } else {
             if (tPtr->tpos>0 && tPtr->tpos < tb->used 
                 && !tb->graphic && tb->text) { 
@@ -2079,7 +2086,6 @@ insertTextInteractively(Text *tPtr, char *text, int len)
                     tPtr->currentTextBlock = tPtr->currentTextBlock->next;
             }
         }
-
     } else { 
         if (tb->used + len >= tb->allocated) {
             tb->allocated = reqBlockSize(tb->used+len);
@@ -2589,14 +2595,15 @@ handleActionEvents(XEvent *event, void *data)
  
                     tPtr->lastClickTime = event->xbutton.time;
                     if(tb && tb->graphic && !tb->object) { 
-                            char desc[tb->used+1];
+                        if(tPtr->delegate && tPtr->delegate->didDoubleClickOnPicture) {
+                            char *desc;
+
+                            desc = wmalloc(tb->used+1);
                             memcpy(desc, tb->text, tb->used);
                             desc[tb->used] = 0;
-                        if(tPtr->delegate) {
-                        if(tPtr->delegate->didDoubleClickOnPicture)
-                            (*tPtr->delegate->didDoubleClickOnPicture)
-                                (tPtr->delegate, desc);
-                        } 
+                            (*tPtr->delegate->didDoubleClickOnPicture)(tPtr->delegate, desc);
+                            wfree(desc);
+                        }
                     } else {
                         autoSelectText(tPtr, 2);
                     }

@@ -194,11 +194,7 @@ singleClick(WMWidget *self, void *data)
 static void
 doubleClick(WMWidget *self, void *data)
 {
-    WMLabel *label = (WMLabel*)data;
-    WMList *lPtr = (WMList*)self;
-    char buf[255];
-
-    WMSelectAllListItems(lPtr);
+    WMSelectAllListItems((WMList*)self);
 }
 
 

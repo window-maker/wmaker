@@ -592,6 +592,7 @@ removeConnection(void *observer, WMNotification *notification)
 }
 
 
+#if 0
 static Bool
 isDifferent(char *str1, char *str2) /*FOLD00*/
 {
@@ -600,6 +601,7 @@ isDifferent(char *str1, char *str2) /*FOLD00*/
 
     return True;
 }
+#endif
 
 
 int

@@ -26,7 +26,7 @@ int numberOfRows(WMTableViewDelegate *self, WMTableView *table)
 
 void *valueForCell(WMTableViewDelegate *self, WMTableColumn *column, int row)
 {
-    WMTableView *table = (WMTableView*)WMGetTableColumnTableView(column);
+    /*WMTableView *table = (WMTableView*)WMGetTableColumnTableView(column);*/
     int i;
     if (col1[0] == 0) {
 	for (i = 0; i < 20; i++) {
@@ -90,7 +90,7 @@ main(int argc, char **argv)
     table = WMCreateTableView(win);
     WMResizeWidget(table, 400, 200);
     WMSetTableViewBackgroundColor(table, WMWhiteColor(scr));
-//    WMSetTableViewGridColor(table, WMGrayColor(scr));
+    /*WMSetTableViewGridColor(table, WMGrayColor(scr));*/
     WMSetTableViewHeaderHeight(table, 20);
     WMSetTableViewDelegate(table, &delegate);
     WMSetTableViewAction(table, clickedTable, table);

@@ -208,7 +208,7 @@ int
 WMHandleEvent(XEvent *event)
 {
     W_EventHandler *hPtr;
-    W_View *view, *vPtr, *toplevel;
+    W_View *view, *toplevel;
     unsigned long mask;
     Window window;
     WMArrayIterator iter;

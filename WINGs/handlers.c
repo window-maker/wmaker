@@ -260,7 +260,6 @@ void
 WMDeleteIdleHandler(WMHandlerID handlerID)
 {
     IdleHandler *handler = (IdleHandler*)handlerID;
-    int pos;
 
     if (!handler || !idleHandler)
         return;
@@ -295,7 +294,6 @@ void
 WMDeleteInputHandler(WMHandlerID handlerID)
 {
     InputHandler *handler = (InputHandler*)handlerID;
-    int pos;
 
     if (!handler || !inputHandler)
 	return;

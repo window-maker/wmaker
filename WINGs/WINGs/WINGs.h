@@ -36,9 +36,6 @@ typedef struct {
     WMSize size;
 } WMRect;
 
-#define wmksize(width, height) (WMSize){(width), (height)}
-#define wmkpoint(x, y)         (WMPoint){(x), (y)}
-#define wmkrect(pos, size)     (WMRect){(pos), (size)}
 
 
 
@@ -577,6 +574,17 @@ typedef struct W_DragDestinationProcs {
 
 
 
+/* ...................................................................... */
+
+
+WMPoint wmkpoint(int x, int y);
+
+WMSize wmksize(unsigned int width, unsigned int height);
+
+#ifdef ANSI_C_DOESNT_LIKE_IT_THIS_WAY
+#define wmksize(width, height) (WMSize){(width), (height)}
+#define wmkpoint(x, y)         (WMPoint){(x), (y)}
+#endif
 
 /* ....................................................................... */
 

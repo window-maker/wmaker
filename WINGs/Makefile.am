@@ -34,6 +34,7 @@ libWINGs_a_SOURCES = 	\
 	host.c \
 	international.c \
 	memory.c \
+	misc.c \
 	notification.c \
 	selection.c \
 	string.c \
@@ -87,6 +88,7 @@ libWUtil_a_SOURCES = 	\
 	host.c \
 	international.c \
 	memory.c \
+	misc.c \
 	notification.c \
 	string.c \
 	tree.c \

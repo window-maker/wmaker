@@ -378,7 +378,6 @@ WMTabViewItem*
 WMTabViewItemAtPoint(WMTabView *tPtr, int x, int y)
 {
     int i;
-    int offset;
     int count = tPtr->visibleTabs;
     int first = tPtr->firstVisible;
     
@@ -526,7 +525,7 @@ static void
 recalcTabWidth(TabView *tPtr)
 {
     int i;
-    int twidth = W_VIEW(tPtr)->size.width;
+    /*int twidth = W_VIEW(tPtr)->size.width;*/
     int width;
 
     if (tPtr->flags.uniformTabs) {
@@ -679,7 +678,7 @@ paintTabView(TabView *tPtr)
 	int moreAtLeft;
 	int moreAtRight;
 	int selectedIsVisible;
-	int tx, ty;
+	int ty;
 	int twidth, theight;
 	
 	ty = 2;

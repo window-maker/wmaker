@@ -193,8 +193,6 @@ WMRetainHost(WMHost *hPtr)
 void
 WMReleaseHost(WMHost *hPtr)
 {
-    int i;
-
     hPtr->refCount--;
 
     if (hPtr->refCount > 0)

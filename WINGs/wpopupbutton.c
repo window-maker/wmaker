@@ -782,8 +782,6 @@ handleActionEvents(XEvent *event, void *data)
 static void
 destroyPopUpButton(PopUpButton *bPtr)
 {
-    WMMenuItem *item;
-
     if (bPtr->timer) {
 	WMDeleteTimerHandler(bPtr->timer);
     }

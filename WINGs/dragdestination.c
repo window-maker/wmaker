@@ -189,8 +189,8 @@ receivedData(WMView *view, Atom selection, Atom target, Time timestamp,
 Bool WMRequestDroppedData(WMView *view, WMDraggingInfo *info, char *type,
 			  WMDropDataCallback *callback)
 {
-    WMScreen *scr = W_VIEW_SCREEN(view);
 #if 0
+    WMScreen *scr = W_VIEW_SCREEN(view);
     if (info->finished) {
 	return False;
     }

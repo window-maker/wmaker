@@ -381,10 +381,7 @@ WMTableView *WMCreateTableView(WMWidget *parent)
 
 void WMAddTableViewColumn(WMTableView *table, WMTableColumn *column)
 {
-    int width;
-    int i;
     WMScreen *scr = WMWidgetScreen(table);
-    int count;
     
     column->table = table;
 
@@ -952,7 +949,7 @@ static void rearrangeHeader(WMTableView *table)
     int width;
     int count;
     int i;    
-    WMRect rect = WMGetScrollViewVisibleRect(table->scrollView);    
+    /*WMRect rect = WMGetScrollViewVisibleRect(table->scrollView);*/
     
     width = 0;
     

@@ -370,7 +370,6 @@ WMRunModalFilePanelForDirectory(WMFilePanel *panel, WMWindow *owner,
                                 char *path, char *name, char **fileTypes)
 {
     WMScreen *scr = WMWidgetScreen(panel->win);
-    XEvent event;
 
     if (name && !owner) {
         WMSetWindowTitle(panel->win, name);

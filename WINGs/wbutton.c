@@ -750,7 +750,7 @@ handleActionEvents(XEvent *event, void *data)
 	if (event->xbutton.button == Button1) {
 	    if (bPtr->flags.pushed) {
 		if (bPtr->groupIndex==0 || 
-		    bPtr->flags.selected && bPtr->groupIndex > 0)
+		    (bPtr->flags.selected && bPtr->groupIndex > 0))
 		    doclick = 1;
 		dopaint = 1;
 		if (bPtr->flags.springLoaded) {

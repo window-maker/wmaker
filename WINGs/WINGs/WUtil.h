@@ -154,8 +154,6 @@ typedef struct {
     int count;
 } WMRange;
 
-#define wmkrange(position, count) (WMRange){(position), (count)}
-
 
 
 /* DO NOT ACCESS THE CONTENTS OF THIS STRUCT */
@@ -276,6 +274,11 @@ void wtokenfree(char **tokens, int count);
 
 char* wtrimspace(char *s);
 
+
+WMRange wmkrange(int start, int count);
+#ifdef ANSI_C_DOESNT_LIKE_IT_THIS_WAY
+#define wmkrange(position, count) (WMRange){(position), (count)}
+#endif
 
 
 char* wusergnusteppath();
