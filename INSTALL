@@ -15,6 +15,7 @@ SUPPORTED PLATFORMS
 - FreeBSD
 - NetBSD
 - OpenBSD
+- BSDI 4.0
 - Solaris 2.5.1, 2.5.2
 - Solaris 2.6.0
 - Solaris 2.7beta

@@ -890,6 +890,16 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	}
 	break;
 	
+     case XK_ISO_Left_Tab:
+         if (tPtr->view->prevFocusChain) {
+             W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
+                                  tPtr->view->prevFocusChain);
+             tPtr->flags.notIllegalMovement = 1;
+         }
+         WMPostNotificationName(WMTextDidEndEditingNotification, tPtr,
+                                (void*)WMBacktabTextMovement);
+         break;
+	
      case XK_Return:
 	WMPostNotificationName(WMTextDidEndEditingNotification, tPtr, 
 			       (void*)WMReturnTextMovement);
