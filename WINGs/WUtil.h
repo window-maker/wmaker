@@ -253,6 +253,7 @@ void *WMGetFromBag(WMBag *bag, int index);
 
 int WMCountInBag(WMBag *bag, void *item);
 
+void *WMReplaceInBag(WMBag *bag, int index, void *item);
     
 /* comparer must return:
  * < 0 if a < b

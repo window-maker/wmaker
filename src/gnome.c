@@ -456,7 +456,7 @@ wGNOMEProcessClientMessage(XClientMessageEvent *event)
     WWindow *wwin;
     Bool done = True;
 
-    scr = wScreenForRootWindow(event->window);
+    scr = wScreenForWindow(event->window);
     if (scr) {
 	/* generic client messages */
 	if (event->message_type == _XA_WIN_WORKSPACE) {

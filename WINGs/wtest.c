@@ -393,7 +393,6 @@ testPullDown(WMScreen *scr)
 }
 
 
-
 void
 testTabView(WMScreen *scr)
 {
@@ -461,6 +460,172 @@ testTabView(WMScreen *scr)
 }
 
 
+void
+splitViewConstrainProc(WMSplitView *sPtr, int indView,
+		       int *minSize, int *maxSize)
+{
+    switch (indView) {
+    case 0:
+    	*minSize = 20;
+	break;
+    case 1:
+    	*minSize = 40;
+    	*maxSize = 80;
+	break;
+    case 2:
+    	*maxSize = 60;
+	break;
+    default:
+    	break;
+    }
+}
+
+
+static void 
+resizeSplitView(XEvent *event, void *data)
+{
+    WMSplitView *sPtr = (WMSplitView*)data;
+
+    if (event->type == ConfigureNotify) {
+	int width = event->xconfigure.width - 10;
+        
+	if (width < WMGetSplitViewDividerThickness(sPtr))
+	    width = WMGetSplitViewDividerThickness(sPtr);
+
+	if (width != WMWidgetWidth(sPtr) ||
+            event->xconfigure.height != WMWidgetHeight(sPtr))
+	    WMResizeWidget(sPtr, width, event->xconfigure.height - 55);
+    }
+}
+
+void
+appendSubviewButtonAction(WMWidget *self, void *data)
+{
+    WMSplitView *sPtr = (WMSplitView*)data;
+    char buf[64];
+    WMLabel *label = WMCreateLabel(sPtr);
+    
+    sprintf(buf, "Subview %d", WMGetSplitViewSubViewsCount(sPtr) + 1);
+    WMSetLabelText(label, buf);
+    WMSetLabelRelief(label, WRSunken);
+    WMAddSplitViewSubview(sPtr, WMWidgetView(label));
+    WMRealizeWidget(label);
+    WMMapWidget(label);
+}
+
+void
+removeSubviewButtonAction(WMWidget *self, void *data)
+{
+    WMSplitView *sPtr = (WMSplitView*)data;
+    int count = WMGetSplitViewSubViewsCount(sPtr);
+    
+    if (count > 2) {
+    	WMView *view = WMGetSplitViewSubViewAt(sPtr, count-1);
+	WMDestroyWidget(WMWidgetOfView(view));
+    	WMRemoveSplitViewSubviewAt(sPtr, count-1);
+    }
+}
+
+void
+orientationButtonAction(WMWidget *self, void *data)
+{
+    WMSplitView *sPtr = (WMSplitView*)data;
+    WMSetSplitViewVertical(sPtr, !WMGetSplitViewVertical(sPtr));
+}
+
+void
+adjustSubviewsButtonAction(WMWidget *self, void *data)
+{
+    WMAdjustSplitViewSubViews((WMSplitView*)data);
+}
+
+void
+testSplitView(WMScreen *scr)
+{
+    WMWindow *win;
+    WMSplitView *splitv1, *splitv2;
+    WMFrame *frame;
+    WMLabel *label;
+    WMButton *button;
+
+    windowCount++;
+    
+    win = WMCreateWindow(scr, "testTabs");
+    WMResizeWidget(win, 300, 400);
+    WMSetWindowCloseAction(win, closeAction, NULL);    
+
+    frame = WMCreateFrame(win);
+    WMSetFrameRelief(frame, WRSunken);
+    WMMoveWidget(frame, 5, 5);
+    WMResizeWidget(frame, 290, 40);
+    
+    splitv1 = WMCreateSplitView(win);
+    WMMoveWidget(splitv1, 5, 50);
+    WMResizeWidget(splitv1, 290, 345);
+    WMSetSplitViewConstrainProc(splitv1, splitViewConstrainProc);
+    WMCreateEventHandler(WMWidgetView(win), StructureNotifyMask,
+                         resizeSplitView, splitv1);
+
+    button = WMCreateCommandButton(frame);
+    WMSetButtonText(button, "+");
+    WMSetButtonAction(button, appendSubviewButtonAction, splitv1);
+    WMMoveWidget(button, 10, 8);
+    WMMapWidget(button);
+    
+    button = WMCreateCommandButton(frame);
+    WMSetButtonText(button, "-");
+    WMSetButtonAction(button, removeSubviewButtonAction, splitv1);
+    WMMoveWidget(button, 80, 8);
+    WMMapWidget(button);
+    
+    button = WMCreateCommandButton(frame);
+    WMSetButtonText(button, "=");
+    WMMoveWidget(button, 150, 8);
+    WMSetButtonAction(button, adjustSubviewsButtonAction, splitv1);
+    WMMapWidget(button);
+    
+    button = WMCreateCommandButton(frame);
+    WMSetButtonText(button, "#");
+    WMMoveWidget(button, 220, 8);
+    WMSetButtonAction(button, orientationButtonAction, splitv1);
+    WMMapWidget(button);
+    
+    label = WMCreateLabel(splitv1);
+    WMSetLabelText(label, "Subview 1");
+    WMSetLabelRelief(label, WRSunken);
+    WMMapWidget(label);
+    WMAddSplitViewSubview(splitv1, WMWidgetView(label));
+
+    splitv2 = WMCreateSplitView(splitv1);
+    WMResizeWidget(splitv2, 150, 150);
+    WMSetSplitViewVertical(splitv2, True);
+
+    label = WMCreateLabel(splitv2);
+    WMSetLabelText(label, "Subview 2.1");
+    WMSetLabelRelief(label, WRSunken);
+    WMMapWidget(label);
+    WMAddSplitViewSubview(splitv2, WMWidgetView(label));
+
+    label = WMCreateLabel(splitv2);
+    WMSetLabelText(label, "Subview 2.2");
+    WMSetLabelRelief(label, WRSunken);
+    WMMapWidget(label);
+    WMAddSplitViewSubview(splitv2, WMWidgetView(label));
+
+    label = WMCreateLabel(splitv2);
+    WMSetLabelText(label, "Subview 2.3");
+    WMSetLabelRelief(label, WRSunken);
+    WMMapWidget(label);
+    WMAddSplitViewSubview(splitv2, WMWidgetView(label));
+        
+    WMMapWidget(splitv2);
+    WMAddSplitViewSubview(splitv1, WMWidgetView(splitv2));
+
+    WMRealizeWidget(win);
+    WMMapSubwidgets(win);
+    WMMapWidget(win);
+}
+
 #include "WUtil.h"
 
 
@@ -513,8 +678,7 @@ int main(int argc, char **argv)
      */
 
 
-    testPullDown(scr);
-
+    testSplitView(scr);
     testFontPanel(scr);
 #if 0
 
@@ -527,11 +691,11 @@ int main(int argc, char **argv)
 
     testOpenFilePanel(scr);
     testList(scr);
-    testGradientButtons(scr);
     testScrollView(scr);
 
 
     testSlider(scr);
+    testPullDown(scr);
 #endif
     /*
      * The main event loop.

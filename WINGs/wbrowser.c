@@ -440,6 +440,14 @@ WMSortBrowserColumn(WMBrowser *bPtr, int column)
 }
 
 
+void
+WMSortBrowserColumnWithComparer(WMBrowser *bPtr, int column,
+				int (f)(const void*, const void*))
+{
+    WMSortListItemsWithComparer(bPtr->columns[column], f);
+}
+
+
 
 WMListItem*
 WMInsertBrowserItem(WMBrowser *bPtr, int column, int row, char *text,

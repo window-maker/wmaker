@@ -82,13 +82,15 @@ static void sizeClick(WMWidget *, void *);
 
 static void listFamilies(WMScreen *scr, WMFontPanel *panel);
 
-static void
-splitViewConstrainCallback(WMSplitView *sPtr, int divIndex, int *min, int *max)
-{    
-    *min = MIN_UPPER_HEIGHT;
-    *max = WMWidgetHeight(sPtr)-BUTTON_SPACE_HEIGHT-MIN_LOWER_HEIGHT;
-}
 
+static void
+splitViewConstrainCallback(WMSplitView *sPtr, int indView, int *min, int *max)
+{
+    if (indView == 0)    
+    	*min = MIN_UPPER_HEIGHT;
+    else
+    	*min = MIN_LOWER_HEIGHT;
+}
 
 static void
 notificationObserver(void *self, WMNotification *notif)

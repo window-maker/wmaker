@@ -635,9 +635,11 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 
     scrPtr->useMultiByte = WINGsConfiguration.useMultiByte;
 
-    scrPtr->normalFont = WMSystemFontOfSize(scrPtr, 12);
+    scrPtr->normalFont = WMSystemFontOfSize(scrPtr, 
+		WINGsConfiguration.defaultFontSize);
 
-    scrPtr->boldFont = WMBoldSystemFontOfSize(scrPtr, 12);
+    scrPtr->boldFont = WMBoldSystemFontOfSize(scrPtr, 
+		WINGsConfiguration.defaultFontSize);
 
     if (!scrPtr->boldFont)
 	scrPtr->boldFont = scrPtr->normalFont;

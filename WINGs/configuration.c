@@ -38,7 +38,11 @@ W_ReadConfigurations(void)
 
 	WINGsConfiguration.doubleClickDelay = 
 	    WMGetUDIntegerForKey(defaults, "DoubleClickTime");	
+	
+	WINGsConfiguration.defaultFontSize = 
+	  	WMGetUDIntegerForKey(defaults, "DefaultFontSize");
     }
+	  
 
     if (!WINGsConfiguration.systemFont) {
 	WINGsConfiguration.systemFont = SYSTEM_FONT;
@@ -49,5 +53,9 @@ W_ReadConfigurations(void)
     if (WINGsConfiguration.doubleClickDelay == 0) {
 	WINGsConfiguration.doubleClickDelay = 250;
     }
+    if (WINGsConfiguration.defaultFontSize == 0) {
+	WINGsConfiguration.defaultFontSize = 12;
+    }
+
 }
 

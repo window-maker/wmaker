@@ -1407,6 +1407,8 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
         dir_data *d = (dir_data*)WMGetFromBag(dirs, i);
 
         length = strlen(path[d->index])+strlen(d->name)+6;
+	if (stripExtension)
+	    length += 7;
         if (command)
             length += strlen(command) + 6;
         buffer = malloc(length);
@@ -1415,16 +1417,18 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
                      path[d->index]);
             break;
         }
+	
+	buffer[0] = '\0';
+        if (stripExtension)
+            strcat(buffer, "-noext ");
 
         have_space = strchr(path[d->index], ' ')!=NULL ||
                      strchr(d->name, ' ')!=NULL;
-        if (have_space) {
-            buffer[0] = '"';
-            buffer[1] = 0;
-            strcat(buffer, path[d->index]);
-        } else {
-            strcpy(buffer, path[d->index]);
-        }
+
+	if (have_space)
+            strcat(buffer, "\"");
+	strcat(buffer, path[d->index]);
+
         strcat(buffer, "/");
         strcat(buffer, d->name);
         if (have_space)
@@ -1450,7 +1454,7 @@ readMenuDirectory(WScreen *scr, char *title, char **path, char *command)
         if (command)
             length += strlen(command);
 
-        buffer = wmalloc(length);
+        buffer = malloc(length);
         if (!buffer) {
             wsyserror(_("out of memory while constructing directory menu %s"),
                      path[f->index]);

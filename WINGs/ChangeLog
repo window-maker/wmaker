@@ -6,10 +6,15 @@ changes since wmaker 0.61.1:
 - rewrote WMPopUpButton to use WMMenuItem
 - added WMGetPopUpButtonMenuItem(WMPopUpButton *bPtr, int index)
 - WMSortListItemsWithComparer(WMList *lPtr, (int)(f)(const void*, const void*))
+- WMSortBrowserColumnWithComparer()
 - fixed bug with sorting list items.
 - fixed bug in handling keyboard input associated with selection and
   notification sending.
-
+- filepanel puts dirs on top of list (Wolff <wolff@cybercable.fr>)
+- added WMReplaceInBag (Wolff <wolff@cybercable.fr>)
+- added vertical views and multiple views in WMSplitView (Wolff <wolff@cybercable.fr>)
+- changed values of parameter values of WMSplitViewConstrainProc()
+- configurable default fontsize patch (Igor P. Roboul <igor@mordor.myip.org>)
 
 changes since wmaker 0.61.0:
 ............................

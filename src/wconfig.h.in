@@ -506,6 +506,9 @@
 #define FRAME_BORDER_COLOR "black"
 
 
+/* for boxes with high mouse sampling rates (SGI) */
+#define DELAY_BETWEEN_MOUSE_SAMPLING  10
+
 
 /*
  *----------------------------------------------------------------------

@@ -151,6 +151,8 @@ static int ArgCount;
 extern void EventLoop();
 extern void StartUp();
 
+static Bool multiHead = True;
+
 /* stdi/o for log shell */
 static int LogStdIn = -1, LogStdOut = -1, LogStdErr = -1;
 
@@ -210,7 +212,7 @@ SetupEnvironment(WScreen *scr)
     char *tmp, *ptr;
     char buf[16];
 
-    if (wScreenCount > 1) {
+    if (multiHead) {
     	tmp = wmalloc(strlen(DisplayName)+64);
     	sprintf(tmp, "DISPLAY=%s", XDisplayName(DisplayName));
     	ptr = strchr(strchr(tmp, ':'), '.');
@@ -540,7 +542,6 @@ int
 main(int argc, char **argv)
 {
     int i, restart=0;
-    Bool multiHead = True;
     char *str;
     int d, s;
 #ifdef DEBUG
@@ -744,6 +745,9 @@ main(int argc, char **argv)
 #endif
     
     StartUp(!multiHead);
+    
+    if (wScreenCount==1)
+	multiHead = False;
 
     execInitScript();
 

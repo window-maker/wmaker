@@ -532,6 +532,19 @@ filterFileName(WMFilePanel *panel, char *file, Bool isDirectory)
 }
 
 
+#define CAST(item) (*((WMListItem**)item))
+static int
+comparer(const void *a, const void *b)
+{
+    if (CAST(a)->isBranch == CAST(b)->isBranch)
+      return (strcmp(CAST(a)->text, CAST(b)->text));
+    if (CAST(a)->isBranch)
+      return (-1);
+    return (1);
+}
+#undef CAST
+
+
 static void
 listDirectoryOnColumn(WMFilePanel *panel, int column, char *path)
 {
@@ -581,7 +594,7 @@ listDirectoryOnColumn(WMFilePanel *panel, int column, char *path)
 		WMInsertBrowserItem(bPtr, column, -1, dentry->d_name, isDirectory);
 	}
     }
-    WMSortBrowserColumn(bPtr, column);
+    WMSortBrowserColumnWithComparer(bPtr, column, comparer);
 
     closedir(dir);
 }

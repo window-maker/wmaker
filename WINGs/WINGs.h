@@ -407,7 +407,7 @@ typedef void WMSplitViewResizeSubviewsProc(WMSplitView *sPtr,
 */
 
 typedef void WMSplitViewConstrainProc(WMSplitView *sPtr, int dividerIndex,
-				      int *minCoordinate, int *maxCoordinate);
+				      int *minSize, int *maxSize);
 
 typedef WMWidget *WMMatrixCreateCellProc(WMMatrix *mPtr);
 
@@ -1016,6 +1016,9 @@ WMListItem *WMInsertBrowserItem(WMBrowser *bPtr, int column, int row, char *text
 
 void WMSortBrowserColumn(WMBrowser *bPtr, int column);
 
+void WMSortBrowserColumnWithComparer(WMBrowser *bPtr, int column,
+				     int (f)(const void*, const void*));
+
 /* Don't free the returned string. */
 char* WMSetBrowserPath(WMBrowser *bPtr, char *path);
 
@@ -1248,8 +1251,20 @@ void WMSetSliderImage(WMSlider *sPtr, WMPixmap *pixmap);
 
 /* ....................................................................... */
 
-/* only supports 2 subviews */
+
 WMSplitView *WMCreateSplitView(WMWidget *parent);
+Bool WMGetSplitViewVertical(WMSplitView *sPtr);
+void WMSetSplitViewVertical(WMSplitView *sPtr, Bool flag);
+
+int WMGetSplitViewSubViewsCount(WMSplitView *sPtr); /* ??? remove ??? */
+
+WMView *WMGetSplitViewSubViewAt(WMSplitView *sPtr, int index);
+
+/* remove the first subview == view */
+void WMRemoveSplitViewSubview(WMSplitView *sPtr, WMView *view);
+
+void WMRemoveSplitViewSubviewAt(WMSplitView *sPtr, int index);
+
 
 void WMAddSplitViewSubview(WMSplitView *sPtr, WMView *subview);
 
@@ -1297,7 +1312,6 @@ void WMSelectTabViewItemAtIndex(WMTabView *tPtr, int index);
 
 void WMSetTabViewDelegate(WMTabView *tPtr, WMTabViewDelegate *delegate);
 
-/* ....................................................................... */
 
 WMTabViewItem *WMCreateTabViewItemWithIdentifier(int identifier);
 

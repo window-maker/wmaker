@@ -130,8 +130,7 @@ WMRemoveFromBag(WMBag *bag, void *item)
 void
 WMDeleteFromBag(WMBag *bag, int index)
 {
-    if (index < 0 || index >= bag->count)
-	return;
+    wassertr(index >= 0 && index < bag->count);
     
     if (index < bag->count-1) {
 	memmove(&bag->items[index], &bag->items[index + 1],
@@ -144,9 +143,7 @@ WMDeleteFromBag(WMBag *bag, int index)
 void*
 WMGetFromBag(WMBag *bag, int index)
 {
-    if (index < 0 || index >= bag->count) {
-	return NULL;
-    }
+    wassertrv(index >= 0 && index < bag->count, NULL);
 
     return bag->items[index];
 }
@@ -203,3 +200,17 @@ WMMapBag(WMBag *bag, void *(*function)(void *))
     return new;
 }
 
+
+void*
+WMReplaceInBag(WMBag *bag, int index, void *item)
+{
+    void *old;
+    
+    wassertrv(index >= 0 && index < bag->count, NULL);
+    
+    old = bag->items[index];
+
+    bag->items[index] = item;
+
+    return old;
+}

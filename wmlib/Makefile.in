@@ -130,7 +130,7 @@ DIST_COMMON =  COPYING.LIB Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = tar
+TAR = gtar
 GZIP_ENV = --best
 SOURCES = $(libWMaker_a_SOURCES)
 OBJECTS = $(libWMaker_a_OBJECTS)
