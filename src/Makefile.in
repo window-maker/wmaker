@@ -100,7 +100,7 @@ bin_PROGRAMS = wmaker
 
 EXTRA_DIST = wmnotify.c wmnotdef.h wmnotify.h
 
-wmaker_SOURCES =  	GNUstep.h 	WindowMaker.h 	actions.c 	actions.h 	appicon.c 	appicon.h 	application.c 	application.h 	appmenu.c 	appmenu.h 	balloon.c 	balloon.h 	client.c 	client.h 	colormap.c 	def_pixmaps.h 	defaults.c 	defaults.h 	dialog.c 	dialog.h 	dock.c 	dockedapp.c 	dock.h 	event.c 	extend_pixmaps.h 	framewin.c 	framewin.h 	gnome.c 	gnome.h 	funcs.h 	icon.c 	icon.h 	keybind.h 	kwm.h 	kwm.c 	list.c 	list.h 	main.c 	menu.c 	menu.h 	misc.c 	motif.c 	motif.h 	moveres.c 	openlook.c 	openlook.h 	pixmap.c 	pixmap.h 	placement.c 	properties.c 	properties.h 	proplist.c 	resources.c 	resources.h 	rootmenu.c 	screen.c 	screen.h 	session.h 	session.c 	shutdown.c 	stacking.c 	stacking.h 	startup.c 	superfluous.c 	superfluous.h 	switchmenu.c 	texture.c 	texture.h 	usermenu.c 	usermenu.h 	xdnd.h 	xdnd.c 	xmodifier.h 	xmodifier.c 	xutil.c 	xutil.h 	wconfig.h 	wcore.c 	wcore.h 	wdefaults.c 	wdefaults.h 	window.c 	window.h 	winmenu.c 	winspector.h 	winspector.c 	workspace.c 	workspace.h 	wmsound.c 	wmsound.h 	text.c 	text.h 
+wmaker_SOURCES =  	GNUstep.h 	WindowMaker.h 	actions.c 	actions.h 	appicon.c 	appicon.h 	application.c 	application.h 	appmenu.c 	appmenu.h 	balloon.c 	balloon.h 	client.c 	client.h 	colormap.c 	def_pixmaps.h 	defaults.c 	defaults.h 	dialog.c 	dialog.h 	dock.c 	dockedapp.c 	dock.h 	event.c 	extend_pixmaps.h 	framewin.c 	framewin.h 	gnome.c 	gnome.h 	funcs.h 	icon.c 	icon.h 	keybind.h 	kwm.h 	kwm.c 	list.c 	list.h 	main.c 	menu.c 	menu.h 	misc.c 	motif.c 	motif.h 	moveres.c 	openlook.c 	openlook.h 	pixmap.c 	pixmap.h 	placement.c 	plugin.c 	plugin.h 	properties.c 	properties.h 	proplist.c 	resources.c 	resources.h 	rootmenu.c 	screen.c 	screen.h 	session.h 	session.c 	shutdown.c 	stacking.c 	stacking.h 	startup.c 	superfluous.c 	superfluous.h 	switchmenu.c 	texture.c 	texture.h 	usermenu.c 	usermenu.h 	xdnd.h 	xdnd.c 	xmodifier.h 	xmodifier.c 	xutil.c 	xutil.h 	wconfig.h 	wcore.c 	wcore.h 	wdefaults.c 	wdefaults.h 	window.c 	window.h 	winmenu.c 	winspector.h 	winspector.c 	workspace.c 	workspace.h 	wmsound.c 	wmsound.h 	text.c 	text.h 
 
 
 CPPFLAGS = @CPPFLAGS@ @DFLAGS@ -DLOCALEDIR=\"$(NLSDIR)\"
@@ -125,7 +125,7 @@ X_PRE_LIBS = @X_PRE_LIBS@
 wmaker_OBJECTS =  actions.o appicon.o application.o appmenu.o balloon.o \
 client.o colormap.o defaults.o dialog.o dock.o dockedapp.o event.o \
 framewin.o gnome.o icon.o kwm.o list.o main.o menu.o misc.o motif.o \
-moveres.o openlook.o pixmap.o placement.o properties.o proplist.o \
+moveres.o openlook.o pixmap.o placement.o plugin.o properties.o proplist.o \
 resources.o rootmenu.o screen.o session.o shutdown.o stacking.o \
 startup.o superfluous.o switchmenu.o texture.o usermenu.o xdnd.o \
 xmodifier.o xutil.o wcore.o wdefaults.o window.o winmenu.o winspector.o \

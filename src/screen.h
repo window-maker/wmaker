@@ -24,6 +24,7 @@
 
 #include "wconfig.h"
 #include "WindowMaker.h"
+#include "plugin.h"
 #include <sys/types.h>
 
 #include <proplist.h>
@@ -147,18 +148,18 @@ typedef struct _WScreen {
     WMPixel select_pixel;
     WMPixel select_text_pixel;
     /* foreground colors */
-#ifdef TITLE_TEXT_SHADOW
-    WMPixel window_title_pixel[6];
-    WMPixel menu_title_pixel[6];       /* menu titlebar text */
-#else /* !TITLE_TEXT_SHADOW */
     WMPixel window_title_pixel[3];     /* window titlebar text (foc, unfoc, pfoc)*/
     WMPixel menu_title_pixel[3];       /* menu titlebar text */
-#endif /* !TITLE_TEXT_SHADOW */
     WMPixel clip_title_pixel[2];       /* clip title text */
     WMPixel mtext_pixel;	        /* menu item text */
     WMPixel dtext_pixel;	        /* disabled menu item text */
     WMPixel line_pixel;
     WMPixel frame_border_pixel;	       /* frame border */
+#ifdef DRAWSTRING_PLUGIN
+    WFunction *drawstring_func[W_STRING_MEMBERS];
+                                    /* ftitle, utitle, ptitle, mtitle, mtext */
+#endif
+
 
     union WTexture *menu_title_texture[3];/* menu titlebar texture (tex, -, -) */
     union WTexture *window_title_texture[3];  /* win textures (foc, unfoc, pfoc) */

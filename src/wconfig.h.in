@@ -44,6 +44,10 @@
  */
 #define TEXTURE_PLUGIN
 
+#ifdef TEXTURE_PLUGIN
+#define DRAWSTRING_PLUGIN
+#endif
+
 
 /* 
  * #define to enable WindozeCycling.  Set WindozeCycling = YES in 
@@ -202,11 +206,6 @@
  * NEXTSTEP 3.3 also does not have these shadows.
  */
 #undef SHADOW_RESIZEBAR
-
-/*
- * Titlebar text shadow
- */
-#undef TITLE_TEXT_SHADOW
 
 /*
  * Define DEMATERIALIZE_ICON if you want the undocked icon animation
@@ -508,13 +507,6 @@
 
 #define FRAME_BORDER_COLOR "black"
 
-
-#ifdef TITLE_TEXT_SHADOW
-#define TITLE_TEXT_SHADOW_X_OFFSET 1
-#define TITLE_TEXT_SHADOW_Y_OFFSET 1
-#define TITLE_TEXT_SHADOW_WIDTH 1
-#define TITLE_TEXT_SHADOW_HEIGHT 1
-#endif
 
 
 /*

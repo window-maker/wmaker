@@ -57,6 +57,8 @@ wmaker_SOURCES = 	\
 	pixmap.c \
 	pixmap.h \
 	placement.c \
+	plugin.c \
+	plugin.h \
 	properties.c \
 	properties.h \
 	proplist.c \

@@ -22,6 +22,7 @@
  */
 
 #include "wconfig.h"
+#include "plugin.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -124,6 +125,9 @@ static int getString();
 static int getPathList();
 static int getEnum();
 static int getTexture();
+#ifdef DRAWSTRING_PLUGIN
+static int getTextRenderer();
+#endif
 static int getWSBackground();
 static int getWSSpecificBackground();
 static int getFont();
@@ -564,6 +568,17 @@ WDefaultEntry optionList[] = {
     {"CClipTitleColor", "\"#454045\"",		(void*)CLIP_COLLAPSED,
 	  NULL,				getColor,	setClipTitleColor
     },
+#ifdef DRAWSTRING_PLUGIN
+    {"FTitleColor",    "white",             (void*)WS_FOCUSED,
+         NULL,          getTextRenderer,    setWTitleColor
+    },
+    {"PTitleColor",    "white",             (void*)WS_PFOCUSED,
+         NULL,          getTextRenderer,    setWTitleColor
+    },
+    {"UTitleColor",    "black",             (void*)WS_UNFOCUSED,
+         NULL,          getTextRenderer,    setWTitleColor
+    },
+#else
     {"FTitleColor",	"white",		(void*)WS_FOCUSED,
 	  NULL,				getColor,	setWTitleColor
     },
@@ -573,6 +588,7 @@ WDefaultEntry optionList[] = {
     {"UTitleColor",	"black",		(void*)WS_UNFOCUSED,
 	  NULL,				getColor,	setWTitleColor
     },
+#endif
     {"FTitleBack",	"(solid, black)",      	NULL,
 	  NULL,				getTexture,	setFTitleBack
     },
@@ -585,9 +601,15 @@ WDefaultEntry optionList[] = {
     {"ResizebarBack",	"(solid, gray)",	NULL,
 	  NULL,				getTexture,	setResizebarBack
     },
+#ifdef DRAWSTRING_PLUGIN
+    {"MenuTitleColor", "white",             NULL,
+        NULL,           getTextRenderer,    setMenuTitleColor
+    },
+#else
     {"MenuTitleColor",	"white",       		NULL,
 	  NULL,				getColor,	setMenuTitleColor
     },
+#endif
     {"MenuTextColor",	"black",       		NULL,
 	  NULL,				getColor,	setMenuTextColor
     },
@@ -749,23 +771,6 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.modelock, 	getBool,	NULL
     }
 #endif /* KEEP_XKB_LOCK_STATUS */
-#ifdef TITLE_TEXT_SHADOW
-    ,{"FShadowColor",     "black",                (void*)WS_SFOCUSED,
-          NULL,                         getColor,       setWTitleColor
-    },
-    {"PShadowColor",     "black",                (void*)WS_SPFOCUSED,
-          NULL,                         getColor,       setWTitleColor
-    },
-    {"UShadowColor",     "grey50",               (void*)WS_SUNFOCUSED,
-         NULL,                         getColor,       setWTitleColor
-    },
-    {"MShadowColor",     "black",               (void*)WS_SMENU,
-          NULL,                         getColor,       setMenuTitleColor
-    },
-    {"Shadow", "Yes",                    NULL,
-         &wPreferences.title_shadow, getBool,  setJustify
-    }
-#endif /* TITLE_TEXT_SHADOW */
 };
 
 
@@ -2002,6 +2007,70 @@ again:
 
 
 
+#ifdef DRAWSTRING_PLUGIN
+static int
+getTextRenderer(WScreen *scr, WDefaultEntry *entry, proplist_t value,
+        void *addr, void **ret)
+{
+    proplist_t elem;
+    char *val, *lib, *func, **argv;
+    int argc, i, changed;
+
+    if (strcmp(entry->key, "FTitleColor")==0) {
+        wPluginDestroyFunction(scr->drawstring_func[changed = W_STRING_FTITLE]);
+        scr->drawstring_func[W_STRING_FTITLE] = NULL;
+    } else if (strcmp(entry->key, "UTitleColor")==0) {
+        wPluginDestroyFunction(scr->drawstring_func[changed = W_STRING_UTITLE]);
+        scr->drawstring_func[W_STRING_UTITLE] = NULL;
+    } else if (strcmp(entry->key, "PTitleColor")==0) {
+        wPluginDestroyFunction(scr->drawstring_func[changed = W_STRING_PTITLE]);
+        scr->drawstring_func[W_STRING_PTITLE] = NULL;
+    } else if (strcmp(entry->key, "MenuTitleColor")==0) {
+        wPluginDestroyFunction(scr->drawstring_func[changed = W_STRING_MTITLE]);
+        scr->drawstring_func[W_STRING_MTITLE] = NULL;
+    } else if (strcmp(entry->key, "MenuPluginColor")==0) {
+        wPluginDestroyFunction(scr->drawstring_func[changed = W_STRING_MTEXT]);
+        scr->drawstring_func[W_STRING_MTEXT] = NULL;
+    }
+    if (PLIsString(value)) { 
+        return getColor(scr,entry,value,addr,ret);
+    }
+
+    if (PLIsArray(value)) {
+        if ((argc = PLGetNumberOfElements(value)) < 3) return False;
+        argc -= 2;
+        argv = (char **)wmalloc(argc * sizeof(char *));
+
+        elem = PLGetArrayElement(value,0);
+        if (!elem || !PLIsString(elem)) return False;
+        val = PLGetString(elem);
+        if (strcasecmp(val, "function")==0) {
+            elem = PLGetArrayElement(value, 1); /* library name */
+            if (!elem || !PLIsString(elem)) return False;
+            lib = PLGetString(elem);
+            elem = PLGetArrayElement(value, 2); /* function name */
+            if (!elem || !PLIsString(elem)) return False;
+            func = PLGetString(elem);
+            scr->drawstring_func[changed] = wPluginCreateFunction (W_FUNCTION_DRAWSTRING, lib, NULL, func, NULL, value, NULL);
+
+            if (scr->drawstring_func[changed]) {
+                void (*initFunc) (Display *, Colormap);
+                initFunc = dlsym(scr->drawstring_func[changed]->handle, "initWindowMaker");
+                if (initFunc) {
+                    initFunc(dpy, scr->w_colormap);
+                } else {
+                    wwarning(_("could not initialize library %s"), lib);
+                }
+            } else {
+                wwarning(_("could not find function %s::%s"), lib, func);
+            }
+        }
+    }
+}
+#endif /* DRAWSTRING_PLUGIN */
+
+
+
 static int
 getWSBackground(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 		void *addr, void **ret)
@@ -2607,29 +2676,12 @@ setWTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
 static int 
 setMenuTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
 {
-#ifdef TITLE_TEXT_SHADOW
-    if (index == WS_SMENU){
-        if (scr->menu_title_pixel[WS_SMENU]!=scr->white_pixel &&
-             scr->menu_title_pixel[WS_SMENU]!=scr->black_pixel) {
-             wFreeColor(scr, scr->menu_title_pixel[WS_SMENU]);
-        }
-        scr->menu_title_pixel[WS_SMENU] = color->pixel;
-    }
-    else {
-        if (scr->menu_title_pixel[0]!=scr->white_pixel &&
-             scr->menu_title_pixel[0]!=scr->black_pixel) {
-             wFreeColor(scr, scr->menu_title_pixel[0]);
-        }
-        scr->menu_title_pixel[0] = color->pixel;
-    }
-#else /* !TITLE_TEXT_SHADOW */
     if (scr->menu_title_pixel[0]!=scr->white_pixel &&
 	scr->menu_title_pixel[0]!=scr->black_pixel) {
 	wFreeColor(scr, scr->menu_title_pixel[0]);
     }
     
     scr->menu_title_pixel[0] = color->pixel;
-#endif /* !TITLE_TEXT_SHADOW */
     XSetForeground(dpy, scr->menu_title_gc, color->pixel);
     
     return REFRESH_MENU_TITLE_COLOR;

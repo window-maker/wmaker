@@ -71,13 +71,6 @@ static char *options[] = {
     "IconTitleColor",
     "IconTitleBack",
     "MenuStyle",
-#ifdef TITLE_TEXT_SHADOW
-    "Shadow",
-    "FShadowColor",    
-    "PShadowColor",    
-    "UShadowColor",    
-    "MShadowColor",
-#endif
     NULL
 };
 

@@ -17,6 +17,24 @@ The strength of gravity can be controled by modify `EdgeResistance' value
 in WindowMaker configuration file.
 
 
+Titlebar Draw String Plugin
+---------------------------
+
+FTitleColor, UTitleColor, PTitleColor, MenuTitleColor can be assigend with
+drawstring plugin instead of plain color. For example:
+
+    FTitleColor = (
+        function,
+        libwmfun.so,
+        drawplainstring,
+        gold,
+        black,
+        gray49
+    );
+
+will invoke function drawplainstring from libwmfun.so and pass 3 colors for
+arguments. To code new plugin, please see plugin.h for more informations.
+
 
 --- 0.60.0
 

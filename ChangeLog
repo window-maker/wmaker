@@ -10,6 +10,8 @@ Changes since version 0.60.0:
   caused crashes for icons with more than 1024 colors.
 - sinking windows (such as gmc icons) won't be calculated in edge resistance
   or attraction.
+- removed drop shadow for text on title bar code. (TITLE_TEXT_SHADOW)
+- text on title bar is now possible to be drawn by plugin. See NEWS.
 
 
 Changes since version 0.53.0:

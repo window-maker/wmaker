@@ -65,7 +65,11 @@ WFrameWindow*
 wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y, 
 		   int width, int height, int flags,
 		   WTexture **title_texture, WTexture **resize_texture,
-		   unsigned long *color, GC *gc, WMFont **font)
+		   unsigned long *color,
+#ifdef DRAWSTRING_PLUGIN
+           int function_offset,
+#endif
+           GC *gc, WMFont **font)
 {
     WFrameWindow *fwin;
     
@@ -79,6 +83,9 @@ wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y,
     fwin->title_texture = title_texture;
     fwin->resizebar_texture = resize_texture;
     fwin->title_pixel = color;
+#ifdef DRAWSTRING_PLUGIN
+    fwin->drawstring_proc_offset = function_offset;
+#endif
     fwin->title_gc = gc;
     fwin->font = font;
 #ifdef KEEP_XKB_LOCK_STATUS
@@ -932,6 +939,8 @@ remakeTexture(WFrameWindow *fwin, int state)
 void
 wFrameWindowPaint(WFrameWindow *fwin)
 {
+    WScreen *scr = fwin->screen_ptr;
+
     if (fwin->flags.is_client_window_frame)
 	fwin->flags.justification = wPreferences.title_justification;
 
@@ -1006,11 +1015,11 @@ wFrameWindowPaint(WFrameWindow *fwin)
     
     
     if (fwin->title && fwin->titlebar && !fwin->flags.repaint_only_resizebar) {
-	int x, w;
-	int lofs = 6, rofs = 6;
-	int titlelen;
-	char *title;
-	int allButtons = 1;
+        int x, w;
+        int lofs = 6, rofs = 6;
+        int titlelen;
+        char *title;
+        int allButtons = 1;
 
 
         if (!wPreferences.new_style) {
@@ -1037,7 +1046,7 @@ wFrameWindowPaint(WFrameWindow *fwin)
 
 #ifdef XKB_BUTTON_HINT
         fwin->languagebutton_image =
-            fwin->screen_ptr->b_pixmaps[WBUT_XKBGROUP1 + fwin->languagemode];
+            scr->b_pixmaps[WBUT_XKBGROUP1 + fwin->languagemode];
 #endif
 
 	title = ShrinkString(*fwin->font, fwin->title,
@@ -1062,28 +1071,28 @@ wFrameWindowPaint(WFrameWindow *fwin)
 	    break;
 	}
 
-#ifdef TITLE_TEXT_SHADOW
-       if(wPreferences.title_shadow){
-          int shadowx,shadowy;
-          XSetForeground(dpy, *fwin->title_gc, 
-              fwin->title_pixel[fwin->flags.state+3]);
-           for(shadowx=0;shadowx<TITLE_TEXT_SHADOW_WIDTH;shadowx++)
-           for(shadowy=0;shadowy<TITLE_TEXT_SHADOW_HEIGHT;shadowy++)
-		   WMDrawString(fwin->screen_ptr->wmscreen, fwin->titlebar->window,
-				*fwin->title_gc, *fwin->font,
-				x + shadowx + TITLE_TEXT_SHADOW_X_OFFSET, 
-				TITLEBAR_EXTRA_HEIGHT/2
-				+ shadowy + TITLE_TEXT_SHADOW_Y_OFFSET, title,
-				titlelen);
-       }
-#endif /* TITLE_TEXT_SHADOW */
 
 	XSetForeground(dpy, *fwin->title_gc, 
 		       fwin->title_pixel[fwin->flags.state]);
 	
-	WMDrawString(fwin->screen_ptr->wmscreen, fwin->titlebar->window, 
-		     *fwin->title_gc, *fwin->font, x, TITLEBAR_EXTRA_HEIGHT/2, 
-		     title, titlelen);
+#ifdef DRAWSTRING_PLUGIN
+    if (scr->drawstring_func[fwin->flags.state + fwin->drawstring_proc_offset]) {
+        scr->drawstring_func[fwin->flags.state + fwin->drawstring_proc_offset]->
+            proc.drawString(dpy, scr->drawstring_func[fwin->flags.state 
+                    + fwin->drawstring_proc_offset]->arg,
+                    fwin->titlebar->window, *fwin->title_gc,
+                    *fwin->font, x, TITLEBAR_EXTRA_HEIGHT/2,
+                    fwin->titlebar->width, fwin->top_width, title, titlelen);
+    } else {
+        WMDrawString(scr->wmscreen, fwin->titlebar->window, 
+                *fwin->title_gc, *fwin->font, x, TITLEBAR_EXTRA_HEIGHT/2, 
+                title, titlelen);
+    }
+#else
+    WMDrawString(scr->wmscreen, fwin->titlebar->window, 
+            *fwin->title_gc, *fwin->font, x, TITLEBAR_EXTRA_HEIGHT/2, 
+            title, titlelen);
+#endif /* DRAWSTRING_PLUGIN */
 
 	free(title);
 	

@@ -81,6 +81,9 @@ typedef struct WFrameWindow {
     union WTexture **title_texture;
     union WTexture **resizebar_texture;
     unsigned long *title_pixel;
+#ifdef DRAWSTRING_PLUGIN
+    int drawstring_proc_offset;
+#endif
     GC *title_gc;
     WMFont **font;
 
@@ -156,7 +159,11 @@ wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y,
 		   int width, int height, int flags,
 		   union WTexture **title_texture, 
 		   union WTexture **resize_texture,
-		   unsigned long *color, GC *gc, WMFont **font);
+		   unsigned long *color, 
+#ifdef DRAWSTRING_PLUGIN
+           int function_offset,
+#endif
+           GC *gc, WMFont **font);
 
 void wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags);
 
