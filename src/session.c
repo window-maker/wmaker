@@ -442,11 +442,11 @@ getWindowState(WScreen *scr, proplist_t win_state)
         state->miniaturized = getBool(value);
     if ((value = PLGetDictionaryEntry(win_state, sHidden))!=NULL)
         state->hidden = getBool(value);
-    if ((value = PLGetDictionaryEntry(win_state, sHidden))!=NULL) {
+    if ((value = PLGetDictionaryEntry(win_state, sShortcutMask))!=NULL) {
         mask = getInt(value);
 	state->window_shortcuts = mask;
     }
-
+    
     value = PLGetDictionaryEntry(win_state, sGeometry);
     if (value && PLIsString(value)) {
         if (sscanf(PLGetString(value), "%ix%i+%i+%i",
