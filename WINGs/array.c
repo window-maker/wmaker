@@ -78,7 +78,7 @@ WMFreeArray(WMArray *array)
 
 
 int
-WMReplaceInArray(WMArray *array, unsigned int index, void *data)
+WMReplaceArrayElement(WMArray *array, unsigned int index, void *data)
 {
     wassertrv(index > array->length, 0);
 
@@ -95,38 +95,40 @@ WMReplaceInArray(WMArray *array, unsigned int index, void *data)
 
 
 void*
-WMGetFromArray(WMArray *array, unsigned int index)
+WMGetArrayElement(WMArray *array, unsigned int index)
 {
-    if (index < 0 || index >= array->length)
+    if (index >= array->length)
         return NULL;
 
     return array->items[index];
 }
 
 
-int WMArrayAppend(WMArray *array, void *data)
+#if 0
+int
+WMAppendToArray(WMArray *array, void *data)
 {
     if (array->length >= array->allocSize) {
         array->allocSize += RESIZE_INCREMENT;
-        array->items = realloc(array->items, sizeof(void*)*array->allocSize);
-        sassertrv(array->items != NULL, 0);
+        array->items = wrealloc(array->items, sizeof(void*)*array->allocSize);
     }
     array->items[array->length++] = data;
 
     return 1;
 }
+#endif
 
 
-int WMArrayInsert(WMArray *array, unsigned index, void *data)
+int
+WMInsertInArray(WMArray *array, unsigned index, void *data)
 {
-    sassertrv(index < array->length, 0);
+    wassertrv(index <= array->length, 0);
 
     if (array->length >= array->allocSize) {
         array->allocSize += RESIZE_INCREMENT;
-        array->items = realloc(array->items, sizeof(void*)*array->allocSize);
-        sassertrv(array->items != NULL, 0);
+        array->items = wrealloc(array->items, sizeof(void*)*array->allocSize);
     }
-    if (index < array->length-1)
+    if (index < array->length)
         memmove(array->items+index+1, array->items+index,
                 sizeof(void*)*(array->length-index));
     array->items[index] = data;
@@ -137,9 +139,17 @@ int WMArrayInsert(WMArray *array, unsigned index, void *data)
 }
 
 
-void WMArrayDelete(WMArray *array, unsigned index)
+int
+WMAppendToArray(WMArray *array, void *data)
 {
-    sassertr(index < array->length);
+    return WMInsertInArray(array, array->length, data);
+}
+
+
+static void
+removeFromArray(WMArray *array, unsigned index)
+{
+    /*wassertr(index < array->length);*/
 
     memmove(array->items+index, array->items+index+1,
             sizeof(void*)*(array->length-index-1));
@@ -148,18 +158,32 @@ void WMArrayDelete(WMArray *array, unsigned index)
 }
 
 
-
-void *WMArrayPop(WMArray *array)
+void
+WMDeleteFromArray(WMArray *array, unsigned index)
 {
-    void *d = WMArrayGet(array, array->length-1);
+    wassertr(index < array->length);
 
-    WMArrayDelete(array, array->length-1);
+    if (array->destructor) {
+        array->destructor(array->items[index]);
+    }
+
+    removeFromArray(array, index);
+}
+
+
+void*
+WMArrayPop(WMArray *array)
+{
+    void *d = WMGetArrayElement(array, array->length-1);
+
+    removeFromArray(array, array->length-1);
 
     return d;
 }
 
 
-int WMArrayIndex(WMArray *array, void *data)
+int
+WMIndexForArrayElement(WMArray *array, void *data)
 {
     unsigned i;
 

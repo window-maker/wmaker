@@ -243,18 +243,16 @@ char *wstrdup(char *str);
 
 char *wstrappend(char *dst, char *src);
 
-    
-    
-    
+
+
 void wtokensplit(char *command, char ***argv, int *argc);
 
 char *wtokenjoin(char **list, int count);
-    
+
 void wtokenfree(char **tokens, int count);
-    
+
 char *wtrimspace(char *s);
 
-    
 
 
 char *wusergnusteppath();
