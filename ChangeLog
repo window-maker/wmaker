@@ -16,7 +16,10 @@ Changes since version 0.70.0:
 - SIGTERM is now handled and saves the internal state before exiting (like
   SIGHUP and SIGINT already do). Now a "kill wmaker_pid" will exit cleanly
   saving dock/clip/session information on exit.
-- added an internal strcasecmp() to WINGs (only on systems where's not present)
+- Added an internal strcasecmp() to WINGs (only on systems where's not present)
+- Deminiaturizing a window that is also shaded, will perform an unshade too.
+  (Note that this only applies to deminiaturizing shaded windows.
+   Unhiding an application will keep the shaded/unshaded state of windows.)
 
 
 Changes since version 0.65.1:

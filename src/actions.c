@@ -255,13 +255,15 @@ wSetFocusTo(WScreen *scr, WWindow  *wwin)
 void
 wShadeWindow(WWindow  *wwin)
 {
-    time_t time0 = time(NULL);
+    time_t time0;
 #ifdef ANIMATIONS
     int y, s, w, h;
 #endif
 
     if (wwin->flags.shaded)
 	return;
+
+    time0 = time(NULL);
 
     XLowerWindow(dpy, wwin->client_win);    
 
@@ -329,7 +331,7 @@ wShadeWindow(WWindow  *wwin)
 void
 wUnshadeWindow(WWindow  *wwin)
 {
-    time_t time0 = time(NULL);
+    time_t time0;
 #ifdef ANIMATIONS
     int y, s, w, h;    
 #endif /* ANIMATIONS */
@@ -337,7 +339,9 @@ wUnshadeWindow(WWindow  *wwin)
 
     if (!wwin->flags.shaded)
 	return;
-    
+
+    time0 = time(NULL);
+
     wwin->flags.shaded = 0;
     wwin->flags.mapped = 1;
     XMapWindow(dpy, wwin->client_win);
@@ -1137,6 +1141,9 @@ wDeiconifyWindow(WWindow  *wwin)
     }
 
     WMPostNotificationName(WMNChangedState, wwin, "iconify");
+
+    /* In case we were shaded and iconified, also unshade */
+    wUnshadeWindow(wwin);
 }
 
 
