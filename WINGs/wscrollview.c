@@ -450,6 +450,10 @@ WMSetScrollViewHasHorizontalScroller(WMScrollView *sPtr, Bool flag)
 	/* make it a horiz. scroller */
 	WMResizeWidget(sPtr->hScroller, 2, 1);
 
+	if (W_VIEW_REALIZED(sPtr->view)) {
+	    WMRealizeWidget(sPtr->hScroller);
+	}
+	
 	reorganizeInterior(sPtr);
 
 	WMMapWidget(sPtr->hScroller);
@@ -480,6 +484,10 @@ WMSetScrollViewHasVerticalScroller(WMScrollView *sPtr, Bool flag)
 	WMSetScrollerArrowsPosition(sPtr->vScroller, WSAMaxEnd);
 	/* make it a vert. scroller */
 	WMResizeWidget(sPtr->vScroller, 1, 2);
+
+	if (W_VIEW_REALIZED(sPtr->view)) {
+	    WMRealizeWidget(sPtr->vScroller);
+	}
 
 	reorganizeInterior(sPtr);
 	

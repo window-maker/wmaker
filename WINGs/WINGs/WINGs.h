@@ -393,10 +393,29 @@ typedef struct WMAlertPanel {
     WMFrame *line;		       /* separator */
     short result;		       /* button that was pushed */
     short done;
-
-    KeyCode retKey;
-    KeyCode escKey;
 } WMAlertPanel;
+
+
+typedef struct WMGenericPanel {
+    WMWindow *win;
+    WMBox *vbox;
+    
+    WMLabel *iLbl;
+    WMLabel *tLbl;
+    
+    WMFrame *line;
+    
+    WMFrame *content;
+    
+    WMBox *buttonBox;
+    WMButton *defBtn;
+    WMButton *altBtn;
+    
+    short result;
+    short done;
+} WMGenericPanel;
+
+
 
 
 typedef struct WMInputPanel {
@@ -408,12 +427,7 @@ typedef struct WMInputPanel {
     WMTextField *text;		       /* text field */
     short result;		       /* button that was pushed */
     short done;
-
-    KeyCode retKey;
-    KeyCode escKey;
 } WMInputPanel;
-
-
 
 
 /* WMRuler: */
@@ -720,17 +734,17 @@ WMFont *WMBoldSystemFontOfSize(WMScreen *scrPtr, int size);
 
 XFontSet WMGetFontFontSet(WMFont *font);
 
-WMFont * WMNormalizeFont(WMScreen *scr, WMFont *font);
+WMFont *WMNormalizeFont(WMScreen *scr, WMFont *font);
 
-WMFont * WMStrengthenFont(WMScreen *scr, WMFont *font);
+WMFont *WMStrengthenFont(WMScreen *scr, WMFont *font);
 
-WMFont * WMUnstrengthenFont(WMScreen *scr, WMFont *font);
+WMFont *WMUnstrengthenFont(WMScreen *scr, WMFont *font);
 
-WMFont * WMEmphasizeFont(WMScreen *scr, WMFont *font);
+WMFont *WMEmphasizeFont(WMScreen *scr, WMFont *font);
 
-WMFont * WMUnemphasizeFont(WMScreen *scr, WMFont *font);
+WMFont *WMUnemphasizeFont(WMScreen *scr, WMFont *font);
 
-WMFont * WMGetFontOfSize(WMScreen *scr, WMFont *font, int size);
+WMFont *WMGetFontOfSize(WMScreen *scr, WMFont *font, int size);
 
 /* ....................................................................... */
 
@@ -863,6 +877,9 @@ Window WMViewXID(WMView *view);
 void WMRedisplayWidget(WMWidget *w);
 
 void WMSetViewNotifySizeChanges(WMView *view, Bool flag);
+
+void WMSetViewExpandsToParent(WMView *view, int topOffs, int leftOffs, 
+			      int rightOffs, int bottomOffs);
 
 WMSize WMGetViewSize(WMView *view);
 
@@ -1709,9 +1726,6 @@ void WMRemoveBoxSubview(WMBox *bPtr, WMView *view);
 
 void WMSetBoxHorizontal(WMBox *box, Bool flag);
 
-void WMSetBoxExpandsToParent(WMBox *box, int topOffs, int bottomOffs,
-                             int leftOffs, int rightOffs);
-
 /* ....................................................................... */
 
 int WMRunAlertPanel(WMScreen *app, WMWindow *owner, char *title, char *msg, 
@@ -1730,9 +1744,16 @@ WMInputPanel *WMCreateInputPanel(WMScreen *app, WMWindow *owner, char *title,
 				 char *msg, char *defaultText, char *okButton, 
 				 char *cancelButton);
 
+
+WMGenericPanel *WMCreateGenericPanel(WMScreen *scrPtr, WMWindow *owner,
+				     char *title, char *defaultButton,
+				     char *alternateButton);
+
 void WMDestroyAlertPanel(WMAlertPanel *panel);
 
 void WMDestroyInputPanel(WMInputPanel *panel);
+
+void WMDestroyGenericPanel(WMGenericPanel *panel);
 
 /* ....................................................................... */
 

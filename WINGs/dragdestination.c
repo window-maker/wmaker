@@ -96,30 +96,36 @@ WMUnregisterViewDraggedTypes(WMView *view)
 
 static unsigned defDraggingEntered(WMView *self, WMDraggingInfo *info)
 {
+    printf("%x drag entered\n", W_VIEW_DRAWABLE(self));
     return WDOperationNone;
 }
 
 static unsigned defDraggingUpdated(WMView *self, WMDraggingInfo *info)
 {
+    printf("%x drag updat\n", W_VIEW_DRAWABLE(self));    
     return WDOperationNone;
 }
 
 static void defDraggingExited(WMView *self, WMDraggingInfo *info)
 {
+    printf("%x drag exit\n", W_VIEW_DRAWABLE(self));    
 }
 
 static Bool defPrepareForDragOperation(WMView *self, WMDraggingInfo *info)
 {
+    printf("%x drag prep\n", W_VIEW_DRAWABLE(self));    
     return False;
 }
 
 static Bool defPerformDragOperation(WMView *self, WMDraggingInfo *info)
 {
+    printf("%x drag perf\n", W_VIEW_DRAWABLE(self));    
     return False;
 }
 
 static void defConcludeDragOperation(WMView *self, WMDraggingInfo *info)
 {
+    printf("%x drag concl\n", W_VIEW_DRAWABLE(self));    
 }
 
 

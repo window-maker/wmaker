@@ -45,6 +45,9 @@ typedef struct W_TableViewDelegate {
 WMTableColumn *WMCreateTableColumn(char *title);
 
 void WMSetTableColumnWidth(WMTableColumn *column, unsigned width);
+
+void WMSetTableColumnConstraints(WMTableColumn *column, 
+				 unsigned minWidth, unsigned maxWidth);
     
 void WMSetTableColumnDelegate(WMTableColumn *column, 
 			      WMTableColumnDelegate *delegate);    

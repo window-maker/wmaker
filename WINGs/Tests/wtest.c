@@ -1279,9 +1279,11 @@ main(int argc, char **argv)
      */
 
 
+
+    testDragAndDrop(scr);
+#if 0
     testScrollView(scr);
     testTabView(scr);    
-#if 0
     testBox(scr);
     testText(scr);
     testList(scr);
@@ -1292,7 +1294,6 @@ main(int argc, char **argv)
 
     testTextField(scr);
 
-    testDragAndDrop(scr);
     testDragAndDrop(scr);
     testFontPanel(scr);
 

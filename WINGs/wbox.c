@@ -23,11 +23,6 @@ typedef struct W_Box {
 
     short borderWidth;
 
-    int topOffs;
-    int bottomOffs;
-    int leftOffs;
-    int rightOffs;
-
     unsigned horizontal:1;
 } Box;
 
@@ -52,18 +47,6 @@ static W_ViewDelegate delegate = {
 };
 
 
-
-
-static void resizedParent(void *self, WMNotification *notif)
-{
-    WMView *view = (WMView*)WMGetNotificationObject(notif);
-    WMSize size = WMGetViewSize(view);
-    WMBox *box = (WMBox*)self;
-
-    WMMoveWidget(box, box->leftOffs, box->topOffs);
-    WMResizeWidget(box, size.width - (box->leftOffs + box->rightOffs), 
-		   size.height - (box->topOffs + box->bottomOffs));
-}
 
 
 WMBox*
@@ -246,28 +229,6 @@ WMSetBoxHorizontal(WMBox *box, Bool flag)
 {
     box->horizontal = flag;
     rearrange(box);
-}
-
-
-void
-WMSetBoxExpandsToParent(WMBox *box, int topOffs, int bottomOffs,
-			int leftOffs, int rightOffs)
-{
-    WMSize size = W_VIEW(box)->parent->size;
-
-    box->topOffs = topOffs;
-    box->bottomOffs = bottomOffs;
-    box->leftOffs = leftOffs;
-    box->rightOffs = rightOffs;
-    
-    WMAddNotificationObserver(resizedParent, box,
-			      WMViewSizeDidChangeNotification, 
-			      W_VIEW(box)->parent);
-    WMSetViewNotifySizeChanges(W_VIEW(box)->parent, True);
-
-    WMMoveWidget(box, leftOffs, topOffs);
-    WMResizeWidget(box, size.width - (leftOffs + rightOffs), 
-		   size.height - (topOffs + bottomOffs));
 }
 
 

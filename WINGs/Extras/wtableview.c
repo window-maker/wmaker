@@ -92,14 +92,14 @@ void WMSetTableColumnDelegate(WMTableColumn *column,
 void WMSetTableColumnConstraints(WMTableColumn *column, 
 				 unsigned minWidth, unsigned maxWidth)
 {
-    wassertr(minWidth <= maxWidth);
+    wassertr(maxWidth == 0 || minWidth <= maxWidth);
     
     column->minWidth = minWidth;
     column->maxWidth = maxWidth;
     
     if (column->width < column->minWidth)
 	WMSetTableColumnWidth(column, column->minWidth);
-    else if (column->width > column->maxWidth || column->maxWidth == 0)
+    else if (column->width > column->maxWidth && column->maxWidth != 0)
 	WMSetTableColumnWidth(column, column->maxWidth);
 }
 
@@ -238,17 +238,14 @@ static void splitterHandler(XEvent *event, void *data)
 	switch (ev.type) {
 	 case MotionNotify:
 	    ox = cx;
+	    	    
 	    if (column->width + ev.xmotion.x < column->minWidth)
 		cx = pos.x + column->minWidth;
+	    else if (column->maxWidth > 0 
+		&& column->width + ev.xmotion.x > column->maxWidth)
+		cx = pos.x + column->maxWidth;
 	    else
 		cx = offsX + ev.xmotion.x;
-	    
-	    if (column->maxWidth > 0) {
-		if (column->width + ev.xmotion.x > column->maxWidth) 
-		    cx = pos.x + column->maxWidth;
-		else
-		    cx = offsX + ev.xmotion.x;
-	    }
 
 	    XDrawLine(dpy, w, gc, ox+20, 0, ox+20, h);	    
 	    XDrawLine(dpy, w, gc, cx+20, 0, cx+20, h);
@@ -256,13 +253,13 @@ static void splitterHandler(XEvent *event, void *data)
 
 	 case ButtonRelease:
 	    column->width = cx - pos.x;
-	    rearrangeHeader(table);
 	    done = 1;
 	    break;
 	}
     }
     
-    XDrawLine(dpy, w, gc, cx+20, 0, cx+20, h);    
+    XDrawLine(dpy, w, gc, cx+20, 0, cx+20, h);
+    rearrangeHeader(table);    
 }
 
 

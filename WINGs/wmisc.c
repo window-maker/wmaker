@@ -94,16 +94,23 @@ fitText(char *text, WMFont *font, int width, int wrap)
 {
     int i, j;
     int w;
-
+    
     if (text[0]==0)
 	return 0;
+    
     i = 0;
     if (wrap) {
+	if (text[0]=='\n')
+	    return 1;
+	
 	do {
 	    i++;
 	    w = WMWidthOfString(font, text, i);
 	} while (w < width && text[i]!='\n' && text[i]!=0);
 
+	if (text[i]=='\n')
+	    return i;
+	
 	/* keep words complete */
 	if (!isspace(text[i])) {
 	    j = i;
@@ -116,7 +123,6 @@ fitText(char *text, WMFont *font, int width, int wrap)
 	while (text[i]!='\n' && text[i]!=0)
 	    i++;
     }
-
     return i;
 }
 

@@ -26,11 +26,13 @@ static void
 handleKeyPress(XEvent *event, void *clientData)
 {
     WMAlertPanel *panel = (WMAlertPanel*)clientData;
-
-    if (event->xkey.keycode == panel->retKey && panel->defBtn) {
+    KeySym ksym;
+    
+    XLookupString(&event->xkey, NULL, 0, &ksym, NULL);
+        
+    if (ksym == XK_Return && panel->defBtn) {
 	WMPerformButtonClick(panel->defBtn);
-    }
-    if (event->xkey.keycode == panel->escKey) {
+    } else if (ksym == XK_Escape) {
 	if (panel->altBtn || panel->othBtn) {
 	    WMPerformButtonClick(panel->othBtn ? panel->othBtn : panel->altBtn);
 	} else {
@@ -106,10 +108,6 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     panel = wmalloc(sizeof(WMAlertPanel));
     memset(panel, 0, sizeof(WMAlertPanel));
 
-
-    panel->retKey = XKeysymToKeycode(scrPtr->display, XK_Return);
-    panel->escKey = XKeysymToKeycode(scrPtr->display, XK_Escape);
-
     if (owner) {
 	panel->win = WMCreatePanelWithStyleForWindow(owner, "alertPanel",
 						     WMTitledWindowMask);
@@ -125,7 +123,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     WMSetWindowTitle(panel->win, "");
 
     panel->vbox = WMCreateBox(panel->win);
-    WMSetBoxExpandsToParent(panel->vbox, 0, 0, 0, 0);
+    WMSetViewExpandsToParent(WMWidgetView(panel->vbox), 0, 0, 0, 0);
     WMSetBoxHorizontal(panel->vbox, False);
     WMMapWidget(panel->vbox);
 
@@ -277,11 +275,13 @@ static void
 handleKeyPress2(XEvent *event, void *clientData)
 {
     WMInputPanel *panel = (WMInputPanel*)clientData;
-
-    if (event->xkey.keycode == panel->retKey && panel->defBtn) {
+    KeySym ksym;
+    
+    XLookupString(&event->xkey, NULL, 0, &ksym, NULL);
+    
+    if (ksym == XK_Return && panel->defBtn) {
 	WMPerformButtonClick(panel->defBtn);
-    }
-    if (event->xkey.keycode == panel->escKey) {
+    } else if (ksym == XK_Escape) {
 	if (panel->altBtn) {
             WMPerformButtonClick(panel->altBtn);
 	} else {
@@ -386,9 +386,6 @@ WMCreateInputPanel(WMScreen *scrPtr, WMWindow *owner, char *title, char *msg,
     panel = wmalloc(sizeof(WMInputPanel));
     memset(panel, 0, sizeof(WMInputPanel));
 
-    panel->retKey = XKeysymToKeycode(scrPtr->display, XK_Return);
-    panel->escKey = XKeysymToKeycode(scrPtr->display, XK_Escape);
-
     if (owner)
 	panel->win = WMCreatePanelWithStyleForWindow(owner, "inputPanel",
 						     WMTitledWindowMask);
@@ -483,5 +480,151 @@ WMCreateInputPanel(WMScreen *scrPtr, WMWindow *owner, char *title, char *msg,
     return panel;
 }
 
+
+
+
+
+
+void
+WMDestroyGenericPanel(WMGenericPanel *panel)
+{
+    WMUnmapWidget(panel->win);
+    WMDestroyWidget(panel->win);
+    wfree(panel);
+}
+
+
+WMGenericPanel* 
+WMCreateGenericPanel(WMScreen *scrPtr, WMWindow *owner, 
+		     char *title, char *defaultButton,
+		     char *alternateButton)
+{
+    WMGenericPanel *panel;
+    int dw=0, aw=0, w;
+    WMBox *hbox;
+    
+    
+    panel = wmalloc(sizeof(WMGenericPanel));
+    memset(panel, 0, sizeof(WMGenericPanel));
+
+    if (owner) {
+	panel->win = WMCreatePanelWithStyleForWindow(owner, "genericPanel",
+						     WMTitledWindowMask);
+    } else {
+	panel->win = WMCreateWindowWithStyle(scrPtr, "genericPanel",
+					     WMTitledWindowMask);
+    }
+
+    WMSetWindowInitialPosition(panel->win,
+	 (scrPtr->rootView->size.width - WMWidgetWidth(panel->win))/2,
+	 (scrPtr->rootView->size.height - WMWidgetHeight(panel->win))/2);
+
+    WMSetWindowTitle(panel->win, "");
+
+    panel->vbox = WMCreateBox(panel->win);
+    WMSetViewExpandsToParent(WMWidgetView(panel->vbox), 0, 0, 0, 0);
+    WMSetBoxHorizontal(panel->vbox, False);
+    WMMapWidget(panel->vbox);
+
+    hbox = WMCreateBox(panel->vbox);
+    WMSetBoxBorderWidth(hbox, 5);
+    WMSetBoxHorizontal(hbox, True);
+    WMMapWidget(hbox);
+    WMAddBoxSubview(panel->vbox, WMWidgetView(hbox), False, True, 74, 0, 5);
+
+    panel->iLbl = WMCreateLabel(hbox);
+    WMSetLabelImagePosition(panel->iLbl, WIPImageOnly);
+    WMMapWidget(panel->iLbl);
+    WMAddBoxSubview(hbox, WMWidgetView(panel->iLbl), False, True, 64, 0, 10);
+
+    if (scrPtr->applicationIcon) {
+	WMSetLabelImage(panel->iLbl, scrPtr->applicationIcon);
+    }
+
+    if (title) {
+	WMFont *largeFont;
+	
+	largeFont = WMBoldSystemFontOfSize(scrPtr, 24);
+
+	panel->tLbl = WMCreateLabel(hbox);
+	WMMapWidget(panel->tLbl);
+	WMAddBoxSubview(hbox, WMWidgetView(panel->tLbl), True, True, 
+			64, 0, 0);
+	WMSetLabelText(panel->tLbl, title);
+	WMSetLabelTextAlignment(panel->tLbl, WALeft);
+	WMSetLabelFont(panel->tLbl, largeFont);
+
+	WMReleaseFont(largeFont);
+    }
+
+    /* create divider line */
+    
+    panel->line = WMCreateFrame(panel->vbox);
+    WMMapWidget(panel->line);
+    WMAddBoxSubview(panel->vbox, WMWidgetView(panel->line), False, True,
+		    2, 2, 5);
+    WMSetFrameRelief(panel->line, WRGroove);
+
+    
+    panel->content = WMCreateFrame(panel->vbox);
+    WMMapWidget(panel->content);
+    WMAddBoxSubview(panel->vbox, WMWidgetView(panel->content), True, True,
+		    50, 0, 5);
+    WMSetFrameRelief(panel->content, WRFlat);
+    
+    hbox = WMCreateBox(panel->vbox);
+    WMSetBoxBorderWidth(hbox, 10);
+    WMSetBoxHorizontal(hbox, True);
+    WMMapWidget(hbox);
+    WMAddBoxSubview(panel->vbox, WMWidgetView(hbox), False, True, 44, 0, 0);
+    
+    /* create buttons */
+    if (defaultButton) 
+	dw = WMWidthOfString(scrPtr->normalFont, defaultButton,
+			     strlen(defaultButton));
+
+    if (alternateButton)
+	aw = WMWidthOfString(scrPtr->normalFont, alternateButton, 
+			     strlen(alternateButton));
+    
+    
+    dw = dw + (scrPtr->buttonArrow ? scrPtr->buttonArrow->width : 0);
+    
+    aw += 30;
+    dw += 30;
+    
+    w = WMAX(dw, aw);
+    if ((w+10)*2 < 400) {
+	aw = w;
+	dw = w;
+    } else {
+	int t;
+
+	t = 400 - 40 - aw - dw;
+	aw += t/2;
+	dw += t/2;
+    }
+
+    if (defaultButton) {
+	panel->defBtn = WMCreateCommandButton(hbox);
+	WMSetButtonAction(panel->defBtn, alertPanelOnClick, panel);
+	WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->defBtn),
+			     False, True, dw, 0, 0);
+	WMSetButtonText(panel->defBtn, defaultButton);
+	WMSetButtonImage(panel->defBtn, scrPtr->buttonArrow);
+	WMSetButtonAltImage(panel->defBtn, scrPtr->pushedButtonArrow);
+	WMSetButtonImagePosition(panel->defBtn, WIPRight);
+    }
+
+    WMMapSubwidgets(hbox);
+
+//    WMCreateEventHandler(W_VIEW(panel->win), KeyPressMask,
+//			 handleKeyPress3, panel);
+
+    WMRealizeWidget(panel->win);
+    WMMapSubwidgets(panel->win);
+
+    return panel;
+}
 
 

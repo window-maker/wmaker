@@ -318,6 +318,11 @@ typedef struct W_View {
     Window window;
 
     WMSize size;
+    
+    short topOffs;
+    short leftOffs;
+    short bottomOffs;
+    short rightOffs;
 
     WMPoint pos;
     

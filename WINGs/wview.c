@@ -731,4 +731,37 @@ WMGetViewScreenPosition(WMView *view)
     return wmkpoint(x, y);
 }
 
+
+
+
+static void resizedParent(void *self, WMNotification *notif)
+{
+    WMSize size = WMGetViewSize((WMView*)WMGetNotificationObject(notif));
+    WMView *view = (WMView*)self;
+
+    W_MoveView(view, view->leftOffs, view->topOffs);
+    W_ResizeView(view, size.width - (view->leftOffs + view->rightOffs),
+		   size.height - (view->topOffs + view->bottomOffs));
+}
+
 			
+void
+WMSetViewExpandsToParent(WMView *view, int leftOffs, int topOffs, 
+			 int rightOffs, int bottomOffs)
+{
+    WMSize size = view->parent->size;
+
+    view->topOffs = topOffs;
+    view->bottomOffs = bottomOffs;
+    view->leftOffs = leftOffs;
+    view->rightOffs = rightOffs;
+    
+    WMAddNotificationObserver(resizedParent, view,
+			      WMViewSizeDidChangeNotification, 
+			      view->parent);
+    WMSetViewNotifySizeChanges(view->parent, True);
+
+    W_MoveView(view, leftOffs, topOffs);
+    W_ResizeView(view, size.width - (leftOffs + rightOffs), 
+		 size.height - (topOffs + bottomOffs));
+}
