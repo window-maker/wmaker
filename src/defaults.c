@@ -154,7 +154,6 @@ static int setMenuTextFont();
 static int setIconTitleFont();
 static int setIconTitleColor();
 static int setIconTitleBack();
-static int setDisplayFont();
 static int setLargeDisplayFont();
 static int setWTitleColor();
 static int setFTitleBack();
@@ -567,9 +566,6 @@ WDefaultEntry optionList[] = {
     },
     {"ClipTitleFont",	DEF_CLIP_TITLE_FONT,	NULL,
 	  NULL,				getFont,	setClipTitleFont
-    },
-    {"DisplayFont",	DEF_INFO_TEXT_FONT,	NULL,
-	  NULL,				getFont,	setDisplayFont
     },
     {"LargeDisplayFont",DEF_WORKSPACE_NAME_FONT, NULL,
 	  NULL,				getFont,	setLargeDisplayFont
@@ -1316,10 +1312,14 @@ wDefaultUpdateIcons(WScreen *scr)
 
 /* --------------------------- Local ----------------------- */
 
-#define STRINGP(x) if (!PLIsString(value)) { \
+#define GET_STRING_OR_DEFAULT(x, var) if (!PLIsString(value)) { \
 	wwarning(_("Wrong option format for key \"%s\". Should be %s."), \
 		entry->key, x); \
-	return False; }
+	wwarning(_("using default \"%s\" instead"), entry->default_value); \
+	var = entry->default_value;\
+	} else var = PLGetString(value)\
+
+	
 
 
 
@@ -1373,9 +1373,7 @@ getBool(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
     char *val;
     int second_pass=0;
 
-    STRINGP("Boolean");
-
-    val = PLGetString(value);
+    GET_STRING_OR_DEFAULT("Boolean", val);
 
 again:
     if ((val[1]=='\0' && (val[0]=='y' || val[0]=='Y'))
@@ -1424,9 +1422,7 @@ getInt(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
     char *val;
     
     
-    STRINGP("Integer");
-    
-    val = PLGetString(value);
+    GET_STRING_OR_DEFAULT("Integer", val);
     
     if (sscanf(val, "%i", &data)!=1) {
         wwarning(_("can't convert \"%s\" to integer for key \"%s\""),
@@ -1540,9 +1536,7 @@ getString(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
 {
     static char *data;
     
-    STRINGP("String");
-    
-    data = PLGetString(value);
+    GET_STRING_OR_DEFAULT("String", data);
     
     if (!data) {
         data = PLGetString(entry->plvalue);
@@ -2211,9 +2205,7 @@ getFont(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
     static WMFont *font;
     char *val;
 
-    STRINGP("Font");
-
-    val = PLGetString(value);
+    GET_STRING_OR_DEFAULT("Font", val);
 
     font = WMCreateFont(scr->wmscreen, val);
     if (!font)
@@ -2242,9 +2234,8 @@ getColor(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
     char *val;
     int second_pass=0;
 
-    STRINGP("Color");
+    GET_STRING_OR_DEFAULT("Color", val);
     
-    val = PLGetString(value);
 
 again:
     if (!wGetColor(scr, val, &color)) {
@@ -2284,9 +2275,7 @@ getKeybind(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
     char buf[128], *b;
 
 
-    STRINGP("Key spec");
-
-    val = PLGetString(value);
+    GET_STRING_OR_DEFAULT("Key spec", val);
 
     if (!val || strcasecmp(val, "NONE")==0) {
 	shortcut.keycode = 0;
@@ -2345,9 +2334,8 @@ getModMask(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
     static unsigned int mask;
     char *str;
 
-    STRINGP("Modifier Key");
+    GET_STRING_OR_DEFAULT("Modifier Key", str);
 
-    str = PLGetString(value);
     if (!str)
 	return False;
 
@@ -2379,9 +2367,7 @@ getRImages(WScreen *scr, WDefaultEntry *entry, proplist_t value,
     int i, n;
     int w, h;
 
-    STRINGP("Image File Path");
-
-    str = PLGetString(value);
+    GET_STRING_OR_DEFAULT("Image File Path", str);
     if (!str)
 	return False;
 
@@ -2583,28 +2569,6 @@ setClipTitleFont(WScreen *scr, WDefaultEntry *entry, WMFont *font, void *foo)
     scr->clip_title_font = font;
 
     return REFRESH_ICON_FONT;
-}
-
-
-static int
-setDisplayFont(WScreen *scr, WDefaultEntry *entry, WMFont *font, void *foo)
-{
-    if (scr->info_text_font) {
-	WMReleaseFont(scr->info_text_font);
-    }
-
-    scr->info_text_font = font;
-
-    /* This test works because the scr structure is initially zeroed out
-       and None = 0. Any other time, the window should be valid. */
-    if (scr->geometry_display != None) {
-        wGetGeometryWindowSize(scr, &scr->geometry_display_width,
-			       &scr->geometry_display_height);
-	XResizeWindow(dpy, scr->geometry_display,
-	    scr->geometry_display_width, scr->geometry_display_height);
-    }
-
-    return 0;
 }
 
 
@@ -2949,10 +2913,6 @@ setWidgetColor(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo
 	wTextureDestroy(scr, (WTexture*)scr->widget_texture);
     }
     scr->widget_texture = *(WTexSolid**)texture;
-
-    if (scr->geometry_display != None)
-    	XSetWindowBackground(dpy, scr->geometry_display, 
-			     scr->widget_texture->normal.pixel);
 
     return 0;
 }
