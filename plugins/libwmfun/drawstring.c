@@ -230,12 +230,12 @@ void initDrawFreeTypeString(proplist_t pl, void **init_data) {
     /* case 1 -- no no case 2 yet :P */
     if (!inst_ft_library) {
         FT_Init_FreeType(&ft_library);
-        inst_ft_library++;
     }
+    inst_ft_library++;
 
     FT_New_Face(ft_library, PLGetString(PLGetArrayElement(pl, 4)), 0, &data->face);
     FT_Set_Pixel_Sizes(data->face, 0, atoi(PLGetString(PLGetArrayElement(pl, 5))));
-    _debug("initialize freetype library\n");
+    _debug("initialize freetype library %d %d %d\n", ft_library, data->face, inst_ft_library);
 }
 
 void
@@ -258,6 +258,7 @@ destroyDrawFreeTypeString(proplist_t pl, void **func_data) {
     }
     free(data->glyphs_array);
     free(data->glyphs_shadow_array);
+    _debug("destroy freetype library %d %d %d\n", ft_library, data->face, inst_ft_library);
     FT_Done_Face(data->face);
     free(data);
     inst_ft_library--;
@@ -306,7 +307,6 @@ logicalCombineArea(RImage *bg, RImage *image,
                     _sw, _sh, _dx, _dy);
         }
     }
-
 }
 
 void
@@ -319,19 +319,25 @@ drawFreeTypeString (proplist_t pl, Drawable d,
     int length = strlen(text);
     Pixmap pixmap;
     GC gc;
+    /*
     int xwidth, xheight, dummy;
+    */
     Window wdummy;
 
     /*pixmap = XCreatePixmap(ds_dpy, d, width, height, DefaultDepth(ds_dpy, DefaultScreen(ds_dpy)));*/
     gc = func_data[0];
     data = ((void **)func_data[2])[2];
-    XClearWindow(ds_dpy, d);
+    pixmap = (Pixmap)func_data[3];
     /* create temp for drawing */
+    /*
     XGetGeometry(ds_dpy, d, &wdummy, &dummy, &dummy, &xwidth, &xheight, &dummy, &dummy);
     pixmap = XCreatePixmap(ds_dpy, d, xwidth, xheight, DefaultDepth(ds_dpy, DefaultScreen(ds_dpy)));
     XCopyArea(ds_dpy, d, pixmap, gc, 0, 0, xwidth, xheight, 0, 0);
+    */
     rimg = RCreateImageFromDrawable(rc, pixmap, None);
+    /*
     XFreePixmap(ds_dpy, pixmap);
+    */
 
     if (rimg) {
         for (i = 0, j = 3; i < strlen(text); i++) {
@@ -349,10 +355,8 @@ drawFreeTypeString (proplist_t pl, Drawable d,
                 _sw = data->glyphs_array[text[i]]->image->width;
                 _sh = data->glyphs_array[text[i]]->image->height;
 
-                /*
                 logicalCombineArea(rimg, data->glyphs_shadow_array[text[i]]->image,
-                        _sx, _sy, _sw, _sh, _dx-2, _dy-2, 50);
-                        */
+                        _sx, _sy, _sw, _sh, _dx-2, _dy-2, 100);
                 logicalCombineArea(rimg, data->glyphs_array[text[i]]->image,
                         _sx, _sy, _sw, _sh, _dx-3, _dy-3, 0);
 
