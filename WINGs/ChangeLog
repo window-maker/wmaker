@@ -36,6 +36,11 @@ Changes since wmaker 0.80.1:
   The more generic WMCreateFont() or WMCreateFontWithFlags() should be used.
 - Multibyte languages can now render antialiased text too (only tested on
   russian since this is the only multibyte language I can test).
+- Added WMCopyFontWithChanges(). This is a more generic and powerful function
+  meant to replaces the obsoleted WMEmphasizeFont(), WMNormalizeFont(),
+  WMStrenghtenFont() and the other similar functions. To get the same effect
+  you pass some predefined structs to it: WFANormal, WFABold, WFAEmphasized,
+  etc)
 
 
 Changes since wmaker 0.80.0:

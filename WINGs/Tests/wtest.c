@@ -604,6 +604,16 @@ testText(WMScreen *scr)
     WMSetTextHasVerticalScroller(text, True);
     WMSetTextEditable(text, False);
 
+    if (1) {
+        WMFont *font, *ifont;
+
+        font = WMDefaultSystemFont(scr);
+        ifont = WMCopyFontWithChanges(scr, font, WFAEmphasized);
+        WMSetTextDefaultFont(text, ifont);
+        WMReleaseFont(font);
+        WMReleaseFont(ifont);
+    }
+
     if(file) {
         char buf[1024];
 
@@ -1294,6 +1304,7 @@ main(int argc, char **argv)
     testText(scr);
 
     testFontPanel(scr);
+
 
 #if 0
     testColorPanel(scr);

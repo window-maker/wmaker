@@ -117,15 +117,6 @@ typedef enum {
 } WMFontFlags;
 
 
-/* Font copy masks */
-typedef enum {
-    WFMUnchanged     = 0,
-    WFMMediumWeight  = 1,
-    WFMNormalWeight  = 2,
-    WFMRegularWeight = 3
-} WMCopyFontMask;
-
-
 /* Use default system font size in system font name */
 enum {
     WFDefaultSize = -1
@@ -441,8 +432,6 @@ typedef struct WMGenericPanel {
 } WMGenericPanel;
 
 
-
-
 typedef struct WMInputPanel {
     WMWindow *win;		       /* window */
     WMButton *defBtn;		       /* default button */
@@ -452,6 +441,34 @@ typedef struct WMInputPanel {
     WMTextField *text;		       /* text field */
     short result;		       /* button that was pushed */
 } WMInputPanel;
+
+
+
+#define WFAUnchanged (NULL)
+/* Struct for font change operations */
+typedef struct WMFontAttributes {
+    char *foundry;
+    char *family;
+    char *weight;
+    char *slant;
+    char *setWidth;
+    char *addStyle;
+    char *pixelSize;
+    char *pointSize;
+    char *resolutionX;
+    char *resolutionY;
+    char *spacing;
+    char *averageWidth;
+    char *registry;
+    char *encoding;
+} WMFontAttributes;
+
+extern const WMFontAttributes *WFANormal;
+extern const WMFontAttributes *WFABold;
+extern const WMFontAttributes *WFANonBold;
+extern const WMFontAttributes *WFAEmphasized;
+extern const WMFontAttributes *WFANonEmphasized;
+extern const WMFontAttributes *WFABoldEmphasized;
 
 
 /* WMRuler: */
@@ -736,7 +753,11 @@ WMFont* WMCreateAntialiasedFontSet(WMScreen *scrPtr, char *fontName);
 
 WMFont* WMCreateFont(WMScreen *scrPtr, char *fontName);
 
-WMFont* WMCreateFontWithFlags(WMScreen *scrPtr, char *fontName, WMFontFlags flags);
+WMFont* WMCreateFontWithFlags(WMScreen *scrPtr, char *fontName,
+                              WMFontFlags flags);
+
+WMFont* WMCopyFontWithChanges(WMScreen *scrPtr, WMFont *font,
+                              const WMFontAttributes *changes);
 
 WMFont* WMRetainFont(WMFont *font);
 
@@ -766,16 +787,6 @@ WMFont* WMSystemFontOfSize(WMScreen *scrPtr, int size);
 WMFont* WMBoldSystemFontOfSize(WMScreen *scrPtr, int size);
 
 XFontSet WMGetFontFontSet(WMFont *font);
-
-WMFont* WMNormalizeFont(WMScreen *scr, WMFont *font);
-
-WMFont* WMStrengthenFont(WMScreen *scr, WMFont *font);
-
-WMFont* WMUnstrengthenFont(WMScreen *scr, WMFont *font);
-
-WMFont* WMEmphasizeFont(WMScreen *scr, WMFont *font);
-
-WMFont* WMUnemphasizeFont(WMScreen *scr, WMFont *font);
 
 /* ....................................................................... */
 
