@@ -998,6 +998,7 @@ handleEnterNotify(XEvent *event)
 #endif
 
 #ifdef VIRTUAL_DESKTOP
+    /* TODO: acceleration code */
     if (wPreferences.vedge_thickness) {
         int x,y;
         if (event->xcrossing.window == scr->virtual_edge_r) {
