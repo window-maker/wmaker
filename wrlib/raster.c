@@ -289,17 +289,19 @@ RCombineArea(RImage *image, RImage *src, int sx, int sy, unsigned width,
     assert(sy + height <= src->height);
     assert(sx + width <= src->width);
 
-    
+    if (width > image->width - dx)
+	width = image->width - dx;
+
     if (height > image->height - dy)
 	height = image->height - dy;
 
     if (!HAS_ALPHA(src)) {
 	if (!HAS_ALPHA(image)) {
-	    swi = (src->width - width) * 3;
-	    dwi = (image->width - width) * 3;
+	    swi = src->width * 3;
+	    dwi = image->width * 3;
 
-	    d = image->data + dy*(int)image->width*3 + dx;
-	    s = src->data + sy*(int)src->width*3 + sx;
+	    s = src->data + (sy*(int)src->width + sx) * 3;
+	    d = image->data + (dy*(int)image->width + dx) * 3;
 
 	    for (y=0; y < height; y++) {
 		memcpy(d, s, width*3);
@@ -310,8 +312,8 @@ RCombineArea(RImage *image, RImage *src, int sx, int sy, unsigned width,
 	    swi = (src->width - width) * 3;
 	    dwi = (image->width - width) * 4;
 
-	    d = image->data + dy*(int)image->width*4 + dx;
-	    s = src->data + sy*(int)src->width*3 + sx;
+	    s = src->data + (sy*(int)src->width + sx) * 3;
+	    d = image->data + (dy*(int)image->width + dx) * 4;
 
 	    for (y=0; y < height; y++) {
 		for (x=0; x < width; x++) {
@@ -328,13 +330,13 @@ RCombineArea(RImage *image, RImage *src, int sx, int sy, unsigned width,
 	int dalpha = HAS_ALPHA(image);
 
 	swi = (src->width - width) * 4;
-	s = src->data + sy*(int)src->width*4 + sx;
+	s = src->data + (sy*(int)src->width + sx) * 4;
 	if (!HAS_ALPHA(image)) {
 	    dwi = (image->width - width) * 3;
-	    d = image->data + (dy*(int)image->width+dx)*3;
+	    d = image->data + (dy*(int)image->width + dx) * 3;
 	} else {
 	    dwi = (image->width - width) * 4;
-	    d = image->data + (dy*(int)image->width+dx)*4;
+	    d = image->data + (dy*(int)image->width + dx) * 4;
 	}
 
 	for (y=0; y < height; y++) {
