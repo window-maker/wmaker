@@ -1289,7 +1289,7 @@ updateScrollers(Text *tPtr)
         return;
 
     if (tPtr->vS) {
-        if (tPtr->docHeight < tPtr->visible.h) {
+        if (tPtr->docHeight <= tPtr->visible.h) {
             WMSetScrollerParameters(tPtr->vS, 0, 1);
             tPtr->vpos = 0;
         } else {   
@@ -1301,7 +1301,7 @@ updateScrollers(Text *tPtr)
     } else tPtr->vpos = 0;
     
     if (tPtr->hS) { 
-        if (tPtr->docWidth < tPtr->visible.w) {
+        if (tPtr->docWidth <= tPtr->visible.w) {
             WMSetScrollerParameters(tPtr->hS, 0, 1);
             tPtr->hpos = 0;
         } else {   
@@ -2026,6 +2026,8 @@ insertTextInteractively(Text *tPtr, char *text, int len)
         int nlen = (int)(newline-text);
         int s = tb->used - tPtr->tpos;
         char save[s];
+
+
         if (!tb->blank && nlen>0) {
             if (s > 0) { 
                 memcpy(save, &tb->text[tPtr->tpos], s);
@@ -2041,14 +2043,20 @@ insertTextInteractively(Text *tPtr, char *text, int len)
             if (tPtr->tpos>0 && tPtr->tpos < tb->used 
                 && !tb->graphic && tb->text) { 
 
+                unsigned short savePos = tPtr->tpos;
                 void *ntb = WMCreateTextBlockWithText(
                     tPtr, &tb->text[tPtr->tpos],
                     tb->d.font, tb->color, True, tb->used - tPtr->tpos);
-                tb->used = tPtr->tpos;
+
+                if(tb->sections[0].end == tPtr->tpos)
+                    WMAppendTextBlock(tPtr, WMCreateTextBlockWithText(tPtr, 
+                        NULL, tb->d.font, tb->color, True, 0));
+
+                tb->used = savePos;
                 WMAppendTextBlock(tPtr, ntb);
                 tPtr->tpos = 0;
 
-            } else if (tPtr->tpos == tb->used || tPtr->tpos == 0) { 
+            } else if (tPtr->tpos == tb->used) { 
                 if(tPtr->flags.indentNewLine) { 
                     WMAppendTextBlock(tPtr, WMCreateTextBlockWithText(tPtr, 
                         "    ", tb->d.font, tb->color, True, 4));
@@ -2058,7 +2066,18 @@ insertTextInteractively(Text *tPtr, char *text, int len)
                         NULL, tb->d.font, tb->color, True, 0));
                     tPtr->tpos = 0;
                 }
-           }
+           } else if (tPtr->tpos == 0) { 
+                if(tPtr->flags.indentNewLine) { 
+                    WMPrependTextBlock(tPtr, WMCreateTextBlockWithText(tPtr, 
+                        "    ", tb->d.font, tb->color, True, 4));
+                } else {
+                    WMPrependTextBlock(tPtr, WMCreateTextBlockWithText(tPtr, 
+                        NULL, tb->d.font, tb->color, True, 0));
+                }
+                tPtr->tpos = 0;
+                if(tPtr->currentTextBlock->next) 
+                    tPtr->currentTextBlock = tPtr->currentTextBlock->next;
+            }
         }
 
     } else { 
@@ -3490,12 +3509,10 @@ WMPrependTextBlock(WMText *tPtr, void *vtb)
             }
         }
         WMAddToArray(tPtr->gfxItems, (void *)tb);
-        tPtr->tpos = 0;
+        tPtr->tpos = 1;
+
     } else {
-        if(tb->graphic) 
-            tPtr->tpos = 1;
-        else
-            tPtr->tpos = tb->used;
+        tPtr->tpos = tb->used;
     }
 
     if (!tPtr->lastTextBlock || !tPtr->firstTextBlock) {
@@ -3541,13 +3558,10 @@ WMAppendTextBlock(WMText *tPtr, void *vtb)
             }
         }
         WMAddToArray(tPtr->gfxItems, (void *)tb);
-        tPtr->tpos = 0;
+        tPtr->tpos = 1;
 
     } else {
-        if(tb->graphic) 
-            tPtr->tpos = 1;
-        else
-            tPtr->tpos = tb->used;
+        tPtr->tpos = tb->used;
     }
 
 
