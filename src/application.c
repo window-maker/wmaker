@@ -301,25 +301,6 @@ wApplicationCreate(WScreen *scr, Window main_window)
 #endif /* USER_MENU */
 
 
-    {
-	WApplication *tmp = scr->wapp_list;
-	
-	wapp->next = NULL;
-	wapp->prev = NULL;
-
-	/* append to app list */
-	if (!tmp) {
-	    scr->wapp_list = wapp;
-	} else {
-	    while (tmp->next) {
-		tmp = tmp->next;
-	    }
-	    tmp->next = wapp;
-	    wapp->prev = tmp;
-	}
-    }
-    
-    
     /*
      * Set application wide attributes from the leader.
      */
@@ -435,7 +416,8 @@ wApplicationCreate(WScreen *scr, Window main_window)
 
     /* set the application instance index */
     {
-	WApplication *list = scr->wapp_list;
+        WApplication *list = scr->wapp_list;
+        WApplication *prev = NULL;
 	int index = 0;
 	WWindow *wwin = wapp->main_window_desc;
 /*
@@ -455,15 +437,28 @@ wApplicationCreate(WScreen *scr, Window main_window)
 		    index++;
 		    
 		    /* restart list traversal */
-		    list = scr->wapp_list;
+                    list = scr->wapp_list;
+                    prev = NULL;
 		    continue;
 		}
 	    }
-	    
+
+            prev = list;
 	    list = list->next;
 	}
 	
-	wapp->index = index;
+        wapp->index = index;
+
+	wapp->next = NULL;
+	wapp->prev = NULL;
+
+	/* append to app list */
+	if (!prev) {
+	    scr->wapp_list = wapp;
+	} else {
+	    prev->next = wapp;
+	    wapp->prev = prev;
+	}
     }
     
     
