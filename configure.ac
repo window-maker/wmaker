@@ -15,7 +15,7 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.90.1)
+AM_INIT_AUTOMAKE(WindowMaker, 0.91.0)
 
 AC_PROG_LIBTOOL
 
@@ -380,14 +380,14 @@ AC_SUBST(supported_locales)
 dnl Support for various hint things
 dnl ===============================
 
-vdesktop_on="no"
+dnl vdesktop_on="no"
 
-AC_ARG_ENABLE(vdesktop,
-  [  --enable-vdesktop       enable virtual desktop],
-  [if test x$enableval = xyes; then
-    AC_DEFINE(VIRTUAL_DESKTOP, 1, [define if you want virtual desktop support])
-    vdesktop_on=yes
-  fi])
+dnl AC_ARG_ENABLE(vdesktop,
+dnl  [  --enable-vdesktop       enable virtual desktop],
+dnl  [if test x$enableval = xyes; then
+dnl    AC_DEFINE(VIRTUAL_DESKTOP, 1, [define if you want virtual desktop support])
+dnl    vdesktop_on=yes
+dnl  fi])
 
 
 dnl
@@ -1104,7 +1104,7 @@ echo "Use assembly routines for wrlib     : $asm_support"
 echo "Use inline MMX(tm) x86 assembly     : $mmx_support"
 echo "Antialiased text support in WINGs   : $xft"
 echo "Xinerama extension support          : $xinerama"
-echo "Virtual desktop support             : $vdesktop_on"
+dnl echo "Virtual desktop support             : $vdesktop_on"
 echo "Translated message files to install : $mof"
 dnl echo "Supported languages beside English  : $languages"
 if test "x$MOFILES" != "x"; then
