@@ -345,7 +345,6 @@ checkIdleHandlers()
     WMBag *handlerCopy;
     WMBagIterator iter;
 
-    
     if (!idleHandler || WMGetBagItemCount(idleHandler)==0) {
 	W_FlushIdleNotificationQueue();
         /* make sure an observer in queue didn't added an idle handler */
@@ -401,7 +400,7 @@ checkTimerHandlers()
     while (timerHandler && IS_ZERO(handler->when)) {
 	handler = timerHandler;
 	timerHandler = timerHandler->next;	
-
+	
 	if (handler->nextDelay > 0) {
 	    handler->when = now;
 	    addmillisecs(&handler->when, handler->nextDelay);
@@ -420,22 +419,26 @@ static void
 delayUntilNextTimerEvent(struct timeval *delay)
 {
     struct timeval now;
+    TimerHandler *handler;
 
-    if (!timerHandler) {
+    handler = timerHandler;
+    while (handler && IS_ZERO(handler->when)) handler = handler->next;
+    
+    if (!handler) {
         /* The return value of this function is only valid if there _are_
          timers active. */
 	delay->tv_sec = 0;
 	delay->tv_usec = 0;
 	return;
     }
-
+    
     rightNow(&now);
-    if (IS_AFTER(now, timerHandler->when)) {
+    if (IS_AFTER(now, handler->when)) {
 	delay->tv_sec = 0;
 	delay->tv_usec = 0;
     } else {
-	delay->tv_sec = timerHandler->when.tv_sec - now.tv_sec;
-	delay->tv_usec = timerHandler->when.tv_usec - now.tv_usec;
+	delay->tv_sec = handler->when.tv_sec - now.tv_sec;
+	delay->tv_usec = handler->when.tv_usec - now.tv_usec;
 	if (delay->tv_usec < 0) {
 	    delay->tv_usec += 1000000;
 	    delay->tv_sec--;

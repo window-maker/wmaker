@@ -228,9 +228,10 @@ handleXIO(Display *xio_dpy)
 static void
 delayedAction(void *cdata)
 {
-    if (WDelatedActionSet == 0)
+    if (WDelayedActionSet == 0) {
 	return;
-    WDelayedActionSet = 0;
+    }
+    WDelayedActionSet--;
     /* 
      * Make the event dispatcher do whatever it needs to do,
      * including handling zombie processes, restart and exit 
@@ -265,7 +266,7 @@ handleExitSig(int sig)
 	/* setup idle handler, so that this will be handled when
 	 * the select() is returned becaused of the signal, even if
 	 * there are no X events in the queue */
-	WDelayedActionSet = 1;
+	WDelayedActionSet++;
     } else if (sig == SIGUSR2) {
 #ifdef SYS_SIGLIST_DECLARED
         wwarning(_("got signal %i (%s) - rereading defaults\n"), sig, sys_siglist[sig]);
@@ -277,7 +278,7 @@ handleExitSig(int sig)
         /* setup idle handler, so that this will be handled when
          * the select() is returned becaused of the signal, even if
          * there are no X events in the queue */
-        WDelayedActionSet = 1;
+        WDelayedActionSet++;
     } else if (sig == SIGINT || sig == SIGHUP) {
 #ifdef SYS_SIGLIST_DECLARED
         wwarning(_("got signal %i (%s) - exiting...\n"), sig, sys_siglist[sig]);
@@ -287,7 +288,7 @@ handleExitSig(int sig)
 
 	SIG_WCHANGE_STATE(WSTATE_NEED_EXIT);
 
-	WDelayedActionSet = 1;
+	WDelayedActionSet++;
     }
     
     sigprocmask(SIG_UNBLOCK, &sigs, NULL);
@@ -418,7 +419,7 @@ buryChild(int foo)
 	NotifyDeadProcess(pid, WEXITSTATUS(status));
     }
 
-    WDelayedActionSet = 1;
+    WDelayedActionSet++;
     
     sigprocmask(SIG_UNBLOCK, &sigs, NULL);
 

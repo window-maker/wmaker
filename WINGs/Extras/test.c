@@ -80,7 +80,7 @@ main(int argc, char **argv)
     
     WMInitializeApplication("test", &argc, argv);
     
-    scr = WMOpenScreen();
+    scr = WMOpenScreen(NULL);
 
     
     win = WMCreateWindow(scr, "eweq");
