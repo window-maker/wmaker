@@ -30,7 +30,9 @@ print_help()
     puts(" -v <vis-id>	visual id to use");
 }
 
+#ifdef BENCH
 #include "bench.h"
+#endif
 int main(int argc, char **argv)
 {
     RContextAttributes attr;
