@@ -19,8 +19,8 @@
  *  USA.
  */
 
-#ifndef _XINERAMA_H_
-#define _XINERAMA_H_
+#ifndef _WMXINERAMA_H_
+#define _WMXINERAMA_H_
 
 #include "screen.h"
 #include "window.h"
