@@ -74,7 +74,7 @@ wGetGeometryWindowSize(WScreen *scr, unsigned int *width,
 {
     *width = WMWidthOfString(scr->info_text_font, "-8888 x -8888", 13);
 
-    *height = (7 * WMFontHeight(scr->info_text_font)) / 4 - 1;
+    *height = (6 * WMFontHeight(scr->info_text_font)) / 4 - 1;
 }
 
 

@@ -37,9 +37,8 @@ structs and most of the intrinsics are very close to OpenStep classes.
 Internationalization:
 ---------------------
 
-   WINGs supports display of multibyte characters (kanji etc) without the
-to specify any flags (ie: there is no way to disable i18n support).
-Change ~/GNUstep/Defaults/WMGLOBAL to set the desired font set.
+    Change ~/GNUstep/Defaults/WMGLOBAL to set the desired font set and
+set MultiByteText = YES; to enable support for multibyte text.
 
 
 Widgets provided by WINGs:

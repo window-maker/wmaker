@@ -175,16 +175,6 @@ if [ "$NLS" = "y" -o "$NLS" = "Y" ]; then
 			continue
 		fi
 
-		if [ "$MB" = "" -a "$i" = "ja" -o "$i" = "ko" ]; then
-			echo
-			echo "A language you selected needs multi-byte character support"
-			echo "Do you want to enable it?"
-			echo -n "<y/n> [n] "
-			read MB
-			if [ "$MB" = "y" -o "$MB" = "Y" ]; then
-				OPTIONS="$OPTIONS --enable-kanji"
-			fi
-		fi
 	done
 	echo
 	echo "Where do you want to put the message files? [$NLSDIR]"
