@@ -28,6 +28,8 @@ typedef struct _Panel {
 
     char *sectionName;
 
+    char *description;
+
     CallbackRec callbacks;
     
     WMWindow *win;
@@ -387,6 +389,9 @@ InitFocus(WMScreen *scr, WMWindow *win)
     memset(panel, 0, sizeof(_Panel));
 
     panel->sectionName = _("Window Focus Preferences");
+
+    panel->description = _("Keyboard focus switching policy, colormap switching\n"
+			   "policy for 8bpp displays and other related options.");
 
     panel->win = win;
 

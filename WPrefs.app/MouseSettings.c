@@ -42,6 +42,8 @@ typedef struct _Panel {
 
     char *sectionName;
 
+    char *description;
+
     CallbackRec callbacks;
     
     WMWindow *win;
@@ -756,7 +758,12 @@ createPanel(Panel *p)
     WMResizeWidget(panel->grabF, 240, 55);
     WMMoveWidget(panel->grabF, 270, 165);
     WMSetFrameTitle(panel->grabF, _("Mouse Grab Modifier"));
-    
+
+    WMSetBalloonTextForView(_("Keyboard modifier to use for actions that\n"
+			      "involve dragging windows with the mouse,\n"
+			      "clicking inside the window."),
+			    WMWidgetView(panel->grabF));
+
     panel->grabP = WMCreatePopUpButton(panel->grabF);
     WMResizeWidget(panel->grabP, 160, 20);
     WMMoveWidget(panel->grabP, 40, 25);
@@ -919,8 +926,11 @@ InitMouseSettings(WMScreen *scr, WMWindow *win)
 
     panel->sectionName = _("Mouse Preferences");
 
+    panel->description = _("Mouse speed/acceleration, double click delay,\n"
+			   "mouse button bindings etc.");
+
     panel->win = win;
-    
+
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;
 

@@ -27,6 +27,8 @@ typedef struct _Panel {
     WMFrame *frame;
     char *sectionName;   
 
+    char *description;
+
     CallbackRec callbacks;
     
     WMWindow *win;
@@ -313,6 +315,9 @@ createPanel(Panel *p)
 	WMSetButtonAltImage(panel->animB, altIcon);
 	WMReleasePixmap(altIcon);
     }
+    WMSetBalloonTextForView(_("Disable/enable animations such as those shown\n"
+			      "for window miniaturization, shading etc."),
+			    WMWidgetView(panel->animB));
 
     panel->supB = WMCreateButton(panel->animF, WBTToggle);
     WMResizeWidget(panel->supB, 64, 64);
@@ -329,6 +334,11 @@ createPanel(Panel *p)
 	WMSetButtonAltImage(panel->supB, altIcon);
 	WMReleasePixmap(altIcon);
     }
+    WMSetBalloonTextForView(_("Disable/enable `superfluous' features and\n"
+			      "animations. These include the `ghosting' of the\n"
+			      "dock when it's being moved to the another side\n"
+			      "and the explosion animation for undocked icons."),
+			    WMWidgetView(panel->supB));
     
     panel->sfxB = WMCreateButton(panel->animF, WBTToggle);
     WMResizeWidget(panel->sfxB, 64, 64);
@@ -345,7 +355,12 @@ createPanel(Panel *p)
 	WMSetButtonAltImage(panel->sfxB, altIcon);
 	WMReleasePixmap(altIcon);
     }
-    
+    WMSetBalloonTextForView(_("Disable/enable support for sound effects played\n"
+			      "for actions like shading and closing a window.\n"
+			      "You will need a module distributed separately\n"
+			      "for this. You can get it at:\n"
+			      "http://www.frontiernet.net/~southgat/wmsound"),
+			    WMWidgetView(panel->sfxB));
     
     panel->noteL = WMCreateLabel(panel->animF);
     WMResizeWidget(panel->noteL, 235, 28);
@@ -362,6 +377,10 @@ createPanel(Panel *p)
     WMResizeWidget(panel->dithF, 255, 95);
     WMMoveWidget(panel->dithF, 255, 130);
     WMSetFrameTitle(panel->dithF, _("Dithering colormap for 8bpp"));
+
+    WMSetBalloonTextForView(_("Number of colors to reserve for Window Maker\n"
+			      "on displays that support only 8bpp (PseudoColor)."),
+			    WMWidgetView(panel->dithF));
     
     panel->dithB = WMCreateSwitchButton(panel->dithF);
     WMResizeWidget(panel->dithB, 235, 32);
@@ -448,6 +467,10 @@ InitConfigurations(WMScreen *scr, WMWindow *win)
     memset(panel, 0, sizeof(_Panel));
 
     panel->sectionName = _("Other Configurations");
+
+    panel->description = _("Animation speeds, titlebar styles, various option\n"
+			   "toggling and number of colors to reserve for\n"
+			   "Window Maker in 8bit displays.");
 
     panel->win = win;
 

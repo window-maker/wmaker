@@ -28,6 +28,8 @@ typedef struct _Panel {
 
     char *sectionName;
 
+    char *description;
+
     CallbackRec callbacks;
     
     WMWindow *win;
@@ -227,6 +229,9 @@ InitMenuPreferences(WMScreen *scr, WMWindow *win)
     memset(panel, 0, sizeof(_Panel));
 
     panel->sectionName = _("Menu Preferences");
+
+    panel->description = _("Menu usability related options. Scrolling speed,\n"
+			   "alignment of submenus etc.");
 
     panel->win = win;
     

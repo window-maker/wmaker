@@ -27,6 +27,8 @@
 typedef struct _Panel {
     WMFrame *frame;
     char *sectionName;
+
+    char *description;
     
     CallbackRec callbacks;
 
@@ -387,6 +389,9 @@ InitPaths(WMScreen *scr, WMWindow *win)
     memset(panel, 0, sizeof(_Panel));
 
     panel->sectionName = _("Search Path Configuration");
+
+    panel->description = _("Search paths to use when looking for pixmaps\n"
+			   "and icons.");
 
     panel->win = win;
 

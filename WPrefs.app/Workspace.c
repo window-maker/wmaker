@@ -29,6 +29,8 @@ typedef struct _Panel {
 
     char *sectionName;
 
+    char *description;
+
     CallbackRec callbacks;
     
     WMWindow *win;
@@ -234,7 +236,10 @@ createPanel(Panel *p)
 	}
 	free(path);
     }
-    
+    WMSetBalloonTextForView(_("Disable/enable the application Dock (the\n"
+			      "vertical icon bar in the side of the screen)."),
+			    WMWidgetView(panel->dockB));
+
     panel->clipB = WMCreateButton(panel->dockF, WBTToggle);
     WMResizeWidget(panel->clipB, 64, 64);
     WMMoveWidget(panel->clipB, 20, 110);
@@ -251,6 +256,10 @@ createPanel(Panel *p)
 	    WMReleasePixmap(icon1);
 	}
     }
+    WMSetBalloonTextForView(_("Disable/enable the Clip (that thing with\n"
+			      "a paper clip icon)."),
+			    WMWidgetView(panel->clipB));
+
     WMMapSubwidgets(panel->dockF);
 
     if (xis)
@@ -285,7 +294,10 @@ InitWorkspace(WMScreen *scr, WMWindow *win)
     memset(panel, 0, sizeof(_Panel));
 
     panel->sectionName = _("Workspace Preferences");
-    
+
+    panel->description = _("Workspace navigation features.\n"
+			   "You can also enable/disable the Dock and Clip here.");
+
     panel->win = win;
     
     panel->callbacks.createWidgets = createPanel;

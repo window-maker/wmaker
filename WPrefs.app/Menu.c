@@ -31,6 +31,8 @@ typedef struct _Panel {
     WMFrame *frame;
     char *sectionName;
 
+    char *description;
+
     CallbackRec callbacks;
     WMWindow *win;
     
@@ -1466,6 +1468,8 @@ InitMenu(WMScreen *scr, WMWindow *win)
     memset(panel, 0, sizeof(_Panel));
 
     panel->sectionName = _("Applications Menu Definition");
+
+    panel->description = _("Edit the menu for launching applications.");
 
     panel->win = win;
 

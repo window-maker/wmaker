@@ -31,7 +31,9 @@ typedef struct _Panel {
     WMFrame *frame;
 
     char *sectionName;
-    
+
+    char *description;
+
     CallbackRec callbacks;
 
     WMWindow *win;
@@ -497,6 +499,9 @@ InitKeyboardShortcuts(WMScreen *scr, WMWindow *win)
     memset(panel, 0, sizeof(_Panel));
 
     panel->sectionName = _("Keyboard Shortcut Preferences");
+
+    panel->description = _("Change the keyboard shortcuts for actions such\n"
+			   "as changing workspaces and opening menus.");
 
     panel->win = win;
     

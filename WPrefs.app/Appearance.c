@@ -41,6 +41,8 @@ typedef struct _Panel {
     WMFrame *frame;
     char *sectionName;
 
+    char *description;
+
     CallbackRec callbacks;
 
     WMWindow *win;
@@ -1299,7 +1301,11 @@ createPanel(Panel *p)
     WMHangData(panel->texLs, panel);
     WMSetListAction(panel->texLs, textureClick, panel);
     WMSetListDoubleAction(panel->texLs, textureDoubleClick, panel);
-    
+
+    WMSetBalloonTextForView(_("Double click in the texture you want to use\n"
+			      "for the selected item."),
+			    WMWidgetView(panel->texLs));
+
     /* command buttons */
 
     font = WMSystemFontOfSize(scr, 10);
@@ -1314,6 +1320,9 @@ createPanel(Panel *p)
     WMSetButtonAction(panel->newB, newTexture, panel);
     SetButtonAlphaImage(scr, panel->newB, TNEW_FILE);
 
+    WMSetBalloonTextForView(_("Create a new texture."),
+			    WMWidgetView(panel->newB));
+
     panel->ripB = WMCreateCommandButton(panel->frame);
     WMResizeWidget(panel->ripB, 56, 48);
     WMMoveWidget(panel->ripB, 341, 180);
@@ -1322,6 +1331,9 @@ createPanel(Panel *p)
     WMSetButtonText(panel->ripB, _("Extract..."));
     WMSetButtonAction(panel->ripB, extractTexture, panel);
     SetButtonAlphaImage(scr, panel->ripB, TEXTR_FILE);
+
+    WMSetBalloonTextForView(_("Extract texture(s) from a theme or a style file."),
+			    WMWidgetView(panel->ripB));
 
     WMSetButtonEnabled(panel->ripB, False);
 
@@ -1333,6 +1345,8 @@ createPanel(Panel *p)
     WMSetButtonText(panel->editB, _("Edit"));
     SetButtonAlphaImage(scr, panel->editB, TEDIT_FILE);
     WMSetButtonAction(panel->editB, editTexture, panel);
+    WMSetBalloonTextForView(_("Edit the highlighted texture."),
+			    WMWidgetView(panel->editB));
 
     panel->delB = WMCreateCommandButton(panel->frame);
     WMResizeWidget(panel->delB, 56, 48);
@@ -1343,6 +1357,8 @@ createPanel(Panel *p)
     SetButtonAlphaImage(scr, panel->delB, TDEL_FILE);
     WMSetButtonEnabled(panel->delB, False);
     WMSetButtonAction(panel->delB, deleteTexture, panel);
+    WMSetBalloonTextForView(_("Delete the highlighted texture."),
+			    WMWidgetView(panel->delB));
 
     WMReleaseFont(font);
 
@@ -1517,6 +1533,9 @@ InitAppearance(WMScreen *scr, WMWindow *win)
     
     panel->sectionName = _("Appearance Preferences");
 
+    panel->description = _("Background texture configuration for windows,\n"
+			   "menus and icons.");
+
     panel->win = win;
 
     panel->callbacks.createWidgets = createPanel;
@@ -1608,7 +1627,4 @@ OpenExtractPanelFor(_Panel *panel, char *path)
     
     WMMapWidget(epanel->win);
 }
-
-
-
 

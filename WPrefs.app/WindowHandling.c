@@ -27,7 +27,9 @@ typedef struct _Panel {
     WMFrame *frame;
 
     char *sectionName;
-    
+
+    char *description;
+
     CallbackRec callbacks;
     
     WMWindow *win;
@@ -221,6 +223,8 @@ createPanel(Panel *p)
     WMResizeWidget(panel->placF, 270, 110);
     WMMoveWidget(panel->placF, 20, 10);
     WMSetFrameTitle(panel->placF, _("Window Placement"));
+    WMSetBalloonTextForView(_("How to place windows when they are first put\n"
+			       "on screen."), WMWidgetView(panel->placF));
 
     panel->placP = WMCreatePopUpButton(panel->placF);
     WMResizeWidget(panel->placP, 105, 20);
@@ -295,7 +299,11 @@ createPanel(Panel *p)
     WMResizeWidget(panel->opaqF, 205, 110);
     WMMoveWidget(panel->opaqF, 300, 10);
     WMSetFrameTitle(panel->opaqF, _("Opaque Move"));
-    
+    WMSetBalloonTextForView(_("Whether the window contents should be moved\n"
+			       "when dragging windows aroung or if only a\n"
+			       "frame should be displayed.\n"),
+			     WMWidgetView(panel->opaqF));
+
     panel->opaqB = WMCreateButton(panel->opaqF, WBTToggle);
     WMResizeWidget(panel->opaqB, 64, 64);
     WMMoveWidget(panel->opaqB, 70, 25);
@@ -352,16 +360,21 @@ createPanel(Panel *p)
     WMMoveWidget(panel->resF, 20, 125);
     WMSetFrameTitle(panel->resF, _("Edge Resistance"));
 
+    WMSetBalloonTextForView(_("Edge resistance will make windows `resist'\n"
+			       "being moved further for the defined threshold\n"
+			       "when moved against other windows or the edges\n"
+			       "of the screen."), WMWidgetView(panel->resF));
+
     panel->resS = WMCreateSlider(panel->resF);
     WMResizeWidget(panel->resS, 200, 15);
-    WMMoveWidget(panel->resS, 10, 20);
+    WMMoveWidget(panel->resS, 20, 20);
     WMSetSliderMinValue(panel->resS, 0);
     WMSetSliderMaxValue(panel->resS, 200);
     WMSetSliderAction(panel->resS, resistanceCallback, panel);
 
     panel->resL = WMCreateLabel(panel->resF);
-    WMResizeWidget(panel->resL, 40, 15);
-    WMMoveWidget(panel->resL, 220, 20);
+    WMResizeWidget(panel->resL, 30, 15);
+    WMMoveWidget(panel->resL, 230, 20);
 
     WMMapSubwidgets(panel->resF);
 
@@ -402,6 +415,9 @@ InitWindowHandling(WMScreen *scr, WMWindow *win)
     memset(panel, 0, sizeof(_Panel));
 
     panel->sectionName = _("Window Handling Preferences");
+
+    panel->description = _("Window handling options. Initial placement style\n"
+			   "edge resistance, opaque move etc.");
 
     panel->win = win;
     

@@ -476,6 +476,9 @@ AddSection(Panel *panel, char *iconFile)
     WMSetButtonAction(bPtr, changeSection, panel);
     WMHangData(bPtr, panel);
 
+    WMSetBalloonTextForView(((PanelRec*)panel)->description,
+			    WMWidgetView(bPtr));
+
     SetButtonAlphaImage(WMWidgetScreen(bPtr), bPtr, iconFile);
 
     WMMapWidget(bPtr);
@@ -485,9 +488,9 @@ AddSection(Panel *panel, char *iconFile)
     if (WPrefs.sectionCount > 0) {
 	WMGroupButtons(WPrefs.sectionB[0], bPtr);
     }
-    
+
     WPrefs.sectionCount++;
-    
+
     WMResizeWidget(WPrefs.buttonF, WPrefs.sectionCount*64, 64);
 }
 

@@ -42,7 +42,7 @@
 
 /****/
 
-#define WVERSION	"0.31"
+#define WVERSION	"0.40"
 #define WMVERSION	"0.53.x"
 
 
@@ -66,7 +66,9 @@ typedef struct PanelRec {
     WMFrame *frame;
 
     char *sectionName;		       /* section name to display in titlebar */
-    
+
+    char *description;
+
     CallbackRec callbacks;
 } PanelRec;
 

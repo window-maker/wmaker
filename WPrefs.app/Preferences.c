@@ -28,6 +28,8 @@ typedef struct _Panel {
 
     char *sectionName;
 
+    char *description;
+
     CallbackRec callbacks;
     
     WMWindow *win;
@@ -233,6 +235,8 @@ InitPreferences(WMScreen *scr, WMWindow *win)
     memset(panel, 0, sizeof(_Panel));
 
     panel->sectionName = _("Miscellaneous Ergonomic Preferences");
+    panel->description = _("Various settings like balloon text, geometry\n"
+			   "displays etc.");
 
     panel->win = win;
     

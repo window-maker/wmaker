@@ -29,6 +29,8 @@ typedef struct _Panel {
 
     char *sectionName;
 
+    char *description;
+
     CallbackRec callbacks;
     
     WMWindow *win;
@@ -246,17 +248,23 @@ createPanel(Panel *p)
     panel->optF = WMCreateFrame(panel->frame);
     WMResizeWidget(panel->optF, 260, 70);
     WMMoveWidget(panel->optF, 25, 150);
-    WMSetFrameTitle(panel->optF, _("Icon Display"));
+/*    WMSetFrameTitle(panel->optF, _("Icon Display"));*/
     
     panel->arrB = WMCreateSwitchButton(panel->optF);
     WMResizeWidget(panel->arrB, 235, 20);
     WMMoveWidget(panel->arrB, 15, 15);
     WMSetButtonText(panel->arrB, _("Auto-arrange icons"));
 
+    WMSetBalloonTextForView(_("Keep icons and miniwindows arranged all the time."),
+			    WMWidgetView(panel->arrB));
+
     panel->omnB = WMCreateSwitchButton(panel->optF);
     WMResizeWidget(panel->omnB, 235, 20);
     WMMoveWidget(panel->omnB, 15, 40);
     WMSetButtonText(panel->omnB, _("Omnipresent miniwindows"));
+
+    WMSetBalloonTextForView(_("Make miniwindows be present in all workspaces."),
+			    WMWidgetView(panel->omnB));
 
     WMMapSubwidgets(panel->optF);
     
@@ -266,6 +274,8 @@ createPanel(Panel *p)
     WMMoveWidget(panel->sizeF, 295, 150);
     WMSetFrameTitle(panel->sizeF, _("Icon Size"));
 
+    WMSetBalloonTextForView(_("The size of the dock/application icon and miniwindows"),
+			    WMWidgetView(panel->sizeF));
 
     panel->sizeP = WMCreatePopUpButton(panel->sizeF);
     WMResizeWidget(panel->sizeP, 156, 20);
@@ -335,9 +345,12 @@ InitIcons(WMScreen *scr, WMWindow *win)
     memset(panel, 0, sizeof(_Panel));
 
     panel->sectionName = _("Icon Preferences");
-    
+
+    panel->description = _("Icon/Miniwindow handling options. Icon positioning\n"
+			   "area, sizes of icons, miniaturization animation style.");
+
     panel->win = win;
-    
+
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;
 

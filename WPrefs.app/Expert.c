@@ -25,7 +25,9 @@
 
 typedef struct _Panel {
     WMFrame *frame;
-    char *sectionName;   
+    char *sectionName;
+
+    char *description;
 
     CallbackRec callbacks;
     
@@ -106,6 +108,9 @@ InitExpert(WMScreen *scr, WMWindow *win)
     memset(panel, 0, sizeof(_Panel));
 
     panel->sectionName = _("Expert User Preferences");
+
+    panel->description = _("Options for people who know what they're doing...\n"
+			   "Also have some other misc. options.");
 
     panel->win = win;
 
