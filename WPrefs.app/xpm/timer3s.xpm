@@ -3,7 +3,7 @@ static char * image_name[] = {
 "24 24 5 1",
 " 	c None",
 ".	c #000000000000",
-"X	c #79E77DF779E7",
+"X	c #7BDE7BDE7BDE",
 "o	c #FFFFFFFFFFFF",
 "O	c #FFFF00000000",
 "                        ",

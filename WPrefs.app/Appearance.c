@@ -49,13 +49,14 @@ typedef struct _Panel {
 
     WMLabel *prevL;
 
-    WMPopUpButton *secP;
 
     WMTabView *tabv;
 
     /* texture list */
     WMFrame *texF;
     WMList *texLs;
+
+    WMPopUpButton *secP;
 
     WMButton *newB;
     WMButton *editB;
@@ -353,7 +354,7 @@ drawMenuBevel(RImage *img)
     mid.alpha = 0;
     mid.red = mid.green = mid.blue = 40;
     
-    for (i = 1; i < 3; i++) {	    
+    for (i = 1; i < 4; i++) {
 	ROperateLine(img, RSubtractOperation, 0, i*iheight-2,
 		     img->width-1, i*iheight-2, &mid);
 	
@@ -573,17 +574,16 @@ renderMenu(_Panel *panel, proplist_t texture, int width, int iheight)
 
 	tmp = renderTexture(scr, texture, width, iheight, NULL, RBEV_RAISED2);
 
-	pix = XCreatePixmap(dpy, tmp, width, iheight*3,
-			    WMScreenDepth(scr));
-	for (i = 0; i < 3; i++) {
+	pix = XCreatePixmap(dpy, tmp, width, iheight*4, WMScreenDepth(scr));
+	for (i = 0; i < 4; i++) {
 	    XCopyArea(dpy, tmp, pix, gc, 0, 0, width, iheight,
 		      0, iheight*i);
 	}
 	XFreePixmap(dpy, tmp);
     } else if (strcasecmp(str, "flat")==0) {
-	pix = renderTexture(scr, texture, width, iheight*3, NULL, RBEV_RAISED2);
+	pix = renderTexture(scr, texture, width, iheight*4, NULL, RBEV_RAISED2);
     } else {
-	pix = renderTexture(scr, texture, width, iheight*3, NULL, MENU_BEVEL);
+	pix = renderTexture(scr, texture, width, iheight*4, NULL, MENU_BEVEL);
     }
 
     XFreeGC(dpy, gc);
@@ -611,11 +611,11 @@ updatePreviewBox(_Panel *panel, int elements)
 	WMColor *color;
 
 	panel->preview = XCreatePixmap(dpy, WMWidgetXID(panel->win),
-				       240-4, 165-4, WMScreenDepth(scr));
+				       240-4, 215-4, WMScreenDepth(scr));
 
 	color = WMGrayColor(scr);
 	XFillRectangle(dpy, panel->preview, WMColorGC(color),
-		       0, 0, 240-4, 165-4);
+		       0, 0, 240-4, 215-4);
 	WMReleaseColor(color);
 
 	refresh = -1;
@@ -627,7 +627,7 @@ updatePreviewBox(_Panel *panel, int elements)
 
 	pix = renderTexture(scr, titem->prop, 190, 20, NULL, RBEV_RAISED2);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 5);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 10);
 
 	XFreePixmap(dpy, pix);
     }
@@ -637,7 +637,7 @@ updatePreviewBox(_Panel *panel, int elements)
 
 	pix = renderTexture(scr, titem->prop, 190, 20, NULL, RBEV_RAISED2);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 30);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 40);
 
 	XFreePixmap(dpy, pix);
     }
@@ -647,7 +647,7 @@ updatePreviewBox(_Panel *panel, int elements)
 
 	pix = renderTexture(scr, titem->prop, 190, 20, NULL, RBEV_RAISED2);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 55);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 70);
 
 	XFreePixmap(dpy, pix);
     }
@@ -657,7 +657,7 @@ updatePreviewBox(_Panel *panel, int elements)
 
 	pix = renderTexture(scr, titem->prop, 190, 9, NULL, RESIZEBAR_BEVEL);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 80);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 100);
 
 	XFreePixmap(dpy, pix);
     }
@@ -667,7 +667,7 @@ updatePreviewBox(_Panel *panel, int elements)
 
 	pix = renderTexture(scr, titem->prop, 90, 20, NULL, RBEV_RAISED2);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 90, 20, 30, 95);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 90, 20, 30, 120);
 
 	XFreePixmap(dpy, pix);
     }
@@ -677,13 +677,13 @@ updatePreviewBox(_Panel *panel, int elements)
 
 	pix = renderMenu(panel, titem->prop, 90, 18);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 90, 18*3, 30, 115);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 90, 18*4, 30, 140);
 
 	XFreePixmap(dpy, pix);
     }
     if (elements & (MITEM|MTITLE)) {
-	XDrawLine(dpy, panel->preview, gc, 29, 95, 29, 115+36+20);
-	XDrawLine(dpy, panel->preview, gc, 29, 94, 119, 94);
+	XDrawLine(dpy, panel->preview, gc, 29, 120, 29, 120+18*4+20);
+	XDrawLine(dpy, panel->preview, gc, 29, 119, 119, 119);
     }
 
     if (elements & ICON) {
@@ -693,16 +693,15 @@ updatePreviewBox(_Panel *panel, int elements)
 	pix = renderTexture(scr, titem->prop, 64, 64, NULL, 
 			    titem->ispixmap ? 0 : RBEV_RAISED3);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 64, 64, 155, 95);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 64, 64, 155, 130);
 
 	XFreePixmap(dpy, pix);
     }
 
-
     if (refresh < 0) {
 	WMPixmap *p;
 	p = WMCreatePixmapFromXPixmaps(scr, panel->preview, None,
-				       240-4, 165-4, WMScreenDepth(scr));
+				       240-4, 215-4, WMScreenDepth(scr));
 
 	WMSetLabelImage(panel->prevL, p);
 	WMReleasePixmap(p);
@@ -954,13 +953,13 @@ changePage(WMWidget *w, void *data)
     WMScreen *scr = WMWidgetScreen(w);
     RContext *rc = WMScreenRContext(scr);
     static WMPoint positions[] = {
-	{5, 5},
-	{5, 30},
-	{5, 55},
-	{5, 80},
-	{5, 95},
-	{5, 130},
-	{130, 110}
+	{5, 10},
+	{5, 40},
+	{5, 70},
+	{5, 100},
+	{5, 120},
+	{5, 160},
+	{130, 150}
     };
 
     section = WMGetPopUpButtonSelectedItem(panel->secP);
@@ -997,13 +996,13 @@ previewClick(XEvent *event, void *clientData)
     _Panel *panel = (_Panel*)clientData;
     int i;
     static WMRect parts[] = {
-	{{30, 5},{190, 20}},
-	{{30,30},{190,20}},
-	{{30,55},{190,20}},
-	{{30,80},{190,9}},
-	{{30,95},{90,20}},
-	{{30,115},{90,60}},
-	{{155,90},{64,64}}
+	{{30,10},{190, 20}},
+	{{30,40},{190,20}},
+	{{30,70},{190,20}},
+	{{30,100},{190,9}},
+	{{30,120},{90,20}},
+	{{30,140},{90,18*4}},
+	{{155,130},{64,64}}
     };
 
     for (i = 0; i < 7; i++) {
@@ -1239,7 +1238,7 @@ createPanel(Panel *p)
 
     /* preview box */
     panel->prevL = WMCreateLabel(panel->frame);
-    WMResizeWidget(panel->prevL, 240, 165);
+    WMResizeWidget(panel->prevL, 240, FRAME_HEIGHT - 20);
     WMMoveWidget(panel->prevL, 15, 10);
     WMSetLabelRelief(panel->prevL, WRSunken);
     WMSetLabelImagePosition(panel->prevL, WIPImageOnly);
@@ -1247,22 +1246,6 @@ createPanel(Panel *p)
     WMCreateEventHandler(WMWidgetView(panel->prevL), ButtonPressMask,
 			 previewClick, panel);
     
-
-    panel->secP = WMCreatePopUpButton(panel->frame);
-    WMResizeWidget(panel->secP, 240, 20);
-    WMMoveWidget(panel->secP, 15, 180);
-    WMSetPopUpButtonSelectedItem(panel->secP, 0);
-    WMAddPopUpButtonItem(panel->secP, _("Titlebar of Focused Window"));
-    WMAddPopUpButtonItem(panel->secP, _("Titlebar of Unfocused Windows"));
-    WMAddPopUpButtonItem(panel->secP, _("Titlebar of Focused Window's Owner"));
-    WMAddPopUpButtonItem(panel->secP, _("Window Resizebar"));
-    WMAddPopUpButtonItem(panel->secP, _("Titlebar of Menus"));
-    WMAddPopUpButtonItem(panel->secP, _("Menu Items"));
-    WMAddPopUpButtonItem(panel->secP, _("Icon Background"));
-/*    WMAddPopUpButtonItem(panel->secP, _("Workspace Backgrounds"));
- */
-    WMSetPopUpButtonAction(panel->secP, changePage, panel);
-
 
     /* tabview */
 
@@ -1281,9 +1264,25 @@ createPanel(Panel *p)
 
     WMAddItemInTabView(panel->tabv, item);
 
+
+    panel->secP = WMCreatePopUpButton(panel->texF);
+    WMResizeWidget(panel->secP, 228, 20);
+    WMMoveWidget(panel->secP, 7, 7);
+    WMSetPopUpButtonSelectedItem(panel->secP, 0);
+    WMAddPopUpButtonItem(panel->secP, _("Titlebar of Focused Window"));
+    WMAddPopUpButtonItem(panel->secP, _("Titlebar of Unfocused Windows"));
+    WMAddPopUpButtonItem(panel->secP, _("Titlebar of Focused Window's Owner"));
+    WMAddPopUpButtonItem(panel->secP, _("Window Resizebar"));
+    WMAddPopUpButtonItem(panel->secP, _("Titlebar of Menus"));
+    WMAddPopUpButtonItem(panel->secP, _("Menu Items"));
+    WMAddPopUpButtonItem(panel->secP, _("Icon Background"));
+/*    WMAddPopUpButtonItem(panel->secP, _("Workspace Backgrounds"));
+ */
+    WMSetPopUpButtonAction(panel->secP, changePage, panel);
+
     panel->texLs = WMCreateList(panel->texF);
-    WMResizeWidget(panel->texLs, 232, 130);
-    WMMoveWidget(panel->texLs, 5, 5);
+    WMResizeWidget(panel->texLs, 165, 155);
+    WMMoveWidget(panel->texLs, 70, 33);
     WMSetListUserDrawItemHeight(panel->texLs, 35);
     WMSetListUserDrawProc(panel->texLs, paintListItem);
     WMHangData(panel->texLs, panel);
@@ -1300,8 +1299,8 @@ createPanel(Panel *p)
 
 
     panel->newB = WMCreateCommandButton(panel->texF);
-    WMResizeWidget(panel->newB, 57, 48);
-    WMMoveWidget(panel->newB, 5, 142);
+    WMResizeWidget(panel->newB, 57, 39);
+    WMMoveWidget(panel->newB, 7, 33);
     WMSetButtonFont(panel->newB, font);
     WMSetButtonImagePosition(panel->newB, WIPAbove);
     WMSetButtonText(panel->newB, _("New"));
@@ -1312,8 +1311,8 @@ createPanel(Panel *p)
 			    WMWidgetView(panel->newB));
 
     panel->ripB = WMCreateCommandButton(panel->texF);
-    WMResizeWidget(panel->ripB, 57, 48);
-    WMMoveWidget(panel->ripB, 63, 142);
+    WMResizeWidget(panel->ripB, 57, 39);
+    WMMoveWidget(panel->ripB, 7, 72);
     WMSetButtonFont(panel->ripB, font);
     WMSetButtonImagePosition(panel->ripB, WIPAbove);
     WMSetButtonText(panel->ripB, _("Extract..."));
@@ -1326,8 +1325,8 @@ createPanel(Panel *p)
     WMSetButtonEnabled(panel->ripB, False);
 
     panel->editB = WMCreateCommandButton(panel->texF);
-    WMResizeWidget(panel->editB, 57, 48);
-    WMMoveWidget(panel->editB, 121, 142);
+    WMResizeWidget(panel->editB, 57, 39);
+    WMMoveWidget(panel->editB, 7, 111);
     WMSetButtonFont(panel->editB, font);
     WMSetButtonImagePosition(panel->editB, WIPAbove);
     WMSetButtonText(panel->editB, _("Edit"));
@@ -1337,8 +1336,8 @@ createPanel(Panel *p)
 			    WMWidgetView(panel->editB));
 
     panel->delB = WMCreateCommandButton(panel->texF);
-    WMResizeWidget(panel->delB, 57, 48);
-    WMMoveWidget(panel->delB, 179, 142);
+    WMResizeWidget(panel->delB, 57, 38);
+    WMMoveWidget(panel->delB, 7, 150);
     WMSetButtonFont(panel->delB, font);
     WMSetButtonImagePosition(panel->delB, WIPAbove);
     WMSetButtonText(panel->delB, _("Delete"));

@@ -45,7 +45,10 @@ xpmdata_DATA = \
 	speed3s.xpm \
 	speed4.xpm \
 	speed4s.xpm \
+	tdel.xpm \
+	tedit.xpm \
 	temp.xpm \
+	textr.xpm \
 	theme.xpm \
 	timer0.xpm \
 	timer0s.xpm \
@@ -59,6 +62,7 @@ xpmdata_DATA = \
 	timer4s.xpm \
 	timer5.xpm \
 	timer5s.xpm \
+	tnew.xpm \
 	whandling.xpm \
 	windowfocus.xpm \
 	workspace.xpm \
