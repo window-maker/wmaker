@@ -21,7 +21,6 @@ Need to do:
   automatic best context guessing
 - docklet to control AccessX (keyboard accessibility) functions
 - rewrite all redundant stuff to use WINGs
-- resizebartexture option
 - add function to directly make a thumbnail of an image, using the
   functionality provided by the image libraries to load a minimal
   amount of data.

@@ -29,6 +29,9 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+
+char *NOptionValueChanged = "NOptionValueChanged";
+
 extern void Initialize(WMScreen *scr);
 
 #define MAX_DEATHS	64

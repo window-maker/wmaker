@@ -42,9 +42,11 @@
 
 /****/
 
-#define WVERSION	"0.30"
+#define WVERSION	"0.31"
 #define WMVERSION	"0.52.x"
 
+
+extern char *NOptionValueChanged;
 
 typedef struct _Panel Panel;
 

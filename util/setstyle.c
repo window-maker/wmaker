@@ -155,7 +155,7 @@ getColor(proplist_t texture)
 	if (!dpy) {
 	    if (sscanf(PLGetString(c1), "#%2x%2x%2x", &r1, &g1, &b1)==3
 		&& sscanf(PLGetString(c2), "#%2x%2x%2x", &r2, &g2, &b2)==3) {
-		sprintf(buffer, "#%2x%2x%2x", (r1+r2)/2, (g1+g2)/2,
+		sprintf(buffer, "#%02x%02x%02x", (r1+r2)/2, (g1+g2)/2,
 			(b1+b2)/2);
 		value = PLMakeString(buffer);
 	    } else {
@@ -170,9 +170,10 @@ getColor(proplist_t texture)
 	    XParseColor(dpy, DefaultColormap(dpy, DefaultScreen(dpy)),
 			PLGetString(c1), &color2);
 	    
-	    sprintf(buffer, "#%4x%4x%4x", (color1.red+color2.red)/2, 
-		    (color1.green+color2.green)/2,
-		    (color1.blue+color2.blue)/2);
+	    sprintf(buffer, "#%02x%02x%02x", 
+		    (color1.red+color2.red)>>3,
+		    (color1.green+color2.green)>>3,
+		    (color1.blue+color2.blue)>>3);
 	    value = PLMakeString(buffer);	    
 	}
     } else if (strcasecmp(str, "mdgradient")==0

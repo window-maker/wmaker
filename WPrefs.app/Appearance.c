@@ -218,14 +218,16 @@ static char * hand_xpm[] = {
 #define	FTITLE	(1<<0)
 #define UTITLE	(1<<1)
 #define OTITLE	(1<<2)
-#define MTITLE	(1<<3)
-#define MITEM	(1<<4)
-#define ICON	(1<<5)
-#define BACK	(1<<6)
+#define RESIZEBAR (1<<3)
+#define MTITLE	(1<<4)
+#define MITEM	(1<<5)
+#define ICON	(1<<6)
+#define BACK	(1<<7)
 #define EVERYTHING	0xff
 
 
-
+#define RESIZEBAR_BEVEL	-1
+#define MENU_BEVEL 	-2
 
 #define TEXPREV_WIDTH	40
 #define TEXPREV_HEIGHT	24
@@ -289,6 +291,70 @@ isPixmap(proplist_t prop)
 	return 0;
 }
 
+
+static void
+drawResizebarBevel(RImage *img)
+{
+    RColor light;
+    RColor dark;
+    RColor black;
+    int width = img->width;
+    int height = img->height;
+    int cwidth = 28;
+
+    black.alpha = 255;
+    black.red = black.green = black.blue = 0;
+    
+    light.alpha = 0;
+    light.red = light.green = light.blue = 80;
+
+    dark.alpha = 0;
+    dark.red = dark.green = dark.blue = 40;
+
+    ROperateLine(img, RSubtractOperation, 0, 0, width-1, 0, &dark);
+    ROperateLine(img, RAddOperation, 0, 1, width-1, 1, &light);
+
+    ROperateLine(img, RSubtractOperation, cwidth, 2, cwidth, height-1, &dark);
+    ROperateLine(img, RAddOperation, cwidth+1, 2, cwidth+1, height-1, &light);
+
+    ROperateLine(img, RSubtractOperation, width-cwidth-2, 2, width-cwidth-2,
+		 height-1, &dark);
+    ROperateLine(img, RAddOperation, width-cwidth-1, 2, width-cwidth-1, 
+		 height-1, &light);
+    
+    RDrawLine(img, 0, height-1, width-1, height-1, &black);
+    RDrawLine(img, 0, 0, 0, height-1, &black);
+    RDrawLine(img, width-1, 0, width-1, height-1, &black);
+}
+
+
+static void
+drawMenuBevel(RImage *img)
+{
+    RColor light, dark, mid;
+    int i;
+    int iheight = img->height / 3;
+    
+    light.alpha = 0;
+    light.red = light.green = light.blue = 80;
+    
+    dark.alpha = 255;
+    dark.red = dark.green = dark.blue = 0;
+    
+    mid.alpha = 0;
+    mid.red = mid.green = mid.blue = 40;
+    
+    for (i = 1; i < 3; i++) {	    
+	ROperateLine(img, RSubtractOperation, 0, i*iheight-2,
+		     img->width-1, i*iheight-2, &mid);
+	
+	RDrawLine(img, 0, i*iheight-1,
+		  img->width-1, i*iheight-1, &dark);
+	
+	ROperateLine(img, RAddOperation, 0, i*iheight, 
+		     img->width-1, i*iheight, &light);
+    }
+}
 
 
 static Pixmap
@@ -464,7 +530,13 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	dumpRImage(path, image);
     }
     
-    if (border) {
+    if (border < 0) {
+	if (border == RESIZEBAR_BEVEL) {
+	    drawResizebarBevel(image);
+	} else if (border == MENU_BEVEL) {
+	    drawMenuBevel(image);
+	}
+    } else if (border) {
 	RBevelImage(image, border);
     }
 
@@ -475,6 +547,39 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 }
 
 
+static Pixmap
+renderMenu(_Panel *panel, proplist_t texture, int width, int iheight)
+{
+    WMScreen *scr = WMWidgetScreen(panel->win);
+    Display *dpy = WMScreenDisplay(scr);
+    Pixmap pix, tmp;
+    char *str;
+    GC gc = XCreateGC(dpy, WMWidgetXID(panel->win), 0, NULL);
+
+    
+    str = GetStringForKey("MenuStyle");
+    if (!str || strcasecmp(str, "normal")==0) {
+	int i;
+
+	tmp = renderTexture(scr, texture, width, iheight, NULL, RBEV_RAISED2);
+
+	pix = XCreatePixmap(dpy, tmp, width, iheight*3,
+			    WMScreenDepth(scr));
+	for (i = 0; i < 3; i++) {
+	    XCopyArea(dpy, tmp, pix, gc, 0, 0, width, iheight,
+		      0, iheight*i);
+	}
+	XFreePixmap(dpy, tmp);
+    } else if (strcasecmp(str, "flat")==0) {
+	pix = renderTexture(scr, texture, width, iheight*3, NULL, RBEV_RAISED2);
+    } else {
+	pix = renderTexture(scr, texture, width, iheight*3, NULL, MENU_BEVEL);
+    }
+
+    XFreeGC(dpy, gc);
+
+    return pix;
+}
 
 
 static void
@@ -512,7 +617,7 @@ updatePreviewBox(_Panel *panel, int elements)
 
 	pix = renderTexture(scr, titem->prop, 210, 20, NULL, RBEV_RAISED2);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 10);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 5);
 
 	XFreePixmap(dpy, pix);
     }
@@ -522,7 +627,7 @@ updatePreviewBox(_Panel *panel, int elements)
 
 	pix = renderTexture(scr, titem->prop, 210, 20, NULL, RBEV_RAISED2);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 35);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 30);
 
 	XFreePixmap(dpy, pix);
     }
@@ -532,12 +637,22 @@ updatePreviewBox(_Panel *panel, int elements)
 
 	pix = renderTexture(scr, titem->prop, 210, 20, NULL, RBEV_RAISED2);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 60);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 55);
+
+	XFreePixmap(dpy, pix);
+    }
+    if (elements & RESIZEBAR) {
+	item = WMGetListItem(panel->texLs, panel->textureIndex[3]);
+	titem = (TextureListItem*)item->clientData;
+
+	pix = renderTexture(scr, titem->prop, 210, 9, NULL, RESIZEBAR_BEVEL);
+
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 80);
 
 	XFreePixmap(dpy, pix);
     }
     if (elements & MTITLE) {
-	item = WMGetListItem(panel->texLs, panel->textureIndex[3]);
+	item = WMGetListItem(panel->texLs, panel->textureIndex[4]);
 	titem = (TextureListItem*)item->clientData;
 
 	pix = renderTexture(scr, titem->prop, 100, 20, NULL, RBEV_RAISED2);
@@ -547,14 +662,12 @@ updatePreviewBox(_Panel *panel, int elements)
 	XFreePixmap(dpy, pix);
     }
     if (elements & MITEM) {
-	item = WMGetListItem(panel->texLs, panel->textureIndex[4]);
+	item = WMGetListItem(panel->texLs, panel->textureIndex[5]);
 	titem = (TextureListItem*)item->clientData;
 
-	pix = renderTexture(scr, titem->prop, 100, 18, NULL, RBEV_RAISED2);
+	pix = renderMenu(panel, titem->prop, 100, 18);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 18, 30, 115);
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 18, 30, 115 + 18);
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 18, 30, 115 + 36);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 100, 18*3, 30, 115);
 
 	XFreePixmap(dpy, pix);
     }
@@ -564,13 +677,13 @@ updatePreviewBox(_Panel *panel, int elements)
     }
 
     if (elements & ICON) {
-	item = WMGetListItem(panel->texLs, panel->textureIndex[5]);
+	item = WMGetListItem(panel->texLs, panel->textureIndex[6]);
 	titem = (TextureListItem*)item->clientData;
 
 	pix = renderTexture(scr, titem->prop, 64, 64, NULL, 
 			    titem->ispixmap ? 0 : RBEV_RAISED3);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 64, 64, 170, 90);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 64, 64, 170, 95);
 
 	XFreePixmap(dpy, pix);
     }
@@ -829,10 +942,11 @@ changePage(WMWidget *w, void *data)
     char *str;
     WMScreen *scr = WMWidgetScreen(w);
     RContext *rc = WMScreenRContext(scr);
-    static WMPoint positions[6] = {
-	{5, 10},
-	{5, 35},
-	{5, 60},
+    static WMPoint positions[] = {
+	{5, 5},
+	{5, 30},
+	{5, 55},
+	{5, 80},
 	{5, 95},
 	{5, 130},
 	{145, 110}
@@ -877,16 +991,17 @@ previewClick(XEvent *event, void *clientData)
 {
     _Panel *panel = (_Panel*)clientData;
     int i;
-    static WMRect parts[6] = {
-	{{30, 10},{210, 20}},
-	{{30,35},{210,20}},
-	{{30,60},{210,20}},
+    static WMRect parts[] = {
+	{{30, 5},{210, 20}},
+	{{30,30},{210,20}},
+	{{30,55},{210,20}},
+	{{30,80},{210,9}},
 	{{30,95},{100,20}},
 	{{30,115},{100,60}},
 	{{170,90},{64,64}}
     };
 
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < 7; i++) {
 	if (event->xbutton.x >= parts[i].pos.x
 	    && event->xbutton.y >= parts[i].pos.y
 	    && event->xbutton.x < parts[i].pos.x + parts[i].size.width
@@ -1141,6 +1256,7 @@ createPanel(Panel *p)
     WMAddPopUpButtonItem(panel->secP, _("Titlebar of Focused Window"));
     WMAddPopUpButtonItem(panel->secP, _("Titlebar of Unfocused Windows"));
     WMAddPopUpButtonItem(panel->secP, _("Titlebar of Focused Window's Owner"));
+    WMAddPopUpButtonItem(panel->secP, _("Window Resizebar"));
     WMAddPopUpButtonItem(panel->secP, _("Titlebar of Menus"));
     WMAddPopUpButtonItem(panel->secP, _("Menu Items"));
     WMAddPopUpButtonItem(panel->secP, _("Icon Background"));
@@ -1295,6 +1411,10 @@ showData(_Panel *panel)
 		    "[Owner of Focused]", i);
     panel->textureIndex[i] = i++;
 
+    setupTextureFor(panel->texLs, "ResizebarBack", "(solid, gray)",
+		    "[Resizebar]", i);
+    panel->textureIndex[i] = i++;
+
     setupTextureFor(panel->texLs, "MenuTitleBack", "(solid, black)", 
 		    "[Menu Title]", i);
     panel->textureIndex[i] = i++;
@@ -1336,13 +1456,17 @@ storeData(_Panel *panel)
 
     item = WMGetListItem(panel->texLs, panel->textureIndex[3]);
     titem = (TextureListItem*)item->clientData;
-    SetObjectForKey(titem->prop, "MenuTitleBack");
+    SetObjectForKey(titem->prop, "ResizebarBack");
 
     item = WMGetListItem(panel->texLs, panel->textureIndex[4]);
     titem = (TextureListItem*)item->clientData;
-    SetObjectForKey(titem->prop, "MenuTextBack");
+    SetObjectForKey(titem->prop, "MenuTitleBack");
 
     item = WMGetListItem(panel->texLs, panel->textureIndex[5]);
+    titem = (TextureListItem*)item->clientData;
+    SetObjectForKey(titem->prop, "MenuTextBack");
+
+    item = WMGetListItem(panel->texLs, panel->textureIndex[6]);
     titem = (TextureListItem*)item->clientData;
     SetObjectForKey(titem->prop, "IconBack");
 }
@@ -1361,7 +1485,7 @@ prepareForClose(_Panel *panel)
     textureList = PLMakeArrayFromElements(NULL, NULL);
 
     /* store list of textures */
-    for (i = 6; i < WMGetListNumberOfRows(panel->texLs); i++) {
+    for (i = 7; i < WMGetListNumberOfRows(panel->texLs); i++) {
 	item = WMGetListItem(panel->texLs, i);
 	titem = (TextureListItem*)item->clientData;
 
