@@ -1118,8 +1118,6 @@ updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
 }
 
 
-
-
 #if 0
 typedef struct _looper {
     WWindow *wwin;
@@ -1152,7 +1150,8 @@ _keyloop(_looper *lpr){
 }
 
 #endif
-#define _KS 20
+
+#define _KS KEY_CONTROL_WINDOW_WEIGHT
 
 int
 wKeyboardMoveResizeWindow(WWindow *wwin)
@@ -1168,9 +1167,10 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
     int src_x = wwin->frame_x;
     int src_y = wwin->frame_y;
     int done,off_x,off_y,ww,wh;
-    int kspeed = 1;
+    int kspeed = _KS;
     Time lastTime = 0;
     KeySym keysym=NoSymbol;
+    int moment=0;
     KeyCode shiftl,shiftr,ctrll,ctrlmode;
 
     /*
@@ -1199,13 +1199,13 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 		 GrabModeAsync, None, wCursor[WCUR_DEFAULT], CurrentTime);
 
     if (wwin->flags.shaded || scr->selected_windows) {
-	if(scr->selected_windows)
-	    drawFrames(wwin,scr->selected_windows,off_x,off_y);
-	else drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
-	if(!scr->selected_windows)
+        if(scr->selected_windows)
+            drawFrames(wwin,scr->selected_windows,off_x,off_y);
+        else drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
+        if(!scr->selected_windows)
             mapPositionDisplay(wwin, src_x, src_y, w, h);
     } else {
-	drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
+    	drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
     }
     ww=w;
     wh=h;
@@ -1233,106 +1233,125 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 	XSync(dpy, False);
 
 	switch (event.type) {
-	 case KeyPress:
-	    /* accelerate */
-	    if (event.xkey.time - lastTime > 50) {
-		kspeed = 1;
-	    } else {
-		if (kspeed < 20)
-		    kspeed++;
-	    }
-	    lastTime = event.xkey.time;
+     case KeyPress:
+        /* accelerate */
+        if (event.xkey.time - lastTime > 50) {
+            kspeed/=(1 + (event.xkey.time - lastTime)/100);
+        } else {
+            if (kspeed < 20) {
+                kspeed++;
+            }
+        }
+        if (kspeed < _KS) kspeed = _KS;
+        lastTime = event.xkey.time;
 
-	    if (event.xkey.state & ControlMask && !wwin->flags.shaded){
-		ctrlmode=1;
-		wUnselectWindows(scr);
-	    }
-	    else {
-		ctrlmode=0;
-	    }
-	    if (event.xkey.keycode == shiftl || event.xkey.keycode == shiftr){
-		if(ctrlmode)
-		    cycleGeometryDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh, 0);
-		else
-		    cyclePositionDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh);
-	    }
-	    else {
-		keysym = XLookupKeysym(&event.xkey, 0);
-		switch(keysym){
-		 case XK_Return:
-		    done=2;
-		    break;
-		 case XK_Escape:
-		    done=1;
-		    break;
-		 case XK_Up:
-		 case XK_KP_Up:
-		 case XK_k:
-		    if (ctrlmode){
-			h-=kspeed;
-		    }
-		    else off_y-=kspeed;
-		    break;
-		 case XK_Down:
-		 case XK_KP_Down:
-		 case XK_j:
-		    if (ctrlmode){
-			h+=kspeed;
-		    }
-		    else off_y+=kspeed;
-		    break;
-		 case XK_Left:
-		 case XK_KP_Left:
-		 case XK_h:
-		    if (ctrlmode){
-			w-=kspeed;
-		    }
-		    else off_x-=kspeed;
-		    break;
-		 case XK_Right:
-		 case XK_KP_Right:
-		 case XK_l:
-		    if (ctrlmode){
-			w+=kspeed;
-		    }
-		    else off_x+=kspeed;
-		    break;
-		}
-		ww=w;wh=h;
-		wh-=vert_border;
-		wWindowConstrainSize(wwin, &ww, &wh);
-		wh+=vert_border;
-		
-		if (wPreferences.ws_cycle){
-		    if (src_x + off_x + wwin->frame->core->width < 20){
-			if(!scr->current_workspace) {
-			    wWorkspaceChange(scr, scr->workspace_count-1);
-			}
-			else wWorkspaceChange(scr, scr->current_workspace-1);
-			off_x += scr_width;
-		    }
-		    else if (src_x + off_x + 20 > scr_width){
-			if(scr->current_workspace == scr->workspace_count-1) {
-			    wWorkspaceChange(scr, 0);
-			}
-			else wWorkspaceChange(scr, scr->current_workspace+1);
-			off_x -= scr_width;
-		    }
-		}
-		else {
-		    if (src_x + off_x + wwin->frame->core->width < 20)
-			off_x = 20 - wwin->frame->core->width - src_x;
-		    else if (src_x + off_x + 20 > scr_width)
-			off_x = scr_width - 20 - src_x;
-		}
-		
-		if (src_y + off_y + wwin->frame->core->height < 20)
-		    off_y = 20 - wwin->frame->core->height - src_y;
-		else if (src_y + off_y + 20 > scr_height)
-		    off_y = scr_height - 20 - src_y;
-		
-	    }
-	    break;
+        if (event.xkey.state & ControlMask && !wwin->flags.shaded) {
+            ctrlmode=1;
+            wUnselectWindows(scr);
+        }
+        else {
+            ctrlmode=0;
+        }
+        if (event.xkey.keycode == shiftl || event.xkey.keycode == shiftr) {
+            if (ctrlmode)
+                cycleGeometryDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh, 0);
+            else
+                cyclePositionDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh);
+        }
+        else {
+
+            keysym = XLookupKeysym(&event.xkey, 0);
+            switch (keysym) {
+             case XK_Return:
+                done=2;
+                break;
+             case XK_Escape:
+                done=1;
+                break;
+             case XK_Up:
+             case XK_KP_Up:
+             case XK_k:
+                if (ctrlmode){
+                if (moment != UP)
+                    h = wh;
+                h-=kspeed;
+                moment = UP;
+                if (h < 1) h = 1;
+                }
+                else off_y-=kspeed;
+                break;
+             case XK_Down:
+             case XK_KP_Down:
+             case XK_j:
+                if (ctrlmode){
+                if (moment != DOWN)
+                    h = wh;
+                h+=kspeed;
+                moment = DOWN;
+                }
+                else off_y+=kspeed;
+                break;
+             case XK_Left:
+             case XK_KP_Left:
+             case XK_h:
+                if (ctrlmode) {
+                if (moment != LEFT)
+                    w = ww;
+                w-=kspeed;
+                if (w < 1) w = 1;
+                moment = LEFT;
+                }
+                else off_x-=kspeed;
+                break;
+             case XK_Right:
+             case XK_KP_Right:
+             case XK_l:
+                if (ctrlmode) {
+                if (moment != RIGHT)
+                    w = ww;
+                w+=kspeed;
+                moment = RIGHT;
+                }
+                else off_x+=kspeed;
+                break;
+            }
+
+            ww=w;wh=h;
+            wh-=vert_border;
+            wWindowConstrainSize(wwin, &ww, &wh);
+            wh+=vert_border;
+        
+            if (wPreferences.ws_cycle){
+                if (src_x + off_x + ww < 20){
+                    if(!scr->current_workspace) {
+                        wWorkspaceChange(scr, scr->workspace_count-1);
+                    }
+                    else wWorkspaceChange(scr, scr->current_workspace-1);
+                    off_x += scr_width;
+                }
+                else if (src_x + off_x + 20 > scr_width){
+                    if(scr->current_workspace == scr->workspace_count-1) {
+                        wWorkspaceChange(scr, 0);
+                    }
+                    else wWorkspaceChange(scr, scr->current_workspace+1);
+                    off_x -= scr_width;
+                }
+            }
+            else {
+                if (src_x + off_x + ww < 20)
+                    off_x = 20 - ww - src_x;
+                else if (src_x + off_x + 20 > scr_width)
+                    off_x = scr_width - 20 - src_x;
+            }
+        
+            if (src_y + off_y + wh < 20) {
+                off_y = 20 - wh - src_y;
+            }
+            else if (src_y + off_y + 20 > scr_height) {
+                off_y = scr_height - 20 - src_y;
+            }
+        }
+        break;
 	 case ButtonPress:
 	 case ButtonRelease:
 	    done=1;
@@ -1359,10 +1378,10 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 	    }
 	}
 
-    	if (wwin->flags.shaded || scr->selected_windows) {
-	    if(scr->selected_windows)
-	        drawFrames(wwin,scr->selected_windows,off_x,off_y);
-	    else drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
+    if (wwin->flags.shaded || scr->selected_windows) {
+    if(scr->selected_windows)
+        drawFrames(wwin,scr->selected_windows,off_x,off_y);
+    else drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
 	}
 	else {
 	    drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, ww, wh);

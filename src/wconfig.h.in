@@ -475,6 +475,7 @@
 
 #define MOVE_THRESHOLD	5 /* how many pixels to move before dragging windows
 			   * and other objects */
+#define KEY_CONTROL_WINDOW_WEIGHT 1
 
 #define HRESIZE_THRESHOLD	3
 
