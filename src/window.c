@@ -807,6 +807,8 @@ wManageWindow(WScreen *scr, Window window)
 	wwin->main_window = wwin->client_win;
     }
 
+    wwin->orig_main_window = wwin->main_window;
+
     if (wwin->flags.is_gnustep) {
         WSETUFLAG(wwin, shared_appicon, 0);
     }

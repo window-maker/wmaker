@@ -220,8 +220,8 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
     WMPropList *shaded, *miniaturized, *hidden, *geometry;
     WMPropList *dock, *shortcut;
 
-    if (wwin->main_window!=None && wwin->main_window!=wwin->client_win)
-        win = wwin->main_window;
+    if (wwin->orig_main_window!=None && wwin->orig_main_window!=wwin->client_win)
+        win = wwin->orig_main_window;
     else
         win = wwin->client_win;
 
@@ -332,10 +332,11 @@ wSessionSaveState(WScreen *scr)
 
     while (wwin) {
         WApplication *wapp=wApplicationOf(wwin->main_window);
+        Window appId = wwin->orig_main_window;
 
         if ((wwin->transient_for==None
              || wwin->transient_for==wwin->screen_ptr->root_win)
-            && WMGetFirstInArray(wapp_list, wapp)==WANotFound
+            && WMGetFirstInArray(wapp_list, (void*)appId)==WANotFound
 	    && !WFLAGP(wwin, dont_save_session)) {
             /* A entry for this application was not yet saved. Save one. */
             if ((win_info = makeWindowState(wwin, wapp))!=NULL) {
@@ -346,7 +347,7 @@ wSessionSaveState(WScreen *scr)
                  * application list, so no multiple entries for the same
                  * application are saved.
                  */
-		WMAddToArray(wapp_list, wapp);
+		WMAddToArray(wapp_list, (void*)appId);
             }
         }
         wwin = wwin->prev;

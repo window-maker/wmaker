@@ -229,6 +229,9 @@ typedef struct WWindow {
 
     Window main_window;		       /* main window for the application */
 
+    Window orig_main_window;   	       /* original main window of application.
+                                          used for the shared appicon thing */
+
     int cmap_window_no;
     Window *cmap_windows;
 
