@@ -242,6 +242,8 @@ char *wstrappend(char *dst, char *src);
 
 void wtokensplit(char *command, char ***argv, int *argc);
 
+char *wtokennext(char *word, char **next);
+
 char *wtokenjoin(char **list, int count);
 
 void wtokenfree(char **tokens, int count);

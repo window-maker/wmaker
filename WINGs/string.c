@@ -32,8 +32,8 @@ static DFA mtable[9][6] = {
     {{-1,-1},{0,0},{0,0},{0,0},{0,0},{0,0}}, /* final state */
 };
 
-static char*
-next_token(char *word, char **next)
+char*
+wtokennext(char *word, char **next)
 {
     char *ptr;
     char *ret, *t;
@@ -95,7 +95,7 @@ wtokensplit(char *command, char ***argv, int *argc)
     count = 0;
     line = command;
     do {
-	token = next_token(line, &line);
+	token = wtokennext(line, &line);
 	if (token) {
 	    if (count == 0)
 		*argv = wmalloc(sizeof(char**));
