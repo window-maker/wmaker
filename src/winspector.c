@@ -1321,8 +1321,9 @@ createInspectorForWindow(WWindow *wwin, int xpos, int ypos,
     WMMoveWidget(panel->specLbl, 15, 210);
     WMResizeWidget(panel->specLbl, frame_width, 100);
     WMSetLabelText(panel->specLbl, _(SPEC_TEXT));
+    WMSetLabelWraps(panel->specLbl, True);
     
-    WMSetLabelTextAlignment(panel->specLbl, WACenter);
+    WMSetLabelTextAlignment(panel->specLbl, WALeft);
     
     /**** attributes ****/
     panel->attrFrm = WMCreateFrame(panel->win);
