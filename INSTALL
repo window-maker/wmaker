@@ -104,6 +104,7 @@ might work too.
 
 - libpng 0.96 or newer and zlib     
 	For PNG image support.
+	http://www.cdrom.com/pub/png/
 
 - libtiff 3.4 or newer
 	For TIFF image support.
@@ -111,16 +112,17 @@ might work too.
 
 - libjpeg 6.0.1 or newer
 	For JPEG image support
+	http://www.ijg.org/
 
 - libgif 2.2 or libungif
-	For GIF image support	
+	For GIF image support
+	ftp://prtr-13.ucsc.edu/pub/libungif/
 
 - GNU xgettext
 	If you want to use translated messages, you will need GNU gettext.
 	Other versions of gettext are not compatible and will not work.
 	Get the GNU version from ftp://ftp.gnu.org
 
-Most of these can be get from ftp.uu.net/pub/graphics
 
 
 CONFIGURE OPTIONS:

@@ -1,3 +1,12 @@
+Changes since version 0.61.0:
+.............................
+
+- fixed problem with window shortcut assignment from the menu
+- fixed problem with fonts in WINGs (Masahide -mac- NODA 
+					<mac@flab.fujitsu.co.jp>)
+
+
+
 Changes since version 0.60.0:
 .............................
 
@@ -45,6 +54,11 @@ Changes since version 0.60.0:
 - fixed PPosition handling
 - New "Smart placement" mode. 'Smart' is no longer an alias to 'Auto' but
   a different mode of placing windows. 'Auto' keeps the old behavior.
+- added the dir where the menu is being read from to the search path
+  given to cpp
+- doing a multiwindow selection shortcut and hitting the shortcut
+  repeatedly will cycle through the selected windows
+- fixed crash when overwriting a string constant (default font specs) in WINGs
 
 
 Changes since version 0.53.0:
