@@ -753,7 +753,18 @@ wScreenInit(int screen_number)
 	rattr.flags |= RC_VisualID;
 	rattr.visualid = wVisualID;
     }
+    
     scr->rcontext = RCreateContext(dpy, screen_number, &rattr);
+
+    if (!scr->rcontext && RErrorCode == RERR_STDCMAPFAIL) {
+	wwarning(RMessageForError(RErrorCode));
+
+	rattr.flags &= ~RC_StandardColormap;
+	rattr.standard_colormap_mode = RUseStdColormap;
+
+	scr->rcontext = RCreateContext(dpy, screen_number, &rattr);
+    }
+
     if (!scr->rcontext) {
 	wwarning(_("could not initialize graphics library context: %s"),
 		 RMessageForError(RErrorCode));
