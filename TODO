@@ -14,7 +14,6 @@ Need to do:
 ===========
 - put a "Do not save workspace state" in the exit confirmation dialog
 - allow user to select/restore default root menu from wprefs
-- fix windoze cycle window patch
 - support for X11R6.4 extension for getting extra visual info in wrlib's
   automatic best context guessing
 - docklet to control AccessX (keyboard accessibility) functions
@@ -22,7 +21,6 @@ Need to do:
 - add function to directly make a thumbnail of an image, using the
   functionality provided by the image libraries to load a minimal
   amount of data.
-+ investigate memory leaks 
 - rewrite defaults/wdefaults stuff to use WINGs UD stuff. Search list:
   ~/G/D/WindowMaker /u/l/s/W/D/WindowMaker built-in-defaults
 - remake internal string processing to use wchar? unicode?

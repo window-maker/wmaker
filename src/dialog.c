@@ -292,7 +292,11 @@ listCallback(void *self, void *data)
     char *path;
 
     if (lPtr==panel->dirList) {
-	path = WMGetListSelectedItem(lPtr)->text;
+	WMListItem *item = WMGetListSelectedItem(lPtr);
+	
+	if (item == NULL)
+	    return;
+	path = item->text;
 	
 	WMSetTextFieldText(panel->fileField, path);
 
@@ -304,11 +308,17 @@ listCallback(void *self, void *data)
 	listPixmaps(panel->scr, panel->iconList, path);	
     } else {
 	char *tmp, *iconFile;
+	WMListItem *item = WMGetListSelectedItem(panel->dirList);
 	
-	path = WMGetListSelectedItem(panel->dirList)->text;
+	if (item == NULL)
+	    return;
+	path = item->text;
 	tmp = wexpandpath(path);
 
-	iconFile = WMGetListSelectedItem(panel->iconList)->text;
+	item = WMGetListSelectedItem(panel->iconList);
+	if (item == NULL)
+	    return;
+	iconFile = item->text;
 
 	path = wmalloc(strlen(tmp)+strlen(iconFile)+4);
 	strcpy(path, tmp);
@@ -477,6 +487,83 @@ buttonCallback(void *self, void *clientData)
 }
 
 
+static void
+keyPressHandler(XEvent *event, void *data)
+{
+    IconPanel *panel = (IconPanel*)data;
+    Display *dpy = event->xany.display;
+    char buffer[32];
+    int count;
+    KeySym ksym;
+    int iidx;
+    int didx;
+    int item;
+    WMList *list = NULL;
+    
+    if (event->type == KeyRelease)
+	return;
+
+    buffer[0] = 0;
+    count = XLookupString(&event->xkey, buffer, sizeof(buffer), &ksym, NULL);
+    
+    
+    iidx = WMGetListSelectedItemRow(panel->iconList);
+    didx = WMGetListSelectedItemRow(panel->dirList);
+    
+    switch (ksym) {
+     case XK_Up:
+	if (iidx > 0)
+	    item = iidx-1;
+	else
+	    item = iidx;
+	list = panel->iconList;
+	break;
+     case XK_Down:
+	if (iidx < WMGetListNumberOfRows(panel->iconList) - 1)
+	    item = iidx+1;
+	else
+	    item = iidx;
+	list = panel->iconList;
+	break;
+     case XK_Home:
+	item = 0;
+	list = panel->iconList;
+	break;
+     case XK_End:
+	item = WMGetListNumberOfRows(panel->iconList) - 1;
+	list = panel->iconList;
+	break;
+     case XK_Next:
+	if (didx < WMGetListNumberOfRows(panel->dirList) - 1)
+	    item = didx + 1;
+	else
+	    item = didx;
+	list = panel->dirList;
+	break;
+     case XK_Prior:
+	if (didx > 0)
+	    item = didx - 1;
+	else
+	    item = 0;
+	list = panel->dirList;
+	break;
+     case XK_Return:
+	WMPerformButtonClick(panel->okButton);
+	break;
+     case XK_Escape:
+	WMPerformButtonClick(panel->cancelButton);
+	break;
+    }
+
+    if (list) {
+	WMSelectListItem(list, item);
+	WMSetListPosition(list, item - 5);
+	listCallback(list, panel);
+    }
+}
+
+
+
 Bool
 wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
 {
@@ -494,6 +581,10 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
     panel->win = WMCreateWindow(scr->wmscreen, "iconChooser");
     WMResizeWidget(panel->win, 450, 280);
     
+    WMCreateEventHandler(WMWidgetView(panel->win), KeyPressMask|KeyReleaseMask,
+			 keyPressHandler, panel);
+    
+
     boldFont = WMBoldSystemFontOfSize(scr->wmscreen, 12);
     panel->normalfont = WMSystemFontOfSize(WMWidgetScreen(panel->win), 12);
     
@@ -558,6 +649,7 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
     WMSetLabelText(panel->fileLabel, _("File Name:"));
     
     panel->fileField = WMCreateTextField(panel->win);
+    WMSetViewNextResponder(WMWidgetView(panel->fileField), WMWidgetView(panel->win));
     WMResizeWidget(panel->fileField, 345, 20);
     WMMoveWidget(panel->fileField, 95, 210);
     WMSetTextFieldEditable(panel->fileField, False);

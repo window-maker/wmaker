@@ -5,6 +5,7 @@ Changes since version 0.64.0:
 - added better appicon handling of apps of the same type
 - applied patch for wkdemenu (Malcolm Cowe <malk@bruhaha.co.uk>)
 - added WINDOWS_MENU submenu type for root menu (Bastien Nocera <hadess@hadess.net>)
+- added kbd shortcuts for icon chooser
 
 Changes since version 0.63.1:
 .............................

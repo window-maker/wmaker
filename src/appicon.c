@@ -385,7 +385,7 @@ wAppIconIsFirstInstance(WAppIcon *icon)
     int index = 0;
 
     if (!WFLAGP(icon->icon->owner, collapse_appicons))
-	return False;
+	return True;
     
     while (list) {
 	if (icon == list)
