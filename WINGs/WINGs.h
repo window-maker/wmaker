@@ -193,6 +193,11 @@ enum {
 };
 
 
+enum {
+    WLNotFound = -1       /* element was not found in WMList */
+};
+
+
 /* drag operations */
 typedef enum {
     WDOperationNone,

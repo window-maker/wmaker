@@ -113,8 +113,7 @@ typedef enum {
 
 enum {
     WBNotFound = INT_MIN, /* element was not found in WMBag   */
-    WANotFound = -1,      /* element was not found in WMArray */
-    WLNotFound = -1       /* element was not found in WMList  */
+    WANotFound = -1       /* element was not found in WMArray */
 };
 
 
