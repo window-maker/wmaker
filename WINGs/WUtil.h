@@ -699,23 +699,23 @@ Bool WMIsHostEqualToHost(WMHost* hPtr, WMHost* anotherHost);
 /*
  * Host names.
  * WMGetHostName() will return first name (official) if a host has several.
- * WMGetHostNames() will return a R/O WMBag with all the names of the host.
+ * WMGetHostNames() will return a R/O WMArray with all the names of the host.
  */
 char* WMGetHostName(WMHost* hPtr);
 
-/* The returned bag is R/O. Do not modify it, and do not free it! */
-WMBag* WMGetHostNames(WMHost* hPtr);
+/* The returned array is R/O. Do not modify it, and do not free it! */
+WMArray* WMGetHostNames(WMHost* hPtr);
 
 /*
  * Host addresses.
  * Addresses are represented as "Dotted Decimal" strings, e.g. "192.42.172.1"
  * WMGetHostAddress() will return an arbitrary address if a host has several.
- * WMGetHostAddresses() will return a R/O WMBag with all addresses of the host.
+ * WMGetHostAddresses() will return a R/O WMArray with all addresses of the host.
  */
 char* WMGetHostAddress(WMHost* hPtr);
 
-/* The returned bag is R/O. Do not modify it, and do not free it! */
-WMBag* WMGetHostAddresses(WMHost* hPtr);
+/* The returned array is R/O. Do not modify it, and do not free it! */
+WMArray* WMGetHostAddresses(WMHost* hPtr);
 
 
 /*-------------------------------------------------------------------------*/
@@ -771,6 +771,11 @@ int WMGetConnectionSocket(WMConnection *cPtr);
 WMConnectionState WMGetConnectionState(WMConnection *cPtr);
 
 WMConnectionTimeoutState WMGetConnectionTimeoutState(WMConnection *cPtr);
+
+WMArray* WMGetConnectionUnsentData(WMConnection *cPtr);
+
+#define WMGetConnectionQueuedData(cPtr) WMGetConnectionUnsentData(cPtr)
+
 
 /*
  * Passing timeout==0 in the SetTimeout functions below, will reset that

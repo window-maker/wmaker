@@ -106,7 +106,7 @@ typedef struct W_Connection {
     void *clientData;             /* client data */
     unsigned int uflags;          /* flags for the client */
 
-    WMBag *outputQueue;
+    WMArray *outputQueue;
     unsigned bufPos;
 
     TimeoutData sendTimeout;
@@ -130,14 +130,8 @@ typedef struct W_Connection {
 static void
 clearOutputQueue(WMConnection *cPtr) /*FOLD00*/
 {
-    int i;
-
     cPtr->bufPos = 0;
-
-    for (i=0; i<WMGetBagItemCount(cPtr->outputQueue); i++)
-        WMReleaseData(WMGetFromBag(cPtr->outputQueue, i));
-
-    WMEmptyBag(cPtr->outputQueue);
+    WMEmptyArray(cPtr->outputQueue);
 }
 
 
@@ -174,7 +168,7 @@ sendTimeout(void *cdata) /*FOLD00*/
         WMDeleteInputHandler(cPtr->handler.write);
         cPtr->handler.write = NULL;
     }
-    if (WMGetBagItemCount(cPtr->outputQueue)>0) {
+    if (WMGetArrayItemCount(cPtr->outputQueue)>0) {
         clearOutputQueue(cPtr);
         cPtr->state = WCTimedOut;
         cPtr->timeoutState = WCTWhileSending;
@@ -372,7 +366,8 @@ createConnectionWithSocket(int sock, Bool closeOnRelease) /*FOLD00*/
     cPtr->sendTimeout.timeout = DefaultTimeout;
     cPtr->sendTimeout.handler = NULL;
     cPtr->closeOnRelease = closeOnRelease;
-    cPtr->outputQueue = WMCreateBag(16);
+    cPtr->outputQueue =
+        WMCreateArrayWithDestructor(16, (WMFreeDataProc*)WMReleaseData);
     cPtr->state = WCNotConnected;
     cPtr->timeoutState = WCTNone;
 
@@ -641,8 +636,7 @@ WMDestroyConnection(WMConnection *cPtr) /*FOLD00*/
     }
 
     removeAllHandlers(cPtr);
-    clearOutputQueue(cPtr);
-    WMFreeBag(cPtr->outputQueue);
+    WMFreeArray(cPtr->outputQueue); /* will also free the items with the destructor */
 
     if (cPtr->address) {
         wfree(cPtr->address);
@@ -756,7 +750,7 @@ WMEnqueueConnectionData(WMConnection *cPtr, WMData *data) /*FOLD00*/
     if (cPtr->state!=WCConnected)
         return False;
 
-    WMPutInBag(cPtr->outputQueue, WMRetainData(data));
+    WMAddToArray(cPtr->outputQueue, WMRetainData(data));
     return True;
 }
 
@@ -776,19 +770,19 @@ WMSendConnectionData(WMConnection *cPtr, WMData *data) /*FOLD00*/
 
     /* If we have no data just flush the queue, else try to send data */
     if (data && WMGetDataLength(data)>0) {
-        WMPutInBag(cPtr->outputQueue, WMRetainData(data));
+        WMAddToArray(cPtr->outputQueue, WMRetainData(data));
         /* If there already was something in queue, and also a write input
          * handler is established, it means we were unable to send, so
          * return and let the write handler notify us when we can send.
          */
-        if (WMGetBagItemCount(cPtr->outputQueue)>1 && cPtr->handler.write)
+        if (WMGetArrayItemCount(cPtr->outputQueue)>1 && cPtr->handler.write)
             return 0;
     }
 
     totalTransfer = 0;
 
-    while (WMGetBagItemCount(cPtr->outputQueue) > 0) {
-        data = WMGetFromBag(cPtr->outputQueue, 0);
+    while (WMGetArrayItemCount(cPtr->outputQueue) > 0) {
+        data = WMGetFromArray(cPtr->outputQueue, 0);
         dataBytes = (const unsigned char *)WMDataBytes(data);
         len = WMGetDataLength(data);
         pos = cPtr->bufPos; /* where we're left last time */
@@ -815,7 +809,6 @@ WMSendConnectionData(WMConnection *cPtr, WMData *data) /*FOLD00*/
                 default:
                     WCErrorCode = errno;
                     cPtr->state = WCDied;
-                    /*clearOutputQueue(cPtr);*/
                     removeAllHandlers(cPtr);
                     if (cPtr->delegate && cPtr->delegate->didDie)
                         (*cPtr->delegate->didDie)(cPtr->delegate, cPtr);
@@ -825,8 +818,7 @@ WMSendConnectionData(WMConnection *cPtr, WMData *data) /*FOLD00*/
             pos += bytes;
             totalTransfer += bytes;
         }
-        WMReleaseData(data);
-        WMDeleteFromBag(cPtr->outputQueue, 0);
+        WMDeleteFromArray(cPtr->outputQueue, 0);
         cPtr->bufPos = 0;
         if (tPtr->handler) {
             WMDeleteTimerHandler(tPtr->handler);
@@ -840,7 +832,7 @@ WMSendConnectionData(WMConnection *cPtr, WMData *data) /*FOLD00*/
 
     return totalTransfer;
 }
- /*FOLD00*/
+
 
 /*
  * WMGetConnectionAvailableData(connection):
@@ -914,7 +906,7 @@ WMSetConnectionDelegate(WMConnection *cPtr, ConnectionDelegate *delegate) /*FOLD
         cPtr->handler.exception = WMAddInputHandler(cPtr->sock, WIExceptMask,
                                                     inputHandler, cPtr);
 }
- /*FOLD00*/
+
 
 #if 0
 Bool
@@ -980,6 +972,13 @@ void
 WMSetConnectionFlags(WMConnection *cPtr, unsigned int flags) /*FOLD00*/
 {
     cPtr->uflags = flags;
+}
+
+
+WMArray*
+WMGetConnectionUnsentData(WMConnection *cPtr)
+{
+    return cPtr->outputQueue;
 }
 
 

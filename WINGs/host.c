@@ -43,8 +43,8 @@
 typedef struct W_Host {
     char   *name;
 
-    WMBag  *names;
-    WMBag  *addresses;
+    WMArray  *names;
+    WMArray  *addresses;
 
     int    refCount;
 } W_Host;
@@ -76,19 +76,19 @@ getHostWithHostEntry(struct hostent *host, char *name)
     hPtr = (WMHost*)wmalloc(sizeof(WMHost));
     memset(hPtr, 0, sizeof(WMHost));
 
-    hPtr->names = WMCreateBag(1);
-    hPtr->addresses = WMCreateBag(1);
+    hPtr->names = WMCreateArrayWithDestructor(1, wfree);
+    hPtr->addresses = WMCreateArrayWithDestructor(1, wfree);
 
-    WMPutInBag(hPtr->names, wstrdup(host->h_name));
+    WMAddToArray(hPtr->names, wstrdup(host->h_name));
 
     for (i=0; host->h_aliases[i]!=NULL; i++) {
-        WMPutInBag(hPtr->names, wstrdup(host->h_aliases[i]));
+        WMAddToArray(hPtr->names, wstrdup(host->h_aliases[i]));
     }
 
     for (i=0; host->h_addr_list[i]!=NULL; i++) {
         memcpy((void*)&in.s_addr, (const void*)host->h_addr_list[i],
                host->h_length);
-        WMPutInBag(hPtr->addresses, wstrdup(inet_ntoa(in)));
+        WMAddToArray(hPtr->addresses, wstrdup(inet_ntoa(in)));
     }
 
     hPtr->refCount = 1;
@@ -122,7 +122,7 @@ WMGetCurrentHost()
 
 
 WMHost*
-WMGetHostWithName(char* name)
+WMGetHostWithName(char *name)
 {
     struct hostent *host;
     WMHost *hPtr;
@@ -151,7 +151,7 @@ WMGetHostWithName(char* name)
 
 
 WMHost*
-WMGetHostWithAddress(char* address)
+WMGetHostWithAddress(char *address)
 {
     struct hostent *host;
     struct in_addr in;
@@ -206,13 +206,8 @@ WMReleaseHost(WMHost *hPtr)
     if (hPtr->refCount > 0)
         return;
 
-    for (i=0; i<WMGetBagItemCount(hPtr->names); i++)
-        wfree(WMGetFromBag(hPtr->names, i));
-    for (i=0; i<WMGetBagItemCount(hPtr->addresses); i++)
-        wfree(WMGetFromBag(hPtr->addresses, i));
-
-    WMFreeBag(hPtr->names);
-    WMFreeBag(hPtr->addresses);
+    WMFreeArray(hPtr->names);
+    WMFreeArray(hPtr->addresses);
 
     if (hPtr->name) {
         WMHashRemove(hostCache, hPtr->name);
@@ -241,7 +236,7 @@ void
 WMFlushHostCache()
 {
     if (hostCache && WMCountHashTable(hostCache)>0) {
-        WMBag *hostBag = WMCreateBag(WMCountHashTable(hostCache));
+        WMArray *hostArray = WMCreateArray(WMCountHashTable(hostCache));
         WMHashEnumerator enumer = WMEnumerateHashTable(hostCache);
         WMHost *hPtr;
         int i;
@@ -249,11 +244,11 @@ WMFlushHostCache()
         while ((hPtr = WMNextHashEnumeratorItem(&enumer))) {
             /* we can't release the host here, because we can't change the
              * hash while using the enumerator functions. */
-            WMPutInBag(hostBag, hPtr);
+            WMAddToArray(hostArray, hPtr);
         }
-        for (i=0; i<WMGetBagItemCount(hostBag); i++)
-            WMReleaseHost(WMGetFromBag(hostBag, i));
-        WMFreeBag(hostBag);
+        for (i=0; i<WMGetArrayItemCount(hostArray); i++)
+            WMReleaseHost(WMGetFromArray(hostArray, i));
+        WMFreeArray(hostArray);
         WMResetHashTable(hostCache);
     }
 }
@@ -270,10 +265,10 @@ WMIsHostEqualToHost(WMHost* hPtr, WMHost* aPtr)
     if (hPtr == aPtr)
         return True;
 
-    for (i=0; i<WMGetBagItemCount(aPtr->addresses); i++) {
-        adr1 = WMGetFromBag(aPtr->addresses, i);
-        for (j=0; j<WMGetBagItemCount(hPtr->addresses); j++) {
-            adr2 = WMGetFromBag(hPtr->addresses, j);
+    for (i=0; i<WMGetArrayItemCount(aPtr->addresses); i++) {
+        adr1 = WMGetFromArray(aPtr->addresses, i);
+        for (j=0; j<WMGetArrayItemCount(hPtr->addresses); j++) {
+            adr2 = WMGetFromArray(hPtr->addresses, j);
             if (strcmp(adr1, adr2)==0)
                 return True;
         }
@@ -286,13 +281,13 @@ WMIsHostEqualToHost(WMHost* hPtr, WMHost* aPtr)
 char*
 WMGetHostName(WMHost *hPtr)
 {
-    return (WMGetBagItemCount(hPtr->names) > 0 ?
-            WMGetFromBag(hPtr->names, 0) : NULL);
-    /*return WMGetFromBag(hPtr->names, 0);*/
+    return (WMGetArrayItemCount(hPtr->names) > 0 ?
+            WMGetFromArray(hPtr->names, 0) : NULL);
+    /*return WMGetFromArray(hPtr->names, 0);*/
 }
 
 
-WMBag*
+WMArray*
 WMGetHostNames(WMHost *hPtr)
 {
     return hPtr->names;
@@ -302,12 +297,12 @@ WMGetHostNames(WMHost *hPtr)
 char*
 WMGetHostAddress(WMHost *hPtr)
 {
-    return (WMGetBagItemCount(hPtr->addresses) > 0 ?
-            WMGetFromBag(hPtr->addresses, 0) : NULL);
+    return (WMGetArrayItemCount(hPtr->addresses) > 0 ?
+            WMGetFromArray(hPtr->addresses, 0) : NULL);
 }
 
 
-WMBag*
+WMArray*
 WMGetHostAddresses(WMHost *hPtr)
 {
     return hPtr->addresses;
