@@ -64,7 +64,7 @@ static proplist_t dWorkspaces=NULL;
 static proplist_t dClip, dName;
 
 #ifdef VIRTUAL_DESKTOP
-static BOOL initVDesk=False;
+static BOOL initVDesk = False;
 #endif
 
 static void
@@ -637,17 +637,17 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 #ifdef VIRTUAL_DESKTOP
 
 void wWorkspaceManageEdge(WScreen *scr) {
-    int i;
+    int w;
     int vmask;
     XSetWindowAttributes attribs;
 
-    puts("ok");
+    puts("wWorkspaceManageEdge()");
     if (wPreferences.vedge_thickness) {
-        initVDesk=True;
-        for (i = 0;i < scr->workspace_count; i++) {
+        initVDesk = True;
+        for (w = 0; w < scr->workspace_count; w++) {
             puts("reset workspace");
-            scr->workspaces[i]->x = scr->workspaces[i]->y = 0;
-            wWorkspaceResizeViewPort(scr, i, wPreferences.vedge_width, wPreferences.vedge_height);
+            wWorkspaceResizeViewPort(scr, w, 0, 0, wPreferences.vedge_maxwidth, wPreferences.vedge_maxheight);
+            wWorkspaceSetViewPort(scr, w, 0, 0);
         }
 
         vmask = CWEventMask|CWOverrideRedirect;
@@ -686,33 +686,35 @@ void wWorkspaceRaiseEdge(WScreen *scr) {
     }
 }
 
-void wWorkspaceResizeViewPort(WScreen *scr, int workspace, int width, int height)
+void wWorkspaceResizeViewPort(WScreen *scr, int workspace, int x, int y, int width, int height)
 {
     if (width < scr->scr_width) return;
     if (height < scr->scr_height) return;
 
+    scr->workspaces[workspace]->x = x;
+    scr->workspaces[workspace]->y = y;
     scr->workspaces[workspace]->width = WMAX(width,scr->scr_width);
     scr->workspaces[workspace]->height = WMAX(height,scr->scr_height);
 
 }
 
-void wWorkspaceSetViewPort(WScreen *scr, int workspace, int x, int y)
+void wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y)
 {
     int diff_x, diff_y;
     WWindow *wwin;
 
-    if (x < 0) return;
-    if (y < 0) return;
-    if (x + scr->scr_width > scr->workspaces[workspace]->width) return;
-    if (y + scr->scr_height > scr->workspaces[workspace]->height) return;
+    if (view_x < scr->workspaces[workspace]->x
+     || view_y < scr->workspaces[workspace]->y
+     || view_x + scr->scr_width > scr->workspaces[workspace]->width
+     || view_y + scr->scr_height > scr->workspaces[workspace]->height) return;
 
-    diff_x = scr->workspaces[workspace]->x - x;
-    diff_y = scr->workspaces[workspace]->y - y;
+    diff_x = scr->workspaces[workspace]->view_x - view_x;
+    diff_y = scr->workspaces[workspace]->view_y - view_y;
 
-    scr->workspaces[workspace]->x = WMIN(x, scr->workspaces[workspace]->width - scr->scr_width);
-    scr->workspaces[workspace]->y = WMIN(y, scr->workspaces[workspace]->height - scr->scr_height);
+    scr->workspaces[workspace]->view_x = WMIN(view_x, scr->workspaces[workspace]->width - scr->scr_width);
+    scr->workspaces[workspace]->view_y = WMIN(view_y, scr->workspaces[workspace]->height - scr->scr_height);
 
-    printf("set view %d %d, %d\n",workspace, scr->workspaces[workspace]->x, scr->workspaces[workspace]->y);
+    printf("set view %d %d, %d\n",workspace, scr->workspaces[workspace]->view_x, scr->workspaces[workspace]->view_y);
 
     wwin = scr->focused_window;
     while (wwin) {
@@ -724,9 +726,11 @@ void wWorkspaceSetViewPort(WScreen *scr, int workspace, int x, int y)
     }
 }
 
-void wWorkspaceGetViewPosition(WScreen *scr, int workspace, int *x, int *y) {
-    *x = scr->workspaces[workspace]->x;
-    *y = scr->workspaces[workspace]->y;
+void wWorkspaceGetViewPosition(WScreen *scr, int workspace, int *view_x, int *view_y, int *x, int *y) {
+    if (view_x) *view_x = scr->workspaces[workspace]->view_x;
+    if (view_y) *view_y = scr->workspaces[workspace]->view_y;
+    if (x) *x = scr->workspaces[workspace]->x;
+    if (y) *y = scr->workspaces[workspace]->y;
 }
 
 #endif

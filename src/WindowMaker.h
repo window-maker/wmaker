@@ -381,8 +381,8 @@ typedef struct WPreferences {
     unsigned int vedge_thickness;
     unsigned int vedge_hscrollspeed;
     unsigned int vedge_vscrollspeed;
-    unsigned int vedge_height; /* could be change to workspace specific one day */
-    unsigned int vedge_width;
+    unsigned int vedge_maxheight;
+    unsigned int vedge_maxwidth;
 #endif
 
     char ws_cycle;                     /* Cycle existing workspaces */

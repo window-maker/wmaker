@@ -29,6 +29,7 @@ typedef struct WWorkspace {
     char *name;
 #ifdef VIRTUAL_DESKTOP
     int x ,y, width, height;
+    int view_x, view_y;
 #endif
     struct WDock *clip;
 } WWorkspace;
@@ -41,9 +42,9 @@ void wWorkspaceForceChange(WScreen *scr, int workspace);
 #ifdef VIRTUAL_DESKTOP 
 void wWorkspaceManageEdge(WScreen *scr);
 void wWorkspaceRaiseEdge(WScreen *scr);
-void wWorkspaceResizeViewPort(WScreen *scr, int workspace, int width, int height);
-void wWorkspaceSetViewPort(WScreen *scr, int workspace, int x, int y);
-void wWorkspaceGetViewPosition(WScreen *scr, int workspace, int *x, int *y);
+void wWorkspaceResizeViewPort(WScreen *scr, int workspace, int x, int y, int width, int height);
+void wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y);
+void wWorkspaceGetViewPosition(WScreen *scr, int workspace, int *view_x, int *view_y, int *x, int *y);
 #endif
 
 

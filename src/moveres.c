@@ -148,7 +148,13 @@ showPosition(WWindow *wwin, int x, int y)
 		  scr->scr_height);
 #endif
     } else {
+#ifdef VIRTUAL_DESKTOP
+	WSetGeometryViewShownPosition(scr->gview,
+            x + scr->workspaces[scr->current_workspace]->view_x,
+            y + scr->workspaces[scr->current_workspace]->view_y);
+#else
 	WSetGeometryViewShownPosition(scr->gview, x, y);
+#endif
     }
 }
 

@@ -451,11 +451,11 @@ WDefaultEntry optionList[] = {
     {"VirtualEdgeVerticalScrollSpeed", "1", NULL,
         &wPreferences.vedge_vscrollspeed, getInt,     NULL
     },
-    {"VirtualEdgeWidth", "2000",    NULL,
-        &wPreferences.vedge_width, getInt,        NULL
+    {"VirtualEdgeMaximumWidth", "3000",    NULL,
+        &wPreferences.vedge_maxwidth, getInt,        NULL
     },
-    {"VirtualEdgeHeight", "2000",   NULL,
-        &wPreferences.vedge_height, getInt,       NULL
+    {"VirtualEdgeMaximumHeight", "3000",   NULL,
+        &wPreferences.vedge_maxheight, getInt,       NULL
     },
 #endif
     {"StickyIcons", "NO",			NULL,
