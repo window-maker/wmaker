@@ -1585,6 +1585,9 @@ void WMPrependTextStream(WMText *tPtr, char *text);
 
 void WMAppendTextStream(WMText *tPtr, char *text);
 
+#define WMClearText(tPtr) WMAppendTextStream \
+    ((tPtr), (NULL))
+
 /* free the text */
 char * WMGetTextStream(WMText *tPtr);
 
