@@ -33,7 +33,7 @@ W_ReadConfigurations(void)
 	    WMGetUDStringForKey(defaults, "BoldSystemFont");
 
 	WINGsConfiguration.useMultiByte =
-	    WMGetUDStringForKey(defaults, "MultiByteText");
+	    WMGetUDBoolForKey(defaults, "MultiByteText");
 
 	WINGsConfiguration.doubleClickDelay = 
 	    WMGetUDIntegerForKey(defaults, "DoubleClickTime");	

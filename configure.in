@@ -327,7 +327,7 @@ dnl ===========================================
 
 AC_PATH_XTRA
 
-X_LIBRARY_PATH=$x_library
+X_LIBRARY_PATH=$x_libraries
 
 XCFLAGS="$X_CFLAGS"
 

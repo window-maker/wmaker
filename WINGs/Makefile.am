@@ -105,4 +105,4 @@ INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
 
 
 wcolorpanel.o: wcolorpanel.c
-	$(COMPILE) -c -DRGBTXT="@X_LIBRARY_PATH@/X11/rgb.txt" $<
+	$(COMPILE) -c -DRGBTXT="\"@X_LIBRARY_PATH@/X11/rgb.txt\"" $<
