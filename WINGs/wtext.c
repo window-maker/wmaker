@@ -354,7 +354,7 @@ removeSelection(Text *tPtr)
     
 static void 
 paintText(Text *tPtr)
-{   
+{
     TextBlock *tb = tPtr->firstTextBlock;
     WMFont *font;
     GC gc, greyGC;
@@ -661,8 +661,8 @@ _doneV:
     if (tPtr->flags.monoFont && tb->graphic)
         tb = getFirstNonGraphicBlockFor(tb, dir);
     if (tb)  {
-if ((dir? tb->sections[s].x >= x : tb->sections[s].x < x))
-         goto   _doneH;
+        if ((dir? tb->sections[s].x >= x : tb->sections[s].x < x))
+            goto   _doneH;
 
 #if 0
         if(tb->blank) {
@@ -1345,12 +1345,12 @@ insertTextInteractively(Text *tPtr, char *text, int len)
     }
 
 #if 0
-if(*text == 'c') {
+    if(*text == 'c') {
     WMColor *color = WMCreateNamedColor(W_VIEW_SCREEN(tPtr->view), 
-"Blue", True);
-WMSetTextSelectionColor(tPtr, color);
-return;
-}
+                                        "Blue", True);
+    WMSetTextSelectionColor(tPtr, color);
+    return;
+    }
 #endif
 
     if (len < 1 || !text)
@@ -1840,6 +1840,8 @@ handleEvents(XEvent *event, void *data)
 
     switch(event->type) {
         case Expose: 
+            if (event->xexpose.count!=0)
+                break;
 
             if(tPtr->hS) { 
                 if (!(W_VIEW(tPtr->hS))->flags.realized)
@@ -1866,8 +1868,7 @@ handleEvents(XEvent *event, void *data)
             if(!tPtr->db) 
                 textDidResize(tPtr->view->delegate, tPtr->view);
 
-            if (!event->xexpose.count && tPtr->view->flags.realized)
-                paintText(tPtr);
+            paintText(tPtr);
         break;
 
         case FocusIn: 
