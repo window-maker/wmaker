@@ -565,6 +565,7 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 	    "XdndActionAsk",
 	    "XdndActionPrivate",
 	    "XdndStatus",
+	    "_WINGS_DND_MOUSE_OFFSET",
 	    "WM_STATE"
     };
     Atom atoms[sizeof(atomNames)/sizeof(char*)];
@@ -797,6 +798,8 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     scrPtr->xdndActionLink = atoms[i++];
     scrPtr->xdndActionAsk = atoms[i++];
     scrPtr->xdndActionPrivate = atoms[i++];
+
+    scrPtr->wmIconDragOffsetAtom = atoms[i++];
 
     scrPtr->wmStateAtom = atoms[i++];
 	
