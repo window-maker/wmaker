@@ -1,0 +1,610 @@
+
+		In¹trukcie pre in¹taláciu Window Makera
+
+
+
+PODPOROVANÉ PLATFORMY
+=====================
+(tzn: vraj to na tom niekto skompiloval...)
+
+- Intel GNU/Linux Conectiva 5.9 (beta)
+- Intel GNU/Linux Slackware
+- Intel GNU/Linux Debian
+- Intel GNU/Linux other distributions
+- Sparc GNU/Linux RedHat 5.1
+- PowerPC GNU/MkLinux
+- Alpha GNU/Linux RedHat 5.1
+- FreeBSD
+- NetBSD
+- OpenBSD
+- BSDI 4.0
+- Solaris 2.5.1, 2.5.2
+- Solaris 2.6.0
+- Solaris 2.7beta
+- SCO Unix
+- SGI Irix 5.x, 6.5
+- OSF/1
+- HP-UX
+- AIX 3.2.5
+- AIX 4.1.4 / IBM PowerPC
+- AIX 4.3.1 / IBM CC compiler
+- AIX 4.3.2 / IBM PowerPC
+- AIX 5.3
+- DEC Alpha/Digital UNIX 4.x
+- XFree86 / OS/2
+- Corel NetWinder
+- SunOS 4.x
+- PowerMac / Power MachTen 4.1.1 over MacOS
+- Amiga 3000 running RedHat Linux 5.1 (Rawhide)
+- IBM S/390 running Linux
+- iBook running Darwin
+
+Patche na rozbehanie na iných platformách sú vítané.
+
+
+PO®IADAVKY:
+===========
+
+Nasledovný softvér je potrebný pre beh Window Makera:
+
+- X11R6.x	
+	Window Maker mô¾e by» skompilovaný na star¹ích verziách X, ako
+	X11R5 (Solaris) alebo X11R4 (OpenWindows) ale nebude pracova»
+	100% korektne. Na takých serveroch nebudú ikony aplikácií a budete
+	ma» problémy s pou¾ívaním doku. Upgrade klientských kni¾níc (Xlib,
+	Xt, atï.) pomô¾e, ak u¾ nemô¾ete spravi» upgrade servera.
+
+Nasledovné je potrebné k skompilovaniu Window Makera:
+
+- Základné be¾né veci
+	Ak chcete kompilova» Window Maker, uistite sa, ¾e máte gcc (alebo
+	iný ANSI C kompilátor) a hlavièkové súbory iXov. Hlavne pre zaèia-
+	toèníkov v Linuxe: musíte nain¹talova» v¹etky X-devel balíky a gcc.
+	Inak nebudete schopní skompilova» ¾iadny program pre X, teda ani
+	Window Maker.
+
+- libPropList
+	Túto kni¾nicu mo¾no nájs» na ftp://ftp.windowmaker.org/pub/libs alebo
+	ftp://ftp.gnome.org/pub/libPropList. Nain¹talujte ju pred kompiláciou
+	Window Makera.
+
+- autoconf, automake a libtool
+	Tieto nástroje NIE sú potrebné, ale ak máte niektoré z nich nain¹talo-
+	vané, uistite sa, ¾e V©ETKY sú presne nasledovné verzie:
+		autoconf 2.13
+		automake 1.4
+		libtool 1.3
+	Ak máte odli¹né verzie, odin¹talujte ich alebo ich doèasne premenujte.
+	Ak neprogramujete, nebudete ich potrebova» a teda ich mô¾ete
+	odin¹talova».
+
+- lex (alebo flex) a yacc (alebo bison)
+	Tieto sú vyu¾ívané z libPropList. Lex v skutoènosti nie je nutný,
+	lebo jeho výstupný súbor je prítomný, ale buï ja alebo automake je
+	hlupák, lebo configuraèný skript pre libPropList sa jednoducho
+	ukonèí z neznámych dôvodov ak lex nie je prítomný.
+
+
+
+NEPOVINNÉ:
+==========
+
+Tieto kni¾nice nie sú nutné pre beh Window Makera, ale sú podporované
+v prípade, ¾e ich chcete pou¾íva». Èísla verzií sú tie, ktoré som pou¾il
+ja (teda urèite fungujú), ale aj iné verzie mô¾u pracova» správne.
+
+
+- libXPM 4.7 alebo nov¹ia
+	Star¹ie verzie nemusia fungova»!!!
+	Dostupné na ftp://sunsite.unc.edu/pub/Linux/libs/X/
+
+	Podpora XPM je aj vstavaná, ale nenaèíta obrázky v
+	ne¹tandardných kódovaniach.
+
+- libpng 0.96 alebo nov¹ia a zlib
+	Pre podporu obrázkov PNG.
+	http://www.cdrom.com/pub/png/
+
+- libtiff 3.4 alebo nov¹ia
+	Pre podporu obrázkov TIFF.
+	ftp://ftp.sgi.com/graphics/tiff
+
+- libjpeg 6.0.1 alebo nov¹ia
+	Pre podporu obrázkov JPEG.
+	http://www.ijg.org/
+
+- libgif 2.2 alebo libungif
+	Pre podporu obrázkov GIF.
+	ftp://prtr-13.ucsc.edu/pub/libungif/
+
+- GNU xgettext
+	Ak chcete pou¾íva» prelo¾ené hlásenia, potrebujete GNU gettext.
+	Iné verzie gettext nie sú kompatibilné a nebudú fungova».
+	Stiahnite si GNU verziu z ftp://ftp.gnu.org
+
+
+
+MO®NOSTI CONFIGURE:
+===================
+
+Tieto mo¾nosti mô¾u by» dané skriptu configure ako argumenty za úèelom
+povolenia/zakázania urèitých vlastností Window Makera. Príklad:
+
+./configure --enable-kde --enable-gnome
+
+nakonfiguruje Window Maker s podporou KDE a GNOME.
+
+
+Zoznam v¹etkých mo¾ností vypí¹e príkaz ./configure --help
+
+--with-libs-from
+	cesty, kde sa majú hµada» kni¾nice. Re»azec -L musí predchádza»
+	ka¾dú cestu, napr.:
+	--with-libs-from="-L/opt/libs -L/usr/local/lib"
+
+--with-incs-from
+	cesty, kde sa majú hµada» hlavièkové súbory. Re»azec -I musí
+	predchádza» ka¾dú cestu, napr.:
+	--with-incs-from="-I/opt/headers -I/usr/local/include"
+
+--enable-single-icon
+	umo¾òuje zrolovanie v¹etký ikon aplikácií WM_CLASS+WM_INSTANCE do
+	jedinej. Táto vlastnos» nie je podporovaná zo strany vývojárov.
+	V prípade problémov s òou, kontaktujte autora:
+	Christopher Seawood <cls@seawood.org>
+
+--disable-shm
+	zaká¾e pou¾itie roz¹írenia zdieµanej pamäte MIT. Toto trochu spomalí
+	generovanie textúr, ale v niektorých prípadoch je táto voµba potrebná
+	kvôli chybe, ktorá spôsobuje nesprávne zobrazovanie ikon a textúr.
+
+--disable-motif 
+	zaká¾e podporu pre pokyny mana¾éra okien wmw 
+
+--enable-openlook
+	povolí podporu pre pokyny mana¾éra okien OPEN LOOK(tm)
+
+--enable-gnome
+	povolí podporu pre pokyny mana¾éra okien GNOME
+
+--enable-kde
+	povolí podporu pre pokyny mana¾éra okien kde/kwm
+
+--enable-lite
+	odstráni veci, ktoré sa u¾ nachádzajú v desktopových prostrediach
+	ako KDE a GNOME. Odstránené veci sú: zoznam okien, menu aplikácií,
+	výber viacerých okien. Vedzte, ¾e u¾ nebudete schopní ukonèi»
+	Window Maker; budete ho musie» zabi» pou¾itím signálu SIGTERM alebo
+	ho ukonèi» z KDE. Neodporúèa sa povoli» túto vlastnos».
+
+--enable-modelock
+	podpora pre XKB nastavenie jazyka. Ak neviete, èo to je, pravdepo-
+	dobne to nepotrebujete. (Slú¾i to na prepínanie rozlo¾enia kláves
+	pomocou nového tlaèidla na hornom paneli okien.)
+
+--enable-sound	
+	povolí podporu pre modul zvukových efektov
+
+--disable-xpm   
+	zaká¾e podporu pre kni¾nicu XPM aj keï je dostupná na va¹om systéme.
+
+--disable-png	
+	zaká¾e pou¾itie kni¾nice PNG
+
+--disable-tiff
+	zaká¾e pou¾itie kni¾nice TIFF
+
+--disable-gif
+	zaká¾e pou¾itie kni¾nice GIF
+
+--disable-jpeg
+	zaká¾e pou¾itie kni¾nice JPEG
+
+--disable-shape
+	zaká¾e tvarované okná (pre oclock, xeyes atï.)
+
+
+POZNÁMKY PRE ©PECIFICKÉ PLATFORMY:
+==================================
+
+- DEC/Alpha
+
+	Nasledovný mail nie je prelo¾ený, ale hovorí sa v òom, ¾e
+	_pravdepodobne_ nie je nutné konfigurova» Window Maker na
+	Alphe s voµbou --disable-shm.
+
+#>>>>>>>>>>>
+From: Anton Ivanov <aivanov@eu.level3.net>
+To: Marcelo E. Magallon <mmagallo@debian.org>
+Subject: Re: Is the WindowMaker package working ok on Alpha?
+
+> Hi,
+> 
+>  I was reading some docs on the WindowMaker tarball, and found this:
+> 
+>  | - DEC/Alpha machines
+>  |         You might need to pass the --disable-shm flag to configure,
+>  |         like ./configure --disable-shm
+> 
+>  is anyone having problems with WindowMaker on Alpha?  Can someone
+>  please test this?  Should the flag be passed when building on Alpha?
+
+Disclaimer: alphas under my command have never run X and are least likely to 
+suddenly start running it anytime soon.
+
+        Alpha used to have some ridiculously low amount of shared memory
+configured. 
+So quite a lot of apps used to barf. Namely - cdrecord, mysql server, etc.
+
+        Check where is yours at the moment and raise it to a more appropriate
+value by either catting to the appropriate /proc entry or changing the
+/usr/src/linux/include/asm/shmparam.h.
+
+        Otherwise the shared memory on alpha should be fully functional and I
+see no reason to disable it. Mine are bumped up to 32 or more on most
+machines.
+
+        And If I recall correctly the comments in that file are actually
+wrong. Value is not bytes, but in machine size word. For alpha *8.
+
+        As I said - I do not run X on them so all #include "stdisclaimer.h"
+apply.
+#<<<<<<<<<<<<
+
+
+- SCO Unix - spustite configure takto
+	CFLAGS="-belf -DANSICPP" ./configure 
+
+- SunOS, Solaris 
+	Ak máte nain¹alované gcc, spustite configure takto:
+	CPP_PATH="gcc -E -x c" ./configure
+	Cpp od Sunu chýbajú niektoré vlastnosti, ktoré Window Maker potrebuje,
+	a to mô¾e spôsobi» problémy pri parsovaní konfiguraèných súborov.
+	Je tie¾ mo¾né, ¾e budete musie» pou¾i» --with-libs-from a
+	--with-incs-from na urèenie ciest k libtiff.
+	Niekto mi mailoval, ¾e tie¾ /usr/local/lib musí by» prvá cesta v
+	premennej LD_LIBRARY_PATH, aby to fungovalo.
+	Ak máte Ultra Creator 3D alebo iný stroj s high-end grafikou,
+	uistite sa, ¾e spú¹»ate iXy s 24-bitovou farebnou håbkou alebo
+	mô¾ete ma» problémy s pomie¹anými farbami. Toto je chyba wmakera
+	a bude opravená.
+
+- GNU/Linux vo v¹eobecnosti
+	Uistite sa, ¾e máte /usr/local/lib v /etc/ld.so.conf a ¾e ste
+	po in¹talácii spustili ldconfig.
+	Odin¹talujte v¹etky balíkované verzie Window Makera pred in¹talovaním
+	novej verzie.
+
+- RedHat GNU/Linux
+	Systémy RedHat majú niekoµko nepríjemných problémov. Ak ich pou¾ívate,
+	dodr¾ujte nasledovné kroky, alebo vám Window Maker nebude fungova»:
+
+	* ak máte nain¹alovaný Window Maker, ktorý je dodaný s RedHatom,
+	pred upgadom ho odin¹talujte;
+
+	* uistite sa, ¾e nemáte premenné LANG a LINGUAS nastavené na en_RN;
+
+	* uistite sa, ¾e máte /usr/local/bin v premennej PATH;
+
+	* uistite sa, ¾e máte /usr/local/lib v /etc/ld.so.conf pred
+	spustením ldconfig;
+
+	* ak máte problémy, v ktorých sa spomína chyba s --no-reexec,
+	odin¹talujte libtool-1.2b a nain¹talujte libtool-1.3. libtool-1.3
+	nájdete na ftp.gnu.org. Tie¾ si preèítajte èas» RIE©ENIE PROBLÉMOV.  
+
+
+	* uistite sa, ¾e máte symbolický odkaz z /usr/include/X11 na
+	/usr/X11R6/include/X11 (ak nie, zadajte ln -s /usr/X11R6/include/X11
+	/usr/include/X11 )
+
+	* uistite sa, ¾e /lib/cpp odkazuje na program cpp
+
+	Ak máte akékoµvek pochybnosti, prosím, neotáµajte a spojte sa
+	s u¾ívateµskou podporou RedHatu. Radi vám odpovedia na v¹etky
+	va¹e otázky týkajúce sa ich systému. Vedia toho o svojom
+	systéme viac ako my (nepou¾ívame RedHat).
+
+
+- PowerPC MkLinux
+	Musíte ma» poslednú verziu Xpmac. Star¹ie verzie majú asi chyby,
+	ktoré spôsobujú zmrznutie celého systému.
+
+- Debian GNU/Linux
+	Ak chcete podporu JPEG a TIFF, uistite sa, ¾e máte nain¹talované
+	libiff-dev a libjpeg-dev.
+
+- SuSE GNU/Linux
+	Ak ste si nain¹talovali balík Window Makera od SuSE, odin¹talujte
+	ho pred pokusmi o skompilovanie wmakera, alebo mô¾ete ma» problémy.
+
+- MetroX (neznáma verzia)
+	MetroX má chybu, ktorá kazí obrázky, ktoré sú nastavené ako pozadie
+	okien. Ak pou¾ívate MetroX a máte èudné problémy s textúrami,
+	nepou¾ívajte textúry v horných li¹tách. Alebo pou¾ite iný X server.
+
+
+IN©TALÁCIA:
+===========
+
+Kompilácia Window Makera
+------------------------
+	Pre rýchly ¹tart, zadajte nasledovné príkazy v shelly:
+
+	./configure
+	make
+
+potom sa prihláste ako root a zadajte:
+
+	make install
+	ldconfig
+
+alebo ak chcete z binárnych súborov odstráni» symboly pre debugger a urobi»
+ich men¹ie, napí¹te miesto toho
+
+	make install-strip
+	ldconfig
+
+Toto skompiluje a nain¹taluje Window Maker so ¹tandardnými parametrami.
+
+Ak si chcete prispôsobi» nastavenia kompilácie, mo¾ete to urobi» nasledovne:
+
+	1. (voliteµne) Pozrite sa na èas» MO®NOSTI CONFIGURE, kde sú
+	uvedené mo¾nosti. Tie¾ spustite:
+
+	./configure --help
+
+	ktorý vám vypí¹e kompletný zoznam ostatných mo¾ných nastavení.
+
+	2. Spustite configure s nastaveniami, ktoré chcete. Napríklad,
+	ak chcete pou¾íva» podporu pre KDE, zadajte:
+
+	./configure --enable-kde
+
+	3. (voliteµne) Otvorte si súbor src/wconfig.h vo svojom obµúbenom
+	textovom editore a prejdite si ho, èi nenájdete nejaké nastavenia,
+	ktoré chcete zmeni».
+
+	4. Kompilácia. Zadajte len:
+
+	make
+	
+	5. Prihláste sa ako root (ak to nie je mo¾né, èítajte èas» "Nemám
+	rootove heslo :-( ") a nain¹talujte Window Maker:
+
+	su root
+	make install
+	
+
+Nastavenia ¹pecifické pre u¾ívateµov
+------------------------------------
+
+Nemusíte sa dr¾a» týchto in¹trukcií, ak robíte upgrade Window Makera zo
+star¹ej verzie, pokiaµ to nie je uvedené v súbore NEWS.
+
+Ka¾dý u¾ívateµ na va¹om systéme, ktorý chce pou¾íva» Window Maker, musí
+urobi» nasledovné:
+
+	1. Nain¹talova» konfiguraèné súbory Window Makera do svojho
+	domovského adresára:
+
+	wmaker.inst
+
+	wmaker.inst nain¹taluje konfiguraèné súbory Window Makera a nastaví
+	iXy aby sa pri ¹tarte automaticky spustil Window Maker.
+
+	To je v¹etko!
+
+	Základné informácie o konfigurácii a iných veciach vám poskytne
+	"man wmaker".
+
+Pre hlb¹í úvod do Window Makera si preèítajte si U¾ívateµký manuál.
+
+Tie¾ sa mô¾te pozrie» na FAQ.
+
+
+
+Installing the extras package
+-----------------------------
+
+Unpack WindowMaker-extra-<version-number>.tar.gz in /usr/local/share
+        
+You can get the file at ftp://ftp.windowmaker.org. This file is optional
+and only have a few icons, and themes. Look for the latest <version-number>
+available.
+Also there is a WindowMaker-extra.readme to instruct you where that package
+should go.
+
+
+
+Nemám rootove heslo :(
+----------------------
+
+Ak nemáte práva roota, mô¾ete si nain¹talova» Window Maker do svojho
+domovského adresára. Na to musíte pou¾i» voµbu --prefix pre configure
+v druhom kroku kompilácie Window Makera. Tie¾ musíte pou¾i» voµbu
+--with-appspath, pomocou ktorej ¹pecifikujete cestu pre WPrefs.app.
+Príklad:
+
+./configure --prefix=/home/jshome --with-appspath=/home/jshome/GNUstep/Apps
+
+Poto pridajte adresár /home/jshome/bin do premennej PATH, /home/jshome/lib
+do premennej LD_LIBRARY_PATH a spustite bin/wmaker.inst
+
+Samozrejme, predpokladá sa, ¾e /home/jshome nahradíte va¹im skutoèným
+domovským adresárom.
+
+
+UPGRADE
+=======
+
+Ak robíte upgrade zo star¹ej verzie Window Makera:
+
+	1. Skofigurujte a skompilujte Window Maker ako v¾dy
+	2. Nain¹talujte Window Maker (ale nespustite wmaker.inst)
+	3. Preèítajte si súbor NEWS a ak je to potrebné, upravte
+	   svoje konfiguraèné súbory.
+
+
+RIE©ENIA PROBLÉMOV
+==================
+
+Ak máte problémy poèas konfigurácie (spú¹»ania configure), napríklad
+nemo¾nos» pou¾i» grafickú kni¾nicu, o ktorej viete, ¾e ju máte nain¹talovanú,
+v súbore config.log nájdete príèinu problému.
+
+== Error with loading fonts, even if they exist.
+
+Skúste kompiláciu bez podpory NLS.
+
+== Error when configuring
+
+ltconfig: unrecognized option `--no-reexec'
+Try `ltconfig --help' for more information.
+configure: error: libtool configure failed
+
+Odstáòte voµbu --no-reexec zo súborov aclocal.m4 a libPropList/aclocal.m4
+a spustite configure.
+Tie¾ sa uistite, ¾e autoconf a automake, ktoré máte nain¹talované, sú v
+týchto verziách:
+autoconf 2.13
+automake 1.4
+libtool 1.3
+
+Nesmie to by» libtool 1.2b, ale libtool 1.3, zo stránok GNU.
+
+== Cant find proplist.h or libPropList.something
+
+Stiahnite a nain¹talujte si libPropList zo stránok uvedených
+niekde v tomto súbore.
+
+
+== configure doesn't detect libtiff, or other graphic libraries.
+
+Odstráòte config.cache, spustite configure s pridanými nasledovnými voµbami
+(okrem iných, ktoré pou¾ívate):
+--with-libs-from="-L/usr/local/lib"
+--with-incs-from="-I/usr/local/include -I/usr/local/include/tiff"
+Vlo¾te cesty k va¹im grafickým kni¾niciam a zodpovedajúcim hlavièkovým
+súborom. Mô¾ete vlo¾i» viac ciest do ka¾dej z týchto volieb, ako je to
+uvedené v príklade --with-incs-from. Len ich oddeµte medzerou.
+
+
+== configure doesn't detect libXpm. 
+
+* Skontrolujte, èi máte symbolický odkaz z libXpm.so.4.9 na libXpm.so
+
+
+== Segmentation fault on startup
+
+* Skontrolujte verziu libXpm, musíte ma» aspoò 4.7
+
+* Skontrolujte, èi máte upravenú verziu ~/GNUstep/Defaults/WindowMaker
+
+Ak si nie ste istí, skúste premenova» ~/GNUstep na ~/GNUtmp a spustite
+wmaker.inst
+
+
+== "...: your machine is misconfigured. gethostname() returned (none)"
+
+* Meno va¹eho poèítaèa je nastavené na nieèo nesprávne, èo zaèína
+úvodzovkami. Preèítajte si man hostname a dozviete sa, ako to nastavi».
+
+
+== The root menu contains only 2 entries. ("XTerm" and "Exit...")
+
+* Window Maker nevie nájs» cpp (C preprocesor). Ak sa vá¹ cpp nenachádza
+v /lib/cpp, upravte src/config.h a vlo¾te správnu cestu do CPP_PATH.
+
+
+== checking lex output file root... configure: error: cannot find output from true; giving up
+
+* Preèítajte si èas» PO®IADAVKY v tomto súbore.
+
+
+MIESTNE NASTAVENIA/INTERNACIONALIZÁCIA
+======================================
+
+Window Maker má podporu pre národné jazyky. Aby ste ju povolili, musíte
+skompilova» Window Maker s niekoµkými prídavnými parametrami.
+
+
+0 - Musíte ma» nain¹talovaný balík GNU gettext. Mô¾ete ho nájs» na
+adrese ftp://prep.ai.mit.edu/pub/gnu/gettext-nnn.tar.gz
+
+Kroky 1 a¾ 3 mô¾ete vynecha», ak pou¾ívate skript Install
+
+1 - Musíte urèi» jazyky, pre ktoré chcete podporu. Nastavte premennú
+LINGUAS na zoznam miestnych nastavení, ktoré chcete. Angliètina je
+podporovaná v¾dy. Príklad:
+
+setenv LINGUAS "pt ja de"
+(csh)
+
+alebo
+
+export LINGUAS;LINGUAS="pt ja de"
+(sh)
+
+Zoznam podporovaných miestnych nastavení nájdete v súbore po/README.
+Angliètina je implicitným jazykom.
+
+Ak chcete preklada» a udr¾iava» súbory s miestnymi nastaveniami, preèítajte
+si súbor po/README.
+
+2 - Naviac, ak vá¹ jazyk pou¾íva multi-byte znaky, napríklad Japonèina
+alebo Kórejèina, musíte nastaveniu MultiByteText priradi» YES v súbore
+~/GNUstep/Defaults/WMGLOBAL
+
+3 - Konfigurujte, kompilujte a in¹talujte Window Maker ako zvyèajne.
+
+4 - Urèité miesne nastavenia si zvolíte nastavením premennej LANG na
+to, ktoré chcete. Napríklad, ak chcete nastavi» slovenské miestne
+nastavenia, musíte spusti»
+
+setenv LANG pt
+
+(csh)
+
+export LANG; LANG=pt
+
+(Bourne sh a podobné)
+
+Pozor: Ak máte nastavenú premennú LC_CTYPE, musíte ju zru¹i» pred
+spustením wmaker.
+
+Window Maker hµadá súbory s definíciou menu v nasledovnom poradí
+(v tomto prípade pre brazílsku portugalèinu):
+
+menu.pt_BR
+menu.pt
+menu
+
+
+5 - Ak si zvolíte jazyk, ktorý pou¾íva multi-byte znaky, musíte poriadne
+nastavi» svoje fonty. Preèítajte si manuálovú stránku k XCreateFontSet,
+kde nájdete viac detailov. Musíte v súbore ~/G/D/WindowMaker upravi» fonty
+pre horné li¹ty, menu a iné veci. Pre fonty pou¾ité v dialógových oknách
+upravte súbor ~/G/D/WMGLOBAL. Re»azce %d v menách fontov nesmú by»
+odstránené. Tie¾ mô¾ete pou¾i» skript wsetfont, ktorý to urobí za vás.
+
+Napríklad mô¾e zada» v súbore ~/G/D/WindowMaker nasledovné:
+
+WindowTitleFont = "-*-helvetica-bold-r-normal-*-12-*,-*-*-medium-r-normal-*-14-*";
+MenuTitleFont = "-*-helvetica-bold-r-normal-*-12-*,-*-*-medium-r-normal-*-14-*";
+MenuTextFont = "-*-helvetica-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-14-*";
+IconTitleFont = "-*-helvetica-medium-r-normal-*-8-*,-*-*-medium-r-normal-*-12-*";
+ClipTitleFont = "-*-helvetica-bold-r-normal-*-10-*,-*-*-medium-r-normal-*-12-*";
+DisplayFont = "-*-helvetica-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-12-*";
+
+a v ~/G/D/WMGLOBAL:
+
+SystemFont = "-*-*-medium-r-normal-*-%d-*-*-*-*-*-*-*";
+BoldSystemFont = "-*-*-medium-r-normal-*-%d-*-*-*-*-*-*-*";
+
+Tieto dva fonty sa pou¾ijú len v aplikáciách, ktoré pou¾ívajú WINGs
+(Window Maker a WPrefs.app)
+
+Skript wsetfont vám umo¾ní nastavi» fonty jednoduch¹ím spôsobom. Pozrite
+sa priamo do jeho súboru pre bli¾¹ie informácie.
+

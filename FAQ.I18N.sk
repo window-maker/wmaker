@@ -1,0 +1,61 @@
+(Toto je len preklad dos» starého súboru! Ak by ste mali skutoène problémy
+ s Window Makerom a slovenèinou a v tomto súbore by ste nena¹li pomoc,
+ po¹lite popis problému na adresu <tomka@oalevice.sk>.)
+
+Ak vám nefunguje podpora miestnych nastavení, skontrolujte nasledujúce:
+
+	- premenná LANG je nastavená na va¹e miestne nastavenia a tieto
+	  sú podporované va¹im OS alebo X emuláciou. Zoznam podporovaných
+	  miestnych nastavení získate príkazom "locale -a". Zoznam
+	  miestnych nastvení podporovaných X emuláciou sa nachádza v
+	  súbore "/usr/X11R6/lib/X11/locale/locale.alias".
+
+	- pou¾ívate správne fonty pre svoje miestne nastavenia. Ak
+	  pou¾ívate font s odli¹ným kódovaním ako je nastavené v Xlib
+	  alebo libc, mô¾u sa dia» èudné veci. Skúste explicitne zada»
+	  kókovanie do premennej LANG, teda sk_SK.ISO-8859-2. Znovu,
+	  pozrite si súbor "/usr/X11R6/lib/X11/locale/locale.aliax".
+
+	- ak vá¹ OS nepodporuje ¾iadne miestne nastavenia alebo vá¹ OS
+	  nepodporuje va¹e miestne nastavenia, mô¾ete pou¾i» emuláciu
+	  podpory miestnych nastavení X Window Systému. To urobíte
+	  voµbou "--with-x-locale" skriptu configure. Ak pou¾ívate
+	  komerèný OS ako Solaris, IRIX, AIX, ..., pravdepodobne
+	  nepotrebujete pou¾i» X emuláciu miestnych nastavení. Ale ak
+	  je vá¹ OS Linux alebo NetBSD alebo ..., je mo¾né, ¾e va¹e
+	  miestne nastavenia e¹te nie sú podporované. Vtedy pou¾ite
+	  "--with-x-locale".
+
+	  Pozor: aby ste mohli pou¾íva» X emuláciu miestnych nastvení,
+		 va¹a Xlib musí by» skompilovaná s touto podporou.
+		 Xlib v Linux RedHat5.0 tak skompilovaná nie je.
+		 (RH4.x je v poriadku). Prekompilovaná Xlib pre
+		 RH5.0 s podporou emulácie miestnych nastavení je
+		 dostupná na adrese
+
+		 ftp://ftp.linux.or.jp/pub/RPM/glibc
+
+	- ak chcete zobrazova» multibyte znaky, nastavte mo¾nos»
+	  MultiByteText YES v ~/GNUstep/Defaults/WindowMaker a
+	  ~/GNUstep/Defaults/WMGLOBAL	
+
+	- fonty, ktoré pou¾ívate, podporujú va¹e miesne nastavenia.
+	  Ak va¹e nastavenia fontov v ~/GNUstep/Defaults/WindowMaker
+	  vyzerajú takto:
+
+	  WindowTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
+	  MenuTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
+	  ......................................................
+
+	  potom nemô¾ete zobrazova» znaky iné ako iso8859-x vo fonte
+	  helvetica. Jednoduchý spôsob ako zobrazova» znaky rôznych
+	  jazykov je nastavi» v¹etky fonty takto:
+	  
+		"-*-*-medium-r-normal-*-14-*-*-*-*-*-*-*"
+
+	  a tie¾ potrebujete zmeni» nastavenia fontov v súboroch ¹týlov
+	  v adresári ~/Library/WindowMaker/Style.
+
+	- premenná LC_CTYPE nie je nastavená alebo má správnu hodnotu. Ak
+	  si nie ste istí, nenastavujte ju.
+
