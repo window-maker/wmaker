@@ -759,7 +759,7 @@ storeData(_Panel *panel)
     char buffer[64];
     int i;
     char *tmp, *p;
-    static char *button[5] = {"None", "left", "middle", "right", "Button4", "Button5"};
+    static char *button[6] = {"None", "left", "middle", "right", "Button4", "Button5"};
     WMUserDefaults *udb = WMGetStandardUserDefaults();
 
     if (!WMGetUDBoolForKey(udb, "NoXSetStuff")) {
