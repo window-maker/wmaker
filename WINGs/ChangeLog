@@ -25,7 +25,10 @@ changes since wmaker 0.62.1:
   client data (previously passed the selected item row).
 - WMRemoveListItem() returns an int : 1 success, 0 fail (previously was void).
 - added WMUnselectListItem(), WMSelectAllListItems(), WMUnselectAllListItems()
-
+- better behavior of wheel mices in WMList. Simple mouse wheel events
+  will scroll by 1/3 of the WMList height. Using Control as a modifier will
+  scroll line by line, while using Shift as a modifier will scroll page
+  by page.
 
 changes since wmaker 0.62.0:
 ............................
