@@ -273,13 +273,13 @@ createPanel(Panel *p)
     panel->raisB = WMCreateSwitchButton(panel->optF);
     WMResizeWidget(panel->raisB, 210, 30);
     WMMoveWidget(panel->raisB, 15, 7);
-    WMSetButtonText(panel->raisB, _("Raise window when switching focus with keyboard."));
+    WMSetButtonText(panel->raisB, _("Raise window when switching\nfocus with keyboard."));
 
 #ifdef XKB_MODELOCK
     panel->modeB = WMCreateSwitchButton(panel->optF);
     WMResizeWidget(panel->modeB, 210, 30);
     WMMoveWidget(panel->modeB, 15, 40);
-    WMSetButtonText(panel->modeB, _("Enable keyboard language switch button in window titlebars."));
+    WMSetButtonText(panel->modeB, _("Enable keyboard language\nswitch button in window titlebars."));
 #endif
 
     WMMapSubwidgets(panel->optF);

@@ -416,7 +416,7 @@ createPanel(Panel *p)
     WMResizeWidget(panel->noteL, 235, 28);
     WMMoveWidget(panel->noteL, 10, 85);
     WMSetLabelFont(panel->noteL, font);
-    WMSetLabelText(panel->noteL, _("Note: sound requires a module distributed separately"));
+    WMSetLabelText(panel->noteL, _("Note: sound requires a module distributed\nseparately"));
     
     WMMapSubwidgets(panel->animF);
     
@@ -456,14 +456,14 @@ createPanel(Panel *p)
     WMMoveWidget(panel->dith1L, 5, 50);
     WMSetLabelTextAlignment(panel->dith1L, WACenter);
     WMSetLabelFont(panel->dith1L, font);
-    WMSetLabelText(panel->dith1L, _("More colors for applications"));
+    WMSetLabelText(panel->dith1L, _("More colors for\napplications"));
 
     panel->dith2L = WMCreateLabel(panel->dithF);
     WMResizeWidget(panel->dith2L, 70, 35);
     WMMoveWidget(panel->dith2L, 180, 50);
     WMSetLabelTextAlignment(panel->dith2L, WACenter);
     WMSetLabelFont(panel->dith2L, font);
-    WMSetLabelText(panel->dith2L, _("More colors for WindowMaker"));
+    WMSetLabelText(panel->dith2L, _("More colors for\nWindowMaker"));
 
     WMMapSubwidgets(panel->dithF);
     

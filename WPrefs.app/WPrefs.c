@@ -352,8 +352,8 @@ createMainWindow(WMScreen *scr)
     WMMoveWidget(WPrefs.creditsL, 10, FRAME_HEIGHT-60);
     WMSetLabelTextAlignment(WPrefs.creditsL, WACenter);
     WMSetLabelText(WPrefs.creditsL, _("Programming/Design: Alfredo K. Kojima\n"
-		   		"Artwork: Marco van Hylckama Vlieg and Largo\n"
-				      "More Programming: James Thompson"));
+		   		"Artwork: Marco van Hylckama Vlieg, Largo et al\n"
+				      "More Programming: James Thompson et al"));
    
     
     WMMapSubwidgets(WPrefs.win);

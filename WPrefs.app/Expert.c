@@ -51,7 +51,7 @@ showData(_Panel *panel)
     WMSetButtonSelected(panel->swi[1], WMGetUDBoolForKey(udb, "NoXSetStuff"));
     WMSetButtonSelected(panel->swi[2], GetBoolForKey("SaveSessionOnExit"));
     WMSetButtonSelected(panel->swi[3], GetBoolForKey("UseSaveUnders"));
-    WMSetButtonSelected(panel->swi[4], GetBoolForKey("WindowsCycling"));
+    WMSetButtonSelected(panel->swi[4], GetBoolForKey("WindozeCycling"));
     WMSetButtonSelected(panel->swi[5], GetBoolForKey("DontConfirmKill"));
     WMSetButtonSelected(panel->swi[6], GetBoolForKey("DisableBlinking"));
 }

@@ -456,6 +456,7 @@ createPanel(Panel *p)
     WMResizeWidget(panel->instructionsL, 160, 55);
     WMMoveWidget(panel->instructionsL, 15, 140);
     WMSetLabelTextAlignment(panel->instructionsL, WACenter);
+    WMSetLabelWraps(panel->instructionsL, True);
     WMSetLabelText(panel->instructionsL, _("Click Capture to interactively define the shortcut key."));
 
     WMMapSubwidgets(panel->shoF);

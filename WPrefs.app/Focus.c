@@ -361,13 +361,13 @@ createPanel(Panel *p)
     panel->ignB = WMCreateSwitchButton(panel->optF);
     WMResizeWidget(panel->ignB, 210, 50);
     WMMoveWidget(panel->ignB, 15, 10);
-    WMSetButtonText(panel->ignB, _("Do not let applications receive the "\
-				"click used to focus windows."));
+    WMSetButtonText(panel->ignB, _("Do not let applications receive\n"
+			    	"the click used to focus windows."));
 
     panel->newB = WMCreateSwitchButton(panel->optF);
     WMResizeWidget(panel->newB, 210, 35);
     WMMoveWidget(panel->newB, 15, 70);
-    WMSetButtonText(panel->newB, _("Automatically focus new windows."));
+    WMSetButtonText(panel->newB, _("Automatically focus new\nwindows."));
 
     WMMapSubwidgets(panel->optF);
 

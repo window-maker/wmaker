@@ -181,7 +181,7 @@ createPanel(Panel *p)
     WMResizeWidget(panel->cyclB, 280, 34);
     WMMoveWidget(panel->cyclB, 75, 30);
     WMSetButtonText(panel->cyclB,
-		   _("wrap to the first workspace after the last workspace."));
+		   _("wrap to the first workspace after the\nlast workspace."));
 
     panel->cyclL = WMCreateLabel(panel->navF);
     WMResizeWidget(panel->cyclL, 60, 60);
@@ -248,7 +248,7 @@ createPanel(Panel *p)
     WMMoveWidget(panel->posL, 75, 165);
     WMSetLabelTextAlignment(panel->posL, WARight);
     WMSetLabelText(panel->posL, 
-		   _("Position of workspace name display"));
+		   _("Position of workspace\nname display"));
     
     panel->posiL = WMCreateLabel(panel->navF);
     WMResizeWidget(panel->posiL, 60, 40);
