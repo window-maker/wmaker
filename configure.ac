@@ -206,6 +206,10 @@ dnl -----------------------
 asm_support=no
 mmx_support=no
 if test "$ac_cv_prog_gcc" = yes; then
+   
+    # gcc-3.4 complains about some of our stuff without this
+    NOSTRICTALIASING="-fno-strict-aliasing"
+
     x86=0
     changequote(,)dnl
     case "$host_cpu" in
@@ -224,7 +228,7 @@ if test "$ac_cv_prog_gcc" = yes; then
 
        AC_CACHE_CHECK(whether gcc supports MMX(tm) inline asm,
                       ac_cv_c_inline_mmx,
-                      [AC_TRY_LINK(,[__asm__ ("movq %mm0, %mm1");],
+                      [AC_TRY_LINK(,[asm ("movq %mm0, %mm1");],
                       ac_cv_c_inline_mmx=yes,
                       ac_cv_c_inline_mmx=no)])
 
@@ -234,6 +238,7 @@ if test "$ac_cv_prog_gcc" = yes; then
        fi
     fi
 fi
+AC_SUBST(NOSTRICTALIASING)
 
 
 dnl pkg-config

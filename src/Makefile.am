@@ -108,7 +108,7 @@ wmaker_SOURCES = 	\
 
 AM_CPPFLAGS = $(DFLAGS) -DLOCALEDIR=\"$(NLSDIR)\"
 
-AM_CFLAGS = -fno-strict-aliasing
+AM_CFLAGS = @NOSTRICTALIASING@
 
 
 INCLUDES = \

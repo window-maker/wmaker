@@ -22,7 +22,7 @@ libExtraWINGs_a_SOURCES = 	\
 	wtableview.h \
 	wtabledelegates.h 
 
-AM_CFLAGS = -fno-strict-aliasing
+AM_CFLAGS = @NOSTRICTALIASING@
 
 INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/WINGs \
 	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @HEADER_SEARCH_PATH@ -DDEBUG

@@ -44,7 +44,7 @@ WPrefs_SOURCES = \
 
 AM_CPPFLAGS = -DLOCALEDIR=\"$(NLSDIR)\"
 
-AM_CFLAGS = -fno-strict-aliasing
+AM_CFLAGS = @NOSTRICTALIASING@
 
 INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/WINGs @HEADER_SEARCH_PATH@ 
 
