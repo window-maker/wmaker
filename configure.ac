@@ -532,11 +532,14 @@ if test "$xft" = yes; then
 	else
 		AC_CHECK_PROG(XFTCONFIG, xft-config, xft-config)
 	fi
+	AC_MSG_CHECKING([for the Xft2 library])
 	if test "x$XFTCONFIG" != x; then
 		XFTLIBS=`$XFTCONFIG --libs`
 		XFTFLAGS=`$XFTCONFIG --cflags`
-		AC_MSG_CHECKING([for the Xft2 library])
 		AC_MSG_RESULT([found])
+	else
+		xft=no
+		AC_MSG_RESULT([not found])
 	fi
 	if test "$xft" = yes; then
 		AC_SUBST(XFTFLAGS)
