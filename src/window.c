@@ -692,6 +692,17 @@ wManageWindow(WScreen *scr, Window window)
 
     wWindowSetupInitialAttributes(wwin, &window_level, &workspace);
 
+    /* if the window has bad PPosition/PSize hints, and user asked to ignore
+     * them, revert the size values */
+    if ((wwin->normal_hints->flags & (PSize|PPosition))
+        && WFLAGP(wwin, ignore_stupid_hints)) {
+        wwin->normal_hints->flags &= ~(PPosition|PSize);
+        x = wattribs.x;
+        y = wattribs.y;
+        width = wattribs.width;
+        height = wattribs.height;
+    }
+    
 #ifdef OLWM_HINTS
     if (wwin->client_flags.olwm_transient && wwin->transient_for==None
 	&& wwin->group_id != None && wwin->group_id != window) {
@@ -873,7 +884,7 @@ wManageWindow(WScreen *scr, Window window)
 		dontBring = True;
 	} 
 
-	if (WFLAGP(wwin, dont_move_off) && dontBring)
+	if (WFLAGP(wwin, ignore_stupid_hints) && dontBring)
 	    wScreenBringInside(scr, &x, &y, width, height);
     }
 
@@ -1911,7 +1922,7 @@ int req_width, req_height;	       /* new size of the client */
 	synth_notify = True;
     }
         
-    if (WFLAGP(wwin, dont_move_off))
+    if (WFLAGP(wwin, ignore_stupid_hints))
 	wScreenBringInside(wwin->screen_ptr, &req_x, &req_y, 
 			   req_width, req_height);
     if (resize) {
@@ -1987,7 +1998,7 @@ int req_x, req_y;		       /* new position of the frame */
      * a completed (opaque) movement in moveres.c */
 #endif
 
-    if (WFLAGP(wwin, dont_move_off))
+    if (WFLAGP(wwin, ignore_stupid_hints))
 	wScreenBringInside(wwin->screen_ptr, &req_x, &req_y,
 			   wwin->frame->core->width, wwin->frame->core->height);
 

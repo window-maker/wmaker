@@ -118,7 +118,7 @@ typedef struct {
     unsigned int no_hide_others:1;     /* hide window when doing hideothers */
     unsigned int no_appicon:1;	       /* make app icon */
     
-    unsigned int dont_move_off:1;
+    unsigned int ignore_stupid_hints:1;
 
     unsigned int no_focusable:1;
     
