@@ -358,7 +358,7 @@ showWorkspaceName(WScreen *scr, int workspace)
 
     ximg = RGetXImage(scr->rcontext, scr->root_win, 
 		      (scr->scr_width - data->text->width)/2,
-		      (scr->scr_height - data->text->height)/2, 
+		      0 /* (scr->scr_height - data->text->height)/2 */,
 		      data->text->width, data->text->height);
 
     if (!ximg) {
