@@ -30,8 +30,9 @@ typedef struct W_UserDefaults {
 
 
 static UserDefaults *sharedUserDefaults = NULL;
-static UserDefaults **sharedDefaultsList = NULL;
+
 static Bool registeredSaveOnExit = False;
+
 
 
 extern char *WMGetApplicationName();
@@ -90,17 +91,12 @@ saveDefaultsChanges(int foo, void *bar)
 saveDefaultsChanges(void)
 #endif
 {
-    /* save the user defaults database */
-    if (sharedUserDefaults && sharedUserDefaults->dirty) {
-	PLSave(sharedUserDefaults->appDomain, YES);
-    }
-
-    /* now save the extra defaults databases we may have */
-    if (sharedDefaultsList) {
-        UserDefaults *tmp = *sharedDefaultsList;
+    /* save the user defaults databases */
+    if (sharedUserDefaults) {
+        UserDefaults *tmp = sharedUserDefaults;
 
         while (tmp) {
-            if (tmp->dirty)
+            if (tmp->appDomain && tmp->dirty)
                 PLSave(tmp->appDomain, YES);
             tmp = tmp->next;
         }
@@ -133,93 +129,102 @@ WMSynchronizeUserDefaults(WMUserDefaults *database)
 
 WMUserDefaults*
 WMGetStandardUserDefaults(void)
-{    
-    if (!sharedUserDefaults) {
-	WMUserDefaults *defaults;
-	
-	proplist_t domain;
-	proplist_t key;
-	char *path;
-	int i;
+{
+    WMUserDefaults *defaults;
+    proplist_t domain;
+    proplist_t key;
+    char *path;
+    int i;
 
-	defaults = wmalloc(sizeof(WMUserDefaults));
-	memset(defaults, 0, sizeof(WMUserDefaults));
-
-	defaults->defaults = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
-
-	defaults->searchList = wmalloc(sizeof(proplist_t)*3);
-	
-	/* application domain */
-	key = PLMakeString(WMGetApplicationName());
-	defaults->searchList[0] = key;
-
-	/* temporary kluge */
-	if (strcmp(WMGetApplicationName(), "WindowMaker")==0) {
-	    domain = NULL;
- 	    path = NULL;
-	} else {
-	    path = wdefaultspathfordomain(PLGetString(key));
-	
-	    domain = PLGetProplistWithPath(path);
-	}
-	if (!domain) {
-	    proplist_t p;
-
-	    domain = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
-	    if (path) {
-		p = PLMakeString(path);
-		PLSetFilename(domain, p);
-		PLRelease(p);
-	    }
-	}
-	if (path)
-	    free(path);
-
-	defaults->appDomain = domain;
-
-	if (domain)
-	    PLInsertDictionaryEntry(defaults->defaults, key, domain);
-
-	PLRelease(key);
-
-	/* global domain */
-	key = PLMakeString("WMGLOBAL");
-	defaults->searchList[1] = key;
-
-	path = wdefaultspathfordomain(PLGetString(key));
-
-	domain = PLGetProplistWithPath(path);
-    
-	free(path);
-
-	if (!domain)
-	    domain = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
-
-	if (domain)
-	    PLInsertDictionaryEntry(defaults->defaults, key, domain);
-
-	PLRelease(key);
-	
-	/* terminate list */
-	defaults->searchList[2] = NULL;
-
-	defaults->searchListArray=PLMakeArrayFromElements(NULL,NULL);
-	
-
-	i = 0;
-	while (defaults->searchList[i]) {
-	    PLAppendArrayElement(defaults->searchListArray, 
-				 defaults->searchList[i]);
-	    i++;
-	}
-
-	sharedUserDefaults = defaults;
-	
-        registerSaveOnExit();
-
+    if (sharedUserDefaults) {
+        defaults = sharedUserDefaults;
+        while (defaults) {
+            /* Trick, path == NULL only for StandardUserDefaults db */
+            if (defaults->path == NULL)
+                return defaults;
+            defaults = defaults->next;
+        }
     }
 
-    return sharedUserDefaults;
+    /* we didn't found the database we are looking for. Go read it. */
+    defaults = wmalloc(sizeof(WMUserDefaults));
+    memset(defaults, 0, sizeof(WMUserDefaults));
+
+    defaults->defaults = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+
+    defaults->searchList = wmalloc(sizeof(proplist_t)*3);
+
+    /* application domain */
+    key = PLMakeString(WMGetApplicationName());
+    defaults->searchList[0] = key;
+
+    /* temporary kluge */
+    if (strcmp(WMGetApplicationName(), "WindowMaker")==0) {
+        domain = NULL;
+        path = NULL;
+    } else {
+        path = wdefaultspathfordomain(PLGetString(key));
+
+        domain = PLGetProplistWithPath(path);
+    }
+    if (!domain) {
+        proplist_t p;
+
+        domain = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+        if (path) {
+            p = PLMakeString(path);
+            PLSetFilename(domain, p);
+            PLRelease(p);
+        }
+    }
+    if (path)
+        free(path);
+
+    defaults->appDomain = domain;
+
+    if (domain)
+        PLInsertDictionaryEntry(defaults->defaults, key, domain);
+
+    PLRelease(key);
+
+    /* global domain */
+    key = PLMakeString("WMGLOBAL");
+    defaults->searchList[1] = key;
+
+    path = wdefaultspathfordomain(PLGetString(key));
+
+    domain = PLGetProplistWithPath(path);
+
+    free(path);
+
+    if (!domain)
+        domain = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+
+    if (domain)
+        PLInsertDictionaryEntry(defaults->defaults, key, domain);
+
+    PLRelease(key);
+
+    /* terminate list */
+    defaults->searchList[2] = NULL;
+
+    defaults->searchListArray=PLMakeArrayFromElements(NULL,NULL);
+
+
+    i = 0;
+    while (defaults->searchList[i]) {
+        PLAppendArrayElement(defaults->searchListArray,
+                             defaults->searchList[i]);
+        i++;
+    }
+
+    if (sharedUserDefaults)
+        defaults->next = sharedUserDefaults;
+    sharedUserDefaults = defaults;
+
+    registerSaveOnExit();
+
+    return defaults;
 }
 
 
@@ -234,10 +239,10 @@ WMGetDefaultsFromPath(char *path)
 
     assert(path != NULL);
 
-    if (sharedDefaultsList) {
-        defaults = *sharedDefaultsList;
+    if (sharedUserDefaults) {
+        defaults = sharedUserDefaults;
         while (defaults) {
-            if (strcmp(defaults->path, path) == 0)
+            if (defaults->path && strcmp(defaults->path, path) == 0)
                 return defaults;
             defaults = defaults->next;
         }
@@ -251,12 +256,13 @@ WMGetDefaultsFromPath(char *path)
 
     defaults->searchList = wmalloc(sizeof(proplist_t)*2);
 
-    /* the domain we want go first */
+    /* the domain we want, go in the first position */
     name = strrchr(path, '/');
     if (!name)
         name = path;
     else
         name++;
+
     key = PLMakeString(name);
     defaults->searchList[0] = key;
 
@@ -292,15 +298,11 @@ WMGetDefaultsFromPath(char *path)
         i++;
     }
 
-    if (sharedDefaultsList)
-        defaults->next = *sharedDefaultsList;
-    sharedDefaultsList = &defaults;
+    if (sharedUserDefaults)
+        defaults->next = sharedUserDefaults;
+    sharedUserDefaults = defaults;
 
     registerSaveOnExit();
-
-    name = PLGetDescriptionIndent(defaults->defaults, 0);
-    puts(name);
-    free(name);
 
     return defaults;
 }

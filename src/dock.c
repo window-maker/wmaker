@@ -425,6 +425,7 @@ wClipMakeTile(WScreen *scr, RImage *normalTile)
     ROperateLine(tile, RAddOperation, tp, 2, wPreferences.icon_size-3,
 		 pt, &light);
 
+    /* arrow bevel */
     ROperateLine(tile, RSubtractOperation, ICON_SIZE - 5 - as, 5,
                  ICON_SIZE - 6, 5, &dark);
     ROperateLine(tile, RSubtractOperation, ICON_SIZE - 6 - as, 5,
@@ -439,11 +440,11 @@ wClipMakeTile(WScreen *scr, RImage *normalTile)
     ROperateLine(tile, RSubtractOperation, 0, tp-2, pt+1,
 		 wPreferences.icon_size-2, &light);
 
+    /* arrow bevel */
     ROperateLine(tile, RSubtractOperation, 5, ICON_SIZE - 6 - as, 
 		 5 + as, ICON_SIZE - 6, &dark);
     ROperateLine(tile, RSubtractOperation, 5, ICON_SIZE - 5 - as, 5,
                  ICON_SIZE - 6, &dark);
-    
     ROperateLine(tile, RAddOperation, 5, ICON_SIZE - 6, 5 + as, ICON_SIZE - 6,
 		 &light);
 
