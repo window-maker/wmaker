@@ -1114,7 +1114,7 @@ handleShapeNotify(XEvent *event)
     XShapeEvent *shev = (XShapeEvent*)event;
     WWindow *wwin;
     XEvent ev;
-#ifdef DEBGU
+#ifdef DEBUG
     L("got shape notify");
 #endif
     while (XCheckTypedWindowEvent(dpy, shev->window, event->type, &ev)) {

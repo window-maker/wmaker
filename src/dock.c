@@ -2351,6 +2351,7 @@ wDockDetach(WDock *dock, WAppIcon *icon)
     icon->docked = 0;
     icon->dock = NULL;
     icon->attracted = 0;
+    icon->auto_launch = 0;
     if (icon->icon->shadowed) {
 	icon->icon->shadowed = 0;
 	icon->icon->force_paint = 1;
