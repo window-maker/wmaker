@@ -434,7 +434,28 @@ WMDequeueNotificationMatching(WMNotificationQueue *queue,
     int i;
     WMNotification *tmp;
 
-    if (mask & WNCOnName) {
+    if ((mask & WNCOnName) && (mask & WNCOnSender)) {
+	for (i = 0; i < WMGetBagItemCount(queue->asapQueue); i++) {
+	    tmp = WMGetFromBag(queue->asapQueue, i);
+
+            if (notification->object == tmp->object &&
+                strcmp(notification->name, tmp->name) == 0) {
+		WMRemoveFromBag(queue->asapQueue, tmp);
+		WMReleaseNotification(tmp);
+		break;
+	    }
+	}
+	for (i = 0; i < WMGetBagItemCount(queue->idleQueue); i++) {
+	    tmp = WMGetFromBag(queue->idleQueue, i);
+
+            if (notification->object == tmp->object &&
+                strcmp(notification->name, tmp->name) == 0) {
+		WMRemoveFromBag(queue->idleQueue, tmp);
+		WMReleaseNotification(tmp);
+		break;
+	    }
+	}
+    } else if (mask & WNCOnName) {
 	for (i = 0; i < WMGetBagItemCount(queue->asapQueue); i++) {
 	    tmp = WMGetFromBag(queue->asapQueue, i);
 
@@ -453,8 +474,7 @@ WMDequeueNotificationMatching(WMNotificationQueue *queue,
 		break;
 	    }
 	}
-    }
-    if (mask & WNCOnSender) {
+    } else if (mask & WNCOnSender) {
 	for (i = 0; i < WMGetBagItemCount(queue->asapQueue); i++) {
 	    tmp = WMGetFromBag(queue->asapQueue, i);
 
