@@ -691,6 +691,10 @@ getPLData(PLData *pldata)
                 ok = 0;
                 break;
             }
+        } else {
+            COMPLAIN(pldata, _("non hexdigit character in PropList data"));
+            ok = 0;
+            break;
         }
     }
 
