@@ -1605,11 +1605,17 @@ handleKeyPress(XEvent *event)
 	}
         break;
      case WKBD_FOCUSNEXT:
-	doWindozeCycle(wwin, event, True);
+	if (wKeyBindings[WKBD_FOCUSNEXT].modifier != 0)
+	    doWindozeCycle(wwin, event, True);
+	else
+	    puts("NEXT");
 	break;
 
      case WKBD_FOCUSPREV:
-	doWindozeCycle(wwin, event, False);
+	if (wKeyBindings[WKBD_FOCUSPREV].modifier != 0)
+	    doWindozeCycle(wwin, event, False);
+	else
+	    puts("PREV");
 	break;
 
 #if (defined(__STDC__) && !defined(UNIXCPP)) || defined(ANSICPP)

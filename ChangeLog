@@ -4,6 +4,8 @@ Changes since version 0.62.0:
 - save lowered state of menus
 - fixed portability bugs for old X servers
 - added check for XInternAtoms in configure and replacement code
+- fixed window cycling with single key shortcut
+- fixed WPrefs crash on menu editor
 
 Changes since version 0.61.1:
 .............................
