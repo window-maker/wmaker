@@ -959,14 +959,17 @@ wIconifyWindow(WWindow *wwin)
 		iw = wwin->icon->core->width;
 		ih = wwin->icon->core->height;
 	    } else {
+#ifdef KWM_HINTS
 		WArea area;
-		
+
 		if (wKWMGetIconGeometry(wwin, &area)) {
 		    ix = area.x1;
 		    iy = area.y1;
 		    iw = area.x2 - ix;
 		    ih = area.y2 - iy;
-		} else {
+		} else
+#endif /* KWM_HINTS */
+		{
 		    ix = 0;
 		    iy = 0;
 		    iw = wwin->screen_ptr->scr_width;
@@ -1098,14 +1101,17 @@ wDeiconifyWindow(WWindow  *wwin)
 	    iw = wwin->icon->core->width;
 	    ih = wwin->icon->core->height;
 	} else {
+#ifdef KWM_HINTS
 	    WArea area;
-		
+
 	    if (wKWMGetIconGeometry(wwin, &area)) {
 		ix = area.x1;
 		iy = area.y1;
 		iw = area.x2 - ix;
 		ih = area.y2 - iy;
-	    } else {
+	    } else
+#endif /* KWM_HINTS */
+	    {
 		ix = 0;
 		iy = 0;
 		iw = wwin->screen_ptr->scr_width;
