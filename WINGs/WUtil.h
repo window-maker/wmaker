@@ -592,6 +592,14 @@ int WMGetTreeNodeDepth(WMTreeNode *node);
 
 void WMDestroyTreeNode(WMTreeNode *node);
 
+void* WMGetDataForTreeNode(WMTreeNode *node);
+
+WMTreeNode* WMGetParentForTreeNode(WMTreeNode *node);
+
+void WMSortLeavesForTreeNode(WMTreeNode *node, WMCompareDataProc *comparer);
+
+void WMSortTree(WMTreeNode *root, WMCompareDataProc *comparer);
+
 
 /*--------------------------------------------------------------------------*/
 

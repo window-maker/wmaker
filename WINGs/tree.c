@@ -1,7 +1,6 @@
 
 
 
-//#include <stdlib.h>
 #include <string.h>
 
 #include "WUtil.h"
@@ -10,7 +9,7 @@
 typedef struct W_TreeNode {
     void *data;
 
-    //unsigned int uflags:16;
+    /*unsigned int uflags:16;*/
 
     WMArray *leaves;
 
@@ -155,6 +154,50 @@ void
 WMDestroyTreeNode(WMTreeNode *node)
 {
     destroyNode(node);
+}
+
+
+void*
+WMGetDataForTreeNode(WMTreeNode *node)
+{
+    return node->data;
+}
+
+
+WMTreeNode*
+WMGetParentForTreeNode(WMTreeNode *node)
+{
+    return node->parent;
+}
+
+
+void
+WMSortLeavesForTreeNode(WMTreeNode *node, WMCompareDataProc *comparer)
+{
+    wassertr(node!=NULL);
+
+    WMSortArray(node->leaves, comparer);
+}
+
+
+static void
+sortLeavesForNode(WMTreeNode *node, WMCompareDataProc *comparer)
+{
+    int i;
+
+    WMSortArray(node->leaves, comparer);
+    for (i=0; i<WMGetArrayItemCount(node->leaves); i++) {
+        sortLeavesForNode(WMGetFromArray(node->leaves, i), comparer);
+    }
+}
+
+
+void
+WMSortTree(WMTreeNode *root, WMCompareDataProc *comparer)
+{
+    wassertr(root!=NULL);
+
+    sortLeavesForNode(root, comparer);
 }
 
 
