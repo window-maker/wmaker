@@ -267,7 +267,7 @@ createPanel(Panel *p)
     tab = WMCreateTabViewItemWithIdentifier(0);
     WMSetTabViewItemView(tab, WMWidgetView(panel->icoF));
     WMAddItemInTabView(panel->tabv, tab);
-    WMSetTabViewItemLabel(tab, "Icon Search Paths");
+    WMSetTabViewItemLabel(tab, _("Icon Search Paths"));
     
     panel->icoL = WMCreateList(panel->icoF);
     WMResizeWidget(panel->icoL, 480, 147);
@@ -298,7 +298,7 @@ createPanel(Panel *p)
     tab = WMCreateTabViewItemWithIdentifier(0);
     WMSetTabViewItemView(tab, WMWidgetView(panel->pixF));
     WMAddItemInTabView(panel->tabv, tab);
-    WMSetTabViewItemLabel(tab, "Pixmap Search Paths");
+    WMSetTabViewItemLabel(tab, _("Pixmap Search Paths"));
     
     panel->pixL = WMCreateList(panel->pixF);
     WMResizeWidget(panel->pixL, 480, 147);
