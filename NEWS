@@ -41,6 +41,14 @@ SHEXEC <command> will execute the shell command.
 If you want to execute something like blabla > /dev/null, then use SHEXEC
 
 
+Application User Menu Path Changes
+----------------------------------
+
+Default configuration for user specific menus installed in
+/usr/local/share/WindowMaker/UserMenus or $(datadir)/WindowMaker/UserMenus
+and ~/GNUstep/Library/WindowMaker/UserMenus.
+
+
 
 --- 0.53.0
 

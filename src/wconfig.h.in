@@ -275,9 +275,9 @@
 "(\"~/pixmaps\",\"~/GNUstep/Library/WindowMaker/Pixmaps\",\""PIXMAPDIR"\")"
 
 #ifdef USER_MENU
-#define GLOBAL_USER_MENU_PATH SYSCONFDIR"/UserMenus"
+#define GLOBAL_USER_MENU_PATH PKGDATADIR"/UserMenus"
 #define DEF_USER_MENU_PATHS \
-"~/GNUstep/Defaults/UserMenus:"GLOBAL_USER_MENU_PATH
+"~/GNUstep/Library/WindowMaker/UserMenus:"GLOBAL_USER_MENU_PATH
 #endif
 
 /* icon path */
