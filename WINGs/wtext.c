@@ -632,6 +632,7 @@ paintText(Text *tPtr)
     done = False;
 
 
+
     /* first, which direction? Don't waste time looking all over,
        since the parts to be drawn will most likely be near what  
        was previously drawn */
@@ -669,7 +670,8 @@ _getSibling:
     /* first, place all text that can be viewed */
     while (!done && tb) {
 
-if(tb->blank) {tb->text[0] = 'F'; }
+/* paragraph diagnostic 
+if(tb->blank) {tb->text[0] = 'F'; } */
 
         if (tb->graphic) {
             tb = tb->next;
@@ -870,6 +872,7 @@ mouseOverObject(Text *tPtr, int x, int y)
     if(!result)
         tPtr->flags.isOverGraphic = 0;
 
+
     tPtr->view->attribs.cursor = (result?
         tPtr->view->screen->defaultCursor
         : tPtr->view->screen->textCursor);
@@ -936,7 +939,7 @@ updateCursorPosition(Text *tPtr)
         if(tPtr->tpos > tb->used)
             tPtr->tpos = tb->used;
 
-        for(s=0; s<tb->nsections; s++) {
+        for(s=0; s<tb->nsections-1; s++) {
 
             if(tPtr->tpos >= tb->sections[s].begin
                 && tPtr->tpos <= tb->sections[s].end)
@@ -955,9 +958,20 @@ updateCursorPosition(Text *tPtr)
     tPtr->cursor.h = h;
     tPtr->cursor.x = x;
 
-//    printf("y:%d  vpos%d\n", y,
-//tPtr->vpos-tPtr->visible.h+tPtr->visible.y);
-  //  tPtr->vpos = y - tPtr->visible.y;
+
+/* scroll the bars if the cursor is not visible */
+    if(tPtr->flags.editable && tPtr->cursor.x != -23) { 
+        if(tPtr->cursor.y+tPtr->cursor.h 
+            > tPtr->vpos+tPtr->visible.y+tPtr->visible.h) { 
+            tPtr->vpos += 
+                (tPtr->cursor.y+tPtr->cursor.h+10
+                - (tPtr->vpos+tPtr->visible.y+tPtr->visible.h));
+        } else if(tPtr->cursor.y < tPtr->vpos+tPtr->visible.y) { 
+            tPtr->vpos -= (tPtr->vpos+tPtr->visible.y-tPtr->cursor.y);
+        }
+            
+    }
+
     updateScrollers(tPtr);
 }
 
@@ -1077,10 +1091,7 @@ _doneV:
             }
         }  else { 
             if (tb->sections[s].x  <= x)
-{
-printf("BREAK\n");
                 break;
-}
         }
 
         if ((dir? tb->next : tb->prior)) {
@@ -1153,6 +1164,21 @@ _doneH:
     tPtr->cursor.h = tb->sections[s].h;
     tPtr->cursor.y = tb->sections[s]._y;
     
+    /* scroll the bars if the cursor is not visible */
+    if(tPtr->flags.editable && tPtr->cursor.x != -23) { 
+        if(tPtr->cursor.y+tPtr->cursor.h 
+            > tPtr->vpos+tPtr->visible.y+tPtr->visible.h) { 
+            tPtr->vpos += 
+                (tPtr->cursor.y+tPtr->cursor.h+10
+                - (tPtr->vpos+tPtr->visible.y+tPtr->visible.h));
+            updateScrollers(tPtr);
+        } else if(tPtr->cursor.y < tPtr->vpos+tPtr->visible.y) { 
+            tPtr->vpos -= (tPtr->vpos+tPtr->visible.y-tPtr->cursor.y);
+            updateScrollers(tPtr);
+        }
+            
+    }
+
 }
 
 static void 
@@ -1470,7 +1496,8 @@ layOutLine(Text *tPtr, myLineItems *items, int nitems, int x, int y)
                         + line_height - WMWidgetHeight(wdt);
                     tb->sections[n].w = WMWidgetWidth(wdt);
                 } else {
-                    tb->sections[n].y = y + line_height -tb->d.pixmap->height + max_d;
+                    tb->sections[n].y = y + line_height 
+                        + max_d - tb->d.pixmap->height;
                     tb->sections[n].w = tb->d.pixmap->width;
                 }
                 x += tb->sections[n].w;
@@ -1506,7 +1533,6 @@ layOutDocument(Text *tPtr)
     WMFont *font;
     unsigned int x, y=0, lw = 0, width=0, bmargin;
     char *start=NULL, *mark=NULL;
-    unsigned int old_y;
 
     if ( tPtr->flags.frozen || (!(tb = tPtr->firstTextBlock)) )
         return;
@@ -1542,15 +1568,6 @@ layOutDocument(Text *tPtr)
             tb = tb->prior;
         }
 
-        /* a hack to get to the bottom, fix */
-        if(!tb->graphic) {
-;
-#if 0
-            WMFont *font = tPtr->flags.monoFont?tPtr->dFont:tb->d.font;
-            y -= 2*(font->height -  tb->d.font->y);
-#endif
-        }
-     
         if(tb->prior && tb->prior->sections && tb->prior->nsections>0) {
             y = tb->prior->sections[tb->prior->nsections-1]._y + 
                 tb->prior->sections[tb->prior->nsections-1].h - 
@@ -1575,7 +1592,6 @@ _layOut:
             WMDestroyTextBlock(tPtr, WMRemoveTextBlock(tPtr));
             tb = next;
             tb->first = True;
-printf("yep that was me :-)\n");
             continue;
         }
 
@@ -1621,7 +1637,7 @@ printf("yep that was me :-)\n");
             font = tPtr->flags.monoFont?tPtr->dFont:tb->d.font;
 
             while (start) {
-                mark = strchr(start, ' ');//, tb->used);
+                mark = strchr(start, ' ');
                 if (mark) {
                     end += (int)(mark-start)+1;
                     start = mark+1;
@@ -1675,7 +1691,8 @@ printf("yep that was me :-)\n");
         }
     
     
-        if(tPtr->flags.laidOut 
+/* not yet fully ready. but is already VERY FAST for a 3Mbyte file ;-) */
+        if(0&&tPtr->flags.laidOut 
             && tb->next && tb->next->sections && tb->next->nsections>0
             && (tPtr->vpos + tPtr->visible.h 
                 < tb->next->sections[0]._y)) {
@@ -2249,6 +2266,12 @@ handleWidgetPress(XEvent *event, void *data)
     tPtr->flags.isOverGraphic = 2;
     tPtr->tpos = 0;
     output(tb->text, tb->used);
+#if 0
+    if (!tPtr->flags.focused) {
+        WMSetFocusToWidget(tPtr);
+      tPtr->flags.focused = True;
+    }     
+#endif
 
 }
 
@@ -2339,14 +2362,11 @@ handleActionEvents(XEvent *event, void *data)
                             char desc[tb->used+1];
                             memcpy(desc, tb->text, tb->used);
                             desc[tb->used] = 0;
-printf("has delegate %p\n", tPtr->delegate);
                         if(tPtr->delegate) {
                         if(tPtr->delegate->didDoubleClickOnPicture)
-printf("has didDoubleClickOnPicture%p\n",
-tPtr->delegate->didDoubleClickOnPicture);
                             (*tPtr->delegate->didDoubleClickOnPicture)
                                 (tPtr->delegate, desc);
-                        } else printf("you clicked on %s\n", desc);
+                        } 
                     } else {
                         autoSelectText(tPtr, 2);
                     }
@@ -2450,11 +2470,7 @@ handleEvents(XEvent *event, void *data)
 
             if(tPtr->hS) { 
                 if (!(W_VIEW(tPtr->hS))->flags.realized)
-{
-printf("expose\n");
                     WMRealizeWidget(tPtr->hS);
-
-}
             }
 
             if(tPtr->vS) { 
@@ -2624,6 +2640,7 @@ prepareForDragOperation(WMView *self, WMDraggingInfo *info)
 
 char *badbadbad;
 
+static void
 receivedData(WMView *view, Atom selection, Atom target, Time timestamp,
          void *cdata, WMData *data)
 {             
@@ -2662,6 +2679,7 @@ wwarning("could not request data for dropped data");
     XSendEvent(scr->display, info->sourceWindow, False, 0, &ev);
     XFlush(scr->display);
     }
+    return True;
 }
 
 static Bool
@@ -3056,6 +3074,7 @@ WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w,
     memset(tb->text, 0, len);
     memcpy(tb->text, description, len);
     tb->used = len;
+    tb->text[tb->used] = 0;
     tb->blank = False;
     tb->d.widget = w;    
     tb->color = WMRetainColor(color);
@@ -3097,6 +3116,7 @@ WMCreateTextBlockWithPixmap(WMText *tPtr, WMPixmap *p,
     memset(tb->text, 0, len);
     memcpy(tb->text, description, len);
     tb->used = len;
+    tb->text[tb->used] = 0;
     tb->blank = False;
     tb->d.pixmap = WMRetainPixmap(p);    
     tb->color = WMRetainColor(color);
