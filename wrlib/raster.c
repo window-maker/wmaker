@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <limits.h>
 #include <X11/Xlib.h>
 #include "wraster.h"
 
@@ -44,6 +45,12 @@ RCreateImage(unsigned width, unsigned height, int alpha)
     RImage *image=NULL;
     
     assert(width>0 && height>0);
+    
+    /* check for too large images (cap on INT_MAX just to be sure :P) */
+    if (width > (INT_MAX/4)/height+4) {
+	RErrorCode = RERR_NOMEMORY;
+	return NULL;
+    }
 
     image = malloc(sizeof(RImage));
     if (!image) {

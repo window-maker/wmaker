@@ -20,7 +20,7 @@ Changes since version 0.80.1:
   transparency. Details in WINGs/ChangeLog.
 - Fixed problem with long, preset workspace names (Wanderlei Antonio Cavassin 
   <cavassin@conectiva.com.br>)
-- Added kinput2 bug workaround in stock WMWindowAttributes (Seiichi SATO 
+- Added kinput2 bug workaround to stock WMWindowAttributes (Seiichi SATO 
   <sato@cvs-net.co.jp>)
 - Added Belarusian translation (Ihar Viarheichyk <iverg@mail.ru>)
 - Fixed wrlib not to load braindead images with 0 sized width or height
@@ -28,6 +28,7 @@ Changes since version 0.80.1:
   with Shift key while moving windows.
 - Changed the default position display while moving a window to 'Center'.
 - Better outline when drawing balloons.
+- Fixed wrlib to not accept too large images (fixes buffer overflow)
 
 
 Changes since version 0.80.0:
