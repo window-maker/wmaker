@@ -810,8 +810,8 @@ applySettings(WMButton *button, InspectorPanel *panel)
     WSETUFLAG(wwin, no_close_button, WMGetButtonSelected(panel->attrChk[2]));
     WSETUFLAG(wwin, no_miniaturize_button, WMGetButtonSelected(panel->attrChk[3]));
     WSETUFLAG(wwin, no_border, WMGetButtonSelected(panel->attrChk[4]));
-    floating                   =  WMGetButtonSelected(panel->attrChk[5]);
-    sunken                     =  WMGetButtonSelected(panel->attrChk[6]);
+    floating = WMGetButtonSelected(panel->attrChk[5]);
+    sunken   = WMGetButtonSelected(panel->attrChk[6]);
     WSETUFLAG(wwin, omnipresent, WMGetButtonSelected(panel->attrChk[7]));
     WSETUFLAG(wwin, start_miniaturized, WMGetButtonSelected(panel->attrChk[8]));
     WSETUFLAG(wwin, start_maximized, WMGetButtonSelected(panel->attrChk[9]));
@@ -819,7 +819,7 @@ applySettings(WMButton *button, InspectorPanel *panel)
 
     WSETUFLAG(wwin, no_bind_keys, WMGetButtonSelected(panel->moreChk[0]));
     WSETUFLAG(wwin, no_bind_mouse, WMGetButtonSelected(panel->moreChk[1]));
-    skip_window_list           =  WMGetButtonSelected(panel->moreChk[2]);
+    skip_window_list = WMGetButtonSelected(panel->moreChk[2]);
     WSETUFLAG(wwin, no_focusable, WMGetButtonSelected(panel->moreChk[3]));
     WSETUFLAG(wwin, dont_move_off, WMGetButtonSelected(panel->moreChk[4]));
     WSETUFLAG(wwin, no_hide_others, WMGetButtonSelected(panel->moreChk[5]));
@@ -1633,7 +1633,7 @@ createInspectorForWindow(WWindow *wwin, int xpos, int ypos,
    
     /* if the window is a transient, don't let it have a miniaturize
      * button */
-    if (wWindowFor(wwin->transient_for)!=NULL)
+    if (wwin->transient_for!=None && wwin->transient_for!=scr->root_win)
 	WMSetButtonEnabled(panel->attrChk[3], False);
     else
 	WMSetButtonEnabled(panel->attrChk[3], True);

@@ -899,8 +899,8 @@ wIconifyWindow(WWindow *wwin)
 	return;
     }
 
-    
-    if (wwin->transient_for!=None) {
+    if (wwin->transient_for!=None &&
+        wwin->transient_for!=wwin->screen_ptr->root_win) {
 	WWindow *owner = wWindowFor(wwin->transient_for);
 	
 	if (owner && owner->flags.miniaturized)

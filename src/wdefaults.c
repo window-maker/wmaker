@@ -148,7 +148,7 @@ get_value(WMPropList *dict_win, WMPropList *dict_class, WMPropList *dict_name,
 	  Bool useGlobalDefault)
 {
     WMPropList *value;
-    
+
 
     if (dict_win) {
 	value = WMGetFromPLDictionary(dict_win, option);
@@ -167,16 +167,16 @@ get_value(WMPropList *dict_win, WMPropList *dict_class, WMPropList *dict_name,
 	if (value)
 	    return value;
     }
-    
+
     if (!useGlobalDefault)
 	return NULL;
-        
+
     if (dict_any) {
 	value = WMGetFromPLDictionary(dict_any, option);
 	if (value)
 	    return value;
     }
-    
+
     return default_value;
 }
 
@@ -253,7 +253,7 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
 	if (value) {attr->flag = getBool(attrib, value); \
 			if (mask) mask->flag = 1;}
 
-    /* get the data */        
+    /* get the data */
     value = get_value(dw, dc, dn, da, ANoTitlebar, No, useGlobalDefault);
     APPLY_VAL(value, no_titlebar, ANoTitlebar);
 

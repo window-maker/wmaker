@@ -7,6 +7,7 @@ Changes since version 0.80.0:
   WMState.<number> file on multihead system.
 - Fixed problem with keyboard shortcuts executed an every screen for
   multihead systems.
+- Fixed problem with kcalc not having a miniaturize button.
 
 
 Changes since version 0.70.0:
