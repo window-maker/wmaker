@@ -33,4 +33,7 @@ wdwrite- write data into the defaults database (configuration files).
 
 wsetfont- set locale the fonts needed for a specific locale for Window Maker
 
+wmagnify- a program to magnify the area near the mouse pointer,
+	with real-time update
+
 wkdemenu.pl- convert a KDE menu into a wmaker menu (for pipe)
