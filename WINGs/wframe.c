@@ -24,6 +24,7 @@ typedef struct W_Frame {
 
 static void destroyFrame(Frame *fPtr);
 static void paintFrame(Frame *fPtr);
+static void repaintFrame(Frame *fPtr);
 
 
 
@@ -31,9 +32,9 @@ void
 WMSetFrameTitlePosition(WMFrame *fPtr, WMTitlePosition position)
 {
     fPtr->flags.titlePosition = position;
-    
-   if (fPtr->view->flags.realized) {
-	paintFrame(fPtr);
+
+    if (fPtr->view->flags.realized) {
+	repaintFrame(fPtr);
     }
 }
 
@@ -44,7 +45,7 @@ WMSetFrameRelief(WMFrame *fPtr, WMReliefType relief)
     fPtr->flags.relief = relief;
     
    if (fPtr->view->flags.realized) {
-	paintFrame(fPtr);
+	repaintFrame(fPtr);
     }
 }
 
@@ -60,8 +61,19 @@ WMSetFrameTitle(WMFrame *fPtr, char *title)
 	fPtr->caption = NULL;
 
    if (fPtr->view->flags.realized) {
-	paintFrame(fPtr);
+	repaintFrame(fPtr);
     }
+}
+
+
+static void
+repaintFrame(Frame *fPtr)
+{
+    W_View *view = fPtr->view;
+    W_Screen *scrPtr = view->screen;
+
+    XClearWindow(scrPtr->display, view->window);
+    paintFrame(fPtr);
 }
 
 
@@ -136,9 +148,6 @@ paintFrame(Frame *fPtr)
     } else {
 	drawTitle = False;
     }
-
-/*    XClearArea(scrPtr->display, view->window, x, y, width, height, False);
- */
 
     {
 	XRectangle rect;
