@@ -167,6 +167,10 @@ WMSetLabelTextColor(WMLabel *lPtr, WMColor *color)
     if (lPtr->textColor)
 	WMReleaseColor(lPtr->textColor);
     lPtr->textColor = WMRetainColor(color);
+
+    if (lPtr->view->flags.realized) {
+	paintLabel(lPtr);
+    }
 }
 
 
